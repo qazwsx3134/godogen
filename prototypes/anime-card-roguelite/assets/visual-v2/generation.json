@@ -1,0 +1,46 @@
+{
+  "generator": "Built-in imagegen",
+  "date": "2026-09-08",
+  "entries": [
+    {
+      "id": "hero-shadow_ninja-attack",
+      "prompt": "Use reference Naruto sprite as exact character identity, costume, palette, pixel scale. Generate FOUR genuinely different sequential ATTACK poses in equal 2x2 grid: 1 crouched anticipation with fist by hip, 2 twist shoulders and raise elbow, 3 forceful RIGHTWARD straight punch with planted legs, 4 recovery to guard. Same full body size as reference, body centered, feet fixed85% baseline. Each full silhouette including fist within central70% of cell, huge padding. NO FX or energy, no detached dust, no text, no scenery. Body only. Bright blond hair orange-black outfit Leaf headband whisker cheeks. Crisp pixel art, solid #FF00FF background.",
+      "source": "/home/ronghao/.codex/generated_images/01a07040-ccdb-7df2-aea5-7edcf5332917/exec-44ee4475-b063-43c3-848d-93fd502299ac.png"
+    },
+    {
+      "id": "hero-shadow_ninja-hurt",
+      "prompt": "Use reference Naruto sprite exact identity costume and pixel scale. Four DIFFERENT sequential HURT reaction poses in 2x2 equal grid: right-facing, 1 bracing arms, 2 flinch torso leaning LEFT from incoming blow on right, face wince, 3 crouched recoil hand against chest, 4 recover ready stance. Feet planted same85% baseline, never lying down, no blood. Identical body proportions, centered each cell, silhouette within central70%, generous padding. No impact FX, no text, no scenery. Solid #FF00FF magenta background, crisp pixel art.",
+      "source": "/home/ronghao/.codex/generated_images/01a07040-ccdb-7df2-aea5-7edcf5332917/exec-d3addbf0-1dac-4a6b-b8b7-077de25ef6f1.png"
+    },
+    {
+      "id": "hero-silver_ronin-attack",
+      "prompt": "Create a FOUR-frame sequential ATTACK body animation of the EXACT referenced character, same pixel rendering, identical face/hair/costume/proportions. 2 columns x 2 rows equal square grid. Motion frames reading order: wooden katana attack: anticipation sword upright close to shoulder, turn shoulders, short strong diagonal downward slash to RIGHT with wooden sword held compact, recover guard. Face RIGHT throughout. Grounded feet, same baseline at85% each cell. Lock character body scale and height to reference (crouch changes pose height but not anatomy scale); full body centered and all hair, feet and weapon within central70% safe cell area. Four genuinely different poses. Solid #FF00FF background; NO text, NO scenery, NO detached effects, NO slash trails, NO energy or dust. Weapon compact near body to avoid oversized bounding box. High quality crisp pixel-art game sprite.",
+      "source": "/home/ronghao/.codex/generated_images/01a07040-ccdb-7df2-aea5-7edcf5332917/exec-9f51bbdc-1a87-48f0-b242-d615c0aab67c.png"
+    },
+    {
+      "id": "hero-silver_ronin-hurt",
+      "prompt": "Create a FOUR-frame sequential HURT body animation of the EXACT referenced character, same pixel rendering, identical face/hair/costume/proportions. 2 columns x 2 rows equal square grid. Motion frames reading order: hurt: brace, flinch leaning LEFT with wince, clutch torso and crouch, recover to guard. Face RIGHT throughout. Grounded feet, same baseline at85% each cell. Lock character body scale and height to reference (crouch changes pose height but not anatomy scale); full body centered and all hair, feet and weapon within central70% safe cell area. Four genuinely different poses. Solid #FF00FF background; NO text, NO scenery, NO detached effects, NO slash trails, NO energy or dust. Weapon compact near body to avoid oversized bounding box. High quality crisp pixel-art game sprite.",
+      "source": "/home/ronghao/.codex/generated_images/01a07040-ccdb-7df2-aea5-7edcf5332917/exec-34927ac3-cbe0-4a86-9f3d-17fb024fb059.png"
+    },
+    {
+      "id": "hero-ki_fighter-attack",
+      "prompt": "Create a FOUR-frame sequential ATTACK body animation of the EXACT referenced character, same pixel rendering, identical face/hair/costume/proportions. 2 columns x 2 rows equal square grid. Motion frames reading order: martial attack: fists draw back to waist and knees bend, twist torso, strong forward RIGHT palm thrust with both hands close together, recover guard. Face RIGHT throughout. Grounded feet, same baseline at85% each cell. Lock character body scale and height to reference (crouch changes pose height but not anatomy scale); full body centered and all hair, feet and weapon within central70% safe cell area. Four genuinely different poses. Solid #FF00FF background; NO text, NO scenery, NO detached effects, NO slash trails, NO energy or dust. Weapon compact near body to avoid oversized bounding box. High quality crisp pixel-art game sprite.",
+      "source": "/home/ronghao/.codex/generated_images/01a07040-ccdb-7df2-aea5-7edcf5332917/exec-900e25a7-646d-4c29-9ad2-5fcf2268902b.png"
+    },
+    {
+      "id": "hero-ki_fighter-hurt",
+      "prompt": "Create a FOUR-frame sequential HURT body animation of the EXACT referenced character, same pixel rendering, identical face/hair/costume/proportions. 2 columns x 2 rows equal square grid. Motion frames reading order: hurt: cross arms defensively, head recoils LEFT and grimaces, crouch hand against torso, recover to guard. Face RIGHT throughout. Grounded feet, same baseline at85% each cell. Lock character body scale and height to reference (crouch changes pose height but not anatomy scale); full body centered and all hair, feet and weapon within central70% safe cell area. Four genuinely different poses. Solid #FF00FF background; NO text, NO scenery, NO detached effects, NO slash trails, NO energy or dust. Weapon compact near body to avoid oversized bounding box. High quality crisp pixel-art game sprite.",
+      "source": "/home/ronghao/.codex/generated_images/01a07040-ccdb-7df2-aea5-7edcf5332917/exec-0aa7bb16-7351-439b-a0e3-eeeeb127dda1.png"
+    },
+    {
+      "id": "bg-ninja",
+      "prompt": "Finished wide 16:9 pixel art SIDE VIEW 2D battle background unmistakably KONOHA Hidden Leaf Village from Naruto: sunlit orange and red cylindrical village rooftops, overhead wires, lush green tree canopies, distant huge sandstone Hokage Rock with multiple carved leader faces clearly visible across mountain, warm blue afternoon sky and cream clouds. Foreground is broad flat training-ground dirt street, wooden posts at far edges only. Orthographic horizontal combat camera, ground at lower22%, open low-detail battle area for characters. Vibrant anime cel-shaded pixel clusters, clean ink outlines, earthy orange/green palette. No characters, no interface, no text, no panels, no moonlit generic Asian roofs. Full bleed 16:9.",
+      "source": "/home/ronghao/.codex/generated_images/01a07040-ccdb-7df2-aea5-7edcf5332917/exec-345f3751-d68b-427a-bace-3e686c1e2ec6.png"
+    },
+    {
+      "id": "hero-shadow_ninja-idle",
+      "prompt": "Pixel-art game sprite sheet of Naruto Uzumaki in Naruto Shippuden: unmistakable short spiky SUNSHINE BLOND hair, three whisker marks on each cheek, blue eyes, black forehead headband with metal Leaf Village spiral emblem, orange-and-black zip ninja jacket and orange pants, black open-toe ninja sandals, thigh kunai pouch. NOT generic blue ninja, no scarf, no samurai. Four sequential subtle breathing IDLE poses facing RIGHT, 2 columns x 2 rows equal grid, square image. Full body centered in every cell, feet at same 85% baseline, identical body scale, silhouette within central70% of each cell. Detailed crisp 32-bit pixel sprite, strong dark outlines, flat anime cel shading and warm orange highlights, readable game silhouette. Solid exact magenta #FF00FF background, no text, no scenery, no shadows or FX. Four whole bodies, generous padding.",
+      "source": "/home/ronghao/.codex/generated_images/01a07040-ccdb-7df2-aea5-7edcf5332917/exec-a0e25f98-d182-4793-acdb-34a9f3b158dd.png"
+    }
+  ]
+}

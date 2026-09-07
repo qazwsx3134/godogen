@@ -317,7 +317,7 @@ function randomRewards(run) {
 }
 
 function grantEliteRelic(run) {
-  const pool = RELICS.filter((relic) => !run.relics.includes(relic.id));
+  const pool = RELICS.filter((relic) => !run.relics.includes(relic.id) && !(run.excludedRelics || []).includes(relic.id));
   if (!pool.length) { run.gold += 30; addLog(run, '菁英獎勵：遺物已收集完畢，改得 30 金幣。'); return; }
   const relic = pickRelic(run,pool); run.relics.push(relic.id); run.metrics.relicsGained += 1; addLog(run, `菁英獎勵：獲得遺物「${relic.name}」。`);
 }
@@ -343,7 +343,7 @@ function resolveEnemyIntent(run, enemy) {
 
 function makeShop(run) {
   const cards = randomRewards(run);
-  const relics = RELICS.filter((relic) => !run.relics.includes(relic.id));
+  const relics = RELICS.filter((relic) => !run.relics.includes(relic.id) && !(run.excludedRelics || []).includes(relic.id));
   return {
     cards: cards.slice(0, 3).map((id) => ({ id, price: 50, sold: false })),
     relic: relics.length ? { id: pickRelic(run,relics).id, price: 100, sold: false } : null,
@@ -423,14 +423,14 @@ export function usePotion(run,uid,targetId=null){
   finishBattle(run);assertInvariants(run);return result(true);
 }
 
-export function createRun({ deck, seed, characterId='shadow_ninja', excludedCards=[] } = {}) {
+export function createRun({ deck, seed, characterId='shadow_ninja', excludedCards=[], excludedRelics=[], excludedBuilds=[] } = {}) {
   const character=CHARACTERS.find(c=>c.id===characterId);if(!character)throw Error('未知角色。');
   const deckError = validateDeckIds(deck, character, excludedCards); if (deckError) throw new Error(deckError);
   if (typeof seed !== 'string') throw new Error('seed 必須是字串。');
   const persistentDeck = makeDeck(deck, character.fixedCards);
   const run = {
     phase: 'map', step: 0, seed, currentNode: null, map: makeMap(),
-    characterId, excludedCards: [...excludedCards], player: { name: character.name, hp: character.maxHp, maxHp: character.maxHp, block: 0, strength: 0, thorns: 0, charge:0,exhaustGuard:0 }, gold: 70, relics: [],
+    characterId, excludedCards: [...excludedCards], excludedRelics: [...excludedRelics], excludedBuilds: [...excludedBuilds], player: { name: character.name, hp: character.maxHp, maxHp: character.maxHp, block: 0, strength: 0, thorns: 0, charge:0,exhaustGuard:0 }, gold: 70, relics: [],
     potions:[{uid:'potion-1',potionId:character.starterPotion}],_nextPotionUid:2,
     deck: persistentDeck, hand: [], draw: [], discard: [], exile: [], resolving: [], enemies: [],
     turn: 0, energy: 0, currentUniverse: character.universe, lastUniverse: null, resonance: 0,
@@ -554,7 +554,7 @@ export function chooseEvent(run, choice) {
   if (choice !== 'risk' && choice !== 'heal') return result(false, '事件選擇無效。');
   if (choice === 'risk') {
     if (run.player.hp <= 8) return result(false, '生命必須大於 8 才能承擔風險。');
-    run.player.hp -= 8; const pool = RELICS.filter((relic) => !run.relics.includes(relic.id));
+    run.player.hp -= 8; const pool = RELICS.filter((relic) => !run.relics.includes(relic.id) && !(run.excludedRelics || []).includes(relic.id));
     if (!pool.length) { run.gold += 30; addLog(run, '風險事件：遺物已收集完畢，改得 30 金幣。'); }
     else { const relic=pickRelic(run,pool);run.relics.push(relic.id); run.metrics.relicsGained += 1; addLog(run, `風險事件：以 8 點生命取得「${relic.name}」。`); }
   } else { const before = run.player.hp; run.player.hp = Math.min(run.player.maxHp, run.player.hp + 6); addLog(run, `事件療癒：恢復 ${run.player.hp - before} 點生命。`); }
@@ -565,6 +565,8 @@ export function assertInvariants(run) {
   if (!run || !PHASES.has(run.phase)) throw new Error('無效 phase。');
   const character = CHARACTERS.find((item) => item.id === run.characterId);
   if (!character) throw Error('無效角色。');
+  if (!Array.isArray(run.excludedRelics || []) || (run.excludedRelics || []).some(id=>!RELIC_BY_ID.has(id))) throw Error('無效遺物排除。');
+  if (!Array.isArray(run.excludedBuilds || []) || (run.excludedBuilds || []).some(id=>!ARCHETYPES[id])) throw Error('無效流派排除。');
   if (!Array.isArray(run.excludedCards)) throw Error('無效排除牌。');
   const excluded = new Set(run.excludedCards);
   if (excluded.size !== run.excludedCards.length || run.excludedCards.some((id) => !CARD_BY_ID.has(id))) throw Error('無效排除牌。');

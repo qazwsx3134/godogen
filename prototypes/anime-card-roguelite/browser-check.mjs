@@ -14,6 +14,12 @@ const output = '/tmp/rift-character-browser';
 await mkdir(output, { recursive: true });
 const results = [], errors = [], themes = new Set();
 
+async function enterConfiguration(page) {
+  await page.locator('[data-menu="play"]').click();
+  await page.locator('[data-menu="new"]').click();
+  await page.locator('[data-menu="choose-character"]').click();
+}
+
 async function checkTutorial(page) {
   const before=await page.locator('.view-root').innerHTML();
   const saved=await page.evaluate(key=>localStorage.getItem(key),STORAGE_KEY);
@@ -148,6 +154,7 @@ try {
   const page = await context.newPage();
   page.on('pageerror', e => errors.push(e.message));
   await page.goto(url);
+  await enterConfiguration(page);
   await page.locator('#start').waitFor();
   assert.equal(await page.title(),'裂界牌局');
   await page.screenshot({path:`${output}/home.png`,fullPage:true});
@@ -165,6 +172,7 @@ try {
   assert.equal(saved.deck.length,10); assert.equal(saved.lastPack.length,3);
   assert.ok(saved.coins>=1400 && saved.coins<=1460);
   await page.reload();
+  await enterConfiguration(page);
   assert.deepEqual(await page.evaluate(key=>JSON.parse(localStorage.getItem(key)),STORAGE_KEY),saved);
   results.push('ten-card editor, free packs, direct acquisition, persistence');
 
@@ -186,6 +194,7 @@ try {
   assert.equal(configured.deck.includes('flash_jab'),false);
   assert.equal(configured.deck.length,10);
   await page.reload();
+  await enterConfiguration(page);
   await page.locator('[data-tab="collection"]').first().click();
   assert.equal(await page.locator('[data-exclude="flash_jab"]').getAttribute('aria-pressed'),'true');
   await page.setViewportSize({width:390,height:844});
@@ -197,6 +206,7 @@ try {
   results.push('interactive resonance and charge examples, mobile layout, focus return, no profile mutation');
   await page.locator('[data-exclude="toxic_mist"]').click();
   await page.locator('[data-tab="home"]').first().click();
+  await page.locator('.character-launch details').last().evaluate(el=>el.open=true);
   await page.locator('[data-preset="relay"]').click();
   const presetSaved=await page.evaluate(key=>JSON.parse(localStorage.getItem(key)),STORAGE_KEY);
   assert.deepEqual(presetSaved.excludedCards,['flash_jab','toxic_mist']);
@@ -291,6 +301,7 @@ try {
     assert.ok(exercised.has('usePotion'),'consumable used through browser');
     results.push({character:preset.id,route:mode,seed:run.seed,result:run.phase,metrics:run.metrics,exercised:[...exercised]});
     await page.locator('#return').click();
+    await enterConfiguration(page);
   }
   assert.deepEqual([...themes].sort(),['dragon','ninja','samurai']);
 
@@ -304,6 +315,7 @@ try {
   await page.getByRole('heading',{name:'旅人倒下'}).waitFor();
   assert.equal((await page.evaluate(key=>JSON.parse(localStorage.getItem(key)).stats,STORAGE_KEY)).runs,++completed);
   await page.locator('#return').click();
+    await enterConfiguration(page);
   results.push('passing turns loses; terminal result stored once');
 
   await page.setViewportSize({width:390,height:844});
@@ -321,7 +333,7 @@ try {
   });
   const fallback=await blocked.newPage();
   fallback.on('pageerror',e=>errors.push(e.message));
-  await fallback.goto(url); await fallback.locator('#start').click();
+  await fallback.goto(url); await enterConfiguration(fallback); await fallback.locator('#start').click();
   await fallback.locator('[data-node]:not(:disabled)').first().click();
   await fallback.locator('#end').waitFor();
   results.push('blocked storage remains playable');
@@ -329,7 +341,7 @@ try {
   const legacy=await browser.newContext();
   await legacy.addInitScript(()=>localStorage.setItem('rift-cards.profile.v1',JSON.stringify({version:1,coins:742,collection:{silver_samurai:1},stats:{runs:4,wins:2}})));
   const migrated=await legacy.newPage(); migrated.on('pageerror',e=>errors.push(e.message));
-  await migrated.goto(url); await migrated.locator('[data-preset="relay"]').click();
+  await migrated.goto(url); await enterConfiguration(migrated); await migrated.locator('.character-launch details').last().evaluate(el=>el.open=true); await migrated.locator('[data-preset="relay"]').click();
   const migratedSave=await migrated.evaluate(key=>JSON.parse(localStorage.getItem(key)),STORAGE_KEY);
   assert.equal(migratedSave.coins,742); assert.equal(migratedSave.collection.silver_resolve,1);
   assert.deepEqual(migratedSave.stats,{runs:4,wins:2});

@@ -1,0 +1,845 @@
+{
+  "schema": "anime-card-roguelite.visual-v1.qc",
+  "status": "passed",
+  "grid": {
+    "rows": 2,
+    "cols": 2,
+    "output_cell_px": 256,
+    "output_sheet_px": [
+      512,
+      512
+    ]
+  },
+  "input_dir": "prototypes/anime-card-roguelite/assets/visual-v1/raw",
+  "output_dir": "prototypes/anime-card-roguelite/assets/visual-v1/processed",
+  "processor": "/home/ronghao/.codex/skills/generate2dsprite/scripts/generate2dsprite.py",
+  "python": "/home/ronghao/.local/share/uv/python/cpython-3.13-linux-x86_64-gnu/bin/python3.13",
+  "dependencies": {
+    "numpy": "available",
+    "Pillow": "available"
+  },
+  "assets": [
+    {
+      "id": "hero-shadow_ninja",
+      "kind": "character",
+      "input": "prototypes/anime-card-roguelite/assets/visual-v1/raw/hero-shadow_ninja.png",
+      "output": "prototypes/anime-card-roguelite/assets/visual-v1/processed/hero-shadow_ninja",
+      "raw_present": true,
+      "expected": {
+        "grid": [
+          2,
+          2
+        ],
+        "cell_size": 256,
+        "sheet_size": [
+          512,
+          512
+        ],
+        "target_subject_height_px": 210,
+        "target_footline_px": 230
+      },
+      "processor": {
+        "target": "player",
+        "mode": "player_actions",
+        "align": "feet",
+        "component_mode": "largest",
+        "scale_strategy": "fit",
+        "shared_scale": true,
+        "fit_scale": 0.82,
+        "chroma_key": {
+          "threshold": 128,
+          "edge_threshold": 180
+        }
+      },
+      "raw_size": [
+        1254,
+        1254
+      ],
+      "raw_cell_size": [
+        627,
+        627
+      ],
+      "command": [
+        "/home/ronghao/.local/share/uv/python/cpython-3.13-linux-x86_64-gnu/bin/python3.13",
+        "/home/ronghao/.codex/skills/generate2dsprite/scripts/generate2dsprite.py",
+        "process",
+        "--input",
+        "/mnt/d/repo/godot/godogen/prototypes/anime-card-roguelite/assets/visual-v1/raw/hero-shadow_ninja.png",
+        "--target",
+        "player",
+        "--mode",
+        "player_actions",
+        "--output-dir",
+        "/mnt/d/repo/godot/godogen/prototypes/anime-card-roguelite/assets/visual-v1/processed/hero-shadow_ninja",
+        "--rows",
+        "2",
+        "--cols",
+        "2",
+        "--cell-size",
+        "256",
+        "--label-prefix",
+        "hero-shadow_ninja",
+        "--duration",
+        "125",
+        "--threshold",
+        "128",
+        "--edge-threshold",
+        "180",
+        "--strict-qc",
+        "--align",
+        "feet",
+        "--scale-strategy",
+        "fit",
+        "--component-mode",
+        "largest",
+        "--shared-scale",
+        "--fit-scale",
+        "0.82",
+        "--max-body-scale-cv",
+        "0.08",
+        "--max-anchor-y-std",
+        "0.05"
+      ],
+      "status": "processed",
+      "qc_summary": {
+        "frame_count": 4,
+        "valid_frame_count": 4,
+        "empty_count": 0,
+        "edge_touch_count": 0,
+        "paste_clamped_count": 0,
+        "body_scale_mean": 0.4460599736990072,
+        "output_subject_height_mean": 209.0,
+        "body_scale_cv": 0.0013902833699899,
+        "anchor_x_std": 0.015761564055806008,
+        "anchor_y_std": 0.0048465266558966325,
+        "anchor_y_mean": 0.9224555735056542
+      },
+      "edge_touch_frames": [],
+      "output_edge_touch_frames": [],
+      "paste_clamped_frames": [],
+      "output_size": [
+        512,
+        512
+      ]
+    },
+    {
+      "id": "hero-ki_fighter",
+      "kind": "character",
+      "input": "prototypes/anime-card-roguelite/assets/visual-v1/raw/hero-ki_fighter.png",
+      "output": "prototypes/anime-card-roguelite/assets/visual-v1/processed/hero-ki_fighter",
+      "raw_present": true,
+      "expected": {
+        "grid": [
+          2,
+          2
+        ],
+        "cell_size": 256,
+        "sheet_size": [
+          512,
+          512
+        ],
+        "target_subject_height_px": 210,
+        "target_footline_px": 230
+      },
+      "processor": {
+        "target": "player",
+        "mode": "player_actions",
+        "align": "feet",
+        "component_mode": "largest",
+        "scale_strategy": "fit",
+        "shared_scale": true,
+        "fit_scale": 0.82,
+        "chroma_key": {
+          "threshold": 128,
+          "edge_threshold": 180
+        }
+      },
+      "raw_size": [
+        1254,
+        1254
+      ],
+      "raw_cell_size": [
+        627,
+        627
+      ],
+      "command": [
+        "/home/ronghao/.local/share/uv/python/cpython-3.13-linux-x86_64-gnu/bin/python3.13",
+        "/home/ronghao/.codex/skills/generate2dsprite/scripts/generate2dsprite.py",
+        "process",
+        "--input",
+        "/mnt/d/repo/godot/godogen/prototypes/anime-card-roguelite/assets/visual-v1/raw/hero-ki_fighter.png",
+        "--target",
+        "player",
+        "--mode",
+        "player_actions",
+        "--output-dir",
+        "/mnt/d/repo/godot/godogen/prototypes/anime-card-roguelite/assets/visual-v1/processed/hero-ki_fighter",
+        "--rows",
+        "2",
+        "--cols",
+        "2",
+        "--cell-size",
+        "256",
+        "--label-prefix",
+        "hero-ki_fighter",
+        "--duration",
+        "125",
+        "--threshold",
+        "128",
+        "--edge-threshold",
+        "180",
+        "--strict-qc",
+        "--align",
+        "feet",
+        "--scale-strategy",
+        "fit",
+        "--component-mode",
+        "largest",
+        "--shared-scale",
+        "--fit-scale",
+        "0.82",
+        "--max-body-scale-cv",
+        "0.08",
+        "--max-anchor-y-std",
+        "0.05"
+      ],
+      "status": "processed",
+      "qc_summary": {
+        "frame_count": 4,
+        "valid_frame_count": 4,
+        "empty_count": 0,
+        "edge_touch_count": 0,
+        "paste_clamped_count": 0,
+        "body_scale_mean": 0.4504423018432861,
+        "output_subject_height_mean": 209.0,
+        "body_scale_cv": 0.0007775909302731223,
+        "anchor_x_std": 0.025619954001863815,
+        "anchor_y_std": 0.0056542810985460434,
+        "anchor_y_mean": 0.907108239095315
+      },
+      "edge_touch_frames": [],
+      "output_edge_touch_frames": [],
+      "paste_clamped_frames": [],
+      "output_size": [
+        512,
+        512
+      ]
+    },
+    {
+      "id": "hero-silver_ronin",
+      "kind": "character",
+      "input": "prototypes/anime-card-roguelite/assets/visual-v1/raw/hero-silver_ronin.png",
+      "output": "prototypes/anime-card-roguelite/assets/visual-v1/processed/hero-silver_ronin",
+      "raw_present": true,
+      "expected": {
+        "grid": [
+          2,
+          2
+        ],
+        "cell_size": 256,
+        "sheet_size": [
+          512,
+          512
+        ],
+        "target_subject_height_px": 210,
+        "target_footline_px": 230
+      },
+      "processor": {
+        "target": "player",
+        "mode": "player_actions",
+        "align": "feet",
+        "component_mode": "largest",
+        "scale_strategy": "fit",
+        "shared_scale": true,
+        "fit_scale": 0.82,
+        "chroma_key": {
+          "threshold": 128,
+          "edge_threshold": 180
+        }
+      },
+      "raw_size": [
+        1254,
+        1254
+      ],
+      "raw_cell_size": [
+        627,
+        627
+      ],
+      "command": [
+        "/home/ronghao/.local/share/uv/python/cpython-3.13-linux-x86_64-gnu/bin/python3.13",
+        "/home/ronghao/.codex/skills/generate2dsprite/scripts/generate2dsprite.py",
+        "process",
+        "--input",
+        "/mnt/d/repo/godot/godogen/prototypes/anime-card-roguelite/assets/visual-v1/raw/hero-silver_ronin.png",
+        "--target",
+        "player",
+        "--mode",
+        "player_actions",
+        "--output-dir",
+        "/mnt/d/repo/godot/godogen/prototypes/anime-card-roguelite/assets/visual-v1/processed/hero-silver_ronin",
+        "--rows",
+        "2",
+        "--cols",
+        "2",
+        "--cell-size",
+        "256",
+        "--label-prefix",
+        "hero-silver_ronin",
+        "--duration",
+        "125",
+        "--threshold",
+        "128",
+        "--edge-threshold",
+        "180",
+        "--strict-qc",
+        "--align",
+        "feet",
+        "--scale-strategy",
+        "fit",
+        "--component-mode",
+        "largest",
+        "--shared-scale",
+        "--fit-scale",
+        "0.82",
+        "--max-body-scale-cv",
+        "0.08",
+        "--max-anchor-y-std",
+        "0.05"
+      ],
+      "status": "processed",
+      "qc_summary": {
+        "frame_count": 4,
+        "valid_frame_count": 4,
+        "empty_count": 0,
+        "edge_touch_count": 0,
+        "paste_clamped_count": 0,
+        "body_scale_mean": 0.4886185108053015,
+        "output_subject_height_mean": 209.0,
+        "body_scale_cv": 0.005023757404838506,
+        "anchor_x_std": 0.0011423372878619567,
+        "anchor_y_std": 0.0,
+        "anchor_y_mean": 0.9321486268174475
+      },
+      "edge_touch_frames": [],
+      "output_edge_touch_frames": [],
+      "paste_clamped_frames": [],
+      "output_size": [
+        512,
+        512
+      ]
+    },
+    {
+      "id": "cameo-shinpachi",
+      "kind": "character",
+      "input": "prototypes/anime-card-roguelite/assets/visual-v1/raw/cameo-shinpachi.png",
+      "output": "prototypes/anime-card-roguelite/assets/visual-v1/processed/cameo-shinpachi",
+      "raw_present": true,
+      "expected": {
+        "grid": [
+          2,
+          2
+        ],
+        "cell_size": 256,
+        "sheet_size": [
+          512,
+          512
+        ],
+        "target_subject_height_px": 210,
+        "target_footline_px": 230
+      },
+      "processor": {
+        "target": "npc",
+        "mode": "npc_walk",
+        "align": "feet",
+        "component_mode": "largest",
+        "scale_strategy": "fit",
+        "shared_scale": true,
+        "fit_scale": 0.82,
+        "chroma_key": {
+          "threshold": 128,
+          "edge_threshold": 180
+        }
+      },
+      "raw_size": [
+        1254,
+        1254
+      ],
+      "raw_cell_size": [
+        627,
+        627
+      ],
+      "command": [
+        "/home/ronghao/.local/share/uv/python/cpython-3.13-linux-x86_64-gnu/bin/python3.13",
+        "/home/ronghao/.codex/skills/generate2dsprite/scripts/generate2dsprite.py",
+        "process",
+        "--input",
+        "/mnt/d/repo/godot/godogen/prototypes/anime-card-roguelite/assets/visual-v1/raw/cameo-shinpachi.png",
+        "--target",
+        "npc",
+        "--mode",
+        "npc_walk",
+        "--output-dir",
+        "/mnt/d/repo/godot/godogen/prototypes/anime-card-roguelite/assets/visual-v1/processed/cameo-shinpachi",
+        "--rows",
+        "2",
+        "--cols",
+        "2",
+        "--cell-size",
+        "256",
+        "--label-prefix",
+        "cameo-shinpachi",
+        "--duration",
+        "125",
+        "--threshold",
+        "128",
+        "--edge-threshold",
+        "180",
+        "--strict-qc",
+        "--align",
+        "feet",
+        "--scale-strategy",
+        "fit",
+        "--component-mode",
+        "largest",
+        "--shared-scale",
+        "--fit-scale",
+        "0.82",
+        "--max-body-scale-cv",
+        "0.08",
+        "--max-anchor-y-std",
+        "0.05"
+      ],
+      "status": "processed",
+      "qc_summary": {
+        "frame_count": 4,
+        "valid_frame_count": 4,
+        "empty_count": 0,
+        "edge_touch_count": 0,
+        "paste_clamped_count": 0,
+        "body_scale_mean": 0.460945657028031,
+        "output_subject_height_mean": 205.0,
+        "body_scale_cv": 0.030841579023774945,
+        "anchor_x_std": 0.05191040068839945,
+        "anchor_y_std": 0.018290778472090877,
+        "anchor_y_mean": 0.8905492730210015
+      },
+      "edge_touch_frames": [],
+      "output_edge_touch_frames": [],
+      "paste_clamped_frames": [],
+      "output_size": [
+        512,
+        512
+      ]
+    },
+    {
+      "id": "enemy-raider",
+      "kind": "character",
+      "input": "prototypes/anime-card-roguelite/assets/visual-v1/raw/enemy-raider.png",
+      "output": "prototypes/anime-card-roguelite/assets/visual-v1/processed/enemy-raider",
+      "raw_present": true,
+      "expected": {
+        "grid": [
+          2,
+          2
+        ],
+        "cell_size": 256,
+        "sheet_size": [
+          512,
+          512
+        ],
+        "target_subject_height_px": 210,
+        "target_footline_px": 230
+      },
+      "processor": {
+        "target": "creature",
+        "mode": "combat",
+        "align": "feet",
+        "component_mode": "largest",
+        "scale_strategy": "fit",
+        "shared_scale": true,
+        "fit_scale": 0.82,
+        "chroma_key": {
+          "threshold": 128,
+          "edge_threshold": 180
+        }
+      },
+      "raw_size": [
+        1254,
+        1254
+      ],
+      "raw_cell_size": [
+        627,
+        627
+      ],
+      "command": [
+        "/home/ronghao/.local/share/uv/python/cpython-3.13-linux-x86_64-gnu/bin/python3.13",
+        "/home/ronghao/.codex/skills/generate2dsprite/scripts/generate2dsprite.py",
+        "process",
+        "--input",
+        "/mnt/d/repo/godot/godogen/prototypes/anime-card-roguelite/assets/visual-v1/raw/enemy-raider.png",
+        "--target",
+        "creature",
+        "--mode",
+        "combat",
+        "--output-dir",
+        "/mnt/d/repo/godot/godogen/prototypes/anime-card-roguelite/assets/visual-v1/processed/enemy-raider",
+        "--rows",
+        "2",
+        "--cols",
+        "2",
+        "--cell-size",
+        "256",
+        "--label-prefix",
+        "enemy-raider",
+        "--duration",
+        "125",
+        "--threshold",
+        "128",
+        "--edge-threshold",
+        "180",
+        "--strict-qc",
+        "--align",
+        "feet",
+        "--scale-strategy",
+        "fit",
+        "--component-mode",
+        "largest",
+        "--shared-scale",
+        "--fit-scale",
+        "0.82",
+        "--max-body-scale-cv",
+        "0.08",
+        "--max-anchor-y-std",
+        "0.05"
+      ],
+      "status": "processed",
+      "qc_summary": {
+        "frame_count": 4,
+        "valid_frame_count": 4,
+        "empty_count": 0,
+        "edge_touch_count": 0,
+        "paste_clamped_count": 0,
+        "body_scale_mean": 0.4656856228994479,
+        "output_subject_height_mean": 209.0,
+        "body_scale_cv": 0.00046517327805742603,
+        "anchor_x_std": 0.021809369951534735,
+        "anchor_y_std": 0.021809369951534707,
+        "anchor_y_mean": 0.9151857835218093
+      },
+      "edge_touch_frames": [],
+      "output_edge_touch_frames": [],
+      "paste_clamped_frames": [],
+      "output_size": [
+        512,
+        512
+      ]
+    },
+    {
+      "id": "enemy-boss",
+      "kind": "character",
+      "input": "prototypes/anime-card-roguelite/assets/visual-v1/raw/enemy-boss.png",
+      "output": "prototypes/anime-card-roguelite/assets/visual-v1/processed/enemy-boss",
+      "raw_present": true,
+      "expected": {
+        "grid": [
+          2,
+          2
+        ],
+        "cell_size": 256,
+        "sheet_size": [
+          512,
+          512
+        ],
+        "target_subject_height_px": 210,
+        "target_footline_px": 230
+      },
+      "processor": {
+        "target": "creature",
+        "mode": "combat",
+        "align": "feet",
+        "component_mode": "largest",
+        "scale_strategy": "fit",
+        "shared_scale": true,
+        "fit_scale": 0.82,
+        "chroma_key": {
+          "threshold": 128,
+          "edge_threshold": 180
+        }
+      },
+      "raw_size": [
+        1254,
+        1254
+      ],
+      "raw_cell_size": [
+        627,
+        627
+      ],
+      "command": [
+        "/home/ronghao/.local/share/uv/python/cpython-3.13-linux-x86_64-gnu/bin/python3.13",
+        "/home/ronghao/.codex/skills/generate2dsprite/scripts/generate2dsprite.py",
+        "process",
+        "--input",
+        "/mnt/d/repo/godot/godogen/prototypes/anime-card-roguelite/assets/visual-v1/raw/enemy-boss.png",
+        "--target",
+        "creature",
+        "--mode",
+        "combat",
+        "--output-dir",
+        "/mnt/d/repo/godot/godogen/prototypes/anime-card-roguelite/assets/visual-v1/processed/enemy-boss",
+        "--rows",
+        "2",
+        "--cols",
+        "2",
+        "--cell-size",
+        "256",
+        "--label-prefix",
+        "enemy-boss",
+        "--duration",
+        "125",
+        "--threshold",
+        "128",
+        "--edge-threshold",
+        "180",
+        "--strict-qc",
+        "--trim-border",
+        "0",
+        "--align",
+        "feet",
+        "--scale-strategy",
+        "fit",
+        "--component-mode",
+        "largest",
+        "--shared-scale",
+        "--fit-scale",
+        "0.82",
+        "--max-body-scale-cv",
+        "0.08",
+        "--max-anchor-y-std",
+        "0.05"
+      ],
+      "status": "processed",
+      "qc_summary": {
+        "frame_count": 4,
+        "valid_frame_count": 4,
+        "empty_count": 0,
+        "edge_touch_count": 0,
+        "paste_clamped_count": 0,
+        "body_scale_mean": 0.5943073326001226,
+        "output_subject_height_mean": 209.0,
+        "body_scale_cv": 0.003133352292619873,
+        "anchor_x_std": 0.026327869249153393,
+        "anchor_y_std": 0.01198827462390182,
+        "anchor_y_mean": 0.9090909090909091
+      },
+      "edge_touch_frames": [],
+      "output_edge_touch_frames": [],
+      "paste_clamped_frames": [],
+      "output_size": [
+        512,
+        512
+      ],
+      "runtime_path": "prototypes/anime-card-roguelite/assets/visual-v1/enemy-boss.png"
+    },
+    {
+      "id": "fx-energy",
+      "kind": "fx",
+      "input": "prototypes/anime-card-roguelite/assets/visual-v1/raw/fx-energy.png",
+      "output": "prototypes/anime-card-roguelite/assets/visual-v1/processed/fx-energy",
+      "raw_present": true,
+      "expected": {
+        "grid": [
+          2,
+          2
+        ],
+        "cell_size": 256,
+        "sheet_size": [
+          512,
+          512
+        ]
+      },
+      "processor": {
+        "target": "asset",
+        "mode": "fx",
+        "align": "center",
+        "component_mode": "all",
+        "scale_strategy": "fit",
+        "shared_scale": true,
+        "fit_scale": 0.85,
+        "chroma_key": {
+          "threshold": 128,
+          "edge_threshold": 180
+        }
+      },
+      "raw_size": [
+        1254,
+        1254
+      ],
+      "raw_cell_size": [
+        627,
+        627
+      ],
+      "command": [
+        "/home/ronghao/.local/share/uv/python/cpython-3.13-linux-x86_64-gnu/bin/python3.13",
+        "/home/ronghao/.codex/skills/generate2dsprite/scripts/generate2dsprite.py",
+        "process",
+        "--input",
+        "/mnt/d/repo/godot/godogen/prototypes/anime-card-roguelite/assets/visual-v1/raw/fx-energy.png",
+        "--target",
+        "asset",
+        "--mode",
+        "fx",
+        "--output-dir",
+        "/mnt/d/repo/godot/godogen/prototypes/anime-card-roguelite/assets/visual-v1/processed/fx-energy",
+        "--rows",
+        "2",
+        "--cols",
+        "2",
+        "--cell-size",
+        "256",
+        "--label-prefix",
+        "fx-energy",
+        "--duration",
+        "125",
+        "--threshold",
+        "128",
+        "--edge-threshold",
+        "180",
+        "--strict-qc",
+        "--trim-border",
+        "0",
+        "--align",
+        "center",
+        "--scale-strategy",
+        "fit",
+        "--component-mode",
+        "all",
+        "--fit-scale",
+        "0.85",
+        "--shared-scale"
+      ],
+      "status": "processed",
+      "qc_summary": {
+        "frame_count": 4,
+        "valid_frame_count": 4,
+        "empty_count": 0,
+        "edge_touch_count": 0,
+        "paste_clamped_count": 0,
+        "body_scale_mean": 0.15511124431240947,
+        "output_subject_height_mean": 167.5,
+        "body_scale_cv": 0.29399277775357774,
+        "anchor_x_std": 0.03641073574741583,
+        "anchor_y_std": 0.04690180049179552,
+        "anchor_y_mean": 0.5021929824561404
+      },
+      "edge_touch_frames": [],
+      "output_edge_touch_frames": [],
+      "paste_clamped_frames": [],
+      "output_size": [
+        512,
+        512
+      ],
+      "runtime_path": "prototypes/anime-card-roguelite/assets/visual-v1/fx-energy.png"
+    },
+    {
+      "id": "fx-beam",
+      "kind": "fx",
+      "input": "prototypes/anime-card-roguelite/assets/visual-v1/raw/fx-beam.png",
+      "output": "prototypes/anime-card-roguelite/assets/visual-v1/processed/fx-beam",
+      "raw_present": true,
+      "expected": {
+        "grid": [
+          2,
+          2
+        ],
+        "cell_size": 256,
+        "sheet_size": [
+          512,
+          512
+        ]
+      },
+      "processor": {
+        "target": "asset",
+        "mode": "fx",
+        "align": "center",
+        "component_mode": "largest",
+        "scale_strategy": "fit",
+        "shared_scale": true,
+        "fit_scale": 0.85,
+        "chroma_key": {
+          "threshold": 128,
+          "edge_threshold": 180
+        }
+      },
+      "raw_size": [
+        1254,
+        1254
+      ],
+      "raw_cell_size": [
+        627,
+        627
+      ],
+      "command": [
+        "/home/ronghao/.local/share/uv/python/cpython-3.13-linux-x86_64-gnu/bin/python3.13",
+        "/home/ronghao/.codex/skills/generate2dsprite/scripts/generate2dsprite.py",
+        "process",
+        "--input",
+        "/mnt/d/repo/godot/godogen/prototypes/anime-card-roguelite/assets/visual-v1/raw/fx-beam.png",
+        "--target",
+        "asset",
+        "--mode",
+        "fx",
+        "--output-dir",
+        "/mnt/d/repo/godot/godogen/prototypes/anime-card-roguelite/assets/visual-v1/processed/fx-beam",
+        "--rows",
+        "2",
+        "--cols",
+        "2",
+        "--cell-size",
+        "256",
+        "--label-prefix",
+        "fx-beam",
+        "--duration",
+        "125",
+        "--threshold",
+        "128",
+        "--edge-threshold",
+        "180",
+        "--strict-qc",
+        "--trim-border",
+        "0",
+        "--align",
+        "center",
+        "--scale-strategy",
+        "fit",
+        "--component-mode",
+        "largest",
+        "--fit-scale",
+        "0.85",
+        "--shared-scale"
+      ],
+      "status": "processed",
+      "qc_summary": {
+        "frame_count": 4,
+        "valid_frame_count": 4,
+        "empty_count": 0,
+        "edge_touch_count": 0,
+        "paste_clamped_count": 0,
+        "body_scale_mean": 0.33684104685743843,
+        "output_subject_height_mean": 78.75,
+        "body_scale_cv": 0.09790872149778777,
+        "anchor_x_std": 0.0034008616645199298,
+        "anchor_y_std": 0.004085706047033335,
+        "anchor_y_mean": 0.47727272727272724
+      },
+      "edge_touch_frames": [],
+      "output_edge_touch_frames": [],
+      "paste_clamped_frames": [],
+      "output_size": [
+        512,
+        512
+      ],
+      "runtime_path": "prototypes/anime-card-roguelite/assets/visual-v1/fx-beam.png"
+    }
+  ],
+  "usage": "python3 prototypes/anime-card-roguelite/scripts/prepare-visuals.py"
+}

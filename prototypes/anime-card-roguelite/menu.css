@@ -1,0 +1,108 @@
+html[data-universe] .shell[data-screen="title"],html[data-universe] .shell[data-screen="play"],html[data-universe] .shell[data-screen="setup"],html[data-universe] .shell[data-screen="achievements"],html[data-universe] .shell[data-screen="replace"] { max-width:none; padding:0; }
+.title-scene { min-height:100svh; position:relative; display:grid; align-items:center; background:linear-gradient(90deg,#050b1788,transparent 65%),url('./assets/menu/title-rift.png') center/cover; }
+.title-content { width:min(47%,610px); padding:5vh 0 7vh clamp(30px,7vw,120px); }
+.menu-kicker { color:#cdb58a; font-size:.75rem; letter-spacing:.2em; text-transform:uppercase; }
+html[data-universe] .title-scene h1 { margin:18px 0; font-size:clamp(3rem,5.2vw,5.5rem); line-height:1.1; letter-spacing:.14em; color:#ffeed1; text-shadow:0 3px 0 #695232,0 8px 30px #000a; white-space:nowrap; }
+.title-tagline { color:#a8b9cf; font-size:1rem; letter-spacing:.15em; margin-bottom:7vh; }
+.title-options { display:grid; gap:12px; width:min(100%,350px); }
+html[data-universe] .title-options button { position:relative; display:grid; text-align:left; padding:15px 20px; gap:5px; background:linear-gradient(90deg,#152333d9,#14203255); border:1px solid #7a8ca444; border-left:3px solid #8ea2b377; border-radius:0 7px 7px 0; box-shadow:none; }
+html[data-universe] .title-options button span { font-size:1.25rem; letter-spacing:.14em; color:#e7e5de; }
+html[data-universe] .title-options button small { color:#879db9; font-size:.66rem; letter-spacing:.1em; }
+html[data-universe] .title-options button.title-primary { border-color:#d6b277; background:linear-gradient(90deg,#9d744940,#26344788); }
+html[data-universe] .title-options button.title-primary span { color:#ffdc98; }
+html[data-universe] .title-options button:hover,html[data-universe] .title-options button:focus-visible { border-color:#ffe1a4; background:linear-gradient(90deg,#c19a5944,#25334baa); transform:translateX(5px); }
+.title-footer { position:absolute; bottom:18px; left:clamp(30px,7vw,120px); right:30px; display:flex; justify-content:space-between; color:#8393a8; font-size:.7rem; letter-spacing:.07em; }
+.menu-feedback { color:#f1bf7e; min-height:1.5em; margin-top:12px; font-size:.8rem; line-height:1.6; }
+.menu-page { min-height:100svh; background:linear-gradient(90deg,#08101def,#08101ddd),url('./assets/menu/title-rift.png') center/cover fixed; }
+.menu-page-header { display:flex; justify-content:space-between; align-items:center; padding:22px clamp(22px,5vw,85px); border-bottom:1px solid #46546b55; color:#c6b28a; letter-spacing:.15em; font-size:.85rem; }
+html[data-universe] .menu-back { padding:8px 18px; background:#172435; border-color:#5a6d86; }
+.menu-page-body { max-width:1250px; margin:auto; padding:clamp(22px,5vh,65px) 32px; }
+html[data-universe] .menu-page h1 { margin-top:12px; font-size:clamp(1.8rem,3vw,3rem); letter-spacing:.08em; }
+.menu-help { color:#a3b2c9; line-height:1.7; font-size:.84rem; margin:12px 0 20px; }
+.journey-options { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:24px; }
+html[data-universe] .journey-card { display:flex; min-height:350px; padding:32px; gap:20px; text-align:left; flex-direction:column; justify-content:center; position:relative; overflow:hidden; border:1px solid #8e805d; border-radius:16px 4px; background:linear-gradient(130deg,#1a2c40e6,#0b142de6); }
+html[data-universe] .journey-card strong { font-size:1.8rem; letter-spacing:.08em; color:#f5d9a4; }
+html[data-universe] .journey-card > span:not(.journey-icon):not(.save-portrait) { color:#c0d1e2; }
+.journey-card small { color:#8ea6be; font-size:.8rem; line-height:1.8; }
+.journey-icon { color:#e0be7a; font-size:3rem; }
+html[data-universe] .journey-card:disabled { opacity:.5; border-color:#4d6178; }
+html[data-universe] .journey-card .save-portrait { position:absolute; right:6px; bottom:12px; width:135px; height:135px; opacity:.9; pointer-events:none; }
+html[data-universe] .journey-card.new-card { background:linear-gradient(90deg,#0d192edb,#14213ea6),url('./assets/menu/title-rift.png') right/cover; }
+.setup-layout { display:grid; grid-template-columns:minmax(0,1.65fr) minmax(280px,1fr); gap:35px; margin-top:24px; }
+.setup-layout h2 { font-size:1.15rem; }
+.build-options { display:grid; gap:10px; }
+html[data-universe] .build-option { display:grid; grid-template-columns:42px 1fr auto; gap:14px; align-items:center; text-align:left; padding:15px; border-color:#526b77; background:#132738ba; }
+.build-option > span:nth-child(2) { display:grid; gap:5px; }
+.build-option strong { font-size:.95rem; }
+.build-option small { color:#9bafc2; font-size:.77rem; line-height:1.5; }
+.build-sigil { font-size:1.8rem; color:#8eced7; text-align:center; }
+.build-state { color:#91d3ba; font-size:.75rem; }
+html[data-universe] .build-option.excluded { background:#352331a3; border-color:#ba7275; }
+.build-option.excluded .build-state { color:#f1a1a0; }
+.build-option.excluded .build-sigil { color:#b08586; }
+.setup-summary { align-self:start; display:grid; gap:20px; padding:26px; border:1px solid #7d6d4f; border-radius:12px; background:linear-gradient(#273246ba,#101827); color:#bac7d8; }
+.setup-summary h2 { color:#f1d496; }
+.setup-summary p { font-size:.83rem; line-height:1.7; }
+.fixed-rule { padding:13px; border-left:3px solid #c9a66d; background:#bc965817; color:#dfc493; line-height:1.65; font-size:.8rem; }
+html[data-universe] .setup-summary .primary { display:grid; gap:6px; padding:15px; }
+.menu-secondary { margin-top:15px; }
+.menu-error { color:#f9a6a0; }
+.achievement-overview { display:flex; gap:32px; padding:22px 0; color:#b2c2d9; }
+.achievement-overview b { font-size:1.5rem; color:#e7c587; }
+.achievement-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+.achievement { display:flex; gap:18px; align-items:center; padding:24px 18px; min-height:140px; border:1px solid #455367; border-radius:10px; background:#142033ca; }
+.achievement.unlocked { border-color:#b19762; background:linear-gradient(125deg,#54463066,#19283bd9); }
+.achievement-medal { display:grid; place-items:center; flex:0 0 58px; height:58px; border:1px solid #788ca466; border-radius:50%; font-size:2rem; color:#71839b; }
+.unlocked .achievement-medal { border-color:#d9b369; color:#f4d08c; background:#9a763524; }
+.achievement small { font-size:.65rem; color:#8f9daf; }
+.unlocked small { color:#e4c185; }
+.achievement h2 { font-size:1rem; margin:7px 0; }
+.achievement p { color:#91a4bc; font-size:.8rem; line-height:1.6; }
+.replace-panel { max-width:650px; margin-top:30px; padding:30px; border:1px solid #a99569; border-radius:10px; background:#18273b; display:grid; gap:20px; }
+.replace-panel > div { display:flex; gap:12px; }
+.character-screen { display:grid; grid-template-columns:minmax(0,1fr) 310px; gap:18px; }
+.character-screen-top { grid-column:1/-1; display:flex; align-items:center; gap:18px; color:#bba67f; font-size:.8rem; }
+html[data-universe] .character-screen .character-picker { padding:20px; }
+.character-launch { display:grid; gap:16px; align-content:start; }
+.character-launch > p { color:#a8bcd2; font-size:.84rem; line-height:1.7; }
+.character-launch .draft-exclusions { max-height:150px; overflow:auto; font-size:.7rem; }
+.character-launch .loadout-check { margin:0; }
+.character-launch .start-button { padding:15px; }
+@media (max-width:1000px) {
+ .title-content { width:52%;padding-left:5vw; }
+ .achievement-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+ .character-screen { grid-template-columns:1fr; }
+ .character-launch { grid-template-columns:1fr 1fr; }
+ .setup-layout { gap:20px; }
+}
+@media (max-width:680px) {
+ .title-scene { background-position:62% center; background-image:linear-gradient(90deg,#07101cec,#07101c55),url('./assets/menu/title-rift.png'); }
+ .title-content { width:90%; padding:50px 25px 80px; }
+ html[data-universe] .title-scene h1 { font-size:2.8rem; }
+ .title-tagline { margin-bottom:35px; font-size:.8rem; }
+ .title-options { width:85%; }
+ .title-footer { left:25px; right:20px; gap:12px; font-size:.6rem; }
+ .menu-page-body { padding:24px 18px; }
+ .journey-options,.setup-layout,.achievement-grid { grid-template-columns:1fr; }
+ html[data-universe] .journey-card { min-height:240px; padding:25px; gap:14px; }
+ .achievement-overview { gap:12px; font-size:.7rem; flex-wrap:wrap; }
+ .character-launch { grid-template-columns:1fr; }
+ .character-screen-top { align-items:start; }
+ .build-option { gap:8px; }
+ .menu-kicker { font-size:.62rem; }
+}
+@media (max-height:500px) and (min-width:681px) {
+ .title-content { padding-top:20px; padding-bottom:45px; }
+ html[data-universe] .title-scene h1 { font-size:2.6rem; margin:8px 0; }
+ .title-tagline { margin-bottom:14px; }
+ .title-options { gap:5px; }
+ html[data-universe] .title-options button { padding:7px 15px; }
+ html[data-universe] .title-options button span { font-size:1rem; }
+ .title-footer { bottom:8px; }
+}
+@media (prefers-reduced-motion:reduce) { html[data-universe] .title-options button:hover { transform:none; } }
+html[data-universe] .character-screen .character-screen-top { grid-row:1; grid-column:1 / -1; }
+html[data-universe] .character-screen .character-picker { grid-row:2; grid-column:1; }
+html[data-universe] .character-screen .character-launch { grid-row:2; grid-column:2; }
+html[data-universe] .shell[data-screen="home"] > .rules,html[data-universe] .shell[data-screen="home"] > .theme-chip { display:none; }
+@media(max-width:1000px) { html[data-universe] .character-screen .character-launch { grid-row:3; grid-column:1; } }

@@ -58,3 +58,24 @@
 ## 原型限制
 
 仍以文字與CSS主題呈現。當局不續存；角色選擇、收藏、起始組與排除清單會保存。Sprite 客串／借招演出和前期正規、後期跨界獎勵路線記於 DESIGN-DIRECTION.md，尚未實作。真人遊玩時間、職業辨識、流派取捨與重玩意願尚待PLAYTEST.md的無提示試玩。
+
+## 2026-09-07 — 2D 橫向素材 v1
+
+- `node --test --test-isolation=none prototypes/anime-card-roguelite/*.test.js`：40/40 通過。
+- `browser-check.mjs`：三名角色完整七層勝利路線、固定牌／排除、起始配置、共鳴／蓄氣教學、存檔遷移與被封鎖情境、390px 版面通過；無 pageerror。
+- `visual-check.mjs --playwright /path/to/@playwright/test`：11 張運行素材解碼成功，角色／敵人正方形比例、左右配置、實際出牌觸發新八吐槽及銀桑龜派氣功、特效清理、390px／844px 版面、減少動態偏好均通過，無 HTTP 4xx/5xx。
+- 八張 sprite 圖集均通過處理器 strict QC（去背、裁格、邊界、共享比例與對齊）；完整結果在 `assets/visual-v1/qc.json`。
+- 人工檢視桌面戰鬥、吐槽、氣功、手機直向截圖，修正圖片比例、戰場文字對比、敵人地面位置及過大的桌面 HUD。特效素材與角色分離，專用施法姿勢尚待下一批。
+- 最新特效截圖：`/tmp/rift-visual-browser/`；完整流程截圖：`/tmp/rift-character-browser/`。
+- 根目錄 `CLAUDE.md` 從 symlink 改為普通 UTF-8 檔案，內容與 `AGENTS.md` 一致；Git 可辨識 mode 120000 → 100644，沒有被 ignore。未代替使用者 commit。
+
+## 2026-09-08 — 木葉素材、遊戲 UI 與攻擊／受擊
+
+- 40 項規則／存檔測試通過。
+- 完整 browser-check：三名角色七層勝利，配置／排除／教學／儲存故障等既有情境通過，無 pageerror。
+- visual-check 新增三名角色真實出牌攻擊、敵方回合受擊、對應圖集來源、恢復待機驗證；保留吐槽、光束、素材解碼、390×844／844×390、reduced-motion 檢查，全部通過。
+- 九張2×2角色圖集經共用角色 scale-profile 處理通過嚴格QC。姿態輪廓容許值與原因記於 visual-v2/ART-DIRECTION.md。
+- 已人工檢視角色選單、木葉戰場、攻擊／受擊、手機版截圖；全景木葉素材修正原背景裁掉地標的問題。
+- 截圖：/tmp/rift-visual-browser-v2/。
+- Herdr 的两個 Luna Max worker 在開始修改前遇到用量限制；本批 UI、素材與動畫由 commander 接手完成，沒有未收回的 worker 修改。
+- 最後增加並通過：桌面狀態標籤完全位於戰場內、1440×900 手牌完整可見。

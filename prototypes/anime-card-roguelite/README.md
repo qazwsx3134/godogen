@@ -85,4 +85,9 @@ node prototypes/anime-card-roguelite/browser-check.mjs \
 
 截圖位於 `/tmp/rift-character-browser/`。驗證紀錄見 VALIDATION.md，真人試玩流程見 PLAYTEST.md。模擬勝率不代表真人勝率。
 
-本原型隔離在此目錄，不參與 Godogen 發布。現行角色 API 見 CHARACTER-CONTRACT.md；通用登塔規則見 CONTRACT.md。Sprite 演出與後期跨界取得方向記於 [DESIGN-DIRECTION.md](./DESIGN-DIRECTION.md)，尚未實作。
+本原型隔離在此目錄，不參與 Godogen 發布。現行角色 API 見 CHARACTER-CONTRACT.md；通用登塔規則見 CONTRACT.md。2D 橫向戰場已接入三套宇宙背景、三名角色待機、普通敵人／首領、新八吐槽與氣功光束 Sprite。後期跨界取得入口仍待設計，方向見 [DESIGN-DIRECTION.md](./DESIGN-DIRECTION.md)。
+
+想測試跨界演出：選銀桑，在收藏指定取得「吐槽反擊」「龜派氣功」，加入起始十張牌後登塔。固定牌仍不能排除。素材規格與生成紀錄見 [assets/visual-v1/ART-DIRECTION.md](./assets/visual-v1/ART-DIRECTION.md)。
+
+
+2026-09-08 視覺 v2：火影角色改為金髮橘黑忍服與木葉護額，背景新增木葉村／火影岩全景。UI 採深色遊戲 HUD、角色選擇卡與帶插圖的手牌。三名可選角色均有四格攻擊和四格受擊圖集，出牌與敵方回合會切換動作，結束恢復待機。素材與完整生成 prompt 見 [visual-v2/ART-DIRECTION.md](./assets/visual-v2/ART-DIRECTION.md)。

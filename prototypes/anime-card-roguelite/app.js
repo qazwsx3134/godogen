@@ -7,8 +7,13 @@ import {
   loadProfile, saveProfile, openPack, grantCard, addTestCoins, setLoadout,
   applyPreset, applyCharacter, recordResult
 } from './profile.js';
+import { BATTLE_ASSETS, playBattleArt, clearBattleArt, playEnemyArt, preloadBattleAssets } from './battle-art.js';
+
+import { menuView } from './menu-views.js';
+import { loadCampaign, saveCampaign, checkpoint, configuredDeck, buildExclusions } from './campaign.js';
 
 const app = document.querySelector('#app');
+preloadBattleAssets();
 const memoryStorage = (() => {
   const values = new Map();
   return { getItem: key => values.get(key) ?? null, setItem: (key, value) => values.set(key, value) };
@@ -26,8 +31,17 @@ try {
 try { seed = sessionStorage.getItem('rift-seed') || seed; } catch (_) {}
 
 let profile = loadProfile(storage);
+const loadedCampaign = loadCampaign(storage, profile.stats);
+let campaign = loadedCampaign.campaign;
+let campaignNotice = loadedCampaign.notice;
+let campaignPersistenceBlocked = Boolean(loadedCampaign.notice && !campaign.run);
+let runId = null;
 let run = null;
-let tab = 'home';
+let tab = 'title';
+let screens = [];
+let excludedBuilds = [];
+let appliedBuildCards = [];
+let replaceReady = false;
 let feedback = '';
 let selectedUid = null;
 let selectedPotion = null;
@@ -59,7 +73,7 @@ const universe = key => UNIVERSES[key] || UNIVERSES.neutral || { name: key, labe
 const kindLabel = kind => ({ battle: '戰鬥', elite: '菁英', camp: '營火', shop: '商店', event: '事件', boss: '首領' }[kind] || kind);
 const owned = id => profile.collection?.[id] || 0;
 const basic = id => id === 'strike' || id === 'defend';
-const activeCharacter = () => CHARACTERS.find(character => character.id === profile.characterId) || CHARACTERS[0];
+const activeCharacter = () => CHARACTERS.find(character => character.id === (run?.characterId || profile.characterId)) || CHARACTERS[0];
 const fixedCardIds = (character = activeCharacter()) => [...(character?.fixedCards || character?.deck?.filter(id => !basic(id)).slice(0, 2) || [])];
 const capFor = id => basic(id) ? 5 : 2;
 const isExcluded = id => draftExcludedCards.includes(id);
@@ -84,6 +98,7 @@ function loadoutCheck() {
 const say = text => { feedback = text; };
 
 function save() {
+  persistProgress();
   if (saveProfile(profile, storage)) return true;
   storageNotice = '本機儲存失敗：收藏只保留在此頁，重新整理可能遺失。';
   say('無法儲存收藏；本次瀏覽仍可繼續。');
@@ -107,13 +122,14 @@ function saveSeed(value) {
 }
 
 function setTheme() {
-  document.documentElement.dataset.universe = run?.currentUniverse || 'neutral';
+  document.documentElement.dataset.universe = tab === 'run' ? run?.currentUniverse || 'neutral' : 'neutral';
+  app.dataset.screen = tab;
 }
 
 function focusRef(element) {
   if (!element || element === document.body || !app.contains(element)) return null;
   if (element.id) return { type: 'id', value: element.id };
-  for (const key of ['tab', 'preset', 'node', 'play', 'enemy', 'reward', 'pile', 'upgrade', 'buyCard', 'buyRelic', 'remove', 'event', 'addDeck', 'character', 'potion', 'removeDeck', 'exclude', 'include', 'tutorialOpen', 'tutorialStep', 'tutorialTab', 'tutorialAction']) {
+  for (const key of ['menu', 'build', 'tab', 'preset', 'node', 'play', 'enemy', 'reward', 'pile', 'upgrade', 'buyCard', 'buyRelic', 'remove', 'event', 'addDeck', 'character', 'potion', 'removeDeck', 'exclude', 'include', 'tutorialOpen', 'tutorialStep', 'tutorialTab', 'tutorialAction']) {
     if (element.dataset[key] !== undefined) return { type: 'data', key, value: element.dataset[key] };
   }
   return null;
@@ -143,6 +159,18 @@ function canEmpower(instance) {
   return Boolean(run && run.resonance >= 3 && hasDamageOrBlock(cardInstance(instance)));
 }
 
+function cardArtAction(item, targetId = null) {
+  if (!item) return null;
+  return {
+    cardId: item.id,
+    characterId: run?.characterId,
+    targetId,
+    target: item.target,
+    hasDamage: Boolean(item.effects?.some(effect => effect.op === 'damage')),
+    hasBlock: Boolean(item.effects?.some(effect => effect.op === 'block')),
+  };
+}
+
 function cardHtml(instanceOrCard, options = {}) {
   const item = instanceOrCard?.cardId ? cardInstance(instanceOrCard) : instanceOrCard;
   if (!item) return '<div class="card invalid-card"><strong>未知卡牌</strong><span class="desc">此卡牌資料無法使用。</span></div>';
@@ -155,12 +183,15 @@ function cardHtml(instanceOrCard, options = {}) {
   const loot=run&&/data-reward|data-buy-card/.test(options.action||'')?`<span class="loot-hint">${esc(getLootHint(run,item.id))}</span>`:'';
   const rarity={common:'普通',uncommon:'進階',rare:'稀有'}[item.rarity]||'';
   const typeLabel = { attack: '攻擊', skill: '技能', power: '能力' }[item.type] || item.type;
-  return `<button class="card${options.selected ? ' selected' : ''}${options.disabled ? ' disabled-card' : ''}" ${options.action || ''} ${options.extra || ''} ${label} ${title} ${options.disabled ? 'disabled' : ''}><span class="eyebrow">${esc(universe(item.universe).name)} · ${esc(typeLabel)} · ${rarity}</span><strong>${esc(item.name)}${upgraded} <span class="cost">${item.cost}</span></strong><span class="desc">${esc(item.text)}</span>${tags.length?`<span class="build-tags">${tags.map(t=>`<i>${esc(t)}</i>`).join('')}</span>`:''}${preview}${loot}${status}</button>`;
+  const artUniverse = item.universe === 'neutral' ? (activeCharacter()?.universe || 'ninja') : item.universe;
+  const artHero = {ninja:'shadow_ninja',dragon:'ki_fighter',samurai:'silver_ronin'}[artUniverse];
+  const illustration = `<span class="card-illustration" aria-hidden="true" style="--card-scene:url('${BATTLE_ASSETS.backgrounds[artUniverse]}')"><span class="sprite-sheet" style="--sprite-image:url('${BATTLE_ASSETS.heroes[artHero]}')"></span></span>`;
+  return `<button class="card${options.selected ? ' selected' : ''}${options.disabled ? ' disabled-card' : ''}" ${options.action || ''} ${options.extra || ''} ${label} ${title} ${options.disabled ? 'disabled' : ''}><span class="eyebrow">${esc(universe(item.universe).name)} · ${esc(typeLabel)} · ${rarity}</span><strong>${esc(item.name)}${upgraded} <span class="cost">${item.cost}</span></strong>${illustration}<span class="desc">${esc(item.text)}</span>${tags.length?`<span class="build-tags">${tags.map(t=>`<i>${esc(t)}</i>`).join('')}</span>`:''}${preview}${loot}${status}</button>`;
 }
 
 function header() {
   const current = run?.currentUniverse || 'neutral';
-  return `<header class="masthead"><div><div class="eyebrow">single-player relay deckbuilder</div><h1>裂界牌局</h1><p class="subtitle">跨宇宙接力 · 七層登塔</p></div><nav class="tabs" aria-label="主選單"><button data-tab="home" aria-current="${tab === 'home' ? 'page' : 'false'}">登塔</button><button data-tab="collection" aria-current="${tab === 'collection' ? 'page' : 'false'}">收藏／起始配置</button>${run ? `<button data-tab="run" aria-current="${tab === 'run' ? 'page' : 'false'}">當局</button>` : ''}<button id="tutorial-open" data-tutorial-open>接力／蓄氣教學</button></nav></header><p class="global-status" role="status" aria-live="polite">${esc(feedback)}</p>${storageNotice ? `<p class="storage-notice" role="status">${esc(storageNotice)}</p>` : ''}<details class="rules" id="rules" ${rulesOpen ? 'open' : ''}><summary>規則摘要</summary><p>每回合 3 能量、抽 5 張；玩家只靠出牌攻擊，結束回合後敵人依意圖行動。格擋會在下回合清除；荊棘、力量等本場效果持續到戰鬥結束。普通勝利不自動回血；失敗只重置當局，收藏保留。非中立牌成功出牌會接力；3 共鳴可手動強化攻擊或格擋牌。</p></details><div class="theme-chip" data-current-universe="${esc(current)}">目前畫風：${esc(universe(current).name)}</div>`;
+  return `<header class="masthead"><div><div class="eyebrow">single-player relay deckbuilder</div><h1>${tab === 'home' ? '選擇你的旅人' : '裂界牌局'}</h1><p class="subtitle">${tab === 'home' ? '02 / 角色與起始牌' : '跨宇宙接力 · 七層登塔'}</p></div><nav class="tabs" aria-label="主選單"><button data-tab="home" aria-current="${tab === 'home' ? 'page' : 'false'}">角色／配置</button><button data-menu="title">主選單</button><button data-tab="collection" aria-current="${tab === 'collection' ? 'page' : 'false'}">收藏／起始配置</button>${run ? `<button data-tab="run" aria-current="${tab === 'run' ? 'page' : 'false'}">當局</button>` : ''}<button id="tutorial-open" data-tutorial-open>接力／蓄氣教學</button></nav></header><p class="global-status" role="status" aria-live="polite">${esc(feedback)}</p>${storageNotice||campaignNotice ? `<p class="storage-notice" role="status">${esc(storageNotice||campaignNotice)}</p>` : ''}<details class="rules" id="rules" ${rulesOpen ? 'open' : ''}><summary>規則摘要</summary><p>每回合 3 能量、抽 5 張；玩家只靠出牌攻擊，結束回合後敵人依意圖行動。格擋會在下回合清除；荊棘、力量等本場效果持續到戰鬥結束。普通勝利不自動回血；失敗只重置當局，收藏保留。非中立牌成功出牌會接力；3 共鳴可手動強化攻擊或格擋牌。</p></details><div class="theme-chip" data-current-universe="${esc(current)}">目前畫風：${esc(universe(current).name)}</div>`;
 }
 
 function presetDeck() {
@@ -170,7 +201,7 @@ function presetDeck() {
 function characterPicker() {
   const selected=activeCharacter();
   const counts=selected.deck.reduce((a,id)=>(a[id]=(a[id]||0)+1,a),{});
-  return `<section class="panel character-picker"><div class="split"><div><span class="eyebrow">選擇冒險角色</span><h2>職業決定特性，戰利品決定流派</h2></div><span class="help">${run ? '冒險進行中，角色與起始配置已鎖定。' : '所有宇宙的卡牌皆可混搭'}</span></div><div class="character-options">${CHARACTERS.map(c=>`<button data-character="${c.id}" class="character-choice ${c.id===selected.id?'active':''}" aria-pressed="${c.id===selected.id}" ${run ? 'disabled' : ''}><span class="eyebrow">${esc(universe(c.universe).name)} · ${esc(c.job)}</span><strong>${esc(c.name)} <small>${c.maxHp} HP</small></strong><b>${esc(c.traitName)}</b><span>${esc(c.traitText)}</span><span class="build-tags">${c.builds.map(t=>`<i>${esc(ARCHETYPES[t]?.name || t)}</i>`).join('')}</span><small class="fixed-preview">固定牌：${fixedCardIds(c).map(id=>esc(card(id)?.name || id)).join('、')}</small></button>`).join('')}</div><details class="starter-preview"><summary>${esc(selected.name)}的起始牌 · 10張</summary><div class="starter-grid">${Object.entries(counts).map(([id,n])=>`<div class="mini"><b>${esc(card(id)?.name || id)} ×${n}</b><br>${esc(card(id)?.text || '')}</div>`).join('')}</div></details></section>`;
+  return `<section class="panel character-picker"><div class="split"><div><span class="eyebrow">選擇冒險角色</span><h2>職業決定特性，戰利品決定流派</h2></div><span class="help">${run ? '冒險進行中，角色與起始配置已鎖定。' : '所有宇宙的卡牌皆可混搭'}</span></div><div class="character-options">${CHARACTERS.map(c=>`<button data-character="${c.id}" class="character-choice ${c.id===selected.id?'active':''}" aria-pressed="${c.id===selected.id}" ${run ? 'disabled' : ''}><span class="character-portrait">${heroSpriteMarkup('choice-sprite', c.id)}</span><span class="eyebrow">${esc(universe(c.universe).name)} · ${esc(c.job)}</span><strong>${esc(c.name)} <small>${c.maxHp} HP</small></strong><b>${esc(c.traitName)}</b><span>${esc(c.traitText)}</span><span class="build-tags">${c.builds.map(t=>`<i>${esc(ARCHETYPES[t]?.name || t)}</i>`).join('')}</span><small class="fixed-preview">固定牌：${fixedCardIds(c).map(id=>esc(card(id)?.name || id)).join('、')}</small></button>`).join('')}</div><details class="starter-preview"><summary>${esc(selected.name)}的起始牌 · 10張</summary><div class="starter-grid">${Object.entries(counts).map(([id,n])=>`<div class="mini"><b>${esc(card(id)?.name || id)} ×${n}</b><br>${esc(card(id)?.text || '')}</div>`).join('')}</div></details></section>`;
 }
 function buildView() {
   const builds=getBuildSummary(run);
@@ -181,11 +212,8 @@ function potionView() {
 }
 
 function homeView() {
-  const check = loadoutCheck();
-  const fixed = fixedCardIds();
-  const optionalCount = Math.max(0, draftDeck.length - draftFixedCount());
-  const excluded = draftExcludedCards.map(id => card(id)?.name || id);
-  return `<section class="home-grid">${characterPicker()}<section class="hero-panel panel"><span class="eyebrow">單人登塔入口</span><h2>${esc(activeCharacter()?.name || '旅人')}，穿過七層裂界</h2><p class="lede">用牌攻擊、防禦與疊加狀態。每次成功出牌都可能切換銀魂紙墨、七龍珠速度線或火影卷軸印記。</p><div class="loadout-check ${check.ok ? 'valid' : 'invalid'}" data-loadout-check="${check.ok ? 'valid' : 'invalid'}"><strong>固定 ${draftFixedCount()}/${fixed.length} · 自選 ${optionalCount}/8 · 總計 ${draftDeck.length}/10</strong><span>${esc(check.text)}</span></div><div class="start-form"><label class="field">固定種子<input id="seed" value="${esc(seed || '裂界-001')}" maxlength="48" autocomplete="off"></label><button class="primary start-button" id="start" ${run || !check.ok ? 'disabled' : ''}>開始登塔 · ${draftDeck.length}/10</button><button data-tab="collection">配置起始牌／排除</button></div><div class="draft-exclusions" data-draft-excluded><b>本局排除</b><span>${excluded.length ? excluded.map(esc).join('、') : '尚未排除卡牌'}</span></div><p class="help">先在「收藏／起始配置」排除非固定牌；排除會移除該牌的所有草稿副本，補滿 10 張後才能保存或開局。</p></section><section class="panel preset-panel"><div class="split"><div><span class="eyebrow">通用牌組配方</span><h2>也能跨職業混搭</h2></div><span class="gold-chip">${profile.coins} 測試幣</span></div>${PRESETS.map(preset => `<button class="preset" data-preset="${preset.id}" ${run ? 'disabled' : ''}><strong>${esc(preset.name)}</strong><span>${esc(preset.description)}</span><small>${preset.deck.length} 張牌 · 保留角色固定牌</small></button>`).join('')}</section><section class="panel route-tease"><span class="eyebrow">登塔流程</span><h2>地圖 → 戰鬥 → 獎勵</h2><div class="flow"><span>選路</span><i>→</i><span>出牌</span><i>→</i><span>休整／商店</span><i>→</i><span>首領</span></div><p class="help">固定種子只控制當局內容；收藏存於本機，當局取得的卡牌與升級只在本局使用。</p><button data-tutorial-open>重開接力／蓄氣教學</button></section></section>`;
+  const check=loadoutCheck(), protectedCards=buildExclusions(excludedBuilds,profile.characterId).protectedCards;
+  return `<section class="character-screen"><div class="character-screen-top"><button data-menu="setup-back">← 冒險設定</button><span>${excludedBuilds.length?'本局排除：'+excludedBuilds.map(id=>ARCHETYPES[id].name).join('、'):'全部流派開放'}</span></div>${characterPicker()}<aside class="character-launch panel"><span class="eyebrow">準備出發</span><h2>${esc(activeCharacter().name)} · ${esc(activeCharacter().job)}</h2><p>${esc(activeCharacter().traitText)}</p>${protectedCards.length?`<p class="fixed-rule">固定牌保留：${protectedCards.map(id=>esc(card(id).name)).join('、')}</p>`:''}<div class="loadout-check ${check.ok?'valid':'invalid'}" data-loadout-check="${check.ok?'valid':'invalid'}"><strong>固定 ${draftFixedCount()}/2 · 自選 ${Math.max(0,draftDeck.length-draftFixedCount())}/8 · 總計 ${draftDeck.length}/10</strong><span>${esc(check.text)}</span></div><label class="field">冒險種子<input id="seed" value="${esc(seed)}" maxlength="48"></label><button class="primary start-button" id="start" ${run||!check.ok?'disabled':''}>開始登塔 · ${draftDeck.length}/10</button><button data-tab="collection">調整起始牌／個別排除</button><div class="draft-exclusions" data-draft-excluded><b>本局排除 ${draftExcludedCards.length} 張卡</b><span>${draftExcludedCards.length?draftExcludedCards.map(id=>esc(card(id).name)).join('、'):'尚未排除卡牌'}</span></div><details><summary>套用推薦牌組</summary>${PRESETS.map(p=>`<button class="preset" data-preset="${p.id}"><strong>${p.name}</strong><span>${p.description}</span></button>`).join('')}</details></aside></section>`;
 }
 
 function collectionView() {
@@ -224,6 +252,20 @@ function playerHtml() {
   return `<section class="player-card"><div class="player-identity"><span class="eyebrow">角色身份 · ${esc(character?.job || '旅人')}</span><strong>${esc(player.name || character?.name || '旅人')}</strong><span class="trait-name">${esc(character?.traitName || '')}</span></div><div class="player-vitals"><span class="hp">生命 ${hp}/${maxHp}</span><span>格擋 ${player.block || 0}</span><span>力量 ${player.strength || 0}</span><span>荊棘 ${player.thorns || 0}</span><span>蓄氣 ${player.charge || 0}/9</span><span>放逐格擋 ${player.exhaustGuard || 0}</span></div><div class="hp-bar" aria-label="生命 ${hp}/${maxHp}"><span style="width:${Math.max(0, Math.min(100, hp / maxHp * 100))}%"></span></div><p class="trait-help">${esc(character?.traitText || '跨宇宙卡牌皆可加入構築。')}</p></section>`;
 }
 
+function heroSpriteMarkup(className = '', characterId = run?.characterId) {
+  const hero = BATTLE_ASSETS.heroes[characterId];
+  return hero ? `<span class="sprite-sheet sprite-idle hero-sprite ${className}" style="--sprite-image:url('${esc(hero)}')" aria-hidden="true"></span>` : '';
+}
+
+function battleHud(className = '') {
+  const player = run?.player || {};
+  const character = CHARACTERS.find(item => item.id === run?.characterId);
+  const hp = Math.max(0, player.hp || 0);
+  const maxHp = player.maxHp || 70;
+  const current = run?.currentUniverse || 'neutral';
+  return `<div class="battle-hud ${className}" data-battle-hud><div class="hud-identity"><span class="hud-portrait">${heroSpriteMarkup('hud-sprite')}</span><span><small class="eyebrow">角色 · ${esc(character?.job || '旅人')}</small><strong>${esc(player.name || character?.name || '旅人')}</strong><small>${esc(character?.traitName || '')}</small></span></div><section class="player-card hud-player-card"><div class="hud-hp-row"><span class="hp">${hp}/${maxHp} HP</span><span>格擋 ${player.block || 0}</span></div><div class="hp-bar" aria-label="生命 ${hp}/${maxHp}"><span style="width:${Math.max(0, Math.min(100, hp / maxHp * 100))}%"></span></div><div class="player-vitals"><span>力量 ${player.strength || 0}</span><span>荊棘 ${player.thorns || 0}</span><span>蓄氣 ${player.charge || 0}/9</span><span>放逐格擋 ${player.exhaustGuard || 0}</span></div></section><div class="hud-resources"><span class="hud-energy">能量 <b>${run?.energy || 0}/3</b></span><span class="hud-resonance" data-resonance="${run?.resonance || 0}">共鳴 <b>${run?.resonance || 0}/3</b></span><span class="hud-universe" data-current-universe="${esc(current)}">${esc(universe(current).name)}</span></div></div>`;
+}
+
 function relicList() {
   if (!run?.relics?.length) return '<p class="help">尚無遺物。</p>';
   return `<div class="relic-list">${run.relics.map(id => { const item = RELICS.find(relic => relic.id === id); return `<div class="relic"><b>${esc(item?.name || id)}</b><span>${esc(item?.text || '遺物效果')}</span></div>`; }).join('')}</div>`;
@@ -246,9 +288,21 @@ function intentHtml(enemy) {
   return `<span class="intent-kind">${esc(label)}</span> ${esc(amount)}${intent.kind === 'attack' ? ' · 預告攻擊' : ''}`;
 }
 
+function intentSummary(enemy) {
+  const intent = enemy.intent || {};
+  const damage = intent.kind === 'attack' ? getIntentDamage(enemy) : 0;
+  const amount = intent.kind === 'attack' ? `${damage} ×${intent.hits || 1}` : intent.amount || '';
+  const label = intent.kind === 'buff' && intent.label === '蓄力' ? '強化攻勢' : intent.label || intent.kind || '未知';
+  return `${label}${amount ? ` ${amount}` : ''}`;
+}
+
 function enemyHtml(enemy) {
   const dead = enemy.hp <= 0;
-  return `<button class="enemy ${dead ? 'dead' : ''} ${selectedUid||selectedPotion ? 'targetable' : ''}" data-enemy="${esc(enemy.id)}" ${dead ? 'disabled' : ''}><span class="enemy-head"><span class="eyebrow">敵方</span><strong>${esc(enemy.name)}</strong></span><span class="enemy-stats"><span class="hp">${enemy.hp}/${enemy.maxHp} HP</span><span>格擋 ${enemy.block || 0}</span>${enemy.poison ? `<span class="poison">毒 ${enemy.poison}</span>` : ''}${enemy.weak ? `<span class="weak">虛弱 ${enemy.weak}</span>` : ''}</span><span class="intent">${intentHtml(enemy)}</span></button>`;
+  const boss = run?.currentNode?.kind === 'boss' || enemy.boss === true || /boss/i.test(enemy.id || '');
+  const sprite = boss ? BATTLE_ASSETS.enemies.boss : BATTLE_ASSETS.enemies.raider;
+  const intent = intentSummary(enemy);
+  const tooltip = `${enemy.name}；生命 ${enemy.hp}/${enemy.maxHp}；格擋 ${enemy.block || 0}；意圖：${intent}${enemy.poison ? `；毒 ${enemy.poison}` : ''}${enemy.weak ? `；虛弱 ${enemy.weak}` : ''}`;
+  return `<button class="enemy ${dead ? 'dead' : ''} ${selectedUid||selectedPotion ? 'targetable' : ''}" data-enemy="${esc(enemy.id)}" aria-label="${esc(tooltip)}" title="${esc(tooltip)}" ${dead ? 'disabled' : ''}><span class="enemy-intent-bubble">${intentHtml(enemy)}</span><span class="enemy-art-wrap"><span class="sprite-sheet sprite-idle enemy-sprite" style="--sprite-image:url('${esc(sprite)}')" aria-hidden="true"></span></span><span class="enemy-head"><span class="eyebrow">敵方</span><strong>${esc(enemy.name)}</strong></span><span class="enemy-stats"><span class="hp">${enemy.hp}/${enemy.maxHp} HP</span><span>格擋 ${enemy.block || 0}</span>${enemy.poison ? `<span class="poison">毒 ${enemy.poison}</span>` : ''}${enemy.weak ? `<span class="weak">虛弱 ${enemy.weak}</span>` : ''}</span><span class="intent">${intentHtml(enemy)}</span><span class="enemy-tooltip" role="tooltip">${esc(tooltip)}</span></button>`;
 }
 
 function pileItems(kind) {
@@ -276,7 +330,10 @@ function battleView() {
     return cardHtml(instance, { action: `data-play="${esc(instance.uid)}"`, selected: instance.uid === selectedUid, disabled: unaffordable, status: unaffordable ? `能量不足 · 需要 ${item.cost}` : '', title: unaffordable ? `需要 ${item.cost} 能量，目前 ${run.energy}` : '', ariaLabel: unaffordable ? `${item?.name || '未知牌'}，能量不足` : undefined });
   }).join('');
   const targetHint = selectedPotion ? '選擇敵人使用消耗品；不消耗能量。' : selectedCard ? (selectedCard.target === 'enemy' ? '選擇一名存活敵人。' : selectedCard.target === 'self' ? '此牌將作用於旅人。' : '此牌可立即結算。') : '選擇一張牌查看目標。';
-  return `<section class="battle-layout"><section class="battle-main"><section class="battle-toolbar panel split"><div><span class="eyebrow">${esc(run.currentNode?.label || '戰鬥')} · 回合 ${run.turn}</span><h2>能量 <span class="energy">${run.energy}/3</span></h2></div><div class="turn-actions"><button id="empower" aria-pressed="${empowerChoice}" ${empowermentAvailable ? '' : 'disabled'}>${empowerChoice ? '強化已開' : '手動強化'} <small>3 共鳴</small></button><button class="primary" id="end">結束回合 → 敵方行動</button></div></section>${potionView()}<section class="mobile-summary">${playerHtml()}${relayPanel()}</section><section class="panel stack enemies-panel"><div class="split"><h2>敵方意圖</h2><span class="help">結束回合不會自動攻擊</span></div><div class="enemy-list">${(run.enemies || []).map(enemyHtml).join('')}</div></section><section class="panel stack hand-panel" id="hand-section"><div class="split"><h2>手牌 · ${run.hand.length}/10</h2><div class="piles"><button data-pile="deck">牌組 ${run.deck.length}</button><button data-pile="draw">抽牌 ${run.draw.length}</button><button data-pile="discard">棄牌 ${run.discard.length}</button><button data-pile="exile">放逐 ${run.exile.length}</button></div></div><p class="notice">${esc(targetHint)} ${empowerChoice ? '符合條件的攻擊／格擋牌將消耗 3 共鳴。' : ''}</p><div class="card-grid hand-grid">${hand || '<p class="empty">手牌已空。</p>'}</div></section></section><aside class="battle-sidebar"><section class="panel player-panel"><h2>角色與職業</h2>${playerHtml()}</section>${relayPanel()}<section class="panel log-panel"><h2>事件</h2><ol class="log">${(run.log || []).slice(-18).reverse().map(entry => `<li>${esc(entry)}</li>`).join('')}</ol></section></aside></section>`;
+  const currentUniverse = run.currentUniverse || 'neutral';
+  const background = BATTLE_ASSETS.backgrounds[currentUniverse];
+  const backgroundStyle = background ? `style="--battle-bg-image:url('${esc(background)}')"` : '';
+  return `<section class="battle-layout battle-layout-art"><section class="battle-main"><section class="battle-toolbar panel"><div class="battle-toolbar-line"><div><span class="eyebrow">${esc(run.currentNode?.label || '戰鬥')} · 回合 ${run.turn}</span><h2>戰場指揮</h2></div><div class="turn-actions"><button id="empower" aria-pressed="${empowerChoice}" ${empowermentAvailable ? '' : 'disabled'}>${empowerChoice ? '強化已開' : '手動強化'} <small>3 共鳴</small></button><button class="primary" id="end">結束回合 → 敵方行動</button></div></div>${battleHud('desktop-battle-hud')}</section><section class="mobile-summary">${battleHud('mobile-battle-hud')}</section>${potionView()}<section class="battle-stage panel enemies-panel" data-battle-stage data-battle-universe="${esc(currentUniverse)}" ${backgroundStyle}><div class="stage-heading"><div><span class="eyebrow">CROSS-UNIVERSE BATTLEFIELD</span><h2 data-current-universe="${esc(currentUniverse)}">${esc(universe(currentUniverse).name)}戰線</h2></div><span class="stage-help">回合 ${run.turn} · 點擊敵人選擇目標</span></div><div class="stage-lanes"><div class="hero-lane"><div class="hero-combatant" data-hero-actor><span class="actor-label">我方 · ${esc(run.player?.name || '旅人')}</span><span class="actor-art-wrap">${heroSpriteMarkup()}</span><span class="actor-stats">格擋 ${run.player?.block || 0} · 蓄氣 ${run.player?.charge || 0}/9</span></div></div><div class="stage-bridge" data-fx-layer aria-hidden="true"><span class="bridge-mark">接力</span></div><div class="enemy-lane"><div class="enemy-lane-heading"><h2>敵方意圖</h2><span class="help">${(run.enemies || []).length} 名敵人</span></div><div class="enemy-list">${(run.enemies || []).map(enemyHtml).join('')}</div></div></div></section><section class="panel stack hand-panel" id="hand-section"><div class="split"><h2>手牌 · ${run.hand.length}/10</h2><div class="piles"><button data-pile="deck">牌組 ${run.deck.length}</button><button data-pile="draw">抽牌 ${run.draw.length}</button><button data-pile="discard">棄牌 ${run.discard.length}</button><button data-pile="exile">放逐 ${run.exile.length}</button></div></div><p class="notice">${esc(targetHint)} ${empowerChoice ? '出牌前已有 3 共鳴，符合條件的牌將首段傷害／首個格擋各 +4。' : ''}</p><div class="hand-scroll"><div class="card-grid hand-grid">${hand || '<p class="empty">手牌已空。</p>'}</div></div></section></section><aside class="battle-sidebar"><section class="panel log-panel"><div class="split"><h2>事件</h2><span class="help">即時戰報</span></div><ol class="log">${(run.log || []).slice(-12).reverse().map(entry => `<li>${esc(entry)}</li>`).join('')}</ol></section>${buildView()}</aside></section>`;
 }
 
 function rewardView() {
@@ -332,15 +389,16 @@ function runView() {
   if (run.phase === 'shop') return shopView();
   if (run.phase === 'event') return eventView();
   const won = run.phase === 'won';
-  return `<section class="terminal panel stack"><span class="eyebrow">冒險結算</span><h2>${won ? '裂界已平定' : '旅人倒下'}</h2><p class="lede">${won ? '七層路線完成，跨宇宙接力留下了新的牌路。' : '本次冒險結束；收藏、冒險金幣與永久牌組不受影響。'}</p><div class="terminal-stats"><span>出牌 ${run.metrics?.cardsPlayed || 0}</span><span>造成 ${run.metrics?.damageDealt || 0}</span><span>接力 ${run.metrics?.relays || 0}</span><span>強化 ${run.metrics?.empowered || 0}</span></div><button class="primary" id="return">返回登塔</button></section>`;
+  return `<section class="terminal panel stack"><span class="eyebrow">冒險結算</span><h2>${won ? '裂界已平定' : '旅人倒下'}</h2><p class="lede">${won ? '七層路線完成，跨宇宙接力留下了新的牌路。' : '本次冒險結束；收藏、冒險金幣與永久牌組不受影響。'}</p><div class="terminal-stats"><span>出牌 ${run.metrics?.cardsPlayed || 0}</span><span>造成 ${run.metrics?.damageDealt || 0}</span><span>接力 ${run.metrics?.relays || 0}</span><span>強化 ${run.metrics?.empowered || 0}</span></div><button class="primary" id="return">返回主選單</button></section>`;
 }
 
 function render(options = {}) {
   const rules = document.querySelector('#rules');
   if (rules) rulesOpen = rules.open;
   if (options.focus === undefined) pendingFocus = focusRef(document.activeElement);
+  clearBattleArt();
   setTheme();
-  app.innerHTML = `${header()}<div class="view-root">${tab === 'collection' ? collectionView() : tab === 'run' ? runView() : homeView()}</div><div class="modal" id="modal" ${pile ? '' : 'hidden'} aria-hidden="${pile ? 'false' : 'true'}"><section class="panel stack" role="dialog" aria-modal="true" aria-labelledby="pile-title" tabindex="-1"><div class="split"><h2 id="pile-title">${pile ? esc({ deck: '牌組', draw: '抽牌堆（僅顯示組成）', discard: '棄牌堆', exile: '放逐區' }[pile] || '牌堆') : ''}</h2><button id="close-modal">關閉</button></div><div class="pile-list">${pile ? (pileItems(pile) || '<p class="empty">此牌堆為空。</p>') : ''}</div></section></div>${tutorialView()}`;
+  app.innerHTML = `${['title','play','setup','achievements','replace'].includes(tab)?'':header()}<div class="view-root">${['title','play','setup','achievements','replace'].includes(tab)?menuView({screen:tab,campaign,profile,builds:excludedBuilds,notice:storageNotice||campaignNotice,feedback,seed}):tab === 'collection' ? collectionView() : tab === 'run' ? runView() : homeView()}</div><div class="modal" id="modal" ${pile ? '' : 'hidden'} aria-hidden="${pile ? 'false' : 'true'}"><section class="panel stack" role="dialog" aria-modal="true" aria-labelledby="pile-title" tabindex="-1"><div class="split"><h2 id="pile-title">${pile ? esc({ deck: '牌組', draw: '抽牌堆（僅顯示組成）', discard: '棄牌堆', exile: '放逐區' }[pile] || '牌堆') : ''}</h2><button id="close-modal">關閉</button></div><div class="pile-list">${pile ? (pileItems(pile) || '<p class="empty">此牌堆為空。</p>') : ''}</div></section></div>${tutorialView()}`;
   const focus = options.focus === undefined ? pendingFocus : options.focus;
   queueMicrotask(() => {
     if (tutorialOpen) {
@@ -349,7 +407,7 @@ function render(options = {}) {
       else document.querySelector('#tutorial-close')?.focus();
     }
     else if (pile) document.querySelector('#close-modal')?.focus();
-    else findFocus(focus)?.focus({ preventScroll: true });
+    else { const target=findFocus(focus); if(target) target.focus({preventScroll:true}); else app.querySelector('button:not(:disabled)')?.focus({preventScroll:true}); }
     pendingFocus = null;
   });
 }
@@ -383,15 +441,58 @@ function closeTutorial() {
   render({ focus });
 }
 
+function persistProgress() {
+  campaign=checkpoint(campaign,run||campaign.run,run?runId:campaign.runId,profile);
+  profile.stats={...campaign.stats};
+  if(!campaignPersistenceBlocked && !saveCampaign(storage,campaign)) campaignNotice='無法寫入冒險存檔；本次可繼續遊玩，重新整理可能回到較早進度。';
+}
 function finish() {
-  if (run && ['won', 'lost'].includes(run.phase) && !recorded) {
-    recordResult(profile, run.phase === 'won');
-    save();
-    recorded = true;
+  persistProgress();
+  if(run && ['won','lost'].includes(run.phase)) { saveProfile(profile,storage); recorded=true; }
+}
+function navigate(next, push=true) {
+  if(push) screens.push({tab,focus:focusRef(document.activeElement)});
+  tab=next; selectedUid=null;selectedPotion=null;pile=null;
+  render({focus:null});window.scrollTo(0,0);
+}
+function applyBuildFilters() {
+  const manualCards=draftExcludedCards.filter(id=>!appliedBuildCards.includes(id));
+  const configured=configuredDeck({...profile,deck:draftDeck,excludedCards:manualCards},excludedBuilds);
+  appliedBuildCards=buildExclusions(excludedBuilds,profile.characterId).excludedCards.filter(id=>!manualCards.includes(id));
+  draftDeck=configured.deck;draftExcludedCards=configured.excludedCards;
+}
+function menuAction(action) {
+  if(action==='back') {const previous=screens.pop();tab=previous?.tab||'title';render({focus:previous?.focus||null});return;}
+  if(action==='title') {persistProgress();screens=[];navigate('title',false);return;}
+  if(action==='play') {navigate('play');return;}
+  if(action==='achievements') {persistProgress();navigate('achievements');return;}
+  if(action==='collection') {navigate('collection');return;}
+  if(action==='new') {run=null;runId=null;excludedBuilds=[];appliedBuildCards=[];replaceReady=false;draftDeck=[...profile.deck];draftExcludedCards=profile.excludedCards.filter(id=>!(campaign.buildExcludedCards||[]).includes(id));navigate('setup');return;}
+  if(action==='continue') {
+    if(!campaign.run)return;
+    run=structuredClone(campaign.run);runId=campaign.runId;excludedBuilds=[...(run.excludedBuilds||[])];recorded=false;screens=[];say('已恢復上次冒險。');navigate('run',false);return;
   }
+  if(action==='reset-builds') {excludedBuilds=[];render();return;}
+  if(action==='choose-character') {applyBuildFilters();navigate('home');return;}
+  if(action==='setup-back') {navigate('setup');return;}
+  if(action==='cancel-replace') {navigate('home',false);return;}
+  if(action==='confirm-replace') {replaceReady=true;startAdventure();return;}
+}
+function startAdventure() {
+  if(run) {say('冒險進行中，請從「當局」繼續挑戰。');render();return;}
+  if(campaign.run&&!replaceReady) {navigate('replace');return;}
+  saveSeed((document.querySelector('#seed')?.value||seed).trim()||'裂界-001');
+  const candidate=structuredClone(profile);
+  const valid=act(()=>setLoadout(candidate,[...draftDeck],[...draftExcludedCards]));
+  if(!valid?.ok){render();return;}
+  const filters=buildExclusions(excludedBuilds,profile.characterId);
+  const result=act(()=>createRun({deck:[...draftDeck],seed,characterId:profile.characterId,excludedCards:[...draftExcludedCards],excludedBuilds:[...excludedBuilds],excludedRelics:filters.excludedRelics}));
+  if(!result?.phase){render();return;}
+  campaignPersistenceBlocked=false;campaign.buildExcludedCards=[...appliedBuildCards];profile=candidate;run=result;runId=crypto.randomUUID();tab='run';screens=[];recorded=false;replaceReady=false;selectedUid=null;selectedPotion=null;empowerChoice=false;
+  lastRelay={from:'neutral',to:'neutral',reason:''};save();say('登塔開始：先選擇第一層節點。');render({focus:null});window.scrollTo(0,0);
 }
 
-function update(fn, relayFrom = null) {
+function update(fn, relayFrom = null, artAction = null) {
   const beforeUniverse = run?.currentUniverse || 'neutral';
   const beforeLogLength = run?.log?.length || 0;
   const result = act(fn);
@@ -408,6 +509,7 @@ function update(fn, relayFrom = null) {
   empowerChoice = false;
   finish();
   render();
+  if (result?.ok && artAction) queueMicrotask(() => playBattleArt(document.querySelector('[data-battle-stage]'), artAction));
   return result;
 }
 
@@ -422,6 +524,8 @@ app.addEventListener('click', event => {
   const button = event.target.closest('button');
   if (!button || !app.contains(button) || button.disabled) return;
   const data = button.dataset;
+  if(data.menu) {menuAction(data.menu);return;}
+  if(data.build) {excludedBuilds=excludedBuilds.includes(data.build)?excludedBuilds.filter(id=>id!==data.build):[...excludedBuilds,data.build];render();return;}
   if (data.tutorialOpen !== undefined) { openTutorial(); return; }
   if (button.id === 'tutorial-close') { closeTutorial(); return; }
   if (data.tutorialTab) { tutorialTab = data.tutorialTab; render(); return; }
@@ -446,13 +550,13 @@ app.addEventListener('click', event => {
     render();
     return;
   }
-  if (data.tab) { tab = data.tab; selectedUid=null;selectedPotion=null;render(); return; }
+  if (data.tab) { navigate(data.tab); return; }
   if (button.id === 'close-modal') { closeModal(); return; }
   if (data.pile) { openPile(data.pile); return; }
   if (data.character) {
     if (run) { say('冒險進行中，角色與起始配置已鎖定。'); render(); return; }
     const result=act(()=>applyCharacter(profile,data.character));
-    if(result?.ok){ profile.excludedCards=[]; draftDeck=[...profile.deck]; draftExcludedCards=[]; save(); say('已選擇角色並載入專屬起始牌。'); }
+    if(result?.ok){ profile.excludedCards=[]; draftDeck=[...profile.deck]; draftExcludedCards=[]; applyBuildFilters(); save(); say('已選擇角色並載入專屬起始牌。'); }
     render();
     return;
   }
@@ -464,23 +568,7 @@ app.addEventListener('click', event => {
     render();
     return;
   }
-  if (button.id === 'start') {
-    if (run) { say('冒險進行中，請從「當局」繼續挑戰。'); render(); return; }
-    saveSeed((document.querySelector('#seed')?.value || seed).trim() || '裂界-001');
-    const candidate = { ...profile, collection: { ...(profile.collection || {}) }, deck: [...(profile.deck || [])], excludedCards: [...(profile.excludedCards || [])], stats: { ...(profile.stats || {}) }, lastPack: [...(profile.lastPack || [])] };
-    const validLoadout = act(() => setLoadout(candidate, [...draftDeck], [...draftExcludedCards]));
-    if (!validLoadout?.ok) { render(); return; }
-    const savedLoadout = act(() => setLoadout(profile, [...draftDeck], [...draftExcludedCards]));
-    if (!savedLoadout?.ok) { render(); return; }
-    profile.excludedCards = [...draftExcludedCards];
-    save();
-    const result = act(() => createRun({ deck: [...draftDeck], seed, characterId:profile.characterId, excludedCards: [...draftExcludedCards] }));
-    const validPhases = new Set(['map', 'battle', 'reward', 'camp', 'shop', 'event', 'won', 'lost']);
-    if (result && typeof result === 'object' && validPhases.has(result.phase)) { run = result; tab = 'run'; recorded = false; selectedUid = null; selectedPotion=null; empowerChoice = false; lastRelay = { from: 'neutral', to: 'neutral', reason: '' }; say('登塔開始：先選擇第一層節點。'); }
-    else if (!result?.error) say('無法建立冒險狀態。');
-    render();
-    return;
-  }
+  if (button.id === 'start') {startAdventure();return;}
   if (button.id === 'save-loadout') {
     if (run) { say('冒險進行中，起始配置已鎖定。'); render(); return; }
     const result = act(() => setLoadout(profile, [...draftDeck], [...draftExcludedCards]));
@@ -488,6 +576,7 @@ app.addEventListener('click', event => {
     render();
     return;
   }
+  if ((data.exclude||data.include) && buildExclusions(excludedBuilds,profile.characterId).excludedCards.includes(data.exclude||data.include)) {say('此卡屬於已排除流派，請回冒險設定重新開放該流派。');render();return;}
   if (data.exclude) {
     if (run) { say('冒險進行中，本局排除已鎖定。'); render(); return; }
     if (fixedCardIds().includes(data.exclude)) { say('角色固定牌不可排除。'); render(); return; }
@@ -558,7 +647,7 @@ app.addEventListener('click', event => {
     if (!instance || !item) { selectedUid = null; say('找不到這張牌。'); render(); return; }
     if (run.energy < item.cost) { say(`能量不足：需要 ${item.cost}，目前 ${run.energy}。`); render(); return; }
     if (item.target === 'enemy') { selectedUid = instance.uid; say('請選擇存活敵人。'); render(); return; }
-    update(() => playCard(run, instance.uid, null, empowerChoice && canEmpower(instance)), run.currentUniverse || 'neutral');
+    update(() => playCard(run, instance.uid, null, empowerChoice && canEmpower(instance)), run.currentUniverse || 'neutral', cardArtAction(item));
     return;
   }
   if(data.enemy&&selectedPotion){update(()=>usePotion(run,selectedPotion,data.enemy));return;}
@@ -566,10 +655,15 @@ app.addEventListener('click', event => {
     const instance = run.hand.find(item => item.uid === selectedUid);
     const item = cardInstance(instance);
     if (!item || item.target !== 'enemy') { selectedUid = null; say('此牌不能指定敵人。'); render(); return; }
-    update(() => playCard(run, selectedUid, data.enemy, empowerChoice && canEmpower(instance)), run.currentUniverse || 'neutral');
+    update(() => playCard(run, selectedUid, data.enemy, empowerChoice && canEmpower(instance)), run.currentUniverse || 'neutral', cardArtAction(item, data.enemy));
     return;
   }
-  if (button.id === 'end') { update(() => endTurn(run)); return; }
+  if (button.id === 'end') {
+    const attackers = run.enemies.filter(e => e.hp > e.poison && e.intent?.kind === 'attack').map(e => e.id);
+    const result = update(() => endTurn(run));
+    if (result?.ok) playEnemyArt(document.querySelector('[data-battle-stage]'), {characterId:run.characterId, attackers});
+    return;
+  }
   if (data.reward) { update(() => chooseReward(run, data.reward)); return; }
   if (button.id === 'skip') { update(() => chooseReward(run, null)); return; }
   if (button.id === 'rest') { update(() => rest(run)); return; }
@@ -579,7 +673,7 @@ app.addEventListener('click', event => {
   if (data.remove) { update(() => removeCard(run, data.remove)); return; }
   if (button.id === 'leave') { update(() => leaveNode(run)); return; }
   if (data.event) { update(() => chooseEvent(run, data.event)); return; }
-  if (button.id === 'return') { run = null; tab = 'home'; draftDeck = presetDeck(); render(); }
+  if (button.id === 'return') { run = null; runId=null; tab = 'title'; screens=[]; draftDeck = presetDeck(); render({focus:null}); }
 });
 
 app.addEventListener('input', event => {
@@ -591,7 +685,16 @@ app.addEventListener('toggle', event => {
 });
 
 document.addEventListener('keydown', event => {
-  if (!pile && !tutorialOpen) return;
+  if (!pile && !tutorialOpen) {
+    if(tab==='title' && ['ArrowDown','ArrowUp','Home','End'].includes(event.key)) {
+      const options=[...app.querySelectorAll('.title-options button')];
+      const index=options.indexOf(document.activeElement);
+      const next=event.key==='Home'?0:event.key==='End'?options.length-1:(index+(event.key==='ArrowDown'?1:-1)+options.length)%options.length;
+      event.preventDefault();options[next]?.focus();return;
+    }
+    if(event.key==='Escape' && !['INPUT','TEXTAREA'].includes(event.target.tagName)) {event.preventDefault();if(tab==='run')menuAction('title');else if(tab!=='title')menuAction('back');}
+    return;
+  }
   if (event.key === 'Escape') { event.preventDefault(); event.stopImmediatePropagation(); if (tutorialOpen) closeTutorial(); else closeModal(); return; }
   if (event.key !== 'Tab') return;
   const modal = document.querySelector(tutorialOpen ? '#tutorial-modal' : '#modal');
@@ -604,4 +707,6 @@ document.addEventListener('keydown', event => {
   else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
 }, true);
 
+profile.stats={...campaign.stats};
+persistProgress();
 render();

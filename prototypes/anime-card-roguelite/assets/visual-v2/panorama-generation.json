@@ -1,0 +1,8 @@
+{
+  "generator": "Built-in imagegen",
+  "date": "2026-09-08",
+  "prompt": "Recompose this Konoha pixel-art battle background for an ULTRAWIDE panoramic game stage, target 3:1 aspect ratio 1920x640. Preserve Naruto Hidden Leaf village architecture, orange round roofs, lush trees and clearly recognizable Hokage Rock carved leader faces. Make the rock smaller and farther away so all carved faces are visible in the upper middle area even in a wide shallow viewport. Flatten camera to a side-view horizontal battle stage; broad unobstructed sandy training ground should fill bottom30% and extend to both edges. Foreground posts only at extreme edges. Bright anime pixel art, crisp clusters. No characters, no UI, no text. Expand horizontal composition with extra buildings to both sides, do NOT stretch the existing image. Full bleed ultrawide landscape.",
+  "source": "/home/ronghao/.codex/generated_images/01a07040-ccdb-7df2-aea5-7edcf5332917/exec-2485f3bd-15b6-4343-9e71-9f67164d45e2.png",
+  "runtime": "bg-ninja-wide.png",
+  "reference": "bg-ninja.png"
+}

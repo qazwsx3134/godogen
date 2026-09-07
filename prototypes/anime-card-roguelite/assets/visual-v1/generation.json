@@ -1,0 +1,62 @@
+{
+  "generator": "Built-in imagegen",
+  "date": "2026-09-07",
+  "records": [
+    {
+      "id": "hero-shadow_ninja",
+      "prompt": "Same pixel-art craft, side view and 2x2 four-frame idle grid as reference, but a DIFFERENT hero: young adult athletic ninja with tousled dark navy hair, forehead metal band with a simple abstract crescent (no lettering), dark teal ninja tunic, burnt-orange scarf, fitted charcoal trousers, leg wraps, fingerless gloves and sandals, one small kunai close to hip. Face RIGHT. Distinct agile silhouette, cyan highlights, calm alert expression. Four tiny breathing variations. Do NOT copy silver hair or samurai robe. TECHNICAL: exact equal 2 columns 2 rows, 4 full-body sequential idle frames. Solid flat #FF00FF magenta background only. All bodies same scale and centered each cell, identical foot baseline at 85%, full silhouette inside central70% with padding, no grid lines, no text, no shadows, no detached FX. Canvas square. Reference is STYLE only; create new costume specified.",
+      "source": "/home/ronghao/.codex/generated_images/01a07040-ccdb-7df2-aea5-7edcf5332917/exec-8106af08-6f71-4b69-b9da-8b909a09690d.png"
+    },
+    {
+      "id": "hero-ki_fighter",
+      "prompt": "Same pixel-art craft, side view and 2x2 four-frame idle grid as reference, but a DIFFERENT hero: charismatic adult martial artist, tall upward spiky black hair, orange sleeveless martial arts gi, deep cobalt undershirt and belt, blue wristbands and boots, athletic muscular anime build, fists ready near waist. Face RIGHT. Four tiny breathing variations, strong planted feet. No silver hair, no samurai robe. TECHNICAL: exact equal 2 columns 2 rows, 4 full-body sequential idle frames. Solid flat #FF00FF magenta background only. All bodies same scale and centered each cell, identical foot baseline at 85%, full silhouette inside central70% with padding, no grid lines, no text, no shadows, no detached FX. Canvas square. Reference is STYLE only; create new costume specified.",
+      "source": "/home/ronghao/.codex/generated_images/01a07040-ccdb-7df2-aea5-7edcf5332917/exec-29a51033-5662-4faa-a561-2d35701a891b.png"
+    },
+    {
+      "id": "bg-ninja",
+      "prompt": "Generate a finished wide 16:9 pixel-art SIDE-VIEW 2D battle stage background WITHOUT any characters, sprites, interface, text, labels, logos or panels. Ninja village rooftop courtyard at twilight: layered teal roof silhouettes, distant mountain ridge and enormous soft moon, hanging paper lanterns, sparse bamboo at outer edges, turquoise mist, weathered timber terraces and worn stone floor. Crisp high-quality 32-bit pixel-art environment, dark indigo/teal palette with small warm amber lantern accents. Horizontal ground plane occupies lower 23%, horizon at 65%, clear low-detail open space across center for a hero on left and enemies on right. Orthographic side battle camera, no isometric overhead view. Beautiful atmospheric foreground/background depth, controlled pixel clusters, no heavy blur. Full-bleed landscape image, 1536x864 intent. Ground must continue unbroken across screen.",
+      "source": "/home/ronghao/.codex/generated_images/01a07040-ccdb-7df2-aea5-7edcf5332917/exec-f5edc4c0-24c3-48b4-8d8f-cf40fc601322.png"
+    },
+    {
+      "id": "cameo-shinpachi",
+      "prompt": "Use reference only for pixel-art STYLE, body scale and equal 2x2 grid. DIFFERENT character Shinpachi Shimura from Gintama: black short neat hair, round thin spectacles, white plain dojo kimono jacket, dark navy hakama trousers, sandals. Full body face RIGHT. A single continuous four-frame comedic scolding action: tense inhale, lean forward a little mouth open pointing right, emphatic open mouth glasses gleam hand chopping close to body, recover upright. Expressive anime face. Keep stable planted feet and torso center, all four same anatomical height. No text or speech bubbles (UI adds those), no detached FX, no weapons. TECHNICAL exact2columns2rows equal square cells, solid flat #FF00FF background, centered eachcell, commonfeetline85%, margin15%, same scale, no grid lines. Four frame sprite sheet square canvas.",
+      "source": "/home/ronghao/.codex/generated_images/01a07040-ccdb-7df2-aea5-7edcf5332917/exec-d26557ed-4b27-4f3b-a9c2-8a23f4896891.png"
+    },
+    {
+      "id": "bg-dragon",
+      "prompt": "Finished full-bleed wide 16:9 pixel-art 2D SIDE-VIEW battle stage, no characters, no UI, no typography. A martial-arts anime wasteland arena: expansive orange ochre sandstone plateau, isolated tall eroded rock columns in distant left and right, dramatic clear electric blue/turquoise sky with white angular cloud streaks, distant mesas, sweeping sunlit cliffs. Beautiful 32-bit pixel art with crisp dark edges, hard cel-shaded shapes and vivid blue/orange contrast, rich details confined to outer edges. Broad FLAT continuous horizontal rocky floor lower23%, clear battle space through central65%; side-on camera not topdown/isometric. Horizon at65%. Warm afternoon lighting. 1536x864 landscape intent. No plants/rocks obstructing central battle line, no logos, no text.",
+      "source": "/home/ronghao/.codex/generated_images/01a07040-ccdb-7df2-aea5-7edcf5332917/exec-65dd9b1a-6794-422a-8192-f840d8fe5d83.png"
+    },
+    {
+      "id": "bg-samurai",
+      "prompt": "Finished full-bleed wide 16:9 pixel-art 2D SIDE-VIEW battle stage, no people, no UI, no text. Edo comedy anime night street: weathered wooden shopfronts at outer sides, red round lanterns, tiled rooftops and utility wires, a narrow distant street vanishing centrally, pale full moon and low indigo clouds, warm amber window glow, subtle pink cherry petals at edges. Mood like Gintama old-town mixed-era Japan, black ink silhouettes, warm parchment cream highlights, charcoal blue shadows and muted crimson, crisp detailed 32-bit pixel-art craft. Continuous broad cobblestone street along lower25% for fighters, open uncluttered center65%, view at side battle character level with background perspective only. 1536x864 landscape intent. Shop signboards MUST be blank plain wood, no writing, no mockup, no labels.",
+      "source": "/home/ronghao/.codex/generated_images/01a07040-ccdb-7df2-aea5-7edcf5332917/exec-18986840-703e-41d3-88c5-c29abc9cf8a1.png"
+    },
+    {
+      "id": "enemy-raider",
+      "prompt": "Use reference STYLE only. Production pixel-art animation sheet of SAME enemy masked rogue ninja in four tiny idle breathing frames. Adult stocky raider, face LEFT, red lacquer half oni mask with bright amber eyes, charcoal hood, layered dark violet padded tunic, crimson sash, short curved dagger held close at waist, wrapped calves and dark boots. Villainous but readable silhouette, 4.5 head tall proportions, full body. Crisp premium32bit pixel art dark outlines and controlled clusters. Identical character, same anatomical scale and planted feet allfour. EXACT equal2columns2rows sheet, pure flat MAGENTA#FF00FF background, no lines/text/floor/shadows/FX. Each body centered inside central70% cell, feet85%, all limbs contained.",
+      "source": "/home/ronghao/.codex/generated_images/01a07040-ccdb-7df2-aea5-7edcf5332917/exec-4aa4bcd7-d876-49e8-b980-0551be409047.png"
+    },
+    {
+      "id": "enemy-boss",
+      "prompt": "Use reference pixel-art STYLE only; create a DIFFERENT larger boss character. Four sequential tiny idle breathing frames of a massive anime rift warlord facing LEFT, ornate obsidian samurai armor with bronze-gold edges, horned skull helmet, crimson cape kept close to body, broad shoulders, glowing cyan chest core, enormous gauntlets with hands at sides, greaves planted firm. Strong stylized villain silhouette, no weapon crossing cells, no detached energy. Equal2columns2rows sprite sheet, SAME boss identity and scale eachcell, locked feet and pelvis, subtle chest pulse no wholebody sideways sway. Crisp32bit pixel art, dark outlines. Pure flat #FF00FF magenta background only, no text/no grid/no groundshadow. Fullbody central70% ofeachcell, commonfeetline85%, generouspadding.",
+      "source": "/home/ronghao/.codex/generated_images/01a07040-ccdb-7df2-aea5-7edcf5332917/exec-d2706adf-1a1a-4ccf-bd1c-7525cfe806a0.png"
+    },
+    {
+      "id": "fx-energy-v2",
+      "prompt": "Create a rigorously spaced 2x2 grid of FOUR small pixel-art cyan energy bursts on solid MAGENTA #FF00FF background. Equal square cells, no visible grid. The widest burst in EVERY cell must be LESS THAN HALF the cell width and height. Huge empty magenta margins, minimum25% margin on EACH side inside each cell. All bursts centered at exact center of their cells, cannot overlap or touch cell edges. Four-frame animation of compact electric cyan ring impact: spark, expanding ring, spiky ring, fading arcs. White center, turquoise rays, royal-blue pixel outlines, crisp 16bit pixel art, no soft transparency or colored background. Square canvas, no labels/text/characters/shadows. IMPORTANT SMALL subjects in spacious grid, not giant bursts filling frame.",
+      "source": "/home/ronghao/.codex/generated_images/01a07040-ccdb-7df2-aea5-7edcf5332917/exec-941a72ac-2114-4faa-810d-2c129d9e97a8.png",
+      "runtime": "fx-energy.png"
+    },
+    {
+      "id": "fx-beam",
+      "prompt": "Production sprite animation sheet: exact 2 columns2rows, four phases of a horizontal anime energy beam traveling LEFT TO RIGHT. Pure solid magenta #FF00FF background. EACH equal squarecell has one fully-contained horizontal beam spanning ONLY central65% width, height no morethan25% ofcell; verylarge empty magenta margins. Bright round white-cyan source orb at left end, straight parallel blue streaks through middle, pointed cyan blast head at right end. Fourframes vary flickering streaks and headpulse, commoncenterline and samebeamlength. Crisp detailed32bit pixel art with whitecore/cyanbody/cobaltedge, no diffuseglow into magenta. No characters, no text, no grids, no floor. Nothing touchescell boundaries. Squarecanvas. This will be sliced into4 separate fixed-size frames.",
+      "source": "/home/ronghao/.codex/generated_images/01a07040-ccdb-7df2-aea5-7edcf5332917/exec-d976d801-d4fd-4486-a013-f92fdc717f3b.png"
+    },
+    {
+      "id": "hero-silver_ronin",
+      "prompt": "Create a production pixel-art game sprite sheet, exactly 2 columns and 2 rows, four sequential idle animation frames of the SAME silver-haired samurai hero, full body facing RIGHT in a side-view 2D roguelike battle. Character: recognizable Gintoki Sakata inspired silver fluffy spiky hair, sleepy confident adult male face, black undershirt, white robe worn over one shoulder with cyan curling wave trim, dark pants and black boots, wooden katana held close down by his side. Premium detailed 32-bit pixel art, crisp dark outline, chunky controlled pixel clusters, handsome anime proportions 4.5 heads tall, cool cyan and ivory palette, restrained shading, no antialiasing. Idle breathing cycle extremely subtle robe/hair movement; SAME scale and identical planted foot baseline all frames. Each equal square cell: character centered at x50%, feet at y83%, full body in central 65% width/height, nothing crossing cell edges, generous margins. Entire canvas 1024x1024. PURE SOLID MAGENTA #FF00FF background everywhere, no checkerboard, no floor shadows, no scenery, no text, no labels, no panel lines, no slash arcs, no detached FX. Four frames read left-to-right then top-to-bottom. Keep costume and identity identical. This is a usable separated sprite sheet, not an illustration or mockup.",
+      "source": "/home/ronghao/.codex/generated_images/01a07040-ccdb-7df2-aea5-7edcf5332917/exec-bc81f41d-bc36-45f0-ab02-005eccb24818.png"
+    }
+  ]
+}
