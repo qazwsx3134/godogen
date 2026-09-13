@@ -30,6 +30,7 @@ function validateRun(run) {
 function decode(raw) {
   if(!raw || raw.length>2_000_000) throw Error('存檔不存在或過大');
   const value=JSON.parse(raw);
+  if(value?.buildExcludedCards!==undefined&&(!Array.isArray(value.buildExcludedCards)||value.buildExcludedCards.some(id=>!CARDS.some(card=>card.id===id)))) throw Error('無效流派卡牌紀錄');
   if(value.version!==1||!Array.isArray(value.achievements)||value.achievements.some(id=>!ACHIEVEMENTS.some(a=>a.id===id))||!Array.isArray(value.completed)||value.completed.some(id=>typeof id!=='string')||!integer(value.stats?.runs)||!integer(value.stats?.wins)||value.stats.wins>value.stats.runs) throw Error('存檔格式不相容');
   if(value.run) { if(typeof value.runId!=='string'||!value.runId||!Number.isFinite(Date.parse(value.savedAt))) throw Error('存檔資訊不完整'); validateRun(value.run); }
   return value;

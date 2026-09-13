@@ -20,6 +20,7 @@ test('damaged snapshot falls back, unsupported versions without backup never con
  const damaged=JSON.parse(storage.getItem(CAMPAIGN_KEY));delete damaged.run._rng;storage.setItem(CAMPAIGN_KEY,JSON.stringify(damaged));
  const result=loadCampaign(storage);assert.match(result.notice,/備份/);assert.equal(result.campaign.run.phase,'map');
  storage.removeItem(`${CAMPAIGN_KEY}.bak`);storage.setItem(CAMPAIGN_KEY,'{"version":99}');assert.equal(loadCampaign(storage).campaign.run,null);
+ const malformed=checkpoint(freshCampaign(),run,'bad-metadata',profile);malformed.buildExcludedCards={};storage.setItem(CAMPAIGN_KEY,JSON.stringify(malformed));assert.equal(loadCampaign(storage).campaign.run,null);
 });
 test('terminal progress unlocks achievements once and retires both active snapshots',()=>{
  const storage=memory(),profile=createProfile(),run=newRun();let state=checkpoint(freshCampaign(),run,'unique',profile);saveCampaign(storage,state);

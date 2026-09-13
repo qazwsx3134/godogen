@@ -203,9 +203,9 @@ function characterPicker() {
   const counts=selected.deck.reduce((a,id)=>(a[id]=(a[id]||0)+1,a),{});
   return `<section class="panel character-picker"><div class="split"><div><span class="eyebrow">選擇冒險角色</span><h2>職業決定特性，戰利品決定流派</h2></div><span class="help">${run ? '冒險進行中，角色與起始配置已鎖定。' : '所有宇宙的卡牌皆可混搭'}</span></div><div class="character-options">${CHARACTERS.map(c=>`<button data-character="${c.id}" class="character-choice ${c.id===selected.id?'active':''}" aria-pressed="${c.id===selected.id}" ${run ? 'disabled' : ''}><span class="character-portrait">${heroSpriteMarkup('choice-sprite', c.id)}</span><span class="eyebrow">${esc(universe(c.universe).name)} · ${esc(c.job)}</span><strong>${esc(c.name)} <small>${c.maxHp} HP</small></strong><b>${esc(c.traitName)}</b><span>${esc(c.traitText)}</span><span class="build-tags">${c.builds.map(t=>`<i>${esc(ARCHETYPES[t]?.name || t)}</i>`).join('')}</span><small class="fixed-preview">固定牌：${fixedCardIds(c).map(id=>esc(card(id)?.name || id)).join('、')}</small></button>`).join('')}</div><details class="starter-preview"><summary>${esc(selected.name)}的起始牌 · 10張</summary><div class="starter-grid">${Object.entries(counts).map(([id,n])=>`<div class="mini"><b>${esc(card(id)?.name || id)} ×${n}</b><br>${esc(card(id)?.text || '')}</div>`).join('')}</div></details></section>`;
 }
-function buildView() {
+function buildView({ open = true } = {}) {
   const builds=getBuildSummary(run);
-  return `<details class="build-summary" open><summary>目前構築 · ${run.deck.length}張牌</summary><div class="build-lines">${builds.map(b=>`<div><b>${esc(b.name)} ×${b.count}</b><span>${esc(b.description || b.payoff || '')}</span></div>`).join('')||'<p class="help">選擇戰利品，開始形成流派。</p>'}</div></details>`;
+  return `<details class="build-summary" ${open ? 'open' : ''}><summary>目前構築 · ${run.deck.length}張牌</summary><div class="build-lines">${builds.map(b=>`<div><b>${esc(b.name)} ×${b.count}</b><span>${esc(b.description || b.payoff || '')}</span></div>`).join('')||'<p class="help">選擇戰利品，開始形成流派。</p>'}</div></details>`;
 }
 function potionView() {
   return `<section class="potion-bar" aria-label="戰鬥消耗品"><b>消耗品 ${run.potions.length}/2</b>${run.potions.map(p=>{const d=POTIONS.find(x=>x.id===p.potionId);return `<button data-potion="${p.uid}" class="${selectedPotion===p.uid?'selected':''}" aria-pressed="${selectedPotion===p.uid}" ${run.phase==='battle'?'':'disabled'} title="${esc(d.text)}"><strong>${d.name}</strong><small>${d.text} · 使用一次</small></button>`;}).join('')}${run.potions.length<2?'<span class="help">戰鬥可掉落補充；背包滿則換10金。</span>':''}</section>`;
@@ -257,13 +257,24 @@ function heroSpriteMarkup(className = '', characterId = run?.characterId) {
   return hero ? `<span class="sprite-sheet sprite-idle hero-sprite ${className}" style="--sprite-image:url('${esc(hero)}')" aria-hidden="true"></span>` : '';
 }
 
+function shieldIcon() {
+  return '<svg class="shield-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2.5 19 5v5.25c0 4.55-2.85 8.48-7 10.75-4.15-2.27-7-6.2-7-10.75V5l7-2.5Z"></path><path d="m8.8 11.9 2.05 2.05 4.45-4.45"></path></svg>';
+}
+
+function combatantVitals({ current, max, block, statuses = [], className = '', label = '生命' }) {
+  const currentValue = Math.max(0, Number(current) || 0);
+  const maxValue = Math.max(1, Number(max) || 1);
+  const blockValue = Math.max(0, Number(block) || 0);
+  const percentage = Math.max(0, Math.min(100, currentValue / maxValue * 100));
+  const statusMarkup = statuses.filter(Boolean).join('') || '<span class="status-empty">無狀態</span>';
+  return `<div class="combatant-vitals ${className}" aria-label="${esc(label)} ${currentValue}/${maxValue}"><div class="combatant-hp-row"><span class="combatant-hp"><span class="hp-bar combatant-hp-bar" role="progressbar" aria-label="${esc(label)} ${currentValue}/${maxValue}" aria-valuemin="0" aria-valuemax="${maxValue}" aria-valuenow="${currentValue}"><span style="width:${percentage}%"></span></span><strong class="combatant-hp-value">${currentValue}/${maxValue}</strong></span><span class="combatant-block" aria-label="格擋 ${blockValue}">${shieldIcon()}<span>${blockValue}</span></span></div><div class="combatant-statuses" aria-label="狀態">${statusMarkup}</div></div>`;
+}
+
 function battleHud(className = '') {
   const player = run?.player || {};
   const character = CHARACTERS.find(item => item.id === run?.characterId);
-  const hp = Math.max(0, player.hp || 0);
-  const maxHp = player.maxHp || 70;
   const current = run?.currentUniverse || 'neutral';
-  return `<div class="battle-hud ${className}" data-battle-hud><div class="hud-identity"><span class="hud-portrait">${heroSpriteMarkup('hud-sprite')}</span><span><small class="eyebrow">角色 · ${esc(character?.job || '旅人')}</small><strong>${esc(player.name || character?.name || '旅人')}</strong><small>${esc(character?.traitName || '')}</small></span></div><section class="player-card hud-player-card"><div class="hud-hp-row"><span class="hp">${hp}/${maxHp} HP</span><span>格擋 ${player.block || 0}</span></div><div class="hp-bar" aria-label="生命 ${hp}/${maxHp}"><span style="width:${Math.max(0, Math.min(100, hp / maxHp * 100))}%"></span></div><div class="player-vitals"><span>力量 ${player.strength || 0}</span><span>荊棘 ${player.thorns || 0}</span><span>蓄氣 ${player.charge || 0}/9</span><span>放逐格擋 ${player.exhaustGuard || 0}</span></div></section><div class="hud-resources"><span class="hud-energy">能量 <b>${run?.energy || 0}/3</b></span><span class="hud-resonance" data-resonance="${run?.resonance || 0}">共鳴 <b>${run?.resonance || 0}/3</b></span><span class="hud-universe" data-current-universe="${esc(current)}">${esc(universe(current).name)}</span></div></div>`;
+  return `<div class="battle-hud ${className}" data-battle-hud><div class="hud-identity"><span class="hud-portrait">${heroSpriteMarkup('hud-sprite')}</span><span><small class="eyebrow">角色 · ${esc(character?.job || '旅人')}</small><strong>${esc(player.name || character?.name || '旅人')}</strong><small>${esc(character?.traitName || '')}</small></span></div><div class="hud-round"><span>回合</span><b>${run?.turn || 1}</b></div><div class="hud-resources"><span class="hud-resonance" data-resonance="${run?.resonance || 0}">共鳴 <b>${run?.resonance || 0}/3</b></span><span class="hud-universe" data-current-universe="${esc(current)}">${esc(universe(current).name)}</span></div></div>`;
 }
 
 function relicList() {
@@ -302,7 +313,17 @@ function enemyHtml(enemy) {
   const sprite = boss ? BATTLE_ASSETS.enemies.boss : BATTLE_ASSETS.enemies.raider;
   const intent = intentSummary(enemy);
   const tooltip = `${enemy.name}；生命 ${enemy.hp}/${enemy.maxHp}；格擋 ${enemy.block || 0}；意圖：${intent}${enemy.poison ? `；毒 ${enemy.poison}` : ''}${enemy.weak ? `；虛弱 ${enemy.weak}` : ''}`;
-  return `<button class="enemy ${dead ? 'dead' : ''} ${selectedUid||selectedPotion ? 'targetable' : ''}" data-enemy="${esc(enemy.id)}" aria-label="${esc(tooltip)}" title="${esc(tooltip)}" ${dead ? 'disabled' : ''}><span class="enemy-intent-bubble">${intentHtml(enemy)}</span><span class="enemy-art-wrap"><span class="sprite-sheet sprite-idle enemy-sprite" style="--sprite-image:url('${esc(sprite)}')" aria-hidden="true"></span></span><span class="enemy-head"><span class="eyebrow">敵方</span><strong>${esc(enemy.name)}</strong></span><span class="enemy-stats"><span class="hp">${enemy.hp}/${enemy.maxHp} HP</span><span>格擋 ${enemy.block || 0}</span>${enemy.poison ? `<span class="poison">毒 ${enemy.poison}</span>` : ''}${enemy.weak ? `<span class="weak">虛弱 ${enemy.weak}</span>` : ''}</span><span class="intent">${intentHtml(enemy)}</span><span class="enemy-tooltip" role="tooltip">${esc(tooltip)}</span></button>`;
+  const vitals = combatantVitals({
+    current: enemy.hp,
+    max: enemy.maxHp,
+    block: enemy.block,
+    className: 'enemy-stats',
+    statuses: [
+      enemy.poison ? `<span class="poison">毒 ${esc(enemy.poison)}</span>` : '',
+      enemy.weak ? `<span class="weak">虛弱 ${esc(enemy.weak)}</span>` : '',
+    ],
+  });
+  return `<button class="enemy ${dead ? 'dead' : ''} ${selectedUid||selectedPotion ? 'targetable' : ''}" data-enemy="${esc(enemy.id)}" data-combatant="enemy" aria-label="${esc(tooltip)}" title="${esc(tooltip)}" ${dead ? 'disabled' : ''}><span class="enemy-intent-bubble">${intentHtml(enemy)}</span><span class="enemy-head"><span class="eyebrow">敵方</span><strong>${esc(enemy.name)}</strong></span><span class="enemy-art-wrap"><span class="sprite-sheet sprite-idle enemy-sprite" style="--sprite-image:url('${esc(sprite)}')" aria-hidden="true"></span></span>${vitals}<span class="enemy-tooltip" role="tooltip">${esc(tooltip)}</span></button>`;
 }
 
 function pileItems(kind) {
@@ -333,7 +354,20 @@ function battleView() {
   const currentUniverse = run.currentUniverse || 'neutral';
   const background = BATTLE_ASSETS.backgrounds[currentUniverse];
   const backgroundStyle = background ? `style="--battle-bg-image:url('${esc(background)}')"` : '';
-  return `<section class="battle-layout battle-layout-art"><section class="battle-main"><section class="battle-toolbar panel"><div class="battle-toolbar-line"><div><span class="eyebrow">${esc(run.currentNode?.label || '戰鬥')} · 回合 ${run.turn}</span><h2>戰場指揮</h2></div><div class="turn-actions"><button id="empower" aria-pressed="${empowerChoice}" ${empowermentAvailable ? '' : 'disabled'}>${empowerChoice ? '強化已開' : '手動強化'} <small>3 共鳴</small></button><button class="primary" id="end">結束回合 → 敵方行動</button></div></div>${battleHud('desktop-battle-hud')}</section><section class="mobile-summary">${battleHud('mobile-battle-hud')}</section>${potionView()}<section class="battle-stage panel enemies-panel" data-battle-stage data-battle-universe="${esc(currentUniverse)}" ${backgroundStyle}><div class="stage-heading"><div><span class="eyebrow">CROSS-UNIVERSE BATTLEFIELD</span><h2 data-current-universe="${esc(currentUniverse)}">${esc(universe(currentUniverse).name)}戰線</h2></div><span class="stage-help">回合 ${run.turn} · 點擊敵人選擇目標</span></div><div class="stage-lanes"><div class="hero-lane"><div class="hero-combatant" data-hero-actor><span class="actor-label">我方 · ${esc(run.player?.name || '旅人')}</span><span class="actor-art-wrap">${heroSpriteMarkup()}</span><span class="actor-stats">格擋 ${run.player?.block || 0} · 蓄氣 ${run.player?.charge || 0}/9</span></div></div><div class="stage-bridge" data-fx-layer aria-hidden="true"><span class="bridge-mark">接力</span></div><div class="enemy-lane"><div class="enemy-lane-heading"><h2>敵方意圖</h2><span class="help">${(run.enemies || []).length} 名敵人</span></div><div class="enemy-list">${(run.enemies || []).map(enemyHtml).join('')}</div></div></div></section><section class="panel stack hand-panel" id="hand-section"><div class="split"><h2>手牌 · ${run.hand.length}/10</h2><div class="piles"><button data-pile="deck">牌組 ${run.deck.length}</button><button data-pile="draw">抽牌 ${run.draw.length}</button><button data-pile="discard">棄牌 ${run.discard.length}</button><button data-pile="exile">放逐 ${run.exile.length}</button></div></div><p class="notice">${esc(targetHint)} ${empowerChoice ? '出牌前已有 3 共鳴，符合條件的牌將首段傷害／首個格擋各 +4。' : ''}</p><div class="hand-scroll"><div class="card-grid hand-grid">${hand || '<p class="empty">手牌已空。</p>'}</div></div></section></section><aside class="battle-sidebar"><section class="panel log-panel"><div class="split"><h2>事件</h2><span class="help">即時戰報</span></div><ol class="log">${(run.log || []).slice(-12).reverse().map(entry => `<li>${esc(entry)}</li>`).join('')}</ol></section>${buildView()}</aside></section>`;
+  const player = run.player || {};
+  const heroVitals = combatantVitals({
+    current: player.hp,
+    max: player.maxHp,
+    block: player.block,
+    className: 'actor-stats',
+    statuses: [
+      `<span>力量 ${player.strength || 0}</span>`,
+      `<span>荊棘 ${player.thorns || 0}</span>`,
+      `<span>蓄氣 ${player.charge || 0}/9</span>`,
+      `<span>放逐格擋 ${player.exhaustGuard || 0}</span>`,
+    ],
+  });
+  return `<section class="battle-layout battle-layout-art"><section class="battle-main"><section class="battle-toolbar panel"><div class="battle-toolbar-line">${battleHud('desktop-battle-hud')}<div class="turn-actions"><button id="empower" aria-pressed="${empowerChoice}" ${empowermentAvailable ? '' : 'disabled'}>${empowerChoice ? '強化已開' : '手動強化'} <small>3 共鳴</small></button></div></div></section><section class="mobile-summary">${battleHud('mobile-battle-hud')}</section>${potionView()}<section class="battle-stage panel enemies-panel" data-battle-stage data-battle-universe="${esc(currentUniverse)}" ${backgroundStyle}><div class="stage-heading"><div><span class="eyebrow">CROSS-UNIVERSE BATTLEFIELD</span><h2 data-current-universe="${esc(currentUniverse)}">${esc(universe(currentUniverse).name)}戰線</h2></div><span class="stage-help">點擊敵人選擇目標</span></div><div class="stage-lanes"><div class="hero-lane"><div class="hero-combatant player-card" data-hero-actor data-combatant="player"><span class="actor-label">我方 · ${esc(player.name || '旅人')}</span><span class="actor-art-wrap">${heroSpriteMarkup()}</span>${heroVitals}</div></div><div class="stage-bridge" data-fx-layer aria-hidden="true"><span class="bridge-mark">接力</span></div><div class="enemy-lane"><div class="enemy-lane-heading"><h2>敵方意圖</h2><span class="help">${(run.enemies || []).length} 名敵人</span></div><div class="enemy-list">${(run.enemies || []).map(enemyHtml).join('')}</div></div></div></section><section class="battle-bottom-dock" aria-label="戰鬥操作"><div class="battle-command battle-command-left"><div class="battle-resource" aria-label="目前能量"><span class="resource-icon resource-icon-energy" aria-hidden="true">✦</span><span><small>能量</small><strong>${run.energy || 0}/3</strong></span></div><div class="piles pile-cluster"><button class="pile-button" data-pile="draw"><span>抽牌</span><b>${run.draw.length}</b></button><button class="pile-button" data-pile="deck"><span>牌組</span><b>${run.deck.length}</b></button></div><span class="battle-resonance" data-resonance="${run.resonance || 0}">共鳴 <b>${run.resonance || 0}/3</b></span></div><section class="panel stack hand-panel" id="hand-section"><div class="hand-heading"><h2>手牌 · ${run.hand.length}/10</h2><span class="hand-target-hint">${esc(targetHint)}</span></div><p class="notice">${empowerChoice ? '出牌前已有 3 共鳴，符合條件的牌將首段傷害／首個格擋各 +4。' : ''}</p><div class="hand-scroll"><div class="card-grid hand-grid">${hand || '<p class="empty">手牌已空。</p>'}</div></div></section><div class="battle-command battle-command-right"><div class="piles pile-cluster"><button class="pile-button" data-pile="discard"><span>棄牌</span><b>${run.discard.length}</b></button><button class="pile-button" data-pile="exile"><span>放逐</span><b>${run.exile.length}</b></button></div><button class="primary end-turn" id="end">結束回合 <small>敵方行動</small></button></div></section></section><aside class="battle-sidebar"><details class="panel log-panel battle-details"><summary><span>事件</span><small>即時戰報 · ${(run.log || []).length} 筆</small></summary><ol class="log">${(run.log || []).slice(-12).reverse().map(entry => `<li>${esc(entry)}</li>`).join('')}</ol></details>${buildView({ open: false })}</aside></section>`;
 }
 
 function rewardView() {

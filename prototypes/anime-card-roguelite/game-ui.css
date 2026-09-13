@@ -42,7 +42,7 @@ html[data-universe] .battle-layout-art { display:block; position:relative; }
 html[data-universe] .battle-layout-art .battle-main { display:grid; gap:8px; }
 html[data-universe] .battle-toolbar { padding:10px 14px; min-height:68px; border-radius:10px 10px 0 0; }
 html[data-universe] .battle-toolbar-line { float:right; margin-left:18px; }
-html[data-universe] .battle-toolbar-line > div:first-child { display:none; }
+html[data-universe] .battle-toolbar-line > .battle-info { display:none; }
 html[data-universe] .battle-hud { grid-template-columns:minmax(110px,.6fr) minmax(180px,1.5fr) 110px; gap:18px; margin:0; padding:0; border:0; }
 html[data-universe] .hud-identity strong { font-size:1rem; }
 html[data-universe] .hud-portrait { border-radius:50%; border-color:#b4a075; }
@@ -171,3 +171,778 @@ html[data-universe] .stage-lanes { grid-template-rows:minmax(0,1fr); }
  html[data-universe] .battle-stage .enemy-art-wrap { width:min(100%,190px); }
 }
 html[data-universe] .battle-stage[data-battle-universe="ninja"] { background-position:center 70%; }
+
+/* Combat read: one wide battlefield, with the combatant vitals attached to each actor. */
+html[data-universe] .battle-layout-art {
+  display:grid;
+  grid-template-columns:minmax(0, 1fr);
+  gap:6px;
+  margin-top:4px;
+}
+html[data-universe] .battle-layout-art .battle-main {
+  display:grid;
+  grid-template-rows:max-content max-content max-content max-content;
+  gap:6px;
+  min-width:0;
+}
+html[data-universe] .battle-toolbar {
+  position:relative;
+  top:auto;
+  min-height:0;
+  padding:8px 12px;
+  border-radius:10px;
+}
+html[data-universe] .battle-toolbar-line {
+  display:flex;
+  float:none;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin:0;
+}
+html[data-universe] .battle-toolbar-line > .battle-hud {
+  display:grid;
+  grid-template-columns:minmax(0, 1fr) auto minmax(0, 1fr);
+  min-width:0;
+  min-height:44px;
+  margin:0;
+  padding:0;
+  border:0;
+}
+html[data-universe] .battle-toolbar-line > .battle-hud .hud-portrait {
+  flex-basis:2.5rem;
+  width:2.5rem;
+  height:2.5rem;
+}
+html[data-universe] .battle-toolbar-line > .battle-hud .hud-identity strong { font-size:.82rem; }
+html[data-universe] .battle-toolbar-line > .battle-hud .hud-identity small:last-child { font-size:.62rem; }
+html[data-universe] .battle-toolbar-line > .battle-info {
+  display:grid !important;
+  min-width:0;
+  gap:1px;
+}
+html[data-universe] .battle-info h2 { font-size:1rem; }
+html[data-universe] .turn-actions { width:auto; }
+html[data-universe] .turn-actions button { min-height:34px; padding:5px 10px; }
+html[data-universe] .battle-hud {
+  display:grid;
+  grid-template-columns:minmax(0, 1.35fr) auto minmax(0, 1fr);
+  align-items:center;
+  gap:12px;
+  margin-top:7px;
+  padding-top:7px;
+  border-top:1px solid #ffffff16;
+}
+html[data-universe] .hud-identity { min-width:0; }
+html[data-universe] .hud-identity strong { font-size:.88rem; }
+html[data-universe] .hud-round {
+  display:flex;
+  align-items:baseline;
+  gap:4px;
+  color:var(--muted);
+  font-size:.72rem;
+  white-space:nowrap;
+}
+html[data-universe] .hud-round b { color:var(--paper); font-size:1.05rem; }
+html[data-universe] .hud-resources {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:flex-end;
+  gap:8px;
+  min-width:0;
+  font-size:.7rem;
+}
+html[data-universe] .hud-resonance,
+html[data-universe] .hud-universe { white-space:nowrap; }
+html[data-universe] .hud-resources b { font-size:.86rem; }
+html[data-universe] .mobile-summary { display:none; }
+html[data-universe] .battle-main > .potion-bar {
+  display:flex;
+  align-items:center;
+  min-width:0;
+  min-height:34px;
+  padding:4px 8px;
+  overflow-x:auto;
+  flex-wrap:nowrap;
+  border:1px solid #ffffff12;
+  border-radius:7px;
+  background:#0b1422a8;
+  scrollbar-width:thin;
+}
+html[data-universe] .battle-main > .potion-bar > b,
+html[data-universe] .battle-main > .potion-bar > .help { flex:0 0 auto; }
+html[data-universe] .battle-main > .potion-bar button {
+  display:flex;
+  flex:0 0 auto;
+  align-items:center;
+  gap:6px;
+  min-height:25px;
+  padding:3px 8px;
+  border-radius:5px;
+  font-size:.7rem;
+}
+html[data-universe] .battle-main > .potion-bar button small { max-width:260px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+/* Keep the stage in normal flow so art motion never moves its vitals. */
+html[data-universe] .battle-stage {
+  display:flex;
+  flex-direction:column;
+  height:clamp(300px, 42vh, 430px);
+  min-height:300px;
+  padding:10px 14px 8px;
+  overflow:hidden;
+}
+html[data-universe] .battle-stage .stage-heading { flex:0 0 auto; }
+html[data-universe] .battle-stage .stage-lanes {
+  position:relative !important;
+  inset:auto !important;
+  display:grid;
+  grid-template-columns:minmax(190px, .7fr) minmax(16px, .08fr) minmax(0, 1.7fr);
+  align-items:stretch;
+  flex:1 1 auto;
+  min-height:0;
+  padding:6px clamp(4px, 2.4vw, 30px) 0;
+  gap:clamp(6px, 1.4vw, 18px);
+}
+html[data-universe] .battle-stage .hero-lane,
+html[data-universe] .battle-stage .enemy-lane { min-width:0; }
+html[data-universe] .battle-stage .hero-lane { align-items:end; justify-content:center; }
+html[data-universe] .battle-stage .hero-combatant {
+  display:grid;
+  grid-template-rows:max-content minmax(0, 1fr) max-content;
+  align-content:end;
+  align-items:end;
+  justify-items:center;
+  width:min(100%, 230px);
+  min-width:0;
+  min-height:0;
+  height:100%;
+  padding:0 3px 2px;
+  overflow:visible;
+  border:0;
+  background:transparent;
+  box-shadow:none;
+  text-align:center;
+}
+html[data-universe] .battle-stage .actor-label {
+  max-width:100%;
+  padding:3px 8px;
+  border-radius:999px;
+  background:#0b1727c9;
+  font-size:.72rem;
+}
+html[data-universe] .battle-stage .actor-art-wrap {
+  position:relative;
+  align-self:end;
+  width:clamp(125px, 16vw, 205px);
+  max-width:100%;
+  height:auto;
+  margin:0 auto;
+  aspect-ratio:1;
+  transform:none;
+}
+html[data-universe] .battle-stage .actor-stats {
+  width:100%;
+  max-width:230px;
+  padding:4px 5px 3px;
+  border:0;
+  border-radius:6px;
+  background:#071321d9;
+  white-space:normal;
+}
+html[data-universe] .stage-bridge { min-width:0; }
+html[data-universe] .bridge-mark { display:none; }
+html[data-universe] .battle-stage .enemy-lane {
+  display:grid;
+  grid-template-rows:max-content minmax(0, 1fr);
+  align-content:end;
+  gap:4px;
+  overflow:hidden;
+}
+html[data-universe] .battle-stage .enemy-lane-heading { display:flex; }
+html[data-universe] .battle-stage .enemy-list {
+  display:grid !important;
+  grid-template-columns:repeat(3, minmax(0, 1fr));
+  align-items:end;
+  justify-items:stretch;
+  width:100%;
+  min-width:0;
+  height:100%;
+  gap:clamp(5px, 1vw, 14px);
+  overflow:visible;
+}
+html[data-universe] .battle-stage .enemy-list:has(> .enemy:only-child) {
+  grid-template-columns:minmax(0, .75fr);
+  justify-content:center;
+}
+html[data-universe] .battle-stage .enemy-list:has(> .enemy:nth-child(2):last-child) {
+  grid-template-columns:repeat(2, minmax(0, 1fr));
+}
+html[data-universe] .battle-stage .enemy {
+  position:relative;
+  display:grid !important;
+  grid-template-rows:minmax(31px, max-content) max-content minmax(96px, 1fr) max-content;
+  align-content:end;
+  align-items:end;
+  justify-items:stretch;
+  width:100%;
+  min-width:0;
+  min-height:218px;
+  height:auto !important;
+  flex:none !important;
+  padding:2px 3px 2px;
+  overflow:visible;
+  border:1px solid transparent;
+  background:transparent;
+  box-shadow:none;
+  text-align:center;
+}
+html[data-universe] .battle-stage .enemy.targetable {
+  border-color:transparent;
+  outline:2px solid var(--accent);
+  outline-offset:3px;
+  background:#ffc86b12;
+  cursor:crosshair;
+}
+html[data-universe] .battle-stage .enemy-intent-bubble {
+  position:static !important;
+  display:grid;
+  align-content:center;
+  width:100%;
+  min-height:31px;
+  padding:4px 5px;
+  border:1px solid #e7a267aa;
+  border-radius:7px;
+  color:#ffd19c;
+  background:#111a2ee8;
+  font-size:.67rem;
+  line-height:1.2;
+  text-align:center;
+}
+html[data-universe] .battle-stage .enemy-head {
+  position:static !important;
+  display:grid;
+  min-width:0;
+  gap:1px;
+  padding:2px 3px;
+  background:transparent;
+  text-shadow:0 2px 3px #000;
+}
+html[data-universe] .battle-stage .enemy-head .eyebrow { display:none; }
+html[data-universe] .battle-stage .enemy-head strong { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:.74rem; }
+html[data-universe] .battle-stage .enemy-art-wrap {
+  position:relative !important;
+  align-self:end;
+  justify-self:center;
+  width:min(100%, 190px);
+  height:auto;
+  margin:0 auto;
+  aspect-ratio:1;
+  transform:none !important;
+}
+html[data-universe] .battle-stage .enemy-sprite { width:100%; height:100%; max-width:100%; }
+html[data-universe] .battle-stage .enemy-stats {
+  position:static !important;
+  display:grid;
+  width:100%;
+  padding:3px 3px 2px;
+  border:0;
+  border-radius:6px;
+  background:#071321d9;
+  color:#ffe2a7;
+}
+html[data-universe] .battle-stage .enemy .intent { display:block; }
+
+/* Shared local vitals: hp track + current/max + shield badge, then statuses. */
+html[data-universe] .combatant-vitals {
+  display:grid;
+  min-width:0;
+  gap:3px;
+  color:var(--paper);
+  font-size:.68rem;
+  line-height:1.15;
+}
+html[data-universe] .combatant-hp-row {
+  display:grid;
+  grid-template-columns:minmax(0, 1fr) max-content;
+  align-items:center;
+  gap:5px;
+  min-width:0;
+}
+html[data-universe] .combatant-hp {
+  display:grid;
+  grid-template-columns:minmax(0, 1fr) max-content;
+  align-items:center;
+  gap:4px;
+  min-width:0;
+}
+html[data-universe] .combatant-hp-bar {
+  width:100%;
+  height:9px;
+  min-width:18px;
+  overflow:hidden;
+  border:1px solid #d88d8e88;
+  border-radius:999px;
+  background:#050a13d9;
+  box-shadow:inset 0 1px 2px #0009;
+}
+html[data-universe] .combatant-hp-bar span {
+  display:block;
+  height:100%;
+  min-width:0;
+  border-radius:inherit;
+  background:linear-gradient(90deg,#ab455d,#ef8790);
+  transition:width .3s ease;
+}
+html[data-universe] .combatant-hp-value {
+  color:#fff1d5;
+  font-size:.7rem;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+}
+html[data-universe] .combatant-block {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:2px;
+  min-width:max-content;
+  padding:2px 4px;
+  border:1px solid #83c9e388;
+  border-radius:5px;
+  color:#d7f2ff;
+  background:#12334ac9;
+  font-size:.62rem;
+  font-weight:800;
+  white-space:nowrap;
+}
+html[data-universe] .shield-icon { width:13px; height:13px; fill:none; stroke:currentColor; stroke-linecap:round; stroke-linejoin:round; stroke-width:2; }
+html[data-universe] .combatant-statuses {
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:3px 6px;
+  min-height:1em;
+  color:#cbd8df;
+  font-size:.61rem;
+}
+html[data-universe] .combatant-statuses .poison { color:#9bdf85; }
+html[data-universe] .combatant-statuses .weak { color:#ff9a96; }
+html[data-universe] .status-empty { color:#93a5b5; }
+html[data-universe] .combatant-vitals,
+html[data-universe] .combatant-hp,
+html[data-universe] .combatant-block,
+html[data-universe] .combatant-statuses { animation:none !important; }
+
+/* The hand is the bottom centre; piles and turn control stay pinned to its sides. */
+html[data-universe] .battle-bottom-dock {
+  display:grid;
+  grid-template-columns:minmax(140px, .22fr) minmax(0, 1fr) minmax(150px, .22fr);
+  align-items:stretch;
+  gap:6px;
+  min-width:0;
+}
+html[data-universe] .battle-command {
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  gap:5px;
+  min-width:0;
+}
+html[data-universe] .battle-command-left { align-items:flex-start; }
+html[data-universe] .battle-command-right { align-items:stretch; }
+html[data-universe] .battle-resource {
+  display:flex;
+  align-items:center;
+  gap:7px;
+  min-height:35px;
+  color:var(--muted);
+}
+html[data-universe] .battle-resource > span:last-child { display:grid; gap:0; line-height:1; }
+html[data-universe] .battle-resource small { font-size:.62rem; }
+html[data-universe] .battle-resource strong { color:#ffe29c; font-size:1.2rem; }
+html[data-universe] .resource-icon {
+  display:grid;
+  place-items:center;
+  width:25px;
+  height:25px;
+  border:1px solid #8ac8efaa;
+  border-radius:50%;
+  color:#d8f3ff;
+  background:#21587c;
+  box-shadow:0 0 10px #47b8ff44;
+}
+html[data-universe] .piles.pile-cluster { display:flex; flex-wrap:wrap; gap:4px; min-width:0; }
+html[data-universe] .pile-button {
+  display:inline-flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:5px;
+  min-width:0;
+  min-height:29px;
+  padding:4px 7px;
+  border-color:#61748b;
+  font-size:.67rem;
+  white-space:nowrap;
+}
+html[data-universe] .pile-button b { color:var(--paper); font-variant-numeric:tabular-nums; }
+html[data-universe] .battle-resonance {
+  color:var(--accent-2);
+  font-size:.66rem;
+  white-space:nowrap;
+}
+html[data-universe] .battle-resonance b { color:var(--paper); }
+html[data-universe] .hand-panel {
+  display:grid;
+  grid-template-rows:max-content max-content minmax(0, 1fr);
+  min-width:0;
+  min-height:0;
+  gap:3px;
+  padding:6px 8px 7px;
+  overflow:hidden;
+  border:0;
+  border-radius:8px;
+  background:linear-gradient(#101b2c,#090f1c);
+  box-shadow:none;
+}
+html[data-universe] .hand-heading {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  min-width:0;
+}
+html[data-universe] .hand-heading h2 { color:#e5c896; font-size:.82rem; white-space:nowrap; }
+html[data-universe] .hand-target-hint {
+  min-width:0;
+  overflow:hidden;
+  color:#a5b8cb;
+  font-size:.63rem;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+html[data-universe] .hand-panel .notice { min-height:0; margin:0; font-size:.63rem; line-height:1.2; }
+html[data-universe] .hand-panel .notice:empty { display:none; }
+html[data-universe] .hand-scroll {
+  min-width:0;
+  overflow-x:auto;
+  overflow-y:hidden;
+  overscroll-behavior-inline:contain;
+  padding:3px 3px 4px;
+  scrollbar-color:var(--accent) #080e18;
+}
+html[data-universe] .battle-layout-art .hand-grid {
+  display:flex;
+  flex-wrap:nowrap;
+  align-items:stretch;
+  justify-content:center;
+  min-width:max-content;
+  gap:8px;
+}
+html[data-universe] .battle-layout-art .hand-grid .card {
+  flex:0 0 clamp(145px, 13vw, 180px);
+  min-height:204px;
+}
+html[data-universe] .battle-layout-art .battle-sidebar {
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0, 1fr));
+  gap:6px;
+  min-width:0;
+  margin-top:0;
+}
+html[data-universe] .battle-sidebar .log-panel,
+html[data-universe] .battle-sidebar .build-summary {
+  min-width:0;
+  max-height:none;
+  margin:0;
+  overflow:visible;
+}
+html[data-universe] .battle-sidebar .log-panel { padding:6px 10px; }
+html[data-universe] .battle-sidebar .log-panel > summary,
+html[data-universe] .battle-sidebar .build-summary > summary {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  color:var(--accent);
+  cursor:pointer;
+  font-size:.72rem;
+}
+html[data-universe] .battle-sidebar .log-panel > summary small { color:var(--muted); font-size:.65rem; }
+html[data-universe] .battle-sidebar .log { max-height:130px; margin-top:6px; font-size:.68rem; }
+
+/* Motion is applied to art wrappers only; vitals stay visually anchored. */
+html[data-universe] .hero-combatant.art-lunge,
+html[data-universe] .hero-combatant.art-recoil,
+html[data-universe] .hero-combatant.art-shield,
+html[data-universe] .battle-stage .enemy.art-hit,
+html[data-universe] .battle-stage .enemy.enemy-lunge { animation:none !important; transform:none !important; }
+html[data-universe] .hero-combatant.art-lunge .actor-art-wrap { animation:actor-lunge .46s ease-out; }
+html[data-universe] .hero-combatant.art-recoil .actor-art-wrap { animation:hero-recoil .6s ease-out; }
+html[data-universe] .hero-combatant.art-shield .actor-art-wrap { animation:shield-glow .62s ease-out; }
+html[data-universe] .battle-stage .enemy.art-hit .enemy-art-wrap { animation:target-hit .38s ease-out; }
+html[data-universe] .battle-stage .enemy.enemy-lunge .enemy-art-wrap { animation:enemy-lunge .48s ease-out; }
+@media (prefers-reduced-motion:reduce) {
+  html[data-universe] .hero-combatant.art-lunge .actor-art-wrap,
+  html[data-universe] .hero-combatant.art-recoil .actor-art-wrap,
+  html[data-universe] .hero-combatant.art-shield .actor-art-wrap,
+  html[data-universe] .battle-stage .enemy.art-hit .enemy-art-wrap,
+  html[data-universe] .battle-stage .enemy.enemy-lunge .enemy-art-wrap { animation:none !important; }
+}
+
+@media (min-width:1001px) {
+  html[data-universe] body:has(.battle-stage) { overflow-x:hidden; }
+  html[data-universe] .battle-layout-art .hand-panel { min-height:220px; }
+}
+
+@media (max-width:680px) {
+  html[data-universe] .battle-layout-art .battle-main { gap:5px; }
+  html[data-universe] .battle-toolbar { padding:6px 8px; }
+  html[data-universe] .battle-toolbar-line { gap:6px; }
+  html[data-universe] .battle-info h2 { font-size:.86rem; }
+  html[data-universe] .battle-toolbar-line .turn-actions button { min-height:30px; padding:4px 7px; font-size:.68rem; }
+  html[data-universe] .desktop-battle-hud { display:none; }
+  html[data-universe] .battle-toolbar-line > .desktop-battle-hud { display:none !important; }
+  html[data-universe] .mobile-summary { display:block; padding:0; }
+  html[data-universe] .mobile-battle-hud {
+    display:grid;
+    grid-template-columns:minmax(0, 1fr) auto minmax(0, 1fr);
+    gap:6px;
+    margin:0;
+    padding:5px 7px;
+    border:1px solid #ffffff14;
+    border-radius:6px;
+    background:#0b1422e8;
+  }
+  html[data-universe] .mobile-battle-hud .hud-portrait { display:none; }
+  html[data-universe] .mobile-battle-hud .hud-identity { gap:0; }
+  html[data-universe] .mobile-battle-hud .hud-identity .eyebrow,
+  html[data-universe] .mobile-battle-hud .hud-identity small:last-child { display:none; }
+  html[data-universe] .mobile-battle-hud .hud-identity strong { font-size:.72rem; }
+  html[data-universe] .mobile-battle-hud .hud-round { justify-content:center; font-size:.62rem; }
+  html[data-universe] .mobile-battle-hud .hud-round b { font-size:.85rem; }
+  html[data-universe] .mobile-battle-hud .hud-resources { justify-content:flex-end; gap:5px; font-size:.61rem; }
+  html[data-universe] .mobile-battle-hud .hud-resources b { font-size:.7rem; }
+  html[data-universe] .battle-main > .potion-bar { min-height:29px; padding:3px 5px; }
+  html[data-universe] .battle-main > .potion-bar button { min-height:23px; padding:2px 5px; font-size:.63rem; }
+  html[data-universe] .battle-main > .potion-bar button small { max-width:130px; font-size:.58rem; }
+  html[data-universe] .battle-main > .potion-bar .help { display:none; }
+  html[data-universe] .battle-stage {
+    height:clamp(292px, 42vh, 360px);
+    min-height:292px;
+    padding:7px 6px 5px;
+  }
+  html[data-universe] .stage-heading { gap:3px; }
+  html[data-universe] .stage-heading h2 { font-size:.78rem; }
+  html[data-universe] .stage-help { padding:2px 4px; font-size:.56rem; }
+  html[data-universe] .battle-stage .stage-lanes {
+    grid-template-columns:minmax(100px, .55fr) 7px minmax(0, 1.45fr);
+    gap:3px;
+    padding:4px 0 0;
+  }
+  html[data-universe] .battle-stage .hero-combatant { width:100%; padding:0 1px 1px; }
+  html[data-universe] .battle-stage .actor-label { padding:2px 4px; font-size:.57rem; }
+  html[data-universe] .battle-stage .actor-art-wrap { width:100px; }
+  html[data-universe] .battle-stage .actor-stats { max-width:108px; padding:3px 2px 2px; }
+  html[data-universe] .battle-stage .enemy-lane { gap:2px; }
+  html[data-universe] .battle-stage .enemy-lane-heading { display:none; }
+  html[data-universe] .battle-stage .enemy-list {
+    display:flex !important;
+    align-items:end;
+    justify-content:flex-start;
+    gap:4px;
+    min-width:0;
+    overflow-x:auto;
+    overflow-y:hidden;
+    padding:0 2px 3px;
+    scrollbar-width:thin;
+  }
+  html[data-universe] .battle-stage .enemy-list:has(> .enemy:only-child),
+  html[data-universe] .battle-stage .enemy-list:has(> .enemy:nth-child(2):last-child) { grid-template-columns:none; }
+  html[data-universe] .battle-stage .enemy {
+    flex:0 0 min(124px, 34vw) !important;
+    grid-template-rows:minmax(28px, max-content) max-content minmax(77px, 1fr) max-content;
+    min-height:202px;
+    padding:1px 2px;
+    scroll-snap-align:start;
+  }
+  html[data-universe] .battle-stage .enemy-intent-bubble { min-height:28px; padding:3px 2px; font-size:.56rem; }
+  html[data-universe] .battle-stage .enemy-head strong { font-size:.61rem; }
+  html[data-universe] .battle-stage .enemy-art-wrap { width:94px; }
+  html[data-universe] .combatant-vitals { font-size:.58rem; }
+  html[data-universe] .combatant-hp-row { gap:2px; }
+  html[data-universe] .combatant-hp { gap:2px; }
+  html[data-universe] .combatant-hp-bar { height:7px; }
+  html[data-universe] .combatant-hp-value { font-size:.58rem; }
+  html[data-universe] .combatant-block { gap:1px; padding:1px 2px; font-size:.53rem; }
+  html[data-universe] .shield-icon { width:10px; height:10px; }
+  html[data-universe] .combatant-statuses { gap:2px 4px; font-size:.52rem; }
+  html[data-universe] .battle-bottom-dock {
+    grid-template-columns:minmax(64px, .28fr) minmax(0, 1fr) minmax(78px, .34fr);
+    gap:3px;
+  }
+  html[data-universe] .battle-command { gap:3px; }
+  html[data-universe] .battle-command-left { align-items:stretch; }
+  html[data-universe] .battle-command-right { align-items:stretch; }
+  html[data-universe] .battle-resource { justify-content:center; min-height:29px; gap:4px; }
+  html[data-universe] .resource-icon { width:19px; height:19px; font-size:.72rem; }
+  html[data-universe] .battle-resource strong { font-size:.82rem; }
+  html[data-universe] .battle-resource small { font-size:.51rem; }
+  html[data-universe] .piles.pile-cluster { flex-direction:column; gap:2px; }
+  html[data-universe] .pile-button { justify-content:space-between; min-height:25px; padding:3px 4px; font-size:.55rem; }
+  html[data-universe] .battle-resonance { font-size:.53rem; text-align:center; }
+  html[data-universe] .hand-panel { padding:4px 4px 5px; }
+  html[data-universe] .hand-heading { display:grid; gap:1px; }
+  html[data-universe] .hand-heading h2 { font-size:.68rem; }
+  html[data-universe] .hand-target-hint { font-size:.52rem; }
+  html[data-universe] .hand-panel .notice { display:none; }
+  html[data-universe] .hand-scroll { padding:2px 2px 3px; }
+  html[data-universe] .battle-layout-art .hand-grid { justify-content:flex-start; gap:5px; }
+  html[data-universe] .battle-layout-art .hand-grid .card { flex-basis:145px; min-height:204px; }
+  html[data-universe] .end-turn { min-height:46px; padding:4px 5px; font-size:.65rem; line-height:1.1; }
+  html[data-universe] .end-turn small { display:block; margin-top:2px; font-size:.5rem; }
+  html[data-universe] .battle-layout-art .battle-sidebar { grid-template-columns:1fr; }
+}
+
+@media (max-width:680px) and (orientation:landscape) {
+  html[data-universe] .battle-stage { height:235px; min-height:235px; }
+  html[data-universe] .battle-stage .enemy { min-height:166px; grid-template-rows:minmax(23px, max-content) max-content minmax(58px, 1fr) max-content; }
+  html[data-universe] .battle-stage .enemy-intent-bubble { min-height:23px; }
+  html[data-universe] .battle-stage .actor-art-wrap { width:82px; }
+  html[data-universe] .battle-stage .enemy-art-wrap { width:75px; }
+  html[data-universe] .battle-layout-art .hand-grid .card { min-height:184px; }
+}
+
+/* Reset the legacy absolute art offsets before the wrapper becomes a grid item. */
+html[data-universe] .battle-stage .enemy-art-wrap {
+  position:relative !important;
+  inset:auto !important;
+  top:auto !important;
+  right:auto !important;
+  bottom:auto !important;
+  left:auto !important;
+  transform:none !important;
+}
+html[data-universe] .battle-stage .enemy-stats,
+html[data-universe] .battle-stage .actor-stats {
+  display:grid !important;
+  grid-template-columns:minmax(0, 1fr) !important;
+  width:min(100%, 220px);
+  max-width:220px;
+  min-width:0;
+  justify-content:stretch !important;
+  justify-items:stretch !important;
+  align-items:stretch;
+  justify-self:center;
+}
+html[data-universe] .battle-stage .combatant-hp-row {
+  display:grid !important;
+  width:100%;
+  min-width:0;
+  grid-template-columns:minmax(0, 1fr) max-content !important;
+}
+html[data-universe] .battle-stage .combatant-hp {
+  display:grid !important;
+  width:100%;
+  min-width:0;
+  grid-template-columns:minmax(0, 1fr) max-content !important;
+  flex:1 1 auto;
+}
+html[data-universe] .battle-stage .combatant-hp-bar {
+  width:100%;
+  min-width:0;
+  flex:1 1 auto;
+}
+@media (min-width:681px) {
+  html[data-universe] .battle-stage .enemy-stats,
+  html[data-universe] .battle-stage .actor-stats { min-width:160px; }
+}
+@media (max-width:680px) {
+  html[data-universe] .battle-stage .enemy-stats { width:100%; max-width:124px; min-width:0; }
+  html[data-universe] .battle-stage .actor-stats { width:100%; max-width:108px; min-width:0; }
+}
+
+/* Battle is the active screen: reclaim the shell's global chrome height. */
+html[data-universe] .shell:has(.battle-stage) {
+  padding-top:8px;
+  padding-bottom:10px;
+}
+html[data-universe] .shell:has(.battle-stage) > .masthead {
+  min-height:0;
+  padding:0 0 4px;
+  gap:6px;
+}
+html[data-universe] .shell:has(.battle-stage) > .masthead h1 {
+  font-size:1.25rem;
+  line-height:1;
+  letter-spacing:.1em;
+}
+html[data-universe] .shell:has(.battle-stage) > .masthead .eyebrow,
+html[data-universe] .shell:has(.battle-stage) > .masthead .subtitle { display:none; }
+html[data-universe] .shell:has(.battle-stage) > .masthead .tabs { gap:4px; }
+html[data-universe] .shell:has(.battle-stage) > .masthead .tabs button { padding:4px 7px; font-size:.66rem; }
+html[data-universe] .shell:has(.battle-stage) > .global-status {
+  min-height:0;
+  max-height:1.15rem;
+  margin:0;
+  padding:0 0 2px;
+  overflow:hidden;
+  font-size:.67rem;
+  line-height:1.1;
+}
+html[data-universe] .shell:has(.battle-stage) > .storage-notice {
+  max-height:1.1rem;
+  margin:0;
+  padding:0 0 2px;
+  overflow:hidden;
+  font-size:.62rem;
+  line-height:1.1;
+}
+
+@media (max-width:680px) {
+  /* Phone: keep all turn controls together, then give the hand the full row. */
+  html[data-universe] .battle-bottom-dock {
+    grid-template-columns:minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:"controls-left controls-right" "hand hand";
+    align-items:stretch;
+  }
+  html[data-universe] .battle-bottom-dock > .battle-command-left {
+    grid-area:controls-left;
+    flex-direction:row;
+    align-items:center;
+    justify-content:flex-start;
+    gap:3px;
+  }
+  html[data-universe] .battle-bottom-dock > .hand-panel {
+    grid-area:hand;
+    width:100%;
+  }
+  html[data-universe] .battle-bottom-dock > .battle-command-right {
+    grid-area:controls-right;
+    flex-direction:row;
+    align-items:center;
+    justify-content:flex-end;
+    gap:3px;
+  }
+  html[data-universe] .battle-bottom-dock .battle-command-left .piles.pile-cluster,
+  html[data-universe] .battle-bottom-dock .battle-command-right .piles.pile-cluster {
+    flex-direction:row !important;
+    flex-wrap:nowrap;
+    gap:2px;
+  }
+  html[data-universe] .battle-bottom-dock .battle-command-left .pile-button,
+  html[data-universe] .battle-bottom-dock .battle-command-right .pile-button {
+    min-width:0;
+    padding:3px 4px;
+  }
+  html[data-universe] .battle-bottom-dock .battle-command-left .battle-resource {
+    flex:0 0 auto;
+  }
+  html[data-universe] .battle-bottom-dock .battle-command-left .battle-resonance {
+    flex:0 0 auto;
+  }
+  html[data-universe] .battle-bottom-dock .battle-command-right .end-turn {
+    flex:0 0 74px;
+    min-width:74px;
+  }
+}
