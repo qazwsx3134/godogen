@@ -17,8 +17,12 @@ function walk(path: string[]) {
       const option = beat.options.find((o) => o.id === step)!;
       dialogue.advance(ChoiceSystem.resolve(dialogue, option));
     } else if (beat.type === "tsukkomi") {
-      const option = beat.options.find((o) => o.id === step)!;
-      dialogue.advance(TsukkomiSystem.resolve(dialogue, beat.id, option, beat.onCorrect, beat.onWrong));
+      if (step === "__timeout__") {
+        dialogue.advance(TsukkomiSystem.resolveTimeout(dialogue, beat.id, beat.onWrong));
+      } else {
+        const option = beat.options.find((o) => o.id === step)!;
+        dialogue.advance(TsukkomiSystem.resolveOption(dialogue, beat.id, option, beat.onCorrect, beat.onWrong));
+      }
     }
   }
   let beat = dialogue.getCurrentBeat();
@@ -33,4 +37,5 @@ function walk(path: string[]) {
 walk(["ask_shinpachi", "meta"]);
 walk(["ask_kagura", "scared"]);
 walk(["ask_landlady", "deflect"]);
+walk(["ask_shinpachi", "__timeout__"]);
 console.log("All paths reached a valid end beat.");

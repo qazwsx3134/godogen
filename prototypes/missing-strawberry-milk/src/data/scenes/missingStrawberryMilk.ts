@@ -97,6 +97,7 @@ export const missingStrawberryMilk: Scene = {
       type: "tsukkomi",
       lines: [{ speaker: "新八", text: "輪到你吐槽了，該怎麼回？" }],
       prompt: "選一句吐槽",
+      timeLimitMs: 2000,
       options: [
         { id: "meta", label: "這根本是隔壁棚跑錯片場吧！", correct: true },
         { id: "scared", label: "好可怕的斗篷……", correct: false },

@@ -17,7 +17,7 @@ The escalation branch of a 委託's 失控判定 — the general concept that "t
 _Avoid_: mini-game (when specifically meaning the Phase 3 framework), Mini-game Framework (that term is reserved for Phase 3's common `start()`/`result` interface)
 
 **吐槽 (Tsukkomi)**:
-A player choice that calls out something absurd happening in the current scene. The Phase 1 prototype's version is an untimed correct/incorrect pick that only branches dialogue. From Phase 2 onward it becomes a timed mechanic with three types: 普通 (text-only), 戰鬥 (weakens an enemy), and Narrative Break (breaks the game's own rules).
+A player choice that calls out something absurd happening in the current scene. Currently implemented as 普通吐槽 only: a timed correct/incorrect pick (2s window, no pick = wrong) that branches dialogue. Two more types exist on paper — 戰鬥 (weakens an enemy) and Narrative Break (breaks the game's own rules) — but both presuppose a battle/boss system this prototype doesn't have yet, so they're deferred (see `prototypes/docs/adr/0002-tsukkomi-types-deferred.md`).
 _Avoid_: joke choice, punchline choice
 
 **Flag**:

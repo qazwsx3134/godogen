@@ -1,6 +1,6 @@
 /**
- * Data shapes for a Phase 1 text scene, per prototypes/CONTEXT.md.
- * `portrait` and `sfx` are reserved for Phase 2/3 — Phase 1 renders text only.
+ * Data shapes for a text scene, per prototypes/CONTEXT.md.
+ * `portrait` and `sfx` are reserved for later phases — this prototype renders text only.
  */
 
 export interface Line {
@@ -33,6 +33,8 @@ export type Beat =
       lines: Line[];
       prompt: string;
       options: TsukkomiOption[];
+      /** Only 普通吐槽 exists so far — no timer means no pressure, so this is required. */
+      timeLimitMs: number;
       onCorrect: string;
       onWrong: string;
     }

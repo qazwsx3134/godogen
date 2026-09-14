@@ -2,13 +2,13 @@ import type { TsukkomiOption } from "../types";
 import { DialogueManager } from "./DialogueManager";
 
 /**
- * Phase 1 tsukkomi: an untimed pick with one correct option.
- * No timer, no scoring, no tsukkomi type (普通/戰鬥/Narrative Break) —
- * those are Phase 2 additions, deliberately not built here yet
- * (see prototypes/docs/adr for why Phase 1 stays this thin).
+ * Phase 2 tsukkomi: a timed pick with one correct option.
+ * Only 普通吐槽 (text-only effect) exists here — 戰鬥吐槽 and Narrative Break
+ * both presuppose a battle/boss system this prototype doesn't have, so they're
+ * deliberately deferred (see prototypes/docs/adr).
  */
 export class TsukkomiSystem {
-  static resolve(
+  static resolveOption(
     dialogue: DialogueManager,
     beatId: string,
     option: TsukkomiOption,
@@ -17,5 +17,11 @@ export class TsukkomiSystem {
   ): string {
     dialogue.setFlag(`tsukkomi:${beatId}:${option.correct ? "correct" : "wrong"}`);
     return option.correct ? onCorrect : onWrong;
+  }
+
+  /** No pick within the time limit counts as wrong, same as picking a wrong option. */
+  static resolveTimeout(dialogue: DialogueManager, beatId: string, onWrong: string): string {
+    dialogue.setFlag(`tsukkomi:${beatId}:timeout`);
+    return onWrong;
   }
 }
