@@ -38,10 +38,19 @@ const TICK_MS = 100;
 const ANNOUNCE_MS = 500;
 const RESULT_MS = 500;
 
+function updateCountdownDisplay(remainingMs: number) {
+  const el = document.getElementById("tsukkomi-countdown");
+  if (el) el.textContent = `${Math.max(0, remainingMs / 1000).toFixed(1)}s`;
+}
+
 function startTsukkomiSequence(beat: TsukkomiBeat) {
   tsukkomiRuntime = { beatId: beat.id, phase: "announce", remainingMs: beat.timeLimitMs };
   tsukkomiAdvanceTimeoutId = window.setTimeout(() => {
     tsukkomiRuntime = { beatId: beat.id, phase: "choosing", remainingMs: beat.timeLimitMs };
+    // Full render exactly once to build the buttons — after this, ticks only
+    // touch the countdown text node so an in-flight click on a button never
+    // gets its element swapped out from under it (that's what silently ate
+    // clicks before: innerHTML every 100ms nuked the button mid-press).
     render();
     tsukkomiIntervalId = window.setInterval(() => {
       if (!tsukkomiRuntime || tsukkomiRuntime.phase !== "choosing") return;
@@ -49,7 +58,7 @@ function startTsukkomiSequence(beat: TsukkomiBeat) {
       if (tsukkomiRuntime.remainingMs <= 0) {
         resolveTsukkomiTimeout(beat);
       } else {
-        render();
+        updateCountdownDisplay(tsukkomiRuntime.remainingMs);
       }
     }, TICK_MS);
   }, ANNOUNCE_MS);
@@ -97,7 +106,7 @@ function renderTsukkomiFooter(beat: TsukkomiBeat): string {
   if (tsukkomiRuntime.phase === "choosing") {
     const seconds = Math.max(0, tsukkomiRuntime.remainingMs / 1000).toFixed(1);
     return `
-      <div class="tsukkomi-announce">吐槽！ ⏱ ${seconds}s</div>
+      <div class="tsukkomi-announce">吐槽！ ⏱ <span id="tsukkomi-countdown">${seconds}s</span></div>
       <div class="prompt">${beat.prompt}</div>
       <div class="options">
         ${beat.options
