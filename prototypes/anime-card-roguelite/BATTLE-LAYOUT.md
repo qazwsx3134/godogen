@@ -2,6 +2,8 @@
 
 2026-09-09。使用者指定參考《Slay the Spire 2》，主角與每名敵人的血條、格擋都要在各自角色附近。本文將這項要求套入裂界牌局；實作與驗證結果見文末。
 
+2026-09-14：目前全畫面與浮動手牌要求以 [FULLSCREEN-UI.md](FULLSCREEN-UI.md)為準。本文的尺寸政策、截圖與驗證紀錄保留為 9 月 9 日版本；角色附近血條、格擋與意圖的原則持續適用。
+
 ## 參考來源
 
 已查看 Mega Crit [官方素材頁](https://www.megacrit.com/press-kits/slay-the-spire-2/)的[戰鬥截圖一](https://www.megacrit.com/images/steam_screenshot1_new.png)與[戰鬥截圖二](https://www.megacrit.com/images/steam_screenshot2_new.png)。截圖呈現完整橫向戰場、底部手牌、敵方頭頂意圖，以及各戰鬥主體腳邊的血條與狀態。截圖一也顯示血條旁的盾牌數字、左下能量與右下結束回合。

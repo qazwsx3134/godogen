@@ -1,10 +1,10 @@
 # 裂界牌局
 
-2026-09-09：戰鬥版面參考《Slay the Spire 2》，主角與每名敵人的血條、格擋值放在各自角色腳邊，敵方意圖位於頭頂；手牌與回合操作位於底部。見 [版面規格與實測截圖](BATTLE-LAYOUT.md)。
+2026-09-14：遊戲填滿瀏覽器視窗，戰場上覆蓋 HUD 與底部浮動手牌。桌面 hover／鍵盤 focus 放大卡牌；手機先點牌預覽，再點敵人或按「出牌」確認。主要按鈕採圖示搭配短文字，主角與每名敵人的血條、格擋值放在角色附近，敵方意圖位於頭頂。見 [全畫面 UI 規格與實測截圖](FULLSCREEN-UI.md)。戰場配置延續《Slay the Spire 2》的參考方向。
 
-已確認的紙娃娃目標設計見 [PAPER-DOLL-SPEC.md](PAPER-DOLL-SPEC.md)，現有素材的沿用／修改／重製／新增清單見 [ASSET-MIGRATION.md](ASSET-MIGRATION.md)。以下玩法說明仍描述目前原型，紙娃娃、三區與廣告經濟尚待後續實作。
+已確認的紙娃娃目標設計見 [PAPER-DOLL-SPEC.md](PAPER-DOLL-SPEC.md)，現有素材的沿用／修改／重製／新增清單見 [ASSET-MIGRATION.md](ASSET-MIGRATION.md)。[設計與實作狀態](DESIGN-STATUS.md)列出已定案規則、目前差距與待補規格。以下玩法說明描述目前原型，紙娃娃、三區與廣告經濟尚待後續實作。
 
-文字為主的單人登塔卡牌原型。選擇角色與職業，沿路用卡牌、遺物和消耗品發展流派；跨宇宙出牌會切換火影、七龍珠、銀魂的介面畫風。
+單人登塔卡牌原型，以全畫面戰場、角色動畫與插圖手牌呈現戰鬥。現行玩法選擇角色與職業，沿路用卡牌、遺物和消耗品發展流派；跨宇宙出牌會切換火影、七龍珠、銀魂的介面畫風。
 
 ## 開始
 
@@ -88,6 +88,15 @@ node prototypes/anime-card-roguelite/browser-check.mjs \
 ```
 
 截圖位於 `/tmp/rift-character-browser/`。驗證紀錄見 VALIDATION.md，真人試玩流程見 PLAYTEST.md。模擬勝率不代表真人勝率。
+
+全畫面 UI 與觸控互動另用以下命令驗證，涵蓋桌面、筆電與手機直橫向。2026-09-14 的 16 個瀏覽器情境全部通過，46 項單元測試通過；[驗收紀錄與保存截圖](FULLSCREEN-UI.md#驗收結果2026-09-14)記錄環境與限制。
+
+```bash
+node prototypes/anime-card-roguelite/battle-layout-check.mjs \
+  --playwright /path/to/node_modules/@playwright/test \
+  --url http://127.0.0.1:5178 \
+  --out /tmp/rift-fullscreen-qa
+```
 
 本原型隔離在此目錄，不參與 Godogen 發布。現行角色 API 見 CHARACTER-CONTRACT.md；通用登塔規則見 CONTRACT.md。2D 橫向戰場已接入三套宇宙背景、三名角色待機、普通敵人／首領、新八吐槽與氣功光束 Sprite。後期跨界取得入口仍待設計，方向見 [DESIGN-DIRECTION.md](./DESIGN-DIRECTION.md)。
 

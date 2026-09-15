@@ -49,6 +49,9 @@ let empowerChoice = false;
 let pile = null;
 let modalReturnFocus = null;
 let pendingFocus = null;
+let battleOverlay = null;
+let battleOverlayReturnFocus = null;
+let inputMode = 'mouse';
 let rulesOpen = false;
 let recorded = false;
 let lastRelay = { from: 'neutral', to: 'neutral', reason: '' };
@@ -97,6 +100,27 @@ function loadoutCheck() {
 }
 const say = text => { feedback = text; };
 
+const icon = (name, className = '') => {
+  const paths = {
+    menu: '<path d="M4 7h16M4 12h16M4 17h16"></path>',
+    log: '<path d="M6 4.5h12v15H6z"></path><path d="M9 8h6M9 12h6M9 16h4"></path>',
+    build: '<path d="M5 4h14v16H5z"></path><path d="m8 9 2 2 4-4M8 15h8"></path>',
+    rules: '<circle cx="12" cy="12" r="8.5"></circle><path d="M12 10v5M12 7.5v.2"></path>',
+    close: '<path d="m6 6 12 12M18 6 6 18"></path>',
+    cancel: '<circle cx="12" cy="12" r="8.5"></circle><path d="m8.5 8.5 7 7M15.5 8.5l-7 7"></path>',
+    confirm: '<path d="m5 12 4.2 4.2L19 6.5"></path>',
+    energy: '<path d="m13.2 2.8-7 10h5.2l-.6 8.4 7-10h-5.2l.6-8.4Z"></path>',
+    draw: '<path d="M7 5h10v14H7z"></path><path d="M4.5 7.5v11h10"></path>',
+    discard: '<path d="M5 7h14M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5"></path>',
+    exile: '<path d="M12 3v12M7.5 10.5 12 15l4.5-4.5M5 20h14"></path>',
+    potion: '<path d="M9 3h6M10 3v4l-3.5 5.3a5 5 0 0 0 4.2 7.7h2.6a5 5 0 0 0 4.2-7.7L14 7V3"></path><path d="M8 13h8"></path>',
+    empower: '<path d="m12 3 1.7 5.3H19l-4.3 3.2 1.6 5.2-4.3-3.1-4.3 3.1 1.6-5.2L5 8.3h5.3L12 3Z"></path>',
+    gold: '<circle cx="12" cy="12" r="8.5"></circle><path d="M9 9.5h4.3a1.7 1.7 0 1 1 0 3.4H10.7a1.7 1.7 0 1 0 0 3.4H15M12 7.5v9"></path>',
+    back: '<path d="M19 12H5M11 6l-6 6 6 6"></path>',
+  };
+  return `<svg class="ui-icon ${className}" viewBox="0 0 24 24" aria-hidden="true" focusable="false">${paths[name] || paths.rules}</svg>`;
+};
+
 function save() {
   persistProgress();
   if (saveProfile(profile, storage)) return true;
@@ -123,13 +147,14 @@ function saveSeed(value) {
 
 function setTheme() {
   document.documentElement.dataset.universe = tab === 'run' ? run?.currentUniverse || 'neutral' : 'neutral';
+  document.documentElement.dataset.input = inputMode;
   app.dataset.screen = tab;
 }
 
 function focusRef(element) {
   if (!element || element === document.body || !app.contains(element)) return null;
   if (element.id) return { type: 'id', value: element.id };
-  for (const key of ['menu', 'build', 'tab', 'preset', 'node', 'play', 'enemy', 'reward', 'pile', 'upgrade', 'buyCard', 'buyRelic', 'remove', 'event', 'addDeck', 'character', 'potion', 'removeDeck', 'exclude', 'include', 'tutorialOpen', 'tutorialStep', 'tutorialTab', 'tutorialAction']) {
+  for (const key of ['menu', 'build', 'tab', 'preset', 'node', 'play', 'enemy', 'reward', 'pile', 'upgrade', 'buyCard', 'buyRelic', 'remove', 'event', 'addDeck', 'character', 'potion', 'removeDeck', 'exclude', 'include', 'tutorialOpen', 'tutorialStep', 'tutorialTab', 'tutorialAction', 'battleOverlay']) {
     if (element.dataset[key] !== undefined) return { type: 'data', key, value: element.dataset[key] };
   }
   return null;
@@ -190,8 +215,9 @@ function cardHtml(instanceOrCard, options = {}) {
 }
 
 function header() {
+  if (tab === 'run' && run?.phase === 'battle') return '';
   const current = run?.currentUniverse || 'neutral';
-  return `<header class="masthead"><div><div class="eyebrow">single-player relay deckbuilder</div><h1>${tab === 'home' ? '選擇你的旅人' : '裂界牌局'}</h1><p class="subtitle">${tab === 'home' ? '02 / 角色與起始牌' : '跨宇宙接力 · 七層登塔'}</p></div><nav class="tabs" aria-label="主選單"><button data-tab="home" aria-current="${tab === 'home' ? 'page' : 'false'}">角色／配置</button><button data-menu="title">主選單</button><button data-tab="collection" aria-current="${tab === 'collection' ? 'page' : 'false'}">收藏／起始配置</button>${run ? `<button data-tab="run" aria-current="${tab === 'run' ? 'page' : 'false'}">當局</button>` : ''}<button id="tutorial-open" data-tutorial-open>接力／蓄氣教學</button></nav></header><p class="global-status" role="status" aria-live="polite">${esc(feedback)}</p>${storageNotice||campaignNotice ? `<p class="storage-notice" role="status">${esc(storageNotice||campaignNotice)}</p>` : ''}<details class="rules" id="rules" ${rulesOpen ? 'open' : ''}><summary>規則摘要</summary><p>每回合 3 能量、抽 5 張；玩家只靠出牌攻擊，結束回合後敵人依意圖行動。格擋會在下回合清除；荊棘、力量等本場效果持續到戰鬥結束。普通勝利不自動回血；失敗只重置當局，收藏保留。非中立牌成功出牌會接力；3 共鳴可手動強化攻擊或格擋牌。</p></details><div class="theme-chip" data-current-universe="${esc(current)}">目前畫風：${esc(universe(current).name)}</div>`;
+  return `<header class="masthead"><div class="masthead-copy"><div class="eyebrow">single-player relay deckbuilder</div><h1>${tab === 'home' ? '選擇你的旅人' : '裂界牌局'}</h1><p class="subtitle">${tab === 'home' ? '02 / 角色與起始牌' : '跨宇宙接力 · 七層登塔'}</p></div><nav class="tabs" aria-label="主選單"><button data-tab="home" aria-current="${tab === 'home' ? 'page' : 'false'}">角色／配置</button><button data-menu="title">主選單</button><button data-tab="collection" aria-current="${tab === 'collection' ? 'page' : 'false'}">收藏／起始配置</button>${run ? `<button data-tab="run" aria-current="${tab === 'run' ? 'page' : 'false'}">當局</button>` : ''}<button id="tutorial-open" data-tutorial-open>接力／蓄氣教學</button></nav></header><p class="global-status" role="status" aria-live="polite">${esc(feedback)}</p>${storageNotice||campaignNotice ? `<p class="storage-notice" role="status">${esc(storageNotice||campaignNotice)}</p>` : ''}<details class="rules" id="rules" ${rulesOpen ? 'open' : ''}><summary>規則摘要</summary><p>每回合 3 能量、抽 5 張；玩家只靠出牌攻擊，結束回合後敵人依意圖行動。格擋會在下回合清除；荊棘、力量等本場效果持續到戰鬥結束。普通勝利不自動回血；失敗只重置當局，收藏保留。非中立牌成功出牌會接力；3 共鳴可手動強化攻擊或格擋牌。</p></details><div class="theme-chip" data-current-universe="${esc(current)}">目前畫風：${esc(universe(current).name)}</div>`;
 }
 
 function presetDeck() {
@@ -207,8 +233,9 @@ function buildView({ open = true } = {}) {
   const builds=getBuildSummary(run);
   return `<details class="build-summary" ${open ? 'open' : ''}><summary>目前構築 · ${run.deck.length}張牌</summary><div class="build-lines">${builds.map(b=>`<div><b>${esc(b.name)} ×${b.count}</b><span>${esc(b.description || b.payoff || '')}</span></div>`).join('')||'<p class="help">選擇戰利品，開始形成流派。</p>'}</div></details>`;
 }
-function potionView() {
-  return `<section class="potion-bar" aria-label="戰鬥消耗品"><b>消耗品 ${run.potions.length}/2</b>${run.potions.map(p=>{const d=POTIONS.find(x=>x.id===p.potionId);return `<button data-potion="${p.uid}" class="${selectedPotion===p.uid?'selected':''}" aria-pressed="${selectedPotion===p.uid}" ${run.phase==='battle'?'':'disabled'} title="${esc(d.text)}"><strong>${d.name}</strong><small>${d.text} · 使用一次</small></button>`;}).join('')}${run.potions.length<2?'<span class="help">戰鬥可掉落補充；背包滿則換10金。</span>':''}</section>`;
+function potionView({ compact = false } = {}) {
+  const label = compact ? '藥' : '消耗品';
+  return `<section class="potion-bar${compact ? ' compact-potion-bar' : ''}" aria-label="戰鬥消耗品"><span class="potion-label">${icon('potion')}<b>${label} ${run.potions.length}/2</b></span>${run.potions.map(p=>{const d=POTIONS.find(x=>x.id===p.potionId);return `<button data-potion="${p.uid}" class="${selectedPotion===p.uid?'selected':''}" aria-pressed="${selectedPotion===p.uid}" ${run.phase==='battle'?'':'disabled'} aria-label="${esc(d?.name || '消耗品')}：${esc(d?.text || '')}" title="${esc(d?.text || '')}"><strong>${esc(d?.name || '未知消耗品')}</strong><small>${esc(d?.text || '')}</small></button>`;}).join('')}${!compact && run.potions.length<2?'<span class="help">戰鬥可掉落補充；背包滿則換10金。</span>':''}</section>`;
 }
 
 function homeView() {
@@ -296,7 +323,7 @@ function intentHtml(enemy) {
   const damage = intent.kind === 'attack' ? getIntentDamage(enemy) : 0;
   const amount = intent.kind === 'attack' ? `${damage} ×${intent.hits || 1}` : intent.amount || '';
   const label = intent.kind === 'buff' && intent.label === '蓄力' ? '強化攻勢' : intent.label || intent.kind || '未知';
-  return `<span class="intent-kind">${esc(label)}</span> ${esc(amount)}${intent.kind === 'attack' ? ' · 預告攻擊' : ''}`;
+  return `<span class="intent-kind">${esc(label)}</span> ${esc(amount)}`;
 }
 
 function intentSummary(enemy) {
@@ -323,7 +350,7 @@ function enemyHtml(enemy) {
       enemy.weak ? `<span class="weak">虛弱 ${esc(enemy.weak)}</span>` : '',
     ],
   });
-  return `<button class="enemy ${dead ? 'dead' : ''} ${selectedUid||selectedPotion ? 'targetable' : ''}" data-enemy="${esc(enemy.id)}" data-combatant="enemy" aria-label="${esc(tooltip)}" title="${esc(tooltip)}" ${dead ? 'disabled' : ''}><span class="enemy-intent-bubble">${intentHtml(enemy)}</span><span class="enemy-head"><span class="eyebrow">敵方</span><strong>${esc(enemy.name)}</strong></span><span class="enemy-art-wrap"><span class="sprite-sheet sprite-idle enemy-sprite" style="--sprite-image:url('${esc(sprite)}')" aria-hidden="true"></span></span>${vitals}<span class="enemy-tooltip" role="tooltip">${esc(tooltip)}</span></button>`;
+  return `<button class="enemy ${dead ? 'dead' : ''} ${selectedPotion || cardInstance(run.hand.find(instance => instance.uid === selectedUid))?.target === 'enemy' ? 'targetable' : ''}" data-enemy="${esc(enemy.id)}" data-combatant="enemy" aria-label="${esc(tooltip)}" title="${esc(tooltip)}" ${dead ? 'disabled' : ''}><span class="enemy-intent-bubble">${intentHtml(enemy)}</span><span class="enemy-head"><span class="eyebrow">敵方</span><strong>${esc(enemy.name)}</strong></span><span class="enemy-art-wrap"><span class="sprite-sheet sprite-idle enemy-sprite" style="--sprite-image:url('${esc(sprite)}')" aria-hidden="true"></span></span>${vitals}<span class="enemy-tooltip" role="tooltip">${esc(tooltip)}</span></button>`;
 }
 
 function pileItems(kind) {
@@ -341,6 +368,34 @@ function pileItems(kind) {
   return items.map(instance => { const item = cardInstance(instance); const version = Number(instance.upgraded || 0) ? ' · 已升級' : ' · 基礎'; return `<div class="mini"><b>${esc(item?.name || '未知卡牌')}${version}</b><br>${esc(item?.text || '')}</div>`; }).join('');
 }
 
+function battleOverlayButton(name, label) {
+  return `<button class="battle-overlay-trigger" data-battle-overlay="${name}" aria-label="${label}" title="${label}">${icon(name)}<span>${label}</span></button>`;
+}
+
+function battleTopbar() {
+  const current = run?.currentUniverse || 'neutral';
+  const node = run?.currentNode;
+  const notices = [...new Set([storageNotice, campaignNotice, feedback].filter(Boolean))];
+  const noticeMarkup = notices.length ? `<div class="battle-notices" role="status" aria-live="polite">${notices.map(notice => `<p>${esc(notice)}</p>`).join('')}</div>` : '';
+  return `<header class="battle-topbar" aria-label="戰鬥資訊"><div class="battle-location"><span class="eyebrow">第 ${run.step + 1}/7 層 · ${esc(kindLabel(node?.kind || 'battle'))}</span><strong data-current-universe="${esc(current)}">${esc(universe(current).name)}戰線</strong><span>回合 ${run.turn} · ${run.gold} 金</span></div><div class="battle-top-resources"><span class="top-resource top-resonance" data-resonance="${run.resonance}">${icon('empower')}<b>${run.resonance}/3</b><span>共鳴</span></span><span class="top-resource top-enemies"><b>${run.enemies.filter(enemy => enemy.hp > 0).length}</b><span>敵人</span></span></div><nav class="battle-top-actions" aria-label="戰鬥資訊入口">${battleOverlayButton('menu', '選單')}${battleOverlayButton('log', '戰報')}${battleOverlayButton('build', '構築')}${battleOverlayButton('rules', '規則')}</nav>${noticeMarkup}</header>`;
+}
+
+function battleOverlayView() {
+  if (!battleOverlay || tab !== 'run' || run?.phase !== 'battle') return '';
+  const titles = { menu: '戰鬥選單', log: '即時戰報', build: '構築與遺物', rules: '戰鬥規則' };
+  let content = '';
+  if (battleOverlay === 'menu') {
+    content = `<div class="overlay-menu-actions"><button data-battle-overlay="close" class="primary">${icon('back')}<span>繼續戰鬥</span></button><button data-tutorial-open>${icon('rules')}<span>玩法教學</span></button><button data-menu="title">${icon('menu')}<span>回到主選單</span></button></div><p class="help">離開戰鬥不會重置存檔；從主選單可繼續目前冒險。</p>`;
+  } else if (battleOverlay === 'log') {
+    content = `<ol class="log overlay-log">${(run.log || []).slice().reverse().map(entry => `<li>${esc(entry)}</li>`).join('') || '<li>尚無戰報。</li>'}</ol>`;
+  } else if (battleOverlay === 'build') {
+    content = `${buildView({ open: true })}<section class="overlay-section"><h3>遺物</h3>${relicList()}</section><section class="overlay-section"><h3>資源</h3><p class="help">冒險金幣 ${run.gold} · 共鳴 ${run.resonance}/3 · 手牌 ${run.hand.length}/10 · 抽牌堆 ${run.draw.length}</p><p class="help">${run.potions.length ? `持有消耗品：${run.potions.map(p => POTIONS.find(item => item.id === p.potionId)?.name || '未知').join('、')}` : '尚無消耗品。'}</p></section>`;
+  } else if (battleOverlay === 'rules') {
+    content = `<details class="overlay-rules" id="rules" open><summary>戰鬥規則</summary><p>每回合 3 能量、抽 5 張；回合結束時手牌棄置，敵人依頭頂意圖行動。格擋在下一回合開始清除；力量、荊棘、蓄氣與放逐護持持續到本場戰鬥結束。</p><p>中立牌不累積也不中斷接力；跨宇宙出牌可累積共鳴，3 共鳴可在出牌前手動強化攻擊或格擋牌。強化的首段傷害與首個格擋各增加 4。</p><p>生命、格擋與狀態數值會顯示在各自角色附近；點擊敵人可在指定牌或敵方消耗品選取目標。</p></details>`;
+  }
+  return `<div id="battle-overlay" role="dialog" aria-modal="true" aria-labelledby="battle-overlay-title" aria-describedby="battle-overlay-description"><section class="battle-overlay-panel" tabindex="-1"><div class="battle-overlay-heading"><div><span class="eyebrow">戰鬥資訊</span><h2 id="battle-overlay-title">${titles[battleOverlay] || '戰鬥資訊'}</h2></div><button id="battle-overlay-close" class="icon-only" aria-label="關閉戰鬥資訊" title="關閉">${icon('close')}</button></div><p id="battle-overlay-description" class="sr-only">只在此浮層中操作；關閉後返回原本的戰鬥控制。</p><div class="battle-overlay-content">${content}</div></section></div>`;
+}
+
 function battleView() {
   const selected = run.hand.find(instance => instance.uid === selectedUid);
   const selectedCard = cardInstance(selected);
@@ -348,26 +403,29 @@ function battleView() {
   const hand = (run.hand || []).map(instance => {
     const item = cardInstance(instance);
     const unaffordable = Boolean(item && run.energy < item.cost);
-    return cardHtml(instance, { action: `data-play="${esc(instance.uid)}"`, selected: instance.uid === selectedUid, disabled: unaffordable, status: unaffordable ? `能量不足 · 需要 ${item.cost}` : '', title: unaffordable ? `需要 ${item.cost} 能量，目前 ${run.energy}` : '', ariaLabel: unaffordable ? `${item?.name || '未知牌'}，能量不足` : undefined });
+    return cardHtml(instance, { action: `data-play="${esc(instance.uid)}"`, selected: instance.uid === selectedUid, disabled: unaffordable, status: unaffordable ? '能量不足' : '', title: unaffordable ? `需要 ${item.cost} 能量，目前 ${run.energy}` : '', ariaLabel: unaffordable ? `${item?.name || '未知牌'}，能量不足` : undefined });
   }).join('');
-  const targetHint = selectedPotion ? '選擇敵人使用消耗品；不消耗能量。' : selectedCard ? (selectedCard.target === 'enemy' ? '選擇一名存活敵人。' : selectedCard.target === 'self' ? '此牌將作用於旅人。' : '此牌可立即結算。') : '選擇一張牌查看目標。';
+  const targetHint = selectedPotion ? '選擇敵人使用消耗品；不消耗能量。' : selectedCard ? (selectedCard.target === 'enemy' ? '選擇一名存活敵人。' : inputMode === 'touch' ? '按「出牌」確認；目前不消耗能量。' : '此牌將作用於旅人。') : '選擇一張牌查看目標。';
   const currentUniverse = run.currentUniverse || 'neutral';
   const background = BATTLE_ASSETS.backgrounds[currentUniverse];
   const backgroundStyle = background ? `style="--battle-bg-image:url('${esc(background)}')"` : '';
   const player = run.player || {};
+  const character = CHARACTERS.find(item => item.id === run.characterId);
   const heroVitals = combatantVitals({
     current: player.hp,
     max: player.maxHp,
     block: player.block,
     className: 'actor-stats',
     statuses: [
-      `<span>力量 ${player.strength || 0}</span>`,
-      `<span>荊棘 ${player.thorns || 0}</span>`,
-      `<span>蓄氣 ${player.charge || 0}/9</span>`,
-      `<span>放逐格擋 ${player.exhaustGuard || 0}</span>`,
+      player.strength ? `<span>力量 ${player.strength}</span>` : '',
+      player.thorns ? `<span>荊棘 ${player.thorns}</span>` : '',
+      player.charge ? `<span>蓄氣 ${player.charge}/9</span>` : '',
+      player.exhaustGuard ? `<span>放逐格擋 ${player.exhaustGuard}</span>` : '',
     ],
   });
-  return `<section class="battle-layout battle-layout-art"><section class="battle-main"><section class="battle-toolbar panel"><div class="battle-toolbar-line">${battleHud('desktop-battle-hud')}<div class="turn-actions"><button id="empower" aria-pressed="${empowerChoice}" ${empowermentAvailable ? '' : 'disabled'}>${empowerChoice ? '強化已開' : '手動強化'} <small>3 共鳴</small></button></div></div></section><section class="mobile-summary">${battleHud('mobile-battle-hud')}</section>${potionView()}<section class="battle-stage panel enemies-panel" data-battle-stage data-battle-universe="${esc(currentUniverse)}" ${backgroundStyle}><div class="stage-heading"><div><span class="eyebrow">CROSS-UNIVERSE BATTLEFIELD</span><h2 data-current-universe="${esc(currentUniverse)}">${esc(universe(currentUniverse).name)}戰線</h2></div><span class="stage-help">點擊敵人選擇目標</span></div><div class="stage-lanes"><div class="hero-lane"><div class="hero-combatant player-card" data-hero-actor data-combatant="player"><span class="actor-label">我方 · ${esc(player.name || '旅人')}</span><span class="actor-art-wrap">${heroSpriteMarkup()}</span>${heroVitals}</div></div><div class="stage-bridge" data-fx-layer aria-hidden="true"><span class="bridge-mark">接力</span></div><div class="enemy-lane"><div class="enemy-lane-heading"><h2>敵方意圖</h2><span class="help">${(run.enemies || []).length} 名敵人</span></div><div class="enemy-list">${(run.enemies || []).map(enemyHtml).join('')}</div></div></div></section><section class="battle-bottom-dock" aria-label="戰鬥操作"><div class="battle-command battle-command-left"><div class="battle-resource" aria-label="目前能量"><span class="resource-icon resource-icon-energy" aria-hidden="true">✦</span><span><small>能量</small><strong>${run.energy || 0}/3</strong></span></div><div class="piles pile-cluster"><button class="pile-button" data-pile="draw"><span>抽牌</span><b>${run.draw.length}</b></button><button class="pile-button" data-pile="deck"><span>牌組</span><b>${run.deck.length}</b></button></div><span class="battle-resonance" data-resonance="${run.resonance || 0}">共鳴 <b>${run.resonance || 0}/3</b></span></div><section class="panel stack hand-panel" id="hand-section"><div class="hand-heading"><h2>手牌 · ${run.hand.length}/10</h2><span class="hand-target-hint">${esc(targetHint)}</span></div><p class="notice">${empowerChoice ? '出牌前已有 3 共鳴，符合條件的牌將首段傷害／首個格擋各 +4。' : ''}</p><div class="hand-scroll"><div class="card-grid hand-grid">${hand || '<p class="empty">手牌已空。</p>'}</div></div></section><div class="battle-command battle-command-right"><div class="piles pile-cluster"><button class="pile-button" data-pile="discard"><span>棄牌</span><b>${run.discard.length}</b></button><button class="pile-button" data-pile="exile"><span>放逐</span><b>${run.exile.length}</b></button></div><button class="primary end-turn" id="end">結束回合 <small>敵方行動</small></button></div></section></section><aside class="battle-sidebar"><details class="panel log-panel battle-details"><summary><span>事件</span><small>即時戰報 · ${(run.log || []).length} 筆</small></summary><ol class="log">${(run.log || []).slice(-12).reverse().map(entry => `<li>${esc(entry)}</li>`).join('')}</ol></details>${buildView({ open: false })}</aside></section>`;
+  const selectedPotionData = selectedPotion ? POTIONS.find(item => item.id === run.potions.find(potion => potion.uid === selectedPotion)?.potionId) : null;
+  const selection = selectedCard || selectedPotionData ? `<section class="card-selection" aria-live="polite"><div class="selection-copy"><span class="eyebrow">${selectedPotionData ? '選擇目標' : selectedCard.target === 'enemy' ? '選擇目標' : '已選卡牌'}</span><strong>${esc(selectedPotionData?.name || selectedCard.name)}${selectedCard ? ` <span class="cost">${selectedCard.cost}</span>` : ''}</strong><span>${esc(selectedPotionData?.text || selectedCard.text)}</span></div><div class="selection-actions"><button id="cancel-card" class="secondary">${icon('cancel')}<span>取消</span></button>${inputMode === 'touch' && selectedCard && selectedCard.target !== 'enemy' ? `<button id="confirm-card" class="primary">${icon('confirm')}<span>出牌</span></button>` : ''}</div></section>` : '';
+  return `<section class="battle-page" data-battle-root aria-label="戰鬥畫面">${battleTopbar()}<section class="battle-layout battle-layout-art"><section class="battle-main"><section class="battle-stage enemies-panel" data-battle-stage data-battle-universe="${esc(currentUniverse)}" ${backgroundStyle}><div class="stage-heading"><div><span class="eyebrow">CROSS-UNIVERSE BATTLEFIELD</span><h2 data-current-universe="${esc(currentUniverse)}">${esc(universe(currentUniverse).name)}戰線</h2></div><span class="stage-help">${selectedPotion || selectedCard?.target === 'enemy' ? '點擊敵人選擇目標' : '選牌預覽；敵人意圖在頭頂'}</span></div><div class="stage-lanes"><div class="hero-lane"><div class="hero-combatant player-card" data-hero-actor data-combatant="player"><span class="actor-label">我方 · ${esc(player.name || '旅人')}<small class="actor-trait">${esc(character?.traitName || '')}</small></span><span class="actor-art-wrap">${heroSpriteMarkup()}</span>${heroVitals}</div></div><div class="stage-bridge" data-fx-layer aria-hidden="true"><span class="bridge-mark">接力</span></div><div class="enemy-lane"><div class="enemy-lane-heading"><h2>敵方意圖</h2><span class="help">${(run.enemies || []).length} 名敵人</span></div><div class="enemy-list">${(run.enemies || []).map(enemyHtml).join('')}</div></div></div></section><section class="battle-bottom-dock" aria-label="戰鬥操作"><div class="battle-command battle-command-left"><div class="battle-resource" aria-label="目前能量">${icon('energy', 'resource-icon resource-icon-energy')}<span><small>能量</small><strong>${run.energy || 0}/3</strong></span></div><div class="quick-actions"><div class="piles pile-cluster"><button class="pile-button" data-pile="draw" aria-label="查看抽牌堆">${icon('draw')}<span>抽牌</span><b>${run.draw.length}</b></button><button class="pile-button" data-pile="deck" aria-label="查看牌組">${icon('build')}<span>牌組</span><b>${run.deck.length}</b></button></div><button class="pile-button empower-button" id="empower" aria-pressed="${empowerChoice}" ${empowermentAvailable ? '' : 'disabled'} aria-label="${empowerChoice ? '取消手動強化' : '手動強化；需要 3 共鳴'}" title="${empowermentAvailable ? '出牌前消耗 3 共鳴強化攻擊或格擋牌' : '需要 3 共鳴'}">${icon('empower')}<span>${empowerChoice ? '強化中' : '強化'}</span><b>3</b></button></div></div><section class="hand-panel" id="hand-section"><div class="hand-heading"><div class="hand-heading-copy"><h2>手牌 · ${run.hand.length}/10</h2><span class="hand-target-hint">${esc(targetHint)}</span></div></div><p class="notice">${empowerChoice ? '3 共鳴已準備；符合條件的牌會強化首段傷害與首個格擋。' : ''}</p><div class="hand-scroll"><div class="card-grid hand-grid">${hand || '<p class="empty">手牌已空。</p>'}</div></div>${selection}</section><div class="battle-command battle-command-right">${potionView({ compact: true })}<div class="quick-actions"><div class="piles pile-cluster"><button class="pile-button" data-pile="discard" aria-label="查看棄牌堆">${icon('discard')}<span>棄牌</span><b>${run.discard.length}</b></button><button class="pile-button" data-pile="exile" aria-label="查看放逐區">${icon('exile')}<span>放逐</span><b>${run.exile.length}</b></button></div></div><button class="primary end-turn" id="end"><span>結束回合</span></button></div></section></section></section></section>`;
 }
 
 function rewardView() {
@@ -432,10 +490,30 @@ function render(options = {}) {
   if (options.focus === undefined) pendingFocus = focusRef(document.activeElement);
   clearBattleArt();
   setTheme();
-  app.innerHTML = `${['title','play','setup','achievements','replace'].includes(tab)?'':header()}<div class="view-root">${['title','play','setup','achievements','replace'].includes(tab)?menuView({screen:tab,campaign,profile,builds:excludedBuilds,notice:storageNotice||campaignNotice,feedback,seed}):tab === 'collection' ? collectionView() : tab === 'run' ? runView() : homeView()}</div><div class="modal" id="modal" ${pile ? '' : 'hidden'} aria-hidden="${pile ? 'false' : 'true'}"><section class="panel stack" role="dialog" aria-modal="true" aria-labelledby="pile-title" tabindex="-1"><div class="split"><h2 id="pile-title">${pile ? esc({ deck: '牌組', draw: '抽牌堆（僅顯示組成）', discard: '棄牌堆', exile: '放逐區' }[pile] || '牌堆') : ''}</h2><button id="close-modal">關閉</button></div><div class="pile-list">${pile ? (pileItems(pile) || '<p class="empty">此牌堆為空。</p>') : ''}</div></section></div>${tutorialView()}`;
+  const menuScreens = ['title', 'play', 'setup', 'achievements', 'replace'];
+  const page = menuScreens.includes(tab) ? menuView({screen:tab,campaign,profile,builds:excludedBuilds,notice:storageNotice||campaignNotice,feedback,seed}) : tab === 'collection' ? collectionView() : tab === 'run' ? runView() : homeView();
+  app.innerHTML = `${menuScreens.includes(tab) ? '' : header()}<div class="view-root">${page}</div><div class="modal" id="modal" ${pile ? '' : 'hidden'} aria-hidden="${pile ? 'false' : 'true'}"><section class="panel stack" role="dialog" aria-modal="true" aria-labelledby="pile-title" tabindex="-1"><div class="split"><h2 id="pile-title">${pile ? esc({ deck: '牌組', draw: '抽牌堆（僅顯示組成）', discard: '棄牌堆', exile: '放逐區' }[pile] || '牌堆') : ''}</h2><button id="close-modal">關閉</button></div><div class="pile-list">${pile ? (pileItems(pile) || '<p class="empty">此牌堆為空。</p>') : ''}</div></section></div>${battleOverlayView()}${tutorialView()}`;
+  const battleRoot = app.querySelector('[data-battle-root]');
+  if (battleOverlay && battleRoot) {
+    battleRoot.setAttribute('inert', '');
+    battleRoot.setAttribute('aria-hidden', 'true');
+  }
+  const activeModal = battleOverlay ? '#battle-overlay' : tutorialOpen ? '#tutorial-modal' : pile ? '#modal' : null;
+  if (activeModal) {
+    for (const child of [...app.children]) {
+      if (child.matches(activeModal)) continue;
+      child.setAttribute('inert', '');
+      child.setAttribute('aria-hidden', 'true');
+    }
+  }
   const focus = options.focus === undefined ? pendingFocus : options.focus;
   queueMicrotask(() => {
-    if (tutorialOpen) {
+    if (battleOverlay) {
+      const overlay = document.querySelector('#battle-overlay');
+      const restored = findFocus(focus);
+      if (restored && !restored.disabled && overlay?.contains(restored)) restored.focus({ preventScroll: true });
+      else overlay?.querySelector('#battle-overlay-close')?.focus({ preventScroll: true });
+    } else if (tutorialOpen) {
       const restored = findFocus(focus);
       if (restored && !restored.disabled && document.querySelector('#tutorial-modal')?.contains(restored)) restored.focus({ preventScroll: true });
       else document.querySelector('#tutorial-close')?.focus();
@@ -460,8 +538,27 @@ function closeModal() {
   render({ focus });
 }
 
+function openBattleOverlay(kind) {
+  if (!['menu', 'log', 'build', 'rules'].includes(kind) || tab !== 'run' || run?.phase !== 'battle') return;
+  battleOverlayReturnFocus = focusRef(document.activeElement);
+  battleOverlay = kind;
+  pile = null;
+  modalReturnFocus = null;
+  tutorialOpen = false;
+  render({ focus: null });
+}
+
+function closeBattleOverlay() {
+  const focus = battleOverlayReturnFocus;
+  battleOverlayReturnFocus = null;
+  battleOverlay = null;
+  render({ focus });
+}
+
 function openTutorial() {
-  tutorialReturnFocus = focusRef(document.activeElement);
+  tutorialReturnFocus = battleOverlayReturnFocus || focusRef(document.activeElement);
+  battleOverlayReturnFocus = null;
+  battleOverlay = null;
   pile = null;
   modalReturnFocus = null;
   tutorialOpen = true;
@@ -486,7 +583,7 @@ function finish() {
 }
 function navigate(next, push=true) {
   if(push) screens.push({tab,focus:focusRef(document.activeElement)});
-  tab=next; selectedUid=null;selectedPotion=null;pile=null;
+  tab=next; selectedUid=null;selectedPotion=null;battleOverlay=null;battleOverlayReturnFocus=null;pile=null;
   render({focus:null});window.scrollTo(0,0);
 }
 function applyBuildFilters() {
@@ -547,6 +644,32 @@ function update(fn, relayFrom = null, artAction = null) {
   return result;
 }
 
+function selectCard(instance, item) {
+  selectedUid = instance.uid;
+  selectedPotion = null;
+  say(item.target === 'enemy' ? `已選擇「${item.name}」；請點擊存活敵人。` : `已預覽「${item.name}」；按「出牌」確認。`);
+  render({ focus: { type: 'data', key: 'play', value: instance.uid } });
+}
+
+function cancelCardSelection() {
+  const selected = selectedUid;
+  const potion = selectedPotion;
+  selectedUid = null;
+  selectedPotion = null;
+  empowerChoice = false;
+  say('已取消選牌。');
+  const focus = selected ? { type: 'data', key: 'play', value: selected } : potion ? { type: 'data', key: 'potion', value: potion } : null;
+  render({ focus });
+}
+
+function confirmSelectedCard() {
+  const instance = run?.hand.find(item => item.uid === selectedUid);
+  const item = cardInstance(instance);
+  if (!instance || !item) { selectedUid = null; say('找不到這張牌。'); render(); return; }
+  if (item.target === 'enemy') { say('請選擇存活敵人。'); render({ focus: { type: 'data', key: 'play', value: instance.uid } }); return; }
+  update(() => playCard(run, instance.uid, null, empowerChoice && canEmpower(instance)), run.currentUniverse || 'neutral', cardArtAction(item));
+}
+
 app.addEventListener('click', event => {
   const button = event.target.closest('button');
   if (!button || !app.contains(button)) return;
@@ -554,12 +677,29 @@ app.addEventListener('click', event => {
   if (button.id === 'close-modal') { event.stopImmediatePropagation(); closeModal(); }
 }, true);
 
+const setInputMode = mode => {
+  inputMode = mode;
+  document.documentElement.dataset.input = mode;
+};
+
+app.addEventListener('pointerdown', event => {
+  setInputMode(event.pointerType === 'touch' ? 'touch' : 'mouse');
+}, true);
+
+app.addEventListener('touchstart', () => setInputMode('touch'), { capture: true, passive: true });
+
 app.addEventListener('click', event => {
   const button = event.target.closest('button');
   if (!button || !app.contains(button) || button.disabled) return;
   const data = button.dataset;
   if(data.menu) {menuAction(data.menu);return;}
   if(data.build) {excludedBuilds=excludedBuilds.includes(data.build)?excludedBuilds.filter(id=>id!==data.build):[...excludedBuilds,data.build];render();return;}
+  if (data.battleOverlay) {
+    if (data.battleOverlay === 'close') closeBattleOverlay();
+    else openBattleOverlay(data.battleOverlay);
+    return;
+  }
+  if (button.id === 'battle-overlay-close') { closeBattleOverlay(); return; }
   if (data.tutorialOpen !== undefined) { openTutorial(); return; }
   if (button.id === 'tutorial-close') { closeTutorial(); return; }
   if (data.tutorialTab) { tutorialTab = data.tutorialTab; render(); return; }
@@ -673,6 +813,8 @@ app.addEventListener('click', event => {
   if (!run) return;
   if (data.node) { update(() => visitNode(run, data.node)); return; }
   if (button.id === 'empower') { empowerChoice = !empowerChoice; say(empowerChoice ? '已開啟手動共鳴強化。' : '已關閉手動共鳴強化。'); render(); return; }
+  if (button.id === 'cancel-card') { cancelCardSelection(); return; }
+  if (button.id === 'confirm-card') { confirmSelectedCard(); return; }
   if(data.potion){const instance=run.potions.find(p=>p.uid===data.potion);const potion=POTIONS.find(p=>p.id===instance?.potionId);if(!potion)return;selectedUid=null;empowerChoice=false;if(potion.target==='enemy'){selectedPotion=instance.uid;say('選擇存活敵人使用消耗品。');render();}else update(()=>usePotion(run,instance.uid));return;}
   if (data.play) {
     selectedPotion=null;
@@ -680,7 +822,8 @@ app.addEventListener('click', event => {
     const item = cardInstance(instance);
     if (!instance || !item) { selectedUid = null; say('找不到這張牌。'); render(); return; }
     if (run.energy < item.cost) { say(`能量不足：需要 ${item.cost}，目前 ${run.energy}。`); render(); return; }
-    if (item.target === 'enemy') { selectedUid = instance.uid; say('請選擇存活敵人。'); render(); return; }
+    if (inputMode === 'touch') { selectCard(instance, item); return; }
+    if (item.target === 'enemy') { selectedUid = instance.uid; say('請選擇存活敵人。'); render({ focus: { type: 'data', key: 'play', value: instance.uid } }); return; }
     update(() => playCard(run, instance.uid, null, empowerChoice && canEmpower(instance)), run.currentUniverse || 'neutral', cardArtAction(item));
     return;
   }
@@ -719,7 +862,25 @@ app.addEventListener('toggle', event => {
 });
 
 document.addEventListener('keydown', event => {
+  if (battleOverlay) {
+    if (event.key === 'Escape') { event.preventDefault(); event.stopImmediatePropagation(); closeBattleOverlay(); return; }
+    if (event.key !== 'Tab') return;
+    const overlay = document.querySelector('#battle-overlay');
+    const focusable = [...(overlay?.querySelectorAll('button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])') || [])].filter(node => !node.disabled && node.offsetParent !== null);
+    if (!focusable.length) { event.preventDefault(); return; }
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (!overlay.contains(document.activeElement)) { event.preventDefault(); (event.shiftKey ? last : first).focus(); }
+    else if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    return;
+  }
   if (!pile && !tutorialOpen) {
+    if (event.key === 'Escape' && tab === 'run' && run?.phase === 'battle' && (selectedUid || selectedPotion)) {
+      event.preventDefault();
+      cancelCardSelection();
+      return;
+    }
     if(tab==='title' && ['ArrowDown','ArrowUp','Home','End'].includes(event.key)) {
       const options=[...app.querySelectorAll('.title-options button')];
       const index=options.indexOf(document.activeElement);
