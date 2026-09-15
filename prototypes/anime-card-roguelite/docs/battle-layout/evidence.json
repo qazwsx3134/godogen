@@ -1,0 +1,432 @@
+{
+  "passed": true,
+  "evidence": [
+    {
+      "label": "desktop-two",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "enemies": 2,
+      "boxes": [
+        {
+          "hp": {
+            "x": 142.65625,
+            "y": 509.03125,
+            "width": 170.09375,
+            "height": 12.875
+          },
+          "art": {
+            "x": 145.15625,
+            "y": 292.96875,
+            "width": 205,
+            "height": 205
+          }
+        },
+        {
+          "hp": {
+            "x": 609.625,
+            "y": 509.03125,
+            "width": 179.046875,
+            "height": 12.875
+          },
+          "art": {
+            "x": 621.625,
+            "y": 309.78125,
+            "width": 190,
+            "height": 190
+          }
+        },
+        {
+          "hp": {
+            "x": 1050.53125,
+            "y": 509.03125,
+            "width": 179.046875,
+            "height": 12.875
+          },
+          "art": {
+            "x": 1062.53125,
+            "y": 309.78125,
+            "width": 190,
+            "height": 190
+          }
+        }
+      ],
+      "endTurn": {
+        "x": 1205.15625,
+        "y": 765,
+        "width": 210.828125,
+        "height": 42.1875
+      },
+      "documentHeight": 900
+    },
+    {
+      "label": "desktop-three",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "enemies": 3,
+      "boxes": [
+        {
+          "hp": {
+            "x": 142.65625,
+            "y": 509.03125,
+            "width": 170.09375,
+            "height": 12.875
+          },
+          "art": {
+            "x": 145.15625,
+            "y": 292.96875,
+            "width": 205,
+            "height": 205
+          }
+        },
+        {
+          "hp": {
+            "x": 536.140625,
+            "y": 509.03125,
+            "width": 179.046875,
+            "height": 12.875
+          },
+          "art": {
+            "x": 548.140625,
+            "y": 309.78125,
+            "width": 190,
+            "height": 190
+          }
+        },
+        {
+          "hp": {
+            "x": 830.078125,
+            "y": 509.03125,
+            "width": 179.046875,
+            "height": 12.875
+          },
+          "art": {
+            "x": 842.078125,
+            "y": 309.78125,
+            "width": 190,
+            "height": 190
+          }
+        },
+        {
+          "hp": {
+            "x": 1124.015625,
+            "y": 509.03125,
+            "width": 174.640625,
+            "height": 12.875
+          },
+          "art": {
+            "x": 1136.015625,
+            "y": 309.78125,
+            "width": 190,
+            "height": 190
+          }
+        }
+      ],
+      "endTurn": {
+        "x": 1205.15625,
+        "y": 765,
+        "width": 210.828125,
+        "height": 42.1875
+      },
+      "documentHeight": 900
+    },
+    {
+      "label": "laptop-boss",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "enemies": 1,
+      "boxes": [
+        {
+          "hp": {
+            "x": 132.21875,
+            "y": 453.578125,
+            "width": 170.09375,
+            "height": 12.875
+          },
+          "art": {
+            "x": 134.71875,
+            "y": 237.515625,
+            "width": 205,
+            "height": 205
+          }
+        },
+        {
+          "hp": {
+            "x": 781.4375,
+            "y": 453.578125,
+            "width": 179.046875,
+            "height": 12.875
+          },
+          "art": {
+            "x": 793.4375,
+            "y": 254.328125,
+            "width": 190,
+            "height": 190
+          }
+        }
+      ],
+      "endTurn": {
+        "x": 1142.46875,
+        "y": 709.546875,
+        "width": 199.515625,
+        "height": 42.1875
+      },
+      "documentHeight": 797
+    },
+    {
+      "label": "desktop-ten-cards",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "enemies": 2,
+      "boxes": [
+        {
+          "hp": {
+            "x": 142.65625,
+            "y": 509.03125,
+            "width": 170.09375,
+            "height": 12.875
+          },
+          "art": {
+            "x": 145.15625,
+            "y": 292.96875,
+            "width": 205,
+            "height": 205
+          }
+        },
+        {
+          "hp": {
+            "x": 609.625,
+            "y": 509.03125,
+            "width": 179.046875,
+            "height": 12.875
+          },
+          "art": {
+            "x": 621.625,
+            "y": 309.78125,
+            "width": 190,
+            "height": 190
+          }
+        },
+        {
+          "hp": {
+            "x": 1050.53125,
+            "y": 509.03125,
+            "width": 179.046875,
+            "height": 12.875
+          },
+          "art": {
+            "x": 1062.53125,
+            "y": 309.78125,
+            "width": 190,
+            "height": 190
+          }
+        }
+      ],
+      "endTurn": {
+        "x": 1205.15625,
+        "y": 765,
+        "width": 210.828125,
+        "height": 42.1875
+      },
+      "documentHeight": 900
+    },
+    {
+      "label": "phone-portrait",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "enemies": 2,
+      "boxes": [
+        {
+          "hp": {
+            "x": 22,
+            "y": 503.8125,
+            "width": 68.53125,
+            "height": 10.671875
+          },
+          "art": {
+            "x": 20,
+            "y": 395.15625,
+            "width": 100,
+            "height": 100
+          }
+        },
+        {
+          "hp": {
+            "x": 140,
+            "y": 509.359375,
+            "width": 88.765625,
+            "height": 10.671875
+          },
+          "art": {
+            "x": 149,
+            "y": 407.515625,
+            "width": 94,
+            "height": 94
+          }
+        },
+        {
+          "hp": {
+            "x": 268,
+            "y": 509.359375,
+            "width": 88.765625,
+            "height": 10.671875
+          },
+          "art": {
+            "x": 277,
+            "y": 407.515625,
+            "width": 94,
+            "height": 94
+          }
+        }
+      ],
+      "endTurn": {
+        "x": 304,
+        "y": 554.25,
+        "width": 74,
+        "height": 46
+      },
+      "documentHeight": 939
+    },
+    {
+      "label": "phone-landscape",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "enemies": 2,
+      "boxes": [
+        {
+          "hp": {
+            "x": 55.25,
+            "y": 431.03125,
+            "width": 148.96875,
+            "height": 12.875
+          },
+          "art": {
+            "x": 82.171875,
+            "y": 284.9375,
+            "width": 135.03125,
+            "height": 135.03125
+          }
+        },
+        {
+          "hp": {
+            "x": 314.453125,
+            "y": 431.03125,
+            "width": 179.046875,
+            "height": 12.875
+          },
+          "art": {
+            "x": 326.453125,
+            "y": 231.78125,
+            "width": 190,
+            "height": 190
+          }
+        },
+        {
+          "hp": {
+            "x": 567.453125,
+            "y": 431.03125,
+            "width": 179.046875,
+            "height": 12.875
+          },
+          "art": {
+            "x": 579.453125,
+            "y": 231.78125,
+            "width": 190,
+            "height": 190
+          }
+        }
+      ],
+      "endTurn": {
+        "x": 682,
+        "y": 693.625,
+        "width": 150,
+        "height": 42.1875
+      },
+      "documentHeight": 815
+    },
+    {
+      "label": "desktop-after-turn",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "enemies": 2,
+      "boxes": [
+        {
+          "hp": {
+            "x": 142.65625,
+            "y": 508.03125,
+            "width": 175.046875,
+            "height": 12.875
+          },
+          "art": {
+            "x": 145.15625,
+            "y": 291.96875,
+            "width": 205,
+            "height": 205
+          }
+        },
+        {
+          "hp": {
+            "x": 609.625,
+            "y": 508.03125,
+            "width": 179.046875,
+            "height": 12.875
+          },
+          "art": {
+            "x": 621.625,
+            "y": 308.78125,
+            "width": 190,
+            "height": 190
+          }
+        },
+        {
+          "hp": {
+            "x": 1050.53125,
+            "y": 508.03125,
+            "width": 179.046875,
+            "height": 12.875
+          },
+          "art": {
+            "x": 1062.53125,
+            "y": 308.78125,
+            "width": 190,
+            "height": 190
+          }
+        }
+      ],
+      "endTurn": {
+        "x": 1205.15625,
+        "y": 764,
+        "width": 210.828125,
+        "height": 42.1875
+      },
+      "documentHeight": 900
+    }
+  ],
+  "checks": [
+    "actor-local HP/block",
+    "non-overlapping health bars",
+    "1-3 enemies and boss",
+    "10-card hand",
+    "desktop and mobile",
+    "pile dialogs and Escape",
+    "targeted attack",
+    "block updates",
+    "resonance empowerment",
+    "targeted consumable",
+    "end turn",
+    "reload continuation"
+  ]
+}
