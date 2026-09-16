@@ -1,0 +1,95 @@
+{
+  "startedAt": "2026-09-15T16:24:32.191Z",
+  "status": "passed",
+  "url": "http://127.0.0.1:5191",
+  "viewport": {
+    "width": 1280,
+    "height": 800
+  },
+  "sources": {
+    "index.html": "010cf7627e274796b1a994c4b7041c96cad0f0dc6ba7e26780a037a5d9cf2d86",
+    "package-lock.json": "69571e324022a8d9e9e98dcf338337d71588a7b7987aef30350ee68d26404420",
+    "src/main.ts": "f564846a6303c3dec6d1f470695ac25e1f97eeb8b4b445b0ad5c54ee7c4fa34f",
+    "src/style.css": "18b57182381cbf215f443bfd224bb863927336c08d42d360fabe05f9fa59c125",
+    "src/types.ts": "95ac13275f60d9ebee34b5d5c3c7290ea42e50b4e43bd023b256b9f1362f104d",
+    "src/core/DialogueManager.ts": "d5f1d8c17f1db62e3c445c86b4e1af4036278262a850d477d382cca8bdc994de",
+    "src/core/ChoiceSystem.ts": "6453be0ee961275c1d1fc1bf9f688334a7db9632cfd8768d1032b21f52379077",
+    "src/core/TsukkomiSystem.ts": "229cce18513acf33f1993b24feddcd2015c3d13f32794cf1f04fbeb0bf442520",
+    "src/data/scenes/missingStrawberryMilk.ts": "b2c19f5670bb21c8cee04c20d13d66d21e20d0ebe0e96dcb07aa348772173137"
+  },
+  "cases": [
+    {
+      "name": "ask_shinpachi/meta",
+      "heldAcrossTimerTick": true,
+      "status": "passed"
+    },
+    {
+      "name": "ask_shinpachi/scared",
+      "heldAcrossTimerTick": false,
+      "status": "passed"
+    },
+    {
+      "name": "ask_shinpachi/deflect",
+      "heldAcrossTimerTick": false,
+      "status": "passed"
+    },
+    {
+      "name": "ask_shinpachi/timeout",
+      "timeoutObservedMs": 1785,
+      "status": "passed"
+    },
+    {
+      "name": "ask_kagura/meta",
+      "heldAcrossTimerTick": false,
+      "status": "passed"
+    },
+    {
+      "name": "ask_kagura/scared",
+      "heldAcrossTimerTick": false,
+      "status": "passed"
+    },
+    {
+      "name": "ask_kagura/deflect",
+      "heldAcrossTimerTick": false,
+      "status": "passed"
+    },
+    {
+      "name": "ask_kagura/timeout",
+      "timeoutObservedMs": 1784,
+      "status": "passed"
+    },
+    {
+      "name": "ask_landlady/meta",
+      "heldAcrossTimerTick": false,
+      "status": "passed"
+    },
+    {
+      "name": "ask_landlady/scared",
+      "heldAcrossTimerTick": false,
+      "status": "passed"
+    },
+    {
+      "name": "ask_landlady/deflect",
+      "heldAcrossTimerTick": false,
+      "status": "passed"
+    },
+    {
+      "name": "ask_landlady/timeout",
+      "timeoutObservedMs": 1787,
+      "status": "passed"
+    }
+  ],
+  "errors": [],
+  "screenshots": [
+    "opening.png",
+    "suspects.png",
+    "tsukkomi.png",
+    "ending-success.png",
+    "ending-timeout.png"
+  ],
+  "scope": "Existing text prototype: DOM navigation, real timers, endings and restart.",
+  "limitations": "Does not measure comedy, reading pace, immersion, or future art, exploration and authoring features.",
+  "browser": "149.0.7827.55",
+  "restartAfterTimerDeadline": "passed",
+  "finishedAt": "2026-09-15T16:25:06.776Z"
+}
