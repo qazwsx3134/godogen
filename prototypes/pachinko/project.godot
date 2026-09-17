@@ -1,0 +1,33 @@
+; 軌道連珠 Pachinko — 試作
+; 規格見 README.md。這裡只放 Godot 必須在啟動前知道的事，其餘常數在 scripts/spec.gd。
+
+config_version=5
+
+[application]
+
+config/name="軌道連珠 Pachinko"
+run/main_scene="res://main.tscn"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+
+[display]
+
+; 直式 9:16。viewport 是 1080x1920，桌機視窗縮到 1/2.5 免得佔滿螢幕。
+window/size/viewport_width=1080
+window/size/viewport_height=1920
+window/size/window_width_override=432
+window/size/window_height_override=768
+window/stretch/mode="canvas_items"
+window/stretch/aspect="keep"
+window/handheld/orientation=1
+
+[physics]
+
+2d/default_gravity=1400.0
+common/physics_ticks_per_second=120
+
+[rendering]
+
+; M1 的技術基準線：Compatibility renderer。這是效能地板，往上加是之後的事。
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+environment/defaults/default_clear_color=Color(0.027, 0.031, 0.063, 1)

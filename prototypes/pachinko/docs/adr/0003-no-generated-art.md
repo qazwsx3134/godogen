@@ -8,4 +8,6 @@ This repo ships `asset-gen`, and a real pachinko machine's presentation is licen
 
 The reason is iteration speed, not cost (a minimal generated cast is only US$5–10). Anticipation is a feel that needs tens of adjustments before it lands, and a shader parameter changes in three seconds while a regenerated character set takes thirty minutes and drifts in style each time. The abstract vocabulary also buys coherence for free: procedural output cannot go off-model.
 
-The consequence we accept: this machine can never carry a character story, which is where most of a real machine's emotional pull comes from. If the Lean-in Test passes on pure geometry, characters become an addition on a proven base; if it fails, we will know the failure was not an art problem.
+The consequence we accept: this machine can never carry a character story, which is where most of a real machine's emotional pull comes from. If the Lean-in Test passes on pure geometry, characters become an addition on a proven base.
+
+What a failure means is narrower than it looks. Removing art quality as a variable does not leave the abstract vocabulary as the only suspect — pacing, legibility and feedback strength are all still live, and all three can be revised without drawing anything. A failed test condemns that revision of the presentation; only once those three have each been worked and it still fails does the conclusion reach the vocabulary itself (ADR 0009).

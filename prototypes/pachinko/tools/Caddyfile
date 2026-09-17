@@ -1,0 +1,23 @@
+# Godot Web 需要 secure context，所以 http:// 不行——只有 localhost 是例外，而手機
+# 連過來用的是 LAN IP。這裡用 Caddy 的內部 CA 簽一張帶 IP SAN 的憑證。
+#
+# thread support 是關的，所以**不需要** COOP/COEP header（ADR 0004 選這個組合的實際
+# 好處）。要的只有 HTTPS 本身。
+{
+	auto_https disable_redirects
+	admin off
+	# 不要把 Caddy 的根憑證裝進系統鑰匙圈——那是系統安全設定的變更，而且會跳權限
+	# 要求卡住啟動。不裝也能用：iOS 上點過一次憑證警告就進得去，secure context 照樣成立。
+	skip_install_trust
+}
+
+https://{$SERVE_HOST}:{$SERVE_PORT} {
+	tls internal
+	root * {$SERVE_ROOT}
+	file_server
+
+	# wasm 要正確的 MIME，否則瀏覽器不會用 streaming 編譯，載入會慢很多
+	@wasm path *.wasm
+	header @wasm Content-Type application/wasm
+	encode gzip
+}

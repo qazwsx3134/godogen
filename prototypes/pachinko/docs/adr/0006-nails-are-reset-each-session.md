@@ -6,7 +6,7 @@ status: accepted
 
 Real parlours adjust their machines' nails daily, and picking a generous machine is one of the things the hobby is actually about. So every session nudges the nail positions slightly: this run's machine is a little kinder or a little meaner than the last one's.
 
-What this does **not** touch is the draw. Per ADR 0002 the outcome is fixed the moment a ball reaches the start pocket, so nails cannot change the jackpot rate — they change only how many draws a given number of balls buys. The observable range runs roughly from one spin per 10 balls to one per 16, which over a 3000-ball session is 428 spins down to 230, and therefore 5.4 SP sightings down to 2.9. The mean case is one spin per 12 balls. That floor of ~3 sightings is what keeps ADR 0005's reasoning intact under the worst roll; a wider nail range would break it.
+What this does **not** touch is the draw. Per ADR 0002 the outcome is fixed the moment a ball reaches the start pocket, so nails cannot change the jackpot rate — they change only how many draws a given number of balls buys. The observable range runs roughly from one spin per 10 balls to one per 16, which over a 3000-ball session is 428 spins down to 230, and therefore 5.4 SP sightings down to 2.9 before any payout comes back. The mean case is one spin per 12 balls. The meanest roll still expects roughly three sightings, and acceptance runs on a fixed standard machine anyway (below), so the range does not reach ADR 0005's sample argument — but a wider one would put the meanest roll below three, and at that point the nails would be deciding whether a session is judgeable.
 
 Two consequences:
 
