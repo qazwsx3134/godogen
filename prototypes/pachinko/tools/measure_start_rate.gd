@@ -18,6 +18,7 @@ const BURST := 12
 
 var _target := 5000
 var _right := false
+var _power := -1.0
 var _guide := -1.0
 var _mouth := -1.0
 var _fired := 0
@@ -33,6 +34,8 @@ func _init() -> void:
 			_target = int(arg.substr(8))
 		elif arg == "--right":
 			_right = true
+		elif arg.begins_with("--power="):
+			_power = float(arg.substr(8))
 		elif arg.begins_with("--guide="):
 			_guide = float(arg.substr(8))
 		elif arg.begins_with("--mouth="):
@@ -51,13 +54,15 @@ func _init() -> void:
 		_field.guide_half_width = _guide
 	if _mouth > 0.0:
 		_field.guide_mouth = _mouth
-	_field.right_aim = _right
+	# 力道就是瞄準（slider 取代了左打／右打兩檔）
+	_field.power = _power if _power >= 0.0 else (1.0 if _right else 0.32)
 	_field.electric_gate_open = _right      # 確變中電チュー才開
 	_field.start_pocket_hit.connect(func() -> void: _hits += 1)
 	root.add_child(_field)
 	physics_frame.connect(_tick)
 	_t0 = Time.get_ticks_msec()
 	print("量測中：%d 顆，%s，誘導開口半寬 %.0f" % [_target, "右打（電チュー開）" if _right else "左打", _field.guide_half_width])
+	print("力道 %.2f" % _field.power)
 	print("V 底開口半寬 %.0f" % _field.guide_mouth)
 
 

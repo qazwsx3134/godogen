@@ -69,8 +69,8 @@ func _ready() -> void:
 	_takeover.visible = false
 	_takeover.z_index = -1
 	add_child(_takeover)
-
-	restart(path)
+	# **不要在這裡自動開演。** 狀態機才是時間的權威——載入就自己播一段 SP 接管的話，
+	# 一次抽選都還沒發生，整個盤面就被全螢幕蓋掉了。等 restart() 被叫才動。
 
 
 func restart(p: int) -> void:
@@ -89,6 +89,8 @@ func total_time() -> float:
 # --- 時間軸 -------------------------------------------------------------
 
 func _process(delta: float) -> void:
+	if _beats.is_empty():
+		return                      # 閒置：還沒有任何一次抽選要演
 	_t += delta
 	for i in _beats.size():
 		if not _fired.has(i) and _t >= float(_beats[i]["at"]):
@@ -325,6 +327,8 @@ func _spawn_shards() -> void:
 # --- 繪製 ---------------------------------------------------------------
 
 func _draw() -> void:
+	if _beats.is_empty():
+		return
 	_draw_orbits()
 	_draw_ghost_marker()
 	_draw_shards()

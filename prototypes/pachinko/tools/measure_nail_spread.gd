@@ -47,6 +47,7 @@ func _start_seed() -> void:
 	var rect := Rect2(Vector2((vp.x - w) * 0.5, vp.y * 0.12), Vector2(w, h))
 	_field = Playfield.new(rect)
 	_field.nail_seed = _seed
+	_field.power = 0.32
 	_field.start_pocket_hit.connect(func() -> void: _hits += 1)
 	root.add_child(_field)
 	_fired = 0
