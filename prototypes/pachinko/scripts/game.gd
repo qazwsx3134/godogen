@@ -18,6 +18,10 @@ var _pres_key := -1
 
 ## 自走：影格擷取與釘子校準用。自動發射，並在該右打時自動切換。
 var auto := false
+## 釘調整（[ADR 0006]）。一場一台，重開才換。
+## 驗收要跑**固定標準台**——否則「這版演出變差」和「這次抽到辛台」分不開，
+## 所以 `--design`（驗收組態）會關掉抽台。
+var fixed_nails := false
 var _firing := false
 var _fire_accum := 0.0
 var _balls_fired := 0
@@ -39,8 +43,14 @@ func _ready() -> void:
 	_machine = Machine.new(rng)
 
 	_field = Playfield.new(_machine_rect)
+	if not fixed_nails:
+		_field.nail_seed = randi() % 1000000
 	_field.start_pocket_hit.connect(_on_start_pocket)
 	add_child(_field)
+	# 只印到 stdout，**不顯示在畫面上**：真機玩家看不出釘調整，他們是靠數轉數推斷的，
+	# 而那個推斷入口是要按才看得到的回轉率按鈕（ADR 0006）。畫面上寫出來就破壞掉了。
+	print("[nails] seed=%s  guide_mouth=%.1f" % [
+		"fixed" if fixed_nails else str(_field.nail_seed), _field.guide_mouth])
 
 	_pres = Presentation.new(_lcd)
 	add_child(_pres)

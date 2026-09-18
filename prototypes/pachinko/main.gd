@@ -19,6 +19,7 @@ var _in_menu := true
 var _current: Node = null
 var _buttons: Array[Dictionary] = []
 var _start_path: int = Sequence.Path.SP_HIT
+var _acceptance := false
 
 
 func _ready() -> void:
@@ -38,8 +39,11 @@ func _ready() -> void:
 				"straight_miss": _start_path = Sequence.Path.STRAIGHT_MISS
 				_: push_error("未知的 --path=%s" % arg.substr(7))
 		elif arg == "--design":
-			# 驗收跑設計值（ADR 0002）。畫面上會印出來，免得跑錯旋鈕還不知道。
+			# 驗收組態：設計值（ADR 0002）＋固定標準台（ADR 0006）。兩件事綁在一起，
+			# 因為前傾測試要可重複——換了旋鈕或換了台，比較就失去意義。
+			# 畫面上會印出當前旋鈕，免得跑錯還不知道。
 			Spec.use_dev_knob = false
+			_acceptance = true
 
 	_layout_menu()
 	if not mode.is_empty():
@@ -91,6 +95,7 @@ func _launch(mode: String, auto: bool) -> void:
 		MODE_GAME:
 			var g := Game.new()
 			g.auto = auto
+			g.fixed_nails = _acceptance
 			g.back_pressed.connect(_return_to_menu)
 			_current = g
 			add_child(g)

@@ -6,7 +6,11 @@ status: accepted
 
 Real parlours adjust their machines' nails daily, and picking a generous machine is one of the things the hobby is actually about. So every session nudges the nail positions slightly: this run's machine is a little kinder or a little meaner than the last one's.
 
-What this does **not** touch is the draw. Per ADR 0002 the outcome is fixed the moment a ball reaches the start pocket, so nails cannot change the jackpot rate — they change only how many draws a given number of balls buys. The observable range runs roughly from one spin per 10 balls to one per 16, which over a 3000-ball session is 428 spins down to 230, and therefore 5.4 SP sightings down to 2.9 before any payout comes back. The mean case is one spin per 12 balls. The meanest roll still expects roughly three sightings, and acceptance runs on a fixed standard machine anyway (below), so the range does not reach ADR 0005's sample argument — but a wider one would put the meanest roll below three, and at that point the nails would be deciding whether a session is judgeable.
+What this does **not** touch is the draw. Per ADR 0002 the outcome is fixed the moment a ball reaches the start pocket, so nails cannot change the jackpot rate — they change only how many draws a given number of balls buys. The mean case is one spin per 12 balls. The harsh end of the range is not a taste call — it is derived, and an earlier draft of this ADR got it wrong.
+
+ADR 0005 needs three SP sightings. On the no-jackpot baseline that is `3 ÷ (4/319) = 239` spins, and 3000 balls buys that many only while `3000 ÷ (rate − 3) ≥ 239`, i.e. **one spin per 15.5 balls or better**. This ADR previously named 16 as the harsh end and claimed it kept the floor intact; 16 yields 2.90 sightings, so it did not. The range is one spin per 10 balls to one per 15.5.
+
+The roll is a normal distribution about the standard machine, clamped to that derived cap — not a uniform spread, because a parlour keeps most of its machines near standard and the generous and mean ones are the exceptions. Measured over 20 rolled machines by actually firing balls (`tools/measure_nail_spread.gd`, 5000 balls each), the realised spread runs 9.8 to 14.0 with the mean on 12.0 — the meanest of them still expecting 3.4 sightings.
 
 Two consequences:
 

@@ -23,9 +23,11 @@ const BANK_DESIGN := 3000
 const BANK_DEV := 1000
 const START_POCKET_AWARD := 3             # 實體入賞即給，保留滿也給
 const PENDING_MAX := 4
-const START_RATE_STANDARD := 12.0         # 通常・左打，發/轉（釘調整範圍 10–16）
+const START_RATE_STANDARD := 12.0         # 通常・左打，發/轉（釘調整範圍 10–15.5）
 const START_RATE_SWEET := 10.0
-const START_RATE_HARSH := 16.0
+## 辛端是推導值不是喜好：SP ≥ 3 次需要基線 3÷SP出現率 轉，回推得 ≤ 15.54 発/轉。
+## ADR 0006 原本寫 16，那只給 2.90 次，破自己的底線。
+const START_RATE_HARSH := 15.5
 const START_RATE_KAKUHEN := 4.0           # 確變・右打，電チュー，不受釘調整影響
 const PAYOUT_GROSS_10R := 450             # 總出玉，不是淨增加
 const PAYOUT_GROSS_5R := 250
