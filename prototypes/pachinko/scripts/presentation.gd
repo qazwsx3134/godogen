@@ -218,21 +218,126 @@ func _third_angle() -> float:
 		var x: float = (_t - win_open) / (takeover - win_open)
 		return base + _short_way(base, ALIGN - MISS_MARGIN * 1.6) * (1.0 - pow(1.0 - x, 2.4))
 
-	var hold := ALIGN - MISS_MARGIN * 1.6
 	if _t < silence:
-		# 接管期間：幾次接近又被甩開。每一次都是一個小的「差一步」。
-		var u: float = (_t - takeover) / (silence - takeover)
-		var tease := sin(u * TAU * 2.5) * MISS_MARGIN * 1.15
-		var drift := u * TAU * 0.75
-		return hold + drift + tease
+		return _orbit_angle((_t - takeover) / (silence - takeover))
 	if _t < resolve:
-		return hold + TAU * 0.75      # 靜默：整個凍住
+		return _orbit_angle(1.0)      # 靜默：整個凍住
 	# 決著
 	var z: float = clampf((_t - resolve) / Spec.T_RESOLVE, 0.0, 1.0)
 	var eased := 1.0 - pow(1.0 - z, 3.0)
-	var from := hold + TAU * 0.75
+	var from := _orbit_angle(1.0)
 	var to := ALIGN if _wins() else ALIGN - MISS_MARGIN
 	return from + _short_way(from, to) * eased
+
+
+## --- 接管中段的軌道運動 ---------------------------------------------
+##
+## 被推翻的那一版是 `sin()` 疊一個等速 drift。它做得出「幾次接近又被甩開」的形狀，
+## 但天體沒有**速度**這個量——沒有近日點加速、沒有遠日點拖慢，看起來就是被瞬移，
+## 而「差一點」的張力需要它真的慢下來、真的滑過去。
+##
+## 這一版解真的克卜勒軌道。積分是解析的：給平近點角 M 解 E − e·sinE = M（牛頓法
+## 四次就收斂到畫面精度），再換成真近點角。所以位置**仍然是時間的純函式**
+## ——序列測試能重播靠的就是這個（ADR 0009）——但角速度是真的隨半徑變化。
+##
+## 三件事同時在跑，都是為了「一圈比一圈更差一點」：
+##   遠日點擺在連珠標記上 → 天體每一圈都**在標記正上方慢下來**，那就是差一步；
+##   軌道進動         → 遠日點一圈比一圈更靠近標記；
+##   週期衰減＋離心率變大 → 被黑洞拉得越來越急，近日點衝得越來越快。
+
+## 遠日點離連珠標記多遠，單位是 MISS_MARGIN。從「差很多」收到「就快進去了」。
+const ORBIT_APPROACH := Vector2(1.7, 0.30)
+## 離心率：越大＝近日點越急、遠日點越拖。一圈比一圈極端。
+const ORBIT_ECC := Vector2(0.34, 0.66)
+## 軌道週期（秒）。11 秒的接管裡大約跑三圈，所以有三次「差一步」。
+const ORBIT_PERIOD := Vector2(4.6, 2.6)
+
+
+## 解克卜勒方程 E − e·sinE = M。牛頓法，四次。
+func _eccentric_anomaly(m: float, e: float) -> float:
+	var ea := m
+	for i in 4:
+		ea -= (ea - e * sin(ea) - m) / maxf(1.0 - e * cos(ea), 0.05)
+	return ea
+
+
+## 從接管開始算起的平近點角。週期隨 u 線性衰減，所以這是 1/P 的積分而不是 u/P。
+func _mean_anomaly(u: float) -> float:
+	var span := Spec.T_TAKEOVER
+	var p0 := ORBIT_PERIOD.x
+	var k := ORBIT_PERIOD.y - ORBIT_PERIOD.x
+	# 從遠日點起跑（M = π），才和接管前那一段的收尾角度接得上
+	if absf(k) < 0.001:
+		return PI + TAU * span * u / p0
+	return PI + TAU * span / k * log((p0 + k * u) / p0)
+
+
+## 這一圈的近點幅角。遠日點要落在標記附近，所以 ω = 目標 − π。
+func _orbit_periapsis(u: float) -> float:
+	return ALIGN - MISS_MARGIN * lerpf(ORBIT_APPROACH.x, ORBIT_APPROACH.y, u) - PI
+
+
+func _orbit_ecc(u: float) -> float:
+	return lerpf(ORBIT_ECC.x, ORBIT_ECC.y, clampf(u, 0.0, 1.0))
+
+
+func _orbit_angle(u: float) -> float:
+	var uu := clampf(u, 0.0, 1.0)
+	var e := _orbit_ecc(uu)
+	var ea := _eccentric_anomaly(_mean_anomaly(uu), e)
+	# 真近點角
+	var nu := 2.0 * atan2(sqrt(1.0 + e) * sin(ea * 0.5), sqrt(1.0 - e) * cos(ea * 0.5))
+	return _orbit_periapsis(uu) + nu
+
+
+## 軌道半徑相對外圈的比例。遠日點正好在外圈上（標記就在那裡），近日點被黑洞拉進去。
+## 有了它，「被甩開」才是真的往外飛，不是只有角度在動。
+func _orbit_radius_scale(u: float) -> float:
+	var uu := clampf(u, 0.0, 1.0)
+	var e := _orbit_ecc(uu)
+	var ea := _eccentric_anomaly(_mean_anomaly(uu), e)
+	return (1.0 - e * cos(ea)) / (1.0 + e)
+
+
+## 第三顆天體這一幀的半徑倍率。接管以外都是 1。
+func _third_radius_scale() -> float:
+	if not _is_sp():
+		return 1.0
+	var takeover := _beat_at("takeover_start")
+	var silence := _beat_at("silence")
+	if _t < takeover:
+		return 1.0
+	if _t < silence:
+		return _orbit_radius_scale((_t - takeover) / (silence - takeover))
+	var resolve := silence + Spec.T_PRE_CLIMAX_SILENCE
+	var held := _orbit_radius_scale(1.0)
+	if _t < resolve:
+		return held
+	# 決著：收回外圈，連珠才對得上
+	var z: float = clampf((_t - resolve) / Spec.T_RESOLVE, 0.0, 1.0)
+	return lerpf(held, 1.0, 1.0 - pow(1.0 - z, 3.0))
+
+
+## 給 tools/test_orbit.gd 的量測窗口。運動模型是這個試作被推翻過一次的地方，
+## 所以它要能被斷言查——而查它需要拿得到未經畫面變換的角度與半徑。
+func orbit_angle_at(u: float) -> float:
+	return _orbit_angle(u)
+
+
+func orbit_radius_at(u: float) -> float:
+	return _orbit_radius_scale(u)
+
+
+func third_angle_at(t: float) -> float:
+	var keep := _t
+	_t = t
+	var a := _third_angle()
+	_t = keep
+	return a
+
+
+func beat_time(name: String) -> float:
+	return _beat_at(name)
 
 
 func _short_way(from: float, to: float) -> float:
@@ -249,6 +354,8 @@ func _locked(i: int) -> bool:
 func _body_pos(i: int) -> Vector2:
 	var a := _body_angle(i)
 	var r: float = _radii[i]
+	if i == 2:
+		r *= _third_radius_scale()
 	# 鎖定時軌道環往內收束一點——那是「扣上了」的觸感
 	if _locked(i):
 		r *= 0.965
