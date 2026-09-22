@@ -1,0 +1,227 @@
+{
+  "schema_version": 1,
+  "settings_defaults": {
+    "sleep_hour": 22,
+    "wake_hour": 7,
+    "timezone_offset_minutes": 480,
+    "debug_time_offset": 0
+  },
+  "pet": {
+    "value_min": 0.0,
+    "value_max": 100.0,
+    "weight_floor": 0.1,
+    "initial": {
+      "fullness": 70.0,
+      "mood": 75.0,
+      "energy": 80.0,
+      "health": 100.0,
+      "cleanliness": 100.0,
+      "weight": 2.0
+    },
+    "stat_floor": 1,
+    "training_stat_cap": 12,
+    "stage_base_stats": {
+      "baby": {
+        "attack": 8,
+        "defense": 8,
+        "agility": 8,
+        "max_hp": 40
+      },
+      "growing": {
+        "attack": 14,
+        "defense": 14,
+        "agility": 14,
+        "max_hp": 58
+      },
+      "mature": {
+        "attack": 20,
+        "defense": 20,
+        "agility": 20,
+        "max_hp": 78
+      }
+    },
+    "species_bonus": {
+      "sprout": {
+        "attack": 0,
+        "defense": 0,
+        "agility": 0
+      },
+      "bloom": {
+        "attack": 1,
+        "defense": 1,
+        "agility": 1
+      },
+      "ember": {
+        "attack": 2,
+        "defense": 0,
+        "agility": 0
+      },
+      "moss": {
+        "attack": 0,
+        "defense": 2,
+        "agility": 0
+      },
+      "breeze": {
+        "attack": 0,
+        "defense": 0,
+        "agility": 2
+      }
+    },
+    "ideal_weight": {
+      "baby": {
+        "min": 1.5,
+        "max": 3.2
+      },
+      "growing": {
+        "min": 2.8,
+        "max": 5.5
+      },
+      "mature": {
+        "min": 4.5,
+        "max": 8.5
+      }
+    },
+    "species_weight_offset": {
+      "sprout": 0.0,
+      "bloom": 0.0,
+      "ember": 0.2,
+      "moss": 0.6,
+      "breeze": -0.3
+    }
+  },
+  "care": {
+    "max_value": 100.0,
+    "meal": {
+      "fullness": 25.0,
+      "mood": 4.0,
+      "weight": 0.25,
+      "cooldown_seconds": 900,
+      "poop_delay_seconds": 1800,
+      "refuse_at_fullness": 95.0
+    },
+    "snack": {
+      "fullness": 8.0,
+      "mood": 10.0,
+      "weight": 0.08,
+      "cooldown_seconds": 600,
+      "poop_delay_seconds": 1200,
+      "refuse_at_fullness": 98.0
+    },
+    "clean": {
+      "cleanliness": 25.0,
+      "mood": 5.0,
+      "cooldown_seconds": 300
+    },
+    "heal": {
+      "injury_seconds": 1800,
+      "sickness_seconds": 3600,
+      "injury_health": 18.0,
+      "sickness_health": 12.0,
+      "mood": 3.0,
+      "cooldown_seconds": 1800
+    }
+  },
+  "battle": {
+    "energy_cost": 12
+  },
+  "time": {
+    "seconds_per_hour": 3600,
+    "offline_cap_seconds": 43200,
+    "grace_seconds": 7200,
+    "fullness_loss_per_hour": 4.0,
+    "mood_loss_per_hour": 1.5,
+    "cleanliness_loss_per_hour": 0.75,
+    "energy_loss_per_hour": 2.0,
+    "energy_recovery_per_sleep_hour": 8.0,
+    "poop_cleanliness_penalty": 8.0,
+    "health_loss_per_mistake": 5.0,
+    "mood_loss_per_mistake": 6.0,
+    "untreated_health_loss_per_hour": 1.0,
+    "sickness_health_threshold": 40.0,
+    "hunger_threshold": 20.0,
+    "cleanliness_threshold": 30.0,
+    "fatigue_sleep_threshold": 30.0,
+    "settlement_step_seconds": 60
+  },
+  "training": {
+    "energy_cost": {
+      "1": 8,
+      "2": 12,
+      "3": 16
+    },
+    "gain_by_quality": {
+      "1": 1,
+      "2": 2,
+      "3": 3
+    },
+    "weight_loss": {
+      "1": 0.05,
+      "2": 0.1,
+      "3": 0.15
+    },
+    "cooldown_seconds": 1800,
+    "stage_caps": {
+      "baby": {
+        "power": 3,
+        "guard": 3,
+        "swift": 3
+      },
+      "growing": {
+        "power": 8,
+        "guard": 8,
+        "swift": 8
+      },
+      "mature": {
+        "power": 12,
+        "guard": 12,
+        "swift": 12
+      }
+    }
+  },
+  "evolution": {
+    "baby_seconds": 7200,
+    "growing_seconds": 86400,
+    "growing_training_count": 3,
+    "branch_priority": ["power", "guard", "swift"],
+    "growing_species": "bloom",
+    "mature_species": {
+      "power": "ember",
+      "guard": "moss",
+      "swift": "breeze"
+    },
+    "branch_modifiers": {
+      "power": {
+        "attack": 2,
+        "defense": 0,
+        "agility": 0
+      },
+      "guard": {
+        "attack": 0,
+        "defense": 2,
+        "agility": 0
+      },
+      "swift": {
+        "attack": 0,
+        "defense": 0,
+        "agility": 2
+      }
+    },
+    "finite_modifiers": {
+      "care": {
+        "base": 2,
+        "mistakes_cap": 3,
+        "min": -2,
+        "max": 2
+      },
+      "sleep": {
+        "seconds_per_hour": 3600,
+        "min": 0,
+        "max": 3
+      },
+      "battle": {
+        "min": -2,
+        "max": 3
+      }
+    }
+  }
+}

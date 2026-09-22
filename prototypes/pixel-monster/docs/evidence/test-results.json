@@ -1,0 +1,112 @@
+{
+  "care": {
+    "log": "/tmp/pixel-monster-care.log",
+    "pass_lines": 132,
+    "result": [
+      "CARE TESTS PASS"
+    ],
+    "script_errors": 0
+  },
+  "steps_save": {
+    "log": "/tmp/pixel-monster-steps_save.log",
+    "pass_lines": 116,
+    "result": [
+      "test_steps_save: PASS"
+    ],
+    "script_errors": 0
+  },
+  "battle": {
+    "log": "/tmp/pixel-monster-battle.log",
+    "pass_lines": 0,
+    "result": [
+      "Battle tests passed"
+    ],
+    "script_errors": 0
+  },
+  "flow": {
+    "log": "/tmp/pixel-monster-flow.log",
+    "pass_lines": 0,
+    "result": [
+      "FLOW CHECKS: 110; FAILURES: 0"
+    ],
+    "script_errors": 0
+  },
+  "release_simulation": {
+    "log": "/tmp/pixel-monster-release-flow.log",
+    "pass_lines": 0,
+    "result": [
+      "FLOW CHECKS: 14; FAILURES: 0"
+    ],
+    "script_errors": 0
+  },
+  "visual": {
+    "log": "/tmp/pixel-monster-visual-final.log",
+    "pass_lines": 0,
+    "result": [
+      "FLOW CHECKS: 118; FAILURES: 0"
+    ],
+    "script_errors": 0
+  },
+  "packed_release": {
+    "log": "/tmp/pixel-monster-packed-flow.log",
+    "result": [
+      "FLOW CHECKS: 17; FAILURES: 0"
+    ],
+    "script_errors": 0
+  },
+  "ios_device_unsigned": {
+    "date": "2026-09-22",
+    "result": "BUILD SUCCEEDED",
+    "architecture": "arm64",
+    "configuration": "Release",
+    "xcode": "26.6 (17F113)",
+    "sdk": "iphoneos26.5",
+    "minimum_os": "16.0",
+    "log": "/tmp/pixel-monster-ios-device-build.log",
+    "signed": false,
+    "device_install_tested": false
+  },
+  "ios_simulator_iphone17": {
+    "date": "2026-09-22",
+    "configuration": "Release",
+    "result": "BUILD SUCCEEDED; install/launch/live-process/screenshot PASS",
+    "device": "iPhone 17 Pro",
+    "runtime": "iOS 26.5",
+    "architecture": "arm64",
+    "screenshot": "09-ios-iphone17-pro.png",
+    "log": "/tmp/pixel-monster-ios-final-iphone17/logs/xcodebuild.log",
+    "script_errors": 0,
+    "physical_device": false
+  },
+  "ios_simulator_iphone12": {
+    "date": "2026-09-22",
+    "configuration": "Release",
+    "result": "BUILD SUCCEEDED; install/launch/live-process/screenshot PASS",
+    "device": "iPhone 12",
+    "runtime": "iOS 26.5",
+    "architecture": "arm64",
+    "screenshot": "10-ios-iphone12.png",
+    "log": "/tmp/pixel-monster-ios-final-iphone12/logs/xcodebuild.log",
+    "script_errors": 0,
+    "physical_device": false
+  },
+  "ios_pipeline_contracts": {
+    "result": "16 tests PASS",
+    "log": "/tmp/pixel-monster-ios-contract.log"
+  },
+  "ios_template_contracts": {
+    "result": "7 tests PASS",
+    "log": "/tmp/pixel-monster-template-contract.log"
+  },
+  "ios_native_smoke_contracts": {
+    "result": "3 tests PASS",
+    "log": "/tmp/pixel-monster-native-smoke-contract.log"
+  },
+  "ios_template_native": {
+    "result": "compile + merge + cache hit PASS",
+    "source_commit": "5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88",
+    "source_compile_elapsed": "00:05:43.11",
+    "log": "/tmp/pixel-monster-ios-template-compile.log",
+    "cache_log": "/tmp/pixel-monster-template-cache.log"
+  }
+}

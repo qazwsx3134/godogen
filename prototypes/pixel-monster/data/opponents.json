@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "opponents": [
+    {
+      "id": "moss_scout",
+      "name": "苔苔練習生",
+      "attack": 10,
+      "defense": 10,
+      "agility": 9,
+      "max_hp": 42,
+      "species": "moss",
+      "stage": "baby",
+      "description": "攻防均衡，適合第一次熟悉戰鬥節奏。",
+      "skill_name": "苔盾反擊",
+      "skill_chance_percent": 16,
+      "skill_bonus_percent": 28
+    },
+    {
+      "id": "ember_rival",
+      "name": "焰尾挑戰者",
+      "attack": 18,
+      "defense": 16,
+      "agility": 17,
+      "max_hp": 64,
+      "species": "ember",
+      "stage": "growing",
+      "description": "強攻型對手，傷害高但防守較薄。",
+      "skill_name": "火花連擊",
+      "skill_chance_percent": 18,
+      "skill_bonus_percent": 34
+    },
+    {
+      "id": "bloom_guardian",
+      "name": "花冠守衛",
+      "attack": 23,
+      "defense": 26,
+      "agility": 21,
+      "max_hp": 88,
+      "species": "bloom",
+      "stage": "mature",
+      "description": "防禦型守衛，戰線穩定且能撐過較長回合。",
+      "skill_name": "花瓣壁壘",
+      "skill_chance_percent": 20,
+      "skill_bonus_percent": 30
+    }
+  ]
+}

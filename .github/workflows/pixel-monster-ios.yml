@@ -1,0 +1,307 @@
+name: Pixel Monster iOS
+
+on:
+  push:
+    paths:
+      - "prototypes/pixel-monster/**"
+      - ".github/workflows/pixel-monster-ios.yml"
+  pull_request:
+    paths:
+      - "prototypes/pixel-monster/**"
+      - ".github/workflows/pixel-monster-ios.yml"
+  workflow_dispatch:
+    inputs:
+      upload_testflight:
+        description: "Upload the signed IPA to TestFlight after the release build"
+        required: true
+        default: false
+        type: boolean
+      confirm_release:
+        description: "I have reviewed the release inputs and want to run the protected release job"
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pixel-monster-ios-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name != 'workflow_dispatch' }}
+
+env:
+  GODOT_RELEASE_VERSION: "4.7-stable"
+  GODOT_REPORTED_VERSION: "4.7.stable.official.5b4e0cb0f"
+  GODOT_TEMPLATE_VERSION: "4.7.stable"
+
+jobs:
+  headless:
+    name: Headless domain suites
+    runs-on: macos-26
+    timeout-minutes: 20
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Select pinned Xcode
+        shell: bash
+        run: |
+          set -euo pipefail
+          xcode_app="/Applications/Xcode_26.6.app"
+          test -d "${xcode_app}/Contents/Developer"
+          sudo xcode-select --switch "${xcode_app}/Contents/Developer"
+          test "$(xcodebuild -version | sed -n '1p')" = "Xcode 26.6"
+
+      - name: Install pinned Godot editor and export templates
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash prototypes/pixel-monster/tools/ios/install_godot.sh
+
+      - name: Run project headless suites
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash prototypes/pixel-monster/tools/verify.sh
+
+      - name: Run offline iOS pipeline contract tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 prototypes/pixel-monster/tools/ios/test_ios_pipeline.py
+
+      - name: Run simulator template helper contract tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 prototypes/pixel-monster/tests/test_simulator_template.py
+          python3 prototypes/pixel-monster/tools/ios/test_smoke_simulator.py
+
+  unsigned-ios:
+    name: Unsigned iOS simulator (${{ matrix.simulator }})
+    needs: headless
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.confirm_release == false }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # macos-26 officially ships Xcode 26.6/17F113 and iOS 26.5 runtimes.
+          # iPhone 17 Pro is preinstalled; iPhone 12 is created with simctl when
+          # its device type is available on the runner image.
+          - simulator: "iPhone 17 Pro"
+            device_type: "com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro"
+            runtime: "com.apple.CoreSimulator.SimRuntime.iOS-26-5"
+          - simulator: "iPhone 12"
+            device_type: "com.apple.CoreSimulator.SimDeviceType.iPhone-12"
+            runtime: "com.apple.CoreSimulator.SimRuntime.iOS-26-5"
+    runs-on: macos-26
+    timeout-minutes: 60
+    env:
+      IOS_XCODE_VERSION: "26.6"
+      SIMULATOR_NAME: ${{ matrix.simulator }}
+      SIMULATOR_DEVICE_TYPE: ${{ matrix.device_type }}
+      SIMULATOR_RUNTIME: ${{ matrix.runtime }}
+      IOS_OUTPUT_DIR: ${{ runner.temp }}/pixel-monster-ios-${{ matrix.simulator }}
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Select pinned Xcode
+        shell: bash
+        run: |
+          set -euo pipefail
+          xcode_app="/Applications/Xcode_${IOS_XCODE_VERSION}.app"
+          test -d "${xcode_app}/Contents/Developer"
+          sudo xcode-select --switch "${xcode_app}/Contents/Developer"
+          test "$(xcodebuild -version | sed -n '1p')" = "Xcode ${IOS_XCODE_VERSION}"
+
+      - name: Install pinned Godot editor and export templates
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash prototypes/pixel-monster/tools/ios/install_godot.sh
+
+      - name: Cache matching arm64 simulator template
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ runner.temp }}/pixel-monster-template/ios-arm64.zip
+            ${{ runner.temp }}/pixel-monster-template/ios-arm64.zip.provenance.json
+          key: pixel-monster-ios-simulator-template-godot-5b4e0cb0fd279832bbdd69fed5354d4e5ad26f88-runner-${{ runner.arch }}-xcode-26.6-17F113-ios-sdk-26.5-${{ hashFiles('prototypes/pixel-monster/tools/ios/prepare_simulator_template.py') }}
+
+      - name: Prepare matching-source arm64 simulator template
+        shell: bash
+        run: |
+          set -euo pipefail
+          scons_venv="${RUNNER_TEMP}/pixel-monster-scons-4.9.1"
+          template_output="${RUNNER_TEMP}/pixel-monster-template/ios-arm64.zip"
+          mkdir -p "${RUNNER_TEMP}/pixel-monster-template"
+          python3 -m venv "${scons_venv}"
+          "${scons_venv}/bin/python" -m pip install \
+            --disable-pip-version-check --no-input --no-warn-script-location \
+            "scons==4.9.1"
+          python3 prototypes/pixel-monster/tools/ios/prepare_simulator_template.py \
+            --template-zip "$HOME/Library/Application Support/Godot/export_templates/4.7.stable/ios.zip" \
+            --output "${template_output}" \
+            --scons "${scons_venv}/bin/scons" \
+            --jobs 3
+          test -s "${template_output}"
+          printf 'IOS_SIMULATOR_TEMPLATE=%s\n' "${template_output}" >> "${GITHUB_ENV}"
+
+      - name: Validate simulator-only export inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 prototypes/pixel-monster/tools/ios/build_ios.py preflight \
+            --mode unsigned --simulator-only
+
+      - name: Export and build unsigned simulator target
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 prototypes/pixel-monster/tools/ios/build_ios.py build \
+            --mode unsigned --simulator-only \
+            --simulator "${SIMULATOR_NAME}" \
+            --output-dir "${IOS_OUTPUT_DIR}"
+
+      - name: Smoke-test exported packed resources
+        shell: bash
+        run: |
+          set -euo pipefail
+          packed_log="${IOS_OUTPUT_DIR}/logs/packed-resource-smoke.log"
+          mkdir -p "${IOS_OUTPUT_DIR}/logs"
+          set +e
+          "${GODOT_BIN}" --headless \
+            --main-pack "${IOS_OUTPUT_DIR}/xcode/PocketDiary.pck" \
+            --script "${GITHUB_WORKSPACE}/prototypes/pixel-monster/tests/test_flow.gd" -- \
+            --release-simulation --expect-packed \
+            --save-path=/tmp/pixel-monster-test-packed.json \
+            2>&1 | tee "${packed_log}"
+          godot_status=${PIPESTATUS[0]}
+          set -e
+          if [[ "${godot_status}" -ne 0 ]]; then
+            echo "Packed-resource smoke exited with status ${godot_status}" >&2
+            exit "${godot_status}"
+          fi
+          python3 - "${packed_log}" <<'PY'
+          import pathlib
+          import re
+          import sys
+
+          log_path = pathlib.Path(sys.argv[1])
+          log = log_path.read_text(encoding="utf-8")
+          if re.search(r"SCRIPT ERROR:|Parse Error:|Failed to load script|Error loading resource", log):
+              raise SystemExit("Godot script/resource error: " + str(log_path))
+          PY
+
+      - name: Install and launch the native simulator app
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 prototypes/pixel-monster/tools/ios/smoke_simulator.py \
+            --build-dir "${IOS_OUTPUT_DIR}"
+
+      - name: Compile unsigned arm64 device target
+        if: ${{ matrix.simulator == 'iPhone 17 Pro' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          xcodebuild -project "${IOS_OUTPUT_DIR}/xcode/PocketDiary.xcodeproj" \
+            -scheme PocketDiary -configuration Release -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath "${IOS_OUTPUT_DIR}/DeviceData" \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO build \
+            > "${IOS_OUTPUT_DIR}/logs/unsigned-device-build.log" 2>&1
+
+      - name: Upload unsigned build evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: pixel-monster-ios-unsigned-${{ matrix.simulator }}
+          path: |
+            ${{ runner.temp }}/pixel-monster-ios-${{ matrix.simulator }}/simulator-app.zip
+            ${{ runner.temp }}/pixel-monster-ios-${{ matrix.simulator }}/build-info.txt
+            ${{ runner.temp }}/pixel-monster-ios-${{ matrix.simulator }}/logs/**
+          if-no-files-found: ignore
+          retention-days: 7
+
+  release:
+    name: Signed iOS release (manual)
+    needs: headless
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.confirm_release == true }}
+    runs-on: macos-26
+    environment:
+      name: ios-release
+    timeout-minutes: 45
+    env:
+      IOS_XCODE_VERSION: "26.6"
+      IOS_TEAM_ID: ${{ vars.IOS_TEAM_ID }}
+      IOS_BUNDLE_IDENTIFIER: ${{ vars.IOS_BUNDLE_IDENTIFIER }}
+      IOS_MARKETING_VERSION: ${{ vars.IOS_MARKETING_VERSION }}
+      IOS_CODE_SIGN_IDENTITY: ${{ vars.IOS_CODE_SIGN_IDENTITY }}
+      IOS_PROVISIONING_PROFILE_NAME: ${{ vars.IOS_PROVISIONING_PROFILE_NAME }}
+      IOS_CERTIFICATE_P12_BASE64: ${{ secrets.IOS_CERTIFICATE_P12_BASE64 }}
+      IOS_CERTIFICATE_PASSWORD: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
+      IOS_PROVISIONING_PROFILE_BASE64: ${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}
+      ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+      ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+      ASC_PRIVATE_KEY_P8: ${{ secrets.ASC_PRIVATE_KEY_P8 }}
+      IOS_OUTPUT_DIR: ${{ runner.temp }}/pixel-monster-ios-release
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Select pinned Xcode
+        shell: bash
+        run: |
+          set -euo pipefail
+          xcode_app="/Applications/Xcode_${IOS_XCODE_VERSION}.app"
+          test -d "${xcode_app}/Contents/Developer"
+          sudo xcode-select --switch "${xcode_app}/Contents/Developer"
+          test "$(xcodebuild -version | sed -n '1p')" = "Xcode ${IOS_XCODE_VERSION}"
+
+      - name: Install pinned Godot editor and export templates
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash prototypes/pixel-monster/tools/ios/install_godot.sh
+
+      - name: Run offline iOS pipeline contract tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 prototypes/pixel-monster/tools/ios/test_ios_pipeline.py
+
+      - name: Preflight signing and App Store Connect inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "${{ inputs.upload_testflight }}" == "true" ]]; then
+            python3 prototypes/pixel-monster/tools/ios/build_ios.py preflight --mode release --upload
+          else
+            python3 prototypes/pixel-monster/tools/ios/build_ios.py preflight --mode release
+          fi
+
+      - name: Build signed device IPA
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ "${{ inputs.upload_testflight }}" == "true" ]]; then
+            python3 prototypes/pixel-monster/tools/ios/build_ios.py build \
+              --mode release \
+              --upload \
+              --output-dir "${IOS_OUTPUT_DIR}"
+          else
+            python3 prototypes/pixel-monster/tools/ios/build_ios.py build \
+              --mode release \
+              --output-dir "${IOS_OUTPUT_DIR}"
+          fi
+
+      - name: Upload signed IPA evidence (never signing keys)
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: pixel-monster-ios-release-${{ github.run_number }}
+          path: ${{ runner.temp }}/pixel-monster-ios-release/*.ipa
+          if-no-files-found: ignore
+          retention-days: 7
