@@ -1,19 +1,24 @@
 {
   "url": "http://127.0.0.1:5193/?qa=1",
-  "started": "2026-09-22T17:07:39.087Z",
+  "started": "2026-09-22T18:45:35.349Z",
   "runs": [
     {
       "route": "touch-smoke",
       "checks": [
-        "tap dialogue twice",
-        "mute",
-        "log",
-        "restart",
+        "touch reveal/advance once each",
+        "layout: dialogue ~28%, quick bar and floating buttons inside the screen and above the box",
+        "tapping the background (not the box) also advances",
+        "long-press hides UI; the restoring tap does not advance",
+        "swipe up opens the backlog; closing keeps the line",
+        "tap S hints, long-press S quick-saves with a toast; neither advances",
+        "dragging (≡) snaps it to the nearest side edge without advancing",
+        "idle 3 s fades buttons to 40%; menu opens and closes from the background",
+        "AUTO advances by itself and toggles off",
         "normal URL"
       ],
       "errors": []
     }
   ],
   "passed": true,
-  "finished": "2026-09-22T17:07:43.928Z"
+  "finished": "2026-09-22T18:45:51.881Z"
 }

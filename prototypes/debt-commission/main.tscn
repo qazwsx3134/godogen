@@ -1,13 +1,12 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://bgh65ni46o2si"]
 
-[ext_resource type="Script" path="res://main.gd" id="1_main"]
+[ext_resource type="Script" uid="uid://c6jnr8dxa3e3x" path="res://main.gd" id="1_main"]
 
-[node name="DebtCommission" type="Control"]
-layout_mode=3
-anchors_preset=15
-anchor_right=1.0
-anchor_bottom=1.0
-grow_horizontal=2
-grow_vertical=2
-script=ExtResource("1_main")
-
+[node name="DebtCommission" type="Control" unique_id=132399990]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_main")

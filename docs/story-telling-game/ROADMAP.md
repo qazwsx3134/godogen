@@ -1,6 +1,6 @@
 # 直式吐槽視覺小說 Roadmap
 
-更新：2026-09-23。狀態：V1 規格依 [gintama0923](../gintama-like/new/gintama0923.md) 定案；Godot 4.7 Web 工具鏈、劇本執行器與驗證流程已由 [debt-commission 原型](../../prototypes/debt-commission/README.md) 建立，V1 從 Phase 0 開始。
+更新：2026-09-23。狀態：V1 規格依 [gintama0923](../gintama-like/new/gintama0923.md) 定案；Godot 4.7 Web 工具鏈、劇本執行器與驗證流程已由 [debt-commission 原型](../../prototypes/debt-commission/README.md) 建立。V1 Phase 0（專案轉換與工具）與 Phase 1（直立框架與懸浮按鈕）已完成並通過自動驗收，待真人手機試玩；下一步 Phase 2 劇本引擎。
 
 目標：用 Godot 做一款手機直立式的銀魂同人視覺小說，先提供瀏覽器試玩。核心玩法改編自逆轉裁判的詰問：把「找矛盾、出示證物」換成「找槽點、吐槽」。玩家扮演新八，在一群裝傻的人之中負責吐槽，劇情才能往下走。
 
@@ -77,22 +77,22 @@
 
 ## 現有基礎
 
-V1 在 `prototypes/debt-commission/` 這個 Godot 專案內改造。改造前先 commit 目前的第一場原型，作為可回溯的基準。
+V1 在 `prototypes/debt-commission/` 這個 Godot 專案內改造，開發分支為 `v1-tsukkomi-vn`；改造前的第一場原型保存在 commit `1ec9ffb`。
 
 | 類別 | 現有內容 | V1 做法 |
 | --- | --- | --- |
 | Web 工具鏈 | 4.7 stable、相符官方單執行緒 Web 範本、`fetch_web_templates.py`／`build_web.sh`／`serve_web.sh`、中文字型 | 沿用；匯出排除 MCP addon |
 | StoryRunner | JSON 節點、資料與引用檢查、flags／condition／goto、跳轉循環保護、snapshot／restore 與版本檢查 | 沿用並擴充 V1 指令；故事 `version` 升版 |
 | 閱讀 UI | 逐字補完／前進、回顧、音效開關、`user://` 閱讀點自動存檔與續讀 | 改為 VN 分層版面；存檔擴充為多槽與縮圖 |
-| 驗證 | `tests/test_story.gd`、`tests/test_stage.gd`、`?qa=1` 唯讀 `window.__debtQA`、Playwright `browser_check.mjs` | 沿用；QA 欄位加入吐槽狀態，瀏覽器路線改為 V1 章節 |
-| 舞台演出 | `story_stage.gd` 萬事屋俯視室內與繞桌走位；`actor_doll.gd` 地圖 SD 與說話立繪 | 俯視舞台與走位不帶入 V1；立繪模式可暫代 placeholder，最終依 V1 規格改為剪影＋名字＋表情文字 |
+| 驗證 | `tests/test_story.gd`、`?qa=1` 唯讀 `window.__debtQA`、Playwright `browser_check.mjs` | 沿用；Phase 1 新增 `tests/test_vn_shell.gd` 手勢測試，瀏覽器檢查改為 VN 版面與手勢；之後加入吐槽狀態，路線改為 V1 章節 |
+| 舞台演出 | `story_stage.gd` 萬事屋俯視室內與繞桌走位；`actor_doll.gd` 地圖 SD 與說話立繪 | 已移除（保留在 `1ec9ffb`）；V1 立繪改用 `placeholder_sprite.gd` 的剪影＋名字＋表情文字 |
 | 故事 | 《請幫我向你老闆討債》第一場 51 句核准稿、兩選項分支與後段回扣（[核准文本](stories/002-debt-commission-draft-v0.1.md)） | 保留為後續章節候選，改寫成含裝傻回合的版本 |
 
-設計尺寸由 720×1280 改為 1080×1920，同為 9:16，於 Phase 1 調整；現有 UI 數值需要同步放大。
+設計尺寸已在 Phase 1 由 720×1280 改為 1080×1920，同為 9:16。
 
 ## 開發階段
 
-每個 Phase 都保留可在瀏覽器開啟的 Web 匯出版本，並通過引擎測試與 `browser_check`。
+每個 Phase 都保留可在瀏覽器開啟的 Web 匯出版本，並通過引擎測試與 `browser_check`。進度：Phase 0 ✅、Phase 1 ✅（自動驗收通過，實機待試玩；證據見 [驗證紀錄](../../prototypes/debt-commission/docs/VERIFICATION.md)）、Phase 2–5 未開始。
 
 | 階段 | 玩家或作者拿到的成果 | 系統工作 | 通過條件 |
 | --- | --- | --- | --- |
@@ -114,9 +114,21 @@ Phase 1 與 Phase 2 可並行，兩者只在對話框顯示介面交會。Phase 
 
 ## 開發工具：Godot MCP Toolkit
 
-現況：`prototypes/debt-commission/addons/godot_mcp_toolkit/` 已放入 v1.0.2（支援 Godot 4.2+，測到 4.7.0）；`project.godot` 尚未啟用此 plugin，專案根沒有 `.mcp.json`，Claude Code 目前也沒有註冊 Godot 相關 MCP server。本機 Node 24 符合 bridge 需要的 Node 22 以上。`godot --help`（4.7）未列出 MCP 選項，只有 LSP 與 DAP 連接埠；目前找到的 MCP 是這個 toolkit：plugin 在編輯器內開 WebSocket，再由 `npx -y @npgamedev/godot-mcp-server` 橋接給 Claude Code。
+現況：`prototypes/debt-commission/addons/godot_mcp_toolkit/` 為 v1.0.2（支援 Godot 4.2+，測到 4.7.0），已在 Windows 版 Godot 編輯器啟用。plugin 在編輯器內開 WebSocket（6550 起），再由 `@npgamedev/godot-mcp-server` 橋接給 Claude Code。V1 大量是 UI 版面與觸控手感，MCP 可以直接開遊戲、截圖與讀 console，縮短調整迴圈。
 
-結論：值得加入，放在 Phase 0 設定。V1 大量是 UI 版面與觸控手感，MCP 可以直接開遊戲、模擬輸入、截圖與讀 console，縮短調整迴圈。
+WSL 裡的 Claude Code 連 Windows 編輯器已實測可用：bridge 必須以 Windows 程序執行，才讀得到 Windows 端的登記檔；專案路徑用環境變數指定，並透過 `WSLENV` 傳給 Windows。在 repo 根目錄執行一次，重開 Claude Code 後生效：
+
+```bash
+claude mcp add godot-mcp-toolkit \
+  -e 'GODOT_MCP_PROJECT_PATH=D:\repo\godot\godogen\prototypes\debt-commission' \
+  -e GODOT_MCP_CONFIG_VERSION=1 \
+  -e WSLENV=GODOT_MCP_PROJECT_PATH:GODOT_MCP_CONFIG_VERSION \
+  -- cmd.exe /c npx -y @npgamedev/godot-mcp-server
+```
+
+專案內的 `.mcp.json` 由編輯器產生，指令是 `cmd`，只適用於從 Windows 啟動的客戶端。
+
+另評估過 [Coding-Solo/godot-mcp](https://github.com/Coding-Solo/godot-mcp)：透過 Godot 命令列建場景、執行專案與讀輸出，不需 plugin，但沒有輸入模擬、執行中截圖與節點檢查；它能做的事，目前的 toolkit 與直接呼叫 `godot --headless` 都已涵蓋，兩個 MCP 同時啟動 Godot 也容易互相干擾，所以不加入。
 
 | 用途 | 工具 |
 | --- | --- |
@@ -133,6 +145,7 @@ Phase 1 與 Phase 2 可並行，兩者只在對話框顯示介面交會。Phase 
 - 目前 `script_export_mode=2` 會把 addon 腳本編成 `.gdc` 帶進 Web 匯出（不會執行，但增加檔案），所以 `exclude_filter` 要排除 `addons/godot_mcp_toolkit/*`。
 - 啟用與停用 plugin 透過 Project Settings → Plugins，不直接手改 `project.godot`；需要只讀時用 dock 開關或 `GODOT_MCP_READ_ONLY=1`。
 - 專案內附的 `CompanionSkills/godot-mcp-toolkit` 說明工具選擇與流程，連線後可參考。
+- WSL 的 headless 匯出與 Windows 編輯器共用專案的 `.godot/`；兩邊同時掃描檔案時，編輯器 console 可能出現 progress dialog 錯誤，屬於編輯器本身，與遊戲無關。
 
 ## Godot 瀏覽器交付
 
@@ -145,7 +158,8 @@ Phase 1 與 Phase 2 可並行，兩者只在對話框顯示介面交會。Phase 
 
 - **正式美術：** 依 [gintama0923](../gintama-like/new/gintama0923.md) 第 263 行的美術 Prompt 製作背景、立繪與 UI。每個角色先定稿一張，4–6 個表情都以它為參考圖；替換只改素材設定檔。
 - **更多章節：** 討債委託改寫成第二章候選；每章先統計場景、素材與可達分支，完成後量測實際遊玩時間，再估算後續工作量。
-- **後續評估：** 俯視地圖探索與格子尋路、紙娃娃換裝、配音、雲端存檔、圖形化劇情編輯器，依實際內容需要再決定。
+- **俯視地圖（V1 之後）：** 沿用 [conversation1](base/conversation1.md)–[conversation3](base/conversation3.md) 的方向，做成 Pokémon 式的俯視地圖：格子移動、四方向行走、面向 NPC／物件互動，對話直接疊在地圖上。紙娃娃換裝與地圖、立繪共用外觀 ID 一併延後。
+- **後續評估：** 配音、雲端存檔、圖形化劇情編輯器，依實際內容需要再決定。
 
 ## 待確認
 
@@ -155,4 +169,3 @@ Phase 1 與 Phase 2 可並行，兩者只在對話框顯示介面交會。Phase 
 4. 文件同步：[prototypes/CONTEXT.md](../../prototypes/CONTEXT.md) 定義吐槽為 2 秒普通吐槽；[ADR 0002](../../prototypes/docs/adr/0002-tsukkomi-types-deferred.md) 延後 Narrative Break，V1 的第四面牆屬此類；[STORY_WORKFLOW.md](STORY_WORKFLOW.md) 寫試讀先採無限時選擇，並沿用舊的 M0／M1 里程碑名稱。三者需依 V1 更新。
 5. 美術風格與素材製作方式，在 Phase 5 後確認。
 6. 對外公開試玩前，確認同人作品的分享範圍。
-7. [conversation1](base/conversation1.md)–[conversation3](base/conversation3.md) 定下的俯視格子地圖、紙娃娃與共用外觀 ID，是否仍是 V1 之後的目標，或改由 VN 調查模式取代。
