@@ -1,8 +1,8 @@
 # 故事產出與驗證流程
 
-更新：2026-09-21。用途：先驗證故事能否透過共同編劇產出、改稿與試讀，再進入 Godot 製作。搭配 [遊戲 Roadmap](ROADMAP.md) 的 S0。
+更新：2026-09-23。用途：驗證故事能否透過共同編劇產出、改稿與試讀，並交付 Godot 演出。搭配 [遊戲 Roadmap](ROADMAP.md) 的第一章劇本製作。
 
-本輪已確認：使用銀魂角色，從新的故事種子開始；使用者選定 B《請幫我向你老闆討債》，新八視角，先驗證人物對話與選擇回應。候選歷程見 [001-story-seeds.md](stories/001-story-seeds.md)，可試讀的產物見 [第一場 draft-v0.1](stories/002-debt-commission-draft-v0.1.md)。目前已有作者自查，真人試讀待執行。
+本輪已確認：使用銀魂角色，從新的故事種子開始；使用者選定 B《請幫我向你老闆討債》，新八視角，先驗證人物對話與選擇回應。候選歷程見 [001-story-seeds.md](stories/001-story-seeds.md)，產物見 [第一場 draft-v0.1](stories/002-debt-commission-draft-v0.1.md)。作者已確認文章可用並要求先完成 Godot 演出；本輪直接把完整第一場帶入 [Godot 專案](../../prototypes/debt-commission/README.md)，從可玩版本收集閱讀節奏和分支回應的回饋。真人試玩結果仍待收集。
 
 ## 來源如何配合
 
@@ -132,4 +132,4 @@ Beat 表：節拍 → 因果 → 玩家行動 → 即時回應 → 後續呼應�
 
 原型的兩秒吐槽、三個回答與成功／失敗收尾可作功能參考；故事產出試讀先採無限時選擇，計時效果在有文本基線後另測。原型已有的功能測試紀錄不代表本次內容或 Godot 版本已通過驗證。
 
-S0 通過後，由選定的互動試稿推導 M0／M1 的內容與演出需求；M0／M1 再決定正式資料格式。此處的節點稿是作者交接格式，尚未是可直接執行的 Godot 腳本。
+本輪依作者核准的互動試稿推導 M0／M1 的內容與演出需求，執行資料使用 [debt_story.json](../../prototypes/debt-commission/data/debt_story.json)。Markdown 節點稿保留為作者文本；Godot 的 StoryRunner 讀取 JSON。真人試玩與後續改稿沿用上述觀察方式。

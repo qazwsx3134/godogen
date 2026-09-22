@@ -1,0 +1,19 @@
+{
+  "url": "http://127.0.0.1:5193/?qa=1",
+  "started": "2026-09-22T17:07:39.087Z",
+  "runs": [
+    {
+      "route": "touch-smoke",
+      "checks": [
+        "tap dialogue twice",
+        "mute",
+        "log",
+        "restart",
+        "normal URL"
+      ],
+      "errors": []
+    }
+  ],
+  "passed": true,
+  "finished": "2026-09-22T17:07:43.928Z"
+}
