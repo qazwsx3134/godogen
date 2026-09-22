@@ -262,9 +262,38 @@ async function playRoute(route, viewport, touch) {
       assert.equal(current.choices.length, 2, 'Both approved options are visible');
       current.choices.forEach(choice => assertInside(choice.rect, current.viewport, choice.label));
       current.choices.forEach(choice => assert.ok(choice.rect.y + choice.rect.height <= current.dialog.y, 'Choices sit above the box'));
-      await screenshot(page, `${route}-choice`);
       await page.waitForTimeout(400);
-      assert.equal(key(await state(page)), key(current), 'Choice waits for the player');
+      await screenshot(page, `${route}-choice`);
+      const waiting = await state(page);
+      assert.equal(key(waiting), key(current), 'Choice waits for the player');
+      const firstChoiceTop = Math.min(...waiting.choices.map(choice => choice.rect.y));
+      for (const name of ['menu', 'save']) {
+        assert.ok(waiting.controls[name].y + waiting.controls[name].height <= firstChoiceTop + 1,
+          `Floating ${name} stays above the choices`);
+      }
+      result.checks.push('choices wait; floating buttons stay above the choices');
+
+      await control(page, 'log', touch);
+      await page.waitForTimeout(500);
+      const logOpen = await state(page);
+      assert.equal(logOpen.screen, 'log');
+      assert.ok(logOpen.log_scroll.max > 0, 'Backlog is longer than one screen at the choice');
+      const logPoint = { x: logOpen.game.x + logOpen.game.width / 2, y: logOpen.game.y + logOpen.game.height * 0.4 };
+      if (touch) {
+        await gesture(page, logOpen.viewport, logPoint, { x: logPoint.x, y: logPoint.y + logOpen.game.height * 0.3 }, 60, true);
+      } else {
+        const p = await toPage(page, logOpen.viewport, logPoint);
+        await page.mouse.move(p.x, p.y);
+        await page.mouse.wheel(0, -600);
+      }
+      await page.waitForTimeout(400);
+      const scrolled = await state(page);
+      assert.ok(scrolled.log_scroll.value < logOpen.log_scroll.value - 20,
+        `Backlog scrolls by ${touch ? 'touch drag' : 'mouse wheel'} (${logOpen.log_scroll.value} → ${scrolled.log_scroll.value})`);
+      await screenshot(page, `${route}-log-scrolled`);
+      await control(page, 'log_close', touch);
+      assert.equal(key(await state(page)), key(current), 'Closing the backlog keeps the choice');
+      result.checks.push(`backlog at the choice scrolls by ${touch ? 'touch drag' : 'mouse wheel'}`);
       if (route === 'B') {
         for (const size of [{ width: 360, height: 800 }, { width: 320, height: 568 }]) {
           await page.setViewportSize(size);

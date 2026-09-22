@@ -1,6 +1,6 @@
 {
   "url": "http://127.0.0.1:5193/?qa=1",
-  "started": "2026-09-22T18:43:43.821Z",
+  "started": "2026-09-22T18:56:19.582Z",
   "runs": [
     {
       "route": "A",
@@ -29,6 +29,8 @@
         "dragging (≡) snaps it to the nearest side edge without advancing",
         "idle 3 s fades buttons to 40%; menu opens and closes from the background",
         "AUTO advances by itself and toggles off",
+        "choices wait; floating buttons stay above the choices",
+        "backlog at the choice scrolls by mouse wheel",
         "reload + continue preserves line, flags and sprites",
         "correct callback and complete ending",
         "restart resets flags; SKIP fast-forwards and stops at the choice"
@@ -72,6 +74,8 @@
         "dragging (≡) snaps it to the nearest side edge without advancing",
         "idle 3 s fades buttons to 40%; menu opens and closes from the background",
         "AUTO advances by itself and toggles off",
+        "choices wait; floating buttons stay above the choices",
+        "backlog at the choice scrolls by touch drag",
         "choices, box and floating buttons fit 360×800 and 320×568",
         "reload + continue preserves line, flags and sprites",
         "correct callback and complete ending",
@@ -91,5 +95,5 @@
     }
   ],
   "passed": true,
-  "finished": "2026-09-22T18:45:35.002Z"
+  "finished": "2026-09-22T18:58:14.066Z"
 }

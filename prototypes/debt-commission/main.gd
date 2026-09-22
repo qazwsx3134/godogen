@@ -535,16 +535,10 @@ func _layout() -> void:
 		sprite.size = Vector2(sprite.size.x, height - sprite_top)
 		sprite.queue_redraw()
 
-	var float_bounds: Rect2 = Rect2(EDGE, top, width - EDGE * 2.0 - 128.0,
-		maxf(0.0, dialog_y - 24.0 - 128.0 - top))
-	var first_layout: bool = _menu_button.position == Vector2.ZERO and _save_button.position == Vector2.ZERO
-	for button: Control in [_menu_button, _save_button]:
-		button.set("bounds", float_bounds)
-	if first_layout:
-		_menu_button.position = Vector2(float_bounds.end.x, top + 80.0)
-		_save_button.position = Vector2(float_bounds.end.x, top + 228.0)
-	for button: Control in [_menu_button, _save_button]:
-		button.call("snap_to_edge", false)
+	if _menu_button.position == Vector2.ZERO and _save_button.position == Vector2.ZERO:
+		_menu_button.position = Vector2(width, top + 80.0)
+		_save_button.position = Vector2(width, top + 228.0)
+	_update_float_bounds()
 
 	_menu_close.position = Vector2(width - EDGE - 112.0, top)
 	_layout_menu_panel()
@@ -557,6 +551,18 @@ func _layout() -> void:
 
 	_layout_title(width, height, top, bottom)
 	_publish_qa_state()
+
+
+# 懸浮按鈕只能停在對話框上方；選項出現時也避開選項，免得點選項變成開選單。
+func _update_float_bounds() -> void:
+	var top: float = EDGE + _safe_top
+	var limit: float = _dialog_panel.position.y - 24.0
+	if _screen_mode == "choice" and not _choice_buttons.is_empty():
+		limit = _choice_box.position.y + _choice_box.size.y - _choice_box.get_combined_minimum_size().y - 24.0
+	var bounds: Rect2 = Rect2(EDGE, top, _game.size.x - EDGE * 2.0 - 128.0, maxf(0.0, limit - 128.0 - top))
+	for button: Control in [_menu_button, _save_button]:
+		button.set("bounds", bounds)
+		button.call("snap_to_edge", false)
 
 
 func _layout_title(width: float, height: float, top: float, bottom: float) -> void:
@@ -839,6 +845,7 @@ func _present_choice(command: Dictionary) -> void:
 		button.custom_minimum_size = Vector2(0.0, 132.0)
 		button.pressed.connect(_on_choice_pressed.bind(_dict_string(option, "id")))
 		_choice_buttons.append(button)
+	call_deferred("_update_float_bounds")
 	call_deferred("_publish_qa_state")
 
 
@@ -857,6 +864,7 @@ func _on_choice_pressed(option_id: String) -> void:
 	_clear_choices()
 	_append_history({"key": "choice:%s:%s" % [_current_line_key, option_id], "kind": "choice",
 		"text": label})
+	_update_float_bounds()
 	_start_drive()
 
 
@@ -1460,6 +1468,7 @@ func _publish_qa_state() -> void:
 		"quickbar": _rect(_quickbar),
 		"name_plate": _rect(_name_plate) if _name_plate.is_visible_in_tree() else {},
 		"sprites": sprites,
+		"log_scroll": {"value": _log_scroll.scroll_vertical, "max": _log_scroll.get_v_scroll_bar().max_value - _log_scroll.size.y},
 		"choices": choices,
 		"controls": controls,
 	}
