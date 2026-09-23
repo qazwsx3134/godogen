@@ -2,6 +2,8 @@
 
 PR/push 會執行遊戲測試、iPhone 17 Pro／iPhone 12 的 Release 模擬器建置、安裝與啟動檢查，並編譯一次未簽署的 arm64 實機 App。驗證使用 `0000000000` / `org.godogen.pixelmonster.ci` 作為匯出所需的測試識別值，不需要 Apple 帳號。手動 `workflow_dispatch` 勾選 `confirm_release` 後，才進入 `ios-release` environment，以真實 Apple 憑證建立 signed IPA，並可選擇上傳 TestFlight。送審與正式發布由 App Store Connect 操作。
 
+Godot PCK、Xcode project、原生引擎與 App sandbox 的分工見 [IOS-ARCHITECTURE.md](IOS-ARCHITECTURE.md)。本頁記錄目前已實作的 build pipeline；活動原生外掛的加入條件列在下方，尚未包含在現有 workflow。
+
 workflow：[`../../../.github/workflows/pixel-monster-ios.yml`](../../../.github/workflows/pixel-monster-ios.yml)
 
 ## 固定版本與 runner 證據
@@ -35,6 +37,18 @@ unsigned job 先以 `actions/cache` 快取由 helper 驗證的 runner-temp `ios-
 
 `smoke_simulator.py` 安裝 App、確認啟動五秒後程序仍在執行，檢查腳本／資源錯誤並保存 `logs/simulator.png`。只關閉由這次檢查啟動的模擬器。iPhone 17 Pro job 另編譯 `iphoneos` arm64 target；這個未簽署產物用於驗證編譯，不能直接安裝到實體手機。手動 release 的 concurrency 獨立於 push/PR，後續 push 不會中斷已開始的發布建置。
 
+## 活動原生外掛加入條件
+
+目前 workflow 沒有 `CMPedometer`／HealthKit binary、`.gdip`、HealthKit entitlement 或用途說明。啟用活動加速前，pipeline 必須一併完成並驗證：
+
+1. 用 Godot 4.7 對應 headers 建置 iOS plugin，輸出含 `iphoneos arm64` 與 Apple Silicon Simulator slice 的 `.xcframework`，連結 Core Motion 與 HealthKit；把 `.gdip` 和 binary 放入 `res://ios/plugins` 並確認 Godot export 實際啟用。
+2. 在匯出的 target 加入 HealthKit capability／`com.apple.developer.healthkit` entitlement、`NSHealthShareUsageDescription` 與 `NSMotionUsageDescription`。只讀 workout 時不要求 HealthKit write permission。
+3. Apple Developer 的 App ID 必須開啟 HealthKit；distribution provisioning profile 必須重新產生並包含相同 entitlement。CI 應以 `codesign -d --entitlements :-` 檢查 archive，而不是只相信 Xcode project 設定。
+4. Simulator matrix 驗證兩個機型都能載入 plugin、啟動且在資料不可用時安全降級；實際授權、歷史查詢、空資料隱私語意與備份排除只能用 iPhone 17 Pro／iPhone 12 實機驗證。
+5. 活動 ledger 與含活動結果的 save 要標記為不進入 iCloud／裝置備份；binary 不得把 HealthKit 或 Motion/Fitness 資料送到 analytics、廣告或遊戲伺服器。提交前同步更新隱私政策、App Store privacy answers 和 Review Notes。[Apple App Review Guidelines 2.5.1、5.1.1–5.1.3](https://developer.apple.com/app-store/review/guidelines/)
+
+上述檢查進入 CI 後，才可把「原生活動資料」列為 release gate。現在的綠燈只證明無原生外掛版本能匯出、編譯與啟動。
+
 ## GitHub 設定：必要 inputs
 
 先在 repository/environment 建立下列非秘密 Variables。這些值必須由 App Store Connect／Apple Developer 帳號提供，不能用範例值代替：
@@ -60,6 +74,8 @@ unsigned job 先以 `actions/cache` 快取由 helper 驗證的 runner-temp `ios-
 | `ASC_PRIVATE_KEY_P8` | 一次下載的 App Store Connect `.p8` private key 內容 |
 
 `ASC_*` 只有在手動勾選 `upload_testflight` 時才必須存在。若只想建立 signed IPA，可不提供 ASC secrets。environment 必須設定 required reviewers／deployment protection；沒有 protected environment approval，release job 不應執行。
+
+加入 HealthKit 後，`IOS_PROVISIONING_PROFILE_BASE64` 還必須來自已啟用 HealthKit 的 App ID，且 profile entitlement 必須與 archive 一致；沿用舊 profile 會讓簽署或安裝失敗。
 
 PR/push simulator-only job 不需要上述 Team/Bundle values，因為它明確使用 syntax-only placeholders；這些值不會被 release 接受。signed release 仍需要真實 Team/Bundle/certificate/profile/ASC values。若本地 release 沒有 `GITHUB_RUN_NUMBER`，必須提供 `IOS_BUILD_NUMBER`；這是刻意的安全狀態，不是用 dummy identity 讓上架流程假綠。
 
@@ -154,4 +170,4 @@ Apple 文件允許用 Xcode、altool、Transporter 或 App Store Connect API 上
 
 Xogot 是選配的 Apple-native Godot workflow，不是本 pipeline 的依賴，也不是付費才能執行本 repo 的必要工具。官方首頁描述在 iPad/iPhone build、run、debug、share，以及 Xogot Connect 的 remote deploy/live-test：[xogot.com](https://xogot.com/)。但 Xogot engine 版本跟桌面 exact 4.7 commit 不應假設相同；官方 4.7.1 文章目前描述的是 XogotBeta 測試／逐步轉換：[Xogot 4.7 update](https://blog.xogot.com/xogot-is-moving-to-godot-4-7/)。
 
-Xogot iPad/iPhone 對 compiled language／compiled plugin 的支援限制也不能被忽略：[Xogot differences](https://docs.xogot.com/documentation/xogot/differences/)。本 repo 沒有原生 `CMPedometer` plugin，沒有 `NSMotionUsageDescription` 設定，沒有 iPhone 實測；因此 Xogot local play 或 web export 都不能被記錄為 Core Motion 通過。Android native path 延後。
+Xogot iPad/iPhone 對 compiled language／compiled plugin 的支援限制也不能被忽略：[Xogot differences](https://docs.xogot.com/documentation/xogot/differences/)。本 repo 沒有原生 `CMPedometer`／HealthKit plugin、用途說明或 entitlement，也沒有 iPhone 實測；因此 Xogot local play 或 web export 都不能被記錄為原生活動串接通過。Android native path 延後。

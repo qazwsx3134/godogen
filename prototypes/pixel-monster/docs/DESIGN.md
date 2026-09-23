@@ -2,6 +2,8 @@
 
 本文件描述階段 A 的照顧、時間與成長規則。所有服務都是 `RefCounted`，狀態是可存檔的 `Dictionary`；呼叫端必須傳入 UTC 秒數 `now`。服務不讀取系統時鐘，因此可以在 headless 測試、快轉模式與正常前景恢復共用同一套規則。
 
+本文件的進化門檻是目前已實作行為。下一版已決定改為放置型成長：自然時間可完成所有階段，步數與 Apple 健康 workout 只加速，三次訓練不再是成熟硬門檻。目標規格與遷移方式見 [IDLE-GROWTH.md](IDLE-GROWTH.md)；程式完成前，兩套規則不可混寫成已驗證狀態。
+
 ## 範圍與資料
 
 `PetModel.create_state(now)` 建立根狀態；`PetModel.create_pet(now)` 建立幼年芽芽。必備欄位見 `CONTRACT.md`，另有幾個可重算／可顯示欄位：

@@ -1,6 +1,6 @@
 # iOS 優先手機流程
 
-目前的可交付平台是「桌面 Godot 4.7 → Xcode → iPhone」。主測試裝置是 iPhone 17 Pro；部署目標設為 iOS 16.0，因此產品範圍涵蓋 iPhone 12 及更新機型。這是工程目標，不是已完成的實機驗證：本專案尚未編寫 `CMPedometer` 原生外掛、尚未包含 Swift/Objective-C/GDExtension bridge，也沒有在 iPhone 17 Pro 或 iPhone 12 實機安裝測試。
+目前的可交付平台是「桌面 Godot 4.7 → Xcode → iPhone」。主測試裝置是 iPhone 17 Pro；部署目標設為 iOS 16.0，因此產品範圍涵蓋 iPhone 12 及更新機型。這是工程目標，不是已完成的實機驗證：本專案尚未編寫 `CMPedometer`／HealthKit 原生外掛、尚未包含 Swift/Objective-C++ bridge，也沒有在 iPhone 17 Pro 或 iPhone 12 實機安裝測試。
 
 2026-09-22 已完成 iPhone 17 Pro 與 iPhone 12／iOS 26.5 模擬器的 Release 建置、安裝、啟動及畫面擷取，亦通過未簽署的 arm64 實機 target 編譯。[驗收紀錄與截圖](VALIDATION.md)
 
@@ -17,6 +17,8 @@ Apple Silicon Simulator 的 unsigned 路徑另外使用 matching-source template
 Godot 官方說明 iOS export 需要 macOS、Xcode 與相符的 export templates，且 Team ID 及唯一 Bundle Identifier 即使只輸出 Xcode project 也必填：[Exporting for iOS — Godot 4.7](https://docs.godotengine.org/en/4.7/tutorials/export/exporting_for_ios.html)。Apple 自 2026-04-28 起要求上傳 App Store Connect 的 app 以 Xcode 26 或更新版及 iOS 26 SDK 建置：[Upcoming Requirements](https://developer.apple.com/news/upcoming-requirements/)。
 
 完整 CI 輸入、暫存 keychain、dry-run、unsigned build 與人工上架步驟見 [`docs/IOS-CICD.md`](IOS-CICD.md)。
+
+App 本身如何由 Godot、PCK、原生引擎與 Xcode 組成，見 [IOS-ARCHITECTURE.md](IOS-ARCHITECTURE.md)。放置成長、步數與 Apple 健康 workout 的目標規則見 [IDLE-GROWTH.md](IDLE-GROWTH.md)。
 
 ## 本機可驗證命令
 
@@ -69,12 +71,12 @@ Xogot 官方首頁把 iPad/iPhone 版本描述為可在裝置上 build、run、d
 
 Xogot 的 engine 版本不能從首頁推定為本專案 exact Godot build。Xogot 官方近期文章只承諾 Godot 4.7.1-based builds 先在 XogotBeta TestFlight 驗證，之後才逐步進入正式 TestFlight/App Store：[Xogot Is Moving to Godot 4.7](https://blog.xogot.com/xogot-is-moving-to-godot-4-7/)。因此本 project 仍以桌面 `4.7.stable.official.5b4e0cb0f` 為 canonical；在 Xogot About／TestFlight 確認版本前，不宣稱相容，首次開啟使用可回復副本。
 
-Xogot 官方差異說明把 iPad/iPhone workflow 的 game logic 限於 GDScript，C#、C++、Swift 等 compiled code／plugins 不應假設可用：[Differences from Godot](https://docs.xogot.com/documentation/xogot/differences/)。本專案沒有驗證 Xogot 能載入或編譯 `CMPedometer`，也沒有把 Xogot 的 Web export 當成 iOS native export。若要取得系統步數，後續仍須做真正的 Core Motion bridge、`NSMotionUsageDescription`、權限與 callback lifecycle；目前只可用既有 MockStepProvider。
+Xogot 官方差異說明把 iPad/iPhone workflow 的 game logic 限於 GDScript，C#、C++、Swift 等 compiled code／plugins 不應假設可用：[Differences from Godot](https://docs.xogot.com/documentation/xogot/differences/)。本專案沒有驗證 Xogot 能載入或編譯活動外掛，也沒有把 Xogot 的 Web export 當成 iOS native export。系統步數與 Apple 健康 workout 仍須真正的 Core Motion／HealthKit bridge、用途說明、entitlement、權限與 callback lifecycle；目前只可用既有 MockStepProvider。
 
 ## 後續 iOS 驗證順序
 
 - 持續以 CI 重跑已通過的 iPhone 17 Pro／12 模擬器測試，另補 iOS 16 最低 OS 的相容性驗證。
 - 以 Xcode archive 在 iPhone 17 Pro 實機驗證啟動、觸控、安全區、鎖屏／前景恢復、存檔與直式 layout。
-- 另建最小 `StepProvider` 原生橋接，先驗證 `CMPedometer` 支援、授權、最近可查詢區間、背景／終止後補讀與回到 Godot 主執行緒；此項尚未實作。
+- 另建 `ActivityProvider` 原生橋接，驗證 `CMPedometer` 步數、HealthKit `HKWorkout`、權限、最近可查詢區間、終止後補讀與回到 Godot 主執行緒；此項尚未實作。
 - 取得 plugin 的可重現 desktop/Xcode build log 後，才評估它是否能被 Xogot 使用；在此之前假設 Xogot 不能使用該 compiled plugin。
 - Android native steps／Health Connect 延後，不在此文件宣稱已支援。

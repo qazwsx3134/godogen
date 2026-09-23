@@ -6,6 +6,8 @@
 
 ## Prompt 開始
 
+> **專案決策更新（2026-09-23）：** 本 Prompt 保留最初需求與 Stage A 實作背景。後續開發已改為 iOS 優先的放置型遊戲：自然時間可以完成所有孵化與進化；Core Motion 步數與 Apple 健康 `HKWorkout` 只提供有上限的選配加速，不影響內容或能力上限。下方「走路孵化」、500／2,000／5,000 步門檻和三次訓練成熟門檻不再是目標規格。實作請以[放置成長規格](../../prototypes/pixel-monster/docs/IDLE-GROWTH.md)、[iOS 技術架構](../../prototypes/pixel-monster/docs/IOS-ARCHITECTURE.md)與[目前實作契約](../../prototypes/pixel-monster/CONTRACT.md)為準。
+
 你是一位熟悉 Godot、手機原生功能串接、像素美術、電子寵物養成與遊戲數值設計的資深遊戲開發者。請協助我製作一款能在 iOS 與 Android 手機遊玩的「像素怪獸養成對戰機」，暫名《口袋怪獸日記》。請使用繁體中文說明，程式識別字使用英文。
 
 我要能逐步執行、測試、擴充的遊戲專案。請先提出精簡設計與開發順序，再開始實作當前階段；不要只交付概念、靜態畫面或互不連接的程式片段。

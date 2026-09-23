@@ -1,6 +1,8 @@
 # 步行孵化與存檔契約
 
-本文件是 Stage A 的步數 domain 實作說明。所有時間欄位都是整數 UTC 秒；`StepService`、`HatchService`、`SaveService` 不讀取牆上時鐘，呼叫端必須傳入 `now`。
+本文件是 Stage A 現行步數 domain 的實作說明。所有時間欄位都是整數 UTC 秒；`StepService`、`HatchService`、`SaveService` 不讀取牆上時鐘，呼叫端必須傳入 `now`。
+
+產品規格已改為「自然時間一定成長，步數與 Apple 健康 workout 只提供加速」。新規則、活動去重和 HealthKit 邊界集中在 [IDLE-GROWTH.md](IDLE-GROWTH.md)。本文件保留作為目前程式、存檔遷移與回歸測試的依據，不代表舊的 500 步門檻仍是目標玩法。
 
 ## Provider 介面
 
@@ -175,4 +177,4 @@ validate_state(state: Dictionary) -> bool
 
 整合驗收執行完整測試，包含孵化與時間替代模式，不使用 `--skip-hatch`。
 
-原生 iOS CMPedometer、Android Health Connect／感測器外掛仍屬 Stage B；本階段只能宣稱 Mock 核心流程已驗證。
+原生 iOS `CMPedometer`、HealthKit `HKWorkout` 讀取外掛與新的 `ActivityService` 仍屬 Stage B；本階段只能宣稱 Mock 步數核心流程已驗證。Android Health Connect／感測器延後。

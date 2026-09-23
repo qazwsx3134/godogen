@@ -1,10 +1,10 @@
 # 口袋怪獸日記
 
-直式像素怪獸養成遊戲。先完成單機養成，再接入 iOS 系統計步與好友對戰。主要實機目標為 iPhone 17 Pro，支援目標為 **iPhone 12 及之後機型、iOS 16+**；使用 Xcode 26 系列的 SDK 建置。這是支援與驗收目標，尚未代表所有機型已實測。
+直式像素怪獸養成遊戲。下一版規格讓自然時間完成孵化與進化；玩家選擇連結 iOS 活動資料後，手機步數和 Apple 健康的運動紀錄可加速成長。目前可執行的 Stage A 尚未實作這項改版。主要實機目標為 iPhone 17 Pro，支援目標為 **iPhone 12 及之後機型、iOS 16+**；使用 Xcode 26 系列的 SDK 建置。這是支援與驗收目標，尚未代表所有機型已實測。
 
 **引擎固定：Godot 4.7 stable**，本機驗證版本 `4.7.stable.official.5b4e0cb0f`。遊戲採 GDScript、Compatibility renderer、離線本機存檔，不依賴 Xogot 訂閱。發佈工作流見 [iOS CI/CD](docs/IOS-CICD.md)。
 
-[設計摘要與數值表](docs/GAME.md) · [驗收紀錄](docs/VALIDATION.md) · [實際遊戲畫面](docs/evidence/02-companion.png)
+[設計摘要與數值表](docs/GAME.md) · [放置成長與活動加速](docs/IDLE-GROWTH.md) · [iOS 執行架構](docs/IOS-ARCHITECTURE.md) · [驗收紀錄](docs/VALIDATION.md)
 
 已通過本機 iPhone 17 Pro／iPhone 12 模擬器的 Release 建置、安裝與啟動。原生畫面：[iPhone 17 Pro](docs/evidence/09-ios-iphone17-pro.png)、[iPhone 12](docs/evidence/10-ios-iphone12.png)。
 
@@ -16,7 +16,7 @@
 /Applications/Godot.app/Contents/MacOS/Godot --path prototypes/pixel-monster
 ```
 
-開發版的快速完整循環：
+目前 Stage A 開發版的快速完整循環：
 
 1. **散步 → +1,000 步**：使用明確標示的模擬來源，孵化新手蛋。
 2. **食物 → 營養正餐**，再到 **訓練** 選力量、防禦或敏捷。每次是三輪、共 15 秒的點擊挑戰。
@@ -32,14 +32,16 @@
 | 階段 | 內容 |
 | --- | --- |
 | A：本機核心 | 七項照顧、15 秒訓練、3 名 NPC、MockStepProvider、時間孵化、幼年→成長→三種成熟分支、收藏與存檔 |
-| B：iOS 步行 | 原生 `CMPedometer` 外掛、權限、七天內歷史回補、iPhone 17 Pro 與 iPhone 12 實機驗證；Android 延後 |
+| B：iOS 活動加速 | 放置成長重構、原生 `CMPedometer` 步數、HealthKit `HKWorkout` 運動紀錄、權限與實機驗證；Android 延後 |
 | C：好友 | 玩家身分、好友碼、可信能力紀錄、非同步戰鬥服務與伺服器防重複結算 |
 
-這次遊戲交付範圍是 A，並建立 iOS 發佈流程。真實計步、TestFlight 上傳與 App Store 審核須各自有驗證證據，不能由桌面試玩推定通過。
+這次可執行遊戲的交付範圍是 A，並建立 iOS 發佈流程。放置成長改版已完成規格，尚未實作；真實步數、HealthKit workout、TestFlight 上傳與 App Store 審核須各自有驗證證據，不能由桌面試玩推定通過。
 
-## 主畫面與流程
+## 目前 Stage A 主畫面與流程
 
 上方是名字、成長階段與日齡；中央為像素房間；下方是需求條與體重計／食物／訓練／對戰／清潔／燈光／療護／散步入口。右上角「冊」收藏個體，「···」設定音量、震動、睡眠作息與開發快轉。面板可捲動，停用按鈕旁會顯示原因。
+
+下圖僅描述目前可執行的 Stage A；下一版流程以 [IDLE-GROWTH.md](docs/IDLE-GROWTH.md) 為準。
 
 ```mermaid
 flowchart LR
@@ -92,6 +94,8 @@ macOS 開發存檔：`~/Library/Application Support/PocketMonsterDiary/diary-dev
 
 ## iOS 開發與上架
 
-使用桌面 Godot + Xcode 開發，GitHub Actions 執行測試、匯出、建置及可手動啟動的簽署／上傳。Apple Developer Team、唯一 Bundle ID、簽署憑證與 App Store Connect API Key 的設定與步驟見 [IOS-CICD](docs/IOS-CICD.md)。本機與 CI 使用同一套腳本。
+遊戲畫面、規則與資源由 Godot 製作；Godot 會輸出 PCK 和 Xcode project，Xcode 再把 Godot 引擎、遊戲資料與未來的 iOS 原生外掛編譯成真正的 `.app`／`.ipa`。玩家不需要安裝 Godot 或 Xogot。各層責任、App 啟動與存檔流程見 [iOS 執行架構](docs/IOS-ARCHITECTURE.md)。
 
-Xogot 可作選配的行動編輯器；使用者不需訂閱它來建置本遊戲。若希望試開標準 Godot 專案，可以執行 `python3 prototypes/pixel-monster/tools/package_xogot.py` 取得不含存檔與快取的 zip。原生計步仍透過獨立 iOS 外掛建置。[平台說明](docs/MOBILE.md)
+GitHub Actions 執行測試、匯出、建置及可手動啟動的簽署／上傳。Apple Developer Team、唯一 Bundle ID、簽署憑證與 App Store Connect API Key 的設定與步驟見 [IOS-CICD](docs/IOS-CICD.md)。本機與 CI 使用同一套腳本。
+
+Xogot 可作選配的行動編輯器；使用者不需訂閱它來建置本遊戲。若希望試開標準 Godot 專案，可以執行 `python3 prototypes/pixel-monster/tools/package_xogot.py` 取得不含存檔與快取的 zip。原生步數與 Apple 健康 workout 仍須透過獨立 iOS 外掛建置。[平台說明](docs/MOBILE.md)

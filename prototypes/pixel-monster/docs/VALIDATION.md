@@ -2,6 +2,8 @@
 
 遊戲規則驗證日期：2026-09-21，最終畫面重驗：2026-09-22。iOS 建置流程整合日期：2026-09-22。以下為本機工作目錄的實際結果；尚未推送或觸發 GitHub Actions。
 
+本頁記錄目前 Stage A 的實作證據。2026-09-23 確定的「自然時間成長、步數與 Apple 健康 workout 選配加速」目前只有[設計規格](IDLE-GROWTH.md)與 [iOS 技術架構](IOS-ARCHITECTURE.md)，下列舊孵化測試不可視為新規則已通過。
+
 ## 已實作
 
 - 可操作的直式主場景、七項核心功能與散步入口；像素房間、五種成長外觀、狀態動畫、音效及設定。
@@ -61,7 +63,7 @@ iOS 建置第一次發現官方模板宣告 arm64 simulator、實際只有 x86_6
 
 - iPhone 17 Pro／iPhone 12 實機安裝、效能、安全區與觸控尺寸。桌面視窗比例驗證不能取代實機。
 - iOS 16 的最低 OS runtime 未執行；目前原生啟動測試使用 iOS 26.5。deployment target 設定不能取代舊 OS 相容性測試。
-- iOS `CMPedometer` 原生外掛尚未實作；目前 release 使用無來源狀態和時間孵化，沒有假計步數據。
+- 放置成長重構、`ActivityService`、iOS `CMPedometer`／HealthKit `HKWorkout` 原生外掛、entitlement、隱私用途說明與本機資料備份排除尚未實作；目前 release 使用無來源狀態和舊的時間孵化，沒有假活動資料。
 - Apple Distribution 簽署、TestFlight 上傳及 App Store 審核尚未執行；需要實際 Apple Developer／App Store Connect 設定。
 - GitHub 雲端 runner 尚未執行；本機驗證不能代表遠端 Actions 已通過。
 - Android 原生串接與好友對戰後端為後續階段。

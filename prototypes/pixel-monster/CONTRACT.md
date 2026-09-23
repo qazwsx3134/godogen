@@ -2,6 +2,8 @@
 
 Godot **4.7.stable.official.5b4e0cb0f**. Stage A gameplay with an iOS build pipeline. GDScript typed methods and dictionary domain state. Design source: `../../docs/pixel-monster/pixel-monster-godot-prompt.md`. Traditional Chinese player copy. All domain timestamps are integer UTC seconds supplied by the caller.
 
+This contract records the currently implemented Stage A behavior. The approved next design is idle-first growth with optional Core Motion steps and HealthKit workout acceleration; see `docs/IDLE-GROWTH.md`. Its `GrowthService`, `ActivityService`, native plugin, save migration, and tests do not exist yet, so this contract intentionally keeps the old APIs until implementation lands.
+
 ## Components
 
 - Coordination and presentation: `scripts/game_session.gd`, `scenes/`, `ui/`, assets/audio, integration tests.
