@@ -1,0 +1,90 @@
+{
+  "id": "strawberry_phase3",
+  "version": "0.1",
+  "title": "Phase 3 技術試片（非核准第一章）",
+  "note": "僅用於驗證調查、吐槽回合與存檔資料層；不是作者核准的第一章文本。",
+  "entry": "phase3_open",
+  "initial_flags": {
+    "round_result": "unset"
+  },
+  "nodes": {
+    "phase3_open": {
+      "title": "技術試片：調查線索",
+      "steps": [
+        { "op": "bg", "id": "yorozuya_living_room" },
+        { "op": "char", "id": "shinpachi" },
+        { "op": "char", "id": "gintoki", "visible": true, "position": "right", "expression": "annoyed" },
+        { "op": "say", "speaker": "shinpachi", "text": "Phase 3 技術試片：這不是核准的第一章台詞。先找出草莓牛奶的線索。" },
+        {
+          "op": "investigate",
+          "id": "living_room_milk_clue",
+          "prompt": "調查客廳，尋找一件線索。",
+          "hotspots": [
+            { "id": "empty_milk_bottle", "label": "空的草莓牛奶瓶", "pos": [0.56, 0.42], "item": "milk_bottle" }
+          ]
+        }
+      ],
+      "next": "gintoki_round"
+    },
+    "gintoki_round": {
+      "title": "銀時的技術測試吐槽回合",
+      "steps": [
+        {
+          "op": "boke_round",
+          "id": "gintoki_milk_round",
+          "speaker": "gintoki",
+          "lines": [
+            { "id": "first_excuse", "text": "銀時：那瓶草莓牛奶不是我喝的。" },
+            { "id": "sleep_excuse", "text": "銀時：我只是替冰箱確認它還有沒有冷。", "listen": "銀時：而且我睡著的時候，手會自動幫忙喝牛奶。" }
+          ],
+          "timer_seconds": 8,
+          "tsukkomi": {
+            "options": [
+              { "id": "point_to_bottle", "label": "拿空瓶反駁：證據就在你手邊。", "result": "perfect", "require": "milk_bottle", "goto": "perfect", "set_flags": { "round_result": "perfect" } },
+              { "id": "weak_comeback", "label": "吐槽：冰箱可不會自己開瓶。", "result": "weak", "goto": "weak", "set_flags": { "round_result": "weak" } },
+              { "id": "missed_comeback", "label": "一時接不上話。", "result": "fail", "goto": "cold", "set_flags": { "round_result": "fail" } },
+              { "id": "secret_comeback", "label": "……（放棄吐槽）", "result": "hidden", "goto": "hidden", "set_flags": { "round_result": "hidden" } }
+            ],
+            "timeout": { "result": "fail", "goto": "cold" }
+          },
+          "game_over": "game_over"
+        }
+      ]
+    },
+    "perfect": {
+      "title": "完美吐槽結果",
+      "steps": [
+        { "op": "say", "speaker": "shinpachi", "text": "技術結果：perfect；空瓶作為證據，力量增加。" },
+        { "op": "end", "text": "完美結果測試結束" }
+      ]
+    },
+    "weak": {
+      "title": "普通吐槽結果",
+      "steps": [
+        { "op": "say", "speaker": "shinpachi", "text": "技術結果：weak；普通吐槽也累積少量力量。" },
+        { "op": "end", "text": "普通結果測試結束" }
+      ]
+    },
+    "cold": {
+      "title": "冷場結果",
+      "steps": [
+        { "op": "say", "speaker": "shinpachi", "text": "技術結果：fail；冷場消耗一副眼鏡，繼續重來。" }
+      ],
+      "next": "gintoki_round"
+    },
+    "hidden": {
+      "title": "隱藏結果",
+      "steps": [
+        { "op": "say", "speaker": "shinpachi", "text": "技術結果：hidden；不改變眼鏡或力量。" },
+        { "op": "end", "text": "隱藏結果測試結束" }
+      ]
+    },
+    "game_over": {
+      "title": "Game Over",
+      "steps": [
+        { "op": "say", "speaker": "shinpachi", "text": "Game Over：眼鏡耗盡。可從吐槽回合檢查點重試。" },
+        { "op": "end", "text": "Game Over 技術測試結束" }
+      ]
+    }
+  }
+}

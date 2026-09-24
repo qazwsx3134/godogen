@@ -1,0 +1,6 @@
+.godot/
+build/
+.cache/
+test-results/
+export_credentials.cfg
+

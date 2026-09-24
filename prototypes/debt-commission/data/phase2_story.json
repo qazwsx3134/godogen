@@ -1,0 +1,67 @@
+{
+  "id": "strawberry_phase2",
+  "version": "0.1",
+  "title": "Phase 2 草莓牛奶技術測試（非核准第一章劇本）",
+  "note": "暫用技術測試片段，不是核准的第一章劇本；正式台詞保留後續作者共同編劇。",
+  "entry": "phase2_open",
+  "initial_flags": {
+    "test_started": false,
+    "route": "unset"
+  },
+  "nodes": {
+    "phase2_open": {
+      "title": "素材與分支測試",
+      "steps": [
+        { "op": "bg", "id": "yorozuya_living_room" },
+        { "op": "char", "id": "shinpachi" },
+        { "op": "say", "speaker": "shinpachi", "text": "這是草莓牛奶技術測試，不是核准的第一章劇本。" },
+        { "op": "char", "id": "gintoki", "expression": "neutral", "position": "right" },
+        { "op": "say", "speaker": "gintoki", "text": "正式台詞留給後續作者共同編劇。" },
+        { "op": "item", "id": "milk_bottle" },
+        { "op": "flag", "key": "test_started", "value": true },
+        { "op": "say", "speaker": "narrator", "text": "現在只確認素材、分支與存檔。" },
+        { "op": "say", "speaker": "shinpachi", "text": "空瓶先當作測試素材。" },
+        {
+          "op": "choice",
+          "prompt": "要測試哪一條路？",
+          "options": [
+            {
+              "id": "inspect_milk",
+              "label": "拿空瓶測試素材條件。",
+              "require": "milk_bottle",
+              "next": "phase2_inspect",
+              "set_flags": { "route": "inspect" }
+            },
+            {
+              "id": "skip_test",
+              "label": "先跳過素材條件。",
+              "next": "phase2_skip",
+              "set_flags": { "route": "skip" }
+            }
+          ]
+        }
+      ]
+    },
+    "phase2_inspect": {
+      "title": "素材條件通過",
+      "steps": [
+        { "op": "bg", "id": "yorozuya_kitchen" },
+        { "op": "char", "id": "kagura", "expression": "smile" },
+        { "op": "say", "speaker": "kagura", "text": "有素材才解鎖這個選項阿魯。" },
+        { "op": "say", "speaker": "shinpachi", "text": "那就測一下可見性。" },
+        { "op": "say", "speaker": "narrator", "text": "這條路只到測試結尾。" },
+        { "op": "end", "text": "素材條件路徑結束" }
+      ]
+    },
+    "phase2_skip": {
+      "title": "無條件路徑",
+      "steps": [
+        { "op": "char", "id": "gintoki", "visible": false },
+        { "op": "say", "speaker": "gintoki", "text": "跳過測試也能安全結束。" },
+        { "op": "say", "speaker": "shinpachi", "text": "這不是正式劇情分支。" },
+        { "op": "say", "speaker": "narrator", "text": "Phase 2 技術片段結束。" },
+        { "op": "end", "text": "無條件路徑結束" }
+      ]
+    }
+  }
+}

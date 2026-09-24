@@ -2,6 +2,12 @@
 
 This repository is not a published game repo. It is the source that `publish.sh` renders into a runtime game repo for a chosen engine and host agent.
 
+## Codex model preferences
+
+- The main Codex session uses **GPT-6 Sol** (`gpt-6-sol`) with **max** reasoning effort. It owns planning, shared design decisions, integration, review, and final acceptance.
+- Delegated Codex workers, including Herdr sibling sessions, preferentially use **GPT-6 Luna** (`gpt-6-luna`) with **max** reasoning effort. Pass both the model and effort explicitly when starting a worker; an explicit user override takes precedence.
+- Updating this file does not switch a session that is already running. Apply these settings when starting the next session or worker.
+
 ## Source Layout
 
 - `prompts/runtime.md` — the engine-agnostic runtime manifest text

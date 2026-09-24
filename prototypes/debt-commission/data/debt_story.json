@@ -1,0 +1,190 @@
+{
+  "id": "debt_commission",
+  "version": "0.1",
+  "title": "請幫我向你老闆討債｜第一場",
+  "entry": "debt_intro",
+  "initial_flags": {
+    "question_method": "unset",
+    "repayment_promised": false
+  },
+  "nodes": {
+    "debt_intro": {
+      "title": "一張正經委託",
+      "steps": [
+        { "op": "camera", "target": "center", "zoom": 1.0, "duration": 0.0 },
+        { "op": "show", "actor": "shinpachi", "at": "reader" },
+        { "op": "show", "actor": "gintoki", "at": "host" },
+        { "op": "hide", "actor": "otose" },
+        { "op": "face", "actor": "shinpachi", "direction": "right" },
+        { "op": "face", "actor": "gintoki", "direction": "left" },
+        { "op": "expression", "actor": "gintoki", "value": "smile" },
+        { "op": "say", "speaker": "narrator", "text": "午後。銀時靠在桌邊吃糰子。新八把委託書攤平，指尖停在已簽收的訂金欄。" },
+        { "op": "say", "speaker": "shinpachi", "thought": true, "expression": "thinking", "text": "有委託。有簽名。還有訂金。這張紙正經得讓我有點不敢碰。" },
+        { "op": "say", "speaker": "shinpachi", "text": "阿銀，訂金呢？" },
+        { "op": "say", "speaker": "narrator", "text": "銀時把糰子袋往桌子中央推了一點。" },
+        { "op": "say", "speaker": "gintoki", "expression": "smile", "text": "已經投入員工福利了。" },
+        { "op": "say", "speaker": "shinpachi", "expression": "annoyed", "text": "員工還沒吃到。" },
+        { "op": "say", "speaker": "gintoki", "text": "那就是福利還有成長空間。先看工作。" },
+        { "op": "say", "speaker": "shinpachi", "text": "委託人，登勢婆婆。委託事項，協助追討拖欠房租……" },
+        { "op": "say", "speaker": "narrator", "text": "新八翻到第二頁。" },
+        { "op": "say", "speaker": "shinpachi", "expression": "surprised", "text": "欠款人，坂田銀時。" },
+        { "op": "wait", "duration": 0.2 },
+        { "op": "say", "speaker": "narrator", "text": "停頓。銀時把最後一顆糰子送進嘴裡。" },
+        { "op": "say", "speaker": "gintoki", "expression": "smile", "text": "很好，雙方都熟，省掉交通費。" },
+        { "op": "sound", "id": "knock" },
+        { "op": "show", "actor": "otose", "at": "door" },
+        { "op": "camera", "target": "otose", "zoom": 1.05, "duration": 0.25 },
+        { "op": "move", "actor": "otose", "target": "landlady", "duration": 0.5 },
+        { "op": "say", "speaker": "narrator", "text": "門被推開。登勢把一本帳本放在桌上。" },
+        { "op": "say", "speaker": "otose", "text": "我就住樓下。你本來打算報多少？" },
+        { "op": "say", "speaker": "shinpachi", "thought": true, "expression": "thinking", "text": "訂金已經吞下去了。至少得讓他說出一件真的會做的事，不能又只有「下次一定」。" }
+      ],
+      "next": "debt_choose_method"
+    },
+    "debt_choose_method": {
+      "title": "先從哪一邊開始",
+      "steps": [
+        { "op": "camera", "target": "shinpachi", "zoom": 1.05, "duration": 0.2 },
+        { "op": "say", "speaker": "shinpachi", "expression": "annoyed", "text": "先別吵。一個一個來。" },
+        {
+          "op": "choice",
+          "prompt": "先從哪一邊開始？",
+          "options": [
+            {
+              "id": "hear_first",
+              "label": "先讓阿銀把理由說完。",
+              "next": "debt_hear_gintoki",
+              "set_flags": { "question_method": "hear_first" }
+            },
+            {
+              "id": "ledger_first",
+              "label": "請婆婆先把欠款明細攤開。",
+              "next": "debt_check_ledger",
+              "set_flags": { "question_method": "ledger_first" }
+            }
+          ]
+        }
+      ]
+    },
+    "debt_hear_gintoki": {
+      "title": "先聽說明",
+      "steps": [
+        { "op": "camera", "target": "gintoki", "zoom": 1.05, "duration": 0.2 },
+        { "op": "expression", "actor": "gintoki", "value": "thinking" },
+        { "op": "say", "speaker": "shinpachi", "text": "阿銀，你先把理由說完。我聽。" },
+        { "op": "expression", "actor": "gintoki", "value": "smile" },
+        { "op": "say", "speaker": "narrator", "text": "銀時坐直，像突然有了靠山。" },
+        { "op": "say", "speaker": "gintoki", "text": "新八，世上不是每件事，都能用數字衡量。" },
+        { "op": "say", "speaker": "otose", "expression": "annoyed", "text": "房租可以。" },
+        { "op": "say", "speaker": "gintoki", "text": "我是在等一個適合還錢的時機。" },
+        { "op": "say", "speaker": "shinpachi", "text": "什麼時候？" },
+        { "op": "say", "speaker": "gintoki", "text": "我有錢的時候。" },
+        { "op": "say", "speaker": "narrator", "text": "新八提起筆，又放下。" },
+        { "op": "say", "speaker": "shinpachi", "expression": "annoyed", "text": "這句寫在日期欄會放不下。" }
+      ],
+      "next": "debt_ask_salary"
+    },
+    "debt_check_ledger": {
+      "title": "先查明細",
+      "steps": [
+        { "op": "camera", "target": "otose", "zoom": 1.05, "duration": 0.2 },
+        { "op": "sound", "id": "paper" },
+        { "op": "say", "speaker": "shinpachi", "text": "婆婆，先把明細攤開。我們一筆一筆看。" },
+        { "op": "say", "speaker": "narrator", "text": "登勢抽出幾張紙，壓在委託書旁。" },
+        { "op": "say", "speaker": "otose", "text": "這是上次的。這是上上次的。最後這張是他自己寫的。" },
+        { "op": "say", "speaker": "shinpachi", "expression": "surprised", "text": "『下次一定』……這不是日期。" },
+        { "op": "say", "speaker": "gintoki", "expression": "smile", "text": "寫得有彈性，雙方比較好安排。" },
+        { "op": "say", "speaker": "shinpachi", "expression": "annoyed", "text": "只有你一直在安排。" },
+        { "op": "say", "speaker": "otose", "text": "紙倒是都很準時。每個月多一張。" },
+        { "op": "say", "speaker": "narrator", "text": "新八把「下次一定」圈起來。" },
+        { "op": "say", "speaker": "shinpachi", "text": "今天先把這個改成真的日期。" }
+      ],
+      "next": "debt_ask_salary"
+    },
+    "debt_ask_salary": {
+      "title": "另一筆帳",
+      "steps": [
+        { "op": "sound", "id": "step" },
+        { "op": "move", "actor": "shinpachi", "target": "other_side", "duration": 0.7 },
+        { "op": "face", "actor": "shinpachi", "direction": "left" },
+        { "op": "say", "speaker": "narrator", "text": "新八移到桌子另一側，把銀時面前的糰子袋挪開，讓帳本正對著他。" },
+        { "op": "camera", "target": "shinpachi", "zoom": 1.1, "duration": 0.25 },
+        { "op": "say", "speaker": "gintoki", "text": "怎麼連你都坐到那邊去了？" },
+        { "op": "say", "speaker": "shinpachi", "text": "這邊有地方寫字。" },
+        { "op": "face", "actor": "shinpachi", "direction": "down" },
+        { "op": "wait", "duration": 0.15 },
+        { "op": "say", "speaker": "shinpachi", "text": "等一下。既然今天都在算帳……" },
+        { "op": "say", "speaker": "shinpachi", "expression": "surprised", "text": "我的薪水呢？" },
+        { "op": "camera", "target": "gintoki", "zoom": 1.1, "duration": 0.25 },
+        { "op": "say", "speaker": "narrator", "text": "銀時看向新八剛才坐的位置，再看回他。" },
+        { "op": "condition", "flag": "question_method", "equals": "hear_first", "then": "debt_recall_hearing", "else": "debt_method_guard" }
+      ]
+    },
+    "debt_method_guard": {
+      "title": "問話方式檢查",
+      "steps": [
+        { "op": "condition", "flag": "question_method", "equals": "ledger_first", "then": "debt_recall_ledger", "else": "debt_choose_method" }
+      ]
+    },
+    "debt_recall_hearing": {
+      "title": "你的規矩",
+      "steps": [
+        { "op": "expression", "actor": "gintoki", "value": "thinking" },
+        { "op": "say", "speaker": "gintoki", "text": "新八，你剛才說什麼？" },
+        { "op": "say", "speaker": "shinpachi", "text": "我的薪水。" },
+        { "op": "say", "speaker": "gintoki", "text": "再前面。『先讓阿銀把理由說完。』" },
+        { "op": "say", "speaker": "narrator", "text": "銀時伸手把茶杯拉近。" },
+        { "op": "say", "speaker": "gintoki", "expression": "smile", "text": "這次的理由比較長。先從我小時候說起——" },
+        { "op": "say", "speaker": "shinpachi", "expression": "annoyed", "text": "我給你說明的時間，不是把我的薪水換成連載！" },
+        { "op": "say", "speaker": "otose", "text": "那先說有結局的部分。" }
+      ],
+      "next": "debt_agreement"
+    },
+    "debt_recall_ledger": {
+      "title": "你的明細",
+      "steps": [
+        { "op": "expression", "actor": "gintoki", "value": "smile" },
+        { "op": "say", "speaker": "gintoki", "text": "照你剛才說的，一筆一筆來。領薪水的收據呢？" },
+        { "op": "say", "speaker": "shinpachi", "expression": "surprised", "text": "我就是沒領到，才沒有收據啊！" },
+        { "op": "say", "speaker": "gintoki", "text": "所以明細還不完整。" },
+        { "op": "say", "speaker": "narrator", "text": "新八把筆按在紙上。" },
+        { "op": "say", "speaker": "shinpachi", "expression": "annoyed", "text": "欠款人不能自己發明一種永遠交不出來的證明！" },
+        { "op": "say", "speaker": "otose", "text": "這句寫大一點。以後用得到。" }
+      ],
+      "next": "debt_agreement"
+    },
+    "debt_agreement": {
+      "title": "本人出席",
+      "steps": [
+        { "op": "camera", "target": "otose", "zoom": 1.05, "duration": 0.2 },
+        { "op": "say", "speaker": "narrator", "text": "登勢把茶杯移到一旁，在紙上空出一行。" },
+        { "op": "say", "speaker": "otose", "text": "明天下午三點，到樓下洗碗。工錢先抵一部分房租。" },
+        { "op": "say", "speaker": "gintoki", "expression": "surprised", "text": "這不是討債，是介紹工作吧？" },
+        { "op": "say", "speaker": "shinpachi", "expression": "annoyed", "text": "做得完的那種。答不答應？" },
+        { "op": "say", "speaker": "narrator", "text": "銀時看一眼空掉的糰子袋。" },
+        { "op": "say", "speaker": "gintoki", "text": "好。明天下午三點。" },
+        { "op": "set_flag", "key": "repayment_promised", "value": true },
+        { "op": "say", "speaker": "narrator", "text": "新八立刻寫下日期和時間。" },
+        { "op": "say", "speaker": "gintoki", "text": "新八，明天你記得——" },
+        { "op": "say", "speaker": "shinpachi", "expression": "smile", "text": "本人出席。" },
+        { "op": "say", "speaker": "narrator", "text": "新八補上四個字，把紙轉向銀時。" },
+        { "op": "say", "speaker": "otose", "text": "開始像一件正經委託了。" },
+        { "op": "say", "speaker": "shinpachi", "text": "那我的薪水……" },
+        { "op": "sound", "id": "paper" },
+        { "op": "say", "speaker": "narrator", "text": "登勢抽出一張空白委託書，推到新八面前。" },
+        { "op": "say", "speaker": "otose", "text": "這個，委託萬事屋看看。" },
+        { "op": "expression", "actor": "gintoki", "value": "neutral" },
+        { "op": "say", "speaker": "gintoki", "text": "歡迎。先收訂金。" },
+        { "op": "say", "speaker": "narrator", "text": "新八看著空掉的糰子袋。停頓。" },
+        { "op": "say", "speaker": "shinpachi", "expression": "surprised", "text": "我要先付錢，才能委託你把錢付給我？" }
+      ],
+      "next": "debt_end"
+    },
+    "debt_end": {
+      "title": "第一場結束",
+      "steps": [
+        { "op": "end", "text": "第一場結束" }
+      ]
+    }
+  }
+}

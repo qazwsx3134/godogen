@@ -1,0 +1,63 @@
+{
+  "backgrounds": {
+    "yorozuya_living_room": {
+      "label": "萬事屋・客廳",
+      "top": "#2e2a45",
+      "bottom": "#b9794f"
+    },
+    "yorozuya_kitchen": {
+      "label": "萬事屋廚房",
+      "top": "#5A4335",
+      "bottom": "#1B2024"
+    }
+  },
+  "characters": {
+    "shinpachi": {
+      "name": "新八",
+      "color": "#4f7fcf",
+      "slot": "left"
+    },
+    "gintoki": {
+      "name": "銀時",
+      "color": "#aab6c8",
+      "slot": "center"
+    },
+    "otose": {
+      "name": "登勢",
+      "color": "#9a6bb0",
+      "slot": "right"
+    },
+    "kagura": {
+      "name": "神樂",
+      "color": "#F08CA8",
+      "slot": "right"
+    },
+    "sadaharu": {
+      "name": "定春",
+      "color": "#F4F0E6",
+      "slot": "center"
+    }
+  },
+  "items": {
+    "milk_bottle": {
+      "name": "空的草莓牛奶瓶",
+      "description": "瓶口還有一點濕氣，像是剛被喝完。"
+    },
+    "milk_trace": {
+      "name": "銀時嘴角的白色痕跡",
+      "description": "一條很難解釋成奶油的白色痕跡。"
+    },
+    "kagura_kombu": {
+      "name": "神樂的醋昆布包裝",
+      "description": "包裝被揉得很平，角落還沾著調味粉。"
+    },
+    "sadaharu_footprint": {
+      "name": "定春的腳印",
+      "description": "小小的腳印一路通往冰箱旁邊。"
+    },
+    "debt_commission_letter": {
+      "name": "討債委託書",
+      "description": "一張把委託人、欠款人和麻煩寫在同一頁的委託書。"
+    }
+  }
+}
