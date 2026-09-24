@@ -4,6 +4,8 @@ extends SceneTree
 
 var failures: Array[String] = []
 var main: Control = null
+const SAVE_SLOTS_SCRIPT: Script = preload("../scripts/save_slots.gd")
+const TEST_SAVE: String = "user://vn_shell_slots_test.save"
 
 
 func _init() -> void:
@@ -11,7 +13,9 @@ func _init() -> void:
 
 
 func _run() -> void:
+	_cleanup_saves()
 	main = (load("res://main.tscn") as PackedScene).instantiate() as Control
+	main.save_path = TEST_SAVE
 	root.add_child(main)
 	await _frames(3)
 	_expect(main._screen_mode == "title", "starts on title")
@@ -49,11 +53,18 @@ func _run() -> void:
 	_expect(_key() == before, "drag does not advance")
 
 	var save_center: Vector2 = main._save_button.get_global_rect().get_center()
+	var story_position: String = _progress_key()
 	await _press_hold_release(save_center, save_center, 0.8)
-	_expect(main._toast.visible and main._toast.text == "已存檔", "long-press S quick-saves with toast")
-	_expect(_key() == before, "long-press S does not advance")
+	_expect(main._screen_mode == "save_slots", "long-press S opens the save-slot picker")
+	_expect(not FileAccess.file_exists(SAVE_SLOTS_SCRIPT.manual_path(TEST_SAVE, 1)), "opening the picker does not save a slot")
+	_expect(_progress_key() == story_position, "long-press S does not advance")
+	main._close_slot_picker()
+	await _frames(2)
 	await _tap(save_center)
-	_expect(main._toast.text == "長按快速存檔", "tap S shows the long-press hint")
+	_expect(main._screen_mode == "save_slots", "tap S opens the same save-slot picker")
+	_expect(_progress_key() == story_position, "tap S does not advance")
+	main._close_slot_picker()
+	await _frames(2)
 
 	main._last_activity_ms = Time.get_ticks_msec() - 5000
 	await create_timer(0.6).timeout
@@ -78,10 +89,28 @@ func _run() -> void:
 			push_error(failure)
 		print("VN SHELL TESTS FAILED: %d" % failures.size())
 		quit(1)
+	_cleanup_saves()
 
 
 func _key() -> String:
 	return "%s:%s:%s" % [main._screen_mode, main._runner.node_id, main._runner.step_index]
+
+
+func _progress_key() -> String:
+	return "%s:%s" % [main._runner.node_id, main._runner.step_index]
+
+
+func _cleanup_saves() -> void:
+	for slot_index: int in range(1, SAVE_SLOTS_SCRIPT.SLOT_COUNT + 1):
+		_remove_save_path(SAVE_SLOTS_SCRIPT.manual_path(TEST_SAVE, slot_index))
+	for suffix: String in ["", ".bak", ".old", ".tmp", ".bak.tmp"]:
+		_remove_save_path(TEST_SAVE + suffix)
+
+
+func _remove_save_path(path: String) -> void:
+	var absolute_path: String = ProjectSettings.globalize_path(path)
+	if FileAccess.file_exists(absolute_path):
+		DirAccess.remove_absolute(absolute_path)
 
 
 func _mouse(at: Vector2, pressed: bool) -> void:

@@ -1,0 +1,26 @@
+{
+  "url": "http://127.0.0.1:5193/?qa=1&sample=phase2",
+  "started": "2026-09-23T13:32:34.326Z",
+  "runs": [
+    {
+      "route": "phase2-inspect",
+      "checks": [
+        "JSON background, character, expression, and mobile layout",
+        "owned item opens the required branch; flag and inventory are visible in QA",
+        "reload and Continue restore line, background, characters, and materials"
+      ],
+      "errors": []
+    },
+    {
+      "route": "phase2-skip",
+      "checks": [
+        "JSON background, character, expression, and mobile layout",
+        "owned item opens the required branch; flag and inventory are visible in QA",
+        "reload and Continue restore line, background, characters, and materials"
+      ],
+      "errors": []
+    }
+  ],
+  "passed": true,
+  "finished": "2026-09-23T13:32:50.421Z"
+}
