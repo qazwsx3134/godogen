@@ -89,7 +89,7 @@ victory_celebration volleyball wait walk warm_up wave_goodbye_01/02
 
 ## Costs
 
-Each generation costs real money, so confirm with the user before generating. Quick reference: texture/simple sprite (Grok) 2¢ · character/ref (Gemini 1K) 7¢ · background 2¢ (Grok) or 10¢ (Gemini 2K) · full 3D asset 37¢ (7¢ image + 30¢ GLB) · rigged character walk/idle/attack ≈ 92¢.
+Each generation costs real money; confirm the spend with the user before the first paid generation. Quick reference: texture/simple sprite (Grok) 2¢ · character/ref (Gemini 1K) 7¢ · background 2¢ (Grok) or 10¢ (Gemini 2K) · full 3D asset 37¢ (7¢ image + 30¢ GLB) · rigged character walk/idle/attack ≈ 92¢.
 
 ## Output and logging
 

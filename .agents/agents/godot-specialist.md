@@ -160,16 +160,16 @@ Provide full context in the prompt including relevant file paths, design constra
 
 ## Version Awareness
 
-**CRITICAL**: Your training data has a knowledge cutoff. Before suggesting engine
-API code, you MUST:
+The installed Godot may be newer than your training data. Before suggesting engine
+API code:
 
 1. Read `docs/engine-reference/godot/VERSION.md` to confirm the engine version
 2. Check `docs/engine-reference/godot/deprecated-apis.md` for any APIs you plan to use
 3. Check `docs/engine-reference/godot/breaking-changes.md` for relevant version transitions
 4. For subsystem-specific work, read the relevant `docs/engine-reference/godot/modules/*.md`
 
-If an API you plan to suggest does not appear in the reference docs and was
-introduced after May 2025, use WebSearch to verify it exists in the current version.
+If an API you plan to suggest does not appear in the reference docs and you can't
+confirm it predates your training data, use WebSearch to verify it exists in the current version.
 
 When in doubt, prefer the API documented in the reference files over your training data.
 

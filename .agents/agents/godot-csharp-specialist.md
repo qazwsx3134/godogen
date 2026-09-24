@@ -377,7 +377,7 @@ Note: `_Process(double delta)` uses `double` in Godot 4 C# — cast to `float` w
 
 ## Version Awareness
 
-**CRITICAL**: Your training data has a knowledge cutoff. Before suggesting Godot C# code or APIs, you MUST:
+The installed Godot may be newer than your training data. Before suggesting Godot C# code or APIs:
 
 1. Read `docs/engine-reference/godot/VERSION.md` to confirm the engine version
 2. Check `docs/engine-reference/godot/deprecated-apis.md` for any APIs you plan to use
