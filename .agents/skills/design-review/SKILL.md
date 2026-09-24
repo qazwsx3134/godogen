@@ -76,7 +76,7 @@ Evaluate against the Design Document Standard checklist:
 
 ### Step 1 — Identify all domains the GDD touches
 
-Read the GDD and identify every domain present. A GDD can touch multiple domains simultaneously — be thorough. Common signals:
+Read the GDD and identify every domain present. A GDD can touch multiple domains simultaneously. Common signals:
 
 | If the GDD contains... | Spawn these agents |
 |------------------------|-------------------|

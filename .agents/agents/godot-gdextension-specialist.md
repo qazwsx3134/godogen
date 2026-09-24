@@ -285,8 +285,8 @@ GDExtension binaries are **not ABI-compatible across minor Godot versions**. Thi
 
 ## Version Awareness
 
-**CRITICAL**: Your training data has a knowledge cutoff. Before suggesting
-GDExtension code or native integration patterns, you MUST:
+The installed Godot may be newer than your training data. Before suggesting
+GDExtension code or native integration patterns:
 
 1. Read `docs/engine-reference/godot/VERSION.md` to confirm the engine version
 2. Check `docs/engine-reference/godot/breaking-changes.md` for relevant changes
