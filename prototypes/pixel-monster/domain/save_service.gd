@@ -12,6 +12,7 @@ class_name SaveService
 ## A corrupt primary never overwrites a valid backup.  `load_state` falls back
 ## to that backup and leaves it in place for a second recovery attempt.
 
+const AtomicFile = preload("res://addons/proto_kit/atomic_file.gd")
 const CURRENT_SCHEMA_VERSION: int = 1
 const REQUIRED_KEYS: Array[String] = [
 	"schema_version",
@@ -458,49 +459,4 @@ static func _read_save(path: String) -> Dictionary:
 	}
 
 static func _write_atomically(path: String, text: String) -> Error:
-	var parent_error: Error = _ensure_parent(path)
-	if parent_error != OK:
-		return parent_error
-	var temporary_path: String = path + ".tmp"
-	var file: FileAccess = FileAccess.open(temporary_path, FileAccess.WRITE)
-	if file == null:
-		return FileAccess.get_open_error()
-	file.store_string(text)
-	file.flush()
-	var write_error: Error = file.get_error()
-	file.close()
-	if write_error != OK:
-		_remove_file(temporary_path)
-		return write_error
-
-	var rename_error: Error = _replace_file(temporary_path, path)
-	if rename_error != OK:
-		_remove_file(temporary_path)
-	return rename_error
-
-static func _ensure_parent(path: String) -> Error:
-	var global_path: String = ProjectSettings.globalize_path(path)
-	var parent: String = global_path.get_base_dir()
-	if parent.is_empty() or DirAccess.dir_exists_absolute(parent):
-		return OK
-	return DirAccess.make_dir_recursive_absolute(parent)
-
-static func _replace_file(temporary_path: String, target_path: String) -> Error:
-	var temporary_global: String = ProjectSettings.globalize_path(temporary_path)
-	var target_global: String = ProjectSettings.globalize_path(target_path)
-	var rename_error: Error = DirAccess.rename_absolute(temporary_global, target_global)
-	if rename_error == OK:
-		return OK
-	# POSIX rename replaces an existing file.  Keep a portable fallback for
-	# platforms where the engine rejects replace-by-rename; the caller has a
-	# .bak checkpoint before changing a primary.
-	if FileAccess.file_exists(target_path):
-		var remove_error: Error = DirAccess.remove_absolute(target_global)
-		if remove_error != OK:
-			return remove_error
-		return DirAccess.rename_absolute(temporary_global, target_global)
-	return rename_error
-
-static func _remove_file(path: String) -> void:
-	if FileAccess.file_exists(path):
-		DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
+	return AtomicFile.write_text(path, text)

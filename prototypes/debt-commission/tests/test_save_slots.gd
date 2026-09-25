@@ -1,4 +1,4 @@
-extends SceneTree
+extends "res://addons/proto_kit/test_kit.gd"
 ## Persistence and picker integration checks for autosave plus 18 manual slots.
 
 const SAVE_SLOTS_SCRIPT: Script = preload("../scripts/save_slots.gd")
@@ -7,8 +7,6 @@ const DEBT_SAVE: String = "user://save_slots_test_debt.save"
 const PHASE2_SAVE: String = "user://save_slots_test_phase2.save"
 const LEGACY_SAVE: String = "user://save_slots_test_legacy.save"
 const ATOMIC_SAVE: String = "user://save_slots_test_atomic.save"
-
-var failures: Array[String] = []
 
 
 func _init() -> void:
@@ -22,14 +20,7 @@ func _run() -> void:
 	await _test_legacy_schema_three()
 	await _test_phase2_isolation()
 	_cleanup_all()
-	if failures.is_empty():
-		print("SAVE SLOT TESTS PASSED")
-		quit(0)
-	else:
-		for failure: String in failures:
-			push_error(failure)
-		print("SAVE SLOT TESTS FAILED: %d" % failures.size())
-		quit(1)
+	_finish("SAVE SLOT TESTS")
 
 
 func _test_atomic_backup_refresh() -> void:
@@ -247,23 +238,3 @@ func _remove(path: String) -> void:
 	var absolute_path: String = ProjectSettings.globalize_path(path)
 	if FileAccess.file_exists(absolute_path):
 		DirAccess.remove_absolute(absolute_path)
-
-
-func _frames(count: int) -> void:
-	for _frame: int in range(count):
-		await process_frame
-
-
-func _until(condition: Callable, label: String, timeout: float = 8.0) -> void:
-	var deadline: int = Time.get_ticks_msec() + int(timeout * 1000.0)
-	while Time.get_ticks_msec() < deadline:
-		if condition.call():
-			return
-		await process_frame
-	failures.append("timed out: " + label)
-
-
-func _expect(condition: bool, label: String) -> void:
-	if not condition:
-		failures.append(label)
-		print("FAIL: ", label)

@@ -1,0 +1,18 @@
+{
+  "url": "http://127.0.0.1:5193/?qa=1&sample=phase2",
+  "started": "2026-09-25T02:51:33.655Z",
+  "runs": [
+    {
+      "route": "manual-slots-touch",
+      "checks": [
+        "S opens six touch-sized slots; slot 1 saves without advancing",
+        "two manual slots preserve different progress; Load selects the requested slot",
+        "title Load navigates all 18 slots and restores slot 2",
+        "manual slots and metadata survive reload; no runtime errors"
+      ],
+      "errors": []
+    }
+  ],
+  "passed": true,
+  "finished": "2026-09-25T02:51:40.466Z"
+}

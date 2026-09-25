@@ -1,4 +1,4 @@
-extends SceneTree
+extends "res://addons/proto_kit/test_kit.gd"
 ## Phase 3 VN-shell flow, overlay timer, and save/restore integration.
 
 const MAIN_SCENE: PackedScene = preload("../main.tscn")
@@ -8,8 +8,6 @@ const TEST_SAVE: String = "user://phase3_ui_test.save"
 const WEAK_SAVE: String = "user://phase3_ui_weak.save"
 const HIDDEN_SAVE: String = "user://phase3_ui_hidden.save"
 const RETRY_SAVE: String = "user://phase3_ui_retry.save"
-
-var failures: Array[String] = []
 
 
 func _init() -> void:
@@ -23,14 +21,7 @@ func _run() -> void:
 	await _test_zero_timer_restore()
 	await _test_timeout_five_fails_and_checkpoint_retry()
 	_cleanup_saves()
-	if failures.is_empty():
-		print("PHASE 3 UI TESTS PASSED")
-		quit(0)
-	else:
-		for failure: String in failures:
-			push_error(failure)
-		print("PHASE 3 UI TESTS FAILED: %d" % failures.size())
-		quit(1)
+	_finish("PHASE 3 UI TESTS")
 
 
 func _test_investigation_save_boke_load_and_perfect() -> void:
@@ -317,20 +308,6 @@ func _continue_cold_to_round(game: Control) -> void:
 	game._on_boke_tsukkomi_pressed()
 
 
-func _frames(count: int) -> void:
-	for _frame: int in range(count):
-		await process_frame
-
-
-func _until(condition: Callable, label: String, timeout: float = 5.0) -> void:
-	var deadline: int = Time.get_ticks_msec() + int(timeout * 1000.0)
-	while Time.get_ticks_msec() < deadline:
-		if condition.call():
-			return
-		await process_frame
-	failures.append("timed out: " + label)
-
-
 func _cleanup_saves() -> void:
 	for base: String in [TEST_SAVE, WEAK_SAVE, HIDDEN_SAVE, RETRY_SAVE]:
 		var paths: Array[String] = [base, base + ".bak", base + ".bak.old", base + ".old", base + ".tmp"]
@@ -341,9 +318,3 @@ func _cleanup_saves() -> void:
 		for path: String in paths:
 			if FileAccess.file_exists(path):
 				DirAccess.remove_absolute(path)
-
-
-func _expect(condition: bool, label: String) -> void:
-	if not condition:
-		failures.append(label)
-		print("FAIL: ", label)

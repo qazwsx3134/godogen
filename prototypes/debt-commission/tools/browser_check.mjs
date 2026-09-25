@@ -44,7 +44,8 @@ const waitFor = (page, predicate, arg, timeout = 15000) => page.waitForFunction(
 function assertInside(rect, viewport, name) {
   assert.ok(rect && rect.width > 0 && rect.height > 0, `${name} needs a visible rectangle`);
   assert.ok(rect.x >= -1 && rect.y >= -1 && rect.x + rect.width <= viewport.width + 1
-    && rect.y + rect.height <= viewport.height + 1, `${name} lies outside the viewport`);
+    && rect.y + rect.height <= viewport.height + 1,
+    `${name} lies outside the viewport: ${JSON.stringify({ rect, viewport })}`);
 }
 
 // Logical Godot coordinates → CSS pixels on the canvas.
@@ -122,11 +123,22 @@ async function screenshot(page, name) {
 }
 
 function assertLayout(value, label) {
-  const { viewport, dialog, quickbar, controls } = value;
+  const { viewport, game, dialog, quickbar, name_plate: namePlate, controls } = value;
   assertInside(dialog, viewport, `${label} dialogue box`);
   assertInside(quickbar, viewport, `${label} quick bar`);
-  const ratio = dialog.height / viewport.height;
-  assert.ok(Math.abs(ratio - 0.28) < 0.02, `${label}: dialogue box is ~28% of the screen (got ${ratio.toFixed(3)})`);
+  assert.ok(Math.abs(dialog.x - game.x) <= 1 && Math.abs(dialog.width - game.width) <= 1,
+    `${label}: dialogue layer spans the full game width`);
+  assert.ok(Math.abs(dialog.y + dialog.height - (game.y + game.height)) <= 1,
+    `${label}: dialogue layer reaches the bottom edge`);
+  assert.ok(quickbar.x >= dialog.x - 1 && quickbar.x + quickbar.width <= dialog.x + dialog.width + 1
+    && quickbar.y >= dialog.y && quickbar.y + quickbar.height <= dialog.y + dialog.height + 1,
+    `${label}: quick bar sits inside the dialogue layer`);
+  if (namePlate.width > 0) {
+    assert.ok(namePlate.x >= dialog.x && namePlate.y >= dialog.y
+      && namePlate.x + namePlate.width <= dialog.x + dialog.width + 1
+      && namePlate.y + namePlate.height <= dialog.y + dialog.height + 1,
+    `${label}: speaker label sits inside the dialogue layer`);
+  }
   for (const name of ['menu', 'save']) {
     assertInside(controls[name], viewport, `${label} floating ${name}`);
     assert.ok(controls[name].y + controls[name].height <= dialog.y + 1, `${label}: floating ${name} avoids the dialogue box`);
@@ -152,7 +164,7 @@ async function phase1Gestures(page, touch, route, checks) {
   assertLayout(value, route);
   assert.ok(value.name_plate.width > 0 || value.speaker === 'narrator', 'Name plate shows for character lines');
   await screenshot(page, `${route}-dialogue`);
-  checks.push('layout: dialogue ~28%, quick bar and floating buttons inside the screen and above the box');
+  checks.push('layout: bottom full-width dialogue layer, integrated quick bar and speaker label; floating buttons above');
 
   await waitFor(page, () => window.__debtQA?.text_complete);
   let before = await state(page);

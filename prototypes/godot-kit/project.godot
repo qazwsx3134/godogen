@@ -1,0 +1,12 @@
+; Standalone project so the kit's own tests run: godot --headless --path . --script res://tests/test_proto_kit.gd
+
+config_version=5
+
+[application]
+
+config/name="proto_kit"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"

@@ -94,7 +94,7 @@ V1 在 `prototypes/debt-commission/` 這個 Godot 專案內改造，開發分支
 
 ## 開發階段
 
-每個 Phase 都保留可在瀏覽器開啟的 Web 匯出版本，並通過相應的引擎測試與瀏覽器檢查。進度：Phase 0–2 ✅；手動存讀檔 ✅；Phase 3 技術短循環通過自動驗收，整體關卡尚待作者台詞與真人手機試玩；Phase 4–5 未開始。證據見[驗證紀錄](../../prototypes/debt-commission/docs/VERIFICATION.md)。Phase 1 的 Safe Area 僅驗過瀏覽器避開系統安全區的行為；Android／iOS 實機與全螢幕模式另列驗收。
+每個 Phase 都保留可在瀏覽器開啟的 Web 匯出版本，並通過相應的引擎測試與瀏覽器檢查。進度：Phase 0–2 ✅；手動存讀檔 ✅；Phase 3 技術短循環通過自動驗收，整體關卡尚待作者台詞與真人手機試玩；Phase 4 第一段（四熱區調查、人物檔案資料、劇本建置流程）的資料層與測試已完成，`main.gd` 端的入口、檔案畫面與控制器拆分待做；Phase 5 未開始。證據見[驗證紀錄](../../prototypes/debt-commission/docs/VERIFICATION.md)。Phase 1 的 Safe Area 僅驗過瀏覽器避開系統安全區的行為；Android／iOS 實機與全螢幕模式另列驗收。
 
 | 階段 | 玩家或作者拿到的成果 | 系統工作 | 通過條件 |
 | --- | --- | --- | --- |
@@ -163,7 +163,8 @@ claude mcp add godot-mcp-toolkit \
 - **正式美術：** 依 [gintama0923](../gintama-like/new/gintama0923.md) 第 263 行的美術 Prompt 製作背景、立繪與 UI。每個角色先定稿一張，4–6 個表情都以它為參考圖；替換只改素材設定檔。
 - **更多章節：** 討債委託改寫成第二章候選；每章先統計場景、素材與可達分支，完成後量測實際遊玩時間，再估算後續工作量。
 - **俯視地圖（V1 之後）：** 沿用 [conversation1](base/conversation1.md)–[conversation3](base/conversation3.md) 的方向，做成 Pokémon 式的俯視地圖：格子移動、四方向行走、面向 NPC／物件互動，對話直接疊在地圖上。紙娃娃換裝與地圖、立繪共用外觀 ID 一併延後。
-- **後續評估：** 配音、雲端存檔、圖形化劇情編輯器，依實際內容需要再決定。
+- **故事流程圖編輯器：** 目標是《底特律：變人》、《黑鏡：潘達斯奈基》那種大量分支的敘事，分支數會多到手改 JSON 追不動，所以要一個流程圖式的分支編輯器：節點是場景或對話段落，拖曳擺放，拉線連出選項分支，一眼看出每條路線通往哪個結局。不限用 Godot 寫，做成網頁更好拖曳與分享。候選：`prototypes/debt-commission/addons/parley/` 已裝 [Parley](https://github.com/bisterix-studio/parley)（Godot 編輯器內的節點圖，存 JSON），已有 `tools/story_build/`：Parley 的 `.ds` 與 Dialogue Manager 的 `.dialogue` 都能建置成劇本 JSON，產出一致，並補上可達性檢查與依結構自動產生的 `version`（見 debt-commission 的 `IMPLEMENTATION.md`）。Puzzle Dependencies 用來規劃解謎依賴，它的卡片加連線介面可當 UI 參考，但不是分支編輯器；Dialogic 2 已評估，不適合取代 StoryRunner（見 `prototypes/debt-commission/docs/DIALOGIC-EVALUATION.md`）。編輯器輸出 `StoryRunner` 已在讀的劇本 JSON（格式見 `prototypes/debt-commission/IMPLEMENTATION.md`），遊戲端不必跟著改；缺節點、斷線沿用 `StoryRunner` 的載入驗證；到不了的節點與結局由編輯器標出（`StoryRunner` 目前不檢查可達性）。玩家端要不要也顯示流程圖（底特律在章節結算時會給玩家看），另外決定。
+- **後續評估：** 配音、雲端存檔，依實際內容需要再決定。
 
 ## 實作基準與待確認
 

@@ -33,7 +33,47 @@ window/handheld/orientation=1
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/godot_mcp_toolkit/plugin.cfg")
+enabled=PackedStringArray("res://addons/godot_mcp_toolkit/plugin.cfg", "res://addons/parley/plugin.cfg", "res://addons/dialogue_manager/plugin.cfg", "res://addons/puzzle_dependencies/plugin.cfg", "res://addons/story_tools/plugin.cfg")
+
+[internationalization]
+
+locale/translations_pot_files=PackedStringArray("res://story_src/phase4.dialogue", "res://story_src/phase4.ds")
+
+[parley]
+
+stores/character_store_path="uid://caci80tc5curv"
+stores/action_store_path="uid://cv6h1dksryg4h"
+stores/fact_store_path="uid://c00tanvgphbyx"
+
+[puzzle_dependencies]
+
+types={
+0: {
+&"color": Color(0, 0, 0, 1),
+&"id": 0,
+&"label": "Type 1"
+},
+1: {
+&"color": Color(1, 0.47058824, 0.41960785, 1),
+&"id": 1,
+&"label": "Type 2"
+},
+2: {
+&"color": Color(0.7411765, 0.5764706, 0.9764706, 1),
+&"id": 2,
+&"label": "Type 3"
+},
+3: {
+&"color": Color(0.4509804, 0.9490196, 0.5019608, 1),
+&"id": 3,
+&"label": "Type 4"
+},
+4: {
+&"color": Color(1, 0.87058824, 0.4, 1),
+&"id": 4,
+&"label": "Type 5"
+}
+}
 
 [rendering]
 

@@ -35,6 +35,7 @@ const VALID_OPS: Array[String] = [
     "goto",
     "investigate",
     "boke_round",
+    "profile",
 ]
 
 const VALID_STAGE_POSITIONS: Array[String] = ["reader", "host", "door", "landlady", "other_side"]
@@ -45,6 +46,8 @@ const VALID_SOUNDS: Array[String] = ["paper", "knock", "step", "stamp"]
 
 var flags: Dictionary = {}
 var items: Array[String] = []
+## Character profiles unlocked by `profile` steps, in unlock order (the case file).
+var profiles: Array[String] = []
 var gameplay: Dictionary = DEFAULT_GAMEPLAY.duplicate(true)
 var checked_hotspots: Dictionary = {}
 var error_message: String = ""
@@ -62,6 +65,7 @@ var _boke_line_index: int = 0
 var _listened_line_ids: Array[String] = []
 var _checkpoint: Dictionary = {}
 var _game_over_active: bool = false
+var _profiles_before_normalize: Array[String] = []
 
 
 func load_story(path: String) -> bool:
@@ -120,6 +124,7 @@ func load_story(path: String) -> bool:
     _loaded = true
     flags = {}
     items = []
+    profiles = []
     gameplay = DEFAULT_GAMEPLAY.duplicate(true)
     checked_hotspots = {}
     _boke_round_id = ""
@@ -159,10 +164,27 @@ func get_asset_catalog() -> Dictionary:
     return _asset_catalog.duplicate(true)
 
 
+## Collected materials and unlocked character profiles with their catalog text, in the
+## order the player got them. Intended for a materials/profiles screen.
+func case_file() -> Dictionary:
+    var materials: Array = []
+    var item_catalog: Dictionary = _asset_catalog.get("items", {}) as Dictionary
+    for item_id: String in items:
+        var item: Dictionary = item_catalog.get(item_id, {}) as Dictionary
+        materials.append({"id": item_id, "name": String(item.get("name", item_id)), "description": String(item.get("description", ""))})
+    var people: Array = []
+    var characters: Dictionary = _character_catalog()
+    for character_id: String in profiles:
+        var character: Dictionary = characters.get(character_id, {}) as Dictionary
+        people.append({"id": character_id, "name": String(character.get("name", character_id)), "profile": String(character.get("profile", ""))})
+    return {"materials": materials, "profiles": people}
+
+
 func reset() -> void:
     if not _loaded:
         flags = {}
         items = []
+        profiles = []
         gameplay = DEFAULT_GAMEPLAY.duplicate(true)
         checked_hotspots = {}
         _boke_round_id = ""
@@ -323,6 +345,7 @@ func retry_checkpoint() -> bool:
     var checkpoint: Dictionary = _checkpoint.duplicate(true)
     flags = checkpoint["flags"].duplicate(true)
     items = _copy_string_array(checkpoint["items"] as Array)
+    profiles = _copy_string_array(checkpoint.get("profiles", profiles) as Array)
     gameplay = checkpoint["gameplay"].duplicate(true)
     checked_hotspots = checkpoint["checked_hotspots"].duplicate(true)
     node_id = String(checkpoint["node_id"])
@@ -362,6 +385,7 @@ func _capture_round_checkpoint(command: Dictionary) -> void:
         "step_index": step_index,
         "flags": flags.duplicate(true),
         "items": items.duplicate(),
+        "profiles": profiles.duplicate(),
         "gameplay": gameplay.duplicate(true),
         "checked_hotspots": checked_hotspots.duplicate(true),
     }
@@ -550,6 +574,7 @@ func snapshot() -> Dictionary:
         "step_index": step_index,
         "flags": flags.duplicate(true),
         "items": items.duplicate(),
+        "profiles": profiles.duplicate(),
         "gameplay": gameplay.duplicate(true),
         "checked_hotspots": checked_hotspots.duplicate(true),
         "boke": {
@@ -574,6 +599,7 @@ func restore(snapshot_data: Dictionary) -> bool:
     # or incompatible save data therefore cannot partially mutate the runner.
     flags = snapshot_data["flags"].duplicate(true)
     items = _copy_string_array(snapshot_data["items"] as Array)
+    profiles = _copy_string_array(snapshot_data.get("profiles", []) as Array)
     node_id = String(snapshot_data["node_id"])
     step_index = int(snapshot_data["step_index"])
     gameplay = (snapshot_data.get("gameplay", DEFAULT_GAMEPLAY) as Dictionary).duplicate(true)
@@ -591,6 +617,7 @@ func restore(snapshot_data: Dictionary) -> bool:
 func _reset_state() -> bool:
     flags = _initial_flags.duplicate(true)
     items = []
+    profiles = []
     gameplay = DEFAULT_GAMEPLAY.duplicate(true)
     checked_hotspots = {}
     _boke_round_id = ""
@@ -609,6 +636,7 @@ func _normalize_position() -> bool:
     var original_step_index: int = step_index
     var original_flags: Dictionary = flags.duplicate(true)
     var original_items: Array[String] = items.duplicate()
+    _profiles_before_normalize = profiles.duplicate()
     var transitions: int = 0
 
     while transitions < MAX_INTERNAL_TRANSITIONS:
@@ -644,6 +672,11 @@ func _normalize_position() -> bool:
                 if not items.has(item_id):
                     items.append(item_id)
                 step_index += 1
+            "profile":
+                var profile_id: String = String(step["id"])
+                if not profiles.has(profile_id):
+                    profiles.append(profile_id)
+                step_index += 1
             "condition":
                 var condition_key: String = String(step["flag"])
                 var target: String = String(step["else"])
@@ -673,6 +706,7 @@ func _rollback_normalization(original_node_id: String, original_step_index: int,
     step_index = original_step_index
     flags = original_flags
     items = original_items.duplicate()
+    profiles = _profiles_before_normalize.duplicate()
     error_message = message
     return false
 
@@ -895,7 +929,7 @@ func _validate_optional_asset_path(entry: Dictionary, kind: String, asset_id: St
         return ""
     if not path.begins_with("res://"):
         return "%s '%s' path must use res://" % [kind, asset_id]
-    if not FileAccess.file_exists(path):
+    if not FileAccess.file_exists(path) and not ResourceLoader.exists(path):
         return "%s '%s' path does not exist: %s" % [kind, asset_id, path]
     return ""
 
@@ -1075,6 +1109,10 @@ func _validate_step(current_node_id: String, index: int, step: Dictionary, nodes
             var item_id: String = String(step.get("id", ""))
             if not _catalog_has_item(asset_catalog, item_id):
                 return "%s item id '%s' is not in asset catalog" % [prefix, item_id]
+        "profile":
+            var profile_character: Dictionary = (asset_catalog.get("characters", {}) as Dictionary).get(String(step.get("id", "")), {}) as Dictionary
+            if not _is_non_empty_string(profile_character.get("profile", null)):
+                return "%s profile id '%s' needs a catalog character with profile text" % [prefix, step.get("id", "")]
         "investigate":
             var investigation_id: String = String(step.get("id", ""))
             if not _is_non_empty_string(step.get("id", null)):
@@ -1317,6 +1355,8 @@ func _validate_snapshot(snapshot_data: Dictionary) -> String:
     if not flags_error.is_empty():
         return flags_error
     var items_error: String = _validate_saved_items(snapshot_data["items"])
+    if items_error.is_empty() and snapshot_data.has("profiles"):
+        items_error = _validate_saved_profiles(snapshot_data["profiles"])
     if not items_error.is_empty():
         return items_error
 
@@ -1371,6 +1411,18 @@ func _validate_saved_flags(value: Variant) -> String:
         var allowed_values: Array = _allowed_flag_values[key] as Array
         if not allowed_values.has(candidate_flags[key]):
             return "invalid value for flag '%s'" % key
+    return ""
+
+
+func _validate_saved_profiles(value: Variant) -> String:
+    if not value is Array:
+        return "profiles must be an array"
+    var seen: Dictionary = {}
+    for profile_value: Variant in value as Array:
+        var profile_id: String = String(profile_value) if typeof(profile_value) == TYPE_STRING else ""
+        if not _catalog_has_character(_asset_catalog, profile_id) or seen.has(profile_id):
+            return "profiles must list distinct catalog characters"
+        seen[profile_id] = true
     return ""
 
 

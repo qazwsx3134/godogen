@@ -1,0 +1,20 @@
+{
+  "url": "http://127.0.0.1:5193/?qa=1&sample=phase3",
+  "started": "2026-09-25T01:40:29.391Z",
+  "runs": [
+    {
+      "route": "phase3-touch",
+      "checks": [
+        "touch investigation presents a reachable hotspot and gates continuation",
+        "hotspot grants one clue, manual slot saves it, and boke round starts",
+        "statement navigation and Listen work without an active countdown",
+        "Tsukkomi opens four clue-filtered choices with an eight-second pausable timer; options fit 320×568",
+        "manual slot restores selected line, Listen state, clue, and remaining countdown after reload",
+        "perfect result adds power once and keeps glasses intact"
+      ],
+      "errors": []
+    }
+  ],
+  "passed": true,
+  "finished": "2026-09-25T01:40:47.304Z"
+}

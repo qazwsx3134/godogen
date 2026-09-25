@@ -1,0 +1,321 @@
+{
+  "entry": "phase4_open",
+  "generated_from": "story_src/phase4.dialogue",
+  "id": "strawberry_phase4",
+  "initial_flags": {
+    "asked": "unset",
+    "round_result": "unset"
+  },
+  "nodes": {
+    "ask_first": {
+      "steps": [
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "ask_gintoki",
+              "label": "直接問銀時",
+              "next": "gintoki_round",
+              "set_flags": {
+                "asked": "gintoki"
+              }
+            },
+            {
+              "id": "ask_kagura",
+              "label": "先聽神樂怎麼說",
+              "next": "kagura_aside",
+              "set_flags": {
+                "asked": "kagura"
+              }
+            }
+          ],
+          "prompt": "要先問誰？"
+        }
+      ],
+      "title": "先問誰"
+    },
+    "cold": {
+      "next": "gintoki_round",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "技術結果：fail；冷場消耗一副眼鏡，再來一次。"
+        }
+      ],
+      "title": "冷場結果"
+    },
+    "game_over": {
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "Game Over：眼鏡耗盡。可從吐槽回合檢查點重試。"
+        },
+        {
+          "op": "end",
+          "text": "Game Over 技術測試結束"
+        }
+      ],
+      "title": "Game Over"
+    },
+    "gintoki_round": {
+      "steps": [
+        {
+          "game_over": "game_over",
+          "id": "gintoki_four_clues",
+          "lines": [
+            {
+              "id": "denial",
+              "text": "銀時：那瓶草莓牛奶不是我喝的。"
+            },
+            {
+              "id": "blame_dog",
+              "listen": "銀時：牠最近學會用鼻子頂門了，這很合理吧。",
+              "text": "銀時：一定是定春半夜自己開冰箱。"
+            }
+          ],
+          "op": "boke_round",
+          "speaker": "gintoki",
+          "timer_seconds": 8.0,
+          "tsukkomi": {
+            "options": [
+              {
+                "goto": "perfect",
+                "id": "point_to_bottle",
+                "label": "拿空瓶：證據就在你手邊。",
+                "require": "milk_bottle",
+                "result": "perfect",
+                "set_flags": {
+                  "round_result": "perfect"
+                }
+              },
+              {
+                "goto": "perfect",
+                "id": "point_to_trace",
+                "label": "你嘴角那圈白色痕跡怎麼解釋？",
+                "require": "milk_trace",
+                "result": "perfect",
+                "set_flags": {
+                  "round_result": "perfect"
+                }
+              },
+              {
+                "goto": "weak",
+                "id": "wave_kombu",
+                "label": "醋昆布包裝……跟牛奶有關嗎？",
+                "require": "kagura_kombu",
+                "result": "weak",
+                "set_flags": {
+                  "round_result": "weak"
+                }
+              },
+              {
+                "goto": "hidden",
+                "id": "follow_paw_print",
+                "label": "腳印只到沙發，冰箱那邊沒有。",
+                "require": "sadaharu_footprint",
+                "result": "hidden",
+                "set_flags": {
+                  "round_result": "hidden"
+                }
+              },
+              {
+                "goto": "weak",
+                "id": "fridge_comeback",
+                "label": "冰箱可不會自己開瓶。",
+                "result": "weak",
+                "set_flags": {
+                  "round_result": "weak"
+                }
+              },
+              {
+                "goto": "cold",
+                "id": "missed_comeback",
+                "label": "一時接不上話。",
+                "result": "fail",
+                "set_flags": {
+                  "round_result": "fail"
+                }
+              }
+            ],
+            "timeout": {
+              "goto": "cold",
+              "result": "fail"
+            }
+          }
+        }
+      ],
+      "title": "銀時的四線索吐槽回合"
+    },
+    "hidden": {
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "技術結果：hidden；腳印證明定春沒碰冰箱。"
+        },
+        {
+          "op": "end",
+          "text": "隱藏結果測試結束"
+        }
+      ],
+      "title": "隱藏結果"
+    },
+    "kagura_aside": {
+      "next": "gintoki_round",
+      "steps": [
+        {
+          "expression": "smile",
+          "id": "kagura",
+          "op": "char",
+          "position": "left",
+          "visible": true
+        },
+        {
+          "id": "kagura",
+          "op": "profile"
+        },
+        {
+          "op": "say",
+          "speaker": "kagura",
+          "text": "醋昆布是我的，但牛奶不是我喝的阿魯。"
+        }
+      ],
+      "title": "神樂的說法"
+    },
+    "perfect": {
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "技術結果：perfect；拿出關鍵證據，吐槽力增加。"
+        },
+        {
+          "else": "perfect_end",
+          "equals": "kagura",
+          "flag": "asked",
+          "op": "condition",
+          "then": "perfect_kagura"
+        }
+      ],
+      "title": "完美吐槽結果"
+    },
+    "perfect_end": {
+      "steps": [
+        {
+          "op": "end",
+          "text": "完美結果測試結束"
+        }
+      ],
+      "title": "完美結果結尾"
+    },
+    "perfect_kagura": {
+      "next": "perfect_end",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "kagura",
+          "text": "早就說不是我了阿魯。"
+        }
+      ],
+      "title": "神樂補一句"
+    },
+    "phase4_open": {
+      "next": "ask_first",
+      "steps": [
+        {
+          "id": "yorozuya_living_room",
+          "op": "bg"
+        },
+        {
+          "id": "shinpachi",
+          "op": "char",
+          "visible": true
+        },
+        {
+          "expression": "annoyed",
+          "id": "gintoki",
+          "op": "char",
+          "position": "right",
+          "visible": true
+        },
+        {
+          "id": "gintoki",
+          "op": "profile"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "Phase 4 技術試片：這不是核准的第一章台詞。草莓牛奶不見了，先把客廳查個遍。"
+        },
+        {
+          "hotspots": [
+            {
+              "id": "empty_milk_bottle",
+              "item": "milk_bottle",
+              "label": "空的草莓牛奶瓶",
+              "pos": [
+                0.56,
+                0.42
+              ]
+            },
+            {
+              "id": "gintoki_mouth",
+              "item": "milk_trace",
+              "label": "銀時的嘴角",
+              "pos": [
+                0.74,
+                0.3
+              ]
+            },
+            {
+              "id": "kombu_wrapper",
+              "item": "kagura_kombu",
+              "label": "沙發下的包裝紙",
+              "pos": [
+                0.3,
+                0.62
+              ]
+            },
+            {
+              "id": "floor_paw_print",
+              "item": "sadaharu_footprint",
+              "label": "地板上的腳印",
+              "pos": [
+                0.46,
+                0.8
+              ]
+            }
+          ],
+          "id": "living_room_search",
+          "op": "investigate",
+          "prompt": "調查客廳，找齊四件線索。"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "四件線索都到手了。"
+        }
+      ],
+      "title": "技術試片：調查客廳"
+    },
+    "weak": {
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "技術結果：weak；方向對了，但證據不夠硬。"
+        },
+        {
+          "op": "end",
+          "text": "普通結果測試結束"
+        }
+      ],
+      "title": "普通吐槽結果"
+    }
+  },
+  "note": "僅用於驗證四熱區調查、素材限定吐槽與劇本建置流程；不是作者核准的第一章文本。",
+  "title": "Phase 4 技術試片：四線索調查（非核准第一章）",
+  "version": "s-3390d681e984"
+}

@@ -10,6 +10,7 @@ class_name Presentation
 ## 所有位置都是時間的純函式，沒有累積狀態。同一條路徑、同一個時刻永遠得到同一個畫面
 ## ——序列測試能重播靠的就是這個（ADR 0009）。
 
+const Synth = preload("res://addons/proto_kit/synth.gd")
 const ALIGN := -PI * 0.5          # 連珠軸指向正上方
 const SQUASH := 0.80              # 軌道壓扁成橢圓，給一點深度
 ## 落空時第三顆天體停在離標記多遠的地方。這個數字直接決定「差一步」讀起來是
@@ -141,14 +142,14 @@ func _on_beat(b: Dictionary) -> void:
 	if a.is_empty():
 		return
 	match a:
-		"mechanical": _player.stream = Tones.click(0.08, 0.30)
-		"body_stop": _player.stream = Tones.click(0.14, 0.45, 14.0)
+		"mechanical": _player.stream = Synth.click(0.08, 0.30)
+		"body_stop": _player.stream = Synth.click(0.14, 0.45, 14.0)
 		# リーチ 進來，聲音才長出來
-		"reach_in": _player.stream = Tones.ramp(180.0, 340.0, Spec.T_REACH, 0.10, 0.42, 1.4)
+		"reach_in": _player.stream = Synth.ramp(180.0, 340.0, Spec.T_REACH, 0.10, 0.42, 1.4)
 		# 接管：一路爬到靜默為止
-		"sp_theme": _player.stream = Tones.ramp(120.0, 760.0, Spec.T_TAKEOVER, 0.16, 0.62, 2.2)
-		"jackpot": _player.stream = Tones.ramp(900.0, 1500.0, 1.2, 0.72, 0.30, 0.7)
-		"collapse": _player.stream = Tones.ramp(400.0, 60.0, 1.4, 0.55, 0.02, 0.8)
+		"sp_theme": _player.stream = Synth.ramp(120.0, 760.0, Spec.T_TAKEOVER, 0.16, 0.62, 2.2)
+		"jackpot": _player.stream = Synth.ramp(900.0, 1500.0, 1.2, 0.72, 0.30, 0.7)
+		"collapse": _player.stream = Synth.ramp(400.0, 60.0, 1.4, 0.55, 0.02, 0.8)
 		_: return
 	_player.play()
 

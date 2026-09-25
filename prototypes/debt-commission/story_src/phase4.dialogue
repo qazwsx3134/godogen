@@ -1,0 +1,57 @@
+~ phase4_open
+do bg("yorozuya_living_room")
+do char("shinpachi")
+do char("gintoki", "annoyed", "right")
+do profile("gintoki")
+新八: Phase 4 技術試片：這不是核准的第一章台詞。草莓牛奶不見了，先把客廳查個遍。
+do investigate("living_room_search")
+新八: 四件線索都到手了。
+=> ask_first
+
+~ ask_first
+要先問誰？
+- 直接問銀時 [ID:ask_gintoki]
+	set asked = "gintoki"
+	=> gintoki_round
+- 先聽神樂怎麼說 [ID:ask_kagura]
+	set asked = "kagura"
+	=> kagura_aside
+
+~ kagura_aside
+do char("kagura", "smile", "left")
+do profile("kagura")
+神樂: 醋昆布是我的，但牛奶不是我喝的阿魯。
+=> gintoki_round
+
+~ gintoki_round
+do boke_round("gintoki_four_clues")
+
+~ perfect
+新八: 技術結果：perfect；拿出關鍵證據，吐槽力增加。
+if asked == "kagura"
+	=> perfect_kagura
+else
+	=> perfect_end
+
+~ perfect_kagura
+神樂: 早就說不是我了阿魯。
+=> perfect_end
+
+~ perfect_end
+do end("完美結果測試結束")
+
+~ weak
+新八: 技術結果：weak；方向對了，但證據不夠硬。
+do end("普通結果測試結束")
+
+~ hidden
+新八: 技術結果：hidden；腳印證明定春沒碰冰箱。
+do end("隱藏結果測試結束")
+
+~ cold
+新八: 技術結果：fail；冷場消耗一副眼鏡，再來一次。
+=> gintoki_round
+
+~ game_over
+新八: Game Over：眼鏡耗盡。可從吐槽回合檢查點重試。
+do end("Game Over 技術測試結束")

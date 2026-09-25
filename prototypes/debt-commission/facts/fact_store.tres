@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="ParleyFactStore" format=3 uid="uid://c00tanvgphbyx"]
+
+[ext_resource type="Script" path="res://addons/parley/models/fact.gd" id="1_ho4iq"]
+[ext_resource type="Script" path="res://addons/parley/stores/fact/fact_store.gd" id="2_8axsa"]
+
+[resource]
+script = ExtResource("2_8axsa")
+id = "fact_store"

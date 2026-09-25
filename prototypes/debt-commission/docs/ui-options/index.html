@@ -1,0 +1,737 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#e9e6dc">
+  <title>三種說話方式｜介面版型提案</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      color: #252724;
+      background: #e9e6dc;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+      --paper: #f4f0e6;
+      --ink: #252724;
+      --muted: #686a62;
+      --rule: #c9c4b8;
+      --tap: 48px;
+    }
+
+    * { box-sizing: border-box; }
+    html { min-width: 320px; scroll-behavior: smooth; }
+    body { margin: 0; min-width: 320px; background: #e9e6dc; }
+    button { color: inherit; font: inherit; touch-action: manipulation; cursor: pointer; }
+    button:disabled { cursor: not-allowed; opacity: .58; }
+    button:active:not(:disabled) { filter: brightness(.92); }
+    button:focus-visible { outline: 3px solid #b8442f; outline-offset: 3px; }
+    [hidden] { display: none !important; }
+    .page-shell { width: min(100%, 1680px); margin: 0 auto; padding: 26px clamp(16px, 3.2vw, 54px) 24px; }
+    .mastline { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-bottom: 14px; border-bottom: 1px solid #bcb8ac; color: #545750; font-size: 14px; font-weight: 700; letter-spacing: .12em; }
+    .mastline i { margin: 0 8px; color: #a8402e; font-style: normal; }
+    .preview-label { display: inline-flex; align-items: center; gap: 8px; letter-spacing: .02em; font-weight: 600; }
+    .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #668b83; box-shadow: 0 0 0 4px rgba(102,139,131,.14); }
+    .title-row { display: flex; align-items: end; justify-content: space-between; gap: 36px; padding: 27px 0 20px; }
+    .eyebrow { margin: 0 0 8px; color: #8d4838; font-size: 14px; font-weight: 800; letter-spacing: .16em; }
+    h1 { margin: 0; font-size: clamp(38px, 5.4vw, 70px); line-height: 1.08; letter-spacing: -.055em; font-weight: 780; }
+    .mobile-break { display: none; }
+    .intro-copy { max-width: 330px; margin: 0 3px 5px 0; color: #565951; font-size: 18px; line-height: 1.65; }
+    .sample-note { display: flex; align-items: center; gap: 10px; max-width: 830px; margin: 0 0 24px; padding: 12px 14px; color: #4e514a; background: rgba(255,255,255,.44); border-left: 2px solid #a8402e; font-size: 14px; line-height: 1.55; }
+    .sample-note strong { color: #9c392a; }
+    .note-mark { display: grid; flex: 0 0 22px; width: 22px; height: 22px; place-items: center; border: 1px solid #9c392a; border-radius: 50%; color: #9c392a; font-family: Georgia, serif; font-size: 14px; font-weight: 700; }
+
+    .preview-toolbar { display: block; padding: 14px 0 17px; border-top: 1px solid #bcb8ac; border-bottom: 1px solid #bcb8ac; }
+    .toolbar-topline { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px 22px; margin-bottom: 13px; }
+    .toolbar-controls { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px 22px; }
+    .toolbar-group { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .toolbar-label { flex: 0 0 auto; color: #65675f; font-size: 14px; font-weight: 700; }
+    .mode-tabs, .state-tabs, .device-tabs { display: flex; align-items: center; gap: 6px; }
+    .mode-tab, .style-tab, .state-tab, .device-tab { min-height: var(--tap); padding: 0 14px; border: 1px solid #b9b5a9; border-radius: 3px; background: transparent; color: #4f514b; font-size: 15px; font-weight: 700; transition: color .16s ease, background-color .16s ease, border-color .16s ease; }
+    .mode-tab:hover, .style-tab:hover, .state-tab:hover, .device-tab:hover { border-color: #6c6d64; background: rgba(255,255,255,.42); }
+    .mode-tab.is-active, .state-tab.is-active { border-color: #272a27; background: #272a27; color: #f4f0e6; }
+    .try-style-selector { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+    .style-tab { padding-inline: 12px; font-size: 14px; }
+    .style-tab[aria-pressed="true"] { border-color: #8e4937; background: rgba(184,68,47,.08); color: #8e4937; }
+    .device-tab { min-width: 104px; padding-inline: 11px; font-size: 14px; }
+    .device-tab.is-active { border-color: #8e4937; color: #8e4937; background: rgba(184,68,47,.07); }
+
+    .concept-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: start; gap: clamp(16px, 2.15vw, 34px); padding-top: 23px; }
+    .concept-card { min-width: 0; }
+    .concept-grid[data-mode="try"] { grid-template-columns: minmax(0, 620px); justify-content: center; gap: 0; }
+    .concept-grid[data-mode="try"] .concept-card { display: none; }
+    .concept-grid[data-mode="try"] .concept-card.is-try-active { display: block; width: 100%; }
+    .concept-head { min-height: 112px; padding-bottom: 13px; border-bottom: 1px solid #bcb8ac; }
+    .concept-overline { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; color: #5e6058; font-size: 14px; font-weight: 700; letter-spacing: .035em; }
+    .concept-number { display: inline-grid; width: 26px; height: 26px; place-items: center; border: 1px solid currentColor; border-radius: 50%; font-size: 14px; }
+    .concept-palette { margin-left: auto; color: #85857c; font-size: 14px; letter-spacing: .08em; }
+    .concept-head h2 { margin: 9px 0 3px; font-size: 25px; line-height: 1.15; letter-spacing: -.03em; }
+    .concept-tagline { margin: 0; color: #65675f; font-size: 15px; line-height: 1.5; }
+    .theme-cinema .concept-number, .theme-cinema .concept-overline > span:nth-child(2) { color: #324f61; }
+    .theme-ledger .concept-number, .theme-ledger .concept-overline > span:nth-child(2) { color: #9c392a; }
+    .theme-manga .concept-number, .theme-manga .concept-overline > span:nth-child(2) { color: #2d2e2b; }
+
+    .phone-frame { width: min(100%, 406px); margin: 17px auto 0; padding: 8px; border: 1px solid #343737; border-radius: 42px; background: #171a1b; box-shadow: 0 20px 40px rgba(26,28,27,.18), 0 4px 8px rgba(26,28,27,.16); }
+    .phone-frame[data-device="320"] { width: min(100%, 336px); }
+    .phone-screen { position: relative; isolation: isolate; width: 100%; overflow: hidden; aspect-ratio: 390 / 844; border-radius: 32px; background: #232b30; }
+    .phone-frame[data-device="320"] .phone-screen { aspect-ratio: 320 / 568; }
+    .scene { position: absolute; z-index: 0; inset: 0; overflow: hidden; background: #593f37; }
+    .scene-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; }
+    .scene-wash { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(7,14,22,.46) 0%, rgba(7,14,22,.03) 28%, rgba(7,14,22,.08) 48%, rgba(7,14,22,.4) 72%, rgba(7,14,22,.25) 100%); }
+    .scene-character { position: absolute; right: -4%; bottom: 25%; height: 62%; width: auto; max-width: 90%; object-fit: contain; object-position: center bottom; filter: drop-shadow(0 3px 6px rgba(0,0,0,.18)); }
+    .world-meta { position: absolute; top: max(14px, env(safe-area-inset-top)); left: 16px; right: 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #fffdf5; font-size: 14px; font-weight: 650; letter-spacing: .04em; text-shadow: 0 1px 4px rgba(0,0,0,.85); }
+    .dialogue-layer, .choices-layer, .pause-layer, .title-layer { position: absolute; z-index: 2; inset: 0; display: none; }
+    .phone-screen[data-state="dialogue"] .dialogue-layer { display: flex; align-items: end; }
+    .phone-screen[data-state="choices"] .choices-layer { display: flex; align-items: end; }
+    .phone-screen[data-state="pause"] .pause-layer { display: flex; align-items: center; justify-content: center; }
+    .phone-screen[data-state="title"] .title-layer { display: flex; align-items: end; justify-content: center; }
+    .dialogue-panel, .choices-panel { position: relative; width: 100%; }
+    .speaker-row { display: flex; align-items: center; gap: 9px; min-height: 28px; }
+    .speaker-mark { display: grid; flex: 0 0 28px; width: 28px; height: 28px; place-items: center; font-size: 16px; font-weight: 800; }
+    .speaker-name { font-size: 16px; font-weight: 750; letter-spacing: .06em; }
+    .scene-count { margin-left: auto; font-size: 14px; font-weight: 550; letter-spacing: .035em; }
+    .dialogue-copy { margin: 8px 0 13px; font-size: 18px; line-height: 1.58; font-weight: 540; text-wrap: pretty; }
+    .dialogue-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .quickbar { display: flex; align-items: center; gap: 2px; min-width: 0; }
+    .quickbar button { display: inline-flex; align-items: center; justify-content: center; min-width: var(--tap); min-height: var(--tap); padding: 0 11px; border: 0; background: transparent; font-size: 14px; font-weight: 650; white-space: nowrap; }
+    .quickbar button:hover { background: rgba(255,255,255,.12); }
+    .advance-button { display: grid; flex: 0 0 52px; width: 52px; min-width: var(--tap); height: 52px; min-height: var(--tap); place-items: center; border: 0; font-size: 25px; font-weight: 500; transition: transform .16s ease, background-color .16s ease; }
+    .advance-button:hover { transform: translateX(2px); }
+    .choice-heading, .pause-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .panel-kicker { display: block; font-size: 14px; font-weight: 700; letter-spacing: .13em; }
+    .choice-heading h3, .pause-heading h3 { margin: 3px 0 0; font-size: 22px; line-height: 1.22; letter-spacing: -.02em; }
+    .choice-count { flex: 0 0 auto; font-size: 14px; font-weight: 700; }
+    .choice-list { display: grid; margin-top: 9px; }
+    .choice-button { position: relative; display: flex; align-items: center; gap: 13px; width: 100%; min-height: var(--tap); padding: 7px 10px; text-align: left; font-size: 17px; line-height: 1.35; font-weight: 620; transition: background-color .15s ease, color .15s ease, border-color .15s ease, transform .15s ease; }
+    .choice-button > span:last-child { min-width: 0; }
+    .choice-index { display: inline-grid; flex: 0 0 28px; width: 28px; height: 28px; place-items: center; font-size: 14px; font-weight: 800; }
+    .timing-preview { display: grid; grid-template-columns: auto minmax(44px, 1fr) auto; align-items: center; gap: 9px; min-height: 24px; margin-top: 8px; font-size: 14px; line-height: 1.2; white-space: nowrap; }
+    .timing-track { display: block; height: 5px; overflow: hidden; border: 1px solid currentColor; border-radius: 99px; opacity: .8; }
+    .timing-track > span { display: block; width: 68%; height: 100%; background: currentColor; }
+    .timing-static { font-size: 14px; }
+    .choice-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 4px; }
+    .choice-feedback { display: flex; flex: 1 1 auto; align-items: center; min-width: 0; min-height: var(--tap); margin: 0; font-size: 14px; line-height: 1.35; }
+    .choice-menu { flex: 0 0 auto; min-width: 64px; min-height: var(--tap); padding: 0 12px; border: 1px solid currentColor; background: transparent; font-size: 14px; font-weight: 700; }
+    .pause-layer { padding: 18px; background: rgba(6,10,14,.64); }
+    .pause-panel { width: 100%; max-width: 360px; padding: 17px; }
+    .close-menu { display: grid; flex: 0 0 48px; width: 48px; min-width: var(--tap); height: 48px; min-height: var(--tap); place-items: center; border: 1px solid currentColor; background: transparent; font-size: 23px; line-height: 1; }
+    .menu-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; width: 100%; min-height: var(--tap); padding: 8px 10px; text-align: left; font-size: 17px; font-weight: 650; }
+    .menu-disabled { font-size: 15px; }
+    .menu-disabled span:last-child { font-size: 14px; }
+    .pause-heading { margin-bottom: 14px; }
+    .title-layer { padding: 18px 18px max(20px, env(safe-area-inset-bottom)); background: linear-gradient(180deg, rgba(5,10,14,.18), rgba(5,10,14,.12) 26%, rgba(5,10,14,.86) 100%); }
+    .title-panel { width: 100%; max-width: 360px; padding: 20px 18px 16px; text-align: center; }
+    .title-kicker { display: block; font-size: 14px; font-weight: 700; letter-spacing: .2em; }
+    .title-panel h3 { margin: 11px 0 5px; font-size: 42px; line-height: 1.02; letter-spacing: .04em; }
+    .title-panel p { margin: 0 0 14px; font-size: 16px; }
+    .title-primary, .title-secondary { display: block; width: 100%; min-height: var(--tap); font-size: 16px; font-weight: 750; }
+    .title-primary { display: flex; align-items: center; justify-content: center; gap: 12px; }
+    .title-secondary { margin-top: 5px; border: 0; background: transparent; }
+    .phone-status { position: absolute; z-index: 7; top: max(46px, calc(env(safe-area-inset-top) + 38px)); left: 14px; right: 14px; display: none; min-height: var(--tap); margin: 0; padding: 12px 14px; border-radius: 3px; text-align: center; font-size: 14px; line-height: 1.45; }
+    .phone-status.is-visible { display: block; animation: status-in .16s ease-out both; }
+    @keyframes status-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* A · 月下映畫：細線、低彩度冷色與全幅夜景。 */
+    .theme-cinema .scene-photo { filter: saturate(.78) brightness(.75); }
+    .theme-cinema .scene-wash { background: linear-gradient(180deg, rgba(7,16,26,.5), rgba(7,16,26,.03) 31%, rgba(7,16,26,.04) 48%, rgba(7,16,26,.38) 70%, rgba(7,16,26,.28)); }
+    .theme-cinema .dialogue-panel { padding: 22px 17px max(13px, env(safe-area-inset-bottom)); border-top: 1px solid rgba(166,205,207,.72); color: #f4f1e9; background: linear-gradient(180deg, rgba(9,18,28,.62), rgba(8,16,25,.96) 18%, rgba(8,16,25,.98)); }
+    .theme-cinema .speaker-mark { color: #a9d0cf; font-size: 18px; }
+    .theme-cinema .speaker-name { color: #e6e5dc; }
+    .theme-cinema .scene-count { color: #bec9c9; }
+    .theme-cinema .dialogue-copy { color: #f4f1e9; font-family: ui-serif, "Noto Serif TC", "Songti TC", "PMingLiU", serif; font-weight: 500; line-height: 1.68; letter-spacing: .018em; text-shadow: 0 1px 2px rgba(0,0,0,.7); }
+    .theme-cinema .quickbar button { color: #d4ddda; }
+    .theme-cinema .quickbar button[aria-pressed="true"] { background: rgba(169,208,207,.16); color: #d5ece8; text-decoration: underline; text-underline-offset: 4px; }
+    .theme-cinema .advance-button { border: 0; border-left: 1px solid rgba(205,225,218,.32); border-radius: 0; background: transparent; color: #d5e3df; }
+    .theme-cinema .choices-panel { padding: 15px 14px max(13px, env(safe-area-inset-bottom)); border-top: 1px solid rgba(166,205,207,.7); color: #f2f1e8; background: linear-gradient(180deg, rgba(8,17,26,.88), rgba(7,14,22,.98)); }
+    .theme-cinema .panel-kicker, .theme-cinema .choice-count { color: #a9c7c6; }
+    .theme-cinema .choice-button { border: 1px solid rgba(217,225,219,.24); background: rgba(246,244,233,.08); color: #f3f2ea; }
+    .theme-cinema .choice-button + .choice-button { margin-top: 5px; }
+    .theme-cinema .choice-button:hover { background: rgba(194,221,217,.18); }
+    .theme-cinema .choice-button.is-selected { border-color: #a9d0cf; background: rgba(169,208,207,.22); box-shadow: inset 3px 0 #a9d0cf; }
+    .theme-cinema .choice-index { color: #a9c7c6; }
+    .theme-cinema .choice-feedback { color: #d1d9d7; }
+    .theme-cinema .timing-preview { color: #a9c7c6; }
+    .theme-cinema .timing-track > span { background: #a9d0cf; }
+    .theme-cinema .choice-menu { border-color: rgba(205,225,218,.58); color: #e8eee8; }
+    .theme-cinema .choice-menu:hover { background: rgba(169,208,207,.15); }
+    .theme-cinema .pause-panel { border-top: 1px solid rgba(182,219,217,.75); border-bottom: 1px solid rgba(182,219,217,.45); background: rgba(8,16,25,.94); color: #f4f1e9; }
+    .theme-cinema .pause-heading { color: #e8e8df; }
+    .theme-cinema .pause-heading .panel-kicker { color: #aacdcb; }
+    .theme-cinema .close-menu { border-color: rgba(215,228,220,.48); color: #f4f1e9; }
+    .theme-cinema .menu-row { border: 0; border-bottom: 1px solid rgba(215,228,220,.25); background: transparent; color: #f4f1e9; }
+    .theme-cinema .menu-primary { color: #c5dedb; }
+    .theme-cinema .title-layer { color: #f7f4e8; }
+    .theme-cinema .title-panel { border-top: 1px solid rgba(190,218,213,.58); }
+    .theme-cinema .title-panel h3 { color: #f4f1e9; text-shadow: 0 2px 8px #06101a; }
+    .theme-cinema .title-primary { border: 1px solid rgba(228,232,222,.7); background: rgba(11,23,33,.66); color: #f7f4e8; }
+    .theme-cinema .title-secondary { color: #e5e3d8; }
+    .theme-cinema .phone-status { background: rgba(8,16,25,.95); color: #f5f1e8; border: 1px solid rgba(169,208,207,.55); }
+    .theme-cinema button:focus-visible { outline-color: #a9d0cf; }
+
+    /* B · 萬事屋委託簿：帶紙纖維感的象牙底、墨字與朱印。 */
+    .theme-ledger .scene-photo { filter: sepia(.2) saturate(.82) brightness(.78); }
+    .theme-ledger .scene-wash { background: linear-gradient(180deg, rgba(60,35,21,.42), rgba(87,52,30,.03) 32%, rgba(87,52,30,.08) 49%, rgba(77,46,28,.36) 76%, rgba(77,46,28,.26)); }
+    .theme-ledger .dialogue-panel, .theme-ledger .choices-panel, .theme-ledger .pause-panel, .theme-ledger .title-panel { color: #382f28; background-color: #f2e8d2; background-image: repeating-linear-gradient(0deg, rgba(99,78,48,.025) 0 1px, transparent 1px 5px); outline: 1px solid rgba(139,104,61,.58); outline-offset: -5px; }
+    .theme-ledger .dialogue-panel { width: calc(100% - 16px); margin: 0 8px 8px; padding: 14px 14px max(12px, env(safe-area-inset-bottom)); border: 1px solid #b9a681; box-shadow: 0 3px 9px rgba(42,31,21,.18); }
+    .theme-ledger .paper-edge { position: absolute; top: 12px; bottom: 12px; left: 0; width: 3px; background: #a94432; }
+    .theme-ledger .speaker-row { padding-bottom: 7px; border-bottom: 1px solid #d1c19e; }
+    .theme-ledger .speaker-mark { border: 1px solid #9f3b2b; border-radius: 50%; background: #a94432; color: #fff5e5; font-size: 14px; }
+    .theme-ledger .speaker-name { color: #3b3029; }
+    .theme-ledger .scene-count { color: #76634c; }
+    .theme-ledger .dialogue-copy { color: #382f28; font-family: ui-serif, "Noto Serif TC", "Songti TC", "PMingLiU", serif; font-weight: 560; }
+    .theme-ledger .quickbar { border-top: 1px solid rgba(103,78,49,.28); }
+    .theme-ledger .quickbar button { color: #665642; }
+    .theme-ledger .quickbar button[aria-pressed="true"] { background: rgba(169,68,50,.09); color: #8f3528; box-shadow: inset 0 -2px #a94432; }
+    .theme-ledger .advance-button { border: 2px solid #f4dfbd; border-radius: 50%; outline: 1px solid #9f3b2b; background: #a94432; color: #fff8e9; font-size: 18px; font-weight: 800; box-shadow: 0 2px 0 #762d22; }
+    .theme-ledger .choices-panel { width: calc(100% - 16px); margin: 0 8px 8px; padding: 14px 14px 11px; border: 1px solid #b9a681; box-shadow: 0 3px 9px rgba(42,31,21,.18); }
+    .theme-ledger .choice-heading { padding-bottom: 8px; border-bottom: 1px solid #b9a681; }
+    .theme-ledger .panel-kicker, .theme-ledger .choice-count { color: #8c4635; }
+    .theme-ledger .choice-list { margin-top: 0; border-bottom: 1px solid #b9a681; }
+    .theme-ledger .choice-button { gap: 12px; border: 0; border-bottom: 1px solid #cfc0a3; background: transparent; color: #382f28; font-family: ui-serif, "Noto Serif TC", "Songti TC", "PMingLiU", serif; }
+    .theme-ledger .choice-button:hover { background: rgba(163,67,48,.07); }
+    .theme-ledger .choice-button.is-selected { padding-left: 13px; background: rgba(169,68,50,.1); box-shadow: inset 3px 0 #a94432; }
+    .theme-ledger .choice-index { border: 1px solid #c4ad84; border-radius: 50%; color: #a94432; }
+    .theme-ledger .choice-feedback { color: #715d45; }
+    .theme-ledger .timing-preview { color: #8c4635; }
+    .theme-ledger .timing-track > span { background: #a94432; }
+    .theme-ledger .choice-menu { border-color: #9f3b2b; background: #a94432; color: #fff5e5; box-shadow: 0 2px 0 #762d22; }
+    .theme-ledger .choice-menu:hover { background: #92392b; }
+    .theme-ledger .pause-layer { background: rgba(40,28,20,.57); }
+    .theme-ledger .pause-panel { position: relative; padding: 18px; border: 1px solid #ad9670; box-shadow: 5px 5px 0 rgba(42,31,21,.35); }
+    .theme-ledger .pause-heading { margin-bottom: 12px; }
+    .theme-ledger .pause-heading .panel-kicker { color: #9a3f2d; }
+    .theme-ledger .close-menu { border: 1px solid #a98d67; color: #41352b; }
+    .theme-ledger .menu-row { border: 0; border-top: 1px solid #c4b28f; background: transparent; color: #3b3028; }
+    .theme-ledger .menu-primary { color: #9c392a; }
+    .seal-small { display: inline-grid; width: 31px; height: 31px; place-items: center; border: 1px solid #782f24; border-radius: 50%; outline: 1px dashed #f1ddbd; outline-offset: -4px; background: #a94432; color: #fff7e8; font-size: 14px; }
+    .theme-ledger .title-layer { background: linear-gradient(180deg, rgba(49,34,24,.17), rgba(49,34,24,.15) 34%, rgba(49,34,24,.73) 100%); }
+    .theme-ledger .title-panel { width: 100%; padding: 18px; border: 1px solid #c9b58c; box-shadow: 5px 5px 0 rgba(34,26,19,.32); }
+    .theme-ledger .title-panel h3 { color: #382f28; font-family: ui-serif, "Noto Serif TC", "Songti TC", "PMingLiU", serif; }
+    .theme-ledger .title-primary { border: 1px solid #852f24; background: #a94432; color: #fff6e6; box-shadow: 0 3px 0 #70291f; }
+    .theme-ledger .title-secondary { color: #5c4b3d; }
+    .theme-ledger .phone-status { border: 1px solid #b9a681; background: #f2e8d2; color: #382f28; box-shadow: 2px 2px 0 rgba(42,31,21,.2); }
+    .theme-ledger .menu-disabled:disabled { color: #756b5b; background: rgba(117,107,91,.06); }
+    .theme-ledger button:focus-visible { outline-color: #9c392a; }
+
+    /* C · 吐槽分鏡：閱讀收斂，只有回應時才用紅黃加重拍點。 */
+    .theme-manga .scene-photo { filter: grayscale(1) contrast(.91) brightness(.8); }
+    .theme-manga .scene-wash { background: linear-gradient(180deg, rgba(15,15,14,.42), rgba(15,15,14,.03) 30%, rgba(15,15,14,.08) 49%, rgba(15,15,14,.32) 74%, rgba(15,15,14,.22)); }
+    .theme-manga .scene-character { filter: grayscale(1) contrast(1.04) drop-shadow(0 3px 4px rgba(0,0,0,.2)); }
+    .theme-manga .dialogue-panel { width: calc(100% - 18px); margin: 0 9px 10px; padding: 14px 13px max(12px, env(safe-area-inset-bottom)); border: 2px solid #242522; background: rgba(246,245,237,.96); color: #242522; box-shadow: 4px 4px 0 rgba(18,19,18,.3); }
+    .theme-manga .speech-notch { position: absolute; top: -9px; left: 27px; width: 15px; height: 15px; transform: rotate(45deg); border-left: 2px solid #242522; border-top: 2px solid #242522; background: #f6f5ed; }
+    .theme-manga .speaker-mark { color: #282a27; font-size: 14px; }
+    .theme-manga .speaker-name { color: #242522; font-weight: 850; }
+    .theme-manga .scene-count { color: #5f605b; }
+    .theme-manga .dialogue-copy { color: #282a27; font-weight: 600; }
+    .theme-manga .quickbar { border-top: 1px solid #b7b7ae; }
+    .theme-manga .quickbar button { color: #41433e; }
+    .theme-manga .quickbar button[aria-pressed="true"] { background: #ffdf46; color: #252724; box-shadow: inset 0 -2px #252724; }
+    .theme-manga .advance-button { border: 2px solid #252724; background: #e74e36; color: #fff9eb; clip-path: polygon(20% 0,100% 0,100% 100%,0 100%); font-weight: 800; }
+    .theme-manga .choices-panel { width: calc(100% - 12px); margin: 0 6px 9px; padding: 11px 11px 9px; border: 3px solid #242522; background: #f5f3e9; color: #20211f; box-shadow: 5px 5px 0 rgba(15,16,15,.42); }
+    .theme-manga .choice-heading { padding-bottom: 7px; border-bottom: 2px solid #242522; }
+    .theme-manga .panel-kicker { color: #5f605b; }
+    .theme-manga .choice-count { padding: 3px 7px; border: 1px solid #242522; background: #ffdc41; color: #252622; transform: rotate(-3deg); }
+    .theme-manga .choice-list { gap: 5px; margin-top: 8px; }
+    .theme-manga .choice-button { overflow: hidden; gap: 9px; padding: 5px 7px; border: 2px solid #242522; background: #fcfbf6; color: #242522; box-shadow: 2px 2px 0 #242522; }
+    .theme-manga .choice-button::after { position: absolute; top: 0; right: 0; width: 15px; height: 100%; content: ""; background: #ffdc41; clip-path: polygon(47% 0,100% 0,100% 100%,0 100%); }
+    .theme-manga .choice-button:hover { background: #fff6c6; }
+    .theme-manga .choice-button.is-selected { border-color: #a83b2b; background: #ffdf46; box-shadow: 3px 3px 0 #a83b2b; }
+    .theme-manga .choice-button.is-selected::after { background: #e74e36; }
+    .theme-manga .choice-index { z-index: 1; flex-basis: 24px; width: 24px; height: 24px; color: #a83b2b; }
+    .theme-manga .choice-feedback { color: #4d4e49; font-weight: 650; }
+    .theme-manga .timing-preview { color: #444540; }
+    .theme-manga .timing-track { color: #242522; }
+    .theme-manga .timing-track > span { background: #e4be32; }
+    .theme-manga .choice-menu { border: 2px solid #242522; background: #fcfbf6; color: #242522; box-shadow: 2px 2px 0 #242522; }
+    .theme-manga .choice-menu:hover { background: #ffdf46; }
+    .theme-manga .pause-layer { background: rgba(25,25,23,.72); }
+    .theme-manga .pause-panel { padding: 15px; border: 3px solid #20211f; background: #f4f2e8; color: #222320; box-shadow: 6px 6px 0 #e6be32; }
+    .theme-manga .pause-heading { margin-bottom: 10px; }
+    .theme-manga .pause-heading .panel-kicker { color: #a83b2b; }
+    .theme-manga .close-menu { border: 2px solid #222320; background: #ffdf46; color: #222320; }
+    .theme-manga .menu-row { border: 2px solid #222320; background: #fbfaf4; color: #222320; box-shadow: 2px 2px 0 #222320; }
+    .theme-manga .menu-row + .menu-row { margin-top: 7px; }
+    .theme-manga .menu-primary { background: #b83424; color: #fff9eb; }
+    .theme-manga .title-layer { background: linear-gradient(180deg, rgba(22,22,20,.25), rgba(22,22,20,.14) 28%, rgba(22,22,20,.79) 100%); }
+    .theme-manga .title-panel { padding: 16px; border: 3px solid #242522; background: #f5f3e9; color: #222320; box-shadow: 6px 6px 0 #e3bd35; }
+    .theme-manga .title-panel h3 { color: #222320; font-weight: 900; }
+    .theme-manga .title-primary { border: 2px solid #252724; background: #b83424; color: #fff9eb; box-shadow: 3px 3px 0 #252724; }
+    .theme-manga .title-secondary { color: #393a36; }
+    .theme-manga .phone-status { border: 2px solid #222320; background: #ffdf46; color: #222320; box-shadow: 3px 3px 0 #222320; font-weight: 700; }
+    .theme-manga .menu-disabled:disabled { color: #666761; background: #e9e7dc; box-shadow: none; }
+    .theme-manga button:focus-visible { outline-color: #ffdc41; box-shadow: 0 0 0 2px #222320; }
+
+    .concept-caption { max-width: 470px; margin: 14px auto 0; padding: 13px 2px 0; border-top: 1px solid #bcb8ac; color: #50534d; font-size: 15px; line-height: 1.6; }
+    .concept-caption p { margin: 0; }
+    .concept-caption .tradeoff { margin-top: 7px; color: #74756d; font-size: 14px; }
+    .concept-caption .tradeoff strong { color: #454740; }
+    .page-footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 20px; margin-top: 30px; padding-top: 13px; border-top: 1px solid #bcb8ac; color: #696b63; font-size: 14px; line-height: 1.5; }
+
+    @media (max-width: 1000px) {
+      .concept-grid { grid-template-columns: minmax(0, 620px); justify-content: center; gap: 32px; }
+      .concept-head { min-height: 0; padding-bottom: 12px; }
+      .phone-frame { margin-top: 15px; }
+      .concept-caption { max-width: 406px; }
+      .toolbar-topline, .toolbar-controls { align-items: flex-start; flex-direction: column; gap: 14px; }
+    }
+    @media (max-width: 600px) {
+      .page-shell { padding: 17px 14px 18px; }
+      .mastline { align-items: flex-start; font-size: 14px; letter-spacing: .07em; }
+      .mastline i { margin-inline: 4px; }
+      .preview-label { white-space: nowrap; font-size: 14px; }
+      .title-row { display: block; padding: 23px 0 16px; }
+      .mobile-break { display: block; }
+      h1 { font-size: clamp(38px, 10.7vw, 50px); line-height: 1.1; }
+      .intro-copy { margin: 13px 0 0; font-size: 17px; }
+      .sample-note { align-items: flex-start; margin-bottom: 19px; padding: 10px 11px; }
+      .preview-toolbar { padding: 13px 0 15px; }
+      .toolbar-group { align-items: flex-start; flex-direction: column; gap: 7px; width: 100%; }
+      .toolbar-topline, .toolbar-controls { align-items: flex-start; flex-direction: column; gap: 13px; }
+      .state-tabs { display: grid; width: 100%; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+      .state-tab { padding: 0 8px; }
+      .mode-tabs { width: 100%; }
+      .mode-tab { flex: 1; }
+      .try-style-selector { display: grid; width: 100%; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+      .try-style-selector .toolbar-label { grid-column: 1 / -1; }
+      .style-tab { min-width: 0; padding: 0 6px; font-size: 14px; white-space: nowrap; }
+      .device-tabs { width: 100%; }
+      .device-tab { flex: 1; }
+      .concept-grid { padding-top: 19px; gap: 29px; }
+      .concept-overline { gap: 7px; }
+      .concept-palette { margin-left: auto; }
+      .concept-head h2 { font-size: 24px; }
+      .concept-tagline { font-size: 15px; }
+      .phone-frame { width: min(100%, 406px); margin-top: 13px; border-radius: 38px; }
+      .phone-frame[data-device="320"] { width: min(100%, 336px); }
+      .phone-screen { border-radius: 28px; }
+      .concept-caption { margin-top: 12px; padding-top: 10px; }
+      .page-footer { display: grid; gap: 5px; margin-top: 23px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page-shell">
+    <header class="page-header">
+      <div class="mastline">
+        <span>DEBT COMMISSION <i aria-hidden="true">/</i> UI FIELD STUDY 01</span>
+        <span class="preview-label"><span class="live-dot" aria-hidden="true"></span>互動式網頁稿</span>
+      </div>
+      <div class="title-row">
+        <div>
+          <p class="eyebrow">對話介面・手機直式</p>
+          <h1>三種說話方式，<br class="mobile-break">三種畫面節奏</h1>
+        </div>
+        <p class="intro-copy">用同一個客廳場景與同一段台詞，比較沉浸、紙本與漫畫感的閱讀方式。</p>
+      </div>
+      <p class="sample-note"><span class="note-mark" aria-hidden="true">i</span><span><strong>台詞取自已核准的討債故事。</strong> 標題與四選項為版面示意；8 秒計時條固定不動。試玩樣式會留在此瀏覽器，不會儲存遊戲進度。</span></p>
+    </header>
+
+    <section class="preview-toolbar" aria-label="預覽控制">
+      <div class="toolbar-topline">
+        <div class="toolbar-group">
+          <span class="toolbar-label">檢視模式</span>
+          <div class="mode-tabs" role="group" aria-label="比較或單機試玩">
+            <button type="button" class="mode-tab is-active" data-mode="compare" aria-pressed="true">並排比較</button>
+            <button type="button" class="mode-tab" data-mode="try" aria-pressed="false">單機試玩</button>
+          </div>
+        </div>
+        <div class="try-style-selector" role="group" aria-label="選擇試玩樣式" hidden>
+          <span class="toolbar-label">試玩樣式</span>
+          <button type="button" class="style-tab" data-style-choice="cinema" aria-pressed="false">A　月下映畫</button>
+          <button type="button" class="style-tab" data-style-choice="ledger" aria-pressed="false">B　委託簿</button>
+          <button type="button" class="style-tab" data-style-choice="manga" aria-pressed="false">C　吐槽分鏡</button>
+        </div>
+      </div>
+      <div class="toolbar-controls">
+        <div class="toolbar-group">
+          <span class="toolbar-label">同步檢視</span>
+          <div class="state-tabs" role="group" aria-label="切換所有預覽畫面">
+            <button type="button" class="state-tab is-active" data-global-state="dialogue" aria-pressed="true">對話</button>
+            <button type="button" class="state-tab" data-global-state="choices" aria-pressed="false">四選一</button>
+            <button type="button" class="state-tab" data-global-state="pause" aria-pressed="false">暫停目錄</button>
+            <button type="button" class="state-tab" data-global-state="title" aria-pressed="false">標題</button>
+          </div>
+        </div>
+        <div class="toolbar-group device-group">
+          <span class="toolbar-label">裝置比例</span>
+          <div class="device-tabs" role="group" aria-label="選擇手機預覽比例">
+            <button type="button" class="device-tab is-active" data-device="390" aria-pressed="true">390 × 844</button>
+            <button type="button" class="device-tab" data-device="320" aria-pressed="false">320 × 568</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="concept-grid" data-mode="compare" aria-label="三款對話介面提案">
+      <article class="concept-card theme-cinema" data-concept="cinema">
+        <header class="concept-head">
+          <div class="concept-overline"><span class="concept-number">A</span><span>月下映畫</span><span class="concept-palette">NAVY / IVORY / CYAN</span></div>
+          <h2>月下映畫</h2>
+          <p class="concept-tagline">讓夜色留在畫面裡，台詞輕輕浮上來。</p>
+        </header>
+
+        <div class="phone-frame" data-device="390" aria-label="月下映畫手機版預覽">
+          <div class="phone-screen" data-state="dialogue">
+            <div class="scene" aria-hidden="true">
+              <img class="scene-photo" src="../../assets/image/yorozuya-inside.png" alt="">
+              <div class="scene-wash"></div>
+              <img class="scene-character" src="../../assets/image/gintoki.png" alt="">
+              <div class="world-meta"><span>萬事屋・夜</span><span>01:16</span></div>
+            </div>
+
+            <section class="dialogue-layer" aria-label="對話版面">
+              <div class="dialogue-panel">
+                <div class="speaker-row"><span class="speaker-mark" aria-hidden="true">◇</span><span class="speaker-name">銀時</span><span class="scene-count">討債委託　／　01</span></div>
+                <p class="dialogue-copy">這次的理由比較長。先從我小時候說起——</p>
+                <div class="dialogue-footer">
+                  <nav class="quickbar" aria-label="快捷功能">
+                    <button type="button" data-action="menu" aria-label="開啟目錄">目錄</button>
+                    <button type="button" data-action="log">回顧</button>
+                    <button type="button" data-action="auto" aria-pressed="false">自動</button>
+                  </nav>
+                  <button type="button" class="advance-button" data-action="advance" aria-label="前往回應選擇">›</button>
+                </div>
+              </div>
+            </section>
+
+            <section class="choices-layer" aria-label="四選一吐槽">
+              <div class="choices-panel">
+                <div class="choice-heading"><div><span class="panel-kicker">回應時機</span><h3>這句要怎麼接？</h3></div><span class="choice-count">4 選 1</span></div>
+                <div class="choice-list">
+                  <button type="button" class="choice-button" data-action="choice" data-choice="先問清楚委託人" aria-pressed="false"><span class="choice-index">01</span><span>先問清楚委託人</span></button>
+                  <button type="button" class="choice-button" data-action="choice" data-choice="這箱先記到新八名下" aria-pressed="false"><span class="choice-index">02</span><span>這箱先記到新八名下</span></button>
+                  <button type="button" class="choice-button" data-action="choice" data-choice="假裝沒看見收據" aria-pressed="false"><span class="choice-index">03</span><span>假裝沒看見收據</span></button>
+                  <button type="button" class="choice-button" data-action="choice" data-choice="這是甜點，不是證物" aria-pressed="false"><span class="choice-index">04</span><span>這是甜點，不是證物</span></button>
+                </div>
+                <div class="timing-preview" role="img" aria-label="8 秒吐槽倒數條，固定靜態版面示意"><span>8 秒計時示意</span><span class="timing-track"><span></span></span><span class="timing-static">靜態</span></div>
+                <div class="choice-footer"><p class="choice-feedback" aria-live="polite">選一句回應</p><button type="button" class="choice-menu" data-action="menu">目錄</button></div>
+              </div>
+            </section>
+
+            <section class="pause-layer" aria-label="暫停目錄">
+              <div class="pause-panel">
+                <div class="pause-heading"><div><span class="panel-kicker">萬事屋・夜班</span><h3>稍歇片刻</h3></div><button type="button" class="close-menu" data-action="resume" aria-label="關閉目錄">×</button></div>
+                <button type="button" class="menu-row menu-primary" data-action="resume"><span>回到故事</span><span aria-hidden="true">→</span></button>
+                <button type="button" class="menu-row menu-disabled" disabled><span>存讀檔</span><span>預覽停用</span></button>
+                <button type="button" class="menu-row" data-action="menu-feedback" data-label="故事回顧">故事回顧<span aria-hidden="true">＋</span></button>
+                <button type="button" class="menu-row" data-action="menu-feedback" data-label="文字選項">文字選項<span aria-hidden="true">＋</span></button>
+              </div>
+            </section>
+
+            <section class="title-layer" aria-label="標題畫面">
+              <div class="title-panel"><span class="title-kicker">萬事屋的夜班委託</span><h3>月夜<br>欠款簿</h3><p>今夜，也先把帳算清。</p><button type="button" class="title-primary" data-action="start">開始故事 <span aria-hidden="true">→</span></button><button type="button" class="title-secondary" data-action="menu">目錄</button></div>
+            </section>
+            <p class="phone-status" aria-live="polite"></p>
+          </div>
+        </div>
+
+        <div class="concept-caption">
+          <p>全幅夜景、底部漸暗台詞層、細上緣線與小型說話者記號。快捷列維持安靜文字樣式，目錄集中在單一入口。</p>
+          <p class="tradeoff"><strong>取捨</strong>　沉浸感最完整；四選一時底部操作區較高，會收窄場景。</p>
+        </div>
+      </article>
+
+      <article class="concept-card theme-ledger" data-concept="ledger">
+        <header class="concept-head">
+          <div class="concept-overline"><span class="concept-number">B</span><span>萬事屋委託簿</span><span class="concept-palette">PAPER / INK / VERMILION</span></div>
+          <h2>萬事屋委託簿</h2>
+          <p class="concept-tagline">像翻開一本有人情味的帳簿，選項逐行落紙。</p>
+        </header>
+
+        <div class="phone-frame" data-device="390" aria-label="萬事屋委託簿手機版預覽">
+          <div class="phone-screen" data-state="dialogue">
+            <div class="scene" aria-hidden="true">
+              <img class="scene-photo" src="../../assets/image/yorozuya-inside.png" alt="">
+              <div class="scene-wash"></div>
+              <img class="scene-character" src="../../assets/image/gintoki.png" alt="">
+              <div class="world-meta"><span>萬事屋・夜</span><span>01:16</span></div>
+            </div>
+
+            <section class="dialogue-layer" aria-label="對話版面">
+              <div class="dialogue-panel">
+                <div class="paper-edge" aria-hidden="true"></div>
+                <div class="speaker-row"><span class="speaker-mark" aria-hidden="true">印</span><span class="speaker-name">銀時</span><span class="scene-count">討債委託　／　01</span></div>
+                <p class="dialogue-copy">這次的理由比較長。先從我小時候說起——</p>
+                <div class="dialogue-footer">
+                  <nav class="quickbar" aria-label="快捷功能">
+                    <button type="button" data-action="menu" aria-label="開啟目錄">目錄</button>
+                    <button type="button" data-action="log">回顧</button>
+                    <button type="button" data-action="auto" aria-pressed="false">自動</button>
+                  </nav>
+                  <button type="button" class="advance-button" data-action="advance" aria-label="前往回應選擇"><span>續</span></button>
+                </div>
+              </div>
+            </section>
+
+            <section class="choices-layer" aria-label="四選一吐槽">
+              <div class="choices-panel">
+                <div class="paper-edge" aria-hidden="true"></div>
+                <div class="choice-heading"><div><span class="panel-kicker">委託簿・回應欄</span><h3>這句要怎麼接？</h3></div><span class="choice-count">四擇一</span></div>
+                <div class="choice-list">
+                  <button type="button" class="choice-button" data-action="choice" data-choice="先問清楚委託人" aria-pressed="false"><span class="choice-index">壹</span><span>先問清楚委託人</span></button>
+                  <button type="button" class="choice-button" data-action="choice" data-choice="這箱先記到新八名下" aria-pressed="false"><span class="choice-index">貳</span><span>這箱先記到新八名下</span></button>
+                  <button type="button" class="choice-button" data-action="choice" data-choice="假裝沒看見收據" aria-pressed="false"><span class="choice-index">參</span><span>假裝沒看見收據</span></button>
+                  <button type="button" class="choice-button" data-action="choice" data-choice="這是甜點，不是證物" aria-pressed="false"><span class="choice-index">肆</span><span>這是甜點，不是證物</span></button>
+                </div>
+                <div class="timing-preview" role="img" aria-label="8 秒吐槽倒數條，固定靜態版面示意"><span>8 秒計時示意</span><span class="timing-track"><span></span></span><span class="timing-static">靜態</span></div>
+                <div class="choice-footer"><p class="choice-feedback" aria-live="polite">選一句回應</p><button type="button" class="choice-menu" data-action="menu">目錄</button></div>
+              </div>
+            </section>
+
+            <section class="pause-layer" aria-label="暫停目錄">
+              <div class="pause-panel">
+                <div class="paper-edge" aria-hidden="true"></div>
+                <div class="pause-heading"><div><span class="panel-kicker">夜班委託・目錄</span><h3>先歇一會兒</h3></div><button type="button" class="close-menu" data-action="resume" aria-label="關閉目錄">×</button></div>
+                <button type="button" class="menu-row menu-primary" data-action="resume"><span>回到故事</span><span class="seal-small" aria-hidden="true">續</span></button>
+                <button type="button" class="menu-row menu-disabled" disabled><span>存讀檔</span><span>預覽停用</span></button>
+                <button type="button" class="menu-row" data-action="menu-feedback" data-label="故事回顧">故事回顧<span aria-hidden="true">＋</span></button>
+                <button type="button" class="menu-row" data-action="menu-feedback" data-label="文字選項">文字選項<span aria-hidden="true">＋</span></button>
+              </div>
+            </section>
+
+            <section class="title-layer" aria-label="標題畫面">
+              <div class="title-panel"><span class="title-kicker">萬事屋的夜班委託</span><h3>月夜<br>欠款簿</h3><p>今夜，也先把帳算清。</p><button type="button" class="title-primary" data-action="start">開始故事 <span aria-hidden="true">→</span></button><button type="button" class="title-secondary" data-action="menu">目錄</button></div>
+            </section>
+            <p class="phone-status" aria-live="polite"></p>
+          </div>
+        </div>
+
+        <div class="concept-caption">
+          <p>暖象牙紙面、墨色字與朱印主按鈕；選項以帳簿橫線排列，讓每句回應都像寫進委託紀錄。</p>
+          <p class="tradeoff"><strong>取捨</strong>　資訊層級清楚、氣質親切；紙面色塊較實，保留的場景較少。</p>
+        </div>
+      </article>
+
+      <article class="concept-card theme-manga" data-concept="manga">
+        <header class="concept-head">
+          <div class="concept-overline"><span class="concept-number">C</span><span>吐槽分鏡</span><span class="concept-palette">PAPER / INK / RED / YELLOW</span></div>
+          <h2>吐槽分鏡</h2>
+          <p class="concept-tagline">平常安靜讀，輪到吐槽再讓畫格出聲。</p>
+        </header>
+
+        <div class="phone-frame" data-device="390" aria-label="吐槽分鏡手機版預覽">
+          <div class="phone-screen" data-state="dialogue">
+            <div class="scene" aria-hidden="true">
+              <img class="scene-photo" src="../../assets/image/yorozuya-inside.png" alt="">
+              <div class="scene-wash"></div>
+              <img class="scene-character" src="../../assets/image/gintoki.png" alt="">
+              <div class="world-meta"><span>萬事屋・夜</span><span>01:16</span></div>
+            </div>
+
+            <section class="dialogue-layer" aria-label="對話版面">
+              <div class="dialogue-panel">
+                <div class="speech-notch" aria-hidden="true"></div>
+                <div class="speaker-row"><span class="speaker-mark" aria-hidden="true">●</span><span class="speaker-name">銀時</span><span class="scene-count">討債委託　／　01</span></div>
+                <p class="dialogue-copy">這次的理由比較長。先從我小時候說起——</p>
+                <div class="dialogue-footer">
+                  <nav class="quickbar" aria-label="快捷功能">
+                    <button type="button" data-action="menu" aria-label="開啟目錄">目錄</button>
+                    <button type="button" data-action="log">回顧</button>
+                    <button type="button" data-action="auto" aria-pressed="false">自動</button>
+                  </nav>
+                  <button type="button" class="advance-button" data-action="advance" aria-label="前往回應選擇"><span aria-hidden="true">→</span></button>
+                </div>
+              </div>
+            </section>
+
+            <section class="choices-layer" aria-label="四選一吐槽">
+              <div class="choices-panel">
+                <div class="choice-heading"><div><span class="panel-kicker">吐槽時機</span><h3>這句要怎麼接？</h3></div><span class="choice-count">四選一</span></div>
+                <div class="choice-list">
+                  <button type="button" class="choice-button" data-action="choice" data-choice="先問清楚委託人" aria-pressed="false"><span class="choice-index">01</span><span>先問清楚委託人</span></button>
+                  <button type="button" class="choice-button" data-action="choice" data-choice="這箱先記到新八名下" aria-pressed="false"><span class="choice-index">02</span><span>這箱先記到新八名下</span></button>
+                  <button type="button" class="choice-button" data-action="choice" data-choice="假裝沒看見收據" aria-pressed="false"><span class="choice-index">03</span><span>假裝沒看見收據</span></button>
+                  <button type="button" class="choice-button" data-action="choice" data-choice="這是甜點，不是證物" aria-pressed="false"><span class="choice-index">04</span><span>這是甜點，不是證物</span></button>
+                </div>
+                <div class="timing-preview" role="img" aria-label="8 秒吐槽倒數條，固定靜態版面示意"><span>8 秒計時示意</span><span class="timing-track"><span></span></span><span class="timing-static">靜態</span></div>
+                <div class="choice-footer"><p class="choice-feedback" aria-live="polite">選一句回應</p><button type="button" class="choice-menu" data-action="menu">目錄</button></div>
+              </div>
+            </section>
+
+            <section class="pause-layer" aria-label="暫停目錄">
+              <div class="pause-panel">
+                <div class="pause-heading"><div><span class="panel-kicker">夜班委託・目錄</span><h3>稍停一格</h3></div><button type="button" class="close-menu" data-action="resume" aria-label="關閉目錄">×</button></div>
+                <button type="button" class="menu-row menu-primary" data-action="resume"><span>回到故事</span><span aria-hidden="true">→</span></button>
+                <button type="button" class="menu-row menu-disabled" disabled><span>存讀檔</span><span>預覽停用</span></button>
+                <button type="button" class="menu-row" data-action="menu-feedback" data-label="故事回顧">故事回顧<span aria-hidden="true">＋</span></button>
+                <button type="button" class="menu-row" data-action="menu-feedback" data-label="文字選項">文字選項<span aria-hidden="true">＋</span></button>
+              </div>
+            </section>
+
+            <section class="title-layer" aria-label="標題畫面">
+              <div class="title-panel"><span class="title-kicker">萬事屋的夜班委託</span><h3>月夜<br>欠款簿</h3><p>今夜，也先把帳算清。</p><button type="button" class="title-primary" data-action="start">開始故事 <span aria-hidden="true">→</span></button><button type="button" class="title-secondary" data-action="menu">目錄</button></div>
+            </section>
+            <p class="phone-status" aria-live="polite"></p>
+          </div>
+        </div>
+
+        <div class="concept-caption">
+          <p>黑白紙墨作為閱讀底色，朱紅與亮黃只在吐槽選項出場；選項切角和強調鍵承接漫畫分鏡的拍點。</p>
+          <p class="tradeoff"><strong>取捨</strong>　吐槽辨識度最高；造型個性鮮明，需要節制使用強調色。</p>
+        </div>
+      </article>
+    </section>
+
+  <footer class="page-footer">
+    <span>HTML / CSS / JavaScript 預覽稿</span>
+    <span>使用專案現有場景與角色素材・無外部字型或套件</span>
+    <span>樣式選擇保留於本瀏覽器・不儲存遊戲進度</span>
+  </footer>
+  </main>
+  <script>
+    (() => {
+      const cards = [...document.querySelectorAll(".concept-card")];
+      const conceptGrid = document.querySelector(".concept-grid");
+      const modeTabs = [...document.querySelectorAll("[data-mode]")].filter((button) => button.classList.contains("mode-tab"));
+      const styleTabs = [...document.querySelectorAll("[data-style-choice]")];
+      const styleSelector = document.querySelector(".try-style-selector");
+      const stateTabs = [...document.querySelectorAll("[data-global-state]")];
+      const deviceTabs = [...document.querySelectorAll("[data-device]")].filter((button) => button.classList.contains("device-tab"));
+      const statusTimers = new WeakMap();
+      const storageKey = "debt-commission-ui-style";
+      const validStyles = new Set(cards.map((card) => card.dataset.concept));
+      let selectedStyle = cards[0]?.dataset.concept || "cinema";
+
+      try {
+        const savedStyle = window.localStorage.getItem(storageKey);
+        if (validStyles.has(savedStyle)) selectedStyle = savedStyle;
+      } catch (_) {
+        // Private browsing and locked-down previews can disable storage.
+      }
+
+      function setState(card, state, focusSelector = "") {
+        const screen = card.querySelector(".phone-screen");
+        const current = screen.dataset.state;
+        if (state === "pause" && current !== "pause") card.dataset.returnState = current;
+        screen.dataset.state = state;
+        if (focusSelector) {
+          requestAnimationFrame(() => card.querySelector(focusSelector)?.focus());
+        }
+      }
+
+      function showStatus(card, message) {
+        const status = card.querySelector(".phone-status");
+        status.textContent = message;
+        status.classList.add("is-visible");
+        clearTimeout(statusTimers.get(card));
+        statusTimers.set(card, setTimeout(() => status.classList.remove("is-visible"), 2200));
+      }
+
+      function syncStyle(style, persist = false) {
+        if (!validStyles.has(style)) return;
+        selectedStyle = style;
+        cards.forEach((card) => card.classList.toggle("is-try-active", card.dataset.concept === style));
+        styleTabs.forEach((tab) => {
+          const active = tab.dataset.styleChoice === style;
+          tab.classList.toggle("is-active", active);
+          tab.setAttribute("aria-pressed", String(active));
+        });
+        if (persist) {
+          try {
+            window.localStorage.setItem(storageKey, style);
+          } catch (_) {
+            // The selected style still works for this page view.
+          }
+        }
+      }
+
+      function syncMode(mode) {
+        const isTry = mode === "try";
+        conceptGrid.dataset.mode = isTry ? "try" : "compare";
+        styleSelector.hidden = !isTry;
+        modeTabs.forEach((tab) => {
+          const active = tab.dataset.mode === conceptGrid.dataset.mode;
+          tab.classList.toggle("is-active", active);
+          tab.setAttribute("aria-pressed", String(active));
+        });
+      }
+
+      syncStyle(selectedStyle);
+      modeTabs.forEach((tab) => tab.addEventListener("click", () => syncMode(tab.dataset.mode)));
+      styleTabs.forEach((tab) => tab.addEventListener("click", () => syncStyle(tab.dataset.styleChoice, true)));
+
+      function syncState(state) {
+        stateTabs.forEach((tab) => {
+          const active = tab.dataset.globalState === state;
+          tab.classList.toggle("is-active", active);
+          tab.setAttribute("aria-pressed", String(active));
+        });
+        cards.forEach((card) => setState(card, state));
+      }
+
+      stateTabs.forEach((tab) => tab.addEventListener("click", () => syncState(tab.dataset.globalState)));
+
+      deviceTabs.forEach((tab) => tab.addEventListener("click", () => {
+        const size = tab.dataset.device;
+        deviceTabs.forEach((option) => {
+          const active = option === tab;
+          option.classList.toggle("is-active", active);
+          option.setAttribute("aria-pressed", String(active));
+        });
+        cards.forEach((card) => {
+          const frame = card.querySelector(".phone-frame");
+          frame.dataset.device = size;
+          frame.setAttribute("aria-label", `${card.querySelector("h2").textContent} ${size} 像素手機版預覽`);
+        });
+      }));
+
+      document.addEventListener("click", (event) => {
+        const control = event.target.closest("[data-action]");
+        if (!control) return;
+        const card = control.closest(".concept-card");
+        if (!card) return;
+        const screen = card.querySelector(".phone-screen");
+        const action = control.dataset.action;
+
+        if (action === "menu") {
+          if (screen.dataset.state === "pause") {
+            setState(card, card.dataset.returnState || "dialogue");
+          } else {
+            setState(card, "pause", ".close-menu");
+          }
+        } else if (action === "resume") {
+          const returnState = card.dataset.returnState || "dialogue";
+          setState(card, returnState, returnState === "title" ? ".title-primary" : returnState === "choices" ? ".choice-button" : ".quickbar button");
+        } else if (action === "advance") {
+          setState(card, "choices", ".choice-button");
+        } else if (action === "start") {
+          setState(card, "dialogue", ".quickbar button");
+        } else if (action === "choice") {
+          const list = control.closest(".choice-list");
+          list.querySelectorAll(".choice-button").forEach((choice) => {
+            const selected = choice === control;
+            choice.classList.toggle("is-selected", selected);
+            choice.setAttribute("aria-pressed", String(selected));
+          });
+          const selectedText = control.dataset.choice;
+          card.querySelector(".choice-feedback").textContent = `已選：「${selectedText}」`;
+        } else if (action === "auto") {
+          const enabled = control.getAttribute("aria-pressed") !== "true";
+          control.setAttribute("aria-pressed", String(enabled));
+          control.textContent = enabled ? "自動中" : "自動";
+          showStatus(card, enabled ? "自動閱讀樣式已開啟（版面示意）" : "自動閱讀樣式已關閉");
+        } else if (action === "log") {
+          showStatus(card, "故事回顧為版面示意，目前沒有遊戲資料。");
+        } else if (action === "menu-feedback") {
+          showStatus(card, `${control.dataset.label}為版面示意，目前不會載入資料。`);
+        }
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key !== "Escape") return;
+        const openCards = cards.filter((card) => card.querySelector(".phone-screen").dataset.state === "pause");
+        if (!openCards.length) return;
+        event.preventDefault();
+        openCards.forEach((card) => {
+          const returnState = card.dataset.returnState || "dialogue";
+          setState(card, returnState, returnState === "title" ? ".title-primary" : returnState === "choices" ? ".choice-button" : ".quickbar button");
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

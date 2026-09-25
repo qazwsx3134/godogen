@@ -1,0 +1,26 @@
+[
+  {
+    "width": 390,
+    "pass": true,
+    "checks": [
+      "three title styles",
+      "reload persistence",
+      "three menu live switches preserve story position",
+      "three dynamic choice styles",
+      "save slots opens"
+    ],
+    "errors": []
+  },
+  {
+    "width": 320,
+    "pass": true,
+    "checks": [
+      "three title styles",
+      "reload persistence",
+      "three menu live switches preserve story position",
+      "three dynamic choice styles",
+      "save slots opens"
+    ],
+    "errors": []
+  }
+]

@@ -10,21 +10,25 @@ const STORY_RUNNER_SCRIPT: Script = preload("res://scripts/story_runner.gd")
 const FLOATING_BUTTON_SCRIPT: Script = preload("res://scripts/floating_button.gd")
 const SPRITE_SCRIPT: Script = preload("res://scripts/placeholder_sprite.gd")
 const SAVE_SLOTS_SCRIPT: Script = preload("res://scripts/save_slots.gd")
+const UI_STYLES_SCRIPT: Script = preload("res://scripts/ui_styles.gd")
 
 const DESIGN_WIDTH: float = 1080.0
 const FONT_PATH: String = "res://assets/fonts/story-cjk.ttc"
 const SAVE_SCHEMA: int = 3
+const UI_PREFERENCE_PATH: String = "user://ui_preferences.cfg"
 const PHASE3_STORY_PATH: String = "res://data/phase3_story.json"
 const PHASE3_SAVE_PATH: String = "user://strawberry_phase3.save"
 const DEFAULT_BOKE_TIMER_SECONDS: float = 8.0
 
 @export_file("*.json") var story_path: String = "res://data/debt_story.json"
 @export var save_path: String = "user://debt_commission.save"
+var ui_preference_path: String = UI_PREFERENCE_PATH
 
 const TYPEWRITER_INTERVAL: float = 0.032
 const DIALOG_RATIO: float = 0.28
 const EDGE: float = 24.0
-const QUICKBAR_HEIGHT: float = 104.0
+const DIALOG_GAP: float = 12.0
+const QUICKBAR_HEIGHT: float = 160.0
 const TEXT_FONT_MAX: int = 56
 const TEXT_FONT_MIN: int = 42
 const TEXT_MAX_LINES: int = 3
@@ -50,9 +54,14 @@ const AUDIO_PATHS: Dictionary = {
 const SLOT_X: Dictionary = {"left": 0.2, "center": 0.5, "right": 0.8}
 
 const COLOR_LETTERBOX: Color = Color("#0b0d18")
-const COLOR_PANEL: Color = Color(0.06, 0.08, 0.17, 0.88)
+const COLOR_PANEL: Color = Color(0.035, 0.045, 0.09, 0.76)
 const COLOR_PANEL_SOLID: Color = Color("#101530")
 const COLOR_GOLD: Color = Color("#c9a24a")
+const COLOR_UI_ACCENT: Color = Color("#b7c6e2")
+const COLOR_BUTTON_SURFACE: Color = Color(0.045, 0.06, 0.115, 0.82)
+const COLOR_BUTTON_HOVER: Color = Color(0.09, 0.12, 0.205, 0.94)
+const COLOR_BUTTON_BORDER: Color = Color(0.42, 0.49, 0.63, 0.22)
+const COLOR_BUTTON_ACTIVE: Color = Color("#b7c6e2")
 const COLOR_TEXT: Color = Color("#f6f1e7")
 const COLOR_TEXT_SOFT: Color = Color("#b9b4c8")
 const COLOR_THOUGHT: Color = Color("#9fc3ff")
@@ -79,6 +88,14 @@ var _dialog_layer: Control = null
 var _float_layer: Control = null
 var _popup_layer: Control = null
 var _title_screen: Control = null
+var _title_style_panel: Panel = null
+var _title_style_caption: Label = null
+var _title_style_row: HBoxContainer = null
+var _title_style_buttons: Dictionary = {}
+var _menu_style_caption: Label = null
+var _menu_style_row: HBoxContainer = null
+var _menu_style_buttons: Dictionary = {}
+var _menu_panel_shell: Panel = null
 
 var _place_tag: Label = null
 var _sprites: Dictionary = {}
@@ -158,6 +175,7 @@ var _safe_bottom: float = 0.0
 
 var _audio_players: Dictionary = {}
 var _audio_muted: bool = false
+var _ui_style_id: String = "cinema"
 
 var _screen_mode: String = "title"
 var _mode_before_overlay: String = "story"
@@ -210,11 +228,13 @@ func _ready() -> void:
 	ui_theme.default_font = _font
 	ui_theme.default_font_size = 44
 	theme = ui_theme
+	_ui_style_id = UI_STYLES_SCRIPT.load_preference(ui_preference_path)
 
 	_select_story_variant()
 	_load_story()
 	_build_audio()
 	_build_ui()
+	_apply_ui_style()
 	get_viewport().size_changed.connect(_layout)
 	_layout()
 	_detect_qa_mode()
@@ -267,6 +287,7 @@ func _build_audio() -> void:
 func _build_ui() -> void:
 	var letterbox: ColorRect = ColorRect.new()
 	letterbox.color = COLOR_LETTERBOX
+	letterbox.set_meta("ui_style_role", "letterbox")
 	letterbox.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(letterbox)
 	letterbox.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -322,8 +343,9 @@ func _build_background() -> void:
 	_bg_layer.add_child(_background_rect)
 	_background_rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_place_tag = _make_label(_bg_layer, "萬事屋・客廳", 40, COLOR_TEXT)
-	_place_tag.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.55))
-	_place_tag.add_theme_constant_override("outline_size", 10)
+	_place_tag.set_meta("ui_style_role", "scene_overlay")
+	_place_tag.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.72))
+	_place_tag.add_theme_constant_override("outline_size", 4)
 	var initial_bg: String = "yorozuya_living_room"
 	if not _backgrounds.has(initial_bg) and not _backgrounds.is_empty():
 		initial_bg = str(_backgrounds.keys()[0])
@@ -341,6 +363,7 @@ func _apply_background(background_id: String) -> void:
 		var art: Resource = load(path)
 		if art is Texture2D:
 			_background_rect.texture = art as Texture2D
+			_background_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 			return
 	_background_gradient.set_color(0, Color(str(info.get("top", "#2e2a45"))))
 	_background_gradient.set_color(1, Color(str(info.get("bottom", "#b9794f"))))
@@ -349,6 +372,7 @@ func _apply_background(background_id: String) -> void:
 	texture.fill_from = Vector2(0.5, 0.0)
 	texture.fill_to = Vector2(0.5, 1.0)
 	_background_rect.texture = texture
+	_background_rect.stretch_mode = TextureRect.STRETCH_SCALE
 
 
 func _build_sprites() -> void:
@@ -361,7 +385,7 @@ func _build_sprites() -> void:
 		if not art_path.is_empty():
 			var art: Resource = load(art_path)
 			if art is Texture2D:
-				sprite.call("set_art", art)
+				sprite.call("set_art", art, bool(info.get("silhouette", false)))
 		sprite.visible = false
 		_sprites[actor_id] = sprite
 
@@ -370,7 +394,8 @@ func _build_phase3_hud() -> void:
 	_phase3_hud = Panel.new()
 	_phase3_hud.name = "Phase3Hud"
 	_phase3_hud.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_phase3_hud.add_theme_stylebox_override("panel", _make_style(COLOR_PANEL, COLOR_GOLD, 16, 2))
+	_phase3_hud.set_meta("ui_style_role", "hud")
+	_phase3_hud.add_theme_stylebox_override("panel", _make_style(COLOR_PANEL, COLOR_BUTTON_BORDER, 8, 0))
 	_fx_layer.add_child(_phase3_hud)
 	_phase3_stats_label = _make_label(_phase3_hud, "眼鏡 5/5　力量 0/100", 30, COLOR_TEXT)
 	_phase3_stats_label.name = "Phase3Stats"
@@ -406,15 +431,18 @@ func _build_dialogue() -> void:
 	_dialog_panel = Panel.new()
 	_dialog_panel.name = "DialoguePanel"
 	_dialog_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_dialog_panel.add_theme_stylebox_override("panel", _make_style(COLOR_PANEL, COLOR_GOLD, 22, 4))
+	_dialog_panel.set_meta("ui_style_role", "dialogue")
+	_dialog_panel.add_theme_stylebox_override("panel", _make_dialog_style())
 	_dialog_layer.add_child(_dialog_panel)
 
 	_text_label = _make_label(_dialog_panel, "", TEXT_FONT_MAX, COLOR_TEXT)
 	_text_label.name = "DialogueText"
 	_text_label.autowrap_mode = TextServer.AUTOWRAP_ARBITRARY
 	_text_label.add_theme_constant_override("line_spacing", 10)
+	_text_label.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.88))
+	_text_label.add_theme_constant_override("outline_size", 4)
 
-	_next_indicator = _make_label(_dialog_panel, "▼", 40, COLOR_GOLD)
+	_next_indicator = _make_label(_dialog_panel, "▼", 40, COLOR_UI_ACCENT)
 	_next_indicator.name = "NextIndicator"
 	var blink: Tween = create_tween().set_loops()
 	blink.tween_property(_next_indicator, "modulate:a", 0.15, 0.45)
@@ -423,10 +451,14 @@ func _build_dialogue() -> void:
 	_name_plate = Panel.new()
 	_name_plate.name = "NamePlate"
 	_name_plate.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_name_plate.set_meta("ui_style_role", "name")
+	_name_plate.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 	_dialog_layer.add_child(_name_plate)
 	_name_label = _make_label(_name_plate, "", 44, COLOR_TEXT)
-	_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	_name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_name_label.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.82))
+	_name_label.add_theme_constant_override("outline_size", 3)
 
 	_choice_box = VBoxContainer.new()
 	_choice_box.name = "Choices"
@@ -450,9 +482,11 @@ func _build_dialogue() -> void:
 	_end_title_button.pressed.connect(_show_title)
 	for button: Button in [_restart_button, _game_over_retry_button, _end_title_button]:
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		button.custom_minimum_size.y = 160.0
 
 	_investigation_continue_button = _make_button(_dialog_panel, "檢查完成・繼續", 34)
 	_investigation_continue_button.name = "InvestigationContinue"
+	_set_button_style(_investigation_continue_button, "primary")
 	_investigation_continue_button.visible = false
 	_investigation_continue_button.pressed.connect(_on_investigation_continue_pressed)
 
@@ -478,6 +512,7 @@ func _build_dialogue() -> void:
 	_boke_listen_button.pressed.connect(_on_boke_listen_pressed)
 	_boke_tsukkomi_button = _make_button(_boke_controls, "吐槽！", 32)
 	_boke_tsukkomi_button.name = "BokeTsukkomi"
+	_set_button_style(_boke_tsukkomi_button, "boke_primary")
 	_boke_tsukkomi_button.pressed.connect(_on_boke_tsukkomi_pressed)
 
 	_quickbar = HBoxContainer.new()
@@ -485,30 +520,35 @@ func _build_dialogue() -> void:
 	_quickbar.add_theme_constant_override("separation", 16)
 	_quickbar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_dialog_layer.add_child(_quickbar)
-	_log_button = _make_button(_quickbar, "LOG", 38)
+	_log_button = _make_button(_quickbar, "紀錄", 34)
+	_set_button_style(_log_button, "quickbar")
 	_log_button.pressed.connect(_open_log)
-	_auto_button = _make_button(_quickbar, "AUTO", 38)
+	_auto_button = _make_button(_quickbar, "自動", 34)
+	_set_button_style(_auto_button, "quickbar")
 	_auto_button.pressed.connect(func() -> void: _set_auto(not _auto))
-	_skip_button = _make_button(_quickbar, "SKIP", 38)
+	_skip_button = _make_button(_quickbar, "略讀", 34)
+	_set_button_style(_skip_button, "quickbar")
 	_skip_button.pressed.connect(func() -> void: _set_skip(not _skip))
-	_material_button = _make_button(_quickbar, "素材", 38)
+	_material_button = _make_button(_quickbar, "素材", 34)
+	_set_button_style(_material_button, "quickbar")
 	_material_button.disabled = not _phase3_enabled
 	_material_button.pressed.connect(_show_inventory_feedback)
 	for button: Button in [_log_button, _auto_button, _skip_button, _material_button]:
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		button.custom_minimum_size.y = QUICKBAR_HEIGHT
 
 
 func _build_floating_buttons() -> void:
 	_menu_button = FLOATING_BUTTON_SCRIPT.new() as Control
 	_menu_button.name = "MenuButton"
 	_float_layer.add_child(_menu_button)
-	_menu_button.call("setup", "≡", _font)
+	_menu_button.call("setup", "≡", _font, _ui_style_id)
 	_menu_button.connect("tapped", _open_menu)
 
 	_save_button = FLOATING_BUTTON_SCRIPT.new() as Control
 	_save_button.name = "SaveButton"
 	_float_layer.add_child(_save_button)
-	_save_button.call("setup", "S", _font)
+	_save_button.call("setup", "S", _font, _ui_style_id)
 	_save_button.connect("tapped", func() -> void: _open_slot_picker("save"))
 	_save_button.connect("long_pressed", func() -> void: _open_slot_picker("save"))
 	for button: Control in [_menu_button, _save_button]:
@@ -552,14 +592,35 @@ void fragment() {
 	_menu_overlay.add_child(_menu_dim)
 	_menu_dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
+	_menu_panel_shell = Panel.new()
+	_menu_panel_shell.name = "MenuPanelShell"
+	_menu_panel_shell.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_menu_panel_shell.set_meta("ui_style_role", "menu")
+	_menu_overlay.add_child(_menu_panel_shell)
+
 	_menu_panel = VBoxContainer.new()
 	_menu_panel.name = "MenuPanel"
 	_menu_panel.add_theme_constant_override("separation", 14)
 	_menu_overlay.add_child(_menu_panel)
+	_menu_style_caption = _make_label(_menu_panel, "介面風格", 48, COLOR_TEXT_SOFT)
+	_menu_style_caption.name = "MenuStyleCaption"
+	_menu_style_row = HBoxContainer.new()
+	_menu_style_row.name = "MenuStyleSelector"
+	_menu_style_row.add_theme_constant_override("separation", 8)
+	_menu_panel.add_child(_menu_style_row)
+	for style_id: String in UI_STYLES_SCRIPT.style_ids():
+		var style_button: Button = _make_button(_menu_style_row,
+			{"cinema": "A 映畫", "ledger": "B 委託簿", "manga": "C 分鏡"}[style_id], 48)
+		style_button.name = "MenuStyle_" + style_id
+		style_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		style_button.custom_minimum_size.y = 164.0
+		_set_button_style(style_button, "selector", style_id == _ui_style_id)
+		style_button.pressed.connect(_on_ui_style_selected.bind(style_id))
+		_menu_style_buttons[style_id] = style_button
 	var material_action: Callable = _show_inventory_feedback if _phase3_enabled else Callable()
 	var entries: Array = [
-		["save", "存 檔", func() -> void: _open_slot_picker("save")],
-		["load", "讀 檔", func() -> void: _open_slot_picker("load")],
+		["save", "儲存進度", func() -> void: _open_slot_picker("save")],
+		["load", "讀取存檔", func() -> void: _open_slot_picker("load")],
 		["material", "吐槽素材", material_action],
 		["profile", "人物檔案", Callable()],
 		["log", "對話紀錄", _open_log],
@@ -568,17 +629,20 @@ void fragment() {
 		["title", "回標題", _show_title],
 	]
 	for entry: Array in entries:
-		var button: Button = _make_button(_menu_panel, str(entry[1]), 44)
-		button.custom_minimum_size = Vector2(520.0, 104.0)
+		var button: Button = _make_button(_menu_panel, str(entry[1]), 48)
+		_set_button_style(button, "menu")
+		button.custom_minimum_size = Vector2(860.0, 164.0)
 		var action: Callable = entry[2]
 		if action.is_valid():
 			button.pressed.connect(action)
 		else:
-			button.disabled = true  # ponytail: 素材／人物檔案 Phase 3、設定 Phase 5
+			button.disabled = true
+			button.visible = false  # 尚未提供的功能不佔選單操作空間。
 		_menu_items[str(entry[0])] = button
 
 	_menu_close = _make_button(_menu_overlay, "×", 60)
 	_menu_close.name = "MenuClose"
+	_set_button_style(_menu_close, "standard")
 	_menu_close.size = Vector2(112.0, 112.0)
 	_menu_close.pressed.connect(_close_menu)
 
@@ -588,6 +652,7 @@ func _build_log() -> void:
 	_log_overlay.name = "LogOverlay"
 	_log_overlay.visible = false
 	_log_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	_log_overlay.set_meta("ui_style_role", "log")
 	_log_overlay.add_theme_stylebox_override("panel", _make_style(Color(0.04, 0.05, 0.11, 0.96), COLOR_GOLD, 0, 0))
 	_popup_layer.add_child(_log_overlay)
 	_log_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -611,9 +676,10 @@ func _build_log() -> void:
 func _build_toast() -> void:
 	_toast = _make_label(_popup_layer, "", 40, COLOR_TEXT)
 	_toast.name = "Toast"
+	_toast.set_meta("ui_style_role", "toast")
 	_toast.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_toast.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	_toast.add_theme_stylebox_override("normal", _make_style(COLOR_PANEL_SOLID, COLOR_GOLD, 40, 3))
+	_toast.add_theme_stylebox_override("normal", _make_style(Color(0.035, 0.045, 0.09, 0.92), COLOR_BUTTON_BORDER, 10, 0))
 	_toast.visible = false
 
 
@@ -627,16 +693,26 @@ func _build_title() -> void:
 	texture.fill_to = Vector2(0.5, 1.0)
 	var background: TextureRect = TextureRect.new()
 	background.texture = texture
-	background.stretch_mode = TextureRect.STRETCH_SCALE
+	background.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 	background.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	background.modulate = Color(0.68, 0.73, 0.84, 1.0)
 	background.mouse_filter = Control.MOUSE_FILTER_STOP
 	_title_screen.add_child(background)
 	background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var exterior_info: Dictionary = _backgrounds.get("yorozuya_exterior", {}) as Dictionary
+	var exterior_path: String = str(exterior_info.get("path", ""))
+	if not exterior_path.is_empty():
+		var exterior_art: Resource = load(exterior_path)
+		if exterior_art is Texture2D:
+			background.texture = exterior_art as Texture2D
 
 	var logo: Label = _make_label(_title_screen, "萬事屋\n吐槽 ADV", 104, COLOR_TEXT)
 	logo.name = "Logo"
+	logo.set_meta("ui_style_role", "title_overlay")
 	logo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	logo.add_theme_stylebox_override("normal", _make_style(Color(0.06, 0.08, 0.17, 0.7), COLOR_GOLD, 12, 6))
+	logo.add_theme_stylebox_override("normal", StyleBoxEmpty.new())
+	logo.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.86))
+	logo.add_theme_constant_override("outline_size", 6)
 	var subtitle_text: String = "暫定標題・V1 Phase 2 劇本引擎\n試玩文本：第一場《請幫我向你老闆討債》"
 	if story_path.ends_with("phase2_story.json"):
 		subtitle_text = "Phase 2 草莓牛奶技術測試\n非核准的第一章劇本"
@@ -644,20 +720,48 @@ func _build_title() -> void:
 		subtitle_text = "Phase 3 調查與吐槽技術試片\n非核准的第一章劇本"
 	var subtitle: Label = _make_label(_title_screen, subtitle_text, 36, COLOR_TEXT_SOFT)
 	subtitle.name = "Subtitle"
+	subtitle.set_meta("ui_style_role", "title_overlay")
 	subtitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	subtitle.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.8))
+	subtitle.add_theme_constant_override("outline_size", 3)
+
+	_title_style_panel = Panel.new()
+	_title_style_panel.name = "TitleStylePanel"
+	_title_style_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_title_style_panel.set_meta("ui_style_role", "title_selector")
+	_title_screen.add_child(_title_style_panel)
+	_title_style_caption = _make_label(_title_style_panel, "介面風格", 44, COLOR_TEXT_SOFT)
+	_title_style_caption.name = "TitleStyleCaption"
+	_title_style_row = HBoxContainer.new()
+	_title_style_row.name = "TitleStyleSelector"
+	_title_style_row.add_theme_constant_override("separation", 8)
+	_title_style_panel.add_child(_title_style_row)
+	for style_id: String in UI_STYLES_SCRIPT.style_ids():
+		var style_button: Button = _make_button(_title_style_row,
+			{"cinema": "A 映畫", "ledger": "B 委託簿", "manga": "C 分鏡"}[style_id], 48)
+		style_button.name = "TitleStyle_" + style_id
+		style_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		style_button.custom_minimum_size.y = 164.0
+		_set_button_style(style_button, "selector", style_id == _ui_style_id)
+		style_button.pressed.connect(_on_ui_style_selected.bind(style_id))
+		_title_style_buttons[style_id] = style_button
 
 	_begin_button = _make_button(_title_screen, "新遊戲", 52)
 	_begin_button.name = "BeginButton"
+	_set_button_style(_begin_button, "primary")
 	_begin_button.pressed.connect(_on_begin_pressed)
 	_continue_button = _make_button(_title_screen, "繼續", 52)
 	_continue_button.name = "ContinueButton"
+	_set_button_style(_continue_button, "primary")
 	_continue_button.pressed.connect(_on_continue_pressed)
 	_title_load_button = _make_button(_title_screen, "讀取存檔", 52)
 	_title_load_button.name = "TitleLoadButton"
+	_set_button_style(_title_load_button, "subtle")
 	_title_load_button.pressed.connect(func() -> void: _open_slot_picker("load"))
 
 	_title_error = _make_label(_title_screen, "", 34, Color("#ff9d8a"))
 	_title_error.name = "TitleError"
+	_set_label_style(_title_error, "danger")
 	_title_error.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_title_error.autowrap_mode = TextServer.AUTOWRAP_ARBITRARY
 	var version_text: String = "v0.3 · Phase 2"
@@ -665,6 +769,7 @@ func _build_title() -> void:
 		version_text = "v0.4 · Phase 3"
 	var version: Label = _make_label(_title_screen, version_text, 30, COLOR_TEXT_SOFT)
 	version.name = "Version"
+	version.set_meta("ui_style_role", "title_overlay")
 
 
 func _build_slot_picker() -> void:
@@ -689,7 +794,8 @@ func _build_slot_picker() -> void:
 	_slot_panel = Panel.new()
 	_slot_panel.name = "SlotPanel"
 	_slot_panel.mouse_filter = Control.MOUSE_FILTER_STOP
-	_slot_panel.add_theme_stylebox_override("panel", _make_style(Color("#101530"), COLOR_GOLD, 24, 4))
+	_slot_panel.set_meta("ui_style_role", "slots")
+	_slot_panel.add_theme_stylebox_override("panel", _make_style(Color(0.035, 0.045, 0.09, 0.96), COLOR_BUTTON_BORDER, 12, 0))
 	_slot_overlay.add_child(_slot_panel)
 	_slot_title = _make_label(_slot_panel, "存檔位", 44, COLOR_GOLD)
 	_slot_title.name = "SlotTitle"
@@ -706,11 +812,13 @@ func _build_slot_picker() -> void:
 	_slot_next_button.pressed.connect(func() -> void: _change_slot_page(1))
 	_slot_auto_button = _make_button(_slot_panel, "繼續自動存檔", 30)
 	_slot_auto_button.name = "SlotAuto"
+	_set_button_style(_slot_auto_button, "primary")
 	_slot_auto_button.pressed.connect(_load_autosave_from_picker)
 
 	for local_index: int in range(SAVE_SLOTS_SCRIPT.PAGE_SIZE):
 		var card: Button = _make_button(_slot_panel, "", 28)
 		card.name = "SlotCard%d" % (local_index + 1)
+		_set_button_style(card, "slot_card")
 		card.pressed.connect(_on_slot_card_pressed.bind(local_index))
 		var number_label: Label = _make_label(card, "", 28, COLOR_GOLD)
 		var title_label: Label = _make_label(card, "", 24, COLOR_TEXT)
@@ -746,12 +854,14 @@ func _build_slot_picker() -> void:
 	_slot_confirmation_panel = Panel.new()
 	_slot_confirmation_panel.name = "OverwriteConfirmation"
 	_slot_confirmation_panel.mouse_filter = Control.MOUSE_FILTER_STOP
-	_slot_confirmation_panel.add_theme_stylebox_override("panel", _make_style(Color("#171b35"), COLOR_GOLD, 24, 4))
+	_slot_confirmation_panel.set_meta("ui_style_role", "confirmation")
+	_slot_confirmation_panel.add_theme_stylebox_override("panel", _make_style(Color(0.055, 0.065, 0.12, 0.98), COLOR_BUTTON_BORDER, 12, 0))
 	_slot_confirmation_overlay.add_child(_slot_confirmation_panel)
 	_slot_confirmation_label = _make_label(_slot_confirmation_panel, "覆寫這個存檔位？", 34, COLOR_TEXT)
 	_slot_confirmation_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_slot_confirm_yes = _make_button(_slot_confirmation_panel, "覆寫", 30)
 	_slot_confirm_yes.name = "SlotConfirmYes"
+	_set_button_style(_slot_confirm_yes, "danger_action")
 	_slot_confirm_yes.pressed.connect(_confirm_slot_overwrite)
 	_slot_confirm_no = _make_button(_slot_confirmation_panel, "返回", 30)
 	_slot_confirm_no.name = "SlotConfirmNo"
@@ -787,29 +897,34 @@ func _layout() -> void:
 	var quickbar_y: float = bottom - QUICKBAR_HEIGHT
 	_quickbar.position = Vector2(EDGE, quickbar_y)
 	_quickbar.size = Vector2(width - EDGE * 2.0, QUICKBAR_HEIGHT)
-	var dialog_height: float = roundf(height * DIALOG_RATIO)
-	var dialog_y: float = quickbar_y - 16.0 - dialog_height
-	_dialog_panel.position = Vector2(EDGE, dialog_y)
-	_dialog_panel.size = Vector2(width - EDGE * 2.0, dialog_height)
-	_text_label.position = Vector2(52.0, 64.0)
+	var dialog_height: float = roundf(height * DIALOG_RATIO) if _phase3_enabled else clampf(height * 0.20, 360.0, 440.0)
+	var dialog_y: float = quickbar_y - DIALOG_GAP - dialog_height
+	_dialog_panel.position = Vector2(0.0, dialog_y)
+	_dialog_panel.size = Vector2(width, height - dialog_y)
+	_text_label.position = Vector2(56.0, 68.0)
 	var interactive_dialog: bool = _screen_mode in ["investigate", "boke_round", "tsukkomi"]
-	_text_label.size = Vector2(_dialog_panel.size.x - 104.0, dialog_height - (288.0 if interactive_dialog else 128.0))
-	_next_indicator.position = Vector2(_dialog_panel.size.x - 84.0, dialog_height - 76.0)
-	_next_indicator.size = Vector2(48.0, 52.0)
-	_investigation_continue_button.position = Vector2(_dialog_panel.size.x - 320.0, dialog_height - 156.0)
-	_investigation_continue_button.size = Vector2(264.0, 128.0)
-	_boke_controls.position = Vector2(40.0, dialog_height - 156.0)
-	_boke_controls.size = Vector2(_dialog_panel.size.x - 80.0, 128.0)
+	_text_label.size = Vector2(width - 160.0, dialog_height - (272.0 if interactive_dialog else 128.0))
+	_next_indicator.position = Vector2(_dialog_panel.size.x - 72.0, dialog_height - 66.0)
+	_next_indicator.size = Vector2(40.0, 48.0)
+	var continue_min_width: float = _investigation_continue_button.get_combined_minimum_size().x
+	var continue_width: float = minf(maxf(264.0, continue_min_width), maxf(0.0, width - 112.0))
+	_investigation_continue_button.position = Vector2(width - 56.0 - continue_width, dialog_height - 176.0)
+	_investigation_continue_button.size = Vector2(continue_width, 160.0)
+	_boke_controls.position = Vector2(40.0, dialog_height - 176.0)
+	_boke_controls.size = Vector2(_dialog_panel.size.x - 80.0, 160.0)
 	for boke_control: Button in [_boke_previous_button, _boke_next_button, _boke_listen_button, _boke_tsukkomi_button]:
-		boke_control.custom_minimum_size = Vector2(204.0, 128.0)
-	_name_plate.position = Vector2(EDGE + 36.0, dialog_y - 46.0)
-	_name_plate.size.y = 92.0
+		boke_control.custom_minimum_size = Vector2(204.0, 160.0)
+	_name_plate.position = Vector2(56.0, dialog_y + 12.0)
+	var name_width: float = maxf(220.0,
+		_font.get_string_size(_name_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, 44).x + 32.0)
+	_name_plate.size.x = minf(name_width, maxf(0.0, width - EDGE * 2.0))
+	_name_plate.size.y = 44.0
 	_name_label.size = _name_plate.size
 
 	_choice_box.position = Vector2(80.0, top + 180.0)
 	_choice_box.size = Vector2(width - 160.0, dialog_y - 56.0 - (top + 180.0))
-	_end_box.position = Vector2(80.0, dialog_y - 56.0 - 124.0)
-	_end_box.size = Vector2(width - 160.0, 124.0)
+	_end_box.position = Vector2(80.0, dialog_y - 56.0 - 160.0)
+	_end_box.size = Vector2(width - 160.0, 160.0)
 
 	for actor_id: String in _sprites.keys():
 		_layout_sprite(actor_id)
@@ -841,10 +956,14 @@ func _layout_sprite(actor_id: String) -> void:
 	var sprite: Control = _sprites[actor_id] as Control
 	var slot: String = str(_actor_slots.get(actor_id, "center"))
 	var slot_x: float = float(SLOT_X.get(slot, 0.5))
-	# 立繪頭部在對話框上方，身體延伸到畫面底部，下緣被對話框蓋住。
+	# 立繪頭部在對話框上方，底部只少量進入透明對話層。
 	var sprite_top: float = _dialog_panel.position.y + 180.0 - 1040.0
-	sprite.position = Vector2(_game.size.x * slot_x - sprite.size.x * 0.5, sprite_top)
-	sprite.size = Vector2(sprite.size.x, _game.size.y - sprite_top)
+	var actor_info: Dictionary = _actors.get(actor_id, {}) as Dictionary
+	var sprite_x: float = _game.size.x * slot_x - sprite.size.x * 0.5
+	if bool(actor_info.get("silhouette", false)):
+		sprite_x = clampf(sprite_x, 0.0, maxf(0.0, _game.size.x - sprite.size.x))
+	sprite.size = Vector2(sprite.size.x, 1040.0)
+	sprite.position = Vector2(sprite_x, sprite_top)
 	sprite.queue_redraw()
 
 
@@ -873,6 +992,12 @@ func _layout_title(width: float, height: float, top: float, bottom: float) -> vo
 	_continue_button.size = Vector2(width - 480.0, 132.0)
 	_title_load_button.position = Vector2(240.0, height * 0.56 + 328.0)
 	_title_load_button.size = Vector2(width - 480.0, 132.0)
+	_title_style_panel.position = Vector2(56.0, height * 0.43)
+	_title_style_panel.size = Vector2(width - 112.0, 224.0)
+	_title_style_caption.position = Vector2(20.0, 6.0)
+	_title_style_caption.size = Vector2(_title_style_panel.size.x - 40.0, 52.0)
+	_title_style_row.position = Vector2(20.0, 58.0)
+	_title_style_row.size = Vector2(_title_style_panel.size.x - 40.0, 164.0)
 	_title_error.position = Vector2(80.0, _title_load_button.position.y + 170.0)
 	_title_error.size = Vector2(width - 160.0, 100.0)
 	var version: Label = _title_screen.get_node("Version")
@@ -885,11 +1010,13 @@ func _layout_menu_panel() -> void:
 	var width: float = _game.size.x
 	var anchor: Vector2 = _menu_button.position
 	var on_left: bool = anchor.x + 64.0 < width * 0.5
-	var x: float = EDGE + 150.0 if on_left else width - EDGE - 150.0 - _menu_panel.size.x
-	var y: float = clampf(anchor.y, EDGE + _safe_top + 120.0,
-		maxf(EDGE, _game.size.y - EDGE - _safe_bottom - _menu_panel.size.y))
+	var x: float = (width - _menu_panel.size.x) * 0.5
+	var y: float = maxf(EDGE + _safe_top + 140.0, (_game.size.y - _menu_panel.size.y) * 0.5)
 	_menu_panel.position = Vector2(x, y)
 	_menu_panel.pivot_offset = Vector2(0.0 if on_left else _menu_panel.size.x, 0.0)
+	if _menu_panel_shell != null:
+		_menu_panel_shell.position = _menu_panel.position - Vector2(14.0, 14.0)
+		_menu_panel_shell.size = _menu_panel.size + Vector2(28.0, 28.0)
 
 
 func _layout_slot_picker(width: float, height: float, top: float, bottom: float) -> void:
@@ -1143,7 +1270,7 @@ func _present_say(command: Dictionary, restored: bool) -> void:
 	var thought: bool = _dict_bool(command, "thought")
 	_set_name_plate(_current_speaker, thought)
 	_focus_speaker(_current_speaker, _dict_string(command, "expression", ""))
-	_text_label.add_theme_color_override("font_color", COLOR_THOUGHT if thought else COLOR_TEXT)
+	_set_label_style(_text_label, "thought" if thought else "body")
 	_fit_text_size(_full_text)
 	if restored and _line_logged:
 		_set_visible_text(_full_text, true)
@@ -1183,7 +1310,7 @@ func _present_investigation(command: Dictionary, restored: bool) -> void:
 	_skip_button.disabled = true
 	_set_name_plate("shinpachi", true)
 	_focus_speaker("shinpachi", "thinking")
-	_text_label.add_theme_color_override("font_color", COLOR_THOUGHT)
+	_set_label_style(_text_label, "thought")
 	_layout()
 	_fit_text_size(_full_text)
 	_set_visible_text(_full_text, true)
@@ -1322,7 +1449,7 @@ func _present_boke_round(command: Dictionary, restored: bool, requested_ui_mode:
 	_full_text = _dict_string(current_line, "text", "（銀時正在等你的吐槽。）")
 	if bool(command.get("listened", false)):
 		_full_text += "\n\n「" + _dict_string(current_line, "listen_text") + "」"
-	_text_label.add_theme_color_override("font_color", COLOR_TEXT)
+	_set_label_style(_text_label, "body")
 	_fit_text_size(_full_text)
 	_set_visible_text(_full_text, true)
 	var lines: Array = command.get("lines", []) as Array
@@ -1379,9 +1506,10 @@ func _present_tsukkomi_options(command: Dictionary, restored: bool) -> void:
 		_current_options.append(option)
 		var button: Button = _make_button(_choice_box, "▶ " + _dict_string(option, "label"), 39)
 		button.name = "Boke_" + _dict_string(option, "id")
+		_set_button_style(button, "choice")
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		button.autowrap_mode = TextServer.AUTOWRAP_ARBITRARY
-		button.custom_minimum_size = Vector2(0.0, 124.0)
+		button.custom_minimum_size = Vector2(0.0, 164.0)
 		button.pressed.connect(_on_boke_option_pressed.bind(_dict_string(option, "id")))
 		_choice_buttons.append(button)
 
@@ -1558,7 +1686,7 @@ func _present_choice(command: Dictionary) -> void:
 	_refresh_phase3_hud()
 	_set_name_plate("shinpachi", true)
 	_focus_speaker("shinpachi", "thinking")
-	_text_label.add_theme_color_override("font_color", COLOR_THOUGHT)
+	_set_label_style(_text_label, "thought")
 	_fit_text_size(_full_text)
 	_set_visible_text(_full_text, true)
 	if not _line_logged:
@@ -1574,9 +1702,10 @@ func _present_choice(command: Dictionary) -> void:
 		_current_options.append(option)
 		var button: Button = _make_button(_choice_box, "▶ " + _dict_string(option, "label"), 46)
 		button.name = "Choice_%d" % _choice_buttons.size()
+		_set_button_style(button, "choice")
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		button.autowrap_mode = TextServer.AUTOWRAP_ARBITRARY
-		button.custom_minimum_size = Vector2(0.0, 132.0)
+		button.custom_minimum_size = Vector2(0.0, 164.0)
 		button.pressed.connect(_on_choice_pressed.bind(_dict_string(option, "id")))
 		_choice_buttons.append(button)
 	call_deferred("_update_float_bounds")
@@ -1619,7 +1748,7 @@ func _present_end(command: Dictionary) -> void:
 	_refresh_phase3_hud()
 	_set_name_plate("narrator", false)
 	_focus_speaker("narrator", "")
-	_text_label.add_theme_color_override("font_color", COLOR_GOLD)
+	_set_label_style(_text_label, "accent")
 	_fit_text_size(_full_text)
 	_set_visible_text(_full_text, true)
 	_end_box.visible = true
@@ -1653,7 +1782,7 @@ func _show_runtime_error(message: String) -> void:
 	_screen_mode = "story"
 	_current_command = {}
 	_set_name_plate("narrator", false)
-	_text_label.add_theme_color_override("font_color", Color("#ff9d8a"))
+	_set_label_style(_text_label, "danger")
 	_set_visible_text(message, false)
 	_publish_qa_state()
 
@@ -1665,11 +1794,14 @@ func _set_name_plate(speaker: String, thought: bool) -> void:
 	if not _name_plate.visible:
 		return
 	var info: Dictionary = _actors[speaker] as Dictionary
-	var color: Color = Color(str(info["color"]))
-	_name_plate.add_theme_stylebox_override("panel", _make_style(color.darkened(0.35), COLOR_GOLD, 16, 4))
 	_name_label.text = str(info["name"]) + ("・心聲" if thought else "")
+	_name_plate.set_meta("ui_style_role", "name_thought" if thought else "name")
+	_name_label.set_meta("ui_style_role", "speaker")
+	UI_STYLES_SCRIPT.apply_panel(_name_plate, _ui_style_id,
+		"name_thought" if thought else "name")
+	UI_STYLES_SCRIPT.apply_label(_name_label, _ui_style_id, "speaker")
 	var text_width: float = _font.get_string_size(_name_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, 44).x
-	_name_plate.size.x = maxf(220.0, text_width + 80.0)
+	_name_plate.size.x = maxf(220.0, text_width + 32.0)
 	_name_label.size = _name_plate.size
 
 
@@ -1838,8 +1970,7 @@ func _update_toggle_styles() -> void:
 	for pair: Array in [[_auto_button, _auto], [_skip_button, _skip]]:
 		var button: Button = pair[0]
 		var active: bool = pair[1]
-		button.add_theme_stylebox_override("normal", _make_style(COLOR_GOLD if active else COLOR_PANEL, COLOR_GOLD, 18, 3))
-		button.add_theme_color_override("font_color", COLOR_PANEL_SOLID if active else COLOR_TEXT)
+		_set_button_style(button, "quickbar", active)
 
 
 func _process(delta: float) -> void:
@@ -2037,12 +2168,8 @@ func _refresh_slot_page() -> void:
 				title_label.text = "資料無效或不相容" if _slot_mode == "load" else "無效資料・確認後覆寫"
 			else:
 				title_label.text = "空白存檔位" if _slot_mode == "save" else "尚無存檔"
-		var normal_color: Color = Color("#192340") if valid else Color("#14182a")
-		var border_color: Color = COLOR_GOLD if valid else COLOR_DISABLED
-		button.add_theme_stylebox_override("normal", _make_style(normal_color, border_color, 16, 3))
-		button.add_theme_stylebox_override("hover", _make_style(normal_color.lightened(0.12), COLOR_GOLD, 16, 4))
-		button.add_theme_stylebox_override("pressed", _make_style(COLOR_GOLD, COLOR_GOLD, 16, 4))
-		button.add_theme_stylebox_override("disabled", _make_style(Color("#111421"), Color("#45495a"), 16, 2))
+		var card_role: String = "slot_card" if valid else ("slot_card_invalid" if occupied else "slot_card_empty")
+		_set_button_style(button, card_role)
 		button.visible = true
 
 
@@ -2525,26 +2652,23 @@ func _make_label(parent: Node, value: String, font_size: int, color: Color) -> L
 	label.text = value
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	label.add_theme_font_size_override("font_size", font_size)
-	label.add_theme_color_override("font_color", color)
+	label.set_meta("ui_style_role", _label_role_for_color(color))
 	parent.add_child(label)
+	UI_STYLES_SCRIPT.apply_label(label, _ui_style_id, str(label.get_meta("ui_style_role")))
 	return label
 
 
 func _make_button(parent: Node, value: String, font_size: int) -> Button:
 	var button: Button = Button.new()
 	button.text = value
-	button.focus_mode = Control.FOCUS_NONE
 	button.add_theme_font_size_override("font_size", font_size)
-	button.add_theme_color_override("font_color", COLOR_TEXT)
-	button.add_theme_color_override("font_hover_color", COLOR_TEXT)
-	button.add_theme_color_override("font_pressed_color", COLOR_PANEL_SOLID)
-	button.add_theme_color_override("font_disabled_color", COLOR_DISABLED)
-	button.add_theme_stylebox_override("normal", _make_style(COLOR_PANEL, COLOR_GOLD, 18, 3))
-	button.add_theme_stylebox_override("hover", _make_style(Color(0.12, 0.15, 0.3, 0.92), COLOR_GOLD, 18, 4))
-	button.add_theme_stylebox_override("pressed", _make_style(COLOR_GOLD, COLOR_GOLD, 18, 4))
-	button.add_theme_stylebox_override("disabled", _make_style(Color(0.06, 0.07, 0.12, 0.7), COLOR_DISABLED, 18, 2))
 	parent.add_child(button)
+	_set_button_style(button, "standard")
 	return button
+
+
+func _make_dialog_style() -> StyleBoxFlat:
+	return UI_STYLES_SCRIPT.panel_style(_ui_style_id, "dialogue")
 
 
 func _make_style(background: Color, border: Color, radius: int, border_width: int) -> StyleBoxFlat:
@@ -2558,6 +2682,79 @@ func _make_style(background: Color, border: Color, radius: int, border_width: in
 	style.content_margin_top = 12.0
 	style.content_margin_bottom = 12.0
 	return style
+
+
+func _label_role_for_color(color: Color) -> String:
+	if color == COLOR_GOLD or color == COLOR_UI_ACCENT:
+		return "accent"
+	if color == COLOR_TEXT_SOFT:
+		return "muted"
+	if color == COLOR_THOUGHT:
+		return "thought"
+	if color == COLOR_DISABLED:
+		return "disabled"
+	if color == Color("#ff9d8a"):
+		return "danger"
+	return "body"
+
+
+func _set_label_style(label: Label, role: String) -> void:
+	label.set_meta("ui_style_role", role)
+	UI_STYLES_SCRIPT.apply_label(label, _ui_style_id, role)
+
+
+func _set_button_style(button: Button, role: String, active: bool = false) -> void:
+	UI_STYLES_SCRIPT.apply_button(button, _ui_style_id, role, active)
+
+
+func _on_ui_style_selected(style_id: String) -> void:
+	_set_ui_style(style_id)
+
+
+func _set_ui_style(style_id: String, persist: bool = true) -> void:
+	_ui_style_id = UI_STYLES_SCRIPT.normalize_id(style_id)
+	if persist:
+		var save_error: Error = UI_STYLES_SCRIPT.save_preference(_ui_style_id, ui_preference_path)
+		if save_error != OK:
+			push_warning("Could not save UI style preference: %s" % error_string(save_error))
+	_apply_ui_style()
+	if _menu_panel != null:
+		_layout_menu_panel()
+	_publish_qa_state()
+
+
+func _apply_ui_style() -> void:
+	if _title_style_caption != null:
+		_title_style_caption.text = "介面風格 · " + UI_STYLES_SCRIPT.style_label(_ui_style_id)
+	if _menu_style_caption != null:
+		_menu_style_caption.text = "介面風格 · " + UI_STYLES_SCRIPT.style_label(_ui_style_id)
+	if _title_style_buttons.is_empty() and _menu_style_buttons.is_empty():
+		return
+	for style_id: String in _title_style_buttons.keys():
+		(_title_style_buttons[style_id] as Button).set_meta("ui_style_active", style_id == _ui_style_id)
+	for style_id: String in _menu_style_buttons.keys():
+		(_menu_style_buttons[style_id] as Button).set_meta("ui_style_active", style_id == _ui_style_id)
+	_apply_ui_style_recursive(self)
+	if _menu_button != null:
+		_menu_button.call("set_style", _ui_style_id)
+		_save_button.call("set_style", _ui_style_id)
+	_update_toggle_styles()
+
+
+func _apply_ui_style_recursive(node: Node) -> void:
+	var role: String = str(node.get_meta("ui_style_role", ""))
+	if node is Button and not role.is_empty():
+		var button: Button = node as Button
+		UI_STYLES_SCRIPT.apply_button(button, _ui_style_id, role,
+			bool(button.get_meta("ui_style_active", false)))
+	elif node is Label and not role.is_empty():
+		UI_STYLES_SCRIPT.apply_label(node as Label, _ui_style_id, role)
+	elif node is Panel and not role.is_empty():
+		UI_STYLES_SCRIPT.apply_panel(node as Panel, _ui_style_id, role)
+	elif node is ColorRect and role == "letterbox":
+		(node as ColorRect).color = UI_STYLES_SCRIPT.palette(_ui_style_id)["canvas"] as Color
+	for child: Node in node.get_children():
+		_apply_ui_style_recursive(child)
 
 
 # ---------------------------------------------------------------- QA（僅 ?qa=1 的 Web 版）
@@ -2589,10 +2786,21 @@ func _publish_qa_state() -> void:
 	}
 	for item_id: String in _menu_items.keys():
 		named["menu_" + item_id] = _menu_items[item_id]
+	for style_id: String in _title_style_buttons.keys():
+		named["title_style_" + style_id] = _title_style_buttons[style_id]
+	for style_id: String in _menu_style_buttons.keys():
+		named["menu_style_" + style_id] = _menu_style_buttons[style_id]
 	for control_name: String in named.keys():
 		var control: Control = named[control_name]
 		if control.is_visible_in_tree() and not (control is BaseButton and (control as BaseButton).disabled):
 			controls[control_name] = _rect(control)
+	for style_id: String in UI_STYLES_SCRIPT.style_ids():
+		var title_style_button: Button = _title_style_buttons.get(style_id) as Button
+		var menu_style_button: Button = _menu_style_buttons.get(style_id) as Button
+		if title_style_button != null and title_style_button.is_visible_in_tree():
+			controls["style_" + style_id] = _rect(title_style_button)
+		elif menu_style_button != null and menu_style_button.is_visible_in_tree():
+			controls["style_" + style_id] = _rect(menu_style_button)
 	var hotspot_state: Array[Dictionary] = []
 	for raw_hotspot: Variant in current.get("hotspots", []):
 		if not raw_hotspot is Dictionary:
@@ -2658,6 +2866,7 @@ func _publish_qa_state() -> void:
 		"auto": _auto,
 		"skip": _skip,
 		"audio_muted": _audio_muted,
+		"ui_style": _ui_style_id,
 		"toast": _toast.text if _toast.visible else "",
 		"float_alpha": _float_alpha,
 		"viewport": {"width": get_viewport_rect().size.x, "height": get_viewport_rect().size.y},

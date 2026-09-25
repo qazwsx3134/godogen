@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://delalchwc6ycm"
+path="res://.godot/imported/phase4.dialogue-cd3145936c84c853a8fe0139185fe8f1.tres"
+
+[deps]
+
+source_file="res://story_src/phase4.dialogue"
+dest_files=["res://.godot/imported/phase4.dialogue-cd3145936c84c853a8fe0139185fe8f1.tres"]
+
+[params]
+
+defaults=true

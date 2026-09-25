@@ -1,10 +1,8 @@
-extends SceneTree
+extends "res://addons/proto_kit/test_kit.gd"
 ## Integration check for the Phase 2 JSON sample and the VN presentation/save layer.
 
 const SAMPLE_STORY: String = "res://data/phase2_story.json"
 const TEST_SAVE: String = "user://phase2_ui_test.save"
-
-var failures: Array[String] = []
 
 
 func _init() -> void:
@@ -51,14 +49,7 @@ func _run() -> void:
 	await _frames(2)
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(TEST_SAVE))
 
-	if failures.is_empty():
-		print("PHASE 2 UI TESTS PASSED")
-		quit(0)
-	else:
-		for failure: String in failures:
-			push_error(failure)
-		print("PHASE 2 UI TESTS FAILED: %d" % failures.size())
-		quit(1)
+	_finish("PHASE 2 UI TESTS")
 
 
 func _new_game() -> Control:
@@ -67,23 +58,3 @@ func _new_game() -> Control:
 	game.save_path = TEST_SAVE
 	root.add_child(game)
 	return game
-
-
-func _frames(count: int) -> void:
-	for _frame: int in range(count):
-		await process_frame
-
-
-func _until(condition: Callable, label: String, timeout: float = 5.0) -> void:
-	var deadline: int = Time.get_ticks_msec() + int(timeout * 1000.0)
-	while Time.get_ticks_msec() < deadline:
-		if condition.call():
-			return
-		await process_frame
-	failures.append("timed out: " + label)
-
-
-func _expect(condition: bool, label: String) -> void:
-	if not condition:
-		failures.append(label)
-		print("FAIL: ", label)

@@ -1,0 +1,14 @@
+[remap]
+
+importer="parley_dialogue_sequence_ast_1.1.0"
+type="Resource"
+uid="uid://sitg7ti086w8"
+path="res://.godot/imported/phase4.ds-9a27cf3b4953514a82e089dc53e09740.tres"
+
+[deps]
+
+source_file="res://story_src/phase4.ds"
+dest_files=["res://.godot/imported/phase4.ds-9a27cf3b4953514a82e089dc53e09740.tres"]
+
+[params]
+

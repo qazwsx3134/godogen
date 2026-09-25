@@ -1,6 +1,6 @@
 # Prototypes
 
-此目錄收錄獨立的設計驗證原型。各原型維護自己的工具鏈、README 與驗證資料，repo 邊界見 [ADR 0001](docs/adr/0001-prototypes-live-in-godogen.md)。
+此目錄收錄獨立的設計驗證原型。各原型維護自己的工具鏈、README 與驗證資料，repo 邊界見 [ADR 0001](docs/adr/0001-prototypes-live-in-godogen.md)。Godot 原型之間共用的程式（合成音、原子存檔、headless 測試基底）只在 [godot-kit](godot-kit/README.md) 維護一份，再同步進各原型的 `addons/proto_kit/`。
 
 ## 第一人稱互動小說規劃
 

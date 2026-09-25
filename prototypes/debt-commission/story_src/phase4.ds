@@ -1,0 +1,660 @@
+{
+  "title": "phase4",
+  "nodes": [
+    {
+      "id": "node:1",
+      "type": "START",
+      "position": "(0.0, 0.0)"
+    },
+    {
+      "id": "node:2",
+      "type": "ACTION",
+      "position": "(460.0, 0.0)",
+      "description": "bg(\"yorozuya_living_room\")",
+      "action_type": "SCRIPT",
+      "action_script_ref": "",
+      "values": []
+    },
+    {
+      "id": "node:3",
+      "type": "ACTION",
+      "position": "(460.0, 200.0)",
+      "description": "char(\"shinpachi\")",
+      "action_type": "SCRIPT",
+      "action_script_ref": "",
+      "values": []
+    },
+    {
+      "id": "node:4",
+      "type": "ACTION",
+      "position": "(460.0, 400.0)",
+      "description": "char(\"gintoki\", \"annoyed\", \"right\")",
+      "action_type": "SCRIPT",
+      "action_script_ref": "",
+      "values": []
+    },
+    {
+      "id": "node:5",
+      "type": "ACTION",
+      "position": "(460.0, 600.0)",
+      "description": "profile(\"gintoki\")",
+      "action_type": "SCRIPT",
+      "action_script_ref": "",
+      "values": []
+    },
+    {
+      "id": "node:6",
+      "type": "DIALOGUE",
+      "position": "(460.0, 800.0)",
+      "character": "uid://caci80tc5curv::shinpachi",
+      "text": "Phase 4 技術試片：這不是核准的第一章台詞。草莓牛奶不見了，先把客廳查個遍。",
+      "text_translation_key": ""
+    },
+    {
+      "id": "node:7",
+      "type": "ACTION",
+      "position": "(460.0, 1000.0)",
+      "description": "investigate(\"living_room_search\")",
+      "action_type": "SCRIPT",
+      "action_script_ref": "",
+      "values": []
+    },
+    {
+      "id": "node:8",
+      "type": "DIALOGUE",
+      "position": "(460.0, 1200.0)",
+      "character": "uid://caci80tc5curv::shinpachi",
+      "text": "四件線索都到手了。",
+      "text_translation_key": ""
+    },
+    {
+      "id": "node:9",
+      "type": "DIALOGUE",
+      "position": "(920.0, 0.0)",
+      "character": "",
+      "text": "要先問誰？",
+      "text_translation_key": ""
+    },
+    {
+      "id": "node:10",
+      "type": "DIALOGUE_OPTION",
+      "position": "(920.0, 200.0)",
+      "character": "",
+      "text": "直接問銀時",
+      "text_translation_key": "ask_gintoki"
+    },
+    {
+      "id": "node:11",
+      "type": "ACTION",
+      "position": "(920.0, 400.0)",
+      "description": "set asked = \"gintoki\"",
+      "action_type": "SCRIPT",
+      "action_script_ref": "",
+      "values": []
+    },
+    {
+      "id": "node:12",
+      "type": "DIALOGUE_OPTION",
+      "position": "(920.0, 600.0)",
+      "character": "",
+      "text": "先聽神樂怎麼說",
+      "text_translation_key": "ask_kagura"
+    },
+    {
+      "id": "node:13",
+      "type": "ACTION",
+      "position": "(920.0, 800.0)",
+      "description": "set asked = \"kagura\"",
+      "action_type": "SCRIPT",
+      "action_script_ref": "",
+      "values": []
+    },
+    {
+      "id": "node:14",
+      "type": "ACTION",
+      "position": "(1380.0, 0.0)",
+      "description": "char(\"kagura\", \"smile\", \"left\")",
+      "action_type": "SCRIPT",
+      "action_script_ref": "",
+      "values": []
+    },
+    {
+      "id": "node:15",
+      "type": "ACTION",
+      "position": "(1380.0, 200.0)",
+      "description": "profile(\"kagura\")",
+      "action_type": "SCRIPT",
+      "action_script_ref": "",
+      "values": []
+    },
+    {
+      "id": "node:16",
+      "type": "DIALOGUE",
+      "position": "(1380.0, 400.0)",
+      "character": "uid://caci80tc5curv::kagura",
+      "text": "醋昆布是我的，但牛奶不是我喝的阿魯。",
+      "text_translation_key": ""
+    },
+    {
+      "id": "node:17",
+      "type": "ACTION",
+      "position": "(1380.0, 800.0)",
+      "description": "boke_round(\"gintoki_four_clues\")",
+      "action_type": "SCRIPT",
+      "action_script_ref": "",
+      "values": []
+    },
+    {
+      "id": "node:18",
+      "type": "DIALOGUE",
+      "position": "(1840.0, 0.0)",
+      "character": "uid://caci80tc5curv::shinpachi",
+      "text": "技術結果：perfect；拿出關鍵證據，吐槽力增加。",
+      "text_translation_key": ""
+    },
+    {
+      "id": "node:19",
+      "type": "CONDITION",
+      "position": "(1840.0, 200.0)",
+      "description": "asked == \"kagura\"",
+      "combiner": "ALL",
+      "conditions": []
+    },
+    {
+      "id": "node:20",
+      "type": "DIALOGUE",
+      "position": "(2300.0, 0.0)",
+      "character": "uid://caci80tc5curv::kagura",
+      "text": "早就說不是我了阿魯。",
+      "text_translation_key": ""
+    },
+    {
+      "id": "node:21",
+      "type": "ACTION",
+      "position": "(2300.0, 400.0)",
+      "description": "end(\"完美結果測試結束\")",
+      "action_type": "SCRIPT",
+      "action_script_ref": "",
+      "values": []
+    },
+    {
+      "id": "node:22",
+      "type": "END",
+      "position": "(2760.0, 400.0)"
+    },
+    {
+      "id": "node:23",
+      "type": "DIALOGUE",
+      "position": "(1840.0, 800.0)",
+      "character": "uid://caci80tc5curv::shinpachi",
+      "text": "技術結果：weak；方向對了，但證據不夠硬。",
+      "text_translation_key": ""
+    },
+    {
+      "id": "node:24",
+      "type": "ACTION",
+      "position": "(1840.0, 1000.0)",
+      "description": "end(\"普通結果測試結束\")",
+      "action_type": "SCRIPT",
+      "action_script_ref": "",
+      "values": []
+    },
+    {
+      "id": "node:25",
+      "type": "END",
+      "position": "(2300.0, 1000.0)"
+    },
+    {
+      "id": "node:26",
+      "type": "DIALOGUE",
+      "position": "(1840.0, 1400.0)",
+      "character": "uid://caci80tc5curv::shinpachi",
+      "text": "技術結果：hidden；腳印證明定春沒碰冰箱。",
+      "text_translation_key": ""
+    },
+    {
+      "id": "node:27",
+      "type": "ACTION",
+      "position": "(1840.0, 1600.0)",
+      "description": "end(\"隱藏結果測試結束\")",
+      "action_type": "SCRIPT",
+      "action_script_ref": "",
+      "values": []
+    },
+    {
+      "id": "node:28",
+      "type": "END",
+      "position": "(2300.0, 1600.0)"
+    },
+    {
+      "id": "node:29",
+      "type": "DIALOGUE",
+      "position": "(1840.0, 2000.0)",
+      "character": "uid://caci80tc5curv::shinpachi",
+      "text": "技術結果：fail；冷場消耗一副眼鏡，再來一次。",
+      "text_translation_key": ""
+    },
+    {
+      "id": "node:30",
+      "type": "DIALOGUE",
+      "position": "(1840.0, 2400.0)",
+      "character": "uid://caci80tc5curv::shinpachi",
+      "text": "Game Over：眼鏡耗盡。可從吐槽回合檢查點重試。",
+      "text_translation_key": ""
+    },
+    {
+      "id": "node:31",
+      "type": "ACTION",
+      "position": "(1840.0, 2600.0)",
+      "description": "end(\"Game Over 技術測試結束\")",
+      "action_type": "SCRIPT",
+      "action_script_ref": "",
+      "values": []
+    },
+    {
+      "id": "node:32",
+      "type": "END",
+      "position": "(2300.0, 2600.0)"
+    },
+    {
+      "id": "node:33",
+      "type": "GROUP",
+      "position": "(420.0, -80.0)",
+      "name": "phase4_open",
+      "node_ids": [
+        "node:2",
+        "node:3",
+        "node:4",
+        "node:5",
+        "node:6",
+        "node:7",
+        "node:8"
+      ],
+      "colour": "(0.0667, 0.102, 0.1686, 1.0)",
+      "size": "(400.0, 1440.0)"
+    },
+    {
+      "id": "node:34",
+      "type": "GROUP",
+      "position": "(880.0, -80.0)",
+      "name": "ask_first",
+      "node_ids": [
+        "node:9",
+        "node:10",
+        "node:11",
+        "node:12",
+        "node:13"
+      ],
+      "colour": "(0.0667, 0.102, 0.1686, 1.0)",
+      "size": "(400.0, 1040.0)"
+    },
+    {
+      "id": "node:35",
+      "type": "GROUP",
+      "position": "(1340.0, -80.0)",
+      "name": "kagura_aside",
+      "node_ids": [
+        "node:14",
+        "node:15",
+        "node:16"
+      ],
+      "colour": "(0.0667, 0.102, 0.1686, 1.0)",
+      "size": "(400.0, 640.0)"
+    },
+    {
+      "id": "node:36",
+      "type": "GROUP",
+      "position": "(1340.0, 720.0)",
+      "name": "gintoki_round",
+      "node_ids": [
+        "node:17"
+      ],
+      "colour": "(0.0667, 0.102, 0.1686, 1.0)",
+      "size": "(400.0, 240.0)"
+    },
+    {
+      "id": "node:37",
+      "type": "GROUP",
+      "position": "(1800.0, -80.0)",
+      "name": "perfect",
+      "node_ids": [
+        "node:18",
+        "node:19"
+      ],
+      "colour": "(0.0667, 0.102, 0.1686, 1.0)",
+      "size": "(400.0, 440.0)"
+    },
+    {
+      "id": "node:38",
+      "type": "GROUP",
+      "position": "(2260.0, -80.0)",
+      "name": "perfect_kagura",
+      "node_ids": [
+        "node:20"
+      ],
+      "colour": "(0.0667, 0.102, 0.1686, 1.0)",
+      "size": "(400.0, 240.0)"
+    },
+    {
+      "id": "node:39",
+      "type": "GROUP",
+      "position": "(2260.0, 320.0)",
+      "name": "perfect_end",
+      "node_ids": [
+        "node:21"
+      ],
+      "colour": "(0.0667, 0.102, 0.1686, 1.0)",
+      "size": "(400.0, 240.0)"
+    },
+    {
+      "id": "node:40",
+      "type": "GROUP",
+      "position": "(1800.0, 720.0)",
+      "name": "weak",
+      "node_ids": [
+        "node:23",
+        "node:24"
+      ],
+      "colour": "(0.0667, 0.102, 0.1686, 1.0)",
+      "size": "(400.0, 440.0)"
+    },
+    {
+      "id": "node:41",
+      "type": "GROUP",
+      "position": "(1800.0, 1320.0)",
+      "name": "hidden",
+      "node_ids": [
+        "node:26",
+        "node:27"
+      ],
+      "colour": "(0.0667, 0.102, 0.1686, 1.0)",
+      "size": "(400.0, 440.0)"
+    },
+    {
+      "id": "node:42",
+      "type": "GROUP",
+      "position": "(1800.0, 1920.0)",
+      "name": "cold",
+      "node_ids": [
+        "node:29"
+      ],
+      "colour": "(0.0667, 0.102, 0.1686, 1.0)",
+      "size": "(400.0, 240.0)"
+    },
+    {
+      "id": "node:43",
+      "type": "GROUP",
+      "position": "(1800.0, 2320.0)",
+      "name": "game_over",
+      "node_ids": [
+        "node:30",
+        "node:31"
+      ],
+      "colour": "(0.0667, 0.102, 0.1686, 1.0)",
+      "size": "(400.0, 440.0)"
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge:1",
+      "from_node": "node:2",
+      "from_slot": 0,
+      "to_node": "node:3",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:2",
+      "from_node": "node:3",
+      "from_slot": 0,
+      "to_node": "node:4",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:3",
+      "from_node": "node:4",
+      "from_slot": 0,
+      "to_node": "node:5",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:4",
+      "from_node": "node:5",
+      "from_slot": 0,
+      "to_node": "node:6",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:5",
+      "from_node": "node:6",
+      "from_slot": 0,
+      "to_node": "node:7",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:6",
+      "from_node": "node:7",
+      "from_slot": 0,
+      "to_node": "node:8",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:7",
+      "from_node": "node:1",
+      "from_slot": 0,
+      "to_node": "node:2",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:8",
+      "from_node": "node:9",
+      "from_slot": 0,
+      "to_node": "node:10",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:9",
+      "from_node": "node:10",
+      "from_slot": 0,
+      "to_node": "node:11",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:10",
+      "from_node": "node:9",
+      "from_slot": 0,
+      "to_node": "node:12",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:11",
+      "from_node": "node:12",
+      "from_slot": 0,
+      "to_node": "node:13",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:12",
+      "from_node": "node:8",
+      "from_slot": 0,
+      "to_node": "node:9",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:13",
+      "from_node": "node:14",
+      "from_slot": 0,
+      "to_node": "node:15",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:14",
+      "from_node": "node:15",
+      "from_slot": 0,
+      "to_node": "node:16",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:15",
+      "from_node": "node:13",
+      "from_slot": 0,
+      "to_node": "node:14",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:16",
+      "from_node": "node:11",
+      "from_slot": 0,
+      "to_node": "node:17",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:17",
+      "from_node": "node:16",
+      "from_slot": 0,
+      "to_node": "node:17",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:18",
+      "from_node": "node:18",
+      "from_slot": 0,
+      "to_node": "node:19",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:19",
+      "from_node": "node:21",
+      "from_slot": 0,
+      "to_node": "node:22",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:20",
+      "from_node": "node:19",
+      "from_slot": 0,
+      "to_node": "node:20",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:21",
+      "from_node": "node:19",
+      "from_slot": 1,
+      "to_node": "node:21",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:22",
+      "from_node": "node:20",
+      "from_slot": 0,
+      "to_node": "node:21",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:23",
+      "from_node": "node:23",
+      "from_slot": 0,
+      "to_node": "node:24",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:24",
+      "from_node": "node:24",
+      "from_slot": 0,
+      "to_node": "node:25",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:25",
+      "from_node": "node:26",
+      "from_slot": 0,
+      "to_node": "node:27",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:26",
+      "from_node": "node:27",
+      "from_slot": 0,
+      "to_node": "node:28",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:27",
+      "from_node": "node:29",
+      "from_slot": 0,
+      "to_node": "node:17",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:28",
+      "from_node": "node:30",
+      "from_slot": 0,
+      "to_node": "node:31",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:29",
+      "from_node": "node:31",
+      "from_slot": 0,
+      "to_node": "node:32",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    }
+  ]
+}

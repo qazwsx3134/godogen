@@ -1,8 +1,7 @@
-extends SceneTree
+extends "res://addons/proto_kit/test_kit.gd"
 ## Headless gesture checks for the Phase 1 VN shell: one tap = one action, long-press,
 ## swipe-up, floating-button drag/snap/long-press, idle alpha, menu close.
 
-var failures: Array[String] = []
 var main: Control = null
 const SAVE_SLOTS_SCRIPT: Script = preload("../scripts/save_slots.gd")
 const TEST_SAVE: String = "user://vn_shell_slots_test.save"
@@ -31,13 +30,13 @@ func _run() -> void:
 	await _until(func() -> bool: return _key() != before and main._screen_mode == "story", "second tap advances")
 
 	before = _key()
-	await _press_hold_release(stage, stage, 0.75)
+	await _drag(stage, stage, 0.75)
 	_expect(main._ui_hidden and _key() == before, "long-press hides UI without advancing")
 	_expect(not main._dialog_panel.visible and not main._float_layer.visible, "dialogue and buttons hidden")
 	await _tap(stage)
 	_expect(not main._ui_hidden and _key() == before, "tap restores UI without advancing")
 
-	await _press_hold_release(stage + Vector2(0, 300), stage, 0.1)
+	await _drag(stage + Vector2(0, 300), stage, 0.1)
 	_expect(main._screen_mode == "log" and _key().ends_with(before.substr(before.find(":"))), "swipe up opens log")
 	main._close_log()
 	_expect(_key() == before, "closing log returns to the same line")
@@ -45,7 +44,7 @@ func _run() -> void:
 	var menu_button: Control = main._menu_button
 	var bounds: Rect2 = menu_button.get("bounds")
 	var start: Vector2 = menu_button.get_global_rect().get_center()
-	await _press_hold_release(start, main._game.position + Vector2(300, bounds.position.y + 400), 0.1)
+	await _drag(start, main._game.position + Vector2(300, bounds.position.y + 400), 0.1)
 	await create_timer(0.4).timeout
 	_expect(is_equal_approx(menu_button.position.x, bounds.position.x),
 		"dragged menu button snaps to left edge (x=%s, left=%s)" % [menu_button.position.x, bounds.position.x])
@@ -54,7 +53,7 @@ func _run() -> void:
 
 	var save_center: Vector2 = main._save_button.get_global_rect().get_center()
 	var story_position: String = _progress_key()
-	await _press_hold_release(save_center, save_center, 0.8)
+	await _drag(save_center, save_center, 0.8)
 	_expect(main._screen_mode == "save_slots", "long-press S opens the save-slot picker")
 	_expect(not FileAccess.file_exists(SAVE_SLOTS_SCRIPT.manual_path(TEST_SAVE, 1)), "opening the picker does not save a slot")
 	_expect(_progress_key() == story_position, "long-press S does not advance")
@@ -81,14 +80,7 @@ func _run() -> void:
 	await _until(func() -> bool: return main._screen_mode == "choice", "SKIP runs to the choice", 20.0)
 	_expect(not main._skip, "SKIP stops at the choice")
 
-	if failures.is_empty():
-		print("VN SHELL TESTS PASSED")
-		quit(0)
-	else:
-		for failure: String in failures:
-			push_error(failure)
-		print("VN SHELL TESTS FAILED: %d" % failures.size())
-		quit(1)
+	_finish("VN SHELL TESTS")
 	_cleanup_saves()
 
 
@@ -111,55 +103,6 @@ func _remove_save_path(path: String) -> void:
 	var absolute_path: String = ProjectSettings.globalize_path(path)
 	if FileAccess.file_exists(absolute_path):
 		DirAccess.remove_absolute(absolute_path)
-
-
-func _mouse(at: Vector2, pressed: bool) -> void:
-	var event: InputEventMouseButton = InputEventMouseButton.new()
-	event.button_index = MOUSE_BUTTON_LEFT
-	event.pressed = pressed
-	event.position = at
-	event.global_position = at
-	root.push_input(event, true)
-
-
-func _move(at: Vector2) -> void:
-	var event: InputEventMouseMotion = InputEventMouseMotion.new()
-	event.button_mask = MOUSE_BUTTON_MASK_LEFT
-	event.position = at
-	event.global_position = at
-	root.push_input(event, true)
-
-
-func _tap(at: Vector2) -> void:
-	_mouse(at, true)
-	await _frames(1)
-	_mouse(at, false)
-	await _frames(3)
-
-
-func _press_hold_release(from: Vector2, to: Vector2, hold: float) -> void:
-	_mouse(from, true)
-	await _frames(1)
-	for step: int in range(1, 7):
-		_move(from.lerp(to, step / 6.0))
-		await _frames(1)
-	await create_timer(hold).timeout
-	_mouse(to, false)
-	await _frames(3)
-
-
-func _frames(count: int) -> void:
-	for i: int in range(count):
-		await process_frame
-
-
-func _until(condition: Callable, label: String, timeout: float = 5.0) -> void:
-	var deadline: int = Time.get_ticks_msec() + int(timeout * 1000.0)
-	while Time.get_ticks_msec() < deadline:
-		if condition.call():
-			return
-		await process_frame
-	failures.append("timed out: " + label)
 
 
 func _expect(condition: bool, label: String) -> void:

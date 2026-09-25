@@ -66,3 +66,27 @@ Phase 2 的自動驗收完成。Android Chrome／iOS Safari 真人試玩、首�
 | Web 觸控 | Chromium 390×844 真實 canvas 觸控：調查取素材、選欄存檔、銀時立繪與發言切換、聽下去、閱讀超過 8 秒、吐槽選詞、選單暫停、重新整理後從指定欄位恢復剩餘秒數，最後選 perfect 並只增加一次力量；6 組檢查通過，錯誤為空。320×568 的四個選項都在畫面內、對話框上方；見[報告](phase3-browser-report.json)、[發言畫面](preview-phase3-boke-phone.png)與[窄畫面選詞](preview-phase3-tsukkomi-narrow.png) |
 
 技術短循環已可從 Web 開啟。Phase 3 的整體關卡仍需作者確認一回合正式台詞，並在 Android Chrome／iOS Safari 真人試玩 8 秒反應時間、選項可讀性與笑點節奏；桌機觸控模擬不能代替實機結論。
+
+## 底部對話層 UI Web 試版
+
+2026-09-25 的[原版／前一版／素材試版畫面比較](UI-TRIAL.md)保留全寬對話層的歷次截圖。前一版有上緣細線；目前素材試版移除對話框邊線，將底色不透明度降至 0.62，並使用店面、客廳及銀時剪影素材。上方 Phase 1 的 28% 對話框紀錄是原版驗證。
+
+| 檢查 | 結果與證據 |
+| --- | --- |
+| Godot UI | `test_vn_shell.gd` 與 `test_phase3_ui.gd` 通過；Web 匯出成功 |
+| 討債主線 | Chromium 桌機 A 路線 53 個閱讀點、14 組檢查；390×844 觸控 B 路線 52 個閱讀點、15 組檢查。320×568 雙選項、底部全寬、層內快捷列與懸浮鈕避讓均通過；見[報告](ui-trial-main-report.json) |
+| Phase 3 | 390×844 調查、發言、聆聽、吐槽選詞、限時暫停與存讀檔共 6 組檢查通過；320×568 的四個選項保持在對話層上方，調查繼續按鈕留在畫面內；見[報告](ui-trial-phase3-report.json) |
+| 手動存讀檔 | 390×844 觸控欄位操作 4 組檢查通過；見[報告](ui-trial-slots-report.json) |
+
+以上是 Web 試版技術驗證。對話層高度與透明度的實機閱讀手感仍待 Android Chrome 與 iOS Safari 對照後決定。
+
+### 素材試版回歸
+
+三張 PNG 已納入 Web 匯出；catalog 的路徑檢查同時接受原始檔與 Godot 匯入資源，避免匯出後誤判圖片不存在。最新 Web 截圖見[標題](preview-assets-title-phone.png)、[對話](preview-assets-dialogue-phone.png)、[Phase 3 發言](preview-assets-phase3-boke-phone.png)與[320×568 吐槽選詞](preview-assets-phase3-tsukkomi-narrow.png)。
+
+| 檢查 | 結果與證據 |
+| --- | --- |
+| Godot 資料與 UI | `test_phase2_story.gd`、`test_phase3_ui.gd` 通過；Web 匯出成功 |
+| 討債主線 | 桌機 A 路線 53 個閱讀點、14 組檢查；390×844 觸控 B 路線 52 個閱讀點、15 組檢查，錯誤為空；見[報告](ui-assets-main-report.json) |
+| Phase 3 | 390×844 觸控 6 組檢查通過，320×568 四選項保持可見，錯誤為空；見[報告](ui-assets-phase3-report.json) |
+| 手動存讀檔 | 390×844 觸控 4 組檢查通過，錯誤為空；見[報告](ui-assets-slots-report.json) |

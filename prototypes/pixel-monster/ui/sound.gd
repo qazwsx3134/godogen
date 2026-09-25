@@ -1,6 +1,8 @@
 extends Node
 ## Small original synthesized chimes; no third-party recordings.
 
+const Synth = preload("res://addons/proto_kit/synth.gd")
+
 var enabled: bool = true
 var music_enabled: bool = true
 var volume: float = 0.65
@@ -9,7 +11,7 @@ var music_player: AudioStreamPlayer
 func _ready() -> void:
 	music_player = AudioStreamPlayer.new()
 	add_child(music_player)
-	var ambience := _tone([261.63, 329.63, 392.0, 329.63, 293.66, 349.23, 440.0, 349.23], 0.8, true)
+	var ambience := Synth.notes([261.63, 329.63, 392.0, 329.63, 293.66, 349.23, 440.0, 349.23], 0.8, true)
 	ambience.loop_mode = AudioStreamWAV.LOOP_FORWARD
 	ambience.loop_end = ambience.data.size() / 2
 	music_player.stream = ambience
@@ -40,27 +42,8 @@ func play(kind: String) -> void:
 		"defeat": notes = [329.63, 293.66, 261.63]
 		"heal": notes = [659.25, 783.99, 987.77]
 	var player := AudioStreamPlayer.new()
-	player.stream = _tone(notes, 0.105)
+	player.stream = Synth.notes(notes, 0.105)
 	player.volume_db = linear_to_db(maxf(volume * 0.27, 0.0001))
 	add_child(player)
 	player.finished.connect(player.queue_free)
 	player.play()
-
-func _tone(notes: Array, duration: float, soft: bool = false) -> AudioStreamWAV:
-	const RATE: int = 22050
-	var bytes := PackedByteArray()
-	var count: int = int(RATE * duration)
-	bytes.resize(count * notes.size() * 2)
-	for note_index in notes.size():
-		for sample in count:
-			var t: float = float(sample) / RATE
-			var envelope: float = minf(t * 90.0, 1.0) * pow(1.0 - float(sample) / count, 2.0)
-			var wave: float = sin(TAU * float(notes[note_index]) * t)
-			if not soft:
-				wave = wave * 0.65 + signf(wave) * 0.35
-			bytes.encode_s16((note_index * count + sample) * 2, int(wave * envelope * 15000.0))
-	var stream := AudioStreamWAV.new()
-	stream.format = AudioStreamWAV.FORMAT_16_BITS
-	stream.mix_rate = RATE
-	stream.data = bytes
-	return stream

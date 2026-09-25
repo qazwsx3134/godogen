@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="ParleyCharacterStore" format=3 uid="uid://caci80tc5curv"]
+
+[ext_resource type="Script" path="res://addons/parley/models/character.gd" id="1_yumch"]
+[ext_resource type="Script" path="res://addons/parley/stores/character/character_store.gd" id="2_1iyyr"]
+
+[sub_resource type="Resource" id="Resource_r7byi"]
+script = ExtResource("1_yumch")
+id = "shinpachi"
+name = "新八"
+
+[sub_resource type="Resource" id="Resource_iwv5x"]
+script = ExtResource("1_yumch")
+id = "gintoki"
+name = "銀時"
+
+[sub_resource type="Resource" id="Resource_s8xrf"]
+script = ExtResource("1_yumch")
+id = "otose"
+name = "登勢"
+
+[sub_resource type="Resource" id="Resource_hwunm"]
+script = ExtResource("1_yumch")
+id = "kagura"
+name = "神樂"
+
+[sub_resource type="Resource" id="Resource_u2tan"]
+script = ExtResource("1_yumch")
+id = "sadaharu"
+name = "定春"
+
+[resource]
+script = ExtResource("2_1iyyr")
+characters = Array[ExtResource("1_yumch")]([SubResource("Resource_r7byi"), SubResource("Resource_iwv5x"), SubResource("Resource_s8xrf"), SubResource("Resource_hwunm"), SubResource("Resource_u2tan")])
+id = "debt_commission_characters"

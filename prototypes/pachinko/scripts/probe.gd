@@ -11,6 +11,7 @@ class_name Probe
 ## 畫面文字一律 ASCII：Godot Web 拿不到系統字型，內嵌一套 CJK 字型要好幾 MB，
 ## 而效能預算是設計約束（ADR 0004）。這是診斷工具，英文標籤就夠。
 
+const Synth = preload("res://addons/proto_kit/synth.gd")
 const BALL_RADIUS := 11.0
 const NAIL_RADIUS := 5.0
 
@@ -122,16 +123,16 @@ func _advance_audio(delta: float) -> void:
 	_audio_log.append("%s  [at %.1fs, drift %+.0fms]" % [entry["label"], entry["at"], drift])
 	match entry["kind"]:
 		"click":
-			_player.stream = Tones.click(0.10)
+			_player.stream = Synth.click(0.10)
 			_player.play()
 		"ramp_up":
 			# 頻率與音量同時爬升，curve 2.0 讓後段更陡——斜坡壞掉會很明顯
-			_player.stream = Tones.ramp(220.0, 880.0, 2.0, 0.12, 0.6, 2.0)
+			_player.stream = Synth.ramp(220.0, 880.0, 2.0, 0.12, 0.6, 2.0)
 			_player.play()
 		"silence":
 			_player.stop()
 		"burst":
-			_player.stream = Tones.ramp(1200.0, 180.0, 1.2, 0.7, 0.05, 0.6)
+			_player.stream = Synth.ramp(1200.0, 180.0, 1.2, 0.7, 0.05, 0.6)
 			_player.play()
 		"done":
 			pass

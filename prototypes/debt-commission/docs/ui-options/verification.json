@@ -1,0 +1,150 @@
+{
+  "checks": [
+    {
+      "width": 1440,
+      "device": "390",
+      "state": "dialogue",
+      "pass": true
+    },
+    {
+      "width": 1440,
+      "device": "390",
+      "state": "choices",
+      "pass": true
+    },
+    {
+      "width": 1440,
+      "device": "390",
+      "state": "pause",
+      "pass": true
+    },
+    {
+      "width": 1440,
+      "device": "390",
+      "state": "title",
+      "pass": true
+    },
+    {
+      "width": 1440,
+      "device": "320",
+      "state": "dialogue",
+      "pass": true
+    },
+    {
+      "width": 1440,
+      "device": "320",
+      "state": "choices",
+      "pass": true
+    },
+    {
+      "width": 1440,
+      "device": "320",
+      "state": "pause",
+      "pass": true
+    },
+    {
+      "width": 1440,
+      "device": "320",
+      "state": "title",
+      "pass": true
+    },
+    {
+      "width": 390,
+      "device": "390",
+      "state": "dialogue",
+      "pass": true
+    },
+    {
+      "width": 390,
+      "device": "390",
+      "state": "choices",
+      "pass": true
+    },
+    {
+      "width": 390,
+      "device": "390",
+      "state": "pause",
+      "pass": true
+    },
+    {
+      "width": 390,
+      "device": "390",
+      "state": "title",
+      "pass": true
+    },
+    {
+      "width": 390,
+      "device": "320",
+      "state": "dialogue",
+      "pass": true
+    },
+    {
+      "width": 390,
+      "device": "320",
+      "state": "choices",
+      "pass": true
+    },
+    {
+      "width": 390,
+      "device": "320",
+      "state": "pause",
+      "pass": true
+    },
+    {
+      "width": 390,
+      "device": "320",
+      "state": "title",
+      "pass": true
+    },
+    {
+      "width": 320,
+      "device": "390",
+      "state": "dialogue",
+      "pass": true
+    },
+    {
+      "width": 320,
+      "device": "390",
+      "state": "choices",
+      "pass": true
+    },
+    {
+      "width": 320,
+      "device": "390",
+      "state": "pause",
+      "pass": true
+    },
+    {
+      "width": 320,
+      "device": "390",
+      "state": "title",
+      "pass": true
+    },
+    {
+      "width": 320,
+      "device": "320",
+      "state": "dialogue",
+      "pass": true
+    },
+    {
+      "width": 320,
+      "device": "320",
+      "state": "choices",
+      "pass": true
+    },
+    {
+      "width": 320,
+      "device": "320",
+      "state": "pause",
+      "pass": true
+    },
+    {
+      "width": 320,
+      "device": "320",
+      "state": "title",
+      "pass": true
+    }
+  ],
+  "interaction": "Menu open/close, advance and selection checked for each concept at all three viewport widths",
+  "scope": "HTML preview only; not Godot or physical devices"
+}

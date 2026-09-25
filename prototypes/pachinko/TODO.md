@@ -26,7 +26,7 @@
 | `scripts/show.gd` | 四條路徑的可重播序列測試台 |
 | `scripts/probe.gd` | 裝置探測：音訊 gesture 解鎖、斜坡時序、觸控 A/B |
 | `scripts/stress.gd` | 效能壓力測試：冷啟動 vs 穩態，三個成本類別 |
-| `scripts/tones.gd` | 程序合成音（帶斜坡，才測得到 Web 的 Sample 限制） |
+| `addons/proto_kit/synth.gd` | 程序合成音（帶斜坡，才測得到 Web 的 Sample 限制）；共用 kit 的副本，改在 `../godot-kit/` |
 | `sim.gd` | 模擬安全網：純 RNG 類＋場次類 |
 | `tools/measure_start_rate.gd` | 物理類量測：真的射球量入賞率 |
 | `tools/measure_nail_spread.gd` | 釘調整的 20 台分布量測 |
@@ -60,7 +60,7 @@
 
 - [x] `probe.gd`：音訊時間軸（機械聲 → 2.0 秒上升斜坡 → 0.5 秒靜默 → 爆），
       畫面上顯示排定時間與實際漂移
-- [x] `tones.gd`：程序合成音。**帶 pitch／音量斜坡**——Web 的 Sample 播放模式限制的是
+- [x] `synth.gd`（共用 godot-kit）：程序合成音。**帶 pitch／音量斜坡**——Web 的 Sample 播放模式限制的是
       執行期參數控制，單發短音會通過，斜坡才會暴露問題
 - [x] 發射 A/B：按住連發 vs 點一下開始／再點停止
 - [x] Web 匯出（Compatibility／thread support off／無 VRAM 壓縮）＋防長按的 CSS

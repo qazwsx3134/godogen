@@ -1,0 +1,54 @@
+{
+  "story": {
+    "id": "strawberry_phase4",
+    "title": "Phase 4 技術試片：四線索調查（非核准第一章）",
+    "note": "僅用於驗證四熱區調查、素材限定吐槽與劇本建置流程；不是作者核准的第一章文本。",
+    "initial_flags": {"asked": "unset", "round_result": "unset"}
+  },
+  "titles": {
+    "phase4_open": "技術試片：調查客廳",
+    "ask_first": "先問誰",
+    "kagura_aside": "神樂的說法",
+    "gintoki_round": "銀時的四線索吐槽回合",
+    "perfect": "完美吐槽結果",
+    "perfect_kagura": "神樂補一句",
+    "perfect_end": "完美結果結尾",
+    "weak": "普通吐槽結果",
+    "hidden": "隱藏結果",
+    "cold": "冷場結果",
+    "game_over": "Game Over"
+  },
+  "blocks": {
+    "living_room_search": {
+      "op": "investigate",
+      "prompt": "調查客廳，找齊四件線索。",
+      "hotspots": [
+        {"id": "empty_milk_bottle", "label": "空的草莓牛奶瓶", "pos": [0.56, 0.42], "item": "milk_bottle"},
+        {"id": "gintoki_mouth", "label": "銀時的嘴角", "pos": [0.74, 0.3], "item": "milk_trace"},
+        {"id": "kombu_wrapper", "label": "沙發下的包裝紙", "pos": [0.3, 0.62], "item": "kagura_kombu"},
+        {"id": "floor_paw_print", "label": "地板上的腳印", "pos": [0.46, 0.8], "item": "sadaharu_footprint"}
+      ]
+    },
+    "gintoki_four_clues": {
+      "op": "boke_round",
+      "speaker": "gintoki",
+      "lines": [
+        {"id": "denial", "text": "銀時：那瓶草莓牛奶不是我喝的。"},
+        {"id": "blame_dog", "text": "銀時：一定是定春半夜自己開冰箱。", "listen": "銀時：牠最近學會用鼻子頂門了，這很合理吧。"}
+      ],
+      "timer_seconds": 8,
+      "tsukkomi": {
+        "options": [
+          {"id": "point_to_bottle", "label": "拿空瓶：證據就在你手邊。", "result": "perfect", "require": "milk_bottle", "goto": "perfect", "set_flags": {"round_result": "perfect"}},
+          {"id": "point_to_trace", "label": "你嘴角那圈白色痕跡怎麼解釋？", "result": "perfect", "require": "milk_trace", "goto": "perfect", "set_flags": {"round_result": "perfect"}},
+          {"id": "wave_kombu", "label": "醋昆布包裝……跟牛奶有關嗎？", "result": "weak", "require": "kagura_kombu", "goto": "weak", "set_flags": {"round_result": "weak"}},
+          {"id": "follow_paw_print", "label": "腳印只到沙發，冰箱那邊沒有。", "result": "hidden", "require": "sadaharu_footprint", "goto": "hidden", "set_flags": {"round_result": "hidden"}},
+          {"id": "fridge_comeback", "label": "冰箱可不會自己開瓶。", "result": "weak", "goto": "weak", "set_flags": {"round_result": "weak"}},
+          {"id": "missed_comeback", "label": "一時接不上話。", "result": "fail", "goto": "cold", "set_flags": {"round_result": "fail"}}
+        ],
+        "timeout": {"result": "fail", "goto": "cold"}
+      },
+      "game_over": "game_over"
+    }
+  }
+}

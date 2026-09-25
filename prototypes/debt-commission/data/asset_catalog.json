@@ -3,12 +3,19 @@
     "yorozuya_living_room": {
       "label": "萬事屋・客廳",
       "top": "#2e2a45",
-      "bottom": "#b9794f"
+      "bottom": "#b9794f",
+      "path": "res://assets/image/yorozuya-inside.png"
     },
     "yorozuya_kitchen": {
       "label": "萬事屋廚房",
       "top": "#5A4335",
       "bottom": "#1B2024"
+    },
+    "yorozuya_exterior": {
+      "label": "萬事屋・外觀",
+      "top": "#263248",
+      "bottom": "#9c6c4e",
+      "path": "res://assets/image/yorozuya-background.png"
     }
   },
   "characters": {
@@ -19,8 +26,11 @@
     },
     "gintoki": {
       "name": "銀時",
+      "profile": "萬事屋老闆，嗜甜如命。自稱冰箱裡的草莓牛奶跟他毫無關係。（技術試片用簡介）",
       "color": "#aab6c8",
-      "slot": "center"
+      "slot": "center",
+      "path": "res://assets/image/gintoki.png",
+      "silhouette": true
     },
     "otose": {
       "name": "登勢",
@@ -29,6 +39,7 @@
     },
     "kagura": {
       "name": "神樂",
+      "profile": "萬事屋的大胃王，醋昆布不離身。說話尾音帶「阿魯」。（技術試片用簡介）",
       "color": "#F08CA8",
       "slot": "right"
     },

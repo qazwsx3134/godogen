@@ -1,0 +1,99 @@
+{
+  "url": "http://127.0.0.1:5193/?qa=1",
+  "started": "2026-09-25T02:51:49.505Z",
+  "runs": [
+    {
+      "route": "A",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "touch": false,
+      "nodes": [
+        "debt_intro",
+        "debt_choose_method",
+        "debt_hear_gintoki",
+        "debt_ask_salary",
+        "debt_recall_hearing",
+        "debt_agreement",
+        "debt_end"
+      ],
+      "lines": 53,
+      "checks": [
+        "first tap reveals the opening line without advancing",
+        "layout: bottom full-width dialogue layer, integrated quick bar and speaker label; floating buttons above",
+        "tapping the background (not the box) also advances",
+        "long-press hides UI; the restoring tap does not advance",
+        "swipe up opens the backlog; closing keeps the line",
+        "S opens selectable save slots and closing does not advance",
+        "dragging (≡) snaps it to the nearest side edge without advancing",
+        "idle 3 s fades buttons to 40%; menu opens and closes from the background",
+        "AUTO advances by itself and toggles off",
+        "choices wait; floating buttons stay above the choices",
+        "backlog at the choice scrolls by mouse wheel",
+        "reload + continue preserves line, flags and sprites",
+        "correct callback and complete ending",
+        "restart resets flags; SKIP fast-forwards and stops at the choice"
+      ],
+      "errors": [],
+      "selection": {
+        "id": "hear_first",
+        "label": "先讓阿銀把理由說完。",
+        "rect": {
+          "height": 160,
+          "width": 920,
+          "x": 905,
+          "y": 744
+        }
+      }
+    },
+    {
+      "route": "B",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "touch": true,
+      "nodes": [
+        "debt_intro",
+        "debt_choose_method",
+        "debt_check_ledger",
+        "debt_ask_salary",
+        "debt_recall_ledger",
+        "debt_agreement",
+        "debt_end"
+      ],
+      "lines": 52,
+      "checks": [
+        "first tap reveals the opening line without advancing",
+        "layout: bottom full-width dialogue layer, integrated quick bar and speaker label; floating buttons above",
+        "tapping the background (not the box) also advances",
+        "long-press hides UI; the restoring tap does not advance",
+        "swipe up opens the backlog; closing keeps the line",
+        "S opens selectable save slots and closing does not advance",
+        "dragging (≡) snaps it to the nearest side edge without advancing",
+        "idle 3 s fades buttons to 40%; menu opens and closes from the background",
+        "AUTO advances by itself and toggles off",
+        "choices wait; floating buttons stay above the choices",
+        "backlog at the choice scrolls by touch drag",
+        "choices, box and floating buttons fit 360×800 and 320×568",
+        "reload + continue preserves line, flags and sprites",
+        "correct callback and complete ending",
+        "restart resets flags; SKIP fast-forwards and stops at the choice"
+      ],
+      "errors": [],
+      "selection": {
+        "id": "ledger_first",
+        "label": "請婆婆先把欠款明細攤開。",
+        "rect": {
+          "height": 160,
+          "width": 920,
+          "x": 80,
+          "y": 1224
+        }
+      }
+    }
+  ],
+  "passed": true,
+  "finished": "2026-09-25T02:53:47.988Z"
+}
