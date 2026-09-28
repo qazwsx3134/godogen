@@ -1,0 +1,7 @@
+[gd_resource type="Theme" format=3]
+
+[ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Medium.otf" id="1_u68y7"]
+
+[resource]
+default_font = ExtResource("1_u68y7")
+default_font_size = 26

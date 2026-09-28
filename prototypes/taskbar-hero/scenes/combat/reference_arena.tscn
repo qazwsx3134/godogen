@@ -1,0 +1,1108 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/wave_arena.gd" id="1_bne36"]
+[ext_resource type="PackedScene" path="res://scenes/combat/party_unit.tscn" id="2_ed4tr"]
+[ext_resource type="Script" path="res://scripts/combat_unit.gd" id="3_bqwlp"]
+[ext_resource type="Script" path="res://data/unit_data.gd" id="4_p43va"]
+[ext_resource type="Texture2D" path="res://assets/reference/monster.png" id="5_twidm"]
+[ext_resource type="Texture2D" path="res://assets/reference/train.png" id="6_nyxvy"]
+[ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Medium.otf" id="7_6wugp"]
+
+[sub_resource type="Resource" id="Resource_gn7y4"]
+script = ExtResource("4_p43va")
+unit_id = "knight"
+display_name = "主角"
+max_health = 96
+attack = 16
+defense = 5
+move_speed = 95.0
+attack_speed = 1.25
+attack_range = 65.0
+
+[sub_resource type="Resource" id="Resource_dyc4y"]
+script = ExtResource("4_p43va")
+unit_id = "sprout"
+display_name = "小芽龍"
+max_health = 96
+attack = 16
+defense = 5
+move_speed = 95.0
+attack_range = 115.0
+
+[sub_resource type="Resource" id="Resource_p0sgm"]
+script = ExtResource("4_p43va")
+unit_id = "fox"
+display_name = "火狐獸"
+max_health = 96
+attack = 16
+defense = 5
+move_speed = 95.0
+attack_range = 185.0
+
+[sub_resource type="Resource" id="Resource_sxqlq"]
+script = ExtResource("4_p43va")
+unit_id = "aqua"
+display_name = "水史萊姆"
+max_health = 96
+attack = 16
+defense = 5
+move_speed = 95.0
+attack_range = 255.0
+
+[sub_resource type="Resource" id="Resource_bfh41"]
+script = ExtResource("4_p43va")
+unit_id = "mushroom"
+display_name = "菇菇怪"
+max_health = 96
+attack = 16
+defense = 5
+move_speed = 95.0
+attack_range = 315.0
+
+[sub_resource type="Resource" id="Resource_07jk8"]
+script = ExtResource("4_p43va")
+unit_id = "enemy_0"
+display_name = "史萊姆"
+faction = "enemy"
+max_health = 130
+defense = 5
+move_speed = 35.0
+attack_range = 65.0
+gold_reward = 14
+
+[sub_resource type="Resource" id="Resource_wko8s"]
+script = ExtResource("4_p43va")
+unit_id = "enemy_1"
+display_name = "史萊姆"
+faction = "enemy"
+max_health = 130
+defense = 5
+move_speed = 35.0
+attack_range = 65.0
+gold_reward = 14
+
+[sub_resource type="Resource" id="Resource_mifjs"]
+script = ExtResource("4_p43va")
+unit_id = "enemy_2"
+display_name = "史萊姆"
+faction = "enemy"
+max_health = 130
+defense = 5
+move_speed = 35.0
+attack_range = 65.0
+gold_reward = 14
+
+[node name="CombatArena" type="Node2D" unique_id=576534727]
+script = ExtResource("1_bne36")
+
+[node name="KnightUnit" parent="." unique_id=1153296289 instance=ExtResource("2_ed4tr")]
+unique_name_in_owner = true
+position = Vector2(95, 0)
+script = ExtResource("3_bqwlp")
+unit_data = SubResource("Resource_gn7y4")
+appearance = "KnightVisual"
+
+[node name="Visuals" parent="KnightUnit" index="0" unique_id=102881119]
+scale = Vector2(0.72, 0.72)
+
+[node name="Shadow" parent="KnightUnit/Visuals" index="0" unique_id=1194177940]
+visible = false
+color = Color(0.02, 0.05, 0.05, 0.68)
+polygon = PackedVector2Array(-24, -1, -20, -9, 0, -12, 20, -8, 25, -1, 18, 4, -17, 4)
+
+[node name="KnightVisual" parent="KnightUnit/Visuals" index="1" unique_id=142695284]
+unique_name_in_owner = true
+
+[node name="KnightAtlas" parent="KnightUnit/Visuals/KnightVisual" index="0" unique_id=363678787]
+texture_filter = 1
+position = Vector2(-93, -125)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 78, 22, 58, 55, 49, 44, 28, 58, 18, 70, 14, 95, 0, 117, 4, 127, 13, 138, 13, 132, 24, 137, 35, 130, 47, 124, 55, 132, 66, 161, 62, 174, 56, 184, 63, 184, 71, 151, 85, 131, 90, 120, 106, 129, 118, 87, 120, 77, 110, 61, 118, 43, 118, 51, 98, 26, 98, 7, 86)
+uv = PackedVector2Array(63, 525, 85, 505, 118, 496, 107, 475, 121, 465, 133, 461, 158, 447, 180, 451, 190, 460, 201, 460, 195, 471, 200, 482, 193, 494, 187, 502, 195, 513, 224, 509, 237, 503, 247, 510, 247, 518, 214, 532, 194, 537, 183, 553, 192, 565, 150, 567, 140, 557, 124, 565, 106, 565, 114, 545, 89, 545, 70, 533)
+
+[node name="SlimeVisual" parent="KnightUnit/Visuals" index="2" unique_id=469824948]
+unique_name_in_owner = true
+visible = false
+
+[node name="SlimeAtlas" parent="KnightUnit/Visuals/SlimeVisual" index="0" unique_id=755261591]
+texture_filter = 1
+position = Vector2(-35, -56)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 54, 1, 29, 9, 15, 20, 8, 27, 1, 43, 0, 54, 8, 63, 20, 68, 40, 70, 55)
+uv = PackedVector2Array(568, 568, 569, 543, 577, 529, 588, 522, 595, 515, 611, 514, 622, 522, 631, 534, 636, 554, 638, 569)
+
+[node name="PetVisual" parent="KnightUnit/Visuals" index="3" unique_id=1012856449]
+visible = false
+
+[node name="PetAtlas" parent="KnightUnit/Visuals/PetVisual" index="0" unique_id=726804392]
+texture_filter = 1
+position = Vector2(-60, -108)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 78, 9, 66, 19, 78, 31, 79, 40, 68, 31, 64, 21, 58, 36, 48, 25, 43, 34, 33, 48, 29, 45, 13, 50, 1, 64, 8, 69, 14, 83, 8, 91, 14, 94, 23, 106, 29, 112, 38, 119, 46, 117, 69, 102, 79, 88, 85, 85, 97, 91, 104, 62, 106, 59, 100, 45, 105, 25, 103, 8, 92)
+uv = PackedVector2Array(267, 539, 276, 527, 286, 539, 298, 540, 307, 529, 298, 525, 288, 519, 303, 509, 292, 504, 301, 494, 315, 490, 312, 474, 317, 462, 331, 469, 336, 475, 350, 469, 358, 475, 361, 484, 373, 490, 379, 499, 386, 507, 384, 530, 369, 540, 355, 546, 352, 558, 358, 565, 329, 567, 326, 561, 312, 566, 292, 564, 275, 553)
+
+[node name="FoxVisual" parent="KnightUnit/Visuals" index="4" unique_id=648160436]
+visible = false
+
+[node name="Fox" parent="KnightUnit/Visuals/FoxVisual" index="0" unique_id=202702061]
+texture_filter = 1
+position = Vector2(-64.5, -108)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 105, 7, 76, 0, 53, 15, 29, 29, 50, 39, 43, 45, 0, 65, 15, 69, 27, 85, 23, 104, 0, 112, 12, 111, 37, 127, 45, 127, 75, 101, 87, 110, 106, 78, 107, 71, 96, 56, 107)
+uv = PackedVector2Array(304, 1414, 311, 1385, 304, 1362, 319, 1338, 333, 1359, 343, 1352, 349, 1309, 369, 1324, 373, 1336, 389, 1332, 408, 1309, 416, 1321, 415, 1346, 431, 1354, 431, 1384, 405, 1396, 414, 1415, 382, 1416, 375, 1405, 360, 1416)
+
+[node name="AquaVisual" parent="KnightUnit/Visuals" index="5" unique_id=141911049]
+visible = false
+
+[node name="Aqua" parent="KnightUnit/Visuals/AquaVisual" index="0" unique_id=793639538]
+texture_filter = 1
+position = Vector2(-56, -77)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 73, 0, 54, 12, 35, 27, 14, 42, 4, 61, 0, 80, 8, 88, 27, 108, 47, 111, 69, 95, 76, 18, 76)
+uv = PackedVector2Array(531, 1413, 531, 1394, 543, 1375, 558, 1354, 573, 1344, 592, 1340, 611, 1348, 619, 1367, 639, 1387, 642, 1409, 626, 1416, 549, 1416)
+
+[node name="MushroomVisual" parent="KnightUnit/Visuals" index="6" unique_id=1501651045]
+visible = false
+
+[node name="Mushroom" parent="KnightUnit/Visuals/MushroomVisual" index="0" unique_id=595585900]
+texture_filter = 1
+position = Vector2(-60.5, -108)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 47, 14, 29, 35, 10, 55, 0, 74, 1, 84, 17, 112, 37, 120, 53, 116, 65, 87, 63, 92, 84, 90, 96, 72, 105, 50, 107, 29, 101, 19, 86, 19, 65, 2, 65)
+uv = PackedVector2Array(744, 1357, 758, 1339, 779, 1320, 799, 1310, 818, 1311, 828, 1327, 856, 1347, 864, 1363, 860, 1375, 831, 1373, 836, 1394, 834, 1406, 816, 1415, 794, 1417, 773, 1411, 763, 1396, 763, 1375, 746, 1375)
+
+[node name="SoldierVisual" parent="KnightUnit/Visuals" index="7" unique_id=46232267]
+visible = false
+modulate = Color(0.65, 0.8, 1, 1)
+scale = Vector2(-1, 1)
+
+[node name="KnightAtlas" parent="KnightUnit/Visuals/SoldierVisual" index="0" unique_id=393783192]
+texture_filter = 1
+position = Vector2(-93, -125)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 78, 22, 58, 55, 49, 44, 28, 58, 18, 70, 14, 95, 0, 117, 4, 127, 13, 138, 13, 132, 24, 137, 35, 130, 47, 124, 55, 132, 66, 161, 62, 174, 56, 184, 63, 184, 71, 151, 85, 131, 90, 120, 106, 129, 118, 87, 120, 77, 110, 61, 118, 43, 118, 51, 98, 26, 98, 7, 86)
+uv = PackedVector2Array(63, 525, 85, 505, 118, 496, 107, 475, 121, 465, 133, 461, 158, 447, 180, 451, 190, 460, 201, 460, 195, 471, 200, 482, 193, 494, 187, 502, 195, 513, 224, 509, 237, 503, 247, 510, 247, 518, 214, 532, 194, 537, 183, 553, 192, 565, 150, 567, 140, 557, 124, 565, 106, 565, 114, 545, 89, 545, 70, 533)
+
+[node name="DummyVisual" parent="KnightUnit/Visuals" index="8" unique_id=858614070]
+visible = false
+
+[node name="DummyAtlas" parent="KnightUnit/Visuals/DummyVisual" index="0" unique_id=2113127279]
+texture_filter = 1
+position = Vector2(-50, -124)
+texture = ExtResource("6_nyxvy")
+polygon = PackedVector2Array(35, 0, 67, 0, 67, 28, 81, 30, 82, 38, 99, 38, 99, 58, 81, 58, 81, 95, 68, 96, 68, 123, 40, 123, 40, 95, 24, 95, 24, 59, 4, 59, 4, 35, 32, 34)
+uv = PackedVector2Array(619, 542, 651, 542, 651, 570, 665, 572, 666, 580, 683, 580, 683, 600, 665, 600, 665, 637, 652, 638, 652, 665, 624, 665, 624, 637, 608, 637, 608, 601, 588, 601, 588, 577, 616, 576)
+
+[node name="HealthBackground" parent="KnightUnit" index="1" unique_id=1311019408]
+position = Vector2(0, -40)
+scale = Vector2(1.3, 1.1)
+color = Color(0.09019608, 0.14509805, 0.20784314, 1)
+polygon = PackedVector2Array(-26, -51, 26, -51, 26, -41, -26, -41)
+
+[node name="HealthFill" parent="KnightUnit" index="2" unique_id=367241668]
+unique_name_in_owner = true
+position = Vector2(0, -40)
+scale = Vector2(1.3, 1.1)
+color = Color(0.6, 0.84313726, 0.49411765, 1)
+polygon = PackedVector2Array(-24, -49, 24, -49, 24, -43, -24, -43)
+
+[node name="DamageFeedback" parent="KnightUnit" index="3" unique_id=153512385]
+visible = false
+offset_left = -90.0
+offset_top = -155.0
+offset_right = 90.0
+offset_bottom = -95.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.078431375, 0.10980392, 0.1764706, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 40
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SproutUnit" parent="." unique_id=1986214314 instance=ExtResource("2_ed4tr")]
+unique_name_in_owner = true
+position = Vector2(235, 0)
+script = ExtResource("3_bqwlp")
+unit_data = SubResource("Resource_dyc4y")
+appearance = "PetVisual"
+
+[node name="Visuals" parent="SproutUnit" index="0" unique_id=102881119]
+scale = Vector2(0.72, 0.72)
+
+[node name="Shadow" parent="SproutUnit/Visuals" index="0" unique_id=1194177940]
+visible = false
+color = Color(0.02, 0.05, 0.05, 0.68)
+polygon = PackedVector2Array(-24, -1, -20, -9, 0, -12, 20, -8, 25, -1, 18, 4, -17, 4)
+
+[node name="KnightVisual" parent="SproutUnit/Visuals" index="1" unique_id=142695284]
+unique_name_in_owner = true
+visible = false
+
+[node name="KnightAtlas" parent="SproutUnit/Visuals/KnightVisual" index="0" unique_id=363678787]
+texture_filter = 1
+position = Vector2(-93, -125)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 78, 22, 58, 55, 49, 44, 28, 58, 18, 70, 14, 95, 0, 117, 4, 127, 13, 138, 13, 132, 24, 137, 35, 130, 47, 124, 55, 132, 66, 161, 62, 174, 56, 184, 63, 184, 71, 151, 85, 131, 90, 120, 106, 129, 118, 87, 120, 77, 110, 61, 118, 43, 118, 51, 98, 26, 98, 7, 86)
+uv = PackedVector2Array(63, 525, 85, 505, 118, 496, 107, 475, 121, 465, 133, 461, 158, 447, 180, 451, 190, 460, 201, 460, 195, 471, 200, 482, 193, 494, 187, 502, 195, 513, 224, 509, 237, 503, 247, 510, 247, 518, 214, 532, 194, 537, 183, 553, 192, 565, 150, 567, 140, 557, 124, 565, 106, 565, 114, 545, 89, 545, 70, 533)
+
+[node name="SlimeVisual" parent="SproutUnit/Visuals" index="2" unique_id=469824948]
+unique_name_in_owner = true
+visible = false
+
+[node name="SlimeAtlas" parent="SproutUnit/Visuals/SlimeVisual" index="0" unique_id=755261591]
+texture_filter = 1
+position = Vector2(-35, -56)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 54, 1, 29, 9, 15, 20, 8, 27, 1, 43, 0, 54, 8, 63, 20, 68, 40, 70, 55)
+uv = PackedVector2Array(568, 568, 569, 543, 577, 529, 588, 522, 595, 515, 611, 514, 622, 522, 631, 534, 636, 554, 638, 569)
+
+[node name="PetAtlas" parent="SproutUnit/Visuals/PetVisual" parent_id_path=PackedInt32Array(1986214314, 1012856449) index="0" unique_id=726804392]
+texture_filter = 1
+position = Vector2(-60, -108)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 78, 9, 66, 19, 78, 31, 79, 40, 68, 31, 64, 21, 58, 36, 48, 25, 43, 34, 33, 48, 29, 45, 13, 50, 1, 64, 8, 69, 14, 83, 8, 91, 14, 94, 23, 106, 29, 112, 38, 119, 46, 117, 69, 102, 79, 88, 85, 85, 97, 91, 104, 62, 106, 59, 100, 45, 105, 25, 103, 8, 92)
+uv = PackedVector2Array(267, 539, 276, 527, 286, 539, 298, 540, 307, 529, 298, 525, 288, 519, 303, 509, 292, 504, 301, 494, 315, 490, 312, 474, 317, 462, 331, 469, 336, 475, 350, 469, 358, 475, 361, 484, 373, 490, 379, 499, 386, 507, 384, 530, 369, 540, 355, 546, 352, 558, 358, 565, 329, 567, 326, 561, 312, 566, 292, 564, 275, 553)
+
+[node name="FoxVisual" parent="SproutUnit/Visuals" index="4" unique_id=648160436]
+visible = false
+
+[node name="Fox" parent="SproutUnit/Visuals/FoxVisual" index="0" unique_id=202702061]
+texture_filter = 1
+position = Vector2(-64.5, -108)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 105, 7, 76, 0, 53, 15, 29, 29, 50, 39, 43, 45, 0, 65, 15, 69, 27, 85, 23, 104, 0, 112, 12, 111, 37, 127, 45, 127, 75, 101, 87, 110, 106, 78, 107, 71, 96, 56, 107)
+uv = PackedVector2Array(304, 1414, 311, 1385, 304, 1362, 319, 1338, 333, 1359, 343, 1352, 349, 1309, 369, 1324, 373, 1336, 389, 1332, 408, 1309, 416, 1321, 415, 1346, 431, 1354, 431, 1384, 405, 1396, 414, 1415, 382, 1416, 375, 1405, 360, 1416)
+
+[node name="AquaVisual" parent="SproutUnit/Visuals" index="5" unique_id=141911049]
+visible = false
+
+[node name="Aqua" parent="SproutUnit/Visuals/AquaVisual" index="0" unique_id=793639538]
+texture_filter = 1
+position = Vector2(-56, -77)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 73, 0, 54, 12, 35, 27, 14, 42, 4, 61, 0, 80, 8, 88, 27, 108, 47, 111, 69, 95, 76, 18, 76)
+uv = PackedVector2Array(531, 1413, 531, 1394, 543, 1375, 558, 1354, 573, 1344, 592, 1340, 611, 1348, 619, 1367, 639, 1387, 642, 1409, 626, 1416, 549, 1416)
+
+[node name="MushroomVisual" parent="SproutUnit/Visuals" index="6" unique_id=1501651045]
+visible = false
+
+[node name="Mushroom" parent="SproutUnit/Visuals/MushroomVisual" index="0" unique_id=595585900]
+texture_filter = 1
+position = Vector2(-60.5, -108)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 47, 14, 29, 35, 10, 55, 0, 74, 1, 84, 17, 112, 37, 120, 53, 116, 65, 87, 63, 92, 84, 90, 96, 72, 105, 50, 107, 29, 101, 19, 86, 19, 65, 2, 65)
+uv = PackedVector2Array(744, 1357, 758, 1339, 779, 1320, 799, 1310, 818, 1311, 828, 1327, 856, 1347, 864, 1363, 860, 1375, 831, 1373, 836, 1394, 834, 1406, 816, 1415, 794, 1417, 773, 1411, 763, 1396, 763, 1375, 746, 1375)
+
+[node name="SoldierVisual" parent="SproutUnit/Visuals" index="7" unique_id=46232267]
+visible = false
+modulate = Color(0.65, 0.8, 1, 1)
+scale = Vector2(-1, 1)
+
+[node name="KnightAtlas" parent="SproutUnit/Visuals/SoldierVisual" index="0" unique_id=393783192]
+texture_filter = 1
+position = Vector2(-93, -125)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 78, 22, 58, 55, 49, 44, 28, 58, 18, 70, 14, 95, 0, 117, 4, 127, 13, 138, 13, 132, 24, 137, 35, 130, 47, 124, 55, 132, 66, 161, 62, 174, 56, 184, 63, 184, 71, 151, 85, 131, 90, 120, 106, 129, 118, 87, 120, 77, 110, 61, 118, 43, 118, 51, 98, 26, 98, 7, 86)
+uv = PackedVector2Array(63, 525, 85, 505, 118, 496, 107, 475, 121, 465, 133, 461, 158, 447, 180, 451, 190, 460, 201, 460, 195, 471, 200, 482, 193, 494, 187, 502, 195, 513, 224, 509, 237, 503, 247, 510, 247, 518, 214, 532, 194, 537, 183, 553, 192, 565, 150, 567, 140, 557, 124, 565, 106, 565, 114, 545, 89, 545, 70, 533)
+
+[node name="DummyVisual" parent="SproutUnit/Visuals" index="8" unique_id=858614070]
+visible = false
+
+[node name="DummyAtlas" parent="SproutUnit/Visuals/DummyVisual" index="0" unique_id=2113127279]
+texture_filter = 1
+position = Vector2(-50, -124)
+texture = ExtResource("6_nyxvy")
+polygon = PackedVector2Array(35, 0, 67, 0, 67, 28, 81, 30, 82, 38, 99, 38, 99, 58, 81, 58, 81, 95, 68, 96, 68, 123, 40, 123, 40, 95, 24, 95, 24, 59, 4, 59, 4, 35, 32, 34)
+uv = PackedVector2Array(619, 542, 651, 542, 651, 570, 665, 572, 666, 580, 683, 580, 683, 600, 665, 600, 665, 637, 652, 638, 652, 665, 624, 665, 624, 637, 608, 637, 608, 601, 588, 601, 588, 577, 616, 576)
+
+[node name="HealthBackground" parent="SproutUnit" index="1" unique_id=1311019408]
+position = Vector2(0, -40)
+scale = Vector2(1.3, 1.1)
+color = Color(0.09019608, 0.14509805, 0.20784314, 1)
+polygon = PackedVector2Array(-26, -51, 26, -51, 26, -41, -26, -41)
+
+[node name="HealthFill" parent="SproutUnit" index="2" unique_id=367241668]
+unique_name_in_owner = true
+position = Vector2(0, -40)
+scale = Vector2(1.3, 1.1)
+color = Color(0.6, 0.84313726, 0.49411765, 1)
+polygon = PackedVector2Array(-24, -49, 24, -49, 24, -43, -24, -43)
+
+[node name="DamageFeedback" parent="SproutUnit" index="3" unique_id=153512385]
+visible = false
+offset_left = -90.0
+offset_top = -155.0
+offset_right = 90.0
+offset_bottom = -95.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.078431375, 0.10980392, 0.1764706, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 40
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="FoxUnit" parent="." unique_id=559943050 instance=ExtResource("2_ed4tr")]
+unique_name_in_owner = true
+position = Vector2(350, 0)
+script = ExtResource("3_bqwlp")
+unit_data = SubResource("Resource_p0sgm")
+appearance = "FoxVisual"
+
+[node name="Visuals" parent="FoxUnit" index="0" unique_id=102881119]
+scale = Vector2(0.72, 0.72)
+
+[node name="Shadow" parent="FoxUnit/Visuals" index="0" unique_id=1194177940]
+visible = false
+color = Color(0.02, 0.05, 0.05, 0.68)
+polygon = PackedVector2Array(-24, -1, -20, -9, 0, -12, 20, -8, 25, -1, 18, 4, -17, 4)
+
+[node name="KnightVisual" parent="FoxUnit/Visuals" index="1" unique_id=142695284]
+unique_name_in_owner = true
+visible = false
+
+[node name="KnightAtlas" parent="FoxUnit/Visuals/KnightVisual" index="0" unique_id=363678787]
+texture_filter = 1
+position = Vector2(-93, -125)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 78, 22, 58, 55, 49, 44, 28, 58, 18, 70, 14, 95, 0, 117, 4, 127, 13, 138, 13, 132, 24, 137, 35, 130, 47, 124, 55, 132, 66, 161, 62, 174, 56, 184, 63, 184, 71, 151, 85, 131, 90, 120, 106, 129, 118, 87, 120, 77, 110, 61, 118, 43, 118, 51, 98, 26, 98, 7, 86)
+uv = PackedVector2Array(63, 525, 85, 505, 118, 496, 107, 475, 121, 465, 133, 461, 158, 447, 180, 451, 190, 460, 201, 460, 195, 471, 200, 482, 193, 494, 187, 502, 195, 513, 224, 509, 237, 503, 247, 510, 247, 518, 214, 532, 194, 537, 183, 553, 192, 565, 150, 567, 140, 557, 124, 565, 106, 565, 114, 545, 89, 545, 70, 533)
+
+[node name="SlimeVisual" parent="FoxUnit/Visuals" index="2" unique_id=469824948]
+unique_name_in_owner = true
+visible = false
+
+[node name="SlimeAtlas" parent="FoxUnit/Visuals/SlimeVisual" index="0" unique_id=755261591]
+texture_filter = 1
+position = Vector2(-35, -56)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 54, 1, 29, 9, 15, 20, 8, 27, 1, 43, 0, 54, 8, 63, 20, 68, 40, 70, 55)
+uv = PackedVector2Array(568, 568, 569, 543, 577, 529, 588, 522, 595, 515, 611, 514, 622, 522, 631, 534, 636, 554, 638, 569)
+
+[node name="PetVisual" parent="FoxUnit/Visuals" index="3" unique_id=1012856449]
+visible = false
+
+[node name="PetAtlas" parent="FoxUnit/Visuals/PetVisual" index="0" unique_id=726804392]
+texture_filter = 1
+position = Vector2(-60, -108)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 78, 9, 66, 19, 78, 31, 79, 40, 68, 31, 64, 21, 58, 36, 48, 25, 43, 34, 33, 48, 29, 45, 13, 50, 1, 64, 8, 69, 14, 83, 8, 91, 14, 94, 23, 106, 29, 112, 38, 119, 46, 117, 69, 102, 79, 88, 85, 85, 97, 91, 104, 62, 106, 59, 100, 45, 105, 25, 103, 8, 92)
+uv = PackedVector2Array(267, 539, 276, 527, 286, 539, 298, 540, 307, 529, 298, 525, 288, 519, 303, 509, 292, 504, 301, 494, 315, 490, 312, 474, 317, 462, 331, 469, 336, 475, 350, 469, 358, 475, 361, 484, 373, 490, 379, 499, 386, 507, 384, 530, 369, 540, 355, 546, 352, 558, 358, 565, 329, 567, 326, 561, 312, 566, 292, 564, 275, 553)
+
+[node name="Fox" parent="FoxUnit/Visuals/FoxVisual" parent_id_path=PackedInt32Array(559943050, 648160436) index="0" unique_id=202702061]
+texture_filter = 1
+position = Vector2(-64.5, -108)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 105, 7, 76, 0, 53, 15, 29, 29, 50, 39, 43, 45, 0, 65, 15, 69, 27, 85, 23, 104, 0, 112, 12, 111, 37, 127, 45, 127, 75, 101, 87, 110, 106, 78, 107, 71, 96, 56, 107)
+uv = PackedVector2Array(304, 1414, 311, 1385, 304, 1362, 319, 1338, 333, 1359, 343, 1352, 349, 1309, 369, 1324, 373, 1336, 389, 1332, 408, 1309, 416, 1321, 415, 1346, 431, 1354, 431, 1384, 405, 1396, 414, 1415, 382, 1416, 375, 1405, 360, 1416)
+
+[node name="AquaVisual" parent="FoxUnit/Visuals" index="5" unique_id=141911049]
+visible = false
+
+[node name="Aqua" parent="FoxUnit/Visuals/AquaVisual" index="0" unique_id=793639538]
+texture_filter = 1
+position = Vector2(-56, -77)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 73, 0, 54, 12, 35, 27, 14, 42, 4, 61, 0, 80, 8, 88, 27, 108, 47, 111, 69, 95, 76, 18, 76)
+uv = PackedVector2Array(531, 1413, 531, 1394, 543, 1375, 558, 1354, 573, 1344, 592, 1340, 611, 1348, 619, 1367, 639, 1387, 642, 1409, 626, 1416, 549, 1416)
+
+[node name="MushroomVisual" parent="FoxUnit/Visuals" index="6" unique_id=1501651045]
+visible = false
+
+[node name="Mushroom" parent="FoxUnit/Visuals/MushroomVisual" index="0" unique_id=595585900]
+texture_filter = 1
+position = Vector2(-60.5, -108)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 47, 14, 29, 35, 10, 55, 0, 74, 1, 84, 17, 112, 37, 120, 53, 116, 65, 87, 63, 92, 84, 90, 96, 72, 105, 50, 107, 29, 101, 19, 86, 19, 65, 2, 65)
+uv = PackedVector2Array(744, 1357, 758, 1339, 779, 1320, 799, 1310, 818, 1311, 828, 1327, 856, 1347, 864, 1363, 860, 1375, 831, 1373, 836, 1394, 834, 1406, 816, 1415, 794, 1417, 773, 1411, 763, 1396, 763, 1375, 746, 1375)
+
+[node name="SoldierVisual" parent="FoxUnit/Visuals" index="7" unique_id=46232267]
+visible = false
+modulate = Color(0.65, 0.8, 1, 1)
+scale = Vector2(-1, 1)
+
+[node name="KnightAtlas" parent="FoxUnit/Visuals/SoldierVisual" index="0" unique_id=393783192]
+texture_filter = 1
+position = Vector2(-93, -125)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 78, 22, 58, 55, 49, 44, 28, 58, 18, 70, 14, 95, 0, 117, 4, 127, 13, 138, 13, 132, 24, 137, 35, 130, 47, 124, 55, 132, 66, 161, 62, 174, 56, 184, 63, 184, 71, 151, 85, 131, 90, 120, 106, 129, 118, 87, 120, 77, 110, 61, 118, 43, 118, 51, 98, 26, 98, 7, 86)
+uv = PackedVector2Array(63, 525, 85, 505, 118, 496, 107, 475, 121, 465, 133, 461, 158, 447, 180, 451, 190, 460, 201, 460, 195, 471, 200, 482, 193, 494, 187, 502, 195, 513, 224, 509, 237, 503, 247, 510, 247, 518, 214, 532, 194, 537, 183, 553, 192, 565, 150, 567, 140, 557, 124, 565, 106, 565, 114, 545, 89, 545, 70, 533)
+
+[node name="DummyVisual" parent="FoxUnit/Visuals" index="8" unique_id=858614070]
+visible = false
+
+[node name="DummyAtlas" parent="FoxUnit/Visuals/DummyVisual" index="0" unique_id=2113127279]
+texture_filter = 1
+position = Vector2(-50, -124)
+texture = ExtResource("6_nyxvy")
+polygon = PackedVector2Array(35, 0, 67, 0, 67, 28, 81, 30, 82, 38, 99, 38, 99, 58, 81, 58, 81, 95, 68, 96, 68, 123, 40, 123, 40, 95, 24, 95, 24, 59, 4, 59, 4, 35, 32, 34)
+uv = PackedVector2Array(619, 542, 651, 542, 651, 570, 665, 572, 666, 580, 683, 580, 683, 600, 665, 600, 665, 637, 652, 638, 652, 665, 624, 665, 624, 637, 608, 637, 608, 601, 588, 601, 588, 577, 616, 576)
+
+[node name="HealthBackground" parent="FoxUnit" index="1" unique_id=1311019408]
+position = Vector2(0, -40)
+scale = Vector2(1.3, 1.1)
+color = Color(0.09019608, 0.14509805, 0.20784314, 1)
+polygon = PackedVector2Array(-26, -51, 26, -51, 26, -41, -26, -41)
+
+[node name="HealthFill" parent="FoxUnit" index="2" unique_id=367241668]
+unique_name_in_owner = true
+position = Vector2(0, -40)
+scale = Vector2(1.3, 1.1)
+color = Color(0.6, 0.84313726, 0.49411765, 1)
+polygon = PackedVector2Array(-24, -49, 24, -49, 24, -43, -24, -43)
+
+[node name="DamageFeedback" parent="FoxUnit" index="3" unique_id=153512385]
+visible = false
+offset_left = -90.0
+offset_top = -155.0
+offset_right = 90.0
+offset_bottom = -95.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.078431375, 0.10980392, 0.1764706, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 40
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AquaUnit" parent="." unique_id=1244420828 instance=ExtResource("2_ed4tr")]
+unique_name_in_owner = true
+position = Vector2(460, 0)
+script = ExtResource("3_bqwlp")
+unit_data = SubResource("Resource_sxqlq")
+appearance = "AquaVisual"
+
+[node name="Visuals" parent="AquaUnit" index="0" unique_id=102881119]
+scale = Vector2(0.72, 0.72)
+
+[node name="Shadow" parent="AquaUnit/Visuals" index="0" unique_id=1194177940]
+visible = false
+color = Color(0.02, 0.05, 0.05, 0.68)
+polygon = PackedVector2Array(-24, -1, -20, -9, 0, -12, 20, -8, 25, -1, 18, 4, -17, 4)
+
+[node name="KnightVisual" parent="AquaUnit/Visuals" index="1" unique_id=142695284]
+unique_name_in_owner = true
+visible = false
+
+[node name="KnightAtlas" parent="AquaUnit/Visuals/KnightVisual" index="0" unique_id=363678787]
+texture_filter = 1
+position = Vector2(-93, -125)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 78, 22, 58, 55, 49, 44, 28, 58, 18, 70, 14, 95, 0, 117, 4, 127, 13, 138, 13, 132, 24, 137, 35, 130, 47, 124, 55, 132, 66, 161, 62, 174, 56, 184, 63, 184, 71, 151, 85, 131, 90, 120, 106, 129, 118, 87, 120, 77, 110, 61, 118, 43, 118, 51, 98, 26, 98, 7, 86)
+uv = PackedVector2Array(63, 525, 85, 505, 118, 496, 107, 475, 121, 465, 133, 461, 158, 447, 180, 451, 190, 460, 201, 460, 195, 471, 200, 482, 193, 494, 187, 502, 195, 513, 224, 509, 237, 503, 247, 510, 247, 518, 214, 532, 194, 537, 183, 553, 192, 565, 150, 567, 140, 557, 124, 565, 106, 565, 114, 545, 89, 545, 70, 533)
+
+[node name="SlimeVisual" parent="AquaUnit/Visuals" index="2" unique_id=469824948]
+unique_name_in_owner = true
+visible = false
+
+[node name="SlimeAtlas" parent="AquaUnit/Visuals/SlimeVisual" index="0" unique_id=755261591]
+texture_filter = 1
+position = Vector2(-35, -56)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 54, 1, 29, 9, 15, 20, 8, 27, 1, 43, 0, 54, 8, 63, 20, 68, 40, 70, 55)
+uv = PackedVector2Array(568, 568, 569, 543, 577, 529, 588, 522, 595, 515, 611, 514, 622, 522, 631, 534, 636, 554, 638, 569)
+
+[node name="PetVisual" parent="AquaUnit/Visuals" index="3" unique_id=1012856449]
+visible = false
+
+[node name="PetAtlas" parent="AquaUnit/Visuals/PetVisual" index="0" unique_id=726804392]
+texture_filter = 1
+position = Vector2(-60, -108)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 78, 9, 66, 19, 78, 31, 79, 40, 68, 31, 64, 21, 58, 36, 48, 25, 43, 34, 33, 48, 29, 45, 13, 50, 1, 64, 8, 69, 14, 83, 8, 91, 14, 94, 23, 106, 29, 112, 38, 119, 46, 117, 69, 102, 79, 88, 85, 85, 97, 91, 104, 62, 106, 59, 100, 45, 105, 25, 103, 8, 92)
+uv = PackedVector2Array(267, 539, 276, 527, 286, 539, 298, 540, 307, 529, 298, 525, 288, 519, 303, 509, 292, 504, 301, 494, 315, 490, 312, 474, 317, 462, 331, 469, 336, 475, 350, 469, 358, 475, 361, 484, 373, 490, 379, 499, 386, 507, 384, 530, 369, 540, 355, 546, 352, 558, 358, 565, 329, 567, 326, 561, 312, 566, 292, 564, 275, 553)
+
+[node name="FoxVisual" parent="AquaUnit/Visuals" index="4" unique_id=648160436]
+visible = false
+
+[node name="Fox" parent="AquaUnit/Visuals/FoxVisual" index="0" unique_id=202702061]
+texture_filter = 1
+position = Vector2(-64.5, -108)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 105, 7, 76, 0, 53, 15, 29, 29, 50, 39, 43, 45, 0, 65, 15, 69, 27, 85, 23, 104, 0, 112, 12, 111, 37, 127, 45, 127, 75, 101, 87, 110, 106, 78, 107, 71, 96, 56, 107)
+uv = PackedVector2Array(304, 1414, 311, 1385, 304, 1362, 319, 1338, 333, 1359, 343, 1352, 349, 1309, 369, 1324, 373, 1336, 389, 1332, 408, 1309, 416, 1321, 415, 1346, 431, 1354, 431, 1384, 405, 1396, 414, 1415, 382, 1416, 375, 1405, 360, 1416)
+
+[node name="Aqua" parent="AquaUnit/Visuals/AquaVisual" parent_id_path=PackedInt32Array(1244420828, 141911049) index="0" unique_id=793639538]
+texture_filter = 1
+position = Vector2(-56, -77)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 73, 0, 54, 12, 35, 27, 14, 42, 4, 61, 0, 80, 8, 88, 27, 108, 47, 111, 69, 95, 76, 18, 76)
+uv = PackedVector2Array(531, 1413, 531, 1394, 543, 1375, 558, 1354, 573, 1344, 592, 1340, 611, 1348, 619, 1367, 639, 1387, 642, 1409, 626, 1416, 549, 1416)
+
+[node name="MushroomVisual" parent="AquaUnit/Visuals" index="6" unique_id=1501651045]
+visible = false
+
+[node name="Mushroom" parent="AquaUnit/Visuals/MushroomVisual" index="0" unique_id=595585900]
+texture_filter = 1
+position = Vector2(-60.5, -108)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 47, 14, 29, 35, 10, 55, 0, 74, 1, 84, 17, 112, 37, 120, 53, 116, 65, 87, 63, 92, 84, 90, 96, 72, 105, 50, 107, 29, 101, 19, 86, 19, 65, 2, 65)
+uv = PackedVector2Array(744, 1357, 758, 1339, 779, 1320, 799, 1310, 818, 1311, 828, 1327, 856, 1347, 864, 1363, 860, 1375, 831, 1373, 836, 1394, 834, 1406, 816, 1415, 794, 1417, 773, 1411, 763, 1396, 763, 1375, 746, 1375)
+
+[node name="SoldierVisual" parent="AquaUnit/Visuals" index="7" unique_id=46232267]
+visible = false
+modulate = Color(0.65, 0.8, 1, 1)
+scale = Vector2(-1, 1)
+
+[node name="KnightAtlas" parent="AquaUnit/Visuals/SoldierVisual" index="0" unique_id=393783192]
+texture_filter = 1
+position = Vector2(-93, -125)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 78, 22, 58, 55, 49, 44, 28, 58, 18, 70, 14, 95, 0, 117, 4, 127, 13, 138, 13, 132, 24, 137, 35, 130, 47, 124, 55, 132, 66, 161, 62, 174, 56, 184, 63, 184, 71, 151, 85, 131, 90, 120, 106, 129, 118, 87, 120, 77, 110, 61, 118, 43, 118, 51, 98, 26, 98, 7, 86)
+uv = PackedVector2Array(63, 525, 85, 505, 118, 496, 107, 475, 121, 465, 133, 461, 158, 447, 180, 451, 190, 460, 201, 460, 195, 471, 200, 482, 193, 494, 187, 502, 195, 513, 224, 509, 237, 503, 247, 510, 247, 518, 214, 532, 194, 537, 183, 553, 192, 565, 150, 567, 140, 557, 124, 565, 106, 565, 114, 545, 89, 545, 70, 533)
+
+[node name="DummyVisual" parent="AquaUnit/Visuals" index="8" unique_id=858614070]
+visible = false
+
+[node name="DummyAtlas" parent="AquaUnit/Visuals/DummyVisual" index="0" unique_id=2113127279]
+texture_filter = 1
+position = Vector2(-50, -124)
+texture = ExtResource("6_nyxvy")
+polygon = PackedVector2Array(35, 0, 67, 0, 67, 28, 81, 30, 82, 38, 99, 38, 99, 58, 81, 58, 81, 95, 68, 96, 68, 123, 40, 123, 40, 95, 24, 95, 24, 59, 4, 59, 4, 35, 32, 34)
+uv = PackedVector2Array(619, 542, 651, 542, 651, 570, 665, 572, 666, 580, 683, 580, 683, 600, 665, 600, 665, 637, 652, 638, 652, 665, 624, 665, 624, 637, 608, 637, 608, 601, 588, 601, 588, 577, 616, 576)
+
+[node name="HealthBackground" parent="AquaUnit" index="1" unique_id=1311019408]
+position = Vector2(0, -40)
+scale = Vector2(1.3, 1.1)
+color = Color(0.09019608, 0.14509805, 0.20784314, 1)
+polygon = PackedVector2Array(-26, -51, 26, -51, 26, -41, -26, -41)
+
+[node name="HealthFill" parent="AquaUnit" index="2" unique_id=367241668]
+unique_name_in_owner = true
+position = Vector2(0, -40)
+scale = Vector2(1.3, 1.1)
+color = Color(0.6, 0.84313726, 0.49411765, 1)
+polygon = PackedVector2Array(-24, -49, 24, -49, 24, -43, -24, -43)
+
+[node name="DamageFeedback" parent="AquaUnit" index="3" unique_id=153512385]
+visible = false
+offset_left = -90.0
+offset_top = -155.0
+offset_right = 90.0
+offset_bottom = -95.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.078431375, 0.10980392, 0.1764706, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 40
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MushroomUnit" parent="." unique_id=1969755034 instance=ExtResource("2_ed4tr")]
+unique_name_in_owner = true
+position = Vector2(555, 0)
+script = ExtResource("3_bqwlp")
+unit_data = SubResource("Resource_bfh41")
+appearance = "MushroomVisual"
+
+[node name="Visuals" parent="MushroomUnit" index="0" unique_id=102881119]
+scale = Vector2(0.72, 0.72)
+
+[node name="Shadow" parent="MushroomUnit/Visuals" index="0" unique_id=1194177940]
+visible = false
+color = Color(0.02, 0.05, 0.05, 0.68)
+polygon = PackedVector2Array(-24, -1, -20, -9, 0, -12, 20, -8, 25, -1, 18, 4, -17, 4)
+
+[node name="KnightVisual" parent="MushroomUnit/Visuals" index="1" unique_id=142695284]
+unique_name_in_owner = true
+visible = false
+
+[node name="KnightAtlas" parent="MushroomUnit/Visuals/KnightVisual" index="0" unique_id=363678787]
+texture_filter = 1
+position = Vector2(-93, -125)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 78, 22, 58, 55, 49, 44, 28, 58, 18, 70, 14, 95, 0, 117, 4, 127, 13, 138, 13, 132, 24, 137, 35, 130, 47, 124, 55, 132, 66, 161, 62, 174, 56, 184, 63, 184, 71, 151, 85, 131, 90, 120, 106, 129, 118, 87, 120, 77, 110, 61, 118, 43, 118, 51, 98, 26, 98, 7, 86)
+uv = PackedVector2Array(63, 525, 85, 505, 118, 496, 107, 475, 121, 465, 133, 461, 158, 447, 180, 451, 190, 460, 201, 460, 195, 471, 200, 482, 193, 494, 187, 502, 195, 513, 224, 509, 237, 503, 247, 510, 247, 518, 214, 532, 194, 537, 183, 553, 192, 565, 150, 567, 140, 557, 124, 565, 106, 565, 114, 545, 89, 545, 70, 533)
+
+[node name="SlimeVisual" parent="MushroomUnit/Visuals" index="2" unique_id=469824948]
+unique_name_in_owner = true
+visible = false
+
+[node name="SlimeAtlas" parent="MushroomUnit/Visuals/SlimeVisual" index="0" unique_id=755261591]
+texture_filter = 1
+position = Vector2(-35, -56)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 54, 1, 29, 9, 15, 20, 8, 27, 1, 43, 0, 54, 8, 63, 20, 68, 40, 70, 55)
+uv = PackedVector2Array(568, 568, 569, 543, 577, 529, 588, 522, 595, 515, 611, 514, 622, 522, 631, 534, 636, 554, 638, 569)
+
+[node name="PetVisual" parent="MushroomUnit/Visuals" index="3" unique_id=1012856449]
+visible = false
+
+[node name="PetAtlas" parent="MushroomUnit/Visuals/PetVisual" index="0" unique_id=726804392]
+texture_filter = 1
+position = Vector2(-60, -108)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 78, 9, 66, 19, 78, 31, 79, 40, 68, 31, 64, 21, 58, 36, 48, 25, 43, 34, 33, 48, 29, 45, 13, 50, 1, 64, 8, 69, 14, 83, 8, 91, 14, 94, 23, 106, 29, 112, 38, 119, 46, 117, 69, 102, 79, 88, 85, 85, 97, 91, 104, 62, 106, 59, 100, 45, 105, 25, 103, 8, 92)
+uv = PackedVector2Array(267, 539, 276, 527, 286, 539, 298, 540, 307, 529, 298, 525, 288, 519, 303, 509, 292, 504, 301, 494, 315, 490, 312, 474, 317, 462, 331, 469, 336, 475, 350, 469, 358, 475, 361, 484, 373, 490, 379, 499, 386, 507, 384, 530, 369, 540, 355, 546, 352, 558, 358, 565, 329, 567, 326, 561, 312, 566, 292, 564, 275, 553)
+
+[node name="FoxVisual" parent="MushroomUnit/Visuals" index="4" unique_id=648160436]
+visible = false
+
+[node name="Fox" parent="MushroomUnit/Visuals/FoxVisual" index="0" unique_id=202702061]
+texture_filter = 1
+position = Vector2(-64.5, -108)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 105, 7, 76, 0, 53, 15, 29, 29, 50, 39, 43, 45, 0, 65, 15, 69, 27, 85, 23, 104, 0, 112, 12, 111, 37, 127, 45, 127, 75, 101, 87, 110, 106, 78, 107, 71, 96, 56, 107)
+uv = PackedVector2Array(304, 1414, 311, 1385, 304, 1362, 319, 1338, 333, 1359, 343, 1352, 349, 1309, 369, 1324, 373, 1336, 389, 1332, 408, 1309, 416, 1321, 415, 1346, 431, 1354, 431, 1384, 405, 1396, 414, 1415, 382, 1416, 375, 1405, 360, 1416)
+
+[node name="AquaVisual" parent="MushroomUnit/Visuals" index="5" unique_id=141911049]
+visible = false
+
+[node name="Aqua" parent="MushroomUnit/Visuals/AquaVisual" index="0" unique_id=793639538]
+texture_filter = 1
+position = Vector2(-56, -77)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 73, 0, 54, 12, 35, 27, 14, 42, 4, 61, 0, 80, 8, 88, 27, 108, 47, 111, 69, 95, 76, 18, 76)
+uv = PackedVector2Array(531, 1413, 531, 1394, 543, 1375, 558, 1354, 573, 1344, 592, 1340, 611, 1348, 619, 1367, 639, 1387, 642, 1409, 626, 1416, 549, 1416)
+
+[node name="Mushroom" parent="MushroomUnit/Visuals/MushroomVisual" parent_id_path=PackedInt32Array(1969755034, 1501651045) index="0" unique_id=595585900]
+texture_filter = 1
+position = Vector2(-60.5, -108)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 47, 14, 29, 35, 10, 55, 0, 74, 1, 84, 17, 112, 37, 120, 53, 116, 65, 87, 63, 92, 84, 90, 96, 72, 105, 50, 107, 29, 101, 19, 86, 19, 65, 2, 65)
+uv = PackedVector2Array(744, 1357, 758, 1339, 779, 1320, 799, 1310, 818, 1311, 828, 1327, 856, 1347, 864, 1363, 860, 1375, 831, 1373, 836, 1394, 834, 1406, 816, 1415, 794, 1417, 773, 1411, 763, 1396, 763, 1375, 746, 1375)
+
+[node name="SoldierVisual" parent="MushroomUnit/Visuals" index="7" unique_id=46232267]
+visible = false
+modulate = Color(0.65, 0.8, 1, 1)
+scale = Vector2(-1, 1)
+
+[node name="KnightAtlas" parent="MushroomUnit/Visuals/SoldierVisual" index="0" unique_id=393783192]
+texture_filter = 1
+position = Vector2(-93, -125)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 78, 22, 58, 55, 49, 44, 28, 58, 18, 70, 14, 95, 0, 117, 4, 127, 13, 138, 13, 132, 24, 137, 35, 130, 47, 124, 55, 132, 66, 161, 62, 174, 56, 184, 63, 184, 71, 151, 85, 131, 90, 120, 106, 129, 118, 87, 120, 77, 110, 61, 118, 43, 118, 51, 98, 26, 98, 7, 86)
+uv = PackedVector2Array(63, 525, 85, 505, 118, 496, 107, 475, 121, 465, 133, 461, 158, 447, 180, 451, 190, 460, 201, 460, 195, 471, 200, 482, 193, 494, 187, 502, 195, 513, 224, 509, 237, 503, 247, 510, 247, 518, 214, 532, 194, 537, 183, 553, 192, 565, 150, 567, 140, 557, 124, 565, 106, 565, 114, 545, 89, 545, 70, 533)
+
+[node name="DummyVisual" parent="MushroomUnit/Visuals" index="8" unique_id=858614070]
+visible = false
+
+[node name="DummyAtlas" parent="MushroomUnit/Visuals/DummyVisual" index="0" unique_id=2113127279]
+texture_filter = 1
+position = Vector2(-50, -124)
+texture = ExtResource("6_nyxvy")
+polygon = PackedVector2Array(35, 0, 67, 0, 67, 28, 81, 30, 82, 38, 99, 38, 99, 58, 81, 58, 81, 95, 68, 96, 68, 123, 40, 123, 40, 95, 24, 95, 24, 59, 4, 59, 4, 35, 32, 34)
+uv = PackedVector2Array(619, 542, 651, 542, 651, 570, 665, 572, 666, 580, 683, 580, 683, 600, 665, 600, 665, 637, 652, 638, 652, 665, 624, 665, 624, 637, 608, 637, 608, 601, 588, 601, 588, 577, 616, 576)
+
+[node name="HealthBackground" parent="MushroomUnit" index="1" unique_id=1311019408]
+position = Vector2(0, -40)
+scale = Vector2(1.3, 1.1)
+color = Color(0.09019608, 0.14509805, 0.20784314, 1)
+polygon = PackedVector2Array(-26, -51, 26, -51, 26, -41, -26, -41)
+
+[node name="HealthFill" parent="MushroomUnit" index="2" unique_id=367241668]
+unique_name_in_owner = true
+position = Vector2(0, -40)
+scale = Vector2(1.3, 1.1)
+color = Color(0.6, 0.84313726, 0.49411765, 1)
+polygon = PackedVector2Array(-24, -49, 24, -49, 24, -43, -24, -43)
+
+[node name="DamageFeedback" parent="MushroomUnit" index="3" unique_id=153512385]
+visible = false
+offset_left = -90.0
+offset_top = -155.0
+offset_right = 90.0
+offset_bottom = -95.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.078431375, 0.10980392, 0.1764706, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 40
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SlimeUnit" parent="." unique_id=1657688972 instance=ExtResource("2_ed4tr")]
+unique_name_in_owner = true
+position = Vector2(750, 0)
+script = ExtResource("3_bqwlp")
+unit_data = SubResource("Resource_07jk8")
+faction = "enemy"
+appearance = "SlimeVisual"
+automatic_respawn = false
+
+[node name="Visuals" parent="SlimeUnit" index="0" unique_id=102881119]
+scale = Vector2(0.72, 0.72)
+
+[node name="Shadow" parent="SlimeUnit/Visuals" index="0" unique_id=1194177940]
+visible = false
+color = Color(0.02, 0.05, 0.05, 0.68)
+polygon = PackedVector2Array(-24, -1, -20, -9, 0, -12, 20, -8, 25, -1, 18, 4, -17, 4)
+
+[node name="KnightVisual" parent="SlimeUnit/Visuals" index="1" unique_id=142695284]
+unique_name_in_owner = true
+visible = false
+
+[node name="KnightAtlas" parent="SlimeUnit/Visuals/KnightVisual" index="0" unique_id=363678787]
+texture_filter = 1
+position = Vector2(-93, -125)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 78, 22, 58, 55, 49, 44, 28, 58, 18, 70, 14, 95, 0, 117, 4, 127, 13, 138, 13, 132, 24, 137, 35, 130, 47, 124, 55, 132, 66, 161, 62, 174, 56, 184, 63, 184, 71, 151, 85, 131, 90, 120, 106, 129, 118, 87, 120, 77, 110, 61, 118, 43, 118, 51, 98, 26, 98, 7, 86)
+uv = PackedVector2Array(63, 525, 85, 505, 118, 496, 107, 475, 121, 465, 133, 461, 158, 447, 180, 451, 190, 460, 201, 460, 195, 471, 200, 482, 193, 494, 187, 502, 195, 513, 224, 509, 237, 503, 247, 510, 247, 518, 214, 532, 194, 537, 183, 553, 192, 565, 150, 567, 140, 557, 124, 565, 106, 565, 114, 545, 89, 545, 70, 533)
+
+[node name="SlimeVisual" parent="SlimeUnit/Visuals" index="2" unique_id=469824948]
+unique_name_in_owner = true
+
+[node name="SlimeAtlas" parent="SlimeUnit/Visuals/SlimeVisual" index="0" unique_id=755261591]
+texture_filter = 1
+position = Vector2(-35, -56)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 54, 1, 29, 9, 15, 20, 8, 27, 1, 43, 0, 54, 8, 63, 20, 68, 40, 70, 55)
+uv = PackedVector2Array(568, 568, 569, 543, 577, 529, 588, 522, 595, 515, 611, 514, 622, 522, 631, 534, 636, 554, 638, 569)
+
+[node name="PetVisual" parent="SlimeUnit/Visuals" index="3" unique_id=1012856449]
+visible = false
+
+[node name="PetAtlas" parent="SlimeUnit/Visuals/PetVisual" index="0" unique_id=726804392]
+texture_filter = 1
+position = Vector2(-60, -108)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 78, 9, 66, 19, 78, 31, 79, 40, 68, 31, 64, 21, 58, 36, 48, 25, 43, 34, 33, 48, 29, 45, 13, 50, 1, 64, 8, 69, 14, 83, 8, 91, 14, 94, 23, 106, 29, 112, 38, 119, 46, 117, 69, 102, 79, 88, 85, 85, 97, 91, 104, 62, 106, 59, 100, 45, 105, 25, 103, 8, 92)
+uv = PackedVector2Array(267, 539, 276, 527, 286, 539, 298, 540, 307, 529, 298, 525, 288, 519, 303, 509, 292, 504, 301, 494, 315, 490, 312, 474, 317, 462, 331, 469, 336, 475, 350, 469, 358, 475, 361, 484, 373, 490, 379, 499, 386, 507, 384, 530, 369, 540, 355, 546, 352, 558, 358, 565, 329, 567, 326, 561, 312, 566, 292, 564, 275, 553)
+
+[node name="FoxVisual" parent="SlimeUnit/Visuals" index="4" unique_id=648160436]
+visible = false
+
+[node name="Fox" parent="SlimeUnit/Visuals/FoxVisual" index="0" unique_id=202702061]
+texture_filter = 1
+position = Vector2(-64.5, -108)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 105, 7, 76, 0, 53, 15, 29, 29, 50, 39, 43, 45, 0, 65, 15, 69, 27, 85, 23, 104, 0, 112, 12, 111, 37, 127, 45, 127, 75, 101, 87, 110, 106, 78, 107, 71, 96, 56, 107)
+uv = PackedVector2Array(304, 1414, 311, 1385, 304, 1362, 319, 1338, 333, 1359, 343, 1352, 349, 1309, 369, 1324, 373, 1336, 389, 1332, 408, 1309, 416, 1321, 415, 1346, 431, 1354, 431, 1384, 405, 1396, 414, 1415, 382, 1416, 375, 1405, 360, 1416)
+
+[node name="AquaVisual" parent="SlimeUnit/Visuals" index="5" unique_id=141911049]
+visible = false
+
+[node name="Aqua" parent="SlimeUnit/Visuals/AquaVisual" index="0" unique_id=793639538]
+texture_filter = 1
+position = Vector2(-56, -77)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 73, 0, 54, 12, 35, 27, 14, 42, 4, 61, 0, 80, 8, 88, 27, 108, 47, 111, 69, 95, 76, 18, 76)
+uv = PackedVector2Array(531, 1413, 531, 1394, 543, 1375, 558, 1354, 573, 1344, 592, 1340, 611, 1348, 619, 1367, 639, 1387, 642, 1409, 626, 1416, 549, 1416)
+
+[node name="MushroomVisual" parent="SlimeUnit/Visuals" index="6" unique_id=1501651045]
+visible = false
+
+[node name="Mushroom" parent="SlimeUnit/Visuals/MushroomVisual" index="0" unique_id=595585900]
+texture_filter = 1
+position = Vector2(-60.5, -108)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 47, 14, 29, 35, 10, 55, 0, 74, 1, 84, 17, 112, 37, 120, 53, 116, 65, 87, 63, 92, 84, 90, 96, 72, 105, 50, 107, 29, 101, 19, 86, 19, 65, 2, 65)
+uv = PackedVector2Array(744, 1357, 758, 1339, 779, 1320, 799, 1310, 818, 1311, 828, 1327, 856, 1347, 864, 1363, 860, 1375, 831, 1373, 836, 1394, 834, 1406, 816, 1415, 794, 1417, 773, 1411, 763, 1396, 763, 1375, 746, 1375)
+
+[node name="SoldierVisual" parent="SlimeUnit/Visuals" index="7" unique_id=46232267]
+visible = false
+modulate = Color(0.65, 0.8, 1, 1)
+scale = Vector2(-1, 1)
+
+[node name="KnightAtlas" parent="SlimeUnit/Visuals/SoldierVisual" index="0" unique_id=393783192]
+texture_filter = 1
+position = Vector2(-93, -125)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 78, 22, 58, 55, 49, 44, 28, 58, 18, 70, 14, 95, 0, 117, 4, 127, 13, 138, 13, 132, 24, 137, 35, 130, 47, 124, 55, 132, 66, 161, 62, 174, 56, 184, 63, 184, 71, 151, 85, 131, 90, 120, 106, 129, 118, 87, 120, 77, 110, 61, 118, 43, 118, 51, 98, 26, 98, 7, 86)
+uv = PackedVector2Array(63, 525, 85, 505, 118, 496, 107, 475, 121, 465, 133, 461, 158, 447, 180, 451, 190, 460, 201, 460, 195, 471, 200, 482, 193, 494, 187, 502, 195, 513, 224, 509, 237, 503, 247, 510, 247, 518, 214, 532, 194, 537, 183, 553, 192, 565, 150, 567, 140, 557, 124, 565, 106, 565, 114, 545, 89, 545, 70, 533)
+
+[node name="DummyVisual" parent="SlimeUnit/Visuals" index="8" unique_id=858614070]
+visible = false
+
+[node name="DummyAtlas" parent="SlimeUnit/Visuals/DummyVisual" index="0" unique_id=2113127279]
+texture_filter = 1
+position = Vector2(-50, -124)
+texture = ExtResource("6_nyxvy")
+polygon = PackedVector2Array(35, 0, 67, 0, 67, 28, 81, 30, 82, 38, 99, 38, 99, 58, 81, 58, 81, 95, 68, 96, 68, 123, 40, 123, 40, 95, 24, 95, 24, 59, 4, 59, 4, 35, 32, 34)
+uv = PackedVector2Array(619, 542, 651, 542, 651, 570, 665, 572, 666, 580, 683, 580, 683, 600, 665, 600, 665, 637, 652, 638, 652, 665, 624, 665, 624, 637, 608, 637, 608, 601, 588, 601, 588, 577, 616, 576)
+
+[node name="HealthBackground" parent="SlimeUnit" index="1" unique_id=1311019408]
+position = Vector2(0, -40)
+scale = Vector2(1.3, 1.1)
+color = Color(0.09019608, 0.14509805, 0.20784314, 1)
+polygon = PackedVector2Array(-26, -51, 26, -51, 26, -41, -26, -41)
+
+[node name="HealthFill" parent="SlimeUnit" index="2" unique_id=367241668]
+unique_name_in_owner = true
+position = Vector2(0, -40)
+scale = Vector2(1.3, 1.1)
+color = Color(0.9490196, 0.49411765, 0.4117647, 1)
+polygon = PackedVector2Array(-24, -49, 24, -49, 24, -43, -24, -43)
+
+[node name="DamageFeedback" parent="SlimeUnit" index="3" unique_id=153512385]
+visible = false
+offset_left = -90.0
+offset_top = -155.0
+offset_right = 90.0
+offset_bottom = -95.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.078431375, 0.10980392, 0.1764706, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 40
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Enemy 1Unit" parent="." unique_id=266911372 instance=ExtResource("2_ed4tr")]
+unique_name_in_owner = true
+position = Vector2(835, 0)
+script = ExtResource("3_bqwlp")
+unit_data = SubResource("Resource_wko8s")
+faction = "enemy"
+appearance = "SlimeVisual"
+automatic_respawn = false
+
+[node name="Visuals" parent="Enemy 1Unit" index="0" unique_id=102881119]
+scale = Vector2(0.72, 0.72)
+
+[node name="Shadow" parent="Enemy 1Unit/Visuals" index="0" unique_id=1194177940]
+visible = false
+color = Color(0.02, 0.05, 0.05, 0.68)
+polygon = PackedVector2Array(-24, -1, -20, -9, 0, -12, 20, -8, 25, -1, 18, 4, -17, 4)
+
+[node name="KnightVisual" parent="Enemy 1Unit/Visuals" index="1" unique_id=142695284]
+unique_name_in_owner = true
+visible = false
+
+[node name="KnightAtlas" parent="Enemy 1Unit/Visuals/KnightVisual" index="0" unique_id=363678787]
+texture_filter = 1
+position = Vector2(-93, -125)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 78, 22, 58, 55, 49, 44, 28, 58, 18, 70, 14, 95, 0, 117, 4, 127, 13, 138, 13, 132, 24, 137, 35, 130, 47, 124, 55, 132, 66, 161, 62, 174, 56, 184, 63, 184, 71, 151, 85, 131, 90, 120, 106, 129, 118, 87, 120, 77, 110, 61, 118, 43, 118, 51, 98, 26, 98, 7, 86)
+uv = PackedVector2Array(63, 525, 85, 505, 118, 496, 107, 475, 121, 465, 133, 461, 158, 447, 180, 451, 190, 460, 201, 460, 195, 471, 200, 482, 193, 494, 187, 502, 195, 513, 224, 509, 237, 503, 247, 510, 247, 518, 214, 532, 194, 537, 183, 553, 192, 565, 150, 567, 140, 557, 124, 565, 106, 565, 114, 545, 89, 545, 70, 533)
+
+[node name="SlimeVisual" parent="Enemy 1Unit/Visuals" index="2" unique_id=469824948]
+unique_name_in_owner = true
+
+[node name="SlimeAtlas" parent="Enemy 1Unit/Visuals/SlimeVisual" index="0" unique_id=755261591]
+texture_filter = 1
+position = Vector2(-35, -56)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 54, 1, 29, 9, 15, 20, 8, 27, 1, 43, 0, 54, 8, 63, 20, 68, 40, 70, 55)
+uv = PackedVector2Array(568, 568, 569, 543, 577, 529, 588, 522, 595, 515, 611, 514, 622, 522, 631, 534, 636, 554, 638, 569)
+
+[node name="PetVisual" parent="Enemy 1Unit/Visuals" index="3" unique_id=1012856449]
+visible = false
+
+[node name="PetAtlas" parent="Enemy 1Unit/Visuals/PetVisual" index="0" unique_id=726804392]
+texture_filter = 1
+position = Vector2(-60, -108)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 78, 9, 66, 19, 78, 31, 79, 40, 68, 31, 64, 21, 58, 36, 48, 25, 43, 34, 33, 48, 29, 45, 13, 50, 1, 64, 8, 69, 14, 83, 8, 91, 14, 94, 23, 106, 29, 112, 38, 119, 46, 117, 69, 102, 79, 88, 85, 85, 97, 91, 104, 62, 106, 59, 100, 45, 105, 25, 103, 8, 92)
+uv = PackedVector2Array(267, 539, 276, 527, 286, 539, 298, 540, 307, 529, 298, 525, 288, 519, 303, 509, 292, 504, 301, 494, 315, 490, 312, 474, 317, 462, 331, 469, 336, 475, 350, 469, 358, 475, 361, 484, 373, 490, 379, 499, 386, 507, 384, 530, 369, 540, 355, 546, 352, 558, 358, 565, 329, 567, 326, 561, 312, 566, 292, 564, 275, 553)
+
+[node name="FoxVisual" parent="Enemy 1Unit/Visuals" index="4" unique_id=648160436]
+visible = false
+
+[node name="Fox" parent="Enemy 1Unit/Visuals/FoxVisual" index="0" unique_id=202702061]
+texture_filter = 1
+position = Vector2(-64.5, -108)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 105, 7, 76, 0, 53, 15, 29, 29, 50, 39, 43, 45, 0, 65, 15, 69, 27, 85, 23, 104, 0, 112, 12, 111, 37, 127, 45, 127, 75, 101, 87, 110, 106, 78, 107, 71, 96, 56, 107)
+uv = PackedVector2Array(304, 1414, 311, 1385, 304, 1362, 319, 1338, 333, 1359, 343, 1352, 349, 1309, 369, 1324, 373, 1336, 389, 1332, 408, 1309, 416, 1321, 415, 1346, 431, 1354, 431, 1384, 405, 1396, 414, 1415, 382, 1416, 375, 1405, 360, 1416)
+
+[node name="AquaVisual" parent="Enemy 1Unit/Visuals" index="5" unique_id=141911049]
+visible = false
+
+[node name="Aqua" parent="Enemy 1Unit/Visuals/AquaVisual" index="0" unique_id=793639538]
+texture_filter = 1
+position = Vector2(-56, -77)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 73, 0, 54, 12, 35, 27, 14, 42, 4, 61, 0, 80, 8, 88, 27, 108, 47, 111, 69, 95, 76, 18, 76)
+uv = PackedVector2Array(531, 1413, 531, 1394, 543, 1375, 558, 1354, 573, 1344, 592, 1340, 611, 1348, 619, 1367, 639, 1387, 642, 1409, 626, 1416, 549, 1416)
+
+[node name="MushroomVisual" parent="Enemy 1Unit/Visuals" index="6" unique_id=1501651045]
+visible = false
+
+[node name="Mushroom" parent="Enemy 1Unit/Visuals/MushroomVisual" index="0" unique_id=595585900]
+texture_filter = 1
+position = Vector2(-60.5, -108)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 47, 14, 29, 35, 10, 55, 0, 74, 1, 84, 17, 112, 37, 120, 53, 116, 65, 87, 63, 92, 84, 90, 96, 72, 105, 50, 107, 29, 101, 19, 86, 19, 65, 2, 65)
+uv = PackedVector2Array(744, 1357, 758, 1339, 779, 1320, 799, 1310, 818, 1311, 828, 1327, 856, 1347, 864, 1363, 860, 1375, 831, 1373, 836, 1394, 834, 1406, 816, 1415, 794, 1417, 773, 1411, 763, 1396, 763, 1375, 746, 1375)
+
+[node name="SoldierVisual" parent="Enemy 1Unit/Visuals" index="7" unique_id=46232267]
+visible = false
+modulate = Color(0.65, 0.8, 1, 1)
+scale = Vector2(-1, 1)
+
+[node name="KnightAtlas" parent="Enemy 1Unit/Visuals/SoldierVisual" index="0" unique_id=393783192]
+texture_filter = 1
+position = Vector2(-93, -125)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 78, 22, 58, 55, 49, 44, 28, 58, 18, 70, 14, 95, 0, 117, 4, 127, 13, 138, 13, 132, 24, 137, 35, 130, 47, 124, 55, 132, 66, 161, 62, 174, 56, 184, 63, 184, 71, 151, 85, 131, 90, 120, 106, 129, 118, 87, 120, 77, 110, 61, 118, 43, 118, 51, 98, 26, 98, 7, 86)
+uv = PackedVector2Array(63, 525, 85, 505, 118, 496, 107, 475, 121, 465, 133, 461, 158, 447, 180, 451, 190, 460, 201, 460, 195, 471, 200, 482, 193, 494, 187, 502, 195, 513, 224, 509, 237, 503, 247, 510, 247, 518, 214, 532, 194, 537, 183, 553, 192, 565, 150, 567, 140, 557, 124, 565, 106, 565, 114, 545, 89, 545, 70, 533)
+
+[node name="DummyVisual" parent="Enemy 1Unit/Visuals" index="8" unique_id=858614070]
+visible = false
+
+[node name="DummyAtlas" parent="Enemy 1Unit/Visuals/DummyVisual" index="0" unique_id=2113127279]
+texture_filter = 1
+position = Vector2(-50, -124)
+texture = ExtResource("6_nyxvy")
+polygon = PackedVector2Array(35, 0, 67, 0, 67, 28, 81, 30, 82, 38, 99, 38, 99, 58, 81, 58, 81, 95, 68, 96, 68, 123, 40, 123, 40, 95, 24, 95, 24, 59, 4, 59, 4, 35, 32, 34)
+uv = PackedVector2Array(619, 542, 651, 542, 651, 570, 665, 572, 666, 580, 683, 580, 683, 600, 665, 600, 665, 637, 652, 638, 652, 665, 624, 665, 624, 637, 608, 637, 608, 601, 588, 601, 588, 577, 616, 576)
+
+[node name="HealthBackground" parent="Enemy 1Unit" index="1" unique_id=1311019408]
+position = Vector2(0, -40)
+scale = Vector2(1.3, 1.1)
+color = Color(0.09019608, 0.14509805, 0.20784314, 1)
+polygon = PackedVector2Array(-26, -51, 26, -51, 26, -41, -26, -41)
+
+[node name="HealthFill" parent="Enemy 1Unit" index="2" unique_id=367241668]
+unique_name_in_owner = true
+position = Vector2(0, -40)
+scale = Vector2(1.3, 1.1)
+color = Color(0.9490196, 0.49411765, 0.4117647, 1)
+polygon = PackedVector2Array(-24, -49, 24, -49, 24, -43, -24, -43)
+
+[node name="DamageFeedback" parent="Enemy 1Unit" index="3" unique_id=153512385]
+visible = false
+offset_left = -90.0
+offset_top = -155.0
+offset_right = 90.0
+offset_bottom = -95.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.078431375, 0.10980392, 0.1764706, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 40
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Enemy 2Unit" parent="." unique_id=1399960174 instance=ExtResource("2_ed4tr")]
+unique_name_in_owner = true
+position = Vector2(910, 0)
+script = ExtResource("3_bqwlp")
+unit_data = SubResource("Resource_mifjs")
+faction = "enemy"
+appearance = "SlimeVisual"
+automatic_respawn = false
+
+[node name="Visuals" parent="Enemy 2Unit" index="0" unique_id=102881119]
+scale = Vector2(0.72, 0.72)
+
+[node name="Shadow" parent="Enemy 2Unit/Visuals" index="0" unique_id=1194177940]
+visible = false
+color = Color(0.02, 0.05, 0.05, 0.68)
+polygon = PackedVector2Array(-24, -1, -20, -9, 0, -12, 20, -8, 25, -1, 18, 4, -17, 4)
+
+[node name="KnightVisual" parent="Enemy 2Unit/Visuals" index="1" unique_id=142695284]
+unique_name_in_owner = true
+visible = false
+
+[node name="KnightAtlas" parent="Enemy 2Unit/Visuals/KnightVisual" index="0" unique_id=363678787]
+texture_filter = 1
+position = Vector2(-93, -125)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 78, 22, 58, 55, 49, 44, 28, 58, 18, 70, 14, 95, 0, 117, 4, 127, 13, 138, 13, 132, 24, 137, 35, 130, 47, 124, 55, 132, 66, 161, 62, 174, 56, 184, 63, 184, 71, 151, 85, 131, 90, 120, 106, 129, 118, 87, 120, 77, 110, 61, 118, 43, 118, 51, 98, 26, 98, 7, 86)
+uv = PackedVector2Array(63, 525, 85, 505, 118, 496, 107, 475, 121, 465, 133, 461, 158, 447, 180, 451, 190, 460, 201, 460, 195, 471, 200, 482, 193, 494, 187, 502, 195, 513, 224, 509, 237, 503, 247, 510, 247, 518, 214, 532, 194, 537, 183, 553, 192, 565, 150, 567, 140, 557, 124, 565, 106, 565, 114, 545, 89, 545, 70, 533)
+
+[node name="SlimeVisual" parent="Enemy 2Unit/Visuals" index="2" unique_id=469824948]
+unique_name_in_owner = true
+
+[node name="SlimeAtlas" parent="Enemy 2Unit/Visuals/SlimeVisual" index="0" unique_id=755261591]
+texture_filter = 1
+position = Vector2(-35, -56)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 54, 1, 29, 9, 15, 20, 8, 27, 1, 43, 0, 54, 8, 63, 20, 68, 40, 70, 55)
+uv = PackedVector2Array(568, 568, 569, 543, 577, 529, 588, 522, 595, 515, 611, 514, 622, 522, 631, 534, 636, 554, 638, 569)
+
+[node name="PetVisual" parent="Enemy 2Unit/Visuals" index="3" unique_id=1012856449]
+visible = false
+
+[node name="PetAtlas" parent="Enemy 2Unit/Visuals/PetVisual" index="0" unique_id=726804392]
+texture_filter = 1
+position = Vector2(-60, -108)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 78, 9, 66, 19, 78, 31, 79, 40, 68, 31, 64, 21, 58, 36, 48, 25, 43, 34, 33, 48, 29, 45, 13, 50, 1, 64, 8, 69, 14, 83, 8, 91, 14, 94, 23, 106, 29, 112, 38, 119, 46, 117, 69, 102, 79, 88, 85, 85, 97, 91, 104, 62, 106, 59, 100, 45, 105, 25, 103, 8, 92)
+uv = PackedVector2Array(267, 539, 276, 527, 286, 539, 298, 540, 307, 529, 298, 525, 288, 519, 303, 509, 292, 504, 301, 494, 315, 490, 312, 474, 317, 462, 331, 469, 336, 475, 350, 469, 358, 475, 361, 484, 373, 490, 379, 499, 386, 507, 384, 530, 369, 540, 355, 546, 352, 558, 358, 565, 329, 567, 326, 561, 312, 566, 292, 564, 275, 553)
+
+[node name="FoxVisual" parent="Enemy 2Unit/Visuals" index="4" unique_id=648160436]
+visible = false
+
+[node name="Fox" parent="Enemy 2Unit/Visuals/FoxVisual" index="0" unique_id=202702061]
+texture_filter = 1
+position = Vector2(-64.5, -108)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 105, 7, 76, 0, 53, 15, 29, 29, 50, 39, 43, 45, 0, 65, 15, 69, 27, 85, 23, 104, 0, 112, 12, 111, 37, 127, 45, 127, 75, 101, 87, 110, 106, 78, 107, 71, 96, 56, 107)
+uv = PackedVector2Array(304, 1414, 311, 1385, 304, 1362, 319, 1338, 333, 1359, 343, 1352, 349, 1309, 369, 1324, 373, 1336, 389, 1332, 408, 1309, 416, 1321, 415, 1346, 431, 1354, 431, 1384, 405, 1396, 414, 1415, 382, 1416, 375, 1405, 360, 1416)
+
+[node name="AquaVisual" parent="Enemy 2Unit/Visuals" index="5" unique_id=141911049]
+visible = false
+
+[node name="Aqua" parent="Enemy 2Unit/Visuals/AquaVisual" index="0" unique_id=793639538]
+texture_filter = 1
+position = Vector2(-56, -77)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 73, 0, 54, 12, 35, 27, 14, 42, 4, 61, 0, 80, 8, 88, 27, 108, 47, 111, 69, 95, 76, 18, 76)
+uv = PackedVector2Array(531, 1413, 531, 1394, 543, 1375, 558, 1354, 573, 1344, 592, 1340, 611, 1348, 619, 1367, 639, 1387, 642, 1409, 626, 1416, 549, 1416)
+
+[node name="MushroomVisual" parent="Enemy 2Unit/Visuals" index="6" unique_id=1501651045]
+visible = false
+
+[node name="Mushroom" parent="Enemy 2Unit/Visuals/MushroomVisual" index="0" unique_id=595585900]
+texture_filter = 1
+position = Vector2(-60.5, -108)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 47, 14, 29, 35, 10, 55, 0, 74, 1, 84, 17, 112, 37, 120, 53, 116, 65, 87, 63, 92, 84, 90, 96, 72, 105, 50, 107, 29, 101, 19, 86, 19, 65, 2, 65)
+uv = PackedVector2Array(744, 1357, 758, 1339, 779, 1320, 799, 1310, 818, 1311, 828, 1327, 856, 1347, 864, 1363, 860, 1375, 831, 1373, 836, 1394, 834, 1406, 816, 1415, 794, 1417, 773, 1411, 763, 1396, 763, 1375, 746, 1375)
+
+[node name="SoldierVisual" parent="Enemy 2Unit/Visuals" index="7" unique_id=46232267]
+visible = false
+modulate = Color(0.65, 0.8, 1, 1)
+scale = Vector2(-1, 1)
+
+[node name="KnightAtlas" parent="Enemy 2Unit/Visuals/SoldierVisual" index="0" unique_id=393783192]
+texture_filter = 1
+position = Vector2(-93, -125)
+texture = ExtResource("5_twidm")
+polygon = PackedVector2Array(0, 78, 22, 58, 55, 49, 44, 28, 58, 18, 70, 14, 95, 0, 117, 4, 127, 13, 138, 13, 132, 24, 137, 35, 130, 47, 124, 55, 132, 66, 161, 62, 174, 56, 184, 63, 184, 71, 151, 85, 131, 90, 120, 106, 129, 118, 87, 120, 77, 110, 61, 118, 43, 118, 51, 98, 26, 98, 7, 86)
+uv = PackedVector2Array(63, 525, 85, 505, 118, 496, 107, 475, 121, 465, 133, 461, 158, 447, 180, 451, 190, 460, 201, 460, 195, 471, 200, 482, 193, 494, 187, 502, 195, 513, 224, 509, 237, 503, 247, 510, 247, 518, 214, 532, 194, 537, 183, 553, 192, 565, 150, 567, 140, 557, 124, 565, 106, 565, 114, 545, 89, 545, 70, 533)
+
+[node name="DummyVisual" parent="Enemy 2Unit/Visuals" index="8" unique_id=858614070]
+visible = false
+
+[node name="DummyAtlas" parent="Enemy 2Unit/Visuals/DummyVisual" index="0" unique_id=2113127279]
+texture_filter = 1
+position = Vector2(-50, -124)
+texture = ExtResource("6_nyxvy")
+polygon = PackedVector2Array(35, 0, 67, 0, 67, 28, 81, 30, 82, 38, 99, 38, 99, 58, 81, 58, 81, 95, 68, 96, 68, 123, 40, 123, 40, 95, 24, 95, 24, 59, 4, 59, 4, 35, 32, 34)
+uv = PackedVector2Array(619, 542, 651, 542, 651, 570, 665, 572, 666, 580, 683, 580, 683, 600, 665, 600, 665, 637, 652, 638, 652, 665, 624, 665, 624, 637, 608, 637, 608, 601, 588, 601, 588, 577, 616, 576)
+
+[node name="HealthBackground" parent="Enemy 2Unit" index="1" unique_id=1311019408]
+position = Vector2(0, -40)
+scale = Vector2(1.3, 1.1)
+color = Color(0.09019608, 0.14509805, 0.20784314, 1)
+polygon = PackedVector2Array(-26, -51, 26, -51, 26, -41, -26, -41)
+
+[node name="HealthFill" parent="Enemy 2Unit" index="2" unique_id=367241668]
+unique_name_in_owner = true
+position = Vector2(0, -40)
+scale = Vector2(1.3, 1.1)
+color = Color(0.9490196, 0.49411765, 0.4117647, 1)
+polygon = PackedVector2Array(-24, -49, 24, -49, 24, -43, -24, -43)
+
+[node name="DamageFeedback" parent="Enemy 2Unit" index="3" unique_id=153512385]
+visible = false
+offset_left = -90.0
+offset_top = -155.0
+offset_right = 90.0
+offset_bottom = -95.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.078431375, 0.10980392, 0.1764706, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 40
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WaveLabel" type="Label" parent="." unique_id=963869222]
+unique_name_in_owner = true
+offset_left = 20.0
+offset_top = -355.0
+offset_right = 920.0
+offset_bottom = -310.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.14509805, 0.19215687, 0.27058825, 1)
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("7_6wugp")
+theme_override_font_sizes/font_size = 26
+text = "1-1  ·  第 1 / 3 波"
+
+[editable path="KnightUnit"]
+[editable path="SproutUnit"]
+[editable path="FoxUnit"]
+[editable path="AquaUnit"]
+[editable path="MushroomUnit"]
+[editable path="SlimeUnit"]
+[editable path="Enemy 1Unit"]
+[editable path="Enemy 2Unit"]

@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="zh-Hant"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Taskbar Hero 圖稿與 Godot 渲染對照</title>
+<style>
+body{margin:0;background:#182132;color:#f0e4d2;font:16px system-ui,sans-serif}main{max-width:1200px;margin:auto;padding:24px}h1{font-size:25px}p{line-height:1.7;color:#c4cbd4}nav{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}button,select{padding:10px 16px;color:inherit;background:#354765;border:1px solid #8296b8;border-radius:5px;cursor:pointer}button[aria-pressed=true]{border-color:#ffda84;color:#ffda84}label{display:inline-flex;align-items:center;gap:12px;margin:8px 16px 16px 0}.pair{display:grid;grid-template-columns:1fr 1fr;gap:20px}figure{margin:0}figcaption{margin-bottom:10px}img{display:block;width:100%}.overlay{position:relative;max-width:600px;margin:auto}.overlay img+img{position:absolute;inset:0;opacity:.5}.hidden{display:none}a{color:#ffda84}@media(max-width:600px){main{padding:12px}.pair{gap:8px}h1{font-size:21px}}
+</style>
+<main><h1>圖稿與 Godot 實際渲染對照</h1>
+<p>左側是使用者原圖，右側是載入真實 .tscn 的截圖。參考數值模式固定金幣與等級，截圖時暫停戰鬥。文字、數值和按鈕均為 Godot 節點；兩側仍有差異，詳見 <a href="README.md">驗收記錄</a>。</p>
+<nav id="pages"></nav>
+<label>檢視 <select id="mode"><option value="pair">並排比較</option><option value="overlay">重疊比較</option></select></label>
+<label id="opacity-label">實作透明度 <input id="opacity" type="range" min="0" max="100" value="50"><span id="value">50%</span></label>
+<div class="pair" id="pair"><figure><figcaption>使用者圖稿 · 941 × 1672</figcaption><img id="reference" alt="使用者參考圖"></figure><figure><figcaption>Godot 實際渲染 · 941 × 1672</figcaption><img id="actual" alt="Godot 實際渲染"></figure></div>
+<div class="overlay hidden" id="overlay"><img id="under" alt="使用者參考圖"><img id="over" alt="疊加的 Godot 渲染"></div>
+</main><script>
+const pages=[['overview','idel','總覽'],['train','train','訓練'],['backpack','backpack','背包'],['monster','monster','怪獸'],['adventure','adventure','冒險'],['store','store','商店']];
+const byId=id=>document.getElementById(id);
+function select(page){for(const b of byId('pages').children)b.setAttribute('aria-pressed',b.dataset.page===page[0]);const ref='../../../../docs/taskbar-hero-mobile-spec/images/'+page[1]+'.png';const actual='941x1672-'+page[0]+'.png';byId('reference').src=byId('under').src=ref;byId('actual').src=byId('over').src=actual;}
+for(const page of pages){const b=document.createElement('button');b.textContent=page[2];b.dataset.page=page[0];b.onclick=()=>select(page);byId('pages').appendChild(b);}
+byId('mode').onchange=()=>{const overlay=byId('mode').value==='overlay';byId('pair').classList.toggle('hidden',overlay);byId('overlay').classList.toggle('hidden',!overlay);};
+byId('opacity').oninput=()=>{byId('over').style.opacity=byId('opacity').value/100;byId('value').textContent=byId('opacity').value+'%';};select(pages[0]);
+</script></html>

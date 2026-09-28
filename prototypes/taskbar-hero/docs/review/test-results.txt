@@ -1,0 +1,38 @@
+test_save_recovery
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+SAVE V1 VALIDATION AND RECOVERY PASSED
+
+
+test_playable
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+PLAYABLE COMBAT AND UI PASSED
+
+
+test_scene_persistence
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+AUTHORED MAIN REFERENCES: ["res://scenes/ui/overview_screen.tscn", "res://scenes/ui/party_details.tscn", "res://scenes/ui/adventure_strip.tscn"]
+SCENE NODE PERSISTENCE PASSED
+
+
+test_editor_contract
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+EDITOR LABEL=SafeMargin/MainLayout/TopBar/TopBarRows/TitleRow/GameTitle MARGIN=SafeMargin
+EDITOR CONTRACT PASSED
+
+
+test_soak
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+SOAK SIMULATED: 600 seconds at 60 steps/second (36000 ticks)
+10-MINUTE SCENE SOAK PASSED
+
+
+normal_launch
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+
+Scene/resource files unchanged: True

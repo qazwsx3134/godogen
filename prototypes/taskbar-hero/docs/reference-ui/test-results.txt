@@ -1,0 +1,42 @@
+test_save_recovery
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+SAVE V1 VALIDATION AND RECOVERY PASSED
+
+
+test_playable
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+PLAYABLE COMBAT PASSED
+
+
+test_reference_ui
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+REFERENCE UI INPUT AND STATE PASSED
+
+
+test_scene_persistence
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+AUTHORED NODES: 695
+SCENE NODE PERSISTENCE PASSED
+
+
+test_editor_contract
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+EDITOR CONTRACT PASSED
+
+
+test_soak
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+SOAK SIMULATED: 600 seconds at 60 steps/second (36000 ticks)
+10-MINUTE SCENE SOAK PASSED
+
+NORMAL LAUNCH / SOURCE IMMUTABILITY
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+
+PASSED

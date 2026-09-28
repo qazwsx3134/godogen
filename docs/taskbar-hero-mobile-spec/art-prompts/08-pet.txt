@@ -1,0 +1,7 @@
+ATTACH: images/monster.png
+SAVE AS: sprout_dragon_idle.png
+OUTPUT: 1024 x 768 PNG, true transparent RGBA.
+
+The small green baby dragon walking beside the hero, approximately x=267..387, y=461..569 in the battlefield. Face right, mint/teal green body, pale cream belly and muzzle, dark round eye, rosy orange cheek, small head spikes, short legs and a curled tail to the left. Reproduce the exact small battlefield sprite, not the enlarged portrait or the navigation icon. At logical 256x192 scale use a roughly 120x108 silhouette centered horizontally with feet at y=160; output is a 4x integer enlargement.
+
+Match the supplied reference identity and its exact pixel-art treatment. This is extraction/restoration of an existing game asset, not a redesign. Preserve its proportions, colors, expression and recognizable silhouette. Crisp pixel clusters and the existing dark outline; no smoothing, painterly effects, 3D, added details, lettering, UI, scenery, floor, cast shadow, frame, watermark or comparison sheet. One complete object only. Background must be genuinely transparent RGBA alpha, NOT a drawn checkerboard or a white/colored background. Leave clear transparent padding around the entire object.

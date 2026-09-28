@@ -1,0 +1,267 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://ui/expedition_theme.tres" id="1_r1wss"]
+[ext_resource type="Script" path="res://scripts/party_details.gd" id="2_vwveh"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f3pk6"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.12, 0.25, 0.24, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.83, 0.65, 0.34, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s5bip"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.09, 0.2, 0.2, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2, 0.39, 0.36, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dorcc"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.17, 0.35, 0.33, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.83, 0.65, 0.34, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mwev2"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.09, 0.2, 0.2, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.16, 0.31, 0.3, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gxfvc"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.09, 0.2, 0.2, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.36, 0.34, 0.23, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[node name="PartyDetailsScreen" type="Control" unique_id=897906247]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_r1wss")
+script = ExtResource("2_vwveh")
+
+[node name="PartyScroll" type="ScrollContainer" parent="." unique_id=1114361928]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+horizontal_scroll_mode = 0
+
+[node name="PartyContent" type="VBoxContainer" parent="PartyScroll" unique_id=2050220059]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="PartyIntroCard" type="PanelContainer" parent="PartyScroll/PartyContent" unique_id=2133794058]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_f3pk6")
+
+[node name="PartyIntroContent" type="VBoxContainer" parent="PartyScroll/PartyContent/PartyIntroCard" unique_id=1602796108]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="PartyKicker" type="Label" parent="PartyScroll/PartyContent/PartyIntroCard/PartyIntroContent" unique_id=884506686]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.83, 0.65, 0.34, 1)
+theme_override_font_sizes/font_size = 12
+text = "隊伍資料  /  出戰狀態"
+vertical_alignment = 1
+
+[node name="PartyHeading" type="Label" parent="PartyScroll/PartyContent/PartyIntroCard/PartyIntroContent" unique_id=1717983036]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.87, 0.72, 1)
+theme_override_font_sizes/font_size = 18
+text = "目前出戰夥伴"
+vertical_alignment = 1
+
+[node name="HeroCard" type="PanelContainer" parent="PartyScroll/PartyContent" unique_id=1925738988]
+custom_minimum_size = Vector2(0, 95)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_s5bip")
+
+[node name="HeroContent" type="VBoxContainer" parent="PartyScroll/PartyContent/HeroCard" unique_id=1343531950]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="HeroTitleRow" type="HBoxContainer" parent="PartyScroll/PartyContent/HeroCard/HeroContent" unique_id=1582461299]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HeroBadge" type="PanelContainer" parent="PartyScroll/PartyContent/HeroCard/HeroContent/HeroTitleRow" unique_id=574274330]
+custom_minimum_size = Vector2(88, 50)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_dorcc")
+
+[node name="HeroBadgeMark" type="Label" parent="PartyScroll/PartyContent/HeroCard/HeroContent/HeroTitleRow/HeroBadge" unique_id=1644459805]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.83, 0.65, 0.34, 1)
+theme_override_font_sizes/font_size = 25
+text = "騎"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HeroTitleContent" type="VBoxContainer" parent="PartyScroll/PartyContent/HeroCard/HeroContent/HeroTitleRow" unique_id=174545120]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 1
+
+[node name="HeroName" type="Label" parent="PartyScroll/PartyContent/HeroCard/HeroContent/HeroTitleRow/HeroTitleContent" unique_id=82876443]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.87, 0.72, 1)
+theme_override_font_sizes/font_size = 20
+text = "騎士"
+vertical_alignment = 1
+
+[node name="RoleLabel" type="Label" parent="PartyScroll/PartyContent/HeroCard/HeroContent/HeroTitleRow/HeroTitleContent" unique_id=2004994396]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.73, 0.66, 1)
+theme_override_font_sizes/font_size = 13
+text = "前衛  ·  近戰自動戰鬥"
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="HeroStatsCard" type="PanelContainer" parent="PartyScroll/PartyContent" unique_id=1114697226]
+custom_minimum_size = Vector2(0, 117)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_mwev2")
+
+[node name="HeroStatsContent" type="VBoxContainer" parent="PartyScroll/PartyContent/HeroStatsCard" unique_id=1380373559]
+layout_mode = 2
+theme_override_constants/separation = 7
+
+[node name="StatsHeading" type="Label" parent="PartyScroll/PartyContent/HeroStatsCard/HeroStatsContent" unique_id=1887332886]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.83, 0.65, 0.34, 1)
+theme_override_font_sizes/font_size = 15
+text = "基礎能力"
+vertical_alignment = 1
+
+[node name="StatsGrid" type="GridContainer" parent="PartyScroll/PartyContent/HeroStatsCard/HeroStatsContent" unique_id=644616673]
+layout_mode = 2
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 6
+columns = 2
+
+[node name="HealthStat" type="Label" parent="PartyScroll/PartyContent/HeroStatsCard/HeroStatsContent/StatsGrid" unique_id=1953247148]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.87, 0.72, 1)
+theme_override_font_sizes/font_size = 15
+text = "生命　82"
+vertical_alignment = 1
+
+[node name="AttackStat" type="Label" parent="PartyScroll/PartyContent/HeroStatsCard/HeroStatsContent/StatsGrid" unique_id=1848556898]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.87, 0.72, 1)
+theme_override_font_sizes/font_size = 15
+text = "攻擊　16"
+vertical_alignment = 1
+
+[node name="DefenseStat" type="Label" parent="PartyScroll/PartyContent/HeroStatsCard/HeroStatsContent/StatsGrid" unique_id=1561218329]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.87, 0.72, 1)
+theme_override_font_sizes/font_size = 15
+text = "防禦　5"
+vertical_alignment = 1
+
+[node name="SpeedStat" type="Label" parent="PartyScroll/PartyContent/HeroStatsCard/HeroStatsContent/StatsGrid" unique_id=1262292871]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.87, 0.72, 1)
+theme_override_font_sizes/font_size = 15
+text = "移動　86"
+vertical_alignment = 1
+
+[node name="AttackSpeedStat" type="Label" parent="PartyScroll/PartyContent/HeroStatsCard/HeroStatsContent/StatsGrid" unique_id=2045975529]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.87, 0.72, 1)
+theme_override_font_sizes/font_size = 14
+text = "攻擊速度　1.25 / 秒"
+vertical_alignment = 1
+
+[node name="PartyStatusCard" type="PanelContainer" parent="PartyScroll/PartyContent" unique_id=2121114113]
+custom_minimum_size = Vector2(0, 57)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_gxfvc")
+
+[node name="PartyStatusContent" type="VBoxContainer" parent="PartyScroll/PartyContent/PartyStatusCard" unique_id=1998945603]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="PartyStatusHeading" type="Label" parent="PartyScroll/PartyContent/PartyStatusCard/PartyStatusContent" unique_id=171172449]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.83, 0.65, 0.34, 1)
+theme_override_font_sizes/font_size = 14
+text = "冒險狀態"
+vertical_alignment = 1
+
+[node name="PartyStatus" type="Label" parent="PartyScroll/PartyContent/PartyStatusCard/PartyStatusContent" unique_id=407457278]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.87, 0.72, 1)
+theme_override_font_sizes/font_size = 13
+text = "目前擊倒 0 隻敵人，持有 0 金幣。"
+vertical_alignment = 1
+autowrap_mode = 3

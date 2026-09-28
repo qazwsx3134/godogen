@@ -1,0 +1,7 @@
+ATTACH: images/monster.png
+SAVE AS: green_slime_idle.png
+OUTPUT: 512 x 384 PNG, true transparent RGBA.
+
+One green slime from the battlefield, approximately x=568..639, y=514..570. A short rounded green jelly body, pale yellow-green face, two small black vertical eyes, gentle green shading, dark pixel outline, subtle tiny orange cheek. Reproduce one normal idle slime, not a blue slime. Exclude the red health bar and attack sparkle above it. At logical 128x96 scale use a roughly 71x56 silhouette centered horizontally, base at y=80; output is 4x integer enlargement.
+
+Match the supplied reference identity and its exact pixel-art treatment. This is extraction/restoration of an existing game asset, not a redesign. Preserve its proportions, colors, expression and recognizable silhouette. Crisp pixel clusters and the existing dark outline; no smoothing, painterly effects, 3D, added details, lettering, UI, scenery, floor, cast shadow, frame, watermark or comparison sheet. One complete object only. Background must be genuinely transparent RGBA alpha, NOT a drawn checkerboard or a white/colored background. Leave clear transparent padding around the entire object.

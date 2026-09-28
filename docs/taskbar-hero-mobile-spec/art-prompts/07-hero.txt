@@ -1,0 +1,7 @@
+ATTACH: images/monster.png
+SAVE AS: hero_idle.png
+OUTPUT: 1024 x 768 PNG, true transparent RGBA.
+
+The small black-haired swordsman in the battlefield, approximately x=63..249, y=447..568. Full body facing right, dark tousled hair, visible face, red cape sweeping behind to the left, gray armor, dark boots, silver sword held toward the right. Reproduce that exact idle/combat-ready pose, including the entire sword blade and cape. Do not copy the header avatar. At logical 256x192 scale, aim for a roughly 186x121 silhouette centered horizontally with feet at y=160; the delivered image is a 4x integer pixel enlargement.
+
+Match the supplied reference identity and its exact pixel-art treatment. This is extraction/restoration of an existing game asset, not a redesign. Preserve its proportions, colors, expression and recognizable silhouette. Crisp pixel clusters and the existing dark outline; no smoothing, painterly effects, 3D, added details, lettering, UI, scenery, floor, cast shadow, frame, watermark or comparison sheet. One complete object only. Background must be genuinely transparent RGBA alpha, NOT a drawn checkerboard or a white/colored background. Leave clear transparent padding around the entire object.

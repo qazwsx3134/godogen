@@ -1,0 +1,195 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://ui/expedition_theme.tres" id="1_u5pbb"]
+[ext_resource type="Script" path="res://scripts/overview_screen.gd" id="2_tgl3s"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_63ek1"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.12, 0.25, 0.24, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.83, 0.65, 0.34, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ml16r"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.09, 0.2, 0.2, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2, 0.39, 0.36, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ujtj5"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.09, 0.2, 0.2, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.16, 0.31, 0.3, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b4hhs"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.09, 0.2, 0.2, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.36, 0.34, 0.23, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[node name="OverviewScreen" type="Control" unique_id=743785857]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource("1_u5pbb")
+script = ExtResource("2_tgl3s")
+
+[node name="OverviewScroll" type="ScrollContainer" parent="." unique_id=1296237005]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+horizontal_scroll_mode = 0
+
+[node name="OverviewContent" type="VBoxContainer" parent="OverviewScroll" unique_id=577629712]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="RegionCard" type="PanelContainer" parent="OverviewScroll/OverviewContent" unique_id=532106725]
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_63ek1")
+
+[node name="RegionContent" type="VBoxContainer" parent="OverviewScroll/OverviewContent/RegionCard" unique_id=610102467]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="RegionKicker" type="Label" parent="OverviewScroll/OverviewContent/RegionCard/RegionContent" unique_id=336369002]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.83, 0.65, 0.34, 1)
+theme_override_font_sizes/font_size = 12
+text = "邊境遠征  /  常駐戰鬥"
+vertical_alignment = 1
+
+[node name="StageTitle" type="Label" parent="OverviewScroll/OverviewContent/RegionCard/RegionContent" unique_id=650084421]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.87, 0.72, 1)
+theme_override_font_sizes/font_size = 19
+text = "第 1-1 區  ·  苔原邊境"
+vertical_alignment = 1
+
+[node name="ProgressCard" type="PanelContainer" parent="OverviewScroll/OverviewContent" unique_id=358392480]
+custom_minimum_size = Vector2(0, 85)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_ml16r")
+
+[node name="ProgressContent" type="VBoxContainer" parent="OverviewScroll/OverviewContent/ProgressCard" unique_id=1446741554]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="ProgressTitle" type="Label" parent="OverviewScroll/OverviewContent/ProgressCard/ProgressContent" unique_id=107007035]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.83, 0.65, 0.34, 1)
+theme_override_font_sizes/font_size = 15
+text = "遠征成果"
+vertical_alignment = 1
+
+[node name="CombatTotals" type="Label" parent="OverviewScroll/OverviewContent/ProgressCard/ProgressContent" unique_id=1569289937]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.87, 0.72, 1)
+theme_override_font_sizes/font_size = 20
+text = "擊倒 0  ·  金幣 0"
+vertical_alignment = 1
+
+[node name="ProgressHint" type="Label" parent="OverviewScroll/OverviewContent/ProgressCard/ProgressContent" unique_id=330199194]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.73, 0.66, 1)
+theme_override_font_sizes/font_size = 12
+text = "金幣隨擊倒累積；目前用來記錄冒險成果。"
+vertical_alignment = 1
+
+[node name="TacticsCard" type="PanelContainer" parent="OverviewScroll/OverviewContent" unique_id=180286275]
+custom_minimum_size = Vector2(0, 104)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_ujtj5")
+
+[node name="TacticsContent" type="VBoxContainer" parent="OverviewScroll/OverviewContent/TacticsCard" unique_id=1066791055]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="TacticsTitle" type="Label" parent="OverviewScroll/OverviewContent/TacticsCard/TacticsContent" unique_id=1664611440]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.83, 0.65, 0.34, 1)
+theme_override_font_sizes/font_size = 15
+text = "騎士的行動"
+vertical_alignment = 1
+
+[node name="TacticsDescription" type="Label" parent="OverviewScroll/OverviewContent/TacticsCard/TacticsContent" unique_id=1230277120]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.87, 0.72, 1)
+theme_override_font_sizes/font_size = 14
+text = "自動尋找最近的史萊姆，移動到攻擊距離後出手。雙方倒下後會短暫休整，再回到原本的戰場位置。"
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="CombatRecordCard" type="PanelContainer" parent="OverviewScroll/OverviewContent" unique_id=555424942]
+custom_minimum_size = Vector2(0, 83)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_b4hhs")
+
+[node name="CombatRecordContent" type="VBoxContainer" parent="OverviewScroll/OverviewContent/CombatRecordCard" unique_id=1473716383]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="CombatRecordTitle" type="Label" parent="OverviewScroll/OverviewContent/CombatRecordCard/CombatRecordContent" unique_id=707551263]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.83, 0.65, 0.34, 1)
+theme_override_font_sizes/font_size = 14
+text = "現地紀錄"
+vertical_alignment = 1
+
+[node name="CombatFeedback" type="Label" parent="OverviewScroll/OverviewContent/CombatRecordCard/CombatRecordContent" unique_id=1565362361]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.87, 0.72, 1)
+theme_override_font_sizes/font_size = 14
+text = "騎士正在搜尋附近的史萊姆。"
+vertical_alignment = 1
+autowrap_mode = 3

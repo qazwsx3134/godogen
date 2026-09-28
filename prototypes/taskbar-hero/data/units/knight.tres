@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="UnitData" format=3]
+
+[ext_resource type="Script" path="res://data/unit_data.gd" id="1_7sqbm"]
+
+[resource]
+script = ExtResource("1_7sqbm")
+unit_id = "knight"
+display_name = "騎士"
+role_description = "前衛  ·  近戰自動戰鬥"
+max_health = 82
+attack = 16
+defense = 5
+move_speed = 86.0
+attack_speed = 1.25
+respawn_delay = 2.2
