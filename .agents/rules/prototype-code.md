@@ -44,6 +44,21 @@ Before writing a dialogue system, icon set, or other generic tool, check the
 third-party addon catalog in `prototypes/godot-kit/README.md`: each entry is
 pinned, tested on Godot 4.7, and lists its install steps and caveats.
 
+## Generated Art and Audio
+For character art, backgrounds, sprites, sprite sheets, UI art, sound effects or music,
+use the installed Scenario skills rather than improvising prompts: `scenario` (setup,
+models, jobs, credits), `scenario-game-assets` (sprites, icons, tiles, UI, transparent
+PNGs for Godot), `scenario-identity-library` and `scenario-consistency` (one character
+across poses and expressions: VN portraits, monster stages), `scenario-sprite-animation`
+(walk/idle/attack cycles, frame grids), `scenario-image` / `scenario-image-editing`
+(generate, edit, upscale, remove backgrounds), `scenario-audio` (SFX, BGM, voice), and
+`scenario-quality-gate` / `scenario-refine-loop` (check and iterate before accepting).
+They need the Scenario MCP server connected (see `prototypes/README.md`) and spend the
+user's Scenario credits, so confirm the spend with the user before the first paid
+generation and confirm the Scenario team and project to write into. Put finished files
+under the prototype's `assets/` and register them in its asset catalog; keep prompts and
+rejected takes out of `assets/`.
+
 ## When a Prototype Succeeds
 If a prototype validates a concept and the feature moves to production:
 1. The prototype code is NOT migrated directly — it is rewritten to production standards

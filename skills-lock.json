@@ -313,6 +313,66 @@
       "skillPath": "skills/disciplines/save-systems/SKILL.md",
       "computedHash": "1ce25859071b68e57b6c78f497b18d3c78b1b91d1fb74bd5e97e5ff5887274e7"
     },
+    "scenario": {
+      "source": "scenario-labs/skills",
+      "sourceType": "github",
+      "skillPath": "skills/scenario/SKILL.md",
+      "computedHash": "e553b813a87212b48ff068aefe786744da1779fd6de483345d94a6629b497a79"
+    },
+    "scenario-audio": {
+      "source": "scenario-labs/skills",
+      "sourceType": "github",
+      "skillPath": "skills/scenario-audio/SKILL.md",
+      "computedHash": "054d270ce93f907617cb3194aecb9a299aa3b439d98b79aeeb8f561be2001d37"
+    },
+    "scenario-consistency": {
+      "source": "scenario-labs/skills",
+      "sourceType": "github",
+      "skillPath": "skills/scenario-consistency/SKILL.md",
+      "computedHash": "1977538e7a5c4322be8129842540b9cffd74c3e90139dbf32ca0773b65bdfe5b"
+    },
+    "scenario-game-assets": {
+      "source": "scenario-labs/skills",
+      "sourceType": "github",
+      "skillPath": "skills/scenario-game-assets/SKILL.md",
+      "computedHash": "1839613173edb0cd55b66708aa7e3fe753d88d0637c6debb8a8fcf54b81f3a52"
+    },
+    "scenario-identity-library": {
+      "source": "scenario-labs/skills",
+      "sourceType": "github",
+      "skillPath": "skills/scenario-identity-library/SKILL.md",
+      "computedHash": "7eb4695b3948a23e8635672ddeef93a96ba7392eeba375e9db75a4e5fb076631"
+    },
+    "scenario-image": {
+      "source": "scenario-labs/skills",
+      "sourceType": "github",
+      "skillPath": "skills/scenario-image/SKILL.md",
+      "computedHash": "f821a300c61fffdb62fbc93c3ad940f27195a67481daa2c2ad44542e35ca160c"
+    },
+    "scenario-image-editing": {
+      "source": "scenario-labs/skills",
+      "sourceType": "github",
+      "skillPath": "skills/scenario-image-editing/SKILL.md",
+      "computedHash": "fa33b842842f7ad5eb30b1513b419660b54eebdb8443b15109667e91ec3ee2a8"
+    },
+    "scenario-quality-gate": {
+      "source": "scenario-labs/skills",
+      "sourceType": "github",
+      "skillPath": "skills/scenario-quality-gate/SKILL.md",
+      "computedHash": "053e21d5612f0569b7720fbb7c10b0ee5aabdbdfc57afc4334551e63a76df1ed"
+    },
+    "scenario-refine-loop": {
+      "source": "scenario-labs/skills",
+      "sourceType": "github",
+      "skillPath": "skills/scenario-refine-loop/SKILL.md",
+      "computedHash": "f4887f861fcbd9fa0145043535cecf24095353c23b1b46efd3aa76b953a6a8f8"
+    },
+    "scenario-sprite-animation": {
+      "source": "scenario-labs/skills",
+      "sourceType": "github",
+      "skillPath": "skills/scenario-sprite-animation/SKILL.md",
+      "computedHash": "d2ca687efc069c0018bbeaae0bdccc3942e32a19ba65b5c231809539349c7c8c"
+    },
     "shader-programming": {
       "source": "gamedev-skills/awesome-gamedev-agent-skills",
       "sourceType": "github",
