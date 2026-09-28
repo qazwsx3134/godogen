@@ -1,0 +1,23 @@
+{
+  "id": "fixture_chapter_b",
+  "version": "1",
+  "title": "測試章 B",
+  "entry": "open",
+  "initial_flags": {},
+  "nodes": {
+    "open": {
+      "title": "開頭",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "測試章 B 開始。"
+        },
+        {
+          "op": "end",
+          "text": "測試章 B 結束"
+        }
+      ]
+    }
+  }
+}

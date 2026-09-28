@@ -10,6 +10,7 @@ const smokeOnly = process.argv.includes('--smoke');
 const phase2Only = process.argv.includes('--phase2');
 const slotsOnly = process.argv.includes('--slots');
 const phase3Only = process.argv.includes('--phase3');
+const roundsOnly = process.argv.includes('--rounds');
 const arg = (name, fallback) => {
   const index = process.argv.indexOf(name);
   return index >= 0 ? process.argv[index + 1] : fallback;
@@ -18,6 +19,7 @@ const { chromium } = require(arg('--playwright', '@playwright/test'));
 const url = new URL(arg('--url', 'http://127.0.0.1:5193/'));
 url.searchParams.set('qa', '1');
 if (phase3Only) url.searchParams.set('sample', 'phase3');
+else if (roundsOnly) url.searchParams.set('sample', 'phase4_rounds');
 else if (phase2Only || slotsOnly) url.searchParams.set('sample', 'phase2');
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const output = path.join(root, 'test-results');
@@ -36,8 +38,8 @@ const lineKey = value => `${value.node_id}:${value.step_index}`;
 const center = rect => ({ x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 });
 const stable = page => page.waitForFunction(() => {
   const value = window.__debtQA;
-  return value && ['title', 'story', 'choice', 'end', 'investigate', 'boke_round', 'tsukkomi',
-    'log', 'menu', 'save_slots', 'load_slots', 'slot_confirm'].includes(value.screen);
+  return value && ['title', 'story', 'choice', 'end', 'result', 'investigate', 'boke_round', 'tsukkomi',
+    'log', 'menu', 'save_slots', 'load_slots', 'slot_confirm', 'chapter_select', 'settings'].includes(value.screen);
 }, null, { timeout: 30000 });
 const waitFor = (page, predicate, arg, timeout = 15000) => page.waitForFunction(predicate, arg, { timeout });
 
@@ -67,6 +69,14 @@ async function control(page, name, touch) {
   assert.ok(current.controls[name], `Control ${name} is available on ${current.screen}`);
   assertInside(current.controls[name], current.viewport, name);
   await tapAt(page, current.viewport, center(current.controls[name]), touch);
+}
+
+async function controlAny(page, names, touch, description = names.join('/')) {
+  const current = await state(page);
+  const name = names.find(candidate => current.controls[candidate]);
+  assert.ok(name, `Control ${description} is available on ${current.screen}; found ${Object.keys(current.controls || {}).join(', ')}`);
+  await control(page, name, touch);
+  return name;
 }
 
 // Press at `from`, move to `to`, hold, release. Touch uses CDP touch events (Playwright has no touch drag).
@@ -101,7 +111,7 @@ async function gesture(page, view, from, to, holdMs, touch) {
 async function reveal(page, touch) {
   const before = await state(page);
   if (before.screen !== 'story' || before.text_complete) return false;
-  await control(page, 'dialogue', touch);
+  await controlAny(page, ['dialogue', 'advance', 'next'], touch, 'dialogue reveal');
   const after = await state(page);
   assert.equal(key(after), key(before), 'First tap completes the current line without advancing');
   assert.equal(after.text_complete, true, 'First tap reveals all text');
@@ -111,7 +121,7 @@ async function reveal(page, touch) {
 async function next(page, touch, target = 'dialogue') {
   await waitFor(page, () => window.__debtQA?.text_complete, null, 10000);
   const before = await state(page);
-  await control(page, target, touch);
+  await controlAny(page, [target, 'dialogue', 'advance', 'next'], touch, 'dialogue advance');
   await waitFor(page, previous => {
     const value = window.__debtQA;
     return value && value.screen !== 'busy' && `${value.screen}:${value.node_id}:${value.step_index}` !== previous;
@@ -124,24 +134,55 @@ async function screenshot(page, name) {
 
 function assertLayout(value, label) {
   const { viewport, game, dialog, quickbar, name_plate: namePlate, controls } = value;
-  assertInside(dialog, viewport, `${label} dialogue box`);
-  assertInside(quickbar, viewport, `${label} quick bar`);
-  assert.ok(Math.abs(dialog.x - game.x) <= 1 && Math.abs(dialog.width - game.width) <= 1,
-    `${label}: dialogue layer spans the full game width`);
-  assert.ok(Math.abs(dialog.y + dialog.height - (game.y + game.height)) <= 1,
-    `${label}: dialogue layer reaches the bottom edge`);
-  assert.ok(quickbar.x >= dialog.x - 1 && quickbar.x + quickbar.width <= dialog.x + dialog.width + 1
-    && quickbar.y >= dialog.y && quickbar.y + quickbar.height <= dialog.y + dialog.height + 1,
-    `${label}: quick bar sits inside the dialogue layer`);
-  if (namePlate.width > 0) {
-    assert.ok(namePlate.x >= dialog.x && namePlate.y >= dialog.y
-      && namePlate.x + namePlate.width <= dialog.x + dialog.width + 1
-      && namePlate.y + namePlate.height <= dialog.y + dialog.height + 1,
-    `${label}: speaker label sits inside the dialogue layer`);
+  assertInside(game, viewport, `${label} game surface`);
+  if (dialog?.width > 0 && dialog?.height > 0) assertInside(dialog, viewport, `${label} dialogue surface`);
+  if (quickbar?.width > 0 && quickbar?.height > 0) assertInside(quickbar, viewport, `${label} reading toolbar`);
+  if (namePlate?.width > 0 && namePlate?.height > 0) assertInside(namePlate, viewport, `${label} speaker mark`);
+  for (const [name, rect] of Object.entries(controls || {})) {
+    assertInside(rect, viewport, `${label} control ${name}`);
   }
-  for (const name of ['menu', 'save']) {
-    assertInside(controls[name], viewport, `${label} floating ${name}`);
-    assert.ok(controls[name].y + controls[name].height <= dialog.y + 1, `${label}: floating ${name} avoids the dialogue box`);
+}
+
+function assertContained(rect, outer, label) {
+  assert.ok(rect.x >= outer.x - 1 && rect.y >= outer.y - 1
+    && rect.x + rect.width <= outer.x + outer.width + 1
+    && rect.y + rect.height <= outer.y + outer.height + 1,
+  `${label} is outside the unified bottom sheet: ${JSON.stringify({ rect, outer })}`);
+}
+
+async function openSaveSlots(page, touch) {
+  await controlAny(page, ['menu', 'toolbar_menu', 'menu_open'], touch, 'single menu control');
+  await waitFor(page, () => window.__debtQA?.screen === 'menu', null, 10000);
+  await controlAny(page, ['menu_save', 'save'], touch, 'menu save action');
+  await waitFor(page, () => window.__debtQA?.screen === 'save_slots', null, 10000);
+  const current = await state(page);
+  assert.equal(current.screen, 'save_slots', 'Save opens the manual slot picker');
+  return current;
+}
+
+async function closeSaveSlots(page, touch) {
+  let current = await state(page);
+  if (['save_slots', 'load_slots', 'slot_confirm'].includes(current.screen)) {
+    await controlAny(page, ['slot_close', 'close_slots', 'menu_close'], touch, 'slot picker close');
+    current = await state(page);
+  }
+  if (current.screen === 'menu') {
+    await controlAny(page, ['menu_close', 'menu_resume', 'resume'], touch, 'menu resume');
+  }
+}
+
+async function activateSkip(page, touch) {
+  let value = await state(page);
+  if (value.controls.skip || value.controls.toolbar_skip) {
+    await controlAny(page, ['skip', 'toolbar_skip'], touch, 'SKIP quick action');
+    return;
+  }
+  await controlAny(page, ['menu', 'toolbar_menu', 'menu_open'], touch, 'single menu control');
+  await waitFor(page, () => window.__debtQA?.screen === 'menu', null, 10000);
+  await controlAny(page, ['menu_skip', 'skip'], touch, 'menu skip action');
+  value = await state(page);
+  if (value.screen === 'menu') {
+    await controlAny(page, ['menu_close', 'menu_resume', 'resume', 'close_menu'], touch, 'menu close/resume');
   }
 }
 
@@ -158,13 +199,13 @@ async function openPage(viewport, touch) {
   return { context, page, errors };
 }
 
-// Gestures on the opening lines: background tap, hide UI, swipe-up log, floating buttons, idle, menu, AUTO.
+// Opening-line interaction: background tap, hide UI, backlog, the single menu entry, and AUTO.
 async function phase1Gestures(page, touch, route, checks) {
   let value = await state(page);
   assertLayout(value, route);
   assert.ok(value.name_plate.width > 0 || value.speaker === 'narrator', 'Name plate shows for character lines');
   await screenshot(page, `${route}-dialogue`);
-  checks.push('layout: bottom full-width dialogue layer, integrated quick bar and speaker label; floating buttons above');
+  checks.push('dialogue, reading toolbar, speaker and controls remain inside the viewport');
 
   await waitFor(page, () => window.__debtQA?.text_complete);
   let before = await state(page);
@@ -193,43 +234,23 @@ async function phase1Gestures(page, touch, route, checks) {
   assert.equal(key(await state(page)), key(before), 'Closing the log returns to the same line');
   checks.push('swipe up opens the backlog; closing keeps the line');
 
-  await control(page, 'save', touch);
   value = await state(page);
-  assert.equal(value.screen, 'save_slots', 'Tap S opens the manual save slots');
-  assert.equal(lineKey(value), lineKey(before), 'Opening save slots does not advance');
-  assert.ok(value.controls.slot_1, 'The first manual slot is selectable');
-  await control(page, 'slot_close', touch);
+  const menuName = await controlAny(page, ['menu', 'toolbar_menu', 'menu_open'], touch, 'single menu control');
   value = await state(page);
-  assert.equal(key(value), key(before), 'Closing save slots returns to the same line');
-  checks.push('S opens selectable save slots and closing does not advance');
-
-  const menuStart = center(value.controls.menu);
-  await gesture(page, value.viewport, menuStart, { x: value.game.x + 300, y: value.game.y + value.game.height * 0.45 }, 60, touch);
-  await page.waitForTimeout(400);
-  value = await state(page);
-  assert.ok(Math.abs(value.controls.menu.x - (value.game.x + 24)) < 2, 'Dragged menu button snaps to the left edge');
-  assert.ok(value.controls.menu.y + value.controls.menu.height <= value.dialog.y + 1, 'Dragged button stays out of the box');
-  assert.equal(key(value), key(before), 'Dragging does not advance');
-  await screenshot(page, `${route}-dragged`);
-  checks.push('dragging (≡) snaps it to the nearest side edge without advancing');
-
-  await page.waitForTimeout(3800);
-  value = await state(page);
-  assert.ok(value.float_alpha <= 0.45, `Idle buttons fade to 40% (got ${value.float_alpha})`);
-  await control(page, 'menu', touch);
-  value = await state(page);
-  assert.equal(value.screen, 'menu', 'Tap (≡) opens the menu');
+  assert.equal(value.screen, 'menu', 'The reading toolbar opens the menu');
+  assert.equal(lineKey(value), lineKey(before), 'Opening the menu does not advance');
+  assert.ok(value.controls.menu_close || value.controls.menu_resume || value.controls.resume,
+    'The menu exposes a reachable close/resume target');
   await page.waitForTimeout(300);
   await screenshot(page, `${route}-menu`);
-  await control(page, 'menu_dim', touch);
+  await controlAny(page, ['menu_close', 'menu_resume', 'resume', 'close_menu'], touch, 'menu close/resume');
   value = await state(page);
-  assert.equal(key(value), key(before), 'Tapping the dimmed background closes the menu without advancing');
-  assert.ok(value.float_alpha > 0.5, 'Buttons recover opacity after interaction');
-  checks.push('idle 3 s fades buttons to 40%; menu opens and closes from the background');
+  assert.equal(key(value), key(before), 'Closing the menu returns to the same line');
+  checks.push(`single menu target (${menuName}) opens and closes without advancing`);
 
-  await control(page, 'auto', touch);
+  await controlAny(page, ['auto', 'toolbar_auto'], touch, 'AUTO quick action');
   await waitFor(page, previous => { const v = window.__debtQA; return `${v.node_id}:${v.step_index}` !== previous; }, lineKey(before), 12000);
-  await control(page, 'auto', touch);
+  await controlAny(page, ['auto', 'toolbar_auto'], touch, 'AUTO quick action');
   assert.equal((await state(page)).auto, false, 'AUTO toggles off');
   checks.push('AUTO advances by itself and toggles off');
 }
@@ -278,19 +299,21 @@ async function playRoute(route, viewport, touch) {
       assert.equal(selected, false, 'Only one deliberate choice is required');
       assert.equal(current.choices.length, 2, 'Both approved options are visible');
       current.choices.forEach(choice => assertInside(choice.rect, current.viewport, choice.label));
-      current.choices.forEach(choice => assert.ok(choice.rect.y + choice.rect.height <= current.dialog.y, 'Choices sit above the box'));
       await page.waitForTimeout(400);
       await screenshot(page, `${route}-choice`);
       const waiting = await state(page);
       assert.equal(key(waiting), key(current), 'Choice waits for the player');
-      const firstChoiceTop = Math.min(...waiting.choices.map(choice => choice.rect.y));
-      for (const name of ['menu', 'save']) {
-        assert.ok(waiting.controls[name].y + waiting.controls[name].height <= firstChoiceTop + 1,
-          `Floating ${name} stays above the choices`);
-      }
-      result.checks.push('choices wait; floating buttons stay above the choices');
+      waiting.choices.forEach(choice => assertInside(choice.rect, waiting.viewport, `${route} choice ${choice.id}`));
+      result.checks.push('choice buttons remain visible while waiting for a deliberate selection');
 
-      await control(page, 'log', touch);
+      if (waiting.controls.log) {
+        await control(page, 'log', touch);
+      } else {
+        // The choice sheet carries only 目錄, as in the HTML reference; the backlog is 目錄 → 對話紀錄.
+        await controlAny(page, ['menu', 'toolbar_menu', 'menu_open'], touch, 'choice sheet menu');
+        await waitFor(page, () => window.__debtQA?.screen === 'menu', null, 10000);
+        await control(page, 'menu_log', touch);
+      }
       await page.waitForTimeout(500);
       const logOpen = await state(page);
       assert.equal(logOpen.screen, 'log');
@@ -322,7 +345,7 @@ async function playRoute(route, viewport, touch) {
         }
         await page.setViewportSize(viewport);
         await page.waitForTimeout(400);
-        result.checks.push('choices, box and floating buttons fit 360×800 and 320×568');
+        result.checks.push('choice buttons and dialogue surfaces fit 360×800 and 320×568');
       }
       const ready = await state(page);
       const chosen = ready.choices[route === 'A' ? 0 : 1];
@@ -353,7 +376,7 @@ async function playRoute(route, viewport, touch) {
   const restarted = await state(page);
   assert.equal(restarted.node_id, 'debt_intro');
   assert.equal(restarted.flags.question_method, 'unset');
-  await control(page, 'skip', touch);
+  await activateSkip(page, touch);
   await waitFor(page, () => window.__debtQA?.screen === 'choice', null, 30000);
   assert.equal((await state(page)).skip, false, 'SKIP stops at the choice');
   result.checks.push('restart resets flags; SKIP fast-forwards and stops at the choice');
@@ -383,7 +406,7 @@ async function touchSmoke() {
   assert.equal(await page.evaluate(() => typeof window.__debtQA), 'undefined', 'Normal play has no QA bridge');
   assert.deepEqual(errors, []);
   report.runs.push({ route: 'touch-smoke', checks: ['touch reveal/advance once each', ...checks, 'normal URL'], errors });
-  console.log('PASS: touch smoke (reveal/advance, gestures, floating buttons, menu, normal URL)');
+  console.log('PASS: touch smoke (reveal/advance, gestures, menu toolbar, normal URL)');
   await context.close();
 }
 
@@ -464,27 +487,27 @@ async function slotsRoute() {
   await stable(page);
   const opening = await state(page);
   assert.equal(opening.screen, 'story');
-  await control(page, 'save', true);
-  let value = await state(page);
-  assert.equal(value.screen, 'save_slots');
+  let value = await openSaveSlots(page, true);
   assert.equal(value.slot_page, 0);
   assert.deepEqual(value.slots.map(slot => slot.index), [1, 2, 3, 4, 5, 6]);
   assert.ok(value.slots.every(slot => !slot.occupied));
   await screenshot(page, 'save-slots-empty-phone');
   await control(page, 'slot_1', true);
+  await closeSaveSlots(page, true);
   await stable(page);
   assert.equal(lineKey(await state(page)), lineKey(opening), 'saving slot 1 keeps the reading point');
   result.checks.push('S opens six touch-sized slots; slot 1 saves without advancing');
 
-  await control(page, 'skip', true);
+  await activateSkip(page, true);
   await waitFor(page, () => window.__debtQA?.screen === 'choice', null, 30000);
   const choice = await state(page);
   assert.deepEqual(choice.items, ['milk_bottle']);
-  await control(page, 'save', true);
+  await openSaveSlots(page, true);
   await control(page, 'slot_2', true);
+  await closeSaveSlots(page, true);
   await stable(page);
   assert.equal((await state(page)).screen, 'choice');
-  await control(page, 'menu', true);
+  await controlAny(page, ['menu', 'toolbar_menu', 'menu_open'], true, 'single menu control');
   await control(page, 'menu_load', true);
   value = await state(page);
   assert.equal(value.screen, 'load_slots');
@@ -498,7 +521,7 @@ async function slotsRoute() {
   assert.deepEqual(value.items, opening.items, 'selected slot 1 restores earlier inventory');
   result.checks.push('two manual slots preserve different progress; Load selects the requested slot');
 
-  await control(page, 'menu', true);
+  await controlAny(page, ['menu', 'toolbar_menu', 'menu_open'], true, 'single menu control');
   await control(page, 'menu_title', true);
   await waitFor(page, () => window.__debtQA?.screen === 'title');
   await control(page, 'title_load', true);
@@ -542,27 +565,38 @@ async function phase3Route() {
   report.runs.push(result);
   await control(page, 'begin', true);
   await stable(page);
-  await control(page, 'skip', true);
+  await activateSkip(page, true);
   await waitFor(page, () => window.__debtQA?.screen === 'investigate', null, 30000);
   let value = await state(page);
   assert.equal(value.node_id, 'phase3_open');
   assert.equal(value.phase3.hotspots.length, 1);
   assert.equal(value.phase3.hotspots[0].checked, false);
   assert.ok(!value.controls.investigate_continue, 'investigation stays gated until inspection');
-  const hotspot = value.phase3.hotspots[0];
-  assertInside(hotspot.rect, value.viewport, 'investigation hotspot');
-  assert.ok(hotspot.rect.y + hotspot.rect.height <= value.dialog.y, 'hotspot is above the dialogue box');
   await screenshot(page, 'phase3-investigate-phone');
-  result.checks.push('touch investigation presents a reachable hotspot and gates continuation');
+  // The wastebasket lies low and to the left in the picture: fold the reading box, then drag
+  // the picture until the spot is in reach.
+  await control(page, 'investigate_collapse', true);
+  await waitFor(page, () => window.__debtQA?.phase3?.investigate_collapsed === true, null, 10000);
+  value = await state(page);
+  let spot = value.phase3.hotspots[0];
+  const from = { x: value.viewport.width / 2, y: value.viewport.height * 0.35 };
+  const shift = value.game.x + value.game.width / 2 - (spot.screen_rect.x + spot.screen_rect.width / 2);
+  await gesture(page, value.viewport, from, { x: from.x + shift, y: from.y }, 50, true);
+  await page.waitForTimeout(300);
+  value = await state(page);
+  spot = value.phase3.hotspots[0];
+  assert.equal(spot.checked, false, 'a drag searches nothing');
+  assertInside(spot.rect, value.viewport, 'investigation spot after dragging the picture');
+  result.checks.push('touch investigation folds the box, drags the picture and gates continuation');
 
-  await tapAt(page, value.viewport, center(hotspot.rect), true);
+  await tapAt(page, value.viewport, center(spot.rect), true);
   await waitFor(page, () => window.__debtQA?.phase3?.hotspots?.[0]?.checked, null, 10000);
   value = await state(page);
   assert.deepEqual(value.items, ['milk_bottle']);
-  assert.ok(value.controls.investigate_continue, 'inspection enables Continue');
-  await control(page, 'save', true);
-  assert.equal((await state(page)).screen, 'save_slots');
+  assert.ok(value.controls.investigate_continue, 'the last clue brings back the box with Continue');
+  await openSaveSlots(page, true);
   await control(page, 'slot_1', true);
+  await closeSaveSlots(page, true);
   await stable(page);
   assert.equal((await state(page)).screen, 'investigate');
   await control(page, 'investigate_continue', true);
@@ -596,31 +630,34 @@ async function phase3Route() {
   assert.equal(value.choices.length, 4);
   assert.ok(value.phase3.timer_remaining > 0 && value.phase3.timer_remaining <= 8);
   assert.ok(value.choices.some(choice => choice.id === 'point_to_bottle'));
+  value.choices.forEach(choice => {
+    assertInside(choice.rect, value.viewport, `390×844 ${choice.id}`);
+    assertContained(choice.rect, value.choice_sheet?.width ? value.choice_sheet : value.dialog, `390×844 ${choice.id}`);
+  });
   await screenshot(page, 'phase3-tsukkomi-phone');
   await page.setViewportSize({ width: 320, height: 568 });
   await page.waitForTimeout(250);
   const narrow = await state(page);
   narrow.choices.forEach(choice => {
     assertInside(choice.rect, narrow.viewport, `320×568 ${choice.id}`);
-    assert.ok(choice.rect.y + choice.rect.height <= narrow.dialog.y + 1,
-      `320×568 ${choice.id} stays above dialogue`);
+    assertContained(choice.rect, narrow.choice_sheet?.width ? narrow.choice_sheet : narrow.dialog, `320×568 ${choice.id}`);
   });
   await screenshot(page, 'phase3-tsukkomi-320x568');
   await page.setViewportSize({ width: 390, height: 844 });
   await page.waitForTimeout(250);
   value = await state(page);
   const beforePause = value.phase3.timer_remaining;
-  await control(page, 'menu', true);
+  await controlAny(page, ['menu', 'toolbar_menu', 'menu_open'], true, 'single menu control');
   await page.waitForTimeout(1200);
   value = await state(page);
   assert.equal(value.screen, 'menu');
   assert.ok(Math.abs(value.phase3.timer_remaining - beforePause) < 0.7, 'menu pauses the choice timer');
-  await control(page, 'menu_close', true);
-  result.checks.push('Tsukkomi opens four clue-filtered choices with an eight-second pausable timer; options fit 320×568');
+  await controlAny(page, ['menu_close', 'menu_resume', 'resume'], true, 'menu close/resume');
+  result.checks.push('Tsukkomi opens four clue-filtered choices inside the unified bottom sheet; the eight-second timer pauses in menu and options fit 320×568');
 
-  await control(page, 'save', true);
-  assert.equal((await state(page)).screen, 'save_slots');
+  await openSaveSlots(page, true);
   await control(page, 'slot_2', true);
+  await closeSaveSlots(page, true);
   await stable(page);
   await page.reload({ waitUntil: 'load', timeout: 120000 });
   await waitFor(page, () => window.__debtQA?.screen === 'title', null, 120000);
@@ -650,6 +687,98 @@ async function phase3Route() {
   await context.close();
 }
 
+// Round v2 by touch in the rounds sample: the censor bar while reading, material options, the
+// super once the gauge is full, and a real tap on the QTE (at once, so it is early).
+async function roundsRoute() {
+  const { context, page, errors } = await openPage({ width: 390, height: 844 }, true);
+  const result = { route: 'rounds-touch', checks: [], errors };
+  report.runs.push(result);
+  // stable() does not know the QTE screen, and the ring times out on its own, so wait for either.
+  const readTo = async screen => {
+    for (let step = 0; step < 80; step++) {
+      await page.waitForFunction(target => [target, 'story', 'choice', 'end', 'boke_round', 'tsukkomi']
+        .includes(window.__debtQA?.screen), screen, { timeout: 30000 });
+      const value = await state(page);
+      if (value.screen === screen) return value;
+      if (value.screen === 'story') await next(page, true);
+      else await page.waitForTimeout(150);
+    }
+    throw new Error(`Did not reach ${screen}`);
+  };
+  const goToLine = async target => {
+    for (let step = 0; step < 6; step++) {
+      const value = await state(page);
+      if (value.phase3.boke_line_index === target) return;
+      await control(page, value.phase3.boke_line_index < target ? 'boke_next' : 'boke_previous', true);
+    }
+    throw new Error(`Could not browse to line ${target + 1}`);
+  };
+  const choose = async id => {
+    const value = await state(page);
+    const option = value.choices.find(choice => choice.id === id);
+    assert.ok(option, `option ${id} is offered`);
+    assertInside(option.rect, value.viewport, `option ${id}`);
+    await tapAt(page, value.viewport, center(option.rect), true);
+  };
+
+  await control(page, 'begin', true);
+  let value = await readTo('boke_round');
+  assert.equal(value.phase3.round.mode, 'testimony');
+  await page.setViewportSize({ width: 320, height: 568 });
+  await page.waitForTimeout(500);
+  value = await state(page);
+  assertInside(value.dialog, value.viewport, '320×568 dialogue box');
+  for (const name of ['boke_next', 'boke_listen', 'boke_tsukkomi']) {
+    assert.ok(value.controls[name], `320×568 keeps ${name} tappable`);
+    assertInside(value.controls[name], value.viewport, `320×568 ${name}`);
+  }
+  await screenshot(page, 'rounds-reading-320x568');
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.waitForTimeout(500);
+  result.checks.push('the round bar fits a 320×568 phone');
+  await goToLine(2);
+  value = await state(page);
+  assert.ok(value.phase3.round.censor && value.controls.censor, 'line 3 offers its censor bar while reading');
+  assertInside(value.controls.censor, value.viewport, 'censor bar');
+  await screenshot(page, 'rounds-censor-phone');
+  await control(page, 'censor', true);
+  value = await readTo('boke_round');
+  assert.ok(value.phase3.round.caught.includes('l3'), 'tapping the censor bar catches line 3');
+  result.checks.push('the censor bar is a touch target and catches its line without a timer');
+
+  for (const line of [1, 3]) {
+    await goToLine(line);
+    await control(page, 'boke_tsukkomi', true);
+    await waitFor(page, () => window.__debtQA?.screen === 'tsukkomi', null, 10000);
+    await choose('a');
+    await readTo(line === 1 ? 'boke_round' : 'tsukkomi');
+  }
+  value = await state(page);
+  assert.equal(value.phase3.round.mode, 'combo');
+  assert.ok(!value.controls.super, 'no super before the gauge is full');
+  result.checks.push('material options catch lines 2 and 4; the combo round opens by itself');
+
+  await choose('a');
+  value = await readTo('tsukkomi');
+  assert.ok(value.phase3.round.super_available && value.controls.super, 'the full gauge lights the super');
+  assertInside(value.controls.super, value.viewport, 'super');
+  await screenshot(page, 'rounds-super-phone');
+  await control(page, 'super', true);
+  value = await readTo('qte');
+  assert.ok(value.phase3.round.qte_active && value.controls.qte, 'the QTE line shows its ring');
+  await screenshot(page, 'rounds-qte-phone');
+  const glasses = value.phase3.gameplay.glasses;
+  await tapAt(page, value.viewport, center(value.controls.qte), true);
+  await waitFor(page, () => window.__debtQA?.node_id === 'r2_qte_early', null, 10000);
+  value = await state(page);
+  assert.equal(value.phase3.gameplay.glasses, glasses - 1, 'an early tap is a fail');
+  assert.equal(value.step_index, 0, 'the tap that answered the QTE does not also advance the reaction');
+  result.checks.push('the super fires by touch; a real tap on the QTE is judged (early) and not reused');
+  assert.deepEqual(errors, [], 'no browser or Godot runtime errors');
+  console.log(`PASS rounds touch: ${result.checks.length} check groups`);
+  await context.close();
+}
+
 try {
   if (smokeOnly) {
     await touchSmoke();
@@ -657,6 +786,8 @@ try {
     await slotsRoute();
   } else if (phase3Only) {
     await phase3Route();
+  } else if (roundsOnly) {
+    await roundsRoute();
   } else if (phase2Only) {
     await phase2Route('inspect', true);
     await phase2Route('skip', false);
@@ -678,7 +809,7 @@ try {
 } finally {
   report.finished = new Date().toISOString();
   const reportName = smokeOnly ? 'smoke-report.json' : slotsOnly ? 'slots-report.json'
-    : phase3Only ? 'phase3-report.json' : phase2Only ? 'phase2-report.json' : 'browser-report.json';
+    : phase3Only ? 'phase3-report.json' : roundsOnly ? 'rounds-report.json' : phase2Only ? 'phase2-report.json' : 'browser-report.json';
   await fs.writeFile(path.join(output, reportName), `${JSON.stringify(report, null, 2)}\n`);
   await browser.close();
   console.log(`Evidence: ${output}`);

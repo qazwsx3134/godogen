@@ -1,0 +1,78 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/story-cjk.ttc" id="1_yuqju"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f73dj"]
+content_margin_left = 27.692308
+content_margin_top = 22.153847
+content_margin_right = 110.76923
+content_margin_bottom = 22.153847
+bg_color = Color(0, 0, 0, 0)
+border_width_top = 3
+border_color = Color(0.76862746, 0.69803923, 0.56078434, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gf4km"]
+content_margin_left = 27.692308
+content_margin_top = 22.153847
+content_margin_right = 110.76923
+content_margin_bottom = 22.153847
+bg_color = Color(0.6627451, 0.26666668, 0.19607843, 0.101960786)
+border_width_left = 8
+border_width_top = 3
+border_color = Color(0.6627451, 0.26666668, 0.19607843, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jxj65"]
+content_margin_left = 27.692308
+content_margin_top = 22.153847
+content_margin_right = 110.76923
+content_margin_bottom = 22.153847
+bg_color = Color(0.6392157, 0.2627451, 0.1882353, 0.07058824)
+border_width_top = 3
+border_color = Color(0.76862746, 0.69803923, 0.56078434, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0epd4"]
+content_margin_left = 27.692308
+content_margin_top = 22.153847
+content_margin_right = 110.76923
+content_margin_bottom = 22.153847
+bg_color = Color(0.45882353, 0.41960785, 0.35686275, 0.05882353)
+border_width_top = 3
+border_color = Color(0.76862746, 0.69803923, 0.56078434, 1)
+
+[sub_resource type="FontVariation" id="FontVariation_7pggv"]
+base_font = ExtResource("1_yuqju")
+variation_embolden = 0.45
+
+[node name="MenuRow" type="Button" unique_id=1089343561]
+custom_minimum_size = Vector2(0, 132.92308)
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_f73dj")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_gf4km")
+theme_override_styles/hover = SubResource("StyleBoxFlat_jxj65")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_gf4km")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_0epd4")
+theme_override_styles/focus = SubResource("StyleBoxFlat_gf4km")
+theme_override_colors/font_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_focus_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_pressed_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_hover_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_disabled_color = Color(0.45882353, 0.41960785, 0.35686275, 1)
+theme_override_fonts/font = SubResource("FontVariation_7pggv")
+theme_override_font_sizes/font_size = 47
+text = "儲存進度"
+alignment = 0
+
+[node name="Hint" type="Label" parent="." unique_id=1179952736]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -27.692308
+offset_right = -27.692308
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 47
+theme_override_colors/font_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+text = "＋"
+vertical_alignment = 1

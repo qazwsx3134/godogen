@@ -9,7 +9,7 @@
    `D:\repo\godot\godogen\prototypes\debt-commission\project.godot`
 3. 專案打開後，畫面最上方中間有一排分頁：2D、3D、Script、AssetLib……旁邊多了 **Parley**（流程圖）、**Dialogue**（文字寫法）與 **Puzzles**（解謎規劃）。
 
-角色清單已經建好：新八、銀時、登勢、神樂、定春。寫台詞時直接從清單選。
+角色清單已經建好：新八、銀時、登勢、神樂、定春、伊莉莎白。寫台詞時直接從清單選。
 
 ## 二、打開或新增一個故事
 
@@ -40,21 +40,22 @@
 | 指令 | 作用 |
 |---|---|
 | `bg("yorozuya_living_room")` | 換背景 |
-| `char("kagura", "smile", "left")` | 角色登場。表情：`neutral` `smile` `annoyed` `surprised` `thinking`；位置：`left` `center` `right`。只寫 `char("kagura")` 就用預設 |
-| `hide("kagura")` | 角色退場 |
+| `char("kagura", "smile", "left")` | 設定角色的表情與站位。角色開口說話才會登場，說過話的人會留在畫面上，換背景時全部退場。表情見 [表情清單](../../../docs/story-telling-game/EXPRESSIONS.md)，例如 `neutral` 平常、`angry` 生氣、`panic` 慌張、`nervous` 緊張、`sweat` 心虛、`shout` 吐槽大吼；位置：`left` `center` `right`，任何角色都能站任何位置，主角通常站 `left`。只寫 `char("kagura")` 就站角色的預設位置；同時有兩人以上在場時，請每個人都寫位置，免得疊在一起 |
+| `hide("kagura")` | 角色先退場（不用等換背景） |
 | `item("milk_bottle")` | 取得素材 |
 | `profile("kagura")` | 解鎖人物檔案 |
 | `set asked = "kagura"` | 記下一個狀態，之後可以用 Condition 判斷 |
 | `end("結尾文字")` | 故事結束。後面可以再接 End 節點，也可以不接 |
-| `investigate("…")`、`boke_round("…")` | 調查、吐槽回合。熱區位置、吐槽選項這些參數寫在同名的 `.blocks.json` 檔裡，請照 `phase4.blocks.json` 的範例改，或請工程師幫忙 |
+| `result("…")` | 本篇章節的最後一步：章節結算畫面（吐槽成績與評價）。標題與依評價說的那句話寫在 `.blocks.json`，照 `tests/fixtures/chapter_a_story.json` 的 `done` 節點寫 |
+| `investigate("…")`、`boke_round("…")` | 調查、吐槽回合。調查點、吐槽選項這些參數寫在同名的 `.blocks.json` 檔裡，請照 `phase4.blocks.json` 的範例改，或請工程師幫忙。調查點的 `pos` 是那樣東西在背景圖上的位置（圖寬、圖高的比例，0～1），`size` 是它的大小 |
 
 目前可以用的代號：
 
 - 背景：`yorozuya_living_room`（客廳）、`yorozuya_kitchen`（廚房）、`yorozuya_exterior`（店門口）
-- 角色：`shinpachi`、`gintoki`、`otose`、`kagura`、`sadaharu`
-- 素材：`milk_bottle`、`milk_trace`、`kagura_kombu`、`sadaharu_footprint`、`debt_commission_letter`
+- 角色：`shinpachi`、`gintoki`、`otose`、`kagura`、`sadaharu`、`elisabeth`
+- 素材：`milk_bottle`、`milk_trace`、`kagura_kombu`、`sadaharu_footprint`、`gin_sleep_testimony`、`debt_commission_letter`
 
-要加新角色、背景或素材，請工程師先加進 `data/asset_catalog.json`。
+要加新角色、背景或素材，請工程師先加進 `data/asset_catalog.json`。站位在哪、每個角色多大，是在 Godot 編輯器裡拖曳調整的：站位在 `scenes/stage.tscn`，角色大小在 `scenes/characters/<角色>.tscn`（見 README 的「舞台」）。
 
 ## 四、建置並試玩
 

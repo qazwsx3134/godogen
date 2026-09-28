@@ -1,0 +1,47 @@
+{
+  "shinpachi": {
+    "base": "res://assets/image/shin-pa-chi.png",
+    "faces": {
+      "shout": "tsukuyomi-yelling.png",
+      "angry": "angry-sinpachi.png",
+      "panic": "shinpachi-out.png",
+      "nervous": "shinpachi-nervous.png",
+      "thinking": "shinpachi-thinking.png"
+    }
+  },
+  "gintoki": {
+    "base": "res://assets/image/gin-san.png",
+    "faces": {
+      "smug": "ginsan-proud.png",
+      "sweat": "ginsan-guilty.png",
+      "annoyed": "ginsan-nose-picking-real.png",
+      "nosepick": "ginsan-nose-picking-real.png",
+      "nervous": "ginsan-nervous.png",
+      "panic": "ginsan-nervous.png",
+      "serious": "ginsan-protect.png",
+      "angry": "ginsan-serious.png"
+    }
+  },
+  "kagura": {
+    "base": "res://assets/image/kagura-chan.png",
+    "scale": 1.0,
+    "faces": {
+      "smile": "kagura-smile.png",
+      "smug": "kagura-proud.png",
+      "mock": "kagura-laugh-at.png",
+      "sweat": "kagura-nervous.png",
+      "nervous": "kagura-nervous.png",
+      "angry": "kagura-angry.png",
+      "annoyed": "kagura-despite.png",
+      "nosepick": "kagura-nose-picking.png"
+    }
+  },
+  "otose": {
+    "base": "res://assets/image/Otose-san.png",
+    "faces": {
+      "annoyed": "odosei-impatient.png",
+      "angry": "odosei-angry.png",
+      "serious": "odosei-serious.png"
+    }
+  }
+}

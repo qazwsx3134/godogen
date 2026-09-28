@@ -33,8 +33,8 @@ func _test_errors_name_their_location() -> void:
 		_node_with(g, "text", "要先問誰？")["character"] = "uid://x::新八"),
 		"group 'ask_first', step 0: the DIALOGUE before options is the choice prompt and must be narration")
 	_expect_error(_edit(graph, func(g: Dictionary) -> void:
-		_node_with(g, "description", 'profile("kagura")')["description"] = 'shake("big")'),
-		"group 'kagura_aside', step 1: unsupported `do shake(big)`")
+		_node_with(g, "description", 'profile("kagura")')["description"] = 'quake("big")'),
+		"group 'kagura_aside', step 1: unsupported `do quake(big)`")
 	_expect_error(_edit(graph, func(g: Dictionary) -> void:
 		(g["nodes"] as Array).append({"id": "node:loose", "type": "DIALOGUE", "position": "(0.0, 0.0)", "character": "", "text": "x"})),
 		"DIALOGUE node node:loose is not inside a group")

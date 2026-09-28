@@ -1,0 +1,10 @@
+[gd_scene format=3]
+
+[node name="ChapterRow" type="Button" unique_id=1347557441]
+custom_minimum_size = Vector2(0, 150)
+theme_override_font_sizes/font_size = 40
+text = "第一章 萬事屋冰箱草莓牛奶失竊事件
+最佳評價 A"
+alignment = 0
+autowrap_mode = 3
+metadata/ui_style_role = "selector"

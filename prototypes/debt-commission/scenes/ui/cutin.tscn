@@ -1,0 +1,73 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/story-cjk.ttc" id="1_b65w5"]
+[ext_resource type="Script" path="res://scripts/cutin.gd" id="2_qfqff"]
+
+[sub_resource type="Theme" id="Theme_v21cn"]
+default_font = ExtResource("1_b65w5")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o5cyj"]
+content_margin_left = 55.384617
+content_margin_top = 33.23077
+content_margin_right = 55.384617
+content_margin_bottom = 38.76923
+bg_color = Color(1, 0.99215686, 0.9607843, 1)
+border_width_left = 11
+border_width_top = 11
+border_width_right = 11
+border_width_bottom = 11
+border_color = Color(0.08235294, 0.08235294, 0.08235294, 1)
+corner_radius_top_left = 17
+corner_radius_top_right = 17
+corner_radius_bottom_right = 17
+corner_radius_bottom_left = 17
+shadow_color = Color(0, 0, 0, 0.35)
+shadow_size = 6
+shadow_offset = Vector2(13.846154, 13.846154)
+
+[sub_resource type="FontVariation" id="FontVariation_n3gbt"]
+base_font = ExtResource("1_b65w5")
+variation_embolden = 0.9
+
+[node name="Cutin" type="Control" unique_id=263714971]
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = SubResource("Theme_v21cn")
+script = ExtResource("2_qfqff")
+
+[node name="Center" type="CenterContainer" parent="." unique_id=65478051]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Bubble" type="PanelContainer" parent="Center" unique_id=837204239]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_o5cyj")
+
+[node name="Column" type="VBoxContainer" parent="Center/Bubble" unique_id=512664823]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Speaker" type="Label" parent="Center/Bubble/Column" unique_id=593907271]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 39
+theme_override_colors/font_color = Color(0.33333334, 0.33333334, 0.3137255, 1)
+text = "新八"
+
+[node name="Text" type="Label" parent="Center/Bubble/Column" unique_id=880107404]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(830.7692, 0)
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_n3gbt")
+theme_override_font_sizes/font_size = 83
+theme_override_colors/font_color = Color(0.7529412, 0.22352941, 0.16862746, 1)
+text = "你在說什麼啊！！"
+horizontal_alignment = 1
+autowrap_mode = 3

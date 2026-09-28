@@ -23,10 +23,10 @@
       "op": "investigate",
       "prompt": "調查客廳，找齊四件線索。",
       "hotspots": [
-        {"id": "empty_milk_bottle", "label": "空的草莓牛奶瓶", "pos": [0.56, 0.42], "item": "milk_bottle"},
-        {"id": "gintoki_mouth", "label": "銀時的嘴角", "pos": [0.74, 0.3], "item": "milk_trace"},
-        {"id": "kombu_wrapper", "label": "沙發下的包裝紙", "pos": [0.3, 0.62], "item": "kagura_kombu"},
-        {"id": "floor_paw_print", "label": "地板上的腳印", "pos": [0.46, 0.8], "item": "sadaharu_footprint"}
+        {"id": "empty_milk_bottle", "label": "垃圾桶裡的空瓶", "pos": [0.254, 0.748], "size": [0.07, 0.14], "item": "milk_bottle"},
+        {"id": "gintoki_mouth", "label": "銀時的辦公桌", "pos": [0.5, 0.6], "size": [0.3, 0.1], "item": "milk_trace"},
+        {"id": "kombu_wrapper", "label": "沙發縫裡的包裝紙", "pos": [0.11, 0.9], "size": [0.2, 0.17], "item": "kagura_kombu"},
+        {"id": "floor_paw_print", "label": "地板上的腳印", "pos": [0.74, 0.84], "size": [0.13, 0.08], "item": "sadaharu_footprint"}
       ]
     },
     "gintoki_four_clues": {

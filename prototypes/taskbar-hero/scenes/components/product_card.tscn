@@ -1,0 +1,154 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Medium.otf" id="1_c1klj"]
+[ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Bold.otf" id="2_my375"]
+[ext_resource type="Texture2D" path="res://assets/reference/store.png" id="3_sgasp"]
+
+[sub_resource type="Theme" id="Theme_krmap"]
+default_font = ExtResource("1_c1klj")
+default_font_size = 26
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wnl7x"]
+bg_color = Color(0.96862745, 0.9098039, 0.8352941, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8, 0.7058824, 0.6039216, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 2
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oe71g"]
+atlas = ExtResource("3_sgasp")
+region = Rect2(48, 930, 175, 136)
+filter_clip = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gnuvx"]
+bg_color = Color(0.30588236, 0.5882353, 0.38039216, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.7529412, 0.8862745, 0.5568628, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yhv7p"]
+bg_color = Color(0.9019608, 0.8117647, 0.70980394, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.74509805, 0.6509804, 0.54901963, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_30n4r"]
+bg_color = Color(0.9137255, 0.8352941, 0.73333335, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.8745098, 0.6666667, 0.2901961, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 2
+
+[node name="ProductCard" type="Control" unique_id=907500816]
+custom_minimum_size = Vector2(215, 416)
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+theme = SubResource("Theme_krmap")
+
+[node name="Frame" type="Panel" parent="." unique_id=1354302986]
+layout_mode = 0
+offset_right = 215.0
+offset_bottom = 416.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_wnl7x")
+
+[node name="Title" type="Label" parent="." unique_id=1022880881]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 8.0
+offset_right = 208.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("2_my375")
+theme_override_font_sizes/font_size = 27
+text = "金幣袋"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Icon" type="TextureRect" parent="." unique_id=1190465468]
+texture_filter = 1
+layout_mode = 0
+offset_left = 25.0
+offset_top = 59.0
+offset_right = 190.0
+offset_bottom = 198.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_oe71g")
+expand_mode = 1
+
+[node name="Quantity" type="Label" parent="." unique_id=574212867]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 199.0
+offset_right = 209.0
+offset_bottom = 241.0
+theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("2_my375")
+theme_override_font_sizes/font_size = 24
+text = "× 10,000"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Description" type="Label" parent="." unique_id=778888411]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 245.0
+offset_right = 205.0
+offset_bottom = 322.0
+theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 20
+text = "供強化與冒險使用。"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BuyButton" type="Button" parent="." unique_id=423179425]
+layout_mode = 0
+offset_left = 13.0
+offset_top = 334.0
+offset_right = 202.0
+offset_bottom = 399.0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
+theme_override_fonts/font = ExtResource("2_my375")
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_gnuvx")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_gnuvx")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gnuvx")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_yhv7p")
+theme_override_styles/focus = SubResource("StyleBoxFlat_30n4r")
+text = "查看商品"
+metadata/action = "buy:0"

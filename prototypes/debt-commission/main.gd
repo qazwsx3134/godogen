@@ -2,41 +2,98 @@ extends Control
 
 ## V1 直立視覺小說外殼。
 ##
-## 分層由下到上：背景 → 立繪 → 特效 → 對話框 → 懸浮按鈕 → 彈出視窗。
+## 分層由下到上：背景 → 立繪 → 特效 → 對話框（scenes/ui/dialogue_box_<風格>.tscn）→ 彈出視窗。
 ## 故事流程由 scripts/story_runner.gd 執行；背景、立繪與素材從同一份 catalog 載入。
 ## 所有輸入只處理滑鼠事件（專案把觸控模擬成滑鼠），一次觸控只會觸發一次動作。
 
 const STORY_RUNNER_SCRIPT: Script = preload("res://scripts/story_runner.gd")
-const FLOATING_BUTTON_SCRIPT: Script = preload("res://scripts/floating_button.gd")
+const DialogueBox = preload("res://scripts/dialogue_box.gd")
+## One reading-box scene per UI edition; switching the edition swaps the scene.
+const DIALOGUE_SCENES: Dictionary = {
+	"cinema": preload("res://scenes/ui/dialogue_box_cinema.tscn"),
+	"ledger": preload("res://scenes/ui/dialogue_box_ledger.tscn"),
+	"manga": preload("res://scenes/ui/dialogue_box_manga.tscn"),
+}
+const ChoiceSheet = preload("res://scripts/choice_sheet.gd")
+const MenuPanel = preload("res://scripts/menu_panel.gd")
+const TitleScreen = preload("res://scripts/title_screen.gd")
+const STAGE_STYLE: Script = preload("res://scripts/ui_stage_style.gd")
+const StageEffects = preload("res://scripts/stage_effects.gd")
+const RoundView = preload("res://scripts/round_view.gd")
+const QteRing = preload("res://scripts/qte_ring.gd")
+const QTE_SCENE: PackedScene = preload("res://scenes/ui/qte_ring.tscn")
+const RoundHud = preload("res://scripts/round_hud.gd")
+const ROUND_HUD_SCENE: PackedScene = preload("res://scenes/ui/round_hud.tscn")
+const GameOverScreen = preload("res://scripts/game_over.gd")
+const GAME_OVER_SCENE: PackedScene = preload("res://scenes/ui/game_over.tscn")
+const MENU_SCENES: Dictionary = {
+	"cinema": preload("res://scenes/ui/menu_panel_cinema.tscn"),
+	"ledger": preload("res://scenes/ui/menu_panel_ledger.tscn"),
+	"manga": preload("res://scenes/ui/menu_panel_manga.tscn"),
+}
+const TITLE_SCENES: Dictionary = {
+	"cinema": preload("res://scenes/ui/title_screen_cinema.tscn"),
+	"ledger": preload("res://scenes/ui/title_screen_ledger.tscn"),
+	"manga": preload("res://scenes/ui/title_screen_manga.tscn"),
+}
+const CHOICE_SHEETS: Dictionary = {
+	"cinema": preload("res://scenes/ui/choice_sheet_cinema.tscn"),
+	"ledger": preload("res://scenes/ui/choice_sheet_ledger.tscn"),
+	"manga": preload("res://scenes/ui/choice_sheet_manga.tscn"),
+}
 const SPRITE_SCRIPT: Script = preload("res://scripts/placeholder_sprite.gd")
+## Each character's own size and framing (tools/make_character_scenes.gd creates missing ones).
+const CHARACTER_SCENE: String = "res://scenes/characters/%s.tscn"
+## A spot to search, laid over its object in the background picture; and the folded reading box.
+const HOTSPOT_SCENE: PackedScene = preload("res://scenes/ui/hotspot.tscn")
+const INVESTIGATE_BAR_SCENE: PackedScene = preload("res://scenes/ui/investigate_bar.tscn")
+const CHAPTER_RESULT_SCENE: PackedScene = preload("res://scenes/ui/chapter_result.tscn")
+const CHAPTER_SELECT_SCENE: PackedScene = preload("res://scenes/ui/chapter_select.tscn")
+const SETTINGS_SCENE: PackedScene = preload("res://scenes/ui/settings_panel.tscn")
+const SETTINGS_SCRIPT: Script = preload("res://scripts/settings.gd")
+## A spot's size when the story gives none, as fractions of the picture.
+const DEFAULT_HOTSPOT_SIZE: Array = [0.12, 0.12]
 const SAVE_SLOTS_SCRIPT: Script = preload("res://scripts/save_slots.gd")
 const UI_STYLES_SCRIPT: Script = preload("res://scripts/ui_styles.gd")
+const CASE_FILE_SCENE: PackedScene = preload("res://scenes/ui/case_file_panel.tscn")
 
 const DESIGN_WIDTH: float = 1080.0
+## One CSS px of the HTML reference (docs/ui-options) in logical px.
+const CSS_PX: float = DESIGN_WIDTH / 390.0
 const FONT_PATH: String = "res://assets/fonts/story-cjk.ttc"
 const SAVE_SCHEMA: int = 3
 const UI_PREFERENCE_PATH: String = "user://ui_preferences.cfg"
 const PHASE3_STORY_PATH: String = "res://data/phase3_story.json"
 const PHASE3_SAVE_PATH: String = "user://strawberry_phase3.save"
+const STORY_CHOICE_PATH: String = "user://story_choice.cfg"
 const DEFAULT_BOKE_TIMER_SECONDS: float = 8.0
 
 @export_file("*.json") var story_path: String = "res://data/debt_story.json"
 @export var save_path: String = "user://debt_commission.save"
+## The stories the player can pick (data/stories.json): chapters in order, then samples, each with
+## its own save namespace. Web builds preselect one with ?sample=<id>; a desktop/editor run
+## remembers the last choice.
+@export_file("*.json") var stories_path: String = "res://data/stories.json"
+## Best grade per cleared story ([cleared] <story id> = S/A/B/C); a cleared chapter unlocks the next.
+@export var progress_path: String = "user://progress.cfg"
+## Text speed, auto-play speed and volumes (settings.gd), each an index into its choices.
+@export var settings_path: String = "user://settings.cfg"
+var _story_choices: Array[Dictionary] = []
+var _story_titles: Dictionary = {}
+var _chapter_result: Control = null
+var _chapter_select: Control = null
+var _settings_panel: Control = null
+var _settings: Dictionary = {}
+var _settings_return: String = "title"
 var ui_preference_path: String = UI_PREFERENCE_PATH
 
-const TYPEWRITER_INTERVAL: float = 0.032
 const DIALOG_RATIO: float = 0.28
 const EDGE: float = 24.0
 const DIALOG_GAP: float = 12.0
 const QUICKBAR_HEIGHT: float = 160.0
-const TEXT_FONT_MAX: int = 56
-const TEXT_FONT_MIN: int = 42
-const TEXT_MAX_LINES: int = 3
 const LONG_PRESS_SEC: float = 0.5
 const TAP_SLOP: float = 30.0
 const SWIPE_DISTANCE: float = 140.0
-const IDLE_SEC: float = 3.0
-const IDLE_ALPHA: float = 0.4
 const AUTO_DELAY_SEC: float = 1.0
 const AUTO_PER_CHAR_SEC: float = 0.03
 const SKIP_DELAY_SEC: float = 0.06
@@ -51,7 +108,8 @@ const AUDIO_PATHS: Dictionary = {
 	"ambient": "res://assets/audio/ambient.wav",
 }
 
-const SLOT_X: Dictionary = {"left": 0.2, "center": 0.5, "right": 0.8}
+## Background frames and the left/center/right standing slots, laid out in the editor.
+const STAGE_SCENE: PackedScene = preload("res://scenes/stage.tscn")
 
 const COLOR_LETTERBOX: Color = Color("#0b0d18")
 const COLOR_PANEL: Color = Color(0.035, 0.045, 0.09, 0.76)
@@ -78,47 +136,52 @@ var _backgrounds: Dictionary = {}
 var _actor_slots: Dictionary = {}
 var _current_bg_id: String = ""
 var _background_gradient: Gradient = null
+## The frame showing now (scenes/stage.tscn Backgrounds/<id>, else Backgrounds/Default).
 var _background_rect: TextureRect = null
+var _background_frames: Dictionary = {}
+var _stage_area: Control = null
+var _slot_markers: Dictionary = {}
+var _paper_textures: Dictionary = {}
 
 var _game: Control = null
 var _bg_layer: Control = null
 var _char_layer: Control = null
 var _fx_layer: Control = null
 var _dialog_layer: Control = null
-var _float_layer: Control = null
+var _overlay_layer: Control = null
 var _popup_layer: Control = null
-var _title_screen: Control = null
-var _title_style_panel: Panel = null
-var _title_style_caption: Label = null
-var _title_style_row: HBoxContainer = null
+## shake / flash / cutin / freeze / bgm / se steps (scripts/stage_effects.gd).
+var _effects: StageEffects = null
+## The mounted title_screen and menu_panel scenes; the buttons and dictionaries below point into them.
+var _title_screen: TitleScreen = null
 var _title_style_buttons: Dictionary = {}
-var _menu_style_caption: Label = null
-var _menu_style_row: HBoxContainer = null
 var _menu_style_buttons: Dictionary = {}
-var _menu_panel_shell: Panel = null
 
 var _place_tag: Label = null
 var _sprites: Dictionary = {}
 var _tap_catcher: Control = null
-var _dialog_panel: Panel = null
+## The mounted dialogue_box scene; the fields below point into it.
+var _dialog_panel: DialogueBox = null
 var _text_label: Label = null
-var _next_indicator: Label = null
-var _name_plate: Panel = null
+var _name_plate: Control = null
 var _name_label: Label = null
-var _choice_box: VBoxContainer = null
+## The mounted choice_sheet scene; it stands in for the dialogue box while options are up.
+var _choice_sheet: ChoiceSheet = null
+var _sheet_prompt: String = ""
+var _sheet_timed: bool = false
+var _sheet_censor: bool = false
+var _sheet_super: bool = false
+var _qte: QteRing = null
 var _end_box: HBoxContainer = null
-var _quickbar: HBoxContainer = null
+var _quickbar: Container = null
 var _log_button: Button = null
 var _auto_button: Button = null
-var _skip_button: Button = null
-var _material_button: Button = null
+var _advance_button: Button = null
 var _restart_button: Button = null
 var _end_title_button: Button = null
-var _menu_button: Control = null
-var _save_button: Control = null
-var _menu_overlay: Control = null
-var _menu_dim: ColorRect = null
-var _menu_panel: VBoxContainer = null
+var _menu_button: Button = null
+var _menu_overlay: MenuPanel = null
+var _menu_panel: Control = null
 var _menu_close: Button = null
 var _menu_items: Dictionary = {}
 var _log_overlay: Control = null
@@ -129,20 +192,34 @@ var _toast: Label = null
 var _begin_button: Button = null
 var _continue_button: Button = null
 var _title_load_button: Button = null
-var _title_error: Label = null
-var _phase3_hud: Panel = null
+var _story_switch: Button = null
+var _case_file_panel: Panel = null
+## The gameplay HUD scene (glasses, power, combo, countdown, materials); the labels point into it.
+var _phase3_hud: RoundHud = null
 var _phase3_stats_label: Label = null
-var _phase3_inventory_label: Label = null
 var _phase3_timer_label: Label = null
 var _investigation_continue_button: Button = null
-var _hotspot_buttons: Dictionary = {}
-var _boke_controls: HBoxContainer = null
+## Investigation: spots by id (hotspot.tscn) on a layer covering the whole picture. While searching,
+## the background frame is stretched to the whole picture (_picture, in game coordinates before
+## panning) and slides sideways by _pan within _pan_range; _frame_offsets restores it afterwards.
+var _hotspots: Dictionary = {}
+var _hotspot_layer: Control = null
+var _picture: Rect2 = Rect2()
+var _pan: float = 0.0
+var _pan_start: float = 0.0
+var _pan_range: Vector2 = Vector2.ZERO
+var _frame_offsets: Array[float] = []
+var _investigate_bar: Control = null
+var _investigate_collapsed: bool = false
+var _boke_controls: Control = null
 var _boke_previous_button: Button = null
 var _boke_line_label: Label = null
 var _boke_next_button: Button = null
 var _boke_listen_button: Button = null
 var _boke_tsukkomi_button: Button = null
 var _game_over_retry_button: Button = null
+## Shattered glasses and checkpoint retry (scenes/ui/game_over.tscn); the retry button above is its.
+var _game_over: GameOverScreen = null
 
 var _slot_overlay: Control = null
 var _slot_panel: Panel = null
@@ -209,9 +286,12 @@ var _gesture_moved: bool = false
 var _gesture_long: bool = false
 var _gesture_start: Vector2 = Vector2.ZERO
 var _gesture_token: int = 0
-var _last_activity_ms: int = 0
 var _toast_token: int = 0
-var _float_alpha: float = 1.0
+var _text_tone: String = "body"
+## Nominal top of the reading area: sprites, hotspots and choices sit above it, so they stay put
+## while the dialogue box grows or shrinks with each line.
+var _stage_bottom: float = 0.0
+var _panel_scale: float = 1.0
 
 var _qa_enabled: bool = false
 var _qa_elapsed: float = 0.0
@@ -230,6 +310,8 @@ func _ready() -> void:
 	theme = ui_theme
 	_ui_style_id = UI_STYLES_SCRIPT.load_preference(ui_preference_path)
 
+	_story_choices = _read_story_choices()
+	_settings = SETTINGS_SCRIPT.load_settings(settings_path)
 	_select_story_variant()
 	_load_story()
 	_build_audio()
@@ -241,18 +323,130 @@ func _ready() -> void:
 	_show_title()
 
 
+## Each entry: {id, kind ("chapter" or "sample"), path, save}.
+func _read_story_choices() -> Array[Dictionary]:
+	var choices: Array[Dictionary] = []
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(stories_path))
+	if parsed is Dictionary:
+		for entry: Variant in (parsed as Dictionary).get("stories", []):
+			if entry is Dictionary and (entry as Dictionary).has_all(["id", "path", "save"]):
+				choices.append(entry as Dictionary)
+	return choices
+
+
 func _select_story_variant() -> void:
-	# 固定的驗收片段由網址開啟；正式試玩的入口仍使用場景設定的故事。
-	if not OS.has_feature("web"):
+	# Web：網址 ?sample=<id> 開固定片段。桌機或編輯器直接執行主場景時，沿用上次在標題選的故事。
+	# 測試與劇本試玩會自己設定 story_path，此時 main 不是 current_scene，不套用記憶的選擇。
+	var choice_id: String = ""
+	if OS.has_feature("web"):
+		choice_id = str(JavaScriptBridge.eval("new URLSearchParams(window.location.search).get('sample') || ''"))
+	elif get_tree().current_scene == self:
+		var config: ConfigFile = ConfigFile.new()
+		if config.load(STORY_CHOICE_PATH) == OK:
+			choice_id = str(config.get_value("story", "id", ""))
+	for choice: Dictionary in _story_choices:
+		if choice["id"] == choice_id:
+			story_path = choice["path"]
+			save_path = choice["save"]
+
+
+func _story_choice_index() -> int:
+	for index: int in range(_story_choices.size()):
+		if _story_choices[index]["path"] == story_path:
+			return index
+	return -1
+
+
+## The title's story label opens 章節選擇.
+func _on_story_switch_pressed() -> void:
+	_open_chapter_select()
+
+
+func _open_chapter_select() -> void:
+	if _screen_mode != "title":
 		return
-	var sample: String = str(JavaScriptBridge.eval(
-		"new URLSearchParams(window.location.search).get('sample') || ''"))
-	if sample == "phase2":
-		story_path = "res://data/phase2_story.json"
-		save_path = "user://strawberry_phase2.save"
-	elif sample == "phase3":
-		story_path = PHASE3_STORY_PATH
-		save_path = PHASE3_SAVE_PATH
+	_screen_mode = "chapter_select"
+	var entries: Array[Dictionary] = []
+	for index: int in range(_story_choices.size()):
+		var choice: Dictionary = _story_choices[index]
+		var kind: String = str(choice.get("kind", "sample"))
+		var locked: bool = not _story_unlocked(index)
+		var grade: String = _cleared_grade(str(choice["id"]))
+		var note: String = "試玩片段"
+		if kind == "chapter":
+			note = "完成前一章後開放" if locked else ("最佳評價 " + grade if not grade.is_empty() else "未完成")
+		entries.append({"index": index, "id": str(choice["id"]), "kind": kind, "title": _story_title(choice),
+			"note": note, "locked": locked, "current": index == _story_choice_index()})
+	_chapter_select.call("set_style", _ui_style_id)
+	_chapter_select.call("open", entries)
+	_publish_qa_state()
+
+
+func _on_chapter_picked(index: int) -> void:
+	if index < 0 or index >= _story_choices.size() or not _story_unlocked(index):
+		return
+	_choose_story(_story_choices[index])
+	_close_chapter_select()
+
+
+func _close_chapter_select() -> void:
+	_chapter_select.visible = false
+	_show_title()
+
+
+## A story's own title (read once from its file).
+func _story_title(choice: Dictionary) -> String:
+	var path: String = str(choice["path"])
+	if not _story_titles.has(path):
+		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+		_story_titles[path] = str((parsed as Dictionary).get("title", choice["id"])) if parsed is Dictionary else str(choice["id"])
+	return _story_titles[path]
+
+
+## 設定 from the title or from 目錄 (which stays open underneath).
+func _open_settings() -> void:
+	if _screen_mode not in ["title", "menu"]:
+		return
+	_settings_return = _screen_mode
+	_screen_mode = "settings"
+	_settings_panel.call("set_style", _ui_style_id)
+	_settings_panel.call("open", _settings)
+	_publish_qa_state()
+
+
+func _close_settings() -> void:
+	_settings_panel.visible = false
+	_screen_mode = _settings_return
+	_publish_qa_state()
+
+
+func _on_setting_changed(key: String, value: int) -> void:
+	_settings[key] = value
+	SETTINGS_SCRIPT.save_settings(settings_path, _settings)
+	if key.ends_with("_volume"):
+		_apply_audio_levels()
+	_publish_qa_state()
+
+
+## Settings volumes on every player; the 音效 switch in 目錄 silences all of them on top.
+func _apply_audio_levels() -> void:
+	var se: float = SETTINGS_SCRIPT.VOLUMES[int(_settings["se_volume"])]
+	for player: AudioStreamPlayer in _audio_players.values():
+		player.volume_db = -80.0 if _audio_muted or se <= 0.0 else linear_to_db(se)
+	_effects.set_volumes(SETTINGS_SCRIPT.VOLUMES[int(_settings["bgm_volume"])], se)
+
+
+func _text_interval() -> float:
+	return SETTINGS_SCRIPT.TEXT_INTERVALS[int(_settings["text_speed"])]
+
+
+func _refresh_story_switch() -> void:
+	if _story_switch == null:
+		return
+	var info: Dictionary = _runner.call("story_info") as Dictionary if _story_ready else {}
+	var title: String = str(info.get("title", story_path.get_file()))
+	var index: int = _story_choice_index()
+	_story_switch.text = "%s\n章節選擇 ›" % title
 
 
 func _load_story() -> void:
@@ -262,7 +456,7 @@ func _load_story() -> void:
 		_story_error = _runner_string("error_message", "故事資料尚未就緒。")
 		return
 	var initial_snapshot: Dictionary = _runner.call("snapshot") as Dictionary
-	_phase3_enabled = str(initial_snapshot.get("story_id", "")) == "strawberry_phase3"
+	_phase3_enabled = bool(_runner.call("has_gameplay"))
 	_catalog = _runner.call("get_asset_catalog") as Dictionary
 	_actors = _catalog.get("characters", {}) as Dictionary
 	_backgrounds = _catalog.get("backgrounds", {}) as Dictionary
@@ -302,20 +496,43 @@ func _build_ui() -> void:
 	_char_layer = _add_layer("CharacterLayer")
 	_fx_layer = _add_layer("EffectLayer")
 	_dialog_layer = _add_layer("DialogueLayer")
-	_float_layer = _add_layer("FloatingLayer")
+	_overlay_layer = _add_layer("OverlayLayer")
 	_popup_layer = _add_layer("PopupLayer")
-	_title_screen = _add_layer("TitleScreen")
 
 	_build_background()
 	_build_sprites()
 	_build_phase3_hud()
 	_build_dialogue()
-	_build_floating_buttons()
-	_build_menu()
+	_build_investigate_bar()
+	_mount_menu()
 	_build_log()
+	_build_case_file()
 	_build_toast()
-	_build_title()
+	_mount_title()
 	_build_slot_picker()
+	_chapter_select = CHAPTER_SELECT_SCENE.instantiate() as Control
+	_game.add_child(_chapter_select)  # above the title screen
+	_chapter_select.connect("picked", _on_chapter_picked)
+	_chapter_select.connect("closed", _close_chapter_select)
+	_settings_panel = SETTINGS_SCENE.instantiate() as Control
+	_game.add_child(_settings_panel)
+	_settings_panel.connect("changed", _on_setting_changed)
+	_settings_panel.connect("closed", _close_settings)
+	_game_over = GAME_OVER_SCENE.instantiate() as GameOverScreen
+	_overlay_layer.add_child(_game_over)
+	_game_over_retry_button = _game_over.retry_button
+	_game_over.retry_pressed.connect(_on_game_over_retry_pressed)
+	_game_over.title_pressed.connect(_show_title)
+	_chapter_result = CHAPTER_RESULT_SCENE.instantiate() as Control
+	_overlay_layer.add_child(_chapter_result)
+	_chapter_result.connect("title_pressed", _show_title)
+	_chapter_result.connect("next_pressed", _on_next_chapter_pressed)
+	_effects = StageEffects.new()
+	_effects.name = "StageEffects"
+	add_child(_effects)
+	_effects.setup([_bg_layer, _char_layer, _fx_layer, _dialog_layer], _overlay_layer, _catalog)
+	_apply_audio_levels()
+	_refresh_gameplay_ui()
 
 
 func _add_layer(layer_name: String) -> Control:
@@ -329,19 +546,18 @@ func _add_layer(layer_name: String) -> Control:
 
 func _build_background() -> void:
 	_background_gradient = Gradient.new()
-	_background_gradient.set_color(0, Color("#2e2a45"))
-	_background_gradient.set_color(1, Color("#b9794f"))
-	var texture: GradientTexture2D = GradientTexture2D.new()
-	texture.gradient = _background_gradient
-	texture.fill_from = Vector2(0.5, 0.0)
-	texture.fill_to = Vector2(0.5, 1.0)
-	_background_rect = TextureRect.new()
-	_background_rect.texture = texture
-	_background_rect.stretch_mode = TextureRect.STRETCH_SCALE
-	_background_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	_background_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_bg_layer.add_child(_background_rect)
-	_background_rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var stage: Control = STAGE_SCENE.instantiate() as Control
+	_bg_layer.add_child(stage)
+	stage.get_node("DialogueGuide").free()  # editor-only guide
+	for frame: TextureRect in stage.get_node("Backgrounds").get_children():
+		_background_frames[str(frame.name)] = frame
+	_background_rect = _background_frames["Default"]
+	_stage_area = stage.get_node("StageArea") as Control
+	for marker: Control in _stage_area.get_children():
+		var preview: Node = marker.get_node_or_null("Preview")  # editor-only portrait
+		if preview != null:
+			preview.free()
+		_slot_markers[str(marker.name)] = marker
 	_place_tag = _make_label(_bg_layer, "萬事屋・客廳", 40, COLOR_TEXT)
 	_place_tag.set_meta("ui_style_role", "scene_overlay")
 	_place_tag.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.72))
@@ -352,6 +568,25 @@ func _build_background() -> void:
 	_apply_background(initial_bg)
 
 
+## A background whose paper is left transparent (hand-drawn art often is) laid on white, so the
+## layers behind it never show through. Cached per path.
+func _paper_backed(path: String) -> Texture2D:
+	if _paper_textures.has(path):
+		return _paper_textures[path]
+	var texture: Texture2D = load(path) as Texture2D
+	var image: Image = texture.get_image()
+	if image != null and image.detect_alpha() != Image.ALPHA_NONE:
+		if image.is_compressed():
+			image.decompress()
+		image.convert(Image.FORMAT_RGBA8)
+		var paper: Image = Image.create(image.get_width(), image.get_height(), false, Image.FORMAT_RGBA8)
+		paper.fill(Color.WHITE)
+		paper.blend_rect(image, Rect2i(Vector2i.ZERO, image.get_size()), Vector2i.ZERO)
+		texture = ImageTexture.create_from_image(paper)
+	_paper_textures[path] = texture
+	return texture
+
+
 func _apply_background(background_id: String) -> void:
 	if not _backgrounds.has(background_id):
 		return
@@ -359,59 +594,62 @@ func _apply_background(background_id: String) -> void:
 	_current_bg_id = background_id
 	_place_tag.text = str(info.get("label", background_id))
 	var path: String = str(info.get("path", ""))
-	if not path.is_empty():
-		var art: Resource = load(path)
-		if art is Texture2D:
-			_background_rect.texture = art as Texture2D
-			_background_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-			return
-	_background_gradient.set_color(0, Color(str(info.get("top", "#2e2a45"))))
-	_background_gradient.set_color(1, Color(str(info.get("bottom", "#b9794f"))))
-	var texture: GradientTexture2D = GradientTexture2D.new()
-	texture.gradient = _background_gradient
-	texture.fill_from = Vector2(0.5, 0.0)
-	texture.fill_to = Vector2(0.5, 1.0)
-	_background_rect.texture = texture
-	_background_rect.stretch_mode = TextureRect.STRETCH_SCALE
+	if not path.is_empty() and load(path) is Texture2D:
+		# The catalog picks the art; the stage scene's frame of the same name sets its framing.
+		_background_rect = _background_frames.get(background_id, _background_frames["Default"])
+		_background_rect.texture = _paper_backed(path)
+	else:
+		_background_gradient.set_color(0, Color(str(info.get("top", "#2e2a45"))))
+		_background_gradient.set_color(1, Color(str(info.get("bottom", "#b9794f"))))
+		var texture: GradientTexture2D = GradientTexture2D.new()
+		texture.gradient = _background_gradient
+		texture.fill_from = Vector2(0.5, 0.0)
+		texture.fill_to = Vector2(0.5, 1.0)
+		_background_rect = _background_frames["Default"]
+		_background_rect.texture = texture
+	for frame: TextureRect in _background_frames.values():
+		frame.visible = frame == _background_rect
 
 
 func _build_sprites() -> void:
 	for actor_id: String in _actors.keys():
 		var info: Dictionary = _actors[actor_id] as Dictionary
-		var sprite: Control = SPRITE_SCRIPT.new() as Control
+		var scene_path: String = CHARACTER_SCENE % actor_id
+		var sprite: Control = (load(scene_path) as PackedScene).instantiate() as Control \
+			if ResourceLoader.exists(scene_path) else SPRITE_SCRIPT.new() as Control
 		_char_layer.add_child(sprite)
 		sprite.call("setup", actor_id, str(info["name"]), Color(str(info["color"])), _font)
 		var art_path: String = str(info.get("path", ""))
 		if not art_path.is_empty():
 			var art: Resource = load(art_path)
 			if art is Texture2D:
-				sprite.call("set_art", art, bool(info.get("silhouette", false)))
+				sprite.call("set_art", art)
+		var faces: Dictionary = {}
+		for expression: String in (info.get("expressions", {}) as Dictionary).keys():
+			var face: Texture2D = _catalog_picture({"path": info["expressions"][expression]})
+			if face != null:
+				faces[expression] = face
+		sprite.call("set_expression_art", faces)
 		sprite.visible = false
 		_sprites[actor_id] = sprite
 
 
 func _build_phase3_hud() -> void:
-	_phase3_hud = Panel.new()
-	_phase3_hud.name = "Phase3Hud"
-	_phase3_hud.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_phase3_hud.set_meta("ui_style_role", "hud")
-	_phase3_hud.add_theme_stylebox_override("panel", _make_style(COLOR_PANEL, COLOR_BUTTON_BORDER, 8, 0))
+	_phase3_hud = ROUND_HUD_SCENE.instantiate() as RoundHud
 	_fx_layer.add_child(_phase3_hud)
-	_phase3_stats_label = _make_label(_phase3_hud, "眼鏡 5/5　力量 0/100", 30, COLOR_TEXT)
-	_phase3_stats_label.name = "Phase3Stats"
-	_phase3_inventory_label = _make_label(_phase3_hud, "線索：尚無", 27, COLOR_TEXT_SOFT)
-	_phase3_inventory_label.name = "Phase3Inventory"
-	_phase3_timer_label = _make_label(_phase3_hud, "", 30, COLOR_GOLD)
-	_phase3_timer_label.name = "Phase3Timer"
+	_phase3_stats_label = _phase3_hud.power_value
+	_phase3_timer_label = _phase3_hud.timer
 	_phase3_hud.visible = false
 
-
+## `char` places a character (slot, expression) for when they speak; only `hide` (visible false)
+## takes them off stage. Characters come on stage by speaking (_focus_speaker).
 func _apply_character(command: Dictionary) -> void:
 	var actor_id: String = _dict_string(command, "id")
 	if not _sprites.has(actor_id):
 		return
 	var sprite: Control = _sprites[actor_id] as Control
-	sprite.visible = _dict_bool(command, "visible", true)
+	if not _dict_bool(command, "visible", true):
+		sprite.visible = false
 	if command.has("expression"):
 		sprite.call("set_expression", _dict_string(command, "expression"))
 	if command.has("position"):
@@ -428,44 +666,8 @@ func _build_dialogue() -> void:
 	_dialog_layer.add_child(_tap_catcher)
 	_tap_catcher.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
-	_dialog_panel = Panel.new()
-	_dialog_panel.name = "DialoguePanel"
-	_dialog_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_dialog_panel.set_meta("ui_style_role", "dialogue")
-	_dialog_panel.add_theme_stylebox_override("panel", _make_dialog_style())
-	_dialog_layer.add_child(_dialog_panel)
-
-	_text_label = _make_label(_dialog_panel, "", TEXT_FONT_MAX, COLOR_TEXT)
-	_text_label.name = "DialogueText"
-	_text_label.autowrap_mode = TextServer.AUTOWRAP_ARBITRARY
-	_text_label.add_theme_constant_override("line_spacing", 10)
-	_text_label.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.88))
-	_text_label.add_theme_constant_override("outline_size", 4)
-
-	_next_indicator = _make_label(_dialog_panel, "▼", 40, COLOR_UI_ACCENT)
-	_next_indicator.name = "NextIndicator"
-	var blink: Tween = create_tween().set_loops()
-	blink.tween_property(_next_indicator, "modulate:a", 0.15, 0.45)
-	blink.tween_property(_next_indicator, "modulate:a", 1.0, 0.45)
-
-	_name_plate = Panel.new()
-	_name_plate.name = "NamePlate"
-	_name_plate.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_name_plate.set_meta("ui_style_role", "name")
-	_name_plate.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
-	_dialog_layer.add_child(_name_plate)
-	_name_label = _make_label(_name_plate, "", 44, COLOR_TEXT)
-	_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	_name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	_name_label.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.82))
-	_name_label.add_theme_constant_override("outline_size", 3)
-
-	_choice_box = VBoxContainer.new()
-	_choice_box.name = "Choices"
-	_choice_box.alignment = BoxContainer.ALIGNMENT_END
-	_choice_box.add_theme_constant_override("separation", 28)
-	_choice_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_dialog_layer.add_child(_choice_box)
+	_mount_dialogue_box()
+	_mount_choice_sheet()
 
 	_end_box = HBoxContainer.new()
 	_end_box.name = "EndButtons"
@@ -474,177 +676,187 @@ func _build_dialogue() -> void:
 	_dialog_layer.add_child(_end_box)
 	_restart_button = _make_button(_end_box, "重玩", 46)
 	_restart_button.pressed.connect(_on_restart_pressed)
-	_game_over_retry_button = _make_button(_end_box, "檢查點重試", 42)
-	_game_over_retry_button.name = "GameOverRetry"
-	_game_over_retry_button.visible = false
-	_game_over_retry_button.pressed.connect(_on_game_over_retry_pressed)
 	_end_title_button = _make_button(_end_box, "回標題", 46)
 	_end_title_button.pressed.connect(_show_title)
-	for button: Button in [_restart_button, _game_over_retry_button, _end_title_button]:
+	for button: Button in [_restart_button, _end_title_button]:
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.custom_minimum_size.y = 160.0
 
-	_investigation_continue_button = _make_button(_dialog_panel, "檢查完成・繼續", 34)
-	_investigation_continue_button.name = "InvestigationContinue"
-	_set_button_style(_investigation_continue_button, "primary")
-	_investigation_continue_button.visible = false
+
+
+## Puts the current edition's reading box in the dialogue layer. On an edition switch the action
+## controls and the shown line move into the new box, and the old one is freed.
+func _mount_dialogue_box() -> void:
+	var old: DialogueBox = _dialog_panel
+	_dialog_panel = (DIALOGUE_SCENES[_ui_style_id] as PackedScene).instantiate() as DialogueBox
+	_dialog_layer.add_child(_dialog_panel)
+	_dialog_layer.move_child(_dialog_panel, _tap_catcher.get_index() + 1)
+	_text_label = _dialog_panel.text
+	_name_plate = _dialog_panel.speaker_row
+	_name_label = _dialog_panel.speaker_name
+	_quickbar = _dialog_panel.toolbar
+	_menu_button = _dialog_panel.menu_button
+	_log_button = _dialog_panel.log_button
+	_auto_button = _dialog_panel.auto_button
+	_advance_button = _dialog_panel.advance_button
+	_dialog_panel.menu_pressed.connect(_open_menu)
+	_dialog_panel.log_pressed.connect(_open_log)
+	_dialog_panel.auto_pressed.connect(func() -> void: _set_auto(not _auto))
+	_dialog_panel.advance_pressed.connect(_on_screen_tap)
+	_dialog_panel.collapse_pressed.connect(_set_investigation_collapsed.bind(true))
+	_investigation_continue_button = _dialog_panel.investigation_continue
+	_boke_controls = _dialog_panel.round_controls
+	_boke_previous_button = _dialog_panel.boke_previous
+	_boke_line_label = _dialog_panel.boke_line_index
+	_boke_next_button = _dialog_panel.boke_next
+	_boke_listen_button = _dialog_panel.boke_listen
+	_boke_tsukkomi_button = _dialog_panel.boke_tsukkomi
 	_investigation_continue_button.pressed.connect(_on_investigation_continue_pressed)
-
-	_boke_controls = HBoxContainer.new()
-	_boke_controls.name = "BokeControls"
-	_boke_controls.add_theme_constant_override("separation", 12)
-	_boke_controls.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_boke_controls.visible = false
-	_dialog_panel.add_child(_boke_controls)
-	_boke_previous_button = _make_button(_boke_controls, "‹ 前句", 30)
-	_boke_previous_button.name = "BokePrevious"
 	_boke_previous_button.pressed.connect(_on_boke_previous_pressed)
-	_boke_line_label = _make_label(_boke_controls, "1 / 1", 28, COLOR_GOLD)
-	_boke_line_label.name = "BokeLineIndex"
-	_boke_line_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_boke_line_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	_boke_line_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_boke_next_button = _make_button(_boke_controls, "後句 ›", 30)
-	_boke_next_button.name = "BokeNext"
 	_boke_next_button.pressed.connect(_on_boke_next_pressed)
-	_boke_listen_button = _make_button(_boke_controls, "聽仔細", 30)
-	_boke_listen_button.name = "BokeListen"
 	_boke_listen_button.pressed.connect(_on_boke_listen_pressed)
-	_boke_tsukkomi_button = _make_button(_boke_controls, "吐槽！", 32)
-	_boke_tsukkomi_button.name = "BokeTsukkomi"
-	_set_button_style(_boke_tsukkomi_button, "boke_primary")
 	_boke_tsukkomi_button.pressed.connect(_on_boke_tsukkomi_pressed)
-
-	_quickbar = HBoxContainer.new()
-	_quickbar.name = "QuickBar"
-	_quickbar.add_theme_constant_override("separation", 16)
-	_quickbar.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_dialog_layer.add_child(_quickbar)
-	_log_button = _make_button(_quickbar, "紀錄", 34)
-	_set_button_style(_log_button, "quickbar")
-	_log_button.pressed.connect(_open_log)
-	_auto_button = _make_button(_quickbar, "自動", 34)
-	_set_button_style(_auto_button, "quickbar")
-	_auto_button.pressed.connect(func() -> void: _set_auto(not _auto))
-	_skip_button = _make_button(_quickbar, "略讀", 34)
-	_set_button_style(_skip_button, "quickbar")
-	_skip_button.pressed.connect(func() -> void: _set_skip(not _skip))
-	_material_button = _make_button(_quickbar, "素材", 34)
-	_set_button_style(_material_button, "quickbar")
-	_material_button.disabled = not _phase3_enabled
-	_material_button.pressed.connect(_show_inventory_feedback)
-	for button: Button in [_log_button, _auto_button, _skip_button, _material_button]:
-		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		button.custom_minimum_size.y = QUICKBAR_HEIGHT
-
-
-func _build_floating_buttons() -> void:
-	_menu_button = FLOATING_BUTTON_SCRIPT.new() as Control
-	_menu_button.name = "MenuButton"
-	_float_layer.add_child(_menu_button)
-	_menu_button.call("setup", "≡", _font, _ui_style_id)
-	_menu_button.connect("tapped", _open_menu)
-
-	_save_button = FLOATING_BUTTON_SCRIPT.new() as Control
-	_save_button.name = "SaveButton"
-	_float_layer.add_child(_save_button)
-	_save_button.call("setup", "S", _font, _ui_style_id)
-	_save_button.connect("tapped", func() -> void: _open_slot_picker("save"))
-	_save_button.connect("long_pressed", func() -> void: _open_slot_picker("save"))
-	for button: Control in [_menu_button, _save_button]:
-		button.connect("moved", _publish_qa_state)
+	_dialog_panel.censor_bar.pressed.connect(_on_censor_pressed)
+	_dialog_panel.set_chapter(_chapter_title())
+	_fit_bottom_panel(_dialog_panel)
+	if old == null:
+		return
+	# The action widgets keep what they showed.
+	for pair: Array in [[old.investigation_continue, _investigation_continue_button], [old.boke_previous, _boke_previous_button],
+			[old.boke_next, _boke_next_button], [old.boke_listen, _boke_listen_button],
+			[old.boke_tsukkomi, _boke_tsukkomi_button], [old.censor_bar, _dialog_panel.censor_bar]]:
+		(pair[1] as Button).visible = (pair[0] as Button).visible
+		(pair[1] as Button).disabled = (pair[0] as Button).disabled
+		(pair[1] as Button).text = (pair[0] as Button).text
+	_boke_controls.visible = old.round_controls.visible
+	_boke_line_label.text = old.boke_line_index.text
+	_dialog_panel.visible = old.visible
+	_auto_button.disabled = old.auto_button.disabled
+	_advance_button.visible = old.advance_button.visible
+	_dialog_panel.set_auto(_auto)
+	_dialog_panel.set_tone(_text_tone)
+	_set_name_plate(_plate_speaker, _plate_thought)
+	_set_visible_text(_visible_text, _text_complete)
+	_dialog_layer.remove_child(old)
+	old.queue_free()
 
 
-func _build_menu() -> void:
-	_menu_overlay = Control.new()
-	_menu_overlay.name = "MenuOverlay"
-	_menu_overlay.visible = false
-	_menu_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+## The current edition's choice sheet sits above the dialogue box; on an edition switch the options
+## on screen are rebuilt in the new sheet.
+func _mount_choice_sheet() -> void:
+	var old: ChoiceSheet = _choice_sheet
+	_choice_sheet = (CHOICE_SHEETS[_ui_style_id] as PackedScene).instantiate() as ChoiceSheet
+	_dialog_layer.add_child(_choice_sheet)
+	_dialog_layer.move_child(_choice_sheet, _dialog_panel.get_index() + 1)
+	_choice_sheet.menu_pressed.connect(_open_menu)
+	_choice_sheet.censor_pressed.connect(_on_censor_pressed)
+	_choice_sheet.super_pressed.connect(_on_super_pressed)
+	_choice_sheet.clear_options()
+	_fit_choice_sheet()
+	if old != null:
+		_dialog_layer.remove_child(old)
+		old.queue_free()
+	if _choice_buttons.is_empty():
+		_choice_sheet.visible = false
+	else:
+		_show_choice_sheet()
+
+
+## Fills the sheet from _current_options. Story choices answer through _on_choice_pressed, a timed
+## tsukkomi through _on_boke_option_pressed.
+func _show_choice_sheet() -> void:
+	var labels: PackedStringArray = []
+	for option: Dictionary in _current_options:
+		labels.append(_dict_string(option, "label"))
+	_choice_buttons = _choice_sheet.show_options(_sheet_prompt, labels, "選一句吐槽" if _sheet_timed else "選一句回應")
+	for index: int in range(_choice_buttons.size()):
+		var option_id: String = _dict_string(_current_options[index], "id")
+		var row: Button = _choice_buttons[index]
+		row.name = "Boke_" + option_id if _sheet_timed else "Choice_%d" % index
+		row.pressed.connect((_on_boke_option_pressed if _sheet_timed else _on_choice_pressed).bind(option_id))
+	if _sheet_timed:
+		_choice_sheet.set_timer(_boke_time_remaining, float(_current_command.get("timer_seconds", DEFAULT_BOKE_TIMER_SECONDS)),
+			_screen_mode != "tsukkomi")
+	_choice_sheet.censor_bar.visible = _sheet_timed and _sheet_censor
+	_choice_sheet.super_button.visible = _sheet_timed and _sheet_super
+	_refresh_reading_ui()
+
+
+## While options are up the sheet stands in for the dialogue box; both hide with the UI.
+func _refresh_reading_ui() -> void:
+	var choosing: bool = not _choice_buttons.is_empty()
+	_dialog_panel.visible = not _ui_hidden and not choosing and not _investigate_collapsed
+	_choice_sheet.visible = not _ui_hidden and choosing
+
+
+## Story title up to its first separator, shown at the right of the speaker row.
+func _chapter_title() -> String:
+	var title: String = str((_runner.call("story_info") as Dictionary).get("title", "")) if _story_ready else ""
+	return title.get_slice("｜", 0).get_slice("：", 0).get_slice("（", 0).strip_edges()
+
+
+## The current edition's 目錄 at the bottom of the popup layer; on an edition switch the new one
+## takes over whether it is open.
+func _mount_menu() -> void:
+	var old: MenuPanel = _menu_overlay
+	_menu_overlay = (MENU_SCENES[_ui_style_id] as PackedScene).instantiate() as MenuPanel
 	_popup_layer.add_child(_menu_overlay)
-	_menu_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_popup_layer.move_child(_menu_overlay, 0)
+	_menu_panel = _menu_overlay.panel
+	_menu_close = _menu_overlay.close_button
+	_menu_items = _menu_overlay.rows
+	_menu_style_buttons = _menu_overlay.style_buttons
+	_menu_overlay.closed.connect(_close_menu)
+	_menu_overlay.row_pressed.connect(_on_menu_row_pressed)
+	_menu_overlay.style_pressed.connect(_on_ui_style_selected)
+	_menu_overlay.visible = old != null and old.visible
+	if old != null:
+		_popup_layer.remove_child(old)
+		old.queue_free()
+	_refresh_menu_rows()
+	_fit_menu()
 
-	# 背景變暗＋模糊；點背景任一處關閉選單。
-	var blur: Shader = Shader.new()
-	blur.code = """
-shader_type canvas_item;
-uniform sampler2D screen_tex : hint_screen_texture, filter_linear;
-void fragment() {
-	vec2 px = SCREEN_PIXEL_SIZE * 3.0;
-	vec3 sum = vec3(0.0);
-	for (int x = -2; x <= 2; x++) {
-		for (int y = -2; y <= 2; y++) {
-			sum += texture(screen_tex, SCREEN_UV + vec2(float(x), float(y)) * px).rgb;
-		}
-	}
-	COLOR = vec4(mix(sum / 25.0, vec3(0.02, 0.03, 0.07), 0.5), 1.0);
-}
-"""
-	var material: ShaderMaterial = ShaderMaterial.new()
-	material.shader = blur
-	_menu_dim = ColorRect.new()
-	_menu_dim.name = "MenuDim"
-	_menu_dim.material = material
-	_menu_dim.mouse_filter = Control.MOUSE_FILTER_STOP
-	_menu_dim.gui_input.connect(func(event: InputEvent) -> void:
-		if event is InputEventMouseButton and not event.is_pressed() \
-				and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT:
-			_close_menu())
-	_menu_overlay.add_child(_menu_dim)
-	_menu_dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
-	_menu_panel_shell = Panel.new()
-	_menu_panel_shell.name = "MenuPanelShell"
-	_menu_panel_shell.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_menu_panel_shell.set_meta("ui_style_role", "menu")
-	_menu_overlay.add_child(_menu_panel_shell)
+func _on_menu_row_pressed(row_id: String) -> void:
+	match row_id:
+		"resume":
+			_close_menu()
+		"save", "load":
+			_open_slot_picker(row_id)
+		"material":
+			_open_case_file("materials")
+		"profile":
+			_open_case_file("profiles")
+		"log":
+			_open_log()
+		"skip":
+			_start_skip_from_menu()
+		"mute":
+			_toggle_mute()
+		"settings":
+			_open_settings()
+		"title":
+			_show_title()
 
-	_menu_panel = VBoxContainer.new()
-	_menu_panel.name = "MenuPanel"
-	_menu_panel.add_theme_constant_override("separation", 14)
-	_menu_overlay.add_child(_menu_panel)
-	_menu_style_caption = _make_label(_menu_panel, "介面風格", 48, COLOR_TEXT_SOFT)
-	_menu_style_caption.name = "MenuStyleCaption"
-	_menu_style_row = HBoxContainer.new()
-	_menu_style_row.name = "MenuStyleSelector"
-	_menu_style_row.add_theme_constant_override("separation", 8)
-	_menu_panel.add_child(_menu_style_row)
-	for style_id: String in UI_STYLES_SCRIPT.style_ids():
-		var style_button: Button = _make_button(_menu_style_row,
-			{"cinema": "A 映畫", "ledger": "B 委託簿", "manga": "C 分鏡"}[style_id], 48)
-		style_button.name = "MenuStyle_" + style_id
-		style_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		style_button.custom_minimum_size.y = 164.0
-		_set_button_style(style_button, "selector", style_id == _ui_style_id)
-		style_button.pressed.connect(_on_ui_style_selected.bind(style_id))
-		_menu_style_buttons[style_id] = style_button
-	var material_action: Callable = _show_inventory_feedback if _phase3_enabled else Callable()
-	var entries: Array = [
-		["save", "儲存進度", func() -> void: _open_slot_picker("save")],
-		["load", "讀取存檔", func() -> void: _open_slot_picker("load")],
-		["material", "吐槽素材", material_action],
-		["profile", "人物檔案", Callable()],
-		["log", "對話紀錄", _open_log],
-		["settings", "設 定", Callable()],
-		["mute", "音效：開", _toggle_mute],
-		["title", "回標題", _show_title],
-	]
-	for entry: Array in entries:
-		var button: Button = _make_button(_menu_panel, str(entry[1]), 48)
-		_set_button_style(button, "menu")
-		button.custom_minimum_size = Vector2(860.0, 164.0)
-		var action: Callable = entry[2]
-		if action.is_valid():
-			button.pressed.connect(action)
-		else:
-			button.disabled = true
-			button.visible = false  # 尚未提供的功能不佔選單操作空間。
-		_menu_items[str(entry[0])] = button
 
-	_menu_close = _make_button(_menu_overlay, "×", 60)
-	_menu_close.name = "MenuClose"
-	_set_button_style(_menu_close, "standard")
-	_menu_close.size = Vector2(112.0, 112.0)
-	_menu_close.pressed.connect(_close_menu)
+## Rows that depend on the story and the moment: 略讀 only from a story line, materials and
+## profiles only in stories with gameplay, the sound state, the current edition.
+func _refresh_menu_rows() -> void:
+	var from_mode: String = _mode_before_overlay if _screen_mode == "menu" else _screen_mode
+	(_menu_items["skip"] as Button).disabled = from_mode != "story"
+	for key: String in ["material", "profile"]:
+		(_menu_items[key] as Button).visible = _phase3_enabled
+	_menu_overlay.set_row_hint("mute", "關" if _audio_muted else "開")
+	_menu_overlay.set_active_style(_ui_style_id)
+	_refresh_phase3_hud()
+
+
+## The menu covers the game area at _panel_scale; its rows scroll when the screen is too short.
+func _fit_menu() -> void:
+	if _game == null or _menu_overlay == null:
+		return
+	_fit_full_area(_menu_overlay.area)
+	_menu_overlay.fit((_game.size.y - _safe_top - _safe_bottom) / _panel_scale - 36.0 * CSS_PX)
 
 
 func _build_log() -> void:
@@ -683,93 +895,41 @@ func _build_toast() -> void:
 	_toast.visible = false
 
 
-func _build_title() -> void:
-	var gradient: Gradient = Gradient.new()
-	gradient.set_color(0, Color("#1d2748"))
-	gradient.set_color(1, Color("#7b3f3f"))
-	var texture: GradientTexture2D = GradientTexture2D.new()
-	texture.gradient = gradient
-	texture.fill_from = Vector2(0.5, 0.0)
-	texture.fill_to = Vector2(0.5, 1.0)
-	var background: TextureRect = TextureRect.new()
-	background.texture = texture
-	background.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-	background.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	background.modulate = Color(0.68, 0.73, 0.84, 1.0)
-	background.mouse_filter = Control.MOUSE_FILTER_STOP
-	_title_screen.add_child(background)
-	background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	var exterior_info: Dictionary = _backgrounds.get("yorozuya_exterior", {}) as Dictionary
-	var exterior_path: String = str(exterior_info.get("path", ""))
-	if not exterior_path.is_empty():
-		var exterior_art: Resource = load(exterior_path)
-		if exterior_art is Texture2D:
-			background.texture = exterior_art as Texture2D
+## The current edition's title screen above the popups; an edition switch keeps whether it shows.
+func _mount_title() -> void:
+	var old: TitleScreen = _title_screen
+	_title_screen = (TITLE_SCENES[_ui_style_id] as PackedScene).instantiate() as TitleScreen
+	_game.add_child(_title_screen)
+	_game.move_child(_title_screen, _popup_layer.get_index() + 1)
+	_story_switch = _title_screen.story_switch
+	_begin_button = _title_screen.begin_button
+	_continue_button = _title_screen.continue_button
+	_title_load_button = _title_screen.load_button
+	_title_style_buttons = _title_screen.style_buttons
+	_title_screen.begin_pressed.connect(_on_begin_pressed)
+	_title_screen.continue_pressed.connect(_on_continue_pressed)
+	_title_screen.load_pressed.connect(func() -> void: _open_slot_picker("load"))
+	_title_screen.story_switch_pressed.connect(_on_story_switch_pressed)
+	_title_screen.settings_pressed.connect(_open_settings)
+	_title_screen.style_pressed.connect(_on_ui_style_selected)
+	_fit_bottom_panel(_title_screen.card_area)
+	if old != null:
+		_title_screen.visible = old.visible
+		_game.remove_child(old)
+		old.queue_free()
+	_refresh_title()
 
-	var logo: Label = _make_label(_title_screen, "萬事屋\n吐槽 ADV", 104, COLOR_TEXT)
-	logo.name = "Logo"
-	logo.set_meta("ui_style_role", "title_overlay")
-	logo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	logo.add_theme_stylebox_override("normal", StyleBoxEmpty.new())
-	logo.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.86))
-	logo.add_theme_constant_override("outline_size", 6)
-	var subtitle_text: String = "暫定標題・V1 Phase 2 劇本引擎\n試玩文本：第一場《請幫我向你老闆討債》"
-	if story_path.ends_with("phase2_story.json"):
-		subtitle_text = "Phase 2 草莓牛奶技術測試\n非核准的第一章劇本"
-	elif story_path.ends_with("phase3_story.json"):
-		subtitle_text = "Phase 3 調查與吐槽技術試片\n非核准的第一章劇本"
-	var subtitle: Label = _make_label(_title_screen, subtitle_text, 36, COLOR_TEXT_SOFT)
-	subtitle.name = "Subtitle"
-	subtitle.set_meta("ui_style_role", "title_overlay")
-	subtitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	subtitle.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.8))
-	subtitle.add_theme_constant_override("outline_size", 3)
 
-	_title_style_panel = Panel.new()
-	_title_style_panel.name = "TitleStylePanel"
-	_title_style_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_title_style_panel.set_meta("ui_style_role", "title_selector")
-	_title_screen.add_child(_title_style_panel)
-	_title_style_caption = _make_label(_title_style_panel, "介面風格", 44, COLOR_TEXT_SOFT)
-	_title_style_caption.name = "TitleStyleCaption"
-	_title_style_row = HBoxContainer.new()
-	_title_style_row.name = "TitleStyleSelector"
-	_title_style_row.add_theme_constant_override("separation", 8)
-	_title_style_panel.add_child(_title_style_row)
-	for style_id: String in UI_STYLES_SCRIPT.style_ids():
-		var style_button: Button = _make_button(_title_style_row,
-			{"cinema": "A 映畫", "ledger": "B 委託簿", "manga": "C 分鏡"}[style_id], 48)
-		style_button.name = "TitleStyle_" + style_id
-		style_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		style_button.custom_minimum_size.y = 164.0
-		_set_button_style(style_button, "selector", style_id == _ui_style_id)
-		style_button.pressed.connect(_on_ui_style_selected.bind(style_id))
-		_title_style_buttons[style_id] = style_button
-
-	_begin_button = _make_button(_title_screen, "新遊戲", 52)
-	_begin_button.name = "BeginButton"
-	_set_button_style(_begin_button, "primary")
-	_begin_button.pressed.connect(_on_begin_pressed)
-	_continue_button = _make_button(_title_screen, "繼續", 52)
-	_continue_button.name = "ContinueButton"
-	_set_button_style(_continue_button, "primary")
-	_continue_button.pressed.connect(_on_continue_pressed)
-	_title_load_button = _make_button(_title_screen, "讀取存檔", 52)
-	_title_load_button.name = "TitleLoadButton"
-	_set_button_style(_title_load_button, "subtle")
-	_title_load_button.pressed.connect(func() -> void: _open_slot_picker("load"))
-
-	_title_error = _make_label(_title_screen, "", 34, Color("#ff9d8a"))
-	_title_error.name = "TitleError"
-	_set_label_style(_title_error, "danger")
-	_title_error.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_title_error.autowrap_mode = TextServer.AUTOWRAP_ARBITRARY
-	var version_text: String = "v0.3 · Phase 2"
-	if story_path.ends_with("phase3_story.json"):
-		version_text = "v0.4 · Phase 3"
-	var version: Label = _make_label(_title_screen, version_text, 30, COLOR_TEXT_SOFT)
-	version.name = "Version"
-	version.set_meta("ui_style_role", "title_overlay")
+## Story label, which buttons work, the last error and the story's exterior photo.
+func _refresh_title() -> void:
+	_refresh_story_switch()
+	_continue_button.disabled = not _has_valid_save()
+	_begin_button.disabled = not _story_ready
+	_title_screen.set_error(_story_error)
+	_title_screen.set_active_style(_ui_style_id)
+	var exterior: String = str((_backgrounds.get("yorozuya_exterior", {}) as Dictionary).get("path", ""))
+	if not exterior.is_empty() and ResourceLoader.exists(exterior):
+		_title_screen.background.texture = _paper_backed(exterior)
 
 
 func _build_slot_picker() -> void:
@@ -885,57 +1045,28 @@ func _layout() -> void:
 	var bottom: float = height - EDGE - _safe_bottom
 	_place_tag.position = Vector2(EDGE + 12.0, top + 8.0)
 	_place_tag.size = Vector2(width * 0.6, 60.0)
-	_phase3_hud.position = Vector2(EDGE + 24.0, top + 84.0)
-	_phase3_hud.size = Vector2(maxf(0.0, width - EDGE * 2.0 - 168.0), 84.0)
-	_phase3_stats_label.position = Vector2(16.0, 8.0)
-	_phase3_stats_label.size = Vector2(286.0, 68.0)
-	_phase3_inventory_label.position = Vector2(306.0, 8.0)
-	_phase3_inventory_label.size = Vector2(maxf(0.0, _phase3_hud.size.x - 530.0), 68.0)
-	_phase3_timer_label.position = Vector2(maxf(306.0, _phase3_hud.size.x - 220.0), 8.0)
-	_phase3_timer_label.size = Vector2(208.0, 68.0)
+	_phase3_hud.offset_top = _safe_top
 
-	var quickbar_y: float = bottom - QUICKBAR_HEIGHT
-	_quickbar.position = Vector2(EDGE, quickbar_y)
-	_quickbar.size = Vector2(width - EDGE * 2.0, QUICKBAR_HEIGHT)
+	# 對話框與選項面板依內容往上長、貼齊底部；這裡只讓出手機手勢列，並在窄螢幕等比放大（見 _ui_scale）。
+	_panel_scale = _ui_scale()
+	_fit_bottom_panel(_dialog_panel)
+	_fit_bottom_panel(_investigate_bar)
+	_fit_choice_sheet()
 	var dialog_height: float = roundf(height * DIALOG_RATIO) if _phase3_enabled else clampf(height * 0.20, 360.0, 440.0)
-	var dialog_y: float = quickbar_y - DIALOG_GAP - dialog_height
-	_dialog_panel.position = Vector2(0.0, dialog_y)
-	_dialog_panel.size = Vector2(width, height - dialog_y)
-	_text_label.position = Vector2(56.0, 68.0)
-	var interactive_dialog: bool = _screen_mode in ["investigate", "boke_round", "tsukkomi"]
-	_text_label.size = Vector2(width - 160.0, dialog_height - (272.0 if interactive_dialog else 128.0))
-	_next_indicator.position = Vector2(_dialog_panel.size.x - 72.0, dialog_height - 66.0)
-	_next_indicator.size = Vector2(40.0, 48.0)
-	var continue_min_width: float = _investigation_continue_button.get_combined_minimum_size().x
-	var continue_width: float = minf(maxf(264.0, continue_min_width), maxf(0.0, width - 112.0))
-	_investigation_continue_button.position = Vector2(width - 56.0 - continue_width, dialog_height - 176.0)
-	_investigation_continue_button.size = Vector2(continue_width, 160.0)
-	_boke_controls.position = Vector2(40.0, dialog_height - 176.0)
-	_boke_controls.size = Vector2(_dialog_panel.size.x - 80.0, 160.0)
-	for boke_control: Button in [_boke_previous_button, _boke_next_button, _boke_listen_button, _boke_tsukkomi_button]:
-		boke_control.custom_minimum_size = Vector2(204.0, 160.0)
-	_name_plate.position = Vector2(56.0, dialog_y + 12.0)
-	var name_width: float = maxf(220.0,
-		_font.get_string_size(_name_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, 44).x + 32.0)
-	_name_plate.size.x = minf(name_width, maxf(0.0, width - EDGE * 2.0))
-	_name_plate.size.y = 44.0
-	_name_label.size = _name_plate.size
+	var dialog_y: float = bottom - (QUICKBAR_HEIGHT + DIALOG_GAP + dialog_height) * _panel_scale
+	_stage_bottom = dialog_y
+	_stage_area.offset_bottom = dialog_y - height
 
-	_choice_box.position = Vector2(80.0, top + 180.0)
-	_choice_box.size = Vector2(width - 160.0, dialog_y - 56.0 - (top + 180.0))
 	_end_box.position = Vector2(80.0, dialog_y - 56.0 - 160.0)
 	_end_box.size = Vector2(width - 160.0, 160.0)
 
 	for actor_id: String in _sprites.keys():
 		_layout_sprite(actor_id)
 
-	if _menu_button.position == Vector2.ZERO and _save_button.position == Vector2.ZERO:
-		_menu_button.position = Vector2(width, top + 80.0)
-		_save_button.position = Vector2(width, top + 228.0)
-	_update_float_bounds()
-
-	_menu_close.position = Vector2(width - EDGE - 112.0, top)
-	_layout_menu_panel()
+	_fit_menu()
+	_fit_full_area(_game_over)
+	_fit_full_area(_chapter_result)
+	_fit_bottom_panel(_title_screen.card_area)
 	_log_overlay.get_node("LogTitle").position = Vector2(56.0, top + 24.0)
 	_log_close.position = Vector2(width - EDGE - 220.0, top + 12.0)
 	_log_close.size = Vector2(220.0, 100.0)
@@ -943,80 +1074,82 @@ func _layout() -> void:
 	_log_scroll.size = Vector2(width - 112.0, bottom - (top + 150.0))
 	_log_entries.custom_minimum_size = Vector2(width - 140.0, 0.0)
 
-	_layout_title(width, height, top, bottom)
 	_layout_slot_picker(width, height, top, bottom)
+	_case_file_panel.call("layout", Rect2(0.0, top, width, bottom - top))
+	_fit_panel_area(_chapter_select, Rect2(0.0, top, width, bottom - top))
+	_fit_panel_area(_settings_panel, Rect2(0.0, top, width, bottom - top))
 	if _screen_mode == "investigate":
-		_layout_hotspots(_current_command)
+		_layout_hotspots()
 	_publish_qa_state()
+
+
+## The scenes are drawn for a 390 CSS px wide game area (1080 / 390 logical px per CSS px). On a
+## narrower phone they would shrink with it, so the box scales up by 390 / CSS width to keep its
+## buttons at least 48 CSS px. CSS px = screen px / device pixel ratio.
+func _ui_scale() -> float:
+	var screen_px: float = _game.size.x * get_viewport().get_final_transform().get_scale().x
+	var css_px: float = screen_px / maxf(1.0, DisplayServer.screen_get_scale())
+	var k: float = 390.0 / maxf(css_px, 1.0)
+	# 0.4 % headroom: a 48 CSS px button scaled to exactly 48 measures 47.997 after rounding.
+	return 1.0 if k <= 1.0 else minf(k * 1.004, 1.5)
+
+
+## Full-screen scene part at _panel_scale, laid out smaller so that scaled it covers the game area.
+func _fit_full_area(area: Control) -> void:
+	area.scale = Vector2(_panel_scale, _panel_scale)
+	area.offset_right = _game.size.x / _panel_scale - _game.size.x
+	area.offset_bottom = _game.size.y / _panel_scale - _game.size.y
+
+
+## A full-screen panel scene at _panel_scale, laid out smaller so that scaled it fills `area`
+## (the game area between the safe-area edges).
+func _fit_panel_area(panel: Control, area: Rect2) -> void:
+	panel.scale = Vector2(_panel_scale, _panel_scale)
+	panel.offset_left = area.position.x
+	panel.offset_top = area.position.y
+	panel.offset_right = area.position.x + area.size.x / _panel_scale - _game.size.x
+	panel.offset_bottom = area.position.y + area.size.y / _panel_scale - _game.size.y
+
+
+## The sheet at _panel_scale, kept below the place name and the HUD (about 96 CSS px from the top).
+func _fit_choice_sheet() -> void:
+	_fit_bottom_panel(_choice_sheet)
+	if _game != null and _game.size.y > 0.0:
+		_choice_sheet.set_max_height((_game.size.y - _safe_top - _safe_bottom - 96.0 * CSS_PX) / _panel_scale)
+
+
+## Bottom-anchored panel scene at _panel_scale, laid out narrower so that scaled it spans the game width.
+func _fit_bottom_panel(panel: Control) -> void:
+	panel.scale = Vector2(_panel_scale, _panel_scale)
+	panel.offset_right = _game.size.x / _panel_scale - _game.size.x
+	panel.offset_bottom = -_safe_bottom
 
 
 func _layout_sprite(actor_id: String) -> void:
 	if _dialog_panel == null or not _sprites.has(actor_id):
 		return
 	var sprite: Control = _sprites[actor_id] as Control
-	var slot: String = str(_actor_slots.get(actor_id, "center"))
-	var slot_x: float = float(SLOT_X.get(slot, 0.5))
-	# 立繪頭部在對話框上方，底部只少量進入透明對話層。
-	var sprite_top: float = _dialog_panel.position.y + 180.0 - 1040.0
-	var actor_info: Dictionary = _actors.get(actor_id, {}) as Dictionary
-	var sprite_x: float = _game.size.x * slot_x - sprite.size.x * 0.5
-	if bool(actor_info.get("silhouette", false)):
-		sprite_x = clampf(sprite_x, 0.0, maxf(0.0, _game.size.x - sprite.size.x))
-	sprite.size = Vector2(sprite.size.x, 1040.0)
-	sprite.position = Vector2(sprite_x, sprite_top)
-	sprite.queue_redraw()
+	var marker: Control = _slot_markers.get(str(_actor_slots.get(actor_id, "center")), _slot_markers["center"])
+	# The character's standing box (its scene root) is scaled to the slot's height (scenes/stage.tscn)
+	# and stands on the slot's bottom edge, centred; its Art keeps the framing set in its own scene.
+	# Worked out from anchors, since the stage may not have had its layout pass since _layout moved
+	# StageArea's bottom.
+	var area: Rect2 = _anchored_rect(_stage_area, Rect2(Vector2.ZERO, _game.size))
+	var box: Rect2 = _anchored_rect(marker, area)
+	var reference: Vector2 = SPRITE_SCRIPT.REFERENCE_SIZE
+	sprite.size = reference
+	sprite.pivot_offset = Vector2(reference.x * 0.5, reference.y)
+	sprite.scale = Vector2.ONE * (box.size.y / reference.y)
+	sprite.position = Vector2(box.get_center().x, box.end.y) - sprite.pivot_offset
 
 
-# 懸浮按鈕只能停在對話框上方；選項出現時也避開選項，免得點選項變成開選單。
-func _update_float_bounds() -> void:
-	var top: float = EDGE + _safe_top
-	var limit: float = _dialog_panel.position.y - 24.0
-	if _screen_mode in ["choice", "tsukkomi"] and not _choice_buttons.is_empty():
-		limit = _choice_box.position.y + _choice_box.size.y - _choice_box.get_combined_minimum_size().y - 24.0
-	var bounds: Rect2 = Rect2(EDGE, top, _game.size.x - EDGE * 2.0 - 128.0, maxf(0.0, limit - 128.0 - top))
-	for button: Control in [_menu_button, _save_button]:
-		button.set("bounds", bounds)
-		button.call("snap_to_edge", false)
-
-
-func _layout_title(width: float, height: float, top: float, bottom: float) -> void:
-	var logo: Label = _title_screen.get_node("Logo")
-	logo.position = Vector2(140.0, height * 0.18)
-	logo.size = Vector2(width - 280.0, 320.0)
-	var subtitle: Label = _title_screen.get_node("Subtitle")
-	subtitle.position = Vector2(60.0, logo.position.y + 360.0)
-	subtitle.size = Vector2(width - 120.0, 110.0)
-	_begin_button.position = Vector2(240.0, height * 0.56)
-	_begin_button.size = Vector2(width - 480.0, 132.0)
-	_continue_button.position = Vector2(240.0, height * 0.56 + 164.0)
-	_continue_button.size = Vector2(width - 480.0, 132.0)
-	_title_load_button.position = Vector2(240.0, height * 0.56 + 328.0)
-	_title_load_button.size = Vector2(width - 480.0, 132.0)
-	_title_style_panel.position = Vector2(56.0, height * 0.43)
-	_title_style_panel.size = Vector2(width - 112.0, 224.0)
-	_title_style_caption.position = Vector2(20.0, 6.0)
-	_title_style_caption.size = Vector2(_title_style_panel.size.x - 40.0, 52.0)
-	_title_style_row.position = Vector2(20.0, 58.0)
-	_title_style_row.size = Vector2(_title_style_panel.size.x - 40.0, 164.0)
-	_title_error.position = Vector2(80.0, _title_load_button.position.y + 170.0)
-	_title_error.size = Vector2(width - 160.0, 100.0)
-	var version: Label = _title_screen.get_node("Version")
-	version.position = Vector2(EDGE + 12.0, bottom - 48.0)
-	version.size = Vector2(360.0, 48.0)
-
-
-func _layout_menu_panel() -> void:
-	_menu_panel.size = _menu_panel.get_combined_minimum_size()
-	var width: float = _game.size.x
-	var anchor: Vector2 = _menu_button.position
-	var on_left: bool = anchor.x + 64.0 < width * 0.5
-	var x: float = (width - _menu_panel.size.x) * 0.5
-	var y: float = maxf(EDGE + _safe_top + 140.0, (_game.size.y - _menu_panel.size.y) * 0.5)
-	_menu_panel.position = Vector2(x, y)
-	_menu_panel.pivot_offset = Vector2(0.0 if on_left else _menu_panel.size.x, 0.0)
-	if _menu_panel_shell != null:
-		_menu_panel_shell.position = _menu_panel.position - Vector2(14.0, 14.0)
-		_menu_panel_shell.size = _menu_panel.size + Vector2(28.0, 28.0)
+## Where a Control's anchors and offsets place it inside parent_rect (no minimum size or grow).
+func _anchored_rect(node: Control, parent_rect: Rect2) -> Rect2:
+	var start: Vector2 = parent_rect.position + parent_rect.size * Vector2(node.anchor_left, node.anchor_top) \
+		+ Vector2(node.offset_left, node.offset_top)
+	var end: Vector2 = parent_rect.position + parent_rect.size * Vector2(node.anchor_right, node.anchor_bottom) \
+		+ Vector2(node.offset_right, node.offset_bottom)
+	return Rect2(start, end - start)
 
 
 func _layout_slot_picker(width: float, height: float, top: float, bottom: float) -> void:
@@ -1101,6 +1234,8 @@ func _read_safe_area(viewport_size: Vector2) -> void:
 
 func _show_title() -> void:
 	_cancel_generation()
+	_effects.play_bgm("")
+	_close_qte()
 	_close_overlays()
 	_set_ui_hidden(false)
 	_set_auto(false)
@@ -1109,20 +1244,15 @@ func _show_title() -> void:
 	_phase3_hud.visible = false
 	_title_screen.visible = true
 	_dialog_layer.visible = false
-	_float_layer.visible = false
-	_continue_button.disabled = not _has_valid_save()
-	_title_error.text = _story_error
-	_begin_button.disabled = not _story_ready
+	_refresh_title()
 	_publish_qa_state()
 
 
 func _show_story_screen() -> void:
 	_title_screen.visible = false
 	_dialog_layer.visible = true
-	_float_layer.visible = true
 	_screen_mode = "busy"
 	_phase3_hud.visible = _phase3_enabled and not _ui_hidden
-	_last_activity_ms = Time.get_ticks_msec()
 
 
 func _on_begin_pressed() -> void:
@@ -1150,6 +1280,8 @@ func _on_restart_pressed() -> void:
 
 func _start_new_story() -> void:
 	_cancel_generation()
+	_close_overlays()
+	_effects.play_bgm("")
 	_delete_save()
 	_history.clear()
 	_boke_time_remaining = 0.0
@@ -1206,6 +1338,11 @@ func _drive_story(generation: int) -> void:
 				_present_end(command)
 				_save_game()
 				return
+			"result":
+				_story_busy = false
+				_present_result(command)
+				_save_game()
+				return
 			"investigate":
 				_story_busy = false
 				_present_investigation(command, false)
@@ -1219,6 +1356,8 @@ func _drive_story(generation: int) -> void:
 			"sound":
 				_play_sound(_dict_string(command, "id"))
 			"bg":
+				if _dict_string(command, "id") != _current_bg_id:
+					_clear_stage()  # a new scene starts with nobody on stage
 				_apply_background(_dict_string(command, "id"))
 			"char":
 				_apply_character(command)
@@ -1231,6 +1370,14 @@ func _drive_story(generation: int) -> void:
 			"wait":
 				if not _skip:
 					await get_tree().create_timer(float(command.get("duration", 0.0))).timeout
+					if generation != _generation:
+						return
+			"shake", "flash", "cutin", "bgm", "se":
+				_effects.play(command, _skip)
+			"freeze":
+				var hold: float = _effects.play(command, _skip)
+				if hold > 0.0:
+					await get_tree().create_timer(hold).timeout
 					if generation != _generation:
 						return
 			_:
@@ -1256,22 +1403,19 @@ func _present_say(command: Dictionary, restored: bool) -> void:
 	_boke_controls.visible = false
 	_game_over_retry_button.visible = false
 	_auto_button.disabled = false
-	_skip_button.disabled = false
 	_current_speaker = _dict_string(command, "speaker", "narrator")
 	_full_text = _dict_string(command, "text")
 	_current_line_key = _line_key(command, "say")
 	_line_logged = _history_has_key(_current_line_key)
 	_line_generation += 1
 	_clear_choices()
-	_choice_box.visible = false
 	_end_box.visible = false
 	_screen_mode = "story"
 	_refresh_phase3_hud()
 	var thought: bool = _dict_bool(command, "thought")
 	_set_name_plate(_current_speaker, thought)
 	_focus_speaker(_current_speaker, _dict_string(command, "expression", ""))
-	_set_label_style(_text_label, "thought" if thought else "body")
-	_fit_text_size(_full_text)
+	_set_text_tone("thought" if thought else "body")
 	if restored and _line_logged:
 		_set_visible_text(_full_text, true)
 		_on_line_completed()
@@ -1301,18 +1445,15 @@ func _present_investigation(command: Dictionary, restored: bool) -> void:
 	_clear_hotspots()
 	_screen_mode = "investigate"
 	_dialog_layer.visible = true
-	_dialog_panel.visible = true
-	_choice_box.visible = false
+	_dialog_panel.visible = true  # the prompt shows first; 收起 folds the box away
 	_end_box.visible = false
 	_investigation_continue_button.visible = true
 	_boke_controls.visible = false
 	_auto_button.disabled = true
-	_skip_button.disabled = true
 	_set_name_plate("shinpachi", true)
-	_focus_speaker("shinpachi", "thinking")
-	_set_label_style(_text_label, "thought")
+	_clear_stage()  # the player searches the room itself
+	_set_text_tone("thought")
 	_layout()
-	_fit_text_size(_full_text)
 	_set_visible_text(_full_text, true)
 	_build_hotspots(command)
 	_update_investigation_controls()
@@ -1324,57 +1465,130 @@ func _present_investigation(command: Dictionary, restored: bool) -> void:
 	_publish_qa_state()
 
 
+func _build_investigate_bar() -> void:
+	_investigate_bar = INVESTIGATE_BAR_SCENE.instantiate() as Control
+	_dialog_layer.add_child(_investigate_bar)
+	_investigate_bar.visible = false
+	_investigate_bar.connect("expand_pressed", _set_investigation_collapsed.bind(false))
+
+
+## Folds the reading box into the one-line bar (or back) while searching.
+func _set_investigation_collapsed(value: bool) -> void:
+	_investigate_collapsed = value and _screen_mode == "investigate"
+	_investigate_bar.visible = _investigate_collapsed
+	_refresh_reading_ui()
+	_publish_qa_state()
+
+
+## The spots of this investigation, on a layer over the whole background picture: each sits over
+## its object at the story's `pos` (centre) and `size`, fractions of the picture.
 func _build_hotspots(command: Dictionary) -> void:
 	_clear_hotspots()
+	var frame: TextureRect = _background_rect
+	_frame_offsets = [frame.offset_left, frame.offset_top, frame.offset_right, frame.offset_bottom]
+	_hotspot_layer = Control.new()
+	_hotspot_layer.name = "Hotspots"
+	_hotspot_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	frame.add_child(_hotspot_layer)
+	_hotspot_layer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	for raw_hotspot: Variant in command.get("hotspots", []):
 		if not raw_hotspot is Dictionary:
 			continue
 		var hotspot: Dictionary = raw_hotspot as Dictionary
 		var hotspot_id: String = _dict_string(hotspot, "id")
-		var checked: bool = bool(hotspot.get("checked", false))
-		var button: Button = _make_button(_dialog_layer,
-			("✓ " if checked else "⌕ ") + _dict_string(hotspot, "label", hotspot_id), 32)
-		button.name = "Hotspot_" + hotspot_id
-		button.custom_minimum_size = Vector2(220.0, 120.0)
-		button.disabled = checked
-		button.autowrap_mode = TextServer.AUTOWRAP_ARBITRARY
-		button.pressed.connect(_on_hotspot_pressed.bind(hotspot_id))
-		_hotspot_buttons[hotspot_id] = button
-	_layout_hotspots(command)
-
-
-func _layout_hotspots(command: Dictionary) -> void:
-	if _dialog_panel == null or command.is_empty():
-		return
-	var stage_height: float = maxf(1.0, _dialog_panel.position.y)
-	var safe_top: float = EDGE + _safe_top + 180.0
-	var button_size: Vector2 = Vector2(clampf(_game.size.x * 0.27, 220.0, 300.0), 124.0)
-	for raw_hotspot: Variant in command.get("hotspots", []):
-		if not raw_hotspot is Dictionary:
-			continue
-		var hotspot: Dictionary = raw_hotspot as Dictionary
-		var hotspot_id: String = _dict_string(hotspot, "id")
-		if not _hotspot_buttons.has(hotspot_id):
-			continue
 		var pos: Array = hotspot.get("pos", [0.5, 0.5]) as Array
-		if pos.size() != 2:
-			continue
-		var center: Vector2 = Vector2(float(pos[0]) * _game.size.x, float(pos[1]) * stage_height)
-		center.y = clampf(center.y, safe_top + button_size.y * 0.5, stage_height - button_size.y * 0.5)
-		center.x = clampf(center.x, button_size.x * 0.5 + EDGE, _game.size.x - button_size.x * 0.5 - EDGE)
-		var button: Button = _hotspot_buttons[hotspot_id] as Button
-		button.position = center - button_size * 0.5
-		button.size = button_size
+		var extent: Array = hotspot.get("size", DEFAULT_HOTSPOT_SIZE) as Array
+		var spot: Control = HOTSPOT_SCENE.instantiate() as Control
+		spot.name = "Hotspot_" + hotspot_id
+		_hotspot_layer.add_child(spot)
+		spot.anchor_left = clampf(float(pos[0]) - float(extent[0]) * 0.5, 0.0, 1.0)
+		spot.anchor_right = clampf(float(pos[0]) + float(extent[0]) * 0.5, 0.0, 1.0)
+		spot.anchor_top = clampf(float(pos[1]) - float(extent[1]) * 0.5, 0.0, 1.0)
+		spot.anchor_bottom = clampf(float(pos[1]) + float(extent[1]) * 0.5, 0.0, 1.0)
+		spot.offset_left = 0.0
+		spot.offset_top = 0.0
+		spot.offset_right = 0.0
+		spot.offset_bottom = 0.0
+		spot.call("set_found", bool(hotspot.get("checked", false)), false)
+		_hotspots[hotspot_id] = spot
+	_layout_hotspots()
+
+
+## Stretches the background frame to the whole picture (which covers the frame's own rect,
+## centred) so every part of it can slide into view, and works out how far it may slide.
+func _layout_hotspots() -> void:
+	if _hotspot_layer == null or not is_instance_valid(_hotspot_layer):
+		return
+	var frame: TextureRect = _hotspot_layer.get_parent() as TextureRect
+	var own: Rect2 = _anchored_rect_with(frame, _frame_offsets, Rect2(Vector2.ZERO, _game.size))
+	_picture = own
+	if frame.texture != null and not frame.texture is GradientTexture2D:
+		var art: Vector2 = Vector2(frame.texture.get_width(), frame.texture.get_height())
+		var drawn: Vector2 = art * maxf(own.size.x / art.x, own.size.y / art.y)
+		_picture = Rect2(own.position + (own.size - drawn) * 0.5, drawn)
+	_pan_range = Vector2(minf(0.0, _game.size.x - _picture.end.x), maxf(0.0, -_picture.position.x))
+	_set_pan(_pan)
+
+
+func _set_pan(value: float) -> void:
+	_pan = clampf(value, _pan_range.x, _pan_range.y)
+	if _hotspot_layer == null or not is_instance_valid(_hotspot_layer):
+		return
+	var frame: TextureRect = _hotspot_layer.get_parent() as TextureRect
+	var start: Vector2 = _game.size * Vector2(frame.anchor_left, frame.anchor_top)
+	var end: Vector2 = _game.size * Vector2(frame.anchor_right, frame.anchor_bottom)
+	frame.offset_left = _picture.position.x + _pan - start.x
+	frame.offset_right = _picture.end.x + _pan - end.x
+	frame.offset_top = _picture.position.y - start.y
+	frame.offset_bottom = _picture.end.y - end.y
 
 
 func _clear_hotspots() -> void:
-	for button: Button in _hotspot_buttons.values():
-		if is_instance_valid(button):
-			button.queue_free()
-	_hotspot_buttons.clear()
+	if _hotspot_layer != null and is_instance_valid(_hotspot_layer):
+		var frame: TextureRect = _hotspot_layer.get_parent() as TextureRect
+		frame.offset_left = _frame_offsets[0]
+		frame.offset_top = _frame_offsets[1]
+		frame.offset_right = _frame_offsets[2]
+		frame.offset_bottom = _frame_offsets[3]
+		_hotspot_layer.queue_free()
+	_hotspot_layer = null
+	_hotspots.clear()
+	_pan = 0.0
+	_pan_range = Vector2.ZERO
+	_investigate_collapsed = false
+	if _investigate_bar != null:
+		_investigate_bar.visible = false
 
 
-func _on_hotspot_pressed(hotspot_id: String) -> void:
+## Where a Control would sit inside parent_rect with the given offsets [left, top, right, bottom].
+func _anchored_rect_with(node: Control, offsets: Array[float], parent_rect: Rect2) -> Rect2:
+	var start: Vector2 = parent_rect.position + parent_rect.size * Vector2(node.anchor_left, node.anchor_top) \
+		+ Vector2(offsets[0], offsets[1])
+	var end: Vector2 = parent_rect.position + parent_rect.size * Vector2(node.anchor_right, node.anchor_bottom) \
+		+ Vector2(offsets[2], offsets[3])
+	return Rect2(start, end - start)
+
+
+## A tap on the picture while searching: the spot under it, unless the reading box covers it.
+func _tap_investigation(at: Vector2) -> void:
+	if _story_busy or (_dialog_panel.visible and _dialog_panel.get_global_rect().has_point(at)):
+		return
+	for hotspot_id: String in _hotspots.keys():
+		var spot: Control = _hotspots[hotspot_id] as Control
+		if not bool(spot.get("found")) and _hotspot_hit_rect(spot).has_point(at):
+			_collect_hotspot(hotspot_id)
+			return
+
+
+## The spot's rect, grown to at least 48 CSS px each way so small objects stay tappable.
+func _hotspot_hit_rect(spot: Control) -> Rect2:
+	var rect: Rect2 = spot.get_global_rect()
+	var least: float = 48.0 * CSS_PX * _panel_scale
+	var grow: Vector2 = (Vector2(least, least) - rect.size).max(Vector2.ZERO) * 0.5
+	return rect.grow_individual(grow.x, grow.y, grow.x, grow.y)
+
+
+func _collect_hotspot(hotspot_id: String) -> void:
 	if _screen_mode != "investigate" or _story_busy:
 		return
 	if not bool(_runner.call("inspect_hotspot", hotspot_id)):
@@ -1388,11 +1602,13 @@ func _on_hotspot_pressed(hotspot_id: String) -> void:
 	var item_info: Dictionary = (_catalog.get("items", {}) as Dictionary).get(item_id, {}) as Dictionary
 	var item_name: String = str(item_info.get("name", item_id))
 	_current_command = _runner_current()
-	_build_hotspots(_current_command)
+	(_hotspots[hotspot_id] as Control).call("set_found", true, true)
 	_update_investigation_controls()
 	_refresh_phase3_hud()
 	_show_toast("取得線索：" + item_name)
 	_save_game()
+	if not _investigation_continue_button.disabled and _investigate_collapsed:
+		_set_investigation_collapsed(false)  # every clue found: bring back 繼續
 	_publish_qa_state()
 
 
@@ -1404,6 +1620,8 @@ func _update_investigation_controls() -> void:
 			all_checked = false
 	_investigation_continue_button.disabled = not all_checked or hotspots.is_empty()
 	_investigation_continue_button.text = "線索已取得・繼續" if all_checked and not hotspots.is_empty() else "先調查所有位置"
+	var found: int = hotspots.filter(func(raw: Variant) -> bool: return raw is Dictionary and bool((raw as Dictionary).get("checked", false))).size()
+	_investigate_bar.call("set_progress", found, hotspots.size())
 
 
 func _on_investigation_continue_pressed() -> void:
@@ -1425,8 +1643,11 @@ func _present_boke_round(command: Dictionary, restored: bool, requested_ui_mode:
 		target_ui_mode = _restored_boke_ui_mode if restored and not _restored_boke_ui_mode.is_empty() else "boke_round"
 	if target_ui_mode not in ["boke_round", "tsukkomi"]:
 		target_ui_mode = "boke_round"
+	if RoundView.automatic(command):  # combo lines open their slot at once
+		target_ui_mode = "qte" if RoundView.action(command) == "qte" else "tsukkomi"
+	_close_qte()
 	_current_command = command.duplicate(true)
-	_current_speaker = _dict_string(command, "speaker", "gintoki")
+	_current_speaker = RoundView.speaker(command)
 	_clear_hotspots()
 	_investigation_continue_button.visible = false
 	_game_over_retry_button.visible = false
@@ -1438,47 +1659,54 @@ func _present_boke_round(command: Dictionary, restored: bool, requested_ui_mode:
 	_story_busy = false
 	_dialog_layer.visible = true
 	_dialog_panel.visible = true
-	_choice_box.visible = false
-	_boke_controls.visible = true
+	_boke_controls.visible = not RoundView.automatic(command)
 	_auto_button.disabled = true
-	_skip_button.disabled = true
 	_set_name_plate(_current_speaker, false)
 	_focus_speaker(_current_speaker, "annoyed")
 	_layout()
-	var current_line: Dictionary = command.get("current_line", {}) as Dictionary
-	_full_text = _dict_string(current_line, "text", "（銀時正在等你的吐槽。）")
-	if bool(command.get("listened", false)):
-		_full_text += "\n\n「" + _dict_string(current_line, "listen_text") + "」"
-	_set_label_style(_text_label, "body")
-	_fit_text_size(_full_text)
+	_full_text = RoundView.text(command)
+	_set_text_tone("body")
 	_set_visible_text(_full_text, true)
-	var lines: Array = command.get("lines", []) as Array
+	_render_round_bar()
 	var line_index: int = int(command.get("line_index", 0))
-	_boke_line_label.text = "%d / %d" % [line_index + 1, lines.size()]
-	_boke_previous_button.disabled = line_index <= 0
-	_boke_next_button.disabled = line_index >= lines.size() - 1
-	_boke_listen_button.visible = current_line.has("listen")
-	_boke_listen_button.disabled = bool(command.get("listened", false))
-	_boke_listen_button.text = "已聽過" if bool(command.get("listened", false)) else "聽仔細"
-	_current_line_key = "%s:%s:%s" % [_line_key(command, "boke"), _dict_string(current_line, "id"), line_index]
+	_current_line_key = "%s:%s:%s" % [_line_key(command, "boke"), _dict_string(RoundView.line(command), "id"), line_index]
 	_line_logged = _history_has_key(_current_line_key)
 	if not _line_logged:
 		_append_history({"key": _current_line_key, "kind": "say", "speaker": _current_speaker, "text": _full_text})
 		_line_logged = true
-	if target_ui_mode == "tsukkomi":
-		_present_tsukkomi_options(command, restored)
-	else:
-		_boke_time_remaining = 0.0
-		_boke_timer_round_id = ""
-		_restored_boke_timer_remaining = -1.0
-		_restored_boke_ui_mode = ""
-		_screen_mode = "boke_round"
-		_choice_box.visible = false
-		_boke_controls.visible = true
-		_current_options.clear()
+	match target_ui_mode:
+		"tsukkomi":
+			_present_tsukkomi_options(command, restored)
+		"qte":
+			_start_qte(command)
+		_:
+			_boke_time_remaining = 0.0
+			_boke_timer_round_id = ""
+			_restored_boke_timer_remaining = -1.0
+			_restored_boke_ui_mode = ""
+			_screen_mode = "boke_round"
+			_current_options.clear()
 	_refresh_phase3_hud()
-	call_deferred("_update_float_bounds")
 	_publish_qa_state()
+
+
+## The round bar for _current_command (scripts/round_view.gd decides what it shows).
+func _render_round_bar() -> void:
+	var command: Dictionary = _current_command
+	var index: int = int(command.get("line_index", 0))
+	var browse: bool = RoundView.navigable(command)
+	_boke_previous_button.visible = browse
+	_boke_next_button.visible = browse
+	_boke_previous_button.disabled = index <= 0
+	_boke_next_button.disabled = index >= (command.get("lines", []) as Array).size() - 1
+	_boke_line_label.text = RoundView.index_text(command)
+	var heard: bool = RoundView.listened(command)
+	_boke_listen_button.visible = RoundView.can_listen(command)
+	_boke_listen_button.disabled = heard
+	_boke_listen_button.text = "已聽過" if heard else "聽下去"
+	_boke_tsukkomi_button.disabled = RoundView.action(command).is_empty()
+	_boke_tsukkomi_button.text = "已接住" if RoundView.caught(command) else "吐槽！"
+	_dialog_panel.censor_bar.visible = RoundView.censor(command)
 
 
 func _present_tsukkomi_options(command: Dictionary, restored: bool) -> void:
@@ -1495,33 +1723,75 @@ func _present_tsukkomi_options(command: Dictionary, restored: bool) -> void:
 		_restored_boke_timer_remaining = -1.0
 	_restored_boke_ui_mode = ""
 	_screen_mode = "tsukkomi"
-	_choice_box.visible = true
 	_boke_controls.visible = false
 	_current_options.clear()
-	var tsukkomi: Dictionary = command.get("tsukkomi", {}) as Dictionary
-	for option_variant: Variant in tsukkomi.get("options", []):
-		if not option_variant is Dictionary:
-			continue
-		var option: Dictionary = (option_variant as Dictionary).duplicate(true)
-		_current_options.append(option)
-		var button: Button = _make_button(_choice_box, "▶ " + _dict_string(option, "label"), 39)
-		button.name = "Boke_" + _dict_string(option, "id")
-		_set_button_style(button, "choice")
-		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		button.autowrap_mode = TextServer.AUTOWRAP_ARBITRARY
-		button.custom_minimum_size = Vector2(0.0, 164.0)
-		button.pressed.connect(_on_boke_option_pressed.bind(_dict_string(option, "id")))
-		_choice_buttons.append(button)
+	for option_variant: Variant in RoundView.options(command):
+		if option_variant is Dictionary:
+			_current_options.append((option_variant as Dictionary).duplicate(true))
+	_sheet_prompt = _full_text
+	_sheet_timed = true
+	_sheet_censor = RoundView.censor(command)
+	_sheet_super = bool(command.get("super_available", false))
+	_show_choice_sheet()
 
 
 func _on_boke_tsukkomi_pressed() -> void:
 	if _screen_mode != "boke_round" or _story_busy:
 		return
-	_present_tsukkomi_options(_current_command, false)
-	_save_game()
-	_refresh_phase3_hud()
-	call_deferred("_update_float_bounds")
+	match RoundView.action(_current_command):
+		"options":
+			_present_tsukkomi_options(_current_command, false)
+			_save_game()
+			_refresh_phase3_hud()
+			_publish_qa_state()
+		"qte":
+			_start_qte(_current_command)
+		"whiff":
+			_round_action(func() -> Dictionary: return _runner.call("whiff_boke"), "（空揮）", "boke_round")
+
+
+## Hands one round move to the runner and plays its outcome.
+func _round_action(move: Callable, label: String, prior_ui_mode: String, feedback: String = "") -> void:
+	_story_busy = true
+	_screen_mode = "busy"
+	_resolve_boke_presentation(move.call() as Dictionary, label, prior_ui_mode, feedback)
+
+
+## The censor bar, torn off while reading (no timer) or while the options run.
+func _on_censor_pressed() -> void:
+	if _screen_mode not in ["boke_round", "tsukkomi"] or _story_busy or not RoundView.censor(_current_command):
+		return
+	_round_action(func() -> Dictionary: return _runner.call("resolve_censor"), "（撕下消音條）", _screen_mode)
+
+
+func _on_super_pressed() -> void:
+	if _screen_mode != "tsukkomi" or _story_busy or not bool(_current_command.get("super_available", false)):
+		return
+	_round_action(func() -> Dictionary: return _runner.call("use_super"), "超必殺吐槽", "tsukkomi", "超必殺吐槽！全部戳破")
+
+
+func _start_qte(command: Dictionary) -> void:
+	_close_qte()
+	_screen_mode = "qte"
+	_qte = QTE_SCENE.instantiate() as QteRing
+	_overlay_layer.add_child(_qte)
+	_qte.resolved.connect(_on_qte_resolved)
+	_qte.start(RoundView.qte(command))
 	_publish_qa_state()
+
+
+## tapped=false: the ring ran out. offset: seconds from the moment the rings met.
+func _on_qte_resolved(tapped: bool, offset: float) -> void:
+	if _screen_mode != "qte" or _story_busy:
+		return
+	_close_qte()
+	_round_action(func() -> Dictionary: return _runner.call("resolve_qte", tapped, offset), "", "qte")
+
+
+func _close_qte() -> void:
+	if _qte != null and is_instance_valid(_qte):
+		_qte.queue_free()
+	_qte = null
 
 
 func _on_boke_previous_pressed() -> void:
@@ -1543,6 +1813,13 @@ func _set_boke_line(index: int) -> void:
 
 func _on_boke_listen_pressed() -> void:
 	if _screen_mode != "boke_round" or _story_busy:
+		return
+	if RoundView.is_v2(_current_command):
+		# The runner has jumped into the line's listen scene; play it, it leads back to the round.
+		if bool(_runner.call("listen_boke_line")):
+			_story_busy = true
+			_screen_mode = "busy"
+			_start_drive()
 		return
 	if not bool(_runner.call("listen_boke_line")):
 		return
@@ -1567,7 +1844,8 @@ func _on_boke_option_pressed(option_id: String) -> void:
 	_resolve_boke_presentation(result, option_label, "tsukkomi")
 
 
-func _resolve_boke_presentation(result: Dictionary, option_label: String = "", prior_ui_mode: String = "") -> void:
+func _resolve_boke_presentation(result: Dictionary, option_label: String = "", prior_ui_mode: String = "",
+		feedback_override: String = "") -> void:
 	if result.is_empty():
 		_story_busy = false
 		_present_boke_round(_runner_current(), true, prior_ui_mode)
@@ -1582,13 +1860,15 @@ func _resolve_boke_presentation(result: Dictionary, option_label: String = "", p
 	var feedback: String = ""
 	match _last_boke_result:
 		"perfect":
-			feedback = "完美吐槽！力量 +30"
+			feedback = "完美吐槽！吐槽之力 +30"
 		"weak":
-			feedback = "普通吐槽！力量 +10"
+			feedback = "普通吐槽！吐槽之力 +10"
 		"fail":
 			feedback = "冷場！眼鏡 -1" if not bool(result.get("game_over", false)) else "眼鏡耗盡・Game Over"
 		"hidden":
 			feedback = "放棄吐槽・狀態不變"
+	if not feedback_override.is_empty():
+		feedback = feedback_override
 	_refresh_phase3_hud()
 	_show_toast(feedback)
 	_start_drive()
@@ -1616,6 +1896,7 @@ func _on_game_over_retry_pressed() -> void:
 	_last_boke_result = "retry"
 	_story_busy = false
 	_screen_mode = "busy"
+	_game_over.visible = false
 	_render_restored_current()
 	_refresh_phase3_hud()
 	_save_game()
@@ -1623,11 +1904,14 @@ func _on_game_over_retry_pressed() -> void:
 
 
 func _typewriter(token: int) -> void:
+	if _text_interval() <= 0.0:  # 瞬間: the whole line at once; the first tap advances
+		_complete_current_line()
+		return
 	for index: int in range(_visible_text.length(), _full_text.length()):
 		if token != _line_generation:
 			return
 		_set_visible_text(_full_text.substr(0, index + 1), false)
-		await get_tree().create_timer(TYPEWRITER_INTERVAL).timeout
+		await get_tree().create_timer(_text_interval()).timeout
 	if token == _line_generation:
 		_complete_current_line()
 
@@ -1651,22 +1935,20 @@ func _on_line_completed() -> void:
 		_auto_step(_line_generation)
 
 
+## While typing, the whole line is laid out once and revealed character by character, so the box
+## is already at its final height and the text never rewraps.
 func _set_visible_text(value: String, complete: bool) -> void:
 	_visible_text = value
 	_text_complete = complete
-	_text_label.text = value
-	_next_indicator.visible = complete and _screen_mode == "story"
+	var typing: bool = _full_text.begins_with(value)
+	_text_label.text = _full_text if typing else value
+	_text_label.visible_characters = value.length() if typing and not complete else -1
+	_advance_button.visible = _command_op(_current_command) == "say"  # not the screen mode: lines finish behind 目錄 too
 
 
-func _fit_text_size(value: String) -> void:
-	var font_size: int = TEXT_FONT_MAX
-	while font_size > TEXT_FONT_MIN:
-		var lines: float = _font.get_multiline_string_size(value, HORIZONTAL_ALIGNMENT_LEFT,
-			_text_label.size.x, font_size).y / _font.get_height(font_size)
-		if lines <= TEXT_MAX_LINES + 0.1:
-			break
-		font_size -= 2
-	_text_label.add_theme_font_size_override("font_size", font_size)
+func _set_text_tone(tone: String) -> void:
+	_text_tone = tone
+	_dialog_panel.set_tone(tone)
 
 
 func _present_choice(command: Dictionary) -> void:
@@ -1681,13 +1963,11 @@ func _present_choice(command: Dictionary) -> void:
 	_clear_hotspots()
 	_investigation_continue_button.visible = false
 	_boke_controls.visible = false
-	_choice_box.visible = true
 	_end_box.visible = false
 	_refresh_phase3_hud()
 	_set_name_plate("shinpachi", true)
 	_focus_speaker("shinpachi", "thinking")
-	_set_label_style(_text_label, "thought")
-	_fit_text_size(_full_text)
+	_set_text_tone("thought")
 	_set_visible_text(_full_text, true)
 	if not _line_logged:
 		_append_history({"key": _current_line_key, "kind": "say", "speaker": "shinpachi",
@@ -1700,15 +1980,9 @@ func _present_choice(command: Dictionary) -> void:
 			continue
 		var option: Dictionary = (option_variant as Dictionary).duplicate(true)
 		_current_options.append(option)
-		var button: Button = _make_button(_choice_box, "▶ " + _dict_string(option, "label"), 46)
-		button.name = "Choice_%d" % _choice_buttons.size()
-		_set_button_style(button, "choice")
-		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		button.autowrap_mode = TextServer.AUTOWRAP_ARBITRARY
-		button.custom_minimum_size = Vector2(0.0, 164.0)
-		button.pressed.connect(_on_choice_pressed.bind(_dict_string(option, "id")))
-		_choice_buttons.append(button)
-	call_deferred("_update_float_bounds")
+	_sheet_prompt = _full_text
+	_sheet_timed = false
+	_show_choice_sheet()
 	call_deferred("_publish_qa_state")
 
 
@@ -1727,7 +2001,6 @@ func _on_choice_pressed(option_id: String) -> void:
 	_clear_choices()
 	_append_history({"key": "choice:%s:%s" % [_current_line_key, option_id], "kind": "choice",
 		"text": label})
-	_update_float_bounds()
 	_start_drive()
 
 
@@ -1744,16 +2017,17 @@ func _present_end(command: Dictionary) -> void:
 	_set_skip(false)
 	_screen_mode = "end"
 	_clear_choices()
-	_choice_box.visible = false
 	_refresh_phase3_hud()
 	_set_name_plate("narrator", false)
 	_focus_speaker("narrator", "")
-	_set_label_style(_text_label, "accent")
-	_fit_text_size(_full_text)
+	_set_text_tone("accent")
 	_set_visible_text(_full_text, true)
-	_end_box.visible = true
 	var snapshot: Dictionary = _runner.call("snapshot") as Dictionary
-	_game_over_retry_button.visible = bool(snapshot.get("game_over_active", false))
+	var game_over: bool = bool(snapshot.get("game_over_active", false))
+	_end_box.visible = not game_over
+	_game_over_retry_button.visible = game_over
+	if game_over:
+		_game_over.open(_full_text)
 	if not _history_has_key(_current_line_key):
 		_append_history({"key": _current_line_key, "kind": "say", "speaker": "narrator", "text": _full_text})
 	_publish_qa_state()
@@ -1768,6 +2042,8 @@ func _render_restored_current() -> void:
 			_present_choice(current)
 		"end":
 			_present_end(current)
+		"result":
+			_present_result(current)
 		"investigate":
 			_present_investigation(current, true)
 		"boke_round":
@@ -1776,44 +2052,142 @@ func _render_restored_current() -> void:
 			_start_drive()
 
 
+## The chapter result (`result` step) over the stage: the numbers, the grade from the glasses left
+## and its closing line. The best grade per story goes to progress_path, which unlocks the next
+## chapter; 下一章 shows when there is one.
+func _present_result(command: Dictionary) -> void:
+	_current_command = command.duplicate(true)
+	_story_busy = false
+	_set_auto(false)
+	_set_skip(false)
+	_clear_choices()
+	_clear_hotspots()
+	_end_box.visible = false
+	_screen_mode = "result"
+	var summary: Dictionary = _runner.call("chapter_result") as Dictionary
+	_record_clear(str(summary.get("grade", "C")))
+	var speaker: String = str((summary.get("line", {}) as Dictionary).get("speaker", "narrator"))
+	_chapter_result.call("show_result", summary, str((_actors.get(speaker, {}) as Dictionary).get("name", "")),
+		not _next_chapter().is_empty())
+	_chapter_result.visible = true
+	_toast.visible = false
+	_refresh_phase3_hud()
+	_publish_qa_state()
+
+
+func _on_next_chapter_pressed() -> void:
+	var next: Dictionary = _next_chapter()
+	if next.is_empty():
+		return
+	_choose_story(next)
+	if _story_ready:
+		_on_begin_pressed()
+	else:
+		_show_title()
+
+
+## The id progress and chapter select know this story by: its registry id, else its own id.
+func _progress_id() -> String:
+	var index: int = _story_choice_index()
+	if index >= 0:
+		return str(_story_choices[index]["id"])
+	return str((_runner.call("story_info") as Dictionary).get("id", story_path.get_file()))
+
+
+func _record_clear(grade: String) -> void:
+	var config: ConfigFile = ConfigFile.new()
+	config.load(progress_path)
+	var best: String = str(config.get_value("cleared", _progress_id(), ""))
+	var grades: Array = STORY_RUNNER_SCRIPT.GRADES
+	if best.is_empty() or grades.find(grade) < grades.find(best):
+		config.set_value("cleared", _progress_id(), grade)
+		config.save(progress_path)
+
+
+## The best grade of a cleared story, "" when not cleared.
+func _cleared_grade(story_id: String) -> String:
+	var config: ConfigFile = ConfigFile.new()
+	return str(config.get_value("cleared", story_id, "")) if config.load(progress_path) == OK else ""
+
+
+## The chapter after the current one in the registry, {} when this is not a chapter or the last.
+func _next_chapter() -> Dictionary:
+	var index: int = _story_choice_index()
+	if index < 0 or str(_story_choices[index].get("kind", "")) != "chapter":
+		return {}
+	for later: int in range(index + 1, _story_choices.size()):
+		if str(_story_choices[later].get("kind", "")) == "chapter":
+			return _story_choices[later]
+	return {}
+
+
+## A chapter opens once the chapter before it is cleared; samples are always open.
+func _story_unlocked(index: int) -> bool:
+	if str(_story_choices[index].get("kind", "")) != "chapter":
+		return true
+	for earlier: int in range(index - 1, -1, -1):
+		if str(_story_choices[earlier].get("kind", "")) == "chapter":
+			return not _cleared_grade(str(_story_choices[earlier]["id"])).is_empty()
+	return true
+
+
+## Switches the title to another story (and remembers it for the next run).
+func _choose_story(choice: Dictionary) -> void:
+	story_path = choice["path"]
+	save_path = choice["save"]
+	var config: ConfigFile = ConfigFile.new()
+	config.set_value("story", "id", choice["id"])
+	config.save(STORY_CHOICE_PATH)
+	_story_error = ""
+	_load_story()
+	_dialog_panel.set_chapter(_chapter_title())
+	_refresh_story_switch()
+	_refresh_gameplay_ui()
+
+
 func _show_runtime_error(message: String) -> void:
+	_clear_choices()  # the message goes in the dialogue box, which the choice sheet would keep hidden
 	_story_busy = false
 	_story_error = message
 	_screen_mode = "story"
 	_current_command = {}
 	_set_name_plate("narrator", false)
-	_set_label_style(_text_label, "danger")
+	_set_text_tone("danger")
 	_set_visible_text(message, false)
 	_publish_qa_state()
 
 
+## Narrator lines show 旁白; a combined speaker ("gintoki+kagura") lists both names.
 func _set_name_plate(speaker: String, thought: bool) -> void:
 	_plate_speaker = speaker
 	_plate_thought = thought
-	_name_plate.visible = speaker != "narrator" and _actors.has(speaker)
-	if not _name_plate.visible:
-		return
-	var info: Dictionary = _actors[speaker] as Dictionary
-	_name_label.text = str(info["name"]) + ("・心聲" if thought else "")
-	_name_plate.set_meta("ui_style_role", "name_thought" if thought else "name")
-	_name_label.set_meta("ui_style_role", "speaker")
-	UI_STYLES_SCRIPT.apply_panel(_name_plate, _ui_style_id,
-		"name_thought" if thought else "name")
-	UI_STYLES_SCRIPT.apply_label(_name_label, _ui_style_id, "speaker")
-	var text_width: float = _font.get_string_size(_name_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, 44).x
-	_name_plate.size.x = maxf(220.0, text_width + 32.0)
-	_name_label.size = _name_plate.size
+	var names: PackedStringArray = []
+	for actor_id: String in speaker.split("+"):
+		if _actors.has(actor_id):
+			names.append(str((_actors[actor_id] as Dictionary)["name"]))
+	_dialog_panel.set_speaker("・".join(names) + ("・心聲" if thought and not names.is_empty() else ""))
 
 
+## Whoever speaks (both, for a line said together) comes on stage at their slot and to the front;
+## everyone already on stage stays behind, dimmed. Narration leaves the stage as it is, all lit.
 func _focus_speaker(speaker: String, expression: String) -> void:
+	var speaking: PackedStringArray = speaker.split("+", false)
 	for actor_id: String in _sprites.keys():
 		var sprite: Control = _sprites[actor_id]
-		var focused: bool = speaker == "narrator" or actor_id == speaker
-		sprite.modulate = Color.WHITE if focused else Color(0.5, 0.5, 0.56)
-		if actor_id == speaker:
+		var talking: bool = speaking.has(actor_id)
+		sprite.modulate = Color.WHITE if talking or speaker == "narrator" else Color(0.5, 0.5, 0.56)
+		if talking:
+			if not sprite.visible:
+				_layout_sprite(actor_id)
+				sprite.visible = true
 			_char_layer.move_child(sprite, -1)
 			if not expression.is_empty():
 				sprite.call("set_expression", expression)
+
+
+func _clear_stage() -> void:
+	for sprite: Control in _sprites.values():
+		sprite.visible = false
 
 
 func _sprite(actor_id: String) -> Control:
@@ -1822,19 +2196,19 @@ func _sprite(actor_id: String) -> Control:
 
 func _clear_choices() -> void:
 	_current_options.clear()
-	for button: Button in _choice_buttons:
-		button.queue_free()
 	_choice_buttons.clear()
+	if _choice_sheet != null:
+		_choice_sheet.clear_options()
+		_refresh_reading_ui()
 
 
 # ---------------------------------------------------------------- 手勢
 
-func _input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.is_pressed():
-		_last_activity_ms = Time.get_ticks_msec()
-
-
 func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel") and _screen_mode == "case_file":
+		get_viewport().set_input_as_handled()
+		_close_case_file()
+		return
 	if event.is_action_pressed("ui_cancel") and _screen_mode in ["save_slots", "load_slots", "slot_confirm"]:
 		get_viewport().set_input_as_handled()
 		if _screen_mode == "slot_confirm":
@@ -1858,6 +2232,7 @@ func _on_catcher_input(event: InputEvent) -> void:
 			_gesture_moved = false
 			_gesture_long = false
 			_gesture_start = button.global_position
+			_pan_start = _pan
 			_gesture_token += 1
 			_wait_long_press(_gesture_token)
 			return
@@ -1875,12 +2250,17 @@ func _on_catcher_input(event: InputEvent) -> void:
 			if -delta.y > SWIPE_DISTANCE and absf(delta.x) < -delta.y:
 				_open_log()
 			return
-		_on_screen_tap()
-	elif event is InputEventMouseMotion and _gesture_active and not _gesture_moved:
+		if _screen_mode == "investigate":
+			_tap_investigation(button.global_position)
+		else:
+			_on_screen_tap()
+	elif event is InputEventMouseMotion and _gesture_active:
 		var motion: InputEventMouseMotion = event as InputEventMouseMotion
-		if motion.global_position.distance_to(_gesture_start) > TAP_SLOP:
+		if not _gesture_moved and motion.global_position.distance_to(_gesture_start) > TAP_SLOP:
 			_gesture_moved = true
 			_gesture_token += 1
+		if _gesture_moved and _screen_mode == "investigate":
+			_set_pan(_pan_start + motion.global_position.x - _gesture_start.x)  # drag the picture sideways
 
 
 func _wait_long_press(token: int) -> void:
@@ -1908,15 +2288,8 @@ func _on_screen_tap() -> void:
 
 func _set_ui_hidden(value: bool) -> void:
 	_ui_hidden = value
-	_dialog_panel.visible = not value
-	_choice_box.visible = not value
-	_quickbar.visible = not value
+	_refresh_reading_ui()
 	_end_box.visible = not value and _screen_mode == "end"
-	_float_layer.visible = not value and _screen_mode != "title"
-	if value:
-		_name_plate.visible = false
-	else:
-		_set_name_plate(_plate_speaker, _plate_thought)
 	_phase3_hud.visible = _phase3_enabled and not value and _screen_mode != "title"
 	if not value and _auto:
 		_auto_step(_line_generation)
@@ -1953,7 +2326,8 @@ func _set_skip(value: bool) -> void:
 func _auto_step(token: int) -> void:
 	if _screen_mode != "story" or not _text_complete:
 		return
-	await get_tree().create_timer(AUTO_DELAY_SEC + _full_text.length() * AUTO_PER_CHAR_SEC).timeout
+	await get_tree().create_timer((AUTO_DELAY_SEC + _full_text.length() * AUTO_PER_CHAR_SEC)
+		* SETTINGS_SCRIPT.AUTO_FACTORS[int(_settings["auto_speed"])]).timeout
 	if _auto and token == _line_generation and _screen_mode == "story" and not _ui_hidden and not _story_busy:
 		_advance_current_line()
 
@@ -1965,19 +2339,16 @@ func _skip_step(token: int) -> void:
 
 
 func _update_toggle_styles() -> void:
-	if _auto_button == null:
-		return
-	for pair: Array in [[_auto_button, _auto], [_skip_button, _skip]]:
-		var button: Button = pair[0]
-		var active: bool = pair[1]
-		_set_button_style(button, "quickbar", active)
+	if _dialog_panel != null:
+		_dialog_panel.set_auto(_auto)
 
 
 func _process(delta: float) -> void:
-	if _float_layer == null:
+	if _dialog_panel == null:
 		return
 	if _screen_mode == "tsukkomi" and not _story_busy:
 		_boke_time_remaining = maxf(0.0, _boke_time_remaining - delta)
+		_choice_sheet.set_timer(_boke_time_remaining, float(_current_command.get("timer_seconds", DEFAULT_BOKE_TIMER_SECONDS)), false)
 		var displayed_second: int = ceili(_boke_time_remaining)
 		if displayed_second != _last_boke_display_second:
 			_last_boke_display_second = displayed_second
@@ -1986,12 +2357,6 @@ func _process(delta: float) -> void:
 		if _boke_time_remaining <= 0.0:
 			_on_boke_timeout()
 			return
-	var dragging: bool = bool(_menu_button.call("is_dragging")) or bool(_save_button.call("is_dragging"))
-	var idle: bool = Time.get_ticks_msec() - _last_activity_ms > int(IDLE_SEC * 1000.0)
-	var target: float = IDLE_ALPHA if idle and not dragging else 1.0
-	_float_alpha = move_toward(_float_alpha, target, delta * 3.0)
-	_menu_button.modulate.a = _float_alpha
-	_save_button.modulate.a = _float_alpha
 	if _qa_enabled:
 		_qa_elapsed += delta
 		if _qa_elapsed >= QA_PUBLISH_SEC:
@@ -2006,16 +2371,18 @@ func _open_menu() -> void:
 		return
 	_mode_before_overlay = _screen_mode
 	_screen_mode = "menu"
-	_update_mute_label()
-	_layout_menu_panel()
+	_refresh_menu_rows()  # after the switch: the HUD and the sheet read the countdown as paused
+	_fit_menu()
 	_menu_overlay.visible = true
-	_refresh_phase3_hud()
-	_menu_panel.scale = Vector2(0.7, 0.7)
-	_menu_panel.modulate.a = 0.0
-	var tween: Tween = create_tween().set_parallel()
-	tween.tween_property(_menu_panel, "scale", Vector2.ONE, 0.14).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	tween.tween_property(_menu_panel, "modulate:a", 1.0, 0.1)
+	_menu_overlay.pop_in().finished.connect(_publish_qa_state)
 	_publish_qa_state()
+
+
+func _start_skip_from_menu() -> void:
+	_close_menu()
+	_set_skip(true)
+	if _skip:
+		_show_toast("略讀中・點畫面停止")
 
 
 func _close_menu() -> void:
@@ -2074,9 +2441,18 @@ func _close_log() -> void:
 
 
 func _close_overlays() -> void:
+	if _game_over != null:
+		_game_over.visible = false
+	if _chapter_result != null:
+		_chapter_result.visible = false
+	if _chapter_select != null:
+		_chapter_select.visible = false
+		_settings_panel.visible = false
 	if _menu_overlay != null:
 		_menu_overlay.visible = false
 		_log_overlay.visible = false
+	if _case_file_panel != null:
+		_case_file_panel.visible = false
 	if _slot_overlay != null:
 		_slot_overlay.visible = false
 		_slot_confirmation_overlay.visible = false
@@ -2276,10 +2652,8 @@ func _show_toast(message: String) -> void:
 	_toast.text = message
 	var toast_size: Vector2 = Vector2(_font.get_string_size(message, HORIZONTAL_ALIGNMENT_LEFT, -1, 40).x + 96.0, 96.0)
 	_toast.size = toast_size
-	# 在存檔鈕旁冒出；按鈕靠右時提示在左邊。
-	var anchor: Vector2 = _save_button.position
-	var on_left: bool = anchor.x + 64.0 < _game.size.x * 0.5
-	_toast.position = Vector2(anchor.x + 148.0 if on_left else anchor.x - toast_size.x - 20.0, anchor.y + 16.0)
+	# 在畫面上方正中冒出，不擋對話框。
+	_toast.position = Vector2((_game.size.x - toast_size.x) * 0.5, EDGE + _safe_top + 190.0)
 	_toast.visible = true
 	_toast.modulate.a = 1.0
 	_publish_qa_state()
@@ -2291,14 +2665,10 @@ func _show_toast(message: String) -> void:
 
 func _toggle_mute() -> void:
 	_audio_muted = not _audio_muted
-	for player: AudioStreamPlayer in _audio_players.values():
-		player.volume_db = -80.0 if _audio_muted else 0.0
-	_update_mute_label()
+	_apply_audio_levels()
+	_effects.set_muted(_audio_muted)
+	_refresh_menu_rows()
 	_publish_qa_state()
-
-
-func _update_mute_label() -> void:
-	(_menu_items["mute"] as Button).text = "音效：關" if _audio_muted else "音效：開"
 
 
 func _start_audio_after_user_gesture() -> void:
@@ -2334,50 +2704,89 @@ func _refresh_phase3_hud() -> void:
 		return
 	var snapshot: Dictionary = _runner.call("snapshot") as Dictionary
 	var gameplay: Dictionary = snapshot.get("gameplay", {}) as Dictionary
-	_phase3_stats_label.text = "眼鏡 %d/%d　力量 %d/%d" % [
-		int(gameplay.get("glasses", 0)), int(gameplay.get("max_glasses", 5)),
-		int(gameplay.get("power", 0)), int(gameplay.get("max_power", 100))]
+	var current: Dictionary = _runner_current()
+	_phase3_hud.show_stats(int(gameplay.get("glasses", 0)), int(gameplay.get("max_glasses", 5)),
+		int(gameplay.get("power", 0)), int(gameplay.get("max_power", 100)),
+		int(current.get("combo", 0)) if RoundView.automatic(current) else 0)
 	var items: Array = snapshot.get("items", []) as Array
-	var item_names: Array[String] = []
+	var clues: Array[Dictionary] = []
 	var catalog_items: Dictionary = _catalog.get("items", {}) as Dictionary
-	for item_index: int in range(mini(items.size(), 2)):
-		var item_id: String = str(items[item_index])
-		var item_info: Dictionary = catalog_items.get(item_id, {}) as Dictionary
-		item_names.append(str(item_info.get("name", item_id)))
-	var extra_count: int = maxi(0, items.size() - item_names.size())
-	var inventory_text: String = "尚無"
-	if not item_names.is_empty():
-		inventory_text = "、".join(item_names)
-		if extra_count > 0:
-			inventory_text += " +%d" % extra_count
-	_phase3_inventory_label.text = "線索：%s" % inventory_text
-	_material_button.text = "線索 %d" % items.size()
+	for item_id: Variant in items:
+		var info: Dictionary = catalog_items.get(str(item_id), {}) as Dictionary
+		clues.append({"name": str(info.get("name", item_id)), "picture": _catalog_picture(info)})
+	_phase3_hud.show_clues(clues)
 	if _menu_items.has("material"):
 		(_menu_items["material"] as Button).text = "吐槽素材（%d）" % items.size()
-	var current: Dictionary = _runner_current()
 	if _command_op(current) == "boke_round" and _effective_boke_ui_mode() == "tsukkomi":
 		var prefix: String = "倒數" if _screen_mode == "tsukkomi" else "暫停"
 		_phase3_timer_label.text = "%s %02d 秒" % [prefix, ceili(_boke_time_remaining)]
+		_choice_sheet.set_timer(_boke_time_remaining, float(current.get("timer_seconds", DEFAULT_BOKE_TIMER_SECONDS)),
+			_screen_mode != "tsukkomi")
 	else:
 		_phase3_timer_label.text = ""
 
 
-func _show_inventory_feedback() -> void:
+## Materials and profiles only exist in stories with investigation or tsukkomi rounds.
+func _refresh_gameplay_ui() -> void:
+	if _menu_overlay != null:
+		_refresh_menu_rows()
+
+
+func _build_case_file() -> void:
+	_case_file_panel = CASE_FILE_SCENE.instantiate() as Panel
+	_popup_layer.add_child(_case_file_panel)
+	_case_file_panel.call("set_style", _ui_style_id)
+	_case_file_panel.connect("closed", _close_case_file)
+	_case_file_panel.connect("material_used", _on_case_file_material_used)
+
+
+## A catalog entry's picture (`path`), or null when it has none yet (screens draw a placeholder).
+func _catalog_picture(info: Dictionary) -> Texture2D:
+	var path: String = str(info.get("path", ""))
+	return load(path) as Texture2D if not path.is_empty() and ResourceLoader.exists(path) else null
+
+
+func _open_case_file(tab: String) -> void:
 	if not _phase3_enabled or _runner == null:
 		return
-	var snapshot: Dictionary = _runner.call("snapshot") as Dictionary
-	var items: Array = snapshot.get("items", []) as Array
-	if items.is_empty():
-		_show_toast("目前尚未取得線索")
+	if _screen_mode == "menu":
+		_close_menu()
+	if _screen_mode not in ["story", "choice", "end", "investigate", "boke_round", "tsukkomi"]:
 		return
-	var names: Array[String] = []
-	var catalog_items: Dictionary = _catalog.get("items", {}) as Dictionary
-	for raw_item: Variant in items:
-		var item_id: String = str(raw_item)
-		var item_info: Dictionary = catalog_items.get(item_id, {}) as Dictionary
-		names.append(str(item_info.get("name", item_id)))
-	_show_toast("持有線索：" + "、".join(names))
+	_mode_before_overlay = _screen_mode
+	_screen_mode = "case_file"
+	var pictures: Dictionary = {}
+	for collection: String in ["items", "characters"]:
+		var entries: Dictionary = _catalog.get(collection, {}) as Dictionary
+		for entry_id: String in entries.keys():
+			var path: String = str((entries[entry_id] as Dictionary).get("path", ""))
+			if not path.is_empty():
+				pictures[entry_id] = path
+	# 限時選詞中，能當根據的素材可以直接「拿來吐槽」。
+	var usable: Dictionary = {}
+	if _mode_before_overlay == "tsukkomi":
+		for option: Dictionary in RoundView.options(_runner_current()):  # Phase 3 and v2 rounds alike
+			if option.has("require"):
+				usable[str(option["require"])] = str(option.get("id", ""))
+	_case_file_panel.call("set_style", _ui_style_id)
+	_case_file_panel.call("open", _runner.call("case_file"), tab, pictures, usable)
+	_refresh_phase3_hud()
+	_publish_qa_state()
 
+
+func _close_case_file() -> void:
+	if not _case_file_panel.visible:
+		return
+	_case_file_panel.visible = false
+	_screen_mode = _mode_before_overlay
+	_refresh_phase3_hud()
+	_publish_qa_state()
+
+
+func _on_case_file_material_used(option_id: String) -> void:
+	_close_case_file()
+	if _screen_mode == "tsukkomi":
+		_on_boke_option_pressed(option_id)
 
 # ---------------------------------------------------------------- 存讀檔
 
@@ -2390,7 +2799,7 @@ func _save_game() -> bool:
 
 func _saveable_current_state() -> bool:
 	return _runner != null and not _story_busy and _command_op(_runner_current()) in [
-		"say", "choice", "end", "investigate", "boke_round"]
+		"say", "choice", "end", "result", "investigate", "boke_round"]
 
 
 func _build_save_payload(preview_png: String) -> Dictionary:
@@ -2415,9 +2824,12 @@ func _build_save_payload(preview_png: String) -> Dictionary:
 		"node_id": str(runner_snapshot.get("node_id", "")),
 		"saved_at": Time.get_datetime_string_from_system(false, false),
 		"preview_png": preview_png,
+		"bgm": _effects.current_bgm,
 	}
 	if _command_op(current) == "boke_round":
 		var boke_ui_mode: String = _effective_boke_ui_mode()
+		if boke_ui_mode not in ["boke_round", "tsukkomi"]:
+			boke_ui_mode = "boke_round"  # a QTE restarts when its line comes back
 		payload["boke_ui_screen"] = boke_ui_mode
 		if boke_ui_mode == "tsukkomi":
 			payload["boke_timer_remaining"] = _boke_time_remaining
@@ -2479,7 +2891,7 @@ func _validate_save_payload(payload: Dictionary) -> bool:
 		if not state is Dictionary or not (state as Dictionary).get("visible") is bool:
 			return false
 		var default_position: String = str((_actors[actor_id] as Dictionary).get("slot", "center"))
-		if not SLOT_X.has(str((state as Dictionary).get("position", default_position))):
+		if not _slot_markers.has(str((state as Dictionary).get("position", default_position))):
 			return false
 		if typeof((state as Dictionary).get("expression", "neutral")) != TYPE_STRING:
 			return false
@@ -2489,6 +2901,8 @@ func _validate_save_payload(payload: Dictionary) -> bool:
 	if payload.has("saved_at") and typeof(payload["saved_at"]) != TYPE_STRING:
 		return false
 	if payload.has("preview_png") and typeof(payload["preview_png"]) != TYPE_STRING:
+		return false
+	if payload.has("bgm") and typeof(payload["bgm"]) != TYPE_STRING:
 		return false
 	if payload.has("boke_timer_remaining"):
 		var remaining: Variant = payload["boke_timer_remaining"]
@@ -2553,6 +2967,7 @@ func _apply_save_payload(payload: Dictionary) -> bool:
 	_history.clear()
 	for entry: Variant in payload["history"]:
 		_history.append((entry as Dictionary).duplicate(true))
+	_effects.play_bgm(str(payload.get("bgm", "")))  # saves before music existed have none
 	return true
 
 
@@ -2667,10 +3082,6 @@ func _make_button(parent: Node, value: String, font_size: int) -> Button:
 	return button
 
 
-func _make_dialog_style() -> StyleBoxFlat:
-	return UI_STYLES_SCRIPT.panel_style(_ui_style_id, "dialogue")
-
-
 func _make_style(background: Color, border: Color, radius: int, border_width: int) -> StyleBoxFlat:
 	var style: StyleBoxFlat = StyleBoxFlat.new()
 	style.bg_color = background
@@ -2718,27 +3129,34 @@ func _set_ui_style(style_id: String, persist: bool = true) -> void:
 		if save_error != OK:
 			push_warning("Could not save UI style preference: %s" % error_string(save_error))
 	_apply_ui_style()
-	if _menu_panel != null:
-		_layout_menu_panel()
 	_publish_qa_state()
 
 
 func _apply_ui_style() -> void:
-	if _title_style_caption != null:
-		_title_style_caption.text = "介面風格 · " + UI_STYLES_SCRIPT.style_label(_ui_style_id)
-	if _menu_style_caption != null:
-		_menu_style_caption.text = "介面風格 · " + UI_STYLES_SCRIPT.style_label(_ui_style_id)
-	if _title_style_buttons.is_empty() and _menu_style_buttons.is_empty():
+	if _dialog_panel == null:
 		return
-	for style_id: String in _title_style_buttons.keys():
-		(_title_style_buttons[style_id] as Button).set_meta("ui_style_active", style_id == _ui_style_id)
-	for style_id: String in _menu_style_buttons.keys():
-		(_menu_style_buttons[style_id] as Button).set_meta("ui_style_active", style_id == _ui_style_id)
+	if _dialog_panel.style_id != _ui_style_id:
+		_mount_dialogue_box()
+		_mount_choice_sheet()
+		_mount_menu()
+		_mount_title()
 	_apply_ui_style_recursive(self)
-	if _menu_button != null:
-		_menu_button.call("set_style", _ui_style_id)
-		_save_button.call("set_style", _ui_style_id)
 	_update_toggle_styles()
+	_apply_stage_style()
+	if _effects != null:
+		_effects.set_style(_ui_style_id)
+	_phase3_hud.set_style(_ui_style_id)
+	_investigate_bar.call("set_style", _ui_style_id)
+
+
+## The photo treatment of each edition (ui_stage_style.gd) on the stage and title photos, and
+## monochrome portraits in the manga edition, as in the HTML reference.
+func _apply_stage_style() -> void:
+	for frame: TextureRect in _background_frames.values():
+		STAGE_STYLE.apply(frame, _ui_style_id)
+	STAGE_STYLE.apply(_title_screen.background, _ui_style_id)
+	for sprite: Control in _sprites.values():
+		sprite.call("set_ui_style", _ui_style_id)  # the art shader goes monochrome for manga
 
 
 func _apply_ui_style_recursive(node: Node) -> void:
@@ -2764,42 +3182,66 @@ func _detect_qa_mode() -> void:
 		"new URLSearchParams(window.location.search).get('qa') === '1'"))
 
 
+## Written just before the frame draws, once containers have laid out this frame's changes, so a
+## test never reads the rows of a sheet or menu that is still being arranged.
 func _publish_qa_state() -> void:
-	if not _qa_enabled:
+	if _qa_enabled and not RenderingServer.frame_pre_draw.is_connected(_write_qa_state):
+		RenderingServer.frame_pre_draw.connect(_write_qa_state, CONNECT_ONE_SHOT)
+
+
+func _write_qa_state() -> void:
+	if not is_inside_tree():
 		return
 	var current: Dictionary = _runner_current()
 	var snapshot: Dictionary = _runner.call("snapshot")
 	var choices: Array = []
 	for index: int in range(_choice_buttons.size()):
-		if index < _current_options.size() and _choice_buttons[index].is_visible_in_tree():
+		if index < _current_options.size() and _tappable(_choice_buttons[index]):
 			choices.append({"id": _dict_string(_current_options[index], "id"),
 				"label": _dict_string(_current_options[index], "label"), "rect": _rect(_choice_buttons[index])})
 	var controls: Dictionary = {}
 	var named: Dictionary = {
 		"begin": _begin_button, "continue": _continue_button, "title_load": _title_load_button, "dialogue": _dialog_panel,
-		"log": _log_button, "auto": _auto_button, "skip": _skip_button, "material": _material_button,
-		"menu": _menu_button, "save": _save_button, "menu_close": _menu_close, "log_close": _log_close,
+		"log": _log_button, "auto": _auto_button, "advance": _advance_button,
+		"menu": _choice_sheet.menu_button if _choice_sheet.is_visible_in_tree() else _menu_button, "menu_close": _menu_close, "log_close": _log_close,
 		"restart": _restart_button, "title": _end_title_button, "investigate_continue": _investigation_continue_button,
+		"investigate_collapse": _dialog_panel.investigation_collapse, "investigate_expand": _investigate_bar.get("expand_button"),
 		"boke_previous": _boke_previous_button, "boke_next": _boke_next_button,
 		"boke_listen": _boke_listen_button, "boke_tsukkomi": _boke_tsukkomi_button,
-		"game_over_retry": _game_over_retry_button,
+		"game_over_retry": _game_over_retry_button, "game_over_title": _game_over.title_button,
+		"result_next": _chapter_result.get("next_button"), "result_title": _chapter_result.get("title_button"),
+		"chapter_close": _chapter_select.get("close_button"), "settings_close": _settings_panel.get("close_button"),
+		"title_settings": _title_screen.settings_button,
+		"censor": _choice_sheet.censor_bar if _choice_sheet.censor_bar.is_visible_in_tree() else _dialog_panel.censor_bar,
+		"super": _choice_sheet.super_button,
 	}
 	for item_id: String in _menu_items.keys():
 		named["menu_" + item_id] = _menu_items[item_id]
+	var chapter_rows: Dictionary = _chapter_select.call("rows")
+	for story_id: String in chapter_rows.keys():
+		named["chapter_" + story_id] = chapter_rows[story_id]
+	var setting_buttons: Dictionary = _settings_panel.call("buttons")
+	for setting_id: String in setting_buttons.keys():
+		named["setting_" + setting_id] = setting_buttons[setting_id]
 	for style_id: String in _title_style_buttons.keys():
 		named["title_style_" + style_id] = _title_style_buttons[style_id]
 	for style_id: String in _menu_style_buttons.keys():
 		named["menu_style_" + style_id] = _menu_style_buttons[style_id]
+	# While 目錄 is open its dim covers everything else, so only its own controls can be tapped.
+	var modal: Control = _menu_overlay if _menu_overlay.visible else null
+	for panel: Control in [_settings_panel, _chapter_select]:  # opened over the title or 目錄
+		if panel.visible:
+			modal = panel
 	for control_name: String in named.keys():
 		var control: Control = named[control_name]
-		if control.is_visible_in_tree() and not (control is BaseButton and (control as BaseButton).disabled):
+		if _tappable(control) and (modal == null or modal.is_ancestor_of(control)):
 			controls[control_name] = _rect(control)
 	for style_id: String in UI_STYLES_SCRIPT.style_ids():
 		var title_style_button: Button = _title_style_buttons.get(style_id) as Button
 		var menu_style_button: Button = _menu_style_buttons.get(style_id) as Button
-		if title_style_button != null and title_style_button.is_visible_in_tree():
+		if title_style_button != null and _tappable(title_style_button):
 			controls["style_" + style_id] = _rect(title_style_button)
-		elif menu_style_button != null and menu_style_button.is_visible_in_tree():
+		elif menu_style_button != null and _tappable(menu_style_button):
 			controls["style_" + style_id] = _rect(menu_style_button)
 	var hotspot_state: Array[Dictionary] = []
 	for raw_hotspot: Variant in current.get("hotspots", []):
@@ -2807,22 +3249,28 @@ func _publish_qa_state() -> void:
 			continue
 		var hotspot: Dictionary = raw_hotspot as Dictionary
 		var hotspot_id: String = _dict_string(hotspot, "id")
-		var button: Control = _hotspot_buttons.get(hotspot_id) as Control
-		var hotspot_entry: Dictionary = {
+		var spot: Control = _hotspots.get(hotspot_id) as Control
+		var hit: Rect2 = _hotspot_hit_rect(spot) if spot != null and is_instance_valid(spot) else Rect2()
+		# `rect` only while a tap there would reach the spot: on screen and not under the reading box.
+		var reachable: bool = hit.has_area() and Rect2(_game.global_position, _game.size).encloses(hit) \
+			and not (_dialog_panel.visible and _dialog_panel.get_global_rect().intersects(hit))
+		hotspot_state.append({
 			"id": hotspot_id,
 			"label": _dict_string(hotspot, "label"),
 			"checked": bool(hotspot.get("checked", false)),
 			"pos": hotspot.get("pos", []),
-			"rect": _rect(button) if button != null and is_instance_valid(button) else {},
-		}
-		hotspot_state.append(hotspot_entry)
-	# 舞台中央空白處：點畫面任一處也能推進，且不會碰到懸浮按鈕。
+			"screen_rect": {"x": hit.position.x, "y": hit.position.y, "width": hit.size.x, "height": hit.size.y},
+			"rect": {"x": hit.position.x, "y": hit.position.y, "width": hit.size.x, "height": hit.size.y} if reachable else {},
+		})
+	# 舞台中央空白處：點畫面任一處也能推進。
 	if _dialog_panel.is_visible_in_tree() or _ui_hidden:
 		var stage: Rect2 = Rect2(_game.position + Vector2(_game.size.x * 0.35, _game.size.y * 0.3),
 			Vector2(_game.size.x * 0.3, _game.size.y * 0.08))
 		controls["stage"] = {"x": stage.position.x, "y": stage.position.y, "width": stage.size.x, "height": stage.size.y}
-	if _menu_overlay.visible:
-		var dim: Rect2 = Rect2(_game.position + Vector2(_game.size.x * 0.1, _game.size.y - 200.0), Vector2(160.0, 80.0))
+	if _qte != null and is_instance_valid(_qte):  # the whole screen answers the QTE
+		controls["qte"] = _rect(_qte)
+	if _menu_overlay.visible:  # the dimmed margin beside the panel
+		var dim: Rect2 = Rect2(_game.position + Vector2(0.0, _game.size.y * 0.5 - 60.0), Vector2(14.0 * CSS_PX * _panel_scale, 120.0))
 		controls["menu_dim"] = {"x": dim.position.x, "y": dim.position.y, "width": dim.size.x, "height": dim.size.y}
 	var visible_slots: Array = []
 	if _slot_overlay.visible:
@@ -2853,8 +3301,10 @@ func _publish_qa_state() -> void:
 		sprites[actor_id] = {"visible": sprite.visible, "expression": str(sprite.get("expression")),
 			"focused": sprite.modulate.r > 0.9, "position": str(_actor_slots.get(actor_id, "center"))}
 	var state: Dictionary = {
-		"screen": "busy" if _story_busy and _screen_mode == "busy" else _screen_mode,
+		# While the menu pops in, its rows are scaled and not yet laid out: report busy until it settles.
+		"screen": "busy" if _screen_mode == "menu" and _menu_panel.scale != Vector2.ONE else _screen_mode,
 		"text": _visible_text,
+		"full_text": _full_text,
 		"speaker": _current_speaker,
 		"node_id": _dict_string(current, "node_id", _dict_string(snapshot, "node_id")),
 		"step_index": int(current.get("step_index", snapshot.get("step_index", -1))),
@@ -2866,13 +3316,15 @@ func _publish_qa_state() -> void:
 		"auto": _auto,
 		"skip": _skip,
 		"audio_muted": _audio_muted,
+		"result": _runner.call("chapter_result") if _screen_mode == "result" else {},
+		"settings": _settings.duplicate(),
 		"ui_style": _ui_style_id,
 		"toast": _toast.text if _toast.visible else "",
-		"float_alpha": _float_alpha,
 		"viewport": {"width": get_viewport_rect().size.x, "height": get_viewport_rect().size.y},
 		"game": _rect(_game),
-		"dialog": _rect(_dialog_panel),
-		"quickbar": _rect(_quickbar),
+		"dialog": _rect(_dialog_panel) if _dialog_panel.is_visible_in_tree() else {},
+		"quickbar": _rect(_quickbar) if _quickbar.is_visible_in_tree() else {},
+		"choice_sheet": _rect(_choice_sheet) if _choice_sheet.is_visible_in_tree() else {},
 		"name_plate": _rect(_name_plate) if _name_plate.is_visible_in_tree() else {},
 		"sprites": sprites,
 		"log_scroll": {"value": _log_scroll.scroll_vertical, "max": _log_scroll.get_v_scroll_bar().max_value - _log_scroll.size.y},
@@ -2882,11 +3334,18 @@ func _publish_qa_state() -> void:
 			"gameplay": snapshot.get("gameplay", {}),
 			"inventory": snapshot.get("items", []),
 			"hotspots": hotspot_state,
+			"pan": {"offset": _pan, "min": _pan_range.x, "max": _pan_range.y},
+			"investigate_collapsed": _investigate_collapsed,
 			"boke_screen_mode": _effective_boke_ui_mode() if _command_op(current) == "boke_round" else "",
 			"boke_line_index": int(current.get("line_index", -1)),
 			"boke_line_count": (current.get("lines", []) as Array).size(),
-			"boke_listened": bool(current.get("listened", false)),
-			"boke_listen_available": (current.get("current_line", {}) as Dictionary).has("listen"),
+			"boke_listened": RoundView.listened(current),
+			"boke_listen_available": RoundView.can_listen(current),
+			"round": {
+				"mode": str(current.get("mode", "")), "combo": int(current.get("combo", 0)),
+				"caught": current.get("caught_line_ids", []), "super_available": bool(current.get("super_available", false)),
+				"censor": RoundView.censor(current), "qte_active": _qte != null,
+			},
 			"timer_remaining": _boke_time_remaining,
 			"timer_active": _command_op(current) == "boke_round" and _effective_boke_ui_mode() == "tsukkomi",
 			"timer_paused": _command_op(current) == "boke_round" and _effective_boke_ui_mode() == "tsukkomi" and _screen_mode != "tsukkomi",
@@ -2899,6 +3358,19 @@ func _publish_qa_state() -> void:
 		"slots": visible_slots,
 	}
 	JavaScriptBridge.eval("window.__debtQA=Object.freeze(%s);" % JSON.stringify(state))
+
+
+## Visible, enabled, and not scrolled or clipped out of view (a menu row below the fold is not).
+func _tappable(control: Control) -> bool:
+	if not control.is_visible_in_tree() or (control is BaseButton and (control as BaseButton).disabled):
+		return false
+	var area: Rect2 = control.get_global_rect()
+	var parent: Node = control.get_parent()
+	while parent is Control:
+		if (parent as Control).clip_contents and not (parent as Control).get_global_rect().grow(0.5).encloses(area):
+			return false
+		parent = parent.get_parent()
+	return true
 
 
 func _rect(control: Control) -> Dictionary:

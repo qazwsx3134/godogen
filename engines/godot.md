@@ -11,7 +11,13 @@ Stack: **Godot 4 (.NET / Mono build)**, **C#**. All Godot C# classes must be `pa
 
 The user watches by running the project themselves (`godot --path .` or the editor) — keep it building and importing cleanly so each run reflects current state.
 
-## Scenes are generated at build time, not by hand
+## Editable scenes are source assets
+
+Deliver populated `.tscn` trees for each screen and reusable game object. Opening the main scene in the editor must show the layout and representative objects before Play. Runtime scripts bind existing nodes and instantiate reusable scenes for data-dependent objects; they do not construct entire screens. Store layout in anchors, offsets, Containers and exported scene/resource properties. Gameplay movement and animation can change transforms; UI initialization must preserve editor-authored layout and static text.
+
+Build scenes once with the editor or the headless builder below. Saved scenes become maintained source files: normal launch, import and tests must not regenerate them. Inspect changes before explicitly rerunning a builder so manual scene edits survive. Document scene entry points in the README and verify an editor-authored spacing or text change survives launch.
+
+## Headless scene authoring
 
 Write scenes as **C# `SceneTree` scripts** that run once headless and emit a `.tscn`: `godot --headless --script scenes/BuildX.cs`. A builder builds the node hierarchy, sets properties, attaches scripts, packs, and `Quit()`s — it contains **no** runtime logic (no `_Ready`/`_Process`, signals, or game state). Build **leaf scenes first**, parents after.
 

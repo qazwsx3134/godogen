@@ -1,0 +1,102 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/case_file_panel.gd" id="1_sx6rw"]
+[ext_resource type="Script" path="res://scripts/item_picture.gd" id="2_pe0uj"]
+
+[node name="CaseFilePanel" type="Panel" unique_id=2143021053]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_sx6rw")
+metadata/ui_style_role = "log"
+
+[node name="Margins" type="MarginContainer" parent="." unique_id=1488739367]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="Layout" type="VBoxContainer" parent="Margins" unique_id=1352708233]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Tabs" type="HBoxContainer" parent="Margins/Layout" unique_id=826301459]
+custom_minimum_size = Vector2(0, 112)
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="CaseFileTab_materials" type="Button" parent="Margins/Layout/Tabs" unique_id=1802315571]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 46
+text = "吐槽素材"
+metadata/ui_style_role = "selector"
+
+[node name="CaseFileTab_profiles" type="Button" parent="Margins/Layout/Tabs" unique_id=257083451]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 46
+text = "人物檔案"
+metadata/ui_style_role = "selector"
+
+[node name="CaseFileClose" type="Button" parent="Margins/Layout/Tabs" unique_id=1494216908]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(112, 112)
+layout_mode = 2
+theme_override_font_sizes/font_size = 60
+text = "×"
+metadata/ui_style_role = "standard"
+
+[node name="CaseFileEmpty" type="Label" parent="Margins/Layout" unique_id=1838001711]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+metadata/ui_style_role = "muted"
+
+[node name="CaseFileGrid" type="GridContainer" parent="Margins/Layout" unique_id=418101769]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 16
+columns = 4
+
+[node name="CaseFilePicture" type="TextureRect" parent="Margins/Layout" unique_id=1628625487]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 360)
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+script = ExtResource("2_pe0uj")
+
+[node name="CaseFileName" type="Label" parent="Margins/Layout" unique_id=1146889502]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "素材名稱"
+metadata/ui_style_role = "accent"
+
+[node name="CaseFileText" type="Label" parent="Margins/Layout" unique_id=887213649]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 40
+text = "選取的素材或人物說明會顯示在這裡。"
+autowrap_mode = 1
+metadata/ui_style_role = "body"
+
+[node name="UseRow" type="CenterContainer" parent="Margins/Layout" unique_id=388531684]
+layout_mode = 2
+
+[node name="CaseFileUse" type="Button" parent="Margins/Layout/UseRow" unique_id=989318654]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(540, 128)
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "拿來吐槽"
+metadata/ui_style_role = "primary"

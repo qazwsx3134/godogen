@@ -1,0 +1,82 @@
+{
+  "story": {
+    "id": "strawberry_phase4_rounds",
+    "title": "Phase 4 回合試片：證言、消音條、連擊（非核准第一章）",
+    "note": "僅用於驗證逐句槽點、聽下去取得素材、空揮與提示、第四面牆消音條、隱藏選項、連擊、QTE 與超必殺；台詞取自第一章草稿，不是作者核准的文本。",
+    "initial_flags": {}
+  },
+  "titles": {
+    "rounds_open": "回合試片：家庭會議",
+    "r1_round": "第一回合：證言",
+    "r1_clear": "第一回合結束",
+    "r2_round": "第二回合：連擊",
+    "r2_clear": "回合試片結束",
+    "r1_hidden": "隱藏結局",
+    "game_over": "Game Over"
+  },
+  "blocks": {
+    "r1_testimony": {
+      "op": "boke_round",
+      "mode": "testimony",
+      "speaker": "gintoki",
+      "timer_seconds": 8,
+      "game_over": "game_over",
+      "clear": "r1_clear",
+      "lines": [
+        {"id": "l1", "text": "睡得很熟。那天晚上，銀桑一步也沒離開被窩。",
+         "listen": "r1_l1_listen", "whiff": "r1_l1_whiff", "hint": "r1_l1_hint"},
+        {"id": "l2", "text": "草莓牛奶那種小孩喝的東西，銀桑三年前就戒了。", "hint": "r1_l2_hint",
+         "slot": {"timeout": "r1_timeout", "options": [
+           {"id": "a", "label": "戒了的人，桌下怎麼有空瓶！", "result": "perfect", "require": "milk_bottle", "goto": "r1_l2_a"},
+           {"id": "b", "label": "你上禮拜才扛三瓶回來！", "result": "weak", "goto": "r1_l2_b"},
+           {"id": "c", "label": "草莓牛奶才不是小孩喝的！", "result": "fail", "goto": "r1_l2_c"}
+         ]}},
+        {"id": "l3", "speaker": "kagura", "text": "定春昨晚親口跟我說了：『牛奶是▇▇喝的，汪』阿魯。", "hint": "r1_l3_hint",
+         "slot": {"timeout": "r1_timeout",
+           "censor": {"hidden": "神樂", "result": "perfect", "goto": "r1_l3_censor"},
+           "options": [
+             {"id": "b", "label": "定春只會「汪」吧！", "result": "weak", "goto": "r1_l3_b"},
+             {"id": "c", "label": "你翻譯得真好。", "result": "fail", "goto": "r1_l3_c"}
+           ]}},
+        {"id": "l4", "text": "嘴角這個？牙膏啦。銀桑刷牙一向刷得很豪邁。", "hint": "r1_l4_hint",
+         "slot": {"timeout": "r1_timeout", "options": [
+           {"id": "a", "label": "那明明是草莓牛奶的味道！", "result": "perfect", "require": "milk_trace", "goto": "r1_l4_a"},
+           {"id": "b", "label": "刷牙刷到嘴角外面嗎！", "result": "weak", "goto": "r1_l4_b"},
+           {"id": "c", "label": "原來是牙膏啊。", "result": "fail", "goto": "r1_l4_c"},
+           {"id": "d", "label": "……（放棄吐槽）", "result": "hidden", "require_caught": ["l2", "l3"], "goto": "r1_hidden"}
+         ]}}
+      ]
+    },
+    "r2_combo": {
+      "op": "boke_round",
+      "mode": "combo",
+      "speaker": "gintoki",
+      "game_over": "game_over",
+      "clear": "r2_clear",
+      "rules": {"combo_timers": [8, 6, 5, 4], "combo_bonus": "r2_bonus", "combo_break": "r2_break", "super": "r2_super"},
+      "lines": [
+        {"id": "c1", "text": "我們不是偷喝。是試毒。怕新八喝到壞掉的牛奶。",
+         "slot": {"timeout": "r2_timeout", "options": [
+           {"id": "a", "label": "試毒試到一滴不剩嗎！", "result": "perfect", "goto": "r2_c1_a"},
+           {"id": "b", "label": "那也該先問我一聲吧！", "result": "weak", "goto": "r2_c1_b"},
+           {"id": "c", "label": "原來是為了我……", "result": "fail", "goto": "r2_c1_c"}
+         ]}},
+        {"id": "c2", "speaker": "kagura", "text": "試到一半發現沒毒，就安心地喝完了阿魯。",
+         "slot": {"timeout": "r2_timeout", "options": [
+           {"id": "a", "label": "安心了就不用喝完吧！", "result": "perfect", "goto": "r2_c2_a"},
+           {"id": "b", "label": "一半是你，一半是阿銀吧！", "result": "weak", "goto": "r2_c2_b"},
+           {"id": "c", "label": "沒毒真是太好了。", "result": "fail", "goto": "r2_c2_c"}
+         ]}},
+        {"id": "c3", "text": "而且銀桑是早上喝的。早上的牛奶是早餐，早餐是人權。",
+         "slot": {"timeout": "r2_timeout", "options": [
+           {"id": "a", "label": "你說過半夜兩點開的冰箱！", "result": "perfect", "require": "gin_sleep_testimony", "goto": "r2_c3_a"},
+           {"id": "b", "label": "早餐也不能吃別人的！", "result": "weak", "goto": "r2_c3_b"},
+           {"id": "c", "label": "早餐確實很重要呢。", "result": "fail", "goto": "r2_c3_c"}
+         ]}},
+        {"id": "c4", "speaker": "gintoki+kagura", "text": "所以錯的是——把名字寫在牛奶上的新八！",
+         "slot": {"qte": {"duration": 1.6, "window": 0.12, "late_after": 2.0,
+           "perfect": "r2_qte_perfect", "early": "r2_qte_early", "late": "r2_qte_late"}}}
+      ]
+    }
+  }
+}

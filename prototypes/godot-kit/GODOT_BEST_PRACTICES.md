@@ -29,6 +29,8 @@
 **#3 Scene organization 缺口**
 - 每個原型建立一個 `Main.tscn` 作進入點，底下分 `World`/`UI` 兩支，方便一眼看懂資料流向。
 - 判斷父子關係時自問：「刪掉父節點，子節點是否理應一起消失？」不是就拆成兄弟節點或獨立 scene，不要為了方便硬塞進同一分支。
+- 用 headless 腳本產生 scene（`PackedScene.pack()` + `ResourceSaver.save()`）時，放進去的子 scene 要用 `instantiate(PackedScene.GEN_EDIT_STATE_INSTANCE)`。預設的 `instantiate()` 沒有留下比對基準，子 scene 的每個屬性都會被當成覆寫寫進上層，之後改子 scene 也不會連動。要改子 scene 內部 node 的值（例如範例列的編號），再加 `set_editable_instance(child, true)`。設 `owner` 時用 `get_children()` 逐層走，不要用 `find_children()`：後者連內部子 node 都會抓到，例如 ScrollContainer 自己的捲軸。這些零件會被存成一般子 node，實例化後多出一組沒人管的捲軸，在左上角畫出一個點。
+- Container 在該幀結尾才排版，而且由內往外一層層排；剛加進去或剛顯示的 node，當下讀 `get_global_rect()` 拿到的是舊位置。要回報或截取座標（QA 快照、點擊測試），等 `RenderingServer.frame_pre_draw` 或下一幀。
 
 **#5 Autoload 缺口**
 - 不要把音效/資源池等「場景該自己管的東西」丟進 autoload；每個 scene 自己持有自己需要的 `AudioStreamPlayer`/資源。

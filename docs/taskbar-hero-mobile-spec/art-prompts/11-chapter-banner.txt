@@ -1,0 +1,5 @@
+ATTACH: images/adventure.png
+SAVE AS: chapter_banner_clean.png
+OUTPUT: PNG, original 941 x 1672 canvas.
+
+Restore only the chapter landscape banner at x=38..903, y=899..1088. Remove the Chinese chapter title and the two description lines from that banner. Restore the dark forest pixels hidden behind the lettering while preserving the exact original landscape, path, castle, trees, sky, border, palette and pixel scale. The rest of the reference image must remain unchanged. No redesign, no new text or props, no blurry patches or repeated stamps. Return a single image. The game will crop this exact 866x190 banner and draw editable text on top.

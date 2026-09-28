@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="UnitData" format=3]
+
+[ext_resource type="Script" path="res://data/unit_data.gd" id="1_vo51j"]
+
+[resource]
+script = ExtResource("1_vo51j")
+unit_id = "slime"
+display_name = "史萊姆"
+role_description = "邊境魔物  ·  近距離反擊"
+faction = "enemy"
+max_health = 48
+attack = 11
+defense = 1
+move_speed = 48.0
+attack_speed = 0.9
+attack_range = 46.0
+gold_reward = 8

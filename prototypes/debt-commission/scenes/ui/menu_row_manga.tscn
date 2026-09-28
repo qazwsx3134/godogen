@@ -1,0 +1,98 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/story-cjk.ttc" id="1_0iyqc"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d4ns5"]
+content_margin_left = 33.23077
+content_margin_top = 27.692308
+content_margin_right = 116.30769
+content_margin_bottom = 27.692308
+bg_color = Color(0.9843137, 0.98039216, 0.95686275, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+shadow_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+shadow_size = 1
+shadow_offset = Vector2(5.5384617, 5.5384617)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slh8i"]
+content_margin_left = 33.23077
+content_margin_top = 27.692308
+content_margin_right = 116.30769
+content_margin_bottom = 27.692308
+bg_color = Color(1, 0.8745098, 0.27450982, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.65882355, 0.23137255, 0.16862746, 1)
+shadow_color = Color(0.65882355, 0.23137255, 0.16862746, 1)
+shadow_size = 1
+shadow_offset = Vector2(8.307693, 8.307693)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_13hff"]
+content_margin_left = 33.23077
+content_margin_top = 27.692308
+content_margin_right = 116.30769
+content_margin_bottom = 27.692308
+bg_color = Color(1, 0.8745098, 0.27450982, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+shadow_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+shadow_size = 1
+shadow_offset = Vector2(5.5384617, 5.5384617)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sfwab"]
+content_margin_left = 33.23077
+content_margin_top = 27.692308
+content_margin_right = 116.30769
+content_margin_bottom = 27.692308
+bg_color = Color(0.9137255, 0.90588236, 0.8627451, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+
+[sub_resource type="FontVariation" id="FontVariation_re8a5"]
+base_font = ExtResource("1_0iyqc")
+variation_embolden = 0.45
+
+[node name="MenuRow" type="Button" unique_id=1248057889]
+custom_minimum_size = Vector2(0, 132.92308)
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_d4ns5")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_slh8i")
+theme_override_styles/hover = SubResource("StyleBoxFlat_13hff")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_slh8i")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_sfwab")
+theme_override_styles/focus = SubResource("StyleBoxFlat_slh8i")
+theme_override_colors/font_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+theme_override_colors/font_focus_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+theme_override_colors/font_pressed_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+theme_override_colors/font_hover_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+theme_override_colors/font_disabled_color = Color(0.4, 0.40392157, 0.38039216, 1)
+theme_override_fonts/font = SubResource("FontVariation_re8a5")
+theme_override_font_sizes/font_size = 47
+text = "儲存進度"
+alignment = 0
+
+[node name="Hint" type="Label" parent="." unique_id=826033919]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -33.23077
+offset_right = -33.23077
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 47
+theme_override_colors/font_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+text = "＋"
+vertical_alignment = 1

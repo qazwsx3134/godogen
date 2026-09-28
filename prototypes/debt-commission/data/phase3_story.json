@@ -20,7 +20,7 @@
           "id": "living_room_milk_clue",
           "prompt": "調查客廳，尋找一件線索。",
           "hotspots": [
-            { "id": "empty_milk_bottle", "label": "空的草莓牛奶瓶", "pos": [0.56, 0.42], "item": "milk_bottle" }
+            { "id": "empty_milk_bottle", "label": "垃圾桶裡的空瓶", "pos": [0.254, 0.748], "size": [0.07, 0.14], "item": "milk_bottle" }
           ]
         }
       ],

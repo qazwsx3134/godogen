@@ -1,0 +1,172 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" path="res://fonts/wqy-zenhei.ttc" id="1_wa270"]
+[ext_resource type="Texture2D" path="res://assets/reference/backpack.png" id="2_8trtm"]
+[ext_resource type="Texture2D" path="res://assets/reference/idel.png" id="3_0oj4p"]
+
+[sub_resource type="FontVariation" id="FontVariation_r60fm"]
+base_font = ExtResource("1_wa270")
+variation_embolden = 0.3
+
+[sub_resource type="Theme" id="Theme_3lmab"]
+default_font = SubResource("FontVariation_r60fm")
+default_font_size = 30
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tktg8"]
+atlas = ExtResource("2_8trtm")
+region = Rect2(44, 921, 163, 195)
+filter_clip = true
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_jl8sj"]
+texture = SubResource("AtlasTexture_tktg8")
+texture_margin_left = 7.0
+texture_margin_top = 7.0
+texture_margin_right = 7.0
+texture_margin_bottom = 7.0
+draw_center = false
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y3g7w"]
+atlas = ExtResource("3_0oj4p")
+region = Rect2(790, 985, 90, 45)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6vxx6"]
+atlas = ExtResource("2_8trtm")
+region = Rect2(77, 937, 91, 98)
+filter_clip = true
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gri2e"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_31a1c"]
+bg_color = Color(0.20784314, 0.28235295, 0.39607844, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(1, 0.8627451, 0.5294118, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ff3py"]
+bg_color = Color(0.40784314, 0.5019608, 0.654902, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.9647059, 0.8745098, 0.68235296, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y8itf"]
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(1, 0.94509804, 0.6901961, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 1
+
+[node name="InventoryCard" type="Control" unique_id=702414485]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 162.0
+offset_bottom = 194.0
+mouse_filter = 2
+theme = SubResource("Theme_3lmab")
+
+[node name="Frame" type="Panel" parent="." unique_id=1993937660]
+layout_mode = 0
+offset_right = 162.0
+offset_bottom = 194.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_jl8sj")
+
+[node name="BlankFill" type="TextureRect" parent="Frame" unique_id=884778354]
+show_behind_parent = true
+texture_filter = 1
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = -5.0
+offset_bottom = -5.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_y3g7w")
+expand_mode = 1
+
+[node name="Icon" type="TextureRect" parent="." unique_id=785229584]
+texture_filter = 1
+layout_mode = 0
+offset_left = 26.0
+offset_top = 16.0
+offset_right = 136.0
+offset_bottom = 128.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_6vxx6")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Quantity" type="Label" parent="." unique_id=430439384]
+layout_mode = 0
+offset_left = 84.0
+offset_top = 111.0
+offset_right = 156.0
+offset_bottom = 151.0
+theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 27
+text = "x18"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Title" type="Label" parent="." unique_id=980063797]
+layout_mode = 0
+offset_top = 148.0
+offset_right = 162.0
+offset_bottom = 188.0
+theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 26
+text = "回復藥水"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="InspectButton" type="Button" parent="." unique_id=756105167]
+layout_mode = 0
+offset_right = 162.0
+offset_bottom = 194.0
+theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxEmpty_gri2e")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_31a1c")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ff3py")
+theme_override_styles/focus = SubResource("StyleBoxFlat_y8itf")
+metadata/action = "item:0"
+
+[node name="BlankFill" type="TextureRect" parent="InspectButton" unique_id=1400709710]
+visible = false
+show_behind_parent = true
+texture_filter = 1
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = -5.0
+offset_bottom = -5.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_y3g7w")
+expand_mode = 1

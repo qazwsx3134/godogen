@@ -1,0 +1,226 @@
+~ rounds_open
+do bg("yorozuya_living_room")
+do char("gintoki", "annoyed", "right")
+do char("kagura", "smile", "left")
+do bgm("bgm_meeting")
+新八: Phase 4 回合技術試片：這不是核准的第一章台詞。家庭會議，開始。
+do item("milk_bottle")
+do item("milk_trace")
+新八: 桌下的空瓶、銀桑嘴角的白色痕跡。證據都在我手上。 [#thought]
+=> r1_round
+
+~ r1_round
+do boke_round("r1_testimony")
+
+~ r1_l1_listen
+銀時: 睡得超熟。半夜兩點起來開冰箱的時候，都還沒醒。
+do item("gin_sleep_testimony")
+新八: ……半夜兩點，開冰箱。現在戳，他只會說是夢遊。先記下來。 [#thought]
+=> r1_round
+
+~ r1_l1_whiff
+新八: 睡覺這種事，誰能證明——
+神樂: 睡著的事戳不破阿魯。
+do freeze()
+do se("crow")
+新八: ……是。
+=> r1_round
+
+~ r1_l1_hint
+神樂: 睡著時的事戳不破阿魯。等銀醬說他醒著做了什麼，再拿出來用阿魯。
+=> r1_round
+
+~ r1_timeout
+do freeze()
+do se("crow")
+神樂: 嘴巴開那麼久，會飛進蒼蠅阿魯。
+=> r1_round
+
+~ r1_l2_a
+do se("tsukkomi_hit")
+do cutin("戒了的人，桌下怎麼有空瓶！", "shinpachi")
+do shake()
+銀時: 那瓶子是自己滾過來投靠銀桑的。
+新八: 它投靠你之前，裡面的牛奶跑去哪了！
+=> r1_round
+
+~ r1_l2_b
+do se("tsukkomi_hit")
+銀時: 那是上禮拜的銀桑。男人一個禮拜就會成長。
+新八: ……空口說不贏他。得拿出東西來。 [#thought]
+=> r1_round
+
+~ r1_l2_c
+do freeze()
+do se("crow")
+神樂: 新八在幫牛奶講話阿魯。
+=> r1_round
+
+~ r1_l2_hint
+神樂: 銀醬桌子底下那個，你剛剛才撿起來阿魯。眼鏡是裝飾品阿魯？
+=> r1_round
+
+~ r1_l3_censor
+do se("tear")
+do cutin("消音條底下是你的名字啊！！", "shinpachi")
+do shake()
+消音條被撕下來。底下寫著——「神樂」。
+神樂: 那條消音條我付過錢的阿魯！退錢阿魯！
+=> r1_round
+
+~ r1_l3_b
+do se("tsukkomi_hit")
+神樂: 就是只會汪，才需要我翻譯阿魯。
+新八: ……翻譯不是重點。重點是那條黑黑的東西。 [#thought]
+=> r1_round
+
+~ r1_l3_c
+do freeze()
+do se("crow")
+神樂: 謝謝阿魯。
+=> r1_round
+
+~ r1_l3_hint
+神樂: 你敢碰那條黑黑的試試看阿魯。那條很貴，手指不准戳阿魯。……不准喔阿魯。
+=> r1_round
+
+~ r1_l4_a
+do se("tsukkomi_hit")
+do cutin("那明明是草莓牛奶的味道！", "shinpachi")
+do shake()
+銀時: 牙膏跟牛奶，都是白的，都有草莓口味。很容易搞混。
+新八: 那你刷牙的時候是用喝的嗎！
+=> r1_round
+
+~ r1_l4_b
+do se("tsukkomi_hit")
+銀時: 豪邁的男人，泡泡不分裡外。
+=> r1_round
+
+~ r1_l4_c
+do freeze()
+do se("crow")
+神樂: 眼鏡被說服了阿魯。度數不夠阿魯。
+=> r1_round
+
+~ r1_l4_hint
+神樂: 你剛剛把臉湊過去聞了吧？那是什麼味道？鼻子也要我借你阿魯？
+=> r1_round
+
+~ r1_hidden
+新八: ……算了。 [#thought]
+定春: 汪。
+do end("隱藏結局：定春的判決（技術試片）")
+
+~ r1_clear
+新八: 第一回合，接住了。
+do bgm("bgm_combo")
+銀時: 那換我們兩個一起上。跟得上嗎，新八？
+=> r2_round
+
+~ r2_round
+do boke_round("r2_combo")
+
+~ r2_timeout
+do freeze()
+do se("crow")
+銀時: 新八，你跟不上了。
+=> r2_round
+
+~ r2_break
+do se("combo_break")
+銀時: 斷了。新八，吐槽是講節奏的。
+=> r2_round
+
+~ r2_c1_a
+do se("tsukkomi_hit")
+銀時: 毒這種東西，常常藏在最後一口。
+=> r2_round
+
+~ r2_c1_b
+銀時: 先問就不是驚喜了。
+=> r2_round
+
+~ r2_c1_c
+do freeze()
+do se("crow")
+神樂: 眼鏡又被收買了阿魯。
+=> r2_round
+
+~ r2_c2_a
+do se("tsukkomi_hit")
+神樂: 安心之後，會口渴阿魯。
+=> r2_round
+
+~ r2_c2_b
+神樂: 數學好的眼鏡最討厭了阿魯。
+=> r2_round
+
+~ r2_c2_c
+do freeze()
+do se("crow")
+銀時: 對吧，大家都平安。
+=> r2_round
+
+~ r2_c3_a
+do se("tsukkomi_hit")
+do cutin("你說過半夜兩點開的冰箱！", "shinpachi")
+do shake()
+銀時: ……那是夢遊的銀桑。跟現在的銀桑是兩個人。
+=> r2_round
+
+~ r2_c3_b
+銀時: 早餐是人權。人權不分你我。
+=> r2_round
+
+~ r2_c3_c
+do freeze()
+do se("crow")
+神樂: 眼鏡被早餐說服了阿魯。
+=> r2_round
+
+~ r2_qte_perfect
+do se("qte_hit")
+do cutin("錯的是你們兩個啊啊啊！！", "shinpachi")
+do shake("big")
+do flash()
+銀時＆神樂: ……是。
+=> r2_round
+
+~ r2_qte_early
+新八: 錯的是——
+神樂: 還沒講完阿魯。插嘴的眼鏡最討厭了阿魯。
+do se("crow")
+=> r2_round
+
+~ r2_qte_late
+do freeze()
+do se("crow")
+銀時: ……看吧。新八也沒意見。
+=> r2_round
+
+~ r2_super
+do se("super_charge")
+do flash("#ffdc41")
+do cutin("超必殺吐槽！！", "shinpachi")
+do shake("big")
+新八: 試毒、安心、早餐——全部都是你們想喝而已吧！！
+銀時＆神樂: ……是。
+=> r2_round
+
+~ r2_bonus
+do se("combo_up")
+do flash("#ffdc41")
+do cutin("吐槽連擊！！")
+神樂: ……眼鏡今天有點帥阿魯。
+=> r2_clear
+
+~ r2_clear
+do bgm("")
+新八: 兩回合都接住了。回合試片到這裡結束。
+do end("回合試片結束")
+
+~ game_over
+do se("glass_shatter")
+新八: 眼鏡……碎了……
+do end("眼鏡耗盡。從這一回合的開頭重來。")

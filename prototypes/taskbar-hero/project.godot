@@ -1,0 +1,41 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="Taskbar Hero: Expedition Log"
+config/description="Portrait idle RPG combat vertical slice"
+run/main_scene="res://main.tscn"
+config/custom_user_dir_name="taskbar-hero"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+
+[autoload]
+
+Game="*res://autoload/game.gd"
+EventBus="*res://autoload/event_bus.gd"
+DataRegistry="*res://autoload/data_registry.gd"
+SaveManager="*res://autoload/save_manager.gd"
+InventoryManager="*res://autoload/inventory_manager.gd"
+ProgressionManager="*res://autoload/progression_manager.gd"
+
+[display]
+
+window/size/viewport_width=941
+window/size/viewport_height=1672
+window/size/window_width_override=390
+window/size/window_height_override=844
+window/stretch/mode="canvas_items"
+window/handheld/orientation=1
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+environment/defaults/default_clear_color=Color(0.035, 0.086, 0.09, 1)

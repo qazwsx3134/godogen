@@ -11,15 +11,34 @@ extends RefCounted
 ##   `if key == value` / `else`    condition; each branch holds exactly one `=> title`
 ##   `do bg("id")`, `do char("id", "expression", "position")`, `do hide("id")`,
 ##   `do item("id")`, `do profile("character_id")`, `do investigate("block")`,
-##   `do boke_round("block")`, `do end("text")`
+##   `do boke_round("block")`, `do end("text")`, `do result("block")` (the chapter result screen)
+##   effects: `do shake()` / `shake("small")`, `do flash()` / `flash("#ff0000")`,
+##   `do cutin("你在說什麼啊！！")` / `cutin("text", "shinpachi")`, `do freeze()` / `freeze(1.5)`,
+##   `do bgm("bgm_meeting")` / `bgm("")` to stop, `do se("crow")`
+##   `銀時＆神樂: text` is a line said together (speaker "gintoki+kagura")
 ##   `=> title`                    jump; `=> END` only after `do end(...)`
 ## Anything else is an error that names the title and step, never silently dropped.
 
-const EXPRESSIONS: Array[String] = ["neutral", "smile", "annoyed", "surprised", "thinking"]
+## Tags a line may carry besides [#thought]: StoryRunner's expressions.
+const EXPRESSIONS: Array[String] = preload("res://scripts/story_runner.gd").VALID_EXPRESSIONS
 const END_TARGETS: Array[String] = ["end", "end!"]
 ## A tsukkomi round leaves through its option gotos, so nothing may follow it in its title.
-const TERMINAL_OPS: Array[String] = ["end", "boke_round"]
+const TERMINAL_OPS: Array[String] = ["end", "boke_round", "result"]
 const EXPRESSION_SOURCE: String = "res://__story_build_expression.dialogue"
+
+
+## A speaker by catalog id or displayed name ("" = narrator). Names joined with ＆, & or +
+## ("銀時＆神樂") become one line said together: "gintoki+kagura". Returns "" when unknown.
+static func speaker_id(name: String, speakers: Dictionary) -> String:
+	if speakers.has(name):
+		return String(speakers[name])
+	var ids: Array[String] = []
+	for part: String in name.replace("＆", "+").replace("&", "+").split("+"):
+		var id: String = String(speakers.get(part.strip_edges(), ""))
+		if id.is_empty() or id == "narrator":
+			return ""
+		ids.append(id)
+	return "+".join(ids) if ids.size() > 1 else ""
 
 
 ## One command in the same grammar as a `.dialogue` line without its `do `: `bg("id")`,
@@ -151,14 +170,14 @@ static func _parse_cue(cue_name: String, first_line: String, lines: Dictionary, 
 
 
 static func _say(line: Dictionary, context: Dictionary, where: String) -> Dictionary:
-	var speakers: Dictionary = context.get("speakers", {})
 	var character: String = String(line.get("character", ""))
-	if not speakers.has(character):
+	var speaker: String = speaker_id(character, context.get("speakers", {}))
+	if speaker.is_empty():
 		return {"error": "%s: unknown speaker '%s' (use a catalog id or name)" % [where, character]}
 	var text: String = String(line.get("text", ""))
 	if text.contains("{{") or text.contains("["):
 		return {"error": "%s: inline markup is not supported in '%s'" % [where, text]}
-	var step: Dictionary = {"op": "say", "speaker": speakers[character], "text": text}
+	var step: Dictionary = {"op": "say", "speaker": speaker, "text": text}
 	for tag: String in line.get("tags", []):
 		if tag == "thought":
 			step["thought"] = true
@@ -267,9 +286,27 @@ static func _mutation(line: Dictionary, where: String) -> Dictionary:
 			return {"op": "char", "id": args[0], "visible": false}
 		["item", 1]:
 			return {"op": "item", "id": args[0]}
+		["shake", 0]:
+			return {"op": "shake"}
+		["shake", 1]:
+			return {"op": "shake", "strength": args[0]}
+		["flash", 0]:
+			return {"op": "flash"}
+		["flash", 1]:
+			return {"op": "flash", "color": args[0]}
+		["cutin", 1]:
+			return {"op": "cutin", "text": args[0]}
+		["cutin", 2]:
+			return {"op": "cutin", "text": args[0], "speaker": args[1]}
+		["freeze", 0]:
+			return {"op": "freeze"}
+		["freeze", 1]:
+			return {"op": "freeze", "duration": args[0]}
+		["bgm", 1], ["se", 1]:
+			return {"op": name, "id": args[0]}
 		["profile", 1]:
 			return {"op": "profile", "id": args[0]}
-		["investigate", 1], ["boke_round", 1]:
+		["investigate", 1], ["boke_round", 1], ["result", 1]:
 			return {"op": name, "block": args[0]}
 		["end", 1]:
 			return {"op": "end", "text": args[0]}

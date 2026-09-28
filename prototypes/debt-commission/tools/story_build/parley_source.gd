@@ -136,13 +136,13 @@ static func _parse_group(graph: Dictionary, group_name: String) -> Dictionary:
 
 static func _say(graph: Dictionary, raw: Dictionary, where: String) -> Dictionary:
 	var character: String = String(raw.get("character", "")).get_slice("::", String(raw.get("character", "")).get_slice_count("::") - 1)
-	var speakers: Dictionary = graph["speakers"]
-	if not speakers.has(character):
+	var speaker: String = DmSource.speaker_id(character, graph["speakers"])
+	if speaker.is_empty():
 		return {"error": "%s: unknown speaker '%s' (use a catalog id or name)" % [where, character]}
 	var text: String = String(raw.get("text", ""))
 	if text.contains("{{") or text.contains("["):
 		return {"error": "%s: inline markup is not supported in '%s'" % [where, text]}
-	return {"op": "say", "speaker": speakers[character], "text": text}
+	return {"op": "say", "speaker": speaker, "text": text}
 
 
 static func _leads_to_options(graph: Dictionary, edges: Array) -> bool:

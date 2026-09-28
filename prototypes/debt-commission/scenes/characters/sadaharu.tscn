@@ -1,0 +1,36 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/placeholder_sprite.gd" id="1_3078i"]
+[ext_resource type="Texture2D" path="res://assets/image/sadaharu.png" id="2_eca0v"]
+
+[node name="sadaharu" type="Control" unique_id=876637719]
+editor_description = "定春 的站姿框。框的底邊是腳底線，站位（scenes/stage.tscn）會把整個框縮放到站位的高度。拖曳、縮放 Art 決定定春在任何站位的大小與位置；框本身不用動。圖以 asset_catalog.json 為準，這裡的圖是預覽。"
+layout_mode = 3
+anchors_preset = 0
+offset_right = 480.0
+offset_bottom = 1560.0
+mouse_filter = 2
+script = ExtResource("1_3078i")
+
+[node name="Box" type="ReferenceRect" parent="." unique_id=1322925042]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+border_color = Color(1, 0.65, 0.2, 1)
+border_width = 4.0
+metadata/_edit_lock_ = true
+
+[node name="Art" type="TextureRect" parent="." unique_id=2131014550]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -780.0
+offset_top = -1560.0
+offset_right = 780.0
+mouse_filter = 2
+texture = ExtResource("2_eca0v")
+expand_mode = 1
+stretch_mode = 5

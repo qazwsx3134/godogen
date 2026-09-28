@@ -1,0 +1,7 @@
+ATTACH: images/train.png
+SAVE AS: training_dummy.png
+OUTPUT: 512 x 640 PNG, true transparent RGBA.
+
+The LEFT wooden training dummy from the battlefield, approximately x=584..685, y=542..666. Simple brown post, square wooden head, horizontal stub arms, rectangular torso with a red-and-cream concentric target painted on the front, narrow stake extending to the ground. Reproduce this exact object, full body including the stake. Exclude surrounding fence, grass and trees. At logical 128x160 scale use a roughly 101x124 silhouette centered horizontally, base at y=146; output is 4x integer enlargement.
+
+Match the supplied reference identity and its exact pixel-art treatment. This is extraction/restoration of an existing game asset, not a redesign. Preserve its proportions, colors, expression and recognizable silhouette. Crisp pixel clusters and the existing dark outline; no smoothing, painterly effects, 3D, added details, lettering, UI, scenery, floor, cast shadow, frame, watermark or comparison sheet. One complete object only. Background must be genuinely transparent RGBA alpha, NOT a drawn checkerboard or a white/colored background. Leave clear transparent padding around the entire object.

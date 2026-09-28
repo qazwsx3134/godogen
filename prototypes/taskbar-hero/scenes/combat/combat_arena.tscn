@@ -1,0 +1,66 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/combat_arena.gd" id="1_buso8"]
+[ext_resource type="PackedScene" path="res://scenes/combat/unit.tscn" id="2_dqx20"]
+[ext_resource type="Resource" path="res://data/units/slime.tres" id="3_u0sf1"]
+
+[node name="CombatArena" type="Node2D" unique_id=1569957475]
+script = ExtResource("1_buso8")
+
+[node name="Sky" type="Polygon2D" parent="." unique_id=2022235359]
+color = Color(0.1, 0.25, 0.24, 1)
+polygon = PackedVector2Array(0, 0, 360, 0, 360, 108, 0, 108)
+
+[node name="DistantHill" type="Polygon2D" parent="." unique_id=106865919]
+color = Color(0.15, 0.32, 0.29, 1)
+polygon = PackedVector2Array(0, 54, 37, 42, 78, 52, 122, 39, 164, 50, 204, 38, 250, 52, 302, 41, 360, 52, 360, 89, 0, 89)
+
+[node name="NearHill" type="Polygon2D" parent="." unique_id=1817879133]
+color = Color(0.19, 0.34, 0.3, 1)
+polygon = PackedVector2Array(0, 70, 43, 61, 90, 73, 143, 61, 193, 73, 251, 60, 310, 72, 360, 64, 360, 108, 0, 108)
+
+[node name="CombatFloor" type="Polygon2D" parent="." unique_id=1332284598]
+color = Color(0.12, 0.23, 0.21, 1)
+polygon = PackedVector2Array(0, 84, 360, 84, 360, 108, 0, 108)
+
+[node name="HorizonLine" type="Line2D" parent="." unique_id=1878030786]
+points = PackedVector2Array(0, 84, 360, 84)
+width = 1.5
+default_color = Color(0.65, 0.53, 0.34, 0.58)
+
+[node name="StoneLeft" type="Polygon2D" parent="." unique_id=61477131]
+color = Color(0.37, 0.43, 0.37, 1)
+polygon = PackedVector2Array(26, 81, 32, 75, 41, 78, 44, 84, 27, 85)
+
+[node name="StoneRight" type="Polygon2D" parent="." unique_id=268667459]
+color = Color(0.4, 0.46, 0.38, 1)
+polygon = PackedVector2Array(315, 83, 322, 76, 330, 79, 334, 85)
+
+[node name="KnightSpawn" type="Marker2D" parent="." unique_id=734363616]
+position = Vector2(73, 78)
+
+[node name="SlimeSpawn" type="Marker2D" parent="." unique_id=2126063701]
+position = Vector2(287, 78)
+
+[node name="KnightUnit" parent="." unique_id=1153296289 instance=ExtResource("2_dqx20")]
+unique_name_in_owner = true
+position = Vector2(73, 78)
+
+[node name="SlimeVisual" parent="KnightUnit/Visuals" parent_id_path=PackedInt32Array(1153296289, 102881119) index="2" unique_id=469824948]
+visible = false
+
+[node name="SlimeUnit" parent="." unique_id=2035854722 instance=ExtResource("2_dqx20")]
+unique_name_in_owner = true
+position = Vector2(287, 78)
+unit_data = ExtResource("3_u0sf1")
+faction = "enemy"
+
+[node name="KnightVisual" parent="SlimeUnit/Visuals" parent_id_path=PackedInt32Array(2035854722, 102881119) index="1" unique_id=142695284]
+visible = false
+
+[node name="BattleCamera" type="Camera2D" parent="." unique_id=470952543]
+unique_name_in_owner = true
+position = Vector2(180, 54)
+
+[editable path="KnightUnit"]
+[editable path="SlimeUnit"]

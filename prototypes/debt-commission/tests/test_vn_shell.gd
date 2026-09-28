@@ -1,10 +1,11 @@
 extends "res://addons/proto_kit/test_kit.gd"
 ## Headless gesture checks for the Phase 1 VN shell: one tap = one action, long-press,
-## swipe-up, floating-button drag/snap/long-press, idle alpha, menu close.
+## swipe-up, the reading box's toolbar (目錄/回顧/自動) and 續 button, 目錄 actions, menu close.
 
 var main: Control = null
 const SAVE_SLOTS_SCRIPT: Script = preload("../scripts/save_slots.gd")
 const TEST_SAVE: String = "user://vn_shell_slots_test.save"
+const TEST_UI: String = "user://vn_shell_ui_test.cfg"
 
 
 func _init() -> void:
@@ -15,6 +16,7 @@ func _run() -> void:
 	_cleanup_saves()
 	main = (load("res://main.tscn") as PackedScene).instantiate() as Control
 	main.save_path = TEST_SAVE
+	main.ui_preference_path = TEST_UI
 	root.add_child(main)
 	await _frames(3)
 	_expect(main._screen_mode == "title", "starts on title")
@@ -24,15 +26,23 @@ func _run() -> void:
 	var stage: Vector2 = main._game.position + Vector2(main._game.size.x * 0.5, main._game.size.y * 0.34)
 	var before: String = _key()
 	_expect(not main._text_complete, "opening line is typing")
+	var typing_height: float = main._dialog_panel.size.y
 	await _tap(stage)
 	_expect(_key() == before and main._text_complete, "first tap completes without advancing")
+	_expect(is_equal_approx(main._dialog_panel.size.y, typing_height), "the box keeps its height while the line types out")
 	await _tap(stage)
 	await _until(func() -> bool: return _key() != before and main._screen_mode == "story", "second tap advances")
+
+	_expect(not main._text_complete, "the next line is typing")
+	main._open_menu()
+	await _until(func() -> bool: return main._text_complete, "the line finishes behind 目錄")
+	main._close_menu()
+	_expect(main._advance_button.is_visible_in_tree(), "續 is back after 目錄 closes on a line that finished behind it")
 
 	before = _key()
 	await _drag(stage, stage, 0.75)
 	_expect(main._ui_hidden and _key() == before, "long-press hides UI without advancing")
-	_expect(not main._dialog_panel.visible and not main._float_layer.visible, "dialogue and buttons hidden")
+	_expect(not main._dialog_panel.visible, "dialogue box and its toolbar hidden")
 	await _tap(stage)
 	_expect(not main._ui_hidden and _key() == before, "tap restores UI without advancing")
 
@@ -41,45 +51,64 @@ func _run() -> void:
 	main._close_log()
 	_expect(_key() == before, "closing log returns to the same line")
 
-	var menu_button: Control = main._menu_button
-	var bounds: Rect2 = menu_button.get("bounds")
-	var start: Vector2 = menu_button.get_global_rect().get_center()
-	await _drag(start, main._game.position + Vector2(300, bounds.position.y + 400), 0.1)
-	await create_timer(0.4).timeout
-	_expect(is_equal_approx(menu_button.position.x, bounds.position.x),
-		"dragged menu button snaps to left edge (x=%s, left=%s)" % [menu_button.position.x, bounds.position.x])
-	_expect(menu_button.position.y + menu_button.size.y <= main._dialog_panel.position.y, "button stays above dialogue")
-	_expect(_key() == before, "drag does not advance")
+	var box: Rect2 = main._dialog_panel.get_global_rect()
+	_expect(box.end.y <= main._game.get_global_rect().end.y + 0.5, "the box sits on the bottom edge")
+	for button: Button in [main._menu_button, main._log_button, main._auto_button, main._advance_button]:
+		_expect(button.is_visible_in_tree() and box.encloses(button.get_global_rect()), "%s is inside the box" % button.name)
+	await _tap(main._auto_button.get_global_rect().get_center())
+	_expect(main._auto and main._auto_button.button_pressed and _key() == before, "自動 turns on without advancing")
+	await _tap(main._auto_button.get_global_rect().get_center())
+	_expect(not main._auto and not main._auto_button.button_pressed, "自動 turns off again")
 
-	var save_center: Vector2 = main._save_button.get_global_rect().get_center()
 	var story_position: String = _progress_key()
-	await _drag(save_center, save_center, 0.8)
-	_expect(main._screen_mode == "save_slots", "long-press S opens the save-slot picker")
+	await _tap(main._menu_button.get_global_rect().get_center())
+	_expect(main._screen_mode == "menu" and _progress_key() == story_position, "tap 目錄 opens the menu without advancing")
+	_expect(main._menu_items["save"].is_visible_in_tree() and not main._menu_items["skip"].disabled,
+		"the menu offers 儲存進度 and 略讀")
+	await _tap(main._menu_style_buttons["ledger"].get_global_rect().get_center())
+	await _frames(2)
+	_expect(main._dialog_panel.style_id == "ledger" and main._text_label.text == main._full_text and
+		main._dialog_layer.get_children().filter(func(n: Node) -> bool: return n.has_method("set_tone")).size() == 1,
+		"B 委託簿 in the menu swaps in the ledger box with the same line")
+	await _tap(main._menu_items["save"].get_global_rect().get_center())
+	_expect(main._screen_mode == "save_slots", "儲存進度 opens the save-slot picker")
 	_expect(not FileAccess.file_exists(SAVE_SLOTS_SCRIPT.manual_path(TEST_SAVE, 1)), "opening the picker does not save a slot")
-	_expect(_progress_key() == story_position, "long-press S does not advance")
 	main._close_slot_picker()
 	await _frames(2)
-	await _tap(save_center)
-	_expect(main._screen_mode == "save_slots", "tap S opens the same save-slot picker")
-	_expect(_progress_key() == story_position, "tap S does not advance")
-	main._close_slot_picker()
-	await _frames(2)
-
-	main._last_activity_ms = Time.get_ticks_msec() - 5000
-	await create_timer(0.6).timeout
-	_expect(main._float_alpha <= main.IDLE_ALPHA + 0.05, "idle buttons fade to 40%%")
-
-	await _tap(menu_button.get_global_rect().get_center())
-	_expect(main._screen_mode == "menu", "tap menu button opens menu")
-	await _tap(main._game.position + Vector2(160, main._game.size.y - 160))
+	_expect(main._screen_mode == "menu", "closing the picker returns to the menu")
+	await _tap(main._game.position + Vector2(20, main._game.size.y * 0.5))
 	_expect(main._screen_mode == "story" and _key() == before, "tap dim background closes menu without advancing")
-	await create_timer(0.3).timeout
-	_expect(main._float_alpha > 0.9, "interaction restores button opacity")
+	_expect(main._advance_button.is_visible_in_tree(), "續 shows in the new box after the menu closes")
 
-	main._set_skip(true)
+	await _tap(main._advance_button.get_global_rect().get_center())
+	await _until(func() -> bool: return _key() != before and main._screen_mode == "story", "tap 續 advances")
+
+	await _tap(main._menu_button.get_global_rect().get_center())
+	await _tap(main._menu_items["resume"].get_global_rect().get_center())
+	_expect(main._screen_mode == "story" and not main._menu_overlay.visible, "回到故事 closes the menu")
+	await _tap(main._menu_button.get_global_rect().get_center())
+	await _tap(main._menu_items["skip"].get_global_rect().get_center())
+	_expect(main._skip and main._screen_mode != "menu", "略讀 in the menu starts skipping")
 	await _until(func() -> bool: return main._screen_mode == "choice", "SKIP runs to the choice", 20.0)
 	_expect(not main._skip, "SKIP stops at the choice")
 
+	await _frames(2)
+	_expect(main._choice_sheet.visible and not main._dialog_panel.visible and
+		main._choice_sheet.prompt.text == main._full_text and main._choice_buttons.size() == main._current_options.size(),
+		"the choice sheet takes the box's place with the prompt and one row per option")
+	await _tap(main._choice_sheet.menu_button.get_global_rect().get_center())
+	_expect(main._screen_mode == "menu", "目錄 on the sheet opens the menu")
+	main._close_menu()
+	_expect(main._screen_mode == "choice" and main._choice_sheet.visible, "closing the menu returns to the choice")
+	var picked: String = str(main._current_options[0]["label"])
+	await _tap(main._choice_buttons[0].get_global_rect().get_center())
+	await _until(func() -> bool: return main._screen_mode == "story", "tapping a row answers the choice")
+	_expect(main._dialog_panel.visible and not main._choice_sheet.visible and
+		main._history.any(func(entry: Dictionary) -> bool: return entry.get("kind") == "choice" and entry.get("text") == picked),
+		"the box comes back and the pick is in the log")
+
+	main.queue_free()
+	await _frames(2)
 	_finish("VN SHELL TESTS")
 	_cleanup_saves()
 
@@ -97,6 +126,7 @@ func _cleanup_saves() -> void:
 		_remove_save_path(SAVE_SLOTS_SCRIPT.manual_path(TEST_SAVE, slot_index))
 	for suffix: String in ["", ".bak", ".old", ".tmp", ".bak.tmp"]:
 		_remove_save_path(TEST_SAVE + suffix)
+	_remove_save_path(TEST_UI)
 
 
 func _remove_save_path(path: String) -> void:

@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/story-cjk.ttc" id="1_sq161"]
+[ext_resource type="Script" path="res://scripts/item_picture.gd" id="2_n62ko"]
+
+[sub_resource type="Theme" id="Theme_fwwn3"]
+default_font = ExtResource("1_sq161")
+
+[node name="ItemPicture" type="TextureRect" unique_id=408534221]
+custom_minimum_size = Vector2(132.92308, 132.92308)
+mouse_filter = 2
+theme = SubResource("Theme_fwwn3")
+expand_mode = 1
+stretch_mode = 5
+script = ExtResource("2_n62ko")

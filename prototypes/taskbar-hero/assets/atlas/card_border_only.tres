@@ -1,0 +1,8 @@
+[gd_resource type="AtlasTexture" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/reference/backpack.png" id="1_l5ip6"]
+
+[resource]
+atlas = ExtResource("1_l5ip6")
+region = Rect2(44, 921, 163, 195)
+filter_clip = true

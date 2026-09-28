@@ -1,0 +1,177 @@
+{
+  "id": "fixture_chapter_a",
+  "version": "1",
+  "title": "測試章 A",
+  "entry": "open",
+  "initial_flags": {},
+  "nodes": {
+    "open": {
+      "title": "開頭",
+      "steps": [
+        {
+          "op": "bg",
+          "id": "yorozuya_living_room"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "測試章 A 開始。"
+        }
+      ],
+      "next": "round1"
+    },
+    "round1": {
+      "title": "第一回合",
+      "steps": [
+        {
+          "op": "boke_round",
+          "id": "r1",
+          "speaker": "gintoki",
+          "lines": [
+            {
+              "id": "l1",
+              "text": "銀時：那瓶草莓牛奶不是我喝的。"
+            }
+          ],
+          "timer_seconds": 8,
+          "tsukkomi": {
+            "options": [
+              {
+                "id": "hit",
+                "label": "證據就在你手邊。",
+                "result": "perfect",
+                "goto": "round2"
+              },
+              {
+                "id": "miss",
+                "label": "一時接不上話。",
+                "result": "fail",
+                "goto": "cold1"
+              },
+              {
+                "id": "quit",
+                "label": "……（放棄吐槽）",
+                "result": "hidden",
+                "goto": "round2"
+              }
+            ],
+            "timeout": {
+              "result": "fail",
+              "goto": "cold1"
+            }
+          },
+          "game_over": "game_over"
+        }
+      ]
+    },
+    "cold1": {
+      "title": "第一回合冷場",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "冷場。"
+        }
+      ],
+      "next": "round1"
+    },
+    "round2": {
+      "title": "第二回合",
+      "steps": [
+        {
+          "op": "boke_round",
+          "id": "r2",
+          "speaker": "gintoki",
+          "lines": [
+            {
+              "id": "l1",
+              "text": "銀時：那瓶草莓牛奶不是我喝的。"
+            }
+          ],
+          "timer_seconds": 8,
+          "tsukkomi": {
+            "options": [
+              {
+                "id": "hit",
+                "label": "證據就在你手邊。",
+                "result": "perfect",
+                "goto": "done"
+              },
+              {
+                "id": "miss",
+                "label": "一時接不上話。",
+                "result": "fail",
+                "goto": "cold2"
+              },
+              {
+                "id": "quit",
+                "label": "……（放棄吐槽）",
+                "result": "hidden",
+                "goto": "done"
+              }
+            ],
+            "timeout": {
+              "result": "fail",
+              "goto": "cold2"
+            }
+          },
+          "game_over": "game_over"
+        }
+      ]
+    },
+    "cold2": {
+      "title": "第二回合冷場",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "又冷場。"
+        }
+      ],
+      "next": "round2"
+    },
+    "done": {
+      "title": "結算",
+      "steps": [
+        {
+          "op": "result",
+          "id": "fixture_result",
+          "title": "～ 測試章 A 完 ～",
+          "hidden_total": 2,
+          "lines": {
+            "S": {
+              "speaker": "shinpachi",
+              "text": "一副都沒碎！"
+            },
+            "A": {
+              "speaker": "kagura",
+              "text": "還算有用阿魯。"
+            },
+            "B": {
+              "speaker": "gintoki",
+              "text": "普通的眼鏡。"
+            },
+            "C": {
+              "speaker": "otose",
+              "text": "寫了名字也不是你的。"
+            }
+          }
+        }
+      ]
+    },
+    "game_over": {
+      "title": "Game Over",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "眼鏡碎了。"
+        },
+        {
+          "op": "end",
+          "text": "Game Over"
+        }
+      ]
+    }
+  }
+}

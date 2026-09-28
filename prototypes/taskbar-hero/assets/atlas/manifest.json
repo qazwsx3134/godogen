@@ -1,0 +1,812 @@
+{
+	"battle_ground": {
+		"rect": [
+			0.0,
+			470.0,
+			941.0,
+			55.0
+		],
+		"source": "equipment.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"battle_lower_0": {
+		"rect": [
+			420.0,
+			360.0,
+			140.0,
+			110.0
+		],
+		"source": "equipment.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"battle_lower_1": {
+		"rect": [
+			420.0,
+			360.0,
+			140.0,
+			110.0
+		],
+		"source": "equipment.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"battle_lower_2": {
+		"rect": [
+			420.0,
+			360.0,
+			84.0,
+			110.0
+		],
+		"source": "equipment.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"battle_lower_3": {
+		"rect": [
+			420.0,
+			360.0,
+			140.0,
+			110.0
+		],
+		"source": "equipment.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"battle_lower_4": {
+		"rect": [
+			420.0,
+			360.0,
+			140.0,
+			110.0
+		],
+		"source": "equipment.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"battle_lower_5": {
+		"rect": [
+			420.0,
+			360.0,
+			140.0,
+			110.0
+		],
+		"source": "equipment.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"battle_lower_6": {
+		"rect": [
+			420.0,
+			360.0,
+			101.0,
+			110.0
+		],
+		"source": "equipment.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"battle_lower_strip": {
+		"rect": [
+			420.0,
+			360.0,
+			140.0,
+			110.0
+		],
+		"source": "equipment.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"battle_sky": {
+		"rect": [
+			0.0,
+			100.0,
+			941.0,
+			260.0
+		],
+		"source": "equipment.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"battle_tree_strip": {
+		"rect": [
+			0.0,
+			360.0,
+			56.0,
+			110.0
+		],
+		"source": "equipment.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"chapter_scenery": {
+		"rect": [
+			421.0,
+			900.0,
+			482.0,
+			188.0
+		],
+		"source": "adventure.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"coin": {
+		"rect": [
+			500.0,
+			29.0,
+			45.0,
+			45.0
+		],
+		"source": "idel.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"equipment_item_0": {
+		"rect": [
+			39.0,
+			1315.0,
+			100.0,
+			72.0
+		],
+		"source": "equipment.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"equipment_item_1": {
+		"rect": [
+			164.0,
+			1315.0,
+			100.0,
+			72.0
+		],
+		"source": "equipment.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"equipment_item_10": {
+		"rect": [
+			414.0,
+			1420.0,
+			100.0,
+			72.0
+		],
+		"source": "equipment.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"equipment_item_11": {
+		"rect": [
+			539.0,
+			1420.0,
+			100.0,
+			72.0
+		],
+		"source": "equipment.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"equipment_item_12": {
+		"rect": [
+			664.0,
+			1420.0,
+			100.0,
+			72.0
+		],
+		"source": "equipment.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"equipment_item_13": {
+		"rect": [
+			789.0,
+			1420.0,
+			100.0,
+			72.0
+		],
+		"source": "equipment.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"equipment_item_14": {
+		"rect": [
+			756.0,
+			1148.0,
+			118.0,
+			92.0
+		],
+		"source": "backpack.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"equipment_item_2": {
+		"rect": [
+			289.0,
+			1315.0,
+			100.0,
+			72.0
+		],
+		"source": "equipment.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"equipment_item_3": {
+		"rect": [
+			414.0,
+			1315.0,
+			100.0,
+			72.0
+		],
+		"source": "equipment.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"equipment_item_4": {
+		"rect": [
+			539.0,
+			1315.0,
+			100.0,
+			72.0
+		],
+		"source": "equipment.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"equipment_item_5": {
+		"rect": [
+			664.0,
+			1315.0,
+			100.0,
+			72.0
+		],
+		"source": "equipment.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"equipment_item_6": {
+		"rect": [
+			789.0,
+			1315.0,
+			100.0,
+			72.0
+		],
+		"source": "equipment.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"equipment_item_7": {
+		"rect": [
+			39.0,
+			1420.0,
+			100.0,
+			72.0
+		],
+		"source": "equipment.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"equipment_item_8": {
+		"rect": [
+			164.0,
+			1420.0,
+			100.0,
+			72.0
+		],
+		"source": "equipment.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"equipment_item_9": {
+		"rect": [
+			289.0,
+			1420.0,
+			100.0,
+			72.0
+		],
+		"source": "equipment.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"gear": {
+		"rect": [
+			865.0,
+			27.0,
+			50.0,
+			48.0
+		],
+		"source": "idel.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"gem": {
+		"rect": [
+			704.0,
+			27.0,
+			44.0,
+			49.0
+		],
+		"source": "idel.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"gift": {
+		"rect": [
+			41.0,
+			1314.0,
+			295.0,
+			154.0
+		],
+		"source": "store.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"item_0": {
+		"rect": [
+			77.0,
+			937.0,
+			91.0,
+			98.0
+		],
+		"source": "backpack.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"item_1": {
+		"rect": [
+			245.0,
+			951.0,
+			99.0,
+			84.0
+		],
+		"source": "backpack.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"item_2": {
+		"rect": [
+			414.0,
+			938.0,
+			110.0,
+			97.0
+		],
+		"source": "backpack.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"item_3": {
+		"rect": [
+			580.0,
+			944.0,
+			122.0,
+			91.0
+		],
+		"source": "backpack.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"item_4": {
+		"rect": [
+			756.0,
+			942.0,
+			119.0,
+			93.0
+		],
+		"source": "backpack.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"item_5": {
+		"rect": [
+			67.0,
+			1141.0,
+			116.0,
+			99.0
+		],
+		"source": "backpack.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"item_6": {
+		"rect": [
+			240.0,
+			1144.0,
+			112.0,
+			96.0
+		],
+		"source": "backpack.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"item_7": {
+		"rect": [
+			414.0,
+			1145.0,
+			111.0,
+			95.0
+		],
+		"source": "backpack.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"item_8": {
+		"rect": [
+			597.0,
+			1144.0,
+			90.0,
+			96.0
+		],
+		"source": "backpack.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"item_9": {
+		"rect": [
+			756.0,
+			1148.0,
+			118.0,
+			92.0
+		],
+		"source": "backpack.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"monster_0": {
+		"rect": [
+			62.0,
+			1297.0,
+			176.0,
+			119.0
+		],
+		"source": "monster.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"monster_1": {
+		"rect": [
+			283.0,
+			1297.0,
+			168.0,
+			118.0
+		],
+		"source": "monster.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"monster_2": {
+		"rect": [
+			500.0,
+			1297.0,
+			170.0,
+			118.0
+		],
+		"source": "monster.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"monster_3": {
+		"rect": [
+			719.0,
+			1297.0,
+			167.0,
+			118.0
+		],
+		"source": "monster.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"nav_0": {
+		"rect": [
+			44.0,
+			1546.0,
+			83.0,
+			77.0
+		],
+		"source": "equipment.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"nav_1": {
+		"rect": [
+			196.0,
+			1545.0,
+			83.0,
+			79.0
+		],
+		"source": "equipment.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"nav_2": {
+		"rect": [
+			347.0,
+			1545.0,
+			88.0,
+			80.0
+		],
+		"source": "equipment.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"nav_3": {
+		"rect": [
+			510.0,
+			1546.0,
+			98.0,
+			80.0
+		],
+		"source": "equipment.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"nav_4": {
+		"rect": [
+			661.0,
+			1542.0,
+			90.0,
+			86.0
+		],
+		"source": "equipment.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"nav_5": {
+		"rect": [
+			816.0,
+			1545.0,
+			88.0,
+			82.0
+		],
+		"source": "equipment.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"paper_border_only": {
+		"rect": [
+			8.0,
+			527.0,
+			925.0,
+			994.0
+		],
+		"source": "equipment.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"pet_detail": {
+		"rect": [
+			50.0,
+			674.0,
+			269.0,
+			243.0
+		],
+		"source": "monster.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"pet_overview": {
+		"rect": [
+			40.0,
+			984.0,
+			260.0,
+			219.0
+		],
+		"source": "idel.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"portrait": {
+		"rect": [
+			19.0,
+			10.0,
+			97.0,
+			90.0
+		],
+		"source": "idel.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"product_0": {
+		"rect": [
+			48.0,
+			930.0,
+			175.0,
+			136.0
+		],
+		"source": "store.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"product_1": {
+		"rect": [
+			276.0,
+			928.0,
+			161.0,
+			138.0
+		],
+		"source": "store.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"product_2": {
+		"rect": [
+			503.0,
+			930.0,
+			161.0,
+			134.0
+		],
+		"source": "store.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"product_3": {
+		"rect": [
+			752.0,
+			928.0,
+			115.0,
+			137.0
+		],
+		"source": "store.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"reward_0": {
+		"rect": [
+			61.0,
+			1358.0,
+			83.0,
+			84.0
+		],
+		"source": "adventure.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"reward_1": {
+		"rect": [
+			157.0,
+			1358.0,
+			83.0,
+			84.0
+		],
+		"source": "adventure.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"reward_2": {
+		"rect": [
+			253.0,
+			1358.0,
+			83.0,
+			84.0
+		],
+		"source": "adventure.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"reward_3": {
+		"rect": [
+			349.0,
+			1358.0,
+			83.0,
+			84.0
+		],
+		"source": "adventure.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"shop_coin": {
+		"rect": [
+			49.0,
+			1070.0,
+			37.0,
+			40.0
+		],
+		"source": "store.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"shop_gem": {
+		"rect": [
+			303.0,
+			1070.0,
+			41.0,
+			40.0
+		],
+		"source": "store.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"stage_0": {
+		"rect": [
+			68.0,
+			1134.0,
+			130.0,
+			99.0
+		],
+		"source": "adventure.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"stage_1": {
+		"rect": [
+			281.0,
+			1134.0,
+			130.0,
+			99.0
+		],
+		"source": "adventure.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"stage_2": {
+		"rect": [
+			494.0,
+			1134.0,
+			130.0,
+			99.0
+		],
+		"source": "adventure.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"stage_3": {
+		"rect": [
+			707.0,
+			1134.0,
+			130.0,
+			99.0
+		],
+		"source": "adventure.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"store_decoration": {
+		"rect": [
+			451.0,
+			721.0,
+			463.0,
+			117.0
+		],
+		"source": "store.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"title_adventure": {
+		"rect": [
+			48.0,
+			792.0,
+			122.0,
+			94.0
+		],
+		"source": "adventure.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"title_backpack": {
+		"rect": [
+			37.0,
+			734.0,
+			85.0,
+			76.0
+		],
+		"source": "backpack.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"title_equipment": {
+		"rect": [
+			514.0,
+			1550.0,
+			92.0,
+			84.0
+		],
+		"source": "equipment.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"title_monster": {
+		"rect": [
+			50.0,
+			674.0,
+			269.0,
+			243.0
+		],
+		"source": "monster.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"title_store": {
+		"rect": [
+			74.0,
+			743.0,
+			115.0,
+			85.0
+		],
+		"source": "store.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"title_train": {
+		"rect": [
+			63.0,
+			796.0,
+			147.0,
+			146.0
+		],
+		"source": "train.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"training_0": {
+		"rect": [
+			52.0,
+			994.0,
+			96.0,
+			89.0
+		],
+		"source": "train.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"training_1": {
+		"rect": [
+			52.0,
+			1126.0,
+			96.0,
+			89.0
+		],
+		"source": "train.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"training_2": {
+		"rect": [
+			52.0,
+			1258.0,
+			96.0,
+			89.0
+		],
+		"source": "train.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"training_3": {
+		"rect": [
+			52.0,
+			1390.0,
+			96.0,
+			89.0
+		],
+		"source": "train.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	},
+	"video_icon": {
+		"rect": [
+			692.0,
+			1368.0,
+			62.0,
+			59.0
+		],
+		"source": "store.png",
+		"usage": "art region only; UI copy, state and clickable controls are separate scene nodes"
+	}
+}

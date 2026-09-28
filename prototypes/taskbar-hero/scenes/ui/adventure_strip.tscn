@@ -1,0 +1,191 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://ui/expedition_theme.tres" id="1_em1hr"]
+[ext_resource type="Script" path="res://scripts/adventure_strip.gd" id="2_66qjy"]
+[ext_resource type="PackedScene" path="res://scenes/combat/combat_arena.tscn" id="3_lcah4"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5tatr"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.12, 0.25, 0.24, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.83, 0.65, 0.34, 1)
+corner_radius_top_left = 13
+corner_radius_top_right = 13
+corner_radius_bottom_right = 13
+corner_radius_bottom_left = 13
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hm2ue"]
+content_margin_left = 1.0
+content_margin_top = 1.0
+content_margin_right = 1.0
+content_margin_bottom = 1.0
+bg_color = Color(0.06, 0.15, 0.16, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.06, 0.15, 0.16, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6g8x2"]
+content_margin_left = 1.0
+content_margin_top = 1.0
+content_margin_right = 1.0
+content_margin_bottom = 1.0
+bg_color = Color(0.83, 0.65, 0.34, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.83, 0.65, 0.34, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_krg57"]
+content_margin_left = 1.0
+content_margin_top = 1.0
+content_margin_right = 1.0
+content_margin_bottom = 1.0
+bg_color = Color(0.06, 0.15, 0.16, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.06, 0.15, 0.16, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gn1jc"]
+content_margin_left = 1.0
+content_margin_top = 1.0
+content_margin_right = 1.0
+content_margin_bottom = 1.0
+bg_color = Color(0.48, 0.69, 0.53, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.48, 0.69, 0.53, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="AdventureStrip" type="PanelContainer" unique_id=1584168842]
+custom_minimum_size = Vector2(0, 184)
+theme = ExtResource("1_em1hr")
+theme_override_styles/panel = SubResource("StyleBoxFlat_5tatr")
+script = ExtResource("2_66qjy")
+
+[node name="StripLayout" type="VBoxContainer" parent="." unique_id=1954047066]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="StripHeader" type="HBoxContainer" parent="StripLayout" unique_id=191795986]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="StripStage" type="Label" parent="StripLayout/StripHeader" unique_id=1186849583]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.83, 0.65, 0.34, 1)
+theme_override_font_sizes/font_size = 13
+text = "遠征紀錄  ·  第 1-1 區"
+vertical_alignment = 1
+
+[node name="StripTotals" type="Label" parent="StripLayout/StripHeader" unique_id=1941655111]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.87, 0.72, 1)
+theme_override_font_sizes/font_size = 13
+text = "擊倒 0  ·  金幣 0"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Battlefield" type="SubViewportContainer" parent="StripLayout" unique_id=717578236]
+custom_minimum_size = Vector2(0, 91)
+layout_mode = 2
+mouse_filter = 2
+stretch = true
+
+[node name="BattleViewport" type="SubViewport" parent="StripLayout/Battlefield" unique_id=1927053158]
+transparent_bg = true
+size = Vector2i(360, 108)
+render_target_update_mode = 4
+
+[node name="CombatArena" parent="StripLayout/Battlefield/BattleViewport" unique_id=1569957475 instance=ExtResource("3_lcah4")]
+
+[node name="UnitVitals" type="HBoxContainer" parent="StripLayout" unique_id=21257087]
+layout_mode = 2
+theme_override_constants/separation = 9
+
+[node name="KnightVitals" type="VBoxContainer" parent="StripLayout/UnitVitals" unique_id=744619653]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 1
+
+[node name="StripKnightHealthText" type="Label" parent="StripLayout/UnitVitals/KnightVitals" unique_id=504442245]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.87, 0.72, 1)
+theme_override_font_sizes/font_size = 11
+text = "騎士  82 / 82"
+vertical_alignment = 1
+
+[node name="StripKnightHealth" type="ProgressBar" parent="StripLayout/UnitVitals/KnightVitals" unique_id=1403433484]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/background = SubResource("StyleBoxFlat_hm2ue")
+theme_override_styles/fill = SubResource("StyleBoxFlat_6g8x2")
+max_value = 82.0
+value = 82.0
+show_percentage = false
+
+[node name="SlimeVitals" type="VBoxContainer" parent="StripLayout/UnitVitals" unique_id=1304257023]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 1
+
+[node name="StripSlimeHealthText" type="Label" parent="StripLayout/UnitVitals/SlimeVitals" unique_id=963528883]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.87, 0.72, 1)
+theme_override_font_sizes/font_size = 11
+text = "史萊姆  48 / 48"
+vertical_alignment = 1
+
+[node name="StripSlimeHealth" type="ProgressBar" parent="StripLayout/UnitVitals/SlimeVitals" unique_id=2074154057]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/background = SubResource("StyleBoxFlat_krg57")
+theme_override_styles/fill = SubResource("StyleBoxFlat_gn1jc")
+max_value = 48.0
+value = 48.0
+show_percentage = false
+
+[node name="StripCombatStatus" type="Label" parent="StripLayout" unique_id=1346945557]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.87, 0.72, 1)
+theme_override_font_sizes/font_size = 12
+text = "自動索敵  ·  靠近後攻擊"
+vertical_alignment = 1
+text_overrun_behavior = 3

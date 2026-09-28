@@ -1,0 +1,11 @@
+ATTACH: images/monster.png
+SAVE AS: monster_clean.png
+OUTPUT: PNG, exactly the original 941 x 1672 canvas; opaque background.
+
+Edit the attached image with surgical fidelity. This is background restoration for a Godot game, NOT a redesign or a new illustration. Preserve the original composition, viewpoint, colors, crisp pixel-art texture, pixel scale, lighting, castle, mountains, bridge/aqueduct, trees, rocks, hanging lantern, grass platform and cliff face.
+
+Only edit the battle landscape between y=100 and y=639. Remove the black-haired swordsman, red cape, sword, green baby dragon, every enemy, all floating health bars, the damage number 24, hit sparks and character-specific shadows. Remove EVERY green slime, including any partly cut-off slime at the right edge. Reconstruct ONLY the scenery occluded by those objects using the immediately surrounding forest, rock, grass and soil. The ground baseline must remain at exactly the same height as the input.
+
+Everything outside these removal masks must remain unchanged, including the header, lower parchment interface and bottom navigation. Do not regenerate text, numbers, icons or buttons. Those interface pixels are retained only to preserve original image coordinates; the game will use a crop of the cleaned battlefield.
+
+No new characters, enemies, props, numbers, outlines, health bars, sparkles or text. No blurred smears, stretched horizontal bands, pasted rectangles, repeating rock stamps, duplicated trees or obvious reconstruction seams. No camera movement, crop, reframing, scaling, palette shift, smooth vector art, painterly rendering or 3D effects. Return one clean image, no comparison sheet, no labels, no watermarks.

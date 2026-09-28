@@ -1,0 +1,78 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/combat_unit.gd" id="1_dsg4w"]
+[ext_resource type="Resource" path="res://data/units/knight.tres" id="2_vdagt"]
+[ext_resource type="Texture2D" path="res://assets/reference/monster.png" id="3_hsqqy"]
+[ext_resource type="Texture2D" path="res://assets/reference/train.png" id="4_qg7bd"]
+
+[node name="Unit" type="Node2D" unique_id=1153296289]
+script = ExtResource("1_dsg4w")
+unit_data = ExtResource("2_vdagt")
+
+[node name="Visuals" type="Node2D" parent="." unique_id=102881119]
+
+[node name="Shadow" type="Polygon2D" parent="Visuals" unique_id=1194177940]
+visible = false
+color = Color(0.02, 0.05, 0.05, 0.68)
+polygon = PackedVector2Array(-24, -1, -20, -9, 0, -12, 20, -8, 25, -1, 18, 4, -17, 4)
+
+[node name="KnightVisual" type="Node2D" parent="Visuals" unique_id=142695284]
+unique_name_in_owner = true
+
+[node name="KnightAtlas" type="Polygon2D" parent="Visuals/KnightVisual" unique_id=363678787]
+texture_filter = 1
+position = Vector2(-266, -125)
+texture = ExtResource("3_hsqqy")
+polygon = PackedVector2Array(0, 78, 22, 58, 55, 49, 44, 28, 58, 18, 70, 14, 95, 0, 117, 4, 127, 13, 138, 13, 132, 24, 137, 35, 130, 47, 124, 55, 132, 66, 161, 62, 174, 56, 184, 63, 184, 71, 151, 85, 131, 90, 120, 106, 129, 118, 87, 120, 77, 110, 61, 118, 43, 118, 51, 98, 26, 98, 7, 86)
+uv = PackedVector2Array(63, 525, 85, 505, 118, 496, 107, 475, 121, 465, 133, 461, 158, 447, 180, 451, 190, 460, 201, 460, 195, 471, 200, 482, 193, 494, 187, 502, 195, 513, 224, 509, 237, 503, 247, 510, 247, 518, 214, 532, 194, 537, 183, 553, 192, 565, 150, 567, 140, 557, 124, 565, 106, 565, 114, 545, 89, 545, 70, 533)
+
+[node name="PetAtlas" type="Polygon2D" parent="Visuals/KnightVisual" unique_id=1286602566]
+texture_filter = 1
+position = Vector2(-62, -108)
+texture = ExtResource("3_hsqqy")
+polygon = PackedVector2Array(0, 78, 9, 66, 19, 78, 31, 79, 40, 68, 31, 64, 21, 58, 36, 48, 25, 43, 34, 33, 48, 29, 45, 13, 50, 1, 64, 8, 69, 14, 83, 8, 91, 14, 94, 23, 106, 29, 112, 38, 119, 46, 117, 69, 102, 79, 88, 85, 85, 97, 91, 104, 62, 106, 59, 100, 45, 105, 25, 103, 8, 92)
+uv = PackedVector2Array(267, 539, 276, 527, 286, 539, 298, 540, 307, 529, 298, 525, 288, 519, 303, 509, 292, 504, 301, 494, 315, 490, 312, 474, 317, 462, 331, 469, 336, 475, 350, 469, 358, 475, 361, 484, 373, 490, 379, 499, 386, 507, 384, 530, 369, 540, 355, 546, 352, 558, 358, 565, 329, 567, 326, 561, 312, 566, 292, 564, 275, 553)
+
+[node name="SlimeVisual" type="Node2D" parent="Visuals" unique_id=469824948]
+unique_name_in_owner = true
+
+[node name="SlimeAtlas" type="Polygon2D" parent="Visuals/SlimeVisual" unique_id=755261591]
+texture_filter = 1
+position = Vector2(-35, -56)
+texture = ExtResource("3_hsqqy")
+polygon = PackedVector2Array(0, 54, 1, 29, 9, 15, 20, 8, 27, 1, 43, 0, 54, 8, 63, 20, 68, 40, 70, 55)
+uv = PackedVector2Array(568, 568, 569, 543, 577, 529, 588, 522, 595, 515, 611, 514, 622, 522, 631, 534, 636, 554, 638, 569)
+
+[node name="DummyAtlas" type="Polygon2D" parent="Visuals/SlimeVisual" unique_id=809602030]
+visible = false
+texture_filter = 1
+position = Vector2(-50, -124)
+texture = ExtResource("4_qg7bd")
+polygon = PackedVector2Array(35, 0, 67, 0, 67, 28, 81, 30, 82, 38, 99, 38, 99, 58, 81, 58, 81, 95, 68, 96, 68, 123, 40, 123, 40, 95, 24, 95, 24, 59, 4, 59, 4, 35, 32, 34)
+uv = PackedVector2Array(619, 542, 651, 542, 651, 570, 665, 572, 666, 580, 683, 580, 683, 600, 665, 600, 665, 637, 652, 638, 652, 665, 624, 665, 624, 637, 608, 637, 608, 601, 588, 601, 588, 577, 616, 576)
+
+[node name="HealthBackground" type="Polygon2D" parent="." unique_id=1311019408]
+position = Vector2(0, -66)
+scale = Vector2(2, 1.5)
+color = Color(0.09019608, 0.14509805, 0.20784314, 1)
+polygon = PackedVector2Array(-26, -51, 26, -51, 26, -41, -26, -41)
+
+[node name="HealthFill" type="Polygon2D" parent="." unique_id=367241668]
+unique_name_in_owner = true
+position = Vector2(0, -66)
+scale = Vector2(2, 1.5)
+color = Color(0.5803922, 0.80784315, 0.44313726, 1)
+polygon = PackedVector2Array(-24, -49, 24, -49, 24, -43, -24, -43)
+
+[node name="DamageFeedback" type="Label" parent="." unique_id=153512385]
+visible = false
+offset_left = -90.0
+offset_top = -207.0
+offset_right = 90.0
+offset_bottom = -143.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.078431375, 0.10980392, 0.1764706, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 40
+horizontal_alignment = 1
+vertical_alignment = 1

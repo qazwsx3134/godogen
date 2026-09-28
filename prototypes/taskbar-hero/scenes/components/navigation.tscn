@@ -1,0 +1,364 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Medium.otf" id="1_7ojwy"]
+[ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Bold.otf" id="2_chqei"]
+[ext_resource type="Texture2D" path="res://assets/reference/equipment.png" id="3_fnavn"]
+
+[sub_resource type="Theme" id="Theme_krmap"]
+default_font = ExtResource("1_7ojwy")
+default_font_size = 26
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3x8hc"]
+bg_color = Color(0.1764706, 0.23921569, 0.3529412, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.44705883, 0.5254902, 0.6509804, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n1lvj"]
+bg_color = Color(0.20784314, 0.29411766, 0.41960785, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.9529412, 0.8235294, 0.5411765, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yhv7p"]
+bg_color = Color(0.9019608, 0.8117647, 0.70980394, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.74509805, 0.6509804, 0.54901963, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_30n4r"]
+bg_color = Color(0.9137255, 0.8352941, 0.73333335, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.8745098, 0.6666667, 0.2901961, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 2
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_3emc6"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yp0bv"]
+atlas = ExtResource("3_fnavn")
+region = Rect2(44, 1546, 83, 77)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p3vln"]
+atlas = ExtResource("3_fnavn")
+region = Rect2(196, 1545, 83, 79)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xd6u1"]
+atlas = ExtResource("3_fnavn")
+region = Rect2(347, 1545, 88, 80)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4lao2"]
+atlas = ExtResource("3_fnavn")
+region = Rect2(510, 1546, 98, 80)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x73ck"]
+atlas = ExtResource("3_fnavn")
+region = Rect2(661, 1542, 90, 86)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g2uih"]
+atlas = ExtResource("3_fnavn")
+region = Rect2(816, 1545, 88, 82)
+filter_clip = true
+
+[node name="Navigation" type="Control" unique_id=1533503802]
+custom_minimum_size = Vector2(941, 122)
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+theme = SubResource("Theme_krmap")
+
+[node name="TrainButton" type="Button" parent="." unique_id=497284241]
+layout_mode = 0
+offset_left = 12.0
+offset_right = 155.0
+offset_bottom = 119.0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
+theme_override_fonts/font = ExtResource("2_chqei")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_3x8hc")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_n1lvj")
+theme_override_styles/hover = SubResource("StyleBoxFlat_n1lvj")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_yhv7p")
+theme_override_styles/focus = SubResource("StyleBoxFlat_30n4r")
+toggle_mode = true
+button_group = SubResource("ButtonGroup_3emc6")
+metadata/action = "page:train"
+
+[node name="Icon" type="TextureRect" parent="TrainButton" unique_id=1363048233]
+texture_filter = 1
+layout_mode = 0
+offset_left = 38.0
+offset_top = 5.0
+offset_right = 105.0
+offset_bottom = 74.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_yp0bv")
+expand_mode = 1
+
+[node name="Caption" type="Label" parent="TrainButton" unique_id=1150247130]
+layout_mode = 0
+offset_top = 75.0
+offset_right = 143.0
+offset_bottom = 113.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("2_chqei")
+theme_override_font_sizes/font_size = 23
+text = "訓練"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BackpackButton" type="Button" parent="." unique_id=967295405]
+layout_mode = 0
+offset_left = 165.0
+offset_right = 308.0
+offset_bottom = 119.0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
+theme_override_fonts/font = ExtResource("2_chqei")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_3x8hc")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_n1lvj")
+theme_override_styles/hover = SubResource("StyleBoxFlat_n1lvj")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_yhv7p")
+theme_override_styles/focus = SubResource("StyleBoxFlat_30n4r")
+toggle_mode = true
+button_group = SubResource("ButtonGroup_3emc6")
+metadata/action = "page:backpack"
+
+[node name="Icon" type="TextureRect" parent="BackpackButton" unique_id=1483152475]
+texture_filter = 1
+layout_mode = 0
+offset_left = 38.0
+offset_top = 5.0
+offset_right = 105.0
+offset_bottom = 74.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_p3vln")
+expand_mode = 1
+
+[node name="Caption" type="Label" parent="BackpackButton" unique_id=625145522]
+layout_mode = 0
+offset_top = 75.0
+offset_right = 143.0
+offset_bottom = 113.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("2_chqei")
+theme_override_font_sizes/font_size = 23
+text = "背包"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MonsterButton" type="Button" parent="." unique_id=120835299]
+layout_mode = 0
+offset_left = 318.0
+offset_right = 461.0
+offset_bottom = 119.0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
+theme_override_fonts/font = ExtResource("2_chqei")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_3x8hc")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_n1lvj")
+theme_override_styles/hover = SubResource("StyleBoxFlat_n1lvj")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_yhv7p")
+theme_override_styles/focus = SubResource("StyleBoxFlat_30n4r")
+toggle_mode = true
+button_group = SubResource("ButtonGroup_3emc6")
+metadata/action = "page:monster"
+
+[node name="Icon" type="TextureRect" parent="MonsterButton" unique_id=79520582]
+texture_filter = 1
+layout_mode = 0
+offset_left = 38.0
+offset_top = 5.0
+offset_right = 105.0
+offset_bottom = 74.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_xd6u1")
+expand_mode = 1
+
+[node name="Caption" type="Label" parent="MonsterButton" unique_id=1008349003]
+layout_mode = 0
+offset_top = 75.0
+offset_right = 143.0
+offset_bottom = 113.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("2_chqei")
+theme_override_font_sizes/font_size = 23
+text = "怪獸"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EquipmentButton" type="Button" parent="." unique_id=189226577]
+layout_mode = 0
+offset_left = 471.0
+offset_right = 614.0
+offset_bottom = 119.0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
+theme_override_fonts/font = ExtResource("2_chqei")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_3x8hc")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_n1lvj")
+theme_override_styles/hover = SubResource("StyleBoxFlat_n1lvj")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_yhv7p")
+theme_override_styles/focus = SubResource("StyleBoxFlat_30n4r")
+toggle_mode = true
+button_group = SubResource("ButtonGroup_3emc6")
+metadata/action = "page:equipment"
+
+[node name="Icon" type="TextureRect" parent="EquipmentButton" unique_id=1657242985]
+texture_filter = 1
+layout_mode = 0
+offset_left = 38.0
+offset_top = 5.0
+offset_right = 105.0
+offset_bottom = 74.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_4lao2")
+expand_mode = 1
+
+[node name="Caption" type="Label" parent="EquipmentButton" unique_id=2137003272]
+layout_mode = 0
+offset_top = 75.0
+offset_right = 143.0
+offset_bottom = 113.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("2_chqei")
+theme_override_font_sizes/font_size = 23
+text = "裝備"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AdventureButton" type="Button" parent="." unique_id=740637191]
+layout_mode = 0
+offset_left = 624.0
+offset_right = 767.0
+offset_bottom = 119.0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
+theme_override_fonts/font = ExtResource("2_chqei")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_3x8hc")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_n1lvj")
+theme_override_styles/hover = SubResource("StyleBoxFlat_n1lvj")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_yhv7p")
+theme_override_styles/focus = SubResource("StyleBoxFlat_30n4r")
+toggle_mode = true
+button_group = SubResource("ButtonGroup_3emc6")
+metadata/action = "page:adventure"
+
+[node name="Icon" type="TextureRect" parent="AdventureButton" unique_id=1254436908]
+texture_filter = 1
+layout_mode = 0
+offset_left = 38.0
+offset_top = 5.0
+offset_right = 105.0
+offset_bottom = 74.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_x73ck")
+expand_mode = 1
+
+[node name="Caption" type="Label" parent="AdventureButton" unique_id=257498453]
+layout_mode = 0
+offset_top = 75.0
+offset_right = 143.0
+offset_bottom = 113.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("2_chqei")
+theme_override_font_sizes/font_size = 23
+text = "冒險"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StoreButton" type="Button" parent="." unique_id=1269000686]
+layout_mode = 0
+offset_left = 777.0
+offset_right = 920.0
+offset_bottom = 119.0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
+theme_override_fonts/font = ExtResource("2_chqei")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_3x8hc")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_n1lvj")
+theme_override_styles/hover = SubResource("StyleBoxFlat_n1lvj")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_yhv7p")
+theme_override_styles/focus = SubResource("StyleBoxFlat_30n4r")
+toggle_mode = true
+button_group = SubResource("ButtonGroup_3emc6")
+metadata/action = "page:store"
+
+[node name="Icon" type="TextureRect" parent="StoreButton" unique_id=1909778616]
+texture_filter = 1
+layout_mode = 0
+offset_left = 38.0
+offset_top = 5.0
+offset_right = 105.0
+offset_bottom = 74.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_g2uih")
+expand_mode = 1
+
+[node name="Caption" type="Label" parent="StoreButton" unique_id=120144995]
+layout_mode = 0
+offset_top = 75.0
+offset_right = 143.0
+offset_bottom = 113.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("2_chqei")
+theme_override_font_sizes/font_size = 23
+text = "商店"
+horizontal_alignment = 1
+vertical_alignment = 1
