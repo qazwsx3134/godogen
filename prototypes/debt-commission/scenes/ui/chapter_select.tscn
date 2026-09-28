@@ -1,0 +1,100 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/chapter_select.gd" id="1_euilf"]
+[ext_resource type="PackedScene" path="res://scenes/ui/chapter_row.tscn" id="2_usf8y"]
+
+[node name="ChapterSelect" type="Panel" unique_id=2001074598]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_euilf")
+metadata/ui_style_role = "log"
+
+[node name="Margins" type="MarginContainer" parent="." unique_id=1521381548]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="Layout" type="VBoxContainer" parent="Margins" unique_id=270141889]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Header" type="HBoxContainer" parent="Margins/Layout" unique_id=1002353191]
+custom_minimum_size = Vector2(0, 112)
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Heading" type="Label" parent="Margins/Layout/Header" unique_id=520478484]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 52
+text = "章節選擇"
+vertical_alignment = 1
+metadata/ui_style_role = "accent"
+
+[node name="Close" type="Button" parent="Margins/Layout/Header" unique_id=37013827]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(132.92308, 132.92308)
+layout_mode = 2
+theme_override_font_sizes/font_size = 60
+text = "×"
+metadata/ui_style_role = "standard"
+
+[node name="Scroll" type="ScrollContainer" parent="Margins/Layout" unique_id=1766874692]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="List" type="VBoxContainer" parent="Margins/Layout/Scroll" unique_id=2105520902]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 20
+
+[node name="ChaptersHeading" type="Label" parent="Margins/Layout/Scroll/List" unique_id=1565401299]
+layout_mode = 2
+text = "本篇"
+metadata/ui_style_role = "muted"
+
+[node name="Chapters" type="VBoxContainer" parent="Margins/Layout/Scroll/List" unique_id=924685747]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Preview0" type="Button" parent="Margins/Layout/Scroll/List/Chapters" unique_id=1347557441 instance=ExtResource("2_usf8y")]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "第一章 萬事屋冰箱草莓牛奶失竊事件
+最佳評價 A"
+alignment = 0
+autowrap_mode = 3
+metadata/ui_style_role = "selector"
+
+[node name="Preview1" type="Button" parent="Margins/Layout/Scroll/List/Chapters" unique_id=1642803917 instance=ExtResource("2_usf8y")]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "第二章
+完成前一章後開放"
+alignment = 0
+autowrap_mode = 3
+metadata/ui_style_role = "selector"
+
+[node name="ChaptersEmpty" type="Label" parent="Margins/Layout/Scroll/List" unique_id=654426488]
+unique_name_in_owner = true
+layout_mode = 2
+text = "本篇章節還在製作中。"
+metadata/ui_style_role = "muted"
+
+[node name="SamplesHeading" type="Label" parent="Margins/Layout/Scroll/List" unique_id=1748806400]
+layout_mode = 2
+text = "試玩片段"
+metadata/ui_style_role = "muted"
+
+[node name="Samples" type="VBoxContainer" parent="Margins/Layout/Scroll/List" unique_id=1811778910]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 16

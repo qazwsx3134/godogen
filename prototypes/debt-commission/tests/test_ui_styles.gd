@@ -66,6 +66,10 @@ func _run() -> void:
 		_expect(_selector_has_focus_and_disabled_states(game, style_id),
 			"%s selector exposes focus and disabled button treatments" % style_id)
 
+	game._on_choice_pressed("no_such_option")
+	_expect(game._dialog_panel.visible and not game._choice_sheet.visible and not game._story_error.is_empty() and
+		game._visible_text == game._story_error, "a refused pick closes the sheet and shows its error in the dialogue box")
+
 	game.queue_free()
 	await _frames(2)
 	var restored: Control = _new_game(TEST_PREFERENCE)
@@ -94,37 +98,44 @@ func _new_game(preference_path: String = TEST_PREFERENCE) -> Control:
 	return game
 
 
+## The edition's own choice sheet holds the rows, a focused row looks different from a resting one,
+## and row text clears contrast against the row colour laid over the sheet's paper.
 func _choices_match_style(game: Control, style_id: String) -> bool:
-	if game._choice_buttons.is_empty():
+	if game._choice_buttons.is_empty() or game._choice_sheet.style_id != style_id or not game._choice_sheet.visible \
+			or game._dialog_panel.visible:
 		return false
+	var paper: Color = {"cinema": Color8(8, 17, 26), "ledger": Color("#f2e8d2"), "manga": Color("#f5f3e9")}[style_id]
 	for button: Button in game._choice_buttons:
 		var normal: StyleBoxFlat = button.get_theme_stylebox("normal") as StyleBoxFlat
-		var disabled: StyleBoxFlat = button.get_theme_stylebox("disabled") as StyleBoxFlat
 		var focus: StyleBoxFlat = button.get_theme_stylebox("focus") as StyleBoxFlat
-		var expected: StyleBoxFlat = UI_STYLES_SCRIPT.button_style(style_id, "choice", "normal")
-		if normal == null or disabled == null or focus == null or normal.bg_color != expected.bg_color:
+		if button.get_parent() != game._choice_sheet.choices or normal == null or focus == null:
 			return false
-		if disabled.border_color == normal.border_color or focus.border_color == normal.border_color:
+		if focus.border_color == normal.border_color and focus.bg_color == normal.bg_color:
 			return false
-		if UI_STYLES_SCRIPT.contrast_ratio(button.get_theme_color("font_color"), normal.bg_color) < 4.5:
+		if UI_STYLES_SCRIPT.contrast_ratio(button.get_theme_color("font_color"), paper.blend(normal.bg_color)) < 4.5:
 			return false
 	return true
 
 
+## The edition's own box scene is mounted, and its text clears contrast against the paper the
+## ornament paints (cinema: the navy gradient at full strength).
 func _dialogue_is_readable(game: Control, style_id: String) -> bool:
-	var panel: StyleBoxFlat = game._dialog_panel.get_theme_stylebox("panel") as StyleBoxFlat
+	var paper: Color = {"cinema": Color(0.03, 0.07, 0.1), "ledger": Color("#f2e8d2"), "manga": Color(0.965, 0.96, 0.93)}[style_id]
 	var text_color: Color = game._text_label.get_theme_color("font_color")
-	return panel != null and UI_STYLES_SCRIPT.contrast_ratio(text_color, panel.bg_color) >= 4.5
+	return game._dialog_panel.style_id == style_id and UI_STYLES_SCRIPT.contrast_ratio(text_color, paper) >= 4.5
 
 
+## The title's edition picker belongs to that edition's title scene, shows a focus ring and a
+## disabled look, and its text clears contrast on the card.
 func _selector_has_focus_and_disabled_states(game: Control, style_id: String) -> bool:
 	var button: Button = game._title_style_buttons[style_id] as Button
 	var focus: StyleBoxFlat = button.get_theme_stylebox("focus") as StyleBoxFlat
 	var disabled: StyleBoxFlat = button.get_theme_stylebox("disabled") as StyleBoxFlat
 	var normal: StyleBoxFlat = button.get_theme_stylebox("normal") as StyleBoxFlat
-	return button.focus_mode == Control.FOCUS_ALL and focus != null and disabled != null and \
-		normal != null and focus.border_color == UI_STYLES_SCRIPT.palette(style_id)["focus"] and \
-		UI_STYLES_SCRIPT.contrast_ratio(button.get_theme_color("font_color"), normal.bg_color) >= 4.5
+	var card: Color = {"cinema": Color8(5, 10, 14), "ledger": Color("#f2e8d2"), "manga": Color("#f5f3e9")}[style_id]
+	return game._title_screen.style_id == style_id and button.focus_mode == Control.FOCUS_ALL and \
+		focus != null and disabled != null and normal != null and focus.border_color.a > 0.0 and focus.border_width_top > 0 and \
+		UI_STYLES_SCRIPT.contrast_ratio(button.get_theme_color("font_color"), card.blend(normal.bg_color)) >= 4.5
 
 
 func _cleanup_files() -> void:

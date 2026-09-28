@@ -138,17 +138,18 @@ static func save_preference(style_id: String, path: String = PREFERENCE_PATH) ->
 	return config.save(path)
 
 
-static func apply_button(button: Button, style_id: String, role: String = "standard", active: bool = false) -> void:
+static func apply_button(button: Button, style_id: String, role: String = "standard", active: bool = false, scale_factor: float = 1.0) -> void:
 	var normalized: String = normalize_id(style_id)
+	var density: float = maxf(1.0, scale_factor)
 	button.set_meta("ui_style_role", role)
 	button.set_meta("ui_style_active", active)
 	button.focus_mode = Control.FOCUS_ALL
-	button.add_theme_stylebox_override("normal", button_style(normalized, role, "normal", active))
-	button.add_theme_stylebox_override("hover", button_style(normalized, role, "hover", active))
-	button.add_theme_stylebox_override("pressed", button_style(normalized, role, "pressed", active))
-	button.add_theme_stylebox_override("hover_pressed", button_style(normalized, role, "pressed", active))
-	button.add_theme_stylebox_override("focus", button_style(normalized, role, "focus", active))
-	button.add_theme_stylebox_override("disabled", button_style(normalized, role, "disabled", active))
+	button.add_theme_stylebox_override("normal", button_style(normalized, role, "normal", active, density))
+	button.add_theme_stylebox_override("hover", button_style(normalized, role, "hover", active, density))
+	button.add_theme_stylebox_override("pressed", button_style(normalized, role, "pressed", active, density))
+	button.add_theme_stylebox_override("hover_pressed", button_style(normalized, role, "pressed", active, density))
+	button.add_theme_stylebox_override("focus", button_style(normalized, role, "focus", active, density))
+	button.add_theme_stylebox_override("disabled", button_style(normalized, role, "disabled", active, density))
 	var p: Dictionary = palette(normalized)
 	var regular_ink: Color = _button_ink(p, role, active, "normal")
 	button.add_theme_color_override("font_color", regular_ink)
@@ -158,9 +159,10 @@ static func apply_button(button: Button, style_id: String, role: String = "stand
 	button.add_theme_color_override("font_disabled_color", p["disabled"] as Color)
 
 
-static func button_style(style_id: String, role: String, state: String, active: bool = false) -> StyleBoxFlat:
+static func button_style(style_id: String, role: String, state: String, active: bool = false, scale_factor: float = 1.0) -> StyleBoxFlat:
 	var p: Dictionary = palette(style_id)
-	var is_primary: bool = role in ["primary", "boke_primary", "danger_action"]
+	var density: float = maxf(1.0, scale_factor)
+	var is_primary: bool = role in ["primary", "boke_primary", "danger_action", "menu_primary"]
 	var is_selector: bool = role == "selector"
 	var normal_bg: Color = p["surface"] as Color
 	var normal_border: Color = p["rule"] as Color
@@ -170,24 +172,104 @@ static func button_style(style_id: String, role: String, state: String, active: 
 	var pressed_border: Color = p["focus"] as Color
 	var border_width: int = int(p["button_border"])
 	var radius: int = int(p["button_radius"])
-	var margins: Vector4 = Vector4(24.0, 12.0, 24.0, 12.0)
+	var margins: Vector4 = Vector4(12.0, 8.0, 12.0, 8.0) * density
 
 	if role == "quickbar":
-		normal_bg = p["quick_active"] as Color if active else p["quick_bg"] as Color
-		normal_border = p["accent"] as Color if active else Color(0, 0, 0, 0)
-		hover_bg = p["surface_hover"] as Color if not active else (p["quick_active"] as Color).lightened(0.08)
+		normal_bg = p["quick_active"] as Color if active else Color.TRANSPARENT
+		normal_border = p["accent"] as Color if active else Color.TRANSPARENT
+		hover_bg = Color((p["accent"] as Color).r, (p["accent"] as Color).g, (p["accent"] as Color).b, 0.14) if not active else (p["quick_active"] as Color).lightened(0.08)
 		hover_border = p["rule"] as Color if not active else p["focus"] as Color
 		pressed_bg = p["accent"] as Color
 		pressed_border = p["focus"] as Color
-		border_width = 0 if not active else maxi(1, int(p["button_border"]))
+		border_width = 0 if not active else maxi(1, roundi(float(p["button_border"]) * density))
 		radius = 0 if style_id == "cinema" else radius
-		margins = Vector4(8.0, 8.0, 8.0, 8.0)
+		margins = Vector4(8.0, 4.0, 8.0, 4.0) * density
+	elif role == "advance":
+		margins = Vector4(0.0, 0.0, 0.0, 0.0)
+		if style_id == "cinema":
+			normal_bg = Color.TRANSPARENT
+			normal_border = Color.TRANSPARENT
+			hover_bg = Color(0.66, 0.82, 0.81, 0.12)
+			hover_border = p["accent"] as Color
+			pressed_bg = Color(0.66, 0.82, 0.81, 0.2)
+			border_width = 0
+		elif style_id == "ledger":
+			normal_bg = p["accent"] as Color
+			normal_border = Color("#fff2d8")
+			hover_bg = (p["accent"] as Color).lightened(0.1)
+			hover_border = p["focus"] as Color
+			pressed_bg = (p["accent"] as Color).darkened(0.12)
+			border_width = maxi(1, roundi(2.0 * density))
+			radius = roundi(99.0 * density)
+		else:
+			normal_bg = p["accent"] as Color
+			normal_border = p["text"] as Color
+			hover_bg = (p["accent"] as Color).lightened(0.12)
+			hover_border = p["text"] as Color
+			pressed_bg = (p["accent"] as Color).darkened(0.1)
+			border_width = maxi(2, roundi(2.0 * density))
+	elif role in ["menu", "menu_toggle"]:
+		if style_id == "cinema":
+			normal_bg = Color.TRANSPARENT
+			normal_border = Color(0.82, 0.88, 0.84, 0.25)
+			hover_bg = Color(0.66, 0.82, 0.81, 0.11)
+			hover_border = Color(0.66, 0.82, 0.81, 0.55)
+		elif style_id == "ledger":
+			normal_bg = Color.TRANSPARENT
+			normal_border = p["rule"] as Color
+			hover_bg = Color(0.66, 0.26, 0.18, 0.07)
+			hover_border = p["accent"] as Color
+		else:
+			normal_bg = p["surface"] as Color
+			normal_border = p["text"] as Color
+			hover_bg = p["surface_hover"] as Color
+			hover_border = p["accent"] as Color
+		if role == "menu_toggle" and active:
+			normal_bg = Color((p["accent"] as Color).r, (p["accent"] as Color).g, (p["accent"] as Color).b, 0.15)
+			normal_border = p["accent"] as Color
+			pressed_bg = p["accent"] as Color
+		border_width = maxi(1, roundi(float(p["button_border"]) * density))
+		margins = Vector4(12.0, 6.0, 12.0, 6.0) * density
+	elif role == "choice":
+		if style_id == "cinema":
+			normal_bg = Color(0.95, 0.95, 0.9, 0.08)
+			normal_border = Color(0.85, 0.89, 0.86, 0.28)
+			hover_bg = Color(0.76, 0.87, 0.85, 0.17)
+			hover_border = p["accent"] as Color
+			border_width = maxi(1, roundi(density))
+		elif style_id == "ledger":
+			normal_bg = Color.TRANSPARENT
+			normal_border = p["rule"] as Color
+			hover_bg = Color(0.66, 0.26, 0.18, 0.08)
+			hover_border = p["accent"] as Color
+			border_width = maxi(1, roundi(density))
+		else:
+			normal_bg = Color("#fcfbf6")
+			normal_border = p["text"] as Color
+			hover_bg = Color("#fff6c6")
+			hover_border = p["accent"] as Color
+			border_width = maxi(2, roundi(2.0 * density))
+		margins = Vector4(10.0, 5.0, 10.0, 5.0) * density
+	elif role == "choice_menu":
+		if style_id == "ledger":
+			normal_bg = p["accent"] as Color
+			normal_border = Color("#782f24")
+			border_width = maxi(1, roundi(density))
+		elif style_id == "manga":
+			normal_bg = p["surface"] as Color
+			normal_border = p["text"] as Color
+			border_width = maxi(2, roundi(2.0 * density))
+		else:
+			normal_bg = Color.TRANSPARENT
+			normal_border = Color(0.82, 0.88, 0.84, 0.55)
+			border_width = maxi(1, roundi(density))
+		margins = Vector4(10.0, 5.0, 10.0, 5.0) * density
 	elif role == "subtle":
 		normal_bg = Color(0, 0, 0, 0)
 		normal_border = p["rule"] as Color
 		hover_bg = p["surface_hover"] as Color
 		hover_border = p["accent"] as Color
-		margins = Vector4(16.0, 8.0, 16.0, 8.0)
+		margins = Vector4(10.0, 6.0, 10.0, 6.0) * density
 	elif is_primary:
 		normal_bg = p["accent"] as Color
 		normal_border = p["focus"] as Color
@@ -195,7 +277,7 @@ static func button_style(style_id: String, role: String, state: String, active: 
 		hover_border = p["focus"] as Color
 		pressed_bg = (p["accent"] as Color).darkened(0.12)
 		pressed_border = p["focus"] as Color
-		border_width = maxi(1, int(p["button_border"]))
+		border_width = maxi(1, roundi(float(p["button_border"]) * density))
 	elif is_selector and active:
 		normal_bg = p["accent"] as Color
 		normal_border = p["focus"] as Color
@@ -203,7 +285,7 @@ static func button_style(style_id: String, role: String, state: String, active: 
 		hover_border = p["focus"] as Color
 		pressed_bg = (p["accent"] as Color).darkened(0.1)
 		pressed_border = p["focus"] as Color
-		border_width = maxi(2, int(p["button_border"]))
+		border_width = maxi(2, roundi(float(p["button_border"]) * density))
 	elif role == "slot_card_empty":
 		normal_bg = p["panel_soft"] as Color
 		normal_border = p["rule"] as Color
@@ -242,21 +324,33 @@ static func button_style(style_id: String, role: String, state: String, active: 
 	# Focus is drawn over the current button state; only add its ring.
 	result.draw_center = state != "focus"
 	result.border_color = border
-	result.set_border_width_all(state_width)
-	result.set_corner_radius_all(radius)
+	result.set_border_width_all(roundi(float(state_width) * density))
+	if role == "advance" and style_id == "cinema":
+		result.border_width_left = maxi(1, roundi(density)) if state != "normal" else 0
+	if role == "menu" and style_id != "manga":
+		result.border_width_left = 0
+		result.border_width_top = 0 if style_id == "cinema" else maxi(1, roundi(density))
+		result.border_width_right = 0
+	if role == "choice" and style_id == "ledger":
+		result.border_width_left = 0
+		result.border_width_top = 0
+		result.border_width_right = 0
+	result.set_corner_radius_all(roundi(float(radius) * density))
 	result.content_margin_left = margins.x
 	result.content_margin_top = margins.y
 	result.content_margin_right = margins.z
 	result.content_margin_bottom = margins.w
-	if style_id == "manga" and role not in ["quickbar", "subtle"]:
+	if style_id == "manga" and role not in ["quickbar", "subtle", "advance"]:
 		result.shadow_color = Color(0.08, 0.08, 0.07, 0.22)
 		result.shadow_size = 2 if state != "disabled" else 0
-		result.shadow_offset = Vector2(2.0, 2.0)
+		result.shadow_size = roundi(float(result.shadow_size) * density)
+		result.shadow_offset = Vector2(2.0, 2.0) * density
 	return result
 
 
-static func panel_style(style_id: String, role: String) -> StyleBoxFlat:
+static func panel_style(style_id: String, role: String, scale_factor: float = 1.0) -> StyleBoxFlat:
 	var p: Dictionary = palette(style_id)
+	var density: float = maxf(1.0, scale_factor)
 	var result: StyleBoxFlat = StyleBoxFlat.new()
 	var background: Color = p["panel"] as Color
 	var border: Color = p["rule"] as Color
@@ -292,21 +386,21 @@ static func panel_style(style_id: String, role: String) -> StyleBoxFlat:
 		result.shadow_offset = Vector2(5.0, 5.0)
 	result.bg_color = background
 	result.border_color = border
-	result.set_border_width_all(border_width)
+	result.set_border_width_all(roundi(float(border_width) * density))
 	if style_id == "ledger" and role in ["menu", "log", "slots", "confirmation", "title_selector"]:
-		result.border_width_left = maxi(3, border_width)
+		result.border_width_left = maxi(3, roundi(float(border_width) * density))
 		result.border_color = p["accent"] as Color
 	if role == "dialogue":
-		result.border_width_top = maxi(1, int(p["panel_border"]))
+		result.border_width_top = maxi(1, roundi(float(p["panel_border"]) * density))
 		if style_id == "ledger":
-			result.border_width_left = 6
+			result.border_width_left = roundi(6.0 * density)
 		elif style_id == "manga":
-			result.border_width_top = 5
-	result.set_corner_radius_all(radius)
-	result.content_margin_left = margins.x
-	result.content_margin_top = margins.y
-	result.content_margin_right = margins.z
-	result.content_margin_bottom = margins.w
+			result.border_width_top = roundi(5.0 * density)
+	result.set_corner_radius_all(roundi(float(radius) * density))
+	result.content_margin_left = margins.x * density
+	result.content_margin_top = margins.y * density
+	result.content_margin_right = margins.z * density
+	result.content_margin_bottom = margins.w * density
 	return result
 
 
@@ -333,23 +427,24 @@ static func label_color(style_id: String, role: String) -> Color:
 			return p["text"] as Color
 
 
-static func apply_label(label: Label, style_id: String, role: String = "body") -> void:
+static func apply_label(label: Label, style_id: String, role: String = "body", scale_factor: float = 1.0) -> void:
 	var p: Dictionary = palette(style_id)
+	var density: float = maxf(1.0, scale_factor)
 	label.set_meta("ui_style_role", role)
 	label.add_theme_color_override("font_color", label_color(style_id, role))
 	if role in ["scene_overlay", "title_overlay"]:
 		label.add_theme_color_override("font_outline_color", p["scene_outline"] as Color)
-		label.add_theme_constant_override("outline_size", 5 if role == "title_overlay" else 4)
+		label.add_theme_constant_override("outline_size", roundi((5.0 if role == "title_overlay" else 4.0) * density))
 	else:
 		label.add_theme_color_override("font_outline_color", p["text_outline"] as Color)
-		label.add_theme_constant_override("outline_size", 2)
+		label.add_theme_constant_override("outline_size", roundi(1.0 * density))
 	if role == "toast":
-		label.add_theme_stylebox_override("normal", panel_style(style_id, "toast"))
+		label.add_theme_stylebox_override("normal", panel_style(style_id, "toast", density))
 
 
-static func apply_panel(panel: Panel, style_id: String, role: String = "menu") -> void:
+static func apply_panel(panel: Panel, style_id: String, role: String = "menu", scale_factor: float = 1.0) -> void:
 	panel.set_meta("ui_style_role", role)
-	panel.add_theme_stylebox_override("panel", panel_style(style_id, role))
+	panel.add_theme_stylebox_override("panel", panel_style(style_id, role, scale_factor))
 
 
 static func contrast_ratio(foreground: Color, background: Color) -> float:

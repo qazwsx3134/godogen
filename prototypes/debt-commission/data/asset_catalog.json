@@ -4,49 +4,92 @@
       "label": "萬事屋・客廳",
       "top": "#2e2a45",
       "bottom": "#b9794f",
-      "path": "res://assets/image/yorozuya-inside.png"
+      "path": "res://assets/image/yorosuya-inside.png"
     },
     "yorozuya_kitchen": {
       "label": "萬事屋廚房",
       "top": "#5A4335",
-      "bottom": "#1B2024"
+      "bottom": "#1B2024",
+      "path": "res://assets/image/kitchen.png"
     },
     "yorozuya_exterior": {
       "label": "萬事屋・外觀",
       "top": "#263248",
       "bottom": "#9c6c4e",
-      "path": "res://assets/image/yorozuya-background.png"
+      "path": "res://assets/image/yorosuya-outside.png"
     }
   },
   "characters": {
     "shinpachi": {
       "name": "新八",
       "color": "#4f7fcf",
-      "slot": "left"
+      "slot": "left",
+      "path": "res://assets/image/shin-pa-chi.png",
+      "expressions": {
+        "shout": "res://assets/image/expressions/shinpachi_shout.png",
+        "angry": "res://assets/image/expressions/shinpachi_angry.png",
+        "panic": "res://assets/image/expressions/shinpachi_panic.png",
+        "nervous": "res://assets/image/expressions/shinpachi_nervous.png",
+        "thinking": "res://assets/image/expressions/shinpachi_thinking.png"
+      }
     },
     "gintoki": {
       "name": "銀時",
       "profile": "萬事屋老闆，嗜甜如命。自稱冰箱裡的草莓牛奶跟他毫無關係。（技術試片用簡介）",
       "color": "#aab6c8",
       "slot": "center",
-      "path": "res://assets/image/gintoki.png",
-      "silhouette": true
+      "path": "res://assets/image/gin-san.png",
+      "expressions": {
+        "smug": "res://assets/image/expressions/gintoki_smug.png",
+        "sweat": "res://assets/image/expressions/gintoki_sweat.png",
+        "annoyed": "res://assets/image/expressions/gintoki_annoyed.png",
+        "nosepick": "res://assets/image/expressions/gintoki_annoyed.png",
+        "nervous": "res://assets/image/expressions/gintoki_nervous.png",
+        "panic": "res://assets/image/expressions/gintoki_nervous.png",
+        "serious": "res://assets/image/expressions/gintoki_serious.png",
+        "angry": "res://assets/image/expressions/gintoki_angry.png"
+      }
     },
     "otose": {
       "name": "登勢",
       "color": "#9a6bb0",
-      "slot": "right"
+      "slot": "right",
+      "path": "res://assets/image/Otose-san.png",
+      "expressions": {
+        "annoyed": "res://assets/image/expressions/otose_annoyed.png",
+        "angry": "res://assets/image/expressions/otose_angry.png",
+        "serious": "res://assets/image/expressions/otose_serious.png"
+      }
     },
     "kagura": {
       "name": "神樂",
       "profile": "萬事屋的大胃王，醋昆布不離身。說話尾音帶「阿魯」。（技術試片用簡介）",
       "color": "#F08CA8",
-      "slot": "right"
+      "slot": "right",
+      "path": "res://assets/image/kagura-chan.png",
+      "expressions": {
+        "smile": "res://assets/image/expressions/kagura_smile.png",
+        "smug": "res://assets/image/expressions/kagura_smug.png",
+        "mock": "res://assets/image/expressions/kagura_mock.png",
+        "sweat": "res://assets/image/expressions/kagura_sweat.png",
+        "nervous": "res://assets/image/expressions/kagura_sweat.png",
+        "angry": "res://assets/image/expressions/kagura_angry.png",
+        "annoyed": "res://assets/image/expressions/kagura_annoyed.png",
+        "nosepick": "res://assets/image/expressions/kagura_nosepick.png"
+      }
     },
     "sadaharu": {
       "name": "定春",
       "color": "#F4F0E6",
-      "slot": "center"
+      "slot": "center",
+      "path": "res://assets/image/sadaharu.png"
+    },
+    "elisabeth": {
+      "name": "伊莉莎白",
+      "profile": "桂的搭檔。從不開口，想說的話都寫在手上的牌子上。（技術試片用簡介）",
+      "color": "#F4F4F0",
+      "slot": "right",
+      "path": "res://assets/image/elisabeth.png"
     }
   },
   "items": {
@@ -66,9 +109,77 @@
       "name": "定春的腳印",
       "description": "小小的腳印一路通往冰箱旁邊。"
     },
+    "gin_sleep_testimony": {
+      "name": "銀時的證詞：半夜兩點",
+      "description": "銀時自己說的：半夜兩點起來開冰箱的時候，人都還沒醒。"
+    },
     "debt_commission_letter": {
       "name": "討債委託書",
       "description": "一張把委託人、欠款人和麻煩寫在同一頁的委託書。"
+    }
+  },
+  "sounds": {
+    "crow": {
+      "label": "烏鴉叫（冷場）"
+    },
+    "tsukkomi_hit": {
+      "label": "吐槽命中"
+    },
+    "glass_crack": {
+      "label": "眼鏡裂開"
+    },
+    "glass_shatter": {
+      "label": "眼鏡碎掉"
+    },
+    "censor_beep": {
+      "label": "消音嗶聲"
+    },
+    "tear": {
+      "label": "撕下消音條"
+    },
+    "qte_hit": {
+      "label": "QTE 判定"
+    },
+    "combo_up": {
+      "label": "連擊"
+    },
+    "combo_break": {
+      "label": "連擊中斷"
+    },
+    "super_charge": {
+      "label": "超必殺"
+    },
+    "fridge": {
+      "label": "冰箱門"
+    },
+    "door_slide": {
+      "label": "拉門"
+    },
+    "bite": {
+      "label": "定春咬人"
+    },
+    "gulp": {
+      "label": "喝牛奶"
+    }
+  },
+  "music": {
+    "bgm_daily": {
+      "label": "日常"
+    },
+    "bgm_meeting": {
+      "label": "家庭會議"
+    },
+    "bgm_boke": {
+      "label": "裝傻回合"
+    },
+    "bgm_combo": {
+      "label": "連擊回合"
+    },
+    "bgm_serious": {
+      "label": "嚴肅（短）"
+    },
+    "bgm_result": {
+      "label": "章節結算"
     }
   }
 }

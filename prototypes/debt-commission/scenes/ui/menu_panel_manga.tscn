@@ -1,0 +1,511 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/story-cjk.ttc" id="1_xfq1u"]
+[ext_resource type="Script" path="res://scripts/menu_panel.gd" id="2_5hl6x"]
+[ext_resource type="Script" path="res://scripts/ui_ornament.gd" id="3_v4hsw"]
+[ext_resource type="PackedScene" path="res://scenes/ui/menu_row_manga.tscn" id="4_rkxb2"]
+
+[sub_resource type="Theme" id="Theme_ee2nr"]
+default_font = ExtResource("1_xfq1u")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_77yhi"]
+
+[sub_resource type="FontVariation" id="FontVariation_t1w27"]
+base_font = ExtResource("1_xfq1u")
+variation_embolden = 0.8
+spacing_glyph = 5
+
+[sub_resource type="FontVariation" id="FontVariation_qlg0f"]
+base_font = ExtResource("1_xfq1u")
+variation_embolden = 0.8
+spacing_glyph = -1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ud3om"]
+content_margin_left = 33.23077
+content_margin_top = 0.0
+content_margin_right = 33.23077
+content_margin_bottom = 0.0
+bg_color = Color(1, 0.8745098, 0.27450982, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ka0no"]
+content_margin_left = 33.23077
+content_margin_top = 0.0
+content_margin_right = 33.23077
+content_margin_bottom = 0.0
+bg_color = Color(1, 0.9137255, 0.47843137, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yd34r"]
+draw_center = false
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.14509805, 0.15294118, 0.14117648, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ll1f6"]
+content_margin_left = 33.23077
+content_margin_top = 27.692308
+content_margin_right = 116.30769
+content_margin_bottom = 27.692308
+bg_color = Color(0.72156864, 0.20392157, 0.14117648, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+shadow_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+shadow_size = 1
+shadow_offset = Vector2(5.5384617, 5.5384617)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ism33"]
+content_margin_left = 33.23077
+content_margin_top = 27.692308
+content_margin_right = 116.30769
+content_margin_bottom = 27.692308
+bg_color = Color(0.64705884, 0.18039216, 0.1254902, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+shadow_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+shadow_size = 1
+shadow_offset = Vector2(5.5384617, 5.5384617)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w4mym"]
+content_margin_left = 16.615385
+content_margin_top = 22.153847
+content_margin_right = 16.615385
+content_margin_bottom = 22.153847
+bg_color = Color(0.9843137, 0.98039216, 0.95686275, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+shadow_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+shadow_size = 1
+shadow_offset = Vector2(5.5384617, 5.5384617)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s0tkh"]
+content_margin_left = 16.615385
+content_margin_top = 22.153847
+content_margin_right = 16.615385
+content_margin_bottom = 22.153847
+bg_color = Color(1, 0.8745098, 0.27450982, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.65882355, 0.23137255, 0.16862746, 1)
+shadow_color = Color(0.65882355, 0.23137255, 0.16862746, 1)
+shadow_size = 1
+shadow_offset = Vector2(8.307693, 8.307693)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_38r6q"]
+content_margin_left = 16.615385
+content_margin_top = 22.153847
+content_margin_right = 16.615385
+content_margin_bottom = 22.153847
+bg_color = Color(1, 0.8745098, 0.27450982, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+shadow_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+shadow_size = 1
+shadow_offset = Vector2(5.5384617, 5.5384617)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dioul"]
+content_margin_left = 16.615385
+content_margin_top = 22.153847
+content_margin_right = 16.615385
+content_margin_bottom = 22.153847
+bg_color = Color(0.9137255, 0.90588236, 0.8627451, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_alf5e"]
+content_margin_left = 16.615385
+content_margin_top = 22.153847
+content_margin_right = 16.615385
+content_margin_bottom = 22.153847
+bg_color = Color(0.9843137, 0.98039216, 0.95686275, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+shadow_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+shadow_size = 1
+shadow_offset = Vector2(5.5384617, 5.5384617)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bb1rq"]
+content_margin_left = 16.615385
+content_margin_top = 22.153847
+content_margin_right = 16.615385
+content_margin_bottom = 22.153847
+bg_color = Color(1, 0.8745098, 0.27450982, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.65882355, 0.23137255, 0.16862746, 1)
+shadow_color = Color(0.65882355, 0.23137255, 0.16862746, 1)
+shadow_size = 1
+shadow_offset = Vector2(8.307693, 8.307693)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aa2ul"]
+content_margin_left = 16.615385
+content_margin_top = 22.153847
+content_margin_right = 16.615385
+content_margin_bottom = 22.153847
+bg_color = Color(1, 0.8745098, 0.27450982, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+shadow_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+shadow_size = 1
+shadow_offset = Vector2(5.5384617, 5.5384617)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rjrkt"]
+content_margin_left = 16.615385
+content_margin_top = 22.153847
+content_margin_right = 16.615385
+content_margin_bottom = 22.153847
+bg_color = Color(0.9137255, 0.90588236, 0.8627451, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mhyo2"]
+content_margin_left = 16.615385
+content_margin_top = 22.153847
+content_margin_right = 16.615385
+content_margin_bottom = 22.153847
+bg_color = Color(0.9843137, 0.98039216, 0.95686275, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+shadow_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+shadow_size = 1
+shadow_offset = Vector2(5.5384617, 5.5384617)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_84l67"]
+content_margin_left = 16.615385
+content_margin_top = 22.153847
+content_margin_right = 16.615385
+content_margin_bottom = 22.153847
+bg_color = Color(1, 0.8745098, 0.27450982, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.65882355, 0.23137255, 0.16862746, 1)
+shadow_color = Color(0.65882355, 0.23137255, 0.16862746, 1)
+shadow_size = 1
+shadow_offset = Vector2(8.307693, 8.307693)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s7yhc"]
+content_margin_left = 16.615385
+content_margin_top = 22.153847
+content_margin_right = 16.615385
+content_margin_bottom = 22.153847
+bg_color = Color(1, 0.8745098, 0.27450982, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+shadow_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+shadow_size = 1
+shadow_offset = Vector2(5.5384617, 5.5384617)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l2kr2"]
+content_margin_left = 16.615385
+content_margin_top = 22.153847
+content_margin_right = 16.615385
+content_margin_bottom = 22.153847
+bg_color = Color(0.9137255, 0.90588236, 0.8627451, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+
+[node name="Menu" type="Control" unique_id=1970215088]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = SubResource("Theme_ee2nr")
+script = ExtResource("2_5hl6x")
+style_id = "manga"
+
+[node name="Dim" type="ColorRect" parent="." unique_id=1225411973]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.09803922, 0.09803922, 0.09019608, 0.72156864)
+
+[node name="Area" type="MarginContainer" parent="." unique_id=1829609941]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 50
+
+[node name="Center" type="VBoxContainer" parent="Area" unique_id=990588834]
+layout_mode = 2
+mouse_filter = 2
+alignment = 1
+
+[node name="Panel" type="PanelContainer" parent="Area/Center" unique_id=1420674435]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_77yhi")
+
+[node name="Frame" type="Control" parent="Area/Center/Panel" unique_id=1210115438]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("3_v4hsw")
+style_id = "manga"
+kind = "menu"
+
+[node name="Padding" type="MarginContainer" parent="Area/Center/Panel" unique_id=133130653]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 42
+theme_override_constants/margin_top = 42
+theme_override_constants/margin_right = 42
+theme_override_constants/margin_bottom = 42
+
+[node name="Column" type="VBoxContainer" parent="Area/Center/Panel/Padding" unique_id=480480039]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Heading" type="HBoxContainer" parent="Area/Center/Panel/Padding/Column" unique_id=1996177797]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 33
+
+[node name="HeadingText" type="VBoxContainer" parent="Area/Center/Panel/Padding/Column/Heading" unique_id=425629796]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="Kicker" type="Label" parent="Area/Center/Panel/Padding/Column/Heading/HeadingText" unique_id=1690382417]
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_t1w27")
+theme_override_font_sizes/font_size = 39
+theme_override_colors/font_color = Color(0.65882355, 0.23137255, 0.16862746, 1)
+text = "夜班委託・目錄"
+
+[node name="Heading" type="Label" parent="Area/Center/Panel/Padding/Column/Heading/HeadingText" unique_id=634478117]
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_qlg0f")
+theme_override_font_sizes/font_size = 61
+theme_override_colors/font_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+text = "稍停一格"
+
+[node name="Close" type="Button" parent="Area/Center/Panel/Padding/Column/Heading" unique_id=194446670]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(132.92308, 132.92308)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/normal = SubResource("StyleBoxFlat_ud3om")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ka0no")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ka0no")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_ka0no")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_ud3om")
+theme_override_styles/focus = SubResource("StyleBoxFlat_yd34r")
+theme_override_colors/font_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+theme_override_colors/font_focus_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+theme_override_colors/font_pressed_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+theme_override_colors/font_hover_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
+theme_override_font_sizes/font_size = 64
+text = "×"
+
+[node name="HeadingGap" type="Control" parent="Area/Center/Panel/Padding/Column" unique_id=2121036532]
+custom_minimum_size = Vector2(0, 27.692308)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="RowsScroll" type="ScrollContainer" parent="Area/Center/Panel/Padding/Column" unique_id=1921737154]
+unique_name_in_owner = true
+layout_mode = 2
+follow_focus = true
+horizontal_scroll_mode = 0
+
+[node name="Rows" type="VBoxContainer" parent="Area/Center/Panel/Padding/Column/RowsScroll" unique_id=1807839941]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 19
+
+[node name="Resume" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1248057889 instance=ExtResource("4_rkxb2")]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_ll1f6")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ism33")
+theme_override_colors/font_color = Color(1, 0.9764706, 0.92156863, 1)
+theme_override_colors/font_focus_color = Color(1, 0.9764706, 0.92156863, 1)
+theme_override_colors/font_pressed_color = Color(1, 0.9764706, 0.92156863, 1)
+theme_override_colors/font_hover_color = Color(1, 0.9764706, 0.92156863, 1)
+theme_override_colors/font_hover_pressed_color = Color(1, 0.9764706, 0.92156863, 1)
+text = "回到故事"
+
+[node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Resume" index="0" unique_id=826033919]
+theme_override_colors/font_color = Color(1, 0.9764706, 0.92156863, 1)
+text = "→"
+
+[node name="Save" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1978079474 instance=ExtResource("4_rkxb2")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Load" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=646477398 instance=ExtResource("4_rkxb2")]
+unique_name_in_owner = true
+layout_mode = 2
+text = "讀取存檔"
+
+[node name="Material" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1255567864 instance=ExtResource("4_rkxb2")]
+unique_name_in_owner = true
+layout_mode = 2
+text = "吐槽素材"
+
+[node name="Profile" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=65704121 instance=ExtResource("4_rkxb2")]
+unique_name_in_owner = true
+layout_mode = 2
+text = "人物檔案"
+
+[node name="Log" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=639856437 instance=ExtResource("4_rkxb2")]
+unique_name_in_owner = true
+layout_mode = 2
+text = "故事回顧"
+
+[node name="Skip" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=831211539 instance=ExtResource("4_rkxb2")]
+unique_name_in_owner = true
+layout_mode = 2
+text = "略讀"
+
+[node name="Styles" type="HBoxContainer" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1178304831]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 17
+
+[node name="Style_cinema" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Styles" unique_id=124628568 instance=ExtResource("4_rkxb2")]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_w4mym")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_s0tkh")
+theme_override_styles/hover = SubResource("StyleBoxFlat_38r6q")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_s0tkh")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_dioul")
+theme_override_styles/focus = SubResource("StyleBoxFlat_s0tkh")
+theme_override_font_sizes/font_size = 39
+toggle_mode = true
+text = "A 映畫"
+alignment = 1
+
+[node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Styles/Style_cinema" index="0" unique_id=826033919]
+text = ""
+
+[node name="Style_ledger" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Styles" unique_id=1476427261 instance=ExtResource("4_rkxb2")]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_alf5e")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_bb1rq")
+theme_override_styles/hover = SubResource("StyleBoxFlat_aa2ul")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_bb1rq")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_rjrkt")
+theme_override_styles/focus = SubResource("StyleBoxFlat_bb1rq")
+theme_override_font_sizes/font_size = 39
+toggle_mode = true
+text = "B 委託簿"
+alignment = 1
+
+[node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Styles/Style_ledger" index="0" unique_id=826033919]
+text = ""
+
+[node name="Style_manga" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Styles" unique_id=1807100089 instance=ExtResource("4_rkxb2")]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_mhyo2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_84l67")
+theme_override_styles/hover = SubResource("StyleBoxFlat_s7yhc")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_84l67")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_l2kr2")
+theme_override_styles/focus = SubResource("StyleBoxFlat_84l67")
+theme_override_font_sizes/font_size = 39
+toggle_mode = true
+button_pressed = true
+text = "C 分鏡"
+alignment = 1
+
+[node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Styles/Style_manga" index="0" unique_id=826033919]
+text = ""
+
+[node name="Mute" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=882528724 instance=ExtResource("4_rkxb2")]
+unique_name_in_owner = true
+layout_mode = 2
+text = "音效"
+
+[node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Mute" index="0" unique_id=826033919]
+text = "開"
+
+[node name="Settings" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=674233957 instance=ExtResource("4_rkxb2")]
+unique_name_in_owner = true
+layout_mode = 2
+text = "設定"
+
+[node name="Title" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1688545038 instance=ExtResource("4_rkxb2")]
+unique_name_in_owner = true
+layout_mode = 2
+text = "回標題"
+
+[node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Title" index="0" unique_id=826033919]
+text = ""
+
+[editable path="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Resume"]
+[editable path="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Save"]
+[editable path="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Load"]
+[editable path="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Material"]
+[editable path="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Profile"]
+[editable path="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Log"]
+[editable path="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Skip"]
+[editable path="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Styles/Style_cinema"]
+[editable path="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Styles/Style_ledger"]
+[editable path="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Styles/Style_manga"]
+[editable path="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Mute"]
+[editable path="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Title"]

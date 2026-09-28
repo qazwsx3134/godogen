@@ -13,6 +13,7 @@ func _init() -> void:
 	_test_version_ignores_text_but_tracks_structure()
 	_test_errors_name_their_location()
 	_test_phase4_four_clue_flow()
+	_test_round_v2_version_and_reachability()
 	_finish("STORY BUILD TESTS")
 
 
@@ -40,7 +41,7 @@ func _test_errors_name_their_location() -> void:
 		["~ a\n路人: 你好。\ndo end(\"x\")\n", "~ a, step 0: unknown speaker '路人'"],
 		["~ a\n要選哪個？\n- 甲 => b\n- 乙 [ID:y] => b\n~ b\ndo end(\"x\")\n", "response '甲' needs [ID:option_id]"],
 		["~ a\n要選哪個？\n- 甲 [if has(\"milk_bottle\")] [ID:x] => b\n- 乙 [ID:y] => b\n~ b\ndo end(\"x\")\n", "[if has(\"item\") /]"],
-		["~ a\ndo shake(\"big\")\ndo end(\"x\")\n", "~ a, step 0: unsupported `do shake(big)`"],
+		["~ a\ndo quake(\"big\")\ndo end(\"x\")\n", "~ a, step 0: unsupported `do quake(big)`"],
 		["~ a\ndo end(\"x\")\n~ orphan\ndo end(\"y\")\n", "unreachable from 'a': orphan"],
 		["~ a\n新八: 沒有結尾。\n=> END\n", "reaches the end without `do end(\"text\")`"],
 		["~ a\ndo investigate(\"missing_block\")\ndo end(\"x\")\n", "unknown block 'missing_block'"],
@@ -113,3 +114,19 @@ func _advance_until(runner: RefCounted, op: String) -> void:
 ## and Dialogue Manager's per-path [ID:] registry.
 func _build_variant(text: String) -> Dictionary:
 	return StoryBuilder.build_text(text, SOURCE)
+
+
+func _test_round_v2_version_and_reachability() -> void:
+	var story: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/round_v2_story.json"))
+	var version: String = StoryBuilder.fingerprint(story)
+	var reworded: Dictionary = story.duplicate(true)
+	reworded["nodes"]["r1"]["steps"][0]["lines"][1]["text"] = "改寫過的台詞"
+	var renamed: Dictionary = story.duplicate(true)
+	renamed["nodes"]["r1"]["steps"][0]["lines"][1]["slot"]["options"][0]["id"] = "a2"
+	var retimed: Dictionary = story.duplicate(true)
+	retimed["nodes"]["r2"]["steps"][0]["rules"]["combo_timers"] = [8, 7, 5]
+	_expect(StoryBuilder.fingerprint(reworded) == version, "rewording a round line keeps the version")
+	_expect(StoryBuilder.fingerprint(renamed) != version and StoryBuilder.fingerprint(retimed) != version,
+		"changing a round option id or its rules changes the version")
+	_expect(StoryBuilder._unreachable("start", story["nodes"]).is_empty(),
+		"round v2 reactions, hints and exits count as reachable")

@@ -28,8 +28,11 @@ V1 可呈現 op：
 - `say`: `speaker` 對應 characters 或 narrator、`text`、可選 `thought`／`expression`。
 - `choice`: `prompt`、`options: [{id,label,next,set_flags?,require?}]`；`require` 是單一素材 ID，至少保留一個無條件選項。
 - `end`: `text`。
-- `investigate`: `id`、`prompt`、`hotspots: [{id,label,pos:[x,y],item}]`；`pos` 為場景正規化座標。
+- `result`: 章節結算，章節的最後一步。`title`（例如「～ 第一章 完 ～」）、`lines: {S|A|B|C: {speaker, text}}`（依評價顯示的一句）、可選 `hidden_total`（本章隱藏裝傻總數）。`chapter_result()` 回傳 `title`、`grade`、`line`、`caught`、`tries`、`perfect`、`max_combo`、`fails`、`hidden`、`hidden_total`、`glasses`、`max_glasses`、`game_overs`。評價只看剩下的眼鏡：5 副 S、4 副 A、3–2 副 B、1 副 C，每次 Game Over 降一級、最低 C（`grade_for`）。`stats` 記在 runner、不隨檢查點重試回溯，v1 與 v2 回合都會累計；眼鏡在回合之間不回滿。
+- `investigate`: `id`、`prompt`、`hotspots: [{id,label,pos:[x,y],size?:[w,h],item}]`；`pos` 是調查點中心、`size` 是大小（預設 0.12×0.12），都是背景圖寬高的比例，所以左右拖曳背景時調查點跟著圖走。
 - `boke_round`: `id`、`speaker`、`lines: [{id,text,listen?}]`、`timer_seconds`、`tsukkomi.options: [{id,label,result,require?,goto,set_flags?}]`、`tsukkomi.timeout`、`game_over`。閱讀發言不限時，玩家進入吐槽選詞後才開始倒數；`require` 控制素材限定選項。
+- `boke_round` 加上 `mode`（`testimony`／`combo`）就是 v2 回合：每句各自的 `slot`（`options`、第四面牆 `censor`、`qte`）、`listen`／`whiff`／`hint` 反應節點、`clear`、`rules`（超必殺、連擊時限與獎勵、提示門檻），單句 `speaker` 可寫合聲（`gintoki+kagura`）；欄位與規則寫在 `scripts/tsukkomi_round.gd` 開頭，完整範例是 `story_src/phase4_rounds.blocks.json`。`current()` 會附上 `current_line`（`speaker`、`caught`、`can_listen`、`can_whiff`、`listened`、`options`、`censor`、`qte`）、`caught_line_ids`、`combo`、`timer_seconds`、`super_available`。玩家動作：`resolve_boke`、`whiff_boke`、`resolve_censor`、`resolve_qte(tapped, offset)`、`use_super`、`set_boke_line`、`listen_boke_line`、`timeout_boke`；每個動作跳到反應節點，反應演完回到回合。
+- 演出：`shake`（`strength` small／big、`duration`）、`flash`（`color`、`duration`）、`cutin`（`text`、`speaker`）、`freeze`（`duration`）、`bgm`（`id`，空字串停止）、`se`（`id`）。`id` 對應 catalog 的 `music`／`sounds`，沒有 `path` 的先播合成佔位音。
 
 內部 op：`flag`（key/value）、`item`（id，重複取得不重複存）、`profile`（角色 id，解鎖人物檔案，重複不重複存；該角色在素材設定要有 `profile` 文字）、`condition`（flag/equals/then/else）、`goto`（target）。`bg`、`char`、`say`、`choice`、`flag`、`goto`、`item` 是新章節的主要指令；所有角色、背景、素材 ID 在載入時驗證，錯誤指出節點與步序。
 
@@ -47,7 +50,7 @@ Runner 對內部跳轉有循環保護。snapshot 另存 `profiles`；沒有這�
 
 ## 素材設定
 
-`data/asset_catalog.json` 是背景、人物與素材 ID 的唯一設定。背景含 `label`、漸層 `top`／`bottom`；人物含 `name`、`color`、預設 `slot`，可加人物檔案文字 `profile`；素材含 `name`、`description`。各項可加 `res://` 圖像 `path`，有填時載入前確認檔案存在。背景與人物沒有圖片時分別使用漸層與剪影。新增章節先在 catalog 定義 ID，再於故事 JSON 引用。
+`data/asset_catalog.json` 是背景、人物與素材 ID 的唯一設定。背景含 `label`、漸層 `top`／`bottom`；人物含 `name`、`color`、預設 `slot`，可加人物檔案文字 `profile`，以及各表情的圖 `expressions: {表情id: res://…}`（說話或 `char` 帶表情時換成那張，沒有就用 `path` 那張；表情 id 見 `VALID_EXPRESSIONS` 與 [表情清單](../../docs/story-telling-game/EXPRESSIONS.md)，`tools/list_expressions.gd` 列出劇本用到、還沒有圖的表情。表情圖由 `tools/fit_expressions.gd` 從 `art_src/expressions/` 的生成原圖做出：和 `path` 那張同樣的像素比例、同一條腳底線、同一條中線，姿勢超出時畫布往兩邊與往上加大；`placeholder_sprite.gd` 依圖的大小把它擺在 `Art` 原本的位置上，所以角色 scene 的取景不用重調。表情圖用 lossy 壓縮匯入）；素材含 `name`、`description`。各項可加 `res://` 圖像 `path`，有填時載入前確認檔案存在。背景與人物沒有圖片時分別使用漸層與剪影。新增章節先在 catalog 定義 ID，再於故事 JSON 引用。背景的取景與三個通用站位（`left`／`center`／`right`，也是存檔與 `char` 可用的位置）在 `scenes/stage.tscn`：背景顯示在同名的 `Backgrounds/<id>` 框（沒有就用 `Default`）。每個角色是 `scenes/characters/<id>.tscn`，根節點是 480×1560 的站姿框（底邊是腳底線），`Art` 在框裡的位置與大小就是這個角色的取景；main 把站姿框等比縮放到站位框的高度，底邊中點對齊站位框的底邊中點。沒有 scene 的角色用預設取景（圖和框一樣高、站在底邊）；`tools/make_character_scenes.gd` 替有圖、沒 scene 的角色補建。說話的人移到最前面。
 
 新劇本的關鍵場景與立繪變化用 `bg`／`char` 明確指定。玩家選項應保留可辨識的後續回應；討債基線的 `question_method` 是 unset/hear_first/ledger_first，`repayment_promised` 初始 false，答應還款後設 true。
 
@@ -68,23 +71,31 @@ godot --headless --path . --script res://tools/story_build/build_story.gd -- sto
 
 ## VN 外殼（main.gd）
 
-- 根節點 `Control` 全螢幕；`Game` 固定 1080 邏輯寬、高度等於視窗邏輯高，水平置中。子層依序：`BackgroundLayer`、`CharacterLayer`、`EffectLayer`、`DialogueLayer`、`FloatingLayer`、`PopupLayer`、`TitleScreen`。
-- 對話框高度為遊戲區高度的 28%，下方是快捷列；名牌疊在對話框左上，依角色換色，旁白不顯示名牌。文字最多三行，超過時由 56 縮到 42。
+- 根節點 `Control` 全螢幕；`Game` 固定 1080 邏輯寬、高度等於視窗邏輯高，水平置中。子層依序：`BackgroundLayer`、`CharacterLayer`、`EffectLayer`、`DialogueLayer`、`OverlayLayer`（閃光、停格、cut-in、QTE、Game Over）、`PopupLayer`，最上面是標題畫面 scene。
+- 對話框是 `scenes/ui/dialogue_box_<cinema|ledger|manga>.tscn`（腳本 `scripts/dialogue_box.gd`），換 UI 風格就換掉整個 scene。框貼齊遊戲區底部，依內容往上長；裡面依序是說話者列（記號、名字或「旁白」、章節）、台詞、動作槽（調查的「繼續」、吐槽回合按鈕）、工具列（目錄、回顧、自動）與「續」鈕。打字時整句先排版再逐字顯示（`visible_characters`），框的高度不會跳。scene 以 390 CSS px 寬的畫面為準；更窄的手機由 main 把框從左下角等比放大 390 ÷ CSS 寬倍（`_ui_scale`），按鈕維持 48 CSS px 以上。立繪與選項改以固定的舞台底線排版（遊戲區高度 28%，沒有玩法的故事 20%），不隨台詞行數移動。
+- 選項出現時，底部改由選項面板 `scenes/ui/choice_sheet_<cinema|ledger|manga>.tscn`（腳本 `scripts/choice_sheet.gd`）取代對話框：標題是劇本的 `prompt`（限時吐槽則是正在吐槽的那句台詞），每個選項一列（`choice_item_<風格>.tscn`，編號 01／壹），限時吐槽多一條倒數，最下面是「目錄」。選完或離開選項，對話框回來。
+- 目錄是 `scenes/ui/menu_panel_<風格>.tscn`（腳本 `scripts/menu_panel.gd`，每列 `menu_row_<風格>.tscn`）：暗幕上置中的面板，標題與 ×，依序是回到故事、儲存進度、讀取存檔、吐槽素材與人物檔案（只在有玩法的故事）、故事回顧、略讀（只從台詞開啟時可用）、三款風格、音效、回標題。畫面太矮時清單可以捲動。點暗幕、× 或回到故事都會關閉。
+- 標題畫面是 `scenes/ui/title_screen_<風格>.tscn`（腳本 `scripts/title_screen.gd`）：故事外觀照片加上該風格的色調，底部卡片放目前的故事（點一下開章節選擇）、遊戲名、開始故事、繼續、讀取存檔與設定、三款風格。
+- 故事清單是 `data/stories.json`（`stories_path`）：`{id, kind: chapter|sample, path, save}`，依序。`?sample=<id>` 與記住的選擇都用 `id`。章節選擇 `scenes/ui/chapter_select.tscn`：本篇依序、前一章有結算紀錄才開放，試玩片段一直開放。結算紀錄在 `progress_path`（預設 `user://progress.cfg`，`[cleared] <id> = 最佳評價`）。`result` 步驟顯示 `scenes/ui/chapter_result.tscn` 並記錄評價；「下一章」是清單裡的下一個本篇。
+- 設定 `scenes/ui/settings_panel.tscn`（標題或目錄開啟，從目錄開時目錄留在底下）：`scripts/settings.gd` 的四項，各是選項索引，存在 `settings_path`（預設 `user://settings.cfg`）。預設值等於原本的速度與音量；「瞬間」整句直接顯示；音量改變時背景音樂重播（Web 的 Sample 模式不吃播放中的音量變化）；目錄的「音效」靜音蓋過音量。
+- 章節選擇與設定是全螢幕面板，窄手機時和其他面板一樣依 `_panel_scale` 等比放大，按鈕維持 48 CSS px 以上。
+- 換 UI 風格時，對話框、選項面板、目錄與標題畫面都換成該風格的 scene，畫面上的狀態原樣帶過去。背景照片套 `scripts/ui_stage_style.gd` 的色調，C 分鏡的立繪另轉黑白。這些 scene 都以 390 CSS px 寬的畫面為準，更窄的手機由 main 等比放大（`_ui_scale`）。
+- 吐槽回合：Phase 3 與 v2 回合共用對話框 Actions 裡的操作列（‹ ›、句數與接住標記、聽下去、吐槽！）和消音條，顯示什麼由 `scripts/round_view.gd` 決定。證言回合按「吐槽！」依該句打開選詞、開始 QTE 或揮空；連擊回合每句直接打開選詞（時限依連擊縮短）或 QTE。QTE 是 `scenes/ui/qte_ring.tscn`：以 `Time.get_ticks_usec` 計時，點一下回報與「縮到剛好」的時間差，過了 `late_after` 沒點就回報太晚。選詞時選項面板另外顯示消音條，以及吐槽力滿時的「超必殺！」；面板比畫面可用高度還高時，選項列改為捲動。v2 的聽下去直接演出 runner 跳去的節點。
+- 登場：角色開口才上場（`_focus_speaker`，合聲的每個人都算），在自己的站位；已在場的人留著、變暗，說話的人移到最前面。`char` 只設定站位與表情，`visible: false`（`hide`）才讓人退場；換到不同背景時與開始調查時全部退場。
+- 調查：調查點是 `scenes/ui/hotspot.tscn`，放在當前背景框裡一層蓋住整張圖的節點上（依 `pos`／`size` 用 anchor 定位），找到前不顯示。調查期間背景框撐開成整張圖（等比蓋滿框、置中），拖曳畫面左右平移、不會超出圖的邊，離開調查時還原框的位置。點擊在放開時判定：拖過的不算，點在對話框上的不算，命中區至少 48 CSS px。對話框的 `InvestigationRow` 有「收起」，收起後改顯示 `scenes/ui/investigate_bar.tscn`（進度與「展開」）；最後一個線索找到時自動展開。
+- HUD 是 `scenes/ui/round_hud.tscn`（眼鏡圖示 `glasses_icon.tscn`、吐槽之力、連擊、倒數；面板下方右側是線索欄，每個線索一個 `clue_chip.tscn`）；Game Over 是 `scenes/ui/game_over.tscn`（碎眼鏡、結尾文字、檢查點重試、回標題），取代一般結尾按鈕。
+- 演出指令交給 `scripts/stage_effects.gd`：震動只移動舞台各層（`Game` 的位置由版面決定），閃光與停格灰屏放在 `OverlayLayer`，cut-in 是 `scenes/ui/cutin.tscn`。它們都不攔截點擊；只有 `freeze` 讓劇情等待，略讀時不等。存檔以選填欄位 `bgm` 記住正在播的音樂。
 - `DialogueLayer` 最底下的 `TapCatcher` 處理所有畫面手勢；對話框、立繪與標籤不攔截滑鼠。以放開判定點擊：移動超過 30 px 視為拖曳，往上 140 px 以上為上滑，按住 0.5 秒為長按。UI 隱藏時的點擊只負責恢復。
 - 只處理滑鼠事件，觸控由專案設定模擬成滑鼠，確保一次觸控只觸發一次動作。
-- 劇本指令：`bg` 切換背景、`char` 控制立繪與站位，`say`／`choice`／`end` 顯示；舊故事的 `show`／`hide`／`expression` 仍改立繪，`sound`／`wait` 仍執行，`move`／`face`／`camera` 無 VN 對應而略過。
+- 劇本指令：`bg` 切換背景、`char` 控制立繪與站位，`say`／`choice`／`end` 顯示；舊故事的 `show`／`hide`／`expression` 仍改立繪，`sound`／`wait` 仍執行，`move`／`face`／`camera` 無 VN 對應而略過；演出指令見上。
 - `story_path` 與 `save_path` 可在場景設定；Web `?sample=phase2` 與 `?sample=phase3` 各開啟固定技術片段及獨立存檔命名空間。
-- `save_path` 是自動續讀檔；同一命名空間另有 18 個手動欄位（3 頁 × 6 格）。(S) 與選單「存檔」開啟欄位，選單與標題「讀檔」可指定欄位或自動檔；覆寫有確認。新遊戲只重設自動進度。
+- `save_path` 是自動續讀檔；同一命名空間另有 18 個手動欄位（3 頁 × 6 格）。目錄的「儲存進度」開啟欄位，目錄與標題的「讀取存檔」可指定欄位或自動檔；覆寫有確認。新遊戲只重設自動進度。
 - 存檔 schema 3：runner snapshot、當前背景、各角色立繪的可見性／表情／站位、回顧紀錄；手動欄位另有章節、時間與小型場景縮圖。穩定的 say／choice／end／investigate／boke_round 寫入自動檔，手動欄位只在玩家選定後寫入。吐槽回合另存 `boke_ui_screen`，選詞階段才存 `boke_timer_remaining`；舊的有倒數但無畫面欄位的存檔會還原到選詞階段。讀檔先驗證劇本 ID／版本與狀態；寫入採暫存檔及備份，避免覆寫中斷破壞原有欄位。
 
-## 懸浮按鈕（scripts/floating_button.gd）
+## 角色立繪（scripts/placeholder_sprite.gd）
 
-`setup(glyph, font)`；訊號 `tapped`、`long_pressed`（0.6 秒）、`moved`（吸邊完成）。`bounds` 是左上角允許範圍，由 main 設成對話框上方區域；放開後吸附到較近的左右邊緣。閒置 3 秒 40% 透明由 main 統一處理。
-
-## Placeholder 立繪（scripts/placeholder_sprite.gd）
-
-`setup(id, display_name, color, font)`、`set_expression(value)`、`set_art(texture)`。剪影頭肩比例固定，身體畫到節點底部；main 把立繪底部延伸到畫面底，讓下緣藏在對話框後面。catalog 有角色圖片時改顯示圖片。
+`scenes/characters/<id>.tscn` 的根腳本：`setup(id, display_name, color, font)`、`set_expression(value)`、`set_art(texture)`（把 catalog 的圖放進 scene 的 `Art`，沒有 `Art` 時建預設的）、`set_ui_style(style_id)`（manga 轉黑白）。`REFERENCE_SIZE` 是站姿框大小。
 
 ## QA
 
-Web 網址帶 `?qa=1` 時，`window.__debtQA` 為唯讀快照：`screen`（title/story/choice/end/investigate/boke_round/tsukkomi/log/menu/save_slots/load_slots/slot_confirm/busy）、`text`、`speaker`、`node_id`、`step_index`、`flags`、`items`、`background`、`text_complete`、`ui_hidden`、`auto`、`skip`、`toast`、`float_alpha`、`viewport`、`game`／`dialog`／`quickbar`／`name_plate` 矩形、`sprites`（含站位）、`choices`、`slot_page`、當頁 `slots`（欄位號、佔用狀態、章節、時間、矩形）、`phase3`（眼鏡與吐槽力、素材、熱區、發言索引與已聽狀態、倒數、檢查點、結果）、`controls`。測試一律透過真實 canvas 點擊操作。
+Web 網址帶 `?qa=1` 時，`window.__debtQA` 為唯讀快照：`screen`（title/story/choice/end/result/investigate/boke_round/tsukkomi/log/menu/save_slots/load_slots/slot_confirm/chapter_select/settings/busy）、`result`（結算時的 `chapter_result()`）、`settings`、`text`（打字中的部分）、`full_text`、`speaker`、`node_id`、`step_index`、`flags`、`items`、`background`、`text_complete`、`ui_hidden`、`auto`、`skip`、`toast`、`viewport`、`game`／`dialog`／`quickbar`／`name_plate`／`choice_sheet` 矩形（看不見的留空）、`sprites`（含站位）、`choices`、`slot_page`、當頁 `slots`（欄位號、佔用狀態、章節、時間、矩形）、`phase3`（眼鏡與吐槽力、素材、調查點（`screen_rect` 是命中區，`rect` 只在點得到時才有）、`pan`（`offset`／`min`／`max`）、`investigate_collapsed`、發言索引與已聽狀態、倒數、檢查點、結果；v2 回合另有 `round`：`mode`、`combo`、`caught`、`super_available`、`censor`、`qte_active`）、`controls`。快照在該幀排版完成、繪製之前才寫出，目錄彈出動畫期間 `screen` 回報 `busy`，測試讀到的座標一定是最終位置。`controls` 只列玩家當下點得到的：看得見、沒停用、沒被捲出或裁出畫面（目錄在矮螢幕上捲到下方的列不列）；目錄開著時只列目錄裡的控制項（`menu_resume`、`menu_<列>`、`menu_style_<風格>`、`menu_close`），`menu_dim` 是面板左側暗幕的一條。調查有 `investigate_collapse`、`investigate_expand`、`investigate_continue`；結算有 `result_next`、`result_title`；章節選擇有 `chapter_<id>`、`chapter_close`；設定有 `setting_<項目>_<索引>`、`settings_close`，標題的 `title_settings`；章節選擇或設定開著時只列它自己的控制項；回合相關的控制項有 `boke_previous`、`boke_next`、`boke_listen`、`boke_tsukkomi`、`censor`（閱讀時對話框裡的，選詞時選項面板裡的）、`super`、`qte`（整個畫面）、`game_over_retry`、`game_over_title`。測試一律透過真實 canvas 點擊操作。

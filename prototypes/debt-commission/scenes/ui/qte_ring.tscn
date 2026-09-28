@@ -1,0 +1,31 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/story-cjk.ttc" id="1_38fu7"]
+[ext_resource type="Script" path="res://scripts/qte_ring.gd" id="2_jfoqm"]
+
+[sub_resource type="Theme" id="Theme_48m8k"]
+default_font = ExtResource("1_38fu7")
+
+[node name="QteRing" type="Control" unique_id=276491426]
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = SubResource("Theme_48m8k")
+script = ExtResource("2_jfoqm")
+target_radius = 193.84615384615384
+
+[node name="Prompt" type="Label" parent="." unique_id=603768082]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = 249.23077
+offset_bottom = 332.30768
+theme_override_font_sizes/font_size = 50
+theme_override_colors/font_color = Color(1, 0.99215686, 0.9607843, 1)
+theme_override_colors/font_outline_color = Color(0.06666667, 0.06666667, 0.06666667, 1)
+theme_override_constants/outline_size = 11
+text = "縮到剛好的時候——點！"
+horizontal_alignment = 1

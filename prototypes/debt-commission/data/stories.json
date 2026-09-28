@@ -1,0 +1,9 @@
+{
+  "stories": [
+    {"id": "debt", "kind": "sample", "path": "res://data/debt_story.json", "save": "user://debt_commission.save"},
+    {"id": "phase2", "kind": "sample", "path": "res://data/phase2_story.json", "save": "user://strawberry_phase2.save"},
+    {"id": "phase3", "kind": "sample", "path": "res://data/phase3_story.json", "save": "user://strawberry_phase3.save"},
+    {"id": "phase4", "kind": "sample", "path": "res://data/phase4_story.json", "save": "user://strawberry_phase4.save"},
+    {"id": "phase4_rounds", "kind": "sample", "path": "res://data/phase4_rounds_story.json", "save": "user://strawberry_phase4_rounds.save"}
+  ]
+}

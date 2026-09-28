@@ -1,0 +1,22 @@
+{
+  "stories": [
+    {
+      "id": "chapter_a",
+      "kind": "chapter",
+      "path": "res://tests/fixtures/chapter_a_story.json",
+      "save": "user://fixture_chapter_a.save"
+    },
+    {
+      "id": "chapter_b",
+      "kind": "chapter",
+      "path": "res://tests/fixtures/chapter_b_story.json",
+      "save": "user://fixture_chapter_b.save"
+    },
+    {
+      "id": "sample",
+      "kind": "sample",
+      "path": "res://data/phase2_story.json",
+      "save": "user://fixture_sample.save"
+    }
+  ]
+}

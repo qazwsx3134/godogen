@@ -1,0 +1,223 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/settings_panel.gd" id="1_dbor5"]
+
+[node name="SettingsPanel" type="Panel" unique_id=1812033895]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_dbor5")
+metadata/ui_style_role = "log"
+
+[node name="Margins" type="MarginContainer" parent="." unique_id=735264933]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="Layout" type="VBoxContainer" parent="Margins" unique_id=2111081504]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Header" type="HBoxContainer" parent="Margins/Layout" unique_id=159567303]
+custom_minimum_size = Vector2(0, 112)
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Heading" type="Label" parent="Margins/Layout/Header" unique_id=622022609]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 52
+text = "設定"
+vertical_alignment = 1
+metadata/ui_style_role = "accent"
+
+[node name="Close" type="Button" parent="Margins/Layout/Header" unique_id=1476719799]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(132.92308, 132.92308)
+layout_mode = 2
+theme_override_font_sizes/font_size = 60
+text = "×"
+metadata/ui_style_role = "standard"
+
+[node name="Rows" type="VBoxContainer" parent="Margins/Layout" unique_id=1918641064]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="TextSpeedLabel" type="Label" parent="Margins/Layout/Rows" unique_id=340835814]
+layout_mode = 2
+text = "文字速度"
+metadata/ui_style_role = "muted"
+
+[node name="TextSpeed" type="HBoxContainer" parent="Margins/Layout/Rows" unique_id=1383724781]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TextSpeed0" type="Button" parent="Margins/Layout/Rows/TextSpeed" unique_id=288291876]
+custom_minimum_size = Vector2(0, 132.92308)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+text = "慢"
+metadata/ui_style_role = "selector"
+
+[node name="TextSpeed1" type="Button" parent="Margins/Layout/Rows/TextSpeed" unique_id=1960324242]
+custom_minimum_size = Vector2(0, 132.92308)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+text = "標準"
+metadata/ui_style_role = "selector"
+
+[node name="TextSpeed2" type="Button" parent="Margins/Layout/Rows/TextSpeed" unique_id=531886917]
+custom_minimum_size = Vector2(0, 132.92308)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+text = "快"
+metadata/ui_style_role = "selector"
+
+[node name="TextSpeed3" type="Button" parent="Margins/Layout/Rows/TextSpeed" unique_id=279301776]
+custom_minimum_size = Vector2(0, 132.92308)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+text = "瞬間"
+metadata/ui_style_role = "selector"
+
+[node name="AutoSpeedLabel" type="Label" parent="Margins/Layout/Rows" unique_id=959908918]
+layout_mode = 2
+text = "自動播放速度"
+metadata/ui_style_role = "muted"
+
+[node name="AutoSpeed" type="HBoxContainer" parent="Margins/Layout/Rows" unique_id=845366742]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="AutoSpeed0" type="Button" parent="Margins/Layout/Rows/AutoSpeed" unique_id=477128390]
+custom_minimum_size = Vector2(0, 132.92308)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+text = "慢"
+metadata/ui_style_role = "selector"
+
+[node name="AutoSpeed1" type="Button" parent="Margins/Layout/Rows/AutoSpeed" unique_id=1621012246]
+custom_minimum_size = Vector2(0, 132.92308)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+text = "標準"
+metadata/ui_style_role = "selector"
+
+[node name="AutoSpeed2" type="Button" parent="Margins/Layout/Rows/AutoSpeed" unique_id=560791906]
+custom_minimum_size = Vector2(0, 132.92308)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+text = "快"
+metadata/ui_style_role = "selector"
+
+[node name="BgmVolumeLabel" type="Label" parent="Margins/Layout/Rows" unique_id=1127238497]
+layout_mode = 2
+text = "背景音樂音量"
+metadata/ui_style_role = "muted"
+
+[node name="BgmVolume" type="HBoxContainer" parent="Margins/Layout/Rows" unique_id=1282624050]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="BgmVolume0" type="Button" parent="Margins/Layout/Rows/BgmVolume" unique_id=490438580]
+custom_minimum_size = Vector2(0, 132.92308)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+text = "關"
+metadata/ui_style_role = "selector"
+
+[node name="BgmVolume1" type="Button" parent="Margins/Layout/Rows/BgmVolume" unique_id=62867497]
+custom_minimum_size = Vector2(0, 132.92308)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+text = "25"
+metadata/ui_style_role = "selector"
+
+[node name="BgmVolume2" type="Button" parent="Margins/Layout/Rows/BgmVolume" unique_id=827461021]
+custom_minimum_size = Vector2(0, 132.92308)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+text = "50"
+metadata/ui_style_role = "selector"
+
+[node name="BgmVolume3" type="Button" parent="Margins/Layout/Rows/BgmVolume" unique_id=188539354]
+custom_minimum_size = Vector2(0, 132.92308)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+text = "75"
+metadata/ui_style_role = "selector"
+
+[node name="BgmVolume4" type="Button" parent="Margins/Layout/Rows/BgmVolume" unique_id=1180848436]
+custom_minimum_size = Vector2(0, 132.92308)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+text = "100"
+metadata/ui_style_role = "selector"
+
+[node name="SeVolumeLabel" type="Label" parent="Margins/Layout/Rows" unique_id=1206948639]
+layout_mode = 2
+text = "音效音量"
+metadata/ui_style_role = "muted"
+
+[node name="SeVolume" type="HBoxContainer" parent="Margins/Layout/Rows" unique_id=1977717995]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="SeVolume0" type="Button" parent="Margins/Layout/Rows/SeVolume" unique_id=1900300228]
+custom_minimum_size = Vector2(0, 132.92308)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+text = "關"
+metadata/ui_style_role = "selector"
+
+[node name="SeVolume1" type="Button" parent="Margins/Layout/Rows/SeVolume" unique_id=1287046459]
+custom_minimum_size = Vector2(0, 132.92308)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+text = "25"
+metadata/ui_style_role = "selector"
+
+[node name="SeVolume2" type="Button" parent="Margins/Layout/Rows/SeVolume" unique_id=924171851]
+custom_minimum_size = Vector2(0, 132.92308)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+text = "50"
+metadata/ui_style_role = "selector"
+
+[node name="SeVolume3" type="Button" parent="Margins/Layout/Rows/SeVolume" unique_id=831946894]
+custom_minimum_size = Vector2(0, 132.92308)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+text = "75"
+metadata/ui_style_role = "selector"
+
+[node name="SeVolume4" type="Button" parent="Margins/Layout/Rows/SeVolume" unique_id=110378956]
+custom_minimum_size = Vector2(0, 132.92308)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+text = "100"
+metadata/ui_style_role = "selector"

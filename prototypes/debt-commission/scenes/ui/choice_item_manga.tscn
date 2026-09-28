@@ -1,0 +1,106 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/story-cjk.ttc" id="1_l6q3l"]
+[ext_resource type="Script" path="res://scripts/ui_ornament.gd" id="2_0emvo"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4rt8k"]
+content_margin_left = 116.30769
+content_margin_top = 19.384615
+content_margin_right = 66.46154
+content_margin_bottom = 19.384615
+bg_color = Color(0.9882353, 0.9843137, 0.9647059, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.14117648, 0.14509805, 0.13333334, 1)
+shadow_color = Color(0.14117648, 0.14509805, 0.13333334, 1)
+shadow_size = 1
+shadow_offset = Vector2(5.5384617, 5.5384617)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6j6qq"]
+content_margin_left = 116.30769
+content_margin_top = 19.384615
+content_margin_right = 66.46154
+content_margin_bottom = 19.384615
+bg_color = Color(1, 0.8745098, 0.27450982, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.65882355, 0.23137255, 0.16862746, 1)
+shadow_color = Color(0.65882355, 0.23137255, 0.16862746, 1)
+shadow_size = 1
+shadow_offset = Vector2(8.307693, 8.307693)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4idmg"]
+content_margin_left = 116.30769
+content_margin_top = 19.384615
+content_margin_right = 66.46154
+content_margin_bottom = 19.384615
+bg_color = Color(1, 0.9647059, 0.7764706, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.14117648, 0.14509805, 0.13333334, 1)
+shadow_color = Color(0.14117648, 0.14509805, 0.13333334, 1)
+shadow_size = 1
+shadow_offset = Vector2(5.5384617, 5.5384617)
+
+[sub_resource type="FontVariation" id="FontVariation_1unwg"]
+base_font = ExtResource("1_l6q3l")
+variation_embolden = 0.5
+
+[sub_resource type="FontVariation" id="FontVariation_tfeej"]
+base_font = ExtResource("1_l6q3l")
+variation_embolden = 0.9
+
+[node name="ChoiceItem" type="Button" unique_id=414271151]
+custom_minimum_size = Vector2(0, 132.92308)
+theme_override_styles/normal = SubResource("StyleBoxFlat_4rt8k")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_6j6qq")
+theme_override_styles/hover = SubResource("StyleBoxFlat_4idmg")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_6j6qq")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_4rt8k")
+theme_override_styles/focus = SubResource("StyleBoxFlat_6j6qq")
+theme_override_colors/font_color = Color(0.14117648, 0.14509805, 0.13333334, 1)
+theme_override_colors/font_focus_color = Color(0.14117648, 0.14509805, 0.13333334, 1)
+theme_override_colors/font_pressed_color = Color(0.14117648, 0.14509805, 0.13333334, 1)
+theme_override_colors/font_hover_color = Color(0.14117648, 0.14509805, 0.13333334, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.14117648, 0.14509805, 0.13333334, 1)
+theme_override_fonts/font = SubResource("FontVariation_1unwg")
+theme_override_font_sizes/font_size = 47
+text = "先問清楚委託人"
+alignment = 0
+autowrap_mode = 3
+
+[node name="Index" type="Label" parent="." unique_id=196511494]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 24.923077
+offset_top = -33.23077
+offset_right = 91.38461
+offset_bottom = 33.23077
+theme_override_fonts/font = SubResource("FontVariation_tfeej")
+theme_override_font_sizes/font_size = 39
+theme_override_colors/font_color = Color(0.65882355, 0.23137255, 0.16862746, 1)
+text = "01"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Slash" type="Control" parent="." unique_id=1286199575]
+anchors_preset = 0
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -47.076923
+offset_top = 5.5384617
+offset_right = -5.5384617
+offset_bottom = -5.5384617
+mouse_filter = 2
+script = ExtResource("2_0emvo")
+style_id = "manga"
+kind = "slash"

@@ -254,28 +254,40 @@
             {
               "id": "empty_milk_bottle",
               "item": "milk_bottle",
-              "label": "空的草莓牛奶瓶",
+              "label": "垃圾桶裡的空瓶",
               "pos": [
-                0.56,
-                0.42
+                0.254,
+                0.748
+              ],
+              "size": [
+                0.07,
+                0.14
               ]
             },
             {
               "id": "gintoki_mouth",
               "item": "milk_trace",
-              "label": "銀時的嘴角",
+              "label": "銀時的辦公桌",
               "pos": [
-                0.74,
-                0.3
+                0.5,
+                0.6
+              ],
+              "size": [
+                0.3,
+                0.1
               ]
             },
             {
               "id": "kombu_wrapper",
               "item": "kagura_kombu",
-              "label": "沙發下的包裝紙",
+              "label": "沙發縫裡的包裝紙",
               "pos": [
-                0.3,
-                0.62
+                0.11,
+                0.9
+              ],
+              "size": [
+                0.2,
+                0.17
               ]
             },
             {
@@ -283,8 +295,12 @@
               "item": "sadaharu_footprint",
               "label": "地板上的腳印",
               "pos": [
-                0.46,
-                0.8
+                0.74,
+                0.84
+              ],
+              "size": [
+                0.13,
+                0.08
               ]
             }
           ],

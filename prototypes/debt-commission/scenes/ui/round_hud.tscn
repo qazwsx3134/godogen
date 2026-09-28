@@ -1,0 +1,170 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/story-cjk.ttc" id="1_eqf1x"]
+[ext_resource type="Script" path="res://scripts/round_hud.gd" id="2_4h080"]
+[ext_resource type="PackedScene" path="res://scenes/ui/glasses_icon.tscn" id="3_hdkj7"]
+[ext_resource type="Script" path="res://scripts/glasses_icon.gd" id="4_xukux"]
+[ext_resource type="PackedScene" path="res://scenes/ui/clue_chip.tscn" id="5_saj44"]
+
+[sub_resource type="Theme" id="Theme_af6c1"]
+default_font = ExtResource("1_eqf1x")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_40fyp"]
+content_margin_left = 17.0
+content_margin_top = 17.0
+content_margin_right = 17.0
+content_margin_bottom = 17.0
+bg_color = Color(0.031, 0.063, 0.098, 0.82)
+
+[node name="RoundHud" type="MarginContainer" unique_id=509902029]
+anchor_right = 1.0
+mouse_filter = 2
+theme = SubResource("Theme_af6c1")
+theme_override_constants/margin_left = 39
+theme_override_constants/margin_top = 111
+theme_override_constants/margin_right = 39
+script = ExtResource("2_4h080")
+
+[node name="Stack" type="VBoxContainer" parent="." unique_id=783362094]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 17
+
+[node name="Panel" type="PanelContainer" parent="Stack" unique_id=524312533]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Padding" type="MarginContainer" parent="Stack/Panel" unique_id=176219203]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 14
+
+[node name="Rows" type="VBoxContainer" parent="Stack/Panel/Padding" unique_id=2080242138]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="Stats" type="HBoxContainer" parent="Stack/Panel/Padding/Rows" unique_id=1312824479]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 28
+
+[node name="Glasses" type="HBoxContainer" parent="Stack/Panel/Padding/Rows/Stats" unique_id=981260145]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="Glasses1" type="Control" parent="Stack/Panel/Padding/Rows/Stats/Glasses" unique_id=938117765 instance=ExtResource("3_hdkj7")]
+custom_minimum_size = Vector2(72, 36)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("4_xukux")
+
+[node name="Glasses2" type="Control" parent="Stack/Panel/Padding/Rows/Stats/Glasses" unique_id=374594795 instance=ExtResource("3_hdkj7")]
+custom_minimum_size = Vector2(72, 36)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("4_xukux")
+
+[node name="Glasses3" type="Control" parent="Stack/Panel/Padding/Rows/Stats/Glasses" unique_id=228911427 instance=ExtResource("3_hdkj7")]
+custom_minimum_size = Vector2(72, 36)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("4_xukux")
+
+[node name="Glasses4" type="Control" parent="Stack/Panel/Padding/Rows/Stats/Glasses" unique_id=1175518508 instance=ExtResource("3_hdkj7")]
+custom_minimum_size = Vector2(72, 36)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("4_xukux")
+
+[node name="Glasses5" type="Control" parent="Stack/Panel/Padding/Rows/Stats/Glasses" unique_id=2134513836 instance=ExtResource("3_hdkj7")]
+custom_minimum_size = Vector2(72, 36)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("4_xukux")
+broken = true
+
+[node name="Power" type="HBoxContainer" parent="Stack/Panel/Padding/Rows/Stats" unique_id=503572465]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="PowerCaption" type="Label" parent="Stack/Panel/Padding/Rows/Stats/Power" unique_id=1854493767]
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "吐槽之力"
+vertical_alignment = 1
+
+[node name="PowerBar" type="ProgressBar" parent="Stack/Panel/Padding/Rows/Stats/Power" unique_id=638012054]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(177.23077, 22.153847)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+value = 60.0
+show_percentage = false
+
+[node name="PowerValue" type="Label" parent="Stack/Panel/Padding/Rows/Stats/Power" unique_id=1491879849]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "60/100"
+vertical_alignment = 1
+
+[node name="Second" type="HBoxContainer" parent="Stack/Panel/Padding/Rows" unique_id=753967719]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 22
+
+[node name="Combo" type="Label" parent="Stack/Panel/Padding/Rows/Second" unique_id=873688518]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "連擊 ×2"
+vertical_alignment = 1
+
+[node name="Timer" type="Label" parent="Stack/Panel/Padding/Rows/Second" unique_id=1290184191]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 33
+text = "倒數 07 秒"
+vertical_alignment = 1
+
+[node name="Clues" type="VBoxContainer" parent="Stack" unique_id=288058713]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(326.76923, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="ClueHeader" type="Label" parent="Stack/Clues" unique_id=1224254638]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.7)
+theme_override_constants/outline_size = 8
+text = "線索"
+horizontal_alignment = 2
+
+[node name="ClueList" type="VBoxContainer" parent="Stack/Clues" unique_id=134341291]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="Chip1" type="PanelContainer" parent="Stack/Clues/ClueList" unique_id=637419230 instance=ExtResource("5_saj44")]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_40fyp")
+
+[node name="Chip2" type="PanelContainer" parent="Stack/Clues/ClueList" unique_id=588575513 instance=ExtResource("5_saj44")]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_40fyp")

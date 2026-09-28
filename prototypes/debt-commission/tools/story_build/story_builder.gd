@@ -10,6 +10,7 @@ extends RefCounted
 const DmSource = preload("res://tools/story_build/dm_source.gd")
 const ParleySource = preload("res://tools/story_build/parley_source.gd")
 const StoryRunner = preload("res://scripts/story_runner.gd")
+const TsukkomiRound = preload("res://scripts/tsukkomi_round.gd")
 const AtomicFile = preload("res://addons/proto_kit/atomic_file.gd")
 const CATALOG_PATH: String = "res://data/asset_catalog.json"
 const CHECK_PATH: String = "user://story_build_check.json"
@@ -127,6 +128,8 @@ static func fingerprint(story: Dictionary) -> String:
 
 static func _step_shape(step: Dictionary) -> Array:
 	var op: String = String(step.get("op", ""))
+	if TsukkomiRound.is_v2(step):
+		return [op, step.get("id"), TsukkomiRound.shape(step)]
 	var shape: Array = [op]
 	for key: String in ["id", "key", "flag", "equals", "then", "else", "target", "game_over"]:
 		if step.has(key):
@@ -176,6 +179,9 @@ static func _unreachable(entry: String, nodes: Dictionary) -> Array[String]:
 		if node.has("next"):
 			queue.append(String(node["next"]))
 		for step: Dictionary in node["steps"]:
+			if TsukkomiRound.is_v2(step):
+				queue.append_array(TsukkomiRound.targets(step))
+				continue
 			for key: String in ["then", "else", "target", "game_over"]:
 				if step.has(key):
 					queue.append(String(step[key]))

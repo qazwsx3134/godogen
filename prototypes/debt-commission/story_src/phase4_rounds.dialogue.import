@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://ynje1x3c88lv"
+path="res://.godot/imported/phase4_rounds.dialogue-8bd5624029d2d8ba88fce3e638e85f21.tres"
+
+[deps]
+
+source_file="res://story_src/phase4_rounds.dialogue"
+dest_files=["res://.godot/imported/phase4_rounds.dialogue-8bd5624029d2d8ba88fce3e638e85f21.tres"]
+
+[params]
+
+defaults=true

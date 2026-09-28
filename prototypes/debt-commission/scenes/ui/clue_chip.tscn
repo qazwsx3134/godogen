@@ -1,0 +1,42 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/ui/item_picture.tscn" id="1_8438m"]
+[ext_resource type="FontFile" path="res://assets/fonts/story-cjk.ttc" id="2_dqnua"]
+[ext_resource type="Script" path="res://scripts/item_picture.gd" id="3_j2rwv"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_40fyp"]
+content_margin_left = 17.0
+content_margin_top = 17.0
+content_margin_right = 17.0
+content_margin_bottom = 17.0
+bg_color = Color(0.031, 0.063, 0.098, 0.82)
+
+[sub_resource type="Theme" id="Theme_fwwn3"]
+default_font = ExtResource("2_dqnua")
+
+[node name="ClueChip" type="PanelContainer" unique_id=637419230]
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_40fyp")
+
+[node name="Row" type="HBoxContainer" parent="." unique_id=959469922]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Picture" type="TextureRect" parent="Row" unique_id=408534221 instance=ExtResource("1_8438m")]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme = SubResource("Theme_fwwn3")
+expand_mode = 1
+stretch_mode = 5
+script = ExtResource("3_j2rwv")
+
+[node name="Name" type="Label" parent="Row" unique_id=1358473135]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 30
+text = "空的草莓牛奶瓶"
+vertical_alignment = 1
+autowrap_mode = 1

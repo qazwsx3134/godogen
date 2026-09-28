@@ -1,0 +1,217 @@
+[gd_scene format=3 uid="uid://bquqikrjtc5ep"]
+
+[ext_resource type="Texture2D" path="res://assets/image/yorosuya-inside.png" id="1_st0q7"]
+[ext_resource type="Texture2D" path="res://assets/image/kitchen.png" id="2_1hwpr"]
+[ext_resource type="Texture2D" path="res://assets/image/yorosuya-outside.png" id="3_dexii"]
+[ext_resource type="Texture2D" path="res://assets/editor/stand_in.svg" id="4_6c5u0"]
+
+[node name="Stage" type="Control" unique_id=1564831491]
+editor_description = "舞台：背景與角色站位。
+背景：Backgrounds 底下每個 node 對應 asset_catalog.json 的一個背景 id，拖它的邊框就能調整取景（圖片等比填滿框、置中裁切）；圖以 catalog 為準，這裡的圖只是預覽。沒有自己 node 的背景用 Default。
+站位：StageArea 底下 left/center/right 是故事 char(…, 位置) 的三個通用站位，誰都能站，主角通常在 left。框的底邊是腳底線、對齊框的中線；框的高度是標準身高，角色各自的大小與取景在 scenes/characters/<角色>.tscn。名字不要改。"
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Backgrounds" type="Control" parent="." unique_id=122875831]
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Default" type="TextureRect" parent="Backgrounds" unique_id=1963667075]
+editor_description = "沒有自己 node 的背景（以及沒有圖、只有漸層色的背景）顯示在這裡。"
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 6
+metadata/_edit_lock_ = true
+
+[node name="yorozuya_living_room" type="TextureRect" parent="Backgrounds" unique_id=871043145]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource("1_st0q7")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="yorozuya_kitchen" type="TextureRect" parent="Backgrounds" unique_id=1157512271]
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource("2_1hwpr")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="yorozuya_exterior" type="TextureRect" parent="Backgrounds" unique_id=482035834]
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource("3_dexii")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="StageArea" type="Control" parent="." unique_id=779423329]
+editor_description = "對話框上方的舞台。底邊由程式對齊對話框上緣（依手機大小變動），這個 node 本身不用調；調裡面的站位。"
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -734.0
+mouse_filter = 2
+metadata/_edit_lock_ = true
+
+[node name="left" type="Control" parent="StageArea" unique_id=559482951]
+editor_description = "站位「left」，任何角色都能站。拖曳移動；框的底邊是腳底線，高度是標準身高（角色各自的大小在 scenes/characters/<角色>.tscn）。剪影 Preview 只在編輯器顯示。"
+layout_mode = 1
+anchor_left = 0.2
+anchor_top = 1.0
+anchor_right = 0.2
+anchor_bottom = 1.0
+offset_left = -126.5
+offset_top = -834.25
+offset_right = 353.5
+offset_bottom = 725.75
+mouse_filter = 2
+metadata/_edit_group_ = true
+
+[node name="Preview" type="AspectRatioContainer" parent="StageArea/left" unique_id=914047340]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+ratio = 0.45
+stretch_mode = 1
+alignment_vertical = 2
+
+[node name="Art" type="TextureRect" parent="StageArea/left/Preview" unique_id=1250696238]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("4_6c5u0")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="StageArea/left/Preview" unique_id=897974091]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.05, 0.08, 0.12, 1)
+theme_override_constants/outline_size = 12
+text = "左
+left
+主角"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="center" type="Control" parent="StageArea" unique_id=1442116471]
+editor_description = "站位「center」，任何角色都能站。拖曳移動；框的底邊是腳底線，高度是標準身高（角色各自的大小在 scenes/characters/<角色>.tscn）。剪影 Preview 只在編輯器顯示。"
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -193.0
+offset_top = -843.0
+offset_right = 287.0
+offset_bottom = 717.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+metadata/_edit_group_ = true
+
+[node name="Preview" type="AspectRatioContainer" parent="StageArea/center" unique_id=1696450583]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+ratio = 0.45
+stretch_mode = 1
+alignment_vertical = 2
+
+[node name="Art" type="TextureRect" parent="StageArea/center/Preview" unique_id=1674299939]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("4_6c5u0")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="StageArea/center/Preview" unique_id=277997352]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.05, 0.08, 0.12, 1)
+theme_override_constants/outline_size = 12
+text = "中
+center"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="right" type="Control" parent="StageArea" unique_id=1155395482]
+editor_description = "站位「right」，任何角色都能站。拖曳移動；框的底邊是腳底線，高度是標準身高（角色各自的大小在 scenes/characters/<角色>.tscn）。剪影 Preview 只在編輯器顯示。"
+layout_mode = 1
+anchor_left = 0.8
+anchor_top = 1.0
+anchor_right = 0.8
+anchor_bottom = 1.0
+offset_left = -354.5
+offset_top = -849.25
+offset_right = 125.5
+offset_bottom = 710.75
+mouse_filter = 2
+metadata/_edit_group_ = true
+
+[node name="Preview" type="AspectRatioContainer" parent="StageArea/right" unique_id=307553668]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+ratio = 0.45
+stretch_mode = 1
+alignment_vertical = 2
+
+[node name="Art" type="TextureRect" parent="StageArea/right/Preview" unique_id=253812298]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("4_6c5u0")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="StageArea/right/Preview" unique_id=523588113]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.05, 0.08, 0.12, 1)
+theme_override_constants/outline_size = 12
+text = "右
+right"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DialogueGuide" type="ColorRect" parent="." unique_id=913392828]
+editor_description = "對話框大約的位置，只在編輯器顯示，執行時移除。"
+layout_mode = 0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -734.0
+mouse_filter = 2
+color = Color(0.03, 0.06, 0.1, 0.6)
+metadata/_edit_lock_ = true
+
+[node name="Note" type="Label" parent="DialogueGuide" unique_id=1953844431]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 40.0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_font_sizes/font_size = 40
+text = "對話框（示意，執行時移除）"
+metadata/_edit_lock_ = true

@@ -1,0 +1,500 @@
+{
+  "id": "round_v2_fixture",
+  "version": "1",
+  "title": "Round v2 fixture",
+  "entry": "start",
+  "initial_flags": {
+    "l2_caught": false
+  },
+  "nodes": {
+    "start": {
+      "title": "開場",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "開場"
+        }
+      ],
+      "next": "r1"
+    },
+    "r1": {
+      "title": "第一回合",
+      "steps": [
+        {
+          "op": "boke_round",
+          "mode": "testimony",
+          "id": "r1",
+          "speaker": "gintoki",
+          "timer_seconds": 8,
+          "clear": "r1_clear",
+          "game_over": "go",
+          "lines": [
+            {
+              "id": "l1",
+              "text": "我昨晚睡得很熟。",
+              "listen": "l1_listen",
+              "whiff": "l1_whiff",
+              "hint": "l1_hint"
+            },
+            {
+              "id": "l2",
+              "text": "牛奶我早就戒了。",
+              "hint": "l2_hint",
+              "slot": {
+                "timeout": "l2_timeout",
+                "options": [
+                  {
+                    "id": "a",
+                    "label": "空瓶呢！",
+                    "result": "perfect",
+                    "require": "milk_bottle",
+                    "goto": "l2_a",
+                    "set_flags": {
+                      "l2_caught": true
+                    }
+                  },
+                  {
+                    "id": "b",
+                    "label": "上週才買的！",
+                    "result": "weak",
+                    "goto": "l2_b"
+                  },
+                  {
+                    "id": "c",
+                    "label": "原來如此。",
+                    "result": "fail",
+                    "goto": "l2_c"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "l3",
+              "text": "定春說牛奶是▇▇喝的。",
+              "speaker": "kagura",
+              "slot": {
+                "timeout": "l3_timeout",
+                "options": [
+                  {
+                    "id": "b",
+                    "label": "定春只會汪！",
+                    "result": "weak",
+                    "goto": "l3_b"
+                  },
+                  {
+                    "id": "h",
+                    "label": "……（放棄吐槽）",
+                    "result": "hidden",
+                    "require_caught": [
+                      "l2"
+                    ],
+                    "goto": "hidden_end"
+                  },
+                  {
+                    "id": "c",
+                    "label": "翻譯得真好。",
+                    "result": "fail",
+                    "goto": "l3_c"
+                  }
+                ],
+                "censor": {
+                  "hidden": "神樂",
+                  "goto": "l3_censor"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "l1_listen": {
+      "title": "半夜兩點開冰箱時還沒醒。",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "半夜兩點開冰箱時還沒醒。"
+        },
+        {
+          "op": "item",
+          "id": "milk_trace"
+        }
+      ],
+      "next": "r1"
+    },
+    "r1_clear": {
+      "title": "第一回合結束",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "第一回合結束"
+        }
+      ],
+      "next": "r2"
+    },
+    "hidden_end": {
+      "title": "隱藏",
+      "steps": [
+        {
+          "op": "end",
+          "text": "隱藏結局"
+        }
+      ]
+    },
+    "r2": {
+      "title": "連擊回合",
+      "steps": [
+        {
+          "op": "boke_round",
+          "mode": "combo",
+          "id": "r2",
+          "speaker": "kagura",
+          "clear": "r2_clear",
+          "game_over": "go",
+          "rules": {
+            "combo_timers": [
+              8,
+              6,
+              5
+            ],
+            "combo_bonus": "r2_bonus",
+            "combo_break": "r2_break",
+            "super": "r2_super"
+          },
+          "lines": [
+            {
+              "id": "c1",
+              "text": "我們是在試毒。",
+              "slot": {
+                "timeout": "c1_t",
+                "options": [
+                  {
+                    "id": "a",
+                    "label": "試到一滴不剩嗎！",
+                    "result": "perfect",
+                    "goto": "c1_a"
+                  },
+                  {
+                    "id": "c",
+                    "label": "原來是為了我。",
+                    "result": "fail",
+                    "goto": "c1_c"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "c2",
+              "text": "安心地喝完了阿魯。",
+              "slot": {
+                "timeout": "c2_t",
+                "options": [
+                  {
+                    "id": "a",
+                    "label": "安心了就不用喝完！",
+                    "result": "perfect",
+                    "goto": "c2_a"
+                  },
+                  {
+                    "id": "c",
+                    "label": "太好了。",
+                    "result": "fail",
+                    "goto": "c2_c"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "c3",
+              "text": "所以錯的是新八！",
+              "speaker": "gintoki",
+              "slot": {
+                "qte": {
+                  "duration": 1.6,
+                  "window": 0.12,
+                  "late_after": 2.0,
+                  "perfect": "c3_p",
+                  "early": "c3_e",
+                  "late": "c3_l"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "r2_bonus": {
+      "title": "吐槽連擊！",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "吐槽連擊！"
+        }
+      ],
+      "next": "r2_clear"
+    },
+    "r2_clear": {
+      "title": "第二回合結束",
+      "steps": [
+        {
+          "op": "end",
+          "text": "結束"
+        }
+      ]
+    },
+    "go": {
+      "title": "Game Over",
+      "steps": [
+        {
+          "op": "end",
+          "text": "眼鏡碎了"
+        }
+      ]
+    },
+    "l1_whiff": {
+      "title": "l1_whiff",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "l1_whiff"
+        }
+      ],
+      "next": "r1"
+    },
+    "l1_hint": {
+      "title": "l1_hint",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "l1_hint"
+        }
+      ],
+      "next": "r1"
+    },
+    "l2_a": {
+      "title": "l2_a",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "l2_a"
+        }
+      ],
+      "next": "r1"
+    },
+    "l2_b": {
+      "title": "l2_b",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "l2_b"
+        }
+      ],
+      "next": "r1"
+    },
+    "l2_c": {
+      "title": "l2_c",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "l2_c"
+        }
+      ],
+      "next": "r1"
+    },
+    "l2_timeout": {
+      "title": "l2_timeout",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "l2_timeout"
+        }
+      ],
+      "next": "r1"
+    },
+    "l2_hint": {
+      "title": "l2_hint",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "l2_hint"
+        }
+      ],
+      "next": "r1"
+    },
+    "l3_b": {
+      "title": "l3_b",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "l3_b"
+        }
+      ],
+      "next": "r1"
+    },
+    "l3_c": {
+      "title": "l3_c",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "l3_c"
+        }
+      ],
+      "next": "r1"
+    },
+    "l3_timeout": {
+      "title": "l3_timeout",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "l3_timeout"
+        }
+      ],
+      "next": "r1"
+    },
+    "l3_censor": {
+      "title": "l3_censor",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "l3_censor"
+        }
+      ],
+      "next": "r1"
+    },
+    "c1_a": {
+      "title": "c1_a",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "c1_a"
+        }
+      ],
+      "next": "r2"
+    },
+    "c1_c": {
+      "title": "c1_c",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "c1_c"
+        }
+      ],
+      "next": "r2"
+    },
+    "c1_t": {
+      "title": "c1_t",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "c1_t"
+        }
+      ],
+      "next": "r2"
+    },
+    "c2_a": {
+      "title": "c2_a",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "c2_a"
+        }
+      ],
+      "next": "r2"
+    },
+    "c2_c": {
+      "title": "c2_c",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "c2_c"
+        }
+      ],
+      "next": "r2"
+    },
+    "c2_t": {
+      "title": "c2_t",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "c2_t"
+        }
+      ],
+      "next": "r2"
+    },
+    "c3_p": {
+      "title": "c3_p",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "c3_p"
+        }
+      ],
+      "next": "r2"
+    },
+    "c3_e": {
+      "title": "c3_e",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "c3_e"
+        }
+      ],
+      "next": "r2"
+    },
+    "c3_l": {
+      "title": "c3_l",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "c3_l"
+        }
+      ],
+      "next": "r2"
+    },
+    "r2_break": {
+      "title": "r2_break",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "r2_break"
+        }
+      ],
+      "next": "r2"
+    },
+    "r2_super": {
+      "title": "r2_super",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "r2_super"
+        }
+      ],
+      "next": "r2"
+    }
+  }
+}

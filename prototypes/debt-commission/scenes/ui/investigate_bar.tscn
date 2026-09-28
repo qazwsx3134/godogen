@@ -1,0 +1,52 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/story-cjk.ttc" id="1_c3glf"]
+[ext_resource type="Script" path="res://scripts/investigate_bar.gd" id="2_15hkm"]
+
+[sub_resource type="Theme" id="Theme_mw6bh"]
+default_font = ExtResource("1_c3glf")
+
+[node name="InvestigateBar" type="MarginContainer" unique_id=1756558891]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_vertical = 0
+mouse_filter = 2
+theme = SubResource("Theme_mw6bh")
+theme_override_constants/margin_left = 33
+theme_override_constants/margin_right = 33
+theme_override_constants/margin_bottom = 33
+script = ExtResource("2_15hkm")
+
+[node name="Panel" type="PanelContainer" parent="." unique_id=1741052086]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Padding" type="MarginContainer" parent="Panel" unique_id=1423990264]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 22
+theme_override_constants/margin_top = 22
+theme_override_constants/margin_right = 22
+theme_override_constants/margin_bottom = 22
+
+[node name="Row" type="HBoxContainer" parent="Panel/Padding" unique_id=1683234750]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 28
+
+[node name="Progress" type="Label" parent="Panel/Padding/Row" unique_id=2106734361]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 36
+text = "線索 1/4・左右拖曳背景，點畫面上的東西調查"
+vertical_alignment = 1
+autowrap_mode = 1
+
+[node name="Expand" type="Button" parent="Panel/Padding/Row" unique_id=720953095]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(199.38461, 132.92308)
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "展開 ▲"

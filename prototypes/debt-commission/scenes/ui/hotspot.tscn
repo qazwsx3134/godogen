@@ -1,0 +1,38 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/hotspot.gd" id="1_88mdb"]
+[ext_resource type="FontFile" path="res://assets/fonts/story-cjk.ttc" id="2_puium"]
+
+[node name="Hotspot" type="Control" unique_id=1412488335]
+editor_description = "調查點：main.gd 依劇本的 pos／size（佔背景圖的比例）放在圖上的物件位置。找到前不顯示，找到後留下淡框與勾。"
+layout_mode = 3
+anchors_preset = 0
+offset_right = 160.0
+offset_bottom = 160.0
+mouse_filter = 2
+script = ExtResource("1_88mdb")
+
+[node name="Outline" type="ReferenceRect" parent="." unique_id=482261879]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+border_color = Color(1, 0.93, 0.6, 1)
+border_width = 8.307693
+editor_only = false
+
+[node name="Mark" type="Label" parent="." unique_id=1458219792]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -14.0
+offset_bottom = 23.0
+grow_horizontal = 0
+theme_override_fonts/font = ExtResource("2_puium")
+theme_override_font_sizes/font_size = 50
+theme_override_colors/font_color = Color(1, 0.93, 0.6, 1)
+theme_override_colors/font_outline_color = Color(0.05, 0.05, 0.08, 1)
+theme_override_constants/outline_size = 11
+text = "✓"

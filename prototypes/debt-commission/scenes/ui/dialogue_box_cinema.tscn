@@ -1,0 +1,735 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/story-cjk.ttc" id="1_122e5"]
+[ext_resource type="Script" path="res://scripts/dialogue_box.gd" id="2_lljnp"]
+[ext_resource type="Script" path="res://scripts/ui_ornament.gd" id="3_mgdok"]
+
+[sub_resource type="Theme" id="Theme_0ai4n"]
+default_font = ExtResource("1_122e5")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_e0nnp"]
+
+[sub_resource type="FontVariation" id="FontVariation_1tbqw"]
+base_font = ExtResource("1_122e5")
+variation_embolden = 0.8
+
+[sub_resource type="FontVariation" id="FontVariation_f5is1"]
+base_font = ExtResource("1_122e5")
+variation_embolden = 0.8
+spacing_glyph = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yxc3j"]
+content_margin_left = 27.692308
+content_margin_right = 27.692308
+bg_color = Color(0.6627451, 0.8156863, 0.8117647, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.6627451, 0.8156863, 0.8117647, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ch34m"]
+content_margin_left = 27.692308
+content_margin_right = 27.692308
+bg_color = Color(0.7607843, 0.8784314, 0.8666667, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.6627451, 0.8156863, 0.8117647, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ll7df"]
+content_margin_left = 27.692308
+content_margin_right = 27.692308
+bg_color = Color(0.6627451, 0.8156863, 0.8117647, 0.5)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.6627451, 0.8156863, 0.8117647, 0.5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slrgv"]
+draw_center = false
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.83137256, 0.9372549, 0.92156863, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fpbx5"]
+bg_color = Color(0.06666667, 0.06666667, 0.06666667, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.6627451, 0.8156863, 0.8117647, 1)
+shadow_color = Color(0.6627451, 0.8156863, 0.8117647, 0.55)
+shadow_size = 11
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_akcjs"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.6627451, 0.8156863, 0.8117647, 1)
+shadow_color = Color(0.6627451, 0.8156863, 0.8117647, 0.55)
+shadow_size = 11
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1nwy4"]
+bg_color = Color(0.14901961, 0.14901961, 0.14901961, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.6627451, 0.8156863, 0.8117647, 1)
+shadow_color = Color(0.6627451, 0.8156863, 0.8117647, 0.55)
+shadow_size = 11
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2peo2"]
+bg_color = Color(0.06666667, 0.06666667, 0.06666667, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.6627451, 0.8156863, 0.8117647, 1)
+shadow_color = Color(0.6627451, 0.8156863, 0.8117647, 0.55)
+shadow_size = 11
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_331qy"]
+content_margin_left = 27.692308
+content_margin_right = 27.692308
+bg_color = Color(0.9647059, 0.95686275, 0.9137255, 0.078431375)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.8509804, 0.88235295, 0.85882354, 0.23921569)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pcegs"]
+content_margin_left = 27.692308
+content_margin_right = 27.692308
+bg_color = Color(0.7607843, 0.8666667, 0.8509804, 0.18039216)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.8509804, 0.88235295, 0.85882354, 0.23921569)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c06yr"]
+content_margin_left = 27.692308
+content_margin_right = 27.692308
+bg_color = Color(0.9647059, 0.95686275, 0.9137255, 0.039215688)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.8509804, 0.88235295, 0.85882354, 0.11960784)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e6uut"]
+draw_center = false
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.83137256, 0.9372549, 0.92156863, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cmmwg"]
+content_margin_left = 27.692308
+content_margin_right = 27.692308
+bg_color = Color(0.9647059, 0.95686275, 0.9137255, 0.078431375)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.8509804, 0.88235295, 0.85882354, 0.23921569)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pbgxl"]
+content_margin_left = 27.692308
+content_margin_right = 27.692308
+bg_color = Color(0.7607843, 0.8666667, 0.8509804, 0.18039216)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.8509804, 0.88235295, 0.85882354, 0.23921569)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x0cds"]
+content_margin_left = 27.692308
+content_margin_right = 27.692308
+bg_color = Color(0.9647059, 0.95686275, 0.9137255, 0.039215688)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.8509804, 0.88235295, 0.85882354, 0.11960784)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_53p0w"]
+draw_center = false
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.83137256, 0.9372549, 0.92156863, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_an23r"]
+content_margin_left = 27.692308
+content_margin_right = 27.692308
+bg_color = Color(0.9647059, 0.95686275, 0.9137255, 0.078431375)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.8509804, 0.88235295, 0.85882354, 0.23921569)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3q873"]
+content_margin_left = 27.692308
+content_margin_right = 27.692308
+bg_color = Color(0.7607843, 0.8666667, 0.8509804, 0.18039216)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.8509804, 0.88235295, 0.85882354, 0.23921569)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8tqfy"]
+content_margin_left = 27.692308
+content_margin_right = 27.692308
+bg_color = Color(0.9647059, 0.95686275, 0.9137255, 0.039215688)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.8509804, 0.88235295, 0.85882354, 0.11960784)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b2x2f"]
+draw_center = false
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.83137256, 0.9372549, 0.92156863, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rf7bk"]
+content_margin_left = 27.692308
+content_margin_right = 27.692308
+bg_color = Color(0.6627451, 0.8156863, 0.8117647, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.6627451, 0.8156863, 0.8117647, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_006sl"]
+content_margin_left = 27.692308
+content_margin_right = 27.692308
+bg_color = Color(0.7607843, 0.8784314, 0.8666667, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.6627451, 0.8156863, 0.8117647, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v61j0"]
+content_margin_left = 27.692308
+content_margin_right = 27.692308
+bg_color = Color(0.6627451, 0.8156863, 0.8117647, 0.5)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.6627451, 0.8156863, 0.8117647, 0.5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_syhbd"]
+draw_center = false
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.83137256, 0.9372549, 0.92156863, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5dqwt"]
+content_margin_left = 30.461538
+content_margin_right = 30.461538
+bg_color = Color(0, 0, 0, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rugm7"]
+content_margin_left = 30.461538
+content_margin_right = 30.461538
+bg_color = Color(0.66, 0.82, 0.81, 0.16)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oig0n"]
+content_margin_left = 30.461538
+content_margin_right = 30.461538
+bg_color = Color(1, 1, 1, 0.12)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fn3q4"]
+draw_center = false
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.83137256, 0.9372549, 0.92156863, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8tixg"]
+content_margin_left = 30.461538
+content_margin_right = 30.461538
+bg_color = Color(0, 0, 0, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kb3e0"]
+content_margin_left = 30.461538
+content_margin_right = 30.461538
+bg_color = Color(0.66, 0.82, 0.81, 0.16)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uj5v4"]
+content_margin_left = 30.461538
+content_margin_right = 30.461538
+bg_color = Color(1, 1, 1, 0.12)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j3no6"]
+draw_center = false
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.83137256, 0.9372549, 0.92156863, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sv42u"]
+content_margin_left = 30.461538
+content_margin_right = 30.461538
+bg_color = Color(0, 0, 0, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4rmmd"]
+content_margin_left = 30.461538
+content_margin_right = 30.461538
+bg_color = Color(0.66, 0.82, 0.81, 0.16)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p1fdj"]
+content_margin_left = 30.461538
+content_margin_right = 30.461538
+bg_color = Color(1, 1, 1, 0.12)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k0ta0"]
+draw_center = false
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.83137256, 0.9372549, 0.92156863, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3vkff"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nh7p3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xmh63"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ll7vq"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_w7pht"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cf85t"]
+draw_center = false
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.83137256, 0.9372549, 0.92156863, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_122e5"]
+bg_color = Color(0.03, 0.07, 0.1, 0.92)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_color = Color(0.65, 0.8, 0.81, 0.5)
+corner_radius_top_left = 11
+corner_radius_top_right = 11
+
+[node name="DialogueBox" type="MarginContainer" unique_id=836306445]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_vertical = 0
+mouse_filter = 2
+theme = SubResource("Theme_0ai4n")
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+script = ExtResource("2_lljnp")
+
+[node name="Panel" type="PanelContainer" parent="." unique_id=1848194617]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_e0nnp")
+
+[node name="Frame" type="Control" parent="Panel" unique_id=541871153]
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("3_mgdok")
+
+[node name="Padding" type="MarginContainer" parent="Panel" unique_id=397297822]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 47
+theme_override_constants/margin_top = 61
+theme_override_constants/margin_right = 47
+theme_override_constants/margin_bottom = 36
+
+[node name="Column" type="VBoxContainer" parent="Panel/Padding" unique_id=1941649860]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="SpeakerRow" type="HBoxContainer" parent="Panel/Padding/Column" unique_id=574986347]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 77.53846)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 25
+
+[node name="SpeakerMark" type="Label" parent="Panel/Padding/Column/SpeakerRow" unique_id=1273214790]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(77.53847, 77.53847)
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_1tbqw")
+theme_override_font_sizes/font_size = 50
+theme_override_colors/font_color = Color(0.6627451, 0.8156863, 0.8117647, 1)
+text = "◇"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SpeakerName" type="Label" parent="Panel/Padding/Column/SpeakerRow" unique_id=1267601981]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_f5is1")
+theme_override_font_sizes/font_size = 44
+theme_override_colors/font_color = Color(0.9019608, 0.8980392, 0.8627451, 1)
+text = "銀時"
+vertical_alignment = 1
+
+[node name="Chapter" type="Label" parent="Panel/Padding/Column/SpeakerRow" unique_id=1856474394]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 39
+theme_override_colors/font_color = Color(0.74509805, 0.7882353, 0.7882353, 1)
+text = "討債委託　／　01"
+horizontal_alignment = 2
+vertical_alignment = 1
+clip_text = true
+
+[node name="TextGap" type="Control" parent="Panel/Padding/Column" unique_id=1533299223]
+custom_minimum_size = Vector2(0, 22.153847)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Text" type="Label" parent="Panel/Padding/Column" unique_id=662864710]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/line_spacing = 20
+theme_override_font_sizes/font_size = 50
+theme_override_colors/font_color = Color(0.95686275, 0.94509804, 0.9137255, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.7)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/shadow_outline_size = 6
+text = "這次的理由比較長。先從我小時候說起——"
+autowrap_mode = 3
+visible_characters_behavior = 1
+
+[node name="Actions" type="VBoxContainer" parent="Panel/Padding/Column" unique_id=965490904]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 22
+
+[node name="InvestigationRow" type="HBoxContainer" parent="Panel/Padding/Column/Actions" unique_id=20552834]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 22
+alignment = 2
+
+[node name="InvestigationContinue" type="Button" parent="Panel/Padding/Column/Actions/InvestigationRow" unique_id=394321182]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(132.92308, 132.92308)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_styles/normal = SubResource("StyleBoxFlat_yxc3j")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ch34m")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ch34m")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_ch34m")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_ll7df")
+theme_override_styles/focus = SubResource("StyleBoxFlat_slrgv")
+theme_override_colors/font_color = Color(0.043137256, 0.08627451, 0.1254902, 1)
+theme_override_colors/font_focus_color = Color(0.043137256, 0.08627451, 0.1254902, 1)
+theme_override_colors/font_pressed_color = Color(0.043137256, 0.08627451, 0.1254902, 1)
+theme_override_colors/font_hover_color = Color(0.043137256, 0.08627451, 0.1254902, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.043137256, 0.08627451, 0.1254902, 1)
+theme_override_colors/font_disabled_color = Color(0.043137256, 0.08627451, 0.1254902, 0.4)
+theme_override_font_sizes/font_size = 42
+text = "檢查完成・繼續"
+
+[node name="RoundControls" type="VBoxContainer" parent="Panel/Padding/Column/Actions" unique_id=1509438071]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 22
+
+[node name="BokeLineIndex" type="Label" parent="Panel/Padding/Column/Actions/RoundControls" unique_id=81254718]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+theme_override_colors/font_color = Color(0.74509805, 0.7882353, 0.7882353, 1)
+text = "1 / 4　·○○○"
+horizontal_alignment = 2
+
+[node name="CensorBar" type="Button" parent="Panel/Padding/Column/Actions/RoundControls" unique_id=1729299558]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(332.3077, 132.92308)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_fpbx5")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_akcjs")
+theme_override_styles/hover = SubResource("StyleBoxFlat_1nwy4")
+theme_override_styles/focus = SubResource("StyleBoxFlat_2peo2")
+theme_override_colors/font_color = Color(0.06666667, 0.06666667, 0.06666667, 1)
+theme_override_colors/font_focus_color = Color(0.06666667, 0.06666667, 0.06666667, 1)
+theme_override_colors/font_pressed_color = Color(0.06666667, 0.06666667, 0.06666667, 1)
+theme_override_colors/font_hover_color = Color(0.06666667, 0.06666667, 0.06666667, 1)
+theme_override_font_sizes/font_size = 44
+text = "▇▇▇▇"
+
+[node name="RoundBar" type="HBoxContainer" parent="Panel/Padding/Column/Actions/RoundControls" unique_id=1120310011]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 17
+
+[node name="BokePrevious" type="Button" parent="Panel/Padding/Column/Actions/RoundControls/RoundBar" unique_id=383102410]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(132.92308, 132.92308)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_331qy")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pcegs")
+theme_override_styles/hover = SubResource("StyleBoxFlat_pcegs")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_pcegs")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_c06yr")
+theme_override_styles/focus = SubResource("StyleBoxFlat_e6uut")
+theme_override_colors/font_color = Color(0.9529412, 0.9490196, 0.91764706, 1)
+theme_override_colors/font_focus_color = Color(0.9529412, 0.9490196, 0.91764706, 1)
+theme_override_colors/font_pressed_color = Color(0.9529412, 0.9490196, 0.91764706, 1)
+theme_override_colors/font_hover_color = Color(0.9529412, 0.9490196, 0.91764706, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.9529412, 0.9490196, 0.91764706, 1)
+theme_override_colors/font_disabled_color = Color(0.9529412, 0.9490196, 0.91764706, 0.4)
+theme_override_font_sizes/font_size = 42
+text = "‹"
+
+[node name="BokeNext" type="Button" parent="Panel/Padding/Column/Actions/RoundControls/RoundBar" unique_id=747971993]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(132.92308, 132.92308)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_cmmwg")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_pbgxl")
+theme_override_styles/hover = SubResource("StyleBoxFlat_pbgxl")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_pbgxl")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_x0cds")
+theme_override_styles/focus = SubResource("StyleBoxFlat_53p0w")
+theme_override_colors/font_color = Color(0.9529412, 0.9490196, 0.91764706, 1)
+theme_override_colors/font_focus_color = Color(0.9529412, 0.9490196, 0.91764706, 1)
+theme_override_colors/font_pressed_color = Color(0.9529412, 0.9490196, 0.91764706, 1)
+theme_override_colors/font_hover_color = Color(0.9529412, 0.9490196, 0.91764706, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.9529412, 0.9490196, 0.91764706, 1)
+theme_override_colors/font_disabled_color = Color(0.9529412, 0.9490196, 0.91764706, 0.4)
+theme_override_font_sizes/font_size = 42
+text = "›"
+
+[node name="Gap" type="Control" parent="Panel/Padding/Column/Actions/RoundControls/RoundBar" unique_id=220190665]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="BokeListen" type="Button" parent="Panel/Padding/Column/Actions/RoundControls/RoundBar" unique_id=552982161]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(132.92308, 132.92308)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_an23r")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_3q873")
+theme_override_styles/hover = SubResource("StyleBoxFlat_3q873")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_3q873")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_8tqfy")
+theme_override_styles/focus = SubResource("StyleBoxFlat_b2x2f")
+theme_override_colors/font_color = Color(0.9529412, 0.9490196, 0.91764706, 1)
+theme_override_colors/font_focus_color = Color(0.9529412, 0.9490196, 0.91764706, 1)
+theme_override_colors/font_pressed_color = Color(0.9529412, 0.9490196, 0.91764706, 1)
+theme_override_colors/font_hover_color = Color(0.9529412, 0.9490196, 0.91764706, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.9529412, 0.9490196, 0.91764706, 1)
+theme_override_colors/font_disabled_color = Color(0.9529412, 0.9490196, 0.91764706, 0.4)
+theme_override_font_sizes/font_size = 42
+text = "聽下去"
+
+[node name="BokeTsukkomi" type="Button" parent="Panel/Padding/Column/Actions/RoundControls/RoundBar" unique_id=955828660]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(132.92308, 132.92308)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_rf7bk")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_006sl")
+theme_override_styles/hover = SubResource("StyleBoxFlat_006sl")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_006sl")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_v61j0")
+theme_override_styles/focus = SubResource("StyleBoxFlat_syhbd")
+theme_override_colors/font_color = Color(0.043137256, 0.08627451, 0.1254902, 1)
+theme_override_colors/font_focus_color = Color(0.043137256, 0.08627451, 0.1254902, 1)
+theme_override_colors/font_pressed_color = Color(0.043137256, 0.08627451, 0.1254902, 1)
+theme_override_colors/font_hover_color = Color(0.043137256, 0.08627451, 0.1254902, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.043137256, 0.08627451, 0.1254902, 1)
+theme_override_colors/font_disabled_color = Color(0.043137256, 0.08627451, 0.1254902, 0.4)
+theme_override_font_sizes/font_size = 42
+text = "吐槽！"
+
+[node name="FooterGap" type="Control" parent="Panel/Padding/Column" unique_id=82783645]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Footer" type="HBoxContainer" parent="Panel/Padding/Column" unique_id=1433249076]
+custom_minimum_size = Vector2(0, 144)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 22
+
+[node name="ToolbarColumn" type="VBoxContainer" parent="Panel/Padding/Column/Footer" unique_id=1642551962]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Toolbar" type="HBoxContainer" parent="Panel/Padding/Column/Footer/ToolbarColumn" unique_id=34584617]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="Menu" type="Button" parent="Panel/Padding/Column/Footer/ToolbarColumn/Toolbar" unique_id=1441181020]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(132.92308, 132.92308)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_5dqwt")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_rugm7")
+theme_override_styles/hover = SubResource("StyleBoxFlat_oig0n")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_rugm7")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_5dqwt")
+theme_override_styles/focus = SubResource("StyleBoxFlat_fn3q4")
+theme_override_colors/font_color = Color(0.83137256, 0.8666667, 0.85490197, 1)
+theme_override_colors/font_focus_color = Color(0.83137256, 0.8666667, 0.85490197, 1)
+theme_override_colors/font_pressed_color = Color(0.8352941, 0.9254902, 0.9098039, 1)
+theme_override_colors/font_hover_color = Color(0.83137256, 0.8666667, 0.85490197, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.8352941, 0.9254902, 0.9098039, 1)
+theme_override_font_sizes/font_size = 39
+text = "目錄"
+
+[node name="Log" type="Button" parent="Panel/Padding/Column/Footer/ToolbarColumn/Toolbar" unique_id=1972976492]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(132.92308, 132.92308)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_8tixg")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_kb3e0")
+theme_override_styles/hover = SubResource("StyleBoxFlat_uj5v4")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_kb3e0")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_8tixg")
+theme_override_styles/focus = SubResource("StyleBoxFlat_j3no6")
+theme_override_colors/font_color = Color(0.83137256, 0.8666667, 0.85490197, 1)
+theme_override_colors/font_focus_color = Color(0.83137256, 0.8666667, 0.85490197, 1)
+theme_override_colors/font_pressed_color = Color(0.8352941, 0.9254902, 0.9098039, 1)
+theme_override_colors/font_hover_color = Color(0.83137256, 0.8666667, 0.85490197, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.8352941, 0.9254902, 0.9098039, 1)
+theme_override_font_sizes/font_size = 39
+text = "回顧"
+
+[node name="Auto" type="Button" parent="Panel/Padding/Column/Footer/ToolbarColumn/Toolbar" unique_id=956635321]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(132.92308, 132.92308)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_sv42u")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_4rmmd")
+theme_override_styles/hover = SubResource("StyleBoxFlat_p1fdj")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_4rmmd")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_sv42u")
+theme_override_styles/focus = SubResource("StyleBoxFlat_k0ta0")
+theme_override_colors/font_color = Color(0.83137256, 0.8666667, 0.85490197, 1)
+theme_override_colors/font_focus_color = Color(0.83137256, 0.8666667, 0.85490197, 1)
+theme_override_colors/font_pressed_color = Color(0.8352941, 0.9254902, 0.9098039, 1)
+theme_override_colors/font_hover_color = Color(0.83137256, 0.8666667, 0.85490197, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.8352941, 0.9254902, 0.9098039, 1)
+theme_override_font_sizes/font_size = 39
+toggle_mode = true
+text = "自動"
+
+[node name="Spacer" type="Control" parent="Panel/Padding/Column/Footer" unique_id=1428906082]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Advance" type="Button" parent="Panel/Padding/Column/Footer" unique_id=1461866885]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(144, 144)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/normal = SubResource("StyleBoxEmpty_3vkff")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_nh7p3")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_xmh63")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_ll7vq")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_w7pht")
+theme_override_styles/focus = SubResource("StyleBoxFlat_cf85t")
+theme_override_colors/font_color = Color(0.8352941, 0.8901961, 0.8745098, 1)
+theme_override_colors/font_focus_color = Color(0.8352941, 0.8901961, 0.8745098, 1)
+theme_override_colors/font_pressed_color = Color(0.8352941, 0.8901961, 0.8745098, 1)
+theme_override_colors/font_hover_color = Color(0.8352941, 0.8901961, 0.8745098, 1)
+theme_override_font_sizes/font_size = 69
+text = "›"
+
+[node name="Shape" type="Control" parent="Panel/Padding/Column/Footer/Advance" unique_id=2064270145]
+show_behind_parent = true
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("3_mgdok")
+kind = "advance"
+
+[node name="Corner" type="Control" parent="." unique_id=906789600]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="CollapseTab" type="PanelContainer" parent="Corner" unique_id=878181488]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_right = -33.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_122e5")
+
+[node name="InvestigationCollapse" type="Button" parent="Corner/CollapseTab" unique_id=454989552]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(132.92308, 132.92308)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_5dqwt")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_rugm7")
+theme_override_styles/hover = SubResource("StyleBoxFlat_oig0n")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_rugm7")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_5dqwt")
+theme_override_styles/focus = SubResource("StyleBoxFlat_fn3q4")
+theme_override_colors/font_color = Color(0.83137256, 0.8666667, 0.85490197, 1)
+theme_override_colors/font_focus_color = Color(0.83137256, 0.8666667, 0.85490197, 1)
+theme_override_colors/font_pressed_color = Color(0.8352941, 0.9254902, 0.9098039, 1)
+theme_override_colors/font_hover_color = Color(0.83137256, 0.8666667, 0.85490197, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.8352941, 0.9254902, 0.9098039, 1)
+theme_override_font_sizes/font_size = 39
+text = "收起 ▼"

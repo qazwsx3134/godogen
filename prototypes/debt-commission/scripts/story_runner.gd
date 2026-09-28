@@ -5,6 +5,7 @@ extends RefCounted
 
 const MAX_INTERNAL_TRANSITIONS: int = 128
 const ASSET_CATALOG_PATH: String = "res://data/asset_catalog.json"
+const TsukkomiRound = preload("res://scripts/tsukkomi_round.gd")
 const HEX_DIGITS: String = "0123456789abcdefABCDEF"
 const DEFAULT_GAMEPLAY: Dictionary = {
     "glasses": 5,
@@ -30,17 +31,28 @@ const VALID_OPS: Array[String] = [
     "wait",
     "sound",
     "end",
+    "result",
     "set_flag",
     "condition",
     "goto",
     "investigate",
     "boke_round",
     "profile",
+    "shake",
+    "flash",
+    "cutin",
+    "freeze",
+    "bgm",
+    "se",
 ]
 
 const VALID_STAGE_POSITIONS: Array[String] = ["reader", "host", "door", "landlady", "other_side"]
 const VALID_CHARACTER_POSITIONS: Array[String] = ["left", "center", "right"]
-const VALID_EXPRESSIONS: Array[String] = ["neutral", "smile", "annoyed", "surprised", "thinking"]
+const GRADES: Array[String] = ["S", "A", "B", "C"]
+## Expression ids for `char` and line tags; what each means and which art to make:
+## docs/story-telling-game/EXPRESSIONS.md.
+const VALID_EXPRESSIONS: Array[String] = ["neutral", "smile", "annoyed", "surprised", "thinking", "sweat", "smug", "shout",
+    "broken", "angry", "panic", "nervous", "serious", "cry", "nosepick", "mock"]
 const VALID_DIRECTIONS: Array[String] = ["left", "right", "up", "down"]
 const VALID_SOUNDS: Array[String] = ["paper", "knock", "step", "stamp"]
 
@@ -50,6 +62,10 @@ var items: Array[String] = []
 var profiles: Array[String] = []
 var gameplay: Dictionary = DEFAULT_GAMEPLAY.duplicate(true)
 var checked_hotspots: Dictionary = {}
+## Live state of the v2 round in play (see tsukkomi_round.gd); kept while its reaction nodes play.
+var round_state: Dictionary = {}
+## Totals for the chapter result: caught, perfect, fails, hidden, max_combo.
+var stats: Dictionary = {}
 var error_message: String = ""
 var node_id: String = ""
 var step_index: int = 0
@@ -66,6 +82,7 @@ var _listened_line_ids: Array[String] = []
 var _checkpoint: Dictionary = {}
 var _game_over_active: bool = false
 var _profiles_before_normalize: Array[String] = []
+var _round_before_normalize: Dictionary = {}
 
 
 func load_story(path: String) -> bool:
@@ -125,6 +142,8 @@ func load_story(path: String) -> bool:
     flags = {}
     items = []
     profiles = []
+    round_state = {}
+    stats = {}
     gameplay = DEFAULT_GAMEPLAY.duplicate(true)
     checked_hotspots = {}
     _boke_round_id = ""
@@ -160,12 +179,60 @@ func load_story(path: String) -> bool:
     return true
 
 
+## True when the story uses investigation or tsukkomi rounds, so the shell shows the
+## glasses/power HUD, the materials button and Game Over retry.
+func has_gameplay() -> bool:
+    return _loaded and _has_phase3_ops
+
+
+## The story's own `title` and `note`, for the title screen.
+func story_info() -> Dictionary:
+    return {"title": String(_story.get("title", "")), "note": String(_story.get("note", ""))}
+
+
 func get_asset_catalog() -> Dictionary:
     return _asset_catalog.duplicate(true)
 
 
 ## Collected materials and unlocked character profiles with their catalog text, in the
 ## order the player got them. Intended for a materials/profiles screen.
+## The chapter's closing numbers for the current `result` step: tsukkomi caught out of tries,
+## perfects, best combo, cold takes, hidden routes found (of the chapter's hidden_total), glasses
+## left, Game Overs, and the grade with its closing line. Stats survive checkpoint retries.
+func chapter_result() -> Dictionary:
+    var command: Dictionary = current()
+    if String(command.get("op", "")) != "result":
+        return {}
+    var grade: String = grade_for(int(gameplay.get("glasses", 0)), int(stats.get("game_overs", 0)))
+    var line: Dictionary = ((command.get("lines", {}) as Dictionary).get(grade, {}) as Dictionary).duplicate()
+    return {
+        "title": String(command.get("title", "")),
+        "grade": grade,
+        "line": line,
+        "caught": int(stats.get("caught", 0)),
+        "tries": int(stats.get("caught", 0)) + int(stats.get("fails", 0)),
+        "perfect": int(stats.get("perfect", 0)),
+        "max_combo": int(stats.get("max_combo", 0)),
+        "fails": int(stats.get("fails", 0)),
+        "hidden": int(stats.get("hidden", 0)),
+        "hidden_total": int(command.get("hidden_total", 0)),
+        "glasses": int(gameplay.get("glasses", 0)),
+        "max_glasses": int(gameplay.get("max_glasses", 5)),
+        "game_overs": int(stats.get("game_overs", 0)),
+    }
+
+
+## The chapter grade from the glasses left (5 S, 4 A, 3–2 B, 1 C); each Game Over drops it one
+## grade, never below C, so retrying cannot farm an S.
+static func grade_for(glasses: int, game_overs: int) -> String:
+    var index: int = 0 if glasses >= 5 else 1 if glasses == 4 else 2 if glasses >= 2 else 3
+    return GRADES[mini(index + maxi(game_overs, 0), GRADES.size() - 1)]
+
+
+func _count(key: String) -> void:
+    stats[key] = int(stats.get(key, 0)) + 1
+
+
 func case_file() -> Dictionary:
     var materials: Array = []
     var item_catalog: Dictionary = _asset_catalog.get("items", {}) as Dictionary
@@ -185,6 +252,8 @@ func reset() -> void:
         flags = {}
         items = []
         profiles = []
+        round_state = {}
+        stats = {}
         gameplay = DEFAULT_GAMEPLAY.duplicate(true)
         checked_hotspots = {}
         _boke_round_id = ""
@@ -210,6 +279,8 @@ func current() -> Dictionary:
     _prepare_interactive_command(command)
     if String(command.get("op", "")) == "investigate":
         command = _decorate_investigation(command)
+    elif TsukkomiRound.is_v2(command):
+        command = TsukkomiRound.decorate(command, round_state, items, gameplay)
     elif String(command.get("op", "")) == "boke_round":
         command = _decorate_boke_round(command)
 
@@ -231,7 +302,7 @@ func advance() -> Dictionary:
         return {}
 
     var op: String = String(command.get("op", ""))
-    if op == "choice" or op == "end" or op == "boke_round":
+    if op == "choice" or op == "end" or op == "boke_round" or op == "result":
         error_message = "The current command requires a choice or is already at the end."
         return command
     if op == "investigate" and not _investigation_is_complete(command):
@@ -277,6 +348,14 @@ func set_boke_line(index: int) -> bool:
     var command: Dictionary = _current_command()
     if String(command.get("op", "")) != "boke_round":
         return _reject("The current command is not a boke round.")
+    if TsukkomiRound.is_v2(command):
+        _prepare_interactive_command(command)
+        var moved: Dictionary = TsukkomiRound.set_line(command, round_state, index)
+        if moved.has("error"):
+            return _reject(String(moved["error"]))
+        round_state = moved["state"]
+        error_message = ""
+        return true
     var lines: Array = command.get("lines", []) as Array
     if index < 0 or index >= lines.size():
         return _reject("Boke line index is outside the round.")
@@ -293,6 +372,11 @@ func listen_boke_line() -> bool:
     if String(command.get("op", "")) != "boke_round":
         return _reject("The current command is not a boke round.")
     _prepare_interactive_command(command)
+    if TsukkomiRound.is_v2(command):
+        var heard: Dictionary = TsukkomiRound.listen(command, round_state)
+        if heard.has("error"):
+            return _reject(String(heard["error"]))
+        return _jump_within_round(heard["state"], String(heard["goto"]))
     var lines: Array = command.get("lines", []) as Array
     var line: Dictionary = lines[_boke_line_index] as Dictionary
     if not _is_non_empty_string(line.get("listen", null)):
@@ -312,6 +396,8 @@ func resolve_boke(option_id: String) -> Dictionary:
     if String(command.get("op", "")) != "boke_round":
         _reject("The current command is not a boke round.")
         return {}
+    if TsukkomiRound.is_v2(command):
+        return _round_action("option", {"id": option_id})
     _prepare_interactive_command(command)
     var visible_options: Array = _visible_boke_options(command)
     for raw_option: Variant in visible_options:
@@ -332,9 +418,92 @@ func timeout_boke() -> Dictionary:
     if String(command.get("op", "")) != "boke_round":
         _reject("The current command is not a boke round.")
         return {}
+    if TsukkomiRound.is_v2(command):
+        return _round_action("timeout")
     var tsukkomi: Dictionary = command.get("tsukkomi", {}) as Dictionary
     var timeout: Dictionary = tsukkomi.get("timeout", {}) as Dictionary
     return _resolve_boke_result(command, timeout)
+
+
+## Pressing 吐槽！ on a line with no tsukkomi slot (v2 rounds).
+func whiff_boke() -> Dictionary:
+    return _round_action("whiff")
+
+
+## Tapping the fourth-wall censor bar of the current line (v2 rounds).
+func resolve_censor() -> Dictionary:
+    return _round_action("censor")
+
+
+## The QTE ring: tapped=false when the ring ran out; offset = seconds from the ring's target
+## (negative = early).
+func resolve_qte(tapped: bool, offset: float = 0.0) -> Dictionary:
+    return _round_action("qte", {"tapped": tapped, "offset": offset})
+
+
+## The ultimate tsukkomi, when round_state and power allow it (v2 rounds).
+func use_super() -> Dictionary:
+    return _round_action("super")
+
+
+func _round_action(kind: String, payload: Dictionary = {}) -> Dictionary:
+    if not _loaded:
+        _reject("No story is loaded.")
+        return {}
+    var command: Dictionary = _current_command()
+    if not TsukkomiRound.is_v2(command):
+        _reject("The current command is not a v2 boke round.")
+        return {}
+    if _game_over_active:
+        _reject("The current boke round is already resolved.")
+        return {}
+    _prepare_interactive_command(command)
+    var decision: Dictionary = TsukkomiRound.resolve(command, round_state, gameplay, items, kind, payload)
+    if decision.has("error"):
+        _reject(String(decision["error"]))
+        return {}
+    var next_flags: Dictionary = flags.duplicate(true)
+    var set_flags: Dictionary = decision["set_flags"]
+    for key: Variant in set_flags.keys():
+        if not _flag_value_is_allowed(String(key), set_flags[key]):
+            _reject("Boke result writes an invalid flag value: %s" % key)
+            return {}
+        next_flags[String(key)] = set_flags[key]
+    var before: Dictionary = snapshot()
+    flags = next_flags
+    gameplay = decision["gameplay"]
+    for key: String in (decision["stats"] as Dictionary).keys():
+        if key == "combo":
+            stats["max_combo"] = maxi(int(stats.get("max_combo", 0)), int(decision["stats"][key]))
+        else:
+            stats[key] = int(stats.get(key, 0)) + int(decision["stats"][key])
+    round_state = {} if bool(decision["leaves_round"]) else decision["state"]
+    _game_over_active = bool(decision["game_over"])
+    if _game_over_active:
+        _count("game_overs")
+    node_id = String(decision["goto"])
+    step_index = 0
+    error_message = ""
+    if not _normalize_position():
+        var message: String = error_message
+        restore(before)
+        error_message = message
+        return {}
+    return {"result": decision["result"], "goto": decision["goto"], "game_over": decision["game_over"]}
+
+
+## Plays a node from inside a v2 round (listen); it leads back to the round.
+func _jump_within_round(next_state: Dictionary, target: String) -> bool:
+    var before: Dictionary = snapshot()
+    round_state = next_state
+    node_id = target
+    step_index = 0
+    error_message = ""
+    if not _normalize_position():
+        var message: String = error_message
+        restore(before)
+        return _reject(message)
+    return true
 
 
 func retry_checkpoint() -> bool:
@@ -353,6 +522,10 @@ func retry_checkpoint() -> bool:
     _boke_round_id = String(checkpoint["round_id"])
     _boke_line_index = 0
     _listened_line_ids = []
+    var retried_round: Dictionary = _find_phase3_command("boke_round", String(checkpoint["round_id"]))
+    if TsukkomiRound.is_v2(retried_round):
+        _boke_round_id = ""
+        round_state = TsukkomiRound.retry_state(retried_round, round_state)
     _game_over_active = false
     error_message = ""
     if not _normalize_position():
@@ -367,6 +540,12 @@ func _prepare_interactive_command(command: Dictionary) -> void:
         var investigation_id: String = String(command.get("id", ""))
         if not checked_hotspots.has(investigation_id):
             checked_hotspots[investigation_id] = []
+    elif TsukkomiRound.is_v2(command):
+        var v2_round_id: String = String(command.get("id", ""))
+        if String(round_state.get("id", "")) != v2_round_id:
+            round_state = TsukkomiRound.new_state(v2_round_id)
+        if _checkpoint.get("round_id", "") != v2_round_id:
+            _capture_round_checkpoint(command)
     elif op == "boke_round":
         var round_id: String = String(command.get("id", ""))
         if _boke_round_id != round_id:
@@ -496,6 +675,17 @@ func _resolve_boke_result(command: Dictionary, resolution: Dictionary) -> Dictio
     var before: Dictionary = snapshot()
     flags = next_flags
     gameplay = next_gameplay
+    match result:
+        "perfect", "weak":
+            _count("caught")
+            if result == "perfect":
+                _count("perfect")
+        "fail":
+            _count("fails")
+        "hidden":
+            _count("hidden")
+    if game_over:
+        _count("game_overs")
     node_id = target
     step_index = 0
     _boke_round_id = ""
@@ -584,6 +774,8 @@ func snapshot() -> Dictionary:
         },
         "checkpoint": _checkpoint.duplicate(true),
         "game_over_active": _game_over_active,
+        "round": round_state.duplicate(true),
+        "stats": stats.duplicate(),
     }
 
 
@@ -610,6 +802,8 @@ func restore(snapshot_data: Dictionary) -> bool:
     _listened_line_ids = _copy_string_array(boke_state.get("listened_line_ids", []) as Array)
     _checkpoint = snapshot_data.get("checkpoint", {}).duplicate(true)
     _game_over_active = bool(snapshot_data.get("game_over_active", false))
+    round_state = (snapshot_data.get("round", {}) as Dictionary).duplicate(true)
+    stats = (snapshot_data.get("stats", {}) as Dictionary).duplicate()
     error_message = ""
     return true
 
@@ -618,6 +812,8 @@ func _reset_state() -> bool:
     flags = _initial_flags.duplicate(true)
     items = []
     profiles = []
+    round_state = {}
+    stats = {}
     gameplay = DEFAULT_GAMEPLAY.duplicate(true)
     checked_hotspots = {}
     _boke_round_id = ""
@@ -637,6 +833,7 @@ func _normalize_position() -> bool:
     var original_flags: Dictionary = flags.duplicate(true)
     var original_items: Array[String] = items.duplicate()
     _profiles_before_normalize = profiles.duplicate()
+    _round_before_normalize = round_state.duplicate(true)
     var transitions: int = 0
 
     while transitions < MAX_INTERNAL_TRANSITIONS:
@@ -658,6 +855,20 @@ func _normalize_position() -> bool:
 
         var step: Dictionary = steps[step_index] as Dictionary
         var op: String = String(step.get("op", ""))
+        # Coming back into a live v2 round: queued reactions (hint, combo break) play first,
+        # and once every slot is caught the round hands over to its exit.
+        if TsukkomiRound.is_v2(step) and String(round_state.get("id", "")) == String(step.get("id", "")) and not _game_over_active:
+            if not (round_state["queue"] as Array).is_empty():
+                node_id = String((round_state["queue"] as Array).pop_front())
+                step_index = 0
+                transitions += 1
+                continue
+            if TsukkomiRound.all_caught(step, round_state):
+                node_id = TsukkomiRound.exit_target(step, round_state)
+                step_index = 0
+                round_state = {}
+                transitions += 1
+                continue
         match op:
             "set_flag":
                 var flag_key: String = String(step["key"])
@@ -707,6 +918,7 @@ func _rollback_normalization(original_node_id: String, original_step_index: int,
     flags = original_flags
     items = original_items.duplicate()
     profiles = _profiles_before_normalize.duplicate()
+    round_state = _round_before_normalize.duplicate(true)
     error_message = message
     return false
 
@@ -774,6 +986,15 @@ func _character_catalog() -> Dictionary:
 func _catalog_has_character(asset_catalog: Dictionary, character_id: String) -> bool:
     var characters: Dictionary = asset_catalog.get("characters", {}) as Dictionary
     return not character_id.is_empty() and characters.has(character_id)
+
+
+## A catalog character, or several joined with "+" for a line said together ("gintoki+kagura").
+func _is_speaker(asset_catalog: Dictionary, speaker: String) -> bool:
+    var parts: PackedStringArray = speaker.split("+")
+    for part: String in parts:
+        if not _catalog_has_character(asset_catalog, part):
+            return false
+    return parts.size() >= 1
 
 
 func _catalog_has_background(asset_catalog: Dictionary, background_id: String) -> bool:
@@ -898,6 +1119,16 @@ func _validate_asset_catalog(value: Variant) -> String:
         var character_path_error: String = _validate_optional_asset_path(character, "character", character_id)
         if not character_path_error.is_empty():
             return character_path_error
+        if character.has("expressions"):
+            if typeof(character["expressions"]) != TYPE_DICTIONARY:
+                return "character '%s' expressions must map expression ids to pictures" % character_id
+            for expression: Variant in (character["expressions"] as Dictionary).keys():
+                if not VALID_EXPRESSIONS.has(String(expression)):
+                    return "character '%s' expression '%s' is not one of %s" % [character_id, expression, VALID_EXPRESSIONS]
+                var expression_error: String = _validate_optional_asset_path({"path": character["expressions"][expression]},
+                    "character", "%s:%s" % [character_id, expression])
+                if not expression_error.is_empty():
+                    return expression_error
 
     var item_catalog: Dictionary = catalog["items"] as Dictionary
     for raw_id: Variant in item_catalog.keys():
@@ -915,6 +1146,21 @@ func _validate_asset_catalog(value: Variant) -> String:
         var item_path_error: String = _validate_optional_asset_path(item, "item", item_id)
         if not item_path_error.is_empty():
             return item_path_error
+
+    # Optional audio: entries without a path play a synthesized placeholder.
+    for collection: String in ["sounds", "music"]:
+        if not catalog.has(collection):
+            continue
+        if typeof(catalog[collection]) != TYPE_DICTIONARY:
+            return "collection '%s' must be an object" % collection
+        var audio: Dictionary = catalog[collection] as Dictionary
+        for raw_id: Variant in audio.keys():
+            var audio_id: String = String(raw_id)
+            if audio_id.is_empty() or typeof(audio[raw_id]) != TYPE_DICTIONARY or not _is_non_empty_string((audio[raw_id] as Dictionary).get("label", null)):
+                return "%s '%s' must be an object with a label" % [collection, audio_id]
+            var audio_path_error: String = _validate_optional_asset_path(audio[raw_id] as Dictionary, collection, audio_id)
+            if not audio_path_error.is_empty():
+                return audio_path_error
 
     return ""
 
@@ -1025,11 +1271,11 @@ func _validate_node(current_node_id: String, node: Dictionary, nodes: Dictionary
             return step_error
         final_op = String(step.get("op", ""))
 
-    if final_op == "end" and node.has("next"):
-        return "end node '%s' cannot have next" % current_node_id
+    if (final_op == "end" or final_op == "result") and node.has("next"):
+        return "%s node '%s' cannot have next" % [final_op, current_node_id]
     if final_op == "choice" and node.has("next"):
         return "choice node '%s' cannot have next" % current_node_id
-    if not node.has("next") and final_op != "end" and final_op != "choice" and final_op != "goto" and final_op != "condition" and final_op != "boke_round":
+    if not node.has("next") and final_op != "end" and final_op != "result" and final_op != "choice" and final_op != "goto" and final_op != "condition" and final_op != "boke_round":
         return "node '%s' needs next or a terminal step" % current_node_id
     return ""
 
@@ -1061,7 +1307,7 @@ func _validate_step(current_node_id: String, index: int, step: Dictionary, nodes
             var speaker: String = String(step.get("speaker", ""))
             if not _is_non_empty_string(step.get("speaker", null)):
                 return "%s say speaker is invalid" % prefix
-            if speaker != "narrator" and not _catalog_has_character(asset_catalog, speaker):
+            if speaker != "narrator" and not _is_speaker(asset_catalog, speaker):
                 return "%s say speaker '%s' is not in asset catalog" % [prefix, speaker]
             if not step.has("text") or typeof(step["text"]) != TYPE_STRING:
                 return "%s say text must be a string" % prefix
@@ -1135,10 +1381,25 @@ func _validate_step(current_node_id: String, index: int, step: Dictionary, nodes
                 hotspot_ids.append(hotspot_id)
                 if not _is_normalized_position(hotspot.get("pos", null)):
                     return "%s hotspot '%s' pos must contain normalized x/y coordinates" % [prefix, hotspot_id]
+                if hotspot.has("size") and (not _is_normalized_position(hotspot["size"]) \
+                        or float(hotspot["size"][0]) <= 0.0 or float(hotspot["size"][1]) <= 0.0):
+                    return "%s hotspot '%s' size must be a positive fraction of the picture [w, h]" % [prefix, hotspot_id]
                 var hotspot_item: String = String(hotspot.get("item", ""))
                 if not _catalog_has_item(asset_catalog, hotspot_item):
                     return "%s hotspot '%s' item '%s' is not in asset catalog" % [prefix, hotspot_id, hotspot_item]
         "boke_round":
+            if TsukkomiRound.is_v2(step):
+                var v2_error: String = TsukkomiRound.validate(step, prefix,
+                    func(target: String) -> bool: return nodes.has(target),
+                    func(item_id: String) -> bool: return _catalog_has_item(asset_catalog, item_id),
+                    func(speaker: String) -> bool: return _is_speaker(asset_catalog, speaker))  # "gintoki+kagura" too
+                if not v2_error.is_empty():
+                    return v2_error
+                for writes: Dictionary in TsukkomiRound.flag_writes(step):
+                    var writes_error: String = _validate_flag_dictionary(writes, "%s boke option set_flags" % prefix)
+                    if not writes_error.is_empty():
+                        return writes_error
+                return ""
             if not _is_non_empty_string(step.get("id", null)):
                 return "%s boke_round id must be a non-empty string" % prefix
             var speaker: String = String(step.get("speaker", ""))
@@ -1244,12 +1505,52 @@ func _validate_step(current_node_id: String, index: int, step: Dictionary, nodes
         "wait":
             if not _is_non_negative_number(step.get("duration", null)):
                 return "%s wait duration must be non-negative" % prefix
+        "shake":
+            if step.has("strength") and not ["small", "big"].has(String(step["strength"])):
+                return "%s shake strength must be small or big" % prefix
+            if step.has("duration") and not _is_number_between(step["duration"], 0.05, 5.0):
+                return "%s shake duration must be 0.05-5 seconds" % prefix
+        "flash":
+            if step.has("color") and not _is_css_hex(step["color"]):
+                return "%s flash color must be a CSS hex color" % prefix
+            if step.has("duration") and not _is_number_between(step["duration"], 0.05, 5.0):
+                return "%s flash duration must be 0.05-5 seconds" % prefix
+        "cutin":
+            if not _is_non_empty_string(step.get("text", null)):
+                return "%s cutin needs text" % prefix
+            if step.has("speaker") and not _is_speaker(asset_catalog, String(step["speaker"])):
+                return "%s cutin speaker '%s' is not in asset catalog" % [prefix, step["speaker"]]
+        "freeze":
+            if step.has("duration") and not _is_number_between(step["duration"], 0.05, 10.0):
+                return "%s freeze duration must be 0.05-10 seconds" % prefix
+        "se":
+            var se_id: String = String(step.get("id", ""))
+            if not VALID_SOUNDS.has(se_id) and not (asset_catalog.get("sounds", {}) as Dictionary).has(se_id):
+                return "%s se id '%s' is not in the asset catalog sounds" % [prefix, se_id]
+        "bgm":
+            var bgm_id: String = String(step.get("id", ""))
+            if not bgm_id.is_empty() and not (asset_catalog.get("music", {}) as Dictionary).has(bgm_id):
+                return "%s bgm id '%s' is not in the asset catalog music (use \"\" to stop)" % [prefix, bgm_id]
         "sound":
             if not VALID_SOUNDS.has(String(step.get("id", ""))):
                 return "%s sound id is invalid" % prefix
         "end":
             if not step.has("text") or typeof(step["text"]) != TYPE_STRING:
                 return "%s end text must be a string" % prefix
+        "result":
+            if not _is_non_empty_string(step.get("title", null)):
+                return "%s result needs a title" % prefix
+            if not step.get("lines", null) is Dictionary:
+                return "%s result lines must map grades to {speaker, text}" % prefix
+            for grade: Variant in (step["lines"] as Dictionary).keys():
+                var grade_line: Variant = step["lines"][grade]
+                if not GRADES.has(String(grade)) or not grade_line is Dictionary \
+                        or not _is_non_empty_string((grade_line as Dictionary).get("text", null)) \
+                        or not _is_speaker(asset_catalog, String((grade_line as Dictionary).get("speaker", "narrator"))):
+                    return "%s result line '%s' needs a known speaker and text (grades %s)" % [prefix, grade, GRADES]
+            if step.has("hidden_total") and (typeof(step["hidden_total"]) != TYPE_INT and typeof(step["hidden_total"]) != TYPE_FLOAT
+                    or int(step["hidden_total"]) < 0):
+                return "%s result hidden_total must be a non-negative whole number" % prefix
         "set_flag":
             if not _is_non_empty_string(step.get("key", null)) or not _is_flag_value(step.get("value", null)):
                 return "%s set_flag needs a key and scalar value" % prefix
@@ -1297,6 +1598,12 @@ func _validate_flag_consistency(root: Dictionary) -> String:
                         var option_flag_error: String = _record_flag_value(types, values, String(key), set_flags[key])
                         if not option_flag_error.is_empty():
                             return option_flag_error
+            elif TsukkomiRound.is_v2(step):
+                for writes: Dictionary in TsukkomiRound.flag_writes(step):
+                    for key: Variant in writes.keys():
+                        var round_flag_error: String = _record_flag_value(types, values, String(key), writes[key])
+                        if not round_flag_error.is_empty():
+                            return round_flag_error
             elif String(step["op"]) == "boke_round":
                 var tsukkomi: Dictionary = step["tsukkomi"] as Dictionary
                 for raw_option: Variant in tsukkomi["options"] as Array:
@@ -1378,7 +1685,8 @@ func _validate_snapshot(snapshot_data: Dictionary) -> String:
     var hotspots_error: String = _validate_checked_hotspots(snapshot_data["checked_hotspots"])
     if not hotspots_error.is_empty():
         return hotspots_error
-    var boke_error: String = _validate_boke_snapshot(snapshot_data["boke"], candidate_op, candidate_step)
+    var v1_op: String = "" if TsukkomiRound.is_v2(candidate_step) else candidate_op
+    var boke_error: String = _validate_boke_snapshot(snapshot_data["boke"], v1_op, candidate_step)
     if not boke_error.is_empty():
         return boke_error
     if typeof(snapshot_data["game_over_active"]) != TYPE_BOOL:
@@ -1394,8 +1702,21 @@ func _validate_snapshot(snapshot_data: Dictionary) -> String:
             return "game over snapshot is missing a checkpoint"
         if candidate_node_id != String((checkpoint_value as Dictionary).get("game_over", "")):
             return "game over snapshot is not at the checkpoint's game_over node"
-    if candidate_op == "boke_round" and String((snapshot_data["boke"] as Dictionary).get("round_id", "")) != String(candidate_step.get("id", "")):
+    if v1_op == "boke_round" and String((snapshot_data["boke"] as Dictionary).get("round_id", "")) != String(candidate_step.get("id", "")):
         return "boke snapshot round_id does not match the current command"
+    var saved_round: Variant = snapshot_data.get("round", {})
+    if not saved_round is Dictionary:
+        return "round must be an object"
+    if not (saved_round as Dictionary).is_empty():
+        var round_step: Dictionary = _find_phase3_command("boke_round", String((saved_round as Dictionary).get("id", "")))
+        if not TsukkomiRound.is_v2(round_step):
+            return "round state references an unknown round"
+        var round_error: String = TsukkomiRound.validate_state(saved_round, round_step)
+        if not round_error.is_empty():
+            return round_error
+    var saved_stats: Variant = snapshot_data.get("stats", {})
+    if not saved_stats is Dictionary or not (saved_stats as Dictionary).values().all(func(v: Variant) -> bool: return typeof(v) == TYPE_INT and int(v) >= 0):
+        return "stats must map names to non-negative integers"
     return ""
 
 
@@ -1593,6 +1914,10 @@ func _collect_allowed_flag_values(story: Dictionary) -> Dictionary:
                     var set_flags: Dictionary = option["set_flags"] as Dictionary
                     for key: Variant in set_flags.keys():
                         _add_allowed_flag_value(values, String(key), set_flags[key])
+            elif TsukkomiRound.is_v2(step):
+                for writes: Dictionary in TsukkomiRound.flag_writes(step):
+                    for key: Variant in writes.keys():
+                        _add_allowed_flag_value(values, String(key), writes[key])
             elif String(step["op"]) == "boke_round":
                 var tsukkomi: Dictionary = step["tsukkomi"] as Dictionary
                 for raw_option: Variant in tsukkomi["options"] as Array:

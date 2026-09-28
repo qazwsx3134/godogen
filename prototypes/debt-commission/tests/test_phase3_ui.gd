@@ -33,13 +33,27 @@ func _test_investigation_save_boke_load_and_perfect() -> void:
 	var investigation_snapshot: Dictionary = game._runner.call("snapshot") as Dictionary
 	_expect(game._save_game(), "investigation state saves to autosave")
 	_expect(game._saveable_current_state(), "stable investigation state is saveable")
-	var hotspot: Button = game._hotspot_buttons.get("empty_milk_bottle") as Button
-	_expect(hotspot != null and not hotspot.disabled, "uninspected hotspot is tappable")
-	if hotspot != null:
-		var hotspot_rect: Rect2 = hotspot.get_global_rect()
-		_expect(hotspot_rect.position.y >= 0.0 and hotspot_rect.end.y < game._dialog_panel.position.y,
-			"hotspot target remains in the visible stage above dialogue")
-		_expect(hotspot.size.y >= 120.0, "hotspot keeps a touch-sized target")
+	var spot: Control = game._hotspots.get("empty_milk_bottle") as Control
+	_expect(spot != null and not bool(spot.get("found")) and not (spot.get_node("Outline") as Control).visible,
+		"the spot lies on the picture and shows nothing until found")
+	_expect(game._sprites.values().all(func(sprite: Control) -> bool: return not sprite.visible),
+		"nobody is on stage while searching")
+	if spot != null:
+		var hit: Rect2 = game._hotspot_hit_rect(spot)
+		_expect(minf(hit.size.x, hit.size.y) >= 48.0 * game.CSS_PX - 0.5, "the spot keeps a 48 CSS px touch target")
+		var middle: Vector2 = game._game.get_global_rect().position + Vector2(game._game.size.x * 0.5, 600.0)
+		var before_x: float = spot.get_global_rect().position.x
+		await _drag(middle, middle + Vector2(300.0, 0.0), 0.1)
+		_expect(absf(spot.get_global_rect().position.x - before_x - 300.0) < 1.0 and game._runner.items.is_empty(),
+			"dragging slides the picture with its spots, and a drag searches nothing")
+		await _drag(middle, middle + Vector2(3000.0, 0.0), 0.1)
+		_expect(is_equal_approx(game._pan, game._pan_range.y) and game._pan_range.y > 0.0
+			and game._background_rect.get_global_rect().position.x <= game._game.get_global_rect().position.x + 0.5,
+			"the picture stops at its left edge")
+		var target: Vector2 = game._hotspot_hit_rect(spot).get_center()
+		_expect(game._dialog_panel.get_global_rect().has_point(target), "fixture: the wastebasket lies under the reading box")
+		await _tap(target)
+		_expect(game._runner.items.is_empty(), "a tap on the reading box does not search the picture under it")
 	_expect(game._investigation_continue_button.disabled, "investigation cannot continue before inspection")
 
 	game.queue_free()
@@ -53,10 +67,23 @@ func _test_investigation_save_boke_load_and_perfect() -> void:
 		"Continue restores the investigation reading point")
 	_expect(resumed._runner.items.is_empty(), "Continue preserves the unchecked clue state")
 	_expect(resumed._investigation_continue_button.disabled, "restored unchecked investigation still blocks continuation")
-	resumed._on_hotspot_pressed("empty_milk_bottle")
-	_expect(resumed._runner.items == ["milk_bottle"], "hotspot grants the clue item")
-	_expect(resumed._hotspot_buttons["empty_milk_bottle"].disabled, "inspected hotspot displays checked state")
-	_expect(resumed._phase3_inventory_label.text.contains("草莓牛奶瓶"), "HUD reflects acquired clue")
+	var resumed_spot: Control = resumed._hotspots["empty_milk_bottle"] as Control
+	var stage_point: Vector2 = resumed._game.get_global_rect().position + Vector2(resumed._game.size.x * 0.5, 600.0)
+	await _drag(stage_point, stage_point + Vector2(resumed._game.get_global_rect().get_center().x
+		- resumed._hotspot_hit_rect(resumed_spot).get_center().x, 0.0), 0.1)  # bring the wastebasket to the middle
+	await _tap(resumed._dialog_panel.investigation_collapse.get_global_rect().get_center())
+	_expect(resumed._investigate_collapsed and not resumed._dialog_panel.visible and resumed._investigate_bar.visible,
+		"收起 folds the reading box into the bar")
+	await _tap(resumed._hotspot_hit_rect(resumed_spot).get_center())
+	_expect(resumed._runner.items == ["milk_bottle"], "tapping the object in the picture grants its clue")
+	_expect(bool(resumed_spot.get("found")) and (resumed_spot.get_node("Outline") as Control).visible,
+		"a found spot keeps its mark")
+	_expect(not resumed._investigate_collapsed and resumed._dialog_panel.visible and not resumed._investigation_continue_button.disabled,
+		"finding the last clue brings the reading box back with 繼續")
+	_expect(resumed._phase3_hud.clues.visible and resumed._phase3_hud.clue_list.get_child_count() == 1
+		and (resumed._phase3_hud.clue_list.get_child(0).get_node("Row/Name") as Label).text.contains("草莓牛奶瓶")
+		and resumed._phase3_hud.clue_list.get_child(0).get_node("Row/Picture").texture == null,
+		"the clue column lists the acquired clue")
 	_expect(resumed._investigation_continue_button.disabled == false, "clue enables investigation continuation")
 	_expect(resumed._save_game(), "checked investigation state saves")
 	resumed._on_investigation_continue_pressed()
@@ -65,7 +92,8 @@ func _test_investigation_save_boke_load_and_perfect() -> void:
 	_expect(resumed._choice_buttons.is_empty(), "statement-reading stage hides all tsukkomi options")
 	_expect(resumed._boke_tsukkomi_button.visible and resumed._boke_tsukkomi_button.text == "吐槽！",
 		"statement-reading stage exposes a distinct Tsukkomi action")
-	_expect(resumed._boke_tsukkomi_button.size.x >= 200.0 and resumed._boke_tsukkomi_button.size.y >= 120.0,
+	var touch: float = 48.0 * 1080.0 / 390.0  # 48 CSS px
+	_expect(resumed._boke_tsukkomi_button.size.x >= touch and resumed._boke_tsukkomi_button.size.y >= touch,
 		"Tsukkomi action keeps a touch-sized target")
 	var reading_autosave: Dictionary = resumed._read_save_payload(TEST_SAVE)
 	_expect(String(reading_autosave.get("boke_ui_screen", "")) == "boke_round" and
@@ -211,7 +239,7 @@ func _test_weak_and_hidden_feedback() -> void:
 	await _until(func() -> bool: return weak._screen_mode == "story" and weak._runner.node_id == "weak", "weak result feedback")
 	_expect(String(weak._last_boke_result) == "weak" and int(weak._runner.gameplay["power"]) == 10,
 		"weak outcome gives power and exposes its result")
-	_expect(weak._toast.text.contains("力量 +10"), "weak outcome feedback is visible")
+	_expect(weak._toast.text.contains("吐槽之力 +10"), "weak outcome feedback is visible")
 	weak.queue_free()
 	await _frames(2)
 
@@ -252,6 +280,9 @@ func _test_timeout_five_fails_and_checkpoint_retry() -> void:
 	await _until(func() -> bool: return game._screen_mode == "story" and game._runner.node_id == "cold", "UI countdown triggers timeout", 3.0)
 	_expect(String(game._last_boke_result) == "fail" and int(game._runner.gameplay["glasses"]) == 4,
 		"timeout applies fail feedback and consumes one glass")
+	var icons: Array = game._phase3_hud.glasses.get_children()
+	_expect(icons.size() == 5 and icons.filter(func(icon: Control) -> bool: return bool(icon.get("broken"))).size() == 1,
+		"the HUD shows five glasses icons with the lost pair broken")
 
 	for failure_index: int in range(4):
 		await _continue_cold_to_round(game)
@@ -294,7 +325,7 @@ func _start_to_investigation(game: Control) -> void:
 func _start_to_round(game: Control) -> void:
 	await _frames(3)
 	await _start_to_investigation(game)
-	game._on_hotspot_pressed("empty_milk_bottle")
+	game._collect_hotspot("empty_milk_bottle")
 	game._on_investigation_continue_pressed()
 	await _until(func() -> bool: return game._screen_mode == "boke_round", "reach boke round")
 

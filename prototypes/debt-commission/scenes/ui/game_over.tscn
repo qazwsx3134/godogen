@@ -1,0 +1,183 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/story-cjk.ttc" id="1_x6o8e"]
+[ext_resource type="Script" path="res://scripts/game_over.gd" id="2_vfrx6"]
+[ext_resource type="Script" path="res://scripts/broken_glasses.gd" id="3_o6b8n"]
+
+[sub_resource type="Theme" id="Theme_4583b"]
+default_font = ExtResource("1_x6o8e")
+
+[sub_resource type="FontVariation" id="FontVariation_b6337"]
+base_font = ExtResource("1_x6o8e")
+variation_embolden = 0.9
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r6ix2"]
+bg_color = Color(0.6627451, 0.26666668, 0.19607843, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.8156863, 0.3529412, 0.2784314, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_trpi5"]
+bg_color = Color(0.5964706, 0.24000001, 0.1764706, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.8156863, 0.3529412, 0.2784314, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0mouq"]
+bg_color = Color(0.7621569, 0.30666667, 0.2254902, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.8156863, 0.3529412, 0.2784314, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e6x8a"]
+bg_color = Color(0.33137256, 0.13333334, 0.09803922, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.8156863, 0.3529412, 0.2784314, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tx7p7"]
+draw_center = false
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(1, 0.8627451, 0.25490198, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_og7aq"]
+bg_color = Color(1, 1, 1, 0)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.9019608, 0.8980392, 0.8627451, 0.5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_unejy"]
+bg_color = Color(0.9, 0.9, 0.9, 0)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.9019608, 0.8980392, 0.8627451, 0.5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_upf3p"]
+bg_color = Color(1.15, 1.15, 1.15, 0)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.9019608, 0.8980392, 0.8627451, 0.5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k58r4"]
+bg_color = Color(0.5, 0.5, 0.5, 0)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.9019608, 0.8980392, 0.8627451, 0.5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3dmgh"]
+draw_center = false
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(1, 0.8627451, 0.25490198, 1)
+
+[node name="GameOver" type="Control" unique_id=1805148464]
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = SubResource("Theme_4583b")
+script = ExtResource("2_vfrx6")
+
+[node name="Dim" type="ColorRect" parent="." unique_id=97535520]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.03, 0.03, 0.04, 0.94)
+
+[node name="Center" type="CenterContainer" parent="." unique_id=1175991152]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Column" type="VBoxContainer" parent="Center" unique_id=295711081]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 28
+alignment = 1
+
+[node name="Glasses" type="Control" parent="Center/Column" unique_id=1434446694]
+custom_minimum_size = Vector2(664.6154, 276.9231)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("3_o6b8n")
+
+[node name="Heading" type="Label" parent="Center/Column" unique_id=1139293561]
+custom_minimum_size = Vector2(775.38464, 0)
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_b6337")
+theme_override_font_sizes/font_size = 72
+theme_override_colors/font_color = Color(0.95686275, 0.94509804, 0.9137255, 1)
+text = "新八的本體已損毀"
+horizontal_alignment = 1
+
+[node name="Message" type="Label" parent="Center/Column" unique_id=1017759231]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(775.38464, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 42
+theme_override_colors/font_color = Color(0.74509805, 0.7882353, 0.7882353, 1)
+text = "眼鏡耗盡。"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Gap" type="Control" parent="Center/Column" unique_id=661716090]
+custom_minimum_size = Vector2(0, 33.23077)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Retry" type="Button" parent="Center/Column" unique_id=1041808844]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(609.2308, 132.92308)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/normal = SubResource("StyleBoxFlat_r6ix2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_trpi5")
+theme_override_styles/hover = SubResource("StyleBoxFlat_0mouq")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_e6x8a")
+theme_override_styles/focus = SubResource("StyleBoxFlat_tx7p7")
+theme_override_colors/font_color = Color(1, 0.9607843, 0.8980392, 1)
+theme_override_colors/font_focus_color = Color(1, 0.9607843, 0.8980392, 1)
+theme_override_colors/font_pressed_color = Color(1, 0.9607843, 0.8980392, 1)
+theme_override_colors/font_hover_color = Color(1, 0.9607843, 0.8980392, 1)
+theme_override_font_sizes/font_size = 44
+text = "檢查點重試"
+
+[node name="Title" type="Button" parent="Center/Column" unique_id=1533833912]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(609.2308, 132.92308)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/normal = SubResource("StyleBoxFlat_og7aq")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_unejy")
+theme_override_styles/hover = SubResource("StyleBoxFlat_upf3p")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_k58r4")
+theme_override_styles/focus = SubResource("StyleBoxFlat_3dmgh")
+theme_override_colors/font_color = Color(0.9019608, 0.8980392, 0.8627451, 1)
+theme_override_colors/font_focus_color = Color(0.9019608, 0.8980392, 0.8627451, 1)
+theme_override_colors/font_pressed_color = Color(0.9019608, 0.8980392, 0.8627451, 1)
+theme_override_colors/font_hover_color = Color(0.9019608, 0.8980392, 0.8627451, 1)
+theme_override_font_sizes/font_size = 44
+text = "回標題"
