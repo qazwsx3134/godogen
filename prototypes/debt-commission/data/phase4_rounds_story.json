@@ -22,22 +22,553 @@
       ],
       "title": "Game Over"
     },
+    "k_clear": {
+      "next": "r2_intro",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "kagura",
+          "text": "……好啦。前面一半是我喝的阿魯。"
+        }
+      ],
+      "title": "神樂的回合結束"
+    },
+    "k_give_up": {
+      "next": "k_round",
+      "steps": [
+        {
+          "op": "freeze"
+        },
+        {
+          "id": "crow",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "speaker": "kagura",
+          "text": "眼鏡投降了阿魯。這一局我贏了阿魯。"
+        }
+      ],
+      "title": "k_give_up"
+    },
+    "k_hidden": {
+      "next": "r2_intro",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "……。",
+          "thought": true
+        },
+        {
+          "op": "say",
+          "speaker": "sadaharu",
+          "text": "汪。"
+        },
+        {
+          "op": "say",
+          "speaker": "narrator",
+          "text": "定春慢慢走到冰箱前，用巨大的腳掌蓋在神樂的腳印旁邊。大小差了三倍。"
+        },
+        {
+          "op": "say",
+          "speaker": "kagura",
+          "text": "……定春，你是站在誰那邊的阿魯。"
+        }
+      ],
+      "title": "隱藏路線：定春的腳"
+    },
+    "k_intro": {
+      "next": "k_round",
+      "steps": [
+        {
+          "id": "gintoki",
+          "op": "char",
+          "visible": false
+        },
+        {
+          "expression": "smug",
+          "id": "kagura",
+          "op": "char",
+          "position": "center",
+          "visible": true
+        },
+        {
+          "enter": true,
+          "expression": "neutral",
+          "id": "elisabeth",
+          "op": "char",
+          "position": "left",
+          "visible": true
+        },
+        {
+          "op": "placard",
+          "text": ""
+        },
+        {
+          "id": "bgm_boke",
+          "op": "bgm"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "……伊莉莎白什麼時候在這裡的？"
+        },
+        {
+          "op": "say",
+          "speaker": "kagura",
+          "text": "哼。我有目擊證人阿魯。定春阿魯。"
+        },
+        {
+          "id": "kagura_kombu",
+          "op": "item"
+        },
+        {
+          "id": "sadaharu_footprint",
+          "op": "item"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "沙發底下的包裝、地板上的腳印。這些也在我手上。",
+          "thought": true
+        }
+      ],
+      "title": "神樂的回合：伊莉莎白在角落"
+    },
+    "k_l1_a": {
+      "next": "k_round",
+      "steps": [
+        {
+          "id": "tsukkomi_hit",
+          "op": "se"
+        },
+        {
+          "op": "cutin",
+          "speaker": "shinpachi",
+          "text": "包裝裡的粉紅色是什麼！"
+        },
+        {
+          "op": "shake"
+        },
+        {
+          "op": "say",
+          "speaker": "kagura",
+          "text": "……醋昆布偶爾也想試試新口味阿魯。"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "想試的是你吧！醋昆布配草莓牛奶是什麼組合！"
+        }
+      ],
+      "title": "k_l1_a"
+    },
+    "k_l1_b": {
+      "next": "k_round",
+      "steps": [
+        {
+          "id": "tsukkomi_hit",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "speaker": "kagura",
+          "text": "我是會忍耐的女人阿魯。"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "……光靠常識贏不了她。",
+          "thought": true
+        }
+      ],
+      "title": "k_l1_b"
+    },
+    "k_l1_c": {
+      "next": "k_round",
+      "steps": [
+        {
+          "op": "freeze"
+        },
+        {
+          "id": "crow",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "speaker": "kagura",
+          "text": "對吧阿魯。"
+        }
+      ],
+      "title": "k_l1_c"
+    },
+    "k_l1_hint": {
+      "next": "k_round",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "kagura",
+          "text": "我絕對不會告訴你，沙發底下的包裝是什麼顏色阿魯。……我什麼都沒說阿魯。"
+        }
+      ],
+      "title": "k_l1_hint"
+    },
+    "k_l1_listen": {
+      "next": "k_round",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "kagura",
+          "text": "配水太普通了。我是有品味的女人阿魯。"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "配水太普通……那她配了什麼？",
+          "thought": true
+        }
+      ],
+      "title": "k_l1_listen"
+    },
+    "k_l2_b": {
+      "next": "k_round",
+      "steps": [
+        {
+          "id": "tsukkomi_hit",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "speaker": "kagura",
+          "text": "就是只會汪，才需要我翻譯阿魯。"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "……翻譯不是重點。角落好像有人舉著什麼。",
+          "thought": true
+        }
+      ],
+      "title": "k_l2_b"
+    },
+    "k_l2_c": {
+      "next": "k_round",
+      "steps": [
+        {
+          "op": "freeze"
+        },
+        {
+          "id": "crow",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "speaker": "kagura",
+          "text": "謝謝阿魯。"
+        }
+      ],
+      "title": "k_l2_c"
+    },
+    "k_l2_hint": {
+      "next": "k_round",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "kagura",
+          "text": "不准看伊莉莎白。牌子上寫什麼都不准看阿魯。……不准喔阿魯。"
+        }
+      ],
+      "title": "k_l2_hint"
+    },
+    "k_l2_listen": {
+      "next": "k_round",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "kagura",
+          "text": "定春說的話我都聽得懂阿魯。我們是好朋友阿魯。"
+        },
+        {
+          "offscreen": true,
+          "op": "say",
+          "speaker": "sadaharu",
+          "text": "汪。"
+        }
+      ],
+      "title": "k_l2_listen"
+    },
+    "k_l2_placard": {
+      "next": "k_round",
+      "steps": [
+        {
+          "op": "placard",
+          "text": "犯人是神樂"
+        },
+        {
+          "id": "tsukkomi_hit",
+          "op": "se"
+        },
+        {
+          "op": "cutin",
+          "speaker": "shinpachi",
+          "text": "牌子上寫著犯人是你啊！！"
+        },
+        {
+          "op": "shake"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "伊莉莎白的牌子上，寫著犯人是你啊！！"
+        },
+        {
+          "op": "say",
+          "speaker": "kagura",
+          "text": "伊莉莎白！你背叛我阿魯！"
+        },
+        {
+          "op": "placard",
+          "text": "我只是路過"
+        },
+        {
+          "op": "say",
+          "speaker": "narrator",
+          "text": "伊莉莎白默默把牌子翻過來。背面寫著：「我只是路過」。"
+        }
+      ],
+      "title": "k_l2_placard"
+    },
+    "k_l3_a": {
+      "next": "k_round",
+      "steps": [
+        {
+          "id": "tsukkomi_hit",
+          "op": "se"
+        },
+        {
+          "op": "cutin",
+          "speaker": "shinpachi",
+          "text": "定春的腳比你的頭還大！"
+        },
+        {
+          "op": "shake"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "這腳印小成這樣，還有五根指頭——是手印吧！"
+        },
+        {
+          "op": "say",
+          "speaker": "kagura",
+          "text": "……定春最近在減肥阿魯。"
+        }
+      ],
+      "title": "k_l3_a"
+    },
+    "k_l3_b": {
+      "next": "k_round",
+      "steps": [
+        {
+          "id": "tsukkomi_hit",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "speaker": "kagura",
+          "text": "牠會用頭撞開阿魯。冰箱門上的凹痕你沒看到阿魯？"
+        }
+      ],
+      "title": "k_l3_b"
+    },
+    "k_l3_c": {
+      "next": "k_round",
+      "steps": [
+        {
+          "id": "bite",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "speaker": "narrator",
+          "text": "定春一口咬住了新八的頭。"
+        },
+        {
+          "op": "say",
+          "speaker": "kagura",
+          "text": "冤枉好狗的報應阿魯。"
+        }
+      ],
+      "title": "k_l3_c"
+    },
+    "k_l3_hint": {
+      "next": "k_round",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "kagura",
+          "text": "你被定春踩過那麼多次，還不知道牠的腳多大阿魯？……咦，我在幫誰說話阿魯。"
+        }
+      ],
+      "title": "k_l3_hint"
+    },
+    "k_round": {
+      "steps": [
+        {
+          "clear": "k_clear",
+          "game_over": "game_over",
+          "id": "kagura_testimony",
+          "lines": [
+            {
+              "hint": "k_l1_hint",
+              "id": "l1",
+              "listen": "k_l1_listen",
+              "slot": {
+                "options": [
+                  {
+                    "goto": "k_l1_a",
+                    "id": "a",
+                    "label": "包裝裡的粉紅色是什麼！",
+                    "require": "kagura_kombu",
+                    "result": "perfect"
+                  },
+                  {
+                    "goto": "k_l1_b",
+                    "id": "b",
+                    "label": "吃醋昆布不喝水會渴吧！",
+                    "result": "weak"
+                  },
+                  {
+                    "goto": "k_l1_c",
+                    "id": "c",
+                    "label": "神樂醬好能忍喔。",
+                    "result": "fail"
+                  },
+                  {
+                    "goto": "k_give_up",
+                    "id": "d",
+                    "label": "……（放棄吐槽）",
+                    "result": "fail"
+                  }
+                ],
+                "timeout": "k_timeout"
+              },
+              "text": "我昨晚只吃了醋昆布。很乾，但我忍住沒喝任何東西阿魯。"
+            },
+            {
+              "hint": "k_l2_hint",
+              "id": "l2",
+              "listen": "k_l2_listen",
+              "slot": {
+                "options": [
+                  {
+                    "goto": "k_l2_b",
+                    "id": "b",
+                    "label": "定春只會「汪」吧！",
+                    "result": "weak"
+                  },
+                  {
+                    "goto": "k_l2_c",
+                    "id": "c",
+                    "label": "你翻譯得真好。",
+                    "result": "fail"
+                  },
+                  {
+                    "goto": "k_give_up",
+                    "id": "d",
+                    "label": "……（放棄吐槽）",
+                    "result": "fail"
+                  }
+                ],
+                "placard": {
+                  "goto": "k_l2_placard",
+                  "result": "perfect",
+                  "text": "犯人是神樂"
+                },
+                "timeout": "k_timeout"
+              },
+              "text": "而且定春昨晚親口跟我說了：『牛奶是別人喝的，汪』阿魯。"
+            },
+            {
+              "hint": "k_l3_hint",
+              "id": "l3",
+              "slot": {
+                "options": [
+                  {
+                    "goto": "k_l3_a",
+                    "id": "a",
+                    "label": "定春的腳比你的頭還大！",
+                    "require": "sadaharu_footprint",
+                    "result": "perfect"
+                  },
+                  {
+                    "goto": "k_l3_b",
+                    "id": "b",
+                    "label": "定春開不了冰箱吧！",
+                    "result": "weak"
+                  },
+                  {
+                    "goto": "k_l3_c",
+                    "id": "c",
+                    "label": "定春，你怎麼可以這樣！",
+                    "result": "fail"
+                  },
+                  {
+                    "goto": "k_give_up",
+                    "id": "d",
+                    "label": "……（放棄吐槽）",
+                    "result": "fail",
+                    "when": [
+                      {
+                        "goto": "k_hidden",
+                        "require_caught": [
+                          "l1",
+                          "l2"
+                        ],
+                        "result": "hidden"
+                      }
+                    ]
+                  }
+                ],
+                "timeout": "k_timeout"
+              },
+              "text": "證據就是這排腳印！從冰箱走到定春的窩，犯人是定春阿魯！"
+            }
+          ],
+          "mode": "testimony",
+          "op": "boke_round",
+          "speaker": "kagura",
+          "timer_seconds": 8.0
+        }
+      ],
+      "title": "神樂的回合：證言"
+    },
+    "k_timeout": {
+      "next": "k_round",
+      "steps": [
+        {
+          "op": "freeze"
+        },
+        {
+          "id": "crow",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "speaker": "kagura",
+          "text": "嘴巴開那麼久，會飛進蒼蠅阿魯。"
+        }
+      ],
+      "title": "k_timeout"
+    },
     "r1_clear": {
-      "next": "r2_round",
+      "next": "k_intro",
       "steps": [
         {
           "op": "say",
           "speaker": "shinpachi",
           "text": "第一回合，接住了。"
-        },
-        {
-          "id": "bgm_combo",
-          "op": "bgm"
-        },
-        {
-          "op": "say",
-          "speaker": "gintoki",
-          "text": "那換我們兩個一起上。跟得上嗎，新八？"
         }
       ],
       "title": "第一回合結束"
@@ -683,6 +1214,30 @@
       ],
       "title": "回合試片結束"
     },
+    "r2_intro": {
+      "next": "r2_round",
+      "steps": [
+        {
+          "id": "elisabeth",
+          "op": "char",
+          "visible": false
+        },
+        {
+          "op": "placard",
+          "text": ""
+        },
+        {
+          "id": "bgm_combo",
+          "op": "bgm"
+        },
+        {
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "那換我們兩個一起上。跟得上嗎，新八？"
+        }
+      ],
+      "title": "連擊回合開始"
+    },
     "r2_qte_early": {
       "next": "r2_round",
       "steps": [
@@ -971,7 +1526,7 @@
       "title": "回合試片：家庭會議"
     }
   },
-  "note": "僅用於驗證逐句槽點、聽下去取得素材、空揮與提示、第四面牆消音條、隱藏選項、連擊、QTE 與超必殺；台詞取自第一章草稿，不是作者核准的文本。",
-  "title": "Phase 4 回合試片：證言、消音條、連擊（非核准第一章）",
-  "version": "s-25e7c242d1ba"
+  "note": "僅用於驗證逐句槽點、聽下去取得素材、空揮與提示、第四面牆消音條與伊莉莎白的牌子、隱藏選項與條件式放棄吐槽、連擊、QTE 與超必殺；台詞取自第一章草稿，不是作者核准的文本。",
+  "title": "Phase 4 回合試片：證言、伊莉莎白的牌子、連擊（非核准第一章）",
+  "version": "s-28bb6e857d31"
 }

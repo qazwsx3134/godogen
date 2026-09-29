@@ -114,6 +114,134 @@ do end("隱藏結局：定春的判決（技術試片）")
 
 ~ r1_clear
 新八: 第一回合，接住了。
+=> k_intro
+
+~ k_intro
+do hide("gintoki")
+do char("kagura", "smug", "center")
+do enter("elisabeth", "neutral", "left")
+do placard("")
+do bgm("bgm_boke")
+新八: ……伊莉莎白什麼時候在這裡的？
+神樂: 哼。我有目擊證人阿魯。定春阿魯。
+do item("kagura_kombu")
+do item("sadaharu_footprint")
+新八: 沙發底下的包裝、地板上的腳印。這些也在我手上。 [#thought]
+=> k_round
+
+~ k_round
+do boke_round("kagura_testimony")
+
+~ k_l1_listen
+神樂: 配水太普通了。我是有品味的女人阿魯。
+新八: 配水太普通……那她配了什麼？ [#thought]
+=> k_round
+
+~ k_l1_a
+do se("tsukkomi_hit")
+do cutin("包裝裡的粉紅色是什麼！", "shinpachi")
+do shake()
+神樂: ……醋昆布偶爾也想試試新口味阿魯。
+新八: 想試的是你吧！醋昆布配草莓牛奶是什麼組合！
+=> k_round
+
+~ k_l1_b
+do se("tsukkomi_hit")
+神樂: 我是會忍耐的女人阿魯。
+新八: ……光靠常識贏不了她。 [#thought]
+=> k_round
+
+~ k_l1_c
+do freeze()
+do se("crow")
+神樂: 對吧阿魯。
+=> k_round
+
+~ k_l1_hint
+神樂: 我絕對不會告訴你，沙發底下的包裝是什麼顏色阿魯。……我什麼都沒說阿魯。
+=> k_round
+
+~ k_l2_listen
+神樂: 定春說的話我都聽得懂阿魯。我們是好朋友阿魯。
+定春: 汪。 [#offscreen]
+=> k_round
+
+~ k_l2_placard
+do placard("犯人是神樂")
+do se("tsukkomi_hit")
+do cutin("牌子上寫著犯人是你啊！！", "shinpachi")
+do shake()
+新八: 伊莉莎白的牌子上，寫著犯人是你啊！！
+神樂: 伊莉莎白！你背叛我阿魯！
+do placard("我只是路過")
+伊莉莎白默默把牌子翻過來。背面寫著：「我只是路過」。
+=> k_round
+
+~ k_l2_b
+do se("tsukkomi_hit")
+神樂: 就是只會汪，才需要我翻譯阿魯。
+新八: ……翻譯不是重點。角落好像有人舉著什麼。 [#thought]
+=> k_round
+
+~ k_l2_c
+do freeze()
+do se("crow")
+神樂: 謝謝阿魯。
+=> k_round
+
+~ k_l2_hint
+神樂: 不准看伊莉莎白。牌子上寫什麼都不准看阿魯。……不准喔阿魯。
+=> k_round
+
+~ k_l3_a
+do se("tsukkomi_hit")
+do cutin("定春的腳比你的頭還大！", "shinpachi")
+do shake()
+新八: 這腳印小成這樣，還有五根指頭——是手印吧！
+神樂: ……定春最近在減肥阿魯。
+=> k_round
+
+~ k_l3_b
+do se("tsukkomi_hit")
+神樂: 牠會用頭撞開阿魯。冰箱門上的凹痕你沒看到阿魯？
+=> k_round
+
+~ k_l3_c
+do se("bite")
+定春一口咬住了新八的頭。
+神樂: 冤枉好狗的報應阿魯。
+=> k_round
+
+~ k_l3_hint
+神樂: 你被定春踩過那麼多次，還不知道牠的腳多大阿魯？……咦，我在幫誰說話阿魯。
+=> k_round
+
+~ k_give_up
+do freeze()
+do se("crow")
+神樂: 眼鏡投降了阿魯。這一局我贏了阿魯。
+=> k_round
+
+~ k_timeout
+do freeze()
+do se("crow")
+神樂: 嘴巴開那麼久，會飛進蒼蠅阿魯。
+=> k_round
+
+~ k_hidden
+新八: ……。 [#thought]
+定春: 汪。
+定春慢慢走到冰箱前，用巨大的腳掌蓋在神樂的腳印旁邊。大小差了三倍。
+神樂: ……定春，你是站在誰那邊的阿魯。
+=> r2_intro
+
+~ k_clear
+神樂: ……好啦。前面一半是我喝的阿魯。
+=> r2_intro
+
+~ r2_intro
+do hide("elisabeth")
+do placard("")
 do bgm("bgm_combo")
 銀時: 那換我們兩個一起上。跟得上嗎，新八？
 => r2_round

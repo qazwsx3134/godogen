@@ -6,7 +6,13 @@
     "initial_flags": {"asked": "unset", "round_result": "unset"}
   },
   "titles": {
-    "phase4_open": "技術試片：調查客廳",
+    "phase4_open": "技術試片：開場",
+    "search": "技術試片：調查客廳",
+    "spot_floor": "地板上的腳印",
+    "talk_gintoki": "問銀時",
+    "talk_kagura": "問神樂",
+    "talk_sadaharu": "問定春",
+    "kitchen_fridge": "廚房的冰箱",
     "ask_first": "先問誰",
     "kagura_aside": "神樂的說法",
     "gintoki_round": "銀時的四線索吐槽回合",
@@ -22,11 +28,24 @@
     "living_room_search": {
       "op": "investigate",
       "prompt": "調查客廳，找齊四件線索。",
+      "bg": "yorozuya_living_room",
+      "label": "客廳",
       "hotspots": [
         {"id": "empty_milk_bottle", "label": "垃圾桶裡的空瓶", "pos": [0.254, 0.748], "size": [0.07, 0.14], "item": "milk_bottle"},
         {"id": "gintoki_mouth", "label": "銀時的辦公桌", "pos": [0.5, 0.6], "size": [0.3, 0.1], "item": "milk_trace"},
         {"id": "kombu_wrapper", "label": "沙發縫裡的包裝紙", "pos": [0.11, 0.9], "size": [0.2, 0.17], "item": "kagura_kombu"},
-        {"id": "floor_paw_print", "label": "地板上的腳印", "pos": [0.74, 0.84], "size": [0.13, 0.08], "item": "sadaharu_footprint"}
+        {"id": "floor_paw_print", "label": "地板上的腳印", "pos": [0.74, 0.84], "size": [0.13, 0.08], "item": "sadaharu_footprint", "goto": "spot_floor"}
+      ],
+      "talk": [
+        {"id": "gintoki_bedtime", "label": "銀時：昨晚幾點睡？", "goto": "talk_gintoki"},
+        {"id": "kagura_dinner", "label": "神樂：昨晚吃了什麼？", "goto": "talk_kagura"},
+        {"id": "sadaharu_witness", "label": "定春：你看到什麼了？", "goto": "talk_sadaharu", "require": "sadaharu_footprint"}
+      ],
+      "places": [
+        {"id": "kitchen", "label": "廚房", "bg": "yorozuya_kitchen", "prompt": "廚房。冰箱就在這裡。",
+         "hotspots": [
+           {"id": "fridge", "label": "冰箱", "pos": [0.78, 0.9], "size": [0.3, 0.14], "goto": "kitchen_fridge", "optional": true}
+         ]}
       ]
     },
     "gintoki_four_clues": {

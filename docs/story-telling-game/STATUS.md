@@ -1,6 +1,6 @@
 # 直式吐槽視覺小說：目前進度與待辦
 
-更新：2026-09-27。範圍是 [V1 Roadmap](ROADMAP.md) 與 [debt-commission Godot 原型](../../prototypes/debt-commission/README.md)；詳細測試結果見[驗證紀錄](../../prototypes/debt-commission/docs/VERIFICATION.md)。本頁區分「技術片段已通過自動驗收」與「正式內容和真人體驗已完成」，避免把兩者混為一談。
+更新：2026-09-29。範圍是 [V1 Roadmap](ROADMAP.md) 與 [debt-commission Godot 原型](../../prototypes/debt-commission/README.md)；詳細測試結果見[驗證紀錄](../../prototypes/debt-commission/docs/VERIFICATION.md)。本頁區分「技術片段已通過自動驗收」與「正式內容和真人體驗已完成」，避免把兩者混為一談。
 
 ## 已完成
 
@@ -14,9 +14,25 @@
 | 底部對話層 UI 與素材 Web 試版 | 全寬半透明、無邊框對話層，層內說話者名稱；其他元件描邊淡化；店面與客廳照片、銀時剪影已套入。[原版與兩版試作截圖比較](../../prototypes/debt-commission/docs/UI-TRIAL.md) | Godot 資料／Phase 3 UI 測試、主線兩路、Phase 3 與存讀檔 Web 觸控通過；正式採用仍待實機試玩 |
 | 三款 UI 風格改為 scene | 對話框與工具列、選項面板、目錄、標題卡，各做成月下映畫／委託簿／吐槽分鏡三款可在編輯器直接調整的 scene，換風格即換 scene；窄於 390 CSS px 的手機等比放大，按鈕維持 48 CSS px 以上 | 對照 HTML 樣稿的 `check_ui_parity`（三款 × 390／320 × 五個畫面）與全部 Web 觸控路線通過 |
 | Phase 4 第二段：回合玩法 | 回合試片（`?sample=phase4_rounds`，台詞取自第一章草稿、非核准）：證言回合逐句槽點、聽下去取得素材、揮空、失敗三次提示、第四面牆消音條、兩句接住後出現的隱藏選項；連擊回合時限 8→6→5→4 秒、QTE 縮圈、超必殺、連擊中斷與獎勵；`shake`／`flash`／`cutin`／`freeze`／`bgm`／`se` 演出（音效為合成佔位音）；HUD 與碎眼鏡 Game Over 畫面 | 回合引擎、試片劇本、外殼流程三組 headless 測試；Web 觸控路線 `--rounds` 實點消音條、超必殺與 QTE；cut-in 不吞點擊有測試 |
+| Phase 4 第三段：第一章上機前的引擎功能 | 伊莉莎白的舉牌槽點（`placard`：閱讀與選詞時點牌子，選詞時發亮、選項面板停在牌子下方；劇情用 `placard()` 改寫或清掉牌上的字；不說話的角色用 `enter()` 上場）；選項的條件結果 `when`（放棄吐槽一直都在，L1、L2 接住才是隱藏路線）；畫面外台詞 `[#offscreen]`；調查的「對話」話題、「移動」到其他地點（各自的背景、熱區與已查狀態）、熱區查看後台詞與可選熱區；`salary_envelope` 素材與六個角色的人物檔案文字。回合試片加了神樂的回合，四線索試片加了話題、廚房與畫面外台詞 | 新增調查測試，回合引擎、試片劇本與兩個外殼流程的測試擴充；Parley 與 `.dialogue` 仍建出相同 JSON；Web 觸控 `--rounds` 實點牌子（含 320×568），新增 `--investigate` 實點話題與移動 |
 | Phase 4 第一段：資料層與編寫流程 | 四熱區、四素材的草莓牛奶技術試片（非核准內容）；每項素材解鎖對應的吐槽選項；人物檔案（`profile` 指令、`case_file()`）隨劇情解鎖並存讀；劇本改由 Parley 流程圖或 Dialogue Manager 文字寫成，建置時檢查語法、說話者、到不了的節點並自動產生存檔版本 | 劇本建置兩套、Phase 4 UI 流程與既有九套測試通過；Parley 與 `.dialogue` 兩種寫法建出相同 JSON；Web 匯出不含編輯器外掛與原始檔 |
 
 標題畫面的副標題是故事切換鈕，點一下換下一個試玩內容（討債閱讀基線 → Phase 2 → Phase 3 → Phase 4 → 回合試片），桌機或編輯器執行會記住上次的選擇。Web 也可以用網址直接開：討債閱讀基線用預設網址；草莓牛奶技術片段用 `?sample=phase2`；調查與吐槽技術短循環用 `?sample=phase3`；四線索調查用 `?sample=phase4`；回合試片用 `?sample=phase4_rounds`。啟動與測試指令見[原型 README](../../prototypes/debt-commission/README.md#開發與-web-匯出)。討債第一場有作者核准的[閱讀文本](stories/002-debt-commission-draft-v0.1.md)；草莓牛奶兩個 JSON 都是**技術片段**，不是核准的第一章。
+
+## 進行中：分支 `ch1-presentation-and-engine`（2026-09-29，尚未 commit）
+
+目標：把第一章（[草稿 v0.2](stories/003-strawberry-milk-ch1-draft-v0.2.md)）放進遊戲，並補上逆轉裁判式的文字演出與 VN 閱讀便利功能。依序分軌進行，因為各軌都會改 `main.gd` 與 `asset_catalog.json`，不能平行。
+
+| 軌 | 內容 | 狀態 |
+| --- | --- | --- |
+| 圖 | 定春 `smile`／`cry`／`smug`、登勢 `smile`／`thinking`／`smug`／`annoyed`（叉腰）／`sit_serious`／`sit_talking`、新八 `broken`；原圖移到 `art_src/expressions/`；`fit_expressions.gd` 支援單張 `rescale`（坐姿用） | ✅ 完成，見[表情清單](EXPRESSIONS.md) |
+| A 第一章玩法 | 伊莉莎白舉牌槽點、條件式放棄吐槽（選項 `when`）、畫面外台詞（`[#offscreen]`）、調查的對話話題與移動（`talk`／`places`）、`enter()`、`salary_envelope` 與六人人物檔案 | ✅ 完成；19 組 headless 測試與 Web 各模式通過。語法見原型 `IMPLEMENTATION.md` |
+| B 超必殺演出 | 吐槽之力集滿時眼鏡的超級賽亞人金色氣焰、`beam` 光束指令、超必殺鈕文字可設定（「龜派氣功！」）、`power_up`／`beam` 音效 | 待做（已派 Sonnet，尚未開工） |
+| C 文字演出 | 對話改 `RichTextLabel`：重點字上色、放大／抖動／慢速、句中停頓；標點自然停頓；依角色音高的打字音；語音接口（新八吐槽聲 `assets/audio/voice/shinpachi_tsukkomi_NN.ogg`，perfect 時隨機播）；`fade` 指令、背景交叉淡化、立繪淡入淡出與說話彈跳 | 待做 |
+| D 閱讀便利 | 回滾（不能越過 choice／回合／調查／結算）、獨立快速存讀格、字級與對話框透明度設定；對話紀錄與存讀檔欄位轉成 scene | 待做 |
+| E 第一章上機 | 草稿轉成 `story_src/chapter1.dialogue`＋`chapter1.blocks.json`，`stories.json` 加 `kind: "chapter"`；用 A–C 的語法 | 待做（等 A–C） |
+
+A 回報的轉稿注意：草稿 `ch1_investigate` 在調查前有台詞，調查要拆成自己的節點；「吐槽之力」取代草稿內文的「戰鬥力」。A 另留兩個小缺口：320×568 時線索欄壓到牌子左上角；調查時立繪跟著背景捲動、熱區跟著立繪（草稿 4.1）未做。
 
 ## 尚未完成
 
@@ -27,12 +43,12 @@
 | 待實機 | 對照[原版、前一版與素材試版](../../prototypes/debt-commission/docs/UI-TRIAL.md)，核對長台詞、選項、懸浮鈕及窄螢幕可讀性；需求原文見[UI 備忘](../../prototypes/debt-commission/TODO.md) | Android Chrome 與 iOS Safari 手機試玩後決定層高、透明度及是否採用；若採用，回寫 Roadmap 的版面基準 |
 | 探索 | 試一個用 shader 表現事件／場景轉換的短演出；ASCII 或駭客風是候選方向，尚未定稿 | 有可觀看的前後對照；確認文字可讀性、手機效能與是否符合故事氣質，再決定納入與否 |
 | Phase 4 接 UI | 已完成：標題切換故事、素材／人物檔案畫面、回合畫面與演出（顯示邏輯在 `round_view.gd`、演出在 `stage_effects.gd`）。待做：把調查熱區也拆出 `main.gd` 並做成 item scene；對話紀錄、存讀檔欄位、結尾按鈕仍在程式裡建立，改到時轉成 scene | 拆分後既有測試仍通過 |
-| Phase 4 | 回合玩法已有技術試片。待做：第一章三回合的正式台詞（[草稿 v0.2](stories/003-strawberry-milk-ch1-draft-v0.2.md)，提案 P1–P8 已於 2026-09-28 全部採納，待轉成 `story_src/chapter1.*`）；移動／對話話題；手機試玩 QTE 判定窗（±0.12 秒）與連擊時限 | 作者核准的三回合都可結束；真人手機試玩後定下判定窗與時限 |
+| Phase 4 | 回合玩法已有技術試片。待做：第一章三回合的正式台詞（[草稿 v0.2](stories/003-strawberry-milk-ch1-draft-v0.2.md)，提案 P1–P8 已於 2026-09-28 全部採納，待轉成 `story_src/chapter1.*`）；調查時立繪跟著背景捲動、熱區跟著立繪；手機試玩 QTE 判定窗（±0.12 秒）與連擊時限 | 作者核准的三回合都可結束；真人手機試玩後定下判定窗與時限 |
 | Phase 5 | 系統已完成（2026-09-28）：設定（文字速度、自動播放、音量）、章節選擇（本篇依序開放、最佳評價）、章節結算（`result` 步驟，依剩下的眼鏡評價，Game Over 降級），故事清單改為 `data/stories.json`。待做：完成作者核准、約 80–100 句的草莓牛奶第一章；主線、隱藏路線和 Game Over 全流程驗收 | 真人可從標題玩到結算，重開與選欄讀檔正確；第一章內容經試讀修訂 |
 | 對外試玩前 | 確認正式名稱、部署網址與同人作品的公開分享範圍；記錄手機首次載入時間與 Web 存檔限制 | 交付位置和分享方式明確，首次載入與保存行為在目標裝置實測 |
 
 ## 已知限制與下一步順序
 
 - Chromium 觸控模擬不代表 Android／iOS 實機已通過；Web 存檔綁定同源本機儲存，換網域或清除網站資料後不會自動轉移。原生手機存檔持久性也尚未驗證。
-- Safe Area 目前驗到瀏覽器避開系統安全區的情況；全螢幕或 PWA 顯示尚未驗。UI 已定為三款可切換風格；手繪的店面、客廳，以及新八、銀時、神樂、登勢、伊莉莎白的立繪已套入，定春與廚房仍是佔位；音樂與音效仍是合成佔位音。
+- Safe Area 目前驗到瀏覽器避開系統安全區的情況；全螢幕或 PWA 顯示尚未驗。UI 已定為三款可切換風格；手繪的店面、客廳、廚房，以及新八、銀時、神樂、登勢、定春、伊莉莎白的立繪與第一章第一批表情已套入；音樂與音效仍是合成佔位音。
 - 先用正式一回合台詞與 UI 試版做真人試玩，收斂計時與版面；再擴充 Phase 4 的四素材、三回合和特殊槽點；最後接 Phase 5 的完整章節與設定。每一階段都保留 Godot 測試、Web 操作與真人回饋的獨立證據。

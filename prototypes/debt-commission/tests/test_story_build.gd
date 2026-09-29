@@ -12,6 +12,7 @@ func _init() -> void:
 	_test_phase4_build_matches_committed_json()
 	_test_version_ignores_text_but_tracks_structure()
 	_test_errors_name_their_location()
+	_test_new_commands()
 	_test_phase4_four_clue_flow()
 	_test_round_v2_version_and_reachability()
 	_finish("STORY BUILD TESTS")
@@ -46,10 +47,28 @@ func _test_errors_name_their_location() -> void:
 		["~ a\n新八: 沒有結尾。\n=> END\n", "reaches the end without `do end(\"text\")`"],
 		["~ a\ndo investigate(\"missing_block\")\ndo end(\"x\")\n", "unknown block 'missing_block'"],
 		["~ a\nif asked == \"x\"\n\t=> b\n~ b\ndo end(\"x\")\n", "`if` needs an `else` branch"],
+		["~ a\n新八: 你好。\ndo offscreen()\ndo end(\"x\")\n", "node 'a' step 1: offscreen() must come right before a line"],
+		["~ a\n旁白說明。 [#offscreen]\ndo end(\"x\")\n", "say offscreen needs a character speaker"],
+		["~ a\ndo placard(1)\ndo end(\"x\")\n", "placard text must be a string"],
+		["~ a\ndo enter(\"nobody\")\ndo end(\"x\")\n", "char id 'nobody' is not in asset catalog"],
 	]
 	for case: Array in cases:
 		var result: Dictionary = _build_variant(case[0])
 		_expect(String(result["error"]).contains(case[1]), "error mentions '%s' (got: %s)" % [case[1], result["error"]])
+
+
+## enter(), placard() and offscreen lines (tag or offscreen()) build to the runner's steps.
+func _test_new_commands() -> void:
+	var built: Dictionary = _build_variant("~ a\ndo enter(\"elisabeth\", \"neutral\", \"left\")\ndo placard(\"犯人是神樂\")\n"
+		+ "定春: 汪。 [#offscreen]\ndo offscreen()\n銀時: 布丁不准碰。\n新八: 好。\ndo placard(\"\")\ndo end(\"x\")\n")
+	_expect(String(built["error"]).is_empty(), "the new commands build: %s" % built["error"])
+	var steps: Array = built["story"]["nodes"]["a"]["steps"] if built["error"] == "" else []
+	_expect(steps.size() == 7 and steps[0] == {"op": "char", "id": "elisabeth", "visible": true, "enter": true, "expression": "neutral", "position": "left"},
+		"enter() is a char step that brings the character on stage")
+	_expect(steps.size() == 7 and steps[1] == {"op": "placard", "text": "犯人是神樂"} and steps[5] == {"op": "placard", "text": ""},
+		"placard() sets and clears the board")
+	_expect(steps.size() == 7 and steps[2].get("offscreen") == true and steps[3].get("offscreen") == true and not steps[4].has("offscreen"),
+		"[#offscreen] and offscreen() mark exactly the next line")
 
 
 func _test_phase4_four_clue_flow() -> void:
@@ -78,17 +97,18 @@ func _test_phase4_four_clue_flow() -> void:
 	var round: Dictionary = resumed.call("current")
 	var option_ids: Array = ((round["tsukkomi"] as Dictionary)["options"] as Array).map(func(o: Dictionary) -> String: return o["id"])
 	_expect(option_ids.size() == 6, "every clue unlocks its tsukkomi option: %s" % [option_ids])
-	_expect(resumed.get("profiles") == ["gintoki", "kagura"], "meeting Gintoki and Kagura unlocks their profiles in order")
+	_expect(resumed.get("profiles") == ["gintoki", "sadaharu", "kagura"],
+		"Gintoki, then Sadaharu (the footprints' scene), then Kagura unlock their profiles in order: %s" % [resumed.get("profiles")])
 	var case_file: Dictionary = resumed.call("case_file")
 	_expect((case_file["materials"] as Array).map(func(m: Dictionary) -> String: return m["name"]) \
 		== ["空的草莓牛奶瓶", "銀時嘴角的白色痕跡", "神樂的醋昆布包裝", "定春的腳印"], "case file lists the four materials by name")
-	_expect(String((case_file["profiles"] as Array)[1]["profile"]).contains("醋昆布"), "case file carries catalog profile text")
+	_expect(String((case_file["profiles"] as Array)[1]["profile"]).contains("腳掌比人頭還大"), "case file carries catalog profile text")
 	var round_save: Dictionary = resumed.call("snapshot")
 	var legacy_save: Dictionary = round_save.duplicate(true)
 	legacy_save.erase("profiles")
 	var reloaded: RefCounted = StoryRunner.new()
 	reloaded.call("load_story", OUTPUT)
-	_expect(reloaded.call("restore", round_save) and reloaded.get("profiles") == ["gintoki", "kagura"], "profiles survive save and load")
+	_expect(reloaded.call("restore", round_save) and reloaded.get("profiles") == ["gintoki", "sadaharu", "kagura"], "profiles survive save and load")
 	_expect(reloaded.call("restore", legacy_save) and (reloaded.get("profiles") as Array).is_empty(),
 		"a save from before profiles existed still loads")
 	var bad_save: Dictionary = round_save.duplicate(true)

@@ -10,10 +10,16 @@ extends RefCounted
 ##                     "combo" (lines in order, no listen; the timer shrinks with each catch)
 ##   id, speaker, timer_seconds, game_over, clear (node once every slot is caught)
 ##   lines[]           {id, text, speaker?, listen?: node, whiff?: node, hint?: node, slot?}
-##   slot              {timeout: node, options?: [...], censor?: {...}, qte?: {...}}
+##   slot              {timeout: node, options?: [...], censor?: {...}, placard?: {...}, qte?: {...}}
 ##     options[]       {id, label, result, goto, require?: item, require_caught?: [line ids],
-##                      set_flags?}
+##                      set_flags?, when?: [...]}
+##       when[]        conditional outcome: the first case whose conditions all hold replaces the
+##                     option's result/goto/set_flags. Conditions (at least one): require_caught
+##                     [line ids], require item, flags {key: value}. Case: {..., result, goto, set_flags?}
 ##     censor          fourth-wall bar: the line text marks it with ▇; {hidden, result, goto}
+##     placard         fourth-wall placard (the holder's `Placard` node in their character scene):
+##                     {text, goto, result? (perfect)}; the placard shows `text` while this line is
+##                     current and uncaught, and tapping it answers the slot (reading or choosing)
 ##     qte             shrinking ring: {duration, window, late_after, perfect, early, late}
 ##   rules             {whiff_costs_glass (true), hint_after (3), hint_survives_retry (true),
 ##                      super?: node, combo_timers?: [s...], combo_bonus?: node, combo_break?: node}
@@ -128,6 +134,7 @@ static func decorate(step: Dictionary, state: Dictionary, items: Array, gameplay
 		"has_slot": line.has("slot"),
 		"options": visible_options(line, state, items),
 		"censor": slot.get("censor", {}),
+		"placard": slot.get("placard", {}),
 		"qte": slot.get("qte", {}),
 	}
 	view["caught_line_ids"] = (state["caught"] as Dictionary).keys()
@@ -145,13 +152,37 @@ static func judge_qte(qte: Dictionary, tapped: bool, offset: float) -> String:
 	return "perfect"
 
 
-## Applies one player action to the round. kind: "option" (payload.id), "censor", "qte"
-## (payload.tapped, payload.offset: seconds from the ring's target), "timeout", "whiff",
-## "super". Returns {"error"} or {"result", "goto", "state", "gameplay", "set_flags",
-## "game_over", "leaves_round", "stats"}; the caller commits everything or nothing. A Game Over
-## keeps the state so the retry can restore the round (and its hint counts).
+## What choosing this option does now: its own result/goto/set_flags, or those of the first
+## `when` case whose conditions all hold (caught lines of this round, items held, flag values).
+static func option_outcome(option: Dictionary, state: Dictionary, items: Array, flags: Dictionary) -> Dictionary:
+	for case: Dictionary in option.get("when", []):
+		if _case_holds(case, state, items, flags):
+			return {"result": String(case["result"]), "goto": String(case["goto"]),
+				"set_flags": case.get("set_flags", option.get("set_flags", {}))}
+	return {"result": String(option["result"]), "goto": String(option["goto"]),
+		"set_flags": option.get("set_flags", {})}
+
+
+static func _case_holds(case: Dictionary, state: Dictionary, items: Array, flags: Dictionary) -> bool:
+	for line_id: Variant in case.get("require_caught", []):
+		if not (state["caught"] as Dictionary).has(String(line_id)):
+			return false
+	if case.has("require") and not items.has(String(case["require"])):
+		return false
+	for key: Variant in (case.get("flags", {}) as Dictionary).keys():
+		if not flags.has(key) or flags[key] != case["flags"][key]:
+			return false
+	return true
+
+
+## Applies one player action to the round. kind: "option" (payload.id), "censor", "placard",
+## "qte" (payload.tapped, payload.offset: seconds from the ring's target), "timeout", "whiff",
+## "super". flags: the story flags, for options with `when` cases. Returns {"error"} or
+## {"result", "goto", "state", "gameplay", "set_flags", "game_over", "leaves_round", "stats"};
+## the caller commits everything or nothing. A Game Over keeps the state so the retry can restore
+## the round (and its hint counts).
 static func resolve(step: Dictionary, state: Dictionary, gameplay: Dictionary, items: Array,
-		kind: String, payload: Dictionary = {}) -> Dictionary:
+		kind: String, payload: Dictionary = {}, flags: Dictionary = {}) -> Dictionary:
 	var index: int = line_index(step, state)
 	var line: Dictionary = (step["lines"] as Array)[index]
 	var line_id: String = String(line["id"])
@@ -166,9 +197,10 @@ static func resolve(step: Dictionary, state: Dictionary, gameplay: Dictionary, i
 				return {"error": "line '%s' has no open tsukkomi slot" % line_id}
 			for option: Dictionary in visible_options(line, state, items):
 				if String(option["id"]) == String(payload.get("id", "")):
-					result = String(option["result"])
-					target = String(option["goto"])
-					set_flags = option.get("set_flags", {})
+					var outcome: Dictionary = option_outcome(option, state, items, flags)
+					result = outcome["result"]
+					target = outcome["goto"]
+					set_flags = outcome["set_flags"]
 			if result.is_empty():
 				return {"error": "option '%s' is not available on line '%s'" % [payload.get("id", ""), line_id]}
 		"censor":
@@ -177,6 +209,12 @@ static func resolve(step: Dictionary, state: Dictionary, gameplay: Dictionary, i
 				return {"error": "line '%s' has no censor bar to tap" % line_id}
 			result = String(censor.get("result", "perfect"))
 			target = String(censor["goto"])
+		"placard":
+			var placard: Dictionary = slot.get("placard", {}) as Dictionary
+			if placard.is_empty() or caught:
+				return {"error": "line '%s' has no placard to tap" % line_id}
+			result = String(placard.get("result", "perfect"))
+			target = String(placard["goto"])
 		"qte":
 			var qte: Dictionary = slot.get("qte", {}) as Dictionary
 			if qte.is_empty() or caught:
@@ -342,9 +380,12 @@ static func validate(step: Dictionary, prefix: String, has_node: Callable, has_i
 			return slot_error
 	for line: Dictionary in lines:
 		for option: Dictionary in (line.get("slot", {}) as Dictionary).get("options", []):
-			for caught_id: Variant in option.get("require_caught", []):
+			var caught_ids: Array = (option.get("require_caught", []) as Array).duplicate()
+			for case: Dictionary in option.get("when", []):
+				caught_ids.append_array(case.get("require_caught", []))
+			for caught_id: Variant in caught_ids:
 				if not line_ids.has(String(caught_id)):
-					return "%s boke option '%s' require_caught line '%s' is not in the round" % [prefix, option.get("id", ""), caught_id]
+					return "%s boke line '%s' option '%s' require_caught line '%s' is not in the round" % [prefix, line["id"], option.get("id", ""), caught_id]
 	if slots == 0:
 		return "%s boke_round needs at least one line with a slot" % prefix
 	return ""
@@ -376,10 +417,26 @@ static func _validate_slot(line: Dictionary, where: String, has_node: Callable, 
 			return "%s option '%s' require item '%s' is not in asset catalog" % [where, option_id, option["require"]]
 		if option.has("set_flags") and not option["set_flags"] is Dictionary:
 			return "%s option '%s' set_flags must be an object" % [where, option_id]
+		if option.has("require_caught") and not _is_text_array(option["require_caught"]):
+			return "%s option '%s' require_caught must list line ids" % [where, option_id]
+		if option.has("when"):
+			var when_error: String = _validate_when(option["when"], "%s option '%s'" % [where, option_id], has_node, has_item)
+			if not when_error.is_empty():
+				return when_error
 		if not option.has("require") and not option.has("require_caught"):
 			unconditional += 1
 	if slot.has("options") and unconditional == 0:
 		return "%s needs at least one option without conditions" % where
+	if slot.has("placard"):
+		var placard: Variant = slot["placard"]
+		if not slot.has("options"):
+			return "%s placard needs options beside it (the timed sheet stays open while it glows)" % where
+		if slot.has("censor"):
+			return "%s slot has both a censor bar and a placard; keep one fourth-wall target" % where
+		if not placard is Dictionary or not _is_text(placard.get("text")) or not has_node.call(String(placard.get("goto", ""))):
+			return "%s placard needs text and a goto" % where
+		if placard.has("result") and not RESULTS.has(String(placard["result"])):
+			return "%s placard result is invalid" % where
 	if slot.has("censor"):
 		var censor: Variant = slot["censor"]
 		if not censor is Dictionary or not _is_text(censor.get("hidden")) or not has_node.call(String(censor.get("goto", ""))):
@@ -398,6 +455,43 @@ static func _validate_slot(line: Dictionary, where: String, has_node: Callable, 
 		for key: String in ["perfect", "early", "late"]:
 			if not has_node.call(String(qte.get(key, ""))):
 				return "%s qte.%s target is invalid" % [where, key]
+	return ""
+
+
+## `when` cases of one option: a non-empty array; each case has at least one condition and a
+## valid result and goto.
+static func _validate_when(value: Variant, where: String, has_node: Callable, has_item: Callable) -> String:
+	if not value is Array or (value as Array).is_empty():
+		return "%s when must be a non-empty array of cases" % where
+	for index: int in range((value as Array).size()):
+		var case: Variant = value[index]
+		var at: String = "%s when[%d]" % [where, index]
+		if not case is Dictionary:
+			return "%s must be an object" % at
+		var conditions: int = 0
+		if case.has("require_caught"):
+			if not _is_text_array(case["require_caught"]) or (case["require_caught"] as Array).is_empty():
+				return "%s require_caught must list line ids" % at
+			conditions += 1
+		if case.has("require"):
+			if not has_item.call(String(case["require"])):
+				return "%s require item '%s' is not in asset catalog" % [at, case["require"]]
+			conditions += 1
+		if case.has("flags"):
+			if not case["flags"] is Dictionary or (case["flags"] as Dictionary).is_empty():
+				return "%s flags must map flag keys to values" % at
+			conditions += 1
+		if conditions == 0:
+			return "%s needs a condition: require_caught, require or flags" % at
+		for key: Variant in (case as Dictionary).keys():
+			if not ["require_caught", "require", "flags", "result", "goto", "set_flags"].has(String(key)):
+				return "%s has unknown field '%s'" % [at, key]
+		if not RESULTS.has(String(case.get("result", ""))):
+			return "%s result is invalid" % at
+		if not has_node.call(String(case.get("goto", ""))):
+			return "%s goto target is invalid" % at
+		if case.has("set_flags") and not case["set_flags"] is Dictionary:
+			return "%s set_flags must be an object" % at
 	return ""
 
 
@@ -436,8 +530,13 @@ static func shape(step: Dictionary) -> Array:
 		var slot: Dictionary = line.get("slot", {}) as Dictionary
 		var line_shape: Array = [line.get("id"), line.get("listen", ""), line.get("whiff", ""), line.get("hint", ""), slot.get("timeout", "")]
 		for option: Dictionary in slot.get("options", []):
-			line_shape.append([option.get("id"), option.get("goto"), option.get("require", ""), option.get("require_caught", [])])
+			var option_shape: Array = [option.get("id"), option.get("goto"), option.get("require", ""), option.get("require_caught", [])]
+			for case: Dictionary in option.get("when", []):
+				option_shape.append([case.get("goto"), case.get("require_caught", []), case.get("require", ""), case.get("flags", {})])
+			line_shape.append(option_shape)
 		line_shape.append((slot.get("censor", {}) as Dictionary).get("goto", ""))
+		if slot.has("placard"):
+			line_shape.append(["placard", (slot["placard"] as Dictionary).get("goto", "")])
 		var qte: Dictionary = slot.get("qte", {}) as Dictionary
 		line_shape.append([qte.get("perfect", ""), qte.get("early", ""), qte.get("late", "")])
 		round_shape.append(line_shape)
@@ -459,8 +558,11 @@ static func targets(step: Dictionary) -> Array[String]:
 			found.append(String(slot["timeout"]))
 		for option: Dictionary in slot.get("options", []):
 			found.append(String(option.get("goto", "")))
-		if slot.has("censor"):
-			found.append(String(slot["censor"].get("goto", "")))
+			for case: Dictionary in option.get("when", []):
+				found.append(String(case.get("goto", "")))
+		for key: String in ["censor", "placard"]:
+			if slot.has(key):
+				found.append(String(slot[key].get("goto", "")))
 		for key: String in ["perfect", "early", "late"]:
 			if (slot.get("qte", {}) as Dictionary).has(key):
 				found.append(String(slot["qte"][key]))
@@ -474,11 +576,29 @@ static func flag_writes(step: Dictionary) -> Array[Dictionary]:
 		for option: Dictionary in (line.get("slot", {}) as Dictionary).get("options", []):
 			if option.get("set_flags") is Dictionary:
 				writes.append(option["set_flags"])
+			for case: Dictionary in option.get("when", []):
+				if case.get("set_flags") is Dictionary:
+					writes.append(case["set_flags"])
 	return writes
+
+
+## Every `flags` condition of the round's `when` cases, for the story's flag check.
+static func flag_conditions(step: Dictionary) -> Array[Dictionary]:
+	var conditions: Array[Dictionary] = []
+	for line: Dictionary in step.get("lines", []):
+		for option: Dictionary in (line.get("slot", {}) as Dictionary).get("options", []):
+			for case: Dictionary in option.get("when", []):
+				if case.get("flags") is Dictionary:
+					conditions.append(case["flags"])
+	return conditions
 
 
 static func _is_text(value: Variant) -> bool:
 	return value is String and not String(value).is_empty()
+
+
+static func _is_text_array(value: Variant) -> bool:
+	return value is Array and (value as Array).all(func(entry: Variant) -> bool: return _is_text(entry))
 
 
 static func _is_positive(value: Variant) -> bool:

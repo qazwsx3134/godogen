@@ -4,9 +4,40 @@ do char("shinpachi")
 do char("gintoki", "annoyed", "right")
 do profile("gintoki")
 新八: Phase 4 技術試片：這不是核准的第一章台詞。草莓牛奶不見了，先把客廳查個遍。
+=> search
+
+~ search
 do investigate("living_room_search")
 新八: 四件線索都到手了。
 => ask_first
+
+~ spot_floor
+新八: 黏黏的腳印，從冰箱一路走到定春的窩。
+do profile("sadaharu")
+定春: 汪。 [#offscreen]
+新八: ……定春，你什麼時候變得這麼秀氣了？
+=> search
+
+~ talk_gintoki
+銀時: 十點。銀桑是早睡早起的模範市民。
+新八: 早起的人，不會現在還在打呵欠吧。
+=> search
+
+~ talk_kagura
+神樂: 醋昆布。很乾阿魯。
+新八: ……很乾。然後呢？
+=> search
+
+~ talk_sadaharu
+定春: 汪。
+新八: ……謝謝你的證詞。
+=> search
+
+~ kitchen_fridge
+新八: 冰箱裡只剩醬油，和一個布丁。
+銀時: 布丁不准碰。上面寫了銀桑的名字。 [#offscreen]
+新八: 你剛剛才說寫名字的東西一向不碰吧！原來是只保護你自己的名字！
+=> search
 
 ~ ask_first
 要先問誰？

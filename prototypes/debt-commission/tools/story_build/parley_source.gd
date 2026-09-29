@@ -12,6 +12,8 @@ extends RefCounted
 ##                                 another group
 ##   ACTION                        `description` holds one command in the .dialogue grammar
 ##                                 without `do `: bg(...), char(...), end("text"), set k = v, ...
+##                                 `offscreen()` right before a DIALOGUE marks that line as said
+##                                 from off stage (the .dialogue tag [#offscreen])
 ##   CONDITION `key == value`      condition; true slot (0) and false slot (1) each lead to a group
 ##   edge into another group       that group comes next; it must point at the group's first node
 ##   END                           allowed only right after `end("text")`

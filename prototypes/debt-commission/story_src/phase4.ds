@@ -53,7 +53,7 @@
     {
       "id": "node:7",
       "type": "ACTION",
-      "position": "(460.0, 1000.0)",
+      "position": "(460.0, 1320.0)",
       "description": "investigate(\"living_room_search\")",
       "action_type": "SCRIPT",
       "action_script_ref": "",
@@ -62,7 +62,7 @@
     {
       "id": "node:8",
       "type": "DIALOGUE",
-      "position": "(460.0, 1200.0)",
+      "position": "(460.0, 1520.0)",
       "character": "uid://caci80tc5curv::shinpachi",
       "text": "四件線索都到手了。",
       "text_translation_key": ""
@@ -266,12 +266,10 @@
         "node:3",
         "node:4",
         "node:5",
-        "node:6",
-        "node:7",
-        "node:8"
+        "node:6"
       ],
       "colour": "(0.0667, 0.102, 0.1686, 1.0)",
-      "size": "(400.0, 1440.0)"
+      "size": "(400.0, 1040.0)"
     },
     {
       "id": "node:34",
@@ -392,6 +390,206 @@
       ],
       "colour": "(0.0667, 0.102, 0.1686, 1.0)",
       "size": "(400.0, 440.0)"
+    },
+    {
+      "id": "node:44",
+      "type": "GROUP",
+      "position": "(420.0, 1240.0)",
+      "name": "search",
+      "node_ids": [
+        "node:7",
+        "node:8"
+      ],
+      "colour": "(0.0667, 0.102, 0.1686, 1.0)",
+      "size": "(400.0, 440.0)"
+    },
+    {
+      "id": "node:45",
+      "type": "DIALOGUE",
+      "position": "(3260.0, 0.0)",
+      "character": "uid://caci80tc5curv::shinpachi",
+      "text": "黏黏的腳印，從冰箱一路走到定春的窩。",
+      "text_translation_key": ""
+    },
+    {
+      "id": "node:46",
+      "type": "ACTION",
+      "position": "(3260.0, 200.0)",
+      "description": "profile(\"sadaharu\")",
+      "action_type": "SCRIPT",
+      "action_script_ref": "",
+      "values": []
+    },
+    {
+      "id": "node:47",
+      "type": "ACTION",
+      "position": "(3260.0, 400.0)",
+      "description": "offscreen()",
+      "action_type": "SCRIPT",
+      "action_script_ref": "",
+      "values": []
+    },
+    {
+      "id": "node:48",
+      "type": "DIALOGUE",
+      "position": "(3260.0, 600.0)",
+      "character": "uid://caci80tc5curv::sadaharu",
+      "text": "汪。",
+      "text_translation_key": ""
+    },
+    {
+      "id": "node:49",
+      "type": "DIALOGUE",
+      "position": "(3260.0, 800.0)",
+      "character": "uid://caci80tc5curv::shinpachi",
+      "text": "……定春，你什麼時候變得這麼秀氣了？",
+      "text_translation_key": ""
+    },
+    {
+      "id": "node:50",
+      "type": "GROUP",
+      "position": "(3220.0, -80.0)",
+      "name": "spot_floor",
+      "node_ids": [
+        "node:45",
+        "node:46",
+        "node:47",
+        "node:48",
+        "node:49"
+      ],
+      "colour": "(0.0667, 0.102, 0.1686, 1.0)",
+      "size": "(400.0, 1040.0)"
+    },
+    {
+      "id": "node:51",
+      "type": "DIALOGUE",
+      "position": "(3260.0, 1120.0)",
+      "character": "uid://caci80tc5curv::gintoki",
+      "text": "十點。銀桑是早睡早起的模範市民。",
+      "text_translation_key": ""
+    },
+    {
+      "id": "node:52",
+      "type": "DIALOGUE",
+      "position": "(3260.0, 1320.0)",
+      "character": "uid://caci80tc5curv::shinpachi",
+      "text": "早起的人，不會現在還在打呵欠吧。",
+      "text_translation_key": ""
+    },
+    {
+      "id": "node:53",
+      "type": "GROUP",
+      "position": "(3220.0, 1040.0)",
+      "name": "talk_gintoki",
+      "node_ids": [
+        "node:51",
+        "node:52"
+      ],
+      "colour": "(0.0667, 0.102, 0.1686, 1.0)",
+      "size": "(400.0, 440.0)"
+    },
+    {
+      "id": "node:54",
+      "type": "DIALOGUE",
+      "position": "(3260.0, 1640.0)",
+      "character": "uid://caci80tc5curv::kagura",
+      "text": "醋昆布。很乾阿魯。",
+      "text_translation_key": ""
+    },
+    {
+      "id": "node:55",
+      "type": "DIALOGUE",
+      "position": "(3260.0, 1840.0)",
+      "character": "uid://caci80tc5curv::shinpachi",
+      "text": "……很乾。然後呢？",
+      "text_translation_key": ""
+    },
+    {
+      "id": "node:56",
+      "type": "GROUP",
+      "position": "(3220.0, 1560.0)",
+      "name": "talk_kagura",
+      "node_ids": [
+        "node:54",
+        "node:55"
+      ],
+      "colour": "(0.0667, 0.102, 0.1686, 1.0)",
+      "size": "(400.0, 440.0)"
+    },
+    {
+      "id": "node:57",
+      "type": "DIALOGUE",
+      "position": "(3260.0, 2160.0)",
+      "character": "uid://caci80tc5curv::sadaharu",
+      "text": "汪。",
+      "text_translation_key": ""
+    },
+    {
+      "id": "node:58",
+      "type": "DIALOGUE",
+      "position": "(3260.0, 2360.0)",
+      "character": "uid://caci80tc5curv::shinpachi",
+      "text": "……謝謝你的證詞。",
+      "text_translation_key": ""
+    },
+    {
+      "id": "node:59",
+      "type": "GROUP",
+      "position": "(3220.0, 2080.0)",
+      "name": "talk_sadaharu",
+      "node_ids": [
+        "node:57",
+        "node:58"
+      ],
+      "colour": "(0.0667, 0.102, 0.1686, 1.0)",
+      "size": "(400.0, 440.0)"
+    },
+    {
+      "id": "node:60",
+      "type": "DIALOGUE",
+      "position": "(3260.0, 2680.0)",
+      "character": "uid://caci80tc5curv::shinpachi",
+      "text": "冰箱裡只剩醬油，和一個布丁。",
+      "text_translation_key": ""
+    },
+    {
+      "id": "node:61",
+      "type": "ACTION",
+      "position": "(3260.0, 2880.0)",
+      "description": "offscreen()",
+      "action_type": "SCRIPT",
+      "action_script_ref": "",
+      "values": []
+    },
+    {
+      "id": "node:62",
+      "type": "DIALOGUE",
+      "position": "(3260.0, 3080.0)",
+      "character": "uid://caci80tc5curv::gintoki",
+      "text": "布丁不准碰。上面寫了銀桑的名字。",
+      "text_translation_key": ""
+    },
+    {
+      "id": "node:63",
+      "type": "DIALOGUE",
+      "position": "(3260.0, 3280.0)",
+      "character": "uid://caci80tc5curv::shinpachi",
+      "text": "你剛剛才說寫名字的東西一向不碰吧！原來是只保護你自己的名字！",
+      "text_translation_key": ""
+    },
+    {
+      "id": "node:64",
+      "type": "GROUP",
+      "position": "(3220.0, 2600.0)",
+      "name": "kitchen_fridge",
+      "node_ids": [
+        "node:60",
+        "node:61",
+        "node:62",
+        "node:63"
+      ],
+      "colour": "(0.0667, 0.102, 0.1686, 1.0)",
+      "size": "(400.0, 840.0)"
     }
   ],
   "edges": [
@@ -652,6 +850,141 @@
       "from_node": "node:31",
       "from_slot": 0,
       "to_node": "node:32",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:30",
+      "from_node": "node:45",
+      "from_slot": 0,
+      "to_node": "node:46",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:31",
+      "from_node": "node:46",
+      "from_slot": 0,
+      "to_node": "node:47",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:32",
+      "from_node": "node:47",
+      "from_slot": 0,
+      "to_node": "node:48",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:33",
+      "from_node": "node:48",
+      "from_slot": 0,
+      "to_node": "node:49",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:34",
+      "from_node": "node:49",
+      "from_slot": 0,
+      "to_node": "node:7",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:35",
+      "from_node": "node:51",
+      "from_slot": 0,
+      "to_node": "node:52",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:36",
+      "from_node": "node:52",
+      "from_slot": 0,
+      "to_node": "node:7",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:37",
+      "from_node": "node:54",
+      "from_slot": 0,
+      "to_node": "node:55",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:38",
+      "from_node": "node:55",
+      "from_slot": 0,
+      "to_node": "node:7",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:39",
+      "from_node": "node:57",
+      "from_slot": 0,
+      "to_node": "node:58",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:40",
+      "from_node": "node:58",
+      "from_slot": 0,
+      "to_node": "node:7",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:41",
+      "from_node": "node:60",
+      "from_slot": 0,
+      "to_node": "node:61",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:42",
+      "from_node": "node:61",
+      "from_slot": 0,
+      "to_node": "node:62",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:43",
+      "from_node": "node:62",
+      "from_slot": 0,
+      "to_node": "node:63",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:44",
+      "from_node": "node:63",
+      "from_slot": 0,
+      "to_node": "node:7",
       "to_slot": 0,
       "should_override_colour": false,
       "colour_override": "(0.0, 0.0, 0.0, 1.0)"

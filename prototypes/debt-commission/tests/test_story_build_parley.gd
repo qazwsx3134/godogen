@@ -1,6 +1,7 @@
 extends "res://addons/proto_kit/test_kit.gd"
-## Parley (.ds) adapter: the Phase 4 graph builds to the same story as phase4.dialogue, and
-## graph mistakes are reported with their group and step.
+## Parley (.ds) adapter: the Phase 4 graph builds to the same story as phase4.dialogue (talk,
+## places, hotspot scenes and offscreen lines included), and graph mistakes are reported with
+## their group and step.
 
 const StoryBuilder = preload("res://tools/story_build/story_builder.gd")
 const DS_SOURCE: String = "res://story_src/phase4.ds"
@@ -50,6 +51,13 @@ func _test_errors_name_their_location() -> void:
 		var elsewhere: String = String(_node_with(g, "description", 'char("shinpachi")')["id"])
 		(g["edges"] as Array).append({"id": "edge:extra", "from_node": prompt, "from_slot": 0, "to_node": elsewhere, "to_slot": 0})),
 		"group 'ask_first', step 0: a choice prompt may only lead to options")
+	_expect_error(_edit(graph, func(g: Dictionary) -> void:
+		_node_with(g, "description", 'profile("sadaharu")')["description"] = 'offscreen()'),
+		"node 'spot_floor' step 1: offscreen() must come right before a line")
+	var built: Dictionary = StoryBuilder.build(DS_SOURCE)
+	var floor_line: Dictionary = built["story"]["nodes"]["spot_floor"]["steps"][2] if built["error"] == "" else {}
+	_expect(floor_line.get("speaker") == "sadaharu" and floor_line.get("offscreen") == true,
+		"an offscreen() ACTION marks the DIALOGUE after it (%s)" % [floor_line])
 
 
 func _expect_error(result: Dictionary, fragment: String) -> void:

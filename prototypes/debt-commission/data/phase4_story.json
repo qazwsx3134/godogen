@@ -184,6 +184,28 @@
       ],
       "title": "神樂的說法"
     },
+    "kitchen_fridge": {
+      "next": "search",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "冰箱裡只剩醬油，和一個布丁。"
+        },
+        {
+          "offscreen": true,
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "布丁不准碰。上面寫了銀桑的名字。"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "你剛剛才說寫名字的東西一向不碰吧！原來是只保護你自己的名字！"
+        }
+      ],
+      "title": "廚房的冰箱"
+    },
     "perfect": {
       "steps": [
         {
@@ -222,7 +244,7 @@
       "title": "神樂補一句"
     },
     "phase4_open": {
-      "next": "ask_first",
+      "next": "search",
       "steps": [
         {
           "id": "yorozuya_living_room",
@@ -248,8 +270,15 @@
           "op": "say",
           "speaker": "shinpachi",
           "text": "Phase 4 技術試片：這不是核准的第一章台詞。草莓牛奶不見了，先把客廳查個遍。"
-        },
+        }
+      ],
+      "title": "技術試片：開場"
+    },
+    "search": {
+      "next": "ask_first",
+      "steps": [
         {
+          "bg": "yorozuya_living_room",
           "hotspots": [
             {
               "id": "empty_milk_bottle",
@@ -291,6 +320,7 @@
               ]
             },
             {
+              "goto": "spot_floor",
               "id": "floor_paw_print",
               "item": "sadaharu_footprint",
               "label": "地板上的腳印",
@@ -305,8 +335,51 @@
             }
           ],
           "id": "living_room_search",
+          "label": "客廳",
           "op": "investigate",
-          "prompt": "調查客廳，找齊四件線索。"
+          "places": [
+            {
+              "bg": "yorozuya_kitchen",
+              "hotspots": [
+                {
+                  "goto": "kitchen_fridge",
+                  "id": "fridge",
+                  "label": "冰箱",
+                  "optional": true,
+                  "pos": [
+                    0.78,
+                    0.9
+                  ],
+                  "size": [
+                    0.3,
+                    0.14
+                  ]
+                }
+              ],
+              "id": "kitchen",
+              "label": "廚房",
+              "prompt": "廚房。冰箱就在這裡。"
+            }
+          ],
+          "prompt": "調查客廳，找齊四件線索。",
+          "talk": [
+            {
+              "goto": "talk_gintoki",
+              "id": "gintoki_bedtime",
+              "label": "銀時：昨晚幾點睡？"
+            },
+            {
+              "goto": "talk_kagura",
+              "id": "kagura_dinner",
+              "label": "神樂：昨晚吃了什麼？"
+            },
+            {
+              "goto": "talk_sadaharu",
+              "id": "sadaharu_witness",
+              "label": "定春：你看到什麼了？",
+              "require": "sadaharu_footprint"
+            }
+          ]
         },
         {
           "op": "say",
@@ -315,6 +388,80 @@
         }
       ],
       "title": "技術試片：調查客廳"
+    },
+    "spot_floor": {
+      "next": "search",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "黏黏的腳印，從冰箱一路走到定春的窩。"
+        },
+        {
+          "id": "sadaharu",
+          "op": "profile"
+        },
+        {
+          "offscreen": true,
+          "op": "say",
+          "speaker": "sadaharu",
+          "text": "汪。"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "……定春，你什麼時候變得這麼秀氣了？"
+        }
+      ],
+      "title": "地板上的腳印"
+    },
+    "talk_gintoki": {
+      "next": "search",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "十點。銀桑是早睡早起的模範市民。"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "早起的人，不會現在還在打呵欠吧。"
+        }
+      ],
+      "title": "問銀時"
+    },
+    "talk_kagura": {
+      "next": "search",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "kagura",
+          "text": "醋昆布。很乾阿魯。"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "……很乾。然後呢？"
+        }
+      ],
+      "title": "問神樂"
+    },
+    "talk_sadaharu": {
+      "next": "search",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "sadaharu",
+          "text": "汪。"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "……謝謝你的證詞。"
+        }
+      ],
+      "title": "問定春"
     },
     "weak": {
       "steps": [
@@ -333,5 +480,5 @@
   },
   "note": "僅用於驗證四熱區調查、素材限定吐槽與劇本建置流程；不是作者核准的第一章文本。",
   "title": "Phase 4 技術試片：四線索調查（非核准第一章）",
-  "version": "s-3390d681e984"
+  "version": "s-7099aaec0f66"
 }

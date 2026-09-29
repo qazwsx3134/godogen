@@ -2,9 +2,12 @@ extends "res://addons/proto_kit/test_kit.gd"
 ## The Phase 4 rounds sample in the shell: stage effects (music survives a save, a cut-in never
 ## eats the next tap, shake settles, freeze holds only when not skipping); the testimony round
 ## (round bar, listening for a material, a whiff, catching with a material, the censor bar
-## while reading, the give-up that waits for two catches); the combo round (lines open by
-## themselves, shrinking timers, the super once the gauge is full, the QTE with a real early
-## tap, the combo bonus); the censor bar on the timed sheet; a combo save reopens the sheet.
+## while reading, the give-up that waits for two catches); Kagura's round (Elisabeth enters
+## without a line, her placard answers line 2 by a real tap while reading, glows on the timed
+## sheet, which stays below it; Sadaharu speaks from off stage without coming on); the combo
+## round (lines open by themselves, shrinking timers, the super once the gauge is full, the QTE
+## with a real early tap, the combo bonus); the censor bar on the timed sheet; a combo save
+## reopens the sheet.
 
 const MAIN_SCENE: PackedScene = preload("res://main.tscn")
 const SAMPLE: String = "res://data/phase4_rounds_story.json"
@@ -19,6 +22,7 @@ func _run() -> void:
 	root.size = Vector2i(1080, 1920)
 	await _test_effects()
 	await _test_testimony_and_combo()
+	await _test_placard_on_stage()
 	await _test_censor_on_the_sheet_and_combo_save()
 	await _test_game_over_screen()
 	await _test_material_as_evidence()
@@ -107,10 +111,21 @@ func _test_testimony_and_combo() -> void:
 	_expect(labels == ["a", "b", "c", "d"], "with lines 2 and 3 caught the give-up is offered on line 4 (%s)" % [labels])
 	await _press(game._choice_buttons[0])
 
+	await _play_until(game, func() -> bool: return game._runner.node_id == "k_round" and game._screen_mode == "boke_round", "Kagura's round")
+	await _press(game._boke_tsukkomi_button)
+	await _press(game._choice_buttons[0])
+	await _play_until(game, func() -> bool: return game._screen_mode == "boke_round", "back from Kagura's line 1")
+	await _press(game._boke_next_button)
+	await _tap(game._placard_hit_rect().get_center())
+	await _play_until(game, func() -> bool: return game._screen_mode == "boke_round", "back from the placard")
+	await _press(game._boke_next_button)
+	await _press(game._boke_tsukkomi_button)
+	await _press(game._choice_buttons[0])
+
 	await _play_until(game, func() -> bool: return game._screen_mode == "tsukkomi", "the combo round")
 	_expect(game._runner.node_id == "r2_round" and not game._boke_controls.visible and
-		is_equal_approx(float(game._current_command["timer_seconds"]), 8.0) and not game._choice_sheet.super_button.visible,
-		"combo line 1 opens by itself at 8 s; 90 power is not enough for the super")
+		is_equal_approx(float(game._current_command["timer_seconds"]), 8.0) and game._choice_sheet.super_button.visible,
+		"combo line 1 opens by itself at 8 s; two perfect testimonies filled the gauge, so the super is offered at once")
 	await _press(game._choice_buttons[0])
 	await _play_until(game, func() -> bool: return game._screen_mode == "tsukkomi", "combo line 2")
 	_expect(is_equal_approx(float(game._current_command["timer_seconds"]), 6.0) and game._choice_sheet.super_button.visible,
@@ -121,7 +136,7 @@ func _test_testimony_and_combo() -> void:
 		game._screen_mode == "tsukkomi", "switching edition keeps the super on the new sheet")
 	await _press(game._choice_sheet.super_button)
 	await _play_until(game, func() -> bool: return game._screen_mode == "qte", "the QTE")
-	_expect(game._qte != null and game._runner.stats["perfect"] == 6, "the super catches both remaining option lines")
+	_expect(game._qte != null and game._runner.stats["perfect"] == 9, "the super catches both remaining option lines (%s)" % [game._runner.stats])
 
 	var stage: Vector2 = game._game.position + Vector2(game._game.size.x * 0.5, game._game.size.y * 0.34)
 	await _tap(stage)
@@ -132,7 +147,7 @@ func _test_testimony_and_combo() -> void:
 	await _play_until(game, func() -> bool: return game._screen_mode == "end", "the ending")
 	var bonus_played: bool = game._history.any(func(entry: Dictionary) -> bool:
 		return str(entry.get("text", "")).contains("眼鏡今天有點帥"))
-	_expect(game._runner.stats["perfect"] == 7 and game._runner.node_id == "r2_clear" and not bonus_played,
+	_expect(game._runner.stats["perfect"] == 10 and game._runner.node_id == "r2_clear" and not bonus_played,
 		"a well-timed tap catches the QTE and the round ends; the early miss broke the combo, so no bonus scene")
 	game.queue_free()
 	await _frames(2)
@@ -166,6 +181,12 @@ func _test_censor_on_the_sheet_and_combo_save() -> void:
 		await _play_until(combo, func() -> bool: return combo._screen_mode in ["boke_round", "tsukkomi"], "next line")
 	combo._set_boke_line(2)
 	await _press(combo._dialog_panel.censor_bar)
+	await _play_until(combo, func() -> bool: return combo._runner.node_id == "k_round" and combo._screen_mode == "boke_round", "Kagura's round")
+	for line: int in range(3):
+		combo._set_boke_line(line)
+		await _press(combo._boke_tsukkomi_button)
+		await _press(combo._choice_buttons[0])
+		await _play_until(combo, func() -> bool: return combo._screen_mode in ["boke_round", "tsukkomi"], "Kagura's next line")
 	await _play_until(combo, func() -> bool: return combo._screen_mode == "tsukkomi", "the combo round")
 	combo._save_game()
 	combo.queue_free()
@@ -177,6 +198,81 @@ func _test_censor_on_the_sheet_and_combo_save() -> void:
 	_expect(resumed._screen_mode == "tsukkomi" and resumed._runner.node_id == "r2_round" and resumed._choice_sheet.visible,
 		"Continue during a combo line reopens its timed sheet")
 	resumed.queue_free()
+	await _frames(2)
+	_cleanup()
+
+
+## Kagura's round in the shell. Elisabeth comes on stage by `enter` though she never speaks; the
+## placard is blank on line 1, reads 犯人是神樂 on line 2 (a tap on it there, through the
+## TapCatcher, catches the line), glows once 吐槽！ opens the timed sheet, which keeps below the
+## board; the reaction flips it to 我只是路過. Sadaharu's 汪 from off stage names him without
+## bringing him on or relighting the stage.
+func _test_placard_on_stage() -> void:
+	var game: Control = _new_game()
+	await _frames(3)
+	game._on_begin_pressed()
+	await _play_until(game, func() -> bool: return game._screen_mode == "boke_round", "the testimony round")
+	for step: Array in [[1, "b"], [3, "b"]]:
+		game._set_boke_line(step[0])
+		await _press(game._boke_tsukkomi_button)
+		for index: int in range(game._current_options.size()):
+			if game._current_options[index]["id"] == step[1]:
+				await _press(game._choice_buttons[index])
+				break
+		await _play_until(game, func() -> bool: return game._screen_mode == "boke_round", "next line")
+	game._set_boke_line(2)
+	await _press(game._dialog_panel.censor_bar)
+	await _play_until(game, func() -> bool: return game._runner.node_id == "k_round" and game._screen_mode == "boke_round", "Kagura's round")
+	var elisabeth: Control = game._sprites["elisabeth"]
+	_expect(game._placard_holder == elisabeth and elisabeth.visible and game._actor_slots["elisabeth"] == "left",
+		"Elisabeth entered at the left without a line of her own")
+	_expect(elisabeth.call("placard_text") == "" and not game._placard_open(), "line 1: a blank placard answers nothing")
+	var board: Rect2 = elisabeth.call("placard_rect")
+	var before: String = _key(game)
+	await _tap(board.get_center())
+	_expect(_key(game) == before and game._runner.gameplay["glasses"] == 5, "tapping the blank placard does nothing")
+
+	await _press(game._boke_next_button)
+	_expect(elisabeth.call("placard_text") == "犯人是神樂" and game._placard_open() and not elisabeth.call("placard_glowing"),
+		"line 2: the placard reads 犯人是神樂 and can be tapped while reading (no glow yet)")
+	var hit: Rect2 = game._placard_hit_rect()
+	var least: float = 48.0 * game.CSS_PX * game._panel_scale
+	_expect(hit.size.x >= least and hit.size.y >= least and hit.end.y <= game._dialog_panel.get_global_rect().position.y + 0.5,
+		"the reachable board is at least 48 CSS px each way and above the reading box (%s)" % [hit])
+
+	var sadaharu: Control = game._sprites["sadaharu"]
+	await _press(game._boke_listen_button)
+	await _play_until(game, func() -> bool: return game._current_speaker == "kagura" and game._screen_mode == "story", "Kagura's listen line")
+	var lighting: Dictionary = {}  # the stage as Kagura's line left it, just before the voice off stage
+	for actor_id: String in game._sprites.keys():
+		lighting[actor_id] = [game._sprites[actor_id].visible, game._sprites[actor_id].modulate]
+	await _play_until(game, func() -> bool: return game._current_speaker == "sadaharu", "Sadaharu's line")
+	var unchanged: bool = true
+	for actor_id: String in game._sprites.keys():
+		if [game._sprites[actor_id].visible, game._sprites[actor_id].modulate] != lighting[actor_id]:
+			unchanged = false
+	_expect(not sadaharu.visible and unchanged and game._dialog_panel.speaker_name.text == "定春",
+		"定春 speaks from off stage: named, not on stage, nobody else relit")
+	await _play_until(game, func() -> bool: return game._screen_mode == "boke_round", "back from listening")
+
+	await _press(game._boke_tsukkomi_button)
+	await _frames(3)
+	_expect(game._screen_mode == "tsukkomi" and elisabeth.call("placard_glowing") and game._placard_open(),
+		"on the timed sheet the placard glows and still answers")
+	var sheet_top: float = game._choice_sheet.get_global_rect().position.y
+	_expect(sheet_top >= board.end.y - 0.5, "the options sheet stays below the board (%s vs %s)" % [sheet_top, board.end.y])
+	game._set_ui_style("manga", false)
+	await _frames(2)
+	_expect(elisabeth.call("placard_glowing") and elisabeth.call("placard_text") == "犯人是神樂", "switching edition keeps the placard")
+	await _tap(game._placard_hit_rect().get_center())
+	_expect(game._runner.node_id == "k_l2_placard" and game._runner.round_state["caught"].get("l2") == "perfect",
+		"tapping the glowing board catches line 2 perfectly")
+	_expect(not elisabeth.call("placard_glowing"), "the glow stops once answered")
+	await _play_until(game, func() -> bool: return elisabeth.call("placard_text") == "我只是路過", "the flip")
+	await _play_until(game, func() -> bool: return game._screen_mode == "boke_round", "back to the round")
+	_expect(elisabeth.call("placard_text") == "我只是路過" and not game._placard_open(), "back on the round the board says 我只是路過")
+	game._set_ui_style("cinema", false)
+	game.queue_free()
 	await _frames(2)
 	_cleanup()
 

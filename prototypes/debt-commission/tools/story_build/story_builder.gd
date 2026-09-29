@@ -76,6 +76,9 @@ static func build_text(text: String, source_path: String) -> Dictionary:
 		return _fail("%s: %s" % [source_path, parsed["error"]])
 
 	var nodes: Dictionary = parsed["nodes"]
+	var fold_error: String = _fold_offscreen(nodes)
+	if not fold_error.is_empty():
+		return _fail("%s: %s" % [source_path, fold_error])
 	var block_error: String = _resolve_blocks(nodes, blocks)
 	if not block_error.is_empty():
 		return _fail("%s: %s" % [source_path, block_error])
@@ -137,7 +140,16 @@ static func _step_shape(step: Dictionary) -> Array:
 	for option: Dictionary in step.get("options", []):
 		shape.append([option.get("id", ""), option.get("next", ""), option.get("require", "")])
 	for hotspot: Dictionary in step.get("hotspots", []):
-		shape.append([hotspot.get("id", ""), hotspot.get("item", "")])
+		shape.append(_hotspot_shape(hotspot))
+	for topic: Dictionary in step.get("talk", []):
+		shape.append(["talk", topic.get("id", ""), topic.get("goto", "")])
+	for place: Dictionary in step.get("places", []):
+		var place_shape: Array = ["place", place.get("id", "")]
+		for hotspot: Dictionary in place.get("hotspots", []):
+			place_shape.append(_hotspot_shape(hotspot))
+		for topic: Dictionary in place.get("talk", []):
+			place_shape.append(["talk", topic.get("id", ""), topic.get("goto", "")])
+		shape.append(place_shape)
 	var tsukkomi: Dictionary = step.get("tsukkomi", {}) as Dictionary
 	for option: Dictionary in tsukkomi.get("options", []):
 		shape.append([option.get("id", ""), option.get("goto", ""), option.get("require", "")])
@@ -146,6 +158,29 @@ static func _step_shape(step: Dictionary) -> Array:
 	for line: Dictionary in step.get("lines", []):
 		shape.append(line.get("id", ""))
 	return shape
+
+
+static func _hotspot_shape(hotspot: Dictionary) -> Array:
+	var shape: Array = [hotspot.get("id", ""), hotspot.get("item", "")]
+	if hotspot.has("goto"):
+		shape.append(hotspot["goto"])
+	return shape
+
+
+## `offscreen()` (a Parley ACTION, or `do offscreen()`) marks the line right after it.
+static func _fold_offscreen(nodes: Dictionary) -> String:
+	for node_id: String in nodes.keys():
+		var steps: Array = (nodes[node_id] as Dictionary)["steps"]
+		var index: int = 0
+		while index < steps.size():
+			if String(steps[index].get("op", "")) != "offscreen":
+				index += 1
+				continue
+			if index + 1 >= steps.size() or String(steps[index + 1].get("op", "")) != "say":
+				return "node '%s' step %d: offscreen() must come right before a line" % [node_id, index]
+			steps.remove_at(index)
+			steps[index]["offscreen"] = true
+	return ""
 
 
 static func _resolve_blocks(nodes: Dictionary, blocks: Dictionary) -> String:
@@ -185,6 +220,13 @@ static func _unreachable(entry: String, nodes: Dictionary) -> Array[String]:
 			for key: String in ["then", "else", "target", "game_over"]:
 				if step.has(key):
 					queue.append(String(step[key]))
+			if String(step.get("op", "")) == "investigate":
+				var reactions: Array = (step.get("hotspots", []) as Array) + (step.get("talk", []) as Array)
+				for place: Dictionary in step.get("places", []):
+					reactions += (place.get("hotspots", []) as Array) + (place.get("talk", []) as Array)
+				for reaction: Dictionary in reactions:
+					if reaction.has("goto"):
+						queue.append(String(reaction["goto"]))
 			for option: Dictionary in step.get("options", []):
 				queue.append(String(option.get("next", "")))
 			var tsukkomi: Dictionary = step.get("tsukkomi", {}) as Dictionary

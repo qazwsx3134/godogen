@@ -16,6 +16,9 @@ var _expression_art: Dictionary = {}
 ## The Art offsets for the usual picture (from the character scene), before any face moves them.
 var _art_rest: Array[float] = []
 @onready var _art: TextureRect = get_node_or_null("Art") as TextureRect
+## A board the character holds up (elisabeth.tscn): `Placard` with its `Text` label and `Glow`.
+@onready var _placard: Control = get_node_or_null("Placard") as Control
+var _placard_pulse: Tween = null
 
 const ART_SHADER: String = """
 shader_type canvas_item;
@@ -38,6 +41,45 @@ func setup(id: String, _display_name: String, color: Color, _font: Font) -> void
 	name = "Sprite_%s" % id
 	size = REFERENCE_SIZE
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	set_placard("", false)  # the scene's text is only an editor preview
+
+
+func has_placard() -> bool:
+	return _placard != null
+
+
+## What the board says ("" = blank) and whether it glows (it answers the line on the timed sheet).
+func set_placard(text: String, glowing: bool) -> void:
+	if _placard == null:
+		return
+	(_placard.get_node("Text") as Label).text = text
+	var glow: CanvasItem = _placard.get_node("Glow") as CanvasItem
+	if glowing == glow.visible:
+		return
+	glow.visible = glowing
+	if _placard_pulse != null:
+		_placard_pulse.kill()
+		_placard_pulse = null
+	glow.modulate.a = 1.0
+	if glowing and is_inside_tree():
+		_placard_pulse = create_tween().set_loops()
+		_placard_pulse.tween_property(glow, "modulate:a", 0.35, 0.6)
+		_placard_pulse.tween_property(glow, "modulate:a", 1.0, 0.6)
+
+
+func placard_text() -> String:
+	return (_placard.get_node("Text") as Label).text if _placard != null else ""
+
+
+func placard_glowing() -> bool:
+	return _placard != null and (_placard.get_node("Glow") as CanvasItem).visible
+
+
+## The board's on-screen box: the rotated board's bounding rect in canvas coordinates.
+func placard_rect() -> Rect2:
+	if _placard == null:
+		return Rect2()
+	return _placard.get_global_transform() * Rect2(Vector2.ZERO, _placard.size)
 
 ## Shows that face's picture when the catalog has one, else the character's usual picture.
 func set_expression(value: String) -> void:

@@ -4,7 +4,7 @@
 
 介面提供「月下映畫／萬事屋委託簿／吐槽分鏡」三款風格，可在標題或遊戲選單切換並記住偏好。見[風格與驗證紀錄](docs/UI-REDESIGN-OPTIONS.md)及[互動比較頁](docs/ui-options/index.html)。
 
-Godot 4.7 手機直立視覺小說，依 [V1 Roadmap](../../docs/story-telling-game/ROADMAP.md) 與 [gintama0923](../../docs/gintama-like/new/gintama0923.md) 製作。狀態：**Phase 1、Phase 2 與 Phase 3 技術短循環已完成自動驗收；Phase 4 的回合玩法（逐句槽點、第四面牆消音條、連擊、QTE、超必殺、演出效果）有可玩的技術試片與自動驗收**；第一章文本與真人手機試玩仍待完成。
+Godot 4.7 手機直立視覺小說，依 [V1 Roadmap](../../docs/story-telling-game/ROADMAP.md) 與 [gintama0923](../../docs/gintama-like/new/gintama0923.md) 製作。狀態：**Phase 1、Phase 2 與 Phase 3 技術短循環已完成自動驗收；Phase 4 的回合玩法（逐句槽點、第四面牆消音條與伊莉莎白的牌子、條件式放棄吐槽、連擊、QTE、超必殺、演出效果）與調查的對話／移動話題有可玩的技術試片與自動驗收**；第一章文本與真人手機試玩仍待完成。
 
 要驗證的假設：直立 VN 版面（滿版背景、立繪、依內容高度配置的底部對話層、整合在框內的閱讀工具列）在手機上單手好讀、好操作；作者只改 JSON 就能換場景、角色、分支與素材條件。[原版、前一版與素材試版比較](docs/UI-TRIAL.md)保留實際 Web 畫面，待手機試玩決定版面。
 
@@ -14,7 +14,7 @@ Godot 4.7 手機直立視覺小說，依 [V1 Roadmap](../../docs/story-telling-g
 
 ## 試玩與操作
 
-啟動下方的 Web 伺服器後，開啟 <http://127.0.0.1:5193/> 試玩討債閱讀基線；<http://127.0.0.1:5193/?sample=phase2> 是草莓牛奶劇本測試，<http://127.0.0.1:5193/?sample=phase3> 是可玩的調查與吐槽技術短循環，<http://127.0.0.1:5193/?sample=phase4> 是四線索調查，<http://127.0.0.1:5193/?sample=phase4_rounds> 是 Phase 4 回合試片（證言、消音條、連擊、QTE、超必殺；台詞取自第一章草稿，非核准）。各用自己的本機存檔；桌機或編輯器直接執行時，在標題點故事名稱打開「章節選擇」換故事。
+啟動下方的 Web 伺服器後，開啟 <http://127.0.0.1:5193/> 試玩討債閱讀基線；<http://127.0.0.1:5193/?sample=phase2> 是草莓牛奶劇本測試，<http://127.0.0.1:5193/?sample=phase3> 是可玩的調查與吐槽技術短循環，<http://127.0.0.1:5193/?sample=phase4> 是四線索調查（對話與移動話題、廚房、畫面外台詞），<http://127.0.0.1:5193/?sample=phase4_rounds> 是 Phase 4 回合試片（證言、消音條、神樂回合的伊莉莎白牌子與條件式放棄吐槽、連擊、QTE、超必殺；台詞取自第一章草稿，非核准）。各用自己的本機存檔；桌機或編輯器直接執行時，在標題點故事名稱打開「章節選擇」換故事。
 
 | 操作 | 效果 |
 | --- | --- |
@@ -28,11 +28,13 @@ Godot 4.7 手機直立視覺小說，依 [V1 Roadmap](../../docs/story-telling-g
 | 推進鈕（›／續／→） | 補完當句或推進劇情 |
 | 選單／標題讀檔 | 選擇指定手動欄位；讀檔頁也可選自動續讀檔 |
 | 工具列 | 對話框內的目錄、回顧、自動與「續」；略讀（快轉到下一個選項）、存讀檔、吐槽素材與人物檔案收在目錄裡 |
-| 調查 | 線索是背景圖上的東西，不是按鈕：左右拖曳背景找，點那樣東西就取得線索，找到的會留下淡框與勾。對話框可按「收起 ▼」縮成底部一條，「展開 ▲」叫回來；全部找到時自動展開，按「繼續」離開。調查時角色都不在畫面上 |
+| 調查 | 線索是背景圖上的東西，不是按鈕：左右拖曳背景找，點那樣東西就取得線索，找到的會留下淡框與勾；有查看後台詞的會先演完再回來。對話框可按「收起 ▼」縮成底部一條，「展開 ▲」叫回來；全部找到時自動展開，按「繼續」離開。調查時角色都不在畫面上 |
+| 對話／移動 | 調查時對話框裡的兩排話題：「對話」點了演出那段對話，聊過的不再出現；「移動」換到另一個地點（例如廚房），那裡有自己的背景與熱區，查完會自動回到原地點，也可以按「移動」回去。各地點已查過的熱區保持打勾 |
 | 裝傻發言 | ‹ › 切換句子；有補充時按「聽下去」；按「吐槽！」才進入 8 秒選詞 |
 | 吐槽選詞 | 選吐槽詞；素材會解鎖完美選項，逾時算冷場；選單、紀錄及存檔欄位會暫停倒數 |
 | Phase 4 證言回合 | 每句可能藏一個槽點，全部接住才結束。句數旁 ● 已接住、○ 還有槽點、· 沒有槽點；在沒有槽點的句子按「吐槽！」是揮空（冷場）；同一處失敗 3 次，神樂會提示 |
 | 消音條 | 台詞裡出現發亮的黑色消音條時，點它就是吐槽：閱讀時不計時，選詞時也能點 |
+| 伊莉莎白的牌子 | 牌子上出現字的那句（例如「犯人是神樂」），伊莉莎白會站到前面，直接點牌子就是吐槽：閱讀時不計時；按「吐槽！」後牌子發亮，8 秒內點也算。其他句子的牌子是空白或劇情寫的字，點了沒反應 |
 | 連擊回合 | 每句講完直接進選詞，每接住一句時限縮短（8→6→5→4 秒）；吐槽力滿了會出現「超必殺！」，一次接住所有選詞句 |
 | QTE | 白圈縮到黃圈時點畫面任一處；太早、太晚或沒點都算冷場 |
 | Game Over | 眼鏡歸零時出現碎眼鏡畫面，可從該回合開頭重試 |
@@ -71,8 +73,8 @@ bash tools/serve_web.sh
 | `data/debt_story.json` | 已核准的討債試玩文本 |
 | `data/phase2_story.json` | 草莓牛奶短篇技術測試，非正式第一章 |
 | `data/phase3_story.json` | 調查、銀時發言與四種吐槽結果的技術短循環，非正式第一章 |
-| `data/phase4_story.json` | 四線索調查與素材限定吐槽的技術試片（`story_src/phase4.*` 建置） |
-| `data/phase4_rounds_story.json` | Phase 4 回合試片：證言與連擊兩回合（`story_src/phase4_rounds.*` 建置；v2 回合的寫法範例） |
+| `data/phase4_story.json` | 四線索調查與素材限定吐槽的技術試片（`story_src/phase4.*` 建置；調查的對話話題、移動地點、查看後台詞與畫面外台詞的寫法範例） |
+| `data/phase4_rounds_story.json` | Phase 4 回合試片：銀時證言、神樂證言（伊莉莎白的牌子、條件式放棄吐槽）與連擊三回合（`story_src/phase4_rounds.*` 建置；v2 回合的寫法範例） |
 | `data/asset_catalog.json` | 背景、人物、吐槽素材及可替換圖片的統一設定 |
 | `data/stories.json` | 章節選擇裡的故事：依序的本篇（`kind: "chapter"`）與試玩片段（`"sample"`），各自的劇本與存檔路徑。新增故事加一行，不用改程式 |
 | `IMPLEMENTATION.md` | StoryRunner、catalog 與外殼的介面契約 |
@@ -98,6 +100,7 @@ XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://t
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_phase4_rounds_story.gd
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_phase4_rounds_ui.gd
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_ui_styles.gd
+XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_investigation.gd
 
 # 先匯出、啟動伺服器；需要已安裝 Playwright 及 Chromium 的 Node 環境。
 node tools/browser_check.mjs --playwright /path/to/node_modules/@playwright/test
@@ -106,10 +109,11 @@ node tools/browser_check.mjs --phase2 --playwright /path/to/node_modules/@playwr
 node tools/browser_check.mjs --slots --playwright /path/to/node_modules/@playwright/test
 node tools/browser_check.mjs --phase3 --playwright /path/to/node_modules/@playwright/test
 node tools/browser_check.mjs --rounds --playwright /path/to/node_modules/@playwright/test
+node tools/browser_check.mjs --investigate --playwright /path/to/node_modules/@playwright/test
 node tools/check_ui_parity.mjs --playwright /path/to/node_modules/@playwright/test
 ```
 
-`--url` 可指定試玩位址；`--chromium /path/to/chrome-headless-shell` 可指定 Chromium。瀏覽器檢查以真實 canvas 滑鼠與觸控操作（長按、上滑用 CDP 觸控事件）；預設走討債兩條路線，`--phase2` 走劇本測試兩條路線，`--slots` 驗證觸控存讀檔與 18 格分頁，`--phase3` 走調查與吐槽並驗證限時選詞讀檔，`--rounds` 在回合試片用觸控點消音條、超必殺與 QTE，並在 320×568 檢查回合操作列；`check_ui_parity.mjs` 在 390×844 與 320×568 下對照三款風格的 HTML 樣稿，檢查每個可點元件至少 48 CSS px、都在畫面內且互不重疊。網址帶 `?qa=1` 時才啟用唯讀的 `window.__debtQA`；一般試玩網址不啟用。
+`--url` 可指定試玩位址；`--chromium /path/to/chrome-headless-shell` 可指定 Chromium。瀏覽器檢查以真實 canvas 滑鼠與觸控操作（長按、上滑用 CDP 觸控事件）；預設走討債兩條路線，`--phase2` 走劇本測試兩條路線，`--slots` 驗證觸控存讀檔與 18 格分頁，`--phase3` 走調查與吐槽並驗證限時選詞讀檔，`--rounds` 在回合試片用觸控點消音條、伊莉莎白的牌子（閱讀時與 320×568 的選詞面板旁，檢查牌子至少 48 CSS px 且沒被選項面板蓋住）、超必殺與 QTE，並在 320×568 檢查回合操作列；`--investigate` 在四線索試片用觸控點對話與移動話題（390×844 與 320×568）、到廚房查冰箱（畫面外台詞）再回到客廳；`check_ui_parity.mjs` 在 390×844 與 320×568 下對照三款風格的 HTML 樣稿，檢查每個可點元件至少 48 CSS px、都在畫面內且互不重疊。網址帶 `?qa=1` 時才啟用唯讀的 `window.__debtQA`；一般試玩網址不啟用。
 
 ## Godot MCP
 
@@ -157,6 +161,8 @@ node tools/check_ui_parity.mjs --playwright /path/to/node_modules/@playwright/te
 | 選項面板 | ✅ 已轉換 | `scenes/ui/choice_sheet_cinema.tscn`、`choice_sheet_ledger.tscn`、`choice_sheet_manga.tscn`（腳本 `scripts/choice_sheet.gd`），每列是 `choice_item_<風格>.tscn` |
 | 眼鏡／吐槽之力 HUD、線索欄 | ✅ 已轉換 | `scenes/ui/round_hud.tscn`（三款共用，`set_style` 換色），眼鏡 `glasses_icon.tscn`、線索 `clue_chip.tscn` |
 | 調查點、收起後的調查列 | ✅ 已轉換 | `scenes/ui/hotspot.tscn`（依劇本放在背景圖上）、`scenes/ui/investigate_bar.tscn`；「收起」鈕在三款對話框 scene 的 `InvestigationRow` |
+| 調查的對話／移動話題 | ✅ 已轉換 | 三款對話框 scene 的 `InvestigationTopics`（`TalkRow`／`MoveRow`，標籤與間距在 scene 裡），每個話題是 `scenes/ui/investigate_topic.tscn`（大小與字級在這裡，顏色跟著該款的「聽下去」） |
+| 伊莉莎白的牌子 | ✅ 已轉換 | `scenes/characters/elisabeth.tscn` 的 `Placard`（對齊圖上白牌子的框，可拖曳、縮放、旋轉）、`Text`（字級與顏色）、`Glow`（選詞時的光框樣式）；牌子上的字由劇本決定 |
 | 結尾按鈕 | 待轉換（做成小 item scene） | |
 
 **舞台**：打開 `scenes/stage.tscn`。

@@ -2,10 +2,11 @@ extends "res://addons/proto_kit/test_kit.gd"
 ## Round v2 (scripts/tsukkomi_round.gd through StoryRunner): testimony with several slots,
 ## whiffs, listening for items, hints after three fails, require_caught, the censor bar,
 ## hidden exits, Game Over retry, combo timing and breaks, the QTE, the ultimate tsukkomi,
-## saves, and data validation.
+## saves, conditional outcomes (`when`), and data validation (placard and `when` included).
 
 const StoryRunner = preload("res://scripts/story_runner.gd")
 const TsukkomiRound = preload("res://scripts/tsukkomi_round.gd")
+const StoryBuilder = preload("res://tools/story_build/story_builder.gd")
 const FIXTURE: String = "res://tests/fixtures/round_v2_story.json"
 const BROKEN: String = "user://round_v2_broken.json"
 
@@ -18,6 +19,7 @@ func _init() -> void:
 	_test_combo_round()
 	_test_combo_bonus_and_super()
 	_test_qte_judgement()
+	_test_when_outcomes()
 	_test_validation_errors()
 	_finish("ROUND V2 TESTS")
 
@@ -185,6 +187,29 @@ func _test_qte_judgement() -> void:
 	_expect(TsukkomiRound.judge_qte(qte, false, 0.0) == "late", "no tap is late")
 
 
+## An option's `when` cases: the first whose conditions all hold (caught lines, items, flags)
+## replaces result and goto; set_flags comes from the case or else the option.
+func _test_when_outcomes() -> void:
+	var option: Dictionary = {"id": "d", "label": "……", "result": "fail", "goto": "cold", "set_flags": {"gave_up": true},
+		"when": [{"require_caught": ["l1", "l2"], "result": "hidden", "goto": "secret"},
+			{"require": "milk_bottle", "flags": {"asked": "kagura"}, "result": "weak", "goto": "half", "set_flags": {"gave_up": false}}]}
+	var state: Dictionary = TsukkomiRound.new_state("r")
+	var outcome: Dictionary = TsukkomiRound.option_outcome(option, state, [], {"asked": "kagura"})
+	_expect(outcome == {"result": "fail", "goto": "cold", "set_flags": {"gave_up": true}}, "no case holds: the option's own outcome")
+	outcome = TsukkomiRound.option_outcome(option, state, ["milk_bottle"], {"asked": "gintoki"})
+	_expect(outcome["result"] == "fail", "every condition of a case must hold (the flag differs)")
+	outcome = TsukkomiRound.option_outcome(option, state, ["milk_bottle"], {"asked": "kagura"})
+	_expect(outcome == {"result": "weak", "goto": "half", "set_flags": {"gave_up": false}}, "item and flag hold: that case, with its own set_flags")
+	state["caught"] = {"l1": "weak", "l2": "perfect"}
+	outcome = TsukkomiRound.option_outcome(option, state, ["milk_bottle"], {"asked": "kagura"})
+	_expect(outcome == {"result": "hidden", "goto": "secret", "set_flags": {"gave_up": true}},
+		"the first case that holds wins; without set_flags it keeps the option's")
+	var story: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(FIXTURE))
+	var version: String = StoryBuilder.fingerprint(story)
+	story["nodes"]["r1"]["steps"][0]["lines"][1]["slot"]["options"][2]["when"] = [{"require_caught": ["l1"], "result": "hidden", "goto": "hidden_end"}]
+	_expect(StoryBuilder.fingerprint(story) != version, "adding a when case changes the story version")
+
+
 func _test_validation_errors() -> void:
 	var base: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(FIXTURE))
 	var cases: Array = [
@@ -195,6 +220,28 @@ func _test_validation_errors() -> void:
 		[func(s: Dictionary) -> void: s["nodes"]["r1"]["steps"][0]["clear"] = "nowhere", "clear target is invalid"],
 		[func(s: Dictionary) -> void: s["nodes"]["r1"]["steps"][0]["lines"][2]["slot"]["options"][1]["require_caught"] = ["l9"], "require_caught line 'l9'"],
 		[func(s: Dictionary) -> void: s["nodes"]["r1"]["steps"][0]["mode"] = "rapid", "mode must be testimony or combo"],
+		[func(s: Dictionary) -> void: s["nodes"]["r1"]["steps"][0]["lines"][1]["slot"]["placard"] = {"text": "犯人是神樂"},
+			"node 'r1' step 0 boke line 'l2' placard needs text and a goto"],
+		[func(s: Dictionary) -> void: s["nodes"]["r1"]["steps"][0]["lines"][2]["slot"]["placard"] = {"text": "x", "goto": "l3_b"},
+			"keep one fourth-wall target"],
+		[func(s: Dictionary) -> void: s["nodes"]["r2"]["steps"][0]["lines"][2]["slot"]["placard"] = {"text": "x", "goto": "c3_p"},
+			"placard needs options beside it"],
+		[func(s: Dictionary) -> void: s["nodes"]["r1"]["steps"][0]["lines"][1]["slot"]["placard"] = {"text": "x", "goto": "l2_a", "result": "great"},
+			"placard result is invalid"],
+		[func(s: Dictionary) -> void: s["nodes"]["r1"]["steps"][0]["lines"][1]["slot"]["options"][2]["when"] = [{"result": "hidden", "goto": "hidden_end"}],
+			"node 'r1' step 0 boke line 'l2' option 'c' when[0] needs a condition"],
+		[func(s: Dictionary) -> void: s["nodes"]["r1"]["steps"][0]["lines"][1]["slot"]["options"][2]["when"] = [{"require_caught": ["l9"], "result": "hidden", "goto": "hidden_end"}],
+			"option 'c' require_caught line 'l9'"],
+		[func(s: Dictionary) -> void: s["nodes"]["r1"]["steps"][0]["lines"][1]["slot"]["options"][2]["when"] = [{"require_caught": ["l1"], "result": "great", "goto": "hidden_end"}],
+			"when[0] result is invalid"],
+		[func(s: Dictionary) -> void: s["nodes"]["r1"]["steps"][0]["lines"][1]["slot"]["options"][2]["when"] = [{"require_caught": ["l1"], "result": "hidden", "goto": "nowhere"}],
+			"when[0] goto target is invalid"],
+		[func(s: Dictionary) -> void: s["nodes"]["r1"]["steps"][0]["lines"][1]["slot"]["options"][2]["when"] = [{"require_caught": ["l1"], "result": "hidden", "goto": "hidden_end", "results": 1}],
+			"when[0] has unknown field 'results'"],
+		[func(s: Dictionary) -> void: s["nodes"]["r1"]["steps"][0]["lines"][1]["slot"]["options"][2]["when"] = [{"flags": {"nope": true}, "result": "hidden", "goto": "hidden_end"}],
+			"node 'r1' step 0 when flags 'nope' is not a story flag"],
+		[func(s: Dictionary) -> void: s["nodes"]["r1"]["steps"][0]["lines"][1]["slot"]["options"][2]["when"] = [{"flags": {"l2_caught": "yes"}, "result": "hidden", "goto": "hidden_end"}],
+			"when flags 'l2_caught' is not a story flag of that type"],
 	]
 	for case: Array in cases:
 		var story: Dictionary = base.duplicate(true)

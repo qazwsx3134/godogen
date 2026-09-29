@@ -22,20 +22,22 @@
   "characters": {
     "shinpachi": {
       "name": "新八",
+      "profile": "萬事屋的員工，負責吐槽與家務。薪水的存在尚待確認。",
       "color": "#4f7fcf",
       "slot": "left",
       "path": "res://assets/image/shin-pa-chi.png",
       "expressions": {
-        "shout": "res://assets/image/expressions/shinpachi_shout.png",
         "angry": "res://assets/image/expressions/shinpachi_angry.png",
-        "panic": "res://assets/image/expressions/shinpachi_panic.png",
+        "broken": "res://assets/image/expressions/shinpachi_panic.png",
         "nervous": "res://assets/image/expressions/shinpachi_nervous.png",
+        "panic": "res://assets/image/expressions/shinpachi_panic.png",
+        "shout": "res://assets/image/expressions/shinpachi_shout.png",
         "thinking": "res://assets/image/expressions/shinpachi_thinking.png"
       }
     },
     "gintoki": {
       "name": "銀時",
-      "profile": "萬事屋老闆，嗜甜如命。自稱冰箱裡的草莓牛奶跟他毫無關係。（技術試片用簡介）",
+      "profile": "萬事屋老闆。嗜甜如命，擅長把藉口講得像道理。",
       "color": "#aab6c8",
       "slot": "center",
       "path": "res://assets/image/gin-san.png",
@@ -52,18 +54,24 @@
     },
     "otose": {
       "name": "登勢",
+      "profile": "樓下酒館的老闆娘，萬事屋的房東。今天兼任家庭會議主持人。",
       "color": "#9a6bb0",
       "slot": "right",
       "path": "res://assets/image/Otose-san.png",
       "expressions": {
-        "annoyed": "res://assets/image/expressions/otose_annoyed.png",
         "angry": "res://assets/image/expressions/otose_angry.png",
-        "serious": "res://assets/image/expressions/otose_serious.png"
+        "annoyed": "res://assets/image/expressions/otose_annoyed.png",
+        "serious": "res://assets/image/expressions/otose_serious.png",
+        "sit_serious": "res://assets/image/expressions/otose_sit_serious.png",
+        "sit_talking": "res://assets/image/expressions/otose_sit_talking.png",
+        "smile": "res://assets/image/expressions/otose_smile.png",
+        "smug": "res://assets/image/expressions/otose_smug.png",
+        "thinking": "res://assets/image/expressions/otose_thinking.png"
       }
     },
     "kagura": {
       "name": "神樂",
-      "profile": "萬事屋的大胃王，醋昆布不離身。說話尾音帶「阿魯」。（技術試片用簡介）",
+      "profile": "萬事屋的大胃王，醋昆布不離身，說話尾音帶「阿魯」。嘴很毒。",
       "color": "#F08CA8",
       "slot": "right",
       "path": "res://assets/image/kagura-chan.png",
@@ -80,13 +88,19 @@
     },
     "sadaharu": {
       "name": "定春",
+      "profile": "萬事屋的白色巨犬。站起來比人還高，腳掌比人頭還大。只會「汪」。",
       "color": "#F4F0E6",
       "slot": "center",
-      "path": "res://assets/image/sadaharu.png"
+      "path": "res://assets/image/sadaharu.png",
+      "expressions": {
+        "cry": "res://assets/image/expressions/sadaharu_cry.png",
+        "smile": "res://assets/image/expressions/sadaharu_smile.png",
+        "smug": "res://assets/image/expressions/sadaharu_smug.png"
+      }
     },
     "elisabeth": {
       "name": "伊莉莎白",
-      "profile": "桂的搭檔。從不開口，想說的話都寫在手上的牌子上。（技術試片用簡介）",
+      "profile": "桂的搭檔。從不開口，想說的話都寫在牌子上。",
       "color": "#F4F4F0",
       "slot": "right",
       "path": "res://assets/image/elisabeth.png"
@@ -112,6 +126,10 @@
     "gin_sleep_testimony": {
       "name": "銀時的證詞：半夜兩點",
       "description": "銀時自己說的：半夜兩點起來開冰箱的時候，人都還沒醒。"
+    },
+    "salary_envelope": {
+      "name": "新八的九月份薪水袋",
+      "description": "銀時準備的薪水信封。裡面只剩三十圓，和一張草莓牛奶的收據。"
     },
     "debt_commission_letter": {
       "name": "討債委託書",

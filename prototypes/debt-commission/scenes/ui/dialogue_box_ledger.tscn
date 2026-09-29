@@ -484,6 +484,58 @@ layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 22
 
+[node name="InvestigationTopics" type="VBoxContainer" parent="Panel/Padding/Column/Actions" unique_id=1609671979]
+unique_name_in_owner = true
+editor_description = "調查時的「對話」與「移動」兩排話題；每個話題是 scenes/ui/investigate_topic.tscn，樣式照這款的「聽下去」鈕。沒有話題的那排會隱藏。"
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 16
+
+[node name="TalkRow" type="HBoxContainer" parent="Panel/Padding/Column/Actions/InvestigationTopics" unique_id=1580576675]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 20
+
+[node name="TalkTag" type="Label" parent="Panel/Padding/Column/Actions/InvestigationTopics/TalkRow" unique_id=1006667269]
+custom_minimum_size = Vector2(96, 132.92308)
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+theme_override_colors/font_color = Color(0.4627451, 0.3882353, 0.29803923, 1)
+text = "對話"
+vertical_alignment = 1
+
+[node name="TalkList" type="HFlowContainer" parent="Panel/Padding/Column/Actions/InvestigationTopics/TalkRow" unique_id=119482432]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 16
+
+[node name="MoveRow" type="HBoxContainer" parent="Panel/Padding/Column/Actions/InvestigationTopics" unique_id=1294002832]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 20
+
+[node name="MoveTag" type="Label" parent="Panel/Padding/Column/Actions/InvestigationTopics/MoveRow" unique_id=1906576925]
+custom_minimum_size = Vector2(96, 132.92308)
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+theme_override_colors/font_color = Color(0.4627451, 0.3882353, 0.29803923, 1)
+text = "移動"
+vertical_alignment = 1
+
+[node name="MoveList" type="HFlowContainer" parent="Panel/Padding/Column/Actions/InvestigationTopics/MoveRow" unique_id=1203481780]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 16
+
 [node name="InvestigationRow" type="HBoxContainer" parent="Panel/Padding/Column/Actions" unique_id=1332724582]
 unique_name_in_owner = true
 visible = false

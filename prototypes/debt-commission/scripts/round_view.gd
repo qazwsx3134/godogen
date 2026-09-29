@@ -49,6 +49,11 @@ static func censor(command: Dictionary) -> bool:
 	return is_v2(command) and not caught(command) and not (line(command).get("censor", {}) as Dictionary).is_empty()
 
 
+## This line has an uncaught placard slot (the placard itself is drawn and hit-tested by main.gd).
+static func placard(command: Dictionary) -> bool:
+	return is_v2(command) and not caught(command) and not (line(command).get("placard", {}) as Dictionary).is_empty()
+
+
 static func qte(command: Dictionary) -> Dictionary:
 	return line(command).get("qte", {}) as Dictionary
 
@@ -70,7 +75,7 @@ static func action(command: Dictionary) -> String:
 		return "options"
 	if caught(command):
 		return ""
-	if not options(command).is_empty() or censor(command):
+	if not options(command).is_empty() or censor(command) or placard(command):
 		return "options"
 	if not qte(command).is_empty():
 		return "qte"

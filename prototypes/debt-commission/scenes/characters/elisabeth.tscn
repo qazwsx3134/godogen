@@ -2,6 +2,25 @@
 
 [ext_resource type="Script" path="res://scripts/placeholder_sprite.gd" id="1_v3mhn"]
 [ext_resource type="Texture2D" path="res://assets/image/elisabeth.png" id="2_dm8tw"]
+[ext_resource type="FontFile" path="res://assets/fonts/story-cjk.ttc" id="3_dm8tw"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1j7sv"]
+draw_center = false
+border_width_left = 12
+border_width_top = 12
+border_width_right = 12
+border_width_bottom = 12
+border_color = Color(1, 0.82, 0.25, 0.95)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_left = 12.0
+expand_margin_top = 12.0
+expand_margin_right = 12.0
+expand_margin_bottom = 12.0
+shadow_color = Color(1, 0.8, 0.2, 0.45)
+shadow_size = 18
 
 [node name="elisabeth" type="Control" unique_id=1890413239]
 editor_description = "伊莉莎白 的站姿框。框的底邊是腳底線，站位（scenes/stage.tscn）會把整個框縮放到站位的高度。拖曳、縮放 Art 決定伊莉莎白在任何站位的大小與位置；框本身不用動。圖以 asset_catalog.json 為準，這裡的圖是預覽。"
@@ -34,3 +53,42 @@ mouse_filter = 2
 texture = ExtResource("2_dm8tw")
 expand_mode = 1
 stretch_mode = 5
+
+[node name="Placard" type="Control" parent="." unique_id=548118014]
+unique_name_in_owner = true
+editor_description = "伊莉莎白手上的白牌子。遊戲把字疊在這裡（劇本的 placard，或回合句子的 placard 槽點）；舉牌槽點的句子上，點這塊（命中區至少 48 CSS px）就是吐槽。拖曳、縮放、旋轉這個框對齊圖上的牌子；Text 的字級與顏色在 Text 上調。"
+anchors_preset = 0
+offset_left = 680.9
+offset_top = 528.3
+offset_right = 1000.9
+offset_bottom = 718.3
+rotation = 0.49392816
+pivot_offset = Vector2(160, 95)
+mouse_filter = 2
+
+[node name="Glow" type="Panel" parent="Placard" unique_id=863712796]
+editor_description = "選詞時牌子能點的提示光框（遊戲裡會一明一暗）。"
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1j7sv")
+
+[node name="Text" type="Label" parent="Placard" unique_id=595297732]
+unique_name_in_owner = true
+editor_description = "牌子上的字；這裡的字只是編輯器預覽，遊戲一開始是空白。"
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 12.0
+offset_right = -16.0
+offset_bottom = -12.0
+theme_override_fonts/font = ExtResource("3_dm8tw")
+theme_override_font_sizes/font_size = 56
+theme_override_colors/font_color = Color(0.1, 0.1, 0.12, 1)
+text = "犯人是神樂"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 1

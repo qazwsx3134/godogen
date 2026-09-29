@@ -12,29 +12,38 @@
 - `current() -> Dictionary`：目前可呈現指令，附 `node_id`、`node_title`、`step_index`；不消耗指令。
 - `advance() -> Dictionary`：完成當前指令後前進；choice／end 不可由 advance 跳過。
 - `choose(option_id: String) -> bool`：只允許當前可見 choice 的有效選項，寫入 flags 並跳轉；缺素材的選項不出現在 `current()` 中，也不能用 ID 強選。
-- `snapshot() -> Dictionary`、`restore(snapshot: Dictionary) -> bool`：保存故事 ID／版本、穩定節點／步序、flags、items、調查與吐槽狀態；無效或異版存檔拒絕且不破壞現況。
-- `inspect_hotspot(id: String) -> bool`：調查目前熱區，標記已查並取得素材；全部查完才可 `advance()`。
+- `snapshot() -> Dictionary`、`restore(snapshot: Dictionary) -> bool`：保存故事 ID／版本、穩定節點／步序、flags、items、調查與吐槽狀態、牌子上的字；無效或異版存檔拒絕且不破壞現況。
+- `inspect_hotspot(id: String) -> bool`：調查目前地點的熱區，標記已查（每個地點分開記）並取得素材（同一素材只給一次）；第一次查時若熱區有 `goto`，跳去演出查看後台詞，演完回到調查。已查過的熱區再查不重播。所有必查熱區（沒有 `optional: true` 的，含其他地點）查完才可 `advance()`；離開調查時回到主地點。
+- `talk_topic(id: String) -> bool`：演出目前地點的一個對話話題（每個話題只播一次，`require` 的素材到手才出現）；話題節點演完回到調查。
+- `move_to(place_id: String) -> bool`：移到調查的另一個地點（`home` 是調查本身）。側地點的熱區全部查完、反應演完後，自動回到主地點。
 - `set_boke_line(index: int) -> bool`、`listen_boke_line() -> bool`：切換發言與讀取補充台詞。
-- `resolve_boke(option_id: String) -> Dictionary`、`timeout_boke() -> Dictionary`：結算四種結果、眼鏡與吐槽力，回傳結果及目標節點；`retry_checkpoint() -> bool` 從 Game Over 回到回合前。
+- `resolve_boke(option_id: String) -> Dictionary`、`timeout_boke() -> Dictionary`：結算四種結果、眼鏡與吐槽力，回傳結果及目標節點；`retry_checkpoint() -> bool` 從 Game Over 回到回合前（素材、已查熱區、聊過的話題、牌子上的字都回到檢查點的狀態）。
+- `placard_view() -> Dictionary`：牌子現在寫什麼：`{text, tappable, slot}`。進行中的回合停在有 `placard` 槽點、還沒接住的句子時，顯示槽點的字（只有回合畫面本身能點，反應場景裡不能）；其他時候是劇情最後一次 `placard` 指令寫的字（"" 為空白）。
 - `case_file() -> Dictionary`：`{materials: [{id,name,description}], profiles: [{id,name,profile}]}`，依取得順序列出素材與已解鎖的人物檔案，文字取自素材設定；給素材／人物檔案畫面用。
-- 公開 `flags: Dictionary`、`items: Array[String]`、`profiles: Array[String]`、`gameplay: Dictionary`、`error_message: String`、`node_id: String`、`step_index: int`。
+- 公開 `flags: Dictionary`、`items: Array[String]`、`profiles: Array[String]`、`gameplay: Dictionary`、`checked_hotspots: Dictionary`（主地點以調查 id 為鍵，其他地點是 `<調查 id>/<地點 id>`）、`investigations: Dictionary`（`{調查 id: {place, talked}}`）、`placard: String`、`error_message: String`、`node_id: String`、`step_index: int`。
 
 故事根資料：`id`、`version`、`title`、`entry`、`initial_flags`、`nodes`。每個 node 有 `title`、`steps`、選擇性的 `next`。
 
 V1 可呈現 op：
 
 - `bg`: `id` 對應 catalog 的 backgrounds。
-- `char`: `id` 對應 characters，可選 `visible`、`expression`、`position`（left/center/right）；省略時依角色 catalog 預設。
-- `say`: `speaker` 對應 characters 或 narrator、`text`、可選 `thought`／`expression`。
+- `char`: `id` 對應 characters，可選 `visible`、`expression`、`position`（left/center/right）、`enter`；省略時依角色 catalog 預設。`enter: true` 讓還沒開口的角色直接上場（例如只舉牌、不說話的伊莉莎白），不能和 `visible: false` 同時用。
+- `say`: `speaker` 對應 characters 或 narrator、`text`、可選 `thought`／`expression`／`offscreen`。`offscreen: true` 是畫面外的聲音：名牌照常，說話者不上場，場上其他人的明暗不變；旁白不能用。
 - `choice`: `prompt`、`options: [{id,label,next,set_flags?,require?}]`；`require` 是單一素材 ID，至少保留一個無條件選項。
 - `end`: `text`。
 - `result`: 章節結算，章節的最後一步。`title`（例如「～ 第一章 完 ～」）、`lines: {S|A|B|C: {speaker, text}}`（依評價顯示的一句）、可選 `hidden_total`（本章隱藏裝傻總數）。`chapter_result()` 回傳 `title`、`grade`、`line`、`caught`、`tries`、`perfect`、`max_combo`、`fails`、`hidden`、`hidden_total`、`glasses`、`max_glasses`、`game_overs`。評價只看剩下的眼鏡：5 副 S、4 副 A、3–2 副 B、1 副 C，每次 Game Over 降一級、最低 C（`grade_for`）。`stats` 記在 runner、不隨檢查點重試回溯，v1 與 v2 回合都會累計；眼鏡在回合之間不回滿。
-- `investigate`: `id`、`prompt`、`hotspots: [{id,label,pos:[x,y],size?:[w,h],item}]`；`pos` 是調查點中心、`size` 是大小（預設 0.12×0.12），都是背景圖寬高的比例，所以左右拖曳背景時調查點跟著圖走。
+- `investigate`: `id`、`prompt`、`hotspots: [{id,label,pos:[x,y],size?:[w,h],item?,goto?,optional?}]`；`pos` 是調查點中心、`size` 是大小（預設 0.12×0.12），都是背景圖寬高的比例，所以左右拖曳背景時調查點跟著圖走。熱區至少有 `item`（取得素材）或 `goto`（查看後台詞的節點）其中一個；`optional: true` 的熱區不擋「繼續」。可選欄位：
+  - `bg`（主地點的背景）、`label`（主地點名稱，給「移動」鈕用，預設是背景的 `label`）；
+  - `talk: [{id,label,goto,require?}]`：主地點的對話話題；
+  - `places: [{id,bg,label?,prompt?,hotspots,talk?}]`：可以移動過去的其他地點，各有背景、熱區與話題。有 `places` 時主地點要寫 `bg`；地點 id 不能是 `home`、不能含 `/`。
+  - 熱區、話題、地點 id 在整個調查裡不重複。熱區 `goto` 與話題的節點最後用 `goto`（`.dialogue` 的 `=> 節點`）跳回放調查的那個節點，所以有反應（`talk`、`places` 或熱區 `goto`）的調查必須是節點的第一步，否則載入時報錯。
 - `boke_round`: `id`、`speaker`、`lines: [{id,text,listen?}]`、`timer_seconds`、`tsukkomi.options: [{id,label,result,require?,goto,set_flags?}]`、`tsukkomi.timeout`、`game_over`。閱讀發言不限時，玩家進入吐槽選詞後才開始倒數；`require` 控制素材限定選項。
-- `boke_round` 加上 `mode`（`testimony`／`combo`）就是 v2 回合：每句各自的 `slot`（`options`、第四面牆 `censor`、`qte`）、`listen`／`whiff`／`hint` 反應節點、`clear`、`rules`（超必殺、連擊時限與獎勵、提示門檻），單句 `speaker` 可寫合聲（`gintoki+kagura`）；欄位與規則寫在 `scripts/tsukkomi_round.gd` 開頭，完整範例是 `story_src/phase4_rounds.blocks.json`。`current()` 會附上 `current_line`（`speaker`、`caught`、`can_listen`、`can_whiff`、`listened`、`options`、`censor`、`qte`）、`caught_line_ids`、`combo`、`timer_seconds`、`super_available`。玩家動作：`resolve_boke`、`whiff_boke`、`resolve_censor`、`resolve_qte(tapped, offset)`、`use_super`、`set_boke_line`、`listen_boke_line`、`timeout_boke`；每個動作跳到反應節點，反應演完回到回合。
+- `boke_round` 加上 `mode`（`testimony`／`combo`）就是 v2 回合：每句各自的 `slot`（`options`、第四面牆 `censor` 或 `placard`、`qte`）、`listen`／`whiff`／`hint` 反應節點、`clear`、`rules`（超必殺、連擊時限與獎勵、提示門檻），單句 `speaker` 可寫合聲（`gintoki+kagura`）；欄位與規則寫在 `scripts/tsukkomi_round.gd` 開頭，完整範例是 `story_src/phase4_rounds.blocks.json`。`current()` 會附上 `current_line`（`speaker`、`caught`、`can_listen`、`can_whiff`、`listened`、`options`、`censor`、`placard`、`qte`）、`caught_line_ids`、`combo`、`timer_seconds`、`super_available`。玩家動作：`resolve_boke`、`whiff_boke`、`resolve_censor`、`resolve_placard`、`resolve_qte(tapped, offset)`、`use_super`、`set_boke_line`、`listen_boke_line`、`timeout_boke`；每個動作跳到反應節點，反應演完回到回合。
+  - `placard: {text, goto, result?}`：舉牌槽點。這句是目前句子、還沒接住時，拿牌子的角色（角色 scene 裡有 `Placard` 節點的，目前是伊莉莎白）的牌子顯示 `text`；閱讀時與選詞時點牌子都算這個槽點的結果（預設 perfect）。槽點旁仍要有 `options`（選詞與逾時照常），不能和 `censor` 或 `qte` 放在同一句。
+  - 選項的 `when: [{require_caught?, require?, flags?, result, goto, set_flags?}]`：條件結果。選項照常顯示；選它時，第一個條件全部成立的 case 取代選項的 `result`／`goto`（`set_flags` 沒寫就沿用選項的）。條件：`require_caught`（本回合已接住的句子 id）、`require`（持有的素材）、`flags`（`{旗標: 值}`，旗標要是故事裡有的、型別相同）；每個 case 至少一個條件。例：放棄吐槽平常 `fail`，L1、L2 都接住時 `hidden`。
 - 演出：`shake`（`strength` small／big、`duration`）、`flash`（`color`、`duration`）、`cutin`（`text`、`speaker`）、`freeze`（`duration`）、`bgm`（`id`，空字串停止）、`se`（`id`）。`id` 對應 catalog 的 `music`／`sounds`，沒有 `path` 的先播合成佔位音。
 
-內部 op：`flag`（key/value）、`item`（id，重複取得不重複存）、`profile`（角色 id，解鎖人物檔案，重複不重複存；該角色在素材設定要有 `profile` 文字）、`condition`（flag/equals/then/else）、`goto`（target）。`bg`、`char`、`say`、`choice`、`flag`、`goto`、`item` 是新章節的主要指令；所有角色、背景、素材 ID 在載入時驗證，錯誤指出節點與步序。
+內部 op：`flag`（key/value）、`item`（id，重複取得不重複存）、`profile`（角色 id，解鎖人物檔案，重複不重複存；該角色在素材設定要有 `profile` 文字）、`placard`（`text`：牌子上的字，"" 為空白；跟著存檔與回合檢查點）、`condition`（flag/equals/then/else）、`goto`（target）。`bg`、`char`、`say`、`choice`、`flag`、`goto`、`item` 是新章節的主要指令；所有角色、背景、素材 ID 在載入時驗證，錯誤指出節點與步序。
 
 討債閱讀基線仍接受下列舊指令，以保留已核准文本與測試：
 
@@ -46,7 +55,7 @@ V1 可呈現 op：
 - `wait`: `duration`；`sound`: `id`（paper/knock/step/stamp）。
 - `set_flag`（key/value）由 Runner 自行消化，與 V1 的 `flag` 同義。
 
-Runner 對內部跳轉有循環保護。snapshot 另存 `profiles`；沒有這個欄位的舊存檔視為尚未解鎖任何人物。Phase 3 snapshot 額外保存 `gameplay`、`checked_hotspots`、`boke`、`checkpoint`、`game_over_active`；缺這些欄位的舊閱讀存檔仍可還原。新增指令須同時定義資料驗證、還原與 UI 呈現。
+Runner 對內部跳轉有循環保護。snapshot 另存 `profiles`；沒有這個欄位的舊存檔視為尚未解鎖任何人物。Phase 3 snapshot 額外保存 `gameplay`、`checked_hotspots`、`boke`、`checkpoint`、`game_over_active`；缺這些欄位的舊閱讀存檔仍可還原。`investigations` 與 `placard`（檢查點裡也有）是選填：沒有的舊存檔視為在主地點、沒聊過話題、牌子空白。新增指令須同時定義資料驗證、還原與 UI 呈現。
 
 ## 素材設定
 
@@ -64,7 +73,8 @@ godot --headless --path . --script res://tools/story_build/build_story.gd -- sto
 ```
 
 - **兩種原始檔，產出相同**：`.dialogue`（Dialogue Manager 的文字語法，`tools/story_build/dm_source.gd`）或 `.ds`（Parley 的節點流程圖，`tools/story_build/parley_source.gd`）。兩者的指令文法相同（Parley 的 ACTION 節點 description 就是 `.dialogue` 去掉 `do ` 的那一行），`story_src/phase4.dialogue` 與 `story_src/phase4.ds` 建出的 JSON 除了 `generated_from` 完全一致。語法對照寫在兩個 adapter 檔頭。
-- **`<名稱>.blocks.json`** 放故事資訊（`id`、`title`、`note`、`initial_flags`）、節點標題，以及調查與裝傻回合的參數。熱區座標、吐槽選項與結果目標不適合在台詞編輯器裡寫，原始檔只用 `investigate("block_id")`、`boke_round("block_id")` 引用。
+- **`<名稱>.blocks.json`** 放故事資訊（`id`、`title`、`note`、`initial_flags`）、節點標題，以及調查與裝傻回合的參數。熱區座標、話題、地點、吐槽選項、舉牌槽點、條件結果與結果目標不適合在台詞編輯器裡寫，原始檔只用 `investigate("block_id")`、`boke_round("block_id")` 引用。
+- **台詞與演出的寫法**（兩種原始檔共用，Parley 的 ACTION 就是去掉 `do ` 的那一行）：`do enter("elisabeth", "neutral", "left")` 讓不說話的角色上場；`do placard("犯人是神樂")`、`do placard("")` 改寫、清掉牌子；畫面外台詞在 `.dialogue` 寫成 `定春: 汪。 [#offscreen]`，Parley 在那句 DIALOGUE 前面接一個 `offscreen()` ACTION（`.dialogue` 也可以用 `do offscreen()`），後面不是台詞就報錯。調查與回合的反應節點最後 `=> 調查或回合所在的節點`。
 - **建置時檢查**：語法、說話者（catalog id 或顯示名稱，無名 = 旁白）、選項 id、到不了的節點，最後把輸出交給 `StoryRunner.load_story()` 驗證。任何無法對應的內容都報錯並指出標題或 group 與步序，不會默默略過。
 - **`version` 自動產生**：取節點、步序與選項等「存檔位置依賴的結構」的雜湊。只改台詞文字時不變，舊存檔照常讀；增刪步驟或改分支就會變，舊存檔被 StoryRunner 以版本不符拒絕，而不是讀到錯位的步驟。
 - 兩個外掛都會把原始檔登記進 `internationalization/locale/translations_pot_files`，供之後產生翻譯 POT，屬正常行為。
@@ -82,9 +92,11 @@ godot --headless --path . --script res://tools/story_build/build_story.gd -- sto
 - 換 UI 風格時，對話框、選項面板、目錄與標題畫面都換成該風格的 scene，畫面上的狀態原樣帶過去。背景照片套 `scripts/ui_stage_style.gd` 的色調，C 分鏡的立繪另轉黑白。這些 scene 都以 390 CSS px 寬的畫面為準，更窄的手機由 main 等比放大（`_ui_scale`）。
 - 吐槽回合：Phase 3 與 v2 回合共用對話框 Actions 裡的操作列（‹ ›、句數與接住標記、聽下去、吐槽！）和消音條，顯示什麼由 `scripts/round_view.gd` 決定。證言回合按「吐槽！」依該句打開選詞、開始 QTE 或揮空；連擊回合每句直接打開選詞（時限依連擊縮短）或 QTE。QTE 是 `scenes/ui/qte_ring.tscn`：以 `Time.get_ticks_usec` 計時，點一下回報與「縮到剛好」的時間差，過了 `late_after` 沒點就回報太晚。選詞時選項面板另外顯示消音條，以及吐槽力滿時的「超必殺！」；面板比畫面可用高度還高時，選項列改為捲動。v2 的聽下去直接演出 runner 跳去的節點。
 - 登場：角色開口才上場（`_focus_speaker`，合聲的每個人都算），在自己的站位；已在場的人留著、變暗，說話的人移到最前面。`char` 只設定站位與表情，`visible: false`（`hide`）才讓人退場；換到不同背景時與開始調查時全部退場。
-- 調查：調查點是 `scenes/ui/hotspot.tscn`，放在當前背景框裡一層蓋住整張圖的節點上（依 `pos`／`size` 用 anchor 定位），找到前不顯示。調查期間背景框撐開成整張圖（等比蓋滿框、置中），拖曳畫面左右平移、不會超出圖的邊，離開調查時還原框的位置。點擊在放開時判定：拖過的不算，點在對話框上的不算，命中區至少 48 CSS px。對話框的 `InvestigationRow` 有「收起」，收起後改顯示 `scenes/ui/investigate_bar.tscn`（進度與「展開」）；最後一個線索找到時自動展開。
+- 調查：對話框的 `InvestigationTopics` 有「對話」與「移動」兩排（沒有項目的那排隱藏），每個話題或地點是 `scenes/ui/investigate_topic.tscn`，樣式照該款對話框的「聽下去」鈕；點話題演出它的節點、演完回到調查（背景拖到哪裡就回到哪裡），點地點換成那個地點的背景、熱區與話題。熱區有查看後台詞時，點到就演出、演完回到調查。「繼續」在任何地點都能按，離開時換回主地點的背景。調查點是 `scenes/ui/hotspot.tscn`，放在當前背景框裡一層蓋住整張圖的節點上（依 `pos`／`size` 用 anchor 定位），找到前不顯示。調查期間背景框撐開成整張圖（等比蓋滿框、置中），拖曳畫面左右平移、不會超出圖的邊，離開調查時還原框的位置。點擊在放開時判定：拖過的不算，點在對話框上的不算，命中區至少 48 CSS px。對話框的 `InvestigationRow` 有「收起」，收起後改顯示 `scenes/ui/investigate_bar.tscn`（進度與「展開」）；最後一個線索找到時自動展開。
 - HUD 是 `scenes/ui/round_hud.tscn`（眼鏡圖示 `glasses_icon.tscn`、吐槽之力、連擊、倒數；面板下方右側是線索欄，每個線索一個 `clue_chip.tscn`）；Game Over 是 `scenes/ui/game_over.tscn`（碎眼鏡、結尾文字、檢查點重試、回標題），取代一般結尾按鈕。
 - 演出指令交給 `scripts/stage_effects.gd`：震動只移動舞台各層（`Game` 的位置由版面決定），閃光與停格灰屏放在 `OverlayLayer`，cut-in 是 `scenes/ui/cutin.tscn`。它們都不攔截點擊；只有 `freeze` 讓劇情等待，略讀時不等。存檔以選填欄位 `bgm` 記住正在播的音樂。
+- 舉牌：角色 scene 裡的 `Placard`（伊莉莎白的在 `scenes/characters/elisabeth.tscn`：框對齊圖上的白牌子、可旋轉，底下 `Text` 是字、`Glow` 是提示光框）顯示 `placard_view()` 的字。牌子能點時（`tappable`），拿牌子的人站到說話者前面、不變暗；選詞時 `Glow` 一明一暗，選項面板的最大高度停在牌子下緣，選項改捲動。點擊由 `TapCatcher` 在放開時判定：命中區是牌子外框的矩形、每邊至少 48 CSS px，扣掉被對話框或選項面板蓋住的部分。
+- 登場：`enter` 讓角色在自己的站位上場並亮著；`offscreen` 的台詞不呼叫 `_focus_speaker`。
 - `DialogueLayer` 最底下的 `TapCatcher` 處理所有畫面手勢；對話框、立繪與標籤不攔截滑鼠。以放開判定點擊：移動超過 30 px 視為拖曳，往上 140 px 以上為上滑，按住 0.5 秒為長按。UI 隱藏時的點擊只負責恢復。
 - 只處理滑鼠事件，觸控由專案設定模擬成滑鼠，確保一次觸控只觸發一次動作。
 - 劇本指令：`bg` 切換背景、`char` 控制立繪與站位，`say`／`choice`／`end` 顯示；舊故事的 `show`／`hide`／`expression` 仍改立繪，`sound`／`wait` 仍執行，`move`／`face`／`camera` 無 VN 對應而略過；演出指令見上。
@@ -98,4 +110,4 @@ godot --headless --path . --script res://tools/story_build/build_story.gd -- sto
 
 ## QA
 
-Web 網址帶 `?qa=1` 時，`window.__debtQA` 為唯讀快照：`screen`（title/story/choice/end/result/investigate/boke_round/tsukkomi/log/menu/save_slots/load_slots/slot_confirm/chapter_select/settings/busy）、`result`（結算時的 `chapter_result()`）、`settings`、`text`（打字中的部分）、`full_text`、`speaker`、`node_id`、`step_index`、`flags`、`items`、`background`、`text_complete`、`ui_hidden`、`auto`、`skip`、`toast`、`viewport`、`game`／`dialog`／`quickbar`／`name_plate`／`choice_sheet` 矩形（看不見的留空）、`sprites`（含站位）、`choices`、`slot_page`、當頁 `slots`（欄位號、佔用狀態、章節、時間、矩形）、`phase3`（眼鏡與吐槽力、素材、調查點（`screen_rect` 是命中區，`rect` 只在點得到時才有）、`pan`（`offset`／`min`／`max`）、`investigate_collapsed`、發言索引與已聽狀態、倒數、檢查點、結果；v2 回合另有 `round`：`mode`、`combo`、`caught`、`super_available`、`censor`、`qte_active`）、`controls`。快照在該幀排版完成、繪製之前才寫出，目錄彈出動畫期間 `screen` 回報 `busy`，測試讀到的座標一定是最終位置。`controls` 只列玩家當下點得到的：看得見、沒停用、沒被捲出或裁出畫面（目錄在矮螢幕上捲到下方的列不列）；目錄開著時只列目錄裡的控制項（`menu_resume`、`menu_<列>`、`menu_style_<風格>`、`menu_close`），`menu_dim` 是面板左側暗幕的一條。調查有 `investigate_collapse`、`investigate_expand`、`investigate_continue`；結算有 `result_next`、`result_title`；章節選擇有 `chapter_<id>`、`chapter_close`；設定有 `setting_<項目>_<索引>`、`settings_close`，標題的 `title_settings`；章節選擇或設定開著時只列它自己的控制項；回合相關的控制項有 `boke_previous`、`boke_next`、`boke_listen`、`boke_tsukkomi`、`censor`（閱讀時對話框裡的，選詞時選項面板裡的）、`super`、`qte`（整個畫面）、`game_over_retry`、`game_over_title`。測試一律透過真實 canvas 點擊操作。
+Web 網址帶 `?qa=1` 時，`window.__debtQA` 為唯讀快照：`screen`（title/story/choice/end/result/investigate/boke_round/tsukkomi/log/menu/save_slots/load_slots/slot_confirm/chapter_select/settings/busy）、`result`（結算時的 `chapter_result()`）、`settings`、`text`（打字中的部分）、`full_text`、`speaker`、`node_id`、`step_index`、`flags`、`items`、`background`、`text_complete`、`ui_hidden`、`auto`、`skip`、`toast`、`viewport`、`game`／`dialog`／`quickbar`／`name_plate`／`choice_sheet` 矩形（看不見的留空）、`sprites`（含站位）、`choices`、`slot_page`、當頁 `slots`（欄位號、佔用狀態、章節、時間、矩形）、`phase3`（眼鏡與吐槽力、素材、調查點（`screen_rect` 是命中區，`rect` 只在點得到時才有）、`pan`（`offset`／`min`／`max`）、`investigate_collapsed`、發言索引與已聽狀態、倒數、檢查點、結果；v2 回合另有 `round`：`mode`、`combo`、`caught`、`super_available`、`censor`、`placard`、`qte_active`；調查另有 `investigation`：`place`、`place_label`、`talk`、`moves`、`complete`、`progress`）、`placard`（`text`、`glowing`、`holder_visible`、`tappable`）、`controls`。快照在該幀排版完成、繪製之前才寫出，目錄彈出動畫期間 `screen` 回報 `busy`，測試讀到的座標一定是最終位置。`controls` 只列玩家當下點得到的：看得見、沒停用、沒被捲出或裁出畫面（目錄在矮螢幕上捲到下方的列不列）；目錄開著時只列目錄裡的控制項（`menu_resume`、`menu_<列>`、`menu_style_<風格>`、`menu_close`），`menu_dim` 是面板左側暗幕的一條。調查有 `investigate_collapse`、`investigate_expand`、`investigate_continue`、每個話題 `talk_<話題 id>`、每個地點 `move_<地點 id>`（主地點是 `move_home`）；結算有 `result_next`、`result_title`；章節選擇有 `chapter_<id>`、`chapter_close`；設定有 `setting_<項目>_<索引>`、`settings_close`，標題的 `title_settings`；章節選擇或設定開著時只列它自己的控制項；回合相關的控制項有 `boke_previous`、`boke_next`、`boke_listen`、`boke_tsukkomi`、`censor`（閱讀時對話框裡的，選詞時選項面板裡的）、`placard`（牌子點得到的部分，至少 48 CSS px 高才列）、`super`、`qte`（整個畫面）、`game_over_retry`、`game_over_title`。測試一律透過真實 canvas 點擊操作。

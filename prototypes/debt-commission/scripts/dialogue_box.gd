@@ -11,6 +11,7 @@ signal advance_pressed
 signal collapse_pressed
 
 const UI_STYLES: Script = preload("res://scripts/ui_styles.gd")
+const TOPIC_SCENE: PackedScene = preload("res://scenes/ui/investigate_topic.tscn")
 
 ## Which edition this scene draws (set in the scene).
 @export_enum("cinema", "ledger", "manga") var style_id: String = "cinema"
@@ -33,6 +34,12 @@ const UI_STYLES: Script = preload("res://scripts/ui_styles.gd")
 @onready var collapse_tab: Control = %CollapseTab
 @onready var investigation_collapse: Button = %InvestigationCollapse
 @onready var investigation_continue: Button = %InvestigationContinue
+## The search's 對話 and 移動 rows (set_topics), above the continue row.
+@onready var investigation_topics: Control = %InvestigationTopics
+@onready var talk_row: Control = %TalkRow
+@onready var talk_list: Container = %TalkList
+@onready var move_row: Control = %MoveRow
+@onready var move_list: Container = %MoveList
 @onready var round_controls: Control = %RoundControls
 @onready var censor_bar: Button = %CensorBar
 @onready var boke_previous: Button = %BokePrevious
@@ -58,6 +65,39 @@ func _ready() -> void:
 	investigation_continue.visibility_changed.connect(func() -> void:
 		investigation_row.visible = investigation_continue.visible
 		collapse_tab.visible = investigation_continue.visible)
+
+
+## Fills the 對話 and 移動 rows with one scenes/ui/investigate_topic.tscn per entry ({id, label}),
+## styled like this edition's 聽下去; a row without entries hides. Returns
+## {"talk:<id>" | "move:<id>": Button} for main.gd to connect.
+func set_topics(talk: Array, moves: Array) -> Dictionary:
+	var buttons: Dictionary = {}
+	for group: Array in [[talk_list, talk, "talk"], [move_list, moves, "move"]]:
+		var list: Container = group[0]
+		for old: Node in list.get_children():
+			list.remove_child(old)
+			old.queue_free()
+		for entry: Dictionary in group[1]:
+			var button: Button = TOPIC_SCENE.instantiate() as Button
+			button.text = str(entry.get("label", ""))
+			button.name = "%s_%s" % [group[2], entry.get("id", "")]
+			_style_like(button, boke_listen)
+			list.add_child(button)
+			buttons["%s:%s" % [group[2], entry.get("id", "")]] = button
+	talk_row.visible = talk_list.get_child_count() > 0
+	move_row.visible = move_list.get_child_count() > 0
+	investigation_topics.visible = talk_row.visible or move_row.visible
+	return buttons
+
+
+func _style_like(button: Button, model: Button) -> void:
+	for state: String in ["normal", "hover", "pressed", "hover_pressed", "focus", "disabled"]:
+		if model.has_theme_stylebox_override(state):
+			button.add_theme_stylebox_override(state, model.get_theme_stylebox(state))
+	for color: String in ["font_color", "font_hover_color", "font_pressed_color", "font_focus_color",
+			"font_hover_pressed_color", "font_disabled_color"]:
+		if model.has_theme_color_override(color):
+			button.add_theme_color_override(color, model.get_theme_color(color))
 
 
 ## display_name "" shows the narrator.

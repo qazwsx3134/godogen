@@ -211,6 +211,13 @@ var _pan_range: Vector2 = Vector2.ZERO
 var _frame_offsets: Array[float] = []
 var _investigate_bar: Control = null
 var _investigate_collapsed: bool = false
+## The search's topic buttons in the reading box: {"talk:<id>" | "move:<id>": Button}.
+var _topic_buttons: Dictionary = {}
+## How far each place of a search was panned ("<investigation>/<place>"), kept across its reactions.
+var _investigation_pans: Dictionary = {}
+var _pan_key: String = ""
+## The character scene holding a placard (elisabeth.tscn's `Placard`), if any.
+var _placard_holder: Control = null
 var _boke_controls: Control = null
 var _boke_previous_button: Button = null
 var _boke_line_label: Label = null
@@ -632,6 +639,8 @@ func _build_sprites() -> void:
 		sprite.call("set_expression_art", faces)
 		sprite.visible = false
 		_sprites[actor_id] = sprite
+		if sprite.has_method("has_placard") and bool(sprite.call("has_placard")):
+			_placard_holder = sprite
 
 
 func _build_phase3_hud() -> void:
@@ -655,6 +664,11 @@ func _apply_character(command: Dictionary) -> void:
 	if command.has("position"):
 		_actor_slots[actor_id] = _dict_string(command, "position")
 		_layout_sprite(actor_id)
+	if _dict_bool(command, "enter") and not sprite.visible:
+		# `enter`: someone who has not spoken (Elisabeth) comes on stage at their slot, lit.
+		_layout_sprite(actor_id)
+		sprite.modulate = Color.WHITE
+		sprite.visible = true
 
 
 func _build_dialogue() -> void:
@@ -737,6 +751,8 @@ func _mount_dialogue_box() -> void:
 	_dialog_panel.set_tone(_text_tone)
 	_set_name_plate(_plate_speaker, _plate_thought)
 	_set_visible_text(_visible_text, _text_complete)
+	if _hotspot_layer != null:
+		_show_topics(_current_command)  # the search's topics move into the new box
 	_dialog_layer.remove_child(old)
 	old.queue_free()
 
@@ -765,6 +781,7 @@ func _mount_choice_sheet() -> void:
 ## Fills the sheet from _current_options. Story choices answer through _on_choice_pressed, a timed
 ## tsukkomi through _on_boke_option_pressed.
 func _show_choice_sheet() -> void:
+	_fit_choice_sheet()
 	var labels: PackedStringArray = []
 	for option: Dictionary in _current_options:
 		labels.append(_dict_string(option, "label"))
@@ -1112,10 +1129,14 @@ func _fit_panel_area(panel: Control, area: Rect2) -> void:
 
 
 ## The sheet at _panel_scale, kept below the place name and the HUD (about 96 CSS px from the top).
+## While a placard answers the line being chosen, the sheet also stays below the board.
 func _fit_choice_sheet() -> void:
 	_fit_bottom_panel(_choice_sheet)
 	if _game != null and _game.size.y > 0.0:
-		_choice_sheet.set_max_height((_game.size.y - _safe_top - _safe_bottom - 96.0 * CSS_PX) / _panel_scale)
+		var top: float = _safe_top + 96.0 * CSS_PX
+		if _screen_mode == "tsukkomi" and _placard_open():
+			top = maxf(top, (_placard_holder.call("placard_rect") as Rect2).end.y - _game.global_position.y + 4.0 * CSS_PX)
+		_choice_sheet.set_max_height((_game.size.y - top - _safe_bottom) / _panel_scale)
 
 
 ## Bottom-anchored panel scene at _panel_scale, laid out narrower so that scaled it spans the game width.
@@ -1290,6 +1311,7 @@ func _start_new_story() -> void:
 	_restored_boke_ui_mode = ""
 	_last_boke_result = ""
 	_clear_hotspots()
+	_investigation_pans.clear()
 	_story_error = ""
 	_set_auto(false)
 	_set_skip(false)
@@ -1414,7 +1436,8 @@ func _present_say(command: Dictionary, restored: bool) -> void:
 	_refresh_phase3_hud()
 	var thought: bool = _dict_bool(command, "thought")
 	_set_name_plate(_current_speaker, thought)
-	_focus_speaker(_current_speaker, _dict_string(command, "expression", ""))
+	if not _dict_bool(command, "offscreen"):  # a voice from off stage leaves the stage as it is
+		_focus_speaker(_current_speaker, _dict_string(command, "expression", ""))
 	_set_text_tone("thought" if thought else "body")
 	if restored and _line_logged:
 		_set_visible_text(_full_text, true)
@@ -1436,6 +1459,8 @@ func _present_investigation(command: Dictionary, restored: bool) -> void:
 	_current_speaker = "shinpachi"
 	_full_text = _dict_string(command, "prompt", "調查現場，尋找線索。")
 	_current_line_key = _line_key(command, "investigate")
+	if _dict_string(command, "place", "home") != "home":
+		_current_line_key += ":" + _dict_string(command, "place")
 	_line_logged = _history_has_key(_current_line_key)
 	_line_generation += 1
 	_story_busy = false
@@ -1452,10 +1477,14 @@ func _present_investigation(command: Dictionary, restored: bool) -> void:
 	_auto_button.disabled = true
 	_set_name_plate("shinpachi", true)
 	_clear_stage()  # the player searches the room itself
+	var place_bg: String = _dict_string(command, "bg")
+	if not place_bg.is_empty() and place_bg != _current_bg_id:
+		_apply_background(place_bg)  # each place of the search shows its own picture
 	_set_text_tone("thought")
 	_layout()
 	_set_visible_text(_full_text, true)
 	_build_hotspots(command)
+	_show_topics(command)
 	_update_investigation_controls()
 	if not _line_logged:
 		_append_history({"key": _current_line_key, "kind": "investigate", "speaker": "shinpachi",
@@ -1484,6 +1513,8 @@ func _set_investigation_collapsed(value: bool) -> void:
 ## its object at the story's `pos` (centre) and `size`, fractions of the picture.
 func _build_hotspots(command: Dictionary) -> void:
 	_clear_hotspots()
+	_pan_key = "%s/%s" % [_dict_string(command, "id"), _dict_string(command, "place", "home")]
+	_pan = float(_investigation_pans.get(_pan_key, 0.0))  # back from a reaction: where the player left it
 	var frame: TextureRect = _background_rect
 	_frame_offsets = [frame.offset_left, frame.offset_top, frame.offset_right, frame.offset_bottom]
 	_hotspot_layer = Control.new()
@@ -1544,6 +1575,12 @@ func _set_pan(value: float) -> void:
 
 
 func _clear_hotspots() -> void:
+	if not _pan_key.is_empty() and _hotspot_layer != null:
+		_investigation_pans[_pan_key] = _pan
+	_pan_key = ""
+	_topic_buttons.clear()
+	if _dialog_panel != null:
+		_dialog_panel.set_topics([], [])
 	if _hotspot_layer != null and is_instance_valid(_hotspot_layer):
 		var frame: TextureRect = _hotspot_layer.get_parent() as TextureRect
 		frame.offset_left = _frame_offsets[0]
@@ -1601,32 +1638,78 @@ func _collect_hotspot(hotspot_id: String) -> void:
 			break
 	var item_info: Dictionary = (_catalog.get("items", {}) as Dictionary).get(item_id, {}) as Dictionary
 	var item_name: String = str(item_info.get("name", item_id))
-	_current_command = _runner_current()
+	var next: Dictionary = _runner_current()
 	(_hotspots[hotspot_id] as Control).call("set_found", true, true)
+	if not item_id.is_empty():
+		_show_toast("取得線索：" + item_name)
+	if _command_op(next) != "investigate":
+		# The spot has something to say: its scene plays and leads back to the search.
+		_refresh_phase3_hud()
+		_story_busy = true
+		_screen_mode = "busy"
+		_start_drive()
+		return
+	if _dict_string(next, "place") != _dict_string(_current_command, "place"):
+		_present_investigation(next, true)  # a searched-out side place sends the player home
+		_save_game()
+		return
+	_current_command = next
 	_update_investigation_controls()
 	_refresh_phase3_hud()
-	_show_toast("取得線索：" + item_name)
 	_save_game()
 	if not _investigation_continue_button.disabled and _investigate_collapsed:
 		_set_investigation_collapsed(false)  # every clue found: bring back 繼續
 	_publish_qa_state()
 
 
+## 繼續 opens once every required spot of every place is checked (runner `complete`/`progress`).
 func _update_investigation_controls() -> void:
-	var all_checked: bool = true
-	var hotspots: Array = _current_command.get("hotspots", []) as Array
-	for raw_hotspot: Variant in hotspots:
-		if not raw_hotspot is Dictionary or not bool((raw_hotspot as Dictionary).get("checked", false)):
-			all_checked = false
-	_investigation_continue_button.disabled = not all_checked or hotspots.is_empty()
-	_investigation_continue_button.text = "線索已取得・繼續" if all_checked and not hotspots.is_empty() else "先調查所有位置"
-	var found: int = hotspots.filter(func(raw: Variant) -> bool: return raw is Dictionary and bool((raw as Dictionary).get("checked", false))).size()
-	_investigate_bar.call("set_progress", found, hotspots.size())
+	var all_checked: bool = bool(_current_command.get("complete", false))
+	var progress: Array = _current_command.get("progress", [0, 0]) as Array
+	_investigation_continue_button.disabled = not all_checked
+	_investigation_continue_button.text = "線索已取得・繼續" if all_checked else "先調查所有位置"
+	_investigate_bar.call("set_progress", int(progress[0]), int(progress[1]))
+
+
+## The 對話 and 移動 rows of the reading box for this place of the search.
+func _show_topics(command: Dictionary) -> void:
+	_topic_buttons = _dialog_panel.set_topics(command.get("talk", []) as Array, command.get("moves", []) as Array)
+	for key: String in _topic_buttons.keys():
+		var topic_id: String = key.get_slice(":", 1)
+		(_topic_buttons[key] as Button).pressed.connect(
+			(_on_talk_pressed if key.begins_with("talk:") else _on_move_pressed).bind(topic_id))
+
+
+## A talk topic: its scene plays once and leads back to the search.
+func _on_talk_pressed(topic_id: String) -> void:
+	if _screen_mode != "investigate" or _story_busy:
+		return
+	if not bool(_runner.call("talk_topic", topic_id)):
+		_show_toast(_runner_string("error_message", "這個話題現在不能聊。"))
+		return
+	_story_busy = true
+	_screen_mode = "busy"
+	_start_drive()
+
+
+## Moving: another place of the search, with its own picture, spots and topics.
+func _on_move_pressed(place_id: String) -> void:
+	if _screen_mode != "investigate" or _story_busy:
+		return
+	if not bool(_runner.call("move_to", place_id)):
+		_show_toast(_runner_string("error_message", "現在不能去那裡。"))
+		return
+	_present_investigation(_runner_current(), true)
+	_save_game()
 
 
 func _on_investigation_continue_pressed() -> void:
 	if _screen_mode != "investigate" or _story_busy or _investigation_continue_button.disabled:
 		return
+	var home_bg: String = _dict_string(_current_command, "home_bg")
+	if not home_bg.is_empty() and home_bg != _current_bg_id:
+		_clear_hotspots()
+		_apply_background(home_bg)  # the search ends where it began
 	_story_busy = true
 	_screen_mode = "busy"
 	var next: Dictionary = _runner.call("advance") as Dictionary
@@ -1762,6 +1845,47 @@ func _on_censor_pressed() -> void:
 	if _screen_mode not in ["boke_round", "tsukkomi"] or _story_busy or not RoundView.censor(_current_command):
 		return
 	_round_action(func() -> Dictionary: return _runner.call("resolve_censor"), "（撕下消音條）", _screen_mode)
+
+
+## The placard, pointed at while reading (no timer) or while the options run; like the censor bar.
+func _on_placard_pressed() -> void:
+	if not _placard_open():
+		return
+	_round_action(func() -> Dictionary: return _runner.call("resolve_placard"), "（指著牌子）", _screen_mode)
+
+
+## The placard answers the current line: it is on stage, the round shows that line, nothing busy.
+func _placard_open() -> bool:
+	if _placard_holder == null or not _placard_holder.visible or _runner == null or _story_busy:
+		return false
+	return _screen_mode in ["boke_round", "tsukkomi"] and bool((_runner.call("placard_view") as Dictionary).get("tappable", false))
+
+
+## The board on screen grown to at least 48 CSS px each way (like a hotspot), inside the game
+## area and above the reading box or options sheet (a tap there belongs to them).
+func _placard_hit_rect() -> Rect2:
+	var rect: Rect2 = _placard_holder.call("placard_rect")
+	var least: float = 48.0 * CSS_PX * _panel_scale
+	var grow: Vector2 = (Vector2(least, least) - rect.size).max(Vector2.ZERO) * 0.5
+	rect = rect.grow_individual(grow.x, grow.y, grow.x, grow.y).intersection(Rect2(_game.global_position, _game.size))
+	for panel: Control in [_dialog_panel, _choice_sheet]:
+		var top: float = panel.get_global_rect().position.y
+		if panel.is_visible_in_tree() and rect.end.y > top:
+			rect.size.y = maxf(0.0, top - rect.position.y)
+	return rect
+
+
+## The runner decides what the placard says; it glows while its line is up on the timed sheet.
+func _refresh_placard() -> void:
+	if _placard_holder == null or _runner == null or not _story_ready:
+		return
+	var view: Dictionary = _runner.call("placard_view") as Dictionary
+	_placard_holder.call("set_placard", str(view.get("text", "")),
+		bool(view.get("tappable", false)) and _screen_mode == "tsukkomi")
+	if bool(view.get("tappable", false)) and _placard_holder.visible:
+		# While the board answers the line, its holder steps in front of the speaker, lit.
+		_char_layer.move_child(_placard_holder, -1)
+		_placard_holder.modulate = Color.WHITE
 
 
 func _on_super_pressed() -> void:
@@ -2250,6 +2374,9 @@ func _on_catcher_input(event: InputEvent) -> void:
 			if -delta.y > SWIPE_DISTANCE and absf(delta.x) < -delta.y:
 				_open_log()
 			return
+		if _placard_open() and _placard_hit_rect().has_point(button.global_position):
+			_on_placard_pressed()
+			return
 		if _screen_mode == "investigate":
 			_tap_investigation(button.global_position)
 		else:
@@ -2699,6 +2826,7 @@ func _history_has_key(key: String) -> bool:
 func _refresh_phase3_hud() -> void:
 	if _phase3_hud == null:
 		return
+	_refresh_placard()
 	_phase3_hud.visible = _phase3_enabled and _screen_mode != "title" and not _ui_hidden
 	if not _phase3_enabled or _runner == null:
 		return
@@ -3269,6 +3397,14 @@ func _write_qa_state() -> void:
 		controls["stage"] = {"x": stage.position.x, "y": stage.position.y, "width": stage.size.x, "height": stage.size.y}
 	if _qte != null and is_instance_valid(_qte):  # the whole screen answers the QTE
 		controls["qte"] = _rect(_qte)
+	if _placard_open():  # the part of the board a tap reaches (at least 48 CSS px tall to count)
+		var board: Rect2 = _placard_hit_rect()
+		if board.size.y >= 48.0 * CSS_PX * _panel_scale - 1.0 and board.size.x > 0.0:
+			controls["placard"] = {"x": board.position.x, "y": board.position.y, "width": board.size.x, "height": board.size.y}
+	for key: String in _topic_buttons.keys():
+		var topic: Button = _topic_buttons[key] as Button
+		if is_instance_valid(topic) and _tappable(topic) and modal == null:
+			controls[key.replace(":", "_")] = _rect(topic)
 	if _menu_overlay.visible:  # the dimmed margin beside the panel
 		var dim: Rect2 = Rect2(_game.position + Vector2(0.0, _game.size.y * 0.5 - 60.0), Vector2(14.0 * CSS_PX * _panel_scale, 120.0))
 		controls["menu_dim"] = {"x": dim.position.x, "y": dim.position.y, "width": dim.size.x, "height": dim.size.y}
@@ -3327,6 +3463,10 @@ func _write_qa_state() -> void:
 		"choice_sheet": _rect(_choice_sheet) if _choice_sheet.is_visible_in_tree() else {},
 		"name_plate": _rect(_name_plate) if _name_plate.is_visible_in_tree() else {},
 		"sprites": sprites,
+		"placard": {"text": str(_placard_holder.call("placard_text")) if _placard_holder != null else "",
+			"glowing": _placard_holder != null and bool(_placard_holder.call("placard_glowing")),
+			"holder_visible": _placard_holder != null and _placard_holder.visible,
+			"tappable": _placard_open()},
 		"log_scroll": {"value": _log_scroll.scroll_vertical, "max": _log_scroll.get_v_scroll_bar().max_value - _log_scroll.size.y},
 		"choices": choices,
 		"phase3": {
@@ -3334,6 +3474,11 @@ func _write_qa_state() -> void:
 			"gameplay": snapshot.get("gameplay", {}),
 			"inventory": snapshot.get("items", []),
 			"hotspots": hotspot_state,
+			"investigation": {"place": _dict_string(current, "place"), "place_label": _dict_string(current, "place_label"),
+				"talk": (current.get("talk", []) as Array).map(func(topic: Dictionary) -> String: return str(topic["id"])),
+				"moves": (current.get("moves", []) as Array).map(func(move: Dictionary) -> String: return str(move["id"])),
+				"complete": bool(current.get("complete", false)), "progress": current.get("progress", [])}
+				if _command_op(current) == "investigate" else {},
 			"pan": {"offset": _pan, "min": _pan_range.x, "max": _pan_range.y},
 			"investigate_collapsed": _investigate_collapsed,
 			"boke_screen_mode": _effective_boke_ui_mode() if _command_op(current) == "boke_round" else "",
@@ -3344,7 +3489,7 @@ func _write_qa_state() -> void:
 			"round": {
 				"mode": str(current.get("mode", "")), "combo": int(current.get("combo", 0)),
 				"caught": current.get("caught_line_ids", []), "super_available": bool(current.get("super_available", false)),
-				"censor": RoundView.censor(current), "qte_active": _qte != null,
+				"censor": RoundView.censor(current), "placard": RoundView.placard(current), "qte_active": _qte != null,
 			},
 			"timer_remaining": _boke_time_remaining,
 			"timer_active": _command_op(current) == "boke_round" and _effective_boke_ui_mode() == "tsukkomi",

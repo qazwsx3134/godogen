@@ -11,6 +11,7 @@ const phase2Only = process.argv.includes('--phase2');
 const slotsOnly = process.argv.includes('--slots');
 const phase3Only = process.argv.includes('--phase3');
 const roundsOnly = process.argv.includes('--rounds');
+const investigateOnly = process.argv.includes('--investigate');
 const arg = (name, fallback) => {
   const index = process.argv.indexOf(name);
   return index >= 0 ? process.argv[index + 1] : fallback;
@@ -20,6 +21,7 @@ const url = new URL(arg('--url', 'http://127.0.0.1:5193/'));
 url.searchParams.set('qa', '1');
 if (phase3Only) url.searchParams.set('sample', 'phase3');
 else if (roundsOnly) url.searchParams.set('sample', 'phase4_rounds');
+else if (investigateOnly) url.searchParams.set('sample', 'phase4');
 else if (phase2Only || slotsOnly) url.searchParams.set('sample', 'phase2');
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const output = path.join(root, 'test-results');
@@ -687,8 +689,10 @@ async function phase3Route() {
   await context.close();
 }
 
-// Round v2 by touch in the rounds sample: the censor bar while reading, material options, the
-// super once the gauge is full, and a real tap on the QTE (at once, so it is early).
+// Round v2 by touch in the rounds sample: the censor bar while reading, material options,
+// Elisabeth's placard (tapped while reading, then glowing beside the timed sheet on a 320×568
+// phone without being covered), the super once the gauge is full, and a real tap on the QTE (at
+// once, so it is early).
 async function roundsRoute() {
   const { context, page, errors } = await openPage({ width: 390, height: 844 }, true);
   const result = { route: 'rounds-touch', checks: [], errors };
@@ -751,16 +755,67 @@ async function roundsRoute() {
     await control(page, 'boke_tsukkomi', true);
     await waitFor(page, () => window.__debtQA?.screen === 'tsukkomi', null, 10000);
     await choose('a');
-    await readTo(line === 1 ? 'boke_round' : 'tsukkomi');
+    await readTo('boke_round');
+  }
+  value = await state(page);
+  assert.equal(value.node_id, 'k_round', 'Kagura\'s testimony follows');
+  assert.ok(value.sprites.elisabeth.visible && value.placard.holder_visible, 'Elisabeth came on stage without a line');
+  assert.equal(value.placard.text, '', 'line 1: the placard is blank');
+  assert.ok(!value.controls.placard, 'a blank placard is not a control');
+  result.checks.push('material options catch lines 2 and 4; Kagura\'s round opens with Elisabeth and a blank placard');
+
+  // Line 2 while reading: the placard reads 犯人是神樂 and a touch on it catches the line.
+  await goToLine(1);
+  value = await state(page);
+  assert.equal(value.placard.text, '犯人是神樂');
+  assert.ok(value.phase3.round.placard && value.controls.placard, 'line 2 offers the placard while reading');
+  assertInside(value.controls.placard, value.viewport, 'placard');
+  const atLeast48 = async (rect, label) => {
+    const bounds = await page.locator('canvas').boundingBox();
+    const perCss = value.viewport.width / bounds.width;  // logical Godot px per CSS px
+    assert.ok(rect.width >= 48 * perCss - 1 && rect.height >= 48 * perCss - 1,
+      `${label} is at least 48 CSS px each way: ${JSON.stringify({ rect, perCss })}`);
+  };
+  await atLeast48(value.controls.placard, 'the placard');
+  assert.ok(value.controls.placard.y + value.controls.placard.height <= value.dialog.y + 1, 'the reading box leaves the placard uncovered');
+  await screenshot(page, 'rounds-placard-reading-phone');
+
+  // On a 320×568 phone the timed sheet opens beside the glowing placard without covering it.
+  await page.setViewportSize({ width: 320, height: 568 });
+  await page.waitForTimeout(500);
+  await control(page, 'boke_tsukkomi', true);
+  value = await waitFor(page, () => window.__debtQA?.screen === 'tsukkomi' && window.__debtQA?.placard?.glowing, null, 10000)
+    .then(() => state(page));
+  assert.ok(value.controls.placard, `the glowing placard stays tappable next to the sheet: ${Object.keys(value.controls).join(', ')}`);
+  assertInside(value.controls.placard, value.viewport, '320×568 placard');
+  await atLeast48(value.controls.placard, 'the 320×568 placard');
+  assert.ok(value.controls.placard.y + value.controls.placard.height <= value.choice_sheet.y + 1,
+    `the options sheet does not cover the placard: ${JSON.stringify({ placard: value.controls.placard, sheet: value.choice_sheet })}`);
+  value.choices.forEach(choice => assertInside(choice.rect, value.viewport, `320×568 ${choice.id}`));
+  await screenshot(page, 'rounds-placard-sheet-320x568');
+  await tapAt(page, value.viewport, center(value.controls.placard), true);
+  await waitFor(page, () => window.__debtQA?.node_id === 'k_l2_placard', null, 10000);
+  value = await readTo('boke_round');
+  assert.ok(value.phase3.round.caught.includes('l2'), 'the placard catches line 2');
+  assert.equal(value.placard.text, '我只是路過', 'the scene flipped the placard');
+  assert.ok(!value.placard.glowing && !value.controls.placard, 'an answered placard is no longer a control');
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.waitForTimeout(500);
+  result.checks.push('the placard is a ≥48 CSS px touch target while reading and beside the uncovered timed sheet at 320×568');
+
+  for (const line of [0, 2]) {
+    await goToLine(line);
+    await control(page, 'boke_tsukkomi', true);
+    await waitFor(page, () => window.__debtQA?.screen === 'tsukkomi', null, 10000);
+    await choose('a');
+    await readTo(line === 0 ? 'boke_round' : 'tsukkomi');
   }
   value = await state(page);
   assert.equal(value.phase3.round.mode, 'combo');
-  assert.ok(!value.controls.super, 'no super before the gauge is full');
-  result.checks.push('material options catch lines 2 and 4; the combo round opens by itself');
+  assert.ok(!value.sprites.elisabeth.visible, 'Elisabeth leaves before the combo');
+  result.checks.push('Kagura\'s round is caught by touch; the combo round opens by itself');
 
-  await choose('a');
-  value = await readTo('tsukkomi');
-  assert.ok(value.phase3.round.super_available && value.controls.super, 'the full gauge lights the super');
+  assert.ok(value.phase3.round.super_available && value.controls.super, 'two perfect testimonies fill the gauge: the super is lit at once');
   assertInside(value.controls.super, value.viewport, 'super');
   await screenshot(page, 'rounds-super-phone');
   await control(page, 'super', true);
@@ -779,6 +834,105 @@ async function roundsRoute() {
   await context.close();
 }
 
+// The Phase 4 search by touch: 對話 and 移動 topics in the reading box (≥48 CSS px, inside a
+// 320×568 phone), a topic scene that comes back to the search without its topic, the kitchen with
+// its own picture and fridge (whose scene has Gintoki answer from off stage), and the way home.
+async function investigateRoute() {
+  const { context, page, errors } = await openPage({ width: 390, height: 844 }, true);
+  const result = { route: 'investigate-touch', checks: [], errors };
+  report.runs.push(result);
+  const atLeast48 = async (rect, label) => {
+    const bounds = await page.locator('canvas').boundingBox();
+    const perCss = (await state(page)).viewport.width / bounds.width;
+    assert.ok(rect.width >= 48 * perCss - 1 && rect.height >= 48 * perCss - 1, `${label} is at least 48 CSS px: ${JSON.stringify(rect)}`);
+  };
+  const readToSearch = async () => {
+    for (let step = 0; step < 40; step++) {
+      await page.waitForFunction(() => ['story', 'investigate'].includes(window.__debtQA?.screen), null, { timeout: 30000 });
+      const value = await state(page);
+      if (value.screen === 'investigate') return value;
+      await next(page, true);
+    }
+    throw new Error('Did not come back to the search');
+  };
+  await control(page, 'begin', true);
+  await stable(page);
+  await activateSkip(page, true);
+  await waitFor(page, () => window.__debtQA?.screen === 'investigate', null, 30000);
+  let value = await state(page);
+  assert.equal(value.node_id, 'search');
+  assert.deepEqual(value.phase3.investigation.talk, ['gintoki_bedtime', 'kagura_dinner'], 'two topics before the footprints');
+  assert.deepEqual(value.phase3.investigation.moves, ['kitchen']);
+  const topics = ['talk_gintoki_bedtime', 'talk_kagura_dinner', 'move_kitchen'];
+  for (const name of topics) {
+    assert.ok(value.controls[name], `${name} is offered`);
+    assertInside(value.controls[name], value.viewport, name);
+    await atLeast48(value.controls[name], name);
+    assertContained(value.controls[name], value.dialog, name);
+  }
+  await screenshot(page, 'investigate-topics-phone');
+  await page.setViewportSize({ width: 320, height: 568 });
+  await page.waitForTimeout(500);
+  value = await state(page);
+  for (const name of [...topics, 'investigate_continue']) {
+    if (name === 'investigate_continue' && !value.controls[name]) continue;
+    assert.ok(value.controls[name], `320×568 keeps ${name}`);
+    assertInside(value.controls[name], value.viewport, `320×568 ${name}`);
+    await atLeast48(value.controls[name], `320×568 ${name}`);
+  }
+  await screenshot(page, 'investigate-topics-320x568');
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.waitForTimeout(500);
+  result.checks.push('talk and move topics are ≥48 CSS px touch targets inside the reading box on 390×844 and 320×568');
+
+  await control(page, 'talk_kagura_dinner', true);
+  await waitFor(page, () => window.__debtQA?.screen === 'story', null, 10000);
+  value = await state(page);
+  assert.equal(value.speaker, 'kagura', 'the topic plays Kagura\'s answer');
+  value = await readToSearch();
+  assert.deepEqual(value.phase3.investigation.talk, ['gintoki_bedtime'], 'a played topic is gone');
+  assert.ok(!value.controls.talk_kagura_dinner && !value.sprites.kagura.visible, 'back in the search with the stage cleared');
+  result.checks.push('a talk topic plays once by touch and the search comes back');
+
+  await control(page, 'move_kitchen', true);
+  await waitFor(page, () => window.__debtQA?.background === 'yorozuya_kitchen' && window.__debtQA?.screen === 'investigate', null, 10000);
+  value = await state(page);
+  assert.equal(value.phase3.investigation.place, 'kitchen');
+  assert.deepEqual(value.phase3.hotspots.map(spot => spot.id), ['fridge']);
+  assert.ok(value.controls.move_home, 'the kitchen offers the way back');
+  await screenshot(page, 'investigate-kitchen-phone');
+  await control(page, 'investigate_collapse', true);
+  await waitFor(page, () => window.__debtQA?.phase3?.investigate_collapsed === true, null, 10000);
+  value = await state(page);
+  let spot = value.phase3.hotspots[0];
+  const from = { x: value.viewport.width / 2, y: value.viewport.height * 0.35 };
+  const shift = value.game.x + value.game.width / 2 - (spot.screen_rect.x + spot.screen_rect.width / 2);
+  await gesture(page, value.viewport, from, { x: from.x + shift, y: from.y }, 50, true);
+  await page.waitForTimeout(300);
+  value = await state(page);
+  spot = value.phase3.hotspots[0];
+  assert.ok(spot.rect?.width > 0, `the fridge is within reach after dragging: ${JSON.stringify(spot)}`);
+  await tapAt(page, value.viewport, center(spot.rect), true);
+  for (let step = 0; step < 10; step++) {
+    await page.waitForFunction(() => ['story', 'investigate'].includes(window.__debtQA?.screen), null, { timeout: 10000 });
+    value = await state(page);
+    if (value.speaker === 'gintoki') break;
+    await next(page, true);
+  }
+  assert.equal(value.speaker, 'gintoki', 'Gintoki answers about the pudding');
+  assert.equal(value.sprites.gintoki.visible, false, 'he speaks from off stage');
+  assert.ok(value.name_plate.width > 0, 'his name still shows');
+  await screenshot(page, 'investigate-offscreen-phone');
+  value = await readToSearch();
+  assert.equal(value.phase3.investigation.place, 'home', 'the searched-out kitchen sends the player home');
+  assert.equal(value.background, 'yorozuya_living_room');
+  assert.deepEqual(value.items, [], 'the fridge grants no material');
+  result.checks.push('moving to the kitchen shows its own picture and spot; its scene has an off-stage line and returns home');
+  assert.deepEqual(errors, [], 'no browser or Godot runtime errors');
+  console.log(`PASS investigate touch: ${result.checks.length} check groups`);
+  await context.close();
+}
+
 try {
   if (smokeOnly) {
     await touchSmoke();
@@ -788,6 +942,8 @@ try {
     await phase3Route();
   } else if (roundsOnly) {
     await roundsRoute();
+  } else if (investigateOnly) {
+    await investigateRoute();
   } else if (phase2Only) {
     await phase2Route('inspect', true);
     await phase2Route('skip', false);
@@ -809,7 +965,8 @@ try {
 } finally {
   report.finished = new Date().toISOString();
   const reportName = smokeOnly ? 'smoke-report.json' : slotsOnly ? 'slots-report.json'
-    : phase3Only ? 'phase3-report.json' : roundsOnly ? 'rounds-report.json' : phase2Only ? 'phase2-report.json' : 'browser-report.json';
+    : phase3Only ? 'phase3-report.json' : roundsOnly ? 'rounds-report.json' : investigateOnly ? 'investigate-report.json'
+    : phase2Only ? 'phase2-report.json' : 'browser-report.json';
   await fs.writeFile(path.join(output, reportName), `${JSON.stringify(report, null, 2)}\n`);
   await browser.close();
   console.log(`Evidence: ${output}`);

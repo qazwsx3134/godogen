@@ -1,0 +1,9 @@
+[gd_scene format=3]
+
+[node name="InvestigateTopic" type="Button" unique_id=1081655259]
+editor_description = "調查時對話框裡的一個話題（對話或移動）。顏色與框線跟著該款對話框的「聽下去」鈕，這裡管大小與字級。"
+custom_minimum_size = Vector2(132.92308, 132.92308)
+size_flags_horizontal = 0
+focus_mode = 0
+theme_override_font_sizes/font_size = 38
+text = "問銀時：昨晚幾點睡？"

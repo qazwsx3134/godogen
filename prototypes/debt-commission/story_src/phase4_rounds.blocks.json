@@ -1,14 +1,19 @@
 {
   "story": {
     "id": "strawberry_phase4_rounds",
-    "title": "Phase 4 回合試片：證言、消音條、連擊（非核准第一章）",
-    "note": "僅用於驗證逐句槽點、聽下去取得素材、空揮與提示、第四面牆消音條、隱藏選項、連擊、QTE 與超必殺；台詞取自第一章草稿，不是作者核准的文本。",
+    "title": "Phase 4 回合試片：證言、伊莉莎白的牌子、連擊（非核准第一章）",
+    "note": "僅用於驗證逐句槽點、聽下去取得素材、空揮與提示、第四面牆消音條與伊莉莎白的牌子、隱藏選項與條件式放棄吐槽、連擊、QTE 與超必殺；台詞取自第一章草稿，不是作者核准的文本。",
     "initial_flags": {}
   },
   "titles": {
     "rounds_open": "回合試片：家庭會議",
     "r1_round": "第一回合：證言",
     "r1_clear": "第一回合結束",
+    "k_intro": "神樂的回合：伊莉莎白在角落",
+    "k_round": "神樂的回合：證言",
+    "k_hidden": "隱藏路線：定春的腳",
+    "k_clear": "神樂的回合結束",
+    "r2_intro": "連擊回合開始",
     "r2_round": "第二回合：連擊",
     "r2_clear": "回合試片結束",
     "r1_hidden": "隱藏結局",
@@ -44,6 +49,39 @@
            {"id": "b", "label": "刷牙刷到嘴角外面嗎！", "result": "weak", "goto": "r1_l4_b"},
            {"id": "c", "label": "原來是牙膏啊。", "result": "fail", "goto": "r1_l4_c"},
            {"id": "d", "label": "……（放棄吐槽）", "result": "hidden", "require_caught": ["l2", "l3"], "goto": "r1_hidden"}
+         ]}}
+      ]
+    },
+    "kagura_testimony": {
+      "op": "boke_round",
+      "mode": "testimony",
+      "speaker": "kagura",
+      "timer_seconds": 8,
+      "game_over": "game_over",
+      "clear": "k_clear",
+      "lines": [
+        {"id": "l1", "text": "我昨晚只吃了醋昆布。很乾，但我忍住沒喝任何東西阿魯。", "listen": "k_l1_listen", "hint": "k_l1_hint",
+         "slot": {"timeout": "k_timeout", "options": [
+           {"id": "a", "label": "包裝裡的粉紅色是什麼！", "result": "perfect", "require": "kagura_kombu", "goto": "k_l1_a"},
+           {"id": "b", "label": "吃醋昆布不喝水會渴吧！", "result": "weak", "goto": "k_l1_b"},
+           {"id": "c", "label": "神樂醬好能忍喔。", "result": "fail", "goto": "k_l1_c"},
+           {"id": "d", "label": "……（放棄吐槽）", "result": "fail", "goto": "k_give_up"}
+         ]}},
+        {"id": "l2", "text": "而且定春昨晚親口跟我說了：『牛奶是別人喝的，汪』阿魯。", "listen": "k_l2_listen", "hint": "k_l2_hint",
+         "slot": {"timeout": "k_timeout",
+           "placard": {"text": "犯人是神樂", "result": "perfect", "goto": "k_l2_placard"},
+           "options": [
+             {"id": "b", "label": "定春只會「汪」吧！", "result": "weak", "goto": "k_l2_b"},
+             {"id": "c", "label": "你翻譯得真好。", "result": "fail", "goto": "k_l2_c"},
+             {"id": "d", "label": "……（放棄吐槽）", "result": "fail", "goto": "k_give_up"}
+           ]}},
+        {"id": "l3", "text": "證據就是這排腳印！從冰箱走到定春的窩，犯人是定春阿魯！", "hint": "k_l3_hint",
+         "slot": {"timeout": "k_timeout", "options": [
+           {"id": "a", "label": "定春的腳比你的頭還大！", "result": "perfect", "require": "sadaharu_footprint", "goto": "k_l3_a"},
+           {"id": "b", "label": "定春開不了冰箱吧！", "result": "weak", "goto": "k_l3_b"},
+           {"id": "c", "label": "定春，你怎麼可以這樣！", "result": "fail", "goto": "k_l3_c"},
+           {"id": "d", "label": "……（放棄吐槽）", "result": "fail", "goto": "k_give_up",
+            "when": [{"require_caught": ["l1", "l2"], "result": "hidden", "goto": "k_hidden"}]}
          ]}}
       ]
     },

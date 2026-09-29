@@ -3,13 +3,17 @@ extends RefCounted
 ##
 ## Each `~ title` becomes a node with that id. Supported lines:
 ##   `Name: text` / plain text     say (Name is a catalog id or displayed name; plain = narrator)
-##                                 tags: [#thought], [#<expression>]
+##                                 tags: [#thought], [#<expression>], [#offscreen] (the speaker
+##                                 talks from off stage: name plate only, the stage stays as is)
 ##   narration + `- label [ID:x]`  choice; the narration line is the prompt. Options take
 ##                                 `[if has("item") /]` (require), `set k = v` lines (set_flags)
 ##                                 and one `=> title`
 ##   `set key = value`             flag
 ##   `if key == value` / `else`    condition; each branch holds exactly one `=> title`
 ##   `do bg("id")`, `do char("id", "expression", "position")`, `do hide("id")`,
+##   `do enter("id", "expression", "position")` (a character who has not spoken comes on stage),
+##   `do placard("text")` / `placard("")` (what the placard holder's board says; "" = blank),
+##   `do offscreen()` right before a line = [#offscreen] (Parley writes it as an ACTION node),
 ##   `do item("id")`, `do profile("character_id")`, `do investigate("block")`,
 ##   `do boke_round("block")`, `do end("text")`, `do result("block")` (the chapter result screen)
 ##   effects: `do shake()` / `shake("small")`, `do flash()` / `flash("#ff0000")`,
@@ -181,6 +185,8 @@ static func _say(line: Dictionary, context: Dictionary, where: String) -> Dictio
 	for tag: String in line.get("tags", []):
 		if tag == "thought":
 			step["thought"] = true
+		elif tag == "offscreen":
+			step["offscreen"] = true
 		elif EXPRESSIONS.has(tag):
 			step["expression"] = tag
 		else:
@@ -284,6 +290,17 @@ static func _mutation(line: Dictionary, where: String) -> Dictionary:
 			return step
 		["hide", 1]:
 			return {"op": "char", "id": args[0], "visible": false}
+		["enter", 1], ["enter", 2], ["enter", 3]:
+			var entrance: Dictionary = {"op": "char", "id": args[0], "visible": true, "enter": true}
+			if args.size() > 1:
+				entrance["expression"] = args[1]
+			if args.size() > 2:
+				entrance["position"] = args[2]
+			return entrance
+		["placard", 1]:
+			return {"op": "placard", "text": args[0]}
+		["offscreen", 0]:
+			return {"op": "offscreen"}  # folded into the next line by story_builder.gd
 		["item", 1]:
 			return {"op": "item", "id": args[0]}
 		["shake", 0]:

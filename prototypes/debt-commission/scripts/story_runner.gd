@@ -44,6 +44,7 @@ const VALID_OPS: Array[String] = [
     "freeze",
     "bgm",
     "se",
+    "placard",
 ]
 
 const VALID_STAGE_POSITIONS: Array[String] = ["reader", "host", "door", "landlady", "other_side"]
@@ -52,16 +53,25 @@ const GRADES: Array[String] = ["S", "A", "B", "C"]
 ## Expression ids for `char` and line tags; what each means and which art to make:
 ## docs/story-telling-game/EXPRESSIONS.md.
 const VALID_EXPRESSIONS: Array[String] = ["neutral", "smile", "annoyed", "surprised", "thinking", "sweat", "smug", "shout",
-    "broken", "angry", "panic", "nervous", "serious", "cry", "nosepick", "mock"]
+    "broken", "angry", "panic", "nervous", "serious", "cry", "nosepick", "mock",
+    "sit_serious", "sit_talking"]
 const VALID_DIRECTIONS: Array[String] = ["left", "right", "up", "down"]
 const VALID_SOUNDS: Array[String] = ["paper", "knock", "step", "stamp"]
+## An investigation's own place (its step-level hotspots, talk and bg); `places` add the others.
+const HOME_PLACE: String = "home"
+const INTERNAL_OPS: Array[String] = ["set_flag", "flag", "item", "condition", "goto", "placard"]
 
 var flags: Dictionary = {}
 var items: Array[String] = []
 ## Character profiles unlocked by `profile` steps, in unlock order (the case file).
 var profiles: Array[String] = []
 var gameplay: Dictionary = DEFAULT_GAMEPLAY.duplicate(true)
+## Checked hotspot ids per investigation id; another place of it keys as "<id>/<place>".
 var checked_hotspots: Dictionary = {}
+## Per investigation id: {"place": where the player is, "talked": topic ids already played}.
+var investigations: Dictionary = {}
+## Story-level text on the placard (`placard` steps); a round line with a placard slot shows its own.
+var placard: String = ""
 ## Live state of the v2 round in play (see tsukkomi_round.gd); kept while its reaction nodes play.
 var round_state: Dictionary = {}
 ## Totals for the chapter result: caught, perfect, fails, hidden, max_combo.
@@ -82,6 +92,7 @@ var _listened_line_ids: Array[String] = []
 var _checkpoint: Dictionary = {}
 var _game_over_active: bool = false
 var _profiles_before_normalize: Array[String] = []
+var _placard_before_normalize: String = ""
 var _round_before_normalize: Dictionary = {}
 
 
@@ -126,6 +137,8 @@ func load_story(path: String) -> bool:
     var previous_items: Array[String] = items.duplicate()
     var previous_gameplay: Dictionary = gameplay.duplicate(true)
     var previous_checked_hotspots: Dictionary = checked_hotspots.duplicate(true)
+    var previous_investigations: Dictionary = investigations.duplicate(true)
+    var previous_placard: String = placard
     var previous_has_phase3_ops: bool = _has_phase3_ops
     var previous_boke_round_id: String = _boke_round_id
     var previous_boke_line_index: int = _boke_line_index
@@ -146,6 +159,8 @@ func load_story(path: String) -> bool:
     stats = {}
     gameplay = DEFAULT_GAMEPLAY.duplicate(true)
     checked_hotspots = {}
+    investigations = {}
+    placard = ""
     _boke_round_id = ""
     _boke_line_index = 0
     _listened_line_ids = []
@@ -167,6 +182,8 @@ func load_story(path: String) -> bool:
         items = previous_items
         gameplay = previous_gameplay
         checked_hotspots = previous_checked_hotspots
+        investigations = previous_investigations
+        placard = previous_placard
         _has_phase3_ops = previous_has_phase3_ops
         _boke_round_id = previous_boke_round_id
         _boke_line_index = previous_boke_line_index
@@ -256,6 +273,8 @@ func reset() -> void:
         stats = {}
         gameplay = DEFAULT_GAMEPLAY.duplicate(true)
         checked_hotspots = {}
+        investigations = {}
+        placard = ""
         _boke_round_id = ""
         _boke_line_index = 0
         _listened_line_ids = []
@@ -308,6 +327,8 @@ func advance() -> Dictionary:
     if op == "investigate" and not _investigation_is_complete(command):
         error_message = "Inspect every hotspot before continuing."
         return command
+    if op == "investigate":
+        _set_place(String(command.get("id", "")), HOME_PLACE)  # the search is over; back where it began
 
     error_message = ""
     step_index += 1
@@ -316,6 +337,9 @@ func advance() -> Dictionary:
     return current()
 
 
+## Inspects a hotspot of the current place: marks it checked (per place), grants its item once and,
+## the first time, plays its `goto` reaction (which leads back to the investigation's node). A side
+## place whose hotspots are all checked sends the player back to the home place.
 func inspect_hotspot(hotspot_id: String) -> bool:
     if not _loaded:
         return _reject("No story is loaded.")
@@ -323,21 +347,76 @@ func inspect_hotspot(hotspot_id: String) -> bool:
     if String(command.get("op", "")) != "investigate":
         return _reject("The current command is not an investigation.")
     var investigation_id: String = String(command.get("id", ""))
-    var hotspots: Array = command.get("hotspots", []) as Array
+    var place: Dictionary = _current_place(command)
     var selected_hotspot: Dictionary = {}
-    for raw_hotspot: Variant in hotspots:
+    for raw_hotspot: Variant in place["hotspots"] as Array:
         if raw_hotspot is Dictionary and String((raw_hotspot as Dictionary).get("id", "")) == hotspot_id:
             selected_hotspot = raw_hotspot as Dictionary
             break
     if selected_hotspot.is_empty():
-        return _reject("Unknown hotspot '%s' in investigation '%s'." % [hotspot_id, investigation_id])
-    var checked: Array[String] = _checked_hotspots_for(investigation_id)
-    if not checked.has(hotspot_id):
-        checked.append(hotspot_id)
-        checked_hotspots[investigation_id] = checked
+        return _reject("Unknown hotspot '%s' in investigation '%s' (place '%s')." % [hotspot_id, investigation_id, place["id"]])
+    var key: String = _checked_key(investigation_id, String(place["id"]))
+    var checked: Array[String] = _checked_hotspots_for(key)
+    if checked.has(hotspot_id):
+        error_message = ""
+        return true  # already searched: nothing new, no replay
+    var before: Dictionary = snapshot()
+    checked.append(hotspot_id)
+    checked_hotspots[key] = checked
     var item_id: String = String(selected_hotspot.get("item", ""))
-    if not items.has(item_id):
+    if not item_id.is_empty() and not items.has(item_id):
         items.append(item_id)
+    if String(place["id"]) != HOME_PLACE and _all_checked(place["hotspots"] as Array, checked):
+        _set_place(investigation_id, HOME_PLACE)
+    error_message = ""
+    if not selected_hotspot.has("goto"):
+        return true
+    return _jump_from_investigation(before, String(selected_hotspot["goto"]))
+
+
+## Plays a talk topic of the current place once; its node leads back to the investigation.
+func talk_topic(topic_id: String) -> bool:
+    if not _loaded:
+        return _reject("No story is loaded.")
+    var command: Dictionary = _current_command()
+    if String(command.get("op", "")) != "investigate":
+        return _reject("The current command is not an investigation.")
+    var investigation_id: String = String(command.get("id", ""))
+    for topic: Dictionary in _visible_topics(command):
+        if String(topic["id"]) == topic_id:
+            var before: Dictionary = snapshot()
+            var state: Dictionary = _investigation_state(investigation_id)
+            (state["talked"] as Array).append(topic_id)
+            investigations[investigation_id] = state
+            return _jump_from_investigation(before, String(topic["goto"]))
+    return _reject("Topic '%s' is not open in investigation '%s'." % [topic_id, investigation_id])
+
+
+## Moves the search to another place of the current investigation (its own background, hotspots
+## and topics). The checked spots of every place are kept.
+func move_to(place_id: String) -> bool:
+    if not _loaded:
+        return _reject("No story is loaded.")
+    var command: Dictionary = _current_command()
+    if String(command.get("op", "")) != "investigate":
+        return _reject("The current command is not an investigation.")
+    var investigation_id: String = String(command.get("id", ""))
+    var here: String = String(_current_place(command)["id"])
+    for place: Dictionary in _investigation_places(command):
+        if String(place["id"]) == place_id and place_id != here:
+            _set_place(investigation_id, place_id)
+            error_message = ""
+            return true
+    return _reject("Cannot move to '%s' in investigation '%s'." % [place_id, investigation_id])
+
+
+func _jump_from_investigation(before: Dictionary, target: String) -> bool:
+    node_id = target
+    step_index = 0
+    if not _normalize_position():
+        var message: String = error_message
+        restore(before)
+        return _reject(message)
     error_message = ""
     return true
 
@@ -435,6 +514,30 @@ func resolve_censor() -> Dictionary:
     return _round_action("censor")
 
 
+## Tapping the placard of the current line (v2 rounds; see placard_view()).
+func resolve_placard() -> Dictionary:
+    return _round_action("placard")
+
+
+## What the placard shows now: {"text", "tappable", "slot"}. While a live round sits on an
+## uncaught line with a placard slot, its text (tappable only on the round itself, not during its
+## reaction scenes); otherwise the story-level text of the last `placard` step ("" = blank).
+func placard_view() -> Dictionary:
+    var view: Dictionary = {"text": placard, "tappable": false, "slot": false}
+    if not _loaded or _game_over_active or round_state.is_empty():
+        return view
+    var step: Dictionary = _find_phase3_command("boke_round", String(round_state.get("id", "")))
+    if not TsukkomiRound.is_v2(step):
+        return view
+    var line: Dictionary = (step["lines"] as Array)[TsukkomiRound.line_index(step, round_state)]
+    var slot_placard: Dictionary = (line.get("slot", {}) as Dictionary).get("placard", {}) as Dictionary
+    if slot_placard.is_empty() or (round_state["caught"] as Dictionary).has(String(line["id"])):
+        return view
+    var here: Dictionary = _current_command()
+    return {"text": String(slot_placard["text"]), "slot": true,
+        "tappable": TsukkomiRound.is_v2(here) and String(here.get("id", "")) == String(step["id"])}
+
+
 ## The QTE ring: tapped=false when the ring ran out; offset = seconds from the ring's target
 ## (negative = early).
 func resolve_qte(tapped: bool, offset: float = 0.0) -> Dictionary:
@@ -458,7 +561,7 @@ func _round_action(kind: String, payload: Dictionary = {}) -> Dictionary:
         _reject("The current boke round is already resolved.")
         return {}
     _prepare_interactive_command(command)
-    var decision: Dictionary = TsukkomiRound.resolve(command, round_state, gameplay, items, kind, payload)
+    var decision: Dictionary = TsukkomiRound.resolve(command, round_state, gameplay, items, kind, payload, flags)
     if decision.has("error"):
         _reject(String(decision["error"]))
         return {}
@@ -517,6 +620,8 @@ func retry_checkpoint() -> bool:
     profiles = _copy_string_array(checkpoint.get("profiles", profiles) as Array)
     gameplay = checkpoint["gameplay"].duplicate(true)
     checked_hotspots = checkpoint["checked_hotspots"].duplicate(true)
+    investigations = (checkpoint.get("investigations", investigations) as Dictionary).duplicate(true)
+    placard = String(checkpoint.get("placard", ""))
     node_id = String(checkpoint["node_id"])
     step_index = int(checkpoint["step_index"])
     _boke_round_id = String(checkpoint["round_id"])
@@ -567,20 +672,104 @@ func _capture_round_checkpoint(command: Dictionary) -> void:
         "profiles": profiles.duplicate(),
         "gameplay": gameplay.duplicate(true),
         "checked_hotspots": checked_hotspots.duplicate(true),
+        "investigations": investigations.duplicate(true),
+        "placard": placard,
     }
 
 
+## The investigation as the shell draws it: the current place's hotspots (with `checked`),
+## `place`, `place_label`, `bg` (the place's background, "" = keep the current one), `home_bg`,
+## `prompt`, the open `talk` topics, `moves` to the other places, `complete` (every required
+## hotspot of every place checked) and `progress` [found, required].
 func _decorate_investigation(command: Dictionary) -> Dictionary:
     var decorated: Dictionary = command.duplicate(true)
     var investigation_id: String = String(decorated.get("id", ""))
-    var checked: Array[String] = _checked_hotspots_for(investigation_id)
-    var hotspots: Array = decorated.get("hotspots", []) as Array
+    var place: Dictionary = _current_place(command)
+    var checked: Array[String] = _checked_hotspots_for(_checked_key(investigation_id, String(place["id"])))
+    var hotspots: Array = (place["hotspots"] as Array).duplicate(true)
     for index: int in range(hotspots.size()):
         var hotspot: Dictionary = hotspots[index] as Dictionary
         hotspot["checked"] = checked.has(String(hotspot.get("id", "")))
         hotspots[index] = hotspot
     decorated["hotspots"] = hotspots
+    decorated["place"] = place["id"]
+    decorated["place_label"] = place["label"]
+    decorated["bg"] = place["bg"]
+    decorated["home_bg"] = String(command.get("bg", ""))
+    decorated["prompt"] = place["prompt"]
+    decorated["talk"] = _visible_topics(command).map(func(topic: Dictionary) -> Dictionary:
+        return {"id": topic["id"], "label": topic["label"]})
+    var moves: Array = []
+    for other: Dictionary in _investigation_places(command):
+        if other["id"] != place["id"]:
+            moves.append({"id": other["id"], "label": other["label"]})
+    decorated["moves"] = moves
+    decorated["complete"] = _investigation_is_complete(command)
+    decorated["progress"] = _investigation_progress(command)
+    decorated.erase("places")
     return decorated
+
+
+## Every place of an investigation step, home first: {id, bg, label, prompt, hotspots, talk}.
+func _investigation_places(command: Dictionary) -> Array[Dictionary]:
+    var home_bg: String = String(command.get("bg", ""))
+    var places: Array[Dictionary] = [{"id": HOME_PLACE, "bg": home_bg,
+        "label": String(command.get("label", _background_label(home_bg))), "prompt": String(command.get("prompt", "")),
+        "hotspots": command.get("hotspots", []), "talk": command.get("talk", [])}]
+    for raw_place: Variant in command.get("places", []):
+        var place: Dictionary = raw_place as Dictionary
+        var bg: String = String(place.get("bg", ""))
+        places.append({"id": String(place.get("id", "")), "bg": bg, "label": String(place.get("label", _background_label(bg))),
+            "prompt": String(place.get("prompt", command.get("prompt", ""))), "hotspots": place.get("hotspots", []),
+            "talk": place.get("talk", [])})
+    return places
+
+
+func _current_place(command: Dictionary) -> Dictionary:
+    var where: String = String(_investigation_state(String(command.get("id", "")))["place"])
+    var places: Array[Dictionary] = _investigation_places(command)
+    for place: Dictionary in places:
+        if place["id"] == where:
+            return place
+    return places[0]
+
+
+func _investigation_state(investigation_id: String) -> Dictionary:
+    var state: Dictionary = (investigations.get(investigation_id, {}) as Dictionary).duplicate(true)
+    if not state.has("place"):
+        state["place"] = HOME_PLACE
+    if not state.has("talked"):
+        state["talked"] = []
+    return state
+
+
+func _set_place(investigation_id: String, place_id: String) -> void:
+    var state: Dictionary = _investigation_state(investigation_id)
+    state["place"] = place_id
+    investigations[investigation_id] = state
+
+
+## Topics of the current place not played yet whose `require` item is held.
+func _visible_topics(command: Dictionary) -> Array[Dictionary]:
+    var talked: Array = _investigation_state(String(command.get("id", "")))["talked"]
+    var topics: Array[Dictionary] = []
+    for raw_topic: Variant in _current_place(command)["talk"] as Array:
+        var topic: Dictionary = raw_topic as Dictionary
+        if talked.has(String(topic.get("id", ""))):
+            continue
+        if topic.has("require") and not items.has(String(topic["require"])):
+            continue
+        topics.append(topic)
+    return topics
+
+
+static func _checked_key(investigation_id: String, place_id: String) -> String:
+    return investigation_id if place_id == HOME_PLACE else "%s/%s" % [investigation_id, place_id]
+
+
+func _background_label(background_id: String) -> String:
+    var backgrounds: Dictionary = _asset_catalog.get("backgrounds", {}) as Dictionary
+    return String((backgrounds.get(background_id, {}) as Dictionary).get("label", background_id))
 
 
 func _decorate_boke_round(command: Dictionary) -> Dictionary:
@@ -623,16 +812,31 @@ func _checked_hotspots_for(investigation_id: String) -> Array[String]:
     return []
 
 
+## Every hotspot without `optional: true`, in every place, has been checked.
 func _investigation_is_complete(command: Dictionary) -> bool:
+    var progress: Array = _investigation_progress(command)
+    return int(progress[0]) == int(progress[1]) and not (command.get("hotspots", []) as Array).is_empty()
+
+
+## [required hotspots checked, required hotspots] over every place of the investigation.
+func _investigation_progress(command: Dictionary) -> Array:
     var investigation_id: String = String(command.get("id", ""))
-    var hotspots: Array = command.get("hotspots", []) as Array
-    var checked: Array[String] = _checked_hotspots_for(investigation_id)
-    if hotspots.is_empty():
-        return false
-    for raw_hotspot: Variant in hotspots:
-        if not raw_hotspot is Dictionary or not checked.has(String((raw_hotspot as Dictionary).get("id", ""))):
-            return false
-    return true
+    var found: int = 0
+    var required: int = 0
+    for place: Dictionary in _investigation_places(command):
+        var checked: Array[String] = _checked_hotspots_for(_checked_key(investigation_id, String(place["id"])))
+        for raw_hotspot: Variant in place["hotspots"] as Array:
+            var hotspot: Dictionary = raw_hotspot as Dictionary
+            if bool(hotspot.get("optional", false)):
+                continue
+            required += 1
+            if checked.has(String(hotspot.get("id", ""))):
+                found += 1
+    return [found, required]
+
+
+func _all_checked(hotspots: Array, checked: Array[String]) -> bool:
+    return hotspots.all(func(raw: Variant) -> bool: return checked.has(String((raw as Dictionary).get("id", ""))))
 
 
 func _resolve_boke_result(command: Dictionary, resolution: Dictionary) -> Dictionary:
@@ -767,6 +971,8 @@ func snapshot() -> Dictionary:
         "profiles": profiles.duplicate(),
         "gameplay": gameplay.duplicate(true),
         "checked_hotspots": checked_hotspots.duplicate(true),
+        "investigations": investigations.duplicate(true),
+        "placard": placard,
         "boke": {
             "round_id": _boke_round_id,
             "line_index": _boke_line_index,
@@ -796,6 +1002,8 @@ func restore(snapshot_data: Dictionary) -> bool:
     step_index = int(snapshot_data["step_index"])
     gameplay = (snapshot_data.get("gameplay", DEFAULT_GAMEPLAY) as Dictionary).duplicate(true)
     checked_hotspots = (snapshot_data.get("checked_hotspots", {}) as Dictionary).duplicate(true)
+    investigations = (snapshot_data.get("investigations", {}) as Dictionary).duplicate(true)
+    placard = String(snapshot_data.get("placard", ""))
     var boke_state: Dictionary = snapshot_data.get("boke", {}) as Dictionary
     _boke_round_id = String(boke_state.get("round_id", ""))
     _boke_line_index = int(boke_state.get("line_index", 0))
@@ -816,6 +1024,8 @@ func _reset_state() -> bool:
     stats = {}
     gameplay = DEFAULT_GAMEPLAY.duplicate(true)
     checked_hotspots = {}
+    investigations = {}
+    placard = ""
     _boke_round_id = ""
     _boke_line_index = 0
     _listened_line_ids = []
@@ -833,6 +1043,7 @@ func _normalize_position() -> bool:
     var original_flags: Dictionary = flags.duplicate(true)
     var original_items: Array[String] = items.duplicate()
     _profiles_before_normalize = profiles.duplicate()
+    _placard_before_normalize = placard
     _round_before_normalize = round_state.duplicate(true)
     var transitions: int = 0
 
@@ -888,6 +1099,9 @@ func _normalize_position() -> bool:
                 if not profiles.has(profile_id):
                     profiles.append(profile_id)
                 step_index += 1
+            "placard":
+                placard = String(step["text"])
+                step_index += 1
             "condition":
                 var condition_key: String = String(step["flag"])
                 var target: String = String(step["else"])
@@ -918,6 +1132,7 @@ func _rollback_normalization(original_node_id: String, original_step_index: int,
     flags = original_flags
     items = original_items.duplicate()
     profiles = _profiles_before_normalize.duplicate()
+    placard = _placard_before_normalize
     round_state = _round_before_normalize.duplicate(true)
     error_message = message
     return false
@@ -934,7 +1149,7 @@ func _current_command() -> Dictionary:
 
     var command: Dictionary = steps[step_index] as Dictionary
     var op: String = String(command.get("op", ""))
-    if op == "set_flag" or op == "flag" or op == "item" or op == "condition" or op == "goto":
+    if INTERNAL_OPS.has(op):
         return {}
 
     var presentable_command: Dictionary = command.duplicate(true)
@@ -1303,6 +1518,13 @@ func _validate_step(current_node_id: String, index: int, step: Dictionary, nodes
                 return "%s char expression is invalid" % prefix
             if step.has("position") and (typeof(step["position"]) != TYPE_STRING or not VALID_CHARACTER_POSITIONS.has(String(step["position"]))):
                 return "%s char position is invalid" % prefix
+            if step.has("enter") and typeof(step["enter"]) != TYPE_BOOL:
+                return "%s char enter must be boolean" % prefix
+            if bool(step.get("enter", false)) and not bool(step.get("visible", true)):
+                return "%s char cannot enter and hide at once" % prefix
+        "placard":
+            if typeof(step.get("text", null)) != TYPE_STRING:
+                return "%s placard text must be a string (\"\" clears the placard)" % prefix
         "say":
             var speaker: String = String(step.get("speaker", ""))
             if not _is_non_empty_string(step.get("speaker", null)):
@@ -1315,6 +1537,10 @@ func _validate_step(current_node_id: String, index: int, step: Dictionary, nodes
                 return "%s say thought must be boolean" % prefix
             if step.has("expression") and (typeof(step["expression"]) != TYPE_STRING or not VALID_EXPRESSIONS.has(String(step["expression"]))):
                 return "%s say expression is invalid" % prefix
+            if step.has("offscreen") and typeof(step["offscreen"]) != TYPE_BOOL:
+                return "%s say offscreen must be boolean" % prefix
+            if bool(step.get("offscreen", false)) and speaker == "narrator":
+                return "%s say offscreen needs a character speaker (narration is never on stage)" % prefix
         "choice":
             if not _is_non_empty_string(step.get("prompt", null)):
                 return "%s choice prompt must be a non-empty string" % prefix
@@ -1360,33 +1586,7 @@ func _validate_step(current_node_id: String, index: int, step: Dictionary, nodes
             if not _is_non_empty_string(profile_character.get("profile", null)):
                 return "%s profile id '%s' needs a catalog character with profile text" % [prefix, step.get("id", "")]
         "investigate":
-            var investigation_id: String = String(step.get("id", ""))
-            if not _is_non_empty_string(step.get("id", null)):
-                return "%s investigate id must be a non-empty string" % prefix
-            if not _is_non_empty_string(step.get("prompt", null)):
-                return "%s investigate prompt must be a non-empty string" % prefix
-            if typeof(step.get("hotspots", null)) != TYPE_ARRAY or (step["hotspots"] as Array).is_empty():
-                return "%s investigate hotspots must be a non-empty array" % prefix
-            var hotspot_ids: Array[String] = []
-            var hotspots: Array = step["hotspots"] as Array
-            for hotspot_index: int in range(hotspots.size()):
-                if not hotspots[hotspot_index] is Dictionary:
-                    return "%s hotspot %d must be an object" % [prefix, hotspot_index]
-                var hotspot: Dictionary = hotspots[hotspot_index] as Dictionary
-                if not _is_non_empty_string(hotspot.get("id", null)) or not _is_non_empty_string(hotspot.get("label", null)):
-                    return "%s hotspot %d needs id and label" % [prefix, hotspot_index]
-                var hotspot_id: String = String(hotspot["id"])
-                if hotspot_ids.has(hotspot_id):
-                    return "%s repeats hotspot id '%s'" % [prefix, hotspot_id]
-                hotspot_ids.append(hotspot_id)
-                if not _is_normalized_position(hotspot.get("pos", null)):
-                    return "%s hotspot '%s' pos must contain normalized x/y coordinates" % [prefix, hotspot_id]
-                if hotspot.has("size") and (not _is_normalized_position(hotspot["size"]) \
-                        or float(hotspot["size"][0]) <= 0.0 or float(hotspot["size"][1]) <= 0.0):
-                    return "%s hotspot '%s' size must be a positive fraction of the picture [w, h]" % [prefix, hotspot_id]
-                var hotspot_item: String = String(hotspot.get("item", ""))
-                if not _catalog_has_item(asset_catalog, hotspot_item):
-                    return "%s hotspot '%s' item '%s' is not in asset catalog" % [prefix, hotspot_id, hotspot_item]
+            return _validate_investigation(step, prefix, index, nodes, asset_catalog)
         "boke_round":
             if TsukkomiRound.is_v2(step):
                 var v2_error: String = TsukkomiRound.validate(step, prefix,
@@ -1568,6 +1768,104 @@ func _validate_step(current_node_id: String, index: int, step: Dictionary, nodes
     return ""
 
 
+## An investigation: prompt, hotspots (home place), optional bg/label, talk topics and other
+## places. Hotspot, topic and place ids are unique across the whole investigation.
+func _validate_investigation(step: Dictionary, prefix: String, index: int, nodes: Dictionary, asset_catalog: Dictionary) -> String:
+    if not _is_non_empty_string(step.get("id", null)):
+        return "%s investigate id must be a non-empty string" % prefix
+    if not _is_non_empty_string(step.get("prompt", null)):
+        return "%s investigate prompt must be a non-empty string" % prefix
+    if step.has("bg") and not _catalog_has_background(asset_catalog, String(step["bg"])):
+        return "%s investigate bg '%s' is not in asset catalog" % [prefix, step["bg"]]
+    if step.has("label") and not _is_non_empty_string(step["label"]):
+        return "%s investigate label must be a non-empty string" % prefix
+    var seen: Dictionary = {}
+    var error: String = _validate_hotspots(step.get("hotspots", null), prefix, seen, nodes, asset_catalog)
+    if error.is_empty():
+        error = _validate_topics(step.get("talk", []), prefix, seen, nodes, asset_catalog)
+    if not error.is_empty():
+        return error
+    var has_reactions: bool = step.has("talk") or step.has("places") \
+        or (step["hotspots"] as Array).any(func(hotspot: Dictionary) -> bool: return hotspot.has("goto"))
+    if step.has("places"):
+        if typeof(step["places"]) != TYPE_ARRAY or (step["places"] as Array).is_empty():
+            return "%s investigate places must be a non-empty array" % prefix
+        if not step.has("bg"):
+            return "%s investigate with places needs its own bg (moving back home shows it)" % prefix
+        for place_index: int in range((step["places"] as Array).size()):
+            var place: Variant = step["places"][place_index]
+            if not place is Dictionary or not _is_non_empty_string((place as Dictionary).get("id", null)):
+                return "%s place %d needs an id" % [prefix, place_index]
+            var place_id: String = String(place["id"])
+            var where: String = "%s place '%s'" % [prefix, place_id]
+            if place_id == HOME_PLACE or place_id.contains("/") or seen.has("place:" + place_id):
+                return "%s: place ids must be unique, without '/', and not '%s'" % [where, HOME_PLACE]
+            seen["place:" + place_id] = true
+            if not _catalog_has_background(asset_catalog, String(place.get("bg", ""))):
+                return "%s bg '%s' is not in asset catalog" % [where, place.get("bg", "")]
+            for key: String in ["label", "prompt"]:
+                if place.has(key) and not _is_non_empty_string(place[key]):
+                    return "%s %s must be a non-empty string" % [where, key]
+            error = _validate_hotspots(place.get("hotspots", null), where, seen, nodes, asset_catalog)
+            if error.is_empty():
+                error = _validate_topics(place.get("talk", []), where, seen, nodes, asset_catalog)
+            if not error.is_empty():
+                return error
+            has_reactions = has_reactions or (place["hotspots"] as Array).any(func(hotspot: Dictionary) -> bool: return hotspot.has("goto"))
+    if has_reactions and index != 0:
+        return "%s investigate '%s' has reactions (talk, places or hotspot goto), so it must be the first step of its node; reactions come back with => <that node>" % [prefix, step["id"]]
+    return ""
+
+
+func _validate_hotspots(value: Variant, where: String, seen: Dictionary, nodes: Dictionary, asset_catalog: Dictionary) -> String:
+    if typeof(value) != TYPE_ARRAY or (value as Array).is_empty():
+        return "%s investigate hotspots must be a non-empty array" % where
+    var hotspots: Array = value as Array
+    for hotspot_index: int in range(hotspots.size()):
+        if not hotspots[hotspot_index] is Dictionary:
+            return "%s hotspot %d must be an object" % [where, hotspot_index]
+        var hotspot: Dictionary = hotspots[hotspot_index] as Dictionary
+        if not _is_non_empty_string(hotspot.get("id", null)) or not _is_non_empty_string(hotspot.get("label", null)):
+            return "%s hotspot %d needs id and label" % [where, hotspot_index]
+        var hotspot_id: String = String(hotspot["id"])
+        if seen.has("spot:" + hotspot_id):
+            return "%s repeats hotspot id '%s'" % [where, hotspot_id]
+        seen["spot:" + hotspot_id] = true
+        if not _is_normalized_position(hotspot.get("pos", null)):
+            return "%s hotspot '%s' pos must contain normalized x/y coordinates" % [where, hotspot_id]
+        if hotspot.has("size") and (not _is_normalized_position(hotspot["size"]) \
+                or float(hotspot["size"][0]) <= 0.0 or float(hotspot["size"][1]) <= 0.0):
+            return "%s hotspot '%s' size must be a positive fraction of the picture [w, h]" % [where, hotspot_id]
+        if not hotspot.has("item") and not hotspot.has("goto"):
+            return "%s hotspot '%s' needs an item, a goto reaction, or both" % [where, hotspot_id]
+        if hotspot.has("item") and not _catalog_has_item(asset_catalog, String(hotspot["item"])):
+            return "%s hotspot '%s' item '%s' is not in asset catalog" % [where, hotspot_id, hotspot["item"]]
+        if hotspot.has("goto") and not nodes.has(String(hotspot["goto"])):
+            return "%s hotspot '%s' goto target is invalid" % [where, hotspot_id]
+        if hotspot.has("optional") and typeof(hotspot["optional"]) != TYPE_BOOL:
+            return "%s hotspot '%s' optional must be boolean" % [where, hotspot_id]
+    return ""
+
+
+func _validate_topics(value: Variant, where: String, seen: Dictionary, nodes: Dictionary, asset_catalog: Dictionary) -> String:
+    if typeof(value) != TYPE_ARRAY:
+        return "%s talk must be an array of topics" % where
+    for topic_index: int in range((value as Array).size()):
+        var topic: Variant = value[topic_index]
+        if not topic is Dictionary or not _is_non_empty_string((topic as Dictionary).get("id", null)) \
+                or not _is_non_empty_string((topic as Dictionary).get("label", null)):
+            return "%s talk topic %d needs id and label" % [where, topic_index]
+        var topic_id: String = String(topic["id"])
+        if seen.has("topic:" + topic_id):
+            return "%s repeats talk topic id '%s'" % [where, topic_id]
+        seen["topic:" + topic_id] = true
+        if not nodes.has(String(topic.get("goto", ""))):
+            return "%s talk topic '%s' goto target is invalid" % [where, topic_id]
+        if topic.has("require") and not _catalog_has_item(asset_catalog, String(topic["require"])):
+            return "%s talk topic '%s' require item '%s' is not in asset catalog" % [where, topic_id, topic["require"]]
+    return ""
+
+
 func _validate_flag_consistency(root: Dictionary) -> String:
     var types: Dictionary = {}
     var values: Dictionary = {}
@@ -1616,6 +1914,16 @@ func _validate_flag_consistency(root: Dictionary) -> String:
                         if not option_flag_error.is_empty():
                             return option_flag_error
 
+    # `when` cases may test flags: each must be a story flag with a value of the same type.
+    for raw_node_id: Variant in nodes.keys():
+        var steps: Array = (nodes[raw_node_id] as Dictionary)["steps"] as Array
+        for index: int in range(steps.size()):
+            if not TsukkomiRound.is_v2(steps[index]):
+                continue
+            for condition: Dictionary in TsukkomiRound.flag_conditions(steps[index]):
+                for key: Variant in condition.keys():
+                    if not types.has(String(key)) or types[String(key)] != typeof(condition[key]):
+                        return "node '%s' step %d when flags '%s' is not a story flag of that type" % [raw_node_id, index, key]
     return ""
 
 
@@ -1655,7 +1963,7 @@ func _validate_snapshot(snapshot_data: Dictionary) -> String:
         return "step_index is outside the node"
     var candidate_step: Dictionary = candidate_steps[candidate_step_index] as Dictionary
     var candidate_op: String = String(candidate_step.get("op", ""))
-    if candidate_op == "set_flag" or candidate_op == "flag" or candidate_op == "item" or candidate_op == "condition" or candidate_op == "goto":
+    if INTERNAL_OPS.has(candidate_op):
         return "snapshot points to an internal command"
 
     var flags_error: String = _validate_saved_flags(snapshot_data["flags"])
@@ -1683,8 +1991,12 @@ func _validate_snapshot(snapshot_data: Dictionary) -> String:
     if not gameplay_error.is_empty():
         return gameplay_error
     var hotspots_error: String = _validate_checked_hotspots(snapshot_data["checked_hotspots"])
+    if hotspots_error.is_empty() and snapshot_data.has("investigations"):
+        hotspots_error = _validate_investigations(snapshot_data["investigations"])
     if not hotspots_error.is_empty():
         return hotspots_error
+    if snapshot_data.has("placard") and typeof(snapshot_data["placard"]) != TYPE_STRING:
+        return "placard must be a string"
     var v1_op: String = "" if TsukkomiRound.is_v2(candidate_step) else candidate_op
     var boke_error: String = _validate_boke_snapshot(snapshot_data["boke"], v1_op, candidate_step)
     if not boke_error.is_empty():
@@ -1787,25 +2099,59 @@ func _validate_checked_hotspots(value: Variant) -> String:
     if not value is Dictionary:
         return "checked_hotspots must be an object"
     var saved: Dictionary = value as Dictionary
-    for raw_investigation_id: Variant in saved.keys():
-        if typeof(raw_investigation_id) != TYPE_STRING:
+    for raw_key: Variant in saved.keys():
+        if typeof(raw_key) != TYPE_STRING:
             return "checked_hotspots keys must be strings"
-        var investigation_id: String = String(raw_investigation_id)
+        var key: String = String(raw_key)
+        var investigation_id: String = key.get_slice("/", 0)
+        var place_id: String = key.get_slice("/", 1) if key.contains("/") else HOME_PLACE
         var investigation: Dictionary = _find_phase3_command("investigate", investigation_id)
         if investigation.is_empty():
             return "checked_hotspots references unknown investigation '%s'" % investigation_id
-        if not saved[raw_investigation_id] is Array:
-            return "checked_hotspots['%s'] must be an array" % investigation_id
+        var place: Dictionary = {}
+        for candidate: Dictionary in _investigation_places(investigation):
+            if candidate["id"] == place_id:
+                place = candidate
+        if place.is_empty() or (key.contains("/") and place_id == HOME_PLACE):
+            return "checked_hotspots references unknown place '%s'" % key
+        if not saved[raw_key] is Array:
+            return "checked_hotspots['%s'] must be an array" % key
         var seen: Dictionary = {}
         var valid_ids: Dictionary = {}
-        for raw_hotspot: Variant in investigation["hotspots"] as Array:
+        for raw_hotspot: Variant in place["hotspots"] as Array:
             valid_ids[String((raw_hotspot as Dictionary)["id"])] = true
-        for raw_checked_id: Variant in saved[raw_investigation_id] as Array:
+        for raw_checked_id: Variant in saved[raw_key] as Array:
             if typeof(raw_checked_id) != TYPE_STRING or not valid_ids.has(String(raw_checked_id)):
-                return "checked_hotspots['%s'] contains an unknown hotspot" % investigation_id
+                return "checked_hotspots['%s'] contains an unknown hotspot" % key
             if seen.has(raw_checked_id):
-                return "checked_hotspots['%s'] contains duplicate hotspot '%s'" % [investigation_id, raw_checked_id]
+                return "checked_hotspots['%s'] contains duplicate hotspot '%s'" % [key, raw_checked_id]
             seen[raw_checked_id] = true
+    return ""
+
+
+func _validate_investigations(value: Variant) -> String:
+    if not value is Dictionary:
+        return "investigations must be an object"
+    for raw_id: Variant in (value as Dictionary).keys():
+        var investigation: Dictionary = _find_phase3_command("investigate", String(raw_id))
+        var state: Variant = value[raw_id]
+        if investigation.is_empty():
+            return "investigations references unknown investigation '%s'" % raw_id
+        if not state is Dictionary or typeof((state as Dictionary).get("place")) != TYPE_STRING \
+                or not (state as Dictionary).get("talked") is Array:
+            return "investigations['%s'] needs place and talked" % raw_id
+        var place_ids: Array = _investigation_places(investigation).map(func(place: Dictionary) -> String: return place["id"])
+        if not place_ids.has(String(state["place"])):
+            return "investigations['%s'] is at an unknown place" % raw_id
+        var topic_ids: Array = []
+        for place: Dictionary in _investigation_places(investigation):
+            for topic: Dictionary in place["talk"]:
+                topic_ids.append(String(topic["id"]))
+        var seen: Dictionary = {}
+        for topic_id: Variant in state["talked"]:
+            if typeof(topic_id) != TYPE_STRING or not topic_ids.has(String(topic_id)) or seen.has(topic_id):
+                return "investigations['%s'] lists an unknown or repeated topic" % raw_id
+            seen[topic_id] = true
     return ""
 
 
@@ -1879,6 +2225,12 @@ func _validate_checkpoint(checkpoint: Dictionary) -> String:
     var gameplay_error: String = _validate_gameplay(checkpoint["gameplay"])
     if not gameplay_error.is_empty():
         return "checkpoint %s" % gameplay_error
+    if checkpoint.has("placard") and typeof(checkpoint["placard"]) != TYPE_STRING:
+        return "checkpoint placard must be a string"
+    if checkpoint.has("investigations"):
+        var investigations_error: String = _validate_investigations(checkpoint["investigations"])
+        if not investigations_error.is_empty():
+            return "checkpoint %s" % investigations_error
     return _validate_checked_hotspots(checkpoint["checked_hotspots"])
 
 

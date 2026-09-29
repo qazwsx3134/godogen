@@ -1,7 +1,9 @@
 extends "res://addons/proto_kit/test_kit.gd"
-## The Phase 4 four-clue sample plays in the existing VN shell: four hotspots, a choice,
-## the tsukkomi round with every clue option, and the ending; the gameplay HUD and Game Over
-## retry turn on from the story's content; the title screen switches between stories.
+## The Phase 4 four-clue sample plays in the existing VN shell: four hotspots (the footprints
+## play their own scene), 對話 and 移動 topics in the reading box, the kitchen with its own
+## picture and fridge (Gintoki answers from off stage), a choice, the tsukkomi round with every
+## clue option, and the ending; the gameplay HUD and Game Over retry turn on from the story's
+## content; the title screen switches between stories.
 
 const MAIN_SCENE: PackedScene = preload("../main.tscn")
 const STORY_PATH: String = "res://data/phase4_story.json"
@@ -18,6 +20,7 @@ func _run() -> void:
 	_cleanup_saves()
 	await _test_title_story_switch()
 	await _test_game_over_retry()
+	await _test_talk_and_move()
 	var game: Control = _new_game(TEST_SAVE)
 	await _frames(3)
 	_expect(game._story_ready, "phase4_story.json loads in the VN shell: %s" % game._story_error)
@@ -31,7 +34,7 @@ func _run() -> void:
 	for hotspot_id: String in HOTSPOTS:
 		var spot: Control = game._hotspots.get(hotspot_id) as Control
 		_expect(spot != null and spot.get_parent() == game._hotspot_layer, "spot '%s' lies on the picture" % hotspot_id)
-		game._collect_hotspot(hotspot_id)
+	await _search_all(game)
 	game._collect_hotspot("empty_milk_bottle")
 	_expect(game._runner.items.size() == 4, "each clue is granted once: %s" % [game._runner.items])
 	game._on_investigation_continue_pressed()
@@ -82,8 +85,8 @@ func _check_case_file(game: Control) -> void:
 	_expect(panel.find_child("CaseFileName", true, false).text == "空的草莓牛奶瓶", "the first material is selected with its name")
 	_expect(not panel.find_child("CaseFileUse", true, false).visible, "拿來吐槽 is hidden outside the timed choice")
 	await _press(panel.find_child("CaseFileTab_profiles", true, false))
-	_expect(grid.get_child_count() == 2 and panel.find_child("CaseFileText", true, false).text.contains("嗜甜"),
-		"the profiles tab lists Gintoki and Kagura with profile text")
+	_expect(grid.get_child_count() == 3 and panel.find_child("CaseFileText", true, false).text.contains("嗜甜"),
+		"the profiles tab lists Gintoki, Sadaharu and Kagura with profile text")
 	await _frames(1)
 	_expect(grid.get_child(0).get_node("Content/Picture").texture != null,
 		"a character with art shows its picture instead of the placeholder")
@@ -133,8 +136,7 @@ func _test_game_over_retry() -> void:
 	game._set_skip(true)
 	await _until(func() -> bool: return game._screen_mode == "investigate", "retry run reaches the investigation")
 	_expect(game._phase3_hud.visible and game._menu_items["material"].visible, "HUD and the materials menu entry are available")
-	for hotspot_id: String in HOTSPOTS:
-		game._collect_hotspot(hotspot_id)
+	await _search_all(game)
 	game._on_investigation_continue_pressed()
 	game._set_skip(true)
 	await _until(func() -> bool: return game._screen_mode == "choice", "retry run reaches the choice")
@@ -157,10 +159,96 @@ func _test_game_over_retry() -> void:
 	game._on_game_over_retry_pressed()
 	_expect(game._screen_mode == "boke_round" and int(game._runner.gameplay["glasses"]) == 5,
 		"retry returns to the round with full glasses")
-	_expect(game._runner.items.size() == 4 and game._runner.profiles == ["gintoki"],
-		"retry keeps the clues and profiles collected before the round")
+	_expect(game._runner.items.size() == 4 and game._runner.profiles == ["gintoki", "sadaharu"],
+		"retry keeps the clues and profiles collected before the round (%s)" % [game._runner.profiles])
 	game.queue_free()
 	await _frames(2)
+
+
+## Collects every living-room spot; a spot with a scene (the footprints) plays it under SKIP and
+## the search comes back.
+func _search_all(game: Control) -> void:
+	for hotspot_id: String in HOTSPOTS:
+		game._collect_hotspot(hotspot_id)
+		if game._screen_mode != "investigate":
+			game._set_skip(true)
+			await _until(func() -> bool: return game._screen_mode == "investigate", "back from the scene of %s" % hotspot_id)
+
+
+## 對話 and 移動 in the reading box: a topic plays its scene once and the search comes back with
+## the picture where it was left; the kitchen has its own picture and fridge, whose scene has
+## Gintoki speak from off stage and then returns home; a style switch keeps the topics; Continue
+## in the kitchen reopens the kitchen.
+func _test_talk_and_move() -> void:
+	var game: Control = _new_game(TEST_SAVE)
+	await _frames(3)
+	game._on_begin_pressed()
+	game._set_skip(true)
+	await _until(func() -> bool: return game._screen_mode == "investigate", "reach the search")
+	var box: Control = game._dialog_panel
+	_expect(box.investigation_topics.visible and box.talk_list.get_child_count() == 2 and box.move_list.get_child_count() == 1,
+		"the reading box shows two talk topics and one move")
+	var kagura_topic: Button = game._topic_buttons.get("talk:kagura_dinner") as Button
+	var kitchen_move: Button = game._topic_buttons.get("move:kitchen") as Button
+	_expect(kagura_topic != null and kagura_topic.text == "神樂：昨晚吃了什麼？" and kitchen_move.text == "廚房"
+		and kagura_topic.custom_minimum_size.y >= 48.0 * game.CSS_PX - 0.5, "topic buttons carry their labels and a 48 CSS px height")
+	game._set_pan(game._pan_range.x * 0.5)
+	var pan: float = game._pan
+	await _press(kagura_topic)
+	await _read_until(game, func() -> bool: return game._current_speaker == "kagura", "Kagura answers")
+	_expect(game._sprites["kagura"].visible and not box.investigation_topics.visible, "Kagura comes on to answer; the topics give way")
+	game._set_skip(true)
+	await _until(func() -> bool: return game._screen_mode == "investigate", "back to the search")
+	_expect(not game._topic_buttons.has("talk:kagura_dinner") and box.talk_list.get_child_count() == 1,
+		"the played topic is gone")
+	_expect(is_equal_approx(game._pan, pan) and not game._sprites["kagura"].visible, "the picture is where it was left; the stage is clear again")
+
+	game._set_ui_style("ledger", false)
+	await _frames(2)
+	_expect(game._dialog_panel.style_id == "ledger" and game._topic_buttons.has("move:kitchen")
+		and game._dialog_panel.move_list.get_child_count() == 1, "switching edition moves the topics into the new box")
+	await _press(game._topic_buttons["move:kitchen"])
+	_expect(game._current_bg_id == "yorozuya_kitchen" and game._hotspots.keys() == ["fridge"] and game._place_tag.text == "萬事屋廚房"
+		and game._topic_buttons.keys() == ["move:home"] and (game._topic_buttons["move:home"] as Button).text == "客廳",
+		"the kitchen has its own picture, its fridge and the way back (%s)" % [game._topic_buttons.keys()])
+	_expect(game._investigation_continue_button.disabled, "繼續 still waits for the living-room clues")
+	game._save_game()
+	var resumed: Control = _new_game(TEST_SAVE)
+	await _frames(3)
+	resumed._on_continue_pressed()
+	await _frames(3)
+	_expect(resumed._screen_mode == "investigate" and resumed._current_bg_id == "yorozuya_kitchen" and resumed._hotspots.has("fridge"),
+		"Continue reopens the search in the kitchen")
+	resumed.queue_free()
+	await _frames(2)
+
+	game._collect_hotspot("fridge")
+	await _read_until(game, func() -> bool: return game._current_speaker == "gintoki", "Gintoki's line")
+	_expect(not game._sprites["gintoki"].visible and game._dialog_panel.speaker_name.text == "銀時",
+		"Gintoki speaks from off stage: named, not on stage")
+	game._set_skip(true)
+	await _until(func() -> bool: return game._screen_mode == "investigate", "back to the search")
+	_expect(game._current_bg_id == "yorozuya_living_room" and game._hotspots.size() == 4 and game._runner.items.is_empty(),
+		"the searched-out kitchen sends the player home; the fridge gave no material")
+	game._set_ui_style("cinema", false)
+	game.queue_free()
+	await _frames(2)
+	_cleanup_saves()
+
+
+## Reads lines (completing, then advancing) until done() holds.
+func _read_until(game: Control, done: Callable, label: String) -> void:
+	var deadline: int = Time.get_ticks_msec() + 8000
+	while Time.get_ticks_msec() < deadline:
+		if done.call():
+			return
+		if game._screen_mode == "story" and not game._story_busy:
+			if game._text_complete:
+				game._advance_current_line()
+			else:
+				game._complete_current_line()
+		await _frames(1)
+	failures.append("timed out before %s (at %s)" % [label, game._runner.node_id])
 
 
 func _new_game(save_path: String) -> Control:
