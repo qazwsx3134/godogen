@@ -19,7 +19,7 @@
 
 標題畫面的副標題是故事切換鈕，點一下換下一個試玩內容（討債閱讀基線 → Phase 2 → Phase 3 → Phase 4 → 回合試片），桌機或編輯器執行會記住上次的選擇。Web 也可以用網址直接開：討債閱讀基線用預設網址；草莓牛奶技術片段用 `?sample=phase2`；調查與吐槽技術短循環用 `?sample=phase3`；四線索調查用 `?sample=phase4`；回合試片用 `?sample=phase4_rounds`。啟動與測試指令見[原型 README](../../prototypes/debt-commission/README.md#開發與-web-匯出)。討債第一場有作者核准的[閱讀文本](stories/002-debt-commission-draft-v0.1.md)；草莓牛奶兩個 JSON 都是**技術片段**，不是核准的第一章。
 
-## 進行中：分支 `ch1-presentation-and-engine`（2026-09-29，尚未 commit）
+## 進行中：第一章上機與文字演出（2026-09-29 起）
 
 目標：把第一章（[草稿 v0.2](stories/003-strawberry-milk-ch1-draft-v0.2.md)）放進遊戲，並補上逆轉裁判式的文字演出與 VN 閱讀便利功能。依序分軌進行，因為各軌都會改 `main.gd` 與 `asset_catalog.json`，不能平行。
 
