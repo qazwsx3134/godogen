@@ -9,11 +9,13 @@ const Model = preload("res://domain/pet_model.gd")
 const Care = preload("res://domain/care_service.gd")
 const Battle = preload("res://domain/battle_service.gd")
 
-const INK: Color = Color("344c43")
-const MUTED: Color = Color("65715f")
-const CREAM: Color = Color("f4efdf")
-const GREEN: Color = Color("607b58")
-const ORANGE: Color = Color("b97755")
+const INK: Color = Color("233a33")
+const MUTED: Color = Color("59675f")
+const CREAM: Color = Color("fffaf0")
+const GREEN: Color = Color("4f7058")
+const ORANGE: Color = Color("b86045")
+const SAND: Color = Color("e8dfc8")
+const GOLD: Color = Color("d19a45")
 const SPECIES: Dictionary = {"sprout": "芽芽", "bloom": "葉角獸", "ember": "暖焰獸", "moss": "苔甲獸", "breeze": "風耳獸"}
 const TRAIN_NAMES: Dictionary = {"power": "力量", "guard": "防禦", "swift": "敏捷"}
 
@@ -37,12 +39,19 @@ var modal_title: Label
 var modal_panel: PanelContainer
 var day_label: Label
 var footer_label: Label
+var room_frame: PanelContainer
+var quick_actions: HBoxContainer
+var egg_activity: Button
+var egg_nav_hint: Label
+var pet_nav_buttons: Array[Button] = []
+var home_focus_controls: Array[Button] = []
 var last_modal: String = ""
 var training_active: bool = false
 var battle_playing: bool = false
 var modal_generation: int = 0
 var safe_margin: MarginContainer
 var heading_font: FontVariation
+var modal_return_focus: Control
 
 func _ready() -> void:
 	_theme()
@@ -62,6 +71,8 @@ func _ready() -> void:
 	_safe_area()
 	if not session.state.get("pending_battle", {}).is_empty() and not session.state.pending_battle.get("settled", true):
 		call_deferred("_battle_report")
+	else:
+		call_deferred("_focus_home")
 
 func _theme() -> void:
 	var game_theme := Theme.new()
@@ -72,18 +83,18 @@ func _theme() -> void:
 	heading_font.base_font = body_font.base_font
 	heading_font.variation_opentype = {2003265652: 650.0}
 	game_theme.default_font = body_font
-	game_theme.default_font_size = 17
+	game_theme.default_font_size = 19
 	game_theme.set_color("font_color", "Label", INK)
 	game_theme.set_color("font_color", "Button", INK)
 	game_theme.set_color("font_hover_color", "Button", INK)
 	game_theme.set_color("font_pressed_color", "Button", INK)
 	game_theme.set_color("font_focus_color", "Button", INK)
 	game_theme.set_color("font_disabled_color", "Button", MUTED)
-	game_theme.set_stylebox("normal", "Button", _style(Color("ece6d2"), 12, Color("d4cdb5"), 1))
-	game_theme.set_stylebox("hover", "Button", _style(Color("f8f3e4"), 12, Color("aeb797"), 2))
-	game_theme.set_stylebox("pressed", "Button", _style(Color("d9dfc4"), 12, GREEN, 2))
-	game_theme.set_stylebox("disabled", "Button", _style(Color("e2dfd1"), 12, Color("d2cebf"), 1))
-	game_theme.set_stylebox("focus", "Button", _style(Color(0, 0, 0, 0), 12, ORANGE, 2))
+	game_theme.set_stylebox("normal", "Button", _style(Color("f4ecd7"), 10, Color("c8bea4"), 2))
+	game_theme.set_stylebox("hover", "Button", _style(Color("fffaf0"), 10, GREEN, 2))
+	game_theme.set_stylebox("pressed", "Button", _style(Color("dce2c8"), 10, GREEN, 2))
+	game_theme.set_stylebox("disabled", "Button", _style(Color("e0dccf"), 10, Color("c5c0b2"), 1))
+	game_theme.set_stylebox("focus", "Button", _style(Color(0, 0, 0, 0), 10, GOLD, 3))
 	game_theme.set_constant("outline_size", "Label", 0)
 	game_theme.set_constant("separation", "VBoxContainer", 12)
 	game_theme.set_constant("separation", "HBoxContainer", 12)
@@ -104,9 +115,12 @@ func _style(color: Color, radius: int = 12, border: Color = Color.TRANSPARENT, w
 func _label(text: String, font_size: int = 17, color: Color = INK) -> Label:
 	var label := Label.new()
 	label.text = text
-	label.add_theme_font_size_override("font_size", font_size)
+	# The 480 × 900 reference can scale to 375 × 667 in the compact target.
+	# A 19-unit floor remains at least 14 points after that transform.
+	var readable_size: int = maxi(font_size, 19)
+	label.add_theme_font_size_override("font_size", readable_size)
 	label.add_theme_color_override("font_color", color)
-	if font_size >= 22:
+	if readable_size >= 20:
 		label.add_theme_font_override("font", heading_font)
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	return label
@@ -123,6 +137,7 @@ func _button(text: String, callback: Callable, primary: bool = false, node_name:
 	button.text = text
 	button.custom_minimum_size = Vector2(0, 60)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.focus_mode = Control.FOCUS_ALL
 	if not node_name.is_empty():
 		button.name = node_name
 	if primary:
@@ -137,6 +152,38 @@ func _button(text: String, callback: Callable, primary: bool = false, node_name:
 		sound.play("tap")
 		callback.call()
 	)
+	return button
+
+func _tile_button(kind: String, text: String, callback: Callable, node_name: String, height: int = 68) -> Button:
+	var button := _button("", callback, false, node_name)
+	button.custom_minimum_size = Vector2(0, height)
+	button.tooltip_text = text
+	var tile_styles: Dictionary = {
+		"normal": _style(Color("f4ecd7"), 10, Color("c8bea4"), 2),
+		"hover": _style(Color("fffaf0"), 10, GREEN, 2),
+		"pressed": _style(Color("dce2c8"), 10, GREEN, 2),
+		"disabled": _style(Color("e0dccf"), 10, Color("c5c0b2"), 1),
+		"focus": _style(Color(0, 0, 0, 0), 10, GOLD, 3),
+	}
+	for style_name in tile_styles:
+		var tile_style: StyleBoxFlat = tile_styles[style_name]
+		tile_style.content_margin_left = 5
+		tile_style.content_margin_right = 5
+		tile_style.content_margin_top = 5
+		tile_style.content_margin_bottom = 5
+		button.add_theme_stylebox_override(style_name, tile_style)
+	var content := VBoxContainer.new()
+	content.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	content.add_theme_constant_override("separation", 0)
+	content.alignment = BoxContainer.ALIGNMENT_CENTER
+	content.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	button.add_child(content)
+	var icon := Icon.new()
+	icon.kind = kind
+	content.add_child(icon)
+	var label := _label(text, 14)
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	content.add_child(label)
 	return button
 
 func _bar(color: Color = GREEN, height: int = 8) -> ProgressBar:
@@ -157,90 +204,67 @@ func _bar(color: Color = GREEN, height: int = 8) -> ProgressBar:
 
 func _build_home() -> void:
 	var background := ColorRect.new()
-	background.color = Color("e8e3d3")
+	background.color = SAND
 	background.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	background.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(background)
 	safe_margin = MarginContainer.new()
 	safe_margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	add_child(safe_margin)
-	var scroll := ScrollContainer.new()
-	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	safe_margin.add_child(scroll)
-	var center := HBoxContainer.new()
-	center.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	scroll.add_child(center)
-	var left := Control.new()
-	left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	center.add_child(left)
-	var margin := MarginContainer.new()
-	margin.custom_minimum_size.x = 456
-	margin.add_theme_constant_override("margin_left", 8)
-	margin.add_theme_constant_override("margin_right", 8)
-	margin.add_theme_constant_override("margin_top", 18)
-	margin.add_theme_constant_override("margin_bottom", 18)
-	center.add_child(margin)
-	var right := Control.new()
-	right.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	center.add_child(right)
-	var column := VBoxContainer.new()
-	column.add_theme_constant_override("separation", 14)
-	margin.add_child(column)
+	var shell := VBoxContainer.new()
+	shell.add_theme_constant_override("separation", 8)
+	safe_margin.add_child(shell)
+
+	var top_margin := MarginContainer.new()
+	top_margin.add_theme_constant_override("margin_left", 10)
+	top_margin.add_theme_constant_override("margin_right", 10)
+	top_margin.add_theme_constant_override("margin_top", 8)
+	shell.add_child(top_margin)
+	var status_card := PanelContainer.new()
+	status_card.add_theme_stylebox_override("panel", _style(CREAM, 14, Color("c8bea4"), 2))
+	top_margin.add_child(status_card)
+	var top_column := VBoxContainer.new()
+	top_column.add_theme_constant_override("separation", 8)
+	status_card.add_child(top_column)
 	var header := HBoxContainer.new()
-	column.add_child(header)
+	header.add_theme_constant_override("separation", 8)
+	top_column.add_child(header)
 	var brand := VBoxContainer.new()
 	brand.add_theme_constant_override("separation", 0)
 	brand.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(brand)
-	brand.add_child(_label("P O C K E T   C O M P A N I O N", 10, MUTED))
-	brand.add_child(_label("口袋怪獸日記", 26))
-	var collection := _button("冊", _collection, false, "Collection")
-	collection.custom_minimum_size = Vector2(60, 60)
-	collection.size_flags_horizontal = Control.SIZE_SHRINK_END
-	collection.tooltip_text = "收藏冊"
-	header.add_child(collection)
-	var settings := _button("···", _settings, false, "Settings")
-	settings.custom_minimum_size = Vector2(60, 60)
+	brand.add_child(_label("POCKET COMPANION", 14, GREEN))
+	brand.add_child(_label("口袋怪獸日記", 22))
+	var settings := _button("設定", _settings, false, "Settings")
+	settings.custom_minimum_size = Vector2(64, 60)
 	settings.size_flags_horizontal = Control.SIZE_SHRINK_END
 	settings.tooltip_text = "聲音、作息與開發工具"
 	header.add_child(settings)
 	var identity := HBoxContainer.new()
-	column.add_child(identity)
+	identity.add_theme_constant_override("separation", 8)
+	top_column.add_child(identity)
 	var names := VBoxContainer.new()
 	names.add_theme_constant_override("separation", 1)
 	names.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	identity.add_child(names)
-	pet_name = _label("等一個小夥伴", 23)
+	pet_name = _label("等一個小夥伴", 20)
 	names.add_child(pet_name)
-	stage_label = _label("初始蛋 · 一段陪伴，從這裡開始", 13, MUTED)
+	stage_label = _label("初始蛋 · 一段陪伴，從這裡開始", 14, MUTED)
+	stage_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	names.add_child(stage_label)
-	day_label = _label("DAY 01", 13, GREEN)
+	day_label = _label("DAY 01", 14, GREEN)
 	day_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	identity.add_child(day_label)
-	var frame := PanelContainer.new()
-	var frame_style := _style(Color("626e58"), 16, Color("535e4e"), 2)
-	frame_style.content_margin_left = 4
-	frame_style.content_margin_right = 4
-	frame_style.content_margin_top = 6
-	frame_style.content_margin_bottom = 6
-	frame.add_theme_stylebox_override("panel", frame_style)
-	column.add_child(frame)
-	room = Room.new()
-	room.custom_minimum_size = Vector2(432, 264)
-	frame.add_child(room)
-	room_caption = _label("YOUR LITTLE PLACE IN THE WORLD", 10, MUTED)
-	room_caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	column.add_child(room_caption)
 	status_panel = VBoxContainer.new()
-	status_panel.add_theme_constant_override("separation", 8)
-	column.add_child(status_panel)
+	status_panel.add_theme_constant_override("separation", 7)
+	top_column.add_child(status_panel)
 	var needs := HBoxContainer.new()
-	needs.add_theme_constant_override("separation", 20)
+	needs.add_theme_constant_override("separation", 12)
 	status_panel.add_child(needs)
-	for entry in [["fullness", "飽食", Color("a7b27b")], ["mood", "心情", Color("c29175")], ["energy", "精力", Color("88a29a")]]:
+	for entry in [["fullness", "飽食", Color("82955f")], ["mood", "心情", Color("c17458")], ["energy", "精力", Color("54817b")]]:
 		var cell := VBoxContainer.new()
 		cell.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		cell.add_theme_constant_override("separation", 6)
+		cell.add_theme_constant_override("separation", 4)
 		needs.add_child(cell)
 		var label := _label(str(entry[1]), 14)
 		cell.add_child(label)
@@ -248,67 +272,120 @@ func _build_home() -> void:
 		var bar := _bar(entry[2], 8)
 		cell.add_child(bar)
 		need_bars[entry[0]] = bar
-	health_line = _label("", 13, MUTED)
+	health_line = _label("", 14, MUTED)
+	health_line.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	status_panel.add_child(health_line)
 	egg_panel = VBoxContainer.new()
-	egg_panel.add_theme_constant_override("separation", 8)
-	column.add_child(egg_panel)
-	hatch_label = _label("散步，喚醒蛋裡的小宇宙。", 16)
+	egg_panel.add_theme_constant_override("separation", 7)
+	top_column.add_child(egg_panel)
+	hatch_label = _label("放著也會長大；散步與運動能加速孵化。", 15)
+	hatch_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	egg_panel.add_child(hatch_label)
 	hatch_bar = _bar(GREEN, 10)
 	egg_panel.add_child(hatch_bar)
-	var action_grid := GridContainer.new()
-	action_grid.columns = 4
-	action_grid.add_theme_constant_override("h_separation", 10)
-	action_grid.add_theme_constant_override("v_separation", 10)
-	column.add_child(action_grid)
-	var actions: Array = [["scale", "體重計", _scale], ["food", "食物", _food], ["train", "訓練", _training], ["battle", "對戰", _battle], ["clean", "清潔", _clean], ["lights", "燈光", _lights], ["heal", "療護", _heal], ["steps", "散步", _steps]]
-	for action in actions:
-		var button := _button("", action[2], false, str(action[0]).capitalize())
-		button.custom_minimum_size = Vector2(102, 82)
-		action_grid.add_child(button)
-		var content := VBoxContainer.new()
-		content.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		content.add_theme_constant_override("separation", 0)
-		content.alignment = BoxContainer.ALIGNMENT_CENTER
-		content.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		button.add_child(content)
-		var icon := Icon.new()
-		icon.kind = action[0]
-		content.add_child(icon)
-		var label := _label(action[1], 15)
-		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		content.add_child(label)
+
+	var scroll := ScrollContainer.new()
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	shell.add_child(scroll)
+	var margin := MarginContainer.new()
+	margin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	margin.add_theme_constant_override("margin_left", 10)
+	margin.add_theme_constant_override("margin_right", 10)
+	margin.add_theme_constant_override("margin_top", 2)
+	margin.add_theme_constant_override("margin_bottom", 4)
+	scroll.add_child(margin)
+	var column := VBoxContainer.new()
+	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	column.add_theme_constant_override("separation", 10)
+	margin.add_child(column)
+	room_frame = PanelContainer.new()
+	var frame_style := _style(Color("626e58"), 16, Color("535e4e"), 2)
+	frame_style.content_margin_left = 4
+	frame_style.content_margin_right = 4
+	frame_style.content_margin_top = 4
+	frame_style.content_margin_bottom = 4
+	room_frame.add_theme_stylebox_override("panel", frame_style)
+	column.add_child(room_frame)
+	room = Room.new()
+	room.custom_minimum_size = Vector2(0, 312)
+	room_frame.add_child(room)
+	room_caption = _label("小房間 · 一起把平凡的日子養成喜歡的樣子", 14, MUTED)
+	room_caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	room_caption.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	column.add_child(room_caption)
+	egg_activity = _button("查看孵化進度與活動紀錄", _steps, true, "EggActivity")
+	column.add_child(egg_activity)
+	egg_nav_hint = _label("孵化後會解鎖日記、餵食、對戰與療護。", 14, MUTED)
+	egg_nav_hint.name = "EggLockedHint"
+	egg_nav_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	egg_nav_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	column.add_child(egg_nav_hint)
+	quick_actions = HBoxContainer.new()
+	quick_actions.add_theme_constant_override("separation", 8)
+	column.add_child(quick_actions)
+	for action in [["train", "訓練", _training, "Train"], ["clean", "清潔", _clean, "Clean"], ["lights", "燈光", _lights, "Lights"]]:
+		quick_actions.add_child(_tile_button(action[0], action[1], action[2], action[3], 68))
 	var note := PanelContainer.new()
-	note.add_theme_stylebox_override("panel", _style(Color("f1ecdc"), 12))
+	note.add_theme_stylebox_override("panel", _style(Color("f7efd9"), 10, Color("d8c8a8"), 1))
 	column.add_child(note)
 	toast = _paragraph(note, "今天也一起慢慢長大吧。", 14, MUTED)
-	toast.custom_minimum_size.y = 32
+	toast.custom_minimum_size.y = 28
 	toast.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	footer_label = _label("", 11, MUTED)
+	footer_label = _label("", 14, MUTED)
 	footer_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	column.add_child(footer_label)
+
+	var nav_margin := MarginContainer.new()
+	nav_margin.add_theme_constant_override("margin_left", 8)
+	nav_margin.add_theme_constant_override("margin_right", 8)
+	nav_margin.add_theme_constant_override("margin_bottom", 8)
+	shell.add_child(nav_margin)
+	var nav_panel := PanelContainer.new()
+	nav_panel.add_theme_stylebox_override("panel", _style(Color("f7efd9"), 14, Color("b9ad91"), 2))
+	nav_margin.add_child(nav_panel)
+	var navigation := GridContainer.new()
+	navigation.columns = 6
+	navigation.add_theme_constant_override("h_separation", 4)
+	nav_panel.add_child(navigation)
+	for action in [["scale", "日記", _scale, "Scale"], ["food", "餵食", _food, "Food"], ["battle", "對戰", _battle, "Battle"], ["heal", "療護", _heal, "Heal"], ["steps", "活動", _steps, "Steps"], ["collection", "收藏", _collection, "Collection"]]:
+		var nav_button := _tile_button(action[0], action[1], action[2], action[3], 66)
+		if action[3] in ["Scale", "Food", "Battle", "Heal"]:
+			nav_button.set_meta("available_tooltip", action[1])
+			pet_nav_buttons.append(nav_button)
+		navigation.add_child(nav_button)
 
 func _safe_area() -> void:
 	if not is_instance_valid(safe_margin):
 		return
 	var top: int = 0
 	var bottom: int = 0
+	var left: int = 0
+	var right: int = 0
 	if OS.get_name() in ["Android", "iOS"]:
 		var safe: Rect2i = DisplayServer.get_display_safe_area()
 		var window_size: Vector2i = DisplayServer.window_get_size()
-		var factor: float = size.y / maxf(window_size.y, 1)
-		top = int(safe.position.y * factor)
-		bottom = int((window_size.y - safe.end.y) * factor)
+		var factor_x: float = size.x / maxf(window_size.x, 1)
+		var factor_y: float = size.y / maxf(window_size.y, 1)
+		top = int(safe.position.y * factor_y)
+		bottom = int((window_size.y - safe.end.y) * factor_y)
+		left = int(safe.position.x * factor_x)
+		right = int((window_size.x - safe.end.x) * factor_x)
 	safe_margin.add_theme_constant_override("margin_top", top)
 	safe_margin.add_theme_constant_override("margin_bottom", bottom)
+	safe_margin.add_theme_constant_override("margin_left", left)
+	safe_margin.add_theme_constant_override("margin_right", right)
+	if is_instance_valid(room):
+		room.custom_minimum_size.y = 312 if size.x >= 440 else 240
 	_modal_safe_area()
 
 func _modal_safe_area() -> void:
 	if not is_instance_valid(modal_panel):
 		return
-	modal_panel.offset_top = maxi(56, safe_margin.get_theme_constant("margin_top") + 12)
-	modal_panel.offset_bottom = -maxi(40, safe_margin.get_theme_constant("margin_bottom") + 12)
+	modal_panel.offset_left = maxi(12, safe_margin.get_theme_constant("margin_left") + 12)
+	modal_panel.offset_right = -maxi(12, safe_margin.get_theme_constant("margin_right") + 12)
+	modal_panel.offset_top = maxi(20, safe_margin.get_theme_constant("margin_top") + 12)
+	modal_panel.offset_bottom = -maxi(20, safe_margin.get_theme_constant("margin_bottom") + 12)
 
 func _refresh() -> void:
 	var state: Dictionary = session.state
@@ -317,6 +394,13 @@ func _refresh() -> void:
 	sound.configure(state.settings)
 	status_panel.visible = not pet.is_empty()
 	egg_panel.visible = pet.is_empty()
+	egg_activity.visible = pet.is_empty()
+	egg_nav_hint.visible = pet.is_empty()
+	quick_actions.visible = not pet.is_empty()
+	for button in pet_nav_buttons:
+		button.disabled = pet.is_empty()
+		button.modulate = Color(1, 1, 1, 0.62) if pet.is_empty() else Color.WHITE
+		button.tooltip_text = "孵化後開放" if pet.is_empty() else str(button.get_meta("available_tooltip", ""))
 	if pet.is_empty():
 		pet_name.text = "等一個小夥伴"
 		stage_label.text = "初始蛋 · 一段陪伴，從這裡開始"
@@ -341,7 +425,7 @@ func _refresh() -> void:
 			need_bars[key].value = float(pet.get(key, 0))
 		health_line.text = "健康 %d  ·  清潔 %d  ·  %s" % [int(pet.get("health", 100)), int(pet.get("cleanliness", 100)), "房間很乾淨" if pet.get("poop", []).is_empty() else "有 %d 份便便待清理" % pet.poop.size()]
 	var local: Dictionary = Time.get_datetime_dict_from_unix_time(session.now() + int(state.settings.get("timezone_offset_minutes", 0)) * 60)
-	room_caption.text = "小房間  /  %02d:%02d     ·     把平凡的日子，養成喜歡的樣子" % [local.hour, local.minute]
+	room_caption.text = "小房間 · %02d:%02d · 把平凡的日子養成喜歡的樣子" % [local.hour, local.minute]
 	footer_label.text = "開發版 · 模擬步數 · 本機日記已保存" if session.debug_enabled else "本機日記 · 時間孵化可用"
 	if not session.last_save_ok:
 		footer_label.text = "存檔失敗 · 請保留遊戲並確認可用空間"
@@ -365,12 +449,11 @@ func _feedback(message: String, action: String) -> void:
 		Input.vibrate_handheld(35)
 
 func _milestone(kind: String, message: String) -> void:
-	_close()
 	room.play(kind)
 	sound.play(kind)
 	var box := _open("新的故事，長出來了。", "破殼紀念" if kind == "hatch" else "成長紀念")
 	var preview := Room.new()
-	preview.custom_minimum_size = Vector2(288, 176)
+	preview.custom_minimum_size = Vector2(288, 208)
 	box.add_child(preview)
 	preview.update_state(session.state)
 	preview.play(kind)
@@ -379,7 +462,10 @@ func _milestone(kind: String, message: String) -> void:
 	box.add_child(_button("你好呀，%s！" % str(session.state.pet.get("name", "小夥伴")), _close, true, "MilestoneContinue"))
 
 func _open(title: String, subtitle: String = "") -> VBoxContainer:
-	_close()
+	var return_focus: Control = modal_return_focus if is_instance_valid(overlay) and is_instance_valid(modal_return_focus) else get_viewport().gui_get_focus_owner()
+	_close(false, false)
+	modal_return_focus = return_focus
+	_set_home_focus_enabled(false)
 	modal_generation += 1
 	overlay = Control.new()
 	overlay.name = "Modal"
@@ -392,11 +478,11 @@ func _open(title: String, subtitle: String = "") -> VBoxContainer:
 	var panel := PanelContainer.new()
 	modal_panel = panel
 	panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	panel.offset_left = 20
-	panel.offset_right = -20
-	panel.offset_top = 56
-	panel.offset_bottom = -40
-	panel.add_theme_stylebox_override("panel", _style(CREAM, 22, Color("d2cbb2"), 2))
+	panel.offset_left = 12
+	panel.offset_right = -12
+	panel.offset_top = 20
+	panel.offset_bottom = -20
+	panel.add_theme_stylebox_override("panel", _style(CREAM, 18, Color("c8bea4"), 2))
 	overlay.add_child(panel)
 	_modal_safe_area()
 	var layout := VBoxContainer.new()
@@ -409,7 +495,7 @@ func _open(title: String, subtitle: String = "") -> VBoxContainer:
 	names.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	header.add_child(names)
 	if not subtitle.is_empty():
-		names.add_child(_label(subtitle, 12, MUTED))
+		names.add_child(_label(subtitle, 14, MUTED))
 	modal_title = _label(title, 24)
 	modal_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	names.add_child(modal_title)
@@ -428,15 +514,55 @@ func _open(title: String, subtitle: String = "") -> VBoxContainer:
 	close_button.grab_focus()
 	return modal_content
 
-func _close() -> void:
+func _close(restore_focus: bool = true, restore_home_focus: bool = true) -> void:
 	modal_generation += 1
 	training_active = false
 	battle_playing = false
+	var return_focus: Control = modal_return_focus
+	modal_return_focus = null
 	if is_instance_valid(overlay):
 		remove_child(overlay)
 		overlay.queue_free()
 		overlay = null
 	modal_panel = null
+	if restore_home_focus:
+		_set_home_focus_enabled(true)
+	if restore_focus:
+		var return_focus_id: int = return_focus.get_instance_id() if is_instance_valid(return_focus) else 0
+		call_deferred("_restore_home_focus", return_focus_id)
+
+func _set_home_focus_enabled(enabled: bool) -> void:
+	if not is_instance_valid(safe_margin):
+		return
+	if enabled:
+		for button in home_focus_controls:
+			if is_instance_valid(button):
+				button.focus_mode = Control.FOCUS_ALL
+		home_focus_controls.clear()
+		return
+	if home_focus_controls.is_empty():
+		for node in safe_margin.find_children("*", "Button", true, false):
+			var button := node as Button
+			if button != null:
+				home_focus_controls.append(button)
+	for button in home_focus_controls:
+		if is_instance_valid(button):
+			button.focus_mode = Control.FOCUS_NONE
+
+func _focus_home() -> void:
+	if is_instance_valid(overlay):
+		return
+	var target: Control = egg_activity if session.state.get("pet", {}).is_empty() else find_child("Train", true, false) as Control
+	if is_instance_valid(target) and target.is_inside_tree() and target.is_visible_in_tree() and target.focus_mode != Control.FOCUS_NONE:
+		target.grab_focus()
+
+func _restore_home_focus(target_id: int) -> void:
+	var target: Control = instance_from_id(target_id) as Control if target_id != 0 else null
+	if is_instance_valid(target) and target.is_inside_tree() and target.is_visible_in_tree() and target.focus_mode != Control.FOCUS_NONE:
+		if not target is BaseButton or not (target as BaseButton).disabled:
+			target.grab_focus()
+			return
+	_focus_home()
 
 func _unhandled_key_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel") and is_instance_valid(overlay):
@@ -476,7 +602,7 @@ func _scale() -> void:
 	var tween := weight.create_tween()
 	tween.tween_method(func(value: float) -> void:
 		if is_instance_valid(weight): weight.text = "%.1f kg" % value
-	, start, float(pet.weight), 0.65)
+	, start, float(pet.weight), 0.35)
 	var ideal: Vector2 = Model.ideal_weight(pet)
 	_paragraph(box, "理想範圍 %.1f–%.1f kg · 體重不等於戰力" % [ideal.x, ideal.y])
 	_paragraph(box, "%s  /  %s\n年齡 %s\n健康 %d · 清潔 %d\n飽食 %d · 心情 %d · 精力 %d" % [SPECIES.get(pet.species, pet.species), Model.stage_name(pet), _duration(session.now() - int(pet.born_at)), pet.health, pet.cleanliness, pet.fullness, pet.mood, pet.energy], 17, INK)
@@ -588,7 +714,7 @@ func _start_training(kind: String) -> void:
 	var generation: int = modal_generation
 	var progress := _paragraph(box, "第 1 / 3 輪", 22, INK)
 	var preview := Room.new()
-	preview.custom_minimum_size = Vector2(288, 176)
+	preview.custom_minimum_size = Vector2(288, 208)
 	box.add_child(preview)
 	preview.update_state(session.state)
 	var meter := Meter.new()
@@ -666,7 +792,7 @@ func _battle_report() -> void:
 	var generation: int = modal_generation
 	battle_playing = true
 	var arena := Room.new()
-	arena.custom_minimum_size = Vector2(288, 176)
+	arena.custom_minimum_size = Vector2(288, 208)
 	box.add_child(arena)
 	arena.update_state(session.state)
 	arena.arena(str(battle.enemy.get("species", "moss")))
@@ -803,7 +929,7 @@ func _settings() -> void:
 		box.add_child(toggle)
 	_paragraph(box, "音量", 16, INK)
 	var volume := HSlider.new()
-	volume.custom_minimum_size.y = 48
+	volume.custom_minimum_size.y = 60
 	volume.min_value = 0
 	volume.max_value = 100
 	volume.value = float(session.state.settings.get("volume", 0.65)) * 100

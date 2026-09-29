@@ -1,6 +1,6 @@
 # 驗收紀錄
 
-遊戲規則驗證日期：2026-09-21，最終畫面重驗：2026-09-22。iOS 建置流程整合日期：2026-09-22。以下為本機工作目錄的實際結果；尚未推送或觸發 GitHub Actions。
+遊戲規則驗證日期：2026-09-21，UI 重做與桌面畫面重驗：2026-09-24。iOS 建置流程整合日期：2026-09-22。以下為本機工作目錄的實際結果；尚未推送或觸發 GitHub Actions。
 
 本頁記錄目前 Stage A 的實作證據。2026-09-23 確定的「自然時間成長、步數與 Apple 健康 workout 選配加速」目前只有[設計規格](IDLE-GROWTH.md)與 [iOS 技術架構](IOS-ARCHITECTURE.md)，下列舊孵化測試不可視為新規則已通過。
 
@@ -22,9 +22,9 @@
 | `test_care.gd` | `CARE TESTS PASS` | 拒絕操作不變異、訓練上限、睡眠、時間倒退、事件分段、疾病、進化與收藏 |
 | `test_steps_save.gd` | `test_steps_save: PASS` | 完整孵化、延遲／重複／跨日／重啟步數、來源覆蓋、損壞存檔備份恢復；未跳過 hatch |
 | `test_battle.gd` | `Battle tests passed` | 能力快照、雙方出手、固定 seed、重開續接、一次結算、KO 受傷與健康分離 |
-| 真實主場景 headless 操作 | 110 checks，0 failures | 孵化至收藏、新蛋、重新建立主場景後恢復戰鬥與收藏 |
-| 正式模式模擬 | 14 checks，0 failures | 無假步數按鈕、資料未知狀態、時間孵化、拒絕快轉及步數注入 |
-| 桌面視窗操作與擷取 | 118 checks，0 failures | 真實輸入事件與畫面；375×667、390×844、402×874、430×932 的捲動及操作入口 |
+| 真實主場景 headless 操作 | 392 checks，0 failures | 孵化至收藏、新蛋、重新建立主場景後恢復戰鬥與收藏；輸出座標中的 44×44 觸控區、14 pt 文字、初始／彈窗／返回焦點與四種手機尺寸 |
+| 正式模式模擬 | 56 checks，0 failures | 無假步數按鈕、資料未知狀態、時間孵化、拒絕快轉及步數注入；同時檢查目前首頁的觸控區、鎖定狀態與初始焦點 |
+| 桌面視窗操作與擷取 | 400 checks，0 failures | 原生渲染與 Button 路由；375×667、390×844、402×874、430×932 的固定導覽、主要房間、觸控區與操作入口 |
 | 匯出後的正式版 PCK | 17 checks，0 failures | 真正匯出的資料檔、對手、字型授權及正式模式行為 |
 | iOS pipeline 離線測試 | 16 tests PASS | 簽署輸入隔離、profile/keychain 回復、私鑰清理、版本號與模擬器重用 |
 | 模板工具／啟動檢查工具 | 7／3 tests PASS | 架構、來源與快取驗證；程序與資源錯誤判定 |
@@ -52,16 +52,18 @@ iOS 建置第一次發現官方模板宣告 arm64 simulator、實際只有 x86_6
 
 ## 畫面證據
 
-以下 PNG 均由 Godot 實際場景擷取：
+以下 PNG 均由 Godot 實際場景擷取。01–10 是 2026-09-22 的 Stage A／iOS pipeline 基線；11–12 是 2026-09-24 的新版 UI：
 
 - [新蛋](evidence/01-egg.png)、[小房間](evidence/02-companion.png)、[體重與成長日記](evidence/03-diary.png)。
 - [訓練](evidence/04-training.png)、[重開後的戰鬥](evidence/05-battle.png)、[成熟體](evidence/06-mature.png)。
 - [下一顆蛋](evidence/07-next-egg.png)、[長螢幕配置](evidence/08-phone.png)。
 - 原生 Release App：[iPhone 17 Pro 模擬器](evidence/09-ios-iphone17-pro.png)、[iPhone 12 模擬器](evidence/10-ios-iphone12.png)。
+- 新版 UI：[寵物主畫面](evidence/11-ui-redesign-companion.png)、[375×667 邏輯視窗的蛋狀態](evidence/12-ui-redesign-375x667.png)。後者的 macOS Compatibility render target 實際輸出為 374×666 PNG；流程中的 viewport 設定與版面斷言使用 375×667。
 
 ## 尚未驗證
 
 - iPhone 17 Pro／iPhone 12 實機安裝、效能、安全區與觸控尺寸。桌面視窗比例驗證不能取代實機。
+- 2026-09-24 UI revision 尚未重跑 iOS 模擬器截圖；09–10 只證明原生 pipeline 基線，11–12 才是目前介面。
 - iOS 16 的最低 OS runtime 未執行；目前原生啟動測試使用 iOS 26.5。deployment target 設定不能取代舊 OS 相容性測試。
 - 放置成長重構、`ActivityService`、iOS `CMPedometer`／HealthKit `HKWorkout` 原生外掛、entitlement、隱私用途說明與本機資料備份排除尚未實作；目前 release 使用無來源狀態和舊的時間孵化，沒有假活動資料。
 - Apple Distribution 簽署、TestFlight 上傳及 App Store 審核尚未執行；需要實際 Apple Developer／App Store Connect 設定。

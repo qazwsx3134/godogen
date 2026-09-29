@@ -1,5 +1,5 @@
 extends Control
-## Original pixel stage drawn at 144 × 88; the UI scales its viewport by whole numbers.
+## Original pixel stage drawn at 144 × 104; the UI scales its viewport by whole numbers.
 
 var pet: Dictionary = {}
 var egg: Dictionary = {}
@@ -46,7 +46,7 @@ func _draw() -> void:
 			elif fmod(elapsed, 14.0) > 10.0:
 				action = "walk"
 		var x: float = 43.0 if battle else 73.0
-		var y: float = 62.0
+		var y: float = 76.0
 		if action in ["happy", "victory", "hatch", "evolve", "train"]:
 			y -= absf(sin(elapsed * 9.0)) * 4.0
 		elif action == "walk":
@@ -58,44 +58,45 @@ func _draw() -> void:
 		_creature(str(pet.get("species", "sprout")), action)
 		draw_set_transform(Vector2.ZERO)
 		if battle:
-			draw_set_transform(Vector2(109 + (sin(elapsed * 24.0) * 2.0 if enemy_turn else 0.0), 56), 0.0, Vector2(-1, 1))
+			draw_set_transform(Vector2(109 + (sin(elapsed * 24.0) * 2.0 if enemy_turn else 0.0), 70), 0.0, Vector2(-1, 1))
 			_creature(enemy_species, "attack" if enemy_turn else "idle")
 			draw_set_transform(Vector2.ZERO)
 		if action == "sleep":
-			_z(92, 32 - int(elapsed * 2) % 5)
+			_z(92, 46 - int(elapsed * 2) % 5)
 		elif action in ["happy", "victory", "eat"]:
-			_heart(88, 33 - int(elapsed * 3) % 4, "d97f76")
+			_heart(88, 47 - int(elapsed * 3) % 4, "d97f76")
 		elif action == "sick":
-			_r(84, 31, 3, 6, "9cad77")
-			_r(84, 40, 3, 2, "9cad77")
+			_r(84, 45, 3, 6, "9cad77")
+			_r(84, 54, 3, 2, "9cad77")
 		if action == "eat":
 			var bite: int = 3 - int(elapsed * 5.0) % 3
-			_r(85, 58, bite * 3, 5, "bc724d")
-			_r(84, 56, bite * 3, 2, "e5ad71")
+			_r(85, 72, bite * 3, 5, "bc724d")
+			_r(84, 70, bite * 3, 2, "e5ad71")
 		if action == "train":
-			_r(85, 59, 14, 3, "6f7770")
-			_r(84, 54, 4, 13, "41534c")
-			_r(98, 54, 4, 13, "41534c")
+			_r(85, 73, 14, 3, "6f7770")
+			_r(84, 68, 4, 13, "41534c")
+			_r(98, 68, 4, 13, "41534c")
 		if action in ["heal", "clean", "hatch", "evolve", "happy", "victory"]:
 			_sparkles()
 		if action == "evolve" and animation_left > 1.4:
-			draw_rect(Rect2(0, 0, 144, 88), Color(0.98, 0.98, 0.83, (sin(elapsed * 18.0) + 1.0) * 0.35))
+			var glow_alpha: float = 0.12 + (sin(elapsed * 3.0) + 1.0) * 0.08
+			draw_rect(Rect2(0, 0, 144, 104), Color(0.98, 0.98, 0.83, glow_alpha))
 	if not battle and not pet.is_empty() and not bool(pet.get("lights_on", true)):
-		draw_rect(Rect2(0, 0, 144, 88), Color(0.10, 0.18, 0.24, 0.48))
+		draw_rect(Rect2(0, 0, 144, 104), Color(0.10, 0.18, 0.24, 0.48))
 		_r(24, 17, 6, 6, "e8dfb9")
 		_r(27, 16, 5, 5, "506e78")
 
 func _room() -> void:
-	_r(0, 0, 144, 88, "e4d8b4")
+	_r(0, 0, 144, 104, "e4d8b4")
 	_r(0, 0, 144, 3, "c7c199")
 	for x in range(0, 144, 8):
 		_r(x, 4, 1, 49, "ded0aa")
 	_r(0, 52, 144, 4, "b5a77e")
-	_r(0, 56, 144, 32, "d2b88f")
-	for y in [64, 75, 86]:
+	_r(0, 56, 144, 48, "d2b88f")
+	for y in [64, 76, 88, 100]:
 		_r(0, y, 144, 1, "c2a47d")
 		for x in range(0, 144, 24):
-			_r(x + (12 if y == 75 else 0), y - 10, 1, 10, "c6ac84")
+			_r(x + (12 if y in [76, 100] else 0), y - 11, 1, 11, "c6ac84")
 	# Window, hills and a tiny drifting cloud.
 	_r(17, 11, 36, 31, "a79770")
 	_r(19, 12, 32, 27, "faf0cf")
@@ -137,34 +138,34 @@ func _room() -> void:
 	_r(8, 39, 6, 3, "84a070")
 	_r(24, 34, 4, 3, "709466")
 	# Woven rug.
-	_r(45, 69, 53, 10, "b89571")
-	_r(42, 71, 59, 6, "b89571")
-	_r(47, 70, 49, 8, "d9cf9d")
-	_r(45, 72, 53, 4, "d9cf9d")
-	_r(51, 73, 40, 2, "bcba8b")
+	_r(45, 83, 53, 10, "b89571")
+	_r(42, 85, 59, 6, "b89571")
+	_r(47, 84, 49, 8, "d9cf9d")
+	_r(45, 86, 53, 4, "d9cf9d")
+	_r(51, 87, 40, 2, "bcba8b")
 	for index in mini(pet.get("poop", []).size(), 5):
 		var px: int = 36 + index * 18
-		_r(px, 72, 7, 3, "80684e")
-		_r(px + 1, 69, 5, 3, "927555")
-		_r(px + 3, 67, 2, 2, "a58660")
+		_r(px, 86, 7, 3, "80684e")
+		_r(px + 1, 83, 5, 3, "927555")
+		_r(px + 3, 81, 2, 2, "a58660")
 
 func _arena() -> void:
-	_r(0, 0, 144, 88, "b5c9b2")
-	_r(0, 51, 144, 37, "d8cfa7")
+	_r(0, 0, 144, 104, "b5c9b2")
+	_r(0, 51, 144, 53, "d8cfa7")
 	for x in range(0, 144, 12):
 		_r(x, 39, 8, 12, "94ad92")
 		_r(x + 3, 34, 3, 8, "94ad92")
-	_r(20, 68, 45, 7, "a8b38c")
-	_r(88, 62, 42, 7, "a8b38c")
-	_r(70, 53, 1, 31, "efe3bd")
+	_r(20, 82, 45, 7, "a8b38c")
+	_r(88, 76, 42, 7, "a8b38c")
+	_r(70, 53, 1, 47, "efe3bd")
 	for y in [4, 12, 20]:
 		_r(0, y, 144, 1, "afc4ac")
 
 func _draw_egg() -> void:
 	var progress: float = clampf(float(egg.get("credited_steps", 0)) / maxf(float(egg.get("target_steps", 500)), 1.0), 0.0, 1.0)
 	var wobble: float = roundf(sin(elapsed * (2.0 + progress * 4.0)) * (2.0 if progress >= 0.25 else 0.0))
-	_r(62, 68, 22, 4, "ad9c77")
-	draw_set_transform(Vector2(73 + wobble, 60 - int(sin(elapsed * 2.0) > 0.8)))
+	_r(62, 82, 22, 4, "ad9c77")
+	draw_set_transform(Vector2(73 + wobble, 74 - int(sin(elapsed * 2.0) > 0.8)))
 	_r(-6, -20, 12, 3, "637154")
 	_r(-9, -17, 18, 4, "637154")
 	_r(-11, -13, 22, 18, "637154")

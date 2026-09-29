@@ -37,3 +37,19 @@ This repository is not a published game repo. It is the source that `publish.sh`
 - **編輯器驗收**：README 列出主要 scene、可調整的 node／export 欄位。驗證直接修改一個 UI 間距或靜態文字後執行仍然保留，且戰鬥移動、生命值等執行狀態不會反向污染原始 scene。
 - **共用模組優先**：新增功能先查 `prototypes/godot-kit/README.md`。適用時用 `sync.sh <project>` 同步並引用現成模組，副本不可直接改；外部套件只在確有需要時引入，記錄來源、版本、授權與匯出限制。
 - 現有原型大多仍在程式裡建畫面。改到哪個畫面，就順手把它轉成 scene；debt-commission 的轉換進度記在它的 README「Scene 轉換進度」。
+# 全域偏好
+
+  ## 能用圖就用圖
+
+  回答時若內容有「流程、步驟、分支、先後順序、多方關係、架構層次」，
+  就在對話中直接畫出文字圖，不要只用文字段落描述。
+
+  怎麼畫：
+
+  1. 用 ASCII／框線字元（`┌ ─ ┐ │ └ ┘ → ↓ ├ ┤`），**不要用 mermaid**
+     —— 終端機不會渲染 mermaid，只會變一坨原始碼。
+  2. 圖放進 ``` 圍欄（code fence）裡，等寬字才對得齊。
+  3. 寬度控制在 80 欄以內。
+  4. 畫在對話裡就好，不要為了畫圖去開 Artifact。
+  5. 圖是輔助：結論先行那一句不能省，圖擺在結論後面。
+  6. 一句話就能答完的問題不用硬畫圖。
