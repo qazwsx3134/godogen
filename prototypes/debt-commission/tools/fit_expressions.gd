@@ -6,7 +6,9 @@ extends SceneTree
 ## docs/story-telling-game/EXPRESSIONS.md) is which expression id. For each source:
 ## - the white reachable from the border becomes transparent (edge pixels fade with their lightness);
 ## - the figure is scaled to the usual picture's pixels: `scale` when given, else the usual figure's
-##   height over the median figure height of that character's sources;
+##   height over the median figure height of that character's sources. A face may be written as
+##   {"file": …, "rescale": 0.66} when its source draws the character at another size (a seated pose
+##   drawn larger): its figure is scaled by that much more and left out of the median;
 ## - it stands on the usual figure's feet line, centred on the same body line (the middle of the
 ##   lower 60 % of the figure, or `anchor_x` for the usual picture when given);
 ## - the canvas is the usual picture's, widened evenly and raised when a pose sticks out, so the game
@@ -30,28 +32,40 @@ func _init() -> void:
 		var base_box: Rect2i = _figure(base)
 		var base_anchor: float = float(spec.get("anchor_x", _anchor(base, base_box)))
 		var sources: Dictionary = {}  # file -> [cut image, figure box, anchor x]
+		var rescales: Dictionary = {}  # file -> extra scale of a source drawn at another size
 		for expression: String in (spec["faces"] as Dictionary).keys():
-			var file: String = String(spec["faces"][expression])
+			var file: String = _face_file(spec["faces"][expression])
+			if spec["faces"][expression] is Dictionary and not rescales.has(file):
+				rescales[file] = float((spec["faces"][expression] as Dictionary).get("rescale", 1.0))
 			if not sources.has(file):
 				var cut: Image = _cut_white(_load(SOURCE_DIR + file))
 				var box: Rect2i = _figure(cut)
 				sources[file] = [cut, box, _anchor(cut, box)]
-		var heights: Array = sources.values().map(func(entry: Array) -> int: return (entry[1] as Rect2i).size.y)
+		var heights: Array = []
+		for file: String in sources.keys():
+			if not rescales.has(file):
+				heights.append((sources[file][1] as Rect2i).size.y)
 		heights.sort()
 		var scale: float = float(spec.get("scale", float(base_box.size.y) / float(heights[heights.size() / 2])))
 		var written: Dictionary = {}  # file -> output path
 		var entry: Dictionary = {}
 		for expression: String in (spec["faces"] as Dictionary).keys():
-			var file: String = String(spec["faces"][expression])
+			var file: String = _face_file(spec["faces"][expression])
 			if not written.has(file):
 				var path: String = OUTPUT_DIR + "%s_%s.png" % [character_id, expression]
-				var fitted: Image = _fit(sources[file], scale, base, base_box, base_anchor)
+				var face_scale: float = scale * float(rescales.get(file, 1.0))
+				var fitted: Image = _fit(sources[file], face_scale, base, base_box, base_anchor)
 				fitted.save_png(ProjectSettings.globalize_path(path))
 				written[file] = path
-				print("FACE %s %s <- %s %s scale %.3f" % [character_id, expression, file, fitted.get_size(), scale])
+				print("FACE %s %s <- %s %s scale %.3f" % [character_id, expression, file, fitted.get_size(), face_scale])
 			entry[expression] = written[file]
 		print("CATALOG \"%s\" expressions: %s" % [character_id, JSON.stringify(entry)])
 	quit(0)
+
+
+## A face is a source file name, or {"file": name, "rescale": n}.
+func _face_file(face: Variant) -> String:
+	return String((face as Dictionary)["file"]) if face is Dictionary else String(face)
 
 
 func _load(path: String) -> Image:

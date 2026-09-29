@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dy0f70smulfl1"
-path="res://.godot/imported/sataharu-proud.png-241ce9ce9d05fef69bb7c2e56dba612f.ctex"
+uid="uid://dunux8vxyaf2"
+path="res://.godot/imported/otose_sit_talking.png-16d5cbba6f3f64b159ec518e7860827a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/image/sataharu-proud.png"
-dest_files=["res://.godot/imported/sataharu-proud.png-241ce9ce9d05fef69bb7c2e56dba612f.ctex"]
+source_file="res://assets/image/expressions/otose_sit_talking.png"
+dest_files=["res://.godot/imported/otose_sit_talking.png-16d5cbba6f3f64b159ec518e7860827a.ctex"]
 
 [params]
 

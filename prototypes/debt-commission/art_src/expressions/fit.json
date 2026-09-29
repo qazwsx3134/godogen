@@ -6,7 +6,8 @@
       "angry": "angry-sinpachi.png",
       "panic": "shinpachi-out.png",
       "nervous": "shinpachi-nervous.png",
-      "thinking": "shinpachi-thinking.png"
+      "thinking": "shinpachi-thinking.png",
+      "broken": "shinpachi-out.png"
     }
   },
   "gintoki": {
@@ -39,9 +40,28 @@
   "otose": {
     "base": "res://assets/image/Otose-san.png",
     "faces": {
-      "annoyed": "odosei-impatient.png",
+      "annoyed": "odosei-not-happy.png",
       "angry": "odosei-angry.png",
-      "serious": "odosei-serious.png"
+      "serious": "odosei-serious.png",
+      "smile": "odosei-happy.png",
+      "thinking": "odosei-thinking.png",
+      "smug": "odosei-proud.png",
+      "sit_serious": {
+        "file": "odosei-sit-serious.png",
+        "rescale": 0.66
+      },
+      "sit_talking": {
+        "file": "odosei-sit-smoking.png",
+        "rescale": 0.76
+      }
+    }
+  },
+  "sadaharu": {
+    "base": "res://assets/image/sadaharu.png",
+    "faces": {
+      "smile": "sataharu-smile.png",
+      "cry": "sataharu-sad.png",
+      "smug": "sataharu-proud.png"
     }
   }
 }

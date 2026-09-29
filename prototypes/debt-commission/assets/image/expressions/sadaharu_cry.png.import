@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://l5rmh0eilrj1"
-path="res://.godot/imported/odosei-thinking.png-eb3a21d1990d3ae42fe0210dff501c2b.ctex"
+uid="uid://bpax0k05ifh6b"
+path="res://.godot/imported/sadaharu_cry.png-6d4ee3d127c05852ec20b9d5d50322c9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/image/odosei-thinking.png"
-dest_files=["res://.godot/imported/odosei-thinking.png-eb3a21d1990d3ae42fe0210dff501c2b.ctex"]
+source_file="res://assets/image/expressions/sadaharu_cry.png"
+dest_files=["res://.godot/imported/sadaharu_cry.png-6d4ee3d127c05852ec20b9d5d50322c9.ctex"]
 
 [params]
 

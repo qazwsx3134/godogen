@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dv2w2s087t2j1"
-path="res://.godot/imported/odosei-sit-smoking.png-98347e366593c02681c2b235534c9d11.ctex"
+uid="uid://b77oq0l5bvuim"
+path="res://.godot/imported/sadaharu_smug.png-19c2924094be09e472b8d9d1d2aaed12.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/image/odosei-sit-smoking.png"
-dest_files=["res://.godot/imported/odosei-sit-smoking.png-98347e366593c02681c2b235534c9d11.ctex"]
+source_file="res://assets/image/expressions/sadaharu_smug.png"
+dest_files=["res://.godot/imported/sadaharu_smug.png-19c2924094be09e472b8d9d1d2aaed12.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://774au3fqojfy"
-path="res://.godot/imported/sataharu-sad.png-72ac670a787c794426b741e3eba7f521.ctex"
+uid="uid://ca6skfmyoor3l"
+path="res://.godot/imported/otose_thinking.png-6fa53d13d83512120a1407efead34077.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/image/sataharu-sad.png"
-dest_files=["res://.godot/imported/sataharu-sad.png-72ac670a787c794426b741e3eba7f521.ctex"]
+source_file="res://assets/image/expressions/otose_thinking.png"
+dest_files=["res://.godot/imported/otose_thinking.png-6fa53d13d83512120a1407efead34077.ctex"]
 
 [params]
 

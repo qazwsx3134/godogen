@@ -1,6 +1,6 @@
 # 角色表情清單（美術製作）
 
-更新：2026-09-28。劇本用表情 id 標出角色當下的臉（`char("kagura", "angry", "right")` 或台詞後面加 `[#angry]`），遊戲依 id 換成那張圖；還沒有圖的表情就先顯示角色原本那張。這份清單列出有哪些表情、每個角色要畫哪些。
+更新：2026-09-29。劇本用表情 id 標出角色當下的臉（`char("kagura", "angry", "right")` 或台詞後面加 `[#angry]`），遊戲依 id 換成那張圖；還沒有圖的表情就先顯示角色原本那張。這份清單列出有哪些表情、每個角色要畫哪些。
 
 ## 表情 id
 
@@ -24,6 +24,8 @@
 | `broken` | 崩潰 | 被打擊到石化、靈魂出竅 | 白眼或空洞眼、全身發白、可加裂痕 |
 | `nosepick` | 挖鼻孔 | 裝傻、不當一回事、聽人說教時 | 手指挖鼻孔、死魚眼 |
 | `mock` | 嘲笑 | 指著人大笑、看別人出糗 | 指著對方、張嘴大笑、眯眼 |
+| `sit_serious` | 正坐（認真） | 坐著主持或旁聽，例如登勢主持家庭會議 | 跪坐、雙手放膝上、表情嚴肅 |
+| `sit_talking` | 坐著說話 | 坐著閒聊、邊抽菸邊插話 | 盤腿或側坐、手托臉頰、可拿菸 |
 
 ## 各角色要畫的表情
 
@@ -31,14 +33,14 @@
 
 | 角色 | 在第一章的功能 | 第一批（先畫） | 第二批 |
 |---|---|---|---|
-| 新八 `shinpachi` | 主角、吐槽役 | ✓`shout`、✓`angry`、✓`panic`、✓`thinking`、**還缺 `broken`**（薪水與定春的反轉、Game Over） | ✓`nervous`、`surprised`、`smile`、`cry`、`serious` |
+| 新八 `shinpachi` | 主角、吐槽役 | ✓`shout`、✓`angry`、✓`panic`、✓`thinking`、✓`broken`（和 `panic` 同一張「靈魂出竅」；薪水與定春的反轉、Game Over） | ✓`nervous`、`surprised`、`smile`、`cry`、`serious` |
 | 銀時 `gintoki` | 裝傻、事件製造者 | ✓`smug`、✓`sweat`、✓`annoyed`（挖鼻孔那張，回合中程式固定用它）、✓`panic`（和 `nervous` 同一張）、✓`serious`（拿木刀那張） | ✓`angry`、✓`nosepick`、✓`nervous`、`smile`、`surprised`、`shout` |
 | 神樂 `kagura` | 嫁禍給定春、提示員 | ✓`smile`、✓`smug`、✓`sweat`（和 `nervous` 同一張）、✓`angry` | ✓`annoyed`（鄙視）、✓`mock`（嘲笑）、✓`nosepick`、`cry`（假哭）、`surprised`、`panic` |
-| 登勢 `otose` | 家庭會議的裁判 | ✓`annoyed`（抽菸不耐煩）、✓`angry`、✓`serious` | `smile` |
-| 定春 `sadaharu` | 被冤枉的證人、真兇 | **還缺** `smile`（汪）、`cry`（被冤枉）、`smug`（舔嘴，真兇） | `angry`（咬人） |
+| 登勢 `otose` | 家庭會議的裁判 | ✓`annoyed`（叉腰不耐煩）、✓`angry`、✓`serious`、✓`sit_serious`（正坐主持）、✓`sit_talking`（坐著抽菸） | ✓`smile`、✓`thinking`、✓`smug` |
+| 定春 `sadaharu` | 被冤枉的證人、真兇 | ✓`smile`（汪）、✓`cry`（被冤枉）、✓`smug`（得意，真兇） | `angry`（咬人） |
 | 伊莉莎白 `elisabeth` | 第四面牆 | 不用（一直是 `neutral`，舉空白牌；牌上的字由遊戲疊上去） | `surprised` |
 
-第一批還缺 4 張：新八 `broken`，定春 `smile`、`cry`、`smug`。
+第一批已全部有圖。
 
 ## 生成的 prompt
 
@@ -53,7 +55,7 @@ Please redraw the attached image in the most clumsy, messy, and hopelessly pathe
 生成的圖是白底，大小、位置也和角色原本那張不一樣，交給 `tools/fit_expressions.gd` 處理。以下路徑都在 `prototypes/debt-commission/`：
 
 1. 把生成的原圖放進 `art_src/expressions/`。這個資料夾有 `.gdignore`，Godot 不會匯入，也不會打包進遊戲。
-2. 在 `art_src/expressions/fit.json` 那個角色底下，把表情 id 對到檔名。兩個表情可以用同一張圖。
+2. 在 `art_src/expressions/fit.json` 那個角色底下，把表情 id 對到檔名。兩個表情可以用同一張圖。生成圖把角色畫得比其他張大或小時（常見於坐姿），寫成 `{"file": "odosei-sit-serious.png", "rescale": 0.66}`，這張另外再縮放 `rescale` 倍，也不列入身高比的計算；數值用頭的大小和站姿比對。
 3. 執行 `godot --headless --path . --script res://tools/fit_expressions.gd`，它會：
    - 去掉從邊緣連進來的白色（衣服裡的白色不動）；
    - 把角色縮放到和原本那張同樣大小（預設用身高比，原圖有道具或特殊姿勢時在 `fit.json` 寫 `scale`，例如神樂原圖有傘又在跳，用頭的大小對齊，`scale` 1.0）；

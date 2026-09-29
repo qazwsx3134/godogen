@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dwc2q1b0nj4a7"
-path="res://.godot/imported/sataharu-smile.png-4842fb91df964c4163b1827852b4010a.ctex"
+uid="uid://c0qs5cdi4wspf"
+path="res://.godot/imported/otose_smile.png-4e3e157e525eb6f94d8eca2fea196f29.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/image/sataharu-smile.png"
-dest_files=["res://.godot/imported/sataharu-smile.png-4842fb91df964c4163b1827852b4010a.ctex"]
+source_file="res://assets/image/expressions/otose_smile.png"
+dest_files=["res://.godot/imported/otose_smile.png-4e3e157e525eb6f94d8eca2fea196f29.ctex"]
 
 [params]
 
