@@ -1,0 +1,30 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://enemies/bean.gd" id="1_wm2to"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_67an8"]
+
+[node name="Bullet" type="Area2D" unique_id=520444882]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_wm2to")
+spin = 0.0
+
+[node name="Glow" type="Polygon2D" parent="." unique_id=202843134]
+color = Color(1, 0.3, 0.1, 0.45)
+polygon = PackedVector2Array(26, 0, 25.11407, 4.399924, 22.51666, 8.5, 18.384777, 12.020815, 13, 14.722432, 6.7292953, 16.420738, 1.5920409e-15, 17, -6.7292953, 16.420738, -13, 14.722432, -18.384777, 12.020815, -22.51666, 8.5, -25.11407, 4.399924, -26, 2.0818996e-15, -25.11407, -4.399924, -22.51666, -8.5, -18.384777, -12.020815, -13, -14.722432, -6.7292953, -16.420738, -4.7761223e-15, -17, 6.7292953, -16.420738, 13, -14.722432, 18.384777, -12.020815, 22.51666, -8.5, 25.11407, -4.399924)
+
+[node name="Outline" type="Polygon2D" parent="." unique_id=13679269]
+color = Color(0.15, 0.08, 0.05, 1)
+polygon = PackedVector2Array(-14, -8, 12, -8, 12, 8, -14, 8)
+
+[node name="Casing" type="Polygon2D" parent="." unique_id=641621728]
+color = Color(1, 0.82, 0.3, 1)
+polygon = PackedVector2Array(-13, -5.5, 7, -5.5, 7, 5.5, -13, 5.5)
+
+[node name="Tip" type="Polygon2D" parent="." unique_id=1817717472]
+color = Color(1, 0.95, 0.7, 1)
+polygon = PackedVector2Array(7, -6, 14, -4, 17, 0, 14, 4, 7, 6)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1863882343]
+shape = SubResource("CircleShape2D_67an8")

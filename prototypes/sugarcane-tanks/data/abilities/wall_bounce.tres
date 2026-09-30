@@ -1,0 +1,10 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://data/ability_def.gd" id="1_ae2ii"]
+
+[resource]
+script = ExtResource("1_ae2ii")
+id = &"wall_bounce"
+title = "牆壁反彈"
+description = "碰到牆會反彈 2 次"
+color = Color(0.72, 0.72, 0.72, 1)

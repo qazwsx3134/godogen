@@ -1,0 +1,11 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://data/ability_def.gd" id="1_pchud"]
+
+[resource]
+script = ExtResource("1_pchud")
+id = &"ricochet"
+title = "彈射"
+description = "打中後彈向附近坦克
+最多 3 次"
+color = Color(0.95, 0.45, 0.75, 1)

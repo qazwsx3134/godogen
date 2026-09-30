@@ -1,0 +1,12 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://data/ability_def.gd" id="1_xapc2"]
+
+[resource]
+script = ExtResource("1_xapc2")
+id = &"heal"
+title = "急救"
+description = "回復 40% 生命"
+color = Color(0.9, 0.35, 0.45, 1)
+max_stacks = 99
+needs_missing_hp = true

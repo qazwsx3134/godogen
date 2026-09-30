@@ -1,0 +1,10 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://data/ability_def.gd" id="1_n831v"]
+
+[resource]
+script = ExtResource("1_n831v")
+id = &"rear"
+title = "後方甘蔗"
+description = "往背後丟一根"
+color = Color(0.55, 0.6, 0.9, 1)

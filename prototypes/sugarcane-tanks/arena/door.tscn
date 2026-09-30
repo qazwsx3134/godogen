@@ -1,0 +1,55 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://arena/door.gd" id="1_1jwkn"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_afbj2"]
+size = Vector2(170, 60)
+
+[node name="Door" type="Area2D" unique_id=1197263406]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_1jwkn")
+
+[node name="Opening" type="Polygon2D" parent="." unique_id=749311283]
+color = Color(0.1, 0.09, 0.08, 1)
+polygon = PackedVector2Array(-90, -60, 90, -60, 90, 0, -90, 0)
+
+[node name="Glow" type="Polygon2D" parent="." unique_id=1657802863]
+unique_name_in_owner = true
+color = Color(1, 0.9, 0.45, 0.8)
+polygon = PackedVector2Array(-85, -60, 85, -60, 85, 10, -85, 10)
+
+[node name="Bars" type="Node2D" parent="." unique_id=1684093563]
+unique_name_in_owner = true
+
+[node name="Bar1" type="Polygon2D" parent="Bars" unique_id=575950749]
+color = Color(0.85, 0.2, 0.15, 1)
+polygon = PackedVector2Array(-69, -62, -59, -62, -59, 2, -69, 2)
+
+[node name="Bar2" type="Polygon2D" parent="Bars" unique_id=1370538336]
+color = Color(0.85, 0.2, 0.15, 1)
+polygon = PackedVector2Array(-37, -62, -27, -62, -27, 2, -37, 2)
+
+[node name="Bar3" type="Polygon2D" parent="Bars" unique_id=383099395]
+color = Color(0.85, 0.2, 0.15, 1)
+polygon = PackedVector2Array(-5, -62, 5, -62, 5, 2, -5, 2)
+
+[node name="Bar4" type="Polygon2D" parent="Bars" unique_id=1977425287]
+color = Color(0.85, 0.2, 0.15, 1)
+polygon = PackedVector2Array(27, -62, 37, -62, 37, 2, 27, 2)
+
+[node name="Bar5" type="Polygon2D" parent="Bars" unique_id=1488620046]
+color = Color(0.85, 0.2, 0.15, 1)
+polygon = PackedVector2Array(59, -62, 69, -62, 69, 2, 59, 2)
+
+[node name="PostLeft" type="Polygon2D" parent="." unique_id=956347692]
+color = Color(0.42, 0.38, 0.32, 1)
+polygon = PackedVector2Array(-110, -70, -90, -70, -90, 10, -110, 10)
+
+[node name="PostRight" type="Polygon2D" parent="." unique_id=867903347]
+color = Color(0.42, 0.38, 0.32, 1)
+polygon = PackedVector2Array(90, -70, 110, -70, 110, 10, 90, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2134826884]
+position = Vector2(0, 10)
+shape = SubResource("RectangleShape2D_afbj2")

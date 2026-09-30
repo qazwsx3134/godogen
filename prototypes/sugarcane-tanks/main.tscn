@@ -1,0 +1,101 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://main.gd" id="1_facbu"]
+[ext_resource type="PackedScene" path="res://rooms/room_01.tscn" id="2_b1qrp"]
+[ext_resource type="PackedScene" path="res://rooms/room_02.tscn" id="3_come4"]
+[ext_resource type="PackedScene" path="res://rooms/room_03.tscn" id="4_h8e4i"]
+[ext_resource type="PackedScene" path="res://rooms/room_04.tscn" id="5_4lmeg"]
+[ext_resource type="PackedScene" path="res://rooms/room_05.tscn" id="6_0cp0l"]
+[ext_resource type="PackedScene" path="res://rooms/room_06.tscn" id="7_d2t1y"]
+[ext_resource type="PackedScene" path="res://rooms/room_07.tscn" id="8_gngh3"]
+[ext_resource type="PackedScene" path="res://rooms/room_08.tscn" id="9_0n3wm"]
+[ext_resource type="PackedScene" path="res://rooms/room_09.tscn" id="10_qnost"]
+[ext_resource type="PackedScene" path="res://rooms/room_10.tscn" id="11_wnkbs"]
+[ext_resource type="Resource" path="res://data/abilities/front.tres" id="12_f6a44"]
+[ext_resource type="Resource" path="res://data/abilities/multishot.tres" id="13_0cbny"]
+[ext_resource type="Resource" path="res://data/abilities/diagonal.tres" id="14_hrvbo"]
+[ext_resource type="Resource" path="res://data/abilities/side.tres" id="15_uypp3"]
+[ext_resource type="Resource" path="res://data/abilities/rear.tres" id="16_blkrb"]
+[ext_resource type="Resource" path="res://data/abilities/pierce.tres" id="17_abqjc"]
+[ext_resource type="Resource" path="res://data/abilities/ricochet.tres" id="18_6iyjs"]
+[ext_resource type="Resource" path="res://data/abilities/wall_bounce.tres" id="19_4w656"]
+[ext_resource type="Resource" path="res://data/abilities/attack_boost.tres" id="20_e71vb"]
+[ext_resource type="Resource" path="res://data/abilities/attack_speed.tres" id="21_rnkwl"]
+[ext_resource type="Resource" path="res://data/abilities/crit.tres" id="22_vke2r"]
+[ext_resource type="Resource" path="res://data/abilities/fire.tres" id="23_uit24"]
+[ext_resource type="Resource" path="res://data/abilities/freeze.tres" id="24_ruth0"]
+[ext_resource type="Resource" path="res://data/abilities/hp_boost.tres" id="25_rm4vd"]
+[ext_resource type="Resource" path="res://data/abilities/heal.tres" id="26_pjyto"]
+[ext_resource type="PackedScene" path="res://player/sugarcane.tscn" id="27_sm6fg"]
+[ext_resource type="PackedScene" path="res://pickups/exp_gem.tscn" id="28_b17eg"]
+[ext_resource type="PackedScene" path="res://pickups/heart.tscn" id="29_ntx8l"]
+[ext_resource type="PackedScene" path="res://effects/damage_number.tscn" id="30_uatky"]
+[ext_resource type="PackedScene" path="res://effects/explosion.tscn" id="31_rqtf5"]
+[ext_resource type="PackedScene" path="res://player/hero.tscn" id="32_1vm84"]
+[ext_resource type="PackedScene" path="res://ui/hud.tscn" id="33_wu3dr"]
+[ext_resource type="PackedScene" path="res://ui/choice_panel.tscn" id="34_cyx1q"]
+[ext_resource type="PackedScene" path="res://ui/result_panel.tscn" id="35_0dhbp"]
+[ext_resource type="Script" path="res://game/time_control.gd" id="36_jx0wj"]
+[ext_resource type="Script" path="res://game/sfx.gd" id="37_kkkcx"]
+
+[node name="Main" type="Node2D" unique_id=1310566911]
+script = ExtResource("1_facbu")
+rooms = Array[PackedScene]([ExtResource("2_b1qrp"), ExtResource("3_come4"), ExtResource("4_h8e4i"), ExtResource("5_4lmeg"), ExtResource("6_0cp0l"), ExtResource("7_d2t1y"), ExtResource("8_gngh3"), ExtResource("9_0n3wm"), ExtResource("10_qnost"), ExtResource("11_wnkbs")])
+abilities = Array[Resource]([ExtResource("12_f6a44"), ExtResource("13_0cbny"), ExtResource("14_hrvbo"), ExtResource("15_uypp3"), ExtResource("16_blkrb"), ExtResource("17_abqjc"), ExtResource("18_6iyjs"), ExtResource("19_4w656"), ExtResource("20_e71vb"), ExtResource("21_rnkwl"), ExtResource("22_vke2r"), ExtResource("23_uit24"), ExtResource("24_ruth0"), ExtResource("25_rm4vd"), ExtResource("26_pjyto")])
+sugarcane_scene = ExtResource("27_sm6fg")
+exp_gem_scene = ExtResource("28_b17eg")
+heart_scene = ExtResource("29_ntx8l")
+damage_number_scene = ExtResource("30_uatky")
+explosion_scene = ExtResource("31_rqtf5")
+
+[node name="Camera" type="Camera2D" parent="." unique_id=1859942808]
+unique_name_in_owner = true
+position = Vector2(540, 960)
+
+[node name="RoomHolder" type="Node2D" parent="." unique_id=799150271]
+unique_name_in_owner = true
+
+[node name="PreviewRoom" parent="RoomHolder" unique_id=1067003751 instance=ExtResource("2_b1qrp")]
+
+[node name="Pickups" type="Node2D" parent="." unique_id=438583742]
+unique_name_in_owner = true
+
+[node name="Hero" parent="." unique_id=484205548 instance=ExtResource("32_1vm84")]
+unique_name_in_owner = true
+position = Vector2(540, 1640)
+
+[node name="Shots" type="Node2D" parent="." unique_id=868822657]
+unique_name_in_owner = true
+
+[node name="EnemyShots" type="Node2D" parent="." unique_id=422593447]
+unique_name_in_owner = true
+
+[node name="Effects" type="Node2D" parent="." unique_id=1111881817]
+unique_name_in_owner = true
+
+[node name="UiLayer" type="CanvasLayer" parent="." unique_id=834621193]
+layer = 10
+
+[node name="Hud" parent="UiLayer" unique_id=1868758086 instance=ExtResource("33_wu3dr")]
+unique_name_in_owner = true
+anchors_preset = 15
+
+[node name="ChoicePanel" parent="UiLayer" unique_id=83118510 instance=ExtResource("34_cyx1q")]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15
+
+[node name="ResultPanel" parent="UiLayer" unique_id=1848652989 instance=ExtResource("35_0dhbp")]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15
+
+[node name="TimeControl" type="Node" parent="." unique_id=1809468032]
+unique_name_in_owner = true
+process_mode = 3
+script = ExtResource("36_jx0wj")
+
+[node name="Sfx" type="Node" parent="." unique_id=1374457434]
+unique_name_in_owner = true
+process_mode = 3
+script = ExtResource("37_kkkcx")

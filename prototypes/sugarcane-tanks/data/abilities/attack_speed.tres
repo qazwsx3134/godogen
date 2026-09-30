@@ -1,0 +1,11 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://data/ability_def.gd" id="1_iv8rw"]
+
+[resource]
+script = ExtResource("1_iv8rw")
+id = &"attack_speed"
+title = "攻速強化"
+description = "丟擲速度 +20%"
+color = Color(1, 0.85, 0.35, 1)
+max_stacks = 5
