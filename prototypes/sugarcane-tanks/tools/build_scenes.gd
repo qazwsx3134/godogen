@@ -6,6 +6,10 @@ extends SceneTree
 ##   godot --headless --path . --script res://tools/build_scenes.gd -- --force  # overwrite (check git diff first!)
 ##
 ## Running the game or the tests never calls this.
+##
+## ui/hud.tscn, ui/joystick.tscn, ui/result_panel.tscn and ui/theme.tres were restyled afterwards by
+## tools/restyle_hud.gd (concept-art HUD); the builders below still describe the old look, so do not
+## --force those files. ui/ability_slot.tscn and pickups/coin.tscn only exist from that pass.
 
 const HERO_LAYER: int = 2
 const ENEMY_LAYER: int = 4
@@ -59,7 +63,6 @@ func _build() -> void:
 	_save(_arena_square(), "res://arena/arena_square.tscn")
 	_save(_arena_memorial(), "res://arena/arena_memorial.tscn")
 	_build_rooms()
-	_save(_ability_chip(), "res://ui/ability_chip.tscn")
 	_save(_ability_card(), "res://ui/ability_card.tscn")
 	_save(_joystick(), "res://ui/joystick.tscn")
 	_save(_hud(), "res://ui/hud.tscn")
@@ -843,18 +846,6 @@ func _room(number: int, layout: Dictionary) -> Node:
 
 # --- UI ----------------------------------------------------------------------
 
-func _ability_chip() -> Node:
-	var chip: Label = _label("AbilityChip", "穿透", 30)
-	var box: StyleBoxFlat = _flat(Color(1, 1, 1, 0.9), 12)
-	box.content_margin_left = 14
-	box.content_margin_right = 14
-	box.content_margin_top = 2
-	box.content_margin_bottom = 2
-	chip.add_theme_stylebox_override(&"normal", box)
-	chip.add_theme_color_override(&"font_color", Color(0.1, 0.1, 0.1))
-	chip.add_theme_constant_override(&"outline_size", 0)
-	return chip
-
 func _ability_card() -> Node:
 	var card := Button.new()
 	card.name = "AbilityCard"
@@ -920,7 +911,6 @@ func _hud() -> Node:
 	var root := Control.new()
 	root.name = "Hud"
 	root.set_script(load("res://ui/hud.gd"))
-	root.set("chip_scene", load("res://ui/ability_chip.tscn"))
 	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.process_mode = Node.PROCESS_MODE_ALWAYS
 	_full_rect(root)

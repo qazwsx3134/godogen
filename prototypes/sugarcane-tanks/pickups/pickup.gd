@@ -1,8 +1,8 @@
 extends Node2D
-## EXP gem or heart. Drops with a small hop, then waits until the room is clear
+## EXP gem, heart or coin. Drops with a small hop, then waits until the room is clear
 ## and flies to the hero (Archero collects everything at once).
 
-enum Kind { EXP, HEART }
+enum Kind { EXP, HEART, COIN }
 
 @export var kind: Kind = Kind.EXP
 @export var value: int = 1

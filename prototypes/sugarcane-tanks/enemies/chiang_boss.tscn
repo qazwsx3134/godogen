@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://enemies/chiang_boss.gd" id="1_kxlfb"]
 [ext_resource type="PackedScene" path="res://enemies/bullet.tscn" id="2_sybv0"]
+[ext_resource type="PackedScene" path="res://effects/aoe_circle.tscn" id="3_aoecr"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_07pg2"]
 radius = 56.0
@@ -29,6 +30,7 @@ collision_mask = 7
 motion_mode = 1
 script = ExtResource("1_kxlfb")
 bullet_scene = ExtResource("2_sybv0")
+aoe_scene = ExtResource("3_aoecr")
 display_name = "蔣介石"
 max_hp = 4500
 move_speed = 150.0

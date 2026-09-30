@@ -6,6 +6,7 @@ extends Node2D
 ## --give=front,multishot,... (start with these abilities, to try a build or record a later room).
 
 const HeroStats = preload("res://domain/hero_stats.gd")
+const Pickup = preload("res://pickups/pickup.gd")
 
 enum State { FIGHT, REWARD, DOOR, TRANSITION, DEAD, WON }
 
@@ -14,6 +15,7 @@ enum State { FIGHT, REWARD, DOOR, TRANSITION, DEAD, WON }
 @export var sugarcane_scene: PackedScene
 @export var exp_gem_scene: PackedScene
 @export var heart_scene: PackedScene
+@export var coin_scene: PackedScene
 @export var damage_number_scene: PackedScene
 @export var explosion_scene: PackedScene
 @export_range(0.0, 1.0, 0.05) var angel_heal_ratio: float = 0.4
@@ -38,6 +40,7 @@ var room: Node2D
 var room_index: int = 0
 var state: State = State.FIGHT
 var kills: int = 0
+var coins: int = 0   # gold picked up this run only; a restart reloads the scene and starts over
 var volleys_thrown: int = 0
 var rng := RandomNumberGenerator.new()
 var autoplay: bool = false
@@ -66,6 +69,8 @@ func _ready() -> void:
 			if def.id == StringName(id):
 				_take_ability(def)
 	_refresh_level()
+	_refresh_hp()
+	hud.set_coins(coins)
 	_load_room(room_index)
 
 func _parse_args() -> void:
@@ -191,16 +196,26 @@ func _on_door_entered() -> void:
 # --- rewards -----------------------------------------------------------------
 
 func collect_pickup(pickup: Node) -> void:
-	if pickup.kind == 0:
-		_pending_levels += stats.gain_exp(pickup.value)
-		_refresh_level()
-		sfx.play(&"pickup", 0.02)
-	else:
-		stats.heal(int(round(stats.max_hp * heart_heal_ratio)))
-		hero.refresh_hp()
+	match pickup.kind:
+		Pickup.Kind.EXP:
+			_pending_levels += stats.gain_exp(pickup.value)
+			_refresh_level()
+			sfx.play(&"pickup", 0.02)
+		Pickup.Kind.HEART:
+			stats.heal(int(round(stats.max_hp * heart_heal_ratio)))
+			_refresh_hp()
+		Pickup.Kind.COIN:
+			coins += pickup.value
+			hud.set_coins(coins)
+			sfx.play(&"pickup", 0.02)
 
 func _refresh_level() -> void:
 	hud.set_level(stats.level, stats.experience, HeroStats.exp_to_next(stats.level))
+
+## The hero's head bar and the HUD's HP bar both follow stats; call after any HP or max HP change.
+func _refresh_hp() -> void:
+	hero.refresh_hp()
+	hud.set_hp(stats.hp, stats.max_hp)
 
 func _resolve_level_ups() -> void:
 	while _pending_levels > 0:
@@ -228,7 +243,7 @@ func _angel() -> void:
 	var index: int = await _choose("天使降臨", "打倒 BOSS 的獎勵，選一個", options)
 	if index == 0:
 		stats.heal(int(round(stats.max_hp * angel_heal_ratio)))
-		hero.refresh_hp()
+		_refresh_hp()
 	else:
 		_take_ability(defs[0])
 
@@ -256,8 +271,8 @@ func _ability_option(def: Resource) -> Dictionary:
 
 func _take_ability(def: Resource) -> void:
 	stats.add_ability(def.id)
-	hero.refresh_hp()
-	hud.add_chip(def.title, def.color)
+	_refresh_hp()
+	hud.set_ability(def, stats.count(def.id))
 
 # --- end of run --------------------------------------------------------------
 
@@ -269,7 +284,7 @@ func _on_hero_died() -> void:
 	room.process_mode = Node.PROCESS_MODE_DISABLED
 	enemy_shots.process_mode = Node.PROCESS_MODE_DISABLED
 	await get_tree().create_timer(0.8).timeout
-	result_panel.open("你倒下了", "抵達第 %d 間｜Lv %d｜擊倒 %d 隻敵人" % [room_index + 1, stats.level, kills])
+	result_panel.open("你倒下了", "抵達第 %d 間｜Lv %d｜擊倒 %d 隻敵人" % [room_index + 1, stats.level, kills], coins)
 
 func _win() -> void:
 	state = State.WON
@@ -277,7 +292,7 @@ func _win() -> void:
 	var picked: int = 0
 	for id: StringName in stats.stacks:
 		picked += stats.count(id)
-	result_panel.open("第一章 完成！", "Lv %d｜擊倒 %d 隻敵人｜拿到 %d 個能力" % [stats.level, kills, picked])
+	result_panel.open("第一章 完成！", "Lv %d｜擊倒 %d 隻敵人｜拿到 %d 個能力" % [stats.level, kills, picked], coins)
 
 func restart() -> void:
 	get_tree().paused = false
@@ -340,6 +355,7 @@ func on_enemy_hit(crit: bool) -> void:
 	sfx.play(&"crit" if crit else &"hit")
 
 func on_hero_hurt(_amount: int) -> void:
+	hud.set_hp(stats.hp, stats.max_hp)   # hero.take_hit has already taken the damage
 	shake(10.0, 0.2)
 	sfx.play(&"hurt")
 
@@ -361,6 +377,18 @@ func on_enemy_killed(enemy: Node2D) -> void:
 			gem.scale = Vector2(1.5, 1.5)
 		pickups.add_child(gem)
 		gem.drop(enemy.global_position)
+	# Coins: 1 gold per EXP point (a boss drops double), as 5-gold coins plus singles like the gems.
+	var gold: int = enemy.exp_value * (2 if boss else 1)
+	while gold > 0:
+		var worth: int = 5 if gold >= 5 else 1
+		gold -= worth
+		var coin: Node2D = coin_scene.instantiate() as Node2D
+		coin.game = self
+		coin.value = worth
+		if worth > 1:
+			coin.scale = Vector2(1.3, 1.3)
+		pickups.add_child(coin)
+		coin.drop(enemy.global_position)
 	if rng.randf() < enemy.heart_drop_chance:
 		var heart: Node2D = heart_scene.instantiate() as Node2D
 		heart.game = self
@@ -407,8 +435,8 @@ func _physics_process(delta: float) -> void:
 		input = _bot_input(delta)
 	hero.move_input = input
 
-## Demo/test bot: stands still to throw, sidesteps beans and tank dash lines,
-## backs off from rats and tanks that get close, walks to the door when it opens.
+## Demo/test bot: stands still to throw, sidesteps beans and tank dash lines, walks out of
+## red circles, backs off from rats and tanks that get close, walks to the door when it opens.
 func _bot_input(delta: float) -> Vector2:
 	var at: Vector2 = hero.global_position
 	if state == State.DOOR:
@@ -432,7 +460,11 @@ func _bot_input(delta: float) -> Vector2:
 		if along > -60.0 and along < float(warning[2]) + 60.0 and off_line.length() < 130.0:
 			_bot_step(off_line if off_line.length() > 1.0 else line.orthogonal(), 0.4)
 			return _bot_move
+	if _bot_leave_circle():
+		return _bot_move
 	for threat: Node in enemy_shots.get_children():
+		if threat.has_method(&"is_aoe"):
+			continue
 		var away: Vector2 = hero.global_position - (threat as Node2D).global_position
 		if away.length() < 260.0 and (threat.direction as Vector2).dot(away.normalized()) > 0.8:
 			var side: Vector2 = (threat.direction as Vector2).orthogonal()
@@ -450,3 +482,30 @@ func _bot_step(direction: Vector2, duration: float) -> void:
 	var toward_center: Vector2 = (Vector2(540, 1100) - hero.global_position).normalized()
 	_bot_move = (direction.normalized() + toward_center * 0.5).normalized()
 	_bot_move_time = duration
+
+## Stepping out of a red circle it stands in: of 16 directions, the one that leaves the circle
+## soonest and still ends on the floor. Ties (a circle centred on the bot) go toward the room centre.
+## Short steps, so it looks again every 0.15 s.
+func _bot_leave_circle() -> bool:
+	var at: Vector2 = hero.global_position
+	for circle: Node in enemy_shots.get_children():
+		if not circle.has_method(&"is_aoe") or not circle.is_aoe():
+			continue
+		var rel: Vector2 = at - (circle as Node2D).global_position
+		var reach: float = circle.radius + 50.0
+		if rel.length() >= reach:
+			continue
+		var to_center: Vector2 = (Vector2(540, 1100) - at).normalized()
+		var best_score: float = INF
+		_bot_move = to_center
+		for i: int in 16:
+			var dir: Vector2 = Vector2.from_angle(TAU * i / 16.0)
+			var b: float = rel.dot(dir)
+			var travel: float = -b + sqrt(b * b - rel.length_squared() + reach * reach)
+			var score: float = travel - 40.0 * dir.dot(to_center)
+			if score < best_score and Rect2(100, 300, 880, 1420).has_point(at + dir * travel):
+				best_score = score
+				_bot_move = dir
+		_bot_move_time = 0.15
+		return true
+	return false

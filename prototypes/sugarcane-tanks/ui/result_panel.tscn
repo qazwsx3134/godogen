@@ -5,7 +5,7 @@
 [node name="ResultPanel" type="Control" unique_id=1848652989]
 process_mode = 3
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource("1_epa8i")
@@ -42,6 +42,16 @@ text = "Lv 8｜擊倒 42 隻敵人｜拿到 7 個能力"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
+
+[node name="CoinsLabel" type="Label" parent="Center/Box" unique_id=1328441389]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.3, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 48
+text = "金幣 328"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="RestartButton" type="Button" parent="Center/Box" unique_id=2144069624]
 unique_name_in_owner = true

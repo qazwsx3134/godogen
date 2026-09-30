@@ -1,143 +1,584 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://ui/hud.gd" id="1_546lt"]
-[ext_resource type="PackedScene" path="res://ui/ability_chip.tscn" id="2_7ihmi"]
+[ext_resource type="PackedScene" path="res://ui/ability_slot.tscn" id="2_546lt"]
 [ext_resource type="PackedScene" path="res://ui/joystick.tscn" id="3_en2x2"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7ihmi"]
+bg_color = Color(0.05, 0.07, 0.05, 0.94)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.03, 0.035, 0.04, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_en2x2"]
+bg_color = Color(0.36, 0.78, 0.2, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.03, 0.035, 0.04, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1v5rv"]
-bg_color = Color(0.05, 0.05, 0.05, 0.75)
+bg_color = Color(0.04, 0.06, 0.1, 0.94)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.03, 0.035, 0.04, 1)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q43x7"]
-bg_color = Color(0.35, 0.8, 1, 1)
+bg_color = Color(0.05, 0.76, 0.99, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.03, 0.035, 0.04, 1)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_srpbi"]
-bg_color = Color(0.05, 0.05, 0.05, 0.75)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
+content_margin_left = 10.0
+content_margin_top = 0.0
+content_margin_right = 10.0
+content_margin_bottom = 0.0
+bg_color = Color(0.06, 0.06, 0.08, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.92, 0.92, 0.96, 0.9)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_spcu4"]
-bg_color = Color(0.9, 0.2, 0.15, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
+bg_color = Color(0.09, 0.1, 0.14, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.91, 0.72, 0.29, 1)
+corner_radius_top_left = 100
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ff8ar"]
+bg_color = Color(0.07, 0.09, 0.13, 0.95)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.03, 0.035, 0.04, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m0eg6"]
+bg_color = Color(0.96, 0.22, 0.18, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.03, 0.035, 0.04, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b00kl"]
+content_margin_left = 14.0
+content_margin_top = 0.0
+content_margin_right = 14.0
+content_margin_bottom = 0.0
+bg_color = Color(0.06, 0.07, 0.1, 0.9)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_so1yu"]
+bg_color = Color(0.09, 0.1, 0.14, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.91, 0.72, 0.29, 1)
+corner_radius_top_left = 100
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
+corner_detail = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_65xic"]
+content_margin_left = 20.0
+content_margin_top = 2.0
+content_margin_right = 22.0
+content_margin_bottom = 2.0
+bg_color = Color(0.075, 0.09, 0.13, 0.94)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 0.1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mp5xd"]
+content_margin_left = 6.0
+content_margin_top = 2.0
+content_margin_right = 20.0
+content_margin_bottom = 2.0
+bg_color = Color(0.075, 0.09, 0.13, 0.94)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 0.1)
+corner_radius_top_left = 23
+corner_radius_top_right = 23
+corner_radius_bottom_right = 23
+corner_radius_bottom_left = 23
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u6vop"]
+bg_color = Color(0.98, 0.78, 0.2, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.62, 0.4, 0.08, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xtm2r"]
+bg_color = Color(0.08, 0.11, 0.12, 0.95)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.03, 0.035, 0.04, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kc1f2"]
+bg_color = Color(0.42, 0.95, 0.28, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.03, 0.035, 0.04, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6mpex"]
+bg_color = Color(0.09, 0.1, 0.14, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.91, 0.72, 0.29, 1)
+corner_radius_top_left = 100
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
+corner_detail = 20
 
 [node name="Hud" type="Control" unique_id=1868758086]
 process_mode = 3
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 script = ExtResource("1_546lt")
-chip_scene = ExtResource("2_7ihmi")
+slot_scene = ExtResource("2_546lt")
 
 [node name="Joystick" parent="." unique_id=2054876327 instance=ExtResource("3_en2x2")]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 15
 offset_top = 300.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="TopBar" type="MarginContainer" parent="." unique_id=1437061280]
+[node name="TopBar" type="MarginContainer" parent="." unique_id=8529934]
 layout_mode = 0
 anchor_right = 1.0
-offset_bottom = 190.0
+offset_bottom = 152.0
 mouse_filter = 2
-theme_override_constants/margin_left = 40
-theme_override_constants/margin_top = 60
-theme_override_constants/margin_right = 40
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 21
 
-[node name="Column" type="VBoxContainer" parent="TopBar" unique_id=221817373]
+[node name="Row" type="HBoxContainer" parent="TopBar" unique_id=2023470319]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 14
 
-[node name="InfoRow" type="HBoxContainer" parent="TopBar/Column" unique_id=501895722]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 20
-
-[node name="RoomLabel" type="Label" parent="TopBar/Column/InfoRow" unique_id=1965823514]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 38
-text = "第 1 / 10 間"
-vertical_alignment = 1
-
-[node name="Spacer" type="Control" parent="TopBar/Column/InfoRow" unique_id=1145742922]
+[node name="Left" type="Control" parent="TopBar/Row" unique_id=316839645]
+custom_minimum_size = Vector2(0, 130)
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
 
-[node name="LevelLabel" type="Label" parent="TopBar/Column/InfoRow" unique_id=371948076]
+[node name="PlayerPanel" type="Control" parent="TopBar/Row/Left" unique_id=1907735055]
 unique_name_in_owner = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 38
-text = "Lv 1"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="PauseButton" type="Button" parent="TopBar/Column/InfoRow" unique_id=878947759]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(130, 64)
-layout_mode = 2
-theme_override_font_sizes/font_size = 30
-text = "暫停"
-
-[node name="ExpBar" type="ProgressBar" parent="TopBar/Column" unique_id=1066468910]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 20)
-layout_mode = 2
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
 mouse_filter = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_1v5rv")
-theme_override_styles/fill = SubResource("StyleBoxFlat_q43x7")
+
+[node name="HpBar" type="ProgressBar" parent="TopBar/Row/Left/PlayerPanel" unique_id=2077342601]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 107.0
+offset_top = 42.0
+offset_right = 588.0
+offset_bottom = 83.0
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_7ihmi")
+theme_override_styles/fill = SubResource("StyleBoxFlat_en2x2")
+value = 100.0
 show_percentage = false
 
-[node name="AbilityChips" type="HFlowContainer" parent="TopBar/Column" unique_id=479138000]
-unique_name_in_owner = true
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/h_separation = 8
-theme_override_constants/v_separation = 8
-
-[node name="BossPanel" type="VBoxContainer" parent="." unique_id=1074025742]
+[node name="HpLabel" type="Label" parent="TopBar/Row/Left/PlayerPanel/HpBar" unique_id=1095829732]
 unique_name_in_owner = true
 layout_mode = 0
 anchor_right = 1.0
-offset_left = 120.0
-offset_top = 196.0
-offset_right = -120.0
-offset_bottom = 262.0
-mouse_filter = 2
-theme_override_constants/separation = 2
-
-[node name="BossName" type="Label" parent="BossPanel" unique_id=243723910]
-unique_name_in_owner = true
-layout_mode = 2
+anchor_bottom = 1.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 6
 theme_override_font_sizes/font_size = 28
-text = "巨砲坦克王"
+text = "520 / 520"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="BossBar" type="ProgressBar" parent="BossPanel" unique_id=2109321059]
+[node name="ExpBar" type="ProgressBar" parent="TopBar/Row/Left/PlayerPanel" unique_id=1792538037]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 22)
+layout_mode = 0
+offset_left = 117.0
+offset_top = 88.0
+offset_right = 588.0
+offset_bottom = 100.0
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_1v5rv")
+theme_override_styles/fill = SubResource("StyleBoxFlat_q43x7")
+value = 60.0
+show_percentage = false
+
+[node name="LevelLabel" type="Label" parent="TopBar/Row/Left/PlayerPanel" unique_id=1216208079]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 97.0
+offset_top = 18.0
+offset_right = 234.0
+offset_bottom = 66.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource("StyleBoxFlat_srpbi")
+text = "LV 12"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HeroPortrait" type="TextureRect" parent="TopBar/Row/Left/PlayerPanel" unique_id=1132340940]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 115.0
+offset_bottom = 115.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Frame" type="Panel" parent="TopBar/Row/Left/PlayerPanel/HeroPortrait" unique_id=1791142307]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_spcu4")
+
+[node name="BossPanel" type="Control" parent="TopBar/Row/Left" unique_id=1060432126]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="BossBar" type="ProgressBar" parent="TopBar/Row/Left/BossPanel" unique_id=2080832829]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+offset_left = 95.0
+offset_top = 48.0
+offset_bottom = 88.0
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_ff8ar")
+theme_override_styles/fill = SubResource("StyleBoxFlat_m0eg6")
+value = 62.0
+show_percentage = false
+
+[node name="BossName" type="Label" parent="TopBar/Row/Left/BossPanel" unique_id=2119667998]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 125.0
+offset_top = 2.0
+offset_right = 345.0
+offset_bottom = 50.0
+theme_override_colors/font_color = Color(1, 0.94, 0.78, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_b00kl")
+text = "BOSS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BossPortrait" type="TextureRect" parent="TopBar/Row/Left/BossPanel" unique_id=538595583]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 115.0
+offset_bottom = 115.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Frame" type="Panel" parent="TopBar/Row/Left/BossPanel/BossPortrait" unique_id=736167381]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_so1yu")
+
+[node name="Right" type="VBoxContainer" parent="TopBar/Row" unique_id=2047080153]
 layout_mode = 2
 mouse_filter = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_srpbi")
-theme_override_styles/fill = SubResource("StyleBoxFlat_spcu4")
-value = 100.0
+theme_override_constants/separation = 28
+
+[node name="StageRow" type="HBoxContainer" parent="TopBar/Row/Right" unique_id=1683177288]
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="StageBox" type="PanelContainer" parent="TopBar/Row/Right/StageRow" unique_id=1264755679]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_65xic")
+
+[node name="StageText" type="HBoxContainer" parent="TopBar/Row/Right/StageRow/StageBox" unique_id=367276827]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="StageLabel" type="Label" parent="TopBar/Row/Right/StageRow/StageBox/StageText" unique_id=1421515225]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 28
+text = "STAGE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RoomLabel" type="Label" parent="TopBar/Row/Right/StageRow/StageBox/StageText" unique_id=1970832440]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8, 0.16, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 40
+text = "03"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PauseButton" type="Button" parent="TopBar/Row/Right/StageRow" unique_id=1329064948]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(68, 68)
+layout_mode = 2
+theme_override_font_sizes/font_size = 34
+text = "II"
+
+[node name="CoinRow" type="HBoxContainer" parent="TopBar/Row/Right" unique_id=1533264448]
+layout_mode = 2
+size_flags_horizontal = 8
+mouse_filter = 2
+
+[node name="CoinBox" type="PanelContainer" parent="TopBar/Row/Right/CoinRow" unique_id=2057837570]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_mp5xd")
+
+[node name="CoinContent" type="HBoxContainer" parent="TopBar/Row/Right/CoinRow/CoinBox" unique_id=2013996786]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="CoinIcon" type="TextureRect" parent="TopBar/Row/Right/CoinRow/CoinBox/CoinContent" unique_id=521843664]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Frame" type="Panel" parent="TopBar/Row/Right/CoinRow/CoinBox/CoinContent/CoinIcon" unique_id=225597933]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_u6vop")
+
+[node name="CoinLabel" type="Label" parent="TopBar/Row/Right/CoinRow/CoinBox/CoinContent" unique_id=4685143]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(84, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 30
+text = "328"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BottomHeroPanel" type="Control" parent="." unique_id=14281296]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -196.0
+offset_top = -208.0
+offset_right = 228.0
+offset_bottom = -86.0
+mouse_filter = 2
+
+[node name="BottomHpBar" type="ProgressBar" parent="BottomHeroPanel" unique_id=84109003]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 115.0
+offset_top = 25.0
+offset_right = 424.0
+offset_bottom = 70.0
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_xtm2r")
+theme_override_styles/fill = SubResource("StyleBoxFlat_kc1f2")
+value = 80.0
 show_percentage = false
+
+[node name="Cut1" type="ColorRect" parent="BottomHeroPanel/BottomHpBar" unique_id=233770444]
+layout_mode = 0
+anchor_left = 0.2
+anchor_right = 0.2
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_right = 2.0
+mouse_filter = 2
+color = Color(0.03, 0.035, 0.04, 0.9)
+
+[node name="Cut2" type="ColorRect" parent="BottomHeroPanel/BottomHpBar" unique_id=1565054684]
+layout_mode = 0
+anchor_left = 0.4
+anchor_right = 0.4
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_right = 2.0
+mouse_filter = 2
+color = Color(0.03, 0.035, 0.04, 0.9)
+
+[node name="Cut3" type="ColorRect" parent="BottomHeroPanel/BottomHpBar" unique_id=959437195]
+layout_mode = 0
+anchor_left = 0.6
+anchor_right = 0.6
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_right = 2.0
+mouse_filter = 2
+color = Color(0.03, 0.035, 0.04, 0.9)
+
+[node name="Cut4" type="ColorRect" parent="BottomHeroPanel/BottomHpBar" unique_id=279123905]
+layout_mode = 0
+anchor_left = 0.8
+anchor_right = 0.8
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_right = 2.0
+mouse_filter = 2
+color = Color(0.03, 0.035, 0.04, 0.9)
+
+[node name="BottomPortrait" type="TextureRect" parent="BottomHeroPanel" unique_id=1558909490]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 122.0
+offset_bottom = 122.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Frame" type="Panel" parent="BottomHeroPanel/BottomPortrait" unique_id=414645841]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_6mpex")
+
+[node name="AbilityChips" type="HBoxContainer" parent="." unique_id=1409647371]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 80.0
+offset_top = -266.0
+offset_right = 80.0
+offset_bottom = -118.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_constants/separation = 18
+alignment = 1
+
+[node name="SampleSlot1" parent="AbilityChips" unique_id=90865584 instance=ExtResource("2_546lt")]
+layout_mode = 2
+
+[node name="SampleSlot2" parent="AbilityChips" unique_id=1891652616 instance=ExtResource("2_546lt")]
+layout_mode = 2
+
+[node name="SampleSlot3" parent="AbilityChips" unique_id=1930707239 instance=ExtResource("2_546lt")]
+layout_mode = 2
 
 [node name="Banner" type="Label" parent="." unique_id=27268067]
 unique_name_in_owner = true
@@ -147,10 +588,13 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -500.0
-offset_top = -260.0
+offset_top = -300.0
 offset_right = 500.0
 offset_bottom = -140.0
-theme_override_font_sizes/font_size = 72
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 26
+theme_override_font_sizes/font_size = 104
 text = "門開了！往上走"
 horizontal_alignment = 1
 vertical_alignment = 1

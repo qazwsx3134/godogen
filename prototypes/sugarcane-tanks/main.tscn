@@ -37,6 +37,7 @@
 [ext_resource type="PackedScene" path="res://ui/result_panel.tscn" id="35_0dhbp"]
 [ext_resource type="Script" path="res://game/time_control.gd" id="36_jx0wj"]
 [ext_resource type="Script" path="res://game/sfx.gd" id="37_kkkcx"]
+[ext_resource type="PackedScene" path="res://pickups/coin.tscn" id="38_coin1"]
 
 [node name="Main" type="Node2D" unique_id=1310566911]
 script = ExtResource("1_facbu")
@@ -45,6 +46,7 @@ abilities = Array[Resource]([ExtResource("12_f6a44"), ExtResource("13_0cbny"), E
 sugarcane_scene = ExtResource("27_sm6fg")
 exp_gem_scene = ExtResource("28_b17eg")
 heart_scene = ExtResource("29_ntx8l")
+coin_scene = ExtResource("38_coin1")
 damage_number_scene = ExtResource("30_uatky")
 explosion_scene = ExtResource("31_rqtf5")
 
