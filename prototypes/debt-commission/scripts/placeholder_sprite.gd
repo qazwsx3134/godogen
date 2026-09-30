@@ -81,6 +81,13 @@ func placard_rect() -> Rect2:
 		return Rect2()
 	return _placard.get_global_transform() * Rect2(Vector2.ZERO, _placard.size)
 
+
+## The portrait's on-screen box (its Art; the standing box when there is none) in canvas
+## coordinates: what a tap on this character hits (investigation hotspots with `character`).
+func art_rect() -> Rect2:
+	var box: Control = _art if _art != null else self
+	return box.get_global_transform() * Rect2(Vector2.ZERO, box.size)
+
 ## Shows that face's picture when the catalog has one, else the character's usual picture.
 func set_expression(value: String) -> void:
 	expression = value

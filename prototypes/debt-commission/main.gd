@@ -111,7 +111,6 @@ const AUDIO_PATHS: Dictionary = {
 ## Background frames and the left/center/right standing slots, laid out in the editor.
 const STAGE_SCENE: PackedScene = preload("res://scenes/stage.tscn")
 
-const COLOR_LETTERBOX: Color = Color("#0b0d18")
 const COLOR_PANEL: Color = Color(0.035, 0.045, 0.09, 0.76)
 const COLOR_PANEL_SOLID: Color = Color("#101530")
 const COLOR_GOLD: Color = Color("#c9a24a")
@@ -143,13 +142,17 @@ var _stage_area: Control = null
 var _slot_markers: Dictionary = {}
 var _paper_textures: Dictionary = {}
 
-var _game: Control = null
-var _bg_layer: Control = null
-var _char_layer: Control = null
-var _fx_layer: Control = null
-var _dialog_layer: Control = null
-var _overlay_layer: Control = null
-var _popup_layer: Control = null
+## The game area and its layers are nodes of main.tscn, back to front: Background, Character,
+## Interaction (character hotspots), Effect (HUD), Dialogue, Comedy (still empty), Overlay, Popup.
+@onready var _game: Control = %Game
+@onready var _bg_layer: Control = %BackgroundLayer
+@onready var _char_layer: Control = %CharacterLayer
+@onready var _interaction_layer: Control = %InteractionLayer
+@onready var _fx_layer: Control = %EffectLayer
+@onready var _dialog_layer: Control = %DialogueLayer
+@onready var _comedy_layer: Control = %ComedyLayer
+@onready var _overlay_layer: Control = %OverlayLayer
+@onready var _popup_layer: Control = %PopupLayer
 ## shake / flash / cutin / freeze / bgm / se steps (scripts/stage_effects.gd).
 var _effects: StageEffects = null
 ## The mounted title_screen and menu_panel scenes; the buttons and dictionaries below point into them.
@@ -486,26 +489,6 @@ func _build_audio() -> void:
 # ---------------------------------------------------------------- UI 建構
 
 func _build_ui() -> void:
-	var letterbox: ColorRect = ColorRect.new()
-	letterbox.color = COLOR_LETTERBOX
-	letterbox.set_meta("ui_style_role", "letterbox")
-	letterbox.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(letterbox)
-	letterbox.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-
-	_game = Control.new()
-	_game.name = "Game"
-	_game.clip_contents = true
-	_game.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(_game)
-
-	_bg_layer = _add_layer("BackgroundLayer")
-	_char_layer = _add_layer("CharacterLayer")
-	_fx_layer = _add_layer("EffectLayer")
-	_dialog_layer = _add_layer("DialogueLayer")
-	_overlay_layer = _add_layer("OverlayLayer")
-	_popup_layer = _add_layer("PopupLayer")
-
 	_build_background()
 	_build_sprites()
 	_build_phase3_hud()
@@ -537,18 +520,9 @@ func _build_ui() -> void:
 	_effects = StageEffects.new()
 	_effects.name = "StageEffects"
 	add_child(_effects)
-	_effects.setup([_bg_layer, _char_layer, _fx_layer, _dialog_layer], _overlay_layer, _catalog)
+	_effects.setup([_bg_layer, _char_layer, _interaction_layer, _fx_layer, _dialog_layer], _overlay_layer, _catalog)
 	_apply_audio_levels()
 	_refresh_gameplay_ui()
-
-
-func _add_layer(layer_name: String) -> Control:
-	var layer: Control = Control.new()
-	layer.name = layer_name
-	layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_game.add_child(layer)
-	layer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	return layer
 
 
 func _build_background() -> void:
@@ -1476,7 +1450,11 @@ func _present_investigation(command: Dictionary, restored: bool) -> void:
 	_boke_controls.visible = false
 	_auto_button.disabled = true
 	_set_name_plate("shinpachi", true)
-	_clear_stage()  # the player searches the room itself
+	if _dict_bool(command, "keep_cast"):
+		for sprite: Control in _sprites.values():
+			sprite.modulate = Color.WHITE  # nobody is in focus while searching: any of them can be tapped
+	else:
+		_clear_stage()  # the player searches the room itself
 	var place_bg: String = _dict_string(command, "bg")
 	if not place_bg.is_empty() and place_bg != _current_bg_id:
 		_apply_background(place_bg)  # each place of the search shows its own picture
@@ -1527,19 +1505,27 @@ func _build_hotspots(command: Dictionary) -> void:
 			continue
 		var hotspot: Dictionary = raw_hotspot as Dictionary
 		var hotspot_id: String = _dict_string(hotspot, "id")
-		var pos: Array = hotspot.get("pos", [0.5, 0.5]) as Array
-		var extent: Array = hotspot.get("size", DEFAULT_HOTSPOT_SIZE) as Array
 		var spot: Control = HOTSPOT_SCENE.instantiate() as Control
 		spot.name = "Hotspot_" + hotspot_id
-		_hotspot_layer.add_child(spot)
-		spot.anchor_left = clampf(float(pos[0]) - float(extent[0]) * 0.5, 0.0, 1.0)
-		spot.anchor_right = clampf(float(pos[0]) + float(extent[0]) * 0.5, 0.0, 1.0)
-		spot.anchor_top = clampf(float(pos[1]) - float(extent[1]) * 0.5, 0.0, 1.0)
-		spot.anchor_bottom = clampf(float(pos[1]) + float(extent[1]) * 0.5, 0.0, 1.0)
-		spot.offset_left = 0.0
-		spot.offset_top = 0.0
-		spot.offset_right = 0.0
-		spot.offset_bottom = 0.0
+		if hotspot.has("character"):
+			# A character's spot covers their portrait on the stage instead of a place on the picture:
+			# it lies on the interaction layer (sized by _layout_hotspots) and exists while they are on stage.
+			if not _dict_bool(hotspot, "present", true):
+				spot.free()
+				continue
+			_interaction_layer.add_child(spot)
+		else:
+			var pos: Array = hotspot.get("pos", [0.5, 0.5]) as Array
+			var extent: Array = hotspot.get("size", DEFAULT_HOTSPOT_SIZE) as Array
+			_hotspot_layer.add_child(spot)
+			spot.anchor_left = clampf(float(pos[0]) - float(extent[0]) * 0.5, 0.0, 1.0)
+			spot.anchor_right = clampf(float(pos[0]) + float(extent[0]) * 0.5, 0.0, 1.0)
+			spot.anchor_top = clampf(float(pos[1]) - float(extent[1]) * 0.5, 0.0, 1.0)
+			spot.anchor_bottom = clampf(float(pos[1]) + float(extent[1]) * 0.5, 0.0, 1.0)
+			spot.offset_left = 0.0
+			spot.offset_top = 0.0
+			spot.offset_right = 0.0
+			spot.offset_bottom = 0.0
 		spot.call("set_found", bool(hotspot.get("checked", false)), false)
 		_hotspots[hotspot_id] = spot
 	_layout_hotspots()
@@ -1559,6 +1545,23 @@ func _layout_hotspots() -> void:
 		_picture = Rect2(own.position + (own.size - drawn) * 0.5, drawn)
 	_pan_range = Vector2(minf(0.0, _game.size.x - _picture.end.x), maxf(0.0, -_picture.position.x))
 	_set_pan(_pan)
+	_place_cast_hotspots()
+
+
+## A character's spot lies over their portrait as it is on screen (kept inside the game area).
+func _place_cast_hotspots() -> void:
+	var screen: Rect2 = Rect2(_game.global_position, _game.size)
+	for raw_hotspot: Variant in _current_command.get("hotspots", []):
+		var hotspot: Dictionary = raw_hotspot as Dictionary
+		var spot: Control = _hotspots.get(_dict_string(hotspot, "id")) as Control
+		if spot == null or spot.get_parent() != _interaction_layer:
+			continue
+		var portrait: Rect2 = (_sprites[_dict_string(hotspot, "character")] as Control).call("art_rect")
+		var shown: Rect2 = portrait.intersection(screen)
+		if not shown.has_area():
+			shown = portrait  # wholly off screen: nothing to clip, and nobody can tap it
+		spot.position = shown.position - _interaction_layer.global_position
+		spot.size = shown.size
 
 
 func _set_pan(value: float) -> void:
@@ -1589,6 +1592,9 @@ func _clear_hotspots() -> void:
 		frame.offset_bottom = _frame_offsets[3]
 		_hotspot_layer.queue_free()
 	_hotspot_layer = null
+	for spot: Control in _hotspots.values():
+		if spot.get_parent() == _interaction_layer:
+			spot.queue_free()  # a character's spot lies on the interaction layer, not on the picture
 	_hotspots.clear()
 	_pan = 0.0
 	_pan_range = Vector2.ZERO
@@ -1607,14 +1613,34 @@ func _anchored_rect_with(node: Control, offsets: Array[float], parent_rect: Rect
 
 
 ## A tap on the picture while searching: the spot under it, unless the reading box covers it.
+## Found spots are done, except those with `lines`, which answer every tap. Where spots overlap, an
+## object beats a character (a character's spot is their whole portrait, so no object may hide in it)
+## and the smaller object wins; of two characters, the one in front wins.
 func _tap_investigation(at: Vector2) -> void:
 	if _story_busy or (_dialog_panel.visible and _dialog_panel.get_global_rect().has_point(at)):
 		return
+	var tapped: String = ""
+	var tapped_rank: float = INF
 	for hotspot_id: String in _hotspots.keys():
 		var spot: Control = _hotspots[hotspot_id] as Control
-		if not bool(spot.get("found")) and _hotspot_hit_rect(spot).has_point(at):
-			_collect_hotspot(hotspot_id)
-			return
+		var data: Dictionary = _hotspot_data(hotspot_id)
+		if bool(spot.get("found")) and not data.has("lines"):
+			continue
+		var hit: Rect2 = _hotspot_hit_rect(spot)
+		var rank: float = hit.get_area() if not data.has("character") else 1.0e9 - _sprites[data["character"]].get_index()
+		if hit.has_point(at) and rank < tapped_rank:
+			tapped = hotspot_id
+			tapped_rank = rank
+	if not tapped.is_empty():
+		_collect_hotspot(tapped)
+
+
+## The runner's entry for a hotspot of the current search ({} when there is none).
+func _hotspot_data(hotspot_id: String) -> Dictionary:
+	for raw_hotspot: Variant in _current_command.get("hotspots", []):
+		if raw_hotspot is Dictionary and _dict_string(raw_hotspot as Dictionary, "id") == hotspot_id:
+			return raw_hotspot as Dictionary
+	return {}
 
 
 ## The spot's rect, grown to at least 48 CSS px each way so small objects stay tappable.
@@ -1628,19 +1654,18 @@ func _hotspot_hit_rect(spot: Control) -> Rect2:
 func _collect_hotspot(hotspot_id: String) -> void:
 	if _screen_mode != "investigate" or _story_busy:
 		return
+	_sync_cast()
+	var spot: Control = _hotspots.get(hotspot_id) as Control
+	var first_time: bool = spot == null or not bool(spot.get("found"))  # `lines` spots answer every tap
 	if not bool(_runner.call("inspect_hotspot", hotspot_id)):
 		_show_toast(_runner_string("error_message", "這個位置目前不能調查。"))
 		return
-	var item_id: String = ""
-	for raw_hotspot: Variant in _current_command.get("hotspots", []):
-		if raw_hotspot is Dictionary and _dict_string(raw_hotspot as Dictionary, "id") == hotspot_id:
-			item_id = _dict_string(raw_hotspot as Dictionary, "item")
-			break
+	var item_id: String = _dict_string(_hotspot_data(hotspot_id), "item")
 	var item_info: Dictionary = (_catalog.get("items", {}) as Dictionary).get(item_id, {}) as Dictionary
 	var item_name: String = str(item_info.get("name", item_id))
 	var next: Dictionary = _runner_current()
-	(_hotspots[hotspot_id] as Control).call("set_found", true, true)
-	if not item_id.is_empty():
+	(_hotspots[hotspot_id] as Control).call("set_found", true, first_time)
+	if not item_id.is_empty() and first_time:
 		_show_toast("取得線索：" + item_name)
 	if _command_op(next) != "investigate":
 		# The spot has something to say: its scene plays and leads back to the search.
@@ -1712,6 +1737,7 @@ func _on_investigation_continue_pressed() -> void:
 		_apply_background(home_bg)  # the search ends where it began
 	_story_busy = true
 	_screen_mode = "busy"
+	_sync_cast()
 	var next: Dictionary = _runner.call("advance") as Dictionary
 	if _command_op(next) == "investigate":
 		_story_busy = false
@@ -3165,8 +3191,20 @@ func _default_background_id() -> String:
 # ---------------------------------------------------------------- 小工具
 
 func _runner_current() -> Dictionary:
+	_sync_cast()
 	var value: Variant = _runner.call("current") if _runner != null else null
 	return (value as Dictionary).duplicate(true) if value is Dictionary else {}
+
+
+## The runner does not know the stage: tell it who is on it before it answers about an investigation.
+func _sync_cast() -> void:
+	if _runner == null:
+		return
+	var on_stage: Array = []
+	for actor_id: String in _sprites.keys():
+		if (_sprites[actor_id] as Control).visible:
+			on_stage.append(actor_id)
+	_runner.set("cast", on_stage)
 
 
 func _runner_string(property_name: String, fallback: String) -> String:
@@ -3380,15 +3418,20 @@ func _write_qa_state() -> void:
 		var spot: Control = _hotspots.get(hotspot_id) as Control
 		var hit: Rect2 = _hotspot_hit_rect(spot) if spot != null and is_instance_valid(spot) else Rect2()
 		# `rect` only while a tap there would reach the spot: on screen and not under the reading box.
-		var reachable: bool = hit.has_area() and Rect2(_game.global_position, _game.size).encloses(hit) \
-			and not (_dialog_panel.visible and _dialog_panel.get_global_rect().intersects(hit))
+		# A character's spot is their whole portrait, so it reports the part above the box.
+		var reach: Rect2 = hit
+		var covered: bool = _dialog_panel.visible and _dialog_panel.get_global_rect().intersects(hit)
+		if hotspot.has("character") and covered:
+			reach.end.y = minf(reach.end.y, _dialog_panel.get_global_rect().position.y)
+			covered = false
+		var reachable: bool = reach.has_area() and Rect2(_game.global_position, _game.size).encloses(reach) and not covered
 		hotspot_state.append({
 			"id": hotspot_id,
 			"label": _dict_string(hotspot, "label"),
 			"checked": bool(hotspot.get("checked", false)),
 			"pos": hotspot.get("pos", []),
 			"screen_rect": {"x": hit.position.x, "y": hit.position.y, "width": hit.size.x, "height": hit.size.y},
-			"rect": {"x": hit.position.x, "y": hit.position.y, "width": hit.size.x, "height": hit.size.y} if reachable else {},
+			"rect": {"x": reach.position.x, "y": reach.position.y, "width": reach.size.x, "height": reach.size.y} if reachable else {},
 		})
 	# 舞台中央空白處：點畫面任一處也能推進。
 	if _dialog_panel.is_visible_in_tree() or _ui_hidden:

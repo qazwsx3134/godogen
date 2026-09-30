@@ -72,6 +72,9 @@ var checked_hotspots: Dictionary = {}
 var investigations: Dictionary = {}
 ## Story-level text on the placard (`placard` steps); a round line with a placard slot shows its own.
 var placard: String = ""
+## Character ids on stage right now. The stage lives in the shell, which sets this before it asks about
+## an investigation; only `character` hotspots read it. Not part of a save.
+var cast: Array = []
 ## Live state of the v2 round in play (see tsukkomi_round.gd); kept while its reaction nodes play.
 var round_state: Dictionary = {}
 ## Totals for the chapter result: caught, perfect, fails, hidden, max_combo.
@@ -338,8 +341,10 @@ func advance() -> Dictionary:
 
 
 ## Inspects a hotspot of the current place: marks it checked (per place), grants its item once and,
-## the first time, plays its `goto` reaction (which leads back to the investigation's node). A side
-## place whose hotspots are all checked sends the player back to the home place.
+## the first time, writes its `set` flags and plays its `goto` reaction (which leads back to the
+## investigation's node). A hotspot with `lines` plays on every tap instead: tap n plays lines[n]
+## (the last one from then on), and the taps are counted in investigations[id].counts. A side place
+## whose hotspots are all checked sends the player back to the home place.
 func inspect_hotspot(hotspot_id: String) -> bool:
     if not _loaded:
         return _reject("No story is loaded.")
@@ -355,23 +360,39 @@ func inspect_hotspot(hotspot_id: String) -> bool:
             break
     if selected_hotspot.is_empty():
         return _reject("Unknown hotspot '%s' in investigation '%s' (place '%s')." % [hotspot_id, investigation_id, place["id"]])
+    if _is_off_stage(selected_hotspot):
+        return _reject("Hotspot '%s' belongs to %s, who is not on stage." % [hotspot_id, selected_hotspot["character"]])
     var key: String = _checked_key(investigation_id, String(place["id"]))
     var checked: Array[String] = _checked_hotspots_for(key)
-    if checked.has(hotspot_id):
+    var lines: Array = selected_hotspot.get("lines", []) as Array
+    var first_time: bool = not checked.has(hotspot_id)
+    if not first_time and lines.is_empty():
         error_message = ""
         return true  # already searched: nothing new, no replay
     var before: Dictionary = snapshot()
-    checked.append(hotspot_id)
-    checked_hotspots[key] = checked
-    var item_id: String = String(selected_hotspot.get("item", ""))
-    if not item_id.is_empty() and not items.has(item_id):
-        items.append(item_id)
-    if String(place["id"]) != HOME_PLACE and _all_checked(place["hotspots"] as Array, checked):
-        _set_place(investigation_id, HOME_PLACE)
+    var reaction: String = String(selected_hotspot.get("goto", ""))
+    if not lines.is_empty():
+        var state: Dictionary = _investigation_state(investigation_id)
+        var counts: Dictionary = state.get("counts", {}) as Dictionary  # only written once a tap happens: old saves have none
+        counts[hotspot_id] = int(counts.get(hotspot_id, 0)) + 1
+        state["counts"] = counts
+        investigations[investigation_id] = state
+        reaction = String(lines[mini(int(counts[hotspot_id]), lines.size()) - 1])
+    if first_time:
+        checked.append(hotspot_id)
+        checked_hotspots[key] = checked
+        var item_id: String = String(selected_hotspot.get("item", ""))
+        if not item_id.is_empty() and not items.has(item_id):
+            items.append(item_id)
+        var writes: Dictionary = selected_hotspot.get("set", {}) as Dictionary
+        for flag_key: Variant in writes.keys():
+            flags[String(flag_key)] = writes[flag_key]
+        if String(place["id"]) != HOME_PLACE and _all_checked(place["hotspots"] as Array, checked):
+            _set_place(investigation_id, HOME_PLACE)
     error_message = ""
-    if not selected_hotspot.has("goto"):
+    if reaction.is_empty():
         return true
-    return _jump_from_investigation(before, String(selected_hotspot["goto"]))
+    return _jump_from_investigation(before, reaction)
 
 
 ## Plays a talk topic of the current place once; its node leads back to the investigation.
@@ -690,6 +711,8 @@ func _decorate_investigation(command: Dictionary) -> Dictionary:
     for index: int in range(hotspots.size()):
         var hotspot: Dictionary = hotspots[index] as Dictionary
         hotspot["checked"] = checked.has(String(hotspot.get("id", "")))
+        if hotspot.has("character"):
+            hotspot["present"] = not _is_off_stage(hotspot)
         hotspots[index] = hotspot
     decorated["hotspots"] = hotspots
     decorated["place"] = place["id"]
@@ -819,6 +842,7 @@ func _investigation_is_complete(command: Dictionary) -> bool:
 
 
 ## [required hotspots checked, required hotspots] over every place of the investigation.
+## A character who is off stage takes their hotspot out of the count.
 func _investigation_progress(command: Dictionary) -> Array:
     var investigation_id: String = String(command.get("id", ""))
     var found: int = 0
@@ -827,7 +851,7 @@ func _investigation_progress(command: Dictionary) -> Array:
         var checked: Array[String] = _checked_hotspots_for(_checked_key(investigation_id, String(place["id"])))
         for raw_hotspot: Variant in place["hotspots"] as Array:
             var hotspot: Dictionary = raw_hotspot as Dictionary
-            if bool(hotspot.get("optional", false)):
+            if bool(hotspot.get("optional", false)) or _is_off_stage(hotspot):
                 continue
             required += 1
             if checked.has(String(hotspot.get("id", ""))):
@@ -836,7 +860,13 @@ func _investigation_progress(command: Dictionary) -> Array:
 
 
 func _all_checked(hotspots: Array, checked: Array[String]) -> bool:
-    return hotspots.all(func(raw: Variant) -> bool: return checked.has(String((raw as Dictionary).get("id", ""))))
+    return hotspots.all(func(raw: Variant) -> bool:
+        return checked.has(String((raw as Dictionary).get("id", ""))) or _is_off_stage(raw as Dictionary))
+
+
+## A hotspot of a character (`keep_cast` investigations) who is not in `cast`.
+func _is_off_stage(hotspot: Dictionary) -> bool:
+    return hotspot.has("character") and not cast.has(String(hotspot["character"]))
 
 
 func _resolve_boke_result(command: Dictionary, resolution: Dictionary) -> Dictionary:
@@ -1779,14 +1809,17 @@ func _validate_investigation(step: Dictionary, prefix: String, index: int, nodes
         return "%s investigate bg '%s' is not in asset catalog" % [prefix, step["bg"]]
     if step.has("label") and not _is_non_empty_string(step["label"]):
         return "%s investigate label must be a non-empty string" % prefix
+    if step.has("keep_cast") and typeof(step["keep_cast"]) != TYPE_BOOL:
+        return "%s investigate keep_cast must be boolean" % prefix
+    var keep_cast: bool = bool(step.get("keep_cast", false))
     var seen: Dictionary = {}
-    var error: String = _validate_hotspots(step.get("hotspots", null), prefix, seen, nodes, asset_catalog)
+    var error: String = _validate_hotspots(step.get("hotspots", null), prefix, seen, nodes, asset_catalog, keep_cast)
     if error.is_empty():
         error = _validate_topics(step.get("talk", []), prefix, seen, nodes, asset_catalog)
     if not error.is_empty():
         return error
     var has_reactions: bool = step.has("talk") or step.has("places") \
-        or (step["hotspots"] as Array).any(func(hotspot: Dictionary) -> bool: return hotspot.has("goto"))
+        or (step["hotspots"] as Array).any(func(hotspot: Dictionary) -> bool: return hotspot.has("goto") or hotspot.has("lines"))
     if step.has("places"):
         if typeof(step["places"]) != TYPE_ARRAY or (step["places"] as Array).is_empty():
             return "%s investigate places must be a non-empty array" % prefix
@@ -1806,18 +1839,19 @@ func _validate_investigation(step: Dictionary, prefix: String, index: int, nodes
             for key: String in ["label", "prompt"]:
                 if place.has(key) and not _is_non_empty_string(place[key]):
                     return "%s %s must be a non-empty string" % [where, key]
-            error = _validate_hotspots(place.get("hotspots", null), where, seen, nodes, asset_catalog)
+            error = _validate_hotspots(place.get("hotspots", null), where, seen, nodes, asset_catalog, keep_cast)
             if error.is_empty():
                 error = _validate_topics(place.get("talk", []), where, seen, nodes, asset_catalog)
             if not error.is_empty():
                 return error
-            has_reactions = has_reactions or (place["hotspots"] as Array).any(func(hotspot: Dictionary) -> bool: return hotspot.has("goto"))
+            has_reactions = has_reactions or (place["hotspots"] as Array).any(
+                func(hotspot: Dictionary) -> bool: return hotspot.has("goto") or hotspot.has("lines"))
     if has_reactions and index != 0:
-        return "%s investigate '%s' has reactions (talk, places or hotspot goto), so it must be the first step of its node; reactions come back with => <that node>" % [prefix, step["id"]]
+        return "%s investigate '%s' has reactions (talk, places or hotspot goto/lines), so it must be the first step of its node; reactions come back with => <that node>" % [prefix, step["id"]]
     return ""
 
 
-func _validate_hotspots(value: Variant, where: String, seen: Dictionary, nodes: Dictionary, asset_catalog: Dictionary) -> String:
+func _validate_hotspots(value: Variant, where: String, seen: Dictionary, nodes: Dictionary, asset_catalog: Dictionary, keep_cast: bool) -> String:
     if typeof(value) != TYPE_ARRAY or (value as Array).is_empty():
         return "%s investigate hotspots must be a non-empty array" % where
     var hotspots: Array = value as Array
@@ -1831,17 +1865,36 @@ func _validate_hotspots(value: Variant, where: String, seen: Dictionary, nodes: 
         if seen.has("spot:" + hotspot_id):
             return "%s repeats hotspot id '%s'" % [where, hotspot_id]
         seen["spot:" + hotspot_id] = true
-        if not _is_normalized_position(hotspot.get("pos", null)):
+        if hotspot.has("character"):
+            # The area of a character's hotspot is their portrait on stage, so it has no pos or size.
+            if not keep_cast:
+                return "%s hotspot '%s' has a character, so the investigation needs keep_cast: true" % [where, hotspot_id]
+            if typeof(hotspot["character"]) != TYPE_STRING or not _catalog_has_character(asset_catalog, String(hotspot["character"])):
+                return "%s hotspot '%s' character '%s' is not in asset catalog" % [where, hotspot_id, hotspot["character"]]
+            if hotspot.has("pos") or hotspot.has("size"):
+                return "%s hotspot '%s' has a character, so its area is the portrait: drop pos and size" % [where, hotspot_id]
+        elif not _is_normalized_position(hotspot.get("pos", null)):
             return "%s hotspot '%s' pos must contain normalized x/y coordinates" % [where, hotspot_id]
         if hotspot.has("size") and (not _is_normalized_position(hotspot["size"]) \
                 or float(hotspot["size"][0]) <= 0.0 or float(hotspot["size"][1]) <= 0.0):
             return "%s hotspot '%s' size must be a positive fraction of the picture [w, h]" % [where, hotspot_id]
-        if not hotspot.has("item") and not hotspot.has("goto"):
-            return "%s hotspot '%s' needs an item, a goto reaction, or both" % [where, hotspot_id]
+        if not hotspot.has("item") and not hotspot.has("goto") and not hotspot.has("lines"):
+            return "%s hotspot '%s' needs an item, a goto reaction, or both (or lines)" % [where, hotspot_id]
         if hotspot.has("item") and not _catalog_has_item(asset_catalog, String(hotspot["item"])):
             return "%s hotspot '%s' item '%s' is not in asset catalog" % [where, hotspot_id, hotspot["item"]]
         if hotspot.has("goto") and not nodes.has(String(hotspot["goto"])):
             return "%s hotspot '%s' goto target is invalid" % [where, hotspot_id]
+        if hotspot.has("lines"):
+            var lines: Variant = hotspot["lines"]
+            if hotspot.has("goto"):
+                return "%s hotspot '%s' has both goto and lines; use one" % [where, hotspot_id]
+            if typeof(lines) != TYPE_ARRAY or (lines as Array).is_empty() or not (lines as Array).all(
+                    func(target: Variant) -> bool: return _is_non_empty_string(target) and nodes.has(String(target))):
+                return "%s hotspot '%s' lines must be a non-empty array of existing node ids" % [where, hotspot_id]
+        if hotspot.has("set"):
+            var set_error: String = _validate_flag_dictionary(hotspot["set"], "%s hotspot '%s' set" % [where, hotspot_id])
+            if not set_error.is_empty():
+                return set_error
         if hotspot.has("optional") and typeof(hotspot["optional"]) != TYPE_BOOL:
             return "%s hotspot '%s' optional must be boolean" % [where, hotspot_id]
     return ""
@@ -1902,6 +1955,12 @@ func _validate_flag_consistency(root: Dictionary) -> String:
                         var round_flag_error: String = _record_flag_value(types, values, String(key), writes[key])
                         if not round_flag_error.is_empty():
                             return round_flag_error
+            elif String(step["op"]) == "investigate":
+                for writes: Dictionary in _hotspot_flag_writes(step):
+                    for key: Variant in writes.keys():
+                        var hotspot_flag_error: String = _record_flag_value(types, values, String(key), writes[key])
+                        if not hotspot_flag_error.is_empty():
+                            return hotspot_flag_error
             elif String(step["op"]) == "boke_round":
                 var tsukkomi: Dictionary = step["tsukkomi"] as Dictionary
                 for raw_option: Variant in tsukkomi["options"] as Array:
@@ -1915,9 +1974,15 @@ func _validate_flag_consistency(root: Dictionary) -> String:
                             return option_flag_error
 
     # `when` cases may test flags: each must be a story flag with a value of the same type.
+    # A hotspot's `set` may only write declared flags (a save lists exactly the declared ones).
     for raw_node_id: Variant in nodes.keys():
         var steps: Array = (nodes[raw_node_id] as Dictionary)["steps"] as Array
         for index: int in range(steps.size()):
+            if String((steps[index] as Dictionary)["op"]) == "investigate":
+                for writes: Dictionary in _hotspot_flag_writes(steps[index]):
+                    for key: Variant in writes.keys():
+                        if not initial_flags.has(String(key)):
+                            return "node '%s' step %d hotspot set flag '%s' is not in initial_flags" % [raw_node_id, index, key]
             if not TsukkomiRound.is_v2(steps[index]):
                 continue
             for condition: Dictionary in TsukkomiRound.flag_conditions(steps[index]):
@@ -1925,6 +1990,16 @@ func _validate_flag_consistency(root: Dictionary) -> String:
                     if not types.has(String(key)) or types[String(key)] != typeof(condition[key]):
                         return "node '%s' step %d when flags '%s' is not a story flag of that type" % [raw_node_id, index, key]
     return ""
+
+
+## The `set` flags of every hotspot of an investigation step, home place and `places` alike.
+func _hotspot_flag_writes(step: Dictionary) -> Array[Dictionary]:
+    var all_writes: Array[Dictionary] = []
+    for place: Dictionary in _investigation_places(step):
+        for raw_hotspot: Variant in place["hotspots"] as Array:
+            if (raw_hotspot as Dictionary).has("set"):
+                all_writes.append((raw_hotspot as Dictionary)["set"] as Dictionary)
+    return all_writes
 
 
 func _record_flag_value(types: Dictionary, values: Dictionary, key: String, value: Variant) -> String:
@@ -2152,6 +2227,19 @@ func _validate_investigations(value: Variant) -> String:
             if typeof(topic_id) != TYPE_STRING or not topic_ids.has(String(topic_id)) or seen.has(topic_id):
                 return "investigations['%s'] lists an unknown or repeated topic" % raw_id
             seen[topic_id] = true
+        # `counts` (taps per `lines` hotspot) is optional: saves from before it have none.
+        var counts: Variant = (state as Dictionary).get("counts", {})
+        if not counts is Dictionary:
+            return "investigations['%s'] counts must be an object" % raw_id
+        var tapped_ids: Array = []
+        for place: Dictionary in _investigation_places(investigation):
+            for raw_hotspot: Variant in place["hotspots"] as Array:
+                if (raw_hotspot as Dictionary).has("lines"):
+                    tapped_ids.append(String((raw_hotspot as Dictionary)["id"]))
+        for hotspot_id: Variant in (counts as Dictionary).keys():
+            var taps: Variant = counts[hotspot_id]
+            if typeof(hotspot_id) != TYPE_STRING or not tapped_ids.has(hotspot_id) or typeof(taps) != TYPE_INT or int(taps) < 1:
+                return "investigations['%s'] counts must map lines hotspots to a tap count of 1 or more" % raw_id
     return ""
 
 
@@ -2268,6 +2356,10 @@ func _collect_allowed_flag_values(story: Dictionary) -> Dictionary:
                         _add_allowed_flag_value(values, String(key), set_flags[key])
             elif TsukkomiRound.is_v2(step):
                 for writes: Dictionary in TsukkomiRound.flag_writes(step):
+                    for key: Variant in writes.keys():
+                        _add_allowed_flag_value(values, String(key), writes[key])
+            elif String(step["op"]) == "investigate":
+                for writes: Dictionary in _hotspot_flag_writes(step):
                     for key: Variant in writes.keys():
                         _add_allowed_flag_value(values, String(key), writes[key])
             elif String(step["op"]) == "boke_round":

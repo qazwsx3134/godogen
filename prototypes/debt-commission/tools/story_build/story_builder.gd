@@ -227,6 +227,8 @@ static func _unreachable(entry: String, nodes: Dictionary) -> Array[String]:
 				for reaction: Dictionary in reactions:
 					if reaction.has("goto"):
 						queue.append(String(reaction["goto"]))
+					for line: Variant in reaction.get("lines", []):  # a hotspot's `lines` nodes
+						queue.append(String(line))
 			for option: Dictionary in step.get("options", []):
 				queue.append(String(option.get("next", "")))
 			var tsukkomi: Dictionary = step.get("tsukkomi", {}) as Dictionary

@@ -1,0 +1,49 @@
+{
+  "id": "fixture_interaction",
+  "version": "1",
+  "title": "互動測試",
+  "entry": "open",
+  "initial_flags": {"examined_milk": false, "found_job": false},
+  "nodes": {
+    "open": {
+      "title": "開場",
+      "steps": [
+        {"op": "bg", "id": "yorozuya_living_room"},
+        {"op": "char", "id": "gintoki", "enter": true, "position": "center"},
+        {"op": "say", "speaker": "gintoki", "text": "今天也沒有工作。"}
+      ],
+      "next": "room"
+    },
+    "room": {
+      "title": "房間",
+      "steps": [
+        {
+          "op": "investigate",
+          "id": "room",
+          "keep_cast": true,
+          "prompt": "看看還有什麼吧。",
+          "hotspots": [
+            {"id": "gin", "label": "銀時", "character": "gintoki", "lines": ["gin_1", "gin_2", "gin_3"], "optional": true},
+            {"id": "kagura", "label": "神樂", "character": "kagura", "goto": "kagura_react"},
+            {"id": "milk", "label": "草莓牛奶", "pos": [0.62, 0.71], "size": [0.08, 0.12], "goto": "milk_react",
+              "set": {"examined_milk": true}, "optional": true},
+            {"id": "job", "label": "委託書", "pos": [0.3, 0.6], "goto": "job_react", "set": {"found_job": true}}
+          ]
+        }
+      ],
+      "next": "after"
+    },
+    "gin_1": {"title": "銀時一", "steps": [{"op": "say", "speaker": "gintoki", "text": "幹嘛？"}, {"op": "goto", "target": "room"}]},
+    "gin_2": {"title": "銀時二", "steps": [{"op": "say", "speaker": "gintoki", "text": "別一直戳。"}, {"op": "goto", "target": "room"}]},
+    "gin_3": {"title": "銀時三", "steps": [{"op": "say", "speaker": "gintoki", "text": "說了別戳啊。"}, {"op": "goto", "target": "room"}]},
+    "kagura_react": {"title": "神樂", "steps": [{"op": "say", "speaker": "kagura", "text": "我在這裡喔。"}, {"op": "goto", "target": "room"}]},
+    "milk_react": {"title": "牛奶", "steps": [{"op": "say", "speaker": "gintoki", "text": "這是我的草莓牛奶。"}, {"op": "goto", "target": "room"}]},
+    "job_react": {"title": "委託書", "steps": [{"op": "say", "speaker": "gintoki", "text": "有委託書！"}, {"op": "goto", "target": "room"}]},
+    "after": {
+      "title": "之後",
+      "steps": [{"op": "condition", "flag": "found_job", "equals": true, "then": "with_job", "else": "no_job"}]
+    },
+    "with_job": {"title": "有工作", "steps": [{"op": "say", "speaker": "gintoki", "text": "有工作了。"}, {"op": "end", "text": "有工作"}]},
+    "no_job": {"title": "沒工作", "steps": [{"op": "say", "speaker": "gintoki", "text": "還是沒工作。"}, {"op": "end", "text": "沒工作"}]}
+  }
+}

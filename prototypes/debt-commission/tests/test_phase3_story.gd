@@ -208,17 +208,17 @@ func _test_snapshot_restore_and_legacy_compatibility() -> void:
 func _test_phase3_validation() -> void:
 	var invalid_stories: Array[Dictionary] = []
 	var duplicate_hotspot: Dictionary = _read_story()
-	var hotspots: Array = duplicate_hotspot["nodes"]["phase3_open"]["steps"][3]["hotspots"]
+	var hotspots: Array = duplicate_hotspot["nodes"]["phase3_open"]["steps"][4]["hotspots"]
 	(hotspots[0] as Dictionary)["id"] = "duplicate"
 	hotspots.append((hotspots[0] as Dictionary).duplicate(true))
 	invalid_stories.append({"label": "duplicate_hotspot", "story": duplicate_hotspot})
 
 	var invalid_position: Dictionary = _read_story()
-	(invalid_position["nodes"]["phase3_open"]["steps"][3]["hotspots"][0] as Dictionary)["pos"] = [1.01, 0.5]
+	(invalid_position["nodes"]["phase3_open"]["steps"][4]["hotspots"][0] as Dictionary)["pos"] = [1.01, 0.5]
 	invalid_stories.append({"label": "invalid_position", "story": invalid_position})
 
 	var missing_item: Dictionary = _read_story()
-	(missing_item["nodes"]["phase3_open"]["steps"][3]["hotspots"][0] as Dictionary)["item"] = "not_in_catalog"
+	(missing_item["nodes"]["phase3_open"]["steps"][4]["hotspots"][0] as Dictionary)["item"] = "not_in_catalog"
 	invalid_stories.append({"label": "missing_item", "story": missing_item})
 
 	var duplicate_command_id: Dictionary = _read_story()
