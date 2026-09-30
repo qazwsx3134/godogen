@@ -1179,3 +1179,12 @@ prototypes/pachinko/tools/test_sequence.gd.uid
 skills-lock.json
 ---
 
+## Session End: 20260929_172203
+### Commits
+84ad648 STATUS: 進行中的分軌表改為不綁分支名稱
+ebf5042 CLAUDE.md: 子 agent 用 Herdr 開 Sonnet（max／xhigh）
+781c705 debt-commission: 第一章玩法引擎（舉牌、條件式放棄吐槽、畫面外台詞、調查話題與移動）
+58f8ac3 debt-commission: 定春、登勢、新八的第一章表情圖
+67c22aa pixel-monster
+---
+
