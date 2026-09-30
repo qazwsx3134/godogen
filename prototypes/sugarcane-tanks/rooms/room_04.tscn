@@ -1,0 +1,49 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://rooms/room.gd" id="1_817be"]
+[ext_resource type="PackedScene" path="res://arena/arena_square.tscn" id="2_42yhg"]
+[ext_resource type="PackedScene" path="res://arena/crate.tscn" id="3_elhsh"]
+[ext_resource type="PackedScene" path="res://enemies/tank.tscn" id="4_o451u"]
+[ext_resource type="PackedScene" path="res://enemies/plate.tscn" id="5_imqgg"]
+[ext_resource type="PackedScene" path="res://enemies/rat.tscn" id="6_mbs2a"]
+
+[node name="Room04" type="Node2D" unique_id=1235652012]
+script = ExtResource("1_817be")
+hp_scale = 1.1
+area_name = "天安門廣場"
+
+[node name="Arena" parent="." unique_id=1480817547 instance=ExtResource("2_42yhg")]
+unique_name_in_owner = true
+
+[node name="Obstacles" type="Node2D" parent="." unique_id=213369794]
+
+[node name="Crate" parent="Obstacles" unique_id=2125247388 instance=ExtResource("3_elhsh")]
+position = Vector2(300, 1020)
+
+[node name="@StaticBody2D@15" parent="Obstacles" unique_id=1864829937 instance=ExtResource("3_elhsh")]
+position = Vector2(780, 1020)
+
+[node name="Enemies" type="Node2D" parent="." unique_id=1395381380]
+unique_name_in_owner = true
+
+[node name="Tank" parent="Enemies" unique_id=2008102017 instance=ExtResource("4_o451u")]
+position = Vector2(280, 460)
+
+[node name="@CharacterBody2D@16" parent="Enemies" unique_id=159046050 instance=ExtResource("4_o451u")]
+position = Vector2(800, 460)
+
+[node name="Plate" parent="Enemies" unique_id=1716880737 instance=ExtResource("5_imqgg")]
+position = Vector2(540, 400)
+
+[node name="Rat" parent="Enemies" unique_id=808546982 instance=ExtResource("6_mbs2a")]
+position = Vector2(400, 720)
+
+[node name="@CharacterBody2D@17" parent="Enemies" unique_id=1861874129 instance=ExtResource("6_mbs2a")]
+position = Vector2(680, 720)
+
+[node name="@CharacterBody2D@18" parent="Enemies" unique_id=511822565 instance=ExtResource("6_mbs2a")]
+position = Vector2(540, 800)
+
+[node name="PlayerStart" type="Marker2D" parent="." unique_id=1819664906]
+unique_name_in_owner = true
+position = Vector2(540, 1640)

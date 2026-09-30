@@ -1,0 +1,32 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://rooms/room.gd" id="1_htvpn"]
+[ext_resource type="PackedScene" path="res://arena/arena_memorial.tscn" id="2_207sr"]
+[ext_resource type="PackedScene" path="res://arena/crate.tscn" id="3_7no0a"]
+[ext_resource type="PackedScene" path="res://enemies/chiang_boss.tscn" id="4_lvimw"]
+
+[node name="Room10" type="Node2D" unique_id=812449511]
+script = ExtResource("1_htvpn")
+boss_room = true
+area_name = "中正紀念堂"
+
+[node name="Arena" parent="." unique_id=219682253 instance=ExtResource("2_207sr")]
+unique_name_in_owner = true
+
+[node name="Obstacles" type="Node2D" parent="." unique_id=1620171522]
+
+[node name="Crate" parent="Obstacles" unique_id=2125247388 instance=ExtResource("3_7no0a")]
+position = Vector2(260, 1150)
+
+[node name="@StaticBody2D@40" parent="Obstacles" unique_id=797607426 instance=ExtResource("3_7no0a")]
+position = Vector2(820, 1150)
+
+[node name="Enemies" type="Node2D" parent="." unique_id=2144336861]
+unique_name_in_owner = true
+
+[node name="ChiangBoss" parent="Enemies" unique_id=1702473872 instance=ExtResource("4_lvimw")]
+position = Vector2(540, 520)
+
+[node name="PlayerStart" type="Marker2D" parent="." unique_id=922063641]
+unique_name_in_owner = true
+position = Vector2(540, 1640)

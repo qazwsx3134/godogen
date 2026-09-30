@@ -1,0 +1,51 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://rooms/room.gd" id="1_0qscy"]
+[ext_resource type="PackedScene" path="res://arena/arena_square.tscn" id="2_4s5in"]
+[ext_resource type="PackedScene" path="res://arena/crate.tscn" id="3_wf84g"]
+[ext_resource type="PackedScene" path="res://enemies/tank.tscn" id="4_fxsks"]
+[ext_resource type="PackedScene" path="res://enemies/rat.tscn" id="5_uqxei"]
+
+[node name="Room07" type="Node2D" unique_id=411111342]
+script = ExtResource("1_0qscy")
+hp_scale = 1.2
+area_name = "天安門廣場"
+
+[node name="Arena" parent="." unique_id=1480817547 instance=ExtResource("2_4s5in")]
+unique_name_in_owner = true
+
+[node name="Obstacles" type="Node2D" parent="." unique_id=652007296]
+
+[node name="Crate" parent="Obstacles" unique_id=2125247388 instance=ExtResource("3_wf84g")]
+position = Vector2(200, 1000)
+
+[node name="@StaticBody2D@24" parent="Obstacles" unique_id=2102748596 instance=ExtResource("3_wf84g")]
+position = Vector2(880, 1000)
+
+[node name="@StaticBody2D@25" parent="Obstacles" unique_id=1038206466 instance=ExtResource("3_wf84g")]
+position = Vector2(540, 1150)
+
+[node name="Enemies" type="Node2D" parent="." unique_id=882987922]
+unique_name_in_owner = true
+
+[node name="Tank" parent="Enemies" unique_id=2008102017 instance=ExtResource("4_fxsks")]
+position = Vector2(240, 460)
+
+[node name="@CharacterBody2D@26" parent="Enemies" unique_id=240125488 instance=ExtResource("4_fxsks")]
+position = Vector2(840, 460)
+
+[node name="@CharacterBody2D@27" parent="Enemies" unique_id=344202495 instance=ExtResource("4_fxsks")]
+position = Vector2(540, 380)
+
+[node name="Rat" parent="Enemies" unique_id=808546982 instance=ExtResource("5_uqxei")]
+position = Vector2(360, 760)
+
+[node name="@CharacterBody2D@28" parent="Enemies" unique_id=23963441 instance=ExtResource("5_uqxei")]
+position = Vector2(720, 760)
+
+[node name="@CharacterBody2D@29" parent="Enemies" unique_id=1977928625 instance=ExtResource("5_uqxei")]
+position = Vector2(540, 700)
+
+[node name="PlayerStart" type="Marker2D" parent="." unique_id=268162369]
+unique_name_in_owner = true
+position = Vector2(540, 1640)

@@ -1,0 +1,30 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://rooms/room.gd" id="1_h05tp"]
+[ext_resource type="PackedScene" path="res://arena/arena_square.tscn" id="2_mctnw"]
+[ext_resource type="PackedScene" path="res://enemies/boss_tank.tscn" id="3_3qq2d"]
+
+[node name="Room05" type="Node2D" unique_id=217214982]
+script = ExtResource("1_h05tp")
+boss_room = true
+area_name = "天安門廣場"
+
+[node name="Arena" parent="." unique_id=1480817547 instance=ExtResource("2_mctnw")]
+unique_name_in_owner = true
+
+[node name="Obstacles" type="Node2D" parent="." unique_id=228515841]
+
+[node name="Enemies" type="Node2D" parent="." unique_id=976393880]
+unique_name_in_owner = true
+
+[node name="BossTank" parent="Enemies" unique_id=1755298951 instance=ExtResource("3_3qq2d")]
+position = Vector2(540, 560)
+scale = Vector2(0.8, 0.8)
+summon_count = 2
+display_name = "重型坦克"
+max_hp = 1800
+exp_value = 20
+
+[node name="PlayerStart" type="Marker2D" parent="." unique_id=527320199]
+unique_name_in_owner = true
+position = Vector2(540, 1640)

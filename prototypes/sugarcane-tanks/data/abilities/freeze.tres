@@ -1,0 +1,10 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://data/ability_def.gd" id="1_1twav"]
+
+[resource]
+script = ExtResource("1_1twav")
+id = &"freeze"
+title = "冰凍甘蔗"
+description = "命中後減速 1.5 秒"
+color = Color(0.5, 0.85, 1, 1)

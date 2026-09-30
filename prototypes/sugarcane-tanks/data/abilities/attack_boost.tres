@@ -1,0 +1,11 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://data/ability_def.gd" id="1_i4k8j"]
+
+[resource]
+script = ExtResource("1_i4k8j")
+id = &"attack_boost"
+title = "攻擊強化"
+description = "攻擊力 +20%"
+color = Color(1, 0.4, 0.35, 1)
+max_stacks = 5

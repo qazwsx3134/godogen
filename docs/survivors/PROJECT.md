@@ -6,7 +6,7 @@
 
 來源：[conversation.md](conversation.md)（設計討論原文，不再修改）。本檔是整理後的決策版，數字與範圍以本檔為準；和原文不同的地方列在文末「裁定」。
 
-狀態：規劃中，尚未建立原型。預定位置 `prototypes/survivors/`。
+狀態：規劃中。預定位置 `prototypes/survivors/`。取得版權前，先用與 IP 無關的替身原型 [安](../../prototypes/sugarcane-tanks/README.md)（弓箭傳說式房間射擊）驗證自動攻擊、升級三選一疊加與打擊回饋；那個原型不驗證敵海密度。
 
 ## 待決事項（開工前要使用者決定）
 

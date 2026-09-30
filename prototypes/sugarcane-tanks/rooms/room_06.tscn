@@ -1,0 +1,48 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://rooms/room.gd" id="1_gnkps"]
+[ext_resource type="PackedScene" path="res://arena/arena_square.tscn" id="2_xlhes"]
+[ext_resource type="PackedScene" path="res://arena/barrier.tscn" id="3_hgic4"]
+[ext_resource type="PackedScene" path="res://enemies/plate.tscn" id="4_ibf3x"]
+[ext_resource type="PackedScene" path="res://enemies/rat.tscn" id="5_sj3sy"]
+
+[node name="Room06" type="Node2D" unique_id=1785678944]
+script = ExtResource("1_gnkps")
+hp_scale = 1.15
+area_name = "天安門廣場"
+
+[node name="Arena" parent="." unique_id=1480817547 instance=ExtResource("2_xlhes")]
+unique_name_in_owner = true
+
+[node name="Obstacles" type="Node2D" parent="." unique_id=1453425825]
+
+[node name="Barrier" parent="Obstacles" unique_id=658051251 instance=ExtResource("3_hgic4")]
+position = Vector2(300, 900)
+
+[node name="@StaticBody2D@19" parent="Obstacles" unique_id=688615092 instance=ExtResource("3_hgic4")]
+position = Vector2(780, 900)
+
+[node name="Enemies" type="Node2D" parent="." unique_id=1302948633]
+unique_name_in_owner = true
+
+[node name="Plate" parent="Enemies" unique_id=1716880737 instance=ExtResource("4_ibf3x")]
+position = Vector2(240, 420)
+
+[node name="@CharacterBody2D@20" parent="Enemies" unique_id=239530138 instance=ExtResource("4_ibf3x")]
+position = Vector2(840, 420)
+
+[node name="@CharacterBody2D@21" parent="Enemies" unique_id=330708793 instance=ExtResource("4_ibf3x")]
+position = Vector2(540, 360)
+
+[node name="Rat" parent="Enemies" unique_id=808546982 instance=ExtResource("5_sj3sy")]
+position = Vector2(380, 700)
+
+[node name="@CharacterBody2D@22" parent="Enemies" unique_id=1195335375 instance=ExtResource("5_sj3sy")]
+position = Vector2(700, 700)
+
+[node name="@CharacterBody2D@23" parent="Enemies" unique_id=1117521219 instance=ExtResource("5_sj3sy")]
+position = Vector2(540, 780)
+
+[node name="PlayerStart" type="Marker2D" parent="." unique_id=2106060731]
+unique_name_in_owner = true
+position = Vector2(540, 1640)

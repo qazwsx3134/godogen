@@ -1,0 +1,10 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://data/ability_def.gd" id="1_ivcn4"]
+
+[resource]
+script = ExtResource("1_ivcn4")
+id = &"side"
+title = "側向甘蔗"
+description = "往左右兩側各丟一根"
+color = Color(0.5, 0.7, 0.95, 1)

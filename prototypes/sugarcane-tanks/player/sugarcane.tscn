@@ -1,0 +1,41 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://player/sugarcane.gd" id="1_k548c"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_idfii"]
+radius = 18.0
+
+[node name="Sugarcane" type="Area2D" unique_id=2093304188]
+collision_layer = 0
+collision_mask = 4
+script = ExtResource("1_k548c")
+
+[node name="Visual" type="Node2D" parent="." unique_id=1334853532]
+unique_name_in_owner = true
+
+[node name="Stalk" type="Polygon2D" parent="Visual" unique_id=965804389]
+color = Color(0.5, 0.25, 0.38, 1)
+polygon = PackedVector2Array(-38, -6, 38, -6, 38, 6, -38, 6)
+
+[node name="Joint1" type="Polygon2D" parent="Visual" unique_id=1408212241]
+color = Color(0.32, 0.14, 0.24, 1)
+polygon = PackedVector2Array(-21, -7.5, -17, -7.5, -17, 7.5, -21, 7.5)
+
+[node name="Joint2" type="Polygon2D" parent="Visual" unique_id=585037547]
+color = Color(0.32, 0.14, 0.24, 1)
+polygon = PackedVector2Array(-2, -7.5, 2, -7.5, 2, 7.5, -2, 7.5)
+
+[node name="Joint3" type="Polygon2D" parent="Visual" unique_id=184510121]
+color = Color(0.32, 0.14, 0.24, 1)
+polygon = PackedVector2Array(17, -7.5, 21, -7.5, 21, 7.5, 17, 7.5)
+
+[node name="LeafA" type="Polygon2D" parent="Visual" unique_id=383410944]
+color = Color(0.45, 0.78, 0.3, 1)
+polygon = PackedVector2Array(34, -2, 60, -14, 44, 2)
+
+[node name="LeafB" type="Polygon2D" parent="Visual" unique_id=923481565]
+color = Color(0.3825, 0.663, 0.25500003, 1)
+polygon = PackedVector2Array(34, 2, 58, 13, 44, -1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1637622900]
+shape = SubResource("CircleShape2D_idfii")

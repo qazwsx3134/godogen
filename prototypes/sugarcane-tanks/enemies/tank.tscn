@@ -1,0 +1,149 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://enemies/tank.gd" id="1_3cubj"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_dmeh0"]
+radius = 44.2
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8opsu"]
+radius = 58.2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sxste"]
+bg_color = Color(0.05, 0.05, 0.05, 0.75)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4sh3m"]
+bg_color = Color(0.9, 0.25, 0.2, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="Tank" type="CharacterBody2D" unique_id=2008102017]
+collision_layer = 4
+collision_mask = 7
+motion_mode = 1
+script = ExtResource("1_3cubj")
+display_name = "坦克"
+max_hp = 320
+move_speed = 90.0
+contact_damage = 30
+exp_value = 5
+knockback = 20.0
+
+[node name="Shadow" type="Polygon2D" parent="." unique_id=1277396725]
+position = Vector2(0, 19.89)
+color = Color(0, 0, 0, 0.28)
+polygon = PackedVector2Array(67.704, 0, 65.39704, 10.733226, 58.633385, 20.735, 47.87396, 29.323719, 33.852, 35.914074, 17.523085, 40.056946, 4.1456744e-15, 41.47, -17.523085, 40.056946, -33.852, 35.914074, -47.87396, 29.323719, -58.633385, 20.735, -65.39704, 10.733226, -67.704, 5.0786105e-15, -65.39704, -10.733226, -58.633385, -20.735, -47.87396, -29.323719, -33.852, -35.914074, -17.523085, -40.056946, -1.2437024e-14, -41.47, 17.523085, -40.056946, 33.852, -35.914074, 47.87396, -29.323719, 58.633385, -20.735, 65.39704, -10.733226)
+
+[node name="Body" type="Node2D" parent="." unique_id=124470425]
+unique_name_in_owner = true
+rotation = 1.5707964
+
+[node name="TrackLeft" type="Polygon2D" parent="Body" unique_id=1278309710]
+color = Color(0.18, 0.18, 0.17, 1)
+polygon = PackedVector2Array(-62.4, -48.1, 62.4, -48.1, 62.4, -27.3, -62.4, -27.3)
+
+[node name="TrackRight" type="Polygon2D" parent="Body" unique_id=566756707]
+color = Color(0.18, 0.18, 0.17, 1)
+polygon = PackedVector2Array(-62.4, 27.3, 62.4, 27.3, 62.4, 48.1, -62.4, 48.1)
+
+[node name="TreadL1" type="Polygon2D" parent="Body" unique_id=1622324186]
+color = Color(0.3, 0.3, 0.28, 1)
+polygon = PackedVector2Array(-46.28, -48.1, -41.08, -48.1, -41.08, -27.3, -46.28, -27.3)
+
+[node name="TreadR1" type="Polygon2D" parent="Body" unique_id=866212914]
+color = Color(0.3, 0.3, 0.28, 1)
+polygon = PackedVector2Array(-46.28, 27.3, -41.08, 27.3, -41.08, 48.1, -46.28, 48.1)
+
+[node name="TreadL2" type="Polygon2D" parent="Body" unique_id=747893163]
+color = Color(0.3, 0.3, 0.28, 1)
+polygon = PackedVector2Array(-24.44, -48.1, -19.24, -48.1, -19.24, -27.3, -24.44, -27.3)
+
+[node name="TreadR2" type="Polygon2D" parent="Body" unique_id=412217258]
+color = Color(0.3, 0.3, 0.28, 1)
+polygon = PackedVector2Array(-24.44, 27.3, -19.24, 27.3, -19.24, 48.1, -24.44, 48.1)
+
+[node name="TreadL3" type="Polygon2D" parent="Body" unique_id=801728398]
+color = Color(0.3, 0.3, 0.28, 1)
+polygon = PackedVector2Array(-2.6, -48.1, 2.6, -48.1, 2.6, -27.3, -2.6, -27.3)
+
+[node name="TreadR3" type="Polygon2D" parent="Body" unique_id=373335340]
+color = Color(0.3, 0.3, 0.28, 1)
+polygon = PackedVector2Array(-2.6, 27.3, 2.6, 27.3, 2.6, 48.1, -2.6, 48.1)
+
+[node name="TreadL4" type="Polygon2D" parent="Body" unique_id=1142755481]
+color = Color(0.3, 0.3, 0.28, 1)
+polygon = PackedVector2Array(19.24, -48.1, 24.44, -48.1, 24.44, -27.3, 19.24, -27.3)
+
+[node name="TreadR4" type="Polygon2D" parent="Body" unique_id=1491411401]
+color = Color(0.3, 0.3, 0.28, 1)
+polygon = PackedVector2Array(19.24, 27.3, 24.44, 27.3, 24.44, 48.1, 19.24, 48.1)
+
+[node name="TreadL5" type="Polygon2D" parent="Body" unique_id=1015414718]
+color = Color(0.3, 0.3, 0.28, 1)
+polygon = PackedVector2Array(41.08, -48.1, 46.28, -48.1, 46.28, -27.3, 41.08, -27.3)
+
+[node name="TreadR5" type="Polygon2D" parent="Body" unique_id=1061074708]
+color = Color(0.3, 0.3, 0.28, 1)
+polygon = PackedVector2Array(41.08, 27.3, 46.28, 27.3, 46.28, 48.1, 41.08, 48.1)
+
+[node name="Hull" type="Polygon2D" parent="Body" unique_id=1056090229]
+color = Color(0.36, 0.46, 0.28, 1)
+polygon = PackedVector2Array(-54.6, -37.7, 54.6, -37.7, 54.6, 37.7, -54.6, 37.7)
+
+[node name="Plate" type="Polygon2D" parent="Body" unique_id=320631021]
+color = Color(0.4368, 0.5248, 0.3664, 1)
+polygon = PackedVector2Array(-40.404, -20.735, 14.196, -20.735, 14.196, 20.735, -40.404, 20.735)
+
+[node name="Blade" type="Polygon2D" parent="Body" unique_id=547592624]
+color = Color(0.62, 0.62, 0.6, 1)
+polygon = PackedVector2Array(59.8, -53.3, 75.4, -53.3, 83.2, 0, 75.4, 53.3, 59.8, 53.3)
+
+[node name="Turret" type="Polygon2D" parent="Body" unique_id=312241983]
+color = Color(0.47520003, 0.5572, 0.40960002, 1)
+polygon = PackedVector2Array(28.6, 0, 23.137886, 15.282416, 8.837886, 24.727468, -8.837886, 24.727468, -23.137886, 15.282416, -28.6, 3.1840818e-15, -23.137886, -15.282416, -8.837886, -24.727468, 8.837886, -24.727468, 23.137886, -15.282416)
+
+[node name="Barrel" type="Polygon2D" parent="Body" unique_id=1565375188]
+color = Color(0.19800001, 0.25300002, 0.154, 1)
+polygon = PackedVector2Array(16.9, -6.5, 61.1, -6.5, 61.1, 6.5, 16.9, 6.5)
+
+[node name="Hatch" type="Polygon2D" parent="Body" unique_id=1976963154]
+position = Vector2(-6.5, 0)
+color = Color(0.252, 0.322, 0.196, 1)
+polygon = PackedVector2Array(10.4, 0, 10.045629, 2.691718, 9.006664, 5.2, 7.3539104, 7.3539104, 5.2, 9.006664, 2.691718, 10.045629, 6.368163e-16, 10.4, -2.691718, 10.045629, -5.2, 9.006664, -7.3539104, 7.3539104, -9.006664, 5.2, -10.045629, 2.691718, -10.4, 1.2736326e-15, -10.045629, -2.691718, -9.006664, -5.2, -7.3539104, -7.3539104, -5.2, -9.006664, -2.691718, -10.045629, -1.910449e-15, -10.4, 2.691718, -10.045629, 5.2, -9.006664, 7.3539104, -7.3539104, 9.006664, -5.2, 10.045629, -2.691718)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1034228957]
+shape = SubResource("CircleShape2D_dmeh0")
+
+[node name="ContactArea" type="Area2D" parent="." unique_id=1128353522]
+unique_name_in_owner = true
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ContactArea" unique_id=208027386]
+shape = SubResource("CircleShape2D_8opsu")
+
+[node name="HpBar" type="ProgressBar" parent="." unique_id=817606166]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 12)
+offset_left = -45.0
+offset_top = -78.2
+offset_right = 45.0
+offset_bottom = -66.2
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_sxste")
+theme_override_styles/fill = SubResource("StyleBoxFlat_4sh3m")
+value = 100.0
+show_percentage = false
+
+[node name="DashLine" type="Line2D" parent="." unique_id=666927670]
+unique_name_in_owner = true
+visible = false
+z_index = -1
+points = PackedVector2Array(0, 0, 0, 600)
+width = 114.4
+default_color = Color(1, 0.1, 0.05, 0.3)

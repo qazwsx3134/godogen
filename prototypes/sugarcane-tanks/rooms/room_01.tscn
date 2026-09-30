@@ -1,0 +1,43 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://rooms/room.gd" id="1_xvxof"]
+[ext_resource type="PackedScene" path="res://arena/arena_temple.tscn" id="2_6f1i6"]
+[ext_resource type="PackedScene" path="res://arena/crate.tscn" id="3_rkvq2"]
+[ext_resource type="PackedScene" path="res://enemies/rat.tscn" id="4_11117"]
+
+[node name="Room01" type="Node2D" unique_id=1067003751]
+script = ExtResource("1_xvxof")
+area_name = "宮廟"
+
+[node name="Arena" parent="." unique_id=677891662 instance=ExtResource("2_6f1i6")]
+unique_name_in_owner = true
+
+[node name="Obstacles" type="Node2D" parent="." unique_id=779355246]
+
+[node name="Crate" parent="Obstacles" unique_id=2125247388 instance=ExtResource("3_rkvq2")]
+position = Vector2(250, 1120)
+
+[node name="@StaticBody2D@2" parent="Obstacles" unique_id=650415991 instance=ExtResource("3_rkvq2")]
+position = Vector2(830, 1120)
+
+[node name="Enemies" type="Node2D" parent="." unique_id=1545074209]
+unique_name_in_owner = true
+
+[node name="Rat" parent="Enemies" unique_id=808546982 instance=ExtResource("4_11117")]
+position = Vector2(300, 520)
+
+[node name="@CharacterBody2D@3" parent="Enemies" unique_id=2099299529 instance=ExtResource("4_11117")]
+position = Vector2(780, 520)
+
+[node name="@CharacterBody2D@4" parent="Enemies" unique_id=406950321 instance=ExtResource("4_11117")]
+position = Vector2(540, 420)
+
+[node name="@CharacterBody2D@5" parent="Enemies" unique_id=400039075 instance=ExtResource("4_11117")]
+position = Vector2(420, 680)
+
+[node name="@CharacterBody2D@6" parent="Enemies" unique_id=705708144 instance=ExtResource("4_11117")]
+position = Vector2(660, 680)
+
+[node name="PlayerStart" type="Marker2D" parent="." unique_id=373475095]
+unique_name_in_owner = true
+position = Vector2(540, 1640)
