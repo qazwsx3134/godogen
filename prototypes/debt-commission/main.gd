@@ -19,6 +19,7 @@ const MenuPanel = preload("res://scripts/menu_panel.gd")
 const TitleScreen = preload("res://scripts/title_screen.gd")
 const STAGE_STYLE: Script = preload("res://scripts/ui_stage_style.gd")
 const StageEffects = preload("res://scripts/stage_effects.gd")
+const ComedyLayer = preload("res://scripts/comedy_layer.gd")
 const RoundView = preload("res://scripts/round_view.gd")
 const QteRing = preload("res://scripts/qte_ring.gd")
 const QTE_SCENE: PackedScene = preload("res://scenes/ui/qte_ring.tscn")
@@ -143,14 +144,14 @@ var _slot_markers: Dictionary = {}
 var _paper_textures: Dictionary = {}
 
 ## The game area and its layers are nodes of main.tscn, back to front: Background, Character,
-## Interaction (character hotspots), Effect (HUD), Dialogue, Comedy (still empty), Overlay, Popup.
+## Interaction (character hotspots), Effect (HUD), Dialogue, Comedy (comedy overlay), Overlay, Popup.
 @onready var _game: Control = %Game
 @onready var _bg_layer: Control = %BackgroundLayer
 @onready var _char_layer: Control = %CharacterLayer
 @onready var _interaction_layer: Control = %InteractionLayer
 @onready var _fx_layer: Control = %EffectLayer
 @onready var _dialog_layer: Control = %DialogueLayer
-@onready var _comedy_layer: Control = %ComedyLayer
+@onready var _comedy_layer: ComedyLayer = %ComedyLayer
 @onready var _overlay_layer: Control = %OverlayLayer
 @onready var _popup_layer: Control = %PopupLayer
 ## shake / flash / cutin / freeze / bgm / se steps (scripts/stage_effects.gd).
@@ -293,6 +294,7 @@ var _auto: bool = false
 var _skip: bool = false
 var _gesture_active: bool = false
 var _gesture_moved: bool = false
+var _gesture_in_comedy: bool = false
 var _gesture_long: bool = false
 var _gesture_start: Vector2 = Vector2.ZERO
 var _gesture_token: int = 0
@@ -521,6 +523,8 @@ func _build_ui() -> void:
 	_effects.name = "StageEffects"
 	add_child(_effects)
 	_effects.setup([_bg_layer, _char_layer, _interaction_layer, _fx_layer, _dialog_layer], _overlay_layer, _catalog)
+	_comedy_layer.setup(_effects, [_bg_layer, _char_layer], _catalog, _comedy_speaker_rect, _comedy_dialog_rect)
+	_comedy_layer.finished.connect(_publish_qa_state)
 	_apply_audio_levels()
 	_refresh_gameplay_ui()
 
@@ -1057,6 +1061,7 @@ func _layout() -> void:
 	_fit_menu()
 	_fit_full_area(_game_over)
 	_fit_full_area(_chapter_result)
+	_fit_full_area(_comedy_layer)
 	_fit_bottom_panel(_title_screen.card_area)
 	_log_overlay.get_node("LogTitle").position = Vector2(56.0, top + 24.0)
 	_log_close.position = Vector2(width - EDGE - 220.0, top + 12.0)
@@ -1376,10 +1381,35 @@ func _drive_story(generation: int) -> void:
 					await get_tree().create_timer(hold).timeout
 					if generation != _generation:
 						return
+			"comedy":
+				_log_comedy(command)
+				if not _skip and _comedy_layer.play(command) > 0.0:
+					_publish_qa_state()
+					while _comedy_layer.is_active() and generation == _generation:
+						await get_tree().process_frame  # a tap or stop() ends it early
+					if generation != _generation:
+						return
 			_:
 				pass  # ponytail: move／face／camera 屬於舊的俯視舞台；VN 立繪沒有對應演出，直接略過
 		_runner.call("advance")
 	_story_busy = false
+
+
+## A comedy step's line goes into the log whether it plays or is skipped; the speaker is the one named.
+func _log_comedy(command: Dictionary) -> void:
+	_append_history({"key": _line_key(command, "comedy"), "kind": "say", "speaker": _dict_string(command, "speaker"),
+		"text": _dict_string(command, "text"), "thought": false})
+
+
+## Where the speaker's picture is on screen (empty when they are not on stage): the comedy layer
+## hangs a small reaction there.
+func _comedy_speaker_rect(speaker: String) -> Rect2:
+	var sprite: Control = _sprites.get(speaker) as Control
+	return sprite.call("art_rect") if sprite != null and sprite.visible and sprite.has_method("art_rect") else Rect2()
+
+
+func _comedy_dialog_rect() -> Rect2:
+	return _dialog_panel.get_global_rect()
 
 
 func _advance_current_line() -> void:
@@ -2184,7 +2214,16 @@ func _present_end(command: Dictionary) -> void:
 
 
 func _render_restored_current() -> void:
+	_comedy_layer.stop()
 	var current: Dictionary = _runner_current()
+	while _command_op(current) == "comedy":  # a played overlay never comes back with a save
+		_log_comedy(current)
+		var position_before: Array = [_runner_string("node_id", ""), int(_runner.get("step_index"))]
+		_runner.call("advance")
+		if [_runner_string("node_id", ""), int(_runner.get("step_index"))] == position_before:
+			_show_runtime_error(_runner_string("error_message", "故事無法繼續。"))
+			return
+		current = _runner_current()
 	match _command_op(current):
 		"say":
 			_present_say(current, true)
@@ -2366,7 +2405,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		else:
 			_close_slot_picker()
 		return
-	if event.is_action_pressed("ui_accept") and _screen_mode == "story":
+	if event.is_action_pressed("ui_accept") and (_screen_mode == "story" or _comedy_layer.is_active()):
 		get_viewport().set_input_as_handled()
 		_on_screen_tap()
 
@@ -2379,6 +2418,7 @@ func _on_catcher_input(event: InputEvent) -> void:
 		_tap_catcher.accept_event()
 		if button.pressed:
 			_gesture_active = true
+			_gesture_in_comedy = _comedy_layer.is_active()
 			_gesture_moved = false
 			_gesture_long = false
 			_gesture_start = button.global_position
@@ -2391,6 +2431,12 @@ func _on_catcher_input(event: InputEvent) -> void:
 		_gesture_active = false
 		_gesture_token += 1
 		if _gesture_long:
+			return
+		if _gesture_in_comedy or _comedy_layer.is_active():
+			# A press that began over the overlay ends it (or, if it ended meanwhile, does nothing):
+			# the release must not reach the line that follows.
+			_gesture_in_comedy = false
+			_comedy_layer.fast_forward()
 			return
 		if _ui_hidden:
 			_set_ui_hidden(false)  # 隱藏 UI 時，點一下只負責恢復，不推進劇情。
@@ -2426,6 +2472,9 @@ func _wait_long_press(token: int) -> void:
 
 
 func _on_screen_tap() -> void:
+	if _comedy_layer.is_active():
+		_comedy_layer.fast_forward()  # this tap only ends the overlay; the next line is not advanced
+		return
 	if _skip:
 		_set_skip(false)
 		return
@@ -2467,6 +2516,7 @@ func _set_skip(value: bool) -> void:
 	_skip = value
 	if value:
 		_auto = false
+		_comedy_layer.fast_forward()  # skipping does not wait for an overlay
 	_update_toggle_styles()
 	if value and _screen_mode == "story":
 		if _text_complete:
@@ -3136,6 +3186,7 @@ func _cancel_generation() -> void:
 	_generation += 1
 	_line_generation += 1
 	_story_busy = false
+	_comedy_layer.stop()
 
 
 func _capture_preview_png() -> String:
@@ -3301,6 +3352,7 @@ func _set_ui_style(style_id: String, persist: bool = true) -> void:
 func _apply_ui_style() -> void:
 	if _dialog_panel == null:
 		return
+	_comedy_layer.stop()
 	if _dialog_panel.style_id != _ui_style_id:
 		_mount_dialogue_box()
 		_mount_choice_sheet()
@@ -3541,6 +3593,7 @@ func _write_qa_state() -> void:
 			"game_over_active": bool(snapshot.get("game_over_active", false)),
 			"last_result": _last_boke_result,
 		},
+		"comedy": _comedy_layer.qa_state(),
 		"controls": controls,
 		"slot_page": _slot_page,
 		"slots": visible_slots,

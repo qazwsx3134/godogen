@@ -178,6 +178,12 @@
     },
     "gulp": {
       "label": "喝牛奶"
+    },
+    "comedy_don": {
+      "label": "漫畫吐槽「咚」"
+    },
+    "comedy_pop": {
+      "label": "漫畫小反應「啵」"
     }
   },
   "music": {

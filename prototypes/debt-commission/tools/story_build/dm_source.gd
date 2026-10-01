@@ -18,6 +18,9 @@ extends RefCounted
 ##   `do boke_round("block")`, `do end("text")`, `do result("block")` (the chapter result screen)
 ##   effects: `do shake()` / `shake("small")`, `do flash()` / `flash("#ff0000")`,
 ##   `do cutin("你在說什麼啊！！")` / `cutin("text", "shinpachi")`, `do freeze()` / `freeze(1.5)`,
+##   `do comedy("tsukkomi_impact", "shinpachi", "line")` / `comedy(preset, speaker, text, "shout")`
+##   (the manga overlay: preset tsukkomi_impact, small_reaction or full_manga_panel; the speaker is a
+##   catalog id or name; the fourth argument is the optional expression of the cut-in)
 ##   `do bgm("bgm_meeting")` / `bgm("")` to stop, `do se("crow")`
 ##   `銀時＆神樂: text` is a line said together (speaker "gintoki+kagura")
 ##   `=> title`                    jump; `=> END` only after `do end(...)`
@@ -315,6 +318,11 @@ static func _mutation(line: Dictionary, where: String) -> Dictionary:
 			return {"op": "cutin", "text": args[0]}
 		["cutin", 2]:
 			return {"op": "cutin", "text": args[0], "speaker": args[1]}
+		["comedy", 3], ["comedy", 4]:
+			var comedy: Dictionary = {"op": "comedy", "preset": args[0], "speaker": args[1], "text": args[2]}
+			if args.size() > 3:
+				comedy["expression"] = args[3]
+			return comedy
 		["freeze", 0]:
 			return {"op": "freeze"}
 		["freeze", 1]:

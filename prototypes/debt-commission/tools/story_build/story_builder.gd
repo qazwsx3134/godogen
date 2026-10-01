@@ -79,6 +79,7 @@ static func build_text(text: String, source_path: String) -> Dictionary:
 	var fold_error: String = _fold_offscreen(nodes)
 	if not fold_error.is_empty():
 		return _fail("%s: %s" % [source_path, fold_error])
+	_resolve_comedy_speakers(nodes, context["speakers"] as Dictionary)
 	var block_error: String = _resolve_blocks(nodes, blocks)
 	if not block_error.is_empty():
 		return _fail("%s: %s" % [source_path, block_error])
@@ -181,6 +182,18 @@ static func _fold_offscreen(nodes: Dictionary) -> String:
 			steps.remove_at(index)
 			steps[index]["offscreen"] = true
 	return ""
+
+
+## A `comedy` step's speaker may be a displayed name ("新八"); the story stores the catalog id.
+## A speaker that is no catalog character stays as written, for the runner to reject.
+static func _resolve_comedy_speakers(nodes: Dictionary, speakers: Dictionary) -> void:
+	for node: Dictionary in nodes.values():
+		for step: Dictionary in node["steps"]:
+			if String(step.get("op", "")) != "comedy":
+				continue
+			var speaker: String = DmSource.speaker_id(String(step.get("speaker", "")), speakers)
+			if not speaker.is_empty() and speaker != "narrator":
+				step["speaker"] = speaker
 
 
 static func _resolve_blocks(nodes: Dictionary, blocks: Dictionary) -> String:

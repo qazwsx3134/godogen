@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://cq22v17s6vwyb"
+path="res://.godot/imported/comedy.dialogue-a677913e0b72ef9e7b5ed842ab74ef28.tres"
+
+[deps]
+
+source_file="res://story_src/comedy.dialogue"
+dest_files=["res://.godot/imported/comedy.dialogue-a677913e0b72ef9e7b5ed842ab74ef28.tres"]
+
+[params]
+
+defaults=true

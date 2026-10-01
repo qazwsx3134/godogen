@@ -1,0 +1,13 @@
+{
+  "story": {
+    "id": "comedy",
+    "title": "漫畫吐槽層 技術片段：EP00 開場（非核准）",
+    "note": "僅用於驗證漫畫吐槽疊加層（comedy op 的三個 preset）；開場台詞取自 v2 EP00 草稿，不是作者核准的文本。",
+    "initial_flags": {}
+  },
+  "titles": {
+    "comedy_open": "技術片段：今天也沒有工作",
+    "comedy_small": "技術片段：小反應",
+    "comedy_panel": "技術片段：整頁漫畫格"
+  }
+}

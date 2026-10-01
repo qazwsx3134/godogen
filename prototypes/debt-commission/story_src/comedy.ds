@@ -1,0 +1,443 @@
+{
+  "title": "comedy",
+  "nodes": [
+    {
+      "id": "node:1",
+      "type": "START",
+      "position": "(0.0, 0.0)"
+    },
+    {
+      "id": "node:2",
+      "type": "ACTION",
+      "position": "(460.0, 0.0)",
+      "description": "bg(\"yorozuya_living_room\")",
+      "action_type": "SCRIPT",
+      "action_script_ref": "",
+      "values": []
+    },
+    {
+      "id": "node:3",
+      "type": "ACTION",
+      "position": "(460.0, 200.0)",
+      "description": "char(\"shinpachi\", \"neutral\", \"left\")",
+      "action_type": "SCRIPT",
+      "action_script_ref": "",
+      "values": []
+    },
+    {
+      "id": "node:4",
+      "type": "ACTION",
+      "position": "(460.0, 400.0)",
+      "description": "char(\"gintoki\", \"annoyed\", \"center\")",
+      "action_type": "SCRIPT",
+      "action_script_ref": "",
+      "values": []
+    },
+    {
+      "id": "node:5",
+      "type": "ACTION",
+      "position": "(460.0, 600.0)",
+      "description": "char(\"kagura\", \"smile\", \"right\")",
+      "action_type": "SCRIPT",
+      "action_script_ref": "",
+      "values": []
+    },
+    {
+      "id": "node:6",
+      "type": "DIALOGUE",
+      "position": "(460.0, 800.0)",
+      "character": "uid://caci80tc5curv::gintoki",
+      "text": "今天也完全沒有工作啊。",
+      "text_translation_key": ""
+    },
+    {
+      "id": "node:7",
+      "type": "DIALOGUE",
+      "position": "(460.0, 1000.0)",
+      "character": "uid://caci80tc5curv::shinpachi",
+      "text": "不是沒有，是你全部都拒絕掉了吧！",
+      "text_translation_key": ""
+    },
+    {
+      "id": "node:8",
+      "type": "DIALOGUE",
+      "position": "(460.0, 1200.0)",
+      "character": "uid://caci80tc5curv::kagura",
+      "text": "阿銀今天已經睡第三次了阿魯。",
+      "text_translation_key": ""
+    },
+    {
+      "id": "node:9",
+      "type": "DIALOGUE",
+      "position": "(460.0, 1400.0)",
+      "character": "uid://caci80tc5curv::gintoki",
+      "text": "沒有工作的時候休息不是很合理嗎？",
+      "text_translation_key": ""
+    },
+    {
+      "id": "node:10",
+      "type": "ACTION",
+      "position": "(460.0, 1600.0)",
+      "description": "comedy(\"tsukkomi_impact\", \"shinpachi\", \"問題是你有工作的時候也在休息啊！！\")",
+      "action_type": "SCRIPT",
+      "action_script_ref": "",
+      "values": []
+    },
+    {
+      "id": "node:11",
+      "type": "DIALOGUE",
+      "position": "(460.0, 1800.0)",
+      "character": "uid://caci80tc5curv::gintoki",
+      "text": "……嗯？剛剛是不是有什麼東西在吵？",
+      "text_translation_key": ""
+    },
+    {
+      "id": "node:12",
+      "type": "DIALOGUE",
+      "position": "(920.0, 0.0)",
+      "character": "uid://caci80tc5curv::kagura",
+      "text": "阿銀，你剛剛絕對裝作沒聽到阿魯。",
+      "text_translation_key": ""
+    },
+    {
+      "id": "node:13",
+      "type": "ACTION",
+      "position": "(920.0, 200.0)",
+      "description": "comedy(\"small_reaction\", \"gintoki\", \"……嗶～\")",
+      "action_type": "SCRIPT",
+      "action_script_ref": "",
+      "values": []
+    },
+    {
+      "id": "node:14",
+      "type": "DIALOGUE",
+      "position": "(920.0, 400.0)",
+      "character": "uid://caci80tc5curv::shinpachi",
+      "text": "不要吹口哨矇混過去啊！",
+      "text_translation_key": ""
+    },
+    {
+      "id": "node:15",
+      "type": "DIALOGUE",
+      "position": "(920.0, 600.0)",
+      "character": "uid://caci80tc5curv::gintoki",
+      "text": "好啦好啦。那你說說看，上一次有委託是什麼時候？",
+      "text_translation_key": ""
+    },
+    {
+      "id": "node:16",
+      "type": "DIALOGUE",
+      "position": "(920.0, 800.0)",
+      "character": "uid://caci80tc5curv::shinpachi",
+      "text": "三個月前，找貓。而且還被貓抓了。",
+      "text_translation_key": ""
+    },
+    {
+      "id": "node:17",
+      "type": "DIALOGUE",
+      "position": "(1380.0, 0.0)",
+      "character": "uid://caci80tc5curv::kagura",
+      "text": "這個月的房租也還沒付阿魯。",
+      "text_translation_key": ""
+    },
+    {
+      "id": "node:18",
+      "type": "ACTION",
+      "position": "(1380.0, 200.0)",
+      "description": "comedy(\"full_manga_panel\", \"新八\", \"全部都是赤字啊啊啊！！\")",
+      "action_type": "SCRIPT",
+      "action_script_ref": "",
+      "values": []
+    },
+    {
+      "id": "node:19",
+      "type": "DIALOGUE",
+      "position": "(1380.0, 400.0)",
+      "character": "uid://caci80tc5curv::gintoki",
+      "text": "……今天先睡吧。",
+      "text_translation_key": ""
+    },
+    {
+      "id": "node:20",
+      "type": "ACTION",
+      "position": "(1380.0, 600.0)",
+      "description": "comedy(\"tsukkomi_impact\", \"shinpachi\", \"現在是工作時間吧！！！\")",
+      "action_type": "SCRIPT",
+      "action_script_ref": "",
+      "values": []
+    },
+    {
+      "id": "node:21",
+      "type": "DIALOGUE",
+      "position": "(1380.0, 800.0)",
+      "character": "uid://caci80tc5curv::kagura",
+      "text": "阿銀已經睡著了阿魯。",
+      "text_translation_key": ""
+    },
+    {
+      "id": "node:22",
+      "type": "ACTION",
+      "position": "(1380.0, 1000.0)",
+      "description": "end(\"漫畫吐槽技術片段到此為止。\")",
+      "action_type": "SCRIPT",
+      "action_script_ref": "",
+      "values": []
+    },
+    {
+      "id": "node:23",
+      "type": "END",
+      "position": "(1380.0, 1320.0)"
+    },
+    {
+      "id": "node:24",
+      "type": "GROUP",
+      "position": "(420.0, -80.0)",
+      "name": "comedy_open",
+      "node_ids": [
+        "node:2",
+        "node:3",
+        "node:4",
+        "node:5",
+        "node:6",
+        "node:7",
+        "node:8",
+        "node:9",
+        "node:10",
+        "node:11"
+      ],
+      "colour": "(0.0667, 0.102, 0.1686, 1.0)",
+      "size": "(400.0, 2240.0)"
+    },
+    {
+      "id": "node:25",
+      "type": "GROUP",
+      "position": "(880.0, -80.0)",
+      "name": "comedy_small",
+      "node_ids": [
+        "node:12",
+        "node:13",
+        "node:14",
+        "node:15",
+        "node:16"
+      ],
+      "colour": "(0.0667, 0.102, 0.1686, 1.0)",
+      "size": "(400.0, 1240.0)"
+    },
+    {
+      "id": "node:26",
+      "type": "GROUP",
+      "position": "(1340.0, -80.0)",
+      "name": "comedy_panel",
+      "node_ids": [
+        "node:17",
+        "node:18",
+        "node:19",
+        "node:20",
+        "node:21",
+        "node:22"
+      ],
+      "colour": "(0.0667, 0.102, 0.1686, 1.0)",
+      "size": "(400.0, 1440.0)"
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge:1",
+      "from_node": "node:2",
+      "from_slot": 0,
+      "to_node": "node:3",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:2",
+      "from_node": "node:3",
+      "from_slot": 0,
+      "to_node": "node:4",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:3",
+      "from_node": "node:4",
+      "from_slot": 0,
+      "to_node": "node:5",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:4",
+      "from_node": "node:5",
+      "from_slot": 0,
+      "to_node": "node:6",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:5",
+      "from_node": "node:6",
+      "from_slot": 0,
+      "to_node": "node:7",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:6",
+      "from_node": "node:7",
+      "from_slot": 0,
+      "to_node": "node:8",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:7",
+      "from_node": "node:8",
+      "from_slot": 0,
+      "to_node": "node:9",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:8",
+      "from_node": "node:9",
+      "from_slot": 0,
+      "to_node": "node:10",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:9",
+      "from_node": "node:10",
+      "from_slot": 0,
+      "to_node": "node:11",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:10",
+      "from_node": "node:12",
+      "from_slot": 0,
+      "to_node": "node:13",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:11",
+      "from_node": "node:13",
+      "from_slot": 0,
+      "to_node": "node:14",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:12",
+      "from_node": "node:14",
+      "from_slot": 0,
+      "to_node": "node:15",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:13",
+      "from_node": "node:15",
+      "from_slot": 0,
+      "to_node": "node:16",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:14",
+      "from_node": "node:17",
+      "from_slot": 0,
+      "to_node": "node:18",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:15",
+      "from_node": "node:18",
+      "from_slot": 0,
+      "to_node": "node:19",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:16",
+      "from_node": "node:19",
+      "from_slot": 0,
+      "to_node": "node:20",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:17",
+      "from_node": "node:20",
+      "from_slot": 0,
+      "to_node": "node:21",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:18",
+      "from_node": "node:21",
+      "from_slot": 0,
+      "to_node": "node:22",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:19",
+      "from_node": "node:11",
+      "from_slot": 0,
+      "to_node": "node:12",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:20",
+      "from_node": "node:16",
+      "from_slot": 0,
+      "to_node": "node:17",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:21",
+      "from_node": "node:22",
+      "from_slot": 0,
+      "to_node": "node:23",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:22",
+      "from_node": "node:1",
+      "from_slot": 0,
+      "to_node": "node:2",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    }
+  ]
+}
