@@ -1,0 +1,66 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://spots/hokage_rock/baked/vertex_color_mat.tres" id="1_i6n0m"]
+[ext_resource type="MultiMesh" path="res://spots/hokage_rock/baked/house_walls.multimesh.res" id="2_47qc5"]
+[ext_resource type="MultiMesh" path="res://spots/hokage_rock/baked/house_roofs.multimesh.res" id="3_nrytd"]
+[ext_resource type="MultiMesh" path="res://spots/hokage_rock/baked/towers.multimesh.res" id="4_n1orj"]
+[ext_resource type="MultiMesh" path="res://spots/hokage_rock/baked/tower_caps.multimesh.res" id="5_dwqb8"]
+[ext_resource type="MultiMesh" path="res://spots/hokage_rock/baked/tanks.multimesh.res" id="6_om6nv"]
+[ext_resource type="MultiMesh" path="res://spots/hokage_rock/baked/trees_left.multimesh.res" id="7_vntyc"]
+[ext_resource type="MultiMesh" path="res://spots/hokage_rock/baked/trees_right.multimesh.res" id="8_xqhqb"]
+[ext_resource type="MultiMesh" path="res://spots/hokage_rock/baked/trees_behind.multimesh.res" id="9_ndduh"]
+[ext_resource type="MultiMesh" path="res://spots/hokage_rock/baked/trees_cliff_top.multimesh.res" id="10_82wdi"]
+[ext_resource type="ArrayMesh" path="res://spots/hokage_rock/baked/hills.mesh.res" id="11_eim4d"]
+[ext_resource type="ArrayMesh" path="res://spots/hokage_rock/baked/mountains.mesh.res" id="12_rtfj5"]
+
+[node name="Scenery" type="Node3D" unique_id=918998095]
+
+[node name="HouseWalls" type="MultiMeshInstance3D" parent="." unique_id=2069955463]
+material_override = ExtResource("1_i6n0m")
+multimesh = ExtResource("2_47qc5")
+
+[node name="HouseRoofs" type="MultiMeshInstance3D" parent="." unique_id=240679130]
+material_override = ExtResource("1_i6n0m")
+multimesh = ExtResource("3_nrytd")
+
+[node name="Towers" type="MultiMeshInstance3D" parent="." unique_id=346585123]
+material_override = ExtResource("1_i6n0m")
+multimesh = ExtResource("4_n1orj")
+
+[node name="TowerCaps" type="MultiMeshInstance3D" parent="." unique_id=747388156]
+material_override = ExtResource("1_i6n0m")
+multimesh = ExtResource("5_dwqb8")
+
+[node name="Tanks" type="MultiMeshInstance3D" parent="." unique_id=784899088]
+material_override = ExtResource("1_i6n0m")
+multimesh = ExtResource("6_om6nv")
+
+[node name="TreesLeft" type="MultiMeshInstance3D" parent="." unique_id=1845246044]
+material_override = ExtResource("1_i6n0m")
+cast_shadow = 0
+multimesh = ExtResource("7_vntyc")
+
+[node name="TreesRight" type="MultiMeshInstance3D" parent="." unique_id=90791253]
+material_override = ExtResource("1_i6n0m")
+cast_shadow = 0
+multimesh = ExtResource("8_xqhqb")
+
+[node name="TreesBehind" type="MultiMeshInstance3D" parent="." unique_id=179966365]
+material_override = ExtResource("1_i6n0m")
+cast_shadow = 0
+multimesh = ExtResource("9_ndduh")
+
+[node name="TreesCliffTop" type="MultiMeshInstance3D" parent="." unique_id=1673493802]
+material_override = ExtResource("1_i6n0m")
+cast_shadow = 0
+multimesh = ExtResource("10_82wdi")
+
+[node name="Hills" type="MeshInstance3D" parent="." unique_id=382068444]
+material_override = ExtResource("1_i6n0m")
+cast_shadow = 0
+mesh = ExtResource("11_eim4d")
+
+[node name="Mountains" type="MeshInstance3D" parent="." unique_id=254295018]
+material_override = ExtResource("1_i6n0m")
+cast_shadow = 0
+mesh = ExtResource("12_rtfj5")

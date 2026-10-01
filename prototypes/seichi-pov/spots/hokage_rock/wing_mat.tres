@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://spots/hokage_rock/baked/rock_tile_albedo.png" id="1_dli07"]
+[ext_resource type="Texture2D" path="res://spots/hokage_rock/baked/rock_tile_normal.png" id="2_6edfb"]
+
+[resource]
+albedo_texture = ExtResource("1_dli07")
+roughness = 0.95
+normal_enabled = true
+normal_texture = ExtResource("2_6edfb")
+texture_filter = 5
