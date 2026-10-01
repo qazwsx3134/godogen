@@ -16,6 +16,10 @@ var burn: bool = false
 var freeze: bool = false
 var game: Node
 
+## Turns per second of the picture (%Visual) while it flies, like a thrown stick. The Area2D itself
+## still points where the cane goes, so the collision and the bounces do not care about the spin.
+@export var spin_turns_per_second: float = 2.5
+
 var _hit: Dictionary = {}
 var _life: float = 1.4
 
@@ -26,7 +30,7 @@ func _ready() -> void:
 	rotation = direction.angle()
 
 func _physics_process(delta: float) -> void:
-	_visual.rotation += 24.0 * delta
+	_visual.rotation += TAU * spin_turns_per_second * delta
 	_life -= delta
 	if _life <= 0.0:
 		queue_free()
@@ -43,6 +47,7 @@ func _physics_process(delta: float) -> void:
 		global_position = (hit["position"] as Vector2) + normal * 4.0
 		direction = direction.bounce(normal)
 		rotation = direction.angle()
+		game.sfx.play(&"ricochet", 0.06)
 		return
 	global_position = hit["position"]
 	game.spawn_puff(global_position, Color(0.75, 0.9, 0.5))
@@ -53,7 +58,7 @@ func _on_body_entered(body: Node2D) -> void:
 		return
 	_hit[body] = true
 	var crit: bool = randf() < crit_chance
-	body.take_hit(damage * (HeroStats.CRIT_MULTIPLIER if crit else 1.0), crit, burn, freeze, direction)
+	body.take_hit(damage * (HeroStats.CRIT_MULTIPLIER if crit else 1.0), crit, burn, freeze, direction, global_position)
 	if ricochets > 0:
 		var next: Node2D = game.nearest_enemy(global_position, _hit, 560.0)
 		if next != null:
@@ -61,6 +66,7 @@ func _on_body_entered(body: Node2D) -> void:
 			damage *= HeroStats.RICOCHET_DAMAGE_FACTOR
 			direction = (next.global_position - global_position).normalized()
 			rotation = direction.angle()
+			game.sfx.play(&"ricochet", 0.06)
 			return
 	if pierce:
 		damage *= HeroStats.PIERCE_DAMAGE_FACTOR

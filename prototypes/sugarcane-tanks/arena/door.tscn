@@ -5,51 +5,80 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_afbj2"]
 size = Vector2(170, 60)
 
-[node name="Door" type="Area2D" unique_id=1197263406]
+[node name="Door" type="Area2D" unique_id=1497263851]
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("1_1jwkn")
 
-[node name="Opening" type="Polygon2D" parent="." unique_id=749311283]
-color = Color(0.1, 0.09, 0.08, 1)
-polygon = PackedVector2Array(-90, -60, 90, -60, 90, 0, -90, 0)
-
-[node name="Glow" type="Polygon2D" parent="." unique_id=1657802863]
-unique_name_in_owner = true
-color = Color(1, 0.9, 0.45, 0.8)
-polygon = PackedVector2Array(-85, -60, 85, -60, 85, 10, -85, 10)
-
-[node name="Bars" type="Node2D" parent="." unique_id=1684093563]
+[node name="Bars" type="Node2D" parent="." unique_id=640605142]
 unique_name_in_owner = true
 
-[node name="Bar1" type="Polygon2D" parent="Bars" unique_id=575950749]
-color = Color(0.85, 0.2, 0.15, 1)
-polygon = PackedVector2Array(-69, -62, -59, -62, -59, 2, -69, 2)
+[node name="Backing" type="Polygon2D" parent="Bars" unique_id=1921822032]
+color = Color(0.12, 0.02, 0.03, 0.5)
+polygon = PackedVector2Array(-80, -120, 80, -120, 80, 0, -80, 0)
 
-[node name="Bar2" type="Polygon2D" parent="Bars" unique_id=1370538336]
-color = Color(0.85, 0.2, 0.15, 1)
-polygon = PackedVector2Array(-37, -62, -27, -62, -27, 2, -37, 2)
+[node name="Bar1" type="Polygon2D" parent="Bars" unique_id=1488601899]
+color = Color(0.82, 0.14, 0.1, 1)
+polygon = PackedVector2Array(-64, -118, -56, -118, -56, -2, -64, -2)
 
-[node name="Bar3" type="Polygon2D" parent="Bars" unique_id=383099395]
-color = Color(0.85, 0.2, 0.15, 1)
-polygon = PackedVector2Array(-5, -62, 5, -62, 5, 2, -5, 2)
+[node name="Bar2" type="Polygon2D" parent="Bars" unique_id=527938250]
+color = Color(0.82, 0.14, 0.1, 1)
+polygon = PackedVector2Array(-44, -118, -36, -118, -36, -2, -44, -2)
 
-[node name="Bar4" type="Polygon2D" parent="Bars" unique_id=1977425287]
-color = Color(0.85, 0.2, 0.15, 1)
-polygon = PackedVector2Array(27, -62, 37, -62, 37, 2, 27, 2)
+[node name="Bar3" type="Polygon2D" parent="Bars" unique_id=791776302]
+color = Color(0.82, 0.14, 0.1, 1)
+polygon = PackedVector2Array(-24, -118, -16, -118, -16, -2, -24, -2)
 
-[node name="Bar5" type="Polygon2D" parent="Bars" unique_id=1488620046]
-color = Color(0.85, 0.2, 0.15, 1)
-polygon = PackedVector2Array(59, -62, 69, -62, 69, 2, 59, 2)
+[node name="Bar4" type="Polygon2D" parent="Bars" unique_id=75249247]
+color = Color(0.82, 0.14, 0.1, 1)
+polygon = PackedVector2Array(-4, -118, 4, -118, 4, -2, -4, -2)
 
-[node name="PostLeft" type="Polygon2D" parent="." unique_id=956347692]
-color = Color(0.42, 0.38, 0.32, 1)
-polygon = PackedVector2Array(-110, -70, -90, -70, -90, 10, -110, 10)
+[node name="Bar5" type="Polygon2D" parent="Bars" unique_id=1099459459]
+color = Color(0.82, 0.14, 0.1, 1)
+polygon = PackedVector2Array(16, -118, 24, -118, 24, -2, 16, -2)
 
-[node name="PostRight" type="Polygon2D" parent="." unique_id=867903347]
-color = Color(0.42, 0.38, 0.32, 1)
-polygon = PackedVector2Array(90, -70, 110, -70, 110, 10, 90, 10)
+[node name="Bar6" type="Polygon2D" parent="Bars" unique_id=1347256989]
+color = Color(0.82, 0.14, 0.1, 1)
+polygon = PackedVector2Array(36, -118, 44, -118, 44, -2, 36, -2)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2134826884]
+[node name="Bar7" type="Polygon2D" parent="Bars" unique_id=1214498288]
+color = Color(0.82, 0.14, 0.1, 1)
+polygon = PackedVector2Array(56, -118, 64, -118, 64, -2, 56, -2)
+
+[node name="RailTop" type="Polygon2D" parent="Bars" unique_id=204176196]
+color = Color(0.55, 0.08, 0.07, 1)
+polygon = PackedVector2Array(-82, -118.5, 82, -118.5, 82, -109.5, -82, -109.5)
+
+[node name="RailMiddle" type="Polygon2D" parent="Bars" unique_id=116699609]
+color = Color(0.55, 0.08, 0.07, 1)
+polygon = PackedVector2Array(-82, -63.5, 82, -63.5, 82, -56.5, -82, -56.5)
+
+[node name="RailBottom" type="Polygon2D" parent="Bars" unique_id=1195706011]
+color = Color(0.55, 0.08, 0.07, 1)
+polygon = PackedVector2Array(-82, -9.5, 82, -9.5, 82, -0.5, -82, -0.5)
+
+[node name="Lock" type="Polygon2D" parent="Bars" unique_id=200679981]
+position = Vector2(0, -60)
+color = Color(0.96, 0.8, 0.3, 1)
+polygon = PackedVector2Array(10, 0, 9.009688, 4.3388376, 6.234898, 7.818315, 2.2252092, 9.749279, -2.2252092, 9.749279, -6.234898, 7.818315, -9.009688, 4.3388376, -10, 1.2246468e-15, -9.009688, -4.3388376, -6.234898, -7.818315, -2.2252092, -9.749279, 2.2252092, -9.749279, 6.234898, -7.818315, 9.009688, -4.3388376)
+
+[node name="Glow" type="Node2D" parent="." unique_id=1902263192]
+unique_name_in_owner = true
+visible = false
+
+[node name="Halo" type="Polygon2D" parent="Glow" unique_id=1003092007]
+position = Vector2(0, 4)
+color = Color(1, 0.9, 0.45, 0.6)
+polygon = PackedVector2Array(104, 0, 100.45628, 6.7292953, 90.06664, 13, 73.53911, 18.384777, 52, 22.51666, 26.917181, 25.11407, 6.3681635e-15, 26, -26.917181, 25.11407, -52, 22.51666, -73.53911, 18.384777, -90.06664, 13, -100.45628, 6.7292953, -104, 3.1840818e-15, -100.45628, -6.7292953, -90.06664, -13, -73.53911, -18.384777, -52, -22.51666, -26.917181, -25.11407, -1.910449e-14, -26, 26.917181, -25.11407, 52, -22.51666, 73.53911, -18.384777, 90.06664, -13, 100.45628, -6.7292953)
+
+[node name="Column" type="Polygon2D" parent="Glow" unique_id=234754309]
+polygon = PackedVector2Array(-78, 0, 78, 0, 46, -200, -46, -200)
+vertex_colors = PackedColorArray(1, 0.88, 0.4, 0.85, 1, 0.88, 0.4, 0.85, 1, 0.85, 0.3, 0, 1, 0.85, 0.3, 0)
+
+[node name="Core" type="Polygon2D" parent="Glow" unique_id=480947192]
+polygon = PackedVector2Array(-30, 0, 30, 0, 14, -160, -14, -160)
+vertex_colors = PackedColorArray(1, 0.98, 0.8, 0.95, 1, 0.98, 0.8, 0.95, 1, 0.95, 0.6, 0, 1, 0.95, 0.6, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=860732479]
 position = Vector2(0, 10)
 shape = SubResource("RectangleShape2D_afbj2")

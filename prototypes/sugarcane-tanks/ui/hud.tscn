@@ -3,6 +3,20 @@
 [ext_resource type="Script" path="res://ui/hud.gd" id="1_546lt"]
 [ext_resource type="PackedScene" path="res://ui/ability_slot.tscn" id="2_546lt"]
 [ext_resource type="PackedScene" path="res://ui/joystick.tscn" id="3_en2x2"]
+[ext_resource type="Texture2D" path="res://assets/portrait_hero.png" id="4_en2x2"]
+[ext_resource type="Texture2D" path="res://assets/coin.png" id="5_1v5rv"]
+
+[sub_resource type="Gradient" id="Gradient_en2x2"]
+offsets = PackedFloat32Array(0.6, 0.86, 1)
+colors = PackedColorArray(1, 0.05, 0.05, 0, 0.95, 0.05, 0.05, 0.3, 0.8, 0, 0, 0.75)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_1v5rv"]
+gradient = SubResource("Gradient_en2x2")
+width = 256
+height = 256
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7ihmi"]
 bg_color = Color(0.05, 0.07, 0.05, 0.94)
@@ -15,6 +29,18 @@ corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_q43x7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mlhsj"]
+bg_color = Color(1, 0.96, 0.9, 0.95)
+border_color = Color(0.03, 0.035, 0.04, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_x3e77"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_en2x2"]
 bg_color = Color(0.36, 0.78, 0.2, 1)
@@ -185,6 +211,18 @@ corner_radius_top_right = 12
 corner_radius_bottom_right = 12
 corner_radius_bottom_left = 12
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_exqf6"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3ju8l"]
+bg_color = Color(1, 0.96, 0.9, 0.95)
+border_color = Color(0.03, 0.035, 0.04, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_b1px6"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kc1f2"]
 bg_color = Color(0.42, 0.95, 0.28, 1)
 border_width_left = 4
@@ -216,9 +254,21 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_546lt")
 slot_scene = ExtResource("2_546lt")
+
+[node name="Vignette" type="TextureRect" parent="." unique_id=970306397]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_1v5rv")
+expand_mode = 1
 
 [node name="Joystick" parent="." unique_id=2054876327 instance=ExtResource("3_en2x2")]
 unique_name_in_owner = true
@@ -254,6 +304,28 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 
+[node name="HpBack" type="Panel" parent="TopBar/Row/Left/PlayerPanel" unique_id=626096360]
+layout_mode = 0
+offset_left = 107.0
+offset_top = 42.0
+offset_right = 588.0
+offset_bottom = 83.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_7ihmi")
+
+[node name="HpGhost" type="ProgressBar" parent="TopBar/Row/Left/PlayerPanel" unique_id=2040486903]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 107.0
+offset_top = 42.0
+offset_right = 588.0
+offset_bottom = 83.0
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxEmpty_q43x7")
+theme_override_styles/fill = SubResource("StyleBoxFlat_mlhsj")
+value = 100.0
+show_percentage = false
+
 [node name="HpBar" type="ProgressBar" parent="TopBar/Row/Left/PlayerPanel" unique_id=2077342601]
 unique_name_in_owner = true
 layout_mode = 0
@@ -262,7 +334,7 @@ offset_top = 42.0
 offset_right = 588.0
 offset_bottom = 83.0
 mouse_filter = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_7ihmi")
+theme_override_styles/background = SubResource("StyleBoxEmpty_x3e77")
 theme_override_styles/fill = SubResource("StyleBoxFlat_en2x2")
 value = 100.0
 show_percentage = false
@@ -313,6 +385,7 @@ layout_mode = 0
 offset_right = 115.0
 offset_bottom = 115.0
 mouse_filter = 2
+texture = ExtResource("4_en2x2")
 expand_mode = 1
 stretch_mode = 5
 
@@ -448,6 +521,7 @@ custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
+texture = ExtResource("5_1v5rv")
 expand_mode = 1
 stretch_mode = 5
 
@@ -484,6 +558,28 @@ offset_right = 228.0
 offset_bottom = -86.0
 mouse_filter = 2
 
+[node name="BottomHpBack" type="Panel" parent="BottomHeroPanel" unique_id=1341622928]
+layout_mode = 0
+offset_left = 115.0
+offset_top = 25.0
+offset_right = 424.0
+offset_bottom = 70.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_xtm2r")
+
+[node name="BottomHpGhost" type="ProgressBar" parent="BottomHeroPanel" unique_id=763903499]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 115.0
+offset_top = 25.0
+offset_right = 424.0
+offset_bottom = 70.0
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxEmpty_exqf6")
+theme_override_styles/fill = SubResource("StyleBoxFlat_3ju8l")
+value = 100.0
+show_percentage = false
+
 [node name="BottomHpBar" type="ProgressBar" parent="BottomHeroPanel" unique_id=84109003]
 unique_name_in_owner = true
 layout_mode = 0
@@ -492,7 +588,7 @@ offset_top = 25.0
 offset_right = 424.0
 offset_bottom = 70.0
 mouse_filter = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_xtm2r")
+theme_override_styles/background = SubResource("StyleBoxEmpty_b1px6")
 theme_override_styles/fill = SubResource("StyleBoxFlat_kc1f2")
 value = 80.0
 show_percentage = false
@@ -543,6 +639,7 @@ layout_mode = 0
 offset_right = 122.0
 offset_bottom = 122.0
 mouse_filter = 2
+texture = ExtResource("4_en2x2")
 expand_mode = 1
 stretch_mode = 5
 
@@ -598,6 +695,14 @@ theme_override_font_sizes/font_size = 104
 text = "門開了！往上走"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="WhiteFlash" type="ColorRect" parent="." unique_id=207786983]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(1, 1, 1, 0)
 
 [node name="PauseOverlay" type="ColorRect" parent="." unique_id=1271807560]
 unique_name_in_owner = true

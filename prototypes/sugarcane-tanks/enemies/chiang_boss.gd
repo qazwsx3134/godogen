@@ -1,7 +1,8 @@
 extends "res://enemies/enemy.gd"
 ## Final boss: moves around the upper half of the room and fires bullet patterns to dodge.
-## Each pattern is announced by a short flash. Below half HP bullets get faster, rests shorter,
-## and the red circles come in greater number and fill faster. The circles are the first pattern.
+## Each pattern is announced by a short flash. Below half HP he is angry (see _enter_rage): bullets get
+## faster and bounce off walls and crates, rests shorter, and the red circles come in greater number and
+## fill faster. The circles are the first pattern.
 ##   aoe    — red circles on the floor, one under the hero, that blow up after a moment
 ##   aimed  — three 3-way bursts at the hero
 ##   fan    — two wide fans, the second offset so there are gaps to slip through
@@ -27,6 +28,21 @@ enum Pattern { AOE, AIMED, FAN, SPIRAL, RING }
 @export var aoe_area: Rect2 = Rect2(190, 390, 700, 1240)
 ## Centre-to-centre distance between circles, in circle radii, so they do not pile up.
 @export var aoe_spacing: float = 1.5
+@export_group("Rage (below half HP)")
+## A bullet fired in rage bounces off a wall or crate this many times before it dies. 0 = no bounce.
+@export var rage_bounces: int = 2
+## A bullet that has bounced fades out this many seconds after its first bounce (0 = it flies on until it hits something).
+@export var rage_bounce_life: float = 1.5
+## Rests run this many times faster in rage (1 = as before the rage).
+@export var rage_rest_speed: float = 1.6
+## Tint of the bullets that bounce, so they can be told from the plain ones.
+@export var rage_bullet_tint: Color = Color(1.0, 0.5, 0.4)
+## The body pulses between these two tints while he is angry.
+@export var rage_tint_high: Color = Color(1.0, 0.45, 0.4)
+@export var rage_tint_low: Color = Color(1.0, 0.72, 0.66)
+
+## True from the moment his HP first drops below half.
+var raging: bool = false
 
 var _pattern_index: int = 0
 var _busy: bool = false
@@ -34,19 +50,56 @@ var _rest: float = 1.2
 var _roam_target: Vector2 = Vector2.ZERO
 
 @onready var _gun_arm: Node2D = %GunArm
+@onready var _steam: CPUParticles2D = %RageSteam
+@onready var _mark: Node2D = %RageMark
 
 func enraged() -> bool:
 	return hp * 2 < max_hp
 
+## The moment he gets angry: a flash and a shake, a banner, the anger mark pops up over his head and steam
+## starts to rise; the body then settles into a slow red pulse for the rest of the fight. (The sound is the
+## `rage` event enemy.gd plays on the hit that takes him below half HP.)
+func _enter_rage() -> void:
+	raging = true
+	game.hud.banner("%s 生氣了！" % display_name)
+	game.juice.shake(game.juice.Tier.MEDIUM)
+	_steam.emitting = true
+	_mark.visible = true
+	_mark.scale = Vector2.ZERO
+	create_tween().tween_property(_mark, "scale", Vector2.ONE, 0.35).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	sprite.modulate = Color(3.0, 0.7, 0.55)
+	var flash: Tween = create_tween()
+	flash.tween_property(sprite, "modulate", rage_tint_high, 0.4)
+	flash.tween_callback(_pulse)
+
+func _pulse() -> void:
+	var body: Tween = create_tween().set_loops()
+	body.tween_property(sprite, "modulate", rage_tint_low, 0.5).set_trans(Tween.TRANS_SINE)
+	body.tween_property(sprite, "modulate", rage_tint_high, 0.5).set_trans(Tween.TRANS_SINE)
+	var mark: Tween = create_tween().set_loops()
+	mark.tween_property(_mark, "scale", Vector2(1.2, 1.2), 0.5).set_trans(Tween.TRANS_SINE)
+	mark.tween_property(_mark, "scale", Vector2.ONE, 0.5).set_trans(Tween.TRANS_SINE)
+
+## The body (art faces right) turns to the hero's side and the pistol follows the hero. Aimed left the
+## pistol would hang upside down, so it is mirrored (scale.y = -1); it also changes sides with the body.
+func _aim_gun(delta: float) -> void:
+	_gun_arm.position.x = absf(_gun_arm.position.x) * signf(body_pivot.scale.x)
+	var aim: float = (target.global_position - _gun_arm.global_position).angle()
+	_gun_arm.rotation = lerp_angle(_gun_arm.rotation, aim, clampf(10.0 * delta, 0.0, 1.0))
+	_gun_arm.scale.y = -1.0 if cos(_gun_arm.rotation) < 0.0 else 1.0
+
 func think(delta: float) -> void:
-	_gun_arm.rotation = lerp_angle(_gun_arm.rotation, to_target().angle(), clampf(10.0 * delta, 0.0, 1.0))
+	if not raging and enraged():
+		_enter_rage()
+	face_toward(to_target())
+	_aim_gun(delta)
 	if _busy:
 		drive(Vector2.ZERO, delta)
 		return
 	if _roam_target == Vector2.ZERO or global_position.distance_to(_roam_target) < 20.0:
 		_roam_target = roam_area.position + Vector2(randf() * roam_area.size.x, randf() * roam_area.size.y)
 	drive((_roam_target - global_position).normalized(), delta)
-	_rest -= delta * (1.5 if enraged() else 1.0) * slow_factor()
+	_rest -= delta * (rage_rest_speed if enraged() else 1.0) * slow_factor()
 	if _rest <= 0.0:
 		_run_pattern(_pattern_index % Pattern.size())
 		_pattern_index += 1
@@ -55,7 +108,11 @@ func _speed() -> float:
 	return bullet_speed * (1.2 if enraged() else 1.0)
 
 func _fire(angle: float) -> void:
-	game.spawn_projectile(bullet_scene, muzzle.global_position, Vector2.from_angle(angle), _speed(), bullet_damage)
+	var bullet: Area2D = game.spawn_projectile(bullet_scene, muzzle.global_position, Vector2.from_angle(angle), _speed(), bullet_damage)
+	if enraged():
+		bullet.bounces = rage_bounces
+		bullet.bounce_life = rage_bounce_life
+		bullet.modulate = rage_bullet_tint
 
 func _wait(seconds: float) -> bool:
 	await get_tree().create_timer(seconds, false).timeout
@@ -88,6 +145,9 @@ func _run_pattern(pattern: int) -> void:
 	var flash: Tween = create_tween()
 	flash.tween_property(body_pivot, "modulate", Color(1.8, 1.5, 1.0), telegraph_time * 0.5)
 	flash.tween_property(body_pivot, "modulate", Color.WHITE, telegraph_time * 0.5)
+	var gun_flash: Tween = create_tween()   # the gun arm is not under %Body, so it needs its own
+	gun_flash.tween_property(_gun_arm, "modulate", Color(1.8, 1.5, 1.0), telegraph_time * 0.5)
+	gun_flash.tween_property(_gun_arm, "modulate", Color.WHITE, telegraph_time * 0.5)
 	if not await _wait(telegraph_time):
 		return
 	match pattern:
@@ -128,6 +188,6 @@ func _run_pattern(pattern: int) -> void:
 			for i: int in count:
 				_fire(start + TAU * i / count)
 			game.sfx.play(&"gun")
-			game.shake(5.0, 0.15)
+			game.juice.shake(game.juice.Tier.SMALL)
 	_rest = rest_time
 	_busy = false

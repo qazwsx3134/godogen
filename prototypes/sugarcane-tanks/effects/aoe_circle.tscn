@@ -3,6 +3,8 @@
 [ext_resource type="Script" path="res://effects/aoe_circle.gd" id="1_cww30"]
 
 [node name="AoeCircle" type="Node2D" unique_id=25165716]
+z_index = -1
+z_as_relative = false
 script = ExtResource("1_cww30")
 
 [node name="Visual" type="Node2D" parent="." unique_id=643943441]

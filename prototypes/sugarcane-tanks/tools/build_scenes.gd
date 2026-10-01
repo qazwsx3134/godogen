@@ -10,6 +10,11 @@ extends SceneTree
 ## ui/hud.tscn, ui/joystick.tscn, ui/result_panel.tscn and ui/theme.tres were restyled afterwards by
 ## tools/restyle_hud.gd (concept-art HUD); the builders below still describe the old look, so do not
 ## --force those files. ui/ability_slot.tscn and pickups/coin.tscn only exist from that pass.
+## The hero, enemies, projectiles and pickups were then switched from Polygon2D shapes to the pictures in
+## assets/ by tools/apply_actor_art.gd (the "plate" enemy became the chef); the builders below still
+## draw the old shapes, so do not --force those scenes either.
+## The arenas, doors, obstacles and rooms were rebuilt by tools/apply_arena_art.gd (painted backgrounds,
+## walls that follow them, y-sort); --force here would bring back the old geometric stages and layouts.
 
 const HERO_LAYER: int = 2
 const ENEMY_LAYER: int = 4

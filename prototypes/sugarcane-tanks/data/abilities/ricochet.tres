@@ -1,6 +1,7 @@
 [gd_resource type="Resource" format=3]
 
 [ext_resource type="Script" path="res://data/ability_def.gd" id="1_pchud"]
+[ext_resource type="Texture2D" path="res://assets/icon_ricochet.png" id="1_sesqn"]
 
 [resource]
 script = ExtResource("1_pchud")
@@ -9,3 +10,4 @@ title = "彈射"
 description = "打中後彈向附近坦克
 最多 3 次"
 color = Color(0.95, 0.45, 0.75, 1)
+icon = ExtResource("1_sesqn")

@@ -1,5 +1,6 @@
 [gd_resource type="Resource" format=3]
 
+[ext_resource type="Texture2D" path="res://assets/icon_fire.png" id="1_7gc8e"]
 [ext_resource type="Script" path="res://data/ability_def.gd" id="1_wdwha"]
 
 [resource]
@@ -8,3 +9,4 @@ id = &"fire"
 title = "火焰甘蔗"
 description = "命中後燃燒 2 秒"
 color = Color(1, 0.45, 0.15, 1)
+icon = ExtResource("1_7gc8e")

@@ -1,6 +1,7 @@
 [gd_resource type="Resource" format=3]
 
 [ext_resource type="Script" path="res://data/ability_def.gd" id="1_1twav"]
+[ext_resource type="Texture2D" path="res://assets/icon_freeze.png" id="1_f6bi4"]
 
 [resource]
 script = ExtResource("1_1twav")
@@ -8,3 +9,4 @@ id = &"freeze"
 title = "冰凍甘蔗"
 description = "命中後減速 1.5 秒"
 color = Color(0.5, 0.85, 1, 1)
+icon = ExtResource("1_f6bi4")

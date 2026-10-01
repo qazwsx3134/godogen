@@ -1,9 +1,10 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://ui/ability_card.gd" id="1_dxmfo"]
+[ext_resource type="Texture2D" path="res://assets/icon_pierce.png" id="2_tkywo"]
 
 [node name="AbilityCard" type="Button" unique_id=161712030]
-custom_minimum_size = Vector2(900, 210)
+custom_minimum_size = Vector2(900, 250)
 script = ExtResource("1_dxmfo")
 
 [node name="Margin" type="MarginContainer" parent="." unique_id=425936066]
@@ -21,13 +22,31 @@ layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 28
 
-[node name="Swatch" type="ColorRect" parent="Margin/Row" unique_id=81968987]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(110, 110)
+[node name="IconBox" type="Control" parent="Margin/Row" unique_id=344580613]
+custom_minimum_size = Vector2(96, 96)
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
+
+[node name="Swatch" type="ColorRect" parent="Margin/Row/IconBox" unique_id=81968987]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_vertical = 4
+mouse_filter = 2
 color = Color(0.85, 0.5, 0.95, 1)
+
+[node name="Icon" type="TextureRect" parent="Margin/Row/IconBox" unique_id=896019042]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource("2_tkywo")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Texts" type="VBoxContainer" parent="Margin/Row" unique_id=640969586]
 layout_mode = 2
@@ -41,6 +60,7 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 44
 text = "穿透"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="Description" type="Label" parent="Margin/Row/Texts" unique_id=1846929955]
 unique_name_in_owner = true
@@ -51,6 +71,7 @@ text = "甘蔗穿過坦克
 每穿一台傷害 −33%"
 vertical_alignment = 1
 autowrap_mode = 3
+max_lines_visible = 3
 
 [node name="Stack" type="Label" parent="Margin/Row" unique_id=276466771]
 unique_name_in_owner = true

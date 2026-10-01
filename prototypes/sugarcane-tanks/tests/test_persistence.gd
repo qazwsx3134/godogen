@@ -37,6 +37,7 @@ func _run() -> void:
 	main.queue_free()
 	root.get_tree().paused = false
 	await _frames(3)
+	OS.delay_msec(300)   # the audio thread lets go of the music players freed above; otherwise the exit reports them as leaked
 
 	var after: Dictionary = _hashes("res://")
 	for path: String in before:

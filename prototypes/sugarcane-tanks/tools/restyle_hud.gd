@@ -274,8 +274,10 @@ func _ability_slot() -> Node:
 func _restyle_joystick() -> Node:
 	var root: Control = _edit("res://ui/joystick.tscn") as Control
 	var base: Panel = root.get_node("%Base") as Panel
-	# Parked bottom-left, anchored to the bottom edge; joystick.gd stores these offsets on _ready.
+	# Where the base shows in the editor (bottom-left, anchored to the bottom edge). At run time joystick.gd hides it
+	# until a finger presses, then puts it under the finger; half transparent as a whole.
 	_place(base, Vector4(0, 1, 0, 1), Vector4(22, -398, 312, -108))
+	base.modulate = Color(1, 1, 1, 0.5)
 	base.add_theme_stylebox_override(&"panel", _box(Color(0.12, 0.12, 0.14, 0.8), 145, Color(0.74, 0.74, 0.78, 0.85), 5))
 	var knob: Panel = root.get_node("%Knob") as Panel
 	_place(knob, Vector4(0.5, 0.5, 0.5, 0.5), Vector4(-62, -62, 62, 62))
@@ -401,9 +403,8 @@ func _restyle_hud() -> Node:
 		_add(bottom_bar, _place(cut, Vector4(x, 0, x, 1), Vector4(-2, 0, 2, 0)), "Cut%d" % (i + 1))
 	_add(bottom, _unique(_at(_portrait("BottomPortrait"), 0, 0, 122, 122)))
 
-	# Ability slots, bottom centre, nudged right of the joystick: the row is centred 80px right of the
-	# screen centre so that even 5 slots stay clear of the parked joystick. The three sample slots
-	# only fill the editor view; hud.gd removes them on _ready.
+	# Ability slots, bottom centre, nudged right: the row is centred 80px right of the screen centre.
+	# The three sample slots only fill the editor view; hud.gd removes them on _ready.
 	var chips := HBoxContainer.new()
 	chips.alignment = BoxContainer.ALIGNMENT_CENTER
 	chips.grow_horizontal = Control.GROW_DIRECTION_BOTH

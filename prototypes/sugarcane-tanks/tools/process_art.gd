@@ -5,6 +5,7 @@ extends SceneTree
 ## Sources without alpha are keyed against their corner colour (the prompts ask for flat #FF00FF),
 ## kits are cut on their grid, each piece is trimmed and resized to its in-game size here,
 ## so nothing is shrunk at runtime. Backgrounds are cover-fitted to the 1080x1920 world.
+## Animation sheets become one horizontal strip (Sprite2D hframes) with a shared frame box.
 
 const SRC := "res://art_src/"
 const OUT := "res://assets/"
@@ -20,9 +21,11 @@ const KITS := {
 		"icon_fire", "icon_freeze", "icon_attack_boost", "icon_attack_speed",
 		"icon_crit", "icon_hp_boost", "icon_heal", ""]],
 }
+## Animation sheet → [columns, rows, frames]. Output is a strip scaled so frame 1 is SIZES[name] tall.
+const ANIMS := {"hero_throw": [3, 2, 6]}
 ## Longest side in game pixels (the world is 1080 wide; concept art is 720 wide, so concept px x1.5).
 const SIZES := {
-	"hero": 120, "rat": 110, "tank": 210, "chef": 140, "boss_tank": 320, "chiang": 300,
+	"hero": 120, "hero_throw": 120, "sugarcane_purple": 90, "rat": 110, "tank": 210, "chef": 140, "boss_tank": 320, "chiang": 300,
 	"sugarcane_shot": 80, "bullet": 50, "pea": 30, "corn": 40, "carrot": 46, "exp_gem": 40, "heart": 44, "pistol": 72, "coin": 36,
 	"crate": 110, "sandbags": 250, "hedgehog": 110, "stone_block": 110,
 	"portrait_hero": 150, "portrait_chiang": 150, "portrait_boss_tank": 150,
@@ -40,7 +43,7 @@ func _init() -> void:
 		return
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(OUT))
 	var missing: Array[String] = []
-	var sources: Array = BACKGROUNDS + KITS.keys() + ["hero", "rat", "tank", "chef", "boss_tank", "chiang"]
+	var sources: Array = BACKGROUNDS + KITS.keys() + ANIMS.keys() + ["hero", "rat", "tank", "chef", "boss_tank", "chiang", "sugarcane_purple"]
 	for source: String in sources:
 		var path: String = _find_source(source)
 		if path == "":
@@ -49,6 +52,10 @@ func _init() -> void:
 		var image: Image = Image.load_from_file(path)
 		if source in BACKGROUNDS:
 			_save(_cover(image, BG_SIZE), source)
+			continue
+		if source in ANIMS:
+			var anim: Array = ANIMS[source]
+			_save(_strip(_anim_frames(_cutout(image), anim[0], anim[1], anim[2]), SIZES[source]), source)
 			continue
 		var kit: Array = KITS.get(source, [1, 1, [source]])
 		_slice(_cutout(image), kit[0], kit[1], kit[2])
@@ -156,9 +163,77 @@ func _corner_colour(image: Image) -> Color:
 		sum += image.get_pixelv(p)
 	return sum / 4.0
 
+## Splits a keyed sheet into frames. Each connected blob goes to the cell holding its centre and keeps
+## its offset from that cell, so a cane poking into the next cell stays with its own frame and the
+## generator's placement (feet on one baseline) survives. Canvases are cell-sized with a half-cell margin.
+func _anim_frames(cut: Image, columns: int, rows: int, count: int) -> Array[Image]:
+	var w: int = cut.get_width()
+	var h: int = cut.get_height()
+	var cell := Vector2i(w / columns, h / rows)
+	var margin: Vector2i = cell / 2
+	var data: PackedByteArray = cut.get_data()
+	var labels := PackedInt32Array()
+	labels.resize(w * h)
+	labels.fill(-1)
+	var sums: Array[Vector3] = []  # x sum, y sum, pixel count per blob
+	var stack := PackedInt32Array()
+	for start: int in w * h:
+		if labels[start] != -1 or data[start * 4 + 3] == 0:
+			continue
+		var blob: int = sums.size()
+		var sum := Vector3.ZERO
+		labels[start] = blob
+		stack.append(start)
+		while not stack.is_empty():
+			var i: int = stack[stack.size() - 1]
+			stack.remove_at(stack.size() - 1)
+			var x: int = i % w
+			var y: int = i / w
+			sum += Vector3(x, y, 1)
+			for n: int in [i - 1 if x > 0 else -1, i + 1 if x < w - 1 else -1, i - w, i + w]:
+				if n >= 0 and n < w * h and labels[n] == -1 and data[n * 4 + 3] != 0:
+					labels[n] = blob
+					stack.append(n)
+		sums.append(sum)
+	var frame_of := PackedInt32Array()
+	for sum: Vector3 in sums:
+		var centre := Vector2i(int(sum.x / sum.z), int(sum.y / sum.z))
+		var index: int = mini(centre.x / cell.x, columns - 1) + mini(centre.y / cell.y, rows - 1) * columns
+		frame_of.append(index if index < count else -1)
+	var frames: Array[Image] = []
+	for f: int in count:
+		frames.append(Image.create(cell.x + margin.x * 2, cell.y + margin.y * 2, false, Image.FORMAT_RGBA8))
+	for i: int in w * h:
+		if labels[i] == -1 or frame_of[labels[i]] == -1:
+			continue
+		var f: int = frame_of[labels[i]]
+		var x: int = i % w
+		var y: int = i / w
+		var local := Vector2i(x - (f % columns) * cell.x, y - (f / columns) * cell.y) + margin
+		if Rect2i(Vector2i.ZERO, frames[f].get_size()).has_point(local):
+			frames[f].set_pixelv(local, cut.get_pixel(x, y))
+	return frames
+
+## Crops every frame to the union box, scales so frame 1 is `height` tall, lays them out left to right.
+func _strip(frames: Array[Image], height: int) -> Image:
+	var box := Rect2i()
+	for frame: Image in frames:
+		var used: Rect2i = frame.get_used_rect()
+		box = used if box.size == Vector2i.ZERO else box.merge(used)
+	var scale: float = float(height) / frames[0].get_used_rect().size.y
+	var size := Vector2i(maxi(1, roundi(box.size.x * scale)), maxi(1, roundi(box.size.y * scale)))
+	var strip: Image = Image.create(size.x * frames.size(), size.y, false, Image.FORMAT_RGBA8)
+	for f: int in frames.size():
+		var piece: Image = _scaled(frames[f].get_region(box), scale)
+		strip.blit_rect(piece, Rect2i(Vector2i.ZERO, piece.get_size()), Vector2i(f * size.x, 0))
+	print("  %d frames of %dx%d (Sprite2D hframes = %d)" % [frames.size(), size.x, size.y, frames.size()])
+	return strip
+
 ## Resizes a premultiplied piece so its longest side is `size`, then un-premultiplies.
 func _fit(piece: Image, size: int) -> Image:
-	var scale: float = float(size) / maxf(piece.get_width(), piece.get_height())
+	return _scaled(piece, float(size) / maxf(piece.get_width(), piece.get_height()))
+
+func _scaled(piece: Image, scale: float) -> Image:
 	piece.resize(maxi(1, roundi(piece.get_width() * scale)), maxi(1, roundi(piece.get_height() * scale)), Image.INTERPOLATE_LANCZOS)
 	for y: int in piece.get_height():
 		for x: int in piece.get_width():
@@ -204,6 +279,15 @@ func _self_test() -> void:
 	ok = _expect(_main_rect(cell) == Rect2i(20, 10, 60, 60), "a sliver of the next cell is dropped") and ok
 	cell.fill_rect(Rect2i(40, 80, 10, 10), Color.WHITE)  # a detached sparkle inside the cell stays
 	ok = _expect(_main_rect(cell) == Rect2i(20, 10, 60, 80), "detached parts away from the edge are kept") and ok
+	var anim: Image = Image.create(200, 100, false, Image.FORMAT_RGBA8)
+	anim.fill_rect(Rect2i(20, 40, 30, 50), Color.WHITE)  # frame 1 body
+	anim.fill_rect(Rect2i(45, 50, 70, 5), Color.WHITE)   # its arm reaching into the next cell
+	anim.fill_rect(Rect2i(130, 30, 30, 60), Color.WHITE) # frame 2 body, 10 px taller
+	var frames: Array[Image] = _anim_frames(anim, 2, 1, 2)
+	ok = _expect(frames[0].get_used_rect() == Rect2i(70, 90, 95, 50), "an arm crossing into the next cell stays with its frame") and ok
+	ok = _expect(frames[1].get_used_rect() == Rect2i(80, 80, 30, 60), "the next frame keeps its place in its cell and gets no stray arm") and ok
+	var strip: Image = _strip(frames, 25)
+	ok = _expect(strip.get_size() == Vector2i(96, 30), "strip frames share one box, scaled so frame 1 is the given height (got %s)" % strip.get_size()) and ok
 	var bg: Image = Image.create(720, 1280, false, Image.FORMAT_RGB8)
 	ok = _expect(_cover(bg, BG_SIZE).get_size() == BG_SIZE, "backgrounds cover-fit to the world size") and ok
 	print("process_art self-test ", "PASSED" if ok else "FAILED")

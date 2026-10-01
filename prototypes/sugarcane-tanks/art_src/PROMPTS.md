@@ -148,3 +148,44 @@ A sheet of 16 square skill icons in exactly the same style as the three skill ic
 ```
 A sheet of 4 round character portrait icons in exactly the same style as the circular portraits in the top-left corner of the attached game screenshots: head and shoulders filling a circle, dark navy background inside the circle, thin gold ring around it, chunky pixel art. Arrange them in a grid of 2 columns and 2 rows, equal cells, each portrait centered with a clear gap around it. Top left: the hero boy (messy black hair, black suit, white shirt, red tie, determined smile). Top right: the bald boss (stern frowning face, black collar with gold trim and epaulettes). Bottom left: the front of a heavy olive-green tank with an angry cat-face emblem and two cannons. Bottom right: an empty navy circle with a gold ring. Flat solid pure magenta background (#FF00FF) outside the circles, no text. Do not use magenta or purple inside the circles. Square image.
 ```
+
+---
+
+## 主角投擲動畫（第二版主角：紫甘蔗、投擲）
+
+照順序做，每一步都拿上一步的成品當參考圖，角色才會一致。
+髮型用文字描述，**不要附人物照片**。附照片的話，生成出來的角色會變成照片裡那個真人的長相。
+
+| 步驟 | 檔名 | 內容 | 附什麼 | 比例 |
+|---|---|---|---|---|
+| 1 | `hero.png`（覆蓋舊的） | 新主角定裝：新髮型、拿紫甘蔗 | 舊的 `art_src/hero.png`＋ann1 | 1:1 |
+| 2 | `hero_throw.png` | 投擲動作 6 格（3 欄 × 2 列） | 步驟 1 的成品 | 3:2 |
+| 3 | `sugarcane_purple.png` | 飛出去的紫甘蔗（遊戲裡會旋轉） | 步驟 1 的成品 | 1:1 |
+
+動畫格一律畫在固定位置：每格的腳底踩在同一條線上、角色大小一樣。工具把每一塊相連的圖歸到它中心所在的格子（甘蔗伸進隔壁格也沒關係），再用同一個裁切框裁全部格子，輸出成一條 `hframes = 6` 的橫條，動畫才不會抖。
+
+### 1. `hero`（附舊的 `art_src/hero.png` 與 ann1）
+
+```
+Redraw the attached character sprite with two changes, keeping everything else identical (same pixel art style, palette, outline weight, proportions, black suit, white shirt, red tie, 3/4 top-down camera angle, facing right). Change 1, the hair: short neat black hair, the front swept up and back into a tidy low quiff with soft volume, a clean side part, short tapered sides above the ears, a polished businessman look. Change 2, the weapon: he no longer holds a launcher; instead he holds one long purple sugarcane stalk in his right hand, held lowered at his side. The stalk is dark purple-red with pale beige ring-shaped joints every short segment and a small tuft of green leaves at the top end, about as long as his body is tall. Full body, standing, large and centered in a square image. Flat solid pure magenta background (#FF00FF) filling the whole image, no gradient, no floor, no ground shadow, no scenery, no text, no UI. Do not use magenta anywhere on the character; the sugarcane is dark purple-red, clearly different from the background.
+```
+
+### 2. `hero_throw`：3 欄 × 2 列（附步驟 1 的成品）
+
+```
+A sprite animation sheet of the attached character performing one overhand throw of his purple sugarcane, 6 frames, in exactly the same pixel art style, palette, outline, outfit, hairstyle and 3/4 top-down camera angle, always facing right. Arrange the frames in a grid of 3 columns and 2 rows, read left to right, top to bottom, each frame centered in its own equal-sized cell. The character is the same size in every frame and his feet stand on the same baseline near the bottom of every cell; only his pose changes. Frame 1: ready stance, holding the sugarcane lowered at his side. Frame 2: wind-up, he steps back and lifts the sugarcane up behind his head with his right arm. Frame 3: full wind-up, arm cocked far back, sugarcane angled back over his shoulder, front foot lifted, body coiled. Frame 4: release, arm whipping forward over his head, body leaning forward, the sugarcane just leaving his hand pointing forward. Frame 5: follow-through, throwing arm extended forward and down, hand empty, the sugarcane is gone. Frame 6: recovering to a balanced stance, hand empty. No motion blur, no speed lines, no flying sugarcane outside his hand, no shadows, no grid lines, no frame numbers, no text. Flat solid pure magenta background (#FF00FF) everywhere. Do not use magenta anywhere on the character. Landscape 3:2.
+```
+
+### 3. `sugarcane_purple`（附步驟 1 的成品）
+
+```
+Draw only the purple sugarcane stalk the attached character is holding, alone, lying horizontally with the leafy end on the left, in exactly the same pixel art style, palette and outline: dark purple-red stalk with pale beige ring-shaped joints and a small tuft of green leaves at one end. Large and centered in a square image. No hand, no motion effects. Flat solid pure magenta background (#FF00FF) filling the whole image, no gradient, no shadow, no text. Do not use magenta on the stalk; keep it dark purple-red, clearly different from the background.
+```
+
+### 另一種做法：用影片生成動作
+
+如果格子圖的 6 格長得不一致（臉或衣服變了、大小跳動），改用圖生影片：拿步驟 1 的成品當第一幀，貼上下面的 prompt，生成 2 秒的影片，再交給我抽格。
+
+```
+The character performs one quick overhand throw of his purple sugarcane toward the right: steps back, raises the stalk behind his head, whips his arm forward and releases it, the stalk flies out of frame to the right, then he returns to a balanced stance. Static camera, no zoom, no camera movement, same 3/4 top-down angle, same pixel art style, the flat magenta background stays perfectly uniform and unchanged for the whole clip.
+```

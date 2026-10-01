@@ -37,6 +37,7 @@ script = ExtResource("1_na1ee")
 
 [node name="Base" type="Panel" parent="." unique_id=531638810]
 unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0.5)
 layout_mode = 0
 anchor_top = 1.0
 anchor_bottom = 1.0

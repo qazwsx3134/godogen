@@ -1,28 +1,38 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://rooms/room.gd" id="1_htvpn"]
-[ext_resource type="PackedScene" path="res://arena/arena_memorial.tscn" id="2_207sr"]
+[ext_resource type="PackedScene" path="res://arena/arena_hall.tscn" id="2_207sr"]
 [ext_resource type="PackedScene" path="res://arena/crate.tscn" id="3_7no0a"]
+[ext_resource type="PackedScene" path="res://arena/stone_block.tscn" id="3_lvimw"]
 [ext_resource type="PackedScene" path="res://enemies/chiang_boss.tscn" id="4_lvimw"]
 
 [node name="Room10" type="Node2D" unique_id=812449511]
+y_sort_enabled = true
 script = ExtResource("1_htvpn")
 boss_room = true
 area_name = "中正紀念堂"
 
-[node name="Arena" parent="." unique_id=219682253 instance=ExtResource("2_207sr")]
+[node name="Arena" parent="." unique_id=1376845098 instance=ExtResource("2_207sr")]
 unique_name_in_owner = true
 
 [node name="Obstacles" type="Node2D" parent="." unique_id=1620171522]
+y_sort_enabled = true
 
-[node name="Crate" parent="Obstacles" unique_id=2125247388 instance=ExtResource("3_7no0a")]
-position = Vector2(260, 1150)
+[node name="StoneBlock1" parent="Obstacles" unique_id=1095915310 instance=ExtResource("3_lvimw")]
+position = Vector2(250, 1000)
 
-[node name="@StaticBody2D@40" parent="Obstacles" unique_id=797607426 instance=ExtResource("3_7no0a")]
-position = Vector2(820, 1150)
+[node name="StoneBlock2" parent="Obstacles" unique_id=1699322903 instance=ExtResource("3_lvimw")]
+position = Vector2(830, 1000)
+
+[node name="Crate1" parent="Obstacles" unique_id=758507357 instance=ExtResource("3_7no0a")]
+position = Vector2(150, 1380)
+
+[node name="Crate2" parent="Obstacles" unique_id=282327773 instance=ExtResource("3_7no0a")]
+position = Vector2(930, 1380)
 
 [node name="Enemies" type="Node2D" parent="." unique_id=2144336861]
 unique_name_in_owner = true
+y_sort_enabled = true
 
 [node name="ChiangBoss" parent="Enemies" unique_id=1702473872 instance=ExtResource("4_lvimw")]
 position = Vector2(540, 520)

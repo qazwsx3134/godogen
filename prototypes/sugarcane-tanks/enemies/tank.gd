@@ -20,8 +20,15 @@ var _timer: float = 0.0
 var _cooldown: float = 0.6
 var _dash_direction: Vector2 = Vector2.ZERO
 var _dash_left: float = 0.0
+var _windup_total: float = 0.4
+var _sprite_home: Vector2 = Vector2.ZERO
+var _dust_gap: float = 0.0
 
 @onready var _dash_line: Line2D = %DashLine
+
+func _ready() -> void:
+	super._ready()
+	_sprite_home = sprite.position
 
 func think(delta: float) -> void:
 	match phase:
@@ -33,16 +40,22 @@ func think(delta: float) -> void:
 		Phase.WINDUP:
 			_timer -= delta * slow_factor()
 			velocity = Vector2.ZERO
-			body_pivot.position = Vector2(randf_range(-3.0, 3.0), randf_range(-3.0, 3.0))
+			_shudder()
 			if _timer <= 0.0:
 				_start_dash()
 		Phase.DASH:
 			var before: Vector2 = global_position
 			velocity = _dash_direction * dash_speed * slow_factor()
 			move_and_slide()
-			_dash_left -= global_position.distance_to(before)
-			if get_slide_collision_count() > 0 or _dash_left <= 0.0:
-				_end_dash()
+			var moved: float = global_position.distance_to(before)
+			_dash_left -= moved
+			_dust_gap -= moved
+			if _dust_gap <= 0.0:   # dust kicked up behind it
+				_dust_gap = 55.0
+				game.juice.dash_dust(global_position + Vector2(0.0, _sprite_home.y) - _dash_direction * 45.0)
+			var bumped: bool = get_slide_collision_count() > 0
+			if bumped or _dash_left <= 0.0:
+				_end_dash(bumped)
 		Phase.RECOVER:
 			_timer -= delta
 			velocity = Vector2.ZERO
@@ -57,24 +70,36 @@ func begin_attack() -> void:
 func windup(duration: float, distance: float) -> void:
 	phase = Phase.WINDUP
 	_timer = duration
+	_windup_total = duration
 	_dash_direction = to_target().normalized()
 	_dash_left = distance
-	body_pivot.rotation = _dash_direction.angle()
+	face_toward(_dash_direction)
 	_dash_line.points = PackedVector2Array([Vector2.ZERO, _dash_direction * distance])
 	_dash_line.visible = true
 	game.sfx.play(&"rev")
 
+## The picture (not the body) shudders in place, harder the closer the dash gets, then settles back
+## at the start of the dash. Smooth sines, not a random jump every frame.
+func _shudder() -> void:
+	var build_up: float = 1.0 - clampf(_timer / maxf(_windup_total, 0.001), 0.0, 1.0)
+	var t: float = Time.get_ticks_msec() * 0.001
+	var amplitude: float = 1.5 + 3.5 * build_up
+	sprite.position = _sprite_home + Vector2(sin(t * 83.0) * amplitude, cos(t * 67.0) * amplitude * 0.5)
+
 func _start_dash() -> void:
 	phase = Phase.DASH
-	body_pivot.position = Vector2.ZERO
+	sprite.position = _sprite_home
+	_dust_gap = 0.0
 	_dash_line.visible = false
 	collision_mask &= ~HERO_LAYER
 	game.sfx.play(&"dash")
 
-func _end_dash() -> void:
+## `bumped`: the dash stopped against a wall or crate (not because it had run its distance).
+func _end_dash(bumped: bool) -> void:
 	collision_mask |= HERO_LAYER
 	velocity = Vector2.ZERO
-	game.shake(4.0, 0.1)
+	if bumped:
+		game.juice.tank_bumped(global_position + Vector2(0.0, _sprite_home.y) + _dash_direction * 50.0)
 	after_dash()
 
 ## Called when a dash ends. The boss overrides this to chain dashes.
@@ -94,6 +119,6 @@ func dash_warning() -> Array:
 		return []
 	return [global_position, _dash_direction, _dash_left]
 
-func take_hit(amount: float, crit: bool = false, burn: bool = false, freeze: bool = false, push: Vector2 = Vector2.ZERO) -> void:
+func take_hit(amount: float, crit: bool = false, burn: bool = false, freeze: bool = false, push: Vector2 = Vector2.ZERO, hit_at: Vector2 = Vector2.INF) -> void:
 	# A dashing tank does not get pushed off its line.
-	super.take_hit(amount, crit, burn, freeze, Vector2.ZERO if phase == Phase.DASH else push)
+	super.take_hit(amount, crit, burn, freeze, Vector2.ZERO if phase == Phase.DASH else push, hit_at)

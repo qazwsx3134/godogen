@@ -14,7 +14,11 @@ var _bob: float = 0.0
 
 @onready var _visual: Node2D = %Visual
 
+func _ready() -> void:
+	_visual.set_meta(&"rest_scale", _visual.scale)   # the pop-in (game/juice.gd) settles on this
+
 func drop(from: Vector2) -> void:
+	game.juice.pickup_dropped(_visual)
 	global_position = from
 	var land: Vector2 = from + Vector2.from_angle(randf() * TAU) * randf_range(20.0, 70.0)
 	var tween: Tween = create_tween()

@@ -1,474 +1,107 @@
 [gd_scene format=3]
 
-[ext_resource type="PackedScene" path="res://arena/door.tscn" id="1_jkyfx"]
+[ext_resource type="Script" path="res://arena/arena.gd" id="1_m8wf1"]
+[ext_resource type="Texture2D" path="res://assets/bg_temple.png" id="2_ym7js"]
+[ext_resource type="PackedScene" path="res://arena/door.tscn" id="3_m335a"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_t53xw"]
-size = Vector2(1080, 70)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2cedc"]
+size = Vector2(540, 387)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_m8wf1"]
-size = Vector2(1080, 70)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q3kt7"]
+size = Vector2(540, 387)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ym7js"]
-size = Vector2(60, 1640)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kjdfj"]
+size = Vector2(200, 325)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_m335a"]
-size = Vector2(60, 1640)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i8f4w"]
+size = Vector2(70, 32)
 
-[node name="ArenaTemple" type="Node2D" unique_id=677891662]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_w2mpg"]
+size = Vector2(70, 32)
 
-[node name="Floor" type="Polygon2D" parent="." unique_id=740481691]
-color = Color(0.6, 0.56, 0.52, 1)
-polygon = PackedVector2Array(60, 260, 1020, 260, 1020, 1760, 60, 1760)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rniiq"]
+size = Vector2(180, 1570)
 
-[node name="Paving" type="Node2D" parent="." unique_id=1774046493]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fw5of"]
+size = Vector2(175, 1570)
 
-[node name="V1" type="Polygon2D" parent="Paving" unique_id=2084517249]
-color = Color(0.52, 0.48, 0.44, 1)
-polygon = PackedVector2Array(178.5, 260, 181.5, 260, 181.5, 1760, 178.5, 1760)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_x75y5"]
+size = Vector2(32, 95)
 
-[node name="V2" type="Polygon2D" parent="Paving" unique_id=1515293834]
-color = Color(0.52, 0.48, 0.44, 1)
-polygon = PackedVector2Array(298.5, 260, 301.5, 260, 301.5, 1760, 298.5, 1760)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4b7qk"]
+size = Vector2(35, 95)
 
-[node name="V3" type="Polygon2D" parent="Paving" unique_id=929228048]
-color = Color(0.52, 0.48, 0.44, 1)
-polygon = PackedVector2Array(418.5, 260, 421.5, 260, 421.5, 1760, 418.5, 1760)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iouue"]
+size = Vector2(527, 300)
 
-[node name="V4" type="Polygon2D" parent="Paving" unique_id=250472107]
-color = Color(0.52, 0.48, 0.44, 1)
-polygon = PackedVector2Array(538.5, 260, 541.5, 260, 541.5, 1760, 538.5, 1760)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mp7ga"]
+size = Vector2(520, 300)
 
-[node name="V5" type="Polygon2D" parent="Paving" unique_id=1031554633]
-color = Color(0.52, 0.48, 0.44, 1)
-polygon = PackedVector2Array(658.5, 260, 661.5, 260, 661.5, 1760, 658.5, 1760)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6pxx8"]
+size = Vector2(340, 200)
 
-[node name="V6" type="Polygon2D" parent="Paving" unique_id=627143263]
-color = Color(0.52, 0.48, 0.44, 1)
-polygon = PackedVector2Array(778.5, 260, 781.5, 260, 781.5, 1760, 778.5, 1760)
+[node name="ArenaTemple" type="Node2D" unique_id=1723082343]
+z_index = -2
+script = ExtResource("1_m8wf1")
+walk_area = Rect2(80, 287, 925, 1420)
 
-[node name="V7" type="Polygon2D" parent="Paving" unique_id=1213930839]
-color = Color(0.52, 0.48, 0.44, 1)
-polygon = PackedVector2Array(898.5, 260, 901.5, 260, 901.5, 1760, 898.5, 1760)
+[node name="Background" type="Sprite2D" parent="." unique_id=1797492181]
+unique_name_in_owner = true
+texture = ExtResource("2_ym7js")
+centered = false
 
-[node name="H1" type="Polygon2D" parent="Paving" unique_id=631294414]
-color = Color(0.52, 0.48, 0.44, 1)
-polygon = PackedVector2Array(60, 378.5, 1020, 378.5, 1020, 381.5, 60, 381.5)
-
-[node name="H2" type="Polygon2D" parent="Paving" unique_id=177931945]
-color = Color(0.52, 0.48, 0.44, 1)
-polygon = PackedVector2Array(60, 498.5, 1020, 498.5, 1020, 501.5, 60, 501.5)
-
-[node name="H3" type="Polygon2D" parent="Paving" unique_id=1226203294]
-color = Color(0.52, 0.48, 0.44, 1)
-polygon = PackedVector2Array(60, 618.5, 1020, 618.5, 1020, 621.5, 60, 621.5)
-
-[node name="H4" type="Polygon2D" parent="Paving" unique_id=1631174688]
-color = Color(0.52, 0.48, 0.44, 1)
-polygon = PackedVector2Array(60, 738.5, 1020, 738.5, 1020, 741.5, 60, 741.5)
-
-[node name="H5" type="Polygon2D" parent="Paving" unique_id=2075424214]
-color = Color(0.52, 0.48, 0.44, 1)
-polygon = PackedVector2Array(60, 858.5, 1020, 858.5, 1020, 861.5, 60, 861.5)
-
-[node name="H6" type="Polygon2D" parent="Paving" unique_id=864185428]
-color = Color(0.52, 0.48, 0.44, 1)
-polygon = PackedVector2Array(60, 978.5, 1020, 978.5, 1020, 981.5, 60, 981.5)
-
-[node name="H7" type="Polygon2D" parent="Paving" unique_id=486989131]
-color = Color(0.52, 0.48, 0.44, 1)
-polygon = PackedVector2Array(60, 1098.5, 1020, 1098.5, 1020, 1101.5, 60, 1101.5)
-
-[node name="H8" type="Polygon2D" parent="Paving" unique_id=1464834100]
-color = Color(0.52, 0.48, 0.44, 1)
-polygon = PackedVector2Array(60, 1218.5, 1020, 1218.5, 1020, 1221.5, 60, 1221.5)
-
-[node name="H9" type="Polygon2D" parent="Paving" unique_id=1764100940]
-color = Color(0.52, 0.48, 0.44, 1)
-polygon = PackedVector2Array(60, 1338.5, 1020, 1338.5, 1020, 1341.5, 60, 1341.5)
-
-[node name="H10" type="Polygon2D" parent="Paving" unique_id=1542236653]
-color = Color(0.52, 0.48, 0.44, 1)
-polygon = PackedVector2Array(60, 1458.5, 1020, 1458.5, 1020, 1461.5, 60, 1461.5)
-
-[node name="H11" type="Polygon2D" parent="Paving" unique_id=280382273]
-color = Color(0.52, 0.48, 0.44, 1)
-polygon = PackedVector2Array(60, 1578.5, 1020, 1578.5, 1020, 1581.5, 60, 1581.5)
-
-[node name="H12" type="Polygon2D" parent="Paving" unique_id=206927454]
-color = Color(0.52, 0.48, 0.44, 1)
-polygon = PackedVector2Array(60, 1698.5, 1020, 1698.5, 1020, 1701.5, 60, 1701.5)
-
-[node name="Walls" type="StaticBody2D" parent="." unique_id=1439161853]
+[node name="Walls" type="StaticBody2D" parent="." unique_id=546638445]
 collision_mask = 0
 
-[node name="WallTop" type="Polygon2D" parent="Walls" unique_id=1773004841]
-color = Color(0.62, 0.14, 0.12, 1)
-polygon = PackedVector2Array(0, 190, 1080, 190, 1080, 260, 0, 260)
-
-[node name="TopShape" type="CollisionShape2D" parent="Walls" unique_id=1835921488]
-position = Vector2(540, 225)
-shape = SubResource("RectangleShape2D_t53xw")
-
-[node name="WallBottom" type="Polygon2D" parent="Walls" unique_id=789920298]
-color = Color(0.62, 0.14, 0.12, 1)
-polygon = PackedVector2Array(0, 1760, 1080, 1760, 1080, 1830, 0, 1830)
-
-[node name="BottomShape" type="CollisionShape2D" parent="Walls" unique_id=24917910]
-position = Vector2(540, 1795)
-shape = SubResource("RectangleShape2D_m8wf1")
-
-[node name="WallLeft" type="Polygon2D" parent="Walls" unique_id=551014770]
-color = Color(0.62, 0.14, 0.12, 1)
-polygon = PackedVector2Array(0, 190, 60, 190, 60, 1830, 0, 1830)
-
-[node name="LeftShape" type="CollisionShape2D" parent="Walls" unique_id=1493993587]
-position = Vector2(30, 1010)
-shape = SubResource("RectangleShape2D_ym7js")
-
-[node name="WallRight" type="Polygon2D" parent="Walls" unique_id=233914094]
-color = Color(0.62, 0.14, 0.12, 1)
-polygon = PackedVector2Array(1020, 190, 1080, 190, 1080, 1830, 1020, 1830)
-
-[node name="RightShape" type="CollisionShape2D" parent="Walls" unique_id=532107881]
-position = Vector2(1050, 1010)
-shape = SubResource("RectangleShape2D_m335a")
-
-[node name="TrimTop" type="Polygon2D" parent="Walls" unique_id=28839033]
-color = Color(0.86, 0.68, 0.26, 1)
-polygon = PackedVector2Array(60, 250, 1020, 250, 1020, 260, 60, 260)
-
-[node name="TrimLeft" type="Polygon2D" parent="Walls" unique_id=1134386260]
-color = Color(0.86, 0.68, 0.26, 1)
-polygon = PackedVector2Array(52, 260, 60, 260, 60, 1760, 52, 1760)
-
-[node name="TrimRight" type="Polygon2D" parent="Walls" unique_id=250193282]
-color = Color(0.86, 0.68, 0.26, 1)
-polygon = PackedVector2Array(1020, 260, 1028, 260, 1028, 1760, 1020, 1760)
-
-[node name="TrimBottom" type="Polygon2D" parent="Walls" unique_id=1985170025]
-color = Color(0.86, 0.68, 0.26, 1)
-polygon = PackedVector2Array(60, 1760, 1020, 1760, 1020, 1768, 60, 1768)
-
-[node name="Facade" type="Node2D" parent="." unique_id=251161081]
-position = Vector2(0, 93.7)
-scale = Vector2(1, 0.64)
-
-[node name="GateWall" type="Polygon2D" parent="Facade" unique_id=1066377354]
-color = Color(0.66, 0.15, 0.12, 1)
-polygon = PackedVector2Array(0, 170, 1080, 170, 1080, 260, 0, 260)
-
-[node name="Roof" type="Polygon2D" parent="Facade" unique_id=57875540]
-color = Color(0.92, 0.58, 0.16, 1)
-polygon = PackedVector2Array(30, 105, 1050, 105, 1080, 172, 0, 172)
-
-[node name="Tile1" type="Polygon2D" parent="Facade" unique_id=1135173657]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(37, 111, 43, 111, 43, 172, 37, 172)
-
-[node name="Tile2" type="Polygon2D" parent="Facade" unique_id=1352047869]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(65, 111, 71, 111, 71, 172, 65, 172)
-
-[node name="Tile3" type="Polygon2D" parent="Facade" unique_id=1845812266]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(93, 111, 99, 111, 99, 172, 93, 172)
-
-[node name="Tile4" type="Polygon2D" parent="Facade" unique_id=1827278380]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(121, 111, 127, 111, 127, 172, 121, 172)
-
-[node name="Tile5" type="Polygon2D" parent="Facade" unique_id=1190463281]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(149, 111, 155, 111, 155, 172, 149, 172)
-
-[node name="Tile6" type="Polygon2D" parent="Facade" unique_id=1577435777]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(177, 111, 183, 111, 183, 172, 177, 172)
-
-[node name="Tile7" type="Polygon2D" parent="Facade" unique_id=315493132]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(205, 111, 211, 111, 211, 172, 205, 172)
-
-[node name="Tile8" type="Polygon2D" parent="Facade" unique_id=1615056516]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(233, 111, 239, 111, 239, 172, 233, 172)
-
-[node name="Tile9" type="Polygon2D" parent="Facade" unique_id=1785137337]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(261, 111, 267, 111, 267, 172, 261, 172)
-
-[node name="Tile10" type="Polygon2D" parent="Facade" unique_id=510238930]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(289, 111, 295, 111, 295, 172, 289, 172)
-
-[node name="Tile11" type="Polygon2D" parent="Facade" unique_id=1366376883]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(317, 111, 323, 111, 323, 172, 317, 172)
-
-[node name="Tile12" type="Polygon2D" parent="Facade" unique_id=610087901]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(345, 111, 351, 111, 351, 172, 345, 172)
-
-[node name="Tile13" type="Polygon2D" parent="Facade" unique_id=1990988033]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(373, 111, 379, 111, 379, 172, 373, 172)
-
-[node name="Tile14" type="Polygon2D" parent="Facade" unique_id=1097951436]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(401, 111, 407, 111, 407, 172, 401, 172)
-
-[node name="Tile15" type="Polygon2D" parent="Facade" unique_id=301267876]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(429, 111, 435, 111, 435, 172, 429, 172)
-
-[node name="Tile16" type="Polygon2D" parent="Facade" unique_id=402941764]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(457, 111, 463, 111, 463, 172, 457, 172)
-
-[node name="Tile17" type="Polygon2D" parent="Facade" unique_id=372417651]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(485, 111, 491, 111, 491, 172, 485, 172)
-
-[node name="Tile18" type="Polygon2D" parent="Facade" unique_id=150189349]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(513, 111, 519, 111, 519, 172, 513, 172)
-
-[node name="Tile19" type="Polygon2D" parent="Facade" unique_id=1639277860]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(541, 111, 547, 111, 547, 172, 541, 172)
-
-[node name="Tile20" type="Polygon2D" parent="Facade" unique_id=176353618]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(569, 111, 575, 111, 575, 172, 569, 172)
-
-[node name="Tile21" type="Polygon2D" parent="Facade" unique_id=1179338350]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(597, 111, 603, 111, 603, 172, 597, 172)
-
-[node name="Tile22" type="Polygon2D" parent="Facade" unique_id=1323640312]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(625, 111, 631, 111, 631, 172, 625, 172)
-
-[node name="Tile23" type="Polygon2D" parent="Facade" unique_id=1240810206]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(653, 111, 659, 111, 659, 172, 653, 172)
-
-[node name="Tile24" type="Polygon2D" parent="Facade" unique_id=36609295]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(681, 111, 687, 111, 687, 172, 681, 172)
-
-[node name="Tile25" type="Polygon2D" parent="Facade" unique_id=625768159]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(709, 111, 715, 111, 715, 172, 709, 172)
-
-[node name="Tile26" type="Polygon2D" parent="Facade" unique_id=752035530]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(737, 111, 743, 111, 743, 172, 737, 172)
-
-[node name="Tile27" type="Polygon2D" parent="Facade" unique_id=1614717576]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(765, 111, 771, 111, 771, 172, 765, 172)
-
-[node name="Tile28" type="Polygon2D" parent="Facade" unique_id=1753362715]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(793, 111, 799, 111, 799, 172, 793, 172)
-
-[node name="Tile29" type="Polygon2D" parent="Facade" unique_id=1579645082]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(821, 111, 827, 111, 827, 172, 821, 172)
-
-[node name="Tile30" type="Polygon2D" parent="Facade" unique_id=841665400]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(849, 111, 855, 111, 855, 172, 849, 172)
-
-[node name="Tile31" type="Polygon2D" parent="Facade" unique_id=564014522]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(877, 111, 883, 111, 883, 172, 877, 172)
-
-[node name="Tile32" type="Polygon2D" parent="Facade" unique_id=1777581562]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(905, 111, 911, 111, 911, 172, 905, 172)
-
-[node name="Tile33" type="Polygon2D" parent="Facade" unique_id=784982910]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(933, 111, 939, 111, 939, 172, 933, 172)
-
-[node name="Tile34" type="Polygon2D" parent="Facade" unique_id=1323158914]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(961, 111, 967, 111, 967, 172, 961, 172)
-
-[node name="Tile35" type="Polygon2D" parent="Facade" unique_id=711602495]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(989, 111, 995, 111, 995, 172, 989, 172)
-
-[node name="Tile36" type="Polygon2D" parent="Facade" unique_id=1869311012]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(1017, 111, 1023, 111, 1023, 172, 1017, 172)
-
-[node name="Tile37" type="Polygon2D" parent="Facade" unique_id=982671043]
-color = Color(0.736, 0.464, 0.128, 1)
-polygon = PackedVector2Array(1045, 111, 1051, 111, 1051, 172, 1045, 172)
-
-[node name="Ridge" type="Polygon2D" parent="Facade" unique_id=179793318]
-color = Color(0.2, 0.52, 0.36, 1)
-polygon = PackedVector2Array(20, 103, 1060, 103, 1060, 113, 20, 113)
-
-[node name="EaveLeft" type="Polygon2D" parent="Facade" unique_id=121403910]
-color = Color(0.2, 0.52, 0.36, 1)
-polygon = PackedVector2Array(0, 172, -10, 140, 40, 172)
-
-[node name="EaveRight" type="Polygon2D" parent="Facade" unique_id=1004073585]
-color = Color(0.2, 0.52, 0.36, 1)
-polygon = PackedVector2Array(1080, 172, 1090, 140, 1040, 172)
-
-[node name="Plaque" type="Polygon2D" parent="Facade" unique_id=380740727]
-color = Color(0.12, 0.1, 0.1, 1)
-polygon = PackedVector2Array(430, 188, 650, 188, 650, 232, 430, 232)
-
-[node name="PlaqueGold" type="Polygon2D" parent="Facade" unique_id=693110905]
-color = Color(0.86, 0.68, 0.26, 1)
-polygon = PackedVector2Array(437, 194, 643, 194, 643, 226, 437, 226)
-
-[node name="Decor" type="Node2D" parent="." unique_id=423458144]
-
-[node name="PillarShadow1" type="Polygon2D" parent="Decor" unique_id=721448862]
-position = Vector2(115, 527)
-color = Color(0, 0, 0, 0.2)
-polygon = PackedVector2Array(30, 0, 28.977776, 7.764571, 25.980762, 15, 21.213203, 21.213203, 15, 25.980762, 7.764571, 28.977776, 1.83697e-15, 30, -7.764571, 28.977776, -15, 25.980762, -21.213203, 21.213203, -25.980762, 15, -28.977776, 7.764571, -30, 3.67394e-15, -28.977776, -7.764571, -25.980762, -15, -21.213203, -21.213203, -15, -25.980762, -7.764571, -28.977776, -5.5109107e-15, -30, 7.764571, -28.977776, 15, -25.980762, 21.213203, -21.213203, 25.980762, -15, 28.977776, -7.764571)
-
-[node name="Pillar1" type="Polygon2D" parent="Decor" unique_id=580155677]
-position = Vector2(110, 520)
-color = Color(0.72, 0.13, 0.1, 1)
-polygon = PackedVector2Array(26, 0, 25.11407, 6.7292953, 22.51666, 13, 18.384777, 18.384777, 13, 22.51666, 6.7292953, 25.11407, 1.5920409e-15, 26, -6.7292953, 25.11407, -13, 22.51666, -18.384777, 18.384777, -22.51666, 13, -25.11407, 6.7292953, -26, 3.1840818e-15, -25.11407, -6.7292953, -22.51666, -13, -18.384777, -18.384777, -13, -22.51666, -6.7292953, -25.11407, -4.7761223e-15, -26, 6.7292953, -25.11407, 13, -22.51666, 18.384777, -18.384777, 22.51666, -13, 25.11407, -6.7292953)
-
-[node name="PillarRing1" type="Polygon2D" parent="Decor" unique_id=1564277942]
-position = Vector2(110, 520)
-color = Color(0.86, 0.68, 0.26, 1)
-polygon = PackedVector2Array(14, 0, 13.522962, 3.6234667, 12.124355, 7, 9.899495, 9.899495, 7, 12.124355, 3.6234667, 13.522962, 8.5725277e-16, 14, -3.6234667, 13.522962, -7, 12.124355, -9.899495, 9.899495, -12.124355, 7, -13.522962, 3.6234667, -14, 1.7145055e-15, -13.522962, -3.6234667, -12.124355, -7, -9.899495, -9.899495, -7, -12.124355, -3.6234667, -13.522962, -2.5717583e-15, -14, 3.6234667, -13.522962, 7, -12.124355, 9.899495, -9.899495, 12.124355, -7, 13.522962, -3.6234667)
-
-[node name="PillarShadow2" type="Polygon2D" parent="Decor" unique_id=745722459]
-position = Vector2(975, 527)
-color = Color(0, 0, 0, 0.2)
-polygon = PackedVector2Array(30, 0, 28.977776, 7.764571, 25.980762, 15, 21.213203, 21.213203, 15, 25.980762, 7.764571, 28.977776, 1.83697e-15, 30, -7.764571, 28.977776, -15, 25.980762, -21.213203, 21.213203, -25.980762, 15, -28.977776, 7.764571, -30, 3.67394e-15, -28.977776, -7.764571, -25.980762, -15, -21.213203, -21.213203, -15, -25.980762, -7.764571, -28.977776, -5.5109107e-15, -30, 7.764571, -28.977776, 15, -25.980762, 21.213203, -21.213203, 25.980762, -15, 28.977776, -7.764571)
-
-[node name="Pillar2" type="Polygon2D" parent="Decor" unique_id=87389394]
-position = Vector2(970, 520)
-color = Color(0.72, 0.13, 0.1, 1)
-polygon = PackedVector2Array(26, 0, 25.11407, 6.7292953, 22.51666, 13, 18.384777, 18.384777, 13, 22.51666, 6.7292953, 25.11407, 1.5920409e-15, 26, -6.7292953, 25.11407, -13, 22.51666, -18.384777, 18.384777, -22.51666, 13, -25.11407, 6.7292953, -26, 3.1840818e-15, -25.11407, -6.7292953, -22.51666, -13, -18.384777, -18.384777, -13, -22.51666, -6.7292953, -25.11407, -4.7761223e-15, -26, 6.7292953, -25.11407, 13, -22.51666, 18.384777, -18.384777, 22.51666, -13, 25.11407, -6.7292953)
-
-[node name="PillarRing2" type="Polygon2D" parent="Decor" unique_id=1894782351]
-position = Vector2(970, 520)
-color = Color(0.86, 0.68, 0.26, 1)
-polygon = PackedVector2Array(14, 0, 13.522962, 3.6234667, 12.124355, 7, 9.899495, 9.899495, 7, 12.124355, 3.6234667, 13.522962, 8.5725277e-16, 14, -3.6234667, 13.522962, -7, 12.124355, -9.899495, 9.899495, -12.124355, 7, -13.522962, 3.6234667, -14, 1.7145055e-15, -13.522962, -3.6234667, -12.124355, -7, -9.899495, -9.899495, -7, -12.124355, -3.6234667, -13.522962, -2.5717583e-15, -14, 3.6234667, -13.522962, 7, -12.124355, 9.899495, -9.899495, 12.124355, -7, 13.522962, -3.6234667)
-
-[node name="PillarShadow3" type="Polygon2D" parent="Decor" unique_id=2002986525]
-position = Vector2(115, 967)
-color = Color(0, 0, 0, 0.2)
-polygon = PackedVector2Array(30, 0, 28.977776, 7.764571, 25.980762, 15, 21.213203, 21.213203, 15, 25.980762, 7.764571, 28.977776, 1.83697e-15, 30, -7.764571, 28.977776, -15, 25.980762, -21.213203, 21.213203, -25.980762, 15, -28.977776, 7.764571, -30, 3.67394e-15, -28.977776, -7.764571, -25.980762, -15, -21.213203, -21.213203, -15, -25.980762, -7.764571, -28.977776, -5.5109107e-15, -30, 7.764571, -28.977776, 15, -25.980762, 21.213203, -21.213203, 25.980762, -15, 28.977776, -7.764571)
-
-[node name="Pillar3" type="Polygon2D" parent="Decor" unique_id=2035641741]
-position = Vector2(110, 960)
-color = Color(0.72, 0.13, 0.1, 1)
-polygon = PackedVector2Array(26, 0, 25.11407, 6.7292953, 22.51666, 13, 18.384777, 18.384777, 13, 22.51666, 6.7292953, 25.11407, 1.5920409e-15, 26, -6.7292953, 25.11407, -13, 22.51666, -18.384777, 18.384777, -22.51666, 13, -25.11407, 6.7292953, -26, 3.1840818e-15, -25.11407, -6.7292953, -22.51666, -13, -18.384777, -18.384777, -13, -22.51666, -6.7292953, -25.11407, -4.7761223e-15, -26, 6.7292953, -25.11407, 13, -22.51666, 18.384777, -18.384777, 22.51666, -13, 25.11407, -6.7292953)
-
-[node name="PillarRing3" type="Polygon2D" parent="Decor" unique_id=2012858857]
-position = Vector2(110, 960)
-color = Color(0.86, 0.68, 0.26, 1)
-polygon = PackedVector2Array(14, 0, 13.522962, 3.6234667, 12.124355, 7, 9.899495, 9.899495, 7, 12.124355, 3.6234667, 13.522962, 8.5725277e-16, 14, -3.6234667, 13.522962, -7, 12.124355, -9.899495, 9.899495, -12.124355, 7, -13.522962, 3.6234667, -14, 1.7145055e-15, -13.522962, -3.6234667, -12.124355, -7, -9.899495, -9.899495, -7, -12.124355, -3.6234667, -13.522962, -2.5717583e-15, -14, 3.6234667, -13.522962, 7, -12.124355, 9.899495, -9.899495, 12.124355, -7, 13.522962, -3.6234667)
-
-[node name="PillarShadow4" type="Polygon2D" parent="Decor" unique_id=84022250]
-position = Vector2(975, 967)
-color = Color(0, 0, 0, 0.2)
-polygon = PackedVector2Array(30, 0, 28.977776, 7.764571, 25.980762, 15, 21.213203, 21.213203, 15, 25.980762, 7.764571, 28.977776, 1.83697e-15, 30, -7.764571, 28.977776, -15, 25.980762, -21.213203, 21.213203, -25.980762, 15, -28.977776, 7.764571, -30, 3.67394e-15, -28.977776, -7.764571, -25.980762, -15, -21.213203, -21.213203, -15, -25.980762, -7.764571, -28.977776, -5.5109107e-15, -30, 7.764571, -28.977776, 15, -25.980762, 21.213203, -21.213203, 25.980762, -15, 28.977776, -7.764571)
-
-[node name="Pillar4" type="Polygon2D" parent="Decor" unique_id=486225832]
-position = Vector2(970, 960)
-color = Color(0.72, 0.13, 0.1, 1)
-polygon = PackedVector2Array(26, 0, 25.11407, 6.7292953, 22.51666, 13, 18.384777, 18.384777, 13, 22.51666, 6.7292953, 25.11407, 1.5920409e-15, 26, -6.7292953, 25.11407, -13, 22.51666, -18.384777, 18.384777, -22.51666, 13, -25.11407, 6.7292953, -26, 3.1840818e-15, -25.11407, -6.7292953, -22.51666, -13, -18.384777, -18.384777, -13, -22.51666, -6.7292953, -25.11407, -4.7761223e-15, -26, 6.7292953, -25.11407, 13, -22.51666, 18.384777, -18.384777, 22.51666, -13, 25.11407, -6.7292953)
-
-[node name="PillarRing4" type="Polygon2D" parent="Decor" unique_id=2021158462]
-position = Vector2(970, 960)
-color = Color(0.86, 0.68, 0.26, 1)
-polygon = PackedVector2Array(14, 0, 13.522962, 3.6234667, 12.124355, 7, 9.899495, 9.899495, 7, 12.124355, 3.6234667, 13.522962, 8.5725277e-16, 14, -3.6234667, 13.522962, -7, 12.124355, -9.899495, 9.899495, -12.124355, 7, -13.522962, 3.6234667, -14, 1.7145055e-15, -13.522962, -3.6234667, -12.124355, -7, -9.899495, -9.899495, -7, -12.124355, -3.6234667, -13.522962, -2.5717583e-15, -14, 3.6234667, -13.522962, 7, -12.124355, 9.899495, -9.899495, 12.124355, -7, 13.522962, -3.6234667)
-
-[node name="PillarShadow5" type="Polygon2D" parent="Decor" unique_id=1523013940]
-position = Vector2(115, 1407)
-color = Color(0, 0, 0, 0.2)
-polygon = PackedVector2Array(30, 0, 28.977776, 7.764571, 25.980762, 15, 21.213203, 21.213203, 15, 25.980762, 7.764571, 28.977776, 1.83697e-15, 30, -7.764571, 28.977776, -15, 25.980762, -21.213203, 21.213203, -25.980762, 15, -28.977776, 7.764571, -30, 3.67394e-15, -28.977776, -7.764571, -25.980762, -15, -21.213203, -21.213203, -15, -25.980762, -7.764571, -28.977776, -5.5109107e-15, -30, 7.764571, -28.977776, 15, -25.980762, 21.213203, -21.213203, 25.980762, -15, 28.977776, -7.764571)
-
-[node name="Pillar5" type="Polygon2D" parent="Decor" unique_id=382969566]
-position = Vector2(110, 1400)
-color = Color(0.72, 0.13, 0.1, 1)
-polygon = PackedVector2Array(26, 0, 25.11407, 6.7292953, 22.51666, 13, 18.384777, 18.384777, 13, 22.51666, 6.7292953, 25.11407, 1.5920409e-15, 26, -6.7292953, 25.11407, -13, 22.51666, -18.384777, 18.384777, -22.51666, 13, -25.11407, 6.7292953, -26, 3.1840818e-15, -25.11407, -6.7292953, -22.51666, -13, -18.384777, -18.384777, -13, -22.51666, -6.7292953, -25.11407, -4.7761223e-15, -26, 6.7292953, -25.11407, 13, -22.51666, 18.384777, -18.384777, 22.51666, -13, 25.11407, -6.7292953)
-
-[node name="PillarRing5" type="Polygon2D" parent="Decor" unique_id=1895432077]
-position = Vector2(110, 1400)
-color = Color(0.86, 0.68, 0.26, 1)
-polygon = PackedVector2Array(14, 0, 13.522962, 3.6234667, 12.124355, 7, 9.899495, 9.899495, 7, 12.124355, 3.6234667, 13.522962, 8.5725277e-16, 14, -3.6234667, 13.522962, -7, 12.124355, -9.899495, 9.899495, -12.124355, 7, -13.522962, 3.6234667, -14, 1.7145055e-15, -13.522962, -3.6234667, -12.124355, -7, -9.899495, -9.899495, -7, -12.124355, -3.6234667, -13.522962, -2.5717583e-15, -14, 3.6234667, -13.522962, 7, -12.124355, 9.899495, -9.899495, 12.124355, -7, 13.522962, -3.6234667)
-
-[node name="PillarShadow6" type="Polygon2D" parent="Decor" unique_id=821249023]
-position = Vector2(975, 1407)
-color = Color(0, 0, 0, 0.2)
-polygon = PackedVector2Array(30, 0, 28.977776, 7.764571, 25.980762, 15, 21.213203, 21.213203, 15, 25.980762, 7.764571, 28.977776, 1.83697e-15, 30, -7.764571, 28.977776, -15, 25.980762, -21.213203, 21.213203, -25.980762, 15, -28.977776, 7.764571, -30, 3.67394e-15, -28.977776, -7.764571, -25.980762, -15, -21.213203, -21.213203, -15, -25.980762, -7.764571, -28.977776, -5.5109107e-15, -30, 7.764571, -28.977776, 15, -25.980762, 21.213203, -21.213203, 25.980762, -15, 28.977776, -7.764571)
-
-[node name="Pillar6" type="Polygon2D" parent="Decor" unique_id=1982820341]
-position = Vector2(970, 1400)
-color = Color(0.72, 0.13, 0.1, 1)
-polygon = PackedVector2Array(26, 0, 25.11407, 6.7292953, 22.51666, 13, 18.384777, 18.384777, 13, 22.51666, 6.7292953, 25.11407, 1.5920409e-15, 26, -6.7292953, 25.11407, -13, 22.51666, -18.384777, 18.384777, -22.51666, 13, -25.11407, 6.7292953, -26, 3.1840818e-15, -25.11407, -6.7292953, -22.51666, -13, -18.384777, -18.384777, -13, -22.51666, -6.7292953, -25.11407, -4.7761223e-15, -26, 6.7292953, -25.11407, 13, -22.51666, 18.384777, -18.384777, 22.51666, -13, 25.11407, -6.7292953)
-
-[node name="PillarRing6" type="Polygon2D" parent="Decor" unique_id=1807646687]
-position = Vector2(970, 1400)
-color = Color(0.86, 0.68, 0.26, 1)
-polygon = PackedVector2Array(14, 0, 13.522962, 3.6234667, 12.124355, 7, 9.899495, 9.899495, 7, 12.124355, 3.6234667, 13.522962, 8.5725277e-16, 14, -3.6234667, 13.522962, -7, 12.124355, -9.899495, 9.899495, -12.124355, 7, -13.522962, 3.6234667, -14, 1.7145055e-15, -13.522962, -3.6234667, -12.124355, -7, -9.899495, -9.899495, -7, -12.124355, -3.6234667, -13.522962, -2.5717583e-15, -14, 3.6234667, -13.522962, 7, -12.124355, 9.899495, -9.899495, 12.124355, -7, 13.522962, -3.6234667)
-
-[node name="Lantern1" type="Polygon2D" parent="Decor" unique_id=697066581]
-position = Vector2(390, 320)
-color = Color(0.9, 0.15, 0.12, 1)
-polygon = PackedVector2Array(24, 0, 23.18222, 7.764571, 20.784609, 15, 16.970562, 21.213203, 12, 25.980762, 6.211657, 28.977776, 1.4695761e-15, 30, -6.211657, 28.977776, -12, 25.980762, -16.970562, 21.213203, -20.784609, 15, -23.18222, 7.764571, -24, 3.67394e-15, -23.18222, -7.764571, -20.784609, -15, -16.970562, -21.213203, -12, -25.980762, -6.211657, -28.977776, -4.4087286e-15, -30, 6.211657, -28.977776, 12, -25.980762, 16.970562, -21.213203, 20.784609, -15, 23.18222, -7.764571)
-
-[node name="LanternBand1" type="Polygon2D" parent="Decor" unique_id=1550513690]
-color = Color(0.95, 0.8, 0.3, 1)
-polygon = PackedVector2Array(375, 317.5, 405, 317.5, 405, 322.5, 375, 322.5)
-
-[node name="Lantern2" type="Polygon2D" parent="Decor" unique_id=2116980661]
-position = Vector2(690, 320)
-color = Color(0.9, 0.15, 0.12, 1)
-polygon = PackedVector2Array(24, 0, 23.18222, 7.764571, 20.784609, 15, 16.970562, 21.213203, 12, 25.980762, 6.211657, 28.977776, 1.4695761e-15, 30, -6.211657, 28.977776, -12, 25.980762, -16.970562, 21.213203, -20.784609, 15, -23.18222, 7.764571, -24, 3.67394e-15, -23.18222, -7.764571, -20.784609, -15, -16.970562, -21.213203, -12, -25.980762, -6.211657, -28.977776, -4.4087286e-15, -30, 6.211657, -28.977776, 12, -25.980762, 16.970562, -21.213203, 20.784609, -15, 23.18222, -7.764571)
-
-[node name="LanternBand2" type="Polygon2D" parent="Decor" unique_id=241623888]
-color = Color(0.95, 0.8, 0.3, 1)
-polygon = PackedVector2Array(675, 317.5, 705, 317.5, 705, 322.5, 675, 322.5)
-
-[node name="BurnerShadow" type="Polygon2D" parent="Decor" unique_id=62265175]
-position = Vector2(185, 1687)
-color = Color(0, 0, 0, 0.2)
-polygon = PackedVector2Array(58, 0, 56.023697, 8.799848, 50.229473, 17, 41.01219, 24.04163, 29, 29.444864, 15.011504, 32.841476, 3.5514757e-15, 34, -15.011504, 32.841476, -29, 29.444864, -41.01219, 24.04163, -50.229473, 17, -56.023697, 8.799848, -58, 4.1637992e-15, -56.023697, -8.799848, -50.229473, -17, -41.01219, -24.04163, -29, -29.444864, -15.011504, -32.841476, -1.0654427e-14, -34, 15.011504, -32.841476, 29, -29.444864, 41.01219, -24.04163, 50.229473, -17, 56.023697, -8.799848)
-
-[node name="Burner" type="Polygon2D" parent="Decor" unique_id=817404317]
-position = Vector2(180, 1680)
-color = Color(0.45, 0.33, 0.18, 1)
-polygon = PackedVector2Array(52, 0, 50.22814, 7.764571, 45.03332, 15, 36.769554, 21.213203, 26, 25.980762, 13.4585905, 28.977776, 3.1840818e-15, 30, -13.4585905, 28.977776, -26, 25.980762, -36.769554, 21.213203, -45.03332, 15, -50.22814, 7.764571, -52, 3.67394e-15, -50.22814, -7.764571, -45.03332, -15, -36.769554, -21.213203, -26, -25.980762, -13.4585905, -28.977776, -9.552245e-15, -30, 13.4585905, -28.977776, 26, -25.980762, 36.769554, -21.213203, 45.03332, -15, 50.22814, -7.764571)
-
-[node name="BurnerAsh" type="Polygon2D" parent="Decor" unique_id=759450267]
-position = Vector2(180, 1677)
-color = Color(0.3, 0.26, 0.22, 1)
-polygon = PackedVector2Array(38, 0, 36.70518, 5.176381, 32.908966, 10, 26.870058, 14.142136, 19, 17.320509, 9.835124, 19.318516, 2.326829e-15, 20, -9.835124, 19.318516, -19, 17.320509, -26.870058, 14.142136, -32.908966, 10, -36.70518, 5.176381, -38, 2.4492936e-15, -36.70518, -5.176381, -32.908966, -10, -26.870058, -14.142136, -19, -17.320509, -9.835124, -19.318516, -6.9804866e-15, -20, 9.835124, -19.318516, 19, -17.320509, 26.870058, -14.142136, 32.908966, -10, 36.70518, -5.176381)
-
-[node name="Smoke1" type="Polygon2D" parent="Decor" unique_id=1300958012]
-position = Vector2(170, 1645)
-color = Color(0.9, 0.9, 0.9, 0.35)
-polygon = PackedVector2Array(16, 0, 15.454813, 3.1058285, 13.856406, 6, 11.313708, 8.485281, 8, 10.392304, 4.1411047, 11.59111, 9.797175e-16, 12, -4.1411047, 11.59111, -8, 10.392304, -11.313708, 8.485281, -13.856406, 6, -15.454813, 3.1058285, -16, 1.4695761e-15, -15.454813, -3.1058285, -13.856406, -6, -11.313708, -8.485281, -8, -10.392304, -4.1411047, -11.59111, -2.9391522e-15, -12, 4.1411047, -11.59111, 8, -10.392304, 11.313708, -8.485281, 13.856406, -6, 15.454813, -3.1058285)
-
-[node name="Smoke2" type="Polygon2D" parent="Decor" unique_id=305581686]
-position = Vector2(182, 1611)
-color = Color(0.9, 0.9, 0.9, 0.27)
-polygon = PackedVector2Array(22, 0, 21.250368, 4.399924, 19.052559, 8.5, 15.556349, 12.020815, 11, 14.722432, 5.694019, 16.420738, 1.3471115e-15, 17, -5.694019, 16.420738, -11, 14.722432, -15.556349, 12.020815, -19.052559, 8.5, -21.250368, 4.399924, -22, 2.0818996e-15, -21.250368, -4.399924, -19.052559, -8.5, -15.556349, -12.020815, -11, -14.722432, -5.694019, -16.420738, -4.0413344e-15, -17, 5.694019, -16.420738, 11, -14.722432, 15.556349, -12.020815, 19.052559, -8.5, 21.250368, -4.399924)
-
-[node name="Smoke3" type="Polygon2D" parent="Decor" unique_id=916748658]
-position = Vector2(194, 1577)
-color = Color(0.9, 0.9, 0.9, 0.19)
-polygon = PackedVector2Array(28, 0, 27.045923, 5.694019, 24.24871, 11, 19.79899, 15.556349, 14, 19.052559, 7.2469335, 21.250368, 1.7145055e-15, 22, -7.2469335, 21.250368, -14, 19.052559, -19.79899, 15.556349, -24.24871, 11, -27.045923, 5.694019, -28, 2.694223e-15, -27.045923, -5.694019, -24.24871, -11, -19.79899, -15.556349, -14, -19.052559, -7.2469335, -21.250368, -5.1435165e-15, -22, 7.2469335, -21.250368, 14, -19.052559, 19.79899, -15.556349, 24.24871, -11, 27.045923, -5.694019)
-
-[node name="Door" parent="." unique_id=1197263406 instance=ExtResource("1_jkyfx")]
+[node name="TopLeft" type="CollisionShape2D" parent="Walls" unique_id=380943424]
+position = Vector2(170, 93.5)
+shape = SubResource("RectangleShape2D_2cedc")
+
+[node name="TopRight" type="CollisionShape2D" parent="Walls" unique_id=291844216]
+position = Vector2(910, 93.5)
+shape = SubResource("RectangleShape2D_q3kt7")
+
+[node name="GateDoors" type="CollisionShape2D" parent="Walls" unique_id=44570121]
+position = Vector2(540, 62.5)
+shape = SubResource("RectangleShape2D_kjdfj")
+
+[node name="LionLeft" type="CollisionShape2D" parent="Walls" unique_id=636917739]
+position = Vector2(340, 296)
+shape = SubResource("RectangleShape2D_i8f4w")
+
+[node name="LionRight" type="CollisionShape2D" parent="Walls" unique_id=123852416]
+position = Vector2(740, 296)
+shape = SubResource("RectangleShape2D_w2mpg")
+
+[node name="Left" type="CollisionShape2D" parent="Walls" unique_id=1332399589]
+position = Vector2(-10, 1065)
+shape = SubResource("RectangleShape2D_rniiq")
+
+[node name="Right" type="CollisionShape2D" parent="Walls" unique_id=2126547346]
+position = Vector2(1092.5, 1065)
+shape = SubResource("RectangleShape2D_fw5of")
+
+[node name="CenserLeft" type="CollisionShape2D" parent="Walls" unique_id=738028149]
+position = Vector2(94, 592.5)
+shape = SubResource("RectangleShape2D_x75y5")
+
+[node name="CenserRight" type="CollisionShape2D" parent="Walls" unique_id=2002464659]
+position = Vector2(987.5, 592.5)
+shape = SubResource("RectangleShape2D_4b7qk")
+
+[node name="BottomLeft" type="CollisionShape2D" parent="Walls" unique_id=1475242881]
+position = Vector2(163.5, 1857)
+shape = SubResource("RectangleShape2D_iouue")
+
+[node name="BottomRight" type="CollisionShape2D" parent="Walls" unique_id=1650985777]
+position = Vector2(920, 1857)
+shape = SubResource("RectangleShape2D_mp7ga")
+
+[node name="BottomEnd" type="CollisionShape2D" parent="Walls" unique_id=546676510]
+position = Vector2(550, 1950)
+shape = SubResource("RectangleShape2D_6pxx8")
+
+[node name="Door" parent="." unique_id=1497263851 instance=ExtResource("3_m335a")]
 unique_name_in_owner = true
-position = Vector2(540, 262)
+position = Vector2(540, 250)
+scale = Vector2(1, 1.05)

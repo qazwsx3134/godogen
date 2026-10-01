@@ -38,8 +38,18 @@
 [ext_resource type="Script" path="res://game/time_control.gd" id="36_jx0wj"]
 [ext_resource type="Script" path="res://game/sfx.gd" id="37_kkkcx"]
 [ext_resource type="PackedScene" path="res://pickups/coin.tscn" id="38_coin1"]
+[ext_resource type="Script" path="res://game/juice.gd" id="39_juice"]
+[ext_resource type="PackedScene" path="res://effects/spark.tscn" id="40_spark"]
+[ext_resource type="PackedScene" path="res://effects/dust.tscn" id="41_dust"]
+[ext_resource type="PackedScene" path="res://effects/debris.tscn" id="42_debris"]
+[ext_resource type="PackedScene" path="res://effects/gold_burst.tscn" id="43_gold"]
+[ext_resource type="PackedScene" path="res://effects/level_ring.tscn" id="44_ring"]
+[ext_resource type="Script" path="res://game/music.gd" id="45_music"]
+[ext_resource type="AudioStreamOggVorbis" uid="uid://dvusu4fehjych" path="res://assets/music/battle.ogg" id="46_battle"]
+[ext_resource type="AudioStreamWAV" uid="uid://bcwr72m8t5qjf" path="res://assets/music/boss_battle.wav" id="47_boss_battle"]
 
 [node name="Main" type="Node2D" unique_id=1310566911]
+y_sort_enabled = true
 script = ExtResource("1_facbu")
 rooms = Array[PackedScene]([ExtResource("2_b1qrp"), ExtResource("3_come4"), ExtResource("4_h8e4i"), ExtResource("5_4lmeg"), ExtResource("6_0cp0l"), ExtResource("7_d2t1y"), ExtResource("8_gngh3"), ExtResource("9_0n3wm"), ExtResource("10_qnost"), ExtResource("11_wnkbs")])
 abilities = Array[Resource]([ExtResource("12_f6a44"), ExtResource("13_0cbny"), ExtResource("14_hrvbo"), ExtResource("15_uypp3"), ExtResource("16_blkrb"), ExtResource("17_abqjc"), ExtResource("18_6iyjs"), ExtResource("19_4w656"), ExtResource("20_e71vb"), ExtResource("21_rnkwl"), ExtResource("22_vke2r"), ExtResource("23_uit24"), ExtResource("24_ruth0"), ExtResource("25_rm4vd"), ExtResource("26_pjyto")])
@@ -49,18 +59,26 @@ heart_scene = ExtResource("29_ntx8l")
 coin_scene = ExtResource("38_coin1")
 damage_number_scene = ExtResource("30_uatky")
 explosion_scene = ExtResource("31_rqtf5")
+spark_scene = ExtResource("40_spark")
+dust_scene = ExtResource("41_dust")
+debris_scene = ExtResource("42_debris")
+gold_burst_scene = ExtResource("43_gold")
+ring_scene = ExtResource("44_ring")
 
 [node name="Camera" type="Camera2D" parent="." unique_id=1859942808]
 unique_name_in_owner = true
 position = Vector2(540, 960)
+ignore_rotation = false
 
 [node name="RoomHolder" type="Node2D" parent="." unique_id=799150271]
 unique_name_in_owner = true
+y_sort_enabled = true
 
 [node name="PreviewRoom" parent="RoomHolder" unique_id=1067003751 instance=ExtResource("2_b1qrp")]
 
 [node name="Pickups" type="Node2D" parent="." unique_id=438583742]
 unique_name_in_owner = true
+y_sort_enabled = true
 
 [node name="Hero" parent="." unique_id=484205548 instance=ExtResource("32_1vm84")]
 unique_name_in_owner = true
@@ -68,12 +86,15 @@ position = Vector2(540, 1640)
 
 [node name="Shots" type="Node2D" parent="." unique_id=868822657]
 unique_name_in_owner = true
+z_index = 1
 
 [node name="EnemyShots" type="Node2D" parent="." unique_id=422593447]
 unique_name_in_owner = true
+z_index = 1
 
 [node name="Effects" type="Node2D" parent="." unique_id=1111881817]
 unique_name_in_owner = true
+z_index = 2
 
 [node name="UiLayer" type="CanvasLayer" parent="." unique_id=834621193]
 layer = 10
@@ -101,3 +122,19 @@ script = ExtResource("36_jx0wj")
 unique_name_in_owner = true
 process_mode = 3
 script = ExtResource("37_kkkcx")
+
+[node name="Juice" type="Node" parent="." unique_id=1627304191]
+unique_name_in_owner = true
+process_mode = 3
+script = ExtResource("39_juice")
+
+[node name="Music" type="Node" parent="."]
+unique_name_in_owner = true
+process_mode = 3
+script = ExtResource("45_music")
+room_track = ExtResource("46_battle")
+boss_track = ExtResource("47_boss_battle")
+
+[node name="TrackA" type="AudioStreamPlayer" parent="Music"]
+
+[node name="TrackB" type="AudioStreamPlayer" parent="Music"]

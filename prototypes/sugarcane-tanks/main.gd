@@ -18,6 +18,11 @@ enum State { FIGHT, REWARD, DOOR, TRANSITION, DEAD, WON }
 @export var coin_scene: PackedScene
 @export var damage_number_scene: PackedScene
 @export var explosion_scene: PackedScene
+@export var spark_scene: PackedScene
+@export var dust_scene: PackedScene
+@export var debris_scene: PackedScene
+@export var gold_burst_scene: PackedScene
+@export var ring_scene: PackedScene
 @export_range(0.0, 1.0, 0.05) var angel_heal_ratio: float = 0.4
 @export_range(0.0, 1.0, 0.05) var heart_heal_ratio: float = 0.1
 @export var sugarcane_speed: float = 1500.0
@@ -34,6 +39,8 @@ enum State { FIGHT, REWARD, DOOR, TRANSITION, DEAD, WON }
 @onready var result_panel: Control = %ResultPanel
 @onready var time_control: Node = %TimeControl
 @onready var sfx: Node = %Sfx
+@onready var juice: Node = %Juice
+@onready var music: Node = %Music
 
 var stats: RefCounted
 var room: Node2D
@@ -50,10 +57,12 @@ var _given: PackedStringArray = []
 var _pending_levels: int = 0
 var _boss: Node2D
 var _area_name: String = ""
-var _shake_strength: float = 0.0
-var _shake_time: float = 0.0
 var _bot_move: Vector2 = Vector2.ZERO
 var _bot_move_time: float = 0.0
+var _bot_grid: AStarGrid2D
+var _bot_grid_room: Node
+var _bot_calm: float = 0.0   # after backing off from enemies it stands and throws for a while (cornered, it would only run)
+var _bot_hidden: float = 0.0   # how long the nearest enemy has been out of sight
 
 func _ready() -> void:
 	rng.randomize()
@@ -121,6 +130,7 @@ func _load_room(index: int) -> void:
 	room.door().entered.connect(_on_door_entered)
 	state = State.FIGHT
 	room.activate(self, hero)
+	music.play(music.boss_track if room.boss_room else music.room_track)
 	if room.boss_room:
 		hud.banner("BOSS 來了！")
 	elif room.area_name != _area_name:
@@ -173,6 +183,7 @@ func _room_cleared() -> void:
 		return
 	room.door().open()
 	sfx.play(&"door")
+	juice.door_opened(room.door().global_position)
 	hud.banner("門開了！往上走")
 	state = State.DOOR
 
@@ -198,16 +209,18 @@ func _on_door_entered() -> void:
 func collect_pickup(pickup: Node) -> void:
 	match pickup.kind:
 		Pickup.Kind.EXP:
-			_pending_levels += stats.gain_exp(pickup.value)
+			var gained: int = stats.gain_exp(pickup.value)
+			_pending_levels += gained
 			_refresh_level()
-			sfx.play(&"pickup", 0.02)
+			if gained > 0:
+				juice.level_gained(hero)
 		Pickup.Kind.HEART:
 			stats.heal(int(round(stats.max_hp * heart_heal_ratio)))
 			_refresh_hp()
 		Pickup.Kind.COIN:
 			coins += pickup.value
 			hud.set_coins(coins)
-			sfx.play(&"pickup", 0.02)
+	juice.pickup_collected(pickup.kind, pickup.global_position)
 
 func _refresh_level() -> void:
 	hud.set_level(stats.level, stats.experience, HeroStats.exp_to_next(stats.level))
@@ -267,7 +280,7 @@ func _ability_option(def: Resource) -> Dictionary:
 	var stack: String = ""
 	if def.max_stacks > 1 and def.max_stacks < 99:
 		stack = "%d / %d" % [owned, def.max_stacks]
-	return {"title": def.title, "description": def.description, "color": def.color, "stack": stack}
+	return {"title": def.title, "description": def.description, "color": def.color, "icon": def.icon, "stack": stack}
 
 func _take_ability(def: Resource) -> void:
 	stats.add_ability(def.id)
@@ -278,16 +291,18 @@ func _take_ability(def: Resource) -> void:
 
 func _on_hero_died() -> void:
 	state = State.DEAD
+	music.stop()
 	hero.active = false
-	spawn_explosion(hero.global_position, 1.2)
-	shake(16.0, 0.4)
-	room.process_mode = Node.PROCESS_MODE_DISABLED
-	enemy_shots.process_mode = Node.PROCESS_MODE_DISABLED
+	juice.hero_died(hero.global_position)
+	# Deferred: the hero's last hit usually arrives inside a physics callback, where disabling bodies is not allowed.
+	room.set_deferred("process_mode", Node.PROCESS_MODE_DISABLED)
+	enemy_shots.set_deferred("process_mode", Node.PROCESS_MODE_DISABLED)
 	await get_tree().create_timer(0.8).timeout
 	result_panel.open("你倒下了", "抵達第 %d 間｜Lv %d｜擊倒 %d 隻敵人" % [room_index + 1, stats.level, kills], coins)
 
 func _win() -> void:
 	state = State.WON
+	music.stop()
 	hero.active = false
 	var picked: int = 0
 	for id: StringName in stats.stacks:
@@ -304,6 +319,9 @@ func restart() -> void:
 func throw_volley(_thrower: Node2D, direction: Vector2) -> void:
 	volleys_thrown += 1
 	var origin: Vector2 = hero.throw_origin()
+	# A hand that reaches past a fence or stair rail would start the cane on the other side of it (or inside it).
+	if not get_world_2d().direct_space_state.intersect_ray(PhysicsRayQueryParameters2D.create(hero.global_position, origin, 1)).is_empty():
+		origin = hero.global_position
 	for shot: Dictionary in stats.volley_pattern():
 		var shot_direction: Vector2 = direction.rotated(shot["angle"])
 		var cane: Area2D = sugarcane_scene.instantiate() as Area2D
@@ -321,7 +339,7 @@ func throw_volley(_thrower: Node2D, direction: Vector2) -> void:
 		shots.add_child(cane)
 	sfx.play(&"throw")
 
-func spawn_projectile(scene: PackedScene, at: Vector2, direction: Vector2, speed: float, damage: int) -> void:
+func spawn_projectile(scene: PackedScene, at: Vector2, direction: Vector2, speed: float, damage: int) -> Area2D:
 	var projectile: Area2D = scene.instantiate() as Area2D
 	projectile.game = self
 	projectile.direction = direction
@@ -329,11 +347,30 @@ func spawn_projectile(scene: PackedScene, at: Vector2, direction: Vector2, speed
 	projectile.damage = damage
 	projectile.position = at
 	enemy_shots.add_child(projectile)
+	return projectile
 
+## A summoned enemy appears on the floor: inside the arena's walk area, and walked toward the hero
+## until it stands clear of walls and crates (the painted gardens and fences are not rectangles).
 func spawn_enemy(scene: PackedScene, at: Vector2) -> void:
-	var arena := Rect2(110, 310, 860, 1400)
-	var spot: Vector2 = Vector2(clampf(at.x, arena.position.x, arena.end.x), clampf(at.y, arena.position.y, arena.end.y))
+	var box: Rect2 = room.arena.walk_area.grow(-50.0)
+	var spot: Vector2 = Vector2(clampf(at.x, box.position.x, box.end.x), clampf(at.y, box.position.y, box.end.y))
+	for step: int in 12:
+		if floor_free(spot, 34.0):
+			break
+		spot = spot.move_toward(hero.global_position, 40.0)
 	room.add_enemy(scene.instantiate() as Node2D, spot, self, hero)
+
+## True if a circle of `radius` at `p` fits on the floor: inside the walk area, clear of walls and crates.
+func floor_free(p: Vector2, radius: float = 30.0) -> bool:
+	if not room.arena.walk_area.grow(-radius).has_point(p):
+		return false
+	var probe := PhysicsShapeQueryParameters2D.new()
+	var circle := CircleShape2D.new()
+	circle.radius = radius
+	probe.shape = circle
+	probe.transform = Transform2D(0.0, p)
+	probe.collision_mask = 1
+	return get_world_2d().direct_space_state.intersect_shape(probe, 1).is_empty()
 
 func spawn_explosion(at: Vector2, size: float = 1.0, tint: Color = Color.WHITE) -> void:
 	var blast: Node2D = explosion_scene.instantiate() as Node2D
@@ -345,27 +382,51 @@ func spawn_explosion(at: Vector2, size: float = 1.0, tint: Color = Color.WHITE) 
 func spawn_puff(at: Vector2, tint: Color) -> void:
 	spawn_explosion(at, 0.3, tint)
 
+## The one-shot pixel bursts (effects/burst.gd): the scene decides the look, these say where, how many
+## (`count_scale` times the scene's amount), which way and in what colour.
+func _burst(scene: PackedScene, at: Vector2, count_scale: float, tint: Color, direction: Vector2 = Vector2.ZERO, palette: Gradient = null) -> void:
+	var burst: CPUParticles2D = scene.instantiate() as CPUParticles2D
+	burst.position = at
+	effects.add_child(burst)
+	burst.fire(count_scale, tint, direction, palette)
+
+func spawn_spark(at: Vector2, direction: Vector2 = Vector2.ZERO, tint: Color = Color.WHITE, count_scale: float = 1.0) -> void:
+	_burst(spark_scene, at, count_scale, tint, direction)
+
+func spawn_dust(at: Vector2, count_scale: float = 1.0) -> void:
+	_burst(dust_scene, at, count_scale, Color.WHITE)
+
+## Pieces in colours picked out of the picture that broke (see juice.palette_of).
+func spawn_debris(at: Vector2, palette: Gradient, count_scale: float = 1.0) -> void:
+	_burst(debris_scene, at, count_scale, Color.WHITE, Vector2.ZERO, palette)
+
+func spawn_gold_burst(at: Vector2) -> void:
+	_burst(gold_burst_scene, at, 1.0, Color.WHITE)
+
+## The ring of light that goes out from the hero when a level is gained.
+func spawn_ring(at: Vector2) -> void:
+	var ring: Node2D = ring_scene.instantiate() as Node2D
+	ring.position = at
+	effects.add_child(ring)
+
 func show_damage(at: Vector2, amount: int, crit: bool) -> void:
 	var number: Node2D = damage_number_scene.instantiate() as Node2D
 	number.position = at
 	effects.add_child(number)
 	number.setup(amount, crit)
 
-func on_enemy_hit(crit: bool) -> void:
-	sfx.play(&"crit" if crit else &"hit")
+## `at` is where the cane struck, `direction` the way it was flying.
+func on_enemy_hit(enemy: Node2D, crit: bool, at: Vector2, direction: Vector2) -> void:
+	juice.enemy_hit(enemy, crit, at, direction)
 
-func on_hero_hurt(_amount: int) -> void:
+func on_hero_hurt(_amount: int, crushed: bool = false) -> void:
 	hud.set_hp(stats.hp, stats.max_hp)   # hero.take_hit has already taken the damage
-	shake(10.0, 0.2)
-	sfx.play(&"hurt")
+	juice.hero_hurt(crushed)
 
 func on_enemy_killed(enemy: Node2D) -> void:
 	kills += 1
 	var boss: bool = enemy.is_boss
-	spawn_explosion(enemy.global_position, 1.8 if boss else 0.9)
-	shake(16.0 if boss else 4.0, 0.35 if boss else 0.12)
-	time_control.hit_stop(0.2 if boss else 0.045)
-	sfx.play(&"boom")
+	juice.enemy_died(enemy)
 	var remaining: int = enemy.exp_value
 	while remaining > 0:
 		var value: int = 5 if remaining >= 5 else 1
@@ -406,23 +467,12 @@ func _check_clear() -> void:
 func register_boss(enemy: Node2D) -> void:
 	_boss = enemy
 	update_boss(enemy)
+	juice.boss_appeared()
 
 func update_boss(enemy: Node2D) -> void:
-	hud.show_boss(enemy.display_name, maxi(enemy.hp, 0), enemy.max_hp)
-
-func shake(strength: float, duration: float) -> void:
-	_shake_strength = maxf(_shake_strength, strength)
-	_shake_time = maxf(_shake_time, duration)
+	hud.show_boss(enemy.display_name, maxi(enemy.hp, 0), enemy.max_hp, enemy.portrait)
 
 # --- per frame ---------------------------------------------------------------
-
-func _process(delta: float) -> void:
-	if _shake_time > 0.0:
-		_shake_time -= delta
-		camera.offset = Vector2(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0)) * _shake_strength
-		if _shake_time <= 0.0:
-			_shake_strength = 0.0
-			camera.offset = Vector2.ZERO
 
 func _physics_process(delta: float) -> void:
 	if hero.dead or state == State.TRANSITION or state == State.WON:
@@ -440,10 +490,10 @@ func _physics_process(delta: float) -> void:
 func _bot_input(delta: float) -> Vector2:
 	var at: Vector2 = hero.global_position
 	if state == State.DOOR:
-		var to_door: Vector2 = room.door().global_position - at
-		return to_door.normalized() if to_door.length() > 8.0 else Vector2.ZERO
+		return _bot_door_step(at)
 	if state != State.FIGHT:
 		return Vector2.ZERO
+	_bot_calm -= delta
 	if _bot_move_time > 0.0:
 		_bot_move_time -= delta
 		return _bot_move
@@ -462,26 +512,104 @@ func _bot_input(delta: float) -> Vector2:
 			return _bot_move
 	if _bot_leave_circle():
 		return _bot_move
-	for threat: Node in enemy_shots.get_children():
-		if threat.has_method(&"is_aoe"):
-			continue
-		var away: Vector2 = hero.global_position - (threat as Node2D).global_position
-		if away.length() < 260.0 and (threat.direction as Vector2).dot(away.normalized()) > 0.8:
-			var side: Vector2 = (threat.direction as Vector2).orthogonal()
-			if side.dot(away) < 0.0:
-				side = -side
-			_bot_step(side, 0.22)
-			return _bot_move
+	if _bot_dodge_bullets():
+		return _bot_move
 	for enemy: Node2D in room.living_enemies():
-		if enemy.active and at.distance_to(enemy.global_position) < 170.0:
+		if enemy.active and _bot_calm <= 0.0 and at.distance_to(enemy.global_position) < 170.0:
 			_bot_step(at - enemy.global_position, 0.25)
+			_bot_calm = 0.9
 			return _bot_move
+	# Nothing to dodge. A target hidden behind a garden, fence or crate (a chef keeps its distance) would never
+	# come out, so after a moment the bot walks toward it until a throw can land.
+	var target: Node2D = nearest_enemy(at)
+	if target != null and not _in_sight(at, target.global_position):
+		_bot_hidden += delta
+		if _bot_hidden > 0.8:
+			_bot_step(target.global_position - at, 0.3, 0.0)
+			return _bot_move
+	else:
+		_bot_hidden = 0.0
 	return Vector2.ZERO
 
-func _bot_step(direction: Vector2, duration: float) -> void:
+## A step away from `direction`'s danger, pulled a little toward the middle of the room (`pull`), and turned
+## aside if it would run into a wall or crate right away (the painted fences and gardens are not rectangles).
+func _bot_step(direction: Vector2, duration: float, pull: float = 0.5) -> void:
 	var toward_center: Vector2 = (Vector2(540, 1100) - hero.global_position).normalized()
-	_bot_move = (direction.normalized() + toward_center * 0.5).normalized()
+	var wanted: Vector2 = (direction.normalized() + toward_center * pull).normalized()
+	for turn: float in [0.0, 0.5, -0.5, 1.0, -1.0, 1.6, -1.6]:
+		if floor_free(hero.global_position + wanted.rotated(turn) * 110.0):
+			wanted = wanted.rotated(turn)
+			break
+	_bot_move = wanted
 	_bot_move_time = duration
+
+## Walks to the door along an A* path over a 40 px grid of the floor (cells a hero fits in), built the first
+## time it is needed in a room: the straight line to the door runs into crates, sandbags and the painted fences.
+func _bot_door_step(at: Vector2) -> Vector2:
+	var door_at: Vector2 = room.door().global_position
+	if _bot_grid_room != room:
+		_bot_grid_room = room
+		_bot_grid = AStarGrid2D.new()
+		_bot_grid.region = Rect2i(0, 0, 27, 48)
+		_bot_grid.cell_size = Vector2(40, 40)
+		_bot_grid.offset = Vector2(20, 20)
+		_bot_grid.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_ONLY_IF_NO_OBSTACLES
+		_bot_grid.update()
+		for x: int in 27:
+			for y: int in 48:
+				_bot_grid.set_point_solid(Vector2i(x, y), not floor_free(Vector2(x * 40 + 20, y * 40 + 20)))
+	var path: PackedVector2Array = _bot_grid.get_point_path(_bot_free_cell(at), _bot_free_cell(door_at))
+	var target: Vector2 = path[1] if path.size() > 2 else door_at
+	var to_target: Vector2 = target - at
+	return to_target.normalized() if to_target.length() > 8.0 else Vector2.ZERO
+
+## The grid cell nearest to `p` that a hero fits in.
+func _bot_free_cell(p: Vector2) -> Vector2i:
+	var best: Vector2i = Vector2i.ZERO
+	var best_distance: float = INF
+	for x: int in 27:
+		for y: int in 48:
+			var cell := Vector2i(x, y)
+			var distance: float = Vector2(x * 40 + 20, y * 40 + 20).distance_squared_to(p)
+			if distance < best_distance and not _bot_grid.is_point_solid(cell):
+				best = cell
+				best_distance = distance
+	return best
+
+## Weighs standing still and eight steps by where the bullets near the hero will be over the next half second
+## (each flies straight on at its speed) and takes the least dangerous. False when standing still is safe.
+func _bot_dodge_bullets() -> bool:
+	var at: Vector2 = hero.global_position
+	var bullets: Array[Node2D] = []
+	for threat: Node in enemy_shots.get_children():
+		if not threat.has_method(&"is_aoe") and (threat as Node2D).global_position.distance_to(at) < 450.0:
+			bullets.append(threat as Node2D)
+	if bullets.is_empty():
+		return false
+	var best: Vector2 = Vector2.ZERO
+	var best_cost: float = INF
+	var stay_cost: float = 0.0
+	for i: int in 9:
+		var dir: Vector2 = Vector2.ZERO if i == 0 else Vector2.from_angle(TAU * (i - 1) / 8.0)
+		var cost: float = 0.0
+		for step: int in range(1, 7):
+			var t: float = step * 0.08
+			var me: Vector2 = at + dir * hero.move_speed * t
+			for bullet: Node2D in bullets:
+				var gap: float = (bullet.global_position + (bullet.direction as Vector2) * float(bullet.speed) * t).distance_to(me)
+				cost += maxf(0.0, 75.0 - gap)
+		if i == 0:
+			stay_cost = cost
+		else:
+			cost += 10.0 + (0.0 if floor_free(at + dir * 120.0) else 5000.0)
+		if cost < best_cost:
+			best_cost = cost
+			best = dir
+	if stay_cost < 1.0 or best == Vector2.ZERO:
+		return false
+	_bot_move = best
+	_bot_move_time = 0.2
+	return true
 
 ## Stepping out of a red circle it stands in: of 16 directions, the one that leaves the circle
 ## soonest and still ends on the floor. Ties (a circle centred on the bot) go toward the room centre.
@@ -503,7 +631,7 @@ func _bot_leave_circle() -> bool:
 			var b: float = rel.dot(dir)
 			var travel: float = -b + sqrt(b * b - rel.length_squared() + reach * reach)
 			var score: float = travel - 40.0 * dir.dot(to_center)
-			if score < best_score and Rect2(100, 300, 880, 1420).has_point(at + dir * travel):
+			if score < best_score and floor_free(at + dir * travel):
 				best_score = score
 				_bot_move = dir
 		_bot_move_time = 0.15

@@ -2,46 +2,49 @@
 
 [ext_resource type="Script" path="res://rooms/room.gd" id="1_l7hoo"]
 [ext_resource type="PackedScene" path="res://arena/arena_temple.tscn" id="2_yiima"]
-[ext_resource type="PackedScene" path="res://arena/barrier.tscn" id="3_m1xjo"]
+[ext_resource type="PackedScene" path="res://arena/stone_block.tscn" id="3_l7hoo"]
 [ext_resource type="PackedScene" path="res://arena/crate.tscn" id="4_tjap7"]
 [ext_resource type="PackedScene" path="res://enemies/plate.tscn" id="5_jnrff"]
 [ext_resource type="PackedScene" path="res://enemies/rat.tscn" id="6_efjce"]
 
 [node name="Room03" type="Node2D" unique_id=57672837]
+y_sort_enabled = true
 script = ExtResource("1_l7hoo")
 hp_scale = 1.05
 area_name = "宮廟"
 
-[node name="Arena" parent="." unique_id=677891662 instance=ExtResource("2_yiima")]
+[node name="Arena" parent="." unique_id=1723082343 instance=ExtResource("2_yiima")]
 unique_name_in_owner = true
 
 [node name="Obstacles" type="Node2D" parent="." unique_id=25810418]
+y_sort_enabled = true
 
-[node name="Barrier" parent="Obstacles" unique_id=658051251 instance=ExtResource("3_m1xjo")]
-position = Vector2(540, 820)
+[node name="StoneBlock1" parent="Obstacles" unique_id=1095915310 instance=ExtResource("3_l7hoo")]
+position = Vector2(320, 820)
 
-[node name="Crate" parent="Obstacles" unique_id=2125247388 instance=ExtResource("4_tjap7")]
+[node name="Crate1" parent="Obstacles" unique_id=758507357 instance=ExtResource("4_tjap7")]
 position = Vector2(250, 1100)
 
-[node name="@StaticBody2D@11" parent="Obstacles" unique_id=906377479 instance=ExtResource("4_tjap7")]
+[node name="Crate2" parent="Obstacles" unique_id=913793748 instance=ExtResource("4_tjap7")]
 position = Vector2(830, 1100)
 
 [node name="Enemies" type="Node2D" parent="." unique_id=1988062405]
 unique_name_in_owner = true
+y_sort_enabled = true
 
-[node name="Plate" parent="Enemies" unique_id=1716880737 instance=ExtResource("5_jnrff")]
+[node name="Plate1" parent="Enemies" unique_id=1716880737 instance=ExtResource("5_jnrff")]
 position = Vector2(260, 440)
 
-[node name="@CharacterBody2D@12" parent="Enemies" unique_id=1674245861 instance=ExtResource("5_jnrff")]
+[node name="Plate2" parent="Enemies" unique_id=1674245861 instance=ExtResource("5_jnrff")]
 position = Vector2(820, 440)
 
-[node name="Rat" parent="Enemies" unique_id=808546982 instance=ExtResource("6_efjce")]
+[node name="Rat1" parent="Enemies" unique_id=808546982 instance=ExtResource("6_efjce")]
 position = Vector2(420, 700)
 
-[node name="@CharacterBody2D@13" parent="Enemies" unique_id=1426576258 instance=ExtResource("6_efjce")]
+[node name="Rat2" parent="Enemies" unique_id=1426576258 instance=ExtResource("6_efjce")]
 position = Vector2(660, 700)
 
-[node name="@CharacterBody2D@14" parent="Enemies" unique_id=978040313 instance=ExtResource("6_efjce")]
+[node name="Rat3" parent="Enemies" unique_id=978040313 instance=ExtResource("6_efjce")]
 position = Vector2(540, 600)
 
 [node name="PlayerStart" type="Marker2D" parent="." unique_id=143258243]

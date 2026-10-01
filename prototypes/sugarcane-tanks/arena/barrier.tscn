@@ -1,34 +1,22 @@
 [gd_scene format=3]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_meddj"]
-size = Vector2(240, 60)
+[ext_resource type="Texture2D" path="res://assets/sandbags.png" id="1_g4nro"]
 
-[node name="Barrier" type="StaticBody2D" unique_id=658051251]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s2pv7"]
+size = Vector2(236, 32)
+
+[node name="Barrier" type="StaticBody2D" unique_id=1580539930]
 collision_mask = 0
 
-[node name="Shadow" type="Polygon2D" parent="." unique_id=1369427469]
-color = Color(0, 0, 0, 0.25)
-polygon = PackedVector2Array(-116, -24, 128, -24, 128, 40, -116, 40)
+[node name="Shadow" type="Polygon2D" parent="." unique_id=209218720]
+position = Vector2(0, 6)
+color = Color(0, 0, 0, 0.28)
+polygon = PackedVector2Array(141.6, 0, 136.7751, 4.5552154, 122.629196, 8.8, 100.12632, 12.44508, 70.8, 15.242047, 36.648777, 17.000294, 8.6704995e-15, 17.6, -36.648777, 17.000294, -70.8, 15.242047, -100.12632, 12.44508, -122.629196, 8.8, -136.7751, 4.5552154, -141.6, 2.1553785e-15, -136.7751, -4.5552154, -122.629196, -8.8, -100.12632, -12.44508, -70.8, -15.242047, -36.648777, -17.000294, -2.6011498e-14, -17.6, 36.648777, -17.000294, 70.8, -15.242047, 100.12632, -12.44508, 122.629196, -8.8, 136.7751, -4.5552154)
 
-[node name="Block" type="Polygon2D" parent="." unique_id=1828122609]
-color = Color(0.56, 0.56, 0.54, 1)
-polygon = PackedVector2Array(-120, -30, 120, -30, 120, 30, -120, 30)
+[node name="Sprite" type="Sprite2D" parent="." unique_id=2093187984]
+unique_name_in_owner = true
+position = Vector2(0, -35.5)
+texture = ExtResource("1_g4nro")
 
-[node name="Top" type="Polygon2D" parent="." unique_id=142233738]
-color = Color(0.68, 0.68, 0.65, 1)
-polygon = PackedVector2Array(-114, -23, 114, -23, 114, -5, -114, -5)
-
-[node name="Stripe1" type="Polygon2D" parent="." unique_id=1464704889]
-color = Color(0.85, 0.7, 0.2, 1)
-polygon = PackedVector2Array(-84, -30, -56, -30, -56, 30, -84, 30)
-
-[node name="Stripe2" type="Polygon2D" parent="." unique_id=489093294]
-color = Color(0.85, 0.7, 0.2, 1)
-polygon = PackedVector2Array(-14, -30, 14, -30, 14, 30, -14, 30)
-
-[node name="Stripe3" type="Polygon2D" parent="." unique_id=665613920]
-color = Color(0.85, 0.7, 0.2, 1)
-polygon = PackedVector2Array(56, -30, 84, -30, 84, 30, 56, 30)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1457040456]
-shape = SubResource("RectangleShape2D_meddj")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=717837349]
+shape = SubResource("RectangleShape2D_s2pv7")

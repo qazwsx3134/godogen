@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" path="res://enemies/pea.tscn" id="2_wwfcv"]
 [ext_resource type="PackedScene" path="res://enemies/corn.tscn" id="3_qus6k"]
 [ext_resource type="PackedScene" path="res://enemies/carrot.tscn" id="4_2c4ci"]
+[ext_resource type="Texture2D" path="res://assets/chef.png" id="5_wwfcv"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_rftr1"]
 radius = 42.0
@@ -31,7 +32,7 @@ collision_mask = 7
 motion_mode = 1
 script = ExtResource("1_y1nnq")
 bean_scenes = Array[PackedScene]([ExtResource("2_wwfcv"), ExtResource("3_qus6k"), ExtResource("4_2c4ci")])
-display_name = "餐盤怪"
+display_name = "廚師"
 max_hp = 200
 contact_damage = 30
 exp_value = 4
@@ -39,69 +40,23 @@ body_faces_motion = false
 knockback = 40.0
 
 [node name="Shadow" type="Polygon2D" parent="." unique_id=29013762]
-position = Vector2(0, 18.9)
-color = Color(0, 0, 0, 0.28)
-polygon = PackedVector2Array(48, 0, 46.36444, 4.1411047, 41.569218, 8, 33.941124, 11.313708, 24, 13.856406, 12.423314, 15.454813, 2.9391522e-15, 16, -12.423314, 15.454813, -24, 13.856406, -33.941124, 11.313708, -41.569218, 8, -46.36444, 4.1411047, -48, 1.959435e-15, -46.36444, -4.1411047, -41.569218, -8, -33.941124, -11.313708, -24, -13.856406, -12.423314, -15.454813, -8.817457e-15, -16, 12.423314, -15.454813, 24, -13.856406, 33.941124, -11.313708, 41.569218, -8, 46.36444, -4.1411047)
-
-[node name="LegRight" type="Polygon2D" parent="." unique_id=525181333]
-color = Color(0.35, 0.35, 0.38, 1)
-polygon = PackedVector2Array(14, 33, 22, 33, 22, 55, 14, 55)
-
-[node name="LegLeft" type="Polygon2D" parent="." unique_id=1832467164]
-color = Color(0.35, 0.35, 0.38, 1)
-polygon = PackedVector2Array(-22, 33, -14, 33, -14, 55, -22, 55)
+position = Vector2(0, 38)
+color = Color(0, 0, 0, 0.34)
+polygon = PackedVector2Array(46, 0, 44.432587, 3.3646476, 39.83717, 6.5, 32.526913, 9.192389, 23, 11.25833, 11.905676, 12.557035, 2.8166876e-15, 13, -11.905676, 12.557035, -23, 11.25833, -32.526913, 9.192389, -39.83717, 6.5, -44.432587, 3.3646476, -46, 1.5920409e-15, -44.432587, -3.3646476, -39.83717, -6.5, -32.526913, -9.192389, -23, -11.25833, -11.905676, -12.557035, -8.4500625e-15, -13, 11.905676, -12.557035, 23, -11.25833, 32.526913, -9.192389, 39.83717, -6.5, 44.432587, -3.3646476)
 
 [node name="Body" type="Node2D" parent="." unique_id=23764225]
 unique_name_in_owner = true
 
-[node name="Rim" type="Polygon2D" parent="Body" unique_id=2070903596]
-color = Color(0.96, 0.96, 0.93, 1)
-polygon = PackedVector2Array(48, 0, 47.077694, 9.364335, 44.34622, 18.368805, 39.91054, 26.667372, 33.941124, 33.941124, 26.667372, 39.91054, 18.368805, 44.34622, 9.364335, 47.077694, 2.9391522e-15, 48, -9.364335, 47.077694, -18.368805, 44.34622, -26.667372, 39.91054, -33.941124, 33.941124, -39.91054, 26.667372, -44.34622, 18.368805, -47.077694, 9.364335, -48, 5.8783045e-15, -47.077694, -9.364335, -44.34622, -18.368805, -39.91054, -26.667372, -33.941124, -33.941124, -26.667372, -39.91054, -18.368805, -44.34622, -9.364335, -47.077694, -8.817457e-15, -48, 9.364335, -47.077694, 18.368805, -44.34622, 26.667372, -39.91054, 33.941124, -33.941124, 39.91054, -26.667372, 44.34622, -18.368805, 47.077694, -9.364335)
+[node name="Sprite" type="Sprite2D" parent="Body" unique_id=261084752]
+unique_name_in_owner = true
+position = Vector2(0, 38)
+scale = Vector2(0.9, 0.9)
+texture = ExtResource("5_wwfcv")
+offset = Vector2(10, -63.5)
 
-[node name="BlueRing" type="Line2D" parent="Body" unique_id=264963380]
-points = PackedVector2Array(40, 0, 39.23141, 7.8036127, 36.95518, 15.307338, 33.258785, 22.222809, 28.284271, 28.284271, 22.222809, 33.258785, 15.307338, 36.95518, 7.8036127, 39.23141, 2.4492936e-15, 40, -7.8036127, 39.23141, -15.307338, 36.95518, -22.222809, 33.258785, -28.284271, 28.284271, -33.258785, 22.222809, -36.95518, 15.307338, -39.23141, 7.8036127, -40, 4.898587e-15, -39.23141, -7.8036127, -36.95518, -15.307338, -33.258785, -22.222809, -28.284271, -28.284271, -22.222809, -33.258785, -15.307338, -36.95518, -7.8036127, -39.23141, -7.34788e-15, -40, 7.8036127, -39.23141, 15.307338, -36.95518, 22.222809, -33.258785, 28.284271, -28.284271, 33.258785, -22.222809, 36.95518, -15.307338, 39.23141, -7.8036127)
-closed = true
-width = 5.0
-default_color = Color(0.3, 0.5, 0.85, 1)
-
-[node name="Well" type="Polygon2D" parent="Body" unique_id=1244745017]
-color = Color(0.9, 0.9, 0.87, 1)
-polygon = PackedVector2Array(33, 0, 32.172623, 7.3431907, 29.731972, 14.318163, 25.80044, 20.575163, 20.575163, 25.80044, 14.318163, 29.731972, 7.3431907, 32.172623, 2.0206672e-15, 33, -7.3431907, 32.172623, -14.318163, 29.731972, -20.575163, 25.80044, -25.80044, 20.575163, -29.731972, 14.318163, -32.172623, 7.3431907, -33, 4.0413344e-15, -32.172623, -7.3431907, -29.731972, -14.318163, -25.80044, -20.575163, -20.575163, -25.80044, -14.318163, -29.731972, -7.3431907, -32.172623, -6.0620018e-15, -33, 7.3431907, -32.172623, 14.318163, -29.731972, 20.575163, -25.80044, 25.80044, -20.575163, 29.731972, -14.318163, 32.172623, -7.3431907)
-
-[node name="Pea" type="Polygon2D" parent="Body" unique_id=239294699]
-position = Vector2(-16, 16)
-color = Color(0.35, 0.75, 0.25, 1)
-polygon = PackedVector2Array(5, 0, 4.829629, 1.2940953, 4.3301272, 2.5, 3.535534, 3.535534, 2.5, 4.3301272, 1.2940953, 4.829629, 3.061617e-16, 5, -1.2940953, 4.829629, -2.5, 4.3301272, -3.535534, 3.535534, -4.3301272, 2.5, -4.829629, 1.2940953, -5, 6.123234e-16, -4.829629, -1.2940953, -4.3301272, -2.5, -3.535534, -3.535534, -2.5, -4.3301272, -1.2940953, -4.829629, -9.18485e-16, -5, 1.2940953, -4.829629, 2.5, -4.3301272, 3.535534, -3.535534, 4.3301272, -2.5, 4.829629, -1.2940953)
-
-[node name="Corn" type="Polygon2D" parent="Body" unique_id=1916290147]
-color = Color(0.98, 0.82, 0.2, 1)
-polygon = PackedVector2Array(-4, 16.5, 4, 16.5, 4, 23.5, -4, 23.5)
-
-[node name="Carrot" type="Polygon2D" parent="Body" unique_id=70899409]
-color = Color(0.98, 0.5, 0.15, 1)
-polygon = PackedVector2Array(11.5, 11.5, 18.5, 11.5, 18.5, 18.5, 11.5, 18.5)
-
-[node name="EyeLeft" type="Polygon2D" parent="Body" unique_id=185902417]
-position = Vector2(-13, -6)
-color = Color(0.08, 0.08, 0.07, 1)
-polygon = PackedVector2Array(6, 0, 5.795555, 1.8117334, 5.196152, 3.5, 4.2426405, 4.9497476, 3, 6.0621777, 1.5529143, 6.761481, 3.6739403e-16, 7, -1.5529143, 6.761481, -3, 6.0621777, -4.2426405, 4.9497476, -5.196152, 3.5, -5.795555, 1.8117334, -6, 8.5725277e-16, -5.795555, -1.8117334, -5.196152, -3.5, -4.2426405, -4.9497476, -3, -6.0621777, -1.5529143, -6.761481, -1.1021821e-15, -7, 1.5529143, -6.761481, 3, -6.0621777, 4.2426405, -4.9497476, 5.196152, -3.5, 5.795555, -1.8117334)
-
-[node name="EyeRight" type="Polygon2D" parent="Body" unique_id=2033707758]
-position = Vector2(13, -6)
-color = Color(0.08, 0.08, 0.07, 1)
-polygon = PackedVector2Array(6, 0, 5.795555, 1.8117334, 5.196152, 3.5, 4.2426405, 4.9497476, 3, 6.0621777, 1.5529143, 6.761481, 3.6739403e-16, 7, -1.5529143, 6.761481, -3, 6.0621777, -4.2426405, 4.9497476, -5.196152, 3.5, -5.795555, 1.8117334, -6, 8.5725277e-16, -5.795555, -1.8117334, -5.196152, -3.5, -4.2426405, -4.9497476, -3, -6.0621777, -1.5529143, -6.761481, -1.1021821e-15, -7, 1.5529143, -6.761481, 3, -6.0621777, 4.2426405, -4.9497476, 5.196152, -3.5, 5.795555, -1.8117334)
-
-[node name="BrowLeft" type="Polygon2D" parent="Body" unique_id=1133434836]
-color = Color(0.08, 0.08, 0.07, 1)
-polygon = PackedVector2Array(-22, -18, -6, -13, -7, -10, -22, -15)
-
-[node name="BrowRight" type="Polygon2D" parent="Body" unique_id=1179466056]
-color = Color(0.08, 0.08, 0.07, 1)
-polygon = PackedVector2Array(22, -18, 6, -13, 7, -10, 22, -15)
-
-[node name="Mouth" type="Polygon2D" parent="Body" unique_id=1244922017]
-color = Color(0.08, 0.08, 0.07, 1)
-polygon = PackedVector2Array(-7, 4, 7, 4, 7, 8, -7, 8)
+[node name="Muzzle" type="Marker2D" parent="Body" unique_id=779373484]
+unique_name_in_owner = true
+position = Vector2(52.2, -37.6)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2127886988]
 shape = SubResource("CircleShape2D_rftr1")
@@ -118,14 +73,11 @@ shape = SubResource("CircleShape2D_repcv")
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 12)
 offset_left = -45.0
-offset_top = -76.0
+offset_top = -94.3
 offset_right = 45.0
-offset_bottom = -64.0
+offset_bottom = -82.3
 mouse_filter = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_hfhug")
 theme_override_styles/fill = SubResource("StyleBoxFlat_xtv54")
 value = 100.0
 show_percentage = false
-
-[node name="Muzzle" type="Marker2D" parent="." unique_id=779373484]
-unique_name_in_owner = true

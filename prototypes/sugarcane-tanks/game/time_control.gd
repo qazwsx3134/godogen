@@ -8,12 +8,15 @@ extends Node
 var _resume_at_ms: int = 0
 var _next_allowed_ms: int = 0
 
-func hit_stop(duration: float) -> void:
+## Freezes the game (almost) for `duration` real seconds. Inside the cooldown after the last stop it
+## is ignored, unless `force` is set (boss death): a forced stop skips the cooldown and only ever
+## lengthens a stop that is still running, never shortens it.
+func hit_stop(duration: float, force: bool = false) -> void:
 	var now: int = Time.get_ticks_msec()
-	if now < _next_allowed_ms:
+	if now < _next_allowed_ms and not force:
 		return
 	Engine.time_scale = hit_stop_scale
-	_resume_at_ms = now + int(duration * 1000.0)
+	_resume_at_ms = maxi(_resume_at_ms, now + int(duration * 1000.0))
 	_next_allowed_ms = _resume_at_ms + int(hit_stop_cooldown * 1000.0)
 
 func _process(_delta: float) -> void:
@@ -22,6 +25,7 @@ func _process(_delta: float) -> void:
 
 func reset() -> void:
 	Engine.time_scale = 1.0
+	_resume_at_ms = 0
 	_next_allowed_ms = 0
 
 func _exit_tree() -> void:

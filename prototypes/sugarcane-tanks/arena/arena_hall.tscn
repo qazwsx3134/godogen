@@ -1,0 +1,121 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://arena/arena.gd" id="1_1widu"]
+[ext_resource type="Texture2D" path="res://assets/bg_hall.png" id="2_imrpw"]
+[ext_resource type="PackedScene" path="res://arena/door.tscn" id="3_gyvld"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u3hxl"]
+size = Vector2(525, 355)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4qses"]
+size = Vector2(525, 355)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_u8y3d"]
+size = Vector2(230, 140)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2h2nh"]
+size = Vector2(78, 92)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bdney"]
+size = Vector2(78, 92)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_r1juk"]
+size = Vector2(140, 53)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_epaja"]
+size = Vector2(135, 53)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b7lrg"]
+size = Vector2(145, 1460)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yaicc"]
+size = Vector2(140, 1460)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gqd1x"]
+size = Vector2(200, 400)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1i68r"]
+size = Vector2(200, 400)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_n8ac3"]
+size = Vector2(1280, 200)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mhldc"]
+size = Vector2(90, 125)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lgul0"]
+size = Vector2(85, 125)
+
+[node name="ArenaHall" type="Node2D" unique_id=1376845098]
+z_index = -2
+script = ExtResource("1_1widu")
+walk_area = Rect2(100, 255, 880, 1605)
+
+[node name="Background" type="Sprite2D" parent="." unique_id=1782055143]
+unique_name_in_owner = true
+texture = ExtResource("2_imrpw")
+centered = false
+
+[node name="Walls" type="StaticBody2D" parent="." unique_id=1610469952]
+collision_mask = 0
+
+[node name="TopLeft" type="CollisionShape2D" parent="Walls" unique_id=1330873840]
+position = Vector2(162.5, 77.5)
+shape = SubResource("RectangleShape2D_u3hxl")
+
+[node name="TopRight" type="CollisionShape2D" parent="Walls" unique_id=539881984]
+position = Vector2(917.5, 77.5)
+shape = SubResource("RectangleShape2D_4qses")
+
+[node name="StairTop" type="CollisionShape2D" parent="Walls" unique_id=1246387325]
+position = Vector2(540, -30)
+shape = SubResource("RectangleShape2D_u8y3d")
+
+[node name="BrazierLeft" type="CollisionShape2D" parent="Walls" unique_id=853517438]
+position = Vector2(309, 296)
+shape = SubResource("RectangleShape2D_2h2nh")
+
+[node name="BrazierRight" type="CollisionShape2D" parent="Walls" unique_id=492339792]
+position = Vector2(772, 296)
+shape = SubResource("RectangleShape2D_bdney")
+
+[node name="BannerLeft" type="CollisionShape2D" parent="Walls" unique_id=1529812543]
+position = Vector2(115, 276.5)
+shape = SubResource("RectangleShape2D_r1juk")
+
+[node name="BannerRight" type="CollisionShape2D" parent="Walls" unique_id=1675974952]
+position = Vector2(967.5, 276.5)
+shape = SubResource("RectangleShape2D_epaja")
+
+[node name="Left" type="CollisionShape2D" parent="Walls" unique_id=4167023]
+position = Vector2(-27.5, 980)
+shape = SubResource("RectangleShape2D_b7lrg")
+
+[node name="Right" type="CollisionShape2D" parent="Walls" unique_id=916870257]
+position = Vector2(1110, 980)
+shape = SubResource("RectangleShape2D_yaicc")
+
+[node name="LowLeft" type="CollisionShape2D" parent="Walls" unique_id=352420477]
+position = Vector2(0, 1900)
+shape = SubResource("RectangleShape2D_gqd1x")
+
+[node name="LowRight" type="CollisionShape2D" parent="Walls" unique_id=1635439072]
+position = Vector2(1080, 1900)
+shape = SubResource("RectangleShape2D_1i68r")
+
+[node name="Bottom" type="CollisionShape2D" parent="Walls" unique_id=1345782857]
+position = Vector2(540, 1960)
+shape = SubResource("RectangleShape2D_n8ac3")
+
+[node name="BrazierBottomLeft" type="CollisionShape2D" parent="Walls" unique_id=456679830]
+position = Vector2(160, 1857.5)
+shape = SubResource("RectangleShape2D_mhldc")
+
+[node name="BrazierBottomRight" type="CollisionShape2D" parent="Walls" unique_id=1864667933]
+position = Vector2(925.5, 1857.5)
+shape = SubResource("RectangleShape2D_lgul0")
+
+[node name="Door" parent="." unique_id=1497263851 instance=ExtResource("3_gyvld")]
+unique_name_in_owner = true
+position = Vector2(543, 150)
+scale = Vector2(1.3, 1)

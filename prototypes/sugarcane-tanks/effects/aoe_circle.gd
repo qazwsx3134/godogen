@@ -33,13 +33,13 @@ func _ready() -> void:
 
 func _explode() -> void:
 	exploded = true
+	var hp_before: int = game.stats.hp
 	if game.hero.global_position.distance_to(global_position) <= radius:
 		game.hero.take_hit(damage)
 	game.spawn_explosion(global_position, radius / 80.0, Color(1.0, 0.25, 0.2))
 	for i: int in 6:
 		game.spawn_puff(global_position + Vector2.from_angle(randf() * TAU) * randf() * radius * 0.7, Color(0.4, 0.37, 0.34))
-	game.shake(6.0, 0.2)
-	game.sfx.play(&"boom")
+	game.juice.aoe_blasted(game.stats.hp < hp_before)
 	_visual.modulate = Color(1.8, 1.4, 1.4)
 	var tween: Tween = create_tween().set_parallel()
 	tween.tween_property(_visual, "modulate", Color(1.0, 1.0, 1.0, 0.0), FADE_TIME).set_ease(Tween.EASE_IN)

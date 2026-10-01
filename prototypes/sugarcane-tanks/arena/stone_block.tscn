@@ -1,0 +1,22 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/stone_block.png" id="1_cj07v"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_r5xtr"]
+size = Vector2(80, 32)
+
+[node name="StoneBlock" type="StaticBody2D" unique_id=1095915310]
+collision_mask = 0
+
+[node name="Shadow" type="Polygon2D" parent="." unique_id=1369915786]
+position = Vector2(0, 6)
+color = Color(0, 0, 0, 0.28)
+polygon = PackedVector2Array(48, 0, 46.36444, 4.5552154, 41.569218, 8.8, 33.941124, 12.44508, 24, 15.242047, 12.423314, 17.000294, 2.9391522e-15, 17.6, -12.423314, 17.000294, -24, 15.242047, -33.941124, 12.44508, -41.569218, 8.8, -46.36444, 4.5552154, -48, 2.1553785e-15, -46.36444, -4.5552154, -41.569218, -8.8, -33.941124, -12.44508, -24, -15.242047, -12.423314, -17.000294, -8.817457e-15, -17.6, 12.423314, -17.000294, 24, -15.242047, 33.941124, -12.44508, 41.569218, -8.8, 46.36444, -4.5552154)
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=1958912977]
+unique_name_in_owner = true
+position = Vector2(0, -38)
+texture = ExtResource("1_cj07v")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=102775163]
+shape = SubResource("RectangleShape2D_r5xtr")

@@ -41,6 +41,6 @@ func _summon() -> void:
 		var offset: Vector2 = Vector2.from_angle(TAU * i / count) * 170.0
 		game.spawn_enemy(rat_scene, global_position + offset)
 	game.sfx.play(&"squeak")
-	game.shake(6.0, 0.2)
+	game.juice.shake(game.juice.Tier.SMALL)
 	phase = Phase.RECOVER
 	_timer = recover_time

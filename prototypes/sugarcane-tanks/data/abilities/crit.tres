@@ -1,5 +1,6 @@
 [gd_resource type="Resource" format=3]
 
+[ext_resource type="Texture2D" path="res://assets/icon_crit.png" id="1_unigj"]
 [ext_resource type="Script" path="res://data/ability_def.gd" id="1_yifve"]
 
 [resource]
@@ -9,4 +10,5 @@ title = "暴擊強化"
 description = "暴擊率 +10%
 暴擊造成 2 倍傷害"
 color = Color(1, 0.95, 0.5, 1)
+icon = ExtResource("1_unigj")
 max_stacks = 4
