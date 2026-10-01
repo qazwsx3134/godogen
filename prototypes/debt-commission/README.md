@@ -14,7 +14,7 @@ Godot 4.7 手機直立視覺小說，依 [V1 Roadmap](../../docs/story-telling-g
 
 ## 試玩與操作
 
-啟動下方的 Web 伺服器後，開啟 <http://127.0.0.1:5193/> 試玩討債閱讀基線；<http://127.0.0.1:5193/?sample=phase2> 是草莓牛奶劇本測試，<http://127.0.0.1:5193/?sample=phase3> 是可玩的調查與吐槽技術短循環，<http://127.0.0.1:5193/?sample=phase4> 是四線索調查（對話與移動話題、廚房、畫面外台詞），<http://127.0.0.1:5193/?sample=phase4_rounds> 是 Phase 4 回合試片（證言、消音條、神樂回合的伊莉莎白牌子與條件式放棄吐槽、連擊、QTE、超必殺；台詞取自第一章草稿，非核准）。各用自己的本機存檔；桌機或編輯器直接執行時，在標題點故事名稱打開「章節選擇」換故事。
+啟動下方的 Web 伺服器後，開啟 <http://127.0.0.1:5193/> 試玩討債閱讀基線；<http://127.0.0.1:5193/?sample=phase2> 是草莓牛奶劇本測試，<http://127.0.0.1:5193/?sample=phase3> 是可玩的調查與吐槽技術短循環，<http://127.0.0.1:5193/?sample=phase4> 是四線索調查（對話與移動話題、廚房、畫面外台詞），<http://127.0.0.1:5193/?sample=phase4_rounds> 是 Phase 4 回合試片（證言、消音條、神樂回合的伊莉莎白牌子與條件式放棄吐槽、連擊、QTE、超必殺；台詞取自第一章草稿，非核准）。<http://127.0.0.1:5193/?sample=comedy> 是漫畫吐槽疊加層技術片段（三個 preset，台詞取自 v2 EP00 草稿，非核准）。各用自己的本機存檔；桌機或編輯器直接執行時，在標題點故事名稱打開「章節選擇」換故事。
 
 | 操作 | 效果 |
 | --- | --- |
@@ -59,6 +59,8 @@ bash tools/serve_web.sh
 
 `GODOT_BIN` 可指定 Godot 執行檔位置；`serve_web.sh` 可接受埠號，例如 `bash tools/serve_web.sh 5194`。伺服器綁定本機 `127.0.0.1`。產物為 `build/web/index.html` 及同目錄相關檔案。Compatibility renderer、單執行緒 Web 匯出。
 
+`build_web.sh` 匯出後會修補 `index.js` 的 Emscripten IDBFS：存檔同步到 IndexedDB 的途中若檔案已被刪除（例如「重新開始」緊接在存檔之後刪掉存檔），略過那個檔案，不再報 `Failed to save IDB file system: undefined`；刪除本身會在 Godot 下一次同步時寫進 IndexedDB。換 Godot 版本後如果修補對不上，建置會直接失敗並說明原因。
+
 ## 檔案
 
 | 檔案 | 用途 |
@@ -67,6 +69,7 @@ bash tools/serve_web.sh
 | `scripts/ui_styles.gd` | 三款介面風格與按鈕狀態 |
 | `scripts/ui_stage_style.gd` | 與介面風格一致的場景色調 |
 | `scenes/stage.tscn` | 舞台：各背景的取景框、左中右通用站位（編輯器裡可拖曳） |
+| `scenes/comedy/tsukkomi_impact.tscn`、`small_reaction.tscn`、`full_manga_panel.tscn` | 漫畫吐槽疊加層的三個 preset（`ComedyLayer` 實例化，腳本 `scripts/comedy_preset.gd`）。根節點的 `@export` 可調：`dim_in`、`cutin_at`、`cutin_slide`、`shake_at`、`sound_at`、`burst_at`、`hold_until`、`fade_at`、`end_at`（秒）、`shake_strength`、`sound_id`、`stage_zoom`、`font_max`；`SpeedLines`（`speed_lines.gd`）調線數、顏色、中心空白；`Burst`（`burst_shape.gd`）調尖角數、填色、框線；`CutInPanel`／`Portrait` 是傾斜漫畫格與臉圖；`Text` 的字體與描邊在 scene 裡。編輯器未執行就看得到新八 `shout` 與「現在是工作時間吧！！！」 |
 | `scenes/characters/<角色>.tscn` | 每個角色的大小與取景（腳本 `scripts/placeholder_sprite.gd`，manga 風格轉黑白） |
 | `scripts/story_runner.gd` | 劇本節點執行、資料檢查、條件跳轉與閱讀位置 |
 | `scripts/save_slots.gd` | 手動欄位命名、暫存寫入與備份還原 |
@@ -101,6 +104,7 @@ XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://t
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_phase4_rounds_ui.gd
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_ui_styles.gd
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_investigation.gd
+XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_comedy.gd
 
 # 先匯出、啟動伺服器；需要已安裝 Playwright 及 Chromium 的 Node 環境。
 node tools/browser_check.mjs --playwright /path/to/node_modules/@playwright/test
@@ -110,10 +114,11 @@ node tools/browser_check.mjs --slots --playwright /path/to/node_modules/@playwri
 node tools/browser_check.mjs --phase3 --playwright /path/to/node_modules/@playwright/test
 node tools/browser_check.mjs --rounds --playwright /path/to/node_modules/@playwright/test
 node tools/browser_check.mjs --investigate --playwright /path/to/node_modules/@playwright/test
+node tools/browser_check.mjs --comedy --playwright /path/to/node_modules/@playwright/test
 node tools/check_ui_parity.mjs --playwright /path/to/node_modules/@playwright/test
 ```
 
-`--url` 可指定試玩位址；`--chromium /path/to/chrome-headless-shell` 可指定 Chromium。瀏覽器檢查以真實 canvas 滑鼠與觸控操作（長按、上滑用 CDP 觸控事件）；預設走討債兩條路線，`--phase2` 走劇本測試兩條路線，`--slots` 驗證觸控存讀檔與 18 格分頁，`--phase3` 走調查與吐槽並驗證限時選詞讀檔，`--rounds` 在回合試片用觸控點消音條、伊莉莎白的牌子（閱讀時與 320×568 的選詞面板旁，檢查牌子至少 48 CSS px 且沒被選項面板蓋住）、超必殺與 QTE，並在 320×568 檢查回合操作列；`--investigate` 在四線索試片用觸控點對話與移動話題（390×844 與 320×568）、到廚房查冰箱（畫面外台詞）再回到客廳；`check_ui_parity.mjs` 在 390×844 與 320×568 下對照三款風格的 HTML 樣稿，檢查每個可點元件至少 48 CSS px、都在畫面內且互不重疊。網址帶 `?qa=1` 時才啟用唯讀的 `window.__debtQA`；一般試玩網址不啟用。
+`--url` 可指定試玩位址；`--chromium /path/to/chrome-headless-shell` 可指定 Chromium。瀏覽器檢查以真實 canvas 滑鼠與觸控操作（長按、上滑用 CDP 觸控事件）；預設走討債兩條路線，`--phase2` 走劇本測試兩條路線，`--slots` 驗證觸控存讀檔與 18 格分頁，`--phase3` 走調查與吐槽並驗證限時選詞讀檔，`--comedy` 在漫畫吐槽片段驗證疊加層播放中、點擊快轉不推進下一句（390×844 與 320×568，截圖與報告存 `docs/`），`--rounds` 在回合試片用觸控點消音條、伊莉莎白的牌子（閱讀時與 320×568 的選詞面板旁，檢查牌子至少 48 CSS px 且沒被選項面板蓋住）、超必殺與 QTE，並在 320×568 檢查回合操作列；`--investigate` 在四線索試片用觸控點對話與移動話題（390×844 與 320×568）、到廚房查冰箱（畫面外台詞）再回到客廳；`check_ui_parity.mjs` 在 390×844 與 320×568 下對照三款風格的 HTML 樣稿，檢查每個可點元件至少 48 CSS px、都在畫面內且互不重疊。網址帶 `?qa=1` 時才啟用唯讀的 `window.__debtQA`；一般試玩網址不啟用。
 
 ## Godot MCP
 
@@ -163,6 +168,7 @@ node tools/check_ui_parity.mjs --playwright /path/to/node_modules/@playwright/te
 | 調查點、收起後的調查列 | ✅ 已轉換 | `scenes/ui/hotspot.tscn`（依劇本放在背景圖上）、`scenes/ui/investigate_bar.tscn`；「收起」鈕在三款對話框 scene 的 `InvestigationRow` |
 | 調查的對話／移動話題 | ✅ 已轉換 | 三款對話框 scene 的 `InvestigationTopics`（`TalkRow`／`MoveRow`，標籤與間距在 scene 裡），每個話題是 `scenes/ui/investigate_topic.tscn`（大小與字級在這裡，顏色跟著該款的「聽下去」） |
 | 伊莉莎白的牌子 | ✅ 已轉換 | `scenes/characters/elisabeth.tscn` 的 `Placard`（對齊圖上白牌子的框，可拖曳、縮放、旋轉）、`Text`（字級與顏色）、`Glow`（選詞時的光框樣式）；牌子上的字由劇本決定 |
+| 漫畫吐槽疊加層 | ✅ 已轉換 | `scenes/comedy/*.tscn`（三個 preset，三款 UI 風格共用；`ComedyLayer` 在 `main.tscn`） |
 | 結尾按鈕 | 待轉換（做成小 item scene） | |
 
 **舞台**：打開 `scenes/stage.tscn`。

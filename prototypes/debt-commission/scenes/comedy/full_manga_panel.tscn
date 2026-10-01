@@ -1,0 +1,171 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/story-cjk.ttc" id="1_lk5ji"]
+[ext_resource type="Script" path="res://scripts/comedy_preset.gd" id="2_t266s"]
+[ext_resource type="Script" path="res://scripts/speed_lines.gd" id="3_2pfmq"]
+[ext_resource type="Texture2D" path="res://assets/image/expressions/shinpachi_shout.png" id="4_s2w1i"]
+[ext_resource type="Script" path="res://scripts/burst_shape.gd" id="5_0ay4e"]
+
+[sub_resource type="Theme" id="Theme_npfmp"]
+default_font = ExtResource("1_lk5ji")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bojkl"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 20
+border_width_top = 20
+border_width_right = 20
+border_width_bottom = 20
+border_color = Color(0.0627451, 0.0627451, 0.0627451, 1)
+shadow_color = Color(0, 0, 0, 0.4)
+shadow_size = 6
+shadow_offset = Vector2(18, 18)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d6gx0"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 16
+border_width_top = 16
+border_width_right = 16
+border_width_bottom = 16
+border_color = Color(0.0627451, 0.0627451, 0.0627451, 1)
+shadow_color = Color(0, 0, 0, 0.4)
+shadow_size = 6
+shadow_offset = Vector2(14, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rtvq7"]
+atlas = ExtResource("4_s2w1i")
+region = Rect2(135.85, 0, 963.3, 831.8238)
+
+[sub_resource type="FontVariation" id="FontVariation_8kly4"]
+base_font = ExtResource("1_lk5ji")
+variation_embolden = 0.9
+
+[node name="FullMangaPanel" type="Control" unique_id=1453457064]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = SubResource("Theme_npfmp")
+script = ExtResource("2_t266s")
+dim_in = 0.08
+cutin_at = 0.1
+cutin_slide = 0.16
+shake_at = 0.18
+sound_at = 0.2
+burst_at = 0.35
+hold_until = 1.45
+fade_at = 1.55
+end_at = 1.8
+stage_zoom = 1.0
+font_max = 170
+
+[node name="Dim" type="Control" parent="." unique_id=1702327958]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Shade" type="ColorRect" parent="Dim" unique_id=956684663]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0, 0, 0.03, 0.5)
+
+[node name="Page" type="Panel" parent="Dim" unique_id=58317398]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.03
+anchor_top = 0.035
+anchor_right = 0.97
+anchor_bottom = 0.965
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bojkl")
+
+[node name="SpeedLines" type="Control" parent="Dim/Page" unique_id=771957161]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("3_2pfmq")
+line_count = 84
+ink = Color(0.06, 0.06, 0.06, 0.5)
+clear_radius = 0.27
+center_ratio = Vector2(0.5, 0.52)
+
+[node name="CutInPanel" type="Panel" parent="." unique_id=537719715]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.07
+anchor_top = 0.08
+anchor_right = 0.93
+anchor_bottom = 0.5
+rotation = -0.05235988
+pivot_offset_ratio = Vector2(0.5, 0.5)
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_d6gx0")
+
+[node name="Portrait" type="TextureRect" parent="CutInPanel" unique_id=166729971]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = -16.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_rtvq7")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Burst" type="Control" parent="." unique_id=446681952]
+unique_name_in_owner = true
+layout_mode = 1
+anchor_left = 0.05
+anchor_top = 0.5
+anchor_right = 0.95
+anchor_bottom = 0.9
+mouse_filter = 2
+script = ExtResource("5_0ay4e")
+spikes = 20
+fill = Color(1, 0.9529412, 0.6901961, 1)
+
+[node name="TextArea" type="Control" parent="Burst" unique_id=1540719635]
+unique_name_in_owner = true
+layout_mode = 1
+anchor_left = 0.13
+anchor_top = 0.17
+anchor_right = 0.87
+anchor_bottom = 0.83
+mouse_filter = 2
+
+[node name="Text" type="RichTextLabel" parent="Burst/TextArea" unique_id=1944572076]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -127.5
+offset_bottom = 127.5
+mouse_filter = 2
+theme_override_fonts/normal_font = SubResource("FontVariation_8kly4")
+theme_override_font_sizes/normal_font_size = 127
+theme_override_colors/default_color = Color(0.078431375, 0.078431375, 0.078431375, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 12
+theme_override_fonts/bold_font = SubResource("FontVariation_8kly4")
+theme_override_font_sizes/bold_font_size = 127
+bbcode_enabled = true
+text = "[color=#141414]現在是工作時[/color][color=#d7191c]間吧！！！[/color]"
+scroll_active = false
+autowrap_mode = 1

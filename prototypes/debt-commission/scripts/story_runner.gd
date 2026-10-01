@@ -41,6 +41,7 @@ const VALID_OPS: Array[String] = [
     "shake",
     "flash",
     "cutin",
+    "comedy",
     "freeze",
     "bgm",
     "se",
@@ -55,6 +56,8 @@ const GRADES: Array[String] = ["S", "A", "B", "C"]
 const VALID_EXPRESSIONS: Array[String] = ["neutral", "smile", "annoyed", "surprised", "thinking", "sweat", "smug", "shout",
     "broken", "angry", "panic", "nervous", "serious", "cry", "nosepick", "mock",
     "sit_serious", "sit_talking"]
+## `comedy` presets (scripts/comedy_layer.gd): the manga overlay a line of the script asks for.
+const VALID_COMEDY_PRESETS: Array[String] = ["tsukkomi_impact", "small_reaction", "full_manga_panel"]
 const VALID_DIRECTIONS: Array[String] = ["left", "right", "up", "down"]
 const VALID_SOUNDS: Array[String] = ["paper", "knock", "step", "stamp"]
 ## An investigation's own place (its step-level hotspots, talk and bg); `places` add the others.
@@ -1750,6 +1753,16 @@ func _validate_step(current_node_id: String, index: int, step: Dictionary, nodes
                 return "%s cutin needs text" % prefix
             if step.has("speaker") and not _is_speaker(asset_catalog, String(step["speaker"])):
                 return "%s cutin speaker '%s' is not in asset catalog" % [prefix, step["speaker"]]
+        "comedy":
+            var comedy_preset: String = String(step.get("preset", ""))
+            if not VALID_COMEDY_PRESETS.has(comedy_preset):
+                return "%s comedy preset '%s' is not one of %s" % [prefix, comedy_preset, ", ".join(VALID_COMEDY_PRESETS)]
+            if not _catalog_has_character(asset_catalog, String(step.get("speaker", ""))):
+                return "%s comedy speaker '%s' is not a character in the asset catalog" % [prefix, step.get("speaker", "")]
+            if not _is_non_empty_string(step.get("text", null)):
+                return "%s comedy needs text" % prefix
+            if step.has("expression") and (typeof(step["expression"]) != TYPE_STRING or not VALID_EXPRESSIONS.has(String(step["expression"]))):
+                return "%s comedy expression is invalid" % prefix
         "freeze":
             if step.has("duration") and not _is_number_between(step["duration"], 0.05, 10.0):
                 return "%s freeze duration must be 0.05-10 seconds" % prefix

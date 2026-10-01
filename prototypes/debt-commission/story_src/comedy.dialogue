@@ -1,0 +1,28 @@
+~ comedy_open
+do bg("yorozuya_living_room")
+do char("shinpachi", "neutral", "left")
+do char("gintoki", "annoyed", "center")
+do char("kagura", "smile", "right")
+銀時: 今天也完全沒有工作啊。
+新八: 不是沒有，是你全部都拒絕掉了吧！
+神樂: 阿銀今天已經睡第三次了阿魯。
+銀時: 沒有工作的時候休息不是很合理嗎？
+do comedy("tsukkomi_impact", "shinpachi", "問題是你有工作的時候也在休息啊！！")
+銀時: ……嗯？剛剛是不是有什麼東西在吵？
+=> comedy_small
+
+~ comedy_small
+神樂: 阿銀，你剛剛絕對裝作沒聽到阿魯。
+do comedy("small_reaction", "gintoki", "……嗶～")
+新八: 不要吹口哨矇混過去啊！
+銀時: 好啦好啦。那你說說看，上一次有委託是什麼時候？
+新八: 三個月前，找貓。而且還被貓抓了。
+=> comedy_panel
+
+~ comedy_panel
+神樂: 這個月的房租也還沒付阿魯。
+do comedy("full_manga_panel", "新八", "全部都是赤字啊啊啊！！")
+銀時: ……今天先睡吧。
+do comedy("tsukkomi_impact", "shinpachi", "現在是工作時間吧！！！")
+神樂: 阿銀已經睡著了阿魯。
+do end("漫畫吐槽技術片段到此為止。")

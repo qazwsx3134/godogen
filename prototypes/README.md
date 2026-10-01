@@ -35,4 +35,5 @@ claude mcp add --transport http scenario https://mcp.scenario.com/mcp
 - [消失的草莓牛奶](missing-strawberry-milk/README.md)：本輪互動小說原型；[功能基線](missing-strawberry-milk/QA-BASELINE.md)與[真人試玩計畫](missing-strawberry-milk/PLAYTEST.md)。相關題材詞彙見 [CONTEXT.md](CONTEXT.md)。
 - [Anime Card Roguelite](anime-card-roguelite/README.md)：卡牌戰鬥原型，範圍與執行方式見該目錄文件。
 - [安](sugarcane-tanks/README.md)：弓箭傳說式的直式房間射擊，丟甘蔗打老鼠、坦克、餐盤怪，從宮廟打到中正紀念堂。《宇智波斑 Survivors》（[PROJECT.md](../docs/survivors/PROJECT.md)）取得版權前的替身，用來驗證自動攻擊、升級疊加與打擊回饋。
+- [聖地展望台](seichi-pov/README.md)：手機第一人稱站在展望台上看動畫經典場景，第一站火影岩；驗證程序生成的「粗模型＋烘焙貼圖」浮雕在手機上的辨識度與效能。
 - [軌道連珠 Pachinko](pachinko/README.md)：Godot 直式柏青哥機台，驗證「純抽象的幾何演出能不能撐起期待感」；階段見 [ROADMAP.md](pachinko/ROADMAP.md)，詞彙見 [CONTEXT.md](pachinko/CONTEXT.md)。獨立於互動小說路線。

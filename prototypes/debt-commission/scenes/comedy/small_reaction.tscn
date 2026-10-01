@@ -1,0 +1,86 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/story-cjk.ttc" id="1_clmfj"]
+[ext_resource type="Script" path="res://scripts/comedy_preset.gd" id="2_kxykx"]
+[ext_resource type="Script" path="res://scripts/burst_shape.gd" id="3_4vnih"]
+
+[sub_resource type="Theme" id="Theme_qim6d"]
+default_font = ExtResource("1_clmfj")
+
+[sub_resource type="FontVariation" id="FontVariation_8kly4"]
+base_font = ExtResource("1_clmfj")
+variation_embolden = 0.9
+
+[node name="SmallReaction" type="Control" unique_id=1609125462]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = SubResource("Theme_qim6d")
+script = ExtResource("2_kxykx")
+cutin_at = 0.0
+sound_at = 0.0
+burst_at = 0.0
+hold_until = 0.65
+fade_at = 0.65
+end_at = 0.9
+shake_strength = "none"
+sound_id = "comedy_pop"
+stage_zoom = 1.0
+font_max = 90
+
+[node name="Spot" type="Control" parent="." unique_id=1643357145]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+mouse_filter = 2
+
+[node name="Burst" type="Control" parent="Spot" unique_id=570861281]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 0
+offset_left = -300.0
+offset_top = -330.0
+offset_right = 300.0
+offset_bottom = -20.0
+mouse_filter = 2
+script = ExtResource("3_4vnih")
+spikes = 10
+inner_ratio = 0.86
+fill = Color(1, 1, 1, 1)
+
+[node name="TextArea" type="Control" parent="Spot/Burst" unique_id=553589285]
+unique_name_in_owner = true
+layout_mode = 1
+anchor_left = 0.13
+anchor_top = 0.17
+anchor_right = 0.87
+anchor_bottom = 0.83
+mouse_filter = 2
+
+[node name="Text" type="RichTextLabel" parent="Spot/Burst/TextArea" unique_id=886047350]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -67.5
+offset_bottom = 67.5
+mouse_filter = 2
+theme_override_fonts/normal_font = SubResource("FontVariation_8kly4")
+theme_override_font_sizes/normal_font_size = 67
+theme_override_colors/default_color = Color(0.078431375, 0.078431375, 0.078431375, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 12
+theme_override_fonts/bold_font = SubResource("FontVariation_8kly4")
+theme_override_font_sizes/bold_font_size = 67
+bbcode_enabled = true
+text = "[color=#141414]……嗶[/color][color=#d7191c]～[/color]"
+scroll_active = false
+autowrap_mode = 1

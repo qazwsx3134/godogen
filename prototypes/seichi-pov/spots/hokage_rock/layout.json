@@ -1,0 +1,21 @@
+{
+  "note": "Authored village layout (metres, x right, z toward the viewer, cliff face at z=0). Read by tools/bake_ground.py (ground texture) and tools/build_scenery.gd (house/tree placement), so roads and buildings never disagree.",
+  "ground": {"center": [0, 190], "size": 900},
+  "village": {"x0": -330, "z0": 14, "x1": 330, "z1": 430, "cliff_gap": 16},
+  "roads": [
+    {"pts": [[0, 58], [0, 440]], "w": 13},
+    {"pts": [[-340, 112], [340, 112]], "w": 9},
+    {"pts": [[-340, 255], [340, 255]], "w": 9},
+    {"pts": [[-340, 370], [340, 370]], "w": 7},
+    {"pts": [[-150, 58], [-180, 440]], "w": 7},
+    {"pts": [[150, 58], [180, 440]], "w": 7},
+    {"pts": [[-60, 112], [-75, 255]], "w": 5},
+    {"pts": [[70, 112], [85, 255]], "w": 5},
+    {"pts": [[-260, 112], [-290, 370]], "w": 5},
+    {"pts": [[260, 112], [290, 370]], "w": 5}
+  ],
+  "plazas": [
+    {"c": [0, 44], "r": 36, "why": "火影大樓前廣場"},
+    {"c": [0, 172], "r": 18, "why": "展望台塔基"}
+  ]
+}

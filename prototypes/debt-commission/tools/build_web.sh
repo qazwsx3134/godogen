@@ -23,4 +23,18 @@ mkdir -p "$project_dir/build/web"
 touch "$project_dir/build/.gdignore"
 "${godot_run[@]}" --headless --path "$project_dir" --editor --import
 "${godot_run[@]}" --headless --path "$project_dir" --export-release Web "$project_dir/build/web/index.html"
+# Emscripten's IDBFS lists user:// first, then copies each listed file into IndexedDB once the
+# database answers. A file deleted in between (restart deletes the save right after writing it)
+# fails the copy with ENOENT (errno 44), logged as "Failed to save IDB file system: undefined".
+# Skip such a file: the delete marks the filesystem dirty, so Godot's next sync removes it.
+python3 - "$project_dir/build/web/index.js" <<'EOF'
+import sys
+path = sys.argv[1]
+source = open(path, encoding="utf-8").read()
+old = "IDBFS.loadLocalEntry(path,(err,entry)=>{if(err)return done(err);"
+new = "IDBFS.loadLocalEntry(path,(err,entry)=>{if(err)return err.errno===44?undefined:done(err);"
+if source.count(old) != 1:
+    sys.exit("index.js: IDBFS.loadLocalEntry no longer matches; re-check the vanished-file patch in tools/build_web.sh")
+open(path, "w", encoding="utf-8").write(source.replace(old, new))
+EOF
 echo "Web build: $project_dir/build/web/index.html"

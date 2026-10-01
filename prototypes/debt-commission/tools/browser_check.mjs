@@ -12,6 +12,7 @@ const slotsOnly = process.argv.includes('--slots');
 const phase3Only = process.argv.includes('--phase3');
 const roundsOnly = process.argv.includes('--rounds');
 const investigateOnly = process.argv.includes('--investigate');
+const comedyOnly = process.argv.includes('--comedy');
 const arg = (name, fallback) => {
   const index = process.argv.indexOf(name);
   return index >= 0 ? process.argv[index + 1] : fallback;
@@ -22,9 +23,11 @@ url.searchParams.set('qa', '1');
 if (phase3Only) url.searchParams.set('sample', 'phase3');
 else if (roundsOnly) url.searchParams.set('sample', 'phase4_rounds');
 else if (investigateOnly) url.searchParams.set('sample', 'phase4');
+else if (comedyOnly) url.searchParams.set('sample', 'comedy');
 else if (phase2Only || slotsOnly) url.searchParams.set('sample', 'phase2');
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const output = path.join(root, 'test-results');
+const docs = path.join(root, 'docs');
 await fs.mkdir(output, { recursive: true });
 await fs.writeFile(path.join(output, '.gdignore'), '');
 const report = { url: url.toString(), started: new Date().toISOString(), runs: [] };
@@ -130,8 +133,8 @@ async function next(page, touch, target = 'dialogue') {
   }, key(before));
 }
 
-async function screenshot(page, name) {
-  await page.screenshot({ path: path.join(output, `${name}.png`), fullPage: true });
+async function screenshot(page, name, dir = output) {
+  await page.screenshot({ path: path.join(dir, `${name}.png`), fullPage: true });
 }
 
 function assertLayout(value, label) {
@@ -933,8 +936,137 @@ async function investigateRoute() {
   await context.close();
 }
 
+
+// The manga overlay (?sample=comedy): every preset plays over the reading screen, a tap on one only ends
+// it (the line after it shows whole and is not advanced), and the overlay never survives a reload.
+// Run at 390×844 and 320×568; the screenshots go to docs/.
+async function comedyRoute(viewport, tag) {
+  const { context, page, errors } = await openPage(viewport, true);
+  const result = { route: `comedy-${tag}`, viewport, touch: true, checks: [], errors };
+  report.runs.push(result);
+  const story = JSON.parse(await fs.readFile(path.join(root, 'data', 'comedy_story.json'), 'utf8'));
+  const comedies = [];
+  for (const [nodeId, node] of Object.entries(story.nodes)) {
+    node.steps.forEach((step, index) => {
+      if (step.op === 'comedy') comedies.push({ node: nodeId, index, preset: step.preset, next: node.steps[index + 1] });
+    });
+  }
+  const impacts = comedies.filter(entry => entry.preset === 'tsukkomi_impact');
+  assert.ok(impacts.length >= 2 && comedies.some(entry => entry.preset === 'small_reaction')
+    && comedies.some(entry => entry.preset === 'full_manga_panel'), 'the sample holds every preset, and the impact twice');
+  assert.equal(impacts[0].next.op, 'say', 'an ordinary line follows the impact at once');
+
+  const overlay = value => value.comedy?.active === true;
+  // Taps through ordinary lines until the given preset starts playing; resolves with that state.
+  const readToComedy = async preset => {
+    for (let step = 0; step < 40; step++) {
+      await waitFor(page, () => window.__debtQA && (window.__debtQA.comedy?.active || window.__debtQA.screen === 'story'), null, 30000);
+      let value = await state(page);
+      if (overlay(value)) {
+        if (value.comedy.preset === preset) return value;
+        await waitFor(page, () => !window.__debtQA.comedy?.active, null, 8000);  // another preset: let it pass
+        continue;
+      }
+      await waitFor(page, () => window.__debtQA?.text_complete || window.__debtQA?.comedy?.active, null, 10000);
+      value = await state(page);
+      if (overlay(value)) continue;
+      const before = lineKey(value);
+      await controlAny(page, ['dialogue', 'advance', 'next'], true, 'dialogue advance');
+      await waitFor(page, previous => {
+        const v = window.__debtQA;
+        return v && (v.comedy?.active || (v.screen === 'story' && `${v.node_id}:${v.step_index}` !== previous));
+      }, before, 10000);
+    }
+    throw new Error(`Never reached the ${preset} preset`);
+  };
+  const finishOverlay = async () => {
+    await waitFor(page, () => window.__debtQA && !window.__debtQA.comedy?.active, null, 8000);
+    await waitFor(page, () => window.__debtQA?.screen === 'story' || window.__debtQA?.screen === 'end', null, 8000);
+  };
+
+  await control(page, 'begin', true);
+  await stable(page);
+
+  // 1. tsukkomi_impact: in play the layer is on screen and the story waits; it ends by itself.
+  let value = await readToComedy('tsukkomi_impact');
+  assert.equal(value.comedy.preset, 'tsukkomi_impact');
+  assert.equal(value.screen, 'busy', 'the story waits while the overlay plays');
+  const waiting = lineKey(value);
+  await page.waitForTimeout(450);
+  value = await state(page);
+  assert.ok(overlay(value), 'the impact is still playing 0.45 s in');
+  assert.ok(value.comedy.burst && value.comedy.text, 'the balloon and its line are on screen');
+  const inside = (rect, outer, label) => assert.ok(rect.x >= outer.x - 1 && rect.y >= outer.y - 1
+    && rect.x + rect.width <= outer.x + outer.width + 1 && rect.y + rect.height <= outer.y + outer.height + 1,
+  `${label} lies outside the game area: ${JSON.stringify({ rect, outer })}`);
+  inside(value.comedy.burst, value.game, 'the balloon');
+  inside(value.comedy.text, value.comedy.burst, 'the big line (in the balloon)');
+  inside(value.comedy.text, value.game, 'the big line');
+  assert.equal(value.comedy.text_fits, true, 'the whole line fits its box (not clipped)');
+  await screenshot(page, `preview-comedy-impact-${tag}`, docs);
+  assert.equal(lineKey(await state(page)), waiting, 'the story did not move while the overlay played');
+  await finishOverlay();
+  value = await state(page);
+  assert.equal(`${value.node_id}:${value.step_index}`, `${impacts[0].node}:${impacts[0].index + 1}`, 'the line after the impact shows');
+  assert.equal(value.comedy.active, false);
+  await waitFor(page, () => window.__debtQA?.text_complete, null, 10000);
+  value = await state(page);
+  assert.equal(value.text, impacts[0].next.text, 'the line after the impact is complete');
+  result.checks.push(`tsukkomi_impact plays over the reading screen (comedy.active), the story waits, then the next line shows whole (${tag})`);
+
+  // 2. small_reaction: the reading box stays, and the line before it is already on screen.
+  value = await readToComedy('small_reaction');
+  assert.ok(value.dialog?.width > 0, 'small_reaction leaves the reading box in place');
+  await page.waitForTimeout(250);
+  if (tag === 'phone') await screenshot(page, 'preview-comedy-small-phone', docs);
+  await finishOverlay();
+  result.checks.push('small_reaction plays without covering the reading box');
+
+  // 3. full_manga_panel plays to its end.
+  value = await readToComedy('full_manga_panel');
+  await page.waitForTimeout(500);
+  await screenshot(page, `comedy-full-panel-${tag}`);
+  await finishOverlay();
+  result.checks.push('full_manga_panel plays to its end');
+
+  // 4. A tap during the second impact only ends it: the next line shows whole and is current.
+  value = await readToComedy('tsukkomi_impact');
+  const target = impacts[1];
+  assert.equal(`${value.node_id}:${value.step_index}`, `${target.node}:${target.index}`, 'the second impact is the one playing');
+  await page.waitForTimeout(350);
+  value = await state(page);
+  assert.ok(overlay(value), 'still playing before the tap');
+  assert.ok(value.controls.stage, 'the stage target is reachable during the overlay');
+  const tappedAt = Date.now();
+  await tapAt(page, value.viewport, center(value.controls.stage), true);
+  await waitFor(page, () => !window.__debtQA.comedy?.active, null, 4000);
+  const took = Date.now() - tappedAt;
+  await waitFor(page, () => window.__debtQA?.screen === 'story', null, 8000);
+  await page.waitForTimeout(500);
+  value = await state(page);
+  assert.equal(`${value.node_id}:${value.step_index}`, `${target.node}:${target.index + 1}`, 'the tap did not also advance: the next line is current');
+  assert.equal(value.full_text, target.next.text, 'the next line, not the one after it');
+  await waitFor(page, () => window.__debtQA?.text_complete, null, 10000);
+  value = await state(page);
+  assert.equal(value.text, target.next.text, 'the next line appears whole');
+  assert.equal(`${value.node_id}:${value.step_index}`, `${target.node}:${target.index + 1}`, 'and is still current after it finished typing');
+  result.checks.push(`a tap during tsukkomi_impact fast-forwards it (gone ${took} ms after the tap, browser clock) and shows the next line whole without advancing`);
+
+  // 5. The story still ends normally and nothing is left over.
+  await controlAny(page, ['dialogue', 'advance', 'next'], true, 'dialogue advance');
+  await waitFor(page, () => window.__debtQA?.screen === 'end' || window.__debtQA?.screen === 'story', null, 8000);
+  value = await state(page);
+  assert.equal(value.comedy.active, false);
+  assert.deepEqual(errors, [], 'no browser or Godot runtime errors');
+  console.log(`PASS comedy ${tag}: ${result.checks.length} check groups`);
+  await context.close();
+}
+
 try {
-  if (smokeOnly) {
+  if (comedyOnly) {
+    await comedyRoute({ width: 390, height: 844 }, 'phone');
+    await comedyRoute({ width: 320, height: 568 }, 'narrow');
+  } else if (smokeOnly) {
     await touchSmoke();
   } else if (slotsOnly) {
     await slotsRoute();
@@ -964,10 +1096,10 @@ try {
   console.error(error.stack);
 } finally {
   report.finished = new Date().toISOString();
-  const reportName = smokeOnly ? 'smoke-report.json' : slotsOnly ? 'slots-report.json'
+  const reportName = comedyOnly ? 'comedy-browser-report.json' : smokeOnly ? 'smoke-report.json' : slotsOnly ? 'slots-report.json'
     : phase3Only ? 'phase3-report.json' : roundsOnly ? 'rounds-report.json' : investigateOnly ? 'investigate-report.json'
     : phase2Only ? 'phase2-report.json' : 'browser-report.json';
-  await fs.writeFile(path.join(output, reportName), `${JSON.stringify(report, null, 2)}\n`);
+  await fs.writeFile(path.join(comedyOnly ? docs : output, reportName), `${JSON.stringify(report, null, 2)}\n`);
   await browser.close();
   console.log(`Evidence: ${output}`);
 }

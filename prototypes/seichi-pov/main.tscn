@@ -1,0 +1,24 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://main.gd" id="1_lquwl"]
+[ext_resource type="PackedScene" path="res://spots/hokage_rock/hokage_rock.tscn" id="2_7mycd"]
+[ext_resource type="Script" path="res://spots/spot.gd" id="3_272bh"]
+[ext_resource type="PackedScene" path="res://ui/hud.tscn" id="4_5vw27"]
+[ext_resource type="Script" path="res://ui/hud.gd" id="5_kek77"]
+
+[node name="Main" type="Node" unique_id=1277947885]
+script = ExtResource("1_lquwl")
+
+[node name="Spot" type="Node3D" parent="." unique_id=496177021 instance=ExtResource("2_7mycd")]
+unique_name_in_owner = true
+script = ExtResource("3_272bh")
+display_name = "火影岩"
+subtitle = "木葉隱村 · 歷代火影的臉"
+intro = "刻在木葉村後方岩壁上的歷代火影頭像。由左至右為初代千手柱間、二代千手扉間、三代猿飛日斬、四代波風湊。
+
+你站在村子中央的展望台上：左下搖桿走動，拖曳畫面環顧，雙指或「望遠鏡」拉近細看。"
+source_note = "私人同人原型，非官方內容；造型依動畫印象程序生成。"
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=899356289 instance=ExtResource("4_5vw27")]
+unique_name_in_owner = true
+script = ExtResource("5_kek77")

@@ -1,0 +1,141 @@
+{
+  "entry": "comedy_open",
+  "generated_from": "story_src/comedy.dialogue",
+  "id": "comedy",
+  "initial_flags": {},
+  "nodes": {
+    "comedy_open": {
+      "next": "comedy_small",
+      "steps": [
+        {
+          "id": "yorozuya_living_room",
+          "op": "bg"
+        },
+        {
+          "expression": "neutral",
+          "id": "shinpachi",
+          "op": "char",
+          "position": "left",
+          "visible": true
+        },
+        {
+          "expression": "annoyed",
+          "id": "gintoki",
+          "op": "char",
+          "position": "center",
+          "visible": true
+        },
+        {
+          "expression": "smile",
+          "id": "kagura",
+          "op": "char",
+          "position": "right",
+          "visible": true
+        },
+        {
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "今天也完全沒有工作啊。"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "不是沒有，是你全部都拒絕掉了吧！"
+        },
+        {
+          "op": "say",
+          "speaker": "kagura",
+          "text": "阿銀今天已經睡第三次了阿魯。"
+        },
+        {
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "沒有工作的時候休息不是很合理嗎？"
+        },
+        {
+          "op": "comedy",
+          "preset": "tsukkomi_impact",
+          "speaker": "shinpachi",
+          "text": "問題是你有工作的時候也在休息啊！！"
+        },
+        {
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "……嗯？剛剛是不是有什麼東西在吵？"
+        }
+      ],
+      "title": "技術片段：今天也沒有工作"
+    },
+    "comedy_panel": {
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "kagura",
+          "text": "這個月的房租也還沒付阿魯。"
+        },
+        {
+          "op": "comedy",
+          "preset": "full_manga_panel",
+          "speaker": "shinpachi",
+          "text": "全部都是赤字啊啊啊！！"
+        },
+        {
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "……今天先睡吧。"
+        },
+        {
+          "op": "comedy",
+          "preset": "tsukkomi_impact",
+          "speaker": "shinpachi",
+          "text": "現在是工作時間吧！！！"
+        },
+        {
+          "op": "say",
+          "speaker": "kagura",
+          "text": "阿銀已經睡著了阿魯。"
+        },
+        {
+          "op": "end",
+          "text": "漫畫吐槽技術片段到此為止。"
+        }
+      ],
+      "title": "技術片段：整頁漫畫格"
+    },
+    "comedy_small": {
+      "next": "comedy_panel",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "kagura",
+          "text": "阿銀，你剛剛絕對裝作沒聽到阿魯。"
+        },
+        {
+          "op": "comedy",
+          "preset": "small_reaction",
+          "speaker": "gintoki",
+          "text": "……嗶～"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "不要吹口哨矇混過去啊！"
+        },
+        {
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "好啦好啦。那你說說看，上一次有委託是什麼時候？"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "三個月前，找貓。而且還被貓抓了。"
+        }
+      ],
+      "title": "技術片段：小反應"
+    }
+  },
+  "note": "僅用於驗證漫畫吐槽疊加層（comedy op 的三個 preset）；開場台詞取自 v2 EP00 草稿，不是作者核准的文本。",
+  "title": "漫畫吐槽層 技術片段：EP00 開場（非核准）",
+  "version": "s-cce74e42a337"
+}

@@ -2,6 +2,7 @@ extends Node
 ## Stage effects the story asks for: shake, flash, cut-in, freeze, background music and sound
 ## effects (`shake`/`flash`/`cutin`/`freeze`/`bgm`/`se` steps). main.gd hands each step over while
 ## it drives the story; only freeze makes the story wait. None of them takes input.
+## The comedy layer (scripts/comedy_layer.gd) asks this node for its shake and sound too.
 ## The catalog's sounds and music are labels until real files get a `path`; until then each id
 ## plays a synthesized placeholder.
 
@@ -135,9 +136,27 @@ func _shake(strength: float, duration: float) -> void:
 	_shake_tween.tween_callback(_offset_layers.bind(Vector2.ZERO))
 
 
+## A layer that shakes with the others only while it exists (the comedy preset on screen).
+func add_shake_layer(layer: Control) -> void:
+	if not _shake_layers.has(layer):
+		_shake_layers.append(layer)
+
+
+func remove_shake_layer(layer: Control) -> void:
+	_shake_layers.erase(layer)
+
+
+## Ends a shake in progress at once, the layers back at rest (the comedy layer leaving early).
+func stop_shake() -> void:
+	if _shake_tween != null and _shake_tween.is_valid():
+		_shake_tween.kill()
+	_offset_layers(Vector2.ZERO)
+
+
 func _offset_layers(offset: Vector2) -> void:
 	for layer: Control in _shake_layers:
-		layer.position = offset
+		if is_instance_valid(layer):
+			layer.position = offset
 
 
 func _flash(color: Color, duration: float) -> void:
@@ -216,6 +235,10 @@ func _placeholder(collection: String, id: String) -> AudioStream:
 			return Synth.ramp(1200.0, 1900.0, 0.1, 0.5, 0.2)
 		"combo_up":
 			return Synth.notes([660, 880, 1320], 0.07)
+		"comedy_don":
+			return Synth.ramp(170.0, 46.0, 0.42, 0.9, 0.0, 1.4)
+		"comedy_pop":
+			return Synth.ramp(480.0, 960.0, 0.12, 0.5, 0.0, 0.8)
 		"combo_break":
 			return Synth.ramp(520.0, 170.0, 0.3, 0.45, 0.0)
 		"super_charge":

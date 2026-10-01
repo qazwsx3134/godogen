@@ -1,6 +1,6 @@
 # 直式吐槽視覺小說：目前進度與待辦
 
-更新：2026-09-29。範圍是 [V1 Roadmap](ROADMAP.md) 與 [debt-commission Godot 原型](../../prototypes/debt-commission/README.md)；詳細測試結果見[驗證紀錄](../../prototypes/debt-commission/docs/VERIFICATION.md)。本頁區分「技術片段已通過自動驗收」與「正式內容和真人體驗已完成」，避免把兩者混為一談。
+更新：2026-10-01。範圍是 [V1 Roadmap](ROADMAP.md) 與 [debt-commission Godot 原型](../../prototypes/debt-commission/README.md)；詳細測試結果見[驗證紀錄](../../prototypes/debt-commission/docs/VERIFICATION.md)。本頁區分「技術片段已通過自動驗收」與「正式內容和真人體驗已完成」，避免把兩者混為一談。
 
 ## 已完成
 
@@ -19,7 +19,20 @@
 
 標題畫面的副標題是故事切換鈕，點一下換下一個試玩內容（討債閱讀基線 → Phase 2 → Phase 3 → Phase 4 → 回合試片），桌機或編輯器執行會記住上次的選擇。Web 也可以用網址直接開：討債閱讀基線用預設網址；草莓牛奶技術片段用 `?sample=phase2`；調查與吐槽技術短循環用 `?sample=phase3`；四線索調查用 `?sample=phase4`；回合試片用 `?sample=phase4_rounds`。啟動與測試指令見[原型 README](../../prototypes/debt-commission/README.md#開發與-web-匯出)。討債第一場有作者核准的[閱讀文本](stories/002-debt-commission-draft-v0.1.md)；草莓牛奶兩個 JSON 都是**技術片段**，不是核准的第一章。
 
-## 進行中：第一章上機與文字演出（2026-09-29 起）
+## 進行中：v2 VN 框架 Prototype v0.1（2026-10-01 起，優先於下方 B–E 軌）
+
+方向依 [v2 討論](v2/conversation4.md)：畫面分成 A＝一般 VN、B＝漫畫吐槽疊加；第一版驗收清單與實作順序在該檔第 900–960 行。順序上 InteractionLayer 已先做，接著 ComedyLayer，再來是 POV／Director 兩種選項、SaveManager，最後是 EP00「今天也沒有工作的萬事屋」的 vertical slice。
+
+| 項目 | 內容 | 狀態 |
+| --- | --- | --- |
+| InteractionLayer | 角色熱區（`character`，範圍是立繪）、每次點都演出的 `lines` 熱區（點擊次數入存檔）、熱區 `set` 旗標、`keep_cast` 調查不清場；`main.tscn` 的分層全部改成 scene node | ✅ 2026-09-30（`ebee323`）；`test_interaction` 與其餘 19 組 headless 測試通過（2026-10-01 重跑） |
+| ComedyLayer | `comedy` 指令，三個 preset（`tsukkomi_impact`／`small_reaction`／`full_manga_panel`）：速度線、顏藝 cut-in、爆炸框大字、震動、zoom、音效，播完回到 A 畫面；點擊快轉、略讀不播；技術試片 `?sample=comedy` | ✅ 分支 `v2-comedy-layer`（未合併）：`test_comedy` 與其餘 20 組 headless 測試通過；Web `--comedy`（390×844、320×568）與 `--rounds` 通過；預設路線偶發的 `Failed to save IDB file system` 已修（見下） |
+| POV／Director Choice | 兩種選項 UI：POV（新八人格範圍內的反應）與 Director（導演式改寫世界、外觀明顯不同） | 待做 |
+| EP00 vertical slice | 三個結局、存讀檔回到目前事件 | 待做 |
+
+**交接（2026-10-01 暫停）**：ComedyLayer 改動全部在分支 `v2-comedy-layer`，尚未 commit。另外修了 Web 存檔偶發錯誤：「重新開始」在存檔後立刻刪檔，Emscripten IDBFS 同步途中找不到檔案（ENOENT）而報 `Failed to save IDB file system: undefined`；`tools/build_web.sh` 匯出後修補 `index.js` 略過已消失的檔案（原理寫在原型 README「開發與 Web 匯出」）。修補前預設路線 4 次失敗 2 次；修補後的正式建置預設路線 4/4 通過（第 5 次跑到一半被中斷）。還沒重跑的：修補後的 `--comedy`、`--rounds`、`--slots` 與全部 headless 測試（修補只動 Web 產物，headless 不受影響；最後一次 headless 是 21/21）。回來後：跑完這些 → commit（只收 `prototypes/debt-commission/` 與本檔；`prototypes/README.md`、`prototypes/seichi-pov/`、`production/session-logs/` 是別的 session 的改動）→ 下一項 POV／Director Choice。
+
+## 暫停：第一章上機與文字演出（2026-09-29 起）
 
 目標：把第一章（[草稿 v0.2](stories/003-strawberry-milk-ch1-draft-v0.2.md)）放進遊戲，並補上逆轉裁判式的文字演出與 VN 閱讀便利功能。依序分軌進行，因為各軌都會改 `main.gd` 與 `asset_catalog.json`，不能平行。
 
