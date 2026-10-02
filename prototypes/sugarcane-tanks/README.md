@@ -251,7 +251,7 @@ HUD、搖桿、結算面板與 `theme.tres` 是後來用 `tools/restyle_hud.gd` 
 
   | 檔案 | 用途 | 來源 | 授權 |
   |---|---|---|---|
-  | `assets/sfx/<音效名>.ogg`，共 20 個：`aoe_blast` `boom` `boss_die` `coin` `crit` `crush` `dash` `door` `gun` `hero_die` `hit` `hurt` `level` `pickup` `rage` `rev` `ricochet` `step` `throw` `toss` | 同名事件的音效（見「音效接口」） | Kenney「Impact Sounds」1.0（www.kenney.nl，2019-12-19） | CC0（`assets/sfx/KENNEY_LICENSE.txt`） |
+  | `assets/sfx/<音效名>.ogg`，共 20 個：`aoe_blast` `boom` `boss_die` `coin` `crit` `crush` `dash` `door` `gun` `hero_die` `hit` `hurt` `level` `pickup` `rage` `rev` `ricochet` `step` `throw` `toss` | 同名事件的音效（見「音效接口」） | Kenney（www.kenney.nl）；個別檔案出自 Kenney 的哪個音效包沒有逐一記錄 | CC0（資料夾裡的 `KENNEY_LICENSE.txt` 是 Impact Sounds 1.0 的授權檔） |
   | `assets/sfx/enemy_die.ogg` | `enemy_die`（一般敵人死亡） | 使用者自己挑的；來源沒有記錄 | 沒有記錄，公開發佈前要補 |
   | `assets/music/battle.ogg` | 一般房間的背景音樂（循環，26.6 秒） | 作者 Wolfgang_ 的「bgm」（8-bit chiptune，2017-12-20） | CC0（`assets/music/CREDITS.md`） |
   | `assets/music/boss_battle.wav` | Boss 房的背景音樂（循環，59.6 秒，10 MB） | 作者 nene 的「Boss Battle #2 ["8 bit"]」（2016-09-05） | CC0（`assets/music/CREDITS.md`） |

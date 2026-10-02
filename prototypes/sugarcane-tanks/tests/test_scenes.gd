@@ -48,7 +48,7 @@ func _run() -> void:
 		"res://ui/choice_panel.tscn": ["Title", "Subtitle", "Cards"],
 		"res://ui/ability_card.tscn": ["Swatch", "Icon", "Title", "Description", "Stack"],
 		"res://ui/result_panel.tscn": ["Title", "Summary", "CoinsLabel", "RestartButton"],
-		"res://main.tscn": ["Camera", "RoomHolder", "Hero", "Shots", "EnemyShots", "Pickups", "Effects", "Hud", "ChoicePanel", "ResultPanel", "TimeControl", "Sfx", "Juice"],
+		"res://main.tscn": ["Camera", "RoomHolder", "Hero", "Shots", "EnemyShots", "Pickups", "Effects", "Hud", "ChoicePanel", "ResultPanel", "TimeControl", "Sfx", "Juice", "Music"],
 	}
 	for path: String in required:
 		var scene: Node = (load(path) as PackedScene).instantiate()
@@ -92,6 +92,9 @@ func _run() -> void:
 	for key: String in ["sugarcane_scene", "exp_gem_scene", "heart_scene", "coin_scene", "damage_number_scene", "explosion_scene",
 			"spark_scene", "dust_scene", "debris_scene", "gold_burst_scene", "ring_scene"]:
 		_expect(main.get(key) is PackedScene, "main.%s is set" % key)
+	var music: Node = main.get_node("%Music")
+	_expect(music.room_track is AudioStream and music.boss_track is AudioStream and music.room_track != music.boss_track, "the music node has a room track and a different boss track")
+	_expect(music.get_child_count() == 2 and music.process_mode == Node.PROCESS_MODE_ALWAYS, "two players take turns, and the music runs while the game is paused")
 	_expect(main.get_node("%RoomHolder").get_child_count() == 1, "main shows a preview room in the editor")
 	_expect(main.get_node("%Hero").is_in_group("hero"), "hero is in the hero group (door uses it)")
 	_expect(main.get_node("%Hero").get_node_or_null("%Body/Hat") == null, "the hero wears no hat")

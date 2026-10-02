@@ -85,7 +85,7 @@ $G --path . -- --autoplay                    # 機器人自己玩（展示、錄
   - 主角：丟甘蔗小擠壓＋手上火花（不震屏）；走路腳下冒灰塵、停下輕微擠壓；受傷 medium（碾壓 large）＋畫面四周閃紅＋HP 殘影條＋無敵時間閃爍。
   - 其他：坦克預警時圖片原地抖動、衝刺揚灰塵、撞牆 small；紅圈打到主角由受傷的 medium 負責、沒打到 small；掉落物彈出、撿到時小閃光＋HUD 數字跳一下；升級光環；開門金光＋small；Boss 登場 medium 且 Boss 條從 0 填滿。
   - 完整的事件與分級對照表在 [專案 README](../../prototypes/sugarcane-tanks/README.md) 的「打擊回饋」。
-- **音效**：每個事件都會呼叫 `game.sfx.play(&"事件名")`。`assets/sfx/` 的檔名就是事件名（Kenney「Impact Sounds」，CC0；`enemy_die.ogg` 是使用者自選的），換檔案不用改程式。找聲音的順序：檔案 → 內建合成音 → 借用別的事件的聲音 → 靜音。現在只有 `squeak`（老鼠叫）還是合成音，`bump` `drop` `heal` `level_up` `boss_intro` 刻意靜音；`ricochet`（彈射）與 `rage`（Boss 第一次低於一半血）是只有聲音的事件。事件名稱與檔案規則見專案 README 的「音效接口」。
+- **音效**：每個事件都會呼叫 `game.sfx.play(&"事件名")`。`assets/sfx/` 的檔名就是事件名（Kenney，CC0；`enemy_die.ogg` 是使用者自選的），換檔案不用改程式。找聲音的順序：檔案 → 內建合成音 → 借用別的事件的聲音 → 靜音。現在只有 `squeak`（老鼠叫）還是合成音，`bump` `drop` `heal` `level_up` `boss_intro` 刻意靜音；`ricochet`（彈射）與 `rage`（Boss 第一次低於一半血）是只有聲音的事件。事件名稱與檔案規則見專案 README 的「音效接口」。
 - **背景音樂**（`game/music.gd`，`main.tscn` 的 `%Music`）：一般房間循環播 `battle.ogg`，Boss 房換成 `boss_battle.wav`；換曲時舊的淡出、新的淡入，通關或死亡時淡出；音量（-12 dB）比音效（-6 dB）小聲，暫停與 hit stop 時照常運作。來源與授權（CC0）在 `assets/music/CREDITS.md`。
 - **HUD**（照概念圖）：左上頭像、等級、血條與經驗條；右上 STAGE 房間數、暫停、金幣；下方中間的技能欄（每個能力一格，◆ 顯示疊層，最多顯示最近拿的 5 格）；按住時才在手指下出現的半透明浮動搖桿（平時不顯示）；Boss 房換成上方的 Boss 血條，主角血量移到下方中間；進入新區域時跳出地名；主角與敵人頭上各有血條。金幣每點 EXP 掉一枚（Boss 加倍），只在一局內累積。
 - **面板**：升級三選一、天使二選一、結算／再來一次。能力卡由左到右是 96 px 的能力圖示（沒有圖示的選項，例如天使的回復生命，顯示色塊）、標題與最多三行說明、疊加層數；卡片 250 px 高，文字都在外框內側。

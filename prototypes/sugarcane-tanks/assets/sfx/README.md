@@ -6,4 +6,4 @@
 事件名稱、什麼時候會播、哪些刻意沒有聲音，列在專案 `README.md` 的「音效接口」；授權與來源在「素材與來源」。
 檔案是在遊戲啟動時才找，新放的檔案要重新執行遊戲才會生效。
 
-`KENNEY_LICENSE.txt` 是 Kenney「Impact Sounds」的授權（CC0）。`test_play` 會在這個資料夾放一個 `zz_feel_test.wav` 試播，測完就刪掉；其他檔案測試都不會動。
+音效來自 Kenney（www.kenney.nl，CC0）；`KENNEY_LICENSE.txt` 是 Impact Sounds 1.0 的授權檔。`test_play` 會在這個資料夾放一個 `zz_feel_test.wav` 試播，測完就刪掉；其他檔案測試都不會動。
