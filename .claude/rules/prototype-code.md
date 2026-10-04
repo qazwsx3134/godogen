@@ -32,7 +32,10 @@ relaxed to maximize iteration speed. The goal is learning, not production qualit
 ## Godot Prototypes: Shared Kit
 Godot prototypes share placeholder audio (`synth.gd`), crash-safe save writes
 (`atomic_file.gd`), and a headless test base (`test_kit.gd`) from
-`prototypes/godot-kit/`, so a new prototype uses these instead of writing its own.
+`prototypes/godot-kit/`, so a new prototype uses these instead of writing its own. The kit also has the game-feel and release pieces
+(`sfx_bank.gd`, `haptics.gd`, `time_control.gd`, `camera_shake.gd`, `music.gd`, `floating_stick.gd`, `scene_loader.gd`,
+`scene_builder.gd`, `font_check.gd`) and command-line tools in `godot-kit/tools/` (font subset, web export, test runner,
+recorder): read its README before writing your own.
 After creating `project.godot`, run `prototypes/godot-kit/sync.sh <name>` and
 preload what you need; `prototypes/godot-kit/README.md` covers each module's API
 and examples. The `addons/proto_kit/` copies are overwritten on every sync, so

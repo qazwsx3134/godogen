@@ -1,6 +1,6 @@
 # Prototypes
 
-此目錄收錄獨立的設計驗證原型。各原型維護自己的工具鏈、README 與驗證資料，repo 邊界見 [ADR 0001](docs/adr/0001-prototypes-live-in-godogen.md)。Godot 原型之間共用的程式（合成音、原子存檔、headless 測試基底）只在 [godot-kit](godot-kit/README.md) 維護一份，再同步進各原型的 `addons/proto_kit/`。
+此目錄收錄獨立的設計驗證原型。各原型維護自己的工具鏈、README 與驗證資料，repo 邊界見 [ADR 0001](docs/adr/0001-prototypes-live-in-godogen.md)。Godot 原型之間共用的程式（合成音、原子存檔、headless 測試基底）只在 [godot-kit](godot-kit/README.md) 維護一份，再同步進各原型的 `addons/proto_kit/`。把 Godot 原型做到 itch.io 網頁版的完整做法與踩過的坑（素材、測試與平衡量測、打擊感與手機震動、網頁匯出瘦身與瀏覽器驗證、多 agent 分工）整理成 skill `godot-prototype-to-itch`，原始檔在 [godot-kit/skills/godot-prototype-to-itch](godot-kit/skills/godot-prototype-to-itch/SKILL.md)，用 symlink 掛進 `~/.claude/skills/`；下一批值得抽進 kit 的模組與證據見 godot-kit README 的「下一批值得抽出來的」。
 
 ## 素材生成（Scenario skills）
 
@@ -34,6 +34,6 @@ claude mcp add --transport http scenario https://mcp.scenario.com/mcp
 - [口袋怪獸日記](pixel-monster/README.md)：iOS 優先的直式像素養成遊戲，包含照顧、模擬步行孵化、訓練、NPC 對戰、分歧進化與本機收藏；[iOS CI/CD](pixel-monster/docs/IOS-CICD.md)。
 - [消失的草莓牛奶](missing-strawberry-milk/README.md)：本輪互動小說原型；[功能基線](missing-strawberry-milk/QA-BASELINE.md)與[真人試玩計畫](missing-strawberry-milk/PLAYTEST.md)。相關題材詞彙見 [CONTEXT.md](CONTEXT.md)。
 - [Anime Card Roguelite](anime-card-roguelite/README.md)：卡牌戰鬥原型，範圍與執行方式見該目錄文件。
-- [安](sugarcane-tanks/README.md)：弓箭傳說式的直式房間射擊，丟甘蔗打老鼠、坦克、餐盤怪，從宮廟打到中正紀念堂。《宇智波斑 Survivors》（[PROJECT.md](../docs/survivors/PROJECT.md)）取得版權前的替身，用來驗證自動攻擊、升級疊加與打擊回饋。
+- [安](../../sugarcane-tanks/README.md)（已搬出 repo，在 `/mnt/d/repo/godot/sugarcane-tanks`）：弓箭傳說式的直式房間射擊，丟甘蔗打老鼠、坦克、餐盤怪，從宮廟打到中正紀念堂。《宇智波斑 Survivors》（[PROJECT.md](../docs/survivors/PROJECT.md)）取得版權前的替身，用來驗證自動攻擊、升級疊加與打擊回饋。
 - [聖地展望台](seichi-pov/README.md)：手機第一人稱站在展望台上看動畫經典場景，第一站火影岩；驗證程序生成的「粗模型＋烘焙貼圖」浮雕在手機上的辨識度與效能。
 - [軌道連珠 Pachinko](pachinko/README.md)：Godot 直式柏青哥機台，驗證「純抽象的幾何演出能不能撐起期待感」；階段見 [ROADMAP.md](pachinko/ROADMAP.md)，詞彙見 [CONTEXT.md](pachinko/CONTEXT.md)。獨立於互動小說路線。

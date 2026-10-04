@@ -1,0 +1,1 @@
+這個 repo 的標準流程是 Concept → Systems Design → Technical Setup → Pre-Production → Production → Polish → Release，階段間以 /gate-check 把關，prototypes/ 則是流程外的丟棄式試作。
