@@ -329,11 +329,17 @@ do se("crow")
 
 ~ r2_super
 do se("super_charge")
+新八: 龜——派——
+do cutin("龜——派——氣——功——！！", "shinpachi")
+do beam()
+do se("beam")
 do flash("#ffdc41")
-do cutin("超必殺吐槽！！", "shinpachi")
 do shake("big")
-新八: 試毒、安心、早餐——全部都是你們想喝而已吧！！
-銀時＆神樂: ……是。
+新八: 試毒試到一滴不剩！安心了還喝完！早餐也不能吃別人的！
+新八: 瓶子上的『新八』是我的名字！是我寫的！
+新八: ——氣功！！
+銀時: ……我們還沒講耶。
+神樂: 眼鏡連我們的台詞都先吐了，還在發光阿魯。
 => r2_round
 
 ~ r2_bonus

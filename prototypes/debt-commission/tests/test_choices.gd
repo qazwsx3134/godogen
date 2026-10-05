@@ -287,7 +287,7 @@ func _test_adapter_misuse() -> void:
 		["a loose tone()", 'do pov("gintoki")', 'do tone("loud")', "node 'scene_pov' step 1: tone() belongs right after a choice option"],
 	]
 	for case: Array in dm_cases:
-		var text: String = DM_TEXT.replace(case[1], case[2])
+		var text: String = DM_TEXT.replace("\r\n", "\n").replace(case[1], case[2])
 		_expect(text != DM_TEXT, "%s: the case edits the source" % case[0])
 		var built: Dictionary = StoryBuilder.build_text(text, DM_PATH)
 		_expect(String(built["error"]).contains(case[3]), "[.dialogue] %s is reported with its title and step (got: %s)" % [case[0], built["error"]])

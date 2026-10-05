@@ -7,6 +7,7 @@ extends Node
 ## plays a synthesized placeholder.
 
 const Synth = preload("res://addons/proto_kit/synth.gd")
+const BEAM_SCENE: PackedScene = preload("res://scenes/ui/beam.tscn")
 const CUTIN_SCENE: PackedScene = preload("res://scenes/ui/cutin.tscn")
 const BGM_DB: float = -14.0
 const SHAKE: Dictionary = {"small": [10.0, 0.25], "big": [28.0, 0.45]}
@@ -36,6 +37,7 @@ var _se_player: AudioStreamPlayer = null
 var _bgm_player: AudioStreamPlayer = null
 var _streams: Dictionary = {}
 var _shake_tween: Tween = null
+var _charge_player: AudioStreamPlayer = null
 
 
 ## shake_layers move together on a shake; overlay holds the flash, the freeze and cut-ins.
@@ -50,6 +52,8 @@ func setup(shake_layers: Array[Control], overlay: Control, catalog: Dictionary) 
 	_bgm_player.volume_db = BGM_DB
 	add_child(_se_player)
 	add_child(_bgm_player)
+	_charge_player = AudioStreamPlayer.new()
+	add_child(_charge_player)
 
 
 func set_style(style_id: String) -> void:
@@ -61,6 +65,7 @@ func set_style(style_id: String) -> void:
 func set_muted(muted: bool) -> void:
 	_muted = muted
 	_se_player.stop()
+	_charge_player.stop()
 	_bgm_player.stop()
 	if not muted and not current_bgm.is_empty() and _bgm_level > 0.0:
 		_bgm_player.stream = _stream("music", current_bgm)
@@ -74,6 +79,7 @@ func set_volumes(bgm: float, se: float) -> void:
 	_se_level = se
 	_bgm_player.volume_db = BGM_DB + linear_to_db(maxf(bgm, 0.0001))
 	_se_player.volume_db = linear_to_db(maxf(se, 0.0001))
+	_charge_player.volume_db = _se_player.volume_db
 	set_muted(_muted)
 
 
@@ -87,6 +93,10 @@ func play(step: Dictionary, skipping: bool) -> float:
 	if skipping:
 		return 0.0
 	match op:
+		"beam":
+			var beam: Control = BEAM_SCENE.instantiate() as Control
+			_overlay.add_child(beam)
+			beam.call("play", float(step.get("duration", 0.8)))
 		"se":
 			_play_se(str(step.get("id", "")))
 		"shake":
@@ -119,8 +129,9 @@ func play_bgm(id: String) -> void:
 func _play_se(id: String) -> void:
 	if _muted or _se_level <= 0.0:
 		return
-	_se_player.stream = _stream("sounds", id)
-	_se_player.play()
+	var player: AudioStreamPlayer = _charge_player if id == "power_up" else _se_player
+	player.stream = _stream("sounds", id)
+	player.play()
 
 
 func _shake(strength: float, duration: float) -> void:
@@ -243,6 +254,10 @@ func _placeholder(collection: String, id: String) -> AudioStream:
 			return Synth.click(0.16, 0.95, 38.0)
 		"combo_break":
 			return Synth.ramp(520.0, 170.0, 0.3, 0.45, 0.0)
+		"beam":
+			return Synth.ramp(1600.0, 80.0, 0.65, 0.65, 0.15, 1.1)
+		"power_up":
+			return Synth.ramp(180.0, 1500.0, 0.55, 0.35, 0.3)
 		"super_charge":
 			return Synth.ramp(220.0, 1700.0, 0.6, 0.2, 0.5)
 		"gulp":

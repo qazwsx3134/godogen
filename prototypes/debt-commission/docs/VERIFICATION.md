@@ -149,3 +149,17 @@ XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://t
 GODOT_BIN=/path/to/godot bash tools/build_web.sh && bash tools/serve_web.sh
 node tools/browser_check.mjs --ep00 --playwright /path/to/node_modules/@playwright/test
 ```
+
+## B 超必殺演出驗收（2026-10-06）
+
+本輪範圍是 B；C 文字演出、D 閱讀便利、E 第一章上機的實作與驗收列在 [TODO](../TODO.md)。回合試片仍是三句選項連擊＋QTE，完整第一章的四句連擊＋第五句 QTE 留給 E。
+
+- `tests/test_super_effects.gd`：未滿／集滿、金焰眼鏡、集滿通知只播一次、自訂按鈕文字、滿格讀檔不重播通知、超必殺消耗、跳過三句選項但保留 QTE、不能再次發動、光束不攔截點擊及自行退場、SKIP／靜音／零音量、無效 duration、編輯 scene 後執行仍保留位置均有斷言。
+- Web `--rounds`：390×844 與 320×568 真實 canvas 觸控，共 7 組檢查；滿格氣焰、「龜派氣功！」、消耗能量、光束點擊穿透與後續 QTE 均通過，瀏覽器／Godot 執行期錯誤為空。報告見 [super-browser-report.json](super-browser-report.json)。截圖：[滿格](super-aura-phone.png)、[窄手機](super-aura-320x568.png)、[氣功光束](super-beam-phone.png)。
+- `scenes/ui/beam.tscn` 用 Godot 存檔，內含可編輯的 Strip／Aura／Light／Core；測試修改 Strip 的 anchor 與 offset、重新 pack／載入／播放，確認保留修改且不污染來源 scene。
+
+本次統一劇本來源與 JSON 的 LF 行尾，讓建置比對不受 CRLF 影響；`test_choices` 的多行 fixture 也在變異測試前正規化行尾。headless 編輯器匯入仍會出現既有 Dialogue Manager theme 設定的 Nil 型別錯誤與外掛關閉時的資源警告，沙箱下另有 MCP socket 警告；Web 可匯出並正常執行。這些編輯器外掛問題未列為 B 的執行期通過證據。
+
+尚待真人驗收：Android Chrome／iOS Safari 的畫面與演出手感、`power_up`／`beam` 合成佔位音試聽。尚未提供正式錄音。
+
+Headless 回歸結果：24 組均通過（全套首次為 23 PASS＋choices 的行尾 fixture 失敗；修正後單獨重跑 choices，exit 0 且 `CHOICE TESTS PASSED`，沒有 script／parse error）。原始全套 log 位於 `/tmp/godot-tests.uJiXWO`，補跑 log 為 `/tmp/debt-b-choices-final.log`。Web 最終匯出後已修補 IDBFS，重新執行 `--rounds` 仍通過 7 組。

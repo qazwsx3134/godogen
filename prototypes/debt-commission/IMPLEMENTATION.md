@@ -131,3 +131,13 @@ godot --headless --path . --script res://tools/story_build/build_story.gd -- sto
 ## QA
 
 Web 網址帶 `?qa=1` 時，`window.__debtQA` 為唯讀快照：`screen`（title/story/choice/end/result/investigate/boke_round/tsukkomi/log/menu/save_slots/load_slots/slot_confirm/chapter_select/settings/busy）、`result`（結算時的 `chapter_result()`）、`settings`、`text`（打字中的部分）、`full_text`、`speaker`、`node_id`、`step_index`、`flags`、`items`、`background`、`text_complete`、`ui_hidden`、`auto`、`skip`、`toast`、`viewport`、`game`／`dialog`／`quickbar`／`name_plate`／`choice_sheet` 矩形（看不見的留空）、`sprites`（含站位）、`choices`、`choice`（`choice` 步驟的選項顯示時是 `{perspective, pov, note, sheet, tones}`：步驟要求的種類、POV 是誰（導演選擇為空字串）、導演註腳（沒有為空字串）、實際掛上的面板（`director` 或目前的風格 id）、每個選項的語氣（沒有為空字串）；沒有選項、限時吐槽時是空物件）、`slot_page`、當頁 `slots`（欄位號、佔用狀態、章節、時間、矩形）、`phase3`（眼鏡與吐槽力、素材、調查點（`screen_rect` 是命中區，`rect` 只在點得到時才有；角色熱區的 `rect` 只取立繪在對話框上方那一段）、`pan`（`offset`／`min`／`max`）、`investigate_collapsed`、發言索引與已聽狀態、倒數、檢查點、結果；v2 回合另有 `round`：`mode`、`combo`、`caught`、`super_available`、`censor`、`placard`、`qte_active`；調查另有 `investigation`：`place`、`place_label`、`talk`、`moves`、`complete`、`progress`）、`placard`（`text`、`glowing`、`holder_visible`、`tappable`）、`comedy`（`active`、`preset`；播放中另有 `burst`、`text` 兩個矩形與 `text_fits`）、`controls`。快照在該幀排版完成、繪製之前才寫出，目錄彈出與導演面板彈入的動畫期間 `screen` 回報 `busy`，測試讀到的座標一定是最終位置。`controls` 只列玩家當下點得到的：看得見、沒停用、沒被捲出或裁出畫面（目錄在矮螢幕上捲到下方的列不列）；目錄開著時只列目錄裡的控制項（`menu_resume`、`menu_<列>`、`menu_style_<風格>`、`menu_close`），`menu_dim` 是面板左側暗幕的一條。調查有 `investigate_collapse`、`investigate_expand`、`investigate_continue`、每個話題 `talk_<話題 id>`、每個地點 `move_<地點 id>`（主地點是 `move_home`）；結算有 `result_next`、`result_title`；章節選擇有 `chapter_<id>`、`chapter_close`；設定有 `setting_<項目>_<索引>`、`settings_close`，標題的 `title_settings`；章節選擇或設定開著時只列它自己的控制項；回合相關的控制項有 `boke_previous`、`boke_next`、`boke_listen`、`boke_tsukkomi`、`censor`（閱讀時對話框裡的，選詞時選項面板裡的）、`placard`（牌子點得到的部分，至少 48 CSS px 高才列）、`super`、`qte`（整個畫面）、`game_over_retry`、`game_over_title`。測試一律透過真實 canvas 點擊操作。
+
+
+## B 超必殺演出（2026-10-06）
+
+- 回合的 `rules.super_label` 是選詞面板上的超必殺文字（非空字串）；省略時沿用「超必殺！」。切換 UI 風格與存讀檔皆從目前回合取得文字。
+- `beam` 是非阻塞演出：JSON `{ "op": "beam", "duration": 0.8 }`，Dialogue Manager／Parley action 寫 `beam()` 或 `beam(0.8)`；duration 可為 0.05–5 秒。略讀不播，所有 node 都忽略滑鼠，不消耗劇情點擊。
+- `scenes/ui/beam.tscn` 的 `Strip` anchors／offsets 決定光束位置與厚度；`Aura`、`Light`、`Core` 決定色彩，`shaders/beam.gdshader` 可調脈動速度與邊緣柔化。根 node 的 `reveal_seconds` 決定展開時間。動畫只改 scale／modulate，場景位置不被改寫。
+- HUD 的眼鏡在力量達到 `max_power` 時出現金色氣焰；發動後力量歸零並消失。從未滿到全滿只播一次「吐槽之力全滿！」cut-in 與 `power_up`，讀檔恢復全滿僅恢復氣焰。
+- `power_up` 使用獨立音效播放器，不會被同一步的反應音打斷；`beam`／`power_up` 同樣遵守靜音及音效音量。catalog `sounds.<id>.path` 可替換合成佔位音。
+- `phase4_rounds` 試片保留原有三個選詞槽點＋QTE，用來驗證超必殺只接住剩餘選詞槽點，QTE 仍要手動完成。正式第一章 C1–C4＋C5 的轉稿列在 TODO 的 E。

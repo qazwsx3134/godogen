@@ -346,6 +346,10 @@ static func _mutation(line: Dictionary, where: String) -> Dictionary:
 			if args.size() > 3:
 				comedy["expression"] = args[3]
 			return comedy
+		["beam", 0]:
+			return {"op": name}
+		["beam", 1]:
+			return {"op": name, "duration": args[0]}
 		["freeze", 0]:
 			return {"op": "freeze"}
 		["freeze", 1]:

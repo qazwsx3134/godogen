@@ -141,6 +141,7 @@ static func decorate(step: Dictionary, state: Dictionary, items: Array, gameplay
 	view["combo"] = int(state["combo"])
 	view["timer_seconds"] = timer_seconds(step, state)
 	view["super_available"] = super_available(step, state, gameplay)
+	view["super_label"] = str(rules(step).get("super_label", "超必殺！"))
 	return view
 
 
@@ -343,6 +344,8 @@ static func validate(step: Dictionary, prefix: String, has_node: Callable, has_i
 	for key: String in ["super", "combo_bonus", "combo_break"]:
 		if (round_rules as Dictionary).has(key) and not has_node.call(String(round_rules[key])):
 			return "%s boke_round rules.%s target is invalid" % [prefix, key]
+	if (round_rules as Dictionary).has("super_label") and not _is_text(round_rules["super_label"]):
+		return "%s boke_round rules.super_label must be non-empty text" % prefix
 	var timers: Variant = rules(step)["combo_timers"]
 	if not timers is Array or (timers as Array).is_empty() \
 			or not (timers as Array).all(func(seconds: Variant) -> bool: return _is_positive(seconds)):

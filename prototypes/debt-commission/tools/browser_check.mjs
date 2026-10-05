@@ -825,8 +825,33 @@ async function roundsRoute() {
 
   assert.ok(value.phase3.round.super_available && value.controls.super, 'two perfect testimonies fill the gauge: the super is lit at once');
   assertInside(value.controls.super, value.viewport, 'super');
+  assert.equal(value.phase3.round.super_label, '龜派氣功！', 'the super uses the authored label');
+  assert.ok(value.phase3.round.aura_active, 'full power lights the glasses aura');
   await screenshot(page, 'rounds-super-phone');
+  await screenshot(page, 'super-aura-phone', docs);
+  await page.setViewportSize({ width: 320, height: 568 });
+  await page.waitForTimeout(300);
+  value = await state(page);
+  assertInside(value.controls.super, value.viewport, '320×568 super');
+  assert.ok(value.phase3.round.aura_active, 'the narrow phone retains the aura');
+  await screenshot(page, 'super-aura-320x568', docs);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.waitForTimeout(300);
   await control(page, 'super', true);
+  value = await readTo('story');
+  assert.equal(value.phase3.gameplay.power, 0, 'super consumes the gauge');
+  assert.equal(value.phase3.round.aura_active, false, 'consumption extinguishes the aura');
+  await next(page, true); // 龜——派—— then the beam and the longer spoken line
+  await waitFor(page, () => window.__debtQA?.beam_active, null, 5000);
+  await page.waitForTimeout(100);
+  await screenshot(page, 'super-beam-phone', docs);
+  value = await state(page);
+  const beamLine = key(value);
+  await tapAt(page, value.viewport, { x: value.game.x + value.game.width * 0.5, y: value.game.y + value.game.height * 0.42 }, true);
+  value = await state(page);
+  assert.equal(key(value), beamLine, 'tap through beam completes the line without advancing');
+  assert.ok(value.text_complete, 'tap through beam reaches the reading layer');
+  result.checks.push('full-gauge aura, authored super label at both phone sizes, power consumption, beam and pointer passthrough');
   value = await readTo('qte');
   assert.ok(value.phase3.round.qte_active && value.controls.qte, 'the QTE line shows its ring');
   await screenshot(page, 'rounds-qte-phone');

@@ -91,7 +91,7 @@
       "speaker": "gintoki",
       "game_over": "game_over",
       "clear": "r2_clear",
-      "rules": {"combo_timers": [8, 6, 5, 4], "combo_bonus": "r2_bonus", "combo_break": "r2_break", "super": "r2_super"},
+      "rules": {"combo_timers": [8, 6, 5, 4], "combo_bonus": "r2_bonus", "combo_break": "r2_break", "super": "r2_super", "super_label": "龜派氣功！"},
       "lines": [
         {"id": "c1", "text": "我們不是偷喝。是試毒。怕新八喝到壞掉的牛奶。",
          "slot": {"timeout": "r2_timeout", "options": [

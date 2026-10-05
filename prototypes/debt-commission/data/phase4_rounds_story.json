@@ -1420,7 +1420,8 @@
               5.0,
               4.0
             ],
-            "super": "r2_super"
+            "super": "r2_super",
+            "super_label": "龜派氣功！"
           },
           "speaker": "gintoki"
         }
@@ -1435,13 +1436,25 @@
           "op": "se"
         },
         {
-          "color": "#ffdc41",
-          "op": "flash"
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "龜——派——"
         },
         {
           "op": "cutin",
           "speaker": "shinpachi",
-          "text": "超必殺吐槽！！"
+          "text": "龜——派——氣——功——！！"
+        },
+        {
+          "op": "beam"
+        },
+        {
+          "id": "beam",
+          "op": "se"
+        },
+        {
+          "color": "#ffdc41",
+          "op": "flash"
         },
         {
           "op": "shake",
@@ -1450,12 +1463,27 @@
         {
           "op": "say",
           "speaker": "shinpachi",
-          "text": "試毒、安心、早餐——全部都是你們想喝而已吧！！"
+          "text": "試毒試到一滴不剩！安心了還喝完！早餐也不能吃別人的！"
         },
         {
           "op": "say",
-          "speaker": "gintoki+kagura",
-          "text": "……是。"
+          "speaker": "shinpachi",
+          "text": "瓶子上的『新八』是我的名字！是我寫的！"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "——氣功！！"
+        },
+        {
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "……我們還沒講耶。"
+        },
+        {
+          "op": "say",
+          "speaker": "kagura",
+          "text": "眼鏡連我們的台詞都先吐了，還在發光阿魯。"
         }
       ],
       "title": "r2_super"
@@ -1528,5 +1556,5 @@
   },
   "note": "僅用於驗證逐句槽點、聽下去取得素材、空揮與提示、第四面牆消音條與伊莉莎白的牌子、隱藏選項與條件式放棄吐槽、連擊、QTE 與超必殺；台詞取自第一章草稿，不是作者核准的文本。",
   "title": "Phase 4 回合試片：證言、伊莉莎白的牌子、連擊（非核准第一章）",
-  "version": "s-28bb6e857d31"
+  "version": "s-34a77b2306c0"
 }

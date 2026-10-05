@@ -1,0 +1,49 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/beam.gd" id="1_q40y2"]
+[ext_resource type="Shader" path="res://shaders/beam.gdshader" id="2_5ieqn"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_66fnq"]
+shader = ExtResource("2_5ieqn")
+shader_parameter/pulse_speed = null
+shader_parameter/edge_softness = null
+
+[node name="Beam" type="Control" unique_id=705117944]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("1_q40y2")
+
+[node name="Strip" type="Control" parent="." unique_id=262524904]
+unique_name_in_owner = true
+anchors_preset = 0
+anchor_top = 0.35
+anchor_right = 1.0
+anchor_bottom = 0.52
+mouse_filter = 2
+
+[node name="Aura" type="ColorRect" parent="Strip" unique_id=355398360]
+material = SubResource("ShaderMaterial_66fnq")
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.22352941, 0.5529412, 1, 1)
+
+[node name="Light" type="ColorRect" parent="Strip" unique_id=634829326]
+material = SubResource("ShaderMaterial_66fnq")
+layout_mode = 0
+anchor_top = 0.2
+anchor_right = 1.0
+anchor_bottom = 0.8
+mouse_filter = 2
+color = Color(0.52156866, 0.9098039, 1, 1)
+
+[node name="Core" type="ColorRect" parent="Strip" unique_id=1748564841]
+layout_mode = 0
+anchor_top = 0.4
+anchor_right = 1.0
+anchor_bottom = 0.6
+mouse_filter = 2

@@ -46,7 +46,7 @@
 | --- | --- | --- |
 | 圖 | 定春 `smile`／`cry`／`smug`、登勢 `smile`／`thinking`／`smug`／`annoyed`（叉腰）／`sit_serious`／`sit_talking`、新八 `broken`；原圖移到 `art_src/expressions/`；`fit_expressions.gd` 支援單張 `rescale`（坐姿用） | ✅ 完成，見[表情清單](EXPRESSIONS.md) |
 | A 第一章玩法 | 伊莉莎白舉牌槽點、條件式放棄吐槽（選項 `when`）、畫面外台詞（`[#offscreen]`）、調查的對話話題與移動（`talk`／`places`）、`enter()`、`salary_envelope` 與六人人物檔案 | ✅ 完成；19 組 headless 測試與 Web 各模式通過。語法見原型 `IMPLEMENTATION.md` |
-| B 超必殺演出 | 吐槽之力集滿時眼鏡的超級賽亞人金色氣焰、`beam` 光束指令、超必殺鈕文字可設定（「龜派氣功！」）、`power_up`／`beam` 音效 | 待做（已派 Sonnet，尚未開工） |
+| B 超必殺演出 | 吐槽之力集滿 cut-in、眼鏡金色氣焰、`beam` 光束 scene、可自訂的「龜派氣功！」按鈕、`power_up`／`beam` 合成佔位音；回合試片可玩 | ✅ 已完成（2026-10-06）：24 組 headless 回歸與 7 組 Web 觸控檢查通過，驗證見原型 `docs/VERIFICATION.md`；真人手機觀看與音效試聽待做 |
 | C 文字演出 | 對話改 `RichTextLabel`：重點字上色、放大／抖動／慢速、句中停頓；標點自然停頓；依角色音高的打字音；語音接口（新八吐槽聲 `assets/audio/voice/shinpachi_tsukkomi_NN.ogg`，perfect 時隨機播）；`fade` 指令、背景交叉淡化、立繪淡入淡出與說話彈跳 | 待做 |
 | D 閱讀便利 | 回滾（不能越過 choice／回合／調查／結算）、獨立快速存讀格、字級與對話框透明度設定；對話紀錄與存讀檔欄位轉成 scene | 待做 |
 | E 第一章上機 | 草稿轉成 `story_src/chapter1.dialogue`＋`chapter1.blocks.json`，`stories.json` 加 `kind: "chapter"`；用 A–C 的語法 | 待做（等 A–C） |
@@ -71,3 +71,5 @@ A 回報的轉稿注意：草稿 `ch1_investigate` 在調查前有台詞，調�
 - Chromium 觸控模擬不代表 Android／iOS 實機已通過；Web 存檔綁定同源本機儲存，換網域或清除網站資料後不會自動轉移。原生手機存檔持久性也尚未驗證。
 - Safe Area 目前驗到瀏覽器避開系統安全區的情況；全螢幕或 PWA 顯示尚未驗。UI 已定為三款可切換風格；手繪的店面、客廳、廚房，以及新八、銀時、神樂、登勢、定春、伊莉莎白的立繪與第一章第一批表情已套入；音樂與音效仍是合成佔位音。
 - 先用正式一回合台詞與 UI 試版做真人試玩，收斂計時與版面；再擴充 Phase 4 的四素材、三回合和特殊槽點；最後接 Phase 5 的完整章節與設定。每一階段都保留 Godot 測試、Web 操作與真人回饋的獨立證據。
+
+2026-10-06：本次範圍依作者指示先完成 B；C、D、E 的接續順序與驗收項目集中在 [debt-commission TODO](../../prototypes/debt-commission/TODO.md#後續實作順序2026-10-06)。

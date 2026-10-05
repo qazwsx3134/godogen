@@ -66,6 +66,7 @@ func show_stats(glasses_left: int, max_glasses: int, power: int, max_power: int,
 		_paint_icon(icon)
 	for index: int in range(max_glasses):
 		glasses.get_child(index).set("broken", index >= glasses_left)
+		glasses.get_child(index).set("charged", power >= max_power and max_power > 0)
 	power_bar.max_value = max_power
 	power_bar.value = power
 	power_value.text = "%d/%d" % [power, max_power]

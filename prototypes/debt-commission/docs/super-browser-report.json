@@ -1,0 +1,21 @@
+{
+  "url": "http://127.0.0.1:5193/?qa=1&sample=phase4_rounds",
+  "started": "2026-10-05T18:35:11.990Z",
+  "runs": [
+    {
+      "route": "rounds-touch",
+      "checks": [
+        "the round bar fits a 320×568 phone",
+        "the censor bar is a touch target and catches its line without a timer",
+        "material options catch lines 2 and 4; Kagura's round opens with Elisabeth and a blank placard",
+        "the placard is a ≥48 CSS px touch target while reading and beside the uncovered timed sheet at 320×568",
+        "Kagura's round is caught by touch; the combo round opens by itself",
+        "full-gauge aura, authored super label at both phone sizes, power consumption, beam and pointer passthrough",
+        "the super fires by touch; a real tap on the QTE is judged (early) and not reused"
+      ],
+      "errors": []
+    }
+  ],
+  "passed": true,
+  "finished": "2026-10-05T18:35:43.288Z"
+}

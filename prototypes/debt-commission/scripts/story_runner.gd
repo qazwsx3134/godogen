@@ -43,6 +43,7 @@ const VALID_OPS: Array[String] = [
     "cutin",
     "comedy",
     "freeze",
+    "beam",
     "bgm",
     "se",
     "placard",
@@ -1799,6 +1800,9 @@ func _validate_step(current_node_id: String, index: int, step: Dictionary, nodes
                 return "%s comedy needs text" % prefix
             if step.has("expression") and (typeof(step["expression"]) != TYPE_STRING or not VALID_EXPRESSIONS.has(String(step["expression"]))):
                 return "%s comedy expression is invalid" % prefix
+        "beam":
+            if step.has("duration") and not _is_number_between(step["duration"], 0.05, 5.0):
+                return "%s beam duration must be 0.05-5 seconds" % prefix
         "freeze":
             if step.has("duration") and not _is_number_between(step["duration"], 0.05, 10.0):
                 return "%s freeze duration must be 0.05-10 seconds" % prefix

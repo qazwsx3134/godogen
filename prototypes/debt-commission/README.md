@@ -35,7 +35,7 @@ Godot 4.7 手機直立視覺小說，依 [V1 Roadmap](../../docs/story-telling-g
 | Phase 4 證言回合 | 每句可能藏一個槽點，全部接住才結束。句數旁 ● 已接住、○ 還有槽點、· 沒有槽點；在沒有槽點的句子按「吐槽！」是揮空（冷場）；同一處失敗 3 次，神樂會提示 |
 | 消音條 | 台詞裡出現發亮的黑色消音條時，點它就是吐槽：閱讀時不計時，選詞時也能點 |
 | 伊莉莎白的牌子 | 牌子上出現字的那句（例如「犯人是神樂」），伊莉莎白會站到前面，直接點牌子就是吐槽：閱讀時不計時；按「吐槽！」後牌子發亮，8 秒內點也算。其他句子的牌子是空白或劇情寫的字，點了沒反應 |
-| 連擊回合 | 每句講完直接進選詞，每接住一句時限縮短（8→6→5→4 秒）；吐槽力滿了會出現「超必殺！」，一次接住所有選詞句 |
+| 連擊回合 | 每句講完直接進選詞，每接住一句時限縮短（8→6→5→4 秒）；吐槽之力集滿時眼鏡冒出金色氣焰，跳出「吐槽之力全滿！」；回合試片的「龜派氣功！」會用光束一次接住剩餘選詞句、力量歸零，QTE 仍須手動完成 |
 | QTE | 白圈縮到黃圈時點畫面任一處；太早、太晚或沒點都算冷場 |
 | Game Over | 眼鏡歸零時出現碎眼鏡畫面，可從該回合開頭重試 |
 | 角色 | 開口說話才登場；說過話的人留在畫面上，說話的人在最前面、其他人在後面變暗。換背景（新場景）時全部退場，劇本也能用 `hide()` 讓人先退場 |
@@ -44,6 +44,8 @@ Godot 4.7 手機直立視覺小說，依 [V1 Roadmap](../../docs/story-telling-g
 對話框內提供目錄、回顧、自動與推進鈕；存檔、讀檔、略讀與素材集中在選單。Safe Area 只在 Android／iOS 原生匯出讀取；瀏覽器分頁本身已避開瀏海。讀到穩定劇本位置時寫入獨立的自動續讀檔；手動存檔有 3 頁、每頁 6 格，存入素材、背景、立繪與閱讀位置。新遊戲重設自動續讀進度，手動欄位保留。同一瀏覽器、同一網址重開後可按「繼續」或從指定欄位讀檔。選單的吐槽素材與人物檔案只在有調查或吐槽回合的故事出現。存檔也記住正在播的背景音樂。
 
 [素材試版手機畫面](docs/preview-assets-dialogue-phone.png) · [UI 試版比較](docs/UI-TRIAL.md) · [Phase 2 手機畫面](docs/preview-phase2-phone.png) · [多欄位讀檔畫面](docs/preview-save-slots-phone.png) · [驗證紀錄](docs/VERIFICATION.md)
+
+B 超必殺演出（2026-10-06）已接入 `?sample=phase4_rounds`，使用既有素材與程序特效。眼鏡的 `charged` 可在 `scenes/ui/glasses_icon.tscn` Inspector 開啟，預覽金色氣焰；執行時由力量控制。[氣焰手機畫面](docs/super-aura-phone.png) · [窄手機畫面](docs/super-aura-320x568.png) · [光束畫面](docs/super-beam-phone.png)。後續 C → D → E 見 [TODO](TODO.md)。
 
 ## 開發與 Web 匯出
 
@@ -103,6 +105,7 @@ XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://t
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_phase4_ui.gd
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_story_tools.gd
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_round_v2.gd
+XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_super_effects.gd
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_phase4_rounds_story.gd
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_phase4_rounds_ui.gd
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_ui_styles.gd
@@ -169,6 +172,7 @@ node tools/check_ui_parity.mjs --playwright /path/to/node_modules/@playwright/te
 | 對話紀錄 | 待轉換 | |
 | 存讀檔欄位 | 待轉換 | |
 | 吐槽回合的操作列與消音條 | ✅ 已轉換 | 在四款對話框 scene 的 Actions 裡（‹ ›、句數、聽下去、吐槽！、`CensorBar`）；選項面板另有 `CensorBar` 與 `Super`；顯示什麼由 `scripts/round_view.gd` 決定 |
+| 超必殺光束 | ✅ 已轉換 | `scenes/ui/beam.tscn`（`Strip` 調 anchors／offsets 與厚度，`Aura`／`Light`／`Core` 調顏色，根 node 的 `reveal_seconds` 調展開秒數；`shaders/beam.gdshader` 調脈動速度與邊緣；正常執行不重建） |
 | QTE、cut-in、Game Over | ✅ 已轉換 | `scenes/ui/qte_ring.tscn`、`cutin.tscn`、`game_over.tscn`（四款共用） |
 | 選項面板 | ✅ 已轉換 | POV 選項與限時吐槽：`scenes/ui/choice_sheet_cinema.tscn`、`choice_sheet_ledger.tscn`、`choice_sheet_manga.tscn`、`choice_sheet_gintama.tscn`（腳本 `scripts/choice_sheet.gd`），每列是 `choice_item_<風格>.tscn`（`%Tone` 語氣標記）；導演選擇：`scenes/ui/choice_sheet_director.tscn`（四款共用），每列是 `choice_item_director.tscn` |
 | 眼鏡／吐槽之力 HUD、線索欄 | ✅ 已轉換 | `scenes/ui/round_hud.tscn`（四款共用，`set_style` 換色），眼鏡 `glasses_icon.tscn`、線索 `clue_chip.tscn` |

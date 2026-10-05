@@ -186,6 +186,7 @@ var _sheet_note: String = ""
 var _sheet_tones: PackedStringArray = []
 var _sheet_censor: bool = false
 var _sheet_super: bool = false
+var _previous_power: int = 0
 var _qte: QteRing = null
 var _end_box: HBoxContainer = null
 var _quickbar: Container = null
@@ -800,6 +801,7 @@ func _show_choice_sheet() -> void:
 			_screen_mode != "tsukkomi")
 	_choice_sheet.censor_bar.visible = _sheet_timed and _sheet_censor
 	_choice_sheet.super_button.visible = _sheet_timed and _sheet_super
+	_choice_sheet.super_button.text = str(_current_command.get("super_label", "超必殺！"))
 	_refresh_reading_ui()
 
 
@@ -1305,6 +1307,7 @@ func _on_restart_pressed() -> void:
 
 
 func _start_new_story() -> void:
+	_previous_power = 0
 	_cancel_generation()
 	_close_overlays()
 	_effects.play_bgm("")
@@ -1399,7 +1402,7 @@ func _drive_story(generation: int) -> void:
 					await get_tree().create_timer(float(command.get("duration", 0.0))).timeout
 					if generation != _generation:
 						return
-			"shake", "flash", "cutin", "bgm", "se":
+			"shake", "flash", "cutin", "bgm", "se", "beam":
 				_effects.play(command, _skip)
 			"freeze":
 				var hold: float = _effects.play(command, _skip)
@@ -2078,6 +2081,12 @@ func _resolve_boke_presentation(result: Dictionary, option_label: String = "", p
 			feedback = "放棄吐槽・狀態不變"
 	if not feedback_override.is_empty():
 		feedback = feedback_override
+	var power: int = int((_runner.get("gameplay") as Dictionary).get("power", 0))
+	var maximum: int = int((_runner.get("gameplay") as Dictionary).get("max_power", 100))
+	if power >= maximum and _previous_power < maximum:
+		_effects.play({"op": "cutin", "text": "吐槽之力全滿！", "speaker": "shinpachi"}, _skip)
+		_effects.play({"op": "se", "id": "power_up"}, _skip)
+	_previous_power = power
 	_refresh_phase3_hud()
 	_show_toast(feedback)
 	_start_drive()
@@ -2102,6 +2111,7 @@ func _on_game_over_retry_pressed() -> void:
 	_boke_time_remaining = 0.0
 	_restored_boke_timer_remaining = -1.0
 	_restored_boke_ui_mode = ""
+	_previous_power = int((_runner.get("gameplay") as Dictionary).get("power", 0))
 	_last_boke_result = "retry"
 	_story_busy = false
 	_screen_mode = "busy"
@@ -3216,6 +3226,7 @@ func _apply_save_payload(payload: Dictionary) -> bool:
 		sprite.visible = bool(state.get("visible", false))
 		sprite.call("set_expression", str(state.get("expression", "neutral")))
 		_layout_sprite(actor_id)
+	_previous_power = int((_runner.get("gameplay") as Dictionary).get("power", 0))
 	_history.clear()
 	for entry: Variant in payload["history"]:
 		_history.append((entry as Dictionary).duplicate(true))
@@ -3634,6 +3645,8 @@ func _write_qa_state() -> void:
 			"round": {
 				"mode": str(current.get("mode", "")), "combo": int(current.get("combo", 0)),
 				"caught": current.get("caught_line_ids", []), "super_available": bool(current.get("super_available", false)),
+				"super_label": _choice_sheet.super_button.text,
+				"aura_active": _phase3_hud.glasses.get_children().any(func(icon: Node) -> bool: return bool(icon.get("charged")) and not bool(icon.get("broken"))),
 				"censor": RoundView.censor(current), "placard": RoundView.placard(current), "qte_active": _qte != null,
 			},
 			"timer_remaining": _boke_time_remaining,
@@ -3643,6 +3656,7 @@ func _write_qa_state() -> void:
 			"game_over_active": bool(snapshot.get("game_over_active", false)),
 			"last_result": _last_boke_result,
 		},
+		"beam_active": _overlay_layer.get_children().any(func(node: Node) -> bool: return node.scene_file_path == "res://scenes/ui/beam.tscn"),
 		"comedy": _comedy_layer.qa_state(),
 		"controls": controls,
 		"slot_page": _slot_page,
