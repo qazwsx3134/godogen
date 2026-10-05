@@ -90,3 +90,62 @@ Phase 2 的自動驗收完成。Android Chrome／iOS Safari 真人試玩、首�
 | 討債主線 | 桌機 A 路線 53 個閱讀點、14 組檢查；390×844 觸控 B 路線 52 個閱讀點、15 組檢查，錯誤為空；見[報告](ui-assets-main-report.json) |
 | Phase 3 | 390×844 觸控 6 組檢查通過，320×568 四選項保持可見，錯誤為空；見[報告](ui-assets-phase3-report.json) |
 | 手動存讀檔 | 390×844 觸控 4 組檢查通過，錯誤為空；見[報告](ui-assets-slots-report.json) |
+
+## VN Framework Prototype v0.1 驗收（EP00 vertical slice）
+
+2026-10-02。驗證對象是 `data/ep00_story.json`（`story_src/ep00.dialogue`＋`ep00.blocks.json` 建置，網址 `?sample=ep00`），把 v2 計畫（`docs/story-telling-game/v2/conversation4.md` 第 902–938 行）的 16 條驗收清單串成一集：`Story JSON → StoryRunner → A 畫面 → POV Choice → 真分支 → Comedy B → Interaction → State → Director Choice → Ending → Save/Load`。台詞取自 v2 EP00 草稿，非核准。
+
+三份證據：
+
+- **headless**：`tests/test_ep00.gd`（成功印 `EP00 TESTS PASSED`）。資料與 36 條路徑用 StoryRunner 窮舉，外殼層的操作多數走 `_tap`／`_press`；只有「快速走到某個畫面」的輔助函式 `_to_search`、`_to_director` 與兩處調查離開（`_on_investigation_continue_pressed`）直接呼叫處理函式（`_on_choice_pressed`、`_collect_hotspot`），真實的 canvas 點擊由 Web 的 `--ep00` 路線負責。全程用 Logger 攔截引擎錯誤。引用位置寫成「函式（行號）」，行號是這次驗收時的檔案。
+- **Web**：`node tools/browser_check.mjs --ep00`，真實 canvas 觸控，390×844 走路徑 A、路徑 B，320×568 走路徑 A 到調查為止。報告 [ep00-browser-report.json](ep00-browser-report.json)，截圖 `preview-ep00-*.png`（[A 畫面](preview-ep00-a-screen-phone.png)、[POV 選項](preview-ep00-pov-phone.png)、[漫畫吐槽層](preview-ep00-comedy-phone.png)、[互動調查](preview-ep00-interaction-phone.png)、[導演選項](preview-ep00-director-phone.png)、[結局](preview-ep00-ending-phone.png)；窄螢幕的[POV](preview-ep00-pov-narrow.png)、[漫畫吐槽層](preview-ep00-comedy-narrow.png)、[互動調查](preview-ep00-interaction-narrow.png)）。
+- **既有測試**：`tests/test_choices.gd`、`test_comedy.gd`、`test_interaction.gd` 等先前驗過各項功能本身，這裡只在 EP00 的劇本上重做串接的部分。
+
+| # | v2 驗收項目 | 結果 | 證據 |
+| --- | --- | --- | --- |
+| 1 | 手機 9:16 正常顯示 | 已驗證（模擬視窗）；實機未驗證 | 設計尺寸是 1080×1920（9:16，`stretch aspect=expand`，較長的手機往下延伸）；headless 測試沒有另外斷言尺寸（`_game.size` 只用來算點擊座標）。Web 在 390×844 與 320×568 兩個模擬視窗跑 `--ep00`：第一句、調查（對話框展開與收起）過 `assertLayout`（遊戲區、對話框、工具列、名牌與所有可點元件在視窗內），POV 選項與導演卡片逐列檢查在遊戲區內，漫畫吐槽層的爆炸框與大字在遊戲區內，截圖見上 |
+| 2 | Story JSON 可以載入 | 已驗證 | `_test_script_data`（94）：載入、與 `ep00.dialogue` 的新建置逐字相同、沒有到不了的節點、每個跳轉與 catalog 引用都存在、每個用到的表情都有圖、句數在 45–65（口徑見下，只算台詞是 38）；`--ep00` 每條路線都從 `?sample=ep00` 的標題開始 |
+| 3 | Dialogue 可以逐字顯示 | 已驗證 | `_test_scene_one_in_the_shell`（416）：第一句從不完整開始、至少出現 3 種長度、最後完整；`--ep00` 的 scene one |
+| 4 | 點擊完成文字／下一句 | 已驗證 | 同上（422–427）：打字中點一下補完且不前進，再點才前進；`--ep00` 路徑 A 有 3 次「點一下補完一句、劇情沒動」 |
+| 5 | 三角色可左右中顯示 | 已驗證 | 同上（437–443）：新八 left、銀時 center、神樂 right，且立繪中心由左到右；`--ep00` 同樣斷言，截圖 `preview-ep00-a-screen-phone.png` |
+| 6 | 可換表情 | 已驗證 | 同上（428、444–447）：新八 angry、神樂 smile、銀時 nosepick → smug；`_test_script_data`（94–181）確認每個（角色，表情）在 catalog 有圖；`--ep00` 路徑 A |
+| 7 | Choice 可以跳不同 Story Branch | 已驗證 | `_test_every_path`（257）：3 個 POV × 找到委託書與否 × 碰草莓牛奶與否 × 3 個結局共 36 條路徑，每條斷言結局文字、四個旗標、道具、該路徑自己的反應句（且沒有別條的）；`_test_pov_choice_panel`（451）按真實按鈕走到 `s03_calm`；`--ep00` 路徑 A（loud）與 B（tired） |
+| 8 | POV Choice 顯示正常 | 已驗證 | `_test_pov_choice_panel`（451–473）：掛的是該風格自己的面板、不是導演面板，提問是新八的想法（名牌「新八・心聲」）、三列文字、語氣標記、QA `choice` 欄位；`--ep00` 每列至少 48 CSS px 且在遊戲區內，截圖 `preview-ep00-pov-phone.png`、`preview-ep00-pov-narrow.png` |
+| 9 | Director Choice 有不同 UI | 已驗證 | `_is_director_choice`（918）：導演面板的 scene、抬頭「── 導演選擇 ──」、提問、註腳、三張卡、QA 欄位，在 `_test_search_by_taps_without_the_job`（628）、`_test_endings_in_the_shell`（660）檢查；`--ep00` 與截圖 `preview-ep00-director-phone.png`；兩種面板互不相同、三款風格共用導演面板由 `test_choices.gd` 驗證 |
+| 10 | Comedy B Overlay 可以從 A 畫面瞬間觸發 | 已驗證（觸發時間的毫秒數未量） | `_test_overlay_waits_and_taps_do_not_skip`（478）：讀完「嗯？」後在同一個畫面上疊起 `tsukkomi_impact`（沒有換 scene，下面還是那句），劇情停在 comedy 步驟、播完下一句出現；`--ep00` 的 `comedy.active` 與 `screen: busy`；`_test_other_reactions`（542）：`small_reaction` 不遮對話框 |
+| 11 | Comic Cut-in／Shake／Big Text 正常 | 已驗證（cut-in 位置靠既有測試） | `_test_overlay_waits_and_taps_do_not_skip`（492–511）：舞台震動、zoom 不超過 1.05、大字放得進爆炸框（`text_fits`）、約 1.35 秒；`--ep00` 爆炸框與大字都在遊戲區內；cut-in 面板在遊戲區內由 `test_comedy.gd` 驗證，EP00 沒有另外斷言，只在截圖 `preview-ep00-comedy-phone.png`／`-narrow.png` 看得到 |
+| 12 | 可以進入 Interaction Mode | 已驗證 | `_test_search_by_taps_without_the_job`（566–576）：留在場上的只有銀時、四個熱區、銀時的熱區是他的立繪、「繼續」一開始就能按；`--ep00` |
+| 13 | Hotspot 可以觸發對話與 State | 已驗證 | 同上（594、606、612）：銀時四次點擊依序「幹嘛。」「你一直點我也不會掉道具。」「這不是手遊角色首頁。」、第四次重複第三句；草莓牛奶寫 `examined_strawberry_milk`；電視不寫旗標；`_test_search_with_the_job`（634）：委託書出現 toast、拿到 `job_document`、寫 `found_job`；`--ep00` 路徑 A 用真實拖曳與觸控點 |
+| 14 | Condition 可以讀 State | 已驗證 | `_test_every_path`（257–313）：`found_job` 與 `examined_strawberry_milk` 兩個條件在 36 條路徑都走對；`_test_search_*`（566、634）在外殼看到「我自己找」或「這不是有工作嗎」、神樂補一句；`_test_bool_flags_in_the_adapters`（374）：`if found_job == true` 能建置；`--ep00` 路徑 A（找到＋碰牛奶）與 B（沒找到） |
+| 15 | 三個不同 Ending | 已驗證（Web 走過結局 A 與 C，結局 B 只在 headless） | `_test_endings_in_the_shell`（660）按三張卡走到「EP00 完 ── 欠債篇／委託篇／？？？篇」，各設 `ep00_ending` debt／request／unknown；`_test_every_path` 另在 StoryRunner 走 36 次；`--ep00` 路徑 A 走結局 C、路徑 B 走結局 A，截圖 `preview-ep00-ending-phone.png` |
+| 16 | 可以 Save／Load 回目前 Event | 已驗證 | `_test_save_in_the_search`（683）：調查中點銀時兩次後存，重建外殼讀檔，第三次點出第三句、第四次重複；手動欄位 payload 同；`_test_save_at_the_director_choice`（728）：自動檔與手動欄位都還原同一個導演選項；`_test_old_save_does_not_replay_the_overlay`（757）：停在 comedy 步驟的存檔讀回來不重播；`--ep00` 路徑 B：在調查與導演選項各存手動欄位，重新整理頁面，讀檔回到同一個事件（畫面、節點、旗標、場上角色、已查熱區、選項） |
+
+這一輪的結果（2026-10-02，Godot `4.7.stable.official.5b4e0cb0f`，官方單執行緒 Web 範本）：
+
+- headless：`--import` 後 `tests/test_*.gd` 全部 23 組印出 PASSED、exit 0（開工前基準 22 組，加上 `test_ep00`，它有 894 個斷言）。
+- Web：`--ep00` 三組（路徑 A 390×844、路徑 B、路徑 A 320×568 前半）全過，沒有瀏覽器或 Godot 執行期錯誤。
+
+劇本實況與偏離規格（為了讓這集跑得起來）：
+
+- **句數口徑**：`_test_script_data` 的「45–65 句」把台詞（`say` 38）、漫畫吐槽層（2）、結局文字（3）、選項提問與選項（2 個選項步驟 × 4 ＝ 8）全算進去，合計 51；只算台詞是 38（含漫畫吐槽層是 40），比派工規格的「約 45–65」少一些。要不要補台詞，等量過實際遊玩時間再決定。
+- **搜尋前新八、神樂退場**：三人同台時立繪蓋住整張背景，物件熱區看不見，所以 `s04_intro` 先讓新八與神樂退場，只留銀時；之後他們在調查中的台詞用 `[#offscreen]`（畫面外出聲），否則一開口就會重新上場、又蓋住背景。調查結束後（`s05_*`）他們開口時回到自己的站位。`keep_cast: true` 仍開著，場上的銀時是角色熱區。
+- **「草莓牛奶」熱區放在桌上的紅色筆筒**：背景 `yorosuya-inside.png` 沒有畫牛奶，label 照劇情寫「草莓牛奶」。要有真正的牛奶需要補素材或換圖。電視與委託書（檯燈左邊的紙堆）對得上畫面。
+- **加了兩句派工規格沒寫的台詞**：`s04_intro` 的銀時「委託書的話，應該還埋在桌上吧。」與調查提示「四處點點看吧。（左右拖曳背景可以看到更多）」。
+- **已知缺口（不擋這集，沒修）**：角色熱區是整張立繪含透明邊（銀時的矩形比螢幕還寬），所以調查時點任何不是未找到物件的地方都算點銀時，熱區的淡框也只剩螢幕邊緣的線與 ✓，辨認度弱；有調查的故事整集顯示眼鏡／吐槽之力 HUD（`has_gameplay()` 只看有沒有 `investigate`／`boke_round`）；全部熱區選填時「繼續」寫「線索已取得・繼續」、進度列寫「線索 0/0」；POV 第一列「問題是你有工作的時候也在休息啊！！」在手機上換行後最後一個「！」單獨一行；結局 B 沒有電話鈴聲，用旁白「嘟嚕嚕嚕——電話響了。」代替。
+
+尚未驗證：
+
+- Android Chrome／iOS Safari 實機的 9:16 顯示與手感（第 1 項只在模擬視窗驗過）。
+- 音效是合成佔位音（`crow`、`door_slide`），沒有試聽。
+- 整集遊玩時間沒有量；v2 計畫的 5–8 分鐘目標未對照。
+- 瀏覽器路線沒有點電視熱區，也沒有走結局 B（委託篇）；兩者只在 headless 驗證。
+
+重跑：
+
+```bash
+cd prototypes/debt-commission
+godot --headless --path . --import
+XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_ep00.gd
+GODOT_BIN=/path/to/godot bash tools/build_web.sh && bash tools/serve_web.sh
+node tools/browser_check.mjs --ep00 --playwright /path/to/node_modules/@playwright/test
+```

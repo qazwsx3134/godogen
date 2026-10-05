@@ -77,6 +77,8 @@ static func build_text(text: String, source_path: String) -> Dictionary:
 
 	var nodes: Dictionary = parsed["nodes"]
 	var fold_error: String = _fold_offscreen(nodes)
+	if fold_error.is_empty():
+		fold_error = _fold_choice_marks(nodes, context["speakers"] as Dictionary)
 	if not fold_error.is_empty():
 		return _fail("%s: %s" % [source_path, fold_error])
 	_resolve_comedy_speakers(nodes, context["speakers"] as Dictionary)
@@ -181,6 +183,46 @@ static func _fold_offscreen(nodes: Dictionary) -> String:
 				return "node '%s' step %d: offscreen() must come right before a line" % [node_id, index]
 			steps.remove_at(index)
 			steps[index]["offscreen"] = true
+	return ""
+
+
+## `pov("gintoki")` and `director("note")` (a Parley ACTION, or `do ...`) mark the choice right after
+## them: the choice gets `pov`, or `perspective: "director"` with the optional `note`. A choice nobody
+## marks gets neither field. `tone()` is folded into its option by the adapter; one left among the
+## steps has no option to belong to.
+static func _fold_choice_marks(nodes: Dictionary, speakers: Dictionary) -> String:
+	for node_id: String in nodes.keys():
+		var steps: Array = (nodes[node_id] as Dictionary)["steps"]
+		var index: int = 0
+		while index < steps.size():
+			var op: String = String(steps[index].get("op", ""))
+			if op == "tone":
+				return "node '%s' step %d: tone() belongs right after a choice option (Parley) or as a [#tag] on its response (.dialogue)" % [node_id, index]
+			if op != "pov" and op != "director":
+				index += 1
+				continue
+			var next_op: String = String(steps[index + 1].get("op", "")) if index + 1 < steps.size() else ""
+			if next_op == "pov" or next_op == "director":
+				return "node '%s' step %d: a choice takes one of pov() or director(), not both" % [node_id, index]
+			if next_op != "choice":
+				return "node '%s' step %d: %s() must come right before a choice prompt" % [node_id, index, op]
+			var mark: Dictionary = steps[index]
+			var choice: Dictionary = steps[index + 1]
+			if op == "pov":
+				var character: String = DmSource.speaker_id(String(mark.get("id", "")), speakers)
+				if character.is_empty() or character == "narrator" or character.contains("+"):
+					return "node '%s' step %d: pov('%s') is not a catalog character (use one catalog id or name)" % [node_id, index, mark.get("id", "")]
+				choice["pov"] = character
+			else:
+				for option: Dictionary in choice.get("options", []):
+					if option.has("tone"):
+						return "node '%s' step %d: a director choice has no tones (option '%s' is tagged %s)" % [node_id, index + 1, option.get("id", ""), option["tone"]]
+				choice["perspective"] = "director"
+				if mark.has("note"):
+					if not mark["note"] is String or String(mark["note"]).strip_edges().is_empty():
+						return "node '%s' step %d: director() note must be non-empty text (leave the argument out for none)" % [node_id, index]
+					choice["note"] = mark["note"]
+			steps.remove_at(index)
 	return ""
 
 

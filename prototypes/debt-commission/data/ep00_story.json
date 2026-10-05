@@ -1,0 +1,587 @@
+{
+  "entry": "s01_open",
+  "generated_from": "story_src/ep00.dialogue",
+  "id": "ep00",
+  "initial_flags": {
+    "ep00_ending": "",
+    "examined_strawberry_milk": false,
+    "found_job": false,
+    "pov_style": ""
+  },
+  "nodes": {
+    "end_debt": {
+      "steps": [
+        {
+          "expression": "shout",
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "為什麼玩家可以決定這種事情啊！！"
+        },
+        {
+          "id": "door_slide",
+          "op": "se"
+        },
+        {
+          "expression": "angry",
+          "op": "say",
+          "speaker": "otose",
+          "text": "喂，你們這個月的房租呢！？"
+        },
+        {
+          "expression": "nervous",
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "……新八，就說銀桑不在家。"
+        },
+        {
+          "expression": "panic",
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "你人就站在這裡啊！"
+        },
+        {
+          "op": "end",
+          "text": "EP00 完 ── 欠債篇"
+        }
+      ],
+      "title": "EP00 結局 A：欠債篇"
+    },
+    "end_request": {
+      "steps": [
+        {
+          "expression": "shout",
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "為什麼連電話什麼時候響，都可以讓玩家決定啊！！"
+        },
+        {
+          "op": "say",
+          "speaker": "narrator",
+          "text": "嘟嚕嚕嚕——電話響了。"
+        },
+        {
+          "expression": "serious",
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "……萬事屋銀桑。是，委託？現在就去。"
+        },
+        {
+          "expression": "angry",
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "難得有委託，你至少把鞋穿好再出門啊！"
+        },
+        {
+          "op": "end",
+          "text": "EP00 完 ── 委託篇"
+        }
+      ],
+      "title": "EP00 結局 B：委託篇"
+    },
+    "end_unknown": {
+      "steps": [
+        {
+          "expression": "shout",
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "為什麼玩家連狗什麼時候衝進來，都可以決定啊！！"
+        },
+        {
+          "expression": "smile",
+          "op": "say",
+          "speaker": "sadaharu",
+          "text": "汪！"
+        },
+        {
+          "expression": "smile",
+          "op": "say",
+          "speaker": "kagura",
+          "text": "定春，你叼回來的那個是什麼阿魯？"
+        },
+        {
+          "expression": "nervous",
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "……為什麼它在動。"
+        },
+        {
+          "op": "end",
+          "text": "EP00 完 ── ？？？篇"
+        }
+      ],
+      "title": "EP00 結局 C：？？？篇"
+    },
+    "s01_open": {
+      "next": "s02_pov",
+      "steps": [
+        {
+          "id": "bgm_daily",
+          "op": "bgm"
+        },
+        {
+          "id": "yorozuya_living_room",
+          "op": "bg"
+        },
+        {
+          "expression": "nosepick",
+          "id": "gintoki",
+          "op": "char",
+          "position": "center",
+          "visible": true
+        },
+        {
+          "expression": "angry",
+          "id": "shinpachi",
+          "op": "char",
+          "position": "left",
+          "visible": true
+        },
+        {
+          "expression": "smile",
+          "id": "kagura",
+          "op": "char",
+          "position": "right",
+          "visible": true
+        },
+        {
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "今天也完全沒有工作啊。"
+        },
+        {
+          "id": "crow",
+          "op": "se"
+        },
+        {
+          "expression": "angry",
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "不是沒有，是你全部都拒絕掉了吧！"
+        },
+        {
+          "op": "say",
+          "speaker": "kagura",
+          "text": "阿銀今天已經睡第三次了阿魯。"
+        },
+        {
+          "offscreen": true,
+          "op": "say",
+          "speaker": "sadaharu",
+          "text": "汪。"
+        },
+        {
+          "expression": "smug",
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "沒有工作的時候休息不是很合理嗎？"
+        }
+      ],
+      "title": "EP00 場景一：普通 VN"
+    },
+    "s02_pov": {
+      "steps": [
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "pov_loud",
+              "label": "問題是你有工作的時候也在休息啊！！",
+              "next": "s03_loud",
+              "set_flags": {
+                "pov_style": "loud"
+              },
+              "tone": "loud"
+            },
+            {
+              "id": "pov_calm",
+              "label": "首先，請你把桌上那疊委託書看完。",
+              "next": "s03_calm",
+              "set_flags": {
+                "pov_style": "calm"
+              },
+              "tone": "calm"
+            },
+            {
+              "id": "pov_tired",
+              "label": "……算了，我甚至不知道從哪裡開始說。",
+              "next": "s03_tired",
+              "set_flags": {
+                "pov_style": "tired"
+              },
+              "tone": "tired"
+            }
+          ],
+          "pov": "shinpachi",
+          "prompt": "這句要怎麼吐槽才好……？"
+        }
+      ],
+      "title": "EP00 場景二：POV 選項"
+    },
+    "s03_calm": {
+      "next": "s04_intro",
+      "steps": [
+        {
+          "expression": "nosepick",
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "嗯嗯，等銀桑睡醒就看。"
+        },
+        {
+          "expression": "nervous",
+          "op": "comedy",
+          "preset": "small_reaction",
+          "speaker": "shinpachi",
+          "text": "……他根本沒在聽。"
+        },
+        {
+          "expression": "mock",
+          "op": "say",
+          "speaker": "kagura",
+          "text": "新八，他已經在摳鼻孔了阿魯。"
+        }
+      ],
+      "title": "EP00 場景三：冷靜指出問題的反應"
+    },
+    "s03_loud": {
+      "next": "s04_intro",
+      "steps": [
+        {
+          "expression": "nosepick",
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "嗯？"
+        },
+        {
+          "expression": "shout",
+          "op": "comedy",
+          "preset": "tsukkomi_impact",
+          "speaker": "shinpachi",
+          "text": "問題是你有工作的時候也在休息啊！！"
+        },
+        {
+          "expression": "mock",
+          "op": "say",
+          "speaker": "kagura",
+          "text": "新八，你的聲音太大了阿魯，耳朵要壞掉了。"
+        }
+      ],
+      "title": "EP00 場景三：激烈吐槽的反應"
+    },
+    "s03_tired": {
+      "next": "s04_intro",
+      "steps": [
+        {
+          "expression": "smug",
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "對吧？休息很重要的。"
+        },
+        {
+          "expression": "thinking",
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "……我什麼都沒說，卻覺得自己輸了。",
+          "thought": true
+        }
+      ],
+      "title": "EP00 場景三：懶得吐槽的反應"
+    },
+    "s04_gintoki_1": {
+      "next": "s04_room",
+      "steps": [
+        {
+          "expression": "annoyed",
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "幹嘛。"
+        }
+      ],
+      "title": "互動調查：銀時（第一次）"
+    },
+    "s04_gintoki_2": {
+      "next": "s04_room",
+      "steps": [
+        {
+          "expression": "nosepick",
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "你一直點我也不會掉道具。"
+        }
+      ],
+      "title": "互動調查：銀時（第二次）"
+    },
+    "s04_gintoki_3": {
+      "next": "s04_room",
+      "steps": [
+        {
+          "expression": "smug",
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "這不是手遊角色首頁。"
+        }
+      ],
+      "title": "互動調查：銀時（第三次起）"
+    },
+    "s04_intro": {
+      "next": "s04_room",
+      "steps": [
+        {
+          "expression": "thinking",
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "至少看看還有哪些委託吧。"
+        },
+        {
+          "expression": "nosepick",
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "委託書的話，應該還埋在桌上吧。"
+        },
+        {
+          "id": "shinpachi",
+          "op": "char",
+          "visible": false
+        },
+        {
+          "id": "kagura",
+          "op": "char",
+          "visible": false
+        }
+      ],
+      "title": "EP00 場景四：互動調查的開頭"
+    },
+    "s04_job": {
+      "next": "s04_room",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "narrator",
+          "text": "桌上那疊委託書的最底下，壓著一張：「尋找失蹤寵物」。"
+        },
+        {
+          "offscreen": true,
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "……找到了，真的有。",
+          "thought": true
+        }
+      ],
+      "title": "互動調查：委託書"
+    },
+    "s04_milk": {
+      "next": "s04_room",
+      "steps": [
+        {
+          "offscreen": true,
+          "op": "say",
+          "speaker": "kagura",
+          "text": "那是我的阿魯！"
+        }
+      ],
+      "title": "互動調查：草莓牛奶"
+    },
+    "s04_room": {
+      "next": "s05_check",
+      "steps": [
+        {
+          "hotspots": [
+            {
+              "character": "gintoki",
+              "id": "gintoki",
+              "label": "銀時",
+              "lines": [
+                "s04_gintoki_1",
+                "s04_gintoki_2",
+                "s04_gintoki_3"
+              ],
+              "optional": true
+            },
+            {
+              "goto": "s04_milk",
+              "id": "strawberry_milk",
+              "label": "草莓牛奶",
+              "optional": true,
+              "pos": [
+                0.4175,
+                0.555
+              ],
+              "set": {
+                "examined_strawberry_milk": true
+              },
+              "size": [
+                0.05,
+                0.095
+              ]
+            },
+            {
+              "goto": "s04_job",
+              "id": "job_document",
+              "item": "job_document",
+              "label": "委託書",
+              "optional": true,
+              "pos": [
+                0.62,
+                0.575
+              ],
+              "set": {
+                "found_job": true
+              },
+              "size": [
+                0.05,
+                0.05
+              ]
+            },
+            {
+              "goto": "s04_tv",
+              "id": "television",
+              "label": "電視",
+              "optional": true,
+              "pos": [
+                0.095,
+                0.47
+              ],
+              "size": [
+                0.16,
+                0.2
+              ]
+            }
+          ],
+          "id": "yorozuya_room",
+          "keep_cast": true,
+          "op": "investigate",
+          "prompt": "四處點點看吧。（左右拖曳背景可以看到更多）"
+        }
+      ],
+      "title": "EP00 場景四：互動調查"
+    },
+    "s04_tv": {
+      "next": "s04_room",
+      "steps": [
+        {
+          "offscreen": true,
+          "op": "say",
+          "speaker": "kagura",
+          "text": "這台電視只收得到天氣預報阿魯，而且都不準。"
+        }
+      ],
+      "title": "互動調查：電視"
+    },
+    "s05_check": {
+      "steps": [
+        {
+          "else": "s05_missed",
+          "equals": true,
+          "flag": "found_job",
+          "op": "condition",
+          "then": "s05_found"
+        }
+      ],
+      "title": "EP00 場景五：找到委託書了嗎"
+    },
+    "s05_found": {
+      "next": "s05_milk",
+      "steps": [
+        {
+          "expression": "angry",
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "這不是有工作嗎！"
+        },
+        {
+          "expression": "nosepick",
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "沒看到。"
+        },
+        {
+          "expression": "shout",
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "你剛才明明就在旁邊！！"
+        }
+      ],
+      "title": "EP00 場景五：找到委託書"
+    },
+    "s05_milk": {
+      "steps": [
+        {
+          "else": "s06_open",
+          "equals": true,
+          "flag": "examined_strawberry_milk",
+          "op": "condition",
+          "then": "s05_milk_yes"
+        }
+      ],
+      "title": "EP00 場景五：碰過草莓牛奶了嗎"
+    },
+    "s05_milk_yes": {
+      "next": "s06_open",
+      "steps": [
+        {
+          "expression": "mock",
+          "op": "say",
+          "speaker": "kagura",
+          "text": "剛剛有人碰了我的草莓牛奶，我都看到了阿魯。"
+        }
+      ],
+      "title": "EP00 場景五：神樂補一句"
+    },
+    "s05_missed": {
+      "next": "s05_milk",
+      "steps": [
+        {
+          "expression": "thinking",
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "……算了，我自己找。"
+        }
+      ],
+      "title": "EP00 場景五：沒找到委託書"
+    },
+    "s06_open": {
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "narrator",
+          "text": "這裡感覺有點無聊。"
+        },
+        {
+          "note": "※製作組經費有限",
+          "op": "choice",
+          "options": [
+            {
+              "id": "director_otose",
+              "label": "登勢闖進來",
+              "next": "end_debt",
+              "set_flags": {
+                "ep00_ending": "debt"
+              }
+            },
+            {
+              "id": "director_phone",
+              "label": "電話突然響",
+              "next": "end_request",
+              "set_flags": {
+                "ep00_ending": "request"
+              }
+            },
+            {
+              "id": "director_sadaharu",
+              "label": "定春撞進房間",
+              "next": "end_unknown",
+              "set_flags": {
+                "ep00_ending": "unknown"
+              }
+            }
+          ],
+          "perspective": "director",
+          "prompt": "接下來發生什麼？"
+        }
+      ],
+      "title": "EP00 場景六：導演選項"
+    }
+  },
+  "note": "VN Framework Prototype v0.1 的 vertical slice：一般 VN、POV 選項、漫畫吐槽層、互動調查、旗標與條件、導演選項、三個結局；台詞取自 v2 EP00 草稿，不是作者核准的文本。",
+  "title": "EP00 今天也沒有工作的萬事屋（Prototype v0.1，非核准）",
+  "version": "s-a3c1608b1e84"
+}

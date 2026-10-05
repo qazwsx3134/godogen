@@ -1,0 +1,40 @@
+{
+  "url": "http://127.0.0.1:5193/?qa=1&sample=choices",
+  "started": "2026-10-02T02:49:40.438Z",
+  "runs": [
+    {
+      "route": "choices-phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "touch": true,
+      "checks": [
+        "the POV choice shows Shinpachi's thought in the cinema sheet with tones loud, calm, tired; every row is at least 48 CSS px (phone)",
+        "tapping the \"loud\" row goes to reply_loud, shows its reaction line and sets reply=loud (phone)",
+        "the director's choice: sheet=director, footnote \"※製作組經費有限\", 3 cards each at least 48 CSS px, stage unchanged (phone)",
+        "changing the edition (ledger) from 目錄 over the director's choice keeps the director's sheet and its cards (phone)",
+        "card \"電話突然響了\" goes to ending_phone, sets ep00_ending=request and the story ends (phone)"
+      ],
+      "errors": []
+    },
+    {
+      "route": "choices-narrow",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "touch": true,
+      "checks": [
+        "the POV choice shows Shinpachi's thought in the cinema sheet with tones loud, calm, tired; every row is at least 48 CSS px (narrow)",
+        "tapping the \"loud\" row goes to reply_loud, shows its reaction line and sets reply=loud (narrow)",
+        "the director's choice: sheet=director, footnote \"※製作組經費有限\", 3 cards each at least 48 CSS px, stage unchanged (narrow)",
+        "changing the edition (ledger) from 目錄 over the director's choice keeps the director's sheet and its cards (narrow)",
+        "card \"電話突然響了\" goes to ending_phone, sets ep00_ending=request and the story ends (narrow)"
+      ],
+      "errors": []
+    }
+  ],
+  "passed": true,
+  "finished": "2026-10-02T02:49:59.952Z"
+}

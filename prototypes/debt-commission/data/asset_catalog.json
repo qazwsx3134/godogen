@@ -134,6 +134,10 @@
     "debt_commission_letter": {
       "name": "討債委託書",
       "description": "一張把委託人、欠款人和麻煩寫在同一頁的委託書。"
+    },
+    "job_document": {
+      "name": "委託書：尋找失蹤寵物",
+      "description": "桌上那疊委託書最底下的一張，唯一還沒被銀時拒絕掉的工作：尋找失蹤寵物。"
     }
   },
   "sounds": {
@@ -184,6 +188,9 @@
     },
     "comedy_pop": {
       "label": "漫畫小反應「啵」"
+    },
+    "director_clap": {
+      "label": "導演選擇出現的場記板「啪」"
     }
   },
   "music": {

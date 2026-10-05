@@ -1,0 +1,58 @@
+~ choices_open
+do bg("yorozuya_living_room")
+do char("shinpachi", "neutral", "left")
+do char("gintoki", "annoyed", "center")
+神樂: 阿銀今天也沒有工作阿魯。
+新八: 不是沒有，是你全部都拒絕掉了吧！
+銀時: 沒有工作的時候休息不是很合理嗎？
+do pov("shinpachi")
+這句要怎麼吐槽才好……？
+- 問題是你有工作的時候也在休息啊！！ [ID:reply_loud] [#loud]
+	set reply = "loud"
+	=> reply_loud
+- 那請問這個月的房租打算怎麼辦？ [ID:reply_calm] [#calm]
+	set reply = "calm"
+	=> reply_calm
+- ……算了，我甚至不知道從哪裡開始說。 [ID:reply_tired] [#tired]
+	set reply = "tired"
+	=> reply_tired
+
+~ reply_loud
+銀時: 吵死了，銀桑的耳膜也是需要休息的。
+=> choices_director
+
+~ reply_calm
+銀時: 房租這種東西，放著放著它自己就會消失。
+=> choices_director
+
+~ reply_tired
+銀時: 對吧對吧？連新八都懂了。
+=> choices_director
+
+~ choices_director
+神樂: 阿銀，接下來要演什麼阿魯？
+do director("※製作組經費有限")
+接下來發生什麼？
+- 登勢闖進來 [ID:tose_enters]
+	set ep00_ending = "debt"
+	=> ending_tose
+- 電話突然響了 [ID:phone_rings]
+	set ep00_ending = "request"
+	=> ending_phone
+- 定春帶回奇怪的東西 [ID:sadaharu_returns]
+	set ep00_ending = "unknown"
+	=> ending_sadaharu
+
+~ ending_tose
+登勢: 喂，你們這個月的房租呢！？
+do end("結局 A：欠債篇。技術片段到此為止。")
+
+~ ending_phone
+銀時: ……萬事屋銀桑。是，委託？現在就去。
+新八: 難得有委託，你至少把鞋穿好再出門啊！
+do end("結局 B：委託篇。技術片段到此為止。")
+
+~ ending_sadaharu
+定春: 汪！
+神樂: 定春，你叼回來的那個是什麼阿魯？
+do end("結局 C：？？？篇。技術片段到此為止。")

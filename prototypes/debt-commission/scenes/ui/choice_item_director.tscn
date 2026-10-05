@@ -1,0 +1,149 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/story-cjk.ttc" id="1_rsjyf"]
+[ext_resource type="Script" path="res://scripts/stripe_bar.gd" id="2_fuifg"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vt4hl"]
+content_margin_left = 244.0
+content_margin_top = 58.0
+content_margin_right = 28.0
+content_margin_bottom = 22.0
+bg_color = Color(0.101960786, 0.101960786, 0.10980392, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.95686275, 0.94509804, 0.9098039, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3un8s"]
+content_margin_left = 244.0
+content_margin_top = 58.0
+content_margin_right = 28.0
+content_margin_bottom = 22.0
+bg_color = Color(0.22745098, 0.19607843, 0, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(1, 0.83137256, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6vhpl"]
+content_margin_left = 244.0
+content_margin_top = 58.0
+content_margin_right = 28.0
+content_margin_bottom = 22.0
+bg_color = Color(0.14901961, 0.14901961, 0.15686275, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(1, 0.83137256, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_soflw"]
+content_margin_left = 244.0
+content_margin_top = 58.0
+content_margin_right = 28.0
+content_margin_bottom = 22.0
+bg_color = Color(0.22745098, 0.19607843, 0, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(1, 0.83137256, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1vfl6"]
+content_margin_left = 244.0
+content_margin_top = 58.0
+content_margin_right = 28.0
+content_margin_bottom = 22.0
+bg_color = Color(0.101960786, 0.101960786, 0.10980392, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.95686275, 0.94509804, 0.9098039, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_numlg"]
+content_margin_left = 244.0
+content_margin_top = 58.0
+content_margin_right = 28.0
+content_margin_bottom = 22.0
+bg_color = Color(0.22745098, 0.19607843, 0, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(1, 0.83137256, 0, 1)
+
+[sub_resource type="FontVariation" id="FontVariation_mahgo"]
+base_font = ExtResource("1_rsjyf")
+variation_embolden = 0.5
+
+[sub_resource type="FontVariation" id="FontVariation_bquhu"]
+base_font = ExtResource("1_rsjyf")
+variation_embolden = 0.9
+
+[node name="ChoiceItem" type="Button" unique_id=1722768235]
+custom_minimum_size = Vector2(0, 150)
+theme_override_styles/normal = SubResource("StyleBoxFlat_vt4hl")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_3un8s")
+theme_override_styles/hover = SubResource("StyleBoxFlat_6vhpl")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_soflw")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_1vfl6")
+theme_override_styles/focus = SubResource("StyleBoxFlat_numlg")
+theme_override_colors/font_color = Color(0.95686275, 0.94509804, 0.9098039, 1)
+theme_override_colors/font_focus_color = Color(0.95686275, 0.94509804, 0.9098039, 1)
+theme_override_colors/font_pressed_color = Color(0.95686275, 0.94509804, 0.9098039, 1)
+theme_override_colors/font_hover_color = Color(0.95686275, 0.94509804, 0.9098039, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.95686275, 0.94509804, 0.9098039, 1)
+theme_override_colors/font_disabled_color = Color(0.7411765, 0.70980394, 0.6039216, 1)
+theme_override_fonts/font = SubResource("FontVariation_mahgo")
+theme_override_font_sizes/font_size = 47
+text = "登勢闖進來"
+alignment = 0
+autowrap_mode = 3
+
+[node name="Stick" type="Control" parent="." unique_id=651287454]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = 38.0
+grow_horizontal = 2
+mouse_filter = 2
+script = ExtResource("2_fuifg")
+color_a = Color(0.95686275, 0.94509804, 0.9098039, 1)
+stripe_width = 34.0
+
+[node name="Index" type="Label" parent="." unique_id=799636946]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 20.0
+offset_top = -14.0
+offset_right = 212.0
+offset_bottom = 48.0
+grow_vertical = 2
+theme_override_fonts/font = SubResource("FontVariation_bquhu")
+theme_override_font_sizes/font_size = 33
+theme_override_colors/font_color = Color(1, 0.83137256, 0, 1)
+text = "SCENE 01"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Divider" type="ColorRect" parent="." unique_id=1246090904]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 222.0
+offset_top = 54.0
+offset_right = 225.0
+offset_bottom = -18.0
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 0.83137256, 0, 0.55)

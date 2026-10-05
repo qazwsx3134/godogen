@@ -6,3 +6,5 @@
 - 試用 shader 做事件或場景轉換；ASCII 與駭客風格是候選方向，需先看可讀性與故事氣質。
 
 [底部對話層與素材 Web 試版比較](docs/UI-TRIAL.md)保留早期試作截圖；目前使用上方三款可切換風格，仍待 Android Chrome 與 iOS Safari 實機試玩。shader 轉場尚未試作；優先順序與驗收方式見[進度紀錄](../../docs/story-telling-game/STATUS.md)。
+
+對話框要照著圖做銀魂風

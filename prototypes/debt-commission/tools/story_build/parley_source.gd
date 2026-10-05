@@ -9,11 +9,14 @@ extends RefCounted
 ##                                 its `text_translation_key`. A CONDITION `has("item")` between
 ##                                 prompt and option makes it require that item. After an option,
 ##                                 ACTION `set k = v` nodes become set_flags, then one edge to
-##                                 another group
+##                                 another group; an ACTION `tone("loud")` there (`calm`, `tired`) is
+##                                 the option's tone (the .dialogue tag [#loud] on a response)
 ##   ACTION                        `description` holds one command in the .dialogue grammar
 ##                                 without `do `: bg(...), char(...), end("text"), set k = v, ...
 ##                                 `offscreen()` right before a DIALOGUE marks that line as said
-##                                 from off stage (the .dialogue tag [#offscreen])
+##                                 from off stage (the .dialogue tag [#offscreen]); `pov("gintoki")`
+##                                 or `director("note")` right before the prompt DIALOGUE of a choice
+##                                 mark whose thought it is, or a director choice (see dm_source.gd)
 ##   CONDITION `key == value`      condition; true slot (0) and false slot (1) each lead to a group
 ##   edge into another group       that group comes next; it must point at the group's first node
 ##   END                           allowed only right after `end("text")`
@@ -214,9 +217,17 @@ static func _choice(graph: Dictionary, prompt: Dictionary, edges: Array, visited
 				break
 			var step: Dictionary = DmSource.command_step(String(next_raw.get("description", "")), where) \
 				if String(next_raw.get("type", "")) == "ACTION" else {}
-			if String(step.get("op", "")) != "flag":
-				return {"error": "%s: after option '%s' only ACTION `set key = value` nodes may come before the next group" % [where, option_id]}
-			set_flags[step["key"]] = step["value"]
+			match String(step.get("op", "")):
+				"flag":
+					set_flags[step["key"]] = step["value"]
+				"tone":
+					if not DmSource.TONES.has(step["tone"]):
+						return {"error": "%s: option '%s' tone '%s' is not one of %s" % [where, option_id, step["tone"], ", ".join(DmSource.TONES)]}
+					if option.has("tone"):
+						return {"error": "%s: option '%s' has more than one tone()" % [where, option_id]}
+					option["tone"] = step["tone"]
+				_:
+					return {"error": "%s: after option '%s' only ACTION `set key = value` and `tone(\"loud\")` nodes may come before the next group" % [where, option_id]}
 			visited[next_id] = true
 			current = next_id
 		if not set_flags.is_empty():

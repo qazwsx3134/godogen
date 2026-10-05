@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://croedlmfylopg"
+path="res://.godot/imported/ep00.dialogue-3a789274070f5269aea69467f6989205.tres"
+
+[deps]
+
+source_file="res://story_src/ep00.dialogue"
+dest_files=["res://.godot/imported/ep00.dialogue-3a789274070f5269aea69467f6989205.tres"]
+
+[params]
+
+defaults=true

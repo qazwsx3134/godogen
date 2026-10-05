@@ -13,6 +13,8 @@ const phase3Only = process.argv.includes('--phase3');
 const roundsOnly = process.argv.includes('--rounds');
 const investigateOnly = process.argv.includes('--investigate');
 const comedyOnly = process.argv.includes('--comedy');
+const choicesOnly = process.argv.includes('--choices');
+const ep00Only = process.argv.includes('--ep00');
 const arg = (name, fallback) => {
   const index = process.argv.indexOf(name);
   return index >= 0 ? process.argv[index + 1] : fallback;
@@ -24,6 +26,8 @@ if (phase3Only) url.searchParams.set('sample', 'phase3');
 else if (roundsOnly) url.searchParams.set('sample', 'phase4_rounds');
 else if (investigateOnly) url.searchParams.set('sample', 'phase4');
 else if (comedyOnly) url.searchParams.set('sample', 'comedy');
+else if (choicesOnly) url.searchParams.set('sample', 'choices');
+else if (ep00Only) url.searchParams.set('sample', 'ep00');
 else if (phase2Only || slotsOnly) url.searchParams.set('sample', 'phase2');
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const output = path.join(root, 'test-results');
@@ -664,6 +668,7 @@ async function phase3Route() {
   await control(page, 'slot_2', true);
   await closeSaveSlots(page, true);
   await stable(page);
+  await page.waitForTimeout(1500);  // the browser's file system flushes to IndexedDB in the background; a reload right after the save can lose it
   await page.reload({ waitUntil: 'load', timeout: 120000 });
   await waitFor(page, () => window.__debtQA?.screen === 'title', null, 120000);
   await control(page, 'title_load', true);
@@ -1062,8 +1067,576 @@ async function comedyRoute(viewport, tag) {
   await context.close();
 }
 
+// The two kinds of choice (?sample=choices): a POV choice (the edition's sheet, a tone marker on each row), then
+// the director's choice (a sheet of its own: heading, footnote, cards). Real touch taps throughout.
+// Run at 390×844 and 320×568; the screenshots go to docs/.
+async function choicesRoute(viewport, tag) {
+  const { context, page, errors } = await openPage(viewport, true);
+  const result = { route: `choices-${tag}`, viewport, touch: true, checks: [], errors };
+  report.runs.push(result);
+  const story = JSON.parse(await fs.readFile(path.join(root, 'data', 'choices_story.json'), 'utf8'));
+  const povStep = story.nodes.choices_open.steps.find(step => step.op === 'choice');
+  const directorStep = story.nodes.choices_director.steps.find(step => step.op === 'choice');
+  assert.equal(povStep.options.map(option => option.tone).join(), 'loud,calm,tired', 'the sample\'s POV choice has one of each tone');
+  assert.equal(directorStep.perspective, 'director');
+  const inside = (rect, outer, label) => assert.ok(rect.x >= outer.x - 1 && rect.y >= outer.y - 1
+    && rect.x + rect.width <= outer.x + outer.width + 1 && rect.y + rect.height <= outer.y + outer.height + 1,
+  `${label} lies outside the game area: ${JSON.stringify({ rect, outer })}`);
+  const onChoice = async perspective => {
+    await waitFor(page, expected => window.__debtQA?.screen === 'choice' && window.__debtQA.choice?.perspective === expected,
+      perspective, 30000);
+    return state(page);
+  };
+  // Taps through ordinary lines until a choice shows.
+  const readToChoice = async perspective => {
+    for (let step = 0; step < 40; step++) {
+      await waitFor(page, () => window.__debtQA && ['story', 'choice'].includes(window.__debtQA.screen), null, 30000);
+      let value = await state(page);
+      if (value.screen === 'choice' && value.choice.perspective === perspective) return value;
+      await waitFor(page, () => window.__debtQA?.text_complete || window.__debtQA?.screen === 'choice', null, 10000);
+      value = await state(page);
+      if (value.screen === 'choice') continue;
+      const before = lineKey(value);
+      await controlAny(page, ['dialogue', 'advance', 'next'], true, 'dialogue advance');
+      await waitFor(page, previous => {
+        const v = window.__debtQA;
+        return v && v.screen !== 'busy' && `${v.node_id}:${v.step_index}` !== previous;
+      }, before, 10000);
+    }
+    throw new Error(`Never reached the ${perspective} choice`);
+  };
+  const tapRow = async (value, index) => {
+    assert.ok(value.choices[index], `row ${index} is on screen and tappable`);
+    assertInside(value.choices[index].rect, value.viewport, `row ${index}`);
+    await tapAt(page, value.viewport, center(value.choices[index].rect), true);
+  };
+
+  await control(page, 'begin', true);
+  await stable(page);
+
+  // 1. The POV choice: Shinpachi's thought in the edition's own sheet, each row with its tone marker.
+  let value = await readToChoice('pov');
+  await page.waitForTimeout(300);
+  value = await state(page);
+  assert.deepEqual(value.choice, { perspective: 'pov', pov: 'shinpachi', note: '', sheet: value.ui_style, tones: ['loud', 'calm', 'tired'] },
+    'the POV choice: Shinpachi\'s, in the edition\'s sheet, with the three tones');
+  assert.equal(value.speaker, 'shinpachi');
+  assert.equal(value.sprites.shinpachi.focused, true, 'Shinpachi is in focus');
+  assert.equal(value.choices.length, 3);
+  for (const [index, row] of value.choices.entries()) {
+    assert.equal(row.label, povStep.options[index].label);
+    assert.ok(row.rect.height / (value.game.width / viewport.width) >= 48 - 0.1, `row ${index} is at least 48 CSS px tall`);
+    inside(row.rect, value.game, `row ${index}`);
+  }
+  assert.ok(value.choice_sheet.width > 0);
+  inside(value.choice_sheet, value.game, 'the POV sheet');
+  await screenshot(page, tag === 'phone' ? 'preview-choice-pov-phone' : 'choices-pov-narrow', tag === 'phone' ? docs : output);
+  result.checks.push(`the POV choice shows Shinpachi's thought in the ${value.ui_style} sheet with tones loud, calm, tired; every row is at least 48 CSS px (${tag})`);
+
+  // 2. The loud row, tapped: it leads to its own reaction and sets its flag.
+  await tapRow(value, 0);
+  await waitFor(page, () => window.__debtQA?.screen === 'story' && window.__debtQA.flags?.reply === 'loud', null, 15000);
+  value = await state(page);
+  const loud = povStep.options[0];
+  assert.equal(value.node_id, loud.next, 'the loud row goes to its own reaction');
+  await waitFor(page, () => window.__debtQA?.text_complete, null, 10000);
+  value = await state(page);
+  const reaction = story.nodes[loud.next].steps.find(step => step.op === 'say');
+  assert.equal(value.text, reaction.text, 'and Gintoki answers with the loud reaction');
+  assert.equal(value.flags.reply, 'loud');
+  result.checks.push(`tapping the "loud" row goes to ${loud.next}, shows its reaction line and sets reply=loud (${tag})`);
+
+  // 3. The director's choice: the director's sheet, the footnote, cards; nobody changes on stage.
+  const stageBefore = (await readToChoice('director')).sprites;
+  value = await state(page);
+  assert.equal(value.screen === 'busy' || value.screen === 'choice', true);
+  await waitFor(page, () => window.__debtQA?.screen === 'choice', null, 5000);  // busy until the sheet has sprung in
+  value = await state(page);
+  assert.deepEqual(value.choice, { perspective: 'director', pov: '', note: directorStep.note, sheet: 'director', tones: ['', '', ''] },
+    'the director\'s choice: its own sheet with the footnote and no tones');
+  assert.equal(value.speaker, '', 'nobody is speaking');
+  assert.deepEqual(value.sprites, stageBefore, 'nobody came on stage or into focus');
+  assert.equal(value.choices.length, directorStep.options.length);
+  for (const [index, row] of value.choices.entries()) {
+    assert.equal(row.label, directorStep.options[index].label);
+    assert.ok(row.rect.height / (value.game.width / viewport.width) >= 48 - 0.1, `card ${index} is at least 48 CSS px tall`);
+    inside(row.rect, value.game, `card ${index}`);
+  }
+  inside(value.choice_sheet, value.game, 'the director\'s sheet');
+  assert.ok(value.controls.menu, '目錄 is on the director\'s sheet too');
+  inside(value.controls.menu, value.game, '目錄');
+  await screenshot(page, `preview-choice-director-${tag}`, docs);
+  result.checks.push(`the director's choice: sheet=director, footnote "${directorStep.note}", ${value.choices.length} cards each at least 48 CSS px, stage unchanged (${tag})`);
+
+  // 4. 目錄 over the director's choice: changing the edition keeps the director's sheet.
+  const styleOrder = ['cinema', 'ledger', 'manga'];
+  const other = styleOrder.find(style => style !== value.ui_style);
+  await controlAny(page, ['menu'], true, '目錄');
+  await waitFor(page, () => window.__debtQA?.screen === 'menu', null, 10000);
+  await control(page, `menu_style_${other}`, true);
+  await waitFor(page, expected => window.__debtQA?.ui_style === expected, other, 10000);
+  value = await state(page);
+  assert.equal(value.ui_style, other, `the edition is now ${other}`);
+  assert.equal(value.choice.sheet, 'director', 'the director\'s sheet is still the one under 目錄');
+  await controlAny(page, ['menu_close', 'menu_resume'], true, 'menu close');
+  await waitFor(page, () => window.__debtQA?.screen === 'choice', null, 10000);
+  value = await state(page);
+  assert.deepEqual(value.choice, { perspective: 'director', pov: '', note: directorStep.note, sheet: 'director', tones: ['', '', ''] });
+  assert.equal(value.choices.length, directorStep.options.length, 'all the cards are still there');
+  inside(value.choice_sheet, value.game, 'the director\'s sheet after the edition changed');
+  await screenshot(page, `choices-director-${other}-${tag}`);
+  result.checks.push(`changing the edition (${other}) from 目錄 over the director's choice keeps the director's sheet and its cards (${tag})`);
+
+  // 5. A card, tapped: its branch, its flag, and the end.
+  const picked = directorStep.options[1];
+  await tapRow(value, 1);
+  await waitFor(page, expected => window.__debtQA?.node_id === expected, picked.next, 15000);
+  value = await state(page);
+  assert.equal(value.flags.ep00_ending, picked.set_flags.ep00_ending, 'the card sets ep00_ending');
+  await activateSkip(page, true);
+  await waitFor(page, () => window.__debtQA?.screen === 'end', null, 30000);
+  value = await state(page);
+  assert.equal(value.flags.ep00_ending, 'request');
+  assert.equal(value.flags.reply, 'loud');
+  assert.deepEqual(errors, [], 'no browser or Godot runtime errors');
+  result.checks.push(`card "${picked.label}" goes to ${picked.next}, sets ep00_ending=${value.flags.ep00_ending} and the story ends (${tag})`);
+  console.log(`PASS choices ${tag}: ${result.checks.length} check groups`);
+  await context.close();
+}
+
+// EP00 (?sample=ep00), the vertical slice, by real touch. Path A: scene one, the POV choice, the loud row's overlay, the search
+// (Gintoki's three lines, the milk, the job document), the director's third card and its ending. Path B: the tired row, the
+// search without the job, the director's first card; a manual slot saved in the search and one at the director's choice, the page
+// reloaded, both loaded and found at the same event. At 320×568 path A runs as far as the search. Screenshots go to docs/.
+function ep00Tools(page) {
+  // One tap on the reading box (finishing the line first when it is still typing); returns when the story has moved
+  // or an overlay has started.
+  const advance = async () => {
+    await waitFor(page, () => window.__debtQA && (window.__debtQA.text_complete
+      || ['choice', 'investigate', 'end'].includes(window.__debtQA.screen)), null, 20000);
+    const before = await state(page);
+    if (before.screen !== 'story') return;
+    await controlAny(page, ['dialogue', 'advance', 'next'], true, 'dialogue advance');
+    await waitFor(page, previous => {
+      const v = window.__debtQA;
+      return v && (v.comedy?.active || (v.screen !== 'busy' && `${v.node_id}:${v.step_index}` !== previous));
+    }, lineKey(before), 20000);
+  };
+  // Taps through ordinary lines until done(state); every line met on the way is appended to `seen`.
+  const readUntil = async (done, label, seen = [], limit = 80) => {
+    for (let step = 0; step < limit; step++) {
+      await waitFor(page, () => { const v = window.__debtQA; return v && (v.comedy?.active || ['story', 'choice', 'investigate', 'end'].includes(v.screen)); }, null, 30000);
+      const value = await state(page);
+      if (value.comedy?.active) {
+        await waitFor(page, () => !window.__debtQA.comedy?.active, null, 10000);
+        continue;
+      }
+      if (value.screen === 'story' && !seen.some(entry => entry.key === lineKey(value))) {
+        seen.push({ key: lineKey(value), node: value.node_id, speaker: value.speaker, text: value.full_text });
+      }
+      if (done(value)) return value;
+      if (value.screen !== 'story') throw new Error(`${label}: stopped on ${value.screen} at ${key(value)}`);
+      await advance();
+    }
+    throw new Error(`${label}: not reached within ${limit} taps`);
+  };
+  const completeLine = () => waitFor(page, () => window.__debtQA?.text_complete, null, 15000);
+  const spotOf = (value, id) => value.phase3.hotspots.find(entry => entry.id === id);
+  // Folds the reading box and drags the picture until the spot's tap area is on screen (the strip left of Gintoki).
+  const bringIntoReach = async id => {
+    let value = await state(page);
+    if (!value.phase3.investigate_collapsed) {
+      await control(page, 'investigate_collapse', true);
+      await waitFor(page, () => window.__debtQA?.phase3?.investigate_collapsed === true, null, 10000);
+      value = await state(page);
+    }
+    const hit = spotOf(value, id).screen_rect;
+    const targetX = Math.max(value.game.x + value.game.width * 0.18, value.game.x + hit.width / 2 + 4);
+    const shift = targetX - (hit.x + hit.width / 2);
+    if (Math.abs(shift) > 40) {
+      const from = { x: value.viewport.width / 2, y: value.viewport.height * 0.35 };
+      await gesture(page, value.viewport, from, { x: from.x + shift, y: from.y }, 50, true);
+      await page.waitForTimeout(300);
+    }
+    return spotOf(await state(page), id);
+  };
+  const tapSpot = async id => {
+    const value = await state(page);
+    const spot = spotOf(value, id);
+    assert.ok(spot?.rect?.width > 0, `${id} is in reach of a tap: ${JSON.stringify(spot)}`);
+    await tapAt(page, value.viewport, center(spot.rect), true);
+  };
+  const saveToSlot = async slot => {
+    await openSaveSlots(page, true);
+    await control(page, `slot_${slot}`, true);
+    await closeSaveSlots(page, true);
+    await stable(page);
+  };
+  // What "the same event" means after a save and a load.
+  const picture = value => ({
+    screen: value.screen, node_id: value.node_id, step_index: value.step_index, flags: value.flags, items: value.items,
+    background: value.background,
+    on_stage: Object.entries(value.sprites).filter(([, sprite]) => sprite.visible).map(([id, sprite]) => `${id}@${sprite.position}`).sort(),
+    spots: (value.phase3.hotspots || []).map(spot => [spot.id, spot.checked]),
+    choice: value.choice, labels: value.choices.map(row => row.label),
+  });
+  return { advance, readUntil, completeLine, spotOf, bringIntoReach, tapSpot, saveToSlot, picture };
+}
+
+async function ep00PathA(viewport, tag, firstHalf) {
+  const { context, page, errors } = await openPage(viewport, true);
+  const result = { route: `ep00-a-${tag}`, viewport, touch: true, checks: [], errors };
+  report.runs.push(result);
+  const story = JSON.parse(await fs.readFile(path.join(root, 'data', 'ep00_story.json'), 'utf8'));
+  const says = nodeId => story.nodes[nodeId].steps.filter(step => step.op === 'say');
+  const sceneOne = says('s01_open');
+  const gintokiLines = [1, 2, 3].map(n => says(`s04_gintoki_${n}`)[0].text);
+  const povStep = story.nodes.s02_pov.steps.find(step => step.op === 'choice');
+  const directorStep = story.nodes.s06_open.steps.find(step => step.op === 'choice');
+  const impactIndex = story.nodes.s03_loud.steps.findIndex(step => step.op === 'comedy');
+  const tools = ep00Tools(page);
+  const phone = tag === 'phone';
+  const seen = [];
+  const inside = (rect, outer, label) => assert.ok(rect.x >= outer.x - 1 && rect.y >= outer.y - 1
+    && rect.x + rect.width <= outer.x + outer.width + 1 && rect.y + rect.height <= outer.y + outer.height + 1,
+  `${label} lies outside the game area: ${JSON.stringify({ rect, outer })}`);
+  const tapRow = async (value, index) => {
+    assert.ok(value.choices[index], `row ${index} is on screen and tappable`);
+    assertInside(value.choices[index].rect, value.viewport, `row ${index}`);
+    await tapAt(page, value.viewport, center(value.choices[index].rect), true);
+  };
+  const rowsOk = (value, step, kind) => {
+    assert.equal(value.choices.length, step.options.length);
+    for (const [index, row] of value.choices.entries()) {
+      assert.equal(row.label, step.options[index].label, `${kind} ${index} reads as the script says`);
+      assert.ok(row.rect.height / (value.game.width / viewport.width) >= 48 - 0.1, `${kind} ${index} is at least 48 CSS px tall`);
+      inside(row.rect, value.game, `${kind} ${index}`);
+    }
+  };
+
+  await control(page, 'begin', true);
+  await stable(page);
+
+  // 1. Scene 01: the living room, the three on stage at their places, faces, typing, a tap that finishes a line, the dog off stage.
+  let value = await tools.readUntil(v => v.full_text === sceneOne[0].text, 'the first line', seen);
+  await tools.completeLine();
+  value = await state(page);
+  assert.equal(value.background, 'yorozuya_living_room', 'the living room is the background');
+  assert.equal(value.speaker, 'gintoki');
+  assert.equal(value.sprites.gintoki.expression, 'nosepick', 'Gintoki has the lazy face');
+  assertLayout(value, `EP00 ${tag} first line`);
+  assert.ok(value.name_plate.width > 0, 'the name plate shows');
+  let revealed = 0;
+  for (let index = 1; index < sceneOne.length; index++) {
+    await tools.advance();
+    await waitFor(page, text => window.__debtQA?.full_text === text, sceneOne[index].text, 10000);
+    if (await reveal(page, true)) revealed += 1;
+    await tools.completeLine();
+    value = await state(page);
+    assert.equal(value.speaker, sceneOne[index].speaker, `line ${index + 1} is said by ${sceneOne[index].speaker}`);
+    if (index === 1) assert.equal(value.sprites.shinpachi.expression, 'angry');
+    if (index === 2) {
+      assert.deepEqual(['shinpachi', 'gintoki', 'kagura'].map(id => [value.sprites[id].visible, value.sprites[id].position]),
+        [[true, 'left'], [true, 'center'], [true, 'right']], 'Shinpachi left, Gintoki centre, Kagura right');
+      assert.equal(value.sprites.kagura.expression, 'smile');
+      if (phone) await screenshot(page, 'preview-ep00-a-screen-phone', docs);
+    }
+    if (index === 3) {
+      assert.equal(value.sprites.sadaharu.visible, false, 'the dog barks from off stage');
+      assert.ok(value.name_plate.width > 0, 'but his name shows');
+    }
+    if (index === 4) assert.equal(value.sprites.gintoki.expression, 'smug', 'Gintoki changed his face for his excuse');
+  }
+  assert.ok(revealed >= 1, 'a tap on a line still being typed finishes it and does not go on');
+  result.checks.push(`scene one: ${sceneOne.length} lines, living room, left/centre/right, faces change, typing, ${revealed} tap(s) finishing a line, the dog off stage (${tag})`);
+
+  // 2. The POV choice: Shinpachi's thought in the edition's own sheet.
+  value = await tools.readUntil(v => v.screen === 'choice', 'the POV choice', seen);
+  await page.waitForTimeout(300);
+  value = await state(page);
+  assert.deepEqual(value.choice, { perspective: 'pov', pov: 'shinpachi', note: '', sheet: value.ui_style, tones: ['loud', 'calm', 'tired'] },
+    'a POV choice: the edition\'s own sheet (not the director\'s), the three tones');
+  assert.equal(value.speaker, 'shinpachi');
+  rowsOk(value, povStep, 'row');
+  inside(value.choice_sheet, value.game, 'the POV sheet');
+  await screenshot(page, `preview-ep00-pov-${tag}`, docs);
+  result.checks.push(`the POV choice is Shinpachi's thought in the ${value.ui_style} sheet, three rows loud/calm/tired, each at least 48 CSS px and inside the game area (${tag})`);
+
+  // 3. The loud row: its branch and flag, then the overlay over the reading screen.
+  await tapRow(value, 0);
+  await waitFor(page, () => window.__debtQA?.flags?.pov_style === 'loud' && window.__debtQA.node_id === 's03_loud', null, 15000);
+  await tools.completeLine();
+  value = await state(page);
+  assert.equal(value.full_text, '嗯？');
+  await tools.advance();
+  await waitFor(page, () => window.__debtQA?.comedy?.active, null, 8000);
+  value = await state(page);
+  assert.equal(value.comedy.preset, 'tsukkomi_impact');
+  assert.equal(value.screen, 'busy', 'the story waits while the overlay plays');
+  const waiting = lineKey(value);
+  await page.waitForTimeout(450);
+  value = await state(page);
+  assert.ok(value.comedy.active && value.comedy.burst && value.comedy.text, 'the balloon and its line are on screen');
+  inside(value.comedy.burst, value.game, 'the balloon');
+  inside(value.comedy.text, value.comedy.burst, 'the big line (in the balloon)');
+  assert.equal(value.comedy.text_fits, true, 'the whole line fits its box');
+  assert.equal(lineKey(value), waiting, 'the story did not move while the overlay played');
+  await screenshot(page, `preview-ep00-comedy-${tag}`, docs);
+  const kaguraLine = says('s03_loud')[1];
+  if (phone) {
+    // A tap during the overlay only ends it: Kagura's line is next and shows whole.
+    assert.ok(value.controls.stage, 'the stage target is reachable during the overlay');
+    await tapAt(page, value.viewport, center(value.controls.stage), true);
+    await waitFor(page, () => !window.__debtQA.comedy?.active, null, 4000);
+  } else {
+    await waitFor(page, () => !window.__debtQA.comedy?.active, null, 8000);
+  }
+  await waitFor(page, () => window.__debtQA?.screen === 'story', null, 8000);
+  await page.waitForTimeout(400);
+  value = await state(page);
+  assert.equal(`${value.node_id}:${value.step_index}`, `s03_loud:${impactIndex + 1}`, 'the line after the overlay is current (a tap on the overlay did not also advance)');
+  assert.equal(value.full_text, kaguraLine.text);
+  assert.equal(value.speaker, 'kagura');
+  await tools.completeLine();
+  value = await state(page);
+  assert.equal(value.text, kaguraLine.text, 'and it shows whole');
+  result.checks.push(`the loud row goes to s03_loud and sets pov_style=loud; tsukkomi_impact plays over the reading screen, the story waits, ${phone ? 'a tap ends it and does not skip Kagura\'s line' : 'it ends by itself'}, then Kagura answers (${tag})`);
+
+  // 4. The search: only Gintoki is on stage; his spot is his portrait; his lines by tap count.
+  value = await tools.readUntil(v => v.screen === 'investigate', 'the search', seen);
+  assert.equal(value.node_id, 's04_room');
+  assert.deepEqual(Object.entries(value.sprites).filter(([, sprite]) => sprite.visible).map(([id]) => id), ['gintoki'], 'Gintoki alone is on stage');
+  assert.deepEqual(value.phase3.hotspots.map(spot => spot.id), ['gintoki', 'strawberry_milk', 'job_document', 'television']);
+  assert.equal(value.phase3.investigation.complete, true, 'nothing is required: 繼續 is open');
+  assert.ok(value.controls.investigate_continue, '繼續 is a control');
+  assertLayout(value, `EP00 ${tag} search`);
+  const gin = tools.spotOf(value, 'gintoki');
+  assert.ok(gin.rect?.width > 0, 'his spot (the part of his portrait above the box) is in reach');
+  const onGin = center(gin.rect);
+  for (const other of value.phase3.hotspots.filter(spot => spot.id !== 'gintoki')) {
+    const r = other.screen_rect;
+    assert.ok(!(onGin.x >= r.x && onGin.x <= r.x + r.width && onGin.y >= r.y && onGin.y <= r.y + r.height), `the tap on Gintoki is not in ${other.id}'s tap area`);
+  }
+  const taps = phone ? 3 : 1;
+  for (let n = 0; n < taps; n++) {
+    await tools.tapSpot('gintoki');
+    await waitFor(page, () => window.__debtQA?.screen === 'story', null, 15000);
+    await tools.completeLine();
+    value = await state(page);
+    assert.equal(value.speaker, 'gintoki');
+    assert.equal(value.node_id, `s04_gintoki_${n + 1}`, `tap ${n + 1} plays his line ${n + 1}`);
+    assert.equal(value.full_text, gintokiLines[n]);
+    value = await tools.readUntil(v => v.screen === 'investigate', 'back from Gintoki', seen);
+  }
+  assert.equal(tools.spotOf(value, 'gintoki').checked, true, 'his spot is checked');
+  result.checks.push(`the search keeps Gintoki alone on stage with four optional spots and 繼續 open; ${taps} tap(s) on his portrait play ${gintokiLines.slice(0, taps).map(text => `「${text}」`).join('')} in order (${tag})`);
+
+  if (firstHalf) {
+    await control(page, 'investigate_collapse', true);
+    await waitFor(page, () => window.__debtQA?.phase3?.investigate_collapsed === true, null, 10000);
+    await page.waitForTimeout(300);
+    value = await state(page);
+    assertLayout(value, `EP00 ${tag} search, box folded`);
+    await screenshot(page, `preview-ep00-interaction-${tag}`, docs);
+    assert.deepEqual(errors, [], 'no browser or Godot runtime errors');
+    result.checks.push(`the whole first half fits ${viewport.width}×${viewport.height}: every control inside the viewport (${tag})`);
+    console.log(`PASS ep00 path A ${tag} (first half): ${result.checks.length} check groups`);
+    await context.close();
+    return;
+  }
+
+  // 5. The milk (Kagura answers from off stage) and the job document (the clue, the flag), by dragging the picture and tapping.
+  let spot = await tools.bringIntoReach('strawberry_milk');
+  assert.ok(spot.rect?.width > 0, `the milk is in reach after dragging: ${JSON.stringify(spot)}`);
+  await tools.tapSpot('strawberry_milk');
+  await waitFor(page, () => window.__debtQA?.screen === 'story', null, 15000);
+  await tools.completeLine();
+  value = await state(page);
+  assert.equal(value.node_id, 's04_milk');
+  assert.equal(value.full_text, says('s04_milk')[0].text);
+  assert.equal(value.speaker, 'kagura');
+  assert.equal(value.sprites.kagura.visible, false, 'Kagura answers from off stage');
+  assert.ok(value.name_plate.width > 0);
+  value = await tools.readUntil(v => v.screen === 'investigate', 'back from the milk', seen);
+  assert.equal(value.flags.examined_strawberry_milk, true);
+  assert.equal(value.flags.found_job, false);
+  spot = await tools.bringIntoReach('job_document');
+  assert.ok(spot.rect?.width > 0, `the job document is in reach after dragging: ${JSON.stringify(spot)}`);
+  await tools.tapSpot('job_document');
+  await waitFor(page, () => window.__debtQA?.screen === 'story', null, 15000);
+  await tools.completeLine();
+  value = await state(page);
+  assert.equal(value.node_id, 's04_job');
+  assert.match(value.full_text, /尋找失蹤寵物/);
+  value = await tools.readUntil(v => v.screen === 'investigate', 'back from the job', seen);
+  assert.deepEqual(value.items, ['job_document'], 'the document is held');
+  assert.equal(value.flags.found_job, true);
+  assert.equal(tools.spotOf(value, 'job_document').checked, true);
+  assert.equal(tools.spotOf(value, 'strawberry_milk').checked, true);
+  await control(page, 'investigate_collapse', true);
+  await waitFor(page, () => window.__debtQA?.phase3?.investigate_collapsed === true, null, 10000);
+  await page.waitForTimeout(1500);  // the clue's toast has gone
+  value = await state(page);
+  assertLayout(value, `EP00 ${tag} search, box folded`);
+  await screenshot(page, `preview-ep00-interaction-${tag}`, docs);
+  result.checks.push(`dragging the picture and tapping: the milk (Kagura off stage, examined_strawberry_milk=true) and the job document (item job_document, found_job=true), both checked (${tag})`);
+
+  // 6. 繼續: found_job picks the branch, the milk flag Kagura's extra line, then the director's choice.
+  await control(page, 'investigate_expand', true);
+  await waitFor(page, () => window.__debtQA?.phase3?.investigate_collapsed === false, null, 10000);
+  await control(page, 'investigate_continue', true);
+  const afterSearch = [];
+  value = await tools.readUntil(v => v.screen === 'choice', 'the director\'s choice', afterSearch);
+  const texts = afterSearch.map(entry => entry.text);
+  assert.deepEqual(texts.slice(0, 3), says('s05_found').map(step => step.text), 'found_job: 這不是有工作嗎！ 沒看到。 你剛才明明就在旁邊！！');
+  assert.equal(texts[3], says('s05_milk_yes')[0].text, 'the milk flag: Kagura\'s extra line');
+  assert.equal(texts[4], says('s06_open')[0].text, 'then the narration');
+  assert.ok(!texts.includes(says('s05_missed')[0].text), 'not the 我自己找 branch');
+  await waitFor(page, () => window.__debtQA?.screen === 'choice', null, 10000);  // busy until the sheet has sprung in
+  value = await state(page);
+  assert.deepEqual(value.choice, { perspective: 'director', pov: '', note: directorStep.note, sheet: 'director', tones: ['', '', ''] },
+    'the director\'s choice: its own sheet, the footnote, no tones');
+  assert.equal(value.speaker, '', 'nobody is speaking');
+  rowsOk(value, directorStep, 'card');
+  inside(value.choice_sheet, value.game, 'the director\'s sheet');
+  assert.ok(value.controls.menu, '目錄 is on the director\'s sheet too');
+  await screenshot(page, `preview-ep00-director-${tag}`, docs);
+  result.checks.push(`繼續 goes to s05_found, then the milk line, then the director's choice: sheet=director, footnote "${directorStep.note}", ${value.choices.length} cards each at least 48 CSS px (${tag})`);
+
+  // 7. The third card: its branch, its flag, its ending.
+  const picked = directorStep.options[2];
+  await tapRow(value, 2);
+  await waitFor(page, expected => window.__debtQA?.node_id === expected, picked.next, 15000);
+  value = await state(page);
+  assert.equal(value.flags.ep00_ending, 'unknown');
+  value = await tools.readUntil(v => v.screen === 'end', 'the ending', seen);
+  await tools.completeLine();
+  value = await state(page);
+  const endStep = story.nodes[picked.next].steps.find(step => step.op === 'end');
+  assert.equal(value.full_text, endStep.text);
+  assert.deepEqual(value.flags, { pov_style: 'loud', found_job: true, examined_strawberry_milk: true, ep00_ending: 'unknown' });
+  assert.deepEqual(value.items, ['job_document']);
+  await screenshot(page, `preview-ep00-ending-${tag}`, docs);
+  assert.deepEqual(errors, [], 'no browser or Godot runtime errors');
+  result.checks.push(`card "${picked.label}" goes to ${picked.next}, sets ep00_ending=unknown and ends with 「${endStep.text}」; the flags of the whole run are kept (${tag})`);
+  console.log(`PASS ep00 path A ${tag}: ${result.checks.length} check groups`);
+  await context.close();
+}
+
+async function ep00PathB() {
+  const viewport = { width: 390, height: 844 };
+  const { context, page, errors } = await openPage(viewport, true);
+  const result = { route: 'ep00-b-phone', viewport, touch: true, checks: [], errors };
+  report.runs.push(result);
+  const story = JSON.parse(await fs.readFile(path.join(root, 'data', 'ep00_story.json'), 'utf8'));
+  const says = nodeId => story.nodes[nodeId].steps.filter(step => step.op === 'say');
+  const gintokiLines = [1, 2, 3].map(n => says(`s04_gintoki_${n}`)[0].text);
+  const directorStep = story.nodes.s06_open.steps.find(step => step.op === 'choice');
+  const tools = ep00Tools(page);
+  const seen = [];
+  const tapRow = async (value, index) => {
+    assert.ok(value.choices[index], `row ${index} is on screen and tappable`);
+    assertInside(value.choices[index].rect, value.viewport, `row ${index}`);
+    await tapAt(page, value.viewport, center(value.choices[index].rect), true);
+  };
+  const playGintoki = async (n) => {
+    await tools.tapSpot('gintoki');
+    await waitFor(page, () => window.__debtQA?.screen === 'story', null, 15000);
+    await tools.completeLine();
+    const value = await state(page);
+    assert.equal(value.full_text, gintokiLines[n], `Gintoki's line ${n + 1}`);
+    return tools.readUntil(v => v.screen === 'investigate', 'back from Gintoki', seen);
+  };
+
+  await control(page, 'begin', true);
+  await stable(page);
+  await activateSkip(page, true);
+  await waitFor(page, () => window.__debtQA?.screen === 'choice', null, 30000);
+  let value = await state(page);
+  assert.equal(value.choice.perspective, 'pov');
+  await tapRow(value, 2);  // 「……算了，我甚至不知道從哪裡開始說。」
+  await waitFor(page, () => window.__debtQA?.flags?.pov_style === 'tired' && window.__debtQA.node_id === 's03_tired', null, 15000);
+  await activateSkip(page, true);
+  await waitFor(page, () => window.__debtQA?.screen === 'investigate', null, 30000);
+  value = await state(page);
+  assert.deepEqual(Object.entries(value.sprites).filter(([, sprite]) => sprite.visible).map(([id]) => id), ['gintoki']);
+  assert.equal(value.flags.pov_style, 'tired');
+  result.checks.push('the tired row (skipping the reading) sets pov_style=tired and leads to the search');
+
+  // Two taps on Gintoki, then a manual slot in the search.
+  value = await playGintoki(0);
+  value = await playGintoki(1);
+  const searching = tools.picture(value);
+  assert.equal(searching.screen, 'investigate');
+  await tools.saveToSlot(1);
+  assert.deepEqual(tools.picture(await state(page)), searching, 'saving slot 1 leaves the search as it was');
+  result.checks.push('two taps on Gintoki, then slot 1 is saved in the search without moving it');
+
+  // 繼續 without the job: 我自己找; no milk was touched, so no extra line; the director's choice.
+  await control(page, 'investigate_continue', true);
+  const afterSearch = [];
+  value = await tools.readUntil(v => v.screen === 'choice', 'the director\'s choice', afterSearch);
+  assert.equal(afterSearch[0].node, 's05_missed');
+  assert.equal(afterSearch[0].text, says('s05_missed')[0].text, 'found_job is false: 我自己找');
+  assert.deepEqual(afterSearch.map(entry => entry.text), [says('s05_missed')[0].text, says('s06_open')[0].text], 'no job lines, no milk line');
+  await waitFor(page, () => window.__debtQA?.screen === 'choice', null, 10000);
+  value = await state(page);
+  assert.deepEqual(value.choice, { perspective: 'director', pov: '', note: directorStep.note, sheet: 'director', tones: ['', '', ''] });
+  const atDirector = tools.picture(value);
+  await tools.saveToSlot(2);
+  assert.deepEqual(tools.picture(await state(page)), atDirector, 'saving slot 2 leaves the director\'s choice as it was');
+  result.checks.push('繼續 without the job goes to 「……算了，我自己找。」 and on to the director\'s choice (found_job=false); slot 2 is saved there');
+
+  // The first card: the debt ending.
+  value = await state(page);
+  await tapRow(value, 0);
+  await waitFor(page, () => window.__debtQA?.node_id === 'end_debt', null, 15000);
+  value = await tools.readUntil(v => v.screen === 'end', 'the ending', seen);
+  await tools.completeLine();
+  value = await state(page);
+  assert.equal(value.full_text, story.nodes.end_debt.steps.find(step => step.op === 'end').text);
+  assert.deepEqual(value.flags, { pov_style: 'tired', found_job: false, examined_strawberry_milk: false, ep00_ending: 'debt' });
+  result.checks.push(`card "${directorStep.options[0].label}" ends the story with 「${value.full_text}」, ep00_ending=debt (path B)`);
+
+  // Reload the page: slot 1 comes back to the search (and counts his taps on), slot 2 to the same director's choice.
+  await page.waitForTimeout(1500);  // the browser's file system flushes to IndexedDB in the background
+  await page.reload({ waitUntil: 'load', timeout: 120000 });
+  await waitFor(page, () => window.__debtQA?.screen === 'title', null, 120000);
+  await control(page, 'title_load', true);
+  value = await state(page);
+  assert.deepEqual(value.slots.slice(0, 2).map(slot => slot.occupied), [true, true], 'both manual slots survived the reload');
+  await control(page, 'slot_1', true);
+  await stable(page);
+  value = await state(page);
+  assert.deepEqual(tools.picture(value), searching, 'slot 1 after a reload: the same event, the search with the same flags, stage and checked spots');
+  value = await playGintoki(2);
+  assert.equal(value.screen, 'investigate');
+  result.checks.push('after reloading the page, slot 1 returns to the same search; the third tap on Gintoki plays his third line (the count was saved)');
+  await controlAny(page, ['menu', 'toolbar_menu', 'menu_open'], true, 'menu');
+  await control(page, 'menu_load', true);
+  await control(page, 'slot_2', true);
+  await stable(page);
+  value = await state(page);
+  assert.deepEqual(tools.picture(value), atDirector, 'slot 2: the same director\'s choice');
+  assert.equal(value.choices.length, directorStep.options.length);
+  await waitFor(page, () => window.__debtQA?.screen === 'choice', null, 10000);
+  await tapRow(await state(page), 0);
+  await waitFor(page, () => window.__debtQA?.node_id === 'end_debt', null, 15000);
+  result.checks.push('slot 2 returns to the same director\'s choice (sheet, footnote, cards, flags) and its card still works');
+  assert.deepEqual(errors, [], 'no browser or Godot runtime errors');
+  console.log(`PASS ep00 path B: ${result.checks.length} check groups`);
+  await context.close();
+}
+
 try {
-  if (comedyOnly) {
+  if (ep00Only) {
+    await ep00PathA({ width: 390, height: 844 }, 'phone', false);
+    await ep00PathB();
+    await ep00PathA({ width: 320, height: 568 }, 'narrow', true);
+  } else if (choicesOnly) {
+    await choicesRoute({ width: 390, height: 844 }, 'phone');
+    await choicesRoute({ width: 320, height: 568 }, 'narrow');
+  } else if (comedyOnly) {
     await comedyRoute({ width: 390, height: 844 }, 'phone');
     await comedyRoute({ width: 320, height: 568 }, 'narrow');
   } else if (smokeOnly) {
@@ -1096,10 +1669,10 @@ try {
   console.error(error.stack);
 } finally {
   report.finished = new Date().toISOString();
-  const reportName = comedyOnly ? 'comedy-browser-report.json' : smokeOnly ? 'smoke-report.json' : slotsOnly ? 'slots-report.json'
+  const reportName = ep00Only ? 'ep00-browser-report.json' : choicesOnly ? 'choices-browser-report.json' : comedyOnly ? 'comedy-browser-report.json' : smokeOnly ? 'smoke-report.json' : slotsOnly ? 'slots-report.json'
     : phase3Only ? 'phase3-report.json' : roundsOnly ? 'rounds-report.json' : investigateOnly ? 'investigate-report.json'
     : phase2Only ? 'phase2-report.json' : 'browser-report.json';
-  await fs.writeFile(path.join(comedyOnly ? docs : output, reportName), `${JSON.stringify(report, null, 2)}\n`);
+  await fs.writeFile(path.join(comedyOnly || choicesOnly || ep00Only ? docs : output, reportName), `${JSON.stringify(report, null, 2)}\n`);
   await browser.close();
   console.log(`Evidence: ${output}`);
 }

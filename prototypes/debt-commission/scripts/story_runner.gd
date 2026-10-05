@@ -58,6 +58,12 @@ const VALID_EXPRESSIONS: Array[String] = ["neutral", "smile", "annoyed", "surpri
     "sit_serious", "sit_talking"]
 ## `comedy` presets (scripts/comedy_layer.gd): the manga overlay a line of the script asks for.
 const VALID_COMEDY_PRESETS: Array[String] = ["tsukkomi_impact", "small_reaction", "full_manga_panel"]
+## `choice` perspectives: a reaction in a character's head (pov, the default) or the player stepping out
+## as the director to decide what happens next. A pov choice says whose thought it is (`pov`, default
+## Shinpachi) and may tag its options with a tone; a director choice may carry a footnote (`note`).
+const VALID_PERSPECTIVES: Array[String] = ["pov", "director"]
+const DEFAULT_POV: String = "shinpachi"
+const VALID_TONES: Array[String] = ["loud", "calm", "tired"]
 const VALID_DIRECTIONS: Array[String] = ["left", "right", "up", "down"]
 const VALID_SOUNDS: Array[String] = ["paper", "knock", "step", "stamp"]
 ## An investigation's own place (its step-level hotspots, talk and bg); `places` add the others.
@@ -1528,6 +1534,27 @@ func _validate_node(current_node_id: String, node: Dictionary, nodes: Dictionary
     return ""
 
 
+## `perspective`, `pov` and `note` of a `choice` step (its options are known to be an array here).
+func _validate_choice_marks(step: Dictionary, prefix: String, asset_catalog: Dictionary) -> String:
+    var perspective: Variant = step.get("perspective", "pov")
+    if typeof(perspective) != TYPE_STRING or not VALID_PERSPECTIVES.has(String(perspective)):
+        return "%s choice perspective '%s' is not one of %s" % [prefix, perspective, ", ".join(VALID_PERSPECTIVES)]
+    var director: bool = String(perspective) == "director"
+    if step.has("pov"):
+        if director:
+            return "%s choice pov is only for a pov choice (this one is a director choice)" % prefix
+        if typeof(step["pov"]) != TYPE_STRING or not _catalog_has_character(asset_catalog, String(step["pov"])):
+            return "%s choice pov '%s' is not a character in the asset catalog" % [prefix, step["pov"]]
+    if step.has("note"):
+        if not director:
+            return "%s choice note is only for a director choice (this one is a pov choice)" % prefix
+        if not _is_non_empty_string(step["note"]):
+            return "%s choice note must be a non-empty string" % prefix
+    if director and (step["options"] as Array).size() < 2:
+        return "%s director choice needs at least two options (it decides what happens next)" % prefix
+    return ""
+
+
 func _validate_step(current_node_id: String, index: int, step: Dictionary, nodes: Dictionary, asset_catalog: Dictionary) -> String:
     var prefix: String = "node '%s' step %d" % [current_node_id, index]
     if not step.has("op") or not _is_non_empty_string(step["op"]):
@@ -1582,6 +1609,10 @@ func _validate_step(current_node_id: String, index: int, step: Dictionary, nodes
             var options: Array = step["options"] as Array
             if options.is_empty():
                 return "%s choice needs at least one option" % prefix
+            var marks_error: String = _validate_choice_marks(step, prefix, asset_catalog)
+            if not marks_error.is_empty():
+                return marks_error
+            var director_choice: bool = String(step.get("perspective", "pov")) == "director"
             var option_ids: Array[String] = []
             var unconditional_options: int = 0
             for option_index: int in range(options.size()):
@@ -1594,6 +1625,11 @@ func _validate_step(current_node_id: String, index: int, step: Dictionary, nodes
                 if option_ids.has(option_id):
                     return "%s repeats option id '%s'" % [prefix, option_id]
                 option_ids.append(option_id)
+                if option.has("tone"):
+                    if director_choice:
+                        return "%s option '%s' tone is only for a pov choice (this one is a director choice)" % [prefix, option_id]
+                    if typeof(option["tone"]) != TYPE_STRING or not VALID_TONES.has(String(option["tone"])):
+                        return "%s option '%s' tone '%s' is not one of %s" % [prefix, option_id, option["tone"], ", ".join(VALID_TONES)]
                 if not _is_non_empty_string(option.get("next", null)) or not nodes.has(String(option["next"])):
                     return "%s option '%s' has an invalid next target" % [prefix, option_id]
                 if option.has("require"):

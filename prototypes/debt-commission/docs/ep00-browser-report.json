@@ -1,0 +1,59 @@
+{
+  "url": "http://127.0.0.1:5193/?qa=1&sample=ep00",
+  "started": "2026-10-02T09:28:00.240Z",
+  "runs": [
+    {
+      "route": "ep00-a-phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "touch": true,
+      "checks": [
+        "scene one: 5 lines, living room, left/centre/right, faces change, typing, 3 tap(s) finishing a line, the dog off stage (phone)",
+        "the POV choice is Shinpachi's thought in the cinema sheet, three rows loud/calm/tired, each at least 48 CSS px and inside the game area (phone)",
+        "the loud row goes to s03_loud and sets pov_style=loud; tsukkomi_impact plays over the reading screen, the story waits, a tap ends it and does not skip Kagura's line, then Kagura answers (phone)",
+        "the search keeps Gintoki alone on stage with four optional spots and 繼續 open; 3 tap(s) on his portrait play 「幹嘛。」「你一直點我也不會掉道具。」「這不是手遊角色首頁。」 in order (phone)",
+        "dragging the picture and tapping: the milk (Kagura off stage, examined_strawberry_milk=true) and the job document (item job_document, found_job=true), both checked (phone)",
+        "繼續 goes to s05_found, then the milk line, then the director's choice: sheet=director, footnote \"※製作組經費有限\", 3 cards each at least 48 CSS px (phone)",
+        "card \"定春撞進房間\" goes to end_unknown, sets ep00_ending=unknown and ends with 「EP00 完 ── ？？？篇」; the flags of the whole run are kept (phone)"
+      ],
+      "errors": []
+    },
+    {
+      "route": "ep00-b-phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "touch": true,
+      "checks": [
+        "the tired row (skipping the reading) sets pov_style=tired and leads to the search",
+        "two taps on Gintoki, then slot 1 is saved in the search without moving it",
+        "繼續 without the job goes to 「……算了，我自己找。」 and on to the director's choice (found_job=false); slot 2 is saved there",
+        "card \"登勢闖進來\" ends the story with 「EP00 完 ── 欠債篇」, ep00_ending=debt (path B)",
+        "after reloading the page, slot 1 returns to the same search; the third tap on Gintoki plays his third line (the count was saved)",
+        "slot 2 returns to the same director's choice (sheet, footnote, cards, flags) and its card still works"
+      ],
+      "errors": []
+    },
+    {
+      "route": "ep00-a-narrow",
+      "viewport": {
+        "width": 320,
+        "height": 568
+      },
+      "touch": true,
+      "checks": [
+        "scene one: 5 lines, living room, left/centre/right, faces change, typing, 3 tap(s) finishing a line, the dog off stage (narrow)",
+        "the POV choice is Shinpachi's thought in the cinema sheet, three rows loud/calm/tired, each at least 48 CSS px and inside the game area (narrow)",
+        "the loud row goes to s03_loud and sets pov_style=loud; tsukkomi_impact plays over the reading screen, the story waits, it ends by itself, then Kagura answers (narrow)",
+        "the search keeps Gintoki alone on stage with four optional spots and 繼續 open; 1 tap(s) on his portrait play 「幹嘛。」 in order (narrow)",
+        "the whole first half fits 320×568: every control inside the viewport (narrow)"
+      ],
+      "errors": []
+    }
+  ],
+  "passed": true,
+  "finished": "2026-10-02T09:29:03.080Z"
+}

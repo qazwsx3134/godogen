@@ -460,6 +460,7 @@ text = "討債委託　／　01"
 horizontal_alignment = 2
 vertical_alignment = 1
 clip_text = true
+text_overrun_behavior = 3
 
 [node name="TextGap" type="Control" parent="Panel/Padding/Column" unique_id=225243894]
 custom_minimum_size = Vector2(0, 22.153847)

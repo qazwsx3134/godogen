@@ -42,6 +42,8 @@ const CHOICE_SHEETS: Dictionary = {
 	"ledger": preload("res://scenes/ui/choice_sheet_ledger.tscn"),
 	"manga": preload("res://scenes/ui/choice_sheet_manga.tscn"),
 }
+## A director choice sits in its own sheet whatever the edition (scenes/ui/choice_sheet_director.tscn).
+const DIRECTOR_SHEET: PackedScene = preload("res://scenes/ui/choice_sheet_director.tscn")
 const SPRITE_SCRIPT: Script = preload("res://scripts/placeholder_sprite.gd")
 ## Each character's own size and framing (tools/make_character_scenes.gd creates missing ones).
 const CHARACTER_SCENE: String = "res://scenes/characters/%s.tscn"
@@ -173,6 +175,11 @@ var _name_label: Label = null
 var _choice_sheet: ChoiceSheet = null
 var _sheet_prompt: String = ""
 var _sheet_timed: bool = false
+## What the choice on the sheet asks for: "pov" (the edition's sheet) or "director" (the director's own),
+## the director's footnote, and the tone of each row ("" for none).
+var _sheet_perspective: String = "pov"
+var _sheet_note: String = ""
+var _sheet_tones: PackedStringArray = []
 var _sheet_censor: bool = false
 var _sheet_super: bool = false
 var _qte: QteRing = null
@@ -735,35 +742,50 @@ func _mount_dialogue_box() -> void:
 	old.queue_free()
 
 
-## The current edition's choice sheet sits above the dialogue box; on an edition switch the options
-## on screen are rebuilt in the new sheet.
+## The choice sheet sits above the dialogue box; on an edition switch the options on screen are rebuilt
+## in the new sheet (a director choice stays in the director's).
 func _mount_choice_sheet() -> void:
-	var old: ChoiceSheet = _choice_sheet
-	_choice_sheet = (CHOICE_SHEETS[_ui_style_id] as PackedScene).instantiate() as ChoiceSheet
-	_dialog_layer.add_child(_choice_sheet)
-	_dialog_layer.move_child(_choice_sheet, _dialog_panel.get_index() + 1)
-	_choice_sheet.menu_pressed.connect(_open_menu)
-	_choice_sheet.censor_pressed.connect(_on_censor_pressed)
-	_choice_sheet.super_pressed.connect(_on_super_pressed)
-	_choice_sheet.clear_options()
-	_fit_choice_sheet()
-	if old != null:
-		_dialog_layer.remove_child(old)
-		old.queue_free()
+	_swap_choice_sheet()
 	if _choice_buttons.is_empty():
 		_choice_sheet.visible = false
 	else:
 		_show_choice_sheet()
 
 
+## The scene the choice on screen asks for: the director's own, or the edition's.
+func _choice_sheet_scene() -> PackedScene:
+	return DIRECTOR_SHEET if _sheet_perspective == "director" else CHOICE_SHEETS[_ui_style_id]
+
+
+## Puts a fresh sheet of that scene in place of the mounted one; the one place that decides which it is.
+func _swap_choice_sheet() -> void:
+	var old: ChoiceSheet = _choice_sheet
+	_choice_sheet = _choice_sheet_scene().instantiate() as ChoiceSheet
+	_dialog_layer.add_child(_choice_sheet)
+	_dialog_layer.move_child(_choice_sheet, _dialog_panel.get_index() + 1)
+	_choice_sheet.menu_pressed.connect(_open_menu)
+	_choice_sheet.censor_pressed.connect(_on_censor_pressed)
+	_choice_sheet.super_pressed.connect(_on_super_pressed)
+	_choice_sheet.pop_finished.connect(_publish_qa_state)
+	_choice_sheet.clear_options()
+	_fit_choice_sheet()
+	if old != null:
+		_dialog_layer.remove_child(old)
+		old.queue_free()
+
+
 ## Fills the sheet from _current_options. Story choices answer through _on_choice_pressed, a timed
 ## tsukkomi through _on_boke_option_pressed.
 func _show_choice_sheet() -> void:
+	if _choice_sheet.scene_file_path != _choice_sheet_scene().resource_path:
+		_swap_choice_sheet()  # a director choice takes its own sheet, the next pov choice or round the edition's
 	_fit_choice_sheet()
 	var labels: PackedStringArray = []
 	for option: Dictionary in _current_options:
 		labels.append(_dict_string(option, "label"))
-	_choice_buttons = _choice_sheet.show_options(_sheet_prompt, labels, "選一句吐槽" if _sheet_timed else "選一句回應")
+	var hint: String = "選一句吐槽" if _sheet_timed else ("選一個接下來的發展" if _sheet_perspective == "director" else "選一句回應")
+	_choice_buttons = _choice_sheet.show_options(_sheet_prompt, labels, hint, _sheet_tones)
+	_choice_sheet.set_note(_sheet_note)
 	for index: int in range(_choice_buttons.size()):
 		var option_id: String = _dict_string(_current_options[index], "id")
 		var row: Button = _choice_buttons[index]
@@ -1869,6 +1891,9 @@ func _present_tsukkomi_options(command: Dictionary, restored: bool) -> void:
 			_current_options.append((option_variant as Dictionary).duplicate(true))
 	_sheet_prompt = _full_text
 	_sheet_timed = true
+	_sheet_perspective = "pov"
+	_sheet_note = ""
+	_sheet_tones = PackedStringArray()
 	_sheet_censor = RoundView.censor(command)
 	_sheet_super = bool(command.get("super_available", false))
 	_show_choice_sheet()
@@ -2131,10 +2156,16 @@ func _set_text_tone(tone: String) -> void:
 	_dialog_panel.set_tone(tone)
 
 
+## A pov choice is a thought of `pov` (Shinpachi unless the step names someone else): their name plate
+## and portrait, the prompt as an inner voice, options in the edition's sheet. A director choice is the
+## player stepping out of the story: narration, nobody comes on stage or into focus, the director's sheet
+## springs in with a clap.
 func _present_choice(command: Dictionary) -> void:
+	var director: bool = _dict_string(command, "perspective", "pov") == "director"
+	var pov: String = _dict_string(command, "pov", STORY_RUNNER_SCRIPT.DEFAULT_POV)
 	_current_command = command.duplicate(true)
-	_current_speaker = "shinpachi"
-	_full_text = _dict_string(command, "prompt", "我該怎麼做……？")
+	_current_speaker = "" if director else pov
+	_full_text = _dict_string(command, "prompt", "接下來發生什麼？" if director else "我該怎麼做……？")
 	_current_line_key = _line_key(command, "choice")
 	_line_logged = _history_has_key(_current_line_key)
 	_line_generation += 1
@@ -2145,24 +2176,34 @@ func _present_choice(command: Dictionary) -> void:
 	_boke_controls.visible = false
 	_end_box.visible = false
 	_refresh_phase3_hud()
-	_set_name_plate("shinpachi", true)
-	_focus_speaker("shinpachi", "thinking")
-	_set_text_tone("thought")
+	if director:
+		_set_name_plate("narrator", false)
+		_set_text_tone("body")
+	else:
+		_set_name_plate(pov, true)
+		_focus_speaker(pov, "thinking")
+		_set_text_tone("thought")
 	_set_visible_text(_full_text, true)
 	if not _line_logged:
-		_append_history({"key": _current_line_key, "kind": "say", "speaker": "shinpachi",
-			"text": _full_text, "thought": true})
+		_append_history({"key": _current_line_key, "kind": "say", "speaker": "narrator" if director else pov,
+			"text": _full_text, "thought": not director})
 		_line_logged = true
 
 	_clear_choices()
+	_sheet_perspective = "director" if director else "pov"
+	_sheet_note = _dict_string(command, "note") if director else ""
 	for option_variant: Variant in command.get("options", []):
 		if not option_variant is Dictionary:
 			continue
 		var option: Dictionary = (option_variant as Dictionary).duplicate(true)
 		_current_options.append(option)
+		_sheet_tones.append(_dict_string(option, "tone"))
 	_sheet_prompt = _full_text
 	_sheet_timed = false
 	_show_choice_sheet()
+	if director:
+		_choice_sheet.pop_in()
+		_effects.play({"op": "se", "id": "director_clap"}, false)  # silent while muted
 	call_deferred("_publish_qa_state")
 
 
@@ -2386,6 +2427,9 @@ func _sprite(actor_id: String) -> Control:
 func _clear_choices() -> void:
 	_current_options.clear()
 	_choice_buttons.clear()
+	_sheet_perspective = "pov"
+	_sheet_note = ""
+	_sheet_tones = PackedStringArray()
 	if _choice_sheet != null:
 		_choice_sheet.clear_options()
 		_refresh_reading_ui()
@@ -3533,7 +3577,8 @@ func _write_qa_state() -> void:
 			"focused": sprite.modulate.r > 0.9, "position": str(_actor_slots.get(actor_id, "center"))}
 	var state: Dictionary = {
 		# While the menu pops in, its rows are scaled and not yet laid out: report busy until it settles.
-		"screen": "busy" if _screen_mode == "menu" and _menu_panel.scale != Vector2.ONE else _screen_mode,
+		# The director's sheet springs in the same way.
+		"screen": "busy" if (_screen_mode == "menu" and _menu_panel.scale != Vector2.ONE) or _choice_sheet.is_popping() else _screen_mode,
 		"text": _visible_text,
 		"full_text": _full_text,
 		"speaker": _current_speaker,
@@ -3564,6 +3609,7 @@ func _write_qa_state() -> void:
 			"tappable": _placard_open()},
 		"log_scroll": {"value": _log_scroll.scroll_vertical, "max": _log_scroll.get_v_scroll_bar().max_value - _log_scroll.size.y},
 		"choices": choices,
+		"choice": _choice_qa_state(current),
 		"phase3": {
 			"enabled": _phase3_enabled,
 			"gameplay": snapshot.get("gameplay", {}),
@@ -3599,6 +3645,23 @@ func _write_qa_state() -> void:
 		"slots": visible_slots,
 	}
 	JavaScriptBridge.eval("window.__debtQA=Object.freeze(%s);" % JSON.stringify(state))
+
+
+## The `choice` field of the QA snapshot while a `choice` step has its options up (else {}): the look the
+## step asks for (`perspective`, whose thought `pov`, the director's `note`, each row's `tones`) and the
+## sheet that really holds it (`director`, or the edition's id).
+func _choice_qa_state(current: Dictionary) -> Dictionary:
+	if _command_op(current) != "choice" or _choice_buttons.is_empty():
+		return {}
+	var director: bool = _dict_string(current, "perspective", "pov") == "director"
+	var tones: Array = []
+	for option: Dictionary in _current_options:
+		tones.append(_dict_string(option, "tone"))
+	return {"perspective": "director" if director else "pov",
+		"pov": "" if director else _dict_string(current, "pov", STORY_RUNNER_SCRIPT.DEFAULT_POV),
+		"note": _dict_string(current, "note"),
+		"sheet": "director" if _choice_sheet.perspective == "director" else _choice_sheet.style_id,
+		"tones": tones}
 
 
 ## Visible, enabled, and not scrolled or clipped out of view (a menu row below the fold is not).

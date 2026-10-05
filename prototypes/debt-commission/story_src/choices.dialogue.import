@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://bpj56pbuf8an8"
+path="res://.godot/imported/choices.dialogue-164cfe19da81c97df126764625635f64.tres"
+
+[deps]
+
+source_file="res://story_src/choices.dialogue"
+dest_files=["res://.godot/imported/choices.dialogue-164cfe19da81c97df126764625635f64.tres"]
+
+[params]
+
+defaults=true

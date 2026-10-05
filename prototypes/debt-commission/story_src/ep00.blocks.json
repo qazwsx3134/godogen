@@ -1,0 +1,50 @@
+{
+  "story": {
+    "id": "ep00",
+    "title": "EP00 今天也沒有工作的萬事屋（Prototype v0.1，非核准）",
+    "note": "VN Framework Prototype v0.1 的 vertical slice：一般 VN、POV 選項、漫畫吐槽層、互動調查、旗標與條件、導演選項、三個結局；台詞取自 v2 EP00 草稿，不是作者核准的文本。",
+    "initial_flags": {
+      "pov_style": "",
+      "found_job": false,
+      "examined_strawberry_milk": false,
+      "ep00_ending": ""
+    }
+  },
+  "titles": {
+    "s01_open": "EP00 場景一：普通 VN",
+    "s02_pov": "EP00 場景二：POV 選項",
+    "s03_loud": "EP00 場景三：激烈吐槽的反應",
+    "s03_calm": "EP00 場景三：冷靜指出問題的反應",
+    "s03_tired": "EP00 場景三：懶得吐槽的反應",
+    "s04_intro": "EP00 場景四：互動調查的開頭",
+    "s04_room": "EP00 場景四：互動調查",
+    "s04_gintoki_1": "互動調查：銀時（第一次）",
+    "s04_gintoki_2": "互動調查：銀時（第二次）",
+    "s04_gintoki_3": "互動調查：銀時（第三次起）",
+    "s04_milk": "互動調查：草莓牛奶",
+    "s04_job": "互動調查：委託書",
+    "s04_tv": "互動調查：電視",
+    "s05_check": "EP00 場景五：找到委託書了嗎",
+    "s05_found": "EP00 場景五：找到委託書",
+    "s05_missed": "EP00 場景五：沒找到委託書",
+    "s05_milk": "EP00 場景五：碰過草莓牛奶了嗎",
+    "s05_milk_yes": "EP00 場景五：神樂補一句",
+    "s06_open": "EP00 場景六：導演選項",
+    "end_debt": "EP00 結局 A：欠債篇",
+    "end_request": "EP00 結局 B：委託篇",
+    "end_unknown": "EP00 結局 C：？？？篇"
+  },
+  "blocks": {
+    "yorozuya_room": {
+      "op": "investigate",
+      "prompt": "四處點點看吧。（左右拖曳背景可以看到更多）",
+      "keep_cast": true,
+      "hotspots": [
+        {"id": "gintoki", "label": "銀時", "character": "gintoki", "lines": ["s04_gintoki_1", "s04_gintoki_2", "s04_gintoki_3"], "optional": true},
+        {"id": "strawberry_milk", "label": "草莓牛奶", "pos": [0.4175, 0.555], "size": [0.05, 0.095], "goto": "s04_milk", "set": {"examined_strawberry_milk": true}, "optional": true},
+        {"id": "job_document", "label": "委託書", "pos": [0.62, 0.575], "size": [0.05, 0.05], "item": "job_document", "goto": "s04_job", "set": {"found_job": true}, "optional": true},
+        {"id": "television", "label": "電視", "pos": [0.095, 0.47], "size": [0.16, 0.2], "goto": "s04_tv", "optional": true}
+      ]
+    }
+  }
+}

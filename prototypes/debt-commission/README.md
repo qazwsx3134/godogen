@@ -14,7 +14,7 @@ Godot 4.7 手機直立視覺小說，依 [V1 Roadmap](../../docs/story-telling-g
 
 ## 試玩與操作
 
-啟動下方的 Web 伺服器後，開啟 <http://127.0.0.1:5193/> 試玩討債閱讀基線；<http://127.0.0.1:5193/?sample=phase2> 是草莓牛奶劇本測試，<http://127.0.0.1:5193/?sample=phase3> 是可玩的調查與吐槽技術短循環，<http://127.0.0.1:5193/?sample=phase4> 是四線索調查（對話與移動話題、廚房、畫面外台詞），<http://127.0.0.1:5193/?sample=phase4_rounds> 是 Phase 4 回合試片（證言、消音條、神樂回合的伊莉莎白牌子與條件式放棄吐槽、連擊、QTE、超必殺；台詞取自第一章草稿，非核准）。<http://127.0.0.1:5193/?sample=comedy> 是漫畫吐槽疊加層技術片段（三個 preset，台詞取自 v2 EP00 草稿，非核准）。各用自己的本機存檔；桌機或編輯器直接執行時，在標題點故事名稱打開「章節選擇」換故事。
+啟動下方的 Web 伺服器後，開啟 <http://127.0.0.1:5193/> 試玩討債閱讀基線；<http://127.0.0.1:5193/?sample=phase2> 是草莓牛奶劇本測試，<http://127.0.0.1:5193/?sample=phase3> 是可玩的調查與吐槽技術短循環，<http://127.0.0.1:5193/?sample=phase4> 是四線索調查（對話與移動話題、廚房、畫面外台詞），<http://127.0.0.1:5193/?sample=phase4_rounds> 是 Phase 4 回合試片（證言、消音條、神樂回合的伊莉莎白牌子與條件式放棄吐槽、連擊、QTE、超必殺；台詞取自第一章草稿，非核准）。<http://127.0.0.1:5193/?sample=comedy> 是漫畫吐槽疊加層技術片段（三個 preset，台詞取自 v2 EP00 草稿，非核准）。<http://127.0.0.1:5193/?sample=choices> 是兩種選項的技術片段（POV 選項：新八的想法，三個選項各帶語氣標記；導演選擇：跳出角色決定接下來發生什麼，三條分支各自結局；台詞取自 v2 EP00 的 Scene 02 與 Scene 06，非核准）。<http://127.0.0.1:5193/?sample=ep00> 是 VN Framework Prototype v0.1 的 vertical slice「EP00 今天也沒有工作的萬事屋」：一般 VN、POV 選項、漫畫吐槽層、互動調查、旗標與條件、導演選項、三個結局與存讀檔串成一集（台詞取自 v2 EP00 草稿，非核准）。各用自己的本機存檔；桌機或編輯器直接執行時，在標題點故事名稱打開「章節選擇」換故事。
 
 | 操作 | 效果 |
 | --- | --- |
@@ -70,6 +70,8 @@ bash tools/serve_web.sh
 | `scripts/ui_stage_style.gd` | 與介面風格一致的場景色調 |
 | `scenes/stage.tscn` | 舞台：各背景的取景框、左中右通用站位（編輯器裡可拖曳） |
 | `scenes/comedy/tsukkomi_impact.tscn`、`small_reaction.tscn`、`full_manga_panel.tscn` | 漫畫吐槽疊加層的三個 preset（`ComedyLayer` 實例化，腳本 `scripts/comedy_preset.gd`）。根節點的 `@export` 可調：`dim_in`、`cutin_at`、`cutin_slide`、`shake_at`、`sound_at`、`burst_at`、`hold_until`、`fade_at`、`end_at`（秒）、`shake_strength`、`sound_id`、`stage_zoom`、`font_max`；`SpeedLines`（`speed_lines.gd`）調線數、顏色、中心空白；`Burst`（`burst_shape.gd`）調尖角數、填色、框線；`CutInPanel`／`Portrait` 是傾斜漫畫格與臉圖；`Text` 的字體與描邊在 scene 裡。編輯器未執行就看得到新八 `shout` 與「現在是工作時間吧！！！」 |
+| `scenes/ui/choice_sheet_<cinema\|ledger\|manga>.tscn`、`choice_item_<風格>.tscn` | POV 選項與限時吐槽的選項面板（腳本 `scripts/choice_sheet.gd`）。每個 `choice_item_<風格>.tscn` 的 `%Tone` 是語氣標記（只在有 `tone` 的列顯示：位置、大小、顏色在 scene 裡）；面板根節點的 `index_numerals`、`count_format` 可調 |
+| `scenes/ui/choice_sheet_director.tscn`、`choice_item_director.tscn` | 導演選擇面板（三款 UI 風格共用，腳本同上）。`%Banner` 抬頭文字、`%Note` 註腳樣式、`TopTape`／`BottomTape`／每列的 `Stick`（`scripts/stripe_bar.gd`：`color_a`、`color_b`、`stripe_width`、`lean`，編輯器裡直接看得到條紋）、`Panel` 的框線與底色、卡片列的 StyleBox（`choice_item_director.tscn`：一般／按下的邊框與底色、左邊 `content_margin_left` 留給「SCENE 01」）；根節點的 `index_format`（"SCENE %02d"）、`count_format`、`pop_seconds`（彈入秒數）、`pop_from_scale`（彈入起始縮放）可調。由 `tools/make_director_scenes.gd` 產生一次，之後 scene 是來源檔 |
 | `scenes/characters/<角色>.tscn` | 每個角色的大小與取景（腳本 `scripts/placeholder_sprite.gd`，manga 風格轉黑白） |
 | `scripts/story_runner.gd` | 劇本節點執行、資料檢查、條件跳轉與閱讀位置 |
 | `scripts/save_slots.gd` | 手動欄位命名、暫存寫入與備份還原 |
@@ -78,6 +80,7 @@ bash tools/serve_web.sh
 | `data/phase3_story.json` | 調查、銀時發言與四種吐槽結果的技術短循環，非正式第一章 |
 | `data/phase4_story.json` | 四線索調查與素材限定吐槽的技術試片（`story_src/phase4.*` 建置；調查的對話話題、移動地點、查看後台詞與畫面外台詞的寫法範例） |
 | `data/phase4_rounds_story.json` | Phase 4 回合試片：銀時證言、神樂證言（伊莉莎白的牌子、條件式放棄吐槽）與連擊三回合（`story_src/phase4_rounds.*` 建置；v2 回合的寫法範例） |
+| `data/ep00_story.json` | EP00 vertical slice（`story_src/ep00.dialogue`＋`ep00.blocks.json` 建置；`?sample=ep00`）：六個場景、三個 POV 選項、導演選項與三個結局；`tests/test_ep00.gd` 窮舉所有路徑 |
 | `data/asset_catalog.json` | 背景、人物、吐槽素材及可替換圖片的統一設定 |
 | `data/stories.json` | 章節選擇裡的故事：依序的本篇（`kind: "chapter"`）與試玩片段（`"sample"`），各自的劇本與存檔路徑。新增故事加一行，不用改程式 |
 | `IMPLEMENTATION.md` | StoryRunner、catalog 與外殼的介面契約 |
@@ -105,6 +108,8 @@ XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://t
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_ui_styles.gd
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_investigation.gd
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_comedy.gd
+XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_choices.gd
+XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_ep00.gd
 
 # 先匯出、啟動伺服器；需要已安裝 Playwright 及 Chromium 的 Node 環境。
 node tools/browser_check.mjs --playwright /path/to/node_modules/@playwright/test
@@ -115,10 +120,12 @@ node tools/browser_check.mjs --phase3 --playwright /path/to/node_modules/@playwr
 node tools/browser_check.mjs --rounds --playwright /path/to/node_modules/@playwright/test
 node tools/browser_check.mjs --investigate --playwright /path/to/node_modules/@playwright/test
 node tools/browser_check.mjs --comedy --playwright /path/to/node_modules/@playwright/test
+node tools/browser_check.mjs --choices --playwright /path/to/node_modules/@playwright/test
+node tools/browser_check.mjs --ep00 --playwright /path/to/node_modules/@playwright/test
 node tools/check_ui_parity.mjs --playwright /path/to/node_modules/@playwright/test
 ```
 
-`--url` 可指定試玩位址；`--chromium /path/to/chrome-headless-shell` 可指定 Chromium。瀏覽器檢查以真實 canvas 滑鼠與觸控操作（長按、上滑用 CDP 觸控事件）；預設走討債兩條路線，`--phase2` 走劇本測試兩條路線，`--slots` 驗證觸控存讀檔與 18 格分頁，`--phase3` 走調查與吐槽並驗證限時選詞讀檔，`--comedy` 在漫畫吐槽片段驗證疊加層播放中、點擊快轉不推進下一句（390×844 與 320×568，截圖與報告存 `docs/`），`--rounds` 在回合試片用觸控點消音條、伊莉莎白的牌子（閱讀時與 320×568 的選詞面板旁，檢查牌子至少 48 CSS px 且沒被選項面板蓋住）、超必殺與 QTE，並在 320×568 檢查回合操作列；`--investigate` 在四線索試片用觸控點對話與移動話題（390×844 與 320×568）、到廚房查冰箱（畫面外台詞）再回到客廳；`check_ui_parity.mjs` 在 390×844 與 320×568 下對照三款風格的 HTML 樣稿，檢查每個可點元件至少 48 CSS px、都在畫面內且互不重疊。網址帶 `?qa=1` 時才啟用唯讀的 `window.__debtQA`；一般試玩網址不啟用。
+`--url` 可指定試玩位址；`--chromium /path/to/chrome-headless-shell` 可指定 Chromium。瀏覽器檢查以真實 canvas 滑鼠與觸控操作（長按、上滑用 CDP 觸控事件）；預設走討債兩條路線，`--phase2` 走劇本測試兩條路線，`--slots` 驗證觸控存讀檔與 18 格分頁，`--phase3` 走調查與吐槽並驗證限時選詞讀檔，`--comedy` 在漫畫吐槽片段驗證疊加層播放中、點擊快轉不推進下一句（390×844 與 320×568，截圖與報告存 `docs/`），`--ep00` 在 EP00 走兩條路線（390×844：路徑 A 選 `loud`、看漫畫吐槽層、調查裡點銀時三次與草莓牛奶、委託書、導演選第三個；路徑 B 選 `tired`、不找委託書、導演選第一個，並在調查與導演選項各存手動欄位、重新整理後讀檔回到同一個事件），320×568 再跑路徑 A 到調查為止，截圖存 `docs/preview-ep00-*.png`、報告存 `docs/ep00-browser-report.json`；`--choices` 在兩種選項片段驗證 POV 選項（語氣標記、選了接對應的反應與旗標）、導演選擇（導演面板、註腳、卡片至少 48 CSS px、舞台不變、從目錄換 UI 風格仍是導演面板、選一張卡走到結局與旗標；390×844 與 320×568，截圖與報告存 `docs/`），`--rounds` 在回合試片用觸控點消音條、伊莉莎白的牌子（閱讀時與 320×568 的選詞面板旁，檢查牌子至少 48 CSS px 且沒被選項面板蓋住）、超必殺與 QTE，並在 320×568 檢查回合操作列；`--investigate` 在四線索試片用觸控點對話與移動話題（390×844 與 320×568）、到廚房查冰箱（畫面外台詞）再回到客廳；`check_ui_parity.mjs` 在 390×844 與 320×568 下對照三款風格的 HTML 樣稿，檢查每個可點元件至少 48 CSS px、都在畫面內且互不重疊。網址帶 `?qa=1` 時才啟用唯讀的 `window.__debtQA`；一般試玩網址不啟用。
 
 ## Godot MCP
 
@@ -163,7 +170,7 @@ node tools/check_ui_parity.mjs --playwright /path/to/node_modules/@playwright/te
 | 存讀檔欄位 | 待轉換 | |
 | 吐槽回合的操作列與消音條 | ✅ 已轉換 | 在三款對話框 scene 的 Actions 裡（‹ ›、句數、聽下去、吐槽！、`CensorBar`）；選項面板另有 `CensorBar` 與 `Super`；顯示什麼由 `scripts/round_view.gd` 決定 |
 | QTE、cut-in、Game Over | ✅ 已轉換 | `scenes/ui/qte_ring.tscn`、`cutin.tscn`、`game_over.tscn`（三款共用） |
-| 選項面板 | ✅ 已轉換 | `scenes/ui/choice_sheet_cinema.tscn`、`choice_sheet_ledger.tscn`、`choice_sheet_manga.tscn`（腳本 `scripts/choice_sheet.gd`），每列是 `choice_item_<風格>.tscn` |
+| 選項面板 | ✅ 已轉換 | POV 選項與限時吐槽：`scenes/ui/choice_sheet_cinema.tscn`、`choice_sheet_ledger.tscn`、`choice_sheet_manga.tscn`（腳本 `scripts/choice_sheet.gd`），每列是 `choice_item_<風格>.tscn`（`%Tone` 語氣標記）；導演選擇：`scenes/ui/choice_sheet_director.tscn`（三款共用），每列是 `choice_item_director.tscn` |
 | 眼鏡／吐槽之力 HUD、線索欄 | ✅ 已轉換 | `scenes/ui/round_hud.tscn`（三款共用，`set_style` 換色），眼鏡 `glasses_icon.tscn`、線索 `clue_chip.tscn` |
 | 調查點、收起後的調查列 | ✅ 已轉換 | `scenes/ui/hotspot.tscn`（依劇本放在背景圖上）、`scenes/ui/investigate_bar.tscn`；「收起」鈕在三款對話框 scene 的 `InvestigationRow` |
 | 調查的對話／移動話題 | ✅ 已轉換 | 三款對話框 scene 的 `InvestigationTopics`（`TalkRow`／`MoveRow`，標籤與間距在 scene 裡），每個話題是 `scenes/ui/investigate_topic.tscn`（大小與字級在這裡，顏色跟著該款的「聽下去」） |
@@ -182,7 +189,7 @@ node tools/check_ui_parity.mjs --playwright /path/to/node_modules/@playwright/te
 - 編輯器的畫框是 1080×1920，手機（390×844）的遊戲區是 1080×2337，比較長：站位跟著對話框走，一樣準；背景的裁切在手機上會不同，調完用手機尺寸跑一次確認。
 - 標題畫面的大樓是另一張：`scenes/ui/title_screen_<風格>.tscn` 的 `Background`，三款各一份，一樣用拉框取景。
 
-**在編輯器裡調整**：雙擊 `scenes/ui/*.tscn` 打開，左邊場景樹點選 node，右邊屬性面板改位置、大小、字級、間距；Container 的間距在 Theme Overrides 裡。對話框、選項面板、目錄與標題畫面各三款 scene 的配色、字級與框線都存在 scene 裡（框線由 `scripts/ui_ornament.gd` 繪製，編輯器裡也畫得出來），看到的就是遊戲裡的樣子；其他畫面（對話紀錄、存讀檔欄位、結尾按鈕）的顏色與框線仍是執行時依 UI 風格（A／B／C）套上，編輯器裡是 Godot 預設灰色。之後可以把三種風格做成 Theme 資源，讓編輯器也顯示真實配色。
+**在編輯器裡調整**：雙擊 `scenes/ui/*.tscn` 打開，左邊場景樹點選 node，右邊屬性面板改位置、大小、字級、間距；Container 的間距在 Theme Overrides 裡。對話框、選項面板、目錄與標題畫面各三款 scene（導演選擇面板一份，三款共用）的配色、字級與框線都存在 scene 裡（框線由 `scripts/ui_ornament.gd` 繪製，編輯器裡也畫得出來），看到的就是遊戲裡的樣子；其他畫面（對話紀錄、存讀檔欄位、結尾按鈕）的顏色與框線仍是執行時依 UI 風格（A／B／C）套上，編輯器裡是 Godot 預設灰色。之後可以把三種風格做成 Theme 資源，讓編輯器也顯示真實配色。
 
 ## 發現
 

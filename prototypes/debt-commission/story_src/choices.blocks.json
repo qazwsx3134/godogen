@@ -1,0 +1,21 @@
+{
+  "story": {
+    "id": "choices",
+    "title": "選項種類 技術片段：POV 與導演選擇（非核准）",
+    "note": "僅用於驗證 choice 的兩種外觀（POV 想法選項與導演選擇）；台詞取自 v2 EP00 草稿的 Scene 02 與 Scene 06，不是作者核准的文本。",
+    "initial_flags": {
+      "reply": "",
+      "ep00_ending": ""
+    }
+  },
+  "titles": {
+    "choices_open": "技術片段：POV 選項",
+    "reply_loud": "技術片段：激烈吐槽的反應",
+    "reply_calm": "技術片段：冷靜指出問題的反應",
+    "reply_tired": "技術片段：懶得吐槽的反應",
+    "choices_director": "技術片段：導演選擇",
+    "ending_tose": "技術片段：結局 A 欠債篇",
+    "ending_phone": "技術片段：結局 B 委託篇",
+    "ending_sadaharu": "技術片段：結局 C ？？？篇"
+  }
+}

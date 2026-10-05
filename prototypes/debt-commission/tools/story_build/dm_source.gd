@@ -7,9 +7,16 @@ extends RefCounted
 ##                                 talks from off stage: name plate only, the stage stays as is)
 ##   narration + `- label [ID:x]`  choice; the narration line is the prompt. Options take
 ##                                 `[if has("item") /]` (require), `set k = v` lines (set_flags)
-##                                 and one `=> title`
-##   `set key = value`             flag
-##   `if key == value` / `else`    condition; each branch holds exactly one `=> title`
+##                                 and one `=> title`; a tag `[#loud]`, `[#calm]` or `[#tired]` on the
+##                                 option is its tone (the round marker before the row; pov choices only)
+##   `do pov("gintoki")`           right before the prompt: whose thought the options are (a catalog id
+##                                 or name; without it the choice is Shinpachi's). Parley: an ACTION node
+##   `do director()` / `director("※製作組經費有限")`  right before the prompt: a director choice, where
+##                                 the player steps out of the story and decides what happens next
+##                                 (two or more options, no tones); the optional text is the footnote
+##                                 under the cards
+##   `set key = value`             flag (a string, a number, or true / false)
+##   `if key == value` / `else`    condition (the same kinds of value); each branch holds exactly one `=> title`
 ##   `do bg("id")`, `do char("id", "expression", "position")`, `do hide("id")`,
 ##   `do enter("id", "expression", "position")` (a character who has not spoken comes on stage),
 ##   `do placard("text")` / `placard("")` (what the placard holder's board says; "" = blank),
@@ -28,6 +35,8 @@ extends RefCounted
 
 ## Tags a line may carry besides [#thought]: StoryRunner's expressions.
 const EXPRESSIONS: Array[String] = preload("res://scripts/story_runner.gd").VALID_EXPRESSIONS
+## The tone tags of a choice option (StoryRunner.VALID_TONES).
+const TONES: Array[String] = preload("res://scripts/story_runner.gd").VALID_TONES
 const END_TARGETS: Array[String] = ["end", "end!"]
 ## A tsukkomi round leaves through its option gotos, so nothing may follow it in its title.
 const TERMINAL_OPS: Array[String] = ["end", "boke_round", "result"]
@@ -78,7 +87,7 @@ static func expression_tokens(expression: String) -> Array:
 static func flag_equals(tokens: Array) -> Dictionary:
 	if tokens.size() == 3 and tokens[0]["type"] == "variable" and tokens[1]["type"] == "comparison" \
 			and tokens[1]["value"] == "==" and _is_literal(tokens[2]):
-		return {"flag": tokens[0]["value"], "equals": tokens[2]["value"]}
+		return {"flag": tokens[0]["value"], "equals": _literal_value(tokens[2])}
 	return {}
 
 
@@ -210,6 +219,12 @@ static func _choice(prompt: Dictionary, first_response: Dictionary, lines: Dicti
 		if label.contains("[if"):
 			return {"error": "%s: write the condition of '%s' as [if has(\"item\") /]" % [where, label]}
 		var option: Dictionary = {"id": option_id, "label": label}
+		for tag: String in response.get("tags", []):
+			if not TONES.has(tag):
+				return {"error": "%s: response '%s' has unknown tag [#%s] (the tone tags are %s)" % [where, option_id, tag, ", ".join(TONES)]}
+			if option.has("tone"):
+				return {"error": "%s: response '%s' has more than one tone tag" % [where, option_id]}
+			option["tone"] = tag
 		var condition: Dictionary = response.get("condition", {})
 		if not condition.is_empty():
 			var item: String = has_item(condition.get("expression", []))
@@ -304,6 +319,14 @@ static func _mutation(line: Dictionary, where: String) -> Dictionary:
 			return {"op": "placard", "text": args[0]}
 		["offscreen", 0]:
 			return {"op": "offscreen"}  # folded into the next line by story_builder.gd
+		["pov", 1]:
+			return {"op": "pov", "id": args[0]}  # folded into the choice right after it by story_builder.gd
+		["director", 0]:
+			return {"op": "director"}
+		["director", 1]:
+			return {"op": "director", "note": args[0]}
+		["tone", 1]:
+			return {"op": "tone", "tone": args[0]}  # after a Parley option; parley_source.gd folds it into that option
 		["item", 1]:
 			return {"op": "item", "id": args[0]}
 		["shake", 0]:
@@ -341,7 +364,7 @@ static func _mutation(line: Dictionary, where: String) -> Dictionary:
 static func _assignment(tokens: Array) -> Dictionary:
 	if tokens.size() == 3 and tokens[0]["type"] == "variable" and tokens[1]["type"] == "assignment" \
 			and tokens[1]["value"] == "=" and _is_literal(tokens[2]):
-		return {"key": tokens[0]["value"], "value": tokens[2]["value"]}
+		return {"key": tokens[0]["value"], "value": _literal_value(tokens[2])}
 	return {}
 
 
@@ -361,12 +384,22 @@ static func _literal_args(raw_args: Array) -> Array:
 			return t["type"] != "parens_close" and t["type"] != "comma")
 		if literals.is_empty():
 			continue
-		args.append(literals[0]["value"] if literals.size() == 1 and _is_literal(literals[0]) else null)
+		args.append(_literal_value(literals[0]) if literals.size() == 1 and _is_literal(literals[0]) else null)
 	return args
 
 
 static func _is_literal(token: Dictionary) -> bool:
-	return ["string", "number", "bool"].has(String(token.get("type", "")))
+	return ["string", "number", "bool"].has(String(token.get("type", ""))) or _is_bool_word(token)
+
+
+## Dialogue Manager's tokenizer tries its variable pattern before its bool one, so `true` and `false`
+## arrive as variables named "true" and "false".
+static func _is_bool_word(token: Dictionary) -> bool:
+	return String(token.get("type", "")) == "variable" and ["true", "false"].has(String(token.get("value", "")))
+
+
+static func _literal_value(token: Dictionary) -> Variant:
+	return String(token["value"]) == "true" if _is_bool_word(token) else token["value"]
 
 
 static func _fail(message: String) -> Dictionary:

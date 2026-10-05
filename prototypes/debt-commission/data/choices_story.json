@@ -1,0 +1,213 @@
+{
+  "entry": "choices_open",
+  "generated_from": "story_src/choices.dialogue",
+  "id": "choices",
+  "initial_flags": {
+    "ep00_ending": "",
+    "reply": ""
+  },
+  "nodes": {
+    "choices_director": {
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "kagura",
+          "text": "阿銀，接下來要演什麼阿魯？"
+        },
+        {
+          "note": "※製作組經費有限",
+          "op": "choice",
+          "options": [
+            {
+              "id": "tose_enters",
+              "label": "登勢闖進來",
+              "next": "ending_tose",
+              "set_flags": {
+                "ep00_ending": "debt"
+              }
+            },
+            {
+              "id": "phone_rings",
+              "label": "電話突然響了",
+              "next": "ending_phone",
+              "set_flags": {
+                "ep00_ending": "request"
+              }
+            },
+            {
+              "id": "sadaharu_returns",
+              "label": "定春帶回奇怪的東西",
+              "next": "ending_sadaharu",
+              "set_flags": {
+                "ep00_ending": "unknown"
+              }
+            }
+          ],
+          "perspective": "director",
+          "prompt": "接下來發生什麼？"
+        }
+      ],
+      "title": "技術片段：導演選擇"
+    },
+    "choices_open": {
+      "steps": [
+        {
+          "id": "yorozuya_living_room",
+          "op": "bg"
+        },
+        {
+          "expression": "neutral",
+          "id": "shinpachi",
+          "op": "char",
+          "position": "left",
+          "visible": true
+        },
+        {
+          "expression": "annoyed",
+          "id": "gintoki",
+          "op": "char",
+          "position": "center",
+          "visible": true
+        },
+        {
+          "op": "say",
+          "speaker": "kagura",
+          "text": "阿銀今天也沒有工作阿魯。"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "不是沒有，是你全部都拒絕掉了吧！"
+        },
+        {
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "沒有工作的時候休息不是很合理嗎？"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "reply_loud",
+              "label": "問題是你有工作的時候也在休息啊！！",
+              "next": "reply_loud",
+              "set_flags": {
+                "reply": "loud"
+              },
+              "tone": "loud"
+            },
+            {
+              "id": "reply_calm",
+              "label": "那請問這個月的房租打算怎麼辦？",
+              "next": "reply_calm",
+              "set_flags": {
+                "reply": "calm"
+              },
+              "tone": "calm"
+            },
+            {
+              "id": "reply_tired",
+              "label": "……算了，我甚至不知道從哪裡開始說。",
+              "next": "reply_tired",
+              "set_flags": {
+                "reply": "tired"
+              },
+              "tone": "tired"
+            }
+          ],
+          "pov": "shinpachi",
+          "prompt": "這句要怎麼吐槽才好……？"
+        }
+      ],
+      "title": "技術片段：POV 選項"
+    },
+    "ending_phone": {
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "……萬事屋銀桑。是，委託？現在就去。"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "難得有委託，你至少把鞋穿好再出門啊！"
+        },
+        {
+          "op": "end",
+          "text": "結局 B：委託篇。技術片段到此為止。"
+        }
+      ],
+      "title": "技術片段：結局 B 委託篇"
+    },
+    "ending_sadaharu": {
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "sadaharu",
+          "text": "汪！"
+        },
+        {
+          "op": "say",
+          "speaker": "kagura",
+          "text": "定春，你叼回來的那個是什麼阿魯？"
+        },
+        {
+          "op": "end",
+          "text": "結局 C：？？？篇。技術片段到此為止。"
+        }
+      ],
+      "title": "技術片段：結局 C ？？？篇"
+    },
+    "ending_tose": {
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "otose",
+          "text": "喂，你們這個月的房租呢！？"
+        },
+        {
+          "op": "end",
+          "text": "結局 A：欠債篇。技術片段到此為止。"
+        }
+      ],
+      "title": "技術片段：結局 A 欠債篇"
+    },
+    "reply_calm": {
+      "next": "choices_director",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "房租這種東西，放著放著它自己就會消失。"
+        }
+      ],
+      "title": "技術片段：冷靜指出問題的反應"
+    },
+    "reply_loud": {
+      "next": "choices_director",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "吵死了，銀桑的耳膜也是需要休息的。"
+        }
+      ],
+      "title": "技術片段：激烈吐槽的反應"
+    },
+    "reply_tired": {
+      "next": "choices_director",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "對吧對吧？連新八都懂了。"
+        }
+      ],
+      "title": "技術片段：懶得吐槽的反應"
+    }
+  },
+  "note": "僅用於驗證 choice 的兩種外觀（POV 想法選項與導演選擇）；台詞取自 v2 EP00 草稿的 Scene 02 與 Scene 06，不是作者核准的文本。",
+  "title": "選項種類 技術片段：POV 與導演選擇（非核准）",
+  "version": "s-74134856df1e"
+}

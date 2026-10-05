@@ -1,0 +1,141 @@
+~ s01_open
+do bgm("bgm_daily")
+do bg("yorozuya_living_room")
+do char("gintoki", "nosepick", "center")
+do char("shinpachi", "angry", "left")
+do char("kagura", "smile", "right")
+銀時: 今天也完全沒有工作啊。
+do se("crow")
+新八: 不是沒有，是你全部都拒絕掉了吧！ [#angry]
+神樂: 阿銀今天已經睡第三次了阿魯。
+定春: 汪。 [#offscreen]
+銀時: 沒有工作的時候休息不是很合理嗎？ [#smug]
+=> s02_pov
+
+~ s02_pov
+do pov("shinpachi")
+這句要怎麼吐槽才好……？
+- 問題是你有工作的時候也在休息啊！！ [ID:pov_loud] [#loud]
+	set pov_style = "loud"
+	=> s03_loud
+- 首先，請你把桌上那疊委託書看完。 [ID:pov_calm] [#calm]
+	set pov_style = "calm"
+	=> s03_calm
+- ……算了，我甚至不知道從哪裡開始說。 [ID:pov_tired] [#tired]
+	set pov_style = "tired"
+	=> s03_tired
+
+~ s03_loud
+銀時: 嗯？ [#nosepick]
+do comedy("tsukkomi_impact", "新八", "問題是你有工作的時候也在休息啊！！", "shout")
+神樂: 新八，你的聲音太大了阿魯，耳朵要壞掉了。 [#mock]
+=> s04_intro
+
+~ s03_calm
+銀時: 嗯嗯，等銀桑睡醒就看。 [#nosepick]
+do comedy("small_reaction", "新八", "……他根本沒在聽。", "nervous")
+神樂: 新八，他已經在摳鼻孔了阿魯。 [#mock]
+=> s04_intro
+
+~ s03_tired
+銀時: 對吧？休息很重要的。 [#smug]
+新八: ……我什麼都沒說，卻覺得自己輸了。 [#thought] [#thinking]
+=> s04_intro
+
+~ s04_intro
+新八: 至少看看還有哪些委託吧。 [#thinking]
+銀時: 委託書的話，應該還埋在桌上吧。 [#nosepick]
+do hide("shinpachi")
+do hide("kagura")
+=> s04_room
+
+~ s04_room
+do investigate("yorozuya_room")
+=> s05_check
+
+~ s04_gintoki_1
+銀時: 幹嘛。 [#annoyed]
+=> s04_room
+
+~ s04_gintoki_2
+銀時: 你一直點我也不會掉道具。 [#nosepick]
+=> s04_room
+
+~ s04_gintoki_3
+銀時: 這不是手遊角色首頁。 [#smug]
+=> s04_room
+
+~ s04_milk
+神樂: 那是我的阿魯！ [#offscreen]
+=> s04_room
+
+~ s04_job
+桌上那疊委託書的最底下，壓著一張：「尋找失蹤寵物」。
+新八: ……找到了，真的有。 [#thought] [#offscreen]
+=> s04_room
+
+~ s04_tv
+神樂: 這台電視只收得到天氣預報阿魯，而且都不準。 [#offscreen]
+=> s04_room
+
+~ s05_check
+if found_job == true
+	=> s05_found
+else
+	=> s05_missed
+
+~ s05_found
+新八: 這不是有工作嗎！ [#angry]
+銀時: 沒看到。 [#nosepick]
+新八: 你剛才明明就在旁邊！！ [#shout]
+=> s05_milk
+
+~ s05_missed
+新八: ……算了，我自己找。 [#thinking]
+=> s05_milk
+
+~ s05_milk
+if examined_strawberry_milk == true
+	=> s05_milk_yes
+else
+	=> s06_open
+
+~ s05_milk_yes
+神樂: 剛剛有人碰了我的草莓牛奶，我都看到了阿魯。 [#mock]
+=> s06_open
+
+~ s06_open
+這裡感覺有點無聊。
+do director("※製作組經費有限")
+接下來發生什麼？
+- 登勢闖進來 [ID:director_otose]
+	set ep00_ending = "debt"
+	=> end_debt
+- 電話突然響 [ID:director_phone]
+	set ep00_ending = "request"
+	=> end_request
+- 定春撞進房間 [ID:director_sadaharu]
+	set ep00_ending = "unknown"
+	=> end_unknown
+
+~ end_debt
+新八: 為什麼玩家可以決定這種事情啊！！ [#shout]
+do se("door_slide")
+登勢: 喂，你們這個月的房租呢！？ [#angry]
+銀時: ……新八，就說銀桑不在家。 [#nervous]
+新八: 你人就站在這裡啊！ [#panic]
+do end("EP00 完 ── 欠債篇")
+
+~ end_request
+新八: 為什麼連電話什麼時候響，都可以讓玩家決定啊！！ [#shout]
+嘟嚕嚕嚕——電話響了。
+銀時: ……萬事屋銀桑。是，委託？現在就去。 [#serious]
+新八: 難得有委託，你至少把鞋穿好再出門啊！ [#angry]
+do end("EP00 完 ── 委託篇")
+
+~ end_unknown
+新八: 為什麼玩家連狗什麼時候衝進來，都可以決定啊！！ [#shout]
+定春: 汪！ [#smile]
+神樂: 定春，你叼回來的那個是什麼阿魯？ [#smile]
+銀時: ……為什麼它在動。 [#nervous]
+do end("EP00 完 ── ？？？篇")

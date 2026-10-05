@@ -239,6 +239,8 @@ func _placeholder(collection: String, id: String) -> AudioStream:
 			return Synth.ramp(170.0, 46.0, 0.42, 0.9, 0.0, 1.4)
 		"comedy_pop":
 			return Synth.ramp(480.0, 960.0, 0.12, 0.5, 0.0, 0.8)
+		"director_clap":
+			return Synth.click(0.16, 0.95, 38.0)
 		"combo_break":
 			return Synth.ramp(520.0, 170.0, 0.3, 0.45, 0.0)
 		"super_charge":
