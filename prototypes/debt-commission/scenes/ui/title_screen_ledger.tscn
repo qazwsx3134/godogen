@@ -21,6 +21,11 @@ fill_to = Vector2(0.5, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_817w1"]
 
+[sub_resource type="FontVariation" id="FontVariation_r265g"]
+base_font = ExtResource("1_cf4tl")
+variation_embolden = 0.8
+spacing_glyph = 4
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l2v4g"]
 content_margin_left = 33.23077
 content_margin_top = 0.0
@@ -45,15 +50,14 @@ border_width_right = 6
 border_width_bottom = 6
 border_color = Color(0.56078434, 0.20784314, 0.15686275, 1)
 
-[sub_resource type="FontVariation" id="FontVariation_r265g"]
-base_font = ExtResource("1_cf4tl")
-variation_embolden = 0.8
-spacing_glyph = 4
-
 [sub_resource type="FontVariation" id="FontVariation_bu1n2"]
 base_font = ExtResource("1_cf4tl")
 variation_embolden = 0.8
 spacing_glyph = 5
+
+[sub_resource type="FontVariation" id="FontVariation_m6db4"]
+base_font = ExtResource("1_cf4tl")
+variation_embolden = 0.6
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bdv01"]
 content_margin_left = 33.23077
@@ -93,7 +97,7 @@ border_width_right = 6
 border_width_bottom = 6
 border_color = Color(0.56078434, 0.20784314, 0.15686275, 1)
 
-[sub_resource type="FontVariation" id="FontVariation_m6db4"]
+[sub_resource type="FontVariation" id="FontVariation_6xvfj"]
 base_font = ExtResource("1_cf4tl")
 variation_embolden = 0.6
 
@@ -121,7 +125,7 @@ border_width_right = 6
 border_width_bottom = 6
 border_color = Color(0.56078434, 0.20784314, 0.15686275, 1)
 
-[sub_resource type="FontVariation" id="FontVariation_6xvfj"]
+[sub_resource type="FontVariation" id="FontVariation_reqfl"]
 base_font = ExtResource("1_cf4tl")
 variation_embolden = 0.6
 
@@ -148,10 +152,6 @@ border_width_top = 6
 border_width_right = 6
 border_width_bottom = 6
 border_color = Color(0.56078434, 0.20784314, 0.15686275, 1)
-
-[sub_resource type="FontVariation" id="FontVariation_reqfl"]
-base_font = ExtResource("1_cf4tl")
-variation_embolden = 0.6
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ffced"]
 content_margin_left = 33.23077
@@ -290,6 +290,8 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme = SubResource("Theme_kfrw3")
 script = ExtResource("2_7gxyc")
 style_id = "ledger"
@@ -320,8 +322,8 @@ offset_left = 38.769234
 offset_top = 38.769234
 offset_right = 38.769234
 offset_bottom = 38.769234
-theme_override_font_sizes/font_size = 33
 theme_override_colors/font_color = Color(0.96862745, 0.95686275, 0.9098039, 1)
+theme_override_font_sizes/font_size = 33
 text = "v0.5 · Phase 4"
 
 [node name="CardArea" type="MarginContainer" parent="." unique_id=1230284610]
@@ -366,12 +368,6 @@ theme_override_constants/separation = 0
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_l2v4g")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_seepd")
-theme_override_styles/hover = SubResource("StyleBoxFlat_seepd")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_seepd")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_l2v4g")
-theme_override_styles/focus = SubResource("StyleBoxFlat_unmbe")
 theme_override_colors/font_color = Color(0.21960784, 0.18431373, 0.15686275, 1)
 theme_override_colors/font_focus_color = Color(0.21960784, 0.18431373, 0.15686275, 1)
 theme_override_colors/font_pressed_color = Color(0.21960784, 0.18431373, 0.15686275, 1)
@@ -379,6 +375,12 @@ theme_override_colors/font_hover_color = Color(0.21960784, 0.18431373, 0.1568627
 theme_override_colors/font_hover_pressed_color = Color(0.21960784, 0.18431373, 0.15686275, 1)
 theme_override_fonts/font = SubResource("FontVariation_r265g")
 theme_override_font_sizes/font_size = 39
+theme_override_styles/normal = SubResource("StyleBoxFlat_l2v4g")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_seepd")
+theme_override_styles/hover = SubResource("StyleBoxFlat_seepd")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_seepd")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_l2v4g")
+theme_override_styles/focus = SubResource("StyleBoxFlat_unmbe")
 text = "請幫我向你老闆討債｜第一場
 點這裡切換試玩內容（1/4）"
 autowrap_mode = 3
@@ -391,10 +393,10 @@ mouse_filter = 2
 [node name="Logo" type="Label" parent="CardArea/Card/Padding/Column" unique_id=1536344376]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_colors/font_color = Color(0.21960784, 0.18431373, 0.15686275, 1)
 theme_override_constants/line_spacing = -28
 theme_override_fonts/font = SubResource("FontVariation_bu1n2")
 theme_override_font_sizes/font_size = 116
-theme_override_colors/font_color = Color(0.21960784, 0.18431373, 0.15686275, 1)
 text = "萬事屋
 吐槽 ADV"
 horizontal_alignment = 1
@@ -406,8 +408,8 @@ mouse_filter = 2
 
 [node name="Tagline" type="Label" parent="CardArea/Card/Padding/Column" unique_id=133400963]
 layout_mode = 2
-theme_override_font_sizes/font_size = 44
 theme_override_colors/font_color = Color(0.21960784, 0.18431373, 0.15686275, 1)
+theme_override_font_sizes/font_size = 44
 text = "今夜，也先把帳算清。"
 horizontal_alignment = 1
 
@@ -420,12 +422,6 @@ mouse_filter = 2
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_bdv01")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_s0wnw")
-theme_override_styles/hover = SubResource("StyleBoxFlat_s0wnw")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_s0wnw")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_bdv01")
-theme_override_styles/focus = SubResource("StyleBoxFlat_h06ei")
 theme_override_colors/font_color = Color(1, 0.9647059, 0.9019608, 1)
 theme_override_colors/font_focus_color = Color(1, 0.9647059, 0.9019608, 1)
 theme_override_colors/font_pressed_color = Color(1, 0.9647059, 0.9019608, 1)
@@ -433,6 +429,12 @@ theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.9019608, 1)
 theme_override_colors/font_hover_pressed_color = Color(1, 0.9647059, 0.9019608, 1)
 theme_override_fonts/font = SubResource("FontVariation_m6db4")
 theme_override_font_sizes/font_size = 44
+theme_override_styles/normal = SubResource("StyleBoxFlat_bdv01")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_s0wnw")
+theme_override_styles/hover = SubResource("StyleBoxFlat_s0wnw")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_s0wnw")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_bdv01")
+theme_override_styles/focus = SubResource("StyleBoxFlat_h06ei")
 text = "開始故事　→"
 
 [node name="ContinueGap" type="Control" parent="CardArea/Card/Padding/Column" unique_id=2144059532]
@@ -444,12 +446,6 @@ mouse_filter = 2
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_fm7wh")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_hhjay")
-theme_override_styles/hover = SubResource("StyleBoxFlat_hhjay")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_hhjay")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_fm7wh")
-theme_override_styles/focus = SubResource("StyleBoxFlat_kx73n")
 theme_override_colors/font_color = Color(0.36078432, 0.29411766, 0.23921569, 1)
 theme_override_colors/font_focus_color = Color(0.36078432, 0.29411766, 0.23921569, 1)
 theme_override_colors/font_pressed_color = Color(0.36078432, 0.29411766, 0.23921569, 1)
@@ -458,6 +454,12 @@ theme_override_colors/font_hover_pressed_color = Color(0.36078432, 0.29411766, 0
 theme_override_colors/font_disabled_color = Color(0.36078432, 0.29411766, 0.23921569, 0.45)
 theme_override_fonts/font = SubResource("FontVariation_6xvfj")
 theme_override_font_sizes/font_size = 44
+theme_override_styles/normal = SubResource("StyleBoxFlat_fm7wh")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_hhjay")
+theme_override_styles/hover = SubResource("StyleBoxFlat_hhjay")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_hhjay")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_fm7wh")
+theme_override_styles/focus = SubResource("StyleBoxFlat_kx73n")
 text = "繼續"
 
 [node name="LoadGap" type="Control" parent="CardArea/Card/Padding/Column" unique_id=968766555]
@@ -474,12 +476,6 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/normal = SubResource("StyleBoxFlat_f6tx1")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_5jnqs")
-theme_override_styles/hover = SubResource("StyleBoxFlat_5jnqs")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_5jnqs")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_f6tx1")
-theme_override_styles/focus = SubResource("StyleBoxFlat_e3ste")
 theme_override_colors/font_color = Color(0.36078432, 0.29411766, 0.23921569, 1)
 theme_override_colors/font_focus_color = Color(0.36078432, 0.29411766, 0.23921569, 1)
 theme_override_colors/font_pressed_color = Color(0.36078432, 0.29411766, 0.23921569, 1)
@@ -488,6 +484,12 @@ theme_override_colors/font_hover_pressed_color = Color(0.36078432, 0.29411766, 0
 theme_override_colors/font_disabled_color = Color(0.36078432, 0.29411766, 0.23921569, 0.45)
 theme_override_fonts/font = SubResource("FontVariation_reqfl")
 theme_override_font_sizes/font_size = 44
+theme_override_styles/normal = SubResource("StyleBoxFlat_f6tx1")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_5jnqs")
+theme_override_styles/hover = SubResource("StyleBoxFlat_5jnqs")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_5jnqs")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_f6tx1")
+theme_override_styles/focus = SubResource("StyleBoxFlat_e3ste")
 text = "讀取存檔"
 
 [node name="Settings" type="Button" parent="CardArea/Card/Padding/Column/LoadRow" unique_id=515696298]
@@ -495,12 +497,6 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/normal = SubResource("StyleBoxFlat_f6tx1")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_5jnqs")
-theme_override_styles/hover = SubResource("StyleBoxFlat_5jnqs")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_5jnqs")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_f6tx1")
-theme_override_styles/focus = SubResource("StyleBoxFlat_e3ste")
 theme_override_colors/font_color = Color(0.36078432, 0.29411766, 0.23921569, 1)
 theme_override_colors/font_focus_color = Color(0.36078432, 0.29411766, 0.23921569, 1)
 theme_override_colors/font_pressed_color = Color(0.36078432, 0.29411766, 0.23921569, 1)
@@ -509,6 +505,12 @@ theme_override_colors/font_hover_pressed_color = Color(0.36078432, 0.29411766, 0
 theme_override_colors/font_disabled_color = Color(0.36078432, 0.29411766, 0.23921569, 0.45)
 theme_override_fonts/font = SubResource("FontVariation_reqfl")
 theme_override_font_sizes/font_size = 44
+theme_override_styles/normal = SubResource("StyleBoxFlat_f6tx1")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_5jnqs")
+theme_override_styles/hover = SubResource("StyleBoxFlat_5jnqs")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_5jnqs")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_f6tx1")
+theme_override_styles/focus = SubResource("StyleBoxFlat_e3ste")
 text = "設定"
 
 [node name="StylesGap" type="Control" parent="CardArea/Card/Padding/Column" unique_id=664589998]
@@ -516,28 +518,29 @@ custom_minimum_size = Vector2(0, 22.153847)
 layout_mode = 2
 mouse_filter = 2
 
-[node name="Styles" type="HBoxContainer" parent="CardArea/Card/Padding/Column" unique_id=1853925523]
+[node name="Styles" type="GridContainer" parent="CardArea/Card/Padding/Column" unique_id=701332284]
 layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 17
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 6
+columns = 2
 
 [node name="Style_cinema" type="Button" parent="CardArea/Card/Padding/Column/Styles" unique_id=185331423]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/normal = SubResource("StyleBoxFlat_ffced")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_c78cn")
-theme_override_styles/hover = SubResource("StyleBoxFlat_i8j7s")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_c78cn")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_ffced")
-theme_override_styles/focus = SubResource("StyleBoxFlat_dbngg")
 theme_override_colors/font_color = Color(0.36078432, 0.29411766, 0.23921569, 1)
 theme_override_colors/font_focus_color = Color(0.36078432, 0.29411766, 0.23921569, 1)
 theme_override_colors/font_pressed_color = Color(1, 0.9647059, 0.9019608, 1)
 theme_override_colors/font_hover_color = Color(0.36078432, 0.29411766, 0.23921569, 1)
 theme_override_colors/font_hover_pressed_color = Color(1, 0.9647059, 0.9019608, 1)
 theme_override_font_sizes/font_size = 39
+theme_override_styles/normal = SubResource("StyleBoxFlat_ffced")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_c78cn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_i8j7s")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_c78cn")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_ffced")
+theme_override_styles/focus = SubResource("StyleBoxFlat_dbngg")
 toggle_mode = true
 text = "A 映畫"
 
@@ -546,18 +549,18 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/normal = SubResource("StyleBoxFlat_snfvd")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_trlok")
-theme_override_styles/hover = SubResource("StyleBoxFlat_vvc7w")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_trlok")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_snfvd")
-theme_override_styles/focus = SubResource("StyleBoxFlat_es2x5")
 theme_override_colors/font_color = Color(0.36078432, 0.29411766, 0.23921569, 1)
 theme_override_colors/font_focus_color = Color(0.36078432, 0.29411766, 0.23921569, 1)
 theme_override_colors/font_pressed_color = Color(1, 0.9647059, 0.9019608, 1)
 theme_override_colors/font_hover_color = Color(0.36078432, 0.29411766, 0.23921569, 1)
 theme_override_colors/font_hover_pressed_color = Color(1, 0.9647059, 0.9019608, 1)
 theme_override_font_sizes/font_size = 39
+theme_override_styles/normal = SubResource("StyleBoxFlat_snfvd")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_trlok")
+theme_override_styles/hover = SubResource("StyleBoxFlat_vvc7w")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_trlok")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_snfvd")
+theme_override_styles/focus = SubResource("StyleBoxFlat_es2x5")
 toggle_mode = true
 button_pressed = true
 text = "B 委託簿"
@@ -567,26 +570,47 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/normal = SubResource("StyleBoxFlat_ad3od")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_6486n")
-theme_override_styles/hover = SubResource("StyleBoxFlat_0lppx")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_6486n")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_ad3od")
-theme_override_styles/focus = SubResource("StyleBoxFlat_iqbv8")
 theme_override_colors/font_color = Color(0.36078432, 0.29411766, 0.23921569, 1)
 theme_override_colors/font_focus_color = Color(0.36078432, 0.29411766, 0.23921569, 1)
 theme_override_colors/font_pressed_color = Color(1, 0.9647059, 0.9019608, 1)
 theme_override_colors/font_hover_color = Color(0.36078432, 0.29411766, 0.23921569, 1)
 theme_override_colors/font_hover_pressed_color = Color(1, 0.9647059, 0.9019608, 1)
 theme_override_font_sizes/font_size = 39
+theme_override_styles/normal = SubResource("StyleBoxFlat_ad3od")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_6486n")
+theme_override_styles/hover = SubResource("StyleBoxFlat_0lppx")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_6486n")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_ad3od")
+theme_override_styles/focus = SubResource("StyleBoxFlat_iqbv8")
 toggle_mode = true
 text = "C 分鏡"
+
+[node name="Style_gintama" type="Button" parent="CardArea/Card/Padding/Column/Styles" unique_id=1698044660]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "銀魂和紙"
+theme_override_colors/font_color = Color(0.36078432, 0.29411766, 0.23921569, 1)
+theme_override_colors/font_focus_color = Color(0.36078432, 0.29411766, 0.23921569, 1)
+theme_override_colors/font_pressed_color = Color(1, 0.9647059, 0.9019608, 1)
+theme_override_colors/font_hover_color = Color(0.36078432, 0.29411766, 0.23921569, 1)
+theme_override_colors/font_hover_pressed_color = Color(1, 0.9647059, 0.9019608, 1)
+theme_override_font_sizes/font_size = 39
+theme_override_styles/normal = SubResource("StyleBoxFlat_ad3od")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_6486n")
+theme_override_styles/hover = SubResource("StyleBoxFlat_0lppx")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_6486n")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_ad3od")
+theme_override_styles/focus = SubResource("StyleBoxFlat_iqbv8")
+toggle_mode = true
+text = "D 銀魂和紙"
 
 [node name="Error" type="Label" parent="CardArea/Card/Padding/Column" unique_id=1577743189]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
-theme_override_font_sizes/font_size = 39
 theme_override_colors/font_color = Color(0.56078434, 0.1764706, 0.13333334, 1)
+theme_override_font_sizes/font_size = 39
 horizontal_alignment = 1
 autowrap_mode = 3

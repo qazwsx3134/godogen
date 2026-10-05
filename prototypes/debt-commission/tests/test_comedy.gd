@@ -366,7 +366,7 @@ func _test_saves() -> void:
 
 
 func _test_presets_in_every_style() -> void:
-	for style: String in ["cinema", "ledger", "manga"]:
+	for style: String in ["cinema", "ledger", "manga", "gintama"]:
 		var game: Control = await _new_game()
 		game._set_ui_style(style, false)
 		await _frames(2)

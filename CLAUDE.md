@@ -4,6 +4,7 @@
 
 ## Claude Code 子 agent：用 Herdr 開 Sonnet
 
+- 開啟前先遵守 `AGENTS.md` 的「子代理的成本門檻」：估算自行完成與委派的 API 總成本（含子代理上下文、輸入／輸出與主 session 交接、審查、整合）。若自行完成的費用 **小於委派總成本的 1.2 倍**，就留在自己的 session 做；無法合理估算時也預設自行完成。開子 agent 的目的是節省成本，此限制同樣適用 Herdr 與 Agent tool；使用者當次明確要求委派時除外。
 - 要開子 agent 時，本專案授權用 `herdr` skill 在旁邊開一個 pane，跑獨立的 Claude Code session：模型 **Sonnet**，effort **max**（長時間實作、要讀大量程式碼）或 **xhigh**（範圍明確的中型工作）。主對話負責規劃、分派、整合與驗收。使用者當次指定其他模型或做法時以使用者為準。
 - 啟動（先確認 `HERDR_ENV=1`；細節與等待、讀輸出的方式見 herdr skill）：
 

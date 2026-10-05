@@ -49,4 +49,4 @@ static func apply(photo: TextureRect, style_id: String) -> void:
 		shader_material = ShaderMaterial.new()
 		shader_material.shader = shader
 		photo.material = shader_material
-	shader_material.set_shader_parameter("style_index", {"cinema": 0, "ledger": 1, "manga": 2}.get(style_id, 0))
+	shader_material.set_shader_parameter("style_index", {"cinema": 0, "ledger": 1, "manga": 2, "gintama": 0}.get(style_id, 0))

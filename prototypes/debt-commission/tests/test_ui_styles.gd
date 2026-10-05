@@ -15,9 +15,12 @@ func _run() -> void:
 	_cleanup_files()
 	_expect(UI_STYLES_SCRIPT.load_preference(TEST_PREFERENCE) == "cinema",
 		"missing preference falls back to cinema")
-	_expect(UI_STYLES_SCRIPT.save_preference("manga", TEST_PREFERENCE) == OK,
+	_expect(UI_STYLES_SCRIPT.style_ids() == ["cinema", "ledger", "manga", "gintama"] and
+		UI_STYLES_SCRIPT.style_label("gintama") == "銀魂和紙",
+		"the four editions include the named gintama paper style")
+	_expect(UI_STYLES_SCRIPT.save_preference("gintama", TEST_PREFERENCE) == OK,
 		"style preference saves to its isolated ConfigFile")
-	_expect(UI_STYLES_SCRIPT.load_preference(TEST_PREFERENCE) == "manga",
+	_expect(UI_STYLES_SCRIPT.load_preference(TEST_PREFERENCE) == "gintama",
 		"saved style preference reloads")
 	var saved_config: ConfigFile = ConfigFile.new()
 	_expect(saved_config.load(TEST_PREFERENCE) == OK, "style preference file is readable")
@@ -37,8 +40,16 @@ func _run() -> void:
 	var game: Control = _new_game()
 	await _frames(3)
 	_expect(game._ui_style_id == "cinema", "new game uses the default cinema style")
-	_expect(game._title_style_buttons.size() == 3 and game._menu_style_buttons.size() == 3,
-		"title and in-game menu expose all three named styles")
+	_expect(game._title_style_buttons.size() == 4 and game._menu_style_buttons.size() == 4 and
+		(game._title_screen.find_child("Styles", true, false) as GridContainer).columns == 2 and
+		(game._menu_overlay.find_child("Styles", true, false) as GridContainer).columns == 2,
+		"title and in-game menu expose four named styles in two columns")
+	await _press(game._title_style_buttons["gintama"] as Button)
+	await _frames(2)
+	_expect(game._ui_style_id == "gintama" and UI_STYLES_SCRIPT.load_preference(TEST_PREFERENCE) == "gintama",
+		"the title's gintama button selects the paper edition and saves it")
+	game._set_ui_style("cinema", false)
+	await _frames(2)
 	game._on_begin_pressed()
 	await _until(func() -> bool: return game._screen_mode == "story", "opening line")
 	game._set_skip(true)
@@ -74,7 +85,7 @@ func _run() -> void:
 	await _frames(2)
 	var restored: Control = _new_game(TEST_PREFERENCE)
 	await _frames(3)
-	_expect(restored._ui_style_id == "manga", "new instance restores the last style preference")
+	_expect(restored._ui_style_id == "gintama", "new instance restores the last style preference")
 	_expect(restored._screen_mode == "title" and restored._visible_text.is_empty() and
 		not restored._dialog_layer.visible,
 		"style persistence leaves the story at its title entry point")
@@ -104,7 +115,7 @@ func _choices_match_style(game: Control, style_id: String) -> bool:
 	if game._choice_buttons.is_empty() or game._choice_sheet.style_id != style_id or not game._choice_sheet.visible \
 			or game._dialog_panel.visible:
 		return false
-	var paper: Color = {"cinema": Color8(8, 17, 26), "ledger": Color("#f2e8d2"), "manga": Color("#f5f3e9")}[style_id]
+	var paper: Color = {"cinema": Color8(8, 17, 26), "ledger": Color("#f2e8d2"), "manga": Color("#f5f3e9"), "gintama": Color("#f4eddf")}[style_id]
 	for button: Button in game._choice_buttons:
 		var normal: StyleBoxFlat = button.get_theme_stylebox("normal") as StyleBoxFlat
 		var focus: StyleBoxFlat = button.get_theme_stylebox("focus") as StyleBoxFlat
@@ -120,9 +131,17 @@ func _choices_match_style(game: Control, style_id: String) -> bool:
 ## The edition's own box scene is mounted, and its text clears contrast against the paper the
 ## ornament paints (cinema: the navy gradient at full strength).
 func _dialogue_is_readable(game: Control, style_id: String) -> bool:
-	var paper: Color = {"cinema": Color(0.03, 0.07, 0.1), "ledger": Color("#f2e8d2"), "manga": Color(0.965, 0.96, 0.93)}[style_id]
+	var paper: Color = {"cinema": Color(0.03, 0.07, 0.1), "ledger": Color("#f2e8d2"), "manga": Color(0.965, 0.96, 0.93), "gintama": Color("#f4eddf")}[style_id]
 	var text_color: Color = game._text_label.get_theme_color("font_color")
-	return game._dialog_panel.style_id == style_id and UI_STYLES_SCRIPT.contrast_ratio(text_color, paper) >= 4.5
+	var readable: bool = game._dialog_panel.style_id == style_id and UI_STYLES_SCRIPT.contrast_ratio(text_color, paper) >= 4.5
+	if style_id != "gintama":
+		return readable
+	var waves: TextureRect = game._dialog_panel.find_child("Seigaiha", true, false) as TextureRect
+	var blossom: TextureRect = game._dialog_panel.find_child("Sakura", true, false) as TextureRect
+	var name_style: StyleBoxFlat = game._dialog_panel.find_child("NamePlate", true, false).get_theme_stylebox("panel") as StyleBoxFlat
+	return readable and waves != null and waves.texture != null and blossom != null and blossom.texture != null and \
+		name_style != null and name_style.bg_color == Color("#203e5e") and \
+		game._name_label.get_theme_color("font_color") == Color("#f8f3e9")
 
 
 ## The title's edition picker belongs to that edition's title scene, shows a focus ring and a
@@ -132,7 +151,7 @@ func _selector_has_focus_and_disabled_states(game: Control, style_id: String) ->
 	var focus: StyleBoxFlat = button.get_theme_stylebox("focus") as StyleBoxFlat
 	var disabled: StyleBoxFlat = button.get_theme_stylebox("disabled") as StyleBoxFlat
 	var normal: StyleBoxFlat = button.get_theme_stylebox("normal") as StyleBoxFlat
-	var card: Color = {"cinema": Color8(5, 10, 14), "ledger": Color("#f2e8d2"), "manga": Color("#f5f3e9")}[style_id]
+	var card: Color = {"cinema": Color8(5, 10, 14), "ledger": Color("#f2e8d2"), "manga": Color("#f5f3e9"), "gintama": Color("#f4eddf")}[style_id]
 	return game._title_screen.style_id == style_id and button.focus_mode == Control.FOCUS_ALL and \
 		focus != null and disabled != null and normal != null and focus.border_color.a > 0.0 and focus.border_width_top > 0 and \
 		UI_STYLES_SCRIPT.contrast_ratio(button.get_theme_color("font_color"), card.blend(normal.bg_color)) >= 4.5

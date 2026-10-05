@@ -1,5 +1,5 @@
 extends Control
-## Title screen, one scene per UI edition: scenes/ui/title_screen_<cinema|ledger|manga>.tscn. The
+## Title screen, one scene per UI edition: scenes/ui/title_screen_<style>.tscn. The
 ## story's exterior photo under the edition's wash, and a card at the bottom: which sample story
 ## (tap for 章節選擇), the game title, 開始故事 / 繼續 / 讀取存檔・設定 and the edition picker.
 
@@ -10,7 +10,7 @@ signal settings_pressed
 signal story_switch_pressed
 signal style_pressed(style_id: String)
 
-@export_enum("cinema", "ledger", "manga") var style_id: String = "cinema"
+@export_enum("cinema", "ledger", "manga", "gintama") var style_id: String = "cinema"
 
 @onready var background: TextureRect = %Background
 ## Bottom-anchored card area; main.gd scales it up on narrow phones.
@@ -21,7 +21,9 @@ signal style_pressed(style_id: String)
 @onready var load_button: Button = %Load
 @onready var settings_button: Button = %Settings
 @onready var error_label: Label = %Error
-@onready var style_buttons: Dictionary = {"cinema": %Style_cinema, "ledger": %Style_ledger, "manga": %Style_manga}
+@onready var style_buttons: Dictionary = {
+	"cinema": %Style_cinema, "ledger": %Style_ledger, "manga": %Style_manga, "gintama": %Style_gintama,
+}
 
 
 func _ready() -> void:

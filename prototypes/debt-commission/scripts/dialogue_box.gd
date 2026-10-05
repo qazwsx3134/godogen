@@ -1,5 +1,5 @@
 extends MarginContainer
-## The reading box, one scene per UI edition: scenes/ui/dialogue_box_<cinema|ledger|manga>.tscn.
+## The reading box, one scene per UI edition: scenes/ui/dialogue_box_<style>.tscn.
 ## Frames, spacing and colors live in the scene; this script only fills it and reports taps.
 ## The box sits at the bottom of the game area and grows upward to fit the whole line, so its
 ## height stays put while the line types out (visible_characters after shaping).
@@ -14,7 +14,7 @@ const UI_STYLES: Script = preload("res://scripts/ui_styles.gd")
 const TOPIC_SCENE: PackedScene = preload("res://scenes/ui/investigate_topic.tscn")
 
 ## Which edition this scene draws (set in the scene).
-@export_enum("cinema", "ledger", "manga") var style_id: String = "cinema"
+@export_enum("cinema", "ledger", "manga", "gintama") var style_id: String = "cinema"
 
 @onready var speaker_row: Control = %SpeakerRow
 @onready var speaker_mark: Label = %SpeakerMark

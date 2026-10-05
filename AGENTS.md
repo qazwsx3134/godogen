@@ -8,6 +8,13 @@ This repository is not a published game repo. It is the source that `publish.sh`
 - Delegated Codex workers, including Herdr sibling sessions, preferentially use **GPT-6 Luna** (`gpt-6-luna`) with **max** reasoning effort. Pass both the model and effort explicitly when starting a worker; an explicit user override takes precedence.
 - Updating this file does not switch a session that is already running. Apply these settings when starting the next session or worker.
 
+## 子代理的成本門檻
+
+- 開啟 subagent 前，先估算由主 session 自行完成與委派的 API 總成本。委派成本包含子代理的輸入／輸出、重複載入上下文，以及主 session 的派工、協調、審查與整合；使用各自模型的費率，不能只比較 token 數。
+- 若自行完成的預估成本 **小於委派總成本的 1.2 倍**，就在自己的 session 完成，不特別開子代理。子代理的目的是節省成本；達到門檻才考慮委派，不因為能平行或任務較大就自動開啟。
+- 無法合理判斷能達到門檻時，預設自行完成。決定委派時，簡短說明成本估算與預期節省，勿把估算當成實際帳單。
+- 此門檻適用於內建 subagent、Herdr sibling session 與其他委派方式，優先於一般性的委派／平行工作偏好；使用者當次明確要求開子代理時，以該要求為準。
+
 ## Source Layout
 
 - `prompts/runtime.md` — the engine-agnostic runtime manifest text

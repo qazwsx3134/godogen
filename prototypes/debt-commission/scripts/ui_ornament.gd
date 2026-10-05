@@ -1,11 +1,11 @@
 @tool
 extends Control
-## Frames and action shapes of the three UI editions (A cinema, B ledger, C manga). Place it
+## Frames and action shapes of the four UI editions (A cinema, B ledger, C manga, D gintama). Place it
 ## as the first child of a panel (or with show_behind_parent under a button); it draws in the
 ## editor too, so scenes show their real frame. `unit` is one CSS pixel of the HTML reference
 ## in local pixels: 1080 / 390 at the design width.
 
-@export_enum("cinema", "ledger", "manga") var style_id: String = "cinema":
+@export_enum("cinema", "ledger", "manga", "gintama") var style_id: String = "cinema":
 	set(value):
 		style_id = value
 		queue_redraw()
@@ -45,6 +45,10 @@ func _draw() -> void:
 			draw_circle(size * .5, radius, Color("#9f3b2b"))
 			draw_circle(size * .5, radius - u, Color("#a94432"))
 			draw_arc(size * .5, radius - 2.5 * u, 0, TAU, 96, Color("#f4dfbd"), 2 * u)
+		elif style_id == "gintama":
+			var radius: float = minf(size.x, size.y) * .5 - 2 * u
+			draw_circle(size * .5, radius, Color("#203e5e"))
+			draw_arc(size * .5, radius - 2 * u, 0, TAU, 96, Color("#d7e4eb"), u)
 		else:
 			var points: PackedVector2Array = PackedVector2Array([Vector2(size.x * .2, 0), Vector2(size.x, 0), size, Vector2(0, size.y)])
 			draw_colored_polygon(points, Color("#e74e36"))
@@ -79,6 +83,21 @@ func _draw() -> void:
 		draw_rect(r.grow(-5 * u), Color(.55, .41, .24, .58), false, u)
 		if kind in ["dialogue", "choices", "menu"]:
 			draw_rect(Rect2(0, 12 * u, 3 * u, size.y - 24 * u), Color("#a94432"))
+	elif style_id == "gintama":
+		var paper: StyleBoxFlat = StyleBoxFlat.new()
+		paper.bg_color = Color("#f4eddf")
+		paper.border_color = Color("#203e5e")
+		paper.set_border_width_all(roundi(2 * u))
+		paper.set_corner_radius_all(roundi(10 * u))
+		paper.shadow_color = Color(0.08, 0.16, 0.23, 0.2)
+		paper.shadow_size = roundi(2 * u)
+		draw_style_box(paper, r)
+		var inner: StyleBoxFlat = StyleBoxFlat.new()
+		inner.draw_center = false
+		inner.border_color = Color(0.53, 0.68, 0.78, 0.36)
+		inner.set_border_width_all(maxi(1, roundi(u)))
+		inner.set_corner_radius_all(roundi(7 * u))
+		draw_style_box(inner, r.grow(-5 * u))
 	else:
 		var shadow: Color = {"menu": Color("#e6be32"), "title": Color("#e3bd35"), "choices": Color(.06, .063, .06, .42)}.get(kind, Color(.07, .07, .07, .3))
 		var offset: float = {"menu": 6.0, "title": 6.0, "choices": 5.0}.get(kind, 4.0)

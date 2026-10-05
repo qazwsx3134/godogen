@@ -21,7 +21,7 @@ const TEST_UI: String = "user://choices_test_ui.cfg"
 const TEST_SETTINGS: String = "user://choices_test_settings.cfg"
 const DIRECTOR_SHEET: String = "res://scenes/ui/choice_sheet_director.tscn"
 const DIRECTOR_ITEM: String = "res://scenes/ui/choice_item_director.tscn"
-const STYLES: Array[String] = ["cinema", "ledger", "manga"]
+const STYLES: Array[String] = ["cinema", "ledger", "manga", "gintama"]
 const DIRECTOR_PROMPT: String = "接下來發生什麼？"
 const DIRECTOR_NOTE: String = "※製作組經費有限"
 const POV_LABELS: Array[String] = ["問題是你有工作的時候也在休息啊！！", "那請問這個月的房租打算怎麼辦？", "……算了，我甚至不知道從哪裡開始說。"]
@@ -31,7 +31,10 @@ const GLYPHS: Dictionary = {"loud": "！", "calm": "？", "tired": "…"}
 const SCENE_FILES: Array[String] = [
 	"res://main.tscn", DIRECTOR_SHEET, DIRECTOR_ITEM,
 	"res://scenes/ui/choice_sheet_cinema.tscn", "res://scenes/ui/choice_sheet_ledger.tscn", "res://scenes/ui/choice_sheet_manga.tscn",
-	"res://scenes/ui/choice_item_cinema.tscn", "res://scenes/ui/choice_item_ledger.tscn", "res://scenes/ui/choice_item_manga.tscn"]
+	"res://scenes/ui/choice_sheet_gintama.tscn",
+	"res://scenes/ui/choice_item_cinema.tscn", "res://scenes/ui/choice_item_ledger.tscn", "res://scenes/ui/choice_item_manga.tscn",
+	"res://scenes/ui/choice_item_gintama.tscn",
+	"res://scenes/ui/dialogue_box_gintama.tscn", "res://scenes/ui/menu_panel_gintama.tscn", "res://scenes/ui/title_screen_gintama.tscn"]
 
 ## One mistake of a story per case: where it is edited, how, and what the loader must say.
 ## A tiny .dialogue (a POV choice, a director choice with a note, one without) and its Parley graph.
@@ -542,7 +545,7 @@ func _test_switching_edition() -> void:
 	var shown: Array[String] = []
 	for row: Button in game._choice_buttons:
 		shown.append(row.text)
-	for style: String in ["ledger", "manga", "cinema"]:
+	for style: String in ["ledger", "manga", "cinema", "gintama"]:
 		game._effects._se_player.stop()
 		game._effects._se_player.stream = null
 		game._set_ui_style(style, false)
@@ -561,10 +564,12 @@ func _test_switching_edition() -> void:
 	# With 目錄 open on top, the edition is picked there.
 	game._open_menu()
 	await _frames(2)
-	game._on_ui_style_selected("manga")
+	game._on_ui_style_selected("gintama")
 	await _frames(3)
-	_expect(game._screen_mode == "menu" and game._choice_sheet.get("perspective") == "director" and game._choice_qa_state(game._runner_current())["sheet"] == "director",
-		"switching the edition from 目錄 keeps the director's sheet under it")
+	_expect(game._screen_mode == "menu" and game._ui_style_id == "gintama" and
+		preload("res://scripts/ui_styles.gd").load_preference(game.ui_preference_path) == "gintama" and
+		game._choice_sheet.get("perspective") == "director" and game._choice_qa_state(game._runner_current())["sheet"] == "director",
+		"switching to the paper edition from 目錄 saves it and keeps the director's sheet under it")
 	game._close_menu()
 	await _frames(2)
 	_expect(game._choice_buttons.size() == 3 and game._choice_sheet.visible, "closing 目錄 shows the cards again")
@@ -575,11 +580,11 @@ func _test_switching_edition() -> void:
 	# A POV choice follows the edition too, tones and all.
 	game = await _new_game()
 	await _to_choice(game, "the POV choice")
-	game._set_ui_style("manga", false)
+	game._set_ui_style("gintama", false)
 	await _frames(3)
 	var markers: Array = game._choice_buttons.map(func(row: Button) -> String: return (row.get_node("%Tone") as Label).text if (row.get_node("%Tone") as Label).visible else "")
-	_expect(game._choice_sheet.style_id == "manga" and game._choice_sheet.get("perspective") == "pov" and markers == ["！", "？", "…"],
-		"the POV choice is rebuilt in the manga sheet with its tones: %s" % [markers])
+	_expect(game._choice_sheet.style_id == "gintama" and game._choice_sheet.get("perspective") == "pov" and markers == ["！", "？", "…"],
+		"the POV choice is rebuilt in the paper sheet with its tones: %s" % [markers])
 	await _free(game)
 
 

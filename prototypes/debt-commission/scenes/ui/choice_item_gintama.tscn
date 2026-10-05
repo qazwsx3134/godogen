@@ -1,0 +1,186 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/story-cjk.ttc" id="1_i5gkl"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4hhcc"]
+content_margin_left = 138.46153
+content_margin_top = 19.384615
+content_margin_right = 27.692308
+content_margin_bottom = 19.384615
+bg_color = Color(0.9607843, 0.9372549, 0.8901961, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.21960784, 0.3372549, 0.4509804, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jurf5"]
+content_margin_left = 138.46153
+content_margin_top = 19.384615
+content_margin_right = 27.692308
+content_margin_bottom = 19.384615
+bg_color = Color(0.1254902, 0.24313726, 0.36862746, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.09411765, 0.21176471, 0.3137255, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b3wro"]
+content_margin_left = 138.46153
+content_margin_top = 19.384615
+content_margin_right = 27.692308
+content_margin_bottom = 19.384615
+bg_color = Color(0.9019608, 0.92941177, 0.94509804, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.1254902, 0.24313726, 0.36862746, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5gu7l"]
+content_margin_left = 138.46153
+content_margin_top = 19.384615
+content_margin_right = 27.692308
+content_margin_bottom = 19.384615
+bg_color = Color(0.1254902, 0.24313726, 0.36862746, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.09411765, 0.21176471, 0.3137255, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_skyom"]
+content_margin_left = 138.46153
+content_margin_top = 19.384615
+content_margin_right = 27.692308
+content_margin_bottom = 19.384615
+bg_color = Color(0.8666667, 0.84705883, 0.80784315, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m6ok3"]
+content_margin_left = 138.46153
+content_margin_top = 19.384615
+content_margin_right = 27.692308
+content_margin_bottom = 19.384615
+bg_color = Color(0.9607843, 0.9372549, 0.8901961, 1)
+draw_center = false
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0.09411765, 0.21176471, 0.3137255, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="FontVariation" id="FontVariation_qf72c"]
+base_font = ExtResource("1_i5gkl")
+variation_embolden = 0.5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h25bt"]
+draw_center = false
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.76862746, 0.6784314, 0.5176471, 1)
+corner_radius_top_left = 39
+corner_radius_top_right = 39
+corner_radius_bottom_right = 39
+corner_radius_bottom_left = 39
+
+[sub_resource type="FontVariation" id="FontVariation_ln6wr"]
+base_font = ExtResource("1_i5gkl")
+variation_embolden = 0.9
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tone"]
+bg_color = Color(0.6627451, 0.26666668, 0.19607843, 1)
+corner_radius_top_left = 31
+corner_radius_top_right = 31
+corner_radius_bottom_right = 31
+corner_radius_bottom_left = 31
+
+[node name="ChoiceItem" type="Button" unique_id=2071340155]
+custom_minimum_size = Vector2(0, 132.92308)
+theme_override_styles/normal = SubResource("StyleBoxFlat_4hhcc")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_jurf5")
+theme_override_styles/hover = SubResource("StyleBoxFlat_b3wro")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_5gu7l")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_skyom")
+theme_override_styles/focus = SubResource("StyleBoxFlat_m6ok3")
+theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/font_focus_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/font_pressed_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
+theme_override_fonts/font = SubResource("FontVariation_qf72c")
+theme_override_font_sizes/font_size = 47
+text = "先問清楚委託人"
+alignment = 0
+autowrap_mode = 3
+
+[node name="Index" type="Label" parent="." unique_id=199674585]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 27.692308
+offset_top = -38.76923
+offset_right = 105.23077
+offset_bottom = 38.76923
+theme_override_styles/normal = SubResource("StyleBoxFlat_h25bt")
+theme_override_fonts/font = SubResource("FontVariation_ln6wr")
+theme_override_font_sizes/font_size = 39
+theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
+theme_override_constants/outline_size = 0
+text = "壹"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Tone" type="Label" parent="." unique_id=1530481301]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 112.0
+offset_top = -31.0
+offset_right = 174.0
+offset_bottom = 31.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_tone")
+theme_override_fonts/font = SubResource("FontVariation_ln6wr")
+theme_override_font_sizes/font_size = 41
+theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
+theme_override_constants/outline_size = 0
+text = "！"
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -1,5 +1,5 @@
 extends Control
-## 目錄, one scene per UI edition: scenes/ui/menu_panel_<cinema|ledger|manga>.tscn, rows from
+## 目錄, one scene per UI edition: scenes/ui/menu_panel_<style>.tscn, rows from
 ## scenes/ui/menu_row_<edition>.tscn. A dimmed screen with a centred panel: heading and ×, then
 ## rows (回到故事 first) and the edition picker. On a short screen the rows scroll (fit).
 ## main.gd decides what each row does and which rows show.
@@ -8,7 +8,7 @@ signal closed
 signal row_pressed(row_id: String)
 signal style_pressed(style_id: String)
 
-@export_enum("cinema", "ledger", "manga") var style_id: String = "cinema"
+@export_enum("cinema", "ledger", "manga", "gintama") var style_id: String = "cinema"
 
 ## Full-screen margin around the panel; main.gd scales it up on narrow phones.
 @onready var area: Control = %Area
@@ -20,7 +20,9 @@ signal style_pressed(style_id: String)
 	"resume": %Resume, "save": %Save, "load": %Load, "material": %Material, "profile": %Profile,
 	"log": %Log, "skip": %Skip, "mute": %Mute, "settings": %Settings, "title": %Title,
 }
-@onready var style_buttons: Dictionary = {"cinema": %Style_cinema, "ledger": %Style_ledger, "manga": %Style_manga}
+@onready var style_buttons: Dictionary = {
+	"cinema": %Style_cinema, "ledger": %Style_ledger, "manga": %Style_manga, "gintama": %Style_gintama,
+}
 
 
 func _ready() -> void:

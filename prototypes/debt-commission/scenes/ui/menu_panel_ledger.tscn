@@ -52,6 +52,47 @@ border_width_right = 6
 border_width_bottom = 6
 border_color = Color(0.56078434, 0.20784314, 0.15686275, 1)
 
+[sub_resource type="FontVariation" id="FontVariation_7pggv"]
+base_font = ExtResource("1_qeajg")
+variation_embolden = 0.45
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f73dj"]
+content_margin_left = 27.692308
+content_margin_top = 22.153847
+content_margin_right = 110.76923
+content_margin_bottom = 22.153847
+bg_color = Color(0, 0, 0, 0)
+border_width_top = 3
+border_color = Color(0.76862746, 0.69803923, 0.56078434, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gf4km"]
+content_margin_left = 27.692308
+content_margin_top = 22.153847
+content_margin_right = 110.76923
+content_margin_bottom = 22.153847
+bg_color = Color(0.6627451, 0.26666668, 0.19607843, 0.101960786)
+border_width_left = 8
+border_width_top = 3
+border_color = Color(0.6627451, 0.26666668, 0.19607843, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jxj65"]
+content_margin_left = 27.692308
+content_margin_top = 22.153847
+content_margin_right = 110.76923
+content_margin_bottom = 22.153847
+bg_color = Color(0.6392157, 0.2627451, 0.1882353, 0.07058824)
+border_width_top = 3
+border_color = Color(0.76862746, 0.69803923, 0.56078434, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0epd4"]
+content_margin_left = 27.692308
+content_margin_top = 22.153847
+content_margin_right = 110.76923
+content_margin_bottom = 22.153847
+bg_color = Color(0.45882353, 0.41960785, 0.35686275, 0.05882353)
+border_width_top = 3
+border_color = Color(0.76862746, 0.69803923, 0.56078434, 1)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nawac"]
 bg_color = Color(0.6627451, 0.26666668, 0.19607843, 1)
 border_width_left = 3
@@ -180,6 +221,8 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 theme = SubResource("Theme_kchly")
 script = ExtResource("2_kkpjy")
@@ -247,16 +290,16 @@ alignment = 1
 
 [node name="Kicker" type="Label" parent="Area/Center/Panel/Padding/Column/Heading/HeadingText" unique_id=1249043473]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.6039216, 0.24705882, 0.1764706, 1)
 theme_override_fonts/font = SubResource("FontVariation_a3esg")
 theme_override_font_sizes/font_size = 39
-theme_override_colors/font_color = Color(0.6039216, 0.24705882, 0.1764706, 1)
 text = "夜班委託・目錄"
 
 [node name="Heading" type="Label" parent="Area/Center/Panel/Padding/Column/Heading/HeadingText" unique_id=2025390899]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.21960784, 0.18431373, 0.15686275, 1)
 theme_override_fonts/font = SubResource("FontVariation_xxvel")
 theme_override_font_sizes/font_size = 61
-theme_override_colors/font_color = Color(0.21960784, 0.18431373, 0.15686275, 1)
 text = "先歇一會兒"
 
 [node name="Close" type="Button" parent="Area/Center/Panel/Padding/Column/Heading" unique_id=499274001]
@@ -264,18 +307,18 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(132.92308, 132.92308)
 layout_mode = 2
 size_flags_vertical = 4
-theme_override_styles/normal = SubResource("StyleBoxFlat_8vl5o")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_lknhh")
-theme_override_styles/hover = SubResource("StyleBoxFlat_lknhh")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_lknhh")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_8vl5o")
-theme_override_styles/focus = SubResource("StyleBoxFlat_tg76o")
 theme_override_colors/font_color = Color(0.25490198, 0.20784314, 0.16862746, 1)
 theme_override_colors/font_focus_color = Color(0.25490198, 0.20784314, 0.16862746, 1)
 theme_override_colors/font_pressed_color = Color(0.25490198, 0.20784314, 0.16862746, 1)
 theme_override_colors/font_hover_color = Color(0.25490198, 0.20784314, 0.16862746, 1)
 theme_override_colors/font_hover_pressed_color = Color(0.25490198, 0.20784314, 0.16862746, 1)
 theme_override_font_sizes/font_size = 64
+theme_override_styles/normal = SubResource("StyleBoxFlat_8vl5o")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_lknhh")
+theme_override_styles/hover = SubResource("StyleBoxFlat_lknhh")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_lknhh")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_8vl5o")
+theme_override_styles/focus = SubResource("StyleBoxFlat_tg76o")
 text = "×"
 
 [node name="HeadingGap" type="Control" parent="Area/Center/Panel/Padding/Column" unique_id=943501251]
@@ -298,132 +341,502 @@ theme_override_constants/separation = 0
 
 [node name="Resume" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1089343561 instance=ExtResource("4_fagai")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.6117647, 0.22352941, 0.16470589, 1)
 theme_override_colors/font_focus_color = Color(0.6117647, 0.22352941, 0.16470589, 1)
 theme_override_colors/font_pressed_color = Color(0.6117647, 0.22352941, 0.16470589, 1)
 theme_override_colors/font_hover_color = Color(0.6117647, 0.22352941, 0.16470589, 1)
 theme_override_colors/font_hover_pressed_color = Color(0.6117647, 0.22352941, 0.16470589, 1)
+theme_override_colors/font_disabled_color = Color(0.45882353, 0.41960785, 0.35686275, 1)
+theme_override_fonts/font = SubResource("FontVariation_7pggv")
+theme_override_font_sizes/font_size = 47
+theme_override_styles/normal = SubResource("StyleBoxFlat_f73dj")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_gf4km")
+theme_override_styles/hover = SubResource("StyleBoxFlat_jxj65")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_gf4km")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_0epd4")
+theme_override_styles/focus = SubResource("StyleBoxFlat_gf4km")
 text = "回到故事"
+alignment = 0
 
 [node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Resume" index="0" unique_id=1179952736]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(72, 72)
+layout_mode = 0
+anchor_left = 1.0
 anchor_top = 0.5
+anchor_right = 1.0
 anchor_bottom = 0.5
+offset_left = -27.692308
 offset_top = -36.0
+offset_right = -27.692308
 offset_bottom = 36.0
-theme_override_styles/normal = SubResource("StyleBoxFlat_nawac")
-theme_override_font_sizes/font_size = 36
+grow_horizontal = 0
 theme_override_colors/font_color = Color(1, 0.9607843, 0.8980392, 1)
+theme_override_font_sizes/font_size = 36
+theme_override_styles/normal = SubResource("StyleBoxFlat_nawac")
 text = "續"
 horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Save" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=874459756 instance=ExtResource("4_fagai")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_focus_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_pressed_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_hover_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_disabled_color = Color(0.45882353, 0.41960785, 0.35686275, 1)
+theme_override_fonts/font = SubResource("FontVariation_7pggv")
+theme_override_font_sizes/font_size = 47
+theme_override_styles/normal = SubResource("StyleBoxFlat_f73dj")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_gf4km")
+theme_override_styles/hover = SubResource("StyleBoxFlat_jxj65")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_gf4km")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_0epd4")
+theme_override_styles/focus = SubResource("StyleBoxFlat_gf4km")
+text = "儲存進度"
+alignment = 0
+
+[node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Save" index="0" unique_id=1179952736]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -27.692308
+offset_right = -27.692308
+grow_horizontal = 0
+theme_override_colors/font_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_font_sizes/font_size = 47
+text = "＋"
+vertical_alignment = 1
 
 [node name="Load" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1696330941 instance=ExtResource("4_fagai")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_focus_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_pressed_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_hover_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_disabled_color = Color(0.45882353, 0.41960785, 0.35686275, 1)
+theme_override_fonts/font = SubResource("FontVariation_7pggv")
+theme_override_font_sizes/font_size = 47
+theme_override_styles/normal = SubResource("StyleBoxFlat_f73dj")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_gf4km")
+theme_override_styles/hover = SubResource("StyleBoxFlat_jxj65")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_gf4km")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_0epd4")
+theme_override_styles/focus = SubResource("StyleBoxFlat_gf4km")
 text = "讀取存檔"
+alignment = 0
+
+[node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Load" index="0" unique_id=1179952736]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -27.692308
+offset_right = -27.692308
+grow_horizontal = 0
+theme_override_colors/font_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_font_sizes/font_size = 47
+text = "＋"
+vertical_alignment = 1
 
 [node name="Material" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=12723512 instance=ExtResource("4_fagai")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_focus_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_pressed_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_hover_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_disabled_color = Color(0.45882353, 0.41960785, 0.35686275, 1)
+theme_override_fonts/font = SubResource("FontVariation_7pggv")
+theme_override_font_sizes/font_size = 47
+theme_override_styles/normal = SubResource("StyleBoxFlat_f73dj")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_gf4km")
+theme_override_styles/hover = SubResource("StyleBoxFlat_jxj65")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_gf4km")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_0epd4")
+theme_override_styles/focus = SubResource("StyleBoxFlat_gf4km")
 text = "吐槽素材"
+alignment = 0
+
+[node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Material" index="0" unique_id=1179952736]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -27.692308
+offset_right = -27.692308
+grow_horizontal = 0
+theme_override_colors/font_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_font_sizes/font_size = 47
+text = "＋"
+vertical_alignment = 1
 
 [node name="Profile" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1634912537 instance=ExtResource("4_fagai")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_focus_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_pressed_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_hover_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_disabled_color = Color(0.45882353, 0.41960785, 0.35686275, 1)
+theme_override_fonts/font = SubResource("FontVariation_7pggv")
+theme_override_font_sizes/font_size = 47
+theme_override_styles/normal = SubResource("StyleBoxFlat_f73dj")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_gf4km")
+theme_override_styles/hover = SubResource("StyleBoxFlat_jxj65")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_gf4km")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_0epd4")
+theme_override_styles/focus = SubResource("StyleBoxFlat_gf4km")
 text = "人物檔案"
+alignment = 0
+
+[node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Profile" index="0" unique_id=1179952736]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -27.692308
+offset_right = -27.692308
+grow_horizontal = 0
+theme_override_colors/font_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_font_sizes/font_size = 47
+text = "＋"
+vertical_alignment = 1
 
 [node name="Log" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1553774936 instance=ExtResource("4_fagai")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_focus_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_pressed_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_hover_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_disabled_color = Color(0.45882353, 0.41960785, 0.35686275, 1)
+theme_override_fonts/font = SubResource("FontVariation_7pggv")
+theme_override_font_sizes/font_size = 47
+theme_override_styles/normal = SubResource("StyleBoxFlat_f73dj")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_gf4km")
+theme_override_styles/hover = SubResource("StyleBoxFlat_jxj65")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_gf4km")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_0epd4")
+theme_override_styles/focus = SubResource("StyleBoxFlat_gf4km")
 text = "故事回顧"
+alignment = 0
+
+[node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Log" index="0" unique_id=1179952736]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -27.692308
+offset_right = -27.692308
+grow_horizontal = 0
+theme_override_colors/font_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_font_sizes/font_size = 47
+text = "＋"
+vertical_alignment = 1
 
 [node name="Skip" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1984578387 instance=ExtResource("4_fagai")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_focus_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_pressed_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_hover_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_disabled_color = Color(0.45882353, 0.41960785, 0.35686275, 1)
+theme_override_fonts/font = SubResource("FontVariation_7pggv")
+theme_override_font_sizes/font_size = 47
+theme_override_styles/normal = SubResource("StyleBoxFlat_f73dj")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_gf4km")
+theme_override_styles/hover = SubResource("StyleBoxFlat_jxj65")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_gf4km")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_0epd4")
+theme_override_styles/focus = SubResource("StyleBoxFlat_gf4km")
 text = "略讀"
+alignment = 0
 
-[node name="Styles" type="HBoxContainer" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=806277687]
+[node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Skip" index="0" unique_id=1179952736]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -27.692308
+offset_right = -27.692308
+grow_horizontal = 0
+theme_override_colors/font_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_font_sizes/font_size = 47
+text = "＋"
+vertical_alignment = 1
+
+[node name="Styles" type="GridContainer" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=921704212]
 layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 17
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 6
+columns = 2
 
 [node name="Style_cinema" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Styles" unique_id=208606102 instance=ExtResource("4_fagai")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_focus_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_pressed_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_hover_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_disabled_color = Color(0.45882353, 0.41960785, 0.35686275, 1)
+theme_override_fonts/font = SubResource("FontVariation_7pggv")
+theme_override_font_sizes/font_size = 39
 theme_override_styles/normal = SubResource("StyleBoxFlat_enb2o")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_ekpis")
 theme_override_styles/hover = SubResource("StyleBoxFlat_30kfm")
 theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_ekpis")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_6xgrq")
 theme_override_styles/focus = SubResource("StyleBoxFlat_ekpis")
-theme_override_font_sizes/font_size = 39
 toggle_mode = true
 text = "A 映畫"
-alignment = 1
 
 [node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Styles/Style_cinema" index="0" unique_id=1179952736]
-text = ""
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -27.692308
+offset_right = -27.692308
+grow_horizontal = 0
+theme_override_colors/font_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_font_sizes/font_size = 47
+vertical_alignment = 1
 
 [node name="Style_ledger" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Styles" unique_id=814169371 instance=ExtResource("4_fagai")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_focus_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_pressed_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_hover_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_disabled_color = Color(0.45882353, 0.41960785, 0.35686275, 1)
+theme_override_fonts/font = SubResource("FontVariation_7pggv")
+theme_override_font_sizes/font_size = 39
 theme_override_styles/normal = SubResource("StyleBoxFlat_h44xf")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_l63ts")
 theme_override_styles/hover = SubResource("StyleBoxFlat_gm76j")
 theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_l63ts")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_gu3tp")
 theme_override_styles/focus = SubResource("StyleBoxFlat_l63ts")
-theme_override_font_sizes/font_size = 39
 toggle_mode = true
 button_pressed = true
 text = "B 委託簿"
-alignment = 1
 
 [node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Styles/Style_ledger" index="0" unique_id=1179952736]
-text = ""
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -27.692308
+offset_right = -27.692308
+grow_horizontal = 0
+theme_override_colors/font_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_font_sizes/font_size = 47
+vertical_alignment = 1
 
 [node name="Style_manga" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Styles" unique_id=1768000473 instance=ExtResource("4_fagai")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_focus_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_pressed_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_hover_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_disabled_color = Color(0.45882353, 0.41960785, 0.35686275, 1)
+theme_override_fonts/font = SubResource("FontVariation_7pggv")
+theme_override_font_sizes/font_size = 39
 theme_override_styles/normal = SubResource("StyleBoxFlat_im3g1")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_6fb1j")
 theme_override_styles/hover = SubResource("StyleBoxFlat_fn1mh")
 theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_6fb1j")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_iea2y")
 theme_override_styles/focus = SubResource("StyleBoxFlat_6fb1j")
-theme_override_font_sizes/font_size = 39
 toggle_mode = true
 text = "C 分鏡"
-alignment = 1
 
 [node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Styles/Style_manga" index="0" unique_id=1179952736]
-text = ""
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -27.692308
+offset_right = -27.692308
+grow_horizontal = 0
+theme_override_colors/font_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_font_sizes/font_size = 47
+vertical_alignment = 1
+
+[node name="Style_gintama" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Styles" unique_id=601812750 instance=ExtResource("4_fagai")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "銀魂和紙"
+theme_override_colors/font_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_focus_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_pressed_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_hover_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_disabled_color = Color(0.45882353, 0.41960785, 0.35686275, 1)
+theme_override_fonts/font = SubResource("FontVariation_7pggv")
+theme_override_font_sizes/font_size = 39
+theme_override_styles/normal = SubResource("StyleBoxFlat_im3g1")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_6fb1j")
+theme_override_styles/hover = SubResource("StyleBoxFlat_fn1mh")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_6fb1j")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_iea2y")
+theme_override_styles/focus = SubResource("StyleBoxFlat_6fb1j")
+toggle_mode = true
+text = "D 銀魂和紙"
+
+[node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Styles/Style_gintama" index="0" unique_id=1179952736]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -27.692308
+offset_right = -27.692308
+grow_horizontal = 0
+theme_override_colors/font_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_font_sizes/font_size = 47
+vertical_alignment = 1
 
 [node name="Mute" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1648462614 instance=ExtResource("4_fagai")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_focus_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_pressed_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_hover_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_disabled_color = Color(0.45882353, 0.41960785, 0.35686275, 1)
+theme_override_fonts/font = SubResource("FontVariation_7pggv")
+theme_override_font_sizes/font_size = 47
+theme_override_styles/normal = SubResource("StyleBoxFlat_f73dj")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_gf4km")
+theme_override_styles/hover = SubResource("StyleBoxFlat_jxj65")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_gf4km")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_0epd4")
+theme_override_styles/focus = SubResource("StyleBoxFlat_gf4km")
 text = "音效"
+alignment = 0
 
 [node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Mute" index="0" unique_id=1179952736]
-text = "開"
-
-[node name="Settings" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1525529198 instance=ExtResource("4_fagai")]
 unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -27.692308
+offset_right = -27.692308
+grow_horizontal = 0
+theme_override_colors/font_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_font_sizes/font_size = 47
+text = "開"
+vertical_alignment = 1
+
+[node name="Settings" type="Button" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1525529198 instance=ExtResource("4_fagai")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_focus_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_pressed_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_hover_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_disabled_color = Color(0.45882353, 0.41960785, 0.35686275, 1)
+theme_override_fonts/font = SubResource("FontVariation_7pggv")
+theme_override_font_sizes/font_size = 47
+theme_override_styles/normal = SubResource("StyleBoxFlat_f73dj")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_gf4km")
+theme_override_styles/hover = SubResource("StyleBoxFlat_jxj65")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_gf4km")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_0epd4")
+theme_override_styles/focus = SubResource("StyleBoxFlat_gf4km")
 text = "設定"
+alignment = 0
 
 [node name="Title" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1316684947 instance=ExtResource("4_fagai")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_focus_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_pressed_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_hover_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_disabled_color = Color(0.45882353, 0.41960785, 0.35686275, 1)
+theme_override_fonts/font = SubResource("FontVariation_7pggv")
+theme_override_font_sizes/font_size = 47
+theme_override_styles/normal = SubResource("StyleBoxFlat_f73dj")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_gf4km")
+theme_override_styles/hover = SubResource("StyleBoxFlat_jxj65")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_gf4km")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_0epd4")
+theme_override_styles/focus = SubResource("StyleBoxFlat_gf4km")
 text = "回標題"
+alignment = 0
 
 [node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Title" index="0" unique_id=1179952736]
-text = ""
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -27.692308
+offset_right = -27.692308
+grow_horizontal = 0
+theme_override_colors/font_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_font_sizes/font_size = 47
+vertical_alignment = 1
 
 [editable path="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Resume"]
 [editable path="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Save"]
@@ -435,5 +848,6 @@ text = ""
 [editable path="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Styles/Style_cinema"]
 [editable path="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Styles/Style_ledger"]
 [editable path="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Styles/Style_manga"]
+[editable path="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Styles/Style_gintama"]
 [editable path="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Mute"]
 [editable path="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Title"]

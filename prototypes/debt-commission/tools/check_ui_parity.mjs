@@ -19,7 +19,7 @@ baseUrl.searchParams.set('sample', 'debt');
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const output = path.resolve(arg('--out', path.join(root, 'test-results', 'ui-parity')));
-const styles = ['cinema', 'ledger', 'manga'];
+const styles = ['cinema', 'ledger', 'manga', 'gintama'];
 const viewports = [
   { width: 390, height: 844 },
   { width: 320, height: 568 },

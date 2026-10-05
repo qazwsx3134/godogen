@@ -13,6 +13,7 @@ const DIALOGUE_SCENES: Dictionary = {
 	"cinema": preload("res://scenes/ui/dialogue_box_cinema.tscn"),
 	"ledger": preload("res://scenes/ui/dialogue_box_ledger.tscn"),
 	"manga": preload("res://scenes/ui/dialogue_box_manga.tscn"),
+	"gintama": preload("res://scenes/ui/dialogue_box_gintama.tscn"),
 }
 const ChoiceSheet = preload("res://scripts/choice_sheet.gd")
 const MenuPanel = preload("res://scripts/menu_panel.gd")
@@ -31,16 +32,19 @@ const MENU_SCENES: Dictionary = {
 	"cinema": preload("res://scenes/ui/menu_panel_cinema.tscn"),
 	"ledger": preload("res://scenes/ui/menu_panel_ledger.tscn"),
 	"manga": preload("res://scenes/ui/menu_panel_manga.tscn"),
+	"gintama": preload("res://scenes/ui/menu_panel_gintama.tscn"),
 }
 const TITLE_SCENES: Dictionary = {
 	"cinema": preload("res://scenes/ui/title_screen_cinema.tscn"),
 	"ledger": preload("res://scenes/ui/title_screen_ledger.tscn"),
 	"manga": preload("res://scenes/ui/title_screen_manga.tscn"),
+	"gintama": preload("res://scenes/ui/title_screen_gintama.tscn"),
 }
 const CHOICE_SHEETS: Dictionary = {
 	"cinema": preload("res://scenes/ui/choice_sheet_cinema.tscn"),
 	"ledger": preload("res://scenes/ui/choice_sheet_ledger.tscn"),
 	"manga": preload("res://scenes/ui/choice_sheet_manga.tscn"),
+	"gintama": preload("res://scenes/ui/choice_sheet_gintama.tscn"),
 }
 ## A director choice sits in its own sheet whatever the edition (scenes/ui/choice_sheet_director.tscn).
 const DIRECTOR_SHEET: PackedScene = preload("res://scenes/ui/choice_sheet_director.tscn")

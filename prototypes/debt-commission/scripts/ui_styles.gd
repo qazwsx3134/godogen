@@ -1,5 +1,5 @@
 extends RefCounted
-## Shared palette and Control styling for the three selectable presentation styles.
+## Shared palette and Control styling for the four selectable presentation styles.
 
 const DEFAULT_ID: String = "cinema"
 const PREFERENCE_PATH: String = "user://ui_preferences.cfg"
@@ -7,6 +7,7 @@ const LABELS: Dictionary = {
 	"cinema": "月下映畫",
 	"ledger": "萬事屋委託簿",
 	"manga": "吐槽分鏡",
+	"gintama": "銀魂和紙",
 }
 
 const PALETTES: Dictionary = {
@@ -106,11 +107,43 @@ const PALETTES: Dictionary = {
 		"panel_border": 2,
 		"focus_border": 4,
 	},
+	"gintama": {
+		"canvas": Color("#e8dfcf"),
+		"panel": Color("#f4eddf"),
+		"panel_soft": Color("#f7f2e8"),
+		"surface": Color("#f5efe3"),
+		"surface_hover": Color("#e6edf1"),
+		"text": Color("#203047"),
+		"muted": Color("#536174"),
+		"accent": Color("#203e5e"),
+		"accent_ink": Color("#f8f3e9"),
+		"thought": Color("#3a5f7e"),
+		"danger": Color("#963e4b"),
+		"disabled": Color("#77766f"),
+		"disabled_surface": Color("#ddd8ce"),
+		"rule": Color("#385673"),
+		"focus": Color("#183650"),
+		"name_bg": Color("#203e5e"),
+		"name_ink": Color("#f8f3e9"),
+		"floating_bg": Color("#203e5e"),
+		"floating_ink": Color("#f8f3e9"),
+		"quick_text": Color("#32485d"),
+		"quick_bg": Color(0.84, 0.89, 0.92, 0.18),
+		"quick_active": Color("#d7e4eb"),
+		"quick_active_ink": Color("#203047"),
+		"scene_outline": Color(0.09, 0.16, 0.23, 0.72),
+		"text_outline": Color("#f7f2e8"),
+		"button_radius": 5,
+		"panel_radius": 6,
+		"button_border": 1,
+		"panel_border": 2,
+		"focus_border": 3,
+	},
 }
 
 
 static func style_ids() -> Array[String]:
-	return ["cinema", "ledger", "manga"]
+	return ["cinema", "ledger", "manga", "gintama"]
 
 
 static func normalize_id(style_id: String) -> String:
@@ -201,6 +234,15 @@ static func button_style(style_id: String, role: String, state: String, active: 
 			pressed_bg = (p["accent"] as Color).darkened(0.12)
 			border_width = maxi(1, roundi(2.0 * density))
 			radius = roundi(99.0 * density)
+		elif style_id == "gintama":
+			normal_bg = p["panel"] as Color
+			normal_border = p["accent"] as Color
+			hover_bg = p["surface_hover"] as Color
+			hover_border = p["focus"] as Color
+			pressed_bg = p["accent"] as Color
+			pressed_border = p["focus"] as Color
+			border_width = maxi(2, roundi(2.0 * density))
+			radius = roundi(24.0 * density)
 		else:
 			normal_bg = p["accent"] as Color
 			normal_border = p["text"] as Color
@@ -236,6 +278,11 @@ static func button_style(style_id: String, role: String, state: String, active: 
 			normal_border = Color(0.85, 0.89, 0.86, 0.28)
 			hover_bg = Color(0.76, 0.87, 0.85, 0.17)
 			hover_border = p["accent"] as Color
+		elif style_id == "gintama":
+			normal_bg = p["surface"] as Color
+			normal_border = p["rule"] as Color
+			hover_bg = p["surface_hover"] as Color
+			hover_border = p["accent"] as Color
 			border_width = maxi(1, roundi(density))
 		elif style_id == "ledger":
 			normal_bg = Color.TRANSPARENT
@@ -259,6 +306,12 @@ static func button_style(style_id: String, role: String, state: String, active: 
 			normal_bg = p["surface"] as Color
 			normal_border = p["text"] as Color
 			border_width = maxi(2, roundi(2.0 * density))
+		elif style_id == "gintama":
+			normal_bg = p["panel"] as Color
+			normal_border = p["rule"] as Color
+			hover_bg = p["surface_hover"] as Color
+			hover_border = p["accent"] as Color
+			border_width = maxi(1, roundi(density))
 		else:
 			normal_bg = Color.TRANSPARENT
 			normal_border = Color(0.82, 0.88, 0.84, 0.55)
@@ -458,6 +511,8 @@ static func contrast_ratio(foreground: Color, background: Color) -> float:
 static func _button_ink(p: Dictionary, role: String, active: bool, state: String) -> Color:
 	if state == "disabled":
 		return p["disabled"] as Color
+	if p == PALETTES["gintama"] and state == "pressed":
+		return p["accent_ink"] as Color
 	if role == "quickbar":
 		return p["quick_active_ink"] as Color if active else p["quick_text"] as Color
 	if role in ["primary", "boke_primary", "danger_action"]:

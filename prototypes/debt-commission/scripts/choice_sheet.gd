@@ -18,7 +18,7 @@ const TONE_GAP: float = 27.692308
 const ROW_STATES: Array[StringName] = [&"normal", &"pressed", &"hover", &"hover_pressed", &"disabled", &"focus"]
 
 ## The edition a pov sheet belongs to; the director sheet is the same in all of them.
-@export_enum("cinema", "ledger", "manga") var style_id: String = "cinema"
+@export_enum("cinema", "ledger", "manga", "gintama") var style_id: String = "cinema"
 ## Whose sheet: a pov choice's (and the timed tsukkomi's) in an edition's look, or the director's.
 @export_enum("pov", "director") var perspective: String = "pov"
 @export var item_scene: PackedScene

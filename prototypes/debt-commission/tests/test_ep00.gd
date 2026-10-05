@@ -793,7 +793,7 @@ func _test_old_save_does_not_replay_the_overlay() -> void:
 ## The chapter label is the story's title up to the first （ ("EP00 今天也沒有工作的萬事屋"), more than the speaker row has room
 ## for: in every edition's box it trims with an ellipsis instead of being cut off on its left.
 func _test_chapter_label_trims_with_an_ellipsis() -> void:
-	for style: String in ["cinema", "ledger", "manga"]:
+	for style: String in ["cinema", "ledger", "manga", "gintama"]:
 		var box: Control = (load("res://scenes/ui/dialogue_box_%s.tscn" % style) as PackedScene).instantiate() as Control
 		var chapter: Label = box.get_node("%Chapter") as Label
 		_expect(chapter.text_overrun_behavior == TextServer.OVERRUN_TRIM_ELLIPSIS and chapter.clip_text and chapter.horizontal_alignment == HORIZONTAL_ALIGNMENT_RIGHT,
