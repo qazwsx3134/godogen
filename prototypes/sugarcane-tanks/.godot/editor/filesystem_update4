@@ -1,0 +1,14 @@
+res://main.gd
+res://data/ability_def.gd
+res://enemies/chiang_boss.gd
+res://enemies/chiang_boss.tscn
+res://pickups/pickup.gd
+res://player/sugarcane.gd
+res://tests/test_play.gd
+res://tests/test_scenes.gd
+res://tools/build_scenes.gd
+res://ui/hud.gd
+res://ui/joystick.gd
+res://ui/joystick.tscn
+res://ui/result_panel.gd
+res://ui/theme.tres
