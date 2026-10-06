@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="StreetUpgradeDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/upgrade_def.gd" id="1_wiuoe"]
+
+[resource]
+script = ExtResource("1_wiuoe")
+id = &"wave_power"
+title = "巨浪衝擊"
+description = "衝擊波更寬，額外增加相當於拳力 35% 的傷害。"
+category = "招式強化"
+max_stacks = 3
+prerequisite = &"wave"
+value = 0.35

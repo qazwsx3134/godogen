@@ -1,0 +1,7 @@
+[gd_scene format=3]
+
+[node name="ActorPlaceholder" type="Node2D" unique_id=1105495097]
+
+[node name="Visual" type="Polygon2D" parent="." unique_id=1188554463]
+color = Color(0.3, 0.8, 0.7, 1)
+polygon = PackedVector2Array(0, -22, 18, 16, -18, 16)

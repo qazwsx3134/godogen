@@ -1,0 +1,26 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/wave.gd" id="1_y5ysc"]
+
+[node name="Shockwave" type="Node2D" unique_id=821049891]
+script = ExtResource("1_y5ysc")
+
+[node name="Visual" type="Node2D" parent="." unique_id=1390460580]
+unique_name_in_owner = true
+position = Vector2(0, -20)
+
+[node name="Crest" type="Line2D" parent="Visual" unique_id=639130446]
+unique_name_in_owner = true
+points = PackedVector2Array(-10, -26, 3, -14, 10, 0, 3, 14, -10, 26)
+width = 7.0
+default_color = Color(0.44705883, 0.8784314, 0.7529412, 1)
+begin_cap_mode = 2
+end_cap_mode = 2
+
+[node name="Trail" type="Line2D" parent="Visual" unique_id=1150819643]
+unique_name_in_owner = true
+points = PackedVector2Array(-48, -12, -12, 0, -48, 12)
+width = 4.0
+default_color = Color(0.45, 0.9, 0.8, 0.4)
+begin_cap_mode = 2
+end_cap_mode = 2

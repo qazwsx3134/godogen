@@ -1,0 +1,72 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/game.gd" id="1_vtaks"]
+[ext_resource type="PackedScene" path="res://scenes/street.tscn" id="2_kvpfn"]
+[ext_resource type="Script" path="res://addons/proto_kit/time_control.gd" id="3_dinhu"]
+[ext_resource type="Script" path="res://scripts/sfx.gd" id="4_kvuet"]
+[ext_resource type="Script" path="res://addons/proto_kit/music.gd" id="5_trtic"]
+[ext_resource type="PackedScene" path="res://scenes/joystick.tscn" id="6_ir15t"]
+[ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="7_ca42v"]
+[ext_resource type="PackedScene" path="res://scenes/menu.tscn" id="8_rysoc"]
+[ext_resource type="PackedScene" path="res://scenes/results.tscn" id="9_ssvqc"]
+[ext_resource type="PackedScene" path="res://scenes/pause.tscn" id="10_264po"]
+[ext_resource type="PackedScene" path="res://scenes/upgrades.tscn" id="11_kvpfn"]
+
+[node name="StreetImpact" type="Node" unique_id=1142722470]
+process_mode = 3
+script = ExtResource("1_vtaks")
+metadata/progression_scene_version = 1
+
+[node name="Street" parent="." unique_id=1672293938 instance=ExtResource("2_kvpfn")]
+unique_name_in_owner = true
+visible = false
+
+[node name="Services" type="Node" parent="." unique_id=514392781]
+
+[node name="TimeControl" type="Node" parent="Services" unique_id=1379722543]
+unique_name_in_owner = true
+script = ExtResource("3_dinhu")
+
+[node name="Sfx" type="Node" parent="Services" unique_id=1098795775]
+unique_name_in_owner = true
+script = ExtResource("4_kvuet")
+
+[node name="Music" type="Node" parent="Services" unique_id=1953106710]
+script = ExtResource("5_trtic")
+
+[node name="VoiceA" type="AudioStreamPlayer" parent="Services/Music" unique_id=522004539]
+
+[node name="VoiceB" type="AudioStreamPlayer" parent="Services/Music" unique_id=979467308]
+
+[node name="Interface" type="CanvasLayer" parent="." unique_id=751173994]
+
+[node name="Stick" parent="Interface" unique_id=1933407123 instance=ExtResource("6_ir15t")]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15
+offset_top = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Hud" parent="Interface" unique_id=825862417 instance=ExtResource("7_ca42v")]
+unique_name_in_owner = true
+visible = false
+
+[node name="Menu" parent="Interface" unique_id=579659505 instance=ExtResource("8_rysoc")]
+unique_name_in_owner = true
+
+[node name="Results" parent="Interface" unique_id=1535469808 instance=ExtResource("9_ssvqc")]
+unique_name_in_owner = true
+visible = false
+
+[node name="PausePanel" parent="Interface" unique_id=1897680285 instance=ExtResource("10_264po")]
+unique_name_in_owner = true
+visible = false
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="UpgradePanel" parent="Interface" unique_id=1995312911 instance=ExtResource("11_kvpfn")]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15

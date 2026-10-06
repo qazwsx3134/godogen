@@ -1,0 +1,12 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://scripts/enemy_def.gd" id="1_y8kq7"]
+
+[resource]
+script = ExtResource("1_y8kq7")
+kind = "bike"
+max_hp = 102.0
+speed = 70.0
+radius = 24.0
+weight = 2.0
+experience = 2

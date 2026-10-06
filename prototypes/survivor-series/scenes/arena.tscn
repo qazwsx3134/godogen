@@ -1,0 +1,25 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/actor_placeholder.tscn" id="1_e05a3"]
+
+[node name="Arena" type="Node2D" unique_id=1585872637]
+
+[node name="Floor" type="Polygon2D" parent="." unique_id=578127749]
+color = Color(0.1, 0.15, 0.2, 1)
+polygon = PackedVector2Array(-400, -230, 400, -230, 400, 230, -400, 230)
+
+[node name="Actors" type="Node2D" parent="." unique_id=480164073]
+
+[node name="PlayerPreview" parent="Actors" unique_id=1105495097 instance=ExtResource("1_e05a3")]
+
+[node name="EnemyPreview" parent="Actors" unique_id=1228386699 instance=ExtResource("1_e05a3")]
+modulate = Color(1, 0.4, 0.4, 1)
+position = Vector2(180, -100)
+
+[node name="Projectiles" type="Node2D" parent="." unique_id=1800942830]
+
+[node name="Pickups" type="Node2D" parent="." unique_id=79582424]
+
+[node name="Effects" type="Node2D" parent="." unique_id=593926839]
+
+[node name="Camera" type="Camera2D" parent="." unique_id=953468702]

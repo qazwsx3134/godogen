@@ -1,0 +1,88 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_jyhfs"]
+[ext_resource type="PackedScene" path="res://scenes/arena.tscn" id="2_tbgi4"]
+[ext_resource type="Script" path="res://addons/proto_kit/time_control.gd" id="3_tefeu"]
+[ext_resource type="Script" path="res://addons/proto_kit/music.gd" id="4_o6xl0"]
+
+[node name="SurvivorSeries" type="Node" unique_id=150879643]
+script = ExtResource("1_jyhfs")
+
+[node name="Arena" parent="." unique_id=1585872637 instance=ExtResource("2_tbgi4")]
+unique_name_in_owner = true
+visible = false
+
+[node name="Services" type="Node" parent="." unique_id=1793495109]
+
+[node name="TimeControl" type="Node" parent="Services" unique_id=154789042]
+process_mode = 3
+script = ExtResource("3_tefeu")
+
+[node name="Music" type="Node" parent="Services" unique_id=213951937]
+process_mode = 3
+script = ExtResource("4_o6xl0")
+
+[node name="VoiceA" type="AudioStreamPlayer" parent="Services/Music" unique_id=1878071353]
+
+[node name="VoiceB" type="AudioStreamPlayer" parent="Services/Music" unique_id=513838116]
+
+[node name="Interface" type="CanvasLayer" parent="." unique_id=1513638652]
+
+[node name="Menu" type="Control" parent="Interface" unique_id=22376373]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Center" type="CenterContainer" parent="Interface/Menu" unique_id=666762830]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Column" type="VBoxContainer" parent="Interface/Menu/Center" unique_id=146989296]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="Interface/Menu/Center/Column" unique_id=1318706490]
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "Survivor Series"
+
+[node name="Subtitle" type="Label" parent="Interface/Menu/Center/Column" unique_id=80256151]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Scene scaffold / gameplay decisions pending"
+
+[node name="OpenArena" type="Button" parent="Interface/Menu/Center/Column" unique_id=966275531]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 52)
+layout_mode = 2
+text = "Open arena scaffold"
+
+[node name="PreviewHud" type="MarginContainer" parent="Interface" unique_id=2139533614]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 10
+anchor_right = 1.0
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 24
+
+[node name="Row" type="HBoxContainer" parent="Interface/PreviewHud" unique_id=1932022203]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Status" type="Label" parent="Interface/PreviewHud/Row" unique_id=1291700462]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Arena preview"
+
+[node name="Spacer" type="Control" parent="Interface/PreviewHud/Row" unique_id=1861555090]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ReturnToMenu" type="Button" parent="Interface/PreviewHud/Row" unique_id=28859950]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Return to menu"

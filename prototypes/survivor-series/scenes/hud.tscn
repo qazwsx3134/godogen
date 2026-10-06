@@ -1,0 +1,155 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://data/ui_theme.tres" id="1_ahhtf"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_toqtt"]
+bg_color = Color(0.44705883, 0.8784314, 0.7529412, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ahhtf"]
+content_margin_top = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.13725491, 0.19215687, 0.23529412, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oo0fn"]
+content_margin_top = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(1, 0.77254903, 0.41960785, 1)
+
+[node name="Hud" type="Control" unique_id=825862417]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("1_ahhtf")
+
+[node name="SafeTop" type="MarginContainer" parent="." unique_id=1168621017]
+layout_mode = 0
+anchor_right = 1.0
+mouse_filter = 2
+theme_override_constants/margin_left = 26
+theme_override_constants/margin_top = 42
+theme_override_constants/margin_right = 26
+
+[node name="Column" type="VBoxContainer" parent="SafeTop" unique_id=2030557527]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="Stats" type="HBoxContainer" parent="SafeTop/Column" unique_id=16320906]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 18
+
+[node name="Time" type="Label" parent="SafeTop/Column/Stats" unique_id=698076125]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.77254903, 0.41960785, 1)
+theme_override_font_sizes/font_size = 24
+text = "90 秒"
+horizontal_alignment = 1
+
+[node name="Kills" type="Label" parent="SafeTop/Column/Stats" unique_id=1271016865]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96862745, 0.9098039, 0.80784315, 1)
+theme_override_font_sizes/font_size = 18
+text = "揍飛  0"
+horizontal_alignment = 1
+
+[node name="Hits" type="Label" parent="SafeTop/Column/Stats" unique_id=1380969681]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96862745, 0.9098039, 0.80784315, 1)
+theme_override_font_sizes/font_size = 18
+text = "受擊  0"
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="SafeTop/Column/Stats" unique_id=733149203]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Pause" type="Button" parent="SafeTop/Column/Stats" unique_id=962246460]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(60, 56)
+layout_mode = 2
+text = "Ⅱ"
+
+[node name="TimeBar" type="ProgressBar" parent="SafeTop/Column" unique_id=642511896]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_toqtt")
+max_value = 90.0
+value = 90.0
+show_percentage = false
+
+[node name="Growth" type="HBoxContainer" parent="SafeTop/Column" unique_id=1290786860]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="Level" type="Label" parent="SafeTop/Column/Growth" unique_id=1947869753]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.44705883, 0.8784314, 0.7529412, 1)
+theme_override_font_sizes/font_size = 16
+text = "Lv.1"
+
+[node name="Experience" type="ProgressBar" parent="SafeTop/Column/Growth" unique_id=1891854903]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_font_sizes/font_size = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_ahhtf")
+theme_override_styles/fill = SubResource("StyleBoxFlat_oo0fn")
+max_value = 5.0
+show_percentage = false
+
+[node name="ShakeToggle" type="CheckButton" parent="SafeTop/Column/Growth" unique_id=1012717740]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_font_sizes/font_size = 14
+button_pressed = true
+text = "震屏"
+
+[node name="Build" type="Label" parent="SafeTop/Column" unique_id=191563783]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.56078434, 0.6509804, 0.6784314, 1)
+theme_override_font_sizes/font_size = 13
+text = "基礎拳擊"
+autowrap_mode = 3
+max_lines_visible = 2
+
+[node name="Hint" type="Label" parent="." unique_id=1603523774]
+layout_mode = 0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -54.0
+offset_bottom = -24.0
+theme_override_colors/font_color = Color(0.56078434, 0.6509804, 0.6784314, 1)
+theme_override_font_sizes/font_size = 16
+text = "按住拖曳移動  ·  靠近自動揮拳"
+horizontal_alignment = 1
+
+[node name="Combo" type="Label" parent="." unique_id=131442156]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -106.0
+offset_bottom = -69.0
+theme_override_colors/font_color = Color(1, 0.77254903, 0.41960785, 1)
+theme_override_font_sizes/font_size = 24
+horizontal_alignment = 1

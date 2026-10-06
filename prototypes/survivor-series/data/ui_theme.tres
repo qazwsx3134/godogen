@@ -1,0 +1,69 @@
+[gd_resource type="Theme" format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/NotoSansTC.ttf" id="1_7igd0"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h1iuo"]
+content_margin_top = 14.0
+content_margin_bottom = 14.0
+bg_color = Color(0.22352941, 0.34901962, 0.41568628, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.44705883, 0.8784314, 0.7529412, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7igd0"]
+content_margin_top = 14.0
+content_margin_bottom = 14.0
+bg_color = Color(0.22352941, 0.34901962, 0.41568628, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3764706, 0.4509804, 0.47843137, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xabvr"]
+content_margin_top = 14.0
+content_margin_bottom = 14.0
+bg_color = Color(0.14901961, 0.24313726, 0.3019608, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3764706, 0.4509804, 0.47843137, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ns0vx"]
+content_margin_top = 14.0
+content_margin_bottom = 14.0
+bg_color = Color(0.22352941, 0.34901962, 0.41568628, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3764706, 0.4509804, 0.47843137, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[resource]
+default_font = ExtResource("1_7igd0")
+default_font_size = 20
+Button/colors/font_color = Color(0.96862745, 0.9098039, 0.80784315, 1)
+Button/styles/focus = SubResource("StyleBoxFlat_h1iuo")
+Button/styles/hover = SubResource("StyleBoxFlat_7igd0")
+Button/styles/normal = SubResource("StyleBoxFlat_xabvr")
+Button/styles/pressed = SubResource("StyleBoxFlat_ns0vx")
+Label/colors/font_color = Color(0.96862745, 0.9098039, 0.80784315, 1)
