@@ -7,6 +7,7 @@ extends MarginContainer
 signal menu_pressed
 signal log_pressed
 signal auto_pressed
+signal skip_pressed
 signal advance_pressed
 signal collapse_pressed
 
@@ -20,13 +21,14 @@ const TOPIC_SCENE: PackedScene = preload("res://scenes/ui/investigate_topic.tscn
 @onready var speaker_mark: Label = %SpeakerMark
 @onready var speaker_name: Label = %SpeakerName
 @onready var chapter: Label = %Chapter
-@onready var text: Label = %Text
+@onready var text: RichTextLabel = %Text
 ## Slot for per-mode controls (investigation continue, tsukkomi round buttons).
 @onready var actions: Container = %Actions
 @onready var toolbar: Container = %Toolbar
 @onready var menu_button: Button = %Menu
 @onready var log_button: Button = %Log
 @onready var auto_button: Button = %Auto
+@onready var skip_button: Button = get_node_or_null("%Skip") as Button
 @onready var advance_button: Button = %Advance
 ## Action widgets in the slot: the investigation row (continue) and the round bar with its censor
 ## bar. While main shows the continue button, the 收起 tab on the box's top-right edge shows too.
@@ -47,7 +49,9 @@ const TOPIC_SCENE: PackedScene = preload("res://scenes/ui/investigate_topic.tscn
 @onready var boke_next: Button = %BokeNext
 @onready var boke_listen: Button = %BokeListen
 @onready var boke_tsukkomi: Button = %BokeTsukkomi
-@onready var _body_color: Color = text.get_theme_color("font_color")
+@onready var _body_color: Color = text.get_theme_color("default_color")
+@onready var _normal_font_size: int = text.get_theme_font_size("normal_font_size")
+var _paper_style: StyleBox
 
 
 func _ready() -> void:
@@ -60,6 +64,8 @@ func _ready() -> void:
 	menu_button.pressed.connect(func() -> void: menu_pressed.emit())
 	log_button.pressed.connect(func() -> void: log_pressed.emit())
 	auto_button.pressed.connect(func() -> void: auto_pressed.emit())
+	if skip_button != null:
+		skip_button.pressed.connect(func() -> void: skip_pressed.emit())
 	advance_button.pressed.connect(func() -> void: advance_pressed.emit())
 	investigation_collapse.pressed.connect(func() -> void: collapse_pressed.emit())
 	investigation_continue.visibility_changed.connect(func() -> void:
@@ -82,6 +88,8 @@ func set_topics(talk: Array, moves: Array) -> Dictionary:
 			button.text = str(entry.get("label", ""))
 			button.name = "%s_%s" % [group[2], entry.get("id", "")]
 			_style_like(button, boke_listen)
+			if style_id == "gintama":
+				UI_STYLES.apply_button(button, style_id, "reading_action")
 			list.add_child(button)
 			buttons["%s:%s" % [group[2], entry.get("id", "")]] = button
 	talk_row.visible = talk_list.get_child_count() > 0
@@ -113,10 +121,47 @@ func set_chapter(value: String) -> void:
 func set_tone(tone: String) -> void:
 	var color: Color = _body_color if tone == "body" else UI_STYLES.palette(style_id).get(tone, _body_color)
 	text.add_theme_color_override("font_color", color)
+	text.add_theme_color_override("default_color", color)
+
+
+## Applies only the paper graphic's alpha; text, names, controls and hit targets stay opaque.
+func apply_reading_settings(font_scale: float, paper_alpha: float) -> void:
+	for kind: String in ["normal", "bold", "italics", "bold_italics", "mono"]:
+		text.add_theme_font_size_override(kind + "_font_size", roundi(_normal_font_size * font_scale))
+	text.add_theme_font_size_override("font_size", roundi(_normal_font_size * font_scale))
+	var panel: PanelContainer = find_child("Panel", true, false) as PanelContainer
+	var cutout: NinePatchRect = find_child("PaperCutout", true, false) as NinePatchRect
+	if cutout != null:
+		cutout.modulate.a = paper_alpha
+	elif panel != null:
+		if _paper_style == null:
+			_paper_style = panel.get_theme_stylebox("panel").duplicate() as StyleBox
+		var style: StyleBox = _paper_style.duplicate() as StyleBox
+		if style is StyleBoxFlat:
+			(style as StyleBoxFlat).bg_color.a = (_paper_style as StyleBoxFlat).bg_color.a * paper_alpha
+		elif style is StyleBoxTexture:
+			(style as StyleBoxTexture).modulate_color.a = (_paper_style as StyleBoxTexture).modulate_color.a * paper_alpha
+		panel.add_theme_stylebox_override("panel", style)
 
 
 func set_auto(active: bool) -> void:
 	auto_button.set_pressed_no_signal(active)
+	if auto_button.has_method("refresh_state"):
+		auto_button.call("refresh_state")
+
+
+func set_skip(active: bool) -> void:
+	if skip_button != null:
+		skip_button.set_pressed_no_signal(active)
+		skip_button.disabled = auto_button.disabled
+		if skip_button.has_method("refresh_state"):
+			skip_button.call("refresh_state")
+
+
+func set_reading_enabled(enabled: bool) -> void:
+	auto_button.disabled = not enabled
+	set_auto(auto_button.button_pressed)
+	set_skip(skip_button.button_pressed if skip_button != null else false)
 
 
 ## Shows the actions slot only while something in it is visible.

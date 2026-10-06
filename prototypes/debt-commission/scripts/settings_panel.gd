@@ -14,6 +14,7 @@ var _values: Dictionary = {}
 @onready var close_button: Button = %Close
 @onready var _rows: Dictionary = {
 	"text_speed": %TextSpeed, "auto_speed": %AutoSpeed, "bgm_volume": %BgmVolume, "se_volume": %SeVolume,
+	"font_size": %FontSize, "paper_opacity": %PaperOpacity,
 }
 
 

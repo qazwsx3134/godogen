@@ -1,0 +1,131 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/gintama_reading_button.gd" id="1_wqrpq"]
+[ext_resource type="Texture2D" path="res://assets/ui/gintama_icon_log.svg" id="2_grlmh"]
+[ext_resource type="Texture2D" path="res://assets/ui/gintama_extracted_log.png" id="2_r3gnm"]
+[ext_resource type="FontFile" path="res://assets/fonts/NotoSerifTC.ttf" id="3_wqrpq"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vmuew"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nmnt4"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nq8uc"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mu2bm"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vruql"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xy32q"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a60pk"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.045, 0.08, 0.12, 0.96)
+draw_center = false
+border_color = Color(0.7529412, 0.7764706, 0.7882353, 1)
+corner_radius_top_left = 17
+corner_radius_top_right = 17
+corner_radius_bottom_right = 17
+corner_radius_bottom_left = 17
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_llyv6"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.14901961, 0.24705882, 0.32156864, 1)
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.95686275, 0.9254902, 0.84313726, 1)
+corner_radius_top_left = 17
+corner_radius_top_right = 17
+corner_radius_bottom_right = 17
+corner_radius_bottom_left = 17
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kc6xy"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.1254902, 0.3019608, 0.40784314, 1)
+draw_center = false
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.8509804, 0.75686276, 0.5058824, 1)
+corner_radius_top_left = 17
+corner_radius_top_right = 17
+corner_radius_bottom_right = 17
+corner_radius_bottom_left = 17
+
+[sub_resource type="FontVariation" id="FontVariation_wqrpq"]
+base_font = ExtResource("3_wqrpq")
+variation_opentype = {
+2003265652: 500.0
+}
+
+[node name="Log" type="Button" unique_id=632778124]
+custom_minimum_size = Vector2(0, 133)
+size_flags_horizontal = 3
+tooltip_text = "紀錄"
+theme_override_styles/normal = SubResource("StyleBoxEmpty_vmuew")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_nmnt4")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_nq8uc")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_mu2bm")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_vruql")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_xy32q")
+script = ExtResource("1_wqrpq")
+normal_surface = SubResource("StyleBoxFlat_a60pk")
+hover_surface = SubResource("StyleBoxFlat_llyv6")
+active_surface = SubResource("StyleBoxFlat_kc6xy")
+
+[node name="Surface" type="Panel" parent="." unique_id=1430441768]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 35.0
+offset_bottom = -36.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_a60pk")
+
+[node name="CutoutArt" type="TextureRect" parent="Surface" unique_id=561126700]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource("2_r3gnm")
+expand_mode = 1
+
+[node name="Contents" type="HBoxContainer" parent="Surface" unique_id=1506508516]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 55.0
+mouse_filter = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Icon" type="TextureRect" parent="Surface/Contents" unique_id=1956578345]
+visible = false
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("2_grlmh")
+expand_mode = 1
+
+[node name="Caption" type="Label" parent="Surface/Contents" unique_id=369703632]
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_wqrpq")
+theme_override_font_sizes/font_size = 27
+theme_override_colors/font_color = Color(0.9607843, 0.95686275, 0.93333334, 1)
+text = "LOG"
+vertical_alignment = 1

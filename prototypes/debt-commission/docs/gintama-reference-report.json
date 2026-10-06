@@ -1,0 +1,179 @@
+[
+  {
+    "viewport": {
+      "width": 720,
+      "height": 1280
+    },
+    "full_text": "今天也完全沒有工作啊。",
+    "controls": {
+      "advance": {
+        "height": 133,
+        "width": 133,
+        "x": 871,
+        "y": 1636
+      },
+      "auto": {
+        "height": 133,
+        "width": 194,
+        "x": 315,
+        "y": 1781
+      },
+      "dialogue": {
+        "height": 450,
+        "width": 1080,
+        "x": 0,
+        "y": 1470
+      },
+      "log": {
+        "height": 133,
+        "width": 194,
+        "x": 60,
+        "y": 1781
+      },
+      "menu": {
+        "height": 133,
+        "width": 195,
+        "x": 825,
+        "y": 1781
+      },
+      "skip": {
+        "height": 133,
+        "width": 194,
+        "x": 570,
+        "y": 1781
+      },
+      "stage": {
+        "height": 153.600006103516,
+        "width": 324,
+        "x": 378,
+        "y": 576
+      }
+    },
+    "checks": [
+      "same reference quote",
+      "LOG returns to same line",
+      "MENU returns to same line",
+      "AUTO on/off",
+      "SKIP on/off"
+    ],
+    "errors": []
+  },
+  {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "full_text": "今天也完全沒有工作啊。",
+    "controls": {
+      "advance": {
+        "height": 133.532012939453,
+        "width": 133.532012939453,
+        "x": 869.464111328125,
+        "y": 2051.86401367188
+      },
+      "auto": {
+        "height": 133.532012939453,
+        "width": 193.772018432617,
+        "x": 315.256011962891,
+        "y": 2197.44384765625
+      },
+      "dialogue": {
+        "height": 451.800018310547,
+        "width": 1080,
+        "x": 0,
+        "y": 1885.19995117188
+      },
+      "log": {
+        "height": 133.532012939453,
+        "width": 193.772018432617,
+        "x": 60.2400016784668,
+        "y": 2197.44384765625
+      },
+      "menu": {
+        "height": 133.532012939453,
+        "width": 193.772018432617,
+        "x": 825.288024902344,
+        "y": 2197.44384765625
+      },
+      "skip": {
+        "height": 133.532012939453,
+        "width": 193.772018432617,
+        "x": 570.272033691406,
+        "y": 2197.44384765625
+      },
+      "stage": {
+        "height": 186.960006713867,
+        "width": 324,
+        "x": 378,
+        "y": 701.099975585938
+      }
+    },
+    "checks": [
+      "same reference quote",
+      "LOG returns to same line",
+      "MENU returns to same line",
+      "AUTO on/off",
+      "SKIP on/off"
+    ],
+    "errors": []
+  },
+  {
+    "viewport": {
+      "width": 320,
+      "height": 568
+    },
+    "full_text": "今天也完全沒有工作啊。",
+    "controls": {
+      "advance": {
+        "height": 162.892807006836,
+        "width": 162.892807006836,
+        "x": 823.037292480469,
+        "y": 1572.16870117188
+      },
+      "auto": {
+        "height": 162.892807006836,
+        "width": 177.589889526367,
+        "x": 324.560852050781,
+        "y": 1749.75854492188
+      },
+      "dialogue": {
+        "height": 551.141052246094,
+        "width": 1080,
+        "x": 0,
+        "y": 1368.85888671875
+      },
+      "log": {
+        "height": 162.892807006836,
+        "width": 176.365142822266,
+        "x": 73.4854736328125,
+        "y": 1749.75854492188
+      },
+      "menu": {
+        "height": 162.892807006836,
+        "width": 177.589889526367,
+        "x": 827.936340332031,
+        "y": 1749.75854492188
+      },
+      "skip": {
+        "height": 162.892807006836,
+        "width": 176.365142822266,
+        "x": 576.860961914062,
+        "y": 1749.75854492188
+      },
+      "stage": {
+        "height": 153.600006103516,
+        "width": 324,
+        "x": 378,
+        "y": 576
+      }
+    },
+    "checks": [
+      "same reference quote",
+      "LOG returns to same line",
+      "MENU returns to same line",
+      "AUTO on/off",
+      "SKIP on/off"
+    ],
+    "errors": []
+  }
+]

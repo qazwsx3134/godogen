@@ -1,0 +1,132 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/gintama_reading_button.gd" id="1_0oqhu"]
+[ext_resource type="Texture2D" path="res://assets/ui/gintama_icon_skip.svg" id="2_aam02"]
+[ext_resource type="Texture2D" path="res://assets/ui/gintama_extracted_skip.png" id="2_v8i63"]
+[ext_resource type="FontFile" path="res://assets/fonts/NotoSerifTC.ttf" id="3_0oqhu"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qoilp"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wk3bc"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5m8uh"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jgse7"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_n4nb1"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0cyxi"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7km5t"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.045, 0.08, 0.12, 0.96)
+draw_center = false
+border_color = Color(0.7529412, 0.7764706, 0.7882353, 1)
+corner_radius_top_left = 17
+corner_radius_top_right = 17
+corner_radius_bottom_right = 17
+corner_radius_bottom_left = 17
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w55u1"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.14901961, 0.24705882, 0.32156864, 1)
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.95686275, 0.9254902, 0.84313726, 1)
+corner_radius_top_left = 17
+corner_radius_top_right = 17
+corner_radius_bottom_right = 17
+corner_radius_bottom_left = 17
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_snbm7"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.1254902, 0.3019608, 0.40784314, 1)
+draw_center = false
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.8509804, 0.75686276, 0.5058824, 1)
+corner_radius_top_left = 17
+corner_radius_top_right = 17
+corner_radius_bottom_right = 17
+corner_radius_bottom_left = 17
+
+[sub_resource type="FontVariation" id="FontVariation_0oqhu"]
+base_font = ExtResource("3_0oqhu")
+variation_opentype = {
+2003265652: 500.0
+}
+
+[node name="Skip" type="Button" unique_id=1861651720]
+custom_minimum_size = Vector2(0, 133)
+size_flags_horizontal = 3
+tooltip_text = "跳過已顯示台詞"
+theme_override_styles/normal = SubResource("StyleBoxEmpty_qoilp")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_wk3bc")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_5m8uh")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_jgse7")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_n4nb1")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_0cyxi")
+toggle_mode = true
+script = ExtResource("1_0oqhu")
+normal_surface = SubResource("StyleBoxFlat_7km5t")
+hover_surface = SubResource("StyleBoxFlat_w55u1")
+active_surface = SubResource("StyleBoxFlat_snbm7")
+
+[node name="Surface" type="Panel" parent="." unique_id=1965221218]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 35.0
+offset_bottom = -36.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_7km5t")
+
+[node name="CutoutArt" type="TextureRect" parent="Surface" unique_id=658025569]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource("2_v8i63")
+expand_mode = 1
+
+[node name="Contents" type="HBoxContainer" parent="Surface" unique_id=186707621]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 55.0
+mouse_filter = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Icon" type="TextureRect" parent="Surface/Contents" unique_id=1223180623]
+visible = false
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("2_aam02")
+expand_mode = 1
+
+[node name="Caption" type="Label" parent="Surface/Contents" unique_id=1656849042]
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_0oqhu")
+theme_override_font_sizes/font_size = 27
+theme_override_colors/font_color = Color(0.9607843, 0.95686275, 0.93333334, 1)
+text = "SKIP"
+vertical_alignment = 1

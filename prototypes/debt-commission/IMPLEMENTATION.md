@@ -1,6 +1,6 @@
 # V1 直立 VN：劇本與畫面介面契約
 
-依 [V1 Roadmap](../../docs/story-telling-game/ROADMAP.md)，直立外殼可載入不同 JSON 故事；`data/debt_story.json` 是已核准討債第一場的閱讀基線，`data/phase2_story.json` 與 `data/phase3_story.json` 是草莓牛奶技術片段，非正式第一章。
+依 [V1 Roadmap](../../docs/story-telling-game/ROADMAP.md)，直立外殼可載入不同 JSON 故事；`data/debt_story.json` 是已核准討債第一場的閱讀基線，`data/phase2_story.json` 與 `data/phase3_story.json` 是草莓牛奶技術片段，非正式第一章。`data/chapter1_story.json` 是依已採納 P1–P8 的 v0.2 草稿建置的第一章上機試讀版。
 
 ## StoryRunner 契約
 
@@ -141,3 +141,21 @@ Web 網址帶 `?qa=1` 時，`window.__debtQA` 為唯讀快照：`screen`（title
 - HUD 的眼鏡在力量達到 `max_power` 時出現金色氣焰；發動後力量歸零並消失。從未滿到全滿只播一次「吐槽之力全滿！」cut-in 與 `power_up`，讀檔恢復全滿僅恢復氣焰。
 - `power_up` 使用獨立音效播放器，不會被同一步的反應音打斷；`beam`／`power_up` 同樣遵守靜音及音效音量。catalog `sounds.<id>.path` 可替換合成佔位音。
 - `phase4_rounds` 試片保留原有三個選詞槽點＋QTE，用來驗證超必殺只接住剩餘選詞槽點，QTE 仍要手動完成。正式第一章 C1–C4＋C5 的轉稿列在 TODO 的 E。
+
+
+## 文字演出與閱讀便利（C–D）
+
+- 四款正文皆為 `RichTextLabel`。`DialogueText.compile` 同時產生可讀正文、BBCode 與 ICU grapheme 時序；紀錄與 QA 只記可讀正文。支援 `[color=#RRGGBB]`、`[big]`、`[shake rate=20 level=5]`、`[pause=0.3]`、`[speed=0.08]…[/speed]` 及基本 BBCode。`speed` 為每字秒數，`pause` 為該位置停頓秒數；打字音按角色音高，旁白／心聲不播，靜音／SE 音量／SKIP 皆遵守。
+- `fade("out", 0.25)`／`fade("in", 0.25)` 是可取消指令；換背景交叉淡化，立繪淡入淡出／說話彈跳。`StageMotion` 只管理 scene 所有的 `BackgroundGhost`／`SceneFade` 與暫時動畫。重開、切故事、讀檔與 SKIP 取消舊動畫。
+- PERFECT 語音選填 `assets/audio/voice/shinpachi_tsukkomi_01.ogg` 至 `_08.ogg`，輪流播放；不存在時正常使用既有音效。
+- `ReadingRollback` 最多保留 64 句、僅限同一閱讀段落；choice／調查／吐槽／結算為邊界。回復 runner、旗標、素材、舞台、音樂與紀錄；讀檔／換章節清空。回滾歷史不序列化。
+- `SaveSlots.quick_path(base)` 產生 `<stem>.quick.<ext>`，和自動／18 格手動分開。三者都原子寫入並驗證故事版本；僅有效 primary 更新 `.bak`，損壞檔不覆蓋有效備份。
+- 設定增加 `font_size`（0.85／1.0／1.2）與 `paper_opacity`（0.65／0.82／1.0）。只改紙底 alpha，文字、名字和按鈕保持不透明。
+- 存檔選填 `round_stages`、`investigation_pans`、`investigation_home_casts`；還原前驗證 dictionary、有限數字、有效背景／站位／角色資料。舊 schema 3 缺少這些欄位時使用空 dictionary。
+
+## 第一章新增呈現欄位（E）
+
+- `say.source_id`／回合句子的 `source_id` 保存草稿句號；QA 顯示目前句號。第一章追溯表含 220 句（一般台詞與 12 句回合發言）及四個結算評語。
+- 角色熱區可寫 `art_region: [x,y,w,h]`，全部為立繪的 0–1 比例，正寬高且不能越界；需搭配 `character`。省略仍使用整張立繪。背景拖曳時保留角色相對位置，熱區跟隨；側地點暫時收起家中角色，返回或讀檔恢復。
+- v2 回合選填 `retry`（節點 id）：檢查點先還原，再播該節點並回到回合。第一章用 G05 備用眼鏡台詞；未填仍直接回到回合。此欄位參與劇本版本。
+- `rules.type_lines: true` 讓證言與連擊發言依閱讀設定逐字顯示，補完後才開連擊選詞／QTE，避免讀句子消耗反應時間。既有試片省略時維持直接呈現。

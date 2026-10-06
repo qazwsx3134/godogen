@@ -1,0 +1,12 @@
+~ text_demo
+do bg("yorozuya_living_room")
+do char("gintoki", "neutral", "center")
+銀時: 今天的工作是……[pause=0.35][color=#235978][big]休息[/big][/color]。
+do char("shinpachi", "angry", "left")
+新八: [shake rate=18 level=4]這根本不是工作吧！[/shake]
+新八: [speed=0.09]……我先冷靜一下。[/speed] [#thought]
+do fade("out", 0.25)
+do bg("yorozuya_kitchen")
+do fade("in", 0.25)
+新八: 文字演出技術試片：句中停頓、慢速、顏色、放大與抖動。
+do end("文字演出技術試片結束")

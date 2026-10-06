@@ -41,6 +41,7 @@
 |---|---|
 | `bg("yorozuya_living_room")` | 換背景 |
 | `char("kagura", "smile", "left")` | 設定角色的表情與站位。角色開口說話才會登場，說過話的人會留在畫面上，換背景時全部退場。表情見 [表情清單](../../../docs/story-telling-game/EXPRESSIONS.md)，例如 `neutral` 平常、`angry` 生氣、`panic` 慌張、`nervous` 緊張、`sweat` 心虛、`shout` 吐槽大吼；位置：`left` `center` `right`，任何角色都能站任何位置，主角通常站 `left`。只寫 `char("kagura")` 就站角色的預設位置；同時有兩人以上在場時，請每個人都寫位置，免得疊在一起 |
+| `fade("out", 0.25)`／`fade("in", 0.25)` | 淡出／淡入黑幕；背景切換也會交叉淡化 |
 | `hide("kagura")` | 角色先退場（不用等換背景） |
 | `item("milk_bottle")` | 取得素材 |
 | `profile("kagura")` | 解鎖人物檔案 |
@@ -98,5 +99,8 @@
 
 ## 目前的限制
 
-- 新故事試玩時，眼鏡與吐槽力的狀態列、素材按鈕和 Game Over 的重試按鈕還不會出現，目前只有 Phase 3 的技術試片有。工程師會一併處理（見 `docs/story-telling-game/STATUS.md`）。
+- 調查／吐槽劇本會自動啟用眼鏡、吐槽之力、素材與 Game Over 重試；第一章範例是 `chapter1.dialogue`＋`chapter1.blocks.json`。
 - 吐槽回合結束後走到哪個框，是寫在 `.blocks.json` 裡的，所以流程圖上的吐槽回合節點不用往外接線。
+
+
+第一章 `chapter1.dialogue` 的 `[#source:M01]` 標記用來對照核准草稿，改文字時請保留。文字演出可寫 `新八: [big]沒有工作！[/big][pause=0.3]真的沒有。`，色字用 `[color=#b94343]…[/color]`，抖動用 `[shake rate=20 level=5]…[/shake]`，慢速用 `[speed=0.08]…[/speed]`。格式不出現在對話紀錄。

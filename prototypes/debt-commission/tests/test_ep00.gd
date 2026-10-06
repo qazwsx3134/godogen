@@ -100,9 +100,10 @@ func _test_script_data() -> void:
 
 	# data/stories.json: ep00 is a sample, last, after choices; ?sample=ep00 finds it by this id.
 	var entries: Array = (JSON.parse_string(FileAccess.get_file_as_string(STORIES)) as Dictionary)["stories"] as Array
-	var last: Dictionary = entries[-1] as Dictionary
-	_expect(last["id"] == "ep00" and last["kind"] == "sample" and last["path"] == STORY and (entries[-2] as Dictionary)["id"] == "choices",
-		"stories.json ends with the ep00 sample after choices: %s" % [last])
+	var ep_index: int = entries.find(entries.filter(func(entry: Dictionary) -> bool: return entry.id == "ep00")[0])
+	var last: Dictionary = entries[ep_index] as Dictionary
+	_expect(last["id"] == "ep00" and last["kind"] == "sample" and last["path"] == STORY and (entries[ep_index-1] as Dictionary)["id"] == "choices",
+		"stories.json registers the ep00 sample after choices: %s" % [last])
 
 	# A fresh build of the source: syntax, speakers, option ids, unreachable nodes and StoryRunner's own validation.
 	var built: Dictionary = StoryBuilder.build(SOURCE)
@@ -860,6 +861,7 @@ func _new_game() -> Control:
 	game.ui_preference_path = TEST_UI
 	game.settings_path = TEST_SETTINGS
 	root.add_child(game)
+	game._set_ui_style("cinema", false)
 	await _frames(3)
 	_expect(game._story_ready, "EP00 loads in the shell: %s" % game._story_error)
 	return game

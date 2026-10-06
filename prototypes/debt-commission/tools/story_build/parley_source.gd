@@ -145,7 +145,7 @@ static func _say(graph: Dictionary, raw: Dictionary, where: String) -> Dictionar
 	if speaker.is_empty():
 		return {"error": "%s: unknown speaker '%s' (use a catalog id or name)" % [where, character]}
 	var text: String = String(raw.get("text", ""))
-	if text.contains("{{") or text.contains("["):
+	if not preload("res://scripts/dialogue_text.gd").valid_markup(text):
 		return {"error": "%s: inline markup is not supported in '%s'" % [where, text]}
 	return {"op": "say", "speaker": speaker, "text": text}
 

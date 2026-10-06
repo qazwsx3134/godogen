@@ -43,6 +43,7 @@ const VALID_OPS: Array[String] = [
     "cutin",
     "comedy",
     "freeze",
+    "fade",
     "beam",
     "bgm",
     "se",
@@ -667,6 +668,12 @@ func retry_checkpoint() -> bool:
     if not _normalize_position():
         _game_over_active = true
         return false
+    var retry_target: String = String(retried_round.get("retry", ""))
+    if not retry_target.is_empty():
+        node_id = retry_target
+        step_index = 0
+        if not _normalize_position():
+            return false
     return true
 
 
@@ -1658,6 +1665,8 @@ func _validate_step(current_node_id: String, index: int, step: Dictionary, nodes
         "investigate":
             return _validate_investigation(step, prefix, index, nodes, asset_catalog)
         "boke_round":
+            if step.has("retry") and (not _is_non_empty_string(step["retry"]) or not nodes.has(String(step["retry"]))):
+                return "%s boke retry target is invalid" % prefix
             if TsukkomiRound.is_v2(step):
                 var v2_error: String = TsukkomiRound.validate(step, prefix,
                     func(target: String) -> bool: return nodes.has(target),
@@ -1803,6 +1812,11 @@ func _validate_step(current_node_id: String, index: int, step: Dictionary, nodes
         "beam":
             if step.has("duration") and not _is_number_between(step["duration"], 0.05, 5.0):
                 return "%s beam duration must be 0.05-5 seconds" % prefix
+        "fade":
+            if String(step.get("direction", "out")) not in ["out", "in"]:
+                return "%s fade direction must be out or in" % prefix
+            if step.has("duration") and not _is_number_between(step["duration"], 0.0, 10.0):
+                return "%s fade duration must be 0-10 seconds" % prefix
         "freeze":
             if step.has("duration") and not _is_number_between(step["duration"], 0.05, 10.0):
                 return "%s freeze duration must be 0.05-10 seconds" % prefix
@@ -1926,6 +1940,13 @@ func _validate_hotspots(value: Variant, where: String, seen: Dictionary, nodes: 
                 return "%s hotspot '%s' character '%s' is not in asset catalog" % [where, hotspot_id, hotspot["character"]]
             if hotspot.has("pos") or hotspot.has("size"):
                 return "%s hotspot '%s' has a character, so its area is the portrait: drop pos and size" % [where, hotspot_id]
+            if hotspot.has("art_region"):
+                var region: Variant = hotspot["art_region"]
+                if not region is Array or region.size() != 4 or not region.all(func(n: Variant) -> bool: return _is_number_between(n,0.0,1.0)) \
+                        or float(region[2]) <= 0.0 or float(region[3]) <= 0.0 or float(region[0])+float(region[2]) > 1.0 or float(region[1])+float(region[3]) > 1.0:
+                    return "%s hotspot '%s' art_region must fit the portrait [x,y,w,h]" % [where, hotspot_id]
+        elif hotspot.has("art_region"):
+            return "%s hotspot '%s' art_region requires a character" % [where, hotspot_id]
         elif not _is_normalized_position(hotspot.get("pos", null)):
             return "%s hotspot '%s' pos must contain normalized x/y coordinates" % [where, hotspot_id]
         if hotspot.has("size") and (not _is_normalized_position(hotspot["size"]) \

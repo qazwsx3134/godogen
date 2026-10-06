@@ -1,0 +1,16 @@
+[remap]
+
+importer="dialogue_manager"
+importer_version=18
+type="Resource"
+uid="uid://croqrmpmtjayb"
+path="res://.godot/imported/text_effects.dialogue-5c8aa34e9eb72b538b25532f3bf13321.tres"
+
+[deps]
+
+source_file="res://story_src/text_effects.dialogue"
+dest_files=["res://.godot/imported/text_effects.dialogue-5c8aa34e9eb72b538b25532f3bf13321.tres"]
+
+[params]
+
+defaults=true

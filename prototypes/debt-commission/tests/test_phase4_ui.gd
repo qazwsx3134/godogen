@@ -105,10 +105,10 @@ func _test_title_story_switch() -> void:
 	var rows: Dictionary = game._chapter_select.call("rows")
 	_expect(game._screen_mode == "chapter_select" and game._chapter_select.visible and rows.size() == game._story_choices.size(),
 		"the story label opens 章節選擇 with every story")
-	_expect(rows.keys() == ["debt", "phase2", "phase3", "phase4", "phase4_rounds", "comedy", "choices", "ep00"]
+	_expect(rows.keys() == ["chapter1", "debt", "phase2", "phase3", "phase4", "phase4_rounds", "comedy", "choices", "ep00", "text_effects"]
 		and (rows["debt"] as Button).text.contains("請幫我向你老闆討債") and (rows["phase4"] as Button).text.contains("試玩片段"),
 		"rows list each story by its own title, samples marked as such: %s" % [rows.keys()])
-	_expect(game._chapter_select.find_child("ChaptersEmpty", true, false).visible, "with no chapters yet, 本篇 says so")
+	_expect(not game._chapter_select.find_child("ChaptersEmpty", true, false).visible and rows["chapter1"].text.contains("草莓牛奶"), "本篇 lists the playable first chapter")
 	await _press(rows["phase4"])
 	_expect(game._screen_mode == "title" and not game._chapter_select.visible and game._story_ready,
 		"picking a story returns to the title with it loaded")

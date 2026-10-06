@@ -19,7 +19,15 @@ static func manual_path(base_path: String, slot_index: int) -> String:
 	return result
 
 
-static func write_atomic(path: String, payload: Dictionary) -> bool:
+static func quick_path(base_path: String) -> String:
+	if base_path.is_empty():
+		return ""
+	var extension: String = base_path.get_extension()
+	var stem: String = base_path.trim_suffix("." + extension) if not extension.is_empty() else base_path
+	return stem + ".quick" + ("." + extension if not extension.is_empty() else "")
+
+
+static func write_atomic(path: String, payload: Dictionary, validate: Callable = Callable()) -> bool:
 	# An empty payload never replaces a save: the loader treats {} as unreadable.
 	if path.is_empty() or payload.is_empty():
 		return false
@@ -27,7 +35,9 @@ static func write_atomic(path: String, payload: Dictionary) -> bool:
 	# fallback when a later write is interrupted or the primary fails validation.
 	if FileAccess.file_exists(path):
 		var current: PackedByteArray = AtomicFile.read_bytes(path)
-		if current.is_empty() or AtomicFile.write_bytes(path + ".bak", current) != OK:
+		var parsed: Dictionary = _read_dictionary(path)
+		var good: bool = not parsed.is_empty() and (not validate.is_valid() or bool(validate.call(parsed)))
+		if good and AtomicFile.write_bytes(path + ".bak", current) != OK:
 			return false
 	return AtomicFile.write_var(path, payload) == OK
 

@@ -1,0 +1,210 @@
+{
+  "date": "2026-10-06",
+  "tests": [
+    {
+      "test": "test_chapter1.gd",
+      "pass": true,
+      "exit": 0,
+      "seconds": 0.9,
+      "log": "/tmp/cde-suite-test_chapter1.log"
+    },
+    {
+      "test": "test_chapter_flow.gd",
+      "pass": true,
+      "exit": 0,
+      "seconds": 2.3,
+      "log": "/tmp/cde-suite-test_chapter_flow.log"
+    },
+    {
+      "test": "test_choices.gd",
+      "pass": true,
+      "exit": 0,
+      "seconds": 35.0,
+      "log": "/tmp/cde-suite-test_choices.log"
+    },
+    {
+      "test": "test_comedy.gd",
+      "pass": true,
+      "exit": 0,
+      "seconds": 60.4,
+      "log": "/tmp/cde-suite-test_comedy.log"
+    },
+    {
+      "test": "test_dialogue_text.gd",
+      "pass": true,
+      "exit": 0,
+      "seconds": 0.5,
+      "log": "/tmp/cde-suite-test_dialogue_text.log"
+    },
+    {
+      "test": "test_ep00.gd",
+      "pass": true,
+      "exit": 0,
+      "seconds": 31.7,
+      "log": "/tmp/cde-suite-test_ep00.log"
+    },
+    {
+      "test": "test_interaction.gd",
+      "pass": true,
+      "exit": 0,
+      "seconds": 2.5,
+      "log": "/tmp/cde-suite-test_interaction.log"
+    },
+    {
+      "test": "test_investigation.gd",
+      "pass": true,
+      "exit": 0,
+      "seconds": 0.4,
+      "log": "/tmp/cde-suite-test_investigation.log"
+    },
+    {
+      "test": "test_phase2_story.gd",
+      "pass": true,
+      "exit": 0,
+      "seconds": 0.5,
+      "log": "/tmp/cde-suite-test_phase2_story.log"
+    },
+    {
+      "test": "test_phase2_ui.gd",
+      "pass": true,
+      "exit": 0,
+      "seconds": 2.5,
+      "log": "/tmp/cde-suite-test_phase2_ui.log"
+    },
+    {
+      "test": "test_phase3_story.gd",
+      "pass": true,
+      "exit": 0,
+      "seconds": 0.6,
+      "log": "/tmp/cde-suite-test_phase3_story.log"
+    },
+    {
+      "test": "test_phase3_ui.gd",
+      "pass": true,
+      "exit": 0,
+      "seconds": 15.9,
+      "log": "/tmp/cde-suite-test_phase3_ui.log"
+    },
+    {
+      "test": "test_phase4_rounds_story.gd",
+      "pass": true,
+      "exit": 0,
+      "seconds": 0.5,
+      "log": "/tmp/cde-suite-test_phase4_rounds_story.log"
+    },
+    {
+      "test": "test_phase4_rounds_ui.gd",
+      "pass": true,
+      "exit": -6,
+      "seconds": 13.1,
+      "log": "/tmp/cde-round-ui-retest.log"
+    },
+    {
+      "test": "test_phase4_ui.gd",
+      "pass": true,
+      "exit": 0,
+      "seconds": 5.3,
+      "log": "/tmp/cde-suite-test_phase4_ui.log"
+    },
+    {
+      "test": "test_reading_convenience.gd",
+      "pass": true,
+      "exit": 0,
+      "seconds": 1.6,
+      "log": "/tmp/cde-reading-save-validation.log"
+    },
+    {
+      "test": "test_round_v2.gd",
+      "pass": true,
+      "exit": 0,
+      "seconds": 0.6,
+      "log": "/tmp/cde-suite-test_round_v2.log"
+    },
+    {
+      "test": "test_save_slots.gd",
+      "pass": true,
+      "exit": 0,
+      "seconds": 5.5,
+      "log": "/tmp/cde-suite-test_save_slots.log"
+    },
+    {
+      "test": "test_settings.gd",
+      "pass": true,
+      "exit": 0,
+      "seconds": 3.5,
+      "log": "/tmp/cde-suite-test_settings.log"
+    },
+    {
+      "test": "test_stage_scene.gd",
+      "pass": true,
+      "exit": 0,
+      "seconds": 2.4,
+      "log": "/tmp/cde-suite-test_stage_scene.log"
+    },
+    {
+      "test": "test_story.gd",
+      "pass": true,
+      "exit": 0,
+      "seconds": 0.4,
+      "log": "/tmp/cde-suite-test_story.log"
+    },
+    {
+      "test": "test_story_build.gd",
+      "pass": true,
+      "exit": 0,
+      "seconds": 0.6,
+      "log": "/tmp/cde-suite-test_story_build.log"
+    },
+    {
+      "test": "test_story_build_parley.gd",
+      "pass": true,
+      "exit": 0,
+      "seconds": 0.7,
+      "log": "/tmp/cde-suite-test_story_build_parley.log"
+    },
+    {
+      "test": "test_story_tools.gd",
+      "pass": true,
+      "exit": 0,
+      "seconds": 1.7,
+      "log": "/tmp/cde-suite-test_story_tools.log"
+    },
+    {
+      "test": "test_super_effects.gd",
+      "pass": true,
+      "exit": 0,
+      "seconds": 3.2,
+      "log": "/tmp/cde-suite-test_super_effects.log"
+    },
+    {
+      "test": "test_text_presentation.gd",
+      "pass": true,
+      "exit": 0,
+      "seconds": 2.2,
+      "log": "/tmp/cde-suite-test_text_presentation.log"
+    },
+    {
+      "test": "test_ui_styles.gd",
+      "pass": true,
+      "exit": 0,
+      "seconds": 3.9,
+      "log": "/tmp/cde-suite-test_ui_styles.log"
+    },
+    {
+      "test": "test_vn_shell.gd",
+      "pass": true,
+      "exit": 0,
+      "seconds": 6.0,
+      "log": "/tmp/cde-suite-test_vn_shell.log"
+    },
+    {
+      "test": "test_reading_scenes.gd",
+      "pass": true,
+      "exit": 0,
+      "seconds": 2.0,
+      "log": "/tmp/cde-suite-test_reading_scenes.log"
+    }
+  ],
+  "passed": 29,
+  "total": 29
+}

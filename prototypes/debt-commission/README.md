@@ -4,13 +4,13 @@
 
 介面提供「月下映畫／萬事屋委託簿／吐槽分鏡／銀魂和紙」四款風格，可在標題或遊戲選單切換並記住偏好。見[風格與驗證紀錄](docs/UI-REDESIGN-OPTIONS.md)及[互動比較頁](docs/ui-options/index.html)。
 
-Godot 4.7 手機直立視覺小說，依 [V1 Roadmap](../../docs/story-telling-game/ROADMAP.md) 與 [gintama0923](../../docs/gintama-like/new/gintama0923.md) 製作。狀態：**Phase 1、Phase 2 與 Phase 3 技術短循環已完成自動驗收；Phase 4 的回合玩法（逐句槽點、第四面牆消音條與伊莉莎白的牌子、條件式放棄吐槽、連擊、QTE、超必殺、演出效果）與調查的對話／移動話題有可玩的技術試片與自動驗收**；第一章文本與真人手機試玩仍待完成。
+Godot 4.7 手機直立視覺小說，依 [V1 Roadmap](../../docs/story-telling-game/ROADMAP.md) 與 [gintama0923](../../docs/gintama-like/new/gintama0923.md) 製作。狀態：**Phase 1、Phase 2 與 Phase 3 技術短循環已完成自動驗收；Phase 4 的回合玩法（逐句槽點、第四面牆消音條與伊莉莎白的牌子、條件式放棄吐槽、連擊、QTE、超必殺、演出效果）與調查的對話／移動話題有可玩的技術試片與自動驗收**；第一章草稿 v0.2 已做成上機試讀版，作者試讀修訂與真人手機試玩待完成。
 
 要驗證的假設：直立 VN 版面（滿版背景、立繪、依內容高度配置的底部對話層、整合在框內的閱讀工具列）在手機上單手好讀、好操作；作者只改 JSON 就能換場景、角色、分支與素材條件。[原版、前一版與素材試版比較](docs/UI-TRIAL.md)保留實際 Web 畫面，待手機試玩決定版面。
 
 劇情會走向《底特律：變人》、《黑鏡：潘達斯奈基》那種大量分支，所以規劃了一個可拖曳連線的故事流程圖編輯器（可做成網頁），輸出同一份劇本 JSON；規格見 [Roadmap 的 V1 之後](../../docs/story-telling-game/ROADMAP.md#v1-之後)。
 
-預設試玩文本是已核准的[第一場《請幫我向你老闆討債》](../../docs/story-telling-game/stories/002-debt-commission-draft-v0.1.md)，用來測版面與操作。另有 Phase 2 與 Phase 3 草莓牛奶技術片段，分別檢查 JSON 與「調查 → 裝傻 → 吐槽」短循環；兩者都不是作者核准的第一章台詞。正式文本會先共同編劇與試讀。
+預設內容是[第一章草稿 v0.2](../../docs/story-telling-game/stories/003-strawberry-milk-ch1-draft-v0.2.md)的上機試讀版。已核准的[第一場《請幫我向你老闆討債》](../../docs/story-telling-game/stories/002-debt-commission-draft-v0.1.md)保留為 `?sample=debt` 閱讀基線。另有 Phase 2 與 Phase 3 草莓牛奶技術片段，分別檢查 JSON 與「調查 → 裝傻 → 吐槽」短循環；兩者都不是作者核准的第一章台詞。正式文本會先共同編劇與試讀。
 
 ## 試玩與操作
 
@@ -23,12 +23,12 @@ Godot 4.7 手機直立視覺小說，依 [V1 Roadmap](../../docs/story-telling-g
 | 往上滑 | 開啟對話紀錄 |
 | 目錄 | 開啟選單，切換風格、存讀檔、設定及其他閱讀功能 |
 | 章節選擇 | 標題上的故事名稱：本篇章節依序排列，前一章結算過才開放，顯示最佳評價；試玩片段一直開放。選了就回到標題，按「開始故事」或「繼續」 |
-| 設定 | 標題或目錄裡：文字速度（慢／標準／快／瞬間）、自動播放速度、背景音樂與音效音量，立刻生效並記住；目錄的「音效」開關仍可一鍵靜音 |
+| 設定 | 標題或目錄裡：文字速度（慢／標準／快／瞬間）、自動播放速度、背景音樂與音效音量、字級及紙框透明度，立刻生效並記住；目錄的「音效」開關仍可一鍵靜音 |
 | 章節結算 | 章節最後：吐槽成功／出手、PERFECT、最高連擊、冷場、隱藏裝傻、剩下的眼鏡、Game Over 次數與評價（剩 5 副 S、4 副 A、3–2 副 B、1 副 C，每次 Game Over 降一級），依評價顯示一句話；「下一章」或「回標題」 |
 | 推進鈕（›／續／→） | 補完當句或推進劇情 |
 | 選單／標題讀檔 | 選擇指定手動欄位；讀檔頁也可選自動續讀檔 |
 | 工具列 | 對話框內的目錄、回顧、自動與「續」；略讀（快轉到下一個選項）、存讀檔、吐槽素材與人物檔案收在目錄裡 |
-| 調查 | 線索是背景圖上的東西，不是按鈕：左右拖曳背景找，點那樣東西就取得線索，找到的會留下淡框與勾；有查看後台詞的會先演完再回來。對話框可按「收起 ▼」縮成底部一條，「展開 ▲」叫回來；全部找到時自動展開，按「繼續」離開。調查時角色都不在畫面上 |
+| 調查 | 線索是背景圖上的東西，不是按鈕：左右拖曳背景找，點那樣東西就取得線索，找到的會留下淡框與勾；有查看後台詞的會先演完再回來。對話框可按「收起 ▼」縮成底部一條，「展開 ▲」叫回來；全部找到時自動展開，按「繼續」離開。`keep_cast` 調查保留角色，第一章的銀時嘴角跟隨立繪與拖曳；移往廚房時角色留在客廳 |
 | 對話／移動 | 調查時對話框裡的兩排話題：「對話」點了演出那段對話，聊過的不再出現；「移動」換到另一個地點（例如廚房），那裡有自己的背景與熱區，查完會自動回到原地點，也可以按「移動」回去。各地點已查過的熱區保持打勾 |
 | 裝傻發言 | ‹ › 切換句子；有補充時按「聽下去」；按「吐槽！」才進入 8 秒選詞 |
 | 吐槽選詞 | 選吐槽詞；素材會解鎖完美選項，逾時算冷場；選單、紀錄及存檔欄位會暫停倒數 |
@@ -169,8 +169,9 @@ node tools/check_ui_parity.mjs --playwright /path/to/node_modules/@playwright/te
 | 素材圖片 | ✅ 已轉換 | `scenes/ui/item_picture.tscn`：catalog 有 `path` 就顯示圖，沒有就畫名稱第一個字的色卡；線索欄、素材卡與素材詳細都用它 |
 | 對話框與工具列 | ✅ 已轉換 | `scenes/ui/dialogue_box_cinema.tscn`、`dialogue_box_ledger.tscn`、`dialogue_box_manga.tscn`、`dialogue_box_gintama.tscn`（腳本 `scripts/dialogue_box.gd`） |
 | 目錄 | ✅ 已轉換 | `scenes/ui/menu_panel_cinema.tscn`、`menu_panel_ledger.tscn`、`menu_panel_manga.tscn`、`menu_panel_gintama.tscn`（腳本 `scripts/menu_panel.gd`），每列是 `menu_row_<風格>.tscn` |
-| 對話紀錄 | 待轉換 | |
-| 存讀檔欄位 | 待轉換 | |
+| 對話紀錄 | ✅ 已轉換 | `scenes/ui/dialogue_log.tscn`、逐句 `log_entry.tscn` |
+| 存讀檔面板與覆寫確認 | ✅ 已轉換 | `scenes/ui/save_slots_panel.tscn`、`save_slot_card.tscn`、`save_overwrite_confirmation.tscn` |
+| 結尾按鈕 | ✅ 已轉換 | `scenes/ui/end_controls.tscn` |
 | 吐槽回合的操作列與消音條 | ✅ 已轉換 | 在四款對話框 scene 的 Actions 裡（‹ ›、句數、聽下去、吐槽！、`CensorBar`）；選項面板另有 `CensorBar` 與 `Super`；顯示什麼由 `scripts/round_view.gd` 決定 |
 | 超必殺光束 | ✅ 已轉換 | `scenes/ui/beam.tscn`（`Strip` 調 anchors／offsets 與厚度，`Aura`／`Light`／`Core` 調顏色，根 node 的 `reveal_seconds` 調展開秒數；`shaders/beam.gdshader` 調脈動速度與邊緣；正常執行不重建） |
 | QTE、cut-in、Game Over | ✅ 已轉換 | `scenes/ui/qte_ring.tscn`、`cutin.tscn`、`game_over.tscn`（四款共用） |
@@ -182,7 +183,7 @@ node tools/check_ui_parity.mjs --playwright /path/to/node_modules/@playwright/te
 | 漫畫吐槽疊加層 | ✅ 已轉換 | `scenes/comedy/*.tscn`（三個 preset，四款 UI 風格共用；`ComedyLayer` 在 `main.tscn`） |
 | 結尾按鈕 | 待轉換（做成小 item scene） | |
 
-**銀魂和紙（第四款）**：`scenes/ui/dialogue_box_gintama.tscn` 的 `NamePlate` 可調整深藍姓名牌，`Padding`／`TextGap` 可調整正文留白，`Frame/Seigaiha` 與 `Frame/Sakura` 可調整波紋與櫻花位置、大小。`PaperAndToolbar` 將閱讀按鈕放在紙框下方。另有 `title_screen_gintama.tscn`、`menu_panel_gintama.tscn`、`choice_sheet_gintama.tscn` 與 `choice_item_gintama.tscn`；標題與目錄的 `Styles` 是兩欄四款選擇器。場景是維護來源，正常執行不會重建；`tools/add_gintama_edition_scenes.gd` 是一次性製作紀錄，已存在新場景時會拒絕執行。
+**銀魂和紙（第四款）**：`scenes/ui/dialogue_box_gintama.tscn` 的 `NameOverlap/SpeakerRow` 決定雲形名牌跨在紙框上方的位置；`NamePlate/CloudPlaque` 使用含喇叭的透明名牌 PNG，名字仍由 `SpeakerName` 更新。`Padding` 調整正文留白，`Frame/PaperCutout` 是含紙紋、波紋、櫻花與下一句三角的完整透明底圖；用 NinePatch 保留四角，`Frame.clip_contents` 限制繪製範圍。[去背素材與提示詞](assets/ui/GINTAMA-EXTRACTION.md)保留來源和製作紀錄。正文與名字的明體字重保存在 `FontVariation`，見[字型來源與授權](assets/fonts/NotoSerifTC-SOURCE.md)。紙框下方 `ToolbarMargin/Toolbar` 依序實例化 `gintama_reading_log.tscn`、`gintama_reading_auto.tscn`、`gintama_reading_skip.tscn`、`gintama_reading_menu.tscn`；小場景的 `Surface/CutoutArt` 是含圖示的透明按鈕底圖，`Contents/Caption` 調整標籤，根 Button 保留至少 48 CSS px 的觸控高度。另有 `title_screen_gintama.tscn`、`menu_panel_gintama.tscn`、`choice_sheet_gintama.tscn` 與 `choice_item_gintama.tscn`；標題與目錄的 `Styles` 是兩欄四款選擇器。場景是維護來源，正常執行不會重建；`tools/add_gintama_edition_scenes.gd` 是早期一次性製作紀錄，已存在新場景時會拒絕執行。
 
 **舞台**：打開 `scenes/stage.tscn`。
 
@@ -210,3 +211,11 @@ node tools/check_ui_parity.mjs --playwright /path/to/node_modules/@playwright/te
 - 背景與立繪：使用者加入 `assets/image/` 的 PNG（外觀、客廳、廚房 `kitchen.png`；新八、銀時、神樂、登勢、定春、伊莉莎白），在 `data/asset_catalog.json` 登記。站位的虛線剪影是 `assets/editor/stand_in.svg`，只在編輯器顯示。每個角色要畫哪些表情（生氣、慌張、緊張……）見 [表情清單](../../docs/story-telling-game/EXPRESSIONS.md)；表情圖登記在角色的 `expressions`，還沒有的先用原本那張。
 - 音效與稀疏背景音：`tools/prepare_audio.py` 產生的原創 PCM WAV，可重建。
 - 中文字型：WenQuanYi Zen Hei，隨附 `assets/fonts/COPYRIGHT.txt` 與 `LICENSE-GPL-2.txt`，包含字型嵌入例外及 M+ FONTS 授權文字。
+
+## 第一章與閱讀功能（2026-10-06）
+
+新啟動的遊戲預設為第一章「萬事屋冰箱草莓牛奶失竊事件」上機試讀版，也可直接開 `?sample=chapter1`；桌機既有的故事選擇仍記住。劇本採用已核准 P1–P8 的草稿 v0.2，修改來源是 `story_src/chapter1.dialogue` 與 `chapter1.blocks.json`，台詞追溯見 `docs/chapter1-source-map.json`。玩法、驗證與真人待辦見 [C–E 交付紀錄](docs/READING-CHAPTER1.md)。
+
+新增段落內「上一句」、獨立快速存檔／快速讀檔，均在目錄。字級與紙框透明度在設定，窄手機可捲動。文字支援重點色／放大／抖動、停頓／慢速與角色打字音；`?sample=text_effects` 是文字演出示範。新安裝預設銀魂和紙；後續對話框與按鈕沿用作者確認的 PNG 紙框與深藍銀框按鈕。
+
+直接調整 `dialogue_log.tscn` 的 `Margins` 與 `Column` 間距、`LogClose` 文字；`save_slots_panel.tscn` 的 `OuterMargins`／`Padding`／`Cards`；`save_slot_card.tscn` 的 `Preview`／`SlotTitle`；`save_overwrite_confirmation.tscn` 的確認文案；`end_controls.tscn` 的 `Actions` anchors 與兩顆按鈕。正常執行不重建這些 scene。

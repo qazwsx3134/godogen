@@ -1,6 +1,6 @@
 # 直式吐槽視覺小說：目前進度與待辦
 
-更新：2026-10-02。範圍是 [V1 Roadmap](ROADMAP.md) 與 [debt-commission Godot 原型](../../prototypes/debt-commission/README.md)；詳細測試結果見[驗證紀錄](../../prototypes/debt-commission/docs/VERIFICATION.md)。本頁區分「技術片段已通過自動驗收」與「正式內容和真人體驗已完成」，避免把兩者混為一談。
+更新：2026-10-06。範圍是 [V1 Roadmap](ROADMAP.md) 與 [debt-commission Godot 原型](../../prototypes/debt-commission/README.md)；詳細測試結果見[驗證紀錄](../../prototypes/debt-commission/docs/VERIFICATION.md)。本頁區分「技術片段已通過自動驗收」與「正式內容和真人體驗已完成」，避免把兩者混為一談。
 
 ## 已完成
 
@@ -17,7 +17,7 @@
 | Phase 4 第三段：第一章上機前的引擎功能 | 伊莉莎白的舉牌槽點（`placard`：閱讀與選詞時點牌子，選詞時發亮、選項面板停在牌子下方；劇情用 `placard()` 改寫或清掉牌上的字；不說話的角色用 `enter()` 上場）；選項的條件結果 `when`（放棄吐槽一直都在，L1、L2 接住才是隱藏路線）；畫面外台詞 `[#offscreen]`；調查的「對話」話題、「移動」到其他地點（各自的背景、熱區與已查狀態）、熱區查看後台詞與可選熱區；`salary_envelope` 素材與六個角色的人物檔案文字。回合試片加了神樂的回合，四線索試片加了話題、廚房與畫面外台詞 | 新增調查測試，回合引擎、試片劇本與兩個外殼流程的測試擴充；Parley 與 `.dialogue` 仍建出相同 JSON；Web 觸控 `--rounds` 實點牌子（含 320×568），新增 `--investigate` 實點話題與移動 |
 | Phase 4 第一段：資料層與編寫流程 | 四熱區、四素材的草莓牛奶技術試片（非核准內容）；每項素材解鎖對應的吐槽選項；人物檔案（`profile` 指令、`case_file()`）隨劇情解鎖並存讀；劇本改由 Parley 流程圖或 Dialogue Manager 文字寫成，建置時檢查語法、說話者、到不了的節點並自動產生存檔版本 | 劇本建置兩套、Phase 4 UI 流程與既有九套測試通過；Parley 與 `.dialogue` 兩種寫法建出相同 JSON；Web 匯出不含編輯器外掛與原始檔 |
 
-標題畫面的副標題是故事切換鈕，點一下換下一個試玩內容（討債閱讀基線 → Phase 2 → Phase 3 → Phase 4 → 回合試片），桌機或編輯器執行會記住上次的選擇。Web 也可以用網址直接開：討債閱讀基線用預設網址；草莓牛奶技術片段用 `?sample=phase2`；調查與吐槽技術短循環用 `?sample=phase3`；四線索調查用 `?sample=phase4`；回合試片用 `?sample=phase4_rounds`。啟動與測試指令見[原型 README](../../prototypes/debt-commission/README.md#開發與-web-匯出)。討債第一場有作者核准的[閱讀文本](stories/002-debt-commission-draft-v0.1.md)；草莓牛奶兩個 JSON 都是**技術片段**，不是核准的第一章。
+標題畫面的副標題是故事切換鈕，點一下換下一個試玩內容（討債閱讀基線 → Phase 2 → Phase 3 → Phase 4 → 回合試片），桌機或編輯器執行會記住上次的選擇。Web 也可以用網址直接開：第一章上機試讀版用預設網址或 `?sample=chapter1`，討債閱讀基線用 `?sample=debt`；草莓牛奶技術片段用 `?sample=phase2`；調查與吐槽技術短循環用 `?sample=phase3`；四線索調查用 `?sample=phase4`；回合試片用 `?sample=phase4_rounds`。啟動與測試指令見[原型 README](../../prototypes/debt-commission/README.md#開發與-web-匯出)。討債第一場有作者核准的[閱讀文本](stories/002-debt-commission-draft-v0.1.md)；草莓牛奶兩個 JSON 都是**技術片段**，不是核准的第一章。
 
 ## v2 VN 框架 Prototype v0.1（2026-10-01 起；2026-10-02 技術驗收完成，待真人手機試玩；優先於下方 B–E 軌）
 
@@ -36,7 +36,7 @@
 
 **`--phase3` 路線**：原版路線在存手動欄位 2 後立刻 `page.reload`，這台機器（軟體渲染）上 IndexedDB 寫入常來不及，原版路線共跑 11 次只過 2 次（含 3 次沒套 IDBFS 修補的對照、過 1 次，所以不是修補造成的）；`browser_check.mjs` 已在 `reload` 前加 1.5 秒等待，修改後連續 5 次通過（實作者 3 次、我 2 次）。真人手動存檔後幾秒才離開頁面，不受影響。
 
-**下一步（待你決定）**：`TODO.md` 新增了一行「對話框要照著圖做銀魂風」，圖應是 v2 的 Option A（[`v2/story-telling-ui2.jpeg`](v2/story-telling-ui2.jpeg)：米色紙面、波紋與櫻花、名牌帶喇叭圖示、底部 LOG／AUTO／SKIP／MENU）。要新增成第四款 UI 風格，還是取代現有三款之一，需要你先定。
+**第四款「銀魂和紙」**：已依作者指定新增，以 v2 的 Option A（[`v2/story-telling-ui2.jpeg`](v2/story-telling-ui2.jpeg)）為基準。2026-10-06 重做跨框雲形名牌、明體、紙框與波紋／櫻花，補齊 LOG／AUTO／SKIP／MENU；[原圖與實際對話對照](../../prototypes/debt-commission/docs/gintama-reference-comparison.png)與[驗證紀錄](../../prototypes/debt-commission/docs/UI-REDESIGN-OPTIONS.md#第四款還原修正2026-10-06)。作者的視覺驗收仍待完成。
 
 ## 暫停：第一章上機與文字演出（2026-09-29 起）
 
@@ -69,7 +69,16 @@ A 回報的轉稿注意：草稿 `ch1_investigate` 在調查前有台詞，調�
 ## 已知限制與下一步順序
 
 - Chromium 觸控模擬不代表 Android／iOS 實機已通過；Web 存檔綁定同源本機儲存，換網域或清除網站資料後不會自動轉移。原生手機存檔持久性也尚未驗證。
-- Safe Area 目前驗到瀏覽器避開系統安全區的情況；全螢幕或 PWA 顯示尚未驗。UI 已定為三款可切換風格；手繪的店面、客廳、廚房，以及新八、銀時、神樂、登勢、定春、伊莉莎白的立繪與第一章第一批表情已套入；音樂與音效仍是合成佔位音。
+- Safe Area 目前驗到瀏覽器避開系統安全區的情況；全螢幕或 PWA 顯示尚未驗。UI 提供四款可切換風格，預設銀魂和紙；手繪的店面、客廳、廚房，以及新八、銀時、神樂、登勢、定春、伊莉莎白的立繪與第一章第一批表情已套入；音樂與音效仍是合成佔位音。
 - 先用正式一回合台詞與 UI 試版做真人試玩，收斂計時與版面；再擴充 Phase 4 的四素材、三回合和特殊槽點；最後接 Phase 5 的完整章節與設定。每一階段都保留 Godot 測試、Web 操作與真人回饋的獨立證據。
 
 2026-10-06：本次範圍依作者指示先完成 B；C、D、E 的接續順序與驗收項目集中在 [debt-commission TODO](../../prototypes/debt-commission/TODO.md#後續實作順序2026-10-06)。
+
+
+## 2026-10-06：銀魂和紙確認與 C–E 交付
+
+作者已確認原圖去背／清字後的透明 PNG 紙框、名字牌與 LOG／AUTO／SKIP／MENU，並指定後續對話框與按鈕沿用。新安裝的介面預設銀魂和紙。
+
+文字演出、段落內回滾、快速存讀、字級／紙框透明度與可編輯紀錄／存讀檔／結尾 scene 已加入。第一章草稿 v0.2 的 P1–P8 已轉成可執行的上機試讀版：四線索調查／廚房／話題、銀時與神樂證言、牌子、條件隱藏線、連擊、龜派氣功、C5 QTE、薪水袋與定春反轉、四級結算與重試。來源與驗證見 [C–E 交付紀錄](../../prototypes/debt-commission/docs/READING-CHAPTER1.md)。
+
+真人剩餘事項：作者試讀修訂與遊玩時間量測、Android Chrome／iOS Safari 實機驗收、正式語音／音效資產。這些不以 Chromium 模擬或自動路線測試代替。

@@ -1,0 +1,3016 @@
+{
+  "entry": "ch1_open_fridge",
+  "generated_from": "story_src/chapter1.dialogue",
+  "id": "strawberry_chapter1",
+  "initial_flags": {
+    "hidden_sadaharu": false
+  },
+  "nodes": {
+    "ch1_game_over": {
+      "steps": [
+        {
+          "id": "black",
+          "op": "bg"
+        },
+        {
+          "id": "",
+          "op": "bgm"
+        },
+        {
+          "id": "glass_shatter",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "source_id": "G01",
+          "speaker": "narrator",
+          "text": "眼鏡，碎了。"
+        },
+        {
+          "op": "say",
+          "source_id": "G02",
+          "speaker": "kagura",
+          "text": "新八……新八不見了阿魯。"
+        },
+        {
+          "op": "say",
+          "source_id": "G03",
+          "speaker": "gintoki",
+          "text": "沒有不見。眼鏡碎了，所以新八整個都沒了。"
+        },
+        {
+          "op": "say",
+          "source_id": "G04",
+          "speaker": "otose",
+          "text": "掃一掃。休庭十分鐘。"
+        },
+        {
+          "op": "end",
+          "text": "新八的本體已損毀・從本回合重試"
+        }
+      ],
+      "title": "新八的本體已損毀"
+    },
+    "ch1_inspect_desk_underside": {
+      "next": "ch1_investigate",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "M17",
+          "speaker": "shinpachi",
+          "text": "寫著我名字的瓶子……空的，躺在阿銀的桌子底下。"
+        },
+        {
+          "op": "say",
+          "source_id": "M18",
+          "speaker": "gintoki",
+          "text": "它自己滾過來的。大概是想投靠銀桑。"
+        }
+      ],
+      "title": "辦公桌底下"
+    },
+    "ch1_inspect_floor_prints": {
+      "next": "ch1_investigate",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "M23",
+          "speaker": "shinpachi",
+          "text": "黏黏的腳印，從冰箱一路走到定春的窩。"
+        },
+        {
+          "id": "sadaharu",
+          "op": "profile"
+        },
+        {
+          "offscreen": true,
+          "op": "say",
+          "source_id": "M24",
+          "speaker": "sadaharu",
+          "text": "汪。"
+        },
+        {
+          "op": "say",
+          "source_id": "M25",
+          "speaker": "shinpachi",
+          "text": "……定春，你什麼時候變得這麼秀氣了？"
+        }
+      ],
+      "title": "地板上的腳印"
+    },
+    "ch1_inspect_gintoki_mouth": {
+      "next": "ch1_investigate",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "M19",
+          "speaker": "shinpachi",
+          "text": "阿銀，你嘴角那條白白的是什麼？……有草莓味。"
+        },
+        {
+          "op": "say",
+          "source_id": "M20",
+          "speaker": "gintoki",
+          "text": "別湊那麼近。想聞銀桑的臉，要先預約。"
+        }
+      ],
+      "title": "銀時的嘴角"
+    },
+    "ch1_inspect_sofa_underside": {
+      "next": "ch1_investigate",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "M21",
+          "speaker": "shinpachi",
+          "text": "醋昆布的包裝……裡面怎麼是粉紅色的？"
+        },
+        {
+          "op": "say",
+          "source_id": "M22",
+          "speaker": "kagura",
+          "text": "那是醋昆布在害羞阿魯。別一直看，它會更紅阿魯。"
+        }
+      ],
+      "title": "沙發底下"
+    },
+    "ch1_investigate": {
+      "next": "ch1_investigate_done",
+      "steps": [
+        {
+          "bg": "yorozuya_living_room",
+          "hotspots": [
+            {
+              "goto": "ch1_inspect_desk_underside",
+              "id": "desk_underside",
+              "item": "milk_bottle",
+              "label": "辦公桌底下",
+              "pos": [
+                0.5,
+                0.78
+              ],
+              "size": [
+                0.13,
+                0.12
+              ]
+            },
+            {
+              "art_region": [
+                0.36,
+                0.15,
+                0.14,
+                0.06
+              ],
+              "character": "gintoki",
+              "goto": "ch1_inspect_gintoki_mouth",
+              "id": "gintoki_mouth",
+              "item": "milk_trace",
+              "label": "銀時的嘴角"
+            },
+            {
+              "goto": "ch1_inspect_sofa_underside",
+              "id": "sofa_underside",
+              "item": "kagura_kombu",
+              "label": "沙發底下",
+              "pos": [
+                0.1,
+                0.8
+              ],
+              "size": [
+                0.13,
+                0.12
+              ]
+            },
+            {
+              "goto": "ch1_inspect_floor_prints",
+              "id": "floor_prints",
+              "item": "sadaharu_footprint",
+              "label": "地板上的腳印",
+              "pos": [
+                0.82,
+                0.84
+              ],
+              "size": [
+                0.13,
+                0.12
+              ]
+            }
+          ],
+          "id": "ch1_living_room_search",
+          "keep_cast": true,
+          "label": "客廳",
+          "op": "investigate",
+          "places": [
+            {
+              "bg": "yorozuya_kitchen",
+              "hotspots": [
+                {
+                  "goto": "ch1_kitchen_fridge",
+                  "id": "ch1_fridge",
+                  "label": "冰箱",
+                  "optional": true,
+                  "pos": [
+                    0.45,
+                    0.45
+                  ],
+                  "size": [
+                    0.24,
+                    0.3
+                  ]
+                }
+              ],
+              "id": "kitchen",
+              "label": "廚房",
+              "prompt": "查看冰箱，查完回到客廳。"
+            }
+          ],
+          "prompt": "調查客廳，找出牛奶去了哪裡。",
+          "talk": [
+            {
+              "goto": "ch1_talk_1",
+              "id": "ch1_topic_1",
+              "label": "問銀時：昨晚幾點睡？"
+            },
+            {
+              "goto": "ch1_talk_2",
+              "id": "ch1_topic_2",
+              "label": "問神樂：昨晚吃了什麼？"
+            },
+            {
+              "goto": "ch1_talk_3",
+              "id": "ch1_topic_3",
+              "label": "問定春：你看到什麼？"
+            }
+          ]
+        }
+      ],
+      "title": "搜查客廳"
+    },
+    "ch1_investigate_done": {
+      "next": "ch1_meeting_open",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "M26",
+          "speaker": "shinpachi",
+          "text": "空瓶、嘴角、包裝、腳印。四樣都到手了。",
+          "thought": true
+        },
+        {
+          "op": "say",
+          "source_id": "M27",
+          "speaker": "shinpachi",
+          "text": "……嫌疑人多到可以開會了。",
+          "thought": true
+        },
+        {
+          "id": "knock",
+          "op": "se"
+        },
+        {
+          "id": "door_slide",
+          "op": "se"
+        }
+      ],
+      "title": "四樣都到手"
+    },
+    "ch1_investigate_pre": {
+      "next": "ch1_investigate",
+      "steps": [
+        {
+          "id": "yorozuya_living_room",
+          "op": "bg"
+        },
+        {
+          "enter": true,
+          "expression": "neutral",
+          "id": "gintoki",
+          "op": "char",
+          "position": "center",
+          "visible": true
+        },
+        {
+          "enter": true,
+          "expression": "smile",
+          "id": "kagura",
+          "op": "char",
+          "position": "right",
+          "visible": true
+        },
+        {
+          "offscreen": true,
+          "op": "say",
+          "source_id": "M16",
+          "speaker": "shinpachi",
+          "text": "冰箱到客廳，一路查過去。一個都不放過。",
+          "thought": true
+        }
+      ],
+      "title": "搜查客廳・開始"
+    },
+    "ch1_kitchen_fridge": {
+      "next": "ch1_investigate",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "D4-1",
+          "speaker": "shinpachi",
+          "text": "冰箱裡只剩醬油，和一個布丁。"
+        },
+        {
+          "offscreen": true,
+          "op": "say",
+          "source_id": "D4-2",
+          "speaker": "gintoki",
+          "text": "布丁不准碰。上面寫了銀桑的名字。"
+        },
+        {
+          "op": "say",
+          "source_id": "D4-3",
+          "speaker": "shinpachi",
+          "text": "你剛剛才說寫名字的東西一向不碰吧！原來是只保護你自己的名字！"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_meeting_open": {
+      "next": "ch1_r1_intro",
+      "steps": [
+        {
+          "expression": "neutral",
+          "id": "shinpachi",
+          "op": "char",
+          "position": "left",
+          "visible": true
+        },
+        {
+          "expression": "annoyed",
+          "id": "otose",
+          "op": "char",
+          "position": "right",
+          "visible": true
+        },
+        {
+          "id": "otose",
+          "op": "profile"
+        },
+        {
+          "op": "say",
+          "source_id": "M28",
+          "speaker": "otose",
+          "text": "一大早吵什麼。樓下的客人以為樓上在拆房子。"
+        },
+        {
+          "op": "say",
+          "source_id": "M29",
+          "speaker": "shinpachi",
+          "text": "婆婆，我的草莓牛奶被偷喝了。犯人就在這個家裡。"
+        },
+        {
+          "op": "say",
+          "source_id": "M30",
+          "speaker": "otose",
+          "text": "這個家裡？那就是全員了。"
+        },
+        {
+          "op": "say",
+          "source_id": "M31",
+          "speaker": "gintoki",
+          "text": "婆婆，這種小事不用驚動你——"
+        },
+        {
+          "op": "say",
+          "source_id": "M32",
+          "speaker": "otose",
+          "text": "房租也是小事，你也一直沒來驚動我。"
+        },
+        {
+          "op": "say",
+          "source_id": "M33",
+          "speaker": "otose",
+          "text": "全員坐下。家庭會議，開始。"
+        },
+        {
+          "id": "stamp",
+          "op": "se"
+        },
+        {
+          "id": "bgm_meeting",
+          "op": "bgm"
+        },
+        {
+          "op": "say",
+          "source_id": "M34",
+          "speaker": "kagura",
+          "text": "婆婆，為什麼拿煙灰缸當法槌阿魯？"
+        },
+        {
+          "op": "say",
+          "source_id": "M35",
+          "speaker": "otose",
+          "text": "有什麼用什麼。你們家不也是這樣過日子的。"
+        },
+        {
+          "op": "say",
+          "source_id": "M36",
+          "speaker": "otose",
+          "text": "規矩很簡單。一個一個講。講不通的地方，新八負責戳。"
+        },
+        {
+          "op": "say",
+          "source_id": "M37",
+          "speaker": "shinpachi",
+          "text": "也就是說——吐槽的時間到了。",
+          "thought": true
+        }
+      ],
+      "title": "家庭會議，開始"
+    },
+    "ch1_open_fridge": {
+      "next": "ch1_investigate_pre",
+      "steps": [
+        {
+          "id": "yorozuya_kitchen",
+          "op": "bg"
+        },
+        {
+          "id": "bgm_daily",
+          "op": "bgm"
+        },
+        {
+          "expression": "surprised",
+          "id": "shinpachi",
+          "op": "char",
+          "position": "left",
+          "visible": true
+        },
+        {
+          "id": "shinpachi",
+          "op": "profile"
+        },
+        {
+          "id": "fridge",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "source_id": "M01",
+          "speaker": "narrator",
+          "text": "早上八點。萬事屋的冰箱門，開著。"
+        },
+        {
+          "op": "say",
+          "source_id": "M02",
+          "speaker": "shinpachi",
+          "text": "……沒有。"
+        },
+        {
+          "op": "say",
+          "source_id": "M03",
+          "speaker": "shinpachi",
+          "text": "我昨天買的草莓牛奶，沒有了。"
+        },
+        {
+          "op": "say",
+          "source_id": "M04",
+          "speaker": "shinpachi",
+          "text": "自己的錢買的。瓶子上還寫了大大的「新八」。",
+          "thought": true
+        },
+        {
+          "op": "say",
+          "source_id": "M05",
+          "speaker": "shinpachi",
+          "text": "這個家裡，唯一寫著我名字的東西。",
+          "thought": true
+        },
+        {
+          "expression": "smile",
+          "id": "kagura",
+          "op": "char",
+          "position": "right",
+          "visible": true
+        },
+        {
+          "id": "kagura",
+          "op": "profile"
+        },
+        {
+          "op": "say",
+          "source_id": "M06",
+          "speaker": "kagura",
+          "text": "一大早對冰箱發呆，眼鏡終於壞掉了阿魯？"
+        },
+        {
+          "op": "say",
+          "source_id": "M07",
+          "speaker": "shinpachi",
+          "text": "神樂醬，我的草莓牛奶不見了。"
+        },
+        {
+          "op": "say",
+          "source_id": "M08",
+          "speaker": "kagura",
+          "text": "新八的東西不見很正常阿魯。新八本人也常常不見阿魯。"
+        },
+        {
+          "op": "say",
+          "source_id": "M09",
+          "speaker": "shinpachi",
+          "text": "我每天都在啊！只是沒人看我而已！"
+        },
+        {
+          "expression": "annoyed",
+          "id": "gintoki",
+          "op": "char",
+          "position": "center",
+          "visible": true
+        },
+        {
+          "id": "gintoki",
+          "op": "profile"
+        },
+        {
+          "op": "say",
+          "source_id": "M10",
+          "speaker": "gintoki",
+          "text": "吵什麼。一大早的，銀桑的耳朵還在放假。"
+        },
+        {
+          "op": "say",
+          "source_id": "M11",
+          "speaker": "shinpachi",
+          "text": "阿銀，你有沒有看到我的草莓牛奶？"
+        },
+        {
+          "op": "say",
+          "source_id": "M12",
+          "speaker": "gintoki",
+          "text": "沒有。寫著別人名字的東西，銀桑一向不碰。"
+        },
+        {
+          "duration": 0.6,
+          "op": "freeze"
+        },
+        {
+          "op": "say",
+          "source_id": "M13",
+          "speaker": "shinpachi",
+          "text": "……我還沒說上面寫了名字。"
+        },
+        {
+          "op": "say",
+          "source_id": "M14",
+          "speaker": "gintoki",
+          "text": "牛奶瓶上寫名字是常識。銀桑是用常識推理的。"
+        },
+        {
+          "op": "say",
+          "source_id": "M15",
+          "speaker": "shinpachi",
+          "text": "好。那我也用常識——這個家，現在開始搜查！"
+        }
+      ],
+      "title": "第一章・冰箱是空的"
+    },
+    "ch1_r1_clear": {
+      "next": "ch1_r2_intro",
+      "steps": [
+        {
+          "expression": "sweat",
+          "id": "gintoki",
+          "op": "char",
+          "position": "center",
+          "visible": true
+        },
+        {
+          "id": "bgm_meeting",
+          "op": "bgm"
+        },
+        {
+          "op": "say",
+          "source_id": "M44",
+          "speaker": "gintoki",
+          "text": "……好吧。銀桑承認，昨晚跟那瓶牛奶見過一面。"
+        },
+        {
+          "op": "say",
+          "source_id": "M45",
+          "speaker": "shinpachi",
+          "text": "『見面』是指喝掉吧！"
+        },
+        {
+          "op": "say",
+          "source_id": "M46",
+          "speaker": "gintoki",
+          "text": "但只有一半！銀桑見到它的時候，它已經瘦了一半！"
+        },
+        {
+          "op": "say",
+          "source_id": "M47",
+          "speaker": "otose",
+          "text": "一半。那另一半呢？"
+        },
+        {
+          "op": "say",
+          "source_id": "M48",
+          "speaker": "kagura",
+          "text": "……幹嘛全部都看我阿魯。"
+        }
+      ],
+      "title": "第一回合結束"
+    },
+    "ch1_r1_gintoki": {
+      "steps": [
+        {
+          "clear": "ch1_r1_clear",
+          "game_over": "ch1_game_over",
+          "id": "ch1_r1",
+          "lines": [
+            {
+              "hint": "ch1_r1_l1_hint",
+              "id": "l1",
+              "listen": "ch1_r1_l1_listen",
+              "source_id": "M40",
+              "text": "新八，先把拳頭放下。銀桑昨晚十點就睡了。",
+              "whiff": "ch1_r1_l1_whiff"
+            },
+            {
+              "hint": "ch1_r1_l2_hint",
+              "id": "l2",
+              "listen": "ch1_r1_l2_listen",
+              "slot": {
+                "options": [
+                  {
+                    "goto": "ch1_r1_l2_a",
+                    "id": "a",
+                    "label": "戒了的人，桌下怎麼有空瓶！",
+                    "require": "milk_bottle",
+                    "result": "perfect"
+                  },
+                  {
+                    "goto": "ch1_r1_l2_b",
+                    "id": "b",
+                    "label": "你上禮拜才扛三瓶回來！",
+                    "result": "weak"
+                  },
+                  {
+                    "goto": "ch1_r1_l2_c",
+                    "id": "c",
+                    "label": "草莓牛奶才不是小孩喝的！",
+                    "result": "fail"
+                  },
+                  {
+                    "goto": "ch1_r1_give_up",
+                    "id": "d",
+                    "label": "……（放棄吐槽）",
+                    "result": "fail"
+                  }
+                ],
+                "timeout": "ch1_r1_timeout"
+              },
+              "source_id": "M41",
+              "text": "草莓牛奶那種小孩喝的東西，銀桑三年前就戒了。"
+            },
+            {
+              "hint": "ch1_r1_l3_hint",
+              "id": "l3",
+              "listen": "ch1_r1_l3_listen",
+              "source_id": "M42",
+              "text": "再說，冰箱是全家共用的。放進去的，就是大家的。",
+              "whiff": "ch1_r1_l3_whiff"
+            },
+            {
+              "hint": "ch1_r1_l4_hint",
+              "id": "l4",
+              "listen": "ch1_r1_l4_listen",
+              "slot": {
+                "options": [
+                  {
+                    "goto": "ch1_r1_l4_a",
+                    "id": "a",
+                    "label": "那明明是草莓牛奶的味道！",
+                    "require": "milk_trace",
+                    "result": "perfect"
+                  },
+                  {
+                    "goto": "ch1_r1_l4_b",
+                    "id": "b",
+                    "label": "刷牙刷到嘴角外面嗎！",
+                    "result": "weak"
+                  },
+                  {
+                    "goto": "ch1_r1_l4_c",
+                    "id": "c",
+                    "label": "原來是牙膏啊。",
+                    "result": "fail"
+                  },
+                  {
+                    "goto": "ch1_r1_give_up",
+                    "id": "d",
+                    "label": "……（放棄吐槽）",
+                    "result": "fail"
+                  }
+                ],
+                "timeout": "ch1_r1_timeout"
+              },
+              "source_id": "M43",
+              "text": "嘴角這個？牙膏啦。銀桑刷牙一向刷得很豪邁。"
+            }
+          ],
+          "mode": "testimony",
+          "op": "boke_round",
+          "retry": "ch1_r1_retry",
+          "rules": {
+            "type_lines": true
+          },
+          "speaker": "gintoki",
+          "timer_seconds": 8.0
+        }
+      ],
+      "title": "銀時的證言"
+    },
+    "ch1_r1_give_up": {
+      "next": "ch1_r1_gintoki",
+      "steps": [
+        {
+          "duration": 0.25,
+          "op": "freeze"
+        },
+        {
+          "id": "crow",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "source_id": "Q1",
+          "speaker": "gintoki",
+          "text": "不吐了？那就是承認銀桑說得對。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r1_intro": {
+      "next": "ch1_r1_gintoki",
+      "steps": [
+        {
+          "expression": "smug",
+          "id": "gintoki",
+          "op": "char",
+          "position": "center",
+          "visible": true
+        },
+        {
+          "id": "kagura",
+          "op": "char",
+          "visible": false
+        },
+        {
+          "id": "bgm_boke",
+          "op": "bgm"
+        },
+        {
+          "op": "say",
+          "source_id": "M38",
+          "speaker": "otose",
+          "text": "銀時，你先。說謊的話，房租加一成。"
+        },
+        {
+          "op": "say",
+          "source_id": "M39",
+          "speaker": "gintoki",
+          "text": "好。那銀桑就把真相，一字一句告訴你們。"
+        }
+      ],
+      "title": "第一回合：銀時"
+    },
+    "ch1_r1_l1_hint": {
+      "next": "ch1_r1_gintoki",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "H11",
+          "speaker": "kagura",
+          "text": "睡著時的事戳不破阿魯。等銀醬說他醒著做了什麼，再拿出來用阿魯。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r1_l1_listen": {
+      "next": "ch1_r1_gintoki",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "L11-1",
+          "speaker": "gintoki",
+          "text": "睡得超熟。半夜兩點起來開冰箱的時候，都還沒醒。"
+        },
+        {
+          "op": "say",
+          "source_id": "L11-2",
+          "speaker": "shinpachi",
+          "text": "……半夜兩點，開冰箱。現在戳，他只會說是夢遊。先記下來。",
+          "thought": true
+        },
+        {
+          "id": "gin_sleep_testimony",
+          "op": "item"
+        }
+      ],
+      "title": "聽下去"
+    },
+    "ch1_r1_l1_whiff": {
+      "next": "ch1_r1_gintoki",
+      "steps": [
+        {
+          "duration": 0.25,
+          "op": "freeze"
+        },
+        {
+          "id": "crow",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "source_id": "K11-1",
+          "speaker": "shinpachi",
+          "text": "睡覺這種事，誰能證明——"
+        },
+        {
+          "op": "say",
+          "source_id": "K11-2",
+          "speaker": "otose",
+          "text": "睡著的事，誰都戳不破。等他說出自己醒著做了什麼，再戳。"
+        },
+        {
+          "op": "say",
+          "source_id": "K11-3",
+          "speaker": "shinpachi",
+          "text": "……是。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r1_l2_a": {
+      "next": "ch1_r1_gintoki",
+      "steps": [
+        {
+          "op": "shake"
+        },
+        {
+          "id": "tsukkomi_hit",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "source_id": "R12a-1",
+          "speaker": "gintoki",
+          "text": "那瓶子是自己滾過來投靠銀桑的。剛剛說過了。"
+        },
+        {
+          "op": "say",
+          "source_id": "R12a-2",
+          "speaker": "shinpachi",
+          "text": "它投靠你之前，裡面的牛奶跑去哪了！"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r1_l2_b": {
+      "next": "ch1_r1_gintoki",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "R12b-1",
+          "speaker": "gintoki",
+          "text": "那是上禮拜的銀桑。男人一個禮拜就會成長。"
+        },
+        {
+          "op": "say",
+          "source_id": "R12b-2",
+          "speaker": "shinpachi",
+          "text": "……空口說不贏他。得拿出東西來。",
+          "thought": true
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r1_l2_c": {
+      "next": "ch1_r1_gintoki",
+      "steps": [
+        {
+          "duration": 0.25,
+          "op": "freeze"
+        },
+        {
+          "id": "crow",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "source_id": "R12c-1",
+          "speaker": "kagura",
+          "text": "新八在幫牛奶講話阿魯。"
+        },
+        {
+          "op": "say",
+          "source_id": "R12c-2",
+          "speaker": "gintoki",
+          "text": "看吧，他也愛喝。動機成立。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r1_l2_hint": {
+      "next": "ch1_r1_gintoki",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "H12",
+          "speaker": "kagura",
+          "text": "銀醬桌子底下那個，你剛剛才撿起來阿魯。眼鏡是裝飾品阿魯？"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r1_l2_listen": {
+      "next": "ch1_r1_gintoki",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "L12-1",
+          "speaker": "gintoki",
+          "text": "現在只喝大人的飲料。例如，粉紅色的那種。"
+        },
+        {
+          "op": "say",
+          "source_id": "L12-2",
+          "speaker": "kagura",
+          "text": "那就是草莓牛奶阿魯。"
+        }
+      ],
+      "title": "聽下去"
+    },
+    "ch1_r1_l3_hint": {
+      "next": "ch1_r1_gintoki",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "H13",
+          "speaker": "kagura",
+          "text": "歪理不是謊話阿魯。去找他講錯的地方，不是講爛的地方阿魯。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r1_l3_listen": {
+      "next": "ch1_r1_gintoki",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "L13-1",
+          "speaker": "gintoki",
+          "text": "跟房租一樣。大家一起欠，感情才會好。"
+        },
+        {
+          "op": "say",
+          "source_id": "L13-2",
+          "speaker": "otose",
+          "text": "只有你在欠。"
+        }
+      ],
+      "title": "聽下去"
+    },
+    "ch1_r1_l3_whiff": {
+      "next": "ch1_r1_gintoki",
+      "steps": [
+        {
+          "duration": 0.25,
+          "op": "freeze"
+        },
+        {
+          "id": "crow",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "source_id": "K13-1",
+          "speaker": "shinpachi",
+          "text": "那我的牛奶也是大家的——不對，等一下！"
+        },
+        {
+          "op": "say",
+          "source_id": "K13-2",
+          "speaker": "otose",
+          "text": "這句是歪理，不是謊話。等他說謊再戳。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r1_l4_a": {
+      "next": "ch1_r1_gintoki",
+      "steps": [
+        {
+          "op": "shake"
+        },
+        {
+          "id": "tsukkomi_hit",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "source_id": "R14a-1",
+          "speaker": "gintoki",
+          "text": "牙膏跟牛奶，都是白的，都有草莓口味。很容易搞混。"
+        },
+        {
+          "op": "say",
+          "source_id": "R14a-2",
+          "speaker": "shinpachi",
+          "text": "那你刷牙的時候是用喝的嗎！"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r1_l4_b": {
+      "next": "ch1_r1_gintoki",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "R14b-1",
+          "speaker": "gintoki",
+          "text": "豪邁的男人，泡泡不分裡外。"
+        },
+        {
+          "op": "say",
+          "source_id": "R14b-2",
+          "speaker": "shinpachi",
+          "text": "……不對，重點是那個味道。",
+          "thought": true
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r1_l4_c": {
+      "next": "ch1_r1_gintoki",
+      "steps": [
+        {
+          "duration": 0.25,
+          "op": "freeze"
+        },
+        {
+          "id": "crow",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "source_id": "R14c-1",
+          "speaker": "kagura",
+          "text": "眼鏡被說服了阿魯。度數不夠阿魯。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r1_l4_hint": {
+      "next": "ch1_r1_gintoki",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "H14",
+          "speaker": "kagura",
+          "text": "你剛剛把臉湊過去聞了吧？那是什麼味道？鼻子也要我借你阿魯？"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r1_l4_listen": {
+      "next": "ch1_r1_gintoki",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "L14-1",
+          "speaker": "gintoki",
+          "text": "草莓口味的，兒童用。銀桑的牙齒還很年輕。"
+        },
+        {
+          "op": "say",
+          "source_id": "L14-2",
+          "speaker": "shinpachi",
+          "text": "剛剛不是才說，小孩的東西早就戒了嗎……",
+          "thought": true
+        }
+      ],
+      "title": "聽下去"
+    },
+    "ch1_r1_retry": {
+      "next": "ch1_r1_gintoki",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "G05",
+          "speaker": "shinpachi",
+          "text": "……我回來了。這次戴了備用的。"
+        }
+      ],
+      "title": "備用的眼鏡"
+    },
+    "ch1_r1_timeout": {
+      "next": "ch1_r1_gintoki",
+      "steps": [
+        {
+          "duration": 0.25,
+          "op": "freeze"
+        },
+        {
+          "id": "crow",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "source_id": "T1-1",
+          "speaker": "narrator",
+          "text": "八秒過去了。新八的嘴還開著。"
+        },
+        {
+          "op": "say",
+          "source_id": "T1-2",
+          "speaker": "kagura",
+          "text": "嘴巴開那麼久，會飛進蒼蠅阿魯。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r2_clear": {
+      "next": "ch1_r3_intro",
+      "steps": [
+        {
+          "id": "bgm_meeting",
+          "op": "bgm"
+        },
+        {
+          "expression": "sweat",
+          "id": "kagura",
+          "op": "char",
+          "position": "center",
+          "visible": true
+        },
+        {
+          "op": "say",
+          "source_id": "M57",
+          "speaker": "kagura",
+          "text": "……好啦。前面一半是我喝的阿魯。"
+        },
+        {
+          "op": "say",
+          "source_id": "M58",
+          "speaker": "kagura",
+          "text": "腳印是我用手蓋的。定春的腳太大，我模仿不來阿魯。"
+        },
+        {
+          "op": "say",
+          "source_id": "M59",
+          "speaker": "shinpachi",
+          "text": "你還認真研究過模仿的難度嗎！"
+        },
+        {
+          "op": "say",
+          "source_id": "M60",
+          "speaker": "sadaharu",
+          "text": "……汪。"
+        }
+      ],
+      "title": "第二回合結束"
+    },
+    "ch1_r2_give_up": {
+      "next": "ch1_r2_kagura",
+      "steps": [
+        {
+          "duration": 0.25,
+          "op": "freeze"
+        },
+        {
+          "id": "crow",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "source_id": "Q2",
+          "speaker": "kagura",
+          "text": "眼鏡投降了阿魯。這一局我贏了阿魯。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r2_hidden_sadaharu": {
+      "next": "ch1_r3_intro",
+      "steps": [
+        {
+          "id": "",
+          "op": "bgm"
+        },
+        {
+          "op": "say",
+          "source_id": "X01",
+          "speaker": "shinpachi",
+          "text": "……算了。讓她說完。",
+          "thought": true
+        },
+        {
+          "op": "say",
+          "source_id": "X02",
+          "speaker": "otose",
+          "text": "好。證據確鑿，定春有罪。"
+        },
+        {
+          "op": "say",
+          "source_id": "X03",
+          "speaker": "sadaharu",
+          "text": "……汪。"
+        },
+        {
+          "id": "stamp",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "source_id": "X04",
+          "speaker": "narrator",
+          "text": "定春站起來，慢慢走向神樂。"
+        },
+        {
+          "id": "bite",
+          "op": "se"
+        },
+        {
+          "op": "shake"
+        },
+        {
+          "op": "say",
+          "source_id": "X05",
+          "speaker": "narrator",
+          "text": "然後把神樂的頭，整顆含進了嘴裡。"
+        },
+        {
+          "op": "say",
+          "source_id": "X06",
+          "speaker": "kagura",
+          "text": "……前面一半是我喝的。腳印是我用手蓋的阿魯。"
+        },
+        {
+          "op": "say",
+          "source_id": "X07",
+          "speaker": "shinpachi",
+          "text": "定春的審判比我的吐槽有效率多了！"
+        },
+        {
+          "op": "say",
+          "source_id": "X08",
+          "speaker": "gintoki",
+          "text": "新八，你的工作被狗搶走了。"
+        },
+        {
+          "key": "hidden_sadaharu",
+          "op": "flag",
+          "value": true
+        }
+      ],
+      "title": "隱藏路線：定春的判決"
+    },
+    "ch1_r2_intro": {
+      "next": "ch1_r2_kagura",
+      "steps": [
+        {
+          "id": "gintoki",
+          "op": "char",
+          "visible": false
+        },
+        {
+          "expression": "smug",
+          "id": "kagura",
+          "op": "char",
+          "position": "center",
+          "visible": true
+        },
+        {
+          "id": "bgm_boke",
+          "op": "bgm"
+        },
+        {
+          "op": "say",
+          "source_id": "M49",
+          "speaker": "otose",
+          "text": "神樂，換你。"
+        },
+        {
+          "enter": true,
+          "expression": "neutral",
+          "id": "elisabeth",
+          "op": "char",
+          "position": "left",
+          "visible": true
+        },
+        {
+          "id": "elisabeth",
+          "op": "profile"
+        },
+        {
+          "op": "placard",
+          "text": ""
+        },
+        {
+          "op": "say",
+          "source_id": "M50",
+          "speaker": "shinpachi",
+          "text": "……伊莉莎白什麼時候在這裡的？"
+        },
+        {
+          "op": "say",
+          "source_id": "M50-1",
+          "speaker": "otose",
+          "text": "一早就在了。桂托我顧一天。"
+        },
+        {
+          "op": "say",
+          "source_id": "M50-2",
+          "speaker": "kagura",
+          "text": "哼。我有目擊證人阿魯。"
+        },
+        {
+          "op": "say",
+          "source_id": "M51",
+          "speaker": "shinpachi",
+          "text": "證人是誰？"
+        },
+        {
+          "op": "say",
+          "source_id": "M52",
+          "speaker": "kagura",
+          "text": "定春阿魯。"
+        },
+        {
+          "expression": "neutral",
+          "id": "sadaharu",
+          "op": "char",
+          "position": "left",
+          "visible": true
+        },
+        {
+          "op": "say",
+          "source_id": "M53",
+          "speaker": "sadaharu",
+          "text": "汪。"
+        },
+        {
+          "id": "otose",
+          "op": "char",
+          "visible": false
+        }
+      ],
+      "title": "第二回合：神樂"
+    },
+    "ch1_r2_kagura": {
+      "steps": [
+        {
+          "clear": "ch1_r2_clear",
+          "game_over": "ch1_game_over",
+          "id": "ch1_r2",
+          "lines": [
+            {
+              "hint": "ch1_r2_l1_hint",
+              "id": "l1",
+              "listen": "ch1_r2_l1_listen",
+              "slot": {
+                "options": [
+                  {
+                    "goto": "ch1_r2_l1_a",
+                    "id": "a",
+                    "label": "包裝裡的粉紅色是什麼！",
+                    "require": "kagura_kombu",
+                    "result": "perfect"
+                  },
+                  {
+                    "goto": "ch1_r2_l1_b",
+                    "id": "b",
+                    "label": "吃醋昆布不喝水會渴吧！",
+                    "result": "weak"
+                  },
+                  {
+                    "goto": "ch1_r2_l1_c",
+                    "id": "c",
+                    "label": "神樂醬好能忍喔。",
+                    "result": "fail"
+                  },
+                  {
+                    "goto": "ch1_r2_give_up",
+                    "id": "d",
+                    "label": "……（放棄吐槽）",
+                    "result": "fail"
+                  }
+                ],
+                "timeout": "ch1_r2_timeout"
+              },
+              "source_id": "M54",
+              "text": "我昨晚只吃了醋昆布。很乾，但我忍住沒喝任何東西阿魯。"
+            },
+            {
+              "hint": "ch1_r2_l2_hint",
+              "id": "l2",
+              "listen": "ch1_r2_l2_listen",
+              "slot": {
+                "options": [
+                  {
+                    "goto": "ch1_r2_l2_b",
+                    "id": "b",
+                    "label": "定春只會「汪」吧！",
+                    "result": "weak"
+                  },
+                  {
+                    "goto": "ch1_r2_l2_c",
+                    "id": "c",
+                    "label": "你翻譯得真好。",
+                    "result": "fail"
+                  },
+                  {
+                    "goto": "ch1_r2_give_up",
+                    "id": "d",
+                    "label": "……（放棄吐槽）",
+                    "result": "fail"
+                  }
+                ],
+                "placard": {
+                  "goto": "ch1_r2_placard",
+                  "result": "perfect",
+                  "text": "犯人是神樂"
+                },
+                "timeout": "ch1_r2_timeout"
+              },
+              "source_id": "M55",
+              "text": "而且定春昨晚親口跟我說了：『牛奶是別人喝的，汪』阿魯。"
+            },
+            {
+              "hint": "ch1_r2_l3_hint",
+              "id": "l3",
+              "listen": "ch1_r2_l3_listen",
+              "slot": {
+                "options": [
+                  {
+                    "goto": "ch1_r2_l3_a",
+                    "id": "a",
+                    "label": "定春的腳比你的頭還大！",
+                    "require": "sadaharu_footprint",
+                    "result": "perfect"
+                  },
+                  {
+                    "goto": "ch1_r2_l3_b",
+                    "id": "b",
+                    "label": "定春開不了冰箱吧！",
+                    "result": "weak"
+                  },
+                  {
+                    "goto": "ch1_r2_l3_c",
+                    "id": "c",
+                    "label": "定春，你怎麼可以這樣！",
+                    "result": "fail"
+                  },
+                  {
+                    "goto": "ch1_r2_give_up",
+                    "id": "d",
+                    "label": "……（放棄吐槽）",
+                    "result": "fail",
+                    "when": [
+                      {
+                        "goto": "ch1_r2_hidden_sadaharu",
+                        "require_caught": [
+                          "l1",
+                          "l2"
+                        ],
+                        "result": "hidden"
+                      }
+                    ]
+                  }
+                ],
+                "timeout": "ch1_r2_timeout"
+              },
+              "source_id": "M56",
+              "text": "證據就是這排腳印！從冰箱走到定春的窩，犯人是定春阿魯！"
+            }
+          ],
+          "mode": "testimony",
+          "op": "boke_round",
+          "retry": "ch1_r2_retry",
+          "rules": {
+            "type_lines": true
+          },
+          "speaker": "kagura",
+          "timer_seconds": 8.0
+        }
+      ],
+      "title": "神樂的證言"
+    },
+    "ch1_r2_l1_a": {
+      "next": "ch1_r2_kagura",
+      "steps": [
+        {
+          "op": "shake"
+        },
+        {
+          "id": "tsukkomi_hit",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "source_id": "R21a-1",
+          "speaker": "kagura",
+          "text": "……醋昆布偶爾也想試試新口味阿魯。"
+        },
+        {
+          "op": "say",
+          "source_id": "R21a-2",
+          "speaker": "shinpachi",
+          "text": "想試的是你吧！醋昆布配草莓牛奶是什麼組合！"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r2_l1_b": {
+      "next": "ch1_r2_kagura",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "R21b-1",
+          "speaker": "kagura",
+          "text": "我是會忍耐的女人阿魯。"
+        },
+        {
+          "op": "say",
+          "source_id": "R21b-2",
+          "speaker": "shinpachi",
+          "text": "……光靠常識贏不了她。",
+          "thought": true
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r2_l1_c": {
+      "next": "ch1_r2_kagura",
+      "steps": [
+        {
+          "duration": 0.25,
+          "op": "freeze"
+        },
+        {
+          "id": "crow",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "source_id": "R21c-1",
+          "speaker": "kagura",
+          "text": "對吧阿魯。"
+        },
+        {
+          "op": "say",
+          "source_id": "R21c-2",
+          "speaker": "gintoki",
+          "text": "新八被一句好聽話收買了。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r2_l1_hint": {
+      "next": "ch1_r2_kagura",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "H21",
+          "speaker": "kagura",
+          "text": "我絕對不會告訴你，沙發底下的包裝是什麼顏色阿魯。……我什麼都沒說阿魯。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r2_l1_listen": {
+      "next": "ch1_r2_kagura",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "L21-1",
+          "speaker": "kagura",
+          "text": "配水太普通了。我是有品味的女人阿魯。"
+        },
+        {
+          "op": "say",
+          "source_id": "L21-2",
+          "speaker": "shinpachi",
+          "text": "配水太普通……那她配了什麼？",
+          "thought": true
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r2_l2_b": {
+      "next": "ch1_r2_kagura",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "R22b-1",
+          "speaker": "kagura",
+          "text": "就是只會汪，才需要我翻譯阿魯。"
+        },
+        {
+          "op": "say",
+          "source_id": "R22b-2",
+          "speaker": "shinpachi",
+          "text": "……翻譯不是重點。角落好像有人舉著什麼。",
+          "thought": true
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r2_l2_c": {
+      "next": "ch1_r2_kagura",
+      "steps": [
+        {
+          "duration": 0.25,
+          "op": "freeze"
+        },
+        {
+          "id": "crow",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "source_id": "R22c-1",
+          "speaker": "kagura",
+          "text": "謝謝阿魯。"
+        },
+        {
+          "op": "say",
+          "source_id": "R22c-2",
+          "speaker": "sadaharu",
+          "text": "……汪。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r2_l2_hint": {
+      "next": "ch1_r2_kagura",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "H22",
+          "speaker": "kagura",
+          "text": "不准看伊莉莎白。牌子上寫什麼都不准看阿魯。……不准喔阿魯。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r2_l2_listen": {
+      "next": "ch1_r2_kagura",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "L22-1",
+          "speaker": "kagura",
+          "text": "定春說的話我都聽得懂阿魯。我們是好朋友阿魯。"
+        },
+        {
+          "op": "say",
+          "source_id": "L22-2",
+          "speaker": "sadaharu",
+          "text": "汪。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r2_l3_a": {
+      "next": "ch1_r2_kagura",
+      "steps": [
+        {
+          "op": "shake"
+        },
+        {
+          "id": "tsukkomi_hit",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "source_id": "R23a-1",
+          "speaker": "shinpachi",
+          "text": "這腳印小成這樣，還有五根指頭——是手印吧！"
+        },
+        {
+          "op": "say",
+          "source_id": "R23a-2",
+          "speaker": "kagura",
+          "text": "……定春最近在減肥阿魯。"
+        },
+        {
+          "op": "say",
+          "source_id": "R23a-3",
+          "speaker": "shinpachi",
+          "text": "腳掌是不會瘦的啦！"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r2_l3_b": {
+      "next": "ch1_r2_kagura",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "R23b-1",
+          "speaker": "kagura",
+          "text": "牠會用頭撞開阿魯。冰箱門上的凹痕你沒看到阿魯？"
+        },
+        {
+          "op": "say",
+          "source_id": "R23b-2",
+          "speaker": "shinpachi",
+          "text": "那是上個月的凹痕吧！"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r2_l3_c": {
+      "next": "ch1_r2_kagura",
+      "steps": [
+        {
+          "duration": 0.25,
+          "op": "freeze"
+        },
+        {
+          "id": "crow",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "source_id": "R23c-1",
+          "speaker": "narrator",
+          "text": "定春一口咬住了新八的頭。"
+        },
+        {
+          "op": "say",
+          "source_id": "R23c-2",
+          "speaker": "kagura",
+          "text": "冤枉好狗的報應阿魯。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r2_l3_hint": {
+      "next": "ch1_r2_kagura",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "H23",
+          "speaker": "kagura",
+          "text": "你被定春踩過那麼多次，還不知道牠的腳多大阿魯？……咦，我在幫誰說話阿魯。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r2_l3_listen": {
+      "next": "ch1_r2_kagura",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "L23-1",
+          "speaker": "kagura",
+          "text": "定春半夜會用鼻子開冰箱。很靈巧阿魯。"
+        },
+        {
+          "op": "say",
+          "source_id": "L23-2",
+          "speaker": "sadaharu",
+          "text": "……汪？"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r2_placard": {
+      "next": "ch1_r2_kagura",
+      "steps": [
+        {
+          "op": "cutin",
+          "speaker": "shinpachi",
+          "text": "牌子上寫著犯人是你啊！！"
+        },
+        {
+          "id": "tsukkomi_hit",
+          "op": "se"
+        },
+        {
+          "op": "shake"
+        },
+        {
+          "op": "say",
+          "source_id": "R22u-1",
+          "speaker": "shinpachi",
+          "text": "伊莉莎白的牌子上，寫著犯人是你啊！！"
+        },
+        {
+          "op": "say",
+          "source_id": "R22u-2",
+          "speaker": "kagura",
+          "text": "伊莉莎白！你背叛我阿魯！"
+        },
+        {
+          "op": "placard",
+          "text": "我只是路過"
+        },
+        {
+          "op": "say",
+          "source_id": "R22u-3",
+          "speaker": "narrator",
+          "text": "伊莉莎白默默把牌子翻過來。背面寫著：「我只是路過」。"
+        },
+        {
+          "op": "say",
+          "source_id": "R22u-4",
+          "speaker": "gintoki",
+          "text": "路過的都比我們家的證人可靠。"
+        }
+      ],
+      "title": "伊莉莎白的牌子"
+    },
+    "ch1_r2_retry": {
+      "next": "ch1_r2_kagura",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "G05",
+          "speaker": "shinpachi",
+          "text": "……我回來了。這次戴了備用的。"
+        }
+      ],
+      "title": "備用的眼鏡"
+    },
+    "ch1_r2_timeout": {
+      "next": "ch1_r2_kagura",
+      "steps": [
+        {
+          "duration": 0.25,
+          "op": "freeze"
+        },
+        {
+          "id": "crow",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "source_id": "T1-1",
+          "speaker": "narrator",
+          "text": "八秒過去了。新八的嘴還開著。"
+        },
+        {
+          "op": "say",
+          "source_id": "T1-2",
+          "speaker": "kagura",
+          "text": "嘴巴開那麼久，會飛進蒼蠅阿魯。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r3_c1_a": {
+      "next": "ch1_r3_combo",
+      "steps": [
+        {
+          "op": "shake"
+        },
+        {
+          "id": "tsukkomi_hit",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "source_id": "R31a-1",
+          "speaker": "gintoki",
+          "text": "毒這種東西，常常藏在最後一口。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r3_c1_b": {
+      "next": "ch1_r3_combo",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "R31b-1",
+          "speaker": "gintoki",
+          "text": "先問就不是驚喜了。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r3_c1_c": {
+      "next": "ch1_r3_combo",
+      "steps": [
+        {
+          "duration": 0.25,
+          "op": "freeze"
+        },
+        {
+          "id": "crow",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "source_id": "R31c-1",
+          "speaker": "kagura",
+          "text": "眼鏡又被收買了阿魯。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r3_c1_hint": {
+      "next": "ch1_r3_combo",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "H31",
+          "speaker": "kagura",
+          "text": "試毒的人，會把整瓶喝完嗎？……換作是我會阿魯。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r3_c2_a": {
+      "next": "ch1_r3_combo",
+      "steps": [
+        {
+          "op": "shake"
+        },
+        {
+          "id": "tsukkomi_hit",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "source_id": "R32a-1",
+          "speaker": "kagura",
+          "text": "安心之後，會口渴阿魯。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r3_c2_b": {
+      "next": "ch1_r3_combo",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "R32b-1",
+          "speaker": "kagura",
+          "text": "數學好的眼鏡最討厭了阿魯。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r3_c2_c": {
+      "next": "ch1_r3_combo",
+      "steps": [
+        {
+          "duration": 0.25,
+          "op": "freeze"
+        },
+        {
+          "id": "crow",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "source_id": "R32c-1",
+          "speaker": "gintoki",
+          "text": "對吧，大家都平安。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r3_c2_hint": {
+      "next": "ch1_r3_combo",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "H32",
+          "speaker": "kagura",
+          "text": "『沒毒』跟『喝完』中間，缺一個理由阿魯。那個理由叫嘴饞。……我說出來了阿魯。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r3_c3_a": {
+      "next": "ch1_r3_combo",
+      "steps": [
+        {
+          "op": "shake"
+        },
+        {
+          "id": "tsukkomi_hit",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "source_id": "R33a-1",
+          "speaker": "gintoki",
+          "text": "……那是夢遊的銀桑。跟現在的銀桑是兩個人。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r3_c3_b": {
+      "next": "ch1_r3_combo",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "R33b-1",
+          "speaker": "gintoki",
+          "text": "早餐是人權。人權不分你我。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r3_c3_c": {
+      "next": "ch1_r3_combo",
+      "steps": [
+        {
+          "duration": 0.25,
+          "op": "freeze"
+        },
+        {
+          "id": "crow",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "source_id": "R33c-1",
+          "speaker": "kagura",
+          "text": "眼鏡被早餐說服了阿魯。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r3_c3_hint": {
+      "next": "ch1_r3_combo",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "H33",
+          "speaker": "kagura",
+          "text": "銀醬第一回合說過幾點起來？沒在聽的眼鏡，現在只能打普通的吐槽阿魯。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r3_c4_a": {
+      "next": "ch1_r3_combo",
+      "steps": [
+        {
+          "op": "shake"
+        },
+        {
+          "id": "tsukkomi_hit",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "source_id": "R34a-1",
+          "speaker": "kagura",
+          "text": "新八啊。是你自己寫上去的阿魯。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r3_c4_b": {
+      "next": "ch1_r3_combo",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "R34b-1",
+          "speaker": "kagura",
+          "text": "新八這名字很適合牛奶阿魯。又白又淡阿魯。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r3_c4_c": {
+      "next": "ch1_r3_combo",
+      "steps": [
+        {
+          "duration": 0.25,
+          "op": "freeze"
+        },
+        {
+          "id": "crow",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "source_id": "R34c-1",
+          "speaker": "gintoki",
+          "text": "新八牛奶。一聽就賣不出去。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r3_c4_hint": {
+      "next": "ch1_r3_combo",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "H34",
+          "speaker": "kagura",
+          "text": "瓶子上的『新八』是誰寫的？眼鏡連自己做過的事都忘了阿魯。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r3_c5_hint": {
+      "next": "ch1_r3_combo",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "H35",
+          "speaker": "kagura",
+          "text": "等我們講完最後那個『！』再吐阿魯。太早沒禮貌，太晚沒存在感阿魯。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r3_clear": {
+      "next": "ch1_truth",
+      "steps": [
+        {
+          "id": "bgm_meeting",
+          "op": "bgm"
+        },
+        {
+          "expression": "sweat",
+          "id": "gintoki",
+          "op": "char",
+          "position": "center",
+          "visible": true
+        },
+        {
+          "expression": "sweat",
+          "id": "kagura",
+          "op": "char",
+          "position": "right",
+          "visible": true
+        },
+        {
+          "op": "say",
+          "source_id": "M70",
+          "speaker": "gintoki",
+          "text": "……全被接住了。"
+        },
+        {
+          "op": "say",
+          "source_id": "M71",
+          "speaker": "kagura",
+          "text": "今天的眼鏡，有點可怕阿魯。"
+        }
+      ],
+      "title": "第三回合結束"
+    },
+    "ch1_r3_combo": {
+      "steps": [
+        {
+          "clear": "ch1_r3_clear",
+          "game_over": "ch1_game_over",
+          "id": "ch1_r3",
+          "lines": [
+            {
+              "hint": "ch1_r3_c1_hint",
+              "id": "c1",
+              "slot": {
+                "options": [
+                  {
+                    "goto": "ch1_r3_c1_a",
+                    "id": "a",
+                    "label": "試毒試到一滴不剩嗎！",
+                    "result": "perfect"
+                  },
+                  {
+                    "goto": "ch1_r3_c1_b",
+                    "id": "b",
+                    "label": "那也該先問我一聲吧！",
+                    "result": "weak"
+                  },
+                  {
+                    "goto": "ch1_r3_c1_c",
+                    "id": "c",
+                    "label": "原來是為了我……",
+                    "result": "fail"
+                  },
+                  {
+                    "goto": "ch1_r3_give_up",
+                    "id": "d",
+                    "label": "……（放棄吐槽）",
+                    "result": "fail"
+                  }
+                ],
+                "timeout": "ch1_r3_timeout"
+              },
+              "source_id": "M65",
+              "speaker": "gintoki",
+              "text": "我們不是偷喝。是試毒。怕新八喝到壞掉的牛奶。"
+            },
+            {
+              "hint": "ch1_r3_c2_hint",
+              "id": "c2",
+              "slot": {
+                "options": [
+                  {
+                    "goto": "ch1_r3_c2_a",
+                    "id": "a",
+                    "label": "安心了就不用喝完吧！",
+                    "result": "perfect"
+                  },
+                  {
+                    "goto": "ch1_r3_c2_b",
+                    "id": "b",
+                    "label": "一半是你，一半是阿銀吧！",
+                    "result": "weak"
+                  },
+                  {
+                    "goto": "ch1_r3_c2_c",
+                    "id": "c",
+                    "label": "沒毒真是太好了。",
+                    "result": "fail"
+                  },
+                  {
+                    "goto": "ch1_r3_give_up",
+                    "id": "d",
+                    "label": "……（放棄吐槽）",
+                    "result": "fail"
+                  }
+                ],
+                "timeout": "ch1_r3_timeout"
+              },
+              "source_id": "M66",
+              "speaker": "kagura",
+              "text": "試到一半發現沒毒，就安心地喝完了阿魯。"
+            },
+            {
+              "hint": "ch1_r3_c3_hint",
+              "id": "c3",
+              "slot": {
+                "options": [
+                  {
+                    "goto": "ch1_r3_c3_a",
+                    "id": "a",
+                    "label": "你說過半夜兩點開的冰箱！",
+                    "require": "gin_sleep_testimony",
+                    "result": "perfect"
+                  },
+                  {
+                    "goto": "ch1_r3_c3_b",
+                    "id": "b",
+                    "label": "早餐也不能吃別人的！",
+                    "result": "weak"
+                  },
+                  {
+                    "goto": "ch1_r3_c3_c",
+                    "id": "c",
+                    "label": "早餐確實很重要呢。",
+                    "result": "fail"
+                  },
+                  {
+                    "goto": "ch1_r3_give_up",
+                    "id": "d",
+                    "label": "……（放棄吐槽）",
+                    "result": "fail"
+                  }
+                ],
+                "timeout": "ch1_r3_timeout"
+              },
+              "source_id": "M67",
+              "speaker": "gintoki",
+              "text": "而且銀桑是早上喝的。早上的牛奶是早餐，早餐是人權。"
+            },
+            {
+              "hint": "ch1_r3_c4_hint",
+              "id": "c4",
+              "slot": {
+                "options": [
+                  {
+                    "goto": "ch1_r3_c4_a",
+                    "id": "a",
+                    "label": "誰會幫牛奶取名叫新八！",
+                    "result": "perfect"
+                  },
+                  {
+                    "goto": "ch1_r3_c4_b",
+                    "id": "b",
+                    "label": "那是我的名字吧！",
+                    "result": "weak"
+                  },
+                  {
+                    "goto": "ch1_r3_c4_c",
+                    "id": "c",
+                    "label": "牛奶的名字好可愛。",
+                    "result": "fail"
+                  },
+                  {
+                    "goto": "ch1_r3_give_up",
+                    "id": "d",
+                    "label": "……（放棄吐槽）",
+                    "result": "fail"
+                  }
+                ],
+                "timeout": "ch1_r3_timeout"
+              },
+              "source_id": "M68",
+              "speaker": "kagura",
+              "text": "瓶子上寫著『新八』，我們以為那是牛奶的名字阿魯。"
+            },
+            {
+              "hint": "ch1_r3_c5_hint",
+              "id": "c5",
+              "slot": {
+                "qte": {
+                  "duration": 1.6,
+                  "early": "ch1_r3_qte_early",
+                  "late": "ch1_r3_qte_late",
+                  "late_after": 2.0,
+                  "perfect": "ch1_r3_qte_perfect",
+                  "window": 0.12
+                }
+              },
+              "source_id": "M69",
+              "speaker": "gintoki+kagura",
+              "text": "所以錯的是——把名字寫在牛奶上的新八（阿魯）！"
+            }
+          ],
+          "mode": "combo",
+          "op": "boke_round",
+          "retry": "ch1_r3_retry",
+          "rules": {
+            "combo_bonus": "ch1_r3_combo_bonus",
+            "combo_break": "ch1_r3_combo_break",
+            "combo_timers": [
+              8.0,
+              6.0,
+              5.0,
+              4.0
+            ],
+            "super": "ch1_r3_super",
+            "super_label": "龜派氣功！",
+            "type_lines": true
+          },
+          "speaker": "gintoki",
+          "timer_seconds": 8.0
+        }
+      ],
+      "title": "吐槽連擊"
+    },
+    "ch1_r3_combo_bonus": {
+      "next": "ch1_r3_clear",
+      "steps": [
+        {
+          "op": "cutin",
+          "speaker": "shinpachi",
+          "text": "吐槽連擊 ×5"
+        },
+        {
+          "id": "combo_up",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "source_id": "CB1",
+          "speaker": "gintoki",
+          "text": "……五連發。新八，你今天早餐吃了什麼？"
+        },
+        {
+          "op": "say",
+          "source_id": "CB2",
+          "speaker": "shinpachi",
+          "text": "什麼都沒吃！我的早餐被你們喝掉了！"
+        }
+      ],
+      "title": "吐槽連擊 ×5"
+    },
+    "ch1_r3_combo_break": {
+      "next": "ch1_r3_combo",
+      "steps": [
+        {
+          "id": "combo_break",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "source_id": "CBX1",
+          "speaker": "gintoki",
+          "text": "斷了。新八，吐槽是講節奏的。"
+        }
+      ],
+      "title": "連擊中斷"
+    },
+    "ch1_r3_give_up": {
+      "next": "ch1_r3_combo",
+      "steps": [
+        {
+          "duration": 0.25,
+          "op": "freeze"
+        },
+        {
+          "id": "crow",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "source_id": "Q3",
+          "speaker": "gintoki",
+          "text": "連擊到一半放棄？新八，吐槽是講節奏的。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r3_intro": {
+      "next": "ch1_r3_combo",
+      "steps": [
+        {
+          "id": "sadaharu",
+          "op": "char",
+          "visible": false
+        },
+        {
+          "id": "elisabeth",
+          "op": "char",
+          "visible": false
+        },
+        {
+          "expression": "smug",
+          "id": "gintoki",
+          "op": "char",
+          "position": "center",
+          "visible": true
+        },
+        {
+          "expression": "smug",
+          "id": "kagura",
+          "op": "char",
+          "position": "right",
+          "visible": true
+        },
+        {
+          "expression": "neutral",
+          "id": "otose",
+          "op": "char",
+          "position": "right",
+          "visible": true
+        },
+        {
+          "op": "say",
+          "source_id": "M61",
+          "speaker": "otose",
+          "text": "前一半是神樂，後一半是銀時。兩個都有份。"
+        },
+        {
+          "op": "say",
+          "source_id": "M62",
+          "speaker": "gintoki",
+          "text": "神樂。看來只能用那招了。"
+        },
+        {
+          "op": "say",
+          "source_id": "M63",
+          "speaker": "kagura",
+          "text": "嗯。萬事屋祕傳，兩人份的藉口阿魯。"
+        },
+        {
+          "op": "say",
+          "source_id": "M64",
+          "speaker": "shinpachi",
+          "text": "那種東西不要祕傳啊！"
+        },
+        {
+          "id": "bgm_combo",
+          "op": "bgm"
+        }
+      ],
+      "title": "第三回合：兩人份的藉口"
+    },
+    "ch1_r3_qte_early": {
+      "next": "ch1_r3_combo",
+      "steps": [
+        {
+          "duration": 0.25,
+          "op": "freeze"
+        },
+        {
+          "id": "crow",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "source_id": "R35e-1",
+          "speaker": "shinpachi",
+          "text": "錯的是——"
+        },
+        {
+          "op": "say",
+          "source_id": "R35e-2",
+          "speaker": "kagura",
+          "text": "還沒講完阿魯。插嘴的眼鏡最討厭了阿魯。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r3_qte_late": {
+      "next": "ch1_r3_combo",
+      "steps": [
+        {
+          "duration": 0.25,
+          "op": "freeze"
+        },
+        {
+          "id": "crow",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "source_id": "R35l-1",
+          "speaker": "gintoki",
+          "text": "……看吧。新八也沒意見。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_r3_qte_perfect": {
+      "next": "ch1_r3_combo",
+      "steps": [
+        {
+          "op": "cutin",
+          "speaker": "shinpachi",
+          "text": "錯的是你們兩個啊啊啊！！"
+        },
+        {
+          "op": "shake"
+        },
+        {
+          "op": "flash"
+        },
+        {
+          "op": "say",
+          "source_id": "R35p-1",
+          "speaker": "shinpachi",
+          "text": "錯的是你們兩個啊啊啊！！"
+        },
+        {
+          "op": "say",
+          "source_id": "R35p-2",
+          "speaker": "gintoki+kagura",
+          "text": "……是。"
+        }
+      ],
+      "title": "最後的吐槽"
+    },
+    "ch1_r3_retry": {
+      "next": "ch1_r3_combo",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "G05",
+          "speaker": "shinpachi",
+          "text": "……我回來了。這次戴了備用的。"
+        }
+      ],
+      "title": "備用的眼鏡"
+    },
+    "ch1_r3_super": {
+      "next": "ch1_r3_combo",
+      "steps": [
+        {
+          "id": "super_charge",
+          "op": "se"
+        },
+        {
+          "op": "cutin",
+          "speaker": "shinpachi",
+          "text": "龜——派——氣——功——！！"
+        },
+        {
+          "op": "beam"
+        },
+        {
+          "id": "beam",
+          "op": "se"
+        },
+        {
+          "op": "flash"
+        },
+        {
+          "op": "shake",
+          "strength": "big"
+        },
+        {
+          "op": "say",
+          "source_id": "S01",
+          "speaker": "shinpachi",
+          "text": "龜——派——"
+        },
+        {
+          "op": "say",
+          "source_id": "S02",
+          "speaker": "shinpachi",
+          "text": "試毒試到一滴不剩！安心了還喝完！早餐也不能吃別人的！"
+        },
+        {
+          "op": "say",
+          "source_id": "S03",
+          "speaker": "shinpachi",
+          "text": "瓶子上的『新八』是我的名字！是我寫的！"
+        },
+        {
+          "op": "say",
+          "source_id": "S04",
+          "speaker": "shinpachi",
+          "text": "——氣功！！"
+        },
+        {
+          "op": "say",
+          "source_id": "S05",
+          "speaker": "gintoki",
+          "text": "……我們還沒講耶。"
+        },
+        {
+          "op": "say",
+          "source_id": "S06",
+          "speaker": "kagura",
+          "text": "眼鏡連我們的台詞都先吐了，還在發光阿魯。"
+        }
+      ],
+      "title": "超必殺：龜派氣功"
+    },
+    "ch1_r3_timeout": {
+      "next": "ch1_r3_combo",
+      "steps": [
+        {
+          "duration": 0.25,
+          "op": "freeze"
+        },
+        {
+          "id": "crow",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "source_id": "T3-1",
+          "speaker": "gintoki",
+          "text": "新八，你跟不上了。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_result": {
+      "steps": [
+        {
+          "id": "bgm_result",
+          "op": "bgm"
+        },
+        {
+          "hidden_total": 1.0,
+          "id": "ch1_result",
+          "lines": {
+            "A": {
+              "source_id": "E-A",
+              "speaker": "kagura",
+              "text": "這副眼鏡，今天還算有用阿魯。"
+            },
+            "B": {
+              "source_id": "E-B",
+              "speaker": "gintoki",
+              "text": "普通的吐槽，普通的眼鏡。明天也拜託了。"
+            },
+            "C": {
+              "source_id": "E-C",
+              "speaker": "otose",
+              "text": "冰箱也好，薪水也好，寫了名字不代表就是你的。"
+            },
+            "S": {
+              "source_id": "E-S",
+              "speaker": "shinpachi",
+              "text": "一副眼鏡都沒碎……為什麼我還是什麼都沒拿到！？"
+            }
+          },
+          "op": "result",
+          "title": "～ 第一章 完 ～"
+        }
+      ],
+      "title": "～ 第一章 完 ～"
+    },
+    "ch1_talk_1": {
+      "next": "ch1_investigate",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "D1-1",
+          "speaker": "gintoki",
+          "text": "十點。銀桑是早睡早起的模範市民。"
+        },
+        {
+          "op": "say",
+          "source_id": "D1-2",
+          "speaker": "shinpachi",
+          "text": "早起的人，不會現在還在打呵欠。",
+          "thought": true
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_talk_2": {
+      "next": "ch1_investigate",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "D2-1",
+          "speaker": "kagura",
+          "text": "醋昆布。很乾阿魯。"
+        },
+        {
+          "op": "say",
+          "source_id": "D2-2",
+          "speaker": "shinpachi",
+          "text": "……很乾。然後呢？",
+          "thought": true
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_talk_3": {
+      "next": "ch1_investigate",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "D3-1",
+          "speaker": "sadaharu",
+          "text": "汪。"
+        },
+        {
+          "op": "say",
+          "source_id": "D3-2",
+          "speaker": "shinpachi",
+          "text": "……謝謝你的證詞。"
+        }
+      ],
+      "title": "吐槽反應"
+    },
+    "ch1_truth": {
+      "steps": [
+        {
+          "expression": "neutral",
+          "id": "otose",
+          "op": "char",
+          "position": "right",
+          "visible": true
+        },
+        {
+          "op": "say",
+          "source_id": "M72",
+          "speaker": "otose",
+          "text": "好了。宣判之前，我把昨晚的事說一遍。"
+        },
+        {
+          "op": "say",
+          "source_id": "M73",
+          "speaker": "otose",
+          "text": "半夜十二點，神樂開冰箱，配醋昆布喝了一半。"
+        },
+        {
+          "op": "say",
+          "source_id": "M74",
+          "speaker": "kagura",
+          "text": "醋昆布配草莓牛奶，是大人的味道阿魯。"
+        },
+        {
+          "op": "say",
+          "source_id": "M75",
+          "speaker": "otose",
+          "text": "半夜兩點，銀時起來喝完剩下的，瓶子踢進桌子底下。"
+        },
+        {
+          "op": "say",
+          "source_id": "M76",
+          "speaker": "shinpachi",
+          "text": "婆婆，你連幾點都知道！"
+        },
+        {
+          "op": "say",
+          "source_id": "M77",
+          "speaker": "otose",
+          "text": "我就住樓下。你們家的天花板，比你們的藉口還薄。"
+        },
+        {
+          "else": "ch1_truth_normal",
+          "equals": true,
+          "flag": "hidden_sadaharu",
+          "op": "condition",
+          "then": "ch1_truth_hidden"
+        }
+      ],
+      "title": "宣判"
+    },
+    "ch1_truth_hidden": {
+      "next": "ch1_verdict",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "M78",
+          "speaker": "kagura",
+          "text": "頭上還有定春的牙印。我今天已經被罰過了阿魯。"
+        }
+      ],
+      "title": "定春的牙印"
+    },
+    "ch1_truth_normal": {
+      "next": "ch1_verdict",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "M78",
+          "speaker": "kagura",
+          "text": "定春，對不起阿魯。今天的肉乾分你一半阿魯。"
+        }
+      ],
+      "title": "定春，對不起"
+    },
+    "ch1_twist": {
+      "next": "ch1_result",
+      "steps": [
+        {
+          "id": "",
+          "op": "bgm"
+        },
+        {
+          "op": "say",
+          "source_id": "M80",
+          "speaker": "gintoki",
+          "text": "……不用等到今天。"
+        },
+        {
+          "op": "say",
+          "source_id": "M81",
+          "speaker": "gintoki",
+          "text": "新的一瓶，銀桑早上就買好了。怕你們偷喝，藏在玄關的鞋櫃裡。"
+        },
+        {
+          "id": "bgm_serious",
+          "op": "bgm"
+        },
+        {
+          "op": "say",
+          "source_id": "M82",
+          "speaker": "shinpachi",
+          "text": "阿銀……你早就買好了？"
+        },
+        {
+          "op": "say",
+          "source_id": "M83",
+          "speaker": "gintoki",
+          "text": "名字也是銀桑寫的，比你寫得好看。"
+        },
+        {
+          "op": "say",
+          "source_id": "M84",
+          "speaker": "shinpachi",
+          "text": "這個人……偶爾也會做一件像樣的事。",
+          "thought": true
+        },
+        {
+          "op": "say",
+          "source_id": "M85",
+          "speaker": "shinpachi",
+          "text": "……謝謝。不過阿銀，錢是哪來的？"
+        },
+        {
+          "op": "say",
+          "source_id": "M86",
+          "speaker": "gintoki",
+          "text": "放心，不是亂花的錢。是銀桑昨天終於準備好的信封。"
+        },
+        {
+          "id": "",
+          "op": "bgm"
+        },
+        {
+          "op": "say",
+          "source_id": "M87",
+          "speaker": "gintoki",
+          "text": "信封上寫著『新八 九月份薪水』。"
+        },
+        {
+          "duration": 0.8,
+          "op": "freeze"
+        },
+        {
+          "id": "crow",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "source_id": "M88",
+          "speaker": "shinpachi",
+          "text": "你終於準備好我的薪水……然後拿去買了我的牛奶！？"
+        },
+        {
+          "id": "salary_envelope",
+          "op": "item"
+        },
+        {
+          "op": "say",
+          "source_id": "M89",
+          "speaker": "gintoki",
+          "text": "找的錢在裡面。三十圓，省著點用。"
+        },
+        {
+          "op": "say",
+          "source_id": "M90",
+          "speaker": "shinpachi",
+          "text": "我一個月的薪水，就是一瓶牛奶加三十圓嗎！"
+        },
+        {
+          "op": "say",
+          "source_id": "M91",
+          "speaker": "gintoki",
+          "text": "好了，別激動。牛奶在鞋櫃，自己去拿。"
+        },
+        {
+          "id": "door_slide",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "source_id": "M92",
+          "speaker": "narrator",
+          "text": "鞋櫃開著。寫著「新八」的瓶子倒在地上，空了。"
+        },
+        {
+          "op": "say",
+          "source_id": "M93",
+          "speaker": "narrator",
+          "text": "旁邊一排巨大的腳印，一路走到定春的窩。每一個都比新八的頭還大。"
+        },
+        {
+          "op": "say",
+          "source_id": "M94",
+          "speaker": "kagura",
+          "text": "看吧，我就說犯人是定春阿魯。"
+        },
+        {
+          "expression": "broken",
+          "id": "shinpachi",
+          "op": "char",
+          "position": "left",
+          "visible": true
+        },
+        {
+          "op": "say",
+          "source_id": "M95",
+          "speaker": "shinpachi",
+          "text": "那次是你冤枉牠！這次才是真的啊啊啊！！"
+        },
+        {
+          "op": "cutin",
+          "speaker": "shinpachi",
+          "text": "這次是真的定春啊啊啊！！"
+        },
+        {
+          "op": "shake"
+        },
+        {
+          "op": "say",
+          "source_id": "M96",
+          "speaker": "sadaharu",
+          "text": "汪。"
+        },
+        {
+          "direction": "out",
+          "duration": 0.3,
+          "op": "fade"
+        }
+      ],
+      "title": "薪水袋與定春"
+    },
+    "ch1_verdict": {
+      "next": "ch1_twist",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "M79",
+          "speaker": "otose",
+          "text": "判決。兩個人，今天之內賠新八一瓶新的。"
+        },
+        {
+          "id": "stamp",
+          "op": "se"
+        }
+      ],
+      "title": "判決"
+    }
+  },
+  "note": "作者已採納 P1–P8 的 draft-v0.2；上機試讀版，待作者試讀與手機實機驗收。",
+  "title": "第一章・萬事屋冰箱草莓牛奶失竊事件（上機試讀版）",
+  "version": "s-5216a2553628"
+}

@@ -1,0 +1,73 @@
+{
+  "entry": "text_demo",
+  "generated_from": "story_src/text_effects.dialogue",
+  "id": "text_effects",
+  "initial_flags": {},
+  "nodes": {
+    "text_demo": {
+      "steps": [
+        {
+          "id": "yorozuya_living_room",
+          "op": "bg"
+        },
+        {
+          "expression": "neutral",
+          "id": "gintoki",
+          "op": "char",
+          "position": "center",
+          "visible": true
+        },
+        {
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "今天的工作是……[pause=0.35][color=#235978][big]休息[/big][/color]。"
+        },
+        {
+          "expression": "angry",
+          "id": "shinpachi",
+          "op": "char",
+          "position": "left",
+          "visible": true
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "[shake rate=18 level=4]這根本不是工作吧！[/shake]"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "[speed=0.09]……我先冷靜一下。[/speed]",
+          "thought": true
+        },
+        {
+          "direction": "out",
+          "duration": 0.25,
+          "op": "fade"
+        },
+        {
+          "id": "yorozuya_kitchen",
+          "op": "bg"
+        },
+        {
+          "direction": "in",
+          "duration": 0.25,
+          "op": "fade"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "文字演出技術試片：句中停頓、慢速、顏色、放大與抖動。"
+        },
+        {
+          "op": "end",
+          "text": "文字演出技術試片結束"
+        }
+      ],
+      "title": "文字與舞台演出"
+    }
+  },
+  "note": "技術试片，非正式章節",
+  "title": "文字演出技術試片",
+  "version": "s-fe8f607cf4fa"
+}

@@ -19,6 +19,7 @@ signal style_pressed(style_id: String)
 @onready var rows: Dictionary = {
 	"resume": %Resume, "save": %Save, "load": %Load, "material": %Material, "profile": %Profile,
 	"log": %Log, "skip": %Skip, "mute": %Mute, "settings": %Settings, "title": %Title,
+	"rollback": %Rollback, "quick_save": %QuickSave, "quick_load": %QuickLoad,
 }
 @onready var style_buttons: Dictionary = {
 	"cinema": %Style_cinema, "ledger": %Style_ledger, "manga": %Style_manga, "gintama": %Style_gintama,

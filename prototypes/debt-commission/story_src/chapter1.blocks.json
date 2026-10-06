@@ -1,0 +1,666 @@
+{
+  "story": {
+    "id": "strawberry_chapter1",
+    "title": "第一章・萬事屋冰箱草莓牛奶失竊事件（上機試讀版）",
+    "note": "作者已採納 P1–P8 的 draft-v0.2；上機試讀版，待作者試讀與手機實機驗收。",
+    "initial_flags": {
+      "hidden_sadaharu": false
+    }
+  },
+  "titles": {
+    "ch1_open_fridge": "第一章・冰箱是空的",
+    "ch1_investigate_pre": "搜查客廳・開始",
+    "ch1_investigate": "搜查客廳",
+    "ch1_inspect_desk_underside": "辦公桌底下",
+    "ch1_inspect_gintoki_mouth": "銀時的嘴角",
+    "ch1_inspect_sofa_underside": "沙發底下",
+    "ch1_inspect_floor_prints": "地板上的腳印",
+    "ch1_talk_1": "吐槽反應",
+    "ch1_talk_2": "吐槽反應",
+    "ch1_talk_3": "吐槽反應",
+    "ch1_kitchen_fridge": "吐槽反應",
+    "ch1_investigate_done": "四樣都到手",
+    "ch1_meeting_open": "家庭會議，開始",
+    "ch1_r1_intro": "第一回合：銀時",
+    "ch1_r1_gintoki": "銀時的證言",
+    "ch1_r1_l1_listen": "聽下去",
+    "ch1_r1_l1_hint": "吐槽反應",
+    "ch1_r1_l1_whiff": "吐槽反應",
+    "ch1_r1_l2_listen": "聽下去",
+    "ch1_r1_l2_hint": "吐槽反應",
+    "ch1_r1_l2_a": "吐槽反應",
+    "ch1_r1_l2_b": "吐槽反應",
+    "ch1_r1_l2_c": "吐槽反應",
+    "ch1_r1_l3_listen": "聽下去",
+    "ch1_r1_l3_hint": "吐槽反應",
+    "ch1_r1_l3_whiff": "吐槽反應",
+    "ch1_r1_l4_listen": "聽下去",
+    "ch1_r1_l4_hint": "吐槽反應",
+    "ch1_r1_l4_a": "吐槽反應",
+    "ch1_r1_l4_b": "吐槽反應",
+    "ch1_r1_l4_c": "吐槽反應",
+    "ch1_r1_give_up": "吐槽反應",
+    "ch1_r1_timeout": "吐槽反應",
+    "ch1_r1_clear": "第一回合結束",
+    "ch1_r2_intro": "第二回合：神樂",
+    "ch1_r2_kagura": "神樂的證言",
+    "ch1_r2_l1_listen": "吐槽反應",
+    "ch1_r2_l1_hint": "吐槽反應",
+    "ch1_r2_l1_a": "吐槽反應",
+    "ch1_r2_l1_b": "吐槽反應",
+    "ch1_r2_l1_c": "吐槽反應",
+    "ch1_r2_l2_listen": "吐槽反應",
+    "ch1_r2_l2_hint": "吐槽反應",
+    "ch1_r2_l2_b": "吐槽反應",
+    "ch1_r2_l2_c": "吐槽反應",
+    "ch1_r2_l3_listen": "吐槽反應",
+    "ch1_r2_l3_hint": "吐槽反應",
+    "ch1_r2_l3_a": "吐槽反應",
+    "ch1_r2_l3_b": "吐槽反應",
+    "ch1_r2_l3_c": "吐槽反應",
+    "ch1_r2_placard": "伊莉莎白的牌子",
+    "ch1_r2_give_up": "吐槽反應",
+    "ch1_r2_timeout": "吐槽反應",
+    "ch1_r2_clear": "第二回合結束",
+    "ch1_r2_hidden_sadaharu": "隱藏路線：定春的判決",
+    "ch1_r3_intro": "第三回合：兩人份的藉口",
+    "ch1_r3_combo": "吐槽連擊",
+    "ch1_r3_c1_a": "吐槽反應",
+    "ch1_r3_c1_b": "吐槽反應",
+    "ch1_r3_c1_c": "吐槽反應",
+    "ch1_r3_c1_hint": "吐槽反應",
+    "ch1_r3_c2_a": "吐槽反應",
+    "ch1_r3_c2_b": "吐槽反應",
+    "ch1_r3_c2_c": "吐槽反應",
+    "ch1_r3_c2_hint": "吐槽反應",
+    "ch1_r3_c3_a": "吐槽反應",
+    "ch1_r3_c3_b": "吐槽反應",
+    "ch1_r3_c3_c": "吐槽反應",
+    "ch1_r3_c3_hint": "吐槽反應",
+    "ch1_r3_c4_a": "吐槽反應",
+    "ch1_r3_c4_b": "吐槽反應",
+    "ch1_r3_c4_c": "吐槽反應",
+    "ch1_r3_c4_hint": "吐槽反應",
+    "ch1_r3_c5_hint": "吐槽反應",
+    "ch1_r3_give_up": "吐槽反應",
+    "ch1_r3_timeout": "吐槽反應",
+    "ch1_r3_qte_perfect": "最後的吐槽",
+    "ch1_r3_qte_early": "吐槽反應",
+    "ch1_r3_qte_late": "吐槽反應",
+    "ch1_r3_super": "超必殺：龜派氣功",
+    "ch1_r3_combo_bonus": "吐槽連擊 ×5",
+    "ch1_r3_combo_break": "連擊中斷",
+    "ch1_r3_clear": "第三回合結束",
+    "ch1_truth": "宣判",
+    "ch1_truth_hidden": "定春的牙印",
+    "ch1_truth_normal": "定春，對不起",
+    "ch1_verdict": "判決",
+    "ch1_twist": "薪水袋與定春",
+    "ch1_result": "～ 第一章 完 ～",
+    "ch1_game_over": "新八的本體已損毀",
+    "ch1_r1_retry": "備用的眼鏡",
+    "ch1_r2_retry": "備用的眼鏡",
+    "ch1_r3_retry": "備用的眼鏡"
+  },
+  "blocks": {
+    "ch1_living_room_search": {
+      "op": "investigate",
+      "id": "ch1_living_room_search",
+      "prompt": "調查客廳，找出牛奶去了哪裡。",
+      "bg": "yorozuya_living_room",
+      "label": "客廳",
+      "keep_cast": true,
+      "hotspots": [
+        {
+          "id": "desk_underside",
+          "label": "辦公桌底下",
+          "item": "milk_bottle",
+          "goto": "ch1_inspect_desk_underside",
+          "pos": [
+            0.5,
+            0.78
+          ],
+          "size": [
+            0.13,
+            0.12
+          ]
+        },
+        {
+          "id": "gintoki_mouth",
+          "label": "銀時的嘴角",
+          "item": "milk_trace",
+          "goto": "ch1_inspect_gintoki_mouth",
+          "character": "gintoki",
+          "art_region": [
+            0.36,
+            0.15,
+            0.14,
+            0.06
+          ]
+        },
+        {
+          "id": "sofa_underside",
+          "label": "沙發底下",
+          "item": "kagura_kombu",
+          "goto": "ch1_inspect_sofa_underside",
+          "pos": [
+            0.1,
+            0.8
+          ],
+          "size": [
+            0.13,
+            0.12
+          ]
+        },
+        {
+          "id": "floor_prints",
+          "label": "地板上的腳印",
+          "item": "sadaharu_footprint",
+          "goto": "ch1_inspect_floor_prints",
+          "pos": [
+            0.82,
+            0.84
+          ],
+          "size": [
+            0.13,
+            0.12
+          ]
+        }
+      ],
+      "talk": [
+        {
+          "id": "ch1_topic_1",
+          "label": "問銀時：昨晚幾點睡？",
+          "goto": "ch1_talk_1"
+        },
+        {
+          "id": "ch1_topic_2",
+          "label": "問神樂：昨晚吃了什麼？",
+          "goto": "ch1_talk_2"
+        },
+        {
+          "id": "ch1_topic_3",
+          "label": "問定春：你看到什麼？",
+          "goto": "ch1_talk_3"
+        }
+      ],
+      "places": [
+        {
+          "id": "kitchen",
+          "label": "廚房",
+          "bg": "yorozuya_kitchen",
+          "prompt": "查看冰箱，查完回到客廳。",
+          "hotspots": [
+            {
+              "id": "ch1_fridge",
+              "label": "冰箱",
+              "pos": [
+                0.45,
+                0.45
+              ],
+              "size": [
+                0.24,
+                0.3
+              ],
+              "goto": "ch1_kitchen_fridge",
+              "optional": true
+            }
+          ]
+        }
+      ]
+    },
+    "ch1_r1": {
+      "op": "boke_round",
+      "id": "ch1_r1",
+      "mode": "testimony",
+      "speaker": "gintoki",
+      "timer_seconds": 8,
+      "game_over": "ch1_game_over",
+      "retry": "ch1_r1_retry",
+      "clear": "ch1_r1_clear",
+      "lines": [
+        {
+          "id": "l1",
+          "text": "新八，先把拳頭放下。銀桑昨晚十點就睡了。",
+          "source_id": "M40",
+          "listen": "ch1_r1_l1_listen",
+          "hint": "ch1_r1_l1_hint",
+          "whiff": "ch1_r1_l1_whiff"
+        },
+        {
+          "id": "l2",
+          "text": "草莓牛奶那種小孩喝的東西，銀桑三年前就戒了。",
+          "source_id": "M41",
+          "listen": "ch1_r1_l2_listen",
+          "hint": "ch1_r1_l2_hint",
+          "slot": {
+            "timeout": "ch1_r1_timeout",
+            "options": [
+              {
+                "id": "a",
+                "label": "戒了的人，桌下怎麼有空瓶！",
+                "result": "perfect",
+                "goto": "ch1_r1_l2_a",
+                "require": "milk_bottle"
+              },
+              {
+                "id": "b",
+                "label": "你上禮拜才扛三瓶回來！",
+                "result": "weak",
+                "goto": "ch1_r1_l2_b"
+              },
+              {
+                "id": "c",
+                "label": "草莓牛奶才不是小孩喝的！",
+                "result": "fail",
+                "goto": "ch1_r1_l2_c"
+              },
+              {
+                "id": "d",
+                "label": "……（放棄吐槽）",
+                "result": "fail",
+                "goto": "ch1_r1_give_up"
+              }
+            ]
+          }
+        },
+        {
+          "id": "l3",
+          "text": "再說，冰箱是全家共用的。放進去的，就是大家的。",
+          "source_id": "M42",
+          "listen": "ch1_r1_l3_listen",
+          "hint": "ch1_r1_l3_hint",
+          "whiff": "ch1_r1_l3_whiff"
+        },
+        {
+          "id": "l4",
+          "text": "嘴角這個？牙膏啦。銀桑刷牙一向刷得很豪邁。",
+          "source_id": "M43",
+          "listen": "ch1_r1_l4_listen",
+          "hint": "ch1_r1_l4_hint",
+          "slot": {
+            "timeout": "ch1_r1_timeout",
+            "options": [
+              {
+                "id": "a",
+                "label": "那明明是草莓牛奶的味道！",
+                "result": "perfect",
+                "goto": "ch1_r1_l4_a",
+                "require": "milk_trace"
+              },
+              {
+                "id": "b",
+                "label": "刷牙刷到嘴角外面嗎！",
+                "result": "weak",
+                "goto": "ch1_r1_l4_b"
+              },
+              {
+                "id": "c",
+                "label": "原來是牙膏啊。",
+                "result": "fail",
+                "goto": "ch1_r1_l4_c"
+              },
+              {
+                "id": "d",
+                "label": "……（放棄吐槽）",
+                "result": "fail",
+                "goto": "ch1_r1_give_up"
+              }
+            ]
+          }
+        }
+      ],
+      "rules": {
+        "type_lines": true
+      }
+    },
+    "ch1_r2": {
+      "op": "boke_round",
+      "id": "ch1_r2",
+      "mode": "testimony",
+      "speaker": "kagura",
+      "timer_seconds": 8,
+      "game_over": "ch1_game_over",
+      "retry": "ch1_r2_retry",
+      "clear": "ch1_r2_clear",
+      "lines": [
+        {
+          "id": "l1",
+          "text": "我昨晚只吃了醋昆布。很乾，但我忍住沒喝任何東西阿魯。",
+          "source_id": "M54",
+          "listen": "ch1_r2_l1_listen",
+          "hint": "ch1_r2_l1_hint",
+          "slot": {
+            "timeout": "ch1_r2_timeout",
+            "options": [
+              {
+                "id": "a",
+                "label": "包裝裡的粉紅色是什麼！",
+                "result": "perfect",
+                "goto": "ch1_r2_l1_a",
+                "require": "kagura_kombu"
+              },
+              {
+                "id": "b",
+                "label": "吃醋昆布不喝水會渴吧！",
+                "result": "weak",
+                "goto": "ch1_r2_l1_b"
+              },
+              {
+                "id": "c",
+                "label": "神樂醬好能忍喔。",
+                "result": "fail",
+                "goto": "ch1_r2_l1_c"
+              },
+              {
+                "id": "d",
+                "label": "……（放棄吐槽）",
+                "result": "fail",
+                "goto": "ch1_r2_give_up"
+              }
+            ]
+          }
+        },
+        {
+          "id": "l2",
+          "text": "而且定春昨晚親口跟我說了：『牛奶是別人喝的，汪』阿魯。",
+          "source_id": "M55",
+          "listen": "ch1_r2_l2_listen",
+          "hint": "ch1_r2_l2_hint",
+          "slot": {
+            "timeout": "ch1_r2_timeout",
+            "options": [
+              {
+                "id": "b",
+                "label": "定春只會「汪」吧！",
+                "result": "weak",
+                "goto": "ch1_r2_l2_b"
+              },
+              {
+                "id": "c",
+                "label": "你翻譯得真好。",
+                "result": "fail",
+                "goto": "ch1_r2_l2_c"
+              },
+              {
+                "id": "d",
+                "label": "……（放棄吐槽）",
+                "result": "fail",
+                "goto": "ch1_r2_give_up"
+              }
+            ],
+            "placard": {
+              "text": "犯人是神樂",
+              "result": "perfect",
+              "goto": "ch1_r2_placard"
+            }
+          }
+        },
+        {
+          "id": "l3",
+          "text": "證據就是這排腳印！從冰箱走到定春的窩，犯人是定春阿魯！",
+          "source_id": "M56",
+          "listen": "ch1_r2_l3_listen",
+          "hint": "ch1_r2_l3_hint",
+          "slot": {
+            "timeout": "ch1_r2_timeout",
+            "options": [
+              {
+                "id": "a",
+                "label": "定春的腳比你的頭還大！",
+                "result": "perfect",
+                "goto": "ch1_r2_l3_a",
+                "require": "sadaharu_footprint"
+              },
+              {
+                "id": "b",
+                "label": "定春開不了冰箱吧！",
+                "result": "weak",
+                "goto": "ch1_r2_l3_b"
+              },
+              {
+                "id": "c",
+                "label": "定春，你怎麼可以這樣！",
+                "result": "fail",
+                "goto": "ch1_r2_l3_c"
+              },
+              {
+                "id": "d",
+                "label": "……（放棄吐槽）",
+                "result": "fail",
+                "goto": "ch1_r2_give_up",
+                "when": [
+                  {
+                    "require_caught": [
+                      "l1",
+                      "l2"
+                    ],
+                    "result": "hidden",
+                    "goto": "ch1_r2_hidden_sadaharu"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "rules": {
+        "type_lines": true
+      }
+    },
+    "ch1_r3": {
+      "op": "boke_round",
+      "id": "ch1_r3",
+      "mode": "combo",
+      "speaker": "gintoki",
+      "timer_seconds": 8,
+      "game_over": "ch1_game_over",
+      "retry": "ch1_r3_retry",
+      "clear": "ch1_r3_clear",
+      "rules": {
+        "combo_timers": [
+          8,
+          6,
+          5,
+          4
+        ],
+        "combo_bonus": "ch1_r3_combo_bonus",
+        "combo_break": "ch1_r3_combo_break",
+        "super": "ch1_r3_super",
+        "super_label": "龜派氣功！",
+        "type_lines": true
+      },
+      "lines": [
+        {
+          "id": "c1",
+          "speaker": "gintoki",
+          "text": "我們不是偷喝。是試毒。怕新八喝到壞掉的牛奶。",
+          "source_id": "M65",
+          "hint": "ch1_r3_c1_hint",
+          "slot": {
+            "timeout": "ch1_r3_timeout",
+            "options": [
+              {
+                "id": "a",
+                "label": "試毒試到一滴不剩嗎！",
+                "result": "perfect",
+                "goto": "ch1_r3_c1_a"
+              },
+              {
+                "id": "b",
+                "label": "那也該先問我一聲吧！",
+                "result": "weak",
+                "goto": "ch1_r3_c1_b"
+              },
+              {
+                "id": "c",
+                "label": "原來是為了我……",
+                "result": "fail",
+                "goto": "ch1_r3_c1_c"
+              },
+              {
+                "id": "d",
+                "label": "……（放棄吐槽）",
+                "result": "fail",
+                "goto": "ch1_r3_give_up"
+              }
+            ]
+          }
+        },
+        {
+          "id": "c2",
+          "speaker": "kagura",
+          "text": "試到一半發現沒毒，就安心地喝完了阿魯。",
+          "source_id": "M66",
+          "hint": "ch1_r3_c2_hint",
+          "slot": {
+            "timeout": "ch1_r3_timeout",
+            "options": [
+              {
+                "id": "a",
+                "label": "安心了就不用喝完吧！",
+                "result": "perfect",
+                "goto": "ch1_r3_c2_a"
+              },
+              {
+                "id": "b",
+                "label": "一半是你，一半是阿銀吧！",
+                "result": "weak",
+                "goto": "ch1_r3_c2_b"
+              },
+              {
+                "id": "c",
+                "label": "沒毒真是太好了。",
+                "result": "fail",
+                "goto": "ch1_r3_c2_c"
+              },
+              {
+                "id": "d",
+                "label": "……（放棄吐槽）",
+                "result": "fail",
+                "goto": "ch1_r3_give_up"
+              }
+            ]
+          }
+        },
+        {
+          "id": "c3",
+          "speaker": "gintoki",
+          "text": "而且銀桑是早上喝的。早上的牛奶是早餐，早餐是人權。",
+          "source_id": "M67",
+          "hint": "ch1_r3_c3_hint",
+          "slot": {
+            "timeout": "ch1_r3_timeout",
+            "options": [
+              {
+                "id": "a",
+                "label": "你說過半夜兩點開的冰箱！",
+                "result": "perfect",
+                "goto": "ch1_r3_c3_a",
+                "require": "gin_sleep_testimony"
+              },
+              {
+                "id": "b",
+                "label": "早餐也不能吃別人的！",
+                "result": "weak",
+                "goto": "ch1_r3_c3_b"
+              },
+              {
+                "id": "c",
+                "label": "早餐確實很重要呢。",
+                "result": "fail",
+                "goto": "ch1_r3_c3_c"
+              },
+              {
+                "id": "d",
+                "label": "……（放棄吐槽）",
+                "result": "fail",
+                "goto": "ch1_r3_give_up"
+              }
+            ]
+          }
+        },
+        {
+          "id": "c4",
+          "speaker": "kagura",
+          "text": "瓶子上寫著『新八』，我們以為那是牛奶的名字阿魯。",
+          "source_id": "M68",
+          "hint": "ch1_r3_c4_hint",
+          "slot": {
+            "timeout": "ch1_r3_timeout",
+            "options": [
+              {
+                "id": "a",
+                "label": "誰會幫牛奶取名叫新八！",
+                "result": "perfect",
+                "goto": "ch1_r3_c4_a"
+              },
+              {
+                "id": "b",
+                "label": "那是我的名字吧！",
+                "result": "weak",
+                "goto": "ch1_r3_c4_b"
+              },
+              {
+                "id": "c",
+                "label": "牛奶的名字好可愛。",
+                "result": "fail",
+                "goto": "ch1_r3_c4_c"
+              },
+              {
+                "id": "d",
+                "label": "……（放棄吐槽）",
+                "result": "fail",
+                "goto": "ch1_r3_give_up"
+              }
+            ]
+          }
+        },
+        {
+          "id": "c5",
+          "speaker": "gintoki+kagura",
+          "text": "所以錯的是——把名字寫在牛奶上的新八（阿魯）！",
+          "source_id": "M69",
+          "hint": "ch1_r3_c5_hint",
+          "slot": {
+            "qte": {
+              "window": 0.12,
+              "perfect": "ch1_r3_qte_perfect",
+              "early": "ch1_r3_qte_early",
+              "late": "ch1_r3_qte_late",
+              "late_after": 2.0,
+              "duration": 1.6
+            }
+          }
+        }
+      ]
+    },
+    "ch1_result": {
+      "op": "result",
+      "title": "～ 第一章 完 ～",
+      "hidden_total": 1,
+      "lines": {
+        "S": {
+          "speaker": "shinpachi",
+          "text": "一副眼鏡都沒碎……為什麼我還是什麼都沒拿到！？",
+          "source_id": "E-S"
+        },
+        "A": {
+          "speaker": "kagura",
+          "text": "這副眼鏡，今天還算有用阿魯。",
+          "source_id": "E-A"
+        },
+        "B": {
+          "speaker": "gintoki",
+          "text": "普通的吐槽，普通的眼鏡。明天也拜託了。",
+          "source_id": "E-B"
+        },
+        "C": {
+          "speaker": "otose",
+          "text": "冰箱也好，薪水也好，寫了名字不代表就是你的。",
+          "source_id": "E-C"
+        }
+      }
+    }
+  }
+}

@@ -58,6 +58,9 @@ const CHAPTER_RESULT_SCENE: PackedScene = preload("res://scenes/ui/chapter_resul
 const CHAPTER_SELECT_SCENE: PackedScene = preload("res://scenes/ui/chapter_select.tscn")
 const SETTINGS_SCENE: PackedScene = preload("res://scenes/ui/settings_panel.tscn")
 const SETTINGS_SCRIPT: Script = preload("res://scripts/settings.gd")
+const DialogueText: Script = preload("res://scripts/dialogue_text.gd")
+const StageMotion: Script = preload("res://scripts/stage_motion.gd")
+const ReadingRollback: Script = preload("res://scripts/reading_rollback.gd")
 ## A spot's size when the story gives none, as fractions of the picture.
 const DEFAULT_HOTSPOT_SIZE: Array = [0.12, 0.12]
 const SAVE_SLOTS_SCRIPT: Script = preload("res://scripts/save_slots.gd")
@@ -162,6 +165,7 @@ var _paper_textures: Dictionary = {}
 @onready var _popup_layer: Control = %PopupLayer
 ## shake / flash / cutin / freeze / bgm / se steps (scripts/stage_effects.gd).
 var _effects: StageEffects = null
+var _motion: StageMotion = null
 ## The mounted title_screen and menu_panel scenes; the buttons and dictionaries below point into them.
 var _title_screen: TitleScreen = null
 var _title_style_buttons: Dictionary = {}
@@ -172,7 +176,7 @@ var _sprites: Dictionary = {}
 var _tap_catcher: Control = null
 ## The mounted dialogue_box scene; the fields below point into it.
 var _dialog_panel: DialogueBox = null
-var _text_label: Label = null
+var _text_label: RichTextLabel = null
 var _name_plate: Control = null
 var _name_label: Label = null
 ## The mounted choice_sheet scene; it stands in for the dialogue box while options are up.
@@ -188,7 +192,7 @@ var _sheet_censor: bool = false
 var _sheet_super: bool = false
 var _previous_power: int = 0
 var _qte: QteRing = null
-var _end_box: HBoxContainer = null
+var _end_box: Control = null
 var _quickbar: Container = null
 var _log_button: Button = null
 var _auto_button: Button = null
@@ -231,6 +235,9 @@ var _investigate_collapsed: bool = false
 var _topic_buttons: Dictionary = {}
 ## How far each place of a search was panned ("<investigation>/<place>"), kept across its reactions.
 var _investigation_pans: Dictionary = {}
+var _cast_pan_origins: Dictionary = {}
+var _round_stages: Dictionary = {}
+var _investigation_home_casts: Dictionary = {}
 var _pan_key: String = ""
 ## The character scene holding a placard (elisabeth.tscn's `Placard`), if any.
 var _placard_holder: Control = null
@@ -245,7 +252,7 @@ var _game_over_retry_button: Button = null
 var _game_over: GameOverScreen = null
 
 var _slot_overlay: Control = null
-var _slot_panel: Panel = null
+var _slot_panel: Control = null
 var _slot_title: Label = null
 var _slot_page_label: Label = null
 var _slot_prev_button: Button = null
@@ -259,7 +266,7 @@ var _slot_card_times: Array[Label] = []
 var _slot_card_previews: Array[TextureRect] = []
 var _slot_visible_entries: Array[Dictionary] = []
 var _slot_confirmation_overlay: Control = null
-var _slot_confirmation_panel: Panel = null
+var _slot_confirmation_panel: Control = null
 var _slot_confirmation_label: Label = null
 var _slot_confirm_yes: Button = null
 var _slot_confirm_no: Button = null
@@ -275,7 +282,7 @@ var _safe_bottom: float = 0.0
 
 var _audio_players: Dictionary = {}
 var _audio_muted: bool = false
-var _ui_style_id: String = "cinema"
+var _ui_style_id: String = UI_STYLES_SCRIPT.DEFAULT_ID
 
 var _screen_mode: String = "title"
 var _mode_before_overlay: String = "story"
@@ -284,6 +291,10 @@ var _generation: int = 0
 var _line_generation: int = 0
 var _text_complete: bool = true
 var _full_text: String = ""
+var _line_plan: Dictionary = {}
+var _rollback: ReadingRollback = ReadingRollback.new()
+var _rolling_back: bool = false
+var _pending_round_mode: String = ""
 var _visible_text: String = ""
 var _current_speaker: String = ""
 var _current_line_key: String = ""
@@ -340,6 +351,9 @@ func _ready() -> void:
 	_load_story()
 	_build_audio()
 	_build_ui()
+	_motion = StageMotion.new()
+	add_child(_motion)
+	_motion.setup(_stage_area.get_node("%BackgroundGhost"), %SceneFade)
 	_apply_ui_style()
 	get_viewport().size_changed.connect(_layout)
 	_layout()
@@ -368,6 +382,8 @@ func _select_story_variant() -> void:
 		var config: ConfigFile = ConfigFile.new()
 		if config.load(STORY_CHOICE_PATH) == OK:
 			choice_id = str(config.get_value("story", "id", ""))
+	if choice_id.is_empty() and get_tree().current_scene == self:
+		choice_id = "chapter1"
 	for choice: Dictionary in _story_choices:
 		if choice["id"] == choice_id:
 			story_path = choice["path"]
@@ -449,7 +465,18 @@ func _on_setting_changed(key: String, value: int) -> void:
 	SETTINGS_SCRIPT.save_settings(settings_path, _settings)
 	if key.ends_with("_volume"):
 		_apply_audio_levels()
+	if key in ["font_size", "paper_opacity"]:
+		_apply_reading_settings()
 	_publish_qa_state()
+
+
+func _apply_reading_settings() -> void:
+	_dialog_panel.apply_reading_settings(SETTINGS_SCRIPT.FONT_SCALES[int(_settings.get("font_size", 1))],
+		SETTINGS_SCRIPT.PAPER_OPACITIES[int(_settings.get("paper_opacity", 2))])
+	if _command_op(_current_command) == "say":
+		_line_plan = DialogueText.compile(_dict_string(_current_command,"text"), _text_interval(),
+			_text_label.get_theme_font_size("normal_font_size"))
+		_set_visible_text(_visible_text, _text_complete)
 
 
 ## Settings volumes on every player; the 音效 switch in 目錄 silences all of them on top.
@@ -584,9 +611,12 @@ func _paper_backed(path: String) -> Texture2D:
 	return texture
 
 
-func _apply_background(background_id: String) -> void:
+func _apply_background(background_id: String, animate: bool = false) -> void:
 	if not _backgrounds.has(background_id):
 		return
+	var changing: bool = animate and not _skip and _motion != null and _background_rect != null and background_id != _current_bg_id
+	if changing:
+		_motion.capture_background(_background_rect)
 	var info: Dictionary = _backgrounds[background_id] as Dictionary
 	_current_bg_id = background_id
 	_place_tag.text = str(info.get("label", background_id))
@@ -606,6 +636,8 @@ func _apply_background(background_id: String) -> void:
 		_background_rect.texture = texture
 	for frame: TextureRect in _background_frames.values():
 		frame.visible = frame == _background_rect
+	if changing:
+		_motion.crossfade()
 
 
 func _build_sprites() -> void:
@@ -648,7 +680,7 @@ func _apply_character(command: Dictionary) -> void:
 		return
 	var sprite: Control = _sprites[actor_id] as Control
 	if not _dict_bool(command, "visible", true):
-		sprite.visible = false
+		_motion.character(sprite, "leave", _skip)
 	if command.has("expression"):
 		sprite.call("set_expression", _dict_string(command, "expression"))
 	if command.has("position"):
@@ -659,6 +691,7 @@ func _apply_character(command: Dictionary) -> void:
 		_layout_sprite(actor_id)
 		sprite.modulate = Color.WHITE
 		sprite.visible = true
+		_motion.character(sprite, "enter", _skip)
 
 
 func _build_dialogue() -> void:
@@ -673,18 +706,12 @@ func _build_dialogue() -> void:
 	_mount_dialogue_box()
 	_mount_choice_sheet()
 
-	_end_box = HBoxContainer.new()
-	_end_box.name = "EndButtons"
-	_end_box.add_theme_constant_override("separation", 28)
-	_end_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_end_box = preload("res://scenes/ui/end_controls.tscn").instantiate()
 	_dialog_layer.add_child(_end_box)
-	_restart_button = _make_button(_end_box, "重玩", 46)
+	_restart_button = _end_box.get_node("%Restart")
+	_end_title_button = _end_box.get_node("%EndTitle")
 	_restart_button.pressed.connect(_on_restart_pressed)
-	_end_title_button = _make_button(_end_box, "回標題", 46)
 	_end_title_button.pressed.connect(_show_title)
-	for button: Button in [_restart_button, _end_title_button]:
-		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		button.custom_minimum_size.y = 160.0
 
 
 
@@ -694,6 +721,8 @@ func _mount_dialogue_box() -> void:
 	var old: DialogueBox = _dialog_panel
 	_dialog_panel = (DIALOGUE_SCENES[_ui_style_id] as PackedScene).instantiate() as DialogueBox
 	_dialog_layer.add_child(_dialog_panel)
+	_dialog_panel.apply_reading_settings(SETTINGS_SCRIPT.FONT_SCALES[int(_settings.get("font_size",1))],
+		SETTINGS_SCRIPT.PAPER_OPACITIES[int(_settings.get("paper_opacity",2))])
 	_dialog_layer.move_child(_dialog_panel, _tap_catcher.get_index() + 1)
 	_text_label = _dialog_panel.text
 	_name_plate = _dialog_panel.speaker_row
@@ -706,6 +735,9 @@ func _mount_dialogue_box() -> void:
 	_dialog_panel.menu_pressed.connect(_open_menu)
 	_dialog_panel.log_pressed.connect(_open_log)
 	_dialog_panel.auto_pressed.connect(func() -> void: _set_auto(not _auto))
+	_dialog_panel.skip_pressed.connect(func() -> void:
+		if _screen_mode == "story":
+			_set_skip(not _skip))
 	_dialog_panel.advance_pressed.connect(_on_screen_tap)
 	_dialog_panel.collapse_pressed.connect(_set_investigation_collapsed.bind(true))
 	_investigation_continue_button = _dialog_panel.investigation_continue
@@ -735,7 +767,7 @@ func _mount_dialogue_box() -> void:
 	_boke_controls.visible = old.round_controls.visible
 	_boke_line_label.text = old.boke_line_index.text
 	_dialog_panel.visible = old.visible
-	_auto_button.disabled = old.auto_button.disabled
+	_dialog_panel.set_reading_enabled(not old.auto_button.disabled)
 	_advance_button.visible = old.advance_button.visible
 	_dialog_panel.set_auto(_auto)
 	_dialog_panel.set_tone(_text_tone)
@@ -846,6 +878,12 @@ func _on_menu_row_pressed(row_id: String) -> void:
 			_close_menu()
 		"save", "load":
 			_open_slot_picker(row_id)
+		"rollback":
+			_rollback_line()
+		"quick_save":
+			_quick_save()
+		"quick_load":
+			_quick_load()
 		"material":
 			_open_case_file("materials")
 		"profile":
@@ -867,6 +905,9 @@ func _on_menu_row_pressed(row_id: String) -> void:
 func _refresh_menu_rows() -> void:
 	var from_mode: String = _mode_before_overlay if _screen_mode == "menu" else _screen_mode
 	(_menu_items["skip"] as Button).disabled = from_mode != "story"
+	(_menu_items["rollback"] as Button).disabled = from_mode != "story" or not _rollback.available()
+	(_menu_items["quick_save"] as Button).disabled = not _saveable_current_state()
+	(_menu_items["quick_load"] as Button).disabled = _read_save_payload(SAVE_SLOTS_SCRIPT.quick_path(save_path)).is_empty()
 	for key: String in ["material", "profile"]:
 		(_menu_items[key] as Button).visible = _phase3_enabled
 	_menu_overlay.set_row_hint("mute", "關" if _audio_muted else "開")
@@ -883,29 +924,13 @@ func _fit_menu() -> void:
 
 
 func _build_log() -> void:
-	_log_overlay = Panel.new()
-	_log_overlay.name = "LogOverlay"
-	_log_overlay.visible = false
-	_log_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
-	_log_overlay.set_meta("ui_style_role", "log")
-	_log_overlay.add_theme_stylebox_override("panel", _make_style(Color(0.04, 0.05, 0.11, 0.96), COLOR_GOLD, 0, 0))
+	_log_overlay = preload("res://scenes/ui/dialogue_log.tscn").instantiate()
 	_popup_layer.add_child(_log_overlay)
-	_log_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-
-	var title: Label = _make_label(_log_overlay, "對話紀錄", 56, COLOR_GOLD)
-	title.name = "LogTitle"
-	_log_close = _make_button(_log_overlay, "關閉", 42)
-	_log_close.name = "LogClose"
+	_log_overlay.visible = false
+	_log_close = _log_overlay.get_node("%LogClose")
+	_log_scroll = _log_overlay.get_node("%LogScroll")
+	_log_entries = _log_overlay.get_node("%LogEntries")
 	_log_close.pressed.connect(_close_log)
-
-	_log_scroll = ScrollContainer.new()
-	_log_scroll.name = "LogScroll"
-	_log_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	_log_overlay.add_child(_log_scroll)
-	_log_entries = VBoxContainer.new()
-	_log_entries.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	_log_entries.add_theme_constant_override("separation", 28)
-	_log_scroll.add_child(_log_entries)
 
 
 func _build_toast() -> void:
@@ -956,102 +981,43 @@ func _refresh_title() -> void:
 
 
 func _build_slot_picker() -> void:
-	_slot_overlay = Control.new()
-	_slot_overlay.name = "SaveSlotOverlay"
-	_slot_overlay.visible = false
-	_slot_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	_slot_overlay = preload("res://scenes/ui/save_slots_panel.tscn").instantiate()
 	_game.add_child(_slot_overlay)
-	_slot_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-
-	var dim: ColorRect = ColorRect.new()
-	dim.name = "SlotDim"
-	dim.color = Color(0.015, 0.02, 0.06, 0.88)
-	dim.mouse_filter = Control.MOUSE_FILTER_STOP
-	dim.gui_input.connect(func(event: InputEvent) -> void:
-		if event is InputEventMouseButton and not event.is_pressed() \
-				and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT:
-			_close_slot_picker())
-	_slot_overlay.add_child(dim)
-	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-
-	_slot_panel = Panel.new()
-	_slot_panel.name = "SlotPanel"
-	_slot_panel.mouse_filter = Control.MOUSE_FILTER_STOP
-	_slot_panel.set_meta("ui_style_role", "slots")
-	_slot_panel.add_theme_stylebox_override("panel", _make_style(Color(0.035, 0.045, 0.09, 0.96), COLOR_BUTTON_BORDER, 12, 0))
-	_slot_overlay.add_child(_slot_panel)
-	_slot_title = _make_label(_slot_panel, "存檔位", 44, COLOR_GOLD)
-	_slot_title.name = "SlotTitle"
-	_slot_page_label = _make_label(_slot_panel, "1 / 3", 30, COLOR_TEXT_SOFT)
-	_slot_page_label.name = "SlotPage"
-	_slot_close_button = _make_button(_slot_panel, "關閉", 30)
-	_slot_close_button.name = "SlotClose"
+	_slot_overlay.visible = false
+	_slot_panel = _slot_overlay.get_node("%SlotPanel")
+	_slot_title = _slot_overlay.get_node("%SlotTitle")
+	_slot_page_label = _slot_overlay.get_node("%SlotPage")
+	_slot_close_button = _slot_overlay.get_node("%SlotClose")
+	_slot_prev_button = _slot_overlay.get_node("%SlotPrev")
+	_slot_next_button = _slot_overlay.get_node("%SlotNext")
+	_slot_auto_button = _slot_overlay.get_node("%SlotAuto")
 	_slot_close_button.pressed.connect(_close_slot_picker)
-	_slot_prev_button = _make_button(_slot_panel, "‹", 44)
-	_slot_prev_button.name = "SlotPrev"
 	_slot_prev_button.pressed.connect(func() -> void: _change_slot_page(-1))
-	_slot_next_button = _make_button(_slot_panel, "›", 44)
-	_slot_next_button.name = "SlotNext"
 	_slot_next_button.pressed.connect(func() -> void: _change_slot_page(1))
-	_slot_auto_button = _make_button(_slot_panel, "繼續自動存檔", 30)
-	_slot_auto_button.name = "SlotAuto"
-	_set_button_style(_slot_auto_button, "primary")
 	_slot_auto_button.pressed.connect(_load_autosave_from_picker)
-
-	for local_index: int in range(SAVE_SLOTS_SCRIPT.PAGE_SIZE):
-		var card: Button = _make_button(_slot_panel, "", 28)
-		card.name = "SlotCard%d" % (local_index + 1)
-		_set_button_style(card, "slot_card")
+	_slot_overlay.get_node("%SlotDim").gui_input.connect(func(event: InputEvent) -> void:
+		if event is InputEventMouseButton and not event.is_pressed() and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT:
+			_close_slot_picker())
+	for local_index in SAVE_SLOTS_SCRIPT.PAGE_SIZE:
+		var card: Button = _slot_overlay.get_node("%Cards").get_child(local_index)
 		card.pressed.connect(_on_slot_card_pressed.bind(local_index))
-		var number_label: Label = _make_label(card, "", 28, COLOR_GOLD)
-		var title_label: Label = _make_label(card, "", 24, COLOR_TEXT)
-		title_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		var time_label: Label = _make_label(card, "", 18, COLOR_TEXT_SOFT)
-		var preview: TextureRect = TextureRect.new()
-		preview.name = "Preview"
-		preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		preview.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-		card.add_child(preview)
 		_slot_card_buttons.append(card)
-		_slot_card_numbers.append(number_label)
-		_slot_card_titles.append(title_label)
-		_slot_card_times.append(time_label)
-		_slot_card_previews.append(preview)
-
-	_slot_confirmation_overlay = Control.new()
-	_slot_confirmation_overlay.name = "SlotConfirmationOverlay"
+		_slot_card_numbers.append(card.get_node("%Number"))
+		_slot_card_titles.append(card.get_node("%SlotTitle"))
+		_slot_card_times.append(card.get_node("%SavedTime"))
+		_slot_card_previews.append(card.get_node("%Preview"))
+	_slot_confirmation_overlay = _slot_overlay.get_node("SlotConfirmationOverlay")
 	_slot_confirmation_overlay.visible = false
-	_slot_confirmation_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
-	_slot_overlay.add_child(_slot_confirmation_overlay)
-	_slot_confirmation_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	var confirm_dim: ColorRect = ColorRect.new()
-	confirm_dim.color = Color(0.0, 0.0, 0.0, 0.68)
-	confirm_dim.mouse_filter = Control.MOUSE_FILTER_STOP
-	confirm_dim.gui_input.connect(func(event: InputEvent) -> void:
-		if event is InputEventMouseButton and not event.is_pressed() \
-				and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT:
-			_cancel_slot_confirmation())
-	_slot_confirmation_overlay.add_child(confirm_dim)
-	confirm_dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_slot_confirmation_panel = Panel.new()
-	_slot_confirmation_panel.name = "OverwriteConfirmation"
-	_slot_confirmation_panel.mouse_filter = Control.MOUSE_FILTER_STOP
-	_slot_confirmation_panel.set_meta("ui_style_role", "confirmation")
-	_slot_confirmation_panel.add_theme_stylebox_override("panel", _make_style(Color(0.055, 0.065, 0.12, 0.98), COLOR_BUTTON_BORDER, 12, 0))
-	_slot_confirmation_overlay.add_child(_slot_confirmation_panel)
-	_slot_confirmation_label = _make_label(_slot_confirmation_panel, "覆寫這個存檔位？", 34, COLOR_TEXT)
-	_slot_confirmation_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_slot_confirm_yes = _make_button(_slot_confirmation_panel, "覆寫", 30)
-	_slot_confirm_yes.name = "SlotConfirmYes"
-	_set_button_style(_slot_confirm_yes, "danger_action")
+	_slot_confirmation_panel = _slot_confirmation_overlay.get_node("%ConfirmationPanel")
+	_slot_confirmation_label = _slot_confirmation_overlay.get_node("%Question")
+	_slot_confirm_yes = _slot_confirmation_overlay.get_node("%SlotConfirmYes")
+	_slot_confirm_no = _slot_confirmation_overlay.get_node("%SlotConfirmNo")
 	_slot_confirm_yes.pressed.connect(_confirm_slot_overwrite)
-	_slot_confirm_no = _make_button(_slot_confirmation_panel, "返回", 30)
-	_slot_confirm_no.name = "SlotConfirmNo"
 	_slot_confirm_no.pressed.connect(_cancel_slot_confirmation)
+	_slot_confirmation_overlay.get_node("%Dim").gui_input.connect(func(event: InputEvent) -> void:
+		if event is InputEventMouseButton and not event.is_pressed() and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT:
+			_cancel_slot_confirmation())
 
-
-# ---------------------------------------------------------------- 版面
 
 func _layout() -> void:
 	if _game == null:
@@ -1080,8 +1046,7 @@ func _layout() -> void:
 	_stage_bottom = dialog_y
 	_stage_area.offset_bottom = dialog_y - height
 
-	_end_box.position = Vector2(80.0, dialog_y - 56.0 - 160.0)
-	_end_box.size = Vector2(width - 160.0, 160.0)
+	_fit_full_area(_end_box)
 
 	for actor_id: String in _sprites.keys():
 		_layout_sprite(actor_id)
@@ -1091,12 +1056,7 @@ func _layout() -> void:
 	_fit_full_area(_chapter_result)
 	_fit_full_area(_comedy_layer)
 	_fit_bottom_panel(_title_screen.card_area)
-	_log_overlay.get_node("LogTitle").position = Vector2(56.0, top + 24.0)
-	_log_close.position = Vector2(width - EDGE - 220.0, top + 12.0)
-	_log_close.size = Vector2(220.0, 100.0)
-	_log_scroll.position = Vector2(56.0, top + 150.0)
-	_log_scroll.size = Vector2(width - 112.0, bottom - (top + 150.0))
-	_log_entries.custom_minimum_size = Vector2(width - 140.0, 0.0)
+	_fit_panel_area(_log_overlay, Rect2(0.0,top,width,bottom-top))
 
 	_layout_slot_picker(width, height, top, bottom)
 	_case_file_panel.call("layout", Rect2(0.0, top, width, bottom - top))
@@ -1181,66 +1141,8 @@ func _anchored_rect(node: Control, parent_rect: Rect2) -> Rect2:
 
 
 func _layout_slot_picker(width: float, height: float, top: float, bottom: float) -> void:
-	if _slot_panel == null:
-		return
-	var panel_width: float = minf(width - EDGE * 2.0, 960.0)
-	var usable_height: float = maxf(320.0, bottom - top)
-	var panel_height: float = minf(usable_height, 1440.0)
-	_slot_panel.size = Vector2(panel_width, panel_height)
-	_slot_panel.position = Vector2((width - panel_width) * 0.5, top + (usable_height - panel_height) * 0.5)
-	_slot_title.position = Vector2(28.0, 22.0)
-	_slot_title.size = Vector2(panel_width - 220.0, 58.0)
-	_slot_close_button.position = Vector2(panel_width - 142.0, 18.0)
-	_slot_close_button.size = Vector2(112.0, 64.0)
-	_slot_prev_button.position = Vector2(panel_width * 0.5 - 138.0, 92.0)
-	_slot_prev_button.size = Vector2(72.0, 60.0)
-	_slot_page_label.position = Vector2(panel_width * 0.5 - 54.0, 98.0)
-	_slot_page_label.size = Vector2(108.0, 48.0)
-	_slot_page_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_slot_next_button.position = Vector2(panel_width * 0.5 + 66.0, 92.0)
-	_slot_next_button.size = Vector2(72.0, 60.0)
-	var content_margin: float = 24.0
-	var card_gap: float = 14.0
-	var card_width: float = maxf(0.0, (panel_width - content_margin * 2.0 - card_gap) * 0.5)
-	var footer_height: float = 104.0
-	var card_top: float = 164.0
-	var card_area_height: float = maxf(120.0, panel_height - card_top - footer_height - 16.0)
-	var card_height: float = maxf(40.0, (card_area_height - card_gap * 2.0) / 3.0)
-	for local_index: int in range(_slot_card_buttons.size()):
-		var column: int = local_index % 2
-		var row: int = local_index / 2
-		var card: Button = _slot_card_buttons[local_index]
-		card.position = Vector2(content_margin + column * (card_width + card_gap), card_top + row * (card_height + card_gap))
-		card.size = Vector2(card_width, card_height)
-		var number_label: Label = _slot_card_numbers[local_index]
-		number_label.position = Vector2(12.0, 6.0)
-		number_label.size = Vector2(50.0, 38.0)
-		number_label.add_theme_font_size_override("font_size", 26)
-		var title_label: Label = _slot_card_titles[local_index]
-		var preview: TextureRect = _slot_card_previews[local_index]
-		var preview_width: float = clampf(card_width * 0.3, 44.0, 108.0)
-		preview.position = Vector2(12.0, 12.0)
-		preview.size = Vector2(preview_width, maxf(0.0, card_height - 24.0))
-		preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		title_label.position = Vector2(preview_width + 22.0, 10.0)
-		title_label.size = Vector2(maxf(0.0, card_width - preview_width - 34.0), maxf(24.0, card_height - 58.0))
-		title_label.add_theme_font_size_override("font_size", 20 if width < 600.0 else 27)
-		var time_label: Label = _slot_card_times[local_index]
-		time_label.position = Vector2(preview_width + 22.0, card_height - 36.0)
-		time_label.size = Vector2(maxf(0.0, card_width - preview_width - 34.0), 28.0)
-		time_label.add_theme_font_size_override("font_size", 17 if width < 600.0 else 19)
-	var footer_y: float = panel_height - 86.0
-	_slot_auto_button.position = Vector2(content_margin, footer_y)
-	_slot_auto_button.size = Vector2(minf(300.0, panel_width * 0.42), 62.0)
-	_slot_confirmation_panel.size = Vector2(minf(panel_width - 36.0, 620.0), 250.0)
-	_slot_confirmation_panel.position = Vector2((width - _slot_confirmation_panel.size.x) * 0.5,
-		(height - _slot_confirmation_panel.size.y) * 0.5)
-	_slot_confirmation_label.position = Vector2(24.0, 34.0)
-	_slot_confirmation_label.size = Vector2(_slot_confirmation_panel.size.x - 48.0, 88.0)
-	_slot_confirm_no.position = Vector2(40.0, 152.0)
-	_slot_confirm_no.size = Vector2((_slot_confirmation_panel.size.x - 100.0) * 0.5, 64.0)
-	_slot_confirm_yes.position = Vector2(60.0 + _slot_confirm_no.size.x, 152.0)
-	_slot_confirm_yes.size = _slot_confirm_no.size
+	if _slot_overlay != null:
+		_fit_panel_area(_slot_overlay, Rect2(0.0,top,width,bottom-top))
 
 
 func _read_safe_area(viewport_size: Vector2) -> void:
@@ -1307,6 +1209,8 @@ func _on_restart_pressed() -> void:
 
 
 func _start_new_story() -> void:
+	_round_stages.clear()
+	_rollback.clear()
 	_previous_power = 0
 	_cancel_generation()
 	_close_overlays()
@@ -1320,6 +1224,7 @@ func _start_new_story() -> void:
 	_last_boke_result = ""
 	_clear_hotspots()
 	_investigation_pans.clear()
+	_investigation_home_casts.clear()
 	_story_error = ""
 	_set_auto(false)
 	_set_skip(false)
@@ -1359,26 +1264,31 @@ func _drive_story(generation: int) -> void:
 				_present_say(command, false)
 				return
 			"choice":
+				_rollback.clear()
 				_story_busy = false
 				_present_choice(command)
 				_save_game()
 				return
 			"end":
+				_rollback.clear()
 				_story_busy = false
 				_present_end(command)
 				_save_game()
 				return
 			"result":
+				_rollback.clear()
 				_story_busy = false
 				_present_result(command)
 				_save_game()
 				return
 			"investigate":
+				_rollback.clear()
 				_story_busy = false
 				_present_investigation(command, false)
 				_save_game()
 				return
 			"boke_round":
+				_rollback.clear()
 				_story_busy = false
 				_present_boke_round(command, false)
 				_save_game()
@@ -1388,13 +1298,13 @@ func _drive_story(generation: int) -> void:
 			"bg":
 				if _dict_string(command, "id") != _current_bg_id:
 					_clear_stage()  # a new scene starts with nobody on stage
-				_apply_background(_dict_string(command, "id"))
+				_apply_background(_dict_string(command, "id"), true)
 			"char":
 				_apply_character(command)
 			"show":
 				_sprite(_dict_string(command, "actor")).visible = true
 			"hide":
-				_sprite(_dict_string(command, "actor")).visible = false
+				_motion.character(_sprite(_dict_string(command, "actor")), "leave", _skip)
 			"expression":
 				_sprite(_dict_string(command, "actor")).call("set_expression", _dict_string(command, "value", "neutral"))
 			"wait":
@@ -1408,6 +1318,12 @@ func _drive_story(generation: int) -> void:
 				var hold: float = _effects.play(command, _skip)
 				if hold > 0.0:
 					await get_tree().create_timer(hold).timeout
+					if generation != _generation:
+						return
+			"fade":
+				var fade_time: float = _motion.fade(_dict_string(command, "direction", "out"), float(command.get("duration", 0.3)), _skip)
+				if fade_time > 0.0:
+					await get_tree().create_timer(fade_time).timeout
 					if generation != _generation:
 						return
 			"comedy":
@@ -1442,6 +1358,8 @@ func _comedy_dialog_rect() -> Rect2:
 
 
 func _advance_current_line() -> void:
+	if _command_op(_runner_current()) == "say":
+		_rollback.remember(_build_save_payload(""))
 	_line_generation += 1
 	_story_busy = true
 	var advanced: Variant = _runner.call("advance")
@@ -1452,14 +1370,17 @@ func _advance_current_line() -> void:
 
 
 func _present_say(command: Dictionary, restored: bool) -> void:
+	_pending_round_mode = ""
 	_current_command = command.duplicate(true)
 	_clear_hotspots()
 	_investigation_continue_button.visible = false
 	_boke_controls.visible = false
 	_game_over_retry_button.visible = false
-	_auto_button.disabled = false
+	_dialog_panel.set_reading_enabled(true)
 	_current_speaker = _dict_string(command, "speaker", "narrator")
-	_full_text = _dict_string(command, "text")
+	_line_plan = DialogueText.compile(_dict_string(command, "text"), _text_interval(),
+		_text_label.get_theme_font_size("normal_font_size"))
+	_full_text = str(_line_plan["plain"])
 	_current_line_key = _line_key(command, "say")
 	_line_logged = _history_has_key(_current_line_key)
 	_line_generation += 1
@@ -1507,10 +1428,21 @@ func _present_investigation(command: Dictionary, restored: bool) -> void:
 	_end_box.visible = false
 	_investigation_continue_button.visible = true
 	_boke_controls.visible = false
-	_auto_button.disabled = true
+	_dialog_panel.set_reading_enabled(false)
 	_set_name_plate("shinpachi", true)
 	if _dict_bool(command, "keep_cast"):
-		for sprite: Control in _sprites.values():
+		var home_key: String = _dict_string(command, "id", _dict_string(command, "node"))
+		var place: String = _dict_string(command, "place", "home")
+		if not _investigation_home_casts.has(home_key) or (place == "home" and (_dict_string(command, "bg").is_empty() or _current_bg_id == _dict_string(command, "bg"))):
+			_investigation_home_casts[home_key] = (_build_save_payload("").get("sprites", {}) as Dictionary).duplicate(true)
+		var home_cast: Dictionary = _investigation_home_casts[home_key]
+		for actor_id: String in _sprites:
+			var sprite: Control = _sprites[actor_id]
+			var pose: Dictionary = home_cast.get(actor_id, {})
+			sprite.visible = place == "home" and bool(pose.get("visible", false))
+			if sprite.visible:
+				_actor_slots[actor_id] = str(pose.get("position", "center"))
+				sprite.call("set_expression", str(pose.get("expression", "neutral")))
 			sprite.modulate = Color.WHITE  # nobody is in focus while searching: any of them can be tapped
 	else:
 		_clear_stage()  # the player searches the room itself
@@ -1520,8 +1452,9 @@ func _present_investigation(command: Dictionary, restored: bool) -> void:
 	_set_text_tone("thought")
 	_layout()
 	_set_visible_text(_full_text, true)
-	_build_hotspots(command)
-	_show_topics(command)
+	_current_command = _runner_current()
+	_build_hotspots(_current_command)
+	_show_topics(_current_command)
 	_update_investigation_controls()
 	if not _line_logged:
 		_append_history({"key": _current_line_key, "kind": "investigate", "speaker": "shinpachi",
@@ -1551,6 +1484,10 @@ func _set_investigation_collapsed(value: bool) -> void:
 func _build_hotspots(command: Dictionary) -> void:
 	_clear_hotspots()
 	_pan_key = "%s/%s" % [_dict_string(command, "id"), _dict_string(command, "place", "home")]
+	if bool(command.get("keep_cast",false)):
+		for actor: String in _sprites.keys():
+			if (_sprites[actor] as Control).visible:
+				_cast_pan_origins[actor] = (_sprites[actor] as Control).position.x
 	_pan = float(_investigation_pans.get(_pan_key, 0.0))  # back from a reaction: where the player left it
 	var frame: TextureRect = _background_rect
 	_frame_offsets = [frame.offset_left, frame.offset_top, frame.offset_right, frame.offset_bottom]
@@ -1616,6 +1553,10 @@ func _place_cast_hotspots() -> void:
 		if spot == null or spot.get_parent() != _interaction_layer:
 			continue
 		var portrait: Rect2 = (_sprites[_dict_string(hotspot, "character")] as Control).call("art_rect")
+		if hotspot.has("art_region"):
+			var region: Array = hotspot["art_region"]
+			portrait = Rect2(portrait.position + portrait.size * Vector2(region[0],region[1]),
+				portrait.size * Vector2(region[2],region[3]))
 		var shown: Rect2 = portrait.intersection(screen)
 		if not shown.has_area():
 			shown = portrait  # wholly off screen: nothing to clip, and nobody can tap it
@@ -1634,9 +1575,15 @@ func _set_pan(value: float) -> void:
 	frame.offset_right = _picture.end.x + _pan - end.x
 	frame.offset_top = _picture.position.y - start.y
 	frame.offset_bottom = _picture.end.y - end.y
+	for actor: String in _cast_pan_origins.keys():
+		(_sprites[actor] as Control).position.x = float(_cast_pan_origins[actor]) + _pan
+	_place_cast_hotspots()
 
 
 func _clear_hotspots() -> void:
+	for actor: String in _cast_pan_origins.keys():
+		(_sprites[actor] as Control).position.x = float(_cast_pan_origins[actor])
+	_cast_pan_origins.clear()
 	if not _pan_key.is_empty() and _hotspot_layer != null:
 		_investigation_pans[_pan_key] = _pan
 	_pan_key = ""
@@ -1806,6 +1753,13 @@ func _on_investigation_continue_pressed() -> void:
 
 
 func _present_boke_round(command: Dictionary, restored: bool, requested_ui_mode: String = "") -> void:
+	_pending_round_mode = ""
+	_line_generation += 1
+	var round_id: String = _dict_string(command,"id")
+	if not _round_stages.has(round_id):
+		var stage_payload: Dictionary = _build_save_payload("")
+		_round_stages[round_id] = {"background": stage_payload.get("background",_current_bg_id),
+			"sprites": stage_payload.get("sprites",{}).duplicate(true), "bgm": _effects.current_bgm}
 	var target_ui_mode: String = requested_ui_mode
 	if target_ui_mode.is_empty():
 		target_ui_mode = _restored_boke_ui_mode if restored and not _restored_boke_ui_mode.is_empty() else "boke_round"
@@ -1828,17 +1782,28 @@ func _present_boke_round(command: Dictionary, restored: bool, requested_ui_mode:
 	_dialog_layer.visible = true
 	_dialog_panel.visible = true
 	_boke_controls.visible = not RoundView.automatic(command)
-	_auto_button.disabled = true
+	_dialog_panel.set_reading_enabled(false)
 	_set_name_plate(_current_speaker, false)
 	_focus_speaker(_current_speaker, "annoyed")
 	_layout()
-	_full_text = RoundView.text(command)
+	_line_plan = DialogueText.compile(RoundView.text(command), _text_interval(), _text_label.get_theme_font_size("normal_font_size"))
+	_full_text = str(_line_plan["plain"])
 	_set_text_tone("body")
 	_set_visible_text(_full_text, true)
 	_render_round_bar()
 	var line_index: int = int(command.get("line_index", 0))
 	_current_line_key = "%s:%s:%s" % [_line_key(command, "boke"), _dict_string(RoundView.line(command), "id"), line_index]
 	_line_logged = _history_has_key(_current_line_key)
+	var type_line: bool = bool((command.get("rules", {}) as Dictionary).get("type_lines", false)) and not _line_logged \
+		and (not restored or requested_ui_mode in ["", "boke_round"])
+	if type_line:
+		_pending_round_mode = target_ui_mode if RoundView.automatic(command) else ""
+		_boke_time_remaining = 0.0
+		_set_visible_text("", false)
+		_typewriter(_line_generation)
+		_refresh_phase3_hud()
+		_publish_qa_state()
+		return
 	if not _line_logged:
 		_append_history({"key": _current_line_key, "kind": "say", "speaker": _current_speaker, "text": _full_text})
 		_line_logged = true
@@ -1908,6 +1873,9 @@ func _present_tsukkomi_options(command: Dictionary, restored: bool) -> void:
 
 func _on_boke_tsukkomi_pressed() -> void:
 	if _screen_mode != "boke_round" or _story_busy:
+		return
+	if not _text_complete:
+		_complete_current_line()
 		return
 	match RoundView.action(_current_command):
 		"options":
@@ -2026,6 +1994,9 @@ func _set_boke_line(index: int) -> void:
 func _on_boke_listen_pressed() -> void:
 	if _screen_mode != "boke_round" or _story_busy:
 		return
+	if not _text_complete:
+		_complete_current_line()
+		return
 	if RoundView.is_v2(_current_command):
 		# The runner has jumped into the line's listen scene; play it, it leads back to the round.
 		if bool(_runner.call("listen_boke_line")):
@@ -2073,6 +2044,7 @@ func _resolve_boke_presentation(result: Dictionary, option_label: String = "", p
 	match _last_boke_result:
 		"perfect":
 			feedback = "完美吐槽！吐槽之力 +30"
+			_effects.play_perfect_voice(int((_runner.get("stats") as Dictionary).get("perfect", 1)))
 		"weak":
 			feedback = "普通吐槽！吐槽之力 +10"
 		"fail":
@@ -2107,12 +2079,26 @@ func _on_game_over_retry_pressed() -> void:
 	if not bool(_runner.call("retry_checkpoint")):
 		_show_toast(_runner_string("error_message", "目前沒有可重試的檢查點。"))
 		return
+	_cancel_generation()
+	_rollback.clear()
 	_boke_timer_round_id = ""
 	_boke_time_remaining = 0.0
 	_restored_boke_timer_remaining = -1.0
 	_restored_boke_ui_mode = ""
 	_previous_power = int((_runner.get("gameplay") as Dictionary).get("power", 0))
 	_last_boke_result = "retry"
+	var snapshot: Dictionary = _runner.call("snapshot")
+	var retry_round: String = str((snapshot.get("checkpoint",{}) as Dictionary).get("round_id",""))
+	var stage: Dictionary = _round_stages.get(retry_round,{})
+	if not stage.is_empty():
+		_apply_background(str(stage["background"]))
+		for actor: String in _sprites.keys():
+			var state: Dictionary = stage["sprites"].get(actor,{})
+			_actor_slots[actor] = str(state.get("position","center"))
+			(_sprites[actor] as Control).visible = bool(state.get("visible",false))
+			_sprites[actor].call("set_expression",str(state.get("expression","neutral")))
+			_layout_sprite(actor)
+		_effects.play_bgm(str(stage.get("bgm","")))
 	_story_busy = false
 	_screen_mode = "busy"
 	_game_over.visible = false
@@ -2126,11 +2112,25 @@ func _typewriter(token: int) -> void:
 	if _text_interval() <= 0.0:  # 瞬間: the whole line at once; the first tap advances
 		_complete_current_line()
 		return
-	for index: int in range(_visible_text.length(), _full_text.length()):
+	var plan: Dictionary = _line_plan if str(_line_plan.get("plain", "")) == _full_text else DialogueText.compile(_full_text, _text_interval())
+	for end: int in plan["ends"]:
+		if end <= _visible_text.length():
+			continue
 		if token != _line_generation:
 			return
-		_set_visible_text(_full_text.substr(0, index + 1), false)
-		await get_tree().create_timer(_text_interval()).timeout
+		var pause: float = DialogueText.before_delay(plan, _visible_text.length())
+		if pause > 0.0:
+			await get_tree().create_timer(pause).timeout
+			if token != _line_generation:
+				return
+		var cluster: String = _full_text.substr(_visible_text.length(), end - _visible_text.length())
+		_set_visible_text(_full_text.substr(0, end), false)
+		_effects.play_type_tick(_current_speaker, cluster, _dict_bool(_current_command, "thought"), _skip)
+		await get_tree().create_timer(DialogueText.after_delay(plan, end)).timeout
+	if token == _line_generation:
+		var final_pause: float = DialogueText.before_delay(plan, _full_text.length())
+		if final_pause > 0.0:
+			await get_tree().create_timer(final_pause).timeout
 	if token == _line_generation:
 		_complete_current_line()
 
@@ -2147,6 +2147,14 @@ func _complete_current_line() -> void:
 
 
 func _on_line_completed() -> void:
+	if _screen_mode == "boke_round" and not _pending_round_mode.is_empty():
+		var mode: String = _pending_round_mode
+		_pending_round_mode = ""
+		if mode == "qte":
+			_start_qte(_current_command)
+		else:
+			_present_tsukkomi_options(_current_command, false)
+		_save_game()
 	_publish_qa_state()
 	if _skip:
 		_skip_step(_line_generation)
@@ -2160,7 +2168,9 @@ func _set_visible_text(value: String, complete: bool) -> void:
 	_visible_text = value
 	_text_complete = complete
 	var typing: bool = _full_text.begins_with(value)
-	_text_label.text = _full_text if typing else value
+	var markup: String = str(_line_plan["rendered"]) if typing and _line_plan.has("rendered") and str(_line_plan.get("plain", "")) == _full_text else (_full_text if typing else value)
+	if _text_label.text != markup:
+		_text_label.text = markup
 	_text_label.visible_characters = value.length() if typing and not complete else -1
 	_advance_button.visible = _command_op(_current_command) == "say"  # not the screen mode: lines finish behind 目錄 too
 
@@ -2421,15 +2431,19 @@ func _focus_speaker(speaker: String, expression: String) -> void:
 		var talking: bool = speaking.has(actor_id)
 		sprite.modulate = Color.WHITE if talking or speaker == "narrator" else Color(0.5, 0.5, 0.56)
 		if talking:
+			var entering: bool = not sprite.visible
 			if not sprite.visible:
 				_layout_sprite(actor_id)
 				sprite.visible = true
 			_char_layer.move_child(sprite, -1)
 			if not expression.is_empty():
 				sprite.call("set_expression", expression)
+			_motion.character(sprite, "enter" if entering else "speak", _skip)
 
 
 func _clear_stage() -> void:
+	if _motion != null:
+		_motion.cancel_characters()
 	for sprite: Control in _sprites.values():
 		sprite.visible = false
 
@@ -2536,6 +2550,9 @@ func _on_screen_tap() -> void:
 	if _skip:
 		_set_skip(false)
 		return
+	if _screen_mode == "boke_round" and not _text_complete:
+		_complete_current_line()
+		return
 	if _screen_mode != "story" or _story_busy or _current_command.is_empty():
 		return
 	if _command_op(_current_command) != "say":
@@ -2574,6 +2591,8 @@ func _set_skip(value: bool) -> void:
 	_skip = value
 	if value:
 		_auto = false
+		_motion.reset()
+		_effects.stop_transients()
 		_comedy_layer.fast_forward()  # skipping does not wait for an overlay
 	_update_toggle_styles()
 	if value and _screen_mode == "story":
@@ -2587,7 +2606,7 @@ func _set_skip(value: bool) -> void:
 func _auto_step(token: int) -> void:
 	if _screen_mode != "story" or not _text_complete:
 		return
-	await get_tree().create_timer((AUTO_DELAY_SEC + _full_text.length() * AUTO_PER_CHAR_SEC)
+	await get_tree().create_timer((AUTO_DELAY_SEC + DialogueText.readable_count(_full_text) * AUTO_PER_CHAR_SEC)
 		* SETTINGS_SCRIPT.AUTO_FACTORS[int(_settings["auto_speed"])]).timeout
 	if _auto and token == _line_generation and _screen_mode == "story" and not _ui_hidden and not _story_busy:
 		_advance_current_line()
@@ -2602,6 +2621,7 @@ func _skip_step(token: int) -> void:
 func _update_toggle_styles() -> void:
 	if _dialog_panel != null:
 		_dialog_panel.set_auto(_auto)
+		_dialog_panel.set_skip(_skip)
 
 
 func _process(delta: float) -> void:
@@ -2664,21 +2684,23 @@ func _open_log() -> void:
 		return
 	_mode_before_overlay = _screen_mode
 	_screen_mode = "log"
-	for child: Node in _log_entries.get_children():
-		child.queue_free()
+	for old: Node in _log_entries.get_children():
+		_log_entries.remove_child(old)
+		old.queue_free()
 	for entry: Dictionary in _history:
-		var label: Label
-		if _dict_string(entry, "kind") == "choice":
-			label = _make_label(_log_entries, "▶ 選擇：%s" % _dict_string(entry, "text"), 40, COLOR_GOLD)
+		var row: Control = preload("res://scenes/ui/log_entry.tscn").instantiate()
+		_log_entries.add_child(row)
+		var heading: Label = row.get_node("%Speaker")
+		var text: Label = row.get_node("%Text")
+		text.text = _dict_string(entry,"text")
+		if _dict_string(entry,"kind") == "choice":
+			heading.text = "▶ 選擇"
 		else:
-			var speaker: String = _dict_string(entry, "speaker", "narrator")
-			var speaker_name: String = str((_actors.get(speaker, {}) as Dictionary).get("name", "旁白"))
-			if _dict_bool(entry, "thought"):
-				speaker_name += "・心聲"
-			label = _make_label(_log_entries, "%s\n%s" % [speaker_name, _dict_string(entry, "text")], 40,
-				COLOR_THOUGHT if _dict_bool(entry, "thought") else COLOR_TEXT)
-		label.autowrap_mode = TextServer.AUTOWRAP_ARBITRARY
-		label.custom_minimum_size = Vector2(_log_entries.custom_minimum_size.x, 0.0)
+			var names: PackedStringArray = []
+			for actor in _dict_string(entry,"speaker","narrator").split("+",false):
+				names.append(str((_actors.get(actor,{}) as Dictionary).get("name","旁白")))
+			heading.text = "、".join(names) + ("・心聲" if _dict_bool(entry,"thought") else "")
+		_apply_ui_style_recursive(row)
 	_log_overlay.visible = true
 	_refresh_phase3_hud()
 	_scroll_log_to_bottom()
@@ -2854,7 +2876,7 @@ func _cancel_slot_confirmation() -> void:
 func _write_manual_slot(slot_index: int) -> void:
 	var path: String = SAVE_SLOTS_SCRIPT.manual_path(save_path, slot_index)
 	var payload: Dictionary = _build_save_payload(_slot_preview_png)
-	if payload.is_empty() or not bool(SAVE_SLOTS_SCRIPT.write_atomic(path, payload)):
+	if payload.is_empty() or not bool(SAVE_SLOTS_SCRIPT.write_atomic(path, payload, _validate_save_payload)):
 		_show_toast("存檔失敗，原有資料已保留")
 		_refresh_slot_page()
 		_publish_qa_state()
@@ -3052,11 +3074,56 @@ func _on_case_file_material_used(option_id: String) -> void:
 
 # ---------------------------------------------------------------- 存讀檔
 
+func _rollback_line() -> bool:
+	var mode: String = _mode_before_overlay if _screen_mode == "menu" else _screen_mode
+	if mode != "story" or not _rollback.available():
+		return false
+	var payload: Dictionary = _rollback.take()
+	_rolling_back = true
+	var restored: bool = _apply_save_payload(payload)
+	_rolling_back = false
+	if not restored:
+		return false
+	_set_auto(false)
+	_set_skip(false)
+	_close_overlays()
+	_show_story_screen()
+	_render_restored_current()
+	_save_game()
+	_show_toast("已回到上一句")
+	return true
+
+
+func _quick_save() -> bool:
+	if not _saveable_current_state():
+		return false
+	var payload: Dictionary = _build_save_payload("")
+	var written: bool = SAVE_SLOTS_SCRIPT.write_atomic(SAVE_SLOTS_SCRIPT.quick_path(save_path), payload, _validate_save_payload)
+	_show_toast("已快速存檔" if written else "快速存檔失敗，原有資料已保留")
+	_refresh_menu_rows()
+	return written
+
+
+func _quick_load() -> bool:
+	var payload: Dictionary = _read_save_payload(SAVE_SLOTS_SCRIPT.quick_path(save_path))
+	if payload.is_empty() or not _apply_save_payload(payload):
+		_show_toast("尚無可讀取的快速存檔")
+		return false
+	_set_auto(false)
+	_set_skip(false)
+	_close_overlays()
+	_set_ui_hidden(false)
+	_show_story_screen()
+	_render_restored_current()
+	_save_game()
+	_show_toast("已快速讀檔")
+	return true
+
 func _save_game() -> bool:
 	if not _saveable_current_state():
 		return false
 	var payload: Dictionary = _build_save_payload("")
-	return not payload.is_empty() and bool(SAVE_SLOTS_SCRIPT.write_atomic(save_path, payload))
+	return not payload.is_empty() and bool(SAVE_SLOTS_SCRIPT.write_atomic(save_path, payload, _validate_save_payload))
 
 
 func _saveable_current_state() -> bool:
@@ -3087,6 +3154,9 @@ func _build_save_payload(preview_png: String) -> Dictionary:
 		"saved_at": Time.get_datetime_string_from_system(false, false),
 		"preview_png": preview_png,
 		"bgm": _effects.current_bgm,
+		"round_stages": _round_stages.duplicate(true),
+		"investigation_pans": _investigation_pans.duplicate(true),
+		"investigation_home_casts": _investigation_home_casts.duplicate(true),
 	}
 	if _command_op(current) == "boke_round":
 		var boke_ui_mode: String = _effective_boke_ui_mode()
@@ -3123,6 +3193,16 @@ func _read_raw_save_payload(path: String) -> Dictionary:
 	var parsed: Variant = file.get_var(false)
 	file.close()
 	return (parsed as Dictionary).duplicate(true) if parsed is Dictionary else {}
+
+
+func _valid_saved_cast(cast: Variant) -> bool:
+	if not cast is Dictionary:
+		return false
+	for actor_id: String in _actors:
+		var pose: Variant = cast.get(actor_id)
+		if not pose is Dictionary or not pose.get("visible") is bool or not _slot_markers.has(str(pose.get("position", ""))) or typeof(pose.get("expression", "")) != TYPE_STRING:
+			return false
+	return true
 
 
 func _validate_save_payload(payload: Dictionary) -> bool:
@@ -3174,6 +3254,18 @@ func _validate_save_payload(payload: Dictionary) -> bool:
 		if typeof(payload["boke_ui_screen"]) != TYPE_STRING or str(payload["boke_ui_screen"]) not in ["boke_round", "tsukkomi"]:
 			return false
 	# 先用全新的 runner 驗證，成功才動目前的遊戲狀態。
+	for key: String in ["round_stages", "investigation_pans", "investigation_home_casts"]:
+		if not payload.get(key, {}) is Dictionary:
+			return false
+	for pan: Variant in (payload.get("investigation_pans", {}) as Dictionary).values():
+		if typeof(pan) not in [TYPE_INT, TYPE_FLOAT] or not is_finite(float(pan)):
+			return false
+	for stage: Variant in (payload.get("round_stages", {}) as Dictionary).values():
+		if not stage is Dictionary or not _backgrounds.has(str(stage.get("background", ""))) or typeof(stage.get("bgm", "")) != TYPE_STRING or not _valid_saved_cast(stage.get("sprites")):
+			return false
+	for cast: Variant in (payload.get("investigation_home_casts", {}) as Dictionary).values():
+		if not _valid_saved_cast(cast):
+			return false
 	var probe: RefCounted = STORY_RUNNER_SCRIPT.new() as RefCounted
 	if not bool(probe.call("load_story", story_path)) or not bool(probe.call("restore", runner_snapshot)):
 		return false
@@ -3200,6 +3292,9 @@ func _has_valid_save() -> bool:
 func _apply_save_payload(payload: Dictionary) -> bool:
 	if not _validate_save_payload(payload) or not bool(_runner.call("restore", payload["runner"])):
 		return false
+	_cancel_generation()
+	if not _rolling_back:
+		_rollback.clear()
 	var restored_current: Dictionary = _runner_current()
 	if _command_op(restored_current) == "boke_round":
 		_restored_boke_ui_mode = str(payload.get("boke_ui_screen",
@@ -3227,6 +3322,9 @@ func _apply_save_payload(payload: Dictionary) -> bool:
 		sprite.call("set_expression", str(state.get("expression", "neutral")))
 		_layout_sprite(actor_id)
 	_previous_power = int((_runner.get("gameplay") as Dictionary).get("power", 0))
+	_round_stages = (payload.get("round_stages",{}) as Dictionary).duplicate(true)
+	_investigation_pans = (payload.get("investigation_pans",{}) as Dictionary).duplicate(true)
+	_investigation_home_casts = (payload.get("investigation_home_casts",{}) as Dictionary).duplicate(true)
 	_history.clear()
 	for entry: Variant in payload["history"]:
 		_history.append((entry as Dictionary).duplicate(true))
@@ -3242,10 +3340,15 @@ func _delete_save() -> void:
 
 
 func _cancel_generation() -> void:
+	_pending_round_mode = ""
 	_generation += 1
 	_line_generation += 1
 	_story_busy = false
 	_comedy_layer.stop()
+	if _motion != null:
+		_motion.reset()
+	if _effects != null:
+		_effects.stop_transients()
 
 
 func _capture_preview_png() -> String:
@@ -3444,8 +3547,8 @@ func _apply_ui_style_recursive(node: Node) -> void:
 			bool(button.get_meta("ui_style_active", false)))
 	elif node is Label and not role.is_empty():
 		UI_STYLES_SCRIPT.apply_label(node as Label, _ui_style_id, role)
-	elif node is Panel and not role.is_empty():
-		UI_STYLES_SCRIPT.apply_panel(node as Panel, _ui_style_id, role)
+	elif (node is Panel or node is PanelContainer) and not role.is_empty():
+		UI_STYLES_SCRIPT.apply_panel(node as Control, _ui_style_id, role)
 	elif node is ColorRect and role == "letterbox":
 		(node as ColorRect).color = UI_STYLES_SCRIPT.palette(_ui_style_id)["canvas"] as Color
 	for child: Node in node.get_children():
@@ -3492,6 +3595,8 @@ func _write_qa_state() -> void:
 		"censor": _choice_sheet.censor_bar if _choice_sheet.censor_bar.is_visible_in_tree() else _dialog_panel.censor_bar,
 		"super": _choice_sheet.super_button,
 	}
+	if _dialog_panel.skip_button != null:
+		named["skip"] = _dialog_panel.skip_button
 	for item_id: String in _menu_items.keys():
 		named["menu_" + item_id] = _menu_items[item_id]
 	var chapter_rows: Dictionary = _chapter_select.call("rows")
@@ -3598,6 +3703,7 @@ func _write_qa_state() -> void:
 		"full_text": _full_text,
 		"speaker": _current_speaker,
 		"node_id": _dict_string(current, "node_id", _dict_string(snapshot, "node_id")),
+		"source_id": _dict_string(current,"source_id", _dict_string(RoundView.line(current), "source_id")),
 		"step_index": int(current.get("step_index", snapshot.get("step_index", -1))),
 		"flags": snapshot.get("flags", {}),
 		"items": snapshot.get("items", []),
@@ -3648,6 +3754,7 @@ func _write_qa_state() -> void:
 				"super_label": _choice_sheet.super_button.text,
 				"aura_active": _phase3_hud.glasses.get_children().any(func(icon: Node) -> bool: return bool(icon.get("charged")) and not bool(icon.get("broken"))),
 				"censor": RoundView.censor(current), "placard": RoundView.placard(current), "qte_active": _qte != null,
+				"qte_elapsed": _qte.call("elapsed") if _qte != null else 0.0,
 			},
 			"timer_remaining": _boke_time_remaining,
 			"timer_active": _command_op(current) == "boke_round" and _effective_boke_ui_mode() == "tsukkomi",

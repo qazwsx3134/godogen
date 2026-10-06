@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://bquqikrjtc5ep"]
+[gd_scene format=3]
 
 [ext_resource type="Texture2D" path="res://assets/image/yorosuya-inside.png" id="1_st0q7"]
 [ext_resource type="Texture2D" path="res://assets/image/kitchen.png" id="2_1hwpr"]
@@ -215,3 +215,10 @@ offset_bottom = 40.0
 theme_override_font_sizes/font_size = 40
 text = "對話框（示意，執行時移除）"
 metadata/_edit_lock_ = true
+
+[node name="BackgroundGhost" type="TextureRect" parent="." unique_id=577417405]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+mouse_filter = 2
+expand_mode = 1

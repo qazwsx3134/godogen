@@ -8,8 +8,10 @@ const TEXT_INTERVALS: Array[float] = [0.06, 0.032, 0.016, 0.0]
 ## Multiplies the auto-play wait.
 const AUTO_FACTORS: Array[float] = [1.6, 1.0, 0.5]
 const VOLUMES: Array[float] = [0.0, 0.25, 0.5, 0.75, 1.0]
-const DEFAULTS: Dictionary = {"text_speed": 1, "auto_speed": 1, "bgm_volume": 4, "se_volume": 4}
-const SIZES: Dictionary = {"text_speed": 4, "auto_speed": 3, "bgm_volume": 5, "se_volume": 5}
+const FONT_SCALES: Array[float] = [0.85, 1.0, 1.2]
+const PAPER_OPACITIES: Array[float] = [0.65, 0.82, 1.0]
+const DEFAULTS: Dictionary = {"text_speed": 1, "auto_speed": 1, "bgm_volume": 4, "se_volume": 4, "font_size": 1, "paper_opacity": 2}
+const SIZES: Dictionary = {"text_speed": 4, "auto_speed": 3, "bgm_volume": 5, "se_volume": 5, "font_size": 3, "paper_opacity": 3}
 
 
 static func load_settings(path: String) -> Dictionary:

@@ -38,6 +38,11 @@ var _bgm_player: AudioStreamPlayer = null
 var _streams: Dictionary = {}
 var _shake_tween: Tween = null
 var _charge_player: AudioStreamPlayer = null
+var _typing_player: AudioStreamPlayer = null
+var _voice_player: AudioStreamPlayer = null
+var _tick_elapsed: float = 1.0
+var last_type_speaker: String = ""
+var type_ticks: int = 0
 
 
 ## shake_layers move together on a shake; overlay holds the flash, the freeze and cut-ins.
@@ -54,6 +59,12 @@ func setup(shake_layers: Array[Control], overlay: Control, catalog: Dictionary) 
 	add_child(_bgm_player)
 	_charge_player = AudioStreamPlayer.new()
 	add_child(_charge_player)
+	_typing_player = AudioStreamPlayer.new()
+	_voice_player = AudioStreamPlayer.new()
+	_typing_player.playback_type = AudioServer.PLAYBACK_TYPE_STREAM
+	_voice_player.playback_type = AudioServer.PLAYBACK_TYPE_STREAM
+	add_child(_typing_player)
+	add_child(_voice_player)
 
 
 func set_style(style_id: String) -> void:
@@ -66,6 +77,8 @@ func set_muted(muted: bool) -> void:
 	_muted = muted
 	_se_player.stop()
 	_charge_player.stop()
+	_typing_player.stop()
+	_voice_player.stop()
 	_bgm_player.stop()
 	if not muted and not current_bgm.is_empty() and _bgm_level > 0.0:
 		_bgm_player.stream = _stream("music", current_bgm)
@@ -80,6 +93,8 @@ func set_volumes(bgm: float, se: float) -> void:
 	_bgm_player.volume_db = BGM_DB + linear_to_db(maxf(bgm, 0.0001))
 	_se_player.volume_db = linear_to_db(maxf(se, 0.0001))
 	_charge_player.volume_db = _se_player.volume_db
+	_typing_player.volume_db = _se_player.volume_db - 15.0
+	_voice_player.volume_db = _se_player.volume_db
 	set_muted(_muted)
 
 
@@ -95,6 +110,7 @@ func play(step: Dictionary, skipping: bool) -> float:
 	match op:
 		"beam":
 			var beam: Control = BEAM_SCENE.instantiate() as Control
+			beam.set_meta("stage_effect", true)
 			_overlay.add_child(beam)
 			beam.call("play", float(step.get("duration", 0.8)))
 		"se":
@@ -106,6 +122,7 @@ func play(step: Dictionary, skipping: bool) -> float:
 			_flash(Color(str(step.get("color", "#ffffff"))), float(step.get("duration", 0.3)))
 		"cutin":
 			var cutin: Control = CUTIN_SCENE.instantiate() as Control
+			cutin.set_meta("stage_effect", true)
 			cutin.set("style_id", _style_id)
 			_overlay.add_child(cutin)
 			cutin.call("play", str(step.get("text", "")), _speaker_name(str(step.get("speaker", ""))))
@@ -124,6 +141,51 @@ func play_bgm(id: String) -> void:
 	if not id.is_empty() and not _muted and _bgm_level > 0.0:
 		_bgm_player.stream = _stream("music", id)
 		_bgm_player.play()
+
+
+func _process(delta: float) -> void:
+	_tick_elapsed += delta
+
+
+## Narration, thoughts, punctuation, skipping and silent settings make no ticks.
+func play_type_tick(speaker: String, cluster: String, thought: bool, skipping: bool) -> void:
+	if _muted or _se_level <= 0.0 or thought or skipping or speaker in ["", "narrator"] \
+			or _tick_elapsed < 0.045 or cluster.strip_edges().is_empty() \
+			or cluster in ["。", "，", "、", "！", "？", "…", ".", ",", "!", "?", "「", "」", "："]:
+		return
+	var key: String = "type/" + speaker
+	if not _streams.has(key):
+		var pitch: float = float({"gintoki": 230, "shinpachi": 390, "kagura": 560, "otose": 180, "sadaharu": 130}.get(speaker, 300))
+		_streams[key] = Synth.ramp(pitch, pitch * 1.05, 0.028, 0.24, 0.0)
+	_typing_player.stream = _streams[key]
+	_typing_player.play()
+	_tick_elapsed = 0.0
+	last_type_speaker = speaker
+	type_ticks += 1
+
+
+## Optional recordings: missing voices are silent, without placeholder speech.
+func play_perfect_voice(number: int) -> bool:
+	if _muted or _se_level <= 0.0:
+		return false
+	var path: String = "res://assets/audio/voice/shinpachi_tsukkomi_%02d.ogg" % (1 + posmod(number - 1, 8))
+	if not ResourceLoader.exists(path):
+		return false
+	_voice_player.stream = load(path) as AudioStream
+	if _voice_player.stream == null:
+		return false
+	_voice_player.play()
+	return true
+
+
+func stop_transients() -> void:
+	stop_shake()
+	for player: AudioStreamPlayer in [_se_player, _charge_player, _typing_player, _voice_player]:
+		if player != null:
+			player.stop()
+	for child: Node in _overlay.get_children():
+		if child.has_meta("stage_effect"):
+			child.queue_free()
 
 
 func _play_se(id: String) -> void:
@@ -192,6 +254,7 @@ func _freeze(hold: float) -> void:
 
 
 func _full_rect(rect: Control) -> Control:
+	rect.set_meta("stage_effect", true)
 	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_overlay.add_child(rect)
 	_overlay.move_child(rect, 0)  # cut-ins stay on top

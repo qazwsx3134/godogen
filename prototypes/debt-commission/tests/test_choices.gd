@@ -825,7 +825,7 @@ func _new_game(story: String = SAMPLE, style: String = "cinema") -> Control:
 	root.add_child(game)
 	await _frames(3)
 	_expect(game._story_ready, "the story loads: %s" % game._story_error)
-	if style != "cinema":
+	if style != game._ui_style_id:
 		game._set_ui_style(style, false)
 		await _frames(2)
 	return game

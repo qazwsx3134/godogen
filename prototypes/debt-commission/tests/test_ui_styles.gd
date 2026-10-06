@@ -13,8 +13,8 @@ func _init() -> void:
 
 func _run() -> void:
 	_cleanup_files()
-	_expect(UI_STYLES_SCRIPT.load_preference(TEST_PREFERENCE) == "cinema",
-		"missing preference falls back to cinema")
+	_expect(UI_STYLES_SCRIPT.load_preference(TEST_PREFERENCE) == "gintama",
+		"missing preference falls back to gintama")
 	_expect(UI_STYLES_SCRIPT.style_ids() == ["cinema", "ledger", "manga", "gintama"] and
 		UI_STYLES_SCRIPT.style_label("gintama") == "銀魂和紙",
 		"the four editions include the named gintama paper style")
@@ -31,15 +31,15 @@ func _run() -> void:
 	var invalid_config: ConfigFile = ConfigFile.new()
 	invalid_config.set_value("ui", "style", "retired-style")
 	_expect(invalid_config.save(INVALID_PREFERENCE) == OK, "invalid preference fixture saves")
-	_expect(UI_STYLES_SCRIPT.load_preference(INVALID_PREFERENCE) == "cinema",
-		"unknown saved style falls back to cinema")
-	_expect(UI_STYLES_SCRIPT.normalize_id("unknown") == "cinema",
+	_expect(UI_STYLES_SCRIPT.load_preference(INVALID_PREFERENCE) == "gintama",
+		"unknown saved style falls back to gintama")
+	_expect(UI_STYLES_SCRIPT.normalize_id("unknown") == "gintama",
 		"runtime style requests also fall back to cinema")
 	_cleanup_files()
 
 	var game: Control = _new_game()
 	await _frames(3)
-	_expect(game._ui_style_id == "cinema", "new game uses the default cinema style")
+	_expect(game._ui_style_id == "gintama", "new game uses the default gintama style")
 	_expect(game._title_style_buttons.size() == 4 and game._menu_style_buttons.size() == 4 and
 		(game._title_screen.find_child("Styles", true, false) as GridContainer).columns == 2 and
 		(game._menu_overlay.find_child("Styles", true, false) as GridContainer).columns == 2,
@@ -52,6 +52,25 @@ func _run() -> void:
 	await _frames(2)
 	game._on_begin_pressed()
 	await _until(func() -> bool: return game._screen_mode == "story", "opening line")
+	game._set_ui_style("gintama", false)
+	await _frames(3)
+	var toolbar_order: Array[String] = []
+	for button: Node in game._dialog_panel.toolbar.get_children():
+		toolbar_order.append(str(button.name))
+	_expect(toolbar_order == ["Log", "Auto", "Skip", "Menu"],
+		"reference toolbar exposes LOG AUTO SKIP MENU in that order")
+	var name_rect: Rect2 = game._name_plate.get_global_rect()
+	var paper_rect: Rect2 = game._dialog_panel.get_node("PaperAndToolbar/Panel").get_global_rect()
+	_expect(name_rect.position.y < paper_rect.position.y and name_rect.end.y > paper_rect.position.y,
+		"the cloud nameplate overlaps the paper's top edge")
+	game._dialog_panel.skip_button.pressed.emit()
+	_expect(game._skip and game._dialog_panel.skip_button.button_pressed and not game._auto,
+		"the reference SKIP button starts skipping and shows its active state")
+	game._set_auto(true)
+	_expect(game._auto and not game._skip and not game._dialog_panel.skip_button.button_pressed,
+		"AUTO stops SKIP and clears its active state")
+	game._set_auto(false)
+	game._set_ui_style("cinema", false)
 	game._set_skip(true)
 	await _until(func() -> bool: return game._screen_mode == "choice", "first generated choice", 12.0)
 	game._set_skip(false)
@@ -93,7 +112,7 @@ func _run() -> void:
 	await _frames(2)
 	var invalid_game: Control = _new_game(INVALID_PREFERENCE)
 	await _frames(2)
-	_expect(invalid_game._ui_style_id == "cinema", "main applies the fallback for an invalid preference")
+	_expect(invalid_game._ui_style_id == "gintama", "main applies the fallback for an invalid preference")
 	invalid_game.queue_free()
 	await _frames(2)
 	_cleanup_files()
@@ -136,11 +155,20 @@ func _dialogue_is_readable(game: Control, style_id: String) -> bool:
 	var readable: bool = game._dialog_panel.style_id == style_id and UI_STYLES_SCRIPT.contrast_ratio(text_color, paper) >= 4.5
 	if style_id != "gintama":
 		return readable
-	var waves: TextureRect = game._dialog_panel.find_child("Seigaiha", true, false) as TextureRect
-	var blossom: TextureRect = game._dialog_panel.find_child("Sakura", true, false) as TextureRect
-	var name_style: StyleBoxFlat = game._dialog_panel.find_child("NamePlate", true, false).get_theme_stylebox("panel") as StyleBoxFlat
-	return readable and waves != null and waves.texture != null and blossom != null and blossom.texture != null and \
-		name_style != null and name_style.bg_color == Color("#203e5e") and \
+	var paper_cutout: NinePatchRect = game._dialog_panel.find_child("PaperCutout", true, false) as NinePatchRect
+	var plaque: TextureRect = game._dialog_panel.find_child("CloudPlaque", true, false) as TextureRect
+	if paper_cutout == null or paper_cutout.texture == null or plaque == null or plaque.texture == null:
+		return false
+	var image: Image = paper_cutout.texture.get_image()
+	if image == null or image.detect_alpha() == Image.ALPHA_NONE:
+		return false
+	for corner: Vector2i in [Vector2i.ZERO, Vector2i(image.get_width() - 1, 0),
+		Vector2i(0, image.get_height() - 1), image.get_size() - Vector2i.ONE]:
+		if image.get_pixelv(corner).a > 0.1:
+			return false
+	return readable and (paper_cutout.get_parent() as Control).clip_contents and \
+		game._dialog_panel.find_child("Seigaiha", true, false) == null and \
+		game._dialog_panel.find_child("Sakura", true, false) == null and \
 		game._name_label.get_theme_color("font_color") == Color("#f8f3e9")
 
 

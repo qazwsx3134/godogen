@@ -45,6 +45,7 @@ func _run() -> void:
 		and game._sprites["gintoki"].modulate == Color.WHITE and game._sprites["shinpachi"].modulate.r < 0.9,
 		"a line said together lights both speakers")
 	game._apply_character({"id": "kagura", "visible": false})
+	await create_timer(0.25).timeout
 	_expect(not game._sprites["kagura"].visible, "hide() takes a character off stage")
 	var kagura_art: TextureRect = game._sprites["kagura"].get_node("Art")
 	var usual: Texture2D = kagura_art.texture
@@ -56,6 +57,7 @@ func _run() -> void:
 	_expect(kagura_art.texture == usual, "a face without a picture shows the character's usual picture")
 	game._sprites["kagura"].call("set_expression_art", {})
 	game._apply_character({"id": "kagura", "visible": false})
+	await create_timer(0.25).timeout
 	# A fitted face (tools/fit_expressions.gd) is wider than the usual picture where the pose sticks
 	# out: it keeps the usual picture's scale, feet line and centre.
 	var shinpachi: Control = game._sprites["shinpachi"]

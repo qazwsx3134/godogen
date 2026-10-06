@@ -17,6 +17,11 @@
       "top": "#263248",
       "bottom": "#9c6c4e",
       "path": "res://assets/image/yorosuya-outside.png"
+    },
+    "black": {
+      "label": "休庭",
+      "top": "#000000",
+      "bottom": "#000000"
     }
   },
   "characters": {
@@ -109,19 +114,19 @@
   "items": {
     "milk_bottle": {
       "name": "空的草莓牛奶瓶",
-      "description": "瓶口還有一點濕氣，像是剛被喝完。"
+      "description": "在銀時的辦公桌底下找到。瓶身用麥克筆寫著大大的「新八」。瓶口還是濕的。"
     },
     "milk_trace": {
       "name": "銀時嘴角的白色痕跡",
-      "description": "一條很難解釋成奶油的白色痕跡。"
+      "description": "銀時嘴角的一道白色痕跡。湊近聞，是草莓牛奶的甜味。"
     },
     "kagura_kombu": {
       "name": "神樂的醋昆布包裝",
-      "description": "包裝被揉得很平，角落還沾著調味粉。"
+      "description": "沙發底下的醋昆布包裝。揉成一團，內側沾著粉紅色的液體。"
     },
     "sadaharu_footprint": {
       "name": "定春的腳印",
-      "description": "小小的腳印一路通往冰箱旁邊。"
+      "description": "黏黏的小腳印，從冰箱一路走到定春的窩。每個腳印都有五根指頭。"
     },
     "gin_sleep_testimony": {
       "name": "銀時的證詞：半夜兩點",

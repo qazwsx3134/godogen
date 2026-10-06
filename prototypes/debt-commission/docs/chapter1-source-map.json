@@ -1,0 +1,1587 @@
+{
+  "draft": "docs/story-telling-game/stories/003-strawberry-milk-ch1-draft-v0.2.md",
+  "utterances": [
+    {
+      "id": "M01",
+      "draft_line": 125,
+      "node": "ch1_open_fridge",
+      "speaker": "narrator",
+      "text": "早上八點。萬事屋的冰箱門，開著。"
+    },
+    {
+      "id": "M02",
+      "draft_line": 127,
+      "node": "ch1_open_fridge",
+      "speaker": "shinpachi",
+      "text": "……沒有。"
+    },
+    {
+      "id": "M03",
+      "draft_line": 129,
+      "node": "ch1_open_fridge",
+      "speaker": "shinpachi",
+      "text": "我昨天買的草莓牛奶，沒有了。"
+    },
+    {
+      "id": "M04",
+      "draft_line": 131,
+      "node": "ch1_open_fridge",
+      "speaker": "shinpachi",
+      "text": "自己的錢買的。瓶子上還寫了大大的「新八」。"
+    },
+    {
+      "id": "M05",
+      "draft_line": 133,
+      "node": "ch1_open_fridge",
+      "speaker": "shinpachi",
+      "text": "這個家裡，唯一寫著我名字的東西。"
+    },
+    {
+      "id": "M06",
+      "draft_line": 137,
+      "node": "ch1_open_fridge",
+      "speaker": "kagura",
+      "text": "一大早對冰箱發呆，眼鏡終於壞掉了阿魯？"
+    },
+    {
+      "id": "M07",
+      "draft_line": 139,
+      "node": "ch1_open_fridge",
+      "speaker": "shinpachi",
+      "text": "神樂醬，我的草莓牛奶不見了。"
+    },
+    {
+      "id": "M08",
+      "draft_line": 141,
+      "node": "ch1_open_fridge",
+      "speaker": "kagura",
+      "text": "新八的東西不見很正常阿魯。新八本人也常常不見阿魯。"
+    },
+    {
+      "id": "M09",
+      "draft_line": 143,
+      "node": "ch1_open_fridge",
+      "speaker": "shinpachi",
+      "text": "我每天都在啊！只是沒人看我而已！"
+    },
+    {
+      "id": "M10",
+      "draft_line": 147,
+      "node": "ch1_open_fridge",
+      "speaker": "gintoki",
+      "text": "吵什麼。一大早的，銀桑的耳朵還在放假。"
+    },
+    {
+      "id": "M11",
+      "draft_line": 149,
+      "node": "ch1_open_fridge",
+      "speaker": "shinpachi",
+      "text": "阿銀，你有沒有看到我的草莓牛奶？"
+    },
+    {
+      "id": "M12",
+      "draft_line": 151,
+      "node": "ch1_open_fridge",
+      "speaker": "gintoki",
+      "text": "沒有。寫著別人名字的東西，銀桑一向不碰。"
+    },
+    {
+      "id": "M13",
+      "draft_line": 155,
+      "node": "ch1_open_fridge",
+      "speaker": "shinpachi",
+      "text": "……我還沒說上面寫了名字。"
+    },
+    {
+      "id": "M14",
+      "draft_line": 157,
+      "node": "ch1_open_fridge",
+      "speaker": "gintoki",
+      "text": "牛奶瓶上寫名字是常識。銀桑是用常識推理的。"
+    },
+    {
+      "id": "M15",
+      "draft_line": 159,
+      "node": "ch1_open_fridge",
+      "speaker": "shinpachi",
+      "text": "好。那我也用常識——這個家，現在開始搜查！"
+    },
+    {
+      "id": "M16",
+      "draft_line": 167,
+      "node": "ch1_investigate_pre",
+      "speaker": "shinpachi",
+      "text": "冰箱到客廳，一路查過去。一個都不放過。"
+    },
+    {
+      "id": "M17",
+      "draft_line": 173,
+      "node": "ch1_inspect_desk_underside",
+      "speaker": "shinpachi",
+      "text": "寫著我名字的瓶子……空的，躺在阿銀的桌子底下。"
+    },
+    {
+      "id": "M18",
+      "draft_line": 175,
+      "node": "ch1_inspect_desk_underside",
+      "speaker": "gintoki",
+      "text": "它自己滾過來的。大概是想投靠銀桑。"
+    },
+    {
+      "id": "M19",
+      "draft_line": 179,
+      "node": "ch1_inspect_gintoki_mouth",
+      "speaker": "shinpachi",
+      "text": "阿銀，你嘴角那條白白的是什麼？……有草莓味。"
+    },
+    {
+      "id": "M20",
+      "draft_line": 181,
+      "node": "ch1_inspect_gintoki_mouth",
+      "speaker": "gintoki",
+      "text": "別湊那麼近。想聞銀桑的臉，要先預約。"
+    },
+    {
+      "id": "M21",
+      "draft_line": 185,
+      "node": "ch1_inspect_sofa_underside",
+      "speaker": "shinpachi",
+      "text": "醋昆布的包裝……裡面怎麼是粉紅色的？"
+    },
+    {
+      "id": "M22",
+      "draft_line": 187,
+      "node": "ch1_inspect_sofa_underside",
+      "speaker": "kagura",
+      "text": "那是醋昆布在害羞阿魯。別一直看，它會更紅阿魯。"
+    },
+    {
+      "id": "M23",
+      "draft_line": 191,
+      "node": "ch1_inspect_floor_prints",
+      "speaker": "shinpachi",
+      "text": "黏黏的腳印，從冰箱一路走到定春的窩。"
+    },
+    {
+      "id": "M24",
+      "draft_line": 195,
+      "node": "ch1_inspect_floor_prints",
+      "speaker": "sadaharu",
+      "text": "汪。"
+    },
+    {
+      "id": "M25",
+      "draft_line": 197,
+      "node": "ch1_inspect_floor_prints",
+      "speaker": "shinpachi",
+      "text": "……定春，你什麼時候變得這麼秀氣了？"
+    },
+    {
+      "id": "D1-1",
+      "draft_line": 202,
+      "node": "ch1_talk_1",
+      "speaker": "gintoki",
+      "text": "十點。銀桑是早睡早起的模範市民。"
+    },
+    {
+      "id": "D1-2",
+      "draft_line": 203,
+      "node": "ch1_talk_1",
+      "speaker": "shinpachi",
+      "text": "早起的人，不會現在還在打呵欠。"
+    },
+    {
+      "id": "D2-1",
+      "draft_line": 205,
+      "node": "ch1_talk_2",
+      "speaker": "kagura",
+      "text": "醋昆布。很乾阿魯。"
+    },
+    {
+      "id": "D2-2",
+      "draft_line": 206,
+      "node": "ch1_talk_2",
+      "speaker": "shinpachi",
+      "text": "……很乾。然後呢？"
+    },
+    {
+      "id": "D3-1",
+      "draft_line": 208,
+      "node": "ch1_talk_3",
+      "speaker": "sadaharu",
+      "text": "汪。"
+    },
+    {
+      "id": "D3-2",
+      "draft_line": 209,
+      "node": "ch1_talk_3",
+      "speaker": "shinpachi",
+      "text": "……謝謝你的證詞。"
+    },
+    {
+      "id": "D4-1",
+      "draft_line": 215,
+      "node": "ch1_kitchen_fridge",
+      "speaker": "shinpachi",
+      "text": "冰箱裡只剩醬油，和一個布丁。"
+    },
+    {
+      "id": "D4-2",
+      "draft_line": 216,
+      "node": "ch1_kitchen_fridge",
+      "speaker": "gintoki",
+      "text": "布丁不准碰。上面寫了銀桑的名字。"
+    },
+    {
+      "id": "D4-3",
+      "draft_line": 217,
+      "node": "ch1_kitchen_fridge",
+      "speaker": "shinpachi",
+      "text": "你剛剛才說寫名字的東西一向不碰吧！原來是只保護你自己的名字！"
+    },
+    {
+      "id": "M26",
+      "draft_line": 221,
+      "node": "ch1_investigate_done",
+      "speaker": "shinpachi",
+      "text": "空瓶、嘴角、包裝、腳印。四樣都到手了。"
+    },
+    {
+      "id": "M27",
+      "draft_line": 223,
+      "node": "ch1_investigate_done",
+      "speaker": "shinpachi",
+      "text": "……嫌疑人多到可以開會了。"
+    },
+    {
+      "id": "M28",
+      "draft_line": 231,
+      "node": "ch1_meeting_open",
+      "speaker": "otose",
+      "text": "一大早吵什麼。樓下的客人以為樓上在拆房子。"
+    },
+    {
+      "id": "M29",
+      "draft_line": 233,
+      "node": "ch1_meeting_open",
+      "speaker": "shinpachi",
+      "text": "婆婆，我的草莓牛奶被偷喝了。犯人就在這個家裡。"
+    },
+    {
+      "id": "M30",
+      "draft_line": 235,
+      "node": "ch1_meeting_open",
+      "speaker": "otose",
+      "text": "這個家裡？那就是全員了。"
+    },
+    {
+      "id": "M31",
+      "draft_line": 237,
+      "node": "ch1_meeting_open",
+      "speaker": "gintoki",
+      "text": "婆婆，這種小事不用驚動你——"
+    },
+    {
+      "id": "M32",
+      "draft_line": 239,
+      "node": "ch1_meeting_open",
+      "speaker": "otose",
+      "text": "房租也是小事，你也一直沒來驚動我。"
+    },
+    {
+      "id": "M33",
+      "draft_line": 241,
+      "node": "ch1_meeting_open",
+      "speaker": "otose",
+      "text": "全員坐下。家庭會議，開始。"
+    },
+    {
+      "id": "M34",
+      "draft_line": 245,
+      "node": "ch1_meeting_open",
+      "speaker": "kagura",
+      "text": "婆婆，為什麼拿煙灰缸當法槌阿魯？"
+    },
+    {
+      "id": "M35",
+      "draft_line": 247,
+      "node": "ch1_meeting_open",
+      "speaker": "otose",
+      "text": "有什麼用什麼。你們家不也是這樣過日子的。"
+    },
+    {
+      "id": "M36",
+      "draft_line": 249,
+      "node": "ch1_meeting_open",
+      "speaker": "otose",
+      "text": "規矩很簡單。一個一個講。講不通的地方，新八負責戳。"
+    },
+    {
+      "id": "M37",
+      "draft_line": 251,
+      "node": "ch1_meeting_open",
+      "speaker": "shinpachi",
+      "text": "也就是說——吐槽的時間到了。"
+    },
+    {
+      "id": "M38",
+      "draft_line": 257,
+      "node": "ch1_r1_intro",
+      "speaker": "otose",
+      "text": "銀時，你先。說謊的話，房租加一成。"
+    },
+    {
+      "id": "M39",
+      "draft_line": 259,
+      "node": "ch1_r1_intro",
+      "speaker": "gintoki",
+      "text": "好。那銀桑就把真相，一字一句告訴你們。"
+    },
+    {
+      "id": "L11-1",
+      "draft_line": 589,
+      "node": "ch1_r1_l1_listen",
+      "speaker": "gintoki",
+      "text": "睡得超熟。半夜兩點起來開冰箱的時候，都還沒醒。"
+    },
+    {
+      "id": "L11-2",
+      "draft_line": 590,
+      "node": "ch1_r1_l1_listen",
+      "speaker": "shinpachi",
+      "text": "……半夜兩點，開冰箱。現在戳，他只會說是夢遊。先記下來。"
+    },
+    {
+      "id": "H11",
+      "draft_line": 641,
+      "node": "ch1_r1_l1_hint",
+      "speaker": "kagura",
+      "text": "睡著時的事戳不破阿魯。等銀醬說他醒著做了什麼，再拿出來用阿魯。"
+    },
+    {
+      "id": "K11-1",
+      "draft_line": 600,
+      "node": "ch1_r1_l1_whiff",
+      "speaker": "shinpachi",
+      "text": "睡覺這種事，誰能證明——"
+    },
+    {
+      "id": "K11-2",
+      "draft_line": 601,
+      "node": "ch1_r1_l1_whiff",
+      "speaker": "otose",
+      "text": "睡著的事，誰都戳不破。等他說出自己醒著做了什麼，再戳。"
+    },
+    {
+      "id": "K11-3",
+      "draft_line": 602,
+      "node": "ch1_r1_l1_whiff",
+      "speaker": "shinpachi",
+      "text": "……是。"
+    },
+    {
+      "id": "L12-1",
+      "draft_line": 591,
+      "node": "ch1_r1_l2_listen",
+      "speaker": "gintoki",
+      "text": "現在只喝大人的飲料。例如，粉紅色的那種。"
+    },
+    {
+      "id": "L12-2",
+      "draft_line": 592,
+      "node": "ch1_r1_l2_listen",
+      "speaker": "kagura",
+      "text": "那就是草莓牛奶阿魯。"
+    },
+    {
+      "id": "H12",
+      "draft_line": 621,
+      "node": "ch1_r1_l2_hint",
+      "speaker": "kagura",
+      "text": "銀醬桌子底下那個，你剛剛才撿起來阿魯。眼鏡是裝飾品阿魯？"
+    },
+    {
+      "id": "R12a-1",
+      "draft_line": 615,
+      "node": "ch1_r1_l2_a",
+      "speaker": "gintoki",
+      "text": "那瓶子是自己滾過來投靠銀桑的。剛剛說過了。"
+    },
+    {
+      "id": "R12a-2",
+      "draft_line": 616,
+      "node": "ch1_r1_l2_a",
+      "speaker": "shinpachi",
+      "text": "它投靠你之前，裡面的牛奶跑去哪了！"
+    },
+    {
+      "id": "R12b-1",
+      "draft_line": 617,
+      "node": "ch1_r1_l2_b",
+      "speaker": "gintoki",
+      "text": "那是上禮拜的銀桑。男人一個禮拜就會成長。"
+    },
+    {
+      "id": "R12b-2",
+      "draft_line": 618,
+      "node": "ch1_r1_l2_b",
+      "speaker": "shinpachi",
+      "text": "……空口說不贏他。得拿出東西來。"
+    },
+    {
+      "id": "R12c-1",
+      "draft_line": 619,
+      "node": "ch1_r1_l2_c",
+      "speaker": "kagura",
+      "text": "新八在幫牛奶講話阿魯。"
+    },
+    {
+      "id": "R12c-2",
+      "draft_line": 620,
+      "node": "ch1_r1_l2_c",
+      "speaker": "gintoki",
+      "text": "看吧，他也愛喝。動機成立。"
+    },
+    {
+      "id": "L13-1",
+      "draft_line": 593,
+      "node": "ch1_r1_l3_listen",
+      "speaker": "gintoki",
+      "text": "跟房租一樣。大家一起欠，感情才會好。"
+    },
+    {
+      "id": "L13-2",
+      "draft_line": 594,
+      "node": "ch1_r1_l3_listen",
+      "speaker": "otose",
+      "text": "只有你在欠。"
+    },
+    {
+      "id": "H13",
+      "draft_line": 642,
+      "node": "ch1_r1_l3_hint",
+      "speaker": "kagura",
+      "text": "歪理不是謊話阿魯。去找他講錯的地方，不是講爛的地方阿魯。"
+    },
+    {
+      "id": "K13-1",
+      "draft_line": 603,
+      "node": "ch1_r1_l3_whiff",
+      "speaker": "shinpachi",
+      "text": "那我的牛奶也是大家的——不對，等一下！"
+    },
+    {
+      "id": "K13-2",
+      "draft_line": 604,
+      "node": "ch1_r1_l3_whiff",
+      "speaker": "otose",
+      "text": "這句是歪理，不是謊話。等他說謊再戳。"
+    },
+    {
+      "id": "L14-1",
+      "draft_line": 595,
+      "node": "ch1_r1_l4_listen",
+      "speaker": "gintoki",
+      "text": "草莓口味的，兒童用。銀桑的牙齒還很年輕。"
+    },
+    {
+      "id": "L14-2",
+      "draft_line": 596,
+      "node": "ch1_r1_l4_listen",
+      "speaker": "shinpachi",
+      "text": "剛剛不是才說，小孩的東西早就戒了嗎……"
+    },
+    {
+      "id": "H14",
+      "draft_line": 637,
+      "node": "ch1_r1_l4_hint",
+      "speaker": "kagura",
+      "text": "你剛剛把臉湊過去聞了吧？那是什麼味道？鼻子也要我借你阿魯？"
+    },
+    {
+      "id": "R14a-1",
+      "draft_line": 632,
+      "node": "ch1_r1_l4_a",
+      "speaker": "gintoki",
+      "text": "牙膏跟牛奶，都是白的，都有草莓口味。很容易搞混。"
+    },
+    {
+      "id": "R14a-2",
+      "draft_line": 633,
+      "node": "ch1_r1_l4_a",
+      "speaker": "shinpachi",
+      "text": "那你刷牙的時候是用喝的嗎！"
+    },
+    {
+      "id": "R14b-1",
+      "draft_line": 634,
+      "node": "ch1_r1_l4_b",
+      "speaker": "gintoki",
+      "text": "豪邁的男人，泡泡不分裡外。"
+    },
+    {
+      "id": "R14b-2",
+      "draft_line": 635,
+      "node": "ch1_r1_l4_b",
+      "speaker": "shinpachi",
+      "text": "……不對，重點是那個味道。"
+    },
+    {
+      "id": "R14c-1",
+      "draft_line": 636,
+      "node": "ch1_r1_l4_c",
+      "speaker": "kagura",
+      "text": "眼鏡被說服了阿魯。度數不夠阿魯。"
+    },
+    {
+      "id": "Q1",
+      "draft_line": 555,
+      "node": "ch1_r1_give_up",
+      "speaker": "gintoki",
+      "text": "不吐了？那就是承認銀桑說得對。"
+    },
+    {
+      "id": "T1-1",
+      "draft_line": 549,
+      "node": "ch1_r1_timeout",
+      "speaker": "narrator",
+      "text": "八秒過去了。新八的嘴還開著。"
+    },
+    {
+      "id": "T1-2",
+      "draft_line": 550,
+      "node": "ch1_r1_timeout",
+      "speaker": "kagura",
+      "text": "嘴巴開那麼久，會飛進蒼蠅阿魯。"
+    },
+    {
+      "id": "M44",
+      "draft_line": 275,
+      "node": "ch1_r1_clear",
+      "speaker": "gintoki",
+      "text": "……好吧。銀桑承認，昨晚跟那瓶牛奶見過一面。"
+    },
+    {
+      "id": "M45",
+      "draft_line": 277,
+      "node": "ch1_r1_clear",
+      "speaker": "shinpachi",
+      "text": "『見面』是指喝掉吧！"
+    },
+    {
+      "id": "M46",
+      "draft_line": 279,
+      "node": "ch1_r1_clear",
+      "speaker": "gintoki",
+      "text": "但只有一半！銀桑見到它的時候，它已經瘦了一半！"
+    },
+    {
+      "id": "M47",
+      "draft_line": 281,
+      "node": "ch1_r1_clear",
+      "speaker": "otose",
+      "text": "一半。那另一半呢？"
+    },
+    {
+      "id": "M48",
+      "draft_line": 285,
+      "node": "ch1_r1_clear",
+      "speaker": "kagura",
+      "text": "……幹嘛全部都看我阿魯。"
+    },
+    {
+      "id": "M49",
+      "draft_line": 291,
+      "node": "ch1_r2_intro",
+      "speaker": "otose",
+      "text": "神樂，換你。"
+    },
+    {
+      "id": "M50",
+      "draft_line": 295,
+      "node": "ch1_r2_intro",
+      "speaker": "shinpachi",
+      "text": "……伊莉莎白什麼時候在這裡的？"
+    },
+    {
+      "id": "M50-1",
+      "draft_line": 297,
+      "node": "ch1_r2_intro",
+      "speaker": "otose",
+      "text": "一早就在了。桂托我顧一天。"
+    },
+    {
+      "id": "M50-2",
+      "draft_line": 299,
+      "node": "ch1_r2_intro",
+      "speaker": "kagura",
+      "text": "哼。我有目擊證人阿魯。"
+    },
+    {
+      "id": "M51",
+      "draft_line": 301,
+      "node": "ch1_r2_intro",
+      "speaker": "shinpachi",
+      "text": "證人是誰？"
+    },
+    {
+      "id": "M52",
+      "draft_line": 303,
+      "node": "ch1_r2_intro",
+      "speaker": "kagura",
+      "text": "定春阿魯。"
+    },
+    {
+      "id": "M53",
+      "draft_line": 307,
+      "node": "ch1_r2_intro",
+      "speaker": "sadaharu",
+      "text": "汪。"
+    },
+    {
+      "id": "L21-1",
+      "draft_line": 654,
+      "node": "ch1_r2_l1_listen",
+      "speaker": "kagura",
+      "text": "配水太普通了。我是有品味的女人阿魯。"
+    },
+    {
+      "id": "L21-2",
+      "draft_line": 655,
+      "node": "ch1_r2_l1_listen",
+      "speaker": "shinpachi",
+      "text": "配水太普通……那她配了什麼？"
+    },
+    {
+      "id": "H21",
+      "draft_line": 676,
+      "node": "ch1_r2_l1_hint",
+      "speaker": "kagura",
+      "text": "我絕對不會告訴你，沙發底下的包裝是什麼顏色阿魯。……我什麼都沒說阿魯。"
+    },
+    {
+      "id": "R21a-1",
+      "draft_line": 670,
+      "node": "ch1_r2_l1_a",
+      "speaker": "kagura",
+      "text": "……醋昆布偶爾也想試試新口味阿魯。"
+    },
+    {
+      "id": "R21a-2",
+      "draft_line": 671,
+      "node": "ch1_r2_l1_a",
+      "speaker": "shinpachi",
+      "text": "想試的是你吧！醋昆布配草莓牛奶是什麼組合！"
+    },
+    {
+      "id": "R21b-1",
+      "draft_line": 672,
+      "node": "ch1_r2_l1_b",
+      "speaker": "kagura",
+      "text": "我是會忍耐的女人阿魯。"
+    },
+    {
+      "id": "R21b-2",
+      "draft_line": 673,
+      "node": "ch1_r2_l1_b",
+      "speaker": "shinpachi",
+      "text": "……光靠常識贏不了她。"
+    },
+    {
+      "id": "R21c-1",
+      "draft_line": 674,
+      "node": "ch1_r2_l1_c",
+      "speaker": "kagura",
+      "text": "對吧阿魯。"
+    },
+    {
+      "id": "R21c-2",
+      "draft_line": 675,
+      "node": "ch1_r2_l1_c",
+      "speaker": "gintoki",
+      "text": "新八被一句好聽話收買了。"
+    },
+    {
+      "id": "L22-1",
+      "draft_line": 656,
+      "node": "ch1_r2_l2_listen",
+      "speaker": "kagura",
+      "text": "定春說的話我都聽得懂阿魯。我們是好朋友阿魯。"
+    },
+    {
+      "id": "L22-2",
+      "draft_line": 657,
+      "node": "ch1_r2_l2_listen",
+      "speaker": "sadaharu",
+      "text": "汪。"
+    },
+    {
+      "id": "H22",
+      "draft_line": 705,
+      "node": "ch1_r2_l2_hint",
+      "speaker": "kagura",
+      "text": "不准看伊莉莎白。牌子上寫什麼都不准看阿魯。……不准喔阿魯。"
+    },
+    {
+      "id": "R22b-1",
+      "draft_line": 701,
+      "node": "ch1_r2_l2_b",
+      "speaker": "kagura",
+      "text": "就是只會汪，才需要我翻譯阿魯。"
+    },
+    {
+      "id": "R22b-2",
+      "draft_line": 702,
+      "node": "ch1_r2_l2_b",
+      "speaker": "shinpachi",
+      "text": "……翻譯不是重點。角落好像有人舉著什麼。"
+    },
+    {
+      "id": "R22c-1",
+      "draft_line": 703,
+      "node": "ch1_r2_l2_c",
+      "speaker": "kagura",
+      "text": "謝謝阿魯。"
+    },
+    {
+      "id": "R22c-2",
+      "draft_line": 704,
+      "node": "ch1_r2_l2_c",
+      "speaker": "sadaharu",
+      "text": "……汪。"
+    },
+    {
+      "id": "L23-1",
+      "draft_line": 658,
+      "node": "ch1_r2_l3_listen",
+      "speaker": "kagura",
+      "text": "定春半夜會用鼻子開冰箱。很靈巧阿魯。"
+    },
+    {
+      "id": "L23-2",
+      "draft_line": 659,
+      "node": "ch1_r2_l3_listen",
+      "speaker": "sadaharu",
+      "text": "……汪？"
+    },
+    {
+      "id": "H23",
+      "draft_line": 724,
+      "node": "ch1_r2_l3_hint",
+      "speaker": "kagura",
+      "text": "你被定春踩過那麼多次，還不知道牠的腳多大阿魯？……咦，我在幫誰說話阿魯。"
+    },
+    {
+      "id": "R23a-1",
+      "draft_line": 716,
+      "node": "ch1_r2_l3_a",
+      "speaker": "shinpachi",
+      "text": "這腳印小成這樣，還有五根指頭——是手印吧！"
+    },
+    {
+      "id": "R23a-2",
+      "draft_line": 717,
+      "node": "ch1_r2_l3_a",
+      "speaker": "kagura",
+      "text": "……定春最近在減肥阿魯。"
+    },
+    {
+      "id": "R23a-3",
+      "draft_line": 718,
+      "node": "ch1_r2_l3_a",
+      "speaker": "shinpachi",
+      "text": "腳掌是不會瘦的啦！"
+    },
+    {
+      "id": "R23b-1",
+      "draft_line": 719,
+      "node": "ch1_r2_l3_b",
+      "speaker": "kagura",
+      "text": "牠會用頭撞開阿魯。冰箱門上的凹痕你沒看到阿魯？"
+    },
+    {
+      "id": "R23b-2",
+      "draft_line": 720,
+      "node": "ch1_r2_l3_b",
+      "speaker": "shinpachi",
+      "text": "那是上個月的凹痕吧！"
+    },
+    {
+      "id": "R23c-1",
+      "draft_line": 721,
+      "node": "ch1_r2_l3_c",
+      "speaker": "narrator",
+      "text": "定春一口咬住了新八的頭。"
+    },
+    {
+      "id": "R23c-2",
+      "draft_line": 722,
+      "node": "ch1_r2_l3_c",
+      "speaker": "kagura",
+      "text": "冤枉好狗的報應阿魯。"
+    },
+    {
+      "id": "R22u-1",
+      "draft_line": 697,
+      "node": "ch1_r2_placard",
+      "speaker": "shinpachi",
+      "text": "伊莉莎白的牌子上，寫著犯人是你啊！！"
+    },
+    {
+      "id": "R22u-2",
+      "draft_line": 698,
+      "node": "ch1_r2_placard",
+      "speaker": "kagura",
+      "text": "伊莉莎白！你背叛我阿魯！"
+    },
+    {
+      "id": "R22u-3",
+      "draft_line": 699,
+      "node": "ch1_r2_placard",
+      "speaker": "narrator",
+      "text": "伊莉莎白默默把牌子翻過來。背面寫著：「我只是路過」。"
+    },
+    {
+      "id": "R22u-4",
+      "draft_line": 700,
+      "node": "ch1_r2_placard",
+      "speaker": "gintoki",
+      "text": "路過的都比我們家的證人可靠。"
+    },
+    {
+      "id": "Q2",
+      "draft_line": 556,
+      "node": "ch1_r2_give_up",
+      "speaker": "kagura",
+      "text": "眼鏡投降了阿魯。這一局我贏了阿魯。"
+    },
+    {
+      "id": "T1-1",
+      "draft_line": 549,
+      "node": "ch1_r2_timeout",
+      "speaker": "narrator",
+      "text": "八秒過去了。新八的嘴還開著。"
+    },
+    {
+      "id": "T1-2",
+      "draft_line": 550,
+      "node": "ch1_r2_timeout",
+      "speaker": "kagura",
+      "text": "嘴巴開那麼久，會飛進蒼蠅阿魯。"
+    },
+    {
+      "id": "M57",
+      "draft_line": 321,
+      "node": "ch1_r2_clear",
+      "speaker": "kagura",
+      "text": "……好啦。前面一半是我喝的阿魯。"
+    },
+    {
+      "id": "M58",
+      "draft_line": 323,
+      "node": "ch1_r2_clear",
+      "speaker": "kagura",
+      "text": "腳印是我用手蓋的。定春的腳太大，我模仿不來阿魯。"
+    },
+    {
+      "id": "M59",
+      "draft_line": 325,
+      "node": "ch1_r2_clear",
+      "speaker": "shinpachi",
+      "text": "你還認真研究過模仿的難度嗎！"
+    },
+    {
+      "id": "M60",
+      "draft_line": 329,
+      "node": "ch1_r2_clear",
+      "speaker": "sadaharu",
+      "text": "……汪。"
+    },
+    {
+      "id": "X01",
+      "draft_line": 339,
+      "node": "ch1_r2_hidden_sadaharu",
+      "speaker": "shinpachi",
+      "text": "……算了。讓她說完。"
+    },
+    {
+      "id": "X02",
+      "draft_line": 341,
+      "node": "ch1_r2_hidden_sadaharu",
+      "speaker": "otose",
+      "text": "好。證據確鑿，定春有罪。"
+    },
+    {
+      "id": "X03",
+      "draft_line": 345,
+      "node": "ch1_r2_hidden_sadaharu",
+      "speaker": "sadaharu",
+      "text": "……汪。"
+    },
+    {
+      "id": "X04",
+      "draft_line": 347,
+      "node": "ch1_r2_hidden_sadaharu",
+      "speaker": "narrator",
+      "text": "定春站起來，慢慢走向神樂。"
+    },
+    {
+      "id": "X05",
+      "draft_line": 351,
+      "node": "ch1_r2_hidden_sadaharu",
+      "speaker": "narrator",
+      "text": "然後把神樂的頭，整顆含進了嘴裡。"
+    },
+    {
+      "id": "X06",
+      "draft_line": 353,
+      "node": "ch1_r2_hidden_sadaharu",
+      "speaker": "kagura",
+      "text": "……前面一半是我喝的。腳印是我用手蓋的阿魯。"
+    },
+    {
+      "id": "X07",
+      "draft_line": 355,
+      "node": "ch1_r2_hidden_sadaharu",
+      "speaker": "shinpachi",
+      "text": "定春的審判比我的吐槽有效率多了！"
+    },
+    {
+      "id": "X08",
+      "draft_line": 357,
+      "node": "ch1_r2_hidden_sadaharu",
+      "speaker": "gintoki",
+      "text": "新八，你的工作被狗搶走了。"
+    },
+    {
+      "id": "M61",
+      "draft_line": 365,
+      "node": "ch1_r3_intro",
+      "speaker": "otose",
+      "text": "前一半是神樂，後一半是銀時。兩個都有份。"
+    },
+    {
+      "id": "M62",
+      "draft_line": 367,
+      "node": "ch1_r3_intro",
+      "speaker": "gintoki",
+      "text": "神樂。看來只能用那招了。"
+    },
+    {
+      "id": "M63",
+      "draft_line": 369,
+      "node": "ch1_r3_intro",
+      "speaker": "kagura",
+      "text": "嗯。萬事屋祕傳，兩人份的藉口阿魯。"
+    },
+    {
+      "id": "M64",
+      "draft_line": 371,
+      "node": "ch1_r3_intro",
+      "speaker": "shinpachi",
+      "text": "那種東西不要祕傳啊！"
+    },
+    {
+      "id": "R31a-1",
+      "draft_line": 745,
+      "node": "ch1_r3_c1_a",
+      "speaker": "gintoki",
+      "text": "毒這種東西，常常藏在最後一口。"
+    },
+    {
+      "id": "R31b-1",
+      "draft_line": 746,
+      "node": "ch1_r3_c1_b",
+      "speaker": "gintoki",
+      "text": "先問就不是驚喜了。"
+    },
+    {
+      "id": "R31c-1",
+      "draft_line": 747,
+      "node": "ch1_r3_c1_c",
+      "speaker": "kagura",
+      "text": "眼鏡又被收買了阿魯。"
+    },
+    {
+      "id": "H31",
+      "draft_line": 748,
+      "node": "ch1_r3_c1_hint",
+      "speaker": "kagura",
+      "text": "試毒的人，會把整瓶喝完嗎？……換作是我會阿魯。"
+    },
+    {
+      "id": "R32a-1",
+      "draft_line": 759,
+      "node": "ch1_r3_c2_a",
+      "speaker": "kagura",
+      "text": "安心之後，會口渴阿魯。"
+    },
+    {
+      "id": "R32b-1",
+      "draft_line": 760,
+      "node": "ch1_r3_c2_b",
+      "speaker": "kagura",
+      "text": "數學好的眼鏡最討厭了阿魯。"
+    },
+    {
+      "id": "R32c-1",
+      "draft_line": 761,
+      "node": "ch1_r3_c2_c",
+      "speaker": "gintoki",
+      "text": "對吧，大家都平安。"
+    },
+    {
+      "id": "H32",
+      "draft_line": 762,
+      "node": "ch1_r3_c2_hint",
+      "speaker": "kagura",
+      "text": "『沒毒』跟『喝完』中間，缺一個理由阿魯。那個理由叫嘴饞。……我說出來了阿魯。"
+    },
+    {
+      "id": "R33a-1",
+      "draft_line": 773,
+      "node": "ch1_r3_c3_a",
+      "speaker": "gintoki",
+      "text": "……那是夢遊的銀桑。跟現在的銀桑是兩個人。"
+    },
+    {
+      "id": "R33b-1",
+      "draft_line": 774,
+      "node": "ch1_r3_c3_b",
+      "speaker": "gintoki",
+      "text": "早餐是人權。人權不分你我。"
+    },
+    {
+      "id": "R33c-1",
+      "draft_line": 775,
+      "node": "ch1_r3_c3_c",
+      "speaker": "kagura",
+      "text": "眼鏡被早餐說服了阿魯。"
+    },
+    {
+      "id": "H33",
+      "draft_line": 776,
+      "node": "ch1_r3_c3_hint",
+      "speaker": "kagura",
+      "text": "銀醬第一回合說過幾點起來？沒在聽的眼鏡，現在只能打普通的吐槽阿魯。"
+    },
+    {
+      "id": "R34a-1",
+      "draft_line": 787,
+      "node": "ch1_r3_c4_a",
+      "speaker": "kagura",
+      "text": "新八啊。是你自己寫上去的阿魯。"
+    },
+    {
+      "id": "R34b-1",
+      "draft_line": 788,
+      "node": "ch1_r3_c4_b",
+      "speaker": "kagura",
+      "text": "新八這名字很適合牛奶阿魯。又白又淡阿魯。"
+    },
+    {
+      "id": "R34c-1",
+      "draft_line": 789,
+      "node": "ch1_r3_c4_c",
+      "speaker": "gintoki",
+      "text": "新八牛奶。一聽就賣不出去。"
+    },
+    {
+      "id": "H34",
+      "draft_line": 790,
+      "node": "ch1_r3_c4_hint",
+      "speaker": "kagura",
+      "text": "瓶子上的『新八』是誰寫的？眼鏡連自己做過的事都忘了阿魯。"
+    },
+    {
+      "id": "H35",
+      "draft_line": 807,
+      "node": "ch1_r3_c5_hint",
+      "speaker": "kagura",
+      "text": "等我們講完最後那個『！』再吐阿魯。太早沒禮貌，太晚沒存在感阿魯。"
+    },
+    {
+      "id": "Q3",
+      "draft_line": 557,
+      "node": "ch1_r3_give_up",
+      "speaker": "gintoki",
+      "text": "連擊到一半放棄？新八，吐槽是講節奏的。"
+    },
+    {
+      "id": "T3-1",
+      "draft_line": 551,
+      "node": "ch1_r3_timeout",
+      "speaker": "gintoki",
+      "text": "新八，你跟不上了。"
+    },
+    {
+      "id": "R35p-1",
+      "draft_line": 802,
+      "node": "ch1_r3_qte_perfect",
+      "speaker": "shinpachi",
+      "text": "錯的是你們兩個啊啊啊！！"
+    },
+    {
+      "id": "R35p-2",
+      "draft_line": 803,
+      "node": "ch1_r3_qte_perfect",
+      "speaker": "gintoki+kagura",
+      "text": "……是。"
+    },
+    {
+      "id": "R35e-1",
+      "draft_line": 804,
+      "node": "ch1_r3_qte_early",
+      "speaker": "shinpachi",
+      "text": "錯的是——"
+    },
+    {
+      "id": "R35e-2",
+      "draft_line": 805,
+      "node": "ch1_r3_qte_early",
+      "speaker": "kagura",
+      "text": "還沒講完阿魯。插嘴的眼鏡最討厭了阿魯。"
+    },
+    {
+      "id": "R35l-1",
+      "draft_line": 806,
+      "node": "ch1_r3_qte_late",
+      "speaker": "gintoki",
+      "text": "……看吧。新八也沒意見。"
+    },
+    {
+      "id": "S01",
+      "draft_line": 391,
+      "node": "ch1_r3_super",
+      "speaker": "shinpachi",
+      "text": "龜——派——"
+    },
+    {
+      "id": "S02",
+      "draft_line": 393,
+      "node": "ch1_r3_super",
+      "speaker": "shinpachi",
+      "text": "試毒試到一滴不剩！安心了還喝完！早餐也不能吃別人的！"
+    },
+    {
+      "id": "S03",
+      "draft_line": 395,
+      "node": "ch1_r3_super",
+      "speaker": "shinpachi",
+      "text": "瓶子上的『新八』是我的名字！是我寫的！"
+    },
+    {
+      "id": "S04",
+      "draft_line": 397,
+      "node": "ch1_r3_super",
+      "speaker": "shinpachi",
+      "text": "——氣功！！"
+    },
+    {
+      "id": "S05",
+      "draft_line": 399,
+      "node": "ch1_r3_super",
+      "speaker": "gintoki",
+      "text": "……我們還沒講耶。"
+    },
+    {
+      "id": "S06",
+      "draft_line": 401,
+      "node": "ch1_r3_super",
+      "speaker": "kagura",
+      "text": "眼鏡連我們的台詞都先吐了，還在發光阿魯。"
+    },
+    {
+      "id": "CB1",
+      "draft_line": 411,
+      "node": "ch1_r3_combo_bonus",
+      "speaker": "gintoki",
+      "text": "……五連發。新八，你今天早餐吃了什麼？"
+    },
+    {
+      "id": "CB2",
+      "draft_line": 413,
+      "node": "ch1_r3_combo_bonus",
+      "speaker": "shinpachi",
+      "text": "什麼都沒吃！我的早餐被你們喝掉了！"
+    },
+    {
+      "id": "CBX1",
+      "draft_line": 734,
+      "node": "ch1_r3_combo_break",
+      "speaker": "gintoki",
+      "text": "斷了。新八，吐槽是講節奏的。"
+    },
+    {
+      "id": "M70",
+      "draft_line": 419,
+      "node": "ch1_r3_clear",
+      "speaker": "gintoki",
+      "text": "……全被接住了。"
+    },
+    {
+      "id": "M71",
+      "draft_line": 421,
+      "node": "ch1_r3_clear",
+      "speaker": "kagura",
+      "text": "今天的眼鏡，有點可怕阿魯。"
+    },
+    {
+      "id": "M72",
+      "draft_line": 427,
+      "node": "ch1_truth",
+      "speaker": "otose",
+      "text": "好了。宣判之前，我把昨晚的事說一遍。"
+    },
+    {
+      "id": "M73",
+      "draft_line": 429,
+      "node": "ch1_truth",
+      "speaker": "otose",
+      "text": "半夜十二點，神樂開冰箱，配醋昆布喝了一半。"
+    },
+    {
+      "id": "M74",
+      "draft_line": 431,
+      "node": "ch1_truth",
+      "speaker": "kagura",
+      "text": "醋昆布配草莓牛奶，是大人的味道阿魯。"
+    },
+    {
+      "id": "M75",
+      "draft_line": 433,
+      "node": "ch1_truth",
+      "speaker": "otose",
+      "text": "半夜兩點，銀時起來喝完剩下的，瓶子踢進桌子底下。"
+    },
+    {
+      "id": "M76",
+      "draft_line": 435,
+      "node": "ch1_truth",
+      "speaker": "shinpachi",
+      "text": "婆婆，你連幾點都知道！"
+    },
+    {
+      "id": "M77",
+      "draft_line": 437,
+      "node": "ch1_truth",
+      "speaker": "otose",
+      "text": "我就住樓下。你們家的天花板，比你們的藉口還薄。"
+    },
+    {
+      "id": "M78",
+      "draft_line": 441,
+      "node": "ch1_truth_hidden",
+      "speaker": "kagura",
+      "text": "頭上還有定春的牙印。我今天已經被罰過了阿魯。"
+    },
+    {
+      "id": "M78",
+      "draft_line": 443,
+      "node": "ch1_truth_normal",
+      "speaker": "kagura",
+      "text": "定春，對不起阿魯。今天的肉乾分你一半阿魯。"
+    },
+    {
+      "id": "M79",
+      "draft_line": 445,
+      "node": "ch1_verdict",
+      "speaker": "otose",
+      "text": "判決。兩個人，今天之內賠新八一瓶新的。"
+    },
+    {
+      "id": "M80",
+      "draft_line": 453,
+      "node": "ch1_twist",
+      "speaker": "gintoki",
+      "text": "……不用等到今天。"
+    },
+    {
+      "id": "M81",
+      "draft_line": 455,
+      "node": "ch1_twist",
+      "speaker": "gintoki",
+      "text": "新的一瓶，銀桑早上就買好了。怕你們偷喝，藏在玄關的鞋櫃裡。"
+    },
+    {
+      "id": "M82",
+      "draft_line": 459,
+      "node": "ch1_twist",
+      "speaker": "shinpachi",
+      "text": "阿銀……你早就買好了？"
+    },
+    {
+      "id": "M83",
+      "draft_line": 461,
+      "node": "ch1_twist",
+      "speaker": "gintoki",
+      "text": "名字也是銀桑寫的，比你寫得好看。"
+    },
+    {
+      "id": "M84",
+      "draft_line": 463,
+      "node": "ch1_twist",
+      "speaker": "shinpachi",
+      "text": "這個人……偶爾也會做一件像樣的事。"
+    },
+    {
+      "id": "M85",
+      "draft_line": 465,
+      "node": "ch1_twist",
+      "speaker": "shinpachi",
+      "text": "……謝謝。不過阿銀，錢是哪來的？"
+    },
+    {
+      "id": "M86",
+      "draft_line": 467,
+      "node": "ch1_twist",
+      "speaker": "gintoki",
+      "text": "放心，不是亂花的錢。是銀桑昨天終於準備好的信封。"
+    },
+    {
+      "id": "M87",
+      "draft_line": 471,
+      "node": "ch1_twist",
+      "speaker": "gintoki",
+      "text": "信封上寫著『新八 九月份薪水』。"
+    },
+    {
+      "id": "M88",
+      "draft_line": 475,
+      "node": "ch1_twist",
+      "speaker": "shinpachi",
+      "text": "你終於準備好我的薪水……然後拿去買了我的牛奶！？"
+    },
+    {
+      "id": "M89",
+      "draft_line": 479,
+      "node": "ch1_twist",
+      "speaker": "gintoki",
+      "text": "找的錢在裡面。三十圓，省著點用。"
+    },
+    {
+      "id": "M90",
+      "draft_line": 481,
+      "node": "ch1_twist",
+      "speaker": "shinpachi",
+      "text": "我一個月的薪水，就是一瓶牛奶加三十圓嗎！"
+    },
+    {
+      "id": "M91",
+      "draft_line": 483,
+      "node": "ch1_twist",
+      "speaker": "gintoki",
+      "text": "好了，別激動。牛奶在鞋櫃，自己去拿。"
+    },
+    {
+      "id": "M92",
+      "draft_line": 487,
+      "node": "ch1_twist",
+      "speaker": "narrator",
+      "text": "鞋櫃開著。寫著「新八」的瓶子倒在地上，空了。"
+    },
+    {
+      "id": "M93",
+      "draft_line": 489,
+      "node": "ch1_twist",
+      "speaker": "narrator",
+      "text": "旁邊一排巨大的腳印，一路走到定春的窩。每一個都比新八的頭還大。"
+    },
+    {
+      "id": "M94",
+      "draft_line": 491,
+      "node": "ch1_twist",
+      "speaker": "kagura",
+      "text": "看吧，我就說犯人是定春阿魯。"
+    },
+    {
+      "id": "M95",
+      "draft_line": 495,
+      "node": "ch1_twist",
+      "speaker": "shinpachi",
+      "text": "那次是你冤枉牠！這次才是真的啊啊啊！！"
+    },
+    {
+      "id": "M96",
+      "draft_line": 499,
+      "node": "ch1_twist",
+      "speaker": "sadaharu",
+      "text": "汪。"
+    },
+    {
+      "id": "G01",
+      "draft_line": 518,
+      "node": "ch1_game_over",
+      "speaker": "narrator",
+      "text": "眼鏡，碎了。"
+    },
+    {
+      "id": "G02",
+      "draft_line": 519,
+      "node": "ch1_game_over",
+      "speaker": "kagura",
+      "text": "新八……新八不見了阿魯。"
+    },
+    {
+      "id": "G03",
+      "draft_line": 520,
+      "node": "ch1_game_over",
+      "speaker": "gintoki",
+      "text": "沒有不見。眼鏡碎了，所以新八整個都沒了。"
+    },
+    {
+      "id": "G04",
+      "draft_line": 521,
+      "node": "ch1_game_over",
+      "speaker": "otose",
+      "text": "掃一掃。休庭十分鐘。"
+    },
+    {
+      "id": "G05",
+      "draft_line": 525,
+      "node": "ch1_r1_retry",
+      "speaker": "shinpachi",
+      "text": "……我回來了。這次戴了備用的。"
+    },
+    {
+      "id": "G05",
+      "draft_line": 525,
+      "node": "ch1_r2_retry",
+      "speaker": "shinpachi",
+      "text": "……我回來了。這次戴了備用的。"
+    },
+    {
+      "id": "G05",
+      "draft_line": 525,
+      "node": "ch1_r3_retry",
+      "speaker": "shinpachi",
+      "text": "……我回來了。這次戴了備用的。"
+    },
+    {
+      "id": "M40",
+      "draft_line": 263,
+      "node": "ch1_r1_gintoki",
+      "speaker": "gintoki",
+      "text": "新八，先把拳頭放下。銀桑昨晚十點就睡了。",
+      "kind": "round_line"
+    },
+    {
+      "id": "M41",
+      "draft_line": 265,
+      "node": "ch1_r1_gintoki",
+      "speaker": "gintoki",
+      "text": "草莓牛奶那種小孩喝的東西，銀桑三年前就戒了。",
+      "kind": "round_line"
+    },
+    {
+      "id": "M42",
+      "draft_line": 267,
+      "node": "ch1_r1_gintoki",
+      "speaker": "gintoki",
+      "text": "再說，冰箱是全家共用的。放進去的，就是大家的。",
+      "kind": "round_line"
+    },
+    {
+      "id": "M43",
+      "draft_line": 269,
+      "node": "ch1_r1_gintoki",
+      "speaker": "gintoki",
+      "text": "嘴角這個？牙膏啦。銀桑刷牙一向刷得很豪邁。",
+      "kind": "round_line"
+    },
+    {
+      "id": "M54",
+      "draft_line": 311,
+      "node": "ch1_r2_kagura",
+      "speaker": "kagura",
+      "text": "我昨晚只吃了醋昆布。很乾，但我忍住沒喝任何東西阿魯。",
+      "kind": "round_line"
+    },
+    {
+      "id": "M55",
+      "draft_line": 313,
+      "node": "ch1_r2_kagura",
+      "speaker": "kagura",
+      "text": "而且定春昨晚親口跟我說了：『牛奶是別人喝的，汪』阿魯。",
+      "kind": "round_line"
+    },
+    {
+      "id": "M56",
+      "draft_line": 315,
+      "node": "ch1_r2_kagura",
+      "speaker": "kagura",
+      "text": "證據就是這排腳印！從冰箱走到定春的窩，犯人是定春阿魯！",
+      "kind": "round_line"
+    },
+    {
+      "id": "M65",
+      "draft_line": 375,
+      "node": "ch1_r3_combo",
+      "speaker": "gintoki",
+      "text": "我們不是偷喝。是試毒。怕新八喝到壞掉的牛奶。",
+      "kind": "round_line"
+    },
+    {
+      "id": "M66",
+      "draft_line": 377,
+      "node": "ch1_r3_combo",
+      "speaker": "kagura",
+      "text": "試到一半發現沒毒，就安心地喝完了阿魯。",
+      "kind": "round_line"
+    },
+    {
+      "id": "M67",
+      "draft_line": 379,
+      "node": "ch1_r3_combo",
+      "speaker": "gintoki",
+      "text": "而且銀桑是早上喝的。早上的牛奶是早餐，早餐是人權。",
+      "kind": "round_line"
+    },
+    {
+      "id": "M68",
+      "draft_line": 381,
+      "node": "ch1_r3_combo",
+      "speaker": "kagura",
+      "text": "瓶子上寫著『新八』，我們以為那是牛奶的名字阿魯。",
+      "kind": "round_line"
+    },
+    {
+      "id": "M69",
+      "draft_line": 383,
+      "node": "ch1_r3_combo",
+      "speaker": "gintoki+kagura",
+      "text": "所以錯的是——把名字寫在牛奶上的新八（阿魯）！",
+      "kind": "round_line"
+    }
+  ],
+  "result_lines": [
+    {
+      "id": "E-S",
+      "draft_line": 507,
+      "node": "ch1_result",
+      "speaker": "shinpachi",
+      "text": "一副眼鏡都沒碎……為什麼我還是什麼都沒拿到！？"
+    },
+    {
+      "id": "E-A",
+      "draft_line": 508,
+      "node": "ch1_result",
+      "speaker": "kagura",
+      "text": "這副眼鏡，今天還算有用阿魯。"
+    },
+    {
+      "id": "E-B",
+      "draft_line": 509,
+      "node": "ch1_result",
+      "speaker": "gintoki",
+      "text": "普通的吐槽，普通的眼鏡。明天也拜託了。"
+    },
+    {
+      "id": "E-C",
+      "draft_line": 510,
+      "node": "ch1_result",
+      "speaker": "otose",
+      "text": "冰箱也好，薪水也好，寫了名字不代表就是你的。"
+    }
+  ]
+}

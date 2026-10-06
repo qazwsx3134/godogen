@@ -191,7 +191,7 @@ static func _say(line: Dictionary, context: Dictionary, where: String) -> Dictio
 	if speaker.is_empty():
 		return {"error": "%s: unknown speaker '%s' (use a catalog id or name)" % [where, character]}
 	var text: String = String(line.get("text", ""))
-	if text.contains("{{") or text.contains("["):
+	if not preload("res://scripts/dialogue_text.gd").valid_markup(text):
 		return {"error": "%s: inline markup is not supported in '%s'" % [where, text]}
 	var step: Dictionary = {"op": "say", "speaker": speaker, "text": text}
 	for tag: String in line.get("tags", []):
@@ -199,6 +199,8 @@ static func _say(line: Dictionary, context: Dictionary, where: String) -> Dictio
 			step["thought"] = true
 		elif tag == "offscreen":
 			step["offscreen"] = true
+		elif tag.begins_with("source:"):
+			step["source_id"] = tag.substr(7)
 		elif EXPRESSIONS.has(tag):
 			step["expression"] = tag
 		else:
@@ -350,6 +352,10 @@ static func _mutation(line: Dictionary, where: String) -> Dictionary:
 			return {"op": name}
 		["beam", 1]:
 			return {"op": name, "duration": args[0]}
+		["fade", 1]:
+			return {"op": "fade", "direction": args[0]}
+		["fade", 2]:
+			return {"op": "fade", "direction": args[0], "duration": args[1]}
 		["freeze", 0]:
 			return {"op": "freeze"}
 		["freeze", 1]:

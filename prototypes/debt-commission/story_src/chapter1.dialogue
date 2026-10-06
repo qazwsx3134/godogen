@@ -1,0 +1,630 @@
+
+~ ch1_open_fridge
+# 上機試讀版。文本依作者已採納 P1–P8 的 draft-v0.2；source tags 保留句號。
+do bg("yorozuya_kitchen")
+do bgm("bgm_daily")
+do char("shinpachi","surprised","left")
+do profile("shinpachi")
+do se("fridge")
+早上八點。萬事屋的冰箱門，開著。 [#source:M01]
+shinpachi: ……沒有。 [#source:M02]
+shinpachi: 我昨天買的草莓牛奶，沒有了。 [#source:M03]
+shinpachi: 自己的錢買的。瓶子上還寫了大大的「新八」。 [#source:M04] [#thought]
+shinpachi: 這個家裡，唯一寫著我名字的東西。 [#source:M05] [#thought]
+do char("kagura","smile","right")
+do profile("kagura")
+kagura: 一大早對冰箱發呆，眼鏡終於壞掉了阿魯？ [#source:M06]
+shinpachi: 神樂醬，我的草莓牛奶不見了。 [#source:M07]
+kagura: 新八的東西不見很正常阿魯。新八本人也常常不見阿魯。 [#source:M08]
+shinpachi: 我每天都在啊！只是沒人看我而已！ [#source:M09]
+do char("gintoki","annoyed","center")
+do profile("gintoki")
+gintoki: 吵什麼。一大早的，銀桑的耳朵還在放假。 [#source:M10]
+shinpachi: 阿銀，你有沒有看到我的草莓牛奶？ [#source:M11]
+gintoki: 沒有。寫著別人名字的東西，銀桑一向不碰。 [#source:M12]
+do freeze(0.6)
+shinpachi: ……我還沒說上面寫了名字。 [#source:M13]
+gintoki: 牛奶瓶上寫名字是常識。銀桑是用常識推理的。 [#source:M14]
+shinpachi: 好。那我也用常識——這個家，現在開始搜查！ [#source:M15]
+=> ch1_investigate_pre
+
+~ ch1_investigate_pre
+do bg("yorozuya_living_room")
+do enter("gintoki","neutral","center")
+do enter("kagura","smile","right")
+shinpachi: 冰箱到客廳，一路查過去。一個都不放過。 [#source:M16] [#thought] [#offscreen]
+=> ch1_investigate
+
+~ ch1_investigate
+do investigate("ch1_living_room_search")
+=> ch1_investigate_done
+
+~ ch1_inspect_desk_underside
+shinpachi: 寫著我名字的瓶子……空的，躺在阿銀的桌子底下。 [#source:M17]
+gintoki: 它自己滾過來的。大概是想投靠銀桑。 [#source:M18]
+=> ch1_investigate
+
+~ ch1_inspect_gintoki_mouth
+shinpachi: 阿銀，你嘴角那條白白的是什麼？……有草莓味。 [#source:M19]
+gintoki: 別湊那麼近。想聞銀桑的臉，要先預約。 [#source:M20]
+=> ch1_investigate
+
+~ ch1_inspect_sofa_underside
+shinpachi: 醋昆布的包裝……裡面怎麼是粉紅色的？ [#source:M21]
+kagura: 那是醋昆布在害羞阿魯。別一直看，它會更紅阿魯。 [#source:M22]
+=> ch1_investigate
+
+~ ch1_inspect_floor_prints
+shinpachi: 黏黏的腳印，從冰箱一路走到定春的窩。 [#source:M23]
+do profile("sadaharu")
+sadaharu: 汪。 [#source:M24] [#offscreen]
+shinpachi: ……定春，你什麼時候變得這麼秀氣了？ [#source:M25]
+=> ch1_investigate
+
+~ ch1_talk_1
+gintoki: 十點。銀桑是早睡早起的模範市民。 [#source:D1-1]
+shinpachi: 早起的人，不會現在還在打呵欠。 [#source:D1-2] [#thought]
+=> ch1_investigate
+
+~ ch1_talk_2
+kagura: 醋昆布。很乾阿魯。 [#source:D2-1]
+shinpachi: ……很乾。然後呢？ [#source:D2-2] [#thought]
+=> ch1_investigate
+
+~ ch1_talk_3
+sadaharu: 汪。 [#source:D3-1]
+shinpachi: ……謝謝你的證詞。 [#source:D3-2]
+=> ch1_investigate
+
+~ ch1_kitchen_fridge
+shinpachi: 冰箱裡只剩醬油，和一個布丁。 [#source:D4-1]
+gintoki: 布丁不准碰。上面寫了銀桑的名字。 [#source:D4-2] [#offscreen]
+shinpachi: 你剛剛才說寫名字的東西一向不碰吧！原來是只保護你自己的名字！ [#source:D4-3]
+=> ch1_investigate
+
+~ ch1_investigate_done
+shinpachi: 空瓶、嘴角、包裝、腳印。四樣都到手了。 [#source:M26] [#thought]
+shinpachi: ……嫌疑人多到可以開會了。 [#source:M27] [#thought]
+do se("knock")
+do se("door_slide")
+=> ch1_meeting_open
+
+~ ch1_meeting_open
+do char("shinpachi","neutral","left")
+do char("otose","annoyed","right")
+do profile("otose")
+otose: 一大早吵什麼。樓下的客人以為樓上在拆房子。 [#source:M28]
+shinpachi: 婆婆，我的草莓牛奶被偷喝了。犯人就在這個家裡。 [#source:M29]
+otose: 這個家裡？那就是全員了。 [#source:M30]
+gintoki: 婆婆，這種小事不用驚動你—— [#source:M31]
+otose: 房租也是小事，你也一直沒來驚動我。 [#source:M32]
+otose: 全員坐下。家庭會議，開始。 [#source:M33]
+do se("stamp")
+do bgm("bgm_meeting")
+kagura: 婆婆，為什麼拿煙灰缸當法槌阿魯？ [#source:M34]
+otose: 有什麼用什麼。你們家不也是這樣過日子的。 [#source:M35]
+otose: 規矩很簡單。一個一個講。講不通的地方，新八負責戳。 [#source:M36]
+shinpachi: 也就是說——吐槽的時間到了。 [#source:M37] [#thought]
+=> ch1_r1_intro
+
+~ ch1_r1_intro
+do char("gintoki","smug","center")
+do hide("kagura")
+do bgm("bgm_boke")
+otose: 銀時，你先。說謊的話，房租加一成。 [#source:M38]
+gintoki: 好。那銀桑就把真相，一字一句告訴你們。 [#source:M39]
+=> ch1_r1_gintoki
+
+~ ch1_r1_gintoki
+do boke_round("ch1_r1")
+
+~ ch1_r1_l1_listen
+gintoki: 睡得超熟。半夜兩點起來開冰箱的時候，都還沒醒。 [#source:L11-1]
+shinpachi: ……半夜兩點，開冰箱。現在戳，他只會說是夢遊。先記下來。 [#source:L11-2] [#thought]
+do item("gin_sleep_testimony")
+=> ch1_r1_gintoki
+
+~ ch1_r1_l1_hint
+kagura: 睡著時的事戳不破阿魯。等銀醬說他醒著做了什麼，再拿出來用阿魯。 [#source:H11]
+=> ch1_r1_gintoki
+
+~ ch1_r1_l1_whiff
+do freeze(0.25)
+do se("crow")
+shinpachi: 睡覺這種事，誰能證明—— [#source:K11-1]
+otose: 睡著的事，誰都戳不破。等他說出自己醒著做了什麼，再戳。 [#source:K11-2]
+shinpachi: ……是。 [#source:K11-3]
+=> ch1_r1_gintoki
+
+~ ch1_r1_l2_listen
+gintoki: 現在只喝大人的飲料。例如，粉紅色的那種。 [#source:L12-1]
+kagura: 那就是草莓牛奶阿魯。 [#source:L12-2]
+=> ch1_r1_gintoki
+
+~ ch1_r1_l2_hint
+kagura: 銀醬桌子底下那個，你剛剛才撿起來阿魯。眼鏡是裝飾品阿魯？ [#source:H12]
+=> ch1_r1_gintoki
+
+~ ch1_r1_l2_a
+do shake()
+do se("tsukkomi_hit")
+gintoki: 那瓶子是自己滾過來投靠銀桑的。剛剛說過了。 [#source:R12a-1]
+shinpachi: 它投靠你之前，裡面的牛奶跑去哪了！ [#source:R12a-2]
+=> ch1_r1_gintoki
+
+~ ch1_r1_l2_b
+gintoki: 那是上禮拜的銀桑。男人一個禮拜就會成長。 [#source:R12b-1]
+shinpachi: ……空口說不贏他。得拿出東西來。 [#source:R12b-2] [#thought]
+=> ch1_r1_gintoki
+
+~ ch1_r1_l2_c
+do freeze(0.25)
+do se("crow")
+kagura: 新八在幫牛奶講話阿魯。 [#source:R12c-1]
+gintoki: 看吧，他也愛喝。動機成立。 [#source:R12c-2]
+=> ch1_r1_gintoki
+
+~ ch1_r1_l3_listen
+gintoki: 跟房租一樣。大家一起欠，感情才會好。 [#source:L13-1]
+otose: 只有你在欠。 [#source:L13-2]
+=> ch1_r1_gintoki
+
+~ ch1_r1_l3_hint
+kagura: 歪理不是謊話阿魯。去找他講錯的地方，不是講爛的地方阿魯。 [#source:H13]
+=> ch1_r1_gintoki
+
+~ ch1_r1_l3_whiff
+do freeze(0.25)
+do se("crow")
+shinpachi: 那我的牛奶也是大家的——不對，等一下！ [#source:K13-1]
+otose: 這句是歪理，不是謊話。等他說謊再戳。 [#source:K13-2]
+=> ch1_r1_gintoki
+
+~ ch1_r1_l4_listen
+gintoki: 草莓口味的，兒童用。銀桑的牙齒還很年輕。 [#source:L14-1]
+shinpachi: 剛剛不是才說，小孩的東西早就戒了嗎…… [#source:L14-2] [#thought]
+=> ch1_r1_gintoki
+
+~ ch1_r1_l4_hint
+kagura: 你剛剛把臉湊過去聞了吧？那是什麼味道？鼻子也要我借你阿魯？ [#source:H14]
+=> ch1_r1_gintoki
+
+~ ch1_r1_l4_a
+do shake()
+do se("tsukkomi_hit")
+gintoki: 牙膏跟牛奶，都是白的，都有草莓口味。很容易搞混。 [#source:R14a-1]
+shinpachi: 那你刷牙的時候是用喝的嗎！ [#source:R14a-2]
+=> ch1_r1_gintoki
+
+~ ch1_r1_l4_b
+gintoki: 豪邁的男人，泡泡不分裡外。 [#source:R14b-1]
+shinpachi: ……不對，重點是那個味道。 [#source:R14b-2] [#thought]
+=> ch1_r1_gintoki
+
+~ ch1_r1_l4_c
+do freeze(0.25)
+do se("crow")
+kagura: 眼鏡被說服了阿魯。度數不夠阿魯。 [#source:R14c-1]
+=> ch1_r1_gintoki
+
+~ ch1_r1_give_up
+do freeze(0.25)
+do se("crow")
+gintoki: 不吐了？那就是承認銀桑說得對。 [#source:Q1]
+=> ch1_r1_gintoki
+
+~ ch1_r1_timeout
+do freeze(0.25)
+do se("crow")
+八秒過去了。新八的嘴還開著。 [#source:T1-1]
+kagura: 嘴巴開那麼久，會飛進蒼蠅阿魯。 [#source:T1-2]
+=> ch1_r1_gintoki
+
+~ ch1_r1_clear
+do char("gintoki","sweat","center")
+do bgm("bgm_meeting")
+gintoki: ……好吧。銀桑承認，昨晚跟那瓶牛奶見過一面。 [#source:M44]
+shinpachi: 『見面』是指喝掉吧！ [#source:M45]
+gintoki: 但只有一半！銀桑見到它的時候，它已經瘦了一半！ [#source:M46]
+otose: 一半。那另一半呢？ [#source:M47]
+kagura: ……幹嘛全部都看我阿魯。 [#source:M48]
+=> ch1_r2_intro
+
+~ ch1_r2_intro
+do hide("gintoki")
+do char("kagura","smug","center")
+do bgm("bgm_boke")
+otose: 神樂，換你。 [#source:M49]
+do enter("elisabeth","neutral","left")
+do profile("elisabeth")
+do placard("")
+shinpachi: ……伊莉莎白什麼時候在這裡的？ [#source:M50]
+otose: 一早就在了。桂托我顧一天。 [#source:M50-1]
+kagura: 哼。我有目擊證人阿魯。 [#source:M50-2]
+shinpachi: 證人是誰？ [#source:M51]
+kagura: 定春阿魯。 [#source:M52]
+do char("sadaharu","neutral","left")
+sadaharu: 汪。 [#source:M53]
+do hide("otose")
+=> ch1_r2_kagura
+
+~ ch1_r2_kagura
+do boke_round("ch1_r2")
+
+~ ch1_r2_l1_listen
+kagura: 配水太普通了。我是有品味的女人阿魯。 [#source:L21-1]
+shinpachi: 配水太普通……那她配了什麼？ [#source:L21-2] [#thought]
+=> ch1_r2_kagura
+
+~ ch1_r2_l1_hint
+kagura: 我絕對不會告訴你，沙發底下的包裝是什麼顏色阿魯。……我什麼都沒說阿魯。 [#source:H21]
+=> ch1_r2_kagura
+
+~ ch1_r2_l1_a
+do shake()
+do se("tsukkomi_hit")
+kagura: ……醋昆布偶爾也想試試新口味阿魯。 [#source:R21a-1]
+shinpachi: 想試的是你吧！醋昆布配草莓牛奶是什麼組合！ [#source:R21a-2]
+=> ch1_r2_kagura
+
+~ ch1_r2_l1_b
+kagura: 我是會忍耐的女人阿魯。 [#source:R21b-1]
+shinpachi: ……光靠常識贏不了她。 [#source:R21b-2] [#thought]
+=> ch1_r2_kagura
+
+~ ch1_r2_l1_c
+do freeze(0.25)
+do se("crow")
+kagura: 對吧阿魯。 [#source:R21c-1]
+gintoki: 新八被一句好聽話收買了。 [#source:R21c-2]
+=> ch1_r2_kagura
+
+~ ch1_r2_l2_listen
+kagura: 定春說的話我都聽得懂阿魯。我們是好朋友阿魯。 [#source:L22-1]
+sadaharu: 汪。 [#source:L22-2]
+=> ch1_r2_kagura
+
+~ ch1_r2_l2_hint
+kagura: 不准看伊莉莎白。牌子上寫什麼都不准看阿魯。……不准喔阿魯。 [#source:H22]
+=> ch1_r2_kagura
+
+~ ch1_r2_l2_b
+kagura: 就是只會汪，才需要我翻譯阿魯。 [#source:R22b-1]
+shinpachi: ……翻譯不是重點。角落好像有人舉著什麼。 [#source:R22b-2] [#thought]
+=> ch1_r2_kagura
+
+~ ch1_r2_l2_c
+do freeze(0.25)
+do se("crow")
+kagura: 謝謝阿魯。 [#source:R22c-1]
+sadaharu: ……汪。 [#source:R22c-2]
+=> ch1_r2_kagura
+
+~ ch1_r2_l3_listen
+kagura: 定春半夜會用鼻子開冰箱。很靈巧阿魯。 [#source:L23-1]
+sadaharu: ……汪？ [#source:L23-2]
+=> ch1_r2_kagura
+
+~ ch1_r2_l3_hint
+kagura: 你被定春踩過那麼多次，還不知道牠的腳多大阿魯？……咦，我在幫誰說話阿魯。 [#source:H23]
+=> ch1_r2_kagura
+
+~ ch1_r2_l3_a
+do shake()
+do se("tsukkomi_hit")
+shinpachi: 這腳印小成這樣，還有五根指頭——是手印吧！ [#source:R23a-1]
+kagura: ……定春最近在減肥阿魯。 [#source:R23a-2]
+shinpachi: 腳掌是不會瘦的啦！ [#source:R23a-3]
+=> ch1_r2_kagura
+
+~ ch1_r2_l3_b
+kagura: 牠會用頭撞開阿魯。冰箱門上的凹痕你沒看到阿魯？ [#source:R23b-1]
+shinpachi: 那是上個月的凹痕吧！ [#source:R23b-2]
+=> ch1_r2_kagura
+
+~ ch1_r2_l3_c
+do freeze(0.25)
+do se("crow")
+定春一口咬住了新八的頭。 [#source:R23c-1]
+kagura: 冤枉好狗的報應阿魯。 [#source:R23c-2]
+=> ch1_r2_kagura
+
+~ ch1_r2_placard
+do cutin("牌子上寫著犯人是你啊！！", "shinpachi")
+do se("tsukkomi_hit")
+do shake()
+shinpachi: 伊莉莎白的牌子上，寫著犯人是你啊！！ [#source:R22u-1]
+kagura: 伊莉莎白！你背叛我阿魯！ [#source:R22u-2]
+do placard("我只是路過")
+伊莉莎白默默把牌子翻過來。背面寫著：「我只是路過」。 [#source:R22u-3]
+gintoki: 路過的都比我們家的證人可靠。 [#source:R22u-4]
+=> ch1_r2_kagura
+
+~ ch1_r2_give_up
+do freeze(0.25)
+do se("crow")
+kagura: 眼鏡投降了阿魯。這一局我贏了阿魯。 [#source:Q2]
+=> ch1_r2_kagura
+
+~ ch1_r2_timeout
+do freeze(0.25)
+do se("crow")
+八秒過去了。新八的嘴還開著。 [#source:T1-1]
+kagura: 嘴巴開那麼久，會飛進蒼蠅阿魯。 [#source:T1-2]
+=> ch1_r2_kagura
+
+~ ch1_r2_clear
+do bgm("bgm_meeting")
+do char("kagura","sweat","center")
+kagura: ……好啦。前面一半是我喝的阿魯。 [#source:M57]
+kagura: 腳印是我用手蓋的。定春的腳太大，我模仿不來阿魯。 [#source:M58]
+shinpachi: 你還認真研究過模仿的難度嗎！ [#source:M59]
+sadaharu: ……汪。 [#source:M60]
+=> ch1_r3_intro
+
+~ ch1_r2_hidden_sadaharu
+do bgm("")
+shinpachi: ……算了。讓她說完。 [#source:X01] [#thought]
+otose: 好。證據確鑿，定春有罪。 [#source:X02]
+sadaharu: ……汪。 [#source:X03]
+do se("stamp")
+定春站起來，慢慢走向神樂。 [#source:X04]
+do se("bite")
+do shake()
+然後把神樂的頭，整顆含進了嘴裡。 [#source:X05]
+kagura: ……前面一半是我喝的。腳印是我用手蓋的阿魯。 [#source:X06]
+shinpachi: 定春的審判比我的吐槽有效率多了！ [#source:X07]
+gintoki: 新八，你的工作被狗搶走了。 [#source:X08]
+set hidden_sadaharu = true
+=> ch1_r3_intro
+
+~ ch1_r3_intro
+do hide("sadaharu")
+do hide("elisabeth")
+do char("gintoki","smug","center")
+do char("kagura","smug","right")
+do char("otose","neutral","right")
+otose: 前一半是神樂，後一半是銀時。兩個都有份。 [#source:M61]
+gintoki: 神樂。看來只能用那招了。 [#source:M62]
+kagura: 嗯。萬事屋祕傳，兩人份的藉口阿魯。 [#source:M63]
+shinpachi: 那種東西不要祕傳啊！ [#source:M64]
+do bgm("bgm_combo")
+=> ch1_r3_combo
+
+~ ch1_r3_combo
+do boke_round("ch1_r3")
+
+~ ch1_r3_c1_a
+do shake()
+do se("tsukkomi_hit")
+gintoki: 毒這種東西，常常藏在最後一口。 [#source:R31a-1]
+=> ch1_r3_combo
+
+~ ch1_r3_c1_b
+gintoki: 先問就不是驚喜了。 [#source:R31b-1]
+=> ch1_r3_combo
+
+~ ch1_r3_c1_c
+do freeze(0.25)
+do se("crow")
+kagura: 眼鏡又被收買了阿魯。 [#source:R31c-1]
+=> ch1_r3_combo
+
+~ ch1_r3_c1_hint
+kagura: 試毒的人，會把整瓶喝完嗎？……換作是我會阿魯。 [#source:H31]
+=> ch1_r3_combo
+
+~ ch1_r3_c2_a
+do shake()
+do se("tsukkomi_hit")
+kagura: 安心之後，會口渴阿魯。 [#source:R32a-1]
+=> ch1_r3_combo
+
+~ ch1_r3_c2_b
+kagura: 數學好的眼鏡最討厭了阿魯。 [#source:R32b-1]
+=> ch1_r3_combo
+
+~ ch1_r3_c2_c
+do freeze(0.25)
+do se("crow")
+gintoki: 對吧，大家都平安。 [#source:R32c-1]
+=> ch1_r3_combo
+
+~ ch1_r3_c2_hint
+kagura: 『沒毒』跟『喝完』中間，缺一個理由阿魯。那個理由叫嘴饞。……我說出來了阿魯。 [#source:H32]
+=> ch1_r3_combo
+
+~ ch1_r3_c3_a
+do shake()
+do se("tsukkomi_hit")
+gintoki: ……那是夢遊的銀桑。跟現在的銀桑是兩個人。 [#source:R33a-1]
+=> ch1_r3_combo
+
+~ ch1_r3_c3_b
+gintoki: 早餐是人權。人權不分你我。 [#source:R33b-1]
+=> ch1_r3_combo
+
+~ ch1_r3_c3_c
+do freeze(0.25)
+do se("crow")
+kagura: 眼鏡被早餐說服了阿魯。 [#source:R33c-1]
+=> ch1_r3_combo
+
+~ ch1_r3_c3_hint
+kagura: 銀醬第一回合說過幾點起來？沒在聽的眼鏡，現在只能打普通的吐槽阿魯。 [#source:H33]
+=> ch1_r3_combo
+
+~ ch1_r3_c4_a
+do shake()
+do se("tsukkomi_hit")
+kagura: 新八啊。是你自己寫上去的阿魯。 [#source:R34a-1]
+=> ch1_r3_combo
+
+~ ch1_r3_c4_b
+kagura: 新八這名字很適合牛奶阿魯。又白又淡阿魯。 [#source:R34b-1]
+=> ch1_r3_combo
+
+~ ch1_r3_c4_c
+do freeze(0.25)
+do se("crow")
+gintoki: 新八牛奶。一聽就賣不出去。 [#source:R34c-1]
+=> ch1_r3_combo
+
+~ ch1_r3_c4_hint
+kagura: 瓶子上的『新八』是誰寫的？眼鏡連自己做過的事都忘了阿魯。 [#source:H34]
+=> ch1_r3_combo
+
+~ ch1_r3_c5_hint
+kagura: 等我們講完最後那個『！』再吐阿魯。太早沒禮貌，太晚沒存在感阿魯。 [#source:H35]
+=> ch1_r3_combo
+
+~ ch1_r3_give_up
+do freeze(0.25)
+do se("crow")
+gintoki: 連擊到一半放棄？新八，吐槽是講節奏的。 [#source:Q3]
+=> ch1_r3_combo
+
+~ ch1_r3_timeout
+do freeze(0.25)
+do se("crow")
+gintoki: 新八，你跟不上了。 [#source:T3-1]
+=> ch1_r3_combo
+
+~ ch1_r3_qte_perfect
+do cutin("錯的是你們兩個啊啊啊！！", "shinpachi")
+do shake()
+do flash()
+shinpachi: 錯的是你們兩個啊啊啊！！ [#source:R35p-1]
+gintoki+kagura: ……是。 [#source:R35p-2]
+=> ch1_r3_combo
+
+~ ch1_r3_qte_early
+do freeze(0.25)
+do se("crow")
+shinpachi: 錯的是—— [#source:R35e-1]
+kagura: 還沒講完阿魯。插嘴的眼鏡最討厭了阿魯。 [#source:R35e-2]
+=> ch1_r3_combo
+
+~ ch1_r3_qte_late
+do freeze(0.25)
+do se("crow")
+gintoki: ……看吧。新八也沒意見。 [#source:R35l-1]
+=> ch1_r3_combo
+
+~ ch1_r3_super
+do se("super_charge")
+do cutin("龜——派——氣——功——！！", "shinpachi")
+do beam()
+do se("beam")
+do flash()
+do shake("big")
+shinpachi: 龜——派—— [#source:S01]
+shinpachi: 試毒試到一滴不剩！安心了還喝完！早餐也不能吃別人的！ [#source:S02]
+shinpachi: 瓶子上的『新八』是我的名字！是我寫的！ [#source:S03]
+shinpachi: ——氣功！！ [#source:S04]
+gintoki: ……我們還沒講耶。 [#source:S05]
+kagura: 眼鏡連我們的台詞都先吐了，還在發光阿魯。 [#source:S06]
+=> ch1_r3_combo
+
+~ ch1_r3_combo_bonus
+do cutin("吐槽連擊 ×5", "shinpachi")
+do se("combo_up")
+gintoki: ……五連發。新八，你今天早餐吃了什麼？ [#source:CB1]
+shinpachi: 什麼都沒吃！我的早餐被你們喝掉了！ [#source:CB2]
+=> ch1_r3_clear
+
+~ ch1_r3_combo_break
+do se("combo_break")
+gintoki: 斷了。新八，吐槽是講節奏的。 [#source:CBX1]
+=> ch1_r3_combo
+
+~ ch1_r3_clear
+do bgm("bgm_meeting")
+do char("gintoki","sweat","center")
+do char("kagura","sweat","right")
+gintoki: ……全被接住了。 [#source:M70]
+kagura: 今天的眼鏡，有點可怕阿魯。 [#source:M71]
+=> ch1_truth
+
+~ ch1_truth
+do char("otose","neutral","right")
+otose: 好了。宣判之前，我把昨晚的事說一遍。 [#source:M72]
+otose: 半夜十二點，神樂開冰箱，配醋昆布喝了一半。 [#source:M73]
+kagura: 醋昆布配草莓牛奶，是大人的味道阿魯。 [#source:M74]
+otose: 半夜兩點，銀時起來喝完剩下的，瓶子踢進桌子底下。 [#source:M75]
+shinpachi: 婆婆，你連幾點都知道！ [#source:M76]
+otose: 我就住樓下。你們家的天花板，比你們的藉口還薄。 [#source:M77]
+if hidden_sadaharu == true
+	=> ch1_truth_hidden
+else
+	=> ch1_truth_normal
+
+~ ch1_truth_hidden
+kagura: 頭上還有定春的牙印。我今天已經被罰過了阿魯。 [#source:M78]
+=> ch1_verdict
+
+~ ch1_truth_normal
+kagura: 定春，對不起阿魯。今天的肉乾分你一半阿魯。 [#source:M78]
+=> ch1_verdict
+
+~ ch1_verdict
+otose: 判決。兩個人，今天之內賠新八一瓶新的。 [#source:M79]
+do se("stamp")
+=> ch1_twist
+
+~ ch1_twist
+do bgm("")
+gintoki: ……不用等到今天。 [#source:M80]
+gintoki: 新的一瓶，銀桑早上就買好了。怕你們偷喝，藏在玄關的鞋櫃裡。 [#source:M81]
+do bgm("bgm_serious")
+shinpachi: 阿銀……你早就買好了？ [#source:M82]
+gintoki: 名字也是銀桑寫的，比你寫得好看。 [#source:M83]
+shinpachi: 這個人……偶爾也會做一件像樣的事。 [#source:M84] [#thought]
+shinpachi: ……謝謝。不過阿銀，錢是哪來的？ [#source:M85]
+gintoki: 放心，不是亂花的錢。是銀桑昨天終於準備好的信封。 [#source:M86]
+do bgm("")
+gintoki: 信封上寫著『新八 九月份薪水』。 [#source:M87]
+do freeze(0.8)
+do se("crow")
+shinpachi: 你終於準備好我的薪水……然後拿去買了我的牛奶！？ [#source:M88]
+do item("salary_envelope")
+gintoki: 找的錢在裡面。三十圓，省著點用。 [#source:M89]
+shinpachi: 我一個月的薪水，就是一瓶牛奶加三十圓嗎！ [#source:M90]
+gintoki: 好了，別激動。牛奶在鞋櫃，自己去拿。 [#source:M91]
+do se("door_slide")
+鞋櫃開著。寫著「新八」的瓶子倒在地上，空了。 [#source:M92]
+旁邊一排巨大的腳印，一路走到定春的窩。每一個都比新八的頭還大。 [#source:M93]
+kagura: 看吧，我就說犯人是定春阿魯。 [#source:M94]
+do char("shinpachi","broken","left")
+shinpachi: 那次是你冤枉牠！這次才是真的啊啊啊！！ [#source:M95]
+do cutin("這次是真的定春啊啊啊！！", "shinpachi")
+do shake()
+sadaharu: 汪。 [#source:M96]
+do fade("out",0.3)
+=> ch1_result
+
+~ ch1_result
+do bgm("bgm_result")
+do result("ch1_result")
+
+~ ch1_game_over
+do bg("black")
+do bgm("")
+do se("glass_shatter")
+眼鏡，碎了。 [#source:G01]
+kagura: 新八……新八不見了阿魯。 [#source:G02]
+gintoki: 沒有不見。眼鏡碎了，所以新八整個都沒了。 [#source:G03]
+otose: 掃一掃。休庭十分鐘。 [#source:G04]
+do end("新八的本體已損毀・從本回合重試")
+
+~ ch1_r1_retry
+shinpachi: ……我回來了。這次戴了備用的。 [#source:G05]
+=> ch1_r1_gintoki
+
+~ ch1_r2_retry
+shinpachi: ……我回來了。這次戴了備用的。 [#source:G05]
+=> ch1_r2_kagura
+
+~ ch1_r3_retry
+shinpachi: ……我回來了。這次戴了備用的。 [#source:G05]
+=> ch1_r3_combo

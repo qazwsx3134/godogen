@@ -158,7 +158,7 @@ static func _step_shape(step: Dictionary) -> Array:
 		shape.append([option.get("id", ""), option.get("goto", ""), option.get("require", "")])
 	if tsukkomi.has("timeout"):
 		shape.append(["timeout", (tsukkomi["timeout"] as Dictionary).get("goto", "")])
-	for line: Dictionary in step.get("lines", []):
+	for line: Dictionary in (step.get("lines", []) if step.get("lines", []) is Array else []):
 		shape.append(line.get("id", ""))
 	return shape
 
@@ -269,6 +269,8 @@ static func _unreachable(entry: String, nodes: Dictionary) -> Array[String]:
 		if node.has("next"):
 			queue.append(String(node["next"]))
 		for step: Dictionary in node["steps"]:
+			if step.has("retry"):
+				queue.append(String(step["retry"]))
 			if TsukkomiRound.is_v2(step):
 				queue.append_array(TsukkomiRound.targets(step))
 				continue

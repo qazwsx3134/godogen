@@ -1,7 +1,7 @@
 extends RefCounted
 ## Shared palette and Control styling for the four selectable presentation styles.
 
-const DEFAULT_ID: String = "cinema"
+const DEFAULT_ID: String = "gintama"
 const PREFERENCE_PATH: String = "user://ui_preferences.cfg"
 const LABELS: Dictionary = {
 	"cinema": "月下映畫",
@@ -184,15 +184,39 @@ static func apply_button(button: Button, style_id: String, role: String = "stand
 	button.add_theme_stylebox_override("focus", button_style(normalized, role, "focus", active, density))
 	button.add_theme_stylebox_override("disabled", button_style(normalized, role, "disabled", active, density))
 	var p: Dictionary = palette(normalized)
+	if normalized == "gintama" and role in ["reading_action", "primary", "selector", "danger_action"]:
+		var font: FontVariation = FontVariation.new()
+		font.base_font = load("res://assets/fonts/NotoSerifTC.ttf")
+		font.variation_opentype = {TextServerManager.get_primary_interface().name_to_tag("wght"): 500.0}
+		button.add_theme_font_override("font", font)
 	var regular_ink: Color = _button_ink(p, role, active, "normal")
 	button.add_theme_color_override("font_color", regular_ink)
 	button.add_theme_color_override("font_hover_color", _button_ink(p, role, active, "hover"))
 	button.add_theme_color_override("font_pressed_color", _button_ink(p, role, active, "pressed"))
 	button.add_theme_color_override("font_focus_color", regular_ink)
-	button.add_theme_color_override("font_disabled_color", p["disabled"] as Color)
+	button.add_theme_color_override("font_disabled_color", _button_ink(p, role, active, "disabled"))
 
 
 static func button_style(style_id: String, role: String, state: String, active: bool = false, scale_factor: float = 1.0) -> StyleBoxFlat:
+	if style_id == "gintama" and role in ["reading_action", "primary", "selector", "danger_action"]:
+		var frame: StyleBoxFlat = StyleBoxFlat.new()
+		frame.bg_color = Color("#08283d") if not active else Color("#275978")
+		frame.border_color = Color("#bfc7ce")
+		if state in ["hover", "focus"]:
+			frame.bg_color = Color("#204d6a")
+			frame.border_color = Color("#d7c18b")
+		elif state == "pressed":
+			frame.bg_color = Color("#326582")
+		elif state == "disabled":
+			frame.bg_color = Color("#344553")
+			frame.border_color = Color("#6a7b87")
+		frame.set_border_width_all(2 if state != "focus" else 3)
+		frame.set_corner_radius_all(17)
+		frame.content_margin_left = 18.0
+		frame.content_margin_right = 18.0
+		frame.content_margin_top = 10.0
+		frame.content_margin_bottom = 10.0
+		return frame
 	var p: Dictionary = palette(style_id)
 	var density: float = maxf(1.0, scale_factor)
 	var is_primary: bool = role in ["primary", "boke_primary", "danger_action", "menu_primary"]
@@ -495,7 +519,7 @@ static func apply_label(label: Label, style_id: String, role: String = "body", s
 		label.add_theme_stylebox_override("normal", panel_style(style_id, "toast", density))
 
 
-static func apply_panel(panel: Panel, style_id: String, role: String = "menu", scale_factor: float = 1.0) -> void:
+static func apply_panel(panel: Control, style_id: String, role: String = "menu", scale_factor: float = 1.0) -> void:
 	panel.set_meta("ui_style_role", role)
 	panel.add_theme_stylebox_override("panel", panel_style(style_id, role, scale_factor))
 
@@ -509,6 +533,8 @@ static func contrast_ratio(foreground: Color, background: Color) -> float:
 
 
 static func _button_ink(p: Dictionary, role: String, active: bool, state: String) -> Color:
+	if p == PALETTES["gintama"] and role in ["reading_action", "primary", "selector", "danger_action"]:
+		return Color("#99a8b3") if state == "disabled" else Color("#f8f3e9")
 	if state == "disabled":
 		return p["disabled"] as Color
 	if p == PALETTES["gintama"] and state == "pressed":

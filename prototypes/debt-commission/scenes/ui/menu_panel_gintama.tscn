@@ -4,6 +4,7 @@
 [ext_resource type="Script" path="res://scripts/menu_panel.gd" id="2_3x304"]
 [ext_resource type="Script" path="res://scripts/ui_ornament.gd" id="3_dplvv"]
 [ext_resource type="PackedScene" path="res://scenes/ui/menu_row_manga.tscn" id="4_wni0k"]
+[ext_resource type="PackedScene" path="res://scenes/ui/menu_row_gintama.tscn" id="5_3x304"]
 
 [sub_resource type="Theme" id="Theme_ee2nr"]
 default_font = ExtResource("1_bu7kj")
@@ -1645,6 +1646,21 @@ theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.87450
 theme_override_constants/outline_size = 0
 text = "→"
 vertical_alignment = 1
+
+[node name="Rollback" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1089343561 instance=ExtResource("5_3x304")]
+unique_name_in_owner = true
+layout_mode = 2
+text = "回上一句"
+
+[node name="QuickSave" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=2049675069 instance=ExtResource("5_3x304")]
+unique_name_in_owner = true
+layout_mode = 2
+text = "快速存檔"
+
+[node name="QuickLoad" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1760311257 instance=ExtResource("5_3x304")]
+unique_name_in_owner = true
+layout_mode = 2
+text = "快速讀檔"
 
 [node name="Save" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1978079474 instance=ExtResource("4_wni0k")]
 unique_name_in_owner = true

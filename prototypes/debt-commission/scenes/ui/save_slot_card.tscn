@@ -1,0 +1,183 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/NotoSerifTC.ttf" id="1_abwsx"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qacqr"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.9607843, 0.9372549, 0.8901961, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.21960784, 0.3372549, 0.4509804, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_75tmn"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.1254902, 0.24313726, 0.36862746, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.09411765, 0.21176471, 0.3137255, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sy003"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.9019608, 0.92941177, 0.94509804, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.1254902, 0.24313726, 0.36862746, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t3c3m"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.1254902, 0.24313726, 0.36862746, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.09411765, 0.21176471, 0.3137255, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1w5nl"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.8666667, 0.84705883, 0.80784315, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fk7hb"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.9607843, 0.9372549, 0.8901961, 1)
+draw_center = false
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.09411765, 0.21176471, 0.3137255, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="FontVariation" id="FontVariation_25w5n"]
+base_font = ExtResource("1_abwsx")
+variation_opentype = {
+2003265652: 500.0
+}
+
+[node name="SaveSlotCard" type="Button" unique_id=1833297476]
+custom_minimum_size = Vector2(0, 280)
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_qacqr")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_75tmn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_sy003")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_t3c3m")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_1w5nl")
+theme_override_styles/focus = SubResource("StyleBoxFlat_fk7hb")
+theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/font_focus_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
+metadata/ui_style_role = "slot_card"
+metadata/ui_style_active = false
+
+[node name="Margins" type="MarginContainer" parent="." unique_id=1130687221]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 18
+
+[node name="Row" type="HBoxContainer" parent="Margins" unique_id=1046719420]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 16
+
+[node name="Preview" type="TextureRect" parent="Margins/Row" unique_id=558790141]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(90, 160)
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Description" type="VBoxContainer" parent="Margins/Row" unique_id=1237557022]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="Number" type="Label" parent="Margins/Row/Description" unique_id=1821648081]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_25w5n")
+theme_override_font_sizes/font_size = 32
+theme_override_colors/font_color = Color(0.1254902, 0.23921569, 0.3254902, 1)
+text = "01"
+metadata/ui_style_role = "body"
+
+[node name="SlotTitle" type="Label" parent="Margins/Row/Description" unique_id=1116801896]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_fonts/font = SubResource("FontVariation_25w5n")
+theme_override_font_sizes/font_size = 32
+theme_override_colors/font_color = Color(0.1254902, 0.23921569, 0.3254902, 1)
+text = "第一章・閱讀段落"
+autowrap_mode = 1
+metadata/ui_style_role = "body"
+
+[node name="SavedTime" type="Label" parent="Margins/Row/Description" unique_id=1286123803]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_25w5n")
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(0.1254902, 0.23921569, 0.3254902, 1)
+text = "尚無存檔"
+autowrap_mode = 1
+metadata/ui_style_role = "body"

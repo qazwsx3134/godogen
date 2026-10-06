@@ -1,0 +1,16 @@
+{
+  "id": "reading_convenience", "version": "1", "title": "閱讀便利測試", "entry": "reading",
+  "initial_flags": {"remembered": false},
+  "nodes": {
+    "reading": {"title": "閱讀段落", "steps": [
+      {"op": "bg", "id": "yorozuya_living_room"}, {"op": "bgm", "id": "bgm_daily"},
+      {"op": "say", "speaker": "gintoki", "text": "第一句。"},
+      {"op": "flag", "key": "remembered", "value": true}, {"op": "item", "id": "milk_bottle"},
+      {"op": "bg", "id": "yorozuya_kitchen"}, {"op": "bgm", "id": "bgm_serious"},
+      {"op": "say", "speaker": "shinpachi", "text": "第二句。"},
+      {"op": "say", "speaker": "kagura", "text": "第三句。"},
+      {"op": "choice", "prompt": "分支邊界", "options": [{"id": "go", "label": "繼續", "next": "done"}]}
+    ]},
+    "done": {"title": "結尾", "steps": [{"op": "say", "speaker": "narrator", "text": "選完了。"}, {"op": "end", "text": "完"}]}
+  }
+}

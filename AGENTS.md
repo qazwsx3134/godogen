@@ -25,6 +25,8 @@ This repository is not a published game repo. It is the source that `publish.sh`
 
 ## Editing Rules
 
+- **debt-commission 的介面基準**：新增或修改對話框與按鈕時，沿用作者已驗收的「銀魂和紙」透明 PNG 與場景元件（`dialogue_box_gintama.tscn`、`gintama_reading_*.tscn`）；它是新安裝的預設風格。紙框、波紋與櫻花使用整張透明底圖，保留四角與裁切，不重新手繪。文字與功能保持獨立 node；新面板與按鈕也沿用和紙／深藍銀框的處理。
+
 - Do not create or maintain `.claude/skills/` or `.agents/skills/` in this source repo.
 - Don't give obvious guidance. The agent is a highly capable LLM, and the deliverable (a recorded video, or a live URL the user watches) surfaces its own mistakes — so keep the guides to what the model can't infer or discover fast.
 - When you change or remove a feature, describe the new state on its own terms. Name the new thing as if it were always the design.

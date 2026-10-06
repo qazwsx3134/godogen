@@ -21,7 +21,7 @@ func _run() -> void:
 		"defaults keep the old text speed and full volume")
 	await _press(game._title_screen.settings_button)
 	var buttons: Dictionary = game._settings_panel.call("buttons")
-	_expect(game._screen_mode == "settings" and game._settings_panel.visible and buttons.size() == 4 + 3 + 5 + 5,
+	_expect(game._screen_mode == "settings" and game._settings_panel.visible and buttons.size() == 4 + 3 + 5 + 5 + 3 + 3,
 		"設定 opens from the title with every choice")
 	await _press(buttons["text_speed_3"])
 	await _press(buttons["bgm_volume_2"])

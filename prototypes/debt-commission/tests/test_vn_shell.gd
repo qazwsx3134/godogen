@@ -65,6 +65,7 @@ func _run() -> void:
 	_expect(main._screen_mode == "menu" and _progress_key() == story_position, "tap 目錄 opens the menu without advancing")
 	_expect(main._menu_items["save"].is_visible_in_tree() and not main._menu_items["skip"].disabled,
 		"the menu offers 儲存進度 and 略讀")
+	await _reveal_menu(main._menu_style_buttons["ledger"])
 	await _tap(main._menu_style_buttons["ledger"].get_global_rect().get_center())
 	await _frames(2)
 	_expect(main._dialog_panel.style_id == "ledger" and main._text_label.text == main._full_text and
@@ -87,6 +88,7 @@ func _run() -> void:
 	await _tap(main._menu_items["resume"].get_global_rect().get_center())
 	_expect(main._screen_mode == "story" and not main._menu_overlay.visible, "回到故事 closes the menu")
 	await _tap(main._menu_button.get_global_rect().get_center())
+	await _reveal_menu(main._menu_items["skip"])
 	await _tap(main._menu_items["skip"].get_global_rect().get_center())
 	_expect(main._skip and main._screen_mode != "menu", "略讀 in the menu starts skipping")
 	await _until(func() -> bool: return main._screen_mode == "choice", "SKIP runs to the choice", 20.0)
@@ -111,6 +113,12 @@ func _run() -> void:
 	await _frames(2)
 	_finish("VN SHELL TESTS")
 	_cleanup_saves()
+
+
+func _reveal_menu(control: Control) -> void:
+	await create_timer(0.2).timeout
+	main._menu_overlay.rows_scroll.ensure_control_visible(control)
+	await _frames(3)
 
 
 func _key() -> String:

@@ -126,6 +126,7 @@ static func decorate(step: Dictionary, state: Dictionary, items: Array, gameplay
 	view["line_index"] = index
 	view["current_line"] = {
 		"id": line["id"], "text": line["text"],
+		"source_id": String(line.get("source_id", "")),
 		"speaker": String(line.get("speaker", step.get("speaker", ""))),
 		"caught": (state["caught"] as Dictionary).has(String(line["id"])),
 		"can_listen": line.has("listen") and String(step["mode"]) == "testimony",
@@ -529,6 +530,8 @@ static func validate_state(value: Variant, step: Dictionary) -> String:
 ## Everything a save position depends on (for the story version fingerprint).
 static func shape(step: Dictionary) -> Array:
 	var round_shape: Array = [step.get("mode"), step.get("clear"), step.get("game_over"), rules(step)]
+	if step.has("retry"):
+		round_shape.append(["retry", step["retry"]])
 	for line: Dictionary in step.get("lines", []):
 		var slot: Dictionary = line.get("slot", {}) as Dictionary
 		var line_shape: Array = [line.get("id"), line.get("listen", ""), line.get("whiff", ""), line.get("hint", ""), slot.get("timeout", "")]
