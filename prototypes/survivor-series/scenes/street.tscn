@@ -13,7 +13,9 @@
 [ext_resource type="PackedScene" path="res://scenes/pickup.tscn" id="9_7gyev"]
 [ext_resource type="Resource" path="res://data/progression.tres" id="9_7vla3"]
 [ext_resource type="Resource" path="res://data/spawn_schedule.tres" id="11_1x85o"]
+[ext_resource type="Resource" path="res://data/heroes/man.tres" id="12_7gyev"]
 [ext_resource type="Script" path="res://scripts/arsenal.gd" id="13_0otry"]
+[ext_resource type="Resource" path="res://data/heroes/woman.tres" id="13_1x85o"]
 
 [node name="Street" type="Node2D" unique_id=1672293938]
 process_mode = 1
@@ -25,468 +27,964 @@ blast_scene = ExtResource("8_wd6c3")
 pickup_scene = ExtResource("9_7gyev")
 progression = ExtResource("9_7vla3")
 schedule = ExtResource("11_1x85o")
+heroes = Array[Resource]([ExtResource("12_7gyev"), ExtResource("13_1x85o")])
 
 [node name="Block" type="Node2D" parent="." unique_id=183623793]
 z_index = -10
 
 [node name="Sidewalk" type="Polygon2D" parent="Block" unique_id=1317068573]
-color = Color(0.34117648, 0.39215687, 0.4117647, 1)
+color = Color(0.35686275, 0.27058825, 0.21960784, 1)
 polygon = PackedVector2Array(0, 0, 1200, 0, 1200, 1680, 0, 1680)
 
 [node name="Asphalt" type="Polygon2D" parent="Block" unique_id=1825546045]
 position = Vector2(36, 36)
-color = Color(0.14901961, 0.21176471, 0.24705882, 1)
+color = Color(0.18039216, 0.14509805, 0.15294118, 1)
 polygon = PackedVector2Array(0, 0, 1128, 0, 1128, 1608, 0, 1608)
 
 [node name="CrossStreet" type="Polygon2D" parent="Block" unique_id=49409679]
 position = Vector2(36, 765)
-color = Color(0.17254902, 0.23921569, 0.2784314, 1)
+color = Color(0.21176471, 0.16862746, 0.1764706, 1)
 polygon = PackedVector2Array(0, 0, 1128, 0, 1128, 150, 0, 150)
 
 [node name="CenterDash1" type="Polygon2D" parent="Block" unique_id=450830502]
 position = Vector2(596, 70)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 8, 0, 8, 24, 0, 24)
 
 [node name="CenterDash2" type="Polygon2D" parent="Block" unique_id=621552773]
 position = Vector2(596, 132)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 8, 0, 8, 24, 0, 24)
 
 [node name="CenterDash3" type="Polygon2D" parent="Block" unique_id=687636588]
 position = Vector2(596, 194)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 8, 0, 8, 24, 0, 24)
 
 [node name="CenterDash4" type="Polygon2D" parent="Block" unique_id=1660503290]
 position = Vector2(596, 256)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 8, 0, 8, 24, 0, 24)
 
 [node name="CenterDash5" type="Polygon2D" parent="Block" unique_id=70417565]
 position = Vector2(596, 318)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 8, 0, 8, 24, 0, 24)
 
 [node name="CenterDash6" type="Polygon2D" parent="Block" unique_id=1669254165]
 position = Vector2(596, 380)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 8, 0, 8, 24, 0, 24)
 
 [node name="CenterDash7" type="Polygon2D" parent="Block" unique_id=56153136]
 position = Vector2(596, 442)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 8, 0, 8, 24, 0, 24)
 
 [node name="CenterDash8" type="Polygon2D" parent="Block" unique_id=12607655]
 position = Vector2(596, 504)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 8, 0, 8, 24, 0, 24)
 
 [node name="CenterDash9" type="Polygon2D" parent="Block" unique_id=883173964]
 position = Vector2(596, 566)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 8, 0, 8, 24, 0, 24)
 
 [node name="CenterDash10" type="Polygon2D" parent="Block" unique_id=1685019821]
 position = Vector2(596, 628)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 8, 0, 8, 24, 0, 24)
 
 [node name="CenterDash11" type="Polygon2D" parent="Block" unique_id=882281045]
 position = Vector2(596, 690)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 8, 0, 8, 24, 0, 24)
 
 [node name="CenterDash16" type="Polygon2D" parent="Block" unique_id=1486920815]
 position = Vector2(596, 1000)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 8, 0, 8, 24, 0, 24)
 
 [node name="CenterDash17" type="Polygon2D" parent="Block" unique_id=1678831604]
 position = Vector2(596, 1062)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 8, 0, 8, 24, 0, 24)
 
 [node name="CenterDash18" type="Polygon2D" parent="Block" unique_id=1689160570]
 position = Vector2(596, 1124)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 8, 0, 8, 24, 0, 24)
 
 [node name="CenterDash19" type="Polygon2D" parent="Block" unique_id=1733237839]
 position = Vector2(596, 1186)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 8, 0, 8, 24, 0, 24)
 
 [node name="CenterDash20" type="Polygon2D" parent="Block" unique_id=428516409]
 position = Vector2(596, 1248)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 8, 0, 8, 24, 0, 24)
 
 [node name="CenterDash21" type="Polygon2D" parent="Block" unique_id=150689532]
 position = Vector2(596, 1310)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 8, 0, 8, 24, 0, 24)
 
 [node name="CenterDash22" type="Polygon2D" parent="Block" unique_id=2125758549]
 position = Vector2(596, 1372)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 8, 0, 8, 24, 0, 24)
 
 [node name="CenterDash23" type="Polygon2D" parent="Block" unique_id=296416128]
 position = Vector2(596, 1434)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 8, 0, 8, 24, 0, 24)
 
 [node name="CenterDash24" type="Polygon2D" parent="Block" unique_id=359551024]
 position = Vector2(596, 1496)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 8, 0, 8, 24, 0, 24)
 
 [node name="CenterDash25" type="Polygon2D" parent="Block" unique_id=1708445235]
 position = Vector2(596, 1558)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 8, 0, 8, 24, 0, 24)
 
 [node name="CenterDash26" type="Polygon2D" parent="Block" unique_id=1851814737]
 position = Vector2(596, 1620)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 8, 0, 8, 24, 0, 24)
 
 [node name="CrossDash1" type="Polygon2D" parent="Block" unique_id=514418251]
 position = Vector2(70, 836)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 26, 0, 26, 8, 0, 8)
 
 [node name="CrossDash2" type="Polygon2D" parent="Block" unique_id=205753112]
 position = Vector2(136, 836)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 26, 0, 26, 8, 0, 8)
 
 [node name="CrossDash3" type="Polygon2D" parent="Block" unique_id=1565312356]
 position = Vector2(202, 836)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 26, 0, 26, 8, 0, 8)
 
 [node name="CrossDash4" type="Polygon2D" parent="Block" unique_id=1915336879]
 position = Vector2(268, 836)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 26, 0, 26, 8, 0, 8)
 
 [node name="CrossDash5" type="Polygon2D" parent="Block" unique_id=669496665]
 position = Vector2(334, 836)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 26, 0, 26, 8, 0, 8)
 
 [node name="CrossDash6" type="Polygon2D" parent="Block" unique_id=565087870]
 position = Vector2(400, 836)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 26, 0, 26, 8, 0, 8)
 
 [node name="CrossDash7" type="Polygon2D" parent="Block" unique_id=1489015494]
 position = Vector2(466, 836)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 26, 0, 26, 8, 0, 8)
 
 [node name="CrossDash11" type="Polygon2D" parent="Block" unique_id=1450217692]
 position = Vector2(730, 836)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 26, 0, 26, 8, 0, 8)
 
 [node name="CrossDash12" type="Polygon2D" parent="Block" unique_id=1387963674]
 position = Vector2(796, 836)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 26, 0, 26, 8, 0, 8)
 
 [node name="CrossDash13" type="Polygon2D" parent="Block" unique_id=90289352]
 position = Vector2(862, 836)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 26, 0, 26, 8, 0, 8)
 
 [node name="CrossDash14" type="Polygon2D" parent="Block" unique_id=1755957278]
 position = Vector2(928, 836)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 26, 0, 26, 8, 0, 8)
 
 [node name="CrossDash15" type="Polygon2D" parent="Block" unique_id=805674509]
 position = Vector2(994, 836)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 26, 0, 26, 8, 0, 8)
 
 [node name="CrossDash16" type="Polygon2D" parent="Block" unique_id=2003907518]
 position = Vector2(1060, 836)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 26, 0, 26, 8, 0, 8)
 
 [node name="CrossDash17" type="Polygon2D" parent="Block" unique_id=430948226]
 position = Vector2(1126, 836)
-color = Color(0.39215687, 0.4509804, 0.4392157, 1)
+color = Color(0.72156864, 0.6039216, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 26, 0, 26, 8, 0, 8)
 
 [node name="Crosswalk1" type="Polygon2D" parent="Block" unique_id=1716398121]
 position = Vector2(520, 742)
-color = Color(0.56078434, 0.6509804, 0.6784314, 1)
+color = Color(0.81960785, 0.7254902, 0.54901963, 1)
 polygon = PackedVector2Array(0, 0, 18, 0, 18, 14, 0, 14)
 
 [node name="Crosswalk2" type="Polygon2D" parent="Block" unique_id=1879660375]
 position = Vector2(548, 742)
-color = Color(0.56078434, 0.6509804, 0.6784314, 1)
+color = Color(0.81960785, 0.7254902, 0.54901963, 1)
 polygon = PackedVector2Array(0, 0, 18, 0, 18, 14, 0, 14)
 
 [node name="Crosswalk3" type="Polygon2D" parent="Block" unique_id=1180533423]
 position = Vector2(576, 742)
-color = Color(0.56078434, 0.6509804, 0.6784314, 1)
+color = Color(0.81960785, 0.7254902, 0.54901963, 1)
 polygon = PackedVector2Array(0, 0, 18, 0, 18, 14, 0, 14)
 
 [node name="Crosswalk4" type="Polygon2D" parent="Block" unique_id=1701771041]
 position = Vector2(604, 742)
-color = Color(0.56078434, 0.6509804, 0.6784314, 1)
+color = Color(0.81960785, 0.7254902, 0.54901963, 1)
 polygon = PackedVector2Array(0, 0, 18, 0, 18, 14, 0, 14)
 
 [node name="Crosswalk5" type="Polygon2D" parent="Block" unique_id=1125945896]
 position = Vector2(632, 742)
-color = Color(0.56078434, 0.6509804, 0.6784314, 1)
+color = Color(0.81960785, 0.7254902, 0.54901963, 1)
 polygon = PackedVector2Array(0, 0, 18, 0, 18, 14, 0, 14)
 
 [node name="Crosswalk6" type="Polygon2D" parent="Block" unique_id=418000103]
 position = Vector2(660, 742)
-color = Color(0.56078434, 0.6509804, 0.6784314, 1)
+color = Color(0.81960785, 0.7254902, 0.54901963, 1)
 polygon = PackedVector2Array(0, 0, 18, 0, 18, 14, 0, 14)
 
 [node name="Crosswalk7" type="Polygon2D" parent="Block" unique_id=867248806]
 position = Vector2(520, 930)
-color = Color(0.56078434, 0.6509804, 0.6784314, 1)
+color = Color(0.81960785, 0.7254902, 0.54901963, 1)
 polygon = PackedVector2Array(0, 0, 18, 0, 18, 14, 0, 14)
 
 [node name="Crosswalk8" type="Polygon2D" parent="Block" unique_id=2078476185]
 position = Vector2(548, 930)
-color = Color(0.56078434, 0.6509804, 0.6784314, 1)
+color = Color(0.81960785, 0.7254902, 0.54901963, 1)
 polygon = PackedVector2Array(0, 0, 18, 0, 18, 14, 0, 14)
 
 [node name="Crosswalk9" type="Polygon2D" parent="Block" unique_id=1977155616]
 position = Vector2(576, 930)
-color = Color(0.56078434, 0.6509804, 0.6784314, 1)
+color = Color(0.81960785, 0.7254902, 0.54901963, 1)
 polygon = PackedVector2Array(0, 0, 18, 0, 18, 14, 0, 14)
 
 [node name="Crosswalk10" type="Polygon2D" parent="Block" unique_id=2106025240]
 position = Vector2(604, 930)
-color = Color(0.56078434, 0.6509804, 0.6784314, 1)
+color = Color(0.81960785, 0.7254902, 0.54901963, 1)
 polygon = PackedVector2Array(0, 0, 18, 0, 18, 14, 0, 14)
 
 [node name="Crosswalk11" type="Polygon2D" parent="Block" unique_id=133618654]
 position = Vector2(632, 930)
-color = Color(0.56078434, 0.6509804, 0.6784314, 1)
+color = Color(0.81960785, 0.7254902, 0.54901963, 1)
 polygon = PackedVector2Array(0, 0, 18, 0, 18, 14, 0, 14)
 
 [node name="Crosswalk12" type="Polygon2D" parent="Block" unique_id=2029903780]
 position = Vector2(660, 930)
-color = Color(0.56078434, 0.6509804, 0.6784314, 1)
+color = Color(0.81960785, 0.7254902, 0.54901963, 1)
 polygon = PackedVector2Array(0, 0, 18, 0, 18, 14, 0, 14)
 
 [node name="Planter1" type="Polygon2D" parent="Block" unique_id=2005009963]
 position = Vector2(4, 120)
-color = Color(0.18431373, 0.22745098, 0.24313726, 1)
+color = Color(0.36862746, 0.26666668, 0.21176471, 1)
 polygon = PackedVector2Array(0, 0, 24, 0, 24, 54, 0, 54)
 
 [node name="Shrub1" type="Polygon2D" parent="Block" unique_id=992926862]
 position = Vector2(16, 147)
-color = Color(0.23529412, 0.43137255, 0.3529412, 1)
+color = Color(0.2, 0.4392157, 0.18431373, 1)
 polygon = PackedVector2Array(14, 0, 12.6135645, 9.545443, 8.728857, 17.200293, 3.115293, 21.448414, -3.115293, 21.448414, -8.728857, 17.200293, -12.6135645, 9.545443, -14, 2.694223e-15, -12.6135645, -9.545443, -8.728857, -17.200293, -3.115293, -21.448414, 3.115293, -21.448414, 8.728857, -17.200293, 12.6135645, -9.545443)
 
 [node name="Planter2" type="Polygon2D" parent="Block" unique_id=1023716985]
 position = Vector2(1172, 120)
-color = Color(0.18431373, 0.22745098, 0.24313726, 1)
+color = Color(0.36862746, 0.26666668, 0.21176471, 1)
 polygon = PackedVector2Array(0, 0, 24, 0, 24, 54, 0, 54)
 
 [node name="Shrub2" type="Polygon2D" parent="Block" unique_id=755048045]
 position = Vector2(1184, 147)
-color = Color(0.23529412, 0.43137255, 0.3529412, 1)
+color = Color(0.2, 0.4392157, 0.18431373, 1)
 polygon = PackedVector2Array(14, 0, 12.6135645, 9.545443, 8.728857, 17.200293, 3.115293, 21.448414, -3.115293, 21.448414, -8.728857, 17.200293, -12.6135645, 9.545443, -14, 2.694223e-15, -12.6135645, -9.545443, -8.728857, -17.200293, -3.115293, -21.448414, 3.115293, -21.448414, 8.728857, -17.200293, 12.6135645, -9.545443)
 
 [node name="Planter3" type="Polygon2D" parent="Block" unique_id=1764477539]
 position = Vector2(4, 350)
-color = Color(0.18431373, 0.22745098, 0.24313726, 1)
+color = Color(0.36862746, 0.26666668, 0.21176471, 1)
 polygon = PackedVector2Array(0, 0, 24, 0, 24, 54, 0, 54)
 
 [node name="Shrub3" type="Polygon2D" parent="Block" unique_id=1863988781]
 position = Vector2(16, 377)
-color = Color(0.23529412, 0.43137255, 0.3529412, 1)
+color = Color(0.2, 0.4392157, 0.18431373, 1)
 polygon = PackedVector2Array(14, 0, 12.6135645, 9.545443, 8.728857, 17.200293, 3.115293, 21.448414, -3.115293, 21.448414, -8.728857, 17.200293, -12.6135645, 9.545443, -14, 2.694223e-15, -12.6135645, -9.545443, -8.728857, -17.200293, -3.115293, -21.448414, 3.115293, -21.448414, 8.728857, -17.200293, 12.6135645, -9.545443)
 
 [node name="Planter4" type="Polygon2D" parent="Block" unique_id=287600270]
 position = Vector2(1172, 350)
-color = Color(0.18431373, 0.22745098, 0.24313726, 1)
+color = Color(0.36862746, 0.26666668, 0.21176471, 1)
 polygon = PackedVector2Array(0, 0, 24, 0, 24, 54, 0, 54)
 
 [node name="Shrub4" type="Polygon2D" parent="Block" unique_id=41840755]
 position = Vector2(1184, 377)
-color = Color(0.23529412, 0.43137255, 0.3529412, 1)
+color = Color(0.2, 0.4392157, 0.18431373, 1)
 polygon = PackedVector2Array(14, 0, 12.6135645, 9.545443, 8.728857, 17.200293, 3.115293, 21.448414, -3.115293, 21.448414, -8.728857, 17.200293, -12.6135645, 9.545443, -14, 2.694223e-15, -12.6135645, -9.545443, -8.728857, -17.200293, -3.115293, -21.448414, 3.115293, -21.448414, 8.728857, -17.200293, 12.6135645, -9.545443)
 
 [node name="Planter5" type="Polygon2D" parent="Block" unique_id=1677243091]
 position = Vector2(4, 580)
-color = Color(0.18431373, 0.22745098, 0.24313726, 1)
+color = Color(0.36862746, 0.26666668, 0.21176471, 1)
 polygon = PackedVector2Array(0, 0, 24, 0, 24, 54, 0, 54)
 
 [node name="Shrub5" type="Polygon2D" parent="Block" unique_id=709458379]
 position = Vector2(16, 607)
-color = Color(0.23529412, 0.43137255, 0.3529412, 1)
+color = Color(0.2, 0.4392157, 0.18431373, 1)
 polygon = PackedVector2Array(14, 0, 12.6135645, 9.545443, 8.728857, 17.200293, 3.115293, 21.448414, -3.115293, 21.448414, -8.728857, 17.200293, -12.6135645, 9.545443, -14, 2.694223e-15, -12.6135645, -9.545443, -8.728857, -17.200293, -3.115293, -21.448414, 3.115293, -21.448414, 8.728857, -17.200293, 12.6135645, -9.545443)
 
 [node name="Planter6" type="Polygon2D" parent="Block" unique_id=733310100]
 position = Vector2(1172, 580)
-color = Color(0.18431373, 0.22745098, 0.24313726, 1)
+color = Color(0.36862746, 0.26666668, 0.21176471, 1)
 polygon = PackedVector2Array(0, 0, 24, 0, 24, 54, 0, 54)
 
 [node name="Shrub6" type="Polygon2D" parent="Block" unique_id=1932076787]
 position = Vector2(1184, 607)
-color = Color(0.23529412, 0.43137255, 0.3529412, 1)
+color = Color(0.2, 0.4392157, 0.18431373, 1)
 polygon = PackedVector2Array(14, 0, 12.6135645, 9.545443, 8.728857, 17.200293, 3.115293, 21.448414, -3.115293, 21.448414, -8.728857, 17.200293, -12.6135645, 9.545443, -14, 2.694223e-15, -12.6135645, -9.545443, -8.728857, -17.200293, -3.115293, -21.448414, 3.115293, -21.448414, 8.728857, -17.200293, 12.6135645, -9.545443)
 
 [node name="Planter7" type="Polygon2D" parent="Block" unique_id=1684672499]
 position = Vector2(4, 810)
-color = Color(0.18431373, 0.22745098, 0.24313726, 1)
+color = Color(0.36862746, 0.26666668, 0.21176471, 1)
 polygon = PackedVector2Array(0, 0, 24, 0, 24, 54, 0, 54)
 
 [node name="Shrub7" type="Polygon2D" parent="Block" unique_id=612175543]
 position = Vector2(16, 837)
-color = Color(0.23529412, 0.43137255, 0.3529412, 1)
+color = Color(0.2, 0.4392157, 0.18431373, 1)
 polygon = PackedVector2Array(14, 0, 12.6135645, 9.545443, 8.728857, 17.200293, 3.115293, 21.448414, -3.115293, 21.448414, -8.728857, 17.200293, -12.6135645, 9.545443, -14, 2.694223e-15, -12.6135645, -9.545443, -8.728857, -17.200293, -3.115293, -21.448414, 3.115293, -21.448414, 8.728857, -17.200293, 12.6135645, -9.545443)
 
 [node name="Planter8" type="Polygon2D" parent="Block" unique_id=1426497727]
 position = Vector2(1172, 810)
-color = Color(0.18431373, 0.22745098, 0.24313726, 1)
+color = Color(0.36862746, 0.26666668, 0.21176471, 1)
 polygon = PackedVector2Array(0, 0, 24, 0, 24, 54, 0, 54)
 
 [node name="Shrub8" type="Polygon2D" parent="Block" unique_id=1246724004]
 position = Vector2(1184, 837)
-color = Color(0.23529412, 0.43137255, 0.3529412, 1)
+color = Color(0.2, 0.4392157, 0.18431373, 1)
 polygon = PackedVector2Array(14, 0, 12.6135645, 9.545443, 8.728857, 17.200293, 3.115293, 21.448414, -3.115293, 21.448414, -8.728857, 17.200293, -12.6135645, 9.545443, -14, 2.694223e-15, -12.6135645, -9.545443, -8.728857, -17.200293, -3.115293, -21.448414, 3.115293, -21.448414, 8.728857, -17.200293, 12.6135645, -9.545443)
 
 [node name="Planter9" type="Polygon2D" parent="Block" unique_id=481719741]
 position = Vector2(4, 1040)
-color = Color(0.18431373, 0.22745098, 0.24313726, 1)
+color = Color(0.36862746, 0.26666668, 0.21176471, 1)
 polygon = PackedVector2Array(0, 0, 24, 0, 24, 54, 0, 54)
 
 [node name="Shrub9" type="Polygon2D" parent="Block" unique_id=466372330]
 position = Vector2(16, 1067)
-color = Color(0.23529412, 0.43137255, 0.3529412, 1)
+color = Color(0.2, 0.4392157, 0.18431373, 1)
 polygon = PackedVector2Array(14, 0, 12.6135645, 9.545443, 8.728857, 17.200293, 3.115293, 21.448414, -3.115293, 21.448414, -8.728857, 17.200293, -12.6135645, 9.545443, -14, 2.694223e-15, -12.6135645, -9.545443, -8.728857, -17.200293, -3.115293, -21.448414, 3.115293, -21.448414, 8.728857, -17.200293, 12.6135645, -9.545443)
 
 [node name="Planter10" type="Polygon2D" parent="Block" unique_id=1405043415]
 position = Vector2(1172, 1040)
-color = Color(0.18431373, 0.22745098, 0.24313726, 1)
+color = Color(0.36862746, 0.26666668, 0.21176471, 1)
 polygon = PackedVector2Array(0, 0, 24, 0, 24, 54, 0, 54)
 
 [node name="Shrub10" type="Polygon2D" parent="Block" unique_id=1758680000]
 position = Vector2(1184, 1067)
-color = Color(0.23529412, 0.43137255, 0.3529412, 1)
+color = Color(0.2, 0.4392157, 0.18431373, 1)
 polygon = PackedVector2Array(14, 0, 12.6135645, 9.545443, 8.728857, 17.200293, 3.115293, 21.448414, -3.115293, 21.448414, -8.728857, 17.200293, -12.6135645, 9.545443, -14, 2.694223e-15, -12.6135645, -9.545443, -8.728857, -17.200293, -3.115293, -21.448414, 3.115293, -21.448414, 8.728857, -17.200293, 12.6135645, -9.545443)
 
 [node name="Planter11" type="Polygon2D" parent="Block" unique_id=1561224709]
 position = Vector2(4, 1270)
-color = Color(0.18431373, 0.22745098, 0.24313726, 1)
+color = Color(0.36862746, 0.26666668, 0.21176471, 1)
 polygon = PackedVector2Array(0, 0, 24, 0, 24, 54, 0, 54)
 
 [node name="Shrub11" type="Polygon2D" parent="Block" unique_id=1159603298]
 position = Vector2(16, 1297)
-color = Color(0.23529412, 0.43137255, 0.3529412, 1)
+color = Color(0.2, 0.4392157, 0.18431373, 1)
 polygon = PackedVector2Array(14, 0, 12.6135645, 9.545443, 8.728857, 17.200293, 3.115293, 21.448414, -3.115293, 21.448414, -8.728857, 17.200293, -12.6135645, 9.545443, -14, 2.694223e-15, -12.6135645, -9.545443, -8.728857, -17.200293, -3.115293, -21.448414, 3.115293, -21.448414, 8.728857, -17.200293, 12.6135645, -9.545443)
 
 [node name="Planter12" type="Polygon2D" parent="Block" unique_id=424408660]
 position = Vector2(1172, 1270)
-color = Color(0.18431373, 0.22745098, 0.24313726, 1)
+color = Color(0.36862746, 0.26666668, 0.21176471, 1)
 polygon = PackedVector2Array(0, 0, 24, 0, 24, 54, 0, 54)
 
 [node name="Shrub12" type="Polygon2D" parent="Block" unique_id=1563220159]
 position = Vector2(1184, 1297)
-color = Color(0.23529412, 0.43137255, 0.3529412, 1)
+color = Color(0.2, 0.4392157, 0.18431373, 1)
 polygon = PackedVector2Array(14, 0, 12.6135645, 9.545443, 8.728857, 17.200293, 3.115293, 21.448414, -3.115293, 21.448414, -8.728857, 17.200293, -12.6135645, 9.545443, -14, 2.694223e-15, -12.6135645, -9.545443, -8.728857, -17.200293, -3.115293, -21.448414, 3.115293, -21.448414, 8.728857, -17.200293, 12.6135645, -9.545443)
 
 [node name="Planter13" type="Polygon2D" parent="Block" unique_id=450075286]
 position = Vector2(4, 1500)
-color = Color(0.18431373, 0.22745098, 0.24313726, 1)
+color = Color(0.36862746, 0.26666668, 0.21176471, 1)
 polygon = PackedVector2Array(0, 0, 24, 0, 24, 54, 0, 54)
 
 [node name="Shrub13" type="Polygon2D" parent="Block" unique_id=389884963]
 position = Vector2(16, 1527)
-color = Color(0.23529412, 0.43137255, 0.3529412, 1)
+color = Color(0.2, 0.4392157, 0.18431373, 1)
 polygon = PackedVector2Array(14, 0, 12.6135645, 9.545443, 8.728857, 17.200293, 3.115293, 21.448414, -3.115293, 21.448414, -8.728857, 17.200293, -12.6135645, 9.545443, -14, 2.694223e-15, -12.6135645, -9.545443, -8.728857, -17.200293, -3.115293, -21.448414, 3.115293, -21.448414, 8.728857, -17.200293, 12.6135645, -9.545443)
 
 [node name="Planter14" type="Polygon2D" parent="Block" unique_id=1084680057]
 position = Vector2(1172, 1500)
-color = Color(0.18431373, 0.22745098, 0.24313726, 1)
+color = Color(0.36862746, 0.26666668, 0.21176471, 1)
 polygon = PackedVector2Array(0, 0, 24, 0, 24, 54, 0, 54)
 
 [node name="Shrub14" type="Polygon2D" parent="Block" unique_id=779190889]
 position = Vector2(1184, 1527)
-color = Color(0.23529412, 0.43137255, 0.3529412, 1)
+color = Color(0.2, 0.4392157, 0.18431373, 1)
 polygon = PackedVector2Array(14, 0, 12.6135645, 9.545443, 8.728857, 17.200293, 3.115293, 21.448414, -3.115293, 21.448414, -8.728857, 17.200293, -12.6135645, 9.545443, -14, 2.694223e-15, -12.6135645, -9.545443, -8.728857, -17.200293, -3.115293, -21.448414, 3.115293, -21.448414, 8.728857, -17.200293, 12.6135645, -9.545443)
 
 [node name="Manhole1" type="Polygon2D" parent="Block" unique_id=1358572801]
 position = Vector2(200, 300)
-color = Color(0.10980392, 0.16470589, 0.19215687, 1)
+color = Color(0.07450981, 0.05882353, 0.07058824, 1)
 polygon = PackedVector2Array(18, 0, 16.629831, 4.592201, 12.727922, 8.485281, 6.888302, 11.086555, 1.1021821e-15, 12, -6.888302, 11.086555, -12.727922, 8.485281, -16.629831, 4.592201, -18, 1.4695761e-15, -16.629831, -4.592201, -12.727922, -8.485281, -6.888302, -11.086555, -3.3065464e-15, -12, 6.888302, -11.086555, 12.727922, -8.485281, 16.629831, -4.592201)
 
 [node name="Manhole2" type="Polygon2D" parent="Block" unique_id=1679507071]
 position = Vector2(580, 570)
-color = Color(0.10980392, 0.16470589, 0.19215687, 1)
+color = Color(0.07450981, 0.05882353, 0.07058824, 1)
 polygon = PackedVector2Array(18, 0, 16.629831, 4.592201, 12.727922, 8.485281, 6.888302, 11.086555, 1.1021821e-15, 12, -6.888302, 11.086555, -12.727922, 8.485281, -16.629831, 4.592201, -18, 1.4695761e-15, -16.629831, -4.592201, -12.727922, -8.485281, -6.888302, -11.086555, -3.3065464e-15, -12, 6.888302, -11.086555, 12.727922, -8.485281, 16.629831, -4.592201)
 
 [node name="Manhole3" type="Polygon2D" parent="Block" unique_id=824149392]
 position = Vector2(960, 840)
-color = Color(0.10980392, 0.16470589, 0.19215687, 1)
+color = Color(0.07450981, 0.05882353, 0.07058824, 1)
 polygon = PackedVector2Array(18, 0, 16.629831, 4.592201, 12.727922, 8.485281, 6.888302, 11.086555, 1.1021821e-15, 12, -6.888302, 11.086555, -12.727922, 8.485281, -16.629831, 4.592201, -18, 1.4695761e-15, -16.629831, -4.592201, -12.727922, -8.485281, -6.888302, -11.086555, -3.3065464e-15, -12, 6.888302, -11.086555, 12.727922, -8.485281, 16.629831, -4.592201)
 
 [node name="Manhole4" type="Polygon2D" parent="Block" unique_id=825078920]
 position = Vector2(200, 1110)
-color = Color(0.10980392, 0.16470589, 0.19215687, 1)
+color = Color(0.07450981, 0.05882353, 0.07058824, 1)
 polygon = PackedVector2Array(18, 0, 16.629831, 4.592201, 12.727922, 8.485281, 6.888302, 11.086555, 1.1021821e-15, 12, -6.888302, 11.086555, -12.727922, 8.485281, -16.629831, 4.592201, -18, 1.4695761e-15, -16.629831, -4.592201, -12.727922, -8.485281, -6.888302, -11.086555, -3.3065464e-15, -12, 6.888302, -11.086555, 12.727922, -8.485281, 16.629831, -4.592201)
 
 [node name="Manhole5" type="Polygon2D" parent="Block" unique_id=630252818]
 position = Vector2(580, 1380)
-color = Color(0.10980392, 0.16470589, 0.19215687, 1)
+color = Color(0.07450981, 0.05882353, 0.07058824, 1)
 polygon = PackedVector2Array(18, 0, 16.629831, 4.592201, 12.727922, 8.485281, 6.888302, 11.086555, 1.1021821e-15, 12, -6.888302, 11.086555, -12.727922, 8.485281, -16.629831, 4.592201, -18, 1.4695761e-15, -16.629831, -4.592201, -12.727922, -8.485281, -6.888302, -11.086555, -3.3065464e-15, -12, 6.888302, -11.086555, 12.727922, -8.485281, 16.629831, -4.592201)
 
 [node name="ParkingLine1" type="Polygon2D" parent="Block" unique_id=2123175771]
 position = Vector2(100, 1520)
-color = Color(0.3647059, 0.42745098, 0.41960785, 1)
+color = Color(0.6509804, 0.54901963, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 4, 0, 4, 60, 0, 60)
 
 [node name="ParkingLine2" type="Polygon2D" parent="Block" unique_id=117793544]
 position = Vector2(170, 1520)
-color = Color(0.3647059, 0.42745098, 0.41960785, 1)
+color = Color(0.6509804, 0.54901963, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 4, 0, 4, 60, 0, 60)
 
 [node name="ParkingLine3" type="Polygon2D" parent="Block" unique_id=1931235606]
 position = Vector2(240, 1520)
-color = Color(0.3647059, 0.42745098, 0.41960785, 1)
+color = Color(0.6509804, 0.54901963, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 4, 0, 4, 60, 0, 60)
 
 [node name="ParkingLine4" type="Polygon2D" parent="Block" unique_id=196884617]
 position = Vector2(310, 1520)
-color = Color(0.3647059, 0.42745098, 0.41960785, 1)
+color = Color(0.6509804, 0.54901963, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 4, 0, 4, 60, 0, 60)
 
 [node name="ParkingLine5" type="Polygon2D" parent="Block" unique_id=1072952660]
 position = Vector2(380, 1520)
-color = Color(0.3647059, 0.42745098, 0.41960785, 1)
+color = Color(0.6509804, 0.54901963, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 4, 0, 4, 60, 0, 60)
 
 [node name="ParkingLine6" type="Polygon2D" parent="Block" unique_id=807711745]
 position = Vector2(450, 1520)
-color = Color(0.3647059, 0.42745098, 0.41960785, 1)
+color = Color(0.6509804, 0.54901963, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 4, 0, 4, 60, 0, 60)
 
 [node name="ParkingLine7" type="Polygon2D" parent="Block" unique_id=1209774663]
 position = Vector2(520, 1520)
-color = Color(0.3647059, 0.42745098, 0.41960785, 1)
+color = Color(0.6509804, 0.54901963, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 4, 0, 4, 60, 0, 60)
 
 [node name="ParkingLine8" type="Polygon2D" parent="Block" unique_id=519128823]
 position = Vector2(590, 1520)
-color = Color(0.3647059, 0.42745098, 0.41960785, 1)
+color = Color(0.6509804, 0.54901963, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 4, 0, 4, 60, 0, 60)
+
+[node name="NightMarket" type="Node2D" parent="Block" unique_id=1310322230]
+
+[node name="Awnings" type="Node2D" parent="Block/NightMarket" unique_id=860828928]
+
+[node name="Awning1_1" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=1694865390]
+color = Color(0.8392157, 0.22745098, 0.20784314, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning1_2" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=115477095]
+position = Vector2(48, 0)
+color = Color(0.9529412, 0.9137255, 0.8627451, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning1_3" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=1097176979]
+position = Vector2(96, 0)
+color = Color(0.8392157, 0.22745098, 0.20784314, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning1_4" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=1234042996]
+position = Vector2(144, 0)
+color = Color(0.9529412, 0.9137255, 0.8627451, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning1_5" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=692001361]
+position = Vector2(192, 0)
+color = Color(0.8392157, 0.22745098, 0.20784314, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning1_6" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=1935756666]
+position = Vector2(240, 0)
+color = Color(0.9529412, 0.9137255, 0.8627451, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning1_7" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=1195990793]
+position = Vector2(288, 0)
+color = Color(0.8392157, 0.22745098, 0.20784314, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning1_8" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=2023825234]
+position = Vector2(336, 0)
+color = Color(0.9529412, 0.9137255, 0.8627451, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning1_9" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=383982751]
+position = Vector2(384, 0)
+color = Color(0.8392157, 0.22745098, 0.20784314, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning1_10" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=121729197]
+position = Vector2(432, 0)
+color = Color(0.9529412, 0.9137255, 0.8627451, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning1_11" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=400615636]
+position = Vector2(480, 0)
+color = Color(0.8392157, 0.22745098, 0.20784314, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning1_12" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=499380737]
+position = Vector2(528, 0)
+color = Color(0.9529412, 0.9137255, 0.8627451, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning1_13" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=1734985887]
+position = Vector2(576, 0)
+color = Color(0.8392157, 0.22745098, 0.20784314, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning1_14" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=2043637591]
+position = Vector2(624, 0)
+color = Color(0.9529412, 0.9137255, 0.8627451, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning1_15" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=87119008]
+position = Vector2(672, 0)
+color = Color(0.8392157, 0.22745098, 0.20784314, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning1_16" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=731227926]
+position = Vector2(720, 0)
+color = Color(0.9529412, 0.9137255, 0.8627451, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning1_17" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=916740247]
+position = Vector2(768, 0)
+color = Color(0.8392157, 0.22745098, 0.20784314, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning1_18" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=1983102524]
+position = Vector2(816, 0)
+color = Color(0.9529412, 0.9137255, 0.8627451, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning1_19" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=1542993418]
+position = Vector2(864, 0)
+color = Color(0.8392157, 0.22745098, 0.20784314, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning1_20" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=562821832]
+position = Vector2(912, 0)
+color = Color(0.9529412, 0.9137255, 0.8627451, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning1_21" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=1374490454]
+position = Vector2(960, 0)
+color = Color(0.8392157, 0.22745098, 0.20784314, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning1_22" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=399642955]
+position = Vector2(1008, 0)
+color = Color(0.9529412, 0.9137255, 0.8627451, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning1_23" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=339604684]
+position = Vector2(1056, 0)
+color = Color(0.8392157, 0.22745098, 0.20784314, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning1_24" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=1849626450]
+position = Vector2(1104, 0)
+color = Color(0.9529412, 0.9137255, 0.8627451, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning1_25" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=584229809]
+position = Vector2(1152, 0)
+color = Color(0.8392157, 0.22745098, 0.20784314, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning2_1" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=1425750579]
+position = Vector2(0, 1644)
+color = Color(0.8392157, 0.22745098, 0.20784314, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning2_2" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=652676931]
+position = Vector2(48, 1644)
+color = Color(0.9529412, 0.9137255, 0.8627451, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning2_3" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=993795489]
+position = Vector2(96, 1644)
+color = Color(0.8392157, 0.22745098, 0.20784314, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning2_4" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=1498852275]
+position = Vector2(144, 1644)
+color = Color(0.9529412, 0.9137255, 0.8627451, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning2_5" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=1688770473]
+position = Vector2(192, 1644)
+color = Color(0.8392157, 0.22745098, 0.20784314, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning2_6" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=1698748858]
+position = Vector2(240, 1644)
+color = Color(0.9529412, 0.9137255, 0.8627451, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning2_7" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=664667492]
+position = Vector2(288, 1644)
+color = Color(0.8392157, 0.22745098, 0.20784314, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning2_8" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=1295093812]
+position = Vector2(336, 1644)
+color = Color(0.9529412, 0.9137255, 0.8627451, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning2_9" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=643939380]
+position = Vector2(384, 1644)
+color = Color(0.8392157, 0.22745098, 0.20784314, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning2_10" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=1103697948]
+position = Vector2(432, 1644)
+color = Color(0.9529412, 0.9137255, 0.8627451, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning2_11" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=1626332445]
+position = Vector2(480, 1644)
+color = Color(0.8392157, 0.22745098, 0.20784314, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning2_12" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=1973747839]
+position = Vector2(528, 1644)
+color = Color(0.9529412, 0.9137255, 0.8627451, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning2_13" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=432907198]
+position = Vector2(576, 1644)
+color = Color(0.8392157, 0.22745098, 0.20784314, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning2_14" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=557681858]
+position = Vector2(624, 1644)
+color = Color(0.9529412, 0.9137255, 0.8627451, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning2_15" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=995067849]
+position = Vector2(672, 1644)
+color = Color(0.8392157, 0.22745098, 0.20784314, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning2_16" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=1332393567]
+position = Vector2(720, 1644)
+color = Color(0.9529412, 0.9137255, 0.8627451, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning2_17" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=1230380432]
+position = Vector2(768, 1644)
+color = Color(0.8392157, 0.22745098, 0.20784314, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning2_18" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=1184406787]
+position = Vector2(816, 1644)
+color = Color(0.9529412, 0.9137255, 0.8627451, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning2_19" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=1753982756]
+position = Vector2(864, 1644)
+color = Color(0.8392157, 0.22745098, 0.20784314, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning2_20" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=407149532]
+position = Vector2(912, 1644)
+color = Color(0.9529412, 0.9137255, 0.8627451, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning2_21" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=1154968162]
+position = Vector2(960, 1644)
+color = Color(0.8392157, 0.22745098, 0.20784314, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning2_22" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=472002523]
+position = Vector2(1008, 1644)
+color = Color(0.9529412, 0.9137255, 0.8627451, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning2_23" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=1193975969]
+position = Vector2(1056, 1644)
+color = Color(0.8392157, 0.22745098, 0.20784314, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning2_24" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=684475379]
+position = Vector2(1104, 1644)
+color = Color(0.9529412, 0.9137255, 0.8627451, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Awning2_25" type="Polygon2D" parent="Block/NightMarket/Awnings" unique_id=1739416376]
+position = Vector2(1152, 1644)
+color = Color(0.8392157, 0.22745098, 0.20784314, 1)
+polygon = PackedVector2Array(0, 0, 48, 0, 48, 36, 0, 36)
+
+[node name="Lanterns" type="Node2D" parent="Block/NightMarket" unique_id=167321990]
+
+[node name="Glow1_1" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=534091019]
+position = Vector2(60, 52)
+color = Color(1, 0.7019608, 0.2784314, 0.28)
+polygon = PackedVector2Array(17, 0, 15.31647, 7.376024, 10.599326, 13.291136, 3.7828567, 16.573774, -3.782856, 16.573774, -10.599326, 13.291136, -15.31647, 7.3760247, -17, -1.4861872e-06, -15.31647, -7.376024, -10.599323, -13.291138, -3.7828572, -16.573774, 3.7828577, -16.573774, 10.599324, -13.291138, 15.31647, -7.376024)
+
+[node name="Lantern1_1" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=357693597]
+position = Vector2(60, 52)
+color = Color(1, 0.47843137, 0.18039216, 1)
+polygon = PackedVector2Array(7, 0, 6.306782, 3.0371864, 4.3644285, 5.4728203, 1.5576469, 6.8244953, -1.5576466, 6.8244953, -4.3644285, 5.4728203, -6.306782, 3.0371866, -7, -6.119594e-07, -6.306782, -3.0371864, -4.3644276, -5.472821, -1.557647, -6.8244953, 1.5576472, -6.8244953, 4.3644276, -5.472821, 6.306782, -3.0371864)
+
+[node name="Glow1_2" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=335418848]
+position = Vector2(158, 52)
+color = Color(1, 0.7019608, 0.2784314, 0.28)
+polygon = PackedVector2Array(17, 0, 15.31647, 7.376024, 10.599326, 13.291136, 3.7828567, 16.573774, -3.782856, 16.573774, -10.599326, 13.291136, -15.31647, 7.3760247, -17, -1.4861872e-06, -15.31647, -7.376024, -10.599323, -13.291138, -3.7828572, -16.573774, 3.7828577, -16.573774, 10.599324, -13.291138, 15.31647, -7.376024)
+
+[node name="Lantern1_2" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=211629278]
+position = Vector2(158, 52)
+color = Color(1, 0.47843137, 0.18039216, 1)
+polygon = PackedVector2Array(7, 0, 6.306782, 3.0371864, 4.3644285, 5.4728203, 1.5576469, 6.8244953, -1.5576466, 6.8244953, -4.3644285, 5.4728203, -6.306782, 3.0371866, -7, -6.119594e-07, -6.306782, -3.0371864, -4.3644276, -5.472821, -1.557647, -6.8244953, 1.5576472, -6.8244953, 4.3644276, -5.472821, 6.306782, -3.0371864)
+
+[node name="Glow1_3" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=574232279]
+position = Vector2(256, 52)
+color = Color(1, 0.7019608, 0.2784314, 0.28)
+polygon = PackedVector2Array(17, 0, 15.31647, 7.376024, 10.599326, 13.291136, 3.7828567, 16.573774, -3.782856, 16.573774, -10.599326, 13.291136, -15.31647, 7.3760247, -17, -1.4861872e-06, -15.31647, -7.376024, -10.599323, -13.291138, -3.7828572, -16.573774, 3.7828577, -16.573774, 10.599324, -13.291138, 15.31647, -7.376024)
+
+[node name="Lantern1_3" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=452987336]
+position = Vector2(256, 52)
+color = Color(1, 0.47843137, 0.18039216, 1)
+polygon = PackedVector2Array(7, 0, 6.306782, 3.0371864, 4.3644285, 5.4728203, 1.5576469, 6.8244953, -1.5576466, 6.8244953, -4.3644285, 5.4728203, -6.306782, 3.0371866, -7, -6.119594e-07, -6.306782, -3.0371864, -4.3644276, -5.472821, -1.557647, -6.8244953, 1.5576472, -6.8244953, 4.3644276, -5.472821, 6.306782, -3.0371864)
+
+[node name="Glow1_4" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=243370071]
+position = Vector2(354, 52)
+color = Color(1, 0.7019608, 0.2784314, 0.28)
+polygon = PackedVector2Array(17, 0, 15.31647, 7.376024, 10.599326, 13.291136, 3.7828567, 16.573774, -3.782856, 16.573774, -10.599326, 13.291136, -15.31647, 7.3760247, -17, -1.4861872e-06, -15.31647, -7.376024, -10.599323, -13.291138, -3.7828572, -16.573774, 3.7828577, -16.573774, 10.599324, -13.291138, 15.31647, -7.376024)
+
+[node name="Lantern1_4" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=1423790360]
+position = Vector2(354, 52)
+color = Color(1, 0.47843137, 0.18039216, 1)
+polygon = PackedVector2Array(7, 0, 6.306782, 3.0371864, 4.3644285, 5.4728203, 1.5576469, 6.8244953, -1.5576466, 6.8244953, -4.3644285, 5.4728203, -6.306782, 3.0371866, -7, -6.119594e-07, -6.306782, -3.0371864, -4.3644276, -5.472821, -1.557647, -6.8244953, 1.5576472, -6.8244953, 4.3644276, -5.472821, 6.306782, -3.0371864)
+
+[node name="Glow1_5" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=280129738]
+position = Vector2(452, 52)
+color = Color(1, 0.7019608, 0.2784314, 0.28)
+polygon = PackedVector2Array(17, 0, 15.31647, 7.376024, 10.599326, 13.291136, 3.7828567, 16.573774, -3.782856, 16.573774, -10.599326, 13.291136, -15.31647, 7.3760247, -17, -1.4861872e-06, -15.31647, -7.376024, -10.599323, -13.291138, -3.7828572, -16.573774, 3.7828577, -16.573774, 10.599324, -13.291138, 15.31647, -7.376024)
+
+[node name="Lantern1_5" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=2085149666]
+position = Vector2(452, 52)
+color = Color(1, 0.47843137, 0.18039216, 1)
+polygon = PackedVector2Array(7, 0, 6.306782, 3.0371864, 4.3644285, 5.4728203, 1.5576469, 6.8244953, -1.5576466, 6.8244953, -4.3644285, 5.4728203, -6.306782, 3.0371866, -7, -6.119594e-07, -6.306782, -3.0371864, -4.3644276, -5.472821, -1.557647, -6.8244953, 1.5576472, -6.8244953, 4.3644276, -5.472821, 6.306782, -3.0371864)
+
+[node name="Glow1_6" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=1210957014]
+position = Vector2(550, 52)
+color = Color(1, 0.7019608, 0.2784314, 0.28)
+polygon = PackedVector2Array(17, 0, 15.31647, 7.376024, 10.599326, 13.291136, 3.7828567, 16.573774, -3.782856, 16.573774, -10.599326, 13.291136, -15.31647, 7.3760247, -17, -1.4861872e-06, -15.31647, -7.376024, -10.599323, -13.291138, -3.7828572, -16.573774, 3.7828577, -16.573774, 10.599324, -13.291138, 15.31647, -7.376024)
+
+[node name="Lantern1_6" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=1434168849]
+position = Vector2(550, 52)
+color = Color(1, 0.47843137, 0.18039216, 1)
+polygon = PackedVector2Array(7, 0, 6.306782, 3.0371864, 4.3644285, 5.4728203, 1.5576469, 6.8244953, -1.5576466, 6.8244953, -4.3644285, 5.4728203, -6.306782, 3.0371866, -7, -6.119594e-07, -6.306782, -3.0371864, -4.3644276, -5.472821, -1.557647, -6.8244953, 1.5576472, -6.8244953, 4.3644276, -5.472821, 6.306782, -3.0371864)
+
+[node name="Glow1_7" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=1035064152]
+position = Vector2(648, 52)
+color = Color(1, 0.7019608, 0.2784314, 0.28)
+polygon = PackedVector2Array(17, 0, 15.31647, 7.376024, 10.599326, 13.291136, 3.7828567, 16.573774, -3.782856, 16.573774, -10.599326, 13.291136, -15.31647, 7.3760247, -17, -1.4861872e-06, -15.31647, -7.376024, -10.599323, -13.291138, -3.7828572, -16.573774, 3.7828577, -16.573774, 10.599324, -13.291138, 15.31647, -7.376024)
+
+[node name="Lantern1_7" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=832699259]
+position = Vector2(648, 52)
+color = Color(1, 0.47843137, 0.18039216, 1)
+polygon = PackedVector2Array(7, 0, 6.306782, 3.0371864, 4.3644285, 5.4728203, 1.5576469, 6.8244953, -1.5576466, 6.8244953, -4.3644285, 5.4728203, -6.306782, 3.0371866, -7, -6.119594e-07, -6.306782, -3.0371864, -4.3644276, -5.472821, -1.557647, -6.8244953, 1.5576472, -6.8244953, 4.3644276, -5.472821, 6.306782, -3.0371864)
+
+[node name="Glow1_8" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=908961373]
+position = Vector2(746, 52)
+color = Color(1, 0.7019608, 0.2784314, 0.28)
+polygon = PackedVector2Array(17, 0, 15.31647, 7.376024, 10.599326, 13.291136, 3.7828567, 16.573774, -3.782856, 16.573774, -10.599326, 13.291136, -15.31647, 7.3760247, -17, -1.4861872e-06, -15.31647, -7.376024, -10.599323, -13.291138, -3.7828572, -16.573774, 3.7828577, -16.573774, 10.599324, -13.291138, 15.31647, -7.376024)
+
+[node name="Lantern1_8" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=456052206]
+position = Vector2(746, 52)
+color = Color(1, 0.47843137, 0.18039216, 1)
+polygon = PackedVector2Array(7, 0, 6.306782, 3.0371864, 4.3644285, 5.4728203, 1.5576469, 6.8244953, -1.5576466, 6.8244953, -4.3644285, 5.4728203, -6.306782, 3.0371866, -7, -6.119594e-07, -6.306782, -3.0371864, -4.3644276, -5.472821, -1.557647, -6.8244953, 1.5576472, -6.8244953, 4.3644276, -5.472821, 6.306782, -3.0371864)
+
+[node name="Glow1_9" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=1253213871]
+position = Vector2(844, 52)
+color = Color(1, 0.7019608, 0.2784314, 0.28)
+polygon = PackedVector2Array(17, 0, 15.31647, 7.376024, 10.599326, 13.291136, 3.7828567, 16.573774, -3.782856, 16.573774, -10.599326, 13.291136, -15.31647, 7.3760247, -17, -1.4861872e-06, -15.31647, -7.376024, -10.599323, -13.291138, -3.7828572, -16.573774, 3.7828577, -16.573774, 10.599324, -13.291138, 15.31647, -7.376024)
+
+[node name="Lantern1_9" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=566354731]
+position = Vector2(844, 52)
+color = Color(1, 0.47843137, 0.18039216, 1)
+polygon = PackedVector2Array(7, 0, 6.306782, 3.0371864, 4.3644285, 5.4728203, 1.5576469, 6.8244953, -1.5576466, 6.8244953, -4.3644285, 5.4728203, -6.306782, 3.0371866, -7, -6.119594e-07, -6.306782, -3.0371864, -4.3644276, -5.472821, -1.557647, -6.8244953, 1.5576472, -6.8244953, 4.3644276, -5.472821, 6.306782, -3.0371864)
+
+[node name="Glow1_10" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=1945250648]
+position = Vector2(942, 52)
+color = Color(1, 0.7019608, 0.2784314, 0.28)
+polygon = PackedVector2Array(17, 0, 15.31647, 7.376024, 10.599326, 13.291136, 3.7828567, 16.573774, -3.782856, 16.573774, -10.599326, 13.291136, -15.31647, 7.3760247, -17, -1.4861872e-06, -15.31647, -7.376024, -10.599323, -13.291138, -3.7828572, -16.573774, 3.7828577, -16.573774, 10.599324, -13.291138, 15.31647, -7.376024)
+
+[node name="Lantern1_10" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=395697373]
+position = Vector2(942, 52)
+color = Color(1, 0.47843137, 0.18039216, 1)
+polygon = PackedVector2Array(7, 0, 6.306782, 3.0371864, 4.3644285, 5.4728203, 1.5576469, 6.8244953, -1.5576466, 6.8244953, -4.3644285, 5.4728203, -6.306782, 3.0371866, -7, -6.119594e-07, -6.306782, -3.0371864, -4.3644276, -5.472821, -1.557647, -6.8244953, 1.5576472, -6.8244953, 4.3644276, -5.472821, 6.306782, -3.0371864)
+
+[node name="Glow1_11" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=1389994402]
+position = Vector2(1040, 52)
+color = Color(1, 0.7019608, 0.2784314, 0.28)
+polygon = PackedVector2Array(17, 0, 15.31647, 7.376024, 10.599326, 13.291136, 3.7828567, 16.573774, -3.782856, 16.573774, -10.599326, 13.291136, -15.31647, 7.3760247, -17, -1.4861872e-06, -15.31647, -7.376024, -10.599323, -13.291138, -3.7828572, -16.573774, 3.7828577, -16.573774, 10.599324, -13.291138, 15.31647, -7.376024)
+
+[node name="Lantern1_11" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=1463904271]
+position = Vector2(1040, 52)
+color = Color(1, 0.47843137, 0.18039216, 1)
+polygon = PackedVector2Array(7, 0, 6.306782, 3.0371864, 4.3644285, 5.4728203, 1.5576469, 6.8244953, -1.5576466, 6.8244953, -4.3644285, 5.4728203, -6.306782, 3.0371866, -7, -6.119594e-07, -6.306782, -3.0371864, -4.3644276, -5.472821, -1.557647, -6.8244953, 1.5576472, -6.8244953, 4.3644276, -5.472821, 6.306782, -3.0371864)
+
+[node name="Glow1_12" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=1604402393]
+position = Vector2(1138, 52)
+color = Color(1, 0.7019608, 0.2784314, 0.28)
+polygon = PackedVector2Array(17, 0, 15.31647, 7.376024, 10.599326, 13.291136, 3.7828567, 16.573774, -3.782856, 16.573774, -10.599326, 13.291136, -15.31647, 7.3760247, -17, -1.4861872e-06, -15.31647, -7.376024, -10.599323, -13.291138, -3.7828572, -16.573774, 3.7828577, -16.573774, 10.599324, -13.291138, 15.31647, -7.376024)
+
+[node name="Lantern1_12" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=740748284]
+position = Vector2(1138, 52)
+color = Color(1, 0.47843137, 0.18039216, 1)
+polygon = PackedVector2Array(7, 0, 6.306782, 3.0371864, 4.3644285, 5.4728203, 1.5576469, 6.8244953, -1.5576466, 6.8244953, -4.3644285, 5.4728203, -6.306782, 3.0371866, -7, -6.119594e-07, -6.306782, -3.0371864, -4.3644276, -5.472821, -1.557647, -6.8244953, 1.5576472, -6.8244953, 4.3644276, -5.472821, 6.306782, -3.0371864)
+
+[node name="Glow2_1" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=521723852]
+position = Vector2(60, 1628)
+color = Color(1, 0.7019608, 0.2784314, 0.28)
+polygon = PackedVector2Array(17, 0, 15.31647, 7.376024, 10.599326, 13.291136, 3.7828567, 16.573774, -3.782856, 16.573774, -10.599326, 13.291136, -15.31647, 7.3760247, -17, -1.4861872e-06, -15.31647, -7.376024, -10.599323, -13.291138, -3.7828572, -16.573774, 3.7828577, -16.573774, 10.599324, -13.291138, 15.31647, -7.376024)
+
+[node name="Lantern2_1" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=1053870971]
+position = Vector2(60, 1628)
+color = Color(1, 0.47843137, 0.18039216, 1)
+polygon = PackedVector2Array(7, 0, 6.306782, 3.0371864, 4.3644285, 5.4728203, 1.5576469, 6.8244953, -1.5576466, 6.8244953, -4.3644285, 5.4728203, -6.306782, 3.0371866, -7, -6.119594e-07, -6.306782, -3.0371864, -4.3644276, -5.472821, -1.557647, -6.8244953, 1.5576472, -6.8244953, 4.3644276, -5.472821, 6.306782, -3.0371864)
+
+[node name="Glow2_2" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=1376386698]
+position = Vector2(158, 1628)
+color = Color(1, 0.7019608, 0.2784314, 0.28)
+polygon = PackedVector2Array(17, 0, 15.31647, 7.376024, 10.599326, 13.291136, 3.7828567, 16.573774, -3.782856, 16.573774, -10.599326, 13.291136, -15.31647, 7.3760247, -17, -1.4861872e-06, -15.31647, -7.376024, -10.599323, -13.291138, -3.7828572, -16.573774, 3.7828577, -16.573774, 10.599324, -13.291138, 15.31647, -7.376024)
+
+[node name="Lantern2_2" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=1446485953]
+position = Vector2(158, 1628)
+color = Color(1, 0.47843137, 0.18039216, 1)
+polygon = PackedVector2Array(7, 0, 6.306782, 3.0371864, 4.3644285, 5.4728203, 1.5576469, 6.8244953, -1.5576466, 6.8244953, -4.3644285, 5.4728203, -6.306782, 3.0371866, -7, -6.119594e-07, -6.306782, -3.0371864, -4.3644276, -5.472821, -1.557647, -6.8244953, 1.5576472, -6.8244953, 4.3644276, -5.472821, 6.306782, -3.0371864)
+
+[node name="Glow2_3" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=1258908868]
+position = Vector2(256, 1628)
+color = Color(1, 0.7019608, 0.2784314, 0.28)
+polygon = PackedVector2Array(17, 0, 15.31647, 7.376024, 10.599326, 13.291136, 3.7828567, 16.573774, -3.782856, 16.573774, -10.599326, 13.291136, -15.31647, 7.3760247, -17, -1.4861872e-06, -15.31647, -7.376024, -10.599323, -13.291138, -3.7828572, -16.573774, 3.7828577, -16.573774, 10.599324, -13.291138, 15.31647, -7.376024)
+
+[node name="Lantern2_3" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=1755906067]
+position = Vector2(256, 1628)
+color = Color(1, 0.47843137, 0.18039216, 1)
+polygon = PackedVector2Array(7, 0, 6.306782, 3.0371864, 4.3644285, 5.4728203, 1.5576469, 6.8244953, -1.5576466, 6.8244953, -4.3644285, 5.4728203, -6.306782, 3.0371866, -7, -6.119594e-07, -6.306782, -3.0371864, -4.3644276, -5.472821, -1.557647, -6.8244953, 1.5576472, -6.8244953, 4.3644276, -5.472821, 6.306782, -3.0371864)
+
+[node name="Glow2_4" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=1117724972]
+position = Vector2(354, 1628)
+color = Color(1, 0.7019608, 0.2784314, 0.28)
+polygon = PackedVector2Array(17, 0, 15.31647, 7.376024, 10.599326, 13.291136, 3.7828567, 16.573774, -3.782856, 16.573774, -10.599326, 13.291136, -15.31647, 7.3760247, -17, -1.4861872e-06, -15.31647, -7.376024, -10.599323, -13.291138, -3.7828572, -16.573774, 3.7828577, -16.573774, 10.599324, -13.291138, 15.31647, -7.376024)
+
+[node name="Lantern2_4" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=29278408]
+position = Vector2(354, 1628)
+color = Color(1, 0.47843137, 0.18039216, 1)
+polygon = PackedVector2Array(7, 0, 6.306782, 3.0371864, 4.3644285, 5.4728203, 1.5576469, 6.8244953, -1.5576466, 6.8244953, -4.3644285, 5.4728203, -6.306782, 3.0371866, -7, -6.119594e-07, -6.306782, -3.0371864, -4.3644276, -5.472821, -1.557647, -6.8244953, 1.5576472, -6.8244953, 4.3644276, -5.472821, 6.306782, -3.0371864)
+
+[node name="Glow2_5" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=2059447449]
+position = Vector2(452, 1628)
+color = Color(1, 0.7019608, 0.2784314, 0.28)
+polygon = PackedVector2Array(17, 0, 15.31647, 7.376024, 10.599326, 13.291136, 3.7828567, 16.573774, -3.782856, 16.573774, -10.599326, 13.291136, -15.31647, 7.3760247, -17, -1.4861872e-06, -15.31647, -7.376024, -10.599323, -13.291138, -3.7828572, -16.573774, 3.7828577, -16.573774, 10.599324, -13.291138, 15.31647, -7.376024)
+
+[node name="Lantern2_5" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=489942323]
+position = Vector2(452, 1628)
+color = Color(1, 0.47843137, 0.18039216, 1)
+polygon = PackedVector2Array(7, 0, 6.306782, 3.0371864, 4.3644285, 5.4728203, 1.5576469, 6.8244953, -1.5576466, 6.8244953, -4.3644285, 5.4728203, -6.306782, 3.0371866, -7, -6.119594e-07, -6.306782, -3.0371864, -4.3644276, -5.472821, -1.557647, -6.8244953, 1.5576472, -6.8244953, 4.3644276, -5.472821, 6.306782, -3.0371864)
+
+[node name="Glow2_6" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=1584644592]
+position = Vector2(550, 1628)
+color = Color(1, 0.7019608, 0.2784314, 0.28)
+polygon = PackedVector2Array(17, 0, 15.31647, 7.376024, 10.599326, 13.291136, 3.7828567, 16.573774, -3.782856, 16.573774, -10.599326, 13.291136, -15.31647, 7.3760247, -17, -1.4861872e-06, -15.31647, -7.376024, -10.599323, -13.291138, -3.7828572, -16.573774, 3.7828577, -16.573774, 10.599324, -13.291138, 15.31647, -7.376024)
+
+[node name="Lantern2_6" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=226207095]
+position = Vector2(550, 1628)
+color = Color(1, 0.47843137, 0.18039216, 1)
+polygon = PackedVector2Array(7, 0, 6.306782, 3.0371864, 4.3644285, 5.4728203, 1.5576469, 6.8244953, -1.5576466, 6.8244953, -4.3644285, 5.4728203, -6.306782, 3.0371866, -7, -6.119594e-07, -6.306782, -3.0371864, -4.3644276, -5.472821, -1.557647, -6.8244953, 1.5576472, -6.8244953, 4.3644276, -5.472821, 6.306782, -3.0371864)
+
+[node name="Glow2_7" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=510615481]
+position = Vector2(648, 1628)
+color = Color(1, 0.7019608, 0.2784314, 0.28)
+polygon = PackedVector2Array(17, 0, 15.31647, 7.376024, 10.599326, 13.291136, 3.7828567, 16.573774, -3.782856, 16.573774, -10.599326, 13.291136, -15.31647, 7.3760247, -17, -1.4861872e-06, -15.31647, -7.376024, -10.599323, -13.291138, -3.7828572, -16.573774, 3.7828577, -16.573774, 10.599324, -13.291138, 15.31647, -7.376024)
+
+[node name="Lantern2_7" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=656017534]
+position = Vector2(648, 1628)
+color = Color(1, 0.47843137, 0.18039216, 1)
+polygon = PackedVector2Array(7, 0, 6.306782, 3.0371864, 4.3644285, 5.4728203, 1.5576469, 6.8244953, -1.5576466, 6.8244953, -4.3644285, 5.4728203, -6.306782, 3.0371866, -7, -6.119594e-07, -6.306782, -3.0371864, -4.3644276, -5.472821, -1.557647, -6.8244953, 1.5576472, -6.8244953, 4.3644276, -5.472821, 6.306782, -3.0371864)
+
+[node name="Glow2_8" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=1320884368]
+position = Vector2(746, 1628)
+color = Color(1, 0.7019608, 0.2784314, 0.28)
+polygon = PackedVector2Array(17, 0, 15.31647, 7.376024, 10.599326, 13.291136, 3.7828567, 16.573774, -3.782856, 16.573774, -10.599326, 13.291136, -15.31647, 7.3760247, -17, -1.4861872e-06, -15.31647, -7.376024, -10.599323, -13.291138, -3.7828572, -16.573774, 3.7828577, -16.573774, 10.599324, -13.291138, 15.31647, -7.376024)
+
+[node name="Lantern2_8" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=1234145447]
+position = Vector2(746, 1628)
+color = Color(1, 0.47843137, 0.18039216, 1)
+polygon = PackedVector2Array(7, 0, 6.306782, 3.0371864, 4.3644285, 5.4728203, 1.5576469, 6.8244953, -1.5576466, 6.8244953, -4.3644285, 5.4728203, -6.306782, 3.0371866, -7, -6.119594e-07, -6.306782, -3.0371864, -4.3644276, -5.472821, -1.557647, -6.8244953, 1.5576472, -6.8244953, 4.3644276, -5.472821, 6.306782, -3.0371864)
+
+[node name="Glow2_9" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=217252678]
+position = Vector2(844, 1628)
+color = Color(1, 0.7019608, 0.2784314, 0.28)
+polygon = PackedVector2Array(17, 0, 15.31647, 7.376024, 10.599326, 13.291136, 3.7828567, 16.573774, -3.782856, 16.573774, -10.599326, 13.291136, -15.31647, 7.3760247, -17, -1.4861872e-06, -15.31647, -7.376024, -10.599323, -13.291138, -3.7828572, -16.573774, 3.7828577, -16.573774, 10.599324, -13.291138, 15.31647, -7.376024)
+
+[node name="Lantern2_9" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=1383675537]
+position = Vector2(844, 1628)
+color = Color(1, 0.47843137, 0.18039216, 1)
+polygon = PackedVector2Array(7, 0, 6.306782, 3.0371864, 4.3644285, 5.4728203, 1.5576469, 6.8244953, -1.5576466, 6.8244953, -4.3644285, 5.4728203, -6.306782, 3.0371866, -7, -6.119594e-07, -6.306782, -3.0371864, -4.3644276, -5.472821, -1.557647, -6.8244953, 1.5576472, -6.8244953, 4.3644276, -5.472821, 6.306782, -3.0371864)
+
+[node name="Glow2_10" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=1549685003]
+position = Vector2(942, 1628)
+color = Color(1, 0.7019608, 0.2784314, 0.28)
+polygon = PackedVector2Array(17, 0, 15.31647, 7.376024, 10.599326, 13.291136, 3.7828567, 16.573774, -3.782856, 16.573774, -10.599326, 13.291136, -15.31647, 7.3760247, -17, -1.4861872e-06, -15.31647, -7.376024, -10.599323, -13.291138, -3.7828572, -16.573774, 3.7828577, -16.573774, 10.599324, -13.291138, 15.31647, -7.376024)
+
+[node name="Lantern2_10" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=661212781]
+position = Vector2(942, 1628)
+color = Color(1, 0.47843137, 0.18039216, 1)
+polygon = PackedVector2Array(7, 0, 6.306782, 3.0371864, 4.3644285, 5.4728203, 1.5576469, 6.8244953, -1.5576466, 6.8244953, -4.3644285, 5.4728203, -6.306782, 3.0371866, -7, -6.119594e-07, -6.306782, -3.0371864, -4.3644276, -5.472821, -1.557647, -6.8244953, 1.5576472, -6.8244953, 4.3644276, -5.472821, 6.306782, -3.0371864)
+
+[node name="Glow2_11" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=2090004565]
+position = Vector2(1040, 1628)
+color = Color(1, 0.7019608, 0.2784314, 0.28)
+polygon = PackedVector2Array(17, 0, 15.31647, 7.376024, 10.599326, 13.291136, 3.7828567, 16.573774, -3.782856, 16.573774, -10.599326, 13.291136, -15.31647, 7.3760247, -17, -1.4861872e-06, -15.31647, -7.376024, -10.599323, -13.291138, -3.7828572, -16.573774, 3.7828577, -16.573774, 10.599324, -13.291138, 15.31647, -7.376024)
+
+[node name="Lantern2_11" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=769201955]
+position = Vector2(1040, 1628)
+color = Color(1, 0.47843137, 0.18039216, 1)
+polygon = PackedVector2Array(7, 0, 6.306782, 3.0371864, 4.3644285, 5.4728203, 1.5576469, 6.8244953, -1.5576466, 6.8244953, -4.3644285, 5.4728203, -6.306782, 3.0371866, -7, -6.119594e-07, -6.306782, -3.0371864, -4.3644276, -5.472821, -1.557647, -6.8244953, 1.5576472, -6.8244953, 4.3644276, -5.472821, 6.306782, -3.0371864)
+
+[node name="Glow2_12" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=831414202]
+position = Vector2(1138, 1628)
+color = Color(1, 0.7019608, 0.2784314, 0.28)
+polygon = PackedVector2Array(17, 0, 15.31647, 7.376024, 10.599326, 13.291136, 3.7828567, 16.573774, -3.782856, 16.573774, -10.599326, 13.291136, -15.31647, 7.3760247, -17, -1.4861872e-06, -15.31647, -7.376024, -10.599323, -13.291138, -3.7828572, -16.573774, 3.7828577, -16.573774, 10.599324, -13.291138, 15.31647, -7.376024)
+
+[node name="Lantern2_12" type="Polygon2D" parent="Block/NightMarket/Lanterns" unique_id=1713513755]
+position = Vector2(1138, 1628)
+color = Color(1, 0.47843137, 0.18039216, 1)
+polygon = PackedVector2Array(7, 0, 6.306782, 3.0371864, 4.3644285, 5.4728203, 1.5576469, 6.8244953, -1.5576466, 6.8244953, -4.3644285, 5.4728203, -6.306782, 3.0371866, -7, -6.119594e-07, -6.306782, -3.0371864, -4.3644276, -5.472821, -1.557647, -6.8244953, 1.5576472, -6.8244953, 4.3644276, -5.472821, 6.306782, -3.0371864)
 
 [node name="BackgroundArt" type="Sprite2D" parent="Block" unique_id=1607539407]
 visible = false

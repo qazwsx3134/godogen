@@ -1,0 +1,13 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://scripts/hero_def.gd" id="1_hero"]
+
+[resource]
+script = ExtResource("1_hero")
+id = &"man"
+display_name = "男｜厭世西裝"
+tagline = "平常很累，打起來很兇：拳頭起手，揮得又大又猛"
+start_weapon = &"punch"
+hp_scale = 1.1
+speed_scale = 0.95
+swing_reach = 38.0

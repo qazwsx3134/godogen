@@ -1,0 +1,46 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/projectile.gd" id="1_bq1av"]
+
+[node name="RiderCharge" type="Node2D" unique_id=1694254106]
+script = ExtResource("1_bq1av")
+radius = 26.0
+
+[node name="Visual" type="Node2D" parent="." unique_id=1190726872]
+unique_name_in_owner = true
+position = Vector2(0, -6)
+
+[node name="WheelBack" type="Polygon2D" parent="Visual" unique_id=1052097246]
+position = Vector2(-20, 6)
+color = Color(0.07450981, 0.1254902, 0.1764706, 1)
+polygon = PackedVector2Array(9, 0, 7.7942286, 4.5, 4.4999995, 7.794229, -3.934025e-07, 9, -4.5000005, 7.7942286, -7.7942286, 4.5000005, -9, -7.86805e-07, -7.7942286, -4.4999995, -4.499999, -7.794229, 1.0732393e-07, -9, 4.499999, -7.794229, 7.794228, -4.5000014)
+
+[node name="WheelFront" type="Polygon2D" parent="Visual" unique_id=11068289]
+position = Vector2(20, 6)
+color = Color(0.07450981, 0.1254902, 0.1764706, 1)
+polygon = PackedVector2Array(9, 0, 7.7942286, 4.5, 4.4999995, 7.794229, -3.934025e-07, 9, -4.5000005, 7.7942286, -7.7942286, 4.5000005, -9, -7.86805e-07, -7.7942286, -4.4999995, -4.499999, -7.794229, 1.0732393e-07, -9, 4.499999, -7.794229, 7.794228, -4.5000014)
+
+[node name="BodyOutline" type="Polygon2D" parent="Visual" unique_id=392562982]
+position = Vector2(0, 2)
+color = Color(0.07450981, 0.1254902, 0.1764706, 1)
+polygon = PackedVector2Array(-26, -9, 26, -9, 30, 6, -24, 8)
+
+[node name="Body" type="Polygon2D" parent="Visual" unique_id=1504777349]
+position = Vector2(0, 2)
+color = Color(0.14901961, 0.21568628, 0.47843137, 1)
+polygon = PackedVector2Array(-23, -6, 24, -6, 26, 4, -21, 5)
+
+[node name="TailLight" type="Polygon2D" parent="Visual" unique_id=1648607300]
+position = Vector2(0, 2)
+color = Color(1, 0.23137255, 0.1882353, 1)
+polygon = PackedVector2Array(-27, -4, -23, -4, -23, 1, -27, 1)
+
+[node name="Rider" type="Polygon2D" parent="Visual" unique_id=1717580943]
+position = Vector2(0, 2)
+color = Color(0.10980392, 0.16470589, 0.33333334, 1)
+polygon = PackedVector2Array(-8, -22, 4, -22, 6, -6, -10, -6)
+
+[node name="Helmet" type="Polygon2D" parent="Visual" unique_id=695065203]
+position = Vector2(-2, -26)
+color = Color(0.95686275, 0.9607843, 0.9843137, 1)
+polygon = PackedVector2Array(8, 0, 7.207751, 3.47107, 4.9879184, 6.254652, 1.7801678, 7.799423, -1.7801676, 7.799423, -4.9879184, 6.254652, -7.207751, 3.4710705, -8, -6.993822e-07, -7.207751, -3.47107, -4.987917, -6.254653, -1.780168, -7.799423, 1.7801683, -7.799423, 4.9879174, -6.254653, 7.207751, -3.47107)

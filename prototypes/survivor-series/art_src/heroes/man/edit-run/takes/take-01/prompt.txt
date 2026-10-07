@@ -1,0 +1,9 @@
+Create exactly ONE square image (1024x1024).
+
+The FIRST attached image is the selected unapproved candidate with a transparent background: a fictional adult man.
+
+Reproduce the FIRST image exactly: the same single figure at exactly the same size and the same position on the canvas (the top of the figure about 15 percent below the top edge, its lowest point about 15 percent above the bottom edge, its left-most point about 33 percent from the left edge and its right-most point about 30 percent from the right edge), the same pose, same elevated three-quarter overhead camera as the FIRST image, about 50 degrees, facing diagonally toward the lower-right, the same character shown in the FIRST reference image. Match the FIRST image exactly in its existing detailed pixel-art style, visible pixel clusters, dark outline, shading and palette. Do not redesign or simplify the art.
+
+THE ONLY CHANGE: Change ONLY the hair to black hair slicked straight back, glossy, neat and lying close against the head, with the forehead exposed. Remove the tall spiky or swept-up volume and the dangling forehead strand. Keep the face, world-weary half-lidded expression, navy suit, red necktie, hunched drooping-shoulder stance, body, hands, feet, pixel-art finish, camera and lower-right facing exactly unchanged. Everything else (face, expression, costume, colours, proportions, hunched stance, hands, feet, framing, camera, lower-right facing and pixel-art style) stays exactly as in the FIRST image.
+
+Background: solid flat pure magenta #FF00FF everywhere outside the character, no shadow, no ground, no glow on the background. No text, no letters, no numbers, no logo, no watermark, no signature, no UI, no border, no frame, no grid.

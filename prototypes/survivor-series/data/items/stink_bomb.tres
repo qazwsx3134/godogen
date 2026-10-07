@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/tofu.tscn" id="1_proj"]
+[ext_resource type="Script" path="res://scripts/item_def.gd" id="2_def"]
+
+[resource]
+script = ExtResource("2_def")
+id = &"stink_bomb"
+title = "爆漿臭豆腐"
+description = "臭豆腐攤與鞭炮融合：臭味區結束時轟地炸開。"
+level_notes = PackedStringArray()
+slot = "fusion"
+accent = Color(0.7216,0.5176,0.9412,1)
+max_level = 1
+kind = &"tofu"
+variant = &"burst"
+projectile = ExtResource("1_proj")
+damage = 28.0
+cooldown = 3.0
+amount = 2
+area = 1.3
+duration = 3.0
+pierce = -1
+knockback = 1.2
+slow = 0.55
+blast_on_end = true
+fuse_a = &"tofu"
+fuse_b = &"firecracker"
+fuse_level = 4

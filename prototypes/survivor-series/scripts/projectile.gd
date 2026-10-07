@@ -18,6 +18,10 @@ var rehit: float = 0.0
 var bounce: bool = false
 var homing: bool = false
 var blast_radius: float = 0.0
+## Zone effects on enemies inside `radius`; see Street._step_projectiles.
+var slow: float = 0.0
+var pull: float = 0.0
+var blast_on_end: bool = false
 var detonate: bool = false
 var start_point := Vector2.ZERO
 var target_point := Vector2.ZERO
@@ -83,7 +87,7 @@ func can_hit(enemy: Node2D, before: Vector2) -> bool:
 
 func remember(enemy: Node2D) -> void:
 	hit_at[enemy.get_instance_id()] = age
-	if blast_radius > 0.0:
+	if blast_radius > 0.0 and not blast_on_end:
 		detonate = true
 	elif pierce > 0:
 		pierce -= 1

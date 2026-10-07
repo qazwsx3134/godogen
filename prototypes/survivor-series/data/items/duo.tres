@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/wave.tscn" id="1_proj"]
+[ext_resource type="Script" path="res://scripts/item_def.gd" id="2_def"]
+
+[resource]
+script = ExtResource("2_def")
+id = &"duo"
+title = "雙人合擊"
+description = "拳頭與衝擊波合體：四面八方射出貫穿的合擊波。"
+level_notes = PackedStringArray()
+slot = "fusion"
+accent = Color(0.7216,0.5176,0.9412,1)
+max_level = 1
+kind = &"wave"
+variant = &"duo"
+projectile = ExtResource("1_proj")
+damage = 55.0
+cooldown = 0.9
+amount = 4
+area = 1.4
+speed = 430.0
+duration = 1.1
+pierce = -1
+knockback = 1.6
+fuse_a = &"punch"
+fuse_b = &"wave"
+fuse_level = 4

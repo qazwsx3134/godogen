@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/item_def.gd" id="2_def"]
+
+[resource]
+script = ExtResource("2_def")
+id = &"moms_counter"
+title = "媽媽的反手"
+description = "雨傘與藍白拖融合：擋下三次傷害，反彈更強，還會回血。"
+level_notes = PackedStringArray()
+slot = "fusion"
+accent = Color(0.7216,0.5176,0.9412,1)
+max_level = 1
+kind = &"umbrella"
+variant = &"counter"
+damage = 70.0
+cooldown = 4.0
+amount = 3
+area = 1.5
+duration = 1.0
+pierce = -1
+knockback = 3.2
+fuse_a = &"umbrella"
+fuse_b = &"slipper"
+fuse_level = 4

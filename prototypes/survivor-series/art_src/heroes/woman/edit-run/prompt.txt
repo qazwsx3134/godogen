@@ -1,0 +1,9 @@
+Create exactly ONE square image (1024x1024).
+
+The FIRST attached image is the selected unapproved candidate with a transparent background: a fictional adult woman.
+
+Reproduce the FIRST image exactly: the same single figure at exactly the same size and the same position on the canvas (the top of the figure about 11 percent below the top edge, its lowest point about 11 percent above the bottom edge, its left-most point about 26 percent from the left edge and its right-most point about 27 percent from the right edge), the pose changed only as specified below, same elevated three-quarter overhead camera as the FIRST image, about 50 degrees, facing diagonally toward the lower-right, the same character shown in the FIRST reference image. Match the FIRST image exactly in its existing detailed pixel-art style, visible pixel clusters, dark outline, shading and palette. Do not redesign or simplify the art.
+
+THE ONLY CHANGES: (1) Change the stance to upright, with the body straight and both feet together or only slightly apart, one arm hanging naturally and the other hand only slightly forward with an open palm, relaxed rather than lunging. (2) Change the eyes to narrow angular line eyes, no visible large iris, a cold expression. Keep the existing hairstyle and wine-red hair colour, black short jacket, light-blue top and skirt, dark tights, white boots, pixel-art finish, camera and lower-right facing unchanged. These are the only two changes. Everything else (hair shape and wine-red colour, costume and its colours, white boots, proportions, framing, camera, lower-right facing and pixel-art style) stays exactly as in the FIRST image.
+
+Background: solid flat pure magenta #FF00FF everywhere outside the character, no shadow, no ground, no glow on the background. No text, no letters, no numbers, no logo, no watermark, no signature, no UI, no border, no frame, no grid.

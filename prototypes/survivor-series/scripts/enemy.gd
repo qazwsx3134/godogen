@@ -16,6 +16,8 @@ var phase: String = "chase"
 var phase_left: float = 0.0
 var hazard_left: float = 1.5
 var fly_left: float = 0.0
+var slow_left: float = 0.0
+var slow_amount: float = 0.0
 var rest_scale: Vector2
 var _flash: Tween
 @onready var visual: Node2D = %Visual
@@ -43,6 +45,11 @@ func setup(hp_scale: float, is_elite: bool) -> void:
 		scale = Vector2.ONE * 1.5
 		visual.modulate = Color(1.15, 0.95, 0.75)
 
+## Slows chasing for `duration` seconds; the strongest slow wins.
+func slow(amount: float, duration: float) -> void:
+	slow_amount = maxf(amount, slow_amount if slow_left > 0.0 else 0.0)
+	slow_left = maxf(slow_left, duration)
+
 func contact_damage() -> float:
 	return definition.contact_damage * (2.5 if phase == "dash" else 1.0) * (1.5 if elite else 1.0)
 
@@ -58,6 +65,9 @@ func step(delta: float, target: Vector2, bounds: Rect2) -> void:
 	var toward: Vector2 = (target - position).normalized()
 	hazard_left -= delta
 	var movement: Vector2 = toward * definition.speed
+	if slow_left > 0.0:
+		slow_left -= delta
+		movement *= 1.0 - slow_amount
 	if definition.kind == "smoker" and hazard_left <= 0.0:
 		hazard_left = definition.hazard_interval
 		smoke_requested.emit(position)

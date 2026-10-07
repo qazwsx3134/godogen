@@ -38,72 +38,171 @@ visible = false
 position = Vector2(0, -25)
 scale = Vector2(0.1, 0.1)
 
-[node name="Placeholder" type="Node2D" parent="Motion/Visual" unique_id=993456191]
+[node name="BodyMan" type="Node2D" parent="Motion/Visual" unique_id=993456191]
+unique_name_in_owner = true
+position = Vector2(-1, 1)
+rotation = 0.06
 
-[node name="LegLeft" type="Polygon2D" parent="Motion/Visual/Placeholder" unique_id=1995173943]
+[node name="LegLeft" type="Polygon2D" parent="Motion/Visual/BodyMan" unique_id=1995173943]
 position = Vector2(-13, -14)
-color = Color(0.07450981, 0.1254902, 0.1764706, 1)
+color = Color(0.10980392, 0.16470589, 0.33333334, 1)
 polygon = PackedVector2Array(0, 0, 10, 0, 10, 19, 0, 19)
 
-[node name="LegRight" type="Polygon2D" parent="Motion/Visual/Placeholder" unique_id=1473764293]
+[node name="LegRight" type="Polygon2D" parent="Motion/Visual/BodyMan" unique_id=1473764293]
 position = Vector2(3, -14)
-color = Color(0.07450981, 0.1254902, 0.1764706, 1)
+color = Color(0.10980392, 0.16470589, 0.33333334, 1)
 polygon = PackedVector2Array(0, 0, 10, 0, 10, 19, 0, 19)
 
-[node name="ShoeLeft" type="Polygon2D" parent="Motion/Visual/Placeholder" unique_id=624611764]
+[node name="ShoeLeft" type="Polygon2D" parent="Motion/Visual/BodyMan" unique_id=624611764]
 position = Vector2(-9, 5)
-color = Color(1, 0.77254903, 0.41960785, 1)
+color = Color(0.105882354, 0.105882354, 0.13333334, 1)
 polygon = PackedVector2Array(9, 0, 8.693333, 1.2940953, 7.7942286, 2.5, 6.3639607, 3.535534, 4.5, 4.330127, 2.3293715, 4.829629, 5.5109107e-16, 5, -2.3293715, 4.829629, -4.5, 4.330127, -6.3639607, 3.535534, -7.7942286, 2.5, -8.693333, 1.2940953, -9, 6.123234e-16, -8.693333, -1.2940953, -7.7942286, -2.5, -6.3639607, -3.535534, -4.5, -4.330127, -2.3293715, -4.829629, -1.6532731e-15, -5, 2.3293715, -4.829629, 4.5, -4.330127, 6.3639607, -3.535534, 7.7942286, -2.5, 8.693333, -1.2940953)
 
-[node name="ShoeRight" type="Polygon2D" parent="Motion/Visual/Placeholder" unique_id=876026263]
+[node name="ShoeRight" type="Polygon2D" parent="Motion/Visual/BodyMan" unique_id=876026263]
 position = Vector2(10, 5)
-color = Color(1, 0.77254903, 0.41960785, 1)
+color = Color(0.105882354, 0.105882354, 0.13333334, 1)
 polygon = PackedVector2Array(9, 0, 8.693333, 1.2940953, 7.7942286, 2.5, 6.3639607, 3.535534, 4.5, 4.330127, 2.3293715, 4.829629, 5.5109107e-16, 5, -2.3293715, 4.829629, -4.5, 4.330127, -6.3639607, 3.535534, -7.7942286, 2.5, -8.693333, 1.2940953, -9, 6.123234e-16, -8.693333, -1.2940953, -7.7942286, -2.5, -6.3639607, -3.535534, -4.5, -4.330127, -2.3293715, -4.829629, -1.6532731e-15, -5, 2.3293715, -4.829629, 4.5, -4.330127, 6.3639607, -3.535534, 7.7942286, -2.5, 8.693333, -1.2940953)
 
-[node name="JacketOutline" type="Polygon2D" parent="Motion/Visual/Placeholder" unique_id=1093184847]
+[node name="JacketOutline" type="Polygon2D" parent="Motion/Visual/BodyMan" unique_id=1093184847]
 color = Color(0.07450981, 0.1254902, 0.1764706, 1)
-polygon = PackedVector2Array(-23, -38, 18, -38, 23, -9, -20, -9)
+polygon = PackedVector2Array(-26, -30, -12, -39, 12, -39, 24, -30, 22, -9, -23, -9)
 
-[node name="Jacket" type="Polygon2D" parent="Motion/Visual/Placeholder" unique_id=1789364680]
-color = Color(0.44705883, 0.8784314, 0.7529412, 1)
-polygon = PackedVector2Array(-19, -35, 15, -35, 19, -12, -16, -12)
+[node name="Jacket" type="Polygon2D" parent="Motion/Visual/BodyMan" unique_id=1789364680]
+color = Color(0.14901961, 0.21568628, 0.47843137, 1)
+polygon = PackedVector2Array(-22, -29, -10, -36, 10, -36, 20, -29, 19, -12, -19, -12)
 
-[node name="HeadOutline" type="Polygon2D" parent="Motion/Visual/Placeholder" unique_id=7988106]
+[node name="HeadOutline" type="Polygon2D" parent="Motion/Visual/BodyMan" unique_id=7988106]
+position = Vector2(0, -47)
+scale = Vector2(1.18, 1.12)
+color = Color(0.07450981, 0.1254902, 0.1764706, 1)
+polygon = PackedVector2Array(17, 0, 16.420738, 4.658743, 14.722431, 9, 12.020815, 12.7279215, 8.5, 15.588457, 4.399924, 17.386665, 1.0409498e-15, 18, -4.399924, 17.386665, -8.5, 15.588457, -12.020815, 12.7279215, -14.722431, 9, -16.420738, 4.658743, -17, 2.2043643e-15, -16.420738, -4.658743, -14.722431, -9, -12.020815, -12.7279215, -8.5, -15.588457, -4.399924, -17.386665, -3.1228493e-15, -18, 4.399924, -17.386665, 8.5, -15.588457, 12.020815, -12.7279215, 14.722431, -9, 16.420738, -4.658743)
+
+[node name="Face" type="Polygon2D" parent="Motion/Visual/BodyMan" unique_id=1792834963]
+position = Vector2(0, -45)
+scale = Vector2(1.18, 1.12)
+color = Color(0.96862745, 0.8117647, 0.627451, 1)
+polygon = PackedVector2Array(13, 0, 12.557035, 3.6234665, 11.25833, 7, 9.192388, 9.899495, 6.5, 12.124355, 3.3646476, 13.522962, 7.9602044e-16, 14, -3.3646476, 13.522962, -6.5, 12.124355, -9.192388, 9.899495, -11.25833, 7, -12.557035, 3.6234665, -13, 1.7145056e-15, -12.557035, -3.6234665, -11.25833, -7, -9.192388, -9.899495, -6.5, -12.124355, -3.3646476, -13.522962, -2.3880612e-15, -14, 3.3646476, -13.522962, 6.5, -12.124355, 9.192388, -9.899495, 11.25833, -7, 12.557035, -3.6234665)
+
+[node name="Hair" type="Polygon2D" parent="Motion/Visual/BodyMan" unique_id=58698722]
+color = Color(0.050980393, 0.050980393, 0.078431375, 1)
+polygon = PackedVector2Array(-16, -51, -12, -65, 10, -66, 17, -52, 0, -58)
+
+[node name="EyeLeft" type="Polygon2D" parent="Motion/Visual/BodyMan" unique_id=990482479]
+position = Vector2(-8, -47)
+color = Color(0.07450981, 0.1254902, 0.1764706, 1)
+polygon = PackedVector2Array(0, 0, 4, 0, 4, 2, 0, 2)
+
+[node name="EyeRight" type="Polygon2D" parent="Motion/Visual/BodyMan" unique_id=410657544]
+position = Vector2(5, -47)
+color = Color(0.07450981, 0.1254902, 0.1764706, 1)
+polygon = PackedVector2Array(0, 0, 4, 0, 4, 2, 0, 2)
+
+[node name="Shirt" type="Polygon2D" parent="Motion/Visual/BodyMan" unique_id=257029863]
+color = Color(0.9490196, 0.9372549, 0.9019608, 1)
+polygon = PackedVector2Array(-4, -36, 5, -36, 0, -27)
+
+[node name="Tie" type="Polygon2D" parent="Motion/Visual/BodyMan" unique_id=694954911]
+color = Color(0.8509804, 0.13725491, 0.1764706, 1)
+polygon = PackedVector2Array(-2.5, -34, 3, -34, 4.5, -21, 0.5, -15, -3.5, -21)
+
+[node name="BodyWoman" type="Node2D" parent="Motion/Visual" unique_id=339260538]
+unique_name_in_owner = true
+visible = false
+
+[node name="LegLeft" type="Polygon2D" parent="Motion/Visual/BodyWoman" unique_id=442176821]
+position = Vector2(-13, -14)
+color = Color(0.2901961, 0.16470589, 0.14117648, 1)
+polygon = PackedVector2Array(0, 0, 10, 0, 10, 19, 0, 19)
+
+[node name="LegRight" type="Polygon2D" parent="Motion/Visual/BodyWoman" unique_id=1037052310]
+position = Vector2(3, -14)
+color = Color(0.2901961, 0.16470589, 0.14117648, 1)
+polygon = PackedVector2Array(0, 0, 10, 0, 10, 19, 0, 19)
+
+[node name="ShoeLeft" type="Polygon2D" parent="Motion/Visual/BodyWoman" unique_id=1522712828]
+position = Vector2(-9, 5)
+color = Color(0.95686275, 0.9607843, 0.9843137, 1)
+polygon = PackedVector2Array(9, 0, 8.693333, 1.2940953, 7.7942286, 2.5, 6.3639607, 3.535534, 4.5, 4.330127, 2.3293715, 4.829629, 5.5109107e-16, 5, -2.3293715, 4.829629, -4.5, 4.330127, -6.3639607, 3.535534, -7.7942286, 2.5, -8.693333, 1.2940953, -9, 6.123234e-16, -8.693333, -1.2940953, -7.7942286, -2.5, -6.3639607, -3.535534, -4.5, -4.330127, -2.3293715, -4.829629, -1.6532731e-15, -5, 2.3293715, -4.829629, 4.5, -4.330127, 6.3639607, -3.535534, 7.7942286, -2.5, 8.693333, -1.2940953)
+
+[node name="ShoeRight" type="Polygon2D" parent="Motion/Visual/BodyWoman" unique_id=885725953]
+position = Vector2(10, 5)
+color = Color(0.95686275, 0.9607843, 0.9843137, 1)
+polygon = PackedVector2Array(9, 0, 8.693333, 1.2940953, 7.7942286, 2.5, 6.3639607, 3.535534, 4.5, 4.330127, 2.3293715, 4.829629, 5.5109107e-16, 5, -2.3293715, 4.829629, -4.5, 4.330127, -6.3639607, 3.535534, -7.7942286, 2.5, -8.693333, 1.2940953, -9, 6.123234e-16, -8.693333, -1.2940953, -7.7942286, -2.5, -6.3639607, -3.535534, -4.5, -4.330127, -2.3293715, -4.829629, -1.6532731e-15, -5, 2.3293715, -4.829629, 4.5, -4.330127, 6.3639607, -3.535534, 7.7942286, -2.5, 8.693333, -1.2940953)
+
+[node name="JacketOutline" type="Polygon2D" parent="Motion/Visual/BodyWoman" unique_id=1051847067]
+color = Color(0.07450981, 0.1254902, 0.1764706, 1)
+polygon = PackedVector2Array(-21, -38, 19, -38, 22, -16, -19, -16)
+
+[node name="Jacket" type="Polygon2D" parent="Motion/Visual/BodyWoman" unique_id=172730021]
+color = Color(0.101960786, 0.101960786, 0.13333334, 1)
+polygon = PackedVector2Array(-18, -35, 16, -35, 19, -18, -16, -18)
+
+[node name="HeadOutline" type="Polygon2D" parent="Motion/Visual/BodyWoman" unique_id=293697162]
 position = Vector2(0, -45)
 color = Color(0.07450981, 0.1254902, 0.1764706, 1)
 polygon = PackedVector2Array(17, 0, 16.420738, 4.658743, 14.722431, 9, 12.020815, 12.7279215, 8.5, 15.588457, 4.399924, 17.386665, 1.0409498e-15, 18, -4.399924, 17.386665, -8.5, 15.588457, -12.020815, 12.7279215, -14.722431, 9, -16.420738, 4.658743, -17, 2.2043643e-15, -16.420738, -4.658743, -14.722431, -9, -12.020815, -12.7279215, -8.5, -15.588457, -4.399924, -17.386665, -3.1228493e-15, -18, 4.399924, -17.386665, 8.5, -15.588457, 12.020815, -12.7279215, 14.722431, -9, 16.420738, -4.658743)
 
-[node name="Face" type="Polygon2D" parent="Motion/Visual/Placeholder" unique_id=1792834963]
+[node name="Face" type="Polygon2D" parent="Motion/Visual/BodyWoman" unique_id=19860478]
 position = Vector2(0, -43)
 color = Color(0.96862745, 0.8117647, 0.627451, 1)
 polygon = PackedVector2Array(13, 0, 12.557035, 3.6234665, 11.25833, 7, 9.192388, 9.899495, 6.5, 12.124355, 3.3646476, 13.522962, 7.9602044e-16, 14, -3.3646476, 13.522962, -6.5, 12.124355, -9.192388, 9.899495, -11.25833, 7, -12.557035, 3.6234665, -13, 1.7145056e-15, -12.557035, -3.6234665, -11.25833, -7, -9.192388, -9.899495, -6.5, -12.124355, -3.3646476, -13.522962, -2.3880612e-15, -14, 3.3646476, -13.522962, 6.5, -12.124355, 9.192388, -9.899495, 11.25833, -7, 12.557035, -3.6234665)
 
-[node name="Hair" type="Polygon2D" parent="Motion/Visual/Placeholder" unique_id=58698722]
-color = Color(0.07450981, 0.1254902, 0.1764706, 1)
-polygon = PackedVector2Array(-14, -50, -10, -61, 9, -60, 15, -51, 0, -55)
+[node name="Hair" type="Polygon2D" parent="Motion/Visual/BodyWoman" unique_id=616432283]
+color = Color(0.5411765, 0.12156863, 0.23921569, 1)
+polygon = PackedVector2Array(-17, -50, -12, -64, 11, -64, 17, -50, 0, -56)
 
-[node name="EyeLeft" type="Polygon2D" parent="Motion/Visual/Placeholder" unique_id=990482479]
-position = Vector2(-7, -47)
-color = Color(0.07450981, 0.1254902, 0.1764706, 1)
-polygon = PackedVector2Array(0, 0, 3, 0, 3, 3, 0, 3)
+[node name="EyeLeft" type="Polygon2D" parent="Motion/Visual/BodyWoman" unique_id=1689099232]
+position = Vector2(-9, -47)
+color = Color(0.5411765, 0.12156863, 0.23921569, 1)
+polygon = PackedVector2Array(0, 1, 5, -1, 5, 1, 0, 3)
 
-[node name="EyeRight" type="Polygon2D" parent="Motion/Visual/Placeholder" unique_id=410657544]
-position = Vector2(5, -47)
-color = Color(0.07450981, 0.1254902, 0.1764706, 1)
-polygon = PackedVector2Array(0, 0, 3, 0, 3, 3, 0, 3)
+[node name="EyeRight" type="Polygon2D" parent="Motion/Visual/BodyWoman" unique_id=1977201797]
+position = Vector2(4, -47)
+color = Color(0.5411765, 0.12156863, 0.23921569, 1)
+polygon = PackedVector2Array(0, -1, 5, 1, 5, 3, 0, 1)
 
-[node name="Fist" type="Node2D" parent="Motion/Visual/Placeholder" unique_id=2077698964]
+[node name="Top" type="Polygon2D" parent="Motion/Visual/BodyWoman" unique_id=1292871932]
+color = Color(0.65882355, 0.83137256, 0.9411765, 1)
+polygon = PackedVector2Array(-14, -19, 15, -19, 18, -10, -17, -10)
+
+[node name="HairLeft" type="Polygon2D" parent="Motion/Visual/BodyWoman" unique_id=2043537269]
+color = Color(0.5411765, 0.12156863, 0.23921569, 1)
+polygon = PackedVector2Array(-17, -52, -12, -52, -13, -33, -20, -30)
+
+[node name="HairRight" type="Polygon2D" parent="Motion/Visual/BodyWoman" unique_id=358123034]
+color = Color(0.5411765, 0.12156863, 0.23921569, 1)
+polygon = PackedVector2Array(14, -52, 18, -50, 21, -30, 14, -34)
+
+[node name="Fist" type="Node2D" parent="Motion/Visual" unique_id=2077698964]
 unique_name_in_owner = true
 
-[node name="KnuckleOutline" type="Polygon2D" parent="Motion/Visual/Placeholder/Fist" unique_id=411213303]
+[node name="KnuckleOutline" type="Polygon2D" parent="Motion/Visual/Fist" unique_id=411213303]
 position = Vector2(20, -29)
 color = Color(0.07450981, 0.1254902, 0.1764706, 1)
 polygon = PackedVector2Array(13, 0, 12.557035, 2.8470094, 11.25833, 5.5, 9.192388, 7.7781744, 6.5, 9.526279, 3.3646476, 10.625184, 7.9602044e-16, 11, -3.3646476, 10.625184, -6.5, 9.526279, -9.192388, 7.7781744, -11.25833, 5.5, -12.557035, 2.8470094, -13, 1.3471116e-15, -12.557035, -2.8470094, -11.25833, -5.5, -9.192388, -7.7781744, -6.5, -9.526279, -3.3646476, -10.625184, -2.3880612e-15, -11, 3.3646476, -10.625184, 6.5, -9.526279, 9.192388, -7.7781744, 11.25833, -5.5, 12.557035, -2.8470094)
 
-[node name="Knuckle" type="Polygon2D" parent="Motion/Visual/Placeholder/Fist" unique_id=2126824935]
+[node name="Knuckle" type="Polygon2D" parent="Motion/Visual/Fist" unique_id=2126824935]
 position = Vector2(20, -29)
 color = Color(0.96862745, 0.8117647, 0.627451, 1)
 polygon = PackedVector2Array(9, 0, 8.693333, 1.8117332, 7.7942286, 3.5, 6.3639607, 4.9497476, 4.5, 6.0621777, 2.3293715, 6.761481, 5.5109107e-16, 7, -2.3293715, 6.761481, -4.5, 6.0621777, -6.3639607, 4.9497476, -7.7942286, 3.5, -8.693333, 1.8117332, -9, 8.572528e-16, -8.693333, -1.8117332, -7.7942286, -3.5, -6.3639607, -4.9497476, -4.5, -6.0621777, -2.3293715, -6.761481, -1.6532731e-15, -7, 2.3293715, -6.761481, 4.5, -6.0621777, 6.3639607, -4.9497476, 7.7942286, -3.5, 8.693333, -1.8117332)
+
+[node name="Umbrella" type="Node2D" parent="Motion" unique_id=896985336]
+unique_name_in_owner = true
+visible = false
+position = Vector2(-26, -62)
+
+[node name="HandleOutline" type="Polygon2D" parent="Motion/Umbrella" unique_id=904907059]
+color = Color(0.07450981, 0.1254902, 0.1764706, 1)
+polygon = PackedVector2Array(-1.5, -2, 1.5, -2, 1.5, 20, -1.5, 20)
+
+[node name="CanopyOutline" type="Polygon2D" parent="Motion/Umbrella" unique_id=537487456]
+scale = Vector2(1.12, 1.12)
+color = Color(0.07450981, 0.1254902, 0.1764706, 1)
+polygon = PackedVector2Array(18, -1.57361e-06, 16.629831, -6.888302, 12.727922, -12.727921, 6.888304, -16.629831, -2.1464786e-07, -18, -6.8883047, -16.62983, -12.72792, -12.727924, -16.629831, -6.888302, -18, 3.14722e-06)
+
+[node name="Canopy" type="Polygon2D" parent="Motion/Umbrella" unique_id=1106970402]
+color = Color(0.43529412, 0.72156864, 1, 1)
+polygon = PackedVector2Array(18, -1.57361e-06, 16.629831, -6.888302, 12.727922, -12.727921, 6.888304, -16.629831, -2.1464786e-07, -18, -6.8883047, -16.62983, -12.72792, -12.727924, -16.629831, -6.888302, -18, 3.14722e-06)
 
 [node name="HpBar" type="ProgressBar" parent="." unique_id=832783500]
 unique_name_in_owner = true
@@ -112,8 +211,8 @@ offset_top = 14.0
 offset_right = 22.0
 offset_bottom = 19.0
 mouse_filter = 2
-theme_override_font_sizes/font_size = 1
 theme_override_styles/background = SubResource("StyleBoxFlat_3vyb7")
 theme_override_styles/fill = SubResource("StyleBoxFlat_g2els")
+theme_override_font_sizes/font_size = 1
 value = 100.0
 show_percentage = false

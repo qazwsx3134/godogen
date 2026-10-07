@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/rider.tscn" id="1_proj"]
+[ext_resource type="Script" path="res://scripts/item_def.gd" id="2_def"]
+
+[resource]
+script = ExtResource("2_def")
+id = &"salt_riders"
+title = "鹽水蜂炮車隊"
+description = "機車騎士與鞭炮融合：三台機車並排衝過，跑完整條路再炸開。"
+level_notes = PackedStringArray()
+slot = "fusion"
+accent = Color(0.7216,0.5176,0.9412,1)
+max_level = 1
+kind = &"rider"
+variant = &"swarm"
+projectile = ExtResource("1_proj")
+damage = 60.0
+cooldown = 6.0
+amount = 3
+area = 1.2
+speed = 520.0
+duration = 1.6
+pierce = -1
+knockback = 2.8
+blast_on_end = true
+fuse_a = &"rider"
+fuse_b = &"firecracker"
+fuse_level = 4

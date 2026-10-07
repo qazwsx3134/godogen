@@ -27,8 +27,17 @@
 [ext_resource type="Resource" path="res://data/items/megaphone.tres" id="24_o5kgk"]
 [ext_resource type="Resource" path="res://data/items/massage.tres" id="25_dg11p"]
 [ext_resource type="Resource" path="res://data/items/hongbao.tres" id="26_hgfm4"]
+[ext_resource type="Resource" path="res://data/items/tofu.tres" id="n_tofu"]
+[ext_resource type="Resource" path="res://data/items/umbrella.tres" id="n_umbrella"]
+[ext_resource type="Resource" path="res://data/items/ring.tres" id="n_ring"]
+[ext_resource type="Resource" path="res://data/items/rider.tres" id="n_rider"]
+[ext_resource type="Resource" path="res://data/items/duo.tres" id="n_duo"]
+[ext_resource type="Resource" path="res://data/items/stink_bomb.tres" id="n_stink_bomb"]
+[ext_resource type="Resource" path="res://data/items/moms_counter.tres" id="n_moms_counter"]
+[ext_resource type="Resource" path="res://data/items/pearl_ring.tres" id="n_pearl_ring"]
+[ext_resource type="Resource" path="res://data/items/salt_riders.tres" id="n_salt_riders"]
 
 [resource]
 script = ExtResource("1_vldh7")
-items = Array[Resource]([ExtResource("3_18xru"), ExtResource("4_u7gse"), ExtResource("5_1c032"), ExtResource("6_qrnru"), ExtResource("7_1ho8s"), ExtResource("8_6wjik"), ExtResource("9_16dbc"), ExtResource("10_jquha"), ExtResource("11_b56bo"), ExtResource("12_gjcul"), ExtResource("13_7fr2w"), ExtResource("14_fqnvc"), ExtResource("15_xolle"), ExtResource("16_j36ro"), ExtResource("17_gs3eg"), ExtResource("18_utg1e"), ExtResource("19_8isqv"), ExtResource("20_igikj"), ExtResource("21_avsfv"), ExtResource("22_ha653"), ExtResource("23_u04ew"), ExtResource("24_o5kgk"), ExtResource("25_dg11p"), ExtResource("26_hgfm4")])
+items = Array[Resource]([ExtResource("3_18xru"), ExtResource("4_u7gse"), ExtResource("5_1c032"), ExtResource("6_qrnru"), ExtResource("7_1ho8s"), ExtResource("8_6wjik"), ExtResource("9_16dbc"), ExtResource("10_jquha"), ExtResource("11_b56bo"), ExtResource("12_gjcul"), ExtResource("13_7fr2w"), ExtResource("14_fqnvc"), ExtResource("15_xolle"), ExtResource("16_j36ro"), ExtResource("17_gs3eg"), ExtResource("18_utg1e"), ExtResource("19_8isqv"), ExtResource("20_igikj"), ExtResource("21_avsfv"), ExtResource("22_ha653"), ExtResource("23_u04ew"), ExtResource("24_o5kgk"), ExtResource("25_dg11p"), ExtResource("26_hgfm4"), ExtResource("n_tofu"), ExtResource("n_umbrella"), ExtResource("n_ring"), ExtResource("n_rider"), ExtResource("n_duo"), ExtResource("n_stink_bomb"), ExtResource("n_moms_counter"), ExtResource("n_pearl_ring"), ExtResource("n_salt_riders")])
 fillers = Array[Resource]([ExtResource("1_fb5j1"), ExtResource("2_yprrw")])

@@ -1,0 +1,25 @@
+{
+  "schema": "generate2dsprite.master_spec.v1",
+  "name": "hero_man",
+  "subject": "a fictional adult man",
+  "identity": "Create ONE production-ready 2D game character sprite in detailed pixel-art style for a portrait mobile survivor game. A fictional adult man, chibi proportions with a slightly large head, slouched drooping shoulders, black hair slicked straight back, half-lidded tired eyes (world-weary, \"too tired to care\"), a navy-blue business suit and a bold bright red necktie, black shoes. Idle stance: a slight hunch, arms hanging loose with relaxed fists.",
+  "pose": null,
+  "recap": null,
+  "facing": "none",
+  "facing_parts": null,
+  "view": "elevated three-quarter overhead view about 50 degrees, facing diagonally lower-right",
+  "class": "hero",
+  "finish": "pixel",
+  "key": "#FF00FF",
+  "genre": null,
+  "pronoun": "he",
+  "identity_ref": null,
+  "style_ref": {
+    "path": "../../../mnt/d/repo/godot/godogen/prototypes/survivor-series/docs/reference/art-direction-night-market.png",
+    "sha256": "b4604817562f33d78279295a81bf02d651b949baea97c581c0a48e5a49fc7f0f"
+  },
+  "allowed_text": null,
+  "extra_bans": [],
+  "opaque_parts": null,
+  "extra": null
+}

@@ -6,11 +6,14 @@ var street: Node2D
 var cooldowns: Dictionary = {}
 var punches: int = 0
 var fired: Dictionary = {}
+## Hits the umbrella can still absorb.
+var shield: int = 0
 
 func reset() -> void:
 	cooldowns.clear()
 	fired.clear()
 	punches = 0
+	shield = 0
 
 func step(delta: float) -> void:
 	for id: StringName in street.build.weapons:
@@ -44,6 +47,14 @@ func fire(s: Dictionary) -> bool:
 			return _lantern(s)
 		&"cane":
 			return _cane(s)
+		&"tofu":
+			return _tofu(s)
+		&"umbrella":
+			return _umbrella(s)
+		&"ring":
+			return _ring(s)
+		&"rider":
+			return _rider(s)
 	return false
 
 func _hero() -> CharacterBody2D:
@@ -121,7 +132,8 @@ func _wave(s: Dictionary) -> bool:
 		if not _room():
 			break
 		var shot := _spawn(s)
-		shot.velocity = heading.rotated((i - (s.amount - 1) * 0.5) * 0.22) * s.speed
+		var turn: float = TAU * i / s.amount if s.variant == &"duo" else (i - (s.amount - 1) * 0.5) * 0.22
+		shot.velocity = heading.rotated(turn) * s.speed
 		shot.launch(_hero().position)
 	street.sfx.play(&"wave", 0.1)
 	return true
@@ -254,4 +266,96 @@ func _cane(s: Dictionary) -> bool:
 			if zone.grow(enemy.definition.radius).has_point(enemy.position):
 				enemy.hit(s.damage, Vector2(direction, -0.2).normalized(), s.knockback * street.build_force())
 	street.sfx.play(&"swish", 0.08)
+	return true
+
+## The densest of a few nearby enemies, so zones land where they catch the most.
+func _crowd_center(reach: float) -> Vector2:
+	var best: Vector2 = Vector2.INF
+	var best_count: int = -1
+	for enemy: Node2D in _targets(reach, 8):
+		var crowd: int = street.grid.query(enemy.position, 70.0).size()
+		if crowd > best_count:
+			best_count = crowd
+			best = enemy.position
+	return best
+
+func _zone(s: Dictionary, at: Vector2) -> Node2D:
+	var zone := _spawn(s)
+	zone.mode = "straight"
+	zone.face_travel = false
+	zone.velocity = Vector2.ZERO
+	zone.rehit = 0.5
+	zone.slow = s.slow
+	zone.pull = s.pull
+	if s.blast_on_end:
+		zone.blast_radius = 80.0 * s.area
+		zone.blast_on_end = true
+	zone.launch(at)
+	return zone
+
+func _tofu(s: Dictionary) -> bool:
+	for i: int in s.amount:
+		if not _room():
+			break
+		var at: Vector2 = _crowd_center(320.0)
+		if at == Vector2.INF:
+			at = _hero().position + Vector2.RIGHT.rotated(street.rng.randf() * TAU) * 120.0
+		_zone(s, at + Vector2.RIGHT.rotated(TAU * i / s.amount) * 30.0 * minf(i, 1.0))
+	street.sfx.play(&"incense", 0.2)
+	return true
+
+func _ring(s: Dictionary) -> bool:
+	var at: Vector2 = _crowd_center(380.0)
+	if at == Vector2.INF:
+		return false
+	for i: int in s.amount:
+		if not _room():
+			break
+		_zone(s, at + Vector2.RIGHT.rotated(TAU * i / s.amount) * 40.0 * minf(i, 1.0))
+	street.sfx.play(&"throw", 0.08)
+	return true
+
+func _rider(s: Dictionary) -> bool:
+	var heading: Vector2 = _aim(520.0)
+	var side: Vector2 = heading.orthogonal()
+	for i: int in s.amount:
+		if not _room():
+			break
+		var shot := _spawn(s)
+		shot.velocity = heading * s.speed
+		if s.blast_on_end:
+			shot.blast_radius = 60.0 * s.area
+			shot.blast_on_end = true
+		shot.launch(_hero().position - heading * 70.0 + side * (i - (s.amount - 1) * 0.5) * 70.0)
+	street.sfx.play(&"heavy", 0.1)
+	return true
+
+## The umbrella recharges one absorbed hit per cooldown, up to `amount`.
+## Full charges still spend the cooldown, so a hit taken while full waits a whole cooldown to come back.
+func _umbrella(s: Dictionary) -> bool:
+	if shield >= s.amount:
+		return true
+	shield += 1
+	_hero().set_shield(shield)
+	street.sfx.play(&"upgrade", 0.2)
+	return true
+
+## Called before the hero takes damage. A charged umbrella eats the hit and shoves everything nearby away.
+func absorb() -> bool:
+	if shield <= 0:
+		return false
+	var stats: Dictionary = {}
+	for id: StringName in street.build.weapons:
+		var candidate: Dictionary = street.build.weapon_stats(id)
+		if candidate.kind == &"umbrella":
+			stats = candidate
+	if stats.is_empty():
+		return false
+	shield -= 1
+	_hero().set_shield(shield)
+	_hero().hurt_cooldown = _hero().hurt_interval
+	street.blast(_hero().position, 110.0 * stats.area, stats.damage, stats.knockback, Color("9fd8ff"), "彈！")
+	street.sfx.play(&"metal", 0.1)
+	if stats.variant == &"counter":
+		_hero().heal(6.0)
 	return true

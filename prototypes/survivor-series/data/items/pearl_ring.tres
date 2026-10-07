@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/ring.tscn" id="1_proj"]
+[ext_resource type="Script" path="res://scripts/item_def.gd" id="2_def"]
+
+[resource]
+script = ExtResource("2_def")
+id = &"pearl_ring"
+title = "珍珠圈"
+description = "套圈圈與珍珠奶茶融合：大圈把敵人吸成一團，圈消失時爆開。"
+level_notes = PackedStringArray()
+slot = "fusion"
+accent = Color(0.7216,0.5176,0.9412,1)
+max_level = 1
+kind = &"ring"
+variant = &"pearl"
+projectile = ExtResource("1_proj")
+damage = 22.0
+cooldown = 4.0
+amount = 2
+area = 1.5
+duration = 2.0
+pierce = -1
+knockback = 1.4
+slow = 0.7
+pull = 260.0
+blast_on_end = true
+fuse_a = &"ring"
+fuse_b = &"pearl"
+fuse_level = 4

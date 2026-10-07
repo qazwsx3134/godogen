@@ -8,6 +8,11 @@ var hp: float = 100.0
 var hp_limit: float = 100.0
 var armor: float = 0.0
 var speed_scale: float = 1.0
+## Per-hero multipliers and swing feel, set by set_hero().
+var hero_hp: float = 1.0
+var hero_speed: float = 1.0
+var swing_reach: float = 27.0
+var swing_overshoot: bool = true
 var facing := Vector2.RIGHT
 var attack_cooldown: float = 0.0
 var hurt_cooldown: float = 0.0
@@ -21,6 +26,9 @@ var _pose: Tween
 @onready var visual: Node2D = %Visual
 @onready var fist: Node2D = %Fist
 @onready var motion: Node2D = %Motion
+@onready var body_man: Node2D = %BodyMan
+@onready var body_woman: Node2D = %BodyWoman
+@onready var umbrella: Node2D = %Umbrella
 @onready var hp_bar: ProgressBar = %HpBar
 
 func _ready() -> void:
@@ -30,6 +38,22 @@ func _ready() -> void:
 	rest_motion_position = motion.position
 	rest_fist_scale = fist.scale
 
+## Shows the hero's body and applies their stat multipliers and swing feel (HeroDef).
+func set_hero(def: Resource) -> void:
+	var woman: bool = def != null and def.id == &"woman"
+	body_man.visible = not woman
+	body_woman.visible = woman
+	if def == null:
+		return
+	hero_hp = def.hp_scale
+	hero_speed = def.speed_scale
+	swing_reach = def.swing_reach
+	swing_overshoot = def.swing_overshoot
+
+## Shows the umbrella while at least one hit can still be absorbed.
+func set_shield(charges: int) -> void:
+	umbrella.visible = charges > 0
+
 func reset(limit: float = max_hp, damage_reduction: float = 0.0, speed_bonus: float = 0.0) -> void:
 	if _pose != null and _pose.is_valid():
 		_pose.kill()
@@ -38,7 +62,7 @@ func reset(limit: float = max_hp, damage_reduction: float = 0.0, speed_bonus: fl
 	hp_limit = limit
 	hp = limit
 	armor = damage_reduction
-	speed_scale = 1.0 + speed_bonus
+	speed_scale = hero_speed * (1.0 + speed_bonus)
 	facing = Vector2.RIGHT
 	attack_cooldown = 0.0
 	hurt_cooldown = 0.0
@@ -50,6 +74,7 @@ func reset(limit: float = max_hp, damage_reduction: float = 0.0, speed_bonus: fl
 	motion.position = rest_motion_position
 	walk_phase = 0.0
 	_refresh_bar()
+	set_shield(0)
 
 func step(delta: float, direction: Vector2, bounds: Rect2, slow: float = 0.0) -> void:
 	attack_cooldown = maxf(0.0, attack_cooldown - delta)
@@ -77,9 +102,9 @@ func punch(direction: Vector2, interval: float, heavy: bool = false) -> void:
 	fist.scale = rest_fist_scale * (1.5 if heavy else 1.15)
 	_pose = create_tween().set_parallel(true)
 	var local_direction := Vector2(direction.x * signf(visual.scale.x), direction.y)
-	_pose.tween_property(fist, "position", local_direction * 27.0, 0.06).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	_pose.tween_property(fist, "position", local_direction * swing_reach, 0.06).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	_pose.tween_property(visual, "position", rest_visual_position + local_direction * 6.0, 0.06).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	_pose.chain().tween_property(fist, "position", Vector2.ZERO, 0.16).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_pose.chain().tween_property(fist, "position", Vector2.ZERO, 0.16).set_trans(Tween.TRANS_BACK if swing_overshoot else Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	_pose.parallel().tween_property(visual, "position", rest_visual_position, 0.16).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	_pose.parallel().tween_property(fist, "scale", rest_fist_scale, 0.16)
 

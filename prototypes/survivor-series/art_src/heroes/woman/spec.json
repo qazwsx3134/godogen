@@ -1,0 +1,25 @@
+{
+  "schema": "generate2dsprite.master_spec.v1",
+  "name": "hero_woman",
+  "subject": "a fictional adult woman",
+  "identity": "Create ONE production-ready 2D game character sprite in detailed pixel-art style for a portrait mobile survivor game. A fictional adult woman, chibi proportions with a slightly large head, wine-red shoulder-length hair, a short black jacket over a light-blue top and a short light-blue skirt, dark tights, white boots. Upright, composed stance, crisp and decisive; cold, sharp eyes drawn as simple narrow angular lines (NOT large sweet anime eyes, not cute). One hand slightly forward, open palm ready.",
+  "pose": null,
+  "recap": null,
+  "facing": "none",
+  "facing_parts": null,
+  "view": "elevated three-quarter overhead view about 50 degrees, facing diagonally lower-right",
+  "class": "hero",
+  "finish": "pixel",
+  "key": "#FF00FF",
+  "genre": null,
+  "pronoun": "she",
+  "identity_ref": null,
+  "style_ref": {
+    "path": "../../../mnt/d/repo/godot/godogen/prototypes/survivor-series/docs/reference/art-direction-night-market.png",
+    "sha256": "b4604817562f33d78279295a81bf02d651b949baea97c581c0a48e5a49fc7f0f"
+  },
+  "allowed_text": null,
+  "extra_bans": [],
+  "opaque_parts": null,
+  "extra": null
+}

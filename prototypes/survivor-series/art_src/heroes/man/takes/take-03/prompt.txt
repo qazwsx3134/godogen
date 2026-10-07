@@ -1,0 +1,7 @@
+Create ONE production-ready 2D game character sprite in detailed pixel-art style for a portrait mobile survivor game. A fictional adult man, chibi proportions with a slightly large head, slouched drooping shoulders, black hair slicked straight back, half-lidded tired eyes (world-weary, "too tired to care"), a navy-blue business suit and a bold bright red necktie, black shoes. Idle stance: a slight hunch, arms hanging loose with relaxed fists.
+
+Crisp pixel clusters, dark outline, limited warm palette, strong silhouette readable at about 90 px tall. Elevated three-quarter overhead view, approximately 50 degrees above the ground, nearly orthographic. Full body facing diagonally toward the lower-right, both feet clearly visible.
+
+Square 1024 x 1024 canvas. Exactly one character centered, generous clear padding, no cropped hands or feet. Solid flat pure magenta #FF00FF background for deterministic transparent PNG extraction; fully opaque character pixels. No ground plane, no cast shadow, no scenery, no text, no UI, no weapon, no smoke, no impact effect, no sprite sheet, no watermark, no checkerboard drawn into the image.
+
+Use the attached night-market image only as the pixel-art, palette, camera and character design reference. Preserve the appearance and idle stance described above. Do not copy its background, HUD, monsters, combat poses or attack effects.

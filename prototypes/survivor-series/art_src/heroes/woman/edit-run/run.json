@@ -1,0 +1,116 @@
+{
+  "schema": "generate2dsprite.master_run.v1",
+  "tool": {
+    "name": "master_still",
+    "version": "0.4.0"
+  },
+  "command": "edit",
+  "created": "2026-10-07T18:03:50.999Z",
+  "name": "hero_woman",
+  "class": "hero",
+  "finish": "pixel",
+  "facing": "none",
+  "key": "#FF00FF",
+  "prompt": {
+    "path": "prompt.txt",
+    "sha256": "bf8dffaf59bdb7a1884086d54ebac416a12facaaa5aff47ad37fd8b1d83865ca",
+    "bytes": 1885
+  },
+  "spec": {
+    "path": "spec.json",
+    "sha256": "199172ace3e670f96db04cf1a2627d7fd6d48720f35008632f6d3aa28bf6cd84",
+    "bytes": 749
+  },
+  "references": [
+    {
+      "role": "edit",
+      "ordinal": "FIRST",
+      "path": "../../../mnt/d/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/woman/candidate-01.png",
+      "sha256": "08cd2e7d68d4cbcc381cb0aecc92e9629a9ebce4990d2ffcae9584c37c771000",
+      "bytes": 497888
+    }
+  ],
+  "media": {
+    "cli": "route_media.py",
+    "cli_source": "sibling",
+    "cli_sha256": "d34a1f26f6f56103b896f3a0a0ffb8040857d66a3d8b038b37450b47d7c713cc",
+    "route_requested": null,
+    "size": "1024x1024",
+    "args": [],
+    "timeout_s": 300.0
+  },
+  "takes": [
+    {
+      "take": 1,
+      "exit_code": 0,
+      "seconds": 59.906,
+      "media": {
+        "status": "ok",
+        "route": "local:codex-cli",
+        "sha256": "0a0e10d08645a7cd79c9917f7f79194cba2297cc7a4e2165112f2f944e10758b",
+        "estimateUsd": 0.0,
+        "kind": "image",
+        "label": "Codex (local CLI)",
+        "model": "codex-image_gen",
+        "verifiedBefore": true
+      },
+      "copied": false,
+      "artifact": {
+        "path": "takes/take-01/generated.png",
+        "sha256": "0a0e10d08645a7cd79c9917f7f79194cba2297cc7a4e2165112f2f944e10758b",
+        "bytes": 1443011,
+        "size": [
+          1254,
+          1254
+        ]
+      },
+      "status": "ok",
+      "route": "local:codex-cli"
+    },
+    {
+      "take": 2,
+      "exit_code": 0,
+      "seconds": 57.933,
+      "media": {
+        "status": "ok",
+        "route": "local:codex-cli",
+        "sha256": "f6f3035aed7cf9f10ad0515edec52104d386afdeca222444d71d5bbf58445a1a",
+        "estimateUsd": 0.0,
+        "kind": "image",
+        "label": "Codex (local CLI)",
+        "model": "codex-image_gen",
+        "verifiedBefore": true
+      },
+      "copied": false,
+      "artifact": {
+        "path": "takes/take-02/generated.png",
+        "sha256": "f6f3035aed7cf9f10ad0515edec52104d386afdeca222444d71d5bbf58445a1a",
+        "bytes": 1434620,
+        "size": [
+          1254,
+          1254
+        ]
+      },
+      "status": "ok",
+      "route": "local:codex-cli"
+    }
+  ],
+  "status": "ok",
+  "edit": {
+    "still": {
+      "path": "../../../mnt/d/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/woman/candidate-01.png",
+      "sha256": "08cd2e7d68d4cbcc381cb0aecc92e9629a9ebce4990d2ffcae9584c37c771000",
+      "bytes": 497888
+    },
+    "change": "(1) Change the stance to upright, with the body straight and both feet together or only slightly apart, one arm hanging naturally and the other hand only slightly forward with an open palm, relaxed rather than lunging. (2) Change the eyes to narrow angular line eyes, no visible large iris, a cold expression. Keep the existing hairstyle and wine-red hair colour, black short jacket, light-blue top and skirt, dark tights, white boots, pixel-art finish, camera and lower-right facing unchanged. These are the only two changes.",
+    "keep": "hair shape and wine-red colour, costume and its colours, white boots, proportions, framing, camera, lower-right facing and pixel-art style",
+    "extra": [],
+    "framing": "the top of the figure about 11 percent below the top edge, its lowest point about 11 percent above the bottom edge, its left-most point about 26 percent from the left edge and its right-most point about 27 percent from the right edge"
+  },
+  "warnings": [],
+  "contact": {
+    "path": "takes.png",
+    "sha256": "1e0c5195a1b7bca5b45601d9ac57a2a031723a286b8ad73db4458491823ced55",
+    "bytes": 219966
+  }
+}

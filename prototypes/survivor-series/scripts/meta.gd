@@ -7,6 +7,10 @@ var coins: int = 0
 var shop_levels: Dictionary = {}
 var unlocked: Array = []
 var records: Dictionary = {}
+## Last chosen hero id.
+var hero: String = "man"
+## Fusion ids discovered across runs (the codex).
+var fusions: Array = []
 
 func _ready() -> void:
 	load_save()
@@ -15,6 +19,8 @@ func _defaults() -> void:
 	coins = 0
 	shop_levels = {}
 	unlocked = []
+	hero = "man"
+	fusions = []
 	records = {"best_time": 0.0, "best_kills": 0, "total_kills": 0, "best_level": 0, "wins": 0, "runs": 0}
 
 func load_save() -> void:
@@ -25,6 +31,9 @@ func load_save() -> void:
 		return
 	var data: Dictionary = parser.data
 	coins = int(data.get("coins", 0))
+	hero = str(data.get("hero", "man"))
+	if data.get("fusions") is Array:
+		fusions = data.fusions
 	if data.get("shop") is Dictionary:
 		shop_levels = data.shop
 	if data.get("unlocked") is Array:
@@ -34,7 +43,7 @@ func load_save() -> void:
 			records[key] = data.records.get(key, records[key])
 
 func save() -> Error:
-	return AtomicFile.write_text(save_path, JSON.stringify({"coins": coins, "shop": shop_levels, "unlocked": unlocked, "records": records}))
+	return AtomicFile.write_text(save_path, JSON.stringify({"coins": coins, "hero": hero, "fusions": fusions, "shop": shop_levels, "unlocked": unlocked, "records": records}))
 
 func level_of(id: StringName) -> int:
 	return int(shop_levels.get(String(id), 0))

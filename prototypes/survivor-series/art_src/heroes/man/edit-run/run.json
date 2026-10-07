@@ -1,0 +1,116 @@
+{
+  "schema": "generate2dsprite.master_run.v1",
+  "tool": {
+    "name": "master_still",
+    "version": "0.4.0"
+  },
+  "command": "edit",
+  "created": "2026-10-07T18:01:54.917Z",
+  "name": "hero_man",
+  "class": "hero",
+  "finish": "pixel",
+  "facing": "none",
+  "key": "#FF00FF",
+  "prompt": {
+    "path": "prompt.txt",
+    "sha256": "753de0f73fae3ecdc46ae433d879d6b6e38a97be4c4eb9a9e9978e56a663627e",
+    "bytes": 1725
+  },
+  "spec": {
+    "path": "spec.json",
+    "sha256": "e75ec182b0354e83991a9e4d6f273386411de5bbff78f74fd7b9b6033055c72b",
+    "bytes": 744
+  },
+  "references": [
+    {
+      "role": "edit",
+      "ordinal": "FIRST",
+      "path": "../../../mnt/d/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man/candidate-01.png",
+      "sha256": "17083f8246a2b7e085afa39a02a89c08725a1fc64f21af0e4acfbdeaa8cd16ef",
+      "bytes": 425490
+    }
+  ],
+  "media": {
+    "cli": "route_media.py",
+    "cli_source": "sibling",
+    "cli_sha256": "d34a1f26f6f56103b896f3a0a0ffb8040857d66a3d8b038b37450b47d7c713cc",
+    "route_requested": null,
+    "size": "1024x1024",
+    "args": [],
+    "timeout_s": 300.0
+  },
+  "takes": [
+    {
+      "take": 1,
+      "exit_code": 0,
+      "seconds": 46.884,
+      "media": {
+        "status": "ok",
+        "route": "local:codex-cli",
+        "sha256": "11a677c91bee9fa85bbe01aa67baf7074547f20884bb47a2445c7241beb293a3",
+        "estimateUsd": 0.0,
+        "kind": "image",
+        "label": "Codex (local CLI)",
+        "model": "codex-image_gen",
+        "verifiedBefore": true
+      },
+      "copied": false,
+      "artifact": {
+        "path": "takes/take-01/generated.png",
+        "sha256": "11a677c91bee9fa85bbe01aa67baf7074547f20884bb47a2445c7241beb293a3",
+        "bytes": 1371774,
+        "size": [
+          1254,
+          1254
+        ]
+      },
+      "status": "ok",
+      "route": "local:codex-cli"
+    },
+    {
+      "take": 2,
+      "exit_code": 0,
+      "seconds": 60.829,
+      "media": {
+        "status": "ok",
+        "route": "local:codex-cli",
+        "sha256": "7a30e65d8d65fddee11779da377237cb2a9fbb5828fde0732c2a29958960f294",
+        "estimateUsd": 0.0,
+        "kind": "image",
+        "label": "Codex (local CLI)",
+        "model": "codex-image_gen",
+        "verifiedBefore": true
+      },
+      "copied": false,
+      "artifact": {
+        "path": "takes/take-02/generated.png",
+        "sha256": "7a30e65d8d65fddee11779da377237cb2a9fbb5828fde0732c2a29958960f294",
+        "bytes": 1379188,
+        "size": [
+          1254,
+          1254
+        ]
+      },
+      "status": "ok",
+      "route": "local:codex-cli"
+    }
+  ],
+  "status": "ok",
+  "edit": {
+    "still": {
+      "path": "../../../mnt/d/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man/candidate-01.png",
+      "sha256": "17083f8246a2b7e085afa39a02a89c08725a1fc64f21af0e4acfbdeaa8cd16ef",
+      "bytes": 425490
+    },
+    "change": "Change ONLY the hair to black hair slicked straight back, glossy, neat and lying close against the head, with the forehead exposed. Remove the tall spiky or swept-up volume and the dangling forehead strand. Keep the face, world-weary half-lidded expression, navy suit, red necktie, hunched drooping-shoulder stance, body, hands, feet, pixel-art finish, camera and lower-right facing exactly unchanged.",
+    "keep": "face, expression, costume, colours, proportions, hunched stance, hands, feet, framing, camera, lower-right facing and pixel-art style",
+    "extra": [],
+    "framing": "the top of the figure about 15 percent below the top edge, its lowest point about 15 percent above the bottom edge, its left-most point about 33 percent from the left edge and its right-most point about 30 percent from the right edge"
+  },
+  "warnings": [],
+  "contact": {
+    "path": "takes.png",
+    "sha256": "88d34d463fd32f94e5c47b2269993f0ea1b7084b478da46d492fb767363a5e48",
+    "bytes": 205878
+  }
+}

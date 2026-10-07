@@ -13,6 +13,8 @@ const Build = preload("res://scripts/run_build.gd")
 @export var pickup_scene: PackedScene
 @export var progression: Resource
 @export var schedule: Resource
+## Playable heroes (HeroDef); `hero_id` picks one for the next run.
+@export var heroes: Array[Resource] = []
 @export var bounds := Rect2(48.0, 48.0, 1104.0, 1584.0)
 @export var max_enemies: int = 140
 @export var max_effects: int = 32
@@ -36,8 +38,11 @@ var sfx: Node
 var shake = Shake.new()
 var grid = Grid.new()
 var build: RefCounted
+var hero_id: StringName = &"man"
 var meta_bonus: Dictionary = {}
 var meta_unlocks: Array = []
+## Fusion ids found in earlier runs; their cards show the real name.
+var meta_fusions: Array = []
 var rng := RandomNumberGenerator.new()
 var kills: int = 0
 var hits_taken: int = 0
@@ -82,8 +87,12 @@ func clear() -> void:
 
 func reset() -> void:
 	clear()
-	build = Build.new(progression, meta_bonus, meta_unlocks)
-	player.reset(player.max_hp * (1.0 + build.stat(&"max_hp")), build.stat(&"armor"), build.stat(&"speed"))
+	var hero: Resource = hero_def()
+	build = Build.new(progression, meta_bonus, meta_unlocks, hero.start_weapon if hero != null else &"")
+	for id: Variant in meta_fusions:
+		build.discovered[StringName(id)] = true
+	player.set_hero(hero)
+	player.reset(player.max_hp * player.hero_hp * (1.0 + build.stat(&"max_hp")), build.stat(&"armor"), build.stat(&"speed"))
 	arsenal.reset()
 	kills = 0
 	hits_taken = 0
@@ -106,16 +115,22 @@ func reset() -> void:
 	spawn_enemy(2, player.position + Vector2(230.0, -220.0))
 	score_changed.emit()
 
+func hero_def() -> Resource:
+	for entry: Resource in heroes:
+		if entry.id == hero_id:
+			return entry
+	return heroes[0] if not heroes.is_empty() else null
+
 func build_force() -> float:
 	return 1.0
 
 ## Re-applies passive and shop stats to the hero after a pick; a higher HP cap heals the difference.
 func refresh_player_stats() -> void:
-	var limit: float = player.max_hp * (1.0 + build.stat(&"max_hp"))
+	var limit: float = player.max_hp * player.hero_hp * (1.0 + build.stat(&"max_hp"))
 	var gained: float = limit - player.hp_limit
 	player.hp_limit = limit
 	player.armor = build.stat(&"armor")
-	player.speed_scale = 1.0 + build.stat(&"speed")
+	player.speed_scale = player.hero_speed * (1.0 + build.stat(&"speed"))
 	player.heal(maxf(0.0, gained))
 
 func spawn_enemy(index: int, at: Vector2, hp_scale: float = 1.0, elite: bool = false) -> Node2D:
@@ -255,6 +270,12 @@ func _step_projectiles(delta: float) -> void:
 					enemy.hit(shot.damage, shot.velocity.normalized() if shot.velocity != Vector2.ZERO else (enemy.position - player.position).normalized(), shot.force)
 				if shot.detonate or shot.is_queued_for_deletion():
 					break
+		if (shot.slow > 0.0 or shot.pull > 0.0) and not shot.detonate and not shot.is_queued_for_deletion():
+			for enemy: Node2D in grid.query(shot.position, shot.radius):
+				if shot.slow > 0.0:
+					enemy.slow(shot.slow, 0.3)
+				if shot.pull > 0.0 and enemy.position.distance_to(shot.position) > 12.0:
+					enemy.position = enemy.position.move_toward(shot.position, shot.pull * delta)
 		if shot.detonate and not shot.is_queued_for_deletion():
 			blast(shot.position, shot.blast_radius, shot.damage, shot.force, Color("ffb347"))
 			sfx.play(&"pop", 0.05)
@@ -376,6 +397,9 @@ func _warning() -> void:
 	sfx.play(&"warning", 0.25)
 
 func _hurt(amount: float, source: String) -> void:
+	if player.hurt_cooldown <= 0.0 and player.hp > 0.0 and arsenal.absorb():
+		score_changed.emit()
+		return
 	var before: float = player.hp
 	if player.hurt(amount):
 		hits_taken += 1

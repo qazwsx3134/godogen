@@ -1,0 +1,48 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/projectile.gd" id="1_0juqt"]
+
+[node name="TofuZone" type="Node2D" unique_id=1887873307]
+script = ExtResource("1_0juqt")
+radius = 70.0
+face_travel = false
+
+[node name="Visual" type="Node2D" parent="." unique_id=1459430100]
+unique_name_in_owner = true
+position = Vector2(0, -6)
+
+[node name="Pool" type="Polygon2D" parent="Visual" unique_id=180291875]
+color = Color(0.56078434, 0.7490196, 0.22745098, 0.3)
+polygon = PackedVector2Array(70, 0, 67.61481, 18.117332, 60.621777, 35, 49.497475, 49.497475, 34.999996, 60.62178, 18.117334, 67.61481, -3.059797e-06, 70, -18.117332, 67.61481, -35.000004, 60.621777, -49.497475, 49.497475, -60.621777, 35.000004, -67.61481, 18.11734, -70, -6.119594e-06, -67.61481, -18.117334, -60.621777, -34.999996, -49.49748, -49.49747, -34.999992, -60.62178, -18.117329, -67.614815, 8.347416e-07, -70, 18.11733, -67.61481, 34.999992, -60.62178, 49.497467, -49.497482, 60.621773, -35.00001, 67.614815, -18.11732)
+
+[node name="PoolEdge" type="Polygon2D" parent="Visual" unique_id=1579945832]
+color = Color(0.43529412, 0.6039216, 0.16470589, 0.25)
+polygon = PackedVector2Array(54, 0, 52.159992, 13.976229, 46.76537, 27, 38.183765, 38.183765, 26.999998, 46.765373, 13.97623, 52.159992, -2.360415e-06, 54, -13.976229, 52.159992, -27.000004, 46.76537, -38.183765, 38.183765, -46.76537, 27.000004, -52.159992, 13.9762335, -54, -4.72083e-06, -52.159992, -13.97623, -46.76537, -26.999998, -38.18377, -38.18376, -26.999994, -46.765373, -13.976225, -52.159996, 6.4394357e-07, -54, 13.976227, -52.159992, 26.999994, -46.765373, 38.183758, -38.183773, 46.76537, -27.00001, 52.159996, -13.976217)
+
+[node name="BlockOutline" type="Polygon2D" parent="Visual" unique_id=1865899449]
+position = Vector2(0, -4)
+color = Color(0.07450981, 0.1254902, 0.1764706, 1)
+polygon = PackedVector2Array(-11, -9, 11, -9, 11, 9, -11, 9)
+
+[node name="Block" type="Polygon2D" parent="Visual" unique_id=1888449057]
+position = Vector2(0, -4)
+color = Color(0.7882353, 0.5411765, 0.23921569, 1)
+polygon = PackedVector2Array(-9, -7, 9, -7, 9, 7, -9, 7)
+
+[node name="Fume1" type="Line2D" parent="Visual" unique_id=1148892875]
+position = Vector2(-14, -14)
+points = PackedVector2Array(0, 0, 4, -8, -4, -16, 0, -24)
+width = 3.0
+default_color = Color(0.70980394, 0.8784314, 0.41568628, 1)
+
+[node name="Fume2" type="Line2D" parent="Visual" unique_id=349437640]
+position = Vector2(0, -14)
+points = PackedVector2Array(0, 0, 4, -8, -4, -16, 0, -24)
+width = 3.0
+default_color = Color(0.70980394, 0.8784314, 0.41568628, 1)
+
+[node name="Fume3" type="Line2D" parent="Visual" unique_id=8870266]
+position = Vector2(14, -14)
+points = PackedVector2Array(0, 0, 4, -8, -4, -16, 0, -24)
+width = 3.0
+default_color = Color(0.70980394, 0.8784314, 0.41568628, 1)

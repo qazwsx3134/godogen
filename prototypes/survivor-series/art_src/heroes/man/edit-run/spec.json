@@ -1,0 +1,22 @@
+{
+  "schema": "generate2dsprite.master_spec.v1",
+  "name": "hero_man",
+  "subject": "a fictional adult man",
+  "identity": "Exactly the selected FIRST reference character, preserving every visible identity feature except the changes explicitly requested below",
+  "pose": null,
+  "recap": "character shown in the FIRST reference image",
+  "facing": "none",
+  "facing_parts": null,
+  "view": "same elevated three-quarter overhead camera as the FIRST image, about 50 degrees, facing diagonally toward the lower-right",
+  "class": "hero",
+  "finish": "pixel",
+  "key": "#FF00FF",
+  "genre": null,
+  "pronoun": "he",
+  "identity_ref": null,
+  "style_ref": null,
+  "allowed_text": null,
+  "extra_bans": [],
+  "opaque_parts": null,
+  "extra": null
+}

@@ -15,16 +15,19 @@ var weapons: Array[StringName] = []
 var passives: Array[StringName] = []
 var picked_ids: Array[StringName] = []
 var rng := RandomNumberGenerator.new()
+## Fusion ids the player has already discovered (card shows its real name).
+var discovered: Dictionary = {}
 
-func _init(definition: Resource, meta_bonus: Dictionary = {}, unlocks: Array = []) -> void:
+func _init(definition: Resource, meta_bonus: Dictionary = {}, unlocks: Array = [], opening: StringName = &"") -> void:
 	config = definition
 	bonus = meta_bonus.duplicate()
 	for id: Variant in unlocks:
 		unlocked[StringName(id)] = true
 	rng.randomize()
-	if config.start_weapon != &"":
-		levels[config.start_weapon] = 1
-		weapons.append(config.start_weapon)
+	var first: StringName = opening if opening != &"" else config.start_weapon
+	if first != &"":
+		levels[first] = 1
+		weapons.append(first)
 
 func threshold() -> int:
 	var late: int = maxi(0, level - config.late_level) * config.late_xp_growth
@@ -63,7 +66,7 @@ func eligible(item: Resource) -> bool:
 		"weapon":
 			if count(item.id) > 0:
 				return count(item.id) < item.max_level
-			return weapons.size() < config.weapon_slots and not (item.evolve_into != &"" and count(item.evolve_into) > 0)
+			return weapons.size() < config.weapon_slots and not (item.evolve_into != &"" and count(item.evolve_into) > 0) and not fused_away(item.id)
 		"passive":
 			if count(item.id) > 0:
 				return count(item.id) < item.max_level
@@ -71,6 +74,15 @@ func eligible(item: Resource) -> bool:
 		"evolution":
 			var base: Resource = definition(item.replaces)
 			return count(item.id) == 0 and base != null and count(base.id) >= base.max_level and count(base.evolve_passive) > 0
+		"fusion":
+			return count(item.id) == 0 and count(item.fuse_a) >= item.fuse_level and count(item.fuse_b) >= item.fuse_level
+	return false
+
+## True when a fusion built from this weapon is already owned; the parts do not come back as new cards.
+func fused_away(id: StringName) -> bool:
+	for item: Resource in config.items:
+		if item.slot == "fusion" and count(item.id) > 0 and (item.fuse_a == id or item.fuse_b == id):
+			return true
 	return false
 
 func offers() -> Array[Resource]:
@@ -80,7 +92,7 @@ func offers() -> Array[Resource]:
 	var opening: bool = picked_ids.is_empty()
 	for item: Resource in config.items:
 		if eligible(item) and (not opening or (item.slot == "weapon" and count(item.id) == 0)):
-			if item.slot == "evolution":
+			if item.slot == "evolution" or item.slot == "fusion":
 				result.append(item)
 			else:
 				pool.append(item)
@@ -114,6 +126,12 @@ func pick(id: StringName) -> bool:
 		"evolution":
 			weapons[weapons.find(item.replaces)] = id
 			levels.erase(item.replaces)
+			levels[id] = 1
+		"fusion":
+			for part: StringName in [item.fuse_a, item.fuse_b]:
+				weapons.erase(part)
+				levels.erase(part)
+			weapons.append(id)
 			levels[id] = 1
 	picked_ids.append(id)
 	pending_choices -= 1
@@ -149,6 +167,9 @@ func weapon_stats(id: StringName) -> Dictionary:
 		"duration": item.duration,
 		"pierce": item.pierce,
 		"knockback": item.knockback,
+		"slow": item.slow,
+		"pull": item.pull,
+		"blast_on_end": item.blast_on_end,
 		"special": item.special_level > 0 and at >= item.special_level,
 		"projectile": item.projectile,
 	}
@@ -164,5 +185,5 @@ func summary() -> String:
 	var lines: PackedStringArray = []
 	for id: StringName in weapons + passives:
 		var item: Resource = definition(id)
-		lines.append("%s %d" % [item.title, count(id)] if item.slot != "evolution" else item.title)
+		lines.append("%s %d" % [item.title, count(id)] if item.slot != "evolution" and item.slot != "fusion" else item.title)
 	return "、".join(lines)

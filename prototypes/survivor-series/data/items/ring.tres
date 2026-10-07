@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/ring.tscn" id="1_proj"]
+[ext_resource type="Script" path="res://scripts/item_def.gd" id="2_def"]
+
+[resource]
+script = ExtResource("2_def")
+id = &"ring"
+title = "套圈圈"
+description = "丟出圈圈落在敵群中，把圈內的敵人拉向圓心並拖慢。"
+level_notes = PackedStringArray("圈圈變大", "傷害 +4，拉力更強", "多丟一個", "圈圈變大，傷害 +4")
+slot = "weapon"
+accent = Color(1,0.5412,0.1804,1)
+max_level = 5
+kind = &"ring"
+projectile = ExtResource("1_proj")
+damage = 5.0
+damage_per_level = 4.0
+cooldown = 4.5
+cooldown_per_level = 0.06
+amount = 1
+amount_levels = PackedInt32Array(4)
+area = 1.0
+area_per_level = 0.12
+duration = 1.8
+pierce = -1
+knockback = 0.1
+slow = 0.6
+pull = 190.0

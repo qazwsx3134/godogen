@@ -36,6 +36,8 @@ func _ready() -> void:
 	sfx.played.connect(func(event: StringName) -> void: sound_events[event] = int(sound_events.get(event, 0)) + 1)
 	menu.get_node("%Start").pressed.connect(start_run)
 	menu.get_node("%OpenShop").pressed.connect(open_shop)
+	menu.get_node("%HeroMan").pressed.connect(select_hero.bind(&"man"))
+	menu.get_node("%HeroWoman").pressed.connect(select_hero.bind(&"woman"))
 	shop.closed.connect(show_menu)
 	results.get_node("%Retry").pressed.connect(start_run)
 	results.get_node("%Home").pressed.connect(show_menu)
@@ -47,6 +49,8 @@ func _ready() -> void:
 			auto_play = true
 		if argument.begins_with("--duration="):
 			session_duration = clampf(argument.get_slice("=", 1).to_float(), 0.3, 600.0)
+		if argument.begins_with("--hero="):
+			meta.hero = argument.get_slice("=", 1)
 		if argument.begins_with("--seed="):
 			street.rng.seed = argument.get_slice("=", 1).to_int()
 	show_menu()
@@ -69,11 +73,25 @@ func _hide_screens() -> void:
 	for screen: Control in [menu, results, pause_panel, upgrade_panel, shop]:
 		screen.hide()
 
+func select_hero(id: StringName) -> void:
+	meta.hero = String(id)
+	meta.save()
+	_show_hero()
+
+func _show_hero() -> void:
+	street.hero_id = StringName(meta.hero)
+	var chosen: Resource = street.hero_def()
+	menu.get_node("%HeroMan").set_pressed_no_signal(chosen != null and chosen.id == &"man")
+	menu.get_node("%HeroWoman").set_pressed_no_signal(chosen != null and chosen.id == &"woman")
+	menu.get_node("%HeroNote").text = chosen.tagline if chosen != null else ""
+
 func start_run() -> void:
 	get_tree().paused = false
 	stick.release()
+	street.hero_id = StringName(meta.hero)
 	street.meta_bonus = meta.bonuses()
 	street.meta_unlocks = meta.unlocked
+	street.meta_fusions = meta.fusions
 	street.reset()
 	revivals = int(street.build.stat(&"revival"))
 	current_offers.clear()
@@ -101,6 +119,7 @@ func show_menu() -> void:
 	street.hide()
 	hud.hide()
 	stick.hide()
+	_show_hero()
 	menu.get_node("%Wallet").text = "金幣  %d  ·  最佳 %s" % [meta.coins, clock(float(meta.records.best_time))]
 	menu.show()
 
@@ -254,13 +273,17 @@ func choose_upgrade(id: StringName, generation: int = -1) -> bool:
 			street.player.heal(chosen.per_level)
 		elif chosen.stat == &"coins":
 			street.coins += int(chosen.per_level)
+	if chosen.slot == "fusion" and not meta.fusions.has(String(chosen.id)):
+		meta.fusions.append(String(chosen.id))
+		street.build.discovered[chosen.id] = true
+		meta.save()
 	street.refresh_player_stats()
 	current_offers.clear()
 	upgrade_panel.hide()
 	stick.release()
 	get_tree().paused = false
 	state = State.RUNNING
-	sfx.play(&"evolve" if chosen.slot == "evolution" else &"upgrade", 0.1)
+	sfx.play(&"evolve" if chosen.slot == "evolution" or chosen.slot == "fusion" else &"upgrade", 0.1)
 	refresh_hud()
 	if street.build.pending_choices > 0:
 		show_upgrades()

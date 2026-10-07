@@ -1,0 +1,132 @@
+{
+  "schema": "generate2dsprite.master_run.v1",
+  "tool": {
+    "name": "master_still",
+    "version": "0.4.0"
+  },
+  "command": "generate",
+  "created": "2026-10-07T17:21:02.423Z",
+  "name": "hero_woman",
+  "class": "hero",
+  "finish": "pixel",
+  "facing": "none",
+  "key": "#FF00FF",
+  "prompt": {
+    "path": "prompt.txt",
+    "sha256": "5fe2301d896a7a4bb1bd5932b7cf6ce36a9fa6b8f84933081e3fd3e370926528",
+    "bytes": 1465
+  },
+  "spec": {
+    "path": "spec.json",
+    "sha256": "7213abfafe9345ed395a945d2c68b4c13f4305f6893c14e0aff4fcc0f0d45ac3",
+    "bytes": 1240
+  },
+  "references": [
+    {
+      "role": "style",
+      "ordinal": "FIRST",
+      "path": "../../../mnt/d/repo/godot/godogen/prototypes/survivor-series/docs/reference/art-direction-night-market.png",
+      "sha256": "b4604817562f33d78279295a81bf02d651b949baea97c581c0a48e5a49fc7f0f",
+      "bytes": 3030876
+    }
+  ],
+  "media": {
+    "cli": "route_media.py",
+    "cli_source": "sibling",
+    "cli_sha256": "d34a1f26f6f56103b896f3a0a0ffb8040857d66a3d8b038b37450b47d7c713cc",
+    "route_requested": null,
+    "size": "1024x1024",
+    "args": [],
+    "timeout_s": 300.0
+  },
+  "takes": [
+    {
+      "take": 1,
+      "exit_code": 0,
+      "seconds": 65.35,
+      "media": {
+        "status": "ok",
+        "route": "local:codex-cli",
+        "sha256": "a171a1b233811ad99695c1d5d7cb45101b45339b48cbbf259d9be77d5b0b4d8b",
+        "estimateUsd": 0.0,
+        "kind": "image",
+        "label": "Codex (local CLI)",
+        "model": "codex-image_gen",
+        "verifiedBefore": true
+      },
+      "copied": false,
+      "artifact": {
+        "path": "takes/take-01/generated.png",
+        "sha256": "a171a1b233811ad99695c1d5d7cb45101b45339b48cbbf259d9be77d5b0b4d8b",
+        "bytes": 1418702,
+        "size": [
+          1254,
+          1254
+        ]
+      },
+      "status": "ok",
+      "route": "local:codex-cli"
+    },
+    {
+      "take": 2,
+      "exit_code": 0,
+      "seconds": 49.866,
+      "media": {
+        "status": "ok",
+        "route": "local:codex-cli",
+        "sha256": "aa8ff907eaf6de4dd894b4d2ef912d8eb55fb530f40ab3e354da989612ac390a",
+        "estimateUsd": 0.0,
+        "kind": "image",
+        "label": "Codex (local CLI)",
+        "model": "codex-image_gen",
+        "verifiedBefore": true
+      },
+      "copied": false,
+      "artifact": {
+        "path": "takes/take-02/generated.png",
+        "sha256": "aa8ff907eaf6de4dd894b4d2ef912d8eb55fb530f40ab3e354da989612ac390a",
+        "bytes": 1429574,
+        "size": [
+          1254,
+          1254
+        ]
+      },
+      "status": "ok",
+      "route": "local:codex-cli"
+    },
+    {
+      "take": 3,
+      "exit_code": 0,
+      "seconds": 92.82,
+      "media": {
+        "status": "ok",
+        "route": "local:codex-cli",
+        "sha256": "e8d6da6910a82621b6ac4eab7b6519a663d010838b081b7cec73bfae9ff90c47",
+        "estimateUsd": 0.0,
+        "kind": "image",
+        "label": "Codex (local CLI)",
+        "model": "codex-image_gen",
+        "verifiedBefore": true
+      },
+      "copied": false,
+      "artifact": {
+        "path": "takes/take-03/generated.png",
+        "sha256": "e8d6da6910a82621b6ac4eab7b6519a663d010838b081b7cec73bfae9ff90c47",
+        "bytes": 1401427,
+        "size": [
+          1254,
+          1254
+        ]
+      },
+      "status": "ok",
+      "route": "local:codex-cli"
+    }
+  ],
+  "status": "ok",
+  "warnings": [],
+  "contact": {
+    "path": "takes.png",
+    "sha256": "d56dd737b13a02a8161807bc112c92bbe061a9ccdc64c5393c75711915d2c346",
+    "bytes": 329364
+  }
+}

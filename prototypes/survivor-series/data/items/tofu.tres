@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/tofu.tscn" id="1_proj"]
+[ext_resource type="Script" path="res://scripts/item_def.gd" id="2_def"]
+
+[resource]
+script = ExtResource("2_def")
+id = &"tofu"
+title = "臭豆腐攤"
+description = "在敵群腳下擺攤，臭味讓範圍內的敵人變慢，還會一直扣血。"
+level_notes = PackedStringArray("傷害 +3，臭味範圍變大", "傷害 +3，持續更久", "多擺一攤", "傷害 +3，臭味更濃")
+slot = "weapon"
+accent = Color(0.7098,0.8784,0.4157,1)
+max_level = 5
+kind = &"tofu"
+projectile = ExtResource("1_proj")
+damage = 6.0
+damage_per_level = 3.0
+cooldown = 3.2
+cooldown_per_level = 0.06
+amount = 1
+amount_levels = PackedInt32Array(4)
+area = 1.0
+area_per_level = 0.1
+duration = 3.5
+pierce = -1
+knockback = 0.15
+slow = 0.5
