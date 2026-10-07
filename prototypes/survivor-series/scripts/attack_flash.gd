@@ -13,6 +13,10 @@ func setup(mode: String, radius: float, direction: Vector2) -> void:
 		%Arc.width = 12.0
 	if mode == "kick":
 		lifetime = 0.32
+	if mode == "cane":
+		%Arc.default_color = Color("ff8fb1")
+		%Arc.width = 10.0
+		%Arc.scale = Vector2(radius / 100.0, 0.45)
 
 func _process(delta: float) -> void:
 	age += delta

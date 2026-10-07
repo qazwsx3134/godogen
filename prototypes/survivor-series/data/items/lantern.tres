@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/lantern.tscn" id="1_vncxa"]
+[ext_resource type="Script" path="res://scripts/item_def.gd" id="2_rca6b"]
+
+[resource]
+script = ExtResource("2_rca6b")
+id = &"lantern"
+title = "天燈"
+description = "從天上往畫面內的敵人砸火。"
+level_notes = PackedStringArray("多一盞", "多一盞，傷害 +7", "多一盞", "多一盞，火更大")
+accent = Color(1, 0.827451, 0.41960785, 1)
+unlock = &"survive_5"
+kind = &"lantern"
+projectile = ExtResource("1_vncxa")
+damage = 24.0
+damage_per_level = 7.0
+cooldown = 2.4
+cooldown_per_level = 0.06
+amount_levels = PackedInt32Array(2, 3, 4, 5)
+area_per_level = 0.06
+duration = 0.4
+knockback = 1.2
+evolve_passive = &"points"
+evolve_into = &"pingxi"

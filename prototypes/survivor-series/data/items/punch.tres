@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/item_def.gd" id="1_u7ixb"]
+
+[resource]
+script = ExtResource("1_u7ixb")
+id = &"punch"
+title = "拳頭"
+description = "自動揍最近的敵人。"
+level_notes = PackedStringArray("傷害 +5，出拳更快", "多打中一個前方敵人", "傷害 +5，範圍變大", "每第三拳是 180% 重拳", "多打中一個前方敵人", "傷害 +5，出拳更快", "傷害 +5，範圍變大")
+accent = Color(0.96862745, 0.9098039, 0.80784315, 1)
+max_level = 8
+kind = &"punch"
+damage = 28.0
+damage_per_level = 5.0
+cooldown = 0.42
+cooldown_per_level = 0.04
+amount_levels = PackedInt32Array(3, 6)
+area_per_level = 0.04
+special_level = 5
+evolve_passive = &"sacha"
+evolve_into = &"iron_palm"

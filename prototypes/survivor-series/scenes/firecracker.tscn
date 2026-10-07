@@ -1,0 +1,33 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/projectile.gd" id="1_l0qr4"]
+
+[node name="Firecracker" type="Node2D" unique_id=1479720515]
+script = ExtResource("1_l0qr4")
+radius = 10.0
+spin = 9.0
+face_travel = false
+
+[node name="Visual" type="Node2D" parent="." unique_id=1686784352]
+unique_name_in_owner = true
+position = Vector2(0, -18)
+
+[node name="Outline" type="Polygon2D" parent="Visual" unique_id=1483767420]
+position = Vector2(-6, -11)
+color = Color(0.105882354, 0.0627451, 0.0627451, 1)
+polygon = PackedVector2Array(0, 0, 12, 0, 12, 22, 0, 22)
+
+[node name="Tube" type="Polygon2D" parent="Visual" unique_id=718678081]
+position = Vector2(-4.5, -9.5)
+color = Color(0.8784314, 0.19607843, 0.16862746, 1)
+polygon = PackedVector2Array(0, 0, 9, 0, 9, 19, 0, 19)
+
+[node name="Band" type="Polygon2D" parent="Visual" unique_id=1129507039]
+position = Vector2(-4.5, -2)
+color = Color(1, 0.827451, 0.41960785, 1)
+polygon = PackedVector2Array(0, 0, 9, 0, 9, 3, 0, 3)
+
+[node name="Spark" type="Polygon2D" parent="Visual" unique_id=53254613]
+position = Vector2(0, -14)
+color = Color(1, 0.9490196, 0.65882355, 1)
+polygon = PackedVector2Array(3, 0, 2.1213202, 2.1213202, 1.8369701e-16, 3, -2.1213202, 2.1213202, -3, 3.6739403e-16, -2.1213202, -2.1213202, -5.5109107e-16, -3, 2.1213202, -2.1213202)

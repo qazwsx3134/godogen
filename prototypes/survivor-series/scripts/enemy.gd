@@ -3,10 +3,15 @@ signal smoke_requested(at: Vector2)
 signal warning_started
 signal impacted(enemy: Node2D, lethal: bool, direction: Vector2)
 @export var definition: Resource
+## Optional art per heading for vehicles, in order S, SE, E, NE, N. West headings mirror SE/E/NE.
+@export var direction_textures: Array[Texture2D] = []
 var hp: float
+var max_hp: float
+var elite: bool = false
 var dead: bool = false
 var knockback := Vector2.ZERO
 var dash_direction := Vector2.RIGHT
+var heading := Vector2.DOWN
 var phase: String = "chase"
 var phase_left: float = 0.0
 var hazard_left: float = 1.5
@@ -19,13 +24,27 @@ var _flash: Tween
 @onready var warning_lane: Line2D = %WarningLane
 @onready var warning_line: Line2D = %WarningLine
 @onready var hp_bar: ProgressBar = %HpBar
+@onready var art: Sprite2D = visual.get_node("Art")
+@onready var placeholder: Node2D = visual.get_node("Placeholder")
 
 func _ready() -> void:
-	hp = definition.max_hp
 	rest_scale = visual.scale
 	warning.hide()
-	hp_bar.max_value = hp
+	setup(1.0, false)
+
+func setup(hp_scale: float, is_elite: bool) -> void:
+	elite = is_elite
+	max_hp = definition.max_hp * hp_scale * (12.0 if elite else 1.0)
+	hp = max_hp
+	hp_bar.max_value = max_hp
 	hp_bar.value = hp
+	hp_bar.visible = elite
+	if elite:
+		scale = Vector2.ONE * 1.5
+		visual.modulate = Color(1.15, 0.95, 0.75)
+
+func contact_damage() -> float:
+	return definition.contact_damage * (2.5 if phase == "dash" else 1.0) * (1.5 if elite else 1.0)
 
 func step(delta: float, target: Vector2, bounds: Rect2) -> void:
 	if dead:
@@ -47,7 +66,7 @@ func step(delta: float, target: Vector2, bounds: Rect2) -> void:
 			phase = "warning"
 			phase_left = definition.warning_time
 			dash_direction = toward
-			warning_lane.points = PackedVector2Array([Vector2.ZERO, dash_direction * 650.0])
+			warning_lane.points = PackedVector2Array([Vector2.ZERO, dash_direction * 650.0 / scale.x])
 			warning_line.points = warning_lane.points
 			warning.show()
 			warning_started.emit()
@@ -70,6 +89,7 @@ func step(delta: float, target: Vector2, bounds: Rect2) -> void:
 			if phase_left <= 0.0:
 				phase = "chase"
 				hazard_left = definition.hazard_interval
+	face(dash_direction if phase in ["warning", "dash"] else toward)
 	position += (movement + knockback) * delta
 	knockback = knockback.move_toward(Vector2.ZERO, delta * 600.0)
 	if phase != "dash":
@@ -77,11 +97,35 @@ func step(delta: float, target: Vector2, bounds: Rect2) -> void:
 	elif not bounds.grow(100.0).has_point(position):
 		queue_free()
 
+## Vehicles pick one of eight headings (five drawings, mirrored for the west side); people only flip.
+func face(direction: Vector2) -> void:
+	if direction == Vector2.ZERO:
+		return
+	heading = direction
+	if not definition.turns:
+		if absf(direction.x) > 0.05:
+			placeholder.scale.x = absf(placeholder.scale.x) * signf(direction.x)
+			art.flip_h = direction.x < 0.0
+		return
+	var octant: int = wrapi(roundi(direction.angle() / (PI / 4.0)), 0, 8)
+	# Godot angles: 0 = E, 2 = S, 4 = W, 6 = N.
+	var frame: int = [2, 1, 0, 1, 2, 3, 4, 3][octant]
+	var mirrored: bool = octant in [3, 4, 5]
+	if direction_textures.size() >= 5 and art.visible:
+		art.texture = direction_textures[frame]
+		art.flip_h = mirrored
+	# Geometric placeholder has one drawing: mirror it and tilt toward the heading.
+	var side: float = -1.0 if mirrored else 1.0
+	placeholder.scale.x = absf(placeholder.scale.x) * side
+	placeholder.rotation = clampf(direction.y, -1.0, 1.0) * 0.35 * side
+
 func hit(damage: float, direction: Vector2, force: float = 1.0) -> bool:
 	if dead:
 		return false
 	hp = maxf(0.0, hp - damage)
 	hp_bar.value = hp
+	if not elite and definition.max_hp >= 140.0 and hp < max_hp:
+		hp_bar.show()
 	dead = hp <= 0.0
 	if dead:
 		warning.hide()
@@ -96,7 +140,7 @@ func hit(damage: float, direction: Vector2, force: float = 1.0) -> bool:
 	visual.modulate = Color(2.0, 1.8, 1.2)
 	visual.scale = rest_scale * Vector2(1.18, 0.84)
 	_flash = create_tween().set_parallel(true)
-	_flash.tween_property(visual, "modulate", Color.WHITE, 0.16)
+	_flash.tween_property(visual, "modulate", Color(1.15, 0.95, 0.75) if elite else Color.WHITE, 0.16)
 	_flash.tween_property(visual, "scale", rest_scale, 0.18).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	impacted.emit(self, dead, direction)
 	return dead

@@ -1,0 +1,30 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/projectile.gd" id="1_hhuhv"]
+
+[node name="Lantern" type="Node2D" unique_id=571194742]
+script = ExtResource("1_hhuhv")
+radius = 10.0
+face_travel = false
+
+[node name="Visual" type="Node2D" parent="." unique_id=1380268134]
+unique_name_in_owner = true
+position = Vector2(0, -18)
+
+[node name="Outline" type="Polygon2D" parent="Visual" unique_id=1416657169]
+color = Color(0.22745098, 0.11372549, 0.047058824, 1)
+polygon = PackedVector2Array(-14, -20, 14, -20, 11, 14, -11, 14)
+
+[node name="Paper" type="Polygon2D" parent="Visual" unique_id=562824041]
+color = Color(1, 0.8862745, 0.6392157, 1)
+polygon = PackedVector2Array(-12, -18, 12, -18, 9, 12, -9, 12)
+
+[node name="Flame" type="Polygon2D" parent="Visual" unique_id=1049644160]
+position = Vector2(0, 5)
+color = Color(1, 0.47843137, 0.18431373, 1)
+polygon = PackedVector2Array(5, 0, 4.045085, 4.1144967, 1.545085, 6.657396, -1.545085, 6.657396, -4.045085, 4.1144967, -5, 8.5725277e-16, -4.045085, -4.1144967, -1.545085, -6.657396, 1.545085, -6.657396, 4.045085, -4.1144967)
+
+[node name="Wish" type="Polygon2D" parent="Visual" unique_id=984142330]
+position = Vector2(-3, -12)
+color = Color(0.8392157, 0.27058825, 0.17254902, 1)
+polygon = PackedVector2Array(0, 0, 6, 0, 6, 14, 0, 14)

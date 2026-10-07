@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/item_def.gd" id="1_gg3wq"]
+
+[resource]
+script = ExtResource("1_gg3wq")
+id = &"sacha"
+title = "沙茶醬"
+description = "所有武器傷害 +10%。"
+level_notes = PackedStringArray("所有武器傷害 +10%。", "所有武器傷害 +10%。", "所有武器傷害 +10%。", "所有武器傷害 +10%。")
+slot = "passive"
+accent = Color(1, 0.7019608, 0.2784314, 1)
+amount_levels = PackedInt32Array()
+stat = &"might"
+per_level = 0.1

@@ -2,13 +2,13 @@
 
 [ext_resource type="Theme" path="res://data/ui_theme.tres" id="1_fk0rn"]
 [ext_resource type="Script" path="res://scripts/upgrade_card.gd" id="2_0hv3p"]
-[ext_resource type="Resource" path="res://data/upgrades/power.tres" id="3_igsks"]
+[ext_resource type="Resource" path="res://data/items/slipper.tres" id="3_fk0rn"]
 
 [node name="UpgradeCard" type="Button" unique_id=618683889]
 custom_minimum_size = Vector2(420, 118)
 theme = ExtResource("1_fk0rn")
 script = ExtResource("2_0hv3p")
-definition = ExtResource("3_igsks")
+definition = ExtResource("3_fk0rn")
 
 [node name="Stripe" type="ColorRect" parent="." unique_id=961910336]
 unique_name_in_owner = true
@@ -38,18 +38,18 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.44705883, 0.8784314, 0.7529412, 1)
 theme_override_font_sizes/font_size = 13
-text = "拳力  ·  1 / 4"
+text = "新武器"
 
 [node name="Title" type="Label" parent="Padding/Column" unique_id=1043766333]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
-text = "拳力加重"
+text = "藍白拖"
 
 [node name="Description" type="Label" parent="Padding/Column" unique_id=1199719042]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(365, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 17
-text = "拳擊與招式傷害增加 25%。"
+text = "丟出藍白拖，飛出去還會飛回來。"
 autowrap_mode = 3

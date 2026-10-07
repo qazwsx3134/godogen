@@ -40,7 +40,7 @@ run_suites() {
 		extra=()
 		[ -n "$fps" ] && extra=(--fixed-fps "$fps")
 		log="$logs/$name.log"
-		timeout "$limit" "$godot" --headless --path "$project" "${extra[@]}" --script "res://tests/test_$name.gd" >"$log" 2>&1
+		timeout "$limit" "$godot" --headless --path "$project" ${extra[@]+"${extra[@]}"} --script "res://tests/test_$name.gd" >"$log" 2>&1
 		rc=$?
 		if [ $rc -ne 0 ] || grep -qE 'SCRIPT ERROR|Parse Error|Failed to load script|^FAIL' "$log" || ! grep -q 'PASSED' "$log"; then
 			echo "FAIL $name (exit $rc) - $log"

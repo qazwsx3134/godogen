@@ -1,0 +1,17 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://scripts/enemy_def.gd" id="1_446yv"]
+
+[resource]
+script = ExtResource("1_446yv")
+kind = "fatty"
+max_hp = 220.0
+speed = 30.0
+radius = 30.0
+weight = 4.0
+experience = 5
+contact_damage = 10.0
+aura_radius = 80.0
+aura_slow = 0.45
+burst_radius = 120.0
+burst_damage = 80.0

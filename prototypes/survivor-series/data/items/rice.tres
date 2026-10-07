@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/item_def.gd" id="1_58fgi"]
+
+[resource]
+script = ExtResource("1_58fgi")
+id = &"rice"
+title = "滷肉飯"
+description = "回復 30 血量。"
+level_notes = PackedStringArray()
+slot = "filler"
+accent = Color(0.77254903, 0.54509807, 0.32156864, 1)
+amount_levels = PackedInt32Array()
+stat = &"heal"
+per_level = 30.0

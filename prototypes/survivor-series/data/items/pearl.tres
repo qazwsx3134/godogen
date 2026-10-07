@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/pearl.tscn" id="1_wt4r2"]
+[ext_resource type="Script" path="res://scripts/item_def.gd" id="2_7toii"]
+
+[resource]
+script = ExtResource("2_7toii")
+id = &"pearl"
+title = "珍珠奶茶"
+description = "射出珍珠，撞到街區邊緣會反彈。"
+level_notes = PackedStringArray("多射一顆", "多射一顆", "傷害 +3，冷卻縮短", "多射一顆")
+accent = Color(0.77254903, 0.54509807, 0.32156864, 1)
+kind = &"pearl"
+projectile = ExtResource("1_wt4r2")
+damage_per_level = 3.0
+cooldown = 1.1
+cooldown_per_level = 0.05
+amount_levels = PackedInt32Array(2, 3, 5)
+speed = 380.0
+duration = 2.0
+pierce = 2
+knockback = 0.6
+evolve_passive = &"energy"
+evolve_into = &"pearl_storm"

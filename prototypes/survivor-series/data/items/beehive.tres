@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/firecracker.tscn" id="1_e0x0x"]
+[ext_resource type="Script" path="res://scripts/item_def.gd" id="2_8e05q"]
+
+[resource]
+script = ExtResource("2_8e05q")
+id = &"beehive"
+title = "鹽水蜂炮"
+description = "四面八方射出蜂炮，碰到就炸。"
+level_notes = PackedStringArray()
+slot = "evolution"
+accent = Color(1, 0.827451, 0.41960785, 1)
+max_level = 1
+kind = &"firecracker"
+variant = &"rocket"
+projectile = ExtResource("1_e0x0x")
+damage = 40.0
+cooldown = 1.5
+amount = 14
+amount_levels = PackedInt32Array()
+area = 1.3
+speed = 380.0
+duration = 1.2
+knockback = 1.6
+replaces = &"firecracker"

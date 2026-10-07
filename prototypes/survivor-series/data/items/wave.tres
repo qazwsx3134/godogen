@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/wave.tscn" id="1_8yqe2"]
+[ext_resource type="Script" path="res://scripts/item_def.gd" id="2_5ohhj"]
+
+[resource]
+script = ExtResource("2_5ohhj")
+id = &"wave"
+title = "衝擊波"
+description = "朝敵人射出穿透的衝擊波。"
+level_notes = PackedStringArray("傷害 +5，冷卻縮短", "多一道衝擊波", "傷害 +5，波更寬", "多一道衝擊波")
+kind = &"wave"
+projectile = ExtResource("1_8yqe2")
+damage = 16.0
+damage_per_level = 5.0
+cooldown = 1.3
+cooldown_per_level = 0.06
+amount_levels = PackedInt32Array(3, 5)
+area_per_level = 0.08
+speed = 440.0
+duration = 0.9
+knockback = 0.8

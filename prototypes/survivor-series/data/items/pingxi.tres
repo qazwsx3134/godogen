@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/lantern.tscn" id="1_7kqv5"]
+[ext_resource type="Script" path="res://scripts/item_def.gd" id="2_rqwlj"]
+
+[resource]
+script = ExtResource("2_rqwlj")
+id = &"pingxi"
+title = "平溪天燈祭"
+description = "滿天天燈一起落下。"
+level_notes = PackedStringArray()
+slot = "evolution"
+accent = Color(1, 0.827451, 0.41960785, 1)
+max_level = 1
+kind = &"lantern"
+projectile = ExtResource("1_7kqv5")
+damage = 50.0
+cooldown = 1.4
+amount = 8
+amount_levels = PackedInt32Array()
+area = 1.6
+duration = 0.4
+knockback = 1.5
+replaces = &"lantern"

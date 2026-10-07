@@ -32,7 +32,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.44705883, 0.8784314, 0.7529412, 1)
 theme_override_font_sizes/font_size = 16
-text = "90 秒  /  測試完成"
+text = "STREET  /  SURVIVOR"
 horizontal_alignment = 1
 
 [node name="Title" type="Label" parent="Center/Column" unique_id=1515380798]
@@ -40,7 +40,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.96862745, 0.9098039, 0.80784315, 1)
 theme_override_font_sizes/font_size = 38
-text = "打得夠爽嗎？"
+text = "撐過十分鐘！"
 horizontal_alignment = 1
 
 [node name="ResultStats" type="Label" parent="Center/Column" unique_id=1988893468]
@@ -58,9 +58,16 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(420, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "基礎拳擊"
+text = "拳頭 1"
 horizontal_alignment = 1
 autowrap_mode = 3
+
+[node name="Unlocks" type="Label" parent="Center/Column" unique_id=1338672610]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.827451, 0.41960785, 1)
+theme_override_font_sizes/font_size = 20
+horizontal_alignment = 1
 
 [node name="Retry" type="Button" parent="Center/Column" unique_id=1399752297]
 unique_name_in_owner = true

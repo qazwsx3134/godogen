@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/item_def.gd" id="1_vlcrv"]
+
+[resource]
+script = ExtResource("1_vlcrv")
+id = &"energy"
+title = "提神飲料"
+description = "冷卻時間 −8%。"
+level_notes = PackedStringArray("冷卻時間 −8%。", "冷卻時間 −8%。", "冷卻時間 −8%。", "冷卻時間 −8%。")
+slot = "passive"
+amount_levels = PackedInt32Array()
+stat = &"cooldown"
+per_level = 0.08

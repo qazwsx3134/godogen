@@ -1,0 +1,102 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://scripts/spawn_phase.gd" id="1_w1xrh"]
+[ext_resource type="Script" path="res://scripts/spawn_schedule.gd" id="2_xpqml"]
+
+[sub_resource type="Resource" id="Resource_mqtbx"]
+script = ExtResource("1_w1xrh")
+weights = PackedFloat32Array(1, 0, 0, 0)
+max_alive = 30
+
+[sub_resource type="Resource" id="Resource_1syvh"]
+script = ExtResource("1_w1xrh")
+start = 60.0
+interval = 0.9
+batch = 3
+weights = PackedFloat32Array(1, 0.25, 0, 0)
+hp_scale = 1.1
+max_alive = 45
+
+[sub_resource type="Resource" id="Resource_t2ms2"]
+script = ExtResource("1_w1xrh")
+start = 120.0
+interval = 0.9
+batch = 3
+weights = PackedFloat32Array(1, 0.3, 0.15, 0)
+hp_scale = 1.2
+max_alive = 55
+ring = 14
+
+[sub_resource type="Resource" id="Resource_q5gc2"]
+script = ExtResource("1_w1xrh")
+start = 180.0
+interval = 0.8
+batch = 4
+weights = PackedFloat32Array(1, 0.3, 0.15, 0.2)
+hp_scale = 1.4
+max_alive = 70
+
+[sub_resource type="Resource" id="Resource_fajxs"]
+script = ExtResource("1_w1xrh")
+start = 240.0
+interval = 0.8
+batch = 4
+weights = PackedFloat32Array(1, 0.35, 0.2, 0.25)
+hp_scale = 1.7
+max_alive = 80
+elite = 3
+
+[sub_resource type="Resource" id="Resource_56ngc"]
+script = ExtResource("1_w1xrh")
+start = 300.0
+interval = 0.7
+batch = 5
+weights = PackedFloat32Array(1, 0.3, 0.2, 0.3)
+hp_scale = 2.0
+max_alive = 90
+ring = 24
+
+[sub_resource type="Resource" id="Resource_spt3k"]
+script = ExtResource("1_w1xrh")
+start = 360.0
+interval = 0.7
+batch = 5
+weights = PackedFloat32Array(1, 0.45, 0.25, 0.3)
+hp_scale = 2.4
+max_alive = 100
+elite = 2
+
+[sub_resource type="Resource" id="Resource_rd8ar"]
+script = ExtResource("1_w1xrh")
+start = 420.0
+interval = 0.65
+batch = 6
+weights = PackedFloat32Array(1, 0.35, 0.3, 0.4)
+hp_scale = 3.3
+max_alive = 120
+
+[sub_resource type="Resource" id="Resource_xme3w"]
+script = ExtResource("1_w1xrh")
+start = 480.0
+interval = 0.6
+batch = 7
+weights = PackedFloat32Array(1, 0.4, 0.3, 0.4)
+hp_scale = 4.2
+max_alive = 130
+ring = 30
+elite = 3
+
+[sub_resource type="Resource" id="Resource_q26rl"]
+script = ExtResource("1_w1xrh")
+start = 540.0
+interval = 0.45
+batch = 10
+weights = PackedFloat32Array(1, 0.4, 0.35, 0.5)
+hp_scale = 5.2
+max_alive = 140
+ring = 36
+elite = 2
+
+[resource]
+script = ExtResource("2_xpqml")
+phases = Array[Resource]([SubResource("Resource_mqtbx"), SubResource("Resource_1syvh"), SubResource("Resource_t2ms2"), SubResource("Resource_q5gc2"), SubResource("Resource_fajxs"), SubResource("Resource_56ngc"), SubResource("Resource_spt3k"), SubResource("Resource_rd8ar"), SubResource("Resource_xme3w"), SubResource("Resource_q26rl")])

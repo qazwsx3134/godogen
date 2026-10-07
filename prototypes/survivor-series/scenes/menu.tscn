@@ -32,7 +32,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.44705883, 0.8784314, 0.7529412, 1)
 theme_override_font_sizes/font_size = 15
-text = "STREET  /  IMPACT LAB"
+text = "STREET  /  SURVIVOR"
 horizontal_alignment = 1
 
 [node name="Title" type="Label" parent="Center/Column" unique_id=2073622066]
@@ -56,20 +56,34 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.96862745, 0.9098039, 0.80784315, 1)
 theme_override_font_sizes/font_size = 18
-text = "拖曳移動，自動出拳
-揍飛升級，選招式越打越強"
+text = "拖曳移動，武器自動攻擊
+撐過十分鐘，越打越強"
 horizontal_alignment = 1
 
 [node name="Start" type="Button" parent="Center/Column" unique_id=1421016204]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 56)
 layout_mode = 2
-text = "開始測試  →"
+text = "開始  →"
+
+[node name="OpenShop" type="Button" parent="Center/Column" unique_id=1485016782]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+text = "街頭補給站"
+
+[node name="Wallet" type="Label" parent="Center/Column" unique_id=192439577]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.77254903, 0.41960785, 1)
+theme_override_font_sizes/font_size = 17
+text = "金幣  0  ·  最佳 00:00"
+horizontal_alignment = 1
 
 [node name="Note" type="Label" parent="Center/Column" unique_id=1543259760]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.56078434, 0.6509804, 0.6784314, 1)
 theme_override_font_sizes/font_size = 15
-text = "本測試場不會死亡，受擊會記次"
+text = "金幣可以買永久強化；達成目標解鎖新武器"
 horizontal_alignment = 1

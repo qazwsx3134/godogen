@@ -1,6 +1,7 @@
 extends Node2D
 @export var lifetime: float = 3.8
 @export var radius: float = 42.0
+@export var damage: float = 4.0
 var age: float = 0.0
 func step(delta: float) -> void:
 	age += delta

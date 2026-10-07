@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/item_def.gd" id="1_lpksk"]
+
+[resource]
+script = ExtResource("1_lpksk")
+id = &"change"
+title = "零錢"
+description = "多帶 20 金幣回家。"
+level_notes = PackedStringArray()
+slot = "filler"
+accent = Color(1, 0.827451, 0.41960785, 1)
+amount_levels = PackedInt32Array()
+stat = &"coins"
+per_level = 4.0

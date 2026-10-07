@@ -1,0 +1,147 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Script" path="res://scripts/achievement_def.gd" id="1_wfmxk"]
+[ext_resource type="Script" path="res://scripts/meta_def.gd" id="2_v4xb1"]
+[ext_resource type="Script" path="res://scripts/shop_item_def.gd" id="3_llrqm"]
+
+[sub_resource type="Resource" id="Resource_0yy7w"]
+script = ExtResource("1_wfmxk")
+id = &"survive_5"
+title = "撐過五分鐘"
+description = "單局撐過 05:00"
+reward = "天燈"
+
+[sub_resource type="Resource" id="Resource_2enmr"]
+script = ExtResource("1_wfmxk")
+id = &"kills_300"
+title = "揍飛高手"
+description = "單局揍飛 300"
+stat = "best_kills"
+reward = "愛的小手"
+
+[sub_resource type="Resource" id="Resource_l6eqo"]
+script = ExtResource("1_wfmxk")
+id = &"total_2000"
+title = "街頭傳說"
+description = "累計揍飛 2000"
+stat = "total_kills"
+threshold = 2000.0
+reward = "紅包"
+
+[sub_resource type="Resource" id="Resource_1cwps"]
+script = ExtResource("3_llrqm")
+id = &"might"
+title = "力量訓練"
+description = "所有武器傷害 +5%。"
+stat = &"might"
+
+[sub_resource type="Resource" id="Resource_kxyf7"]
+script = ExtResource("3_llrqm")
+id = &"vitality"
+title = "健康檢查"
+description = "血量上限 +10%。"
+stat = &"max_hp"
+per_level = 0.1
+max_level = 3
+base_cost = 120
+cost_growth = 1.6
+
+[sub_resource type="Resource" id="Resource_wo5jg"]
+script = ExtResource("3_llrqm")
+id = &"recovery"
+title = "早睡早起"
+description = "每秒回復 0.2 血。"
+stat = &"recovery"
+per_level = 0.2
+max_level = 3
+base_cost = 150
+cost_growth = 1.6
+
+[sub_resource type="Resource" id="Resource_08nfd"]
+script = ExtResource("3_llrqm")
+id = &"helmet"
+title = "安全帽"
+description = "每次受傷少扣 1。"
+stat = &"armor"
+per_level = 1.0
+max_level = 2
+base_cost = 200
+cost_growth = 2.0
+
+[sub_resource type="Resource" id="Resource_5p6ph"]
+script = ExtResource("3_llrqm")
+id = &"drink"
+title = "手搖飲集點"
+description = "冷卻時間 −2.5%。"
+stat = &"cooldown"
+per_level = 0.025
+max_level = 2
+base_cost = 300
+cost_growth = 2.0
+
+[sub_resource type="Resource" id="Resource_gir3j"]
+script = ExtResource("3_llrqm")
+id = &"voice"
+title = "大嗓門"
+description = "攻擊範圍 +5%。"
+stat = &"area"
+max_level = 2
+base_cost = 250
+cost_growth = 1.8
+
+[sub_resource type="Resource" id="Resource_57x8x"]
+script = ExtResource("3_llrqm")
+id = &"jog"
+title = "晨跑習慣"
+description = "移動速度 +5%。"
+stat = &"speed"
+max_level = 2
+base_cost = 150
+cost_growth = 1.8
+
+[sub_resource type="Resource" id="Resource_kyn7w"]
+script = ExtResource("3_llrqm")
+id = &"bargain"
+title = "撿便宜"
+description = "撿東西的範圍 +25%。"
+stat = &"magnet"
+per_level = 0.25
+max_level = 2
+cost_growth = 1.8
+
+[sub_resource type="Resource" id="Resource_r4gdi"]
+script = ExtResource("3_llrqm")
+id = &"cram"
+title = "補習班"
+description = "經驗 +5%。"
+stat = &"growth"
+max_level = 3
+base_cost = 200
+cost_growth = 1.6
+
+[sub_resource type="Resource" id="Resource_vpn0y"]
+script = ExtResource("3_llrqm")
+id = &"piggy"
+title = "存錢筒"
+description = "金幣 +10%。"
+stat = &"greed"
+per_level = 0.1
+max_level = 3
+base_cost = 150
+cost_growth = 1.6
+
+[sub_resource type="Resource" id="Resource_mj40t"]
+script = ExtResource("3_llrqm")
+id = &"revival"
+title = "再來一碗"
+description = "每局可以復活一次。"
+stat = &"revival"
+per_level = 1.0
+max_level = 1
+base_cost = 800
+cost_growth = 1.0
+
+[resource]
+script = ExtResource("2_v4xb1")
+shop = Array[Resource]([SubResource("Resource_1cwps"), SubResource("Resource_kxyf7"), SubResource("Resource_wo5jg"), SubResource("Resource_08nfd"), SubResource("Resource_5p6ph"), SubResource("Resource_gir3j"), SubResource("Resource_57x8x"), SubResource("Resource_kyn7w"), SubResource("Resource_r4gdi"), SubResource("Resource_vpn0y"), SubResource("Resource_mj40t")])
+achievements = Array[Resource]([SubResource("Resource_0yy7w"), SubResource("Resource_2enmr"), SubResource("Resource_l6eqo")])

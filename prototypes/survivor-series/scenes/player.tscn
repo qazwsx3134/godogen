@@ -5,6 +5,16 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_g2els"]
 radius = 14.0
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3vyb7"]
+content_margin_top = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.07450981, 0.1254902, 0.1764706, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g2els"]
+content_margin_top = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(1, 0.3529412, 0.30980393, 1)
+
 [node name="Player" type="CharacterBody2D" unique_id=2133992438]
 script = ExtResource("1_3vyb7")
 
@@ -94,3 +104,16 @@ polygon = PackedVector2Array(13, 0, 12.557035, 2.8470094, 11.25833, 5.5, 9.19238
 position = Vector2(20, -29)
 color = Color(0.96862745, 0.8117647, 0.627451, 1)
 polygon = PackedVector2Array(9, 0, 8.693333, 1.8117332, 7.7942286, 3.5, 6.3639607, 4.9497476, 4.5, 6.0621777, 2.3293715, 6.761481, 5.5109107e-16, 7, -2.3293715, 6.761481, -4.5, 6.0621777, -6.3639607, 4.9497476, -7.7942286, 3.5, -8.693333, 1.8117332, -9, 8.572528e-16, -8.693333, -1.8117332, -7.7942286, -3.5, -6.3639607, -4.9497476, -4.5, -6.0621777, -2.3293715, -6.761481, -1.6532731e-15, -7, 2.3293715, -6.761481, 4.5, -6.0621777, 6.3639607, -4.9497476, 7.7942286, -3.5, 8.693333, -1.8117332)
+
+[node name="HpBar" type="ProgressBar" parent="." unique_id=832783500]
+unique_name_in_owner = true
+offset_left = -22.0
+offset_top = 14.0
+offset_right = 22.0
+offset_bottom = 19.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_3vyb7")
+theme_override_styles/fill = SubResource("StyleBoxFlat_g2els")
+value = 100.0
+show_percentage = false

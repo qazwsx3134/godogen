@@ -1,8 +1,14 @@
 extends CharacterBody2D
 @export var move_speed: float = 210.0
 @export var attack_range: float = 100.0
-@export var attack_damage: float = 34.0
-@export var attack_interval: float = 0.42
+@export var max_hp: float = 100.0
+## Seconds of invulnerability after taking damage.
+@export var hurt_interval: float = 0.5
+var hp: float = 100.0
+var hp_limit: float = 100.0
+var armor: float = 0.0
+var speed_scale: float = 1.0
+var facing := Vector2.RIGHT
 var attack_cooldown: float = 0.0
 var hurt_cooldown: float = 0.0
 var rest_scale: Vector2
@@ -15,6 +21,7 @@ var _pose: Tween
 @onready var visual: Node2D = %Visual
 @onready var fist: Node2D = %Fist
 @onready var motion: Node2D = %Motion
+@onready var hp_bar: ProgressBar = %HpBar
 
 func _ready() -> void:
 	rest_scale = visual.scale
@@ -23,11 +30,16 @@ func _ready() -> void:
 	rest_motion_position = motion.position
 	rest_fist_scale = fist.scale
 
-func reset() -> void:
+func reset(limit: float = max_hp, damage_reduction: float = 0.0, speed_bonus: float = 0.0) -> void:
 	if _pose != null and _pose.is_valid():
 		_pose.kill()
 	position = rest_position
 	velocity = Vector2.ZERO
+	hp_limit = limit
+	hp = limit
+	armor = damage_reduction
+	speed_scale = 1.0 + speed_bonus
+	facing = Vector2.RIGHT
 	attack_cooldown = 0.0
 	hurt_cooldown = 0.0
 	visual.scale = rest_scale
@@ -37,14 +49,16 @@ func reset() -> void:
 	fist.scale = rest_fist_scale
 	motion.position = rest_motion_position
 	walk_phase = 0.0
+	_refresh_bar()
 
-func step(delta: float, direction: Vector2, bounds: Rect2) -> void:
+func step(delta: float, direction: Vector2, bounds: Rect2, slow: float = 0.0) -> void:
 	attack_cooldown = maxf(0.0, attack_cooldown - delta)
 	hurt_cooldown = maxf(0.0, hurt_cooldown - delta)
-	velocity = direction.limit_length(1.0) * move_speed
+	velocity = direction.limit_length(1.0) * move_speed * speed_scale * (1.0 - slow)
 	move_and_slide()
 	position = position.clamp(bounds.position, bounds.end)
 	if direction.length() > 0.05:
+		facing = direction.normalized()
 		walk_phase += delta * 13.0
 		motion.position.y = rest_motion_position.y - absf(sin(walk_phase)) * 3.0
 	else:
@@ -52,8 +66,8 @@ func step(delta: float, direction: Vector2, bounds: Rect2) -> void:
 	if absf(direction.x) > 0.05 and (_pose == null or not _pose.is_valid() or not _pose.is_running()):
 		visual.scale.x = absf(rest_scale.x) * (1.0 if direction.x >= 0.0 else -1.0)
 
-func punch(direction: Vector2, interval: float = -1.0, heavy: bool = false) -> void:
-	attack_cooldown = attack_interval if interval < 0.0 else interval
+func punch(direction: Vector2, interval: float, heavy: bool = false) -> void:
+	attack_cooldown = interval
 	if _pose != null and _pose.is_valid():
 		_pose.kill()
 	fist.position = Vector2.ZERO
@@ -69,10 +83,28 @@ func punch(direction: Vector2, interval: float = -1.0, heavy: bool = false) -> v
 	_pose.parallel().tween_property(visual, "position", rest_visual_position, 0.16).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	_pose.parallel().tween_property(fist, "scale", rest_fist_scale, 0.16)
 
-func hurt() -> bool:
-	if hurt_cooldown > 0.0:
+## Takes `amount` minus armor (at least 1). Returns false while invulnerable.
+func hurt(amount: float) -> bool:
+	if hurt_cooldown > 0.0 or hp <= 0.0:
 		return false
-	hurt_cooldown = 0.7
+	hurt_cooldown = hurt_interval
+	hp = maxf(0.0, hp - maxf(1.0, amount - armor))
+	_refresh_bar()
 	visual.modulate = Color(1.0, 0.35, 0.35)
 	create_tween().tween_property(visual, "modulate", Color.WHITE, 0.3)
 	return true
+
+func heal(amount: float) -> void:
+	if hp <= 0.0:
+		return
+	hp = minf(hp_limit, hp + amount)
+	_refresh_bar()
+
+func revive(fraction: float) -> void:
+	hp = hp_limit * fraction
+	hurt_cooldown = 2.0
+	_refresh_bar()
+
+func _refresh_bar() -> void:
+	hp_bar.max_value = hp_limit
+	hp_bar.value = hp

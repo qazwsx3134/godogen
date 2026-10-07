@@ -6,16 +6,20 @@
 [ext_resource type="Script" path="res://scripts/sfx.gd" id="4_kvuet"]
 [ext_resource type="Script" path="res://addons/proto_kit/music.gd" id="5_trtic"]
 [ext_resource type="PackedScene" path="res://scenes/joystick.tscn" id="6_ir15t"]
+[ext_resource type="Script" path="res://scripts/meta.gd" id="6_trtic"]
 [ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="7_ca42v"]
+[ext_resource type="Resource" path="res://data/meta.tres" id="7_ir15t"]
 [ext_resource type="PackedScene" path="res://scenes/menu.tscn" id="8_rysoc"]
 [ext_resource type="PackedScene" path="res://scenes/results.tscn" id="9_ssvqc"]
 [ext_resource type="PackedScene" path="res://scenes/pause.tscn" id="10_264po"]
 [ext_resource type="PackedScene" path="res://scenes/upgrades.tscn" id="11_kvpfn"]
+[ext_resource type="PackedScene" path="res://scenes/shop.tscn" id="14_ca42v"]
 
 [node name="StreetImpact" type="Node" unique_id=1142722470]
 process_mode = 3
 script = ExtResource("1_vtaks")
 metadata/progression_scene_version = 1
+metadata/horde_scene_version = 1
 
 [node name="Street" parent="." unique_id=1672293938 instance=ExtResource("2_kvpfn")]
 unique_name_in_owner = true
@@ -37,6 +41,11 @@ script = ExtResource("5_trtic")
 [node name="VoiceA" type="AudioStreamPlayer" parent="Services/Music" unique_id=522004539]
 
 [node name="VoiceB" type="AudioStreamPlayer" parent="Services/Music" unique_id=979467308]
+
+[node name="Meta" type="Node" parent="Services" unique_id=645250751]
+unique_name_in_owner = true
+script = ExtResource("6_trtic")
+catalogue = ExtResource("7_ir15t")
 
 [node name="Interface" type="CanvasLayer" parent="." unique_id=751173994]
 
@@ -67,6 +76,12 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="UpgradePanel" parent="Interface" unique_id=1995312911 instance=ExtResource("11_kvpfn")]
+unique_name_in_owner = true
+visible = false
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Shop" parent="Interface" unique_id=1289160779 instance=ExtResource("14_ca42v")]
 unique_name_in_owner = true
 visible = false
 anchors_preset = 15

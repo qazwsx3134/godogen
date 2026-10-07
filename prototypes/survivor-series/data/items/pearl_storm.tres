@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/pearl.tscn" id="1_fxknl"]
+[ext_resource type="Script" path="res://scripts/item_def.gd" id="2_w0aht"]
+
+[resource]
+script = ExtResource("2_w0aht")
+id = &"pearl_storm"
+title = "珍珠暴雨"
+description = "珍珠像下雨一樣連射。"
+level_notes = PackedStringArray()
+slot = "evolution"
+accent = Color(1, 0.827451, 0.41960785, 1)
+max_level = 1
+kind = &"pearl"
+projectile = ExtResource("1_fxknl")
+damage = 22.0
+cooldown = 0.25
+amount = 3
+amount_levels = PackedInt32Array()
+area = 1.2
+speed = 460.0
+duration = 2.0
+pierce = 5
+knockback = 0.8
+replaces = &"pearl"

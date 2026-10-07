@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/item_def.gd" id="1_iffqt"]
+
+[resource]
+script = ExtResource("1_iffqt")
+id = &"megaphone"
+title = "大聲公"
+description = "攻擊範圍 +10%。"
+level_notes = PackedStringArray("攻擊範圍 +10%。", "攻擊範圍 +10%。", "攻擊範圍 +10%。", "攻擊範圍 +10%。")
+slot = "passive"
+accent = Color(1, 0.827451, 0.41960785, 1)
+amount_levels = PackedInt32Array()
+stat = &"area"
+per_level = 0.1

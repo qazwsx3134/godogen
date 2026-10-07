@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/slipper.tscn" id="1_oa1ou"]
+[ext_resource type="Script" path="res://scripts/item_def.gd" id="2_2e5uf"]
+
+[resource]
+script = ExtResource("2_2e5uf")
+id = &"homing_slipper"
+title = "媽媽的追蹤拖鞋"
+description = "不管跑多遠，拖鞋都會追上。"
+level_notes = PackedStringArray()
+slot = "evolution"
+accent = Color(1, 0.827451, 0.41960785, 1)
+max_level = 1
+kind = &"slipper"
+variant = &"homing"
+projectile = ExtResource("1_oa1ou")
+damage = 30.0
+cooldown = 0.9
+amount = 4
+amount_levels = PackedInt32Array()
+area = 1.2
+speed = 460.0
+duration = 2.5
+knockback = 1.4
+replaces = &"slipper"

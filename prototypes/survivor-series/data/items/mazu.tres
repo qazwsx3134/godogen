@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/incense.tscn" id="1_tcw1o"]
+[ext_resource type="Script" path="res://scripts/item_def.gd" id="2_x7hw3"]
+
+[resource]
+script = ExtResource("2_x7hw3")
+id = &"mazu"
+title = "媽祖遶境"
+description = "香陣常駐不散，繞得更大圈。"
+level_notes = PackedStringArray()
+slot = "evolution"
+accent = Color(1, 0.827451, 0.41960785, 1)
+max_level = 1
+kind = &"incense"
+variant = &"permanent"
+projectile = ExtResource("1_tcw1o")
+damage = 26.0
+amount = 6
+amount_levels = PackedInt32Array()
+area = 1.6
+speed = 420.0
+knockback = 1.2
+replaces = &"incense"

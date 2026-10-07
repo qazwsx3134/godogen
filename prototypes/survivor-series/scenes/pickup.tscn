@@ -1,0 +1,95 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/pickup.gd" id="1_pg2rt"]
+
+[node name="Pickup" type="Node2D" unique_id=1287427530]
+script = ExtResource("1_pg2rt")
+
+[node name="Looks" type="Node2D" parent="." unique_id=968379439]
+unique_name_in_owner = true
+position = Vector2(0, -6)
+
+[node name="Gem" type="Node2D" parent="Looks" unique_id=804388915]
+
+[node name="Outline" type="Polygon2D" parent="Looks/Gem" unique_id=11462894]
+color = Color(0.050980393, 0.09411765, 0.1254902, 1)
+polygon = PackedVector2Array(0, -8, 6.8, 0, 0, 8, -6.8, 0)
+
+[node name="Body" type="Polygon2D" parent="Looks/Gem" unique_id=2061815702]
+color = Color(0.3529412, 0.6627451, 1, 1)
+polygon = PackedVector2Array(0, -6, 4.8, 0, 0, 6, -4.8, 0)
+
+[node name="GemMid" type="Node2D" parent="Looks" unique_id=1589786286]
+
+[node name="Outline" type="Polygon2D" parent="Looks/GemMid" unique_id=1990698617]
+color = Color(0.050980393, 0.09411765, 0.1254902, 1)
+polygon = PackedVector2Array(0, -10, 8.4, 0, 0, 10, -8.4, 0)
+
+[node name="Body" type="Polygon2D" parent="Looks/GemMid" unique_id=1817623329]
+color = Color(0.41960785, 0.8392157, 0.41960785, 1)
+polygon = PackedVector2Array(0, -8, 6.4, 0, 0, 8, -6.4, 0)
+
+[node name="GemBig" type="Node2D" parent="Looks" unique_id=999627672]
+
+[node name="Outline" type="Polygon2D" parent="Looks/GemBig" unique_id=1503804948]
+color = Color(0.050980393, 0.09411765, 0.1254902, 1)
+polygon = PackedVector2Array(0, -14, 11.6, 0, 0, 14, -11.6, 0)
+
+[node name="Body" type="Polygon2D" parent="Looks/GemBig" unique_id=1703570929]
+color = Color(1, 0.3529412, 0.30980393, 1)
+polygon = PackedVector2Array(0, -12, 9.6, 0, 0, 12, -9.6, 0)
+
+[node name="Coin" type="Node2D" parent="Looks" unique_id=1365736224]
+
+[node name="Outline" type="Polygon2D" parent="Looks/Coin" unique_id=1519509416]
+color = Color(0.3529412, 0.23137255, 0, 1)
+polygon = PackedVector2Array(9, 0, 8.314916, 3.444151, 6.363961, 6.363961, 3.444151, 8.314916, 5.5109107e-16, 9, -3.444151, 8.314916, -6.363961, 6.363961, -8.314916, 3.444151, -9, 1.1021821e-15, -8.314916, -3.444151, -6.363961, -6.363961, -3.444151, -8.314916, -1.6532732e-15, -9, 3.444151, -8.314916, 6.363961, -6.363961, 8.314916, -3.444151)
+
+[node name="Face" type="Polygon2D" parent="Looks/Coin" unique_id=1526704238]
+color = Color(1, 0.827451, 0.41960785, 1)
+polygon = PackedVector2Array(7, 0, 6.467157, 2.6787841, 4.9497476, 4.9497476, 2.6787841, 6.467157, 4.2862639e-16, 7, -2.6787841, 6.467157, -4.9497476, 4.9497476, -6.467157, 2.6787841, -7, 8.5725277e-16, -6.467157, -2.6787841, -4.9497476, -4.9497476, -2.6787841, -6.467157, -1.2858791e-15, -7, 2.6787841, -6.467157, 4.9497476, -4.9497476, 6.467157, -2.6787841)
+
+[node name="Food" type="Node2D" parent="Looks" unique_id=979323563]
+
+[node name="Bowl" type="Polygon2D" parent="Looks/Food" unique_id=309223238]
+color = Color(0.9098039, 0.8784314, 0.8156863, 1)
+polygon = PackedVector2Array(-13, -2, 13, -2, 9, 9, -9, 9)
+
+[node name="Rice" type="Polygon2D" parent="Looks/Food" unique_id=338153521]
+position = Vector2(0, -3)
+color = Color(1, 0.98039216, 0.9411765, 1)
+polygon = PackedVector2Array(12, 0, 10.811626, 2.1694188, 7.481878, 3.9091575, 2.6702511, 4.8746395, -2.6702511, 4.8746395, -7.481878, 3.9091575, -10.811626, 2.1694188, -12, 6.123234e-16, -10.811626, -2.1694188, -7.481878, -3.9091575, -2.6702511, -4.8746395, 2.6702511, -4.8746395, 7.481878, -3.9091575, 10.811626, -2.1694188)
+
+[node name="Pork" type="Polygon2D" parent="Looks/Food" unique_id=1141122601]
+position = Vector2(0, -5)
+color = Color(0.47843137, 0.23921569, 0.09411765, 1)
+polygon = PackedVector2Array(8, 0, 6.928203, 1.75, 4, 3.0310888, 4.8985874e-16, 3.5, -4, 3.0310888, -6.928203, 1.75, -8, 4.2862639e-16, -6.928203, -1.75, -4, -3.0310888, -1.4695761e-15, -3.5, 4, -3.0310888, 6.928203, -1.75)
+
+[node name="Magnet" type="Node2D" parent="Looks" unique_id=1349767883]
+
+[node name="Body" type="Polygon2D" parent="Looks/Magnet" unique_id=772876742]
+position = Vector2(-9, -7)
+color = Color(0.56078434, 0.6509804, 0.6784314, 1)
+polygon = PackedVector2Array(0, 0, 18, 0, 18, 14, 0, 14)
+
+[node name="Nozzle" type="Polygon2D" parent="Looks/Magnet" unique_id=825047252]
+position = Vector2(-20, 2)
+color = Color(0.2901961, 0.3529412, 0.38431373, 1)
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 4, 0, 4)
+
+[node name="Chest" type="Node2D" parent="Looks" unique_id=832662705]
+
+[node name="Box" type="Polygon2D" parent="Looks/Chest" unique_id=1010891824]
+position = Vector2(-13, -9)
+color = Color(0.7529412, 0.22352941, 0.16862746, 1)
+polygon = PackedVector2Array(0, 0, 26, 0, 26, 18, 0, 18)
+
+[node name="Lid" type="Polygon2D" parent="Looks/Chest" unique_id=285991626]
+position = Vector2(-14, -12)
+color = Color(0.8784314, 0.19607843, 0.16862746, 1)
+polygon = PackedVector2Array(0, 0, 28, 0, 28, 6, 0, 6)
+
+[node name="Band" type="Polygon2D" parent="Looks/Chest" unique_id=125427765]
+position = Vector2(-2, -12)
+color = Color(1, 0.827451, 0.41960785, 1)
+polygon = PackedVector2Array(0, 0, 4, 0, 4, 24, 0, 24)

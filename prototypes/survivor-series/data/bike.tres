@@ -5,8 +5,10 @@
 [resource]
 script = ExtResource("1_y8kq7")
 kind = "bike"
-max_hp = 102.0
+max_hp = 40.0
 speed = 70.0
 radius = 24.0
 weight = 2.0
 experience = 2
+contact_damage = 7.0
+turns = true

@@ -1,86 +1,94 @@
-# 行人反擊：90 秒打擊測試場
+# 行人反擊：十分鐘割草
 
-可玩的 Godot 4.7 原型，支援手機瀏覽器直式與桌面試玩。單指浮動搖桿移動、靠近敵人自動揮拳；普通命中擊退，致命命中誇張揍飛。玩家不死；揍飛取得經驗，升級三選一解鎖衝擊波、回旋踢或橫掃拳。90 秒後統計揍飛、受擊、連殺、等級與本局成長，可直接重試。
+可玩的 Godot 4.7 原型，支援手機瀏覽器直式與桌面試玩。機制參考 Vampire Survivors：單指浮動搖桿移動，武器各自冷卻、自動攻擊；揍飛的敵人掉經驗寶石，升級時三選一，取得台灣街頭味的武器與被動。武器升滿後搭配對應被動可以進化。撐過 10 分鐘就勝利，血量歸零就倒下；每局的金幣帶回「街頭補給站」買永久強化，達成目標會解鎖新武器。
 
-三類敵人：抽菸者留下只造成傷害的煙霧、機車先顯示路線再直線衝刺、汽車慢速追近且難推動。打擊包含程序音效、閃光、形變、速度線、震屏與節流的 hit stop。HUD 可關閉震屏；暫停及失焦會停止戰鬥，需按繼續才恢復。
+完整規格與已確認的決策見 [horde-spec.md](docs/horde-spec.md)；開發清單見 [TODO.md](TODO.md) 與 [ROADMAP.md](ROADMAP.md)。
 
-## 本輪新增
+## 內容
 
-開發清單與里程碑見 [TODO.md](TODO.md) 與 [ROADMAP.md](ROADMAP.md)。
-
-十張升級卡：衝擊波、回旋踢、橫掃拳、拳力加重、快拳連打、長臂反擊、強力擊退、蓄力重拳、巨浪衝擊、旋風踢擊。第一輪固定三種攻擊模式，後續抽取合法選項；招式強化有前置與層數上限。選卡時暫停倒數與敵人，選完重新拖曳即可移動。
-
-增加走路起伏、出拳朝向、攻擊弧線與圓環、重拳音效、連續揍飛、敵群重量分離；機車預警與衝刺維持固定路線。
+- **武器**：拳頭（起始）、衝擊波、回旋踢、藍白拖、珍珠奶茶、鞭炮、三炷香、天燈（解鎖）、愛的小手（解鎖）。
+- **進化**：鐵沙掌、媽媽的追蹤拖鞋、珍珠暴雨、鹽水蜂炮、媽祖遶境、平溪天燈祭、雞毛撢子。
+- **被動**：沙茶醬、雞排、提神飲料、集點卡、平安符、大聲公、腳底按摩、紅包（解鎖）。武器與被動各 6 格。
+- **敵人**：抽菸者（留下煙霧）、機車（預警後衝刺）、汽車（慢、重、血厚）、臭臭胖子（臭味光環讓主角減速；被揍飛時爆屁，炸飛周圍敵人，可以連鎖）。4:00、6:00、8:00、9:00 會出現精英，打倒後掉寶箱，可以多選 1、3 或 5 次。
+- **掉落**：經驗寶石（超過上限就合併成大寶石）、金幣、滷肉飯（回血）、吸塵器（吸走全場寶石）。
+- **街區**：1104×1584 的封閉街區，鏡頭跟著主角走，敵人從畫面外湧進來。
+- **局外成長**：11 項永久強化，以及 3 個解鎖目標；存檔用 AtomicFile 寫成 JSON。
 
 ## 試玩
 
-Windows Godot 開啟 `D:\repo\godot\godogen\prototypes\survivor-series\project.godot`，按 F5。入口是 `scenes/game.tscn`。桌面可用滑鼠拖曳，或 WASD／方向鍵。
-
-Web 版建置後放在 `build/web/`，上傳用壓縮包為 `build/survivor-series-web.zip`。不要直接雙擊 `index.html`；本機透過 HTTP localhost，手機遠端試玩則放在 HTTPS 網站。這次未發布到外部平台。
+Godot 開啟 `prototypes/survivor-series/project.godot`，按 F5，入口是 `scenes/game.tscn`。桌面可用滑鼠拖曳，或 WASD／方向鍵。
 
 ```bash
 bash prototypes/godot-kit/tools/web/build_web.sh prototypes/survivor-series
 python3 -m http.server 8793 --bind 127.0.0.1 --directory prototypes/survivor-series/build/web
 ```
 
-在本機開啟 `http://localhost:8793/index.html`。Windows 編輯器的 Web 匯出範本需安裝在 Windows 自己的 Godot 資料目錄；WSL 的範本不會自動共用。Web preset 使用 Compatibility、無 threads／GDExtension。
+在本機開啟 `http://localhost:8793/index.html`。不要直接雙擊 `index.html`；手機遠端試玩要放在 HTTPS 網站上。Web preset 使用 Compatibility 渲染，沒有 threads 或 GDExtension。
 
-## 可編輯場景
+命令列參數（加在 `--` 之後）：`--autoplay` 讓自動駕駛代玩（錄影與壓力測試用），`--duration=<秒>` 縮短一局（上限 600），`--seed=<n>` 固定刷怪亂數。
 
-| Scene | 可調整內容 |
+## 可編輯場景與資料
+
+| 檔案 | 可調整內容 |
 |---|---|
-| `scenes/game.tscn` | 主流程、session_duration、共用服務與各畫面 instance |
-| `scenes/menu.tscn` | Title、Instructions、Start、Column 的間距 |
-| `scenes/street.tscn` | 街區幾何、Camera、Player 起點、三類代表性敵人；bounds、刷怪與演出數量上限 |
-| `scenes/player.tscn` | Motion、Visual、Placeholder、Art、Shadow、Fist；移速、攻擊範圍、傷害與間隔 |
-| `scenes/smoker.tscn`、`bike.tscn`、`car.tscn` | 敵人外觀、WarningLane／WarningLine、HpBar、definition 資源 |
-| `scenes/smoke.tscn` | 煙霧形狀、危險區、radius 與 lifetime |
-| `scenes/impact.tscn` | 命中星芒、速度線、Caption 與 lifetime |
-| `scenes/joystick.tscn` | 觸控區 anchor／offset、Base／Knob 外觀、radius／dead_zone |
-| `scenes/hud.tscn` | SafeTop 邊距、計時條、受擊與揍飛統計、Pause、ShakeToggle |
-| `scenes/results.tscn`、`pause.tscn` | 結算與暫停畫面、按鈕、文字與間距 |
-| `scenes/upgrades.tscn`、`upgrade_card.tscn` | 升級面板與卡片 item，代表性卡片在編輯器可見；Column／Options 間距、標題與說明文字樣式 |
-| `scenes/wave.tscn`、`attack_flash.tscn` | 衝擊波、拳擊弧線與回旋踢圓環；速度、半徑、壽命與線條 |
-| `data/progression.tres` | 起始升級 EXP、每級增加值、第一輪選項與升級清單 |
-| `data/upgrades/*.tres` | 每張卡的 ID、標題、描述、前置、上限、顏色與效果數值 |
-| `data/ui_theme.tres` | 共用字型、字體大小、按鈕樣式與顏色 |
-| `data/smoker.tres`、`bike.tres`、`car.tres` | 血量、速度、碰撞半徑、擊退重量、經驗獎勵、煙霧間隔或衝刺時序 |
+| `scenes/game.tscn` | 主流程、`session_duration`、金幣換算（每次揍飛、每分鐘、勝利獎勵、金幣面額）、共用服務與各畫面 |
+| `scenes/street.tscn` | 街區幾何、Camera 的 limit、Player 起點、四類代表性敵人；bounds、敵人／特效／寶石／煙霧上限、磁吸半徑、掉落機率 |
+| `scenes/player.tscn` | 外觀、HpBar；移速、拳頭距離、血量、受傷無敵時間 |
+| `scenes/smoker.tscn`、`bike.tscn`、`car.tscn`、`fatty.tscn` | 敵人外觀、預警線、HpBar；交通工具的 `direction_textures`（5 方向圖） |
+| `scenes/wave.tscn`、`slipper.tscn`、`pearl.tscn`、`firecracker.tscn`、`incense.tscn`、`lantern.tscn` | 投射物外觀、碰撞半徑、旋轉速度 |
+| `scenes/blast.tscn`、`impact.tscn`、`attack_flash.tscn`、`pickup.tscn`、`smoke.tscn` | 爆炸、命中、揮擊、掉落物與煙霧外觀 |
+| `scenes/hud.tscn`、`menu.tscn`、`results.tscn`、`pause.tscn`、`upgrades.tscn`、`upgrade_card.tscn`、`shop.tscn`、`shop_item.tscn` | 介面版面、文字與間距 |
+| `data/items/*.tres` | 每張卡：武器基礎值與每級成長、被動加成、進化條件、解鎖條件、卡片文字 |
+| `data/progression.tres` | 經驗曲線、起始武器、欄位數、卡片清單、補給卡 |
+| `data/spawn_schedule.tres` | 刷怪時間軸：每段的生成間隔、數量、敵人權重、血量倍率、同屏上限、包圍圈、精英 |
+| `data/meta.tres` | 商店項目（價格、上限、加成）與解鎖目標 |
+| `data/smoker.tres`、`bike.tres`、`car.tres`、`fatty.tres` | 血量、速度、重量、經驗、接觸傷害、臭味光環、爆屁 |
 
-場景內的三個 PreviewEnemy 是編輯器代表物件；開始一局時清空並依場景資源刷怪。改 Player 起點或靜態文字再執行會保留；執行期血量、位移與統計不回存 scene。
+場景內的 PreviewEnemy 是編輯器用的代表物件；開局時會清空，再依刷怪時間軸生成。執行期的血量、位移與統計不會寫回 scene。
 
-`tools/build_playable.gd` 已於 2026-10-07 使用，保存的 scene 是維護來源。它驗 owner、pack 前後節點數與子場景引用，既有檔案一律跳過；正常開啟、匯入、執行與測試不呼叫產生器。第二輪的 `tools/add_progression.gd` 是已套用的一次性擴充工具，版本標記存在時直接跳過，重跑驗證保留 35 個 scene／resource 的雜湊。最初的 `main.tscn`／`arena.tscn` 與 scaffold 測試保留為入口骨架參考，F5 使用新的 game scene。
+`tools/add_horde.gd` 已在 2026-10-07 用過一次，用來產生本版的 scene 與 Resource。之後 scene 就是可以維護的來源檔：game.tscn 有 `horde_scene_version` 標記，重跑工具會直接跳過；當次第一輪在 `migrate_street` 中斷，事後只補跑過那一個函式一次，那條補救路徑已經移除。更早的 `tools/add_progression.gd` 與 `build_playable.gd` 是前兩版的一次性工具，留著當紀錄。
 
-## 圖片替換與聲音
+## 圖片與聲音
 
-第一批 [opt image 提示詞](docs/opt-image-prompts.md)由使用者自行生成，現有角色與背景都是幾何佔位，沒有調用 AI 圖片生成。將原圖放在 `assets/source/` 保留；遊戲用圖放在 `assets/art/`。
+角色、交通工具與背景目前都是幾何佔位。提示詞見 [opt-image-prompts.md](docs/opt-image-prompts.md)：第一批是角色與背景，第二批是交通工具的 5 方向圖、臭臭胖子、武器與掉落物。原圖放 `assets/source/`，遊戲用圖放 `assets/art/`。
 
-在對應角色 scene 將 `Motion/Visual/Art.texture`（主角）或 `Visual/Art.texture`（敵人） 指向遊戲用圖，調整 Sprite2D 的位置／比例並勾選 visible，再將 同一 Visual 下的 `Placeholder.visible` 關閉；腳底或車輪對準 scene 原點，Shadow 留在地面。碰撞與血量無須因換圖修改。街區貼圖使用 `Street/Block/BackgroundArt`；啟用後可關閉 Block 下的幾何地面與周邊裝飾。
+- 人物：把 `Visual/Art.texture` 指向圖片並勾選 visible，再關掉 `Placeholder`。
+- 交通工具：另外把 5 張方向圖依「南、東南、東、東北、北」的順序填進根節點的 `direction_textures`；朝西的三個方向會自動鏡像。
 
-本批是單張靜態姿勢，揮拳先以短距離 visual 位移、拳頭與命中特效呈現；不同方向與逐格動畫另行補圖。
+音效使用 kit 的 SfxBank／Synth 程序音效。把同名的 `.ogg` 放進 `assets/sfx/` 就會替換。事件名稱：`punch`、`hit`、`metal`、`launch`、`hurt`、`warning`、`start`、`finish`、`death`、`heavy`、`wave`、`kick`、`throw`、`pearl`、`pop`、`incense`、`lantern`、`swish`、`fart`、`gem`、`coin`、`heal`、`chest`、`level`、`upgrade`、`evolve`、`combo`。
 
-音效使用 kit 的 SfxBank／Synth。將 `punch.ogg`、`hit.ogg`、`metal.ogg`、`launch.ogg`、`hurt.ogg`、`warning.ogg`、`start.ogg` 、`heavy.ogg`、`wave.ogg`、`kick.ogg`、`level.ogg`、`upgrade.ogg`、`combo.ogg` 或 `finish.ogg` 放進 `assets/sfx/` 並匯入，可替換對應音效，不改腳本。Web preset 維持全部資源匯出，確保依事件名尋找的聲音會打包。未提供背景音樂；Music 服務已留在場景。
+Noto Sans TC 是 433 字的子集，粗體 700，約 160 KB，附 [OFL 授權](assets/fonts/OFL.txt)。新增中文後要重新製作子集（完整來源可以用 `pixel-monster/assets/fonts/NotoSansTC.ttf`）：
 
-Noto Sans TC 字型從 sugarcane-tanks 的完整來源製作子集，約 110 KB；保留 [OFL 授權](assets/fonts/OFL.txt)。本版使用程序音效與幾何外觀，沒有搬入原作美術或音樂。字型子集是最小字元集合；新增中文後需用 kit 的 subset_font.py 重新製作，並跑字型檢查。
+```bash
+python3 prototypes/godot-kit/tools/subset_font.py --project prototypes/survivor-series --source prototypes/pixel-monster/assets/fonts/NotoSansTC.ttf --out prototypes/survivor-series/assets/fonts/NotoSansTC.ttf --weight 700 --minimal
+```
 
-## 測試與重用
+## 測試
 
 ```bash
 bash prototypes/godot-kit/tools/run_tests.sh prototypes/survivor-series growth:600 playable:600 scaffold
 bash prototypes/godot-kit/sync.sh --check survivor-series
 ```
 
-109 項 growth 檢查包含經驗溢出、合法選項、前置與上限、觸控卡片 signal、選擇凍結、衝擊波穿透只命中一次、回旋踢、前方橫掃、過期選卡事件、結算優先與成長重置。47 項 playable 檢查包括攻擊與移動、致命判定、重量、預警鎖定、煙霧、受擊節流、90 秒流程、暫停與失焦、重試、靜態編輯保留與實際畫面字型；原 scaffold 另有 7 項檢查。快速測試以手動固定步長推進遊戲時間，最後讓原生音訊執行緒收尾。
+- **growth（132 項）**：
+  - 經驗溢出與多級排隊、第一次升級只出新武器、解鎖限制、6+6 欄位上限、進化條件與保留原欄位、全滿後的補給卡
+  - 商店加成、選卡凍結、過期卡片事件、寶箱 1／3／5
+  - 判定先後：倒下 > 時間到 > 待選升級
+  - 復活、金幣入帳、成就只解鎖一次、存檔來回讀寫、壞檔回到預設值、商店畫面
+- **playable（199 項）**：
+  - 移動中出拳、揍飛掉寶石、磁吸、寶石合併
+  - 汽車重量、機車預警與衝刺、交通工具 8 方向與人物翻面
+  - 煙霧與煙霧上限、胖子減速、爆屁排隊連鎖
+  - 空間格子對照暴力掃描、15 種武器／進化都會開火並造成傷害、三炷香數量、投射物重複命中間隔
+  - 刷怪時間軸（包圍圈、精英、上限、生成在畫面外）
+  - 暫停與失焦、自動駕駛短局走到結算、重試
+  - 靜態文字保留、原始 scene 不被改動、字型與畫面主題、震屏開關
+- **scaffold（7 項）**：最早的入口骨架。
 
-`tools/browser_check.mjs` 用 Playwright／Chromium 驗證手機真觸控事件、音訊手勢解鎖、升級三選一與真觸控選卡、衝擊波、完整 90 秒成長、物件上限、結算、重試及桌面載入。傳入本機 Playwright 套件與 Chromium 路徑即可重跑，報告與截圖預設寫到 `/tmp/survivor-browser`：
+測試用自己的存檔路徑，跑完會刪掉。測試全部用遊戲時間推進。`tools/browser_check.mjs` 還是 90 秒版的瀏覽器檢查，**已過期**，待改寫（TODO T-005）。
 
-```bash
-node prototypes/survivor-series/tools/browser_check.mjs --playwright /path/to/playwright-core --chromium /path/to/chrome --out prototypes/survivor-series/build/qa
-```
+`addons/proto_kit/` 由 `../godot-kit/sync.sh survivor-series` 同步，不能直接改副本。本版使用的模組：FloatingStick、TimeControl、SfxBank、Synth、CameraShake、SceneBuilder、TestKit、FontCheck、AtomicFile；Music 已接入，但沒有指定音樂。
 
-`addons/proto_kit/` 由 `../godot-kit/sync.sh survivor-series` 同步；修改來源後再同步，不能直接改副本。本版實際使用 FloatingStick、TimeControl、SfxBank、Synth、CameraShake、SceneBuilder、TestKit、FontCheck，Music 已接入但沒有指定音樂。其餘模組保留可用副本，未聲稱已接入。sugarcane-tanks 的房間與甘蔗主流程未複製，細節見 [重用盤點](docs/reuse-audit.md)。
+## 驗收界線
 
-## 設計與驗收界線
-
-四輪訪談與整體實作同意記在 [design-interview.md](docs/design-interview.md)，詞彙記在 [CONTEXT.md](CONTEXT.md)，完整規格見 [first-playable-spec.md](docs/first-playable-spec.md)。本輪升級與攻擊變化見 [progression-spec.md](docs/progression-spec.md)。Boss、局外成長、存檔與正式死亡規則屬於後續版本。
-
-目前的瀏覽器驗證使用模擬手機與軟體 WebGL；真機幀率、瀏海／安全區、喇叭聽感與「夠不夠爽」仍需真人試玩。沒有用自動測試宣稱已完成手感驗收。
+平衡與效能目前只有 headless 自動駕駛的模擬與桌面瀏覽器的冒煙測試，數字見 [horde-spec.md](docs/horde-spec.md) 的「模擬紀錄」。真機幀率、觸控手感、聲音與「夠不夠爽」仍需要真人試玩。四個參考 repo 的研究見 [reference-repos.md](docs/reference-repos.md)。

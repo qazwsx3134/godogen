@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/incense.tscn" id="1_1fkym"]
+[ext_resource type="Script" path="res://scripts/item_def.gd" id="2_035p1"]
+
+[resource]
+script = ExtResource("2_035p1")
+id = &"incense"
+title = "三炷香"
+description = "三支香繞著身體轉，燙到就痛。"
+level_notes = PackedStringArray("傷害 +3，轉更大圈", "多一支香", "傷害 +3，持續更久", "多一支香")
+accent = Color(1, 0.7019608, 0.2784314, 1)
+kind = &"incense"
+projectile = ExtResource("1_1fkym")
+damage = 9.0
+damage_per_level = 3.0
+cooldown = 4.5
+cooldown_per_level = 0.05
+amount = 3
+amount_levels = PackedInt32Array(3, 5)
+area_per_level = 0.06
+speed = 360.0
+duration = 3.0
+knockback = 0.8
+evolve_passive = &"amulet"
+evolve_into = &"mazu"

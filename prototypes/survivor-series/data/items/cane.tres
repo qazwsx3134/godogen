@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/item_def.gd" id="1_wwqog"]
+
+[resource]
+script = ExtResource("1_wwqog")
+id = &"cane"
+title = "愛的小手"
+description = "左右橫掃一長條，打一大片。"
+level_notes = PackedStringArray("兩邊一起打", "傷害 +5，打更遠", "冷卻縮短", "傷害 +5，打更遠")
+accent = Color(1, 0.56078434, 0.69411767, 1)
+unlock = &"kills_300"
+kind = &"cane"
+damage = 16.0
+damage_per_level = 5.0
+cooldown = 1.4
+cooldown_per_level = 0.05
+amount_levels = PackedInt32Array(2)
+area_per_level = 0.08
+knockback = 1.2
+evolve_passive = &"chicken"
+evolve_into = &"duster"

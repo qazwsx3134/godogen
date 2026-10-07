@@ -3,13 +3,12 @@
 [ext_resource type="Theme" path="res://data/ui_theme.tres" id="1_js5n2"]
 [ext_resource type="Script" path="res://scripts/upgrade_panel.gd" id="2_ef3hr"]
 [ext_resource type="PackedScene" path="res://scenes/upgrade_card.tscn" id="3_vi17a"]
-[ext_resource type="Resource" path="res://data/upgrades/wave.tres" id="4_h5bgf"]
-[ext_resource type="Resource" path="res://data/upgrades/kick.tres" id="5_5wf0v"]
-[ext_resource type="Resource" path="res://data/upgrades/sweep.tres" id="6_yoata"]
+[ext_resource type="Resource" path="res://data/items/pearl.tres" id="4_jcj7r"]
+[ext_resource type="Resource" path="res://data/items/firecracker.tres" id="5_js5n2"]
 
 [node name="UpgradePanel" type="Control" unique_id=1995312911]
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 theme = ExtResource("1_js5n2")
@@ -36,7 +35,7 @@ theme_override_constants/separation = 16
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
-text = "LEVEL 2  /  揍飛成長"
+text = "LEVEL 2"
 horizontal_alignment = 1
 
 [node name="Title" type="Label" parent="Center/Column" unique_id=543009603]
@@ -53,15 +52,14 @@ theme_override_constants/separation = 12
 
 [node name="Choice" parent="Center/Column/Options" unique_id=618683889 instance=ExtResource("3_vi17a")]
 layout_mode = 2
-definition = ExtResource("4_h5bgf")
 
 [node name="Choice2" parent="Center/Column/Options" unique_id=1341897143 instance=ExtResource("3_vi17a")]
 layout_mode = 2
-definition = ExtResource("5_5wf0v")
+definition = ExtResource("4_jcj7r")
 
 [node name="Choice3" parent="Center/Column/Options" unique_id=1057431681 instance=ExtResource("3_vi17a")]
 layout_mode = 2
-definition = ExtResource("6_yoata")
+definition = ExtResource("5_js5n2")
 
 [node name="Note" type="Label" parent="Center/Column" unique_id=1234160588]
 unique_name_in_owner = true

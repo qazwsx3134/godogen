@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/item_def.gd" id="1_fbpkx"]
+
+[resource]
+script = ExtResource("1_fbpkx")
+id = &"duster"
+title = "雞毛撢子"
+description = "兩邊同時揮，又寬又痛。"
+level_notes = PackedStringArray()
+slot = "evolution"
+accent = Color(1, 0.827451, 0.41960785, 1)
+max_level = 1
+kind = &"cane"
+variant = &"both"
+damage = 48.0
+amount = 2
+amount_levels = PackedInt32Array()
+area = 1.8
+knockback = 1.6
+replaces = &"cane"

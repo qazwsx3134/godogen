@@ -10,12 +10,21 @@ var id: StringName
 func _ready() -> void:
 	pressed.connect(func() -> void: chosen.emit(id))
 	if definition != null:
-		setup(definition, 0)
+		setup(definition, null)
 
-func setup(item: Resource, current_stacks: int) -> void:
+func setup(item: Resource, build: RefCounted) -> void:
 	definition = item
 	id = item.id
 	title_label.text = item.title
-	body_label.text = item.description
-	tag_label.text = "%s  ·  %d / %d" % [item.category, current_stacks + 1, item.max_stacks]
+	var owned: int = build.count(item.id) if build != null else 0
+	body_label.text = build.card_note(item) if build != null else item.description
+	match item.slot:
+		"weapon":
+			tag_label.text = "新武器" if owned == 0 else "武器  ·  Lv.%d → %d" % [owned, owned + 1]
+		"passive":
+			tag_label.text = "新被動" if owned == 0 else "被動  ·  Lv.%d → %d" % [owned, owned + 1]
+		"evolution":
+			tag_label.text = "進化！"
+		_:
+			tag_label.text = "補給"
 	stripe.color = item.accent

@@ -1,0 +1,69 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://data/ui_theme.tres" id="1_6gmg1"]
+[ext_resource type="Script" path="res://scripts/shop_item.gd" id="2_xcw7k"]
+[ext_resource type="Script" path="res://scripts/shop_item_def.gd" id="3_1d7d6"]
+
+[sub_resource type="Resource" id="Resource_1cwps"]
+script = ExtResource("3_1d7d6")
+id = &"might"
+title = "力量訓練"
+description = "所有武器傷害 +5%。"
+stat = &"might"
+
+[node name="ShopItem" type="Button" unique_id=1101496144]
+custom_minimum_size = Vector2(420, 84)
+theme = ExtResource("1_6gmg1")
+script = ExtResource("2_xcw7k")
+definition = SubResource("Resource_1cwps")
+
+[node name="Padding" type="MarginContainer" parent="." unique_id=640558265]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 10
+
+[node name="Row" type="HBoxContainer" parent="Padding" unique_id=1743703078]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Column" type="VBoxContainer" parent="Padding/Row" unique_id=1550285930]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Title" type="Label" parent="Padding/Row/Column" unique_id=1704461830]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "力量訓練"
+
+[node name="Description" type="Label" parent="Padding/Row/Column" unique_id=517071081]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.56078434, 0.6509804, 0.6784314, 1)
+theme_override_font_sizes/font_size = 14
+text = "所有武器傷害 +5%。"
+
+[node name="Side" type="VBoxContainer" parent="Padding/Row" unique_id=1165907339]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Level" type="Label" parent="Padding/Row/Side" unique_id=2060523040]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Lv.0 / 5"
+horizontal_alignment = 2
+
+[node name="Cost" type="Label" parent="Padding/Row/Side" unique_id=779816879]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.77254903, 0.41960785, 1)
+theme_override_font_sizes/font_size = 18
+text = "100 金幣"
+horizontal_alignment = 2

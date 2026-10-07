@@ -4,10 +4,11 @@ var age: float = 0.0
 @onready var burst: Node2D = %Burst
 @onready var streak: Line2D = %Streak
 @onready var caption: Label = %Caption
-func setup(lethal: bool, direction: Vector2) -> void:
+func setup(lethal: bool, direction: Vector2, text: String = "") -> void:
 	rotation = direction.angle()
 	caption.rotation = -rotation
-	caption.text = "飛出去！" if lethal else "砰！"
+	caption.text = text
+	caption.visible = text != ""
 	if lethal:
 		lifetime = 0.5
 		burst.scale = Vector2.ONE * 1.7

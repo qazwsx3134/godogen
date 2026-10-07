@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/item_def.gd" id="1_a5k53"]
+
+[resource]
+script = ExtResource("1_a5k53")
+id = &"iron_palm"
+title = "鐵沙掌"
+description = "沙茶醬加持：前方大範圍，每拳都是重拳。"
+level_notes = PackedStringArray()
+slot = "evolution"
+accent = Color(1, 0.827451, 0.41960785, 1)
+max_level = 1
+kind = &"punch"
+variant = &"palm"
+damage = 70.0
+cooldown = 0.32
+amount = 8
+amount_levels = PackedInt32Array()
+area = 1.5
+knockback = 2.0
+replaces = &"punch"

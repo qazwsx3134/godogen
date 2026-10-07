@@ -1,0 +1,31 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/projectile.gd" id="1_48wcn"]
+
+[node name="Incense" type="Node2D" unique_id=1449352359]
+script = ExtResource("1_48wcn")
+radius = 13.0
+face_travel = false
+
+[node name="Visual" type="Node2D" parent="." unique_id=1497086230]
+unique_name_in_owner = true
+position = Vector2(0, -18)
+
+[node name="Stick" type="Polygon2D" parent="Visual" unique_id=1081288929]
+position = Vector2(-2, -15)
+color = Color(0.5411765, 0.3529412, 0.16862746, 1)
+polygon = PackedVector2Array(0, 0, 4, 0, 4, 30, 0, 30)
+
+[node name="Glow" type="Polygon2D" parent="Visual" unique_id=2055093599]
+position = Vector2(0, -16)
+color = Color(1, 0.6039216, 0.23529412, 1)
+polygon = PackedVector2Array(6, 0, 4.854102, 3.5267115, 1.854102, 5.706339, -1.854102, 5.706339, -4.854102, 3.5267115, -6, 7.3478806e-16, -4.854102, -3.5267115, -1.854102, -5.706339, 1.854102, -5.706339, 4.854102, -3.5267115)
+
+[node name="Tip" type="Polygon2D" parent="Visual" unique_id=405300607]
+position = Vector2(0, -16)
+color = Color(1, 0.23137255, 0.12156863, 1)
+polygon = PackedVector2Array(3, 0, 2.1213202, 2.1213202, 1.8369701e-16, 3, -2.1213202, 2.1213202, -3, 3.6739403e-16, -2.1213202, -2.1213202, -5.5109107e-16, -3, 2.1213202, -2.1213202)
+
+[node name="Wisp" type="Polygon2D" parent="Visual" unique_id=127872238]
+color = Color(0.9098039, 0.8784314, 0.8156863, 1)
+polygon = PackedVector2Array(-2, -20, 3, -28, -1, -36, -4, -34, 0, -28, -5, -21)

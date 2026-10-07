@@ -1,0 +1,33 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/blast.gd" id="1_sp0cc"]
+[ext_resource type="Theme" path="res://data/ui_theme.tres" id="2_theme"]
+
+[node name="Blast" type="Node2D" unique_id=892607886]
+script = ExtResource("1_sp0cc")
+
+[node name="Fill" type="Polygon2D" parent="." unique_id=1996931196]
+unique_name_in_owner = true
+color = Color(1, 0.7019608, 0.2784314, 0.34901962)
+polygon = PackedVector2Array(100, 0, 97.49279, 15.576466, 90.096886, 30.371862, 78.18315, 43.644287, 62.34898, 54.728203, 43.388374, 63.06782, 22.252094, 68.24496, 6.1232338e-15, 70, -22.252094, 68.24496, -43.388374, 63.06782, -62.34898, 54.728203, -78.18315, 43.644287, -90.096886, 30.371862, -97.49279, 15.576466, -100, 8.572527e-15, -97.49279, -15.576466, -90.096886, -30.371862, -78.18315, -43.644287, -62.34898, -54.728203, -43.388374, -63.06782, -22.252094, -68.24496, -1.8369702e-14, -70, 22.252094, -68.24496, 43.388374, -63.06782, 62.34898, -54.728203, 78.18315, -43.644287, 90.096886, -30.371862, 97.49279, -15.576466)
+
+[node name="Ring" type="Line2D" parent="." unique_id=138185372]
+unique_name_in_owner = true
+points = PackedVector2Array(100, 0, 97.49279, 15.576466, 90.096886, 30.371862, 78.18315, 43.644287, 62.34898, 54.728203, 43.388374, 63.06782, 22.252094, 68.24496, 6.1232338e-15, 70, -22.252094, 68.24496, -43.388374, 63.06782, -62.34898, 54.728203, -78.18315, 43.644287, -90.096886, 30.371862, -97.49279, 15.576466, -100, 8.572527e-15, -97.49279, -15.576466, -90.096886, -30.371862, -78.18315, -43.644287, -62.34898, -54.728203, -43.388374, -63.06782, -22.252094, -68.24496, -1.8369702e-14, -70, 22.252094, -68.24496, 43.388374, -63.06782, 62.34898, -54.728203, 78.18315, -43.644287, 90.096886, -30.371862, 97.49279, -15.576466)
+closed = true
+width = 6.0
+default_color = Color(1, 0.7019608, 0.2784314, 1)
+
+[node name="Caption" type="Label" parent="." unique_id=1812584970]
+theme = ExtResource("2_theme")
+unique_name_in_owner = true
+offset_left = -50.0
+offset_top = -60.0
+offset_right = 50.0
+offset_bottom = -26.0
+theme_override_colors/font_color = Color(0.96862745, 0.9098039, 0.80784315, 1)
+theme_override_colors/font_outline_color = Color(0.0627451, 0.08627451, 0.10980392, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 26
+text = "噗～"
+horizontal_alignment = 1

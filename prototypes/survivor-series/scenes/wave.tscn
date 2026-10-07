@@ -1,9 +1,10 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scripts/wave.gd" id="1_y5ysc"]
+[ext_resource type="Script" path="res://scripts/projectile.gd" id="1_y5ysc"]
 
 [node name="Shockwave" type="Node2D" unique_id=821049891]
 script = ExtResource("1_y5ysc")
+radius = 18.0
 
 [node name="Visual" type="Node2D" parent="." unique_id=1390460580]
 unique_name_in_owner = true

@@ -4,3 +4,7 @@
 
 [resource]
 script = ExtResource("1_vgm7j")
+max_hp = 26.0
+speed = 46.0
+contact_damage = 5.0
+hazard_interval = 6.0
