@@ -1,12 +1,12 @@
 {
-  "date": "2026-10-06",
+  "date": "2026-10-07",
   "tests": [
     {
       "test": "test_chapter1.gd",
       "pass": true,
       "exit": 0,
       "seconds": 0.9,
-      "log": "/tmp/cde-suite-test_chapter1.log"
+      "log": "/tmp/cde-chapter1-last-test.log"
     },
     {
       "test": "test_chapter_flow.gd",

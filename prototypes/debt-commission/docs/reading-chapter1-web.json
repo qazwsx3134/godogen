@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-07",
+  "status": "partial",
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844
+    },
+    {
+      "width": 320,
+      "height": 568
+    }
+  ],
+  "passed": [
+    "default gintama",
+    "quick save/load",
+    "rollback",
+    "scrolling font/paper settings",
+    "manual slot/overwrite/paging",
+    "LOG return",
+    "kitchen return and cast",
+    "four clue touches and background pan",
+    "listening grants material",
+    "Gintoki testimony",
+    "Kagura testimony",
+    "placard touch",
+    "ultimate tsukkomi",
+    "C5 typing completes before QTE",
+    "early QTE returns to the line"
+  ],
+  "pending": [
+    "automated exact-time QTE tap to chapter result; real phone timing acceptance"
+  ],
+  "last_failure": "readTo chapter result encountered qte again after the automated ring tap; perfect timing was not established by this Web run",
+  "engine_routes": "test_chapter1.gd: nine complete routes pass, including exact QTE resolution and all grades"
+}
