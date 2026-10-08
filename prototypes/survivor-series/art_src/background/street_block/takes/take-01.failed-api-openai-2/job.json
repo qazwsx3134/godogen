@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 2,
+  "provider": "openai",
+  "kind": "image",
+  "route": "rest",
+  "apiBase": "https://api.openai.com/v1",
+  "endpoint": "https://api.openai.com/v1/images/edits",
+  "requestedModel": "gpt-image-2.5-sunburst",
+  "options": {
+    "model": "gpt-image-2.5-sunburst",
+    "n": 1,
+    "output_format": "png",
+    "size": "1200x1680"
+  },
+  "promptSha256": "ef0ddac3c2707d9fca70370edabf299e5d37d9422629b39dc93899c4af5c1a17",
+  "references": [
+    {
+      "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/docs/reference/art-direction-night-market.png",
+      "sha256": "b4604817562f33d78279295a81bf02d651b949baea97c581c0a48e5a49fc7f0f",
+      "size": [
+        941,
+        1672
+      ],
+      "mime": "image/png",
+      "bytes": 3030876
+    }
+  ],
+  "lastFrame": null,
+  "keyEnv": "OPENAI_API_KEY",
+  "paidRequests": 1,
+  "automaticPostRetries": 0,
+  "outDir": "/Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261008/background/street_block/takes/take-01",
+  "execution": "execute",
+  "capability": {
+    "verifiedAt": "2026-10-06",
+    "docs": [
+      "https://developers.openai.com/api/docs/models/gpt-image-2.5-sunburst"
+    ],
+    "async": false
+  },
+  "pricing": {
+    "unit": "output_image",
+    "quantity": 1,
+    "qualifiers": {
+      "quality": null,
+      "size": "1200x1680"
+    },
+    "inputs": null,
+    "note": "input image and text tokens are not included"
+  },
+  "fingerprint": "6e0a973daf503177bcc5c5991d3969f0cf15f2c5a5ddf6ef192887a016f5f8b3",
+  "estimate": {
+    "usd": null,
+    "currency": "USD",
+    "basis": "unpriced: no verified price row for openai/gpt-image-2.5-sunburst output_image(size=1200x1680); known rows: output_image(quality=high,size=1024x1024) 0.0527; output_image(quality=low,size=1024x1024) 0.0059; output_image(quality=max,size=1024x1024) 0.2107; output_image(quality=medium,size=1024x1024) 0.0132; output_image(quality=xhigh,size=1024x1024) 0.0937",
+    "pricesVersion": "2026-10-06",
+    "items": []
+  },
+  "consent": {
+    "provider": "openai",
+    "model": "gpt-image-2.5-sunburst",
+    "calls": 1,
+    "estimateUsd": null,
+    "apiHost": "api.openai.com"
+  },
+  "status": "failed",
+  "clientRequestId": "2a3502dd757c48b6b79d1df70769758b",
+  "receipt": {
+    "startedAt": "2026-10-08T09:22:48.252Z",
+    "submittedAt": "2026-10-08T09:22:48.254Z",
+    "completedAt": "2026-10-08T09:22:50.664Z",
+    "wallMs": 2413,
+    "providerMs": 2410,
+    "attempt": 1,
+    "purpose": "route_media image",
+    "toolVersion": "generate_media/0.4.0",
+    "outcomeCode": "auth"
+  },
+  "ledger": {
+    "projectDir": "/Users/peter/repo/agent-sprite-forge",
+    "reservationId": "22a5f5ab40a0428fa706e8b365255865",
+    "status": "failed"
+  },
+  "providerRequestId": "req_d23197152bde45f8a6efe18ea63071cd",
+  "error": {
+    "httpStatus": 401,
+    "code": "invalid_api_key",
+    "type": "invalid_request_error",
+    "message": "Incorrect API key provided: [redacted] You can find your API key at [url]",
+    "requestId": "req_d23197152bde45f8a6efe18ea63071cd"
+  },
+  "errorType": "MediaError"
+}

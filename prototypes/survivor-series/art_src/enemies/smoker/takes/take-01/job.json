@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 2,
+  "provider": "gemini",
+  "kind": "image",
+  "route": "rest",
+  "apiBase": "https://generativelanguage.googleapis.com/v1beta",
+  "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image:generateContent",
+  "requestedModel": "gemini-3.1-flash-image",
+  "options": {
+    "model": "gemini-3.1-flash-image",
+    "generationConfig": {
+      "responseModalities": [
+        "IMAGE"
+      ],
+      "imageConfig": {
+        "aspectRatio": "1:1",
+        "imageSize": "1K"
+      }
+    }
+  },
+  "promptSha256": "5c85e1b545112d549ead3d53a826e44c6cca54f356fcb971a723a4ff7b56282c",
+  "references": [
+    {
+      "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man/master-green/master_rgba.png",
+      "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+      "size": [
+        1024,
+        1024
+      ],
+      "mime": "image/png",
+      "bytes": 405203
+    }
+  ],
+  "lastFrame": null,
+  "keyEnv": "GOOGLE_API_KEY or GEMINI_API_KEY",
+  "paidRequests": 1,
+  "automaticPostRetries": 0,
+  "outDir": "/Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261008/enemies/.smoker.stage-cf52bc19/takes/take-01",
+  "execution": "execute",
+  "capability": {
+    "verifiedAt": "2026-10-06",
+    "docs": [
+      "https://ai.google.dev/gemini-api/docs/models/gemini-3.1-flash-image"
+    ],
+    "async": false
+  },
+  "pricing": {
+    "unit": "output_image",
+    "quantity": 1,
+    "qualifiers": {
+      "resolution": "1K"
+    },
+    "inputs": null,
+    "note": "thinking and text tokens are not included; input image tokens are not included"
+  },
+  "fingerprint": "d6f5075a3d9507bae39154cc2bfe3045124d3f20bc987b3c65d8d6b96cd43f5c",
+  "estimate": {
+    "usd": 0.067,
+    "currency": "USD",
+    "basis": "1 output_image x 0.067 = 0.067 USD list price (verified 2026-10-06); excludes tax and rejected attempts; thinking and text tokens are not included; input image tokens are not included",
+    "pricesVersion": "2026-10-06",
+    "items": [
+      {
+        "unit": "output_image",
+        "quantity": 1,
+        "usdEach": 0.067,
+        "usd": 0.067,
+        "source": "https://ai.google.dev/gemini-api/docs/pricing",
+        "verifiedAt": "2026-10-06",
+        "resolution": "1K"
+      }
+    ]
+  },
+  "consent": {
+    "provider": "gemini",
+    "model": "gemini-3.1-flash-image",
+    "calls": 1,
+    "estimateUsd": 0.067,
+    "apiHost": "generativelanguage.googleapis.com"
+  },
+  "status": "failed",
+  "clientRequestId": "544215fa5d29425dac70e9a59f103800",
+  "receipt": {
+    "startedAt": "2026-10-08T09:24:06.269Z",
+    "submittedAt": "2026-10-08T09:24:06.270Z",
+    "completedAt": "2026-10-08T09:24:09.544Z",
+    "wallMs": 3275,
+    "providerMs": 3273,
+    "attempt": 1,
+    "purpose": "route_media image",
+    "toolVersion": "generate_media/0.4.0",
+    "outcomeCode": "auth"
+  },
+  "ledger": {
+    "projectDir": "/Users/peter/repo/agent-sprite-forge",
+    "reservationId": "abdeeeeb7f9a407d8d8910d0c9051312",
+    "status": "failed"
+  },
+  "error": {
+    "httpStatus": 400,
+    "code": "API_KEY_INVALID",
+    "type": "INVALID_ARGUMENT",
+    "message": "API key not valid. Please pass a valid API key."
+  },
+  "errorType": "MediaError"
+}

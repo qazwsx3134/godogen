@@ -1,0 +1,31 @@
+{
+  "schema": "generate2dsprite.master_spec.v1",
+  "name": "smoker",
+  "subject": "a small ominous smoker enemy, full body",
+  "identity": "A small ominous mass of black-purple smoke shaped like a lumpy cloud with stubby wisps for limbs, two glowing angry red eyes and a faint cigarette ember glowing inside the smoke. It reads as a fictional smoker swallowed by his own smoke. Soft grey smoke wisps at the edges, readable as a swarm member at about 60 px.",
+  "pose": "a static idle pose with the lumpy smoke body hovering compactly and stubby wisps hanging as limbs",
+  "recap": "a small ominous black-purple smoke creature shaped like a lumpy cloud with stubby wisps for limbs, two glowing angry red eyes, a faint cigarette ember inside the smoke, and soft grey edge wisps, facing diagonally toward the lower-right",
+  "facing": "right",
+  "facing_parts": "the glowing eyes, ember and whole smoke body",
+  "view": "elevated three-quarter overhead view about 50 degrees above the ground, body turned diagonally toward the lower-right",
+  "class": "mob",
+  "finish": "pixel",
+  "key": "#00FF00",
+  "genre": "a Taiwan night-market survivor game",
+  "pronoun": "it",
+  "identity_ref": null,
+  "style_ref": {
+    "path": "../../../../../godot/godogen/prototypes/survivor-series/art_src/heroes/man/master-green/master_rgba.png",
+    "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+    "what": "the approved hero sprite of this game",
+    "do_not_copy": "the hero's face, hair, outfit, equipment or colours; copy only its pixel-art style, outline weight, pixel density, shading, scale and elevated three-quarter framing"
+  },
+  "allowed_text": null,
+  "extra_bans": [
+    "ground plane",
+    "cast shadow",
+    "smoke cloud separate from the body"
+  ],
+  "opaque_parts": null,
+  "extra": "Keep the warm lantern-lit Taiwan night-market mood from the art-direction reference while preserving a transparent cutout workflow: the image model must place the single subject on the requested flat green key background. The game draws smoke aura and effects separately."
+}

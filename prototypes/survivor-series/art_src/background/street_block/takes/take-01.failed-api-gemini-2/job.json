@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 2,
+  "provider": "gemini",
+  "kind": "image",
+  "route": "rest",
+  "apiBase": "https://generativelanguage.googleapis.com/v1beta",
+  "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image:generateContent",
+  "requestedModel": "gemini-3.1-flash-image",
+  "options": {
+    "model": "gemini-3.1-flash-image",
+    "generationConfig": {
+      "responseModalities": [
+        "IMAGE"
+      ],
+      "imageConfig": {
+        "aspectRatio": "3:4",
+        "imageSize": "2K"
+      }
+    }
+  },
+  "promptSha256": "ef0ddac3c2707d9fca70370edabf299e5d37d9422629b39dc93899c4af5c1a17",
+  "references": [
+    {
+      "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/docs/reference/art-direction-night-market.png",
+      "sha256": "b4604817562f33d78279295a81bf02d651b949baea97c581c0a48e5a49fc7f0f",
+      "size": [
+        941,
+        1672
+      ],
+      "mime": "image/png",
+      "bytes": 3030876
+    }
+  ],
+  "lastFrame": null,
+  "keyEnv": "GOOGLE_API_KEY or GEMINI_API_KEY",
+  "paidRequests": 1,
+  "automaticPostRetries": 0,
+  "outDir": "/Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261008/background/street_block/takes/take-01",
+  "execution": "execute",
+  "capability": {
+    "verifiedAt": "2026-10-06",
+    "docs": [
+      "https://ai.google.dev/gemini-api/docs/models/gemini-3.1-flash-image"
+    ],
+    "async": false
+  },
+  "pricing": {
+    "unit": "output_image",
+    "quantity": 1,
+    "qualifiers": {
+      "resolution": "2K"
+    },
+    "inputs": null,
+    "note": "thinking and text tokens are not included; input image tokens are not included"
+  },
+  "fingerprint": "77e5e7f6e28e276cc55030021287c30083e1f79eca46b1fda18df41a52d8b830",
+  "estimate": {
+    "usd": 0.101,
+    "currency": "USD",
+    "basis": "1 output_image x 0.101 = 0.101 USD list price (verified 2026-10-06); excludes tax and rejected attempts; thinking and text tokens are not included; input image tokens are not included",
+    "pricesVersion": "2026-10-06",
+    "items": [
+      {
+        "unit": "output_image",
+        "quantity": 1,
+        "usdEach": 0.101,
+        "usd": 0.101,
+        "source": "https://ai.google.dev/gemini-api/docs/pricing",
+        "verifiedAt": "2026-10-06",
+        "resolution": "2K"
+      }
+    ]
+  },
+  "consent": {
+    "provider": "gemini",
+    "model": "gemini-3.1-flash-image",
+    "calls": 1,
+    "estimateUsd": 0.101,
+    "apiHost": "generativelanguage.googleapis.com"
+  },
+  "status": "failed",
+  "clientRequestId": "c89ef83ac4bf4316b3893028d8f3129a",
+  "receipt": {
+    "startedAt": "2026-10-08T09:22:24.159Z",
+    "submittedAt": "2026-10-08T09:22:24.162Z",
+    "completedAt": "2026-10-08T09:22:48.215Z",
+    "wallMs": 24056,
+    "providerMs": 24052,
+    "attempt": 1,
+    "purpose": "route_media image",
+    "toolVersion": "generate_media/0.4.0",
+    "outcomeCode": "auth"
+  },
+  "ledger": {
+    "projectDir": "/Users/peter/repo/agent-sprite-forge",
+    "reservationId": "defb4e0790364c16b6644e7a861d7998",
+    "status": "failed"
+  },
+  "error": {
+    "httpStatus": 400,
+    "code": "API_KEY_INVALID",
+    "type": "INVALID_ARGUMENT",
+    "message": "API key not valid. Please pass a valid API key."
+  },
+  "errorType": "MediaError"
+}

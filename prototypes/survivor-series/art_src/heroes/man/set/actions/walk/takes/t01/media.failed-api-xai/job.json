@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 2,
+  "provider": "xai",
+  "kind": "video",
+  "route": "rest",
+  "apiBase": "https://api.x.ai/v1",
+  "endpoint": "https://api.x.ai/v1/videos/generations",
+  "requestedModel": "grok-imagine-video-1.5",
+  "options": {
+    "model": "grok-imagine-video-1.5",
+    "duration": 6,
+    "resolution": "720p",
+    "generate_audio": false
+  },
+  "promptSha256": "6c0c76bb5f03869ab8c1d70e37b6300458f0dc26dd28d5693c8fc4d92f399df2",
+  "references": [
+    {
+      "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man/set/actions/walk/job/input.png",
+      "sha256": "f19a1be3f58036c47bcb29d22044f204008a4835178f756eb6af682c09d9198d",
+      "size": [
+        1024,
+        1024
+      ],
+      "mime": "image/png",
+      "bytes": 339631
+    }
+  ],
+  "lastFrame": null,
+  "keyEnv": "XAI_API_KEY",
+  "paidRequests": 1,
+  "automaticPostRetries": 0,
+  "outDir": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man/set/actions/walk/takes/t01/media",
+  "execution": "execute",
+  "capability": {
+    "verifiedAt": "2026-10-06",
+    "docs": [
+      "https://docs.x.ai/developers/models/grok-imagine-video-1.5",
+      "https://docs.x.ai/developers/model-capabilities/video/reference-to-video"
+    ],
+    "async": true
+  },
+  "pricing": {
+    "unit": "output_second",
+    "quantity": 6,
+    "qualifiers": {
+      "resolution": "720p"
+    },
+    "inputs": 1
+  },
+  "fingerprint": "7e8ddc062ec09e0a4c80d12cb117e18623a5d85c2beea5f3b630e5016c6b3968",
+  "estimate": {
+    "usd": 0.85,
+    "currency": "USD",
+    "basis": "6 output_second x 0.14 + 1 input_image x 0.01 = 0.85 USD list price (verified 2026-10-06); excludes tax and rejected attempts",
+    "pricesVersion": "2026-10-06",
+    "items": [
+      {
+        "unit": "output_second",
+        "quantity": 6,
+        "usdEach": 0.14,
+        "usd": 0.84,
+        "source": "https://docs.x.ai/developers/pricing",
+        "verifiedAt": "2026-10-06",
+        "resolution": "720p"
+      },
+      {
+        "unit": "input_image",
+        "quantity": 1,
+        "usdEach": 0.01,
+        "usd": 0.01,
+        "source": "https://docs.x.ai/developers/pricing",
+        "verifiedAt": "2026-10-06"
+      }
+    ]
+  },
+  "consent": {
+    "provider": "xai",
+    "model": "grok-imagine-video-1.5",
+    "calls": 1,
+    "estimateUsd": 0.85,
+    "apiHost": "api.x.ai"
+  },
+  "status": "failed",
+  "clientRequestId": "4118ad0ca3984885a76e6a0b8ffd8e27",
+  "receipt": {
+    "startedAt": "2026-10-08T09:07:08.568Z",
+    "submittedAt": "2026-10-08T09:07:08.571Z",
+    "completedAt": "2026-10-08T09:07:17.299Z",
+    "wallMs": 8731,
+    "providerMs": null,
+    "attempt": 1,
+    "purpose": "route_media video",
+    "toolVersion": "generate_media/0.4.0",
+    "outcomeCode": "quota"
+  },
+  "ledger": {
+    "projectDir": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man",
+    "reservationId": "d2956572e0174862b22e9dcd111c0d27",
+    "status": "failed"
+  },
+  "error": {
+    "httpStatus": 403,
+    "code": "permission-denied",
+    "message": "Your newly created team doesn't have any credits or licenses yet. You can purchase those on [url]"
+  },
+  "errorType": "MediaError"
+}

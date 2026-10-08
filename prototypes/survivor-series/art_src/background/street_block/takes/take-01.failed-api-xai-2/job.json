@@ -1,0 +1,109 @@
+{
+  "schemaVersion": 2,
+  "provider": "xai",
+  "kind": "image",
+  "route": "rest",
+  "apiBase": "https://api.x.ai/v1",
+  "endpoint": "https://api.x.ai/v1/images/edits",
+  "requestedModel": "grok-imagine-image-2.0",
+  "options": {
+    "model": "grok-imagine-image-2.0",
+    "n": 1,
+    "response_format": "b64_json",
+    "resolution": "2k"
+  },
+  "promptSha256": "ef0ddac3c2707d9fca70370edabf299e5d37d9422629b39dc93899c4af5c1a17",
+  "references": [
+    {
+      "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/docs/reference/art-direction-night-market.png",
+      "sha256": "b4604817562f33d78279295a81bf02d651b949baea97c581c0a48e5a49fc7f0f",
+      "size": [
+        941,
+        1672
+      ],
+      "mime": "image/png",
+      "bytes": 3030876
+    }
+  ],
+  "lastFrame": null,
+  "keyEnv": "XAI_API_KEY",
+  "paidRequests": 1,
+  "automaticPostRetries": 0,
+  "outDir": "/Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261008/background/street_block/takes/take-01",
+  "execution": "execute",
+  "capability": {
+    "verifiedAt": "2026-10-06",
+    "docs": [
+      "https://docs.x.ai/developers/models/grok-imagine-image-2.0"
+    ],
+    "async": false
+  },
+  "pricing": {
+    "unit": "output_image",
+    "quantity": 1,
+    "qualifiers": {
+      "resolution": "2k",
+      "quality": "medium"
+    },
+    "inputs": 1,
+    "note": "quality auto is priced as medium, the value xAI documents for edits"
+  },
+  "fingerprint": "f207842b4226627bc26710bb3aceec0023f22eeb0dce17c241d48fc5d314dcb3",
+  "estimate": {
+    "usd": 0.09,
+    "currency": "USD",
+    "basis": "1 output_image x 0.08 + 1 input_image x 0.01 = 0.09 USD list price (verified 2026-10-06); excludes tax and rejected attempts; quality auto is priced as medium, the value xAI documents for edits",
+    "pricesVersion": "2026-10-06",
+    "items": [
+      {
+        "unit": "output_image",
+        "quantity": 1,
+        "usdEach": 0.08,
+        "usd": 0.08,
+        "source": "https://docs.x.ai/developers/pricing",
+        "verifiedAt": "2026-10-06",
+        "resolution": "2k",
+        "quality": "medium"
+      },
+      {
+        "unit": "input_image",
+        "quantity": 1,
+        "usdEach": 0.01,
+        "usd": 0.01,
+        "source": "https://docs.x.ai/developers/pricing",
+        "verifiedAt": "2026-10-06"
+      }
+    ]
+  },
+  "consent": {
+    "provider": "xai",
+    "model": "grok-imagine-image-2.0",
+    "calls": 1,
+    "estimateUsd": 0.09,
+    "apiHost": "api.x.ai"
+  },
+  "status": "failed",
+  "clientRequestId": "fa8cedfd63f84b369b04f5c8023c8db6",
+  "receipt": {
+    "startedAt": "2026-10-08T09:22:50.714Z",
+    "submittedAt": "2026-10-08T09:22:50.715Z",
+    "completedAt": "2026-10-08T09:22:59.202Z",
+    "wallMs": 8488,
+    "providerMs": 8486,
+    "attempt": 1,
+    "purpose": "route_media image",
+    "toolVersion": "generate_media/0.4.0",
+    "outcomeCode": "quota"
+  },
+  "ledger": {
+    "projectDir": "/Users/peter/repo/agent-sprite-forge",
+    "reservationId": "42338c0c37964891b3992787c15b8a35",
+    "status": "failed"
+  },
+  "error": {
+    "httpStatus": 403,
+    "code": "permission-denied",
+    "message": "Your newly created team doesn't have any credits or licenses yet. You can purchase those on [url]"
+  },
+  "errorType": "MediaError"
+}

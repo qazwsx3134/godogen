@@ -1,0 +1,38 @@
+{
+  "schema": "generate2dsprite.master_spec.v1",
+  "name": "car",
+  "subject": "a driver-and-car enemy unit, full body",
+  "identity": "A chunky mustard-yellow compact city car with an annoyed fictional adult driver clearly visible behind a light windshield. Exaggerated heavy bumper, large readable wheels, rounded sturdy body. The car should feel substantially heavier than a motor scooter. Driver remains inside the car; car and driver are ONE sprite. No real brand logos, no readable license-plate text.",
+  "pose": "a stationary complete car-and-driver unit pointing diagonally toward the lower-right, with all wheels grounded",
+  "recap": "a chunky mustard-yellow compact city car with a rounded sturdy body, exaggerated heavy bumper, large readable wheels and an annoyed fictional adult driver visible behind a light windshield, facing diagonally toward the lower-right",
+  "facing": "right",
+  "facing_parts": "the car front, windshield, driver gaze and whole car-and-driver unit",
+  "view": "elevated three-quarter overhead view about 50 degrees above the ground, body turned diagonally toward the lower-right",
+  "class": "mob",
+  "finish": "pixel",
+  "key": "#FF00FF",
+  "genre": "a Taiwan night-market survivor game",
+  "pronoun": "it",
+  "identity_ref": null,
+  "style_ref": {
+    "path": "../../../../../../godot/godogen/prototypes/survivor-series/art_src/heroes/man/master-green/master_rgba.png",
+    "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+    "what": "the approved hero sprite of this game",
+    "do_not_copy": "the hero's face, hair, outfit, equipment or colours; copy only its pixel-art style, outline weight, pixel density, shading, scale and elevated three-quarter framing"
+  },
+  "allowed_text": null,
+  "extra_bans": [
+    "side profile",
+    "low-angle camera",
+    "realistic photography",
+    "road",
+    "exhaust",
+    "speed lines",
+    "impact effects",
+    "ground plane",
+    "cast shadow",
+    "readable license-plate text"
+  ],
+  "opaque_parts": null,
+  "extra": "Keep the warm lantern-lit Taiwan night-market mood from the art-direction reference while preserving a transparent cutout workflow: the image model must place exactly one complete car-and-driver unit on the requested flat magenta key background. The game draws road, exhaust and impact effects separately."
+}

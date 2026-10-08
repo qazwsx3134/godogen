@@ -472,7 +472,7 @@ func _exit_tree() -> void: loader.cancel()             # 沒人領的載入任�
 
 **目前只有一個原型用，也還沒抽出來**：`juice.gd` 的三級回饋對照表（哪個事件算哪一級是這款遊戲的調校）、升級選卡面板與選卡鎖、`hero_stats.gd` 的能力疊加、敵人基底（依賴 `game.show_damage` 等介面）、載入畫面與製作名單面板的**畫面本身**（只有 `scene_loader.gd` 的邏輯抽出來了）、射線步進投射物（核心只有 8 行 `intersect_ray`，其餘是這款遊戲的碰撞規則）、`balance_run`（決定性的機器人平衡量測，依賴這款遊戲的 `main.gd`）。等第二個原型需要時再抽。
 
-沿用 sugarcane-tanks 做完整條流程的經驗見 skill `godot-prototype-to-itch`（原始檔在 `skills/godot-prototype-to-itch/`，用 symlink 掛進 `~/.claude/skills/`，跟 `cf-stack` 一樣）。
+沿用 sugarcane-tanks 做完整條流程的經驗見 skill `godot-prototype-to-itch`（原始檔在 `skills/godot-prototype-to-itch/`，用 symlink 掛進 `~/.claude/skills/`，跟 `cf-stack` 一樣）。角色原畫到動畫 sprite（Claude 挑圖、Codex 生圖、沒有影片 API 時手動生影片）見 skill `character-sprite-forge`（`skills/character-sprite-forge/`，同樣用 symlink）。
 
 ## 維護
 

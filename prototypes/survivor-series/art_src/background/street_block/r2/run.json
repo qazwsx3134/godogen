@@ -1,0 +1,45 @@
+{
+  "status": "ok",
+  "kind": "background-candidates",
+  "route": "local:codex-cli",
+  "takes": [
+    {
+      "number": 1,
+      "size": [
+        948,
+        1659
+      ],
+      "opaque": true,
+      "route": "codex-cli",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "raw": "takes/take-01/generated.png"
+    },
+    {
+      "number": 2,
+      "size": [
+        948,
+        1659
+      ],
+      "opaque": true,
+      "route": "codex-cli",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "raw": "takes/take-02/generated.png"
+    },
+    {
+      "number": 3,
+      "size": [
+        979,
+        1606
+      ],
+      "opaque": true,
+      "route": "codex-cli",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "raw": "takes/take-03/generated.png"
+    }
+  ],
+  "crop": "none",
+  "approve": false
+}

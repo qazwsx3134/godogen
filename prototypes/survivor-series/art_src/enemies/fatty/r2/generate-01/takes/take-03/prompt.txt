@@ -1,0 +1,13 @@
+Create exactly ONE square image (1024x1024).
+
+Style: premium 16-bit pixel art (SNES era) for a Taiwan night-market survivor game, crisp visible chunky pixels, limited palette, strong dark outline, 3-tone cel shading, no smooth gradients, no blur. No text, no letters, no numbers, no logo, no watermark, no signature, no UI, no border, no frame, no grid, no bodily fluids, no realistic grime, no green cloud, no ground plane, no cast shadow.
+
+Reference image: the attached image is an approved in-game sprite from the same game (the approved hero sprite of this game): match its pixel-art style, outline weight, shading, figure size and position on the canvas; do NOT copy the hero's face, hair, outfit, equipment or colours; copy only its pixel-art style, outline weight, pixel density, shading, scale and elevated three-quarter framing.
+
+Subject: a chubby adult smoker enemy, full body, elevated three-quarter overhead view about 50 degrees above the ground, body turned diagonally toward the lower-right, clearly FACING RIGHT: his face, gaze, chest and whole body turn toward the RIGHT edge of the image; forward is RIGHT and his back is toward the LEFT edge. A fictional, chubby adult man in a stained olive tank top and matching olive shorts, flip-flops, sweaty and smug, with three small cartoon green stink wavy lines rising from his shoulders. Comedic, not disgusting: no bodily fluids and no realistic grime. A static idle pose with a smug expression, relaxed shoulders and both feet visible.
+
+Size and position: one single figure, the top of the figure (including hair, headgear, raised weapons and effects) about 35 percent below the top edge of the canvas and its lowest point about 15 percent above the bottom edge (the figure about 50 percent of the canvas height), the body a little left of centre so there is extra empty room on the RIGHT side for forward motion, generous empty magenta margin on every side, nothing touching or crossing the edges. The whole figure is drawn with solid, fully opaque pixels: no transparency, no semi-transparent glow, no soft aura, nothing blended with the background.
+
+Keep the warm lantern-lit Taiwan night-market mood from the art-direction reference while preserving a transparent cutout workflow: the image model must place the single subject on the requested flat magenta key background. The game draws the stink aura separately.
+
+Background: solid flat pure magenta #FF00FF everywhere outside the character, no shadow, no ground, no glow on the background.

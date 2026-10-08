@@ -1,0 +1,174 @@
+{
+  "schema": "generate2dsprite.master.v1",
+  "tool": {
+    "name": "master_still",
+    "version": "0.4.0"
+  },
+  "created": "2026-10-08T08:37:13.248Z",
+  "name": "hero_man",
+  "subject": "a fictional adult office worker, chibi proportions with a slightly large head, full body",
+  "identity_recap": "tired chibi office worker with black slicked-back hair, half-lidded eyes, navy-blue suit, white shirt, bright red necktie and black shoes, hunched with drooping shoulders",
+  "facing": "right",
+  "view": "elevated three-quarter overhead view about 50 degrees above the ground, body turned diagonally toward the lower-right",
+  "finish": "pixel",
+  "class": "hero",
+  "framing": {
+    "canvas": [
+      1024,
+      1024
+    ],
+    "subject_height_px": 788,
+    "top_margin_px": 138,
+    "lead_px": 0,
+    "preset": "hero",
+    "subject_bbox": [
+      321,
+      138,
+      703,
+      926
+    ],
+    "anchor": [
+      374.0,
+      926.0
+    ],
+    "opaque_area_px": 203565,
+    "width_limited": false
+  },
+  "key": "#00FF00",
+  "files": {
+    "master": {
+      "path": "master.png",
+      "sha256": "dd3c1026d46ec009b1b5f8e91ecc69b984847d06f1144395bdf796e32746f753",
+      "bytes": 344009,
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    "cutout": {
+      "path": "master_rgba.png",
+      "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+      "bytes": 405203,
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    "source": {
+      "path": "source.png",
+      "sha256": "c5e1fe69dad3edb2d706264b150ddf89e61e67c9af061038b17137f3d0bc0c8a",
+      "bytes": 426471,
+      "size": [
+        1254,
+        1254
+      ]
+    },
+    "spec": {
+      "path": "spec.json",
+      "sha256": "d9b77294a098623d5f6353150f33364cb4d2ca8a9ff5bea73c4f9d2d7632225f",
+      "bytes": 1088
+    },
+    "prompt": {
+      "path": "prompt.txt",
+      "sha256": "753de0f73fae3ecdc46ae433d879d6b6e38a97be4c4eb9a9e9978e56a663627e",
+      "bytes": 1725
+    }
+  },
+  "references": [],
+  "transform": {
+    "mapping": "master = scale * source + offset (continuous pixel coordinates: pixel i spans [i, i + 1))",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "source_subject_bbox": [
+      417,
+      210,
+      832,
+      1066
+    ],
+    "crop_box": [
+      411,
+      204,
+      838,
+      1072
+    ],
+    "crop_margin_px": 6,
+    "scale": 0.9205607476635514,
+    "offset": [
+      -62.89018691588785,
+      -55.3177570093458
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "resampler": "lanczos",
+    "premultiplied": true,
+    "alpha_floor_px": 1307,
+    "subject_parts": 1,
+    "ignored_parts": 0,
+    "ignored_px": 0,
+    "source_touches": [],
+    "key_rgb": [
+      0,
+      255,
+      0
+    ]
+  },
+  "route": "codex-cli",
+  "provenance": {
+    "command": "external",
+    "run": null,
+    "take": null,
+    "source_name": "edit-02.png",
+    "source_sha256": "c5e1fe69dad3edb2d706264b150ddf89e61e67c9af061038b17137f3d0bc0c8a",
+    "media": null,
+    "media_cli_source": null,
+    "edit": null
+  },
+  "matte": {
+    "requested": "soft",
+    "key_estimate": {
+      "key": [
+        0.0,
+        255.0,
+        0.0
+      ],
+      "source": "native_alpha",
+      "valid": false,
+      "ring_share": 0.0,
+      "coverage": 0.0,
+      "distance_from_declared": 0.0
+    },
+    "quality": "native_alpha",
+    "qa": {
+      "key": [
+        0.0,
+        255.0,
+        0.0
+      ],
+      "opaque_key_px": 0,
+      "outer_ring_spill_fraction": 0.0,
+      "semitransparent_fraction": 0.0,
+      "enclosed_key_pockets": 0,
+      "key_hued_px": 0,
+      "visible_px": 240313,
+      "outer_ring_px": 2799,
+      "thresholds": {
+        "key_tolerance": 48.0,
+        "spill_threshold": 20.0,
+        "min_pocket_area": 16,
+        "opaque_alpha": 128,
+        "spill_hue_balance": 0.5
+      },
+      "method": "forge_matte.matte_qa v1: straight-colour key distance and dominance on the keyed image; two-channel keys count spill only where the key channels are balanced"
+    },
+    "key_choice": {
+      "status": "ok",
+      "overlap_share": 0.0,
+      "rule": "reject a key when more than 0.5% of subject pixels have key dominance >= 40; first acceptable candidate wins"
+    }
+  },
+  "warnings": []
+}

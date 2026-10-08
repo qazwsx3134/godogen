@@ -1,0 +1,22 @@
+{
+  "schema": "generate2dsprite.master_spec.v1",
+  "name": "hero_man",
+  "subject": "a fictional adult office worker, chibi proportions with a slightly large head, full body",
+  "identity": "black hair slicked straight back, glossy and close to the head, forehead exposed; half-lidded tired world-weary eyes; navy-blue business suit, white shirt, bold bright red necktie, brown belt, black shoes; slight hunch with slouched drooping shoulders, arms hanging loose with relaxed fists",
+  "pose": null,
+  "recap": "tired chibi office worker with black slicked-back hair, half-lidded eyes, navy-blue suit, white shirt, bright red necktie and black shoes, hunched with drooping shoulders",
+  "facing": "right",
+  "facing_parts": null,
+  "view": "elevated three-quarter overhead view about 50 degrees above the ground, body turned diagonally toward the lower-right",
+  "class": "hero",
+  "finish": "pixel",
+  "key": "#FF00FF",
+  "genre": null,
+  "pronoun": "he",
+  "identity_ref": null,
+  "style_ref": null,
+  "allowed_text": null,
+  "extra_bans": [],
+  "opaque_parts": null,
+  "extra": null
+}

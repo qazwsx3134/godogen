@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 2,
+  "provider": "byteplus",
+  "kind": "video",
+  "route": "rest",
+  "apiBase": "https://ark.ap-southeast.bytepluses.com/api/v3",
+  "endpoint": "https://ark.ap-southeast.bytepluses.com/api/v3/contents/generations/tasks",
+  "requestedModel": "dreamina-seedance-2-0-260128",
+  "options": {
+    "model": "dreamina-seedance-2-0-260128",
+    "ratio": "adaptive",
+    "duration": 6,
+    "resolution": "720p",
+    "generate_audio": false,
+    "watermark": false,
+    "frames": [
+      "first_frame",
+      "last_frame"
+    ]
+  },
+  "promptSha256": "67a36731aadc9f2129742a18d72b914720e4c17f650533b885cefc552835de37",
+  "references": [
+    {
+      "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man/set/actions/attack/job/input.png",
+      "sha256": "c3660c6523f76515e61f42b5ba864eed39dc7725447cf5775b62a51d23a6a68e",
+      "size": [
+        1820,
+        1024
+      ],
+      "mime": "image/png",
+      "bytes": 356268
+    }
+  ],
+  "lastFrame": {
+    "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man/set/actions/attack/job/input.png",
+    "sha256": "c3660c6523f76515e61f42b5ba864eed39dc7725447cf5775b62a51d23a6a68e",
+    "size": [
+      1820,
+      1024
+    ],
+    "mime": "image/png",
+    "bytes": 356268
+  },
+  "keyEnv": "ARK_API_KEY",
+  "paidRequests": 1,
+  "automaticPostRetries": 0,
+  "outDir": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man/set/actions/attack/takes/t01/media",
+  "execution": "execute",
+  "capability": {
+    "verifiedAt": "2026-10-06",
+    "docs": [
+      "https://docs.byteplus.com/en/docs/modelark/seedance-2-0",
+      "https://docs.byteplus.com/en/docs/ModelArk/1520757"
+    ],
+    "async": true
+  },
+  "pricing": {
+    "unit": "output_second",
+    "quantity": 6,
+    "qualifiers": {
+      "resolution": "720p"
+    },
+    "inputs": null,
+    "note": "16:9 list price per second (billed by tokens, so square clips cost less); input images are not billed"
+  },
+  "fingerprint": "deba84000500d820d2904143affac5ada530bb539e52fa3fc34e57207d955510",
+  "estimate": {
+    "usd": 0.9,
+    "currency": "USD",
+    "basis": "6 output_second x 0.15 = 0.9 USD list price (verified 2026-10-06); excludes tax and rejected attempts; 16:9 list price per second (billed by tokens, so square clips cost less); input images are not billed",
+    "pricesVersion": "2026-10-06",
+    "items": [
+      {
+        "unit": "output_second",
+        "quantity": 6,
+        "usdEach": 0.15,
+        "usd": 0.9,
+        "source": "https://docs.byteplus.com/en/docs/ModelArk/1544106",
+        "verifiedAt": "2026-10-06",
+        "resolution": "720p"
+      }
+    ]
+  },
+  "consent": {
+    "provider": "byteplus",
+    "model": "dreamina-seedance-2-0-260128",
+    "calls": 1,
+    "estimateUsd": 0.9,
+    "apiHost": "ark.ap-southeast.bytepluses.com"
+  },
+  "status": "submit_unknown",
+  "clientRequestId": "ab47bf9fa5c64c61a09be7026d8292ee",
+  "receipt": {
+    "startedAt": "2026-10-08T09:07:17.568Z",
+    "submittedAt": "2026-10-08T09:07:17.571Z",
+    "completedAt": "2026-10-08T09:07:20.257Z",
+    "wallMs": 2690,
+    "providerMs": null,
+    "attempt": 1,
+    "purpose": "route_media video",
+    "toolVersion": "generate_media/0.4.0",
+    "outcomeCode": "submit_unknown"
+  },
+  "ledger": {
+    "projectDir": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man",
+    "reservationId": "1d1641eb32d04d54a11a293efb119d00",
+    "status": "unknown"
+  },
+  "errorType": "MediaError"
+}

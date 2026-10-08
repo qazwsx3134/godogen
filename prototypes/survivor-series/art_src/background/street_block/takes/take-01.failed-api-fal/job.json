@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 2,
+  "provider": "fal",
+  "kind": "image",
+  "route": "rest",
+  "apiBase": "https://queue.fal.run",
+  "endpoint": "https://queue.fal.run/fal-ai/nano-banana-2/edit",
+  "requestedModel": "fal-ai/nano-banana-2/edit",
+  "options": {
+    "model": "fal-ai/nano-banana-2/edit",
+    "image_urls": [
+      "<image>"
+    ],
+    "aspect_ratio": "3:4",
+    "resolution": "2K",
+    "num_images": 1,
+    "output_format": "png"
+  },
+  "promptSha256": "ef0ddac3c2707d9fca70370edabf299e5d37d9422629b39dc93899c4af5c1a17",
+  "references": [
+    {
+      "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/docs/reference/art-direction-night-market.png",
+      "sha256": "b4604817562f33d78279295a81bf02d651b949baea97c581c0a48e5a49fc7f0f",
+      "size": [
+        941,
+        1672
+      ],
+      "mime": "image/png",
+      "bytes": 3030876
+    }
+  ],
+  "lastFrame": null,
+  "keyEnv": "FAL_KEY",
+  "paidRequests": 1,
+  "automaticPostRetries": 0,
+  "outDir": "/Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261008/background/street_block/takes/take-01",
+  "execution": "execute",
+  "capability": {
+    "verifiedAt": "2026-10-06",
+    "docs": [
+      "https://fal.ai/models/fal-ai/nano-banana-2/edit/api"
+    ],
+    "async": true
+  },
+  "uploads": {
+    "to": "v3.fal.media",
+    "count": 1
+  },
+  "pricing": {
+    "unit": "output_image",
+    "quantity": 1,
+    "qualifiers": {
+      "resolution": "2K"
+    },
+    "inputs": null,
+    "note": "list price on fal.ai"
+  },
+  "fingerprint": "56d19d7a4e84b5bcdfaf4b351f2eaefdf7e62516d83ce58944525690e8f51d97",
+  "estimate": {
+    "usd": 0.12,
+    "currency": "USD",
+    "basis": "1 output_image x 0.12 = 0.12 USD list price (verified 2026-10-06); excludes tax and rejected attempts; list price on fal.ai",
+    "pricesVersion": "2026-10-06",
+    "items": [
+      {
+        "unit": "output_image",
+        "quantity": 1,
+        "usdEach": 0.12,
+        "usd": 0.12,
+        "source": "https://fal.ai/models/fal-ai/nano-banana-2/edit",
+        "verifiedAt": "2026-10-06",
+        "resolution": "2K"
+      }
+    ]
+  },
+  "consent": {
+    "provider": "fal",
+    "model": "fal-ai/nano-banana-2/edit",
+    "calls": 1,
+    "estimateUsd": 0.12,
+    "apiHost": "queue.fal.run"
+  },
+  "status": "not_sent",
+  "clientRequestId": "c153823b708541b383807afd7ea367ce",
+  "receipt": {
+    "startedAt": "2026-10-08T09:21:53.645Z",
+    "submittedAt": null,
+    "completedAt": "2026-10-08T09:21:53.652Z",
+    "wallMs": 7,
+    "providerMs": null,
+    "attempt": 1,
+    "purpose": "route_media image",
+    "toolVersion": "generate_media/0.4.0",
+    "outcomeCode": "not_sent"
+  },
+  "ledger": {
+    "projectDir": "/Users/peter/repo/agent-sprite-forge",
+    "reservationId": "6a642ad6aeb54b04b71bb9e7343dd30c",
+    "status": "not_sent"
+  },
+  "errorType": "MediaError"
+}

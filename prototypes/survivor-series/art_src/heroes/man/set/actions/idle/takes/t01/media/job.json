@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 2,
+  "provider": "fal",
+  "kind": "video",
+  "route": "rest",
+  "apiBase": "https://queue.fal.run",
+  "endpoint": "https://queue.fal.run/fal-ai/kling-video/v3/pro/image-to-video",
+  "requestedModel": "fal-ai/kling-video/v3/pro/image-to-video",
+  "options": {
+    "model": "fal-ai/kling-video/v3/pro/image-to-video",
+    "start_image_url": "<image>",
+    "end_image_url": "<image>",
+    "duration": "6",
+    "generate_audio": false
+  },
+  "promptSha256": "2e766b0f9a6d0cbca3c40fbcceeae0d84f3d600b7d9f8d15f7f9991bb46370f2",
+  "references": [
+    {
+      "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man/set/actions/idle/job/input.png",
+      "sha256": "f19a1be3f58036c47bcb29d22044f204008a4835178f756eb6af682c09d9198d",
+      "size": [
+        1024,
+        1024
+      ],
+      "mime": "image/png",
+      "bytes": 339631
+    }
+  ],
+  "lastFrame": {
+    "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man/set/actions/idle/job/input.png",
+    "sha256": "f19a1be3f58036c47bcb29d22044f204008a4835178f756eb6af682c09d9198d",
+    "size": [
+      1024,
+      1024
+    ],
+    "mime": "image/png",
+    "bytes": 339631
+  },
+  "keyEnv": "FAL_KEY",
+  "paidRequests": 1,
+  "automaticPostRetries": 0,
+  "outDir": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man/set/actions/idle/takes/t01/media",
+  "execution": "execute",
+  "capability": {
+    "verifiedAt": "2026-10-06",
+    "docs": [
+      "https://fal.ai/models/fal-ai/kling-video/v3/pro/image-to-video/api"
+    ],
+    "async": true
+  },
+  "pin": "last_frame",
+  "uploads": {
+    "to": "v3.fal.media",
+    "count": 2
+  },
+  "notes": [
+    "fal-ai/kling-video/v3/pro/image-to-video renders at its own resolution; --resolution is not sent"
+  ],
+  "pricing": {
+    "unit": "output_second",
+    "quantity": 6,
+    "qualifiers": {},
+    "inputs": null,
+    "note": "audio-off list price per second; input images are not billed"
+  },
+  "fingerprint": "d2934731fa93b0457b277e2f3b8efe6c646935676916d6f9711bc1e1eded7201",
+  "estimate": {
+    "usd": 0.672,
+    "currency": "USD",
+    "basis": "6 output_second x 0.112 = 0.672 USD list price (verified 2026-10-06); excludes tax and rejected attempts; audio-off list price per second; input images are not billed",
+    "pricesVersion": "2026-10-06",
+    "items": [
+      {
+        "unit": "output_second",
+        "quantity": 6,
+        "usdEach": 0.112,
+        "usd": 0.672,
+        "source": "https://fal.ai/models/fal-ai/kling-video/v3/pro/image-to-video",
+        "verifiedAt": "2026-10-06"
+      }
+    ]
+  },
+  "consent": {
+    "provider": "fal",
+    "model": "fal-ai/kling-video/v3/pro/image-to-video",
+    "calls": 1,
+    "estimateUsd": 0.672,
+    "apiHost": "queue.fal.run"
+  },
+  "status": "not_sent",
+  "clientRequestId": "e519fc115b9d4495becdb2e4336fd599",
+  "receipt": {
+    "startedAt": "2026-10-08T09:07:17.294Z",
+    "submittedAt": null,
+    "completedAt": "2026-10-08T09:07:19.042Z",
+    "wallMs": 1748,
+    "providerMs": null,
+    "attempt": 1,
+    "purpose": "route_media video",
+    "toolVersion": "generate_media/0.4.0",
+    "outcomeCode": "auth"
+  },
+  "ledger": {
+    "projectDir": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man",
+    "reservationId": "9ff6966062834ee2b84b6951e0c08797",
+    "status": "not_sent"
+  },
+  "error": {
+    "httpStatus": 401,
+    "message": "No user found for Key ID and Secret"
+  },
+  "errorType": "MediaError"
+}

@@ -1,0 +1,191 @@
+{
+  "schema": "video2dsprite.sprite_set_state.v1",
+  "tool": {
+    "name": "sprite_set",
+    "version": "0.4.0"
+  },
+  "plan": {
+    "path": "set_plan.json",
+    "sha256": "21339b488091a360b930b1d9f5edc1aaa1cfd516897426de41349e0e088c0b49"
+  },
+  "createdAt": "2026-10-08T08:37:51.346Z",
+  "runs": 2,
+  "actions": {
+    "idle": {
+      "status": "error",
+      "round": 1,
+      "fixes": [],
+      "job": {
+        "dir": "actions/idle/job",
+        "job": "actions/idle/job/registration_job.json",
+        "sha256": "aead25899251936e2717ea6b8c81fc3e0005f08e145d6d9d2f208ba473d33e29",
+        "input": "actions/idle/job/input.png",
+        "referenceScale": 1.0,
+        "keyColor": "green",
+        "padding": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "warnings": 3
+      },
+      "takes": [
+        {
+          "take": 1,
+          "round": 1,
+          "dir": "actions/idle/takes/t01",
+          "status": "error",
+          "createdAt": "2026-10-08T08:37:53.997Z",
+          "prompt": {
+            "path": "actions/idle/takes/t01/prompt.txt",
+            "sha256": "448aabc5288dbd2530b9bc73a69d54f8b42efa15c63d8a425c2e143dd9864381"
+          },
+          "fixes": [],
+          "lint": [],
+          "stages": {},
+          "message": "api:fal: auth: fal.ai input upload failed before the paid request: API HTTP 401: No user found for Key ID and Secret; request was not retried (earlier routes refused the request: api:xai quota; api:byteplus auth)",
+          "logged": true
+        },
+        {
+          "take": 2,
+          "round": 1,
+          "dir": "actions/idle/takes/t02",
+          "status": "error",
+          "createdAt": "2026-10-08T09:07:20.297Z",
+          "prompt": {
+            "path": "actions/idle/takes/t02/prompt.txt",
+            "sha256": "448aabc5288dbd2530b9bc73a69d54f8b42efa15c63d8a425c2e143dd9864381"
+          },
+          "fixes": [],
+          "lint": [],
+          "stages": {},
+          "message": "api:byteplus: submit_unknown: Connection failed while sending (SSLEOFError); outcome unknown and not retried. Check the provider's usage history before sending it again (earlier routes refused the request: api:xai quota)",
+          "logged": true
+        }
+      ],
+      "chosen": null,
+      "accepted": null,
+      "output": null,
+      "message": "take 2: api:byteplus: submit_unknown: Connection failed while sending (SSLEOFError); outcome unknown and not retried. Check the provider's usage history before sending it again (earlier routes refused the request: api:xai quota) (the next run tries again)"
+    },
+    "walk": {
+      "status": "error",
+      "round": 1,
+      "fixes": [],
+      "job": {
+        "dir": "actions/walk/job",
+        "job": "actions/walk/job/registration_job.json",
+        "sha256": "320ef67f22d21b8a90f03abdc00941b7c097bca68b95457967761c75ea478c63",
+        "input": "actions/walk/job/input.png",
+        "referenceScale": 1.0,
+        "keyColor": "green",
+        "padding": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "warnings": 3
+      },
+      "takes": [
+        {
+          "take": 1,
+          "round": 1,
+          "dir": "actions/walk/takes/t01",
+          "status": "error",
+          "createdAt": "2026-10-08T08:37:54.000Z",
+          "prompt": {
+            "path": "actions/walk/takes/t01/prompt.txt",
+            "sha256": "7d5ead3bece9ec4bbdbe27a1ea446df80ec7b7a9d031967b5e43098e2a1dc7e4"
+          },
+          "fixes": [],
+          "lint": [],
+          "stages": {},
+          "message": "api:byteplus: submit_unknown: Connection failed while sending (SSLEOFError); outcome unknown and not retried. Check the provider's usage history before sending it again (earlier routes refused the request: api:xai quota)",
+          "logged": true
+        },
+        {
+          "take": 2,
+          "round": 1,
+          "dir": "actions/walk/takes/t02",
+          "status": "error",
+          "createdAt": "2026-10-08T09:07:20.302Z",
+          "prompt": {
+            "path": "actions/walk/takes/t02/prompt.txt",
+            "sha256": "7d5ead3bece9ec4bbdbe27a1ea446df80ec7b7a9d031967b5e43098e2a1dc7e4"
+          },
+          "fixes": [],
+          "lint": [],
+          "stages": {},
+          "message": "api:fal: auth: fal.ai input upload failed before the paid request: API HTTP 401: No user found for Key ID and Secret; request was not retried (earlier routes refused the request: api:xai quota; api:byteplus auth)",
+          "logged": true
+        }
+      ],
+      "chosen": null,
+      "accepted": null,
+      "output": null,
+      "message": "take 2: api:fal: auth: fal.ai input upload failed before the paid request: API HTTP 401: No user found for Key ID and Secret; request was not retried (earlier routes refused the request: api:xai quota; api:byteplus auth) (the next run tries again)"
+    },
+    "attack": {
+      "status": "error",
+      "round": 1,
+      "fixes": [],
+      "job": {
+        "dir": "actions/attack/job",
+        "job": "actions/attack/job/registration_job.json",
+        "sha256": "dadae15cf5ce902fb23a93ae4f15a4f543dddf492fb157199ccecb9374cebe6e",
+        "input": "actions/attack/job/input.png",
+        "referenceScale": 1.0,
+        "keyColor": "green",
+        "padding": [
+          427,
+          0,
+          370,
+          0
+        ],
+        "warnings": 3
+      },
+      "takes": [
+        {
+          "take": 1,
+          "round": 1,
+          "dir": "actions/attack/takes/t01",
+          "status": "error",
+          "createdAt": "2026-10-08T08:37:54.002Z",
+          "prompt": {
+            "path": "actions/attack/takes/t01/prompt.txt",
+            "sha256": "07055c5bd142bad97aebcd54cc757f4ad722e42c1e74639beca0a7d7e19c5f38"
+          },
+          "fixes": [],
+          "lint": [],
+          "stages": {},
+          "message": "api:byteplus: submit_unknown: Connection failed while sending (SSLEOFError); outcome unknown and not retried. Check the provider's usage history before sending it again (earlier routes refused the request: api:xai quota)",
+          "logged": true
+        },
+        {
+          "take": 2,
+          "round": 1,
+          "dir": "actions/attack/takes/t02",
+          "status": "error",
+          "createdAt": "2026-10-08T09:07:20.304Z",
+          "prompt": {
+            "path": "actions/attack/takes/t02/prompt.txt",
+            "sha256": "07055c5bd142bad97aebcd54cc757f4ad722e42c1e74639beca0a7d7e19c5f38"
+          },
+          "fixes": [],
+          "lint": [],
+          "stages": {},
+          "message": "api:byteplus: submit_unknown: Connection failed while sending (SSLEOFError); outcome unknown and not retried. Check the provider's usage history before sending it again (earlier routes refused the request: api:xai quota)",
+          "logged": true
+        }
+      ],
+      "chosen": null,
+      "accepted": null,
+      "output": null,
+      "message": "take 2: api:byteplus: submit_unknown: Connection failed while sending (SSLEOFError); outcome unknown and not retried. Check the provider's usage history before sending it again (earlier routes refused the request: api:xai quota) (the next run tries again)"
+    }
+  },
+  "review": null,
+  "updatedAt": "2026-10-08T09:07:39.419Z"
+}

@@ -1,0 +1,22 @@
+{
+  "schema": "generate2dsprite.master_spec.v1",
+  "name": "hero_woman",
+  "subject": "a fictional adult woman, chibi proportions with a slightly large head, full body",
+  "identity": "wine-red shoulder-length wavy hair with bangs, small gold earring; sharp narrow cold eyes, stern expression; short black jacket with gold trim over a light-blue top and short light-blue skirt with a black belt; dark brown tights; white boots; upright composed stance, one hand slightly forward with an open palm",
+  "pose": null,
+  "recap": "cool chibi woman with wine-red shoulder-length hair, sharp narrow eyes, short black gold-trimmed jacket over a light-blue top and skirt, dark tights and white boots, standing upright",
+  "facing": "right",
+  "facing_parts": null,
+  "view": "elevated three-quarter overhead view about 50 degrees above the ground, body turned diagonally toward the lower-right",
+  "class": "hero",
+  "finish": "pixel",
+  "key": "#00FF00",
+  "genre": null,
+  "pronoun": "she",
+  "identity_ref": null,
+  "style_ref": null,
+  "allowed_text": null,
+  "extra_bans": [],
+  "opaque_parts": null,
+  "extra": null
+}

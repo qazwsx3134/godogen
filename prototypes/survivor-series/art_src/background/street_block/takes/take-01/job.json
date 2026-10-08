@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 2,
+  "provider": "byteplus",
+  "kind": "image",
+  "route": "rest",
+  "apiBase": "https://ark.ap-southeast.bytepluses.com/api/v3",
+  "endpoint": "https://ark.ap-southeast.bytepluses.com/api/v3/images/generations",
+  "requestedModel": "dola-seedream-5-0-pro-260628",
+  "options": {
+    "model": "dola-seedream-5-0-pro-260628",
+    "response_format": "b64_json",
+    "output_format": "png",
+    "watermark": false,
+    "size": "1200x1680",
+    "image": "<image>"
+  },
+  "promptSha256": "ef0ddac3c2707d9fca70370edabf299e5d37d9422629b39dc93899c4af5c1a17",
+  "references": [
+    {
+      "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/docs/reference/art-direction-night-market.png",
+      "sha256": "b4604817562f33d78279295a81bf02d651b949baea97c581c0a48e5a49fc7f0f",
+      "size": [
+        941,
+        1672
+      ],
+      "mime": "image/png",
+      "bytes": 3030876
+    }
+  ],
+  "lastFrame": null,
+  "keyEnv": "ARK_API_KEY",
+  "paidRequests": 1,
+  "automaticPostRetries": 0,
+  "outDir": "/Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261008/background/street_block/takes/take-01",
+  "execution": "execute",
+  "capability": {
+    "verifiedAt": "2026-10-06",
+    "docs": [
+      "https://docs.byteplus.com/en/docs/modelark/seedream-5-0-pro"
+    ],
+    "async": false
+  },
+  "pricing": {
+    "unit": "output_image",
+    "quantity": 1,
+    "qualifiers": {
+      "resolution": "up-to-2.61MP"
+    },
+    "inputs": 0,
+    "note": "the first reference image is free"
+  },
+  "fingerprint": "18a0b7b7cce1fcc21cb57e3936e7dd00a84fd8839e8689ecf5c90974b2451c12",
+  "estimate": {
+    "usd": 0.045,
+    "currency": "USD",
+    "basis": "1 output_image x 0.045 = 0.045 USD list price (verified 2026-10-06); excludes tax and rejected attempts; the first reference image is free",
+    "pricesVersion": "2026-10-06",
+    "items": [
+      {
+        "unit": "output_image",
+        "quantity": 1,
+        "usdEach": 0.045,
+        "usd": 0.045,
+        "source": "https://docs.byteplus.com/en/docs/ModelArk/1544106",
+        "verifiedAt": "2026-10-06",
+        "resolution": "up-to-2.61MP"
+      }
+    ]
+  },
+  "consent": {
+    "provider": "byteplus",
+    "model": "dola-seedream-5-0-pro-260628",
+    "calls": 1,
+    "estimateUsd": 0.045,
+    "apiHost": "ark.ap-southeast.bytepluses.com"
+  },
+  "status": "submit_unknown",
+  "clientRequestId": "6f5394908dc249518ad1f0a9d1aae991",
+  "receipt": {
+    "startedAt": "2026-10-08T09:22:59.262Z",
+    "submittedAt": "2026-10-08T09:22:59.265Z",
+    "completedAt": "2026-10-08T09:23:02.266Z",
+    "wallMs": 3004,
+    "providerMs": null,
+    "attempt": 1,
+    "purpose": "route_media image",
+    "toolVersion": "generate_media/0.4.0",
+    "outcomeCode": "submit_unknown"
+  },
+  "ledger": {
+    "projectDir": "/Users/peter/repo/agent-sprite-forge",
+    "reservationId": "a5f09f62e6e44b5598276ad47b7ab872",
+    "status": "unknown"
+  },
+  "errorType": "MediaError"
+}
