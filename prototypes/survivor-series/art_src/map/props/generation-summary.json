@@ -1,0 +1,158 @@
+[
+  {
+    "id": "stall-fruit",
+    "requested_route": "codex-cli",
+    "exit_code": 0,
+    "wall_seconds": 38.972,
+    "reused": false,
+    "output_dir": "/Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/props/stall-fruit",
+    "references": [
+      {
+        "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/background/street_block/selected.png",
+        "sha256": "43d29dff193a7923e5aeeffc2d1b4c18a9e2ec3c89f085c2fd50c489dafaf08d",
+        "role": "material/style FIRST"
+      },
+      {
+        "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man/master-green/master_rgba.png",
+        "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+        "role": "hero STYLE SECOND only"
+      }
+    ],
+    "status": "done",
+    "route": "local:codex-cli",
+    "model": "codex-image_gen",
+    "generated_sha256": "5d72efa7079e09ea261655fad5e41a2127e587841dbcec5fa19b29b69fcd1bf8",
+    "job": "job.json",
+    "prompt": "prompt.txt"
+  },
+  {
+    "id": "stall-snack",
+    "requested_route": "codex-cli",
+    "exit_code": 0,
+    "wall_seconds": 43.077,
+    "reused": false,
+    "output_dir": "/Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/props/stall-snack",
+    "references": [
+      {
+        "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/background/street_block/selected.png",
+        "sha256": "43d29dff193a7923e5aeeffc2d1b4c18a9e2ec3c89f085c2fd50c489dafaf08d",
+        "role": "material/style FIRST"
+      },
+      {
+        "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man/master-green/master_rgba.png",
+        "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+        "role": "hero STYLE SECOND only"
+      }
+    ],
+    "status": "done",
+    "route": "local:codex-cli",
+    "model": "codex-image_gen",
+    "generated_sha256": "946f8540eb1e9b1f19e3d84e66c6c5fe820ab0ebeaf6e474888aa1b466c92623",
+    "job": "job.json",
+    "prompt": "prompt.txt"
+  },
+  {
+    "id": "lantern_post",
+    "requested_route": "codex-cli",
+    "exit_code": 0,
+    "wall_seconds": 40.83,
+    "reused": false,
+    "output_dir": "/Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/props/lantern_post",
+    "references": [
+      {
+        "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/background/street_block/selected.png",
+        "sha256": "43d29dff193a7923e5aeeffc2d1b4c18a9e2ec3c89f085c2fd50c489dafaf08d",
+        "role": "material/style FIRST"
+      },
+      {
+        "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man/master-green/master_rgba.png",
+        "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+        "role": "hero STYLE SECOND only"
+      }
+    ],
+    "status": "done",
+    "route": "local:codex-cli",
+    "model": "codex-image_gen",
+    "generated_sha256": "2b01a6568f73f9b5a66d54e3e29fbd7da515a4bd3a76e1651b2cb66b8a0c8be2",
+    "job": "job.json",
+    "prompt": "prompt.txt"
+  },
+  {
+    "id": "bollard",
+    "requested_route": "codex-cli",
+    "exit_code": 0,
+    "wall_seconds": 44.73,
+    "reused": false,
+    "output_dir": "/Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/props/bollard",
+    "references": [
+      {
+        "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/background/street_block/selected.png",
+        "sha256": "43d29dff193a7923e5aeeffc2d1b4c18a9e2ec3c89f085c2fd50c489dafaf08d",
+        "role": "material/style FIRST"
+      },
+      {
+        "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man/master-green/master_rgba.png",
+        "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+        "role": "hero STYLE SECOND only"
+      }
+    ],
+    "status": "done",
+    "route": "local:codex-cli",
+    "model": "codex-image_gen",
+    "generated_sha256": "12f050d203b8ad8c0bd03c29a3bdacc158eb68735c88330e754b9178d3c590f8",
+    "job": "job.json",
+    "prompt": "prompt.txt"
+  },
+  {
+    "id": "parked_scooter",
+    "requested_route": "codex-cli",
+    "exit_code": 0,
+    "wall_seconds": 46.127,
+    "reused": false,
+    "output_dir": "/Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/props/parked_scooter",
+    "references": [
+      {
+        "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/background/street_block/selected.png",
+        "sha256": "43d29dff193a7923e5aeeffc2d1b4c18a9e2ec3c89f085c2fd50c489dafaf08d",
+        "role": "material/style FIRST"
+      },
+      {
+        "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man/master-green/master_rgba.png",
+        "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+        "role": "hero STYLE SECOND only"
+      }
+    ],
+    "status": "done",
+    "route": "local:codex-cli",
+    "model": "codex-image_gen",
+    "generated_sha256": "2db2629bac4e4fb8cef4f797bb8fa0d4c6d8e797357b34d8945ec3b3fc40d92c",
+    "job": "job.json",
+    "prompt": "prompt.txt"
+  },
+  {
+    "id": "compact-planter-cone-crate",
+    "requested_route": "codex-cli",
+    "exit_code": 0,
+    "wall_seconds": 54.794,
+    "reused": false,
+    "output_dir": "/Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/props/compact-planter-cone-crate",
+    "references": [
+      {
+        "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/background/street_block/selected.png",
+        "sha256": "43d29dff193a7923e5aeeffc2d1b4c18a9e2ec3c89f085c2fd50c489dafaf08d",
+        "role": "material/style FIRST"
+      },
+      {
+        "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man/master-green/master_rgba.png",
+        "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+        "role": "hero STYLE SECOND only"
+      }
+    ],
+    "status": "done",
+    "route": "local:codex-cli",
+    "model": "codex-image_gen",
+    "generated_sha256": "4f473610525a34508c5d8601674ca63b76f590036bf790eddb3051321ce26076",
+    "job": "job.json",
+    "prompt": "prompt.txt"
+  }
+]

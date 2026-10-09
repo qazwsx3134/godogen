@@ -1,0 +1,95 @@
+{
+  "schema": "survivor_assets.c_props_handoff.v1",
+  "status": "completed",
+  "scope": "C map props only; no ground, Godot export, preview, report, SS, approve, animation, API or codeart",
+  "staging_root": ".forge/survivor-assets-20261009/C/map/props",
+  "route": {
+    "requested": "codex-cli",
+    "executor": "root batch CLI",
+    "worker_generation_started": false,
+    "root_generation_started": true,
+    "api_or_codeart": false
+  },
+  "references": {
+    "material_style_role": "FIRST; selected street-block material, warm night-market palette/lighting, red-white canopy language and 50-degree overhead view",
+    "material_style_path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/background/street_block/selected.png",
+    "material_style_sha256": "43d29dff193a7923e5aeeffc2d1b4c18a9e2ec3c89f085c2fd50c489dafaf08d",
+    "material_style_size": [948, 1659],
+    "hero_style_role": "SECOND; style only: outline, pixel density, shading and camera discipline; never face/hair/outfit/colors",
+    "hero_style_path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man/master-green/master_rgba.png",
+    "hero_style_sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+    "hero_style_size": [1024, 1024],
+    "runtime_player_height_px": 90
+  },
+  "requests_file": "requests.json",
+  "postprocess_plan": "postprocess-plan.json",
+  "generation_summary": "generation-summary.json",
+  "call_count": 6,
+  "canonical_png_count": 8,
+  "requests": [
+    {"id": "stall-fruit", "prompt_file": "prompts/stall-fruit.prompt.txt", "output_dir": "stall-fruit", "key": "#0000FF", "generation_shape": "one_by_one"},
+    {"id": "stall-snack", "prompt_file": "prompts/stall-snack.prompt.txt", "output_dir": "stall-snack", "key": "#0000FF", "generation_shape": "one_by_one"},
+    {"id": "lantern_post", "prompt_file": "prompts/lantern_post.prompt.txt", "output_dir": "lantern_post", "key": "#00FF00", "generation_shape": "one_by_one"},
+    {"id": "bollard", "prompt_file": "prompts/bollard.prompt.txt", "output_dir": "bollard", "key": "#FF00FF", "generation_shape": "one_by_one"},
+    {"id": "parked_scooter", "prompt_file": "prompts/parked_scooter.prompt.txt", "output_dir": "parked_scooter", "key": "#00FF00", "generation_shape": "one_by_one"},
+    {"id": "compact-planter-cone-crate", "prompt_file": "prompts/compact-planter-cone-crate.prompt.txt", "output_dir": "compact-planter-cone-crate", "key": "#0000FF", "generation_shape": "2x2"}
+  ],
+  "compact_pack": {
+    "labels_row_major": ["planter", "cone", "fruit_crate", "empty"],
+    "rows": 2,
+    "cols": 2,
+    "empty_cell": "row-02-col-02",
+    "key": "#0000FF"
+  },
+  "asset_identity_notes": {
+    "lantern_post": "one tall post with a short top arm/cord supporting one connected vertical string of THREE red-orange lanterns; not a single lantern and not a loose lantern string",
+    "stall_snack": "one connected stall unit with two red-white canopy bays",
+    "parked_scooter": "one blue scooter, no rider",
+    "bollard": "yellow-black striped single bollard"
+  },
+  "runtime_targets": {
+    "stall-fruit": {"display_px": [128, 112], "anchor": "stance/bottom ground contact", "fit": "nearest aspect-preserve"},
+    "stall-snack": {"display_px": [128, 112], "anchor": "stance/bottom ground contact", "fit": "nearest aspect-preserve"},
+    "lantern_post": {"display_px": [64, 144], "anchor": "stance/bottom ground contact", "fit": "nearest aspect-preserve"},
+    "planter": {"display_px": [64, 64], "anchor": "stance/bottom ground contact", "fit": "nearest aspect-preserve"},
+    "cone": {"display_px": [24, 32], "anchor": "stance/bottom ground contact", "fit": "nearest aspect-preserve"},
+    "bollard": {"display_px": [20, 52], "diagnostic_old_display_px": [16, 48], "anchor": "stance/bottom ground contact", "fit": "integer translate +2,+2; no resample", "padding_px": [2, 2, 2, 2]},
+    "parked_scooter": {"display_px": [96, 80], "anchor": "stance/bottom ground contact", "fit": "nearest aspect-preserve"},
+    "fruit_crate": {"display_px": [40, 32], "anchor": "stance/bottom ground contact", "fit": "nearest aspect-preserve"}
+  },
+  "post_raw_pipeline": {
+    "key_cleanup": "key_still soft matte with the request key (blue/green/magenta), nearest/edge-preserving; then native-alpha extraction",
+    "wide_tall": "measure explicit boxes after raw QC; do not place stalls, lantern_post, bollard or parked_scooter in a square pack",
+    "extract_flags": ["--background-mode native_alpha", "--component-mode all", "--reject-edge-touch"],
+    "compact_extract": "2x2 labels planter,cone,fruit_crate,empty; accepted three assets and recorded the empty fourth cell as skipped-label",
+    "canonical_qc": ["true RGBA alpha", "no edge_touch", "full silhouette inbounds", "no floor/shadow/text/person/smoke", "aspect-preserving nearest fit", "record actual bound/anchor/transform/source hash/warnings"]
+  },
+  "expected_preservation": ["generated.png", "prompt.txt", "job.json", "run.json", "raw source hashes", "per-pack prop-pack.json", "per-item comparison.png", "props-contact.png"],
+  "generation_result": {
+    "root_session": "exited_0",
+    "six_calls_done": true,
+    "job_route": "codex-cli",
+    "run_route": "local:codex-cli",
+    "model": "codex-image_gen",
+    "raw_preserved": ["generated.png", "prompt.txt", "job.json", "run.json"]
+  },
+  "processed_items": {
+    "accepted_assets": ["stall-fruit", "stall-snack", "lantern_post", "bollard", "parked_scooter", "planter", "cone", "fruit_crate"],
+    "accepted_count": 8,
+    "extractor": "skills/generate2dmap/scripts/extract_prop_pack.py",
+    "runtime_outputs": ["stall-fruit.png", "stall-snack.png", "lantern_post.png", "bollard.png", "parked_scooter.png", "planter.png", "cone.png", "fruit_crate.png"],
+    "prop_kit": "prop-kit.json",
+    "contact": "props-contact.png",
+    "comparisons_dir": "postprocess/comparisons",
+    "all_true_rgba": true,
+    "all_inbounds": true,
+    "all_viewed": true,
+    "lantern_post_three_lantern_string": true,
+    "hero_comparison_subject_crop_90px": true,
+    "bollard_padding_fix": {"old_diagnostic": "postprocess/runtime/bollard-16x48-diagnostic.png", "new_display_px": [20, 52], "offset_xy": [2, 2], "source_hash_unchanged": true, "new_edge_touch": false}
+  },
+  "warnings": [],
+  "diagnostic_notes": ["old bollard 16x48 runtime bbox touching left/right/bottom is retained at postprocess/runtime/bollard-16x48-diagnostic.png"],
+  "pending": [],
+  "handoff_note": "C props complete. Root generated all six codex-cli calls and exited 0; accepted assets were keyed with declared blue/green/magenta, extracted with the repo script, fitted by uniform nearest scaling, viewed, compared at native size against the 90px hero reference, and recorded in prop-kit.json. No SS/report/preview/Godot/API/codeart/approve/animation work was done."
+}

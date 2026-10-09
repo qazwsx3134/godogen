@@ -1,0 +1,61 @@
+[gd_resource type="TileSet" load_steps=13 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/tilesets/pavement.png" id="1_pavement"]
+[ext_resource type="Texture2D" path="res://assets/tilesets/overlay-manhole.png" id="2_overlay_manhole"]
+[ext_resource type="Texture2D" path="res://assets/tilesets/overlay-drain-grate.png" id="3_overlay_drain_grate"]
+[ext_resource type="Texture2D" path="res://assets/tilesets/overlay-puddle.png" id="4_overlay_puddle"]
+[ext_resource type="Texture2D" path="res://assets/tilesets/overlay-cracks.png" id="5_overlay_cracks"]
+[ext_resource type="Texture2D" path="res://assets/tilesets/overlay-zebra.png" id="6_overlay_zebra"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0"]
+resource_name = "pavement"
+texture = ExtResource("1_pavement")
+texture_region_size = Vector2i(128, 128)
+0:0/0 = 0
+0:0/0/custom_data_0 = true
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1"]
+resource_name = "overlay-manhole"
+texture = ExtResource("2_overlay_manhole")
+texture_region_size = Vector2i(128, 128)
+0:0/0 = 0
+0:0/0/custom_data_0 = true
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2"]
+resource_name = "overlay-drain-grate"
+texture = ExtResource("3_overlay_drain_grate")
+texture_region_size = Vector2i(128, 128)
+0:0/0 = 0
+0:0/0/custom_data_0 = true
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3"]
+resource_name = "overlay-puddle"
+texture = ExtResource("4_overlay_puddle")
+texture_region_size = Vector2i(128, 128)
+0:0/0 = 0
+0:0/0/custom_data_0 = true
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4"]
+resource_name = "overlay-cracks"
+texture = ExtResource("5_overlay_cracks")
+texture_region_size = Vector2i(128, 128)
+0:0/0 = 0
+0:0/0/custom_data_0 = true
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5"]
+resource_name = "overlay-zebra"
+texture = ExtResource("6_overlay_zebra")
+texture_region_size = Vector2i(128, 128)
+0:0/0 = 0
+0:0/0/custom_data_0 = true
+
+[resource]
+tile_size = Vector2i(128, 128)
+custom_data_layer_0/name = "walkable"
+custom_data_layer_0/type = 1
+sources/0 = SubResource("TileSetAtlasSource_0")
+sources/1 = SubResource("TileSetAtlasSource_1")
+sources/2 = SubResource("TileSetAtlasSource_2")
+sources/3 = SubResource("TileSetAtlasSource_3")
+sources/4 = SubResource("TileSetAtlasSource_4")
+sources/5 = SubResource("TileSetAtlasSource_5")

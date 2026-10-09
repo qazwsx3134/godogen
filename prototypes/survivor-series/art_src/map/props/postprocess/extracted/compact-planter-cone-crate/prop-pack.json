@@ -1,0 +1,374 @@
+{
+  "schema": "generate2dmap.prop_pack.v2",
+  "tool": {
+    "name": "extract_prop_pack",
+    "version": "0.4.0"
+  },
+  "input": "../../keyed/compact-planter-cone-crate-alpha.png",
+  "source_size": [
+    1254,
+    1254
+  ],
+  "source_sha256": "6a0c7a056a2ccfa3b917ed5f87dceb83539b2c0724c83b054a7bd7a5bad79320",
+  "source_mode": "RGBA",
+  "layout_mode": "grid",
+  "boxes_file": null,
+  "labels_file": null,
+  "background_mode": "native_alpha",
+  "art_source": "host_image",
+  "rows": 2,
+  "cols": 2,
+  "threshold": 100,
+  "edge_threshold": 150,
+  "despill_radius": 0,
+  "despill": {
+    "mode": "off",
+    "applied": "off",
+    "radius": 0,
+    "margin": 12,
+    "changed_px": 0
+  },
+  "hygiene": {
+    "mode": "none",
+    "floor": 4,
+    "solid_min": 32,
+    "attach_radius": 2,
+    "connectivity": 8,
+    "floor_px": 0,
+    "detached_px": 0,
+    "detached_components": 0,
+    "max_removed_alpha": 0
+  },
+  "alpha_floor": 0,
+  "alpha_floor_pixels_removed": 0,
+  "trim_border": 0,
+  "edge_clean_depth": 0,
+  "component_mode": "all",
+  "component_padding": 8,
+  "min_component_area": "auto",
+  "edge_touch_margin": 0,
+  "geometry": {
+    "connectivity": 8,
+    "alpha_geometry_threshold": 16,
+    "anchor_mode": "stance",
+    "support_band_fraction": 0.25,
+    "anchor_rounding": "whole pixels, half-up",
+    "grid_rounding": "exact",
+    "keep_canvas": false,
+    "world_scale": null
+  },
+  "accepted": [
+    {
+      "index": 0,
+      "label": "planter",
+      "display_name": "planter",
+      "status": "accepted",
+      "image": "planter/prop.png",
+      "sha256": "d369560a58f8c382a118204e74d3746987c7a00d74a7dc123da7d8f1d8d56280",
+      "output_size": [
+        396,
+        470
+      ],
+      "grid": [
+        0,
+        0
+      ],
+      "cell_box": [
+        0,
+        0,
+        627,
+        627
+      ],
+      "source_box": [
+        0,
+        0,
+        627,
+        627
+      ],
+      "source_rect": [
+        131,
+        105,
+        527,
+        575
+      ],
+      "trim_offset": [
+        131,
+        105
+      ],
+      "padding": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "anchor_px": [
+        198,
+        462
+      ],
+      "anchor_source": "measured",
+      "component_mode": "all",
+      "component_count": 1,
+      "min_component_area": 100,
+      "trim_applied": 0,
+      "crop_bbox": [
+        139,
+        113,
+        519,
+        567
+      ],
+      "padded_crop_bbox": [
+        131,
+        105,
+        527,
+        575
+      ],
+      "selected_component_area": null,
+      "selected_component_bbox": null,
+      "kept_area": 123725,
+      "dropped_components": 1,
+      "dropped_area": 4,
+      "edge_touch": false
+    },
+    {
+      "index": 1,
+      "label": "cone",
+      "display_name": "cone",
+      "status": "accepted",
+      "image": "cone/prop.png",
+      "sha256": "00f9219ff690f98fec0b2bab14da83cb57782a766225cc7d76889116e23f9cfb",
+      "output_size": [
+        301,
+        409
+      ],
+      "grid": [
+        0,
+        1
+      ],
+      "cell_box": [
+        627,
+        0,
+        1254,
+        627
+      ],
+      "source_box": [
+        627,
+        0,
+        1254,
+        627
+      ],
+      "source_rect": [
+        788,
+        142,
+        1089,
+        551
+      ],
+      "trim_offset": [
+        161,
+        142
+      ],
+      "padding": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "anchor_px": [
+        151,
+        401
+      ],
+      "anchor_source": "measured",
+      "component_mode": "all",
+      "component_count": 1,
+      "min_component_area": 100,
+      "trim_applied": 0,
+      "crop_bbox": [
+        169,
+        150,
+        454,
+        543
+      ],
+      "padded_crop_bbox": [
+        161,
+        142,
+        462,
+        551
+      ],
+      "selected_component_area": null,
+      "selected_component_bbox": null,
+      "kept_area": 60348,
+      "dropped_components": 0,
+      "dropped_area": 0,
+      "edge_touch": false
+    },
+    {
+      "index": 2,
+      "label": "fruit-crate",
+      "display_name": "fruit_crate",
+      "status": "accepted",
+      "image": "fruit-crate/prop.png",
+      "sha256": "3fd6562d569a2b32c9e13eb1077c037909b62177abea28ddbab38640005ea37b",
+      "output_size": [
+        439,
+        395
+      ],
+      "grid": [
+        1,
+        0
+      ],
+      "cell_box": [
+        0,
+        627,
+        627,
+        1254
+      ],
+      "source_box": [
+        0,
+        627,
+        627,
+        1254
+      ],
+      "source_rect": [
+        110,
+        742,
+        549,
+        1137
+      ],
+      "trim_offset": [
+        110,
+        115
+      ],
+      "padding": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "anchor_px": [
+        222,
+        387
+      ],
+      "anchor_source": "measured",
+      "component_mode": "all",
+      "component_count": 1,
+      "min_component_area": 100,
+      "trim_applied": 0,
+      "crop_bbox": [
+        118,
+        123,
+        541,
+        502
+      ],
+      "padded_crop_bbox": [
+        110,
+        115,
+        549,
+        510
+      ],
+      "selected_component_area": null,
+      "selected_component_bbox": null,
+      "kept_area": 108533,
+      "dropped_components": 0,
+      "dropped_area": 0,
+      "edge_touch": false
+    }
+  ],
+  "rejected": [
+    {
+      "index": 3,
+      "label": "",
+      "display_name": "empty",
+      "grid": [
+        1,
+        1
+      ],
+      "cell_box": [
+        627,
+        627,
+        1254,
+        1254
+      ],
+      "source_box": [
+        627,
+        627,
+        1254,
+        1254
+      ],
+      "status": "skipped-label"
+    }
+  ],
+  "edge_touch_props": [],
+  "warnings": [],
+  "qa": {
+    "status": "pass",
+    "method": "native alpha, not keyed; alpha hygiene none; 8-connected components (all); checks measured on the published pixels",
+    "notProven": [
+      "that each label names the art in its cell or box",
+      "that a prop is complete: clipping is detected only where art meets the cell edge",
+      "keyed-edge quality beyond the edge fringe count",
+      "that anchors and suggested footprints match gameplay contact (both are measured from alpha)",
+      "runtime placement, collision or occlusion"
+    ],
+    "checks": [
+      {
+        "id": "accepted",
+        "status": "pass",
+        "value": 3,
+        "threshold": ">= 1"
+      },
+      {
+        "id": "edge_touch",
+        "status": "pass",
+        "value": [],
+        "threshold": 0
+      },
+      {
+        "id": "dropped_area",
+        "status": "pass",
+        "value": {
+          "planter": 0.0
+        },
+        "threshold": 0.01
+      },
+      {
+        "id": "strategy_aspect",
+        "status": "pass",
+        "value": [],
+        "threshold": 1.6
+      },
+      {
+        "id": "edge_fringe",
+        "status": "skipped",
+        "value": null,
+        "threshold": 0.02
+      }
+    ],
+    "inputs": [
+      {
+        "path": "../../keyed/compact-planter-cone-crate-alpha.png",
+        "sha256": "6a0c7a056a2ccfa3b917ed5f87dceb83539b2c0724c83b054a7bd7a5bad79320",
+        "bytes": 597855
+      }
+    ],
+    "outputs": [
+      {
+        "path": "planter/prop.png",
+        "sha256": "d369560a58f8c382a118204e74d3746987c7a00d74a7dc123da7d8f1d8d56280",
+        "bytes": 244936
+      },
+      {
+        "path": "cone/prop.png",
+        "sha256": "00f9219ff690f98fec0b2bab14da83cb57782a766225cc7d76889116e23f9cfb",
+        "bytes": 103494
+      },
+      {
+        "path": "fruit-crate/prop.png",
+        "sha256": "3fd6562d569a2b32c9e13eb1077c037909b62177abea28ddbab38640005ea37b",
+        "bytes": 215779
+      }
+    ],
+    "tool": {
+      "name": "extract_prop_pack",
+      "version": "0.4.0"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "id": "lantern_post",
+  "requested_route": "codex-cli",
+  "exit_code": 0,
+  "wall_seconds": 40.83,
+  "reused": false,
+  "output_dir": "/Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/props/lantern_post",
+  "references": [
+    {
+      "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/background/street_block/selected.png",
+      "sha256": "43d29dff193a7923e5aeeffc2d1b4c18a9e2ec3c89f085c2fd50c489dafaf08d",
+      "role": "material/style FIRST"
+    },
+    {
+      "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man/master-green/master_rgba.png",
+      "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+      "role": "hero STYLE SECOND only"
+    }
+  ],
+  "status": "done",
+  "route": "local:codex-cli",
+  "model": "codex-image_gen",
+  "generated_sha256": "2b01a6568f73f9b5a66d54e3e29fbd7da515a4bd3a76e1651b2cb66b8a0c8be2",
+  "job": "job.json",
+  "prompt": "prompt.txt"
+}

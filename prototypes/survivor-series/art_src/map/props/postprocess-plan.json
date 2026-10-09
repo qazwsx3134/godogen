@@ -1,0 +1,45 @@
+{
+  "schema": "survivor_assets.c_props_postprocess_plan.v1",
+  "status": "completed",
+  "generation_owner": "root",
+  "worker_must_not": ["generate", "retry", "approve", "animation", "API", "codeart", "extract before rawdone"],
+  "raw_inputs": {
+    "stall-fruit": {"generated": "stall-fruit/generated.png", "key": "#0000FF", "shape": "one_by_one"},
+    "stall-snack": {"generated": "stall-snack/generated.png", "key": "#0000FF", "shape": "one_by_one"},
+    "lantern_post": {"generated": "lantern_post/generated.png", "key": "#00FF00", "shape": "one_by_one", "identity": "three connected lanterns on one post"},
+    "bollard": {"generated": "bollard/generated.png", "key": "#FF00FF", "shape": "one_by_one"},
+    "parked_scooter": {"generated": "parked_scooter/generated.png", "key": "#00FF00", "shape": "one_by_one"},
+    "compact-planter-cone-crate": {"generated": "compact-planter-cone-crate/generated.png", "key": "#0000FF", "shape": "2x2", "labels": ["planter", "cone", "fruit_crate", "empty"]}
+  },
+  "key_cleanup": {
+    "method": "forge_matte.key_still",
+    "quality": "soft",
+    "resampler_hint": "nearest",
+    "keys": {"blue": "#0000FF", "green": "#00FF00", "magenta": "#FF00FF"},
+    "native_alpha_next": true,
+    "preserve_raw": true
+  },
+  "extraction": {
+    "script": "skills/generate2dmap/scripts/extract_prop_pack.py",
+    "required_flags": ["--background-mode native_alpha", "--component-mode all", "--reject-edge-touch"],
+    "one_by_one": "After visual QC, measure an explicit source box for each raw; extract with --boxes-file, a new per-item output directory, --anchor-mode stance, and a per-pack prop-pack.json. Do not use square grid packing.",
+    "compact_2x2": "Used rows=2 cols=2, labels=planter,cone,fruit_crate,empty; accepted three assets and recorded the fourth empty cell as skipped-label.",
+    "no_axis_stretch": true
+  },
+  "runtime_fit": {
+    "sampling": "nearest",
+    "fit": "aspect-preserve",
+    "player_height_px": 90,
+    "targets_px": {"stall-fruit": [128, 112], "stall-snack": [128, 112], "lantern_post": [64, 144], "planter": [64, 64], "cone": [24, 32], "bollard": [20, 52], "parked_scooter": [96, 80], "fruit_crate": [40, 32]},
+    "bollard_padding_fix": {"diagnostic_old_size": [16, 48], "offset_xy": [2, 2], "padding_px": [2, 2, 2, 2], "resample": false},
+    "record": ["actual_bound", "anchor_px", "transform", "source_sha256", "warnings", "alpha", "edge_touch"]
+  },
+  "outputs_after_raw": {
+    "canonical_count": 8,
+    "completed": true,
+    "manifest": "prop-kit.json",
+    "comparisons": "postprocess/comparisons/<id>.png",
+    "total_contact": "props-contact.png",
+    "handoff": "C-props-handoff.md and C-props-handoff.json"
+  }
+}

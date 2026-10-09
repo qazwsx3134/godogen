@@ -101,4 +101,7 @@ Read 每張 `-sheet.png`、`-final.png` 與 lineup：數字看不出臉、朝向
 - 同一個 repo 在 WSL（`/mnt/d/...`）與 Mac（`~/repo/...`）路徑不同，舊報告裡的路徑要換算。
 - `prepare_i2v_input.py lint` 對 sprite set prompt 會報 `missing-work-region`、`missing-timeline`，可以不理（sprite set 刻意不放數字範圍）；要注意的是 `weak-amplitude`。
 - 先做一個角色跑完整條，確認畫面與費用，再做其他角色。
+- codex-cli 的單筆生成可能卡住不回（2026-10-09 實測一筆 `codex exec` 卡 3 小時）：派工單要求每筆設時限（例如 6 分鐘），超時停掉該筆、記錄、重跑一次，再卡就跳過。
+- Codex 幾乎每個指令都要人工核准（讀檔、`herdr`、寫到工作區外）。使用者不在時整批會停住；長批次前請使用者在 Codex 用 `/approvals` 放寬，或把產出寫在 Codex 的工作區、最後一次搬。
+- 真人照片當參考（例如髮型）：派工單寫明只借該特徵，臉與身分虛構。
 - `route_media.py resolve` 只看 key 有沒有設，不驗 key 對不對、帳號有沒有錢。2026-10-08 實測：xAI 新 team 沒儲值回 403 `quota`；BytePlus、fal 的 key 錯回 401；一個 provider 失敗會自動往下一個試。第一次跑先 `run --max-takes 1`，失敗看 `actions/<id>/takes/tNN/media.failed-api-<provider>/job.json` 的 `error`。config 是 `~/.config/agent-sprite-forge/config.json`，provider 名稱用 `xai`（寫 `grok` 會被忽略）。

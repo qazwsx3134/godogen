@@ -1,0 +1,22 @@
+{
+  "schema": "generate2dmap.placements.v2",
+  "props": [
+    {"id": "stall-fruit-01", "image": "../props/stall-fruit.png", "x": 192, "y": 256, "anchor": "px", "anchorPx": [78, 111], "sortY": 256, "layer": "props", "engine_layer": "props-y-sorted", "scale": 1.0, "resampler": "nearest", "footprint": {"shape": "rect", "width": 120, "depth": 16, "offset": [-14, -8], "basis": "prop_px", "method": "C-authored base contact from measured alpha bbox"}, "solid": true},
+    {"id": "stall-snack-01", "image": "../props/stall-snack.png", "x": 576, "y": 256, "anchor": "px", "anchorPx": [85, 111], "sortY": 256, "layer": "props", "engine_layer": "props-y-sorted", "scale": 1.0, "resampler": "nearest", "footprint": {"shape": "rect", "width": 126, "depth": 16, "offset": [-21, -8], "basis": "prop_px", "method": "C-authored base contact from measured alpha bbox"}, "solid": true},
+    {"id": "lantern-post-01", "image": "../props/lantern_post.png", "x": 320, "y": 192, "anchor": "px", "anchorPx": [24, 143], "sortY": 192, "layer": "props", "engine_layer": "props-y-sorted", "scale": 1.0, "resampler": "nearest", "footprint": {"shape": "rect", "width": 20, "depth": 12, "offset": [8, -6], "basis": "prop_px", "method": "C-authored base contact from measured alpha bbox"}, "solid": true},
+    {"id": "planter-01", "image": "../props/planter.png", "x": 576, "y": 640, "anchor": "px", "anchorPx": [32, 63], "sortY": 640, "layer": "props", "engine_layer": "props-y-sorted", "scale": 1.0, "resampler": "nearest", "footprint": {"shape": "rect", "width": 52, "depth": 16, "offset": [0, -8], "basis": "prop_px", "method": "C-authored base contact from measured alpha bbox"}, "solid": true},
+    {"id": "cone-01", "image": "../props/cone.png", "x": 192, "y": 640, "anchor": "px", "anchorPx": [12, 31], "sortY": 640, "layer": "props", "engine_layer": "props-y-sorted", "scale": 1.0, "resampler": "nearest", "footprint": {"shape": "rect", "width": 22, "depth": 10, "offset": [0, -5], "basis": "prop_px", "method": "C-authored base contact from measured alpha bbox"}, "solid": true},
+    {"id": "bollard-01", "image": "../props/bollard.png", "x": 704, "y": 640, "anchor": "px", "anchorPx": [10, 49], "sortY": 640, "layer": "props", "engine_layer": "props-y-sorted", "scale": 1.0, "resampler": "nearest", "footprint": {"shape": "rect", "width": 16, "depth": 10, "offset": [0, -5], "basis": "prop_px", "method": "C-authored base contact from padded measured alpha bbox"}, "solid": true},
+    {"id": "parked-scooter-01", "image": "../props/parked_scooter.png", "x": 320, "y": 704, "anchor": "px", "anchorPx": [45, 79], "sortY": 704, "layer": "props", "engine_layer": "props-y-sorted", "scale": 1.0, "resampler": "nearest", "footprint": {"shape": "rect", "width": 80, "depth": 14, "offset": [3, -7], "basis": "prop_px", "method": "C-authored base contact from measured alpha bbox"}, "solid": true},
+    {"id": "fruit-crate-01", "image": "../props/fruit_crate.png", "x": 576, "y": 704, "anchor": "px", "anchorPx": [20, 31], "sortY": 704, "layer": "props", "engine_layer": "props-y-sorted", "scale": 1.0, "resampler": "nearest", "footprint": {"shape": "rect", "width": 34, "depth": 14, "offset": [0, -7], "basis": "prop_px", "method": "C-authored base contact from measured alpha bbox"}, "solid": true}
+  ],
+  "actors": [
+    {"id": "hero-demo-se-90px", "image": "../preview/hero-se-demo.png", "x": 384, "y": 384, "anchor": "px", "anchorPx": [22, 90], "sortY": 384, "layer": "actors", "scale": 1.0, "resampler": "nearest", "solid": false}
+  ],
+  "metadata": {
+    "scope": "preview-only",
+    "hero": "approved master-green se alpha bbox crop, nearest fit to 90px height",
+    "props": "actual prop-kit dimensions and runtime anchors",
+    "contact": "independent collision footprints; not derived from y-sort"
+  }
+}

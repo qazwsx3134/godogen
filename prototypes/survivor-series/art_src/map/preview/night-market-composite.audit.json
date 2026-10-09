@@ -1,0 +1,405 @@
+{
+  "schema": "generate2dmap.compose_audit.v1",
+  "status": "pass",
+  "method": "compose_layered_preview placement audit: actor feet by forge_nav rule N9 at the placement positions (with --bundle on the bundle's D2 blocking set in world pixels, else on the canvas, stage ground polygons and solid placement footprints, closed sets), prop feet as points in the walk area, solid footprints rasterised at pixel centres, occlusion from the draw-index owner map at alpha > 16.",
+  "notProven": [
+    "Feet are tested at the placement positions: actors with the forge_nav rules (centre and 8 footprint samples), on the bundle's blocking set with --bundle (D2), else on the canvas, stage ground polygons and solid placement footprints; props as points. Reachability between points is map_nav's job.",
+    "Overlaps are checked only between footprints from prop-pack manifests or placements; placements without a footprint are counted, not checked.",
+    "Occlusion is measured on the flattened preview at alpha > 16; runtime sorting, animation, camera, lighting and scale are not simulated.",
+    "The preview is not proof that the art reads well at gameplay scale; look at it."
+  ],
+  "checks": [
+    {
+      "id": "actor_feet_valid",
+      "status": "pass",
+      "value": {
+        "checked": 1,
+        "invalid": [],
+        "actor_radius_px": 12.0,
+        "y_squash": 1.0,
+        "model": "bundle",
+        "collision": "forge_nav D2 blocking set of C-night-market.map-bundle.json"
+      },
+      "threshold": "forge_nav rule N9: the foot and 8 footprint samples in the walk area and off every blocker (with --bundle the bundle's D2 blocking set, as map_nav.py judges it)"
+    },
+    {
+      "id": "actor_feet_off_placement_footprints",
+      "status": "pass",
+      "value": {
+        "checked": 1,
+        "actors": []
+      },
+      "threshold": "placement footprints are compose-only (the bundle's blocking set decides validity, D2); an actor standing in one is reported so the prop can be added to the bundle"
+    },
+    {
+      "id": "feet_in_walk_area",
+      "status": "pass",
+      "value": {
+        "checked": 8,
+        "outside": [],
+        "walk_area": "C-night-market.map-bundle.json collision.walkRegions"
+      },
+      "threshold": "foot inside a walk area"
+    },
+    {
+      "id": "bounds",
+      "status": "pass",
+      "value": {
+        "off_canvas": [],
+        "clipped": [],
+        "empty": []
+      },
+      "threshold": "visible pixels (alpha > 16) inside the canvas"
+    },
+    {
+      "id": "footprint_overlaps",
+      "status": "pass",
+      "value": {
+        "pairs": [],
+        "checked": 8,
+        "without_footprint": 1
+      },
+      "threshold": "solid footprints do not overlap"
+    },
+    {
+      "id": "duplicate_placements",
+      "status": "pass",
+      "value": [],
+      "threshold": "no two placements of the same image at the same point"
+    },
+    {
+      "id": "actors_visible",
+      "status": "pass",
+      "value": {
+        "hidden": []
+      },
+      "threshold": "no actor fully covered by later draws"
+    }
+  ],
+  "inputs": [
+    {
+      "path": "ground-layered-6x6.png",
+      "sha256": "587bcfdc97092d91953728b9bb2fe5b02fffba60b9f3f8d0b5b3a49bbfb5a053",
+      "bytes": 378260
+    },
+    {
+      "path": "../data/C-placements.json",
+      "sha256": "1f4f0c02acc9ecc3027207a4d9d36a6ab4c680c9a6e516d441ada3beff51d549",
+      "bytes": 3789
+    },
+    {
+      "path": "../props/stall-fruit.png",
+      "sha256": "c6914406146567bb7b77d8b430dc9fd93b82e0e9acfe375c6bf3284bac06b7df",
+      "bytes": 26198
+    },
+    {
+      "path": "../props/stall-snack.png",
+      "sha256": "7564cd9ca219de7490f78728839a6d288b24537ecfb9f6b8283dbd217fb2c734",
+      "bytes": 24023
+    },
+    {
+      "path": "../props/lantern_post.png",
+      "sha256": "de2ba2ca85d2cf8cce75b5b7d04d6a55fe4caf41f6ec4c11de01c1afc68a25d4",
+      "bytes": 9335
+    },
+    {
+      "path": "../props/planter.png",
+      "sha256": "2baddad69da8d0a506e5e3b75584c28eb23e8ec3f7b1189239988d55c6bff9eb",
+      "bytes": 7593
+    },
+    {
+      "path": "../props/cone.png",
+      "sha256": "e9775254b9930e62b0575947a30aaea586e7ef6c35450ab8f95933c8d9fd1e12",
+      "bytes": 1314
+    },
+    {
+      "path": "../props/bollard.png",
+      "sha256": "f3dabba842fbf72fb439f4d36b84f882f81b0680702716b088cc9e6a49a9075c",
+      "bytes": 1473
+    },
+    {
+      "path": "../props/parked_scooter.png",
+      "sha256": "b145550f72ba2a6d2189c432421bf9187f9af744be0a72fd4b45bb902dfb98c4",
+      "bytes": 11426
+    },
+    {
+      "path": "../props/fruit_crate.png",
+      "sha256": "d5d62c6026d9a41455e347ffdc740086b738b881a042f3061c3907997a820275",
+      "bytes": 2550
+    },
+    {
+      "path": "hero-se-demo.png",
+      "sha256": "dbade5583a0f968ff007d62fe9cb4f05327c1b68507ce970745d6941c045585d",
+      "bytes": 8337
+    },
+    {
+      "path": "../data/C-night-market.map-bundle.json",
+      "sha256": "3b7a07590b71bd2abaab34331dc3dbb752809a46379e2b7f3098c83494e5fcc2",
+      "bytes": 14568
+    }
+  ],
+  "outputs": [
+    {
+      "path": "night-market-composite.png",
+      "sha256": "2cf9d2741d4537b4224b06f221d84bade5132cf879b5208615b4e2ebc01fd57d",
+      "bytes": 445309
+    }
+  ],
+  "tool": {
+    "name": "compose_layered_preview",
+    "version": "0.4.0"
+  },
+  "placements": [
+    {
+      "id": "lantern-post-01",
+      "kind": "prop",
+      "band": "world",
+      "draw_index": 0,
+      "foot": [
+        320.0,
+        192.0
+      ],
+      "visible_bounds": [
+        305,
+        50,
+        350,
+        192
+      ],
+      "foot_walkable": true,
+      "occluded_fraction": 0.0,
+      "footprint": {
+        "shape": "rect",
+        "cx": 328.0,
+        "cy": 186.0,
+        "rx": 10.0,
+        "ry": 6.0,
+        "rotate": 0.0,
+        "source": "placement",
+        "solid": true
+      }
+    },
+    {
+      "id": "stall-fruit-01",
+      "kind": "prop",
+      "band": "world",
+      "draw_index": 1,
+      "foot": [
+        192.0,
+        256.0
+      ],
+      "visible_bounds": [
+        118,
+        146,
+        238,
+        256
+      ],
+      "foot_walkable": true,
+      "occluded_fraction": 0.0,
+      "footprint": {
+        "shape": "rect",
+        "cx": 178.0,
+        "cy": 248.0,
+        "rx": 60.0,
+        "ry": 8.0,
+        "rotate": 0.0,
+        "source": "placement",
+        "solid": true
+      }
+    },
+    {
+      "id": "stall-snack-01",
+      "kind": "prop",
+      "band": "world",
+      "draw_index": 2,
+      "foot": [
+        576.0,
+        256.0
+      ],
+      "visible_bounds": [
+        492,
+        161,
+        618,
+        256
+      ],
+      "foot_walkable": true,
+      "occluded_fraction": 0.0,
+      "footprint": {
+        "shape": "rect",
+        "cx": 555.0,
+        "cy": 248.0,
+        "rx": 63.0,
+        "ry": 8.0,
+        "rotate": 0.0,
+        "source": "placement",
+        "solid": true
+      }
+    },
+    {
+      "id": "hero-demo-se-90px",
+      "kind": "actor",
+      "band": "world",
+      "draw_index": 3,
+      "foot": [
+        384.0,
+        384.0
+      ],
+      "visible_bounds": [
+        362,
+        294,
+        406,
+        384
+      ],
+      "foot_valid": true,
+      "blocked_by": [],
+      "foot_checked": [
+        384.0,
+        384.0
+      ],
+      "in_placement_footprints": [],
+      "occluded_fraction": 0.0,
+      "footprint": null
+    },
+    {
+      "id": "cone-01",
+      "kind": "prop",
+      "band": "world",
+      "draw_index": 4,
+      "foot": [
+        192.0,
+        640.0
+      ],
+      "visible_bounds": [
+        181,
+        610,
+        203,
+        640
+      ],
+      "foot_walkable": true,
+      "occluded_fraction": 0.0,
+      "footprint": {
+        "shape": "rect",
+        "cx": 192.0,
+        "cy": 635.0,
+        "rx": 11.0,
+        "ry": 5.0,
+        "rotate": 0.0,
+        "source": "placement",
+        "solid": true
+      }
+    },
+    {
+      "id": "planter-01",
+      "kind": "prop",
+      "band": "world",
+      "draw_index": 5,
+      "foot": [
+        576.0,
+        640.0
+      ],
+      "visible_bounds": [
+        550,
+        578,
+        602,
+        640
+      ],
+      "foot_walkable": true,
+      "occluded_fraction": 0.0,
+      "footprint": {
+        "shape": "rect",
+        "cx": 576.0,
+        "cy": 632.0,
+        "rx": 26.0,
+        "ry": 8.0,
+        "rotate": 0.0,
+        "source": "placement",
+        "solid": true
+      }
+    },
+    {
+      "id": "bollard-01",
+      "kind": "prop",
+      "band": "world",
+      "draw_index": 6,
+      "foot": [
+        704.0,
+        640.0
+      ],
+      "visible_bounds": [
+        696,
+        598,
+        712,
+        641
+      ],
+      "foot_walkable": true,
+      "occluded_fraction": 0.0,
+      "footprint": {
+        "shape": "rect",
+        "cx": 704.0,
+        "cy": 635.0,
+        "rx": 8.0,
+        "ry": 5.0,
+        "rotate": 0.0,
+        "source": "placement",
+        "solid": true
+      }
+    },
+    {
+      "id": "parked-scooter-01",
+      "kind": "prop",
+      "band": "world",
+      "draw_index": 7,
+      "foot": [
+        320.0,
+        704.0
+      ],
+      "visible_bounds": [
+        283,
+        626,
+        363,
+        704
+      ],
+      "foot_walkable": true,
+      "occluded_fraction": 0.0,
+      "footprint": {
+        "shape": "rect",
+        "cx": 323.0,
+        "cy": 697.0,
+        "rx": 40.0,
+        "ry": 7.0,
+        "rotate": 0.0,
+        "source": "placement",
+        "solid": true
+      }
+    },
+    {
+      "id": "fruit-crate-01",
+      "kind": "prop",
+      "band": "world",
+      "draw_index": 8,
+      "foot": [
+        576.0,
+        704.0
+      ],
+      "visible_bounds": [
+        559,
+        674,
+        593,
+        704
+      ],
+      "foot_walkable": true,
+      "occluded_fraction": 0.0,
+      "footprint": {
+        "shape": "rect",
+        "cx": 576.0,
+        "cy": 697.0,
+        "rx": 17.0,
+        "ry": 7.0,
+        "rotate": 0.0,
+        "source": "placement",
+        "solid": true
+      }
+    }
+  ],
+  "overlaps": [],
+  "walk_area": "C-night-market.map-bundle.json collision.walkRegions"
+}

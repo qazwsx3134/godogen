@@ -1,0 +1,63 @@
+{
+  "schema": "survivor_assets.c_prop_kit.v1",
+  "status": "completed",
+  "scope": "C map props only",
+  "route": {
+    "requested": "codex-cli",
+    "raw_job_route": "codex-cli",
+    "raw_run_route": "local:codex-cli",
+    "model": "codex-image_gen",
+    "root_generation_summary": "generation-summary.json",
+    "all_six_raw_status": "done_exit_0"
+  },
+  "references": {
+    "material_style_first": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/background/street_block/selected.png",
+    "material_style_sha256": "43d29dff193a7923e5aeeffc2d1b4c18a9e2ec3c89f085c2fd50c489dafaf08d",
+    "hero_style_second_only": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man/master-green/master_rgba.png",
+    "hero_style_sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+    "hero_runtime_reference_px": 90,
+    "hero_comparison": {"method": "alpha-crop-then-height-fit", "source_canvas_size": [1024, 1024], "alpha_crop_bbox": [320, 138, 704, 926], "cropped_subject_size": [384, 788], "display_size": [44, 90], "sampling": "nearest"}
+  },
+  "extraction": {
+    "script": "skills/generate2dmap/scripts/extract_prop_pack.py",
+    "background_mode": "native_alpha",
+    "component_mode": "all",
+    "reject_edge_touch": true,
+    "anchor_mode": "stance",
+    "accepted_asset_count": 8,
+    "pack_manifests": [
+      "postprocess/extracted/stall-fruit/prop-pack.json",
+      "postprocess/extracted/stall-snack/prop-pack.json",
+      "postprocess/extracted/lantern_post/prop-pack.json",
+      "postprocess/extracted/bollard/prop-pack.json",
+      "postprocess/extracted/parked_scooter/prop-pack.json",
+      "postprocess/extracted/compact-planter-cone-crate/prop-pack.json"
+    ],
+    "compact_pack": {"accepted": ["planter", "cone", "fruit-crate"], "empty_cell": "row-02-col-02", "empty_cell_status": "skipped-label"}
+  },
+  "assets": [
+    {"id":"stall-fruit","runtime_png":"stall-fruit.png","runtime_json":"postprocess/runtime/stall-fruit.json","comparison":"postprocess/comparisons/stall-fruit.png","key":"#0000FF","raw":"stall-fruit/generated.png","raw_sha256":"5d72efa7079e09ea261655fad5e41a2127e587841dbcec5fa19b29b69fcd1bf8","source_sha256":"5aaeb98c56f1a07649b2011f455eef12abdb63417f3361eeb0d5283d1cc25fab","target_size":[128,112],"actual_alpha_bbox":[4,1,124,111],"runtime_anchor_px":[78,111],"warnings":[]},
+    {"id":"stall-snack","runtime_png":"stall-snack.png","runtime_json":"postprocess/runtime/stall-snack.json","comparison":"postprocess/comparisons/stall-snack.png","key":"#0000FF","raw":"stall-snack/generated.png","raw_sha256":"946f8540eb1e9b1f19e3d84e66c6c5fe820ab0ebeaf6e474888aa1b466c92623","source_sha256":"b12fd6a13e11e664b3d72b61b05321cceb9d524b90a1a83c788b44d0e1ea20a6","target_size":[128,112],"actual_alpha_bbox":[1,16,127,111],"runtime_anchor_px":[85,111],"warnings":[]},
+    {"id":"lantern_post","runtime_png":"lantern_post.png","runtime_json":"postprocess/runtime/lantern_post.json","comparison":"postprocess/comparisons/lantern_post.png","key":"#00FF00","raw":"lantern_post/generated.png","raw_sha256":"2b01a6568f73f9b5a66d54e3e29fbd7da515a4bd3a76e1651b2cb66b8a0c8be2","source_sha256":"0cd1dfb150aa1e20c8ac37f8856b309acb696781080d494d5c44ef58ba78f0ef","target_size":[64,144],"actual_alpha_bbox":[9,1,54,143],"runtime_anchor_px":[24,143],"warnings":[],"identity_qc":"one post with connected vertical string of three lanterns"},
+    {"id":"bollard","runtime_png":"bollard.png","runtime_json":"postprocess/runtime/bollard.json","comparison":"postprocess/comparisons/bollard.png","key":"#FF00FF","raw":"bollard/generated.png","raw_sha256":"12f050d203b8ad8c0bd03c29a3bdacc158eb68735c88330e754b9178d3c590f8","source_sha256":"4db207ae242b4f4ae1bf9fc969524cd58580ddcb21afa4656de70d73da83687f","target_size":[20,52],"actual_alpha_bbox":[2,7,18,50],"runtime_anchor_px":[10,49],"warnings":[],"diagnostic_old_runtime":"postprocess/runtime/bollard-16x48-diagnostic.png","diagnostic_warning":"old 16x48 bbox touched left/right/bottom; retained for diagnostics"},
+    {"id":"parked_scooter","runtime_png":"parked_scooter.png","runtime_json":"postprocess/runtime/parked_scooter.json","comparison":"postprocess/comparisons/parked_scooter.png","key":"#00FF00","raw":"parked_scooter/generated.png","raw_sha256":"2db2629bac4e4fb8cef4f797bb8fa0d4c6d8e797357b34d8945ec3b3fc40d92c","source_sha256":"520eb2ec6ce7e505f087a61de67f476dde5cdddfa9d788772bf421e8c7ec344b","target_size":[96,80],"actual_alpha_bbox":[8,1,88,79],"runtime_anchor_px":[45,79],"warnings":[]},
+    {"id":"planter","runtime_png":"planter.png","runtime_json":"postprocess/runtime/planter.json","comparison":"postprocess/comparisons/planter.png","key":"#0000FF","raw":"compact-planter-cone-crate/generated.png","raw_sha256":"4f473610525a34508c5d8601674ca63b76f590036bf790eddb3051321ce26076","source_sha256":"d369560a58f8c382a118204e74d3746987c7a00d74a7dc123da7d8f1d8d56280","target_size":[64,64],"actual_alpha_bbox":[6,1,58,63],"runtime_anchor_px":[32,63],"warnings":[]},
+    {"id":"cone","runtime_png":"cone.png","runtime_json":"postprocess/runtime/cone.json","comparison":"postprocess/comparisons/cone.png","key":"#0000FF","raw":"compact-planter-cone-crate/generated.png","raw_sha256":"4f473610525a34508c5d8601674ca63b76f590036bf790eddb3051321ce26076","source_sha256":"00f9219ff690f98fec0b2bab14da83cb57782a766225cc7d76889116e23f9cfb","target_size":[24,32],"actual_alpha_bbox":[1,1,23,31],"runtime_anchor_px":[12,31],"warnings":[]},
+    {"id":"fruit_crate","runtime_png":"fruit_crate.png","runtime_json":"postprocess/runtime/fruit_crate.json","comparison":"postprocess/comparisons/fruit_crate.png","key":"#0000FF","raw":"compact-planter-cone-crate/generated.png","raw_sha256":"4f473610525a34508c5d8601674ca63b76f590036bf790eddb3051321ce26076","source_sha256":"3fd6562d569a2b32c9e13eb1077c037909b62177abea28ddbab38640005ea37b","target_size":[40,32],"actual_alpha_bbox":[3,1,37,31],"runtime_anchor_px":[20,31],"warnings":[]}
+  ],
+  "contact": "props-contact.png",
+  "visual_qc": {
+    "all_eight_viewed": true,
+    "all_true_rgba": true,
+    "all_inbounds": true,
+    "no_redraw": true,
+    "hero_comparison_subject_crop_90px": true,
+    "no_floor_shadow_text_person_smoke": true,
+    "lantern_post_three_lantern_string": true,
+    "key_cleanup": "repo forge_matte key_still; declared blue/green/magenta only"
+  },
+  "warnings": [],
+  "diagnostic_notes": ["old bollard 16x48 runtime bbox touching left/right/bottom is retained at postprocess/runtime/bollard-16x48-diagnostic.png"],
+  "export_worker": {"bollard": {"recommended_display_size": [20, 52], "padding": [2, 2, 2, 2], "source_runtime_preserved": true}},
+  "preserved_raw": ["generated.png", "prompt.txt", "job.json", "run.json"]
+}

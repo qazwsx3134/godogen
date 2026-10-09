@@ -1,0 +1,201 @@
+{
+  "schema": "generate2dmap.prop_pack.v2",
+  "tool": {
+    "name": "extract_prop_pack",
+    "version": "0.4.0"
+  },
+  "input": "../../keyed/stall-fruit-alpha.png",
+  "source_size": [
+    1536,
+    1024
+  ],
+  "source_sha256": "26f83db6a299a16d7cf53ccd1574da30b9de640cb502c81b7237855b0ff41826",
+  "source_mode": "RGBA",
+  "layout_mode": "explicit_boxes",
+  "boxes_file": "../../boxes/stall-fruit.json",
+  "labels_file": null,
+  "background_mode": "native_alpha",
+  "art_source": "host_image",
+  "rows": null,
+  "cols": null,
+  "threshold": 100,
+  "edge_threshold": 150,
+  "despill_radius": 0,
+  "despill": {
+    "mode": "off",
+    "applied": "off",
+    "radius": 0,
+    "margin": 12,
+    "changed_px": 0
+  },
+  "hygiene": {
+    "mode": "none",
+    "floor": 4,
+    "solid_min": 32,
+    "attach_radius": 2,
+    "connectivity": 8,
+    "floor_px": 0,
+    "detached_px": 0,
+    "detached_components": 0,
+    "max_removed_alpha": 0
+  },
+  "alpha_floor": 0,
+  "alpha_floor_pixels_removed": 0,
+  "trim_border": 0,
+  "edge_clean_depth": 0,
+  "component_mode": "all",
+  "component_padding": 8,
+  "min_component_area": "auto",
+  "edge_touch_margin": 0,
+  "geometry": {
+    "connectivity": 8,
+    "alpha_geometry_threshold": 16,
+    "anchor_mode": "stance",
+    "support_band_fraction": 0.25,
+    "anchor_rounding": "whole pixels, half-up",
+    "grid_rounding": null,
+    "keep_canvas": false,
+    "world_scale": null
+  },
+  "accepted": [
+    {
+      "index": 0,
+      "label": "stall-fruit",
+      "display_name": "stall-fruit",
+      "status": "accepted",
+      "image": "stall-fruit/prop.png",
+      "sha256": "5aaeb98c56f1a07649b2011f455eef12abdb63417f3361eeb0d5283d1cc25fab",
+      "output_size": [
+        1005,
+        925
+      ],
+      "grid": null,
+      "cell_box": [
+        265,
+        49,
+        1270,
+        974
+      ],
+      "source_box": [
+        265,
+        49,
+        1270,
+        974
+      ],
+      "source_rect": [
+        265,
+        49,
+        1270,
+        974
+      ],
+      "trim_offset": [
+        0,
+        0
+      ],
+      "padding": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "anchor_px": [
+        619,
+        917
+      ],
+      "anchor_source": "measured",
+      "component_mode": "all",
+      "component_count": 1,
+      "min_component_area": 100,
+      "trim_applied": 0,
+      "crop_bbox": [
+        8,
+        8,
+        997,
+        917
+      ],
+      "padded_crop_bbox": [
+        0,
+        0,
+        1005,
+        925
+      ],
+      "selected_component_area": null,
+      "selected_component_bbox": null,
+      "kept_area": 591153,
+      "dropped_components": 2,
+      "dropped_area": 4,
+      "edge_touch": false
+    }
+  ],
+  "rejected": [],
+  "edge_touch_props": [],
+  "warnings": [],
+  "qa": {
+    "status": "pass",
+    "method": "native alpha, not keyed; alpha hygiene none; 8-connected components (all); checks measured on the published pixels",
+    "notProven": [
+      "that each label names the art in its cell or box",
+      "that a prop is complete: clipping is detected only where art meets the cell edge",
+      "keyed-edge quality beyond the edge fringe count",
+      "that anchors and suggested footprints match gameplay contact (both are measured from alpha)",
+      "runtime placement, collision or occlusion"
+    ],
+    "checks": [
+      {
+        "id": "accepted",
+        "status": "pass",
+        "value": 1,
+        "threshold": ">= 1"
+      },
+      {
+        "id": "edge_touch",
+        "status": "pass",
+        "value": [],
+        "threshold": 0
+      },
+      {
+        "id": "dropped_area",
+        "status": "pass",
+        "value": {
+          "stall-fruit": 0.0
+        },
+        "threshold": 0.01
+      },
+      {
+        "id": "strategy_aspect",
+        "status": "skipped",
+        "value": null,
+        "threshold": 1.6
+      },
+      {
+        "id": "edge_fringe",
+        "status": "skipped",
+        "value": null,
+        "threshold": 0.02
+      }
+    ],
+    "inputs": [
+      {
+        "path": "../../keyed/stall-fruit-alpha.png",
+        "sha256": "26f83db6a299a16d7cf53ccd1574da30b9de640cb502c81b7237855b0ff41826",
+        "bytes": 1224054
+      },
+      {
+        "path": "../../boxes/stall-fruit.json",
+        "sha256": "705516b3a8602c55abdf8e258dbbab3545722c1d5aee56d3f2d82210fd358748",
+        "bytes": 76
+      }
+    ],
+    "outputs": [
+      {
+        "path": "stall-fruit/prop.png",
+        "sha256": "5aaeb98c56f1a07649b2011f455eef12abdb63417f3361eeb0d5283d1cc25fab",
+        "bytes": 1182541
+      }
+    ],
+    "tool": {
+      "name": "extract_prop_pack",
+      "version": "0.4.0"
+    }
+  }
+}

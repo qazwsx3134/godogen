@@ -1,0 +1,28 @@
+# 生成過程的中間檔留在本機，不進 git。
+# 進 git 的是：selected*.png、master*/、candidate-*.png、比較圖（*contact*.png）、
+# map/ 的成品（ground/*.png、props/*.png、godot/、preview/、*.json）、報告與派工單。
+
+# agent-sprite-forge 每次生成／修改／重跑的工作資料夾
+r2/
+takes/
+takes.png
+pad-*/
+generate-*/
+fix-*/
+failed-*/
+edit-run/
+edit-r*/
+run-*/
+prior-pause-*/
+recovered-original/
+diagnostic/
+smoker-sandbox-not-sent/
+*-beforefix.png
+
+# generate2dmap 的原圖與萃取過程
+raw-*/
+extract-*/
+prep-*/
+
+# Godot 匯入檔（art_src 有 .gdignore，不會再產生；舊的保留在 git）
+*.import

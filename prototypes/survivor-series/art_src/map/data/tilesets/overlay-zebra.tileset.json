@@ -1,0 +1,21 @@
+{
+  "schema": "generate2dmap.tileset.v1",
+  "id": "overlay-zebra",
+  "image": "../../ground/zebra.png",
+  "sha256": "e5b4fd615d3fbf66d1578706b40cb175746e1850cce71589c2e84c719c1846b3",
+  "tile_size": [128, 128],
+  "columns": 1,
+  "kind": "flat",
+  "materials": ["zebra-overlay"],
+  "tiles": [{"index": 0, "variant": 0, "properties": {"walkable": true}}],
+  "seamless_verified": false,
+  "seam_qc": {"policy": "isolated", "exact_proof": false, "note": "Overlay is not a repeat claim."},
+  "provenance": {
+    "art_source": "host_image",
+    "route": "local:codex-cli",
+    "generator": {"name": "extract_terrain_tiles.py", "version": "0.4.0"},
+    "source_terrain_bundle": {"path": "../../ground/extract-overlay-zebra-01/terrain-bundle.json", "sha256": "e6f3ad4a2387c67516ef5be1f2fb695fcd21764798b8e6afbf3b583cc0c7ebf9"},
+    "prompt": {"path": "../../ground/prompts/zebra.prompt.txt", "sha256": "223f11c555b2aaea8edfdd0ce0a9c606c390d95cc1c6a7ab67a1508a6cd0fc38"}
+  },
+  "qc_source": {"status": "pass", "warnings": 0, "alpha_bbox": [14, 20, 113, 114], "visible_fraction": 0.212097, "contrast": 0.155684, "edge_policy": "isolated"}
+}

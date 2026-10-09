@@ -1,0 +1,558 @@
+{
+  "schema": "generate2dmap.compose_report.v2",
+  "tool": {
+    "name": "compose_layered_preview",
+    "version": "0.4.0"
+  },
+  "base": "ground-layered-6x6.png",
+  "base_sha256": "587bcfdc97092d91953728b9bb2fe5b02fffba60b9f3f8d0b5b3a49bbfb5a053",
+  "placements": "../data/C-placements.json",
+  "placements_sha256": "1f4f0c02acc9ecc3027207a4d9d36a6ab4c680c9a6e516d441ada3beff51d549",
+  "output": "night-market-composite.png",
+  "output_sha256": "2cf9d2741d4537b4224b06f221d84bade5132cf879b5208615b4e2ebc01fd57d",
+  "canvas_size": [
+    768,
+    768
+  ],
+  "scale": 1.0,
+  "resampler": "nearest",
+  "sort": "ground-line",
+  "anchor_policy": "manifest",
+  "compositing_order": [
+    {
+      "band": "base",
+      "draws": "the base image (scaled by --scale)"
+    },
+    {
+      "band": "background",
+      "draws": "placements on layer background",
+      "sorted_by": [
+        "sortY",
+        "x",
+        "id"
+      ]
+    },
+    {
+      "band": "world",
+      "draws": "props, objects, actors and every other layer",
+      "sorted_by": [
+        "sortY",
+        "x",
+        "id"
+      ]
+    },
+    {
+      "band": "foreground",
+      "draws": "the foreground list and layer foreground",
+      "sorted_by": [
+        "sortY",
+        "x",
+        "id"
+      ]
+    },
+    {
+      "band": "not baked",
+      "draws": "the debug overlay and plate pan are separate files"
+    }
+  ],
+  "prop_packs": [],
+  "pasted": [
+    {
+      "id": "lantern-post-01",
+      "group": "props",
+      "kind": "prop",
+      "layer": "props",
+      "band": "world",
+      "draw_index": 0,
+      "image": "../props/lantern_post.png",
+      "image_sha256": "de2ba2ca85d2cf8cce75b5b7d04d6a55fe4caf41f6ec4c11de01c1afc68a25d4",
+      "left": 296,
+      "top": 49,
+      "w": 64,
+      "h": 144,
+      "source_size": [
+        64,
+        144
+      ],
+      "anchorPx": [
+        24.0,
+        143.0
+      ],
+      "anchor_source": "px",
+      "anchor_world": [
+        320.0,
+        192.0
+      ],
+      "anchor_canvas": [
+        320.0,
+        192.0
+      ],
+      "anchor_world_error": [
+        0.0,
+        0.0
+      ],
+      "resampler": "nearest",
+      "clipped": false,
+      "visible_bounds": [
+        305,
+        50,
+        350,
+        192
+      ],
+      "sortY": 192.0,
+      "sort_source": "explicit",
+      "footprint": {
+        "shape": "rect",
+        "cx": 328.0,
+        "cy": 186.0,
+        "rx": 10.0,
+        "ry": 6.0,
+        "rotate": 0.0,
+        "source": "placement",
+        "solid": true
+      },
+      "warnings": []
+    },
+    {
+      "id": "stall-fruit-01",
+      "group": "props",
+      "kind": "prop",
+      "layer": "props",
+      "band": "world",
+      "draw_index": 1,
+      "image": "../props/stall-fruit.png",
+      "image_sha256": "c6914406146567bb7b77d8b430dc9fd93b82e0e9acfe375c6bf3284bac06b7df",
+      "left": 114,
+      "top": 145,
+      "w": 128,
+      "h": 112,
+      "source_size": [
+        128,
+        112
+      ],
+      "anchorPx": [
+        78.0,
+        111.0
+      ],
+      "anchor_source": "px",
+      "anchor_world": [
+        192.0,
+        256.0
+      ],
+      "anchor_canvas": [
+        192.0,
+        256.0
+      ],
+      "anchor_world_error": [
+        0.0,
+        0.0
+      ],
+      "resampler": "nearest",
+      "clipped": false,
+      "visible_bounds": [
+        118,
+        146,
+        238,
+        256
+      ],
+      "sortY": 256.0,
+      "sort_source": "explicit",
+      "footprint": {
+        "shape": "rect",
+        "cx": 178.0,
+        "cy": 248.0,
+        "rx": 60.0,
+        "ry": 8.0,
+        "rotate": 0.0,
+        "source": "placement",
+        "solid": true
+      },
+      "warnings": []
+    },
+    {
+      "id": "stall-snack-01",
+      "group": "props",
+      "kind": "prop",
+      "layer": "props",
+      "band": "world",
+      "draw_index": 2,
+      "image": "../props/stall-snack.png",
+      "image_sha256": "7564cd9ca219de7490f78728839a6d288b24537ecfb9f6b8283dbd217fb2c734",
+      "left": 491,
+      "top": 145,
+      "w": 128,
+      "h": 112,
+      "source_size": [
+        128,
+        112
+      ],
+      "anchorPx": [
+        85.0,
+        111.0
+      ],
+      "anchor_source": "px",
+      "anchor_world": [
+        576.0,
+        256.0
+      ],
+      "anchor_canvas": [
+        576.0,
+        256.0
+      ],
+      "anchor_world_error": [
+        0.0,
+        0.0
+      ],
+      "resampler": "nearest",
+      "clipped": false,
+      "visible_bounds": [
+        492,
+        161,
+        618,
+        256
+      ],
+      "sortY": 256.0,
+      "sort_source": "explicit",
+      "footprint": {
+        "shape": "rect",
+        "cx": 555.0,
+        "cy": 248.0,
+        "rx": 63.0,
+        "ry": 8.0,
+        "rotate": 0.0,
+        "source": "placement",
+        "solid": true
+      },
+      "warnings": []
+    },
+    {
+      "id": "hero-demo-se-90px",
+      "group": "actors",
+      "kind": "actor",
+      "layer": "actors",
+      "band": "world",
+      "draw_index": 3,
+      "image": "hero-se-demo.png",
+      "image_sha256": "dbade5583a0f968ff007d62fe9cb4f05327c1b68507ce970745d6941c045585d",
+      "left": 362,
+      "top": 294,
+      "w": 44,
+      "h": 90,
+      "source_size": [
+        44,
+        90
+      ],
+      "anchorPx": [
+        22.0,
+        90.0
+      ],
+      "anchor_source": "px",
+      "anchor_world": [
+        384.0,
+        384.0
+      ],
+      "anchor_canvas": [
+        384.0,
+        384.0
+      ],
+      "anchor_world_error": [
+        0.0,
+        0.0
+      ],
+      "resampler": "nearest",
+      "clipped": false,
+      "visible_bounds": [
+        362,
+        294,
+        406,
+        384
+      ],
+      "sortY": 384.0,
+      "sort_source": "explicit",
+      "footprint": null,
+      "warnings": []
+    },
+    {
+      "id": "cone-01",
+      "group": "props",
+      "kind": "prop",
+      "layer": "props",
+      "band": "world",
+      "draw_index": 4,
+      "image": "../props/cone.png",
+      "image_sha256": "e9775254b9930e62b0575947a30aaea586e7ef6c35450ab8f95933c8d9fd1e12",
+      "left": 180,
+      "top": 609,
+      "w": 24,
+      "h": 32,
+      "source_size": [
+        24,
+        32
+      ],
+      "anchorPx": [
+        12.0,
+        31.0
+      ],
+      "anchor_source": "px",
+      "anchor_world": [
+        192.0,
+        640.0
+      ],
+      "anchor_canvas": [
+        192.0,
+        640.0
+      ],
+      "anchor_world_error": [
+        0.0,
+        0.0
+      ],
+      "resampler": "nearest",
+      "clipped": false,
+      "visible_bounds": [
+        181,
+        610,
+        203,
+        640
+      ],
+      "sortY": 640.0,
+      "sort_source": "explicit",
+      "footprint": {
+        "shape": "rect",
+        "cx": 192.0,
+        "cy": 635.0,
+        "rx": 11.0,
+        "ry": 5.0,
+        "rotate": 0.0,
+        "source": "placement",
+        "solid": true
+      },
+      "warnings": []
+    },
+    {
+      "id": "planter-01",
+      "group": "props",
+      "kind": "prop",
+      "layer": "props",
+      "band": "world",
+      "draw_index": 5,
+      "image": "../props/planter.png",
+      "image_sha256": "2baddad69da8d0a506e5e3b75584c28eb23e8ec3f7b1189239988d55c6bff9eb",
+      "left": 544,
+      "top": 577,
+      "w": 64,
+      "h": 64,
+      "source_size": [
+        64,
+        64
+      ],
+      "anchorPx": [
+        32.0,
+        63.0
+      ],
+      "anchor_source": "px",
+      "anchor_world": [
+        576.0,
+        640.0
+      ],
+      "anchor_canvas": [
+        576.0,
+        640.0
+      ],
+      "anchor_world_error": [
+        0.0,
+        0.0
+      ],
+      "resampler": "nearest",
+      "clipped": false,
+      "visible_bounds": [
+        550,
+        578,
+        602,
+        640
+      ],
+      "sortY": 640.0,
+      "sort_source": "explicit",
+      "footprint": {
+        "shape": "rect",
+        "cx": 576.0,
+        "cy": 632.0,
+        "rx": 26.0,
+        "ry": 8.0,
+        "rotate": 0.0,
+        "source": "placement",
+        "solid": true
+      },
+      "warnings": []
+    },
+    {
+      "id": "bollard-01",
+      "group": "props",
+      "kind": "prop",
+      "layer": "props",
+      "band": "world",
+      "draw_index": 6,
+      "image": "../props/bollard.png",
+      "image_sha256": "f3dabba842fbf72fb439f4d36b84f882f81b0680702716b088cc9e6a49a9075c",
+      "left": 694,
+      "top": 591,
+      "w": 20,
+      "h": 52,
+      "source_size": [
+        20,
+        52
+      ],
+      "anchorPx": [
+        10.0,
+        49.0
+      ],
+      "anchor_source": "px",
+      "anchor_world": [
+        704.0,
+        640.0
+      ],
+      "anchor_canvas": [
+        704.0,
+        640.0
+      ],
+      "anchor_world_error": [
+        0.0,
+        0.0
+      ],
+      "resampler": "nearest",
+      "clipped": false,
+      "visible_bounds": [
+        696,
+        598,
+        712,
+        641
+      ],
+      "sortY": 640.0,
+      "sort_source": "explicit",
+      "footprint": {
+        "shape": "rect",
+        "cx": 704.0,
+        "cy": 635.0,
+        "rx": 8.0,
+        "ry": 5.0,
+        "rotate": 0.0,
+        "source": "placement",
+        "solid": true
+      },
+      "warnings": []
+    },
+    {
+      "id": "parked-scooter-01",
+      "group": "props",
+      "kind": "prop",
+      "layer": "props",
+      "band": "world",
+      "draw_index": 7,
+      "image": "../props/parked_scooter.png",
+      "image_sha256": "b145550f72ba2a6d2189c432421bf9187f9af744be0a72fd4b45bb902dfb98c4",
+      "left": 275,
+      "top": 625,
+      "w": 96,
+      "h": 80,
+      "source_size": [
+        96,
+        80
+      ],
+      "anchorPx": [
+        45.0,
+        79.0
+      ],
+      "anchor_source": "px",
+      "anchor_world": [
+        320.0,
+        704.0
+      ],
+      "anchor_canvas": [
+        320.0,
+        704.0
+      ],
+      "anchor_world_error": [
+        0.0,
+        0.0
+      ],
+      "resampler": "nearest",
+      "clipped": false,
+      "visible_bounds": [
+        283,
+        626,
+        363,
+        704
+      ],
+      "sortY": 704.0,
+      "sort_source": "explicit",
+      "footprint": {
+        "shape": "rect",
+        "cx": 323.0,
+        "cy": 697.0,
+        "rx": 40.0,
+        "ry": 7.0,
+        "rotate": 0.0,
+        "source": "placement",
+        "solid": true
+      },
+      "warnings": []
+    },
+    {
+      "id": "fruit-crate-01",
+      "group": "props",
+      "kind": "prop",
+      "layer": "props",
+      "band": "world",
+      "draw_index": 8,
+      "image": "../props/fruit_crate.png",
+      "image_sha256": "d5d62c6026d9a41455e347ffdc740086b738b881a042f3061c3907997a820275",
+      "left": 556,
+      "top": 673,
+      "w": 40,
+      "h": 32,
+      "source_size": [
+        40,
+        32
+      ],
+      "anchorPx": [
+        20.0,
+        31.0
+      ],
+      "anchor_source": "px",
+      "anchor_world": [
+        576.0,
+        704.0
+      ],
+      "anchor_canvas": [
+        576.0,
+        704.0
+      ],
+      "anchor_world_error": [
+        0.0,
+        0.0
+      ],
+      "resampler": "nearest",
+      "clipped": false,
+      "visible_bounds": [
+        559,
+        674,
+        593,
+        704
+      ],
+      "sortY": 704.0,
+      "sort_source": "explicit",
+      "footprint": {
+        "shape": "rect",
+        "cx": 576.0,
+        "cy": 697.0,
+        "rx": 17.0,
+        "ry": 7.0,
+        "rotate": 0.0,
+        "source": "placement",
+        "solid": true
+      },
+      "warnings": []
+    }
+  ],
+  "warnings": [],
+  "audit_status": "pass"
+}

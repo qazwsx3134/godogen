@@ -1,0 +1,36 @@
+{
+  "status": "pass",
+  "godot_version": "4.7.stable.official.5b4e0cb0f",
+  "checks": [
+    {
+      "id": "godot_headless_editor_import",
+      "exit_code": 0,
+      "log": "godot/import.log"
+    },
+    {
+      "id": "godot_headless_main_scene_2_frames",
+      "exit_code": 0,
+      "log": "godot/scene-load.log"
+    }
+  ],
+  "final_engine_resource_sha256": {
+    "survivor-series-C-night-market.tscn": "c9b7c07436019d675800d014d5f896492d31aed1b29e26dbfe0c86e7ea7947be",
+    "survivor-series-C-night-market.tileset.tres": "28dca8643f12cc943f30fd6233783ff844761b60a19b8f1fb2c230a1f557cbfc"
+  },
+  "source_jobs_verified": 13,
+  "accepted_props": 8,
+  "accepted_overlay_tiles": 5,
+  "ground_QC": {
+    "x_ratio": 0.441609,
+    "y_ratio": 0.926504,
+    "max_ratio": 1.25,
+    "strict_warnings": [],
+    "seamless_verified": false
+  },
+  "preview": "preview/night-market-composite.png",
+  "limitations": [
+    "flat Atlas tilesets do not define Wang/blob terrain brush sets; exact exporter warnings retained in godot/godot-export.json",
+    "static scene load does not exercise player movement or physics gameplay",
+    "repeating single base material retains recognisable warm-reflection periodicity; overlays/props can be rearranged"
+  ]
+}

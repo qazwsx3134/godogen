@@ -1,0 +1,22 @@
+{
+  "schema": "generate2dmap.tileset.v1",
+  "id": "overlay-puddle",
+  "image": "../../ground/puddle.png",
+  "sha256": "4e192d39dd75c6bea60c6001ca27ad4e27f38e4b4bdcea214dae9d7156495d32",
+  "tile_size": [128, 128],
+  "columns": 1,
+  "kind": "flat",
+  "materials": ["puddle-overlay"],
+  "tiles": [{"index": 0, "variant": 0, "properties": {"walkable": true}}],
+  "seamless_verified": false,
+  "seam_qc": {"policy": "isolated", "exact_proof": false, "note": "Overlay is not a repeat claim."},
+  "provenance": {
+    "art_source": "host_image",
+    "route": "local:codex-cli",
+    "generator": {"name": "extract_terrain_tiles.py", "version": "0.4.0"},
+    "source_terrain_bundle": {"path": "../../ground/extract-overlay-puddle-clean-01/terrain-bundle.json", "sha256": "600dd8f720190093183e461da283c43f511dedde18c310747f873f77527ca226"},
+    "prompt": {"path": "../../ground/prompts/puddle-clean.prompt.txt", "sha256": "0118befe2f416814a9042dba5fb0d9e3e6ceff93934ce23b9edb45b322921b9a"},
+    "supersedes": {"diagnostic_image": "../../ground/diagnostic/puddle-initial.png", "reason": "clean raw-puddle-clean extraction accepted; diagnostic excluded"}
+  },
+  "qc_source": {"status": "pass", "warnings": 0, "alpha_bbox": [28, 54, 103, 82], "visible_fraction": 0.080566, "contrast": 0.158077, "edge_policy": "isolated", "source": "extract-overlay-puddle-clean-01/terrain-bundle.json"}
+}

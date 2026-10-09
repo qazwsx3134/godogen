@@ -1,0 +1,119 @@
+{
+  "schema": "survivor-series.C.export-handoff.v2",
+  "status": "ready_for_publish",
+  "owner": "C",
+  "scope": {
+    "write_roots": [
+      ".forge/survivor-assets-20261009/C/map/",
+      ".forge/survivor-assets-20261009/C/C-export-handoff.json",
+      ".forge/survivor-assets-20261009/C/C-export-handoff.md"
+    ],
+    "forbidden_written": [
+      ".forge/survivor-assets-20261009/C/map/ground/",
+      ".forge/survivor-assets-20261009/C/map/props/",
+      "/Users/peter/repo/godot/godogen/prototypes/survivor-series/",
+      ".forge/survivor-assets-20261009/report*"
+    ],
+    "template_archive": ".forge/survivor-assets-20261009/C/map-bundle/ (retained archive; final bundle does not depend on it)",
+    "publish_rule": "copy only C/map/ to SS/art_src/map/"
+  },
+  "pipeline": {
+    "map_mode": "tile_mode",
+    "visual_model": "layered_tilemap",
+    "runtime_object_model": "y_sorted_props",
+    "collision_model": "coarse_shapes_with_independent_prop_footprints",
+    "engine_target": "Godot 4 TileSet/TileMapLayer",
+    "godot_target": "Godot 4.3+; Root editor import session 12731 targets Godot 4.7",
+    "texture_filter": "nearest",
+    "world_px": [768, 768],
+    "tile_px": [128, 128],
+    "grid": [6, 6],
+    "layers_bottom_to_top": ["ground", "grounddecor-manhole", "grounddecor-drain-grate", "grounddecor-puddle", "grounddecor-cracks", "grounddecor-zebra", "props-y-sorted"],
+    "portable_policy": {
+      "bundle_refs": "C/map/data relative only; ../ground and ../props",
+      "godot_refs": "res:// only inside standalone project",
+      "absolute_runtime_refs": [],
+      "external_map_bundle_dependency": false
+    }
+  },
+  "final_artifacts": {
+    "bundle": {
+      "path": "map/data/C-night-market.map-bundle.json",
+      "schema": "generate2dmap.map_bundle.v2",
+      "sha256": "3b7a07590b71bd2abaab34331dc3dbb752809a46379e2b7f3098c83494e5fcc2",
+      "validation_report": "map/data/C-night-market.map-bundle-report.json"
+    },
+    "tilesets": [
+      "map/data/tilesets/pavement.tileset.json",
+      "map/data/tilesets/overlay-manhole.tileset.json",
+      "map/data/tilesets/overlay-drain-grate.tileset.json",
+      "map/data/tilesets/overlay-puddle.tileset.json",
+      "map/data/tilesets/overlay-cracks.tileset.json",
+      "map/data/tilesets/overlay-zebra.tileset.json"
+    ],
+    "layout_data": ["map/data/ground-layer.json", "map/data/C-object-layout.json", "map/data/C-placements.json"],
+    "nav_qc": ["map/data/nav/nav-grid.json", "map/data/nav/nav-report.json", "map/data/nav/nav-debug.png"],
+    "godot_project": {
+      "root": "map/godot/project.godot",
+      "main_scene": "res://survivor-series-C-night-market.tscn",
+      "scene": "map/godot/survivor-series-C-night-market.tscn",
+      "tileset": "map/godot/survivor-series-C-night-market.tileset.tres",
+      "export_report": "map/godot/godot-export.json",
+      "root_validation": "map/root-validation.json",
+      "asset_root": "map/godot/assets/"
+    },
+    "previews": {
+      "ground_repeat": "map/preview/ground-repeat-3x3.png",
+      "ground_grid": "map/preview/ground-grid-6x6.png",
+      "layered_ground": "map/preview/ground-layered-6x6.png",
+      "hero_demo": "map/preview/hero-se-demo.png",
+      "composite": "map/preview/night-market-composite.png",
+      "compose_report": "map/preview/night-market-composite.report.json",
+      "compose_audit": "map/preview/night-market-composite.audit.json"
+    },
+    "complete_qc_manifest": "map/data/C-final-qc.json"
+  },
+  "qc": {
+    "bundle_validate_require_sha256": {"status": "pass", "errors": 0, "warnings": 0},
+    "map_nav_check": {"status": "pass", "unreachable": 0, "thin_gaps": 0},
+    "compose_strict": {"status": "pass", "warnings": 0, "audit": "pass", "placed": 9},
+    "export_godot_strict": {"status": "pass", "parse_back": "pass", "tiles_layers": 6, "objects": 8, "collision_shapes": 8, "warnings": 6},
+    "godot_editor_import": {"status": "pass", "session": 12731, "godot_version": "4.7.stable.official.5b4e0cb0f", "proof_file": "map/root-validation.json", "editor_exit_code": 0, "main_scene_2_frames_exit_code": 0, "images_imported": 14, "errors": 0, "warnings": 0},
+    "ground_seam_policy": {"pavement_ratio_x": 0.441609, "pavement_ratio_y": 0.926504, "threshold": 1.25, "seamless_verified": false, "exact_zero_proof": false}
+  },
+  "asset_inventory": {
+    "ground_overlays": [
+      {"id": "manhole", "size": [128, 128], "sha256": "0ae95241f369d70493424367efa3353b0d6d14ab9467593b13676484c12c43cc", "alpha_bbox": [12, 14, 124, 124], "qc": "pass; contrast 0.175341; visible 0.251343; warnings 0"},
+      {"id": "drain_grate", "size": [128, 128], "sha256": "935551a711188e6ee9a37901be789f1f1dbd3950bf963f4a2019345c7212fc2e", "alpha_bbox": [12, 32, 113, 93], "qc": "pass; contrast 0.200015; visible 0.165771; warnings 0"},
+      {"id": "puddle", "size": [128, 128], "sha256": "4e192d39dd75c6bea60c6001ca27ad4e27f38e4b4bdcea214dae9d7156495d32", "alpha_bbox": [28, 54, 103, 82], "qc": "pass; contrast 0.158077; visible 0.080566; warnings 0"},
+      {"id": "cracks", "size": [128, 128], "sha256": "beefc33354ff8b0f37f662b1430676d1adfadf5db0d4db918fd4a05ae09a19a0", "alpha_bbox": [16, 20, 111, 121], "qc": "pass; contrast 0.128896; visible 0.032227; warnings 0"},
+      {"id": "zebra", "size": [128, 128], "sha256": "e5b4fd615d3fbf66d1578706b40cb175746e1850cce71589c2e84c719c1846b3", "alpha_bbox": [14, 20, 113, 114], "qc": "pass; contrast 0.155684; visible 0.212097; warnings 0"}
+    ],
+    "props": [
+      {"id": "stall-fruit", "size": [128, 112], "anchor_px": [78, 111], "alpha_bbox": [4, 1, 124, 111], "sha256": "c6914406146567bb7b77d8b430dc9fd93b82e0e9acfe375c6bf3284bac06b7df", "transform": "scale 1; flip_x false; rotation 0"},
+      {"id": "stall-snack", "size": [128, 112], "anchor_px": [85, 111], "alpha_bbox": [1, 16, 127, 111], "sha256": "7564cd9ca219de7490f78728839a6d288b24537ecfb9f6b8283dbd217fb2c734", "transform": "scale 1; flip_x false; rotation 0"},
+      {"id": "lantern_post", "size": [64, 144], "anchor_px": [24, 143], "alpha_bbox": [9, 1, 54, 143], "sha256": "de2ba2ca85d2cf8cce75b5b7d04d6a55fe4caf41f6ec4c11de01c1afc68a25d4", "transform": "scale 1; flip_x false; rotation 0"},
+      {"id": "planter", "size": [64, 64], "anchor_px": [32, 63], "alpha_bbox": [6, 1, 58, 63], "sha256": "2baddad69da8d0a506e5e3b75584c28eb23e8ec3f7b1189239988d55c6bff9eb", "transform": "scale 1; flip_x false; rotation 0"},
+      {"id": "cone", "size": [24, 32], "anchor_px": [12, 31], "alpha_bbox": [1, 1, 23, 31], "sha256": "e9775254b9930e62b0575947a30aaea586e7ef6c35450ab8f95933c8d9fd1e12", "transform": "scale 1; flip_x false; rotation 0"},
+      {"id": "bollard", "size": [20, 52], "anchor_px": [10, 49], "alpha_bbox": [2, 7, 18, 50], "sha256": "f3dabba842fbf72fb439f4d36b84f882f81b0680702716b088cc9e6a49a9075c", "transform": "scale 1; flip_x false; rotation 0; +2,+2 transparent padding from 16x48"},
+      {"id": "parked_scooter", "size": [96, 80], "anchor_px": [45, 79], "alpha_bbox": [8, 1, 88, 79], "sha256": "b145550f72ba2a6d2189c432421bf9187f9af744be0a72fd4b45bb902dfb98c4", "transform": "scale 1; flip_x false; rotation 0"},
+      {"id": "fruit_crate", "size": [40, 32], "anchor_px": [20, 31], "alpha_bbox": [3, 1, 37, 31], "sha256": "d5d62c6026d9a41455e347ffdc740086b738b881a042f3061c3907997a820275", "transform": "scale 1; flip_x false; rotation 0"}
+    ]
+  },
+  "provenance": {
+    "ground_kit": {"path": "map/ground/ground-kit.json", "sha256": "0f2bc85ee3dc9b77e618a6ddf5da0d85a80ae043cb9867259760d5d25ec322ea", "status": "complete", "pending": [], "warnings": []},
+    "ground_kit_note": "Raw prompt trailing-newline versus CLI strip discrepancy resolved: job SHA 3723950955b400c9ae559564b4cea7209d1d5af0d7535589eea04739db2bcfa2 equals sha256(prompt.txt.strip()); preserved source/full prompt SHA 0118befe2f416814a9042dba5fb0d9e3e6ceff93934ce23b9edb45b322921b9a and bytes match.",
+    "prop_kit": "map/props/prop-kit.json; status completed",
+    "puddle_canonical_sha256": "4e192d39dd75c6bea60c6001ca27ad4e27f38e4b4bdcea214dae9d7156495d32",
+    "puddle_terrain_bundle_sha256": "600dd8f720190093183e461da283c43f511dedde18c310747f873f77527ca226",
+    "puddle_prompt_sha256": "0118befe2f416814a9042dba5fb0d9e3e6ceff93934ce23b9edb45b322921b9a",
+    "hero_source": "approved master-green original se reference; alpha extraction only; no character generation",
+    "generator_route": "Root-managed source generation; C performed no API calls",
+    "tooling": "unmodified copies of repo generate2dmap export/compose/schema scripts under map/tools/"
+  },
+  "warnings": [
+    "six flat atlas no-Wang/blob terrain warnings are expected and retained; no fake Wang/blob metadata was added.",
+    "pavement seam QC ratios pass but seamless_verified remains false.",
+    "Root validation records Godot 4.7 editor import and two-frame main-scene load pass; static scene load does not exercise player movement or physics gameplay."
+  ]
+}

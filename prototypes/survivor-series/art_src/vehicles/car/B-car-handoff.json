@@ -1,0 +1,194 @@
+{
+  "schema": "survivor_assets.b_car_handoff.v1",
+  "status": "completed",
+  "created_at": "2026-10-09T02:51:44+08:00",
+  "updated_at": "2026-10-09T09:00:03+08:00",
+  "scope": "B-car only; C not started",
+  "staging_root": ".forge/survivor-assets-20261009/B/vehicles/car",
+  "raw_modified": false,
+  "route": {
+    "requested": "codex-cli",
+    "actual_for_batch": "local:codex-cli",
+    "model": "codex-image_gen",
+    "api_or_codeart": false
+  },
+  "references": {
+    "identity_role": "FIRST",
+    "identity_path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/vehicles/car/master/master_rgba.png",
+    "identity_sha256": "b3ec16d0c59a82b0ec56382444fd6e1c4d94bc238c9bf30a5e9214c419035cce",
+    "style_role": "SECOND, style only",
+    "style_path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man/master-green/master_rgba.png",
+    "style_sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+    "spec_check": "All four specs resolve the same identity_ref FIRST and style_ref SECOND absolute paths; class=mob, facing=none, finish=pixel, key=#FF00FF. Identity text is direction-neutral.",
+    "fix_run_reference_check": "fix-north-01/run.json records the approved car as FIRST/edit and hero as SECOND/extra with both expected hashes; its stale relative-style warning is not an absent-reference failure."
+  },
+  "source_qc": {
+    "ne": {
+      "status": "pass",
+      "raw_sources": [
+        "dir-ne/fix-ne-01/takes/take-01/generated.png",
+        "dir-ne/fix-ne-01/takes/take-02/generated.png"
+      ],
+      "raw_sha256": [
+        "803474be6609a4e232aa89930ff29efebbd5f93d998905909114108c27a01d81",
+        "29568b35e75171a35d62807261ee337d510a602598d65a4a4ba26d1798edc5db"
+      ],
+      "route_model": "local:codex-cli / codex-image_gen",
+      "references": "approved car FIRST and hero SECOND present with expected hashes",
+      "direction": "UPPER-RIGHT front / LOWER-LEFT rear, rear-right three-quarter",
+      "raw_preserved": true
+    },
+    "n": {
+      "status": "pass",
+      "raw_sources": [
+        "dir-n/fix-north-01/takes/take-01/generated.png",
+        "dir-n/generate-batch-01/takes/take-02/generated.png"
+      ],
+      "raw_sha256": [
+        "cdfc567385f2351093727c80dce0b8ee993108161678e14944afd7287b439fac",
+        "0c3870565e02f5bc6f6a663d40917ee13c480d72f2f5f6c68b37658d1e3ef8ac"
+      ],
+      "route_model": "local:codex-cli / codex-image_gen",
+      "references": "actual run references contain approved car FIRST and hero SECOND with expected hashes",
+      "warning": "fix-north-01 has stale relative style-path warning only; attachment is present",
+      "direction": "straight TOP, rear and driver back",
+      "raw_preserved": true
+    },
+    "e": {
+      "status": "pass",
+      "current_outputs": "dir-e/fix-e-02 outputs accepted; older initial outputs retained as beforefix/failure diagnostics",
+      "raw_sources": [
+        "dir-e/fix-e-02/takes/take-01/generated.png",
+        "dir-e/fix-e-02/takes/take-02/generated.png"
+      ],
+      "raw_sha256": [
+        "188bee0c69848fc1322a19a1a32255cdb07ffafac416daf28aa2484a1fe77894",
+        "33e51720d9bfb8e9b14b32fbcfed207d21a06db9617d5a58aff7a10a2b83d20c"
+      ],
+      "route_model": "local:codex-cli / codex-image_gen",
+      "references": "approved car FIRST and hero SECOND present with expected hashes; root run warnings=0",
+      "direction": "exact EAST/RIGHT: horizontal wheel axles and ground contacts, narrow nose RIGHT, roof visible from elevated camera",
+      "root_fix_expected": "dir-e/fix-e-02 with two heading-only EAST edits; completed successfully",
+      "pad": {
+        "outputs": ["dir-e/pad-fix-01/padded_rgba.png", "dir-e/pad-fix-02/padded_rgba.png"],
+        "bbox": [[83, 406, 941, 877], [138, 406, 886, 877]],
+        "width_px": [858, 748],
+        "height_px": [471, 471],
+        "transform_scale": [0.8234265734, 0.8336283186],
+        "transform_offset": [[3.5340909091, 25.5769230769], [59.7566371681, -29.9876106195]],
+        "width_limited": [false, false],
+        "warnings": [[], []],
+        "groundline_y": 877
+      },
+      "stopped_attempt": {
+        "run": "car-e fix attempt before dir-e/fix-e-02",
+        "processes": ["PID 43523", "Codex 43531"],
+        "duration_note": "stalled for about 3 hours",
+        "stopped_by": "root verified and SIGINT-stopped all 3 layers",
+        "process_check": "ps empty after stop",
+        "old_run_id": "ed8a04a874bf4026a8188c934856ab84",
+        "resume_result": "resume produced no image",
+        "artifact_status": "ARTIFACT_MISSING",
+        "raw_written": false
+      },
+      "retry_policy": {
+        "run": "dir-e/fix-e-02",
+        "owner": "root",
+        "max_attempts": 1,
+        "outer_timeout_s": 360,
+        "on_timeout": "SIGINT/stop and skip; no further retry",
+        "worker_action": "wait for root raw output; pad only after raw returns",
+        "result": "success; both takes returned and were padded; no further retry"
+      },
+      "raw_preserved": true
+    }
+  },
+  "approved_se_baseline": {
+    "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/vehicles/car/master/master_rgba.png",
+    "framing_bbox": [94, 406, 730, 877],
+    "width_px": 636,
+    "height_px": 471,
+    "transform_scale": 1.0,
+    "contact_position": "center"
+  },
+  "candidate_qc": [
+    {
+      "dir": "s",
+      "expected_heading": "DOWN/front",
+      "observed_heading": "DOWN/front",
+      "heading_pass": true,
+      "candidates": [
+        {"id": "candidate-01", "source": "dir-s/recovered-original/generated.png", "raw_job": "dir-s/recovered-original/job.json", "candidate": "dir-s/candidate-01.png", "pad": "dir-s/pad-01/pad.json", "bbox": [319, 406, 705, 877], "width_px": 386, "height_px": 471, "transform_scale": 0.5992366412, "alpha": {"mode": "RGBA", "size": [1024, 1024], "nonzero_px": 146241}, "inbounds": true, "pad_warnings": [], "visual": "pass: complete front-facing car, driver, mirrors and visible wheels; no crop/text/shadow"},
+        {"id": "candidate-02", "source": "dir-s/generate-batch-01/takes/take-01/generated.png", "raw_job": "dir-s/generate-batch-01/takes/take-01/job.json", "candidate": "dir-s/candidate-02.png", "pad": "dir-s/pad-02/pad.json", "bbox": [322, 406, 702, 877], "width_px": 380, "height_px": 471, "transform_scale": 0.6399456522, "alpha": {"mode": "RGBA", "size": [1024, 1024], "nonzero_px": 150513}, "inbounds": true, "pad_warnings": [], "visual": "pass: complete front-facing car, driver, mirrors and visible wheels; no crop/text/shadow"}
+      ],
+      "contact": "dir-s/candidates-contact.png"
+    },
+    {
+      "dir": "e",
+      "expected_heading": "RIGHT",
+      "observed_heading": "EAST/RIGHT exact: horizontal axles, narrow nose RIGHT, elevated roof visible",
+      "heading_pass": true,
+      "candidates": [
+        {"id": "candidate-01", "source": "dir-e/fix-e-02/takes/take-01/generated.png", "raw_job": "dir-e/fix-e-02/takes/take-01/job.json", "candidate": "dir-e/candidate-01.png", "beforefix_copy": "dir-e/candidate-01-beforefix.png", "candidate_sha256": "52d9d589b2a8ece4142a2cfe8b1566140100091985335c21c125b2f21f20cdb9", "pad": "dir-e/pad-fix-01/pad.json", "bbox": [83, 406, 941, 877], "width_px": 858, "height_px": 471, "transform_scale": 0.8234265734, "transform_offset": [3.5340909091, 25.5769230769], "width_limited": false, "alpha": {"mode": "RGBA", "size": [1024, 1024], "nonzero_px": 298499}, "inbounds": true, "pad_warnings": [], "visual": "pass: exact EAST/RIGHT, horizontal wheel axles and ground contacts, roof visible, narrow nose RIGHT, no crop/text/shadow"},
+        {"id": "candidate-02", "source": "dir-e/fix-e-02/takes/take-02/generated.png", "raw_job": "dir-e/fix-e-02/takes/take-02/job.json", "candidate": "dir-e/candidate-02.png", "beforefix_copy": "dir-e/candidate-02-beforefix.png", "candidate_sha256": "5b34075fa9b75d9b8485862a92c3b1dde90119551e396a27a7eafae625962dfc", "pad": "dir-e/pad-fix-02/pad.json", "bbox": [138, 406, 886, 877], "width_px": 748, "height_px": 471, "transform_scale": 0.8336283186, "transform_offset": [59.7566371681, -29.9876106195], "width_limited": false, "alpha": {"mode": "RGBA", "size": [1024, 1024], "nonzero_px": 255276}, "inbounds": true, "pad_warnings": [], "visual": "pass/adopted: exact EAST/RIGHT, horizontal wheel axles and ground contacts, roof visible, narrow nose RIGHT, no crop/text/shadow; root report note: slight lower-right projection remains"}
+      ],
+      "contact": "dir-e/candidates-contact.png",
+      "fix_record": {"fix_run": "dir-e/fix-e-02/run.json", "route": "local:codex-cli", "model": "codex-image_gen", "key": "#FF00FF", "retry_authorized_once": true, "previous_stalled_run": "ed8a04a874bf4026a8188c934856ab84", "previous_result": "3h stalled, root SIGINT-killed 3 layers; resume ARTIFACT_MISSING", "old_initial_raw": ["dir-e/generate-batch-01/takes/take-01/generated.png", "dir-e/generate-batch-01/takes/take-02/generated.png"], "old_candidates": ["dir-e/candidate-01-beforefix.png", "dir-e/candidate-02-beforefix.png"], "old_contacts": ["dir-e/candidates-contact-beforefix.png", "directions-contact-beforefix.png"], "result": "both root retry takes pass exact RIGHT and are padded; no further retry"}
+    },
+    {
+      "dir": "ne",
+      "expected_heading": "UPPER-RIGHT",
+      "observed_heading": "UPPER-RIGHT / rear-left three-quarter",
+      "heading_pass": true,
+      "candidates": [
+        {"id": "candidate-01", "source": "dir-ne/fix-ne-01/takes/take-01/generated.png", "raw_job": "dir-ne/fix-ne-01/takes/take-01/job.json", "candidate": "dir-ne/candidate-01.png", "beforefix_copy": "dir-ne/candidate-01-beforefix.png", "pad": "dir-ne/pad-fix-01/pad.json", "bbox": [196, 406, 828, 877], "width_px": 632, "height_px": 471, "transform_scale": 0.6633802817, "alpha": {"mode": "RGBA", "size": [1024, 1024], "nonzero_px": 193996}, "inbounds": true, "pad_warnings": [], "visual": "pass after root fix: front points UPPER-RIGHT, rear points LOWER-LEFT, driver on right/rear three-quarter side, no crop/text/shadow"},
+        {"id": "candidate-02", "source": "dir-ne/fix-ne-01/takes/take-02/generated.png", "raw_job": "dir-ne/fix-ne-01/takes/take-02/job.json", "candidate": "dir-ne/candidate-02.png", "beforefix_copy": "dir-ne/candidate-02-beforefix.png", "pad": "dir-ne/pad-fix-02/pad.json", "bbox": [172, 406, 852, 877], "width_px": 680, "height_px": 471, "transform_scale": 0.7785123967, "alpha": {"mode": "RGBA", "size": [1024, 1024], "nonzero_px": 211696}, "inbounds": true, "pad_warnings": [], "visual": "pass after root fix: front points UPPER-RIGHT, rear points LOWER-LEFT, driver on right/rear three-quarter side, no crop/text/shadow"}
+      ],
+      "contact": "dir-ne/candidates-contact.png",
+      "fix_record": {"fix_run": "dir-ne/fix-ne-01/run.json", "route": "local:codex-cli", "model": "codex-image_gen", "change": "heading only: front UPPER-RIGHT, rear LOWER-LEFT, rear three-quarter with driver on the right/rear side", "old_candidates": ["dir-ne/candidate-01-beforefix.png", "dir-ne/candidate-02-beforefix.png"], "result": "both fixed candidates pass"}
+    },
+    {
+      "dir": "n",
+      "expected_heading": "TOP/rear view",
+      "observed_heading": "TOP/rear view",
+      "heading_pass": true,
+      "candidates": [
+        {"id": "candidate-01", "source": "dir-n/fix-north-01/takes/take-01/generated.png", "raw_job": "dir-n/fix-north-01/takes/take-01/job.json", "candidate": "dir-n/candidate-01.png", "beforefix_copy": "dir-n/candidate-01-beforefix.png", "pad": "dir-n/pad-fix-01/pad.json", "bbox": [298, 406, 726, 877], "width_px": 428, "height_px": 471, "transform_scale": 0.6816208394, "alpha": {"mode": "RGBA", "size": [1024, 1024], "nonzero_px": 172222}, "inbounds": true, "pad_warnings": [], "visual": "pass after root fix: straight TOP heading, rear of car and driver's back visible, mirrors/wheels/body complete, no crop/text/shadow"},
+        {"id": "candidate-02", "source": "dir-n/generate-batch-01/takes/take-02/generated.png", "raw_job": "dir-n/generate-batch-01/takes/take-02/job.json", "candidate": "dir-n/candidate-02.png", "pad": "dir-n/pad-02/pad.json", "bbox": [298, 406, 726, 877], "width_px": 428, "height_px": 471, "transform_scale": 0.6709401709, "alpha": {"mode": "RGBA", "size": [1024, 1024], "nonzero_px": 169577}, "inbounds": true, "pad_warnings": [], "visual": "pass: rear of car and driver's back visible, mirrors/wheels/body complete, no crop/text/shadow"}
+      ],
+      "contact": "dir-n/candidates-contact.png",
+      "fix_record": {
+        "fix_run": "dir-n/fix-north-01/run.json",
+        "route": "local:codex-cli",
+        "model": "codex-image_gen",
+        "key": "#FF00FF",
+        "old_candidate": "dir-n/candidate-01-beforefix.png",
+        "old_observation": "old dir-n take-01 leaned toward upper-left with the rear toward lower-right; it was not selected",
+        "change": "heading only: make the complete same car-and-driver unit point straight NORTH/TOP; preserve appearance and style",
+        "result": "accepted as candidate-01 after pad; raw fix input remains under dir-n/fix-north-01"
+      }
+    }
+  ],
+  "geometry_assessment": {
+    "target": {"class": "mob", "top_margin_px": 406, "subject_height_px": 471, "groundline_y": 877},
+    "all_eight_framing": "true: every final candidate pad bbox is inbounds with top=406, height=471 and bottom=877; all pad warning lists are empty; all four direction headings accepted",
+    "projected_width_px": {"s": [386, 380], "e": [858, 748], "ne": [632, 680], "n": [428, 428], "approved_se": 636},
+    "transform_scales": {"s": [0.5992366412, 0.6399456522], "e": [0.8234265734, 0.8336283186], "ne": [0.6633802817, 0.7785123967], "n": [0.6816208394, 0.6709401709], "approved_se": 1.0},
+    "projection_note": "Framing/ground-line geometry is exact and no width-limit fallback was needed. Projected widths span 380-858 px versus approved se 636 px (59.7%-134.9% of the baseline; max/min about 2.26x). This is view-projection/occlusion variation, not a claim that physical car length is precisely identical; e-02 retains the root-reviewed slight lower-right projection note."
+  },
+  "contact": {
+    "path": "directions-contact.png",
+    "layout": "final 3x3 vehicle directions contact; approved se baseline is center; e-01/e-02 are adopted RIGHT candidates; ne/n/s are final accepted candidates; no failed candidate included"
+  },
+  "run_warnings": [
+    {
+      "run": "dir-n/fix-north-01/run.json",
+      "warning": "the style reference master_rgba.png is missing; its recorded sha256 is kept",
+      "interpretation": "stale relative-path warning only; actual run references contain the approved car FIRST and hero SECOND with the expected hashes, and both files exist at the absolute paths above"
+    }
+  ],
+  "not_done": ["approve", "animation", "C map work", "SS/report writes"],
+  "final_report_note": "car-e prior fix attempt stalled about 3h (PID 43523 / Codex 43531); root SIGINT-stopped all 3 layers and ps was empty. Old run ed8a04a874bf4026a8188c934856ab84 resume returned no image with ARTIFACT_MISSING. User authorized exactly one retry; root dir-e/fix-e-02 succeeded in two takes under the 360s outer timeout, warnings=0, and both E candidates were padded/adopted. No further retry. Report note: e-02 retains a slight lower-right projection; it remains accepted and is not hidden.",
+  "publication_note": "B published by commander and the B report was updated; this worker's B handoff is closed. No B files require further changes.",
+  "handoff_note": "All eight final candidates pass the requested headings and numeric alpha/inbounds/framing QC. E fix-e-02 is the sole authorized retry and is adopted; older initial E candidates/raw and failure contacts remain as diagnostics. B is published; no approve/animation/C work or SS/report write was performed in this B handoff."
+}

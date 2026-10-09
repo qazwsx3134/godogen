@@ -1,0 +1,21 @@
+{
+  "schema": "generate2dmap.tileset.v1",
+  "id": "overlay-manhole",
+  "image": "../../ground/manhole.png",
+  "sha256": "0ae95241f369d70493424367efa3353b0d6d14ab9467593b13676484c12c43cc",
+  "tile_size": [128, 128],
+  "columns": 1,
+  "kind": "flat",
+  "materials": ["manhole-overlay"],
+  "tiles": [{"index": 0, "variant": 0, "properties": {"walkable": true}}],
+  "seamless_verified": false,
+  "seam_qc": {"policy": "isolated", "exact_proof": false, "note": "Overlay is not a repeat claim."},
+  "provenance": {
+    "art_source": "host_image",
+    "route": "local:codex-cli",
+    "generator": {"name": "extract_terrain_tiles.py", "version": "0.4.0"},
+    "source_terrain_bundle": {"path": "../../ground/extract-overlay-manhole-01/terrain-bundle.json", "sha256": "454cf152cc22ba16696846815ed07e873e13477a99627f5ebea6270728bc46a0"},
+    "prompt": {"path": "../../ground/prompts/manhole.prompt.txt", "sha256": "f5b452dcc3ef4b6957a8d8562896cceabf2917ec44b55499be2567c2132206e1"}
+  },
+  "qc_source": {"status": "pass", "warnings": 0, "alpha_bbox": [12, 14, 124, 124], "visible_fraction": 0.251343, "contrast": 0.175341, "edge_policy": "isolated"}
+}

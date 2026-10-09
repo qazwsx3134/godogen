@@ -1,0 +1,250 @@
+{
+  "schema": "generate2dmap.nav_report.v1",
+  "status": "pass",
+  "method": "plan Appendix C validity (centre + 8 footprint samples against walk regions, solids, object footprints scaled once, tile collision and material classes) on a grid of cell max(1, round(r/2)) px; 4-neighbour moves open when segmentClear holds between node centres (samples every cell/2, plus the exact thin-gap centre path and one_way direction); BFS from every spawn and portal arrival to every interaction, exit, anchor slot and approach point",
+  "notProven": [
+    "that the collision data matches the painted art",
+    "positions closer than one grid cell to a blocker (the grid samples cell centres)",
+    "runtime movement code: map-runtime.mjs parity is tested during integration",
+    "links to maps not passed with --link"
+  ],
+  "checks": [
+    {
+      "id": "starts_valid",
+      "status": "pass",
+      "value": {
+        "starts": 1,
+        "blocked": []
+      },
+      "threshold": {
+        "blocked": 0
+      }
+    },
+    {
+      "id": "targets_reachable",
+      "status": "pass",
+      "value": {
+        "reachable": 0,
+        "total": 0,
+        "unreachable": []
+      },
+      "threshold": {
+        "unreachable": 0
+      }
+    },
+    {
+      "id": "portals_inside_world",
+      "status": "pass",
+      "value": {
+        "outside": []
+      },
+      "threshold": {
+        "outside": 0
+      }
+    },
+    {
+      "id": "arrivals_outside_triggers",
+      "status": "pass",
+      "value": {
+        "problems": 0
+      },
+      "threshold": {
+        "problems": 0
+      }
+    },
+    {
+      "id": "reciprocal_links",
+      "status": "pass",
+      "value": {
+        "links": [],
+        "notChecked": []
+      },
+      "threshold": {
+        "errors": 0
+      }
+    },
+    {
+      "id": "thin_gaps",
+      "status": "pass",
+      "value": 0,
+      "threshold": "reported: moves the thin-gap rule closed although every footprint sample was valid"
+    },
+    {
+      "id": "unreachable_walkable_area",
+      "status": "pass",
+      "value": {
+        "pockets": 0,
+        "cells": 0
+      },
+      "threshold": "reported"
+    },
+    {
+      "id": "blocked_rects_union",
+      "status": "pass",
+      "value": {
+        "rects": 40,
+        "blockedCells": 1651
+      },
+      "threshold": "union == blocked cells"
+    },
+    {
+      "id": "footprints_scaled_once",
+      "status": "pass",
+      "value": {
+        "objectSolids": 8
+      },
+      "threshold": "object footprint x scale, never inflated by the actor radius"
+    }
+  ],
+  "inputs": [
+    {
+      "path": "../../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/data/C-night-market.map-bundle.json",
+      "sha256": "3b7a07590b71bd2abaab34331dc3dbb752809a46379e2b7f3098c83494e5fcc2",
+      "bytes": 14568
+    },
+    {
+      "path": "../../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/data/tilesets/pavement.tileset.json",
+      "sha256": "8f918e9525e3ea468cac56a9671c0686a93c229ce416e7c3977be47c034c157a",
+      "bytes": 1431
+    },
+    {
+      "path": "../../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/ground/pavement.png",
+      "sha256": "34a6e5745fde6b816976b69521664d5c78685ee06bf26f95606b030dd5341155",
+      "bytes": 47420
+    },
+    {
+      "path": "../../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/data/tilesets/overlay-manhole.tileset.json",
+      "sha256": "995a2dba4d41927be82ccf6b0a02bcbf193b5e51102b00223674fd10744a4155",
+      "bytes": 1141
+    },
+    {
+      "path": "../../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/ground/manhole.png",
+      "sha256": "0ae95241f369d70493424367efa3353b0d6d14ab9467593b13676484c12c43cc",
+      "bytes": 14080
+    },
+    {
+      "path": "../../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/data/tilesets/overlay-drain-grate.tileset.json",
+      "sha256": "e745bc556dd68bb13928542fcb0533d95c563e5ee914629528c33784537fc45f",
+      "bytes": 1160
+    },
+    {
+      "path": "../../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/ground/drain_grate.png",
+      "sha256": "935551a711188e6ee9a37901be789f1f1dbd3950bf963f4a2019345c7212fc2e",
+      "bytes": 7937
+    },
+    {
+      "path": "../../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/data/tilesets/overlay-puddle.tileset.json",
+      "sha256": "e3d2cda3d2bea05c117e5d5661bd25c1f9d9d4fff80e1c1899fbd4800417f452",
+      "bytes": 1375
+    },
+    {
+      "path": "../../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/ground/puddle.png",
+      "sha256": "4e192d39dd75c6bea60c6001ca27ad4e27f38e4b4bdcea214dae9d7156495d32",
+      "bytes": 4730
+    },
+    {
+      "path": "../../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/data/tilesets/overlay-cracks.tileset.json",
+      "sha256": "59e99c2e28ba352e814d6a57f2bf1c4d5d62ad1b2e815e4765124f2bcb1eb9ed",
+      "bytes": 1136
+    },
+    {
+      "path": "../../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/ground/cracks.png",
+      "sha256": "beefc33354ff8b0f37f662b1430676d1adfadf5db0d4db918fd4a05ae09a19a0",
+      "bytes": 3928
+    },
+    {
+      "path": "../../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/data/tilesets/overlay-zebra.tileset.json",
+      "sha256": "d5027d3af11fce0c9555e25125cfb1acdf4217bba23426142c2821871bc7b973",
+      "bytes": 1131
+    },
+    {
+      "path": "../../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/ground/zebra.png",
+      "sha256": "e5b4fd615d3fbf66d1578706b40cb175746e1850cce71589c2e84c719c1846b3",
+      "bytes": 13195
+    },
+    {
+      "path": "../../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/props/stall-fruit.png",
+      "sha256": "c6914406146567bb7b77d8b430dc9fd93b82e0e9acfe375c6bf3284bac06b7df",
+      "bytes": 26198
+    },
+    {
+      "path": "../../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/props/stall-snack.png",
+      "sha256": "7564cd9ca219de7490f78728839a6d288b24537ecfb9f6b8283dbd217fb2c734",
+      "bytes": 24023
+    },
+    {
+      "path": "../../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/props/lantern_post.png",
+      "sha256": "de2ba2ca85d2cf8cce75b5b7d04d6a55fe4caf41f6ec4c11de01c1afc68a25d4",
+      "bytes": 9335
+    },
+    {
+      "path": "../../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/props/planter.png",
+      "sha256": "2baddad69da8d0a506e5e3b75584c28eb23e8ec3f7b1189239988d55c6bff9eb",
+      "bytes": 7593
+    },
+    {
+      "path": "../../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/props/cone.png",
+      "sha256": "e9775254b9930e62b0575947a30aaea586e7ef6c35450ab8f95933c8d9fd1e12",
+      "bytes": 1314
+    },
+    {
+      "path": "../../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/props/bollard.png",
+      "sha256": "f3dabba842fbf72fb439f4d36b84f882f81b0680702716b088cc9e6a49a9075c",
+      "bytes": 1473
+    },
+    {
+      "path": "../../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/props/parked_scooter.png",
+      "sha256": "b145550f72ba2a6d2189c432421bf9187f9af744be0a72fd4b45bb902dfb98c4",
+      "bytes": 11426
+    },
+    {
+      "path": "../../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/props/fruit_crate.png",
+      "sha256": "d5d62c6026d9a41455e347ffdc740086b738b881a042f3061c3907997a820275",
+      "bytes": 2550
+    }
+  ],
+  "outputs": [
+    {
+      "path": "nav-grid.json",
+      "sha256": "09b9d7723ff2f7bd07c42177351345b7f4e5da4cd2b23c5a5f0f792c9cd16540",
+      "bytes": 38240
+    },
+    {
+      "path": "nav-debug.png",
+      "sha256": "2c77899e91b823a59d4566f0a4ff1c83ab813464aa83a62d5eedadd66d5d0a08",
+      "bytes": 415997
+    }
+  ],
+  "tool": {
+    "name": "map_nav.py",
+    "version": "0.4.0"
+  },
+  "map": "survivor-series-C-night-market",
+  "cell": 6,
+  "starts": [
+    {
+      "kind": "spawn",
+      "id": "spawn-c",
+      "point": [
+        384.0,
+        384.0
+      ],
+      "reachable": true,
+      "steps": 0,
+      "node": [
+        381.0,
+        381.0
+      ],
+      "reason": null
+    }
+  ],
+  "targets": [],
+  "links": [],
+  "thinGaps": [],
+  "unreachablePockets": [],
+  "bundleNav": {
+    "cell": 6,
+    "grid": "nav-grid.json"
+  },
+  "problems": []
+}

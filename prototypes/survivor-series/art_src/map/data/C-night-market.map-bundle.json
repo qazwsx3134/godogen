@@ -1,0 +1,308 @@
+{
+  "schema": "generate2dmap.map_bundle.v2",
+  "id": "survivor-series-C-night-market",
+  "name": "Night Market C",
+  "tile_size": [128, 128],
+  "world": {"width": 768, "height": 768, "unit": "px"},
+  "tilesets": [
+    {"id": "pavement", "manifest": "tilesets/pavement.tileset.json", "sha256": "8f918e9525e3ea468cac56a9671c0686a93c229ce416e7c3977be47c034c157a"},
+    {"id": "overlay-manhole", "manifest": "tilesets/overlay-manhole.tileset.json", "sha256": "995a2dba4d41927be82ccf6b0a02bcbf193b5e51102b00223674fd10744a4155"},
+    {"id": "overlay-drain-grate", "manifest": "tilesets/overlay-drain-grate.tileset.json", "sha256": "e745bc556dd68bb13928542fcb0533d95c563e5ee914629528c33784537fc45f"},
+    {"id": "overlay-puddle", "manifest": "tilesets/overlay-puddle.tileset.json", "sha256": "e3d2cda3d2bea05c117e5d5661bd25c1f9d9d4fff80e1c1899fbd4800417f452"},
+    {"id": "overlay-cracks", "manifest": "tilesets/overlay-cracks.tileset.json", "sha256": "59e99c2e28ba352e814d6a57f2bf1c4d5d62ad1b2e815e4765124f2bcb1eb9ed"},
+    {"id": "overlay-zebra", "manifest": "tilesets/overlay-zebra.tileset.json", "sha256": "d5027d3af11fce0c9555e25125cfb1acdf4217bba23426142c2821871bc7b973"}
+  ],
+  "layers": [
+    {
+      "name": "ground",
+      "kind": "tiles",
+      "tileset": "pavement",
+      "data": [
+        [0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0]
+      ]
+    },
+    {
+      "name": "grounddecor-manhole",
+      "kind": "tiles",
+      "tileset": "overlay-manhole",
+      "data": [
+        [-1, -1, -1, -1, -1, -1],
+        [-1, 0, -1, -1, -1, -1],
+        [-1, -1, -1, -1, -1, -1],
+        [-1, -1, -1, -1, -1, -1],
+        [-1, -1, -1, -1, 0, -1],
+        [-1, -1, -1, -1, -1, -1]
+      ]
+    },
+    {
+      "name": "grounddecor-drain-grate",
+      "kind": "tiles",
+      "tileset": "overlay-drain-grate",
+      "data": [
+        [-1, -1, -1, -1, -1, -1],
+        [-1, -1, -1, -1, 0, -1],
+        [-1, -1, -1, -1, -1, -1],
+        [-1, -1, -1, -1, -1, -1],
+        [-1, 0, -1, -1, -1, -1],
+        [-1, -1, -1, -1, -1, -1]
+      ]
+    },
+    {
+      "name": "grounddecor-puddle",
+      "kind": "tiles",
+      "tileset": "overlay-puddle",
+      "data": [
+        [-1, -1, -1, -1, 0, -1],
+        [-1, -1, -1, -1, -1, -1],
+        [-1, -1, -1, -1, -1, -1],
+        [-1, 0, -1, -1, -1, -1],
+        [-1, -1, -1, -1, -1, -1],
+        [-1, -1, -1, -1, 0, -1]
+      ]
+    },
+    {
+      "name": "grounddecor-cracks",
+      "kind": "tiles",
+      "tileset": "overlay-cracks",
+      "data": [
+        [-1, 0, -1, -1, -1, -1],
+        [-1, -1, -1, -1, -1, -1],
+        [-1, -1, -1, -1, -1, 0],
+        [-1, -1, -1, -1, -1, -1],
+        [-1, -1, -1, -1, -1, -1],
+        [-1, -1, 0, -1, -1, -1]
+      ]
+    },
+    {
+      "name": "grounddecor-zebra",
+      "kind": "tiles",
+      "tileset": "overlay-zebra",
+      "data": [
+        [-1, -1, -1, -1, -1, -1],
+        [-1, -1, -1, -1, -1, -1],
+        [-1, -1, -1, -1, -1, -1],
+        [-1, -1, 0, 0, -1, -1],
+        [-1, -1, -1, -1, -1, -1],
+        [-1, -1, -1, -1, -1, -1]
+      ]
+    },
+    {"name": "props-y-sorted", "kind": "objects"}
+  ],
+  "props": {
+    "stall-fruit": {
+      "label": "stall-fruit",
+      "display_name": "Fruit stall",
+      "image": "../props/stall-fruit.png",
+      "sha256": "c6914406146567bb7b77d8b430dc9fd93b82e0e9acfe375c6bf3284bac06b7df",
+      "size": [128, 112],
+      "anchor_px": [78, 111],
+      "actual_alpha_bbox": [4, 1, 124, 111],
+      "anchor_source": "measured",
+      "footprint": {"shape": "rect", "width": 120, "depth": 16, "offset": [-14, -8], "basis": "prop_px", "method": "C-authored base contact from measured alpha bbox"},
+      "solid": true,
+      "contact": "base_contact",
+      "occlusion_class": "tall",
+      "occupant_policy": "y_sort",
+      "status": "accepted",
+      "edge_touch": false,
+      "warnings": []
+    },
+    "stall-snack": {
+      "label": "stall-snack",
+      "display_name": "Snack stall",
+      "image": "../props/stall-snack.png",
+      "sha256": "7564cd9ca219de7490f78728839a6d288b24537ecfb9f6b8283dbd217fb2c734",
+      "size": [128, 112],
+      "anchor_px": [85, 111],
+      "actual_alpha_bbox": [1, 16, 127, 111],
+      "anchor_source": "measured",
+      "footprint": {"shape": "rect", "width": 126, "depth": 16, "offset": [-21, -8], "basis": "prop_px", "method": "C-authored base contact from measured alpha bbox"},
+      "solid": true,
+      "contact": "base_contact",
+      "occlusion_class": "tall",
+      "occupant_policy": "y_sort",
+      "status": "accepted",
+      "edge_touch": false,
+      "warnings": []
+    },
+    "lantern_post": {
+      "label": "lantern_post",
+      "display_name": "Lantern post",
+      "image": "../props/lantern_post.png",
+      "sha256": "de2ba2ca85d2cf8cce75b5b7d04d6a55fe4caf41f6ec4c11de01c1afc68a25d4",
+      "size": [64, 144],
+      "anchor_px": [24, 143],
+      "actual_alpha_bbox": [9, 1, 54, 143],
+      "anchor_source": "measured",
+      "footprint": {"shape": "rect", "width": 20, "depth": 12, "offset": [8, -6], "basis": "prop_px", "method": "C-authored base contact from measured alpha bbox"},
+      "solid": true,
+      "contact": "base_contact",
+      "occlusion_class": "tall",
+      "occupant_policy": "y_sort",
+      "status": "accepted",
+      "edge_touch": false,
+      "warnings": []
+    },
+    "planter": {
+      "label": "planter",
+      "display_name": "Planter",
+      "image": "../props/planter.png",
+      "sha256": "2baddad69da8d0a506e5e3b75584c28eb23e8ec3f7b1189239988d55c6bff9eb",
+      "size": [64, 64],
+      "anchor_px": [32, 63],
+      "actual_alpha_bbox": [6, 1, 58, 63],
+      "anchor_source": "measured",
+      "footprint": {"shape": "rect", "width": 52, "depth": 16, "offset": [0, -8], "basis": "prop_px", "method": "C-authored base contact from measured alpha bbox"},
+      "solid": true,
+      "contact": "base_contact",
+      "occlusion_class": "low",
+      "occupant_policy": "y_sort",
+      "status": "accepted",
+      "edge_touch": false,
+      "warnings": []
+    },
+    "cone": {
+      "label": "cone",
+      "display_name": "Traffic cone",
+      "image": "../props/cone.png",
+      "sha256": "e9775254b9930e62b0575947a30aaea586e7ef6c35450ab8f95933c8d9fd1e12",
+      "size": [24, 32],
+      "anchor_px": [12, 31],
+      "actual_alpha_bbox": [1, 1, 23, 31],
+      "anchor_source": "measured",
+      "footprint": {"shape": "rect", "width": 22, "depth": 10, "offset": [0, -5], "basis": "prop_px", "method": "C-authored base contact from measured alpha bbox"},
+      "solid": true,
+      "contact": "base_contact",
+      "occlusion_class": "low",
+      "occupant_policy": "y_sort",
+      "status": "accepted",
+      "edge_touch": false,
+      "warnings": []
+    },
+    "bollard": {
+      "label": "bollard",
+      "display_name": "Bollard",
+      "image": "../props/bollard.png",
+      "sha256": "f3dabba842fbf72fb439f4d36b84f882f81b0680702716b088cc9e6a49a9075c",
+      "size": [20, 52],
+      "anchor_px": [10, 49],
+      "actual_alpha_bbox": [2, 7, 18, 50],
+      "anchor_source": "measured",
+      "padding_provenance": {"method": "integer transparent +2,+2 padding", "pre_padding_size": [16, 48], "pre_padding_anchor_px": [8, 47], "actual_silhouette_unchanged": true},
+      "footprint": {"shape": "rect", "width": 16, "depth": 10, "offset": [0, -5], "basis": "prop_px", "method": "C-authored base contact from padded measured alpha bbox"},
+      "solid": true,
+      "contact": "base_contact",
+      "occlusion_class": "low",
+      "occupant_policy": "y_sort",
+      "status": "accepted",
+      "edge_touch": false,
+      "warnings": []
+    },
+    "parked_scooter": {
+      "label": "parked_scooter",
+      "display_name": "Parked scooter",
+      "image": "../props/parked_scooter.png",
+      "sha256": "b145550f72ba2a6d2189c432421bf9187f9af744be0a72fd4b45bb902dfb98c4",
+      "size": [96, 80],
+      "anchor_px": [45, 79],
+      "actual_alpha_bbox": [8, 1, 88, 79],
+      "anchor_source": "measured",
+      "footprint": {"shape": "rect", "width": 80, "depth": 14, "offset": [3, -7], "basis": "prop_px", "method": "C-authored base contact from measured alpha bbox"},
+      "solid": true,
+      "contact": "base_contact",
+      "occlusion_class": "low",
+      "occupant_policy": "y_sort",
+      "status": "accepted",
+      "edge_touch": false,
+      "warnings": []
+    },
+    "fruit_crate": {
+      "label": "fruit_crate",
+      "display_name": "Fruit crate",
+      "image": "../props/fruit_crate.png",
+      "sha256": "d5d62c6026d9a41455e347ffdc740086b738b881a042f3061c3907997a820275",
+      "size": [40, 32],
+      "anchor_px": [20, 31],
+      "actual_alpha_bbox": [3, 1, 37, 31],
+      "anchor_source": "measured",
+      "footprint": {"shape": "rect", "width": 34, "depth": 14, "offset": [0, -7], "basis": "prop_px", "method": "C-authored base contact from measured alpha bbox"},
+      "solid": true,
+      "contact": "base_contact",
+      "occlusion_class": "low",
+      "occupant_policy": "y_sort",
+      "status": "accepted",
+      "edge_touch": false,
+      "warnings": []
+    }
+  },
+  "objects": [
+    {"id": "stall-fruit-01", "prop": "stall-fruit", "x": 192, "y": 256, "anchor_px": [78, 111], "scale": 1.0, "sortY": 256, "layer": "props-y-sorted", "occlusion": "tall", "occupant_policy": "y_sort", "solid": true, "contact": "base_contact", "flip_x": false, "kind": "prop", "group": "sparse-market"},
+    {"id": "stall-snack-01", "prop": "stall-snack", "x": 576, "y": 256, "anchor_px": [85, 111], "scale": 1.0, "sortY": 256, "layer": "props-y-sorted", "occlusion": "tall", "occupant_policy": "y_sort", "solid": true, "contact": "base_contact", "flip_x": false, "kind": "prop", "group": "sparse-market"},
+    {"id": "lantern-post-01", "prop": "lantern_post", "x": 320, "y": 192, "anchor_px": [24, 143], "scale": 1.0, "sortY": 192, "layer": "props-y-sorted", "occlusion": "tall", "occupant_policy": "y_sort", "solid": true, "contact": "base_contact", "flip_x": false, "kind": "prop", "group": "sparse-market"},
+    {"id": "planter-01", "prop": "planter", "x": 576, "y": 640, "anchor_px": [32, 63], "scale": 1.0, "sortY": 640, "layer": "props-y-sorted", "occlusion": "low", "occupant_policy": "y_sort", "solid": true, "contact": "base_contact", "flip_x": false, "kind": "prop", "group": "sparse-market"},
+    {"id": "cone-01", "prop": "cone", "x": 192, "y": 640, "anchor_px": [12, 31], "scale": 1.0, "sortY": 640, "layer": "props-y-sorted", "occlusion": "low", "occupant_policy": "y_sort", "solid": true, "contact": "base_contact", "flip_x": false, "kind": "prop", "group": "sparse-market"},
+    {"id": "bollard-01", "prop": "bollard", "x": 704, "y": 640, "anchor_px": [10, 49], "scale": 1.0, "sortY": 640, "layer": "props-y-sorted", "occlusion": "low", "occupant_policy": "y_sort", "solid": true, "contact": "base_contact", "flip_x": false, "kind": "prop", "group": "sparse-market"},
+    {"id": "parked-scooter-01", "prop": "parked_scooter", "x": 320, "y": 704, "anchor_px": [45, 79], "scale": 1.0, "sortY": 704, "layer": "props-y-sorted", "occlusion": "low", "occupant_policy": "y_sort", "solid": true, "contact": "base_contact", "flip_x": false, "kind": "prop", "group": "sparse-market"},
+    {"id": "fruit-crate-01", "prop": "fruit_crate", "x": 576, "y": 704, "anchor_px": [20, 31], "scale": 1.0, "sortY": 704, "layer": "props-y-sorted", "occlusion": "low", "occupant_policy": "y_sort", "solid": true, "contact": "base_contact", "flip_x": false, "kind": "prop", "group": "sparse-market"}
+  ],
+  "collision": {
+    "actorRadius": 12,
+    "ySquash": 1.0,
+    "walkRegions": [{"polygon": [[0, 0], [768, 0], [768, 768], [0, 768]], "holes": []}],
+    "solids": [],
+    "rects": []
+  },
+  "spawns": [{"id": "spawn-c", "x": 384, "y": 384, "facing": "se"}],
+  "camera": {"pixelToWorld": 1, "bounds": [0, 0, 768, 768]},
+  "art_source": "mixed",
+  "placeholder": false,
+  "provenance": {
+    "tool": "C map integration",
+    "version": "2026-10-09",
+    "params": {
+      "map_mode": "tile_mode",
+      "visual_model": "layered_tilemap",
+      "runtime_object_model": "y_sorted_props",
+      "collision_model": "coarse_shapes_with_independent_prop_footprints",
+      "engine_target": "Godot 4 TileSet/TileMapLayer",
+      "world_px": [768, 768],
+      "tile_px": [128, 128],
+      "grid": [6, 6],
+      "texture_filter": "nearest",
+      "seamless_verified": false
+    },
+    "inputs": [
+      {"path": "../ground/pavement.png", "sha256": "34a6e5745fde6b816976b69521664d5c78685ee06bf26f95606b030dd5341155"},
+      {"path": "../ground/manhole.png", "sha256": "0ae95241f369d70493424367efa3353b0d6d14ab9467593b13676484c12c43cc"},
+      {"path": "../ground/drain_grate.png", "sha256": "935551a711188e6ee9a37901be789f1f1dbd3950bf963f4a2019345c7212fc2e"},
+      {"path": "../ground/puddle.png", "sha256": "4e192d39dd75c6bea60c6001ca27ad4e27f38e4b4bdcea214dae9d7156495d32"},
+      {"path": "../ground/cracks.png", "sha256": "beefc33354ff8b0f37f662b1430676d1adfadf5db0d4db918fd4a05ae09a19a0"},
+      {"path": "../ground/zebra.png", "sha256": "e5b4fd615d3fbf66d1578706b40cb175746e1850cce71589c2e84c719c1846b3"},
+      {"path": "../props/stall-fruit.png", "sha256": "c6914406146567bb7b77d8b430dc9fd93b82e0e9acfe375c6bf3284bac06b7df"},
+      {"path": "../props/stall-snack.png", "sha256": "7564cd9ca219de7490f78728839a6d288b24537ecfb9f6b8283dbd217fb2c734"},
+      {"path": "../props/lantern_post.png", "sha256": "de2ba2ca85d2cf8cce75b5b7d04d6a55fe4caf41f6ec4c11de01c1afc68a25d4"},
+      {"path": "../props/planter.png", "sha256": "2baddad69da8d0a506e5e3b75584c28eb23e8ec3f7b1189239988d55c6bff9eb"},
+      {"path": "../props/cone.png", "sha256": "e9775254b9930e62b0575947a30aaea586e7ef6c35450ab8f95933c8d9fd1e12"},
+      {"path": "../props/bollard.png", "sha256": "f3dabba842fbf72fb439f4d36b84f882f81b0680702716b088cc9e6a49a9075c"},
+      {"path": "../props/parked_scooter.png", "sha256": "b145550f72ba2a6d2189c432421bf9187f9af744be0a72fd4b45bb902dfb98c4"},
+      {"path": "../props/fruit_crate.png", "sha256": "d5d62c6026d9a41455e347ffdc740086b738b881a042f3061c3907997a820275"}
+    ]
+  },
+  "qa": {
+    "status": "needs-visual-review",
+    "bundle_validation": "pending",
+    "nav_check": "pending",
+    "godot_parse_back": "pending",
+    "godot_editor_import": "root_pending",
+    "warnings": [
+      "A passing pavement seam ratio is not an exact-zero seam proof; seamless_verified remains false.",
+      "Godot editor import and runtime collision are not proven by the exporter parse-back.",
+      "The preview-only hero is not part of this map bundle."
+    ]
+  }
+}

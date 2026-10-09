@@ -1,0 +1,199 @@
+{
+  "schema": "generate2dmap.prop_pack.v2",
+  "tool": {
+    "name": "extract_prop_pack",
+    "version": "0.4.0"
+  },
+  "input": "../../keyed/bollard-alpha.png",
+  "source_size": [
+    1254,
+    1254
+  ],
+  "source_sha256": "cf5d4a8157034984fcab6e32e4642c6a805576b8444960ea6820be52cfca6604",
+  "source_mode": "RGBA",
+  "layout_mode": "explicit_boxes",
+  "boxes_file": "../../boxes/bollard.json",
+  "labels_file": null,
+  "background_mode": "native_alpha",
+  "art_source": "host_image",
+  "rows": null,
+  "cols": null,
+  "threshold": 100,
+  "edge_threshold": 150,
+  "despill_radius": 0,
+  "despill": {
+    "mode": "off",
+    "applied": "off",
+    "radius": 0,
+    "margin": 12,
+    "changed_px": 0
+  },
+  "hygiene": {
+    "mode": "none",
+    "floor": 4,
+    "solid_min": 32,
+    "attach_radius": 2,
+    "connectivity": 8,
+    "floor_px": 0,
+    "detached_px": 0,
+    "detached_components": 0,
+    "max_removed_alpha": 0
+  },
+  "alpha_floor": 0,
+  "alpha_floor_pixels_removed": 0,
+  "trim_border": 0,
+  "edge_clean_depth": 0,
+  "component_mode": "all",
+  "component_padding": 8,
+  "min_component_area": "auto",
+  "edge_touch_margin": 0,
+  "geometry": {
+    "connectivity": 8,
+    "alpha_geometry_threshold": 16,
+    "anchor_mode": "stance",
+    "support_band_fraction": 0.25,
+    "anchor_rounding": "whole pixels, half-up",
+    "grid_rounding": null,
+    "keep_canvas": false,
+    "world_scale": null
+  },
+  "accepted": [
+    {
+      "index": 0,
+      "label": "bollard",
+      "display_name": "bollard",
+      "status": "accepted",
+      "image": "bollard/prop.png",
+      "sha256": "4db207ae242b4f4ae1bf9fc969524cd58580ddcb21afa4656de70d73da83687f",
+      "output_size": [
+        371,
+        991
+      ],
+      "grid": null,
+      "cell_box": [
+        441,
+        131,
+        812,
+        1122
+      ],
+      "source_box": [
+        441,
+        131,
+        812,
+        1122
+      ],
+      "source_rect": [
+        441,
+        131,
+        812,
+        1122
+      ],
+      "trim_offset": [
+        0,
+        0
+      ],
+      "padding": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "anchor_px": [
+        186,
+        983
+      ],
+      "anchor_source": "measured",
+      "component_mode": "all",
+      "component_count": 1,
+      "min_component_area": 100,
+      "trim_applied": 0,
+      "crop_bbox": [
+        8,
+        8,
+        363,
+        983
+      ],
+      "padded_crop_bbox": [
+        0,
+        0,
+        371,
+        991
+      ],
+      "selected_component_area": null,
+      "selected_component_bbox": null,
+      "kept_area": 200017,
+      "dropped_components": 0,
+      "dropped_area": 0,
+      "edge_touch": false
+    }
+  ],
+  "rejected": [],
+  "edge_touch_props": [],
+  "warnings": [],
+  "qa": {
+    "status": "pass",
+    "method": "native alpha, not keyed; alpha hygiene none; 8-connected components (all); checks measured on the published pixels",
+    "notProven": [
+      "that each label names the art in its cell or box",
+      "that a prop is complete: clipping is detected only where art meets the cell edge",
+      "keyed-edge quality beyond the edge fringe count",
+      "that anchors and suggested footprints match gameplay contact (both are measured from alpha)",
+      "runtime placement, collision or occlusion"
+    ],
+    "checks": [
+      {
+        "id": "accepted",
+        "status": "pass",
+        "value": 1,
+        "threshold": ">= 1"
+      },
+      {
+        "id": "edge_touch",
+        "status": "pass",
+        "value": [],
+        "threshold": 0
+      },
+      {
+        "id": "dropped_area",
+        "status": "pass",
+        "value": {},
+        "threshold": 0.01
+      },
+      {
+        "id": "strategy_aspect",
+        "status": "skipped",
+        "value": null,
+        "threshold": 1.6
+      },
+      {
+        "id": "edge_fringe",
+        "status": "skipped",
+        "value": null,
+        "threshold": 0.02
+      }
+    ],
+    "inputs": [
+      {
+        "path": "../../keyed/bollard-alpha.png",
+        "sha256": "cf5d4a8157034984fcab6e32e4642c6a805576b8444960ea6820be52cfca6604",
+        "bytes": 329781
+      },
+      {
+        "path": "../../boxes/bollard.json",
+        "sha256": "623b4a847e16e389ed0fb1e10945aa7f4f1113f6d6187345179654b784b94aeb",
+        "bytes": 73
+      }
+    ],
+    "outputs": [
+      {
+        "path": "bollard/prop.png",
+        "sha256": "4db207ae242b4f4ae1bf9fc969524cd58580ddcb21afa4656de70d73da83687f",
+        "bytes": 298770
+      }
+    ],
+    "tool": {
+      "name": "extract_prop_pack",
+      "version": "0.4.0"
+    }
+  }
+}

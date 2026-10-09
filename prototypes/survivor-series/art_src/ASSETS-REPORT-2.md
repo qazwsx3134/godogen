@@ -1,17 +1,20 @@
-# 階段二資產候選報告（未執行，2026-10-08）
-階段一生成路徑發生認證失效，依 BRIEF-assets.md 停止條件停止，尚未到達「階段一完成後直接開始階段二」。
-本階段沒有 route_media 呼叫、provider/model 回傳、PNG、比較圖或總覽；不宣稱完成。
-以下 key 均為計畫值，並未實際使用；候選皆為 0/2。
-slipper：icons/slipper/；key=magenta。
-pearl：icons/pearl/；key=magenta。
-firecracker：icons/firecracker/；key=green。
-incense：icons/incense/；key=green。
-lantern：icons/lantern/；key=green。
-cane：icons/cane/；塑膠手掌打手板顏色未指定，key 待生成設計配色確定。
-gem：icons/gem/；key=magenta。
-coin：icons/coin/；key=magenta。
-rice：icons/rice/；key 待配菜配色確定。
-vacuum：icons/vacuum/；key 待設計配色確定。
-chest：icons/chest/；key=green。
-icons/all-contact.png 未產生；未用程式繪圖代替圖片。
-恢复條件：修復有效生成路徑，先查清 BytePlus submit_unknown 的服務端結果，再繼續階段一與階段二。
+# 階段二候選報告（第二輪，2026-10-08）
+實際生成 route=local:codex-cli、provider=openai、model=codex-image_gen，使用 Codex 登入額度；未呼叫 API。
+以下路徑相對 art_src；每項列出兩張候選、並排圖與實際 key。
+
+- slipper：icons/slipper/candidate-{01,02}.png；icons/slipper/candidates-contact.png；key=magenta。
+- pearl：icons/pearl/candidate-{01,02}.png；icons/pearl/candidates-contact.png；key=magenta。
+- firecracker：icons/firecracker/candidate-{01,02}.png；icons/firecracker/candidates-contact.png；key=green。
+- incense：icons/incense/candidate-{01,02}.png；icons/incense/candidates-contact.png；key=green。
+- lantern：icons/lantern/candidate-{01,02}.png；icons/lantern/candidates-contact.png；key=green。
+- cane：icons/cane/candidate-{01,02}.png；icons/cane/candidates-contact.png；key=green。
+- gem：icons/gem/candidate-{01,02}.png；icons/gem/candidates-contact.png；key=magenta。
+- coin：icons/coin/candidate-{01,02}.png；icons/coin/candidates-contact.png；key=magenta。
+- rice：icons/rice/candidate-{01,02}.png；icons/rice/candidates-contact.png；key=magenta。
+- vacuum：icons/vacuum/candidate-{01,02}.png；icons/vacuum/candidates-contact.png；key=magenta。
+- chest：icons/chest/candidate-{01,02}.png；icons/chest/candidates-contact.png；key=green。
+
+全部總覽：icons/all-contact.png，含 22 張候選與 32 px 輪廓預覽。
+原始 generated.png、prompt.txt、job.json、run.json、spec.json 與 pad.json 保留於各素材 r2/；另恢復暫停前 cane 原圖至 r2/prior-pause-take-01/，未改候選。
+驗收：11 項各 2 張、22 張真透明 RGBA 1024×1024、11 張並排圖與總覽齊全；每張单物件、置中、完整、無文字／地面陰影；22 次 pad 均無警告。
+問題／偏差：暫停中斷 cane/chest 後先查舊請求再補齊；cane 沙盒啟動失敗已外部執行成功；pearl 01 次級棕色反光仍為單珠；香／吸塵器細長，24px 細節較弱。僅候選，未 approve 或動畫。

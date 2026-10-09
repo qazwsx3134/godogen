@@ -1,0 +1,58 @@
+{
+  "id": "stall-fruit",
+  "raw": "stall-fruit/generated.png",
+  "raw_sha256": "5d72efa7079e09ea261655fad5e41a2127e587841dbcec5fa19b29b69fcd1bf8",
+  "source_extracted": "postprocess/extracted/stall-fruit/stall-fruit/prop.png",
+  "source_sha256": "5aaeb98c56f1a07649b2011f455eef12abdb63417f3361eeb0d5283d1cc25fab",
+  "canonical": "stall-fruit.png",
+  "canonical_sha256": "c6914406146567bb7b77d8b430dc9fd93b82e0e9acfe375c6bf3284bac06b7df",
+  "mode": "RGBA",
+  "canvas_size": [
+    128,
+    112
+  ],
+  "source_size": [
+    1005,
+    925
+  ],
+  "actual_alpha_bbox": [
+    4,
+    1,
+    124,
+    111
+  ],
+  "alpha_nonzero_px": 8709,
+  "anchor_source_px": [
+    619,
+    917
+  ],
+  "transform": {
+    "scale_uniform": 0.12108108108108108,
+    "fit_size": [
+      122,
+      112
+    ],
+    "offset_xy": [
+      3,
+      0
+    ],
+    "sampling": "nearest",
+    "aspect_preserve": true
+  },
+  "runtime_anchor_px": [
+    78,
+    111
+  ],
+  "target_display_px": [
+    128,
+    112
+  ],
+  "warnings": [],
+  "edge_touch": false,
+  "comparison": "postprocess/comparisons/stall-fruit.png",
+  "key": "#0000FF",
+  "job_route": "codex-cli",
+  "run_route": "local:codex-cli",
+  "model": "codex-image_gen",
+  "actual_inbounds": true
+}

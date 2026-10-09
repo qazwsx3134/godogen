@@ -1,0 +1,46 @@
+{
+  "schema": "generate2dsprite.master_spec.v1",
+  "name": "car-dir-ne",
+  "subject": "a driver-and-car enemy unit, full body",
+  "identity": "A chunky mustard-yellow compact city car with the same annoyed fictional adult driver clearly visible inside the cabin, matching the approved car identity: light windshield, rounded sturdy body, exaggerated heavy dark bumper, large readable wheels, side mirrors, dark window trim and compact city-car proportions. The driver remains inside the car; car and driver are ONE sprite. Keep the same yellow car, same driver appearance, same wheel and mirror design, with no real brand logo and no readable license-plate text. This identity description is direction-neutral.",
+  "pose": "a stationary complete car-and-driver unit pointing diagonally toward the UPPER-RIGHT corner of the image, with the front quarter and driver's side readable and every wheel grounded on one shared baseline",
+  "recap": "chunky mustard-yellow compact city car with a rounded sturdy body, exaggerated heavy bumper, large readable wheels, side mirrors and the same annoyed fictional adult driver inside, pointing diagonally toward the UPPER-RIGHT corner of the image with every wheel grounded",
+  "facing": "none",
+  "facing_parts": "the whole car-and-driver unit",
+  "view": "elevated three-quarter overhead view about 50 degrees above the ground; the car points diagonally toward the UPPER-RIGHT corner of the image, showing the front quarter and driver's side; show the full car body, all four wheels, both side mirrors and the driver without cropping",
+  "class": "mob",
+  "finish": "pixel",
+  "key": "#FF00FF",
+  "genre": "a Taiwan night-market survivor game",
+  "pronoun": "it",
+  "identity_ref": {
+    "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/vehicles/car/master/master_rgba.png",
+    "sha256": "b3ec16d0c59a82b0ec56382444fd6e1c4d94bc238c9bf30a5e9214c419035cce",
+    "what": "the approved car-and-driver enemy identity, FIRST reference; copy its exact yellow car, wheels, mirrors, body details and driver appearance",
+    "copy": "the same mustard-yellow compact car, dark bumper, windows, mirrors, four wheels and annoyed fictional adult driver appearance; rotate the complete unit only to satisfy the requested view"
+  },
+  "style_ref": {
+    "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man/master-green/master_rgba.png",
+    "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+    "what": "the approved hero sprite style reference, SECOND reference",
+    "do_not_copy": "the hero's face, hair, outfit, equipment or colours; copy only pixel-art style, outline weight, pixel density, shading, scale discipline and elevated three-quarter framing"
+  },
+  "allowed_text": null,
+  "extra_bans": [
+    "side profile",
+    "low-angle camera",
+    "realistic photography",
+    "road",
+    "exhaust",
+    "speed lines",
+    "impact effects",
+    "ground plane",
+    "cast shadow",
+    "readable license-plate text",
+    "text or symbols",
+    "sprite sheet",
+    "multiple views"
+  ],
+  "opaque_parts": null,
+  "extra": "Use the approved car identity as the FIRST reference and the hero only as the SECOND style reference. Keep the same yellow car and same driver identity while rotating the complete unit to the NE direction. Match the approved southeast car's vehicle length, wheel scale, pixel density and visual weight. Keep all wheels touching one shared bottom ground-contact line, with generous margin and no cropped parts. Create one complete transparent-cutout candidate on a flat magenta key background, not a sheet."
+}

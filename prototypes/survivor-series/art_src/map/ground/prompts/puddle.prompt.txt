@@ -1,0 +1,5 @@
+Create exactly one isolated small wet-puddle overlay for a 2D top-down night-market map.
+
+Use the supplied FIRST reference only for the warm grey-brown wet-surface palette, humid night lighting, and restrained amber reflections. Use the supplied SECOND reference only for crisp pixel density and the elevated roughly 50-degree top-down camera; do not copy its hero, face, hair, clothing, pose, or colours. Match a roughly 90-pixel-tall hero's game scale and make this readable on a 128x128 tile.
+
+Show one irregular shallow puddle shape as a reusable overlay: a clean dark-wet contour, a few broken warm amber reflection fragments, and very restrained blue-grey wet highlights. The puddle must be isolated on a square transparent canvas with comfortable margin; outside the puddle must contain no pavement texture or opaque square. Prefer real native alpha; if the renderer cannot provide native alpha, use only a perfectly flat solid #FF00FF chroma background outside the puddle. No rain, droplets, splash, smoke, glow aura, manhole, drain grate, cracks, zebra stripes, curb, stall, lantern, vehicle, person, enemy, text, sign, logo, UI, or border.

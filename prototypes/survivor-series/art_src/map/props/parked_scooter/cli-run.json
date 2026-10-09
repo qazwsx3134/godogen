@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 2,
+  "provider": "openai",
+  "kind": "image",
+  "route": "codex-cli",
+  "requestedModel": "codex-image_gen",
+  "options": {
+    "tool": "image_gen"
+  },
+  "promptSha256": "3e93e8e1e3f2ee819269943ea93ebf79b63bda0e8d7c70874ba4bab4b581a0c3",
+  "references": [
+    {
+      "sha256": "43d29dff193a7923e5aeeffc2d1b4c18a9e2ec3c89f085c2fd50c489dafaf08d",
+      "bytes": 3464762
+    },
+    {
+      "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+      "bytes": 405203
+    }
+  ],
+  "fingerprint": "9480bd91b11ff6439c51db6dffdd9db5c381a0ae7c61e5644c93acc4962601f9",
+  "estimate": {
+    "usd": 0.0,
+    "currency": "USD",
+    "pricesVersion": "2026-10-06",
+    "items": [],
+    "basis": "subscription quota call: no per-call USD price; counted by call caps"
+  },
+  "consent": {
+    "provider": "openai",
+    "model": "codex-image_gen",
+    "calls": 1,
+    "estimateUsd": 0.0,
+    "route": "codex-cli",
+    "quota": true,
+    "account": "the user's own Codex sign-in (ChatGPT)",
+    "note": "uses the subscription quota of that sign-in, never API credit"
+  },
+  "artSource": "host_image",
+  "execution": "execute",
+  "status": "done",
+  "outputDir": "../survivor-assets-20261009/C/map/props/parked_scooter",
+  "receipt": {
+    "startedAt": "2026-10-09T01:09:35.055Z",
+    "submittedAt": "2026-10-09T01:09:35.058Z",
+    "completedAt": "2026-10-09T01:10:20.981Z",
+    "wallMs": 45926,
+    "providerMs": 45918,
+    "attempt": 1,
+    "purpose": "BRIEF-assets-2 C parked_scooter",
+    "toolVersion": "cli_media/0.4.0",
+    "outcomeCode": "ok"
+  },
+  "ledger": {
+    "projectDir": "../..",
+    "reservationId": "fd4a78abc2004b3791d80ef18695dcd8",
+    "status": "done"
+  },
+  "cliRun": {
+    "tool": "codex",
+    "runId": "3d750eee2c964a56947d22c1a238f0b4",
+    "cwd": "<tmp>/forge-cli-3d750eee2c96-3797df00",
+    "startedAt": "2026-10-09T01:09:35.055Z",
+    "version": "0.160.0",
+    "versionText": "codex-cli 0.160.0",
+    "recipe": "codex-exec-imagegen/1",
+    "home": "CODEX_HOME",
+    "verifiedBefore": true,
+    "threadId": "01a11e35-590d-7dd0-a948-12c21418583f"
+  },
+  "adoption": {
+    "method": "native-run-folder",
+    "source": "CODEX_HOME/generated_images/01a11e35-590d-7dd0-a948-12c21418583f/exec-5f739e0f-8653-410e-ba55-460f1f7b7a52.png",
+    "sourceSha256": "2db2629bac4e4fb8cef4f797bb8fa0d4c6d8e797357b34d8945ec3b3fc40d92c",
+    "sourceMtime": "2026-10-09T01:10:16Z",
+    "freshAfter": "2026-10-09T01:09:35.058Z",
+    "checks": [
+      "inside the CLI's own folder for this run",
+      "no symlink or junction",
+      "regular file of a sane size",
+      "newer than the run",
+      "magic bytes",
+      "decodes",
+      "exactly one output",
+      "exclusive copy with matching sha256"
+    ],
+    "finalAnswerNamesFile": true
+  },
+  "artifact": {
+    "path": "../survivor-assets-20261009/C/map/props/parked_scooter/generated.png",
+    "sha256": "2db2629bac4e4fb8cef4f797bb8fa0d4c6d8e797357b34d8945ec3b3fc40d92c",
+    "bytes": 1609927,
+    "format": "PNG",
+    "size": [
+      1254,
+      1254
+    ]
+  }
+}

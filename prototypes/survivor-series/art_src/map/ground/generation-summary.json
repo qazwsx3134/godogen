@@ -1,0 +1,184 @@
+[
+  {
+    "id": "ground-pavement",
+    "requested_route": "codex-cli",
+    "exit_code": 0,
+    "wall_seconds": 0,
+    "reused": true,
+    "output_dir": "/Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/ground/raw-ground",
+    "references": [
+      {
+        "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/background/street_block/selected.png",
+        "sha256": "43d29dff193a7923e5aeeffc2d1b4c18a9e2ec3c89f085c2fd50c489dafaf08d",
+        "role": "material/style FIRST"
+      },
+      {
+        "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man/master-green/master_rgba.png",
+        "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+        "role": "hero STYLE SECOND only"
+      }
+    ],
+    "status": "done",
+    "route": "local:codex-cli",
+    "model": "codex-image_gen",
+    "generated_sha256": "3fccad1d73f0e338ae2b1786ff8922d41ff60d59d18eec340498c0dbb4c03c8d",
+    "job": "job.json",
+    "prompt": "prompt.txt"
+  },
+  {
+    "id": "overlay-manhole",
+    "requested_route": "codex-cli",
+    "exit_code": 0,
+    "wall_seconds": 0,
+    "reused": true,
+    "output_dir": "/Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/ground/raw-manhole",
+    "references": [
+      {
+        "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/background/street_block/selected.png",
+        "sha256": "43d29dff193a7923e5aeeffc2d1b4c18a9e2ec3c89f085c2fd50c489dafaf08d",
+        "role": "material/style FIRST"
+      },
+      {
+        "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man/master-green/master_rgba.png",
+        "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+        "role": "hero STYLE SECOND only"
+      }
+    ],
+    "status": "done",
+    "route": "local:codex-cli",
+    "model": "codex-image_gen",
+    "generated_sha256": "d10531cf03e5e78e69e0a1e1a185790e0e11c20dda95f7247ea28ea4dec5703e",
+    "job": "job.json",
+    "prompt": "prompt.txt"
+  },
+  {
+    "id": "overlay-drain-grate",
+    "requested_route": "codex-cli",
+    "exit_code": 0,
+    "wall_seconds": 0,
+    "reused": true,
+    "output_dir": "/Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/ground/raw-drain-grate",
+    "references": [
+      {
+        "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/background/street_block/selected.png",
+        "sha256": "43d29dff193a7923e5aeeffc2d1b4c18a9e2ec3c89f085c2fd50c489dafaf08d",
+        "role": "material/style FIRST"
+      },
+      {
+        "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man/master-green/master_rgba.png",
+        "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+        "role": "hero STYLE SECOND only"
+      }
+    ],
+    "status": "done",
+    "route": "local:codex-cli",
+    "model": "codex-image_gen",
+    "generated_sha256": "55ea5a3a806b72886d291f4c288320781d0a8422fedab41b57951a6c9ef150ee",
+    "job": "job.json",
+    "prompt": "prompt.txt"
+  },
+  {
+    "id": "overlay-puddle",
+    "requested_route": "codex-cli",
+    "exit_code": 0,
+    "wall_seconds": 0,
+    "reused": true,
+    "output_dir": "/Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/ground/raw-puddle",
+    "references": [
+      {
+        "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/background/street_block/selected.png",
+        "sha256": "43d29dff193a7923e5aeeffc2d1b4c18a9e2ec3c89f085c2fd50c489dafaf08d",
+        "role": "material/style FIRST"
+      },
+      {
+        "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man/master-green/master_rgba.png",
+        "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+        "role": "hero STYLE SECOND only"
+      }
+    ],
+    "status": "done",
+    "route": "local:codex-cli",
+    "model": "codex-image_gen",
+    "generated_sha256": "5c8ab1ee176604277a0cb0a7521ad03ea4a2c42224a6f4ea180f0b530a7514e7",
+    "job": "job.json",
+    "prompt": "prompt.txt"
+  },
+  {
+    "id": "overlay-cracks",
+    "requested_route": "codex-cli",
+    "exit_code": 0,
+    "wall_seconds": 0,
+    "reused": true,
+    "output_dir": "/Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/ground/raw-cracks",
+    "references": [
+      {
+        "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/background/street_block/selected.png",
+        "sha256": "43d29dff193a7923e5aeeffc2d1b4c18a9e2ec3c89f085c2fd50c489dafaf08d",
+        "role": "material/style FIRST"
+      },
+      {
+        "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man/master-green/master_rgba.png",
+        "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+        "role": "hero STYLE SECOND only"
+      }
+    ],
+    "status": "done",
+    "route": "local:codex-cli",
+    "model": "codex-image_gen",
+    "generated_sha256": "91659437293fd1a7503db4a29811f93509cfa8651e9484e7589e0cdd9e0ceb20",
+    "job": "job.json",
+    "prompt": "prompt.txt"
+  },
+  {
+    "id": "overlay-zebra",
+    "requested_route": "codex-cli",
+    "exit_code": 0,
+    "wall_seconds": 0,
+    "reused": true,
+    "output_dir": "/Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/ground/raw-zebra",
+    "references": [
+      {
+        "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/background/street_block/selected.png",
+        "sha256": "43d29dff193a7923e5aeeffc2d1b4c18a9e2ec3c89f085c2fd50c489dafaf08d",
+        "role": "material/style FIRST"
+      },
+      {
+        "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man/master-green/master_rgba.png",
+        "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+        "role": "hero STYLE SECOND only"
+      }
+    ],
+    "status": "done",
+    "route": "local:codex-cli",
+    "model": "codex-image_gen",
+    "generated_sha256": "fa30b242a2499f482bec835cfb8d475871fdb8e653e8e2716c96eb4c74c626f7",
+    "job": "job.json",
+    "prompt": "prompt.txt"
+  },
+  {
+    "id": "overlay-puddle-clean",
+    "requested_route": "codex-cli",
+    "exit_code": 0,
+    "wall_seconds": 51.734,
+    "reused": false,
+    "output_dir": "/Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/ground/raw-puddle-clean",
+    "references": [
+      {
+        "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/background/street_block/selected.png",
+        "sha256": "43d29dff193a7923e5aeeffc2d1b4c18a9e2ec3c89f085c2fd50c489dafaf08d",
+        "role": "material/style FIRST"
+      },
+      {
+        "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man/master-green/master_rgba.png",
+        "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+        "role": "hero STYLE SECOND only"
+      }
+    ],
+    "status": "done",
+    "route": "local:codex-cli",
+    "model": "codex-image_gen",
+    "generated_sha256": "9077674dfd1019eeb3efa767f5fa6207fb2267674897b0d0f4fd6bbb69a29254",
+    "job": "job.json",
+    "prompt": "prompt.txt"
+  }
+]

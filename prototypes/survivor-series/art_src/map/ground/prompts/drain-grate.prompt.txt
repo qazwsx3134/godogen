@@ -1,0 +1,5 @@
+Create exactly one isolated storm-drain-grate overlay for a 2D top-down night-market map.
+
+Use the supplied FIRST reference only for the warm wet pavement palette, restrained amber reflections, crisp material detailing, and lighting direction. Use the supplied SECOND reference only for crisp pixel density and the elevated roughly 50-degree top-down camera; do not copy any hero content, face, hair, clothing, or character colours. Match the scale of a roughly 90-pixel-tall hero and make the overlay readable on a 128x128 tile.
+
+Show one shallow narrow rectangular cast-iron drainage grate lying flush in the ground plane, with a strong dark outer rim and clean parallel slots or bars, slightly worn metal highlights, and a subtle warm damp glint. Keep it isolated and fully inside a square transparent canvas with comfortable margin; do not draw any surrounding pavement, curb, gutter, road, or tile patch. Prefer real native alpha; if native alpha is unavailable, use only a perfectly flat solid #FF00FF chroma background outside the grate. No manhole, puddle, cracks, zebra stripes, stall, lantern, cone, vehicle, person, enemy, smoke, text, sign, logo, UI, or border.

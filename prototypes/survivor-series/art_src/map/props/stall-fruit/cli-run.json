@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 2,
+  "provider": "openai",
+  "kind": "image",
+  "route": "codex-cli",
+  "requestedModel": "codex-image_gen",
+  "options": {
+    "tool": "image_gen"
+  },
+  "promptSha256": "f89dcd0936e5798ee5d07ef5eb14787b9a7e03b0ff04eac53db213986e57c769",
+  "references": [
+    {
+      "sha256": "43d29dff193a7923e5aeeffc2d1b4c18a9e2ec3c89f085c2fd50c489dafaf08d",
+      "bytes": 3464762
+    },
+    {
+      "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+      "bytes": 405203
+    }
+  ],
+  "fingerprint": "926e6360a6f7925195fc804bfb538e1c46dd2f0cdde4995f55447f3f7bdd4958",
+  "estimate": {
+    "usd": 0.0,
+    "currency": "USD",
+    "pricesVersion": "2026-10-06",
+    "items": [],
+    "basis": "subscription quota call: no per-call USD price; counted by call caps"
+  },
+  "consent": {
+    "provider": "openai",
+    "model": "codex-image_gen",
+    "calls": 1,
+    "estimateUsd": 0.0,
+    "route": "codex-cli",
+    "quota": true,
+    "account": "the user's own Codex sign-in (ChatGPT)",
+    "note": "uses the subscription quota of that sign-in, never API credit"
+  },
+  "artSource": "host_image",
+  "execution": "execute",
+  "status": "done",
+  "outputDir": "../survivor-assets-20261009/C/map/props/stall-fruit",
+  "receipt": {
+    "startedAt": "2026-10-09T01:06:47.459Z",
+    "submittedAt": "2026-10-09T01:06:47.465Z",
+    "completedAt": "2026-10-09T01:07:26.185Z",
+    "wallMs": 38726,
+    "providerMs": 38709,
+    "attempt": 1,
+    "purpose": "BRIEF-assets-2 C stall-fruit",
+    "toolVersion": "cli_media/0.4.0",
+    "outcomeCode": "ok"
+  },
+  "ledger": {
+    "projectDir": "../..",
+    "reservationId": "e851d50ac7054866a104a6ebf0ee3a7f",
+    "status": "done"
+  },
+  "cliRun": {
+    "tool": "codex",
+    "runId": "c9bca34a26304b478d9195cdf87f6e5a",
+    "cwd": "<tmp>/forge-cli-c9bca34a2630-524fd355",
+    "startedAt": "2026-10-09T01:06:47.459Z",
+    "version": "0.160.0",
+    "versionText": "codex-cli 0.160.0",
+    "recipe": "codex-exec-imagegen/1",
+    "home": "CODEX_HOME",
+    "verifiedBefore": true,
+    "threadId": "01a11e32-ca69-70e2-af50-82cfd98e3498"
+  },
+  "adoption": {
+    "method": "native-run-folder",
+    "source": "CODEX_HOME/generated_images/01a11e32-ca69-70e2-af50-82cfd98e3498/exec-bfdd8cad-0906-46a5-bbff-f90013474ddb.png",
+    "sourceSha256": "5d72efa7079e09ea261655fad5e41a2127e587841dbcec5fa19b29b69fcd1bf8",
+    "sourceMtime": "2026-10-09T01:07:22Z",
+    "freshAfter": "2026-10-09T01:06:47.466Z",
+    "checks": [
+      "inside the CLI's own folder for this run",
+      "no symlink or junction",
+      "regular file of a sane size",
+      "newer than the run",
+      "magic bytes",
+      "decodes",
+      "exactly one output",
+      "exclusive copy with matching sha256"
+    ],
+    "finalAnswerNamesFile": true
+  },
+  "artifact": {
+    "path": "../survivor-assets-20261009/C/map/props/stall-fruit/generated.png",
+    "sha256": "5d72efa7079e09ea261655fad5e41a2127e587841dbcec5fa19b29b69fcd1bf8",
+    "bytes": 1652044,
+    "format": "PNG",
+    "size": [
+      1536,
+      1024
+    ]
+  }
+}

@@ -1,0 +1,368 @@
+{
+  "schema": "survivor-assets.b_motorcycle_handoff.v1",
+  "status": "complete",
+  "handoff_kind": "complete-candidate-handoff",
+  "scope": "B motorcycle only",
+  "staging_root": ".forge/survivor-assets-20261009/B/vehicles/motorcycle",
+  "candidate_count": {
+    "expected": 8,
+    "accepted": 8,
+    "blocked": 0,
+    "directions": ["s", "e", "ne", "n"]
+  },
+  "generation_contract": {
+    "route_requested": "codex-cli",
+    "class": "mob",
+    "facing": "none",
+    "finish": "pixel",
+    "key": "#00FF00",
+    "raw_size_px": [1254, 1254],
+    "candidate_size_px": [1024, 1024],
+    "pad_subject_height_px": 471,
+    "pad_top_margin_px": 406,
+    "ground_y": 877,
+    "physical_length_claim": "not asserted; projection_width_px is an image-space silhouette measurement and legitimately varies by heading and take"
+  },
+  "references": {
+    "identity_first": {
+      "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/vehicles/motorcycle/master/master_rgba.png",
+      "sha256": "3ae07ddbf6370668f960c273be022a0a80624d24eba912e2134b1287aa0cf136"
+    },
+    "style_second": {
+      "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man/master-green/master_rgba.png",
+      "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1"
+    },
+    "ne_fix_reference_interpretation": "fix-ne-01 run.json records edit FIRST as the approved SE master and extra SECOND as the hero style reference; both paths and hashes above match those actual records"
+  },
+  "run_provenance": {
+    "s": {
+      "run_path": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-s/generate-01/run.json",
+      "status": "ok",
+      "actual_route": "local:codex-cli",
+      "provider": "Codex (local CLI)",
+      "model": "codex-image_gen",
+      "warnings": 0,
+      "reference_records": ["identity FIRST", "style SECOND"]
+    },
+    "e": {
+      "run_path": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-e/fix-e-01/run.json",
+      "status": "ok",
+      "actual_route": "local:codex-cli",
+      "provider": "Codex (local CLI)",
+      "model": "codex-image_gen",
+      "warnings": 0,
+      "reference_records": ["edit FIRST = approved SE master", "extra SECOND = hero style"]
+    },
+    "ne": {
+      "run_path": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-ne/fix-ne-01/run.json",
+      "status": "ok",
+      "actual_route": "local:codex-cli",
+      "provider": "Codex (local CLI)",
+      "model": "codex-image_gen",
+      "warnings": 0,
+      "reference_records": ["edit FIRST = approved SE master", "extra SECOND = hero style"]
+    },
+    "n": {
+      "run_path": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-n/generate-batch-01/run.json",
+      "status": "ok",
+      "actual_route": "local:codex-cli",
+      "provider": "Codex (local CLI)",
+      "model": "codex-image_gen",
+      "warnings": 0,
+      "reference_records": ["identity FIRST", "style SECOND"]
+    }
+  },
+  "directions": {
+    "s": {
+      "requested_heading": "image DOWN",
+      "observed_heading": "image DOWN",
+      "run_output": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-s/generate-01",
+      "candidate_contact": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-s/candidates-contact.png",
+      "candidates": [
+        {
+          "take": 1,
+          "raw_path": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-s/generate-01/takes/take-01/generated.png",
+          "raw_sha256": "a1c2134ed853478d66b1c7f50a2f8cbfbe3a34982ac4d59dc8d715d677938dbe",
+          "candidate_path": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-s/candidate-01.png",
+          "candidate_sha256": "1b4082f1bd4ed5244b9eecae0d6318a584e367da38b6da7d6c2bb9530f0f2594",
+          "pad_path": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-s/pad-01",
+          "output_bbox": [382, 406, 642, 877],
+          "projection_width_px": 260,
+          "projection_height_px": 471,
+          "projection_width_height_ratio": 0.552017,
+          "ground_y": 877,
+          "pad_scale": 0.6156862745,
+          "pad_warnings": [],
+          "source_touches": [],
+          "opaque_green_px": 0,
+          "alpha_semi_fraction": 0.001038551,
+          "actual_route": "local:codex-cli",
+          "provider": "Codex (local CLI)",
+          "model": "codex-image_gen",
+          "visual_qc": "pass: full scooter, both wheels, both mirrors, white helmet and rider inbounds; no text, shadow or crop"
+        },
+        {
+          "take": 2,
+          "raw_path": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-s/generate-01/takes/take-02/generated.png",
+          "raw_sha256": "4fbdb04fed9c8423e2d63c065702cd3230f8c779ae723941ca16e6e85a6780ce",
+          "candidate_path": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-s/candidate-02.png",
+          "candidate_sha256": "66115de87f5eddb2cccbbf82f974802c18fefdf4d41b4d1ff4d3a08484eaaeb1",
+          "pad_path": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-s/pad-02",
+          "output_bbox": [391, 406, 633, 877],
+          "projection_width_px": 242,
+          "projection_height_px": 471,
+          "projection_width_height_ratio": 0.5138,
+          "ground_y": 877,
+          "pad_scale": 0.5358361775,
+          "pad_warnings": [],
+          "source_touches": [],
+          "opaque_green_px": 0,
+          "alpha_semi_fraction": 0.000940323,
+          "actual_route": "local:codex-cli",
+          "provider": "Codex (local CLI)",
+          "model": "codex-image_gen",
+          "visual_qc": "pass: full scooter, both wheels, both mirrors, white helmet and rider inbounds; no text, shadow or crop"
+        }
+      ]
+    },
+    "e": {
+      "requested_heading": "image RIGHT",
+      "observed_heading": "image RIGHT",
+      "run_output": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-e/fix-e-01",
+      "candidate_contact": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-e/candidates-contact.png",
+      "superseded_original_raw_preserved": [
+        {
+          "raw_path": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-e/generate-batch-01/takes/take-01/generated.png",
+          "raw_sha256": "fd56f2957e33fbb1f4e38f26099e5c18a1e3c93f53e3749fa0b8211929676b35",
+          "reason": "original E draft retained for provenance, replaced after heading review"
+        },
+        {
+          "raw_path": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-e/generate-batch-01/takes/take-02/generated.png",
+          "raw_sha256": "a7cce4d6e43734b7983f848382e5f90acfad6c2ccdb1ae4002ff6c73229d67c1",
+          "reason": "original E draft retained for provenance, replaced after heading review"
+        }
+      ],
+      "candidates": [
+        {
+          "take": 1,
+          "raw_path": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-e/fix-e-01/takes/take-01/generated.png",
+          "raw_sha256": "998e10bda657bf52239a91cc3853efc7331b659155e569f19b22076cf208359b",
+          "candidate_path": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-e/candidate-01.png",
+          "candidate_sha256": "af629e151052044380f3759508f5df7919e688c4a0421b0be27cf0e71b4636ee",
+          "pad_path": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-e/pad-fix-01",
+          "output_bbox": [248, 406, 776, 877],
+          "projection_width_px": 528,
+          "projection_height_px": 471,
+          "projection_width_height_ratio": 1.121019,
+          "ground_y": 877,
+          "pad_scale": 0.6541666667,
+          "pad_warnings": [],
+          "source_touches": [],
+          "opaque_green_px": 0,
+          "alpha_semi_fraction": 0.001769066,
+          "actual_route": "local:codex-cli",
+          "provider": "Codex (local CLI)",
+          "model": "codex-image_gen",
+          "visual_qc": "pass: exact RIGHT; nose/front wheel RIGHT, tail LEFT, axle and tyre contact line near horizontal; full scooter, both wheels, both mirrors, white helmet and rider inbounds; no text, shadow or crop"
+        },
+        {
+          "take": 2,
+          "raw_path": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-e/fix-e-01/takes/take-02/generated.png",
+          "raw_sha256": "a565d0fd19e3f87862a464ef9d013687472c0da9d0f199c229d5352e68f6d2c2",
+          "candidate_path": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-e/candidate-02.png",
+          "candidate_sha256": "406993b0cd5239a69355ea95dd8ae9568d323f2d63888126ad617ec29db76b43",
+          "pad_path": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-e/pad-fix-02",
+          "output_bbox": [244, 406, 779, 877],
+          "projection_width_px": 535,
+          "projection_height_px": 471,
+          "projection_width_height_ratio": 1.135881,
+          "ground_y": 877,
+          "pad_scale": 0.7302325581,
+          "pad_warnings": [],
+          "source_touches": [],
+          "opaque_green_px": 0,
+          "alpha_semi_fraction": 0.001935959,
+          "actual_route": "local:codex-cli",
+          "provider": "Codex (local CLI)",
+          "model": "codex-image_gen",
+          "visual_qc": "pass: exact RIGHT; nose/front wheel RIGHT, tail LEFT, axle and tyre contact line near horizontal; full scooter, both wheels, both mirrors, white helmet and rider inbounds; no text, shadow or crop"
+        }
+      ]
+    },
+    "ne": {
+      "requested_heading": "image UPPER-RIGHT; rear three-quarter",
+      "observed_heading": "image UPPER-RIGHT; rear three-quarter",
+      "run_output": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-ne/fix-ne-01",
+      "candidate_contact": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-ne/candidates-contact.png",
+      "superseded_wrong_heading_raw_preserved": [
+        {
+          "raw_path": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-ne/generate-batch-01/takes/take-01/generated.png",
+          "raw_sha256": "d42237b914759e6acbf8fe4a3f911272fb8b152bfe20b1a8f1e67bd1f721cc1e",
+          "reason": "original SE/lower-right heading retained for provenance, not selected"
+        },
+        {
+          "raw_path": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-ne/generate-batch-01/takes/take-02/generated.png",
+          "raw_sha256": "0d0fc8eb1b8286092a623ac5380b630cb0b05e888a5f047bae3f895e61e14404",
+          "reason": "original SE/lower-right heading retained for provenance, not selected"
+        }
+      ],
+      "candidates": [
+        {
+          "take": 1,
+          "raw_path": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-ne/fix-ne-01/takes/take-01/generated.png",
+          "raw_sha256": "acca174fd1fac18117dde7ea4777560160016aa90354cd67de405ce4a9312193",
+          "candidate_path": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-ne/candidate-01.png",
+          "candidate_sha256": "22e69672f7761c0f56a816209910fa61eb84582265fb790ee38d74be8d404ce2",
+          "pad_path": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-ne/pad-01",
+          "output_bbox": [314, 406, 709, 877],
+          "projection_width_px": 395,
+          "projection_height_px": 471,
+          "projection_width_height_ratio": 0.838641,
+          "ground_y": 877,
+          "pad_scale": 0.6936671576,
+          "pad_warnings": [],
+          "source_touches": [],
+          "opaque_green_px": 0,
+          "alpha_semi_fraction": 0.001272202,
+          "actual_route": "local:codex-cli",
+          "provider": "Codex (local CLI)",
+          "model": "codex-image_gen",
+          "visual_qc": "pass: front/wheel upper-right, red tail lower-left, rear rider-back, full scooter and both mirrors/helmet inbounds; no text, shadow or crop"
+        },
+        {
+          "take": 2,
+          "raw_path": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-ne/fix-ne-01/takes/take-02/generated.png",
+          "raw_sha256": "f8cc8f7b499a3eb366e7b3e858d6ce0a25ffef8d07368739e6aed990afda4ad5",
+          "candidate_path": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-ne/candidate-02.png",
+          "candidate_sha256": "e084116ce9ab5ce8c492b8f1425bcc07023a901454531f79f9040458b8d8deb3",
+          "pad_path": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-ne/pad-02",
+          "output_bbox": [323, 406, 701, 877],
+          "projection_width_px": 378,
+          "projection_height_px": 471,
+          "projection_width_height_ratio": 0.802548,
+          "ground_y": 877,
+          "pad_scale": 0.6845930233,
+          "pad_warnings": [],
+          "source_touches": [],
+          "opaque_green_px": 0,
+          "alpha_semi_fraction": 0.001291275,
+          "actual_route": "local:codex-cli",
+          "provider": "Codex (local CLI)",
+          "model": "codex-image_gen",
+          "visual_qc": "pass: front/wheel upper-right, red tail lower-left, rear rider-back, full scooter and both mirrors/helmet inbounds; no text, shadow or crop"
+        }
+      ]
+    },
+    "n": {
+      "requested_heading": "image TOP; rear of scooter and rider back",
+      "observed_heading": "image TOP; rear of scooter and rider back",
+      "run_output": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-n/generate-batch-01",
+      "candidate_contact": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-n/candidates-contact.png",
+      "candidates": [
+        {
+          "take": 1,
+          "raw_path": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-n/generate-batch-01/takes/take-01/generated.png",
+          "raw_sha256": "46a7e27abd84fb7f58df02b5e197dbca430cb960214ab5ce226dd00381c43453",
+          "candidate_path": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-n/candidate-01.png",
+          "candidate_sha256": "14db0df96a88af8e74a415f861edbfb4a76fb7ae99f5794efe84fea56a6a2d0e",
+          "pad_path": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-n/pad-01",
+          "output_bbox": [380, 406, 644, 877],
+          "projection_width_px": 264,
+          "projection_height_px": 471,
+          "projection_width_height_ratio": 0.56051,
+          "ground_y": 877,
+          "pad_scale": 0.6173001311,
+          "pad_warnings": [],
+          "source_touches": [],
+          "opaque_green_px": 0,
+          "alpha_semi_fraction": 0.001241684,
+          "actual_route": "local:codex-cli",
+          "provider": "Codex (local CLI)",
+          "model": "codex-image_gen",
+          "visual_qc": "pass: rear view, rider back, full scooter, both wheels, both mirrors and white helmet inbounds; no text, shadow or crop"
+        },
+        {
+          "take": 2,
+          "raw_path": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-n/generate-batch-01/takes/take-02/generated.png",
+          "raw_sha256": "91a36ac4a9225e96179ca57787fddcbe4cd02dee93bdb0154f86e544696a330e",
+          "candidate_path": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-n/candidate-02.png",
+          "candidate_sha256": "26b2a66439d3cc14acc4f2bfaa2aab12764ba7dc24098f9248d2900ea70a8b10",
+          "pad_path": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-n/pad-02",
+          "output_bbox": [386, 406, 638, 877],
+          "projection_width_px": 252,
+          "projection_height_px": 471,
+          "projection_width_height_ratio": 0.535032,
+          "ground_y": 877,
+          "pad_scale": 0.6116883117,
+          "pad_warnings": [],
+          "source_touches": [],
+          "opaque_green_px": 0,
+          "alpha_semi_fraction": 0.001271248,
+          "actual_route": "local:codex-cli",
+          "provider": "Codex (local CLI)",
+          "model": "codex-image_gen",
+          "visual_qc": "pass: rear view, rider back, full scooter, both wheels, both mirrors and white helmet inbounds; no text, shadow or crop"
+        }
+      ]
+    }
+  },
+  "contacts": {
+    "per_direction": [
+      ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-s/candidates-contact.png",
+      ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-e/candidates-contact.png",
+      ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-ne/candidates-contact.png",
+      ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-n/candidates-contact.png"
+    ],
+    "directions_contact": {
+      "path": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/directions-contact.png",
+      "size_px": [1500, 1120],
+      "center_reference": "approved SE master",
+      "center_reference_path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/vehicles/motorcycle/master/master_rgba.png",
+      "layout": {
+        "top_left": "N candidates 01/02",
+        "top_right": "NE candidates 01/02",
+        "center": "approved SE master",
+        "bottom_left": "S candidates 01/02",
+        "bottom_right": "E candidates 01/02"
+      },
+      "comparison_only": true
+    }
+  },
+  "overall_qc": {
+    "candidate_count_viewed_individually": 8,
+    "contacts_viewed": 5,
+    "directions": {
+      "s": "pass: DOWN",
+      "e": "pass: RIGHT",
+      "ne": "pass: UPPER-RIGHT rear three-quarter",
+      "n": "pass: TOP rear/back"
+    },
+    "identity": "all eight retain navy scooter, white helmet, dark rider and approved scooter equipment; red taillight visible where the view exposes it",
+    "containment": "all eight output bboxes are inside 1024x1024; all eight ground_y values are 877",
+    "alpha": "all eight have opaque_green_px=0; alpha is transparent outside the measured subject",
+    "key_warnings": [],
+    "crop_warnings": [],
+    "pad_warnings": [],
+    "source_touches": [],
+    "text_shadow_crop_qc": "no text, baked shadow or visible crop observed",
+      "projection_widths_px": {
+      "s": [260, 242],
+      "e": [528, 535],
+      "ne": [395, 378],
+      "n": [264, 252]
+    },
+    "projection_note": "These are actual image-space projected widths at a common 471 px height, not a claim that physical motorcycle length is identical across headings or takes.",
+    "warnings": []
+  },
+  "raw_preservation": {
+    "all_original_raw_runs_preserved": true,
+    "wrong_heading_ne_raw_preserved": true,
+    "wrong_heading_run": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-ne/generate-batch-01",
+    "fix_raw_run": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-ne/fix-ne-01",
+    "superseded_e_raw_preserved": true,
+    "superseded_e_run": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-e/generate-batch-01",
+    "selected_e_fix_run": ".forge/survivor-assets-20261009/B/vehicles/motorcycle/dir-e/fix-e-01"
+  },
+  "approval": "not approved; candidate handoff only",
+  "next_action": "No further B work. Commander may review and publish; this worker will not start C."
+}

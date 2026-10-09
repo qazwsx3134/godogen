@@ -1,0 +1,9 @@
+Create exactly one 2x2 static compact-prop sheet for a Taiwanese night-market map, using the FIRST attached selected street-block image as the material, palette, warm lantern lighting, wet-market surfaces, red-white awning cues, and 50-degree elevated overhead camera reference. Use the SECOND attached hero master only for outline weight, pixel density, shading discipline, and camera discipline; never copy the hero's face, hair, body, suit, or colors. The game player is about 90 px high, so keep one consistent readable prop scale and generous margins.
+
+Use this exact row-major layout and nothing else:
+1. planter: one square concrete planter with one compact cluster of leafy green plants.
+2. cone: one orange-red traffic cone with one clean white reflective band.
+3. fruit_crate: one small wooden fruit crate with a few red, orange, and green fruits contained inside.
+4. empty: a completely empty solid blue key cell with no art.
+
+Every occupied cell contains exactly one complete compact prop, centered inside the central 50% to 60% safe area. Use a perfectly flat solid #0000FF blue background in all four cells, including the empty fourth cell. No baked floor, pavement, wet ground, reflection beneath a prop, cast shadow, people, vehicles, smoke, steam, signs, logos, letters, numbers, UI, watermark, borders, labels, guide lines, extra props, cropped parts, or detached fragments. Do not make any prop touch or cross a cell edge.

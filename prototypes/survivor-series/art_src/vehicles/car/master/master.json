@@ -1,0 +1,179 @@
+{
+  "schema": "generate2dsprite.master.v1",
+  "tool": {
+    "name": "master_still",
+    "version": "0.4.0"
+  },
+  "created": "2026-10-08T17:56:54.675Z",
+  "name": "car",
+  "subject": "a driver-and-car enemy unit, full body",
+  "identity_recap": "chunky mustard-yellow compact city car with a rounded sturdy body, exaggerated heavy bumper, large readable wheels and an annoyed fictional adult driver visible behind a light windshield, facing diagonally toward the lower-right",
+  "facing": "right",
+  "view": "elevated three-quarter overhead view about 50 degrees above the ground, body turned diagonally toward the lower-right",
+  "finish": "pixel",
+  "class": "mob",
+  "framing": {
+    "canvas": [
+      1024,
+      1024
+    ],
+    "subject_height_px": 471,
+    "top_margin_px": 406,
+    "lead_px": 100,
+    "preset": "mob",
+    "subject_bbox": [
+      94,
+      406,
+      730,
+      877
+    ],
+    "anchor": [
+      398.5,
+      877.0
+    ],
+    "opaque_area_px": 203009,
+    "width_limited": false
+  },
+  "key": "#FF00FF",
+  "files": {
+    "master": {
+      "path": "master.png",
+      "sha256": "501a548722e2a41f269ce95829c5486e9cc6acaf82f6f4445f97e66a4e5eac6f",
+      "bytes": 359129,
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    "cutout": {
+      "path": "master_rgba.png",
+      "sha256": "b3ec16d0c59a82b0ec56382444fd6e1c4d94bc238c9bf30a5e9214c419035cce",
+      "bytes": 412361,
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    "source": {
+      "path": "source.png",
+      "sha256": "b3ec16d0c59a82b0ec56382444fd6e1c4d94bc238c9bf30a5e9214c419035cce",
+      "bytes": 412361,
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    "spec": {
+      "path": "spec.json",
+      "sha256": "4fdc83191d1b7e61cb50ad934cadf50d4511915e1cfdc82c9eba0a491758d0a4",
+      "bytes": 2339
+    },
+    "prompt": null
+  },
+  "references": [
+    {
+      "role": "style",
+      "path": "../../../../../godot/godogen/prototypes/survivor-series/art_src/heroes/man/master-green/master_rgba.png",
+      "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+      "what": "the approved hero sprite of this game"
+    }
+  ],
+  "transform": {
+    "mapping": "master = scale * source + offset (continuous pixel coordinates: pixel i spans [i, i + 1))",
+    "source_size": [
+      1024,
+      1024
+    ],
+    "source_subject_bbox": [
+      94,
+      406,
+      730,
+      877
+    ],
+    "crop_box": [
+      88,
+      400,
+      736,
+      883
+    ],
+    "crop_margin_px": 6,
+    "scale": 1.0,
+    "offset": [
+      0.0,
+      0.0
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "resampler": "lanczos",
+    "premultiplied": true,
+    "alpha_floor_px": 0,
+    "subject_parts": 1,
+    "ignored_parts": 0,
+    "ignored_px": 0,
+    "source_touches": [],
+    "key_rgb": [
+      255,
+      0,
+      255
+    ]
+  },
+  "route": "codex-cli",
+  "provenance": {
+    "command": "external",
+    "run": null,
+    "take": null,
+    "source_name": "candidate-02.png",
+    "source_sha256": "b3ec16d0c59a82b0ec56382444fd6e1c4d94bc238c9bf30a5e9214c419035cce",
+    "media": null,
+    "media_cli_source": null,
+    "edit": null
+  },
+  "matte": {
+    "requested": "soft",
+    "key_estimate": {
+      "key": [
+        255.0,
+        0.0,
+        255.0
+      ],
+      "source": "native_alpha",
+      "valid": false,
+      "ring_share": 0.0,
+      "coverage": 0.0,
+      "distance_from_declared": 0.0
+    },
+    "quality": "native_alpha",
+    "qa": {
+      "key": [
+        255.0,
+        0.0,
+        255.0
+      ],
+      "opaque_key_px": 0,
+      "outer_ring_spill_fraction": 0.0004636068613815484,
+      "semitransparent_fraction": 0.022866054884398575,
+      "enclosed_key_pockets": 0,
+      "key_hued_px": 0,
+      "visible_px": 204539,
+      "outer_ring_px": 2157,
+      "thresholds": {
+        "key_tolerance": 48.0,
+        "spill_threshold": 20.0,
+        "min_pocket_area": 16,
+        "opaque_alpha": 128,
+        "spill_hue_balance": 0.5
+      },
+      "method": "forge_matte.matte_qa v1: straight-colour key distance and dominance on the keyed image; two-channel keys count spill only where the key channels are balanced"
+    },
+    "key_choice": {
+      "status": "ok",
+      "overlap_share": 0.0,
+      "rule": "reject a key when more than 0.5% of subject pixels have key dominance >= 40; first acceptable candidate wins"
+    }
+  },
+  "warnings": [
+    "the style reference master_rgba.png is missing; its recorded sha256 is kept"
+  ]
+}

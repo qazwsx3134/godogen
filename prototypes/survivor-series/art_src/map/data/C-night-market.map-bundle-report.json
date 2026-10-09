@@ -1,0 +1,264 @@
+{
+  "schema": "generate2dmap.map_bundle_report.v1",
+  "status": "pass",
+  "method": "JSON Schema map.schema.json#/$defs/map_bundle_v2 (vendored copy, built-in Draft 2020-12 evaluator), file existence and sha256 of every referenced file, and cross-field rules: unique ids, tile indices against tilesets, wang/blob topology, material colours, portal targets and arrivals, slots and approach points",
+  "notProven": [
+    "reachability, portal arrivals and collision geometry (run map_nav.py check)",
+    "that collision and footprints match the painted art",
+    "engine or editor import (Tiled GUI, Godot, LDtk not verified)"
+  ],
+  "checks": [
+    {
+      "id": "schema",
+      "status": "pass",
+      "value": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "threshold": {
+        "errors": 0
+      }
+    },
+    {
+      "id": "files",
+      "status": "pass",
+      "value": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "threshold": {
+        "errors": 0
+      }
+    },
+    {
+      "id": "sha256",
+      "status": "pass",
+      "value": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "threshold": {
+        "errors": 0
+      }
+    },
+    {
+      "id": "tilesets",
+      "status": "pass",
+      "value": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "threshold": {
+        "errors": 0
+      }
+    },
+    {
+      "id": "layers",
+      "status": "pass",
+      "value": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "threshold": {
+        "errors": 0
+      }
+    },
+    {
+      "id": "props_and_objects",
+      "status": "pass",
+      "value": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "threshold": {
+        "errors": 0
+      }
+    },
+    {
+      "id": "collision",
+      "status": "pass",
+      "value": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "threshold": {
+        "errors": 0
+      }
+    },
+    {
+      "id": "material_map",
+      "status": "pass",
+      "value": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "threshold": {
+        "errors": 0
+      }
+    },
+    {
+      "id": "portals",
+      "status": "pass",
+      "value": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "threshold": {
+        "errors": 0
+      }
+    },
+    {
+      "id": "spawns_anchors_interactions",
+      "status": "pass",
+      "value": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "threshold": {
+        "errors": 0
+      }
+    },
+    {
+      "id": "document",
+      "status": "pass",
+      "value": {
+        "errors": 0,
+        "warnings": 0
+      },
+      "threshold": {
+        "errors": 0
+      }
+    }
+  ],
+  "inputs": [
+    {
+      "path": "../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/data/C-night-market.map-bundle.json",
+      "sha256": "3b7a07590b71bd2abaab34331dc3dbb752809a46379e2b7f3098c83494e5fcc2",
+      "bytes": 14568
+    },
+    {
+      "path": "../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/data/tilesets/pavement.tileset.json",
+      "sha256": "8f918e9525e3ea468cac56a9671c0686a93c229ce416e7c3977be47c034c157a",
+      "bytes": 1431
+    },
+    {
+      "path": "../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/ground/pavement.png",
+      "sha256": "34a6e5745fde6b816976b69521664d5c78685ee06bf26f95606b030dd5341155",
+      "bytes": 47420
+    },
+    {
+      "path": "../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/data/tilesets/overlay-manhole.tileset.json",
+      "sha256": "995a2dba4d41927be82ccf6b0a02bcbf193b5e51102b00223674fd10744a4155",
+      "bytes": 1141
+    },
+    {
+      "path": "../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/ground/manhole.png",
+      "sha256": "0ae95241f369d70493424367efa3353b0d6d14ab9467593b13676484c12c43cc",
+      "bytes": 14080
+    },
+    {
+      "path": "../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/data/tilesets/overlay-drain-grate.tileset.json",
+      "sha256": "e745bc556dd68bb13928542fcb0533d95c563e5ee914629528c33784537fc45f",
+      "bytes": 1160
+    },
+    {
+      "path": "../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/ground/drain_grate.png",
+      "sha256": "935551a711188e6ee9a37901be789f1f1dbd3950bf963f4a2019345c7212fc2e",
+      "bytes": 7937
+    },
+    {
+      "path": "../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/data/tilesets/overlay-puddle.tileset.json",
+      "sha256": "e3d2cda3d2bea05c117e5d5661bd25c1f9d9d4fff80e1c1899fbd4800417f452",
+      "bytes": 1375
+    },
+    {
+      "path": "../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/ground/puddle.png",
+      "sha256": "4e192d39dd75c6bea60c6001ca27ad4e27f38e4b4bdcea214dae9d7156495d32",
+      "bytes": 4730
+    },
+    {
+      "path": "../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/data/tilesets/overlay-cracks.tileset.json",
+      "sha256": "59e99c2e28ba352e814d6a57f2bf1c4d5d62ad1b2e815e4765124f2bcb1eb9ed",
+      "bytes": 1136
+    },
+    {
+      "path": "../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/ground/cracks.png",
+      "sha256": "beefc33354ff8b0f37f662b1430676d1adfadf5db0d4db918fd4a05ae09a19a0",
+      "bytes": 3928
+    },
+    {
+      "path": "../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/data/tilesets/overlay-zebra.tileset.json",
+      "sha256": "d5027d3af11fce0c9555e25125cfb1acdf4217bba23426142c2821871bc7b973",
+      "bytes": 1131
+    },
+    {
+      "path": "../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/ground/zebra.png",
+      "sha256": "e5b4fd615d3fbf66d1578706b40cb175746e1850cce71589c2e84c719c1846b3",
+      "bytes": 13195
+    },
+    {
+      "path": "../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/props/stall-fruit.png",
+      "sha256": "c6914406146567bb7b77d8b430dc9fd93b82e0e9acfe375c6bf3284bac06b7df",
+      "bytes": 26198
+    },
+    {
+      "path": "../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/props/stall-snack.png",
+      "sha256": "7564cd9ca219de7490f78728839a6d288b24537ecfb9f6b8283dbd217fb2c734",
+      "bytes": 24023
+    },
+    {
+      "path": "../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/props/lantern_post.png",
+      "sha256": "de2ba2ca85d2cf8cce75b5b7d04d6a55fe4caf41f6ec4c11de01c1afc68a25d4",
+      "bytes": 9335
+    },
+    {
+      "path": "../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/props/planter.png",
+      "sha256": "2baddad69da8d0a506e5e3b75584c28eb23e8ec3f7b1189239988d55c6bff9eb",
+      "bytes": 7593
+    },
+    {
+      "path": "../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/props/cone.png",
+      "sha256": "e9775254b9930e62b0575947a30aaea586e7ef6c35450ab8f95933c8d9fd1e12",
+      "bytes": 1314
+    },
+    {
+      "path": "../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/props/bollard.png",
+      "sha256": "f3dabba842fbf72fb439f4d36b84f882f81b0680702716b088cc9e6a49a9075c",
+      "bytes": 1473
+    },
+    {
+      "path": "../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/props/parked_scooter.png",
+      "sha256": "b145550f72ba2a6d2189c432421bf9187f9af744be0a72fd4b45bb902dfb98c4",
+      "bytes": 11426
+    },
+    {
+      "path": "../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/props/fruit_crate.png",
+      "sha256": "d5d62c6026d9a41455e347ffdc740086b738b881a042f3061c3907997a820275",
+      "bytes": 2550
+    }
+  ],
+  "outputs": [],
+  "tool": {
+    "name": "map_bundle.py",
+    "version": "0.4.0"
+  },
+  "bundle": {
+    "id": "survivor-series-C-night-market",
+    "version": 2,
+    "world": [
+      768.0,
+      768.0
+    ],
+    "counts": {
+      "tilesets": 6,
+      "layers": 7,
+      "props": 8,
+      "objects": 8,
+      "portals": 0,
+      "spawns": 1,
+      "anchors": 0,
+      "interactions": 0
+    }
+  },
+  "problems": []
+}

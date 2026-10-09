@@ -1,0 +1,179 @@
+{
+  "schema": "generate2dsprite.master.v1",
+  "tool": {
+    "name": "master_still",
+    "version": "0.4.0"
+  },
+  "created": "2026-10-08T17:56:53.515Z",
+  "name": "fatty",
+  "subject": "a chubby adult smoker enemy, full body",
+  "identity_recap": "fictional chubby adult man in a stained olive tank top and shorts, flip-flops, sweaty and smug, a cigarette in his mouth, with three small cartoon green stink wavy lines rising from his shoulders",
+  "facing": "right",
+  "view": "elevated three-quarter overhead view about 50 degrees above the ground, body turned diagonally toward the lower-right",
+  "finish": "pixel",
+  "class": "mob",
+  "framing": {
+    "canvas": [
+      1024,
+      1024
+    ],
+    "subject_height_px": 471,
+    "top_margin_px": 406,
+    "lead_px": 100,
+    "preset": "mob",
+    "subject_bbox": [
+      274,
+      406,
+      550,
+      877
+    ],
+    "anchor": [
+      334.0,
+      877.0
+    ],
+    "opaque_area_px": 79493,
+    "width_limited": false
+  },
+  "key": "#FF00FF",
+  "files": {
+    "master": {
+      "path": "master.png",
+      "sha256": "c4d298f3720e62f37ac28d77b21273d33d12e60eac04c6f57f06ff6836ebf6ec",
+      "bytes": 157915,
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    "cutout": {
+      "path": "master_rgba.png",
+      "sha256": "3c330f9a930d3844ca190ca36b2ade47fbabbb660ff051b198a6371c02ba44ed",
+      "bytes": 182860,
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    "source": {
+      "path": "source.png",
+      "sha256": "3c330f9a930d3844ca190ca36b2ade47fbabbb660ff051b198a6371c02ba44ed",
+      "bytes": 182860,
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    "spec": {
+      "path": "spec.json",
+      "sha256": "5dcca11e08e5a820ba077bf528749ff5bf2fed689b050dde53f50efcd2942ae9",
+      "bytes": 1974
+    },
+    "prompt": null
+  },
+  "references": [
+    {
+      "role": "style",
+      "path": "../../../../../godot/godogen/prototypes/survivor-series/art_src/heroes/man/master-green/master_rgba.png",
+      "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+      "what": "the approved hero sprite of this game"
+    }
+  ],
+  "transform": {
+    "mapping": "master = scale * source + offset (continuous pixel coordinates: pixel i spans [i, i + 1))",
+    "source_size": [
+      1024,
+      1024
+    ],
+    "source_subject_bbox": [
+      274,
+      406,
+      550,
+      877
+    ],
+    "crop_box": [
+      268,
+      400,
+      556,
+      883
+    ],
+    "crop_margin_px": 6,
+    "scale": 1.0,
+    "offset": [
+      0.0,
+      0.0
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "resampler": "lanczos",
+    "premultiplied": true,
+    "alpha_floor_px": 0,
+    "subject_parts": 4,
+    "ignored_parts": 0,
+    "ignored_px": 0,
+    "source_touches": [],
+    "key_rgb": [
+      255,
+      0,
+      255
+    ]
+  },
+  "route": "codex-cli",
+  "provenance": {
+    "command": "external",
+    "run": null,
+    "take": null,
+    "source_name": "candidate-03.png",
+    "source_sha256": "3c330f9a930d3844ca190ca36b2ade47fbabbb660ff051b198a6371c02ba44ed",
+    "media": null,
+    "media_cli_source": null,
+    "edit": null
+  },
+  "matte": {
+    "requested": "soft",
+    "key_estimate": {
+      "key": [
+        255.0,
+        0.0,
+        255.0
+      ],
+      "source": "native_alpha",
+      "valid": false,
+      "ring_share": 0.0,
+      "coverage": 0.0,
+      "distance_from_declared": 0.0
+    },
+    "quality": "native_alpha",
+    "qa": {
+      "key": [
+        255.0,
+        0.0,
+        255.0
+      ],
+      "opaque_key_px": 0,
+      "outer_ring_spill_fraction": 0.000946521533364884,
+      "semitransparent_fraction": 0.058642585363443196,
+      "enclosed_key_pockets": 0,
+      "key_hued_px": 0,
+      "visible_px": 80948,
+      "outer_ring_px": 2113,
+      "thresholds": {
+        "key_tolerance": 48.0,
+        "spill_threshold": 20.0,
+        "min_pocket_area": 16,
+        "opaque_alpha": 128,
+        "spill_hue_balance": 0.5
+      },
+      "method": "forge_matte.matte_qa v1: straight-colour key distance and dominance on the keyed image; two-channel keys count spill only where the key channels are balanced"
+    },
+    "key_choice": {
+      "status": "ok",
+      "overlap_share": 0.0,
+      "rule": "reject a key when more than 0.5% of subject pixels have key dominance >= 40; first acceptable candidate wins"
+    }
+  },
+  "warnings": [
+    "the style reference master_rgba.png is missing; its recorded sha256 is kept"
+  ]
+}

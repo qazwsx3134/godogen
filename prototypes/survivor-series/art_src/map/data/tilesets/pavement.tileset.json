@@ -1,0 +1,48 @@
+{
+  "schema": "generate2dmap.tileset.v1",
+  "id": "pavement",
+  "image": "../../ground/pavement.png",
+  "sha256": "34a6e5745fde6b816976b69521664d5c78685ee06bf26f95606b030dd5341155",
+  "tile_size": [128, 128],
+  "columns": 1,
+  "kind": "flat",
+  "materials": ["pavement"],
+  "tiles": [
+    {
+      "index": 0,
+      "variant": 0,
+      "properties": {"walkable": true}
+    }
+  ],
+  "seamless_verified": false,
+  "seam_qc": {
+    "policy": "seamless",
+    "ratio_x": 0.441609,
+    "ratio_y": 0.926504,
+    "max_ratio": 0.926504,
+    "threshold": 1.25,
+    "warnings": [],
+    "exact_proof": false,
+    "note": "QC ratio pass is diagnostic only; no exact-zero seam proof was claimed."
+  },
+  "provenance": {
+    "art_source": "host_image",
+    "route": "local:codex-cli",
+    "generator": {"name": "extract_terrain_tiles.py", "version": "0.4.0"},
+    "source_terrain_bundle": {
+      "path": "../../ground/extract-ground-runtime-01/terrain-bundle.json",
+      "sha256": "f4f51b1b3526d024f18008b2f5efbb909877659538f26dde56cbaa2dbc455f48"
+    },
+    "prompt": {
+      "path": "../../ground/prompts/ground-pavement.prompt.txt",
+      "sha256": "bb9feb51ed02722fc487501f30324df9301b880a40e4a65a94423e246c9330c6"
+    }
+  },
+  "qc_source": {
+    "status": "pass",
+    "warnings": 0,
+    "contrast": 0.117631,
+    "wrap_seam_ratio": 0.926504,
+    "not_proven": ["exact image seam equality", "Godot editor import", "runtime collision"]
+  }
+}

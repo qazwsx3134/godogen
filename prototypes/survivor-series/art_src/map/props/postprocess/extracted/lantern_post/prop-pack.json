@@ -1,0 +1,199 @@
+{
+  "schema": "generate2dmap.prop_pack.v2",
+  "tool": {
+    "name": "extract_prop_pack",
+    "version": "0.4.0"
+  },
+  "input": "../../keyed/lantern_post-alpha.png",
+  "source_size": [
+    1024,
+    1536
+  ],
+  "source_sha256": "90487eaaf5fe6f055a8047ace7ef696ca0ca9bda6be7d5282029b3ea48585663",
+  "source_mode": "RGBA",
+  "layout_mode": "explicit_boxes",
+  "boxes_file": "../../boxes/lantern_post.json",
+  "labels_file": null,
+  "background_mode": "native_alpha",
+  "art_source": "host_image",
+  "rows": null,
+  "cols": null,
+  "threshold": 100,
+  "edge_threshold": 150,
+  "despill_radius": 0,
+  "despill": {
+    "mode": "off",
+    "applied": "off",
+    "radius": 0,
+    "margin": 12,
+    "changed_px": 0
+  },
+  "hygiene": {
+    "mode": "none",
+    "floor": 4,
+    "solid_min": 32,
+    "attach_radius": 2,
+    "connectivity": 8,
+    "floor_px": 0,
+    "detached_px": 0,
+    "detached_components": 0,
+    "max_removed_alpha": 0
+  },
+  "alpha_floor": 0,
+  "alpha_floor_pixels_removed": 0,
+  "trim_border": 0,
+  "edge_clean_depth": 0,
+  "component_mode": "all",
+  "component_padding": 8,
+  "min_component_area": "auto",
+  "edge_touch_margin": 0,
+  "geometry": {
+    "connectivity": 8,
+    "alpha_geometry_threshold": 16,
+    "anchor_mode": "stance",
+    "support_band_fraction": 0.25,
+    "anchor_rounding": "whole pixels, half-up",
+    "grid_rounding": null,
+    "keep_canvas": false,
+    "world_scale": null
+  },
+  "accepted": [
+    {
+      "index": 0,
+      "label": "lantern-post",
+      "display_name": "lantern_post",
+      "status": "accepted",
+      "image": "lantern-post/prop.png",
+      "sha256": "0cd1dfb150aa1e20c8ac37f8856b309acb696781080d494d5c44ef58ba78f0ef",
+      "output_size": [
+        418,
+        1291
+      ],
+      "grid": null,
+      "cell_box": [
+        328,
+        135,
+        746,
+        1426
+      ],
+      "source_box": [
+        328,
+        135,
+        746,
+        1426
+      ],
+      "source_rect": [
+        328,
+        135,
+        746,
+        1426
+      ],
+      "trim_offset": [
+        0,
+        0
+      ],
+      "padding": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "anchor_px": [
+        139,
+        1283
+      ],
+      "anchor_source": "measured",
+      "component_mode": "all",
+      "component_count": 1,
+      "min_component_area": 100,
+      "trim_applied": 0,
+      "crop_bbox": [
+        8,
+        8,
+        410,
+        1283
+      ],
+      "padded_crop_bbox": [
+        0,
+        0,
+        418,
+        1291
+      ],
+      "selected_component_area": null,
+      "selected_component_bbox": null,
+      "kept_area": 221462,
+      "dropped_components": 0,
+      "dropped_area": 0,
+      "edge_touch": false
+    }
+  ],
+  "rejected": [],
+  "edge_touch_props": [],
+  "warnings": [],
+  "qa": {
+    "status": "pass",
+    "method": "native alpha, not keyed; alpha hygiene none; 8-connected components (all); checks measured on the published pixels",
+    "notProven": [
+      "that each label names the art in its cell or box",
+      "that a prop is complete: clipping is detected only where art meets the cell edge",
+      "keyed-edge quality beyond the edge fringe count",
+      "that anchors and suggested footprints match gameplay contact (both are measured from alpha)",
+      "runtime placement, collision or occlusion"
+    ],
+    "checks": [
+      {
+        "id": "accepted",
+        "status": "pass",
+        "value": 1,
+        "threshold": ">= 1"
+      },
+      {
+        "id": "edge_touch",
+        "status": "pass",
+        "value": [],
+        "threshold": 0
+      },
+      {
+        "id": "dropped_area",
+        "status": "pass",
+        "value": {},
+        "threshold": 0.01
+      },
+      {
+        "id": "strategy_aspect",
+        "status": "skipped",
+        "value": null,
+        "threshold": 1.6
+      },
+      {
+        "id": "edge_fringe",
+        "status": "skipped",
+        "value": null,
+        "threshold": 0.02
+      }
+    ],
+    "inputs": [
+      {
+        "path": "../../keyed/lantern_post-alpha.png",
+        "sha256": "90487eaaf5fe6f055a8047ace7ef696ca0ca9bda6be7d5282029b3ea48585663",
+        "bytes": 467681
+      },
+      {
+        "path": "../../boxes/lantern_post.json",
+        "sha256": "a8c686a9995e848cfb4b45257f09e0901831c2b7e054bc2e3f862226d9cb1687",
+        "bytes": 78
+      }
+    ],
+    "outputs": [
+      {
+        "path": "lantern-post/prop.png",
+        "sha256": "0cd1dfb150aa1e20c8ac37f8856b309acb696781080d494d5c44ef58ba78f0ef",
+        "bytes": 438090
+      }
+    ],
+    "tool": {
+      "name": "extract_prop_pack",
+      "version": "0.4.0"
+    }
+  }
+}

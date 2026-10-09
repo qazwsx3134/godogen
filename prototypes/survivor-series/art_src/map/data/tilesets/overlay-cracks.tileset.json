@@ -1,0 +1,21 @@
+{
+  "schema": "generate2dmap.tileset.v1",
+  "id": "overlay-cracks",
+  "image": "../../ground/cracks.png",
+  "sha256": "beefc33354ff8b0f37f662b1430676d1adfadf5db0d4db918fd4a05ae09a19a0",
+  "tile_size": [128, 128],
+  "columns": 1,
+  "kind": "flat",
+  "materials": ["cracks-overlay"],
+  "tiles": [{"index": 0, "variant": 0, "properties": {"walkable": true}}],
+  "seamless_verified": false,
+  "seam_qc": {"policy": "isolated", "exact_proof": false, "note": "Overlay is not a repeat claim."},
+  "provenance": {
+    "art_source": "host_image",
+    "route": "local:codex-cli",
+    "generator": {"name": "extract_terrain_tiles.py", "version": "0.4.0"},
+    "source_terrain_bundle": {"path": "../../ground/extract-overlay-cracks-01/terrain-bundle.json", "sha256": "5aa2940a894d3cf9edd8901a5cbf883f901e41c54d80c27735c9a17507d34ebc"},
+    "prompt": {"path": "../../ground/prompts/cracks.prompt.txt", "sha256": "e21f66835f3d53c6b53e133cfd01192b53405ee51599916f86999b9eaba36323"}
+  },
+  "qc_source": {"status": "pass", "warnings": 0, "alpha_bbox": [16, 20, 111, 121], "visible_fraction": 0.032227, "contrast": 0.128896, "edge_policy": "isolated"}
+}

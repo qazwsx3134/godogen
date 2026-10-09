@@ -1,0 +1,29 @@
+{
+  "schema": "survivor_assets.c_props_requests.v1",
+  "status": "ready_for_root_raw",
+  "route": "codex-cli",
+  "references": {
+    "first": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/background/street_block/selected.png",
+    "second": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man/master-green/master_rgba.png"
+  },
+  "call_count": 6,
+  "canonical_png_count": 8,
+  "requests": [
+    {"id": "stall-fruit", "prompt_file": "prompts/stall-fruit.prompt.txt", "output_dir": "stall-fruit", "key": "#0000FF"},
+    {"id": "stall-snack", "prompt_file": "prompts/stall-snack.prompt.txt", "output_dir": "stall-snack", "key": "#0000FF"},
+    {"id": "lantern_post", "prompt_file": "prompts/lantern_post.prompt.txt", "output_dir": "lantern_post", "key": "#00FF00"},
+    {"id": "bollard", "prompt_file": "prompts/bollard.prompt.txt", "output_dir": "bollard", "key": "#FF00FF"},
+    {"id": "parked_scooter", "prompt_file": "prompts/parked_scooter.prompt.txt", "output_dir": "parked_scooter", "key": "#00FF00"},
+    {"id": "compact-planter-cone-crate", "prompt_file": "prompts/compact-planter-cone-crate.prompt.txt", "output_dir": "compact-planter-cone-crate", "key": "#0000FF"}
+  ],
+  "compact_pack": {
+    "rows": 2,
+    "cols": 2,
+    "labels_row_major": ["planter", "cone", "fruit_crate", "empty"],
+    "empty_cell": "row-02-col-02",
+    "extract_component_mode": "all",
+    "reject_edge_touch": true
+  },
+  "one_by_one": ["stall-fruit", "stall-snack", "lantern_post", "bollard", "parked_scooter"],
+  "generation_started": false
+}

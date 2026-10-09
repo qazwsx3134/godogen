@@ -1,0 +1,26 @@
+{
+  "schema": "survivor-series.C.ground-layer.v1",
+  "status": "ready_base_layer_for_final_bundle",
+  "world": {"width": 768, "height": 768, "unit": "px"},
+  "tile_size": [128, 128],
+  "grid": [6, 6],
+  "tileset": "tilesets/pavement.tileset.json",
+  "tile_image": "../ground/pavement.png",
+  "tile_image_sha256": "34a6e5745fde6b816976b69521664d5c78685ee06bf26f95606b030dd5341155",
+  "data": [
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0]
+  ],
+  "qc": {
+    "source": "../ground/extract-ground-runtime-01/terrain-bundle.json",
+    "status": "pass",
+    "warnings": 0,
+    "wrap_seam_ratio": {"x": 0.441609, "y": 0.926504, "threshold": 1.25},
+    "seamless_verified": false,
+    "note": "Retains the source contract: QC ratio pass does not equal exact-zero proof."
+  }
+}

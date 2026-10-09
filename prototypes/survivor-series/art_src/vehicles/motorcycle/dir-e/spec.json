@@ -1,0 +1,52 @@
+{
+  "schema": "generate2dsprite.master_spec.v1",
+  "name": "motorcycle-e",
+  "subject": "one complete rider-and-scooter enemy unit",
+  "identity": "The exact approved motorcycle identity: one compact dark navy urban motor scooter with one seated adult rider, a white helmet, dark navy jacket and dark trousers, visible handlebars, two round mirrors, both wheels, front fairing, seat and side panels, and a clearly visible red rear taillight. Preserve the approved scooter and rider appearance, proportions, equipment, colours and pixel details exactly. The rider and scooter are one connected full unit; no branding, license-plate writing, extra person or extra vehicle.",
+  "pose": "a stationary adult rider seated upright on the scooter, hands on the handlebars, both wheels grounded and the rider aligned with the scooter",
+  "recap": "one complete dark navy urban scooter with a seated adult rider in a white helmet and dark clothing, two wheels, handlebars, two round mirrors, front fairing, seat, side panels and red rear taillight",
+  "facing": "none",
+  "facing_parts": "the whole rider-and-scooter unit",
+  "view": "near-orthographic elevated view about 50 degrees above the ground; in image space the scooter points straight toward the RIGHT edge, with its front leading toward the right; show the side and front three-quarter structure while keeping the rider, both wheels, both mirrors, helmet and rear red taillight complete",
+  "class": "mob",
+  "finish": "pixel",
+  "key": "#00FF00",
+  "genre": "a Taiwan night-market survivor game",
+  "pronoun": "they",
+  "identity_ref": {
+    "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/vehicles/motorcycle/master/master_rgba.png",
+    "sha256": "3ae07ddbf6370668f960c273be022a0a80624d24eba912e2134b1287aa0cf136",
+    "what": "the approved FIRST motorcycle identity image",
+    "copy": "the exact navy scooter, white helmet, dark rider, proportions, wheels, handlebars, mirrors, equipment, red rear taillight and appearance"
+  },
+  "style_ref": {
+    "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man/master-green/master_rgba.png",
+    "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+    "what": "the approved SECOND hero sprite as a style and framing reference only",
+    "do_not_copy": "the hero's face, hair, outfit, equipment, character identity or colours; copy only pixel-art finish, outline weight, pixel density, shading, camera elevation, scale and framing"
+  },
+  "allowed_text": null,
+  "extra_bans": [
+    "text or symbols",
+    "logo",
+    "watermark",
+    "license-plate writing",
+    "extra vehicle",
+    "extra rider",
+    "extra person",
+    "low-angle camera",
+    "perspective distortion",
+    "road",
+    "ground plane",
+    "cast shadow",
+    "drop shadow",
+    "motion trails",
+    "cropped wheel",
+    "cropped mirror",
+    "cropped helmet",
+    "cropped rider",
+    "partial scooter"
+  ],
+  "opaque_parts": null,
+  "extra": "Create exactly one complete rider-and-scooter sprite on a flat pure green key background. Preserve the approved identity as the FIRST reference and use the hero only as the SECOND style reference. Keep the full scooter, both wheels, both mirrors, helmet, rider and red rear taillight safely inside the frame. Use a restrained pixel-art silhouette readable as a 24 to 40 pixel game unit, with no scene, no writing and no shadows. This is the image-space RIGHT heading requested for this direction."
+}

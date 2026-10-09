@@ -1,0 +1,199 @@
+{
+  "schema": "generate2dmap.prop_pack.v2",
+  "tool": {
+    "name": "extract_prop_pack",
+    "version": "0.4.0"
+  },
+  "input": "../../keyed/parked_scooter-alpha.png",
+  "source_size": [
+    1254,
+    1254
+  ],
+  "source_sha256": "d8a5bfeb7c29328c5970247e48e97f7defc08d08311f7497d21acd4b85a7a00f",
+  "source_mode": "RGBA",
+  "layout_mode": "explicit_boxes",
+  "boxes_file": "../../boxes/parked_scooter.json",
+  "labels_file": null,
+  "background_mode": "native_alpha",
+  "art_source": "host_image",
+  "rows": null,
+  "cols": null,
+  "threshold": 100,
+  "edge_threshold": 150,
+  "despill_radius": 0,
+  "despill": {
+    "mode": "off",
+    "applied": "off",
+    "radius": 0,
+    "margin": 12,
+    "changed_px": 0
+  },
+  "hygiene": {
+    "mode": "none",
+    "floor": 4,
+    "solid_min": 32,
+    "attach_radius": 2,
+    "connectivity": 8,
+    "floor_px": 0,
+    "detached_px": 0,
+    "detached_components": 0,
+    "max_removed_alpha": 0
+  },
+  "alpha_floor": 0,
+  "alpha_floor_pixels_removed": 0,
+  "trim_border": 0,
+  "edge_clean_depth": 0,
+  "component_mode": "all",
+  "component_padding": 8,
+  "min_component_area": "auto",
+  "edge_touch_margin": 0,
+  "geometry": {
+    "connectivity": 8,
+    "alpha_geometry_threshold": 16,
+    "anchor_mode": "stance",
+    "support_band_fraction": 0.25,
+    "anchor_rounding": "whole pixels, half-up",
+    "grid_rounding": null,
+    "keep_canvas": false,
+    "world_scale": null
+  },
+  "accepted": [
+    {
+      "index": 0,
+      "label": "parked-scooter",
+      "display_name": "parked_scooter",
+      "status": "accepted",
+      "image": "parked-scooter/prop.png",
+      "sha256": "520eb2ec6ce7e505f087a61de67f476dde5cdddfa9d788772bf421e8c7ec344b",
+      "output_size": [
+        940,
+        913
+      ],
+      "grid": null,
+      "cell_box": [
+        160,
+        178,
+        1100,
+        1091
+      ],
+      "source_box": [
+        160,
+        178,
+        1100,
+        1091
+      ],
+      "source_rect": [
+        160,
+        178,
+        1100,
+        1091
+      ],
+      "trim_offset": [
+        0,
+        0
+      ],
+      "padding": [
+        8,
+        8,
+        8,
+        8
+      ],
+      "anchor_px": [
+        439,
+        905
+      ],
+      "anchor_source": "measured",
+      "component_mode": "all",
+      "component_count": 1,
+      "min_component_area": 100,
+      "trim_applied": 0,
+      "crop_bbox": [
+        8,
+        8,
+        932,
+        905
+      ],
+      "padded_crop_bbox": [
+        0,
+        0,
+        940,
+        913
+      ],
+      "selected_component_area": null,
+      "selected_component_bbox": null,
+      "kept_area": 436802,
+      "dropped_components": 0,
+      "dropped_area": 0,
+      "edge_touch": false
+    }
+  ],
+  "rejected": [],
+  "edge_touch_props": [],
+  "warnings": [],
+  "qa": {
+    "status": "pass",
+    "method": "native alpha, not keyed; alpha hygiene none; 8-connected components (all); checks measured on the published pixels",
+    "notProven": [
+      "that each label names the art in its cell or box",
+      "that a prop is complete: clipping is detected only where art meets the cell edge",
+      "keyed-edge quality beyond the edge fringe count",
+      "that anchors and suggested footprints match gameplay contact (both are measured from alpha)",
+      "runtime placement, collision or occlusion"
+    ],
+    "checks": [
+      {
+        "id": "accepted",
+        "status": "pass",
+        "value": 1,
+        "threshold": ">= 1"
+      },
+      {
+        "id": "edge_touch",
+        "status": "pass",
+        "value": [],
+        "threshold": 0
+      },
+      {
+        "id": "dropped_area",
+        "status": "pass",
+        "value": {},
+        "threshold": 0.01
+      },
+      {
+        "id": "strategy_aspect",
+        "status": "skipped",
+        "value": null,
+        "threshold": 1.6
+      },
+      {
+        "id": "edge_fringe",
+        "status": "skipped",
+        "value": null,
+        "threshold": 0.02
+      }
+    ],
+    "inputs": [
+      {
+        "path": "../../keyed/parked_scooter-alpha.png",
+        "sha256": "d8a5bfeb7c29328c5970247e48e97f7defc08d08311f7497d21acd4b85a7a00f",
+        "bytes": 925121
+      },
+      {
+        "path": "../../boxes/parked_scooter.json",
+        "sha256": "b8124c76140039d7373e3f9dc761ac0f99b59c3aeddb117e1ed699f0fd682d8f",
+        "bytes": 81
+      }
+    ],
+    "outputs": [
+      {
+        "path": "parked-scooter/prop.png",
+        "sha256": "520eb2ec6ce7e505f087a61de67f476dde5cdddfa9d788772bf421e8c7ec344b",
+        "bytes": 905921
+      }
+    ],
+    "tool": {
+      "name": "extract_prop_pack",
+      "version": "0.4.0"
+    }
+  }
+}

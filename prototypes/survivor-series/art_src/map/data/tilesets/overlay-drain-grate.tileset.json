@@ -1,0 +1,21 @@
+{
+  "schema": "generate2dmap.tileset.v1",
+  "id": "overlay-drain-grate",
+  "image": "../../ground/drain_grate.png",
+  "sha256": "935551a711188e6ee9a37901be789f1f1dbd3950bf963f4a2019345c7212fc2e",
+  "tile_size": [128, 128],
+  "columns": 1,
+  "kind": "flat",
+  "materials": ["drain-grate-overlay"],
+  "tiles": [{"index": 0, "variant": 0, "properties": {"walkable": true}}],
+  "seamless_verified": false,
+  "seam_qc": {"policy": "isolated", "exact_proof": false, "note": "Overlay is not a repeat claim."},
+  "provenance": {
+    "art_source": "host_image",
+    "route": "local:codex-cli",
+    "generator": {"name": "extract_terrain_tiles.py", "version": "0.4.0"},
+    "source_terrain_bundle": {"path": "../../ground/extract-overlay-drain-grate-01/terrain-bundle.json", "sha256": "47411a224e30fae71ab030071ff5f04e0c3d4fe90a7798d031779090e8a0ddea"},
+    "prompt": {"path": "../../ground/prompts/drain-grate.prompt.txt", "sha256": "9b0e2f049c543d55a265578145b0f6f32ae4d78e034c6ca457242ffa11b41062"}
+  },
+  "qc_source": {"status": "pass", "warnings": 0, "alpha_bbox": [12, 32, 113, 93], "visible_fraction": 0.165771, "contrast": 0.200015, "edge_policy": "isolated"}
+}

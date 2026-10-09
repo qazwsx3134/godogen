@@ -1,0 +1,78 @@
+{
+  "schema": "survivor-assets.c_ground_requests.v1",
+  "status": "prepared",
+  "scope": "C ground and five transparent overlays only",
+  "route_requested": "codex-cli",
+  "generation_policy": {
+    "creative_prompts": "handwritten English; do not synthesize or rewrite programmatically",
+    "reference_order": [
+      {
+        "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/background/street_block/selected.png",
+        "role": "material and lighting reference FIRST"
+      },
+      {
+        "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man/master-green/master_rgba.png",
+        "role": "style, pixel density, and camera language SECOND; style only"
+      }
+    ],
+    "runtime_size_px": [
+      128,
+      128
+    ],
+    "ground_processing": "opaque 1x1 terrain source; nearest-neighbor 128x128; extract with --edge-policy seamless --strict-qc",
+    "overlay_processing": "isolated 128x128 transparent canvas; native alpha preferred; strict magenta chroma-key fallback only",
+    "no_content": [
+      "characters",
+      "enemies",
+      "smoke",
+      "text",
+      "signs",
+      "logos",
+      "UI"
+    ]
+  },
+  "requests": [
+    {
+      "id": "ground-pavement",
+      "prompt_file": ".forge/survivor-assets-20261009/C/map/ground/prompts/ground-pavement.prompt.txt",
+      "output_dir": ".forge/survivor-assets-20261009/C/map/ground/raw-ground",
+      "key": "none"
+    },
+    {
+      "id": "overlay-manhole",
+      "prompt_file": ".forge/survivor-assets-20261009/C/map/ground/prompts/manhole.prompt.txt",
+      "output_dir": ".forge/survivor-assets-20261009/C/map/ground/raw-manhole",
+      "key": "magenta"
+    },
+    {
+      "id": "overlay-drain-grate",
+      "prompt_file": ".forge/survivor-assets-20261009/C/map/ground/prompts/drain-grate.prompt.txt",
+      "output_dir": ".forge/survivor-assets-20261009/C/map/ground/raw-drain-grate",
+      "key": "magenta"
+    },
+    {
+      "id": "overlay-puddle",
+      "prompt_file": ".forge/survivor-assets-20261009/C/map/ground/prompts/puddle.prompt.txt",
+      "output_dir": ".forge/survivor-assets-20261009/C/map/ground/raw-puddle",
+      "key": "magenta"
+    },
+    {
+      "id": "overlay-cracks",
+      "prompt_file": ".forge/survivor-assets-20261009/C/map/ground/prompts/cracks.prompt.txt",
+      "output_dir": ".forge/survivor-assets-20261009/C/map/ground/raw-cracks",
+      "key": "magenta"
+    },
+    {
+      "id": "overlay-zebra",
+      "prompt_file": ".forge/survivor-assets-20261009/C/map/ground/prompts/zebra.prompt.txt",
+      "output_dir": ".forge/survivor-assets-20261009/C/map/ground/raw-zebra",
+      "key": "magenta"
+    },
+    {
+      "id": "overlay-puddle-clean",
+      "prompt_file": "prompts/puddle-clean.prompt.txt",
+      "output_dir": "raw-puddle-clean",
+      "key": "native_alpha"
+    }
+  ]
+}

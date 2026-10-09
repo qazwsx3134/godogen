@@ -1,0 +1,438 @@
+{
+  "schema": "survivor-assets.c_ground_handoff.v1",
+  "status": "complete",
+  "scope": "C ground only; canonical base plus five overlays export-eligible, superseded initial puddle retained diagnostic-only",
+  "staging_root": ".forge/survivor-assets-20261009/C/map/ground",
+  "route_requested": "codex-cli",
+  "references": {
+    "material_first": {
+      "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/background/street_block/selected.png",
+      "sha256": "43d29dff193a7923e5aeeffc2d1b4c18a9e2ec3c89f085c2fd50c489dafaf08d",
+      "role": "material and lighting FIRST"
+    },
+    "hero_second": {
+      "path": "/Users/peter/repo/godot/godogen/prototypes/survivor-series/art_src/heroes/man/master-green/master_rgba.png",
+      "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+      "role": "style, pixel density and camera language SECOND; style only"
+    }
+  },
+  "raw_provenance": {
+    "raw_run_dir": ".forge/survivor-assets-20261009/C/map/ground/raw-ground",
+    "generated_path": ".forge/survivor-assets-20261009/C/map/ground/raw-ground/generated.png",
+    "generated_sha256": "3fccad1d73f0e338ae2b1786ff8922d41ff60d59d18eec340498c0dbb4c03c8d",
+    "generated_size_px": [1254, 1254],
+    "generated_mode": "RGB",
+    "job_json": {
+      "path": ".forge/survivor-assets-20261009/C/map/ground/raw-ground/job.json",
+      "status": "done",
+      "route": "codex-cli",
+      "provider": "openai",
+      "requested_model": "codex-image_gen",
+      "cli_run_id": "58bc5dc79134453f8a5550b1b23fe15f",
+      "thread_id": "01a11e33-338f-7e31-b8dc-3f82ae6eeb0a"
+    },
+    "run_json": {
+      "path": ".forge/survivor-assets-20261009/C/map/ground/raw-ground/run.json",
+      "status": "done",
+      "route": "local:codex-cli",
+      "model": "codex-image_gen"
+    },
+    "raw_files_preserved": ["generated.png", "prompt.txt", "job.json", "run.json"]
+  },
+  "raw_generation_records": {
+    "count": 7,
+    "all_generated_prompt_job_run_sets_preserved": true,
+    "records": [
+      {
+        "id": "ground",
+        "raw_run_dir": ".forge/survivor-assets-20261009/C/map/ground/raw-ground",
+        "generated_path": ".forge/survivor-assets-20261009/C/map/ground/raw-ground/generated.png",
+        "generated_sha256": "3fccad1d73f0e338ae2b1786ff8922d41ff60d59d18eec340498c0dbb4c03c8d",
+        "generated_size_px": [1254, 1254],
+        "generated_mode": "RGB",
+        "prompt_path": ".forge/survivor-assets-20261009/C/map/ground/raw-ground/prompt.txt",
+        "job_path": ".forge/survivor-assets-20261009/C/map/ground/raw-ground/job.json",
+        "run_path": ".forge/survivor-assets-20261009/C/map/ground/raw-ground/run.json",
+        "job_route": "codex-cli",
+        "job_provider": "openai",
+        "job_model": "codex-image_gen",
+        "run_route": "local:codex-cli",
+        "run_model": "codex-image_gen"
+      },
+      {
+        "id": "manhole",
+        "raw_run_dir": ".forge/survivor-assets-20261009/C/map/ground/raw-manhole",
+        "generated_path": ".forge/survivor-assets-20261009/C/map/ground/raw-manhole/generated.png",
+        "generated_sha256": "d10531cf03e5e78e69e0a1e1a185790e0e11c20dda95f7247ea28ea4dec5703e",
+        "generated_size_px": [1254, 1254],
+        "generated_mode": "RGBA",
+        "prompt_path": ".forge/survivor-assets-20261009/C/map/ground/raw-manhole/prompt.txt",
+        "job_path": ".forge/survivor-assets-20261009/C/map/ground/raw-manhole/job.json",
+        "run_path": ".forge/survivor-assets-20261009/C/map/ground/raw-manhole/run.json",
+        "job_route": "codex-cli",
+        "job_provider": "openai",
+        "job_model": "codex-image_gen",
+        "run_route": "local:codex-cli",
+        "run_model": "codex-image_gen"
+      },
+      {
+        "id": "drain-grate",
+        "raw_run_dir": ".forge/survivor-assets-20261009/C/map/ground/raw-drain-grate",
+        "generated_path": ".forge/survivor-assets-20261009/C/map/ground/raw-drain-grate/generated.png",
+        "generated_sha256": "55ea5a3a806b72886d291f4c288320781d0a8422fedab41b57951a6c9ef150ee",
+        "generated_size_px": [1254, 1254],
+        "generated_mode": "RGBA",
+        "prompt_path": ".forge/survivor-assets-20261009/C/map/ground/raw-drain-grate/prompt.txt",
+        "job_path": ".forge/survivor-assets-20261009/C/map/ground/raw-drain-grate/job.json",
+        "run_path": ".forge/survivor-assets-20261009/C/map/ground/raw-drain-grate/run.json",
+        "job_route": "codex-cli",
+        "job_provider": "openai",
+        "job_model": "codex-image_gen",
+        "run_route": "local:codex-cli",
+        "run_model": "codex-image_gen"
+      },
+      {
+        "id": "puddle-initial-diagnostic",
+        "raw_run_dir": ".forge/survivor-assets-20261009/C/map/ground/raw-puddle",
+        "generated_path": ".forge/survivor-assets-20261009/C/map/ground/raw-puddle/generated.png",
+        "generated_sha256": "5c8ab1ee176604277a0cb0a7521ad03ea4a2c42224a6f4ea180f0b530a7514e7",
+        "generated_size_px": [1254, 1254],
+        "generated_mode": "RGBA",
+        "prompt_path": ".forge/survivor-assets-20261009/C/map/ground/raw-puddle/prompt.txt",
+        "job_path": ".forge/survivor-assets-20261009/C/map/ground/raw-puddle/job.json",
+        "run_path": ".forge/survivor-assets-20261009/C/map/ground/raw-puddle/run.json",
+        "job_route": "codex-cli",
+        "job_provider": "openai",
+        "job_model": "codex-image_gen",
+        "run_route": "local:codex-cli",
+        "run_model": "codex-image_gen",
+        "export_eligible": false,
+        "note": "superseded initial draft preserved for diagnosis; baked paver-density mismatch"
+      },
+      {
+        "id": "cracks",
+        "raw_run_dir": ".forge/survivor-assets-20261009/C/map/ground/raw-cracks",
+        "generated_path": ".forge/survivor-assets-20261009/C/map/ground/raw-cracks/generated.png",
+        "generated_sha256": "91659437293fd1a7503db4a29811f93509cfa8651e9484e7589e0cdd9e0ceb20",
+        "generated_size_px": [1254, 1254],
+        "generated_mode": "RGBA",
+        "prompt_path": ".forge/survivor-assets-20261009/C/map/ground/raw-cracks/prompt.txt",
+        "job_path": ".forge/survivor-assets-20261009/C/map/ground/raw-cracks/job.json",
+        "run_path": ".forge/survivor-assets-20261009/C/map/ground/raw-cracks/run.json",
+        "job_route": "codex-cli",
+        "job_provider": "openai",
+        "job_model": "codex-image_gen",
+        "run_route": "local:codex-cli",
+        "run_model": "codex-image_gen"
+      },
+      {
+        "id": "zebra",
+        "raw_run_dir": ".forge/survivor-assets-20261009/C/map/ground/raw-zebra",
+        "generated_path": ".forge/survivor-assets-20261009/C/map/ground/raw-zebra/generated.png",
+        "generated_sha256": "fa30b242a2499f482bec835cfb8d475871fdb8e653e8e2716c96eb4c74c626f7",
+        "generated_size_px": [1254, 1254],
+        "generated_mode": "RGBA",
+        "prompt_path": ".forge/survivor-assets-20261009/C/map/ground/raw-zebra/prompt.txt",
+        "job_path": ".forge/survivor-assets-20261009/C/map/ground/raw-zebra/job.json",
+        "run_path": ".forge/survivor-assets-20261009/C/map/ground/raw-zebra/run.json",
+        "job_route": "codex-cli",
+        "job_provider": "openai",
+        "job_model": "codex-image_gen",
+        "run_route": "local:codex-cli",
+        "run_model": "codex-image_gen"
+      },
+      {
+        "id": "puddle-clean",
+        "raw_run_dir": ".forge/survivor-assets-20261009/C/map/ground/raw-puddle-clean",
+        "generated_path": ".forge/survivor-assets-20261009/C/map/ground/raw-puddle-clean/generated.png",
+        "generated_sha256": "9077674dfd1019eeb3efa767f5fa6207fb2267674897b0d0f4fd6bbb69a29254",
+        "generated_size_px": [1774, 887],
+        "generated_mode": "RGBA",
+        "prompt_path": ".forge/survivor-assets-20261009/C/map/ground/raw-puddle-clean/prompt.txt",
+        "prompt_sha256": "0118befe2f416814a9042dba5fb0d9e3e6ceff93934ce23b9edb45b322921b9a",
+        "job_path": ".forge/survivor-assets-20261009/C/map/ground/raw-puddle-clean/job.json",
+        "job_prompt_sha256": "3723950955b400c9ae559564b4cea7209d1d5af0d7535589eea04739db2bcfa2",
+        "run_path": ".forge/survivor-assets-20261009/C/map/ground/raw-puddle-clean/run.json",
+        "job_route": "codex-cli",
+        "job_provider": "openai",
+        "job_model": "codex-image_gen",
+        "run_route": "local:codex-cli",
+        "run_model": "codex-image_gen",
+        "cli_run_id": "677657e6892548a59d9645b623a689b0",
+        "thread_id": "01a11e3b-9d29-7c83-8746-334175480e94",
+        "purpose": "one water-only codex-cli regeneration; no baked paver grid"
+      }
+    ]
+  },
+  "formal_extraction": {
+    "tool_path": "skills/generate2dmap/scripts/extract_terrain_tiles.py",
+    "tool_version": "0.4.0",
+    "run_dir": ".forge/survivor-assets-20261009/C/map/ground/extract-ground-runtime-01",
+    "command": ".venv/bin/python skills/generate2dmap/scripts/extract_terrain_tiles.py --input .forge/survivor-assets-20261009/C/map/ground/raw-ground/generated.png --output-dir .forge/survivor-assets-20261009/C/map/ground/extract-ground-runtime-01 --manifest .forge/survivor-assets-20261009/C/map/ground/extract-ground-runtime-01/terrain-bundle.json --rows 1 --cols 1 --terrain-row pavement=0 --tile-size 128 --layer base --background-mode opaque --resampler nearest --edge-policy seamless --max-seam-ratio 1.25 --prompt .forge/survivor-assets-20261009/C/map/ground/prompts/ground-pavement.prompt.txt --strict-qc",
+    "source_transform": {
+      "atlas_rows": 1,
+      "atlas_cols": 1,
+      "source_cell_px": [1254, 1254],
+      "runtime_size_px": [128, 128],
+      "resampler": "nearest",
+      "layer": "base",
+      "background_mode": "opaque",
+      "edge_policy": "seamless"
+    },
+    "canonical_output": {
+      "path": ".forge/survivor-assets-20261009/C/map/ground/pavement.png",
+      "sha256": "34a6e5745fde6b816976b69521664d5c78685ee06bf26f95606b030dd5341155",
+      "size_px": [128, 128],
+      "mode": "RGB"
+    },
+    "manifest": ".forge/survivor-assets-20261009/C/map/ground/extract-ground-runtime-01/terrain-bundle.json",
+    "diagnostic_old_extractions_preserved": [
+      ".forge/survivor-assets-20261009/C/map/ground/extract-ground-01/terrain-bundle.json",
+      ".forge/survivor-assets-20261009/C/map/ground/extract-ground-nearest-01/terrain-bundle.json"
+    ]
+  },
+  "qc": {
+    "strict_status": "pass",
+    "warnings": [],
+    "thresholds": {
+      "min_contrast": 0.035,
+      "min_variant_difference": 0.025,
+      "max_border_delta": 0.1,
+      "max_seam_ratio": 1.25,
+      "min_shape_coverage": 0.97,
+      "max_shape_spill": 0.03
+    },
+    "values": {
+      "mean_luminance": 0.438777,
+      "contrast": 0.117631,
+      "variant_difference_min": 1.0,
+      "border_max_delta": 0.0,
+      "shape_coverage": "skipped_square",
+      "shape_spill": "skipped_square"
+    },
+    "wrap": {
+      "x": {
+        "seam_ratio": 0.441609,
+        "seam": 10.408203,
+        "near_median": 13.605469,
+        "verdict": "continuous"
+      },
+      "y": {
+        "seam_ratio": 0.926504,
+        "seam": 19.697266,
+        "near_median": 17.361328,
+        "verdict": "continuous"
+      },
+      "threshold": 1.25,
+      "manifest_seamless_verified": false
+    },
+    "exact_edge_diagnostic": {
+      "preview_path": ".forge/survivor-assets-20261009/C/map/ground/ground-3x3.png",
+      "preview_sha256": "64e1dc543c03d89635f1424b1a702a26a0d22f96a41e3399b91ef71689aeaec7",
+      "preview_size_px": [384, 384],
+      "x_boundary_pairs": 128,
+      "x_nonzero_pairs": 128,
+      "x_max_channel_delta": 140,
+      "x_mean_channel_abs_delta": 13.877604,
+      "y_boundary_pairs": 128,
+      "y_nonzero_pairs": 128,
+      "y_max_channel_delta": 137,
+      "y_mean_channel_abs_delta": 26.263021,
+      "interpretation": "3x3 viewed with no obvious hard grid break; edge columns are not byte-identical, and the repo manifest explicitly leaves seamless_verified=false. Do not claim exact mathematical seamlessness."
+    }
+  },
+  "completed_overlays": {
+    "manhole": {
+      "raw_run_dir": ".forge/survivor-assets-20261009/C/map/ground/raw-manhole",
+      "raw_sha256": "d10531cf03e5e78e69e0a1e1a185790e0e11c20dda95f7247ea28ea4dec5703e",
+      "job_route": "codex-cli",
+      "job_provider": "openai",
+      "job_requested_model": "codex-image_gen",
+      "run_route": "local:codex-cli",
+      "run_model": "codex-image_gen",
+      "extract_dir": ".forge/survivor-assets-20261009/C/map/ground/extract-overlay-manhole-01",
+      "extract_manifest": ".forge/survivor-assets-20261009/C/map/ground/extract-overlay-manhole-01/terrain-bundle.json",
+      "canonical_path": ".forge/survivor-assets-20261009/C/map/ground/manhole.png",
+      "canonical_sha256": "0ae95241f369d70493424367efa3353b0d6d14ab9467593b13676484c12c43cc",
+      "runtime_size_px": [128, 128],
+      "processing": {
+        "background_mode": "native_alpha",
+        "resampler": "nearest",
+        "edge_policy": "isolated",
+        "layer": "overlay"
+      },
+      "alpha_bbox": [12, 14, 124, 124],
+      "visible_fraction": 0.251343,
+      "alpha_extrema": [0, 255],
+      "qc": {"status": "pass", "min_contrast": 0.035, "contrast": 0.175341, "warnings": []},
+      "visual_qc": "isolated circular manhole cover, margin present, no crop observed"
+    },
+    "drain_grate": {
+      "raw_run_dir": ".forge/survivor-assets-20261009/C/map/ground/raw-drain-grate",
+      "raw_sha256": "55ea5a3a806b72886d291f4c288320781d0a8422fedab41b57951a6c9ef150ee",
+      "job_route": "codex-cli",
+      "job_provider": "openai",
+      "job_requested_model": "codex-image_gen",
+      "run_route": "local:codex-cli",
+      "run_model": "codex-image_gen",
+      "extract_dir": ".forge/survivor-assets-20261009/C/map/ground/extract-overlay-drain-grate-01",
+      "extract_manifest": ".forge/survivor-assets-20261009/C/map/ground/extract-overlay-drain-grate-01/terrain-bundle.json",
+      "canonical_path": ".forge/survivor-assets-20261009/C/map/ground/drain_grate.png",
+      "canonical_sha256": "935551a711188e6ee9a37901be789f1f1dbd3950bf963f4a2019345c7212fc2e",
+      "runtime_size_px": [128, 128],
+      "processing": {
+        "background_mode": "native_alpha",
+        "resampler": "nearest",
+        "edge_policy": "isolated",
+        "layer": "overlay"
+      },
+      "alpha_bbox": [12, 32, 113, 93],
+      "visible_fraction": 0.165771,
+      "alpha_extrema": [0, 254],
+      "qc": {"status": "pass", "min_contrast": 0.035, "contrast": 0.200015, "warnings": []},
+      "visual_qc": "isolated rectangular grate, margin present, no crop observed"
+    },
+    "puddle": {
+      "raw_run_dir": ".forge/survivor-assets-20261009/C/map/ground/raw-puddle-clean",
+      "raw_sha256": "9077674dfd1019eeb3efa767f5fa6207fb2267674897b0d0f4fd6bbb69a29254",
+      "raw_size_px": [1774, 887],
+      "raw_mode": "RGBA",
+      "job_route": "codex-cli",
+      "job_provider": "openai",
+      "job_requested_model": "codex-image_gen",
+      "run_route": "local:codex-cli",
+      "run_model": "codex-image_gen",
+      "cli_run_id": "677657e6892548a59d9645b623a689b0",
+      "thread_id": "01a11e3b-9d29-7c83-8746-334175480e94",
+      "raw_prompt": ".forge/survivor-assets-20261009/C/map/ground/raw-puddle-clean/prompt.txt",
+      "raw_prompt_sha256": "0118befe2f416814a9042dba5fb0d9e3e6ceff93934ce23b9edb45b322921b9a",
+      "job_json": ".forge/survivor-assets-20261009/C/map/ground/raw-puddle-clean/job.json",
+      "job_prompt_sha256": "3723950955b400c9ae559564b4cea7209d1d5af0d7535589eea04739db2bcfa2",
+      "run_json": ".forge/survivor-assets-20261009/C/map/ground/raw-puddle-clean/run.json",
+      "extract_dir": ".forge/survivor-assets-20261009/C/map/ground/extract-overlay-puddle-clean-01",
+      "extract_manifest": ".forge/survivor-assets-20261009/C/map/ground/extract-overlay-puddle-clean-01/terrain-bundle.json",
+      "canonical_path": ".forge/survivor-assets-20261009/C/map/ground/puddle.png",
+      "canonical_sha256": "4e192d39dd75c6bea60c6001ca27ad4e27f38e4b4bdcea214dae9d7156495d32",
+      "runtime_size_px": [128, 128],
+      "processing": {
+        "background_mode": "native_alpha",
+        "resampler": "nearest",
+        "edge_policy": "isolated",
+        "layer": "overlay"
+      },
+      "source_transform": {
+        "operation": "transparent_pad_to_square",
+        "input_size_px": [1774, 887],
+        "output_size_px": [1774, 1774],
+        "padding_px": {"left": 0, "top": 443, "right": 0, "bottom": 444},
+        "padded_source": ".forge/survivor-assets-20261009/C/map/ground/prep-puddle-clean-01/source-padded-square.png",
+        "padded_source_sha256": "6f16c006f3ae198a75d49bb0e04cf50c108e8cc8e74fc6dd363f2edcca3fdfd1",
+        "crop": false,
+        "stretch": false
+      },
+      "alpha_bbox": [28, 54, 103, 82],
+      "visible_fraction": 0.080566,
+      "alpha_extrema": [0, 251],
+      "semi_transparent_fraction": 0.0811767578125,
+      "mean_luminance": 0.247092,
+      "qc": {"status": "pass", "min_contrast": 0.035, "contrast": 0.158077, "warnings": []},
+      "visual_qc": "accepted water-only puddle with warm reflection, no baked paver grid, transparent outside, no crop; base-plus-hero90 preview accepted",
+      "source_edit_semantics": "one codex-cli water-only regeneration succeeded",
+      "export_eligible": true
+    },
+    "cracks": {
+      "raw_run_dir": ".forge/survivor-assets-20261009/C/map/ground/raw-cracks",
+      "raw_sha256": "91659437293fd1a7503db4a29811f93509cfa8651e9484e7589e0cdd9e0ceb20",
+      "job_route": "codex-cli",
+      "job_provider": "openai",
+      "job_requested_model": "codex-image_gen",
+      "run_route": "local:codex-cli",
+      "run_model": "codex-image_gen",
+      "extract_dir": ".forge/survivor-assets-20261009/C/map/ground/extract-overlay-cracks-01",
+      "extract_manifest": ".forge/survivor-assets-20261009/C/map/ground/extract-overlay-cracks-01/terrain-bundle.json",
+      "canonical_path": ".forge/survivor-assets-20261009/C/map/ground/cracks.png",
+      "canonical_sha256": "beefc33354ff8b0f37f662b1430676d1adfadf5db0d4db918fd4a05ae09a19a0",
+      "runtime_size_px": [128, 128],
+      "processing": {"background_mode": "native_alpha", "resampler": "nearest", "edge_policy": "isolated", "layer": "overlay"},
+      "alpha_bbox": [16, 20, 111, 121],
+      "visible_fraction": 0.032227,
+      "alpha_extrema": [0, 252],
+      "qc": {"status": "pass", "min_contrast": 0.035, "contrast": 0.128896, "warnings": []},
+      "visual_qc": "isolated branching crack, transparent margin, no crop observed"
+    },
+    "zebra": {
+      "raw_run_dir": ".forge/survivor-assets-20261009/C/map/ground/raw-zebra",
+      "raw_sha256": "fa30b242a2499f482bec835cfb8d475871fdb8e653e8e2716c96eb4c74c626f7",
+      "job_route": "codex-cli",
+      "job_provider": "openai",
+      "job_requested_model": "codex-image_gen",
+      "run_route": "local:codex-cli",
+      "run_model": "codex-image_gen",
+      "extract_dir": ".forge/survivor-assets-20261009/C/map/ground/extract-overlay-zebra-01",
+      "extract_manifest": ".forge/survivor-assets-20261009/C/map/ground/extract-overlay-zebra-01/terrain-bundle.json",
+      "canonical_path": ".forge/survivor-assets-20261009/C/map/ground/zebra.png",
+      "canonical_sha256": "e5b4fd615d3fbf66d1578706b40cb175746e1850cce71589c2e84c719c1846b",
+      "runtime_size_px": [128, 128],
+      "processing": {"background_mode": "native_alpha", "resampler": "nearest", "edge_policy": "isolated", "layer": "overlay"},
+      "alpha_bbox": [14, 20, 113, 114],
+      "visible_fraction": 0.212097,
+      "alpha_extrema": [0, 255],
+      "qc": {"status": "pass", "min_contrast": 0.035, "contrast": 0.155684, "warnings": []},
+      "visual_qc": "isolated zebra stripe segment, transparent margin, no crop observed"
+    }
+  },
+  "diagnostic_only": {
+    "puddle_initial": {
+      "raw_run_dir": ".forge/survivor-assets-20261009/C/map/ground/raw-puddle",
+      "raw_sha256": "5c8ab1ee176604277a0cb0a7521ad03ea4a2c42224a6f4ea180f0b530a7514e7",
+      "runtime_copy": ".forge/survivor-assets-20261009/C/map/ground/diagnostic/puddle-initial.png",
+      "runtime_sha256": "805e54a8700125d4680910eaddbebfed45b1b8f7fadf2a1bcf59eb75e3d79b98",
+      "qa_preview": ".forge/survivor-assets-20261009/C/map/ground/diagnostic/puddle-initial-base-hero90-qc.png",
+      "qa_preview_sha256": "32bdcd1062e8e0d5f29929f41ec8e55c245eeaddc5577c904eea6ca51fdd8930",
+      "contact": ".forge/survivor-assets-20261009/C/map/ground/diagnostic/ground-contact-initial-puddle.png",
+      "limitation": "superseded initial draft retained for diagnosis only because its interior baked paver texture had a visibly different density from pavement.png; never export"
+    }
+  },
+  "comparisons": {
+    "ground_3x3": {
+      "path": ".forge/survivor-assets-20261009/C/map/ground/ground-3x3.png",
+      "sha256": "64e1dc543c03d89635f1424b1a702a26a0d22f96a41e3399b91ef71689aeaec7",
+      "size_px": [384, 384]
+    },
+    "raw_runtime_contact": {
+      "path": ".forge/survivor-assets-20261009/C/map/ground/ground-contact-raw-runtime.png",
+      "sha256": "b3db0e0ca937d7985e3d0204ff853d9088da0b6cda6c7367ce0f03623d35cca3",
+      "size_px": [632, 1848],
+      "note": "final contact includes all six raw/runtime rows; clean puddle row is selected"
+    },
+    "puddle_base_hero90": {
+      "path": ".forge/survivor-assets-20261009/C/map/ground/puddle-base-hero90-qc.png",
+      "sha256": "d8bb623f3414c0861d631b5e4457587b7de7243cb68f516aaca8d1236537bd91",
+      "size_px": [560, 292],
+      "note": "clean water-only puddle beside pavement and hero at 90px visible height"
+    },
+    "diagnostic_initial_contact": {
+      "path": ".forge/survivor-assets-20261009/C/map/ground/diagnostic/ground-contact-initial-puddle.png",
+      "sha256": "c1904a15df98eda08009a795f58e0cf99571fcf493e6bf8f959e7475b5e315f3",
+      "size_px": [632, 1848]
+    },
+    "diagnostic_initial_puddle_base_hero90": {
+      "path": ".forge/survivor-assets-20261009/C/map/ground/diagnostic/puddle-initial-base-hero90-qc.png",
+      "sha256": "32bdcd1062e8e0d5f29929f41ec8e55c245eeaddc5577c904eea6ca51fdd8930",
+      "size_px": [560, 292]
+    }
+  },
+  "canonical_export_names": {
+    "ground": "pavement.png",
+    "overlays": ["manhole.png", "drain_grate.png", "puddle.png", "cracks.png", "zebra.png"],
+    "diagnostic_only": ["diagnostic/puddle-initial.png"]
+  },
+  "warnings": [],
+  "notes": [
+    "resolved prompt normalization: raw-puddle-clean/job.json promptSha256 3723950955b400c9ae559564b4cea7209d1d5af0d7535589eea04739db2bcfa2 equals SHA-256(prompt.txt bytes.strip()); the preserved prompt.txt and extractor prompt SHA 0118befe2f416814a9042dba5fb0d9e3e6ceff93934ce23b9edb45b322921b9a match the full prompt bytes and differ only by the trailing newline",
+    "known QC limitation: pavement manifest retains seamless_verified=false; wrap ratios pass, but exact mathematical seamlessness is not claimed"
+  ],
+  "pending_overlays": [],
+  "ground_kit": ".forge/survivor-assets-20261009/C/map/ground/ground-kit.json (complete; exports clean puddle, retains initial puddle diagnostic-only)",
+  "no_generation_by_worker": true
+}

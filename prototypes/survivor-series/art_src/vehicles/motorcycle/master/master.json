@@ -1,0 +1,179 @@
+{
+  "schema": "generate2dsprite.master.v1",
+  "tool": {
+    "name": "master_still",
+    "version": "0.4.0"
+  },
+  "created": "2026-10-08T17:56:54.065Z",
+  "name": "motorcycle",
+  "subject": "a rider-and-scooter enemy unit, full body",
+  "identity_recap": "fictional adult rider in a white helmet, dark jacket and dark trousers seated on a compact dark navy Taiwanese urban motor scooter with both wheels, handlebars, mirrors and a glowing red tail light complete, facing diagonally toward the lower-right",
+  "facing": "right",
+  "view": "elevated three-quarter overhead view about 50 degrees above the ground, body turned diagonally toward the lower-right",
+  "finish": "pixel",
+  "class": "mob",
+  "framing": {
+    "canvas": [
+      1024,
+      1024
+    ],
+    "subject_height_px": 471,
+    "top_margin_px": 406,
+    "lead_px": 100,
+    "preset": "mob",
+    "subject_bbox": [
+      229,
+      406,
+      595,
+      877
+    ],
+    "anchor": [
+      544.5,
+      877.0
+    ],
+    "opaque_area_px": 99008,
+    "width_limited": false
+  },
+  "key": "#00FF00",
+  "files": {
+    "master": {
+      "path": "master.png",
+      "sha256": "c9d2e7740e80b647a4acc0d53e1bff9767ff80122de70596f7e16393d0efdeca",
+      "bytes": 202026,
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    "cutout": {
+      "path": "master_rgba.png",
+      "sha256": "3ae07ddbf6370668f960c273be022a0a80624d24eba912e2134b1287aa0cf136",
+      "bytes": 233735,
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    "source": {
+      "path": "source.png",
+      "sha256": "3ae07ddbf6370668f960c273be022a0a80624d24eba912e2134b1287aa0cf136",
+      "bytes": 233735,
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    "spec": {
+      "path": "spec.json",
+      "sha256": "71bbb98af4b5fe18ff9545871fa442ff9c3645db54490d27a49bdbccc07adcd9",
+      "bytes": 2441
+    },
+    "prompt": null
+  },
+  "references": [
+    {
+      "role": "style",
+      "path": "../../../../../godot/godogen/prototypes/survivor-series/art_src/heroes/man/master-green/master_rgba.png",
+      "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+      "what": "the approved hero sprite of this game"
+    }
+  ],
+  "transform": {
+    "mapping": "master = scale * source + offset (continuous pixel coordinates: pixel i spans [i, i + 1))",
+    "source_size": [
+      1024,
+      1024
+    ],
+    "source_subject_bbox": [
+      229,
+      406,
+      595,
+      877
+    ],
+    "crop_box": [
+      223,
+      400,
+      601,
+      883
+    ],
+    "crop_margin_px": 6,
+    "scale": 1.0,
+    "offset": [
+      0.0,
+      0.0
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "resampler": "lanczos",
+    "premultiplied": true,
+    "alpha_floor_px": 0,
+    "subject_parts": 1,
+    "ignored_parts": 0,
+    "ignored_px": 0,
+    "source_touches": [],
+    "key_rgb": [
+      0,
+      255,
+      0
+    ]
+  },
+  "route": "codex-cli",
+  "provenance": {
+    "command": "external",
+    "run": null,
+    "take": null,
+    "source_name": "candidate-02.png",
+    "source_sha256": "3ae07ddbf6370668f960c273be022a0a80624d24eba912e2134b1287aa0cf136",
+    "media": null,
+    "media_cli_source": null,
+    "edit": null
+  },
+  "matte": {
+    "requested": "soft",
+    "key_estimate": {
+      "key": [
+        0.0,
+        255.0,
+        0.0
+      ],
+      "source": "native_alpha",
+      "valid": false,
+      "ring_share": 0.0,
+      "coverage": 0.0,
+      "distance_from_declared": 0.0
+    },
+    "quality": "native_alpha",
+    "qa": {
+      "key": [
+        0.0,
+        255.0,
+        0.0
+      ],
+      "opaque_key_px": 0,
+      "outer_ring_spill_fraction": 0.0032482598607888632,
+      "semitransparent_fraction": 0.047643223333831065,
+      "enclosed_key_pockets": 0,
+      "key_hued_px": 0,
+      "visible_px": 100455,
+      "outer_ring_px": 2155,
+      "thresholds": {
+        "key_tolerance": 48.0,
+        "spill_threshold": 20.0,
+        "min_pocket_area": 16,
+        "opaque_alpha": 128,
+        "spill_hue_balance": 0.5
+      },
+      "method": "forge_matte.matte_qa v1: straight-colour key distance and dominance on the keyed image; two-channel keys count spill only where the key channels are balanced"
+    },
+    "key_choice": {
+      "status": "ok",
+      "overlap_share": 0.0,
+      "rule": "reject a key when more than 0.5% of subject pixels have key dominance >= 40; first acceptable candidate wins"
+    }
+  },
+  "warnings": [
+    "the style reference master_rgba.png is missing; its recorded sha256 is kept"
+  ]
+}
