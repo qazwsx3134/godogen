@@ -1,0 +1,58 @@
+{
+  "schema": "generate2dmap.tileset.v1",
+  "id": "overlay-zebra",
+  "image": "../../../ground/zebra.png",
+  "sha256": "bade5ded7973d77c6c7f1d6e7c3ff5323abdb97bb50ebe22eaa0e6272270856f",
+  "tile_size": [
+    512,
+    512
+  ],
+  "columns": 1,
+  "kind": "flat",
+  "materials": [
+    "zebra"
+  ],
+  "tiles": [
+    {
+      "index": 0,
+      "variant": 0,
+      "properties": {
+        "walkable": true
+      }
+    }
+  ],
+  "seamless_verified": false,
+  "seam_qc": {
+    "policy": "isolated",
+    "exact_proof": false,
+    "note": "Transparent overlay; no repeat claim."
+  },
+  "provenance": {
+    "art_source": "host_image",
+    "route": "local:codex-cli",
+    "generator": {
+      "name": "extract_terrain_tiles.py",
+      "version": "0.4.0"
+    },
+    "source_terrain_bundle": {
+      "path": "../../../ground/r4/zebra-terrain-bundle.json"
+    },
+    "prompt": {
+      "path": "../../../ground/r4/raw-zebra/prompt.txt"
+    }
+  },
+  "qc_source": {
+    "status": "pass",
+    "warnings": 0,
+    "contrast": 0.23056,
+    "threshold": 0.035,
+    "alpha_bbox": [
+      54,
+      46,
+      461,
+      361
+    ],
+    "visible_fraction": 0.220413,
+    "edge_policy": "isolated"
+  }
+}

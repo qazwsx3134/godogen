@@ -1,0 +1,20 @@
+{
+  "schema": "survivor-assets.generation-attempts.v1",
+  "items": [
+    {
+      "item": "pavement",
+      "attempt": 1,
+      "status": "failed-before-generation",
+      "route": "codex-cli",
+      "cause": "sandbox prevented the CLI from writing PATH aliases under the existing Codex runtime; no image artifact was produced."
+    },
+    {
+      "item": "pavement",
+      "attempt": 2,
+      "status": "done",
+      "route": "codex-cli",
+      "output": "raw-pavement-retry/",
+      "retry_of": 1
+    }
+  ]
+}

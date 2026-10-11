@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 2,
+  "provider": "openai",
+  "kind": "image",
+  "route": "codex-cli",
+  "requestedModel": "codex-image_gen",
+  "options": {
+    "tool": "image_gen"
+  },
+  "promptSha256": "3f2a9f472bc3014bedfa29c2a289a2c66190b169d486e23c469fdb6115626079",
+  "references": [
+    {
+      "sha256": "43d29dff193a7923e5aeeffc2d1b4c18a9e2ec3c89f085c2fd50c489dafaf08d",
+      "bytes": 3464762
+    },
+    {
+      "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+      "bytes": 405203
+    }
+  ],
+  "fingerprint": "94f0fad8cd78321672113975f5a3d9e741938eabfa2716af68f6b5f9e39b2ce8",
+  "estimate": {
+    "usd": 0.0,
+    "currency": "USD",
+    "pricesVersion": "2026-10-06",
+    "items": [],
+    "basis": "subscription quota call: no per-call USD price; counted by call caps"
+  },
+  "consent": {
+    "provider": "openai",
+    "model": "codex-image_gen",
+    "calls": 1,
+    "estimateUsd": 0.0,
+    "route": "codex-cli",
+    "quota": true,
+    "account": "the user's own Codex sign-in (ChatGPT)",
+    "note": "uses the subscription quota of that sign-in, never API credit"
+  },
+  "artSource": "host_image",
+  "execution": "execute",
+  "status": "done",
+  "outputDir": "../../raw-lantern-glow",
+  "receipt": {
+    "startedAt": "2026-10-11T18:11:13.847Z",
+    "submittedAt": "2026-10-11T18:11:13.878Z",
+    "completedAt": "2026-10-11T18:12:19.130Z",
+    "wallMs": 65283,
+    "providerMs": 70773,
+    "attempt": 1,
+    "purpose": "BRIEF-assets-3 A warm lantern glow overlay",
+    "toolVersion": "cli_media/0.4.0",
+    "outcomeCode": "ok"
+  },
+  "ledger": {
+    "projectDir": "../..",
+    "reservationId": "1c7f7bf086fe49f782461415757299ff",
+    "status": "done"
+  },
+  "cliRun": {
+    "tool": "codex",
+    "runId": "13652a33de0d4ed391d4a3dc005bcbd9",
+    "cwd": "<tmp>/forge-cli-13652a33de0d-bed75edc",
+    "startedAt": "2026-10-11T18:11:13.847Z",
+    "version": "0.162.1",
+    "versionText": "codex-cli 0.162.1",
+    "recipe": "codex-exec-imagegen/1",
+    "home": "CODEX_HOME",
+    "verifiedBefore": true,
+    "threadId": "01a12c29-69e7-7921-bdcc-eea55801750f"
+  },
+  "adoption": {
+    "method": "native-run-folder",
+    "source": "CODEX_HOME/generated_images/01a12c29-69e7-7921-bdcc-eea55801750f/exec-56cb37e5-ed67-48d9-9cb3-e9c3e70b99bc.png",
+    "sourceSha256": "5fd2cf339f57522c7e259420a1e7c6b42b1cada45f525a511f9ea8022e8fa915",
+    "sourceMtime": "2026-10-11T18:12:14Z",
+    "freshAfter": "2026-10-11T18:11:13.889Z",
+    "checks": [
+      "inside the CLI's own folder for this run",
+      "no symlink or junction",
+      "regular file of a sane size",
+      "newer than the run",
+      "magic bytes",
+      "decodes",
+      "exactly one output",
+      "exclusive copy with matching sha256"
+    ],
+    "finalAnswerNamesFile": true
+  },
+  "artifact": {
+    "path": "../../raw-lantern-glow/generated.png",
+    "sha256": "5fd2cf339f57522c7e259420a1e7c6b42b1cada45f525a511f9ea8022e8fa915",
+    "bytes": 763810,
+    "format": "PNG",
+    "size": [
+      1254,
+      1254
+    ]
+  }
+}

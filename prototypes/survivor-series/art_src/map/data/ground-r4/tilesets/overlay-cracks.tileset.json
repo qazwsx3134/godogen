@@ -1,0 +1,58 @@
+{
+  "schema": "generate2dmap.tileset.v1",
+  "id": "overlay-cracks",
+  "image": "../../../ground/cracks.png",
+  "sha256": "2d0d6774dde72c46da1930abdcf4124cee68df21c0502b60bc2843f09c4f71ce",
+  "tile_size": [
+    512,
+    512
+  ],
+  "columns": 1,
+  "kind": "flat",
+  "materials": [
+    "cracks"
+  ],
+  "tiles": [
+    {
+      "index": 0,
+      "variant": 0,
+      "properties": {
+        "walkable": true
+      }
+    }
+  ],
+  "seamless_verified": false,
+  "seam_qc": {
+    "policy": "isolated",
+    "exact_proof": false,
+    "note": "Transparent overlay; no repeat claim."
+  },
+  "provenance": {
+    "art_source": "reused-existing",
+    "route": "retained from ground/v1",
+    "generator": {
+      "name": "extract_terrain_tiles.py",
+      "version": "0.4.0"
+    },
+    "source_terrain_bundle": {
+      "path": "../../../ground/v1/ground-kit.json"
+    },
+    "prompt": {
+      "path": "../../../ground/v1/../v1/prompts/cracks.prompt.txt"
+    }
+  },
+  "qc_source": {
+    "status": "pass",
+    "warnings": 0,
+    "contrast": 0.128896,
+    "source_qc": "pass",
+    "retained_artwork": true,
+    "canvas_padded_without_scaling": true,
+    "alpha_bbox": [
+      208,
+      212,
+      303,
+      313
+    ]
+  }
+}

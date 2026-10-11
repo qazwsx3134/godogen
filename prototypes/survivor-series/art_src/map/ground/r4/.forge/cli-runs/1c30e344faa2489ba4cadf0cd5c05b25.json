@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 2,
+  "provider": "openai",
+  "kind": "image",
+  "route": "codex-cli",
+  "requestedModel": "codex-image_gen",
+  "options": {
+    "tool": "image_gen"
+  },
+  "promptSha256": "f80af161d7fbcfcfb62a41656bf544e4e3086154548c2586b828bcea43d958a2",
+  "references": [
+    {
+      "sha256": "43d29dff193a7923e5aeeffc2d1b4c18a9e2ec3c89f085c2fd50c489dafaf08d",
+      "bytes": 3464762
+    },
+    {
+      "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+      "bytes": 405203
+    }
+  ],
+  "fingerprint": "bb842a8cad6f75a66fb6dcd5ba24c3123c71779ecbe25a6a20cd31fa5a2a8070",
+  "estimate": {
+    "usd": 0.0,
+    "currency": "USD",
+    "pricesVersion": "2026-10-06",
+    "items": [],
+    "basis": "subscription quota call: no per-call USD price; counted by call caps"
+  },
+  "consent": {
+    "provider": "openai",
+    "model": "codex-image_gen",
+    "calls": 1,
+    "estimateUsd": 0.0,
+    "route": "codex-cli",
+    "quota": true,
+    "account": "the user's own Codex sign-in (ChatGPT)",
+    "note": "uses the subscription quota of that sign-in, never API credit"
+  },
+  "artSource": "host_image",
+  "execution": "execute",
+  "status": "done",
+  "outputDir": "../../raw-pavement-retry",
+  "receipt": {
+    "startedAt": "2026-10-11T18:09:49.373Z",
+    "submittedAt": "2026-10-11T18:09:49.408Z",
+    "completedAt": "2026-10-11T18:10:35.672Z",
+    "wallMs": 46299,
+    "providerMs": 48854,
+    "attempt": 2,
+    "purpose": "BRIEF-assets-3 A pavement retry",
+    "toolVersion": "cli_media/0.4.0",
+    "outcomeCode": "ok"
+  },
+  "ledger": {
+    "projectDir": "../..",
+    "reservationId": "7543b6d69876496a807c28c20fd54859",
+    "status": "done"
+  },
+  "cliRun": {
+    "tool": "codex",
+    "runId": "1c30e344faa2489ba4cadf0cd5c05b25",
+    "cwd": "<tmp>/forge-cli-1c30e344faa2-37cdea5e",
+    "startedAt": "2026-10-11T18:09:49.373Z",
+    "version": "0.162.1",
+    "versionText": "codex-cli 0.162.1",
+    "recipe": "codex-exec-imagegen/1",
+    "home": "CODEX_HOME",
+    "verifiedBefore": false,
+    "threadId": "01a12c28-2035-7082-b140-8f3e1939484d"
+  },
+  "adoption": {
+    "method": "native-run-folder",
+    "source": "CODEX_HOME/generated_images/01a12c28-2035-7082-b140-8f3e1939484d/exec-302a2862-735f-4991-a57d-5733f58aa4b7.png",
+    "sourceSha256": "940905185b61f24764955b7e8d274a7d68146bc8975740efd8505a02fda833a3",
+    "sourceMtime": "2026-10-11T18:10:31Z",
+    "freshAfter": "2026-10-11T18:09:49.419Z",
+    "checks": [
+      "inside the CLI's own folder for this run",
+      "no symlink or junction",
+      "regular file of a sane size",
+      "newer than the run",
+      "magic bytes",
+      "decodes",
+      "exactly one output",
+      "exclusive copy with matching sha256"
+    ],
+    "finalAnswerNamesFile": true
+  },
+  "artifact": {
+    "path": "../../raw-pavement-retry/generated.png",
+    "sha256": "940905185b61f24764955b7e8d274a7d68146bc8975740efd8505a02fda833a3",
+    "bytes": 2378187,
+    "format": "PNG",
+    "size": [
+      1254,
+      1254
+    ]
+  }
+}

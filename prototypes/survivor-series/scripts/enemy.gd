@@ -11,6 +11,11 @@ var elite: bool = false
 var dead: bool = false
 var knockback := Vector2.ZERO
 var dash_direction := Vector2.RIGHT
+## Bikes charge along an S: sideways swing in px and the length of one full wave.
+var weave_amplitude: float = 45.0
+var weave_length: float = 190.0
+var weave_side: float = 1.0
+var dash_travel: float = 0.0
 var heading := Vector2.DOWN
 var phase: String = "chase"
 var phase_left: float = 0.0
@@ -76,7 +81,12 @@ func step(delta: float, target: Vector2, bounds: Rect2) -> void:
 			phase = "warning"
 			phase_left = definition.warning_time
 			dash_direction = toward
-			warning_lane.points = PackedVector2Array([Vector2.ZERO, dash_direction * 650.0 / scale.x])
+			dash_travel = 0.0
+			weave_side = -weave_side
+			var lane := PackedVector2Array()
+			for i: int in 34:
+				lane.append(dash_offset(i * 20.0) / scale.x)
+			warning_lane.points = lane
 			warning_line.points = warning_lane.points
 			warning.show()
 			warning_started.emit()
@@ -88,7 +98,9 @@ func step(delta: float, target: Vector2, bounds: Rect2) -> void:
 				phase_left = definition.dash_time
 				warning.hide()
 		elif phase == "dash":
-			movement = dash_direction * definition.dash_speed
+			var from: Vector2 = dash_offset(dash_travel)
+			dash_travel += definition.dash_speed * delta
+			movement = (dash_offset(dash_travel) - from) / delta if delta > 0.0 else Vector2.ZERO
 			phase_left -= delta
 			if phase_left <= 0.0:
 				phase = "recover"
@@ -99,13 +111,17 @@ func step(delta: float, target: Vector2, bounds: Rect2) -> void:
 			if phase_left <= 0.0:
 				phase = "chase"
 				hazard_left = definition.hazard_interval
-	face(dash_direction if phase in ["warning", "dash"] else toward)
+	face(movement if phase == "dash" else dash_direction if phase == "warning" else toward)
 	position += (movement + knockback) * delta
 	knockback = knockback.move_toward(Vector2.ZERO, delta * 600.0)
 	if phase != "dash":
 		position = position.clamp(bounds.position, bounds.end)
 	elif not bounds.grow(100.0).has_point(position):
 		queue_free()
+
+## Where the S-shaped charge is after `travel` px along the locked lane, relative to its start.
+func dash_offset(travel: float) -> Vector2:
+	return dash_direction * travel + dash_direction.orthogonal() * weave_side * weave_amplitude * sin(TAU * travel / weave_length)
 
 ## Vehicles pick one of eight headings (five drawings, mirrored for the west side); people only flip.
 func face(direction: Vector2) -> void:

@@ -1,0 +1,82 @@
+{
+  "schema": "survivor-series.D.ground-layer.v1",
+  "status": "ready_base_layer_for_final_bundle",
+  "world": {
+    "width": 3072,
+    "height": 3072,
+    "unit": "px"
+  },
+  "tile_size": [
+    512,
+    512
+  ],
+  "grid": [
+    6,
+    6
+  ],
+  "tileset": "tilesets/pavement.tileset.json",
+  "tile_image": "../../ground/pavement.png",
+  "tile_image_sha256": "46f0ba08e49c1b3aa5ae7ed9eee8a0145f25b3caf5c42fbd6ddcd8b6cd3783df",
+  "data": [
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  ],
+  "qc": {
+    "source": "../../ground/r4/pavement-terrain-bundle.json",
+    "status": "pass",
+    "warnings": 0,
+    "contrast": 0.074962,
+    "wrap_seam_ratio": {
+      "x": 1.07327,
+      "y": 1.223259
+    },
+    "threshold": 1.25,
+    "seamless_verified": false
+  }
+}

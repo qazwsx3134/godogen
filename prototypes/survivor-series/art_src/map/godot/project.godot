@@ -4,15 +4,15 @@ config_version=5
 
 [application]
 
-config/name="Survivor Series C - Night Market"
-run/main_scene="res://survivor-series-C-night-market.tscn"
+config/name="Survivor Series D - Night Market"
+run/main_scene="res://survivor-series-D-night-market.tscn"
 
 [display]
 
-window/size/viewport_width=768
-window/size/viewport_height=768
-window/size/window_width_override=768
-window/size/window_height_override=768
+window/size/viewport_width=1536
+window/size/viewport_height=1536
+window/size/window_width_override=1536
+window/size/window_height_override=1536
 window/stretch/mode="canvas_items"
 
 [rendering]

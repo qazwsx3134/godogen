@@ -212,10 +212,10 @@ func _incense(s: Dictionary) -> bool:
 	for shot: Node2D in street.projectiles.get_children():
 		if shot.mode == "orbit" and not shot.is_queued_for_deletion():
 			existing += 1
-	if permanent and existing >= s.amount:
+	if not permanent:
+		return _poke(s)
+	if existing >= s.amount:
 		return true
-	if not permanent and existing > 0:
-		return false
 	if permanent:
 		for shot: Node2D in street.projectiles.get_children():
 			if shot.mode == "orbit":
@@ -234,6 +234,30 @@ func _incense(s: Dictionary) -> bool:
 		shot.launch(_hero().position)
 		shot.step(0.0)
 	street.sfx.play(&"incense", 0.2)
+	return true
+
+## Each stick stabs a different nearby enemy and pulls back; waits when nobody is in reach.
+func _poke(s: Dictionary) -> bool:
+	var reach: float = 130.0 * s.area
+	var targets: Array = _targets(reach, s.amount)
+	if targets.is_empty():
+		return false
+	for i: int in s.amount:
+		if not _room():
+			break
+		var target: Node2D = targets[i % targets.size()]
+		var heading: Vector2 = (target.position - _hero().position).normalized()
+		if heading == Vector2.ZERO:
+			heading = Vector2.UP
+		var shot := _spawn(s)
+		shot.mode = "thrust"
+		shot.lifetime = 0.28
+		shot.anchor = _hero()
+		shot.velocity = heading.rotated((i / targets.size()) * 0.35) * (reach + 20.0)
+		shot.scale = Vector2.ONE
+		shot.rotation = heading.angle() + PI * 0.5
+		shot.launch(_hero().position)
+	street.sfx.play(&"incense", 0.1)
 	return true
 
 func _lantern(s: Dictionary) -> bool:

@@ -1,6 +1,6 @@
 extends Node2D
 ## A weapon projectile. Street owns hit tests; this only moves, remembers whom it hit, and flags detonation.
-@export_enum("straight", "boomerang", "orbit", "lob", "fall") var mode: String = "straight"
+@export_enum("straight", "boomerang", "orbit", "lob", "fall", "thrust") var mode: String = "straight"
 @export var radius: float = 16.0
 ## Visual spin in radians per second.
 @export var spin: float = 0.0
@@ -60,6 +60,10 @@ func step(delta: float) -> Vector2:
 			orbit_angle += orbit_speed * delta
 			if anchor != null:
 				position = anchor.position + Vector2.RIGHT.rotated(orbit_angle) * orbit_radius
+		"thrust":
+			# Stabs out to `velocity` (an offset from the anchor) and pulls back, following the hero.
+			if anchor != null:
+				position = anchor.position + velocity * sin(PI * clampf(age / lifetime, 0.0, 1.0))
 		"lob", "fall":
 			var t: float = clampf(age / lifetime, 0.0, 1.0)
 			position = start_point.lerp(target_point, t) if mode == "lob" else target_point

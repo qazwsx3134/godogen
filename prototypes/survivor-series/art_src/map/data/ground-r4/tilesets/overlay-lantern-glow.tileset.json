@@ -1,0 +1,59 @@
+{
+  "schema": "generate2dmap.tileset.v1",
+  "id": "overlay-lantern-glow",
+  "image": "../../../ground/lantern_glow.png",
+  "sha256": "16541682f9394b01b71bd1905c766a2ab9f01738c439c9bc6deb4b386ec92617",
+  "tile_size": [
+    512,
+    512
+  ],
+  "columns": 1,
+  "kind": "flat",
+  "materials": [
+    "lantern-glow"
+  ],
+  "tiles": [
+    {
+      "index": 0,
+      "variant": 0,
+      "properties": {
+        "walkable": true
+      }
+    }
+  ],
+  "seamless_verified": false,
+  "seam_qc": {
+    "policy": "isolated",
+    "exact_proof": false,
+    "note": "Transparent overlay; no repeat claim."
+  },
+  "provenance": {
+    "art_source": "host_image",
+    "route": "local:codex-cli",
+    "generator": {
+      "name": "extract_terrain_tiles.py",
+      "version": "0.4.0"
+    },
+    "source_terrain_bundle": {
+      "path": "../../../ground/r4/glow-attempt1-bundle.json"
+    },
+    "prompt": {
+      "path": "../../../ground/r4/raw-lantern-glow/prompt.txt"
+    }
+  },
+  "qc_source": {
+    "status": "pass",
+    "warnings": 0,
+    "contrast": 0.103353,
+    "threshold": 0.035,
+    "alpha_bbox": [
+      42,
+      126,
+      470,
+      408
+    ],
+    "visible_fraction": 0.180595,
+    "edge_policy": "isolated",
+    "post_extract_alpha_scale": 0.32
+  }
+}

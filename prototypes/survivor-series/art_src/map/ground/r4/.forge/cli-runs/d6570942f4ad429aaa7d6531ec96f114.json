@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 2,
+  "provider": "openai",
+  "kind": "image",
+  "route": "codex-cli",
+  "requestedModel": "codex-image_gen",
+  "options": {
+    "tool": "image_gen"
+  },
+  "promptSha256": "f80af161d7fbcfcfb62a41656bf544e4e3086154548c2586b828bcea43d958a2",
+  "references": [
+    {
+      "sha256": "43d29dff193a7923e5aeeffc2d1b4c18a9e2ec3c89f085c2fd50c489dafaf08d",
+      "bytes": 3464762
+    },
+    {
+      "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+      "bytes": 405203
+    }
+  ],
+  "fingerprint": "bb842a8cad6f75a66fb6dcd5ba24c3123c71779ecbe25a6a20cd31fa5a2a8070",
+  "estimate": {
+    "usd": 0.0,
+    "currency": "USD",
+    "pricesVersion": "2026-10-06",
+    "items": [],
+    "basis": "subscription quota call: no per-call USD price; counted by call caps"
+  },
+  "consent": {
+    "provider": "openai",
+    "model": "codex-image_gen",
+    "calls": 1,
+    "estimateUsd": 0.0,
+    "route": "codex-cli",
+    "quota": true,
+    "account": "the user's own Codex sign-in (ChatGPT)",
+    "note": "uses the subscription quota of that sign-in, never API credit"
+  },
+  "artSource": "host_image",
+  "execution": "execute",
+  "status": "submit_unknown",
+  "outputDir": "../../raw-pavement",
+  "receipt": {
+    "startedAt": "2026-10-11T18:09:11.531Z",
+    "submittedAt": "2026-10-11T18:09:11.563Z",
+    "completedAt": "2026-10-11T18:09:11.980Z",
+    "wallMs": 449,
+    "providerMs": 406,
+    "attempt": 1,
+    "purpose": "BRIEF-assets-3 A pavement",
+    "toolVersion": "cli_media/0.4.0",
+    "outcomeCode": "PROVIDER_ERROR"
+  },
+  "ledger": {
+    "projectDir": "../..",
+    "reservationId": "454685589e384bd2bb6d61a1b92909d2",
+    "status": "unknown"
+  },
+  "cliRun": {
+    "tool": "codex",
+    "runId": "d6570942f4ad429aaa7d6531ec96f114",
+    "cwd": "<tmp>/forge-cli-d6570942f4ad-d67d0b7a",
+    "startedAt": "2026-10-11T18:09:11.531Z",
+    "version": "0.162.1",
+    "versionText": "codex-cli 0.162.1",
+    "recipe": "codex-exec-imagegen/1",
+    "home": "CODEX_HOME",
+    "verifiedBefore": false
+  },
+  "error": {
+    "code": "PROVIDER_ERROR",
+    "message": "the Codex CLI exited with an error (WARNING: proceeding, even though we could not create PATH aliases: Read-only file system (os error 30) Error: failed to initialize in-process app-server client:)"
+  },
+  "errorType": "CliMediaError"
+}

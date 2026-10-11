@@ -1,0 +1,58 @@
+{
+  "schema": "generate2dmap.tileset.v1",
+  "id": "overlay-manhole",
+  "image": "../../../ground/manhole.png",
+  "sha256": "db1c1556dc75a80eee905822647230b2125e7b601355e77e542e5849bfe296e9",
+  "tile_size": [
+    512,
+    512
+  ],
+  "columns": 1,
+  "kind": "flat",
+  "materials": [
+    "manhole"
+  ],
+  "tiles": [
+    {
+      "index": 0,
+      "variant": 0,
+      "properties": {
+        "walkable": true
+      }
+    }
+  ],
+  "seamless_verified": false,
+  "seam_qc": {
+    "policy": "isolated",
+    "exact_proof": false,
+    "note": "Transparent overlay; no repeat claim."
+  },
+  "provenance": {
+    "art_source": "reused-existing",
+    "route": "retained from ground/v1",
+    "generator": {
+      "name": "extract_terrain_tiles.py",
+      "version": "0.4.0"
+    },
+    "source_terrain_bundle": {
+      "path": "../../../ground/v1/ground-kit.json"
+    },
+    "prompt": {
+      "path": "../../../ground/v1/../v1/prompts/manhole.prompt.txt"
+    }
+  },
+  "qc_source": {
+    "status": "pass",
+    "warnings": 0,
+    "contrast": 0.175341,
+    "source_qc": "pass",
+    "retained_artwork": true,
+    "canvas_padded_without_scaling": true,
+    "alpha_bbox": [
+      204,
+      206,
+      316,
+      316
+    ]
+  }
+}

@@ -97,6 +97,17 @@ func run() -> void:
 	bike.step(0.9, Vector2(300, 900), street.bounds)
 	bike.step(0.05, Vector2(300, 900), street.bounds)
 	_expect(bike.phase == "dash" and not bike.warning.visible, "bike enters charge after warning")
+	var lane: PackedVector2Array = bike.warning_lane.points
+	var swing: float = 0.0
+	for point: Vector2 in lane:
+		swing = maxf(swing, absf(point.dot(locked.orthogonal())))
+	_expect(lane.size() > 2 and swing > 20.0, "the warning shows the S-shaped lane")
+	var dash_start: Vector2 = bike.position
+	var widest: float = 0.0
+	for i: int in 30:
+		bike.step(0.02, Vector2(300, 900), street.bounds)
+		widest = maxf(widest, absf((bike.position - dash_start).dot(locked.orthogonal())))
+	_expect(widest > 20.0 and (bike.position - dash_start).dot(locked) > 200.0, "the charge weaves sideways while driving down the lane")
 	_expect(bike.contact_damage() > bike.definition.contact_damage * 2.0, "a charging bike hits harder than a parked one")
 
 	car.face(Vector2.LEFT)
@@ -177,10 +188,17 @@ func run() -> void:
 		_expect(target.hp < target.max_hp and int(street.arsenal.fired.get(entry[0], 0)) > 0, "%s fires and damages a nearby enemy" % entry[1])
 
 	_arm(street, [&"incense"])
-	street.spawn_enemy(2, hero.position + Vector2(300, 0))
+	var far = street.spawn_enemy(2, hero.position + Vector2(300, 0))
 	_settle(street, 2)
-	var orbiters: int = street.projectiles.get_children().filter(func(p: Node2D) -> bool: return p.mode == "orbit").size()
-	_expect(orbiters == 3, "three incense sticks orbit the hero")
+	_expect(street.projectiles.get_child_count() == 0, "incense waits while nobody is in reach")
+	far.position = hero.position + Vector2(90, 0)
+	_settle(street, 2)
+	var pokes: Array = street.projectiles.get_children().filter(func(p: Node2D) -> bool: return p.mode == "thrust")
+	_expect(pokes.size() == 3 and pokes[0].velocity.x > 0.0, "three incense sticks stab toward the nearby enemy")
+	_settle(street, 30)
+	_expect(street.projectiles.get_children().filter(func(p: Node2D) -> bool: return p.mode == "thrust" and not p.is_queued_for_deletion()).size() <= 3, "stabs pull back instead of piling up")
+	far.queue_free()
+	var orbiters: int
 	_arm(street, [&"mazu"])
 	_settle(street, 200)
 	orbiters = street.projectiles.get_children().filter(func(p: Node2D) -> bool: return p.mode == "orbit" and not p.is_queued_for_deletion()).size()

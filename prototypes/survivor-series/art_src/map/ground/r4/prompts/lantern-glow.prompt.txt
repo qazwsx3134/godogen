@@ -1,0 +1,5 @@
+Create exactly one square 1024x1024 transparent game overlay for a Taiwan night-market pavement tile. The runtime canvas will be 512x512 px.
+
+Use the FIRST supplied image only for the palette and visual mood of warm lantern light in the night market. Use the SECOND supplied image only for crisp pixel-art density, edge treatment, and the elevated roughly 50-degree ground-plane view. Do not copy any objects or character.
+
+Draw one soft, restrained warm amber lantern-light pool seen on the ground from above: a broad feathered oval glow with a few sparse, blocky pixel glints near its brightest center. Keep the glow subtle and localized so it can sit beneath a lantern and leave enemies and smoke readable. The canvas must have real transparent alpha everywhere outside the light. If native transparency cannot be produced, use a perfectly flat #FF00FF background only; never draw a checkerboard or pavement. No visible lantern, no ground texture, no paver lines, no reflection streak, no puddle, no object, no character, no shadow, no text, no border.

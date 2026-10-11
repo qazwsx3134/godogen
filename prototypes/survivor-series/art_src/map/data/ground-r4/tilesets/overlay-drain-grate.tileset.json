@@ -1,0 +1,58 @@
+{
+  "schema": "generate2dmap.tileset.v1",
+  "id": "overlay-drain-grate",
+  "image": "../../../ground/drain_grate.png",
+  "sha256": "a37136c34b136ebc51ceff35e6d18052576d15048daac2710a5eff755fca2cad",
+  "tile_size": [
+    512,
+    512
+  ],
+  "columns": 1,
+  "kind": "flat",
+  "materials": [
+    "drain-grate"
+  ],
+  "tiles": [
+    {
+      "index": 0,
+      "variant": 0,
+      "properties": {
+        "walkable": true
+      }
+    }
+  ],
+  "seamless_verified": false,
+  "seam_qc": {
+    "policy": "isolated",
+    "exact_proof": false,
+    "note": "Transparent overlay; no repeat claim."
+  },
+  "provenance": {
+    "art_source": "reused-existing",
+    "route": "retained from ground/v1",
+    "generator": {
+      "name": "extract_terrain_tiles.py",
+      "version": "0.4.0"
+    },
+    "source_terrain_bundle": {
+      "path": "../../../ground/v1/ground-kit.json"
+    },
+    "prompt": {
+      "path": "../../../ground/v1/../v1/prompts/drain-grate.prompt.txt"
+    }
+  },
+  "qc_source": {
+    "status": "pass",
+    "warnings": 0,
+    "contrast": 0.200015,
+    "source_qc": "pass",
+    "retained_artwork": true,
+    "canvas_padded_without_scaling": true,
+    "alpha_bbox": [
+      204,
+      224,
+      305,
+      285
+    ]
+  }
+}

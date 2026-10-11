@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 2,
+  "provider": "openai",
+  "kind": "image",
+  "route": "codex-cli",
+  "requestedModel": "codex-image_gen",
+  "options": {
+    "tool": "image_gen"
+  },
+  "promptSha256": "a00176908dd2c824a2e332dea00cf610544d1342d60d84baf189871981430e61",
+  "references": [
+    {
+      "sha256": "43d29dff193a7923e5aeeffc2d1b4c18a9e2ec3c89f085c2fd50c489dafaf08d",
+      "bytes": 3464762
+    },
+    {
+      "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+      "bytes": 405203
+    }
+  ],
+  "fingerprint": "768dc9883316fb1fc5bf50b1ca0ed8a6e691c0b94e93e6c0bb3ce6b484277bae",
+  "estimate": {
+    "usd": 0.0,
+    "currency": "USD",
+    "pricesVersion": "2026-10-06",
+    "items": [],
+    "basis": "subscription quota call: no per-call USD price; counted by call caps"
+  },
+  "consent": {
+    "provider": "openai",
+    "model": "codex-image_gen",
+    "calls": 1,
+    "estimateUsd": 0.0,
+    "route": "codex-cli",
+    "quota": true,
+    "account": "the user's own Codex sign-in (ChatGPT)",
+    "note": "uses the subscription quota of that sign-in, never API credit"
+  },
+  "artSource": "host_image",
+  "execution": "execute",
+  "status": "done",
+  "outputDir": "../../raw-wet-reflection",
+  "receipt": {
+    "startedAt": "2026-10-11T18:13:12.454Z",
+    "submittedAt": "2026-10-11T18:13:12.488Z",
+    "completedAt": "2026-10-11T18:14:16.708Z",
+    "wallMs": 64254,
+    "providerMs": 69746,
+    "attempt": 1,
+    "purpose": "BRIEF-assets-3 A wet pavement reflection overlay",
+    "toolVersion": "cli_media/0.4.0",
+    "outcomeCode": "ok"
+  },
+  "ledger": {
+    "projectDir": "../..",
+    "reservationId": "f7e15081e0ca4421896e87b10389f239",
+    "status": "done"
+  },
+  "cliRun": {
+    "tool": "codex",
+    "runId": "bb02d8cef297402ea83e8526a0d927ff",
+    "cwd": "<tmp>/forge-cli-bb02d8cef297-49e89350",
+    "startedAt": "2026-10-11T18:13:12.454Z",
+    "version": "0.162.1",
+    "versionText": "codex-cli 0.162.1",
+    "recipe": "codex-exec-imagegen/1",
+    "home": "CODEX_HOME",
+    "verifiedBefore": true,
+    "threadId": "01a12c2b-390e-7b60-8757-a6540d3719ce"
+  },
+  "adoption": {
+    "method": "native-run-folder",
+    "source": "CODEX_HOME/generated_images/01a12c2b-390e-7b60-8757-a6540d3719ce/exec-d60a9136-b793-4a90-b483-43f7a90d586d.png",
+    "sourceSha256": "944039394f238d1ff8c6bf10231d828b0914696eb8dbca6a01d0f9ef91926322",
+    "sourceMtime": "2026-10-11T18:14:12Z",
+    "freshAfter": "2026-10-11T18:13:12.501Z",
+    "checks": [
+      "inside the CLI's own folder for this run",
+      "no symlink or junction",
+      "regular file of a sane size",
+      "newer than the run",
+      "magic bytes",
+      "decodes",
+      "exactly one output",
+      "exclusive copy with matching sha256"
+    ],
+    "finalAnswerNamesFile": true
+  },
+  "artifact": {
+    "path": "../../raw-wet-reflection/generated.png",
+    "sha256": "944039394f238d1ff8c6bf10231d828b0914696eb8dbca6a01d0f9ef91926322",
+    "bytes": 115629,
+    "format": "PNG",
+    "size": [
+      1254,
+      1254
+    ]
+  }
+}

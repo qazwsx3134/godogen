@@ -10100,3 +10100,15 @@ prototypes/survivor-series/art_src/ASSETS-REPORT-2.md
 prototypes/survivor-series/art_src/PROGRESS.md
 ---
 
+## Session End: 20261012_015957
+### Uncommitted Changes
+prototypes/survivor-series/art_src/PROGRESS.md
+prototypes/survivor-series/assets/fonts/NotoSansTC.ttf
+prototypes/survivor-series/data/items/incense.tres
+prototypes/survivor-series/docs/horde-spec.md
+prototypes/survivor-series/scripts/arsenal.gd
+prototypes/survivor-series/scripts/enemy.gd
+prototypes/survivor-series/scripts/projectile.gd
+prototypes/survivor-series/tests/test_playable.gd
+---
+

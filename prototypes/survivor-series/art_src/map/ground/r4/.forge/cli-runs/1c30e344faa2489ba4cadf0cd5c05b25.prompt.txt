@@ -1,0 +1,9 @@
+Create exactly one square 1024x1024 seamless, opaque terrain texture for a 2D Taiwan night-market survivor game. It will be reduced with nearest-neighbor sampling to one 512x512 gameplay tile. It must repeat cleanly in both X and Y.
+
+Reference order: FIRST, use the supplied night-market scene only for its warm grey-brown stone material, diagonal diamond paving language, and pixel-art world mood. Remove its lantern light streaks entirely. SECOND, use the supplied hero sprite only for crisp pixel density, outline and shading treatment, and the elevated roughly 50-degree camera language. Do not copy the hero or any scene objects.
+
+The whole square is one continuous ground-only surface, edge-to-edge with no border or margin. Use clear, consistently sized diagonal rhombus pavers with dark but restrained joints. At final 512x512 gameplay size, each paver should read as a distinct diamond; aim for a calm, even grid of roughly 12 to 16 pavers across, with enough natural variation that a 3x3 repeat does not look stamped. Use a neutral warm grey-brown palette with low contrast, subtle stone grain, and small irregular damp variations. Keep the median ground quiet and readable under enemies, particles, and smoke. Avoid strong highlights and high-frequency noise.
+
+Make the opposite edges continue naturally into each other so there is no visible seam when repeated. Keep the same paver grid phase and scale at all four edges. This is a flat orthographic game texture, not a perspective scene.
+
+Do not draw any orange or amber lantern reflections, light streaks, bright spots, puddles, manholes, drain grates, cracks, zebra crossings, road paint, curbs, stalls, awnings, lanterns, props, people, enemies, smoke, shadows, text, logos, UI, frames, or perspective horizon. No transparency, no checkerboard. Every pixel is opaque pavement.

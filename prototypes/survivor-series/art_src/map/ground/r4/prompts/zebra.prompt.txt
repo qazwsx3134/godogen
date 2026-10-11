@@ -1,0 +1,7 @@
+Create exactly one square 1024x1024 transparent zebra-crossing overlay for a 2D Taiwan night-market game, to be reduced to a 512x512 gameplay canvas.
+
+Use the FIRST supplied image only for the warm grey-brown night-market pavement palette and pixel-art mood. Use the SECOND supplied image only for crisp pixel density, outline treatment, and the elevated roughly 50-degree ground-plane view. Do not copy any objects or character.
+
+Show five broad, parallel, cleanly separated off-white road-stripe bars across the center, seen flat from above at the same elevated game camera. The crossing must read instantly at 512px: bars are solid, evenly spaced, and large enough to recognize at a glance, with only a few small chipped pixel corners and a very subtle warm damp edge. Keep every stripe wholly inside the square with ample transparent margin; preserve transparent gaps between all bars and around the group. Native alpha transparency is required. If native transparency cannot be produced, use a perfectly flat #FF00FF background only; never draw a checkerboard or pavement.
+
+No asphalt or pavement rectangle, no paver texture, no yellow lane lines, no manhole, drain grate, puddle, cracks, curb, stall, lantern, object, person, enemy, smoke, text, logo, UI, shadow, frame, or border. This is an isolated overlay, not a road scene.

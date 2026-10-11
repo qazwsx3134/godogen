@@ -1,0 +1,141 @@
+{
+  "schema": "survivor-series.ground-r4-canonical.v1",
+  "assets": {
+    "cracks": {
+      "path": "cracks.png",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "2d0d6774dde72c46da1930abdcf4124cee68df21c0502b60bc2843f09c4f71ce",
+      "alpha_bbox": [
+        208,
+        212,
+        303,
+        313
+      ],
+      "source": "art_src/map/ground/cracks.png",
+      "operation": "nearest pixel canvas pad only; artwork unchanged"
+    },
+    "drain_grate": {
+      "path": "drain_grate.png",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "a37136c34b136ebc51ceff35e6d18052576d15048daac2710a5eff755fca2cad",
+      "alpha_bbox": [
+        204,
+        224,
+        305,
+        285
+      ],
+      "source": "art_src/map/ground/drain_grate.png",
+      "operation": "nearest pixel canvas pad only; artwork unchanged"
+    },
+    "glow": {
+      "path": "glow.png",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "16541682f9394b01b71bd1905c766a2ab9f01738c439c9bc6deb4b386ec92617",
+      "alpha_bbox": [
+        42,
+        126,
+        470,
+        408
+      ],
+      "source": "art_src/map/ground-r4/extract-glow-attempt1/glow-1.png",
+      "operation": "alpha scale 0.32 after strict extraction"
+    },
+    "manhole": {
+      "path": "manhole.png",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "db1c1556dc75a80eee905822647230b2125e7b601355e77e542e5849bfe296e9",
+      "alpha_bbox": [
+        204,
+        206,
+        316,
+        316
+      ],
+      "source": "art_src/map/ground/manhole.png",
+      "operation": "nearest pixel canvas pad only; artwork unchanged"
+    },
+    "pavement": {
+      "path": "pavement.png",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "46f0ba08e49c1b3aa5ae7ed9eee8a0145f25b3caf5c42fbd6ddcd8b6cd3783df",
+      "alpha_bbox": [
+        0,
+        0,
+        512,
+        512
+      ],
+      "source": "art_src/map/ground-r4/extract-pavement/pavement-1.png",
+      "operation": "strict seamless extraction at 512px"
+    },
+    "puddle": {
+      "path": "puddle.png",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "bb5557daeeeb36c7e9a15a5b11ec9afa1ac08b9b24837ac253fcb696bcb61535",
+      "alpha_bbox": [
+        220,
+        246,
+        295,
+        274
+      ],
+      "source": "art_src/map/ground/puddle.png",
+      "operation": "nearest pixel canvas pad only; artwork unchanged"
+    },
+    "wet_reflection": {
+      "path": "wet_reflection.png",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "173e721b6b1388c95a8051dc8a6028bf63d63c5bf61f621e4da3aeefb834ffe9",
+      "alpha_bbox": [
+        231,
+        148,
+        292,
+        382
+      ],
+      "source": "art_src/map/ground-r4/extract-wet-reflection/wet-reflection-1.png",
+      "operation": "alpha scale 0.42 after strict extraction"
+    },
+    "zebra": {
+      "path": "zebra.png",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "bade5ded7973d77c6c7f1d6e7c3ff5323abdb97bb50ebe22eaa0e6272270856f",
+      "alpha_bbox": [
+        54,
+        46,
+        461,
+        361
+      ],
+      "source": "art_src/map/ground-r4/extract-zebra/zebra-1.png",
+      "operation": "strict seamless extraction at 512px"
+    }
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "schema": "generate2dmap.tileset.v1",
+  "id": "overlay-wet-reflection",
+  "image": "../../../ground/wet_reflection.png",
+  "sha256": "173e721b6b1388c95a8051dc8a6028bf63d63c5bf61f621e4da3aeefb834ffe9",
+  "tile_size": [
+    512,
+    512
+  ],
+  "columns": 1,
+  "kind": "flat",
+  "materials": [
+    "wet-reflection"
+  ],
+  "tiles": [
+    {
+      "index": 0,
+      "variant": 0,
+      "properties": {
+        "walkable": true
+      }
+    }
+  ],
+  "seamless_verified": false,
+  "seam_qc": {
+    "policy": "isolated",
+    "exact_proof": false,
+    "note": "Transparent overlay; no repeat claim."
+  },
+  "provenance": {
+    "art_source": "host_image",
+    "route": "local:codex-cli",
+    "generator": {
+      "name": "extract_terrain_tiles.py",
+      "version": "0.4.0"
+    },
+    "source_terrain_bundle": {
+      "path": "../../../ground/r4/wet-reflection-terrain-bundle.json"
+    },
+    "prompt": {
+      "path": "../../../ground/r4/raw-wet-reflection/prompt.txt"
+    }
+  },
+  "qc_source": {
+    "status": "pass",
+    "warnings": 0,
+    "contrast": 0.142226,
+    "threshold": 0.035,
+    "alpha_bbox": [
+      231,
+      148,
+      292,
+      382
+    ],
+    "visible_fraction": 0.009998,
+    "edge_policy": "isolated",
+    "post_extract_alpha_scale": 0.42
+  }
+}

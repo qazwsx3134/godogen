@@ -1,0 +1,246 @@
+[gd_scene load_steps=18 format=3]
+
+[ext_resource type="TileSet" path="survivor-series-D-night-market.tileset.tres" id="1_survivor_series_D_night_market_tileset"]
+[ext_resource type="Texture2D" path="assets/props/stall-fruit.png" id="2_stall_fruit"]
+[ext_resource type="Texture2D" path="assets/props/stall-snack.png" id="3_stall_snack"]
+[ext_resource type="Texture2D" path="assets/props/lantern_post.png" id="4_lantern_post"]
+[ext_resource type="Texture2D" path="assets/props/planter.png" id="5_planter"]
+[ext_resource type="Texture2D" path="assets/props/cone.png" id="6_cone"]
+[ext_resource type="Texture2D" path="assets/props/bollard.png" id="7_bollard"]
+[ext_resource type="Texture2D" path="assets/props/parked_scooter.png" id="8_parked_scooter"]
+[ext_resource type="Texture2D" path="assets/props/fruit_crate.png" id="9_fruit_crate"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0"]
+size = Vector2(120, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(126, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2"]
+size = Vector2(20, 12)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3"]
+size = Vector2(52, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4"]
+size = Vector2(22, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5"]
+size = Vector2(16, 10)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6"]
+size = Vector2(80, 14)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7"]
+size = Vector2(34, 14)
+
+[node name="survivor-series-D-night-market" type="Node2D"]
+texture_filter = 1
+metadata/map_bundle_sha256 = "474720b4d0c70800c6ba32efde9e16db62b67c5e16278e58cb254c89e09aebc4"
+
+[node name="ground" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+tile_set = ExtResource("1_survivor_series_D_night_market_tileset")
+
+[node name="grounddecor-manhole" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray(0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 4, 0, 4, 0, 1, 0, 0, 0, 0, 0, 0, 0)
+tile_set = ExtResource("1_survivor_series_D_night_market_tileset")
+
+[node name="grounddecor-drain-grate" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray(0, 0, 4, 0, 1, 0, 2, 0, 0, 0, 0, 0, 0, 0, 1, 0, 4, 0, 2, 0, 0, 0, 0, 0, 0, 0)
+tile_set = ExtResource("1_survivor_series_D_night_market_tileset")
+
+[node name="grounddecor-puddle" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray(0, 0, 4, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 1, 0, 3, 0, 3, 0, 0, 0, 0, 0, 0, 0, 4, 0, 5, 0, 3, 0, 0, 0, 0, 0, 0, 0)
+tile_set = ExtResource("1_survivor_series_D_night_market_tileset")
+
+[node name="grounddecor-cracks" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray(0, 0, 1, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 5, 0, 2, 0, 4, 0, 0, 0, 0, 0, 0, 0, 2, 0, 5, 0, 4, 0, 0, 0, 0, 0, 0, 0)
+tile_set = ExtResource("1_survivor_series_D_night_market_tileset")
+
+[node name="grounddecor-zebra" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray(0, 0, 0, 0, 1, 0, 5, 0, 0, 0, 0, 0, 0, 0)
+tile_set = ExtResource("1_survivor_series_D_night_market_tileset")
+
+[node name="grounddecor-lantern-glow" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray(0, 0, 2, 0, 1, 0, 6, 0, 0, 0, 0, 0, 0, 0)
+tile_set = ExtResource("1_survivor_series_D_night_market_tileset")
+
+[node name="grounddecor-wet-reflection" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray(0, 0, 2, 0, 1, 0, 7, 0, 0, 0, 0, 0, 0, 0)
+tile_set = ExtResource("1_survivor_series_D_night_market_tileset")
+
+[node name="props-y-sorted" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="stall-fruit-01" type="Sprite2D" parent="props-y-sorted"]
+position = Vector2(768, 1024)
+texture = ExtResource("2_stall_fruit")
+centered = false
+offset = Vector2(-78, -111)
+metadata/bundle_id = "stall-fruit-01"
+metadata/prop = "stall-fruit"
+metadata/anchor_world = Vector2(768, 1024)
+metadata/anchor_px = Vector2(78, 111)
+metadata/sort_y = 1024.0
+metadata/solid = true
+metadata/occlusion = "tall"
+metadata/contact = "base_contact"
+metadata/flip_x = false
+
+[node name="stall-snack-01" type="Sprite2D" parent="props-y-sorted"]
+position = Vector2(2304, 1024)
+texture = ExtResource("3_stall_snack")
+centered = false
+offset = Vector2(-85, -111)
+metadata/bundle_id = "stall-snack-01"
+metadata/prop = "stall-snack"
+metadata/anchor_world = Vector2(2304, 1024)
+metadata/anchor_px = Vector2(85, 111)
+metadata/sort_y = 1024.0
+metadata/solid = true
+metadata/occlusion = "tall"
+metadata/contact = "base_contact"
+metadata/flip_x = false
+
+[node name="lantern-post-01" type="Sprite2D" parent="props-y-sorted"]
+position = Vector2(1280, 768)
+texture = ExtResource("4_lantern_post")
+centered = false
+offset = Vector2(-24, -143)
+metadata/bundle_id = "lantern-post-01"
+metadata/prop = "lantern_post"
+metadata/anchor_world = Vector2(1280, 768)
+metadata/anchor_px = Vector2(24, 143)
+metadata/sort_y = 768.0
+metadata/solid = true
+metadata/occlusion = "tall"
+metadata/contact = "base_contact"
+metadata/flip_x = false
+
+[node name="planter-01" type="Sprite2D" parent="props-y-sorted"]
+position = Vector2(2304, 2560)
+texture = ExtResource("5_planter")
+centered = false
+offset = Vector2(-32, -63)
+metadata/bundle_id = "planter-01"
+metadata/prop = "planter"
+metadata/anchor_world = Vector2(2304, 2560)
+metadata/anchor_px = Vector2(32, 63)
+metadata/sort_y = 2560.0
+metadata/solid = true
+metadata/occlusion = "low"
+metadata/contact = "base_contact"
+metadata/flip_x = false
+
+[node name="cone-01" type="Sprite2D" parent="props-y-sorted"]
+position = Vector2(768, 2560)
+texture = ExtResource("6_cone")
+centered = false
+offset = Vector2(-12, -31)
+metadata/bundle_id = "cone-01"
+metadata/prop = "cone"
+metadata/anchor_world = Vector2(768, 2560)
+metadata/anchor_px = Vector2(12, 31)
+metadata/sort_y = 2560.0
+metadata/solid = true
+metadata/occlusion = "low"
+metadata/contact = "base_contact"
+metadata/flip_x = false
+
+[node name="bollard-01" type="Sprite2D" parent="props-y-sorted"]
+position = Vector2(2816, 2560)
+texture = ExtResource("7_bollard")
+centered = false
+offset = Vector2(-10, -49)
+metadata/bundle_id = "bollard-01"
+metadata/prop = "bollard"
+metadata/anchor_world = Vector2(2816, 2560)
+metadata/anchor_px = Vector2(10, 49)
+metadata/sort_y = 2560.0
+metadata/solid = true
+metadata/occlusion = "low"
+metadata/contact = "base_contact"
+metadata/flip_x = false
+
+[node name="parked-scooter-01" type="Sprite2D" parent="props-y-sorted"]
+position = Vector2(1280, 2816)
+texture = ExtResource("8_parked_scooter")
+centered = false
+offset = Vector2(-45, -79)
+metadata/bundle_id = "parked-scooter-01"
+metadata/prop = "parked_scooter"
+metadata/anchor_world = Vector2(1280, 2816)
+metadata/anchor_px = Vector2(45, 79)
+metadata/sort_y = 2816.0
+metadata/solid = true
+metadata/occlusion = "low"
+metadata/contact = "base_contact"
+metadata/flip_x = false
+
+[node name="fruit-crate-01" type="Sprite2D" parent="props-y-sorted"]
+position = Vector2(2304, 2816)
+texture = ExtResource("9_fruit_crate")
+centered = false
+offset = Vector2(-20, -31)
+metadata/bundle_id = "fruit-crate-01"
+metadata/prop = "fruit_crate"
+metadata/anchor_world = Vector2(2304, 2816)
+metadata/anchor_px = Vector2(20, 31)
+metadata/sort_y = 2816.0
+metadata/solid = true
+metadata/occlusion = "low"
+metadata/contact = "base_contact"
+metadata/flip_x = false
+
+[node name="collision" type="StaticBody2D" parent="."]
+metadata/actor_radius = 12.0
+metadata/y_squash = 1.0
+metadata/walk_regions = [{"polygon": PackedVector2Array(0, 0, 3072, 0, 3072, 3072, 0, 3072), "holes": []}]
+
+[node name="footprint_stall-fruit-01" type="CollisionShape2D" parent="collision"]
+position = Vector2(754, 1016)
+shape = SubResource("RectangleShape2D_0")
+metadata/object = "stall-fruit-01"
+
+[node name="footprint_stall-snack-01" type="CollisionShape2D" parent="collision"]
+position = Vector2(2283, 1016)
+shape = SubResource("RectangleShape2D_1")
+metadata/object = "stall-snack-01"
+
+[node name="footprint_lantern-post-01" type="CollisionShape2D" parent="collision"]
+position = Vector2(1288, 762)
+shape = SubResource("RectangleShape2D_2")
+metadata/object = "lantern-post-01"
+
+[node name="footprint_planter-01" type="CollisionShape2D" parent="collision"]
+position = Vector2(2304, 2552)
+shape = SubResource("RectangleShape2D_3")
+metadata/object = "planter-01"
+
+[node name="footprint_cone-01" type="CollisionShape2D" parent="collision"]
+position = Vector2(768, 2555)
+shape = SubResource("RectangleShape2D_4")
+metadata/object = "cone-01"
+
+[node name="footprint_bollard-01" type="CollisionShape2D" parent="collision"]
+position = Vector2(2816, 2555)
+shape = SubResource("RectangleShape2D_5")
+metadata/object = "bollard-01"
+
+[node name="footprint_parked-scooter-01" type="CollisionShape2D" parent="collision"]
+position = Vector2(1283, 2809)
+shape = SubResource("RectangleShape2D_6")
+metadata/object = "parked-scooter-01"
+
+[node name="footprint_fruit-crate-01" type="CollisionShape2D" parent="collision"]
+position = Vector2(2304, 2809)
+shape = SubResource("RectangleShape2D_7")
+metadata/object = "fruit-crate-01"
+
+[node name="markers" type="Node2D" parent="."]
+
+[node name="spawn-c" type="Marker2D" parent="markers"]
+position = Vector2(1536, 1536)
+metadata/kind = "spawn"
+metadata/facing = "se"

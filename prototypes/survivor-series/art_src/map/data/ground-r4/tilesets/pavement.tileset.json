@@ -1,0 +1,61 @@
+{
+  "schema": "generate2dmap.tileset.v1",
+  "id": "pavement",
+  "image": "../../../ground/pavement.png",
+  "sha256": "46f0ba08e49c1b3aa5ae7ed9eee8a0145f25b3caf5c42fbd6ddcd8b6cd3783df",
+  "tile_size": [
+    512,
+    512
+  ],
+  "columns": 1,
+  "kind": "flat",
+  "materials": [
+    "pavement"
+  ],
+  "tiles": [
+    {
+      "index": 0,
+      "variant": 0,
+      "properties": {
+        "walkable": true
+      }
+    }
+  ],
+  "seamless_verified": false,
+  "seam_qc": {
+    "policy": "seamless",
+    "ratio_x": 1.07327,
+    "ratio_y": 1.223259,
+    "max_ratio": 1.223259,
+    "threshold": 1.25,
+    "warnings": [],
+    "exact_proof": false,
+    "note": "Wrap ratios pass; exact image seam equality is not proven."
+  },
+  "provenance": {
+    "art_source": "host_image",
+    "route": "local:codex-cli",
+    "generator": {
+      "name": "extract_terrain_tiles.py",
+      "version": "0.4.0"
+    },
+    "source_terrain_bundle": {
+      "path": "../../../ground/r4/pavement-terrain-bundle.json"
+    },
+    "prompt": {
+      "path": "../../../ground/r4/raw-pavement-retry/prompt.txt"
+    }
+  },
+  "qc_source": {
+    "status": "pass",
+    "warnings": 0,
+    "contrast": 0.074962,
+    "threshold": 0.035,
+    "wrap_seam_ratio": {
+      "x": 1.07327,
+      "y": 1.223259
+    },
+    "max_seam_ratio": 1.25,
+    "seamless_verified": false
+  }
+}

@@ -1,0 +1,426 @@
+{
+  "schema": "generate2dmap.engine_export.v1",
+  "tool": {
+    "name": "export_godot",
+    "version": "0.4.0"
+  },
+  "engine": {
+    "name": "godot",
+    "target": "4.3+",
+    "format": 3,
+    "verified": "parse-level (files re-read by this tool); Godot editor import not run"
+  },
+  "bundle": {
+    "path": "../data/C-night-market.map-bundle.json",
+    "sha256": "3b7a07590b71bd2abaab34331dc3dbb752809a46379e2b7f3098c83494e5fcc2",
+    "bytes": 14568
+  },
+  "files": {
+    "scene": "survivor-series-C-night-market.tscn",
+    "tileset": "survivor-series-C-night-market.tileset.tres"
+  },
+  "assets": [
+    {
+      "role": "tileset",
+      "id": "pavement",
+      "path": "assets/tilesets/pavement.png",
+      "sha256": "34a6e5745fde6b816976b69521664d5c78685ee06bf26f95606b030dd5341155",
+      "source": "../ground/pavement.png"
+    },
+    {
+      "role": "tileset",
+      "id": "overlay-manhole",
+      "path": "assets/tilesets/overlay-manhole.png",
+      "sha256": "0ae95241f369d70493424367efa3353b0d6d14ab9467593b13676484c12c43cc",
+      "source": "../ground/manhole.png"
+    },
+    {
+      "role": "tileset",
+      "id": "overlay-drain-grate",
+      "path": "assets/tilesets/overlay-drain-grate.png",
+      "sha256": "935551a711188e6ee9a37901be789f1f1dbd3950bf963f4a2019345c7212fc2e",
+      "source": "../ground/drain_grate.png"
+    },
+    {
+      "role": "tileset",
+      "id": "overlay-puddle",
+      "path": "assets/tilesets/overlay-puddle.png",
+      "sha256": "4e192d39dd75c6bea60c6001ca27ad4e27f38e4b4bdcea214dae9d7156495d32",
+      "source": "../ground/puddle.png"
+    },
+    {
+      "role": "tileset",
+      "id": "overlay-cracks",
+      "path": "assets/tilesets/overlay-cracks.png",
+      "sha256": "beefc33354ff8b0f37f662b1430676d1adfadf5db0d4db918fd4a05ae09a19a0",
+      "source": "../ground/cracks.png"
+    },
+    {
+      "role": "tileset",
+      "id": "overlay-zebra",
+      "path": "assets/tilesets/overlay-zebra.png",
+      "sha256": "e5b4fd615d3fbf66d1578706b40cb175746e1850cce71589c2e84c719c1846b3",
+      "source": "../ground/zebra.png"
+    },
+    {
+      "role": "prop",
+      "id": "stall-fruit",
+      "path": "assets/props/stall-fruit.png",
+      "sha256": "c6914406146567bb7b77d8b430dc9fd93b82e0e9acfe375c6bf3284bac06b7df",
+      "source": "../props/stall-fruit.png"
+    },
+    {
+      "role": "prop",
+      "id": "stall-snack",
+      "path": "assets/props/stall-snack.png",
+      "sha256": "7564cd9ca219de7490f78728839a6d288b24537ecfb9f6b8283dbd217fb2c734",
+      "source": "../props/stall-snack.png"
+    },
+    {
+      "role": "prop",
+      "id": "lantern_post",
+      "path": "assets/props/lantern_post.png",
+      "sha256": "de2ba2ca85d2cf8cce75b5b7d04d6a55fe4caf41f6ec4c11de01c1afc68a25d4",
+      "source": "../props/lantern_post.png"
+    },
+    {
+      "role": "prop",
+      "id": "planter",
+      "path": "assets/props/planter.png",
+      "sha256": "2baddad69da8d0a506e5e3b75584c28eb23e8ec3f7b1189239988d55c6bff9eb",
+      "source": "../props/planter.png"
+    },
+    {
+      "role": "prop",
+      "id": "cone",
+      "path": "assets/props/cone.png",
+      "sha256": "e9775254b9930e62b0575947a30aaea586e7ef6c35450ab8f95933c8d9fd1e12",
+      "source": "../props/cone.png"
+    },
+    {
+      "role": "prop",
+      "id": "bollard",
+      "path": "assets/props/bollard.png",
+      "sha256": "f3dabba842fbf72fb439f4d36b84f882f81b0680702716b088cc9e6a49a9075c",
+      "source": "../props/bollard.png"
+    },
+    {
+      "role": "prop",
+      "id": "parked_scooter",
+      "path": "assets/props/parked_scooter.png",
+      "sha256": "b145550f72ba2a6d2189c432421bf9187f9af744be0a72fd4b45bb902dfb98c4",
+      "source": "../props/parked_scooter.png"
+    },
+    {
+      "role": "prop",
+      "id": "fruit_crate",
+      "path": "assets/props/fruit_crate.png",
+      "sha256": "d5d62c6026d9a41455e347ffdc740086b738b881a042f3061c3907997a820275",
+      "source": "../props/fruit_crate.png"
+    }
+  ],
+  "tilesets": [
+    {
+      "id": "pavement",
+      "source_id": 0,
+      "terrain_set": null,
+      "terrain_mode": null,
+      "inside_material": null,
+      "tiles": 1,
+      "physics_polygons": 0
+    },
+    {
+      "id": "overlay-manhole",
+      "source_id": 1,
+      "terrain_set": null,
+      "terrain_mode": null,
+      "inside_material": null,
+      "tiles": 1,
+      "physics_polygons": 0
+    },
+    {
+      "id": "overlay-drain-grate",
+      "source_id": 2,
+      "terrain_set": null,
+      "terrain_mode": null,
+      "inside_material": null,
+      "tiles": 1,
+      "physics_polygons": 0
+    },
+    {
+      "id": "overlay-puddle",
+      "source_id": 3,
+      "terrain_set": null,
+      "terrain_mode": null,
+      "inside_material": null,
+      "tiles": 1,
+      "physics_polygons": 0
+    },
+    {
+      "id": "overlay-cracks",
+      "source_id": 4,
+      "terrain_set": null,
+      "terrain_mode": null,
+      "inside_material": null,
+      "tiles": 1,
+      "physics_polygons": 0
+    },
+    {
+      "id": "overlay-zebra",
+      "source_id": 5,
+      "terrain_set": null,
+      "terrain_mode": null,
+      "inside_material": null,
+      "tiles": 1,
+      "physics_polygons": 0
+    }
+  ],
+  "layers": [
+    {
+      "name": "ground",
+      "kind": "tiles",
+      "node": "ground",
+      "cells": 36
+    },
+    {
+      "name": "grounddecor-manhole",
+      "kind": "tiles",
+      "node": "grounddecor-manhole",
+      "cells": 2
+    },
+    {
+      "name": "grounddecor-drain-grate",
+      "kind": "tiles",
+      "node": "grounddecor-drain-grate",
+      "cells": 2
+    },
+    {
+      "name": "grounddecor-puddle",
+      "kind": "tiles",
+      "node": "grounddecor-puddle",
+      "cells": 3
+    },
+    {
+      "name": "grounddecor-cracks",
+      "kind": "tiles",
+      "node": "grounddecor-cracks",
+      "cells": 3
+    },
+    {
+      "name": "grounddecor-zebra",
+      "kind": "tiles",
+      "node": "grounddecor-zebra",
+      "cells": 2
+    },
+    {
+      "name": "props-y-sorted",
+      "kind": "objects",
+      "node": "props-y-sorted",
+      "count": 8
+    }
+  ],
+  "counts": {
+    "objects": 8,
+    "solids": 0,
+    "footprints": 8,
+    "markers": 1,
+    "portals": 0,
+    "interactions": 0
+  },
+  "notExported": [
+    "camera: not exported (stays in the map bundle)"
+  ],
+  "warnings": [
+    "tileset pavement (flat) has no complete wang or blob_mask data; no terrain set was made",
+    "tileset overlay-manhole (flat) has no complete wang or blob_mask data; no terrain set was made",
+    "tileset overlay-drain-grate (flat) has no complete wang or blob_mask data; no terrain set was made",
+    "tileset overlay-puddle (flat) has no complete wang or blob_mask data; no terrain set was made",
+    "tileset overlay-cracks (flat) has no complete wang or blob_mask data; no terrain set was made",
+    "tileset overlay-zebra (flat) has no complete wang or blob_mask data; no terrain set was made"
+  ],
+  "qa": {
+    "status": "pass",
+    "method": "export_godot: read collision through forge_nav (the D2 blocking set), wrote the TileSet and scene, re-read both with a Godot text-resource parser and compared tiles (decoded tile_map_data), terrain peering bits, physics polygons, prop anchors (flip_h included), collision shapes (solids, rects, solid footprints) and marker positions with the bundle.",
+    "notProven": [
+      "Parse-level only: the files are re-read by this tool's own reader; the Godot editor import was not run.",
+      "Terrain peering bits follow the documented Wang/blob mapping; painting with Godot's terrain brush is not verified (the centre terrain of a mixed Wang tile is its majority corner material).",
+      "Non-circular ellipse solids and footprints become 32-sided polygons inscribed in the ellipse; walk regions ride as metadata, and the material map and nav grid are not exported (see notExported).",
+      "Collision shapes are the forge_nav blocking set at export time; Godot's physics (body shapes, margins, one-way collision) is not simulated here."
+    ],
+    "checks": [
+      {
+        "id": "tileset_parses",
+        "status": "pass",
+        "value": [],
+        "threshold": null
+      },
+      {
+        "id": "peering_bits_roundtrip",
+        "status": "pass",
+        "value": [],
+        "threshold": null
+      },
+      {
+        "id": "physics_polygons_roundtrip",
+        "status": "pass",
+        "value": [],
+        "threshold": null
+      },
+      {
+        "id": "scene_parses",
+        "status": "pass",
+        "value": [],
+        "threshold": null
+      },
+      {
+        "id": "tile_map_data_roundtrip",
+        "status": "pass",
+        "value": [],
+        "threshold": null
+      },
+      {
+        "id": "prop_anchors_roundtrip",
+        "status": "pass",
+        "value": [],
+        "threshold": {
+          "max_error_px": 0.001
+        }
+      },
+      {
+        "id": "collision_shapes_roundtrip",
+        "status": "pass",
+        "value": [],
+        "threshold": {
+          "shapes": 8,
+          "max_error_px": 0.001
+        }
+      },
+      {
+        "id": "markers_roundtrip",
+        "status": "pass",
+        "value": [],
+        "threshold": {
+          "max_error_px": 0.001
+        }
+      },
+      {
+        "id": "assets_identical",
+        "status": "pass",
+        "value": [],
+        "threshold": null
+      },
+      {
+        "id": "objects_in_world",
+        "status": "pass",
+        "value": [],
+        "threshold": {
+          "world": [
+            768.0,
+            768.0
+          ]
+        }
+      }
+    ],
+    "inputs": [
+      {
+        "path": "../../../Users/peter/repo/agent-sprite-forge/.forge/survivor-assets-20261009/C/map/data/C-night-market.map-bundle.json",
+        "sha256": "3b7a07590b71bd2abaab34331dc3dbb752809a46379e2b7f3098c83494e5fcc2",
+        "bytes": 14568
+      }
+    ],
+    "outputs": [
+      {
+        "path": "survivor-series-C-night-market.tscn",
+        "sha256": "c9b7c07436019d675800d014d5f896492d31aed1b29e26dbfe0c86e7ea7947be",
+        "bytes": 10108
+      },
+      {
+        "path": "survivor-series-C-night-market.tileset.tres",
+        "sha256": "28dca8643f12cc943f30fd6233783ff844761b60a19b8f1fb2c230a1f557cbfc",
+        "bytes": 2385
+      },
+      {
+        "path": "assets/tilesets/pavement.png",
+        "sha256": "34a6e5745fde6b816976b69521664d5c78685ee06bf26f95606b030dd5341155",
+        "bytes": 47420
+      },
+      {
+        "path": "assets/tilesets/overlay-manhole.png",
+        "sha256": "0ae95241f369d70493424367efa3353b0d6d14ab9467593b13676484c12c43cc",
+        "bytes": 14080
+      },
+      {
+        "path": "assets/tilesets/overlay-drain-grate.png",
+        "sha256": "935551a711188e6ee9a37901be789f1f1dbd3950bf963f4a2019345c7212fc2e",
+        "bytes": 7937
+      },
+      {
+        "path": "assets/tilesets/overlay-puddle.png",
+        "sha256": "4e192d39dd75c6bea60c6001ca27ad4e27f38e4b4bdcea214dae9d7156495d32",
+        "bytes": 4730
+      },
+      {
+        "path": "assets/tilesets/overlay-cracks.png",
+        "sha256": "beefc33354ff8b0f37f662b1430676d1adfadf5db0d4db918fd4a05ae09a19a0",
+        "bytes": 3928
+      },
+      {
+        "path": "assets/tilesets/overlay-zebra.png",
+        "sha256": "e5b4fd615d3fbf66d1578706b40cb175746e1850cce71589c2e84c719c1846b3",
+        "bytes": 13195
+      },
+      {
+        "path": "assets/props/stall-fruit.png",
+        "sha256": "c6914406146567bb7b77d8b430dc9fd93b82e0e9acfe375c6bf3284bac06b7df",
+        "bytes": 26198
+      },
+      {
+        "path": "assets/props/stall-snack.png",
+        "sha256": "7564cd9ca219de7490f78728839a6d288b24537ecfb9f6b8283dbd217fb2c734",
+        "bytes": 24023
+      },
+      {
+        "path": "assets/props/lantern_post.png",
+        "sha256": "de2ba2ca85d2cf8cce75b5b7d04d6a55fe4caf41f6ec4c11de01c1afc68a25d4",
+        "bytes": 9335
+      },
+      {
+        "path": "assets/props/planter.png",
+        "sha256": "2baddad69da8d0a506e5e3b75584c28eb23e8ec3f7b1189239988d55c6bff9eb",
+        "bytes": 7593
+      },
+      {
+        "path": "assets/props/cone.png",
+        "sha256": "e9775254b9930e62b0575947a30aaea586e7ef6c35450ab8f95933c8d9fd1e12",
+        "bytes": 1314
+      },
+      {
+        "path": "assets/props/bollard.png",
+        "sha256": "f3dabba842fbf72fb439f4d36b84f882f81b0680702716b088cc9e6a49a9075c",
+        "bytes": 1473
+      },
+      {
+        "path": "assets/props/parked_scooter.png",
+        "sha256": "b145550f72ba2a6d2189c432421bf9187f9af744be0a72fd4b45bb902dfb98c4",
+        "bytes": 11426
+      },
+      {
+        "path": "assets/props/fruit_crate.png",
+        "sha256": "d5d62c6026d9a41455e347ffdc740086b738b881a042f3061c3907997a820275",
+        "bytes": 2550
+      }
+    ],
+    "tool": {
+      "name": "export_godot",
+      "version": "0.4.0"
+    }
+  },
+  "portable_paths": {
+    "project_root": ".",
+    "main_scene": "res://survivor-series-C-night-market.tscn",
+    "tileset": "res://survivor-series-C-night-market.tileset.tres",
+    "asset_root": "res://assets/",
+    "external_runtime_paths": [],
+    "godot_editor_import": "root_pending"
+  }
+}

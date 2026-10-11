@@ -1,0 +1,58 @@
+{
+  "schema": "generate2dmap.tileset.v1",
+  "id": "overlay-puddle",
+  "image": "../../../ground/puddle.png",
+  "sha256": "bb5557daeeeb36c7e9a15a5b11ec9afa1ac08b9b24837ac253fcb696bcb61535",
+  "tile_size": [
+    512,
+    512
+  ],
+  "columns": 1,
+  "kind": "flat",
+  "materials": [
+    "puddle"
+  ],
+  "tiles": [
+    {
+      "index": 0,
+      "variant": 0,
+      "properties": {
+        "walkable": true
+      }
+    }
+  ],
+  "seamless_verified": false,
+  "seam_qc": {
+    "policy": "isolated",
+    "exact_proof": false,
+    "note": "Transparent overlay; no repeat claim."
+  },
+  "provenance": {
+    "art_source": "reused-existing",
+    "route": "retained from ground/v1",
+    "generator": {
+      "name": "extract_terrain_tiles.py",
+      "version": "0.4.0"
+    },
+    "source_terrain_bundle": {
+      "path": "../../../ground/v1/ground-kit.json"
+    },
+    "prompt": {
+      "path": "../../../ground/v1/../v1/prompts/puddle-clean.prompt.txt"
+    }
+  },
+  "qc_source": {
+    "status": "pass",
+    "warnings": 0,
+    "contrast": 0.158077,
+    "source_qc": "pass",
+    "retained_artwork": true,
+    "canvas_padded_without_scaling": true,
+    "alpha_bbox": [
+      220,
+      246,
+      295,
+      274
+    ]
+  }
+}

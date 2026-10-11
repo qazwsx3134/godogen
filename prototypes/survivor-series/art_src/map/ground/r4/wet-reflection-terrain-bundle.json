@@ -1,0 +1,179 @@
+{
+  "schema": "generate2dmap.terrain_tile_bundle.v2",
+  "source": {
+    "path": "raw-wet-reflection/generated.png",
+    "sha256": "944039394f238d1ff8c6bf10231d828b0914696eb8dbca6a01d0f9ef91926322",
+    "bytes": 115629,
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGBA",
+    "bit_depth": 8,
+    "conversion": "none"
+  },
+  "prompt": {
+    "path": "raw-wet-reflection/prompt.txt",
+    "sha256": "860c7a0da61f470434919c40ab3abd9c1dc44caedb992cd4de27ed991a427513",
+    "bytes": 1155
+  },
+  "grid": {
+    "rows": 1,
+    "cols": 1,
+    "rounding": "exact",
+    "source_cell_size": [
+      1254,
+      1254
+    ],
+    "output_tile_size": [
+      512,
+      512
+    ]
+  },
+  "tile": {
+    "shape": "square",
+    "layer": "overlay",
+    "footprint": [
+      [
+        0.0,
+        0.0
+      ],
+      [
+        512.0,
+        0.0
+      ],
+      [
+        512.0,
+        512.0
+      ],
+      [
+        0.0,
+        512.0
+      ]
+    ]
+  },
+  "terrains": {
+    "wet-reflection": {
+      "display_name": "wet-reflection",
+      "row": 0,
+      "kind": "fill",
+      "variants": [
+        {
+          "path": "extract-wet-reflection/wet-reflection-1.png",
+          "source_cell": [
+            0,
+            0
+          ],
+          "source_box": [
+            0,
+            0,
+            1254,
+            1254
+          ],
+          "resized": true,
+          "mean_luminance": 0.68925,
+          "contrast": 0.142226,
+          "visible_fraction": 0.011036,
+          "sha256": "39188b02da72b9b903cd95fa8c6e8fd7c65b273ac9200c0810f3ea23910814b2"
+        }
+      ],
+      "variant_difference_min": 1.0
+    }
+  },
+  "processing": {
+    "background_mode": "native_alpha",
+    "background_mode_requested": "native_alpha",
+    "cell_shape": "square",
+    "resampler": "lanczos",
+    "grid_rounding": "exact",
+    "edge_policy": "isolated",
+    "wrap_aware_resize": false
+  },
+  "qc": {
+    "min_contrast": 0.035,
+    "min_variant_difference": 0.025,
+    "max_border_delta": 0.1,
+    "min_shape_coverage": 0.97,
+    "max_shape_spill": 0.03,
+    "max_seam_ratio": null,
+    "warnings": [],
+    "passed": true,
+    "seamless_verified": false
+  },
+  "qa": {
+    "status": "pass",
+    "method": "Grid slices of the atlas, background handled per --background-mode, resized to the tile size (Lanczos or nearest; wrap-aware for the seamless policy). Luminance contrast and mean thumbnail differences; drawn frames along opposite edges; footprint coverage and spill for iso/hex base tiles; for the seamless policy, premultiplied wrap and Wang-join steps normalised by the art's own steps near each edge.",
+    "notProven": [
+      "visual quality, style match and readability at game zoom",
+      "that each variant reads as the named terrain",
+      "seamlessness: no exact seam proof exists for image tiles (seamless_verified stays false)"
+    ],
+    "checks": [
+      {
+        "id": "contrast",
+        "status": "pass",
+        "value": 0.142226,
+        "threshold": 0.035
+      },
+      {
+        "id": "variant_difference",
+        "status": "pass",
+        "value": 1.0,
+        "threshold": 0.025
+      },
+      {
+        "id": "border_frame",
+        "status": "skipped",
+        "value": null,
+        "threshold": 0.1
+      },
+      {
+        "id": "shape_coverage",
+        "status": "skipped",
+        "value": null,
+        "threshold": 0.97
+      },
+      {
+        "id": "shape_spill",
+        "status": "skipped",
+        "value": null,
+        "threshold": 0.03
+      },
+      {
+        "id": "wrap_seams",
+        "status": "skipped",
+        "value": null,
+        "threshold": null
+      },
+      {
+        "id": "wang_seams",
+        "status": "skipped",
+        "value": null,
+        "threshold": null
+      }
+    ],
+    "inputs": [
+      {
+        "path": "raw-wet-reflection/generated.png",
+        "sha256": "944039394f238d1ff8c6bf10231d828b0914696eb8dbca6a01d0f9ef91926322",
+        "bytes": 115629
+      },
+      {
+        "path": "raw-wet-reflection/prompt.txt",
+        "sha256": "860c7a0da61f470434919c40ab3abd9c1dc44caedb992cd4de27ed991a427513",
+        "bytes": 1155
+      }
+    ],
+    "outputs": [
+      {
+        "path": "extract-wet-reflection/wet-reflection-1.png",
+        "sha256": "39188b02da72b9b903cd95fa8c6e8fd7c65b273ac9200c0810f3ea23910814b2",
+        "bytes": 18160
+      }
+    ],
+    "tool": {
+      "name": "extract_terrain_tiles.py",
+      "version": "0.4.0"
+    }
+  }
+}
