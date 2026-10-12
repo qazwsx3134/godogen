@@ -15,9 +15,17 @@
 
 `heroes/man/master/` 是沒用到的洋紅版，可刪。
 
-## 下一步（2026-10-12 02:30 已派 Codex 執行中）
-- 派工單 `BRIEF-assets-3.md` → 報告 `ASSETS-REPORT-4.md`。Codex 在 Herdr pane `wJ:p12`（gpt-6-luna max、`--approve-for-me`，在這台 WSL 跑；Python 用 `uv run --no-project --with-requirements`，不建 venv）。
-- 接手：先看 `ASSETS-REPORT-4.md` 是否存在、pane 最後一行是 `DONE` 或 `BLOCKED`；再看比較圖給使用者挑。
+## 下一步（2026-10-12 16:30 更新：A 已交，B 被使用者暫停未開始）
+- 派工單 `BRIEF-assets-3.md` → 報告 `ASSETS-REPORT-4.md`。Codex session 已結束（Mac 上 pane `wT:pH`，可 `codex resume 01a11ad1-0e7b-7262-9fa1-59ce67e608d9`）。
+- A 地面驗收（Claude 看圖）：新磚 512 px、低對比、菱形清楚，比舊版好很多；Godot 4.7 匯入 0 錯。待修：
+  1. **水平接縫**：`map/preview/ground-repeat-3x3.png` 在 y=512／1024 每列都有灰縫錯位的小缺口（QC Y 比 1.22，逼近上限 1.25；`seamless_verified=false`），遊戲裡每 512 px 會出現一條斷線。
+  2. **濕地反光**往燈籠上方飄，看起來像火星／煙，不像地上的倒影；倒影應落在燈籠底座附近的地面。示意圖裡暖光暈也離燈籠太遠（只是擺放問題）。
+  3. 斑馬線亮米白、對比偏高（小問題，可在 Godot 調 modulate）。
+- 2026-10-12 使用者同意修 A 的 1、2 並開工 B → 派工單 `BRIEF-assets-4.md`（Mac 路徑）→ 報告 `ASSETS-REPORT-5.md`。Codex 在 Herdr pane `wT:pH`（agent 名 `art7b`，gpt-6-luna max、`--approve-for-me`）。
+- **2026-10-12 第七輪結果：BLOCKED（使用者出門，依指示停止）**
+  - A 已完成：地磚接縫重修（wrap QC x 1.013／y 1.008，原本 y 1.22）、濕地反光改成從燈座往畫面下方延伸的暖紅橘光帶；Godot 4.7（Mac）匯入 0 錯。圖：`map/preview/pavement-comparison-r7.png`、`ground-seam-y512-3x.png`、`wet-reflection-comparison-r7.png`、`ground-layered-hero90.png`。
+  - Claude 看圖：反光方向與位置正確；接縫大致消失，但 `ground-seam-y512-3x.png` 縮圖上仍隱約有一兩處小缺口，下次放大確認後再請使用者定案。
+  - B（流氓 3 張候選）**未開始**。續做：叫 Codex 只做 `BRIEF-assets-4.md` 的 B 段，報告接著寫進 `ASSETS-REPORT-5.md` 的 B 段。
 - 原始規格（已寫進派工單）：
 1. **地面重做**（只做地面，道具保留）。問題：地磚只有 128×128、橘色反光條紋鋪滿、對比太高（敵人與煙霧會看不清）、重複一眼可見、斜菱形鋪磚看不出來、斑馬線糊。要求：
    - 無縫地磚 512 px 以上（遊戲尺寸），低對比、中性暖灰褐，斜菱形鋪磚在遊戲尺寸清楚可辨。

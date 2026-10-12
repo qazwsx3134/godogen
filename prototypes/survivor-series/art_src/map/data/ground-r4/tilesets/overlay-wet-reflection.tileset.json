@@ -2,7 +2,7 @@
   "schema": "generate2dmap.tileset.v1",
   "id": "overlay-wet-reflection",
   "image": "../../../ground/wet_reflection.png",
-  "sha256": "173e721b6b1388c95a8051dc8a6028bf63d63c5bf61f621e4da3aeefb834ffe9",
+  "sha256": "cd24d593698b55300f185b06e297b17e8a639b5900ba7c69b1187864f0fdce94",
   "tile_size": [
     512,
     512
@@ -35,25 +35,26 @@
       "version": "0.4.0"
     },
     "source_terrain_bundle": {
-      "path": "../../../ground/r4/wet-reflection-terrain-bundle.json"
+      "path": "../../../ground/extract-wet-reflection-r7-v2/terrain-bundle.json"
     },
     "prompt": {
-      "path": "../../../ground/r4/raw-wet-reflection/prompt.txt"
+      "path": "../../../ground/raw-wet-reflection-r7/prompt.txt"
     }
   },
   "qc_source": {
     "status": "pass",
     "warnings": 0,
-    "contrast": 0.142226,
+    "contrast": 0.101742,
     "threshold": 0.035,
     "alpha_bbox": [
-      231,
-      148,
-      292,
-      382
+      207,
+      260,
+      304,
+      464
     ],
-    "visible_fraction": 0.009998,
+    "visible_fraction": 0.050591,
     "edge_policy": "isolated",
-    "post_extract_alpha_scale": 0.42
+    "source_qc": "pass",
+    "route": "local:codex-cli"
   }
 }

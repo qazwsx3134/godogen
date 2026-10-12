@@ -16,7 +16,7 @@
   ],
   "tileset": "tilesets/pavement.tileset.json",
   "tile_image": "../../ground/pavement.png",
-  "tile_image_sha256": "46f0ba08e49c1b3aa5ae7ed9eee8a0145f25b3caf5c42fbd6ddcd8b6cd3783df",
+  "tile_image_sha256": "cae1c5b8cba4e94e8da9a0f0148a793469471777185c5f061afd1830ddf891d0",
   "data": [
     [
       0,
@@ -68,13 +68,13 @@
     ]
   ],
   "qc": {
-    "source": "../../ground/r4/pavement-terrain-bundle.json",
+    "source": "../../ground/extract-pavement-r7-v2/terrain-bundle.json",
     "status": "pass",
     "warnings": 0,
-    "contrast": 0.074962,
+    "contrast": 0.071717,
     "wrap_seam_ratio": {
-      "x": 1.07327,
-      "y": 1.223259
+      "x": 1.013484,
+      "y": 1.007589
     },
     "threshold": 1.25,
     "seamless_verified": false

@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 2,
+  "provider": "openai",
+  "kind": "image",
+  "route": "codex-cli",
+  "requestedModel": "codex-image_gen",
+  "options": {
+    "tool": "image_gen"
+  },
+  "promptSha256": "34274e5901c8924ad0912228a0967efb42143eeb8d1011a5fb778b1e270cb32b",
+  "references": [
+    {
+      "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+      "bytes": 405203
+    },
+    {
+      "sha256": "46f0ba08e49c1b3aa5ae7ed9eee8a0145f25b3caf5c42fbd6ddcd8b6cd3783df",
+      "bytes": 546216
+    },
+    {
+      "sha256": "de2ba2ca85d2cf8cce75b5b7d04d6a55fe4caf41f6ec4c11de01c1afc68a25d4",
+      "bytes": 9335
+    }
+  ],
+  "fingerprint": "f48e849c51ff3518e4b54cd082a27f2d69ffdec7656c5f74b92159191eb353f4",
+  "estimate": {
+    "usd": 0.0,
+    "currency": "USD",
+    "pricesVersion": "2026-10-06",
+    "items": [],
+    "basis": "subscription quota call: no per-call USD price; counted by call caps"
+  },
+  "consent": {
+    "provider": "openai",
+    "model": "codex-image_gen",
+    "calls": 1,
+    "estimateUsd": 0.0,
+    "route": "codex-cli",
+    "quota": true,
+    "account": "the user's own Codex sign-in (ChatGPT)",
+    "note": "uses the subscription quota of that sign-in, never API credit"
+  },
+  "artSource": "host_image",
+  "execution": "execute",
+  "status": "done",
+  "outputDir": "../../art_src/map/ground/raw-wet-reflection-r7",
+  "receipt": {
+    "startedAt": "2026-10-12T08:57:19.902Z",
+    "submittedAt": "2026-10-12T08:57:19.905Z",
+    "completedAt": "2026-10-12T08:58:30.690Z",
+    "wallMs": 70787,
+    "providerMs": 70770,
+    "attempt": 2,
+    "purpose": "BRIEF-assets-4 A wet lantern reflection correction",
+    "toolVersion": "cli_media/0.4.0",
+    "outcomeCode": "ok"
+  },
+  "ledger": {
+    "projectDir": "../..",
+    "reservationId": "1baa7fa1ade047029b18819f9d1f8a78",
+    "status": "done"
+  },
+  "cliRun": {
+    "tool": "codex",
+    "runId": "e8eff014458f4c3cad7cef617f98fd3c",
+    "cwd": "<tmp>/forge-cli-e8eff014458f-ab7d8ce4",
+    "startedAt": "2026-10-12T08:57:19.902Z",
+    "version": "0.162.1",
+    "versionText": "codex-cli 0.162.1",
+    "recipe": "codex-exec-imagegen/1",
+    "home": "CODEX_HOME",
+    "verifiedBefore": false,
+    "threadId": "01a12f54-a9ee-7580-9588-0c01c0ac5b6a"
+  },
+  "adoption": {
+    "method": "native-run-folder",
+    "source": "CODEX_HOME/generated_images/01a12f54-a9ee-7580-9588-0c01c0ac5b6a/exec-df496d14-0e9b-4818-9726-f60d89959c39.png",
+    "sourceSha256": "96048d17a258695df238b9843455eef8625079b7a5d0fc58498c65eb6a1a64bf",
+    "sourceMtime": "2026-10-12T08:58:21Z",
+    "freshAfter": "2026-10-12T08:57:19.905Z",
+    "checks": [
+      "inside the CLI's own folder for this run",
+      "no symlink or junction",
+      "regular file of a sane size",
+      "newer than the run",
+      "magic bytes",
+      "decodes",
+      "exactly one output",
+      "exclusive copy with matching sha256"
+    ],
+    "finalAnswerNamesFile": true
+  },
+  "artifact": {
+    "path": "../../art_src/map/ground/raw-wet-reflection-r7/generated.png",
+    "sha256": "96048d17a258695df238b9843455eef8625079b7a5d0fc58498c65eb6a1a64bf",
+    "bytes": 1272429,
+    "format": "PNG",
+    "size": [
+      1254,
+      1254
+    ]
+  }
+}

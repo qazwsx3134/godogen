@@ -2,7 +2,7 @@
   "schema": "generate2dmap.tileset.v1",
   "id": "pavement",
   "image": "../../../ground/pavement.png",
-  "sha256": "46f0ba08e49c1b3aa5ae7ed9eee8a0145f25b3caf5c42fbd6ddcd8b6cd3783df",
+  "sha256": "cae1c5b8cba4e94e8da9a0f0148a793469471777185c5f061afd1830ddf891d0",
   "tile_size": [
     512,
     512
@@ -24,13 +24,13 @@
   "seamless_verified": false,
   "seam_qc": {
     "policy": "seamless",
-    "ratio_x": 1.07327,
-    "ratio_y": 1.223259,
-    "max_ratio": 1.223259,
+    "ratio_x": 1.013484,
+    "ratio_y": 1.007589,
+    "max_ratio": 1.013484,
     "threshold": 1.25,
     "warnings": [],
     "exact_proof": false,
-    "note": "Wrap ratios pass; exact image seam equality is not proven."
+    "note": "Strict wrap QC passed; visual 3x3 repeat inspected. Exact pixel equality is not proven."
   },
   "provenance": {
     "art_source": "host_image",
@@ -40,20 +40,20 @@
       "version": "0.4.0"
     },
     "source_terrain_bundle": {
-      "path": "../../../ground/r4/pavement-terrain-bundle.json"
+      "path": "../../../ground/extract-pavement-r7-v2/terrain-bundle.json"
     },
     "prompt": {
-      "path": "../../../ground/r4/raw-pavement-retry/prompt.txt"
+      "path": "../../../ground/raw-ground/prompt.txt"
     }
   },
   "qc_source": {
     "status": "pass",
     "warnings": 0,
-    "contrast": 0.074962,
+    "contrast": 0.071717,
     "threshold": 0.035,
     "wrap_seam_ratio": {
-      "x": 1.07327,
-      "y": 1.223259
+      "x": 1.013484,
+      "y": 1.007589
     },
     "max_seam_ratio": 1.25,
     "seamless_verified": false

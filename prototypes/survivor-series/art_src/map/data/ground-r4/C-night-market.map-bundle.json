@@ -15,7 +15,7 @@
     {
       "id": "pavement",
       "manifest": "tilesets/pavement.tileset.json",
-      "sha256": "26f09be0ecc2ab7f941cd2aa675dfd91a5378e8c841aaa5a60872f1391bb52ad"
+      "sha256": "f00db5d8b64e9393ae6d49b0646fc03e28bf85d07208b2db057bc3576c575148"
     },
     {
       "id": "overlay-manhole",
@@ -50,7 +50,7 @@
     {
       "id": "overlay-wet-reflection",
       "manifest": "tilesets/overlay-wet-reflection.tileset.json",
-      "sha256": "5dc7e959097ba30ff3c8ca9c2cab2e57b512d9a28b33570ccfa6b17dfe40fc6b"
+      "sha256": "0fa1a5f59f3b460e1f15c11a4c9051a144aa1132a3caffbd57f2288a755c143a"
     }
   ],
   "layers": [

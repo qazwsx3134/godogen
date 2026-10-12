@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 2,
+  "provider": "openai",
+  "kind": "image",
+  "route": "codex-cli",
+  "requestedModel": "codex-image_gen",
+  "options": {
+    "tool": "image_gen"
+  },
+  "promptSha256": "34274e5901c8924ad0912228a0967efb42143eeb8d1011a5fb778b1e270cb32b",
+  "references": [
+    {
+      "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+      "bytes": 405203
+    },
+    {
+      "sha256": "46f0ba08e49c1b3aa5ae7ed9eee8a0145f25b3caf5c42fbd6ddcd8b6cd3783df",
+      "bytes": 546216
+    },
+    {
+      "sha256": "de2ba2ca85d2cf8cce75b5b7d04d6a55fe4caf41f6ec4c11de01c1afc68a25d4",
+      "bytes": 9335
+    }
+  ],
+  "fingerprint": "f48e849c51ff3518e4b54cd082a27f2d69ffdec7656c5f74b92159191eb353f4",
+  "estimate": {
+    "usd": 0.0,
+    "currency": "USD",
+    "pricesVersion": "2026-10-06",
+    "items": [],
+    "basis": "subscription quota call: no per-call USD price; counted by call caps"
+  },
+  "consent": {
+    "provider": "openai",
+    "model": "codex-image_gen",
+    "calls": 1,
+    "estimateUsd": 0.0,
+    "route": "codex-cli",
+    "quota": true,
+    "account": "the user's own Codex sign-in (ChatGPT)",
+    "note": "uses the subscription quota of that sign-in, never API credit"
+  },
+  "artSource": "host_image",
+  "execution": "execute",
+  "status": "submit_unknown",
+  "outputDir": "../../art_src/map/ground/raw-wet-reflection-r7",
+  "receipt": {
+    "startedAt": "2026-10-12T08:55:26.740Z",
+    "submittedAt": "2026-10-12T08:55:26.742Z",
+    "completedAt": "2026-10-12T08:55:27.026Z",
+    "wallMs": 286,
+    "providerMs": 281,
+    "attempt": 1,
+    "purpose": "BRIEF-assets-4 A wet lantern reflection correction",
+    "toolVersion": "cli_media/0.4.0",
+    "outcomeCode": "PROVIDER_ERROR"
+  },
+  "ledger": {
+    "projectDir": "../..",
+    "reservationId": "07bfc7c2fef34b1da93dbca22eefa8d4",
+    "status": "unknown"
+  },
+  "cliRun": {
+    "tool": "codex",
+    "runId": "16b0a737fce448df970ed89ae4a331ac",
+    "cwd": "<tmp>/forge-cli-16b0a737fce4-d63e5aa7",
+    "startedAt": "2026-10-12T08:55:26.740Z",
+    "version": "0.162.1",
+    "versionText": "codex-cli 0.162.1",
+    "recipe": "codex-exec-imagegen/1",
+    "home": "CODEX_HOME",
+    "verifiedBefore": false
+  },
+  "error": {
+    "code": "PROVIDER_ERROR",
+    "message": "the Codex CLI exited with an error (WARNING: proceeding, even though we could not create PATH aliases: Operation not permitted (os error 1) Error: failed to initialize in-process app-server client)"
+  },
+  "errorType": "CliMediaError"
+}

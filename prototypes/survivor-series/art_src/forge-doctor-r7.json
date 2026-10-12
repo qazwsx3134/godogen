@@ -1,0 +1,423 @@
+{
+  "schema": "generate2dmedia.doctor.v1",
+  "tool": {
+    "name": "forge_doctor",
+    "version": "0.4.0"
+  },
+  "createdAt": "2026-10-12T08:49:47.504Z",
+  "overall": "WARN",
+  "host": {
+    "declared": true,
+    "tools": [],
+    "unrecognised": []
+  },
+  "checks": [
+    {
+      "id": "python.version",
+      "status": "OK",
+      "detail": "Python 3.11.7 at /opt/anaconda3/bin/python3"
+    },
+    {
+      "id": "deps.numpy",
+      "status": "OK",
+      "detail": "1.26.4"
+    },
+    {
+      "id": "deps.Pillow",
+      "status": "OK",
+      "detail": "10.2.0"
+    },
+    {
+      "id": "deps.scipy",
+      "status": "OK",
+      "detail": "1.11.4"
+    },
+    {
+      "id": "deps.resvg-py",
+      "status": "MISSING",
+      "detail": "not installed; needed for codeart2d SVG rendering (PixelSpec needs only numpy and Pillow)",
+      "remedy": "\"/opt/anaconda3/bin/python3\" -m pip install \"resvg-py>=0.5,<0.6\""
+    },
+    {
+      "id": "encoding.stdout",
+      "status": "OK",
+      "detail": "stdout=utf-8"
+    },
+    {
+      "id": "skills.present",
+      "status": "OK",
+      "detail": "~/repo/agent-sprite-forge/skills: all 5 skills"
+    },
+    {
+      "id": "skills.vendored",
+      "status": "OK",
+      "detail": "vendored shared files agree across skills"
+    },
+    {
+      "id": "skills.canonical",
+      "status": "OK",
+      "detail": "source checkout: vendored copies match shared/"
+    },
+    {
+      "id": "ffmpeg",
+      "status": "OK",
+      "detail": "8.1.2 at /opt/homebrew/bin/ffmpeg"
+    },
+    {
+      "id": "media.host-tools",
+      "status": "OK",
+      "detail": "declared: none"
+    },
+    {
+      "id": "media.config",
+      "status": "WARN",
+      "detail": "~/.config/agent-sprite-forge/config.json can be read by other users",
+      "remedy": "chmod 600 ~/.config/agent-sprite-forge/config.json"
+    },
+    {
+      "id": "media.api.openai",
+      "status": "UNKNOWN",
+      "detail": "OPENAI_API_KEY is configured (user config file; the value is never shown); credit and model access are proven by the first call"
+    },
+    {
+      "id": "media.api.gemini",
+      "status": "UNKNOWN",
+      "detail": "GEMINI_API_KEY is configured (user config file; the value is never shown); credit and model access are proven by the first call"
+    },
+    {
+      "id": "media.api.xai",
+      "status": "UNKNOWN",
+      "detail": "XAI_API_KEY is configured (user config file; the value is never shown); credit and model access are proven by the first call"
+    },
+    {
+      "id": "media.api.byteplus",
+      "status": "UNKNOWN",
+      "detail": "ARK_API_KEY is configured (user config file; the value is never shown); credit and model access are proven by the first call"
+    },
+    {
+      "id": "media.api.fal",
+      "status": "UNKNOWN",
+      "detail": "FAL_KEY is configured (user config file; the value is never shown); credit and model access are proven by the first call"
+    },
+    {
+      "id": "media.ledger",
+      "status": "WARN",
+      "detail": "8 request(s) with an unknown outcome are unsettled",
+      "remedy": "check the provider's usage history, then media_ledger.py settle <reservation> --status ..."
+    },
+    {
+      "id": "cli.codex",
+      "status": "OK",
+      "detail": "codex-cli 0.162.1 at ~/.local/bin/codex"
+    },
+    {
+      "id": "cli.grok",
+      "status": "MISSING",
+      "detail": "Grok Build CLI not found on PATH or in $GROK_HOME/bin",
+      "remedy": "optional: install the Grok Build CLI and sign in, then verify a route"
+    },
+    {
+      "id": "route.codex-cli:image_gen",
+      "status": "UNKNOWN",
+      "detail": "PRESENT: the proof is for 0.160.0; installed 0.162.1",
+      "remedy": "nothing to do: the route's first successful route_media.py run records the proof; to verify ahead of time (one quota call; repeat after a CLI update): python \"<skill-dir>/scripts/forge_doctor.py\" --verify-route codex-cli --execute"
+    }
+  ],
+  "cli": {
+    "codex-cli:image_gen": {
+      "route": "codex-cli",
+      "tool": "image_gen",
+      "recipe": "codex-exec-imagegen/1",
+      "level": "PRESENT",
+      "blocked": false,
+      "version": "0.162.1",
+      "versionText": "codex-cli 0.162.1",
+      "steps": [
+        {
+          "step": "PRESENT",
+          "status": "OK",
+          "detail": "codex-cli 0.162.1 (PATH: ~/.local/bin/codex)"
+        },
+        {
+          "step": "AUTH_MODE",
+          "status": "UNKNOWN",
+          "detail": "sign-in mode not checked (--probe-auth reads it)"
+        },
+        {
+          "step": "TOOL_EXPOSED",
+          "status": "UNKNOWN",
+          "detail": "seen with version 0.160.0, not yet with 0.162.1"
+        },
+        {
+          "step": "VERIFIED",
+          "status": "WARN",
+          "detail": "the proof is for 0.160.0; installed 0.162.1",
+          "remedy": "nothing to do: the route's first successful route_media.py run records the proof; to verify ahead of time (one quota call; repeat after a CLI update): python \"<skill-dir>/scripts/forge_doctor.py\" --verify-route codex-cli --execute"
+        }
+      ]
+    }
+  },
+  "apiKeys": {
+    "openai": true,
+    "gemini": true,
+    "xai": true,
+    "byteplus": true,
+    "fal": true
+  },
+  "providers": {
+    "openai": {
+      "label": "OpenAI API",
+      "configured": true,
+      "keyEnv": [
+        "OPENAI_API_KEY"
+      ],
+      "source": "config",
+      "variable": "OPENAI_API_KEY",
+      "kinds": [
+        "image"
+      ]
+    },
+    "gemini": {
+      "label": "Google Gemini API",
+      "configured": true,
+      "keyEnv": [
+        "GOOGLE_API_KEY",
+        "GEMINI_API_KEY"
+      ],
+      "source": "config",
+      "variable": "GEMINI_API_KEY",
+      "kinds": [
+        "image"
+      ]
+    },
+    "xai": {
+      "label": "xAI API",
+      "configured": true,
+      "keyEnv": [
+        "XAI_API_KEY"
+      ],
+      "source": "config",
+      "variable": "XAI_API_KEY",
+      "kinds": [
+        "image",
+        "video"
+      ]
+    },
+    "byteplus": {
+      "label": "BytePlus ModelArk API",
+      "configured": true,
+      "keyEnv": [
+        "ARK_API_KEY"
+      ],
+      "source": "config",
+      "variable": "ARK_API_KEY",
+      "kinds": [
+        "image",
+        "video"
+      ]
+    },
+    "fal": {
+      "label": "fal.ai API",
+      "configured": true,
+      "keyEnv": [
+        "FAL_KEY"
+      ],
+      "source": "config",
+      "variable": "FAL_KEY",
+      "kinds": [
+        "image",
+        "video"
+      ]
+    }
+  },
+  "providerPreference": {
+    "image": [
+      "openai"
+    ],
+    "video": [
+      "xai"
+    ]
+  },
+  "routes": {
+    "image": {
+      "route": "api:openai",
+      "status": "ready",
+      "detail": "OpenAI API (gpt-image-2.5-sunburst) through route_media.py: the configured key is the owner's consent; paid per call, every call and its estimate go to the ledger",
+      "options": [
+        {
+          "route": "api:openai",
+          "status": "ready",
+          "detail": "OpenAI API (gpt-image-2.5-sunburst) through route_media.py: the configured key is the owner's consent; paid per call, every call and its estimate go to the ledger",
+          "consent": "paid",
+          "label": "OpenAI API",
+          "model": "gpt-image-2.5-sunburst"
+        },
+        {
+          "route": "api:gemini",
+          "status": "ready",
+          "detail": "Google Gemini API (gemini-3.1-flash-image) through route_media.py: the configured key is the owner's consent; paid per call, every call and its estimate go to the ledger",
+          "consent": "paid",
+          "label": "Google Gemini API",
+          "model": "gemini-3.1-flash-image"
+        },
+        {
+          "route": "api:xai",
+          "status": "ready",
+          "detail": "xAI API (grok-imagine-image-2.0) through route_media.py: the configured key is the owner's consent; paid per call, every call and its estimate go to the ledger",
+          "consent": "paid",
+          "label": "xAI API",
+          "model": "grok-imagine-image-2.0"
+        },
+        {
+          "route": "api:byteplus",
+          "status": "ready",
+          "detail": "BytePlus ModelArk API (dola-seedream-5-0-pro-260628) through route_media.py: the configured key is the owner's consent; paid per call, every call and its estimate go to the ledger",
+          "consent": "paid",
+          "label": "BytePlus ModelArk API",
+          "model": "dola-seedream-5-0-pro-260628"
+        },
+        {
+          "route": "local:codex-cli",
+          "status": "ready",
+          "detail": "Codex (local CLI), at PRESENT: its first successful run records the VERIFIED proof; route_media.py runs it on the user's own sign-in (subscription quota, not API credit)",
+          "consent": "quota",
+          "level": "PRESENT",
+          "label": "Codex (local CLI)",
+          "verified": false
+        }
+      ]
+    },
+    "image_edit": {
+      "route": "api:openai",
+      "status": "ready",
+      "detail": "OpenAI API (gpt-image-2.5-sunburst) through route_media.py: the configured key is the owner's consent; paid per call, every call and its estimate go to the ledger",
+      "options": [
+        {
+          "route": "api:openai",
+          "status": "ready",
+          "detail": "OpenAI API (gpt-image-2.5-sunburst) through route_media.py: the configured key is the owner's consent; paid per call, every call and its estimate go to the ledger",
+          "consent": "paid",
+          "label": "OpenAI API",
+          "model": "gpt-image-2.5-sunburst"
+        },
+        {
+          "route": "api:gemini",
+          "status": "ready",
+          "detail": "Google Gemini API (gemini-3.1-flash-image) through route_media.py: the configured key is the owner's consent; paid per call, every call and its estimate go to the ledger",
+          "consent": "paid",
+          "label": "Google Gemini API",
+          "model": "gemini-3.1-flash-image"
+        },
+        {
+          "route": "api:xai",
+          "status": "ready",
+          "detail": "xAI API (grok-imagine-image-2.0) through route_media.py: the configured key is the owner's consent; paid per call, every call and its estimate go to the ledger",
+          "consent": "paid",
+          "label": "xAI API",
+          "model": "grok-imagine-image-2.0"
+        },
+        {
+          "route": "api:byteplus",
+          "status": "ready",
+          "detail": "BytePlus ModelArk API (dola-seedream-5-0-pro-260628) through route_media.py: the configured key is the owner's consent; paid per call, every call and its estimate go to the ledger",
+          "consent": "paid",
+          "label": "BytePlus ModelArk API",
+          "model": "dola-seedream-5-0-pro-260628"
+        },
+        {
+          "route": "api:fal",
+          "status": "ready",
+          "detail": "fal.ai API (fal-ai/nano-banana-2/edit) through route_media.py: the configured key is the owner's consent; paid per call, every call and its estimate go to the ledger",
+          "consent": "paid",
+          "label": "fal.ai API",
+          "model": "fal-ai/nano-banana-2/edit"
+        },
+        {
+          "route": "local:codex-cli",
+          "status": "ready",
+          "detail": "Codex (local CLI), at PRESENT: its first successful run records the VERIFIED proof; route_media.py runs it on the user's own sign-in (subscription quota, not API credit)",
+          "consent": "quota",
+          "level": "PRESENT",
+          "label": "Codex (local CLI)",
+          "verified": false
+        }
+      ]
+    },
+    "video": {
+      "route": "api:xai",
+      "status": "ready",
+      "detail": "xAI API (grok-imagine-video-1.5) through route_media.py: the configured key is the owner's consent; paid per call, every call and its estimate go to the ledger",
+      "options": [
+        {
+          "route": "api:xai",
+          "status": "ready",
+          "detail": "xAI API (grok-imagine-video-1.5) through route_media.py: the configured key is the owner's consent; paid per call, every call and its estimate go to the ledger",
+          "consent": "paid",
+          "label": "xAI API",
+          "model": "grok-imagine-video-1.5"
+        },
+        {
+          "route": "api:byteplus",
+          "status": "ready",
+          "detail": "BytePlus ModelArk API (dreamina-seedance-2-0-260128) through route_media.py: the configured key is the owner's consent; paid per call, every call and its estimate go to the ledger",
+          "consent": "paid",
+          "label": "BytePlus ModelArk API",
+          "model": "dreamina-seedance-2-0-260128"
+        },
+        {
+          "route": "api:fal",
+          "status": "ready",
+          "detail": "fal.ai API (fal-ai/kling-video/v3/pro/image-to-video) through route_media.py: the configured key is the owner's consent; paid per call, every call and its estimate go to the ledger",
+          "consent": "paid",
+          "label": "fal.ai API",
+          "model": "fal-ai/kling-video/v3/pro/image-to-video"
+        }
+      ]
+    },
+    "clip": {
+      "route": "ffmpeg",
+      "status": "ready",
+      "detail": "supplied clips decode and encode with ffmpeg 8.1.2"
+    },
+    "code_art": {
+      "route": "codeart2d",
+      "status": "fallback",
+      "detail": "explicit-only last resort: only when the user asks for code-drawn art or no image or video route exists; codeart2d PixelSpec; SVG needs resvg-py"
+    }
+  },
+  "routeOrder": {
+    "image": [
+      "api:openai",
+      "api:gemini",
+      "api:xai",
+      "api:byteplus",
+      "local:codex-cli",
+      "codeart2d"
+    ],
+    "image_edit": [
+      "api:openai",
+      "api:gemini",
+      "api:xai",
+      "api:byteplus",
+      "api:fal",
+      "local:codex-cli",
+      "codeart2d"
+    ],
+    "video": [
+      "api:xai",
+      "api:byteplus",
+      "api:fal",
+      "codeart2d"
+    ]
+  },
+  "proofs": {
+    "codex-cli:image_gen": {
+      "level": "VERIFIED",
+      "version": "0.160.0",
+      "recipe": "codex-exec-imagegen/1",
+      "verifiedAt": "2026-10-09T01:17:17.221Z",
+      "matchesInstalled": false
+    }
+  },
+  "elapsedMs": 519
+}
