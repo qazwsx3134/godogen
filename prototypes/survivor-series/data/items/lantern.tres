@@ -1,5 +1,6 @@
 [gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
 
+[ext_resource type="Texture2D" path="res://assets/art/icons/lantern.png" id="1_rca6b"]
 [ext_resource type="PackedScene" path="res://scenes/lantern.tscn" id="1_vncxa"]
 [ext_resource type="Script" path="res://scripts/item_def.gd" id="2_rca6b"]
 
@@ -10,6 +11,7 @@ title = "天燈"
 description = "從天上往畫面內的敵人砸火。"
 level_notes = PackedStringArray("多一盞", "多一盞，傷害 +7", "多一盞", "多一盞，火更大")
 accent = Color(1, 0.827451, 0.41960785, 1)
+icon = ExtResource("1_rca6b")
 unlock = &"survive_5"
 kind = &"lantern"
 projectile = ExtResource("1_vncxa")

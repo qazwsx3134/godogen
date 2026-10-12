@@ -9,6 +9,8 @@ extends Resource
 @export var level_notes: PackedStringArray = []
 @export_enum("weapon", "passive", "evolution", "fusion", "filler") var slot: String = "weapon"
 @export var accent: Color = Color("72e0c0")
+## Shown on the level-up card; empty hides the icon.
+@export var icon: Texture2D
 @export_range(1, 8, 1) var max_level: int = 5
 ## Achievement id that must be unlocked in the meta save; empty means always available.
 @export var unlock: StringName

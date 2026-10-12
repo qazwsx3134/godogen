@@ -1,0 +1,31 @@
+{
+  "schema": "generate2dsprite.master_spec.v1",
+  "name": "smoker-gangster",
+  "subject": "a fictional adult Taiwanese male street-gangster enemy, full body",
+  "identity": "An original fictional adult man with a compact sturdy build, tan skin, broad square jaw, thick brows, and a stern but readable expression. He has black hair clipped short on top into a crisp flat-top, with the sides and back shaved close to visible scalp in a high skin fade. Both bare arms have bold black traditional-style tattoos. He wears a simple black sleeveless shirt, dark charcoal trousers, a modest gold chain, and dark shoes. A short white cigarette is clearly held between his lips at one corner, with a tiny orange ember.",
+  "pose": "Grounded idle stance with feet planted, shoulders squared, elbows bent and hands held low in a tough street-fighter posture; no weapon.",
+  "recap": "original fictional adult Taiwanese street-gangster man with a visible high skin fade, short black flat-top, tattooed bare arms, black sleeveless shirt and a cigarette at the corner of his mouth",
+  "facing": "right",
+  "facing_parts": "face, gaze, chest and leading foot",
+  "view": "elevated three-quarter overhead view about 50 degrees above the ground, body turned diagonally toward the lower-right",
+  "class": "mob",
+  "finish": "pixel",
+  "key": "#00FF00",
+  "genre": "a Taiwan night-market survivor game",
+  "pronoun": "he",
+  "identity_ref": null,
+  "style_ref": {
+    "path": "../../../heroes/man/master-green/master_rgba.png",
+    "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+    "what": "the approved male hero sprite from the same game",
+    "do_not_copy": "the hero's face, hair, suit, equipment or colours; copy only pixel-art style, outline weight, pixel density, shading, scale and elevated three-quarter framing"
+  },
+  "allowed_text": null,
+  "extra_bans": [
+    "guns",
+    "blood",
+    "smoke plume"
+  ],
+  "opaque_parts": null,
+  "extra": "Entirely fictional adult character, not based on or resembling any real person; the hairstyle is described in text only and no real-person photo is attached. Match the style reference's compact game-sprite scale and clear pixels. Keep the full body centered with generous green space on every side; head, cigarette, fade silhouette and tattooed arms must remain readable in a 90 px game-size preview. No extra characters, no ground, no cast shadow, no weapon."
+}

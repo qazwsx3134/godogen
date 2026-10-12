@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 2,
+  "provider": "openai",
+  "kind": "image",
+  "route": "codex-cli",
+  "requestedModel": "codex-image_gen",
+  "options": {
+    "tool": "image_gen"
+  },
+  "promptSha256": "bd2d732bfdf40675d7fbd61ed373c98019b5262c02c02e533fea1311b4b81e18",
+  "references": [
+    {
+      "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+      "bytes": 405203
+    }
+  ],
+  "fingerprint": "2341f898f63fbaaad2a2226d062dec604b019cca60875aeb81aa150989ab0167",
+  "estimate": {
+    "usd": 0.0,
+    "currency": "USD",
+    "pricesVersion": "2026-10-06",
+    "items": [],
+    "basis": "subscription quota call: no per-call USD price; counted by call caps"
+  },
+  "consent": {
+    "provider": "openai",
+    "model": "codex-image_gen",
+    "calls": 1,
+    "estimateUsd": 0.0,
+    "route": "codex-cli",
+    "quota": true,
+    "account": "the user's own Codex sign-in (ChatGPT)",
+    "note": "uses the subscription quota of that sign-in, never API credit"
+  },
+  "artSource": "host_image",
+  "execution": "execute",
+  "status": "submit_unknown",
+  "outputDir": "../../art_src/enemies/smoker-gangster/.run-01.stage-71cd85ef/takes/take-03",
+  "receipt": {
+    "startedAt": "2026-10-12T12:52:00.109Z",
+    "submittedAt": "2026-10-12T12:52:00.132Z",
+    "completedAt": "2026-10-12T12:52:00.241Z",
+    "wallMs": 132,
+    "providerMs": 101,
+    "attempt": 3,
+    "purpose": "route_media image",
+    "toolVersion": "cli_media/0.4.0",
+    "outcomeCode": "PROVIDER_ERROR"
+  },
+  "ledger": {
+    "projectDir": "../..",
+    "reservationId": "44114405a4354affbdb3d821f1ccd765",
+    "status": "unknown"
+  },
+  "cliRun": {
+    "tool": "codex",
+    "runId": "4f5588b036ad4e42908450f04650cb38",
+    "cwd": "<tmp>/forge-cli-4f5588b036ad-0b9b92aa",
+    "startedAt": "2026-10-12T12:52:00.109Z",
+    "version": "0.162.1",
+    "versionText": "codex-cli 0.162.1",
+    "recipe": "codex-exec-imagegen/1",
+    "home": "CODEX_HOME",
+    "verifiedBefore": true
+  },
+  "error": {
+    "code": "PROVIDER_ERROR",
+    "message": "the Codex CLI exited with an error (WARNING: proceeding, even though we could not create PATH aliases: Read-only file system (os error 30) Error: failed to initialize in-process app-server client:)"
+  },
+  "errorType": "CliMediaError"
+}

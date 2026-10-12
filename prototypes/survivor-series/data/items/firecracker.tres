@@ -1,5 +1,6 @@
 [gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
 
+[ext_resource type="Texture2D" path="res://assets/art/icons/firecracker.png" id="1_3rd55"]
 [ext_resource type="PackedScene" path="res://scenes/firecracker.tscn" id="1_5l0le"]
 [ext_resource type="Script" path="res://scripts/item_def.gd" id="2_3rd55"]
 
@@ -10,6 +11,7 @@ title = "鞭炮"
 description = "丟進敵人堆裡炸開。"
 level_notes = PackedStringArray("多丟一串", "傷害 +6，爆炸變大", "多丟一串", "傷害 +6，冷卻縮短")
 accent = Color(1, 0.3529412, 0.30980393, 1)
+icon = ExtResource("1_3rd55")
 kind = &"firecracker"
 projectile = ExtResource("1_5l0le")
 damage = 18.0

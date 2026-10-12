@@ -6,6 +6,7 @@ var id: StringName
 @onready var body_label: Label = %Description
 @onready var tag_label: Label = %Tag
 @onready var stripe: ColorRect = %Stripe
+@onready var icon_rect: TextureRect = %Icon
 
 func _ready() -> void:
 	pressed.connect(func() -> void: chosen.emit(id))
@@ -33,3 +34,5 @@ func setup(item: Resource, build: RefCounted) -> void:
 		_:
 			tag_label.text = "補給"
 	stripe.color = Color("b784f0") if hidden else item.accent
+	icon_rect.texture = null if hidden else item.icon
+	icon_rect.visible = icon_rect.texture != null

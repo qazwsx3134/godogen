@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 2,
+  "provider": "openai",
+  "kind": "image",
+  "route": "codex-cli",
+  "requestedModel": "codex-image_gen",
+  "options": {
+    "tool": "image_gen"
+  },
+  "promptSha256": "bd2d732bfdf40675d7fbd61ed373c98019b5262c02c02e533fea1311b4b81e18",
+  "references": [
+    {
+      "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+      "bytes": 405203
+    }
+  ],
+  "fingerprint": "2341f898f63fbaaad2a2226d062dec604b019cca60875aeb81aa150989ab0167",
+  "estimate": {
+    "usd": 0.0,
+    "currency": "USD",
+    "pricesVersion": "2026-10-06",
+    "items": [],
+    "basis": "subscription quota call: no per-call USD price; counted by call caps"
+  },
+  "consent": {
+    "provider": "openai",
+    "model": "codex-image_gen",
+    "calls": 1,
+    "estimateUsd": 0.0,
+    "route": "codex-cli",
+    "quota": true,
+    "account": "the user's own Codex sign-in (ChatGPT)",
+    "note": "uses the subscription quota of that sign-in, never API credit"
+  },
+  "artSource": "host_image",
+  "execution": "execute",
+  "status": "done",
+  "outputDir": "../../art_src/enemies/smoker-gangster/.run-02.stage-300d85c7/takes/take-01",
+  "receipt": {
+    "startedAt": "2026-10-12T12:53:49.400Z",
+    "submittedAt": "2026-10-12T12:53:49.421Z",
+    "completedAt": "2026-10-12T12:54:44.514Z",
+    "wallMs": 55114,
+    "providerMs": 55072,
+    "attempt": 4,
+    "purpose": "route_media image",
+    "toolVersion": "cli_media/0.4.0",
+    "outcomeCode": "ok"
+  },
+  "ledger": {
+    "projectDir": "../..",
+    "reservationId": "1158f5d70bf24cb38ad867851258bfb6",
+    "status": "done"
+  },
+  "cliRun": {
+    "tool": "codex",
+    "runId": "a5fd3a2db9d74ddba6752e1bde0cfd34",
+    "cwd": "<tmp>/forge-cli-a5fd3a2db9d7-92fae76b",
+    "startedAt": "2026-10-12T12:53:49.400Z",
+    "version": "0.162.1",
+    "versionText": "codex-cli 0.162.1",
+    "recipe": "codex-exec-imagegen/1",
+    "home": "CODEX_HOME",
+    "verifiedBefore": true,
+    "threadId": "01a1302d-2d45-72a0-aa1f-104b7b6edd57"
+  },
+  "adoption": {
+    "method": "native-run-folder",
+    "source": "CODEX_HOME/generated_images/01a1302d-2d45-72a0-aa1f-104b7b6edd57/exec-64a05d02-7130-4249-9e4b-e054a7039f74.png",
+    "sourceSha256": "eee3cb455dbc247929d2b1045f22f8fbf6831a7f66e45f2e054371638fe3fcd7",
+    "sourceMtime": "2026-10-12T12:54:39Z",
+    "freshAfter": "2026-10-12T12:53:49.429Z",
+    "checks": [
+      "inside the CLI's own folder for this run",
+      "no symlink or junction",
+      "regular file of a sane size",
+      "newer than the run",
+      "magic bytes",
+      "decodes",
+      "exactly one output",
+      "exclusive copy with matching sha256"
+    ],
+    "finalAnswerNamesFile": true
+  },
+  "artifact": {
+    "path": "../../art_src/enemies/smoker-gangster/.run-02.stage-300d85c7/takes/take-01/generated.png",
+    "sha256": "eee3cb455dbc247929d2b1045f22f8fbf6831a7f66e45f2e054371638fe3fcd7",
+    "bytes": 1349595,
+    "format": "PNG",
+    "size": [
+      1254,
+      1254
+    ]
+  }
+}

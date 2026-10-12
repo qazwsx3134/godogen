@@ -1,6 +1,11 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/pickup.gd" id="1_pg2rt"]
+[ext_resource type="Texture2D" path="res://assets/art/icons/gem.png" id="2_t0qhb"]
+[ext_resource type="Texture2D" path="res://assets/art/icons/coin.png" id="3_mj4kx"]
+[ext_resource type="Texture2D" path="res://assets/art/icons/rice.png" id="4_ror3w"]
+[ext_resource type="Texture2D" path="res://assets/art/icons/vacuum.png" id="5_hlv8s"]
+[ext_resource type="Texture2D" path="res://assets/art/icons/chest.png" id="6_j61ql"]
 
 [node name="Pickup" type="Node2D" unique_id=1287427530]
 script = ExtResource("1_pg2rt")
@@ -12,84 +17,128 @@ position = Vector2(0, -6)
 [node name="Gem" type="Node2D" parent="Looks" unique_id=804388915]
 
 [node name="Outline" type="Polygon2D" parent="Looks/Gem" unique_id=11462894]
+visible = false
 color = Color(0.050980393, 0.09411765, 0.1254902, 1)
 polygon = PackedVector2Array(0, -8, 6.8, 0, 0, 8, -6.8, 0)
 
 [node name="Body" type="Polygon2D" parent="Looks/Gem" unique_id=2061815702]
+visible = false
 color = Color(0.3529412, 0.6627451, 1, 1)
 polygon = PackedVector2Array(0, -6, 4.8, 0, 0, 6, -4.8, 0)
+
+[node name="Art" type="Sprite2D" parent="Looks/Gem" unique_id=484031015]
+scale = Vector2(0.140625, 0.140625)
+texture = ExtResource("2_t0qhb")
 
 [node name="GemMid" type="Node2D" parent="Looks" unique_id=1589786286]
 
 [node name="Outline" type="Polygon2D" parent="Looks/GemMid" unique_id=1990698617]
+visible = false
 color = Color(0.050980393, 0.09411765, 0.1254902, 1)
 polygon = PackedVector2Array(0, -10, 8.4, 0, 0, 10, -8.4, 0)
 
 [node name="Body" type="Polygon2D" parent="Looks/GemMid" unique_id=1817623329]
+visible = false
 color = Color(0.41960785, 0.8392157, 0.41960785, 1)
 polygon = PackedVector2Array(0, -8, 6.4, 0, 0, 8, -6.4, 0)
+
+[node name="Art" type="Sprite2D" parent="Looks/GemMid" unique_id=1915486205]
+scale = Vector2(0.1875, 0.1875)
+texture = ExtResource("2_t0qhb")
 
 [node name="GemBig" type="Node2D" parent="Looks" unique_id=999627672]
 
 [node name="Outline" type="Polygon2D" parent="Looks/GemBig" unique_id=1503804948]
+visible = false
 color = Color(0.050980393, 0.09411765, 0.1254902, 1)
 polygon = PackedVector2Array(0, -14, 11.6, 0, 0, 14, -11.6, 0)
 
 [node name="Body" type="Polygon2D" parent="Looks/GemBig" unique_id=1703570929]
+visible = false
 color = Color(1, 0.3529412, 0.30980393, 1)
 polygon = PackedVector2Array(0, -12, 9.6, 0, 0, 12, -9.6, 0)
+
+[node name="Art" type="Sprite2D" parent="Looks/GemBig" unique_id=524245190]
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("2_t0qhb")
 
 [node name="Coin" type="Node2D" parent="Looks" unique_id=1365736224]
 
 [node name="Outline" type="Polygon2D" parent="Looks/Coin" unique_id=1519509416]
+visible = false
 color = Color(0.3529412, 0.23137255, 0, 1)
 polygon = PackedVector2Array(9, 0, 8.314916, 3.444151, 6.363961, 6.363961, 3.444151, 8.314916, 5.5109107e-16, 9, -3.444151, 8.314916, -6.363961, 6.363961, -8.314916, 3.444151, -9, 1.1021821e-15, -8.314916, -3.444151, -6.363961, -6.363961, -3.444151, -8.314916, -1.6532732e-15, -9, 3.444151, -8.314916, 6.363961, -6.363961, 8.314916, -3.444151)
 
 [node name="Face" type="Polygon2D" parent="Looks/Coin" unique_id=1526704238]
+visible = false
 color = Color(1, 0.827451, 0.41960785, 1)
 polygon = PackedVector2Array(7, 0, 6.467157, 2.6787841, 4.9497476, 4.9497476, 2.6787841, 6.467157, 4.2862639e-16, 7, -2.6787841, 6.467157, -4.9497476, 4.9497476, -6.467157, 2.6787841, -7, 8.5725277e-16, -6.467157, -2.6787841, -4.9497476, -4.9497476, -2.6787841, -6.467157, -1.2858791e-15, -7, 2.6787841, -6.467157, 4.9497476, -4.9497476, 6.467157, -2.6787841)
+
+[node name="Art" type="Sprite2D" parent="Looks/Coin" unique_id=1033841098]
+scale = Vector2(0.15625, 0.15625)
+texture = ExtResource("3_mj4kx")
 
 [node name="Food" type="Node2D" parent="Looks" unique_id=979323563]
 
 [node name="Bowl" type="Polygon2D" parent="Looks/Food" unique_id=309223238]
+visible = false
 color = Color(0.9098039, 0.8784314, 0.8156863, 1)
 polygon = PackedVector2Array(-13, -2, 13, -2, 9, 9, -9, 9)
 
 [node name="Rice" type="Polygon2D" parent="Looks/Food" unique_id=338153521]
+visible = false
 position = Vector2(0, -3)
 color = Color(1, 0.98039216, 0.9411765, 1)
 polygon = PackedVector2Array(12, 0, 10.811626, 2.1694188, 7.481878, 3.9091575, 2.6702511, 4.8746395, -2.6702511, 4.8746395, -7.481878, 3.9091575, -10.811626, 2.1694188, -12, 6.123234e-16, -10.811626, -2.1694188, -7.481878, -3.9091575, -2.6702511, -4.8746395, 2.6702511, -4.8746395, 7.481878, -3.9091575, 10.811626, -2.1694188)
 
 [node name="Pork" type="Polygon2D" parent="Looks/Food" unique_id=1141122601]
+visible = false
 position = Vector2(0, -5)
 color = Color(0.47843137, 0.23921569, 0.09411765, 1)
 polygon = PackedVector2Array(8, 0, 6.928203, 1.75, 4, 3.0310888, 4.8985874e-16, 3.5, -4, 3.0310888, -6.928203, 1.75, -8, 4.2862639e-16, -6.928203, -1.75, -4, -3.0310888, -1.4695761e-15, -3.5, 4, -3.0310888, 6.928203, -1.75)
 
+[node name="Art" type="Sprite2D" parent="Looks/Food" unique_id=120558826]
+scale = Vector2(0.234375, 0.234375)
+texture = ExtResource("4_ror3w")
+
 [node name="Magnet" type="Node2D" parent="Looks" unique_id=1349767883]
 
 [node name="Body" type="Polygon2D" parent="Looks/Magnet" unique_id=772876742]
+visible = false
 position = Vector2(-9, -7)
 color = Color(0.56078434, 0.6509804, 0.6784314, 1)
 polygon = PackedVector2Array(0, 0, 18, 0, 18, 14, 0, 14)
 
 [node name="Nozzle" type="Polygon2D" parent="Looks/Magnet" unique_id=825047252]
+visible = false
 position = Vector2(-20, 2)
 color = Color(0.2901961, 0.3529412, 0.38431373, 1)
 polygon = PackedVector2Array(0, 0, 16, 0, 16, 4, 0, 4)
 
+[node name="Art" type="Sprite2D" parent="Looks/Magnet" unique_id=1029910200]
+scale = Vector2(0.234375, 0.234375)
+texture = ExtResource("5_hlv8s")
+
 [node name="Chest" type="Node2D" parent="Looks" unique_id=832662705]
 
 [node name="Box" type="Polygon2D" parent="Looks/Chest" unique_id=1010891824]
+visible = false
 position = Vector2(-13, -9)
 color = Color(0.7529412, 0.22352941, 0.16862746, 1)
 polygon = PackedVector2Array(0, 0, 26, 0, 26, 18, 0, 18)
 
 [node name="Lid" type="Polygon2D" parent="Looks/Chest" unique_id=285991626]
+visible = false
 position = Vector2(-14, -12)
 color = Color(0.8784314, 0.19607843, 0.16862746, 1)
 polygon = PackedVector2Array(0, 0, 28, 0, 28, 6, 0, 6)
 
 [node name="Band" type="Polygon2D" parent="Looks/Chest" unique_id=125427765]
+visible = false
 position = Vector2(-2, -12)
 color = Color(1, 0.827451, 0.41960785, 1)
 polygon = PackedVector2Array(0, 0, 4, 0, 4, 24, 0, 24)
+
+[node name="Art" type="Sprite2D" parent="Looks/Chest" unique_id=952934293]
+scale = Vector2(0.28125, 0.28125)
+texture = ExtResource("6_j61ql")

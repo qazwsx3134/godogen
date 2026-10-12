@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/art/map/cone.png" id="1_vlks8"]
+
+[node name="Cone" type="Sprite2D" unique_id=1427295026]
+texture = ExtResource("1_vlks8")
+centered = false
+offset = Vector2(-12, -31)

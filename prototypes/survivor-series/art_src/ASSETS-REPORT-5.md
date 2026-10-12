@@ -12,6 +12,10 @@
 - 其他 ground 貼圖與 `map/props` 未修改。B 尚未執行。
 
 ## B — 抽菸者改台灣流氓
-- 未執行（2026-10-12 使用者出門，依指示停止）。
+- `local:codex-cli`，未呼叫 API；只附男主角作風格參考，未附真人照／identity-ref。`--class mob`、pixel、朝右下、50°俯視；每張限時 360 秒，`run-02` 三張耗時 55.729／56.530／53.772 秒。`run-01` 三筆因唯讀沙盒啟動失敗，保留紀錄後重跑一次成功。
+- 輸出 `art_src/enemies/smoker-gangster/candidate-{01,02,03}.png`（1024×1024 RGBA）；`candidates-contact.png` 含 90 px 主體高度預覽；`comparison-old-vs-new.png` 以同樣 90 px 高度並排三張舊煙霧怪與三張新候選。
+- 原始 `generated.png`、`prompt.txt`、`job.json`、`run.json` 保存在 `smoker-gangster/run-02/`（每張各自一份）；三份 pad JSON 與 alpha 輸出在 `pad-{01,02,03}/`。僅候選，未 approve／動畫。
+- Pad QC：三張皆單一主體、主體高 471 px／頂端 y=406／基線 y=877；warnings 0、opaque key pixels 0、外圈 spill 0、key-hued pixels 0、ignored parts 0；visible pixels 243201／280444／286230。
+- 視看均符合高漸層平頂、刺青手臂、嘴角香菸與右下朝向；90 px 清楚可辨，硬規格偏差無，候選姿勢相近。
 
-BLOCKED：A 已收尾；依指示停止，B 尚未執行。
+DONE

@@ -1,5 +1,6 @@
 [gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
 
+[ext_resource type="Texture2D" path="res://assets/art/icons/cane.png" id="1_ls6ak"]
 [ext_resource type="Script" path="res://scripts/item_def.gd" id="1_wwqog"]
 
 [resource]
@@ -9,6 +10,7 @@ title = "愛的小手"
 description = "左右橫掃一長條，打一大片。"
 level_notes = PackedStringArray("兩邊一起打", "傷害 +5，打更遠", "冷卻縮短", "傷害 +5，打更遠")
 accent = Color(1, 0.56078434, 0.69411767, 1)
+icon = ExtResource("1_ls6ak")
 unlock = &"kills_300"
 kind = &"cane"
 damage = 16.0

@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/slipper.tscn" id="1_iwcji"]
+[ext_resource type="Texture2D" path="res://assets/art/icons/slipper.png" id="1_vild4"]
 [ext_resource type="Script" path="res://scripts/item_def.gd" id="2_vild4"]
 
 [resource]
@@ -10,6 +11,7 @@ title = "藍白拖"
 description = "丟出藍白拖，飛出去還會飛回來。"
 level_notes = PackedStringArray("多丟一隻", "傷害 +4，冷卻縮短", "多丟一隻", "傷害 +4，拖鞋變大")
 accent = Color(0.3529412, 0.6627451, 1, 1)
+icon = ExtResource("1_vild4")
 kind = &"slipper"
 projectile = ExtResource("1_iwcji")
 damage = 14.0

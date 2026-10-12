@@ -1,0 +1,178 @@
+{
+  "schema": "generate2dsprite.master.v1",
+  "tool": {
+    "name": "master_still",
+    "version": "0.4.0"
+  },
+  "created": "2026-10-12T13:14:59.650Z",
+  "name": "smoker-gangster",
+  "subject": "a fictional adult Taiwanese male street-gangster enemy, full body",
+  "identity_recap": "original fictional adult Taiwanese street-gangster man with a visible high skin fade, short black flat-top, tattooed bare arms, black sleeveless shirt and a cigarette at the corner of his mouth",
+  "facing": "right",
+  "view": "elevated three-quarter overhead view about 50 degrees above the ground, body turned diagonally toward the lower-right",
+  "finish": "pixel",
+  "class": "mob",
+  "framing": {
+    "canvas": [
+      1024,
+      1024
+    ],
+    "subject_height_px": 471,
+    "top_margin_px": 406,
+    "lead_px": 100,
+    "preset": "mob",
+    "subject_bbox": [
+      278,
+      406,
+      547,
+      877
+    ],
+    "anchor": [
+      331.0,
+      877.0
+    ],
+    "opaque_area_px": 81168,
+    "width_limited": false
+  },
+  "key": "#00FF00",
+  "files": {
+    "master": {
+      "path": "master.png",
+      "sha256": "8efbf80c021211eb2f13d732f5d69cad74cc36d4d2d6b02c34e92b75b33e13ba",
+      "bytes": 154937,
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    "cutout": {
+      "path": "master_rgba.png",
+      "sha256": "6e19f01308f1bfa5ac9aed0b4bcbd16ee649794b188d2a505647e7813603ebb2",
+      "bytes": 179978,
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    "source": {
+      "path": "source.png",
+      "sha256": "eee3cb455dbc247929d2b1045f22f8fbf6831a7f66e45f2e054371638fe3fcd7",
+      "bytes": 1349595,
+      "size": [
+        1254,
+        1254
+      ]
+    },
+    "spec": {
+      "path": "spec.json",
+      "sha256": "705f70ad50ed22f73f19c024d6a97a233e0a3b346582b437da726244dac76686",
+      "bytes": 2430
+    },
+    "prompt": {
+      "path": "prompt.txt",
+      "sha256": "d42fb2c59cda710d94d4be909b4bdfd97ebadcd646b7d3fad7bbf2b10e0b3dd7",
+      "bytes": 3016
+    }
+  },
+  "references": [
+    {
+      "role": "style",
+      "path": "../../../heroes/man/master-green/master_rgba.png",
+      "sha256": "9848d346af464c1e07597acecc2f701618fcd99a4f360d2563386be4ef233af1",
+      "bytes": 405203,
+      "what": "the approved male hero sprite from the same game"
+    }
+  ],
+  "transform": {
+    "mapping": "master = scale * source + offset (continuous pixel coordinates: pixel i spans [i, i + 1))",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "source_subject_bbox": [
+      363,
+      352,
+      826,
+      1165
+    ],
+    "crop_box": [
+      357,
+      346,
+      832,
+      1171
+    ],
+    "crop_margin_px": 6,
+    "scale": 0.5793357933579336,
+    "offset": [
+      67.58487084870848,
+      202.07380073800738
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "resampler": "lanczos",
+    "premultiplied": true,
+    "alpha_floor_px": 1457,
+    "subject_parts": 1,
+    "ignored_parts": 0,
+    "ignored_px": 0,
+    "source_touches": [],
+    "key_rgb": [
+      0,
+      255,
+      0
+    ]
+  },
+  "route": "local:codex-cli",
+  "provenance": {
+    "command": "generate",
+    "run": "../run-02",
+    "take": 1,
+    "source_name": "generated.png",
+    "source_sha256": "eee3cb455dbc247929d2b1045f22f8fbf6831a7f66e45f2e054371638fe3fcd7",
+    "media": {
+      "status": "ok",
+      "route": "local:codex-cli",
+      "sha256": "eee3cb455dbc247929d2b1045f22f8fbf6831a7f66e45f2e054371638fe3fcd7",
+      "estimateUsd": 0.0,
+      "kind": "image",
+      "label": "Codex (local CLI)",
+      "model": "codex-image_gen",
+      "verifiedBefore": true
+    },
+    "media_cli_source": "sibling",
+    "edit": null
+  },
+  "matte": {
+    "requested": "soft",
+    "key_estimate": {
+      "key": [
+        3.0,
+        248.0,
+        5.0
+      ],
+      "source": "border_median",
+      "valid": true,
+      "ring_share": 1.0,
+      "coverage": 0.8452956917449489,
+      "distance_from_declared": 9.11
+    },
+    "quality": "soft",
+    "interior_despill": true,
+    "qa": {
+      "opaque_key_px": 0,
+      "outer_ring_spill_fraction": 0.0,
+      "semitransparent_fraction": 0.016665227527847336,
+      "enclosed_key_pockets": 0,
+      "key_hued_px": 0,
+      "visible_px": 243201
+    },
+    "key_choice": {
+      "status": "ok",
+      "overlap_share": 0.0,
+      "rule": "reject a key when more than 0.5% of subject pixels have key dominance >= 40; first acceptable candidate wins"
+    }
+  },
+  "warnings": []
+}

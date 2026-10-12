@@ -15,6 +15,8 @@ const Build = preload("res://scripts/run_build.gd")
 @export var schedule: Resource
 ## Playable heroes (HeroDef); `hero_id` picks one for the next run.
 @export var heroes: Array[Resource] = []
+## The play area travels with the hero (endless map): hero, enemies and drops stay inside it.
+## Its size grows to the view plus a margin on wide screens; see `_recenter`.
 @export var bounds := Rect2(48.0, 48.0, 1104.0, 1584.0)
 @export var max_enemies: int = 140
 @export var max_effects: int = 32
@@ -33,6 +35,7 @@ const Build = preload("res://scripts/run_build.gd")
 @onready var pickups: Node2D = %Pickups
 @onready var camera: Camera2D = %Camera
 @onready var arsenal: Node = %Arsenal
+@onready var map: Node2D = %Map
 var time_control: Node
 var sfx: Node
 var shake = Shake.new()
@@ -109,6 +112,8 @@ func reset() -> void:
 	spawn_left = 1.0
 	phase_index = -1
 	camera.position = player.position
+	_recenter()
+	map.reset(player.position)
 	# Three distinct editable scene instances introduce the run immediately.
 	spawn_enemy(0, player.position + Vector2(0.0, -150.0))
 	spawn_enemy(1, player.position + Vector2(-220.0, -260.0))
@@ -142,6 +147,11 @@ func spawn_enemy(index: int, at: Vector2, hp_scale: float = 1.0, elite: bool = f
 	enemy.warning_started.connect(_warning)
 	enemy.impacted.connect(_impact)
 	return enemy
+
+## ponytail: enemies left behind get dragged along the edge of the moving area instead of despawning; fine off-screen.
+func _recenter() -> void:
+	var size: Vector2 = bounds.size.max(get_viewport_rect().size / camera.zoom + Vector2(480.0, 480.0))
+	bounds = Rect2(player.position - size * 0.5, size)
 
 func view_rect() -> Rect2:
 	var size: Vector2 = get_viewport_rect().size / camera.zoom
@@ -190,8 +200,10 @@ func step(delta: float, direction: Vector2, elapsed: float) -> void:
 	for enemy: Node2D in grid.query(player.position, 120.0):
 		if enemy.definition.aura_radius > 0.0 and enemy.position.distance_to(player.position) <= enemy.definition.aura_radius:
 			slow = maxf(slow, enemy.definition.aura_slow)
+	_recenter()
 	player.step(delta, direction, bounds.grow(-18.0), slow)
 	camera.position = player.position
+	map.follow(camera.position)
 	shake.step(delta)
 	_spawn(delta, elapsed, living.size())
 	for enemy: Node2D in enemies.get_children():

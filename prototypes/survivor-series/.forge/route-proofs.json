@@ -8,11 +8,11 @@
       "versionText": "codex-cli 0.162.1",
       "recipe": "codex-exec-imagegen/1",
       "level": "VERIFIED",
-      "verifiedAt": "2026-10-12T08:58:30.698Z",
-      "runId": "e8eff014458f4c3cad7cef617f98fd3c",
+      "verifiedAt": "2026-10-12T12:56:35.005Z",
+      "runId": "9240fa69e72f44a4bfc28494e5adc01c",
       "method": "cli_media.py run: native tool output adopted from the CLI's own run folder with scoped checks",
-      "jobDir": "art_src/map/ground/raw-wet-reflection-r7",
-      "artifactSha256": "96048d17a258695df238b9843455eef8625079b7a5d0fc58498c65eb6a1a64bf"
+      "jobDir": "art_src/enemies/smoker-gangster/.run-02.stage-300d85c7/takes/take-03",
+      "artifactSha256": "37a9a0a33fac600847e5dd72244b6a5a846921b1be9e2f4ebabb9ed746467701"
     }
   ]
 }
