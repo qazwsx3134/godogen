@@ -94,7 +94,7 @@ bash prototypes/godot-kit/sync.sh --check survivor-series
   - 靜態文字保留、原始 scene 不被改動、字型與畫面主題、震屏開關
 - **scaffold（7 項）**：最早的入口骨架。
 
-測試用自己的存檔路徑，跑完會刪掉。測試全部用遊戲時間推進。`tools/browser_check.mjs` 還是 90 秒版的瀏覽器檢查，**已過期**，待改寫（TODO T-005）。
+測試用自己的存檔路徑，跑完會刪掉。測試全部用遊戲時間推進。瀏覽器檢查：建好網頁版後 `python3 -m http.server 8793 -d build/web &`，再 `node tools/browser_check.mjs --playwright <playwright-core 路徑> --chromium <chrome 路徑>`（用法見檔頭）。
 
 `addons/proto_kit/` 由 `../godot-kit/sync.sh survivor-series` 同步，不能直接改副本。本版使用的模組：FloatingStick、TimeControl、SfxBank、Synth、CameraShake、SceneBuilder、TestKit、FontCheck、AtomicFile；Music 已接入，但沒有指定音樂。
 

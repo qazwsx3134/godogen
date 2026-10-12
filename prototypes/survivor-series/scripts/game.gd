@@ -53,6 +53,11 @@ func _ready() -> void:
 			meta.hero = argument.get_slice("=", 1)
 		if argument.begins_with("--seed="):
 			street.rng.seed = argument.get_slice("=", 1).to_int()
+	if OS.has_feature("web"):
+		# QA shortcut for tools/browser_check.mjs: index.html?duration=25 shortens a run. Players never pass it.
+		var query: Variant = JavaScriptBridge.eval("new URLSearchParams(location.search).get('duration')")
+		if query is String and not query.is_empty():
+			session_duration = clampf(query.to_float(), 0.3, 600.0)
 	show_menu()
 	if auto_play:
 		start_run()
@@ -313,7 +318,7 @@ func snapshot() -> Dictionary:
 
 func qa_layout() -> Dictionary:
 	var layout: Dictionary = {}
-	for entry: Array in [["start", menu.get_node("%Start")], ["shop", menu.get_node("%OpenShop")], ["pause", hud.get_node("%Pause")], ["resume", pause_panel.get_node("%Resume")], ["retry", results.get_node("%Retry")]]:
+	for entry: Array in [["start", menu.get_node("%Start")], ["shop", menu.get_node("%OpenShop")], ["pause", hud.get_node("%Pause")], ["resume", pause_panel.get_node("%Resume")], ["retry", results.get_node("%Retry")], ["home", results.get_node("%Home")], ["shop_back", shop.get_node("%Back")]]:
 		var rect: Rect2 = entry[1].get_global_rect()
 		layout[entry[0]] = [rect.position.x, rect.position.y, rect.size.x, rect.size.y]
 	var size: Vector2 = get_viewport().get_visible_rect().size
