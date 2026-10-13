@@ -2,6 +2,8 @@ extends Node
 ## Fires every owned weapon on its own cooldown. Street resolves hits, blasts and feedback.
 @export var flash_scene: PackedScene
 @export var max_projectiles: int = 90
+## The spring hand every cane-kind weapon throws when its item names no projectile of its own.
+@export var spring_hand: PackedScene = preload("res://scenes/cane.tscn")
 var street: Node2D
 var cooldowns: Dictionary = {}
 var punches: int = 0
@@ -277,18 +279,23 @@ func _lantern(s: Dictionary) -> bool:
 	street.sfx.play(&"lantern", 0.15)
 	return true
 
+## A spring-loaded hand shoots out sideways, overshoots, wobbles and snaps back; it hits everything along its path.
 func _cane(s: Dictionary) -> bool:
 	var side: float = signf(_hero().facing.x) if absf(_hero().facing.x) > 0.05 else 1.0
-	var width: float = 150.0 * s.area
-	var height: float = 56.0 * s.area
+	var reach: float = 150.0 * s.area
 	for i: int in s.amount:
+		if not _room():
+			break
 		var direction: float = side if i % 2 == 0 else -side
-		var center: Vector2 = _hero().position + Vector2(direction * (width * 0.5 + 10.0), -12.0)
-		var zone := Rect2(center - Vector2(width, height) * 0.5, Vector2(width, height))
-		_flash("cane", width, Vector2(direction, 0.0), center)
-		for enemy: Node2D in street.grid.query(center, width * 0.5 + 10.0):
-			if zone.grow(enemy.definition.radius).has_point(enemy.position):
-				enemy.hit(s.damage, Vector2(direction, -0.2).normalized(), s.knockback * street.build_force())
+		var hand := _spawn(s if s.projectile != null else s.merged({"projectile": spring_hand}, true))
+		hand.mode = "spring"
+		hand.face_travel = false
+		hand.anchor = _hero()
+		hand.arm_root = Vector2(direction * 10.0, -34.0)
+		hand.velocity = Vector2(direction * reach, 0.0)
+		hand.lifetime = 0.5
+		hand.visual.scale.x = direction
+		hand.launch(_hero().position + hand.arm_root)
 	street.sfx.play(&"swish", 0.08)
 	return true
 
@@ -324,7 +331,8 @@ func _tofu(s: Dictionary) -> bool:
 		var at: Vector2 = _crowd_center(320.0)
 		if at == Vector2.INF:
 			at = _hero().position + Vector2.RIGHT.rotated(street.rng.randf() * TAU) * 120.0
-		_zone(s, at + Vector2.RIGHT.rotated(TAU * i / s.amount) * 30.0 * minf(i, 1.0))
+		var zone := _zone(s, at + Vector2.RIGHT.rotated(TAU * i / s.amount) * 30.0 * minf(i, 1.0))
+		zone.throw(_hero().position + Vector2(0.0, -30.0), 0.42 + 0.06 * i)
 	street.sfx.play(&"incense", 0.2)
 	return true
 

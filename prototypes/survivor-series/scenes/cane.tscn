@@ -1,0 +1,24 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/projectile.gd" id="1_77tqj"]
+[ext_resource type="Texture2D" path="res://assets/art/icons/cane.png" id="2_633jo"]
+
+[node name="SpringHand" type="Node2D" unique_id=1291290987]
+script = ExtResource("1_77tqj")
+mode = "spring"
+radius = 26.0
+face_travel = false
+
+[node name="Arm" type="Line2D" parent="." unique_id=1056520081]
+unique_name_in_owner = true
+width = 4.0
+default_color = Color(1, 0.56078434, 0.69411767, 1)
+joint_mode = 2
+
+[node name="Visual" type="Node2D" parent="." unique_id=1308142892]
+unique_name_in_owner = true
+
+[node name="Hand" type="Sprite2D" parent="Visual" unique_id=1276887271]
+rotation = 2.3561945
+scale = Vector2(0.42, 0.42)
+texture = ExtResource("2_633jo")

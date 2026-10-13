@@ -30,6 +30,9 @@ var _pose: Tween
 @onready var body_woman: Node2D = %BodyWoman
 @onready var umbrella: Node2D = %Umbrella
 @onready var hp_bar: ProgressBar = %HpBar
+## Lighter bar behind HpBar that drains after a short delay, so a hit reads as a chunk lost.
+@onready var hp_trail: ProgressBar = %HpTrail
+var _trail: Tween
 
 func _ready() -> void:
 	rest_scale = visual.scale
@@ -132,4 +135,13 @@ func revive(fraction: float) -> void:
 
 func _refresh_bar() -> void:
 	hp_bar.max_value = hp_limit
+	hp_trail.max_value = hp_limit
 	hp_bar.value = hp
+	if _trail != null and _trail.is_valid():
+		_trail.kill()
+	if hp >= hp_trail.value:
+		hp_trail.value = hp
+		return
+	_trail = create_tween()
+	_trail.tween_interval(0.25)
+	_trail.tween_property(hp_trail, "value", hp, 0.45).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)

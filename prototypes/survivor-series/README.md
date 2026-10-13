@@ -35,8 +35,9 @@ python3 -m http.server 8793 --bind 127.0.0.1 --directory prototypes/survivor-ser
 | 檔案 | 可調整內容 |
 |---|---|
 | `scenes/game.tscn` | 主流程、`session_duration`、金幣換算（每次揍飛、每分鐘、勝利獎勵、金幣面額）、共用服務與各畫面 |
-| `scenes/street.tscn` | `Map`（`Ground` 地磚、`prop_scenes`、每格道具數 `props_per_chunk`、起點淨空半徑）、`heroes` 清單、Player 起點、四類代表性敵人；bounds 大小、敵人／特效／寶石／煙霧上限、磁吸半徑、掉落機率 |
-| `scenes/props/*.tscn` | 8 種地圖道具（攤位、燈籠柱含暖光暈與濕地倒影、花台、三角錐、護柱、停放機車、水果箱），腳底在原點 |
+| `scenes/street.tscn` | `Map`（`Ground` 地磚、夜市群場景與權重、每格出現機率、起點淨空半徑）、`World`（y-sort：道具、敵人、主角）、`heroes` 清單、Player 起點、四類代表性敵人；bounds 大小、敵人／特效／寶石／煙霧上限、磁吸半徑、掉落機率 |
+| `scenes/props/*.tscn` | 8 種地圖道具（攤位、燈籠柱含暖光暈與濕地倒影、花台、三角錐、護柱、停放機車、水果箱），腳底在原點；`Block/Footprint` 長方形就是路障（擋主角、敵人與飛行投射物） |
+| `scenes/clusters/*.tscn` | 夜市群：`market_row`、`market_double`、`roadblock`；在 `street.tscn` 的 `Map.cluster_scenes`／`cluster_weights`／`cluster_chance` 調出現率 |
 | `scenes/player.tscn` | `BodyMan`／`BodyWoman` 兩套外觀（共用 `Fist`，執行時只顯示選中的一套）、HpBar；移速、拳頭距離、血量、受傷無敵時間 |
 | `data/heroes/man.tres`、`woman.tres` | 主角：起手武器、血量與移速倍率、揮擊距離與回彈、選單文字 |
 | `scenes/smoker.tscn`、`bike.tscn`、`car.tscn`、`fatty.tscn` | 敵人外觀、預警線、HpBar；交通工具的 `direction_textures`（5 方向圖） |

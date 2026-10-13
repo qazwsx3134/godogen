@@ -2,7 +2,18 @@
 
 [ext_resource type="Texture2D" path="res://assets/art/map/bollard.png" id="1_fm8yq"]
 
-[node name="Bollard" type="Sprite2D" unique_id=1932245878]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jxypr"]
+size = Vector2(18, 12)
+
+[node name="Bollard" type="Node2D" unique_id=2116886650]
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=1056188086]
 texture = ExtResource("1_fm8yq")
 centered = false
 offset = Vector2(-10, -49)
+
+[node name="Block" type="StaticBody2D" parent="." unique_id=1050375055]
+
+[node name="Footprint" type="CollisionShape2D" parent="Block" unique_id=1545395132]
+position = Vector2(0, -4)
+shape = SubResource("RectangleShape2D_jxypr")

@@ -1,0 +1,12 @@
+{
+  "schema": "generate2dmap.placements.v2",
+  "props": [
+    {"id":"lantern-post-01","image":"../props/lantern_post.png","x":320,"y":192,"anchor":"px","anchorPx":[24,143],"sortY":192,"layer":"props","scale":1.0,"resampler":"nearest"},
+    {"id":"stall-fruit-01","image":"../props/stall-fruit.png","x":192,"y":256,"anchor":"px","anchorPx":[78,111],"sortY":256,"layer":"props","scale":1.0,"resampler":"nearest"},
+    {"id":"stall-snack-01","image":"../props/stall-snack.png","x":576,"y":256,"anchor":"px","anchorPx":[85,111],"sortY":256,"layer":"props","scale":1.0,"resampler":"nearest"}
+  ],
+  "actors": [
+    {"id":"hero-demo-se-90px","image":"hero-se-demo.png","x":384,"y":384,"anchor":"px","anchorPx":[22,90],"sortY":384,"layer":"actors","scale":1.0,"resampler":"nearest"}
+  ],
+  "metadata":{"scope":"preview-only","hero":"original SE demo sprite at 44x90 px; no resize","props":"unchanged map props; existing authored anchors"}
+}

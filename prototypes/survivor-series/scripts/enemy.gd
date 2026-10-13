@@ -24,6 +24,15 @@ var fly_left: float = 0.0
 var slow_left: float = 0.0
 var slow_amount: float = 0.0
 var rest_scale: Vector2
+## Damage of the latest hit, for the floating number.
+var last_damage: float = 0.0
+## How a lethal hit plays out, from the damage left over past the remaining HP (see `hit`):
+## "drop" falls over on the spot, "slide" is knocked back a little then falls, "launch" flies off spinning.
+var death: String = "launch"
+## Damage past zero HP, as a fraction of max HP, at which death becomes "slide" / "launch".
+@export var slide_overkill: float = 0.25
+@export var launch_overkill: float = 1.0
+var _fall_side: float = 1.0
 var _flash: Tween
 @onready var visual: Node2D = %Visual
 @onready var shadow: Polygon2D = %Shadow
@@ -60,10 +69,20 @@ func contact_damage() -> float:
 
 func step(delta: float, target: Vector2, bounds: Rect2) -> void:
 	if dead:
-		position += knockback * delta
-		visual.rotation += delta * 12.0
-		visual.scale += Vector2.ONE * delta * 0.24
 		fly_left -= delta
+		match death:
+			"launch":
+				position += knockback * delta
+				visual.rotation += delta * 12.0
+				visual.scale += Vector2.ONE * delta * 0.24
+			"slide":
+				position += knockback * delta
+				knockback = knockback.move_toward(Vector2.ZERO, delta * 1100.0)
+				visual.rotation = move_toward(visual.rotation, _fall_side * 1.45, delta * 5.0)
+				modulate.a = clampf(fly_left / 0.3, 0.0, 1.0)
+			_:
+				visual.rotation = move_toward(visual.rotation, _fall_side * 1.45, delta * 8.0)
+				modulate.a = clampf(fly_left / 0.3, 0.0, 1.0)
 		if fly_left <= 0.0:
 			queue_free()
 		return
@@ -148,6 +167,8 @@ func face(direction: Vector2) -> void:
 func hit(damage: float, direction: Vector2, force: float = 1.0) -> bool:
 	if dead:
 		return false
+	var overkill: float = (damage - hp) / max_hp
+	last_damage = damage
 	hp = maxf(0.0, hp - damage)
 	hp_bar.value = hp
 	if not elite and definition.max_hp >= 140.0 and hp < max_hp:
@@ -157,8 +178,18 @@ func hit(damage: float, direction: Vector2, force: float = 1.0) -> bool:
 		warning.hide()
 		shadow.hide()
 		hp_bar.hide()
-		knockback = direction.normalized() * 1300.0
-		fly_left = 1.0
+		death = "launch" if overkill >= launch_overkill else ("slide" if overkill >= slide_overkill else "drop")
+		_fall_side = 1.0 if direction.x >= 0.0 else -1.0
+		match death:
+			"launch":
+				knockback = direction.normalized() * 1300.0
+				fly_left = 1.0
+			"slide":
+				knockback = direction.normalized() * 520.0
+				fly_left = 0.75
+			_:
+				knockback = Vector2.ZERO
+				fly_left = 0.5
 	else:
 		knockback += direction.normalized() * (260.0 * force / definition.weight)
 	if _flash != null and _flash.is_valid():

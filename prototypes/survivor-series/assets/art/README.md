@@ -2,7 +2,8 @@
 
 | 檔案 | 來源（`art_src/`） | 用在 |
 |---|---|---|
-| `map/pavement.png`（512，無縫） | `map/godot/assets/tilesets/pavement.png`（第七輪） | `street.tscn` Map/Ground |
+| `map/pavement.png`（512，無縫） | `map/ground/r8/candidate-02.png`（第八輪長方形鋪磚，暫用） | `street.tscn` Map/Ground |
+| `fx/soft_puff.tres`（徑向漸層，有深色邊） | 程式產生 | `smoke.tscn` 的地面霧與煙團 |
 | `map/lantern_glow.png`、`map/wet_reflection.png` | 同上 overlay，裁掉透明邊 | `scenes/props/lantern_post.tscn` |
 | `map/<道具>.png` ×8 | `map/godot/assets/props/` | `scenes/props/*.tscn` |
 | `enemies/gangster.png`（92×160，顯示 0.5 倍） | `enemies/smoker-gangster/master/`（candidate-01） | `scenes/smoker.tscn` Visual/Art |

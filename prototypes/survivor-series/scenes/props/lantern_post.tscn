@@ -4,17 +4,31 @@
 [ext_resource type="Texture2D" path="res://assets/art/map/lantern_glow.png" id="2_m5vdo"]
 [ext_resource type="Texture2D" path="res://assets/art/map/wet_reflection.png" id="3_ohnsn"]
 
-[node name="LanternPost" type="Sprite2D" unique_id=13274467]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_x5ioh"]
+size = Vector2(23.04, 14)
+
+[node name="LanternPost" type="Node2D" unique_id=2013300087]
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=900352408]
+scale = Vector2(1.2, 1.2)
 texture = ExtResource("1_3rd1k")
 centered = false
 offset = Vector2(-24, -143)
 
-[node name="Glow" type="Sprite2D" parent="." unique_id=1545171471]
-show_behind_parent = true
-position = Vector2(0, 11)
+[node name="Block" type="StaticBody2D" parent="." unique_id=322520205]
+
+[node name="Footprint" type="CollisionShape2D" parent="Block" unique_id=752991905]
+position = Vector2(9.6, -5)
+shape = SubResource("RectangleShape2D_x5ioh")
+
+[node name="Glow" type="Sprite2D" parent="." unique_id=51091423]
+z_index = -9
+position = Vector2(0, 13.200001)
+scale = Vector2(1.2, 1.2)
 texture = ExtResource("2_m5vdo")
 
-[node name="Reflection" type="Sprite2D" parent="." unique_id=154593064]
-show_behind_parent = true
-position = Vector2(0, 106)
+[node name="Reflection" type="Sprite2D" parent="." unique_id=469633909]
+z_index = -9
+position = Vector2(0, 127.200005)
+scale = Vector2(1.2, 1.2)
 texture = ExtResource("3_ohnsn")

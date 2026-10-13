@@ -1,0 +1,34 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/props/lantern_post.tscn" id="1_aqfjj"]
+[ext_resource type="PackedScene" path="res://scenes/props/stall_fruit.tscn" id="2_p17k3"]
+[ext_resource type="PackedScene" path="res://scenes/props/stall_snack.tscn" id="3_kt2s3"]
+[ext_resource type="PackedScene" path="res://scenes/props/fruit_crate.tscn" id="4_vmyw3"]
+[ext_resource type="PackedScene" path="res://scenes/props/cone.tscn" id="5_fq51q"]
+
+[node name="MarketRow" type="Node2D" unique_id=1538565013]
+y_sort_enabled = true
+
+[node name="LanternPost1" type="Node2D" parent="." unique_id=2013300087 instance=ExtResource("1_aqfjj")]
+position = Vector2(-410, 10)
+
+[node name="StallFruit1" type="Node2D" parent="." unique_id=1685761157 instance=ExtResource("2_p17k3")]
+position = Vector2(-260, 0)
+
+[node name="StallSnack1" type="Node2D" parent="." unique_id=84730947 instance=ExtResource("3_kt2s3")]
+
+[node name="StallFruit2" type="Node2D" parent="." unique_id=25137911 instance=ExtResource("2_p17k3")]
+position = Vector2(260, 0)
+scale = Vector2(-1, 1)
+
+[node name="LanternPost2" type="Node2D" parent="." unique_id=1045469406 instance=ExtResource("1_aqfjj")]
+position = Vector2(400, 10)
+
+[node name="FruitCrate1" type="Node2D" parent="." unique_id=1640017494 instance=ExtResource("4_vmyw3")]
+position = Vector2(-150, 46)
+
+[node name="FruitCrate2" type="Node2D" parent="." unique_id=1683602405 instance=ExtResource("4_vmyw3")]
+position = Vector2(120, 52)
+
+[node name="Cone1" type="Node2D" parent="." unique_id=734965717 instance=ExtResource("5_fq51q")]
+position = Vector2(330, 70)

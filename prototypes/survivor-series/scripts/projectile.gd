@@ -1,6 +1,6 @@
 extends Node2D
 ## A weapon projectile. Street owns hit tests; this only moves, remembers whom it hit, and flags detonation.
-@export_enum("straight", "boomerang", "orbit", "lob", "fall", "thrust") var mode: String = "straight"
+@export_enum("straight", "boomerang", "orbit", "lob", "fall", "thrust", "spring") var mode: String = "straight"
 @export var radius: float = 16.0
 ## Visual spin in radians per second.
 @export var spin: float = 0.0
@@ -31,7 +31,25 @@ var orbit_radius: float = 80.0
 var orbit_speed: float = 3.6
 var bounds := Rect2()
 var hit_at: Dictionary = {}
+## Thrown shots (`throw`): seconds of the arc from `flight_from` before the shot starts working where it landed.
+var flight: float = 0.0
+var flight_left: float = 0.0
+var flight_from := Vector2.ZERO
+## Spring arm: the hand flies out from `anchor` + `arm_root` along `velocity`, overshoots, wobbles and snaps back.
+var arm_root := Vector2.ZERO
 @onready var visual: Node2D = %Visual
+## Optional child of Visual hidden while a thrown shot is in the air (the pool a tofu leaves behind).
+@onready var landed: Node2D = visual.get_node_or_null("Landed")
+@onready var arm: Line2D = get_node_or_null("%Arm")
+
+## Throws the shot from `from` to where it was launched; it does nothing until it lands.
+func throw(from: Vector2, seconds: float) -> void:
+	flight = seconds
+	flight_left = seconds
+	flight_from = from
+	position = from
+	if landed != null:
+		landed.hide()
 
 func launch(at: Vector2) -> void:
 	position = at
@@ -41,6 +59,20 @@ func launch(at: Vector2) -> void:
 
 func step(delta: float) -> Vector2:
 	var before: Vector2 = position
+	if flight_left > 0.0:
+		flight_left -= delta
+		var t: float = 1.0 - clampf(flight_left / flight, 0.0, 1.0)
+		position = flight_from.lerp(start_point, t)
+		visual.position.y = -sin(t * PI) * 70.0
+		visual.rotation += delta * 13.0
+		if flight_left <= 0.0:
+			visual.position.y = 0.0
+			visual.rotation = 0.0
+			if landed != null:
+				landed.show()
+				landed.scale = Vector2(0.3, 0.3)
+				create_tween().tween_property(landed, "scale", Vector2.ONE, 0.18).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		return before
 	age += delta
 	match mode:
 		"straight":
@@ -64,6 +96,12 @@ func step(delta: float) -> Vector2:
 			# Stabs out to `velocity` (an offset from the anchor) and pulls back, following the hero.
 			if anchor != null:
 				position = anchor.position + velocity * sin(PI * clampf(age / lifetime, 0.0, 1.0))
+		"spring":
+			if anchor != null:
+				var root: Vector2 = anchor.position + arm_root
+				position = root + velocity * spring_extension(clampf(age / lifetime, 0.0, 1.0))
+				if arm != null:
+					arm.points = _coil((root - position) / scale.x)
 		"lob", "fall":
 			var t: float = clampf(age / lifetime, 0.0, 1.0)
 			position = start_point.lerp(target_point, t) if mode == "lob" else target_point
@@ -71,7 +109,7 @@ func step(delta: float) -> Vector2:
 			if t >= 1.0:
 				detonate = true
 	visual.rotation += spin * delta
-	if mode != "lob" and mode != "fall":
+	if mode != "lob" and mode != "fall" and mode != "spring":
 		modulate.a = clampf((lifetime - age) / 0.15, 0.0, 1.0)
 		if age >= lifetime:
 			if blast_radius > 0.0:
@@ -81,7 +119,7 @@ func step(delta: float) -> Vector2:
 	return before
 
 func can_hit(enemy: Node2D, before: Vector2) -> bool:
-	if mode == "lob" or mode == "fall" or detonate or enemy.dead or pierce == 0:
+	if flight_left > 0.0 or mode == "lob" or mode == "fall" or detonate or enemy.dead or pierce == 0:
 		return false
 	var id: int = enemy.get_instance_id()
 	if hit_at.has(id) and (rehit <= 0.0 or age - float(hit_at[id]) < rehit):
@@ -97,3 +135,22 @@ func remember(enemy: Node2D) -> void:
 		pierce -= 1
 		if pierce == 0:
 			queue_free()
+
+## 0 → 1 → 0 over the shot's life: shoots out past full reach, wobbles back to it, then retracts.
+static func spring_extension(t: float) -> float:
+	if t < 0.62:
+		var u: float = t / 0.62
+		return 1.0 - exp(-5.0 * u) * cos(11.0 * u)
+	var v: float = (t - 0.62) / 0.38
+	return (1.0 - exp(-5.0) * cos(11.0)) * (1.0 - v * v)
+
+## A zigzag spring from `to_root` (local) to the hand at the origin: more coils the longer it stretches.
+func _coil(to_root: Vector2) -> PackedVector2Array:
+	var points := PackedVector2Array([to_root])
+	var length: float = to_root.length()
+	var across: Vector2 = to_root.orthogonal().normalized() * 7.0
+	var turns: int = 8
+	for i: int in range(1, turns):
+		points.append(to_root * (1.0 - float(i) / turns) + across * (1.0 if i % 2 == 0 else -1.0) * minf(1.0, length / 60.0))
+	points.append(Vector2.ZERO)
+	return points

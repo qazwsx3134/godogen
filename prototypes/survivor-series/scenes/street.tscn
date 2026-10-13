@@ -12,19 +12,15 @@
 [ext_resource type="PackedScene" path="res://scenes/blast.tscn" id="8_wd6c3"]
 [ext_resource type="PackedScene" path="res://scenes/pickup.tscn" id="9_7gyev"]
 [ext_resource type="Resource" path="res://data/progression.tres" id="9_7vla3"]
+[ext_resource type="PackedScene" path="res://scenes/damage_number.tscn" id="10_5turb"]
 [ext_resource type="Resource" path="res://data/spawn_schedule.tres" id="11_1x85o"]
 [ext_resource type="Resource" path="res://data/heroes/man.tres" id="12_7gyev"]
 [ext_resource type="Script" path="res://scripts/arsenal.gd" id="13_0otry"]
 [ext_resource type="Resource" path="res://data/heroes/woman.tres" id="13_1x85o"]
 [ext_resource type="Script" path="res://scripts/map.gd" id="14_m25ji"]
-[ext_resource type="PackedScene" path="res://scenes/props/stall_fruit.tscn" id="15_scssp"]
-[ext_resource type="PackedScene" path="res://scenes/props/stall_snack.tscn" id="16_kkqeo"]
-[ext_resource type="PackedScene" path="res://scenes/props/lantern_post.tscn" id="17_xcar7"]
-[ext_resource type="PackedScene" path="res://scenes/props/planter.tscn" id="18_m3phq"]
-[ext_resource type="PackedScene" path="res://scenes/props/cone.tscn" id="19_mice7"]
-[ext_resource type="PackedScene" path="res://scenes/props/bollard.tscn" id="20_vs586"]
-[ext_resource type="PackedScene" path="res://scenes/props/parked_scooter.tscn" id="21_mptns"]
-[ext_resource type="PackedScene" path="res://scenes/props/fruit_crate.tscn" id="22_2mxiw"]
+[ext_resource type="PackedScene" path="res://scenes/clusters/market_row.tscn" id="16_061y5"]
+[ext_resource type="PackedScene" path="res://scenes/clusters/market_double.tscn" id="17_3au6m"]
+[ext_resource type="PackedScene" path="res://scenes/clusters/roadblock.tscn" id="18_r3eyu"]
 [ext_resource type="Texture2D" path="res://assets/art/map/pavement.png" id="23_pmkni"]
 
 [node name="Street" type="Node2D" unique_id=1672293938]
@@ -35,15 +31,18 @@ smoke_scene = ExtResource("5_nokxu")
 impact_scene = ExtResource("6_7vla3")
 blast_scene = ExtResource("8_wd6c3")
 pickup_scene = ExtResource("9_7gyev")
+number_scene = ExtResource("10_5turb")
 progression = ExtResource("9_7vla3")
 schedule = ExtResource("11_1x85o")
 heroes = Array[Resource]([ExtResource("12_7gyev"), ExtResource("13_1x85o")])
+magnet_radius = 110.0
 
 [node name="Map" type="Node2D" parent="." unique_id=1056006506]
 unique_name_in_owner = true
 z_index = -10
 script = ExtResource("14_m25ji")
-prop_scenes = Array[PackedScene]([ExtResource("15_scssp"), ExtResource("16_kkqeo"), ExtResource("17_xcar7"), ExtResource("18_m3phq"), ExtResource("19_mice7"), ExtResource("20_vs586"), ExtResource("21_mptns"), ExtResource("22_2mxiw")])
+cluster_scenes = Array[PackedScene]([ExtResource("16_061y5"), ExtResource("17_3au6m"), ExtResource("18_r3eyu")])
+cluster_weights = PackedFloat32Array(3, 2, 2)
 
 [node name="Ground" type="Sprite2D" parent="Map" unique_id=446245008]
 unique_name_in_owner = true
@@ -52,34 +51,38 @@ texture = ExtResource("23_pmkni")
 region_enabled = true
 region_rect = Rect2(0, 0, 4096, 4096)
 
-[node name="Props" type="Node2D" parent="Map" unique_id=1425087145]
-unique_name_in_owner = true
-
 [node name="Hazards" type="Node2D" parent="." unique_id=536408701]
 unique_name_in_owner = true
+z_index = 2
 
 [node name="Pickups" type="Node2D" parent="." unique_id=698247646]
 unique_name_in_owner = true
 
-[node name="Enemies" type="Node2D" parent="." unique_id=1371719731]
+[node name="World" type="Node2D" parent="." unique_id=399804568]
+y_sort_enabled = true
+
+[node name="Props" type="Node2D" parent="World" unique_id=1425087145]
 unique_name_in_owner = true
 y_sort_enabled = true
 
-[node name="PreviewEnemy" parent="Enemies" unique_id=2129893070 instance=ExtResource("2_5m0si")]
+[node name="Enemies" type="Node2D" parent="World" unique_id=1371719731]
+unique_name_in_owner = true
+y_sort_enabled = true
+
+[node name="PreviewEnemy" parent="World/Enemies" unique_id=2129893070 instance=ExtResource("2_5m0si")]
 position = Vector2(600, 690)
 
-[node name="PreviewEnemy2" parent="Enemies" unique_id=149359201 instance=ExtResource("3_dxpu0")]
+[node name="PreviewEnemy2" parent="World/Enemies" unique_id=149359201 instance=ExtResource("3_dxpu0")]
 position = Vector2(380, 600)
 
-[node name="PreviewEnemy3" parent="Enemies" unique_id=1478062503 instance=ExtResource("4_cotsb")]
+[node name="PreviewEnemy3" parent="World/Enemies" unique_id=1478062503 instance=ExtResource("4_cotsb")]
 position = Vector2(830, 620)
 
-[node name="PreviewEnemy4" parent="Enemies" unique_id=458105425 instance=ExtResource("5_fmkxj")]
+[node name="PreviewEnemy4" parent="World/Enemies" unique_id=458105425 instance=ExtResource("5_fmkxj")]
 position = Vector2(800, 1000)
 
-[node name="Player" parent="." unique_id=2133992438 instance=ExtResource("7_0wd0x")]
+[node name="Player" parent="World" unique_id=2133992438 instance=ExtResource("7_0wd0x")]
 unique_name_in_owner = true
-z_index = 1
 position = Vector2(600, 840)
 
 [node name="Effects" type="Node2D" parent="." unique_id=1098333123]
@@ -99,3 +102,7 @@ z_index = 4
 unique_name_in_owner = true
 script = ExtResource("13_0otry")
 flash_scene = ExtResource("8_nokxu")
+
+[node name="Numbers" type="Node2D" parent="." unique_id=490767626]
+unique_name_in_owner = true
+z_index = 9

@@ -23,6 +23,50 @@ func _settle(street: Node2D, steps: int, dt: float = 1.0 / 30.0) -> void:
 	for i: int in steps:
 		street.step(dt, Vector2.ZERO, 0.0)
 
+## Death styles, damage numbers, roadblocks, the spring hand, the thrown tofu and the hero's HP trail.
+func _feedback_checks(street: Node2D) -> void:
+	_arm(street, [])
+	var hero = street.player
+	var deaths: Array = []
+	for damage: float in [10.5, 20.0, 1000.0]:
+		var enemy = street.spawn_enemy(0, hero.position + Vector2(300, 0))
+		enemy.hp = 10.0
+		enemy.hit(damage, Vector2.RIGHT)
+		deaths.append(enemy.death)
+	_expect(deaths == ["drop", "slide", "launch"], "overkill picks drop, slide or launch death: %s" % [deaths])
+	_expect(street.numbers.get_child_count() == 3, "each hit shows a damage number")
+	var block := Rect2(hero.position + Vector2(100, -20), Vector2(80, 40))
+	street.map._blocks[Vector2i(99999, 99999)] = [block]
+	street.map._rebuild_cells()
+	var pushed: Vector2 = street.map.push_out(block.get_center() + Vector2(-30, 0), 10.0, block.get_center() + Vector2(200, 0))
+	_expect(not block.grow(9.9).has_point(pushed), "push_out moves a body out of a roadblock")
+	_expect(street.map.blocked(block.get_center()) and not street.map.blocked(block.get_center() + Vector2(0, 100)), "blocked() matches the roadblock rect")
+	var shot = street.arsenal._spawn(street.build.weapon_stats(&"slipper").merged({"projectile": load("res://data/items/slipper.tres").projectile}, true))
+	shot.mode = "straight"
+	shot.velocity = Vector2(600, 0)
+	shot.launch(block.get_center() + Vector2(-50, 0))
+	_settle(street, 6)
+	_expect(not is_instance_valid(shot) or shot.is_queued_for_deletion(), "a flying projectile stops on a roadblock")
+	street.map._blocks.erase(Vector2i(99999, 99999))
+	street.map._rebuild_cells()
+	var Projectile = load("res://scripts/projectile.gd")
+	_expect(Projectile.spring_extension(0.0) == 0.0 and Projectile.spring_extension(0.18) > 1.1 and absf(Projectile.spring_extension(1.0)) < 0.01, "spring hand overshoots past full reach and returns to zero")
+	_arm(street, [&"cane"])
+	street.arsenal.fire(street.build.weapon_stats(&"cane"))
+	var hands: Array = street.projectiles.get_children().filter(func(p: Node2D) -> bool: return p.mode == "spring")
+	_expect(hands.size() >= 1 and hands[0].anchor == hero, "the cane throws a spring hand anchored on the hero")
+	_arm(street, [&"tofu"])
+	var target = street.spawn_enemy(0, hero.position + Vector2(160, 0))
+	street.arsenal.fire(street.build.weapon_stats(&"tofu"))
+	var tofu: Node2D = street.projectiles.get_child(0)
+	_expect(tofu.flight_left > 0.0 and not tofu.landed.visible and tofu.position.distance_to(hero.position) < 40.0, "tofu starts in the air at the hero")
+	_expect(not tofu.can_hit(target, tofu.position), "airborne tofu hurts nobody")
+	_settle(street, 20)
+	_expect(tofu.flight_left <= 0.0 and tofu.landed.visible and tofu.position.distance_to(tofu.start_point) < 1.0, "tofu lands where it was aimed and opens its pool")
+	hero.reset(100.0)
+	hero.hurt(30.0)
+	_expect(hero.hp_bar.value == 70.0 and hero.hp_trail.value == 100.0, "the HP bar drops at once and the trail waits")
+
 func run() -> void:
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(META_PATH))
 	var game = (load("res://scenes/game.tscn") as PackedScene).instantiate()
@@ -289,6 +333,7 @@ func run() -> void:
 	street.camera.rotation = 0.01
 	game.hud.get_node("%ShakeToggle").button_pressed = false
 	_expect(street.camera.offset == Vector2.ZERO and street.camera.rotation == 0.0 and street.shake.shake_scale == 0.0, "disabling shake restores the camera immediately")
+	_feedback_checks(street)
 	game.show_menu()
 	game.queue_free()
 	await _frames(2)

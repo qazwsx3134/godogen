@@ -11,6 +11,7 @@ const Build = preload("res://scripts/run_build.gd")
 @export var impact_scene: PackedScene
 @export var blast_scene: PackedScene
 @export var pickup_scene: PackedScene
+@export var number_scene: PackedScene
 @export var progression: Resource
 @export var schedule: Resource
 ## Playable heroes (HeroDef); `hero_id` picks one for the next run.
@@ -22,6 +23,8 @@ const Build = preload("res://scripts/run_build.gd")
 @export var max_effects: int = 32
 @export var max_gems: int = 160
 @export var max_hazards: int = 10
+## Floating damage numbers on screen at once; further hits show none until some fade.
+@export var max_numbers: int = 40
 @export var magnet_radius: float = 70.0
 @export_group("Drops")
 @export var coin_chance: float = 0.03
@@ -33,6 +36,7 @@ const Build = preload("res://scripts/run_build.gd")
 @onready var effects: Node2D = %Effects
 @onready var projectiles: Node2D = %Projectiles
 @onready var pickups: Node2D = %Pickups
+@onready var numbers: Node2D = %Numbers
 @onready var camera: Camera2D = %Camera
 @onready var arsenal: Node = %Arsenal
 @onready var map: Node2D = %Map
@@ -47,6 +51,8 @@ var meta_unlocks: Array = []
 ## Fusion ids found in earlier runs; their cards show the real name.
 var meta_fusions: Array = []
 var rng := RandomNumberGenerator.new()
+## Cosmetic randomness only, so effects never shift spawns or drops.
+var _fx_rng := RandomNumberGenerator.new()
 var kills: int = 0
 var hits_taken: int = 0
 var damage_taken: float = 0.0
@@ -76,7 +82,7 @@ func _ready() -> void:
 	arsenal.street = self
 
 func clear() -> void:
-	for holder: Node2D in [enemies, hazards, effects, projectiles, pickups]:
+	for holder: Node2D in [enemies, hazards, effects, projectiles, pickups, numbers]:
 		for child: Node in holder.get_children():
 			holder.remove_child(child)
 			child.queue_free()
@@ -215,6 +221,7 @@ func step(delta: float, direction: Vector2, elapsed: float) -> void:
 		_hurt(enemy.contact_damage(), enemy.definition.kind + ("_dash" if enemy.phase == "dash" else ""))
 		break
 	_separate_enemies(delta)
+	_block_enemies(delta)
 	for cloud: Node2D in hazards.get_children():
 		cloud.step(delta)
 		if not cloud.is_queued_for_deletion() and cloud.position.distance_to(player.position) < cloud.radius + 12.0:
@@ -282,7 +289,13 @@ func _step_projectiles(delta: float) -> void:
 					enemy.hit(shot.damage, shot.velocity.normalized() if shot.velocity != Vector2.ZERO else (enemy.position - player.position).normalized(), shot.force)
 				if shot.detonate or shot.is_queued_for_deletion():
 					break
-		if (shot.slow > 0.0 or shot.pull > 0.0) and not shot.detonate and not shot.is_queued_for_deletion():
+		if _stopped_by_roadblock(shot):
+			if shot.blast_radius > 0.0:
+				shot.detonate = true
+			else:
+				shot.queue_free()
+				continue
+		if (shot.slow > 0.0 or shot.pull > 0.0) and shot.flight_left <= 0.0 and not shot.detonate and not shot.is_queued_for_deletion():
 			for enemy: Node2D in grid.query(shot.position, shot.radius):
 				if shot.slow > 0.0:
 					enemy.slow(shot.slow, 0.3)
@@ -396,6 +409,19 @@ func _separate_enemies(delta: float) -> void:
 				a.position = (a.position + push * b.definition.weight / weight).clamp(bounds.position, bounds.end)
 				b.position = (b.position - push * a.definition.weight / weight).clamp(bounds.position, bounds.end)
 
+## Roadblocks hold enemies back; they slide along the face toward the shorter way round the hero.
+func _block_enemies(delta: float) -> void:
+	for enemy: Node2D in enemies.get_children():
+		if enemy.dead or enemy.is_queued_for_deletion():
+			continue
+		enemy.position = map.push_out(enemy.position, enemy.definition.radius * 0.6, player.position, enemy.definition.speed * delta * 0.8)
+
+## Thrown, falling, orbiting and anchored shots pass over roadblocks; flat flying ones stop on them.
+func _stopped_by_roadblock(shot: Node2D) -> bool:
+	if shot.is_queued_for_deletion() or shot.detonate or shot.mode not in ["straight", "boomerang"] or shot.velocity == Vector2.ZERO:
+		return false
+	return map.blocked(shot.position)
+
 func _smoke(at: Vector2) -> void:
 	if hazards.get_child_count() >= max_hazards:
 		return
@@ -422,6 +448,7 @@ func _hurt(amount: float, source: String) -> void:
 		score_changed.emit()
 
 func _impact(enemy: Node2D, lethal: bool, direction: Vector2) -> void:
+	_show_number(enemy, lethal)
 	if not lethal:
 		if punching and effects.get_child_count() < max_effects:
 			_impact_effect(enemy, false, direction, "砰！")
@@ -455,6 +482,14 @@ func _impact(enemy: Node2D, lethal: bool, direction: Vector2) -> void:
 		# Resolved at the start of the next step so a chain of farts never recurses inside hit().
 		_bursts.append({"at": enemy.position, "radius": enemy.definition.burst_radius * (1.6 if enemy.elite else 1.0), "damage": enemy.definition.burst_damage})
 	score_changed.emit()
+
+func _show_number(enemy: Node2D, lethal: bool) -> void:
+	if number_scene == null or numbers.get_child_count() >= max_numbers:
+		return
+	var label := number_scene.instantiate() as Node2D
+	numbers.add_child(label)
+	label.position = enemy.position + Vector2(_fx_rng.randf_range(-10.0, 10.0), -enemy.definition.radius - 46.0)
+	label.setup(enemy.last_damage, lethal)
 
 func _impact_effect(enemy: Node2D, lethal: bool, direction: Vector2, caption: String) -> void:
 	if effects.get_child_count() >= max_effects:

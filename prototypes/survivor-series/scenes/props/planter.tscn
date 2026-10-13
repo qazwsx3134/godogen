@@ -2,7 +2,18 @@
 
 [ext_resource type="Texture2D" path="res://assets/art/map/planter.png" id="1_4x3cg"]
 
-[node name="Planter" type="Sprite2D" unique_id=840906494]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sa7rw"]
+size = Vector2(54.4, 30)
+
+[node name="Planter" type="Node2D" unique_id=166428917]
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=2142301185]
 texture = ExtResource("1_4x3cg")
 centered = false
 offset = Vector2(-32, -63)
+
+[node name="Block" type="StaticBody2D" parent="." unique_id=719597156]
+
+[node name="Footprint" type="CollisionShape2D" parent="Block" unique_id=1251667563]
+position = Vector2(0, -13)
+shape = SubResource("RectangleShape2D_sa7rw")

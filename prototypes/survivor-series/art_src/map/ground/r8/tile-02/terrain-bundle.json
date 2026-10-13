@@ -1,0 +1,201 @@
+{
+  "schema": "generate2dmap.terrain_tile_bundle.v2",
+  "source": {
+    "path": "../gen-02/generated.png",
+    "sha256": "341eb5244112876b1d90496588f1dac1b41ece3f8e02b6e653c9fc6bcdd0b1dd",
+    "bytes": 1928725,
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGB",
+    "bit_depth": 8,
+    "conversion": "RGB -> RGBA"
+  },
+  "grid": {
+    "rows": 1,
+    "cols": 1,
+    "rounding": "exact",
+    "source_cell_size": [
+      1254,
+      1254
+    ],
+    "output_tile_size": [
+      512,
+      512
+    ]
+  },
+  "tile": {
+    "shape": "square",
+    "layer": "base",
+    "footprint": [
+      [
+        0.0,
+        0.0
+      ],
+      [
+        512.0,
+        0.0
+      ],
+      [
+        512.0,
+        512.0
+      ],
+      [
+        0.0,
+        512.0
+      ]
+    ]
+  },
+  "terrains": {
+    "pavement": {
+      "display_name": "pavement",
+      "row": 0,
+      "kind": "fill",
+      "variants": [
+        {
+          "path": "pavement-1.png",
+          "source_cell": [
+            0,
+            0
+          ],
+          "source_box": [
+            0,
+            0,
+            1254,
+            1254
+          ],
+          "resized": true,
+          "mean_luminance": 0.451908,
+          "contrast": 0.078723,
+          "border": {
+            "checked": true,
+            "frame": false,
+            "frames": [],
+            "max_delta": 0.0
+          },
+          "wrap": {
+            "x": {
+              "seam": 4.297852,
+              "adjacent_median": 2.241943,
+              "adjacent_p95": 19.743164,
+              "adjacent_max": 21.351562,
+              "seam_over_median": 1.917021,
+              "seam_over_p95": 0.217688,
+              "seam_ratio": 0.24186,
+              "near_median": 10.460205,
+              "verdict": "continuous",
+              "method": "premultiplied RGBA column steps (0-255); join vs interior steps within 8 columns per side, whole edge and worst 4-row window"
+            },
+            "y": {
+              "seam": 41.412598,
+              "adjacent_median": 2.188721,
+              "adjacent_p95": 29.479126,
+              "adjacent_max": 38.472168,
+              "seam_over_median": 18.920915,
+              "seam_over_p95": 1.404811,
+              "seam_ratio": 1.228387,
+              "near_median": 9.545166,
+              "verdict": "continuous",
+              "method": "premultiplied RGBA column steps (0-255); join vs interior steps within 8 columns per side, whole edge and worst 4-row window"
+            }
+          },
+          "sha256": "a5581dc8d3a3e1da7618576cd34b8e5662461e3a72eb8522379711f2373d8bf7"
+        }
+      ],
+      "variant_difference_min": 1.0
+    }
+  },
+  "processing": {
+    "background_mode": "opaque",
+    "background_mode_requested": "opaque",
+    "cell_shape": "square",
+    "resampler": "lanczos",
+    "grid_rounding": "exact",
+    "edge_policy": "seamless",
+    "wrap_aware_resize": true
+  },
+  "qc": {
+    "min_contrast": 0.035,
+    "min_variant_difference": 0.025,
+    "max_border_delta": 0.1,
+    "min_shape_coverage": 0.97,
+    "max_shape_spill": 0.03,
+    "max_seam_ratio": 1.25,
+    "warnings": [],
+    "passed": true,
+    "seamless_verified": false
+  },
+  "qa": {
+    "status": "pass",
+    "method": "Grid slices of the atlas, background handled per --background-mode, resized to the tile size (Lanczos or nearest; wrap-aware for the seamless policy). Luminance contrast and mean thumbnail differences; drawn frames along opposite edges; footprint coverage and spill for iso/hex base tiles; for the seamless policy, premultiplied wrap and Wang-join steps normalised by the art's own steps near each edge.",
+    "notProven": [
+      "visual quality, style match and readability at game zoom",
+      "that each variant reads as the named terrain",
+      "seamlessness: no exact seam proof exists for image tiles (seamless_verified stays false)",
+      "joins between different variants of a fill row (measured as diagnostics only)"
+    ],
+    "checks": [
+      {
+        "id": "contrast",
+        "status": "pass",
+        "value": 0.078723,
+        "threshold": 0.035
+      },
+      {
+        "id": "variant_difference",
+        "status": "pass",
+        "value": 1.0,
+        "threshold": 0.025
+      },
+      {
+        "id": "border_frame",
+        "status": "pass",
+        "value": 0,
+        "threshold": 0.1
+      },
+      {
+        "id": "shape_coverage",
+        "status": "skipped",
+        "value": null,
+        "threshold": 0.97
+      },
+      {
+        "id": "shape_spill",
+        "status": "skipped",
+        "value": null,
+        "threshold": 0.03
+      },
+      {
+        "id": "wrap_seams",
+        "status": "pass",
+        "value": 1.228387,
+        "threshold": 1.25
+      },
+      {
+        "id": "wang_seams",
+        "status": "skipped",
+        "value": null,
+        "threshold": null
+      }
+    ],
+    "inputs": [
+      {
+        "path": "../gen-02/generated.png",
+        "sha256": "341eb5244112876b1d90496588f1dac1b41ece3f8e02b6e653c9fc6bcdd0b1dd",
+        "bytes": 1928725
+      }
+    ],
+    "outputs": [
+      {
+        "path": "pavement-1.png",
+        "sha256": "a5581dc8d3a3e1da7618576cd34b8e5662461e3a72eb8522379711f2373d8bf7",
+        "bytes": 417471
+      }
+    ],
+    "tool": {
+      "name": "extract_terrain_tiles.py",
+      "version": "0.4.0"
+    }
+  }
+}

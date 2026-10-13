@@ -2,7 +2,19 @@
 
 [ext_resource type="Texture2D" path="res://assets/art/map/stall-fruit.png" id="1_8pmvd"]
 
-[node name="StallFruit" type="Sprite2D" unique_id=171862990]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5j7w3"]
+size = Vector2(195.84, 48)
+
+[node name="StallFruit" type="Node2D" unique_id=1685761157]
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=7515517]
+scale = Vector2(1.8, 1.8)
 texture = ExtResource("1_8pmvd")
 centered = false
 offset = Vector2(-78, -111)
+
+[node name="Block" type="StaticBody2D" parent="." unique_id=861456668]
+
+[node name="Footprint" type="CollisionShape2D" parent="Block" unique_id=19675915]
+position = Vector2(-25.2, -22)
+shape = SubResource("RectangleShape2D_5j7w3")
