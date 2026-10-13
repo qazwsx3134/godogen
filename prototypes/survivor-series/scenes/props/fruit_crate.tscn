@@ -1,8 +1,17 @@
 [gd_scene format=3]
 
+[ext_resource type="Script" path="res://scripts/prop.gd" id="9_prop"]
+
 [ext_resource type="Texture2D" path="res://assets/art/map/fruit_crate.png" id="1_e3x00"]
 
 [node name="FruitCrate" type="Sprite2D" unique_id=434493916]
+script = ExtResource("9_prop")
 texture = ExtResource("1_e3x00")
 centered = false
 offset = Vector2(-20, -31)
+hp = 24.0
+hit_radius = 22.0
+xp = 20.0
+coins = 4
+food_chance = 0.5
+magnet_chance = 0.5

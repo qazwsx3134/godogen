@@ -26,9 +26,11 @@
 [ext_resource type="PackedScene" path="res://scenes/props/parked_scooter.tscn" id="21_mptns"]
 [ext_resource type="PackedScene" path="res://scenes/props/fruit_crate.tscn" id="22_2mxiw"]
 [ext_resource type="Texture2D" path="res://assets/art/map/pavement.png" id="23_pmkni"]
+[ext_resource type="Script" path="res://scripts/edge_markers.gd" id="27_scssp"]
 
 [node name="Street" type="Node2D" unique_id=1672293938]
 process_mode = 1
+y_sort_enabled = true
 script = ExtResource("1_7vr8w")
 enemy_scenes = Array[PackedScene]([ExtResource("2_5m0si"), ExtResource("3_dxpu0"), ExtResource("4_cotsb"), ExtResource("5_fmkxj")])
 smoke_scene = ExtResource("5_nokxu")
@@ -41,12 +43,13 @@ heroes = Array[Resource]([ExtResource("12_7gyev"), ExtResource("13_1x85o")])
 
 [node name="Map" type="Node2D" parent="." unique_id=1056006506]
 unique_name_in_owner = true
-z_index = -10
+y_sort_enabled = true
 script = ExtResource("14_m25ji")
 prop_scenes = Array[PackedScene]([ExtResource("15_scssp"), ExtResource("16_kkqeo"), ExtResource("17_xcar7"), ExtResource("18_m3phq"), ExtResource("19_mice7"), ExtResource("20_vs586"), ExtResource("21_mptns"), ExtResource("22_2mxiw")])
 
 [node name="Ground" type="Sprite2D" parent="Map" unique_id=446245008]
 unique_name_in_owner = true
+z_index = -10
 texture_repeat = 2
 texture = ExtResource("23_pmkni")
 region_enabled = true
@@ -54,12 +57,15 @@ region_rect = Rect2(0, 0, 4096, 4096)
 
 [node name="Props" type="Node2D" parent="Map" unique_id=1425087145]
 unique_name_in_owner = true
+y_sort_enabled = true
 
 [node name="Hazards" type="Node2D" parent="." unique_id=536408701]
 unique_name_in_owner = true
+z_index = -1
 
 [node name="Pickups" type="Node2D" parent="." unique_id=698247646]
 unique_name_in_owner = true
+z_index = -1
 
 [node name="Enemies" type="Node2D" parent="." unique_id=1371719731]
 unique_name_in_owner = true
@@ -79,7 +85,6 @@ position = Vector2(800, 1000)
 
 [node name="Player" parent="." unique_id=2133992438 instance=ExtResource("7_0wd0x")]
 unique_name_in_owner = true
-z_index = 1
 position = Vector2(600, 840)
 
 [node name="Effects" type="Node2D" parent="." unique_id=1098333123]
@@ -90,6 +95,7 @@ z_index = 8
 unique_name_in_owner = true
 position = Vector2(600, 840)
 ignore_rotation = false
+zoom = Vector2(0.72, 0.72)
 
 [node name="Projectiles" type="Node2D" parent="." unique_id=141637931]
 unique_name_in_owner = true
@@ -99,3 +105,8 @@ z_index = 4
 unique_name_in_owner = true
 script = ExtResource("13_0otry")
 flash_scene = ExtResource("8_nokxu")
+
+[node name="Markers" type="Node2D" parent="." unique_id=409617624]
+unique_name_in_owner = true
+z_index = 9
+script = ExtResource("27_scssp")

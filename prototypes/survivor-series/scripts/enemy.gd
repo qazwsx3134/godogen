@@ -21,6 +21,8 @@ var phase: String = "chase"
 var phase_left: float = 0.0
 var hazard_left: float = 1.5
 var fly_left: float = 0.0
+## Seconds spent off-screen while the hero walks away; Street moves the enemy ahead past a limit.
+var lag: float = 0.0
 var slow_left: float = 0.0
 var slow_amount: float = 0.0
 var rest_scale: Vector2

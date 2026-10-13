@@ -2,6 +2,8 @@ extends Node2D
 signal score_changed
 signal player_hurt
 signal chest_opened
+## Big centre-screen notice, such as an incoming surge.
+signal announced(text: String)
 const Shake = preload("res://addons/proto_kit/camera_shake.gd")
 const Grid = preload("res://scripts/grid.gd")
 const Build = preload("res://scripts/run_build.gd")
@@ -23,6 +25,16 @@ const Build = preload("res://scripts/run_build.gd")
 @export var max_gems: int = 160
 @export var max_hazards: int = 10
 @export var magnet_radius: float = 70.0
+## Off-screen enemies left behind for this long while the hero walks away reappear ahead of the hero.
+@export var relocate_after: float = 2.5
+## While an elite is alive the regular spawn interval is divided by this (0.5 = half as many).
+@export var elite_spawn_scale: float = 0.5
+@export_group("Surge")
+## Every `surge_interval` seconds (random in the range) a crowd pours in from one direction.
+@export var surge_interval := Vector2(38.0, 56.0)
+@export var surge_base: int = 10
+@export var surge_per_minute: float = 3.0
+@export var surge_text: String = "下班人潮來了！"
 @export_group("Drops")
 @export var coin_chance: float = 0.03
 @export var food_chance: float = 0.006
@@ -61,6 +73,12 @@ var combo: int = 0
 var best_combo: int = 0
 var combo_left: float = 0.0
 var spawn_left: float = 0.0
+var surge_left: float = 0.0
+var surges: int = 0
+var relocations: int = 0
+var props_broken: int = 0
+var _last_hero := Vector2.ZERO
+var _hero_velocity := Vector2.ZERO
 var phase_index: int = -1
 var punching: bool = false
 var big_gem: Node2D
@@ -110,8 +128,14 @@ func reset() -> void:
 	best_combo = 0
 	combo_left = 0.0
 	spawn_left = 1.0
+	surge_left = rng.randf_range(surge_interval.x, surge_interval.y)
+	surges = 0
+	relocations = 0
+	props_broken = 0
 	phase_index = -1
 	camera.position = player.position
+	_last_hero = player.position
+	_hero_velocity = Vector2.ZERO
 	_recenter()
 	map.reset(player.position)
 	# Three distinct editable scene instances introduce the run immediately.
@@ -141,7 +165,7 @@ func refresh_player_stats() -> void:
 func spawn_enemy(index: int, at: Vector2, hp_scale: float = 1.0, elite: bool = false) -> Node2D:
 	var enemy := enemy_scenes[index].instantiate() as Node2D
 	enemies.add_child(enemy)
-	enemy.position = at.clamp(bounds.position, bounds.end)
+	enemy.position = map.push_out(at.clamp(bounds.position, bounds.end), enemy.definition.radius * 0.6)
 	enemy.setup(hp_scale, elite)
 	enemy.smoke_requested.connect(_smoke)
 	enemy.warning_started.connect(_warning)
@@ -155,7 +179,25 @@ func _recenter() -> void:
 
 func view_rect() -> Rect2:
 	var size: Vector2 = get_viewport_rect().size / camera.zoom
-	return Rect2(camera.get_screen_center_position() - size * 0.5, size)
+	# The camera's own position, not get_screen_center_position(): that one lags a frame behind step().
+	return Rect2(camera.position - size * 0.5, size)
+
+## Where a ray from the hero along `direction` leaves the view grown by `margin`.
+func edge_point(direction: Vector2, margin: float = 60.0) -> Vector2:
+	var view: Rect2 = view_rect().grow(margin)
+	var from: Vector2 = player.position
+	var reach: float = INF
+	if direction.x != 0.0:
+		reach = minf(reach, ((view.end.x if direction.x > 0.0 else view.position.x) - from.x) / direction.x)
+	if direction.y != 0.0:
+		reach = minf(reach, ((view.end.y if direction.y > 0.0 else view.position.y) - from.y) / direction.y)
+	return from + direction * maxf(0.0, reach)
+
+func elite_alive() -> bool:
+	for enemy: Node2D in enemies.get_children():
+		if enemy.elite and not enemy.dead and not enemy.is_queued_for_deletion():
+			return true
+	return false
 
 ## A point just outside the visible rect, inside the block; falls back to the far edge of the block.
 func spawn_point() -> Vector2:
@@ -202,14 +244,21 @@ func step(delta: float, direction: Vector2, elapsed: float) -> void:
 			slow = maxf(slow, enemy.definition.aura_slow)
 	_recenter()
 	player.step(delta, direction, bounds.grow(-18.0), slow)
+	player.position = map.push_out(player.position, 12.0)
+	_hero_velocity = (player.position - _last_hero) / delta if delta > 0.0 else Vector2.ZERO
+	_last_hero = player.position
 	camera.position = player.position
 	map.follow(camera.position)
+	map.tick(delta)
 	shake.step(delta)
 	_spawn(delta, elapsed, living.size())
 	for enemy: Node2D in enemies.get_children():
 		if enemy.is_queued_for_deletion():
 			continue
 		enemy.step(delta, player.position, bounds)
+		if not enemy.dead and not enemy.is_queued_for_deletion():
+			enemy.position = map.push_out(enemy.position, enemy.definition.radius * 0.6)
+			_relocate_if_left_behind(enemy, delta)
 	grid.rebuild(enemies.get_children().filter(func(e: Node2D) -> bool: return not e.dead and not e.is_queued_for_deletion()))
 	for enemy: Node2D in grid.query(player.position, 15.0):
 		_hurt(enemy.contact_damage(), enemy.definition.kind + ("_dash" if enemy.phase == "dash" else ""))
@@ -235,15 +284,54 @@ func _spawn(delta: float, elapsed: float, living: int) -> void:
 	if index != phase_index:
 		phase_index = index
 		_begin_phase(phase)
+	var elite_here: bool = elite_alive()
+	if not elite_here:
+		surge_left -= delta
+		if surge_left <= 0.0:
+			surge_left = rng.randf_range(surge_interval.x, surge_interval.y)
+			_surge(phase, elapsed, living)
 	spawn_left -= delta
 	if spawn_left > 0.0:
 		return
-	spawn_left = phase.interval
+	spawn_left = phase.interval / (elite_spawn_scale if elite_here else 1.0)
 	var cap: int = mini(max_enemies, phase.max_alive)
 	for i: int in phase.batch:
 		if living + i >= cap or enemies.get_child_count() >= max_enemies + 30:
 			break
 		spawn_enemy(_pick_kind(phase.weights), spawn_point(), phase.hp_scale)
+
+## A crowd from one direction, announced on screen. Counts toward the phase cap like normal spawns.
+func _surge(phase: Resource, elapsed: float, living: int) -> void:
+	var room: int = mini(max_enemies, phase.max_alive) - living
+	var count: int = mini(room, surge_base + roundi(elapsed / 60.0 * surge_per_minute))
+	if count <= 0:
+		return
+	surges += 1
+	var heading: Vector2 = Vector2.RIGHT.rotated(rng.randf() * TAU)
+	for i: int in count:
+		spawn_enemy(_pick_kind(phase.weights), edge_point(heading.rotated(rng.randf_range(-0.55, 0.55)), rng.randf_range(40.0, 140.0)), phase.hp_scale)
+	sfx.play(&"warning", 0.1)
+	announced.emit(surge_text)
+
+## Like PokeSurvivor: a regular enemy stuck off-screen while the hero walks away is moved ahead of the hero,
+## so on an endless map the crowd stays in front instead of trailing behind.
+func _relocate_if_left_behind(enemy: Node2D, delta: float) -> void:
+	if enemy.elite or enemy.phase in ["warning", "dash"]:
+		enemy.lag = 0.0
+		return
+	var speed: float = _hero_velocity.length()
+	var offset: Vector2 = enemy.position - player.position
+	if view_rect().grow(60.0).has_point(enemy.position):
+		enemy.lag = 0.0
+		return
+	if speed > 40.0 and offset.dot(_hero_velocity) < -0.2 * offset.length() * speed:
+		enemy.lag += delta
+	if enemy.lag < relocate_after:
+		return
+	enemy.lag = 0.0
+	relocations += 1
+	enemy.knockback = Vector2.ZERO
+	enemy.position = map.push_out(edge_point(_hero_velocity.normalized().rotated(rng.randf_range(-0.9, 0.9)), rng.randf_range(40.0, 110.0)), enemy.definition.radius * 0.6)
 
 func _begin_phase(phase: Resource) -> void:
 	for i: int in phase.ring:
@@ -282,6 +370,8 @@ func _step_projectiles(delta: float) -> void:
 					enemy.hit(shot.damage, shot.velocity.normalized() if shot.velocity != Vector2.ZERO else (enemy.position - player.position).normalized(), shot.force)
 				if shot.detonate or shot.is_queued_for_deletion():
 					break
+		if shot.mode != "lob" and shot.mode != "fall" and not shot.is_queued_for_deletion():
+			hit_props(shot.position, shot.radius, shot.damage)
 		if (shot.slow > 0.0 or shot.pull > 0.0) and not shot.detonate and not shot.is_queued_for_deletion():
 			for enemy: Node2D in grid.query(shot.position, shot.radius):
 				if shot.slow > 0.0:
@@ -303,6 +393,35 @@ func blast(at: Vector2, radius: float, damage: float, force: float, color: Color
 	for enemy: Node2D in grid.query(at, radius):
 		var heading: Vector2 = (enemy.position - at).normalized()
 		enemy.hit(damage, heading if heading != Vector2.ZERO else Vector2.UP, force * 1.4)
+	hit_props(at, radius, damage)
+
+## Weapon damage to breakable street props; a broken prop scatters its loot.
+func hit_props(at: Vector2, radius: float, damage: float) -> void:
+	for prop: Node2D in map.breakables_in(at, radius):
+		if prop.damage(damage):
+			_break_prop(prop)
+
+func _break_prop(prop: Node2D) -> void:
+	var at: Vector2 = prop.global_position
+	props_broken += 1
+	sfx.play(&"chest" if prop.coins >= 3 else &"pop", 0.05)
+	shake.add_trauma(0.12, 0.3)
+	if blast_scene != null and effects.get_child_count() < max_effects:
+		var ring := blast_scene.instantiate() as Node2D
+		effects.add_child(ring)
+		ring.position = at - Vector2(0.0, 10.0)
+		ring.setup(prop.hit_radius + 14.0, Color("ffd36b"), "")
+	if prop.xp > 0.0:
+		drop("xp", at, prop.xp)
+	for i: int in prop.coins:
+		drop("coin", at + Vector2(rng.randf_range(-16.0, 16.0), rng.randf_range(-10.0, 10.0)), 1.0)
+	var roll: float = rng.randf()
+	if roll < prop.food_chance:
+		drop("food", at + Vector2(10, 6), 30.0)
+	elif roll < prop.food_chance + prop.magnet_chance:
+		drop("magnet", at + Vector2(10, 6), 1.0)
+	map.remove_prop(prop)
+	score_changed.emit()
 
 func _resolve_bursts() -> void:
 	var queued: Array = _bursts

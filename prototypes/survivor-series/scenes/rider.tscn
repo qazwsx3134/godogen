@@ -4,6 +4,7 @@
 
 [node name="RiderCharge" type="Node2D" unique_id=1694254106]
 script = ExtResource("1_bq1av")
+lift = 0.0
 radius = 26.0
 
 [node name="Visual" type="Node2D" parent="." unique_id=1190726872]

@@ -4,6 +4,7 @@
 
 [node name="TofuZone" type="Node2D" unique_id=1887873307]
 script = ExtResource("1_0juqt")
+lift = 0.0
 radius = 70.0
 face_travel = false
 

@@ -10144,3 +10144,33 @@ prototypes/survivor-series/scenes/street.tscn
 prototypes/survivor-series/scripts/street.gd
 ---
 
+## Session End: 20261013_164911
+### Uncommitted Changes
+prototypes/survivor-series/CONTEXT.md
+prototypes/survivor-series/README.md
+prototypes/survivor-series/TODO.md
+prototypes/survivor-series/assets/fonts/NotoSansTC.ttf
+prototypes/survivor-series/scenes/hud.tscn
+prototypes/survivor-series/scenes/props/bollard.tscn
+prototypes/survivor-series/scenes/props/cone.tscn
+prototypes/survivor-series/scenes/props/fruit_crate.tscn
+prototypes/survivor-series/scenes/props/lantern_post.tscn
+prototypes/survivor-series/scenes/props/parked_scooter.tscn
+prototypes/survivor-series/scenes/props/planter.tscn
+prototypes/survivor-series/scenes/props/stall_fruit.tscn
+prototypes/survivor-series/scenes/props/stall_snack.tscn
+prototypes/survivor-series/scenes/rider.tscn
+prototypes/survivor-series/scenes/ring.tscn
+prototypes/survivor-series/scenes/street.tscn
+prototypes/survivor-series/scenes/tofu.tscn
+prototypes/survivor-series/scenes/upgrades.tscn
+prototypes/survivor-series/scripts/arsenal.gd
+prototypes/survivor-series/scripts/enemy.gd
+prototypes/survivor-series/scripts/game.gd
+prototypes/survivor-series/scripts/map.gd
+prototypes/survivor-series/scripts/projectile.gd
+prototypes/survivor-series/scripts/run_build.gd
+prototypes/survivor-series/scripts/street.gd
+prototypes/survivor-series/scripts/upgrade_panel.gd
+---
+
