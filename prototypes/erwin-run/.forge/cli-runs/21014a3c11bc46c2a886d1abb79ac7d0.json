@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 2,
+  "provider": "openai",
+  "kind": "image",
+  "route": "codex-cli",
+  "requestedModel": "codex-image_gen",
+  "options": {
+    "tool": "image_gen"
+  },
+  "promptSha256": "6872d1d53dcbdacc0f846dbcb97f4f5f9240ef3077ce575059ccb552d8233b1f",
+  "fingerprint": "4419ba0c2b5901d3073eba7dc8d3d9c331731837cba6f7a1ced2132ef78b076a",
+  "estimate": {
+    "usd": 0.0,
+    "currency": "USD",
+    "pricesVersion": "2026-10-06",
+    "items": [],
+    "basis": "subscription quota call: no per-call USD price; counted by call caps"
+  },
+  "consent": {
+    "provider": "openai",
+    "model": "codex-image_gen",
+    "calls": 1,
+    "estimateUsd": 0.0,
+    "route": "codex-cli",
+    "quota": true,
+    "account": "the user's own Codex sign-in (ChatGPT)",
+    "note": "uses the subscription quota of that sign-in, never API credit"
+  },
+  "artSource": "host_image",
+  "execution": "execute",
+  "status": "done",
+  "outputDir": "../../art_src/gen/titan_tall-r2",
+  "receipt": {
+    "startedAt": "2026-10-13T17:55:34.873Z",
+    "submittedAt": "2026-10-13T17:55:34.887Z",
+    "completedAt": "2026-10-13T17:56:23.792Z",
+    "wallMs": 48919,
+    "providerMs": 50218,
+    "attempt": 2,
+    "purpose": null,
+    "toolVersion": "cli_media/0.4.0",
+    "outcomeCode": "ok"
+  },
+  "ledger": {
+    "projectDir": "../..",
+    "reservationId": "ca180c082d7342c5aadd00c5bfd22104",
+    "status": "done"
+  },
+  "cliRun": {
+    "tool": "codex",
+    "runId": "21014a3c11bc46c2a886d1abb79ac7d0",
+    "cwd": "<tmp>/forge-cli-21014a3c11bc-f194cd62",
+    "startedAt": "2026-10-13T17:55:34.873Z",
+    "version": "0.162.1",
+    "versionText": "codex-cli 0.162.1",
+    "recipe": "codex-exec-imagegen/1",
+    "home": "CODEX_HOME",
+    "verifiedBefore": true,
+    "threadId": "01a13667-cddb-7f01-b4d6-d1b85657502f"
+  },
+  "adoption": {
+    "method": "native-run-folder",
+    "source": "CODEX_HOME/generated_images/01a13667-cddb-7f01-b4d6-d1b85657502f/exec-b5d04afd-eb95-49b5-806f-f7036afe9ce0.png",
+    "sourceSha256": "e6cc744630005d0a8ad5bf744b980f30c897dbac4e0ca3513c6f36584b587d90",
+    "sourceMtime": "2026-10-13T17:56:18Z",
+    "freshAfter": "2026-10-13T17:55:34.894Z",
+    "checks": [
+      "inside the CLI's own folder for this run",
+      "no symlink or junction",
+      "regular file of a sane size",
+      "newer than the run",
+      "magic bytes",
+      "decodes",
+      "exactly one output",
+      "exclusive copy with matching sha256"
+    ],
+    "finalAnswerNamesFile": true
+  },
+  "artifact": {
+    "path": "../../art_src/gen/titan_tall-r2/generated.png",
+    "sha256": "e6cc744630005d0a8ad5bf744b980f30c897dbac4e0ca3513c6f36584b587d90",
+    "bytes": 1633558,
+    "format": "PNG",
+    "size": [
+      1536,
+      1024
+    ]
+  }
+}
