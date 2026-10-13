@@ -27,12 +27,15 @@ var fresh_unlocks: Array[Resource] = []
 var auto_play: bool = false
 var sound_events: Dictionary = {}
 var _report_left: float = 0.0
+var _banner_left: float = 0.0
 
 func _ready() -> void:
 	street.time_control = %TimeControl
 	street.sfx = sfx
 	street.score_changed.connect(refresh_hud)
 	upgrade_panel.chosen.connect(choose_upgrade)
+	upgrade_panel.reroll_requested.connect(reroll_upgrades)
+	street.announced.connect(announce)
 	sfx.played.connect(func(event: StringName) -> void: sound_events[event] = int(sound_events.get(event, 0)) + 1)
 	menu.get_node("%Start").pressed.connect(start_run)
 	menu.get_node("%OpenShop").pressed.connect(open_shop)
@@ -105,6 +108,8 @@ func start_run() -> void:
 	earned = 0
 	fresh_unlocks.clear()
 	sound_events.clear()
+	_banner_left = 0.0
+	hud.get_node("%Banner").hide()
 	state = State.RUNNING
 	_hide_screens()
 	street.show()
@@ -187,6 +192,9 @@ func _physics_process(delta: float) -> void:
 		if keyboard != Vector2.ZERO:
 			direction = keyboard.normalized()
 	elapsed = minf(session_duration, elapsed + delta)
+	if _banner_left > 0.0:
+		_banner_left -= delta
+		hud.get_node("%Banner").visible = _banner_left > 0.0
 	street.step(delta, direction, elapsed)
 	refresh_hud()
 	# Death wins over the clock, and the clock wins over queued level-ups.
@@ -263,6 +271,23 @@ func show_upgrades() -> void:
 	get_tree().paused = true
 	upgrade_panel.present(street.build, current_offers, upgrade_generation)
 	sfx.play(&"level", 0.1)
+
+## Spends one reroll for three fresh cards.
+func reroll_upgrades() -> bool:
+	if state != State.UPGRADE or street.build.rerolls <= 0:
+		return false
+	street.build.rerolls -= 1
+	current_offers = street.build.offers()
+	upgrade_generation += 1
+	upgrade_panel.present(street.build, current_offers, upgrade_generation)
+	sfx.play(&"swish", 0.1)
+	return true
+
+## Centre-screen notice for a couple of seconds of game time.
+func announce(text: String) -> void:
+	hud.get_node("%Banner").text = text
+	hud.get_node("%Banner").show()
+	_banner_left = 2.6
 
 func choose_upgrade(id: StringName, generation: int = -1) -> bool:
 	if state != State.UPGRADE or (generation >= 0 and generation != upgrade_generation):

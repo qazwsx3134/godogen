@@ -14,7 +14,9 @@
 - **被動**：沙茶醬、雞排、提神飲料、集點卡、平安符、大聲公、腳底按摩、紅包（解鎖）。武器與被動各 6 格。
 - **敵人**：抽菸者（刺青叼菸的流氓，留下煙霧）、機車（預警後衝刺）、汽車（慢、重、血厚）、臭臭胖子（臭味光環讓主角減速；被揍飛時爆屁，炸飛周圍敵人，可以連鎖）。4:00、6:00、8:00、9:00 會出現精英，打倒後掉寶箱，可以多選 1、3 或 5 次。
 - **掉落**：經驗寶石（超過上限就合併成大寶石）、金幣、滷肉飯（回血）、吸塵器（吸走全場寶石）。
-- **街區**：無限延伸的夜市街道，鏡頭跟著主角走，敵人從畫面外湧進來。活動範圍（`bounds`）跟著主角移動，至少比畫面大 240 px；落後的敵人會被拖在範圍邊緣。
+- **街區**：無限延伸的夜市街道，視角參考 PokéSurvivor（見 [pokesurvivor-reference.md](docs/pokesurvivor-reference.md)）：鏡頭拉遠（`zoom` 0.72），主角、敵人與道具依 y 排序前後遮擋，飛行的投射物離地 18 px、地上有影子，繞身軌道壓成橢圓。鏡頭跟著主角走，敵人從畫面外湧進來；活動範圍（`bounds`）跟著主角移動，至少比畫面大 240 px。在畫面外落後超過 2.5 秒的一般敵人會被搬到主角前進方向的畫面外。每 38～56 秒一波「下班人潮」從同一個方向湧入（精英在場時暫停，且一般生成減半）。畫面外的寶箱與精英在畫面邊緣有金色菱形。
+- **街頭道具**：每個地圖區塊約八成機率放一組夜市群（一排攤位、兩排夾走道、三角錐路障）。所有道具都是路障，擋主角、敵人與飛行的投射物，敵人會沿邊緣繞過去。三角錐、花台、水果箱打得破，掉經驗、金幣，水果箱另掉滷肉飯或吸塵器；打破後路障跟著消失，整局不會再長回來。拳頭附近沒有敵人時會去打道具。
+- **選卡重抽**：每局 1 次。
 - **局外成長**：11 項永久強化，以及 3 個解鎖目標；存檔用 AtomicFile 寫成 JSON。
 
 ## 試玩
@@ -35,8 +37,8 @@ python3 -m http.server 8793 --bind 127.0.0.1 --directory prototypes/survivor-ser
 | 檔案 | 可調整內容 |
 |---|---|
 | `scenes/game.tscn` | 主流程、`session_duration`、金幣換算（每次揍飛、每分鐘、勝利獎勵、金幣面額）、共用服務與各畫面 |
-| `scenes/street.tscn` | `Map`（`Ground` 地磚、夜市群場景與權重、每格出現機率、起點淨空半徑）、`World`（y-sort：道具、敵人、主角）、`heroes` 清單、Player 起點、四類代表性敵人；bounds 大小、敵人／特效／寶石／煙霧上限、磁吸半徑、掉落機率 |
-| `scenes/props/*.tscn` | 8 種地圖道具（攤位、燈籠柱含暖光暈與濕地倒影、花台、三角錐、護柱、停放機車、水果箱），腳底在原點；`Block/Footprint` 長方形就是路障（擋主角、敵人與飛行投射物） |
+| `scenes/street.tscn` | `Map`（`Ground` 地磚、夜市群場景與權重、每格出現機率、起點淨空半徑）、`World`（y-sort：道具、敵人、主角）、`heroes` 清單、Player 起點、四類代表性敵人、`Camera` 的 `zoom`、`Markers`（畫面外菱形的顏色、大小）；bounds 大小、敵人／特效／寶石／煙霧上限、磁吸半徑、掉落機率、落後搬移秒數 `relocate_after`、精英在場的生成倍率、`Surge` 群組（間隔、人數、橫幅文字） |
+| `scenes/props/*.tscn` | 8 種地圖道具（攤位、燈籠柱含暖光暈與濕地倒影、花台、三角錐、護柱、停放機車、水果箱），腳底在原點；`Block/Footprint` 長方形就是路障（擋主角、敵人與飛行投射物）；根節點 `prop.gd` 的 `hp`（0＝打不破）、`hit_radius` 與掉落 |
 | `scenes/clusters/*.tscn` | 夜市群：`market_row`、`market_double`、`roadblock`；在 `street.tscn` 的 `Map.cluster_scenes`／`cluster_weights`／`cluster_chance` 調出現率 |
 | `scenes/player.tscn` | `BodyMan`／`BodyWoman` 兩套外觀（共用 `Fist`，執行時只顯示選中的一套）、HpBar；移速、拳頭距離、血量、受傷無敵時間 |
 | `data/heroes/man.tres`、`woman.tres` | 主角：起手武器、血量與移速倍率、揮擊距離與回彈、選單文字 |
@@ -44,7 +46,7 @@ python3 -m http.server 8793 --bind 127.0.0.1 --directory prototypes/survivor-ser
 | `scenes/wave.tscn`、`slipper.tscn`、`pearl.tscn`、`firecracker.tscn`、`incense.tscn`、`lantern.tscn` | 投射物外觀、碰撞半徑、旋轉速度 |
 | `scenes/blast.tscn`、`impact.tscn`、`attack_flash.tscn`、`pickup.tscn`、`smoke.tscn` | 爆炸、命中、揮擊、掉落物與煙霧外觀 |
 | `scenes/menu.tscn` | 主角選擇（`HeroMan`／`HeroWoman`／`HeroNote`）與選單文字 |
-| `scenes/hud.tscn`、`menu.tscn`、`results.tscn`、`pause.tscn`、`upgrades.tscn`、`upgrade_card.tscn`、`shop.tscn`、`shop_item.tscn` | 介面版面、文字與間距 |
+| `scenes/hud.tscn`、`menu.tscn`、`results.tscn`、`pause.tscn`、`upgrades.tscn`、`upgrade_card.tscn`、`shop.tscn`、`shop_item.tscn` | 介面版面、文字與間距；hud 的 `Banner`（下班人潮橫幅）、upgrades 的 `Reroll` |
 | `data/items/*.tres` | 每張卡：武器基礎值與每級成長（含 `slow`／`pull`／`blast_on_end`）、被動加成、進化條件、融合配方（`fuse_a`／`fuse_b`／`fuse_level`）、解鎖條件、卡片文字 |
 | `scenes/tofu.tscn`、`ring.tscn`、`rider.tscn` | 新武器的投射物外觀與碰撞半徑；雨傘畫在 `player.tscn` 的 `Umbrella` |
 | `data/progression.tres` | 經驗曲線、起始武器、欄位數、卡片清單、補給卡 |
@@ -54,7 +56,7 @@ python3 -m http.server 8793 --bind 127.0.0.1 --directory prototypes/survivor-ser
 
 場景內的 PreviewEnemy 是編輯器用的代表物件；開局時會清空，再依刷怪時間軸生成。執行期的血量、位移與統計不會寫回 scene。
 
-`tools/add_horde.gd` 已在 2026-10-07 用過一次，用來產生本版的 scene 與 Resource。之後 scene 就是可以維護的來源檔：game.tscn 有 `horde_scene_version` 標記，重跑工具會直接跳過；當次第一輪在 `migrate_street` 中斷，事後只補跑過那一個函式一次，那條補救路徑已經移除。更早的 `tools/add_progression.gd` 與 `build_playable.gd` 是前兩版的一次性工具，留著當紀錄。
+`tools/add_horde.gd` 已在 2026-10-07 用過一次，用來產生本版的 scene 與 Resource。之後 scene 就是可以維護的來源檔：game.tscn 有 `horde_scene_version` 標記，重跑工具會直接跳過；當次第一輪在 `migrate_street` 中斷，事後只補跑過那一個函式一次，那條補救路徑已經移除。更早的 `tools/add_progression.gd` 與 `build_playable.gd` 是前兩版的一次性工具，留著當紀錄。`tools/add_poke_view.gd`（2026-10-13 已套用）只新增了 street 的 `Markers`、hud 的 `Banner`、upgrades 的 `Reroll` 三個節點，重跑會跳過。
 
 ## 圖片與聲音
 
@@ -74,7 +76,7 @@ python3 prototypes/godot-kit/tools/subset_font.py --project prototypes/survivor-
 ## 測試
 
 ```bash
-bash prototypes/godot-kit/tools/run_tests.sh prototypes/survivor-series growth:600 playable:600 scaffold heroes:60 fusion:60
+bash prototypes/godot-kit/tools/run_tests.sh prototypes/survivor-series growth:600 playable:600 scaffold heroes:60 fusion:60 view:60
 bash prototypes/godot-kit/sync.sh --check survivor-series
 ```
 
@@ -93,6 +95,7 @@ bash prototypes/godot-kit/sync.sh --check survivor-series
   - 刷怪時間軸（包圍圈、精英、上限、生成在畫面外）
   - 暫停與失焦、自動駕駛短局走到結算、重試
   - 靜態文字保留、原始 scene 不被改動、字型與畫面主題、震屏開關
+- **view（24 項）**：鏡頭距離、y 排序與圖層、投射物離地與橢圓軌道、攤位擋路、打破道具掉寶且不會長回來、拳頭打道具、落後敵人搬到前方（精英不搬）、下班人潮與橫幅、精英在場時降低生成、畫面外寶箱指示、重抽。
 - **scaffold（7 項）**：最早的入口骨架。
 
 測試用自己的存檔路徑，跑完會刪掉。測試全部用遊戲時間推進。瀏覽器檢查：建好網頁版後 `python3 -m http.server 8793 -d build/web &`，再 `node tools/browser_check.mjs --playwright <playwright-core 路徑> --chromium <chrome 路徑>`（用法見檔頭）。

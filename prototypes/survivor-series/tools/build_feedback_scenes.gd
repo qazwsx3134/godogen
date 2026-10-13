@@ -17,6 +17,12 @@ const PROPS := [
 	["ParkedScooter", "parked_scooter.png", Vector2(45, 79), 1.1, 0.8, 26.0],
 	["FruitCrate", "fruit_crate.png", Vector2(20, 31), 1.0, 0.9, 22.0],
 ]
+## Breakable props (prop.gd): hp, hit radius, xp, coins, food chance, magnet chance. The rest cannot break.
+const BREAKABLE := {
+	"Cone": [10.0, 16.0, 3.0, 0, 0.05, 0.0],
+	"Planter": [30.0, 28.0, 6.0, 1, 0.06, 0.0],
+	"FruitCrate": [24.0, 22.0, 20.0, 4, 0.5, 0.5],
+}
 var props: Dictionary = {}
 
 func _init() -> void:
@@ -92,10 +98,20 @@ func _soft_puff() -> Texture2D:
 	assert(ResourceSaver.save(texture, ART + "fx/soft_puff.tres") == OK)
 	return load(ART + "fx/soft_puff.tres")
 
-## Prop: feet at the origin (y-sort point), the sprite above it, a StaticBody2D footprint that is a roadblock.
+## Prop: feet at the origin (y-sort point), the sprite above it, a StaticBody2D footprint that is a roadblock;
+## breakable ones lose the roadblock when they break.
 func _prop(spec: Array) -> PackedScene:
 	var root := Node2D.new()
 	root.name = spec[0]
+	root.set_script(load("res://scripts/prop.gd"))
+	if BREAKABLE.has(spec[0]):
+		var stats: Array = BREAKABLE[spec[0]]
+		root.hp = stats[0]
+		root.hit_radius = stats[1]
+		root.xp = stats[2]
+		root.coins = stats[3]
+		root.food_chance = stats[4]
+		root.magnet_chance = stats[5]
 	var texture: Texture2D = load(ART + "map/" + spec[1])
 	var anchor: Vector2 = spec[2]
 	var size: float = spec[3]
@@ -135,7 +151,7 @@ func _cluster(node_name: String, placed: Array) -> PackedScene:
 	root.y_sort_enabled = true
 	var counts: Dictionary = {}
 	for entry: Array in placed:
-		var prop := (props[entry[0]] as PackedScene).instantiate() as Node2D
+		var prop := (props[entry[0]] as PackedScene).instantiate(PackedScene.GEN_EDIT_STATE_INSTANCE) as Node2D
 		counts[entry[0]] = int(counts.get(entry[0], 0)) + 1
 		prop.name = "%s%d" % [entry[0], counts[entry[0]]]
 		prop.position = entry[1]

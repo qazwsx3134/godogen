@@ -1,19 +1,26 @@
 [gd_scene format=3]
 
-[ext_resource type="Texture2D" path="res://assets/art/map/planter.png" id="1_4x3cg"]
+[ext_resource type="Script" path="res://scripts/prop.gd" id="1_sa7rw"]
+[ext_resource type="Texture2D" path="res://assets/art/map/planter.png" id="2_herjr"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_sa7rw"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fyn66"]
 size = Vector2(54.4, 30)
 
-[node name="Planter" type="Node2D" unique_id=166428917]
+[node name="Planter" type="Node2D" unique_id=1679410343]
+script = ExtResource("1_sa7rw")
+hp = 30.0
+hit_radius = 28.0
+xp = 6.0
+coins = 1
+food_chance = 0.06
 
-[node name="Sprite" type="Sprite2D" parent="." unique_id=2142301185]
-texture = ExtResource("1_4x3cg")
+[node name="Sprite" type="Sprite2D" parent="." unique_id=502200663]
+texture = ExtResource("2_herjr")
 centered = false
 offset = Vector2(-32, -63)
 
-[node name="Block" type="StaticBody2D" parent="." unique_id=719597156]
+[node name="Block" type="StaticBody2D" parent="." unique_id=1924545285]
 
-[node name="Footprint" type="CollisionShape2D" parent="Block" unique_id=1251667563]
+[node name="Footprint" type="CollisionShape2D" parent="Block" unique_id=973201049]
 position = Vector2(0, -13)
-shape = SubResource("RectangleShape2D_sa7rw")
+shape = SubResource("RectangleShape2D_fyn66")

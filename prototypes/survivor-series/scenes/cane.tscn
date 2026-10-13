@@ -5,6 +5,7 @@
 
 [node name="SpringHand" type="Node2D" unique_id=1291290987]
 script = ExtResource("1_77tqj")
+lift = 0.0
 mode = "spring"
 radius = 26.0
 face_travel = false

@@ -6,45 +6,45 @@
 [ext_resource type="PackedScene" path="res://scenes/props/planter.tscn" id="4_bctng"]
 [ext_resource type="PackedScene" path="res://scenes/props/lantern_post.tscn" id="5_xowi0"]
 
-[node name="Roadblock" type="Node2D" unique_id=16383379]
+[node name="Roadblock" type="Node2D" unique_id=1959161488]
 y_sort_enabled = true
 
-[node name="Bollard1" type="Node2D" parent="." unique_id=2116886650 instance=ExtResource("1_1swfa")]
+[node name="Bollard1" parent="." unique_id=832429984 instance=ExtResource("1_1swfa")]
 position = Vector2(-260, 0)
 
-[node name="Cone1" type="Node2D" parent="." unique_id=734965717 instance=ExtResource("2_dwv0f")]
+[node name="Cone1" parent="." unique_id=1805998261 instance=ExtResource("2_dwv0f")]
 position = Vector2(-205, 4)
 
-[node name="Cone2" type="Node2D" parent="." unique_id=1395782718 instance=ExtResource("2_dwv0f")]
+[node name="Cone2" parent="." unique_id=570065446 instance=ExtResource("2_dwv0f")]
 position = Vector2(-155, 0)
 
-[node name="Cone3" type="Node2D" parent="." unique_id=667329693 instance=ExtResource("2_dwv0f")]
+[node name="Cone3" parent="." unique_id=1251411791 instance=ExtResource("2_dwv0f")]
 position = Vector2(-105, 4)
 
-[node name="Cone4" type="Node2D" parent="." unique_id=718109791 instance=ExtResource("2_dwv0f")]
+[node name="Cone4" parent="." unique_id=601527881 instance=ExtResource("2_dwv0f")]
 position = Vector2(35, 4)
 
-[node name="Cone5" type="Node2D" parent="." unique_id=551549174 instance=ExtResource("2_dwv0f")]
+[node name="Cone5" parent="." unique_id=1264468615 instance=ExtResource("2_dwv0f")]
 position = Vector2(85, 0)
 
-[node name="Cone6" type="Node2D" parent="." unique_id=68349608 instance=ExtResource("2_dwv0f")]
+[node name="Cone6" parent="." unique_id=1624801810 instance=ExtResource("2_dwv0f")]
 position = Vector2(135, 4)
 
-[node name="Bollard2" type="Node2D" parent="." unique_id=1197795278 instance=ExtResource("1_1swfa")]
+[node name="Bollard2" parent="." unique_id=1891028010 instance=ExtResource("1_1swfa")]
 position = Vector2(190, 0)
 
-[node name="ParkedScooter1" type="Node2D" parent="." unique_id=2027796467 instance=ExtResource("3_vh3hn")]
+[node name="ParkedScooter1" parent="." unique_id=1574791293 instance=ExtResource("3_vh3hn")]
 position = Vector2(-170, 90)
 
-[node name="ParkedScooter2" type="Node2D" parent="." unique_id=1339465905 instance=ExtResource("3_vh3hn")]
+[node name="ParkedScooter2" parent="." unique_id=1530998644 instance=ExtResource("3_vh3hn")]
 position = Vector2(-60, 96)
 
-[node name="ParkedScooter3" type="Node2D" parent="." unique_id=1381951882 instance=ExtResource("3_vh3hn")]
+[node name="ParkedScooter3" parent="." unique_id=1224144260 instance=ExtResource("3_vh3hn")]
 position = Vector2(120, 90)
 scale = Vector2(-1, 1)
 
-[node name="Planter1" type="Node2D" parent="." unique_id=166428917 instance=ExtResource("4_bctng")]
+[node name="Planter1" parent="." unique_id=1679410343 instance=ExtResource("4_bctng")]
 position = Vector2(290, -20)
 
-[node name="LanternPost1" type="Node2D" parent="." unique_id=2013300087 instance=ExtResource("5_xowi0")]
+[node name="LanternPost1" parent="." unique_id=105192382 instance=ExtResource("5_xowi0")]
 position = Vector2(-330, -30)

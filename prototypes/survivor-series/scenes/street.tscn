@@ -21,6 +21,7 @@
 [ext_resource type="PackedScene" path="res://scenes/clusters/market_row.tscn" id="16_061y5"]
 [ext_resource type="PackedScene" path="res://scenes/clusters/market_double.tscn" id="17_3au6m"]
 [ext_resource type="PackedScene" path="res://scenes/clusters/roadblock.tscn" id="18_r3eyu"]
+[ext_resource type="Script" path="res://scripts/edge_markers.gd" id="23_061y5"]
 [ext_resource type="Texture2D" path="res://assets/art/map/pavement.png" id="23_pmkni"]
 
 [node name="Street" type="Node2D" unique_id=1672293938]
@@ -93,6 +94,7 @@ z_index = 8
 unique_name_in_owner = true
 position = Vector2(600, 840)
 ignore_rotation = false
+zoom = Vector2(0.72, 0.72)
 
 [node name="Projectiles" type="Node2D" parent="." unique_id=141637931]
 unique_name_in_owner = true
@@ -106,3 +108,8 @@ flash_scene = ExtResource("8_nokxu")
 [node name="Numbers" type="Node2D" parent="." unique_id=490767626]
 unique_name_in_owner = true
 z_index = 9
+
+[node name="Markers" type="Node2D" parent="." unique_id=926820052]
+unique_name_in_owner = true
+z_index = 9
+script = ExtResource("23_061y5")

@@ -6,6 +6,10 @@ extends Node2D
 @export var spin: float = 0.0
 ## Aligns the visual with the travel direction.
 @export var face_travel: bool = true
+## Height of the visual above its ground point; a shadow marks the ground point. 0 = lies on the ground.
+@export var lift: float = 18.0
+## Orbits are squashed vertically so the circle reads as lying on the ground.
+const ORBIT_SQUASH := 0.7
 var velocity := Vector2.ZERO
 var damage: float = 10.0
 var force: float = 1.0
@@ -38,6 +42,7 @@ var flight_from := Vector2.ZERO
 ## Spring arm: the hand flies out from `anchor` + `arm_root` along `velocity`, overshoots, wobbles and snaps back.
 var arm_root := Vector2.ZERO
 @onready var visual: Node2D = %Visual
+@onready var _rest: Vector2 = visual.position
 ## Optional child of Visual hidden while a thrown shot is in the air (the pool a tofu leaves behind).
 @onready var landed: Node2D = visual.get_node_or_null("Landed")
 @onready var arm: Line2D = get_node_or_null("%Arm")
@@ -56,6 +61,8 @@ func launch(at: Vector2) -> void:
 	start_point = at
 	if face_travel and velocity != Vector2.ZERO:
 		rotation = velocity.angle()
+	if mode != "lob" and mode != "fall":
+		_raise(lift)
 
 func step(delta: float) -> Vector2:
 	var before: Vector2 = position
@@ -63,10 +70,10 @@ func step(delta: float) -> Vector2:
 		flight_left -= delta
 		var t: float = 1.0 - clampf(flight_left / flight, 0.0, 1.0)
 		position = flight_from.lerp(start_point, t)
-		visual.position.y = -sin(t * PI) * 70.0
+		_raise(sin(t * PI) * 70.0)
 		visual.rotation += delta * 13.0
 		if flight_left <= 0.0:
-			visual.position.y = 0.0
+			_raise(lift)
 			visual.rotation = 0.0
 			if landed != null:
 				landed.show()
@@ -91,7 +98,7 @@ func step(delta: float) -> Vector2:
 		"orbit":
 			orbit_angle += orbit_speed * delta
 			if anchor != null:
-				position = anchor.position + Vector2.RIGHT.rotated(orbit_angle) * orbit_radius
+				position = anchor.position + Vector2(cos(orbit_angle), sin(orbit_angle) * ORBIT_SQUASH) * orbit_radius
 		"thrust":
 			# Stabs out to `velocity` (an offset from the anchor) and pulls back, following the hero.
 			if anchor != null:
@@ -105,9 +112,11 @@ func step(delta: float) -> Vector2:
 		"lob", "fall":
 			var t: float = clampf(age / lifetime, 0.0, 1.0)
 			position = start_point.lerp(target_point, t) if mode == "lob" else target_point
-			visual.position.y = -sin(t * PI) * 70.0 if mode == "lob" else -(1.0 - t) * 260.0
+			_raise(sin(t * PI) * 70.0 if mode == "lob" else (1.0 - t) * 260.0)
 			if t >= 1.0:
 				detonate = true
+	if mode != "lob" and mode != "fall":
+		_raise(lift)
 	visual.rotation += spin * delta
 	if mode != "lob" and mode != "fall" and mode != "spring":
 		modulate.a = clampf((lifetime - age) / 0.15, 0.0, 1.0)
@@ -117,6 +126,17 @@ func step(delta: float) -> Vector2:
 			else:
 				queue_free()
 	return before
+
+## Lifts the visual straight up on screen, whatever the projectile's own rotation.
+func _raise(height: float) -> void:
+	visual.position = _rest + Vector2(0.0, -height).rotated(-rotation)
+	queue_redraw()
+
+func _draw() -> void:
+	if lift <= 0.0 and mode != "lob" and mode != "fall" and flight_left <= 0.0:
+		return
+	draw_set_transform(Vector2.ZERO, -rotation, Vector2(1.0, 0.38))
+	draw_circle(Vector2.ZERO, radius * 0.9 / maxf(scale.x, 0.01), Color(0, 0, 0, 0.25))
 
 func can_hit(enemy: Node2D, before: Vector2) -> bool:
 	if flight_left > 0.0 or mode == "lob" or mode == "fall" or detonate or enemy.dead or pierce == 0:

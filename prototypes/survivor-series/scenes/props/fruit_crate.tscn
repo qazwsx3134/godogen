@@ -1,19 +1,27 @@
 [gd_scene format=3]
 
-[ext_resource type="Texture2D" path="res://assets/art/map/fruit_crate.png" id="1_e3x00"]
+[ext_resource type="Script" path="res://scripts/prop.gd" id="1_nud0y"]
+[ext_resource type="Texture2D" path="res://assets/art/map/fruit_crate.png" id="2_uyoch"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_nud0y"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1gnbq"]
 size = Vector2(36, 22)
 
-[node name="FruitCrate" type="Node2D" unique_id=1640017494]
+[node name="FruitCrate" type="Node2D" unique_id=464604555]
+script = ExtResource("1_nud0y")
+hp = 24.0
+hit_radius = 22.0
+xp = 20.0
+coins = 4
+food_chance = 0.5
+magnet_chance = 0.5
 
-[node name="Sprite" type="Sprite2D" parent="." unique_id=1523613419]
-texture = ExtResource("1_e3x00")
+[node name="Sprite" type="Sprite2D" parent="." unique_id=407750029]
+texture = ExtResource("2_uyoch")
 centered = false
 offset = Vector2(-20, -31)
 
-[node name="Block" type="StaticBody2D" parent="." unique_id=509969705]
+[node name="Block" type="StaticBody2D" parent="." unique_id=1877583081]
 
-[node name="Footprint" type="CollisionShape2D" parent="Block" unique_id=245249976]
+[node name="Footprint" type="CollisionShape2D" parent="Block" unique_id=2040434357]
 position = Vector2(0, -9)
-shape = SubResource("RectangleShape2D_nud0y")
+shape = SubResource("RectangleShape2D_1gnbq")

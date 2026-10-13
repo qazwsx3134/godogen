@@ -1,20 +1,22 @@
 [gd_scene format=3]
 
-[ext_resource type="Texture2D" path="res://assets/art/map/stall-snack.png" id="1_tdtjh"]
+[ext_resource type="Script" path="res://scripts/prop.gd" id="1_r7f7w"]
+[ext_resource type="Texture2D" path="res://assets/art/map/stall-snack.png" id="2_pa4ie"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_r7f7w"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4cj1a"]
 size = Vector2(195.84, 48)
 
-[node name="StallSnack" type="Node2D" unique_id=84730947]
+[node name="StallSnack" type="Node2D" unique_id=1329169006]
+script = ExtResource("1_r7f7w")
 
-[node name="Sprite" type="Sprite2D" parent="." unique_id=1137280110]
+[node name="Sprite" type="Sprite2D" parent="." unique_id=249499776]
 scale = Vector2(1.8, 1.8)
-texture = ExtResource("1_tdtjh")
+texture = ExtResource("2_pa4ie")
 centered = false
 offset = Vector2(-85, -111)
 
-[node name="Block" type="StaticBody2D" parent="." unique_id=440088868]
+[node name="Block" type="StaticBody2D" parent="." unique_id=1681561722]
 
-[node name="Footprint" type="CollisionShape2D" parent="Block" unique_id=485943906]
+[node name="Footprint" type="CollisionShape2D" parent="Block" unique_id=1845177189]
 position = Vector2(-37.8, -22)
-shape = SubResource("RectangleShape2D_r7f7w")
+shape = SubResource("RectangleShape2D_4cj1a")

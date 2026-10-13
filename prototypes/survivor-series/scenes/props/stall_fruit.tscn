@@ -1,20 +1,22 @@
 [gd_scene format=3]
 
-[ext_resource type="Texture2D" path="res://assets/art/map/stall-fruit.png" id="1_8pmvd"]
+[ext_resource type="Script" path="res://scripts/prop.gd" id="1_5j7w3"]
+[ext_resource type="Texture2D" path="res://assets/art/map/stall-fruit.png" id="2_hr7bf"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_5j7w3"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dq50o"]
 size = Vector2(195.84, 48)
 
-[node name="StallFruit" type="Node2D" unique_id=1685761157]
+[node name="StallFruit" type="Node2D" unique_id=1713413469]
+script = ExtResource("1_5j7w3")
 
-[node name="Sprite" type="Sprite2D" parent="." unique_id=7515517]
+[node name="Sprite" type="Sprite2D" parent="." unique_id=1662388221]
 scale = Vector2(1.8, 1.8)
-texture = ExtResource("1_8pmvd")
+texture = ExtResource("2_hr7bf")
 centered = false
 offset = Vector2(-78, -111)
 
-[node name="Block" type="StaticBody2D" parent="." unique_id=861456668]
+[node name="Block" type="StaticBody2D" parent="." unique_id=1742295949]
 
-[node name="Footprint" type="CollisionShape2D" parent="Block" unique_id=19675915]
+[node name="Footprint" type="CollisionShape2D" parent="Block" unique_id=1339277669]
 position = Vector2(-25.2, -22)
-shape = SubResource("RectangleShape2D_5j7w3")
+shape = SubResource("RectangleShape2D_dq50o")

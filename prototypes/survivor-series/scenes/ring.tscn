@@ -4,6 +4,7 @@
 
 [node name="RingToss" type="Node2D" unique_id=1087894976]
 script = ExtResource("1_03kdj")
+lift = 0.0
 radius = 90.0
 face_travel = false
 

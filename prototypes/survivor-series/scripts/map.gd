@@ -5,6 +5,8 @@ extends Node2D
 ## randomness is untouched.
 ## Every CollisionShape2D rectangle inside a cluster is a roadblock: the hero bumps into its StaticBody2D,
 ## Street pushes enemies out of it and stops flying projectiles on it (`blocked`, `push_out`).
+## Props with `hp` (prop.gd) break under weapon hits; a broken prop stays broken for the rest of the run,
+## even when its chunk is rebuilt, and its roadblock goes with it.
 @export var cluster_scenes: Array[PackedScene] = []
 ## Relative pick weights, one per cluster scene; missing entries count as 1.
 @export var cluster_weights: PackedFloat32Array = []
@@ -20,6 +22,9 @@ var _clear_at := Vector2.ZERO
 ## Roadblock rects (world space) per chunk key, and a 256 px lookup grid over all of them.
 var _blocks: Dictionary = {}
 var _cells: Dictionary = {}
+## Keys of props broken this run, and the breakable props standing in the 3×3 chunks.
+var _broken: Dictionary = {}
+var _breakables: Array = []
 const CELL := 256.0
 
 func reset(start: Vector2) -> void:
@@ -27,6 +32,7 @@ func reset(start: Vector2) -> void:
 		chunk.free()
 	_chunks.clear()
 	_blocks.clear()
+	_broken.clear()
 	_clear_at = start
 	follow(start)
 
@@ -62,7 +68,7 @@ func blocked(at: Vector2) -> bool:
 
 ## Moves a circle of `radius` at `at` out of any roadblock it overlaps. It leaves along the shallowest side and
 ## slides `slide` px along that face toward whichever end is the shorter way round to `goal`.
-func push_out(at: Vector2, radius: float, goal: Vector2, slide: float = 0.0) -> Vector2:
+func push_out(at: Vector2, radius: float, goal: Vector2 = Vector2.ZERO, slide: float = 0.0) -> Vector2:
 	for rect: Rect2 in blocks_near(at):
 		var grown: Rect2 = rect.grow(radius)
 		if not grown.has_point(at):
@@ -85,8 +91,33 @@ func push_out(at: Vector2, radius: float, goal: Vector2, slide: float = 0.0) -> 
 				at.x += slide * (-1.0 if left < right else 1.0)
 	return at
 
+## Breakable props whose hit circle touches the circle at `at`.
+## ponytail: linear scan over the few breakables in the 3×3 chunks; index by cell if clusters get dense.
+func breakables_in(at: Vector2, radius: float) -> Array:
+	return _breakables.filter(func(prop: Node2D) -> bool: return prop.global_position.distance_to(at) <= radius + prop.hit_radius)
+
+func tick(delta: float) -> void:
+	for prop: Node2D in _breakables:
+		prop.tick(delta)
+
+## Breaks `prop` for the rest of the run and lifts its roadblock.
+func remove_prop(prop: Node2D) -> void:
+	_broken[prop.key] = true
+	for key: Vector2i in _chunks:
+		if _chunks[key].is_ancestor_of(prop):
+			prop.get_parent().remove_child(prop)
+			_collect(key)
+			break
+	prop.queue_free()
+	_rebuild_cells()
+
 func _rebuild_cells() -> void:
 	_cells.clear()
+	_breakables.clear()
+	for chunk: Node2D in _chunks.values():
+		for prop: Node in chunk.find_children("*", "Node2D", true, false):
+			if prop.has_method("breakable") and prop.breakable():
+				_breakables.append(prop)
 	for list: Array in _blocks.values():
 		for rect: Rect2 in list:
 			var from := Vector2i((rect.position / CELL).floor())
@@ -98,12 +129,22 @@ func _rebuild_cells() -> void:
 						_cells[key] = []
 					_cells[key].append(rect)
 
+## Roadblock rects of every footprint still standing in the chunk.
+func _collect(key: Vector2i) -> void:
+	_blocks[key] = []
+	for shape: CollisionShape2D in _chunks[key].find_children("*", "CollisionShape2D", true, false):
+		var box := shape.shape as RectangleShape2D
+		if box != null:
+			var size: Vector2 = box.size * shape.global_scale.abs()
+			_blocks[key].append(Rect2(shape.global_position - size * 0.5, size))
+
 func _make_chunk(key: Vector2i) -> Node2D:
 	var chunk := Node2D.new()
 	chunk.name = "Chunk_%d_%d" % [key.x, key.y]
 	chunk.position = Vector2(key) * chunk_size
 	chunk.y_sort_enabled = true
 	props.add_child(chunk)
+	_chunks[key] = chunk
 	_blocks[key] = []
 	if cluster_scenes.is_empty():
 		return chunk
@@ -120,9 +161,10 @@ func _make_chunk(key: Vector2i) -> Node2D:
 	var cluster := cluster_scenes[rng.rand_weighted(weights)].instantiate() as Node2D
 	cluster.position = at
 	chunk.add_child(cluster)
-	for shape: CollisionShape2D in cluster.find_children("*", "CollisionShape2D", true, false):
-		var box := shape.shape as RectangleShape2D
-		if box != null:
-			var size: Vector2 = box.size * shape.global_scale.abs()
-			_blocks[key].append(Rect2(shape.global_position - size * 0.5, size))
+	for prop: Node in cluster.find_children("*", "Node2D", true, false).filter(func(n: Node) -> bool: return "key" in n):
+		prop.key = "%d,%d/%s" % [key.x, key.y, cluster.get_path_to(prop)]
+		if _broken.has(prop.key):
+			prop.get_parent().remove_child(prop)
+			prop.free()
+	_collect(key)
 	return chunk

@@ -102,9 +102,16 @@ func _flash(mode: String, radius: float, heading: Vector2, at: Vector2 = Vector2
 func _punch(s: Dictionary) -> bool:
 	var reach: float = _hero().attack_range * s.area
 	var target: Node2D = street.grid.nearest(_hero().position, reach)
-	if target == null:
-		return false
-	var toward: Vector2 = (target.position - _hero().position).normalized()
+	var aim: Vector2
+	if target != null:
+		aim = target.position
+	else:
+		# Nobody in reach: smash a breakable prop instead, if one is close.
+		var props: Array = street.map.breakables_in(_hero().position, reach)
+		if props.is_empty():
+			return false
+		aim = props[0].global_position
+	var toward: Vector2 = (aim - _hero().position).normalized()
 	if toward == Vector2.ZERO:
 		toward = Vector2.UP
 	punches += 1
@@ -114,7 +121,7 @@ func _punch(s: Dictionary) -> bool:
 	street.sfx.play(&"punch")
 	if heavy:
 		street.sfx.play(&"heavy", 0.12)
-	var targets: Array = [target]
+	var targets: Array = [target] if target != null else []
 	for enemy: Node2D in street.grid.query(_hero().position, reach):
 		if targets.size() >= s.amount:
 			break
@@ -126,6 +133,7 @@ func _punch(s: Dictionary) -> bool:
 	for enemy: Node2D in targets:
 		enemy.hit(damage, toward, s.knockback * street.build_force() * (1.5 if heavy else 1.0))
 	street.punching = false
+	street.hit_props(_hero().position + toward * reach * 0.5, reach * 0.5, damage)
 	return true
 
 func _wave(s: Dictionary) -> bool:
@@ -147,6 +155,7 @@ func _kick(s: Dictionary) -> bool:
 	for enemy: Node2D in street.grid.query(_hero().position, radius):
 		var heading: Vector2 = (enemy.position - _hero().position).normalized()
 		enemy.hit(s.damage, heading if heading != Vector2.ZERO else Vector2.UP, s.knockback * street.build_force() * 1.6)
+	street.hit_props(_hero().position, radius, s.damage)
 	return true
 
 func _slipper(s: Dictionary) -> bool:

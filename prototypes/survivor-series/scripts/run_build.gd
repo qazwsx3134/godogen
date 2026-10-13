@@ -10,6 +10,8 @@ var level: int = 1
 var experience: float = 0.0
 var total_experience: float = 0.0
 var pending_choices: int = 0
+## Level-up rerolls left this run: one, plus any from the shop.
+var rerolls: int = 1
 var levels: Dictionary = {}
 var weapons: Array[StringName] = []
 var passives: Array[StringName] = []
@@ -21,6 +23,7 @@ var discovered: Dictionary = {}
 func _init(definition: Resource, meta_bonus: Dictionary = {}, unlocks: Array = [], opening: StringName = &"") -> void:
 	config = definition
 	bonus = meta_bonus.duplicate()
+	rerolls = 1 + int(float(bonus.get(&"rerolls", 0.0)))
 	for id: Variant in unlocks:
 		unlocked[StringName(id)] = true
 	rng.randomize()
