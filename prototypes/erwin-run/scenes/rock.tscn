@@ -1,0 +1,12 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/rock.gd" id="1_mek2u"]
+[ext_resource type="Texture2D" path="res://assets/sprites/rocks.png" id="2_ik6fu"]
+
+[node name="Rock" type="Node2D" unique_id=1440799887]
+script = ExtResource("1_mek2u")
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=45566660]
+unique_name_in_owner = true
+texture = ExtResource("2_ik6fu")
+hframes = 4

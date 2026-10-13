@@ -1,0 +1,24 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_qhqgy"]
+[ext_resource type="Texture2D" path="res://assets/sprites/erwin_gallop.png" id="2_dqkch"]
+[ext_resource type="Texture2D" path="res://assets/sprites/erwin_actions.png" id="3_qlg0r"]
+
+[node name="Player" type="Node2D" unique_id=1506577660]
+script = ExtResource("1_qhqgy")
+
+[node name="Body" type="Node2D" parent="." unique_id=2037886306]
+unique_name_in_owner = true
+
+[node name="Gallop" type="Sprite2D" parent="Body" unique_id=1717973813]
+unique_name_in_owner = true
+texture = ExtResource("2_dqkch")
+offset = Vector2(0, -48)
+hframes = 6
+
+[node name="Action" type="Sprite2D" parent="Body" unique_id=56942848]
+unique_name_in_owner = true
+visible = false
+texture = ExtResource("3_qlg0r")
+offset = Vector2(0, -52)
+hframes = 3

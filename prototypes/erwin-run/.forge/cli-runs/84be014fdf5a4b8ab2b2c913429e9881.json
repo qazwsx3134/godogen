@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 2,
+  "provider": "openai",
+  "kind": "image",
+  "route": "codex-cli",
+  "requestedModel": "codex-image_gen",
+  "options": {
+    "tool": "image_gen"
+  },
+  "promptSha256": "04761d0d1b53be6c5d40c7a74ff800fe3c13d15ff2a871ac9a42415dc0d0e80a",
+  "fingerprint": "03ebe0643a399a072d88502db0c361d85e0087cd486001a4c3e92b47a68ff352",
+  "estimate": {
+    "usd": 0.0,
+    "currency": "USD",
+    "pricesVersion": "2026-10-06",
+    "items": [],
+    "basis": "subscription quota call: no per-call USD price; counted by call caps"
+  },
+  "consent": {
+    "provider": "openai",
+    "model": "codex-image_gen",
+    "calls": 1,
+    "estimateUsd": 0.0,
+    "route": "codex-cli",
+    "quota": true,
+    "account": "the user's own Codex sign-in (ChatGPT)",
+    "note": "uses the subscription quota of that sign-in, never API credit"
+  },
+  "artSource": "host_image",
+  "execution": "execute",
+  "status": "done",
+  "outputDir": "../../art_src/gen/titan_runner",
+  "receipt": {
+    "startedAt": "2026-10-13T18:06:25.199Z",
+    "submittedAt": "2026-10-13T18:06:25.213Z",
+    "completedAt": "2026-10-13T18:07:05.109Z",
+    "wallMs": 39910,
+    "providerMs": 40496,
+    "attempt": 1,
+    "purpose": null,
+    "toolVersion": "cli_media/0.4.0",
+    "outcomeCode": "ok"
+  },
+  "ledger": {
+    "projectDir": "../..",
+    "reservationId": "370a654cdd7a49a39b0bb19bfd7c4b8b",
+    "status": "done"
+  },
+  "cliRun": {
+    "tool": "codex",
+    "runId": "84be014fdf5a4b8ab2b2c913429e9881",
+    "cwd": "<tmp>/forge-cli-84be014fdf5a-c09637ec",
+    "startedAt": "2026-10-13T18:06:25.199Z",
+    "version": "0.162.1",
+    "versionText": "codex-cli 0.162.1",
+    "recipe": "codex-exec-imagegen/1",
+    "home": "CODEX_HOME",
+    "verifiedBefore": true,
+    "threadId": "01a13671-ba1a-7150-bbe4-f40d772f0aee"
+  },
+  "adoption": {
+    "method": "native-run-folder",
+    "source": "CODEX_HOME/generated_images/01a13671-ba1a-7150-bbe4-f40d772f0aee/exec-8fd2d451-f52b-44a1-a850-f05c51d90c87.png",
+    "sourceSha256": "600bd12fa2f69b4f46eb0a3f0194b79633487cc3f653c4349b5e76eb581b6d5c",
+    "sourceMtime": "2026-10-13T18:07:00Z",
+    "freshAfter": "2026-10-13T18:06:25.221Z",
+    "checks": [
+      "inside the CLI's own folder for this run",
+      "no symlink or junction",
+      "regular file of a sane size",
+      "newer than the run",
+      "magic bytes",
+      "decodes",
+      "exactly one output",
+      "exclusive copy with matching sha256"
+    ],
+    "finalAnswerNamesFile": true
+  },
+  "artifact": {
+    "path": "../../art_src/gen/titan_runner/generated.png",
+    "sha256": "600bd12fa2f69b4f46eb0a3f0194b79633487cc3f653c4349b5e76eb581b6d5c",
+    "bytes": 1450971,
+    "format": "PNG",
+    "size": [
+      1536,
+      1024
+    ]
+  }
+}

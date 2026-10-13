@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 2,
+  "provider": "openai",
+  "kind": "image",
+  "route": "codex-cli",
+  "requestedModel": "codex-image_gen",
+  "options": {
+    "tool": "image_gen"
+  },
+  "promptSha256": "1a8b25c0adeed9ab1184379d32e0d8438165e3fe5dddb0d6686561db0f4bf65a",
+  "fingerprint": "afb928b920fd25a4cec48d5c7a1a903595245ec9c6eedf59e76603be01c4a94c",
+  "estimate": {
+    "usd": 0.0,
+    "currency": "USD",
+    "pricesVersion": "2026-10-06",
+    "items": [],
+    "basis": "subscription quota call: no per-call USD price; counted by call caps"
+  },
+  "consent": {
+    "provider": "openai",
+    "model": "codex-image_gen",
+    "calls": 1,
+    "estimateUsd": 0.0,
+    "route": "codex-cli",
+    "quota": true,
+    "account": "the user's own Codex sign-in (ChatGPT)",
+    "note": "uses the subscription quota of that sign-in, never API credit"
+  },
+  "artSource": "host_image",
+  "execution": "execute",
+  "status": "done",
+  "outputDir": "../../art_src/gen/levi",
+  "receipt": {
+    "startedAt": "2026-10-13T17:58:51.100Z",
+    "submittedAt": "2026-10-13T17:58:51.115Z",
+    "completedAt": "2026-10-13T17:59:41.770Z",
+    "wallMs": 50670,
+    "providerMs": 51951,
+    "attempt": 1,
+    "purpose": null,
+    "toolVersion": "cli_media/0.4.0",
+    "outcomeCode": "ok"
+  },
+  "ledger": {
+    "projectDir": "../..",
+    "reservationId": "e87cd53104564fc7b4f782071813f87a",
+    "status": "done"
+  },
+  "cliRun": {
+    "tool": "codex",
+    "runId": "abb28bac0ce24abd93260ae8583a4416",
+    "cwd": "<tmp>/forge-cli-abb28bac0ce2-24c77d7d",
+    "startedAt": "2026-10-13T17:58:51.100Z",
+    "version": "0.162.1",
+    "versionText": "codex-cli 0.162.1",
+    "recipe": "codex-exec-imagegen/1",
+    "home": "CODEX_HOME",
+    "verifiedBefore": true,
+    "threadId": "01a1366a-cc62-79b1-ade6-7a0824977b59"
+  },
+  "adoption": {
+    "method": "native-run-folder",
+    "source": "CODEX_HOME/generated_images/01a1366a-cc62-79b1-ade6-7a0824977b59/exec-1b793f8c-d372-4afd-a3b2-39d68e03e9ce.png",
+    "sourceSha256": "a1b683150a076be0f51d07ee23640292c3bebc2978fd5b7265149cd0ce984e53",
+    "sourceMtime": "2026-10-13T17:59:37Z",
+    "freshAfter": "2026-10-13T17:58:51.123Z",
+    "checks": [
+      "inside the CLI's own folder for this run",
+      "no symlink or junction",
+      "regular file of a sane size",
+      "newer than the run",
+      "magic bytes",
+      "decodes",
+      "exactly one output",
+      "exclusive copy with matching sha256"
+    ],
+    "finalAnswerNamesFile": true
+  },
+  "artifact": {
+    "path": "../../art_src/gen/levi/generated.png",
+    "sha256": "a1b683150a076be0f51d07ee23640292c3bebc2978fd5b7265149cd0ce984e53",
+    "bytes": 1575570,
+    "format": "PNG",
+    "size": [
+      2172,
+      724
+    ]
+  }
+}

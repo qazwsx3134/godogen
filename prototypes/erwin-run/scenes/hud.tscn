@@ -1,0 +1,245 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/hud.gd" id="1_6fi6k"]
+[ext_resource type="Texture2D" path="res://assets/ui/emblem.png" id="2_uo2fv"]
+[ext_resource type="Theme" path="res://assets/ui/theme.tres" id="3_047uy"]
+[ext_resource type="Texture2D" path="res://assets/sprites/erwin_gallop.png" id="4_5pdws"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hd3ao"]
+atlas = ExtResource("2_uo2fv")
+region = Rect2(0, 0, 26, 26)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0i1j5"]
+atlas = ExtResource("2_uo2fv")
+region = Rect2(26, 0, 26, 26)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mphia"]
+content_margin_left = 6.0
+content_margin_top = 0.0
+content_margin_right = 6.0
+content_margin_bottom = 0.0
+bg_color = Color(0.06, 0.06, 0.08, 0.85)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.7882353, 0.7254902, 0.5411765, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0m4u7"]
+atlas = ExtResource("4_5pdws")
+region = Rect2(0, 0, 112, 96)
+
+[node name="Hud" type="CanvasLayer" unique_id=563609180]
+process_mode = 3
+layer = 5
+script = ExtResource("1_6fi6k")
+heart_full = SubResource("AtlasTexture_hd3ao")
+heart_empty = SubResource("AtlasTexture_0i1j5")
+
+[node name="UI" type="Control" parent="." unique_id=119673676]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = ExtResource("3_047uy")
+
+[node name="Flash" type="ColorRect" parent="UI" unique_id=445102375]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(1, 0, 0, 0)
+
+[node name="Top" type="Control" parent="UI" unique_id=746410644]
+unique_name_in_owner = true
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Hearts" type="HBoxContainer" parent="UI/Top" unique_id=1337009225]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 10.0
+offset_top = 6.0
+offset_right = 100.0
+offset_bottom = 32.0
+theme_override_constants/separation = 3
+
+[node name="Heart1" type="TextureRect" parent="UI/Top/Hearts" unique_id=33617886]
+custom_minimum_size = Vector2(26, 26)
+layout_mode = 2
+texture = SubResource("AtlasTexture_hd3ao")
+stretch_mode = 3
+
+[node name="Heart2" type="TextureRect" parent="UI/Top/Hearts" unique_id=1953477886]
+custom_minimum_size = Vector2(26, 26)
+layout_mode = 2
+texture = SubResource("AtlasTexture_hd3ao")
+stretch_mode = 3
+
+[node name="Heart3" type="TextureRect" parent="UI/Top/Hearts" unique_id=1152101241]
+custom_minimum_size = Vector2(26, 26)
+layout_mode = 2
+texture = SubResource("AtlasTexture_hd3ao")
+stretch_mode = 3
+
+[node name="Progress" type="Panel" parent="UI/Top" unique_id=1309550510]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -120.0
+offset_top = 12.0
+offset_right = 100.0
+offset_bottom = 19.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_mphia")
+
+[node name="Fill" type="ColorRect" parent="UI/Top/Progress" unique_id=1452707706]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 1.0
+offset_bottom = 6.0
+mouse_filter = 2
+color = Color(0.8784314, 0.6509804, 0.22745098, 1)
+
+[node name="GoalLabel" type="Label" parent="UI/Top" unique_id=1664321902]
+layout_mode = 0
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 106.0
+offset_top = 6.0
+offset_right = 176.0
+offset_bottom = 24.0
+theme_override_colors/font_color = Color(1, 0.8117647, 0.5411765, 1)
+text = "獸之巨人"
+
+[node name="Marker" type="TextureRect" parent="UI/Top" unique_id=1657071684]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -132.0
+offset_right = -106.0
+offset_bottom = 22.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_0m4u7")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Score" type="Label" parent="UI/Top" unique_id=2126678785]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -200.0
+offset_top = 26.0
+offset_right = -10.0
+offset_bottom = 42.0
+text = "000000  討伐 0"
+horizontal_alignment = 2
+
+[node name="Combo" type="Label" parent="UI/Top" unique_id=1153698122]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -200.0
+offset_top = 42.0
+offset_right = -10.0
+offset_bottom = 58.0
+theme_override_colors/font_color = Color(1, 0.84705883, 0.41568628, 1)
+horizontal_alignment = 2
+
+[node name="Hint" type="Label" parent="UI" unique_id=1453365690]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+offset_top = 66.0
+offset_bottom = 86.0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Banner" type="Label" parent="UI" unique_id=2044714049]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+offset_top = 104.0
+offset_bottom = 144.0
+theme_override_colors/font_color = Color(1, 0.8862745, 0.627451, 1)
+theme_override_font_sizes/font_size = 33
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BannerSub" type="Label" parent="UI" unique_id=1282397646]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+offset_top = 148.0
+offset_bottom = 168.0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TouchPads" type="Control" parent="UI" unique_id=191974117]
+unique_name_in_owner = true
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="JumpPad" type="PanelContainer" parent="UI/TouchPads" unique_id=313978274]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0.4)
+layout_mode = 0
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = -80.0
+offset_right = 102.0
+offset_bottom = -10.0
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="UI/TouchPads/JumpPad" unique_id=7783306]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "跳躍"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SlashPad" type="PanelContainer" parent="UI/TouchPads" unique_id=1891299465]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0.4)
+layout_mode = 0
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -102.0
+offset_top = -80.0
+offset_right = -10.0
+offset_bottom = -10.0
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="UI/TouchPads/SlashPad" unique_id=248467512]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "斬擊"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PauseButton" type="Button" parent="UI" unique_id=2094947010]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -36.0
+offset_top = 4.0
+offset_right = -6.0
+offset_bottom = 26.0
+focus_mode = 0
+text = "II"

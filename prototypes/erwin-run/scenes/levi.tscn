@@ -1,0 +1,10 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/levi.png" id="1_g6f20"]
+
+[node name="Levi" type="Node2D" unique_id=1422792864]
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=847810178]
+texture = ExtResource("1_g6f20")
+offset = Vector2(0, -32)
+hframes = 5

@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 2,
+  "provider": "openai",
+  "kind": "image",
+  "route": "codex-cli",
+  "requestedModel": "codex-image_gen",
+  "options": {
+    "tool": "image_gen"
+  },
+  "promptSha256": "6872d1d53dcbdacc0f846dbcb97f4f5f9240ef3077ce575059ccb552d8233b1f",
+  "fingerprint": "4419ba0c2b5901d3073eba7dc8d3d9c331731837cba6f7a1ced2132ef78b076a",
+  "estimate": {
+    "usd": 0.0,
+    "currency": "USD",
+    "pricesVersion": "2026-10-06",
+    "items": [],
+    "basis": "subscription quota call: no per-call USD price; counted by call caps"
+  },
+  "consent": {
+    "provider": "openai",
+    "model": "codex-image_gen",
+    "calls": 1,
+    "estimateUsd": 0.0,
+    "route": "codex-cli",
+    "quota": true,
+    "account": "the user's own Codex sign-in (ChatGPT)",
+    "note": "uses the subscription quota of that sign-in, never API credit"
+  },
+  "artSource": "host_image",
+  "execution": "execute",
+  "status": "failed",
+  "outputDir": "../../art_src/gen/titan_tall",
+  "receipt": {
+    "startedAt": "2026-10-13T17:54:47.140Z",
+    "submittedAt": "2026-10-13T17:54:47.155Z",
+    "completedAt": "2026-10-13T17:55:34.557Z",
+    "wallMs": 47417,
+    "providerMs": 48021,
+    "attempt": 1,
+    "purpose": null,
+    "toolVersion": "cli_media/0.4.0",
+    "outcomeCode": "ARTIFACT_MISSING"
+  },
+  "ledger": {
+    "projectDir": "../..",
+    "reservationId": "4a8bb1ebaeae4493a00d483ce767cf8b",
+    "status": "failed"
+  },
+  "cliRun": {
+    "tool": "codex",
+    "runId": "055dc1aeca1b4338943f4ff30b34b226",
+    "cwd": "<tmp>/forge-cli-055dc1aeca1b-e19a12a2",
+    "startedAt": "2026-10-13T17:54:47.140Z",
+    "version": "0.162.1",
+    "versionText": "codex-cli 0.162.1",
+    "recipe": "codex-exec-imagegen/1",
+    "home": "CODEX_HOME",
+    "verifiedBefore": true,
+    "threadId": "01a13667-13bc-7a72-ab38-2f1fa17c09a9"
+  },
+  "error": {
+    "code": "ARTIFACT_MISSING",
+    "message": "the Codex thread folder holds no image; Codex answered: Image generation was rejected by the tool's safety system. No image path was produced."
+  },
+  "errorType": "CliMediaError"
+}

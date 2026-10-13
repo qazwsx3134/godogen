@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 2,
+  "provider": "openai",
+  "kind": "image",
+  "route": "codex-cli",
+  "requestedModel": "codex-image_gen",
+  "options": {
+    "tool": "image_gen"
+  },
+  "promptSha256": "0559b4ec3d37c266460d26cf8c893dd838c5b9c2c5215d5782d56ec0db586b8e",
+  "fingerprint": "ee36701f4746f0c32c0f3550c453b277346593d98b8ecb31248b6ee45782b6f3",
+  "estimate": {
+    "usd": 0.0,
+    "currency": "USD",
+    "pricesVersion": "2026-10-06",
+    "items": [],
+    "basis": "subscription quota call: no per-call USD price; counted by call caps"
+  },
+  "consent": {
+    "provider": "openai",
+    "model": "codex-image_gen",
+    "calls": 1,
+    "estimateUsd": 0.0,
+    "route": "codex-cli",
+    "quota": true,
+    "account": "the user's own Codex sign-in (ChatGPT)",
+    "note": "uses the subscription quota of that sign-in, never API credit"
+  },
+  "artSource": "host_image",
+  "execution": "execute",
+  "status": "failed",
+  "outputDir": "../../art_src/gen/erwin_gallop_01",
+  "receipt": {
+    "startedAt": "2026-10-13T17:38:27.766Z",
+    "submittedAt": "2026-10-13T17:38:27.779Z",
+    "completedAt": "2026-10-13T17:39:17.145Z",
+    "wallMs": 49380,
+    "providerMs": 50250,
+    "attempt": 1,
+    "purpose": null,
+    "toolVersion": "cli_media/0.4.0",
+    "outcomeCode": "ARTIFACT_INVALID"
+  },
+  "ledger": {
+    "projectDir": "../..",
+    "reservationId": "25e662a54d94487885be58c7984a94f5",
+    "status": "failed"
+  },
+  "cliRun": {
+    "tool": "codex",
+    "runId": "347ce3c173ff4d8295d4af68fdce0cc9",
+    "cwd": "<tmp>/forge-cli-347ce3c173ff-d1a9e2b6",
+    "startedAt": "2026-10-13T17:38:27.766Z",
+    "version": "0.162.1",
+    "versionText": "codex-cli 0.162.1",
+    "recipe": "codex-exec-imagegen/1",
+    "home": "CODEX_HOME",
+    "verifiedBefore": false,
+    "threadId": "01a13658-2266-7413-a21e-1b48ef4a5f5a"
+  },
+  "error": {
+    "code": "ARTIFACT_INVALID",
+    "message": "Pillow is needed to verify images: python -m pip install \"Pillow>=10.1\""
+  },
+  "errorType": "CliMediaError"
+}
