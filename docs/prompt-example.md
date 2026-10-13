@@ -8,4 +8,4 @@ World: an open island with a jungle, plains, coastline, and highlands, populated
 
 HUD: rounded dark panels with a gold/amber accent — health, stamina, and hunger bars bottom-left, hotbar/inventory bottom-center, minimap top-right. Keep it minimal and legible.
 
-Ship it fully playable: gather/craft loop, basic building placement, at least one tameable and one hostile dinosaur, day/night cycle — no placeholder art.
+ : gather/craft loop, basic building placement, at least one tameable and one hostile dinosaur, day/night cycle — no placeholder art.

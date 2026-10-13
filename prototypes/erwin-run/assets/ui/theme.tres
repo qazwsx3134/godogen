@@ -1,0 +1,103 @@
+[gd_resource type="Theme" format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/Cubic11.ttf" id="1_6cha6"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ib6tx"]
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 6.0
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.84705883, 0.41568628, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fenpc"]
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 6.0
+bg_color = Color(0.18431373, 0.3529412, 0.23921569, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.9490196, 0.8901961, 0.6901961, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_omlnh"]
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 6.0
+bg_color = Color(0.14117648, 0.2509804, 0.18039216, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.7882353, 0.7254902, 0.5411765, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lvrds"]
+content_margin_left = 12.0
+content_margin_top = 6.0
+content_margin_right = 12.0
+content_margin_bottom = 6.0
+bg_color = Color(0.09411765, 0.1882353, 0.12156863, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.9490196, 0.8901961, 0.6901961, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_im0sm"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 10.0
+bg_color = Color(0.08, 0.1, 0.09, 0.92)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.7882353, 0.7254902, 0.5411765, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7h6bm"]
+content_margin_left = 6.0
+content_margin_top = 0.0
+content_margin_right = 6.0
+content_margin_bottom = 0.0
+bg_color = Color(0.06, 0.06, 0.08, 0.85)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.7882353, 0.7254902, 0.5411765, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_86uey"]
+content_margin_left = 6.0
+content_margin_top = 0.0
+content_margin_right = 6.0
+content_margin_bottom = 0.0
+bg_color = Color(0.8784314, 0.6509804, 0.22745098, 1)
+border_color = Color(0.8784314, 0.6509804, 0.22745098, 1)
+
+[resource]
+default_font = ExtResource("1_6cha6")
+default_font_size = 11
+Button/colors/font_color = Color(0.95686275, 0.91764706, 0.8235294, 1)
+Button/colors/font_focus_color = Color(1, 1, 1, 1)
+Button/colors/font_hover_color = Color(1, 1, 1, 1)
+Button/colors/font_outline_color = Color(0.078431375, 0.05490196, 0.047058824, 1)
+Button/constants/outline_size = 3
+Button/font_sizes/font_size = 11
+Button/styles/focus = SubResource("StyleBoxFlat_ib6tx")
+Button/styles/hover = SubResource("StyleBoxFlat_fenpc")
+Button/styles/normal = SubResource("StyleBoxFlat_omlnh")
+Button/styles/pressed = SubResource("StyleBoxFlat_lvrds")
+Label/colors/font_color = Color(0.95686275, 0.91764706, 0.8235294, 1)
+Label/colors/font_outline_color = Color(0.078431375, 0.05490196, 0.047058824, 1)
+Label/constants/outline_size = 4
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_im0sm")
+ProgressBar/styles/background = SubResource("StyleBoxFlat_7h6bm")
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_86uey")

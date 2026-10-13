@@ -1,0 +1,153 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_yc10j"]
+[ext_resource type="AudioStream" path="res://assets/audio/bgm_run.wav" id="2_jscy8"]
+[ext_resource type="AudioStream" path="res://assets/audio/bgm_boss.wav" id="3_pm3ni"]
+[ext_resource type="AudioStream" path="res://assets/audio/bgm_end.wav" id="4_y6deb"]
+[ext_resource type="Script" path="res://scripts/sfx.gd" id="5_og1vs"]
+[ext_resource type="Script" path="res://addons/proto_kit/music.gd" id="6_2wyq8"]
+[ext_resource type="Script" path="res://addons/proto_kit/time_control.gd" id="7_vxglm"]
+[ext_resource type="Texture2D" path="res://assets/bg/sky.png" id="8_2f3dj"]
+[ext_resource type="Texture2D" path="res://assets/bg/far.png" id="9_yq6so"]
+[ext_resource type="Texture2D" path="res://assets/sprites/beast_body.png" id="10_fv21b"]
+[ext_resource type="Texture2D" path="res://assets/bg/mid.png" id="11_tel4y"]
+[ext_resource type="Texture2D" path="res://assets/bg/ruins.png" id="12_qkpxi"]
+[ext_resource type="Texture2D" path="res://assets/bg/wall_gate.png" id="13_5q0nq"]
+[ext_resource type="Texture2D" path="res://assets/bg/ground.png" id="14_dgi5k"]
+[ext_resource type="PackedScene" path="res://scenes/beast.tscn" id="15_j8jky"]
+[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="16_kmb1v"]
+[ext_resource type="PackedScene" path="res://scenes/levi.tscn" id="17_fuf3a"]
+[ext_resource type="Script" path="res://addons/proto_kit/pixel_vfx.gd" id="18_pibwh"]
+[ext_resource type="FontFile" path="res://assets/fonts/Cubic11.ttf" id="19_c6pm6"]
+[ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="20_5he1u"]
+[ext_resource type="PackedScene" path="res://scenes/screens.tscn" id="21_5poiv"]
+
+[node name="Main" type="Node2D" unique_id=1349001729]
+script = ExtResource("1_yc10j")
+run_track = ExtResource("2_jscy8")
+boss_track = ExtResource("3_pm3ni")
+end_track = ExtResource("4_y6deb")
+
+[node name="Sfx" type="Node" parent="." unique_id=2095665431]
+unique_name_in_owner = true
+script = ExtResource("5_og1vs")
+
+[node name="Music" type="Node" parent="." unique_id=425785293]
+unique_name_in_owner = true
+process_mode = 3
+script = ExtResource("6_2wyq8")
+
+[node name="Player1" type="AudioStreamPlayer" parent="Music" unique_id=193787785]
+
+[node name="Player2" type="AudioStreamPlayer" parent="Music" unique_id=902364304]
+
+[node name="TimeControl" type="Node" parent="." unique_id=1515346558]
+unique_name_in_owner = true
+process_mode = 3
+script = ExtResource("7_vxglm")
+
+[node name="Sky" type="Parallax2D" parent="." unique_id=1218467897]
+unique_name_in_owner = true
+repeat_size = Vector2(1080, 0)
+repeat_times = 3
+ignore_camera_scroll = true
+
+[node name="Sprite" type="Sprite2D" parent="Sky" unique_id=1592846333]
+texture = ExtResource("8_2f3dj")
+centered = false
+
+[node name="Far" type="Parallax2D" parent="." unique_id=1096370037]
+unique_name_in_owner = true
+repeat_size = Vector2(1662, 0)
+repeat_times = 3
+ignore_camera_scroll = true
+
+[node name="Sprite" type="Sprite2D" parent="Far" unique_id=1455831180]
+position = Vector2(0, 96)
+texture = ExtResource("9_yq6so")
+centered = false
+
+[node name="BeastFar" type="Sprite2D" parent="." unique_id=645017121]
+unique_name_in_owner = true
+visible = false
+self_modulate = Color(0.36, 0.33, 0.46, 1)
+position = Vector2(560, 256)
+scale = Vector2(0.32, 0.32)
+texture = ExtResource("10_fv21b")
+offset = Vector2(0, -145)
+hframes = 3
+
+[node name="Mid" type="Parallax2D" parent="." unique_id=232529195]
+unique_name_in_owner = true
+repeat_size = Vector2(1320, 0)
+repeat_times = 3
+ignore_camera_scroll = true
+
+[node name="Sprite" type="Sprite2D" parent="Mid" unique_id=801541904]
+position = Vector2(0, 94)
+texture = ExtResource("11_tel4y")
+centered = false
+
+[node name="Ruins" type="Parallax2D" parent="." unique_id=1204058023]
+unique_name_in_owner = true
+repeat_size = Vector2(1014, 0)
+repeat_times = 3
+ignore_camera_scroll = true
+
+[node name="Sprite" type="Sprite2D" parent="Ruins" unique_id=1408755793]
+position = Vector2(0, 72)
+texture = ExtResource("12_qkpxi")
+centered = false
+
+[node name="WallGate" type="Sprite2D" parent="." unique_id=1423506257]
+unique_name_in_owner = true
+position = Vector2(-40, -6)
+texture = ExtResource("13_5q0nq")
+centered = false
+
+[node name="Ground" type="Parallax2D" parent="." unique_id=607918509]
+unique_name_in_owner = true
+repeat_size = Vector2(492, 0)
+repeat_times = 4
+ignore_camera_scroll = true
+
+[node name="Sprite" type="Sprite2D" parent="Ground" unique_id=821937995]
+position = Vector2(0, 310)
+texture = ExtResource("14_dgi5k")
+centered = false
+
+[node name="World" type="Node2D" parent="." unique_id=473640011]
+
+[node name="Beast" parent="World" unique_id=1424083683 instance=ExtResource("15_j8jky")]
+unique_name_in_owner = true
+visible = false
+position = Vector2(520, 318)
+
+[node name="Obstacles" type="Node2D" parent="World" unique_id=774974622]
+unique_name_in_owner = true
+
+[node name="Player" parent="World" unique_id=1506577660 instance=ExtResource("16_kmb1v")]
+unique_name_in_owner = true
+position = Vector2(120, 318)
+
+[node name="Levi" parent="World" unique_id=1422792864 instance=ExtResource("17_fuf3a")]
+unique_name_in_owner = true
+visible = false
+
+[node name="Fx" type="Node2D" parent="." unique_id=2101980672]
+unique_name_in_owner = true
+z_index = 5
+script = ExtResource("18_pibwh")
+pixel = 1.0
+font = ExtResource("19_c6pm6")
+
+[node name="Camera" type="Camera2D" parent="." unique_id=1960712461]
+unique_name_in_owner = true
+position = Vector2(320, 180)
+ignore_rotation = false
+
+[node name="Hud" parent="." unique_id=563609180 instance=ExtResource("20_5he1u")]
+unique_name_in_owner = true
+
+[node name="Screens" parent="." unique_id=250200069 instance=ExtResource("21_5poiv")]
+unique_name_in_owner = true

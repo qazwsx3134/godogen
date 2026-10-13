@@ -1,0 +1,9 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/ui/emblem.png" id="1_8jokm"]
+
+[node name="Warning" type="Sprite2D" unique_id=106528869]
+z_index = 6
+texture = ExtResource("1_8jokm")
+hframes = 4
+frame = 3

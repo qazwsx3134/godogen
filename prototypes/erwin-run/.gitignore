@@ -1,0 +1,6 @@
+.godot/
+build/
+.forge/
+# raw Codex output and the full font: local only (assets/ holds the processed files the game uses)
+art_src/gen/
+art_src/fonts/
