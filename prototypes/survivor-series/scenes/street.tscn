@@ -6,10 +6,7 @@
 [ext_resource type="PackedScene" path="res://scenes/car.tscn" id="4_cotsb"]
 [ext_resource type="PackedScene" path="res://scenes/fatty.tscn" id="5_fmkxj"]
 [ext_resource type="PackedScene" path="res://scenes/smoke.tscn" id="5_nokxu"]
-[ext_resource type="PackedScene" path="res://scenes/impact.tscn" id="6_7vla3"]
 [ext_resource type="PackedScene" path="res://scenes/player.tscn" id="7_0wd0x"]
-[ext_resource type="PackedScene" path="res://scenes/attack_flash.tscn" id="8_nokxu"]
-[ext_resource type="PackedScene" path="res://scenes/blast.tscn" id="8_wd6c3"]
 [ext_resource type="PackedScene" path="res://scenes/pickup.tscn" id="9_7gyev"]
 [ext_resource type="Resource" path="res://data/progression.tres" id="9_7vla3"]
 [ext_resource type="PackedScene" path="res://scenes/damage_number.tscn" id="10_5turb"]
@@ -21,16 +18,21 @@
 [ext_resource type="PackedScene" path="res://scenes/clusters/market_row.tscn" id="16_061y5"]
 [ext_resource type="PackedScene" path="res://scenes/clusters/market_double.tscn" id="17_3au6m"]
 [ext_resource type="PackedScene" path="res://scenes/clusters/roadblock.tscn" id="18_r3eyu"]
+[ext_resource type="Script" path="res://addons/proto_kit/pixel_vfx.gd" id="19_3au6m"]
+[ext_resource type="Texture2D" path="res://assets/pixel/map/pavement_184.png" id="19_061y5"]
+[ext_resource type="FontFile" path="res://assets/fonts/Cubic11.ttf" id="20_r3eyu"]
+[ext_resource type="FontFile" path="res://assets/fonts/NotoSansTC.ttf" id="21_m25ji"]
 [ext_resource type="Script" path="res://scripts/edge_markers.gd" id="23_061y5"]
-[ext_resource type="Texture2D" path="res://assets/art/map/pavement.png" id="23_pmkni"]
+
+[sub_resource type="FontVariation" id="FontVariation_sjwbh"]
+fallbacks = Array[Font]([ExtResource("21_m25ji")])
+base_font = ExtResource("20_r3eyu")
 
 [node name="Street" type="Node2D" unique_id=1672293938]
 process_mode = 1
 script = ExtResource("1_7vr8w")
 enemy_scenes = Array[PackedScene]([ExtResource("2_5m0si"), ExtResource("3_dxpu0"), ExtResource("4_cotsb"), ExtResource("5_fmkxj")])
 smoke_scene = ExtResource("5_nokxu")
-impact_scene = ExtResource("6_7vla3")
-blast_scene = ExtResource("8_wd6c3")
 pickup_scene = ExtResource("9_7gyev")
 number_scene = ExtResource("10_5turb")
 progression = ExtResource("9_7vla3")
@@ -48,9 +50,10 @@ cluster_weights = PackedFloat32Array(3, 2, 2)
 [node name="Ground" type="Sprite2D" parent="Map" unique_id=446245008]
 unique_name_in_owner = true
 texture_repeat = 2
-texture = ExtResource("23_pmkni")
+scale = Vector2(2.7826087, 2.7826087)
+texture = ExtResource("19_061y5")
 region_enabled = true
-region_rect = Rect2(0, 0, 4096, 4096)
+region_rect = Rect2(0, 0, 1472, 1472)
 
 [node name="Hazards" type="Node2D" parent="." unique_id=536408701]
 unique_name_in_owner = true
@@ -90,6 +93,31 @@ position = Vector2(600, 840)
 unique_name_in_owner = true
 z_index = 8
 
+[node name="Fx" type="Node2D" parent="." unique_id=469098753]
+unique_name_in_owner = true
+z_index = 8
+script = ExtResource("19_3au6m")
+pixel = 2.7777777777777777
+font = SubResource("FontVariation_sjwbh")
+palettes = {
+"blast": ["#3a0a08", "#a8201a", "#ff5a2e", "#ffc24a", "#fff3c0"],
+"bounce": ["#102a40", "#2e6c9e", "#6fbaf0", "#c4e8ff", "#ffffff"],
+"cane": ["#3a0c24", "#a0306a", "#f070a8", "#ffc0dc", "#ffffff"],
+"fart": ["#18300c", "#3e7020", "#86c040", "#d2f08a", "#f6ffe0"],
+"firecracker": ["#300808", "#a01818", "#ff4a2a", "#ffcc4a", "#fff4c8"],
+"gold": ["#3a2408", "#a8701a", "#ffc83e", "#ffe896", "#ffffff"],
+"heavy": ["#3a1406", "#b8400e", "#ff8a1f", "#ffd25c", "#fff6d0"],
+"hit": ["#2a1a10", "#a4542a", "#ffb35c", "#ffe7a8", "#ffffff"],
+"incense": ["#2a1206", "#8a3c10", "#e07a20", "#ffc060", "#fff0c8"],
+"kick": ["#14202e", "#3c6c96", "#7fc4ff", "#d4f0ff", "#ffffff"],
+"lantern": ["#3a1606", "#b05010", "#ff9a2e", "#ffd88a", "#fffbe8"],
+"pearl": ["#1c0e06", "#5a3018", "#9a6236", "#e0b88a", "#fff0dc"],
+"slipper": ["#101c3a", "#2a4aa0", "#5c8cf0", "#c8dcff", "#ffffff"],
+"smoke": ["#221c2c", "#5a5068", "#8a8098", "#bcb4c8", "#e8e4ee"],
+"stink": ["#14260a", "#3a6418", "#7cb83a", "#c8ec84", "#f4ffd8"],
+"wave": ["#10243a", "#1f5d86", "#3fb4e0", "#9fe8ff", "#ffffff"]
+}
+
 [node name="Camera" type="Camera2D" parent="." unique_id=560680069]
 unique_name_in_owner = true
 position = Vector2(600, 840)
@@ -103,7 +131,6 @@ z_index = 4
 [node name="Arsenal" type="Node" parent="." unique_id=764988573]
 unique_name_in_owner = true
 script = ExtResource("13_0otry")
-flash_scene = ExtResource("8_nokxu")
 
 [node name="Numbers" type="Node2D" parent="." unique_id=490767626]
 unique_name_in_owner = true

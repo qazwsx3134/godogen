@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
 
-[ext_resource type="Texture2D" path="res://assets/art/icons/lantern.png" id="1_rca6b"]
+[ext_resource type="Texture2D" path="res://assets/pixel/icons/lantern_24.png" id="1_rca6b"]
 [ext_resource type="PackedScene" path="res://scenes/lantern.tscn" id="1_vncxa"]
 [ext_resource type="Script" path="res://scripts/item_def.gd" id="2_rca6b"]
 

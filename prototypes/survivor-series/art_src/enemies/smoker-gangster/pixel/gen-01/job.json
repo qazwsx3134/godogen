@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 2,
+  "provider": "openai",
+  "kind": "image",
+  "route": "codex-cli",
+  "requestedModel": "codex-image_gen",
+  "options": {
+    "tool": "image_gen"
+  },
+  "promptSha256": "11233cbf5e25aeb9534b28e0d5bf282a487b10f77a85c5b9dceaa20f55d8e267",
+  "references": [
+    {
+      "sha256": "d5a379e6adcc584c80d944558cc97464728a43fb371af7fb7a26d3f97464ba86",
+      "bytes": 29001
+    },
+    {
+      "sha256": "987fe7cce2ada04fb937b99ee2f3138216387b9f5552f3f254cf6cf31c4112e8",
+      "bytes": 1270005
+    }
+  ],
+  "fingerprint": "776f5259eb80c412b395e6e38dbb81f09309002134928c9dfb3e8f78817f45ab",
+  "estimate": {
+    "usd": 0.0,
+    "currency": "USD",
+    "pricesVersion": "2026-10-06",
+    "items": [],
+    "basis": "subscription quota call: no per-call USD price; counted by call caps"
+  },
+  "consent": {
+    "provider": "openai",
+    "model": "codex-image_gen",
+    "calls": 1,
+    "estimateUsd": 0.0,
+    "route": "codex-cli",
+    "quota": true,
+    "account": "the user's own Codex sign-in (ChatGPT)",
+    "note": "uses the subscription quota of that sign-in, never API credit"
+  },
+  "artSource": "host_image",
+  "execution": "execute",
+  "status": "done",
+  "receipt": {
+    "startedAt": "2026-10-13T14:36:50.921Z",
+    "submittedAt": "2026-10-13T14:36:50.941Z",
+    "completedAt": "2026-10-13T14:37:38.403Z",
+    "wallMs": 47483,
+    "providerMs": 48522,
+    "attempt": 1,
+    "purpose": "survivor pixel redraw art_src/enemies/smoker-gangster/pixel",
+    "toolVersion": "cli_media/0.4.0",
+    "outcomeCode": "ok"
+  },
+  "ledger": {
+    "projectDir": "..",
+    "reservationId": "e5338c5779814cb0add484d925a37765",
+    "status": "done"
+  },
+  "cliRun": {
+    "tool": "codex",
+    "runId": "949361aebe3d47ba9591fb873721790b",
+    "cwd": "<tmp>/forge-cli-949361aebe3d-3626f192",
+    "startedAt": "2026-10-13T14:36:50.921Z",
+    "version": "0.162.1",
+    "versionText": "codex-cli 0.162.1",
+    "recipe": "codex-exec-imagegen/1",
+    "home": "CODEX_HOME",
+    "verifiedBefore": false,
+    "threadId": "01a135b1-dcb9-7a91-80c4-529124ecb3eb"
+  },
+  "adoption": {
+    "method": "native-run-folder",
+    "source": "CODEX_HOME/generated_images/01a135b1-dcb9-7a91-80c4-529124ecb3eb/exec-935d3d33-2798-4d7d-a804-09a75c7cdb87.png",
+    "sourceSha256": "0dcc0a048a45f9dde40a4c9773b749909d99aaebe5766015f558abaa491b53e1",
+    "sourceMtime": "2026-10-13T14:37:31Z",
+    "freshAfter": "2026-10-13T14:36:50.950Z",
+    "checks": [
+      "inside the CLI's own folder for this run",
+      "no symlink or junction",
+      "regular file of a sane size",
+      "newer than the run",
+      "magic bytes",
+      "decodes",
+      "exactly one output",
+      "exclusive copy with matching sha256"
+    ],
+    "finalAnswerNamesFile": true
+  },
+  "artifact": {
+    "path": "generated.png",
+    "sha256": "0dcc0a048a45f9dde40a4c9773b749909d99aaebe5766015f558abaa491b53e1",
+    "bytes": 1308068,
+    "format": "PNG",
+    "size": [
+      1254,
+      1254
+    ]
+  }
+}

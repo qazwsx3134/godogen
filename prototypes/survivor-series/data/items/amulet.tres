@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
 
 [ext_resource type="Script" path="res://scripts/item_def.gd" id="1_7dhtv"]
+[ext_resource type="Texture2D" path="res://assets/pixel/icons/amulet_24.png" id="1_wjxff"]
 
 [resource]
 script = ExtResource("1_7dhtv")
@@ -10,6 +11,7 @@ description = "每次受傷少扣 1。"
 level_notes = PackedStringArray("每次受傷少扣 1。", "每次受傷少扣 1。", "每次受傷少扣 1。", "每次受傷少扣 1。")
 slot = "passive"
 accent = Color(1, 0.3529412, 0.30980393, 1)
+icon = ExtResource("1_wjxff")
 amount_levels = PackedInt32Array()
 stat = &"armor"
 per_level = 1.0

@@ -10,27 +10,27 @@
 y_sort_enabled = true
 
 [node name="StallSnack1" parent="." unique_id=1329169006 instance=ExtResource("1_5kosy")]
-position = Vector2(-140, -150)
+position = Vector2(-105, -112.5)
 
 [node name="StallFruit1" parent="." unique_id=1713413469 instance=ExtResource("2_gvmnd")]
-position = Vector2(140, -150)
+position = Vector2(105, -112.5)
 scale = Vector2(-1, 1)
 
 [node name="LanternPost1" parent="." unique_id=105192382 instance=ExtResource("3_ocs4e")]
-position = Vector2(-330, 0)
+position = Vector2(-247.5, 0)
 
 [node name="LanternPost2" parent="." unique_id=5126456 instance=ExtResource("3_ocs4e")]
-position = Vector2(330, 0)
+position = Vector2(247.5, 0)
 
 [node name="StallFruit2" parent="." unique_id=695385434 instance=ExtResource("2_gvmnd")]
-position = Vector2(-140, 160)
+position = Vector2(-105, 120)
 
 [node name="StallSnack2" parent="." unique_id=436613031 instance=ExtResource("1_5kosy")]
-position = Vector2(140, 160)
+position = Vector2(105, 120)
 scale = Vector2(-1, 1)
 
 [node name="FruitCrate1" parent="." unique_id=464604555 instance=ExtResource("4_vyokh")]
-position = Vector2(-20, -110)
+position = Vector2(-15, -82.5)
 
 [node name="Planter1" parent="." unique_id=1679410343 instance=ExtResource("5_w506l")]
-position = Vector2(0, 200)
+position = Vector2(0, 150)

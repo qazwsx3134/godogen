@@ -66,6 +66,22 @@ func _feedback_checks(street: Node2D) -> void:
 	hero.reset(100.0)
 	hero.hurt(30.0)
 	_expect(hero.hp_bar.value == 70.0 and hero.hp_trail.value == 100.0, "the HP bar drops at once and the trail waits")
+	# Pixel pass: red "-N" over the hero, the bike's warning lane fills up, elites are found for the HUD bar.
+	hero.hurt_cooldown = 0.0
+	var before: int = street.numbers.get_child_count()
+	street._hurt(12.0, "test")
+	var last: Node = street.numbers.get_child(street.numbers.get_child_count() - 1)
+	_expect(street.numbers.get_child_count() == before + 1 and last.text.text.begins_with("-"), "the hero's damage shows as a red minus number")
+	var bike: Node2D = street.spawn_enemy(1, hero.position + Vector2(200, 0))
+	bike.hazard_left = 0.0
+	bike.step(1.0 / 60.0, hero.position, street.bounds)
+	var early: int = bike.warning_fill.points.size()
+	for i: int in 30:
+		bike.step(1.0 / 60.0, hero.position, street.bounds)
+	_expect(bike.phase == "warning" and bike.warning_fill.points.size() > early + 5, "the bike's warning lane fills as the countdown runs")
+	var elite: Node2D = street.spawn_enemy(0, hero.position + Vector2(0, 300), 1.0, true)
+	_expect(street.elite_enemy() == elite, "the HUD can find the living elite")
+	_expect(hero.hp_bar.size.y <= 4.0 and hero.hp_trail.size.y <= 4.0 and elite.hp_bar.size.y <= 4.0, "head HP bars stay 2 art px thin, not squares")
 
 func run() -> void:
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(META_PATH))
@@ -83,7 +99,7 @@ func run() -> void:
 	_expect(game.hud.get_node("%Time").text == "00:00", "HUD clock counts up from 00:00")
 	street.coins = 3
 	game.refresh_hud()
-	_expect(game.hud.get_node("%Coins").text == "金幣  %d" % (3 * game.coin_value), "HUD coins use the same unit as the results payout")
+	_expect(game.hud.get_node("%Coins").text == "金幣 %d" % (3 * game.coin_value), "HUD coins use the same unit as the results payout")
 	street.coins = 0
 	street.spawn_left = 1000.0
 	var original: Vector2 = hero.position
@@ -208,9 +224,8 @@ func run() -> void:
 	street.step(0.01, Vector2.ZERO, 0.0)
 	_expect(street.bursts_fired == 2 and fat_c.dead, "fart chains resolve one link per step")
 	_expect(game.sound_events.has(&"fart"), "farts have a sound")
-	var fart_ring = (load("res://scenes/blast.tscn") as PackedScene).instantiate()
-	street.effects.add_child(fart_ring)
-	_expect(fart_ring.caption.get_theme_font("font").has_char("噗".unicode_at(0)), "the fart caption uses the Chinese font")
+	_expect(street.fx._shapes.any(func(shape: Dictionary) -> bool: return shape.kind == "text" and shape.text == "噗～"), "a fart pops a pixel caption")
+	_expect(street.fx.font.has_char("噗".unicode_at(0)), "the fart caption uses a Chinese font")
 
 	var g = Grid.new()
 	var actors: Array = []
@@ -331,7 +346,7 @@ func run() -> void:
 	_expect(game.hud.get_node("%Pause").size.x >= 60.0, "pause touch target has enough width")
 	street.camera.offset = Vector2(3, 2)
 	street.camera.rotation = 0.01
-	game.hud.get_node("%ShakeToggle").button_pressed = false
+	game.pause_panel.get_node("%ShakeToggle").button_pressed = false
 	_expect(street.camera.offset == Vector2.ZERO and street.camera.rotation == 0.0 and street.shake.shake_scale == 0.0, "disabling shake restores the camera immediately")
 	_feedback_checks(street)
 	game.show_menu()

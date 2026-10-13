@@ -6,8 +6,15 @@ extends Node2D
 @export var spin: float = 0.0
 ## Aligns the visual with the travel direction.
 @export var face_travel: bool = true
+## Pixel sprites that must stay upright (a rider): no rotation, the visual only mirrors to face left or right.
+@export var upright: bool = false
 ## Height of the visual above its ground point; a shadow marks the ground point. 0 = lies on the ground.
 @export var lift: float = 18.0
+## Ground shadow radius; 0 = from the hit radius.
+@export var shadow_size: float = 0.0
+## PixelVfx palette (on Street %Fx) for this shot's hits and trail, and the trail kind ("ember", "spark", "drip"; empty = none).
+@export var palette: StringName = &"hit"
+@export var trail: StringName = &""
 ## Orbits are squashed vertically so the circle reads as lying on the ground.
 const ORBIT_SQUASH := 0.7
 var velocity := Vector2.ZERO
@@ -61,6 +68,8 @@ func launch(at: Vector2) -> void:
 	start_point = at
 	if face_travel and velocity != Vector2.ZERO:
 		rotation = velocity.angle()
+	if upright and velocity.x != 0.0:
+		visual.scale.x = absf(visual.scale.x) * signf(velocity.x)
 	if mode != "lob" and mode != "fall":
 		_raise(lift)
 
@@ -136,7 +145,7 @@ func _draw() -> void:
 	if lift <= 0.0 and mode != "lob" and mode != "fall" and flight_left <= 0.0:
 		return
 	draw_set_transform(Vector2.ZERO, -rotation, Vector2(1.0, 0.38))
-	draw_circle(Vector2.ZERO, radius * 0.9 / maxf(scale.x, 0.01), Color(0, 0, 0, 0.25))
+	draw_circle(Vector2.ZERO, (shadow_size if shadow_size > 0.0 else radius * 0.9 / maxf(scale.x, 0.01)), Color(0, 0, 0, 0.25))
 
 func can_hit(enemy: Node2D, before: Vector2) -> bool:
 	if flight_left > 0.0 or mode == "lob" or mode == "fall" or detonate or enemy.dead or pierce == 0:

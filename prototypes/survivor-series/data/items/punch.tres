@@ -1,5 +1,6 @@
 [gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
 
+[ext_resource type="Texture2D" path="res://assets/pixel/icons/punch_24.png" id="1_cnm0i"]
 [ext_resource type="Script" path="res://scripts/item_def.gd" id="1_u7ixb"]
 
 [resource]
@@ -9,6 +10,7 @@ title = "拳頭"
 description = "自動揍最近的敵人。"
 level_notes = PackedStringArray("傷害 +5，出拳更快", "多打中一個前方敵人", "傷害 +5，範圍變大", "每第三拳是 180% 重拳", "多打中一個前方敵人", "傷害 +5，出拳更快", "傷害 +5，範圍變大")
 accent = Color(0.96862745, 0.9098039, 0.80784315, 1)
+icon = ExtResource("1_cnm0i")
 max_level = 8
 kind = &"punch"
 damage = 28.0

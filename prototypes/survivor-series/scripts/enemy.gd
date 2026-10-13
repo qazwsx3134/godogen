@@ -41,6 +41,8 @@ var _flash: Tween
 @onready var warning: Node2D = %Warning
 @onready var warning_lane: Line2D = %WarningLane
 @onready var warning_line: Line2D = %WarningLine
+## Grows along the warning lane as the countdown runs (bike only).
+@onready var warning_fill: Line2D = get_node_or_null("%WarningFill")
 @onready var hp_bar: ProgressBar = %HpBar
 @onready var art: Sprite2D = visual.get_node("Art")
 @onready var placeholder: Node2D = visual.get_node("Placeholder")
@@ -58,6 +60,10 @@ func setup(hp_scale: float, is_elite: bool) -> void:
 	hp_bar.value = hp
 	hp_bar.visible = elite
 	if elite:
+		# Elites get a gold health bar, like PokéSurvivor's bosses.
+		var gold := (hp_bar.get_theme_stylebox("fill") as StyleBoxFlat).duplicate() as StyleBoxFlat
+		gold.bg_color = Color("ffcb3d")
+		hp_bar.add_theme_stylebox_override("fill", gold)
 		scale = Vector2.ONE * 1.5
 		visual.modulate = Color(1.15, 0.95, 0.75)
 
@@ -114,6 +120,7 @@ func step(delta: float, target: Vector2, bounds: Rect2) -> void:
 		if phase == "warning":
 			movement = Vector2.ZERO
 			phase_left -= delta
+			_fill_warning(1.0 - phase_left / definition.warning_time)
 			if phase_left <= 0.0:
 				phase = "dash"
 				phase_left = definition.dash_time
@@ -139,6 +146,14 @@ func step(delta: float, target: Vector2, bounds: Rect2) -> void:
 		position = position.clamp(bounds.position, bounds.end)
 	elif not bounds.grow(100.0).has_point(position):
 		queue_free()
+
+## The countdown fills the lane from the bike outward; the last quarter blinks.
+func _fill_warning(t: float) -> void:
+	if warning_fill == null:
+		return
+	var lane: PackedVector2Array = warning_lane.points
+	warning_fill.points = lane.slice(0, clampi(roundi(lane.size() * t), 2, lane.size()))
+	warning.modulate.a = 0.35 if t > 0.75 and fmod(t * 12.0, 1.0) < 0.5 else 1.0
 
 ## Where the S-shaped charge is after `travel` px along the locked lane, relative to its start.
 func dash_offset(travel: float) -> Vector2:
@@ -196,7 +211,7 @@ func hit(damage: float, direction: Vector2, force: float = 1.0) -> bool:
 		knockback += direction.normalized() * (260.0 * force / definition.weight)
 	if _flash != null and _flash.is_valid():
 		_flash.kill()
-	visual.modulate = Color(2.0, 1.8, 1.2)
+	visual.modulate = Color(2.0, 2.0, 2.0)
 	visual.scale = rest_scale * Vector2(1.18, 0.84)
 	_flash = create_tween().set_parallel(true)
 	_flash.tween_property(visual, "modulate", Color(1.15, 0.95, 0.75) if elite else Color.WHITE, 0.16)

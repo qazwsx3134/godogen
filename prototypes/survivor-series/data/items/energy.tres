@@ -1,5 +1,6 @@
 [gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
 
+[ext_resource type="Texture2D" path="res://assets/pixel/icons/energy_24.png" id="1_0dei3"]
 [ext_resource type="Script" path="res://scripts/item_def.gd" id="1_vlcrv"]
 
 [resource]
@@ -9,6 +10,7 @@ title = "提神飲料"
 description = "冷卻時間 −8%。"
 level_notes = PackedStringArray("冷卻時間 −8%。", "冷卻時間 −8%。", "冷卻時間 −8%。", "冷卻時間 −8%。")
 slot = "passive"
+icon = ExtResource("1_0dei3")
 amount_levels = PackedInt32Array()
 stat = &"cooldown"
 per_level = 0.08

@@ -1,0 +1,15 @@
+A 3 by 3 grid of nine separate game item icons, in the exact style of the reference icons: chunky pixel art, a clean 1-pixel dark outline around each object, bold readable silhouette, simple shading with a highlight, saturated colours, no anti-aliasing blur.
+
+Layout: the image is 1024x1024, split into nine equal square cells (3 columns, 3 rows). Each icon sits centred in its own cell and fills about 70% of the cell, with plenty of empty background between icons. Do not draw grid lines, frames, borders, labels, numbers or any text anywhere.
+
+- Row 1, column 1: a clenched fist punching forward, white shirt cuff and navy suit sleeve.
+- Row 1, column 2: a cyan-white crescent shockwave blast.
+- Row 1, column 3: a black leather office shoe kicking, with a curved motion swoosh.
+- Row 2, column 1: an open folding umbrella, navy with a red trim, seen from above at an angle.
+- Row 2, column 2: a stack of three colourful plastic ring-toss rings (night-market game).
+- Row 2, column 3: a scooter rider in a white helmet and navy jacket riding a blue scooter, three-quarter view.
+- Row 3, column 1: a paper tray of golden deep-fried stinky tofu with pickled cabbage and green stink fumes.
+- Row 3, column 2: a glass jar of Taiwanese sha-cha sauce with an orange-red lid and a plain label.
+- Row 3, column 3: a huge Taiwanese fried chicken cutlet sticking out of a paper bag.
+
+Background: one flat pure green #00ff00 everywhere outside the objects, no floor, no shadows, no glow on the background.

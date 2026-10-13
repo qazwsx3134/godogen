@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/pearl.tscn" id="1_fxknl"]
+[ext_resource type="Texture2D" path="res://assets/pixel/icons/pearl_storm_24.png" id="1_w0aht"]
 [ext_resource type="Script" path="res://scripts/item_def.gd" id="2_w0aht"]
 
 [resource]
@@ -11,6 +12,7 @@ description = "珍珠像下雨一樣連射。"
 level_notes = PackedStringArray()
 slot = "evolution"
 accent = Color(1, 0.827451, 0.41960785, 1)
+icon = ExtResource("1_w0aht")
 max_level = 1
 kind = &"pearl"
 projectile = ExtResource("1_fxknl")

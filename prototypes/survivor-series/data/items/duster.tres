@@ -1,5 +1,6 @@
 [gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
 
+[ext_resource type="Texture2D" path="res://assets/pixel/icons/duster_24.png" id="1_8retb"]
 [ext_resource type="Script" path="res://scripts/item_def.gd" id="1_fbpkx"]
 
 [resource]
@@ -10,6 +11,7 @@ description = "兩邊同時揮，又寬又痛。"
 level_notes = PackedStringArray()
 slot = "evolution"
 accent = Color(1, 0.827451, 0.41960785, 1)
+icon = ExtResource("1_8retb")
 max_level = 1
 kind = &"cane"
 variant = &"both"

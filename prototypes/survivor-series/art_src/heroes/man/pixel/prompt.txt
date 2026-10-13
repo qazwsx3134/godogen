@@ -1,0 +1,10 @@
+Redraw the character in the reference image as a tiny retro pixel-art game sprite.
+
+Identity (keep exactly): the same tired Taiwanese office worker — short black hair, sleepy half-closed eyes, navy blue suit jacket, white shirt, red tie, dark trousers, black shoes. Same colours as the reference.
+
+Sprite rules:
+- The sprite is 32 pixels tall and about 18 pixels wide in sprite pixels. Draw it upscaled 24x so every sprite pixel is one crisp, solid 24x24 square block on a perfect grid. Output image 1024x1024 with the sprite centred.
+- Chibi proportions like classic 16-bit JRPG overworld sprites: head about one third of the body height, readable face with two dark eye pixels.
+- 1 sprite-pixel dark outline (#1b1420) around the whole silhouette. At most 16 colours. No anti-aliasing, no gradients, no blur, no soft shadows, no dithering noise.
+- Standing idle pose, three-quarter view facing down-right, camera about 50 degrees above (top-down RPG view), feet at the bottom.
+- Background: one flat pure green #00ff00, no floor, no shadow, no text.

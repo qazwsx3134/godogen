@@ -2,18 +2,15 @@
 
 [ext_resource type="Script" path="res://scripts/enemy.gd" id="1_77r6i"]
 [ext_resource type="Resource" path="res://data/bike.tres" id="2_juvdb"]
-[ext_resource type="Texture2D" path="res://assets/art/vehicles/motorcycle-s.png" id="3_yvj5b"]
-[ext_resource type="Texture2D" path="res://assets/art/vehicles/motorcycle-se.png" id="4_7nrme"]
-[ext_resource type="Texture2D" path="res://assets/art/vehicles/motorcycle-e.png" id="5_d1jr7"]
-[ext_resource type="Texture2D" path="res://assets/art/vehicles/motorcycle-ne.png" id="6_o7eds"]
-[ext_resource type="Texture2D" path="res://assets/art/vehicles/motorcycle-n.png" id="7_irgsv"]
+[ext_resource type="Texture2D" path="res://assets/pixel/vehicles/motorcycle-s_33.png" id="3_yvj5b"]
+[ext_resource type="Texture2D" path="res://assets/pixel/vehicles/motorcycle-se_33.png" id="4_7nrme"]
+[ext_resource type="Texture2D" path="res://assets/pixel/vehicles/motorcycle-e_33.png" id="5_d1jr7"]
+[ext_resource type="Texture2D" path="res://assets/pixel/vehicles/motorcycle-ne_33.png" id="6_o7eds"]
+[ext_resource type="Texture2D" path="res://assets/pixel/vehicles/motorcycle-n_33.png" id="7_irgsv"]
+[ext_resource type="Texture2D" path="res://assets/ui/bar_back.png" id="8_7nrme"]
+[ext_resource type="Material" path="res://assets/fx/hit_flash.tres" id="8_d1jr7"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_77r6i"]
-content_margin_left = 0.0
-content_margin_top = 0.0
-content_margin_right = 0.0
-content_margin_bottom = 0.0
-bg_color = Color(0.07450981, 0.1254902, 0.1764706, 1)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_d1jr7"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_juvdb"]
 content_margin_left = 0.0
@@ -21,6 +18,13 @@ content_margin_top = 0.0
 content_margin_right = 0.0
 content_margin_bottom = 0.0
 bg_color = Color(1, 0.77254903, 0.41960785, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_o7eds"]
+texture = ExtResource("8_7nrme")
+texture_margin_left = 4.0
+texture_margin_top = 4.0
+texture_margin_right = 4.0
+texture_margin_bottom = 4.0
 
 [node name="Bike" type="Node2D" unique_id=149359201]
 script = ExtResource("1_77r6i")
@@ -38,10 +42,11 @@ polygon = PackedVector2Array(35, 0, 33.807404, 3.6234665, 30.310888, 7, 24.74873
 unique_name_in_owner = true
 
 [node name="Art" type="Sprite2D" parent="Visual" unique_id=777707776]
+material = ExtResource("8_d1jr7")
 position = Vector2(0, 8)
-scale = Vector2(0.575, 0.575)
+scale = Vector2(2.7878788, 2.7878788)
 texture = ExtResource("4_7nrme")
-offset = Vector2(0, -80)
+offset = Vector2(0, -16.5)
 
 [node name="Placeholder" type="Node2D" parent="Visual" unique_id=1959038151]
 visible = false
@@ -87,15 +92,27 @@ polygon = PackedVector2Array(0, 0, 12, 0, 12, 7, 0, 7)
 
 [node name="HpBar" type="ProgressBar" parent="." unique_id=1109125658]
 unique_name_in_owner = true
-offset_left = -22.0
+custom_minimum_size = Vector2(32, 4)
+offset_left = -22.222221
 offset_top = -100.0
-offset_right = 22.0
-offset_bottom = -95.0
+offset_right = 9.777779
+offset_bottom = -96.0
+scale = Vector2(1.3888888, 1.3888888)
 mouse_filter = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_77r6i")
+theme_override_styles/background = SubResource("StyleBoxEmpty_d1jr7")
 theme_override_styles/fill = SubResource("StyleBoxFlat_juvdb")
 theme_override_font_sizes/font_size = 1
 show_percentage = false
+
+[node name="HpFrame" type="Panel" parent="HpBar" unique_id=1345110348]
+show_behind_parent = true
+layout_mode = 0
+offset_left = -2.0
+offset_top = -2.0
+offset_right = 34.0
+offset_bottom = 6.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_o7eds")
 
 [node name="Warning" type="Node2D" parent="." unique_id=708128912]
 unique_name_in_owner = true
@@ -106,6 +123,12 @@ unique_name_in_owner = true
 points = PackedVector2Array(0, 0, 0, 150)
 width = 36.0
 default_color = Color(1, 0.35, 0.2, 0.16)
+
+[node name="WarningFill" type="Line2D" parent="Warning" unique_id=242661946]
+unique_name_in_owner = true
+points = PackedVector2Array(0, 0, 0, 60)
+width = 36.0
+default_color = Color(1, 0.4, 0.2, 0.3)
 
 [node name="WarningLine" type="Line2D" parent="Warning" unique_id=1355953451]
 unique_name_in_owner = true

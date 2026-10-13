@@ -1,0 +1,18 @@
+{
+  "schema": "generate2dmedia.route_proofs.v1",
+  "proofs": [
+    {
+      "route": "codex-cli",
+      "tool": "image_gen",
+      "version": "0.162.1",
+      "versionText": "codex-cli 0.162.1",
+      "recipe": "codex-exec-imagegen/1",
+      "level": "VERIFIED",
+      "verifiedAt": "2026-10-13T14:48:11.425Z",
+      "runId": "74d228e94e3842e2992efb3d3da10b09",
+      "method": "cli_media.py run: native tool output adopted from the CLI's own run folder with scoped checks",
+      "jobDir": "gen-01",
+      "artifactSha256": "a93989dedd3ae794a479558bfe62c91ea6425d2bfeb90ee4ab2dac5c0f4658ea"
+    }
+  ]
+}

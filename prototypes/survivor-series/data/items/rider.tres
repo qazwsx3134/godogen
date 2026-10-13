@@ -1,6 +1,7 @@
 [gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/rider.tscn" id="1_proj"]
+[ext_resource type="Texture2D" path="res://assets/pixel/icons/rider_24.png" id="1_terwc"]
 [ext_resource type="Script" path="res://scripts/item_def.gd" id="2_def"]
 
 [resource]
@@ -9,20 +10,16 @@ id = &"rider"
 title = "路過的機車騎士"
 description = "一台機車從旁衝過去，把整排敵人撞飛。"
 level_notes = PackedStringArray("傷害 +10", "再多一台", "傷害 +10，騎得更快", "再多一台")
-slot = "weapon"
-accent = Color(0.1499,0.2157,0.4784,1)
-max_level = 5
+accent = Color(0.1499, 0.2157, 0.4784, 1)
+icon = ExtResource("1_terwc")
 kind = &"rider"
 projectile = ExtResource("1_proj")
 damage = 45.0
 damage_per_level = 10.0
 cooldown = 7.0
 cooldown_per_level = 0.06
-amount = 1
 amount_levels = PackedInt32Array(3, 5)
-area = 1.0
 area_per_level = 0.05
 speed = 560.0
 duration = 1.5
-pierce = -1
 knockback = 2.6

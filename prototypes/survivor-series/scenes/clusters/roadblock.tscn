@@ -10,41 +10,41 @@
 y_sort_enabled = true
 
 [node name="Bollard1" parent="." unique_id=832429984 instance=ExtResource("1_1swfa")]
-position = Vector2(-260, 0)
+position = Vector2(-195, 0)
 
 [node name="Cone1" parent="." unique_id=1805998261 instance=ExtResource("2_dwv0f")]
-position = Vector2(-205, 4)
+position = Vector2(-153.75, 3)
 
 [node name="Cone2" parent="." unique_id=570065446 instance=ExtResource("2_dwv0f")]
-position = Vector2(-155, 0)
+position = Vector2(-116.25, 0)
 
 [node name="Cone3" parent="." unique_id=1251411791 instance=ExtResource("2_dwv0f")]
-position = Vector2(-105, 4)
+position = Vector2(-78.75, 3)
 
 [node name="Cone4" parent="." unique_id=601527881 instance=ExtResource("2_dwv0f")]
-position = Vector2(35, 4)
+position = Vector2(26.25, 3)
 
 [node name="Cone5" parent="." unique_id=1264468615 instance=ExtResource("2_dwv0f")]
-position = Vector2(85, 0)
+position = Vector2(63.75, 0)
 
 [node name="Cone6" parent="." unique_id=1624801810 instance=ExtResource("2_dwv0f")]
-position = Vector2(135, 4)
+position = Vector2(101.25, 3)
 
 [node name="Bollard2" parent="." unique_id=1891028010 instance=ExtResource("1_1swfa")]
-position = Vector2(190, 0)
+position = Vector2(142.5, 0)
 
 [node name="ParkedScooter1" parent="." unique_id=1574791293 instance=ExtResource("3_vh3hn")]
-position = Vector2(-170, 90)
+position = Vector2(-127.5, 67.5)
 
 [node name="ParkedScooter2" parent="." unique_id=1530998644 instance=ExtResource("3_vh3hn")]
-position = Vector2(-60, 96)
+position = Vector2(-45, 72)
 
 [node name="ParkedScooter3" parent="." unique_id=1224144260 instance=ExtResource("3_vh3hn")]
-position = Vector2(120, 90)
+position = Vector2(90, 67.5)
 scale = Vector2(-1, 1)
 
 [node name="Planter1" parent="." unique_id=1679410343 instance=ExtResource("4_bctng")]
-position = Vector2(290, -20)
+position = Vector2(217.5, -15)
 
 [node name="LanternPost1" parent="." unique_id=105192382 instance=ExtResource("5_xowi0")]
-position = Vector2(-330, -30)
+position = Vector2(-247.5, -22.5)

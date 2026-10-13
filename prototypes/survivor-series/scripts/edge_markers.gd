@@ -1,9 +1,14 @@
 extends Node2D
-## Gold diamonds on the screen edge pointing at off-screen chests and elites, so loot on the endless map is not lost.
+## Gold arrows on the screen edge pointing at off-screen chests and elites, with the distance in metres
+## (PokéSurvivor's 32 px = 1 m), so loot on the endless map is not lost.
 ## Lives under Street (reads its view, pickups and enemies); sizes are screen pixels.
 @export var color := Color("ffd23f")
 @export var size: float = 9.0
-@export var inset: float = 24.0
+@export var inset: float = 30.0
+@export var metre: float = 32.0
+## Pixel font for the distance; one font pixel is drawn as `pixel` screen px.
+@export var font: Font = preload("res://assets/fonts/Cubic11.ttf")
+@export var pixel: float = 2.0
 @onready var street: Node2D = get_parent()
 var _time: float = 0.0
 
@@ -37,5 +42,17 @@ func _draw() -> void:
 		if heading.y != 0.0:
 			reach = minf(reach, ((inner.end.y if heading.y > 0.0 else inner.position.y) - center.y) / heading.y)
 		var at: Vector2 = center + heading * clampf(reach, 0.0, 1.0)
+		var way: Vector2 = heading.normalized()
+		var side: Vector2 = way.orthogonal()
 		draw_circle(at, radius * 1.9, Color(color, 0.25))
-		draw_colored_polygon(PackedVector2Array([at + Vector2(0, -radius), at + Vector2(radius * 0.75, 0), at + Vector2(0, radius), at + Vector2(-radius * 0.75, 0)]), color)
+		var tip: Vector2 = at + way * radius * 1.2
+		draw_colored_polygon(PackedVector2Array([tip, at - way * radius * 0.6 + side * radius, at - way * radius * 0.6 - side * radius]), color)
+		# Distance label on the inner side of the arrow, in the pixel font.
+		var label: String = "%dm" % roundi(target.distance_to(street.player.position) / metre)
+		var scale: float = pixel / zoom
+		var spot: Vector2 = at - way * radius * 3.2
+		var width: float = font.get_string_size(label, HORIZONTAL_ALIGNMENT_LEFT, -1, 11).x * scale
+		draw_set_transform(spot - Vector2(width * 0.5, -4.0 * scale), 0.0, Vector2.ONE * scale)
+		draw_string_outline(font, Vector2.ZERO, label, HORIZONTAL_ALIGNMENT_LEFT, -1, 11, 3, Color("120c1e"))
+		draw_string(font, Vector2.ZERO, label, HORIZONTAL_ALIGNMENT_LEFT, -1, 11, color)
+		draw_set_transform(Vector2.ZERO)

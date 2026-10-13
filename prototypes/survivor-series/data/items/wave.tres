@@ -1,5 +1,6 @@
 [gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
 
+[ext_resource type="Texture2D" path="res://assets/pixel/icons/wave_24.png" id="1_5ohhj"]
 [ext_resource type="PackedScene" path="res://scenes/wave.tscn" id="1_8yqe2"]
 [ext_resource type="Script" path="res://scripts/item_def.gd" id="2_5ohhj"]
 
@@ -9,6 +10,7 @@ id = &"wave"
 title = "衝擊波"
 description = "朝敵人射出穿透的衝擊波。"
 level_notes = PackedStringArray("傷害 +5，冷卻縮短", "多一道衝擊波", "傷害 +5，波更寬", "多一道衝擊波")
+icon = ExtResource("1_5ohhj")
 kind = &"wave"
 projectile = ExtResource("1_8yqe2")
 damage = 16.0

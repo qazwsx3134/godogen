@@ -1,6 +1,5 @@
 extends Node
 ## Fires every owned weapon on its own cooldown. Street resolves hits, blasts and feedback.
-@export var flash_scene: PackedScene
 @export var max_projectiles: int = 90
 ## The spring hand every cane-kind weapon throws when its item names no projectile of its own.
 @export var spring_hand: PackedScene = preload("res://scenes/cane.tscn")
@@ -91,13 +90,13 @@ func _spawn(s: Dictionary) -> Node2D:
 	street.projectiles.add_child(shot)
 	return shot
 
-func _flash(mode: String, radius: float, heading: Vector2, at: Vector2 = Vector2.INF) -> void:
-	if flash_scene == null or street.effects.get_child_count() >= street.max_effects:
-		return
-	var effect := flash_scene.instantiate() as Node2D
-	street.effects.add_child(effect)
-	effect.position = (_hero().position - Vector2(0, 20)) if at == Vector2.INF else at
-	effect.setup(mode, radius, heading)
+## The swing itself, drawn by PixelVfx: an arc for punches, a ground ring for kicks.
+func _flash(mode: String, radius: float, heading: Vector2) -> void:
+	var at: Vector2 = _hero().position - Vector2(0, 20)
+	if mode == "kick":
+		street.fx.ring(_hero().position, radius * 0.35, radius, &"kick", 0.32, 2)
+	else:
+		street.fx.slash(at, heading.angle(), radius * 0.75, 1.7, &"heavy" if mode == "heavy" else &"hit", mode == "heavy")
 
 func _punch(s: Dictionary) -> bool:
 	var reach: float = _hero().attack_range * s.area
@@ -395,7 +394,7 @@ func absorb() -> bool:
 	shield -= 1
 	_hero().set_shield(shield)
 	_hero().hurt_cooldown = _hero().hurt_interval
-	street.blast(_hero().position, 110.0 * stats.area, stats.damage, stats.knockback, Color("9fd8ff"), "彈！")
+	street.blast(_hero().position, 110.0 * stats.area, stats.damage, stats.knockback, &"bounce", "彈！")
 	street.sfx.play(&"metal", 0.1)
 	if stats.variant == &"counter":
 		_hero().heal(6.0)

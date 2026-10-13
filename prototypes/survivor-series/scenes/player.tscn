@@ -1,23 +1,30 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_3vyb7"]
-[ext_resource type="Texture2D" path="res://assets/art/heroes/man.png" id="2_qhqgy"]
-[ext_resource type="Texture2D" path="res://assets/art/heroes/woman.png" id="3_dqkch"]
+[ext_resource type="Texture2D" path="res://assets/pixel/heroes/man_32.png" id="2_qhqgy"]
+[ext_resource type="Texture2D" path="res://assets/pixel/heroes/woman_32.png" id="3_dqkch"]
+[ext_resource type="Texture2D" path="res://assets/ui/bar_back.png" id="4_dqkch"]
+[ext_resource type="Texture2D" path="res://assets/pixel/fx/fist.png" id="4_tuyoq"]
+[ext_resource type="Texture2D" path="res://assets/pixel/fx/umbrella.png" id="5_fjrip"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_g2els"]
 radius = 14.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3vyb7"]
-content_margin_top = 0.0
-content_margin_bottom = 0.0
-bg_color = Color(0.07450981, 0.1254902, 0.1764706, 1)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qlg0r"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qhqgy"]
 content_margin_top = 0.0
 content_margin_bottom = 0.0
 bg_color = Color(1, 0.94509804, 0.7607843, 1)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dqkch"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_tuyoq"]
+texture = ExtResource("4_dqkch")
+texture_margin_left = 4.0
+texture_margin_top = 4.0
+texture_margin_right = 4.0
+texture_margin_bottom = 4.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fjrip"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g2els"]
 content_margin_top = 0.0
@@ -127,9 +134,9 @@ polygon = PackedVector2Array(-2.5, -34, 3, -34, 4.5, -21, 0.5, -15, -3.5, -21)
 
 [node name="Art" type="Sprite2D" parent="Motion/Visual/BodyMan" unique_id=570234540]
 position = Vector2(0, 8)
-scale = Vector2(0.5, 0.5)
+scale = Vector2(2.8125, 2.8125)
 texture = ExtResource("2_qhqgy")
-offset = Vector2(0, -90)
+offset = Vector2(0, -16)
 
 [node name="BodyWoman" type="Node2D" parent="Motion/Visual" unique_id=339260538]
 unique_name_in_owner = true
@@ -215,22 +222,30 @@ polygon = PackedVector2Array(14, -52, 18, -50, 21, -30, 14, -34)
 
 [node name="Art" type="Sprite2D" parent="Motion/Visual/BodyWoman" unique_id=565628237]
 position = Vector2(0, 8)
-scale = Vector2(0.5, 0.5)
+scale = Vector2(2.8125, 2.8125)
 texture = ExtResource("3_dqkch")
-offset = Vector2(0, -90)
+offset = Vector2(0, -16)
 
 [node name="Fist" type="Node2D" parent="Motion/Visual" unique_id=2077698964]
 unique_name_in_owner = true
 
 [node name="KnuckleOutline" type="Polygon2D" parent="Motion/Visual/Fist" unique_id=411213303]
+visible = false
 position = Vector2(20, -29)
 color = Color(0.07450981, 0.1254902, 0.1764706, 1)
 polygon = PackedVector2Array(13, 0, 12.557035, 2.8470094, 11.25833, 5.5, 9.192388, 7.7781744, 6.5, 9.526279, 3.3646476, 10.625184, 7.9602044e-16, 11, -3.3646476, 10.625184, -6.5, 9.526279, -9.192388, 7.7781744, -11.25833, 5.5, -12.557035, 2.8470094, -13, 1.3471116e-15, -12.557035, -2.8470094, -11.25833, -5.5, -9.192388, -7.7781744, -6.5, -9.526279, -3.3646476, -10.625184, -2.3880612e-15, -11, 3.3646476, -10.625184, 6.5, -9.526279, 9.192388, -7.7781744, 11.25833, -5.5, 12.557035, -2.8470094)
 
 [node name="Knuckle" type="Polygon2D" parent="Motion/Visual/Fist" unique_id=2126824935]
+visible = false
 position = Vector2(20, -29)
 color = Color(0.96862745, 0.8117647, 0.627451, 1)
 polygon = PackedVector2Array(9, 0, 8.693333, 1.8117332, 7.7942286, 3.5, 6.3639607, 4.9497476, 4.5, 6.0621777, 2.3293715, 6.761481, 5.5109107e-16, 7, -2.3293715, 6.761481, -4.5, 6.0621777, -6.3639607, 4.9497476, -7.7942286, 3.5, -8.693333, 1.8117332, -9, 8.572528e-16, -8.693333, -1.8117332, -7.7942286, -3.5, -6.3639607, -4.9497476, -4.5, -6.0621777, -2.3293715, -6.761481, -1.6532731e-15, -7, 2.3293715, -6.761481, 4.5, -6.0621777, 6.3639607, -4.9497476, 7.7942286, -3.5, 8.693333, -1.8117332)
+
+[node name="Art" type="Sprite2D" parent="Motion/Visual/Fist" unique_id=2126880324]
+position = Vector2(20, -29)
+scale = Vector2(2.7777777, 2.7777777)
+texture = ExtResource("4_tuyoq")
+flip_h = true
 
 [node name="Umbrella" type="Node2D" parent="Motion" unique_id=896985336]
 unique_name_in_owner = true
@@ -238,39 +253,61 @@ visible = false
 position = Vector2(-26, -62)
 
 [node name="HandleOutline" type="Polygon2D" parent="Motion/Umbrella" unique_id=904907059]
+visible = false
 color = Color(0.07450981, 0.1254902, 0.1764706, 1)
 polygon = PackedVector2Array(-1.5, -2, 1.5, -2, 1.5, 20, -1.5, 20)
 
 [node name="CanopyOutline" type="Polygon2D" parent="Motion/Umbrella" unique_id=537487456]
+visible = false
 scale = Vector2(1.12, 1.12)
 color = Color(0.07450981, 0.1254902, 0.1764706, 1)
 polygon = PackedVector2Array(18, -1.57361e-06, 16.629831, -6.888302, 12.727922, -12.727921, 6.888304, -16.629831, -2.1464786e-07, -18, -6.8883047, -16.62983, -12.72792, -12.727924, -16.629831, -6.888302, -18, 3.14722e-06)
 
 [node name="Canopy" type="Polygon2D" parent="Motion/Umbrella" unique_id=1106970402]
+visible = false
 color = Color(0.43529412, 0.72156864, 1, 1)
 polygon = PackedVector2Array(18, -1.57361e-06, 16.629831, -6.888302, 12.727922, -12.727921, 6.888304, -16.629831, -2.1464786e-07, -18, -6.8883047, -16.62983, -12.72792, -12.727924, -16.629831, -6.888302, -18, 3.14722e-06)
 
+[node name="Art" type="Sprite2D" parent="Motion/Umbrella" unique_id=1410800019]
+position = Vector2(-20, -20)
+scale = Vector2(2.7777777, 2.7777777)
+texture = ExtResource("5_fjrip")
+
 [node name="HpTrail" type="ProgressBar" parent="." unique_id=1123277290]
 unique_name_in_owner = true
-offset_left = -24.0
+custom_minimum_size = Vector2(34, 4)
+offset_left = -23.61111
 offset_top = -100.0
-offset_right = 24.0
-offset_bottom = -94.0
+offset_right = 10.388889
+offset_bottom = -96.0
+scale = Vector2(1.3888888, 1.3888888)
 mouse_filter = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_3vyb7")
+theme_override_styles/background = SubResource("StyleBoxEmpty_qlg0r")
 theme_override_styles/fill = SubResource("StyleBoxFlat_qhqgy")
 theme_override_font_sizes/font_size = 1
 value = 100.0
 show_percentage = false
 
+[node name="HpFrame" type="Panel" parent="HpTrail" unique_id=1066304271]
+show_behind_parent = true
+layout_mode = 0
+offset_left = -2.0
+offset_top = -2.0
+offset_right = 36.0
+offset_bottom = 6.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_tuyoq")
+
 [node name="HpBar" type="ProgressBar" parent="." unique_id=832783500]
 unique_name_in_owner = true
-offset_left = -24.0
+custom_minimum_size = Vector2(34, 4)
+offset_left = -23.61111
 offset_top = -100.0
-offset_right = 24.0
-offset_bottom = -94.0
+offset_right = 10.388889
+offset_bottom = -96.0
+scale = Vector2(1.3888888, 1.3888888)
 mouse_filter = 2
-theme_override_styles/background = SubResource("StyleBoxEmpty_dqkch")
+theme_override_styles/background = SubResource("StyleBoxEmpty_fjrip")
 theme_override_styles/fill = SubResource("StyleBoxFlat_g2els")
 theme_override_font_sizes/font_size = 1
 value = 100.0

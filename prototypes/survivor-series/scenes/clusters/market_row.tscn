@@ -10,25 +10,25 @@
 y_sort_enabled = true
 
 [node name="LanternPost1" parent="." unique_id=105192382 instance=ExtResource("1_aqfjj")]
-position = Vector2(-410, 10)
+position = Vector2(-307.5, 7.5)
 
 [node name="StallFruit1" parent="." unique_id=1713413469 instance=ExtResource("2_p17k3")]
-position = Vector2(-260, 0)
+position = Vector2(-195, 0)
 
 [node name="StallSnack1" parent="." unique_id=1329169006 instance=ExtResource("3_kt2s3")]
 
 [node name="StallFruit2" parent="." unique_id=758644725 instance=ExtResource("2_p17k3")]
-position = Vector2(260, 0)
+position = Vector2(195, 0)
 scale = Vector2(-1, 1)
 
 [node name="LanternPost2" parent="." unique_id=1846227992 instance=ExtResource("1_aqfjj")]
-position = Vector2(400, 10)
+position = Vector2(300, 7.5)
 
 [node name="FruitCrate1" parent="." unique_id=464604555 instance=ExtResource("4_vmyw3")]
-position = Vector2(-150, 46)
+position = Vector2(-112.5, 34.5)
 
 [node name="FruitCrate2" parent="." unique_id=1087808433 instance=ExtResource("4_vmyw3")]
-position = Vector2(120, 52)
+position = Vector2(90, 39)
 
 [node name="Cone1" parent="." unique_id=1805998261 instance=ExtResource("5_fq51q")]
-position = Vector2(330, 70)
+position = Vector2(247.5, 52.5)

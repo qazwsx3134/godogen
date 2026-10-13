@@ -1,6 +1,7 @@
 extends Node2D
-## A cigarette-smoke cloud left by a smoker: a faint haze on the ground marks where it hurts, and soft
-## puffs above it swell, drift upward and thin out. Puffs are the children of %Puffs, placed in the scene.
+## A cigarette-smoke hazard left by a smoker: a faint haze on the ground marks where it hurts. The cloud itself
+## is a PixelVfx "smoke" effect that Street spawns for the same lifetime; the older soft puffs (%Puffs, hidden)
+## still animate when shown.
 @export var lifetime: float = 3.8
 @export var radius: float = 42.0
 @export var damage: float = 4.0

@@ -1,0 +1,13 @@
+Redraw the subject in reference image 1 as a tiny retro pixel-art game sprite.
+
+Reference image 1 is the subject: keep its identity, outfit, colours and viewing direction exactly.
+Reference image 2 is the finished style target from the same game: match its pixel size, chunky outline, shading style and palette treatment exactly, so both look drawn by the same artist.
+
+Subject: a small yellow hatchback car with a driver (as in reference image 1)
+
+Sprite rules:
+- The sprite is 52 pixels tall and about 72 pixels wide in sprite pixels. Draw it upscaled so every sprite pixel is one crisp, solid square block on a perfect grid. Output image 1024x1024 with the sprite centred.
+- 1 sprite-pixel dark outline (#1b1420) around the whole silhouette. At most 16 colours. No anti-aliasing, no gradients, no blur, no soft shadows, no dithering noise.
+- Camera about 50 degrees above (top-down RPG view), same facing as reference image 1.
+- Keep the vehicle proportions of reference image 1; it is seen from the same direction.
+- Background: one flat pure green #00ff00, no floor, no shadow, no text.

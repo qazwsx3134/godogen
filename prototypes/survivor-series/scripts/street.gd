@@ -10,8 +10,6 @@ const Build = preload("res://scripts/run_build.gd")
 ## Smoker, bike, car, fatty: spawn weights in the schedule use this order.
 @export var enemy_scenes: Array[PackedScene] = []
 @export var smoke_scene: PackedScene
-@export var impact_scene: PackedScene
-@export var blast_scene: PackedScene
 @export var pickup_scene: PackedScene
 @export var number_scene: PackedScene
 @export var progression: Resource
@@ -25,6 +23,8 @@ const Build = preload("res://scripts/run_build.gd")
 @export var max_effects: int = 32
 @export var max_gems: int = 160
 @export var max_hazards: int = 10
+## Blasts in these palettes get a pixel fireball (PixelVfx "explosion"); the others a quick flash.
+@export var explosive_palettes: Array[StringName] = [&"blast", &"firecracker", &"fart"]
 ## Floating damage numbers on screen at once; further hits show none until some fade.
 @export var max_numbers: int = 40
 @export var magnet_radius: float = 70.0
@@ -52,6 +52,7 @@ const Build = preload("res://scripts/run_build.gd")
 @onready var camera: Camera2D = %Camera
 @onready var arsenal: Node = %Arsenal
 @onready var map: Node2D = %Map
+@onready var fx: Node2D = %Fx
 var time_control: Node
 var sfx: Node
 var shake = Shake.new()
@@ -105,6 +106,7 @@ func clear() -> void:
 			holder.remove_child(child)
 			child.queue_free()
 	_bursts.clear()
+	fx.clear()
 	big_gem = null
 	shake.trauma = 0.0
 	camera.offset = Vector2.ZERO
@@ -200,10 +202,14 @@ func edge_point(direction: Vector2, margin: float = 60.0) -> Vector2:
 	return from + direction * maxf(0.0, reach)
 
 func elite_alive() -> bool:
+	return elite_enemy() != null
+
+## The first living elite, or null.
+func elite_enemy() -> Node2D:
 	for enemy: Node2D in enemies.get_children():
 		if enemy.elite and not enemy.dead and not enemy.is_queued_for_deletion():
-			return true
-	return false
+			return enemy
+	return null
 
 ## A point just outside the visible rect, inside the block; falls back to the far edge of the block.
 func spawn_point() -> Vector2:
@@ -368,16 +374,21 @@ func _step_projectiles(delta: float) -> void:
 				var want: Vector2 = (target.position - shot.position).normalized() * shot.velocity.length()
 				shot.velocity = shot.velocity.lerp(want, minf(1.0, delta * 6.0))
 		var before: Vector2 = shot.step(delta)
+		var air: Vector2 = shot.position - Vector2(0.0, shot.lift)
+		if shot.trail != &"" and shot.flight_left <= 0.0 and not shot.is_queued_for_deletion():
+			fx.trail(air, shot.palette, shot.trail)
 		if not shot.detonate and not shot.is_queued_for_deletion():
 			for enemy: Node2D in grid.query((before + shot.position) * 0.5, before.distance_to(shot.position) * 0.5 + shot.radius):
 				if shot.can_hit(enemy, before):
 					shot.remember(enemy)
+					fx.burst(air, shot.palette, 5 if shot.is_queued_for_deletion() else 3, 45.0)
 					enemy.hit(shot.damage, shot.velocity.normalized() if shot.velocity != Vector2.ZERO else (enemy.position - player.position).normalized(), shot.force)
 				if shot.detonate or shot.is_queued_for_deletion():
 					break
 		if shot.mode != "lob" and shot.mode != "fall" and shot.flight_left <= 0.0 and not shot.is_queued_for_deletion():
 			hit_props(shot.position, shot.radius, shot.damage)
 		if _stopped_by_roadblock(shot):
+			fx.burst(air, shot.palette, 5, 40.0)
 			if shot.blast_radius > 0.0:
 				shot.detonate = true
 			else:
@@ -390,17 +401,22 @@ func _step_projectiles(delta: float) -> void:
 				if shot.pull > 0.0 and enemy.position.distance_to(shot.position) > 12.0:
 					enemy.position = enemy.position.move_toward(shot.position, shot.pull * delta)
 		if shot.detonate and not shot.is_queued_for_deletion():
-			blast(shot.position, shot.blast_radius, shot.damage, shot.force, Color("ffb347"))
+			blast(shot.position, shot.blast_radius, shot.damage, shot.force, shot.palette)
 			sfx.play(&"pop", 0.05)
 			shot.queue_free()
 
-## Instant area damage with a visual ring. Lethal hits inside queue their own consequences.
-func blast(at: Vector2, radius: float, damage: float, force: float, color: Color, caption: String = "") -> void:
-	if blast_scene != null and effects.get_child_count() < max_effects:
-		var ring := blast_scene.instantiate() as Node2D
-		effects.add_child(ring)
-		ring.position = at
-		ring.setup(radius, color, caption)
+## Instant area damage with a pixel ring, burst and star in `palette` (a PixelVfx palette on %Fx). Lethal hits inside
+## queue their own consequences.
+func blast(at: Vector2, radius: float, damage: float, force: float, palette: StringName = &"blast", caption: String = "") -> void:
+	if palette in explosive_palettes:
+		fx.effect(&"explosion", at - Vector2(0.0, 14.0), Vector2.ONE * radius * 2.6, 0.7, palette)
+	else:
+		fx.pop(at - Vector2(0.0, 10.0), palette, radius * 0.4)
+	fx.ring(at, radius * 0.45, radius, palette, 0.3, 2)
+	fx.burst(at - Vector2(0.0, 10.0), palette, 18, 85.0)
+	fx.star(at - Vector2(0.0, 10.0), palette, true)
+	if caption != "":
+		fx.caption(at - Vector2(0.0, 40.0), caption, palette)
 	for enemy: Node2D in grid.query(at, radius):
 		var heading: Vector2 = (enemy.position - at).normalized()
 		enemy.hit(damage, heading if heading != Vector2.ZERO else Vector2.UP, force * 1.4)
@@ -417,11 +433,8 @@ func _break_prop(prop: Node2D) -> void:
 	props_broken += 1
 	sfx.play(&"chest" if prop.coins >= 3 else &"pop", 0.05)
 	shake.add_trauma(0.12, 0.3)
-	if blast_scene != null and effects.get_child_count() < max_effects:
-		var ring := blast_scene.instantiate() as Node2D
-		effects.add_child(ring)
-		ring.position = at - Vector2(0.0, 10.0)
-		ring.setup(prop.hit_radius + 14.0, Color("ffd36b"), "")
+	fx.ring(at - Vector2(0.0, 6.0), 6.0, prop.hit_radius + 18.0, &"gold", 0.3)
+	fx.burst(at - Vector2(0.0, 12.0), &"gold", 10, 65.0)
 	if prop.xp > 0.0:
 		drop("xp", at, prop.xp)
 	for i: int in prop.coins:
@@ -444,7 +457,7 @@ func _resolve_bursts() -> void:
 		bursts_fired += 1
 		sfx.play(&"fart", 0.05)
 		shake.add_trauma(0.25, 0.5)
-		blast(burst.at, burst.radius, burst.damage, 1.6, Color("9bd65a"), "噗～")
+		blast(burst.at, burst.radius, burst.damage, 1.6, &"fart", "噗～")
 
 func _step_pickups(delta: float) -> void:
 	var radius: float = magnet_radius * (1.0 + build.stat(&"magnet"))
@@ -545,6 +558,8 @@ func _smoke(at: Vector2) -> void:
 	var cloud := smoke_scene.instantiate() as Node2D
 	hazards.add_child(cloud)
 	cloud.position = at
+	# The visible cloud is a PixelVfx smoke effect living exactly as long as the hazard.
+	fx.effect(&"smoke", at + Vector2(0.0, 8.0), Vector2(cloud.radius * 4.0, cloud.radius * 3.4), cloud.lifetime, &"smoke", {}, Vector2(0.5, 1.0))
 	smoke_spawns += 1
 
 func _warning() -> void:
@@ -560,15 +575,19 @@ func _hurt(amount: float, source: String) -> void:
 		hits_taken += 1
 		damage_taken += before - player.hp
 		damage_sources[source] = float(damage_sources.get(source, 0.0)) + before - player.hp
+		_number_at(player.position + Vector2(_fx_rng.randf_range(-8.0, 8.0), -110.0), before - player.hp, false, true)
 		sfx.play(&"hurt", 0.15)
 		player_hurt.emit()
 		score_changed.emit()
 
 func _impact(enemy: Node2D, lethal: bool, direction: Vector2) -> void:
 	_show_number(enemy, lethal)
+	var chest: Vector2 = enemy.position - Vector2(0.0, 20.0)
 	if not lethal:
-		if punching and effects.get_child_count() < max_effects:
-			_impact_effect(enemy, false, direction, "砰！")
+		fx.spark(chest, direction, &"hit")
+		if punching:
+			fx.star(chest, &"hit")
+			fx.caption(chest - Vector2(0.0, 30.0), "砰！", &"hit")
 		sfx.play(&"metal" if enemy.definition.kind in ["bike", "car"] else &"hit", 0.05)
 		shake.add_trauma(0.08, 0.3)
 		return
@@ -580,8 +599,12 @@ func _impact(enemy: Node2D, lethal: bool, direction: Vector2) -> void:
 	var milestone: bool = combo % 25 == 0
 	if enemy.elite:
 		_frame_big = true
+	fx.pop(chest, &"heavy" if enemy.elite else &"hit", 26.0 if enemy.elite else 14.0, 0.1)
+	fx.burst(chest, &"heavy" if enemy.elite else &"hit", 16 if enemy.elite else 9, 70.0)
 	if enemy.elite or milestone or punching:
-		_impact_effect(enemy, true, direction, "飛出去！" if enemy.elite or milestone else "")
+		fx.star(chest, &"heavy", true)
+	if enemy.elite or milestone:
+		fx.caption(chest - Vector2(0.0, 36.0), "飛出去！", &"heavy")
 	if milestone:
 		sfx.play(&"combo", 0.15)
 	drop("xp", enemy.position, enemy.definition.experience * (10.0 if enemy.elite else 1.0))
@@ -601,20 +624,15 @@ func _impact(enemy: Node2D, lethal: bool, direction: Vector2) -> void:
 	score_changed.emit()
 
 func _show_number(enemy: Node2D, lethal: bool) -> void:
+	_number_at(enemy.position + Vector2(_fx_rng.randf_range(-10.0, 10.0), -enemy.definition.radius - 46.0), enemy.last_damage, lethal)
+
+func _number_at(at: Vector2, amount: float, lethal: bool, hurt: bool = false) -> void:
 	if number_scene == null or numbers.get_child_count() >= max_numbers:
 		return
 	var label := number_scene.instantiate() as Node2D
 	numbers.add_child(label)
-	label.position = enemy.position + Vector2(_fx_rng.randf_range(-10.0, 10.0), -enemy.definition.radius - 46.0)
-	label.setup(enemy.last_damage, lethal)
-
-func _impact_effect(enemy: Node2D, lethal: bool, direction: Vector2, caption: String) -> void:
-	if effects.get_child_count() >= max_effects:
-		return
-	var effect := impact_scene.instantiate() as Node2D
-	effects.add_child(effect)
-	effect.position = enemy.position - Vector2(0.0, 20.0)
-	effect.setup(lethal, direction, caption)
+	label.position = at
+	label.setup(amount, lethal, hurt)
 
 ## One sound, one shake and at most one hit stop per frame, however many enemies flew.
 ## Hit stop is kept for elites and huge multi-kills; late-game swarms would otherwise freeze the screen.

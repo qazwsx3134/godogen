@@ -1,0 +1,298 @@
+[
+	{
+		"height": 33,
+		"kind": "sprite",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/vehicles/motorcycle-se_33.png",
+		"res": "res://assets/pixel/vehicles/motorcycle-se_33.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/vehicles/motorcycle-se.png",
+		"width": 26
+	},
+	{
+		"height": 33,
+		"kind": "sprite",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/vehicles/motorcycle-s_33.png",
+		"res": "res://assets/pixel/vehicles/motorcycle-s_33.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/vehicles/motorcycle-s.png",
+		"width": 18
+	},
+	{
+		"height": 33,
+		"kind": "sprite",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/vehicles/motorcycle-e_33.png",
+		"res": "res://assets/pixel/vehicles/motorcycle-e_33.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/vehicles/motorcycle-e.png",
+		"width": 38
+	},
+	{
+		"height": 33,
+		"kind": "sprite",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/vehicles/motorcycle-ne_33.png",
+		"res": "res://assets/pixel/vehicles/motorcycle-ne_33.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/vehicles/motorcycle-ne.png",
+		"width": 28
+	},
+	{
+		"height": 33,
+		"kind": "sprite",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/vehicles/motorcycle-n_33.png",
+		"res": "res://assets/pixel/vehicles/motorcycle-n_33.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/vehicles/motorcycle-n.png",
+		"width": 19
+	},
+	{
+		"height": 19,
+		"kind": "sprite",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/icons/cane_19.png",
+		"res": "res://assets/pixel/icons/cane_19.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/icons/cane.png",
+		"width": 19
+	},
+	{
+		"height": 52,
+		"kind": "sprite",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/vehicles/car-se_52.png",
+		"res": "res://assets/pixel/vehicles/car-se_52.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/vehicles/car-se.png",
+		"width": 70
+	},
+	{
+		"height": 52,
+		"kind": "sprite",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/vehicles/car-s_52.png",
+		"res": "res://assets/pixel/vehicles/car-s_52.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/vehicles/car-s.png",
+		"width": 42
+	},
+	{
+		"height": 52,
+		"kind": "sprite",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/vehicles/car-e_52.png",
+		"res": "res://assets/pixel/vehicles/car-e_52.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/vehicles/car-e.png",
+		"width": 82
+	},
+	{
+		"height": 52,
+		"kind": "sprite",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/vehicles/car-ne_52.png",
+		"res": "res://assets/pixel/vehicles/car-ne_52.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/vehicles/car-ne.png",
+		"width": 70
+	},
+	{
+		"height": 52,
+		"kind": "sprite",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/vehicles/car-n_52.png",
+		"res": "res://assets/pixel/vehicles/car-n_52.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/vehicles/car-n.png",
+		"width": 47
+	},
+	{
+		"height": 30,
+		"kind": "sprite",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/enemies/fatty_30.png",
+		"res": "res://assets/pixel/enemies/fatty_30.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/enemies/fatty.png",
+		"width": 18
+	},
+	{
+		"height": 6,
+		"kind": "sprite",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/icons/gem_6.png",
+		"res": "res://assets/pixel/icons/gem_6.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/icons/gem.png",
+		"width": 6
+	},
+	{
+		"height": 9,
+		"kind": "sprite",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/icons/gem_9.png",
+		"res": "res://assets/pixel/icons/gem_9.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/icons/gem.png",
+		"width": 9
+	},
+	{
+		"height": 12,
+		"kind": "sprite",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/icons/gem_12.png",
+		"res": "res://assets/pixel/icons/gem_12.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/icons/gem.png",
+		"width": 12
+	},
+	{
+		"height": 7,
+		"kind": "sprite",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/icons/coin_7.png",
+		"res": "res://assets/pixel/icons/coin_7.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/icons/coin.png",
+		"width": 7
+	},
+	{
+		"height": 11,
+		"kind": "sprite",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/icons/rice_11.png",
+		"res": "res://assets/pixel/icons/rice_11.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/icons/rice.png",
+		"width": 11
+	},
+	{
+		"height": 11,
+		"kind": "sprite",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/icons/vacuum_11.png",
+		"res": "res://assets/pixel/icons/vacuum_11.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/icons/vacuum.png",
+		"width": 11
+	},
+	{
+		"height": 13,
+		"kind": "sprite",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/icons/chest_13.png",
+		"res": "res://assets/pixel/icons/chest_13.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/icons/chest.png",
+		"width": 13
+	},
+	{
+		"height": 32,
+		"kind": "sprite",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/heroes/man_32.png",
+		"res": "res://assets/pixel/heroes/man_32.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/heroes/man.png",
+		"width": 16
+	},
+	{
+		"height": 32,
+		"kind": "sprite",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/heroes/woman_32.png",
+		"res": "res://assets/pixel/heroes/woman_32.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/heroes/woman.png",
+		"width": 16
+	},
+	{
+		"height": 29,
+		"kind": "sprite",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/enemies/gangster_29.png",
+		"res": "res://assets/pixel/enemies/gangster_29.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/enemies/gangster.png",
+		"width": 17
+	},
+	{
+		"height": 19,
+		"kind": "sprite",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/map/bollard_19.png",
+		"res": "res://assets/pixel/map/bollard_19.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/map/bollard.png",
+		"width": 7
+	},
+	{
+		"height": 12,
+		"kind": "sprite",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/map/cone_12.png",
+		"res": "res://assets/pixel/map/cone_12.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/map/cone.png",
+		"width": 9
+	},
+	{
+		"height": 12,
+		"kind": "sprite",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/map/fruit_crate_12.png",
+		"res": "res://assets/pixel/map/fruit_crate_12.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/map/fruit_crate.png",
+		"width": 14
+	},
+	{
+		"height": 62,
+		"kind": "sprite",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/map/lantern_post_62.png",
+		"res": "res://assets/pixel/map/lantern_post_62.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/map/lantern_post.png",
+		"width": 28
+	},
+	{
+		"height": 32,
+		"kind": "sprite",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/map/parked_scooter_32.png",
+		"res": "res://assets/pixel/map/parked_scooter_32.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/map/parked_scooter.png",
+		"width": 38
+	},
+	{
+		"height": 23,
+		"kind": "sprite",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/map/planter_23.png",
+		"res": "res://assets/pixel/map/planter_23.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/map/planter.png",
+		"width": 23
+	},
+	{
+		"height": 73,
+		"kind": "sprite",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/map/stall-fruit_73.png",
+		"res": "res://assets/pixel/map/stall-fruit_73.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/map/stall-fruit.png",
+		"width": 83
+	},
+	{
+		"height": 73,
+		"kind": "sprite",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/map/stall-snack_73.png",
+		"res": "res://assets/pixel/map/stall-snack_73.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/map/stall-snack.png",
+		"width": 83
+	},
+	{
+		"height": 24,
+		"kind": "icon",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/icons/cane_24.png",
+		"res": "res://assets/pixel/icons/cane_24.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/icons/cane.png",
+		"width": 24
+	},
+	{
+		"height": 24,
+		"kind": "icon",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/icons/firecracker_24.png",
+		"res": "res://assets/pixel/icons/firecracker_24.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/icons/firecracker.png",
+		"width": 24
+	},
+	{
+		"height": 24,
+		"kind": "icon",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/icons/incense_24.png",
+		"res": "res://assets/pixel/icons/incense_24.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/icons/incense.png",
+		"width": 24
+	},
+	{
+		"height": 24,
+		"kind": "icon",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/icons/lantern_24.png",
+		"res": "res://assets/pixel/icons/lantern_24.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/icons/lantern.png",
+		"width": 24
+	},
+	{
+		"height": 24,
+		"kind": "icon",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/icons/pearl_24.png",
+		"res": "res://assets/pixel/icons/pearl_24.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/icons/pearl.png",
+		"width": 24
+	},
+	{
+		"height": 24,
+		"kind": "icon",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/icons/slipper_24.png",
+		"res": "res://assets/pixel/icons/slipper_24.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/icons/slipper.png",
+		"width": 24
+	},
+	{
+		"height": 184,
+		"kind": "tile",
+		"out": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/pixel/map/pavement_184.png",
+		"res": "res://assets/pixel/map/pavement_184.png",
+		"src": "/mnt/d/repo/godot/godogen/prototypes/survivor-series/assets/art/map/pavement.png",
+		"width": 184
+	}
+]

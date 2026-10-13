@@ -2,14 +2,11 @@
 
 [ext_resource type="Script" path="res://scripts/enemy.gd" id="1_pe7t6"]
 [ext_resource type="Resource" path="res://data/fatty.tres" id="2_pl1t4"]
-[ext_resource type="Texture2D" path="res://assets/art/enemies/fatty.png" id="3_pl1t4"]
+[ext_resource type="Material" path="res://assets/fx/hit_flash.tres" id="3_7hr3a"]
+[ext_resource type="Texture2D" path="res://assets/pixel/enemies/fatty_30.png" id="3_pl1t4"]
+[ext_resource type="Texture2D" path="res://assets/ui/bar_back.png" id="4_ibs6v"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pqji1"]
-content_margin_left = 0.0
-content_margin_top = 0.0
-content_margin_right = 0.0
-content_margin_bottom = 0.0
-bg_color = Color(0.07450981, 0.1254902, 0.1764706, 1)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7hr3a"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cbwf1"]
 content_margin_left = 0.0
@@ -17,6 +14,13 @@ content_margin_top = 0.0
 content_margin_right = 0.0
 content_margin_bottom = 0.0
 bg_color = Color(1, 0.77254903, 0.41960785, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_d8vjr"]
+texture = ExtResource("4_ibs6v")
+texture_margin_left = 4.0
+texture_margin_top = 4.0
+texture_margin_right = 4.0
+texture_margin_bottom = 4.0
 
 [node name="Fatty" type="Node2D" unique_id=2129893070]
 script = ExtResource("1_pe7t6")
@@ -57,10 +61,11 @@ polygon = PackedVector2Array(22, 0, 21.250368, 2.3293715, 19.052559, 4.5, 15.556
 unique_name_in_owner = true
 
 [node name="Art" type="Sprite2D" parent="Visual" unique_id=293100559]
+material = ExtResource("3_7hr3a")
 position = Vector2(0, 8)
-scale = Vector2(0.5, 0.5)
+scale = Vector2(2.8, 2.8)
 texture = ExtResource("3_pl1t4")
-offset = Vector2(0, -84)
+offset = Vector2(0, -15)
 
 [node name="Placeholder" type="Node2D" parent="Visual" unique_id=1255244781]
 visible = false
@@ -137,15 +142,27 @@ polygon = PackedVector2Array(11, 0, 10.162675, 3.444151, 7.7781744, 6.363961, 4.
 
 [node name="HpBar" type="ProgressBar" parent="." unique_id=520868916]
 unique_name_in_owner = true
-offset_left = -22.0
+custom_minimum_size = Vector2(32, 4)
+offset_left = -22.222221
 offset_top = -96.0
-offset_right = 22.0
-offset_bottom = -91.0
+offset_right = 9.777779
+offset_bottom = -92.0
+scale = Vector2(1.3888888, 1.3888888)
 mouse_filter = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_pqji1")
+theme_override_styles/background = SubResource("StyleBoxEmpty_7hr3a")
 theme_override_styles/fill = SubResource("StyleBoxFlat_cbwf1")
 theme_override_font_sizes/font_size = 1
 show_percentage = false
+
+[node name="HpFrame" type="Panel" parent="HpBar" unique_id=768891119]
+show_behind_parent = true
+layout_mode = 0
+offset_left = -2.0
+offset_top = -2.0
+offset_right = 34.0
+offset_bottom = 6.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_d8vjr")
 
 [node name="Warning" type="Node2D" parent="." unique_id=1764202345]
 unique_name_in_owner = true

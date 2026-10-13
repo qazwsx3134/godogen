@@ -46,7 +46,7 @@ func _ready() -> void:
 	results.get_node("%Home").pressed.connect(show_menu)
 	hud.get_node("%Pause").pressed.connect(pause_run)
 	pause_panel.get_node("%Resume").pressed.connect(resume_run)
-	hud.get_node("%ShakeToggle").toggled.connect(set_shake_enabled)
+	pause_panel.get_node("%ShakeToggle").toggled.connect(set_shake_enabled)
 	for argument: String in OS.get_cmdline_user_args():
 		if argument == "--autoplay":
 			auto_play = true
@@ -115,7 +115,7 @@ func start_run() -> void:
 	street.show()
 	hud.show()
 	stick.show()
-	hud.get_node("%TimeBar").max_value = session_duration
+	hud.clear_build()
 	sfx.play(&"start")
 	refresh_hud()
 
@@ -202,7 +202,7 @@ func _physics_process(delta: float) -> void:
 		if revivals > 0:
 			revivals -= 1
 			street.player.revive(0.5)
-			street.blast(street.player.position, 220.0, 9999.0, 2.0, Color("ffe08a"), "再來一碗！")
+			street.blast(street.player.position, 220.0, 9999.0, 2.0, &"gold", "再來一碗！")
 			sfx.play(&"heal")
 		else:
 			finish_run(false)
@@ -325,15 +325,15 @@ static func clock(seconds: float) -> String:
 
 func refresh_hud() -> void:
 	hud.get_node("%Time").text = clock(elapsed)
-	hud.get_node("%Kills").text = "揍飛  %d" % street.kills
-	hud.get_node("%Coins").text = "金幣  %d" % (street.coins * coin_value)
-	hud.get_node("%TimeBar").value = elapsed
+	hud.get_node("%Kills").text = "揍飛 %d" % street.kills
+	hud.get_node("%Coins").text = "金幣 %d" % (street.coins * coin_value)
 	if street.build != null:
 		hud.get_node("%Level").text = "Lv.%d" % street.build.level
 		hud.get_node("%Experience").max_value = street.build.threshold()
 		hud.get_node("%Experience").value = street.build.experience
 		hud.get_node("%Combo").text = "連續揍飛 ×%d" % street.combo if street.combo >= 2 else ""
-		hud.get_node("%Build").text = street.build.summary()
+		hud.show_build(street.build)
+	hud.show_elite(street.elite_enemy())
 
 func snapshot() -> Dictionary:
 	var offers: Array[String] = []

@@ -5,6 +5,8 @@
 # no renderer to record). Frames are written at the project's own viewport size whatever --resolution says, at a fixed
 # 30 fps, as <output dir>/f*.png plus f.wav; with ffmpeg installed they are also made into video.mp4.
 # On macOS a window covered by another window stops updating, hence --always-on-top. Environment: GODOT_BIN (default `godot`).
+# On Linux with xvfb-run installed the window goes to a virtual display, so nothing pops up on the desktop
+# (WSLg would show it); CAPTURE_VISIBLE=1 opens it on the real display instead.
 set -euo pipefail
 GODOT_BIN=${GODOT_BIN:-godot}
 [ $# -ge 2 ] || { echo "usage: capture.sh <project dir> <output dir> [frames] [-- game args...]" >&2; exit 2; }
@@ -17,7 +19,11 @@ if [ $# -gt 0 ] && [ "$1" != "--" ]; then frames="$1"; shift; fi
 
 mkdir -p "$out"
 rm -f "$out"/f*.png "$out"/f.wav
-"$GODOT_BIN" --path "$project" --rendering-method gl_compatibility --resolution 540x960 --always-on-top \
+offscreen=()
+if [ "$(uname)" = Linux ] && [ -z "${CAPTURE_VISIBLE:-}" ] && command -v xvfb-run >/dev/null; then
+	offscreen=(env -u WAYLAND_DISPLAY xvfb-run -a -s "-screen 0 1280x1280x24")
+fi
+"${offscreen[@]}" "$GODOT_BIN" --path "$project" --rendering-method gl_compatibility --resolution 540x960 --always-on-top \
 	--write-movie "$out/f.png" --fixed-fps 30 --quit-after "$frames" -- "$@"
 
 if command -v ffmpeg >/dev/null; then

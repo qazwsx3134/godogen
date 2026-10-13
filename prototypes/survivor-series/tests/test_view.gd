@@ -89,7 +89,7 @@ func run() -> void:
 	var crate_foot: Rect2 = _footprint(crate)
 	_expect(map.blocked(crate_foot.get_center()), "a standing crate is a roadblock")
 	var drops_before: int = street.pickups.get_child_count()
-	street.blast(crate.global_position, 30.0, 999.0, 1.0, Color.WHITE)
+	street.blast(crate.global_position, 30.0, 999.0, 1.0, &"gold")
 	_expect(crate.is_queued_for_deletion() and street.props_broken == 1, "weapon damage breaks a crate")
 	_expect(not map.blocked(crate_foot.get_center()), "a broken crate no longer blocks the street")
 	_expect(street.pickups.get_child_count() >= drops_before + 1 + crate.coins, "a broken crate drops experience and coins")

@@ -1,0 +1,15 @@
+A 3 by 3 grid of nine separate game item icons, in the exact style of the reference icons: chunky pixel art, a clean 1-pixel dark outline around each object, bold readable silhouette, simple shading with a highlight, saturated colours, no anti-aliasing blur.
+
+Layout: the image is 1024x1024, split into nine equal square cells (3 columns, 3 rows). Each icon sits centred in its own cell and fills about 70% of the cell, with plenty of empty background between icons. Do not draw grid lines, frames, borders, labels, numbers or any text anywhere.
+
+- Row 1, column 1: a small brown glass tonic bottle with a yellow cap.
+- Row 1, column 2: a loyalty stamp card with round red stamps.
+- Row 1, column 3: a red silk temple protection amulet pouch with gold trim and a red string.
+- Row 2, column 1: a red and white handheld megaphone.
+- Row 2, column 2: a bare foot with a wooden foot-reflexology massage stick.
+- Row 2, column 3: a red envelope with a gold pattern.
+- Row 3, column 1: an iron-grey open palm strike glowing orange with flying sand grains.
+- Row 3, column 2: a blue-and-white slipper flying with a red target reticle behind it.
+- Row 3, column 3: a bubble tea cup with many black tapioca pearls bursting out of it.
+
+Background: one flat pure green #00ff00 everywhere outside the objects, no floor, no shadows, no glow on the background.

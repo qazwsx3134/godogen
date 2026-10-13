@@ -393,6 +393,19 @@ func _exit_tree() -> void: loader.cancel()             # 沒人領的載入任�
 
 `shown` 只往前走、不會跑在真正的讀取進度前面、也不會跑在時鐘前面（`min_show_time`，所以畫面不會一閃而過；沒有執行緒的網頁版一次讀完，進度條仍用這段時間填滿），每秒最多走 `fill_speed`，滿了再停 `hold_at_full` 秒才交出場景。只有狀態是 LOADED 才放行：進度值可能比狀態早一點到 1.0。**沒有執行緒的網頁版在呼叫 `request()` 的那一刻就讀完了**，所以要先讓畫面畫出來（等兩幀）再呼叫。測試裡讓載入失敗的做法：隨機位元組、副檔名 `.scn`（引擎只印 `Unrecognized binary resource file`）；文字 scene 寫壞會印 `Parse Error`，會被 kit 的 log 檢查當成失敗。
 
+## pixel_vfx.gd：像素打擊特效
+
+PokéSurvivor 式的像素特效，一個節點畫完：方塊粒子（`burst`、`spark`、`trail`）、格子拼的形狀（`ring`、`slash`、`star`、`pop`、`caption`），以及 shader 特效（`effect(&"explosion" | &"smoke", ...)`，硬邊、一像素外框、不用抖動點）。全部對齊同一個素材像素格（`pixel`），淡出分三段，配色是每組 5 色。用自己的亂數產生器，不動全域 `randf()`。
+
+```gdscript
+fx.spark(chest, direction, &"hit")
+fx.effect(&"explosion", at, Vector2.ONE * 180, 0.7, &"fire")
+fx.register(&"cross", func(e, left): ...)   # 新的形狀
+fx.shaders[&"shockwave"] = preload("...")   # 新的 shader 特效，模板見 pixel_vfx.gdshaderinc
+```
+
+不跳視窗地看每種特效：`vfx_gallery.gd`（用法在檔頭，要套 `xvfb-run`）。完整做法、規則、怎麼新增特效與踩過的坑：skill `pixel-vfx`（`skills/pixel-vfx/`）。採用：survivor-series。
+
 ## tools/：字型子集與網頁匯出
 
 開發時在命令列跑的工具，**不會**同步進原型，直接從 kit 執行（路徑相對於 `prototypes/` 的上一層，即 repo 根目錄）。每支都有 `--self-test`（不連網、不需要 Godot），改了要重跑；自我測試都做過「弄壞一處、確認會失敗」。
@@ -407,7 +420,7 @@ func _exit_tree() -> void: loader.cancel()             # 沒人領的載入任�
 | `tools/web/pck_size.py` | 把 `.pck` 依種類拆開，看網頁下載量由什麼組成 | `python3 prototypes/godot-kit/tools/web/pck_size.py build/web/index.pck` |
 | `tools/web/web_probe.mjs` | 用 headless Chromium 以桌面與手機各開一次匯出版：console 錯誤、失敗的請求、canvas 大小、震動偵測、截圖 | `node prototypes/godot-kit/tools/web/web_probe.mjs --playwright <playwright-core 的路徑> --project prototypes/<原型> --url http://127.0.0.1:8765/index.html --tap 0.5,0.76`；網頁版必須從 localhost 或 HTTPS 開，區網 http 引擎不會啟動 |
 | `tools/run_tests.sh` | 跑專案的 headless 測試並嚴格檢查 log：Godot 遇到 `SCRIPT ERROR` 仍會 exit 0，所以 log 有 `SCRIPT ERROR`／`Parse Error`／`Failed to load script`、有 `FAIL` 開頭的行、或沒有 `PASSED`，都算失敗 | `prototypes/godot-kit/tools/run_tests.sh <原型> [套件[:fps] ...]`；不給套件就跑全部 `tests/test_*.gd`；`play:60` 是這套用 `--fixed-fps 60` 跑 |
-| `tools/capture.sh` | 錄影：開視窗、固定 30 fps 寫出 PNG 影格，有 ffmpeg 就轉成 mp4（需要顯示器；`--write-movie` 的畫面大小永遠是專案的視窗大小） | `prototypes/godot-kit/tools/capture.sh <原型> <輸出資料夾> [影格數] [-- 遊戲參數]` |
+| `tools/capture.sh` | 錄影：固定 30 fps 寫出 PNG 影格，有 ffmpeg 就轉成 mp4（Linux 有 `xvfb-run` 時在虛擬螢幕錄，不會跳視窗，`CAPTURE_VISIBLE=1` 改回真的視窗；其他平台需要顯示器；`--write-movie` 的畫面大小永遠是專案的視窗大小） | `prototypes/godot-kit/tools/capture.sh <原型> <輸出資料夾> [影格數] [-- 遊戲參數]` |
 
 `tools/*.sh` 必須維持 LF 行尾（CRLF 會變成 `bash\r: No such file`；Windows 上的 git 若轉成 CRLF，在 repo 的 `.gitattributes` 加 `*.sh text eol=lf`）。完整流程與踩過的坑見 skill `godot-prototype-to-itch`。已採用：sugarcane-tanks（它的 `tools/build_web.sh` 與 `tools/subset_font.py` 是包這些工具的薄殼，`web_probe.mjs` 與 `pck_size.py` 的本地副本已刪）。
 
@@ -472,7 +485,7 @@ func _exit_tree() -> void: loader.cancel()             # 沒人領的載入任�
 
 **目前只有一個原型用，也還沒抽出來**：`juice.gd` 的三級回饋對照表（哪個事件算哪一級是這款遊戲的調校）、升級選卡面板與選卡鎖、`hero_stats.gd` 的能力疊加、敵人基底（依賴 `game.show_damage` 等介面）、載入畫面與製作名單面板的**畫面本身**（只有 `scene_loader.gd` 的邏輯抽出來了）、射線步進投射物（核心只有 8 行 `intersect_ray`，其餘是這款遊戲的碰撞規則）、`balance_run`（決定性的機器人平衡量測，依賴這款遊戲的 `main.gd`）。等第二個原型需要時再抽。
 
-沿用 sugarcane-tanks 做完整條流程的經驗見 skill `godot-prototype-to-itch`（原始檔在 `skills/godot-prototype-to-itch/`，用 symlink 掛進 `~/.claude/skills/`，跟 `cf-stack` 一樣）。角色原畫到動畫 sprite（Claude 挑圖、Codex 生圖、沒有影片 API 時手動生影片）見 skill `character-sprite-forge`（`skills/character-sprite-forge/`，同樣用 symlink）。
+沿用 sugarcane-tanks 做完整條流程的經驗見 skill `godot-prototype-to-itch`（原始檔在 `skills/godot-prototype-to-itch/`，用 symlink 掛進 `~/.claude/skills/`，跟 `cf-stack` 一樣）。角色原畫到動畫 sprite（Claude 挑圖、Codex 生圖、沒有影片 API 時手動生影片）見 skill `character-sprite-forge`（`skills/character-sprite-forge/`，同樣用 symlink）。像素打擊特效見 skill `pixel-vfx`（`skills/pixel-vfx/`，同樣用 symlink）。
 
 ## 維護
 

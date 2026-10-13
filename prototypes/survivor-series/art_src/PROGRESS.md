@@ -1,4 +1,28 @@
-# 美術進度（2026-10-09 10:10，暫停待續）
+# 美術進度（2026-10-14 01:40 更新）
+
+## 還沒確定（等使用者看過再定）
+| 項目 | 現在遊戲裡用的 | 要看的東西 |
+|---|---|---|
+| 地磚 r8（非菱形、橫排長方形鋪磚） | candidate 02（暫用） | `map/preview/r8/candidates-contact.png` 三選一 |
+| 9 項回饋（血條、透視、吸經驗、丟臭豆腐、彈簧手、煙、夜市群路障、傷害數字、三種死法） | 全做完 | 試玩確認手感（見下方「2026-10-13 使用者回饋」） |
+| 27 個新卡片圖示＋拳頭／雨傘／臭豆腐／機車騎士像素圖 | 全接上 | `icons/all-contact.png`；不滿意的格子只重生那張表 |
+| 特效（kit `pixel_vfx`：硬邊爆炸與煙霧 shader、方塊粒子） | 已換 | 遊戲裡看煙霧還像不像破圖；靜態圖 `pixel-style/fx-demo-kit.png`、`vfx-gallery.png` |
+| 介面面板配色（`docs/pixel-ui-plan.md` D2） | 夜市版：深靛藍底＋燈籠金框（建議值） | 另一個選擇是 PokéSurvivor 原版藍盒子 |
+| 底部格子（同上 D4） | 兩排：武器 6 大格＋被動 6 小格（建議值） | 另一個選擇是只放武器、被動移到暫停畫面 |
+| commit | 都還沒 commit | 使用者說最後自己決定何時 commit |
+
+## 還沒做
+- 地磚定案後：重新匯出 `map/godot/`（地面重做後一直沒更新）。
+- 拳頭揮出時會放大 1.15～1.5 倍，那幾幀不在像素格上（小問題，先不改）。
+- 汽車的撞擊半徑沒跟著放大後的圖調整。
+- 敵人很多＋路障時的效能沒量過。
+- 「炷」字俐方體 11 號沒有，會退回 Noto 字型（三炷香卡片看得出字體不同）。
+- 動畫／影片（見下方「暫停中」）。
+- 可刪：`heroes/man/master/`（沒用到的洋紅版）。
+- 帳務：BytePlus 有兩筆「送出結果不明」，要到後台確認有沒有扣款（見「紀錄」）。
+- 刻意維持向量、不打算改：圈圈套中區、機車預警線、陰影。
+- 玩法與發佈的待辦在 `TODO.md`（T-115 PokéSurvivor 機制候選、T-204 設定畫面、T-205 對外試玩包）。
+
 
 ## 已定案（選中的圖一律是 `selected.png` 或 `master/`）
 | 素材 | 檔案 | 備註 |
@@ -9,8 +33,10 @@
 | 機車 5 方向 | se：`vehicles/motorcycle/master/`（＝`selected-se.png`）；s／e／ne／n：`vehicles/motorcycle/dir-<方向>/selected.png` | s 01、e 02、ne 01、n 01；n／s 車身看起來比 se 小，接入時統一尺寸 |
 | 汽車 5 方向 | se：`vehicles/car/master/`（＝`selected-se.png`）；s／e／ne／n：`vehicles/car/dir-<方向>/selected.png` | s 02、e 02（fix-e-02 的 take 2，看得到車頂）、ne 01、n 01 |
 | 夜市風格基準 | `background/street_block/selected.png`（candidate-01，斜菱形鋪磚） | 只當風格參考；地圖用拼接素材 |
-| 圖示 ×11 | `icons/<名稱>/selected.png` | 愛的小手 01、便當寶箱 02、金幣 01、鞭炮 01、寶石 02、香 01、天燈 02、珍珠 02、滷肉飯 01、藍白拖 01、吸塵器 edit-01（加粗版） |
+| 圖示 ×11（掉落物與六把武器） | `icons/<名稱>/selected.png` | 愛的小手 01、便當寶箱 02、金幣 01、鞭炮 01、寶石 02、香 01、天燈 02、珍珠 02、滷肉飯 01、藍白拖 01、吸塵器 edit-01（加粗版） |
+| 圖示 ×27（其餘武器、被動、進化、融合） | `icons/<id>/selected.png`（切自 `icons/sheets/`） | 2026-10-14 一次生成；拳頭、雨傘、臭豆腐、機車騎士的遊戲圖也由這批縮出（`assets/pixel/fx/`） |
 | 地圖道具 ×8 | `map/props/<id>.png`（遊戲尺寸見 `ASSETS-REPORT-3.md`） | 攤位 ×2、燈籠柱、花台、三角錐、護柱、停放機車、水果箱；攤位比主角偏小，接入時可放大 |
+| 像素重畫（2026-10-14） | 各資料夾 `**/pixel/SELECTED.txt` | 男主角 03、女主角 02、流氓 02、胖子 02、機車／汽車 5 方向；上面幾列是重畫前的原圖，當像素圖的參考 |
 | 地圖 Godot 匯出 | `map/godot/`（TileSet＋示範場景，Godot 4.7 匯入通過） | 地面重做後要重新匯出 |
 
 `heroes/man/master/` 是沒用到的洋紅版，可刪。
@@ -62,8 +88,8 @@
 另外：上一輪的瀏覽器檢查改寫（`tools/browser_check.mjs`、`game.gd` 的 `?duration=`、TODO／README）還沒 commit。
 
 ## 美術待辦
-- 拳頭圖：揮拳時甩出去的拳頭，取代現在的幾何圓點（使用者 2026-10-13 決定之後畫）。
-- 進化／融合／被動／拳頭的卡片圖示：先用佔位（沒有圖示）。
+- 2026-10-14 已補齊：拳頭圖、全部 27 個卡片圖示（武器、被動、進化、融合），以及雨傘、飛行中的臭豆腐、機車騎士的像素圖。來源是 `icons/sheets/gen-{a,b,c}/generated.png`（Codex 3×3 綠幕圖示表，提示詞 `prompt-{a,b,c}.txt`，格子對應 `layout.json`），切好的原圖在 `icons/<id>/selected.png`，總覽 `icons/all-contact.png`。哪一格不滿意就只重生那張表、重跑 `tools/slice_icon_sheet.py`。
+- 剩下的向量圖形是刻意留的：圈圈套中區、機車預警線、陰影（PokéSurvivor 的光環與預警也是平滑圖形）。
 
 ## 暫停中
 - 動畫／影片：等靜態圖都定案再做（`heroes/MANUAL-VIDEO.md`、`heroes/man/set/` 保留可續用）。

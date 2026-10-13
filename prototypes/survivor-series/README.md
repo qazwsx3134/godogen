@@ -43,10 +43,15 @@ python3 -m http.server 8793 --bind 127.0.0.1 --directory prototypes/survivor-ser
 | `scenes/player.tscn` | `BodyMan`／`BodyWoman` 兩套外觀（共用 `Fist`，執行時只顯示選中的一套）、HpBar；移速、拳頭距離、血量、受傷無敵時間 |
 | `data/heroes/man.tres`、`woman.tres` | 主角：起手武器、血量與移速倍率、揮擊距離與回彈、選單文字 |
 | `scenes/smoker.tscn`、`bike.tscn`、`car.tscn`、`fatty.tscn` | 敵人外觀、預警線、HpBar；交通工具的 `direction_textures`（5 方向圖） |
-| `scenes/wave.tscn`、`slipper.tscn`、`pearl.tscn`、`firecracker.tscn`、`incense.tscn`、`lantern.tscn` | 投射物外觀、碰撞半徑、旋轉速度 |
-| `scenes/blast.tscn`、`impact.tscn`、`attack_flash.tscn`、`pickup.tscn`、`smoke.tscn` | 爆炸、命中、揮擊、掉落物與煙霧外觀 |
+| `scenes/wave.tscn`、`slipper.tscn`、`pearl.tscn`、`firecracker.tscn`、`incense.tscn`、`lantern.tscn` | 投射物：`Visual/Art` 像素圖（`assets/pixel/fx/`，舊的向量圖形隱藏在同一個 Visual 下）、碰撞半徑 `radius`、影子 `shadow_size`、特效配色 `palette`、拖尾 `trail`（ember／spark／drip）、旋轉速度 |
+| street 的 `Fx`（kit 的 `addons/proto_kit/pixel_vfx.gd`） | 所有命中特效，參考 PokéSurvivor 畫在素材像素格上：方塊粒子、像素光圈、揮擊弧、命中星芒、中心閃光、像素字幕（砰！噗～彈！），以及硬邊的像素爆炸（鞭炮、屁）與流氓的像素煙霧（kit 的 shader 特效）。Inspector 可調每種武器的 5 色配色 `palettes`、上限。street 的 `explosive_palettes` 決定哪些 blast 有火球。看效果：`tools/fx_demo.gd`（在 Xvfb 跑）；做法與新增特效：skill `pixel-vfx` |
+| `assets/fx/hit_flash.tres` | 敵人受擊閃白（四種敵人的 `Visual/Art` 共用；modulate 三個通道都超過 1 就變白色剪影） |
+| `scenes/pickup.tscn`、`smoke.tscn` | 掉落物與煙霧外觀 |
 | `scenes/menu.tscn` | 主角選擇（`HeroMan`／`HeroWoman`／`HeroNote`）與選單文字 |
-| `scenes/hud.tscn`、`menu.tscn`、`results.tscn`、`pause.tscn`、`upgrades.tscn`、`upgrade_card.tscn`、`shop.tscn`、`shop_item.tscn` | 介面版面、文字與間距；hud 的 `Banner`（下班人潮橫幅）、upgrades 的 `Reroll` |
+| `scenes/hud.tscn`、`menu.tscn`、`results.tscn`、`pause.tscn`、`upgrades.tscn`、`upgrade_card.tscn`、`shop.tscn`、`shop_item.tscn` | 介面版面、文字與間距。hud：頂端經驗條 `Experience`、計時、`EliteBar`（精英在場才出現）、`Banner`（下班人潮）、底部 `Weapons`／`Passives` 格；menu／results／pause／shop 的 `Box` 是夜市雙框盒子，upgrades 的 `Glass` 是半透明面板、`Reroll` 重抽；震屏開關在 pause |
+| `scenes/weapon_slot.tscn`、`passive_slot.tscn` | HUD 的武器／被動格（圖示、沒圖示時的字、等級點） |
+| `data/ui_theme.tres` | 像素字（俐方體 11 號，缺字用 Noto 補）、字級 22，按鈕／主要按鈕 `PrimaryButton`／玻璃卡 `GlassCard`／盒子／進度條 `XpBar`、`EliteBar` 的 9-slice 框（`assets/ui/`） |
+| `scenes/damage_number.tscn` | 傷害數字：根節點 scale 讓 1 字型像素＝1 素材像素；一般白、致命金、主角受傷紅「-N」 |
 | `data/items/*.tres` | 每張卡：武器基礎值與每級成長（含 `slow`／`pull`／`blast_on_end`）、被動加成、進化條件、融合配方（`fuse_a`／`fuse_b`／`fuse_level`）、解鎖條件、卡片文字 |
 | `scenes/tofu.tscn`、`ring.tscn`、`rider.tscn` | 新武器的投射物外觀與碰撞半徑；雨傘畫在 `player.tscn` 的 `Umbrella` |
 | `data/progression.tres` | 經驗曲線、起始武器、欄位數、卡片清單、補給卡 |
@@ -60,17 +65,20 @@ python3 -m http.server 8793 --bind 127.0.0.1 --directory prototypes/survivor-ser
 
 ## 圖片與聲音
 
-地面、地圖道具、男女主角、四種敵人、交通工具 5 方向、掉落物與六把武器的卡片圖示都已換成正式圖（`assets/art/`，清單見該資料夾 README）；幾何佔位仍留在場景裡（隱藏）。拳頭的揮擊仍是幾何圓點（男女主角、煙霧怪與夜市配色已按參考圖調過色）。提示詞見 [opt-image-prompts.md](docs/opt-image-prompts.md)：第一批是男女主角、抽菸者、機車、汽車與夜市背景，第二批是交通工具的 5 方向圖、臭臭胖子、武器與掉落物。原圖放 `assets/source/`，遊戲用圖放 `assets/art/`。
+**像素風**（[pixel-ui-plan.md](docs/pixel-ui-plan.md)）：畫面上每個素材像素都是 2 px。場景用的是 `assets/pixel/` 的縮小版，原圖留在 `assets/art/`。重做縮小版：`godot --headless --path . -s tools/build_pixel_scenes.gd -- --plan` 列出尺寸，再 `uv run --no-project --with pillow --with numpy python tools/pixelize.py`。場景已經套用過一次（`assets/pixel/.applied`），之後換圖只要覆蓋同名檔。介面框由 `tools/make_ui_frames.py` 畫，主題與 HUD 由 `tools/build_pixel_ui.gd` 一次產生（`assets/ui/.applied`），之後以 `data/ui_theme.tres` 與場景為準。
+
+地面、地圖道具、男女主角、四種敵人、交通工具 5 方向、掉落物與每一張卡片（武器、被動、進化、融合）的圖示都已換成正式圖（`assets/art/`，清單見該資料夾 README）；拳頭、雨傘、飛行中的臭豆腐與機車騎士用 `assets/pixel/fx/` 的像素圖。幾何佔位仍留在場景裡（隱藏）。卡片圖示由 Codex 生的 3×3 圖示表切出：`uv run --no-project --with pillow --with numpy --with scipy python tools/slice_icon_sheet.py art_src/icons/sheets` 寫 `assets/pixel/icons/<id>_24.png`（同名覆蓋，不用改 `.tres`）。提示詞見 [opt-image-prompts.md](docs/opt-image-prompts.md)：第一批是男女主角、抽菸者、機車、汽車與夜市背景，第二批是交通工具的 5 方向圖、臭臭胖子、武器與掉落物。原圖放 `assets/source/`，遊戲用圖放 `assets/art/`。
 
 - 主角：把男／女主角圖分別指給 `BodyMan`、`BodyWoman` 底下新增的 Sprite2D，再隱藏該 Body 的幾何多邊形。敵人：把 `Visual/Art.texture` 指向圖片並勾選 visible，再關掉 `Placeholder`。
 - 交通工具：另外把 5 張方向圖依「南、東南、東、東北、北」的順序填進根節點的 `direction_textures`；朝西的三個方向會自動鏡像。
 
 音效使用 kit 的 SfxBank／Synth 程序音效。把同名的 `.ogg` 放進 `assets/sfx/` 就會替換。事件名稱：`punch`、`hit`、`metal`、`launch`、`hurt`、`warning`、`start`、`finish`、`death`、`heavy`、`wave`、`kick`、`throw`、`pearl`、`pop`、`incense`、`lantern`、`swish`、`fart`、`gem`、`coin`、`heal`、`chest`、`level`、`upgrade`、`evolve`、`combo`。
 
-Noto Sans TC 是 433 字的子集，粗體 700，約 160 KB，附 [OFL 授權](assets/fonts/OFL.txt)。新增中文後要重新製作子集（完整來源可以用 `pixel-monster/assets/fonts/NotoSansTC.ttf`）：
+介面字型是俐方體 11 號（Cubic 11 v1.500，<https://github.com/ACh-K/Cubic-11>，OFL 1.1，無保留字型名稱），子集 `assets/fonts/Cubic11.ttf`，完整來源 `art_src/fonts/Cubic_11.ttf`，授權 [Cubic_11-LICENSE.md](assets/fonts/Cubic_11-LICENSE.md)；字級只用 11 的倍數。俐方體沒有的字（目前只有「炷」）由 Noto Sans TC 補。Noto Sans TC 是子集，粗體 700，約 180 KB，附 [OFL 授權](assets/fonts/OFL.txt)。新增中文後要重新製作子集（完整來源可以用 `pixel-monster/assets/fonts/NotoSansTC.ttf`）：
 
 ```bash
-python3 prototypes/godot-kit/tools/subset_font.py --project prototypes/survivor-series --source prototypes/pixel-monster/assets/fonts/NotoSansTC.ttf --out prototypes/survivor-series/assets/fonts/NotoSansTC.ttf --weight 700 --minimal
+uv run --no-project --with fonttools python prototypes/godot-kit/tools/subset_font.py --project prototypes/survivor-series --source prototypes/pixel-monster/assets/fonts/NotoSansTC.ttf --out prototypes/survivor-series/assets/fonts/NotoSansTC.ttf --weight 700 --minimal
+uv run --no-project --with fonttools python prototypes/godot-kit/tools/subset_font.py --project prototypes/survivor-series --source prototypes/survivor-series/art_src/fonts/Cubic_11.ttf --out prototypes/survivor-series/assets/fonts/Cubic11.ttf --minimal
 ```
 
 ## 測試
@@ -97,6 +105,8 @@ bash prototypes/godot-kit/sync.sh --check survivor-series
   - 靜態文字保留、原始 scene 不被改動、字型與畫面主題、震屏開關
 - **view（24 項）**：鏡頭距離、y 排序與圖層、投射物離地與橢圓軌道、攤位擋路、打破道具掉寶且不會長回來、拳頭打道具、落後敵人搬到前方（精英不搬）、下班人潮與橫幅、精英在場時降低生成、畫面外寶箱指示、重抽。
 - **scaffold（7 項）**：最早的入口骨架。
+
+介面截圖（不會跳視窗，在 Xvfb 虛擬螢幕跑）：`env -u WAYLAND_DISPLAY xvfb-run -a -s "-screen 0 1280x1280x24" godot --path . --fixed-fps 60 --resolution 390x844 -s res://tools/ui_tour.gd -- --out=<資料夾>`，依序存主選單、戰鬥（精英、機車預警、畫面外寶箱）、選卡、暫停、結算、商店。`capture.sh` 在 Linux 也會自動用 Xvfb。
 
 測試用自己的存檔路徑，跑完會刪掉。測試全部用遊戲時間推進。瀏覽器檢查：建好網頁版後 `python3 -m http.server 8793 -d build/web &`，再 `node tools/browser_check.mjs --playwright <playwright-core 路徑> --chromium <chrome 路徑>`（用法見檔頭）。
 

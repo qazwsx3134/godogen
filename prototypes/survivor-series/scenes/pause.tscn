@@ -7,6 +7,8 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme = ExtResource("1_f1d2v")
 
 [node name="Shade" type="ColorRect" parent="." unique_id=1923980195]
@@ -20,29 +22,38 @@ layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="Column" type="VBoxContainer" parent="Center" unique_id=849652658]
+[node name="Box" type="PanelContainer" parent="Center" unique_id=1393230177]
+layout_mode = 2
+
+[node name="Column" type="VBoxContainer" parent="Center/Box" unique_id=849652658]
 custom_minimum_size = Vector2(420, 0)
 layout_mode = 2
 theme_override_constants/separation = 22
 
-[node name="Title" type="Label" parent="Center/Column" unique_id=1725941520]
+[node name="Title" type="Label" parent="Center/Box/Column" unique_id=1725941520]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.96862745, 0.9098039, 0.80784315, 1)
-theme_override_font_sizes/font_size = 38
+theme_override_font_sizes/font_size = 33
 text = "休息一下"
 horizontal_alignment = 1
 
-[node name="Note" type="Label" parent="Center/Column" unique_id=1508494781]
+[node name="Note" type="Label" parent="Center/Box/Column" unique_id=1508494781]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.96862745, 0.9098039, 0.80784315, 1)
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 22
 text = "已暫停，時間與敵人都會等你。"
 horizontal_alignment = 1
 
-[node name="Resume" type="Button" parent="Center/Column" unique_id=653608620]
+[node name="ShakeToggle" type="CheckButton" parent="Center/Box/Column" unique_id=1172993483]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+button_pressed = true
+text = "震屏"
+
+[node name="Resume" type="Button" parent="Center/Box/Column" unique_id=653608620]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 56)
 layout_mode = 2
+theme_type_variation = &"PrimaryButton"
 text = "繼續  →"

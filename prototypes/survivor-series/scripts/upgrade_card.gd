@@ -1,6 +1,8 @@
 extends Button
 signal chosen(id: StringName)
 @export var definition: Resource
+## Tag and stripe colour per card kind (PokéSurvivor's rarity colours).
+const KIND_COLORS := {"weapon": Color("4fb4ff"), "upgrade": Color("9fb1c9"), "passive": Color("5fe08a"), "evolution": Color("c47bff"), "fusion": Color("ffcb3d"), "filler": Color("fff4dc")}
 var id: StringName
 @onready var title_label: Label = %Title
 @onready var body_label: Label = %Description
@@ -33,6 +35,10 @@ func setup(item: Resource, build: RefCounted) -> void:
 			tag_label.text = "隱藏融合！"
 		_:
 			tag_label.text = "補給"
-	stripe.color = Color("b784f0") if hidden else item.accent
+	var kind: Color = KIND_COLORS.get(item.slot, Color.WHITE)
+	if item.slot in ["weapon", "passive"] and owned > 0:
+		kind = KIND_COLORS.upgrade
+	tag_label.add_theme_color_override("font_color", kind)
+	stripe.color = Color("b784f0") if hidden else kind
 	icon_rect.texture = null if hidden else item.icon
 	icon_rect.visible = icon_rect.texture != null

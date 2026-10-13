@@ -21,58 +21,62 @@ card_scene = ExtResource("3_vi17a")
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color(0.03, 0.06, 0.08, 0.96)
+color = Color(0.07058824, 0.047058824, 0.11764706, 0.45)
 
 [node name="Center" type="CenterContainer" parent="." unique_id=1414097177]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="Column" type="VBoxContainer" parent="Center" unique_id=1859714261]
+[node name="Glass" type="PanelContainer" parent="Center" unique_id=1706202753]
+layout_mode = 2
+theme_type_variation = &"GlassPanel"
+
+[node name="Column" type="VBoxContainer" parent="Center/Glass" unique_id=1859714261]
 custom_minimum_size = Vector2(420, 0)
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="Level" type="Label" parent="Center/Column" unique_id=1421213498]
+[node name="Level" type="Label" parent="Center/Glass/Column" unique_id=1421213498]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 22
 text = "LEVEL 2"
 horizontal_alignment = 1
 
-[node name="Title" type="Label" parent="Center/Column" unique_id=543009603]
+[node name="Title" type="Label" parent="Center/Glass/Column" unique_id=543009603]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 34
+theme_override_font_sizes/font_size = 33
 text = "升級！選一招"
 horizontal_alignment = 1
 
-[node name="Options" type="VBoxContainer" parent="Center/Column" unique_id=1609551511]
+[node name="Options" type="VBoxContainer" parent="Center/Glass/Column" unique_id=1609551511]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Choice" parent="Center/Column/Options" unique_id=618683889 instance=ExtResource("3_vi17a")]
+[node name="Choice" parent="Center/Glass/Column/Options" unique_id=618683889 instance=ExtResource("3_vi17a")]
 layout_mode = 2
 
-[node name="Choice2" parent="Center/Column/Options" unique_id=1341897143 instance=ExtResource("3_vi17a")]
+[node name="Choice2" parent="Center/Glass/Column/Options" unique_id=1341897143 instance=ExtResource("3_vi17a")]
 layout_mode = 2
 definition = ExtResource("4_jcj7r")
 
-[node name="Choice3" parent="Center/Column/Options" unique_id=1057431681 instance=ExtResource("3_vi17a")]
+[node name="Choice3" parent="Center/Glass/Column/Options" unique_id=1057431681 instance=ExtResource("3_vi17a")]
 layout_mode = 2
 definition = ExtResource("5_js5n2")
 
-[node name="Reroll" type="Button" parent="Center/Column" unique_id=1690181649]
+[node name="Reroll" type="Button" parent="Center/Glass/Column" unique_id=1690181649]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(220, 48)
 layout_mode = 2
 size_flags_horizontal = 4
 text = "重抽（剩 1 次）"
 
-[node name="Note" type="Label" parent="Center/Column" unique_id=1234160588]
+[node name="Note" type="Label" parent="Center/Glass/Column" unique_id=1234160588]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 22
 text = "戰鬥已暫停，選好再繼續揍。"
 horizontal_alignment = 1

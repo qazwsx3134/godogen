@@ -10174,3 +10174,182 @@ prototypes/survivor-series/scripts/street.gd
 prototypes/survivor-series/scripts/upgrade_panel.gd
 ---
 
+## Session End: 20261013_205638
+### Commits
+648bcea Merge remote survivor-series PokéSurvivor view into night-market feedback work
+36854fe update
+c79c274 update
+---
+
+## Session End: 20261013_223557
+### Commits
+648bcea Merge remote survivor-series PokéSurvivor view into night-market feedback work
+36854fe update
+c79c274 update
+### Uncommitted Changes
+production/session-logs/agent-audit.log
+production/session-logs/session-log.md
+prototypes/godot-kit/README.md
+prototypes/godot-kit/tools/capture.sh
+prototypes/survivor-series/README.md
+prototypes/survivor-series/TODO.md
+prototypes/survivor-series/assets/art/README.md
+prototypes/survivor-series/assets/fonts/NotoSansTC.ttf
+prototypes/survivor-series/data/items/cane.tres
+prototypes/survivor-series/data/items/firecracker.tres
+prototypes/survivor-series/data/items/incense.tres
+prototypes/survivor-series/data/items/lantern.tres
+prototypes/survivor-series/data/items/pearl.tres
+prototypes/survivor-series/data/items/slipper.tres
+prototypes/survivor-series/data/ui_theme.tres
+prototypes/survivor-series/docs/pokesurvivor-reference.md
+prototypes/survivor-series/scenes/bike.tscn
+prototypes/survivor-series/scenes/cane.tscn
+prototypes/survivor-series/scenes/car.tscn
+prototypes/survivor-series/scenes/damage_number.tscn
+prototypes/survivor-series/scenes/fatty.tscn
+prototypes/survivor-series/scenes/hud.tscn
+prototypes/survivor-series/scenes/menu.tscn
+prototypes/survivor-series/scenes/pause.tscn
+prototypes/survivor-series/scenes/pickup.tscn
+prototypes/survivor-series/scenes/player.tscn
+prototypes/survivor-series/scenes/props/bollard.tscn
+prototypes/survivor-series/scenes/props/cone.tscn
+prototypes/survivor-series/scenes/props/fruit_crate.tscn
+prototypes/survivor-series/scenes/props/lantern_post.tscn
+prototypes/survivor-series/scenes/props/parked_scooter.tscn
+prototypes/survivor-series/scenes/props/planter.tscn
+prototypes/survivor-series/scenes/props/stall_fruit.tscn
+prototypes/survivor-series/scenes/props/stall_snack.tscn
+prototypes/survivor-series/scenes/results.tscn
+prototypes/survivor-series/scenes/shop.tscn
+prototypes/survivor-series/scenes/shop_item.tscn
+prototypes/survivor-series/scenes/smoker.tscn
+prototypes/survivor-series/scenes/street.tscn
+prototypes/survivor-series/scenes/upgrade_card.tscn
+prototypes/survivor-series/scenes/upgrades.tscn
+prototypes/survivor-series/scripts/damage_number.gd
+prototypes/survivor-series/scripts/edge_markers.gd
+prototypes/survivor-series/scripts/enemy.gd
+prototypes/survivor-series/scripts/game.gd
+prototypes/survivor-series/scripts/map.gd
+prototypes/survivor-series/scripts/street.gd
+prototypes/survivor-series/scripts/upgrade_card.gd
+prototypes/survivor-series/tests/test_playable.gd
+---
+
+## Session End: 20261014_012453
+### Commits
+648bcea Merge remote survivor-series PokéSurvivor view into night-market feedback work
+36854fe update
+c79c274 update
+### Uncommitted Changes
+production/session-logs/agent-audit.log
+production/session-logs/session-log.md
+prototypes/godot-kit/README.md
+prototypes/godot-kit/tests/test_proto_kit.gd
+prototypes/godot-kit/tools/capture.sh
+prototypes/survivor-series/README.md
+prototypes/survivor-series/TODO.md
+prototypes/survivor-series/art_src/PROGRESS.md
+prototypes/survivor-series/art_src/icons/all-contact.png
+prototypes/survivor-series/assets/art/README.md
+prototypes/survivor-series/assets/fonts/NotoSansTC.ttf
+prototypes/survivor-series/data/items/amulet.tres
+prototypes/survivor-series/data/items/beehive.tres
+prototypes/survivor-series/data/items/cane.tres
+prototypes/survivor-series/data/items/change.tres
+prototypes/survivor-series/data/items/chicken.tres
+prototypes/survivor-series/data/items/duo.tres
+prototypes/survivor-series/data/items/duster.tres
+prototypes/survivor-series/data/items/energy.tres
+prototypes/survivor-series/data/items/firecracker.tres
+prototypes/survivor-series/data/items/homing_slipper.tres
+prototypes/survivor-series/data/items/hongbao.tres
+prototypes/survivor-series/data/items/incense.tres
+prototypes/survivor-series/data/items/iron_palm.tres
+prototypes/survivor-series/data/items/kick.tres
+prototypes/survivor-series/data/items/lantern.tres
+prototypes/survivor-series/data/items/massage.tres
+prototypes/survivor-series/data/items/mazu.tres
+prototypes/survivor-series/data/items/megaphone.tres
+prototypes/survivor-series/data/items/moms_counter.tres
+prototypes/survivor-series/data/items/pearl.tres
+prototypes/survivor-series/data/items/pearl_ring.tres
+prototypes/survivor-series/data/items/pearl_storm.tres
+prototypes/survivor-series/data/items/pingxi.tres
+prototypes/survivor-series/data/items/points.tres
+prototypes/survivor-series/data/items/punch.tres
+prototypes/survivor-series/data/items/rice.tres
+prototypes/survivor-series/data/items/rider.tres
+prototypes/survivor-series/data/items/ring.tres
+prototypes/survivor-series/data/items/sacha.tres
+prototypes/survivor-series/data/items/salt_riders.tres
+prototypes/survivor-series/data/items/slipper.tres
+prototypes/survivor-series/data/items/stink_bomb.tres
+prototypes/survivor-series/data/items/tofu.tres
+prototypes/survivor-series/data/items/umbrella.tres
+prototypes/survivor-series/data/items/wave.tres
+prototypes/survivor-series/data/ui_theme.tres
+prototypes/survivor-series/docs/pokesurvivor-reference.md
+prototypes/survivor-series/scenes/attack_flash.tscn
+prototypes/survivor-series/scenes/bike.tscn
+prototypes/survivor-series/scenes/blast.tscn
+prototypes/survivor-series/scenes/cane.tscn
+prototypes/survivor-series/scenes/car.tscn
+prototypes/survivor-series/scenes/clusters/market_double.tscn
+prototypes/survivor-series/scenes/clusters/market_row.tscn
+prototypes/survivor-series/scenes/clusters/roadblock.tscn
+prototypes/survivor-series/scenes/damage_number.tscn
+prototypes/survivor-series/scenes/fatty.tscn
+prototypes/survivor-series/scenes/firecracker.tscn
+prototypes/survivor-series/scenes/hud.tscn
+prototypes/survivor-series/scenes/impact.tscn
+prototypes/survivor-series/scenes/incense.tscn
+prototypes/survivor-series/scenes/lantern.tscn
+prototypes/survivor-series/scenes/menu.tscn
+prototypes/survivor-series/scenes/pause.tscn
+prototypes/survivor-series/scenes/pearl.tscn
+prototypes/survivor-series/scenes/pickup.tscn
+prototypes/survivor-series/scenes/player.tscn
+prototypes/survivor-series/scenes/props/bollard.tscn
+prototypes/survivor-series/scenes/props/cone.tscn
+prototypes/survivor-series/scenes/props/fruit_crate.tscn
+prototypes/survivor-series/scenes/props/lantern_post.tscn
+prototypes/survivor-series/scenes/props/parked_scooter.tscn
+prototypes/survivor-series/scenes/props/planter.tscn
+prototypes/survivor-series/scenes/props/stall_fruit.tscn
+prototypes/survivor-series/scenes/props/stall_snack.tscn
+prototypes/survivor-series/scenes/results.tscn
+prototypes/survivor-series/scenes/rider.tscn
+prototypes/survivor-series/scenes/ring.tscn
+prototypes/survivor-series/scenes/shop.tscn
+prototypes/survivor-series/scenes/shop_item.tscn
+prototypes/survivor-series/scenes/slipper.tscn
+prototypes/survivor-series/scenes/smoke.tscn
+prototypes/survivor-series/scenes/smoker.tscn
+prototypes/survivor-series/scenes/street.tscn
+prototypes/survivor-series/scenes/tofu.tscn
+prototypes/survivor-series/scenes/upgrade_card.tscn
+prototypes/survivor-series/scenes/upgrades.tscn
+prototypes/survivor-series/scenes/wave.tscn
+prototypes/survivor-series/scripts/arsenal.gd
+prototypes/survivor-series/scripts/attack_flash.gd
+prototypes/survivor-series/scripts/attack_flash.gd.uid
+prototypes/survivor-series/scripts/blast.gd
+prototypes/survivor-series/scripts/blast.gd.uid
+prototypes/survivor-series/scripts/damage_number.gd
+prototypes/survivor-series/scripts/edge_markers.gd
+prototypes/survivor-series/scripts/enemy.gd
+prototypes/survivor-series/scripts/game.gd
+prototypes/survivor-series/scripts/impact.gd
+prototypes/survivor-series/scripts/impact.gd.uid
+prototypes/survivor-series/scripts/map.gd
+prototypes/survivor-series/scripts/projectile.gd
+prototypes/survivor-series/scripts/smoke.gd
+prototypes/survivor-series/scripts/street.gd
+prototypes/survivor-series/scripts/upgrade_card.gd
+prototypes/survivor-series/tests/test_playable.gd
+prototypes/survivor-series/tests/test_view.gd
+---
+

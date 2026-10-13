@@ -1,12 +1,14 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/projectile.gd" id="1_0juqt"]
+[ext_resource type="Texture2D" path="res://assets/pixel/fx/tofu.png" id="2_5juip"]
 
 [node name="TofuZone" type="Node2D" unique_id=1887873307]
 script = ExtResource("1_0juqt")
-lift = 0.0
 radius = 70.0
 face_travel = false
+lift = 0.0
+palette = &"stink"
 
 [node name="Visual" type="Node2D" parent="." unique_id=1459430100]
 unique_name_in_owner = true
@@ -41,11 +43,18 @@ width = 3.0
 default_color = Color(0.70980394, 0.8784314, 0.41568628, 1)
 
 [node name="BlockOutline" type="Polygon2D" parent="Visual" unique_id=1865899449]
+visible = false
 position = Vector2(0, -4)
 color = Color(0.07450981, 0.1254902, 0.1764706, 1)
 polygon = PackedVector2Array(-11, -9, 11, -9, 11, 9, -11, 9)
 
 [node name="Block" type="Polygon2D" parent="Visual" unique_id=1888449057]
+visible = false
 position = Vector2(0, -4)
 color = Color(0.7882353, 0.5411765, 0.23921569, 1)
 polygon = PackedVector2Array(-9, -7, 9, -7, 9, 7, -9, 7)
+
+[node name="Tray" type="Sprite2D" parent="Visual" unique_id=128102419]
+position = Vector2(0, -10)
+scale = Vector2(2.7777777, 2.7777777)
+texture = ExtResource("2_5juip")

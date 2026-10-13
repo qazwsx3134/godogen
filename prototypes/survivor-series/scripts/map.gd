@@ -37,7 +37,7 @@ func reset(start: Vector2) -> void:
 	follow(start)
 
 func follow(center: Vector2) -> void:
-	var tile: float = ground.texture.get_width()
+	var tile: float = ground.texture.get_width() * ground.scale.x
 	ground.position = (center / tile).floor() * tile
 	var here := Vector2i((center / chunk_size).floor())
 	var changed: bool = false

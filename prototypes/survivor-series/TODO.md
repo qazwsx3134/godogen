@@ -72,14 +72,17 @@
 - [x] T-114 參考圖的愛心血量與技能鈕：使用者決定不做，血量維持頭上血條、沒有主動技能。
 - [ ] T-112 音樂：確定方向與來源，用已接入的 Music 服務；記錄授權。
 - [x] T-113 傷害數字：每次命中跳數字，致命一擊金色大字。設定裡的開關併入 T-204。
-- [ ] T-116 像素風（參考 PokéSurvivor，見 [pokesurvivor-reference.md](docs/pokesurvivor-reference.md) 第 3 節）。2026-10-13 使用者決定：角色重畫成小尺寸像素圖、每個素材像素＝2 個邏輯 px、UI 換俐方體 11 號。**尚未開始，等使用者說開工。**
-  - [ ] 角色與交通工具重畫（Codex 生圖，skill `character-sprite-forge`，`--route codex-cli`、`--finish pixel`）：先試做男主角一張（目標約 24×40 px、1 px 深色描邊、少色、無反鋸齒；以現有定案圖當 identity-ref），使用者挑過再做女主角、流氓、臭臭胖子、汽車與機車各 5 方向。
-  - [ ] 道具、地磚、圖示改用自動縮小版：依「畫面像素 2 px」把原圖縮到目標尺寸（面積平均→量化到約 32 色→alpha 門檻→外加 1 px 描邊），做成可重跑的工具；原圖留在 `assets/art/`，縮小版另放一個資料夾。試做結果：攤位、燈籠、三角錐可用，角色臉會糊（比較圖 `art_src/pixel-style/auto-downscale-compare.png`）。
-  - [ ] 統一顯示比例：所有 Sprite2D 的 scale＝2 ÷ 鏡頭 zoom（0.72 時約 2.78），讓每個素材像素在畫面上一樣大；材質一律 nearest。
-  - [ ] 投射物換成像素圖：藍白拖、珍珠、鞭炮、香、天燈、愛的小手用既有圖示縮小；衝擊波、臭豆腐、圈圈、機車騎士、雨傘目前是向量圖形，要補圖或維持向量（PokéSurvivor 的光環、預警、陰影本來就是平滑圖形）。
-  - [ ] 掉落物（寶石、金幣、滷肉飯、吸塵器、寶箱）用同一像素比例。
-  - [ ] UI：下載俐方體 11 號（Cubic 11，OFL，記錄來源、版本、授權），用 `subset_font.py` 做子集；字級用 11 的倍數；`ui_theme.tres` 面板改深色半透明＋細亮框、小圓角；血條／經驗條改成圓角實心條＋條上數字。
-  - [ ] 選做：HUD 改成頂端細經驗條、底部武器格（有圖示用圖示，沒有就用兩個字）。
+- [ ] T-116 像素風（參考 PokéSurvivor，見 [pokesurvivor-reference.md](docs/pokesurvivor-reference.md) 第 3 節）。2026-10-13 使用者決定：角色重畫成小尺寸像素圖、每個素材像素＝2 個邏輯 px、UI 換俐方體 11 號。實作計畫見 [pixel-ui-plan.md](docs/pixel-ui-plan.md)。2026-10-14 開工，待決定事項先用建議值（夜市配色、自動縮小版過渡、底部兩排格）。
+  - [x] P1 全遊戲換成像素縮小版（`tools/pixelize.py`、`build_pixel_scenes.gd`）。
+  - [x] P2 角色與交通工具像素重畫（Codex `--route codex-cli`，綠幕 → `pixelize.py --keyed`）：男主角 03、女主角 02、流氓 02、胖子 02、機車／汽車 5 方向各一張（使用者 2026-10-14 選定，各資料夾 `art_src/**/pixel/SELECTED.txt`）。
+  - [x] P3 俐方體 11 號、像素框主題（`make_ui_frames.py`、`build_pixel_ui.gd`）。
+  - [x] P4 HUD：頂端經驗條、計時置中、底部武器／被動格、精英血條；震屏開關搬到暫停。
+  - [x] P5 選單、暫停、結算、商店換雙框盒子；選卡改玻璃卡＋左側圖示＋種類色。
+  - [x] P6 傷害數字（像素字、放大、主角受傷紅字「-N」）、頭上血條像素框（精英金色）、機車預警逐漸填滿＋最後 25% 閃爍、畫面外箭頭＋距離（公尺）、掉落物影子（`tools/build_pixel_world.gd`）。
+  - [x] 2026-10-14 使用者回饋「道具和武器有點大、特效太醜」：道具縮成 0.75 倍（`tools/shrink_props.gd`，像素密度不變，路障與夜市群間距跟著縮）、投射物換成約 0.7 倍的像素圖（`build_pixel_fx_scenes.gd`）、特效改成 PokéSurvivor 式的像素格特效（`scripts/pixel_fx.gd`）＋敵人受擊閃白 shader；舊的 `attack_flash`／`impact`／`blast` 場景已刪除。
+  - [x] 2026-10-14 特效抽成 godot-kit 模組 `pixel_vfx.gd`＋skill `pixel-vfx`（使用者要可重用、可新增）。VFX 2D Free 試接過一版，但像素模式的抖動邊緣讓煙霧像破圖，改用 kit 自己寫的硬邊爆炸與煙霧 shader，VFX 2D 與選單的製作名單已移除。評估過但沒用：GODOT-VFX-LIBRARY、VFEZ（比較見 skill）。
+  - [x] P7 測試、網頁版瀏覽器檢查；360×640、390×844、430×932 截圖看過（`tools/ui_tour.gd`，在 Xvfb 虛擬螢幕跑）。小字一律 22 px，11 px 只留在精英血條名字與被動格。
+  - [x] 2026-10-14 補齊圖示與最後的向量圖形：Codex 一次生 3 張 3×3 圖示表（`art_src/icons/sheets/`，`--route codex-cli`），`tools/slice_icon_sheet.py` 切成 27 個 24 px 像素圖示（武器 7、被動 8、進化 7、融合 5；滷肉飯、零錢沿用掉落物圖）；`tools/wire_icons.gd` 接上所有卡片與 HUD 格，並把拳頭、雨傘、飛行中的臭豆腐、機車騎士換成像素圖（舊向量圖形留著、隱藏）。機車騎士用 `projectile.gd` 的 `upright`：不跟著方向旋轉，只左右翻面。總覽 `art_src/icons/all-contact.png`。
 - [ ] T-115 PokéSurvivor 機制候選（見 [pokesurvivor-reference.md](docs/pokesurvivor-reference.md) 第 4 節）：土地公廟（25 秒強化）、廟口泉水（站著回血）、可引爆的瓦斯桶（敵我都炸）、只能帶一個的攜帶道具、治療者／護盾者／召喚者／光束／區域砲／自爆／跳躍等敵人行為（數字見第 10 節）、精英改成雙模式 Boss AI 加半血發怒、隨機事件（同類敵人潮、黃金時段、護送迷路的人、帶錢小偷）、HUD 改成頂端細經驗條＋底部武器圖示格。
 
 ## P2：對外試玩版本

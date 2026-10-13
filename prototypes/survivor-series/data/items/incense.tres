@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/incense.tscn" id="1_1fkym"]
-[ext_resource type="Texture2D" path="res://assets/art/icons/incense.png" id="1_035p1"]
+[ext_resource type="Texture2D" path="res://assets/pixel/icons/incense_24.png" id="1_035p1"]
 [ext_resource type="Script" path="res://scripts/item_def.gd" id="2_035p1"]
 
 [resource]

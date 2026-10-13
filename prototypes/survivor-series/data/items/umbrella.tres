@@ -1,5 +1,6 @@
 [gd_resource type="Resource" script_class="StreetItemDefinition" format=3]
 
+[ext_resource type="Texture2D" path="res://assets/pixel/icons/umbrella_24.png" id="1_e0esx"]
 [ext_resource type="Script" path="res://scripts/item_def.gd" id="2_def"]
 
 [resource]
@@ -8,18 +9,13 @@ id = &"umbrella"
 title = "雨傘"
 description = "撐開擋下一次傷害，並把周圍敵人彈開；冷卻後重新充能。"
 level_notes = PackedStringArray("彈開更用力，傷害 +10", "再多擋一次", "範圍變大，傷害 +10", "充能更快")
-slot = "weapon"
-accent = Color(0.4353,0.7216,1,1)
-max_level = 5
+accent = Color(0.4353, 0.7216, 1, 1)
+icon = ExtResource("1_e0esx")
 kind = &"umbrella"
 damage = 30.0
 damage_per_level = 10.0
 cooldown = 7.0
 cooldown_per_level = 0.08
-amount = 1
 amount_levels = PackedInt32Array(3)
-area = 1.0
 area_per_level = 0.1
-duration = 1.0
-pierce = -1
 knockback = 2.5

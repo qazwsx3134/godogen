@@ -1,0 +1,35 @@
+{
+ "a": [
+  "punch",
+  "wave",
+  "kick",
+  "umbrella",
+  "ring",
+  "rider",
+  "tofu",
+  "sacha",
+  "chicken"
+ ],
+ "b": [
+  "energy",
+  "points",
+  "amulet",
+  "megaphone",
+  "massage",
+  "hongbao",
+  "iron_palm",
+  "homing_slipper",
+  "pearl_storm"
+ ],
+ "c": [
+  "beehive",
+  "mazu",
+  "pingxi",
+  "duster",
+  "duo",
+  "moms_counter",
+  "pearl_ring",
+  "salt_riders",
+  "stink_bomb"
+ ]
+}

@@ -12,6 +12,7 @@ const Music = preload("res://addons/proto_kit/music.gd")
 const CameraShake = preload("res://addons/proto_kit/camera_shake.gd")
 const FloatingStick = preload("res://addons/proto_kit/floating_stick.gd")
 const SceneLoader = preload("res://addons/proto_kit/scene_loader.gd")
+const PixelVfx = preload("res://addons/proto_kit/pixel_vfx.gd")
 const DIR: String = "user://proto_kit_test"
 
 
@@ -29,6 +30,7 @@ func _run() -> void:
 	await _test_time_control()
 	await _test_music()
 	_test_camera_shake()
+	_test_pixel_vfx()
 	await _test_floating_stick()
 	await _test_scene_loader()
 	await _test_harness_input()
@@ -425,6 +427,36 @@ func _test_music() -> void:
 
 
 ## Trauma shake, stepped by hand (`step(delta)`) so the numbers do not depend on the frame rate.
+func _test_pixel_vfx() -> void:
+	var fx: Node2D = PixelVfx.new()
+	root.add_child(fx)
+	# Effects use their own generator: spawning them must not move the game's seeded randf().
+	seed(42)
+	var expected: float = randf()
+	seed(42)
+	fx.burst(Vector2.ZERO, &"hit", 20)
+	fx.effect(&"explosion", Vector2.ZERO, Vector2(64, 64), 0.5, &"fire")
+	_expect(randf() == expected, "pixel_vfx: effects never touch the global random generator")
+	_expect(fx.count() == 21, "pixel_vfx: a burst adds its particles and an effect adds one node")
+	var boom: Node2D = fx.get_child(0)
+	_expect(boom.material is ShaderMaterial and boom.material.get_shader_parameter(&"tone_2") == fx.tones(&"fire")[2], "pixel_vfx: shader effects get their palette as tone uniforms")
+	fx.max_particles = 5
+	fx.burst(Vector2.ZERO, &"hit", 50)
+	_expect(fx._parts.size() == 20, "pixel_vfx: max_particles caps new particles")
+	var drawn: Array = []
+	fx.register(&"blip", func(entry: Dictionary, left: float) -> void: drawn.append(left))
+	fx.add_shape(&"blip", Vector2(3, 3), &"ice", 0.2, {"size": 2})
+	fx.add_shape(&"nope", Vector2.ZERO, &"ice", 0.2)
+	_expect(fx._shapes.size() == 1 and fx._shapes[0].size == 2 and fx._shapes[0].pal == fx.tones(&"ice"), "pixel_vfx: registered kinds spawn with their extra keys; unknown kinds are ignored")
+	_expect(fx.tones(&"no such palette") == fx.tones(fx.fallback_palette), "pixel_vfx: unknown palettes fall back")
+	fx._process(1.0)
+	boom._process(1.0)
+	_expect(fx._parts.is_empty() and fx._shapes.is_empty() and boom.is_queued_for_deletion(), "pixel_vfx: everything expires after its life")
+	_expect(PixelVfx.fade(0.9) == 1.0 and PixelVfx.fade(0.5) == 0.66 and PixelVfx.fade(0.1) == 0.33, "pixel_vfx: fades step instead of sliding")
+	fx.pixel = 3.0
+	_expect(fx.snap(Vector2(4.4, -1.6)) == Vector2(3, -3), "pixel_vfx: snap() puts points on the art-pixel grid")
+	fx.free()
+
 func _test_camera_shake() -> void:
 	var camera := Camera2D.new()
 	root.add_child(camera)
