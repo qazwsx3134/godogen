@@ -1,6 +1,13 @@
+# Godot's import cache and editor state: rebuilt by `godot --headless --editor --quit`
 .godot/
+
+# Web export (build_web.sh output): rebuilt from source, uploaded to itch.io, not versioned
 build/
+
+# agent-sprite-forge ledger and run records of the Codex image calls (local provenance only)
 .forge/
-# raw Codex output and the full font: local only (assets/ holds the processed files the game uses)
+
+# Raw Codex output and the full source font: local only.
+# assets/ holds the processed files the game uses; art_src/prompts/ and art_src/cover/ stay versioned.
 art_src/gen/
 art_src/fonts/
