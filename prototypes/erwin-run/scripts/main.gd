@@ -21,6 +21,9 @@ const MAX_HP := 3
 const SAVE_PATH := "user://erwin_run.cfg"
 ## Parallax factor of each scrolling layer (1.0 = ground speed).
 const LAYERS := {&"Sky": 0.04, &"Far": 0.14, &"Mid": 0.38, &"Ruins": 0.6, &"Ground": 1.0}
+## The last ruins copy: the strip up to RUINS_CUT, then a slope of rubble (tools/process_art.py makes it).
+const RUINS_END := preload("res://assets/bg/ruins_end.png")
+const RUINS_CUT := 880.0
 
 @export var run_track: AudioStream
 @export var boss_track: AudioStream
@@ -28,6 +31,7 @@ const LAYERS := {&"Sky": 0.04, &"Far": 0.14, &"Mid": 0.38, &"Ruins": 0.6, &"Grou
 
 @onready var sfx: Node = %Sfx
 @onready var music: Node = %Music
+@onready var hooves: AudioStreamPlayer = %Hooves
 @onready var time_control: Node = %TimeControl
 @onready var player: Node2D = %Player
 @onready var obstacles: Node2D = %Obstacles
@@ -36,6 +40,8 @@ const LAYERS := {&"Sky": 0.04, &"Far": 0.14, &"Mid": 0.38, &"Ruins": 0.6, &"Grou
 @onready var levi: Node2D = %Levi
 @onready var levi_sprite: Sprite2D = $World/Levi/Sprite
 @onready var wall_gate: Sprite2D = %WallGate
+@onready var ruins: Parallax2D = %Ruins
+@onready var ruins_sprite: Sprite2D = $Ruins/Sprite
 @onready var fx: Node2D = %Fx
 @onready var camera: Camera2D = %Camera
 @onready var hud: CanvasLayer = %Hud
@@ -71,6 +77,10 @@ var boss_timer := 0.0
 var boss_attacks := 0
 var boss_target := Vector2.ZERO
 var wall_start := Vector2.ZERO
+var ruins_repeat := Vector2.ZERO
+var ruins_leaving := false
+var ruins_tile: Texture2D
+var beast_far_x := 0.0
 
 
 func _ready() -> void:
@@ -81,8 +91,14 @@ func _ready() -> void:
 		if a.begins_with("--seed="):
 			rng.seed = int(a.trim_prefix("--seed="))
 	shake.camera = camera
+	var gallop := hooves.stream as AudioStreamWAV
+	gallop.loop_mode = AudioStreamWAV.LOOP_FORWARD
+	gallop.loop_end = roundi(gallop.get_length() * gallop.mix_rate)
 	shake.max_offset = Vector2(14.0, 10.0)
 	wall_start = wall_gate.position
+	ruins_repeat = ruins.repeat_size
+	ruins_tile = ruins_sprite.texture
+	beast_far_x = beast_far.position.x
 	fx.palettes.merge({
 		"steel": ["#141c28", "#4f6078", "#a3b4cc", "#e2ecf8", "#ffffff"],
 		"blood": ["#260404", "#6e0e0e", "#be2618", "#f06848", "#ffd2c2"],
@@ -98,6 +114,7 @@ func _ready() -> void:
 	screens.mute_toggled.connect(func(m: bool) -> void:
 		AudioServer.set_bus_mute(AudioServer.get_bus_index(&"Master"), m))
 	hud.pause_pressed.connect(_toggle_pause)
+	screens.portrait_changed.connect(_on_portrait)
 	player.landed.connect(_on_landed)
 	best = _load_best()
 	_reset_world(false)
@@ -157,6 +174,18 @@ func _slash() -> void:
 		fx.slash(player.blade_tip() + Vector2(18, 0), -0.35, 52.0, 1.9, &"steel", true)
 
 
+## Upright phones cannot play: a run pauses (and stays on the pause menu after turning back), the Levi
+## cut-scene freezes and carries on once the phone is on its side again.
+func _on_portrait(upright: bool) -> void:
+	if upright and not get_tree().paused:
+		if state == S.RUN or state == S.BOSS:
+			_toggle_pause()
+		elif state == S.LEVI:
+			get_tree().paused = true
+	elif not upright and state == S.LEVI and get_tree().paused:
+		get_tree().paused = false
+
+
 func _toggle_pause() -> void:
 	if state != S.RUN and state != S.BOSS:
 		return
@@ -180,7 +209,14 @@ func _start(from_boss: bool) -> void:
 		_start_boss()
 	else:
 		music.play(run_track)
-		hud.show_banner("調查兵團，出擊！", "目標：牆外的獸之巨人", 1.8)
+		player.shout("ススメ——！！")
+		sfx.play(&"susume")
+		get_tree().create_timer(0.9, false).timeout.connect(func() -> void:
+			if state == S.RUN and t < 3.0:
+				sfx.play(&"battle_cry"))
+		get_tree().create_timer(1.3, false).timeout.connect(func() -> void:
+			if state == S.RUN and t < 3.0:
+				hud.show_banner("調查兵團，出擊！", "目標：牆外的獸之巨人", 1.6))
 		var touch := DisplayServer.is_touchscreen_available()
 		hud.show_hint("點左半邊：跳躍　　點右半邊：斬擊・彈反" if touch
 				else "空白鍵／↑：跳躍　　J／→：斬擊・彈反", 3.2)
@@ -236,7 +272,11 @@ func _reset_world(from_boss: bool) -> void:
 	beast_far.visible = false
 	wall_gate.visible = not from_boss
 	wall_gate.position = wall_start
-	%Ruins.modulate.a = 0.0 if from_boss else 1.0
+	ruins.repeat_size = ruins_repeat
+	ruins.scroll_offset = Vector2.ZERO
+	ruins_sprite.texture = ruins_tile
+	ruins.visible = not from_boss
+	ruins_leaving = false
 	_tint_sky(1.0 if from_boss else 0.0)
 	hud.set_hp(hp)
 	hud.set_combo(0)
@@ -260,7 +300,7 @@ func _physics_process(delta: float) -> void:
 			_boss_step(delta)
 	distance += speed * delta
 	_scroll(speed, delta)
-	_zones()
+	_zones(delta)
 	player.step(delta)
 	for o in obstacles.get_children():
 		if not o.is_queued_for_deletion():
@@ -274,8 +314,19 @@ func _physics_process(delta: float) -> void:
 	if state == S.RUN or state == S.BOSS:
 		_resolve()
 	_dust(delta)
+	_hooves()
 	hud.set_progress(minf(t, BOSS_TIME) / BOSS_TIME)
 	hud.set_score(score(), kills)
+
+
+## Hoofbeats while the horse runs during play, pitched with the speed; silent on the title and once it slows down.
+func _hooves() -> void:
+	var on: bool = (state == S.RUN or state == S.BOSS or state == S.LEVI) and player.alive and speed > 60.0
+	if on and not hooves.playing:
+		hooves.play()
+	elif not on and hooves.playing:
+		hooves.stop()
+	hooves.pitch_scale = clampf(speed / 240.0, 0.8, 1.3)
 
 
 ## World x of the screen's right edge: the camera sits at x 320 and wide phones show more on both sides.
@@ -301,19 +352,41 @@ func _scroll(world_speed: float, delta: float) -> void:
 	drifting = drifting.filter(func(d: Variant) -> bool: return is_instance_valid(d))
 
 
-## Ruins fade into open fields, the sky turns to dusk, and the boss shows on the horizon near the end.
-func _zones() -> void:
+## The last ruins scroll away to open fields, the sky turns to dusk, and the boss walks in on the horizon.
+func _zones(delta: float) -> void:
 	if state != S.RUN:
 		return
-	%Ruins.modulate.a = clampf(1.0 - (t - 42.0) / 6.0, 0.0, 1.0)
+	if t > 42.0 and ruins.visible:
+		_ruins_leave()
 	_tint_sky(clampf((t - 105.0) / 40.0, 0.0, 1.0))
-	if t > 47.0 and _teach(&"fields"):
-		hud.show_banner("牆外平原", "巨人變多了，保持節奏", 1.6)
 	if t > 118.0 and _teach(&"far_beast"):
 		hud.show_banner("遠方傳來巨響……", "巨石是從那裡丟過來的", 1.8)
-	beast_far.visible = t > 118.0
+		beast_far.position.x = right_edge() + 60.0
+		beast_far.modulate.a = 0.85
+		beast_far.visible = true
 	if beast_far.visible:
-		beast_far.modulate.a = clampf((t - 118.0) / 6.0, 0.0, 1.0) * 0.85
+		beast_far.position.x = maxf(beast_far_x, beast_far.position.x - speed * LAYERS[&"Far"] * delta)
+
+
+## Stops the ruins strip from repeating once one copy covers the screen up to RUINS_CUT beyond its right edge,
+## swaps that copy for the version that ends in rubble (identical on screen), and lets it scroll off to the left.
+func _ruins_leave() -> void:
+	var x := ruins_sprite.get_global_transform_with_canvas().origin.x
+	if not ruins_leaving:
+		var view_w := get_viewport_rect().size.x
+		var cut := RUINS_CUT if view_w <= RUINS_CUT else ruins_repeat.x  # wider than the cut: end flat
+		for k in range(-3, 4):
+			var copy_x := x + k * ruins_repeat.x
+			if copy_x <= 0.0 and copy_x + cut >= view_w:
+				ruins.repeat_size = Vector2.ZERO
+				if cut == RUINS_CUT:
+					ruins_sprite.texture = RUINS_END
+				ruins.scroll_offset.x += copy_x - ruins_sprite.get_global_transform_with_canvas().origin.x
+				ruins_leaving = true
+				return
+	elif x + ruins_sprite.texture.get_width() < 0.0:
+		ruins.visible = false
+		hud.show_banner("牆外平原", "巨人變多了，保持節奏", 1.6)
 
 
 func _tint_sky(k: float) -> void:
@@ -742,7 +815,7 @@ func _finale() -> void:
 	await land.finished
 	fx.burst(levi.position, &"dust", 8, 50.0)
 	await get_tree().create_timer(0.6).timeout
-	fx.caption(levi.position + Vector2(0, -78), "嘖…生日快樂，團長。", &"steel", 2.6)
+	fx.caption(levi.position + Vector2(0, -78), "嘖…又多活了一年啊，艾爾文。", &"steel", 2.6)
 	await get_tree().create_timer(2.8).timeout
 	_ending()
 

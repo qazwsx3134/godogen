@@ -13,6 +13,7 @@ const IFRAMES := 1.3
 @onready var body: Node2D = %Body
 @onready var gallop: Sprite2D = %Gallop
 @onready var action: Sprite2D = %Action
+@onready var shout_label: Label = %Shout
 
 var ground_y := 0.0
 var vy := 0.0
@@ -23,6 +24,7 @@ var anim_t := 0.0
 var gait := 1.0       # gallop animation speed factor (slows to a halt in cutscenes)
 var alive := true
 var squash := 0.0
+var _shout_tween: Tween
 
 
 func _ready() -> void:
@@ -40,6 +42,28 @@ func reset() -> void:
 	rotation = 0.0
 	modulate = Color.WHITE
 	body.scale = Vector2.ONE
+	if _shout_tween:
+		_shout_tween.kill()
+	shout_label.visible = false
+
+
+## A battle cry over Erwin's head: pops in, shakes, then fades.
+func shout(text: String, seconds: float = 1.3) -> void:
+	if _shout_tween:
+		_shout_tween.kill()
+	shout_label.text = text
+	shout_label.visible = true
+	shout_label.modulate.a = 1.0
+	shout_label.scale = Vector2(0.3, 0.3)
+	_shout_tween = create_tween()
+	_shout_tween.tween_property(shout_label, "scale", Vector2(1.15, 1.15), 0.14).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	for i in 4:
+		_shout_tween.tween_property(shout_label, "rotation", 0.06 if i % 2 == 0 else -0.06, 0.05)
+	_shout_tween.tween_property(shout_label, "rotation", 0.0, 0.05)
+	_shout_tween.tween_property(shout_label, "scale", Vector2.ONE, 0.1)
+	_shout_tween.tween_interval(seconds)
+	_shout_tween.tween_property(shout_label, "modulate:a", 0.0, 0.3)
+	_shout_tween.tween_callback(shout_label.hide)
 
 
 func jump() -> bool:

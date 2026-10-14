@@ -115,18 +115,6 @@ theme_override_colors/font_color = Color(1, 0.84705883, 0.41568628, 1)
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="RotateHint" type="Label" parent="UI/Title" unique_id=1760498236]
-unique_name_in_owner = true
-visible = false
-layout_mode = 0
-anchor_right = 1.0
-offset_top = 96.0
-offset_bottom = 116.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-text = "把手機橫過來玩，畫面更大！"
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="Pause" type="Control" parent="UI" unique_id=1935513664]
 unique_name_in_owner = true
 anchors_preset = 0
@@ -296,32 +284,35 @@ layout_mode = 0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -78.0
+offset_top = -46.0
 mouse_filter = 2
 color = Color(0.05, 0.03, 0.04, 0.62)
 
 [node name="EndingStats" type="Label" parent="UI/Ending" unique_id=617374805]
 unique_name_in_owner = true
 layout_mode = 0
+anchor_top = 1.0
 anchor_right = 1.0
-offset_top = 286.0
-offset_bottom = 318.0
-horizontal_alignment = 1
+anchor_bottom = 1.0
+offset_left = 14.0
+offset_top = -44.0
+offset_right = -180.0
+offset_bottom = -2.0
 vertical_alignment = 1
 
 [node name="AgainButton" type="Button" parent="UI/Ending" unique_id=154668606]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(150, 34)
 layout_mode = 0
-anchor_left = 0.5
+anchor_left = 1.0
 anchor_top = 1.0
-anchor_right = 0.5
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -60.0
-offset_top = -38.0
-offset_right = 60.0
-offset_bottom = -10.0
-grow_horizontal = 2
+offset_left = -164.0
+offset_top = -40.0
+offset_right = -14.0
+offset_bottom = -6.0
+grow_horizontal = 0
 text = "再衝一次"
 
 [node name="Fade" type="ColorRect" parent="UI" unique_id=1233825475]
@@ -331,3 +322,68 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 color = Color(0, 0, 0, 0)
+
+[node name="Portrait" type="Control" parent="UI" unique_id=1014301001]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Dim" type="ColorRect" parent="UI/Portrait" unique_id=1014301002]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.05, 0.04, 0.07, 1)
+
+[node name="Phone" type="ColorRect" parent="UI/Portrait" unique_id=1014301003]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -150.0
+offset_right = 50.0
+offset_bottom = -100.0
+pivot_offset = Vector2(50, 25)
+mouse_filter = 2
+color = Color(0.85, 0.8, 0.69, 1)
+
+[node name="Screen" type="ColorRect" parent="UI/Portrait/Phone" unique_id=1014301004]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 5.0
+offset_right = -6.0
+offset_bottom = -5.0
+mouse_filter = 2
+color = Color(0.16, 0.27, 0.55, 1)
+
+[node name="Message" type="Label" parent="UI/Portrait" unique_id=1014301005]
+layout_mode = 0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -70.0
+offset_bottom = 10.0
+theme_override_colors/font_color = Color(1, 0.9019608, 0.65882355, 1)
+theme_override_font_sizes/font_size = 33
+text = "請把手機橫過來"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Sub" type="Label" parent="UI/Portrait" unique_id=1014301006]
+layout_mode = 0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = 14.0
+offset_bottom = 40.0
+theme_override_colors/font_color = Color(0.84705883, 0.8, 0.6901961, 1)
+theme_override_font_sizes/font_size = 22
+text = "這款遊戲只能橫向遊玩"
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -213,6 +213,39 @@ def full(img, w, h, colors):
     return q.convert("RGBA")
 
 
+RUINS_CUT, RUINS_TAPER = 880, 100  # main.gd's RUINS_CUT must match
+
+
+def ruins_end(tile):
+    """The last ruins copy: the strip up to RUINS_CUT, then a crumbling slope down to the ground, so the ruins
+    scroll away instead of ending in a straight cut."""
+    rgba = np.asarray(tile).copy()[:, :RUINS_CUT + RUINS_TAPER]
+    h = rgba.shape[0]
+    start = int(np.argmax(rgba[:, RUINS_CUT - 1, 3] > 0))
+    rng = np.random.default_rng(1014)
+    for x in range(RUINS_CUT, RUINS_CUT + RUINS_TAPER):
+        k = (x - RUINS_CUT) / RUINS_TAPER
+        limit = int(start + (h - start) * k ** 0.8) + int(rng.integers(-5, 6)) * (x // 3 % 2)
+        limit = min(max(limit, start), h)
+        rgba[:limit, x, 3] = 0
+        solid = np.nonzero(rgba[:, x, 3] > 0)[0]
+        if solid.size:
+            rgba[solid[0], x] = (20, 16, 24, 255)
+    return Image.fromarray(rgba, "RGBA")
+
+
+# Full images pushed down by this many pixels, the gap above filled by stretching their top rows (sky): the ending
+# screen puts its title on the top 84 px, so the cake and faces must sit below it.
+DROP = {"ending_art": 60}
+
+
+def drop(im, px):
+    out = Image.new("RGBA", im.size)
+    out.paste(im, (0, px))
+    out.paste(im.crop((0, 0, im.width, 4)).resize((im.width, px), Image.Resampling.NEAREST), (0, 0))
+    return out
+
+
 def placeholder(asset_id, spec):
     kind, _, frames, cw, ch, _ = spec
     col = next((c for k, c in PLACEHOLDER.items() if asset_id.startswith(k)), (200, 200, 200))
@@ -260,11 +293,16 @@ def build(asset_id):
             im = background(img, ch, colors, True, mirror=False)
         else:
             im = full(img, cw, ch, colors)
+            if asset_id in DROP:
+                im = drop(im, DROP[asset_id])
         how = str(src.relative_to(ROOT))
     out = OUT / rel
     out.parent.mkdir(parents=True, exist_ok=True)
     im.save(out)
     print(f"{asset_id:14s} {im.width}x{im.height}  <- {how}")
+    if asset_id == "bg_ruins":
+        ruins_end(im).save(OUT / "bg/ruins_end.png")
+        print(f"{'ruins_end':14s} {RUINS_CUT + RUINS_TAPER}x{im.height}")
 
 
 def self_test():

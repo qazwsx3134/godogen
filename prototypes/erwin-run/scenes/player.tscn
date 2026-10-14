@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_qhqgy"]
 [ext_resource type="Texture2D" path="res://assets/sprites/erwin_gallop.png" id="2_dqkch"]
 [ext_resource type="Texture2D" path="res://assets/sprites/erwin_actions.png" id="3_qlg0r"]
+[ext_resource type="Theme" path="res://assets/ui/theme.tres" id="4_shout"]
 
 [node name="Player" type="Node2D" unique_id=1506577660]
 script = ExtResource("1_qhqgy")
@@ -22,3 +23,19 @@ visible = false
 texture = ExtResource("3_qlg0r")
 offset = Vector2(0, -52)
 hframes = 3
+
+[node name="Shout" type="Label" parent="." unique_id=1014201410]
+unique_name_in_owner = true
+visible = false
+offset_left = -60.0
+offset_top = -134.0
+offset_right = 120.0
+offset_bottom = -104.0
+pivot_offset = Vector2(60, 15)
+theme = ExtResource("4_shout")
+theme_override_colors/font_color = Color(1, 0.95, 0.78, 1)
+theme_override_colors/font_outline_color = Color(0.12, 0.08, 0.06, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 22
+text = "ススメ——！！"
+vertical_alignment = 1

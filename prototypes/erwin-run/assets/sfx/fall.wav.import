@@ -2,13 +2,13 @@
 
 importer="wav"
 type="AudioStreamWAV"
-uid="uid://82nsxolftcup"
-path="res://.godot/imported/bgm_run.wav-f45036653dada801c41dc80f9deb43d5.sample"
+uid="uid://c5ydlx4vw8tmv"
+path="res://.godot/imported/fall.wav-e0f1740f79e234895b6e23014ec91f6d.sample"
 
 [deps]
 
-source_file="res://assets/audio/bgm_run.wav"
-dest_files=["res://.godot/imported/bgm_run.wav-f45036653dada801c41dc80f9deb43d5.sample"]
+source_file="res://assets/sfx/fall.wav"
+dest_files=["res://.godot/imported/fall.wav-e0f1740f79e234895b6e23014ec91f6d.sample"]
 
 [params]
 

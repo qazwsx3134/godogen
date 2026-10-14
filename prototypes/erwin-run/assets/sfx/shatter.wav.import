@@ -2,13 +2,13 @@
 
 importer="wav"
 type="AudioStreamWAV"
-uid="uid://dl4etd1j0dhav"
-path="res://.godot/imported/bgm_boss.wav-785ffda56d0b6a5f0ae1f743d74b6dce.sample"
+uid="uid://bkhw0bf0k5p54"
+path="res://.godot/imported/shatter.wav-54762c92a7d1137924ed301659e49f0b.sample"
 
 [deps]
 
-source_file="res://assets/audio/bgm_boss.wav"
-dest_files=["res://.godot/imported/bgm_boss.wav-785ffda56d0b6a5f0ae1f743d74b6dce.sample"]
+source_file="res://assets/sfx/shatter.wav"
+dest_files=["res://.godot/imported/shatter.wav-54762c92a7d1137924ed301659e49f0b.sample"]
 
 [params]
 

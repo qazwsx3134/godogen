@@ -1,8 +1,8 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_yc10j"]
-[ext_resource type="AudioStream" path="res://assets/audio/bgm_run.wav" id="2_jscy8"]
-[ext_resource type="AudioStream" path="res://assets/audio/bgm_boss.wav" id="3_pm3ni"]
+[ext_resource type="AudioStream" path="res://assets/audio/bgm_main.mp3" id="2_jscy8"]
+[ext_resource type="AudioStream" path="res://assets/sfx/gallop.wav" id="3_pm3ni"]
 [ext_resource type="AudioStream" path="res://assets/audio/bgm_end.wav" id="4_y6deb"]
 [ext_resource type="Script" path="res://scripts/sfx.gd" id="5_og1vs"]
 [ext_resource type="Script" path="res://addons/proto_kit/music.gd" id="6_2wyq8"]
@@ -25,12 +25,17 @@
 [node name="Main" type="Node2D" unique_id=1349001729]
 script = ExtResource("1_yc10j")
 run_track = ExtResource("2_jscy8")
-boss_track = ExtResource("3_pm3ni")
+boss_track = ExtResource("2_jscy8")
 end_track = ExtResource("4_y6deb")
 
 [node name="Sfx" type="Node" parent="." unique_id=2095665431]
 unique_name_in_owner = true
 script = ExtResource("5_og1vs")
+
+[node name="Hooves" type="AudioStreamPlayer" parent="." unique_id=1014401001]
+unique_name_in_owner = true
+stream = ExtResource("3_pm3ni")
+volume_db = -15.0
 
 [node name="Music" type="Node" parent="." unique_id=425785293]
 unique_name_in_owner = true
@@ -71,8 +76,8 @@ centered = false
 unique_name_in_owner = true
 visible = false
 self_modulate = Color(0.36, 0.33, 0.46, 1)
-position = Vector2(560, 256)
-scale = Vector2(0.32, 0.32)
+position = Vector2(560, 238)
+scale = Vector2(0.44, 0.44)
 texture = ExtResource("10_fv21b")
 offset = Vector2(0, -145)
 hframes = 3

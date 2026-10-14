@@ -5,6 +5,8 @@ signal start_pressed
 signal retry_pressed(from_boss: bool)
 signal resume_pressed
 signal mute_toggled(muted: bool)
+## A phone turned upright (true) or back on its side (false). The game cannot be played upright.
+signal portrait_changed(upright: bool)
 
 @onready var title: Control = %Title
 @onready var start_button: Button = %StartButton
@@ -23,7 +25,8 @@ signal mute_toggled(muted: bool)
 @onready var again_button: Button = %AgainButton
 @onready var ending_title: Label = %EndingTitle
 @onready var fade: ColorRect = %Fade
-@onready var rotate_hint: Label = %RotateHint
+@onready var portrait: Control = %Portrait
+@onready var phone_icon: ColorRect = %Portrait/Phone
 
 var muted := false
 var _t := 0.0
@@ -51,7 +54,12 @@ func _process(delta: float) -> void:
 	_t += delta
 	press_label.modulate.a = 0.45 + 0.55 * absf(sin(_t * 2.4))
 	var win := DisplayServer.window_get_size()
-	rotate_hint.visible = win.y > win.x
+	var upright := DisplayServer.is_touchscreen_available() and win.y > win.x
+	if upright != portrait.visible:
+		portrait.visible = upright
+		portrait_changed.emit(upright)
+	if upright:  # the phone picture tips over onto its side, again and again
+		phone_icon.rotation = -PI / 2.0 * clampf(fposmod(_t, 2.0) - 0.6, 0.0, 0.6) / 0.6
 
 
 func show_only(panel: Control) -> void:

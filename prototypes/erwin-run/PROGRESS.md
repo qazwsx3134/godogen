@@ -1,10 +1,24 @@
 # erwin-run 進度
 
-最後更新：2026-10-14。專案說明、操作與 scene 清單見 `README.md`。
+最後更新：2026-10-14（回饋修正）。專案說明、操作與 scene 清單見 `README.md`。
 
 ## 狀態
 
-可以從頭玩到結局，網頁版已匯出：`build/web/`，上傳用的 zip 是 `build/erwin-run-web.zip`。還沒 commit，也還沒上傳 itch.io。
+可以從頭玩到結局，網頁版已匯出：`build/web/`，上傳用的 zip 是 `build/erwin-run-web.zip`。還沒上傳 itch.io。
+
+### 2026-10-14 使用者回饋（`docs/erwin-dino-game/todo.md`）已處理
+- 獸之巨人重生（小頭人臉大鬍子、長臂垂過膝、裸露腹肌、毛只在肩臂腿），`beast.tscn` 的 `ArmPivot`、`Face`、`HandRock` 依新圖重量。
+- 開場城牆依 `wall.png` 重生：平滑巨牆加立柱、紅屋頂小鎮。
+- 開場艾爾文頭上喊「ススメ——！！」（`player.tscn` 的 `%Shout`，播原音 `susume.wav`，0.9 秒後接士兵吶喊 `battle_cry.wav`），之後才出「調查兵團，出擊！」。
+- 背景不再淡出：廢墟在 42 秒後停止重複，換上帶崩塌斜坡的 `ruins_end.png` 捲出畫面；遠方的獸之巨人從右邊走進來，並放大到露出山頭（舊版整隻被中景擋住）。天空轉黃昏仍是色調漸變。
+- 標題封面只用自己生成的素材拼（`art_src/cover/compose.py`）。
+- 音效與音樂換成使用者提供的檔案：見 README「素材來源」。跑的時候有馬蹄聲（`main.tscn` 的 `%Hooves`，音高跟速度走）；倒下時馬嘶。舊的跑酷／Boss 晶片 BGM 已刪除（`render_music.gd` 可重產），網頁版資料包 3.3 MB。
+- 還是合成佔位音的事件：slash、kill、parry、perfect、hurt、warn、rock、roar、reach、levi、spin、boss_down、steam、land、ui、victory、over、whiff。
+- 兵長收尾台詞改成「嘖…又多活了一年啊，艾爾文。」
+- 手機直拿不能玩（`screens.tscn` 的 `%Portrait`）；網頁版用 Chromium 模擬 390×844／844×390 實測：直拿點不到開始、玩到一半轉直會暫停、轉回來停在暫停選單，無 console 錯誤。
+- 結局插畫重生（`art_src/gen/ending_art-r3`，附原作截圖當參考）：艾爾文右手斷掉、空袖子垂著，用左手舉蛋糕；兵長矮一個頭、黑色兩側剃短、白領巾、抱胸。`process_art.py` 把它下移 60px（`DROP`），上方用天空補，讓蛋糕不被標題帶蓋住；結局的統計帶壓成一條（統計在左、「再衝一次」在右），空袖子才露得出來。r2 是全身構圖的備選。
+- 頁面截圖 8 張：`publishing/screenshots/`。itch 上架資料（文案、欄位、embed 設定、封面 630×500）：`publishing/itch/`。
+- 驗證：`font`、`play:60` 測試通過；macOS 開視窗截圖檢查開場、廢墟捲出、遠方巨人、Boss 戰、兵長、結局。
 
 ## 已完成
 
@@ -31,7 +45,7 @@
 - `tools/process_art.py`：去背、用連通區塊切格（劍尖跨進下一格也不會切錯）、縮成像素尺寸、限色，背景用鏡像拼成無縫。附 `--self-test`。
 
 ### 音訊
-- BGM 三首（跑酷、Boss、結局），是原創的晶片音樂，由 `tools/render_music.gd` 產生到 `assets/audio/`。
+- BGM：跑酷與 Boss 是「Stroke of Destiny」（使用者提供），結局是 `tools/render_music.gd` 的晶片音樂。
 - 音效 21 種，用 synth 合成（`scripts/sfx.gd`）；在 `assets/sfx/` 放同名的 `.ogg` 就會換掉。
 
 ### 工程
@@ -51,8 +65,8 @@
    截圖工具用的是專案的 16:9 視窗，看不出手機的超寬比例：手機畫面要另外用 `web_landscape.mjs` 加 `--boss` 那類的流程看。
 2. **真手機試玩**（Android 與 iPhone 各一台）：觸控反應、全螢幕與鎖定橫向、震動、音樂在第一次點擊後有沒有開始播。手機開網頁要用 HTTPS 或 itch.io 的 Draft 頁面，區網的 http 引擎不會啟動。
 3. **手感調校**：真人玩過以後再調斬擊有效時間（0.2 秒）、預警時間（0.95 秒）、後段的出怪間隔。現在的平衡只用「完美機器人」量過（跑完全程滿血、約 40 次討伐、36 次彈反），沒有量過真人的失誤率。
-4. **上架 itch.io**（要的話）：建頁面、登入 butler 由使用者做；之後 `butler push build/web <user>/<game>:html5`。頁面要設橫向的 viewport，例如 1280×720，並勾選手機可玩。
-5. **commit**：等使用者決定。要 commit 的是 `prototypes/erwin-run/` 整個資料夾（`build/` 與 `art_src/gen/` 要不要進版控，也由使用者決定）。
+4. **上架 itch.io**：頁面 https://natsu-madao.itch.io/erwin-smith-run（目前是草稿）。文案與設定在 `publishing/itch/page.md`；還沒上傳。這台沒有 butler，瀏覽器擴充也沒連上：建頁面、登入 butler 由使用者做；之後 `butler push build/web <user>/<game>:html5`。頁面要設橫向的 viewport，例如 1280×720，並勾選手機可玩。
+5. **commit**：資料夾已進版控；這輪的改動還沒 commit。
 6. 可選：
    - 結局插畫裡的旗幟是樹的圖案，不是自由之翼（Codex 生成的）。在意的話用 edit 只改旗幟。
    - 遠景出現的獸之巨人目前只是縮小的剪影。
@@ -62,5 +76,6 @@
 
 - Codex 在 Herdr 裡啟動時，`-c` 參數會跳出一個警告框，會擋住它，要按 Esc 關掉。它也會先問「直接生成或只給 prompt」：派工單裡要先寫明使用者選了直接生成。
 - 素材更新後要先執行 `godot --headless --path . --editor --quit` 重新匯入，否則截圖或測試還是舊圖。
-- `build_scenes.gd --overwrite` 會蓋掉 scene：在編輯器手動改過 scene 之後就不要再重跑，先看 `git diff`。
+- `build_scenes.gd --overwrite` 會蓋掉 scene：在編輯器手動改過 scene 之後就不要再重跑，先看 `git diff`。它已經落後於 scene（沒有 `%Shout`、`%Portrait`，Boss 座標是舊的）：scene 才是來源。
+- macOS：Godot 在 `/Applications/Godot.app/Contents/MacOS/Godot`，跑測試與匯出要 `GODOT_BIN=` 指過去，`run_tests.sh` 要用 `bash` 執行（沒有執行權限）。
 - 遊戲裡新增了中文字，就要重跑 `subset_font.py --minimal`；字型測試會抓到缺字。

@@ -9,7 +9,7 @@ script = ExtResource("1_qx1v6")
 
 [node name="ArmPivot" type="Node2D" parent="." unique_id=1823128235]
 unique_name_in_owner = true
-position = Vector2(4, -174)
+position = Vector2(28, -194)
 
 [node name="Arm" type="Sprite2D" parent="ArmPivot" unique_id=1993398313]
 unique_name_in_owner = true
@@ -25,8 +25,8 @@ hframes = 3
 
 [node name="Face" type="Marker2D" parent="." unique_id=571543466]
 unique_name_in_owner = true
-position = Vector2(-30, -237.8)
+position = Vector2(-22, -222)
 
 [node name="HandRock" type="Marker2D" parent="." unique_id=851228344]
 unique_name_in_owner = true
-position = Vector2(20, -284.2)
+position = Vector2(40, -262)
