@@ -23,7 +23,7 @@
 
 ## 教訓紀錄（append-only；格式見 ~/claude-institution/rules/maintenance-protocol.md）
 
-做 Godot 原型到 itch.io 網頁版的完整做法與坑，見 skill `godot-prototype-to-itch`（原始檔在 `prototypes/godot-kit/skills/`）。
+做 Godot 原型到 itch.io 網頁版的完整做法與坑，見 skill `godot-prototype-to-itch`（原始檔在 `prototypes/godot-kit/skills/`，用 `prototypes/godot-kit/install_skills.sh` 複製安裝，不用 symlink）。
 
 - 2026-10-02 | 選卡鎖與震動間隔 | 用 `Time.get_ticks_msec()`（牆上時鐘）做玩法邏輯；測試用 `--fixed-fps 60`，遊戲時間比牆上時間快很多，鎖把機器人的點擊全吞掉，十幾個不相干的測試連環失敗 | 用 `create_timer(秒, true, false, true)`（遊戲時間）或可注入的時鐘 | 影響玩法的計時一律用遊戲時間
 - 2026-10-02 | 匯出版讀 `res://assets/x.ogg` | `FileAccess.file_exists` 在匯出版是 false（原檔不在 pck 裡） | `ResourceLoader.exists` 再 `load` | 資源存不存在一律問 ResourceLoader

@@ -485,7 +485,7 @@ fx.shaders[&"shockwave"] = preload("...")   # 新的 shader 特效，模板見 p
 
 **目前只有一個原型用，也還沒抽出來**：`juice.gd` 的三級回饋對照表（哪個事件算哪一級是這款遊戲的調校）、升級選卡面板與選卡鎖、`hero_stats.gd` 的能力疊加、敵人基底（依賴 `game.show_damage` 等介面）、載入畫面與製作名單面板的**畫面本身**（只有 `scene_loader.gd` 的邏輯抽出來了）、射線步進投射物（核心只有 8 行 `intersect_ray`，其餘是這款遊戲的碰撞規則）、`balance_run`（決定性的機器人平衡量測，依賴這款遊戲的 `main.gd`）。erwin-run（2026-10-14）又多了三個：**手機方向鎖**（`screens.tscn` 的 `%Portrait` 遮罩、`portrait_changed` 訊號、玩到一半轉直就暫停，加上 `main.gd` 的 `_phone_fullscreen()` 在第一次點擊時請求全螢幕並鎖橫向；任何只能橫玩或只能直玩的網頁原型都用得到）、**Parallax 收尾**（`main.gd` 的 `_ruins_leave()`：讓重複的圖層在不跳格的情況下捲出畫面，換上尾端收尾的圖）、**橫式手機的瀏覽器驗證**（`tools/web_landscape.mjs`，可以併進 `web_probe.mjs` 當 `--landscape`）。等第二個原型需要時再抽。
 
-沿用 sugarcane-tanks 做完整條流程的經驗見 skill `godot-prototype-to-itch`（原始檔在 `skills/godot-prototype-to-itch/`，用 symlink 掛進 `~/.claude/skills/`，跟 `cf-stack` 一樣）。角色原畫到動畫 sprite（Claude 挑圖、Codex 生圖、沒有影片 API 時手動生影片）見 skill `character-sprite-forge`（`skills/character-sprite-forge/`，同樣用 symlink）。像素打擊特效見 skill `pixel-vfx`（`skills/pixel-vfx/`，同樣用 symlink）。
+沿用 sugarcane-tanks 做完整條流程的經驗見 skill `godot-prototype-to-itch`（原始檔在 `skills/godot-prototype-to-itch/`）。角色原畫到動畫 sprite（Claude 挑圖、Codex 生圖、沒有影片 API 時手動生影片）見 skill `character-sprite-forge`（`skills/character-sprite-forge/`）。像素打擊特效見 skill `pixel-vfx`（`skills/pixel-vfx/`）。三個 skill 用 `./install_skills.sh` 複製進 `~/.claude/skills/`（見下方「維護」）。
 
 ## 維護
 
@@ -494,6 +494,9 @@ fx.shaders[&"shockwave"] = preload("...")   # 新的 shader 特效，模板見 p
 ./sync.sh <原型資料夾名>   # 讓新原型加入
 ./sync.sh --check         # 有副本和這裡不同就 exit 1
 ./sync.sh /絕對路徑/遊戲    # repo 外面的遊戲（也可以加 --check）；不帶參數的 ./sync.sh 只更新 prototypes/ 底下的
+./install_skills.sh        # 把 skills/ 底下的 skill 複製進 ~/.claude/skills/（新帳號 clone 後跑一次；改了 skill 再跑一次）
+./install_skills.sh --check            # 已安裝的副本缺少或過時就 exit 1
+./install_skills.sh --dest <資料夾>     # 裝到別的 skills 資料夾
 ```
 
 sugarcane-tanks 已經在 2026-10-04 搬出 repo，現在是 `/mnt/d/repo/godot/sugarcane-tanks`：它的 `addons/proto_kit/` 是副本，用 `./sync.sh /mnt/d/repo/godot/sugarcane-tanks` 更新，它的 `tools/*.sh` 靠 `GODOT_KIT` 或「隔壁有 `godogen/prototypes/godot-kit`」找到這裡。
@@ -505,4 +508,5 @@ sugarcane-tanks 已經在 2026-10-04 搬出 repo，現在是 `/mnt/d/repo/godot/
 3. `./sync.sh`，再跑每個使用中原型的測試。
 
 - **新增模組**：同樣的程式在第二個原型也出現時再抽進來，並在 `tests/test_proto_kit.gd` 補測試。
-- **為什麼用複製**：這個 repo 在 Windows／WSL 上 checkout 時，git 會把 symlink 變成純文字檔；Godot 匯出也需要實體檔案，所以用複製而不用 symlink。
+- **為什麼用複製**：這個 repo 在 Windows／WSL 上 checkout 時，git 會把 symlink 變成純文字檔；Godot 匯出也需要實體檔案，所以用複製而不用 symlink。skill 也一樣：`~/.claude/skills/` 裡的 symlink 指向某一台機器的 clone、不在 repo 裡，別的帳號拿不到。`install_skills.sh` 在每份副本放 `.godot-kit-skill` 標記，只更新自己裝的；同名但不是它裝的資料夾不碰，舊的 symlink 換成副本（只刪連結，不動目標）。
+- **改 skill**：只改 `godot-kit/skills/`，改完跑 `./install_skills.sh`。直接改 `~/.claude/skills/` 裡的副本，下次安裝會被蓋掉。
