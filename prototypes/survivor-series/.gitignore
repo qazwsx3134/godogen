@@ -1,2 +1,5 @@
 .godot/
 build/
+
+# Documentation screenshots are evidence, not runtime textures.
+/docs/**/*.import

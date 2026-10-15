@@ -3,12 +3,21 @@
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_3vyb7"]
 [ext_resource type="Texture2D" path="res://assets/pixel/heroes/man_32.png" id="2_qhqgy"]
 [ext_resource type="Texture2D" path="res://assets/pixel/heroes/woman_32.png" id="3_dqkch"]
+[ext_resource type="Shader" path="res://assets/fx/player_readability.gdshader" id="3_fjrip"]
 [ext_resource type="Texture2D" path="res://assets/ui/bar_back.png" id="4_dqkch"]
 [ext_resource type="Texture2D" path="res://assets/pixel/fx/fist.png" id="4_tuyoq"]
 [ext_resource type="Texture2D" path="res://assets/pixel/fx/umbrella.png" id="5_fjrip"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_g2els"]
 radius = 14.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_smehm"]
+shader = ExtResource("3_fjrip")
+shader_parameter/outline_color = Color(1, 0.9, 0.55, 0.95)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ur7pv"]
+shader = ExtResource("3_fjrip")
+shader_parameter/outline_color = Color(1, 0.9, 0.55, 0.95)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qlg0r"]
 
@@ -138,6 +147,16 @@ scale = Vector2(2.8125, 2.8125)
 texture = ExtResource("2_qhqgy")
 offset = Vector2(0, -16)
 
+[node name="Readability" type="Sprite2D" parent="Motion/Visual/BodyMan" unique_id=1859646113]
+visible = false
+z_index = 10
+z_as_relative = false
+material = SubResource("ShaderMaterial_smehm")
+position = Vector2(0, 8)
+scale = Vector2(2.8125, 2.8125)
+texture = ExtResource("2_qhqgy")
+offset = Vector2(0, -16)
+
 [node name="BodyWoman" type="Node2D" parent="Motion/Visual" unique_id=339260538]
 unique_name_in_owner = true
 visible = false
@@ -226,6 +245,16 @@ scale = Vector2(2.8125, 2.8125)
 texture = ExtResource("3_dqkch")
 offset = Vector2(0, -16)
 
+[node name="Readability" type="Sprite2D" parent="Motion/Visual/BodyWoman" unique_id=74595931]
+visible = false
+z_index = 10
+z_as_relative = false
+material = SubResource("ShaderMaterial_ur7pv")
+position = Vector2(0, 8)
+scale = Vector2(2.8125, 2.8125)
+texture = ExtResource("3_dqkch")
+offset = Vector2(0, -16)
+
 [node name="Fist" type="Node2D" parent="Motion/Visual" unique_id=2077698964]
 unique_name_in_owner = true
 
@@ -275,6 +304,8 @@ texture = ExtResource("5_fjrip")
 
 [node name="HpTrail" type="ProgressBar" parent="." unique_id=1123277290]
 unique_name_in_owner = true
+z_index = 10
+z_as_relative = false
 custom_minimum_size = Vector2(34, 4)
 offset_left = -23.61111
 offset_top = -100.0
@@ -300,6 +331,8 @@ theme_override_styles/panel = SubResource("StyleBoxTexture_tuyoq")
 
 [node name="HpBar" type="ProgressBar" parent="." unique_id=832783500]
 unique_name_in_owner = true
+z_index = 10
+z_as_relative = false
 custom_minimum_size = Vector2(34, 4)
 offset_left = -23.61111
 offset_top = -100.0

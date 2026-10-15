@@ -1,0 +1,182 @@
+{
+  "engine": "Desktop WebKit; 390x844 touch viewport; not a physical iPhone",
+  "checks": [
+    "WebKit loads the isolated QA build",
+    "WebKit touch starts and completes the QA run",
+    "WebKit results reclaim combat objects",
+    "WebKit persists QA progress through IDBFS reload",
+    "WebKit touch opens and closes the shop",
+    "no WebKit, shader, load or Godot script errors"
+  ],
+  "snapshots": {
+    "menu": {
+      "actors": 0,
+      "best_combo": 0,
+      "bursts": 0,
+      "coins": 0,
+      "combo": 0,
+      "effects": 0,
+      "elapsed": 0,
+      "hazards": 0,
+      "hits": 0,
+      "hp": 100,
+      "kills": 0,
+      "level": 1,
+      "levels": {},
+      "living": 0,
+      "offers": [],
+      "pickups": 0,
+      "player": [
+        600,
+        840
+      ],
+      "projectiles": 0,
+      "punches": 0,
+      "qa": true,
+      "save_path": "user://survivor_meta_qa.json",
+      "session_duration": 1,
+      "smoke": 0,
+      "sounds": {},
+      "state": "MENU",
+      "stick": [
+        0,
+        0
+      ],
+      "vfx": {
+        "dropped": {
+          "captions": 0,
+          "particles": 0,
+          "shaders": 0,
+          "shapes": 0
+        },
+        "limits": {
+          "particles": 500,
+          "shaders": 12,
+          "shapes": 80
+        },
+        "particles": 0,
+        "shaders": 0,
+        "shapes": 0
+      },
+      "warnings": 0,
+      "weapons": [],
+      "won": false
+    },
+    "result": {
+      "actors": 0,
+      "best_combo": 1,
+      "bursts": 0,
+      "coins": 150,
+      "combo": 1,
+      "effects": 0,
+      "elapsed": 1,
+      "hazards": 0,
+      "hits": 0,
+      "hp": 110,
+      "kills": 1,
+      "level": 1,
+      "levels": {
+        "punch": 1
+      },
+      "living": 0,
+      "offers": [],
+      "pickups": 0,
+      "player": [
+        600,
+        840
+      ],
+      "projectiles": 0,
+      "punches": 1,
+      "qa": true,
+      "save_path": "user://survivor_meta_qa.json",
+      "session_duration": 1,
+      "smoke": 0,
+      "sounds": {
+        "finish": 1,
+        "launch": 1,
+        "punch": 1,
+        "start": 1
+      },
+      "state": "RESULTS",
+      "stick": [
+        0,
+        0
+      ],
+      "vfx": {
+        "dropped": {
+          "captions": 0,
+          "particles": 0,
+          "shaders": 0,
+          "shapes": 0
+        },
+        "limits": {
+          "particles": 500,
+          "shaders": 12,
+          "shapes": 80
+        },
+        "particles": 0,
+        "shaders": 0,
+        "shapes": 0
+      },
+      "warnings": 0,
+      "weapons": [
+        "punch"
+      ],
+      "won": true
+    },
+    "reloaded": {
+      "actors": 0,
+      "best_combo": 0,
+      "bursts": 0,
+      "coins": 150,
+      "combo": 0,
+      "effects": 0,
+      "elapsed": 0,
+      "hazards": 0,
+      "hits": 0,
+      "hp": 100,
+      "kills": 0,
+      "level": 1,
+      "levels": {},
+      "living": 0,
+      "offers": [],
+      "pickups": 0,
+      "player": [
+        600,
+        840
+      ],
+      "projectiles": 0,
+      "punches": 0,
+      "qa": true,
+      "save_path": "user://survivor_meta_qa.json",
+      "session_duration": 1,
+      "smoke": 0,
+      "sounds": {},
+      "state": "MENU",
+      "stick": [
+        0,
+        0
+      ],
+      "vfx": {
+        "dropped": {
+          "captions": 0,
+          "particles": 0,
+          "shaders": 0,
+          "shapes": 0
+        },
+        "limits": {
+          "particles": 500,
+          "shaders": 12,
+          "shapes": 80
+        },
+        "particles": 0,
+        "shaders": 0,
+        "shapes": 0
+      },
+      "warnings": 0,
+      "weapons": [],
+      "won": false
+    }
+  },
+  "errors": []
+}

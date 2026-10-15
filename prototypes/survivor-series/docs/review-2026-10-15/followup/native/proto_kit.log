@@ -1,0 +1,32 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+saved: user://proto_kit_test/scenes/child.tscn (2 nodes)
+saved: user://proto_kit_test/scenes/nested/parent.tscn (7 nodes)
+skip (exists): user://proto_kit_test/scenes/nested/parent.tscn
+saved: user://proto_kit_test/scenes/nested/parent.tscn (1 nodes)
+saved: user://proto_kit_test/scenes/cached.tscn (1 nodes)
+saved: user://proto_kit_test/scenes/cached.tscn (3 nodes)
+(expected) the ERROR lines below are save_scene failures under test
+ERROR: user://proto_kit_test/scenes/bad.tscn: scene reference missing: user://proto_kit_test/scenes/missing.tscn
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] save_scene (res://addons/proto_kit/scene_builder.gd:74)
+       [1] _test_scene_builder (res://tests/test_proto_kit.gd:155)
+       [2] _run (res://tests/test_proto_kit.gd:26)
+ERROR: user://proto_kit_test/scenes/dropped.tscn: 4 nodes built, 3 after reload (a node added under a sub-scene instance, or one without an owner, is dropped)
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] save_scene (res://addons/proto_kit/scene_builder.gd:74)
+       [1] _test_scene_builder (res://tests/test_proto_kit.gd:159)
+       [2] _run (res://tests/test_proto_kit.gd:26)
+ERROR: user://proto_kit_test/scenes/odd.unknown: cannot save: File unrecognized
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] save_scene (res://addons/proto_kit/scene_builder.gd:74)
+       [1] _test_scene_builder (res://tests/test_proto_kit.gd:160)
+       [2] _run (res://tests/test_proto_kit.gd:26)
+ERROR: Unrecognized binary resource file: 'user://proto_kit_test/loader/broken.scn'.
+   at: open (core/io/resource_format_binary.cpp:943)
+ERROR: Failed loading resource: user://proto_kit_test/loader/broken.scn.
+   at: _load (core/io/resource_loader.cpp:317)
+PROTO KIT TESTS PASSED

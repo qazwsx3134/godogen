@@ -66,7 +66,7 @@ func blocked(at: Vector2) -> bool:
 			return true
 	return false
 
-## Earliest contact of a projectile's swept bounds with a roadblock (0..1), or INF.
+## Earliest contact of a swept projectile circle with a roadblock (0..1), or INF.
 ## Scan every crossed grid cell: fast shots can cross several cells in a single step.
 func sweep_block(from: Vector2, to: Vector2, radius: float) -> float:
 	var area := Rect2(from, Vector2.ZERO).expand(to).grow(radius)
@@ -80,8 +80,38 @@ func sweep_block(from: Vector2, to: Vector2, radius: float) -> float:
 				if seen.has(rect):
 					continue
 				seen[rect] = true
-				first = minf(first, _segment_rect(from, to, rect.grow(radius)))
+				first = minf(first, _sweep_circle_rect(from, to, radius, rect))
 	return first
+
+## A rectangle expanded by a circle has straight sides and round corners.
+## The grown box is only a broadphase; its empty corner squares must not stop a shot.
+static func _sweep_circle_rect(from: Vector2, to: Vector2, radius: float, rect: Rect2) -> float:
+	if radius <= 0.0:
+		return _segment_rect(from, to, rect)
+	if is_inf(_segment_rect(from, to, rect.grow(radius))):
+		return INF
+	var first: float = minf(
+		_segment_rect(from, to, Rect2(rect.position - Vector2(radius, 0), rect.size + Vector2(radius * 2.0, 0))),
+		_segment_rect(from, to, Rect2(rect.position - Vector2(0, radius), rect.size + Vector2(0, radius * 2.0))))
+	for corner: Vector2 in [rect.position, Vector2(rect.end.x, rect.position.y), rect.end, Vector2(rect.position.x, rect.end.y)]:
+		first = minf(first, _segment_circle(from, to, corner, radius))
+	return first
+
+static func _segment_circle(from: Vector2, to: Vector2, center: Vector2, radius: float) -> float:
+	var offset := from - center
+	var c: float = offset.length_squared() - radius * radius
+	if c <= 0.0:
+		return 0.0
+	var movement := to - from
+	var a: float = movement.length_squared()
+	if is_zero_approx(a):
+		return INF
+	var b: float = offset.dot(movement)
+	var discriminant: float = b * b - a * c
+	if discriminant < 0.0:
+		return INF
+	var t: float = (-b - sqrt(discriminant)) / a
+	return t if t >= 0.0 and t <= 1.0 else INF
 
 static func _segment_rect(from: Vector2, to: Vector2, rect: Rect2) -> float:
 	var movement := to - from

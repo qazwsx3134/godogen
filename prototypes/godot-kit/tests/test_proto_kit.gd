@@ -435,10 +435,9 @@ func _test_pixel_vfx() -> void:
 	var expected: float = randf()
 	seed(42)
 	fx.burst(Vector2.ZERO, &"hit", 20)
-	fx.effect(&"explosion", Vector2.ZERO, Vector2(64, 64), 0.5, &"fire")
+	var boom: Node2D = fx.effect(&"explosion", Vector2.ZERO, Vector2(64, 64), 0.5, &"fire")
 	_expect(randf() == expected, "pixel_vfx: effects never touch the global random generator")
 	_expect(fx.count() == 21, "pixel_vfx: a burst adds its particles and an effect adds one node")
-	var boom: Node2D = fx.get_child(0)
 	_expect(boom.material is ShaderMaterial and boom.material.get_shader_parameter(&"tone_2") == fx.tones(&"fire")[2], "pixel_vfx: shader effects get their palette as tone uniforms")
 	fx.max_particles = 5
 	fx.burst(Vector2.ZERO, &"hit", 50)
@@ -455,6 +454,35 @@ func _test_pixel_vfx() -> void:
 	_expect(PixelVfx.fade(0.9) == 1.0 and PixelVfx.fade(0.5) == 0.66 and PixelVfx.fade(0.1) == 0.33, "pixel_vfx: fades step instead of sliding")
 	fx.pixel = 3.0
 	_expect(fx.snap(Vector2(4.4, -1.6)) == Vector2(3, -3), "pixel_vfx: snap() puts points on the art-pixel grid")
+	fx.clear()
+	fx.slash(Vector2.ZERO, 0.0, 80.0, 1.7, &"hit")
+	_expect(fx._shapes.size() == 1 and fx._shapes[0].kind == &"slash", "pixel_vfx: a swing alone never implies a collision")
+	_expect(fx.ground_layer.z_index < fx.z_index and not fx.ground_layer.z_as_relative, "pixel_vfx: ground rings render on their own absolute layer")
+	fx.clear()
+	fx.caption(Vector2.ZERO, "BAM", &"hit")
+	fx.caption(Vector2.ZERO, "BAM", &"hit")
+	_expect(fx.stats().shapes == 1 and fx.stats().dropped.captions == 1, "pixel_vfx: captions are throttled")
+	fx._process(fx.caption_interval + 0.01)
+	fx.caption(Vector2.ZERO, "BAM", &"hit")
+	_expect(fx.stats().shapes == 1, "pixel_vfx: captions resume after the cooldown")
+	fx.clear()
+	fx.max_particles = 5
+	fx.burst(Vector2.ZERO, &"hit", 10)
+	for i: int in 80:
+		fx.ring(Vector2.ZERO, 10, 30, &"hit")
+	_expect(fx.stats().shapes == 72, "pixel_vfx: cosmetic shapes leave eight collision slots")
+	for i: int in 12:
+		fx.star(Vector2.ZERO, &"hit")
+	fx.max_shader_effects = 3
+	for i: int in 4:
+		fx.effect(&"gas", Vector2.ZERO, Vector2(64, 64), 0.5, &"poison")
+	var stats: Dictionary = fx.stats()
+	_expect(stats.particles == 5 and stats.shapes == 80 and stats.shaders == 3 and fx.count() == 88, "pixel_vfx: every renderer category respects its actual budget")
+	_expect(stats.dropped.particles == 5 and stats.dropped.shapes == 12 and stats.dropped.shaders == 1, "pixel_vfx: telemetry counts rejected requests")
+	stats.dropped.particles = 999
+	_expect(fx.stats().dropped.particles == 5, "pixel_vfx: telemetry cannot mutate renderer counters")
+	fx.clear()
+	_expect(fx.count() == 0 and fx.stats().dropped.particles == 0 and is_instance_valid(fx.ground_layer), "pixel_vfx: clear reclaims effects, resets counters and retains the ground renderer")
 	fx.free()
 
 func _test_camera_shake() -> void:

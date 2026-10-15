@@ -1,0 +1,72 @@
+extends Node
+const VFX = preload("res://addons/proto_kit/pixel_vfx.gd")
+const GAME = preload("res://scenes/game.tscn")
+const SHOT = preload("res://scenes/wave.tscn")
+var game: Node
+var clock: float = 0.0
+var tick: int = 0
+var frozen: bool = false
+func _ready() -> void:
+	game = GAME.instantiate()
+	game.get_node("Services/Meta").save_path = "user://density_preview_meta.json"
+	add_child(game)
+	game.set_physics_process(false)
+	game.start_run()
+	var street = game.street
+	street.clear()
+	street.spawn_left = 10000.0
+	street.surge_left = 10000.0
+	street.build.weapons.clear()
+	street.build.levels.clear()
+	street.player.hurt_cooldown = 1000.0
+	street.rng.seed = 42
+	for i: int in 140:
+		var enemy = street.spawn_enemy(i % 4, street.player.position + Vector2.RIGHT.rotated(i * 2.399) * (160.0 + i % 8 * 46.0))
+		enemy.hp = 100000.0
+		if i % 4 == 1:
+			enemy.hazard_left = 0.01
+func _process(delta: float) -> void:
+	if frozen:
+		return
+	clock += delta
+	tick += 1
+	var street = game.street
+	var at: Vector2 = street.player.position
+	if tick % 6 == 1:
+		for i: int in 40:
+			var shot = SHOT.instantiate()
+			street.projectiles.add_child(shot)
+			shot.velocity = Vector2.RIGHT.rotated(i * TAU / 40.0 + tick * 0.1) * 160.0
+			shot.damage = 1.0
+			shot.force = 0.0
+			shot.lifetime = 2.0
+			shot.launch(at)
+	if tick % 4 == 1:
+		for i: int in 16:
+			var spot := at + Vector2.RIGHT.rotated(i * 2.399) * (120 + i % 4 * 60)
+			street.fx.effect(&"explosion" if i % 2 == 0 else &"gas", spot, Vector2(150, 150), 0.5, &"firecracker" if i % 2 == 0 else &"fart")
+	for i: int in 20:
+		var spot := at + Vector2.RIGHT.rotated(i * 2.399 + tick * 0.03) * (80 + i % 8 * 35)
+		street.fx.burst(spot, &"hit", 5)
+		street.fx.ring(spot, 10, 60, &"hit")
+		street.fx.star(spot, &"hit")
+	street._smoke(at + Vector2(120, 0))
+	street.step(minf(delta, 1.0 / 60.0), Vector2.ZERO, clock)
+	game.refresh_hud()
+	if tick >= 33:
+		# A controlled capacity frame, independent of each renderer's wall-clock frame rate.
+		street.fx.clear()
+		for i: int in 16:
+			var spot := at + Vector2.RIGHT.rotated(i * 2.399) * (120 + i % 4 * 60)
+			street.fx.effect(&"explosion" if i % 2 == 0 else &"gas", spot, Vector2(150, 150), 0.5, &"firecracker" if i % 2 == 0 else &"fart")
+		for i: int in 100:
+			var spot := at + Vector2.RIGHT.rotated(i * 2.399) * (80 + i % 8 * 35)
+			street.fx.burst(spot, &"hit", 10)
+			street.fx.star(spot, &"hit")
+		for child: Node in street.fx.get_children():
+			if child is VFX.ShaderEffect and not child.is_queued_for_deletion():
+				child._process(0.12)
+		street._refresh_player_readability()
+		frozen = true
+		get_tree().paused = true
+		JavaScriptBridge.eval("window.__densityReady = " + JSON.stringify(game.snapshot()))

@@ -26,6 +26,10 @@ const Build = preload("res://scripts/run_build.gd")
 @export var explosive_palettes: Array[StringName] = [&"blast", &"firecracker"]
 ## Floating damage numbers on screen at once; further hits show none until some fade.
 @export var max_numbers: int = 40
+## Reveal the hero silhouette only when this many nearby actors or shots obscure the body.
+@export var readability_enemies: int = 8
+@export var readability_projectiles: int = 12
+@export var readability_radius: float = 100.0
 @export var magnet_radius: float = 70.0
 ## Off-screen enemies left behind for this long while the hero walks away reappear ahead of the hero.
 @export var relocate_after: float = 2.5
@@ -105,6 +109,8 @@ func clear() -> void:
 			holder.remove_child(child)
 			child.queue_free()
 	_bursts.clear()
+	grid.rebuild([])
+	player.set_readability(false)
 	fx.clear()
 	big_gem = null
 	shake.trauma = 0.0
@@ -280,6 +286,7 @@ func step(delta: float, direction: Vector2, elapsed: float) -> void:
 			_hurt(cloud.damage, "smoke")
 	arsenal.step(delta)
 	_step_projectiles(delta)
+	_refresh_player_readability()
 	_step_pickups(delta)
 	var recovery: float = build.stat(&"recovery")
 	if recovery > 0.0:
@@ -362,6 +369,18 @@ func _pick_kind(weights: PackedFloat32Array) -> int:
 		if roll <= 0.0:
 			return i
 	return 0
+
+func _refresh_player_readability() -> void:
+	var crowded: bool = grid.query(player.position, readability_radius).size() >= readability_enemies
+	if not crowded:
+		var nearby: int = 0
+		for shot: Node2D in projectiles.get_children():
+			if not shot.is_queued_for_deletion() and shot.position.distance_squared_to(player.position) <= readability_radius * readability_radius:
+				nearby += 1
+				if nearby >= readability_projectiles:
+					crowded = true
+					break
+	player.set_readability(crowded)
 
 func _step_projectiles(delta: float) -> void:
 	for shot: Node2D in projectiles.get_children():

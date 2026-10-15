@@ -46,10 +46,10 @@ python3 prototypes/godot-kit/tools/web/patch_idbfs.py prototypes/survivor-series
 | 檔案 | 可調整內容 |
 |---|---|
 | `scenes/game.tscn` | 主流程、`session_duration`、金幣換算（每次揍飛、每分鐘、勝利獎勵、金幣面額）、共用服務與各畫面 |
-| `scenes/street.tscn` | `Map`（`Ground` 地磚、夜市群場景與權重、每格出現機率、起點淨空半徑）、`World`（y-sort：道具、敵人、主角）、`heroes` 清單、Player 起點、四類代表性敵人、`Camera` 的 `zoom`、`Markers`（畫面外菱形的顏色、大小）；bounds 大小、敵人／特效／寶石／煙霧上限、磁吸半徑、掉落機率、落後搬移秒數 `relocate_after`、精英在場的生成倍率、`Surge` 群組（間隔、人數、橫幅文字） |
+| `scenes/street.tscn` | `Map`（`Ground` 地磚、夜市群場景與權重、每格出現機率、起點淨空半徑）、`World`（y-sort：道具、敵人、主角）、`heroes` 清單、Player 起點、四類代表性敵人、`Camera` 的 `zoom`、`Markers`（畫面外菱形的顏色、大小）；bounds 大小、敵人／寶石／煙霧上限、`readability_*`（近身密度觸發主角輪廓）、磁吸半徑、掉落機率、落後搬移秒數 `relocate_after`、精英在場的生成倍率、`Surge` 群組（間隔、人數、橫幅文字） |
 | `scenes/props/*.tscn` | 8 種地圖道具（攤位、燈籠柱含暖光暈與濕地倒影、花台、三角錐、護柱、停放機車、水果箱），腳底在原點；`Block/Footprint` 長方形就是路障（擋主角、敵人與飛行投射物）；根節點 `prop.gd` 的 `hp`（0＝打不破）、`hit_radius` 與掉落 |
 | `scenes/clusters/*.tscn` | 夜市群：`market_row`、`market_double`、`roadblock`；在 `street.tscn` 的 `Map.cluster_scenes`／`cluster_weights`／`cluster_chance` 調出現率 |
-| `scenes/player.tscn` | `BodyMan`／`BodyWoman` 兩套外觀（共用 `Fist`，執行時只顯示選中的一套）、HpBar；移速、拳頭距離、血量、受傷無敵時間 |
+| `scenes/player.tscn` | `BodyMan`／`BodyWoman` 兩套外觀（共用 `Fist`，執行時只顯示選中的一套）、各自的 `Readability` 密集戰鬥輪廓、HpBar（z=10）；移速、拳頭距離、血量、受傷無敵時間 |
 | `data/heroes/man.tres`、`woman.tres` | 主角：起手武器、血量與移速倍率、揮擊距離與回彈、選單文字 |
 | `scenes/smoker.tscn`、`bike.tscn`、`car.tscn`、`fatty.tscn` | 敵人外觀、預警線、HpBar；交通工具的 `direction_textures`（5 方向圖） |
 | `scenes/wave.tscn`、`slipper.tscn`、`pearl.tscn`、`firecracker.tscn`、`incense.tscn`、`lantern.tscn` | 投射物：`Visual/Art` 像素圖（`assets/pixel/fx/`，舊的向量圖形隱藏在同一個 Visual 下）、碰撞半徑 `radius`、影子 `shadow_size`、特效配色 `palette`、拖尾 `trail`（ember／spark／drip）、旋轉速度 |
@@ -94,7 +94,7 @@ uv run --no-project --with fonttools python prototypes/godot-kit/tools/subset_fo
 ## 測試
 
 ```bash
-bash prototypes/godot-kit/tools/run_tests.sh prototypes/survivor-series growth:600 playable:600 scaffold heroes:60 fusion:60 view:60
+bash prototypes/godot-kit/tools/run_tests.sh prototypes/survivor-series growth:600 playable:600 scaffold heroes:60 fusion:60 view:60 combat_regressions:60
 bash prototypes/godot-kit/sync.sh --check survivor-series
 ```
 
@@ -115,10 +115,11 @@ bash prototypes/godot-kit/sync.sh --check survivor-series
   - 靜態文字保留、原始 scene 不被改動、字型與畫面主題、震屏開關
 - **view（24 項）**：鏡頭距離、y 排序與圖層、投射物離地與橢圓軌道、攤位擋路、打破道具掉寶且不會長回來、拳頭打道具、落後敵人搬到前方（精英不搬）、下班人潮與橫幅、精英在場時降低生成、畫面外寶箱指示、重抽。
 - **scaffold（7 項）**：最早的入口骨架。
+- **combat_regressions（38 項）**：圓角掃掠、敵人／路障接觸順序、到期引爆、煙霧滿額可見、各自的材質時間軸、暫停／到期／清場、主角輪廓與 140 敵人滿載配額。
 
 介面截圖（不會跳視窗，在 Xvfb 虛擬螢幕跑）：`env -u WAYLAND_DISPLAY xvfb-run -a -s "-screen 0 1280x1280x24" godot --path . --fixed-fps 60 --resolution 390x844 -s res://tools/ui_tour.gd -- --out=<資料夾>`，依序存主選單、戰鬥（精英、機車預警、畫面外寶箱）、選卡、暫停、結算、商店。`capture.sh` 在 Linux 也會自動用 Xvfb。
 
-測試用自己的存檔路徑，跑完會刪掉。測試全部用遊戲時間推進。瀏覽器檢查：匯出 `Web QA` 後 `python3 -m http.server 8793 -d build/qa &`，再 `node tools/browser_check.mjs --playwright <playwright-core 路徑> --chromium <chrome 路徑>`（用法見檔頭）。
+測試用自己的存檔路徑，跑完會刪掉。測試全部用遊戲時間推進。瀏覽器檢查：匯出 `Web QA` 後 `python3 -m http.server 8793 -d build/qa &`，再 `node tools/browser_check.mjs --playwright <playwright-core 路徑> --chromium <chrome 路徑>`（用法見檔頭；加 `--production-url <正式版網址>` 同時檢查短局入口與存檔隔離）。WebKit 檢查使用 `tools/browser_webkit_check.mjs`，傳相同的 QA 網址，以及 `--playwright`／`--webkit` 路徑；這是桌面 WebKit 相容性檢查。
 
 `addons/proto_kit/` 由 `../godot-kit/sync.sh survivor-series` 同步，不能直接改副本。本版使用的模組：FloatingStick、TimeControl、SfxBank、Synth、CameraShake、SceneBuilder、TestKit、FontCheck、AtomicFile；Music 已接入，但沒有指定音樂。
 
@@ -132,3 +133,9 @@ bash prototypes/godot-kit/sync.sh --check survivor-series
 - 傷害煙霧擁有獨立材質與持續地面範圍，裝飾 shader 滿額仍可見；生命週期跟著戰鬥暫停。
 - 正式／QA 匯出與存檔分開；瀏覽器預算讀真正的 PixelVfx 統計，粒子 500、形狀 80、shader 12。形狀預算保留最後 8 格給命中；危險煙霧另受 `max_hazards=10` 限制。
 - VFX 以 PokéSurvivor 的短打擊、像素粒子與清楚圖層為參考，保留台灣夜市美術；見 [調整紀錄](docs/vfx-polish-2026-10-15.md)。
+
+## 2026-10-15 第二輪收尾
+
+圓角路障改用精確 swept circle；清場同時清空敵人空間索引。主角附近有至少 8 個敵人或 12 個投射物時顯示輪廓，血條位於特效上方；場景保留可調整的男女兩套輪廓 Sprite2D。
+
+遊戲 7 組回歸與 godot-kit 套件、Chromium 完整觸控流程、WebKit 開局／結算／存檔重載及兩種引擎的滿載畫面均已確認。詳細證據與真機限制見 [第二輪收尾紀錄](docs/validation-followup-2026-10-15.md)。
