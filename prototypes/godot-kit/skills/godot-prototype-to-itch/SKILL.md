@@ -51,6 +51,10 @@ description: 把 Godot 4.7 的 2D 手機直式原型一路做到 itch.io 網頁�
 - **匯出模式要維持「Export all resources」**：用名字在執行時找的檔案（丟 `事件名.ogg` 換聲音、`title_bg.png`）沒有 scene 引用，改成只匯出 scene 與相依資源它們就默默消失。boot splash 的匯入版是多餘的，用 `exclude_filter` 排除（原檔照樣打包）。→ `references/web-release.md`
 - **主場景的 `_ready()` 裡換場景會留下舊場景**（要 `call_deferred`），而且 headless 測試看不到；載入畫面只在狀態是 LOADED 時才換場景。→ `references/testing-and-balance.md`
 - **GitHub 下載很慢時**（這台 WSL 約 36 KB/s），Godot 範本是 zip，用 HTTP Range 只抓 `web_nothreads_release.zip`（13.6 MB，不是 1.28 GB）。kit 的 `tools/web/fetch_web_templates.py` 已有現成工具（debt-commission 那份是舊版）。
+- **重複的 `Parallax2D` 要「捲走」而不是淡出**：等某一份複本蓋滿整個畫面時才設 `repeat_size = Vector2.ZERO`（太早關，旁邊那份會瞬間消失），再用 `get_global_transform_with_canvas()` 讀回位置補 `scroll_offset`，讓切換那一幀連續；最後一份換成尾端有收尾（崩塌斜坡）的圖，切點要在畫面外。實作：erwin-run `scripts/main.gd` 的 `_ruins_leave()`。
+- **生成的插畫會被 UI 文字帶蓋住**：結局圖、標題圖在原圖上看起來很好，進遊戲後上下的文字帶剛好蓋住蛋糕和斷手。生圖前先量畫面的安全區（文字帶以外的高度），寫進 prompt；生完一定在遊戲裡截圖看，不夠就把圖下移、上方補天空，或把文字帶壓扁、移到角落。
+- **放在兩層 `Parallax2D` 之間的遠景物件可能整個被擋住**：erwin-run 遠方的獸之巨人從第一版就被中景山丘完全蓋住，沒人發現。這類物件要在遊戲裡截圖確認看得到。
+- **headless 探針遇到 parse error 會一直等下去**：`-s probe.gd` 裡 `await` 一個永遠不會來的訊號，指令卡到 timeout。臨時探針一律加 `timeout 120`。`var x := node.prop`（`node` 沒有型別）會讓整支腳本 parse error，改寫成 `var x: bool = ...`。
 - **Windows 上的 Godot 編輯器用自己的範本資料夾**（`%APPDATA%\Godot\export_templates\4.7.stable`），在 WSL 裝範本對它沒用。
 
 ## References
@@ -59,7 +63,7 @@ description: 把 Godot 4.7 的 2D 手機直式原型一路做到 itch.io 網頁�
 - `references/agent-workflow.md`：派工單範本、檔案分工、等待與驗收、Herdr 指令、auto mode 會擋什麼
 - `references/testing-and-balance.md`：測試迴圈、時間域陷阱、變異檢查、機器人量測
 - `references/art-pipeline.md`：洋紅去背、切格、動畫條、prompt 規則、匯入設定
-- `references/feel-audio-haptics.md`：回饋中樞、事件→聲音、長音效、BGM、手機震動規則
+- `references/feel-audio-haptics.md`：回饋中樞、事件→聲音、長音效、BGM、手機震動規則、使用者給的音檔怎麼轉
 
 ## 相關
 
