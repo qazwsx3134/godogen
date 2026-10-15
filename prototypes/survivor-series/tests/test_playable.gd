@@ -325,7 +325,7 @@ func run() -> void:
 		await _frames()
 	game.auto_play = false
 	_expect(game.state == game.State.RESULTS and street.kills > 0, "an autopiloted short run reaches the results")
-	_expect(street.enemies.get_child_count() == 0 and street.hazards.get_child_count() == 0 and street.effects.get_child_count() == 0 and street.pickups.get_child_count() == 0, "results reclaim all runtime objects")
+	_expect(street.enemies.get_child_count() == 0 and street.hazards.get_child_count() == 0 and street.fx.count() == 0 and street.pickups.get_child_count() == 0, "results reclaim all runtime objects")
 	game.results.get_node("%Retry").pressed.emit()
 	_expect(game.state == game.State.RUNNING and game.elapsed == 0.0 and street.kills == 0, "result retry button starts a clean run")
 	game.session_duration = 600.0

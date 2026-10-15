@@ -4,9 +4,9 @@ extends Node2D
 ## Palettes are five tones: outline, dark, mid, light, white.
 ##
 ## Two kinds of effect:
-## - Shapes, drawn by this node's _draw: square particles (burst, spark, trail) and shape entries (ring, slash,
+## - Shapes, drawn by this node and its ground layer: square particles (burst, spark, trail) and shape entries (ring, slash,
 ##   star, pop, caption). Add your own with register(kind, draw) + add_shape(kind, ...).
-## - Shader effects: one child node per effect running a canvas shader from `shaders` (explosion, smoke), with
+## - Shader effects: one child node per effect running a canvas shader from `shaders` (explosion, smoke, gas), with
 ##   `progress` driven 0 → 1 over its life. Add your own by putting a shader in `shaders`; see pixel_vfx.gdshaderinc.
 ##
 ## Cosmetic randomness uses its own generator, so spawning effects never moves the game's global randf().
@@ -17,6 +17,9 @@ extends Node2D
 @export var max_particles: int = 500
 @export var max_shapes: int = 80
 @export var max_shader_effects: int = 12
+## Absolute canvas layer for ground rings, below actors at z=0.
+@export var ground_z_index: int = -1
+@export var caption_interval: float = 0.45
 ## Caption font, drawn at 11 px so one font pixel is one art pixel; null uses the default theme font.
 @export var font: Font
 @export var font_size: int = 11
@@ -35,6 +38,7 @@ extends Node2D
 @export var shaders: Dictionary = {
 	"explosion": preload("res://addons/proto_kit/pixel_vfx_explosion.gdshader"),
 	"smoke": preload("res://addons/proto_kit/pixel_vfx_smoke.gdshader"),
+	"gas": preload("res://addons/proto_kit/pixel_vfx_gas.gdshader"),
 }
 var rng := RandomNumberGenerator.new()
 var _parts: Array = []
@@ -42,6 +46,25 @@ var _shapes: Array = []
 var _kinds: Dictionary = {}
 var _tones: Dictionary = {}
 var _drawn: bool = false
+var _caption_left: float = 0.0
+var _dropped := {"particles": 0, "shapes": 0, "shaders": 0, "captions": 0}
+var ground_layer: GroundLayer
+
+class GroundLayer extends Node2D:
+	var source: Node2D
+	func _draw() -> void:
+		for shape: Dictionary in source._shapes:
+			if shape.kind == &"ring":
+				source._draw_ring(shape, 1.0 - shape.t / shape.life, self)
+
+func _ready() -> void:
+	ground_layer = GroundLayer.new()
+	ground_layer.name = "GroundRings"
+	ground_layer.source = self
+	ground_layer.z_as_relative = false
+	ground_layer.z_index = ground_z_index
+	add_child(ground_layer)
+
 
 ## A running shader effect: draws one rect that its shader fills; progress goes 0 → 1 over `life` seconds.
 class ShaderEffect extends Node2D:
@@ -71,11 +94,22 @@ func clear() -> void:
 			child.queue_free()
 	_parts.clear()
 	_shapes.clear()
+	_caption_left = 0.0
+	for key: String in _dropped:
+		_dropped[key] = 0
+	if is_instance_valid(ground_layer):
+		ground_layer.queue_redraw()
 	queue_redraw()
 
 ## Live particles, shapes and shader effects.
 func count() -> int:
 	return _parts.size() + _shapes.size() + get_children().filter(func(c: Node) -> bool: return c is ShaderEffect and not c.is_queued_for_deletion()).size()
+
+## Renderer counts and rejected cosmetic requests, for telemetry and capacity tuning.
+func stats() -> Dictionary:
+	return {"particles": _parts.size(), "shapes": _shapes.size(), "shaders": count_effects(),
+		"limits": {"particles": max_particles, "shapes": max_shapes, "shaders": max_shader_effects},
+		"dropped": _dropped.duplicate()}
 
 ## The five colours of `palette`.
 func tones(palette: StringName) -> Array:
@@ -118,6 +152,7 @@ func trail(at: Vector2, palette: StringName, kind: StringName) -> void:
 ## One square particle (`cells` art pixels wide) with drag and optional gravity (world px/s²).
 func particle(at: Vector2, velocity: Vector2, color: Color, life: float, cells: int = 1, gravity: float = 0.0) -> void:
 	if _parts.size() >= max_particles:
+		_dropped.particles += 1
 		return
 	_parts.append({"at": at, "v": velocity, "color": color, "life": life, "t": 0.0, "size": cells, "g": gravity})
 
@@ -127,26 +162,35 @@ func particle(at: Vector2, velocity: Vector2, color: Color, life: float, cells: 
 func ring(at: Vector2, from_radius: float, to_radius: float, palette: StringName, life: float = 0.3, thick: int = 1) -> void:
 	add_shape(&"ring", at, palette, life, {"r0": from_radius, "r1": to_radius, "thick": thick})
 
-## A swing: an arc around `at` facing `angle`, thick in the middle and thin at the ends, with an impact star.
+## A directional swing. Collision code emits impact stars only when something is hit.
 func slash(at: Vector2, angle: float, radius: float, arc: float, palette: StringName, heavy: bool = false) -> void:
-	add_shape(&"slash", at, palette, 0.22, {"angle": angle, "radius": radius, "arc": arc, "heavy": heavy})
-	star(at + Vector2.RIGHT.rotated(angle) * radius * 0.7, palette, heavy)
+	add_shape(&"slash", at, palette, 0.18 if heavy else 0.12, {"angle": angle, "radius": radius, "arc": arc, "heavy": heavy})
 
 ## An eight-ray impact star; its second frame is wider and turned.
 func star(at: Vector2, palette: StringName, big: bool = false) -> void:
-	add_shape(&"star", at, palette, 0.28 if big else 0.2, {"size": 8.0 if big else 5.0})
+	add_shape(&"star", at, palette, 0.14 if big else 0.09, {"size": 6.0 if big else 3.0})
 
 ## A solid flash that shrinks fast: white core, light and mid rings. `radius` in world px.
 func pop(at: Vector2, palette: StringName, radius: float, life: float = 0.14) -> void:
 	add_shape(&"pop", at, palette, life, {"radius": radius})
 
 ## A pixel-font word that pops and rises ("BAM!").
-func caption(at: Vector2, text: String, palette: StringName, life: float = 0.6) -> void:
+func caption(at: Vector2, text: String, palette: StringName, life: float = 0.45) -> void:
+	if _caption_left > 0.0:
+		_dropped.captions += 1
+		return
+	_caption_left = caption_interval
 	add_shape(&"text", at, palette, life, {"text": text})
 
 ## A shape of a registered kind: drawn every frame by its draw callable until `life` runs out.
 func add_shape(kind: StringName, at: Vector2, palette: StringName, life: float, extra: Dictionary = {}) -> void:
-	if _shapes.size() >= max_shapes or not _kinds.has(kind):
+	if not _kinds.has(kind):
+		return
+	# Reserve the last eight slots for collision feedback; rings and swings are cosmetic.
+	var collision: bool = kind in [&"star", &"pop"]
+	var budget: int = max_shapes if collision else maxi(0, max_shapes - mini(8, floori(max_shapes / 4.0)))
+	if _shapes.size() >= budget:
+		_dropped.shapes += 1
 		return
 	var entry := {"kind": kind, "at": at, "pal": tones(palette), "life": life, "t": 0.0}
 	entry.merge(extra)
@@ -164,7 +208,10 @@ func register(kind: StringName, draw: Callable) -> void:
 ## when the cap is reached or the name is unknown.
 func effect(name: StringName, at: Vector2, size: Vector2, life: float, palette: StringName, params: Dictionary = {}, pivot := Vector2(0.5, 0.5)) -> Node2D:
 	var shader: Shader = shaders.get(name)
-	if shader == null or count_effects() >= max_shader_effects:
+	if shader == null:
+		return null
+	if count_effects() >= max_shader_effects:
+		_dropped.shaders += 1
 		return null
 	var material := ShaderMaterial.new()
 	material.shader = shader
@@ -194,6 +241,7 @@ func count_effects() -> int:
 # --- update and draw -----------------------------------------------------------------------------------------
 
 func _process(delta: float) -> void:
+	_caption_left = maxf(0.0, _caption_left - delta)
 	var drag: float = pow(0.9, 60.0 * delta)
 	for i: int in range(_parts.size() - 1, -1, -1):
 		var p: Dictionary = _parts[i]
@@ -210,6 +258,8 @@ func _process(delta: float) -> void:
 			_shapes.remove_at(i)
 	if not _parts.is_empty() or not _shapes.is_empty() or _drawn:
 		queue_redraw()
+		if is_instance_valid(ground_layer):
+			ground_layer.queue_redraw()
 
 ## `at` moved onto the art-pixel grid.
 func snap(at: Vector2) -> Vector2:
@@ -220,37 +270,40 @@ static func fade(left: float) -> float:
 	return 1.0 if left > 0.66 else (0.66 if left > 0.33 else 0.33)
 
 ## One square of `cells` art pixels at `at` (snapped). Only valid inside a draw callable.
-func cell(at: Vector2, color: Color, cells: int = 1) -> void:
-	draw_rect(Rect2(snap(at), Vector2.ONE * pixel * cells), color)
+func cell(at: Vector2, color: Color, cells: int = 1, canvas: Node2D = null) -> void:
+	var target: Node2D = canvas if canvas != null else self
+	target.draw_rect(Rect2(snap(at), Vector2.ONE * pixel * cells), color)
 
 func _draw() -> void:
 	_drawn = not _parts.is_empty() or not _shapes.is_empty()
 	for s: Dictionary in _shapes:
-		_kinds[s.kind].call(s, 1.0 - s.t / s.life)
+		if s.kind != &"ring":
+			_kinds[s.kind].call(s, 1.0 - s.t / s.life)
 	for p: Dictionary in _parts:
 		cell(p.at, Color(p.color, fade(1.0 - p.t / p.life)), p.size)
 
-func _draw_ring(s: Dictionary, left: float) -> void:
+func _draw_ring(s: Dictionary, left: float, canvas: Node2D = null) -> void:
 	var radius: float = lerpf(s.r0, s.r1, 1.0 - left)
 	var steps: int = maxi(10, ceili(TAU * radius / (pixel * 1.5)))
 	var alpha: float = fade(left)
 	for i: int in steps:
 		var a: float = TAU * i / steps
 		var at := Vector2(cos(a) * radius, sin(a) * radius * 0.75)
-		cell(s.at + at, Color(s.pal[3], alpha), s.thick)
+		cell(s.at + at, Color(s.pal[3], alpha * 0.75), s.thick, canvas)
 		if s.thick > 1:
-			cell(s.at + at * 0.94, Color(s.pal[2], alpha))
+			cell(s.at + at * 0.94, Color(s.pal[2], alpha * 0.75), 1, canvas)
 
 func _draw_slash(s: Dictionary, left: float) -> void:
 	var half: float = minf(s.arc, TAU) * 0.5
+	var sweep: float = (1.0 - left) * half * 0.65
 	var radius: float = s.radius * (0.72 + 0.28 * (1.0 - left))
 	var cells: int = maxi(8, ceili(radius * half * 2.0 / pixel))
-	var depth_max: int = 6 if s.heavy else 4
+	var depth_max: int = 4 if s.heavy else 2
 	var alpha: float = fade(left)
 	var angle: float = snappedf(s.angle, PI / 8.0)
 	for i: int in cells + 1:
 		var u: float = float(i) / cells
-		var a: float = angle - half + u * half * 2.0
+		var a: float = angle - half + sweep + u * half * 2.0
 		var depth: int = roundi(depth_max * sin(PI * u) * left)
 		for d: int in range(-1, depth + 1):
 			var tone: int = 0 if d < 0 else (4 if d == depth else (3 if d > depth / 2 else 2))

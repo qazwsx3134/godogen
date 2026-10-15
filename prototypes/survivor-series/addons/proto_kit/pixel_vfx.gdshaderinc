@@ -6,8 +6,8 @@
 //   void fragment() { COLOR = pv_shade(UV); }
 // See pixel_vfx_smoke.gdshader. Read `progress` (0 → 1 over the effect's life) and `seed` inside density/heat.
 //
-// Look rules: one art pixel per `pixel` rect px, hard edges (no dithering, no alpha blending), four fill tones
-// plus a one-pixel outline in tone_0. Fading out is the shape breaking up, not transparency.
+// One art pixel per `pixel` rect px. Solid impacts use pv_shade, four fill tones and a tone_0 outline.
+// Smoke/gas use discrete pixel contours with translucent fills; no dithering or blurred edges.
 
 uniform float progress : hint_range(0.0, 1.0) = 0.3; // 0 start, 1 gone; driven by PixelVfx
 uniform float seed = 0.0;

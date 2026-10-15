@@ -66,6 +66,40 @@ func blocked(at: Vector2) -> bool:
 			return true
 	return false
 
+## Earliest contact of a projectile's swept bounds with a roadblock (0..1), or INF.
+## Scan every crossed grid cell: fast shots can cross several cells in a single step.
+func sweep_block(from: Vector2, to: Vector2, radius: float) -> float:
+	var area := Rect2(from, Vector2.ZERO).expand(to).grow(radius)
+	var low := Vector2i((area.position / CELL).floor())
+	var high := Vector2i((area.end / CELL).floor())
+	var seen: Dictionary = {}
+	var first: float = INF
+	for x: int in range(low.x, high.x + 1):
+		for y: int in range(low.y, high.y + 1):
+			for rect: Rect2 in _cells.get(Vector2i(x, y), []):
+				if seen.has(rect):
+					continue
+				seen[rect] = true
+				first = minf(first, _segment_rect(from, to, rect.grow(radius)))
+	return first
+
+static func _segment_rect(from: Vector2, to: Vector2, rect: Rect2) -> float:
+	var movement := to - from
+	var enter: float = 0.0
+	var leave: float = 1.0
+	for axis: int in 2:
+		if is_zero_approx(movement[axis]):
+			if from[axis] < rect.position[axis] or from[axis] > rect.end[axis]:
+				return INF
+			continue
+		var a: float = (rect.position[axis] - from[axis]) / movement[axis]
+		var b: float = (rect.end[axis] - from[axis]) / movement[axis]
+		enter = maxf(enter, minf(a, b))
+		leave = minf(leave, maxf(a, b))
+		if enter > leave:
+			return INF
+	return enter
+
 ## Moves a circle of `radius` at `at` out of any roadblock it overlaps. It leaves along the shallowest side and
 ## slides `slide` px along that face toward whichever end is the shorter way round to `goal`.
 func push_out(at: Vector2, radius: float, goal: Vector2 = Vector2.ZERO, slide: float = 0.0) -> Vector2:

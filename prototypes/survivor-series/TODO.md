@@ -85,6 +85,14 @@
   - [x] 2026-10-14 補齊圖示與最後的向量圖形：Codex 一次生 3 張 3×3 圖示表（`art_src/icons/sheets/`，`--route codex-cli`），`tools/slice_icon_sheet.py` 切成 27 個 24 px 像素圖示（武器 7、被動 8、進化 7、融合 5；滷肉飯、零錢沿用掉落物圖）；`tools/wire_icons.gd` 接上所有卡片與 HUD 格，並把拳頭、雨傘、飛行中的臭豆腐、機車騎士換成像素圖（舊向量圖形留著、隱藏）。機車騎士用 `projectile.gd` 的 `upright`：不跟著方向旋轉，只左右翻面。總覽 `art_src/icons/all-contact.png`。
 - [ ] T-115 PokéSurvivor 機制候選（見 [pokesurvivor-reference.md](docs/pokesurvivor-reference.md) 第 4 節）：土地公廟（25 秒強化）、廟口泉水（站著回血）、可引爆的瓦斯桶（敵我都炸）、只能帶一個的攜帶道具、治療者／護盾者／召喚者／光束／區域砲／自爆／跳躍等敵人行為（數字見第 10 節）、精英改成雙模式 Boss AI 加半血發怒、隨機事件（同類敵人潮、黃金時段、護送迷路的人、帶錢小偷）、HUD 改成頂端細經驗條＋底部武器圖示格。
 
+## 2026-10-15 Review 修正
+
+- [x] P1：危險煙霧改為 scene 自帶 shader 與傷害邊界，不受裝飾配額影響。
+- [x] P1：高速投射物以 swept bounds 查路障，敵人與路障按接觸順序處理。
+- [x] P2：短局入口限定獨立 `Web QA` feature，QA 存檔與正式進度隔離。
+- [x] P2：VFX 遙測讀實際粒子／形狀／shader 計數、上限與略過數；瀏覽器檢查同步更新。
+- [x] VFX：方向揮擊與碰撞星芒分開、縮短命中節奏、地面圈分層、爆竹／臭氣不同輪廓、字幕節流。細節見 `docs/vfx-polish-2026-10-15.md`。
+
 ## P2：對外試玩版本
 
 - [ ] T-204 設定畫面：音量、震屏、傷害數字；用 AtomicFile 保存。

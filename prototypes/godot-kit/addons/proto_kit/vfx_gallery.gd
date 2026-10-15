@@ -16,6 +16,7 @@ func _initialize() -> void:
 	var args: PackedStringArray = OS.get_cmdline_user_args()
 	out = args[0] if not args.is_empty() else "user://vfx_gallery.png"
 	var back := ColorRect.new()
+	back.z_index = -20
 	back.color = Color("5a524c")
 	back.size = Vector2(4096, 4096)
 	root.add_child(back)

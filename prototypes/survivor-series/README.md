@@ -30,7 +30,16 @@ python3 -m http.server 8793 --bind 127.0.0.1 --directory prototypes/survivor-ser
 
 在本機開啟 `http://localhost:8793/index.html`。不要直接雙擊 `index.html`；手機遠端試玩要放在 HTTPS 網站上。Web preset 使用 Compatibility 渲染，沒有 threads 或 GDExtension。
 
-命令列參數（加在 `--` 之後）：`--autoplay` 讓自動駕駛代玩（錄影與壓力測試用），`--duration=<秒>` 縮短一局（上限 600），`--seed=<n>` 固定刷怪亂數。
+QA 命令列參數（Godot 編輯器執行檔，或帶 `survivor_qa` feature 的匯出；加在 `--` 之後）：`--autoplay` 讓自動駕駛代玩（錄影與壓力測試用），`--duration=<秒>` 縮短一局（上限 600），`--seed=<n>` 固定刷怪亂數。QA 使用 `user://survivor_meta_qa.json`，正式進度為 `user://survivor_meta.json`。
+
+正式 `Web` 忽略網址的 `duration`。需要短局時匯出獨立的 `Web QA` preset（`build/qa/index.html?duration=25`），完成時顯示「測試局完成」，獎勵與紀錄留在 QA 存檔。
+
+```bash
+mkdir -p prototypes/survivor-series/build/qa
+godot --headless --path prototypes/survivor-series --export-release "Web QA" build/qa/index.html
+python3 prototypes/godot-kit/tools/web/patch_idbfs.py prototypes/survivor-series/build/qa/index.js
+```
+
 
 ## 可編輯場景與資料
 
@@ -44,9 +53,10 @@ python3 -m http.server 8793 --bind 127.0.0.1 --directory prototypes/survivor-ser
 | `data/heroes/man.tres`、`woman.tres` | 主角：起手武器、血量與移速倍率、揮擊距離與回彈、選單文字 |
 | `scenes/smoker.tscn`、`bike.tscn`、`car.tscn`、`fatty.tscn` | 敵人外觀、預警線、HpBar；交通工具的 `direction_textures`（5 方向圖） |
 | `scenes/wave.tscn`、`slipper.tscn`、`pearl.tscn`、`firecracker.tscn`、`incense.tscn`、`lantern.tscn` | 投射物：`Visual/Art` 像素圖（`assets/pixel/fx/`，舊的向量圖形隱藏在同一個 Visual 下）、碰撞半徑 `radius`、影子 `shadow_size`、特效配色 `palette`、拖尾 `trail`（ember／spark／drip）、旋轉速度 |
-| street 的 `Fx`（kit 的 `addons/proto_kit/pixel_vfx.gd`） | 所有命中特效，參考 PokéSurvivor 畫在素材像素格上：方塊粒子、像素光圈、揮擊弧、命中星芒、中心閃光、像素字幕（砰！噗～彈！），以及硬邊的像素爆炸（鞭炮、屁）與流氓的像素煙霧（kit 的 shader 特效）。Inspector 可調每種武器的 5 色配色 `palettes`、上限。street 的 `explosive_palettes` 決定哪些 blast 有火球。看效果：`tools/fx_demo.gd`（在 Xvfb 跑）；做法與新增特效：skill `pixel-vfx` |
+| street 的 `Fx`（kit 的 `addons/proto_kit/pixel_vfx.gd`） | 方塊粒子、0.12／0.18 秒方向揮擊、碰撞後才出現的 0.09／0.14 秒星芒、0.3 秒爆竹、0.55 秒半透明臭氣。地面圈在 `ground_z_index=-1`，打擊在 z=8；字幕間隔至少 0.45 秒。Inspector 可調 5 色配色、各類上限。`stats()` 回報粒子、形狀、shader 與略過數，`snapshot().effects` 為裝飾 renderer 的實際總數。危險煙霧由自己的 scene 管理。 |
 | `assets/fx/hit_flash.tres` | 敵人受擊閃白（四種敵人的 `Visual/Art` 共用；modulate 三個通道都超過 1 就變白色剪影） |
-| `scenes/pickup.tscn`、`smoke.tscn` | 掉落物與煙霧外觀 |
+| `scenes/pickup.tscn` | 掉落物外觀 |
+| `scenes/smoke.tscn` | `Footprint/DangerArea` 填色、`DangerBoundary` 圓形傷害邊界、`Cloud` 的 shader／尺寸／位置。`radius` 同步縮放顯示範圍；`lifetime` 同時決定消失與停止傷害。邊界在角色下方、低矮煙絲在腳邊上方，不佔裝飾 shader 配額。 |
 | `scenes/menu.tscn` | 主角選擇（`HeroMan`／`HeroWoman`／`HeroNote`）與選單文字 |
 | `scenes/hud.tscn`、`menu.tscn`、`results.tscn`、`pause.tscn`、`upgrades.tscn`、`upgrade_card.tscn`、`shop.tscn`、`shop_item.tscn` | 介面版面、文字與間距。hud：頂端經驗條 `Experience`、計時、`EliteBar`（精英在場才出現）、`Banner`（下班人潮）、底部 `Weapons`／`Passives` 格；menu／results／pause／shop 的 `Box` 是夜市雙框盒子，upgrades 的 `Glass` 是半透明面板、`Reroll` 重抽；震屏開關在 pause |
 | `scenes/weapon_slot.tscn`、`passive_slot.tscn` | HUD 的武器／被動格（圖示、沒圖示時的字、等級點） |
@@ -108,10 +118,17 @@ bash prototypes/godot-kit/sync.sh --check survivor-series
 
 介面截圖（不會跳視窗，在 Xvfb 虛擬螢幕跑）：`env -u WAYLAND_DISPLAY xvfb-run -a -s "-screen 0 1280x1280x24" godot --path . --fixed-fps 60 --resolution 390x844 -s res://tools/ui_tour.gd -- --out=<資料夾>`，依序存主選單、戰鬥（精英、機車預警、畫面外寶箱）、選卡、暫停、結算、商店。`capture.sh` 在 Linux 也會自動用 Xvfb。
 
-測試用自己的存檔路徑，跑完會刪掉。測試全部用遊戲時間推進。瀏覽器檢查：建好網頁版後 `python3 -m http.server 8793 -d build/web &`，再 `node tools/browser_check.mjs --playwright <playwright-core 路徑> --chromium <chrome 路徑>`（用法見檔頭）。
+測試用自己的存檔路徑，跑完會刪掉。測試全部用遊戲時間推進。瀏覽器檢查：匯出 `Web QA` 後 `python3 -m http.server 8793 -d build/qa &`，再 `node tools/browser_check.mjs --playwright <playwright-core 路徑> --chromium <chrome 路徑>`（用法見檔頭）。
 
 `addons/proto_kit/` 由 `../godot-kit/sync.sh survivor-series` 同步，不能直接改副本。本版使用的模組：FloatingStick、TimeControl、SfxBank、Synth、CameraShake、SceneBuilder、TestKit、FontCheck、AtomicFile；Music 已接入，但沒有指定音樂。
 
 ## 驗收界線
 
 平衡與效能目前只有 headless 自動駕駛的模擬與桌面瀏覽器的冒煙測試，數字見 [horde-spec.md](docs/horde-spec.md) 的「模擬紀錄」。真機幀率、觸控手感、聲音與「夠不夠爽」仍需要真人試玩。四個參考 repo 的研究見 [reference-repos.md](docs/reference-repos.md)。
+
+## 2026-10-15 P1／P2 與 VFX 調整
+
+- 快速直飛／回旋投射物以整段路徑查路障，依第一次接觸排序敵人；在牆面停止或引爆。拋物、落物、軌道與伸展武器保持各自的穿越規則。
+- 傷害煙霧擁有獨立材質與持續地面範圍，裝飾 shader 滿額仍可見；生命週期跟著戰鬥暫停。
+- 正式／QA 匯出與存檔分開；瀏覽器預算讀真正的 PixelVfx 統計，粒子 500、形狀 80、shader 12。形狀預算保留最後 8 格給命中；危險煙霧另受 `max_hazards=10` 限制。
+- VFX 以 PokéSurvivor 的短打擊、像素粒子與清楚圖層為參考，保留台灣夜市美術；見 [調整紀錄](docs/vfx-polish-2026-10-15.md)。

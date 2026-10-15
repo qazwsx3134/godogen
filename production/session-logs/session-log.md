@@ -10361,3 +10361,89 @@ prototypes/survivor-series/tests/test_view.gd
 36854fe update
 ---
 
+## Session End: 20261014_154251
+### Commits
+188a844 erwin-run: feedback round — beast titan, wall, susume, ending, audio, portrait lock
+### Uncommitted Changes
+prototypes/erwin-run/.forge/ledger.jsonl
+prototypes/erwin-run/.forge/route-proofs.json
+prototypes/erwin-run/.godot/editor/editor_layout.cfg
+prototypes/erwin-run/.godot/editor/editor_script_doc_cache.res
+prototypes/erwin-run/.godot/editor/filesystem_cache10
+prototypes/erwin-run/.godot/editor/project_metadata.cfg
+prototypes/erwin-run/.godot/editor/script_editor_cache.cfg
+prototypes/erwin-run/.godot/exported/133200997/export-234fb6894ec6226e856ab7f825500d3d-player.scn
+prototypes/erwin-run/.godot/exported/133200997/export-3ad5c15c4f3250da0cc7c1af1770d85f-main.scn
+prototypes/erwin-run/.godot/exported/133200997/export-86714d093e490150b85662544f0c1949-beast.scn
+prototypes/erwin-run/.godot/exported/133200997/export-f4dd2558d8e192684fbae2f0a4360311-screens.scn
+prototypes/erwin-run/.godot/exported/133200997/file_cache
+prototypes/erwin-run/.godot/imported/Cubic11.ttf-c7991ab0f496a25ed73d0d913b150012.fontdata
+prototypes/erwin-run/.godot/imported/Cubic11.ttf-c7991ab0f496a25ed73d0d913b150012.md5
+prototypes/erwin-run/.godot/imported/beast_arm.png-6ced9269c50dca6c109e3e86822cb94f.ctex
+prototypes/erwin-run/.godot/imported/beast_arm.png-6ced9269c50dca6c109e3e86822cb94f.md5
+prototypes/erwin-run/.godot/imported/beast_body.png-145f96b96b9b55888738e187466ba81f.ctex
+prototypes/erwin-run/.godot/imported/beast_body.png-145f96b96b9b55888738e187466ba81f.md5
+prototypes/erwin-run/.godot/imported/ending_art.png-50295502ae99d5c82e059f9a97f95e36.ctex
+prototypes/erwin-run/.godot/imported/ending_art.png-50295502ae99d5c82e059f9a97f95e36.md5
+prototypes/erwin-run/.godot/imported/title_art.png-4f3a3fc727d10b01830a2a1ad6478441.ctex
+prototypes/erwin-run/.godot/imported/title_art.png-4f3a3fc727d10b01830a2a1ad6478441.md5
+prototypes/erwin-run/.godot/imported/wall_gate.png-905fd0f0c797bdee7a8e5956f0c9776e.ctex
+prototypes/erwin-run/.godot/imported/wall_gate.png-905fd0f0c797bdee7a8e5956f0c9776e.md5
+prototypes/erwin-run/.godot/uid_cache.bin
+prototypes/erwin-run/build/erwin-run-web.zip
+prototypes/erwin-run/build/web/index.html
+prototypes/erwin-run/build/web/index.pck
+---
+
+## Session End: 20261014_154452
+### Commits
+b249eb7 erwin-run: stop tracking ignored caches and build output
+188a844 erwin-run: feedback round — beast titan, wall, susume, ending, audio, portrait lock
+### Uncommitted Changes
+production/session-logs/agent-audit.log
+production/session-logs/session-log.md
+---
+
+## Session End: 20261014_154649
+### Commits
+b249eb7 erwin-run: stop tracking ignored caches and build output
+188a844 erwin-run: feedback round — beast titan, wall, susume, ending, audio, portrait lock
+### Uncommitted Changes
+production/session-logs/agent-audit.log
+production/session-logs/session-log.md
+---
+
+## Session End: 20261015_100616
+### Commits
+19eb669 Record erwin-run learnings: kit candidates, itch skill notes, lessons
+### Uncommitted Changes
+production/session-logs/agent-audit.log
+production/session-logs/session-log.md
+---
+
+## Session End: 20261015_101152
+### Commits
+0bd08fe godot-kit: install skills as copies instead of symlinks
+19eb669 Record erwin-run learnings: kit candidates, itch skill notes, lessons
+### Uncommitted Changes
+production/session-logs/agent-audit.log
+production/session-logs/session-log.md
+---
+
+## Session End: 20261015_103056
+### Commits
+0bd08fe godot-kit: install skills as copies instead of symlinks
+19eb669 Record erwin-run learnings: kit candidates, itch skill notes, lessons
+### Uncommitted Changes
+production/session-logs/agent-audit.log
+production/session-logs/session-log.md
+prototypes/godot-kit/addons/proto_kit/pixel_vfx.gd
+prototypes/survivor-series/export_presets.cfg
+prototypes/survivor-series/scripts/game.gd
+prototypes/survivor-series/scripts/map.gd
+prototypes/survivor-series/scripts/meta.gd
+prototypes/survivor-series/scripts/projectile.gd
+prototypes/survivor-series/scripts/street.gd
+prototypes/survivor-series/tools/browser_check.mjs
+---
+

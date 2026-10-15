@@ -1,8 +1,8 @@
-// Phone-shaped browser check of the Web build (build/web), driven by real touch input.
-//   python3 -m http.server 8793 -d prototypes/survivor-series/build/web &
+// Phone-shaped browser check of the Web QA build (build/qa), driven by real touch input.
+//   python3 -m http.server 8793 -d prototypes/survivor-series/build/qa &
 //   node tools/browser_check.mjs [--url http://127.0.0.1:8793/index.html] [--duration 25] [--out dir]
 //        [--playwright <path to playwright-core>] [--chromium <chrome binary>]
-// A run is shortened with index.html?duration=N (game.gd reads it on Web only). Covers: menu, touch start and
+// A run is shortened with index.html?duration=N (only the Web QA preset accepts it). Covers: menu, touch start and
 // drag, level-up cards, pause, a full run to the results, retry, home, shop, and coins surviving a page reload (IDBFS).
 import {createRequire} from 'node:module';
 import fs from 'node:fs';
@@ -44,7 +44,10 @@ try {
  await page.goto(url,{waitUntil:'load',timeout:60000});
  await until('MENU',60000);
  await page.screenshot({path:path.join(out,'phone-menu.png')});
- const coinsBefore=(await tel()).coins;
+ const menuState=await tel();
+ expect(menuState.qa&&menuState.session_duration===duration,'QA feature enables the short run');
+ expect(menuState.save_path==='user://survivor_meta_qa.json','QA progress is isolated from production');
+ const coinsBefore=menuState.coins;
  await click('start');
  await until('RUNNING',10000);
  expect(true,'real touch starts the game');
@@ -84,7 +87,8 @@ try {
  const started=Date.now();
  for(let s=await tel();s.state!=='RESULTS';s=await tel()){
   if(s.state==='UPGRADE')await choose();
-  expect(s.living<=140&&s.effects<=32&&s.hazards<=10,'runtime object budgets hold');
+  const fx=s.vfx;
+  expect(s.living<=140&&s.hazards<=10&&fx.particles<=fx.limits.particles&&fx.shapes<=fx.limits.shapes&&fx.shaders<=fx.limits.shaders&&s.effects===fx.particles+fx.shapes+fx.shaders,'actual renderer budgets hold');
   if(Date.now()-started>duration*1000*6+60000)throw new Error('run did not finish');
   await page.waitForTimeout(1000);
  }

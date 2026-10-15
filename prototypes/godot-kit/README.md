@@ -395,11 +395,12 @@ func _exit_tree() -> void: loader.cancel()             # 沒人領的載入任�
 
 ## pixel_vfx.gd：像素打擊特效
 
-PokéSurvivor 式的像素特效，一個節點畫完：方塊粒子（`burst`、`spark`、`trail`）、格子拼的形狀（`ring`、`slash`、`star`、`pop`、`caption`），以及 shader 特效（`effect(&"explosion" | &"smoke", ...)`，硬邊、一像素外框、不用抖動點）。全部對齊同一個素材像素格（`pixel`），淡出分三段，配色是每組 5 色。用自己的亂數產生器，不動全域 `randf()`。
+PokéSurvivor 式的像素特效：方塊粒子（`burst`、`spark`、`trail`）、格子形狀（`ring`、`slash`、`star`、`pop`、`caption`），以及 shader（`explosion` 短爆竹、`smoke` 薄霧、`gas` 低矮臭氣）。素材像素格由 `pixel` 統一；煙與氣體採半透明填色和離散輪廓，不用抖動點。亂數獨立於遊戲。
 
+地面圈由 `ground_z_index=-1` 的子層繪製，其餘跟隨 Fx 圖層。`slash` 只畫揮擊，實際碰撞後才呼叫 `star`。字幕至少間隔 `caption_interval=0.45` 秒。粒子／形狀／shader 有各自上限，`stats()` 提供真實計數、預算與略過數；形狀保留最多 8 格給命中。會造成傷害的持續區域必須自帶場景視覺，不透過可略過的 `effect()`。
 ```gdscript
 fx.spark(chest, direction, &"hit")
-fx.effect(&"explosion", at, Vector2.ONE * 180, 0.7, &"fire")
+fx.effect(&"explosion", at, Vector2.ONE * 180, 0.3, &"fire")
 fx.register(&"cross", func(e, left): ...)   # 新的形狀
 fx.shaders[&"shockwave"] = preload("...")   # 新的 shader 特效，模板見 pixel_vfx.gdshaderinc
 ```
