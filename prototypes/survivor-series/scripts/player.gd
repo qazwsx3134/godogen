@@ -57,6 +57,11 @@ func set_hero(def: Resource) -> void:
 func set_shield(charges: int) -> void:
 	umbrella.visible = charges > 0
 
+## Keep the selected hero identifiable when nearby actors or projectiles obscure the base art.
+func set_readability(enabled: bool) -> void:
+	body_man.get_node("Readability").visible = enabled
+	body_woman.get_node("Readability").visible = enabled
+
 func reset(limit: float = max_hp, damage_reduction: float = 0.0, speed_bonus: float = 0.0) -> void:
 	if _pose != null and _pose.is_valid():
 		_pose.kill()
@@ -78,6 +83,7 @@ func reset(limit: float = max_hp, damage_reduction: float = 0.0, speed_bonus: fl
 	walk_phase = 0.0
 	_refresh_bar()
 	set_shield(0)
+	set_readability(false)
 
 func step(delta: float, direction: Vector2, bounds: Rect2, slow: float = 0.0) -> void:
 	attack_cooldown = maxf(0.0, attack_cooldown - delta)

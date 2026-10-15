@@ -172,6 +172,9 @@ func run() -> void:
 
 	game.queue_free()
 	await _frames(2)
+	# The native audio thread needs wall time to release stopped playback resources.
+	OS.delay_msec(150)
+	await _frames(2)
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(META_PATH))
 	_finish("VIEW")
 

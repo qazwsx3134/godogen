@@ -26,6 +26,18 @@
 
 兩個 `AudioStreamPlayer` 輪流播；換曲淡出淡入 0.8 秒；通關與死亡淡出；同一首不重來；`process_mode` Always、tween 忽略 time_scale（暫停與 hit stop 下照常）；循環在播放前用程式打開（Ogg 的 `loop`、WAV 的 `loop_mode`），所以匯入時沒設循環也會循環。Boss 房換 Boss 曲。**循環點可能有一聲輕微的喀**（沒用耳朵驗證）。
 
+## 使用者給的音檔（影片、mp3、長錄音）
+
+```bash
+ffmpeg -i clip.mp4 -vn -ss 0.12 -af "afade=t=out:st=1.55:d=0.27,loudnorm=I=-12:TP=-1" -ac 1 -ar 44100 -c:a pcm_s16le assets/sfx/susume.wav
+ffmpeg -i music.mp3 -c:a libmp3lame -b:a 112k bgm_main.mp3     # BGM：2.8 MB → 1.6 MB
+```
+
+- 先看音量輪廓再決定截哪段（每 0.1～0.5 秒算一次 RMS），長錄音只截最響的幾秒、尾端淡出，`loudnorm` 讓各檔音量一致。
+- Homebrew 的 ffmpeg 沒有 `libvorbis`（內建的 `vorbis` 是實驗品）：音效存 `.wav`（Godot 匯入時壓縮，`sfx_bank.gd` 找不到 `.ogg` 會用 `.wav`），BGM 用 mp3（`libmp3lame` 有）。
+- 跑步聲這類持續音：在 scene 放一個 pausable 的 `AudioStreamPlayer`，`_ready` 把 `AudioStreamWAV` 設成 `LOOP_FORWARD`，`pitch_scale` 跟著速度走，只在玩家真的在跑時播。
+- 想讓兩段（跑酷、Boss）連著播同一首：兩個欄位指到同一個資源，`music.gd` 的 `play()` 遇到同一首會直接略過。
+
 ## 手機震動（haptics）
 
 - 規則集中在 `juice.gd` 的 `haptic(tier)`：玩家開關與 `haptic_scale` 為 0 → 不做；兩下之間至少 70 ms、每秒最多 6 次；較弱的脈衝不打斷還沒結束的較強的；**更大級的脈衝穿過間隔與上限**（被爆擊打死的 Boss 同一格先 small 再 large，不然 Boss 死亡永遠少一個大震）。

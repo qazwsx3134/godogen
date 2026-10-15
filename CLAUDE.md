@@ -23,7 +23,7 @@
 
 ## 教訓紀錄（append-only；格式見 ~/claude-institution/rules/maintenance-protocol.md）
 
-做 Godot 原型到 itch.io 網頁版的完整做法與坑，見 skill `godot-prototype-to-itch`（原始檔在 `prototypes/godot-kit/skills/`）。
+做 Godot 原型到 itch.io 網頁版的完整做法與坑，見 skill `godot-prototype-to-itch`（原始檔在 `prototypes/godot-kit/skills/`，用 `prototypes/godot-kit/install_skills.sh` 複製安裝，不用 symlink）。
 
 - 2026-10-02 | 選卡鎖與震動間隔 | 用 `Time.get_ticks_msec()`（牆上時鐘）做玩法邏輯；測試用 `--fixed-fps 60`，遊戲時間比牆上時間快很多，鎖把機器人的點擊全吞掉，十幾個不相干的測試連環失敗 | 用 `create_timer(秒, true, false, true)`（遊戲時間）或可注入的時鐘 | 影響玩法的計時一律用遊戲時間
 - 2026-10-02 | 匯出版讀 `res://assets/x.ogg` | `FileAccess.file_exists` 在匯出版是 false（原檔不在 pck 裡） | `ResourceLoader.exists` 再 `load` | 資源存不存在一律問 ResourceLoader
@@ -34,3 +34,7 @@
 - 2026-10-03 | 加升級特效後 balance 基準線整個平移 | 新特效的 `CPUParticles2D` 只要被建立（連 `.new()` 都算）就吃掉全域亂數（headless 小腳本實測：`seed(1)` 後第一個 `randf()` 從 0.4218 變 0.1591）；主角 scene 多 3 個粒子節點，每個 seed 的敵人繞路都變了，我先當成特效改了遊戲邏輯，二分三輪（擠壓、拿掉舊光環、加空節點全都沒事）才找到；另外 `balance_run.sh` 的 `RUN` 行有 `wall=`（牆上時間），逐位元組比對要先剝掉 | 先用幾行 headless 腳本量「建這個節點會不會動到 `randf`」；比對用 `sed -E 's/ wall=[0-9.]+//'`；基準線在加完粒子節點之後才重拍 | 加粒子節點會平移全域亂數：要 byte-identical 的 gate，基準線得在加完之後拍
 - 2026-10-04 | 搬專案資料夾到 repo 外面 | `mv` 一直 `Permission denied`，`lsof` 與 /proc 都看不到誰在用——鎖在 Windows 那邊：使用者的檔案總管視窗開在子資料夾 `publishing\itch\screenshots`（Windows 不讓有東西開著的資料夾被改名） | 逐層把子資料夾改名再改回來找出被鎖的是哪個；`powershell.exe -Command "(New-Object -ComObject Shell.Application).Windows() | % LocationURL"` 列出開著的檔案總管視窗；沒被鎖的先搬走，被鎖的留著，寫一支一行指令的腳本（`.claude/tasks/sugarcane-art/finish-publishing-move.sh`）等使用者關窗 | 搬目錄前先查 Windows 的檔案總管視窗與對話框；不要替使用者關他的視窗
 - 2026-10-15 | 降 survivor-series 的 draw call | 以為敵人圖散在多張貼圖才斷批次，做了圖集只省一點；`Performance.TIME_PROCESS／TIME_PHYSICS_PROCESS` 也亂跳（平均 6 ms 的跑次 physics 最大 4 秒） | 一層層 `visible=false` 量 draw call、再列出執行中實際可見的節點類型：每個 Polygon2D／Line2D／`draw_circle` 都單獨一次 draw call（胖子臭氣 4 個多邊形 ×40 隻＝160 次）；改成共用貼圖的 Sprite2D、同類放同一個 z 層後 670 → 280 | 量幀時間用牆上時間；大量重複的物件不要用多邊形畫，同類圖用同一張貼圖並放同一 z 層
+- 2026-10-14 | 在 macOS 上跑 erwin-run 的測試、截圖、匯出 | 照 PROGRESS 的 WSL 指令跑：`godot` 不在 PATH、沒有 `xvfb-run`、`run_tests.sh` 沒有執行權限（permission denied） | `GODOT_BIN=/Applications/Godot.app/Contents/MacOS/Godot bash <腳本>`；截圖直接開視窗跑 `shots.gd`，加 `--resolution 1688x780` 看手機比例 | 換機器先確認 Godot 路徑與腳本權限，不要照抄別台的指令
+- 2026-10-14 | 外部改 erwin-run 的 `.tscn` 時，使用者的 Godot 編輯器正開著同一個專案 | 沒先查就改，編輯器裡存檔會把修改蓋回去 | 改 scene 前 `ps aux | grep -i godot` 看編輯器有沒有開；有就提醒使用者重新載入、不要存舊版 | 編輯器開著時改 scene 檔要先講
+- 2026-10-14 | erwin-run 的 `.gitignore` 早就寫了 `.godot/`、`build/` | 規則加在檔案提交之後，所以 257 個檔案一直被追蹤、每次都顯示已修改 | `git ls-files -ci --exclude-standard` 找出來，`git rm -r --cached` 移出版控（本機檔案保留） | 新增忽略規則後，查一次有沒有已經被追蹤的檔案
+- 2026-10-14 | 推含大量圖檔與音檔的 commit 到 GitHub | `git push` 回 HTTP 400、遠端意外掛斷 | 只對那一次用 `git -c http.postBuffer=524288000 push` | 推大檔失敗先加大 postBuffer，不要改全域設定

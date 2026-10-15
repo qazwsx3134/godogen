@@ -1,0 +1,228 @@
+{
+  "duration": 25,
+  "checks": [
+    "production ignores the short-run query",
+    "production uses its own progress file",
+    "QA feature enables the short run",
+    "QA progress is isolated from production",
+    "real touch starts the game",
+    "audio context unlocked by the start gesture",
+    "real touch drag moves the hero",
+    "floating stick receives touch input",
+    "touch release clears movement",
+    "level-up shows cards",
+    "upgrade choice freezes game time",
+    "real touch picks a card",
+    "movement still works after choosing an upgrade",
+    "HUD pause stops game time",
+    "touch resumes the paused game",
+    "actual renderer budgets hold",
+    "actual renderer budgets hold",
+    "actual renderer budgets hold",
+    "actual renderer budgets hold",
+    "actual renderer budgets hold",
+    "actual renderer budgets hold",
+    "actual renderer budgets hold",
+    "actual renderer budgets hold",
+    "actual renderer budgets hold",
+    "actual renderer budgets hold",
+    "actual renderer budgets hold",
+    "actual renderer budgets hold",
+    "actual renderer budgets hold",
+    "actual renderer budgets hold",
+    "actual renderer budgets hold",
+    "actual renderer budgets hold",
+    "actual renderer budgets hold",
+    "finished run banks coins",
+    "real touch retries with reset score and build",
+    "coins survive a page reload (IDBFS)",
+    "shop opens and closes by touch",
+    "QA rewards never reach the production save",
+    "production stays full-length after a QA run",
+    "no browser, load or Godot script errors",
+    "wide desktop browser loads the game"
+  ],
+  "audio": [
+    "running"
+  ],
+  "snapshots": {
+    "productionBefore": {
+      "actors": 0,
+      "best_combo": 0,
+      "bursts": 0,
+      "coins": 0,
+      "combo": 0,
+      "effects": 0,
+      "elapsed": 0,
+      "hazards": 0,
+      "hits": 0,
+      "hp": 100,
+      "kills": 0,
+      "level": 1,
+      "levels": {},
+      "living": 0,
+      "offers": [],
+      "pickups": 0,
+      "player": [
+        600,
+        840
+      ],
+      "projectiles": 0,
+      "punches": 0,
+      "qa": false,
+      "save_path": "user://survivor_meta.json",
+      "session_duration": 600,
+      "smoke": 0,
+      "sounds": {},
+      "state": "MENU",
+      "stick": [
+        0,
+        0
+      ],
+      "vfx": {
+        "dropped": {
+          "captions": 0,
+          "particles": 0,
+          "shaders": 0,
+          "shapes": 0
+        },
+        "limits": {
+          "particles": 500,
+          "shaders": 12,
+          "shapes": 80
+        },
+        "particles": 0,
+        "shaders": 0,
+        "shapes": 0
+      },
+      "warnings": 0,
+      "weapons": [],
+      "won": false
+    },
+    "results": {
+      "actors": 0,
+      "best_combo": 14,
+      "bursts": 0,
+      "coins": 152,
+      "combo": 14,
+      "effects": 0,
+      "elapsed": 25,
+      "hazards": 0,
+      "hits": 0,
+      "hp": 110,
+      "kills": 22,
+      "level": 2,
+      "levels": {
+        "pearl": 1,
+        "punch": 1
+      },
+      "living": 0,
+      "offers": [],
+      "pickups": 0,
+      "player": [
+        871.762390136719,
+        917.607116699219
+      ],
+      "projectiles": 0,
+      "punches": 24,
+      "qa": true,
+      "save_path": "user://survivor_meta_qa.json",
+      "session_duration": 25,
+      "smoke": 55,
+      "sounds": {
+        "finish": 1,
+        "gem": 7,
+        "hit": 19,
+        "launch": 22,
+        "level": 1,
+        "metal": 6,
+        "pearl": 17,
+        "punch": 24,
+        "start": 1,
+        "upgrade": 1,
+        "warning": 1
+      },
+      "state": "RESULTS",
+      "stick": [
+        0,
+        0
+      ],
+      "vfx": {
+        "dropped": {
+          "captions": 0,
+          "particles": 0,
+          "shaders": 0,
+          "shapes": 0
+        },
+        "limits": {
+          "particles": 500,
+          "shaders": 12,
+          "shapes": 80
+        },
+        "particles": 0,
+        "shaders": 0,
+        "shapes": 0
+      },
+      "warnings": 1,
+      "weapons": [
+        "punch",
+        "pearl"
+      ],
+      "won": true
+    },
+    "productionAfter": {
+      "actors": 0,
+      "best_combo": 0,
+      "bursts": 0,
+      "coins": 0,
+      "combo": 0,
+      "effects": 0,
+      "elapsed": 0,
+      "hazards": 0,
+      "hits": 0,
+      "hp": 100,
+      "kills": 0,
+      "level": 1,
+      "levels": {},
+      "living": 0,
+      "offers": [],
+      "pickups": 0,
+      "player": [
+        600,
+        840
+      ],
+      "projectiles": 0,
+      "punches": 0,
+      "qa": false,
+      "save_path": "user://survivor_meta.json",
+      "session_duration": 600,
+      "smoke": 0,
+      "sounds": {},
+      "state": "MENU",
+      "stick": [
+        0,
+        0
+      ],
+      "vfx": {
+        "dropped": {
+          "captions": 0,
+          "particles": 0,
+          "shaders": 0,
+          "shapes": 0
+        },
+        "limits": {
+          "particles": 500,
+          "shaders": 12,
+          "shapes": 80
+        },
+        "particles": 0,
+        "shaders": 0,
+        "shapes": 0
+      },
+      "warnings": 0,
+      "weapons": [],
+      "won": false
+    }
+  },
+  "errors": []
+}

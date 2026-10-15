@@ -1,0 +1,26 @@
+{
+  "recorded_at_utc": "2026-10-15T09:24:35.766019+00:00",
+  "engine": "Godot 4.7.stable.official.5b4e0cb0f",
+  "files": {
+    "build/web/index.pck": {
+      "bytes": 1885816,
+      "sha256": "87063c5565ba4b54ca3a2403785edd8dc6001989a29857105a0ec6d0d1e7fc50"
+    },
+    "build/web/index.js": {
+      "bytes": 279840,
+      "sha256": "fe6245d11c045a8ed92645c4a51839e2e245f31d4f6967ea7e5c36bb7c4d4f27"
+    },
+    "build/qa/index.pck": {
+      "bytes": 1885848,
+      "sha256": "450da33a53a5666c2da242a4a466f49127df3525635d02ffed74bd7c7fc8ea9d"
+    },
+    "build/qa/index.js": {
+      "bytes": 279840,
+      "sha256": "fe6245d11c045a8ed92645c4a51839e2e245f31d4f6967ea7e5c36bb7c4d4f27"
+    },
+    "build/survivor-series-web.zip": {
+      "bytes": 11889364,
+      "sha256": "efaa12b1677c3d58193d41f5ee0f2769535e6f2521421dcc5bdd82ed342e9778"
+    }
+  }
+}

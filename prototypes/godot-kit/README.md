@@ -395,11 +395,12 @@ func _exit_tree() -> void: loader.cancel()             # 沒人領的載入任�
 
 ## pixel_vfx.gd：像素打擊特效
 
-PokéSurvivor 式的像素特效，一個節點畫完：方塊粒子（`burst`、`spark`、`trail`）、格子拼的形狀（`ring`、`slash`、`star`、`pop`、`caption`），以及 shader 特效（`effect(&"explosion" | &"smoke", ...)`，硬邊、一像素外框、不用抖動點）。全部對齊同一個素材像素格（`pixel`），淡出分三段，配色是每組 5 色。用自己的亂數產生器，不動全域 `randf()`。
+PokéSurvivor 式的像素特效：方塊粒子（`burst`、`spark`、`trail`）、格子形狀（`ring`、`slash`、`star`、`pop`、`caption`），以及 shader（`explosion` 短爆竹、`smoke` 薄霧、`gas` 低矮臭氣）。素材像素格由 `pixel` 統一；煙與氣體採半透明填色和離散輪廓，不用抖動點。亂數獨立於遊戲。
 
+地面圈由 `ground_z_index=-1` 的子層繪製，其餘跟隨 Fx 圖層。`slash` 只畫揮擊，實際碰撞後才呼叫 `star`。字幕至少間隔 `caption_interval=0.45` 秒。粒子／形狀／shader 有各自上限，`stats()` 提供真實計數、預算與略過數；形狀保留最多 8 格給命中。會造成傷害的持續區域必須自帶場景視覺，不透過可略過的 `effect()`。
 ```gdscript
 fx.spark(chest, direction, &"hit")
-fx.effect(&"explosion", at, Vector2.ONE * 180, 0.7, &"fire")
+fx.effect(&"explosion", at, Vector2.ONE * 180, 0.3, &"fire")
 fx.register(&"cross", func(e, left): ...)   # 新的形狀
 fx.shaders[&"shockwave"] = preload("...")   # 新的 shader 特效，模板見 pixel_vfx.gdshaderinc
 ```
@@ -483,9 +484,9 @@ fx.shaders[&"shockwave"] = preload("...")   # 新的 shader 特效，模板見 p
 
 **抽出來之後還沒做的（要各原型的擁有者處理）**：debt-commission 的 `tools/fetch_web_templates.py`、`tools/build_web.sh` 改成呼叫 kit 的版本；pixel-monster、seichi-pov、taskbar-hero 套字型子集（各省 9–30 MB）並加 `FontCheck` 測試；pachinko 的 `tools/serve.sh` 對照 `web_probe.mjs` 的「網頁版必須從 localhost 或 HTTPS 開」；pixel-monster `ui/main.gd:449` 的 `Input.vibrate_handheld(35)` 改用 `haptics.gd`（要有偵測，網頁版才不會每次呼叫都讓瀏覽器 `console.warn`）；pachinko `scripts/presentation.gd`、pixel-monster `ui/sound.gd`、debt-commission `main.gd`／`scripts/stage_effects.gd` 的音效管理改用 `sfx_bank.gd`（各寫一個繼承它的小腳本、填自己的合成音表，就有檔案優先、同時一個、長音效截斷）。這些原型目前都有未提交的修改，`./sync.sh --check` 對它們全部報 drift（debt-commission、pachinko、pixel-monster、seichi-pov、taskbar-hero），所以這一輪只對 sugarcane-tanks 跑了 `sync.sh`；別一次 `./sync.sh` 全部同步，會把新模組混進別人未完成的變更。
 
-**目前只有一個原型用，也還沒抽出來**：`juice.gd` 的三級回饋對照表（哪個事件算哪一級是這款遊戲的調校）、升級選卡面板與選卡鎖、`hero_stats.gd` 的能力疊加、敵人基底（依賴 `game.show_damage` 等介面）、載入畫面與製作名單面板的**畫面本身**（只有 `scene_loader.gd` 的邏輯抽出來了）、射線步進投射物（核心只有 8 行 `intersect_ray`，其餘是這款遊戲的碰撞規則）、`balance_run`（決定性的機器人平衡量測，依賴這款遊戲的 `main.gd`）。等第二個原型需要時再抽。
+**目前只有一個原型用，也還沒抽出來**：`juice.gd` 的三級回饋對照表（哪個事件算哪一級是這款遊戲的調校）、升級選卡面板與選卡鎖、`hero_stats.gd` 的能力疊加、敵人基底（依賴 `game.show_damage` 等介面）、載入畫面與製作名單面板的**畫面本身**（只有 `scene_loader.gd` 的邏輯抽出來了）、射線步進投射物（核心只有 8 行 `intersect_ray`，其餘是這款遊戲的碰撞規則）、`balance_run`（決定性的機器人平衡量測，依賴這款遊戲的 `main.gd`）。erwin-run（2026-10-14）又多了三個：**手機方向鎖**（`screens.tscn` 的 `%Portrait` 遮罩、`portrait_changed` 訊號、玩到一半轉直就暫停，加上 `main.gd` 的 `_phone_fullscreen()` 在第一次點擊時請求全螢幕並鎖橫向；任何只能橫玩或只能直玩的網頁原型都用得到）、**Parallax 收尾**（`main.gd` 的 `_ruins_leave()`：讓重複的圖層在不跳格的情況下捲出畫面，換上尾端收尾的圖）、**橫式手機的瀏覽器驗證**（`tools/web_landscape.mjs`，可以併進 `web_probe.mjs` 當 `--landscape`）。等第二個原型需要時再抽。
 
-沿用 sugarcane-tanks 做完整條流程的經驗見 skill `godot-prototype-to-itch`（原始檔在 `skills/godot-prototype-to-itch/`，用 symlink 掛進 `~/.claude/skills/`，跟 `cf-stack` 一樣）。角色原畫到動畫 sprite（Claude 挑圖、Codex 生圖、沒有影片 API 時手動生影片）見 skill `character-sprite-forge`（`skills/character-sprite-forge/`，同樣用 symlink）。像素打擊特效見 skill `pixel-vfx`（`skills/pixel-vfx/`，同樣用 symlink）。
+沿用 sugarcane-tanks 做完整條流程的經驗見 skill `godot-prototype-to-itch`（原始檔在 `skills/godot-prototype-to-itch/`）。角色原畫到動畫 sprite（Claude 挑圖、Codex 生圖、沒有影片 API 時手動生影片）見 skill `character-sprite-forge`（`skills/character-sprite-forge/`）。像素打擊特效見 skill `pixel-vfx`（`skills/pixel-vfx/`）。三個 skill 用 `./install_skills.sh` 複製進 `~/.claude/skills/`（見下方「維護」）。
 
 ## 維護
 
@@ -494,6 +495,9 @@ fx.shaders[&"shockwave"] = preload("...")   # 新的 shader 特效，模板見 p
 ./sync.sh <原型資料夾名>   # 讓新原型加入
 ./sync.sh --check         # 有副本和這裡不同就 exit 1
 ./sync.sh /絕對路徑/遊戲    # repo 外面的遊戲（也可以加 --check）；不帶參數的 ./sync.sh 只更新 prototypes/ 底下的
+./install_skills.sh        # 把 skills/ 底下的 skill 複製進 ~/.claude/skills/（新帳號 clone 後跑一次；改了 skill 再跑一次）
+./install_skills.sh --check            # 已安裝的副本缺少或過時就 exit 1
+./install_skills.sh --dest <資料夾>     # 裝到別的 skills 資料夾
 ```
 
 sugarcane-tanks 已經在 2026-10-04 搬出 repo，現在是 `/mnt/d/repo/godot/sugarcane-tanks`：它的 `addons/proto_kit/` 是副本，用 `./sync.sh /mnt/d/repo/godot/sugarcane-tanks` 更新，它的 `tools/*.sh` 靠 `GODOT_KIT` 或「隔壁有 `godogen/prototypes/godot-kit`」找到這裡。
@@ -505,4 +509,5 @@ sugarcane-tanks 已經在 2026-10-04 搬出 repo，現在是 `/mnt/d/repo/godot/
 3. `./sync.sh`，再跑每個使用中原型的測試。
 
 - **新增模組**：同樣的程式在第二個原型也出現時再抽進來，並在 `tests/test_proto_kit.gd` 補測試。
-- **為什麼用複製**：這個 repo 在 Windows／WSL 上 checkout 時，git 會把 symlink 變成純文字檔；Godot 匯出也需要實體檔案，所以用複製而不用 symlink。
+- **為什麼用複製**：這個 repo 在 Windows／WSL 上 checkout 時，git 會把 symlink 變成純文字檔；Godot 匯出也需要實體檔案，所以用複製而不用 symlink。skill 也一樣：`~/.claude/skills/` 裡的 symlink 指向某一台機器的 clone、不在 repo 裡，別的帳號拿不到。`install_skills.sh` 在每份副本放 `.godot-kit-skill` 標記，只更新自己裝的；同名但不是它裝的資料夾不碰，舊的 symlink 換成副本（只刪連結，不動目標）。
+- **改 skill**：只改 `godot-kit/skills/`，改完跑 `./install_skills.sh`。直接改 `~/.claude/skills/` 裡的副本，下次安裝會被蓋掉。

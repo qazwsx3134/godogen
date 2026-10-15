@@ -148,13 +148,30 @@ func _draw() -> void:
 	draw_circle(Vector2.ZERO, (shadow_size if shadow_size > 0.0 else radius * 0.9 / maxf(scale.x, 0.01)), Color(0, 0, 0, 0.25))
 
 func can_hit(enemy: Node2D, before: Vector2) -> bool:
+	return is_finite(hit_fraction(enemy, before))
+
+## First contact along this step, used to resolve enemies and walls in travel order.
+func hit_fraction(enemy: Node2D, before: Vector2) -> float:
 	if flight_left > 0.0 or mode == "lob" or mode == "fall" or detonate or enemy.dead or pierce == 0:
-		return false
+		return INF
 	var id: int = enemy.get_instance_id()
 	if hit_at.has(id) and (rehit <= 0.0 or age - float(hit_at[id]) < rehit):
-		return false
-	var closest: Vector2 = Geometry2D.get_closest_point_to_segment(enemy.position, before, position)
-	return closest.distance_to(enemy.position) <= radius + enemy.definition.radius
+		return INF
+	var offset: Vector2 = before - enemy.position
+	var reach: float = radius + enemy.definition.radius
+	var c: float = offset.length_squared() - reach * reach
+	if c <= 0.0:
+		return 0.0
+	var movement: Vector2 = position - before
+	var a: float = movement.length_squared()
+	if is_zero_approx(a):
+		return INF
+	var b: float = offset.dot(movement)
+	var discriminant: float = b * b - a * c
+	if discriminant < 0.0:
+		return INF
+	var t: float = (-b - sqrt(discriminant)) / a
+	return t if t >= 0.0 and t <= 1.0 else INF
 
 func remember(enemy: Node2D) -> void:
 	hit_at[enemy.get_instance_id()] = age

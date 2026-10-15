@@ -1,0 +1,1711 @@
+{
+  "qaResult": {
+    "actors": 0,
+    "best_combo": 1,
+    "bursts": 0,
+    "coins": 150,
+    "combo": 1,
+    "effects": 0,
+    "elapsed": 1,
+    "hazards": 0,
+    "hits": 0,
+    "hp": 110,
+    "kills": 1,
+    "level": 1,
+    "levels": {
+      "punch": 1
+    },
+    "living": 0,
+    "offers": [],
+    "pickups": 0,
+    "player": [
+      600,
+      840
+    ],
+    "projectiles": 0,
+    "punches": 1,
+    "qa": true,
+    "save_path": "user://survivor_meta_qa.json",
+    "session_duration": 1,
+    "smoke": 0,
+    "sounds": {
+      "finish": 1,
+      "launch": 1,
+      "punch": 1,
+      "start": 1
+    },
+    "state": "RESULTS",
+    "stick": [
+      0,
+      0
+    ],
+    "vfx": {
+      "dropped": {
+        "captions": 0,
+        "particles": 0,
+        "shaders": 0,
+        "shapes": 0
+      },
+      "limits": {
+        "particles": 500,
+        "shaders": 12,
+        "shapes": 80
+      },
+      "particles": 0,
+      "shaders": 0,
+      "shapes": 0
+    },
+    "warnings": 0,
+    "weapons": [
+      "punch"
+    ],
+    "won": true
+  },
+  "production": {
+    "actors": 0,
+    "best_combo": 0,
+    "bursts": 0,
+    "coins": 0,
+    "combo": 0,
+    "effects": 0,
+    "elapsed": 0,
+    "hazards": 0,
+    "hits": 0,
+    "hp": 100,
+    "kills": 0,
+    "level": 1,
+    "levels": {},
+    "living": 0,
+    "offers": [],
+    "pickups": 0,
+    "player": [
+      600,
+      840
+    ],
+    "projectiles": 0,
+    "punches": 0,
+    "qa": false,
+    "save_path": "user://survivor_meta.json",
+    "session_duration": 600,
+    "smoke": 0,
+    "sounds": {},
+    "state": "MENU",
+    "stick": [
+      0,
+      0
+    ],
+    "vfx": {
+      "dropped": {
+        "captions": 0,
+        "particles": 0,
+        "shaders": 0,
+        "shapes": 0
+      },
+      "limits": {
+        "particles": 500,
+        "shaders": 12,
+        "shapes": 80
+      },
+      "particles": 0,
+      "shaders": 0,
+      "shapes": 0
+    },
+    "warnings": 0,
+    "weapons": [],
+    "won": false
+  },
+  "samples": [
+    {
+      "actors": 3,
+      "best_combo": 0,
+      "bursts": 0,
+      "coins": 0,
+      "combo": 0,
+      "effects": 0,
+      "elapsed": 0.45,
+      "hazards": 0,
+      "hits": 0,
+      "hp": 110,
+      "kills": 0,
+      "level": 1,
+      "levels": {
+        "punch": 1
+      },
+      "living": 3,
+      "offers": [],
+      "pickups": 0,
+      "player": [
+        600,
+        840
+      ],
+      "projectiles": 0,
+      "punches": 0,
+      "qa": false,
+      "save_path": "user://survivor_meta.json",
+      "session_duration": 600,
+      "smoke": 0,
+      "sounds": {
+        "start": 1
+      },
+      "state": "RUNNING",
+      "stick": [
+        0,
+        0
+      ],
+      "vfx": {
+        "dropped": {
+          "captions": 0,
+          "particles": 0,
+          "shaders": 0,
+          "shapes": 0
+        },
+        "limits": {
+          "particles": 500,
+          "shaders": 12,
+          "shapes": 80
+        },
+        "particles": 0,
+        "shaders": 0,
+        "shapes": 0
+      },
+      "warnings": 0,
+      "weapons": [
+        "punch"
+      ],
+      "won": false
+    },
+    {
+      "actors": 3,
+      "best_combo": 1,
+      "bursts": 0,
+      "coins": 0,
+      "combo": 1,
+      "effects": 8,
+      "elapsed": 0.716666666666667,
+      "hazards": 0,
+      "hits": 0,
+      "hp": 110,
+      "kills": 1,
+      "level": 1,
+      "levels": {
+        "punch": 1
+      },
+      "living": 2,
+      "offers": [],
+      "pickups": 1,
+      "player": [
+        600,
+        840
+      ],
+      "projectiles": 0,
+      "punches": 1,
+      "qa": false,
+      "save_path": "user://survivor_meta.json",
+      "session_duration": 600,
+      "smoke": 0,
+      "sounds": {
+        "launch": 1,
+        "punch": 1,
+        "start": 1
+      },
+      "state": "RUNNING",
+      "stick": [
+        0,
+        0
+      ],
+      "vfx": {
+        "dropped": {
+          "captions": 0,
+          "particles": 0,
+          "shaders": 0,
+          "shapes": 0
+        },
+        "limits": {
+          "particles": 500,
+          "shaders": 12,
+          "shapes": 80
+        },
+        "particles": 5,
+        "shaders": 0,
+        "shapes": 3
+      },
+      "warnings": 0,
+      "weapons": [
+        "punch"
+      ],
+      "won": false
+    },
+    {
+      "actors": 4,
+      "best_combo": 1,
+      "bursts": 0,
+      "coins": 0,
+      "combo": 1,
+      "effects": 0,
+      "elapsed": 1.25,
+      "hazards": 0,
+      "hits": 0,
+      "hp": 110,
+      "kills": 1,
+      "level": 1,
+      "levels": {
+        "punch": 1
+      },
+      "living": 4,
+      "offers": [],
+      "pickups": 1,
+      "player": [
+        600,
+        840
+      ],
+      "projectiles": 0,
+      "punches": 1,
+      "qa": false,
+      "save_path": "user://survivor_meta.json",
+      "session_duration": 600,
+      "smoke": 0,
+      "sounds": {
+        "launch": 1,
+        "punch": 1,
+        "start": 1
+      },
+      "state": "RUNNING",
+      "stick": [
+        0,
+        0
+      ],
+      "vfx": {
+        "dropped": {
+          "captions": 0,
+          "particles": 0,
+          "shaders": 0,
+          "shapes": 0
+        },
+        "limits": {
+          "particles": 500,
+          "shaders": 12,
+          "shapes": 80
+        },
+        "particles": 0,
+        "shaders": 0,
+        "shapes": 0
+      },
+      "warnings": 0,
+      "weapons": [
+        "punch"
+      ],
+      "won": false
+    },
+    {
+      "actors": 4,
+      "best_combo": 1,
+      "bursts": 0,
+      "coins": 0,
+      "combo": 1,
+      "effects": 0,
+      "elapsed": 1.76666666666667,
+      "hazards": 0,
+      "hits": 0,
+      "hp": 110,
+      "kills": 1,
+      "level": 1,
+      "levels": {
+        "punch": 1
+      },
+      "living": 4,
+      "offers": [],
+      "pickups": 1,
+      "player": [
+        600,
+        840
+      ],
+      "projectiles": 0,
+      "punches": 1,
+      "qa": false,
+      "save_path": "user://survivor_meta.json",
+      "session_duration": 600,
+      "smoke": 0,
+      "sounds": {
+        "launch": 1,
+        "punch": 1,
+        "start": 1,
+        "warning": 1
+      },
+      "state": "RUNNING",
+      "stick": [
+        0,
+        0
+      ],
+      "vfx": {
+        "dropped": {
+          "captions": 0,
+          "particles": 0,
+          "shaders": 0,
+          "shapes": 0
+        },
+        "limits": {
+          "particles": 500,
+          "shaders": 12,
+          "shapes": 80
+        },
+        "particles": 0,
+        "shaders": 0,
+        "shapes": 0
+      },
+      "warnings": 1,
+      "weapons": [
+        "punch"
+      ],
+      "won": false
+    },
+    {
+      "actors": 6,
+      "best_combo": 1,
+      "bursts": 0,
+      "coins": 0,
+      "combo": 1,
+      "effects": 0,
+      "elapsed": 2.28333333333333,
+      "hazards": 0,
+      "hits": 0,
+      "hp": 110,
+      "kills": 1,
+      "level": 1,
+      "levels": {
+        "punch": 1
+      },
+      "living": 6,
+      "offers": [],
+      "pickups": 1,
+      "player": [
+        600,
+        840
+      ],
+      "projectiles": 0,
+      "punches": 1,
+      "qa": false,
+      "save_path": "user://survivor_meta.json",
+      "session_duration": 600,
+      "smoke": 0,
+      "sounds": {
+        "launch": 1,
+        "punch": 1,
+        "start": 1,
+        "warning": 1
+      },
+      "state": "RUNNING",
+      "stick": [
+        0,
+        0
+      ],
+      "vfx": {
+        "dropped": {
+          "captions": 0,
+          "particles": 0,
+          "shaders": 0,
+          "shapes": 0
+        },
+        "limits": {
+          "particles": 500,
+          "shaders": 12,
+          "shapes": 80
+        },
+        "particles": 0,
+        "shaders": 0,
+        "shapes": 0
+      },
+      "warnings": 1,
+      "weapons": [
+        "punch"
+      ],
+      "won": false
+    },
+    {
+      "actors": 6,
+      "best_combo": 1,
+      "bursts": 0,
+      "coins": 0,
+      "combo": 0,
+      "effects": 0,
+      "elapsed": 2.91666666666666,
+      "hazards": 2,
+      "hits": 1,
+      "hp": 92.5,
+      "kills": 1,
+      "level": 1,
+      "levels": {
+        "punch": 1
+      },
+      "living": 6,
+      "offers": [],
+      "pickups": 1,
+      "player": [
+        600,
+        840
+      ],
+      "projectiles": 0,
+      "punches": 2,
+      "qa": false,
+      "save_path": "user://survivor_meta.json",
+      "session_duration": 600,
+      "smoke": 2,
+      "sounds": {
+        "hurt": 1,
+        "launch": 1,
+        "metal": 1,
+        "punch": 2,
+        "start": 1,
+        "warning": 1
+      },
+      "state": "RUNNING",
+      "stick": [
+        0,
+        0
+      ],
+      "vfx": {
+        "dropped": {
+          "captions": 0,
+          "particles": 0,
+          "shaders": 0,
+          "shapes": 0
+        },
+        "limits": {
+          "particles": 500,
+          "shaders": 12,
+          "shapes": 80
+        },
+        "particles": 0,
+        "shaders": 0,
+        "shapes": 0
+      },
+      "warnings": 1,
+      "weapons": [
+        "punch"
+      ],
+      "won": false
+    },
+    {
+      "actors": 8,
+      "best_combo": 1,
+      "bursts": 0,
+      "coins": 0,
+      "combo": 1,
+      "effects": 0,
+      "elapsed": 3.43333333333333,
+      "hazards": 2,
+      "hits": 1,
+      "hp": 92.5,
+      "kills": 2,
+      "level": 1,
+      "levels": {
+        "punch": 1
+      },
+      "living": 7,
+      "offers": [],
+      "pickups": 1,
+      "player": [
+        600,
+        840
+      ],
+      "projectiles": 0,
+      "punches": 3,
+      "qa": false,
+      "save_path": "user://survivor_meta.json",
+      "session_duration": 600,
+      "smoke": 2,
+      "sounds": {
+        "gem": 1,
+        "hurt": 1,
+        "launch": 2,
+        "metal": 1,
+        "punch": 3,
+        "start": 1,
+        "warning": 1
+      },
+      "state": "RUNNING",
+      "stick": [
+        0,
+        0
+      ],
+      "vfx": {
+        "dropped": {
+          "captions": 0,
+          "particles": 0,
+          "shaders": 0,
+          "shapes": 0
+        },
+        "limits": {
+          "particles": 500,
+          "shaders": 12,
+          "shapes": 80
+        },
+        "particles": 0,
+        "shaders": 0,
+        "shapes": 0
+      },
+      "warnings": 1,
+      "weapons": [
+        "punch"
+      ],
+      "won": false
+    },
+    {
+      "actors": 7,
+      "best_combo": 1,
+      "bursts": 0,
+      "coins": 0,
+      "combo": 1,
+      "effects": 0,
+      "elapsed": 3.94999999999999,
+      "hazards": 4,
+      "hits": 1,
+      "hp": 92.5,
+      "kills": 2,
+      "level": 1,
+      "levels": {
+        "punch": 1
+      },
+      "living": 7,
+      "offers": [],
+      "pickups": 1,
+      "player": [
+        600,
+        840
+      ],
+      "projectiles": 0,
+      "punches": 3,
+      "qa": false,
+      "save_path": "user://survivor_meta.json",
+      "session_duration": 600,
+      "smoke": 4,
+      "sounds": {
+        "gem": 1,
+        "hurt": 1,
+        "launch": 2,
+        "metal": 1,
+        "punch": 3,
+        "start": 1,
+        "warning": 1
+      },
+      "state": "RUNNING",
+      "stick": [
+        0,
+        0
+      ],
+      "vfx": {
+        "dropped": {
+          "captions": 0,
+          "particles": 0,
+          "shaders": 0,
+          "shapes": 0
+        },
+        "limits": {
+          "particles": 500,
+          "shaders": 12,
+          "shapes": 80
+        },
+        "particles": 0,
+        "shaders": 0,
+        "shapes": 0
+      },
+      "warnings": 1,
+      "weapons": [
+        "punch"
+      ],
+      "won": false
+    },
+    {
+      "actors": 9,
+      "best_combo": 1,
+      "bursts": 0,
+      "coins": 0,
+      "combo": 1,
+      "effects": 0,
+      "elapsed": 4.48333333333332,
+      "hazards": 4,
+      "hits": 1,
+      "hp": 92.5,
+      "kills": 2,
+      "level": 1,
+      "levels": {
+        "punch": 1
+      },
+      "living": 9,
+      "offers": [],
+      "pickups": 1,
+      "player": [
+        600,
+        840
+      ],
+      "projectiles": 0,
+      "punches": 3,
+      "qa": false,
+      "save_path": "user://survivor_meta.json",
+      "session_duration": 600,
+      "smoke": 4,
+      "sounds": {
+        "gem": 1,
+        "hurt": 1,
+        "launch": 2,
+        "metal": 1,
+        "punch": 3,
+        "start": 1,
+        "warning": 1
+      },
+      "state": "RUNNING",
+      "stick": [
+        0,
+        0
+      ],
+      "vfx": {
+        "dropped": {
+          "captions": 0,
+          "particles": 0,
+          "shaders": 0,
+          "shapes": 0
+        },
+        "limits": {
+          "particles": 500,
+          "shaders": 12,
+          "shapes": 80
+        },
+        "particles": 0,
+        "shaders": 0,
+        "shapes": 0
+      },
+      "warnings": 1,
+      "weapons": [
+        "punch"
+      ],
+      "won": false
+    },
+    {
+      "actors": 9,
+      "best_combo": 1,
+      "bursts": 0,
+      "coins": 0,
+      "combo": 1,
+      "effects": 0,
+      "elapsed": 4.74999999999999,
+      "hazards": 6,
+      "hits": 1,
+      "hp": 92.5,
+      "kills": 2,
+      "level": 1,
+      "levels": {
+        "punch": 1
+      },
+      "living": 9,
+      "offers": [],
+      "pickups": 1,
+      "player": [
+        600,
+        840
+      ],
+      "projectiles": 0,
+      "punches": 3,
+      "qa": false,
+      "save_path": "user://survivor_meta.json",
+      "session_duration": 600,
+      "smoke": 6,
+      "sounds": {
+        "gem": 1,
+        "hurt": 1,
+        "launch": 2,
+        "metal": 1,
+        "punch": 3,
+        "start": 1,
+        "warning": 1
+      },
+      "state": "RUNNING",
+      "stick": [
+        0,
+        0
+      ],
+      "vfx": {
+        "dropped": {
+          "captions": 0,
+          "particles": 0,
+          "shaders": 0,
+          "shapes": 0
+        },
+        "limits": {
+          "particles": 500,
+          "shaders": 12,
+          "shapes": 80
+        },
+        "particles": 0,
+        "shaders": 0,
+        "shapes": 0
+      },
+      "warnings": 1,
+      "weapons": [
+        "punch"
+      ],
+      "won": false
+    },
+    {
+      "actors": 11,
+      "best_combo": 1,
+      "bursts": 0,
+      "coins": 0,
+      "combo": 0,
+      "effects": 0,
+      "elapsed": 5.28333333333332,
+      "hazards": 6,
+      "hits": 1,
+      "hp": 92.5,
+      "kills": 2,
+      "level": 1,
+      "levels": {
+        "punch": 1
+      },
+      "living": 11,
+      "offers": [],
+      "pickups": 1,
+      "player": [
+        600,
+        840
+      ],
+      "projectiles": 0,
+      "punches": 3,
+      "qa": false,
+      "save_path": "user://survivor_meta.json",
+      "session_duration": 600,
+      "smoke": 6,
+      "sounds": {
+        "gem": 1,
+        "hurt": 1,
+        "launch": 2,
+        "metal": 1,
+        "punch": 3,
+        "start": 1,
+        "warning": 1
+      },
+      "state": "RUNNING",
+      "stick": [
+        0,
+        0
+      ],
+      "vfx": {
+        "dropped": {
+          "captions": 0,
+          "particles": 0,
+          "shaders": 0,
+          "shapes": 0
+        },
+        "limits": {
+          "particles": 500,
+          "shaders": 12,
+          "shapes": 80
+        },
+        "particles": 0,
+        "shaders": 0,
+        "shapes": 0
+      },
+      "warnings": 1,
+      "weapons": [
+        "punch"
+      ],
+      "won": false
+    },
+    {
+      "actors": 11,
+      "best_combo": 1,
+      "bursts": 0,
+      "coins": 0,
+      "combo": 0,
+      "effects": 0,
+      "elapsed": 5.81666666666665,
+      "hazards": 8,
+      "hits": 1,
+      "hp": 92.5,
+      "kills": 2,
+      "level": 1,
+      "levels": {
+        "punch": 1
+      },
+      "living": 11,
+      "offers": [],
+      "pickups": 1,
+      "player": [
+        600,
+        840
+      ],
+      "projectiles": 0,
+      "punches": 4,
+      "qa": false,
+      "save_path": "user://survivor_meta.json",
+      "session_duration": 600,
+      "smoke": 8,
+      "sounds": {
+        "gem": 1,
+        "hurt": 1,
+        "launch": 2,
+        "metal": 2,
+        "punch": 4,
+        "start": 1,
+        "warning": 1
+      },
+      "state": "RUNNING",
+      "stick": [
+        0,
+        0
+      ],
+      "vfx": {
+        "dropped": {
+          "captions": 0,
+          "particles": 0,
+          "shaders": 0,
+          "shapes": 0
+        },
+        "limits": {
+          "particles": 500,
+          "shaders": 12,
+          "shapes": 80
+        },
+        "particles": 0,
+        "shaders": 0,
+        "shapes": 0
+      },
+      "warnings": 1,
+      "weapons": [
+        "punch"
+      ],
+      "won": false
+    },
+    {
+      "actors": 13,
+      "best_combo": 1,
+      "bursts": 0,
+      "coins": 0,
+      "combo": 0,
+      "effects": 0,
+      "elapsed": 6.34999999999998,
+      "hazards": 6,
+      "hits": 1,
+      "hp": 92.5,
+      "kills": 2,
+      "level": 1,
+      "levels": {
+        "punch": 1
+      },
+      "living": 13,
+      "offers": [],
+      "pickups": 1,
+      "player": [
+        600,
+        840
+      ],
+      "projectiles": 0,
+      "punches": 5,
+      "qa": false,
+      "save_path": "user://survivor_meta.json",
+      "session_duration": 600,
+      "smoke": 8,
+      "sounds": {
+        "gem": 1,
+        "hurt": 1,
+        "launch": 2,
+        "metal": 3,
+        "punch": 5,
+        "start": 1,
+        "warning": 1
+      },
+      "state": "RUNNING",
+      "stick": [
+        0,
+        0
+      ],
+      "vfx": {
+        "dropped": {
+          "captions": 0,
+          "particles": 0,
+          "shaders": 0,
+          "shapes": 0
+        },
+        "limits": {
+          "particles": 500,
+          "shaders": 12,
+          "shapes": 80
+        },
+        "particles": 0,
+        "shaders": 0,
+        "shapes": 0
+      },
+      "warnings": 1,
+      "weapons": [
+        "punch"
+      ],
+      "won": false
+    },
+    {
+      "actors": 13,
+      "best_combo": 1,
+      "bursts": 0,
+      "coins": 0,
+      "combo": 0,
+      "effects": 6,
+      "elapsed": 6.88333333333331,
+      "hazards": 8,
+      "hits": 1,
+      "hp": 92.5,
+      "kills": 2,
+      "level": 1,
+      "levels": {
+        "punch": 1
+      },
+      "living": 13,
+      "offers": [],
+      "pickups": 1,
+      "player": [
+        600,
+        840
+      ],
+      "projectiles": 0,
+      "punches": 7,
+      "qa": false,
+      "save_path": "user://survivor_meta.json",
+      "session_duration": 600,
+      "smoke": 10,
+      "sounds": {
+        "gem": 1,
+        "hurt": 1,
+        "launch": 2,
+        "metal": 5,
+        "punch": 7,
+        "start": 1,
+        "warning": 1
+      },
+      "state": "RUNNING",
+      "stick": [
+        0,
+        0
+      ],
+      "vfx": {
+        "dropped": {
+          "captions": 0,
+          "particles": 0,
+          "shaders": 0,
+          "shapes": 0
+        },
+        "limits": {
+          "particles": 500,
+          "shaders": 12,
+          "shapes": 80
+        },
+        "particles": 4,
+        "shaders": 0,
+        "shapes": 2
+      },
+      "warnings": 1,
+      "weapons": [
+        "punch"
+      ],
+      "won": false
+    },
+    {
+      "actors": 15,
+      "best_combo": 1,
+      "bursts": 0,
+      "coins": 0,
+      "combo": 0,
+      "effects": 5,
+      "elapsed": 7.41666666666665,
+      "hazards": 6,
+      "hits": 1,
+      "hp": 92.5,
+      "kills": 2,
+      "level": 1,
+      "levels": {
+        "punch": 1
+      },
+      "living": 15,
+      "offers": [],
+      "pickups": 1,
+      "player": [
+        600,
+        840
+      ],
+      "projectiles": 0,
+      "punches": 8,
+      "qa": false,
+      "save_path": "user://survivor_meta.json",
+      "session_duration": 600,
+      "smoke": 10,
+      "sounds": {
+        "gem": 1,
+        "hurt": 1,
+        "launch": 2,
+        "metal": 6,
+        "punch": 8,
+        "start": 1,
+        "warning": 1
+      },
+      "state": "RUNNING",
+      "stick": [
+        0,
+        0
+      ],
+      "vfx": {
+        "dropped": {
+          "captions": 0,
+          "particles": 0,
+          "shaders": 0,
+          "shapes": 0
+        },
+        "limits": {
+          "particles": 500,
+          "shaders": 12,
+          "shapes": 80
+        },
+        "particles": 4,
+        "shaders": 0,
+        "shapes": 1
+      },
+      "warnings": 1,
+      "weapons": [
+        "punch"
+      ],
+      "won": false
+    },
+    {
+      "actors": 15,
+      "best_combo": 1,
+      "bursts": 0,
+      "coins": 0,
+      "combo": 1,
+      "effects": 5,
+      "elapsed": 7.94999999999998,
+      "hazards": 8,
+      "hits": 1,
+      "hp": 92.5,
+      "kills": 3,
+      "level": 1,
+      "levels": {
+        "punch": 1
+      },
+      "living": 14,
+      "offers": [],
+      "pickups": 2,
+      "player": [
+        600,
+        840
+      ],
+      "projectiles": 0,
+      "punches": 9,
+      "qa": false,
+      "save_path": "user://survivor_meta.json",
+      "session_duration": 600,
+      "smoke": 12,
+      "sounds": {
+        "gem": 1,
+        "hurt": 1,
+        "launch": 3,
+        "metal": 6,
+        "punch": 9,
+        "start": 1,
+        "warning": 1
+      },
+      "state": "RUNNING",
+      "stick": [
+        0,
+        0
+      ],
+      "vfx": {
+        "dropped": {
+          "captions": 0,
+          "particles": 0,
+          "shaders": 0,
+          "shapes": 0
+        },
+        "limits": {
+          "particles": 500,
+          "shaders": 12,
+          "shapes": 80
+        },
+        "particles": 5,
+        "shaders": 0,
+        "shapes": 0
+      },
+      "warnings": 1,
+      "weapons": [
+        "punch"
+      ],
+      "won": false
+    },
+    {
+      "actors": 17,
+      "best_combo": 1,
+      "bursts": 0,
+      "coins": 0,
+      "combo": 1,
+      "effects": 5,
+      "elapsed": 8.01666666666664,
+      "hazards": 8,
+      "hits": 1,
+      "hp": 92.5,
+      "kills": 3,
+      "level": 2,
+      "levels": {
+        "punch": 1
+      },
+      "living": 16,
+      "offers": [
+        "firecracker",
+        "kick",
+        "umbrella"
+      ],
+      "pickups": 1,
+      "player": [
+        600,
+        840
+      ],
+      "projectiles": 0,
+      "punches": 9,
+      "qa": false,
+      "save_path": "user://survivor_meta.json",
+      "session_duration": 600,
+      "smoke": 12,
+      "sounds": {
+        "gem": 2,
+        "hurt": 1,
+        "launch": 3,
+        "level": 1,
+        "metal": 6,
+        "punch": 9,
+        "start": 1,
+        "warning": 1
+      },
+      "state": "UPGRADE",
+      "stick": [
+        0,
+        0
+      ],
+      "vfx": {
+        "dropped": {
+          "captions": 0,
+          "particles": 0,
+          "shaders": 0,
+          "shapes": 0
+        },
+        "limits": {
+          "particles": 500,
+          "shaders": 12,
+          "shapes": 80
+        },
+        "particles": 5,
+        "shaders": 0,
+        "shapes": 0
+      },
+      "warnings": 1,
+      "weapons": [
+        "punch"
+      ],
+      "won": false
+    },
+    {
+      "actors": 16,
+      "best_combo": 1,
+      "bursts": 0,
+      "coins": 0,
+      "combo": 1,
+      "effects": 5,
+      "elapsed": 8.38333333333333,
+      "hazards": 6,
+      "hits": 1,
+      "hp": 92.5,
+      "kills": 3,
+      "level": 2,
+      "levels": {
+        "firecracker": 1,
+        "punch": 1
+      },
+      "living": 16,
+      "offers": [],
+      "pickups": 1,
+      "player": [
+        600,
+        840
+      ],
+      "projectiles": 1,
+      "punches": 9,
+      "qa": false,
+      "save_path": "user://survivor_meta.json",
+      "session_duration": 600,
+      "smoke": 12,
+      "sounds": {
+        "gem": 2,
+        "hurt": 1,
+        "launch": 3,
+        "level": 1,
+        "metal": 6,
+        "punch": 9,
+        "start": 1,
+        "throw": 1,
+        "upgrade": 1,
+        "warning": 1
+      },
+      "state": "RUNNING",
+      "stick": [
+        0,
+        0
+      ],
+      "vfx": {
+        "dropped": {
+          "captions": 0,
+          "particles": 0,
+          "shaders": 0,
+          "shapes": 0
+        },
+        "limits": {
+          "particles": 500,
+          "shaders": 12,
+          "shapes": 80
+        },
+        "particles": 5,
+        "shaders": 0,
+        "shapes": 0
+      },
+      "warnings": 1,
+      "weapons": [
+        "punch",
+        "firecracker"
+      ],
+      "won": false
+    },
+    {
+      "actors": 16,
+      "best_combo": 1,
+      "bursts": 0,
+      "coins": 0,
+      "combo": 1,
+      "effects": 2,
+      "elapsed": 8.90000000000002,
+      "hazards": 10,
+      "hits": 1,
+      "hp": 92.5,
+      "kills": 3,
+      "level": 2,
+      "levels": {
+        "firecracker": 1,
+        "punch": 1
+      },
+      "living": 16,
+      "offers": [],
+      "pickups": 1,
+      "player": [
+        600,
+        840
+      ],
+      "projectiles": 0,
+      "punches": 9,
+      "qa": false,
+      "save_path": "user://survivor_meta.json",
+      "session_duration": 600,
+      "smoke": 16,
+      "sounds": {
+        "gem": 2,
+        "hit": 1,
+        "hurt": 1,
+        "launch": 3,
+        "level": 1,
+        "metal": 6,
+        "pop": 1,
+        "punch": 9,
+        "start": 1,
+        "throw": 1,
+        "upgrade": 1,
+        "warning": 1
+      },
+      "state": "RUNNING",
+      "stick": [
+        0,
+        0
+      ],
+      "vfx": {
+        "dropped": {
+          "captions": 0,
+          "particles": 0,
+          "shaders": 0,
+          "shapes": 0
+        },
+        "limits": {
+          "particles": 500,
+          "shaders": 12,
+          "shapes": 80
+        },
+        "particles": 2,
+        "shaders": 0,
+        "shapes": 0
+      },
+      "warnings": 1,
+      "weapons": [
+        "punch",
+        "firecracker"
+      ],
+      "won": false
+    },
+    {
+      "actors": 18,
+      "best_combo": 2,
+      "bursts": 0,
+      "coins": 0,
+      "combo": 2,
+      "effects": 0,
+      "elapsed": 9.43333333333338,
+      "hazards": 8,
+      "hits": 1,
+      "hp": 92.5,
+      "kills": 4,
+      "level": 2,
+      "levels": {
+        "firecracker": 1,
+        "punch": 1
+      },
+      "living": 17,
+      "offers": [],
+      "pickups": 2,
+      "player": [
+        600,
+        840
+      ],
+      "projectiles": 0,
+      "punches": 10,
+      "qa": false,
+      "save_path": "user://survivor_meta.json",
+      "session_duration": 600,
+      "smoke": 16,
+      "sounds": {
+        "gem": 2,
+        "hit": 1,
+        "hurt": 1,
+        "launch": 4,
+        "level": 1,
+        "metal": 6,
+        "pop": 1,
+        "punch": 10,
+        "start": 1,
+        "throw": 1,
+        "upgrade": 1,
+        "warning": 1
+      },
+      "state": "RUNNING",
+      "stick": [
+        0,
+        0
+      ],
+      "vfx": {
+        "dropped": {
+          "captions": 0,
+          "particles": 0,
+          "shaders": 0,
+          "shapes": 0
+        },
+        "limits": {
+          "particles": 500,
+          "shaders": 12,
+          "shapes": 80
+        },
+        "particles": 0,
+        "shaders": 0,
+        "shapes": 0
+      },
+      "warnings": 1,
+      "weapons": [
+        "punch",
+        "firecracker"
+      ],
+      "won": false
+    },
+    {
+      "actors": 17,
+      "best_combo": 2,
+      "bursts": 0,
+      "coins": 0,
+      "combo": 2,
+      "effects": 0,
+      "elapsed": 9.96666666666674,
+      "hazards": 10,
+      "hits": 1,
+      "hp": 92.5,
+      "kills": 4,
+      "level": 2,
+      "levels": {
+        "firecracker": 1,
+        "punch": 1
+      },
+      "living": 17,
+      "offers": [],
+      "pickups": 2,
+      "player": [
+        600,
+        840
+      ],
+      "projectiles": 0,
+      "punches": 10,
+      "qa": false,
+      "save_path": "user://survivor_meta.json",
+      "session_duration": 600,
+      "smoke": 18,
+      "sounds": {
+        "gem": 2,
+        "hit": 1,
+        "hurt": 1,
+        "launch": 4,
+        "level": 1,
+        "metal": 6,
+        "pop": 1,
+        "punch": 10,
+        "start": 1,
+        "throw": 1,
+        "upgrade": 1,
+        "warning": 1
+      },
+      "state": "RUNNING",
+      "stick": [
+        0,
+        0
+      ],
+      "vfx": {
+        "dropped": {
+          "captions": 0,
+          "particles": 0,
+          "shaders": 0,
+          "shapes": 0
+        },
+        "limits": {
+          "particles": 500,
+          "shaders": 12,
+          "shapes": 80
+        },
+        "particles": 0,
+        "shaders": 0,
+        "shapes": 0
+      },
+      "warnings": 1,
+      "weapons": [
+        "punch",
+        "firecracker"
+      ],
+      "won": false
+    },
+    {
+      "actors": 19,
+      "best_combo": 2,
+      "bursts": 0,
+      "coins": 0,
+      "combo": 2,
+      "effects": 17,
+      "elapsed": 10.5000000000001,
+      "hazards": 10,
+      "hits": 1,
+      "hp": 92.5,
+      "kills": 4,
+      "level": 2,
+      "levels": {
+        "firecracker": 1,
+        "punch": 1
+      },
+      "living": 19,
+      "offers": [],
+      "pickups": 2,
+      "player": [
+        600,
+        840
+      ],
+      "projectiles": 0,
+      "punches": 10,
+      "qa": false,
+      "save_path": "user://survivor_meta.json",
+      "session_duration": 600,
+      "smoke": 20,
+      "sounds": {
+        "gem": 2,
+        "hit": 1,
+        "hurt": 1,
+        "launch": 4,
+        "level": 1,
+        "metal": 6,
+        "pop": 2,
+        "punch": 10,
+        "start": 1,
+        "throw": 2,
+        "upgrade": 1,
+        "warning": 1
+      },
+      "state": "RUNNING",
+      "stick": [
+        0,
+        0
+      ],
+      "vfx": {
+        "dropped": {
+          "captions": 0,
+          "particles": 0,
+          "shaders": 0,
+          "shapes": 0
+        },
+        "limits": {
+          "particles": 500,
+          "shaders": 12,
+          "shapes": 80
+        },
+        "particles": 14,
+        "shaders": 1,
+        "shapes": 2
+      },
+      "warnings": 1,
+      "weapons": [
+        "punch",
+        "firecracker"
+      ],
+      "won": false
+    },
+    {
+      "actors": 21,
+      "best_combo": 2,
+      "bursts": 0,
+      "coins": 0,
+      "combo": 0,
+      "effects": 0,
+      "elapsed": 11.0333333333335,
+      "hazards": 10,
+      "hits": 1,
+      "hp": 92.5,
+      "kills": 4,
+      "level": 2,
+      "levels": {
+        "firecracker": 1,
+        "punch": 1
+      },
+      "living": 21,
+      "offers": [],
+      "pickups": 2,
+      "player": [
+        600,
+        840
+      ],
+      "projectiles": 0,
+      "punches": 10,
+      "qa": false,
+      "save_path": "user://survivor_meta.json",
+      "session_duration": 600,
+      "smoke": 20,
+      "sounds": {
+        "gem": 2,
+        "hit": 1,
+        "hurt": 1,
+        "launch": 4,
+        "level": 1,
+        "metal": 6,
+        "pop": 2,
+        "punch": 10,
+        "start": 1,
+        "throw": 2,
+        "upgrade": 1,
+        "warning": 1
+      },
+      "state": "RUNNING",
+      "stick": [
+        0,
+        0
+      ],
+      "vfx": {
+        "dropped": {
+          "captions": 0,
+          "particles": 0,
+          "shaders": 0,
+          "shapes": 0
+        },
+        "limits": {
+          "particles": 500,
+          "shaders": 12,
+          "shapes": 80
+        },
+        "particles": 0,
+        "shaders": 0,
+        "shapes": 0
+      },
+      "warnings": 1,
+      "weapons": [
+        "punch",
+        "firecracker"
+      ],
+      "won": false
+    },
+    {
+      "actors": 21,
+      "best_combo": 2,
+      "bursts": 0,
+      "coins": 0,
+      "combo": 0,
+      "effects": 0,
+      "elapsed": 11.5666666666668,
+      "hazards": 10,
+      "hits": 1,
+      "hp": 92.5,
+      "kills": 4,
+      "level": 2,
+      "levels": {
+        "firecracker": 1,
+        "punch": 1
+      },
+      "living": 21,
+      "offers": [],
+      "pickups": 2,
+      "player": [
+        600,
+        840
+      ],
+      "projectiles": 0,
+      "punches": 10,
+      "qa": false,
+      "save_path": "user://survivor_meta.json",
+      "session_duration": 600,
+      "smoke": 22,
+      "sounds": {
+        "gem": 2,
+        "hit": 1,
+        "hurt": 1,
+        "launch": 4,
+        "level": 1,
+        "metal": 6,
+        "pop": 2,
+        "punch": 10,
+        "start": 1,
+        "throw": 2,
+        "upgrade": 1,
+        "warning": 1
+      },
+      "state": "RUNNING",
+      "stick": [
+        0,
+        0
+      ],
+      "vfx": {
+        "dropped": {
+          "captions": 0,
+          "particles": 0,
+          "shaders": 0,
+          "shapes": 0
+        },
+        "limits": {
+          "particles": 500,
+          "shaders": 12,
+          "shapes": 80
+        },
+        "particles": 0,
+        "shaders": 0,
+        "shapes": 0
+      },
+      "warnings": 1,
+      "weapons": [
+        "punch",
+        "firecracker"
+      ],
+      "won": false
+    }
+  ],
+  "errors": []
+}

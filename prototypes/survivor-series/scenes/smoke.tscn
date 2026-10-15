@@ -1,46 +1,45 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scripts/smoke.gd" id="1_acmqr"]
-[ext_resource type="Texture2D" path="res://assets/art/fx/soft_puff.tres" id="2_rx0m8"]
+[ext_resource type="Script" path="res://scripts/smoke.gd" id="1_rx0m8"]
+[ext_resource type="Shader" path="res://addons/proto_kit/pixel_vfx_smoke.gdshader" id="2_y4cvb"]
 
-[node name="Smoke" type="Node2D" unique_id=910838709]
-script = ExtResource("1_acmqr")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rx0m8"]
+resource_local_to_scene = true
+shader = ExtResource("2_y4cvb")
+shader_parameter/progress = 0.35
+shader_parameter/seed = null
+shader_parameter/rect_size = Vector2(112, 80)
+shader_parameter/pixel = 2.777778
+shader_parameter/outline = null
+shader_parameter/tone_0 = null
+shader_parameter/tone_1 = null
+shader_parameter/tone_2 = Color(0.5568628, 0.5294118, 0.60784316, 1)
+shader_parameter/tone_3 = Color(0.8235294, 0.79607844, 0.84705883, 1)
+shader_parameter/tone_4 = null
 
-[node name="Haze" type="Sprite2D" parent="." unique_id=344173247]
-modulate = Color(0.45, 0.38, 0.55, 0.35)
-scale = Vector2(1.5, 0.6)
-texture = ExtResource("2_rx0m8")
+[node name="Smoke" type="Node2D" unique_id=1904744519]
+script = ExtResource("1_rx0m8")
 
-[node name="Puffs" type="Node2D" parent="." unique_id=423820628]
+[node name="Footprint" type="Node2D" parent="." unique_id=495848598]
 unique_name_in_owner = true
-visible = false
 
-[node name="Puff1" type="Sprite2D" parent="Puffs" unique_id=1479944826]
-modulate = Color(0.86, 0.85, 0.9, 0.85)
-position = Vector2(-22, -14)
-scale = Vector2(0.62, 0.62)
-texture = ExtResource("2_rx0m8")
+[node name="DangerArea" type="Polygon2D" parent="Footprint" unique_id=1923099276]
+color = Color(0.5254902, 0.48235294, 0.6117647, 0.14117648)
+polygon = PackedVector2Array(42, 0, 41.79776, 4.1167197, 41.19298, 8.193793, 40.191494, 12.191956, 38.80294, 16.072704, 37.040695, 19.798662, 34.921722, 23.33395, 32.466442, 26.644518, 29.698484, 29.698484, 26.644518, 32.46644, 23.33395, 34.921722, 19.798664, 37.04069, 16.072704, 38.80294, 12.191955, 40.191494, 8.193795, 41.19298, 4.1167197, 41.79776, -1.8358783e-06, 42, -4.1167183, 41.79776, -8.193793, 41.19298, -12.191958, 40.191494, -16.072702, 38.80294, -19.798658, 37.040695, -23.333948, 34.921726, -26.644518, 32.466442, -29.698484, 29.698484, -32.466442, 26.644518, -34.921726, 23.333948, -37.04069, 19.798668, -38.80294, 16.072706, -40.191494, 12.191958, -41.19298, 8.193793, -41.79776, 4.1167183, -42, -3.6717565e-06, -41.79776, -4.1167154, -41.19298, -8.19379, -40.191494, -12.191955, -38.80294, -16.072704, -37.04069, -19.798664, -34.921722, -23.333952, -32.466442, -26.644516, -29.698486, -29.698483, -26.64452, -32.46644, -23.333958, -34.92172, -19.79866, -37.040695, -16.07271, -38.80294, -12.191951, -40.191494, -8.193796, -41.19298, -4.116711, -41.79776, 5.00845e-07, -42, 4.116712, -41.79776, 8.193797, -41.19298, 12.191952, -40.191494, 16.072712, -38.802937, 19.798662, -37.040695, 23.333942, -34.921726, 26.64452, -32.46644, 29.698479, -29.69849, 32.466442, -26.644512, 34.921722, -23.333952, 37.040695, -19.798655, 38.80294, -16.072704, 40.191494, -12.191963, 41.19298, -8.1937895, 41.79776, -4.1167245)
 
-[node name="Puff2" type="Sprite2D" parent="Puffs" unique_id=969375762]
-modulate = Color(0.86, 0.85, 0.9, 0.85)
-position = Vector2(18, -12)
-scale = Vector2(0.7, 0.7)
-texture = ExtResource("2_rx0m8")
+[node name="DangerBoundary" type="Line2D" parent="Footprint" unique_id=197446137]
+points = PackedVector2Array(42, 0, 41.79776, 4.1167197, 41.19298, 8.193793, 40.191494, 12.191956, 38.80294, 16.072704, 37.040695, 19.798662, 34.921722, 23.33395, 32.466442, 26.644518, 29.698484, 29.698484, 26.644518, 32.46644, 23.33395, 34.921722, 19.798664, 37.04069, 16.072704, 38.80294, 12.191955, 40.191494, 8.193795, 41.19298, 4.1167197, 41.79776, -1.8358783e-06, 42, -4.1167183, 41.79776, -8.193793, 41.19298, -12.191958, 40.191494, -16.072702, 38.80294, -19.798658, 37.040695, -23.333948, 34.921726, -26.644518, 32.466442, -29.698484, 29.698484, -32.466442, 26.644518, -34.921726, 23.333948, -37.04069, 19.798668, -38.80294, 16.072706, -40.191494, 12.191958, -41.19298, 8.193793, -41.79776, 4.1167183, -42, -3.6717565e-06, -41.79776, -4.1167154, -41.19298, -8.19379, -40.191494, -12.191955, -38.80294, -16.072704, -37.04069, -19.798664, -34.921722, -23.333952, -32.466442, -26.644516, -29.698486, -29.698483, -26.64452, -32.46644, -23.333958, -34.92172, -19.79866, -37.040695, -16.07271, -38.80294, -12.191951, -40.191494, -8.193796, -41.19298, -4.116711, -41.79776, 5.00845e-07, -42, 4.116712, -41.79776, 8.193797, -41.19298, 12.191952, -40.191494, 16.072712, -38.802937, 19.798662, -37.040695, 23.333942, -34.921726, 26.64452, -32.46644, 29.698479, -29.69849, 32.466442, -26.644512, 34.921722, -23.333952, 37.040695, -19.798655, 38.80294, -16.072704, 40.191494, -12.191963, 41.19298, -8.1937895, 41.79776, -4.1167245)
+closed = true
+width = 2.777778
+default_color = Color(0.827451, 0.7372549, 0.79607844, 0.6)
 
-[node name="Puff3" type="Sprite2D" parent="Puffs" unique_id=1689617848]
-modulate = Color(0.86, 0.85, 0.9, 0.85)
-position = Vector2(-4, -26)
-scale = Vector2(0.82, 0.82)
-texture = ExtResource("2_rx0m8")
-
-[node name="Puff4" type="Sprite2D" parent="Puffs" unique_id=713762393]
-modulate = Color(0.86, 0.85, 0.9, 0.85)
-position = Vector2(-18, -40)
-scale = Vector2(0.55, 0.55)
-texture = ExtResource("2_rx0m8")
-
-[node name="Puff5" type="Sprite2D" parent="Puffs" unique_id=874453901]
-modulate = Color(0.86, 0.85, 0.9, 0.85)
-position = Vector2(14, -42)
-scale = Vector2(0.6, 0.6)
-texture = ExtResource("2_rx0m8")
+[node name="Cloud" type="ColorRect" parent="Footprint" unique_id=786532971]
+unique_name_in_owner = true
+z_index = 1
+z_as_relative = false
+material = SubResource("ShaderMaterial_rx0m8")
+offset_left = -56.0
+offset_top = -50.0
+offset_right = 56.0
+offset_bottom = 30.0
+mouse_filter = 2

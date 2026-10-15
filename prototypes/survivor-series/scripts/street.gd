@@ -20,13 +20,16 @@ const Build = preload("res://scripts/run_build.gd")
 ## Its size grows to the view plus a margin on wide screens; see `_recenter`.
 @export var bounds := Rect2(48.0, 48.0, 1104.0, 1584.0)
 @export var max_enemies: int = 140
-@export var max_effects: int = 32
 @export var max_gems: int = 160
 @export var max_hazards: int = 10
-## Blasts in these palettes get a pixel fireball (PixelVfx "explosion"); the others a quick flash.
-@export var explosive_palettes: Array[StringName] = [&"blast", &"firecracker", &"fart"]
+## Fire palettes use a brief radial explosion; fart/stink use gas, other palettes a quick flash.
+@export var explosive_palettes: Array[StringName] = [&"blast", &"firecracker"]
 ## Floating damage numbers on screen at once; further hits show none until some fade.
 @export var max_numbers: int = 40
+## Reveal the hero silhouette only when this many nearby actors or shots obscure the body.
+@export var readability_enemies: int = 8
+@export var readability_projectiles: int = 12
+@export var readability_radius: float = 100.0
 @export var magnet_radius: float = 70.0
 ## Off-screen enemies left behind for this long while the hero walks away reappear ahead of the hero.
 @export var relocate_after: float = 2.5
@@ -106,6 +109,8 @@ func clear() -> void:
 			holder.remove_child(child)
 			child.queue_free()
 	_bursts.clear()
+	grid.rebuild([])
+	player.set_readability(false)
 	fx.clear()
 	big_gem = null
 	shake.trauma = 0.0
@@ -281,6 +286,7 @@ func step(delta: float, direction: Vector2, elapsed: float) -> void:
 			_hurt(cloud.damage, "smoke")
 	arsenal.step(delta)
 	_step_projectiles(delta)
+	_refresh_player_readability()
 	_step_pickups(delta)
 	var recovery: float = build.stat(&"recovery")
 	if recovery > 0.0:
@@ -364,6 +370,18 @@ func _pick_kind(weights: PackedFloat32Array) -> int:
 			return i
 	return 0
 
+func _refresh_player_readability() -> void:
+	var crowded: bool = grid.query(player.position, readability_radius).size() >= readability_enemies
+	if not crowded:
+		var nearby: int = 0
+		for shot: Node2D in projectiles.get_children():
+			if not shot.is_queued_for_deletion() and shot.position.distance_squared_to(player.position) <= readability_radius * readability_radius:
+				nearby += 1
+				if nearby >= readability_projectiles:
+					crowded = true
+					break
+	player.set_readability(crowded)
+
 func _step_projectiles(delta: float) -> void:
 	for shot: Node2D in projectiles.get_children():
 		if shot.is_queued_for_deletion():
@@ -373,27 +391,44 @@ func _step_projectiles(delta: float) -> void:
 			if target != null:
 				var want: Vector2 = (target.position - shot.position).normalized() * shot.velocity.length()
 				shot.velocity = shot.velocity.lerp(want, minf(1.0, delta * 6.0))
+		var airborne: bool = shot.flight_left > 0.0
 		var before: Vector2 = shot.step(delta)
-		var air: Vector2 = shot.position - Vector2(0.0, shot.lift)
-		if shot.trail != &"" and shot.flight_left <= 0.0 and not shot.is_queued_for_deletion():
-			fx.trail(air, shot.palette, shot.trail)
+		var destination: Vector2 = shot.position
+		var wall_t: float = INF
+		if not airborne and shot.mode in ["straight", "boomerang"] and shot.velocity != Vector2.ZERO and not shot.is_queued_for_deletion():
+			wall_t = map.sweep_block(before, destination, shot.radius)
+		var hits: Array = []
+		var stopped_on_enemy: bool = false
 		if not shot.detonate and not shot.is_queued_for_deletion():
-			for enemy: Node2D in grid.query((before + shot.position) * 0.5, before.distance_to(shot.position) * 0.5 + shot.radius):
-				if shot.can_hit(enemy, before):
-					shot.remember(enemy)
-					fx.burst(air, shot.palette, 5 if shot.is_queued_for_deletion() else 3, 45.0)
-					enemy.hit(shot.damage, shot.velocity.normalized() if shot.velocity != Vector2.ZERO else (enemy.position - player.position).normalized(), shot.force)
+			for enemy: Node2D in grid.query((before + destination) * 0.5, before.distance_to(destination) * 0.5 + shot.radius):
+				var contact: float = shot.hit_fraction(enemy, before)
+				if is_finite(contact) and contact < wall_t:
+					hits.append({"enemy": enemy, "t": contact})
+			hits.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return a.t < b.t)
+			for hit: Dictionary in hits:
+				var enemy: Node2D = hit.enemy
+				var at: Vector2 = before.lerp(destination, hit.t)
+				shot.remember(enemy)
+				fx.burst(at - Vector2(0.0, shot.lift), shot.palette, 5 if shot.is_queued_for_deletion() else 3, 45.0)
+				enemy.hit(shot.damage, shot.velocity.normalized() if shot.velocity != Vector2.ZERO else (enemy.position - player.position).normalized(), shot.force)
 				if shot.detonate or shot.is_queued_for_deletion():
+					shot.position = at
+					stopped_on_enemy = true
 					break
-		if shot.mode != "lob" and shot.mode != "fall" and shot.flight_left <= 0.0 and not shot.is_queued_for_deletion():
-			hit_props(shot.position, shot.radius, shot.damage)
-		if _stopped_by_roadblock(shot):
-			fx.burst(air, shot.palette, 5, 40.0)
+		if is_finite(wall_t) and not stopped_on_enemy and not shot.is_queued_for_deletion():
+			shot.position = before.lerp(destination, wall_t)
+			fx.spark(shot.position - Vector2(0.0, shot.lift), -shot.velocity.normalized(), shot.palette, 3)
+			# Include the contacted prop even when its boundary is exactly one radius away.
+			hit_props(shot.position, shot.radius + 0.1, shot.damage)
 			if shot.blast_radius > 0.0:
 				shot.detonate = true
 			else:
 				shot.queue_free()
 				continue
+		elif shot.mode not in ["lob", "fall"] and shot.flight_left <= 0.0 and not shot.is_queued_for_deletion():
+			hit_props(shot.position, shot.radius, shot.damage)
+		if shot.trail != &"" and shot.flight_left <= 0.0 and not shot.is_queued_for_deletion():
+			fx.trail(shot.position - Vector2(0.0, shot.lift), shot.palette, shot.trail)
 		if (shot.slow > 0.0 or shot.pull > 0.0) and shot.flight_left <= 0.0 and not shot.detonate and not shot.is_queued_for_deletion():
 			for enemy: Node2D in grid.query(shot.position, shot.radius):
 				if shot.slow > 0.0:
@@ -405,16 +440,19 @@ func _step_projectiles(delta: float) -> void:
 			sfx.play(&"pop", 0.05)
 			shot.queue_free()
 
-## Instant area damage with a pixel ring, burst and star in `palette` (a PixelVfx palette on %Fx). Lethal hits inside
+## Instant area damage with ground ring and material-specific feedback. Lethal hits inside
 ## queue their own consequences.
 func blast(at: Vector2, radius: float, damage: float, force: float, palette: StringName = &"blast", caption: String = "") -> void:
-	if palette in explosive_palettes:
-		fx.effect(&"explosion", at - Vector2(0.0, 14.0), Vector2.ONE * radius * 2.6, 0.7, palette)
+	var gas: bool = palette in [&"fart", &"stink"]
+	if gas:
+		fx.effect(&"gas", at - Vector2(0.0, 8.0), Vector2.ONE * radius * 2.6, 0.55, palette)
+	elif palette in explosive_palettes:
+		fx.effect(&"explosion", at - Vector2(0.0, 14.0), Vector2.ONE * radius * 2.6, 0.3, palette)
+		fx.pop(at - Vector2(0.0, 14.0), palette, minf(radius * 0.2, 18.0), 0.055)
 	else:
-		fx.pop(at - Vector2(0.0, 10.0), palette, radius * 0.4)
-	fx.ring(at, radius * 0.45, radius, palette, 0.3, 2)
-	fx.burst(at - Vector2(0.0, 10.0), palette, 18, 85.0)
-	fx.star(at - Vector2(0.0, 10.0), palette, true)
+		fx.pop(at - Vector2(0.0, 10.0), palette, minf(radius * 0.25, 24.0), 0.09)
+	fx.ring(at, radius * 0.45, radius, palette, 0.24, 1)
+	fx.burst(at - Vector2(0.0, 10.0), palette, 6 if gas else 12, 35.0 if gas else 85.0)
 	if caption != "":
 		fx.caption(at - Vector2(0.0, 40.0), caption, palette)
 	for enemy: Node2D in grid.query(at, radius):
@@ -546,20 +584,13 @@ func _block_enemies(delta: float) -> void:
 			continue
 		enemy.position = map.push_out(enemy.position, enemy.definition.radius * 0.6, player.position, enemy.definition.speed * delta * 0.8)
 
-## Thrown, falling, orbiting and anchored shots pass over roadblocks; flat flying ones stop on them.
-func _stopped_by_roadblock(shot: Node2D) -> bool:
-	if shot.is_queued_for_deletion() or shot.detonate or shot.mode not in ["straight", "boomerang"] or shot.velocity == Vector2.ZERO:
-		return false
-	return map.blocked(shot.position)
-
 func _smoke(at: Vector2) -> void:
 	if hazards.get_child_count() >= max_hazards:
 		return
 	var cloud := smoke_scene.instantiate() as Node2D
-	hazards.add_child(cloud)
 	cloud.position = at
-	# The visible cloud is a PixelVfx smoke effect living exactly as long as the hazard.
-	fx.effect(&"smoke", at + Vector2(0.0, 8.0), Vector2(cloud.radius * 4.0, cloud.radius * 3.4), cloud.lifetime, &"smoke", {}, Vector2(0.5, 1.0))
+	hazards.add_child(cloud)
+	# The hazard owns its cloud and footprint, independently of cosmetic VFX budgets.
 	smoke_spawns += 1
 
 func _warning() -> void:
@@ -587,7 +618,6 @@ func _impact(enemy: Node2D, lethal: bool, direction: Vector2) -> void:
 		fx.spark(chest, direction, &"hit")
 		if punching:
 			fx.star(chest, &"hit")
-			fx.caption(chest - Vector2(0.0, 30.0), "砰！", &"hit")
 		sfx.play(&"metal" if enemy.definition.kind in ["bike", "car"] else &"hit", 0.05)
 		shake.add_trauma(0.08, 0.3)
 		return
@@ -599,8 +629,8 @@ func _impact(enemy: Node2D, lethal: bool, direction: Vector2) -> void:
 	var milestone: bool = combo % 25 == 0
 	if enemy.elite:
 		_frame_big = true
-	fx.pop(chest, &"heavy" if enemy.elite else &"hit", 26.0 if enemy.elite else 14.0, 0.1)
-	fx.burst(chest, &"heavy" if enemy.elite else &"hit", 16 if enemy.elite else 9, 70.0)
+	fx.pop(chest, &"heavy" if enemy.elite else &"hit", 22.0 if enemy.elite else 9.0, 0.1)
+	fx.burst(chest, &"heavy" if enemy.elite else &"hit", 12 if enemy.elite else 5, 70.0)
 	if enemy.elite or milestone or punching:
 		fx.star(chest, &"heavy", true)
 	if enemy.elite or milestone:

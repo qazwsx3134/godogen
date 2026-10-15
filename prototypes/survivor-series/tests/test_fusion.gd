@@ -124,5 +124,8 @@ func run() -> void:
 	_expect(street.projectiles.get_child_count() == 2, "rider and tofu each spawn a projectile")
 	game.queue_free()
 	await _frames(2)
+	# Audio mixing uses wall time even when --fixed-fps accelerates the test.
+	OS.delay_msec(150)
+	await _frames(2)
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(META_PATH))
 	_finish("SURVIVOR FUSION")

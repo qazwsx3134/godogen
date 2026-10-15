@@ -13,6 +13,8 @@ var hero: String = "man"
 var fusions: Array = []
 
 func _ready() -> void:
+	if save_path == "user://survivor_meta.json" and preload("res://scripts/qa_config.gd").enabled():
+		save_path = preload("res://scripts/qa_config.gd").SAVE_PATH
 	load_save()
 
 func _defaults() -> void:

@@ -1,8 +1,9 @@
-// Phone-shaped browser check of the Web build (build/web), driven by real touch input.
-//   python3 -m http.server 8793 -d prototypes/survivor-series/build/web &
+// Phone-shaped browser check of the Web QA build (build/qa), driven by real touch input.
+//   python3 -m http.server 8793 -d prototypes/survivor-series/build/qa &
 //   node tools/browser_check.mjs [--url http://127.0.0.1:8793/index.html] [--duration 25] [--out dir]
 //        [--playwright <path to playwright-core>] [--chromium <chrome binary>]
-// A run is shortened with index.html?duration=N (game.gd reads it on Web only). Covers: menu, touch start and
+//        [--production-url http://127.0.0.1:8793/web/index.html]
+// A run is shortened with index.html?duration=N (only the Web QA preset accepts it). Covers: menu, touch start and
 // drag, level-up cards, pause, a full run to the results, retry, home, shop, and coins surviving a page reload (IDBFS).
 import {createRequire} from 'node:module';
 import fs from 'node:fs';
@@ -12,7 +13,9 @@ const arg = (key, fallback) => args.includes(key) ? args[args.indexOf(key)+1] : 
 const {chromium} = createRequire(import.meta.url)(arg('--playwright','playwright-core'));
 const out = arg('--out','/tmp/survivor-browser');
 const duration = Number(arg('--duration','25'));
-const url = arg('--url','http://127.0.0.1:8793/index.html') + '?duration=' + duration;
+const withDuration=value=>{const u=new URL(value);u.searchParams.set('duration',String(duration));return u.href;};
+const url=withDuration(arg('--url','http://127.0.0.1:8793/index.html'));
+const productionUrl=arg('--production-url',null);
 fs.mkdirSync(out,{recursive:true});
 const browser = await chromium.launch({headless:true,executablePath:arg('--chromium',undefined),args:['--enable-webgl','--ignore-gpu-blocklist','--use-angle=swiftshader','--enable-unsafe-swiftshader']});
 const errors=[];
@@ -41,10 +44,21 @@ try {
  };
  const click=async name=>{await page.waitForTimeout(300);await tapRect((await page.evaluate(()=>window.__survivorLayout))[name]);};
  const choose=async()=>{await page.waitForTimeout(400);await tapRect((await page.evaluate(()=>window.__survivorLayout)).cards[0]);await page.waitForTimeout(400);};
+ let productionBefore;
+ if(productionUrl){
+  await page.goto(withDuration(productionUrl),{waitUntil:'load',timeout:60000});
+  await until('MENU',60000);
+  productionBefore=report.snapshots.productionBefore=await tel();
+  expect(!productionBefore.qa&&productionBefore.session_duration===600,'production ignores the short-run query');
+  expect(productionBefore.save_path==='user://survivor_meta.json','production uses its own progress file');
+ }
  await page.goto(url,{waitUntil:'load',timeout:60000});
  await until('MENU',60000);
  await page.screenshot({path:path.join(out,'phone-menu.png')});
- const coinsBefore=(await tel()).coins;
+ const menuState=await tel();
+ expect(menuState.qa&&menuState.session_duration===duration,'QA feature enables the short run');
+ expect(menuState.save_path==='user://survivor_meta_qa.json','QA progress is isolated from production');
+ const coinsBefore=menuState.coins;
  await click('start');
  await until('RUNNING',10000);
  expect(true,'real touch starts the game');
@@ -73,6 +87,14 @@ try {
  await choose();
  while((await tel()).state==='UPGRADE')await choose();
  expect(JSON.stringify((await tel()).levels)!==levelsBefore,'real touch picks a card');
+ const afterUpgrade=await tel();
+ await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:180,y:580,id:2}]});
+ await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:250,y:600,id:2}]});
+ await page.waitForTimeout(500);
+ const afterDrag=await tel();
+ await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+ expect(Math.hypot(afterDrag.player[0]-afterUpgrade.player[0],afterDrag.player[1]-afterUpgrade.player[1])>10,'movement still works after choosing an upgrade');
+
  await click('pause');
  await until('PAUSED');
  const paused=(await tel()).elapsed;
@@ -84,7 +106,8 @@ try {
  const started=Date.now();
  for(let s=await tel();s.state!=='RESULTS';s=await tel()){
   if(s.state==='UPGRADE')await choose();
-  expect(s.living<=140&&s.effects<=32&&s.hazards<=10,'runtime object budgets hold');
+  const fx=s.vfx;
+  expect(s.living<=140&&s.hazards<=10&&fx.particles<=fx.limits.particles&&fx.shapes<=fx.limits.shapes&&fx.shaders<=fx.limits.shaders&&s.effects===fx.particles+fx.shapes+fx.shaders,'actual renderer budgets hold');
   if(Date.now()-started>duration*1000*6+60000)throw new Error('run did not finish');
   await page.waitForTimeout(1000);
  }
@@ -104,6 +127,13 @@ try {
  await click('shop_back');
  await until('MENU');
  expect(true,'shop opens and closes by touch');
+ if(productionUrl){
+  await page.goto(withDuration(productionUrl),{waitUntil:'load',timeout:60000});
+  await until('MENU',60000);
+  const productionAfter=report.snapshots.productionAfter=await tel();
+  expect(productionAfter.coins===productionBefore.coins,'QA rewards never reach the production save');
+  expect(!productionAfter.qa&&productionAfter.session_duration===600,'production stays full-length after a QA run');
+ }
  expect(errors.length===0,'no browser, load or Godot script errors');
  await ctx.close();
  const desktop=await browser.newContext({viewport:{width:960,height:600}});

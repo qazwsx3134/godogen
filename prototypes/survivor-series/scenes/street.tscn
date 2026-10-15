@@ -57,7 +57,7 @@ region_rect = Rect2(0, 0, 1472, 1472)
 
 [node name="Hazards" type="Node2D" parent="." unique_id=536408701]
 unique_name_in_owner = true
-z_index = 2
+z_index = -2
 
 [node name="Pickups" type="Node2D" parent="." unique_id=698247646]
 unique_name_in_owner = true

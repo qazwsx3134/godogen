@@ -1,0 +1,19 @@
+# Public upstream snapshot and deployed files (download_snapshot.py).
+/upstream/
+/upstream-*.tar.gz
+/raw/
+
+# Rebuildable inventories and raw download/API responses.
+/manifest.json
+/png-inventory.json
+/commit.json
+/github-repository.json
+/initial-downloads.json
+/initial-response.json
+
+# Rendered research outputs (capture_reference.mjs).
+/generated/
+/screenshots/
+
+# Local session bookkeeping; the handoff is recorded in README.md.
+/session-state.json

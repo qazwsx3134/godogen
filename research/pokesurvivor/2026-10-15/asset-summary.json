@@ -1,0 +1,23 @@
+{
+  "commit": "c31715d183c0fd0b357e5ebc10fd85606132865e",
+  "file_count": 13619,
+  "asset_files": 13481,
+  "png_count": 13476,
+  "pokemon_png_count": 13468,
+  "normal_sheets": 6762,
+  "shiny_sheets": 6706,
+  "sheet_animations": {
+    "Attack": 1924,
+    "Charge": 1924,
+    "Faint": 1924,
+    "Hurt": 1924,
+    "Idle": 1924,
+    "Shoot": 1924,
+    "Walk": 1924
+  },
+  "png_color_types": {
+    "6": 8,
+    "3": 13468
+  },
+  "deployed_bundle_matches": true
+}

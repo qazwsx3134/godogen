@@ -1,0 +1,60 @@
+{
+  "engine": "chromium",
+  "snapshot": {
+    "actors": 140,
+    "best_combo": 0,
+    "bursts": 0,
+    "coins": 0,
+    "combo": 0,
+    "effects": 592,
+    "elapsed": 0,
+    "hazards": 10,
+    "hits": 0,
+    "hp": 110,
+    "kills": 0,
+    "level": 1,
+    "levels": {},
+    "living": 140,
+    "offers": [],
+    "pickups": 0,
+    "player": [
+      600,
+      840
+    ],
+    "projectiles": 240,
+    "punches": 0,
+    "qa": true,
+    "save_path": "user://density_preview_meta.json",
+    "session_duration": 600,
+    "smoke": 10,
+    "sounds": {
+      "start": 1,
+      "warning": 35
+    },
+    "state": "RUNNING",
+    "stick": [
+      0,
+      0
+    ],
+    "vfx": {
+      "dropped": {
+        "captions": 0,
+        "particles": 500,
+        "shaders": 4,
+        "shapes": 20
+      },
+      "limits": {
+        "particles": 500,
+        "shaders": 12,
+        "shapes": 80
+      },
+      "particles": 500,
+      "shaders": 12,
+      "shapes": 80
+    },
+    "warnings": 35,
+    "weapons": [],
+    "won": false
+  },
+  "errors": []
+}

@@ -79,7 +79,7 @@ godot --headless --path . --export-release "Web" build/web/index.html
 **手機上測試不能用區網的 http 網址**：引擎檢查 `isSecureContext`，不是 HTTPS／localhost 時遊戲不啟動，只顯示缺少 `Secure Context`（pachinko 的 `serve.sh` 先踩過）。可行：上傳 itch.io 的 Draft／受限頁面用手機開（最省事，也驗證 iframe 的震動權限）；`adb reverse tcp:8000 tcp:8000` 後在手機開 `http://localhost:8000`；或在區網開 HTTPS（Caddy 內部 CA）。下面的桌面自動驗證用 `127.0.0.1`，算安全環境，所以沒有這個問題。
 
 
-這台機器已有 Playwright 的 Chromium（`~/.cache/ms-playwright/chromium-*/chrome-linux64/chrome`）；`playwright-core` 用 `npm i playwright-core` 裝在暫存資料夾即可，用 `executablePath` 指定瀏覽器。
+這台機器已有 Playwright 的 Chromium（WSL：`~/.cache/ms-playwright/chromium-*/chrome-linux64/chrome`；macOS：`~/Library/Caches/ms-playwright/chromium-*/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing`）；`playwright-core` 用 `npm i playwright-core` 裝在暫存資料夾即可，用 `executablePath` 指定瀏覽器。
 
 ```js
 const browser = await chromium.launch({ executablePath, headless: true,
@@ -89,11 +89,14 @@ const browser = await chromium.launch({ executablePath, headless: true,
 
 - 用 `python3 -m http.server <port> --bind 127.0.0.1`（背景執行，記下 `$!` 再 `kill`；**不要用 `pkill -f`，會連自己的 shell 一起殺**）。不能用 `file://`。
 - 看：`page.on('console')`、`pageerror`、`requestfailed`、`canvas` 尺寸、`navigator` 能力、截圖。軟體 WebGL 下約 15 秒載入完。
+- 橫式遊戲的手機版：`web_probe.mjs` 只會開直式手機，橫式用 erwin-run 的 `tools/web_landscape.mjs`（844×390）。測「直拿不能玩」：`page.setViewportSize` 在 390×844 與 844×390 之間切換，Godot 的視窗大小會跟著變，可以驗證直拿擋住、玩到一半轉直會暫停、轉回來停在暫停選單。
 - `godot-kit/tools/web/web_probe.mjs` 就是這個（載入、console 錯誤、截圖、能力檢查；`--project` 指到專案，讓它讀專案自己的震動探測字串）。
 
 ## 7. itch.io 頁面與上傳
 
 - 建頁面、`butler login` 只有使用者能做（瀏覽器授權）。頁面 **Kind of project = HTML**，頻道標成「playable in browser」（`itch-publish` 的坑）。
-- 嵌入設定：直式 9:16，viewport 540×960；開 Fullscreen button；勾 Mobile friendly；方向 Portrait。桌面全螢幕靠上面的 `_fit_window()` 置中。
+- 嵌入設定：直式 9:16，viewport 540×960；開 Fullscreen button；勾 Mobile friendly；方向 Portrait。桌面全螢幕靠上面的 `_fit_window()` 置中。橫式遊戲（erwin-run）：viewport 1280×720、方向 Landscape；文案、欄位、封面 630×500 的完整範例見 erwin-run `publishing/itch/page.md`。
+- 草稿頁的公開網址回 404，WebFetch 讀不到現有內容；要改頁面只能在後台（使用者自己，或連上 Claude in Chrome 擴充）。擴充的 `file_upload` 單次上限 10 MB，網頁版 zip 通常 13 MB 以上，zip 仍要使用者自己傳或用 butler。
+- macOS 上 `brew install butler` 裝到的是同名的視窗管理軟體（manytricks），不是 itch 的工具；butler 要從 itch 官方下載。
 - 指令：`butler push build/web <user>/<game>:html --userversion <版本>`（推**資料夾**，不要推 zip 的 zip）。不用 butler 時：把 `build/web` 裡的檔案壓成 zip，**`index.html` 要在 zip 最上層**，頁面勾 "played in the browser"。
 - 專案頁要寫的：音樂與音效作者與授權（CC0 也建議標）、字型授權（OFL）、素材是 AI 生成的要如實揭露（itch.io 專案頁有相關欄位，請在編輯畫面確認）、真人與真實地點的內容說明。

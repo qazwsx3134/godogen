@@ -1,4 +1,5 @@
 extends Node
+const QA = preload("res://scripts/qa_config.gd")
 enum State { MENU, RUNNING, PAUSED, RESULTS, UPGRADE, SHOP }
 @export var session_duration: float = 600.0
 ## Coins per kill, per surviving minute, and for a full-length win.
@@ -47,20 +48,20 @@ func _ready() -> void:
 	hud.get_node("%Pause").pressed.connect(pause_run)
 	pause_panel.get_node("%Resume").pressed.connect(resume_run)
 	pause_panel.get_node("%ShakeToggle").toggled.connect(set_shake_enabled)
-	for argument: String in OS.get_cmdline_user_args():
-		if argument == "--autoplay":
-			auto_play = true
-		if argument.begins_with("--duration="):
-			session_duration = clampf(argument.get_slice("=", 1).to_float(), 0.3, 600.0)
-		if argument.begins_with("--hero="):
-			meta.hero = argument.get_slice("=", 1)
-		if argument.begins_with("--seed="):
-			street.rng.seed = argument.get_slice("=", 1).to_int()
-	if OS.has_feature("web"):
-		# QA shortcut for tools/browser_check.mjs: index.html?duration=25 shortens a run. Players never pass it.
-		var query: Variant = JavaScriptBridge.eval("new URLSearchParams(location.search).get('duration')")
-		if query is String and not query.is_empty():
-			session_duration = clampf(query.to_float(), 0.3, 600.0)
+	if QA.enabled():
+		for argument: String in OS.get_cmdline_user_args():
+			if argument == "--autoplay":
+				auto_play = true
+			if argument.begins_with("--duration="):
+				session_duration = clampf(argument.get_slice("=", 1).to_float(), 0.3, 600.0)
+			if argument.begins_with("--hero="):
+				meta.hero = argument.get_slice("=", 1)
+			if argument.begins_with("--seed="):
+				street.rng.seed = argument.get_slice("=", 1).to_int()
+		if OS.has_feature("web"):
+			var query: Variant = JavaScriptBridge.eval("new URLSearchParams(location.search).get('duration')")
+			if query is String and query.is_valid_float():
+				session_duration = clampf(query.to_float(), 0.3, 600.0)
 	show_menu()
 	if auto_play:
 		start_run()
@@ -166,7 +167,7 @@ func finish_run(victory: bool) -> void:
 	var level: int = street.build.level
 	earned = int(round((street.coins * coin_value + kills * coins_per_kill + floorf(elapsed / 60.0) * coins_per_minute + (win_bonus if victory else 0)) * (1.0 + street.build.stat(&"greed"))))
 	fresh_unlocks = meta.record_run(elapsed, kills, level, victory, earned)
-	results.get_node("%Title").text = "撐過十分鐘！" if victory else "倒下了…"
+	results.get_node("%Title").text = ("測試局完成" if QA.enabled() and session_duration < 600.0 else "撐過十分鐘！") if victory else "倒下了…"
 	results.get_node("%ResultStats").text = "存活 %s  ·  揍飛 %d\n最高連殺 %d  ·  成長到 Lv.%d\n獲得金幣 %d（共 %d）" % [clock(elapsed), kills, street.best_combo, level, earned, meta.coins]
 	results.get_node("%BuildSummary").text = street.build.summary()
 	var names: PackedStringArray = []
@@ -339,7 +340,38 @@ func snapshot() -> Dictionary:
 	var offers: Array[String] = []
 	for item: Resource in current_offers:
 		offers.append(String(item.id))
-	return {"state": State.keys()[state], "elapsed": elapsed, "kills": street.kills, "hp": street.player.hp, "hits": street.hits_taken, "punches": street.arsenal.punches, "warnings": street.warnings, "smoke": street.smoke_spawns, "bursts": street.bursts_fired, "living": street.living_count(), "actors": street.enemies.get_child_count(), "effects": street.effects.get_child_count(), "hazards": street.hazards.get_child_count(), "projectiles": street.projectiles.get_child_count(), "pickups": street.pickups.get_child_count(), "combo": street.combo, "best_combo": street.best_combo, "level": street.build.level if street.build != null else 1, "weapons": street.build.weapons if street.build != null else [], "levels": street.build.levels if street.build != null else {}, "offers": offers, "player": [street.player.position.x, street.player.position.y], "stick": [stick.vector.x, stick.vector.y], "coins": meta.coins, "won": won, "sounds": sound_events}
+	return {
+		"state": State.keys()[state],
+		"elapsed": elapsed,
+		"kills": street.kills,
+		"hp": street.player.hp,
+		"hits": street.hits_taken,
+		"punches": street.arsenal.punches,
+		"warnings": street.warnings,
+		"smoke": street.smoke_spawns,
+		"bursts": street.bursts_fired,
+		"living": street.living_count(),
+		"actors": street.enemies.get_child_count(),
+		"effects": street.fx.count(),
+		"vfx": street.fx.stats(),
+		"qa": QA.enabled(),
+		"session_duration": session_duration,
+		"save_path": meta.save_path,
+		"hazards": street.hazards.get_child_count(),
+		"projectiles": street.projectiles.get_child_count(),
+		"pickups": street.pickups.get_child_count(),
+		"combo": street.combo,
+		"best_combo": street.best_combo,
+		"level": street.build.level if street.build != null else 1,
+		"weapons": street.build.weapons if street.build != null else [],
+		"levels": street.build.levels if street.build != null else {},
+		"offers": offers,
+		"player": [street.player.position.x, street.player.position.y],
+		"stick": [stick.vector.x, stick.vector.y],
+		"coins": meta.coins,
+		"won": won,
+		"sounds": sound_events
+	}
 
 func qa_layout() -> Dictionary:
 	var layout: Dictionary = {}

@@ -1,0 +1,8 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+REVIEW_SMOKE {"cloud_visible":true,"footprint_visible":true,"hazards":1,"material_is_local":true,"shader_effects":12,"telemetry":{"dropped":{"captions":0,"particles":0,"shaders":0,"shapes":0},"limits":{"particles":500,"shaders":12,"shapes":80},"particles":0,"shaders":12,"shapes":0}}
+REVIEW_WALL {"hp_after":26.0,"hp_before":26.0,"shot_end":"(625.0, 840.0)","shot_queued_for_deletion":true,"shot_start":"(600.0, 840.0)","wall_blocks_midpoint":true}
+REVIEW_SWING {"shape_kinds_without_collision":["slash"]}
+REVIEW_EXPIRY_WALL {"detonated":true,"shot_end":"(625.0, 840.0)"}
+REVIEW_HIT_ORDER {"far_after":26.0,"far_before":26.0,"near_after":25.0,"near_before":26.0}
+REVIEW_SMOKE_CLOCKS {"first":0.263157894736842,"independent":true,"second":0.526315789473684}
