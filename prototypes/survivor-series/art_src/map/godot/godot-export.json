@@ -12,7 +12,7 @@
   },
   "bundle": {
     "path": "../data/ground-r4/C-night-market.map-bundle.json",
-    "sha256": "2b38f5d904b8367008d29c5e4e86d9c16d87057896af6527848bad9ba8f3bcca",
+    "sha256": "64d6af13a51ae3d8b24c24fa21385847f76579ceeeb850a87a4867bbcaf820ed",
     "bytes": 22379
   },
   "files": {
@@ -24,7 +24,7 @@
       "role": "tileset",
       "id": "pavement",
       "path": "assets/tilesets/pavement.png",
-      "sha256": "cae1c5b8cba4e94e8da9a0f0148a793469471777185c5f061afd1830ddf891d0",
+      "sha256": "a5581dc8d3a3e1da7618576cd34b8e5662461e3a72eb8522379711f2373d8bf7",
       "source": "../../ground/pavement.png"
     },
     {
@@ -370,14 +370,14 @@
     "inputs": [
       {
         "path": "../data/ground-r4/C-night-market.map-bundle.json",
-        "sha256": "2b38f5d904b8367008d29c5e4e86d9c16d87057896af6527848bad9ba8f3bcca",
+        "sha256": "64d6af13a51ae3d8b24c24fa21385847f76579ceeeb850a87a4867bbcaf820ed",
         "bytes": 22379
       }
     ],
     "outputs": [
       {
         "path": "survivor-series-D-night-market.tscn",
-        "sha256": "d72e8f14440af9230e2ab0bb5a2d266d9e27677ac7f4b703ee0e61afb77899f6",
+        "sha256": "21aad131b1141fd88b0c18c393949c6c47d1ecdb191e285890f87b7d77f43f1c",
         "bytes": 10496
       },
       {
@@ -387,8 +387,8 @@
       },
       {
         "path": "assets/tilesets/pavement.png",
-        "sha256": "cae1c5b8cba4e94e8da9a0f0148a793469471777185c5f061afd1830ddf891d0",
-        "bytes": 560552
+        "sha256": "a5581dc8d3a3e1da7618576cd34b8e5662461e3a72eb8522379711f2373d8bf7",
+        "bytes": 417471
       },
       {
         "path": "assets/tilesets/overlay-manhole.png",

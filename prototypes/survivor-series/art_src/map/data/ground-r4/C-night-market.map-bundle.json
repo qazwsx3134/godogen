@@ -15,7 +15,7 @@
     {
       "id": "pavement",
       "manifest": "tilesets/pavement.tileset.json",
-      "sha256": "f00db5d8b64e9393ae6d49b0646fc03e28bf85d07208b2db057bc3576c575148"
+      "sha256": "d84eb5f5250fbd693325e2c78d4fe4e02518a005f074af68e55e33552223eeaa"
     },
     {
       "id": "overlay-manhole",

@@ -7,7 +7,7 @@
 ## 內容
 
 - **主角**：男（厭世西裝；血量 ×1.1、移速 ×0.95、拳頭起手、大幅揮擊）與女（冷酷外套；血量 ×0.9、移速 ×1.08、衝擊波起手、乾脆出掌）。選擇記在存檔；命令列 `--hero=man|woman` 可指定。
-- **武器**：拳頭（男主角起始）、衝擊波（女主角起始）、回旋踢、藍白拖、珍珠奶茶、鞭炮、三炷香、天燈（解鎖）、愛的小手（解鎖）。
+- **武器**：拳頭（男主角起始）、衝擊波（女主角起始）、回旋踢、藍白拖、珍珠奶茶、鞭炮、三支香、天燈（解鎖）、愛的小手（解鎖）。
 - **新機制武器**：臭豆腐攤（放置區域，減速）、雨傘（擋傷並彈開）、套圈圈（拉扯）、路過的機車騎士（召喚夥伴）。
 - **隱藏融合**：兩把指定武器 Lv.4 時冒出「？？？」卡，選了才揭曉：雙人合擊、爆漿臭豆腐、媽媽的反手、珍珠圈、鹽水蜂炮車隊；配方見 [horde-spec.md](docs/horde-spec.md)。
 - **進化**：鐵沙掌、媽媽的追蹤拖鞋、珍珠暴雨、鹽水蜂炮、媽祖遶境、平溪天燈祭、雞毛撢子。
@@ -67,14 +67,14 @@ python3 -m http.server 8793 --bind 127.0.0.1 --directory prototypes/survivor-ser
 
 **像素風**（[pixel-ui-plan.md](docs/pixel-ui-plan.md)）：畫面上每個素材像素都是 2 px。場景用的是 `assets/pixel/` 的縮小版，原圖留在 `assets/art/`。重做縮小版：`godot --headless --path . -s tools/build_pixel_scenes.gd -- --plan` 列出尺寸，再 `uv run --no-project --with pillow --with numpy python tools/pixelize.py`。場景已經套用過一次（`assets/pixel/.applied`），之後換圖只要覆蓋同名檔。介面框由 `tools/make_ui_frames.py` 畫，主題與 HUD 由 `tools/build_pixel_ui.gd` 一次產生（`assets/ui/.applied`），之後以 `data/ui_theme.tres` 與場景為準。
 
-地面、地圖道具、男女主角、四種敵人、交通工具 5 方向、掉落物與每一張卡片（武器、被動、進化、融合）的圖示都已換成正式圖（`assets/art/`，清單見該資料夾 README）；拳頭、雨傘、飛行中的臭豆腐與機車騎士用 `assets/pixel/fx/` 的像素圖。幾何佔位仍留在場景裡（隱藏）。卡片圖示由 Codex 生的 3×3 圖示表切出：`uv run --no-project --with pillow --with numpy --with scipy python tools/slice_icon_sheet.py art_src/icons/sheets` 寫 `assets/pixel/icons/<id>_24.png`（同名覆蓋，不用改 `.tres`）。提示詞見 [opt-image-prompts.md](docs/opt-image-prompts.md)：第一批是男女主角、抽菸者、機車、汽車與夜市背景，第二批是交通工具的 5 方向圖、臭臭胖子、武器與掉落物。原圖放 `assets/source/`，遊戲用圖放 `assets/art/`。
+地面、地圖道具、男女主角、四種敵人、交通工具 5 方向、掉落物與每一張卡片（武器、被動、進化、融合）的圖示都已換成正式圖（`assets/art/`，清單見該資料夾 README）；拳頭、雨傘、飛行中的臭豆腐與機車騎士用 `assets/pixel/fx/` 的像素圖。敵人與掉落物的幾何佔位已拿掉（敵人留一個空的 `Visual/Placeholder` 給翻面用），其他場景的仍留著（隱藏）。為了讓整群敵人合成少數幾次 draw call：角色與掉落物的陰影是共用 `assets/fx/shadow_ellipse.png` 的 Sprite2D（z −1）；胖子的臭氣是一張 `assets/fx/stink.png`（z −2）；敵人血條的框在 z 1、填色在 z 2；敵人與掉落物的圖來自同一張圖集 `assets/pixel/atlas/sprites.png`，場景引用其中的 AtlasTexture（`.tres`）。換了 `assets/pixel/` 裡的敵人或掉落物圖之後要重跑 `uv run --no-project --with pillow python tools/build_atlas.py`。不要在這些場景裡加 Polygon2D 或 Line2D：多邊形每個都要單獨畫一次。卡片圖示由 Codex 生的 3×3 圖示表切出：`uv run --no-project --with pillow --with numpy --with scipy python tools/slice_icon_sheet.py art_src/icons/sheets` 寫 `assets/pixel/icons/<id>_24.png`（同名覆蓋，不用改 `.tres`）。提示詞見 [opt-image-prompts.md](docs/opt-image-prompts.md)：第一批是男女主角、抽菸者、機車、汽車與夜市背景，第二批是交通工具的 5 方向圖、臭臭胖子、武器與掉落物。原圖放 `assets/source/`，遊戲用圖放 `assets/art/`。
 
 - 主角：把男／女主角圖分別指給 `BodyMan`、`BodyWoman` 底下新增的 Sprite2D，再隱藏該 Body 的幾何多邊形。敵人：把 `Visual/Art.texture` 指向圖片並勾選 visible，再關掉 `Placeholder`。
 - 交通工具：另外把 5 張方向圖依「南、東南、東、東北、北」的順序填進根節點的 `direction_textures`；朝西的三個方向會自動鏡像。
 
 音效使用 kit 的 SfxBank／Synth 程序音效。把同名的 `.ogg` 放進 `assets/sfx/` 就會替換。事件名稱：`punch`、`hit`、`metal`、`launch`、`hurt`、`warning`、`start`、`finish`、`death`、`heavy`、`wave`、`kick`、`throw`、`pearl`、`pop`、`incense`、`lantern`、`swish`、`fart`、`gem`、`coin`、`heal`、`chest`、`level`、`upgrade`、`evolve`、`combo`。
 
-介面字型是俐方體 11 號（Cubic 11 v1.500，<https://github.com/ACh-K/Cubic-11>，OFL 1.1，無保留字型名稱），子集 `assets/fonts/Cubic11.ttf`，完整來源 `art_src/fonts/Cubic_11.ttf`，授權 [Cubic_11-LICENSE.md](assets/fonts/Cubic_11-LICENSE.md)；字級只用 11 的倍數。俐方體沒有的字（目前只有「炷」）由 Noto Sans TC 補。Noto Sans TC 是子集，粗體 700，約 180 KB，附 [OFL 授權](assets/fonts/OFL.txt)。新增中文後要重新製作子集（完整來源可以用 `pixel-monster/assets/fonts/NotoSansTC.ttf`）：
+介面字型是俐方體 11 號（Cubic 11 v1.500，<https://github.com/ACh-K/Cubic-11>，OFL 1.1，無保留字型名稱），子集 `assets/fonts/Cubic11.ttf`，完整來源 `art_src/fonts/Cubic_11.ttf`，授權 [Cubic_11-LICENSE.md](assets/fonts/Cubic_11-LICENSE.md)；字級只用 11 的倍數。俐方體沒有的字由 Noto Sans TC 補（目前遊戲裡的字俐方體都有，Noto 只是保險）。Noto Sans TC 是子集，粗體 700，約 180 KB，附 [OFL 授權](assets/fonts/OFL.txt)。新增中文後要重新製作子集（完整來源可以用 `pixel-monster/assets/fonts/NotoSansTC.ttf`）：
 
 ```bash
 uv run --no-project --with fonttools python prototypes/godot-kit/tools/subset_font.py --project prototypes/survivor-series --source prototypes/pixel-monster/assets/fonts/NotoSansTC.ttf --out prototypes/survivor-series/assets/fonts/NotoSansTC.ttf --weight 700 --minimal
@@ -88,6 +88,8 @@ bash prototypes/godot-kit/tools/run_tests.sh prototypes/survivor-series growth:6
 bash prototypes/godot-kit/sync.sh --check survivor-series
 ```
 
+效能（最壞情況：怪物上限、六把滿級進化／融合武器、路障；印出每幀時間、draw call、節點數）：`xvfb-run -a godot --path prototypes/survivor-series --fixed-fps 60 -s res://tools/perf_bench.gd`；只看遊戲邏輯改用 `--headless`。2026-10-15：邏輯每幀平均 4 ms，draw call 約 280（原本 670），節點約 5 千（原本 1 萬）。
+
 - **fusion**：配方門檻、融合換掉兩個零件並空出一格、零件不再重複出現、未發現的融合顯示「？？？」、發現記進存檔、合擊波四面八方、雨傘擋傷與無敵、圈圈拉扯減速、機車與臭豆腐生成。
 - **heroes**：選單預設男主角；選女主角後按鈕與說明更新、起手武器與顯示的身體對得上、女主角較快較脆、成長後倍率仍保留、揮拳會回到原位、選擇存檔後重讀仍在。
 - **growth（132 項）**：
@@ -99,7 +101,7 @@ bash prototypes/godot-kit/sync.sh --check survivor-series
   - 移動中出拳、揍飛掉寶石、磁吸、寶石合併
   - 汽車重量、機車預警與衝刺、交通工具 8 方向與人物翻面
   - 煙霧與煙霧上限、胖子減速、爆屁排隊連鎖
-  - 空間格子對照暴力掃描、15 種武器／進化都會開火並造成傷害、三炷香數量、投射物重複命中間隔
+  - 空間格子對照暴力掃描、15 種武器／進化都會開火並造成傷害、三支香數量、投射物重複命中間隔
   - 刷怪時間軸（包圍圈、精英、上限、生成在畫面外）
   - 暫停與失焦、自動駕駛短局走到結算、重試
   - 靜態文字保留、原始 scene 不被改動、字型與畫面主題、震屏開關

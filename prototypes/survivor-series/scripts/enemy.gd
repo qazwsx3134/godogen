@@ -37,7 +37,7 @@ var death: String = "launch"
 var _fall_side: float = 1.0
 var _flash: Tween
 @onready var visual: Node2D = %Visual
-@onready var shadow: Polygon2D = %Shadow
+@onready var shadow: Sprite2D = %Shadow
 @onready var warning: Node2D = %Warning
 @onready var warning_lane: Line2D = %WarningLane
 @onready var warning_line: Line2D = %WarningLine

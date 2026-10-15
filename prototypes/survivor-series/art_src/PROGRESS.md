@@ -1,24 +1,15 @@
-# 美術進度（2026-10-14 01:40 更新）
+# 美術進度（2026-10-15 更新）
 
 ## 還沒確定（等使用者看過再定）
 | 項目 | 現在遊戲裡用的 | 要看的東西 |
 |---|---|---|
-| 地磚 r8（非菱形、橫排長方形鋪磚） | candidate 02（暫用） | `map/preview/r8/candidates-contact.png` 三選一 |
 | 9 項回饋（血條、透視、吸經驗、丟臭豆腐、彈簧手、煙、夜市群路障、傷害數字、三種死法） | 全做完 | 試玩確認手感（見下方「2026-10-13 使用者回饋」） |
-| 27 個新卡片圖示＋拳頭／雨傘／臭豆腐／機車騎士像素圖 | 全接上 | `icons/all-contact.png`；不滿意的格子只重生那張表 |
-| 特效（kit `pixel_vfx`：硬邊爆炸與煙霧 shader、方塊粒子） | 已換 | 遊戲裡看煙霧還像不像破圖；靜態圖 `pixel-style/fx-demo-kit.png`、`vfx-gallery.png` |
-| 介面面板配色（`docs/pixel-ui-plan.md` D2） | 夜市版：深靛藍底＋燈籠金框（建議值） | 另一個選擇是 PokéSurvivor 原版藍盒子 |
-| 底部格子（同上 D4） | 兩排：武器 6 大格＋被動 6 小格（建議值） | 另一個選擇是只放武器、被動移到暫停畫面 |
-| commit | 都還沒 commit | 使用者說最後自己決定何時 commit |
+| commit | 到 2026-10-14 01:27（7c33985）已 commit；2026-10-15 這輪（地磚匯出、刪洋紅版、汽車半徑、`tools/perf_bench.gd`、三支香改名、拿掉隱藏備用圖、陰影改 Sprite2D、敵人／掉落物圖集、臭氣烤圖、血條分層、D2／D4 定案）還沒 | 使用者自己決定何時 commit |
 
 ## 還沒做
-- 地磚定案後：重新匯出 `map/godot/`（地面重做後一直沒更新）。
 - 拳頭揮出時會放大 1.15～1.5 倍，那幾幀不在像素格上（小問題，先不改）。
-- 汽車的撞擊半徑沒跟著放大後的圖調整。
-- 敵人很多＋路障時的效能沒量過。
-- 「炷」字俐方體 11 號沒有，會退回 Noto 字型（三炷香卡片看得出字體不同）。
+- 效能（2026-10-15 用 `tools/perf_bench.gd` 量最壞情況：怪物上限、六把滿級進化／融合武器、路障）：桌機原生遊戲邏輯每幀平均 4 ms、p95 7 ms，不是瓶頸。draw call 670 → 約 280、節點 1 萬 → 5 千。做法：拿掉隱藏的幾何備用圖；陰影改共用貼圖的 Sprite2D（z −1）；敵人與掉落物的圖合成一張圖集（`tools/build_atlas.py`）；胖子臭氣的 4 個多邊形烤成一張圖（z −2）；敵人血條框／填色分到 z 1／z 2。剩下的大頭是投射物（約 95，`projectile.gd` 的 `draw_circle` 陰影是多邊形，又跟各自的圖交錯）與傷害數字（約 80）。手機網頁版的實際幀率還沒在裝置上量，網頁版也還沒重建。
 - 動畫／影片（見下方「暫停中」）。
-- 可刪：`heroes/man/master/`（沒用到的洋紅版）。
 - 帳務：BytePlus 有兩筆「送出結果不明」，要到後台確認有沒有扣款（見「紀錄」）。
 - 刻意維持向量、不打算改：圈圈套中區、機車預警線、陰影。
 - 玩法與發佈的待辦在 `TODO.md`（T-115 PokéSurvivor 機制候選、T-204 設定畫面、T-205 對外試玩包）。
@@ -37,9 +28,12 @@
 | 圖示 ×27（其餘武器、被動、進化、融合） | `icons/<id>/selected.png`（切自 `icons/sheets/`） | 2026-10-14 一次生成；拳頭、雨傘、臭豆腐、機車騎士的遊戲圖也由這批縮出（`assets/pixel/fx/`） |
 | 地圖道具 ×8 | `map/props/<id>.png`（遊戲尺寸見 `ASSETS-REPORT-3.md`） | 攤位 ×2、燈籠柱、花台、三角錐、護柱、停放機車、水果箱；攤位比主角偏小，接入時可放大 |
 | 像素重畫（2026-10-14） | 各資料夾 `**/pixel/SELECTED.txt` | 男主角 03、女主角 02、流氓 02、胖子 02、機車／汽車 5 方向；上面幾列是重畫前的原圖，當像素圖的參考 |
-| 地圖 Godot 匯出 | `map/godot/`（TileSet＋示範場景，Godot 4.7 匯入通過） | 地面重做後要重新匯出 |
-
-`heroes/man/master/` 是沒用到的洋紅版，可刪。
+| 卡片圖示 ×27＋拳頭／雨傘／臭豆腐／機車騎士像素圖 | `icons/all-contact.png` | 2026-10-15 照現狀定案 |
+| 特效 | kit `pixel_vfx`（硬邊爆炸與煙霧 shader、方塊粒子） | 2026-10-15 照現狀定案 |
+| 介面面板配色（`docs/pixel-ui-plan.md` D2） | 夜市版：深靛藍底＋燈籠金框 | 2026-10-15 定案 |
+| 底部格子（D4） | 兩排：武器 6 大格＋被動 6 小格 | 2026-10-15 定案 |
+| 地磚 r8 | `map/ground/r8/candidate-02.png`（＝`map/ground/pavement.png`） | 使用者 2026-10-15 定案 02：50° 斜俯視、橫排長方形磚；遊戲用縮圖 `assets/pixel/map/pavement_184.png` |
+| 地圖 Godot 匯出 | `map/godot/`（TileSet＋示範場景） | 2026-10-15 用地磚 02 重新匯出（bundle 裡的 hash 一併更新），WSL Godot 4.7 匯入與載入 0 錯 |
 
 ## 下一步（2026-10-12 16:30 更新：A 已交，B 被使用者暫停未開始）
 - 派工單 `BRIEF-assets-3.md` → 報告 `ASSETS-REPORT-4.md`。Codex session 已結束（Mac 上 pane `wT:pH`，可 `codex resume 01a11ad1-0e7b-7262-9fa1-59ce67e608d9`）。
@@ -95,6 +89,8 @@
 - 動畫／影片：等靜態圖都定案再做（`heroes/MANUAL-VIDEO.md`、`heroes/man/set/` 保留可續用）。
 
 ## 紀錄
+- 2026-10-15：「三炷香」改名「三支香」（俐方體沒有「炷」），兩個字型子集重建，俐方體涵蓋全部遊戲用字；掉落物與四種敵人 scene 用 Godot 存檔拿掉隱藏的 Polygon2D 備用圖（敵人保留空的 `Visual/Placeholder` 給 enemy.gd 翻面用），六組測試全過。
+- 2026-10-15：刪掉沒用到的洋紅版男主角 `heroes/man/master/`（git 歷史可找回）；汽車撞擊半徑 40 → 60（圖放大後約 194 px 寬，比例對齊機車），六組測試全過。
 - 派工單與報告：第四輪 `BRIEF-assets.md` → `ASSETS-REPORT-1.md`、`-2.md`（圖示總覽 `icons/all-contact.png`）；第五輪 `BRIEF-assets-2.md` → `ASSETS-REPORT-3.md`。
 - 第五輪汽車 e 方向第一次重做卡了 3 小時（codex exec 無回應），停掉後重跑一次成功；之後派工單可要求每筆生成設時限。
 - 生圖一律 `--route codex-cli`：config 裡的 API key（Gemini、OpenAI 無效；xAI 沒額度；BytePlus、fal 無效）會讓預設路由失敗。BytePlus 有兩筆「送出結果不明」（clientRequestId `6f5394908dc249518ad1f0a9d1aae991` 等），可到後台確認有無扣款。

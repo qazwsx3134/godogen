@@ -1,12 +1,11 @@
 {
-  "godot_cli": "/Applications/Godot.app/Contents/MacOS/Godot",
+  "godot_cli": "/home/ronghao/.local/bin/godot",
   "godot_version": "4.7.stable.official.5b4e0cb0f",
   "editor_import_exit_code": 0,
   "scene_load_exit_code": 0,
   "imported_png_count": 16,
-  "imported_cache_file_count": 32,
   "import_log": "import.log",
   "scene_log": "scene-load.log",
   "errors": [],
-  "environment": "macOS; Godot 4.7 editor import and one-frame headless scene load completed with writable user-data path"
+  "environment": "WSL; 2026-10-15 re-export with pavement r8 candidate-02; Godot 4.7 headless editor import and 2-frame scene load"
 }

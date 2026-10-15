@@ -7,7 +7,7 @@
 [resource]
 script = ExtResource("2_035p1")
 id = &"incense"
-title = "三炷香"
+title = "三支香"
 description = "三支香往身邊的人戳過去，燙到就痛。"
 level_notes = PackedStringArray("傷害 +3，戳更遠", "多一支香", "傷害 +3，戳更遠", "多一支香")
 accent = Color(1, 0.7019608, 0.2784314, 1)

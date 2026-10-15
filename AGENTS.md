@@ -62,3 +62,47 @@ This repository is not a published game repo. It is the source that `publish.sh`
   4. 畫在對話裡就好，不要為了畫圖去開 Artifact。
   5. 圖是輔助：結論先行那一句不能省，圖擺在結論後面。
   6. 一句話就能答完的問題不用硬畫圖。
+
+<!-- GODOGEN-STUDIO:BEGIN -->
+## Game Studios
+
+Read `studio/runtime/codex/CATALOG.md` for the 74 workflows and 49 roles.
+Read `studio/runtime/codex/docs/config-resolution.md` before resolving Studio settings.
+`project.yaml` controls rigor and automation; start at minimal unless the user specifies otherwise.
+Use `studio/runtime/codex/docs/workflow-catalog.yaml` to choose the next workflow.
+Read `studio/runtime/codex/rules/*.md` only for the paths in each rule's frontmatter.
+Resume from `production/session-state/active.md` when it exists.
+
+## Godogen Studio integration policy
+
+The user's current request and existing project instructions govern this workflow.
+Authorization persists across phases: an instruction to implement, fix, or port
+authorizes necessary reversible file edits. Resolve routine choices and finish
+authorized work before requesting approval for an external or irreversible action.
+Apply the project's delegation cost gate before any Agent/team/review dispatch;
+when the gate does not justify a worker, perform that role in the main session.
+An engine/version/code-root pinned by this project takes precedence over template
+examples. Game screens and reusable objects in this repo use editable saved scenes.
+Before AI image generation, describe the batch and wait for the user's choice of
+direct generation or ready-to-use prompts for opt image. An approved batch needs
+no repeated approval. Keep session instructions and final responses in the user's
+language. These integration rules take precedence over upstream workflow defaults.
+
+## Codex execution mapping
+
+Use Codex's available file, shell and user-input tools for upstream Read/Glob/Grep/
+Write/Edit/Bash/AskUserQuestion steps. Use native custom agents only after the
+delegation cost gate; otherwise perform the role locally. Claude tool allowlists,
+`@file` imports, model names and `!` inline shell substitutions are not executed
+by Codex. Read referenced files explicitly. Run each configuration bootstrap
+explicitly with the shell before following the workflow. Use `$skill-name` to
+invoke a discovered Codex skill, or read its SKILL.md when using the source catalog.
+No workflow changes the active model by editing a rules file.
+
+This is the Godogen generator source. Studio workflow sources live in
+`studio/upstream/`; `studio/runtime/` is generated. Source workflows are
+loaded by their paths in the catalog. Native skill directories are generated
+only for destination game repos. Run game-specific workflows from that game's
+root; do not treat all prototypes as one game or pin one engine for this source repo.
+For Studio workflows, the catalog is authoritative over legacy `.agents/` copies.
+<!-- GODOGEN-STUDIO:END -->

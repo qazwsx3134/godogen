@@ -71,3 +71,27 @@ A full generation run can take hours, so it's convenient to offload it to a serv
 See [CHANGELOG.md](CHANGELOG.md).
 
 Follow progress: [@alex_erm](https://x.com/alex_erm)
+
+## Game Studios workflows
+
+[Game Studios](studio/README.md) provides 74 workflows, 49 specialist roles,
+project settings, design and QA templates, and session recovery for Claude and Codex.
+The MIT-licensed upstream is vendored at a pinned revision in `studio/upstream/`.
+
+Publish a game repo with the full workflow package:
+
+```bash
+./publish.sh --engine godot --agent codex --studio --out /tmp/my-game
+```
+
+Install it into an existing game without replacing project rules or custom skills:
+
+```bash
+python3 scripts/install_studio.py --target /path/to/game --agent codex
+```
+
+For this generator source, use `--target . --agent codex --source-repo`; workflows
+are read from the generated catalog in `studio/runtime/codex/CATALOG.md`, and
+native roles and hooks are generated in `.codex/`. New native skill directories
+are emitted in destination game repos. See the [integration guide](studio/README.md)
+for hook activation, updates, compatibility, and validation.

@@ -6,3 +6,7 @@
 **/__pycache__
 godot/skills/godot-api/doc_api/
 godot/skills/godot-api/doc_source/
+project.local.yaml
+production/session-logs/
+.studio/
+studio/runtime/

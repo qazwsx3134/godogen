@@ -2,8 +2,8 @@
 # Publish Godogen runtime files into a target game repo.
 #
 # Usage:
-#   ./publish.sh --engine godot|bevy|babylon --agent claude|codex --out <dir> [--force]
-#   ./publish.sh --engine godot|bevy|babylon --agent claude|codex <dir> [--force]
+#   ./publish.sh --engine godot|bevy|babylon --agent claude|codex --out <dir> [--studio] [--force]
+#   ./publish.sh --engine godot|bevy|babylon --agent claude|codex <dir> [--studio] [--force]
 #
 # A published repo carries only docs: the runtime manifest (CLAUDE.md / AGENTS.md),
 # a per-engine guide (<engine>.md), and the asset-gen skill. The agent scaffolds
@@ -17,6 +17,7 @@ ENGINE=""
 AGENT=""
 OUT=""
 FORCE=0
+STUDIO=0
 
 usage() {
     sed -n '1,10p' "$0" >&2
@@ -28,6 +29,7 @@ while [ $# -gt 0 ]; do
         --agent)  AGENT="${2:-}";  shift 2 ;;
         --out)    OUT="${2:-}";    shift 2 ;;
         --force)  FORCE=1;         shift   ;;
+        --studio) STUDIO=1;        shift   ;;
         -h|--help) usage; exit 0 ;;
         -*) echo "error: unknown option $1" >&2; usage; exit 1 ;;
         *)
@@ -106,8 +108,8 @@ if [ "$AGENT" = "codex" ]; then
     python3 "$HELPERS/generate_codex_metadata.py" "$TMP/skills"
 fi
 
-mkdir -p "$TARGET/$SKILLS_DIR_REL"
-rsync -a --delete "$TMP/skills/" "$TARGET/$SKILLS_DIR_REL/"
+mkdir -p "$TARGET/$SKILLS_DIR_REL/asset-gen"
+rsync -a --delete "$TMP/skills/asset-gen/" "$TARGET/$SKILLS_DIR_REL/asset-gen/"
 echo "Installed asset-gen skill"
 
 # --- Manifest: the runtime process doc ---
@@ -150,5 +152,10 @@ if [ ! -f "$TARGET/.gitignore" ]; then
 fi
 
 git -C "$TARGET" init -q 2>/dev/null || true
+
+if [ "$STUDIO" -eq 1 ]; then
+    python3 "$HELPERS/install_studio.py" --target "$TARGET" --agent "$AGENT"
+    echo "Installed Game Studios workflows, roles, and hooks"
+fi
 
 echo "Done."

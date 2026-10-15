@@ -2,7 +2,7 @@
   "schema": "generate2dmap.tileset.v1",
   "id": "pavement",
   "image": "../../../ground/pavement.png",
-  "sha256": "cae1c5b8cba4e94e8da9a0f0148a793469471777185c5f061afd1830ddf891d0",
+  "sha256": "a5581dc8d3a3e1da7618576cd34b8e5662461e3a72eb8522379711f2373d8bf7",
   "tile_size": [
     512,
     512
