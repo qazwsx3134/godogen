@@ -1,0 +1,3 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+STUDIO_GRID_BENCH {"crowded":{"checksum":4096,"median_us_per_call":34.452392578125,"queries":4096},"nearest":{"checksum":337758,"median_us_per_call":48.255859375,"queries":4096},"query":{"checksum":566999,"median_us_per_call":34.66650390625,"queries":4096}}

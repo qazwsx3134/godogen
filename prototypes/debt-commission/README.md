@@ -219,3 +219,13 @@ node tools/check_ui_parity.mjs --playwright /path/to/node_modules/@playwright/te
 新增段落內「上一句」、獨立快速存檔／快速讀檔，均在目錄。字級與紙框透明度在設定，窄手機可捲動。文字支援重點色／放大／抖動、停頓／慢速與角色打字音；`?sample=text_effects` 是文字演出示範。新安裝預設銀魂和紙；後續對話框與按鈕沿用作者確認的 PNG 紙框與深藍銀框按鈕。
 
 直接調整 `dialogue_log.tscn` 的 `Margins` 與 `Column` 間距、`LogClose` 文字；`save_slots_panel.tscn` 的 `OuterMargins`／`Padding`／`Cards`；`save_slot_card.tscn` 的 `Preview`／`SlotTitle`；`save_overwrite_confirmation.tscn` 的確認文案；`end_controls.tscn` 的 `Actions` anchors 與兩顆按鈕。正常執行不重建這些 scene。
+
+## Studio 效能改善（2026-10-16）
+
+此原型使用 `project.yaml` 保存 Godot 4.7、`scripts/` 程式根目錄與輕量工作流程。
+共用工作流程目錄在 `../../studio/runtime/codex/`。本輪規格見
+[quick spec](design/quick-specs/studio-polish-2026-10-16.md)，量測與限制見
+[改善報告](production/polish/studio-polish-2026-10-16.md)，測試結果見
+[smoke report](production/qa/smoke-2026-10-16.md)。
+
+可重跑 CPU 微基準：`godot --headless --path . --fixed-fps 60 --script res://tools/studio_bench.gd`。 `test_comedy`／`test_ep00` 的時間斷言須用正常時間執行，不加 `--fixed-fps`。

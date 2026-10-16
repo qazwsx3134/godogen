@@ -1,0 +1,16 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+[MCPRuntimeServer] port: scanning 6570-6585 (default)
+[MCPRuntimeServer] listening on 127.0.0.1:6570
+[MCPRegistry] runtime port 6570 registered for /mnt/d/repo/godot/godogen/prototypes/debt-commission
+FAIL: it lasts about 1.35 s (0.05)
+EP00 checks: 895
+ERROR: it lasts about 1.35 s (0.05)
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _finish (res://addons/proto_kit/test_kit.gd:26)
+       [1] _run (res://tests/test_ep00.gd:89)
+       [2] _test_chapter_label_trims_with_an_ellipsis (res://tests/test_ep00.gd:806)
+       [3] _free (res://tests/test_ep00.gd:872)
+       [4] _frames (res://addons/proto_kit/test_kit.gd:33)
+EP00 TESTS FAILED: 1

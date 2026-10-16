@@ -110,6 +110,25 @@ class StudioTests(unittest.TestCase):
                                 cwd=self.target, text=True, capture_output=True, check=True)
         self.assertIn("minimal", result.stdout)
 
+    def test_source_artifact_scan_accepts_an_explicit_game_root(self):
+        install(self.target, "codex", source_repo=True)
+        game = Path(self.temp.name) / "nested game"
+        (game / "design").mkdir(parents=True)
+        (game / "project.yaml").write_text("schema_version: 1\nengine:\n  name: Godot\n")
+        (game / "design/game-brief.md").write_text("Game brief\n")
+        script = self.target / "studio/runtime/codex/scripts/artifact-check.sh"
+        result = subprocess.run(["bash", str(script), "--path", "minimal", str(game)],
+                                cwd=game, capture_output=True, text=True, check=True)
+        self.assertIn(f"ROOT: {game}", result.stdout)
+        self.assertRegex(result.stdout, r"STEP: engine-setup .*status=PRESENT")
+        self.assertRegex(result.stdout, r"STEP: game-brief .*status=PRESENT")
+        self.assertFalse((game / "studio").exists())
+        # Without a root argument, a relative helper path still finds the source catalog.
+        (self.target / "sub").mkdir()
+        result = subprocess.run(["bash", "../studio/runtime/codex/scripts/artifact-check.sh", "--path", "minimal"],
+                                cwd=self.target / "sub", capture_output=True, text=True, check=True)
+        self.assertIn(f"ROOT: {self.target}", result.stdout)
+
     def test_claude_settings_hooks_keep_user_permissions(self):
         settings = self.target / ".claude/settings.json"
         settings.parent.mkdir()

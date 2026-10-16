@@ -141,3 +141,13 @@ bash prototypes/godot-kit/sync.sh --check survivor-series
 圓角路障改用精確 swept circle；清場同時清空敵人空間索引。主角附近有至少 8 個敵人或 12 個投射物時顯示輪廓，血條位於特效上方；場景保留可調整的男女兩套輪廓 Sprite2D。
 
 遊戲 7 組回歸與 godot-kit 套件、Chromium 完整觸控流程、WebKit 開局／結算／存檔重載及兩種引擎的滿載畫面均已確認。詳細證據與真機限制見 [第二輪收尾紀錄](docs/validation-followup-2026-10-15.md)。
+
+## Studio 效能改善（2026-10-16）
+
+此原型使用 `project.yaml` 保存 Godot 4.7、`scripts/` 程式根目錄與輕量工作流程。
+共用工作流程目錄在 `../../studio/runtime/codex/`。本輪規格見
+[quick spec](design/quick-specs/studio-polish-2026-10-16.md)，量測與限制見
+[改善報告](production/polish/studio-polish-2026-10-16.md)，測試結果見
+[smoke report](production/qa/smoke-2026-10-16.md)。
+
+可重跑 CPU 微基準：`godot --headless --path . --fixed-fps 60 --script res://tools/studio_bench.gd`。 Survivor 加 `-- --clustered` 測密集敵群。

@@ -210,6 +210,22 @@ func load_story(path: String) -> bool:
     return true
 
 
+## An isolated state machine sharing this already-validated story definition.
+## Story/catalog dictionaries are read-only after load; restore() copies only save state.
+## This avoids file I/O and full story validation for every autosave or slot preview.
+func create_validation_probe() -> RefCounted:
+    if not _loaded:
+        return null
+    var probe: RefCounted = get_script().new() as RefCounted
+    probe._story = _story
+    probe._asset_catalog = _asset_catalog
+    probe._initial_flags = _initial_flags
+    probe._allowed_flag_values = _allowed_flag_values
+    probe._has_phase3_ops = _has_phase3_ops
+    probe._loaded = true
+    return probe
+
+
 ## True when the story uses investigation or tsukkomi rounds, so the shell shows the
 ## glasses/power HUD, the materials button and Game Over retry.
 func has_gameplay() -> bool:

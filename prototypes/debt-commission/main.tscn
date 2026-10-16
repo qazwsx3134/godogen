@@ -110,6 +110,7 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="PopupLayer" type="Control" parent="Game" unique_id=103120398]
+z_index = 2
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15

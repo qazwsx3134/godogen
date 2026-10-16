@@ -136,6 +136,7 @@ const COLOR_DISABLED: Color = Color("#5d6070")
 
 var _font: Font = ThemeDB.fallback_font
 var _runner: RefCounted = null
+var _save_validation_probe: RefCounted = null
 var _story_ready: bool = false
 var _phase3_enabled: bool = false
 var _story_error: String = ""
@@ -501,6 +502,7 @@ func _refresh_story_switch() -> void:
 
 
 func _load_story() -> void:
+	_save_validation_probe = null
 	_runner = STORY_RUNNER_SCRIPT.new() as RefCounted
 	_story_ready = bool(_runner.call("load_story", story_path))
 	if not _story_ready:
@@ -3253,7 +3255,7 @@ func _validate_save_payload(payload: Dictionary) -> bool:
 	if payload.has("boke_ui_screen"):
 		if typeof(payload["boke_ui_screen"]) != TYPE_STRING or str(payload["boke_ui_screen"]) not in ["boke_round", "tsukkomi"]:
 			return false
-	# 先用全新的 runner 驗證，成功才動目前的遊戲狀態。
+	# Save validation uses independent mutable state, sharing the loaded story definition.
 	for key: String in ["round_stages", "investigation_pans", "investigation_home_casts"]:
 		if not payload.get(key, {}) is Dictionary:
 			return false
@@ -3266,8 +3268,10 @@ func _validate_save_payload(payload: Dictionary) -> bool:
 	for cast: Variant in (payload.get("investigation_home_casts", {}) as Dictionary).values():
 		if not _valid_saved_cast(cast):
 			return false
-	var probe: RefCounted = STORY_RUNNER_SCRIPT.new() as RefCounted
-	if not bool(probe.call("load_story", story_path)) or not bool(probe.call("restore", runner_snapshot)):
+	if _save_validation_probe == null:
+		_save_validation_probe = _runner.call("create_validation_probe") as RefCounted
+	var probe: RefCounted = _save_validation_probe
+	if probe == null or not bool(probe.call("restore", runner_snapshot)):
 		return false
 	var probe_current: Dictionary = probe.call("current") as Dictionary
 	var probe_op: String = _command_op(probe_current)

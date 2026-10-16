@@ -2,6 +2,13 @@ extends RefCounted
 ## Compiles inline presentation into BBCode and a plain, grapheme-based reading timeline.
 ## [pause=seconds], [speed=seconds]...[/speed], [big]...[/big], and RichText formatting
 ## never count as dialogue characters. Unknown brackets remain visible literal text.
+static var _tag_pattern: RegEx
+
+static func _markup_pattern() -> RegEx:
+	if _tag_pattern == null:
+		_tag_pattern = RegEx.new()
+		_tag_pattern.compile("\\[([^\\]]+)\\]")
+	return _tag_pattern
 
 static func compile(source: String, base_interval: float, font_size: int = 48) -> Dictionary:
 	var plain: String = ""
@@ -9,8 +16,7 @@ static func compile(source: String, base_interval: float, font_size: int = 48) -
 	var speeds: Array[float] = []
 	var pauses: Dictionary = {}
 	var speed_stack: Array[float] = [base_interval]
-	var pattern: RegEx = RegEx.new()
-	pattern.compile("\\[([^\\]]+)\\]")
+	var pattern: RegEx = _markup_pattern()
 	var cursor: int = 0
 	for match_result: RegExMatch in pattern.search_all(source):
 		var before: String = source.substr(cursor, match_result.get_start() - cursor)
@@ -78,8 +84,7 @@ static func readable_count(text: String) -> int:
 static func valid_markup(source: String) -> bool:
 	if source.contains("{{"):
 		return false
-	var pattern: RegEx = RegEx.new()
-	pattern.compile("\\[([^\\]]+)\\]")
+	var pattern: RegEx = _markup_pattern()
 	var stripped: String = source
 	for found: RegExMatch in pattern.search_all(source):
 		var tag: String = found.get_string(1)

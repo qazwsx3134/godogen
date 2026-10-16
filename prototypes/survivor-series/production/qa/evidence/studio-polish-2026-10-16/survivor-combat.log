@@ -1,0 +1,5 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+DENSITY {"dropped":{"captions":0,"particles":107393,"shaders":1080,"shapes":9491},"peak":{"actors":140,"hazards":10,"particles":500,"projectiles":200,"shaders":12,"shapes":80},"seconds":5}
+checks: 38
+COMBAT REGRESSIONS PASSED

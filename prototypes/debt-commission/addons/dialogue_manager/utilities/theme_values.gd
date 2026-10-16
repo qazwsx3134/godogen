@@ -54,6 +54,14 @@ func _init(values: Dictionary) -> void:
 ## Get size and colour values used for setting themes.
 static func get_values_from_editor() -> DMThemeValues:
 	var editor_settings: EditorSettings = EditorInterface.get_editor_settings()
+	# Godot 4.7 groups editor fonts under interface/editor/fonts/.
+	var editor_code_size: int = 16
+	for key: String in ["interface/editor/fonts/code_font_size", "interface/editor/code_font_size"]:
+		if editor_settings.has_setting(key):
+			var value: Variant = editor_settings.get_setting(key)
+			if value is int and value > 0:
+				editor_code_size = value
+				break
 	return DMThemeValues.new({
 		scale = EditorInterface.get_editor_scale(),
 
@@ -77,7 +85,7 @@ static func get_values_from_editor() -> DMThemeValues:
 		comments_color = editor_settings.get_setting("text_editor/theme/highlighting/comment_color"),
 		jumps_color = Color(editor_settings.get_setting("text_editor/theme/highlighting/gdscript/node_reference_color"), 0.6),
 
-		font_size = editor_settings.get_setting("interface/editor/code_font_size")
+		font_size = editor_code_size
 	})
 
 

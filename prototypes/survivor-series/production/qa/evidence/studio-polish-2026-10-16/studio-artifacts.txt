@@ -1,0 +1,11 @@
+CATALOG: ../../studio/runtime/codex/docs/workflow-catalog.yaml
+ROOT: /mnt/d/repo/godot/godogen/prototypes/survivor-series
+PATHS: 1
+STEPS: 5
+NO_CHECK: 2
+PATH: minimal
+  STEP: engine-setup required=true repeatable=false check=any_of status=PRESENT alt=1 match=project.yaml
+  STEP: game-brief required=true repeatable=false check=glob status=PRESENT count=1
+  STEP: create-stories required=true repeatable=false check=glob status=PRESENT count=1
+  STEP: implement required=true repeatable=true check=none status=NO_CHECK note=Each story's Status line (Ready / In Progress / Complete) is the record — story files are numbered in build order
+  STEP: story-done required=true repeatable=true check=none status=NO_CHECK

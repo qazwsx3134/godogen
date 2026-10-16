@@ -1,0 +1,110 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+[MCPRuntimeServer] port: scanning 6570-6585 (default)
+[MCPRuntimeServer] listening on 127.0.0.1:6570
+[MCPRegistry] runtime port 6570 registered for /mnt/d/repo/godot/godogen/prototypes/debt-commission
+FAIL: tsukkomi_impact lasts about 1.35 s (0.05)
+FAIL: cinema/tsukkomi_impact: ran to its end (0.01 of 1.35 s) and left nothing behind
+FAIL: cinema/small_reaction: ran to its end (0.01 of 0.90 s) and left nothing behind
+FAIL: cinema/full_manga_panel: ran to its end (0.02 of 1.80 s) and left nothing behind
+FAIL: ledger/tsukkomi_impact: ran to its end (0.00 of 1.35 s) and left nothing behind
+FAIL: ledger/small_reaction: ran to its end (0.00 of 0.90 s) and left nothing behind
+FAIL: ledger/full_manga_panel: ran to its end (0.00 of 1.80 s) and left nothing behind
+FAIL: manga/tsukkomi_impact: ran to its end (0.00 of 1.35 s) and left nothing behind
+FAIL: manga/small_reaction: ran to its end (0.00 of 0.90 s) and left nothing behind
+FAIL: manga/full_manga_panel: ran to its end (0.00 of 1.80 s) and left nothing behind
+FAIL: gintama/tsukkomi_impact: ran to its end (0.00 of 1.35 s) and left nothing behind
+FAIL: gintama/small_reaction: ran to its end (0.00 of 0.90 s) and left nothing behind
+FAIL: gintama/full_manga_panel: ran to its end (0.00 of 1.80 s) and left nothing behind
+ERROR: tsukkomi_impact lasts about 1.35 s (0.05)
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _finish (res://addons/proto_kit/test_kit.gd:26)
+       [1] _run (res://tests/test_comedy.gd:73)
+       [2] _test_narrow_phone (res://tests/test_comedy.gd:463)
+       [3] _frames (res://addons/proto_kit/test_kit.gd:33)
+ERROR: cinema/tsukkomi_impact: ran to its end (0.01 of 1.35 s) and left nothing behind
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _finish (res://addons/proto_kit/test_kit.gd:26)
+       [1] _run (res://tests/test_comedy.gd:73)
+       [2] _test_narrow_phone (res://tests/test_comedy.gd:463)
+       [3] _frames (res://addons/proto_kit/test_kit.gd:33)
+ERROR: cinema/small_reaction: ran to its end (0.01 of 0.90 s) and left nothing behind
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _finish (res://addons/proto_kit/test_kit.gd:26)
+       [1] _run (res://tests/test_comedy.gd:73)
+       [2] _test_narrow_phone (res://tests/test_comedy.gd:463)
+       [3] _frames (res://addons/proto_kit/test_kit.gd:33)
+ERROR: cinema/full_manga_panel: ran to its end (0.02 of 1.80 s) and left nothing behind
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _finish (res://addons/proto_kit/test_kit.gd:26)
+       [1] _run (res://tests/test_comedy.gd:73)
+       [2] _test_narrow_phone (res://tests/test_comedy.gd:463)
+       [3] _frames (res://addons/proto_kit/test_kit.gd:33)
+ERROR: ledger/tsukkomi_impact: ran to its end (0.00 of 1.35 s) and left nothing behind
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _finish (res://addons/proto_kit/test_kit.gd:26)
+       [1] _run (res://tests/test_comedy.gd:73)
+       [2] _test_narrow_phone (res://tests/test_comedy.gd:463)
+       [3] _frames (res://addons/proto_kit/test_kit.gd:33)
+ERROR: ledger/small_reaction: ran to its end (0.00 of 0.90 s) and left nothing behind
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _finish (res://addons/proto_kit/test_kit.gd:26)
+       [1] _run (res://tests/test_comedy.gd:73)
+       [2] _test_narrow_phone (res://tests/test_comedy.gd:463)
+       [3] _frames (res://addons/proto_kit/test_kit.gd:33)
+ERROR: ledger/full_manga_panel: ran to its end (0.00 of 1.80 s) and left nothing behind
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _finish (res://addons/proto_kit/test_kit.gd:26)
+       [1] _run (res://tests/test_comedy.gd:73)
+       [2] _test_narrow_phone (res://tests/test_comedy.gd:463)
+       [3] _frames (res://addons/proto_kit/test_kit.gd:33)
+ERROR: manga/tsukkomi_impact: ran to its end (0.00 of 1.35 s) and left nothing behind
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _finish (res://addons/proto_kit/test_kit.gd:26)
+       [1] _run (res://tests/test_comedy.gd:73)
+       [2] _test_narrow_phone (res://tests/test_comedy.gd:463)
+       [3] _frames (res://addons/proto_kit/test_kit.gd:33)
+ERROR: manga/small_reaction: ran to its end (0.00 of 0.90 s) and left nothing behind
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _finish (res://addons/proto_kit/test_kit.gd:26)
+       [1] _run (res://tests/test_comedy.gd:73)
+       [2] _test_narrow_phone (res://tests/test_comedy.gd:463)
+       [3] _frames (res://addons/proto_kit/test_kit.gd:33)
+ERROR: manga/full_manga_panel: ran to its end (0.00 of 1.80 s) and left nothing behind
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _finish (res://addons/proto_kit/test_kit.gd:26)
+       [1] _run (res://tests/test_comedy.gd:73)
+       [2] _test_narrow_phone (res://tests/test_comedy.gd:463)
+       [3] _frames (res://addons/proto_kit/test_kit.gd:33)
+ERROR: gintama/tsukkomi_impact: ran to its end (0.00 of 1.35 s) and left nothing behind
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _finish (res://addons/proto_kit/test_kit.gd:26)
+       [1] _run (res://tests/test_comedy.gd:73)
+       [2] _test_narrow_phone (res://tests/test_comedy.gd:463)
+       [3] _frames (res://addons/proto_kit/test_kit.gd:33)
+ERROR: gintama/small_reaction: ran to its end (0.00 of 0.90 s) and left nothing behind
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _finish (res://addons/proto_kit/test_kit.gd:26)
+       [1] _run (res://tests/test_comedy.gd:73)
+       [2] _test_narrow_phone (res://tests/test_comedy.gd:463)
+       [3] _frames (res://addons/proto_kit/test_kit.gd:33)
+ERROR: gintama/full_manga_panel: ran to its end (0.00 of 1.80 s) and left nothing behind
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _finish (res://addons/proto_kit/test_kit.gd:26)
+       [1] _run (res://tests/test_comedy.gd:73)
+       [2] _test_narrow_phone (res://tests/test_comedy.gd:463)
+       [3] _frames (res://addons/proto_kit/test_kit.gd:33)
+COMEDY TESTS FAILED: 13

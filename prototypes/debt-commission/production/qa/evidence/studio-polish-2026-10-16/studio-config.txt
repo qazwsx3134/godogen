@@ -1,0 +1,8 @@
+=== CCGS Config (resolved: local->yaml->legacy->default; use as-is) ===
+review_mode: solo (rigor:minimal)
+automation: guided (project.yaml)
+workflow: minimal (rigor:minimal)
+qa.level: minimal (rigor:minimal)
+team.size: individual (rigor:minimal)
+performance.enforce: warn (project.yaml)
+=== end ===

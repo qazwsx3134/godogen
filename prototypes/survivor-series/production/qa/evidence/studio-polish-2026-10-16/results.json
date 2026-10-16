@@ -1,0 +1,195 @@
+[
+  {
+    "name": "after-survivor-series-test_combat_regressions",
+    "game": "survivor-series",
+    "exit": 0,
+    "passed": true,
+    "seconds": 6.62,
+    "log": "after-survivor-series-test_combat_regressions.log",
+    "summary": [
+      "checks: 38",
+      "COMBAT REGRESSIONS PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-survivor-series-test_fusion",
+    "game": "survivor-series",
+    "exit": 0,
+    "passed": true,
+    "seconds": 3.86,
+    "log": "after-survivor-series-test_fusion.log",
+    "summary": [
+      "SURVIVOR FUSION PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-survivor-series-test_grid",
+    "game": "survivor-series",
+    "exit": 0,
+    "passed": true,
+    "seconds": 0.27,
+    "log": "after-survivor-series-test_grid.log",
+    "summary": [
+      "checks: 611",
+      "GRID TESTS PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-survivor-series-test_growth",
+    "game": "survivor-series",
+    "exit": 0,
+    "passed": true,
+    "seconds": 4.0,
+    "log": "after-survivor-series-test_growth.log",
+    "summary": [
+      "checks: 132",
+      "STREET GROWTH PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-survivor-series-test_heroes",
+    "game": "survivor-series",
+    "exit": 0,
+    "passed": true,
+    "seconds": 3.75,
+    "log": "after-survivor-series-test_heroes.log",
+    "summary": [
+      "SURVIVOR HEROES PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-survivor-series-test_playable",
+    "game": "survivor-series",
+    "exit": 0,
+    "passed": true,
+    "seconds": 5.06,
+    "log": "after-survivor-series-test_playable.log",
+    "summary": [
+      "checks: 219",
+      "STREET PLAYABLE PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-survivor-series-test_scaffold",
+    "game": "survivor-series",
+    "exit": 0,
+    "passed": true,
+    "seconds": 0.37,
+    "log": "after-survivor-series-test_scaffold.log",
+    "summary": [
+      "SURVIVOR SCAFFOLD PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-survivor-series-test_view",
+    "game": "survivor-series",
+    "exit": 0,
+    "passed": true,
+    "seconds": 3.8,
+    "log": "after-survivor-series-test_view.log",
+    "summary": [
+      "VIEW PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-grid-bench",
+    "game": "survivor-series",
+    "exit": 0,
+    "passed": true,
+    "seconds": 0.83,
+    "log": "after-grid-bench.log",
+    "summary": [
+      "STUDIO_GRID_BENCH {\"crowded\":{\"checksum\":567,\"median_us_per_call\":5.4072265625,\"queries\":4096},\"nearest\":{\"checksum\":293700,\"median_us_per_call\":10.947265625,\"queries\":4096},\"query\":{\"checksum\":21073,\"median_us_per_call\":5.510498046875,\"queries\":4096}}"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-survivor-proof",
+    "game": "survivor-series",
+    "exit": 0,
+    "passed": true,
+    "seconds": 4.33,
+    "log": "after-survivor-proof.log",
+    "summary": [
+      "STUDIO VISUAL PROOF PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "survivor-grid",
+    "game": "survivor-series",
+    "passed": true,
+    "exit": 0,
+    "errors": [],
+    "log": "survivor-grid.log",
+    "summary": [
+      "checks: 611",
+      "GRID TESTS PASSED"
+    ]
+  },
+  {
+    "name": "survivor-playable",
+    "game": "survivor-series",
+    "passed": true,
+    "exit": 0,
+    "errors": [],
+    "log": "survivor-playable.log",
+    "summary": [
+      "checks: 219",
+      "STREET PLAYABLE PASSED"
+    ]
+  },
+  {
+    "name": "survivor-combat",
+    "game": "survivor-series",
+    "passed": true,
+    "exit": 0,
+    "errors": [],
+    "log": "survivor-combat.log",
+    "summary": [
+      "checks: 38",
+      "COMBAT REGRESSIONS PASSED"
+    ]
+  },
+  {
+    "name": "grid-uniform-final",
+    "game": "survivor-series",
+    "passed": true,
+    "exit": 0,
+    "errors": [],
+    "log": "grid-uniform-final.log",
+    "summary": [
+      "STUDIO_GRID_BENCH {\"crowded\":{\"checksum\":567,\"median_us_per_call\":4.74755859375,\"queries\":4096},\"nearest\":{\"checksum\":293700,\"median_us_per_call\":10.96044921875,\"queries\":4096},\"query\":{\"checksum\":21073,\"median_us_per_call\":5.248046875,\"queries\":4096}}"
+    ]
+  },
+  {
+    "name": "grid-clustered-before",
+    "game": "survivor-series",
+    "passed": true,
+    "exit": 0,
+    "errors": [],
+    "log": "grid-clustered-before.log",
+    "summary": [
+      "STUDIO_GRID_BENCH {\"crowded\":{\"checksum\":4096,\"median_us_per_call\":34.452392578125,\"queries\":4096},\"nearest\":{\"checksum\":337758,\"median_us_per_call\":48.255859375,\"queries\":4096},\"query\":{\"checksum\":566999,\"median_us_per_call\":34.66650390625,\"queries\":4096}}"
+    ]
+  },
+  {
+    "name": "grid-clustered-final",
+    "game": "survivor-series",
+    "passed": true,
+    "exit": 0,
+    "errors": [],
+    "log": "grid-clustered-final.log",
+    "summary": [
+      "STUDIO_GRID_BENCH {\"crowded\":{\"checksum\":4096,\"median_us_per_call\":2.792236328125,\"queries\":4096},\"nearest\":{\"checksum\":337758,\"median_us_per_call\":23.494384765625,\"queries\":4096},\"query\":{\"checksum\":566999,\"median_us_per_call\":33.552978515625,\"queries\":4096}}"
+    ]
+  }
+]

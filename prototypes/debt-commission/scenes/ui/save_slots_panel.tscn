@@ -528,6 +528,7 @@ variation_opentype = {
 }
 
 [node name="SaveSlotOverlay" type="Control" unique_id=418027157]
+z_index = 2
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

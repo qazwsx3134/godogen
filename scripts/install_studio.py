@@ -151,6 +151,14 @@ def install(target: Path, host: str, source_repo: bool = False,
             # Helpers derive roots from their own directory when no env is set.
             root_relative = os.path.relpath(target, target / runtime / Path(relative).parent)
             text = text.replace('/../.."', f'/{root_relative}"')
+            if source_repo and relative == "scripts/artifact-check.sh":
+                # A shared source runtime checks other game roots with its own catalog;
+                # resolve it before the no-argument branch changes directory.
+                text = text.replace('if [ -n "$ROOT_ARG" ]; then',
+                                    'CATALOG_DIR="$(cd "$(dirname "$0")/../docs" && { pwd -W 2>/dev/null || pwd; })"\n'
+                                    'if [ -n "$ROOT_ARG" ]; then', 1)
+                text = text.replace(f'CATALOG="$ROOT/{runtime}/docs/workflow-catalog.yaml"',
+                                    'CATALOG="$CATALOG_DIR/workflow-catalog.yaml"')
         if relative == "hooks/yaml-helper.sh":
             text = text.replace("engine.name::Godot|Unity|Unreal", "engine.name::Godot|Unity|Unreal|Bevy|Babylon")
             text = text.replace('    unreal*) root="Source" ;;', '    unreal*) root="Source" ;;\n    bevy|babylon|babylon.js) root="src" ;;')

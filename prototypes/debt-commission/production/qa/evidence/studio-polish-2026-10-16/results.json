@@ -1,0 +1,461 @@
+[
+  {
+    "name": "after-debt-commission-test_chapter1",
+    "game": "debt-commission",
+    "exit": 0,
+    "passed": true,
+    "seconds": 17.84,
+    "log": "after-debt-commission-test_chapter1.log",
+    "summary": [
+      "CHAPTER 1 TESTS PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-debt-commission-test_chapter_flow",
+    "game": "debt-commission",
+    "exit": 0,
+    "passed": true,
+    "seconds": 11.25,
+    "log": "after-debt-commission-test_chapter_flow.log",
+    "summary": [
+      "chapter flow PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-debt-commission-test_choices",
+    "game": "debt-commission",
+    "exit": 0,
+    "passed": true,
+    "seconds": 77.5,
+    "log": "after-debt-commission-test_choices.log",
+    "summary": [
+      "CHOICE TESTS PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "rerun-debt-commission-test_comedy",
+    "game": "debt-commission",
+    "exit": 0,
+    "passed": true,
+    "seconds": 100.8,
+    "log": "rerun-debt-commission-test_comedy.log",
+    "summary": [
+      "COMEDY TESTS PASSED"
+    ],
+    "errors": [],
+    "previous_attempt": {
+      "name": "after-debt-commission-test_comedy",
+      "game": "debt-commission",
+      "exit": 1,
+      "passed": false,
+      "seconds": 47.01,
+      "log": "after-debt-commission-test_comedy.log",
+      "summary": [],
+      "errors": [
+        "FAIL: tsukkomi_impact lasts about 1.35 s (0.05)",
+        "FAIL: cinema/tsukkomi_impact: ran to its end (0.01 of 1.35 s) and left nothing behind",
+        "FAIL: cinema/small_reaction: ran to its end (0.01 of 0.90 s) and left nothing behind",
+        "FAIL: cinema/full_manga_panel: ran to its end (0.02 of 1.80 s) and left nothing behind",
+        "FAIL: ledger/tsukkomi_impact: ran to its end (0.00 of 1.35 s) and left nothing behind",
+        "FAIL: ledger/small_reaction: ran to its end (0.00 of 0.90 s) and left nothing behind",
+        "FAIL: ledger/full_manga_panel: ran to its end (0.00 of 1.80 s) and left nothing behind",
+        "FAIL: manga/tsukkomi_impact: ran to its end (0.00 of 1.35 s) and left nothing behind"
+      ]
+    }
+  },
+  {
+    "name": "after-debt-commission-test_dialogue_text",
+    "game": "debt-commission",
+    "exit": 0,
+    "passed": true,
+    "seconds": 5.63,
+    "log": "after-debt-commission-test_dialogue_text.log",
+    "summary": [
+      "DIALOGUE TEXT TESTS PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "rerun-debt-commission-test_ep00",
+    "game": "debt-commission",
+    "exit": 0,
+    "passed": true,
+    "seconds": 81.98,
+    "log": "rerun-debt-commission-test_ep00.log",
+    "summary": [
+      "EP00 TESTS PASSED"
+    ],
+    "errors": [],
+    "previous_attempt": {
+      "name": "after-debt-commission-test_ep00",
+      "game": "debt-commission",
+      "exit": 1,
+      "passed": false,
+      "seconds": 53.44,
+      "log": "after-debt-commission-test_ep00.log",
+      "summary": [],
+      "errors": [
+        "FAIL: it lasts about 1.35 s (0.05)"
+      ]
+    }
+  },
+  {
+    "name": "after-debt-commission-test_interaction",
+    "game": "debt-commission",
+    "exit": 0,
+    "passed": true,
+    "seconds": 15.78,
+    "log": "after-debt-commission-test_interaction.log",
+    "summary": [
+      "INTERACTION TESTS PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-debt-commission-test_investigation",
+    "game": "debt-commission",
+    "exit": 0,
+    "passed": true,
+    "seconds": 8.44,
+    "log": "after-debt-commission-test_investigation.log",
+    "summary": [
+      "INVESTIGATION TESTS PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-debt-commission-test_phase2_story",
+    "game": "debt-commission",
+    "exit": 0,
+    "passed": true,
+    "seconds": 7.57,
+    "log": "after-debt-commission-test_phase2_story.log",
+    "summary": [
+      "PHASE 2 STORY TESTS PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-debt-commission-test_phase2_ui",
+    "game": "debt-commission",
+    "exit": 0,
+    "passed": true,
+    "seconds": 12.76,
+    "log": "after-debt-commission-test_phase2_ui.log",
+    "summary": [
+      "PHASE 2 UI TESTS PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-debt-commission-test_phase3_story",
+    "game": "debt-commission",
+    "exit": 0,
+    "passed": true,
+    "seconds": 10.03,
+    "log": "after-debt-commission-test_phase3_story.log",
+    "summary": [
+      "PHASE 3 STORY TESTS PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-debt-commission-test_phase3_ui",
+    "game": "debt-commission",
+    "exit": 0,
+    "passed": true,
+    "seconds": 26.14,
+    "log": "after-debt-commission-test_phase3_ui.log",
+    "summary": [
+      "PHASE 3 UI TESTS PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-debt-commission-test_phase4_rounds_story",
+    "game": "debt-commission",
+    "exit": 0,
+    "passed": true,
+    "seconds": 6.77,
+    "log": "after-debt-commission-test_phase4_rounds_story.log",
+    "summary": [
+      "PHASE 4 ROUNDS STORY TESTS PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-debt-commission-test_phase4_rounds_ui",
+    "game": "debt-commission",
+    "exit": 0,
+    "passed": true,
+    "seconds": 24.95,
+    "log": "after-debt-commission-test_phase4_rounds_ui.log",
+    "summary": [
+      "PHASE 4 ROUNDS UI TESTS PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-debt-commission-test_phase4_ui",
+    "game": "debt-commission",
+    "exit": 0,
+    "passed": true,
+    "seconds": 16.65,
+    "log": "after-debt-commission-test_phase4_ui.log",
+    "summary": [
+      "PHASE 4 UI TESTS PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-debt-commission-test_reading_convenience",
+    "game": "debt-commission",
+    "exit": 0,
+    "passed": true,
+    "seconds": 10.88,
+    "log": "after-debt-commission-test_reading_convenience.log",
+    "summary": [
+      "READING CONVENIENCE TESTS PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-debt-commission-test_reading_scenes",
+    "game": "debt-commission",
+    "exit": 0,
+    "passed": true,
+    "seconds": 16.75,
+    "log": "after-debt-commission-test_reading_scenes.log",
+    "summary": [
+      "READING SCENES TESTS PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-debt-commission-test_round_v2",
+    "game": "debt-commission",
+    "exit": 0,
+    "passed": true,
+    "seconds": 10.99,
+    "log": "after-debt-commission-test_round_v2.log",
+    "summary": [
+      "ROUND V2 TESTS PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-debt-commission-test_save_slots",
+    "game": "debt-commission",
+    "exit": 0,
+    "passed": true,
+    "seconds": 17.48,
+    "log": "after-debt-commission-test_save_slots.log",
+    "summary": [
+      "SAVE SLOT TESTS PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-debt-commission-test_save_validation",
+    "game": "debt-commission",
+    "exit": 0,
+    "passed": true,
+    "seconds": 11.28,
+    "log": "after-debt-commission-test_save_validation.log",
+    "summary": [
+      "SAVE VALIDATION TESTS PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-debt-commission-test_settings",
+    "game": "debt-commission",
+    "exit": 0,
+    "passed": true,
+    "seconds": 12.51,
+    "log": "after-debt-commission-test_settings.log",
+    "summary": [
+      "settings PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-debt-commission-test_stage_scene",
+    "game": "debt-commission",
+    "exit": 0,
+    "passed": true,
+    "seconds": 10.91,
+    "log": "after-debt-commission-test_stage_scene.log",
+    "summary": [
+      "stage scene PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-debt-commission-test_story",
+    "game": "debt-commission",
+    "exit": 0,
+    "passed": true,
+    "seconds": 6.76,
+    "log": "after-debt-commission-test_story.log",
+    "summary": [
+      "STORY TESTS PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-debt-commission-test_story_build",
+    "game": "debt-commission",
+    "exit": 0,
+    "passed": true,
+    "seconds": 8.87,
+    "log": "after-debt-commission-test_story_build.log",
+    "summary": [
+      "STORY BUILD TESTS PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-debt-commission-test_story_build_parley",
+    "game": "debt-commission",
+    "exit": 0,
+    "passed": true,
+    "seconds": 7.89,
+    "log": "after-debt-commission-test_story_build_parley.log",
+    "summary": [
+      "STORY BUILD PARLEY TESTS PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-debt-commission-test_story_tools",
+    "game": "debt-commission",
+    "exit": 0,
+    "passed": true,
+    "seconds": 12.72,
+    "log": "after-debt-commission-test_story_tools.log",
+    "summary": [
+      "STORY TOOLS TESTS PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-debt-commission-test_super_effects",
+    "game": "debt-commission",
+    "exit": 0,
+    "passed": true,
+    "seconds": 13.77,
+    "log": "after-debt-commission-test_super_effects.log",
+    "summary": [
+      "SUPER EFFECTS PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-debt-commission-test_text_presentation",
+    "game": "debt-commission",
+    "exit": 0,
+    "passed": true,
+    "seconds": 11.1,
+    "log": "after-debt-commission-test_text_presentation.log",
+    "summary": [
+      "TEXT PRESENTATION TESTS PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-debt-commission-test_ui_styles",
+    "game": "debt-commission",
+    "exit": 0,
+    "passed": true,
+    "seconds": 14.58,
+    "log": "after-debt-commission-test_ui_styles.log",
+    "summary": [
+      "UI STYLE TESTS PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-debt-commission-test_vn_shell",
+    "game": "debt-commission",
+    "exit": 0,
+    "passed": true,
+    "seconds": 10.99,
+    "log": "after-debt-commission-test_vn_shell.log",
+    "summary": [
+      "VN SHELL TESTS PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-debt-bench",
+    "game": "debt-commission",
+    "exit": 0,
+    "passed": true,
+    "seconds": 11.03,
+    "log": "after-debt-bench.log",
+    "summary": [
+      "STUDIO_DEBT_BENCH {\"accepted\":63,\"iterations\":60,\"mean_us\":33.8166666666667,\"median_us\":32.0,\"p95_us\":42.0,\"unchanged\":true}"
+    ],
+    "errors": []
+  },
+  {
+    "name": "after-debt-proof",
+    "game": "debt-commission",
+    "exit": 0,
+    "passed": true,
+    "seconds": 12.37,
+    "log": "after-debt-proof.log",
+    "summary": [
+      "STUDIO VISUAL PROOF PASSED"
+    ],
+    "errors": []
+  },
+  {
+    "name": "debt-reading-scenes",
+    "game": "debt-commission",
+    "passed": true,
+    "exit": 0,
+    "errors": [],
+    "log": "debt-reading-scenes.log",
+    "summary": [
+      "READING SCENES TESTS PASSED"
+    ]
+  },
+  {
+    "name": "debt-save-slots",
+    "game": "debt-commission",
+    "passed": true,
+    "exit": 0,
+    "errors": [],
+    "log": "debt-save-slots.log",
+    "summary": [
+      "SAVE SLOT TESTS PASSED"
+    ]
+  },
+  {
+    "name": "debt-ui-styles",
+    "game": "debt-commission",
+    "passed": true,
+    "exit": 0,
+    "errors": [],
+    "log": "debt-ui-styles.log",
+    "summary": [
+      "UI STYLE TESTS PASSED"
+    ]
+  },
+  {
+    "name": "debt-proof-final",
+    "game": "debt-commission",
+    "passed": true,
+    "exit": 0,
+    "errors": [],
+    "log": "debt-proof-final.log",
+    "summary": [
+      "STUDIO VISUAL PROOF PASSED"
+    ]
+  }
+]

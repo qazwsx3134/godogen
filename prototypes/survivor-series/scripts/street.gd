@@ -371,7 +371,7 @@ func _pick_kind(weights: PackedFloat32Array) -> int:
 	return 0
 
 func _refresh_player_readability() -> void:
-	var crowded: bool = grid.query(player.position, readability_radius).size() >= readability_enemies
+	var crowded: bool = grid.has_at_least(player.position, readability_radius, readability_enemies)
 	if not crowded:
 		var nearby: int = 0
 		for shot: Node2D in projectiles.get_children():
