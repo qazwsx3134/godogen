@@ -90,11 +90,12 @@ func _spawn(s: Dictionary) -> Node2D:
 	street.projectiles.add_child(shot)
 	return shot
 
-## The swing itself, drawn by PixelVfx: an arc for punches, a ground ring for kicks.
+## The swing itself, drawn by PixelVfx: an arc for punches, two opposite crescents for the spinning kick.
 func _flash(mode: String, radius: float, heading: Vector2) -> void:
 	var at: Vector2 = _hero().position - Vector2(0, 20)
 	if mode == "kick":
-		street.fx.ring(_hero().position, radius * 0.35, radius, &"kick", 0.32, 2)
+		street.fx.slash(at, heading.angle(), radius * 0.8, 1.9, &"kick", true)
+		street.fx.slash(at, heading.angle() + PI, radius * 0.8, 1.9, &"kick", true)
 	else:
 		street.fx.slash(at, heading.angle(), radius * 0.75, 1.7, &"heavy" if mode == "heavy" else &"hit", mode == "heavy")
 
@@ -149,7 +150,7 @@ func _wave(s: Dictionary) -> bool:
 
 func _kick(s: Dictionary) -> bool:
 	var radius: float = 112.0 * s.area
-	_flash("kick", radius, Vector2.RIGHT)
+	_flash("kick", radius, _hero().facing)
 	street.sfx.play(&"kick", 0.12)
 	for enemy: Node2D in street.grid.query(_hero().position, radius):
 		var heading: Vector2 = (enemy.position - _hero().position).normalized()

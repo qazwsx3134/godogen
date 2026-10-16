@@ -1,5 +1,5 @@
 extends SceneTree
-## Puts every PixelFx effect next to the hero once (punch and heavy slash, kick ring, firecracker and fart blasts
+## Puts every PixelFx effect next to the hero once (punch and heavy slash, spinning-kick crescents, firecracker and fart blasts
 ## with captions, gold burst, sparks, a white hit flash, a smoker's cloud) and saves two frames, for tuning effects by eye.
 ## Renders, so run it on a virtual display, never on the user's desktop:
 ##   env -u WAYLAND_DISPLAY xvfb-run -a -s "-screen 0 1280x1280x24" \
@@ -29,13 +29,23 @@ func _process(_delta: float) -> bool:
 			var enemy: Node2D = street.spawn_enemy(0, at + Vector2(-120, 60))
 			street.fx.slash(at + Vector2(0, -20), 0.0, 90.0, 1.7, &"hit")
 			street.fx.slash(at + Vector2(0, -170), PI, 90.0, 1.7, &"heavy", true)
-			street.fx.ring(at + Vector2(0, 170), 30.0, 110.0, &"kick", 0.32, 2)
+			street.arsenal._kick(street.build.weapon_stats(&"kick"))
 			street.blast(at + Vector2(150, 120), 90.0, 0.0, 0.0, &"blast", "砰！")
 			street.blast(at + Vector2(-150, -170), 90.0, 0.0, 0.0, &"fart", "噗～")
 			street.fx.burst(at + Vector2(150, -160), &"gold", 14, 70.0)
 			street.fx.spark(at + Vector2(-60, 220), Vector2.RIGHT, &"slipper", 6)
 			enemy.hit(1.0, Vector2.LEFT, 0.0)
-			street._smoke(at + Vector2(-20, 300))
+			street._smoke(at + Vector2(-150, 250))
+			var hoop: Node2D = (load("res://scenes/ring.tscn") as PackedScene).instantiate() as Node2D
+			hoop.mode = "straight"
+			hoop.velocity = Vector2.ZERO
+			hoop.lifetime = 1.8
+			hoop.radius = 90.0
+			hoop.damage = 0.0
+			hoop.slow = 0.0
+			hoop.pull = 0.0
+			street.projectiles.add_child(hoop)
+			hoop.launch(at + Vector2(150, 270))
 		11:
 			root.get_texture().get_image().save_png(out + "-a.png")
 		16:
@@ -44,5 +54,6 @@ func _process(_delta: float) -> bool:
 			root.get_texture().get_image().save_png(out + "-c.png")
 		44:
 			DirAccess.remove_absolute(ProjectSettings.globalize_path(META_PATH))
+			game.free()
 			return true
 	return false

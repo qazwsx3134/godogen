@@ -71,9 +71,12 @@ func build() -> void:
 	# Ring toss: a thick orange ring that drags enemies in.
 	var ring := projectile("RingToss", 90.0, false)
 	var rv := ring.get_node("Visual")
-	line(rv, "Outer", "ff8a2e", circle(82.0, 28), 9.0, true)
-	line(rv, "Inner", "ffe08a", circle(56.0, 24), 4.0, true)
-	poly(rv, "Fill", "ffb347", circle(82.0, 28), Vector2.ZERO, 0.12)
+	var hoop := Sprite2D.new()
+	hoop.name = "Art"
+	hoop.texture = load("res://assets/pixel/fx/ring.png")
+	hoop.scale = Vector2.ONE * (2.0 / 0.72)
+	rv.add_child(hoop)
+	hoop.owner = ring
 	save(ring, "res://scenes/ring.tscn")
 	# Rider: a passing scooter drawn facing +x; the projectile rotates it along its heading.
 	var rider := projectile("RiderCharge", 26.0, true)

@@ -1,5 +1,5 @@
 """Pixel sprites for weapons that have no icon art (docs/pixel-ui-plan.md, effects pass): drawn here on the art-pixel
-grid with a 5-tone palette (outline, dark, mid, light, white) and saved 1:1 into assets/pixel/fx/.
+grid and saved 1:1 into assets/pixel/fx/.
 The scenes draw them at the world pixel density (2 screen px per art px).
 
     uv run --no-project --with pillow python tools/make_fx_sprites.py
@@ -50,8 +50,55 @@ def crescent():
     return out
 
 
+def hoop():
+    """A chunky, tilted night-market plastic ring, drawn at the art-pixel grid."""
+    width, height = 43, 24
+    img = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+    px = img.load()
+    cx, cy = 21.0, 11.5
+    tilt = math.radians(-6.0)
+    cos_t, sin_t = math.cos(tilt), math.sin(tilt)
+    outer_rx, outer_ry = 18.3, 7.0
+    inner_rx, inner_ry = 14.2, 4.4
+    outline_color = rgba("#281c2a")
+    shadow = rgba("#a84218")
+    orange = rgba("#f2761b")
+    bright = rgba("#ff9a27")
+    gold = rgba("#ffc653")
+    glint = rgba("#fff0b0")
+
+    for y in range(height):
+        for x in range(width):
+            dx, dy = x - cx, y - cy
+            u = dx * cos_t - dy * sin_t
+            v = dx * sin_t + dy * cos_t
+            angle = math.atan2(v / outer_ry, u / outer_rx)
+            wobble = 1.0 + math.sin(angle * 5.0 + 0.3) * 0.018 + math.sin(angle * 9.0) * 0.012
+            outer = math.hypot(u / (outer_rx * wobble), v / (outer_ry * wobble))
+            inner = math.hypot(u / (inner_rx * wobble), v / (inner_ry * wobble))
+
+            # One-pixel dark outer and inner edges keep the ring legible when scaled down.
+            if outer > 1.13 or inner < 0.82:
+                continue
+            if outer > 0.97 or inner < 1.12:
+                px[x, y] = outline_color
+            elif v > 1.8 or (u > 7.0 and v > -1.0):
+                px[x, y] = shadow
+            elif v < -2.2 and -10.0 < u < 5.0:
+                px[x, y] = gold
+            elif v < -0.2 and u < 4.0:
+                px[x, y] = bright
+            else:
+                px[x, y] = orange
+
+    # Small reflected glints on the upper-left arc.
+    for x, y in ((12, 4), (13, 4), (14, 5), (15, 5)):
+        px[x, y] = glint
+    return img
+
+
 if __name__ == "__main__":
     os.makedirs(OUT, exist_ok=True)
-    img = crescent()
-    img.save(os.path.join(OUT, "wave.png"))
-    print("wave.png", img.size)
+    for name, img in (("wave", crescent()), ("ring", hoop())):
+        img.save(os.path.join(OUT, f"{name}.png"))
+        print(f"{name}.png", img.size)

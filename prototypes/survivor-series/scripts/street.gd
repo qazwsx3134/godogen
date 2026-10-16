@@ -440,7 +440,7 @@ func _step_projectiles(delta: float) -> void:
 			sfx.play(&"pop", 0.05)
 			shot.queue_free()
 
-## Instant area damage with ground ring and material-specific feedback. Lethal hits inside
+## Instant area damage with material-specific feedback. Lethal hits inside
 ## queue their own consequences.
 func blast(at: Vector2, radius: float, damage: float, force: float, palette: StringName = &"blast", caption: String = "") -> void:
 	var gas: bool = palette in [&"fart", &"stink"]
@@ -451,7 +451,6 @@ func blast(at: Vector2, radius: float, damage: float, force: float, palette: Str
 		fx.pop(at - Vector2(0.0, 14.0), palette, minf(radius * 0.2, 18.0), 0.055)
 	else:
 		fx.pop(at - Vector2(0.0, 10.0), palette, minf(radius * 0.25, 24.0), 0.09)
-	fx.ring(at, radius * 0.45, radius, palette, 0.24, 1)
 	fx.burst(at - Vector2(0.0, 10.0), palette, 6 if gas else 12, 35.0 if gas else 85.0)
 	if caption != "":
 		fx.caption(at - Vector2(0.0, 40.0), caption, palette)
@@ -471,7 +470,7 @@ func _break_prop(prop: Node2D) -> void:
 	props_broken += 1
 	sfx.play(&"chest" if prop.coins >= 3 else &"pop", 0.05)
 	shake.add_trauma(0.12, 0.3)
-	fx.ring(at - Vector2(0.0, 6.0), 6.0, prop.hit_radius + 18.0, &"gold", 0.3)
+	fx.pop(at - Vector2(0.0, 12.0), &"gold", prop.hit_radius * 0.6, 0.1)
 	fx.burst(at - Vector2(0.0, 12.0), &"gold", 10, 65.0)
 	if prop.xp > 0.0:
 		drop("xp", at, prop.xp)

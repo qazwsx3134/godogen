@@ -30,9 +30,11 @@ func run() -> void:
 	game.street.refresh_player_stats()
 	_expect(street.build.level > level_before and is_equal_approx(player.speed_scale, player.hero_speed * (1.0 + street.build.stat(&"speed"))), "stat refresh keeps the hero multiplier")
 	# A punch swing must still travel her shorter reach and come back to rest.
+	_expect(not player.fist.visible, "the fist is not carried on the body between swings")
 	player.punch(Vector2.RIGHT, 0.5)
+	_expect(player.fist.visible, "the fist appears when the punch is thrown")
 	await create_timer(0.3).timeout
-	_expect(player.fist.position.length() < 1.0, "fist returns to rest after a swing")
+	_expect(player.fist.position.length() < 1.0 and not player.fist.visible, "fist returns to rest after a swing and disappears")
 	game.meta.load_save()
 	_expect(game.meta.hero == "woman", "the pick survives a reload of the save")
 	game.queue_free()

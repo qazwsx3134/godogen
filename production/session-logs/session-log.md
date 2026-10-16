@@ -10605,3 +10605,40 @@ scripts/install_studio.py
 tests/test_studio.py
 ---
 
+## Session End: 20261016_175227
+### Commits
+d2250f6 update
+### Uncommitted Changes
+prototypes/survivor-series/TODO.md
+prototypes/survivor-series/scenes/player.tscn
+prototypes/survivor-series/scenes/ring.tscn
+prototypes/survivor-series/scenes/smoke.tscn
+prototypes/survivor-series/scripts/arsenal.gd
+prototypes/survivor-series/scripts/player.gd
+prototypes/survivor-series/scripts/smoke.gd
+prototypes/survivor-series/scripts/street.gd
+prototypes/survivor-series/tests/test_heroes.gd
+prototypes/survivor-series/tools/add_weapons.gd
+prototypes/survivor-series/tools/fx_demo.gd
+prototypes/survivor-series/tools/make_fx_sprites.py
+---
+
+## Session End: 20261016_175343
+### Commits
+d2250f6 update
+### Uncommitted Changes
+production/session-logs/session-log.md
+prototypes/survivor-series/TODO.md
+prototypes/survivor-series/scenes/player.tscn
+prototypes/survivor-series/scenes/ring.tscn
+prototypes/survivor-series/scenes/smoke.tscn
+prototypes/survivor-series/scripts/arsenal.gd
+prototypes/survivor-series/scripts/player.gd
+prototypes/survivor-series/scripts/smoke.gd
+prototypes/survivor-series/scripts/street.gd
+prototypes/survivor-series/tests/test_heroes.gd
+prototypes/survivor-series/tools/add_weapons.gd
+prototypes/survivor-series/tools/fx_demo.gd
+prototypes/survivor-series/tools/make_fx_sprites.py
+---
+

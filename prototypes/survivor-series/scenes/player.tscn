@@ -261,6 +261,7 @@ offset = Vector2(0, -16)
 
 [node name="Fist" type="Node2D" parent="Motion/Visual" unique_id=2077698964]
 unique_name_in_owner = true
+visible = false
 
 [node name="KnuckleOutline" type="Polygon2D" parent="Motion/Visual/Fist" unique_id=411213303]
 visible = false

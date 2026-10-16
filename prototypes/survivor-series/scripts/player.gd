@@ -79,6 +79,7 @@ func reset(limit: float = max_hp, damage_reduction: float = 0.0, speed_bonus: fl
 	visual.modulate = Color.WHITE
 	fist.position = Vector2.ZERO
 	fist.scale = rest_fist_scale
+	fist.visible = false
 	motion.position = rest_motion_position
 	walk_phase = 0.0
 	_refresh_bar()
@@ -109,6 +110,9 @@ func punch(direction: Vector2, interval: float, heavy: bool = false) -> void:
 	if absf(direction.x) > 0.05:
 		visual.scale.x = absf(rest_scale.x) * signf(direction.x)
 	fist.scale = rest_fist_scale * (1.5 if heavy else 1.15)
+	# The fist only exists during the swing: it pops out, then fades while pulling back.
+	fist.visible = true
+	fist.modulate.a = 1.0
 	_pose = create_tween().set_parallel(true)
 	var local_direction := Vector2(direction.x * signf(visual.scale.x), direction.y)
 	_pose.tween_property(fist, "position", local_direction * swing_reach, 0.06).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
@@ -116,6 +120,8 @@ func punch(direction: Vector2, interval: float, heavy: bool = false) -> void:
 	_pose.chain().tween_property(fist, "position", Vector2.ZERO, 0.16).set_trans(Tween.TRANS_BACK if swing_overshoot else Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	_pose.parallel().tween_property(visual, "position", rest_visual_position, 0.16).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	_pose.parallel().tween_property(fist, "scale", rest_fist_scale, 0.16)
+	_pose.parallel().tween_property(fist, "modulate:a", 0.0, 0.16).set_ease(Tween.EASE_IN)
+	_pose.chain().tween_callback(fist.hide)
 
 ## Takes `amount` minus armor (at least 1). Returns false while invulnerable.
 func hurt(amount: float) -> bool:
