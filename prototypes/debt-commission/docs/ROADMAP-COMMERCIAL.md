@@ -10,6 +10,40 @@
 2. **劇本來源：** 既有章節以 `.dialogue` 為唯一來源，編輯器對它們只做檢視與診斷；新故事以編輯器的 JSON 為唯一來源，提供一次性的「轉成圖編輯來源」。不做 JSON → `.dialogue` 的反向轉換。
 3. **美術方向與系統定位（2026-10-19）：** 先維持手繪蠟筆風，不重繪。長期目標是讓創作者用這套系統，自己提供故事與畫作，做出不同的作品；第一章是示範作品。新功能優先考慮「別人的故事與圖也能放進來」，不寫死萬事屋的角色或畫風。
 
+## 待辦總覽（2026-10-19 更新）
+
+細節與證據在下方各里程碑的表格；這裡只列還沒完成的，依「誰來做」分組。
+
+```
+等你決定 ──→ K2 故事包的優先順序 ──→ Claude／Codex 才動手
+等你做（真人）  C2 試讀、C3 音效、B04/B17 真機
+Claude 下一批   K1 → K3 → U1 → B14 → B11 → G6
+Codex           A01…A14 編輯器、B01/B02/B03/B08/B13、K4/K5
+```
+
+**等你決定**
+- K2 故事包、K4 投稿檢查、K5 授權欄位的優先順序（K2 會改故事與素材的載入方式；K4、K5 屬 Codex）。
+- 舊的 repo 層級問題（不屬本專案、這輪沒動）：`.claude/` 約 200 個檔案在 `.gitignore` 裡卻仍被追蹤；`prototypes/survivor-series/art_src/` 有 274 張候選圖被它自己的 `.gitignore` 排除卻仍被追蹤。要不要移出版控。
+
+**等你做（真人才能完成）**
+- C2 第一章作者試讀與修訂；`BR` 開頭的分支結局台詞是 Claude 寫的，一併試讀（C1）。
+- C3 正式音效與配樂（目前是合成佔位音加原聲帶）。
+- B04／B17 Android Chrome、iOS Safari 實機：首次點擊、切到背景再回來是否有聲音（B05）、單手操作、遊玩時間、金色氣焰與光束的強度（TODO.md B 段）。
+
+**Claude 下一批（建議順序）**
+1. K1 創作者美術規格（S）。
+2. K3 署名，與 G5 片尾名單一起（S/M）。
+3. U1 銀魂和紙的調查列、回合 HUD、QTE、牌子、toast 樣式統一（S）。
+4. B14 最大字級逐畫面截圖驗收（M）。
+5. B11 存檔匯出／匯入（M）。
+6. G6 拆分 `main.gd`（L，改到哪拆到哪）。
+7. B20 `--ep00` 瀏覽器路線失敗、U2 拍 cinema 結算截圖確認（S）。
+8. 之後：B06 PWA safe area（真機確認需要才做）、G4 流程圖、G7 多語系、C4 第二章流程（與你一起）。
+
+**Codex**
+- 讀 `372b314`、`1346379` 的實際 diff 後回 ACK；特別是 `project.godot` 開 ICU 資料讓 pck +4.8 MB（落在 B02），以及改過的 `tools/browser_check.mjs`、`check_ui_parity.mjs`、`check_gintama_reference.mjs`、`check_reading_chapter1.mjs`。
+- 編輯器 A01–A14；發行／品質 B01、B02、B03、B08、B13、B16；創作者 K4、K5。
+
 ## 里程碑
 
 ```
@@ -89,6 +123,7 @@ M5 內容：第一章定稿 → 第二章起量產（與 M2／M3 並行）
 | B14 | P1 | 最大字級時不截字、照片上的對比度，逐個場景驗收 | 已有字級設定與對比測試，但沒有逐像素驗收 | M | C |
 | B16 | P2 | 色盲：不只靠顏色區分；鍵盤焦點 | `editor.js` 用紅綠線表示狀態 | M/L | X |
 | B17 | P2 | 單手真人試玩 | 已有 48 CSS px 的檢查 | S | U |
+| B20 | P1 | `browser_check.mjs --ep00` 失敗：「Gintoki alone is on stage」（2026-10-19 在 HEAD 版同樣失敗，不是這輪造成的；未查原因） | `tools/browser_check.mjs --ep00` | S | C |
 | U1 | P1 | 銀魂和紙：調查列、回合 HUD、QTE、placard、toast 的樣式統一 | 這些仍由程式依款式上色 | S | C |
 | U3 | ☑ P1 | 標題卡只留開始／繼續／讀檔／設定：A–D 風格鈕在四款標題 scene 設為隱藏，換風格改在設定的「介面風格」或目錄；版本字改為「v0.5」（2026-10-19） | `scenes/ui/title_screen_*.tscn`；`tests/test_ui_styles.gd` | S | C |
 | B18 | ☑ P1 | 中文禁則：Web 版把「。」「，」排到行首（匯出沒帶 ICU 斷行資料）。`project.godot` 開 `internationalization/locale/include_text_server_data`，pck +4.8 MB（2026-10-19） | 結算台詞、選詞題目的 Web 截圖 | S | C |
