@@ -47,6 +47,27 @@ Godot 4.7 手機直立視覺小說，依 [V1 Roadmap](../../docs/story-telling-g
 
 B 超必殺演出（2026-10-06）已接入 `?sample=phase4_rounds`，使用既有素材與程序特效。眼鏡的 `charged` 可在 `scenes/ui/glasses_icon.tscn` Inspector 開啟，預覽金色氣焰；執行時由力量控制。[氣焰手機畫面](docs/super-aura-phone.png) · [窄手機畫面](docs/super-aura-320x568.png) · [光束畫面](docs/super-beam-phone.png)。後續 C → D → E 見 [TODO](TODO.md)。
 
+## 打開故事編輯器（網頁）
+
+劇本節點編輯器是 `tools/story_editor/` 裡的靜態網頁，不用建置、不用 npm。在**這個資料夾**開一個本機伺服器，再用瀏覽器開網址：
+
+```bash
+cd prototypes/debt-commission
+python3 -m http.server 8000 --bind 127.0.0.1
+```
+
+- 開 <http://127.0.0.1:8000/tools/story_editor/>：可選的故事來自 `data/stories.json`，角色、表情與指令清單也從專案讀進來。
+- 直接開某個故事：在網址後面加 `?story=<id>`，例如 <http://127.0.0.1:8000/tools/story_editor/?story=chapter1>、`?story=ep00`（id 見 `data/stories.json`）。
+- 8000 被占用就換別的埠，例如 `python3 -m http.server 8001 --bind 127.0.0.1`，網址的埠跟著改。遊戲試玩用的是 5193（`tools/serve_web.sh`），兩個可以同時開。
+- 不開伺服器也能雙擊 `tools/story_editor/index.html`，再用「開啟…」選 `data/*_story.json`；這樣讀不到角色清單，角色欄改成手打。
+- 存檔方式：編輯器只能「匯出 JSON」下載。把下載的檔案放回 `data/` 後，**一定要**跑一次檢查，重算存檔用的 `version`（Mac 上 `godot` 換成 `/Applications/Godot.app/Contents/MacOS/Godot`）：
+
+  ```bash
+  godot --headless --path . --script res://tools/story_editor/check_story.gd -- data/<故事>_story.json --write
+  ```
+
+  印出 `OK` 才算完成。第一章這類用 `.dialogue` 寫的故事，在編輯器裡只看不改（改 `story_src/` 再建置）。拖曳、接線、搜尋、草稿復原等操作見 [編輯器說明](docs/STORY-EDITOR.md)。
+
 ## 開發與 Web 匯出
 
 此目錄是獨立的 Godot 專案，用 **Godot 4.7 stable** 開啟 `project.godot`，按 F5 試玩。設計尺寸 1080×1920（9:16），`stretch aspect=expand`：較長的手機往下延伸，桌機左右留黑邊。
