@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>劇本節點編輯器</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="editor.css">
+</head>
+<body>
+<header id="toolbar">
+  <strong class="brand">劇本節點編輯器</strong>
+  <label class="btn" title="開啟任一 *_story.json">開啟…<input id="fileOpen" type="file" accept=".json,application/json" hidden></label>
+  <select id="storySelect" title="data/stories.json 列出的故事" hidden></select>
+  <button id="btnNewStory" title="從一個空白故事開始">新故事</button>
+  <button id="btnExport" class="primary" title="下載 JSON（鍵排序、縮排與建置輸出相同）">匯出 JSON</button>
+  <label class="btn" title="選回已下載的 JSON，比對成功才確認儲存">確認下載檔…<input id="verifySaved" type="file" accept=".json,application/json" hidden></label>
+  <button id="btnUndo" disabled title="Ctrl/Cmd+Z">復原</button>
+  <button id="btnRedo" disabled title="Ctrl/Cmd+Shift+Z 或 Ctrl+Y">重做</button>
+  <span class="sep"></span>
+  <button id="btnAddNode" title="在畫面中央新增節點（也可以雙擊空白處）">＋節點</button>
+  <button id="btnLayout" title="依 entry 重新分層排版">自動排版</button>
+  <button id="btnFit" title="縮放到看見全部節點">符合畫面</button>
+  <button id="btnLayoutExport" title="下載 &lt;id&gt;.layout.json">匯出座標</button>
+  <label class="btn" title="讀入 &lt;id&gt;.layout.json">匯入座標<input id="layoutOpen" type="file" accept=".json,application/json" hidden></label>
+  <span id="status" role="status"></span>
+</header>
+<main>
+  <div id="view" tabindex="0">
+    <div id="world">
+      <svg id="edges" xmlns="http://www.w3.org/2000/svg"></svg>
+      <div id="cards"></div>
+    </div>
+    <div id="help">拖背景平移 · 滾輪縮放 · 雙擊空白處新增節點 · 從右側圓點拖線：放在卡片＝改目標，放在空白處＝新節點</div>
+  </div>
+  <aside id="side">
+    <section id="banner"></section>
+    <details id="infoBox" open><summary>故事</summary><div id="info"></div></details>
+    <details id="problemBox" open><summary id="problemTitle">問題清單</summary><ul id="problems"></ul></details>
+    <details id="searchBox" open><summary>全文搜尋</summary>
+      <label for="searchInput">節點、台詞、角色（Ctrl/Cmd+F）</label>
+      <input id="searchInput" type="search" autocomplete="off" placeholder="輸入關鍵字">
+      <p id="searchCount" role="status"></p><ul id="searchResults"></ul>
+    </details>
+    <section id="inspector"></section>
+  </aside>
+</main>
+<script src="story_core.js"></script>
+<script src="editor_state.js"></script>
+<script src="editor.js"></script>
+</body>
+</html>

@@ -184,6 +184,15 @@
       "values": []
     },
     {
+      "id": "node:27",
+      "type": "ACTION",
+      "position": "(920.0, 1000.0)",
+      "description": "comedy(\"emotion_band\", \"kagura\", \"阿銀居然有接過委託阿魯！？\")",
+      "action_type": "SCRIPT",
+      "action_script_ref": "",
+      "values": []
+    },
+    {
       "id": "node:23",
       "type": "END",
       "position": "(1380.0, 1320.0)"
@@ -218,10 +227,11 @@
         "node:13",
         "node:14",
         "node:15",
-        "node:16"
+        "node:16",
+        "node:27"
       ],
       "colour": "(0.0667, 0.102, 0.1686, 1.0)",
-      "size": "(400.0, 1240.0)"
+      "size": "(400.0, 1440.0)"
     },
     {
       "id": "node:26",
@@ -416,7 +426,7 @@
       "id": "edge:20",
       "from_node": "node:16",
       "from_slot": 0,
-      "to_node": "node:17",
+      "to_node": "node:27",
       "to_slot": 0,
       "should_override_colour": false,
       "colour_override": "(0.0, 0.0, 0.0, 1.0)"
@@ -435,6 +445,15 @@
       "from_node": "node:1",
       "from_slot": 0,
       "to_node": "node:2",
+      "to_slot": 0,
+      "should_override_colour": false,
+      "colour_override": "(0.0, 0.0, 0.0, 1.0)"
+    },
+    {
+      "id": "edge:23",
+      "from_node": "node:27",
+      "from_slot": 0,
+      "to_node": "node:17",
       "to_slot": 0,
       "should_override_colour": false,
       "colour_override": "(0.0, 0.0, 0.0, 1.0)"

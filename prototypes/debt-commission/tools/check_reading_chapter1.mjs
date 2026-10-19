@@ -18,7 +18,7 @@ try{await Promise.all([{width:390,height:844},{width:320,height:568}].map(async 
  const tap=async(name)=>{let s=await state();for(let i=0;!s.controls[name]&&i<24;i++){await scroll(i<12?220:-220);s=await state();}assert.ok(s.controls[name],`${name} unavailable at ${s.screen}; ${Object.keys(s.controls)}`);await clickRect(s.controls[name],s);};
  const menu=async()=>{await tap('menu');await wait(()=>window.__debtQA?.screen==='menu');};
  const readTo=async(predicate,label)=>{for(let i=0;i<220;i++){
-  await wait(()=>window.__debtQA&&(window.__debtQA.comedy?.active||['story','investigate','boke_round','tsukkomi','qte','result','end'].includes(window.__debtQA.screen)));
+  await wait(()=>window.__debtQA&&(window.__debtQA.comedy?.active||['story','investigate','boke_round','tsukkomi','qte','choice','result','end'].includes(window.__debtQA.screen)));
   const s=await state();if(predicate(s))return s;
   if(s.comedy?.active){await wait(()=>!window.__debtQA?.comedy?.active,null,10000);continue;}
   assert.equal(s.screen,'story',`${label} blocked at ${s.screen} ${s.node_id}`);
@@ -73,7 +73,7 @@ try{await Promise.all([{width:390,height:844},{width:320,height:568}].map(async 
  await wait(()=>window.__debtQA?.phase3.round.qte_active);
  // Poll the ring's visual progress through QA's elapsed value; QA is read-only.
  await wait(()=>window.__debtQA?.phase3?.round?.qte_elapsed>=1.55,null,10000);
- s=await state();await clickRect(s.controls.qte,s,0);await wait(()=>window.__debtQA?.screen!=='qte');await readTo(s=>s.screen==='result','chapter result');
+ s=await state();await clickRect(s.controls.qte,s,0);await wait(()=>window.__debtQA?.screen!=='qte');s=await readTo(s=>s.screen==='choice','fetch choice');const self=s.choices.find(x=>x.id==='fetch_self');assert.ok(self,'fetch_self option');await clickRect(self.rect,s);await readTo(s=>s.screen==='result','chapter result');
  s=await state();assert.equal(s.result.grade,'A');assert.ok(s.items.includes('salary_envelope'));await page.screenshot({path:`${out}/${viewport.width}-result.png`});assert.deepEqual(errors,[]);
- report.push({viewport,grade:s.result.grade,checks:['default gintama','quick save/load','rollback','scrolling typography settings','save slots and overwrite','LOG return','kitchen cast','four clue hotspots with pan','listening material','three rounds','placard','super','C5 text before QTE','early QTE retry','salary twist and result'],errors});console.log(`PASS reading/chapter ${viewport.width}`);await context.close();
+ report.push({viewport,grade:s.result.grade,checks:['default gintama','quick save/load','rollback','scrolling typography settings','save slots and overwrite','LOG return','kitchen cast','four clue hotspots with pan','listening material','three rounds','placard','super','C5 text before QTE','early QTE retry','salary twist, fetch choice and result'],errors});console.log(`PASS reading/chapter ${viewport.width}`);await context.close();
 }));await fs.writeFile(`${out}/report.json`,JSON.stringify(report,null,2));}finally{await browser.close();}

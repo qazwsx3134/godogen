@@ -1,10 +1,10 @@
 extends SceneTree
-## Writes scenes/comedy/{tsukkomi_impact,small_reaction,full_manga_panel}.tscn once, with
+## Writes scenes/comedy/{tsukkomi_impact,small_reaction,full_manga_panel,emotion_band}.tscn once, with
 ## PackedScene.pack() + ResourceSaver.save():
 ##   godot --headless --path . --script res://tools/make_comedy_scenes.gd [-- --force]
 ## The saved scenes are the source files from then on: edit them in the editor. The game and the tests
-## never run this, and it refuses to overwrite a scene unless --force is given; check `git diff` first,
-## since a rewrite drops hand edits. Each scene's node count and owners are checked before it is packed
+## never run this. It writes only the scenes that do not exist yet; --force rewrites all of them
+## (check `git diff` first, since a rewrite drops hand edits). Each scene's node count and owners are checked before it is packed
 ## and after it is read back.
 
 const PresetScript: Script = preload("res://scripts/comedy_preset.gd")
@@ -15,7 +15,10 @@ const OUT_DIR: String = "res://scenes/comedy/"
 ## The editor preview: Shinpachi's `shout` face and a line of the episode.
 const PREVIEW_FACE: String = "res://assets/image/expressions/shinpachi_shout.png"
 const PREVIEW_LINE: String = "現在是工作時間吧！！！"
-const PRESETS: Array[String] = ["tsukkomi_impact", "small_reaction", "full_manga_panel"]
+const PRESETS: Array[String] = ["tsukkomi_impact", "small_reaction", "full_manga_panel", "emotion_band"]
+## emotion_band's editor preview.
+const BAND_FACE: String = "res://assets/image/kagura-chan.png"
+const BAND_LINE: String = "阿銀居然有接過委託阿魯！？"
 ## The game area the previews are laid out for (1080 wide; the real height is 1920 or more).
 const DESIGN_SIZE: Vector2 = Vector2(1080.0, 1920.0)
 
@@ -25,11 +28,6 @@ var _bold: FontVariation = null
 
 func _init() -> void:
 	var force: bool = OS.get_cmdline_user_args().has("--force")
-	for preset: String in PRESETS:
-		if FileAccess.file_exists(OUT_DIR + preset + ".tscn") and not force:
-			printerr("%s%s.tscn exists; it is the source now. Check git diff, then rerun with -- --force." % [OUT_DIR, preset])
-			quit(1)
-			return
 	DirAccess.make_dir_recursive_absolute(OUT_DIR)
 	_font = load(FONT_PATH) as Font
 	_bold = FontVariation.new()
@@ -37,6 +35,9 @@ func _init() -> void:
 	_bold.variation_embolden = 0.9
 	var failed: bool = false
 	for preset: String in PRESETS:
+		if FileAccess.file_exists(OUT_DIR + preset + ".tscn") and not force:
+			print("%s%s.tscn exists; kept (it is the source now)" % [OUT_DIR, preset])
+			continue
 		failed = not _write(preset) or failed
 	quit(1 if failed else 0)
 
@@ -148,6 +149,72 @@ func _build_small_reaction() -> Control:
 	burst.offset_top = -330.0
 	burst.offset_right = 300.0
 	burst.offset_bottom = -20.0
+	return root
+
+
+## A solid horizontal band across the screen (manga "surprise" beat): it slides in from the left,
+## holds, and slides out to the right. The band's colour is the CutInPanel StyleBox's bg_color.
+func _build_emotion_band() -> Control:
+	var root: Control = _root("EmotionBand")
+	root.set("dim_in", 0.08)
+	root.set("cutin_at", 0.0)
+	root.set("cutin_slide", 0.18)
+	root.set("shake_strength", "small")
+	root.set("shake_at", 0.16)
+	root.set("sound_id", "comedy_pop")
+	root.set("sound_at", 0.1)
+	root.set("hold_until", 1.0)
+	root.set("fade_at", 1.0)
+	root.set("end_at", 1.25)
+	root.set("cutin_exit", true)
+	root.set("stage_zoom", 1.0)
+	root.set("font_max", 120)
+	var dim: ColorRect = _add(root, ColorRect.new(), "Dim", root, true)
+	_full(dim)
+	dim.color = Color(0.0, 0.0, 0.03, 0.35)
+	var band: Panel = _add(root, Panel.new(), "CutInPanel", root, true)
+	_anchor(band, Vector4(0.0, 0.34, 1.0, 0.52))
+	var style: StyleBoxFlat = StyleBoxFlat.new()
+	style.bg_color = Color("#ffd23f")
+	style.border_width_top = 14
+	style.border_width_bottom = 14
+	style.border_color = Color("#101010")
+	style.shadow_color = Color(0, 0, 0, 0.35)
+	style.shadow_size = 4
+	style.shadow_offset = Vector2(0.0, 14.0)
+	band.add_theme_stylebox_override("panel", style)
+	band.clip_contents = true
+	var face: TextureRect = _add(band, TextureRect.new(), "Portrait", root, true)
+	_anchor(face, Vector4(0.02, 0.0, 0.3, 1.0))
+	face.offset_top = 14.0
+	face.offset_bottom = -14.0
+	face.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	face.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	var source: Texture2D = load(BAND_FACE) as Texture2D
+	if source != null:
+		var frame: Vector2 = Vector2(0.28 * DESIGN_SIZE.x, 0.18 * DESIGN_SIZE.y - 28.0)
+		var width: float = float(source.get_width()) * PresetScript.FACE_WIDTH
+		var crop: AtlasTexture = AtlasTexture.new()
+		crop.atlas = source
+		crop.region = Rect2((float(source.get_width()) - width) * 0.5, 0.0, width, minf(width * frame.y / frame.x, float(source.get_height())))
+		face.texture = crop
+	var area: Control = _add(band, Control.new(), "TextArea", root, true)
+	_anchor(area, Vector4(0.32, 0.12, 0.98, 0.88))
+	var text: RichTextLabel = _add(area, RichTextLabel.new(), "Text", root, true)
+	_anchor(text, Vector4(0.0, 0.5, 1.0, 0.5))
+	text.offset_top = -60.0
+	text.offset_bottom = 60.0
+	text.bbcode_enabled = true
+	text.scroll_active = false
+	text.autowrap_mode = TextServer.AUTOWRAP_ARBITRARY
+	text.add_theme_font_override("normal_font", _bold)
+	text.add_theme_font_override("bold_font", _bold)
+	text.add_theme_font_size_override("normal_font_size", 80)
+	text.add_theme_font_size_override("bold_font_size", 80)
+	text.add_theme_color_override("default_color", Color(PresetScript.INK))
+	text.add_theme_color_override("font_outline_color", Color.WHITE)
+	text.add_theme_constant_override("outline_size", 12)
+	text.text = PresetScript.colored(BAND_LINE)
 	return root
 
 

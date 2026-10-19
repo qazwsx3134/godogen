@@ -40,13 +40,21 @@ func _run() -> void:
 	_expect(screen.visible and screen.grade.text.contains("A") and screen.quote.text == "神樂：「還算有用阿魯。」"
 		and screen.caught.text == "2 / 3" and screen.next_button.visible, "the result screen shows them, with 下一章")
 	_expect(game._cleared_grade("chapter_a") == "A" and game._story_unlocked(1), "clearing chapter A unlocks chapter B")
+	var progress: ConfigFile = ConfigFile.new()
+	progress.load(PROGRESS)
+	_expect(progress.get_value("endings", "chapter_a", []) == ["a_clear"] and progress.get_value("carry", "chapter_a", {}) == {"cold_takes": 1.0},
+		"the result records its ending and carries the one cold take: %s" % [progress.get_value("carry", "chapter_a", {})])
+	_expect(game._ending_note(game._story_choices[0]) == "結局 1/2", "chapter select counts 1 of 2 endings")
 	_expect(game._runner.call("advance").get("op", "") == "result", "the result is the end of the chapter")
+	game._choose_story(game._story_choices[0])
+	_expect(game._runner.flags["cold_takes"] == 0, "replaying chapter A does not import its own carry")
 
 	# Replay with a Game Over: the grade drops one step even though the glasses end full again.
 	game._on_begin_pressed()
 	for _attempt: int in range(5):
 		await _pick(game, "miss")
 	_expect(game._game_over.visible, "five cold takes end in Game Over")
+	_expect(game._ending_note(game._story_choices[0]) == "結局 2/2", "the Game Over end is an ending too")
 	game._on_game_over_retry_pressed()
 	await _read_until(game, ["boke_round"])
 	_expect(int(game._runner.stats["game_overs"]) == 1 and int(game._runner.gameplay["glasses"]) == 5,
@@ -55,6 +63,9 @@ func _run() -> void:
 	await _pick(game, "hit")
 	_expect(game._runner.call("chapter_result")["grade"] == "A" and game._cleared_grade("chapter_a") == "A",
 		"5 glasses after one Game Over grade A, and the best grade stays")
+	progress.load(PROGRESS)
+	_expect(progress.get_value("carry", "chapter_a", {}) == {"cold_takes": 0.0},
+		"the Game Over run carries nothing and the retry's adds are not counted twice: %s" % [progress.get_value("carry", "chapter_a", {})])
 
 	game._chapter_result.next_button.pressed.emit()
 	await _read_until(game, ["end"])
@@ -62,6 +73,18 @@ func _run() -> void:
 	_expect(game.save_path == "user://fixture_chapter_b.save" and not game._chapter_result.visible,
 		"chapter B plays in its own save with the result closed")
 	_expect(game._next_chapter().is_empty(), "the last chapter has no 下一章")
+	_expect(game._ending_note(game._story_choices[1]) == "結局 1/1", "chapter B's end is recorded under chapter B")
+	_expect(game._runner.flags["cold_takes"] == 0 and game._previous_chapter_carry() == {"cold_takes": 0.0},
+		"chapter B starts from chapter A's carried value: %s %s" % [game._runner.flags, game._previous_chapter_carry()])
+
+	# A new chapter B starts from the carried value; a save holding a carried value is accepted.
+	var runner: RefCounted = Runner.new()
+	runner.load_story("res://tests/fixtures/chapter_b_story.json")
+	_expect(runner.call("carry_in", {"cold_takes": 3, "unknown": true}) and runner.flags == {"cold_takes": 3},
+		"carry_in starts the chapter with the carried flag and ignores others")
+	_expect(runner.create_validation_probe().restore(runner.snapshot()), "a save with a carried value restores")
+	_expect(runner.call("carry_in", {"cold_takes": "9"}) and runner.flags["cold_takes"] == 3,
+		"a carried value of the wrong type is ignored")
 	game.queue_free()
 	await _frames(2)
 	_cleanup()

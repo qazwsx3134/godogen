@@ -1,0 +1,112 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/story-cjk.ttc" id="1_j3q72"]
+[ext_resource type="Script" path="res://scripts/comedy_preset.gd" id="2_6s6ko"]
+[ext_resource type="Texture2D" path="res://assets/image/kagura-chan.png" id="3_d27xu"]
+
+[sub_resource type="Theme" id="Theme_j0tc0"]
+default_font = ExtResource("1_j3q72")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r0hs8"]
+bg_color = Color(1, 0.8235294, 0.24705882, 1)
+border_width_top = 14
+border_width_bottom = 14
+border_color = Color(0.0627451, 0.0627451, 0.0627451, 1)
+shadow_color = Color(0, 0, 0, 0.35)
+shadow_size = 4
+shadow_offset = Vector2(0, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ethep"]
+atlas = ExtResource("3_d27xu")
+region = Rect2(123.42, 0, 875.16, 919.14954)
+
+[sub_resource type="FontVariation" id="FontVariation_r24n7"]
+base_font = ExtResource("1_j3q72")
+variation_embolden = 0.9
+
+[node name="EmotionBand" type="Control" unique_id=1315419498]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = SubResource("Theme_j0tc0")
+script = ExtResource("2_6s6ko")
+dim_in = 0.08
+cutin_at = 0.0
+cutin_slide = 0.18
+shake_at = 0.16
+sound_at = 0.1
+hold_until = 1.0
+fade_at = 1.0
+end_at = 1.25
+cutin_exit = true
+shake_strength = "small"
+sound_id = "comedy_pop"
+stage_zoom = 1.0
+font_max = 120
+
+[node name="Dim" type="ColorRect" parent="." unique_id=1253441176]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0, 0, 0.03, 0.35)
+
+[node name="CutInPanel" type="Panel" parent="." unique_id=1852465940]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.34
+anchor_right = 1.0
+anchor_bottom = 0.52
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_r0hs8")
+
+[node name="Portrait" type="TextureRect" parent="CutInPanel" unique_id=943518969]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.02
+anchor_right = 0.3
+anchor_bottom = 1.0
+offset_top = 14.0
+offset_bottom = -14.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_ethep")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="TextArea" type="Control" parent="CutInPanel" unique_id=1516389700]
+unique_name_in_owner = true
+layout_mode = 1
+anchor_left = 0.32
+anchor_top = 0.12
+anchor_right = 0.98
+anchor_bottom = 0.88
+mouse_filter = 2
+
+[node name="Text" type="RichTextLabel" parent="CutInPanel/TextArea" unique_id=1679091561]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -60.0
+offset_bottom = 60.0
+mouse_filter = 2
+theme_override_fonts/normal_font = SubResource("FontVariation_r24n7")
+theme_override_font_sizes/normal_font_size = 80
+theme_override_colors/default_color = Color(0.078431375, 0.078431375, 0.078431375, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 12
+theme_override_fonts/bold_font = SubResource("FontVariation_r24n7")
+theme_override_font_sizes/bold_font_size = 80
+bbcode_enabled = true
+text = "[color=#141414]阿銀居然有接過委託[/color][color=#d7191c]阿魯！？[/color]"
+scroll_active = false
+autowrap_mode = 1

@@ -96,7 +96,10 @@
     "ch1_truth_normal": "定春，對不起",
     "ch1_verdict": "判決",
     "ch1_twist": "薪水袋與定春",
+    "ch1_twist_shoebox": "鞋櫃裡的牛奶",
+    "ch1_twist_gin": "叫阿銀去拿",
     "ch1_result": "～ 第一章 完 ～",
+    "ch1_result_gin": "～ 第一章 完 ～",
     "ch1_game_over": "新八的本體已損毀",
     "ch1_r1_retry": "備用的眼鏡",
     "ch1_r2_retry": "備用的眼鏡",
@@ -660,7 +663,38 @@
           "text": "冰箱也好，薪水也好，寫了名字不代表就是你的。",
           "source_id": "E-C"
         }
-      }
+      },
+      "ending": "ch1_sadaharu",
+      "ending_title": "這次真的是定春"
+    },
+    "ch1_result_gin": {
+      "op": "result",
+      "title": "～ 第一章 完 ～",
+      "hidden_total": 1,
+      "lines": {
+        "S": {
+          "speaker": "shinpachi",
+          "text": "一副眼鏡都沒碎……為什麼我還是什麼都沒拿到！？",
+          "source_id": "E-S"
+        },
+        "A": {
+          "speaker": "kagura",
+          "text": "這副眼鏡，今天還算有用阿魯。",
+          "source_id": "E-A"
+        },
+        "B": {
+          "speaker": "gintoki",
+          "text": "普通的吐槽，普通的眼鏡。明天也拜託了。",
+          "source_id": "E-B"
+        },
+        "C": {
+          "speaker": "otose",
+          "text": "冰箱也好，薪水也好，寫了名字不代表就是你的。",
+          "source_id": "E-C"
+        }
+      },
+      "ending": "ch1_gintoki",
+      "ending_title": "試毒試到一滴不剩"
     }
   }
 }

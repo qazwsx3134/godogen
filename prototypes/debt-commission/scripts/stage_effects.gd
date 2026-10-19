@@ -54,6 +54,7 @@ func setup(shake_layers: Array[Control], overlay: Control, catalog: Dictionary) 
 		_names[actor_id] = str(catalog["characters"][actor_id].get("name", actor_id))
 	_se_player = AudioStreamPlayer.new()
 	_bgm_player = AudioStreamPlayer.new()
+	_bgm_player.playback_type = AudioServer.PLAYBACK_TYPE_STREAM
 	_bgm_player.volume_db = BGM_DB
 	add_child(_se_player)
 	add_child(_bgm_player)
@@ -278,6 +279,9 @@ func _stream(collection: String, id: String) -> AudioStream:
 	var stream: AudioStream = load(path) as AudioStream if not path.is_empty() and ResourceLoader.exists(path) else null
 	if stream == null:
 		stream = _placeholder(collection, id)
+	if collection == "music" and stream is AudioStreamOggVorbis:
+		stream = stream.duplicate() as AudioStreamOggVorbis
+		(stream as AudioStreamOggVorbis).loop = true
 	_streams[key] = stream
 	return stream
 

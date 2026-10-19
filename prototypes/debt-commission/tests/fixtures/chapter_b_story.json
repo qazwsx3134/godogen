@@ -3,7 +3,9 @@
   "version": "1",
   "title": "測試章 B",
   "entry": "open",
-  "initial_flags": {},
+  "initial_flags": {
+    "cold_takes": 0
+  },
   "nodes": {
     "open": {
       "title": "開頭",
@@ -15,9 +17,13 @@
         },
         {
           "op": "end",
-          "text": "測試章 B 結束"
+          "text": "測試章 B 結束",
+          "ending": "b_end"
         }
       ]
     }
-  }
+  },
+  "carry": [
+    "cold_takes"
+  ]
 }

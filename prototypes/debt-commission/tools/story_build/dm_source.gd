@@ -16,18 +16,24 @@ extends RefCounted
 ##                                 (two or more options, no tones); the optional text is the footnote
 ##                                 under the cards
 ##   `set key = value`             flag (a string, a number, or true / false)
-##   `if key == value` / `else`    condition (the same kinds of value); each branch holds exactly one `=> title`
+##   `set key += 1` / `set key -= 1`  flag add (whole numbers; not inside choice options)
+##   `if key == value` / `else`    condition (the same kinds of value); each branch holds exactly one `=> title`.
+##                                 Also `a >= 2 and has("item")`, `x != "y" or not b == true`: one kind of
+##                                 joiner per `if`, no brackets; comparisons == != < <= > >=
 ##   `do bg("id")`, `do char("id", "expression", "position")`, `do hide("id")`,
 ##   `do enter("id", "expression", "position")` (a character who has not spoken comes on stage),
 ##   `do placard("text")` / `placard("")` (what the placard holder's board says; "" = blank),
 ##   `do offscreen()` right before a line = [#offscreen] (Parley writes it as an ACTION node),
 ##   `do item("id")`, `do profile("character_id")`, `do investigate("block")`,
-##   `do boke_round("block")`, `do end("text")`, `do result("block")` (the chapter result screen)
+##   `do boke_round("block")`, `do end("text")`, `do result("block")` (the chapter result screen);
+##   `do end("text", "ending_id")` / `end("text", "ending_id", "結局名")` is a named ending (a result
+##   block takes `ending` / `ending_title` fields)
 ##   effects: `do shake()` / `shake("small")`, `do flash()` / `flash("#ff0000")`,
 ##   `do cutin("你在說什麼啊！！")` / `cutin("text", "shinpachi")`, `do freeze()` / `freeze(1.5)`,
 ##   `do comedy("tsukkomi_impact", "shinpachi", "line")` / `comedy(preset, speaker, text, "shout")`
-##   (the manga overlay: preset tsukkomi_impact, small_reaction or full_manga_panel; the speaker is a
-##   catalog id or name; the fourth argument is the optional expression of the cut-in)
+##   (the manga overlay: preset tsukkomi_impact, small_reaction, full_manga_panel or emotion_band; the
+##   speaker is a catalog id or name; after the text come the optional expression of the cut-in and, for
+##   emotion_band, the band colour "#rrggbb", in either order: `comedy("emotion_band", "kagura", "欸！？", "#7ec8ff")`)
 ##   `do bgm("bgm_meeting")` / `bgm("")` to stop, `do se("crow")`
 ##   `銀時＆神樂: text` is a line said together (speaker "gintoki+kagura")
 ##   `=> title`                    jump; `=> END` only after `do end(...)`
@@ -88,6 +94,44 @@ static func flag_equals(tokens: Array) -> Dictionary:
 	if tokens.size() == 3 and tokens[0]["type"] == "variable" and tokens[1]["type"] == "comparison" \
 			and tokens[1]["value"] == "==" and _is_literal(tokens[2]):
 		return {"flag": tokens[0]["value"], "equals": _literal_value(tokens[2])}
+	return {}
+
+
+## The condition step fields for `if` tokens: {"flag", "equals"} for a lone `key == value`,
+## {"test": tree} for and / or / not / ordering / has (see IMPLEMENTATION.md), {} when unsupported.
+static func condition_test(tokens: Array) -> Dictionary:
+	var legacy: Dictionary = flag_equals(tokens)
+	if not legacy.is_empty():
+		return legacy
+	var parts: Array = []
+	var joiner: String = ""
+	var current: Array = []
+	for token: Dictionary in tokens + [{"type": "and_or", "value": ""}]:
+		if token["type"] != "and_or":
+			current.append(token)
+			continue
+		var word: String = {"and": "all", "&&": "all", "or": "any", "||": "any"}.get(token["value"], "")
+		if not word.is_empty():
+			if not joiner.is_empty() and joiner != word:
+				return {}
+			joiner = word
+		var leaf: Dictionary = _test_leaf(current)
+		if leaf.is_empty():
+			return {}
+		parts.append(leaf)
+		current = []
+	return {"test": parts[0] if parts.size() == 1 else {joiner: parts}}
+
+
+static func _test_leaf(tokens: Array) -> Dictionary:
+	if not tokens.is_empty() and tokens[0]["type"] == "not":
+		var inner: Dictionary = _test_leaf(tokens.slice(1))
+		return {} if inner.is_empty() else {"not": inner}
+	var item: String = has_item(tokens)
+	if not item.is_empty():
+		return {"has": item}
+	if tokens.size() == 3 and tokens[0]["type"] == "variable" and tokens[1]["type"] == "comparison" and _is_literal(tokens[2]):
+		return {"flag": tokens[0]["value"], "cmp": tokens[1]["value"], "value": _literal_value(tokens[2])}
 	return {}
 
 
@@ -253,7 +297,7 @@ static func _response_body(line_id: String, lines: Dictionary, start_of: Diction
 			"mutation":
 				var assignment: Dictionary = _assignment(line.get("mutation", {}).get("expression", []))
 				if assignment.is_empty():
-					return {"error": "body may only contain `set key = value` lines and one => jump"}
+					return {"error": "body may only contain `set key = value` lines and one => jump (put `+=` / `-=` at the start of the node it jumps to)"}
 				set_flags[assignment["key"]] = assignment["value"]
 				line_id = String(line.get("next_id", ""))
 			"goto":
@@ -267,9 +311,9 @@ static func _response_body(line_id: String, lines: Dictionary, start_of: Diction
 
 
 static func _condition(line: Dictionary, lines: Dictionary, start_of: Dictionary, where: String) -> Dictionary:
-	var test: Dictionary = flag_equals(line.get("condition", {}).get("expression", []))
+	var test: Dictionary = condition_test(line.get("condition", {}).get("expression", []))
 	if test.is_empty():
-		return {"error": "%s: conditions must be `if key == value`" % where}
+		return {"error": "%s: write the condition as `key == value`, `has(\"item\")`, comparisons joined by all `and` or all `or` (no brackets)" % where}
 	var else_line: Dictionary = lines.get(String(line.get("next_sibling_id", "")), {})
 	if String(else_line.get("type", "")) != "condition" or not (else_line.get("condition", {}) as Dictionary).is_empty():
 		return {"error": "%s: `if` needs an `else` branch" % where}
@@ -277,7 +321,10 @@ static func _condition(line: Dictionary, lines: Dictionary, start_of: Dictionary
 	var else_target: String = _single_jump(String(else_line.get("next_id", "")), lines, start_of)
 	if then_target.is_empty() or else_target.is_empty():
 		return {"error": "%s: each `if`/`else` branch must hold exactly one => jump" % where}
-	return {"op": "condition", "flag": test["flag"], "equals": test["equals"], "then": then_target, "else": else_target}
+	var step: Dictionary = {"op": "condition"}
+	step.merge(test)
+	step.merge({"then": then_target, "else": else_target})
+	return step
 
 
 static func _single_jump(line_id: String, lines: Dictionary, start_of: Dictionary) -> String:
@@ -292,6 +339,10 @@ static func _mutation(line: Dictionary, where: String) -> Dictionary:
 	var assignment: Dictionary = _assignment(tokens)
 	if not assignment.is_empty():
 		return {"op": "flag", "key": assignment["key"], "value": assignment["value"]}
+	if tokens.size() == 3 and tokens[0]["type"] == "variable" and tokens[1]["type"] == "assignment" \
+			and ["+=", "-="].has(tokens[1]["value"]) and tokens[2]["type"] == "number":
+		var amount: Variant = tokens[2]["value"]
+		return {"op": "flag", "key": tokens[0]["value"], "add": -amount if tokens[1]["value"] == "-=" else amount}
 	if tokens.size() != 1 or tokens[0]["type"] != "function":
 		return {"error": "%s: only `set key = value` and `do op(...)` are supported" % where}
 	var name: String = tokens[0]["function"]
@@ -343,10 +394,13 @@ static func _mutation(line: Dictionary, where: String) -> Dictionary:
 			return {"op": "cutin", "text": args[0]}
 		["cutin", 2]:
 			return {"op": "cutin", "text": args[0], "speaker": args[1]}
-		["comedy", 3], ["comedy", 4]:
+		["comedy", 3], ["comedy", 4], ["comedy", 5]:
 			var comedy: Dictionary = {"op": "comedy", "preset": args[0], "speaker": args[1], "text": args[2]}
-			if args.size() > 3:
-				comedy["expression"] = args[3]
+			for extra: Variant in args.slice(3):
+				var key: String = "color" if str(extra).begins_with("#") else "expression"
+				if comedy.has(key):
+					return {"error": "%s: comedy takes one expression and one color, got two of %s" % [where, key]}
+				comedy[key] = extra
 			return comedy
 		["beam", 0]:
 			return {"op": name}
@@ -368,6 +422,10 @@ static func _mutation(line: Dictionary, where: String) -> Dictionary:
 			return {"op": name, "block": args[0]}
 		["end", 1]:
 			return {"op": "end", "text": args[0]}
+		["end", 2]:
+			return {"op": "end", "text": args[0], "ending": args[1]}
+		["end", 3]:
+			return {"op": "end", "text": args[0], "ending": args[1], "ending_title": args[2]}
 	return {"error": "%s: unsupported `do %s(%s)`" % [where, name, ", ".join(args.map(func(a: Variant) -> String: return str(a)))]}
 
 

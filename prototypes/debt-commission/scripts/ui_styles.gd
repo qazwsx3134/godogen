@@ -10,6 +10,10 @@ const LABELS: Dictionary = {
 	"gintama": "銀魂和紙",
 }
 
+## Full panels (log, save slots, chapters, case file, confirmations) on washi in the gintama edition.
+const GINTAMA_PAPER_ROLES: Array[String] = ["menu", "log", "slots", "confirmation"]
+const GINTAMA_PAPER: String = "res://assets/ui/gintama_panel_paper.png"
+
 const PALETTES: Dictionary = {
 	"cinema": {
 		"canvas": Color("#0b0d18"),
@@ -417,6 +421,13 @@ static func button_style(style_id: String, role: String, state: String, active: 
 	result.content_margin_top = margins.y
 	result.content_margin_right = margins.z
 	result.content_margin_bottom = margins.w
+	if style_id == "gintama" and role in ["standard", "slot_card", "slot_card_empty", "slot_card_invalid"]:
+		# Paper chips with a navy rule, as in settings_panel_gintama.tscn.
+		result.set_border_width_all(roundi(float(3 if state in ["hover", "focus"] else 2) * density))
+		result.set_corner_radius_all(roundi(17.0 * density))
+		result.shadow_color = Color(0.03, 0.09, 0.14, 0.22) if state != "focus" else Color(0, 0, 0, 0)
+		result.shadow_size = roundi(3.0 * density)
+		result.shadow_offset = Vector2(0.0, 4.0) * density
 	if style_id == "manga" and role not in ["quickbar", "subtle", "advance"]:
 		result.shadow_color = Color(0.08, 0.08, 0.07, 0.22)
 		result.shadow_size = 2 if state != "disabled" else 0
@@ -521,7 +532,24 @@ static func apply_label(label: Label, style_id: String, role: String = "body", s
 
 static func apply_panel(panel: Control, style_id: String, role: String = "menu", scale_factor: float = 1.0) -> void:
 	panel.set_meta("ui_style_role", role)
+	if normalize_id(style_id) == "gintama" and role in GINTAMA_PAPER_ROLES:
+		panel.add_theme_stylebox_override("panel", gintama_paper(panel_style(style_id, role, scale_factor)))
+		return
 	panel.add_theme_stylebox_override("panel", panel_style(style_id, role, scale_factor))
+
+
+## The washi paper of settings_panel_gintama.tscn (gintama_panel_paper.png: frame, waves and
+## blossoms kept whole in the corners), with the content margins of `flat`.
+static func gintama_paper(flat: StyleBox) -> StyleBoxTexture:
+	var paper: StyleBoxTexture = StyleBoxTexture.new()
+	paper.texture = load(GINTAMA_PAPER) as Texture2D
+	paper.texture_margin_left = 280.0
+	paper.texture_margin_top = 140.0
+	paper.texture_margin_right = 245.0
+	paper.texture_margin_bottom = 122.0
+	for side: Side in [SIDE_LEFT, SIDE_TOP, SIDE_RIGHT, SIDE_BOTTOM]:
+		paper.set_content_margin(side, maxf(flat.get_content_margin(side), 24.0))
+	return paper
 
 
 static func contrast_ratio(foreground: Color, background: Color) -> float:

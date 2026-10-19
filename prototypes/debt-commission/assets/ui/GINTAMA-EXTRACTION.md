@@ -15,6 +15,15 @@
 
 紙框用 `NinePatchRect` 保留四角；波紋、櫻花與邊框在同一張圖片中，不會各自縮放後伸出紙框。`Frame.clip_contents` 額外限制繪製範圍。文字、名字與按鈕標籤仍是獨立 node，可隨劇本更新；沒有自動重建或切圖流程。
 
+### 面板用衍生圖（2026-10-18）
+
+標題卡與設定面板不需要「下一句」三角與喇叭，所以由 `tools/make_gintama_panels.gd -- textures` 從上表兩張圖衍生，不經過生圖模型、原圖保留給對話框：
+
+| 素材 | 來源 | 處理 |
+| --- | --- | --- |
+| `gintama_panel_paper.png` | `gintama_extracted_paper.png` | 找出右下的飽和藍三角（38×32），每個像素換成同一欄正上方的紙面 |
+| `gintama_heading_plaque.png` | `gintama_extracted_nameplate.png` | 找出右側淺色喇叭（26×35），每個像素換成同一列左邊的深藍 |
+
 ## 最終提示詞
 
 下面為提示詞摘要；[完整送出內容](GINTAMA-EXTRACTION-PROMPTS.txt)保留兩次內建 imagegen 呼叫的原文。

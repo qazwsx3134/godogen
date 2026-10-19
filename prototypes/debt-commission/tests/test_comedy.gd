@@ -1,5 +1,5 @@
 extends "res://addons/proto_kit/test_kit.gd"
-## The `comedy` op and the ComedyLayer: the data (validation, both build adapters), the three
+## The `comedy` op and the ComedyLayer: the data (validation, both build adapters), the four
 ## preset scenes, and the shell around them: it waits for the preset, a tap on it only ends it
 ## (the next line is not advanced and shows whole), skipping never plays it, leaving the screen
 ## clears it and puts the stage back, a save never brings it back, every preset runs in every UI
@@ -16,10 +16,10 @@ const TEST_SAVE: String = "user://comedy_test.save"
 const TEST_UI: String = "user://comedy_test_ui.cfg"
 const TEST_SETTINGS: String = "user://comedy_test_settings.cfg"
 const SCENE_DIR: String = "res://scenes/comedy/"
-const PRESETS: Array[String] = ["tsukkomi_impact", "small_reaction", "full_manga_panel"]
+const PRESETS: Array[String] = ["tsukkomi_impact", "small_reaction", "full_manga_panel", "emotion_band"]
 const AFTER_IMPACT_LINE: String = "……嗯？剛剛是不是有什麼東西在吵？"
 const SAVED_NODES: Array[String] = ["res://scenes/comedy/tsukkomi_impact.tscn", "res://scenes/comedy/small_reaction.tscn",
-	"res://scenes/comedy/full_manga_panel.tscn", "res://main.tscn"]
+	"res://scenes/comedy/full_manga_panel.tscn", "res://scenes/comedy/emotion_band.tscn", "res://main.tscn"]
 
 
 ## Collects every error the engine logs (script errors, push_error) while a check runs.
@@ -64,6 +64,7 @@ func _run() -> void:
 	await _test_saves()
 	await _test_presets_in_every_style()
 	await _test_small_reaction_place()
+	await _test_emotion_band()
 	await _test_narrow_phone()
 	for path: String in SAVED_NODES:
 		_expect(FileAccess.get_file_as_string(path) == scene_sources[path], "playing never rewrites %s" % path)
@@ -81,6 +82,7 @@ func _test_validation(story: Dictionary) -> void:
 		["text", null, "comedy needs text"],
 		["speaker", "nobody", "comedy speaker 'nobody' is not a character in the asset catalog"],
 		["expression", "bogus", "comedy expression is invalid"],
+		["color", "#ff0000", "comedy color is only for emotion_band"],
 	]
 	for case: Array in fields:
 		var broken: Dictionary = story.duplicate(true)
@@ -101,6 +103,18 @@ func _test_validation(story: Dictionary) -> void:
 	((with_face["nodes"]["comedy_open"]["steps"] as Array)[impact_index] as Dictionary)["expression"] = "angry"
 	FileAccess.open(BAD_STORY, FileAccess.WRITE).store_string(JSON.stringify(with_face))
 	_expect(StoryRunner.new().call("load_story", BAD_STORY), "a comedy may name a valid expression")
+	for color: Variant in ["red", "#12345", "#fff", "#7ec8ffcc", 7]:
+		var band_story: Dictionary = story.duplicate(true)
+		var band_step: Dictionary = (band_story["nodes"]["comedy_open"]["steps"] as Array)[impact_index]
+		band_step["preset"] = "emotion_band"
+		band_step["color"] = color
+		FileAccess.open(BAD_STORY, FileAccess.WRITE).store_string(JSON.stringify(band_story))
+		var band_runner: RefCounted = StoryRunner.new()
+		_expect(not band_runner.call("load_story", BAD_STORY) and str(band_runner.get("error_message")).contains("comedy color must be"),
+			"an emotion_band color %s that is not #rrggbb is rejected: %s" % [color, band_runner.get("error_message")])
+		band_step["color"] = "#7ec8ff"
+		FileAccess.open(BAD_STORY, FileAccess.WRITE).store_string(JSON.stringify(band_story))
+		_expect(StoryRunner.new().call("load_story", BAD_STORY), "an emotion_band may name its color")
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(BAD_STORY))
 
 
@@ -121,12 +135,12 @@ func _test_adapters() -> void:
 		for node: Dictionary in (story["nodes"] as Dictionary).values():
 			comedies.append_array((node["steps"] as Array).filter(func(step: Dictionary) -> bool: return step["op"] == "comedy"))
 		steps_of_both.append(comedies)
-	_expect(steps_of_both[0] == steps_of_both[1] and steps_of_both[0].size() == 4, "both adapters give the same four comedy steps")
+	_expect(steps_of_both[0] == steps_of_both[1] and steps_of_both[0].size() == 5, "both adapters give the same five comedy steps")
 	for step: Dictionary in steps_of_both[0]:
 		kinds.append(str(step["preset"]))
-		_expect(step["speaker"] in ["shinpachi", "gintoki"], "a speaker given by name or id is stored as the catalog id (%s)" % step["speaker"])
+		_expect(step["speaker"] in ["shinpachi", "gintoki", "kagura"], "a speaker given by name or id is stored as the catalog id (%s)" % step["speaker"])
 	kinds.sort()
-	_expect(kinds == ["full_manga_panel", "small_reaction", "tsukkomi_impact", "tsukkomi_impact"], "the sample uses every preset, the impact twice")
+	_expect(kinds == ["emotion_band", "full_manga_panel", "small_reaction", "tsukkomi_impact", "tsukkomi_impact"], "the sample uses every preset, the impact twice")
 	var on_disk: String = FileAccess.get_file_as_string(STORY)
 	_expect(on_disk == StoryBuilder.to_json(from_dm["story"]), "data/comedy_story.json is a fresh build of comedy.dialogue")
 	# The optional fourth argument and a display name through both adapters, built from text.
@@ -135,12 +149,21 @@ func _test_adapters() -> void:
 	var step: Dictionary = ((with_face["story"]["nodes"]["a"]["steps"]) as Array)[0] if with_face["error"] == "" else {}
 	_expect(step.get("speaker") == "shinpachi" and step.get("expression") == "angry" and step.get("preset") == "small_reaction",
 		"the fourth argument is the expression and a display name becomes the id: %s %s" % [step, with_face["error"]])
+	var doubled: Dictionary = StoryBuilder.build_text('~ a\ndo comedy("emotion_band", "新八", "咦？", "angry", "shout")\n新八: x\ndo end("e")\n',
+		"res://story_src/__comedy_check.dialogue")
+	_expect(str(doubled["error"]).contains("got two of expression"), "two expressions are an error, not a silent pick: %s" % doubled["error"])
+	for args: String in ['"#7ec8ff", "angry"', '"angry", "#7ec8ff"']:
+		var tinted: Dictionary = StoryBuilder.build_text('~ a\ndo comedy("emotion_band", "新八", "咦？", %s)\n新八: x\ndo end("e")\n' % args,
+			"res://story_src/__comedy_check.dialogue")
+		var band: Dictionary = ((tinted["story"]["nodes"]["a"]["steps"]) as Array)[0] if tinted["error"] == "" else {}
+		_expect(band.get("color") == "#7ec8ff" and band.get("expression") == "angry",
+			"a #hex argument is the band color, in either order (%s): %s %s" % [args, band, tinted["error"]])
 
 
 # ---------------------------------------------------------------- scenes
 
 func _test_scenes() -> void:
-	var timelines: Dictionary = {"tsukkomi_impact": 1.35, "small_reaction": 0.9, "full_manga_panel": 1.8}
+	var timelines: Dictionary = {"tsukkomi_impact": 1.35, "small_reaction": 0.9, "full_manga_panel": 1.8, "emotion_band": 1.25}
 	for preset: String in PRESETS:
 		var packed: PackedScene = load(SCENE_DIR + preset + ".tscn") as PackedScene
 		_expect(packed != null, "%s is a scene" % preset)
@@ -151,13 +174,18 @@ func _test_scenes() -> void:
 			"%s: the root's end_at export is %s" % [preset, timelines[preset]])
 		_expect(float(root.get("burst_at")) >= 0.0 and float(root.get("fade_at")) < float(root.get("end_at")),
 			"%s: the timeline is exported on the root" % preset)
-		for name: String in ["Burst", "TextArea", "Text"]:
+		for name: String in ["TextArea", "Text"] if preset == "emotion_band" else ["Burst", "TextArea", "Text"]:
 			_expect(root.get_node_or_null("%" + name) != null, "%s has %s" % [preset, name])
 		var text: RichTextLabel = root.get_node("%Text") as RichTextLabel
 		_expect(text.text.length() > 0 and text.get_parsed_text().length() > 1, "%s shows a line in the editor: %s" % [preset, text.get_parsed_text()])
 		_expect(text.text.contains("d7191c") and text.text.contains("141414") or preset == "small_reaction",
 			"%s: its line is set in red and black" % preset)
-		if preset != "small_reaction":
+		if preset == "emotion_band":
+			var band: Control = root.get_node("%CutInPanel") as Control
+			_expect(bool(root.get("cutin_exit")) and band.anchor_left == 0.0 and band.anchor_right == 1.0
+				and (root.get_node("%Portrait") as TextureRect).texture != null and root.get_node_or_null("%Burst") == null,
+				"emotion_band: a full-width band with a face that exits sliding, no balloon")
+		elif preset != "small_reaction":
 			var face: TextureRect = root.get_node("%Portrait") as TextureRect
 			_expect(face.texture != null and root.get_node_or_null("%SpeedLines") != null and root.get_node_or_null("%CutInPanel") != null,
 				"%s shows a speed-line layer and the cut-in with a face in the editor" % preset)
@@ -283,7 +311,7 @@ func _test_skip_plays_nothing() -> void:
 	_expect(not seen[0], "skipping never builds a preset")
 	_expect(took < 8.0, "skipping does not wait for the comedy steps (%.1f s)" % took)
 	var logged: Array = game._history.filter(func(entry: Dictionary) -> bool: return str(entry["key"]).begins_with("comedy:"))
-	_expect(logged.size() == 4, "the skipped comedy lines are still in the log (%d)" % logged.size())
+	_expect(logged.size() == 5, "the skipped comedy lines are still in the log (%d)" % logged.size())
 	await _free(game)
 
 	game = await _new_game()
@@ -441,7 +469,9 @@ func _test_narrow_phone() -> void:
 				"text": "問題是你有工作的時候也在休息啊！！而且還是三個月都沒有委託"})
 			await create_timer(0.5).timeout
 			var root_node: Control = layer.get_child(0) as Control
-			var burst: Control = root_node.get_node("%Burst") as Control
+			var burst: Control = root_node.get_node_or_null("%Burst") as Control
+			if burst == null:
+				burst = root_node.get_node("%CutInPanel") as Control  # emotion_band: the band holds the line
 			var text: RichTextLabel = root_node.get_node("%Text") as RichTextLabel
 			var area: Control = root_node.get_node("%TextArea") as Control
 			_expect(game_rect.grow(0.5).encloses(burst.get_global_rect()), "%s: the balloon is inside the game area: %s in %s" % [label, burst.get_global_rect(), game_rect])
@@ -461,6 +491,42 @@ func _test_narrow_phone() -> void:
 		await _free(game)
 	root.size = original
 	await _frames(2)
+
+
+## The band slides in from the left, holds across the full width, then slides out past the right edge
+## (not a fade); the stage behind is untouched.
+func _test_emotion_band() -> void:
+	var game: Control = await _new_game()
+	game._on_begin_pressed()
+	await _until(func() -> bool: return game._screen_mode == "story", "story starts")
+	await _complete_line(game)
+	var layer: Control = game._comedy_layer
+	var seconds: float = layer.play({"op": "comedy", "preset": "emotion_band", "speaker": "kagura", "text": "阿銀居然有接過委託阿魯！？"})
+	var preset: Control = layer.get_child(0) as Control
+	var band: Control = preset.get_node("%CutInPanel") as Control
+	await _frames(2)
+	_expect(band.position.x < -band.size.x * 0.5, "the band starts off the left edge (x %.0f)" % band.position.x)
+	await create_timer(0.5).timeout
+	var held: Rect2 = band.get_global_rect()
+	var area: Rect2 = layer.get_global_rect()
+	_expect(absf(held.position.x - area.position.x) < 1.0 and absf(held.size.x - area.size.x) < 1.0,
+		"while it holds the band spans the screen: %s in %s" % [held, area])
+	_expect(is_equal_approx(preset.modulate.a, 1.0) and layer.qa_state().get("text_fits", false), "it is fully shown and its line fits")
+	await create_timer(float(preset.get("fade_at")) - 0.5 + 0.15).timeout
+	_expect(band.position.x > 1.0 and is_equal_approx(preset.modulate.a, 1.0),
+		"after fade_at the band slides out to the right without fading (x %.0f, alpha %.2f)" % [band.position.x, preset.modulate.a])
+	await _until(func() -> bool: return not layer.is_active(), "emotion_band ends", seconds + 1.0)
+	_expect(_stage_at_rest(game) and layer.get_child_count() == 0, "it leaves nothing behind")
+	layer.play({"op": "comedy", "preset": "emotion_band", "speaker": "kagura", "text": "欸！？", "color": "#7ec8ff"})
+	var tinted: Control = (layer.get_child(0) as Control).get_node("%CutInPanel") as Control
+	_expect((tinted.get_theme_stylebox("panel") as StyleBoxFlat).bg_color.is_equal_approx(Color("#7ec8ff")),
+		"the step's color fills the band")
+	layer.stop()
+	var fresh: Control = (load(SCENE_DIR + "emotion_band.tscn") as PackedScene).instantiate() as Control
+	_expect((fresh.get_node("%CutInPanel").get_theme_stylebox("panel") as StyleBoxFlat).bg_color.is_equal_approx(Color("#ffd23f")),
+		"a tinted play leaves the scene's own color as it was")
+	fresh.free()
+	await _free(game)
 
 
 # ---------------------------------------------------------------- helpers

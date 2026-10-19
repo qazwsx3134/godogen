@@ -591,6 +591,14 @@ do item("salary_envelope")
 gintoki: 找的錢在裡面。三十圓，省著點用。 [#source:M89]
 shinpachi: 我一個月的薪水，就是一瓶牛奶加三十圓嗎！ [#source:M90]
 gintoki: 好了，別激動。牛奶在鞋櫃，自己去拿。 [#source:M91]
+do pov("shinpachi")
+「自己去拿」……在這個家，東西離開視線就會消失。 [#source:BR00]
+- 自己去鞋櫃拿 [ID:fetch_self]
+	=> ch1_twist_shoebox
+- 叫阿銀拿過來 [ID:fetch_gin]
+	=> ch1_twist_gin
+
+~ ch1_twist_shoebox
 do se("door_slide")
 鞋櫃開著。寫著「新八」的瓶子倒在地上，空了。 [#source:M92]
 旁邊一排巨大的腳印，一路走到定春的窩。每一個都比新八的頭還大。 [#source:M93]
@@ -603,9 +611,41 @@ sadaharu: 汪。 [#source:M96]
 do fade("out",0.3)
 => ch1_result
 
+~ ch1_twist_gin
+# 分支結局：作者草稿 v0.2 沒有這段，BR 開頭的台詞待作者試讀。
+shinpachi: 不要。阿銀，你去拿過來。 [#source:BR01]
+gintoki: 為什麼是銀桑。 [#source:BR02]
+shinpachi: 這次我要親眼看著它，從鞋櫃走到我手上。 [#source:BR03]
+gintoki: ……真沒辦法。 [#source:BR04]
+do hide("gintoki")
+do se("door_slide")
+玄關傳來鞋櫃打開的聲音。接著，是一段很長、很安靜的咕嘟聲。 [#source:BR05]
+do enter("gintoki","smug","center")
+銀時拿著空瓶回來了。嘴角有一條白白的線。 [#source:BR06]
+gintoki: 新八，好消息。銀桑幫你試過毒了。 [#source:BR07]
+gintoki: 沒有毒。很安全。很好喝。 [#source:BR08]
+do freeze(0.6)
+do cutin("一滴不剩又來一次啊！！", "shinpachi")
+do se("tsukkomi_hit")
+do shake()
+shinpachi: 試毒試到一滴不剩，這招剛剛才戳過一次了啊！！ [#source:BR09]
+kagura: 銀醬學不乖阿魯。這次連藉口都是二手的阿魯。 [#source:BR10]
+do char("otose","annoyed","right")
+otose: 說謊的話房租加一成。我一開始就說過了。 [#source:BR11]
+gintoki: 銀桑沒說謊！真的沒有毒！ [#source:BR12]
+otose: 那就是沒說謊，單純喝掉。加兩成。 [#source:BR13]
+do char("shinpachi","broken","left")
+shinpachi: 房租加多少，我的牛奶都不會回來啊啊啊！！ [#source:BR14]
+do fade("out",0.3)
+=> ch1_result_gin
+
 ~ ch1_result
 do bgm("bgm_result")
 do result("ch1_result")
+
+~ ch1_result_gin
+do bgm("bgm_result")
+do result("ch1_result_gin")
 
 ~ ch1_game_over
 do bg("black")

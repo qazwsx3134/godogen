@@ -14,10 +14,11 @@ const PRESETS: Dictionary = {
 	"tsukkomi_impact": preload("res://scenes/comedy/tsukkomi_impact.tscn"),
 	"small_reaction": preload("res://scenes/comedy/small_reaction.tscn"),
 	"full_manga_panel": preload("res://scenes/comedy/full_manga_panel.tscn"),
+	"emotion_band": preload("res://scenes/comedy/emotion_band.tscn"),
 }
 ## The cut-in face when the step names none.
 const DEFAULT_EXPRESSION: Dictionary = {
-	"tsukkomi_impact": "shout", "small_reaction": "neutral", "full_manga_panel": "shout",
+	"tsukkomi_impact": "shout", "small_reaction": "neutral", "full_manga_panel": "shout", "emotion_band": "surprised",
 }
 ## A preset that has not reported its end this long after its own end time is cut.
 const WATCHDOG_SEC: float = 1.0
@@ -78,6 +79,8 @@ func play(step: Dictionary) -> float:
 	_preset.connect("shake_requested", _on_shake)
 	_preset.connect("zoom_requested", _on_zoom)
 	_preset.connect("finished", stop)
+	if step.has("color"):
+		_preset.call("tint", Color.html(str(step["color"])))
 	if _preset.has_method("place_at"):
 		_preset.call("place_at", _spot_for(speaker), size)
 	_preset.call("play", _portrait(speaker, str(step.get("expression", DEFAULT_EXPRESSION[preset_id]))),

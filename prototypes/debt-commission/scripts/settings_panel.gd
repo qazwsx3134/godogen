@@ -1,12 +1,17 @@
 extends Panel
 ## 設定 (scenes/ui/settings_panel.tscn): text speed, auto-play speed, and music and sound volume,
 ## each a row of choices in the scene (the button's position in its row is the value). main.gd
-## keeps the values (settings.gd) and applies them; colours come from ui_styles.gd.
+## keeps the values (settings.gd) and applies them. Colours come from ui_styles.gd, except in an
+## edition scene with `paint_from_style` off (settings_panel_gintama.tscn): its buttons are toggles
+## styled in the scene, and the chosen one is shown pressed.
 
 signal changed(key: String, value: int)
 signal closed
 
 const UI_STYLES: Script = preload("res://scripts/ui_styles.gd")
+
+## Off: the scene's own StyleBoxes are kept and the chosen choice is the pressed toggle.
+@export var paint_from_style: bool = true
 
 var _style_id: String = "cinema"
 var _values: Dictionary = {}
@@ -57,4 +62,8 @@ func _paint() -> void:
 	for key: String in _rows.keys():
 		var row: Container = _rows[key]
 		for index: int in range(row.get_child_count()):
-			UI_STYLES.apply_button(row.get_child(index) as Button, _style_id, "selector", int(_values.get(key, -1)) == index)
+			var chosen: bool = int(_values.get(key, -1)) == index
+			if paint_from_style:
+				UI_STYLES.apply_button(row.get_child(index) as Button, _style_id, "selector", chosen)
+			else:
+				(row.get_child(index) as Button).set_pressed_no_signal(chosen)

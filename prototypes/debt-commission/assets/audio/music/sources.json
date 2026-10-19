@@ -1,0 +1,112 @@
+{
+  "playlist_url": "https://www.youtube.com/playlist?list=PLRW80bBvVD3Wf6pc5Dv8-wGp3vL149Qm7",
+  "playlist_title": "The Complete GINTAMA Soundtrack Collection",
+  "downloaded_on": "2026-10-18",
+  "default_bgm": "bgm_gintama_35",
+  "tracks": [
+    {
+      "playlist_index": 1,
+      "id": "bgm_gintama_01",
+      "title": "Teme-raaaa!! Soredemo Gintama Tsuitennokaaaa!",
+      "source_url": "https://www.youtube.com/watch?v=vb3sxt80o5U",
+      "path": "res://assets/audio/music/gintama_01.ogg",
+      "duration_seconds": 115
+    },
+    {
+      "playlist_index": 2,
+      "id": "bgm_gintama_02",
+      "title": "Subtitleda Konoyaro-",
+      "source_url": "https://www.youtube.com/watch?v=BK543m4hdVQ",
+      "path": "res://assets/audio/music/gintama_02.ogg",
+      "duration_seconds": 10
+    },
+    {
+      "playlist_index": 3,
+      "id": "bgm_gintama_03",
+      "title": "Toubun Toraneetona-",
+      "source_url": "https://www.youtube.com/watch?v=RIwKHBEwcRA",
+      "path": "res://assets/audio/music/gintama_03.ogg",
+      "duration_seconds": 87
+    },
+    {
+      "playlist_index": 5,
+      "id": "bgm_gintama_05",
+      "title": "Uchuusenkan Otose",
+      "source_url": "https://www.youtube.com/watch?v=C1qSVbtNbak",
+      "path": "res://assets/audio/music/gintama_05.ogg",
+      "duration_seconds": 127
+    },
+    {
+      "playlist_index": 8,
+      "id": "bgm_gintama_08",
+      "title": "Yono Charmpoint",
+      "source_url": "https://www.youtube.com/watch?v=RhUeN3R46Is",
+      "path": "res://assets/audio/music/gintama_08.ogg",
+      "duration_seconds": 91
+    },
+    {
+      "playlist_index": 10,
+      "id": "bgm_gintama_10",
+      "title": "Dorobouha Doroboudemo Koidorobousa!!",
+      "source_url": "https://www.youtube.com/watch?v=8lYW49qDdMs",
+      "path": "res://assets/audio/music/gintama_10.ogg",
+      "duration_seconds": 112
+    },
+    {
+      "playlist_index": 13,
+      "id": "bgm_gintama_13",
+      "title": "Kokoha Samurainokunida",
+      "source_url": "https://www.youtube.com/watch?v=NZ7x3oULs2A",
+      "path": "res://assets/audio/music/gintama_13.ogg",
+      "duration_seconds": 159
+    },
+    {
+      "playlist_index": 19,
+      "id": "bgm_gintama_19",
+      "title": "Eyecatch Desuzee",
+      "source_url": "https://www.youtube.com/watch?v=XVIBb4LQua0",
+      "path": "res://assets/audio/music/gintama_19.ogg",
+      "duration_seconds": 9
+    },
+    {
+      "playlist_index": 20,
+      "id": "bgm_gintama_20",
+      "title": "Kenkattenowayoo Nanikao Mamorutameni Yarumondaroga",
+      "source_url": "https://www.youtube.com/watch?v=mcv6XFYKTTw",
+      "path": "res://assets/audio/music/gintama_20.ogg",
+      "duration_seconds": 110
+    },
+    {
+      "playlist_index": 21,
+      "id": "bgm_gintama_21",
+      "title": "Zurajyanai Katsuradaaa!!",
+      "source_url": "https://www.youtube.com/watch?v=f7-1ymlwCkI",
+      "path": "res://assets/audio/music/gintama_21.ogg",
+      "duration_seconds": 99
+    },
+    {
+      "playlist_index": 22,
+      "id": "bgm_gintama_22",
+      "title": "Goyou Aratamedearu!",
+      "source_url": "https://www.youtube.com/watch?v=z2qyIILZCTM",
+      "path": "res://assets/audio/music/gintama_22.ogg",
+      "duration_seconds": 126
+    },
+    {
+      "playlist_index": 34,
+      "id": "bgm_gintama_34",
+      "title": "Teme-ra! Hajimeruzee!!",
+      "source_url": "https://www.youtube.com/watch?v=3i53BX9dAwc",
+      "path": "res://assets/audio/music/gintama_34.ogg",
+      "duration_seconds": 9
+    },
+    {
+      "playlist_index": 35,
+      "id": "bgm_gintama_35",
+      "title": "Takuyo- Kyoumoshigotoga Koneejyane-ka",
+      "source_url": "https://www.youtube.com/watch?v=iL17f0YJmWc",
+      "path": "res://assets/audio/music/gintama_35.ogg",
+      "duration_seconds": 105
+    }
+  ]
+}

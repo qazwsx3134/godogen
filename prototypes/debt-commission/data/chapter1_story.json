@@ -2671,8 +2671,49 @@
           "op": "bgm"
         },
         {
+          "ending": "ch1_sadaharu",
+          "ending_title": "這次真的是定春",
           "hidden_total": 1.0,
           "id": "ch1_result",
+          "lines": {
+            "A": {
+              "source_id": "E-A",
+              "speaker": "kagura",
+              "text": "這副眼鏡，今天還算有用阿魯。"
+            },
+            "B": {
+              "source_id": "E-B",
+              "speaker": "gintoki",
+              "text": "普通的吐槽，普通的眼鏡。明天也拜託了。"
+            },
+            "C": {
+              "source_id": "E-C",
+              "speaker": "otose",
+              "text": "冰箱也好，薪水也好，寫了名字不代表就是你的。"
+            },
+            "S": {
+              "source_id": "E-S",
+              "speaker": "shinpachi",
+              "text": "一副眼鏡都沒碎……為什麼我還是什麼都沒拿到！？"
+            }
+          },
+          "op": "result",
+          "title": "～ 第一章 完 ～"
+        }
+      ],
+      "title": "～ 第一章 完 ～"
+    },
+    "ch1_result_gin": {
+      "steps": [
+        {
+          "id": "bgm_result",
+          "op": "bgm"
+        },
+        {
+          "ending": "ch1_gintoki",
+          "ending_title": "試毒試到一滴不剩",
+          "hidden_total": 1.0,
+          "id": "ch1_result_gin",
           "lines": {
             "A": {
               "source_id": "E-A",
@@ -2837,7 +2878,6 @@
       "title": "定春，對不起"
     },
     "ch1_twist": {
-      "next": "ch1_result",
       "steps": [
         {
           "id": "",
@@ -2937,6 +2977,171 @@
           "text": "好了，別激動。牛奶在鞋櫃，自己去拿。"
         },
         {
+          "op": "choice",
+          "options": [
+            {
+              "id": "fetch_self",
+              "label": "自己去鞋櫃拿",
+              "next": "ch1_twist_shoebox"
+            },
+            {
+              "id": "fetch_gin",
+              "label": "叫阿銀拿過來",
+              "next": "ch1_twist_gin"
+            }
+          ],
+          "pov": "shinpachi",
+          "prompt": "「自己去拿」……在這個家，東西離開視線就會消失。"
+        }
+      ],
+      "title": "薪水袋與定春"
+    },
+    "ch1_twist_gin": {
+      "next": "ch1_result_gin",
+      "steps": [
+        {
+          "op": "say",
+          "source_id": "BR01",
+          "speaker": "shinpachi",
+          "text": "不要。阿銀，你去拿過來。"
+        },
+        {
+          "op": "say",
+          "source_id": "BR02",
+          "speaker": "gintoki",
+          "text": "為什麼是銀桑。"
+        },
+        {
+          "op": "say",
+          "source_id": "BR03",
+          "speaker": "shinpachi",
+          "text": "這次我要親眼看著它，從鞋櫃走到我手上。"
+        },
+        {
+          "op": "say",
+          "source_id": "BR04",
+          "speaker": "gintoki",
+          "text": "……真沒辦法。"
+        },
+        {
+          "id": "gintoki",
+          "op": "char",
+          "visible": false
+        },
+        {
+          "id": "door_slide",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "source_id": "BR05",
+          "speaker": "narrator",
+          "text": "玄關傳來鞋櫃打開的聲音。接著，是一段很長、很安靜的咕嘟聲。"
+        },
+        {
+          "enter": true,
+          "expression": "smug",
+          "id": "gintoki",
+          "op": "char",
+          "position": "center",
+          "visible": true
+        },
+        {
+          "op": "say",
+          "source_id": "BR06",
+          "speaker": "narrator",
+          "text": "銀時拿著空瓶回來了。嘴角有一條白白的線。"
+        },
+        {
+          "op": "say",
+          "source_id": "BR07",
+          "speaker": "gintoki",
+          "text": "新八，好消息。銀桑幫你試過毒了。"
+        },
+        {
+          "op": "say",
+          "source_id": "BR08",
+          "speaker": "gintoki",
+          "text": "沒有毒。很安全。很好喝。"
+        },
+        {
+          "duration": 0.6,
+          "op": "freeze"
+        },
+        {
+          "op": "cutin",
+          "speaker": "shinpachi",
+          "text": "一滴不剩又來一次啊！！"
+        },
+        {
+          "id": "tsukkomi_hit",
+          "op": "se"
+        },
+        {
+          "op": "shake"
+        },
+        {
+          "op": "say",
+          "source_id": "BR09",
+          "speaker": "shinpachi",
+          "text": "試毒試到一滴不剩，這招剛剛才戳過一次了啊！！"
+        },
+        {
+          "op": "say",
+          "source_id": "BR10",
+          "speaker": "kagura",
+          "text": "銀醬學不乖阿魯。這次連藉口都是二手的阿魯。"
+        },
+        {
+          "expression": "annoyed",
+          "id": "otose",
+          "op": "char",
+          "position": "right",
+          "visible": true
+        },
+        {
+          "op": "say",
+          "source_id": "BR11",
+          "speaker": "otose",
+          "text": "說謊的話房租加一成。我一開始就說過了。"
+        },
+        {
+          "op": "say",
+          "source_id": "BR12",
+          "speaker": "gintoki",
+          "text": "銀桑沒說謊！真的沒有毒！"
+        },
+        {
+          "op": "say",
+          "source_id": "BR13",
+          "speaker": "otose",
+          "text": "那就是沒說謊，單純喝掉。加兩成。"
+        },
+        {
+          "expression": "broken",
+          "id": "shinpachi",
+          "op": "char",
+          "position": "left",
+          "visible": true
+        },
+        {
+          "op": "say",
+          "source_id": "BR14",
+          "speaker": "shinpachi",
+          "text": "房租加多少，我的牛奶都不會回來啊啊啊！！"
+        },
+        {
+          "direction": "out",
+          "duration": 0.3,
+          "op": "fade"
+        }
+      ],
+      "title": "叫阿銀去拿"
+    },
+    "ch1_twist_shoebox": {
+      "next": "ch1_result",
+      "steps": [
+        {
           "id": "door_slide",
           "op": "se"
         },
@@ -2991,7 +3196,7 @@
           "op": "fade"
         }
       ],
-      "title": "薪水袋與定春"
+      "title": "鞋櫃裡的牛奶"
     },
     "ch1_verdict": {
       "next": "ch1_twist",
@@ -3012,5 +3217,5 @@
   },
   "note": "作者已採納 P1–P8 的 draft-v0.2；上機試讀版，待作者試讀與手機實機驗收。",
   "title": "第一章・萬事屋冰箱草莓牛奶失竊事件（上機試讀版）",
-  "version": "s-5216a2553628"
+  "version": "s-aa84e0401f95"
 }

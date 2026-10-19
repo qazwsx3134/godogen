@@ -55,8 +55,15 @@ const CHARACTER_SCENE: String = "res://scenes/characters/%s.tscn"
 const HOTSPOT_SCENE: PackedScene = preload("res://scenes/ui/hotspot.tscn")
 const INVESTIGATE_BAR_SCENE: PackedScene = preload("res://scenes/ui/investigate_bar.tscn")
 const CHAPTER_RESULT_SCENE: PackedScene = preload("res://scenes/ui/chapter_result.tscn")
+## Editions with their own Game Over／chapter result; the others share the scenes above.
+const GAME_OVER_SCENES: Dictionary = {"gintama": preload("res://scenes/ui/game_over_gintama.tscn")}
+const RESULT_SCENES: Dictionary = {"gintama": preload("res://scenes/ui/chapter_result_gintama.tscn")}
 const CHAPTER_SELECT_SCENE: PackedScene = preload("res://scenes/ui/chapter_select.tscn")
 const SETTINGS_SCENE: PackedScene = preload("res://scenes/ui/settings_panel.tscn")
+## Editions with their own 設定 scene; the others share SETTINGS_SCENE (coloured by ui_styles.gd).
+const SETTINGS_SCENES: Dictionary = {
+	"gintama": preload("res://scenes/ui/settings_panel_gintama.tscn"),
+}
 const SETTINGS_SCRIPT: Script = preload("res://scripts/settings.gd")
 const DialogueText: Script = preload("res://scripts/dialogue_text.gd")
 const StageMotion: Script = preload("res://scripts/stage_motion.gd")
@@ -115,7 +122,6 @@ const AUDIO_PATHS: Dictionary = {
 	"knock": "res://assets/audio/knock.wav",
 	"step": "res://assets/audio/step.wav",
 	"stamp": "res://assets/audio/stamp.wav",
-	"ambient": "res://assets/audio/ambient.wav",
 }
 
 ## Background frames and the left/center/right standing slots, laid out in the editor.
@@ -416,6 +422,9 @@ func _open_chapter_select() -> void:
 		var note: String = "試玩片段"
 		if kind == "chapter":
 			note = "完成前一章後開放" if locked else ("最佳評價 " + grade if not grade.is_empty() else "未完成")
+		var endings: String = "" if locked else _ending_note(choice)
+		if not endings.is_empty():
+			note += "・" + endings
 		entries.append({"index": index, "id": str(choice["id"]), "kind": kind, "title": _story_title(choice),
 			"note": note, "locked": locked, "current": index == _story_choice_index()})
 	_chapter_select.call("set_style", _ui_style_id)
@@ -508,6 +517,9 @@ func _load_story() -> void:
 	if not _story_ready:
 		_story_error = _runner_string("error_message", "故事資料尚未就緒。")
 		return
+	var carried: Dictionary = _previous_chapter_carry()
+	if not carried.is_empty():
+		_runner.call("carry_in", carried)
 	var initial_snapshot: Dictionary = _runner.call("snapshot") as Dictionary
 	_phase3_enabled = bool(_runner.call("has_gameplay"))
 	_catalog = _runner.call("get_asset_catalog") as Dictionary
@@ -547,19 +559,8 @@ func _build_ui() -> void:
 	_game.add_child(_chapter_select)  # above the title screen
 	_chapter_select.connect("picked", _on_chapter_picked)
 	_chapter_select.connect("closed", _close_chapter_select)
-	_settings_panel = SETTINGS_SCENE.instantiate() as Control
-	_game.add_child(_settings_panel)
-	_settings_panel.connect("changed", _on_setting_changed)
-	_settings_panel.connect("closed", _close_settings)
-	_game_over = GAME_OVER_SCENE.instantiate() as GameOverScreen
-	_overlay_layer.add_child(_game_over)
-	_game_over_retry_button = _game_over.retry_button
-	_game_over.retry_pressed.connect(_on_game_over_retry_pressed)
-	_game_over.title_pressed.connect(_show_title)
-	_chapter_result = CHAPTER_RESULT_SCENE.instantiate() as Control
-	_overlay_layer.add_child(_chapter_result)
-	_chapter_result.connect("title_pressed", _show_title)
-	_chapter_result.connect("next_pressed", _on_next_chapter_pressed)
+	_mount_settings()
+	_mount_end_screens()
 	_effects = StageEffects.new()
 	_effects.name = "StageEffects"
 	add_child(_effects)
@@ -970,6 +971,54 @@ func _mount_title() -> void:
 	_refresh_title()
 
 
+## The current edition's 設定 panel; a switch puts the new one where the old one was among the
+## overlays and keeps it open if it was.
+func _mount_settings() -> void:
+	var scene: PackedScene = SETTINGS_SCENES.get(_ui_style_id, SETTINGS_SCENE) as PackedScene
+	var old: Control = _settings_panel
+	if old != null and old.scene_file_path == scene.resource_path:
+		return
+	_settings_panel = scene.instantiate() as Control
+	_game.add_child(_settings_panel)
+	_settings_panel.connect("changed", _on_setting_changed)
+	_settings_panel.connect("closed", _close_settings)
+	if old == null:
+		return
+	_game.move_child(_settings_panel, old.get_index())
+	if old.visible:
+		_settings_panel.call("set_style", _ui_style_id)
+		_settings_panel.call("open", _settings)
+	_game.remove_child(old)
+	old.queue_free()
+	_layout()
+
+
+## The current edition's Game Over and chapter result (the gintama edition has its own scenes). A
+## switch happens from the title or 目錄, while both are hidden.
+func _mount_end_screens() -> void:
+	var over_scene: PackedScene = GAME_OVER_SCENES.get(_ui_style_id, GAME_OVER_SCENE) as PackedScene
+	if _game_over == null or _game_over.scene_file_path != over_scene.resource_path:
+		var old_over: Control = _game_over
+		_game_over = over_scene.instantiate() as GameOverScreen
+		_overlay_layer.add_child(_game_over)
+		_game_over_retry_button = _game_over.retry_button
+		_game_over.retry_pressed.connect(_on_game_over_retry_pressed)
+		_game_over.title_pressed.connect(_show_title)
+		if old_over != null:
+			_overlay_layer.move_child(_game_over, old_over.get_index())
+			old_over.queue_free()
+	var result_scene: PackedScene = RESULT_SCENES.get(_ui_style_id, CHAPTER_RESULT_SCENE) as PackedScene
+	if _chapter_result == null or _chapter_result.scene_file_path != result_scene.resource_path:
+		var old_result: Control = _chapter_result
+		_chapter_result = result_scene.instantiate() as Control
+		_overlay_layer.add_child(_chapter_result)
+		_chapter_result.connect("title_pressed", _show_title)
+		_chapter_result.connect("next_pressed", _on_next_chapter_pressed)
+		if old_result != null:
+			_overlay_layer.move_child(_chapter_result, old_result.get_index())
+			old_result.queue_free()
+
+
 ## Story label, which buttons work, the last error and the story's exterior photo.
 func _refresh_title() -> void:
 	_refresh_story_switch()
@@ -1166,7 +1215,7 @@ func _read_safe_area(viewport_size: Vector2) -> void:
 
 func _show_title() -> void:
 	_cancel_generation()
-	_effects.play_bgm("")
+	_effects.play_bgm("bgm_gintama_35")
 	_close_qte()
 	_close_overlays()
 	_set_ui_hidden(false)
@@ -1216,7 +1265,7 @@ func _start_new_story() -> void:
 	_previous_power = 0
 	_cancel_generation()
 	_close_overlays()
-	_effects.play_bgm("")
+	_effects.play_bgm("bgm_gintama_35")
 	_delete_save()
 	_history.clear()
 	_boke_time_remaining = 0.0
@@ -2271,6 +2320,7 @@ func _present_end(command: Dictionary) -> void:
 	_set_visible_text(_full_text, true)
 	var snapshot: Dictionary = _runner.call("snapshot") as Dictionary
 	var game_over: bool = bool(snapshot.get("game_over_active", false))
+	_record_ending(command, game_over)
 	_end_box.visible = not game_over
 	_game_over_retry_button.visible = game_over
 	if game_over:
@@ -2322,6 +2372,7 @@ func _present_result(command: Dictionary) -> void:
 	_screen_mode = "result"
 	var summary: Dictionary = _runner.call("chapter_result") as Dictionary
 	_record_clear(str(summary.get("grade", "C")))
+	_record_ending(command)
 	var speaker: String = str((summary.get("line", {}) as Dictionary).get("speaker", "narrator"))
 	_chapter_result.call("show_result", summary, str((_actors.get(speaker, {}) as Dictionary).get("name", "")),
 		not _next_chapter().is_empty())
@@ -2358,6 +2409,50 @@ func _record_clear(grade: String) -> void:
 	if best.is_empty() or grades.find(grade) < grades.find(best):
 		config.set_value("cleared", _progress_id(), grade)
 		config.save(progress_path)
+
+
+## An `end`/`result` reached: its `ending` id joins this story's seen endings, and (unless it is
+## a Game Over) the story's `carry` flags are kept under its id for the next chapter.
+func _record_ending(command: Dictionary, game_over: bool = false) -> void:
+	var config: ConfigFile = ConfigFile.new()
+	config.load(progress_path)
+	var ending: String = _dict_string(command, "ending", "")
+	var seen: Array = config.get_value("endings", _progress_id(), [])
+	if not ending.is_empty() and not seen.has(ending):
+		config.set_value("endings", _progress_id(), seen + [ending])
+	var carried: Dictionary = {} if game_over else _runner.call("carry_out") as Dictionary
+	if not carried.is_empty():
+		config.set_value("carry", _progress_id(), carried)
+	if not carried.is_empty() or not ending.is_empty():
+		config.save(progress_path)
+
+
+## The `carry` values the chapter before this one ended with; {} for samples, the first
+## chapter, or when that chapter has not reached an end. Replaying a chapter never reads its own.
+func _previous_chapter_carry() -> Dictionary:
+	var index: int = _story_choice_index()
+	if index < 0 or str(_story_choices[index].get("kind", "")) != "chapter":
+		return {}
+	for earlier: int in range(index - 1, -1, -1):
+		if str(_story_choices[earlier].get("kind", "")) == "chapter":
+			var config: ConfigFile = ConfigFile.new()
+			config.load(progress_path)
+			return config.get_value("carry", str(_story_choices[earlier]["id"]), {}) as Dictionary
+	return {}
+
+
+## "結局 1/3" for a story with `ending`s, "" without (its JSON is read for the total).
+func _ending_note(choice: Dictionary) -> String:
+	var story: Variant = JSON.parse_string(FileAccess.get_file_as_string(str(choice.get("path", ""))))
+	if not story is Dictionary:
+		return ""
+	var endings: Array[Dictionary] = STORY_RUNNER_SCRIPT.endings_of(story)
+	if endings.is_empty():
+		return ""
+	var config: ConfigFile = ConfigFile.new()
+	config.load(progress_path)
+	var seen: Array = config.get_value("endings", str(choice["id"]), [])
+	return "結局 %d/%d" % [endings.filter(func(e: Dictionary) -> bool: return seen.has(e["id"])).size(), endings.size()]
 
 
 ## The best grade of a cleared story, "" when not cleared.
@@ -2958,9 +3053,8 @@ func _toggle_mute() -> void:
 
 func _start_audio_after_user_gesture() -> void:
 	_play_sound("paper")
-	var ambient: AudioStreamPlayer = _audio_players.get("ambient")
-	if ambient != null and ambient.stream != null and not _audio_muted and not ambient.playing:
-		ambient.play()
+	# Resume title music after the browser grants audio access on a user gesture.
+	_effects.set_muted(_audio_muted)
 
 
 func _play_sound(audio_id: String) -> void:
@@ -3524,6 +3618,9 @@ func _apply_ui_style() -> void:
 		_mount_choice_sheet()
 		_mount_menu()
 		_mount_title()
+		_mount_settings()
+		_mount_end_screens()
+		_layout()
 	_apply_ui_style_recursive(self)
 	_update_toggle_styles()
 	_apply_stage_style()

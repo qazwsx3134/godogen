@@ -4,6 +4,7 @@ extends Control
 ## `play`, and carries out the stage-level requests (shake, sound, zoom) this node raises.
 ## Pieces are looked up by unique name and each is optional: Dim, SpeedLines, CutInPanel, Portrait,
 ## Burst, TextArea (the room for the line), Text (centred in it), Spot (small_reaction: where the balloon hangs, set by `place_at`).
+## Without a Burst (emotion_band) the line is fitted as the cut-in slides in.
 
 signal sound_requested(sound_id: String)
 signal shake_requested(strength: String)
@@ -30,6 +31,8 @@ const MIN_FONT: int = 24
 @export var hold_until: float = 0.90
 @export var fade_at: float = 1.20
 @export var end_at: float = 1.35
+## From fade_at the cut-in slides out past the right edge and only Dim fades, instead of the whole overlay fading.
+@export var cutin_exit: bool = false
 @export_group("Effects")
 @export_enum("none", "small", "big") var shake_strength: String = "big"
 @export var sound_id: String = "comedy_don"
@@ -74,10 +77,25 @@ func play(portrait: Texture2D, line: String) -> void:
 		_timeline.tween_callback(_pop).set_delay(burst_at)
 	if absf(stage_zoom - 1.0) > 0.001:
 		_timeline.tween_callback(zoom_requested.emit.bind(stage_zoom, maxf(hold_until - burst_at, 0.05))).set_delay(burst_at)
-	_timeline.tween_property(self, "modulate:a", 0.0, maxf(end_at - fade_at, 0.001)).set_delay(fade_at)
+	if cutin_exit and _cutin != null:
+		_timeline.tween_callback(_slide_out).set_delay(fade_at)
+		if _dim != null:
+			_timeline.tween_property(_dim, "modulate:a", 0.0, maxf(end_at - fade_at, 0.001)).set_delay(fade_at)
+	else:
+		_timeline.tween_property(self, "modulate:a", 0.0, maxf(end_at - fade_at, 0.001)).set_delay(fade_at)
 	if absf(stage_zoom - 1.0) > 0.001:
 		_timeline.tween_callback(zoom_requested.emit.bind(1.0, maxf(end_at - fade_at, 0.05))).set_delay(fade_at)
 	_timeline.tween_callback(_finish).set_delay(end_at)
+
+
+## The cut-in's fill colour for this play (emotion_band: the band); the scene's StyleBox is copied, never changed.
+func tint(color: Color) -> void:
+	var style: StyleBoxFlat = _cutin.get_theme_stylebox("panel") as StyleBoxFlat if _cutin != null else null
+	if style == null:
+		return
+	style = style.duplicate() as StyleBoxFlat
+	style.bg_color = color
+	_cutin.add_theme_stylebox_override("panel", style)
 
 
 ## Cuts the rest of the timeline: fades out at once (the layer is gone within FAST_FORWARD_SEC).
@@ -155,11 +173,18 @@ func _face(texture: Texture2D) -> Texture2D:
 
 func _slide_in() -> void:
 	_speed_lines_in()
+	if _burst == null:
+		_fit_text()
 	var rest: Vector2 = _cutin.position
 	_cutin.modulate.a = 1.0
 	_cutin.position = Vector2(-_cutin.size.x - 120.0, rest.y)  # fully past the left edge, tilt included
 	var tween: Tween = _cutin.create_tween()
 	tween.tween_property(_cutin, "position", rest, maxf(cutin_slide, 0.001)).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
+
+
+func _slide_out() -> void:
+	_cutin.create_tween().tween_property(_cutin, "position:x", size.x + 120.0, maxf(end_at - fade_at, 0.001)) \
+		.set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
 
 
 func _speed_lines_in() -> void:

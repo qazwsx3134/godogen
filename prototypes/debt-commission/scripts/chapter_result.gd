@@ -28,7 +28,8 @@ func _ready() -> void:
 
 ## summary: StoryRunner.chapter_result(). speaker_name: the closing line's speaker as shown.
 func show_result(summary: Dictionary, speaker_name: String, has_next: bool) -> void:
-	heading.text = str(summary.get("title", ""))
+	var ending: String = str(summary.get("ending_title", ""))
+	heading.text = str(summary.get("title", "")) + ("" if ending.is_empty() else "\n結局「%s」" % ending)
 	caught.text = "%d / %d" % [int(summary.get("caught", 0)), int(summary.get("tries", 0))]
 	perfect.text = str(int(summary.get("perfect", 0)))
 	combo.text = str(int(summary.get("max_combo", 0)))

@@ -2,13 +2,13 @@ extends "res://addons/proto_kit/test_kit.gd"
 const Runner = preload("res://scripts/story_runner.gd")
 const STORY = "res://data/chapter1_story.json"
 func _init() -> void:
-	for route: String in ["perfect", "hidden", "super", "weak", "timeout", "retry", "one_fail", "two_fails", "four_fails"]:
+	for route: String in ["perfect", "hidden", "super", "weak", "timeout", "retry", "one_fail", "two_fails", "four_fails", "gin"]:
 		_route(route)
 	_finish("CHAPTER 1 TESTS")
 func _settle(r: RefCounted) -> Dictionary:
 	for i in range(1500):
 		var c: Dictionary = r.call("current")
-		if c.get("op") in ["investigate", "boke_round", "result", "end"]:
+		if c.get("op") in ["investigate", "boke_round", "choice", "result", "end"]:
 			return c
 		r.call("advance")
 	_expect(false, "chapter flow settles")
@@ -85,8 +85,11 @@ func _route(route: String) -> void:
 			_roundtrip(r)
 	_expect(not r.current().current_line.qte.is_empty(), "C5 still requires a QTE after normal or super route")
 	_expect(r.resolve_qte(true,0.0).get("result")=="perfect", "C5 QTE completes")
+	_expect(_settle(r).get("op")=="choice" and r.items.has("salary_envelope"), "salary twist asks who fetches the milk")
+	_expect(r.choose("fetch_gin" if route=="gin" else "fetch_self"), "fetch choice is taken")
 	var result=_settle(r)
-	_expect(result.get("op")=="result" and r.items.has("salary_envelope"), "salary twist reaches chapter result")
-	var expected = {"perfect":"S","hidden":"S","super":"S","weak":"S","timeout":"A","retry":"A","one_fail":"A","two_fails":"B","four_fails":"C"}[route]
+	var ending: String = "ch1_gintoki" if route=="gin" else "ch1_sadaharu"
+	_expect(result.get("op")=="result" and result.get("ending")==ending, "%s route reaches ending %s (got %s)" % [route,ending,result.get("ending")])
+	var expected = {"gin":"S","perfect":"S","hidden":"S","super":"S","weak":"S","timeout":"A","retry":"A","one_fail":"A","two_fails":"B","four_fails":"C"}[route]
 	_expect(r.chapter_result().get("grade")==expected, "%s route grade %s (got %s)" % [route,expected,r.chapter_result().get("grade")])
 	_roundtrip(r)

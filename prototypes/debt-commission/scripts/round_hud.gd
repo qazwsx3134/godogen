@@ -13,6 +13,8 @@ const TINTS: Dictionary = {
 		"text": Color("#382f28"), "soft": Color("#76634c"), "gauge": Color("#a94432"), "alert": Color("#8f2d22")},
 	"manga": {"bg": Color("#f5f3e9"), "border": Color("#242522"), "width": 2,
 		"text": Color("#242522"), "soft": Color("#5f605b"), "gauge": Color("#e4be32"), "alert": Color("#e74e36")},
+	"gintama": {"bg": Color(0.973, 0.953, 0.914, 0.94), "border": Color("#385673"), "width": 1,
+		"text": Color("#203047"), "soft": Color("#536174"), "gauge": Color("#203e5e"), "alert": Color("#963e4b")},
 }
 
 @onready var panel: PanelContainer = %Panel

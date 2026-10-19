@@ -50,9 +50,26 @@ V1 可呈現 op：
   - `placard: {text, goto, result?}`：舉牌槽點。這句是目前句子、還沒接住時，拿牌子的角色（角色 scene 裡有 `Placard` 節點的，目前是伊莉莎白）的牌子顯示 `text`；閱讀時與選詞時點牌子都算這個槽點的結果（預設 perfect）。槽點旁仍要有 `options`（選詞與逾時照常），不能和 `censor` 或 `qte` 放在同一句。
   - 選項的 `when: [{require_caught?, require?, flags?, result, goto, set_flags?}]`：條件結果。選項照常顯示；選它時，第一個條件全部成立的 case 取代選項的 `result`／`goto`（`set_flags` 沒寫就沿用選項的）。條件：`require_caught`（本回合已接住的句子 id）、`require`（持有的素材）、`flags`（`{旗標: 值}`，旗標要是故事裡有的、型別相同）；每個 case 至少一個條件。例：放棄吐槽平常 `fail`，L1、L2 都接住時 `hidden`。
 - 演出：`shake`（`strength` small／big、`duration`）、`flash`（`color`、`duration`）、`cutin`（`text`、`speaker`）、`freeze`（`duration`）、`bgm`（`id`，空字串停止）、`se`（`id`）。`id` 對應 catalog 的 `music`／`sounds`，沒有 `path` 的先播合成佔位音。
-- 漫畫吐槽 `comedy`：`{"op": "comedy", "preset": <id>, "speaker": <catalog 角色 id>, "text": <台詞>, "expression"?: <表情>}`。`preset` 只能是 `tsukkomi_impact`、`small_reaction`、`full_manga_panel`；`speaker` 必須是 catalog 角色；`text` 非空；`expression` 若有須是合法表情（預設 `tsukkomi_impact`／`full_manga_panel` 用 `shout`，`small_reaction` 用 `neutral`；catalog 沒有該角色該表情的圖就退回角色預設圖，不報錯）。驗證錯誤訊息含節點與步序，例如 `node 'comedy_open' step 4 comedy preset 'x' is not one of ...`。劇作者只選 preset，不組動畫。
+- 漫畫吐槽 `comedy`：`{"op": "comedy", "preset": <id>, "speaker": <catalog 角色 id>, "text": <台詞>, "expression"?: <表情>, "color"?: "#rrggbb"}`。`preset` 只能是 `tsukkomi_impact`、`small_reaction`、`full_manga_panel`、`emotion_band`（橫向純色長條從左滑入、往右滑出，用於驚訝等情緒）；`speaker` 必須是 catalog 角色；`text` 非空；`expression` 若有須是合法表情（預設 `tsukkomi_impact`／`full_manga_panel` 用 `shout`，`small_reaction` 用 `neutral`，`emotion_band` 用 `surprised`；catalog 沒有該角色該表情的圖就退回角色預設圖，不報錯）；`color` 只能用在 `emotion_band`，是這次色帶的顏色（`#rrggbb`，省略時用 scene 裡的預設黃），由寫故事的人依情緒自訂；`.dialogue` 寫成 `do comedy("emotion_band", "kagura", "欸！？", "#7ec8ff")`，表情與顏色可都寫、順序不拘。驗證錯誤訊息含節點與步序，例如 `node 'comedy_open' step 4 comedy preset 'x' is not one of ...`。劇作者只選 preset，不組動畫。
 
-內部 op：`flag`（key/value）、`item`（id，重複取得不重複存）、`profile`（角色 id，解鎖人物檔案，重複不重複存；該角色在素材設定要有 `profile` 文字）、`placard`（`text`：牌子上的字，"" 為空白；跟著存檔與回合檢查點）、`condition`（flag/equals/then/else）、`goto`（target）。`bg`、`char`、`say`、`choice`、`flag`、`goto`、`item` 是新章節的主要指令；所有角色、背景、素材 ID 在載入時驗證，錯誤指出節點與步序。
+內部 op：`flag`（key/value）、`item`（id，重複取得不重複存）、`profile`（角色 id，解鎖人物檔案，重複不重複存；該角色在素材設定要有 `profile` 文字）、`placard`（`text`：牌子上的字，"" 為空白；跟著存檔與回合檢查點）、`condition`（flag/equals/then/else，或 test/then/else，見下）、`goto`（target）。`bg`、`char`、`say`、`choice`、`flag`、`goto`、`item` 是新章節的主要指令；所有角色、背景、素材 ID 在載入時驗證，錯誤指出節點與步序。
+
+旗標加減與複合條件：
+
+- `flag` 寫 `value`（直接設值）或 `add`（整數，可為負，加到目前的值上），兩者擇一；`set_flag` 相同。用 `add` 的旗標必須在 `initial_flags` 宣告成數字。數字一律視為同一種型別（JSON 讀進來的 1 與 1.0 相同）。選項的 `set_flags` 只能設值；要依選項加減，把 `add` 寫在選項跳去的節點開頭。
+- `condition` 寫 `{flag, equals, then, else}`（單一旗標等於某值），或 `{test, then, else}`，兩種擇一。`test` 是一棵條件樹：
+  - `{"flag": 旗標, "cmp": "==｜!=｜<｜<=｜>｜>=", "value": 值}`：旗標必須在 `initial_flags` 宣告，`value` 與宣告的型別相同；`<`、`<=`、`>`、`>=` 只能用在數字旗標。
+  - `{"has": 素材 id}`：持有該素材（catalog 裡要有）。
+  - `{"all": [test…]}`（全部成立）、`{"any": [test…]}`（任一成立），至少一項；`{"not": test}`（反轉）。
+  - 例：`{"all": [{"flag": "trust", "cmp": ">=", "value": 2}, {"not": {"has": "milk_bottle"}}]}`。
+- 存檔：用 `add` 的旗標，存檔裡的值只檢查是不是數字；其他旗標照舊，只接受劇本裡出現過的值。
+- `.dialogue`：`set trust += 1`／`set trust -= 2` 寫成 `add`（只能用在一般內文，不能用在選項底下）；`if` 可以寫 `a == 1 and has("milk")`、`trust >= 2 or not met_gintoki == true`。同一個 `if` 只能全用 `and` 或全用 `or`，不支援括號；`not` 只作用在緊接的那一項。只有單一 `key == value` 的 `if` 仍輸出舊的 `flag`／`equals` 形式。
+
+結局與跨章旗標：
+
+- `end` 與 `result` 可以帶 `ending`（結局 id）與選填的 `ending_title`（顯示名稱，預設為 end 的 `text` 或 result 的 `title`）。到達時，id 記進 `progress.cfg` 的 `[endings]`（key 是 registry 的故事 id，值是看過的 id 清單）；Game Over 的 end 也可以是結局。章節選擇在章節名下顯示「結局 已看過/總數」，總數是故事裡不同 `ending` 的數量。
+- 故事根層的 `carry: [旗標…]`（都要在 `initial_flags` 宣告）：到達 result 或非 Game Over 的 end 時，這些旗標的目前值寫進 `progress.cfg` 的 `[carry]`（key 是故事 id）。載入一個 `chapter` 時，只讀 registry 裡**前一個 chapter** 存下的值：自己也列在 `carry` 裡、型別相同的旗標取代 `initial_flags`，其餘照 `initial_flags`。重玩同一章不會讀到自己上一輪的值。第三章要用第一章的旗標，第二章也要把它列進 `carry` 轉交。`carry` 旗標在存檔裡只檢查型別。
+- `.dialogue`：`do end("文字", "結局id")`／`do end("文字", "結局id", "結局名")`；result 區塊直接在 `.blocks.json` 寫 `ending`／`ending_title`；`carry` 寫在 `.blocks.json` 的 `story` 裡。
 
 討債閱讀基線仍接受下列舊指令，以保留已核准文本與測試：
 
@@ -113,7 +130,7 @@ godot --headless --path . --script res://tools/story_build/build_story.gd -- sto
   - 劇情等 preset 播完才前進（`main.gd` 的 `comedy` 分派在 await 後檢查 `generation`）。ComedyLayer 內所有 node 的 `mouse_filter` 都是 IGNORE，點擊由 `DialogueLayer` 底下的 `TapCatcher` 接：播放中的一次點擊（含按下時 preset 在播、放開時已結束的那一下，以及 `ui_accept`／續）只呼叫 `fast_forward()`，≤0.15 秒淡出結束，不推進劇情，下一句照常打字、完整顯示。
   - 略讀（`skip`）時不建 preset、不等，開啟略讀時正在播的 preset 立刻快轉；自動播放照常等。台詞不論播或略過都記進對話紀錄（說話者是 `speaker`）。存檔不記 comedy：讀檔、還原、檢查點重試時，若目前步驟停在 `comedy` 會直接跳過，已播過的不會重播。
   - 回標題、讀欄位、換 UI 風格、重新開始、Game Over 重試（`_cancel_generation`、`_render_restored_current`、`_apply_ui_style`）都呼叫 `stop()`：ComedyLayer 清空並隱藏、舞台層 `scale`／`position`／`pivot_offset` 還原、沒有殘留 tween。大字依爆炸框內的空間縮到放得下（`comedy_preset.gd::_fit_text`，用 label 自己量內容高度），窄螢幕（320 CSS px）也不超出遊戲區；整層用 `_fit_full_area` 跟 `_ui_scale` 放大。
-  - 場景由 `tools/make_comedy_scenes.gd`（`PackedScene.pack()` + `ResourceSaver.save()`）產生一次，之後 scene 是來源檔：已存在時拒絕覆蓋，需 `-- --force`，重產前先看 `git diff`。`speed_lines.gd`、`burst_shape.gd` 是 `@tool` 繪圖，編輯器裡直接看得到速度線與鋸齒爆炸框。
+  - 場景由 `tools/make_comedy_scenes.gd`（`PackedScene.pack()` + `ResourceSaver.save()`）產生一次，之後 scene 是來源檔：只補建不存在的 scene，已存在的保留；`-- --force` 才全部重寫，重產前先看 `git diff`。`speed_lines.gd`、`burst_shape.gd` 是 `@tool` 繪圖，編輯器裡直接看得到速度線與鋸齒爆炸框。
 - 演出指令交給 `scripts/stage_effects.gd`：震動只移動舞台各層（`Game` 的位置由版面決定），閃光與停格灰屏放在 `OverlayLayer`，cut-in 是 `scenes/ui/cutin.tscn`。它們都不攔截點擊；只有 `freeze` 讓劇情等待，略讀時不等。存檔以選填欄位 `bgm` 記住正在播的音樂。
 - 舉牌：角色 scene 裡的 `Placard`（伊莉莎白的在 `scenes/characters/elisabeth.tscn`：框對齊圖上的白牌子、可旋轉，底下 `Text` 是字、`Glow` 是提示光框）顯示 `placard_view()` 的字。牌子能點時（`tappable`），拿牌子的人站到說話者前面、不變暗；選詞時 `Glow` 一明一暗，選項面板的最大高度停在牌子下緣，選項改捲動。點擊由 `TapCatcher` 在放開時判定：命中區是牌子外框的矩形、每邊至少 48 CSS px，扣掉被對話框或選項面板蓋住的部分。
 - 登場：`enter` 讓角色在自己的站位上場並亮著；`offscreen` 的台詞不呼叫 `_focus_speaker`。

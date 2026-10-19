@@ -59,7 +59,7 @@ const VALID_EXPRESSIONS: Array[String] = ["neutral", "smile", "annoyed", "surpri
     "broken", "angry", "panic", "nervous", "serious", "cry", "nosepick", "mock",
     "sit_serious", "sit_talking"]
 ## `comedy` presets (scripts/comedy_layer.gd): the manga overlay a line of the script asks for.
-const VALID_COMEDY_PRESETS: Array[String] = ["tsukkomi_impact", "small_reaction", "full_manga_panel"]
+const VALID_COMEDY_PRESETS: Array[String] = ["tsukkomi_impact", "small_reaction", "full_manga_panel", "emotion_band"]
 ## `choice` perspectives: a reaction in a character's head (pov, the default) or the player stepping out
 ## as the director to decide what happens next. A pov choice says whose thought it is (`pov`, default
 ## Shinpachi) and may tag its options with a tone; a director choice may carry a footnote (`note`).
@@ -254,6 +254,7 @@ func chapter_result() -> Dictionary:
     var line: Dictionary = ((command.get("lines", {}) as Dictionary).get(grade, {}) as Dictionary).duplicate()
     return {
         "title": String(command.get("title", "")),
+        "ending_title": String(command.get("ending_title", command.get("ending", ""))),
         "grade": grade,
         "line": line,
         "caught": int(stats.get("caught", 0)),
@@ -1144,13 +1145,12 @@ func _normalize_position() -> bool:
                 transitions += 1
                 continue
         match op:
-            "set_flag":
+            "set_flag", "flag":
                 var flag_key: String = String(step["key"])
-                flags[flag_key] = step["value"]
-                step_index += 1
-            "flag":
-                var flag_op_key: String = String(step["key"])
-                flags[flag_op_key] = step["value"]
+                if step.has("add"):
+                    flags[flag_key] = flags[flag_key] + step["add"]
+                else:
+                    flags[flag_key] = step["value"]
                 step_index += 1
             "item":
                 var item_id: String = String(step["id"])
@@ -1166,9 +1166,10 @@ func _normalize_position() -> bool:
                 placard = String(step["text"])
                 step_index += 1
             "condition":
-                var condition_key: String = String(step["flag"])
                 var target: String = String(step["else"])
-                if flags.get(condition_key, null) == step["equals"]:
+                var passed: bool = _test_passes(step["test"]) if step.has("test") \
+                        else flags.get(String(step["flag"]), null) == step["equals"]
+                if passed:
                     target = String(step["then"])
                 if not _story_node_exists(target):
                     return _rollback_normalization(original_node_id, original_step_index, original_flags, original_items, "Condition target does not exist: %s" % target)
@@ -1497,6 +1498,9 @@ func _validate_story(value: Variant, asset_catalog: Dictionary) -> String:
     var flag_error: String = _validate_flag_dictionary(initial_flags, "initial_flags")
     if not flag_error.is_empty():
         return flag_error
+    if root.has("carry") and (not root["carry"] is Array \
+            or not (root["carry"] as Array).all(func(key: Variant) -> bool: return typeof(key) == TYPE_STRING and initial_flags.has(key))):
+        return "carry must list flags declared in initial_flags"
 
     var nodes: Dictionary = root["nodes"] as Dictionary
     if nodes.is_empty():
@@ -1766,8 +1770,8 @@ func _validate_step(current_node_id: String, index: int, step: Dictionary, nodes
             if not _is_non_empty_string(timeout.get("goto", null)) or not nodes.has(String(timeout["goto"])):
                 return "%s boke timeout goto target is invalid" % prefix
         "flag":
-            if not _is_non_empty_string(step.get("key", null)) or not _is_flag_value(step.get("value", null)):
-                return "%s flag needs a key and scalar value" % prefix
+            if not _flag_step_is_valid(step):
+                return "%s flag needs a key and either a scalar value or a whole-number add" % prefix
         "show":
             if not _catalog_has_character(asset_catalog, String(step.get("actor", ""))):
                 return "%s show actor is invalid" % prefix
@@ -1825,6 +1829,11 @@ func _validate_step(current_node_id: String, index: int, step: Dictionary, nodes
                 return "%s comedy needs text" % prefix
             if step.has("expression") and (typeof(step["expression"]) != TYPE_STRING or not VALID_EXPRESSIONS.has(String(step["expression"]))):
                 return "%s comedy expression is invalid" % prefix
+            if step.has("color"):
+                if comedy_preset != "emotion_band":
+                    return "%s comedy color is only for emotion_band" % prefix
+                if typeof(step["color"]) != TYPE_STRING or String(step["color"]).length() != 7 or not String(step["color"]).begins_with("#") or not Color.html_is_valid(String(step["color"])):
+                    return "%s comedy color must be \"#rrggbb\"" % prefix
         "beam":
             if step.has("duration") and not _is_number_between(step["duration"], 0.05, 5.0):
                 return "%s beam duration must be 0.05-5 seconds" % prefix
@@ -1850,9 +1859,13 @@ func _validate_step(current_node_id: String, index: int, step: Dictionary, nodes
         "end":
             if not step.has("text") or typeof(step["text"]) != TYPE_STRING:
                 return "%s end text must be a string" % prefix
+            if not _ending_is_valid(step):
+                return "%s ending must be a non-empty id (ending_title a string)" % prefix
         "result":
             if not _is_non_empty_string(step.get("title", null)):
                 return "%s result needs a title" % prefix
+            if not _ending_is_valid(step):
+                return "%s ending must be a non-empty id (ending_title a string)" % prefix
             if not step.get("lines", null) is Dictionary:
                 return "%s result lines must map grades to {speaker, text}" % prefix
             for grade: Variant in (step["lines"] as Dictionary).keys():
@@ -1865,10 +1878,16 @@ func _validate_step(current_node_id: String, index: int, step: Dictionary, nodes
                     or int(step["hidden_total"]) < 0):
                 return "%s result hidden_total must be a non-negative whole number" % prefix
         "set_flag":
-            if not _is_non_empty_string(step.get("key", null)) or not _is_flag_value(step.get("value", null)):
-                return "%s set_flag needs a key and scalar value" % prefix
+            if not _flag_step_is_valid(step):
+                return "%s set_flag needs a key and either a scalar value or a whole-number add" % prefix
         "condition":
-            if not _is_non_empty_string(step.get("flag", null)) or not _is_flag_value(step.get("equals", null)):
+            if step.has("test") == step.has("flag"):
+                return "%s condition needs either flag/equals or test" % prefix
+            if step.has("test"):
+                var test_error: String = _validate_test(step["test"], asset_catalog)
+                if not test_error.is_empty():
+                    return "%s condition test %s" % [prefix, test_error]
+            elif not _is_non_empty_string(step.get("flag", null)) or not _is_flag_value(step.get("equals", null)):
                 return "%s condition needs a flag and scalar equals value" % prefix
             if not _is_non_empty_string(step.get("then", null)) or not nodes.has(String(step["then"])):
                 return "%s condition then target is invalid" % prefix
@@ -2016,7 +2035,7 @@ func _validate_flag_consistency(root: Dictionary) -> String:
     for key: Variant in initial_flags.keys():
         var flag_key: String = String(key)
         var initial_value: Variant = initial_flags[key]
-        types[flag_key] = typeof(initial_value)
+        types[flag_key] = _flag_kind(initial_value)
         values[flag_key] = [initial_value]
 
     var nodes: Dictionary = root["nodes"] as Dictionary
@@ -2025,7 +2044,7 @@ func _validate_flag_consistency(root: Dictionary) -> String:
         var steps: Array = node["steps"] as Array
         for raw_step: Variant in steps:
             var step: Dictionary = raw_step as Dictionary
-            if String(step["op"]) == "set_flag" or String(step["op"]) == "flag":
+            if (String(step["op"]) == "set_flag" or String(step["op"]) == "flag") and not step.has("add"):
                 var set_flag_error: String = _record_flag_value(types, values, String(step["key"]), step["value"])
                 if not set_flag_error.is_empty():
                     return set_flag_error
@@ -2063,6 +2082,26 @@ func _validate_flag_consistency(root: Dictionary) -> String:
                         if not option_flag_error.is_empty():
                             return option_flag_error
 
+    # `add` and condition tests read flags, so each must be declared (a missing flag would be null).
+    for raw_node_id: Variant in nodes.keys():
+        var steps: Array = (nodes[raw_node_id] as Dictionary)["steps"] as Array
+        for index: int in range(steps.size()):
+            var step: Dictionary = steps[index] as Dictionary
+            var op: String = String(step["op"])
+            if (op == "flag" or op == "set_flag") and step.has("add"):
+                var add_key: String = String(step["key"])
+                if not initial_flags.has(add_key) or not _is_number(initial_flags[add_key]) or types[add_key] != TYPE_FLOAT:
+                    return "node '%s' step %d add flag '%s' must be a number declared in initial_flags" % [raw_node_id, index, add_key]
+            elif op == "condition" and step.has("test"):
+                for leaf: Dictionary in _test_leaves(step["test"]):
+                    if not leaf.has("flag"):
+                        continue
+                    var leaf_key: String = String(leaf["flag"])
+                    if not initial_flags.has(leaf_key) or types[leaf_key] != _flag_kind(leaf["value"]):
+                        return "node '%s' step %d condition flag '%s' must be declared in initial_flags with a value of that type" % [raw_node_id, index, leaf_key]
+                    if not ["==", "!="].has(String(leaf["cmp"])) and types[leaf_key] != TYPE_FLOAT:
+                        return "node '%s' step %d condition flag '%s' can only be ordered (<, >) when it is a number" % [raw_node_id, index, leaf_key]
+
     # `when` cases may test flags: each must be a story flag with a value of the same type.
     # A hotspot's `set` may only write declared flags (a save lists exactly the declared ones).
     for raw_node_id: Variant in nodes.keys():
@@ -2093,10 +2132,10 @@ func _hotspot_flag_writes(step: Dictionary) -> Array[Dictionary]:
 
 
 func _record_flag_value(types: Dictionary, values: Dictionary, key: String, value: Variant) -> String:
-    if types.has(key) and types[key] != typeof(value):
+    if types.has(key) and types[key] != _flag_kind(value):
         return "flag '%s' changes value type" % key
     if not types.has(key):
-        types[key] = typeof(value)
+        types[key] = _flag_kind(value)
         values[key] = []
     if not (values[key] as Array).has(value):
         (values[key] as Array).append(value)
@@ -2206,8 +2245,7 @@ func _validate_saved_flags(value: Variant) -> String:
     for key: Variant in _allowed_flag_values.keys():
         if not candidate_flags.has(key):
             return "missing flag '%s'" % key
-        var allowed_values: Array = _allowed_flag_values[key] as Array
-        if not allowed_values.has(candidate_flags[key]):
+        if not _flag_value_is_allowed(String(key), candidate_flags[key]):
             return "invalid value for flag '%s'" % key
     return ""
 
@@ -2425,6 +2463,7 @@ func _find_phase3_command(op: String, command_id: String) -> Dictionary:
 
 func _collect_allowed_flag_values(story: Dictionary) -> Dictionary:
     var values: Dictionary = {}
+    var counters: Array[String] = []
     var initial_flags: Dictionary = story["initial_flags"] as Dictionary
     for key: Variant in initial_flags.keys():
         values[String(key)] = [initial_flags[key]]
@@ -2435,7 +2474,10 @@ func _collect_allowed_flag_values(story: Dictionary) -> Dictionary:
         for raw_step: Variant in (node["steps"] as Array):
             var step: Dictionary = raw_step as Dictionary
             if String(step["op"]) == "set_flag" or String(step["op"]) == "flag":
-                _add_allowed_flag_value(values, String(step["key"]), step["value"])
+                if step.has("add"):
+                    counters.append(String(step["key"]))
+                else:
+                    _add_allowed_flag_value(values, String(step["key"]), step["value"])
             elif String(step["op"]) == "choice":
                 for raw_option: Variant in (step["options"] as Array):
                     var option: Dictionary = raw_option as Dictionary
@@ -2461,6 +2503,12 @@ func _collect_allowed_flag_values(story: Dictionary) -> Dictionary:
                     var set_flags: Dictionary = option["set_flags"] as Dictionary
                     for key: Variant in set_flags.keys():
                         _add_allowed_flag_value(values, String(key), set_flags[key])
+    # A `carry` flag can arrive from an earlier chapter with any value of its type, and a flag
+    # that `add` changes can hold any number: a save only checks the type of these.
+    for key: Variant in story.get("carry", []):
+        values[String(key)] = {"kind": _flag_kind(initial_flags[key])}
+    for key: String in counters:
+        values[key] = {"kind": TYPE_FLOAT}
     return values
 
 
@@ -2495,6 +2543,128 @@ func _is_non_empty_string(value: Variant) -> bool:
     return typeof(value) == TYPE_STRING and not String(value).is_empty()
 
 
+func _ending_is_valid(step: Dictionary) -> bool:
+    if not step.has("ending"):
+        return not step.has("ending_title")
+    return _is_non_empty_string(step["ending"]) and typeof(step.get("ending_title", "")) == TYPE_STRING
+
+
+## The endings a story can reach, [{id, title}] in node order, one per id. The title is
+## `ending_title`, else the end's text or the result's title.
+static func endings_of(story: Dictionary) -> Array[Dictionary]:
+    var found: Array[Dictionary] = []
+    var seen: Dictionary = {}
+    for node: Variant in (story.get("nodes", {}) as Dictionary).values():
+        for step: Variant in (node as Dictionary).get("steps", []):
+            var ending: String = String((step as Dictionary).get("ending", ""))
+            if ending.is_empty() or seen.has(ending):
+                continue
+            seen[ending] = true
+            var fallback: String = String(step.get("text", step.get("title", ending)))
+            found.append({"id": ending, "title": String(step.get("ending_title", fallback))})
+    return found
+
+
+## The `carry` flags (root field) with their current values, to hand to the next chapter.
+func carry_out() -> Dictionary:
+    var carried: Dictionary = {}
+    for key: Variant in _story.get("carry", []):
+        carried[key] = flags[key]
+    return carried
+
+
+## Starts this story with carried values for its `carry` flags (those a save of this story could
+## hold; others keep initial_flags), then resets to the entry.
+func carry_in(values: Dictionary) -> bool:
+    if not _loaded:
+        return false
+    _initial_flags = _initial_flags.duplicate(true)
+    for key: Variant in _story.get("carry", []):
+        if values.has(key) and _flag_value_is_allowed(String(key), values[key]):
+            _initial_flags[key] = values[key]
+    return _reset_state()
+
+
+func _is_number(value: Variant) -> bool:
+    return typeof(value) == TYPE_INT or typeof(value) == TYPE_FLOAT
+
+
+## Flag type for consistency checks: JSON reads every number as float, so 1 and 1.0 match.
+func _flag_kind(value: Variant) -> int:
+    return TYPE_FLOAT if _is_number(value) else typeof(value)
+
+
+func _flag_step_is_valid(step: Dictionary) -> bool:
+    if not _is_non_empty_string(step.get("key", null)) or step.has("add") == step.has("value"):
+        return false
+    if step.has("add"):
+        return _is_number(step["add"]) and float(step["add"]) == floorf(float(step["add"]))
+    return _is_flag_value(step["value"])
+
+
+## Structure of a condition `test` tree (see IMPLEMENTATION.md); "" when valid.
+func _validate_test(test: Variant, asset_catalog: Dictionary) -> String:
+    if not test is Dictionary or (test as Dictionary).size() == 0:
+        return "must be an object"
+    var node: Dictionary = test as Dictionary
+    if node.has("all") or node.has("any"):
+        var parts: Variant = node.get("all", node.get("any"))
+        if node.size() != 1 or not parts is Array or (parts as Array).is_empty():
+            return "all/any needs a non-empty list"
+        for part: Variant in parts as Array:
+            var part_error: String = _validate_test(part, asset_catalog)
+            if not part_error.is_empty():
+                return part_error
+        return ""
+    if node.has("not"):
+        return "not takes one test" if node.size() != 1 else _validate_test(node["not"], asset_catalog)
+    if node.has("has"):
+        if node.size() != 1 or not _is_non_empty_string(node["has"]) or not _catalog_has_item(asset_catalog, String(node["has"])):
+            return "has '%s' is not a catalog item" % node.get("has", "")
+        return ""
+    if node.size() != 3 or not _is_non_empty_string(node.get("flag", null)) or not _is_flag_value(node.get("value", null)) \
+            or not ["==", "!=", "<", "<=", ">", ">="].has(String(node.get("cmp", ""))):
+        return "needs flag, cmp (== != < <= > >=) and value"
+    return ""
+
+
+## The flag and has leaves of a validated test tree.
+func _test_leaves(test: Dictionary) -> Array[Dictionary]:
+    if test.has("all") or test.has("any"):
+        var leaves: Array[Dictionary] = []
+        for part: Dictionary in test.get("all", test.get("any")):
+            leaves.append_array(_test_leaves(part))
+        return leaves
+    if test.has("not"):
+        return _test_leaves(test["not"])
+    return [test]
+
+
+func _test_passes(test: Dictionary) -> bool:
+    if test.has("all"):
+        return (test["all"] as Array).all(func(part: Dictionary) -> bool: return _test_passes(part))
+    if test.has("any"):
+        return (test["any"] as Array).any(func(part: Dictionary) -> bool: return _test_passes(part))
+    if test.has("not"):
+        return not _test_passes(test["not"])
+    if test.has("has"):
+        return items.has(String(test["has"]))
+    var current: Variant = flags[String(test["flag"])]
+    var value: Variant = test["value"]
+    match String(test["cmp"]):
+        "==":
+            return current == value
+        "!=":
+            return current != value
+        "<":
+            return current < value
+        "<=":
+            return current <= value
+        ">":
+            return current > value
+    return current >= value
+
+
 func _is_flag_value(value: Variant) -> bool:
     return typeof(value) == TYPE_BOOL or typeof(value) == TYPE_INT or typeof(value) == TYPE_FLOAT or typeof(value) == TYPE_STRING
 
@@ -2515,6 +2685,8 @@ func _is_number_between(value: Variant, minimum: float, maximum: float) -> bool:
 func _flag_value_is_allowed(key: String, value: Variant) -> bool:
     if not _allowed_flag_values.has(key):
         return false
+    if _allowed_flag_values[key] is Dictionary:  # {"kind": type}: a counter or a `carry` flag
+        return _flag_kind(value) == int(_allowed_flag_values[key]["kind"])
     var allowed_values: Array = _allowed_flag_values[key] as Array
     return allowed_values.has(value)
 

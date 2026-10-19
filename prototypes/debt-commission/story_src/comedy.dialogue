@@ -17,6 +17,7 @@ do comedy("small_reaction", "gintoki", "……嗶～")
 新八: 不要吹口哨矇混過去啊！
 銀時: 好啦好啦。那你說說看，上一次有委託是什麼時候？
 新八: 三個月前，找貓。而且還被貓抓了。
+do comedy("emotion_band", "kagura", "阿銀居然有接過委託阿魯！？")
 => comedy_panel
 
 ~ comedy_panel

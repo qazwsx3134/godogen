@@ -103,6 +103,8 @@ static func build_text(text: String, source_path: String) -> Dictionary:
 	}
 	if meta.has("note"):
 		story["note"] = meta["note"]
+	if meta.has("carry"):
+		story["carry"] = meta["carry"]
 	story["version"] = fingerprint(story)
 
 	var runner_error: String = _validate_with_runner(story)
@@ -137,7 +139,7 @@ static func _step_shape(step: Dictionary) -> Array:
 	if TsukkomiRound.is_v2(step):
 		return [op, step.get("id"), TsukkomiRound.shape(step)]
 	var shape: Array = [op]
-	for key: String in ["id", "key", "flag", "equals", "then", "else", "target", "game_over"]:
+	for key: String in ["id", "key", "flag", "equals", "test", "add", "then", "else", "target", "game_over"]:
 		if step.has(key):
 			shape.append([key, step[key]])
 	for option: Dictionary in step.get("options", []):
