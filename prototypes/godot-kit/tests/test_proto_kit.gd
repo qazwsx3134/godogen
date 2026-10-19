@@ -13,6 +13,8 @@ const CameraShake = preload("res://addons/proto_kit/camera_shake.gd")
 const FloatingStick = preload("res://addons/proto_kit/floating_stick.gd")
 const SceneLoader = preload("res://addons/proto_kit/scene_loader.gd")
 const PixelVfx = preload("res://addons/proto_kit/pixel_vfx.gd")
+const Sprite3DSheet = preload("res://addons/proto_kit/sprite3d_sheet.gd")
+const Sprite3DActor = preload("res://addons/proto_kit/sprite3d_actor.gd")
 const DIR: String = "user://proto_kit_test"
 
 
@@ -31,6 +33,7 @@ func _run() -> void:
 	await _test_music()
 	_test_camera_shake()
 	_test_pixel_vfx()
+	await _test_sprite3d()
 	await _test_floating_stick()
 	await _test_scene_loader()
 	await _test_harness_input()
@@ -484,6 +487,134 @@ func _test_pixel_vfx() -> void:
 	fx.clear()
 	_expect(fx.count() == 0 and fx.stats().dropped.particles == 0 and is_instance_valid(fx.ground_layer), "pixel_vfx: clear reclaims effects, resets counters and retains the ground renderer")
 	fx.free()
+
+func _test_sprite3d() -> void:
+	# A camera with the identity basis looks down -Z, so a facing of +Z points at it.
+	var cam := Basis.IDENTITY
+	_expect(is_equal_approx(Sprite3DSheet.view_angle(Vector3(0, 0, 1), cam), 0.0), "sprite3d: facing the camera is 0")
+	_expect(is_equal_approx(Sprite3DSheet.view_angle(Vector3(1, 0, 0), cam), 90.0), "sprite3d: screen right is 90")
+	_expect(is_equal_approx(Sprite3DSheet.view_angle(Vector3(0, 0, -1), cam), 180.0), "sprite3d: away from the camera is 180")
+	_expect(is_equal_approx(Sprite3DSheet.view_angle(Vector3(-1, 0, 0), cam), 270.0), "sprite3d: screen left is 270")
+	var turned := Basis(Vector3.UP, PI / 2.0)  # the camera turned to look down -X: world +Z is now screen left
+	_expect(is_equal_approx(Sprite3DSheet.view_angle(Vector3(0, 0, 1), turned), 270.0), "sprite3d: the angle follows the camera, not the world")
+	var down := Basis(Vector3.RIGHT, -PI / 2.0)  # looking straight down, screen up = world -Z
+	_expect(is_equal_approx(Sprite3DSheet.view_angle(Vector3(0, 0, 1), down), 0.0) and is_equal_approx(Sprite3DSheet.view_angle(Vector3(1, 0, 0), down), 90.0), "sprite3d: a top-down camera still gives directions")
+	var pitched := Basis(Vector3.RIGHT, deg_to_rad(-26.0))
+	_expect(is_equal_approx(Sprite3DSheet.view_angle(Vector3(1, 0, 1).normalized(), pitched), 45.0), "sprite3d: pitch does not bend the diagonals")
+
+	var sheet: Resource = Sprite3DSheet.new()
+	sheet.columns = 8
+	sheet.rows = 5
+	sheet.directions = 8
+	sheet.mirror = true
+	sheet.anims = {"walk": {"cell": 2, "n": 2, "d": [10, 5], "loop": true}, "attack": {"cell": 4, "n": 2, "d": [3, 3], "loop": false}}
+	_expect(sheet.direction(0.0) == 0 and sheet.direction(44.0) == 1 and sheet.direction(90.0) == 2 and sheet.direction(337.0) == 7, "sprite3d: 8 directions in 45-degree sectors")
+	_expect(sheet.direction(28.0, 0) == 0 and sheet.direction(29.0, 0) == 1, "sprite3d: the direction holds until 6 degrees past the border")
+	_expect(sheet.cell(&"walk", 2, 0) == Vector2i(2 + 2 * 8, 1), "sprite3d: a drawn row is cell + row * columns")
+	_expect(sheet.cell(&"walk", 5, 0) == Vector2i(2 + 3 * 8, -1) and sheet.cell(&"walk", 7, 0) == Vector2i(2 + 1 * 8, -1), "sprite3d: back-left and front-left are the right-side rows mirrored")
+	_expect(sheet.cell(&"walk", 0, 9).x == 2 and sheet.cell(&"walk", 0, 10).x == 3 and sheet.cell(&"walk", 0, 15).x == 2, "sprite3d: frames follow their ticks and loop")
+	_expect(sheet.cell(&"attack", 0, 100).x == 5, "sprite3d: a one-shot holds its last frame")
+	_expect(sheet.cell(&"no such anim", 0, 0).x == 2, "sprite3d: a missing animation falls back to walk")
+	sheet.directions = 4
+	_expect(sheet.direction(270.0) == 3 and sheet.cell(&"walk", 3, 0) == Vector2i(2 + 8, -1), "sprite3d: 4 directions mirror left from right")
+	sheet.directions = 1
+	_expect(sheet.direction(90.0) == 0 and sheet.cell(&"walk", 0, 0) == Vector2i(2, 1), "sprite3d: one direction faces right as drawn")
+	_expect(sheet.direction(270.0) == 1 and sheet.cell(&"walk", 1, 0) == Vector2i(2, -1), "sprite3d: one direction flips for screen left")
+	var color: Color = Sprite3DSheet.instance_color(Color(0.5, 1, 1), Sprite3DSheet.ROLE_ELITE)
+	_expect(roundi((1.0 - color.a) * 8.0) == Sprite3DSheet.ROLE_ELITE and roundi((1.0 - Color.WHITE.a) * 8.0) == Sprite3DSheet.ROLE_NONE, "sprite3d: the outline role round-trips through the instance alpha; white means none")
+	var custom: Color = Sprite3DSheet.instance_custom(7, 0.5, -1, 1.0, 0.25)
+	_expect(signf(custom.b) == -1.0 and is_equal_approx(absf(custom.b) - 1.0, 0.25), "sprite3d: facing and dissolve share INSTANCE_CUSTOM.z")
+
+	DirAccess.make_dir_recursive_absolute(DIR)
+	var json_path: String = DIR + "/sheets.json"
+	var file := FileAccess.open(json_path, FileAccess.WRITE)
+	file.store_string(JSON.stringify({"atlas": "atlas.png", "cell_px": 32, "columns": 8, "rows": 5, "foot_px": 2, "meters_per_px": 0.05,
+		"characters": {"hero": {"directions": 8, "mirror": true, "anims": {"idle": {"cell": 0, "n": 2, "d": [10, 5], "loop": true}}}}}))
+	file.close()
+	var loaded: Resource = Sprite3DSheet.from_json(json_path, "hero")
+	_expect(loaded != null and loaded.columns == 8 and loaded.cell(&"idle", 6, 10) == Vector2i(1 + 2 * 8, -1), "sprite3d: from_json reads a sprite_atlas.py sheet")
+	_expect(is_equal_approx(loaded.size_m(), 1.6) and is_equal_approx(loaded.foot_gutter(), 2.0 / 32.0), "sprite3d: quad size and foot strip come from the sheet")
+
+	for path: String in ["sprite3d.gdshader", "sprite3d_xray.gdshader", "sprite3d_ghost.gdshader", "sprite3d_shadow.gdshader"]:
+		var shader: Shader = load("res://addons/proto_kit/" + path)
+		var names: Array = shader.get_shader_uniform_list().map(func(u: Dictionary) -> String: return u.name)
+		_expect(not names.is_empty(), "sprite3d: %s parses" % path)
+		if path != "sprite3d_shadow.gdshader":
+			_expect(names.has("frames") and names.has("foot_gutter"), "sprite3d: %s takes the sheet's grid" % path)
+	var main_names: Array = (load("res://addons/proto_kit/sprite3d.gdshader") as Shader).get_shader_uniform_list().map(func(u: Dictionary) -> String: return u.name)
+	_expect(main_names.has("outline_elite") and main_names.has("dissolve") and main_names.has("see_through_enabled"), "sprite3d: the main shader has outline roles, dissolve and see-through")
+
+	var actor: Node3D = Sprite3DActor.new()
+	var sprite := MeshInstance3D.new()
+	sprite.name = "Sprite"
+	var mat := ShaderMaterial.new()
+	mat.shader = load("res://addons/proto_kit/sprite3d.gdshader")
+	sprite.material_override = mat
+	actor.add_child(sprite)
+	var camera := Camera3D.new()
+	camera.position = Vector3(0, 0, 10)
+	root.add_child(camera)
+	camera.make_current()
+	loaded.mirror = true
+	actor.sheet = loaded
+	actor.anim = &"idle"
+	actor.facing = Vector3(-1, 0, 0)  # screen left
+	root.add_child(actor)
+	await _frames(2)
+	var m: ShaderMaterial = sprite.material_override
+	_expect(m != mat, "sprite3d: an actor draws with its own copy of the material")
+	_expect(actor.direction == 6 and is_equal_approx(m.get_shader_parameter(&"facing"), -1.0) and int(m.get_shader_parameter(&"frame")) % 8 < 2 and int(m.get_shader_parameter(&"frame")) / 8 == 2, "sprite3d: facing screen left shows the right row mirrored")
+	_expect(is_equal_approx(sprite.scale.x, 1.6) and m.get_shader_parameter(&"frames") == Vector2(8, 5), "sprite3d: the sheet sizes the quad and sets the grid")
+	actor.play(&"idle")
+	var before: float = actor.ticks
+	actor.play(&"idle")
+	_expect(actor.ticks == before, "sprite3d: play() does not restart the running animation")
+
+	# The game's own clock: a paused world (delta 0) keeps the frame; hit stop advances it in proportion.
+	actor.auto_advance = false
+	actor.play(&"idle", true)
+	await _frames(3)
+	_expect(actor.ticks == 0.0, "sprite3d: with auto_advance off the actor does not move on by itself")
+	actor.step(0.0)
+	_expect(actor.ticks == 0.0, "sprite3d: step(0) keeps the frame")
+	actor.step(10.0 / 60.0)
+	_expect(is_equal_approx(actor.ticks, 10.0) and int(m.get_shader_parameter(&"frame")) % 8 == 1, "sprite3d: step(game delta) advances the animation and redraws")
+
+	# One-shots finish after their full length, and a fallback animation finishes as it plays.
+	loaded.anims["hit"] = {"cell": 0, "n": 2, "d": [3, 3], "loop": false}
+	actor.play(&"hit")
+	actor.step(5.0 / 60.0)
+	_expect(not actor.finished(), "sprite3d: a one-shot is not finished while its last frame still has time")
+	actor.step(1.0 / 60.0)
+	_expect(actor.finished(), "sprite3d: a one-shot is finished after its full length")
+	actor.play(&"missing")
+	_expect(not actor.finished() and loaded.resolve(&"missing") == loaded.resolve(&"idle"), "sprite3d: a missing animation plays (and finishes like) its fallback")
+	_expect(Sprite3DSheet.length_ticks({"n": 4}) == 4, "sprite3d: without d, one tick per frame")
+
+	# Two actors from one material: each gets its own copies, shadow included.
+	var shadow := MeshInstance3D.new()
+	shadow.name = "Shadow"
+	var shadow_mat := ShaderMaterial.new()
+	shadow_mat.shader = load("res://addons/proto_kit/sprite3d_shadow.gdshader")
+	shadow.material_override = shadow_mat
+	var twin: Node3D = Sprite3DActor.new()
+	var twin_sprite := MeshInstance3D.new()
+	twin_sprite.name = "Sprite"
+	twin_sprite.material_override = mat
+	twin.add_child(twin_sprite)
+	twin.add_child(shadow)
+	var other: Resource = Sprite3DSheet.new()
+	other.columns = 4
+	other.rows = 4
+	other.anims = {"idle": {"cell": 0, "n": 1, "d": [1], "loop": true}}
+	twin.sheet = other
+	root.add_child(twin)
+	await _frames(1)
+	_expect(m.get_shader_parameter(&"frames") == Vector2(8, 5) and (twin_sprite.material_override as ShaderMaterial).get_shader_parameter(&"frames") == Vector2(4, 4), "sprite3d: actors sharing a material keep their own sheets")
+	_expect(shadow.material_override != shadow_mat and mat.get_shader_parameter(&"frames") == null, "sprite3d: the shadow material is copied too, and the scene's material is left alone")
+	twin.free()
+	actor.free()
+	camera.free()
 
 func _test_camera_shake() -> void:
 	var camera := Camera2D.new()

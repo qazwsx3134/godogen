@@ -20,6 +20,7 @@
 | [`camera_shake.gd`](addons/proto_kit/camera_shake.gd) | trauma 震屏：偏移與轉角跟 trauma 的平方成正比，平滑不抖，可關（無障礙） | sugarcane-tanks |
 | [`floating_stick.gd`](addons/proto_kit/floating_stick.gd) | 浮動虛擬搖桿：平時看不見，按下才在手指下出現，輸出螢幕向量 | sugarcane-tanks |
 | [`scene_loader.gd`](addons/proto_kit/scene_loader.gd) | 載入畫面的邏輯：執行緒載入、進度不倒退也不跑在時鐘前面、失敗可重試、離開時收掉任務 | sugarcane-tanks |
+| [`sprite3d*.gdshader`](addons/proto_kit/sprite3d.gdshader)、[`sprite3d_sheet.gd`](addons/proto_kit/sprite3d_sheet.gd)、[`sprite3d_actor.gd`](addons/proto_kit/sprite3d_actor.gd) | 2D 角色圖立在 3D 世界（pokebonk.com／仙境傳說式）：billboard、腳底貼地、依鏡頭相對方向選 1／4／8 方向（含鏡像與遲滯）、描邊身分色、閃白、溶解、x-ray 剪影、殘影、腳下影子，MultiMesh 大軍可用。搭配 `tools/sprite_atlas.py` | madara-survivor、horde-25d（2026-10-19 從這兩份抽出） |
 
 GDScript、Godot 4.7。只用於 `prototypes/`，不接進 `publish.sh`（見 [ADR 0001](../docs/adr/0001-prototypes-live-in-godogen.md)）。
 
@@ -407,6 +408,36 @@ fx.shaders[&"shockwave"] = preload("...")   # 新的 shader 特效，模板見 p
 
 不跳視窗地看每種特效：`vfx_gallery.gd`（用法在檔頭，要套 `xvfb-run`）。完整做法、規則、怎麼新增特效與踩過的坑：skill `pixel-vfx`（`skills/pixel-vfx/`）。採用：survivor-series。
 
+## sprite3d：2D 角色立在 3D 世界
+
+規格（每條規則的理由、數值出處、素材管線、驗收清單）在 skill `sprite-actors-3d`（`skills/sprite-actors-3d/`）；這裡只列程式。
+
+| 檔案 | 用途 |
+|---|---|
+| `sprite3d.gdshader` | 角色、敵人、道具。節點用 uniform（`frame`、`facing`、`flash`、`dissolve`、`outline`）；MultiMesh 開 `use_instance_custom`（格號、閃白、面向 ×(1＋溶解)、走路相位）與 `use_instance_color`（rgb 色調、alpha 描邊身分） |
+| `sprite3d_xray.gdshader` | 主角被擋住時的條紋剪影（`render_priority` 比本體高） |
+| `sprite3d_ghost.gdshader` | 殘影（閃避、衝刺） |
+| `sprite3d_shadow.gdshader` | 腳下的橢圓影子：平地和本體共用實例；高度場開 `ground_from_instance` 另一批；`stepped` 改成兩段硬邊 |
+| `sprite3d.gdshaderinc` | 上面幾支共用的 billboard、腳底、翻滾、描邊取樣 |
+| `sprite3d_sheet.gd` | 一個角色的圖集資料：`view_angle()`、`direction()`（遲滯）、`cell()`（鏡像列回傳 facing −1）、`instance_custom()`／`instance_color()`、`from_json()` |
+| `sprite3d_actor.gd` | 少量角色用的 `@tool` Node3D：依鏡頭選方向、播動作；預設自己走 Engine 時間，或 `auto_advance = false`＋`step(game_delta)` 跟遊戲時鐘；執行時每個實例複製自己的材質，編輯器裡不自己改 scene |
+| `sprite3d_gallery.gd` | 不開遊戲看效果：三種俯角的 8 方向一圈＋MultiMesh 的描邊、閃白、溶解、翻滾（用法在檔頭，要套 `xvfb-run`） |
+| `tools/sprite_atlas.py` | manifest → `atlas.png`＋`sheets.json`：同角色同一縮放、腳底線對齊、1 texel 透明邊、像素模式（同角色共用色盤）；超出格子直接報錯，不偷偷縮小。`uv run --with pillow tools/sprite_atlas.py --self-test` |
+
+```gdscript
+const Sprite3DSheet = preload("res://addons/proto_kit/sprite3d_sheet.gd")
+var sheet := Sprite3DSheet.from_json("res://assets/sprites/sheets.json", "hero")
+sheet.apply(crowd_material)
+dir[i] = sheet.direction(Sprite3DSheet.view_angle(facing[i], camera.global_basis), dir[i])
+var drawn := sheet.cell(&"walk", dir[i], ticks[i])          # Vector2i(格號, facing)
+mm.set_instance_custom_data(i, Sprite3DSheet.instance_custom(drawn.x, flash[i], drawn.y, phase[i]))
+mm.set_instance_color(i, Sprite3DSheet.instance_color(Color.WHITE, Sprite3DSheet.ROLE_ELITE))
+```
+
+shader 預設值是 madara-survivor 的（`frames` 4×6、`lean` 1、`foot_gutter` 0.047）。horde-25d 的不同處（4×2 格、`lean` 0.35、無腳底帶、深色硬邊影子）寫在它自己的材質與 `tools/build_scenes.gd` 的 `LOOK`／`ACTOR`。
+
+換成 kit 版時的驗證（2026-10-19）：兩個原型的測試都通過；同 seed 錄影，madara 第 10、39 格逐像素相同；horde-25d 第 10 格相同，第 39 格只差在主角 x-ray：舊版沒有往鏡頭推，會在主角自己身上畫條紋，kit 用 madara 的修法（`toward_camera` 0.35）。gallery 在 Compatibility 與 Mobile 渲染器畫面相同。
+
 ## tools/：字型子集與網頁匯出
 
 開發時在命令列跑的工具，**不會**同步進原型，直接從 kit 執行（路徑相對於 `prototypes/` 的上一層，即 repo 根目錄）。每支都有 `--self-test`（不連網、不需要 Godot），改了要重跑；自我測試都做過「弄壞一處、確認會失敗」。
@@ -481,12 +512,13 @@ fx.shaders[&"shockwave"] = preload("...")   # 新的 shader 特效，模板見 p
 | 5 | **音效播放** `sfx_bank.gd`（檔案優先、合成後備、同時一個、長音效截斷）<br>**已抽出（2026-10-03），sugarcane-tanks 已採用** | 各自直接管 `AudioStreamPlayer`：pachinko `scripts/presentation.gd`、pixel-monster `ui/sound.gd`、debt-commission `main.gd`／`scripts/stage_effects.gd`、sugarcane-tanks `game/sfx.gd`（只有這一份有檔案優先、同時一個、長音效截斷） | 合成音表、借用表、長音效表改成由專案的子類別在 `_ready` 填，不寫死在模組裡（見上方 sfx_bank.gd 一節） | 使用者丟 `事件名.ogg` 就換聲音的流程，每個原型都能用 |
 | 6 | **虛擬搖桿** `floating_stick.gd`<br>**已抽出（2026-10-04）**：sugarcane-tanks 的浮動搖桿，輸出螢幕向量；seichi-pov 的固定搖桿還沒換 | seichi-pov `ui/move_stick.gd`（輸出 x 右、y 前進，給 3D）；sugarcane-tanks `ui/joystick.gd`（浮動，2D，靠觸控轉滑鼠事件） | 需要先統一輸出（螢幕向量），3D 專案自己轉；固定與浮動做成模式 | 兩個原型的搖桿行為一致、測試共用 |
 | 7 | **素材處理**（洋紅去背、切格、縮到遊戲尺寸）<br>**沒有抽**：`process_art.gd` 的背景清單、檔名與有損匯入是這款遊戲專屬，另一套是 Python 加外部腳本；等第二個 Godot 原型要做同樣的事再決定 | sugarcane-tanks `tools/process_art.gd`（零依賴，Godot 內跑）；anime-card-roguelite `scripts/prepare-visuals.py`，它交給 `~/.codex/skills/generate2dsprite/scripts/generate2dsprite.py`（1,838 行，有錨點、縮放設定檔、QC） | **先選一套**。建議 `process_art.gd` 當零依賴預設，並借 `generate2dsprite` 的品質檢查（邊緣是否被切到、錨點）；尺寸表改成每個專案的 manifest，不寫死在腳本 | 新原型用同一套約定與工具 |
+| 8 | **3D 裡的 2D 角色** billboard shader 組（`sprite_billboard`、`sprite_xray`、`sprite_ghost`、`blob_shadow`）＋`build_atlas.py`<br>**已抽出（2026-10-19），madara-survivor、horde-25d 已改用**，見上方 sprite3d 一節 | horde-25d `shaders/`；madara-survivor `shaders/`、`tools/build_atlas.py`（兩份 shader 幾乎相同） | 共用 billboard 基底改成 `.gdshaderinc`；補 4／8 方向選列＋遲滯、shader 描邊、動作資料 Resource 與 tick 播放器、`SpriteActor` scene；atlas 工具讀各遊戲 manifest | 之後每個 2.5D 遊戲（luffy-marineford 等）直接用同一套角色規格與工具 |
 
 **抽出來之後還沒做的（要各原型的擁有者處理）**：debt-commission 的 `tools/fetch_web_templates.py`、`tools/build_web.sh` 改成呼叫 kit 的版本；pixel-monster、seichi-pov、taskbar-hero 套字型子集（各省 9–30 MB）並加 `FontCheck` 測試；pachinko 的 `tools/serve.sh` 對照 `web_probe.mjs` 的「網頁版必須從 localhost 或 HTTPS 開」；pixel-monster `ui/main.gd:449` 的 `Input.vibrate_handheld(35)` 改用 `haptics.gd`（要有偵測，網頁版才不會每次呼叫都讓瀏覽器 `console.warn`）；pachinko `scripts/presentation.gd`、pixel-monster `ui/sound.gd`、debt-commission `main.gd`／`scripts/stage_effects.gd` 的音效管理改用 `sfx_bank.gd`（各寫一個繼承它的小腳本、填自己的合成音表，就有檔案優先、同時一個、長音效截斷）。這些原型目前都有未提交的修改，`./sync.sh --check` 對它們全部報 drift（debt-commission、pachinko、pixel-monster、seichi-pov、taskbar-hero），所以這一輪只對 sugarcane-tanks 跑了 `sync.sh`；別一次 `./sync.sh` 全部同步，會把新模組混進別人未完成的變更。
 
 **目前只有一個原型用，也還沒抽出來**：`juice.gd` 的三級回饋對照表（哪個事件算哪一級是這款遊戲的調校）、升級選卡面板與選卡鎖、`hero_stats.gd` 的能力疊加、敵人基底（依賴 `game.show_damage` 等介面）、載入畫面與製作名單面板的**畫面本身**（只有 `scene_loader.gd` 的邏輯抽出來了）、射線步進投射物（核心只有 8 行 `intersect_ray`，其餘是這款遊戲的碰撞規則）、`balance_run`（決定性的機器人平衡量測，依賴這款遊戲的 `main.gd`）。erwin-run（2026-10-14）又多了三個：**手機方向鎖**（`screens.tscn` 的 `%Portrait` 遮罩、`portrait_changed` 訊號、玩到一半轉直就暫停，加上 `main.gd` 的 `_phone_fullscreen()` 在第一次點擊時請求全螢幕並鎖橫向；任何只能橫玩或只能直玩的網頁原型都用得到）、**Parallax 收尾**（`main.gd` 的 `_ruins_leave()`：讓重複的圖層在不跳格的情況下捲出畫面，換上尾端收尾的圖）、**橫式手機的瀏覽器驗證**（`tools/web_landscape.mjs`，可以併進 `web_probe.mjs` 當 `--landscape`）。等第二個原型需要時再抽。
 
-沿用 sugarcane-tanks 做完整條流程的經驗見 skill `godot-prototype-to-itch`（原始檔在 `skills/godot-prototype-to-itch/`）。角色原畫到動畫 sprite（Claude 挑圖、Codex 生圖、沒有影片 API 時手動生影片）見 skill `character-sprite-forge`（`skills/character-sprite-forge/`）。像素打擊特效見 skill `pixel-vfx`（`skills/pixel-vfx/`）。三個 skill 用 `./install_skills.sh` 複製進 `~/.claude/skills/`（見下方「維護」）。
+沿用 sugarcane-tanks 做完整條流程的經驗見 skill `godot-prototype-to-itch`（原始檔在 `skills/godot-prototype-to-itch/`）。角色原畫到動畫 sprite（Claude 挑圖、Codex 生圖、沒有影片 API 時手動生影片）見 skill `character-sprite-forge`（`skills/character-sprite-forge/`）。像素打擊特效見 skill `pixel-vfx`（`skills/pixel-vfx/`）。2D 角色圖立在 3D 世界（pokebonk.com／仙境傳說式 billboard、8 方向、MultiMesh 大軍）的共用規格見 skill `sprite-actors-3d`（`skills/sprite-actors-3d/`）。四個 skill 用 `./install_skills.sh` 複製進 `~/.claude/skills/`（見下方「維護」）。
 
 ## 維護
 
