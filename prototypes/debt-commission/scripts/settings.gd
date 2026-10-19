@@ -1,7 +1,8 @@
 extends RefCounted
 ## Player settings (ConfigFile [settings]): each is an index into its list of choices, which is
 ## also the button's position in its row of scenes/ui/settings_panel.tscn. The defaults are the
-## speeds and volumes the game had before settings existed.
+## speeds and volumes the game had before settings existed. `motion` 1 tones down screen shake and
+## flashes; `assist` 1 gives the timed choice more time and the QTE a wider window.
 
 ## Seconds per character; 0 shows the whole line at once.
 const TEXT_INTERVALS: Array[float] = [0.06, 0.032, 0.016, 0.0]
@@ -10,8 +11,14 @@ const AUTO_FACTORS: Array[float] = [1.6, 1.0, 0.5]
 const VOLUMES: Array[float] = [0.0, 0.25, 0.5, 0.75, 1.0]
 const FONT_SCALES: Array[float] = [0.85, 1.0, 1.2]
 const PAPER_OPACITIES: Array[float] = [0.65, 0.82, 1.0]
-const DEFAULTS: Dictionary = {"text_speed": 1, "auto_speed": 1, "bgm_volume": 4, "se_volume": 4, "font_size": 1, "paper_opacity": 2}
-const SIZES: Dictionary = {"text_speed": 4, "auto_speed": 3, "bgm_volume": 5, "se_volume": 5, "font_size": 3, "paper_opacity": 3}
+## 吐槽輔助 寬鬆: the timed choice's seconds and the QTE's judging window are multiplied by these.
+const ASSIST_TIMER_FACTOR: float = 1.5
+const ASSIST_QTE_WINDOW_FACTOR: float = 2.0
+const DEFAULTS: Dictionary = {"text_speed": 1, "auto_speed": 1, "bgm_volume": 4, "se_volume": 4, "font_size": 1, "paper_opacity": 2,
+	"motion": 0, "assist": 0}
+const SIZES: Dictionary = {"text_speed": 4, "auto_speed": 3, "bgm_volume": 5, "se_volume": 5, "font_size": 3, "paper_opacity": 3,
+	"motion": 2, "assist": 2}
+const AtomicFile = preload("res://addons/proto_kit/atomic_file.gd")
 
 
 static func load_settings(path: String) -> Dictionary:
@@ -30,4 +37,4 @@ static func save_settings(path: String, values: Dictionary) -> Error:
 	var config: ConfigFile = ConfigFile.new()
 	for key: String in DEFAULTS.keys():
 		config.set_value("settings", key, int(values.get(key, DEFAULTS[key])))
-	return config.save(path)
+	return AtomicFile.write_text(path, config.encode_to_text())

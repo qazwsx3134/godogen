@@ -40,14 +40,28 @@ func _run() -> void:
 	var game: Control = _new_game()
 	await _frames(3)
 	_expect(game._ui_style_id == "gintama", "new game uses the default gintama style")
-	_expect(game._title_style_buttons.size() == 4 and game._menu_style_buttons.size() == 4 and
-		(game._title_screen.find_child("Styles", true, false) as GridContainer).columns == 2 and
+	_expect(game._menu_style_buttons.size() == 4 and
 		(game._menu_overlay.find_child("Styles", true, false) as GridContainer).columns == 2,
-		"title and in-game menu expose four named styles in two columns")
-	await _press(game._title_style_buttons["gintama"] as Button)
+		"the in-game menu exposes four named styles in two columns")
+	_expect(not (game._title_screen.find_child("Styles", true, false) as Control).visible,
+		"the title card leaves the edition picker to 設定")
+	game._open_settings()
+	var setting_styles: Dictionary = game._settings_panel.call("buttons")
+	_expect(game._screen_mode == "settings" and (setting_styles["ui_style_gintama"] as Button).button_pressed,
+		"設定's 介面風格 shows the current edition")
+	await _frames(3)  # laid out before the row is scrolled into view
+	await _press(setting_styles["ui_style_cinema"] as Button)
 	await _frames(2)
-	_expect(game._ui_style_id == "gintama" and UI_STYLES_SCRIPT.load_preference(TEST_PREFERENCE) == "gintama",
-		"the title's gintama button selects the paper edition and saves it")
+	_expect(game._ui_style_id == "cinema" and UI_STYLES_SCRIPT.load_preference(TEST_PREFERENCE) == "cinema"
+		and game._settings_panel.visible and game._settings_panel.scene_file_path.ends_with("settings_panel.tscn"),
+		"設定's 映畫 switches the edition, saves it and keeps 設定 open in that edition: %s %s %s %s" % [game._ui_style_id,
+			UI_STYLES_SCRIPT.load_preference(TEST_PREFERENCE), game._settings_panel.visible, game._settings_panel.scene_file_path])
+	await _frames(3)
+	await _press(game._settings_panel.call("buttons")["ui_style_gintama"] as Button)
+	await _frames(2)
+	_expect(game._ui_style_id == "gintama" and UI_STYLES_SCRIPT.load_preference(TEST_PREFERENCE) == "gintama"
+		and game._settings_panel.visible, "and 銀魂和紙 switches back")
+	game._close_settings()
 	game._set_ui_style("cinema", false)
 	await _frames(2)
 	game._on_begin_pressed()

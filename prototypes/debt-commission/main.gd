@@ -199,6 +199,9 @@ var _sheet_censor: bool = false
 var _sheet_super: bool = false
 var _previous_power: int = 0
 var _qte: QteRing = null
+## Set when an autosave from an older story structure was set aside (_archive_other_version_save).
+var _archived_save_notice: String = ""
+var _last_qte_offset: float = 0.0  # QA: the last answered QTE's offset (seconds from the rings meeting)
 var _end_box: Control = null
 var _quickbar: Container = null
 var _log_button: Button = null
@@ -428,8 +431,26 @@ func _open_chapter_select() -> void:
 		entries.append({"index": index, "id": str(choice["id"]), "kind": kind, "title": _story_title(choice),
 			"note": note, "locked": locked, "current": index == _story_choice_index()})
 	_chapter_select.call("set_style", _ui_style_id)
-	_chapter_select.call("open", entries)
+	_chapter_select.call("open", entries, _chapter_endings())
 	_publish_qa_state()
+
+
+## 結局收集: every `ending` of each chapter (samples excluded) with whether it was reached.
+func _chapter_endings() -> Array[Dictionary]:
+	var rows: Array[Dictionary] = []
+	var config: ConfigFile = ConfigFile.new()
+	config.load(progress_path)
+	for choice: Dictionary in _story_choices:
+		if str(choice.get("kind", "")) != "chapter":
+			continue
+		var story: Variant = JSON.parse_string(FileAccess.get_file_as_string(str(choice["path"])))
+		if not story is Dictionary:
+			continue
+		var seen: Array = config.get_value("endings", str(choice["id"]), [])
+		var chapter: String = _story_title(choice).get_slice("・", 0)
+		for ending: Dictionary in STORY_RUNNER_SCRIPT.endings_of(story):
+			rows.append({"chapter": chapter, "title": str(ending["title"]), "seen": seen.has(ending["id"])})
+	return rows
 
 
 func _on_chapter_picked(index: int) -> void:
@@ -472,7 +493,10 @@ func _close_settings() -> void:
 
 func _on_setting_changed(key: String, value: int) -> void:
 	_settings[key] = value
-	SETTINGS_SCRIPT.save_settings(settings_path, _settings)
+	if SETTINGS_SCRIPT.save_settings(settings_path, _settings) != OK:
+		_show_toast("設定無法儲存，這次遊玩仍會套用")
+	if key == "motion":
+		_effects.reduce_motion = value == 1
 	if key.ends_with("_volume"):
 		_apply_audio_levels()
 	if key in ["font_size", "paper_opacity"]:
@@ -495,6 +519,12 @@ func _apply_audio_levels() -> void:
 	for player: AudioStreamPlayer in _audio_players.values():
 		player.volume_db = -80.0 if _audio_muted or se <= 0.0 else linear_to_db(se)
 	_effects.set_volumes(SETTINGS_SCRIPT.VOLUMES[int(_settings["bgm_volume"])], se)
+
+
+## Seconds the timed choice gives: the step's `timer_seconds`, longer with 吐槽輔助 寬鬆.
+func _timer_total(command: Dictionary) -> float:
+	var seconds: float = float(command.get("timer_seconds", DEFAULT_BOKE_TIMER_SECONDS))
+	return seconds * (SETTINGS_SCRIPT.ASSIST_TIMER_FACTOR if int(_settings.get("assist", 0)) == 1 else 1.0)
 
 
 func _text_interval() -> float:
@@ -521,6 +551,7 @@ func _load_story() -> void:
 	if not carried.is_empty():
 		_runner.call("carry_in", carried)
 	var initial_snapshot: Dictionary = _runner.call("snapshot") as Dictionary
+	_archive_other_version_save(str(initial_snapshot.get("story_id", "")), str(initial_snapshot.get("version", "")))
 	_phase3_enabled = bool(_runner.call("has_gameplay"))
 	_catalog = _runner.call("get_asset_catalog") as Dictionary
 	_actors = _catalog.get("characters", {}) as Dictionary
@@ -528,6 +559,30 @@ func _load_story() -> void:
 	for actor_id: String in _actors.keys():
 		var info: Dictionary = _actors[actor_id] as Dictionary
 		_actor_slots[actor_id] = str(info.get("slot", "center"))
+
+
+## The `version` of the story a save was made on when it differs from this build's ("" when it matches or
+## is not a save of this story). Text-only edits keep the version; changed structure gets a new one.
+func _other_version_of(payload: Dictionary, story_id: String, version: String) -> String:
+	var runner_snapshot: Variant = payload.get("runner")
+	if not runner_snapshot is Dictionary or str((runner_snapshot as Dictionary).get("story_id", "")) != story_id:
+		return ""
+	var saved: String = str((runner_snapshot as Dictionary).get("version", ""))
+	return "" if saved.is_empty() or saved == version else saved
+
+
+## An autosave made on an older structure of this story cannot be resumed. It is renamed to
+## `<save>.<old version>` (with its .bak) so the next autosave does not overwrite it, and the
+## title says so until a story starts.
+func _archive_other_version_save(story_id: String, version: String) -> void:
+	_archived_save_notice = ""
+	var old_version: String = _other_version_of(_read_raw_save_payload(save_path), story_id, version)
+	if old_version.is_empty():
+		return
+	for suffix: String in ["", ".bak"]:
+		if FileAccess.file_exists(save_path + suffix):
+			DirAccess.rename_absolute(save_path + suffix, "%s.%s%s" % [save_path, old_version, suffix])
+	_archived_save_notice = "劇本已更新，上次的續讀進度無法接續；舊檔已保留。"
 
 
 func _build_audio() -> void:
@@ -565,6 +620,7 @@ func _build_ui() -> void:
 	_effects.name = "StageEffects"
 	add_child(_effects)
 	_effects.setup([_bg_layer, _char_layer, _interaction_layer, _fx_layer, _dialog_layer], _overlay_layer, _catalog)
+	_effects.reduce_motion = int(_settings.get("motion", 0)) == 1
 	_comedy_layer.setup(_effects, [_bg_layer, _char_layer], _catalog, _comedy_speaker_rect, _comedy_dialog_rect)
 	_comedy_layer.finished.connect(_publish_qa_state)
 	_apply_audio_levels()
@@ -832,7 +888,7 @@ func _show_choice_sheet() -> void:
 		row.name = "Boke_" + option_id if _sheet_timed else "Choice_%d" % index
 		row.pressed.connect((_on_boke_option_pressed if _sheet_timed else _on_choice_pressed).bind(option_id))
 	if _sheet_timed:
-		_choice_sheet.set_timer(_boke_time_remaining, float(_current_command.get("timer_seconds", DEFAULT_BOKE_TIMER_SECONDS)),
+		_choice_sheet.set_timer(_boke_time_remaining, _timer_total(_current_command),
 			_screen_mode != "tsukkomi")
 	_choice_sheet.censor_bar.visible = _sheet_timed and _sheet_censor
 	_choice_sheet.super_button.visible = _sheet_timed and _sheet_super
@@ -981,6 +1037,7 @@ func _mount_settings() -> void:
 	_settings_panel = scene.instantiate() as Control
 	_game.add_child(_settings_panel)
 	_settings_panel.connect("changed", _on_setting_changed)
+	_settings_panel.connect("style_picked", _on_ui_style_selected)
 	_settings_panel.connect("closed", _close_settings)
 	if old == null:
 		return
@@ -1024,7 +1081,7 @@ func _refresh_title() -> void:
 	_refresh_story_switch()
 	_continue_button.disabled = not _has_valid_save()
 	_begin_button.disabled = not _story_ready
-	_title_screen.set_error(_story_error)
+	_title_screen.set_error(_story_error if not _story_error.is_empty() else _archived_save_notice)
 	_title_screen.set_active_style(_ui_style_id)
 	var exterior: String = str((_backgrounds.get("yorozuya_exterior", {}) as Dictionary).get("path", ""))
 	if not exterior.is_empty() and ResourceLoader.exists(exterior):
@@ -1260,6 +1317,7 @@ func _on_restart_pressed() -> void:
 
 
 func _start_new_story() -> void:
+	_archived_save_notice = ""
 	_round_stages.clear()
 	_rollback.clear()
 	_previous_power = 0
@@ -1896,7 +1954,7 @@ func _render_round_bar() -> void:
 func _present_tsukkomi_options(command: Dictionary, restored: bool) -> void:
 	_current_command = command.duplicate(true)
 	var round_id: String = _dict_string(command, "id")
-	var timer_seconds: float = float(command.get("timer_seconds", DEFAULT_BOKE_TIMER_SECONDS))
+	var timer_seconds: float = _timer_total(command)
 	if _boke_timer_round_id != round_id:
 		if restored and _restored_boke_timer_remaining >= 0.0:
 			_boke_time_remaining = clampf(_restored_boke_timer_remaining, 0.0, timer_seconds)
@@ -2016,7 +2074,14 @@ func _on_qte_resolved(tapped: bool, offset: float) -> void:
 	if _screen_mode != "qte" or _story_busy:
 		return
 	_close_qte()
+	offset = _judged_qte_offset(offset)
+	_last_qte_offset = offset
 	_round_action(func() -> Dictionary: return _runner.call("resolve_qte", tapped, offset), "", "qte")
+
+
+## The offset the runner judges: 吐槽輔助 寬鬆 widens the window by judging a proportionally smaller one.
+func _judged_qte_offset(offset: float) -> float:
+	return offset / SETTINGS_SCRIPT.ASSIST_QTE_WINDOW_FACTOR if int(_settings.get("assist", 0)) == 1 else offset
 
 
 func _close_qte() -> void:
@@ -2726,7 +2791,7 @@ func _process(delta: float) -> void:
 		return
 	if _screen_mode == "tsukkomi" and not _story_busy:
 		_boke_time_remaining = maxf(0.0, _boke_time_remaining - delta)
-		_choice_sheet.set_timer(_boke_time_remaining, float(_current_command.get("timer_seconds", DEFAULT_BOKE_TIMER_SECONDS)), false)
+		_choice_sheet.set_timer(_boke_time_remaining, _timer_total(_current_command), false)
 		var displayed_second: int = ceili(_boke_time_remaining)
 		if displayed_second != _last_boke_display_second:
 			_last_boke_display_second = displayed_second
@@ -2921,7 +2986,13 @@ func _refresh_slot_page() -> void:
 			preview.texture = null
 			time_label.text = ""
 			if occupied:
-				title_label.text = "資料無效或不相容" if _slot_mode == "load" else "無效資料・確認後覆寫"
+				var snapshot: Dictionary = _runner.call("snapshot") as Dictionary
+				var older: bool = not _other_version_of(_read_raw_save_payload(path), str(snapshot.get("story_id", "")),
+					str(snapshot.get("version", ""))).is_empty()
+				if _slot_mode == "load":
+					title_label.text = "舊版劇本的存檔（無法讀取）" if older else "資料無效或不相容"
+				else:
+					title_label.text = "舊版劇本的存檔・確認後覆寫" if older else "無效資料・確認後覆寫"
 			else:
 				title_label.text = "空白存檔位" if _slot_mode == "save" else "尚無存檔"
 		var card_role: String = "slot_card" if valid else ("slot_card_invalid" if occupied else "slot_card_empty")
@@ -3100,7 +3171,7 @@ func _refresh_phase3_hud() -> void:
 	if _command_op(current) == "boke_round" and _effective_boke_ui_mode() == "tsukkomi":
 		var prefix: String = "倒數" if _screen_mode == "tsukkomi" else "暫停"
 		_phase3_timer_label.text = "%s %02d 秒" % [prefix, ceili(_boke_time_remaining)]
-		_choice_sheet.set_timer(_boke_time_remaining, float(current.get("timer_seconds", DEFAULT_BOKE_TIMER_SECONDS)),
+		_choice_sheet.set_timer(_boke_time_remaining, _timer_total(current),
 			_screen_mode != "tsukkomi")
 	else:
 		_phase3_timer_label.text = ""
@@ -3377,7 +3448,9 @@ func _validate_save_payload(payload: Dictionary) -> bool:
 		if payload.has("boke_timer_remaining") and saved_boke_ui_mode != "tsukkomi":
 			return false
 	if payload.has("boke_timer_remaining"):
-		var max_remaining: float = float(probe_current.get("timer_seconds", DEFAULT_BOKE_TIMER_SECONDS))
+		# Saved with 吐槽輔助 寬鬆 the clock can hold more than the step's seconds; restore clamps it.
+		var max_remaining: float = float(probe_current.get("timer_seconds", DEFAULT_BOKE_TIMER_SECONDS)) * \
+			SETTINGS_SCRIPT.ASSIST_TIMER_FACTOR
 		if float(payload["boke_timer_remaining"]) > max_remaining:
 			return false
 	return true
@@ -3692,7 +3765,7 @@ func _write_qa_state() -> void:
 		"game_over_retry": _game_over_retry_button, "game_over_title": _game_over.title_button,
 		"result_next": _chapter_result.get("next_button"), "result_title": _chapter_result.get("title_button"),
 		"chapter_close": _chapter_select.get("close_button"), "settings_close": _settings_panel.get("close_button"),
-		"title_settings": _title_screen.settings_button,
+		"title_settings": _title_screen.settings_button, "story_switch": _title_screen.story_switch,
 		"censor": _choice_sheet.censor_bar if _choice_sheet.censor_bar.is_visible_in_tree() else _dialog_panel.censor_bar,
 		"super": _choice_sheet.super_button,
 	}
@@ -3815,6 +3888,11 @@ func _write_qa_state() -> void:
 		"skip": _skip,
 		"audio_muted": _audio_muted,
 		"result": _runner.call("chapter_result") if _screen_mode == "result" else {},
+		# Read from progress_path (and each story's JSON), so only on the screens that show it.
+		"cleared": _story_choices.map(func(choice: Dictionary) -> Dictionary:
+			return {"id": str(choice["id"]), "grade": _cleared_grade(str(choice["id"])), "endings": _ending_note(choice)})
+			if _screen_mode in ["title", "chapter_select", "result"] else [],
+		"ending_rows": _chapter_select.call("ending_rows") if _screen_mode == "chapter_select" else [],
 		"settings": _settings.duplicate(),
 		"ui_style": _ui_style_id,
 		"toast": _toast.text if _toast.visible else "",
@@ -3856,6 +3934,10 @@ func _write_qa_state() -> void:
 				"aura_active": _phase3_hud.glasses.get_children().any(func(icon: Node) -> bool: return bool(icon.get("charged")) and not bool(icon.get("broken"))),
 				"censor": RoundView.censor(current), "placard": RoundView.placard(current), "qte_active": _qte != null,
 				"qte_elapsed": _qte.call("elapsed") if _qte != null else 0.0,
+				# Browser clock (ms) at which the rings meet, so a route can aim a tap without polling lag.
+				"qte_meet_ms": Time.get_unix_time_from_system() * 1000.0 + (_qte.duration - float(_qte.call("elapsed"))) * 1000.0
+					if _qte != null else 0.0,
+				"last_qte_offset": _last_qte_offset,
 			},
 			"timer_remaining": _boke_time_remaining,
 			"timer_active": _command_op(current) == "boke_round" and _effective_boke_ui_mode() == "tsukkomi",

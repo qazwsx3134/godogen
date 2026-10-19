@@ -2,7 +2,7 @@
 
 目前已完成與待辦清單見[進度紀錄](../../docs/story-telling-game/STATUS.md)。
 
-介面提供「月下映畫／萬事屋委託簿／吐槽分鏡／銀魂和紙」四款風格，可在標題或遊戲選單切換並記住偏好。見[風格與驗證紀錄](docs/UI-REDESIGN-OPTIONS.md)及[互動比較頁](docs/ui-options/index.html)。
+介面提供「月下映畫／萬事屋委託簿／吐槽分鏡／銀魂和紙」四款風格，可在設定的「介面風格」或遊戲選單切換並記住偏好。見[風格與驗證紀錄](docs/UI-REDESIGN-OPTIONS.md)及[互動比較頁](docs/ui-options/index.html)。
 
 Godot 4.7 手機直立視覺小說，依 [V1 Roadmap](../../docs/story-telling-game/ROADMAP.md) 與 [gintama0923](../../docs/gintama-like/new/gintama0923.md) 製作。狀態：**Phase 1、Phase 2 與 Phase 3 技術短循環已完成自動驗收；Phase 4 的回合玩法（逐句槽點、第四面牆消音條與伊莉莎白的牌子、條件式放棄吐槽、連擊、QTE、超必殺、演出效果）與調查的對話／移動話題有可玩的技術試片與自動驗收**；第一章草稿 v0.2 已做成上機試讀版，作者試讀修訂與真人手機試玩待完成。
 
@@ -22,8 +22,8 @@ Godot 4.7 手機直立視覺小說，依 [V1 Roadmap](../../docs/story-telling-g
 | 長按畫面 | 隱藏全部 UI，再點一下恢復（恢復的那一下不推進） |
 | 往上滑 | 開啟對話紀錄 |
 | 目錄 | 開啟選單，切換風格、存讀檔、設定及其他閱讀功能 |
-| 章節選擇 | 標題上的故事名稱：本篇章節依序排列，前一章結算過才開放，顯示最佳評價；試玩片段一直開放。選了就回到標題，按「開始故事」或「繼續」 |
-| 設定 | 標題或目錄裡：文字速度（慢／標準／快／瞬間）、自動播放速度、背景音樂與音效音量、字級及紙框透明度，立刻生效並記住；目錄的「音效」開關仍可一鍵靜音 |
+| 章節選擇 | 標題上的故事名稱：本篇章節依序排列，前一章結算過才開放，顯示最佳評價；「結局收集」列出每章的結局，看過的顯示名稱、沒看過的是「？？？」；試玩片段一直開放。選了就回到標題，按「開始故事」或「繼續」 |
+| 設定 | 標題或目錄裡：文字速度（慢／標準／快／瞬間）、自動播放速度、背景音樂與音效音量、字級及紙框透明度、畫面效果（減少震動與閃光）、吐槽輔助（寬鬆：選詞時間 ×1.5、QTE 判定窗 ×2）與介面風格，立刻生效並記住；目錄的「音效」開關仍可一鍵靜音 |
 | 章節結算 | 章節最後：吐槽成功／出手、PERFECT、最高連擊、冷場、隱藏裝傻、剩下的眼鏡、Game Over 次數與評價（剩 5 副 S、4 副 A、3–2 副 B、1 副 C，每次 Game Over 降一級），依評價顯示一句話；「下一章」或「回標題」 |
 | 推進鈕（›／續／→） | 補完當句或推進劇情 |
 | 選單／標題讀檔 | 選擇指定手動欄位；讀檔頁也可選自動續讀檔 |
@@ -164,8 +164,8 @@ node tools/check_ui_parity.mjs --playwright /path/to/node_modules/@playwright/te
 | 舞台（背景取景、角色站位） | ✅ 已轉換 | `scenes/stage.tscn`（見下方「舞台」） |
 | 角色立繪 | ✅ 已轉換 | `scenes/characters/<角色>.tscn`（腳本 `scripts/placeholder_sprite.gd`），`tools/make_character_scenes.gd` 補建 |
 | 素材／人物檔案 | ✅ 已轉換 | `scenes/ui/case_file_panel.tscn`，卡片 `case_file_card.tscn` |
-| 標題畫面 | ✅ 已轉換 | `scenes/ui/title_screen_cinema.tscn`、`title_screen_ledger.tscn`、`title_screen_manga.tscn`、`title_screen_gintama.tscn`（腳本 `scripts/title_screen.gd`） |
-| 章節選擇、設定、章節結算 | ✅ 已轉換 | `scenes/ui/chapter_select.tscn`（每列 `chapter_row.tscn`）、`settings_panel.tscn`、`chapter_result.tscn`（四款共用；銀魂和紙另有 `settings_panel_gintama.tscn`、`chapter_result_gintama.tscn`） |
+| 標題畫面 | ✅ 已轉換 | `scenes/ui/title_screen_cinema.tscn`、`title_screen_ledger.tscn`、`title_screen_manga.tscn`、`title_screen_gintama.tscn`（腳本 `scripts/title_screen.gd`）；卡片裡的風格鈕列 `Styles` 在 scene 裡設為隱藏，打開 visible 就回到標題上 |
+| 章節選擇、設定、章節結算 | ✅ 已轉換 | `scenes/ui/chapter_select.tscn`（每列 `chapter_row.tscn`；「結局收集」`EndingsHeading`／`%Endings`，每列 `ending_row.tscn`）、`settings_panel.tscn`（最後三列 `Motion`、`Assist`、`UiStyle`，各自一個 ButtonGroup，按鈕文字與間距可在 scene 改）、`chapter_result.tscn`（四款共用；銀魂和紙另有 `settings_panel_gintama.tscn`、`chapter_result_gintama.tscn`） |
 | 素材圖片 | ✅ 已轉換 | `scenes/ui/item_picture.tscn`：catalog 有 `path` 就顯示圖，沒有就畫名稱第一個字的色卡；線索欄、素材卡與素材詳細都用它 |
 | 對話框與工具列 | ✅ 已轉換 | `scenes/ui/dialogue_box_cinema.tscn`、`dialogue_box_ledger.tscn`、`dialogue_box_manga.tscn`、`dialogue_box_gintama.tscn`（腳本 `scripts/dialogue_box.gd`） |
 | 目錄 | ✅ 已轉換 | `scenes/ui/menu_panel_cinema.tscn`、`menu_panel_ledger.tscn`、`menu_panel_manga.tscn`、`menu_panel_gintama.tscn`（腳本 `scripts/menu_panel.gd`），每列是 `menu_row_<風格>.tscn` |

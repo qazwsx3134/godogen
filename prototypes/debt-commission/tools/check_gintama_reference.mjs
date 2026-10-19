@@ -24,7 +24,7 @@ for(const viewport of [{width:720,height:1280},{width:390,height:844},{width:320
  const tap=async name=>{const s=await state();const r=s.controls[name];assert.ok(r,name);const c=await page.locator('canvas').boundingBox();await page.touchscreen.tap(c.x+(r.x+r.width/2)/s.viewport.width*c.width,c.y+(r.y+r.height/2)/s.viewport.height*c.height);await page.waitForTimeout(250);};
  await page.goto(url.toString());
  await page.waitForFunction(()=>window.__debtQA?.screen==='title',null,{timeout:120000});
- await tap('title_style_gintama');await tap('begin');
+ assert.equal((await state()).ui_style,'gintama','a new install opens in 銀魂和紙');await tap('begin');
  await page.waitForFunction(()=>window.__debtQA?.screen==='story'&&window.__debtQA.text_complete,null,{timeout:30000});
  let s=await state();assert.equal(s.full_text,'今天也完全沒有工作啊。');
  await page.screenshot({path:`${output}/${viewport.width}x${viewport.height}.png`});

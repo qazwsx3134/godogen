@@ -23,6 +23,8 @@ void fragment() {
 
 ## The music id playing now ("" = none); saves keep it.
 var current_bgm: String = ""
+## 設定 畫面效果 減少: shakes move a fifth as far and flashes start at a third of their brightness.
+var reduce_motion: bool = false
 
 var _shake_layers: Array[Control] = []
 var _overlay: Control = null
@@ -201,6 +203,8 @@ func _shake(strength: float, duration: float) -> void:
 	if _shake_tween != null and _shake_tween.is_valid():
 		_shake_tween.kill()
 	_shake_tween = create_tween()
+	if reduce_motion:
+		strength *= 0.2
 	var steps: int = maxi(4, int(duration / 0.035))
 	for index: int in range(steps):
 		var fade: float = 1.0 - float(index) / steps
@@ -237,7 +241,7 @@ func _flash(color: Color, duration: float) -> void:
 	var rect: ColorRect = _full_rect(ColorRect.new())
 	rect.color = color
 	var tween: Tween = rect.create_tween()
-	tween.tween_property(rect, "modulate:a", 0.0, duration).from(0.85)
+	tween.tween_property(rect, "modulate:a", 0.0, duration).from(0.28 if reduce_motion else 0.85)
 	tween.tween_callback(rect.queue_free)
 
 

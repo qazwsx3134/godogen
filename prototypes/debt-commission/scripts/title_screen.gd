@@ -1,7 +1,8 @@
 extends Control
 ## Title screen, one scene per UI edition: scenes/ui/title_screen_<style>.tscn. The
 ## story's exterior photo under the edition's wash, and a card at the bottom: which sample story
-## (tap for 章節選擇), the game title, 開始故事 / 繼續 / 讀取存檔・設定 and the edition picker.
+## (tap for 章節選擇), the game title and 開始故事 / 繼續 / 讀取存檔・設定. The scene keeps an edition
+## picker (Styles) hidden: players pick the edition in 設定's 介面風格 or in 目錄.
 
 signal begin_pressed
 signal continue_pressed

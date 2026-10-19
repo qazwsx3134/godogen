@@ -2,7 +2,7 @@ extends "res://addons/proto_kit/test_kit.gd"
 ## Phase 5 chapter flow on a two-chapter fixture registry: the `result` step shows the chapter
 ## result (numbers, grade from the glasses left, each Game Over one grade lower, the grade's
 ## closing line), glasses carry across rounds, the best grade is kept, clearing a chapter unlocks
-## the next, and 下一章 starts it.
+## the next, 下一章 starts it, and 結局收集 lists the endings reached.
 
 const REGISTRY: String = "res://tests/fixtures/stories_chapters.json"
 const PROGRESS: String = "user://chapter_flow_test_progress.cfg"
@@ -45,6 +45,11 @@ func _run() -> void:
 	_expect(progress.get_value("endings", "chapter_a", []) == ["a_clear"] and progress.get_value("carry", "chapter_a", {}) == {"cold_takes": 1.0},
 		"the result records its ending and carries the one cold take: %s" % [progress.get_value("carry", "chapter_a", {})])
 	_expect(game._ending_note(game._story_choices[0]) == "結局 1/2", "chapter select counts 1 of 2 endings")
+	game._chapter_select.call("open", [], game._chapter_endings())
+	var rows: Array = game._chapter_select.call("ending_rows")
+	_expect(rows == ["測試章 A｜～ 測試章 A 完 ～", "測試章 A｜？？？", "測試章 B｜？？？"],
+		"結局收集 names the seen ending and hides the others: %s" % [rows])
+	game._chapter_select.visible = false
 	_expect(game._runner.call("advance").get("op", "") == "result", "the result is the end of the chapter")
 	game._choose_story(game._story_choices[0])
 	_expect(game._runner.flags["cold_takes"] == 0, "replaying chapter A does not import its own carry")
@@ -74,6 +79,8 @@ func _run() -> void:
 		"chapter B plays in its own save with the result closed")
 	_expect(game._next_chapter().is_empty(), "the last chapter has no 下一章")
 	_expect(game._ending_note(game._story_choices[1]) == "結局 1/1", "chapter B's end is recorded under chapter B")
+	_expect(game._chapter_endings().all(func(ending: Dictionary) -> bool: return ending["seen"]),
+		"結局收集 is complete once every ending was reached")
 	_expect(game._runner.flags["cold_takes"] == 0 and game._previous_chapter_carry() == {"cold_takes": 0.0},
 		"chapter B starts from chapter A's carried value: %s %s" % [game._runner.flags, game._previous_chapter_carry()])
 

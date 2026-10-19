@@ -1284,7 +1284,7 @@ text = "▇▇▇▇"
 [node name="RoundBar" type="HBoxContainer" parent="PaperAndToolbar/Panel/Padding/Column/Actions/RoundControls" unique_id=1130762068]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/separation = 17
+theme_override_constants/separation = 10
 
 [node name="BokePrevious" type="Button" parent="PaperAndToolbar/Panel/Padding/Column/Actions/RoundControls/RoundBar" unique_id=2001773855]
 unique_name_in_owner = true

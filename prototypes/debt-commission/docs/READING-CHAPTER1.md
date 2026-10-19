@@ -32,7 +32,7 @@
 - `test_reading_convenience.gd`／`test_reading_scenes.gd`：回滾狀態與互動邊界、快速格備份／隔離、字級與紙底 alpha、scene 序列化與編輯器保留。
 - 29 組引擎測試全數通過，見 [測試報告](reading-chapter1-tests.json)。原有全部測試一併回歸。舊測試明確指定 cinema，避免把「新安裝預設」當成固定 cinema；手勢測試先捲動讓選單列進入視窗再點按，保留真實輸入斷言。首次 headless 回合 UI 測試曾遇 Godot 4.7 原生 signal 11，單獨重跑通過。
 - `check_gintama_reference.mjs`：720×1280、390×844、320×568 的參考台詞及 LOG／AUTO／SKIP／MENU 實點。
-- `check_reading_chapter1.mjs`：390×844／320×568 真實觸控新閱讀入口，已通過調查、牌子、超必殺及 C5 文字完成後才進 QTE；最後的自動精準點按未能建立 perfect 時序，Web 到結算需再覆驗，見 [實點報告](reading-chapter1-web.json)。QA 只讀狀態，不注入遊戲流程。熱區驗證修正了廚房返回後角色熱區未重建、沙發線索被底列遮住。
+- `check_reading_chapter1.mjs`：390×844／320×568 真實觸控新閱讀入口，已通過調查、牌子、超必殺及 C5 文字完成後才進 QTE；C5 先走一次過早、一次過晚（各回到 C5），再依 QA 的 `qte_meet_ms` 對準兩圈重合點擊（實測偏差 +0.02～+0.05 秒，判定窗 ±0.12），接著選「自己去拿」到結算，評價依剩下的眼鏡核對，重新整理後章節選擇仍有評價與結局；2026-10-19 最終版本兩尺寸連續 3 次通過（一次 320 寬第一下因軟體渲染延遲偏差 0.433 秒，重試命中）。QA 只讀狀態，不注入遊戲流程。熱區驗證修正了廚房返回後角色熱區未重建、沙發線索被底列遮住。
 
 實際畫面：[390 設定](chapter1-390-settings.png)、[320 存檔欄位](chapter1-320-save.png)、[320 牌子](chapter1-320-placard.png)。
 

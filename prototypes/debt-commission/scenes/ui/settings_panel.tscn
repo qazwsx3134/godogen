@@ -289,3 +289,97 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 36
 text = "100%"
+
+[node name="MotionLabel" type="Label" parent="Margins/Layout/SettingsScroll/Rows" unique_id=841126918]
+layout_mode = 2
+theme_override_font_sizes/font_size = 44
+text = "畫面效果"
+
+[node name="Motion" type="HBoxContainer" parent="Margins/Layout/SettingsScroll/Rows" unique_id=205672127]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Motion0" type="Button" parent="Margins/Layout/SettingsScroll/Rows/Motion" unique_id=353332909]
+custom_minimum_size = Vector2(0, 133)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 36
+text = "標準"
+autowrap_mode = 3
+
+[node name="Motion1" type="Button" parent="Margins/Layout/SettingsScroll/Rows/Motion" unique_id=1195994962]
+custom_minimum_size = Vector2(0, 133)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 36
+text = "減少震動與閃光"
+autowrap_mode = 3
+
+[node name="AssistLabel" type="Label" parent="Margins/Layout/SettingsScroll/Rows" unique_id=823132003]
+layout_mode = 2
+theme_override_font_sizes/font_size = 44
+text = "吐槽輔助"
+
+[node name="Assist" type="HBoxContainer" parent="Margins/Layout/SettingsScroll/Rows" unique_id=726726700]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Assist0" type="Button" parent="Margins/Layout/SettingsScroll/Rows/Assist" unique_id=880206502]
+custom_minimum_size = Vector2(0, 133)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 36
+text = "標準"
+autowrap_mode = 3
+
+[node name="Assist1" type="Button" parent="Margins/Layout/SettingsScroll/Rows/Assist" unique_id=1739376229]
+custom_minimum_size = Vector2(0, 133)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 36
+text = "寬鬆"
+autowrap_mode = 3
+
+[node name="UiStyleLabel" type="Label" parent="Margins/Layout/SettingsScroll/Rows" unique_id=1714654009]
+layout_mode = 2
+theme_override_font_sizes/font_size = 44
+text = "介面風格"
+
+[node name="UiStyle" type="HBoxContainer" parent="Margins/Layout/SettingsScroll/Rows" unique_id=2111860410]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="UiStyle0" type="Button" parent="Margins/Layout/SettingsScroll/Rows/UiStyle" unique_id=606627495]
+custom_minimum_size = Vector2(0, 133)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 36
+text = "映畫"
+autowrap_mode = 3
+
+[node name="UiStyle1" type="Button" parent="Margins/Layout/SettingsScroll/Rows/UiStyle" unique_id=535324477]
+custom_minimum_size = Vector2(0, 133)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 36
+text = "委託簿"
+autowrap_mode = 3
+
+[node name="UiStyle2" type="Button" parent="Margins/Layout/SettingsScroll/Rows/UiStyle" unique_id=1867928928]
+custom_minimum_size = Vector2(0, 133)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 36
+text = "分鏡"
+autowrap_mode = 3
+
+[node name="UiStyle3" type="Button" parent="Margins/Layout/SettingsScroll/Rows/UiStyle" unique_id=1779092486]
+custom_minimum_size = Vector2(0, 133)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 36
+text = "銀魂和紙"
+autowrap_mode = 3

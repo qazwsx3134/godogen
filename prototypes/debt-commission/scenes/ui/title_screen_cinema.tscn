@@ -318,7 +318,7 @@ offset_right = 38.769234
 offset_bottom = 38.769234
 theme_override_colors/font_color = Color(0.96862745, 0.95686275, 0.9098039, 1)
 theme_override_font_sizes/font_size = 33
-text = "v0.5 · Phase 4"
+text = "v0.5"
 
 [node name="CardArea" type="MarginContainer" parent="." unique_id=1443819218]
 unique_name_in_owner = true
@@ -510,11 +510,13 @@ theme_override_styles/focus = SubResource("StyleBoxFlat_vm5gp")
 text = "設定"
 
 [node name="StylesGap" type="Control" parent="CardArea/Card/Padding/Column" unique_id=315625865]
+visible = false
 custom_minimum_size = Vector2(0, 22.153847)
 layout_mode = 2
 mouse_filter = 2
 
 [node name="Styles" type="GridContainer" parent="CardArea/Card/Padding/Column" unique_id=686090057]
+visible = false
 layout_mode = 2
 theme_override_constants/h_separation = 8
 theme_override_constants/v_separation = 6

@@ -7,6 +7,8 @@ const DEBT_SAVE: String = "user://save_slots_test_debt.save"
 const PHASE2_SAVE: String = "user://save_slots_test_phase2.save"
 const LEGACY_SAVE: String = "user://save_slots_test_legacy.save"
 const ATOMIC_SAVE: String = "user://save_slots_test_atomic.save"
+const OLD_STRUCTURE_SAVE: String = "user://save_slots_test_old_structure.save"
+const OLD_VERSION: String = "s-oldstructure"
 
 
 func _init() -> void:
@@ -18,6 +20,7 @@ func _run() -> void:
 	_test_atomic_backup_refresh()
 	await _test_manual_slots_and_autosave()
 	await _test_legacy_schema_three()
+	await _test_older_story_structure()
 	await _test_phase2_isolation()
 	_cleanup_all()
 	_finish("SAVE SLOT TESTS")
@@ -211,6 +214,40 @@ func _test_phase2_isolation() -> void:
 	await _frames(2)
 
 
+## A save made before the story's structure changed (another `version`): the autosave is set aside
+## under its old version instead of being overwritten, the title says so, and manual slots say why
+## they cannot load.
+func _test_older_story_structure() -> void:
+	var source: Control = _new_game("res://data/debt_story.json", DEBT_SAVE)
+	await _frames(2)
+	var payload: Dictionary = source._read_save_payload(SAVE_SLOTS_SCRIPT.manual_path(DEBT_SAVE, 1))
+	source.queue_free()
+	await _frames(2)
+	_expect(not payload.is_empty(), "a manual snapshot is available for the older-structure fixture")
+	if payload.is_empty():
+		return
+	(payload["runner"] as Dictionary)["version"] = OLD_VERSION
+	_expect(bool(SAVE_SLOTS_SCRIPT.write_atomic(OLD_STRUCTURE_SAVE, payload)) and
+		bool(SAVE_SLOTS_SCRIPT.write_atomic(SAVE_SLOTS_SCRIPT.manual_path(OLD_STRUCTURE_SAVE, 1), payload)),
+		"older-structure autosave and manual slot write")
+	var game: Control = _new_game("res://data/debt_story.json", OLD_STRUCTURE_SAVE)
+	await _frames(3)
+	_expect(not FileAccess.file_exists(OLD_STRUCTURE_SAVE) and FileAccess.file_exists(OLD_STRUCTURE_SAVE + "." + OLD_VERSION),
+		"the older autosave is kept under its old version")
+	_expect(game._continue_button.disabled and game._title_screen.error_label.visible
+		and game._title_screen.error_label.text.contains("舊檔已保留"), "the title says why 繼續 is unavailable")
+	await _open_picker(game, "load")
+	_expect((game._slot_card_titles[0] as Label).text == "舊版劇本的存檔（無法讀取）" and (game._slot_card_buttons[0] as Button).disabled,
+		"the manual slot from the older structure says so and cannot load: %s" % (game._slot_card_titles[0] as Label).text)
+	game._close_slot_picker()
+	game._on_begin_pressed()
+	await _until(func() -> bool: return game._screen_mode == "story", "new story after the notice")
+	_expect(game._archived_save_notice.is_empty() and FileAccess.file_exists(OLD_STRUCTURE_SAVE + "." + OLD_VERSION),
+		"starting over clears the notice and leaves the kept file alone")
+	game.queue_free()
+	await _frames(2)
+
+
 func _new_game(story: String, save: String) -> Control:
 	var game: Control = MAIN_SCENE.instantiate() as Control
 	game.story_path = story
@@ -225,8 +262,8 @@ func _open_picker(game: Control, mode: String) -> void:
 
 
 func _cleanup_all() -> void:
-	for path: String in [DEBT_SAVE, PHASE2_SAVE, LEGACY_SAVE, ATOMIC_SAVE]:
-		for suffix: String in ["", ".bak", ".old", ".tmp", ".bak.tmp", ".bak.old"]:
+	for path: String in [DEBT_SAVE, PHASE2_SAVE, LEGACY_SAVE, ATOMIC_SAVE, OLD_STRUCTURE_SAVE]:
+		for suffix: String in ["", ".bak", ".old", ".tmp", ".bak.tmp", ".bak.old", "." + OLD_VERSION, "." + OLD_VERSION + ".bak"]:
 			_remove(path + suffix)
 		for slot_index: int in range(1, SAVE_SLOTS_SCRIPT.SLOT_COUNT + 1):
 			var slot_path: String = SAVE_SLOTS_SCRIPT.manual_path(path, slot_index)

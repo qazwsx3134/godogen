@@ -4,9 +4,11 @@ extends "res://addons/proto_kit/test_kit.gd"
 ## reach the players (目錄's 音效 switch still silences everything).
 
 const SETTINGS_PATH: String = "user://settings_test.cfg"
+const BLOCKER: String = "user://settings_test_blocker"
 const SAVE: String = "user://settings_test.save"
 const UI: String = "user://settings_test_ui.cfg"
 const Settings = preload("res://scripts/settings.gd")
+const Round = preload("res://scripts/tsukkomi_round.gd")
 
 
 func _init() -> void:
@@ -21,15 +23,31 @@ func _run() -> void:
 		"defaults keep the old text speed and full volume")
 	await _press(game._title_screen.settings_button)
 	var buttons: Dictionary = game._settings_panel.call("buttons")
-	_expect(game._screen_mode == "settings" and game._settings_panel.visible and buttons.size() == 4 + 3 + 5 + 5 + 3 + 3,
+	_expect(game._screen_mode == "settings" and game._settings_panel.visible and buttons.size() == 4 + 3 + 5 + 5 + 3 + 3 + 2 + 2 + 4,
 		"設定 opens from the title with every choice")
 	await _press(buttons["text_speed_3"])
 	await _press(buttons["bgm_volume_2"])
 	await _press(buttons["se_volume_0"])
 	_expect(game._settings["text_speed"] == 3 and is_equal_approx(game._effects._bgm_level, 0.5)
 		and game._effects._se_level == 0.0, "choices apply at once")
+	await _press(buttons["motion_1"])
+	await _press(buttons["assist_1"])
+	_expect(game._effects.reduce_motion and is_equal_approx(game._timer_total({"timer_seconds": 8.0}), 12.0)
+		and (buttons["paper_opacity_2"] as Button).button_pressed == (game._settings_panel.paint_from_style == false),
+		"畫面效果 減少 tones down effects, 吐槽輔助 寬鬆 gives the timed choice half again, other rows keep their pick")
 	var saved: Dictionary = Settings.load_settings(SETTINGS_PATH)
-	_expect(saved["text_speed"] == 3 and saved["bgm_volume"] == 2 and saved["se_volume"] == 0, "choices persist")
+	_expect(saved["text_speed"] == 3 and saved["bgm_volume"] == 2 and saved["se_volume"] == 0
+		and saved["motion"] == 1 and saved["assist"] == 1, "choices persist")
+	_expect(not FileAccess.file_exists(SETTINGS_PATH + ".tmp"), "the settings file is committed whole, no .tmp left")
+	var window: Dictionary = {"window": 0.12}
+	_expect(Round.judge_qte(window, true, game._judged_qte_offset(0.2)) == "perfect"
+		and Round.judge_qte(window, true, game._judged_qte_offset(-0.2)) == "perfect"
+		and Round.judge_qte(window, true, game._judged_qte_offset(0.3)) == "late",
+		"寬鬆 judges a tap 0.2 s off as perfect (window ×2) and 0.3 s off as late")
+	await _press(buttons["assist_0"])
+	await _press(buttons["motion_0"])
+	_expect(Round.judge_qte(window, true, game._judged_qte_offset(0.2)) == "late" and not game._effects.reduce_motion,
+		"標準 judges the same tap late again, and effects are back to full")
 	await _press(game._settings_panel.close_button)
 	_expect(game._screen_mode == "title" and not game._settings_panel.visible, "closing returns to the title")
 
@@ -52,6 +70,13 @@ func _run() -> void:
 	await _frames(3)
 	_expect(reopened._settings["bgm_volume"] == 2 and reopened._settings["text_speed"] == 1
 		and is_equal_approx(reopened._effects._bgm_level, 0.5), "settings come back on the next run")
+	var blocker: FileAccess = FileAccess.open(BLOCKER, FileAccess.WRITE)  # a file where a folder would go
+	blocker.close()
+	reopened.settings_path = BLOCKER + "/settings.cfg"
+	reopened._on_setting_changed("motion", 1)
+	_expect(reopened._toast.visible and reopened._toast.text.contains("無法儲存") and reopened._effects.reduce_motion,
+		"a settings file that cannot be written says so and still applies the choice: %s" % reopened._toast.text)
+	reopened.settings_path = SETTINGS_PATH
 	reopened._audio_muted = false
 	reopened._settings["se_volume"] = 4
 	reopened._apply_audio_levels()
@@ -75,7 +100,7 @@ func _new_game() -> Control:
 
 
 func _cleanup() -> void:
-	for path: String in [SETTINGS_PATH, SAVE, UI]:
+	for path: String in [SETTINGS_PATH, SAVE, UI, BLOCKER]:
 		for suffix: String in ["", ".bak", ".old", ".tmp", ".bak.tmp"]:
 			if FileAccess.file_exists(path + suffix):
 				DirAccess.remove_absolute(ProjectSettings.globalize_path(path + suffix))

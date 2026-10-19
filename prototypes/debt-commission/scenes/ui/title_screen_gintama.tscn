@@ -850,7 +850,7 @@ theme_override_font_sizes/font_size = 33
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
-text = "v0.5 · Phase 4"
+text = "v0.5"
 
 [node name="CardArea" type="MarginContainer" parent="." unique_id=1909849087]
 unique_name_in_owner = true
@@ -1046,11 +1046,13 @@ theme_override_font_sizes/font_size = 44
 text = "設定"
 
 [node name="StylesGap" type="Control" parent="CardArea/Card/Padding/Column" unique_id=1350424130]
+visible = false
 custom_minimum_size = Vector2(0, 22.153847)
 layout_mode = 2
 mouse_filter = 2
 
 [node name="Styles" type="GridContainer" parent="CardArea/Card/Padding/Column" unique_id=152260923]
+visible = false
 layout_mode = 2
 theme_override_constants/h_separation = 8
 theme_override_constants/v_separation = 6

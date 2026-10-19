@@ -92,6 +92,7 @@ border_width_bottom = 6
 border_color = Color(1, 0.8627451, 0.25490198, 1)
 
 [node name="GameOver" type="Control" unique_id=1805148464]
+z_index = 2
 layout_mode = 3
 anchors_preset = 0
 anchor_right = 1.0

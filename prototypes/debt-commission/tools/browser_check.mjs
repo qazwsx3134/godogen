@@ -29,6 +29,7 @@ else if (comedyOnly) url.searchParams.set('sample', 'comedy');
 else if (choicesOnly) url.searchParams.set('sample', 'choices');
 else if (ep00Only) url.searchParams.set('sample', 'ep00');
 else if (phase2Only || slotsOnly) url.searchParams.set('sample', 'phase2');
+else url.searchParams.set('sample', 'debt');  // the default routes read the debt baseline; the bare URL opens chapter 1
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const output = path.join(root, 'test-results');
 const docs = path.join(root, 'docs');
@@ -74,7 +75,15 @@ async function tapAt(page, view, point, touch) {
 }
 
 async function control(page, name, touch) {
-  const current = await state(page);
+  let current = await state(page);
+  // A row below the fold of a scrolling panel (目錄, 設定) is wheeled into view first.
+  for (let i = 0; i < 12 && !current.controls[name] && ['menu', 'settings'].includes(current.screen); i++) {
+    const css = page.viewportSize();
+    await page.mouse.move(css.width * 0.5, css.height * 0.55);
+    await page.mouse.wheel(0, 240);
+    await page.waitForTimeout(150);
+    current = await state(page);
+  }
   assert.ok(current.controls[name], `Control ${name} is available on ${current.screen}`);
   assertInside(current.controls[name], current.viewport, name);
   await tapAt(page, current.viewport, center(current.controls[name]), touch);

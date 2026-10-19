@@ -259,14 +259,23 @@ async function advanceUntilTarget(page) {
   throw new Error('Could not reach ' + targetNode + ' with the approved comparison text in 80 advances');
 }
 
+// The title card has no edition picker: 設定 → 介面風格 switches it, then 設定 closes back to the title.
 async function clickStyleOnTitle(page, style) {
-  const value = await readState(page);
-  const control = getControl(value,
-    ['style_' + style, 'title_style_' + style, 'ui_style_' + style],
-    'title style ' + style);
-  await tapRect(page, value.viewport, control.rect);
+  if ((await readState(page)).ui_style === style) return;
+  await tapControl(page, ['title_settings'], 'title 設定');
+  await page.waitForFunction(() => window.__debtQA?.screen === 'settings', null, { timeout: 10000 });
+  // 介面風格 is the last row: wheel the settings list until its button is on screen.
+  for (let i = 0; i < 16 && !(await readState(page)).controls?.['setting_ui_style_' + style]; i++) {
+    const viewport = page.viewportSize();
+    await page.mouse.move(viewport.width * 0.5, viewport.height * 0.55);
+    await page.mouse.wheel(0, 240);
+    await page.waitForTimeout(150);
+  }
+  await tapControl(page, ['setting_ui_style_' + style], '設定 style ' + style);
   await page.waitForFunction(expected => window.__debtQA?.ui_style === expected, style,
     { timeout: 10000 });
+  await tapControl(page, ['settings_close'], '設定 close');
+  await page.waitForFunction(() => window.__debtQA?.screen === 'title', null, { timeout: 10000 });
 }
 
 async function createGamePage(viewport, style, run) {
