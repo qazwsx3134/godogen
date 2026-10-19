@@ -1,0 +1,680 @@
+{
+  "identity_reference": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/madara/candidate-03.png",
+  "identity_sha256": "c412017550dbd3ee2cacc0589e6cf388faec45b60f285b4871600eff88d84a0f",
+  "approved": false,
+  "visual_review": "14 final candidate stills and final contact sheet inspected; anatomical stride ambiguity and perspective deviations recorded in REPORT.md",
+  "candidates": [
+    {
+      "pose": "idle",
+      "take": 1,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/idle/candidate-01.png",
+      "source": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/idle/takes/take-01/generated.png",
+      "source_run": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/idle",
+      "method": "generate",
+      "route": "local:codex-cli",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "sha256": "87a5ecf3691d1d4edcfc375be4347d77cc94d05c28f453bcba3bd11930da9bca",
+      "size": [
+        1254,
+        1254
+      ],
+      "bbox": [
+        312,
+        61,
+        941,
+        1208
+      ],
+      "mirrored": false,
+      "matte": {
+        "requested": "soft",
+        "key_estimate": {
+          "key": [
+            3.0,
+            248.0,
+            3.0
+          ],
+          "source": "border_median",
+          "valid": true,
+          "ring_share": 1.0,
+          "coverage": 0.7410074046941335,
+          "distance_from_declared": 8.19
+        },
+        "quality": "soft",
+        "interior_despill": true,
+        "qa": {
+          "opaque_key_px": 0,
+          "outer_ring_spill_fraction": 0.0,
+          "semitransparent_fraction": 0.019662603962487535,
+          "enclosed_key_pockets": 0,
+          "key_hued_px": 0,
+          "visible_px": 407118
+        }
+      }
+    },
+    {
+      "pose": "idle",
+      "take": 2,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/idle/candidate-02.png",
+      "source": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/idle/takes/take-02/generated.png",
+      "source_run": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/idle",
+      "method": "generate",
+      "route": "local:codex-cli",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "sha256": "536db45075e808ca6219ecf168c994c57bcb1829fecdd09be6bf3929cf2c06aa",
+      "size": [
+        1254,
+        1254
+      ],
+      "bbox": [
+        337,
+        94,
+        885,
+        1158
+      ],
+      "mirrored": false,
+      "matte": {
+        "requested": "soft",
+        "key_estimate": {
+          "key": [
+            4.0,
+            248.0,
+            6.0
+          ],
+          "source": "border_median",
+          "valid": true,
+          "ring_share": 1.0,
+          "coverage": 0.7816912514721631,
+          "distance_from_declared": 10.05
+        },
+        "quality": "soft",
+        "interior_despill": true,
+        "qa": {
+          "opaque_key_px": 0,
+          "outer_ring_spill_fraction": 0.0,
+          "semitransparent_fraction": 0.020841711398248038,
+          "enclosed_key_pockets": 0,
+          "key_hued_px": 0,
+          "visible_px": 343158
+        }
+      }
+    },
+    {
+      "pose": "run-a",
+      "take": 1,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/run-a/candidate-01.png",
+      "source": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/run-a/takes/take-01/generated.png",
+      "source_run": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/run-a",
+      "method": "generate",
+      "route": "local:codex-cli",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "sha256": "c0c8df55545851116ab4aff85ee24affb3d3b7c61b86eb1b47bab7da2efec9ec",
+      "size": [
+        1254,
+        1254
+      ],
+      "bbox": [
+        84,
+        126,
+        1087,
+        1111
+      ],
+      "mirrored": false,
+      "matte": {
+        "requested": "soft",
+        "key_estimate": {
+          "key": [
+            3.0,
+            248.0,
+            3.0
+          ],
+          "source": "border_median",
+          "valid": true,
+          "ring_share": 1.0,
+          "coverage": 0.72404605104177,
+          "distance_from_declared": 8.19
+        },
+        "quality": "soft",
+        "interior_despill": true,
+        "qa": {
+          "opaque_key_px": 0,
+          "outer_ring_spill_fraction": 0.0,
+          "semitransparent_fraction": 0.021027832717850838,
+          "enclosed_key_pockets": 0,
+          "key_hued_px": 0,
+          "visible_px": 433806
+        }
+      }
+    },
+    {
+      "pose": "run-a",
+      "take": 2,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/run-a/candidate-02.png",
+      "source": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/run-a/takes/take-02/generated.png",
+      "source_run": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/run-a",
+      "method": "generate",
+      "route": "local:codex-cli",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "sha256": "cdc5ef15092dacc9fd71a12c71e6b302754fbcb071c2e9b2a3d2a7e716c994ab",
+      "size": [
+        1254,
+        1254
+      ],
+      "bbox": [
+        158,
+        135,
+        1065,
+        1130
+      ],
+      "mirrored": false,
+      "matte": {
+        "requested": "soft",
+        "key_estimate": {
+          "key": [
+            3.0,
+            248.0,
+            2.0
+          ],
+          "source": "border_median",
+          "valid": true,
+          "ring_share": 1.0,
+          "coverage": 0.7558091618781622,
+          "distance_from_declared": 7.87
+        },
+        "quality": "soft",
+        "interior_despill": true,
+        "qa": {
+          "opaque_key_px": 0,
+          "outer_ring_spill_fraction": 0.0,
+          "semitransparent_fraction": 0.02192308293516603,
+          "enclosed_key_pockets": 0,
+          "key_hued_px": 0,
+          "visible_px": 383842
+        }
+      }
+    },
+    {
+      "pose": "run-b",
+      "take": 1,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/run-b/candidate-01.png",
+      "source": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/fixes/run-b-high-knee/takes/take-01/generated.png",
+      "source_run": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/fixes/run-b-high-knee",
+      "method": "generate",
+      "route": "local:codex-cli",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "sha256": "7ab13a545dd50320b3b6e135fdcc619eb1cbb4c298bbaf0f3384b487aed57c1a",
+      "size": [
+        1254,
+        1254
+      ],
+      "bbox": [
+        90,
+        170,
+        1081,
+        970
+      ],
+      "mirrored": false,
+      "matte": {
+        "requested": "soft",
+        "key_estimate": {
+          "key": [
+            3.0,
+            248.0,
+            4.0
+          ],
+          "source": "border_median",
+          "valid": true,
+          "ring_share": 1.0,
+          "coverage": 0.7617722172620183,
+          "distance_from_declared": 8.6
+        },
+        "quality": "soft",
+        "interior_despill": true,
+        "qa": {
+          "opaque_key_px": 0,
+          "outer_ring_spill_fraction": 0.0,
+          "semitransparent_fraction": 0.02018259938421442,
+          "enclosed_key_pockets": 0,
+          "key_hued_px": 0,
+          "visible_px": 374481
+        }
+      }
+    },
+    {
+      "pose": "run-b",
+      "take": 2,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/run-b/candidate-02.png",
+      "source": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/fixes/run-b-high-knee/takes/take-02/generated.png",
+      "source_run": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/fixes/run-b-high-knee",
+      "method": "generate",
+      "route": "local:codex-cli",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "sha256": "98f5cc6038a0d5bdaa3f7b96cf873bfd468a4198e47a03af5cf87381f1f11eaf",
+      "size": [
+        1254,
+        1254
+      ],
+      "bbox": [
+        70,
+        162,
+        1184,
+        979
+      ],
+      "mirrored": false,
+      "matte": {
+        "requested": "soft",
+        "key_estimate": {
+          "key": [
+            3.0,
+            248.0,
+            3.0
+          ],
+          "source": "border_median",
+          "valid": true,
+          "ring_share": 1.0,
+          "coverage": 0.7336911039378932,
+          "distance_from_declared": 8.19
+        },
+        "quality": "soft",
+        "interior_despill": true,
+        "qa": {
+          "opaque_key_px": 0,
+          "outer_ring_spill_fraction": 0.0,
+          "semitransparent_fraction": 0.02053364546258032,
+          "enclosed_key_pockets": 0,
+          "key_hued_px": 0,
+          "visible_px": 418630
+        }
+      }
+    },
+    {
+      "pose": "punch",
+      "take": 1,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/punch/candidate-01.png",
+      "source": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/punch/takes/take-01/generated.png",
+      "source_run": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/punch",
+      "method": "generate",
+      "route": "local:codex-cli",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "sha256": "9acf316997779549be2c9c7aa7174d1b50ef250ae8b02b5c540851495e0dd1c2",
+      "size": [
+        1254,
+        1254
+      ],
+      "bbox": [
+        37,
+        138,
+        1216,
+        1121
+      ],
+      "mirrored": false,
+      "matte": {
+        "requested": "soft",
+        "key_estimate": {
+          "key": [
+            3.0,
+            248.0,
+            4.0
+          ],
+          "source": "border_median",
+          "valid": true,
+          "ring_share": 1.0,
+          "coverage": 0.7149784167537881,
+          "distance_from_declared": 8.6
+        },
+        "quality": "soft",
+        "interior_despill": true,
+        "qa": {
+          "opaque_key_px": 0,
+          "outer_ring_spill_fraction": 0.0,
+          "semitransparent_fraction": 0.020752796650269176,
+          "enclosed_key_pockets": 0,
+          "key_hued_px": 0,
+          "visible_px": 448036
+        }
+      }
+    },
+    {
+      "pose": "punch",
+      "take": 2,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/punch/candidate-02.png",
+      "source": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/punch/takes/take-02/generated.png",
+      "source_run": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/punch",
+      "method": "generate",
+      "route": "local:codex-cli",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "sha256": "4ee7f7fe6a973013352484c099b823303fc8e7bb35a2b00cf32cbcca4730afc3",
+      "size": [
+        1254,
+        1254
+      ],
+      "bbox": [
+        40,
+        100,
+        1224,
+        1171
+      ],
+      "mirrored": false,
+      "matte": {
+        "requested": "soft",
+        "key_estimate": {
+          "key": [
+            3.0,
+            249.0,
+            4.0
+          ],
+          "source": "border_median",
+          "valid": true,
+          "ring_share": 1.0,
+          "coverage": 0.6746163473058462,
+          "distance_from_declared": 7.81
+        },
+        "quality": "soft",
+        "interior_despill": true,
+        "qa": {
+          "opaque_key_px": 0,
+          "outer_ring_spill_fraction": 0.0,
+          "semitransparent_fraction": 0.019383633683535545,
+          "enclosed_key_pockets": 0,
+          "key_hued_px": 0,
+          "visible_px": 511514
+        }
+      }
+    },
+    {
+      "pose": "kick",
+      "take": 1,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/kick/candidate-01.png",
+      "source": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/kick/takes/take-01/generated.png",
+      "source_run": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/kick",
+      "method": "generate",
+      "route": "local:codex-cli",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "sha256": "481311dfbb2445d35f61deea8f6582c89c7dc6c077975dfb9691af0e7c88c0f9",
+      "size": [
+        1254,
+        1254
+      ],
+      "bbox": [
+        19,
+        121,
+        1222,
+        1021
+      ],
+      "mirrored": false,
+      "matte": {
+        "requested": "soft",
+        "key_estimate": {
+          "key": [
+            3.0,
+            248.0,
+            5.0
+          ],
+          "source": "border_median",
+          "valid": true,
+          "ring_share": 1.0,
+          "coverage": 0.7385813562469317,
+          "distance_from_declared": 9.11
+        },
+        "quality": "soft",
+        "interior_despill": true,
+        "qa": {
+          "opaque_key_px": 0,
+          "outer_ring_spill_fraction": 0.0,
+          "semitransparent_fraction": 0.02509053033252862,
+          "enclosed_key_pockets": 0,
+          "key_hued_px": 0,
+          "visible_px": 410912
+        }
+      }
+    },
+    {
+      "pose": "kick",
+      "take": 2,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/kick/candidate-02.png",
+      "source": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/kick/takes/take-02/generated.png",
+      "source_run": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/kick",
+      "method": "generate",
+      "route": "local:codex-cli",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "sha256": "973b7b9c3b96ee558e39ff12c4e3a1bb1d5ba443fa556bdc2e6ca0490f83f0fd",
+      "size": [
+        1254,
+        1254
+      ],
+      "bbox": [
+        26,
+        134,
+        1241,
+        942
+      ],
+      "mirrored": false,
+      "matte": {
+        "requested": "soft",
+        "key_estimate": {
+          "key": [
+            3.0,
+            249.0,
+            4.0
+          ],
+          "source": "border_median",
+          "valid": true,
+          "ring_share": 1.0,
+          "coverage": 0.7265865657328765,
+          "distance_from_declared": 7.81
+        },
+        "quality": "soft",
+        "interior_despill": true,
+        "qa": {
+          "opaque_key_px": 0,
+          "outer_ring_spill_fraction": 0.0,
+          "semitransparent_fraction": 0.022897086438828245,
+          "enclosed_key_pockets": 0,
+          "key_hued_px": 0,
+          "visible_px": 429749
+        }
+      }
+    },
+    {
+      "pose": "fan-swing",
+      "take": 1,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/fan-swing/candidate-01.png",
+      "source": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/fan-swing/takes/take-01/generated.png",
+      "source_run": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/fan-swing",
+      "method": "generate",
+      "route": "local:codex-cli",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "sha256": "228681881b6ca806e894fef2545ec4962437f1ef012759321d7093e40a75e2c2",
+      "size": [
+        1254,
+        1254
+      ],
+      "bbox": [
+        181,
+        139,
+        1231,
+        1104
+      ],
+      "mirrored": false,
+      "matte": {
+        "requested": "soft",
+        "key_estimate": {
+          "key": [
+            3.0,
+            248.0,
+            4.0
+          ],
+          "source": "border_median",
+          "valid": true,
+          "ring_share": 1.0,
+          "coverage": 0.7240517743539653,
+          "distance_from_declared": 8.6
+        },
+        "quality": "soft",
+        "interior_despill": true,
+        "qa": {
+          "opaque_key_px": 0,
+          "outer_ring_spill_fraction": 0.0,
+          "semitransparent_fraction": 0.019458499982710726,
+          "enclosed_key_pockets": 0,
+          "key_hued_px": 0,
+          "visible_px": 433795
+        }
+      }
+    },
+    {
+      "pose": "fan-swing",
+      "take": 2,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/fan-swing/candidate-02.png",
+      "source": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/fan-swing/takes/take-02/generated.png",
+      "source_run": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/fan-swing",
+      "method": "generate",
+      "route": "local:codex-cli",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "sha256": "7a42e97b7410920e507fd6ce8f8ee1892c5f69be661fa6c3480a065c71c884db",
+      "size": [
+        1254,
+        1254
+      ],
+      "bbox": [
+        161,
+        85,
+        1184,
+        1127
+      ],
+      "mirrored": false,
+      "matte": {
+        "requested": "soft",
+        "key_estimate": {
+          "key": [
+            3.0,
+            248.0,
+            4.0
+          ],
+          "source": "border_median",
+          "valid": true,
+          "ring_share": 1.0,
+          "coverage": 0.7252250533539881,
+          "distance_from_declared": 8.6
+        },
+        "quality": "soft",
+        "interior_despill": true,
+        "qa": {
+          "opaque_key_px": 0,
+          "outer_ring_spill_fraction": 0.0,
+          "semitransparent_fraction": 0.01898398631300889,
+          "enclosed_key_pockets": 0,
+          "key_hued_px": 0,
+          "visible_px": 431943
+        }
+      }
+    },
+    {
+      "pose": "seal",
+      "take": 1,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/seal/candidate-01.png",
+      "source": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/seal/takes/take-01/generated.png",
+      "source_run": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/seal",
+      "method": "generate",
+      "route": "local:codex-cli",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "sha256": "2373b18a1a4a2e4f5eb0b2ab10b80aca38f211c6e90c3ef3a9dfc0f0bcda8ade",
+      "size": [
+        1254,
+        1254
+      ],
+      "bbox": [
+        295,
+        54,
+        965,
+        1201
+      ],
+      "mirrored": false,
+      "matte": {
+        "requested": "soft",
+        "key_estimate": {
+          "key": [
+            3.0,
+            248.0,
+            5.0
+          ],
+          "source": "border_median",
+          "valid": true,
+          "ring_share": 1.0,
+          "coverage": 0.743173996321818,
+          "distance_from_declared": 9.11
+        },
+        "quality": "soft",
+        "interior_despill": true,
+        "qa": {
+          "opaque_key_px": 0,
+          "outer_ring_spill_fraction": 0.0,
+          "semitransparent_fraction": 0.016022013240637314,
+          "enclosed_key_pockets": 0,
+          "key_hued_px": 0,
+          "visible_px": 403757
+        }
+      }
+    },
+    {
+      "pose": "seal",
+      "take": 2,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/seal/candidate-02.png",
+      "source": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/seal/takes/take-02/generated.png",
+      "source_run": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/seal",
+      "method": "generate",
+      "route": "local:codex-cli",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "sha256": "fead3114bf1e05e6707207b027cd8a39e5e74c042f198fec2d2c53e66f7a3293",
+      "size": [
+        1254,
+        1254
+      ],
+      "bbox": [
+        339,
+        125,
+        916,
+        1150
+      ],
+      "mirrored": false,
+      "matte": {
+        "requested": "soft",
+        "key_estimate": {
+          "key": [
+            4.0,
+            248.0,
+            4.0
+          ],
+          "source": "border_median",
+          "valid": true,
+          "ring_share": 1.0,
+          "coverage": 0.7947632965260767,
+          "distance_from_declared": 9.0
+        },
+        "quality": "soft",
+        "interior_despill": true,
+        "qa": {
+          "opaque_key_px": 0,
+          "outer_ring_spill_fraction": 0.0,
+          "semitransparent_fraction": 0.0180985797620745,
+          "enclosed_key_pockets": 0,
+          "key_hued_px": 0,
+          "visible_px": 322622
+        }
+      }
+    }
+  ]
+}

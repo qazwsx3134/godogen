@@ -1,0 +1,132 @@
+{
+  "schema": "generate2dsprite.master_run.v1",
+  "tool": {
+    "name": "master_still",
+    "version": "0.4.0"
+  },
+  "command": "generate",
+  "created": "2026-10-19T06:03:36.887Z",
+  "name": "caster-water",
+  "class": "mob",
+  "finish": "hd",
+  "facing": "right",
+  "key": "#FF00FF",
+  "prompt": {
+    "path": "prompt.txt",
+    "sha256": "334927641878a3487ecc8dd3ba64854109c4f75b134397d0fcd72379929f21dd",
+    "bytes": 2940
+  },
+  "spec": {
+    "path": "spec.json",
+    "sha256": "ae82ab949c76898a8d95c49653bad538324c631e78bc492965348c71814635f3",
+    "bytes": 2185
+  },
+  "references": [
+    {
+      "role": "identity",
+      "ordinal": "FIRST",
+      "path": "../inputs/caster-body-reference.png",
+      "sha256": "e22054132e06fa0530a2f19fbe87049c6fffa0023a13947911f9191e816405cd",
+      "bytes": 1398643
+    }
+  ],
+  "media": {
+    "cli": "route_media.py",
+    "cli_source": "sibling",
+    "cli_sha256": "5f920b3c8f37118e144f40c1c021cba87b691413cd83cb4dc5437ad500df6562",
+    "route_requested": "codex-cli",
+    "size": "1024x1024",
+    "args": [],
+    "timeout_s": 1800.0
+  },
+  "takes": [
+    {
+      "take": 1,
+      "exit_code": 0,
+      "seconds": 73.598,
+      "media": {
+        "status": "ok",
+        "route": "local:codex-cli",
+        "sha256": "d018c96f40f82de2e413b0e2dd408075f0c6d6f33e0f6fc4c403c775af4fffb7",
+        "estimateUsd": 0.0,
+        "kind": "image",
+        "label": "Codex (local CLI)",
+        "model": "codex-image_gen",
+        "verifiedBefore": true
+      },
+      "copied": false,
+      "artifact": {
+        "path": "takes/take-01/generated.png",
+        "sha256": "d018c96f40f82de2e413b0e2dd408075f0c6d6f33e0f6fc4c403c775af4fffb7",
+        "bytes": 1413971,
+        "size": [
+          1254,
+          1254
+        ]
+      },
+      "status": "ok",
+      "route": "local:codex-cli"
+    },
+    {
+      "take": 2,
+      "exit_code": 0,
+      "seconds": 129.779,
+      "media": {
+        "status": "ok",
+        "route": "local:codex-cli",
+        "sha256": "a065a3f27c277a6229b857f7f7c6940024b3d37edeca225d229e926f686c7a6c",
+        "estimateUsd": 0.0,
+        "kind": "image",
+        "label": "Codex (local CLI)",
+        "model": "codex-image_gen",
+        "verifiedBefore": true
+      },
+      "copied": false,
+      "artifact": {
+        "path": "takes/take-02/generated.png",
+        "sha256": "a065a3f27c277a6229b857f7f7c6940024b3d37edeca225d229e926f686c7a6c",
+        "bytes": 1408510,
+        "size": [
+          1254,
+          1254
+        ]
+      },
+      "status": "ok",
+      "route": "local:codex-cli"
+    },
+    {
+      "take": 3,
+      "exit_code": 0,
+      "seconds": 67.912,
+      "media": {
+        "status": "ok",
+        "route": "local:codex-cli",
+        "sha256": "20efa49915bacbaf6a78997fcfdf57ba6af5f54e16afe70a4469d7c3453ac630",
+        "estimateUsd": 0.0,
+        "kind": "image",
+        "label": "Codex (local CLI)",
+        "model": "codex-image_gen",
+        "verifiedBefore": true
+      },
+      "copied": false,
+      "artifact": {
+        "path": "takes/take-03/generated.png",
+        "sha256": "20efa49915bacbaf6a78997fcfdf57ba6af5f54e16afe70a4469d7c3453ac630",
+        "bytes": 1418366,
+        "size": [
+          1254,
+          1254
+        ]
+      },
+      "status": "ok",
+      "route": "local:codex-cli"
+    }
+  ],
+  "status": "ok",
+  "warnings": [],
+  "contact": {
+    "path": "takes.png",
+    "sha256": "5b46600cdceb097c446261f9a888fe59b087321a6a16bcbb81e28671c4b3924e",
+    "bytes": 309942
+  }
+}

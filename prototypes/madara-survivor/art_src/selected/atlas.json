@@ -1,0 +1,18 @@
+{
+  "_doc": "atlas frame -> selected art (relative to this folder), or {file, group}. tools/build_atlas.py places each into its cell; frames not listed keep the placeholder. Frames in one group share one scale (the smallest that fits every member), so a character keeps its size from pose to pose.",
+  "0": {"file": "madara_poses/idle.png", "group": "madara"},
+  "1": "genin.png",
+  "2": "masked.png",
+  "3": "heavy.png",
+  "4": "elite.png",
+  "8": "caster_fire.png",
+  "9": "caster_water.png",
+  "10": "caster_earth.png",
+  "11": {"file": "madara_poses/idle.png", "group": "madara"},
+  "12": {"file": "madara_poses/run_a.png", "group": "madara"},
+  "13": {"file": "madara_poses/run_b.png", "group": "madara"},
+  "14": {"file": "madara_poses/punch.png", "group": "madara"},
+  "15": {"file": "madara_poses/kick.png", "group": "madara"},
+  "16": {"file": "madara_poses/fan.png", "group": "madara"},
+  "17": {"file": "madara_poses/seal.png", "group": "madara"}
+}

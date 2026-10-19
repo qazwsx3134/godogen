@@ -1,0 +1,463 @@
+{
+  "route": "local:codex-cli",
+  "approved": false,
+  "visual_review": "all 24 raw candidates and 8 processed contact sheets inspected",
+  "candidates": [
+    {
+      "character": "madara",
+      "take": 1,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/madara/candidate-01.png",
+      "sha256": "ca2bc8b1ab24f994acae717b80103d643b3834bad2a770cd64d3735b57cff28e",
+      "raw": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/madara/takes/take-01/generated.png",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "bbox": [
+        336,
+        138,
+        689,
+        926
+      ]
+    },
+    {
+      "character": "madara",
+      "take": 2,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/madara/candidate-02.png",
+      "sha256": "744bc738e70c8ee8ebe00e59102e3155b4d84cc48a5816e51dbf825f254fb899",
+      "raw": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/madara/takes/take-02/generated.png",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "bbox": [
+        325,
+        138,
+        697,
+        927
+      ]
+    },
+    {
+      "character": "madara",
+      "take": 3,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/madara/candidate-03.png",
+      "sha256": "c412017550dbd3ee2cacc0589e6cf388faec45b60f285b4871600eff88d84a0f",
+      "raw": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/madara/takes/take-03/generated.png",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "bbox": [
+        308,
+        138,
+        716,
+        926
+      ]
+    },
+    {
+      "character": "genin",
+      "take": 1,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/genin/candidate-01.png",
+      "sha256": "8fa9a81dcb897550b3687d619beab92934aff479b60234469ff5a752b508e39c",
+      "raw": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/genin/takes/take-01/generated.png",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "bbox": [
+        201,
+        406,
+        623,
+        877
+      ]
+    },
+    {
+      "character": "genin",
+      "take": 2,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/genin/candidate-02.png",
+      "sha256": "f82f7e2440761f76d215dfb2484127d6bb40dae8273be61304226e6f59e6ce56",
+      "raw": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/genin/takes/take-02/generated.png",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "bbox": [
+        168,
+        406,
+        656,
+        879
+      ]
+    },
+    {
+      "character": "genin",
+      "take": 3,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/genin/candidate-03.png",
+      "sha256": "1b0b085c5e2da9bd1ed823329942e125af72af93ebee0dbf018924069011ef3f",
+      "raw": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/genin/takes/take-03/generated.png",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "bbox": [
+        174,
+        406,
+        650,
+        877
+      ]
+    },
+    {
+      "character": "masked",
+      "take": 1,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/masked/candidate-01.png",
+      "sha256": "b6e8cc09f377cfe26fb3a229d195a4e6f59ed1d70bbecdb2f0da2e9bcf1ac92c",
+      "raw": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/masked/takes/take-01/generated.png",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "bbox": [
+        80,
+        406,
+        744,
+        877
+      ]
+    },
+    {
+      "character": "masked",
+      "take": 2,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/masked/candidate-02.png",
+      "sha256": "9f0a0c6b09c8d8f9d00b589cb7f90187e9c6c0209b508798a31db39ddd7e7c94",
+      "raw": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/masked/takes/take-02/generated.png",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "bbox": [
+        46,
+        406,
+        778,
+        879
+      ]
+    },
+    {
+      "character": "masked",
+      "take": 3,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/masked/candidate-03.png",
+      "sha256": "3a29b93c422d7a8a97eaa05021f4a6deed148ba28424ed34a61cb814a6747b65",
+      "raw": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/masked/takes/take-03/generated.png",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "bbox": [
+        42,
+        406,
+        782,
+        879
+      ]
+    },
+    {
+      "character": "heavy",
+      "take": 1,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/heavy/candidate-01.png",
+      "sha256": "54f918c88862cf94cbe8932f9862b85a1fc4e3bbe3b1b8a74ab4a8d4178e1c1f",
+      "raw": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/heavy/takes/take-01/generated.png",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "bbox": [
+        151,
+        405,
+        673,
+        879
+      ]
+    },
+    {
+      "character": "heavy",
+      "take": 2,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/heavy/candidate-02.png",
+      "sha256": "e9e37e0545ef2ca971baf6c7f3be89293fff376aba0cbb74e1d3921bf9a556ce",
+      "raw": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/heavy/takes/take-02/generated.png",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "bbox": [
+        155,
+        404,
+        669,
+        878
+      ]
+    },
+    {
+      "character": "heavy",
+      "take": 3,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/heavy/candidate-03.png",
+      "sha256": "7653f5ca1a1beb120a7233b95e6e1b24233bf0fbfd848f2bb566a04db8408ab0",
+      "raw": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/heavy/takes/take-03/generated.png",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "bbox": [
+        145,
+        406,
+        678,
+        877
+      ]
+    },
+    {
+      "character": "caster-fire",
+      "take": 1,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/caster-fire/candidate-01.png",
+      "sha256": "82930f491841e195f7e000880b81e97cea95a533cea146c2ebbdba83ee40c2bb",
+      "raw": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/caster-fire/takes/take-01/generated.png",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "bbox": [
+        263,
+        406,
+        561,
+        878
+      ]
+    },
+    {
+      "character": "caster-fire",
+      "take": 2,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/caster-fire/candidate-02.png",
+      "sha256": "d58cf2baf5cbefd9848658f273cee13758dcdb1abff24317714e5997f1a35388",
+      "raw": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/caster-fire/takes/take-02/generated.png",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "bbox": [
+        212,
+        406,
+        611,
+        879
+      ]
+    },
+    {
+      "character": "caster-fire",
+      "take": 3,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/caster-fire/candidate-03.png",
+      "sha256": "fcf5802ccaa96077117fb256185f53d95e148a7fd31de43f837b8fc0f192b410",
+      "raw": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/caster-fire/takes/take-03/generated.png",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "bbox": [
+        229,
+        406,
+        595,
+        877
+      ]
+    },
+    {
+      "character": "caster-water",
+      "take": 1,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/caster-water/candidate-01.png",
+      "sha256": "4484227d37a62e6b5161b1cf9aba83dca18778643be384a5e2185072157552c0",
+      "raw": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/caster-water/takes/take-01/generated.png",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "bbox": [
+        263,
+        406,
+        561,
+        877
+      ]
+    },
+    {
+      "character": "caster-water",
+      "take": 2,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/caster-water/candidate-02.png",
+      "sha256": "c7ce8749ba9471a0a7cf5f48732fdad9f300912ccf12751bcc71fda7cd5d3870",
+      "raw": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/caster-water/takes/take-02/generated.png",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "bbox": [
+        261,
+        406,
+        563,
+        877
+      ]
+    },
+    {
+      "character": "caster-water",
+      "take": 3,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/caster-water/candidate-03.png",
+      "sha256": "57a859c061b99f3ae00e9e69fbc59cc4f7baa1b31276d90f82f2f386bb959d49",
+      "raw": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/caster-water/takes/take-03/generated.png",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "bbox": [
+        263,
+        406,
+        561,
+        877
+      ]
+    },
+    {
+      "character": "caster-earth",
+      "take": 1,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/caster-earth/candidate-01.png",
+      "sha256": "4f925cd868349a329c2da22ce5bd9734ba986db800b019de2b015862be3ea18f",
+      "raw": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/caster-earth/takes/take-01/generated.png",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "bbox": [
+        245,
+        406,
+        579,
+        877
+      ]
+    },
+    {
+      "character": "caster-earth",
+      "take": 2,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/caster-earth/candidate-02.png",
+      "sha256": "cc7a97a9edbf74f8e23b4fa7c634dd84a7353c4101110349f5778ba1969d6759",
+      "raw": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/caster-earth/takes/take-02/generated.png",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "bbox": [
+        263,
+        406,
+        561,
+        877
+      ]
+    },
+    {
+      "character": "caster-earth",
+      "take": 3,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/caster-earth/candidate-03.png",
+      "sha256": "b79aba918a5ce6619ed73b0a54f031ae395a4d53097e019e8914daa9233c5272",
+      "raw": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/caster-earth/takes/take-03/generated.png",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "bbox": [
+        252,
+        405,
+        570,
+        879
+      ]
+    },
+    {
+      "character": "elite",
+      "take": 1,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/elite/candidate-01.png",
+      "sha256": "e426221b6956f486f3173d2218bde3c9535fcb63309ad72660afd5c06b41dc31",
+      "raw": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/elite/takes/take-01/generated.png",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "bbox": [
+        166,
+        406,
+        656,
+        879
+      ]
+    },
+    {
+      "character": "elite",
+      "take": 2,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/elite/candidate-02.png",
+      "sha256": "6bc2e39476291c9f43283dc74d8699f70edd1472c5115082c939faab97e79bc9",
+      "raw": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/elite/takes/take-02/generated.png",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "bbox": [
+        210,
+        404,
+        614,
+        879
+      ]
+    },
+    {
+      "character": "elite",
+      "take": 3,
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/elite/candidate-03.png",
+      "sha256": "8f1e32e9f845312335bf832314b4b4f8388a214df8f2bdeeb505041e54fe1f5a",
+      "raw": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/elite/takes/take-03/generated.png",
+      "provider": "openai",
+      "model": "codex-image_gen",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "bbox": [
+        206,
+        404,
+        618,
+        879
+      ]
+    }
+  ]
+}

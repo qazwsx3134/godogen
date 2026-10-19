@@ -1,0 +1,88 @@
+[
+  {
+    "take": 1,
+    "source": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/fixes/run-b-high-knee/takes/take-01/generated.png",
+    "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/run-b/candidate-01.png",
+    "sha256": "7ab13a545dd50320b3b6e135fdcc619eb1cbb4c298bbaf0f3384b487aed57c1a",
+    "size": [
+      1254,
+      1254
+    ],
+    "bbox": [
+      90,
+      170,
+      1081,
+      970
+    ],
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          3.0,
+          248.0,
+          4.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.7617722172620183,
+        "distance_from_declared": 8.6
+      },
+      "quality": "soft",
+      "interior_despill": true,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.0,
+        "semitransparent_fraction": 0.02018259938421442,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 0,
+        "visible_px": 374481
+      }
+    },
+    "mirrored": false,
+    "transform": "identity: original generated canvas, scale and placement preserved; chroma key only"
+  },
+  {
+    "take": 2,
+    "source": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/fixes/run-b-high-knee/takes/take-02/generated.png",
+    "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/run-b/candidate-02.png",
+    "sha256": "98f5cc6038a0d5bdaa3f7b96cf873bfd468a4198e47a03af5cf87381f1f11eaf",
+    "size": [
+      1254,
+      1254
+    ],
+    "bbox": [
+      70,
+      162,
+      1184,
+      979
+    ],
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          3.0,
+          248.0,
+          3.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.7336911039378932,
+        "distance_from_declared": 8.19
+      },
+      "quality": "soft",
+      "interior_despill": true,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.0,
+        "semitransparent_fraction": 0.02053364546258032,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 0,
+        "visible_px": 418630
+      }
+    },
+    "mirrored": false,
+    "transform": "identity: original generated canvas, scale and placement preserved; chroma key only"
+  }
+]

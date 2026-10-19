@@ -1,0 +1,22 @@
+{
+  "schema": "generate2dsprite.master_spec.v1",
+  "name": "elite",
+  "subject": "an elite ninja commander in a white hooded cloak with red trim over dark armour, full body",
+  "identity": "an elite jonin commander (generic): white long hooded cloak with a red trim over dark armour, metal-plate headband, confident stance, one hand raised ready to cast. Japanese TV-anime cel shading: clean dark ink outlines (thick enough to read at 100 px tall), flat base colours with one shadow tone, no gradients, no painterly texture, no background, single full-body character standing on an invisible ground line, feet fully visible, elevated three-quarter overhead view about 42 degrees, body turned diagonally toward the lower-right, heroic proportions about 6 heads tall, readable silhouette, no cast shadow, no text, no logo.",
+  "pose": null,
+  "recap": "an elite ninja commander in a white hooded cloak with red trim over dark armour",
+  "facing": "right",
+  "facing_parts": null,
+  "view": "elevated three-quarter overhead view about 42 degrees, body turned diagonally toward the lower-right",
+  "class": "mob",
+  "finish": "hd",
+  "key": "#FF00FF",
+  "genre": null,
+  "pronoun": "they",
+  "identity_ref": null,
+  "style_ref": null,
+  "allowed_text": null,
+  "extra_bans": [],
+  "opaque_parts": null,
+  "extra": "All forehead protectors must have completely plain unmarked metal plates, with no village symbol."
+}

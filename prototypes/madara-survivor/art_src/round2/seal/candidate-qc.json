@@ -1,0 +1,88 @@
+[
+  {
+    "take": 1,
+    "source": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/seal/takes/take-01/generated.png",
+    "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/seal/candidate-01.png",
+    "sha256": "2373b18a1a4a2e4f5eb0b2ab10b80aca38f211c6e90c3ef3a9dfc0f0bcda8ade",
+    "size": [
+      1254,
+      1254
+    ],
+    "bbox": [
+      295,
+      54,
+      965,
+      1201
+    ],
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          3.0,
+          248.0,
+          5.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.743173996321818,
+        "distance_from_declared": 9.11
+      },
+      "quality": "soft",
+      "interior_despill": true,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.0,
+        "semitransparent_fraction": 0.016022013240637314,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 0,
+        "visible_px": 403757
+      }
+    },
+    "mirrored": false,
+    "transform": "identity: original generated canvas, scale and placement preserved; chroma key only"
+  },
+  {
+    "take": 2,
+    "source": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/seal/takes/take-02/generated.png",
+    "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/seal/candidate-02.png",
+    "sha256": "fead3114bf1e05e6707207b027cd8a39e5e74c042f198fec2d2c53e66f7a3293",
+    "size": [
+      1254,
+      1254
+    ],
+    "bbox": [
+      339,
+      125,
+      916,
+      1150
+    ],
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          4.0,
+          248.0,
+          4.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.7947632965260767,
+        "distance_from_declared": 9.0
+      },
+      "quality": "soft",
+      "interior_despill": true,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.0,
+        "semitransparent_fraction": 0.0180985797620745,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 0,
+        "visible_px": 322622
+      }
+    },
+    "mirrored": false,
+    "transform": "identity: original generated canvas, scale and placement preserved; chroma key only"
+  }
+]

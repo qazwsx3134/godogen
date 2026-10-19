@@ -1,0 +1,27 @@
+{
+  "schema": "generate2dsprite.master_spec.v1",
+  "name": "madara-kick",
+  "subject": "Uchiha Madara, a single full-body character",
+  "identity": "The exact same Uchiha Madara as the FIRST attached identity reference: the same pale sharp face, visible red Sharingan eye, waist-length wild spiky black hair with the same long fringe covering his right eye; identical segmented crimson-red armour including chest plates, large shoulder guards and skirt panels, identical dark navy high-collared clothes and trousers, white shin bandages and black ninja sandals. The exact same cream-white war fan with a single red circle, black rim and wooden handle. Preserve the anime cel-shaded treatment, thick dark outlines, palette, costume construction and anatomical proportions. Only the requested pose and the physically necessary positions of limbs, hair, armour panels and fan change; do not copy the standing idle pose.",
+  "pose": "a powerful high flying side kick toward the lower-right (combo finisher), body horizontal, hair flaring",
+  "recap": "Uchiha Madara in crimson segmented armour with long spiky black hair and a white-and-red war fan",
+  "facing": "right",
+  "facing_parts": null,
+  "view": "elevated three-quarter overhead view about 42 degrees, body turned diagonally toward the lower-right",
+  "class": "hero",
+  "finish": "hd",
+  "key": "#00FF00",
+  "genre": null,
+  "pronoun": "they",
+  "identity_ref": {
+    "path": "../../round1/madara/candidate-03.png",
+    "sha256": "c412017550dbd3ee2cacc0589e6cf388faec45b60f285b4871600eff88d84a0f",
+    "what": "the user-selected Madara identity master still, not a pose template",
+    "copy": "the exact face, waist-length spiky hair and right-eye fringe, segmented crimson armour, navy clothes, white shin wraps, sandals, cream-white red-circle fan, cel shading, thick ink outlines and body proportions; change only the pose"
+  },
+  "style_ref": null,
+  "allowed_text": null,
+  "extra_bans": [],
+  "opaque_parts": null,
+  "extra": "Japanese TV-anime cel shading: clean dark ink outlines (thick enough to read at 100 px tall), flat base colours with one shadow tone, no gradients, no painterly texture, no background, single full-body character standing on an invisible ground line, feet fully visible, elevated three-quarter overhead view about 42 degrees, body turned diagonally toward the lower-right, heroic proportions about 6 heads tall, readable silhouette, no cast shadow, no text, no logo. Use the FIRST attached image for identity, palette, linework and standing-equivalent anatomical scale only; the required pose overrides its old pose. Show exactly one isolated character, including every hand, foot, hair tip and the entire war fan, with safe padding on every side. No motion streaks, no detached attack effects, no afterimages, no cast shadow. Preserve the 42 degree elevated view and lower-right body direction; do not turn toward the upper-right or make a flat side-profile camera. This pose is airborne, overriding the common standing/grounded wording: torso approximately horizontal, one leg fully extended in a strong side kick to the lower-right, the other leg bent. Retain the war fan securely in the trailing hand and keep all extremities inside the canvas. No ground contact or floor."
+}

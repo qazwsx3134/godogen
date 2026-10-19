@@ -1,0 +1,22 @@
+{
+  "schema": "generate2dsprite.master_spec.v1",
+  "name": "heavy",
+  "subject": "a broad ninja in brown armour carrying a wooden war hammer, full body",
+  "identity": "a big, broad heavy ninja soldier: brown armoured flak vest, thick arm guards, metal-plate headband (no symbol), dark brown clothes, carrying a large wooden war hammer, heavy marching stance. Japanese TV-anime cel shading: clean dark ink outlines (thick enough to read at 100 px tall), flat base colours with one shadow tone, no gradients, no painterly texture, no background, single full-body character standing on an invisible ground line, feet fully visible, elevated three-quarter overhead view about 42 degrees, body turned diagonally toward the lower-right, heroic proportions about 6 heads tall, readable silhouette, no cast shadow, no text, no logo.",
+  "pose": null,
+  "recap": "a broad ninja in brown armour carrying a wooden war hammer",
+  "facing": "right",
+  "facing_parts": null,
+  "view": "elevated three-quarter overhead view about 42 degrees, body turned diagonally toward the lower-right",
+  "class": "mob",
+  "finish": "hd",
+  "key": "#FF00FF",
+  "genre": null,
+  "pronoun": "they",
+  "identity_ref": null,
+  "style_ref": null,
+  "allowed_text": null,
+  "extra_bans": [],
+  "opaque_parts": null,
+  "extra": "All forehead protectors must have completely plain unmarked metal plates, with no village symbol."
+}

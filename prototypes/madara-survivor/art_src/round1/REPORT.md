@@ -1,0 +1,18 @@
+# 第一輪原畫候選
+- route_media：route=`local:codex-cli`、provider=`openai`、model=`codex-image_gen`（工具回報標識；底層影像模型版本未另揭露）。
+- madara：資料夾 `/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/madara/`；contact `/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/madara/candidates-contact.png`。
+- genin：資料夾 `/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/genin/`；contact `/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/genin/candidates-contact.png`。
+- masked：資料夾 `/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/masked/`；contact `/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/masked/candidates-contact.png`。
+- heavy：資料夾 `/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/heavy/`；contact `/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/heavy/candidates-contact.png`。
+- caster-fire：資料夾 `/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/caster-fire/`；contact `/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/caster-fire/candidates-contact.png`。
+- caster-water：資料夾 `/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/caster-water/`；contact `/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/caster-water/candidates-contact.png`。
+- caster-earth：資料夾 `/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/caster-earth/`；contact `/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/caster-earth/candidates-contact.png`。
+- elite：資料夾 `/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/elite/`；contact `/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/elite/candidates-contact.png`。
+- 共 24 張 `candidate-01.png`～`candidate-03.png`：RGBA 透明背景、單一全身角色；逐張檢查手腳、武器未裁切，未見反向圖，沒有水平鏡像。
+- 原始生成圖保留於各角色 `takes/take-01`～`take-03/generated.png`；只做去背／標準留白與 contact sheet，沒有 approve、動畫或其他素材生成。
+- 一般忍者護額目視均無村徽；白色金屬反光不是符號。
+- 水／土以火系 01 為身形參考，保留臉、髮、四肢比例與結印姿勢；火系 02／03 的站姿、袖長有變化，並非三組所有候選逐像素一致。
+- 規格偏差：斑 01／02 的白紅團扇另有勾玉紋樣，03 為紅圓；部分角色的視角偏側面，42°俯視一致性仍需 Claude 挑選。
+- 規格偏差：施術特效多為實色火焰／水流／岩塊，範圍比「小光暈」更明顯；未擅自改寫原始外觀段落。
+- 問題：沙盒內 CLI app-server 初始化失敗；自動核准沙盒外執行後全部成功，初次失敗紀錄保留於 `failures/madara-sandbox/`。
+- 來源／交付檢查記錄：`/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/delivery-manifest.json`、各角色 `run.json`／`candidate-qc.json`；所有生成固定 `--route codex-cli`。

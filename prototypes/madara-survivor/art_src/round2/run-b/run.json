@@ -1,0 +1,130 @@
+{
+  "schema": "generate2dsprite.master_run.v1",
+  "tool": {
+    "name": "master_still",
+    "version": "0.4.0"
+  },
+  "command": "edit",
+  "created": "2026-10-19T06:16:04.271Z",
+  "name": "madara-run-b",
+  "class": "hero",
+  "finish": "hd",
+  "facing": "right",
+  "key": "#00FF00",
+  "prompt": {
+    "path": "prompt.txt",
+    "sha256": "3b21fb03af29ead6a4ebc81da3bfe04d22380098becbb3ae7329941f07465c3b",
+    "bytes": 2645
+  },
+  "spec": {
+    "path": "spec.json",
+    "sha256": "db40f946ea066aba79e8bceb4fde364436c9963f7a4407014429e1a5cb6ac697",
+    "bytes": 3055
+  },
+  "references": [
+    {
+      "role": "edit",
+      "ordinal": "FIRST",
+      "path": "../run-a/takes/take-01/generated.png",
+      "sha256": "8d9ba48b6b550f59dea66a69229feaba2bb0ad38a8c80e9a2ea13921313886cc",
+      "bytes": 1490741
+    },
+    {
+      "role": "extra",
+      "ordinal": "SECOND",
+      "path": "../../round1/madara/candidate-03.png",
+      "sha256": "c412017550dbd3ee2cacc0589e6cf388faec45b60f285b4871600eff88d84a0f",
+      "bytes": 355900
+    }
+  ],
+  "media": {
+    "cli": "route_media.py",
+    "cli_source": "sibling",
+    "cli_sha256": "5f920b3c8f37118e144f40c1c021cba87b691413cd83cb4dc5437ad500df6562",
+    "route_requested": "codex-cli",
+    "size": "1024x1024",
+    "args": [],
+    "timeout_s": 1800.0
+  },
+  "takes": [
+    {
+      "take": 1,
+      "exit_code": 0,
+      "seconds": 58.819,
+      "media": {
+        "status": "ok",
+        "route": "local:codex-cli",
+        "sha256": "ed8d06b1ef53eadd88a083ce55007b928102594875d594178468e8be99e12f67",
+        "estimateUsd": 0.0,
+        "kind": "image",
+        "label": "Codex (local CLI)",
+        "model": "codex-image_gen",
+        "verifiedBefore": true
+      },
+      "copied": false,
+      "artifact": {
+        "path": "takes/take-01/generated.png",
+        "sha256": "ed8d06b1ef53eadd88a083ce55007b928102594875d594178468e8be99e12f67",
+        "bytes": 1515317,
+        "size": [
+          1254,
+          1254
+        ]
+      },
+      "status": "ok",
+      "route": "local:codex-cli"
+    },
+    {
+      "take": 2,
+      "exit_code": 0,
+      "seconds": 60.016,
+      "media": {
+        "status": "ok",
+        "route": "local:codex-cli",
+        "sha256": "63657691a34942038804341fb7bcd50f161e7489b060f75dba6875cad7c5f3c6",
+        "estimateUsd": 0.0,
+        "kind": "image",
+        "label": "Codex (local CLI)",
+        "model": "codex-image_gen",
+        "verifiedBefore": true
+      },
+      "copied": false,
+      "artifact": {
+        "path": "takes/take-02/generated.png",
+        "sha256": "63657691a34942038804341fb7bcd50f161e7489b060f75dba6875cad7c5f3c6",
+        "bytes": 1501364,
+        "size": [
+          1254,
+          1254
+        ]
+      },
+      "status": "ok",
+      "route": "local:codex-cli"
+    }
+  ],
+  "status": "ok",
+  "edit": {
+    "still": {
+      "path": "../run-a/takes/take-01/generated.png",
+      "sha256": "8d9ba48b6b550f59dea66a69229feaba2bb0ad38a8c80e9a2ea13921313886cc",
+      "bytes": 1490741
+    },
+    "change": "Change ONLY the two legs to the OPPOSITE running stride. In the first image the left leg is forward and the right leg trails: this must be reversed. The anatomical RIGHT leg, the leg on the same side of the body as the fan-holding right hand (the hip on the LEFT side of the visible pelvis), must now be the FORWARD leg: bring this thigh forward toward the lower-right, with its shin and sandal extending toward the lower-right. The anatomical LEFT leg, originating at the opposite hip on the RIGHT side of the visible pelvis, must trail back toward the upper-left with its knee folded and sandal behind. The leg attached under the fan arm must be forward, not behind. This is a different stride, not a second copy of the first image. Preserve the exact same head, face, hair, torso, upper-body lean, arms, fan, armour design, camera, canvas and standing-equivalent anatomical scale. Keep the white shin bandages and sandals, with both legs complete and separate. Do not horizontally mirror the character or exchange the fan hand. No motion lines.",
+    "keep": "face, hair, torso, arms, hand positions, fan, costume design, colours, anatomical scale, camera and framing",
+    "extra": [
+      {
+        "role": "the selected Madara identity reference: preserve this exact face, armour, waist-length black hair covering the right eye and cream-white red-circle fan",
+        "path": "../../round1/madara/candidate-03.png",
+        "sha256": "c412017550dbd3ee2cacc0589e6cf388faec45b60f285b4871600eff88d84a0f",
+        "bytes": 355900
+      }
+    ],
+    "framing": "the top of the figure about 10 percent below the top edge, its lowest point about 11 percent above the bottom edge, its left-most point about 7 percent from the left edge and its right-most point about 13 percent from the right edge"
+  },
+  "warnings": [],
+  "contact": {
+    "path": "takes.png",
+    "sha256": "93a9f8427d3a3ce9dfcfb5eea861050c9ee75378fb9faf0b24ff7726cf11ef85",
+    "bytes": 229221
+  }
+}

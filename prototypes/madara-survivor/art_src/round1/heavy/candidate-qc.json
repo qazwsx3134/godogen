@@ -1,0 +1,62 @@
+[
+  {
+    "take": 1,
+    "file": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/heavy/candidate-01.png",
+    "size": [
+      1024,
+      1024
+    ],
+    "alpha_range": [
+      0,
+      255
+    ],
+    "bbox": [
+      151,
+      405,
+      673,
+      879
+    ],
+    "mirrored": false,
+    "warnings": []
+  },
+  {
+    "take": 2,
+    "file": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/heavy/candidate-02.png",
+    "size": [
+      1024,
+      1024
+    ],
+    "alpha_range": [
+      0,
+      255
+    ],
+    "bbox": [
+      155,
+      404,
+      669,
+      878
+    ],
+    "mirrored": false,
+    "warnings": []
+  },
+  {
+    "take": 3,
+    "file": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/heavy/candidate-03.png",
+    "size": [
+      1024,
+      1024
+    ],
+    "alpha_range": [
+      0,
+      255
+    ],
+    "bbox": [
+      145,
+      406,
+      678,
+      877
+    ],
+    "mirrored": false,
+    "warnings": []
+  }
+]

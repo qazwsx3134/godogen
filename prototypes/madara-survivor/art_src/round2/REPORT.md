@@ -1,0 +1,15 @@
+# 斑：第二輪 7 姿勢候選
+- 方法：generate + identity-ref；edit 模板固定原姿勢，跑 B 曾試局部 edit 未成功，最後採高抬膝 generate。全部 `--route codex-cli`，provider=`openai`、model=`codex-image_gen`。
+- idle：`/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/idle/candidate-01.png`、`/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/idle/candidate-02.png`。
+- run-a：`/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/run-a/candidate-01.png`、`/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/run-a/candidate-02.png`。
+- run-b：`/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/run-b/candidate-01.png`、`/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/run-b/candidate-02.png`。
+- punch：`/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/punch/candidate-01.png`、`/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/punch/candidate-02.png`。
+- kick：`/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/kick/candidate-01.png`、`/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/kick/candidate-02.png`。
+- fan-swing：`/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/fan-swing/candidate-01.png`、`/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/fan-swing/candidate-02.png`。
+- seal：`/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/seal/candidate-01.png`、`/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/seal/candidate-02.png`。
+- 總比較圖：`/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/poses-contact.png`。
+- 身分參考：`/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round1/madara/candidate-03.png`；保留黑長刺髮遮右眼、紅分段甲、深藍衣與白繃帶、白底紅圓團扇；14 張均 RGBA 透明、全身未觸邊，未水平鏡像。
+- 跑 B：初版及 edit 仍像跑 A；最終改用高抬膝候選，原圖完整保留於 rejected／run-b 的 takes／fixes；最終來源見 run-b/candidate-source.json。裙甲遮髖，左右腿判讀仍有歧義。
+- 外觀偏差：甲片接縫、袖口與扇柄角度有細微變化；飛踢軀幹仍偏斜而非完全水平，揮扇偏斜下；視角未能保證逐張精確 42°。
+- 只做 key 去背，保留每張原始畫布、比例與位置，不各自 bbox-fit；寬姿勢與站姿的可見佔幅不同，原始圖均留在對應生成來源。
+- 未 approve、未做動畫；來源與 alpha／邊界檢查見 `/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/round2/delivery-manifest.json` 及各姿勢 candidate-qc.json。

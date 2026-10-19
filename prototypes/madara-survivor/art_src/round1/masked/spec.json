@@ -1,0 +1,22 @@
+{
+  "schema": "generate2dsprite.master_spec.v1",
+  "name": "masked",
+  "subject": "a masked ninja in dark grey armour with two kunai, full body",
+  "identity": "a generic masked ninja soldier: dark grey flak vest, black cloth mask covering the lower face, metal-plate headband (no symbol), dark grey clothes, a kunai in each hand, fast low sprinting pose. Japanese TV-anime cel shading: clean dark ink outlines (thick enough to read at 100 px tall), flat base colours with one shadow tone, no gradients, no painterly texture, no background, single full-body character standing on an invisible ground line, feet fully visible, elevated three-quarter overhead view about 42 degrees, body turned diagonally toward the lower-right, heroic proportions about 6 heads tall, readable silhouette, no cast shadow, no text, no logo.",
+  "pose": null,
+  "recap": "a masked ninja in dark grey armour with two kunai",
+  "facing": "right",
+  "facing_parts": null,
+  "view": "elevated three-quarter overhead view about 42 degrees, body turned diagonally toward the lower-right",
+  "class": "mob",
+  "finish": "hd",
+  "key": "#FF00FF",
+  "genre": null,
+  "pronoun": "they",
+  "identity_ref": null,
+  "style_ref": null,
+  "allowed_text": null,
+  "extra_bans": [],
+  "opaque_parts": null,
+  "extra": "All forehead protectors must have completely plain unmarked metal plates, with no village symbol."
+}
