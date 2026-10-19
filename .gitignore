@@ -10,3 +10,4 @@ project.local.yaml
 production/session-logs/
 .studio/
 studio/runtime/
+.forge/
