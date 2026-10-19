@@ -78,7 +78,8 @@ main.tscn（main.gd：遊戲時鐘、生怪、經驗、勝負；依固定順序�
 4. **鏡頭低又廣角（26°、FOV 70）帶來的問題**：前景的物件和敵人會擋住玩家，需要兩個對策：
    - 道具用網點挖空。
    - 玩家用 x-ray 剪影。
-5. **Godot headless 存材質的陷阱**：沒設定的 shader 參數會被存成 `= null`，產生器存檔後要把這些行刪掉。
+5. **角色 shader 已移到 godot-kit 的 `sprite3d`**（2026-10-19）：本專案的外觀差異寫在 `tools/build_scenes.gd` 的 `LOOK`／`ACTOR` 與各材質；舊版 x-ray 會畫在主角自己身上，換成 kit 版後修正。
+6. **Godot headless 存材質的陷阱**：沒設定的 shader 參數會被存成 `= null`，產生器存檔後要把這些行刪掉。
 
 ## 下一步
 

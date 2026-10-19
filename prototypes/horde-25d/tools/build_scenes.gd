@@ -16,14 +16,22 @@ func _initialize() -> void:
 	_build.call_deferred()
 
 
+## This prototype's look on the shared sprite3d shader (whose defaults are madara-survivor's): 4x2 grid, no foot strip,
+## actors leaned 0.35 like pokebonk.com, a stronger bob, and a dark two-step pixel shadow.
+const LOOK := {"frames": Vector2(4, 2), "foot_gutter": 0.0}
+const ACTOR := {"lean": 0.35, "bob": 0.06}
+
+
 func _build() -> void:
-	var sprite_node: ShaderMaterial = _material("res://materials/sprite_node.tres", "res://shaders/sprite_billboard.gdshader", {
-		"atlas": load(ATLAS), "use_instance_custom": false})
-	var sprite_instanced: ShaderMaterial = _material("res://materials/sprite_instanced.tres", "res://shaders/sprite_billboard.gdshader", {
-		"atlas": load(ATLAS), "use_instance_custom": true})
-	var sprite_prop: ShaderMaterial = _material("res://materials/sprite_prop.tres", "res://shaders/sprite_billboard.gdshader", {
-		"atlas": load(ATLAS), "use_instance_custom": true, "lean": 0.0, "bob": 0.0, "see_through_enabled": true})
-	var shadow: ShaderMaterial = _material("res://materials/blob_shadow.tres", "res://shaders/blob_shadow.gdshader", {})
+	var sprite_node: ShaderMaterial = _material("res://materials/sprite_node.tres", "res://addons/proto_kit/sprite3d.gdshader",
+		_with({"atlas": load(ATLAS), "use_instance_custom": false}, [LOOK, ACTOR]))
+	var sprite_instanced: ShaderMaterial = _material("res://materials/sprite_instanced.tres", "res://addons/proto_kit/sprite3d.gdshader",
+		_with({"atlas": load(ATLAS), "use_instance_custom": true}, [LOOK, ACTOR]))
+	var sprite_prop: ShaderMaterial = _material("res://materials/sprite_prop.tres", "res://addons/proto_kit/sprite3d.gdshader",
+		_with({"atlas": load(ATLAS), "use_instance_custom": true, "lean": 0.0, "bob": 0.0, "see_through_enabled": true,
+			"focus_height": 1.2}, [LOOK]))
+	var shadow: ShaderMaterial = _material("res://materials/blob_shadow.tres", "res://addons/proto_kit/sprite3d_shadow.gdshader", {
+		"color": Color(0.08, 0.07, 0.14), "size": Vector2(0.8, 0.48), "stepped": true})
 	var ground: ShaderMaterial = _material("res://materials/ground.tres", "res://shaders/ground.gdshader", {})
 	var glow: ShaderMaterial = _material("res://materials/fx_glow.tres", "res://shaders/fx_glow.gdshader", {})
 	var gem: ShaderMaterial = _material("res://materials/gem.tres", "res://shaders/gem.gdshader", {})
@@ -297,8 +305,11 @@ func _player(sprite: ShaderMaterial, shadow: ShaderMaterial) -> Node3D:
 	var xray := MeshInstance3D.new()
 	xray.mesh = quad
 	var xray_material := ShaderMaterial.new()
-	xray_material.shader = load("res://shaders/sprite_xray.gdshader")
+	xray_material.shader = load("res://addons/proto_kit/sprite3d_xray.gdshader")
 	xray_material.set_shader_parameter(&"atlas", load(ATLAS))
+	for key: String in LOOK:
+		xray_material.set_shader_parameter(key, LOOK[key])
+	xray_material.set_shader_parameter(&"lean", ACTOR.lean)
 	xray_material.render_priority = 1
 	xray.material_override = xray_material
 	xray.scale = body.scale
@@ -605,3 +616,9 @@ func _round(color: Color, radius: int, border: Color) -> StyleBoxFlat:
 	box.set_border_width_all(3)
 	box.border_color = border
 	return box
+
+
+func _with(params: Dictionary, extras: Array) -> Dictionary:
+	for extra: Dictionary in extras:
+		params.merge(extra)
+	return params

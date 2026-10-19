@@ -10,7 +10,7 @@ extends MultiMeshInstance3D
 ##   commit()                          uploads the instance buffer
 ##
 ## The MultiMesh mesh has two surfaces sharing one instance buffer: 0 the blob shadow, 1 the billboard sprite.
-## Instance custom data is (atlas frame, flash 0..1, facing +-1, walk phase), read by sprite_billboard.gdshader.
+## Instance custom data is (atlas frame, flash 0..1, facing +-1, walk phase), read by addons/proto_kit/sprite3d.gdshader.
 
 signal killed(at: Vector3, def: EnemyDef)
 signal damaged(at: Vector3, amount: float)

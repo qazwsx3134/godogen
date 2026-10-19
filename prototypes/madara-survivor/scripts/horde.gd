@@ -13,7 +13,7 @@ extends MultiMeshInstance3D
 ##   ...weapons hurt enemies (damage_cone, damage_circle, nearest, hurt)...
 ##   flush_dead()                      emits `killed` for new kills, removes bodies that have landed
 ##   commit()                          uploads the instance buffer
-## Instance custom data is (atlas frame, flash 0..1, facing +-1, walk phase), read by sprite_billboard.gdshader;
+## Instance custom data is (atlas frame, flash 0..1, facing +-1, walk phase), read by addons/proto_kit/sprite3d.gdshader;
 ## a tumble is written as a rotation of the instance basis around Z.
 
 ## `burning`: it died on fire (fire release Lv5 makes burning deaths explode).

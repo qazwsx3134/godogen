@@ -1,6 +1,6 @@
 [gd_resource type="ShaderMaterial" format=3]
 
-[ext_resource type="Shader" path="res://shaders/blob_shadow.gdshader" id="1_i8388"]
+[ext_resource type="Shader" path="res://addons/proto_kit/sprite3d_shadow.gdshader" id="1_i8388"]
 
 [resource]
 render_priority = 0

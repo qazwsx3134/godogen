@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" path="res://scripts/player.gd" id="1_qlg0r"]
 [ext_resource type="Material" path="res://materials/blob_shadow.tres" id="2_tuyoq"]
-[ext_resource type="Shader" path="res://shaders/sprite_billboard.gdshader" id="3_fjrip"]
+[ext_resource type="Shader" path="res://addons/proto_kit/sprite3d.gdshader" id="3_fjrip"]
 [ext_resource type="Texture2D" path="res://assets/sprites/atlas.png" id="4_smehm"]
-[ext_resource type="Shader" path="res://shaders/sprite_xray.gdshader" id="5_ur7pv"]
+[ext_resource type="Shader" path="res://addons/proto_kit/sprite3d_xray.gdshader" id="5_ur7pv"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_y4r1p"]
 size = Vector2(1, 1)
@@ -16,6 +16,10 @@ shader_parameter/atlas = ExtResource("4_smehm")
 shader_parameter/use_instance_custom = false
 shader_parameter/frame = 0.0
 shader_parameter/outline = Color(1, 1, 1, 1)
+shader_parameter/frames = Vector2(4, 2)
+shader_parameter/foot_gutter = 0.0
+shader_parameter/lean = 0.35
+shader_parameter/bob = 0.06
 
 [sub_resource type="QuadMesh" id="QuadMesh_3v2ag"]
 center_offset = Vector3(0, 0.5, 0)
@@ -24,6 +28,9 @@ center_offset = Vector3(0, 0.5, 0)
 render_priority = 1
 shader = ExtResource("5_ur7pv")
 shader_parameter/atlas = ExtResource("4_smehm")
+shader_parameter/frames = Vector2(4, 2)
+shader_parameter/foot_gutter = 0.0
+shader_parameter/lean = 0.35
 
 [node name="Player" type="Node3D" unique_id=1848256062]
 script = ExtResource("1_qlg0r")

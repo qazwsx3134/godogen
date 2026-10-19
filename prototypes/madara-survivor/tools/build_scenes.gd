@@ -20,18 +20,18 @@ func _initialize() -> void:
 
 
 func _build() -> void:
-	var sprite_node: ShaderMaterial = _material("res://materials/sprite_node.tres", "res://shaders/sprite_billboard.gdshader", {
+	var sprite_node: ShaderMaterial = _material("res://materials/sprite_node.tres", "res://addons/proto_kit/sprite3d.gdshader", {
 		"atlas": load(ATLAS), "use_instance_custom": false})
-	var sprite_instanced: ShaderMaterial = _material("res://materials/sprite_instanced.tres", "res://shaders/sprite_billboard.gdshader", {
+	var sprite_instanced: ShaderMaterial = _material("res://materials/sprite_instanced.tres", "res://addons/proto_kit/sprite3d.gdshader", {
 		"atlas": load(ATLAS), "use_instance_custom": true, "flash_color": Color(1.0, 0.92, 0.85)})
-	var sprite_prop: ShaderMaterial = _material("res://materials/sprite_prop.tres", "res://shaders/sprite_billboard.gdshader", {
+	var sprite_prop: ShaderMaterial = _material("res://materials/sprite_prop.tres", "res://addons/proto_kit/sprite3d.gdshader", {
 		"atlas": load(ATLAS), "use_instance_custom": true, "lean": 0.0, "bob": 0.0, "see_through_enabled": true})
-	var shadow: ShaderMaterial = _material("res://materials/blob_shadow.tres", "res://shaders/blob_shadow.gdshader", {})
+	var shadow: ShaderMaterial = _material("res://materials/blob_shadow.tres", "res://addons/proto_kit/sprite3d_shadow.gdshader", {})
 	var ground: ShaderMaterial = _material("res://materials/sand.tres", "res://shaders/ground.gdshader", {})
 	var glow: ShaderMaterial = _material("res://materials/fx_glow.tres", "res://shaders/fx_glow.gdshader", {})
 	var dust: ShaderMaterial = _material("res://materials/fx_dust.tres", "res://shaders/fx_dust.gdshader", {})
 	# Chakra orbs: atlas frames 18-21 (one per tier), standing on the ground like the actors.
-	var orb: ShaderMaterial = _material("res://materials/chakra_orb.tres", "res://shaders/sprite_billboard.gdshader", {
+	var orb: ShaderMaterial = _material("res://materials/chakra_orb.tres", "res://addons/proto_kit/sprite3d.gdshader", {
 		"atlas": load(ATLAS), "use_instance_custom": true, "bob": 0.0, "hit_squash": 0.0})
 	var arc: ShaderMaterial = _material("res://materials/gunbai_arc.tres", "res://shaders/ground_cone.gdshader", {})
 	var danger: ShaderMaterial = _material("res://materials/danger_ring.tres", "res://shaders/ground_ring.gdshader", {
@@ -319,7 +319,7 @@ func _player(sprite: ShaderMaterial, shadow: ShaderMaterial) -> Node3D:
 	var xray := MeshInstance3D.new()
 	xray.mesh = quad
 	var xray_material := ShaderMaterial.new()
-	xray_material.shader = load("res://shaders/sprite_xray.gdshader")
+	xray_material.shader = load("res://addons/proto_kit/sprite3d_xray.gdshader")
 	xray_material.set_shader_parameter(&"atlas", load(ATLAS))
 	xray_material.set_shader_parameter(&"color", Color(1.0, 0.35, 0.3, 0.6))
 	xray_material.render_priority = 1
@@ -344,7 +344,7 @@ func _player(sprite: ShaderMaterial, shadow: ShaderMaterial) -> Node3D:
 		ghost.top_level = true
 		ghost.scale = body.scale
 		var ghost_material := ShaderMaterial.new()
-		ghost_material.shader = load("res://shaders/sprite_ghost.gdshader")
+		ghost_material.shader = load("res://addons/proto_kit/sprite3d_ghost.gdshader")
 		ghost_material.set_shader_parameter(&"atlas", load(ATLAS))
 		ghost.material_override = ghost_material
 		SceneBuilder.add(ghosts, ghost, "Ghost%d" % (g + 1))

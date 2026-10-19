@@ -1,6 +1,6 @@
 [gd_resource type="ShaderMaterial" format=3]
 
-[ext_resource type="Shader" path="res://shaders/sprite_billboard.gdshader" id="1_nrq1d"]
+[ext_resource type="Shader" path="res://addons/proto_kit/sprite3d.gdshader" id="1_nrq1d"]
 [ext_resource type="Texture2D" path="res://assets/sprites/atlas.png" id="2_lgiu0"]
 
 [resource]
@@ -8,3 +8,7 @@ render_priority = 0
 shader = ExtResource("1_nrq1d")
 shader_parameter/atlas = ExtResource("2_lgiu0")
 shader_parameter/use_instance_custom = true
+shader_parameter/frames = Vector2(4, 2)
+shader_parameter/foot_gutter = 0.0
+shader_parameter/lean = 0.35
+shader_parameter/bob = 0.06

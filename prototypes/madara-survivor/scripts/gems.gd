@@ -10,7 +10,7 @@ extends MultiMeshInstance3D
 ## XP thresholds for tiers 1, 2 and 3 (tier 0 below the first).
 @export var tier_xp: PackedInt32Array = PackedInt32Array([3, 10, 30])
 @export var sizes: PackedFloat32Array = PackedFloat32Array([0.45, 0.55, 0.7, 0.9])
-## Atlas frame of the tier-0 chakra sprite (tiers follow it) when the material is sprite_billboard; -1 when the
+## Atlas frame of the tier-0 chakra sprite (tiers follow it) when the material is sprite3d (addons/proto_kit); -1 when the
 ## material draws the orbs itself (gem.gdshader reads the tier).
 @export var frame_base: int = -1
 
