@@ -1,0 +1,16 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" path="res://ui/fonts/NotoSansTC.ttf" id="1_aie4f"]
+
+[node name="DamageNumber" type="Label3D" unique_id=1112774806]
+pixel_size = 0.01
+billboard = 1
+no_depth_test = true
+texture_filter = 0
+render_priority = 10
+outline_render_priority = 9
+outline_modulate = Color(0.1, 0.08, 0.16, 1)
+text = "12"
+font = ExtResource("1_aie4f")
+font_size = 56
+outline_size = 16

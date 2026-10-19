@@ -1,0 +1,266 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/hud.gd" id="1_6fi6k"]
+[ext_resource type="PackedScene" path="res://scenes/upgrade_card.tscn" id="2_uo2fv"]
+[ext_resource type="Theme" path="res://ui/theme.tres" id="3_047uy"]
+[ext_resource type="Script" path="res://addons/proto_kit/floating_stick.gd" id="4_5pdws"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hd3ao"]
+bg_color = Color(1, 1, 1, 0.16)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 1, 1, 0.5)
+corner_radius_top_left = 100
+corner_radius_top_right = 100
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0i1j5"]
+bg_color = Color(1, 1, 1, 0.75)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.1, 0.08, 0.16, 0.6)
+corner_radius_top_left = 42
+corner_radius_top_right = 42
+corner_radius_bottom_right = 42
+corner_radius_bottom_left = 42
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mphia"]
+bg_color = Color(1, 0.35, 0.4, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0m4u7"]
+content_margin_left = 48.0
+content_margin_top = 32.0
+content_margin_right = 48.0
+content_margin_bottom = 32.0
+bg_color = Color(0.98, 0.97, 0.94, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.75, 0.7, 0.62, 1)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_right = 22
+corner_radius_bottom_left = 22
+
+[node name="Hud" type="CanvasLayer" unique_id=1430079216]
+script = ExtResource("1_6fi6k")
+card_scene = ExtResource("2_uo2fv")
+
+[node name="Root" type="Control" parent="." unique_id=1446788313]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = ExtResource("3_047uy")
+
+[node name="Stick" type="Control" parent="Root" unique_id=1815994495]
+unique_name_in_owner = true
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("4_5pdws")
+
+[node name="Base" type="Panel" parent="Root/Stick" unique_id=1662783155]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 140.0
+offset_top = 420.0
+offset_right = 340.0
+offset_bottom = 620.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hd3ao")
+
+[node name="Knob" type="Panel" parent="Root/Stick/Base" unique_id=733657428]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 58.0
+offset_top = 58.0
+offset_right = 142.0
+offset_bottom = 142.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_0i1j5")
+
+[node name="Top" type="MarginContainer" parent="Root" unique_id=120050482]
+layout_mode = 0
+anchor_right = 1.0
+mouse_filter = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+
+[node name="Column" type="VBoxContainer" parent="Root/Top" unique_id=2122723309]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="XpBar" type="ProgressBar" parent="Root/Top/Column" unique_id=1966264021]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+mouse_filter = 2
+value = 35.0
+show_percentage = false
+
+[node name="Row" type="HBoxContainer" parent="Root/Top/Column" unique_id=1965080099]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="LevelLabel" type="Label" parent="Root/Top/Column/Row" unique_id=537152837]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "Lv.1"
+
+[node name="HpBar" type="ProgressBar" parent="Root/Top/Column/Row" unique_id=1745375606]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(220, 18)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_mphia")
+value = 80.0
+show_percentage = false
+
+[node name="Spacer" type="Control" parent="Root/Top/Column/Row" unique_id=395086997]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="TimeLabel" type="Label" parent="Root/Top/Column/Row" unique_id=1059444492]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "0:00"
+
+[node name="Spacer2" type="Control" parent="Root/Top/Column/Row" unique_id=1606545467]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="KillsLabel" type="Label" parent="Root/Top/Column/Row" unique_id=1657247156]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "擊倒 0"
+
+[node name="Perf" type="Label" parent="Root" unique_id=2104238572]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = -34.0
+offset_right = 59.0
+offset_bottom = -11.0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 15
+text = "60 fps"
+
+[node name="LevelUp" type="Control" parent="Root" unique_id=1758266656]
+unique_name_in_owner = true
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Dim" type="ColorRect" parent="Root/LevelUp" unique_id=1348308582]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.05, 0.04, 0.1, 0.6)
+
+[node name="Margin" type="MarginContainer" parent="Root/LevelUp" unique_id=925674101]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="Stack" type="VBoxContainer" parent="Root/LevelUp/Margin" unique_id=358837355]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Title" type="Label" parent="Root/LevelUp/Margin/Stack" unique_id=970173868]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "升級！選一張卡"
+horizontal_alignment = 1
+
+[node name="Cards" type="HFlowContainer" parent="Root/LevelUp/Margin/Stack" unique_id=1130596068]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 18
+theme_override_constants/v_separation = 14
+alignment = 1
+
+[node name="Sample1" parent="Root/LevelUp/Margin/Stack/Cards" unique_id=1495148697 instance=ExtResource("2_uo2fv")]
+layout_mode = 2
+
+[node name="Sample2" parent="Root/LevelUp/Margin/Stack/Cards" unique_id=389592266 instance=ExtResource("2_uo2fv")]
+layout_mode = 2
+
+[node name="Sample3" parent="Root/LevelUp/Margin/Stack/Cards" unique_id=49283800 instance=ExtResource("2_uo2fv")]
+layout_mode = 2
+
+[node name="Result" type="Control" parent="Root" unique_id=1170836729]
+unique_name_in_owner = true
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Dim" type="ColorRect" parent="Root/Result" unique_id=2095374110]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.05, 0.04, 0.1, 0.6)
+
+[node name="Center" type="CenterContainer" parent="Root/Result" unique_id=832360196]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Panel" type="PanelContainer" parent="Root/Result/Center" unique_id=847248416]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_0m4u7")
+
+[node name="Body" type="VBoxContainer" parent="Root/Result/Center/Panel" unique_id=1866102709]
+layout_mode = 2
+theme_override_constants/separation = 18
+alignment = 1
+
+[node name="ResultTitle" type="Label" parent="Root/Result/Center/Panel/Body" unique_id=97956355]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.12, 0.1, 0.2, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 46
+text = "倒下了"
+horizontal_alignment = 1
+
+[node name="ResultStats" type="Label" parent="Root/Result/Center/Panel/Body" unique_id=302079070]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.28, 0.36, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 24
+text = "存活 0:00 · 擊倒 0 · Lv.1"
+horizontal_alignment = 1
+
+[node name="Restart" type="Button" parent="Root/Result/Center/Panel/Body" unique_id=624701750]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "再來一局"

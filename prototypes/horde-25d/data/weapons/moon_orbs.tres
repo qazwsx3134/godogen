@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="WeaponDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapon_def.gd" id="1_1ityv"]
+
+[resource]
+script = ExtResource("1_1ityv")
+id = &"moon_orbs"
+title = "月光球"
+description = "光球繞著你轉，撞到就傷害。"
+kind = 2
+damage = 8.0
+cooldown = 0.25
+amount = 2
+area = 1.2
+speed = 3.2
+knockback = 4.0
+color = Color(0.75, 0.6, 1, 1)

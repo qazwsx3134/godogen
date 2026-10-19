@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="EnemyDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/enemy_def.gd" id="1_enbfl"]
+
+[resource]
+script = ExtResource("1_enbfl")
+id = &"brute"
+frame = 3
+hp = 45.0
+speed = 2.0
+size = 3.0
+radius = 0.9
+damage = 12.0
+xp = 4
+knockback_resist = 0.6
+tint = Color(0.7, 0.5, 0.9, 1)
+appears_at = 100.0
+weight = 0.3

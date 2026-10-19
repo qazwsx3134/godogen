@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="WeaponDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapon_def.gd" id="1_1l4hl"]
+
+[resource]
+script = ExtResource("1_1l4hl")
+id = &"shock_nova"
+title = "震波"
+description = "從腳下炸開一圈震波，把敵人推遠。"
+kind = 3
+damage = 14.0
+cooldown = 2.6
+area = 5.0
+speed = 0.0
+knockback = 14.0
+color = Color(1, 0.6, 0.25, 1)

@@ -1,0 +1,7 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://shaders/fx_glow.gdshader" id="1_qiw20"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_qiw20")

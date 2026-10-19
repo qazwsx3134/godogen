@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://shaders/ground_ring.gdshader" id="1_w5q22"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_w5q22")
+shader_parameter/color = Color(0.35, 0.85, 1, 0.55)
+shader_parameter/fill = 0.1

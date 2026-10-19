@@ -1,0 +1,46 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_qlg0r"]
+[ext_resource type="Material" path="res://materials/blob_shadow.tres" id="2_tuyoq"]
+[ext_resource type="Shader" path="res://shaders/sprite_billboard.gdshader" id="3_fjrip"]
+[ext_resource type="Texture2D" path="res://assets/sprites/atlas.png" id="4_smehm"]
+[ext_resource type="Shader" path="res://shaders/sprite_xray.gdshader" id="5_ur7pv"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_y4r1p"]
+size = Vector2(1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d2wvv"]
+render_priority = 0
+shader = ExtResource("3_fjrip")
+shader_parameter/atlas = ExtResource("4_smehm")
+shader_parameter/use_instance_custom = false
+shader_parameter/frame = 0.0
+shader_parameter/outline = Color(1, 1, 1, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_3v2ag"]
+center_offset = Vector3(0, 0.5, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_jej6c"]
+render_priority = 1
+shader = ExtResource("5_ur7pv")
+shader_parameter/atlas = ExtResource("4_smehm")
+
+[node name="Player" type="Node3D" unique_id=1848256062]
+script = ExtResource("1_qlg0r")
+
+[node name="Shadow" type="MeshInstance3D" parent="." unique_id=911143400]
+transform = Transform3D(2, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0)
+material_override = ExtResource("2_tuyoq")
+mesh = SubResource("PlaneMesh_y4r1p")
+
+[node name="Body" type="MeshInstance3D" parent="." unique_id=434591347]
+unique_name_in_owner = true
+transform = Transform3D(2.37, 0, 0, 0, 2.37, 0, 0, 0, 2.37, 0, 0, 0)
+material_override = SubResource("ShaderMaterial_d2wvv")
+mesh = SubResource("QuadMesh_3v2ag")
+
+[node name="Xray" type="MeshInstance3D" parent="." unique_id=1729192953]
+unique_name_in_owner = true
+transform = Transform3D(2.37, 0, 0, 0, 2.37, 0, 0, 0, 2.37, 0, 0, 0)
+material_override = SubResource("ShaderMaterial_jej6c")
+mesh = SubResource("QuadMesh_3v2ag")

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="WeaponDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapon_def.gd" id="1_ndghv"]
+
+[resource]
+script = ExtResource("1_ndghv")
+id = &"spark_bolt"
+title = "星火彈"
+description = "朝最近的敵人發射火花彈。"
+damage = 9.0
+cooldown = 0.7
+speed = 15.0
+knockback = 3.0
+color = Color(1, 0.8, 0.3, 1)

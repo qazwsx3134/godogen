@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="PassiveDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/passive_def.gd" id="1_rahq3"]
+
+[resource]
+script = ExtResource("1_rahq3")
+id = &"regen"
+title = "再生"
+description = "每秒回復 0.5 生命。"
+stat = 6
+per_level = 0.5

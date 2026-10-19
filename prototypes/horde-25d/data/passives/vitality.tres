@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="PassiveDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/passive_def.gd" id="1_nj2f1"]
+
+[resource]
+script = ExtResource("1_nj2f1")
+id = &"vitality"
+title = "體魄"
+description = "最大生命 +20。"
+stat = 5
+per_level = 20.0

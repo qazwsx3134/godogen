@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="PassiveDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/passive_def.gd" id="1_42iu6"]
+
+[resource]
+script = ExtResource("1_42iu6")
+id = &"haste"
+title = "迅捷"
+description = "冷卻時間 -8%。"
+stat = 1
+per_level = 0.08

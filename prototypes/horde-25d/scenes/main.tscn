@@ -1,0 +1,235 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_c6pm6"]
+[ext_resource type="Material" path="res://materials/ground.tres" id="2_5he1u"]
+[ext_resource type="ArrayMesh" path="res://assets/meshes/prop_mesh.tres" id="3_5poiv"]
+[ext_resource type="Script" path="res://scripts/decor.gd" id="4_2cjbq"]
+[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="5_chjal"]
+[ext_resource type="ArrayMesh" path="res://assets/meshes/actor_mesh.tres" id="6_cjqg0"]
+[ext_resource type="Script" path="res://scripts/horde.gd" id="7_vchkt"]
+[ext_resource type="Script" path="res://scripts/enemy_def.gd" id="8_txyw0"]
+[ext_resource type="Resource" path="res://data/enemies/slime.tres" id="9_vc5cj"]
+[ext_resource type="Resource" path="res://data/enemies/bat.tres" id="10_nvyfr"]
+[ext_resource type="Resource" path="res://data/enemies/brute.tres" id="11_ty1g6"]
+[ext_resource type="Resource" path="res://data/enemies/elite.tres" id="12_j2jfr"]
+[ext_resource type="Material" path="res://materials/gem.tres" id="13_bjg73"]
+[ext_resource type="Script" path="res://scripts/gems.gd" id="14_bu4jf"]
+[ext_resource type="Material" path="res://materials/fx_glow.tres" id="15_o7ddy"]
+[ext_resource type="Script" path="res://scripts/glow_pool.gd" id="16_0loja"]
+[ext_resource type="Script" path="res://scripts/fx.gd" id="17_ids8r"]
+[ext_resource type="Script" path="res://scripts/arsenal.gd" id="18_dnhof"]
+[ext_resource type="Script" path="res://scripts/weapon_def.gd" id="19_1v6qk"]
+[ext_resource type="Resource" path="res://data/weapons/spark_bolt.tres" id="20_augu2"]
+[ext_resource type="Resource" path="res://data/weapons/guard_aura.tres" id="21_tm6hj"]
+[ext_resource type="Resource" path="res://data/weapons/moon_orbs.tres" id="22_kf5aa"]
+[ext_resource type="Resource" path="res://data/weapons/shock_nova.tres" id="23_t5ykj"]
+[ext_resource type="Script" path="res://scripts/passive_def.gd" id="24_e755i"]
+[ext_resource type="Resource" path="res://data/passives/might.tres" id="25_ro3en"]
+[ext_resource type="Resource" path="res://data/passives/haste.tres" id="26_od4ux"]
+[ext_resource type="Resource" path="res://data/passives/area.tres" id="27_xhfw6"]
+[ext_resource type="Resource" path="res://data/passives/swift.tres" id="28_1epgm"]
+[ext_resource type="Resource" path="res://data/passives/magnet.tres" id="29_152kg"]
+[ext_resource type="Resource" path="res://data/passives/vitality.tres" id="30_r4e17"]
+[ext_resource type="Resource" path="res://data/passives/regen.tres" id="31_y57op"]
+[ext_resource type="Material" path="res://materials/aura_ring.tres" id="32_mlv25"]
+[ext_resource type="Material" path="res://materials/nova_ring.tres" id="33_a82wo"]
+[ext_resource type="Script" path="res://scripts/damage_numbers.gd" id="34_gdvew"]
+[ext_resource type="PackedScene" path="res://scenes/damage_number.tscn" id="35_kjtvk"]
+[ext_resource type="Shader" path="res://shaders/sprite_billboard.gdshader" id="36_xrs0c"]
+[ext_resource type="Texture2D" path="res://assets/sprites/atlas.png" id="37_xljpf"]
+[ext_resource type="Script" path="res://scripts/camera_rig.gd" id="38_j4bwh"]
+[ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="39_ksmap"]
+
+[sub_resource type="Environment" id="Environment_ygd8o"]
+background_mode = 1
+background_color = Color(0.53, 0.75, 0.93, 1)
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+glow_enabled = true
+glow_intensity = 0.7
+glow_blend_mode = 0
+glow_hdr_threshold = 1.05
+fog_enabled = true
+fog_mode = 1
+fog_light_color = Color(0.62, 0.8, 0.95, 1)
+fog_density = 1.0
+fog_sky_affect = 0.0
+fog_depth_begin = 40.0
+fog_depth_end = 110.0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_2s0kr"]
+size = Vector2(320, 320)
+
+[sub_resource type="MultiMesh" id="MultiMesh_xaipn"]
+transform_format = 1
+use_custom_data = true
+mesh = ExtResource("3_5poiv")
+
+[sub_resource type="MultiMesh" id="MultiMesh_ndrjj"]
+transform_format = 1
+use_custom_data = true
+mesh = ExtResource("6_cjqg0")
+
+[sub_resource type="QuadMesh" id="QuadMesh_ih3m7"]
+
+[sub_resource type="MultiMesh" id="MultiMesh_11yus"]
+transform_format = 1
+use_custom_data = true
+mesh = SubResource("QuadMesh_ih3m7")
+
+[sub_resource type="MultiMesh" id="MultiMesh_b6ruc"]
+transform_format = 1
+use_colors = true
+use_custom_data = true
+mesh = SubResource("QuadMesh_ih3m7")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_155or"]
+size = Vector2(1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vtx2l"]
+render_priority = 0
+shader = ExtResource("36_xrs0c")
+shader_parameter/atlas = ExtResource("37_xljpf")
+shader_parameter/use_instance_custom = false
+shader_parameter/frame = 1.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_63lxy"]
+center_offset = Vector3(0, 0.5, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fjhjs"]
+render_priority = 0
+shader = ExtResource("36_xrs0c")
+shader_parameter/atlas = ExtResource("37_xljpf")
+shader_parameter/use_instance_custom = false
+shader_parameter/frame = 2.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bfu41"]
+render_priority = 0
+shader = ExtResource("36_xrs0c")
+shader_parameter/atlas = ExtResource("37_xljpf")
+shader_parameter/use_instance_custom = false
+shader_parameter/frame = 3.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r4ag1"]
+render_priority = 0
+shader = ExtResource("36_xrs0c")
+shader_parameter/atlas = ExtResource("37_xljpf")
+shader_parameter/use_instance_custom = false
+shader_parameter/frame = 4.0
+
+[node name="Main" type="Node3D" unique_id=713027828]
+script = ExtResource("1_c6pm6")
+elite_times = PackedFloat32Array(60, 120, 180, 240)
+surge_times = PackedFloat32Array(90, 210)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1313160093]
+environment = SubResource("Environment_ygd8o")
+
+[node name="Ground" type="MeshInstance3D" parent="." unique_id=945351979]
+unique_name_in_owner = true
+material_override = ExtResource("2_5he1u")
+mesh = SubResource("PlaneMesh_2s0kr")
+
+[node name="Decor" type="MultiMeshInstance3D" parent="." unique_id=807676207]
+unique_name_in_owner = true
+custom_aabb = AABB(-2000, -10, -2000, 4000, 40, 4000)
+multimesh = SubResource("MultiMesh_xaipn")
+script = ExtResource("4_2cjbq")
+frames = PackedInt32Array(5, 6, 7)
+sizes = PackedFloat32Array(5, 2, 1.2)
+weights = PackedFloat32Array(0.35, 0.2, 0.45)
+
+[node name="Player" parent="." unique_id=1100636473 instance=ExtResource("5_chjal")]
+unique_name_in_owner = true
+
+[node name="Horde" type="MultiMeshInstance3D" parent="." unique_id=1509099349]
+unique_name_in_owner = true
+custom_aabb = AABB(-2000, -10, -2000, 4000, 40, 4000)
+multimesh = SubResource("MultiMesh_ndrjj")
+script = ExtResource("7_vchkt")
+defs = Array[ExtResource("8_txyw0")]([ExtResource("9_vc5cj"), ExtResource("10_nvyfr"), ExtResource("11_ty1g6"), ExtResource("12_j2jfr")])
+
+[node name="Gems" type="MultiMeshInstance3D" parent="." unique_id=982455125]
+unique_name_in_owner = true
+material_override = ExtResource("13_bjg73")
+custom_aabb = AABB(-2000, -10, -2000, 4000, 40, 4000)
+multimesh = SubResource("MultiMesh_11yus")
+script = ExtResource("14_bu4jf")
+tier_xp = PackedInt32Array(3, 10, 30)
+sizes = PackedFloat32Array(0.45, 0.55, 0.7, 0.9)
+
+[node name="Glow" type="MultiMeshInstance3D" parent="." unique_id=947180438]
+unique_name_in_owner = true
+material_override = ExtResource("15_o7ddy")
+custom_aabb = AABB(-2000, -10, -2000, 4000, 40, 4000)
+multimesh = SubResource("MultiMesh_b6ruc")
+script = ExtResource("16_0loja")
+
+[node name="Fx" type="Node" parent="." unique_id=343833674 node_paths=PackedStringArray("glow")]
+unique_name_in_owner = true
+script = ExtResource("17_ids8r")
+glow = NodePath("../Glow")
+
+[node name="Arsenal" type="Node3D" parent="." unique_id=998786078 node_paths=PackedStringArray("horde", "glow", "fx")]
+unique_name_in_owner = true
+script = ExtResource("18_dnhof")
+horde = NodePath("../Horde")
+glow = NodePath("../Glow")
+fx = NodePath("../Fx")
+weapon_pool = Array[ExtResource("19_1v6qk")]([ExtResource("20_augu2"), ExtResource("21_tm6hj"), ExtResource("22_kf5aa"), ExtResource("23_t5ykj")])
+passive_pool = Array[ExtResource("24_e755i")]([ExtResource("25_ro3en"), ExtResource("26_od4ux"), ExtResource("27_xhfw6"), ExtResource("28_1epgm"), ExtResource("29_152kg"), ExtResource("30_r4e17"), ExtResource("31_y57op")])
+starting_weapon = ExtResource("20_augu2")
+
+[node name="Aura" type="MeshInstance3D" parent="Arsenal" unique_id=2005637214]
+unique_name_in_owner = true
+transform = Transform3D(5.2, 0, 0, 0, 1, 0, 0, 0, 5.2, 0, 0.05, 0)
+material_override = ExtResource("32_mlv25")
+mesh = SubResource("PlaneMesh_155or")
+
+[node name="Nova" type="MeshInstance3D" parent="Arsenal" unique_id=1282103962]
+unique_name_in_owner = true
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 0, 0.05, 0)
+material_override = ExtResource("33_a82wo")
+mesh = SubResource("PlaneMesh_155or")
+
+[node name="Numbers" type="Node3D" parent="." unique_id=1713383223]
+unique_name_in_owner = true
+script = ExtResource("34_gdvew")
+number_scene = ExtResource("35_kjtvk")
+
+[node name="Previews" type="Node3D" parent="." unique_id=121708964]
+unique_name_in_owner = true
+
+[node name="Slime" type="MeshInstance3D" parent="Previews" unique_id=2073647988]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -4.5, 0, -3)
+material_override = SubResource("ShaderMaterial_vtx2l")
+mesh = SubResource("QuadMesh_63lxy")
+
+[node name="Bat" type="MeshInstance3D" parent="Previews" unique_id=100932835]
+transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, -1.5, 0, -3)
+material_override = SubResource("ShaderMaterial_fjhjs")
+mesh = SubResource("QuadMesh_63lxy")
+
+[node name="Brute" type="MeshInstance3D" parent="Previews" unique_id=112358836]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 1.5, 0, -3)
+material_override = SubResource("ShaderMaterial_bfu41")
+mesh = SubResource("QuadMesh_63lxy")
+
+[node name="Elite" type="MeshInstance3D" parent="Previews" unique_id=465158349]
+transform = Transform3D(4.4, 0, 0, 0, 4.4, 0, 0, 0, 4.4, 4.5, 0, -3)
+material_override = SubResource("ShaderMaterial_r4ag1")
+mesh = SubResource("QuadMesh_63lxy")
+
+[node name="CameraRig" type="Node3D" parent="." unique_id=1240971555 node_paths=PackedStringArray("target")]
+unique_name_in_owner = true
+script = ExtResource("38_j4bwh")
+target = NodePath("../Player")
+
+[node name="Camera" type="Camera3D" parent="CameraRig" unique_id=175094893]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 0.90044713, 0.43496552, 0, -0.43496552, 0.90044713, 0, 4.91469, 8.104024)
+fov = 70.0
+far = 300.0
+
+[node name="Hud" parent="." unique_id=1430079216 instance=ExtResource("39_ksmap")]
+unique_name_in_owner = true

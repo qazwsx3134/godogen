@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="WeaponDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapon_def.gd" id="1_rwt7q"]
+
+[resource]
+script = ExtResource("1_rwt7q")
+id = &"guard_aura"
+title = "守護光環"
+description = "持續傷害身邊一圈的敵人。"
+kind = 1
+damage = 4.0
+cooldown = 0.4
+area = 2.6
+speed = 0.0
+knockback = 0.8
+color = Color(0.35, 0.85, 1, 1)
