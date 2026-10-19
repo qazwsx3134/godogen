@@ -1,7 +1,12 @@
 [gd_resource type="ShaderMaterial" format=3]
 
-[ext_resource type="Shader" path="res://shaders/gem.gdshader" id="1_q1at5"]
+[ext_resource type="Shader" path="res://shaders/sprite_billboard.gdshader" id="1_nrq1d"]
+[ext_resource type="Texture2D" path="res://assets/sprites/atlas.png" id="2_lgiu0"]
 
 [resource]
 render_priority = 0
-shader = ExtResource("1_q1at5")
+shader = ExtResource("1_nrq1d")
+shader_parameter/atlas = ExtResource("2_lgiu0")
+shader_parameter/use_instance_custom = true
+shader_parameter/bob = 0.0
+shader_parameter/hit_squash = 0.0

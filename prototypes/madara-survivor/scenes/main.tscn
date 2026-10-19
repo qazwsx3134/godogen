@@ -85,10 +85,13 @@ mesh = ExtResource("6_1v6qk")
 
 [sub_resource type="QuadMesh" id="QuadMesh_raiwf"]
 
+[sub_resource type="QuadMesh" id="QuadMesh_gemft"]
+center_offset = Vector3(0, 0.5, 0)
+
 [sub_resource type="MultiMesh" id="MultiMesh_roort"]
 transform_format = 1
 use_custom_data = true
-mesh = SubResource("QuadMesh_raiwf")
+mesh = SubResource("QuadMesh_gemft")
 
 [sub_resource type="MultiMesh" id="MultiMesh_gm02q"]
 transform_format = 1
@@ -276,7 +279,8 @@ custom_aabb = AABB(-2000, -10, -2000, 4000, 60, 4000)
 multimesh = SubResource("MultiMesh_roort")
 script = ExtResource("17_r4e17")
 tier_xp = PackedInt32Array(3, 10, 30)
-sizes = PackedFloat32Array(0.45, 0.55, 0.7, 0.9)
+sizes = PackedFloat32Array(0.7, 0.85, 1, 1.25)
+frame_base = 18
 
 [node name="Dust" type="MultiMeshInstance3D" parent="." unique_id=1472899501]
 unique_name_in_owner = true

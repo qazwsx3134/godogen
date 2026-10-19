@@ -30,7 +30,9 @@ func _build() -> void:
 	var ground: ShaderMaterial = _material("res://materials/sand.tres", "res://shaders/ground.gdshader", {})
 	var glow: ShaderMaterial = _material("res://materials/fx_glow.tres", "res://shaders/fx_glow.gdshader", {})
 	var dust: ShaderMaterial = _material("res://materials/fx_dust.tres", "res://shaders/fx_dust.gdshader", {})
-	var orb: ShaderMaterial = _material("res://materials/chakra_orb.tres", "res://shaders/gem.gdshader", {})
+	# Chakra orbs: atlas frames 18-21 (one per tier), standing on the ground like the actors.
+	var orb: ShaderMaterial = _material("res://materials/chakra_orb.tres", "res://shaders/sprite_billboard.gdshader", {
+		"atlas": load(ATLAS), "use_instance_custom": true, "bob": 0.0, "hit_squash": 0.0})
 	var arc: ShaderMaterial = _material("res://materials/gunbai_arc.tres", "res://shaders/ground_cone.gdshader", {})
 	var danger: ShaderMaterial = _material("res://materials/danger_ring.tres", "res://shaders/ground_ring.gdshader", {
 		"color": Color(1.0, 0.25, 0.15, 0.9), "thickness": 0.05, "fill_with_progress": true, "fade_with_progress": 0.0})
@@ -666,9 +668,14 @@ func _main(actor_mesh: ArrayMesh, prop_mesh: ArrayMesh, sprite_node: ShaderMater
 
 	var quad := QuadMesh.new()
 	quad.size = Vector2.ONE
+	var gem_quad := QuadMesh.new()
+	gem_quad.size = Vector2.ONE
+	gem_quad.center_offset = Vector3(0.0, 0.5, 0.0)
 	var gems := MultiMeshInstance3D.new()
 	gems.set_script(load("res://scripts/gems.gd"))
-	gems.multimesh = _multimesh(quad, false, true)
+	gems.multimesh = _multimesh(gem_quad, false, true)
+	gems.set("frame_base", 18)
+	gems.set("sizes", PackedFloat32Array([0.7, 0.85, 1.0, 1.25]))
 	gems.material_override = orb_mat
 	gems.custom_aabb = huge
 	SceneBuilder.add(main, SceneBuilder.unique(gems), "Gems")
