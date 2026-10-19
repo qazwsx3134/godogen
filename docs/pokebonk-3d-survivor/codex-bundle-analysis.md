@@ -11,6 +11,8 @@
 
 ## 核心結論與前提校正
 
+數值口徑：本文及 data 表中的 bundle 數值是出貨預設；線上實際平衡可由同源 /api/config 的 balance map 覆寫。模式、難度等範圍會決定哪一筆生效，不能將某個線上值當成所有 run 的預設。線上值引用使用存檔快照 /Users/peter/repo/godot/godogen/.claude/tasks/pokebonk/api-config.json，未在此報告重新連線請求。
+
 - 遊戲渲染層使用 Three.js；`assets` 暴露的版本是 r170。遊戲本體採自訂 3D 移動、碰撞與空間查詢；在指定 bundle 中沒有找到 Cannon API／物理世界呼叫。(assets:34, assets:29033, main:4943, main:8869)
 - 派工單提到「44 隻可玩角色」：主 roster `Se` 確有 44 筆；同檔接著把 29 筆舊角色 `Zh` 加入同一選角資料。因此文件分開列出主 roster 44 筆與舊資料 29 筆，不把兩者混成 44。(main:1048, main:1666, main:123)
 - 派工單寫「5 個模式」：`Ae` 有 classic、night、cave、arena、duel、bonk 六個 ID。arena 是 Lucario 操作與訓練木偶的 action 原型；排除它後，五個 survivor／對戰流程是前三個地圖模式、duel 和 bonk。(main:2877, main:2909, main:3036, main:3058)
@@ -28,6 +30,8 @@
 武器 schema 沒有各招共用的數值射程欄位，不能用單一數字比較「範圍」；資料表將其標為未找到，改記攻擊形狀與程式中的目標／判定方式。(main:103)
 
 ## 戰鬥、升級與成長
+
+本輪補充的獨立資料：[16 組 Combo](/Users/peter/repo/godot/godogen/docs/pokebonk-3d-survivor/data/combos.md)、[天氣表](/Users/peter/repo/godot/godogen/docs/pokebonk-3d-survivor/data/weather.md)、[任務／PB 表](/Users/peter/repo/godot/godogen/docs/pokebonk-3d-survivor/data/missions.md)、[美術與 FX 實作指南](/Users/peter/repo/godot/godogen/docs/pokebonk-3d-survivor/art-and-vfx-implementation.md)。
 
 ### 角色與武器
 
@@ -47,7 +51,7 @@ XP 寶石按價值分四級顏色與尺寸；XP 和金幣用 InstancedMesh 繪�
 
 ### Mega
 
-局內地圖預先放 5 顆 Mega 石；碎片與石頭累積充能，滿格便自動觸發，沒有要求玩家手動按鍵。基礎持續 20 秒；變身時造成半徑 14 m 的範圍傷害，附 hit stop、FOV 推進、閃白、星粒子、光柱與擴散圓環。持續中再增加充能會延長時間，每次 12 秒、最長 40 秒；變身期間每秒脈衝一次。(main:3389, main:29908, main:30745, main:30761)
+局內地圖預先放 5 顆 Mega 石；碎片與石頭累積充能，滿格便自動觸發，沒有要求玩家手動按鍵。基礎持續 20 秒；變身時造成半徑 14 m 的範圍傷害，附 hit stop、FOV 推進、閃白、星粒子、光柱與擴散圓環。持續中每次增加 e 份充能會延長 e×12 秒，剩餘時間上限為 20×2=40 秒。bundle 碎片 e=0.14 可延長 1.68 秒；Classic/Normal 線上快照 e=0.22 可延長 2.64 秒（main:30745-30760）；變身期間每秒脈衝一次。(main:3389, main:29908, main:30745, main:30761)
 
 ## 模式、節奏與勝利條件
 
@@ -84,7 +88,7 @@ Classic、Night、Cave 預設 Boss 計畫是 90、180、270、360、450、540 �
 | 粒子與場景特效 | 粒子系統按名稱延遲建立並重用，每種系統有 1,600 個加色或 900 個一般粒子容量；另有 decal、beam、pillar、ring、poof 等效果。(main:5766, main:5810, main:6071, main:6080, main:6120) | 用 GPUParticles3D 或固定容量粒子池；命中、蓄力預告、衝擊圈、死亡效果用可重用 scene／pool，限制同時效果數。 |
 | 傷害數字與受擊 | 傷害數字是 90 個預先建立的 DOM 元件池，數字依傷害大小縮放並在 0.75–1 秒後回收；玩家受傷有短暫無敵、紅閃、粒子、震屏與 hit stop。(main:5766, main:6289, main:27474, main:30338) | 用 Label3D／CanvasLayer 數字池、材質閃白、短震屏與短暫遊戲時間縮放；讓動畫回收而非持續 new／free。 |
 | 擊退與死亡 | 傷害流程分開處理 HP、擊退與受擊狀態；Boss／菁英會用較低擊退係數，死亡播放 poof／爆裂效果並生成掉落。(main:30390, main:30455, main:30501) | 傷害事件回傳擊退向量與效果類型；把死亡動畫、掉落建立和敵人回收拆成明確步驟。 |
-| 後處理 | composer 依序串接場景、描邊、 tilt、bloom、finish 與 copy；Bloom 參數為 strength 0.55、radius 0.3、threshold 2.4。(main:32155, main:32160) | 用 Godot WorldEnvironment 的 Glow 加上 SubViewport／Canvas shader 做描邊或色散，提供低畫質選項。 |
+| 後處理 | composer 依序串接場景、描邊、 tilt、bloom、finish 與 OutputPass（色調映射／輸出色彩空間）；Bloom 參數為 strength 0.55、radius 0.3、threshold 2.4。(main:32155, main:32160) | 用 Godot WorldEnvironment 的 Glow 加上 SubViewport／Canvas shader 做描邊或色散，提供低畫質選項。 |
 | Instancing 與上限 | 敵人採 InstancedMesh，單型別資源池容量 640；XP 寶石 InstancedMesh 容量 900、硬幣 300；全場敵人預設最多 650。(main:26194, main:26936, main:3621) | 用 MultiMeshInstance3D 批次畫重複幾何；設定全局敵人上限與池容量，拾取物以合併價值控制數量。 |
 | LOD | Three.js bundle 有 `LOD` 類別，但遊戲 bundle 未找到建立或呼叫 LOD 的使用點。(assets:19168, assets:28919) | 若目標平台需要效能餘裕，再依距離切換模型細節；不把它當作此 bundle 已採用的手法。 |
 
@@ -136,3 +140,64 @@ Duel 是另一套競賽邏輯：雙方各自跑敵潮，依擊殺門檻送 alfa 
 8. 移動使用速度加速、慣性、衝刺、滑行與跳躍互動，而不是每幀直接改角色位置。(main:27559, main:27620)
 9. 手機搖桿提供浮動／固定、左右手交換與獨立鏡頭拖動設定。(main:5418, main:5634, main:33569)
 10. 多人敵潮由 host 權威模擬，以量化二進位快照傳輸敵人，而把玩家狀態和傷害請求分開同步。(main:28248, main:28413, main:28418)
+
+## 遠端平衡（/api/config）
+
+線上 config 由 Bg() 以同源 fetch /api/config 取得，啟動流程將回應的 balance 傳給 le.applyServer（main:29557-29563、34201-34203）。applyServer 先以 gr() 驗證每個值為有限數字、key 符合 parser 且 ID 已註冊；全域值寫入參數 shipped slot，範圍值寫入 Gt map；若至少一個鍵套用，接著排序範圍並重算註冊參數（main:7659-7668、7798-7801）。key parser Kc 接受 @scope|分類.子類.鍵，scope 經 Jc/il 驗證與正規化（main:7552-7618）。生效值先取全域值，再疊符合當局 context 的範圍值；Wi 依 scope 特異性排序，較多限定條件的值後套用並優先（main:7635-7657）。
+
+排序分數 ed(scope) = 每個維度加 1000，再加該維度位元權重；維度順序為 m,d,h,r,b,p（main:7591、7622）。同樣有兩個限定時，m+d 得分 2003，m+h 得分 2005，所以標準敵潮的 @m:classic,h:std 值會在 @m:classic,d:normal 後套用。這是同時匹配兩種範圍的結果，不是只按難度決定 XP。實際 run context 包含 h:std 或 h:adapt（main:29852-29857）。
+
+scope 維度：m 模式、d Classic 難度 normal/hard、h 標準／adaptive horde、r:off/on（Golpes 自由／Restrito）、b Boss 數、p solo/online 玩家狀態。h 的允許值是 std/adapt，代表 horde style，不是任意文字標籤（main:7554-7590）。例如 @m:classic,d:normal|Geral.Inimigos.enemyDmg 可覆寫全域 Geral.Inimigos.enemyDmg，且只在 Classic/Normal context 命中。
+
+已存 api-config.json 快照含 211 個 balance keys：136 個全域、75 個範圍鍵；它是提供的線上資料快照，不代表本報告重新取得的即時狀態。快照主要分類為 Geral 120、Cartas 7、Itens 6、Golpes 74、Inimigos 1、Megaeclima 2、Vitaminas 1。下表將 bundle 預設與該快照的線上值分欄；effective 值指未啟用本機平衡調參時的 matching run context（main:7635-7647）：
+
+| 設定 | bundle 預設 | 線上覆寫（快照） | 範圍／解讀 |
+|---|---:|---:|---|
+| Geral.Jogador.xpCurve | 1 | 全域 3；Classic/Normal 1；Classic/標準敵潮 2；Classic/Hard/Adaptive 3 | Classic/Normal/標準敵潮實際為 2；Normal/Adaptive 為 1；Hard/標準為 2；Hard/Adaptive 為 3。相同限定數的 scope 仍有排序，見下文（main:7622、7640-7657、29852-29857）。 |
+| Geral.Chegadadoschefes.interval | 90 秒 | 全域 60 秒 | 共用 Boss timing 控制值；mode plan 仍可能給出明確 Boss at 時間，不可因此推斷每種模式都統一每 60 秒刷新 Boss（main:2993-2996、29959-29963、7016）。 |
+| Geral.Inimigos.enemyDmg | 1.0 | 全域 1.5；Classic/Normal 0.72 | scope 值在匹配 run 覆寫全域。實際傷害還乘時間、威脅、horde、事件、合作等倍率（main:6703、30001-30013）。 |
+| Geral.Inimigos.spawnRate | 1.1 | 全域 1.25；Classic/Normal 1.8 | 影響每秒生成率，與波次群潮分開計算（main:6705、30092-30103）。 |
+| Megaeclima.MegaEvolução.damage | +60% | Classic/Normal +80% | bundle 的 Ee.buffs.damage=0.6；線上值是 +0.8（main:3389-3397；快照同名 balance key）。 |
+| Megaeclima.MegaEvolução.shardValue | 0.14／碎片條 | Classic/Normal 0.22 | 每碎片充能比例，不是傷害倍率（main:3389-3397）。 |
+| Golpes.ChoquedoTrovão.damage | 27.2 | 全域 28.8 | 招式資料本體 main:1676-1687；bundle 的具體攻擊係數可由同名線上鍵取代。 |
+| Inimigos.Rattata.hp | 10 | 全域 10.2 | 直接覆寫敵人資料 HP 欄；敵人基礎值 main:2558。 |
+
+線上 Mega damage=0.8 時，部分 UI 靜態提示仍寫 +60%，而動態公告讀當前配置；移植時應共用同一設定來源產生數值，避免提示與實際係數脫節（main:30828-30834）。Cartas、Itens、Vitaminas 的直接覆寫逐項比較見[升級表的線上覆寫對照](/Users/peter/repo/godot/godogen/docs/pokebonk-3d-survivor/data/upgrades.md)。快照沒有角色專屬、Pokébola 價格或天氣類別的 balance keys；共用傷害、XP 與 enemy 乘數仍會間接改變這些玩法的有效結果。
+
+## 本輪補充的遊戲系統
+
+### Pressure 與 Adaptive
+
+Pressure 是能力效果：半徑 7m 內敵人移速 -35%，移動程式將敵速再乘 0.65（main:3535-3538、26439-26443）。Adaptive Horde 從 run 120 秒後開始，約每 2 秒評估一次最近 10 個玩家 HP 樣本；light／normal／strong profile 可設附近敵人目標、horde 上限與成長速率。normal 的近敵目標 2、horde cap 2.5、每次 creep 0.02；strong 近敵目標 4、cap 4、creep 0.035。Boss 戰中停止一般評估，並以受傷、附近敵人數與威脅命中調節 horde（main:3719-3742、4071-4105）。這是動態威脅修正，與 /api/config 的 h:adapt 範圍值分開。
+
+### 狀態異常
+
+| 狀態 | bundle 預設與處理 | Boss／菁英 |
+|---|---|---|
+| 靜電麻痺／暈眩 | Static 基礎 20% 命中機率，另乘 effectMult；設定 stunT=1 秒（main:3400-3406、30372-30375）。 | 排除 Boss，沒有排除菁英。 |
+| 燃燒 | 同一武器實例每 0.5 秒造成 dps×0.5；該實例重複點燃取時間與 DPS 最大值。可傳染時找 3.4m 內一隻，時間／DPS 乘 0.8（main:8933-8935、8954-8983、9008-9021）。 | 此處 ignite／tick 未見 Boss／菁英專屬減半。不同武器實例各有 burns map，不能推論所有來源的燃燒互斥。 |
+| 減速 | 普通敵人／菁英移速乘 0.45；一般 dealDamage 收到 slow 會設 slowT=2 秒。Pressure 另乘 0.65（main:26439-26443、30394）。 | Boss 的 bossMove 減速係數為 0.6（main:26505-26511），不是普通敵人的 0.45。 |
+| 冰招「凍結」 | 基礎 Ice Beam 命中 slow=真；進化每 2.6 秒在半徑 8×size 範圍施加 stun 1.5 秒、slowT=3 秒（main:14105-14166）。Icicle Crash 主落點 stun 0.45 秒；進化碎裂延遲 0.18 秒、stun 1.3 秒（main:15440-15470）。 | 共用 aoe／cone／zone 的 stun 排除 Boss；上述慢速效果仍可設在 Boss 上。 |
+| 共用抗性 | 未找到獨立跨招式 freeze enum 或固定凍結時長；冰招以既有 stunT／slowT 表達控制。 | 通用暈眩對 Boss 有免疫條件；未找到 Boss／菁英統一抗性減半規則（main:8995-8997、9073-9101）。 |
+
+### Bonk 物件與經濟
+
+Bonk 兩階段各 540 秒，Boss 在第 300 秒；Fields/Tyranitar 為第一階段，Noite Sombria/Lugia 為第二階段，後段敵方 HP 階段倍率 2.4、傷害 1.7（main:3058-3075、28611-28618）。場上有 4 個 charge shrine：半徑 3.4m 內累積 4 秒，離開時以一半速率退回充能（main:28700-28715）。2 個 challenge shrine 會召喚非最終、非本階段目標的隨機 Boss，HP scale=當局 hpScale×0.6；擊敗後出免費 Pokébola（main:28747-28754、28784-28790）。2 個 cursed shrine 每次給幸運 stat +0.10、XP stat +0.12、reroll +1，代價是敵方 HP 倍率乘 (1+詛咒數×0.15)、spawn 倍率乘 (1+詛咒數×0.12)（main:28611-28618、28791-28802）。charge shrine 的獎勵由十種本局永久 buff 抽三張，稀有度依幸運抽選（main:3082-3093、28807-28836）。
+
+Meowth 商人展示 3 項，稀有度基價 25／40／70／120／200；價格 = round(該稀有度基價 × (1+time/600) × (1+stage×0.5))，reroll = round(15×(1+time/600))（main:3079、28838-28845、28850-28883）。微波爐每階段 2 台；價格 round(45×1.7^已使用次數×(1+time/900))，可複製一個已持有 item（main:3080、28887-28928）。非最終 Boss 倒下後開 portal 供進下一階段；計時耗盡進終局 swarm（main:28931-28948、3081）。
+
+### Pokébola 價格
+
+Bundle 初始普通球公式 round(12×1.32^opened + 4×opened)，前五次 12／20／29／40／52；不同稀有度再乘 [1、1.6、2.5、4、6.5]。另有錢包門檻倍率 0／0／0.08／0.18／0.35，實際價格取公式價與稀有度錢包比例計算值的較高者。每 40 秒出現一顆，地圖上限 22，最多顯示 3 個 item 選項；拒絕付款退款係數 0.5。稀有度基礎權重 60／25／10／4／1，並受 luck 調整（main:3875-3895、7495-7514、1034-1046、27080-27085）。付款可依稀有度消耗維他命等級、reroll／banish／skip 或詛咒，見 main:7516-7546。api-config.json 快照沒有 Pokébola 價格鍵。
+
+### 評級、PB 與任務
+
+勝利取 Boss medal 平均分：至少 0.85 為 S+，否則 S；失敗按 450／270／120 秒分 A／B／C，未達 120 為 D（main:22582-22589）。PB 基底由 medal 3／2／1、存活每分鐘 3、每 100 擊殺 1（上限 30）、每 Boss 6、勝利 40 或 Duel 勝 25、bonus PB 組成；結算乘數為 Bonk 時 1.3、否則 1.0，再加 restricted +0.25、adaptive +0.25、風險 modifier 總和、每位額外玩家 +0.05，四捨五入並追加任務 PB（main:3803、4540、4794-4831）。22 個任務完整條件與解鎖獎勵見[任務資料表](/Users/peter/repo/godot/godogen/docs/pokebonk-3d-survivor/data/missions.md)（main:4562-4718）。
+
+### 平衡實驗室
+
+F2 Balanceamento 與 F4 Laboratório 是開發工具入口（main:23967）。Balanceamento 將註冊分類／子類／鍵顯示為滑桿，並附使用現值換算生成、傷害或 XP 公式的說明；y() 收集註冊 key、label、範圍、step 與預設值（main:6724-6739、6756-6768、17654-17682）。Laboratório 的測試局不進歷史、排行榜或永久進度（main:26081-26089）；UI 顯示 run／player／build／敵人／scenario／account 類別（main:32321-32339）。
+
+### 合作人數修正
+
+合作 scale = 1 + 每位額外玩家 × 各項係數（main:3620、28050-28055）。它用於敵人生命、傷害、生怪、場上 cap、elite 出現、horde wave 與 Boss 出招速度（main:3602-3618、26686、29987-30013、30104-30125、30196）。每多一名玩家：一般敵 HP +60%、Boss HP +85%（取代一般敵 HP 的合作倍率，非兩者相乘；main:30252-30264）、spawn +30%、存活上限 +8%（乘數最多 1.5，即最多 +50%）、敵人傷害 +7%、移速 +2%、horde +20%、elite 生成速度 +25%、Boss 攻擊速度 +6%。隊友復活需站旁 3 秒、距離 2.8m，復活 HP 40%；升級選卡時受到傷害乘 0.5，遠距 XP 範圍參數為 22m（main:3602-3618、28371-28388、27441、30436）。Duel 不應直接套用為多人合作；PB 的額外玩家加成另見前節。

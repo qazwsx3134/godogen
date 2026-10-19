@@ -1,12 +1,14 @@
 # 被動道具與升級規則
 
+數值口徑：表格記錄 bundle 預設；線上 /api/config 快照可覆寫註冊的 Cartas、Itens 等平衡鍵，值依遊戲範圍而定，詳見 [bundle 分析的遠端平衡節](/Users/peter/repo/godot/godogen/docs/pokebonk-3d-survivor/codex-bundle-analysis.md#遠端平衡-api-config)。快照沒有逐條升級項目的通用直接覆寫時，不代表其他共用乘數不會改變實際效果。
+
 ## 維他命（進化材料與角色升級）
 
-升級量會按抽到的稀有度倍率調整，且持有等級達 20 後有 0.96 的遞減係數；下列是 base 的每級數值。(`main:2143、main:2236`、`main:3646、main:3679`)
+升級量會按抽到的稀有度倍率調整，且持有等級達 20 後有 0.96 的遞減係數；下列是 base 的每級數值。（main:2144、main:2236、main:3646、main:3679）
 
 | 行 | ID／pt-BR 名稱（中文） | 影響欄位 | 每級 base 增量 |
 |---:|---|---|---:|
-| main:2143 | `protein`／Proteína（蛋白質） | 傷害 | +0.1 |
+| main:2144 | `protein`／Proteína（蛋白質） | 傷害 | +0.1 |
 | main:2153 | `carbos`／Carbos（速度強化劑） | 移動速度 | +0.08 |
 | main:2162 | `iron`／Ferro（鐵） | 護甲 | +0.05 |
 | main:2171 | `hpup`／HP Up（HP 強化劑） | 最大 HP | +20 |
@@ -66,7 +68,7 @@
 
 | 行 | ID／pt-BR 名稱（中文） | 稀有度 | 效果 |
 |---:|---|---|---|
-| main:3399 | `static`／Estática（靜電） | 不普通 | 20% 命中率使敵人麻痺 1 秒 |
+| main:3400 | `static`／Estática（靜電） | 不普通 | 20% 命中率使敵人麻痺 1 秒 |
 | main:3409 | `flamebody`／Corpo Chamejante（火焰之軀） | 不普通 | 碰觸者承受反彈傷害 |
 | main:3418 | `adaptability`／Adaptabilidade（適應力） | 稀有 | 同屬性招式 +40% 傷害 |
 | main:3430 | `technician`／Técnico（技術高手） | 不普通 | 基礎傷害 ≤20 的招式傷害 +50% |
@@ -89,3 +91,25 @@
 - Skip 會把該次等級轉成 `round(5 + level × 2)` 金幣；Boss 基礎獎勵含 20 份 XP、25 枚硬幣、2 個 Mega 碎片、2 個免費寶箱和 1 個磁鐵。 (`main:31210、main:31228`、`main:30460、main:30485`)
 
 寶箱高稀有度可用降低維他命等級、消耗 reroll／banish／skip，或接受 run 內詛咒付款；這是寶箱付款選項，不是升級卡的常規價格。 (`main:30658、main:30710`)
+
+
+## 線上覆寫對照（api-config 快照）
+
+下表以資料 bundle 的註冊預設與已存快照並列；「Classic/Hard/...」是限定 scope，不代表全域值。這份快照有 Cartas 7 個、Itens 6 個、Vitaminas 1 個 balance entries。
+
+| 分類／鍵 | bundle 預設 | 線上覆寫（快照） | 範圍 | 來源 |
+|---|---:|---:|---|---|
+| Cartas.Comum.mult | 1.0 | 1.2 | 全域 | main:1035-1039 |
+| Cartas.Incomum.mult | 1.3 | 1.5 | 全域 | main:1035-1039 |
+| Cartas.Raro.mult | 1.7 | 2.0 | 全域 | main:1035-1039 |
+| Cartas.Épico.mult | 2.2 | 2.7 | 全域 | main:1035-1039 |
+| Cartas.Lendário.mult | 3.0 | 3.5 | 全域 | main:1035-1039 |
+| Cartas.Upgradedegolpe.damage | 0.15 | 0.20 | 全域 | main:2132-2137、7250-7259 |
+| Cartas.Upgradedegolpe.cooldown | 0.07 | 0.13 | 全域 | main:2132-2137、7250-7259 |
+| Itens.SinoConcha.lifesteal | 0.01 | 0.002 全域；0.001 限定值 | 全域；@m:classic,d:hard | main:2318-2326 |
+| Itens.GarraAfiada.critMult | 0.4 | 0.1 | @m:classic,d:hard | main:2328-2336 |
+| Itens.FaixaFoco.rarity | 3 | 4 | @m:classic,d:hard | main:2358-2365 |
+| Itens.PedradoRei.execute | 0.03 | 0.02 | @m:classic,d:hard | main:2377-2385 |
+| Itens.InsígniaMestre.quantity | 1 | 2 | @m:classic,d:hard,h:adapt,b:6,p:solo | main:2547-2555 |
+| Vitaminas.Trevo.per | 0.1 | 0.12 | @m:classic,d:hard,h:adapt,b:6,p:solo | main:2209-2218 |
+

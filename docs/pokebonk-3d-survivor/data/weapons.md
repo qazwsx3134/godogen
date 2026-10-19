@@ -1,5 +1,7 @@
 # 招式／武器資料
 
+數值口徑：本表是 bundle 預設。已存的 api-config.json 快照另有線上覆寫；其作用依模式／難度／標籤而變，見 [bundle 分析的遠端平衡節](/Users/peter/repo/godot/godogen/docs/pokebonk-3d-survivor/codex-bundle-analysis.md#遠端平衡-api-config)。例如 Thunderbolt bundle 傷害 27.2、快照全域值 28.8；Mega bundle 傷害 +60%／碎片值 0.14，Classic/Normal 線上覆寫分別為 +80%／0.22。
+
 資料合併關係：新武器 `ne` 22 招，`Object.assign(ne, eu)` 再接入舊武器 `eu` 29 招；合計 51 招。通用 base schema 只有傷害、冷卻、數量、尺寸、速度、持續、穿透、擊退、連鎖，沒有共同的「射程」欄位；因此下表以每招描述和程式定位整理判定形狀，**數值射程未找到為共同資料**。`pierce=99` 表示程式採用的近似無限穿透值。 (schema `main:103`、新武器 `main:1668、main:1986`、舊武器 `main:532、main:793`)
 
 | 行 | ID／pt-BR 名稱（中文） | 基礎數值 | 判定／距離形狀 | 升級池 |
@@ -12,7 +14,7 @@
 | main:1741 | `judgment` · Julgamento（制裁光礫） | 傷害 30／CD 2.6 秒／數量 2／穿透 0／擊退 3／連鎖 0 | 從天空落下的光柱，基礎 2 道 | 傷害、冷卻、數量、範圍尺寸 |
 | main:1752 | `shadowball` · Bola Sombria（暗影球） | 傷害 42／CD 1.35 秒／數量 1／穿透 1／擊退 3／連鎖 0 | 追蹤敵人的暗影球 | 傷害、冷卻、數量、穿透、飛行速度 |
 | main:1772 | `razorleaf` · Folha Navalha（飛葉快刀） | 傷害 12／CD 1.6 秒／數量 3／穿透 ∞／擊退 1／連鎖 0 | 來回飛行的葉片迴力鏢，可穿透 | 傷害、冷卻、數量、飛行速度 |
-| main:1792 | `icebeam` · Raio de Gelo（冰凍光束） | 傷害 28.8／CD 1.25 秒／數量 1／穿透 2／擊退 1／連鎖 0 | 快速冰束，附減速與凍結 | 傷害、冷卻、數量、穿透 |
+| main:1792 | `icebeam` · Raio de Gelo（冰凍光束） | 傷害 28.8／CD 1.25 秒／數量 1／穿透 2／擊退 1／連鎖 0 | 基礎冰束附 slowT=2 秒；進化另有 1.5 秒暈眩與 3 秒減速（main:14105-14166、30394） | 傷害、冷卻、數量、穿透 |
 | main:1813 | `earthquake` · Terremoto（地震） | 傷害 32／CD 3.3 秒／數量 1／穿透 0／擊退 9／連鎖 0 | 以玩家為中心的地面衝擊波 | 傷害、冷卻、範圍尺寸、擊退 |
 | main:1823 | `surf` · Surfe（衝浪） | 傷害 22／CD 2.6 秒／數量 1／穿透 0／擊退 8／連鎖 0 | 從玩家向外擴大的環形水浪 | 傷害、冷卻、範圍尺寸、擊退 |
 | main:1833 | `watershuriken` · Shuriken de Água（飛水手裡劍） | 傷害 14.3／CD 0.7 秒／數量 2／穿透 2／擊退 1.5／連鎖 0 | 快速直線手裏劍，可穿刺 | 傷害、冷卻、數量、穿透、飛行速度 |
@@ -130,6 +132,8 @@ Mastery 在武器等級 8 發生：從相容 perk 中抽卡，效果包括低血
 | main:957 | `eruption` | Erupção Total（全面噴發） | `carbos`／速度強化劑 | 熔岩球數量翻倍，玩家周圍先爆炸 |
 | main:963 | `psychoboost` | Impulso Absoluto（極限精神突進） | `calcium`／鈣 | 相反方向兩道光束，留下精神火地 |
 
-## 套裝連動
+## 防疊加傷害折扣（非圖鑑 Combo）
 
-「Tempestade Divina」（龍之波動、龍捲風、制裁光礫）把參與連動武器的傷害折算為兩招同時持有時 85%、三招全持有時 60%。名稱與倍率在 `main:3565、main:3567`，觸發於 `main:27394`（`addWeapon` 內檢查）。
+「Tempestade Divina」是防止三招疊加過強的傷害折扣，不是套裝獎勵：同時持有 Dragon Pulse、Twister、Judgment 中兩招時，相關傷害乘 0.85；三招全持有時乘 0.60。定義在 main:3601，addWeapon 檢查在 main:27394-27409，傷害乘數套用在 main:7891、7914。
+
+這與 16 組圖鑑 Combo 分開：Combo 只檢查持有條件並顯示完成橫幅，不改戰鬥數值。清單見 [Combo 資料](/Users/peter/repo/godot/godogen/docs/pokebonk-3d-survivor/data/combos.md)（main:17232-17345、18497、31006-31024）。

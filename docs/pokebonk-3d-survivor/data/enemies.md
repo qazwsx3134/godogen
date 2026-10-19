@@ -1,5 +1,7 @@
 # 敵人與 Boss 數值
 
+數值口徑：此處是 bundle 預設基礎值；api-config.json 是另存的線上 balance 快照，實際值還會套用符合模式／難度的係數。例：Rattata bundle HP 10，快照 Inimigos.Rattata.hp 為 10.2；Classic/Normal 的 enemyDmg=0.72、spawnRate=1.8。完整覆寫解析見 [bundle 分析的遠端平衡節](/Users/peter/repo/godot/godogen/docs/pokebonk-3d-survivor/codex-bundle-analysis.md#遠端平衡-api-config)。
+
 下表列的是資料表基礎值；實際生成會乘上時間曲線、威脅、難度、合作人數及模式修正。普通敵人定義在 `main:2558`，Boss 定義在 `main:3095`。
 
 ## 普通敵人（24）
@@ -72,3 +74,14 @@
 菁英（UI 稱 Pokémon alfa）生成時基礎 HP ×14、傷害 ×1.6、半徑與高度 ×1.8、XP ×12；死亡掉 6 顆分裝 XP、6 枚硬幣與免費寶箱。普通擊殺有 16% 硬幣機率，索財靈額外掉 3 枚；莓果機率從 0.6% 線性降至第 10 分鐘的 0.08%，且至少隔 12 s 才會再掉莓果；未掉莓果時，磁鐵機率是 0.25%。 (`main:26235`、`main:30490`、`main:3810`)
 
 Boss 基礎 HP 會再乘上 run HP scale、Boss HP、合作／時間／事件等係數；普通敵人也有獨立的時間與威脅係數。 (`main:29987`、`main:30001`)
+
+## 快照中的直接線上覆寫
+
+| 範圍 | balance key | 線上覆寫 | bundle 預設 |
+|---|---|---:|---:|
+| 全域 | Inimigos.Rattata.hp | 10.2 | 10 |
+| 全域 | Geral.Inimigos.enemyDmg | 1.5 | 通用倍率預設 |
+| Classic/Normal | Geral.Inimigos.enemyDmg | 0.72 | 通用倍率預設 |
+| Classic/Normal | Geral.Inimigos.spawnRate | 1.8 | 通用倍率預設 |
+
+快照值取自 /Users/peter/repo/godot/godogen/.claude/tasks/pokebonk/api-config.json；同一 key 可能同時有全域與範圍值，真正生效者依目前 run context 決定。
