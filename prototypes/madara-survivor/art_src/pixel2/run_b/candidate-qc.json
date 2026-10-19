@@ -1,0 +1,48 @@
+{
+  "pose": "run_b",
+  "source": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel2/run_b/takes/take-01/generated.png",
+  "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel2/run_b/candidate-01.png",
+  "source_sha256": "131c5dad0ad9d7cfc43f704a880f66456bf2dc597b713538ebfcf5ca3a41e226",
+  "candidate_sha256": "6d53af57a63bb952915971dc202342a762f558beb5b07f3fbf97c780f7b051ca",
+  "size": [
+    1254,
+    1254
+  ],
+  "bbox": [
+    59,
+    159,
+    1186,
+    1126
+  ],
+  "alpha_range": [
+    0,
+    255
+  ],
+  "matte": {
+    "requested": "soft",
+    "key_estimate": {
+      "key": [
+        3.0,
+        249.0,
+        1.0
+      ],
+      "source": "border_median",
+      "valid": true,
+      "ring_share": 1.0,
+      "coverage": 0.6844884249190469,
+      "distance_from_declared": 6.78
+    },
+    "quality": "soft",
+    "interior_despill": true,
+    "qa": {
+      "opaque_key_px": 0,
+      "outer_ring_spill_fraction": 0.0,
+      "semitransparent_fraction": 0.02401969481902058,
+      "enclosed_key_pockets": 0,
+      "key_hued_px": 0,
+      "visible_px": 495968
+    }
+  },
+  "warnings": [],
+  "processing": "green key removal only; original canvas, scale and pixel shapes retained; no redrawing or per-pose scale normalization"
+}

@@ -1,0 +1,110 @@
+{
+  "active_candidates": 20,
+  "active_contacts": 12,
+  "new_caster_generations": 6,
+  "rerolls": 0,
+  "assets": [
+    {
+      "folder": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/madara",
+      "candidates": 2,
+      "finish": "pixel",
+      "route": "local:codex-cli",
+      "qc_warnings": 0,
+      "visual_review": "reviewed raw and transparent contact"
+    },
+    {
+      "folder": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/genin",
+      "candidates": 2,
+      "finish": "pixel",
+      "route": "local:codex-cli",
+      "qc_warnings": 0,
+      "visual_review": "reviewed raw and transparent contact"
+    },
+    {
+      "folder": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/masked",
+      "candidates": 2,
+      "finish": "pixel",
+      "route": "local:codex-cli",
+      "qc_warnings": 0,
+      "visual_review": "reviewed raw and transparent contact"
+    },
+    {
+      "folder": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/heavy",
+      "candidates": 2,
+      "finish": "pixel",
+      "route": "local:codex-cli",
+      "qc_warnings": 0,
+      "visual_review": "reviewed raw and transparent contact"
+    },
+    {
+      "folder": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/caster-fire",
+      "candidates": 2,
+      "finish": "pixel",
+      "route": "local:codex-cli",
+      "qc_warnings": 0,
+      "visual_review": "reviewed raw and transparent contact"
+    },
+    {
+      "folder": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/caster-water",
+      "candidates": 2,
+      "finish": "pixel",
+      "route": "local:codex-cli",
+      "qc_warnings": 0,
+      "visual_review": "reviewed raw and transparent contact"
+    },
+    {
+      "folder": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/caster-earth",
+      "candidates": 2,
+      "finish": "pixel",
+      "route": "local:codex-cli",
+      "qc_warnings": 0,
+      "visual_review": "reviewed raw and transparent contact"
+    },
+    {
+      "folder": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/elite",
+      "candidates": 2,
+      "finish": "pixel",
+      "route": "local:codex-cli",
+      "qc_warnings": 0,
+      "visual_review": "reviewed raw and transparent contact"
+    },
+    {
+      "folder": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/chakra",
+      "candidates": 1,
+      "finish": "pixel",
+      "route": "local:codex-cli",
+      "qc_warnings": 0,
+      "visual_review": "reviewed raw and transparent contact"
+    },
+    {
+      "folder": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/props/hoodoo",
+      "candidates": 1,
+      "finish": "pixel",
+      "route": "local:codex-cli",
+      "qc_warnings": 0,
+      "visual_review": "reviewed raw and transparent contact"
+    },
+    {
+      "folder": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/props/boulder",
+      "candidates": 1,
+      "finish": "pixel",
+      "route": "local:codex-cli",
+      "qc_warnings": 0,
+      "visual_review": "reviewed raw and transparent contact"
+    },
+    {
+      "folder": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/props/shrub",
+      "candidates": 1,
+      "finish": "pixel",
+      "route": "local:codex-cli",
+      "qc_warnings": 0,
+      "visual_review": "reviewed raw and transparent contact"
+    }
+  ],
+  "visual_deviations": [
+    "Several actors, especially Madara and water casters, read as about 4–5 heads rather than strictly 4; overhead angle varies.",
+    "Fire swirl patch appears on the near upper arm, likely anatomical right instead of specified left.",
+    "Earth chakra arcs are wider than the requested small hand glow; cloth and armour engraving details vary between takes."
+  ],
+  "processing": "Chroma removal only, no sprite redrawing, original canvas and disconnected effects preserved."
+}

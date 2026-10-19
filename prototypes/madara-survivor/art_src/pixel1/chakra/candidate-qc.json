@@ -1,0 +1,50 @@
+[
+  {
+    "take": 1,
+    "source": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/chakra/takes/take-01/generated.png",
+    "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/chakra/candidate-01.png",
+    "sha256": "cff42f65b8239b81bf5f8ae8238c6c5aac308e0637067c5cab2f54ec3dfa10f1",
+    "size": [
+      1254,
+      1254
+    ],
+    "bbox": [
+      27,
+      300,
+      1229,
+      916
+    ],
+    "alpha_range": [
+      0,
+      255
+    ],
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          252.0,
+          3.0,
+          251.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.7860632260657443,
+        "distance_from_declared": 5.83
+      },
+      "quality": "soft",
+      "interior_despill": false,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.002146550883012977,
+        "semitransparent_fraction": 0.08660865817192424,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 2194,
+        "visible_px": 334089
+      }
+    },
+    "warnings": [],
+    "mirrored": false,
+    "transform": "chroma removal only; original canvas, pixel shapes and scale retained; all disconnected objects retained"
+  }
+]

@@ -1,0 +1,22 @@
+{
+  "schema": "generate2dsprite.master_spec.v1",
+  "name": "pixel-masked",
+  "subject": "a masked ninja in dark grey armour with two kunai",
+  "identity": "a generic masked ninja soldier: dark grey flak vest, black cloth mask covering the lower face, metal-plate headband (no symbol), dark grey clothes, a kunai in each hand, fast low sprinting pose. detailed HD-2D pixel art game sprite in the style of Octopath Traveler: rich hand-placed shading, crisp 1-pixel dark outline, limited palette, compact heroic proportions about 4 heads tall, standing upright, front three-quarter view from slightly above (about 20 degrees), body and face turned toward the lower-right, full body with feet visible on an invisible ground line, no background, no cast shadow, no text.",
+  "pose": null,
+  "recap": "a masked ninja in dark grey armour with two kunai",
+  "facing": "right",
+  "facing_parts": null,
+  "view": "front three-quarter view from slightly above (about 20 degrees), body and face turned toward the lower-right",
+  "class": "mob",
+  "finish": "pixel",
+  "key": "#FF00FF",
+  "genre": null,
+  "pronoun": "they",
+  "identity_ref": null,
+  "style_ref": null,
+  "allowed_text": null,
+  "extra_bans": [],
+  "opaque_parts": null,
+  "extra": "The above pixel-art styling and the NEW slightly overhead 20-degree camera and compact four-head proportions govern this design. No smooth anime line-art illustration or vector-painted treatment. Forehead protectors have completely plain unmarked metal plates, no village emblem or symbol. Full body and all weapons inside the image with safe padding."
+}

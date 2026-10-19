@@ -1,0 +1,22 @@
+{
+  "schema": "generate2dsprite.master_spec.v1",
+  "name": "pixel-chakra",
+  "subject": "four separate blue, green, purple and gold chakra pickup orbs increasing in size from left to right",
+  "identity": "One pickup comparison group containing exactly FOUR separate glowing swirling chakra-flame energy orbs arranged in one horizontal row with clear empty spacing. From LEFT to RIGHT strictly: a SMALL BLUE orb, a larger GREEN orb, a larger PURPLE orb, and a LARGE GOLD orb. Sizes increase progressively in that exact order. Each has a bright luminous core and pixel-shaded swirling chakra flames, with its own complete isolated silhouette and no connecting beam, pedestal, character or label. Purple is deep blue-violet rather than pink; keep it distinct from the magenta key background. detailed HD-2D pixel art game sprite in the style of Octopath Traveler: rich hand-placed shading, crisp 1-pixel dark outline, limited palette, compact heroic proportions about 4 heads tall, standing upright, front three-quarter view from slightly above (about 20 degrees), body and face turned toward the lower-right, full body with feet visible on an invisible ground line, no background, no cast shadow, no text.",
+  "pose": null,
+  "recap": "four separate blue, green, purple and gold chakra pickup orbs increasing in size from left to right",
+  "facing": "none",
+  "facing_parts": null,
+  "view": "front three-quarter view from slightly above (about 20 degrees)",
+  "class": "prop",
+  "finish": "pixel",
+  "key": "#FF00FF",
+  "genre": null,
+  "pronoun": "they",
+  "identity_ref": null,
+  "style_ref": null,
+  "allowed_text": null,
+  "extra_bans": [],
+  "opaque_parts": null,
+  "extra": "For this object image, the shared style describes pixel shading, palette, outlines and camera only: ignore its humanoid proportions, head count, standing pose and feet clauses. Do not draw any person or creature. Draw only the requested object(s), completely contained with safe margins, no ground plate or cast shadow. No smooth vector or anime illustration. The flat magenta outside the objects is the chroma-key backdrop. This is intentionally one group of FOUR objects; retain all four separated orbs and generous gaps, not a single merged subject."
+}

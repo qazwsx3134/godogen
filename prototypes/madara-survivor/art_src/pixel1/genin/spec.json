@@ -1,0 +1,22 @@
+{
+  "schema": "generate2dsprite.master_spec.v1",
+  "name": "pixel-genin",
+  "subject": "a young ninja in an olive flak vest with a plain metal headband and kunai",
+  "identity": "a generic young male leaf-village ninja soldier (not any named character): short black hair, forehead protector headband with a plain metal plate (no symbol), olive-green padded flak vest with scroll pockets over a dark navy long-sleeved shirt, dark navy trousers, shin bandages, holding a kunai, running stance leaning forward. detailed HD-2D pixel art game sprite in the style of Octopath Traveler: rich hand-placed shading, crisp 1-pixel dark outline, limited palette, compact heroic proportions about 4 heads tall, standing upright, front three-quarter view from slightly above (about 20 degrees), body and face turned toward the lower-right, full body with feet visible on an invisible ground line, no background, no cast shadow, no text.",
+  "pose": null,
+  "recap": "a young ninja in an olive flak vest with a plain metal headband and kunai",
+  "facing": "right",
+  "facing_parts": null,
+  "view": "front three-quarter view from slightly above (about 20 degrees), body and face turned toward the lower-right",
+  "class": "mob",
+  "finish": "pixel",
+  "key": "#FF00FF",
+  "genre": null,
+  "pronoun": "they",
+  "identity_ref": null,
+  "style_ref": null,
+  "allowed_text": null,
+  "extra_bans": [],
+  "opaque_parts": null,
+  "extra": "The above pixel-art styling and the NEW slightly overhead 20-degree camera and compact four-head proportions govern this design. No smooth anime line-art illustration or vector-painted treatment. Forehead protectors have completely plain unmarked metal plates, no village emblem or symbol. Full body and all weapons inside the image with safe padding."
+}

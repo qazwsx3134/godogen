@@ -58,20 +58,22 @@ a big, broad heavy ninja soldier: brown armoured flak vest, thick arm guards, me
 dark brown clothes, carrying a large wooden war hammer, heavy marching stance.
 ```
 
-## 5～7. 施術忍者（mob；火 key green、水 key magenta、土 key green）
+## 5～7. 施術忍者（mob；火 key magenta、水 key green、土 key magenta）
 
-同一個身形，配色和結印特效不同：
+三種各自一套服裝，參考使用者給的 `docs/naruto/doc/` 三張圖（只抄服裝，不抄臉；參考圖不進版控）。共同點：雙手在胸前結印，手邊一小團該屬性的查克拉光。
 
 ```text
-a generic ninja jutsu caster: forehead protector (no symbol), dark clothes with a sleeveless short coat, both hands
-forming a hand seal in front of the chest, a small glow of <ELEMENT> chakra around the hands.
+a ninja jutsu caster, both hands forming a hand seal in front of the chest, a small glow of <ELEMENT> chakra around
+the hands. <OUTFIT>
 ```
 
-| 元素 | 外套顏色 | 手邊光的顏色 | `<ELEMENT>` 填入 |
+| 元素 | 參考圖 | 服裝重點 | `<ELEMENT>` |
 |---|---|---|---|
-| 火 | 暗紅 | 橘紅 | `orange fire` |
-| 水 | 藍 | 水藍 | `blue water` |
-| 土 | 褐 | 黃褐 | `brown earth and stone` |
+| 火 | `konoha.png` | 木葉制服：橄欖綠防彈背心（立領、胸前卷軸口袋、肩扣）、深藍長袖與長褲、左肩紅色漩渦臂章、護額 | `orange fire` |
+| 水 | `water.png` | 灰色連帽寬袖上衣、下擺斜裹；白色單肩胸甲（三道刻線）；深灰燈籠褲、膝上白布交叉綁帶；暗紅護臂與綁腿；深紫灰忍者涼鞋；背一把紅白纏柄刀；白色刺髮、護額 | `blue water` |
+| 土 | `sand.png` | 砂隱風：卡其橄欖背心（高領、大肩甲、腰間一排口袋）、深褐長袖與長褲、白頭巾從護額後垂到背、大腿白繃帶 | `brown earth and stone` |
+
+key 顏色跟著衣服改：火和土的背心是綠色系，用 magenta；水有暗紅，用 green。
 
 ## 8. 精英（mob，key magenta）
 

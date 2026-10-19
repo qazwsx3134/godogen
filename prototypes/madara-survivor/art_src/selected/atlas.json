@@ -1,18 +1,88 @@
 {
-  "_doc": "atlas frame -> selected art (relative to this folder), or {file, group}. tools/build_atlas.py places each into its cell; frames not listed keep the placeholder. Frames in one group share one scale (the smallest that fits every member), so a character keeps its size from pose to pose.",
-  "0": {"file": "madara_poses/idle.png", "group": "madara"},
-  "1": "genin.png",
-  "2": "masked.png",
-  "3": "heavy.png",
-  "4": "elite.png",
-  "8": "caster_fire.png",
-  "9": "caster_water.png",
-  "10": "caster_earth.png",
-  "11": {"file": "madara_poses/idle.png", "group": "madara"},
-  "12": {"file": "madara_poses/run_a.png", "group": "madara"},
-  "13": {"file": "madara_poses/run_b.png", "group": "madara"},
-  "14": {"file": "madara_poses/punch.png", "group": "madara"},
-  "15": {"file": "madara_poses/kick.png", "group": "madara"},
-  "16": {"file": "madara_poses/fan.png", "group": "madara"},
-  "17": {"file": "madara_poses/seal.png", "group": "madara"}
+  "_doc": "atlas frame -> selected art (relative to this folder), or {file, group, crop, fill}. tools/build_atlas.py places each into its cell; frames not listed keep the placeholder. Frames in one group share one scale (the smallest that fits every member), so a character keeps its size from pose to pose. _pixel: 128-px cells, palette-snapped, nearest-sampled. atlas-hd.json is the previous HD (anime-style) mapping.",
+  "_pixel": {
+    "colors": 48
+  },
+  "0": {
+    "file": "pixel/madara_poses/idle.png",
+    "group": "madara"
+  },
+  "11": {
+    "file": "pixel/madara_poses/idle.png",
+    "group": "madara"
+  },
+  "12": {
+    "file": "pixel/madara_poses/run_a.png",
+    "group": "madara"
+  },
+  "13": {
+    "file": "pixel/madara_poses/run_b.png",
+    "group": "madara"
+  },
+  "14": {
+    "file": "pixel/madara_poses/punch.png",
+    "group": "madara"
+  },
+  "15": {
+    "file": "pixel/madara_poses/kick.png",
+    "group": "madara"
+  },
+  "16": {
+    "file": "pixel/madara_poses/fan.png",
+    "group": "madara"
+  },
+  "17": {
+    "file": "pixel/madara_poses/seal.png",
+    "group": "madara"
+  },
+  "1": "pixel/genin.png",
+  "2": "pixel/masked.png",
+  "3": "pixel/heavy.png",
+  "4": "pixel/elite.png",
+  "5": "pixel/hoodoo.png",
+  "6": "pixel/boulder.png",
+  "7": "pixel/shrub.png",
+  "8": "pixel/caster_fire.png",
+  "9": "pixel/caster_water.png",
+  "10": "pixel/caster_earth.png",
+  "18": {
+    "file": "pixel/chakra.png",
+    "crop": [
+      27,
+      552,
+      173,
+      265
+    ],
+    "fill": 0.8
+  },
+  "19": {
+    "file": "pixel/chakra.png",
+    "crop": [
+      227,
+      468,
+      247,
+      385
+    ],
+    "fill": 0.8
+  },
+  "20": {
+    "file": "pixel/chakra.png",
+    "crop": [
+      495,
+      373,
+      315,
+      508
+    ],
+    "fill": 0.8
+  },
+  "21": {
+    "file": "pixel/chakra.png",
+    "crop": [
+      832,
+      300,
+      397,
+      616
+    ],
+    "fill": 0.8
+  }
 }

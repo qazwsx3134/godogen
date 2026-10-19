@@ -1,0 +1,98 @@
+{
+  "schema": "generate2dsprite.master_run.v1",
+  "tool": {
+    "name": "master_still",
+    "version": "0.4.0"
+  },
+  "command": "edit",
+  "created": "2026-10-19T08:49:37.343Z",
+  "name": "pixel-madara-fan",
+  "class": "hero",
+  "finish": "pixel",
+  "facing": "right",
+  "key": "#00FF00",
+  "prompt": {
+    "path": "prompt.txt",
+    "sha256": "d215bfce834f2722fab214512749f20866b43c0bc9de77bd25a79abb633fbcb9",
+    "bytes": 2899
+  },
+  "spec": {
+    "path": "spec.json",
+    "sha256": "797ce13bd659a1fa938fc66e149daa449d2b4d0795126270cfb4b24a2c03ebbb",
+    "bytes": 2146
+  },
+  "references": [
+    {
+      "role": "edit",
+      "ordinal": "FIRST",
+      "path": "../../pixel1/madara/candidate-01.png",
+      "sha256": "06bb6bc86a2039e9341fc1949791955be4b814aa83fe85bb37fed0df879d2e45",
+      "bytes": 823742
+    },
+    {
+      "role": "extra",
+      "ordinal": "SECOND",
+      "path": "../../selected/madara_poses/fan.png",
+      "sha256": "228681881b6ca806e894fef2545ec4962437f1ef012759321d7093e40a75e2c2",
+      "bytes": 716020
+    }
+  ],
+  "media": {
+    "cli": "route_media.py",
+    "cli_source": "sibling",
+    "cli_sha256": "5f920b3c8f37118e144f40c1c021cba87b691413cd83cb4dc5437ad500df6562",
+    "route_requested": "codex-cli",
+    "size": "1024x1024",
+    "args": [],
+    "timeout_s": 1800.0
+  },
+  "takes": [
+    {
+      "take": 1,
+      "exit_code": 0,
+      "seconds": 66.324,
+      "media": {
+        "status": "ok",
+        "route": "local:codex-cli",
+        "sha256": "10168825b43a715149f330722e5d665da0e08088453c682071107d2a249cac1f",
+        "estimateUsd": 0.0,
+        "kind": "image",
+        "label": "Codex (local CLI)",
+        "model": "codex-image_gen",
+        "verifiedBefore": true
+      },
+      "copied": false,
+      "artifact": {
+        "path": "takes/take-01/generated.png",
+        "sha256": "10168825b43a715149f330722e5d665da0e08088453c682071107d2a249cac1f",
+        "bytes": 1717659,
+        "size": [
+          1254,
+          1254
+        ]
+      },
+      "status": "ok",
+      "route": "local:codex-cli"
+    }
+  ],
+  "status": "ok",
+  "edit": {
+    "still": {
+      "path": "../../pixel1/madara/candidate-01.png",
+      "sha256": "06bb6bc86a2039e9341fc1949791955be4b814aa83fe85bb37fed0df879d2e45",
+      "bytes": 823742
+    },
+    "change": "Change ONLY the body pose to this action: Powerful two-handed fan swing toward the lower-right: both hands gripping the handle in front, fan head swept low forward at a diagonal; wide grounded lunge and torso rotation as in the SECOND reference. Body-only action, no added slash, wind trail or ground effects. The SECOND image is solely the pose reference; the FIRST image remains the sole identity, proportions, costume and pixel-style authority. Preserve the character's original standing-equivalent anatomical scale; do not adopt the tall smooth-anime anatomy of the SECOND image. Render exactly one complete isolated pixel-art character, full fan and feet included with safe padding, no cropping, no ground or cast shadow, no text, no motion blur or detached effects. Use a solid uniform pure green #00FF00 key background instead of transparency for reliable subsequent key removal.",
+    "keep": "The FIRST image's exact character identity, face, waist-length spiky dark hair covering the right eye, red segmented armour, navy clothing, gloves, white shin wraps, open-toed sandals, white-and-red gunbai fan, palette, body proportions, detailed HD-2D pixel style, crisp dark pixel outlines and rich hand-placed shading. Maintain the FIRST image's approximately 20-degree overhead front three-quarter camera and face/body toward the lower-right, with the same anatomical scale. The pose and limb positions may change as requested.",
+    "extra": [
+      {
+        "role": "pose reference only: copy the body pose, limb positions and held-fan angle; do NOT copy its drawing style, line art, face or proportions.",
+        "path": "../../selected/madara_poses/fan.png",
+        "sha256": "228681881b6ca806e894fef2545ec4962437f1ef012759321d7093e40a75e2c2",
+        "bytes": 716020
+      }
+    ],
+    "framing": "the top of the figure about 4 percent below the top edge, its lowest point about 5 percent above the bottom edge, its left-most point about 19 percent from the left edge and its right-most point about 29 percent from the right edge"
+  },
+  "warnings": []
+}

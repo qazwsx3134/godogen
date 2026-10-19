@@ -1,0 +1,134 @@
+{
+  "status": "complete",
+  "edits": 7,
+  "generate_fallbacks": 0,
+  "rerolls": 0,
+  "first_reference_sha256": "06bb6bc86a2039e9341fc1949791955be4b814aa83fe85bb37fed0df879d2e45",
+  "poses": [
+    {
+      "pose": "idle",
+      "command": "edit",
+      "route": "local:codex-cli",
+      "finish": "pixel",
+      "first_reference": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/madara/candidate-01.png",
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel2/idle/candidate-01.png",
+      "sha256": "3bc6150592abb4a6947359224c3079c28f8e0cffc616f294c61eedf8fdd2397e",
+      "bbox": [
+        283,
+        48,
+        923,
+        1214
+      ],
+      "minimum_canvas_margin": 40,
+      "warnings": []
+    },
+    {
+      "pose": "run_a",
+      "command": "edit",
+      "route": "local:codex-cli",
+      "finish": "pixel",
+      "first_reference": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/madara/candidate-01.png",
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel2/run_a/candidate-01.png",
+      "sha256": "55a1df70c3f9bcd08b3f8c4d28266e852b570d2e6f33c6baa764e0c62b0d4aa4",
+      "bbox": [
+        67,
+        103,
+        1184,
+        1186
+      ],
+      "minimum_canvas_margin": 67,
+      "warnings": []
+    },
+    {
+      "pose": "run_b",
+      "command": "edit",
+      "route": "local:codex-cli",
+      "finish": "pixel",
+      "first_reference": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/madara/candidate-01.png",
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel2/run_b/candidate-01.png",
+      "sha256": "6d53af57a63bb952915971dc202342a762f558beb5b07f3fbf97c780f7b051ca",
+      "bbox": [
+        59,
+        159,
+        1186,
+        1126
+      ],
+      "minimum_canvas_margin": 59,
+      "warnings": []
+    },
+    {
+      "pose": "punch",
+      "command": "edit",
+      "route": "local:codex-cli",
+      "finish": "pixel",
+      "first_reference": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/madara/candidate-01.png",
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel2/punch/candidate-01.png",
+      "sha256": "d369e3849ec741c352ee43c1be724c22d3442d0852e1a741c53ce5fbfce80f6d",
+      "bbox": [
+        35,
+        71,
+        1230,
+        1193
+      ],
+      "minimum_canvas_margin": 24,
+      "warnings": []
+    },
+    {
+      "pose": "kick",
+      "command": "edit",
+      "route": "local:codex-cli",
+      "finish": "pixel",
+      "first_reference": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/madara/candidate-01.png",
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel2/kick/candidate-01.png",
+      "sha256": "ddb4b241e4e021531cb6844dd079a4c9b24c223469c77ea6a0c7f58e49d3e6d5",
+      "bbox": [
+        13,
+        140,
+        1250,
+        1128
+      ],
+      "minimum_canvas_margin": 4,
+      "warnings": []
+    },
+    {
+      "pose": "fan",
+      "command": "edit",
+      "route": "local:codex-cli",
+      "finish": "pixel",
+      "first_reference": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/madara/candidate-01.png",
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel2/fan/candidate-01.png",
+      "sha256": "2ec56a9ede82515201eed98e191a271e686b4bb9dc036c0099e23b9dece76c64",
+      "bbox": [
+        39,
+        97,
+        1246,
+        1168
+      ],
+      "minimum_canvas_margin": 8,
+      "warnings": []
+    },
+    {
+      "pose": "seal",
+      "command": "edit",
+      "route": "local:codex-cli",
+      "finish": "pixel",
+      "first_reference": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/madara/candidate-01.png",
+      "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel2/seal/candidate-01.png",
+      "sha256": "418a480da614bc94cdcdb766d5d915a828d4df4b3a3f04553ba3ddae414f0875",
+      "bbox": [
+        313,
+        61,
+        956,
+        1185
+      ],
+      "minimum_canvas_margin": 61,
+      "warnings": []
+    }
+  ],
+  "visual_review": {
+    "identity": "Same P1 pixel character, red segmented armour, navy clothing, dark long hair, white shin wraps and white/red fan; small shading and armour detail differences.",
+    "running": "A uses low extended forward stride; B uses high forward knee. Silhouettes clearly distinct. Anatomical left/right alternation remains ambiguous under armour and three-quarter projection.",
+    "framing": "All seven complete, facing lower-right. Kick and fan margins are narrow but do not touch edges.",
+    "processing": "Green key removal only, original canvases and pixel shapes retained. No per-pose body scaling or redrawing."
+  }
+}

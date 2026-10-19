@@ -1,0 +1,50 @@
+[
+  {
+    "take": 1,
+    "source": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/props/shrub/takes/take-01/generated.png",
+    "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/props/shrub/candidate-01.png",
+    "sha256": "b96a65269d9e6b5a868b99527808b3c3326932f7ae751cf4a2a89e3d3e3b5f97",
+    "size": [
+      1254,
+      1254
+    ],
+    "bbox": [
+      146,
+      205,
+      1123,
+      1058
+    ],
+    "alpha_range": [
+      0,
+      255
+    ],
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          250.0,
+          3.0,
+          250.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.7275258248564721,
+        "distance_from_declared": 7.68
+      },
+      "quality": "soft",
+      "interior_despill": false,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.0017908071897592358,
+        "semitransparent_fraction": 0.07056271141723751,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 480,
+        "visible_px": 424516
+      }
+    },
+    "warnings": [],
+    "mirrored": false,
+    "transform": "chroma removal only; original canvas, pixel shapes and scale retained; all disconnected objects retained"
+  }
+]

@@ -1,0 +1,105 @@
+{
+  "schema": "generate2dsprite.master_run.v1",
+  "tool": {
+    "name": "master_still",
+    "version": "0.4.0"
+  },
+  "command": "generate",
+  "created": "2026-10-19T08:37:17.013Z",
+  "name": "pixel-caster-earth-v2",
+  "class": "mob",
+  "finish": "pixel",
+  "facing": "right",
+  "key": "#FF00FF",
+  "prompt": {
+    "path": "prompt.txt",
+    "sha256": "0a9296a226d1b97712680836e35deb6322ceb4f90ba2047232dba3897ee67f46",
+    "bytes": 3625
+  },
+  "spec": {
+    "path": "spec.json",
+    "sha256": "62347ed844a44c34a4b51013510342cfb04a9dfbdb61d415566794c53cb911e0",
+    "bytes": 3013
+  },
+  "references": [
+    {
+      "role": "identity",
+      "ordinal": "FIRST",
+      "path": "../../../../../docs/naruto/doc/sand.png",
+      "sha256": "84e91e137363c8198c29394ac867151eb2caa26b497582d475bacc49c8fb04c8",
+      "bytes": 56789
+    }
+  ],
+  "media": {
+    "cli": "route_media.py",
+    "cli_source": "sibling",
+    "cli_sha256": "5f920b3c8f37118e144f40c1c021cba87b691413cd83cb4dc5437ad500df6562",
+    "route_requested": "codex-cli",
+    "size": "1024x1024",
+    "args": [],
+    "timeout_s": 1800.0
+  },
+  "takes": [
+    {
+      "take": 1,
+      "exit_code": 0,
+      "seconds": 85.003,
+      "media": {
+        "status": "ok",
+        "route": "local:codex-cli",
+        "sha256": "e461036a0bd1f6583c1b427ea87289a963f8c49c5ea90e006684097bf4ca7ddc",
+        "estimateUsd": 0.0,
+        "kind": "image",
+        "label": "Codex (local CLI)",
+        "model": "codex-image_gen",
+        "verifiedBefore": true
+      },
+      "copied": false,
+      "artifact": {
+        "path": "takes/take-01/generated.png",
+        "sha256": "e461036a0bd1f6583c1b427ea87289a963f8c49c5ea90e006684097bf4ca7ddc",
+        "bytes": 1340199,
+        "size": [
+          1254,
+          1254
+        ]
+      },
+      "status": "ok",
+      "route": "local:codex-cli"
+    },
+    {
+      "take": 2,
+      "exit_code": 0,
+      "seconds": 90.51,
+      "media": {
+        "status": "ok",
+        "route": "local:codex-cli",
+        "sha256": "7c40af047c48ac9ca235689fa8e09d12aa7916484fc2d99da0d68c96331f9dab",
+        "estimateUsd": 0.0,
+        "kind": "image",
+        "label": "Codex (local CLI)",
+        "model": "codex-image_gen",
+        "verifiedBefore": true
+      },
+      "copied": false,
+      "artifact": {
+        "path": "takes/take-02/generated.png",
+        "sha256": "7c40af047c48ac9ca235689fa8e09d12aa7916484fc2d99da0d68c96331f9dab",
+        "bytes": 1339864,
+        "size": [
+          1254,
+          1254
+        ]
+      },
+      "status": "ok",
+      "route": "local:codex-cli"
+    }
+  ],
+  "status": "ok",
+  "warnings": [],
+  "contact": {
+    "path": "takes.png",
+    "sha256": "2f904727a0ddc00c0c3216871f409af3012a03c45dd8f3d45dcc853e8a3f8fe5",
+    "bytes": 208680
+  }
+}

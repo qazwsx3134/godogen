@@ -1,0 +1,27 @@
+{
+  "schema": "generate2dsprite.master_spec.v1",
+  "name": "pixel-caster-fire-v2",
+  "subject": "an olive-green uniform ninja caster with orange fire chakra",
+  "identity": "Olive-green flak vest with high standing collar, two vertical columns of scroll pockets on the chest and shoulder buckles; navy-black tight long-sleeved shirt and trousers; red swirl patch on the LEFT upper arm; black cloth forehead protector. Short dark spiky hair. Both hands form a ninja seal directly before the chest, with one small close orange fire chakra flame around the hands. detailed HD-2D pixel art game sprite in the style of Octopath Traveler: rich hand-placed shading, crisp 1-pixel dark outline, limited palette, compact heroic proportions about 4 heads tall, standing upright, front three-quarter view from slightly above (about 20 degrees), body and face turned toward the lower-right, full body with feet visible on an invisible ground line, no background, no cast shadow, no text.",
+  "pose": null,
+  "recap": "an olive-green uniform ninja caster with orange fire chakra",
+  "facing": "right",
+  "facing_parts": null,
+  "view": "front three-quarter view from slightly above (about 20 degrees), body and face turned toward the lower-right",
+  "class": "mob",
+  "finish": "pixel",
+  "key": "#FF00FF",
+  "genre": null,
+  "pronoun": "they",
+  "identity_ref": {
+    "path": "../../../../../docs/naruto/doc/konoha.png",
+    "sha256": "dc3ca775bebf785ed14d58e58238974d325270e471870a7cc61295eb92c6ec62",
+    "what": "costume and equipment design reference, not character identity or rendering style",
+    "copy": "costume cut, colours, gear and silhouette only"
+  },
+  "style_ref": null,
+  "allowed_text": null,
+  "extra_bans": [],
+  "opaque_parts": null,
+  "extra": "Use the reference for costume cut, colours, gear and silhouette only. Give this character a generic ninja mob face; do NOT copy the reference person's identity, named character likeness, expression or signature facial details. Hairstyle may follow the specified costume brief. The reference is anime artwork: do NOT copy its anime linework or smooth cel illustration; render only in detailed HD-2D pixel art with crisp pixel clusters and compact approximately FOUR-head proportions. All forehead metal plates are plain blank unmarked metal, no village symbol or emblem. The red swirl on the left upper arm is allowed. One isolated full-body subject only, body and face turned toward the lower-right, viewed from about 20 degrees above. Both hands remain together in a chest-height seal. Keep elemental chakra small and close to hands. Leave safe padding around feet, sword, headscarf and all protrusions; nothing cropped. detailed HD-2D pixel art game sprite in the style of Octopath Traveler: rich hand-placed shading, crisp 1-pixel dark outline, limited palette, compact heroic proportions about 4 heads tall, standing upright, front three-quarter view from slightly above (about 20 degrees), body and face turned toward the lower-right, full body with feet visible on an invisible ground line, no background, no cast shadow, no text."
+}

@@ -1,0 +1,65 @@
+{
+  "schema": "generate2dsprite.master_run.v1",
+  "tool": {
+    "name": "master_still",
+    "version": "0.4.0"
+  },
+  "command": "generate",
+  "created": "2026-10-19T06:50:17.403Z",
+  "name": "pixel-props-hoodoo",
+  "class": "prop",
+  "finish": "pixel",
+  "facing": "none",
+  "key": "#FF00FF",
+  "prompt": {
+    "path": "prompt.txt",
+    "sha256": "c2a53d8596143ba9c22b500c3514ef0664cf155a38020e7a68a18d55b3c63405",
+    "bytes": 2143
+  },
+  "spec": {
+    "path": "spec.json",
+    "sha256": "209588ecf0fd5dc8de0a5cc24517425f352020e09bbd5cc366ca0a806e1328e4",
+    "bytes": 1739
+  },
+  "references": [],
+  "media": {
+    "cli": "route_media.py",
+    "cli_source": "sibling",
+    "cli_sha256": "5f920b3c8f37118e144f40c1c021cba87b691413cd83cb4dc5437ad500df6562",
+    "route_requested": "codex-cli",
+    "size": "1024x1024",
+    "args": [],
+    "timeout_s": 1800.0
+  },
+  "takes": [
+    {
+      "take": 1,
+      "exit_code": 0,
+      "seconds": 51.179,
+      "media": {
+        "status": "ok",
+        "route": "local:codex-cli",
+        "sha256": "bee643d425493fb2649961a2bd3c9636cad23673680c2519642c4afc4b2e624e",
+        "estimateUsd": 0.0,
+        "kind": "image",
+        "label": "Codex (local CLI)",
+        "model": "codex-image_gen",
+        "verifiedBefore": true
+      },
+      "copied": false,
+      "artifact": {
+        "path": "takes/take-01/generated.png",
+        "sha256": "bee643d425493fb2649961a2bd3c9636cad23673680c2519642c4afc4b2e624e",
+        "bytes": 1318989,
+        "size": [
+          1254,
+          1254
+        ]
+      },
+      "status": "ok",
+      "route": "local:codex-cli"
+    }
+  ],
+  "status": "ok",
+  "warnings": []
+}

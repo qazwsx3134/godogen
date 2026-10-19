@@ -1,0 +1,50 @@
+[
+  {
+    "take": 1,
+    "source": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/props/boulder/takes/take-01/generated.png",
+    "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/props/boulder/candidate-01.png",
+    "sha256": "cb19364b3afdb3afb979e944358e7df9e4dbcf7b48f18c5425c11b79140356d4",
+    "size": [
+      1254,
+      1254
+    ],
+    "bbox": [
+      157,
+      252,
+      1104,
+      1068
+    ],
+    "alpha_range": [
+      0,
+      255
+    ],
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          252.0,
+          3.0,
+          251.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.6163848253372303,
+        "distance_from_declared": 5.83
+      },
+      "quality": "soft",
+      "interior_despill": true,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.0,
+        "semitransparent_fraction": 0.007351416279961044,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 0,
+        "visible_px": 602741
+      }
+    },
+    "warnings": [],
+    "mirrored": false,
+    "transform": "chroma removal only; original canvas, pixel shapes and scale retained; all disconnected objects retained"
+  }
+]

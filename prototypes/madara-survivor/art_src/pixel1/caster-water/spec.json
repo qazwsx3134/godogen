@@ -1,0 +1,27 @@
+{
+  "schema": "generate2dsprite.master_spec.v1",
+  "name": "pixel-caster-water-v2",
+  "subject": "a grey-robed white-armoured water ninja caster with blue chakra",
+  "identity": "Grey hooded wide-sleeved tunic with diagonal wrap hem; white SINGLE-shoulder breastplate with three engraved lines; dark-grey balloon trousers and white crossed knee wraps; dark-red forearm guards and shin guards; dark purple-grey ninja sandals. A sword with red-and-white wrapped hilt is worn diagonally across the back, wholly inside the image. White spiky hair and cloth forehead protector. Both hands form a ninja seal directly before the chest, with one small close blue water chakra swirl around the hands. detailed HD-2D pixel art game sprite in the style of Octopath Traveler: rich hand-placed shading, crisp 1-pixel dark outline, limited palette, compact heroic proportions about 4 heads tall, standing upright, front three-quarter view from slightly above (about 20 degrees), body and face turned toward the lower-right, full body with feet visible on an invisible ground line, no background, no cast shadow, no text.",
+  "pose": null,
+  "recap": "a grey-robed white-armoured water ninja caster with blue chakra",
+  "facing": "right",
+  "facing_parts": null,
+  "view": "front three-quarter view from slightly above (about 20 degrees), body and face turned toward the lower-right",
+  "class": "mob",
+  "finish": "pixel",
+  "key": "#00FF00",
+  "genre": null,
+  "pronoun": "they",
+  "identity_ref": {
+    "path": "../../../../../docs/naruto/doc/water.png",
+    "sha256": "1187ab42633c8b6c43d1a12a24306ce89785faae99ef03ba01d478313f6429bb",
+    "what": "costume and equipment design reference, not character identity or rendering style",
+    "copy": "costume cut, colours, gear and silhouette only"
+  },
+  "style_ref": null,
+  "allowed_text": null,
+  "extra_bans": [],
+  "opaque_parts": null,
+  "extra": "Use the reference for costume cut, colours, gear and silhouette only. Give this character a generic ninja mob face; do NOT copy the reference person's identity, named character likeness, expression or signature facial details. Hairstyle may follow the specified costume brief. The reference is anime artwork: do NOT copy its anime linework or smooth cel illustration; render only in detailed HD-2D pixel art with crisp pixel clusters and compact approximately FOUR-head proportions. All forehead metal plates are plain blank unmarked metal, no village symbol or emblem. One isolated full-body subject only, body and face turned toward the lower-right, viewed from about 20 degrees above. Both hands remain together in a chest-height seal. Keep elemental chakra small and close to hands. Leave safe padding around feet, sword, headscarf and all protrusions; nothing cropped. detailed HD-2D pixel art game sprite in the style of Octopath Traveler: rich hand-placed shading, crisp 1-pixel dark outline, limited palette, compact heroic proportions about 4 heads tall, standing upright, front three-quarter view from slightly above (about 20 degrees), body and face turned toward the lower-right, full body with feet visible on an invisible ground line, no background, no cast shadow, no text."
+}

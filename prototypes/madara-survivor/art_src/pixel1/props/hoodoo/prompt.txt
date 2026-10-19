@@ -1,0 +1,11 @@
+Create exactly ONE square image (1024x1024).
+
+Style: premium 16-bit pixel art (SNES era), crisp visible chunky pixels, limited palette, strong dark outline, 3-tone cel shading, no smooth gradients, no blur. No text, no letters, no numbers, no logo, no watermark, no signature, no UI, no border, no frame, no grid.
+
+Subject: a tall slender wind-eroded sandstone hoodoo rock pillar, layered strata and a broader caprock at the top, warm desert sandstone colours, front three-quarter view from slightly above (about 20 degrees). A tall slender wind-eroded sandstone hoodoo rock pillar, layered strata and a broader caprock at the top, warm desert sandstone colours detailed HD-2D pixel art game sprite in the style of Octopath Traveler: rich hand-placed shading, crisp 1-pixel dark outline, limited palette, compact heroic proportions about 4 heads tall, standing upright, front three-quarter view from slightly above (about 20 degrees), body and face turned toward the lower-right, full body with feet visible on an invisible ground line, no background, no cast shadow, no text.
+
+Size and position: one single object, the top of the object (including every attached part) about 20 percent below the top edge of the canvas and its lowest point about 20 percent above the bottom edge (the object about 60 percent of the canvas height), centred horizontally, generous empty magenta margin on every side, nothing touching or crossing the edges. The whole object is drawn with solid, fully opaque pixels: no transparency, no semi-transparent glow, no soft aura, nothing blended with the background.
+
+For this object image, the shared style describes pixel shading, palette, outlines and camera only: ignore its humanoid proportions, head count, standing pose and feet clauses. Do not draw any person or creature. Draw only the requested object(s), completely contained with safe margins, no ground plate or cast shadow. No smooth vector or anime illustration. The flat magenta outside the objects is the chroma-key backdrop.
+
+Background: solid flat pure magenta #FF00FF everywhere outside the object, no shadow, no ground, no glow on the background.

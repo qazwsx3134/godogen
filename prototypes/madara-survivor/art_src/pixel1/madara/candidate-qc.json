@@ -1,0 +1,98 @@
+[
+  {
+    "take": 1,
+    "source": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/madara/takes/take-01/generated.png",
+    "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/madara/candidate-01.png",
+    "sha256": "06bb6bc86a2039e9341fc1949791955be4b814aa83fe85bb37fed0df879d2e45",
+    "size": [
+      1254,
+      1254
+    ],
+    "bbox": [
+      237,
+      48,
+      893,
+      1194
+    ],
+    "alpha_range": [
+      0,
+      255
+    ],
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          3.0,
+          249.0,
+          2.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.7367931391477098,
+        "distance_from_declared": 7.0
+      },
+      "quality": "soft",
+      "interior_despill": true,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.0,
+        "semitransparent_fraction": 0.023593444493050304,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 0,
+        "visible_px": 413759
+      }
+    },
+    "warnings": [],
+    "mirrored": false,
+    "transform": "chroma removal only; original canvas, pixel shapes and scale retained; all disconnected objects retained"
+  },
+  {
+    "take": 2,
+    "source": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/madara/takes/take-02/generated.png",
+    "candidate": "/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/madara/candidate-02.png",
+    "sha256": "6bc3f9315f953a333f9b5077a44c971c1588ab4351f02f450856d6a10dff41d2",
+    "size": [
+      1254,
+      1254
+    ],
+    "bbox": [
+      273,
+      68,
+      879,
+      1193
+    ],
+    "alpha_range": [
+      0,
+      255
+    ],
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          3.0,
+          249.0,
+          2.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.7411880069900719,
+        "distance_from_declared": 7.0
+      },
+      "quality": "soft",
+      "interior_despill": true,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.0,
+        "semitransparent_fraction": 0.01984293772812742,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 0,
+        "visible_px": 406845
+      }
+    },
+    "warnings": [],
+    "mirrored": false,
+    "transform": "chroma removal only; original canvas, pixel shapes and scale retained; all disconnected objects retained"
+  }
+]

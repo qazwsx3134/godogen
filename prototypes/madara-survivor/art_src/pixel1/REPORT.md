@@ -1,0 +1,20 @@
+# P1／P1b 完成
+- route：全部 --route codex-cli --finish pixel；新施術忍者 --class mob --takes 2，附各自指定參考圖。
+- /Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/madara/：2 張透明 candidate＋candidates-contact.png。
+- /Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/genin/：2 張透明 candidate＋candidates-contact.png。
+- /Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/masked/：2 張透明 candidate＋candidates-contact.png。
+- /Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/heavy/：2 張透明 candidate＋candidates-contact.png。
+- /Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/caster-fire/：2 張透明 candidate＋candidates-contact.png。
+- /Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/caster-water/：2 張透明 candidate＋candidates-contact.png。
+- /Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/caster-earth/：2 張透明 candidate＋candidates-contact.png。
+- /Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/elite/：2 張透明 candidate＋candidates-contact.png。
+- /Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/chakra/：1 張透明 candidate＋candidates-contact.png。
+- /Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/props/hoodoo/：1 張透明 candidate＋candidates-contact.png。
+- /Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/props/boulder/：1 張透明 candidate＋candidates-contact.png。
+- /Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/props/shrub/：1 張透明 candidate＋candidates-contact.png。
+- 舊三種施術忍者封存於 /Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/rejected/caster-{fire,water,earth}-v1/。
+- elite／chakra／props 沿用既有 takes 收尾，未補生；chakra 藍→綠→紫→金，四顆分離由小到大。
+- 偏差：部分角色約 4–5 頭身，俯視角有差異；火遁臂章出現在近側上臂，疑為右臂而非指定左臂。
+- 偏差：土遁石流範圍略大；服裝刻線與頭巾細節各 take 有差異；依規定不重骰。
+- 驗收：20 張透明候選、12 張 contact；全身／武器／頭巾未裁切，無村徽，去背與邊界 QC 0 警告；記錄於 /Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/acceptance.json。
+- 額度：依使用者 16:20 重置繼續，新生 6／6 成功；未遇額度錯誤，未取得即時剩餘量；沒有重骰。

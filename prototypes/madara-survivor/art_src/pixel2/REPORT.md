@@ -1,0 +1,11 @@
+# P2 完成
+- route：7／7 使用 master_still.py edit，--route codex-cli --finish pixel --class hero --key green，每姿勢 1 張。
+- FIRST：/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel1/madara/candidate-01.png；SECOND：各姿勢 selected/madara_poses 參考，只取動作。
+- 輸出根目錄：/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel2；idle／run_a／run_b／punch／kick／fan／seal 各有 candidate-01.png。
+- 總比較圖：/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel2/poses-contact.png。
+- 驗收：七張透明 RGBA、全身與團扇未裁切、朝右下，同一套像素造型；去背／邊界 QC 0 警告。
+- 跑 A 前腿低伸，跑 B 高抬膝，腿部輪廓明顯不同；受裙甲遮擋及視角影響，解剖上的左右換腳無法嚴格確認。
+- 偏差：臉部、甲片與像素明暗有小幅變化；俯視角並非精密量測；飛踢與揮扇邊距較窄但完整。
+- 全部 edit 成功，沒有 generate fallback，沒有重骰；原始圖、prompt、route 與 QC 收據皆保留。
+- 額度：7 次單張 edit 全成功，未遇額度錯誤；未取得即時剩餘量。
+- 詳細驗收：/Users/peter/repo/godot/godogen/prototypes/madara-survivor/art_src/pixel2/acceptance.json。
