@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="JutsuDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/jutsu_def.gd" id="1_rc7bt"]
+
+[resource]
+script = ExtResource("1_rc7bt")
+id = &"fireball"
+title = "火遁・豪火球"
+kind = 2
+summary = "朝敵人吐出拳頭大的火球，命中爆炸。"
+level_texts = PackedStringArray("火球長到一個人大，爆炸更大。", "火球比人還大，爆炸處留下燃燒的地面。", "一次吐兩顆，火地燒得更久。", "火球有兩人高；燒著的敵人死掉時會爆炸，把火傳出去。")

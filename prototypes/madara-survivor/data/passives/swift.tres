@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="PassiveDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/passive_def.gd" id="1_uro2w"]
+
+[resource]
+script = ExtResource("1_uro2w")
+id = &"swift"
+title = "瞬步"
+description = "移動速度 +8%。"
+stat = 3
+per_level = 0.08

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="JutsuDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/jutsu_def.gd" id="1_4ppno"]
+
+[resource]
+script = ExtResource("1_4ppno")
+id = &"taijutsu"
+title = "體術"
+summary = "近身三連擊，第三下踢飛敵人撞進人群。"
+level_texts = PackedStringArray("連擊更快。", "出手範圍變大。", "第三下踢擊震出一圈衝擊波。", "第三下把人踢得更遠、更狠。")

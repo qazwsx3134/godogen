@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="JutsuDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/jutsu_def.gd" id="1_2uq6b"]
+
+[resource]
+script = ExtResource("1_2uq6b")
+id = &"wood"
+title = "木遁・樹界降誕"
+kind = 4
+summary = "樹根從敵群腳下竄出，把一整圈敵人綁在原地。"
+level_texts = PackedStringArray("樹海更大，綁得更久。", "樹海再擴大。", "一次長出兩片樹海（前後各一）。", "學過火遁時，樹根會著火，把綁住的人一起燒。")

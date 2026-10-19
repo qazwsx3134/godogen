@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="EnemyDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/enemy_def.gd" id="1_4jaxi"]
+
+[resource]
+script = ExtResource("1_4jaxi")
+id = &"masked"
+frame = 2
+hp = 14.0
+speed = 4.6
+size = 2.0
+radius = 0.5
+damage = 5.0
+tint = Color(0.6, 0.62, 0.68, 1)
+appears_at = 90.0
+weight = 0.6
+cast_cooldown = 0.0

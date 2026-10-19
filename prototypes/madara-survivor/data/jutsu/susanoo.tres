@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="JutsuDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/jutsu_def.gd" id="1_ynthj"]
+
+[resource]
+script = ExtResource("1_ynthj")
+id = &"susanoo"
+title = "須佐能乎"
+kind = 6
+summary = "按「須佐」召出查克拉巨人：7 秒內自動揮出巨大斬擊，替你擋下七成傷害。"
+level_texts = PackedStringArray("第二階段：巨人更大，撐 8 秒。", "半身：斬擊更遠更重，撐 9 秒。", "鎧甲：再大一圈，冷卻更短。", "完全體：斬擊橫掃一整圈，撐 12 秒。")
+min_player_level = 5

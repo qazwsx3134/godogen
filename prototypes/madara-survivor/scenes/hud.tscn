@@ -1,0 +1,489 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/hud.gd" id="1_uo2fv"]
+[ext_resource type="PackedScene" path="res://scenes/upgrade_card.tscn" id="2_047uy"]
+[ext_resource type="Theme" path="res://ui/theme.tres" id="3_5pdws"]
+[ext_resource type="Script" path="res://scripts/touch_stick.gd" id="4_hd3ao"]
+[ext_resource type="Script" path="res://scripts/touch_button.gd" id="5_0i1j5"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mphia"]
+bg_color = Color(1, 1, 1, 0.14)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 1, 1, 0.45)
+corner_radius_top_left = 95
+corner_radius_top_right = 95
+corner_radius_bottom_right = 95
+corner_radius_bottom_left = 95
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0m4u7"]
+bg_color = Color(1, 1, 1, 0.7)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.12, 0.08, 0.1, 0.6)
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_right = 40
+corner_radius_bottom_left = 40
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_apjy4"]
+bg_color = Color(0.86, 0.2, 0.22, 0.8)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 1, 1, 0.75)
+corner_radius_top_left = 67
+corner_radius_top_right = 67
+corner_radius_bottom_right = 67
+corner_radius_bottom_left = 67
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5n1hp"]
+bg_color = Color(0.35, 0.15, 0.55, 0.85)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.85, 0.7, 1, 0.9)
+corner_radius_top_left = 52
+corner_radius_top_right = 52
+corner_radius_bottom_right = 52
+corner_radius_bottom_left = 52
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eld54"]
+bg_color = Color(0.45, 0.2, 0.7, 0.85)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.85, 0.7, 1, 0.9)
+corner_radius_top_left = 52
+corner_radius_top_right = 52
+corner_radius_bottom_right = 52
+corner_radius_bottom_left = 52
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3swnk"]
+bg_color = Color(0.86, 0.2, 0.22, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qkknv"]
+bg_color = Color(0.62, 0.35, 0.95, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uxdf7"]
+content_margin_left = 48.0
+content_margin_top = 32.0
+content_margin_right = 48.0
+content_margin_bottom = 32.0
+bg_color = Color(0.96, 0.93, 0.86, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.12, 0.08, 0.1, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[node name="Hud" type="CanvasLayer" unique_id=1932767223]
+script = ExtResource("1_uo2fv")
+card_scene = ExtResource("2_047uy")
+
+[node name="Root" type="Control" parent="." unique_id=1953246961]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = ExtResource("3_5pdws")
+
+[node name="Darken" type="ColorRect" parent="Root" unique_id=2045571292]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.06, 0.02, 0.12, 0.55)
+
+[node name="Stick" type="Control" parent="Root" unique_id=855174100]
+unique_name_in_owner = true
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("4_hd3ao")
+
+[node name="Base" type="Panel" parent="Root/Stick" unique_id=1916560795]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 110.0
+offset_top = 320.0
+offset_right = 300.0
+offset_bottom = 510.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_mphia")
+
+[node name="Knob" type="Panel" parent="Root/Stick/Base" unique_id=2143315150]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 55.0
+offset_top = 55.0
+offset_right = 135.0
+offset_bottom = 135.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_0m4u7")
+
+[node name="DashButton" type="Control" parent="Root" unique_id=1888208829]
+unique_name_in_owner = true
+anchors_preset = 0
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -170.0
+offset_top = -170.0
+offset_right = -36.0
+offset_bottom = -36.0
+mouse_filter = 2
+script = ExtResource("5_0i1j5")
+
+[node name="Face" type="Panel" parent="Root/DashButton" unique_id=1864691284]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+pivot_offset = Vector2(67, 67)
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_apjy4")
+
+[node name="Label" type="Label" parent="Root/DashButton/Face" unique_id=1529868422]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_font_sizes/font_size = 30
+text = "瞬身"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="UltButton" type="Control" parent="Root" unique_id=1606535351]
+unique_name_in_owner = true
+anchors_preset = 0
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -150.0
+offset_top = -300.0
+offset_right = -46.0
+offset_bottom = -196.0
+mouse_filter = 2
+script = ExtResource("5_0i1j5")
+action = &"ultimate"
+
+[node name="Face" type="Panel" parent="Root/UltButton" unique_id=1968048674]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+pivot_offset = Vector2(52, 52)
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_5n1hp")
+
+[node name="Label" type="Label" parent="Root/UltButton/Face" unique_id=1371979932]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_font_sizes/font_size = 22
+text = "地爆
+天星"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SusButton" type="Control" parent="Root" unique_id=1276532676]
+unique_name_in_owner = true
+anchors_preset = 0
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -300.0
+offset_top = -140.0
+offset_right = -196.0
+offset_bottom = -36.0
+mouse_filter = 2
+script = ExtResource("5_0i1j5")
+action = &"susanoo"
+
+[node name="Face" type="Panel" parent="Root/SusButton" unique_id=1511054829]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+pivot_offset = Vector2(52, 52)
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_eld54")
+
+[node name="Label" type="Label" parent="Root/SusButton/Face" unique_id=2116898094]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_font_sizes/font_size = 26
+text = "須佐"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Top" type="MarginContainer" parent="Root" unique_id=1877732298]
+layout_mode = 0
+anchor_right = 1.0
+mouse_filter = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+
+[node name="Column" type="VBoxContainer" parent="Root/Top" unique_id=606307687]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="XpBar" type="ProgressBar" parent="Root/Top/Column" unique_id=1015968490]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+mouse_filter = 2
+value = 35.0
+show_percentage = false
+
+[node name="Row" type="HBoxContainer" parent="Root/Top/Column" unique_id=613928052]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="LevelLabel" type="Label" parent="Root/Top/Column/Row" unique_id=1495992245]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "Lv.1"
+
+[node name="HpBar" type="ProgressBar" parent="Root/Top/Column/Row" unique_id=1147263546]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(220, 18)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_3swnk")
+value = 80.0
+show_percentage = false
+
+[node name="Spacer" type="Control" parent="Root/Top/Column/Row" unique_id=609122559]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="TimeLabel" type="Label" parent="Root/Top/Column/Row" unique_id=1895163694]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "0:00"
+
+[node name="Spacer2" type="Control" parent="Root/Top/Column/Row" unique_id=243704377]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="KillBox" type="VBoxContainer" parent="Root/Top/Column/Row" unique_id=1064945238]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = -6
+
+[node name="KillsLabel" type="Label" parent="Root/Top/Column/Row/KillBox" unique_id=780188718]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "0"
+horizontal_alignment = 2
+
+[node name="Caption" type="Label" parent="Root/Top/Column/Row/KillBox" unique_id=1871478112]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8, 0.75, 1)
+theme_override_font_sizes/font_size = 16
+text = "KILLS"
+horizontal_alignment = 2
+
+[node name="DominanceRow" type="HBoxContainer" parent="Root/Top/Column" unique_id=879961958]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="DominanceLabel" type="Label" parent="Root/Top/Column/DominanceRow" unique_id=1689232027]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.7, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "支配"
+
+[node name="DominanceBar" type="ProgressBar" parent="Root/Top/Column/DominanceRow" unique_id=402096000]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 12)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_qkknv")
+value = 40.0
+show_percentage = false
+
+[node name="Combo" type="VBoxContainer" parent="Root" unique_id=1735399610]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -260.0
+offset_top = 92.0
+offset_right = 260.0
+offset_bottom = 190.0
+mouse_filter = 2
+theme_override_constants/separation = -4
+
+[node name="ComboCount" type="Label" parent="Root/Combo" unique_id=89229429]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.92, 0.8, 1)
+theme_override_colors/font_outline_color = Color(0.45, 0.05, 0.08, 1)
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 52
+text = "47 KILLS"
+horizontal_alignment = 1
+
+[node name="ComboTitle" type="Label" parent="Root/Combo" unique_id=1320211543]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.45, 0.4, 1)
+theme_override_font_sizes/font_size = 26
+text = "SHINOBI HUNTER"
+horizontal_alignment = 1
+
+[node name="Flash" type="ColorRect" parent="Root" unique_id=857827515]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(1, 0.98, 1, 1)
+
+[node name="Perf" type="Label" parent="Root" unique_id=2011344372]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = -30.0
+offset_right = 59.0
+offset_bottom = -7.0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 14
+text = "60 fps"
+
+[node name="LevelUp" type="Control" parent="Root" unique_id=1567267564]
+unique_name_in_owner = true
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Dim" type="ColorRect" parent="Root/LevelUp" unique_id=1578791046]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.08, 0.03, 0.05, 0.62)
+
+[node name="Margin" type="MarginContainer" parent="Root/LevelUp" unique_id=257180721]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="Stack" type="VBoxContainer" parent="Root/LevelUp/Margin" unique_id=1655637217]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Title" type="Label" parent="Root/LevelUp/Margin/Stack" unique_id=1853618667]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "查克拉解放 — 選一張"
+horizontal_alignment = 1
+
+[node name="Cards" type="HFlowContainer" parent="Root/LevelUp/Margin/Stack" unique_id=2014904440]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 18
+theme_override_constants/v_separation = 14
+alignment = 1
+
+[node name="Sample1" parent="Root/LevelUp/Margin/Stack/Cards" unique_id=1431714656 instance=ExtResource("2_047uy")]
+layout_mode = 2
+
+[node name="Sample2" parent="Root/LevelUp/Margin/Stack/Cards" unique_id=1921035036 instance=ExtResource("2_047uy")]
+layout_mode = 2
+
+[node name="Sample3" parent="Root/LevelUp/Margin/Stack/Cards" unique_id=1876056661 instance=ExtResource("2_047uy")]
+layout_mode = 2
+
+[node name="Result" type="Control" parent="Root" unique_id=289414159]
+unique_name_in_owner = true
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Dim" type="ColorRect" parent="Root/Result" unique_id=1547471478]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.08, 0.03, 0.05, 0.62)
+
+[node name="Center" type="CenterContainer" parent="Root/Result" unique_id=1055258501]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Panel" type="PanelContainer" parent="Root/Result/Center" unique_id=760671983]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_uxdf7")
+
+[node name="Body" type="VBoxContainer" parent="Root/Result/Center/Panel" unique_id=1563998855]
+layout_mode = 2
+theme_override_constants/separation = 18
+alignment = 1
+
+[node name="ResultTitle" type="Label" parent="Root/Result/Center/Panel/Body" unique_id=1371405303]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.12, 0.08, 0.1, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 46
+text = "戰場已被支配"
+horizontal_alignment = 1
+
+[node name="ResultStats" type="Label" parent="Root/Result/Center/Panel/Body" unique_id=364493402]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.32, 0.26, 0.28, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 24
+text = "10:00 · 擊倒 0 · 最大連殺 0 · Lv.1"
+horizontal_alignment = 1
+
+[node name="Restart" type="Button" parent="Root/Result/Center/Panel/Body" unique_id=2073419003]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "再戰"

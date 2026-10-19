@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="JutsuDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/jutsu_def.gd" id="1_2au4n"]
+
+[resource]
+script = ExtResource("1_2au4n")
+id = &"sharingan"
+title = "寫輪眼"
+kind = 3
+summary = "看穿攻擊：快被打中時留下殘影閃開（6 秒一次）。"
+level_texts = PackedStringArray("看穿得更快（4.5 秒一次）。", "殘影會爆開，把攻擊你的人震飛。", "可以連續閃兩次，3.5 秒補一次。", "萬花筒：閃開後無敵 1 秒，3 秒補一次。")

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="JutsuDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/jutsu_def.gd" id="1_0vt0b"]
+
+[resource]
+script = ExtResource("1_0vt0b")
+id = &"chibaku"
+title = "輪迴眼・地爆天星"
+kind = 5
+summary = "支配滿了就能發動：把整片戰場的敵人吸上天，壓成一顆星。"
+level_texts = PackedStringArray()
+max_level = 1
+min_player_level = 8

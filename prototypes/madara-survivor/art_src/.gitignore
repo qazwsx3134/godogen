@@ -1,0 +1,11 @@
+# 生成過程的中間檔留在本機，不進 git（照 survivor-series/art_src 的慣例）。
+# 進 git 的是：selected/、candidate-*.png、比較圖（*contact*.png）、派工單與報告、spec／prompt／run 等 json。
+takes/
+takes.png
+cutout-*/
+cutout-*.log
+rejected/
+failures/
+inputs/
+fixes/
+*.import

@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="EnemyDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/enemy_def.gd" id="1_m1xtv"]
+
+[resource]
+script = ExtResource("1_m1xtv")
+id = &"caster_earth"
+frame = 10
+hp = 30.0
+speed = 2.6
+size = 2.0
+radius = 0.5
+damage = 5.0
+xp = 2
+tint = Color(0.75, 0.55, 0.35, 1)
+appears_at = 210.0
+weight = 0.2
+cost = 2.0
+jutsu = 3
+cast_range = 13.0
+cast_cooldown = 4.0

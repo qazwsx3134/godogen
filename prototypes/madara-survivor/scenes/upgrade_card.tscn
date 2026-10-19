@@ -1,0 +1,79 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://ui/theme.tres" id="1_ew4bf"]
+[ext_resource type="Script" path="res://scripts/upgrade_card.gd" id="2_fk0rn"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0hv3p"]
+bg_color = Color(0.96, 0.93, 0.86, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 7
+border_color = Color(0.12, 0.08, 0.1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_igsks"]
+bg_color = Color(1, 0.9, 0.82, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 7
+border_color = Color(0.86, 0.2, 0.22, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_33rkj"]
+
+[node name="UpgradeCard" type="Button" unique_id=1431714656]
+custom_minimum_size = Vector2(300, 170)
+theme = ExtResource("1_ew4bf")
+theme_override_styles/normal = SubResource("StyleBoxFlat_0hv3p")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_igsks")
+theme_override_styles/hover = SubResource("StyleBoxFlat_igsks")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_33rkj")
+script = ExtResource("2_fk0rn")
+
+[node name="Margin" type="MarginContainer" parent="." unique_id=1072307745]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 18
+
+[node name="Box" type="VBoxContainer" parent="Margin" unique_id=1115146401]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="Level" type="Label" parent="Margin/Box" unique_id=245098027]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.86, 0.2, 0.22, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 18
+text = "NEW"
+
+[node name="Title" type="Label" parent="Margin/Box" unique_id=1170889663]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.12, 0.08, 0.1, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 30
+text = "團扇之力"
+
+[node name="Desc" type="Label" parent="Margin/Box" unique_id=1948751268]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.32, 0.26, 0.28, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 19
+text = "團扇傷害 +20%。"
+autowrap_mode = 1

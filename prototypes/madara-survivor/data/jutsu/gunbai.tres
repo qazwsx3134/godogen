@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="JutsuDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/jutsu_def.gd" id="1_t8b7c"]
+
+[resource]
+script = ExtResource("1_t8b7c")
+id = &"gunbai"
+title = "團扇"
+kind = 1
+summary = "揮出 120° 扇形重擊，把前方一整排掃飛；敵人的火遁、水遁會被扇回去。"
+level_texts = PackedStringArray("團扇變大，傷害提高。", "團扇再變大。", "掃飛的力道更強。", "揮扇後捲起一陣暴風，再推一次。")

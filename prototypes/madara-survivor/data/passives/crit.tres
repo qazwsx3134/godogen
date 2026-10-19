@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="PassiveDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/passive_def.gd" id="1_jl16y"]
+
+[resource]
+script = ExtResource("1_jl16y")
+id = &"crit"
+title = "看破"
+description = "暴擊率 +6%。"
+stat = 7
+per_level = 0.06

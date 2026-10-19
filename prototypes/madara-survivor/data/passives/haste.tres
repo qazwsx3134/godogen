@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="PassiveDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/passive_def.gd" id="1_42iu6"]
+
+[resource]
+script = ExtResource("1_42iu6")
+id = &"haste"
+title = "結印速度"
+description = "所有忍術冷卻 -10%。"
+stat = 1

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="EnemyDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/enemy_def.gd" id="1_3gnbx"]
+
+[resource]
+script = ExtResource("1_3gnbx")
+id = &"elite"
+frame = 4
+hp = 900.0
+speed = 2.8
+size = 2.8
+radius = 0.85
+damage = 18.0
+xp = 30
+knockback_resist = 0.85
+tint = Color(0.95, 0.92, 0.85, 1)
+weight = 0.0
+cost = 10.0
+cast_cooldown = 0.0
+elite = true

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="PassiveDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/passive_def.gd" id="1_eyr44"]
+
+[resource]
+script = ExtResource("1_eyr44")
+id = &"magnet"
+title = "查克拉感知"
+description = "查克拉吸取範圍 +35%。"
+stat = 4
+per_level = 0.35
