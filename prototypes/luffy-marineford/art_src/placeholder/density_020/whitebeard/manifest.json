@@ -1,0 +1,58 @@
+{
+  "cell_px": 352,
+  "columns": 3,
+  "foot_px": 4,
+  "meters_per_px": 0.02,
+  "pixel": {
+    "colors": 16
+  },
+  "characters": {
+    "whitebeard": {
+      "height_px": 335,
+      "directions": 1,
+      "mirror": true,
+      "align": "canvas",
+      "foot_y": 348,
+      "anims": {
+        "idle": {
+          "d": [
+            30,
+            30
+          ],
+          "loop": true,
+          "sheet": {
+            "file": "whitebeard_idle.png",
+            "fw": 352,
+            "fh": 352
+          }
+        },
+        "quake": {
+          "d": [
+            8,
+            8,
+            8
+          ],
+          "loop": false,
+          "sheet": {
+            "file": "whitebeard_quake.png",
+            "fw": 352,
+            "fh": 352
+          }
+        },
+        "slash": {
+          "d": [
+            8,
+            8,
+            8
+          ],
+          "loop": false,
+          "sheet": {
+            "file": "whitebeard_slash.png",
+            "fw": 352,
+            "fh": 352
+          }
+        }
+      }
+    }
+  }
+}

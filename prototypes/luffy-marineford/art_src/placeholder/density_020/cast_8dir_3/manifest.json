@@ -1,0 +1,172 @@
+{
+  "cell_px": 128,
+  "columns": 12,
+  "foot_px": 4,
+  "meters_per_px": 0.02,
+  "pixel": {
+    "colors": 16
+  },
+  "characters": {
+    "wb_pirate_a": {
+      "height_px": 95,
+      "directions": 8,
+      "mirror": true,
+      "align": "canvas",
+      "foot_y": 124,
+      "anims": {
+        "idle": {
+          "d": [
+            30,
+            30
+          ],
+          "loop": true,
+          "sheet": {
+            "file": "wb_pirate_a_idle.png",
+            "fw": 128,
+            "fh": 128
+          }
+        },
+        "attack": {
+          "d": [
+            8,
+            8,
+            8
+          ],
+          "loop": false,
+          "sheet": {
+            "file": "wb_pirate_a_attack.png",
+            "fw": 128,
+            "fh": 128
+          }
+        },
+        "hit": {
+          "d": [
+            8
+          ],
+          "loop": false,
+          "sheet": {
+            "file": "wb_pirate_a_hit.png",
+            "fw": 128,
+            "fh": 128
+          }
+        }
+      }
+    },
+    "wb_pirate_b": {
+      "height_px": 105,
+      "directions": 8,
+      "mirror": true,
+      "align": "canvas",
+      "foot_y": 124,
+      "anims": {
+        "idle": {
+          "d": [
+            30,
+            30
+          ],
+          "loop": true,
+          "sheet": {
+            "file": "wb_pirate_b_idle.png",
+            "fw": 128,
+            "fh": 128
+          }
+        },
+        "attack": {
+          "d": [
+            8,
+            8,
+            8
+          ],
+          "loop": false,
+          "sheet": {
+            "file": "wb_pirate_b_attack.png",
+            "fw": 128,
+            "fh": 128
+          }
+        },
+        "hit": {
+          "d": [
+            8
+          ],
+          "loop": false,
+          "sheet": {
+            "file": "wb_pirate_b_hit.png",
+            "fw": 128,
+            "fh": 128
+          }
+        }
+      }
+    },
+    "smoker": {
+      "height_px": 105,
+      "directions": 8,
+      "mirror": true,
+      "align": "canvas",
+      "foot_y": 124,
+      "anims": {
+        "idle": {
+          "d": [
+            30,
+            30
+          ],
+          "loop": true,
+          "sheet": {
+            "file": "smoker_idle.png",
+            "fw": 128,
+            "fh": 128
+          }
+        },
+        "walk": {
+          "d": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "loop": true,
+          "sheet": {
+            "file": "smoker_walk.png",
+            "fw": 128,
+            "fh": 128
+          }
+        },
+        "attack": {
+          "d": [
+            8,
+            8,
+            8
+          ],
+          "loop": false,
+          "sheet": {
+            "file": "smoker_attack.png",
+            "fw": 128,
+            "fh": 128
+          }
+        },
+        "smoke": {
+          "d": [
+            8,
+            8
+          ],
+          "loop": true,
+          "sheet": {
+            "file": "smoker_smoke.png",
+            "fw": 128,
+            "fh": 128
+          }
+        },
+        "hit": {
+          "d": [
+            8
+          ],
+          "loop": false,
+          "sheet": {
+            "file": "smoker_hit.png",
+            "fw": 128,
+            "fh": 128
+          }
+        }
+      }
+    }
+  }
+}

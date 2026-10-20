@@ -1,0 +1,42 @@
+{
+  "atlas": "pacifista.png",
+  "cell_px": 368,
+  "columns": 5,
+  "rows": 5,
+  "foot_px": 4,
+  "meters_per_px": 0.02,
+  "characters": {
+    "pacifista": {
+      "directions": 8,
+      "mirror": true,
+      "anims": {
+        "walk": {
+          "cell": 0,
+          "n": 2,
+          "d": [
+            8,
+            8
+          ],
+          "loop": true
+        },
+        "attack": {
+          "cell": 2,
+          "n": 2,
+          "d": [
+            8,
+            8
+          ],
+          "loop": false
+        },
+        "hit": {
+          "cell": 4,
+          "n": 1,
+          "d": [
+            8
+          ],
+          "loop": false
+        }
+      }
+    }
+  }
+}

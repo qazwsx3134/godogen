@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="JutsuDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/jutsu_def.gd" id="1_4ppno"]
+
+[resource]
+script = ExtResource("1_4ppno")
+id = &"bazooka"
+title = "橡膠火箭砲"
+kind = 2
+summary = "雙掌推出，把一整排人推成一道牆撞進人群。"
+level_texts = PackedStringArray("推得更寬。", "推得更遠。", "掌風更寬，撞到的人連鎖擊飛。", "一次推平整條路。")
+max_level = 5
+min_player_level = 0

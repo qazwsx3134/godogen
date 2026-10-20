@@ -1,0 +1,127 @@
+{
+  "cell_px": 128,
+  "columns": 12,
+  "foot_px": 4,
+  "meters_per_px": 0.02,
+  "pixel": {
+    "colors": 16
+  },
+  "characters": {
+    "luffy": {
+      "height_px": 90,
+      "directions": 8,
+      "mirror": true,
+      "align": "canvas",
+      "foot_y": 124,
+      "anims": {
+        "idle": {
+          "d": [
+            30,
+            30
+          ],
+          "loop": true,
+          "sheet": {
+            "file": "luffy_idle.png",
+            "fw": 128,
+            "fh": 128
+          }
+        },
+        "walk": {
+          "d": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "loop": true,
+          "sheet": {
+            "file": "luffy_walk.png",
+            "fw": 128,
+            "fh": 128
+          }
+        },
+        "punch": {
+          "d": [
+            6,
+            8,
+            10
+          ],
+          "loop": false,
+          "sheet": {
+            "file": "luffy_punch.png",
+            "fw": 128,
+            "fh": 128
+          }
+        }
+      }
+    },
+    "marine": {
+      "height_px": 88,
+      "directions": 8,
+      "mirror": true,
+      "align": "canvas",
+      "foot_y": 124,
+      "anims": {
+        "walk": {
+          "d": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "loop": true,
+          "sheet": {
+            "file": "marine_walk.png",
+            "fw": 128,
+            "fh": 128
+          }
+        },
+        "hit": {
+          "d": [
+            12
+          ],
+          "loop": false,
+          "sheet": {
+            "file": "marine_hit.png",
+            "fw": 128,
+            "fh": 128
+          }
+        }
+      }
+    },
+    "vice_admiral": {
+      "height_px": 115,
+      "directions": 8,
+      "mirror": true,
+      "align": "canvas",
+      "foot_y": 124,
+      "anims": {
+        "walk": {
+          "d": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "loop": true,
+          "sheet": {
+            "file": "vice_admiral_walk.png",
+            "fw": 128,
+            "fh": 128
+          }
+        },
+        "hit": {
+          "d": [
+            12
+          ],
+          "loop": false,
+          "sheet": {
+            "file": "vice_admiral_hit.png",
+            "fw": 128,
+            "fh": 128
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "atlas": "sengoku_buddha.png",
+  "cell_px": 304,
+  "columns": 5,
+  "rows": 1,
+  "foot_px": 4,
+  "meters_per_px": 0.033,
+  "characters": {
+    "sengoku_buddha": {
+      "directions": 1,
+      "mirror": false,
+      "anims": {
+        "idle": {
+          "cell": 0,
+          "n": 2,
+          "d": [
+            30,
+            30
+          ],
+          "loop": true
+        },
+        "strike": {
+          "cell": 2,
+          "n": 3,
+          "d": [
+            8,
+            8,
+            8
+          ],
+          "loop": false
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,29 @@
+[gd_resource type="ArrayMesh" format=4]
+
+[ext_resource type="Material" path="res://materials/blob_shadow.tres" id="1_pihp8"]
+[ext_resource type="Material" path="res://materials/sprite_instanced.tres" id="2_gdguu"]
+
+[resource]
+_surfaces = [{
+"aabb": AABB(-0.5, 0, -0.5, 1, 1e-05, 1),
+"attribute_data": PackedByteArray("AACAPwAAgD8AAAAAAACAPwAAgD8AAAAAAAAAAAAAAAA="),
+"format": 34359742487,
+"index_count": 6,
+"index_data": PackedByteArray("AAABAAIAAQADAAIA"),
+"material": ExtResource("1_pihp8"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray("AAAAPwAAAAAAAAA/AAAAvwAAAAAAAAA/AAAAPwAAAAAAAAC/AAAAvwAAAAAAAAC/AID//////78AgP//////vwCA//////+/AID//////78=")
+}, {
+"aabb": AABB(-0.5, 0, 0, 1, 1, 1e-05),
+"attribute_data": PackedByteArray("AACAPwAAgD8AAAAAAACAPwAAgD8AAAAAAAAAAAAAAAA="),
+"format": 34359742487,
+"index_count": 6,
+"index_data": PackedByteArray("AAABAAIAAQADAAIA"),
+"material": ExtResource("2_gdguu"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray("AAAAPwAAAAAAAAAAAAAAvwAAAAAAAAAAAAAAPwAAgD8AAAAAAAAAvwAAgD8AAAAA/3//f////7//f/9/////v/9//3////+//3//f////78=")
+}]

@@ -1,0 +1,160 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/act.gd" id="1_crjn4"]
+[ext_resource type="PackedScene" path="res://scenes/route.tscn" id="2_1oof4"]
+[ext_resource type="Script" path="res://scripts/act_trigger.gd" id="3_jbohc"]
+[ext_resource type="Script" path="res://scripts/beat.gd" id="4_77gsi"]
+[ext_resource type="PackedScene" path="res://scenes/cutscenes/act4_hormone.tscn" id="5_uo2k6"]
+[ext_resource type="PackedScene" path="res://scenes/cutscenes/act4_execution.tscn" id="6_voq1t"]
+[ext_resource type="PackedScene" path="res://scenes/cutscenes/act4_golden_fist.tscn" id="7_itfga"]
+
+[node name="Act4" type="Node3D" unique_id=903626648]
+script = ExtResource("1_crjn4")
+army_curve = PackedVector2Array(0, 30, 60, 90, 150, 160, 240, 220)
+kit = PackedStringArray("pistol:3", "gatling:3", "gear2:1", "gigant:1")
+unlocked = PackedStringArray()
+companions = PackedStringArray("ivankov")
+
+[node name="Reference" parent="." unique_id=1675133996 instance=ExtResource("2_1oof4")]
+
+[node name="Opening" type="Marker3D" parent="." unique_id=2088228563]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 30)
+script = ExtResource("3_jbohc")
+on_start = true
+
+[node name="01 CALL bridge closed" type="Node" parent="Opening" unique_id=909378668]
+script = ExtResource("4_77gsi")
+kind = 6
+method = &"bridge"
+arg = "closed"
+wait = false
+
+[node name="02 TITLE" type="Node" parent="Opening" unique_id=248638706]
+script = ExtResource("4_77gsi")
+kind = 4
+
+[node name="03 CUTSCENE" type="Node" parent="Opening" unique_id=1053788112]
+script = ExtResource("4_77gsi")
+kind = 5
+cutscene = ExtResource("5_uo2k6")
+
+[node name="04 CALL unlock hormone" type="Node" parent="Opening" unique_id=397895959]
+script = ExtResource("4_77gsi")
+kind = 6
+method = &"unlock"
+arg = "hormone"
+wait = false
+
+[node name="05 TOAST 緊張荷爾蒙：倒下也能" type="Node" parent="Opening" unique_id=1014333496]
+script = ExtResource("4_77gsi")
+kind = 2
+speaker = "伊萬科夫"
+portrait = "ivankov"
+text = "緊張荷爾蒙：倒下也能再站起來一次"
+color = Color(1, 0.47843137, 0.7529412, 1)
+
+[node name="Coby" type="Marker3D" parent="." unique_id=998104565]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -70)
+script = ExtResource("3_jbohc")
+goal_name = "克比"
+
+[node name="01 LINE 魯夫先生，請停下來！" type="Node" parent="Coby" unique_id=2120814543]
+script = ExtResource("4_77gsi")
+kind = 1
+speaker = "克比"
+text = "魯夫先生，請停下來！"
+seconds = 2.2
+
+[node name="02 CALL blocker coby_2" type="Node" parent="Coby" unique_id=1281269282]
+script = ExtResource("4_77gsi")
+kind = 6
+method = &"blocker"
+arg = "coby:2"
+
+[node name="03 LINE 抱歉了，克比！" type="Node" parent="Coby" unique_id=1196013379]
+script = ExtResource("4_77gsi")
+kind = 1
+speaker = "魯夫"
+text = "抱歉了，克比！"
+seconds = 1.8
+
+[node name="Plaza" type="Marker3D" parent="." unique_id=7455223]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -146)
+script = ExtResource("3_jbohc")
+goal_name = "廣場"
+
+[node name="01 CUTSCENE" type="Node" parent="Plaza" unique_id=998205933]
+script = ExtResource("4_77gsi")
+kind = 5
+cutscene = ExtResource("6_voq1t")
+
+[node name="02 CALL haki" type="Node" parent="Plaza" unique_id=1319402108]
+script = ExtResource("4_77gsi")
+kind = 6
+method = &"haki"
+
+[node name="03 TOAST 全員掩護魯夫！" type="Node" parent="Plaza" unique_id=197526412]
+script = ExtResource("4_77gsi")
+kind = 2
+speaker = "白鬍子"
+portrait = "whitebeard"
+text = "全員掩護魯夫！"
+color = Color(0.9411765, 0.9137255, 0.8509804, 1)
+
+[node name="04 CALL bridge rise" type="Node" parent="Plaza" unique_id=57884411]
+script = ExtResource("4_77gsi")
+kind = 6
+method = &"bridge"
+arg = "rise"
+
+[node name="05 LINE 路通了！艾斯——！" type="Node" parent="Plaza" unique_id=438004318]
+script = ExtResource("4_77gsi")
+kind = 1
+speaker = "魯夫"
+text = "路通了！艾斯——！"
+seconds = 2.0
+
+[node name="Garp" type="Marker3D" parent="." unique_id=1110604403]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -226)
+script = ExtResource("3_jbohc")
+goal_name = "卡普"
+
+[node name="01 SAY 魯夫！想過去，就先打" type="Node" parent="Garp" unique_id=476253670]
+script = ExtResource("4_77gsi")
+speaker = "卡普"
+portrait = "garp"
+text = "魯夫！想過去，就先打倒我！"
+color = Color(0.62352943, 0.7647059, 1, 1)
+
+[node name="02 SAY 爺爺……讓開！" type="Node" parent="Garp" unique_id=273189492]
+script = ExtResource("4_77gsi")
+speaker = "魯夫"
+portrait = "luffy_resolve"
+text = "爺爺……讓開！"
+
+[node name="03 CALL blocker garp_8" type="Node" parent="Garp" unique_id=346416265]
+script = ExtResource("4_77gsi")
+kind = 6
+method = &"blocker"
+arg = "garp:8"
+
+[node name="04 LINE ……臭小子。" type="Node" parent="Garp" unique_id=355387022]
+script = ExtResource("4_77gsi")
+kind = 1
+speaker = "卡普"
+text = "……臭小子。"
+seconds = 2.0
+
+[node name="Platform" type="Marker3D" parent="." unique_id=1225222041]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -249.5)
+script = ExtResource("3_jbohc")
+goal_name = "處刑台"
+
+[node name="01 CUTSCENE" type="Node" parent="Platform" unique_id=609955027]
+script = ExtResource("4_77gsi")
+kind = 5
+cutscene = ExtResource("7_itfga")
+
+[node name="02 WIN" type="Node" parent="Platform" unique_id=86233156]
+script = ExtResource("4_77gsi")
+kind = 8

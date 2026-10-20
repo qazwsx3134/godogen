@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="JutsuDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/jutsu_def.gd" id="1_4ppno"]
+
+[resource]
+script = ExtResource("1_4ppno")
+id = &"gear2"
+title = "二檔"
+kind = 6
+summary = "按鈕：一段時間內全招式加速、冒蒸氣。"
+level_texts = PackedStringArray("持續更久。", "冷卻更短。", "持續再久。", "冷卻再短，移動也更快。")
+max_level = 5
+min_player_level = 3

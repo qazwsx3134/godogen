@@ -1,0 +1,62 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/cast_actor.gd" id="1_bi22m"]
+[ext_resource type="Material" path="res://materials/blob_shadow.tres" id="2_q8usa"]
+[ext_resource type="Shader" path="res://addons/proto_kit/sprite3d.gdshader" id="3_3qbio"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_8dvev"]
+size = Vector2(1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0p486"]
+render_priority = 0
+shader = ExtResource("3_3qbio")
+shader_parameter/frames = null
+shader_parameter/use_instance_custom = false
+shader_parameter/use_instance_color = null
+shader_parameter/lean = null
+shader_parameter/foot_gutter = null
+shader_parameter/frame = null
+shader_parameter/facing = null
+shader_parameter/phase = null
+shader_parameter/flash = null
+shader_parameter/dissolve = null
+shader_parameter/bob = null
+shader_parameter/hit_squash = null
+shader_parameter/alpha_cut = null
+shader_parameter/tint = null
+shader_parameter/light = null
+shader_parameter/flash_color = null
+shader_parameter/outline = null
+shader_parameter/outline_player = null
+shader_parameter/outline_elite = null
+shader_parameter/outline_boss = null
+shader_parameter/outline_ally = null
+shader_parameter/outline_role_5 = null
+shader_parameter/outline_role_6 = null
+shader_parameter/outline_role_7 = null
+shader_parameter/dissolve_color = null
+shader_parameter/dissolve_edge = null
+shader_parameter/see_through_enabled = null
+shader_parameter/focus = null
+shader_parameter/focus_height = null
+shader_parameter/see_through = null
+shader_parameter/see_radius = null
+
+[sub_resource type="QuadMesh" id="QuadMesh_n4bxv"]
+center_offset = Vector3(0, 0.5, 0)
+
+[node name="CastActor" type="Node3D" unique_id=685743556]
+script = ExtResource("1_bi22m")
+xray_path = NodePath("")
+shadow_path = NodePath("")
+
+[node name="Blob" type="MeshInstance3D" parent="." unique_id=1752546354]
+material_override = ExtResource("2_q8usa")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_8dvev")
+
+[node name="Sprite" type="MeshInstance3D" parent="." unique_id=1702573016]
+transform = Transform3D(2.4, 0, 0, 0, 2.4, 0, 0, 0, 2.4, 0, 0, 0)
+material_override = SubResource("ShaderMaterial_0p486")
+cast_shadow = 0
+mesh = SubResource("QuadMesh_n4bxv")

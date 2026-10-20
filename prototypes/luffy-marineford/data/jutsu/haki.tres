@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="JutsuDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/jutsu_def.gd" id="1_4ppno"]
+
+[resource]
+script = ExtResource("1_4ppno")
+id = &"haki"
+title = "霸王色霸氣"
+kind = 5
+summary = "意志值滿時：範圍內的一般海兵昏倒，精英被震退。"
+level_texts = PackedStringArray()
+max_level = 1
+min_player_level = 99

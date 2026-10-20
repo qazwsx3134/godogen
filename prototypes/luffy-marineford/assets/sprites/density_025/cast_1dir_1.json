@@ -1,0 +1,199 @@
+{
+  "atlas": "cast_1dir_1.png",
+  "cell_px": 144,
+  "columns": 5,
+  "rows": 7,
+  "foot_px": 4,
+  "meters_per_px": 0.025,
+  "characters": {
+    "aokiji": {
+      "directions": 1,
+      "mirror": true,
+      "anims": {
+        "idle": {
+          "cell": 0,
+          "n": 2,
+          "d": [
+            30,
+            30
+          ],
+          "loop": true
+        },
+        "attack": {
+          "cell": 2,
+          "n": 3,
+          "d": [
+            8,
+            8,
+            8
+          ],
+          "loop": false
+        }
+      }
+    },
+    "kizaru": {
+      "directions": 1,
+      "mirror": true,
+      "anims": {
+        "idle": {
+          "cell": 5,
+          "n": 2,
+          "d": [
+            30,
+            30
+          ],
+          "loop": true
+        },
+        "attack": {
+          "cell": 7,
+          "n": 3,
+          "d": [
+            8,
+            8,
+            8
+          ],
+          "loop": false
+        }
+      }
+    },
+    "hancock": {
+      "directions": 1,
+      "mirror": true,
+      "anims": {
+        "idle": {
+          "cell": 10,
+          "n": 2,
+          "d": [
+            30,
+            30
+          ],
+          "loop": true
+        },
+        "kick": {
+          "cell": 12,
+          "n": 3,
+          "d": [
+            8,
+            8,
+            8
+          ],
+          "loop": false
+        }
+      }
+    },
+    "marco": {
+      "directions": 1,
+      "mirror": true,
+      "anims": {
+        "idle": {
+          "cell": 15,
+          "n": 2,
+          "d": [
+            30,
+            30
+          ],
+          "loop": true
+        },
+        "phoenix": {
+          "cell": 17,
+          "n": 3,
+          "d": [
+            8,
+            8,
+            8
+          ],
+          "loop": true
+        }
+      }
+    },
+    "coby": {
+      "directions": 1,
+      "mirror": true,
+      "anims": {
+        "idle": {
+          "cell": 20,
+          "n": 2,
+          "d": [
+            30,
+            30
+          ],
+          "loop": true
+        },
+        "hit": {
+          "cell": 22,
+          "n": 1,
+          "d": [
+            8
+          ],
+          "loop": false
+        },
+        "knocked": {
+          "cell": 23,
+          "n": 2,
+          "d": [
+            8,
+            8
+          ],
+          "loop": false
+        }
+      }
+    },
+    "executioner": {
+      "directions": 1,
+      "mirror": true,
+      "anims": {
+        "idle": {
+          "cell": 25,
+          "n": 2,
+          "d": [
+            30,
+            30
+          ],
+          "loop": true
+        },
+        "raise": {
+          "cell": 27,
+          "n": 3,
+          "d": [
+            8,
+            8,
+            8
+          ],
+          "loop": false
+        },
+        "down": {
+          "cell": 30,
+          "n": 1,
+          "d": [
+            8
+          ],
+          "loop": false
+        }
+      }
+    },
+    "ace_chained": {
+      "directions": 1,
+      "mirror": false,
+      "anims": {
+        "kneel": {
+          "cell": 31,
+          "n": 2,
+          "d": [
+            30,
+            30
+          ],
+          "loop": true
+        },
+        "struggle": {
+          "cell": 33,
+          "n": 2,
+          "d": [
+            8,
+            8
+          ],
+          "loop": true
+        }
+      }
+    }
+  }
+}

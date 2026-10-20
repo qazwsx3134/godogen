@@ -1,0 +1,126 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/cutscene.gd" id="1_qtclw"]
+[ext_resource type="PackedScene" path="res://scenes/route.tscn" id="2_bdfyt"]
+[ext_resource type="PackedScene" path="res://scenes/cast_actor.tscn" id="3_5wxpl"]
+
+[sub_resource type="Animation" id="Animation_jg7hy"]
+length = 6.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Shot:transform")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2.2, 4.38, 4.4, 6.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Transform3D(1, 0, 0, 0, 0.9919189, -0.12687336, 0, 0.12687336, 0.9919189, 0, 3.5, -134), Transform3D(1, 0, 0, 0, 0.9931506, 0.11684125, 0, -0.11684125, 0.9931506, 0, 30, -246), Transform3D(1, 0, 0, 0, 0.99435925, 0.10606501, 0, -0.10606501, 0.99435925, 0, 29.6, -248), Transform3D(1, 0, 0, 0, 0.94868326, 0.31622776, 0, -0.31622776, 0.94868326, 0, 5, -134), Transform3D(1, 0, 0, 0, 0.9307515, 0.36565238, 0, -0.36565238, 0.9307515, 0, 6.5, -132)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Shot:fov")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 2.2, 4.38, 4.4, 6.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [45.0, 40.0, 40.0, 50.0, 54.0]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.4, 4.4),
+"transitions": PackedFloat32Array(1, 1),
+"values": [{
+"args": ["海軍", "時間到了！執行死刑——！", 1.9],
+"method": &"say"
+}, {
+"args": [0.6],
+"method": &"shake"
+}]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ExecutionerL")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(2.4),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"raise"],
+"method": &"play"
+}]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("ExecutionerR")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(2.4),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"raise"],
+"method": &"play"
+}]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Ace")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(2.6),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"struggle"],
+"method": &"play"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_rgvx2"]
+_data = {
+&"main": SubResource("Animation_jg7hy")
+}
+
+[node name="Act4Execution" type="Node3D" unique_id=23412254]
+script = ExtResource("1_qtclw")
+
+[node name="Reference" parent="." unique_id=1675133996 instance=ExtResource("2_bdfyt")]
+
+[node name="Shot" type="Camera3D" parent="." unique_id=688481141]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 0.9919189, -0.12687336, 0, 0.12687336, 0.9919189, 0, 3.5, -134)
+fov = 45.0
+far = 600.0
+
+[node name="Ace" parent="." unique_id=685743556 instance=ExtResource("3_5wxpl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 27.4, -263)
+character = "ace_chained"
+anim = &"kneel"
+
+[node name="ExecutionerL" parent="." unique_id=1142773895 instance=ExtResource("3_5wxpl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7, 27.4, -263.6)
+character = "executioner"
+facing = Vector3(1, 0, 0.4)
+
+[node name="ExecutionerR" parent="." unique_id=6178160 instance=ExtResource("3_5wxpl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7, 27.4, -263.6)
+character = "executioner"
+facing = Vector3(-1, 0, 0.4)
+
+[node name="Anim" type="AnimationPlayer" parent="." unique_id=1908219940]
+unique_name_in_owner = true
+libraries/ = SubResource("AnimationLibrary_rgvx2")

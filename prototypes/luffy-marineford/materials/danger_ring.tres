@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://shaders/ground_ring.gdshader" id="1_5k50k"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_5k50k")
+shader_parameter/color = Color(1, 0.25, 0.15, 0.9)
+shader_parameter/thickness = 0.05
+shader_parameter/fade_with_progress = 0.0
+shader_parameter/fill_with_progress = true

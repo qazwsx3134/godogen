@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="JutsuDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/jutsu_def.gd" id="1_4ppno"]
+
+[resource]
+script = ExtResource("1_4ppno")
+id = &"gatling"
+title = "橡膠機關槍"
+kind = 1
+summary = "前方扇形連打，最後一拳把人打飛。"
+level_texts = PackedStringArray("扇形變寬。", "拳數變多。", "連打範圍變長。", "拳數再多，最後一拳打得更遠。")
+max_level = 5
+min_player_level = 0

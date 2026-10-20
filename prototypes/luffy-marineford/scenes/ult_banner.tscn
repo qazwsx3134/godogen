@@ -1,0 +1,241 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://ui/theme.tres" id="1_rtm5u"]
+[ext_resource type="Script" path="res://scripts/ult_banner.gd" id="2_fwj8c"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3iqjc"]
+bg_color = Color(0.078431375, 0.13725491, 0.21960784, 1)
+border_width_top = 2
+border_width_bottom = 2
+border_color = Color(0.9411765, 0.9137255, 0.8509804, 1)
+shadow_color = Color(0.02, 0.04, 0.09, 0.5)
+shadow_size = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0y2l5"]
+content_margin_left = 6.0
+content_margin_top = 6.0
+content_margin_right = 6.0
+content_margin_bottom = 6.0
+bg_color = Color(0.14509805, 0.23137255, 0.32156864, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.9647059, 0.8666667, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[node name="UltBanner" type="Control" unique_id=2044489785]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = ExtResource("1_rtm5u")
+script = ExtResource("2_fwj8c")
+
+[node name="BannerFlash" type="ColorRect" parent="." unique_id=1239848807]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Motion" type="Control" parent="." unique_id=1992065684]
+unique_name_in_owner = true
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="SafeFrame" type="MarginContainer" parent="Motion" unique_id=1904634797]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Canvas" type="Control" parent="Motion/SafeFrame" unique_id=1386029318]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Band" type="Panel" parent="Motion/SafeFrame/Canvas" unique_id=1402657701]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = -0.16
+anchor_top = 0.5
+anchor_right = 1.16
+anchor_bottom = 0.5
+offset_top = -88.0
+offset_bottom = 88.0
+rotation = -0.17453292
+pivot_offset = Vector2(844.8, 88)
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3iqjc")
+
+[node name="Accent" type="ColorRect" parent="Motion/SafeFrame/Canvas/Band" unique_id=284889427]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+offset_top = 5.0
+offset_bottom = 11.0
+mouse_filter = 2
+color = Color(1, 0.81960785, 0.41960785, 1)
+
+[node name="LowerRule" type="ColorRect" parent="Motion/SafeFrame/Canvas/Band" unique_id=1260874676]
+layout_mode = 0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -12.0
+offset_bottom = -9.0
+mouse_filter = 2
+color = Color(0.34901962, 0.41960785, 0.5019608, 1)
+
+[node name="Stripes" type="HBoxContainer" parent="Motion/SafeFrame/Canvas/Band" unique_id=350369268]
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -280.0
+offset_right = -40.0
+mouse_filter = 2
+theme_override_constants/separation = 18
+
+[node name="Slash0" type="ColorRect" parent="Motion/SafeFrame/Canvas/Band/Stripes" unique_id=1968218785]
+custom_minimum_size = Vector2(14, 0)
+layout_mode = 2
+mouse_filter = 2
+color = Color(0.65, 0.77, 0.9, 0.12)
+
+[node name="Slash1" type="ColorRect" parent="Motion/SafeFrame/Canvas/Band/Stripes" unique_id=1414892098]
+custom_minimum_size = Vector2(14, 0)
+layout_mode = 2
+mouse_filter = 2
+color = Color(0.65, 0.77, 0.9, 0.12)
+
+[node name="Slash2" type="ColorRect" parent="Motion/SafeFrame/Canvas/Band/Stripes" unique_id=581309984]
+custom_minimum_size = Vector2(14, 0)
+layout_mode = 2
+mouse_filter = 2
+color = Color(0.65, 0.77, 0.9, 0.12)
+
+[node name="Slash3" type="ColorRect" parent="Motion/SafeFrame/Canvas/Band/Stripes" unique_id=382557300]
+custom_minimum_size = Vector2(14, 0)
+layout_mode = 2
+mouse_filter = 2
+color = Color(0.65, 0.77, 0.9, 0.12)
+
+[node name="Slash4" type="ColorRect" parent="Motion/SafeFrame/Canvas/Band/Stripes" unique_id=834434156]
+custom_minimum_size = Vector2(14, 0)
+layout_mode = 2
+mouse_filter = 2
+color = Color(0.65, 0.77, 0.9, 0.12)
+
+[node name="Slash5" type="ColorRect" parent="Motion/SafeFrame/Canvas/Band/Stripes" unique_id=725488967]
+custom_minimum_size = Vector2(14, 0)
+layout_mode = 2
+mouse_filter = 2
+color = Color(0.65, 0.77, 0.9, 0.12)
+
+[node name="SafeContent" type="MarginContainer" parent="Motion/SafeFrame/Canvas/Band" unique_id=95940485]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme_override_constants/margin_left = 229
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 229
+theme_override_constants/margin_bottom = 18
+
+[node name="ContentWidth" type="AspectRatioContainer" parent="Motion/SafeFrame/Canvas/Band/SafeContent" unique_id=1780344585]
+layout_mode = 2
+mouse_filter = 2
+ratio = 5.1
+
+[node name="ContentRow" type="HBoxContainer" parent="Motion/SafeFrame/Canvas/Band/SafeContent/ContentWidth" unique_id=1108236816]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 28
+alignment = 1
+
+[node name="PortraitFrame" type="PanelContainer" parent="Motion/SafeFrame/Canvas/Band/SafeContent/ContentWidth/ContentRow" unique_id=326469268]
+custom_minimum_size = Vector2(120, 120)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_0y2l5")
+
+[node name="PortraitStack" type="Control" parent="Motion/SafeFrame/Canvas/Band/SafeContent/ContentWidth/ContentRow/PortraitFrame" unique_id=504550750]
+custom_minimum_size = Vector2(108, 108)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="PortraitAccent" type="ColorRect" parent="Motion/SafeFrame/Canvas/Band/SafeContent/ContentWidth/ContentRow/PortraitFrame/PortraitStack" unique_id=1529069665]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(1, 1, 1, 0.12)
+
+[node name="Portrait" type="TextureRect" parent="Motion/SafeFrame/Canvas/Band/SafeContent/ContentWidth/ContentRow/PortraitFrame/PortraitStack" unique_id=1546737727]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Initials" type="Label" parent="Motion/SafeFrame/Canvas/Band/SafeContent/ContentWidth/ContentRow/PortraitFrame/PortraitStack" unique_id=472956343]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_colors/font_color = Color(1, 0.9647059, 0.8666667, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 40
+text = "LF"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Words" type="VBoxContainer" parent="Motion/SafeFrame/Canvas/Band/SafeContent/ContentWidth/ContentRow" unique_id=649520870]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 1
+alignment = 1
+
+[node name="Eyebrow" type="Label" parent="Motion/SafeFrame/Canvas/Band/SafeContent/ContentWidth/ContentRow/Words" unique_id=844536709]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.81960785, 0.41960785, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 14
+text = "ULTIMATE / 必殺"
+
+[node name="Title" type="Label" parent="Motion/SafeFrame/Canvas/Band/SafeContent/ContentWidth/ContentRow/Words" unique_id=1765188712]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.9647059, 0.8666667, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 48
+text = "霸王色霸氣"
+clip_text = true
+text_overrun_behavior = 3
+max_lines_visible = 1
+
+[node name="Subtitle" type="Label" parent="Motion/SafeFrame/Canvas/Band/SafeContent/ContentWidth/ContentRow/Words" unique_id=2097846587]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6784314, 0.7411765, 0.8117647, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 20
+text = "蒙奇・D・魯夫"
+text_overrun_behavior = 3

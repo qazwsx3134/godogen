@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="EnemyDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/enemy_def.gd" id="1_2ynxc"]
+
+[resource]
+script = ExtResource("1_2ynxc")
+id = &"genin"
+hp = 20.0
+speed = 3.2
+size = 2.0
+radius = 0.5
+tint = Color(0.6, 0.75, 0.5, 1)
+cast_cooldown = 0.0

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="JutsuDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/jutsu_def.gd" id="1_4ppno"]
+
+[resource]
+script = ExtResource("1_4ppno")
+id = &"whip"
+title = "橡膠鞭"
+kind = 4
+summary = "360° 掃腿，把貼身的人踢開。"
+level_texts = PackedStringArray("掃得更遠。", "踢得更狠。", "掃腿更快。", "踢起的人撞倒旁邊的人。")
+max_level = 5
+min_player_level = 0

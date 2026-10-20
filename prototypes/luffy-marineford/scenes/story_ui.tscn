@@ -1,0 +1,279 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/story_ui.gd" id="1_hdr44"]
+[ext_resource type="PackedScene" path="res://scenes/toast_item.tscn" id="2_h4rx8"]
+[ext_resource type="Theme" path="res://ui/theme.tres" id="3_su3vf"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3k048"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.02, 0.04, 0.08, 0.6)
+border_color = Color(1, 1, 1, 0)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jd7xs"]
+content_margin_left = 14.0
+content_margin_top = 14.0
+content_margin_right = 14.0
+content_margin_bottom = 14.0
+bg_color = Color(0.078431375, 0.13725491, 0.21960784, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.9647059, 0.8666667, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_os5qo"]
+content_margin_left = 3.0
+content_margin_top = 3.0
+content_margin_right = 3.0
+content_margin_bottom = 3.0
+bg_color = Color(0.14509805, 0.23137255, 0.32156864, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.9647059, 0.8666667, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="StoryUi" type="CanvasLayer" unique_id=91200437]
+process_mode = 3
+layer = 2
+script = ExtResource("1_hdr44")
+toast_scene = ExtResource("2_h4rx8")
+
+[node name="Root" type="Control" parent="." unique_id=1280006546]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = ExtResource("3_su3vf")
+
+[node name="LetterboxTop" type="ColorRect" parent="Root" unique_id=1806720585]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+offset_bottom = 56.0
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="LetterboxBottom" type="ColorRect" parent="Root" unique_id=1576746218]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -56.0
+pivot_offset = Vector2(0, 56)
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Subtitle" type="PanelContainer" parent="Root" unique_id=472708992]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -330.0
+offset_top = -170.0
+offset_right = 330.0
+offset_bottom = -112.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3k048")
+
+[node name="Line" type="HBoxContainer" parent="Root/Subtitle" unique_id=582742530]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="SubtitleSpeaker" type="Label" parent="Root/Subtitle/Line" unique_id=636317212]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.81960785, 0.41960785, 1)
+theme_override_font_sizes/font_size = 22
+text = "魯夫"
+
+[node name="SubtitleText" type="Label" parent="Root/Subtitle/Line" unique_id=889159710]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 0.9647059, 0.8666667, 1)
+theme_override_font_sizes/font_size = 26
+text = "因為我是弟弟啊！"
+autowrap_mode = 3
+
+[node name="Toasts" type="VBoxContainer" parent="Root" unique_id=1704081057]
+unique_name_in_owner = true
+layout_mode = 0
+offset_top = 118.0
+offset_right = 380.0
+offset_bottom = 400.0
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="SampleToast" parent="Root/Toasts" unique_id=237402813 instance=ExtResource("2_h4rx8")]
+layout_mode = 2
+
+[node name="Catcher" type="Control" parent="Root" unique_id=41307192]
+unique_name_in_owner = true
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="DialogueBox" type="PanelContainer" parent="Root" unique_id=1547373045]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = -184.0
+offset_right = -24.0
+offset_bottom = -20.0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_jd7xs")
+
+[node name="Row" type="HBoxContainer" parent="Root/DialogueBox" unique_id=872196574]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 18
+
+[node name="PortraitFrame" type="PanelContainer" parent="Root/DialogueBox/Row" unique_id=620119338]
+custom_minimum_size = Vector2(136, 136)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_os5qo")
+
+[node name="PortraitStack" type="Control" parent="Root/DialogueBox/Row/PortraitFrame" unique_id=1062552384]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Portrait" type="TextureRect" parent="Root/DialogueBox/Row/PortraitFrame/PortraitStack" unique_id=1135146018]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Initials" type="Label" parent="Root/DialogueBox/Row/PortraitFrame/PortraitStack" unique_id=1672232450]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_colors/font_color = Color(1, 0.9647059, 0.8666667, 1)
+theme_override_font_sizes/font_size = 54
+text = "魯"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Words" type="VBoxContainer" parent="Root/DialogueBox/Row" unique_id=420381571]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Speaker" type="Label" parent="Root/DialogueBox/Row/Words" unique_id=1124999934]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.81960785, 0.41960785, 1)
+theme_override_font_sizes/font_size = 24
+text = "魯夫"
+
+[node name="Text" type="Label" parent="Root/DialogueBox/Row/Words" unique_id=1216245101]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(1, 0.9647059, 0.8666667, 1)
+theme_override_font_sizes/font_size = 28
+text = "艾斯——！我來救你了！"
+autowrap_mode = 3
+
+[node name="NextMark" type="Label" parent="Root/DialogueBox/Row/Words" unique_id=1893028039]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.81960785, 0.41960785, 1)
+theme_override_font_sizes/font_size = 20
+text = "▼"
+horizontal_alignment = 2
+
+[node name="ActTitle" type="Control" parent="Root" unique_id=1217965777]
+unique_name_in_owner = true
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Black" type="ColorRect" parent="Root/ActTitle" unique_id=2024896575]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.02, 0.03, 0.06, 1)
+
+[node name="Center" type="VBoxContainer" parent="Root/ActTitle" unique_id=691999078]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="TitleNumber" type="Label" parent="Root/ActTitle/Center" unique_id=1289299252]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.81960785, 0.41960785, 1)
+theme_override_font_sizes/font_size = 30
+text = "第四幕"
+horizontal_alignment = 1
+
+[node name="TitleName" type="Label" parent="Root/ActTitle/Center" unique_id=1292853265]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.9647059, 0.8666667, 1)
+theme_override_font_sizes/font_size = 76
+text = "處刑台"
+horizontal_alignment = 1
+
+[node name="Rule" type="ColorRect" parent="Root/ActTitle/Center" unique_id=1629086370]
+custom_minimum_size = Vector2(220, 3)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+color = Color(1, 0.81960785, 0.41960785, 1)
+
+[node name="Skip" type="Button" parent="Root" unique_id=549025494]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -150.0
+offset_top = 8.0
+offset_right = -16.0
+offset_bottom = 48.0
+grow_horizontal = 0
+focus_mode = 0
+theme_override_font_sizes/font_size = 20
+text = "跳過 ▶▶"

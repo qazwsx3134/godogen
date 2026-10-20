@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="JutsuDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/jutsu_def.gd" id="1_4ppno"]
+
+[resource]
+script = ExtResource("1_4ppno")
+id = &"gigant"
+title = "巨人手槍"
+kind = 3
+summary = "三檔：每隔幾秒一記巨大的拳頭砸地，一大片人被擊飛。"
+level_texts = PackedStringArray("拳頭更大。", "間隔更短。", "拳頭再大一圈。", "間隔再短，砸地的衝擊波更遠。")
+max_level = 5
+min_player_level = 4

@@ -1,0 +1,37 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/fist_streak.gd" id="1_evs26"]
+[ext_resource type="Shader" path="res://shaders/fist_streak.gdshader" id="2_wj1bq"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e1dpm"]
+render_priority = 1
+shader = ExtResource("2_wj1bq")
+shader_parameter/skin = null
+shader_parameter/edge = null
+shader_parameter/speed = null
+shader_parameter/progress = null
+shader_parameter/texels = null
+shader_parameter/opacity = null
+
+[sub_resource type="QuadMesh" id="QuadMesh_8imku"]
+
+[node name="FistStreak" type="Node3D" unique_id=989894268]
+script = ExtResource("1_evs26")
+
+[node name="Arm1" type="MeshInstance3D" parent="." unique_id=1150918475]
+transform = Transform3D(3.5, 0, 0, 0, 0.42, 0, 0, 0, 1, 1.75, 1.1, 0)
+material_override = SubResource("ShaderMaterial_e1dpm")
+cast_shadow = 0
+mesh = SubResource("QuadMesh_8imku")
+
+[node name="Arm2" type="MeshInstance3D" parent="." unique_id=1611488779]
+transform = Transform3D(3.5, 0, 0, 0, 0.42, 0, 0, 0, 1, 1.75, 1.1, -0.2)
+material_override = SubResource("ShaderMaterial_e1dpm")
+cast_shadow = 0
+mesh = SubResource("QuadMesh_8imku")
+
+[node name="Arm3" type="MeshInstance3D" parent="." unique_id=1205891726]
+transform = Transform3D(3.5, 0, 0, 0, 0.42, 0, 0, 0, 1, 1.75, 1.1, -0.4)
+material_override = SubResource("ShaderMaterial_e1dpm")
+cast_shadow = 0
+mesh = SubResource("QuadMesh_8imku")

@@ -1,0 +1,269 @@
+{
+  "cell_px": 144,
+  "columns": 5,
+  "foot_px": 4,
+  "meters_per_px": 0.025,
+  "pixel": {
+    "colors": 16
+  },
+  "characters": {
+    "aokiji": {
+      "height_px": 120,
+      "directions": 1,
+      "mirror": true,
+      "align": "canvas",
+      "foot_y": 140,
+      "anims": {
+        "idle": {
+          "d": [
+            30,
+            30
+          ],
+          "loop": true,
+          "sheet": {
+            "file": "aokiji_idle.png",
+            "fw": 144,
+            "fh": 144
+          }
+        },
+        "attack": {
+          "d": [
+            8,
+            8,
+            8
+          ],
+          "loop": false,
+          "sheet": {
+            "file": "aokiji_attack.png",
+            "fw": 144,
+            "fh": 144
+          }
+        }
+      }
+    },
+    "kizaru": {
+      "height_px": 120,
+      "directions": 1,
+      "mirror": true,
+      "align": "canvas",
+      "foot_y": 140,
+      "anims": {
+        "idle": {
+          "d": [
+            30,
+            30
+          ],
+          "loop": true,
+          "sheet": {
+            "file": "kizaru_idle.png",
+            "fw": 144,
+            "fh": 144
+          }
+        },
+        "attack": {
+          "d": [
+            8,
+            8,
+            8
+          ],
+          "loop": false,
+          "sheet": {
+            "file": "kizaru_attack.png",
+            "fw": 144,
+            "fh": 144
+          }
+        }
+      }
+    },
+    "hancock": {
+      "height_px": 76,
+      "directions": 1,
+      "mirror": true,
+      "align": "canvas",
+      "foot_y": 140,
+      "anims": {
+        "idle": {
+          "d": [
+            30,
+            30
+          ],
+          "loop": true,
+          "sheet": {
+            "file": "hancock_idle.png",
+            "fw": 144,
+            "fh": 144
+          }
+        },
+        "kick": {
+          "d": [
+            8,
+            8,
+            8
+          ],
+          "loop": false,
+          "sheet": {
+            "file": "hancock_kick.png",
+            "fw": 144,
+            "fh": 144
+          }
+        }
+      }
+    },
+    "marco": {
+      "height_px": 80,
+      "directions": 1,
+      "mirror": true,
+      "align": "canvas",
+      "foot_y": 140,
+      "anims": {
+        "idle": {
+          "d": [
+            30,
+            30
+          ],
+          "loop": true,
+          "sheet": {
+            "file": "marco_idle.png",
+            "fw": 144,
+            "fh": 144
+          }
+        },
+        "phoenix": {
+          "d": [
+            8,
+            8,
+            8
+          ],
+          "loop": true,
+          "sheet": {
+            "file": "marco_phoenix.png",
+            "fw": 144,
+            "fh": 144
+          }
+        }
+      }
+    },
+    "coby": {
+      "height_px": 68,
+      "directions": 1,
+      "mirror": true,
+      "align": "canvas",
+      "foot_y": 140,
+      "anims": {
+        "idle": {
+          "d": [
+            30,
+            30
+          ],
+          "loop": true,
+          "sheet": {
+            "file": "coby_idle.png",
+            "fw": 144,
+            "fh": 144
+          }
+        },
+        "hit": {
+          "d": [
+            8
+          ],
+          "loop": false,
+          "sheet": {
+            "file": "coby_hit.png",
+            "fw": 144,
+            "fh": 144
+          }
+        },
+        "knocked": {
+          "d": [
+            8,
+            8
+          ],
+          "loop": false,
+          "sheet": {
+            "file": "coby_knocked.png",
+            "fw": 144,
+            "fh": 144
+          }
+        }
+      }
+    },
+    "executioner": {
+      "height_px": 80,
+      "directions": 1,
+      "mirror": true,
+      "align": "canvas",
+      "foot_y": 140,
+      "anims": {
+        "idle": {
+          "d": [
+            30,
+            30
+          ],
+          "loop": true,
+          "sheet": {
+            "file": "executioner_idle.png",
+            "fw": 144,
+            "fh": 144
+          }
+        },
+        "raise": {
+          "d": [
+            8,
+            8,
+            8
+          ],
+          "loop": false,
+          "sheet": {
+            "file": "executioner_raise.png",
+            "fw": 144,
+            "fh": 144
+          }
+        },
+        "down": {
+          "d": [
+            8
+          ],
+          "loop": false,
+          "sheet": {
+            "file": "executioner_down.png",
+            "fw": 144,
+            "fh": 144
+          }
+        }
+      }
+    },
+    "ace_chained": {
+      "height_px": 37,
+      "directions": 1,
+      "mirror": false,
+      "align": "canvas",
+      "foot_y": 140,
+      "anims": {
+        "kneel": {
+          "d": [
+            30,
+            30
+          ],
+          "loop": true,
+          "sheet": {
+            "file": "ace_chained_kneel.png",
+            "fw": 144,
+            "fh": 144
+          }
+        },
+        "struggle": {
+          "d": [
+            8,
+            8
+          ],
+          "loop": true,
+          "sheet": {
+            "file": "ace_chained_struggle.png",
+            "fw": 144,
+            "fh": 144
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,187 @@
+{
+  "atlas": "atlas.png",
+  "cell_px": 128,
+  "columns": 14,
+  "rows": 15,
+  "foot_px": 4,
+  "meters_per_px": 0.02,
+  "characters": {
+    "luffy": {
+      "directions": 8,
+      "mirror": true,
+      "anims": {
+        "idle": {
+          "cell": 0,
+          "n": 2,
+          "d": [
+            30,
+            30
+          ],
+          "loop": true
+        },
+        "walk": {
+          "cell": 2,
+          "n": 4,
+          "d": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "loop": true
+        },
+        "punch": {
+          "cell": 6,
+          "n": 3,
+          "d": [
+            8,
+            8,
+            8
+          ],
+          "loop": false
+        },
+        "gear2_walk": {
+          "cell": 9,
+          "n": 4,
+          "d": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "loop": true
+        },
+        "fall": {
+          "cell": 70,
+          "n": 2,
+          "d": [
+            8,
+            8
+          ],
+          "loop": false
+        },
+        "down": {
+          "cell": 72,
+          "n": 1,
+          "d": [
+            8
+          ],
+          "loop": false
+        },
+        "getup": {
+          "cell": 73,
+          "n": 3,
+          "d": [
+            8,
+            8,
+            8
+          ],
+          "loop": false
+        },
+        "ride": {
+          "cell": 76,
+          "n": 2,
+          "d": [
+            8,
+            8
+          ],
+          "loop": true
+        },
+        "hit": {
+          "cell": 78,
+          "n": 1,
+          "d": [
+            8
+          ],
+          "loop": false
+        }
+      }
+    },
+    "marine": {
+      "directions": 8,
+      "mirror": true,
+      "anims": {
+        "walk": {
+          "cell": 79,
+          "n": 4,
+          "d": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "loop": true
+        },
+        "hit": {
+          "cell": 83,
+          "n": 1,
+          "d": [
+            8
+          ],
+          "loop": false
+        },
+        "attack": {
+          "cell": 140,
+          "n": 3,
+          "d": [
+            8,
+            8,
+            8
+          ],
+          "loop": false
+        },
+        "down": {
+          "cell": 143,
+          "n": 1,
+          "d": [
+            8
+          ],
+          "loop": false
+        }
+      }
+    },
+    "vice_admiral": {
+      "directions": 8,
+      "mirror": true,
+      "anims": {
+        "walk": {
+          "cell": 144,
+          "n": 4,
+          "d": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "loop": true
+        },
+        "hit": {
+          "cell": 148,
+          "n": 1,
+          "d": [
+            8
+          ],
+          "loop": false
+        },
+        "attack": {
+          "cell": 149,
+          "n": 3,
+          "d": [
+            8,
+            8,
+            8
+          ],
+          "loop": false
+        },
+        "down": {
+          "cell": 152,
+          "n": 1,
+          "d": [
+            8
+          ],
+          "loop": false
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="EnemyDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/enemy_def.gd" id="1_atf36"]
+
+[resource]
+script = ExtResource("1_atf36")
+id = &"heavy"
+frame = 3
+hp = 70.0
+speed = 2.4
+size = 2.4
+radius = 0.7
+damage = 10.0
+xp = 3
+knockback_resist = 0.5
+tint = Color(0.7, 0.58, 0.42, 1)
+appears_at = 180.0
+weight = 0.3
+cost = 3.0
+cast_cooldown = 0.0

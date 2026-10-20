@@ -1,0 +1,125 @@
+{
+  "characters": {
+    "luffy": {
+      "sheet": "sheets.json",
+      "height_m": 1.8,
+      "tier": 1
+    },
+    "marine": {
+      "sheet": "sheets.json",
+      "height_m": 1.75,
+      "tier": 1
+    },
+    "vice_admiral": {
+      "sheet": "sheets.json",
+      "height_m": 2.3,
+      "tier": 1
+    },
+    "ace": {
+      "sheet": "cast_8dir_1.json",
+      "height_m": 1.85,
+      "tier": 1
+    },
+    "jinbe": {
+      "sheet": "cast_8dir_1.json",
+      "height_m": 3.0,
+      "tier": 1
+    },
+    "ivankov": {
+      "sheet": "cast_8dir_2.json",
+      "height_m": 3.1,
+      "tier": 1
+    },
+    "marine_rifle": {
+      "sheet": "cast_8dir_2.json",
+      "height_m": 1.75,
+      "tier": 1
+    },
+    "wb_pirate_a": {
+      "sheet": "cast_8dir_2.json",
+      "height_m": 1.9,
+      "tier": 1
+    },
+    "wb_pirate_b": {
+      "sheet": "cast_8dir_3.json",
+      "height_m": 2.1,
+      "tier": 1
+    },
+    "smoker": {
+      "sheet": "cast_8dir_3.json",
+      "height_m": 2.1,
+      "tier": 2
+    },
+    "garp": {
+      "sheet": "cast_8dir_4.json",
+      "height_m": 2.9,
+      "tier": 2
+    },
+    "akainu": {
+      "sheet": "cast_8dir_4.json",
+      "height_m": 3.05,
+      "tier": 2
+    },
+    "crocodile": {
+      "sheet": "cast_8dir_5.json",
+      "height_m": 2.5,
+      "tier": 2
+    },
+    "aokiji": {
+      "sheet": "cast_1dir_1.json",
+      "height_m": 3.0,
+      "tier": 3
+    },
+    "kizaru": {
+      "sheet": "cast_1dir_1.json",
+      "height_m": 3.0,
+      "tier": 3
+    },
+    "hancock": {
+      "sheet": "cast_1dir_1.json",
+      "height_m": 1.9,
+      "tier": 3
+    },
+    "marco": {
+      "sheet": "cast_1dir_1.json",
+      "height_m": 2.0,
+      "tier": 3
+    },
+    "coby": {
+      "sheet": "cast_1dir_1.json",
+      "height_m": 1.7,
+      "tier": 3
+    },
+    "executioner": {
+      "sheet": "cast_1dir_1.json",
+      "height_m": 2.0,
+      "tier": 3
+    },
+    "ace_chained": {
+      "sheet": "cast_1dir_1.json",
+      "height_m": 1.85,
+      "tier": 3,
+      "pose_height_m": 0.925
+    },
+    "pacifista": {
+      "sheet": "pacifista.json",
+      "height_m": 6.9,
+      "tier": 1
+    },
+    "whitebeard": {
+      "sheet": "whitebeard.json",
+      "height_m": 6.7,
+      "tier": 3
+    },
+    "sengoku_buddha": {
+      "sheet": "sengoku_buddha.json",
+      "height_m": 9.0,
+      "tier": 3
+    },
+    "giant": {
+      "sheet": "giant.json",
+      "height_m": 18.0,
+      "tier": 3
+    }
+  }
+}

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="JutsuDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/jutsu_def.gd" id="1_4ppno"]
+
+[resource]
+script = ExtResource("1_4ppno")
+id = &"pistol"
+title = "橡膠手槍"
+kind = 0
+summary = "朝最近的敵人直線出拳，打中的人被擊飛。"
+level_texts = PackedStringArray("左右拳交替，出手更快。", "手臂伸得更長。", "一拳貫穿三個人。", "被打飛的人變成人肉砲彈，撞倒後面一排。")
+max_level = 5
+min_player_level = 0

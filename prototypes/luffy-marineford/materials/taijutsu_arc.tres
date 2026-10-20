@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://shaders/ground_cone.gdshader" id="1_drxf6"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_drxf6")
+shader_parameter/color = Color(1, 0.95, 0.85, 0.85)
+shader_parameter/half_angle = 0.8

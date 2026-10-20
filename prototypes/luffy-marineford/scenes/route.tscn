@@ -1,0 +1,537 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/route.gd" id="1_6i845"]
+[ext_resource type="Shader" path="res://shaders/terrain.gdshader" id="2_t247l"]
+[ext_resource type="ArrayMesh" path="res://assets/route/terrain.res" id="3_4kvwv"]
+[ext_resource type="Shader" path="res://shaders/toon_solid.gdshader" id="4_mp3ek"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tmi4a"]
+render_priority = 0
+shader = ExtResource("2_t247l")
+shader_parameter/px_per_m = null
+shader_parameter/sun_dir = null
+shader_parameter/light_color = null
+shader_parameter/shadow_color = null
+shader_parameter/bands = null
+shader_parameter/slab_light = null
+shader_parameter/slab_dark = null
+shader_parameter/grout = null
+shader_parameter/slab_size = null
+shader_parameter/rock_light = null
+shader_parameter/rock_dark = null
+shader_parameter/strata = null
+shader_parameter/frost = null
+shader_parameter/ice = null
+shader_parameter/ice_crack = null
+shader_parameter/ice_below = null
+shader_parameter/terrace_above = null
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f7us8"]
+render_priority = 0
+shader = ExtResource("4_mp3ek")
+shader_parameter/albedo = Color(0.74, 0.76, 0.8, 1)
+shader_parameter/px_per_m = null
+shader_parameter/sun_dir = null
+shader_parameter/light_color = null
+shader_parameter/shadow_color = null
+shader_parameter/bands = null
+shader_parameter/courses = Vector2(0.5, 2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_6cowp"]
+size = Vector3(9, 1, 80)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pmycl"]
+render_priority = 0
+shader = ExtResource("4_mp3ek")
+shader_parameter/albedo = Color(0.8, 0.8, 0.83, 1)
+shader_parameter/px_per_m = null
+shader_parameter/sun_dir = null
+shader_parameter/light_color = null
+shader_parameter/shadow_color = null
+shader_parameter/bands = null
+shader_parameter/courses = Vector2(1, 3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_nigos"]
+size = Vector3(44, 3, 20)
+
+[sub_resource type="BoxMesh" id="BoxMesh_lbews"]
+size = Vector3(28, 3, 13)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bea4g"]
+render_priority = 0
+shader = ExtResource("4_mp3ek")
+shader_parameter/albedo = Color(0.5, 0.38, 0.28, 1)
+shader_parameter/px_per_m = null
+shader_parameter/sun_dir = null
+shader_parameter/light_color = null
+shader_parameter/shadow_color = null
+shader_parameter/bands = null
+shader_parameter/courses = Vector2(0, 0)
+
+[sub_resource type="BoxMesh" id="BoxMesh_6xxpl"]
+size = Vector3(2, 20, 2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_35v8l"]
+size = Vector3(2, 20, 2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_dgs42"]
+size = Vector3(8.4, 1, 1.6)
+
+[sub_resource type="BoxMesh" id="BoxMesh_moxbd"]
+size = Vector3(11, 1.4, 8)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_78mve"]
+render_priority = 0
+shader = ExtResource("4_mp3ek")
+shader_parameter/albedo = Color(0.92, 0.93, 0.95, 1)
+shader_parameter/px_per_m = null
+shader_parameter/sun_dir = null
+shader_parameter/light_color = null
+shader_parameter/shadow_color = null
+shader_parameter/bands = null
+shader_parameter/courses = Vector2(3, 4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_c6m64"]
+size = Vector3(90, 34, 26)
+
+[sub_resource type="BoxMesh" id="BoxMesh_pkwyv"]
+size = Vector3(22, 26, 20)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_64sf7"]
+render_priority = 0
+shader = ExtResource("4_mp3ek")
+shader_parameter/albedo = Color(0.3, 0.42, 0.66, 1)
+shader_parameter/px_per_m = null
+shader_parameter/sun_dir = null
+shader_parameter/light_color = null
+shader_parameter/shadow_color = null
+shader_parameter/bands = null
+shader_parameter/courses = Vector2(0, 0)
+
+[sub_resource type="BoxMesh" id="BoxMesh_nxscl"]
+size = Vector3(26, 6, 24)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xyyoh"]
+render_priority = 0
+shader = ExtResource("4_mp3ek")
+shader_parameter/albedo = Color(0.5, 0.52, 0.6, 1)
+shader_parameter/px_per_m = null
+shader_parameter/sun_dir = null
+shader_parameter/light_color = null
+shader_parameter/shadow_color = null
+shader_parameter/bands = null
+shader_parameter/courses = Vector2(1, 3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_j80s0"]
+size = Vector3(3, 14, 322)
+
+[sub_resource type="BoxMesh" id="BoxMesh_c5il5"]
+size = Vector3(3, 14, 322)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8qand"]
+render_priority = 0
+shader = ExtResource("4_mp3ek")
+shader_parameter/albedo = Color(0.42, 0.33, 0.27, 1)
+shader_parameter/px_per_m = null
+shader_parameter/sun_dir = null
+shader_parameter/light_color = null
+shader_parameter/shadow_color = null
+shader_parameter/bands = null
+shader_parameter/courses = Vector2(0.8, 6)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wq6sn"]
+size = Vector3(9, 7, 34)
+
+[sub_resource type="BoxMesh" id="BoxMesh_vrvo0"]
+size = Vector3(8, 1, 30)
+
+[sub_resource type="BoxMesh" id="BoxMesh_eq3s8"]
+size = Vector3(0.8, 22, 0.8)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xyn6k"]
+render_priority = 0
+shader = ExtResource("4_mp3ek")
+shader_parameter/albedo = Color(0.95, 0.94, 0.9, 1)
+shader_parameter/px_per_m = null
+shader_parameter/sun_dir = null
+shader_parameter/light_color = null
+shader_parameter/shadow_color = null
+shader_parameter/bands = null
+shader_parameter/courses = Vector2(0, 0)
+
+[sub_resource type="BoxMesh" id="BoxMesh_2pr6l"]
+size = Vector3(10, 8, 0.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_lvvcc"]
+size = Vector3(0.8, 22, 0.8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_h42ye"]
+size = Vector3(10, 8, 0.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_86xcd"]
+size = Vector3(9, 7, 34)
+
+[sub_resource type="BoxMesh" id="BoxMesh_3rk3f"]
+size = Vector3(8, 1, 30)
+
+[sub_resource type="BoxMesh" id="BoxMesh_30sci"]
+size = Vector3(0.8, 22, 0.8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wcyvu"]
+size = Vector3(10, 8, 0.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_h13w1"]
+size = Vector3(0.8, 22, 0.8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_mnjsy"]
+size = Vector3(10, 8, 0.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wf85j"]
+size = Vector3(9, 7, 34)
+
+[sub_resource type="BoxMesh" id="BoxMesh_sw5xd"]
+size = Vector3(8, 1, 30)
+
+[sub_resource type="BoxMesh" id="BoxMesh_h8rmh"]
+size = Vector3(0.8, 22, 0.8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_48hub"]
+size = Vector3(10, 8, 0.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_c1whm"]
+size = Vector3(0.8, 22, 0.8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_7jklt"]
+size = Vector3(10, 8, 0.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_8yb68"]
+size = Vector3(9, 7, 34)
+
+[sub_resource type="BoxMesh" id="BoxMesh_klxmk"]
+size = Vector3(8, 1, 30)
+
+[sub_resource type="BoxMesh" id="BoxMesh_53ttu"]
+size = Vector3(0.8, 22, 0.8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_hfhka"]
+size = Vector3(10, 8, 0.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_5c6gb"]
+size = Vector3(0.8, 22, 0.8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_r4wcv"]
+size = Vector3(10, 8, 0.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_37clf"]
+size = Vector3(9, 7, 34)
+
+[sub_resource type="BoxMesh" id="BoxMesh_t00k0"]
+size = Vector3(8, 1, 30)
+
+[sub_resource type="BoxMesh" id="BoxMesh_4dad3"]
+size = Vector3(0.8, 22, 0.8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_sy58d"]
+size = Vector3(10, 8, 0.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_2aoos"]
+size = Vector3(0.8, 22, 0.8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wg36i"]
+size = Vector3(10, 8, 0.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ducy2"]
+size = Vector3(9, 7, 34)
+
+[sub_resource type="BoxMesh" id="BoxMesh_fecjl"]
+size = Vector3(8, 1, 30)
+
+[sub_resource type="BoxMesh" id="BoxMesh_bohfe"]
+size = Vector3(0.8, 22, 0.8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_4mgcm"]
+size = Vector3(10, 8, 0.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_lu8g4"]
+size = Vector3(0.8, 22, 0.8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ofcpn"]
+size = Vector3(10, 8, 0.4)
+
+[node name="Route" type="Node3D" unique_id=1675133996]
+script = ExtResource("1_6i845")
+
+[node name="Terrain" type="MeshInstance3D" parent="." unique_id=1025417427]
+material_override = SubResource("ShaderMaterial_tmi4a")
+mesh = ExtResource("3_4kvwv")
+
+[node name="Bridge" type="MeshInstance3D" parent="." unique_id=706823469]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, -190)
+material_override = SubResource("ShaderMaterial_f7us8")
+mesh = SubResource("BoxMesh_6cowp")
+
+[node name="Landmarks" type="Node3D" parent="." unique_id=655833850]
+
+[node name="PlatformBase" type="MeshInstance3D" parent="Landmarks" unique_id=658639441]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -262)
+material_override = SubResource("ShaderMaterial_pmycl")
+mesh = SubResource("BoxMesh_nigos")
+
+[node name="PlatformStep" type="MeshInstance3D" parent="Landmarks" unique_id=5225064]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.5, -263)
+material_override = SubResource("ShaderMaterial_pmycl")
+mesh = SubResource("BoxMesh_lbews")
+
+[node name="TowerLegL" type="MeshInstance3D" parent="Landmarks" unique_id=1000580146]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.2, 16, -263)
+material_override = SubResource("ShaderMaterial_bea4g")
+mesh = SubResource("BoxMesh_6xxpl")
+
+[node name="TowerLegR" type="MeshInstance3D" parent="Landmarks" unique_id=2089363741]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.2, 16, -263)
+material_override = SubResource("ShaderMaterial_bea4g")
+mesh = SubResource("BoxMesh_35v8l")
+
+[node name="TowerBrace" type="MeshInstance3D" parent="Landmarks" unique_id=2095174979]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, -263)
+material_override = SubResource("ShaderMaterial_bea4g")
+mesh = SubResource("BoxMesh_dgs42")
+
+[node name="PlatformDeck" type="MeshInstance3D" parent="Landmarks" unique_id=272310926]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 26.7, -263)
+material_override = SubResource("ShaderMaterial_bea4g")
+mesh = SubResource("BoxMesh_moxbd")
+
+[node name="HeadquartersBlock" type="MeshInstance3D" parent="Landmarks" unique_id=1811758853]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 17, -312)
+material_override = SubResource("ShaderMaterial_78mve")
+mesh = SubResource("BoxMesh_c6m64")
+
+[node name="HeadquartersTower" type="MeshInstance3D" parent="Landmarks" unique_id=1398279178]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 47, -312)
+material_override = SubResource("ShaderMaterial_78mve")
+mesh = SubResource("BoxMesh_pkwyv")
+
+[node name="HeadquartersRoof" type="MeshInstance3D" parent="Landmarks" unique_id=724281869]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 63, -312)
+material_override = SubResource("ShaderMaterial_64sf7")
+mesh = SubResource("BoxMesh_nxscl")
+
+[node name="SiegeWallL" type="MeshInstance3D" parent="Landmarks" unique_id=1797779559]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -43, 11.6, -121)
+material_override = SubResource("ShaderMaterial_xyyoh")
+mesh = SubResource("BoxMesh_j80s0")
+
+[node name="SiegeWallR" type="MeshInstance3D" parent="Landmarks" unique_id=1027874462]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43, 11.6, -121)
+material_override = SubResource("ShaderMaterial_xyyoh")
+mesh = SubResource("BoxMesh_c5il5")
+
+[node name="Warship1" type="Node3D" parent="Landmarks" unique_id=1889905694]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -64, -3, -30)
+
+[node name="Hull" type="MeshInstance3D" parent="Landmarks/Warship1" unique_id=278486742]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
+material_override = SubResource("ShaderMaterial_8qand")
+mesh = SubResource("BoxMesh_wq6sn")
+
+[node name="Deck" type="MeshInstance3D" parent="Landmarks/Warship1" unique_id=1282257967]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.5, 0)
+material_override = SubResource("ShaderMaterial_bea4g")
+mesh = SubResource("BoxMesh_vrvo0")
+
+[node name="Mast1" type="MeshInstance3D" parent="Landmarks/Warship1" unique_id=1353047837]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19, -7)
+material_override = SubResource("ShaderMaterial_bea4g")
+mesh = SubResource("BoxMesh_eq3s8")
+
+[node name="Sail1" type="MeshInstance3D" parent="Landmarks/Warship1" unique_id=822547684]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 21, -6.4)
+material_override = SubResource("ShaderMaterial_xyn6k")
+mesh = SubResource("BoxMesh_2pr6l")
+
+[node name="Mast2" type="MeshInstance3D" parent="Landmarks/Warship1" unique_id=308872677]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19, 7)
+material_override = SubResource("ShaderMaterial_bea4g")
+mesh = SubResource("BoxMesh_lvvcc")
+
+[node name="Sail2" type="MeshInstance3D" parent="Landmarks/Warship1" unique_id=624745714]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 21, 7.6)
+material_override = SubResource("ShaderMaterial_xyn6k")
+mesh = SubResource("BoxMesh_h42ye")
+
+[node name="Warship2" type="Node3D" parent="Landmarks" unique_id=467825784]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -74, -3, -110)
+
+[node name="Hull" type="MeshInstance3D" parent="Landmarks/Warship2" unique_id=949718634]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
+material_override = SubResource("ShaderMaterial_8qand")
+mesh = SubResource("BoxMesh_86xcd")
+
+[node name="Deck" type="MeshInstance3D" parent="Landmarks/Warship2" unique_id=2100458473]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.5, 0)
+material_override = SubResource("ShaderMaterial_bea4g")
+mesh = SubResource("BoxMesh_3rk3f")
+
+[node name="Mast1" type="MeshInstance3D" parent="Landmarks/Warship2" unique_id=609866592]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19, -7)
+material_override = SubResource("ShaderMaterial_bea4g")
+mesh = SubResource("BoxMesh_30sci")
+
+[node name="Sail1" type="MeshInstance3D" parent="Landmarks/Warship2" unique_id=1146864326]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 21, -6.4)
+material_override = SubResource("ShaderMaterial_xyn6k")
+mesh = SubResource("BoxMesh_wcyvu")
+
+[node name="Mast2" type="MeshInstance3D" parent="Landmarks/Warship2" unique_id=339468307]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19, 7)
+material_override = SubResource("ShaderMaterial_bea4g")
+mesh = SubResource("BoxMesh_h13w1")
+
+[node name="Sail2" type="MeshInstance3D" parent="Landmarks/Warship2" unique_id=1657123901]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 21, 7.6)
+material_override = SubResource("ShaderMaterial_xyn6k")
+mesh = SubResource("BoxMesh_mnjsy")
+
+[node name="Warship3" type="Node3D" parent="Landmarks" unique_id=2129138390]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -64, -3, -190)
+
+[node name="Hull" type="MeshInstance3D" parent="Landmarks/Warship3" unique_id=619946330]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
+material_override = SubResource("ShaderMaterial_8qand")
+mesh = SubResource("BoxMesh_wf85j")
+
+[node name="Deck" type="MeshInstance3D" parent="Landmarks/Warship3" unique_id=339944887]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.5, 0)
+material_override = SubResource("ShaderMaterial_bea4g")
+mesh = SubResource("BoxMesh_sw5xd")
+
+[node name="Mast1" type="MeshInstance3D" parent="Landmarks/Warship3" unique_id=605630062]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19, -7)
+material_override = SubResource("ShaderMaterial_bea4g")
+mesh = SubResource("BoxMesh_h8rmh")
+
+[node name="Sail1" type="MeshInstance3D" parent="Landmarks/Warship3" unique_id=557509031]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 21, -6.4)
+material_override = SubResource("ShaderMaterial_xyn6k")
+mesh = SubResource("BoxMesh_48hub")
+
+[node name="Mast2" type="MeshInstance3D" parent="Landmarks/Warship3" unique_id=1819503338]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19, 7)
+material_override = SubResource("ShaderMaterial_bea4g")
+mesh = SubResource("BoxMesh_c1whm")
+
+[node name="Sail2" type="MeshInstance3D" parent="Landmarks/Warship3" unique_id=38939336]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 21, 7.6)
+material_override = SubResource("ShaderMaterial_xyn6k")
+mesh = SubResource("BoxMesh_7jklt")
+
+[node name="Warship4" type="Node3D" parent="Landmarks" unique_id=1783181039]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 74, -3, 40)
+
+[node name="Hull" type="MeshInstance3D" parent="Landmarks/Warship4" unique_id=44438216]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
+material_override = SubResource("ShaderMaterial_8qand")
+mesh = SubResource("BoxMesh_8yb68")
+
+[node name="Deck" type="MeshInstance3D" parent="Landmarks/Warship4" unique_id=1883764635]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.5, 0)
+material_override = SubResource("ShaderMaterial_bea4g")
+mesh = SubResource("BoxMesh_klxmk")
+
+[node name="Mast1" type="MeshInstance3D" parent="Landmarks/Warship4" unique_id=1965614979]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19, -7)
+material_override = SubResource("ShaderMaterial_bea4g")
+mesh = SubResource("BoxMesh_53ttu")
+
+[node name="Sail1" type="MeshInstance3D" parent="Landmarks/Warship4" unique_id=1234016793]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 21, -6.4)
+material_override = SubResource("ShaderMaterial_xyn6k")
+mesh = SubResource("BoxMesh_hfhka")
+
+[node name="Mast2" type="MeshInstance3D" parent="Landmarks/Warship4" unique_id=2076699817]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19, 7)
+material_override = SubResource("ShaderMaterial_bea4g")
+mesh = SubResource("BoxMesh_5c6gb")
+
+[node name="Sail2" type="MeshInstance3D" parent="Landmarks/Warship4" unique_id=2140470749]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 21, 7.6)
+material_override = SubResource("ShaderMaterial_xyn6k")
+mesh = SubResource("BoxMesh_r4wcv")
+
+[node name="Warship5" type="Node3D" parent="Landmarks" unique_id=1056756609]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 64, -3, -70)
+
+[node name="Hull" type="MeshInstance3D" parent="Landmarks/Warship5" unique_id=573077393]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
+material_override = SubResource("ShaderMaterial_8qand")
+mesh = SubResource("BoxMesh_37clf")
+
+[node name="Deck" type="MeshInstance3D" parent="Landmarks/Warship5" unique_id=334271624]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.5, 0)
+material_override = SubResource("ShaderMaterial_bea4g")
+mesh = SubResource("BoxMesh_t00k0")
+
+[node name="Mast1" type="MeshInstance3D" parent="Landmarks/Warship5" unique_id=599316763]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19, -7)
+material_override = SubResource("ShaderMaterial_bea4g")
+mesh = SubResource("BoxMesh_4dad3")
+
+[node name="Sail1" type="MeshInstance3D" parent="Landmarks/Warship5" unique_id=1824448365]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 21, -6.4)
+material_override = SubResource("ShaderMaterial_xyn6k")
+mesh = SubResource("BoxMesh_sy58d")
+
+[node name="Mast2" type="MeshInstance3D" parent="Landmarks/Warship5" unique_id=1910024862]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19, 7)
+material_override = SubResource("ShaderMaterial_bea4g")
+mesh = SubResource("BoxMesh_2aoos")
+
+[node name="Sail2" type="MeshInstance3D" parent="Landmarks/Warship5" unique_id=2007316449]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 21, 7.6)
+material_override = SubResource("ShaderMaterial_xyn6k")
+mesh = SubResource("BoxMesh_wg36i")
+
+[node name="Warship6" type="Node3D" parent="Landmarks" unique_id=880447171]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 74, -3, -150)
+
+[node name="Hull" type="MeshInstance3D" parent="Landmarks/Warship6" unique_id=2074401907]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
+material_override = SubResource("ShaderMaterial_8qand")
+mesh = SubResource("BoxMesh_ducy2")
+
+[node name="Deck" type="MeshInstance3D" parent="Landmarks/Warship6" unique_id=591070099]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.5, 0)
+material_override = SubResource("ShaderMaterial_bea4g")
+mesh = SubResource("BoxMesh_fecjl")
+
+[node name="Mast1" type="MeshInstance3D" parent="Landmarks/Warship6" unique_id=1612969386]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19, -7)
+material_override = SubResource("ShaderMaterial_bea4g")
+mesh = SubResource("BoxMesh_bohfe")
+
+[node name="Sail1" type="MeshInstance3D" parent="Landmarks/Warship6" unique_id=1234848148]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 21, -6.4)
+material_override = SubResource("ShaderMaterial_xyn6k")
+mesh = SubResource("BoxMesh_4mgcm")
+
+[node name="Mast2" type="MeshInstance3D" parent="Landmarks/Warship6" unique_id=2072647597]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 19, 7)
+material_override = SubResource("ShaderMaterial_bea4g")
+mesh = SubResource("BoxMesh_lu8g4")
+
+[node name="Sail2" type="MeshInstance3D" parent="Landmarks/Warship6" unique_id=980818310]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 21, 7.6)
+material_override = SubResource("ShaderMaterial_xyn6k")
+mesh = SubResource("BoxMesh_ofcpn")
+
+[node name="Waypoints" type="Node3D" parent="." unique_id=631707083]
+
+[node name="Waypoint1" type="Marker3D" parent="Waypoints" unique_id=153279590]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -150)
+
+[node name="Garp" type="Marker3D" parent="Waypoints" unique_id=326188238]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -230)
+
+[node name="Platform" type="Marker3D" parent="Waypoints" unique_id=1873462668]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -252)

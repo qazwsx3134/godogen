@@ -1,0 +1,129 @@
+{
+  "atlas": "cast_8dir_3.png",
+  "cell_px": 128,
+  "columns": 12,
+  "rows": 10,
+  "foot_px": 4,
+  "meters_per_px": 0.02,
+  "characters": {
+    "wb_pirate_a": {
+      "directions": 8,
+      "mirror": true,
+      "anims": {
+        "idle": {
+          "cell": 0,
+          "n": 2,
+          "d": [
+            30,
+            30
+          ],
+          "loop": true
+        },
+        "attack": {
+          "cell": 2,
+          "n": 3,
+          "d": [
+            8,
+            8,
+            8
+          ],
+          "loop": false
+        },
+        "hit": {
+          "cell": 5,
+          "n": 1,
+          "d": [
+            8
+          ],
+          "loop": false
+        }
+      }
+    },
+    "wb_pirate_b": {
+      "directions": 8,
+      "mirror": true,
+      "anims": {
+        "idle": {
+          "cell": 6,
+          "n": 2,
+          "d": [
+            30,
+            30
+          ],
+          "loop": true
+        },
+        "attack": {
+          "cell": 8,
+          "n": 3,
+          "d": [
+            8,
+            8,
+            8
+          ],
+          "loop": false
+        },
+        "hit": {
+          "cell": 11,
+          "n": 1,
+          "d": [
+            8
+          ],
+          "loop": false
+        }
+      }
+    },
+    "smoker": {
+      "directions": 8,
+      "mirror": true,
+      "anims": {
+        "idle": {
+          "cell": 60,
+          "n": 2,
+          "d": [
+            30,
+            30
+          ],
+          "loop": true
+        },
+        "walk": {
+          "cell": 62,
+          "n": 4,
+          "d": [
+            8,
+            8,
+            8,
+            8
+          ],
+          "loop": true
+        },
+        "attack": {
+          "cell": 66,
+          "n": 3,
+          "d": [
+            8,
+            8,
+            8
+          ],
+          "loop": false
+        },
+        "smoke": {
+          "cell": 69,
+          "n": 2,
+          "d": [
+            8,
+            8
+          ],
+          "loop": true
+        },
+        "hit": {
+          "cell": 71,
+          "n": 1,
+          "d": [
+            8
+          ],
+          "loop": false
+        }
+      }
+    }
+  }
+}

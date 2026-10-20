@@ -1,0 +1,512 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_bu4jf"]
+[ext_resource type="PackedScene" path="res://scenes/route.tscn" id="2_route"]
+[ext_resource type="Shader" path="res://shaders/pixel_sky.gdshader" id="60_sky"]
+[ext_resource type="Shader" path="res://shaders/pixel_outline.gdshader" id="61_outline"]
+[ext_resource type="Shader" path="res://shaders/grade.gdshader" id="62_grade"]
+[ext_resource type="ArrayMesh" path="res://assets/meshes/prop_mesh.tres" id="3_0loja"]
+[ext_resource type="Script" path="res://scripts/decor.gd" id="4_ids8r"]
+[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="5_dnhof"]
+[ext_resource type="ArrayMesh" path="res://assets/meshes/actor_mesh.tres" id="6_1v6qk"]
+[ext_resource type="Script" path="res://scripts/horde.gd" id="7_augu2"]
+[ext_resource type="Script" path="res://scripts/enemy_def.gd" id="8_tm6hj"]
+[ext_resource type="Resource" path="res://data/enemies/genin.tres" id="9_kf5aa"]
+[ext_resource type="Resource" path="res://data/enemies/masked.tres" id="10_t5ykj"]
+[ext_resource type="Resource" path="res://data/enemies/heavy.tres" id="11_e755i"]
+[ext_resource type="Resource" path="res://data/enemies/elite.tres" id="12_ro3en"]
+[ext_resource type="Resource" path="res://data/enemies/caster_fire.tres" id="13_od4ux"]
+[ext_resource type="Resource" path="res://data/enemies/caster_water.tres" id="14_xhfw6"]
+[ext_resource type="Resource" path="res://data/enemies/caster_earth.tres" id="15_1epgm"]
+[ext_resource type="Material" path="res://materials/chakra_orb.tres" id="16_152kg"]
+[ext_resource type="Script" path="res://scripts/gems.gd" id="17_r4e17"]
+[ext_resource type="Material" path="res://materials/fx_dust.tres" id="18_y57op"]
+[ext_resource type="Script" path="res://scripts/glow_pool.gd" id="19_mlv25"]
+[ext_resource type="Material" path="res://materials/fx_glow.tres" id="20_a82wo"]
+[ext_resource type="Script" path="res://scripts/fx.gd" id="21_gdvew"]
+[ext_resource type="Script" path="res://scripts/enemy_jutsu.gd" id="22_kjtvk"]
+[ext_resource type="Shader" path="res://shaders/ground_ring.gdshader" id="23_xrs0c"]
+[ext_resource type="Script" path="res://scripts/ultimate.gd" id="24_xljpf"]
+[ext_resource type="Shader" path="res://shaders/core.gdshader" id="25_j4bwh"]
+[ext_resource type="Script" path="res://scripts/jutsu.gd" id="26_ksmap"]
+[ext_resource type="Resource" path="res://data/jutsu/pistol.tres" id="27_ygd8o"]
+[ext_resource type="Material" path="res://materials/taijutsu_arc.tres" id="28_2s0kr"]
+[ext_resource type="Material" path="res://materials/gunbai_arc.tres" id="29_xaipn"]
+[ext_resource type="Script" path="res://scripts/upgrades.gd" id="30_ndrjj"]
+[ext_resource type="Script" path="res://scripts/jutsu_def.gd" id="31_ih3m7"]
+[ext_resource type="Resource" path="res://data/jutsu/gatling.tres" id="32_11yus"]
+[ext_resource type="Resource" path="res://data/jutsu/bazooka.tres" id="33_b6ruc"]
+[ext_resource type="Resource" path="res://data/jutsu/whip.tres" id="34_155or"]
+[ext_resource type="Resource" path="res://data/jutsu/gear2.tres" id="35_vtx2l"]
+[ext_resource type="Resource" path="res://data/jutsu/haki.tres" id="36_63lxy"]
+[ext_resource type="Resource" path="res://data/jutsu/gigant.tres" id="37_fjhjs"]
+[ext_resource type="Script" path="res://scripts/passive_def.gd" id="38_bfu41"]
+[ext_resource type="Resource" path="res://data/passives/might.tres" id="39_r4ag1"]
+[ext_resource type="Resource" path="res://data/passives/area.tres" id="40_v0wtd"]
+[ext_resource type="Resource" path="res://data/passives/haste.tres" id="41_sgvw8"]
+[ext_resource type="Resource" path="res://data/passives/crit.tres" id="42_6nfnn"]
+[ext_resource type="Resource" path="res://data/passives/swift.tres" id="43_4ue30"]
+[ext_resource type="Resource" path="res://data/passives/magnet.tres" id="44_k42av"]
+[ext_resource type="Resource" path="res://data/passives/vitality.tres" id="45_gr8w0"]
+[ext_resource type="Script" path="res://scripts/sfx.gd" id="46_673bd"]
+[ext_resource type="Script" path="res://scripts/damage_numbers.gd" id="47_akjxb"]
+[ext_resource type="PackedScene" path="res://scenes/damage_number.tscn" id="48_vrx01"]
+[ext_resource type="Shader" path="res://addons/proto_kit/sprite3d.gdshader" id="49_1uevf"]
+[ext_resource type="Texture2D" path="res://assets/sprites/atlas.png" id="50_tc087"]
+[ext_resource type="Script" path="res://scripts/camera_rig.gd" id="51_73205"]
+[ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="52_0tljd"]
+[ext_resource type="PackedScene" path="res://scenes/fist_streak.tscn" id="63_fist"]
+[ext_resource type="PackedScene" path="res://scenes/story_ui.tscn" id="64_story"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sky"]
+shader = ExtResource("60_sky")
+
+[sub_resource type="Sky" id="Sky_pixel"]
+sky_material = SubResource("ShaderMaterial_sky")
+radiance_size = 0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_outline"]
+render_priority = -100
+shader = ExtResource("61_outline")
+
+[sub_resource type="QuadMesh" id="QuadMesh_outline"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_grade"]
+shader = ExtResource("62_grade")
+
+[sub_resource type="Environment" id="Environment_mgpkq"]
+background_mode = 2
+sky = SubResource("Sky_pixel")
+background_color = Color(0.5, 0.68, 0.9, 1)
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+glow_enabled = true
+glow_intensity = 0.8
+glow_blend_mode = 0
+glow_hdr_threshold = 0.92
+fog_enabled = true
+fog_mode = 1
+fog_light_color = Color(0.7, 0.8, 0.9, 1)
+fog_density = 0.45
+fog_sky_affect = 0.0
+fog_depth_begin = 60.0
+fog_depth_end = 420.0
+
+[sub_resource type="MultiMesh" id="MultiMesh_wvlrk"]
+transform_format = 1
+use_custom_data = true
+mesh = ExtResource("3_0loja")
+
+[sub_resource type="MultiMesh" id="MultiMesh_engxj"]
+transform_format = 1
+use_custom_data = true
+mesh = ExtResource("6_1v6qk")
+
+[sub_resource type="QuadMesh" id="QuadMesh_raiwf"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_gemft"]
+center_offset = Vector3(0, 0.5, 0)
+
+[sub_resource type="MultiMesh" id="MultiMesh_roort"]
+transform_format = 1
+use_custom_data = true
+mesh = SubResource("QuadMesh_gemft")
+
+[sub_resource type="MultiMesh" id="MultiMesh_gm02q"]
+transform_format = 1
+use_colors = true
+use_custom_data = true
+mesh = SubResource("QuadMesh_raiwf")
+
+[sub_resource type="MultiMesh" id="MultiMesh_07pt3"]
+transform_format = 1
+use_colors = true
+use_custom_data = true
+mesh = SubResource("QuadMesh_raiwf")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_37xlc"]
+render_priority = 0
+shader = ExtResource("23_xrs0c")
+shader_parameter/color = Color(1, 0.25, 0.15, 0.9)
+shader_parameter/thickness = 0.05
+shader_parameter/fade_with_progress = 0.0
+shader_parameter/fill_with_progress = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_83607"]
+size = Vector2(1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vny5k"]
+render_priority = 0
+shader = ExtResource("23_xrs0c")
+shader_parameter/color = Color(1, 0.25, 0.15, 0.9)
+shader_parameter/thickness = 0.05
+shader_parameter/fade_with_progress = 0.0
+shader_parameter/fill_with_progress = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8lcmr"]
+render_priority = 0
+shader = ExtResource("23_xrs0c")
+shader_parameter/color = Color(1, 0.25, 0.15, 0.9)
+shader_parameter/thickness = 0.05
+shader_parameter/fade_with_progress = 0.0
+shader_parameter/fill_with_progress = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ga3rw"]
+render_priority = 0
+shader = ExtResource("23_xrs0c")
+shader_parameter/color = Color(1, 0.25, 0.15, 0.9)
+shader_parameter/thickness = 0.05
+shader_parameter/fade_with_progress = 0.0
+shader_parameter/fill_with_progress = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f5chs"]
+render_priority = 0
+shader = ExtResource("23_xrs0c")
+shader_parameter/color = Color(1, 0.25, 0.15, 0.9)
+shader_parameter/thickness = 0.05
+shader_parameter/fade_with_progress = 0.0
+shader_parameter/fill_with_progress = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_eh25q"]
+render_priority = 0
+shader = ExtResource("23_xrs0c")
+shader_parameter/color = Color(1, 0.25, 0.15, 0.9)
+shader_parameter/thickness = 0.05
+shader_parameter/fade_with_progress = 0.0
+shader_parameter/fill_with_progress = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_joh2r"]
+render_priority = 0
+shader = ExtResource("23_xrs0c")
+shader_parameter/color = Color(1, 0.25, 0.15, 0.9)
+shader_parameter/thickness = 0.05
+shader_parameter/fade_with_progress = 0.0
+shader_parameter/fill_with_progress = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yton5"]
+render_priority = 0
+shader = ExtResource("23_xrs0c")
+shader_parameter/color = Color(1, 0.25, 0.15, 0.9)
+shader_parameter/thickness = 0.05
+shader_parameter/fade_with_progress = 0.0
+shader_parameter/fill_with_progress = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4ahvx"]
+render_priority = 0
+shader = ExtResource("25_j4bwh")
+
+[sub_resource type="SphereMesh" id="SphereMesh_2cr71"]
+radius = 1.0
+height = 2.0
+radial_segments = 24
+rings = 12
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_1hbcg"]
+size = Vector2(1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_m4o51"]
+render_priority = 0
+shader = ExtResource("49_1uevf")
+shader_parameter/atlas = ExtResource("50_tc087")
+shader_parameter/use_instance_custom = false
+shader_parameter/frame = 1.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_jp61a"]
+center_offset = Vector3(0, 0.5, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_esrwe"]
+render_priority = 0
+shader = ExtResource("49_1uevf")
+shader_parameter/atlas = ExtResource("50_tc087")
+shader_parameter/use_instance_custom = false
+shader_parameter/frame = 2.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4b36k"]
+render_priority = 0
+shader = ExtResource("49_1uevf")
+shader_parameter/atlas = ExtResource("50_tc087")
+shader_parameter/use_instance_custom = false
+shader_parameter/frame = 3.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1v8b0"]
+render_priority = 0
+shader = ExtResource("49_1uevf")
+shader_parameter/atlas = ExtResource("50_tc087")
+shader_parameter/use_instance_custom = false
+shader_parameter/frame = 4.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_683hg"]
+render_priority = 0
+shader = ExtResource("49_1uevf")
+shader_parameter/atlas = ExtResource("50_tc087")
+shader_parameter/use_instance_custom = false
+shader_parameter/frame = 8.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ow8of"]
+render_priority = 0
+shader = ExtResource("49_1uevf")
+shader_parameter/atlas = ExtResource("50_tc087")
+shader_parameter/use_instance_custom = false
+shader_parameter/frame = 9.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hj4tt"]
+render_priority = 0
+shader = ExtResource("49_1uevf")
+shader_parameter/atlas = ExtResource("50_tc087")
+shader_parameter/use_instance_custom = false
+shader_parameter/frame = 10.0
+
+[node name="Main" type="Node3D" unique_id=525722401]
+script = ExtResource("1_bu4jf")
+army_curve = PackedVector2Array(0, 20, 120, 60, 240, 120, 360, 200, 480, 300, 600, 340)
+elite_times = PackedFloat32Array(240, 420)
+dominance_stages = PackedStringArray("意志", "高漲", "沸騰", "覺醒", "霸王")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1549986357]
+environment = SubResource("Environment_mgpkq")
+
+[node name="Route" parent="." unique_id=1720914979 instance=ExtResource("2_route")]
+unique_name_in_owner = true
+
+[node name="Decor" type="MultiMeshInstance3D" parent="." unique_id=646957229 node_paths=PackedStringArray("route")]
+unique_name_in_owner = true
+custom_aabb = AABB(-2000, -10, -2000, 4000, 60, 4000)
+multimesh = SubResource("MultiMesh_wvlrk")
+script = ExtResource("4_ids8r")
+frames = PackedInt32Array(5, 6, 7)
+sizes = PackedFloat32Array(7, 3, 1.6)
+weights = PackedFloat32Array(0, 0.7, 0.3)
+density = 0.15
+radii = PackedFloat32Array(1.35, 1, 0)
+route = NodePath("../Route")
+
+[node name="Player" parent="." unique_id=1619320876 instance=ExtResource("5_dnhof")]
+unique_name_in_owner = true
+
+[node name="Horde" type="MultiMeshInstance3D" parent="." unique_id=1540977028 node_paths=PackedStringArray("obstacles")]
+unique_name_in_owner = true
+custom_aabb = AABB(-2000, -10, -2000, 4000, 60, 4000)
+multimesh = SubResource("MultiMesh_engxj")
+script = ExtResource("7_augu2")
+defs = Array[ExtResource("8_tm6hj")]([ExtResource("9_kf5aa"), ExtResource("10_t5ykj"), ExtResource("11_e755i"), ExtResource("12_ro3en"), ExtResource("13_od4ux"), ExtResource("14_xhfw6"), ExtResource("15_1epgm")])
+obstacles = NodePath("../Decor")
+recycle_distance = 90.0
+recycle_radius = 55.0
+recycle_behind = 25.0
+
+[node name="Gems" type="MultiMeshInstance3D" parent="." unique_id=126059289]
+unique_name_in_owner = true
+material_override = ExtResource("16_152kg")
+custom_aabb = AABB(-2000, -10, -2000, 4000, 60, 4000)
+multimesh = SubResource("MultiMesh_roort")
+script = ExtResource("17_r4e17")
+tier_xp = PackedInt32Array(3, 10, 30)
+sizes = PackedFloat32Array(0.7, 0.85, 1, 1.25)
+frame_base = 18
+
+[node name="Dust" type="MultiMeshInstance3D" parent="." unique_id=1472899501]
+unique_name_in_owner = true
+material_override = ExtResource("18_y57op")
+custom_aabb = AABB(-2000, -10, -2000, 4000, 60, 4000)
+multimesh = SubResource("MultiMesh_gm02q")
+script = ExtResource("19_mlv25")
+
+[node name="Glow" type="MultiMeshInstance3D" parent="." unique_id=301198447]
+unique_name_in_owner = true
+material_override = ExtResource("20_a82wo")
+custom_aabb = AABB(-2000, -10, -2000, 4000, 60, 4000)
+multimesh = SubResource("MultiMesh_07pt3")
+script = ExtResource("19_mlv25")
+
+[node name="Fx" type="Node" parent="." unique_id=971521120 node_paths=PackedStringArray("glow", "dust_pool")]
+unique_name_in_owner = true
+script = ExtResource("21_gdvew")
+glow = NodePath("../Glow")
+dust_pool = NodePath("../Dust")
+
+[node name="EnemyJutsu" type="Node3D" parent="." unique_id=9816289 node_paths=PackedStringArray("horde", "fx", "glow")]
+unique_name_in_owner = true
+script = ExtResource("22_kjtvk")
+horde = NodePath("../Horde")
+fx = NodePath("../Fx")
+glow = NodePath("../Glow")
+
+[node name="Warnings" type="Node3D" parent="EnemyJutsu" unique_id=400354703]
+unique_name_in_owner = true
+
+[node name="Warning1" type="MeshInstance3D" parent="EnemyJutsu/Warnings" unique_id=2020202282]
+transform = Transform3D(4, 0, 0, 0, 1, 0, 0, 0, 4, 0, 0, 0)
+top_level = true
+material_override = SubResource("ShaderMaterial_37xlc")
+mesh = SubResource("PlaneMesh_83607")
+
+[node name="Warning2" type="MeshInstance3D" parent="EnemyJutsu/Warnings" unique_id=282476254]
+transform = Transform3D(4, 0, 0, 0, 1, 0, 0, 0, 4, 0, 0, 0)
+top_level = true
+material_override = SubResource("ShaderMaterial_vny5k")
+mesh = SubResource("PlaneMesh_83607")
+
+[node name="Warning3" type="MeshInstance3D" parent="EnemyJutsu/Warnings" unique_id=735823982]
+transform = Transform3D(4, 0, 0, 0, 1, 0, 0, 0, 4, 0, 0, 0)
+top_level = true
+material_override = SubResource("ShaderMaterial_8lcmr")
+mesh = SubResource("PlaneMesh_83607")
+
+[node name="Warning4" type="MeshInstance3D" parent="EnemyJutsu/Warnings" unique_id=254135232]
+transform = Transform3D(4, 0, 0, 0, 1, 0, 0, 0, 4, 0, 0, 0)
+top_level = true
+material_override = SubResource("ShaderMaterial_ga3rw")
+mesh = SubResource("PlaneMesh_83607")
+
+[node name="Warning5" type="MeshInstance3D" parent="EnemyJutsu/Warnings" unique_id=1892715798]
+transform = Transform3D(4, 0, 0, 0, 1, 0, 0, 0, 4, 0, 0, 0)
+top_level = true
+material_override = SubResource("ShaderMaterial_f5chs")
+mesh = SubResource("PlaneMesh_83607")
+
+[node name="Warning6" type="MeshInstance3D" parent="EnemyJutsu/Warnings" unique_id=241095708]
+transform = Transform3D(4, 0, 0, 0, 1, 0, 0, 0, 4, 0, 0, 0)
+top_level = true
+material_override = SubResource("ShaderMaterial_eh25q")
+mesh = SubResource("PlaneMesh_83607")
+
+[node name="Warning7" type="MeshInstance3D" parent="EnemyJutsu/Warnings" unique_id=1031714008]
+transform = Transform3D(4, 0, 0, 0, 1, 0, 0, 0, 4, 0, 0, 0)
+top_level = true
+material_override = SubResource("ShaderMaterial_joh2r")
+mesh = SubResource("PlaneMesh_83607")
+
+[node name="Warning8" type="MeshInstance3D" parent="EnemyJutsu/Warnings" unique_id=111445160]
+transform = Transform3D(4, 0, 0, 0, 1, 0, 0, 0, 4, 0, 0, 0)
+top_level = true
+material_override = SubResource("ShaderMaterial_yton5")
+mesh = SubResource("PlaneMesh_83607")
+
+[node name="Ultimate" type="Node3D" parent="." unique_id=1401596425 node_paths=PackedStringArray("horde", "fx", "rig")]
+unique_name_in_owner = true
+script = ExtResource("24_xljpf")
+horde = NodePath("../Horde")
+fx = NodePath("../Fx")
+rig = NodePath("../CameraRig")
+
+[node name="Core" type="MeshInstance3D" parent="Ultimate" unique_id=1542606543]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, -2)
+top_level = true
+material_override = SubResource("ShaderMaterial_4ahvx")
+mesh = SubResource("SphereMesh_2cr71")
+
+[node name="Jutsu" type="Node3D" parent="." unique_id=887861847 node_paths=PackedStringArray("horde", "enemy_jutsu", "fx", "glow")]
+unique_name_in_owner = true
+script = ExtResource("26_ksmap")
+horde = NodePath("../Horde")
+enemy_jutsu = NodePath("../EnemyJutsu")
+fx = NodePath("../Fx")
+glow = NodePath("../Glow")
+starting = ExtResource("27_ygd8o")
+
+[node name="TaiArc" type="MeshInstance3D" parent="Jutsu" unique_id=263954709]
+unique_name_in_owner = true
+transform = Transform3D(4.6, 0, 0, 0, 4.6, 0, 0, 0, 4.6, 0, 0.06, 0)
+material_override = ExtResource("28_2s0kr")
+mesh = SubResource("PlaneMesh_1hbcg")
+
+[node name="FanArc" type="MeshInstance3D" parent="Jutsu" unique_id=1919104255]
+unique_name_in_owner = true
+transform = Transform3D(8.8, 0, 0, 0, 8.8, 0, 0, 0, 8.8, 0, 0.06, 0)
+material_override = ExtResource("29_xaipn")
+mesh = SubResource("PlaneMesh_1hbcg")
+
+[node name="Upgrades" type="Node" parent="." unique_id=795476792 node_paths=PackedStringArray("jutsu")]
+unique_name_in_owner = true
+script = ExtResource("30_ndrjj")
+jutsu = NodePath("../Jutsu")
+jutsu_pool = Array[ExtResource("31_ih3m7")]([ExtResource("32_11yus"), ExtResource("33_b6ruc"), ExtResource("34_155or"), ExtResource("35_vtx2l"), ExtResource("37_fjhjs")])
+pool = Array[ExtResource("38_bfu41")]([ExtResource("39_r4ag1"), ExtResource("40_v0wtd"), ExtResource("41_sgvw8"), ExtResource("42_6nfnn"), ExtResource("43_4ue30"), ExtResource("44_k42av"), ExtResource("45_gr8w0")])
+new_jutsu_levels = PackedInt32Array(2, 4)
+
+[node name="Sfx" type="Node" parent="." unique_id=1214096429]
+unique_name_in_owner = true
+script = ExtResource("46_673bd")
+
+[node name="FistStreak" parent="." unique_id=63000001 instance=ExtResource("63_fist")]
+unique_name_in_owner = true
+
+[node name="Numbers" type="Node3D" parent="." unique_id=1190722792]
+unique_name_in_owner = true
+script = ExtResource("47_akjxb")
+number_scene = ExtResource("48_vrx01")
+
+[node name="Previews" type="Node3D" parent="." unique_id=1371027536]
+unique_name_in_owner = true
+
+[node name="Genin" type="MeshInstance3D" parent="Previews" unique_id=678298161]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -4.5, 0, -3.5)
+material_override = SubResource("ShaderMaterial_m4o51")
+mesh = SubResource("QuadMesh_jp61a")
+
+[node name="Masked" type="MeshInstance3D" parent="Previews" unique_id=1143989791]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -1.5, 0, -3.5)
+material_override = SubResource("ShaderMaterial_esrwe")
+mesh = SubResource("QuadMesh_jp61a")
+
+[node name="Heavy" type="MeshInstance3D" parent="Previews" unique_id=424749640]
+transform = Transform3D(2.4, 0, 0, 0, 2.4, 0, 0, 0, 2.4, 1.5, 0, -3.5)
+material_override = SubResource("ShaderMaterial_4b36k")
+mesh = SubResource("QuadMesh_jp61a")
+
+[node name="Elite" type="MeshInstance3D" parent="Previews" unique_id=2139527823]
+transform = Transform3D(2.8, 0, 0, 0, 2.8, 0, 0, 0, 2.8, 4.5, 0, -3.5)
+material_override = SubResource("ShaderMaterial_1v8b0")
+mesh = SubResource("QuadMesh_jp61a")
+
+[node name="Caster Fire" type="MeshInstance3D" parent="Previews" unique_id=100510423]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 7.5, 0, -3.5)
+material_override = SubResource("ShaderMaterial_683hg")
+mesh = SubResource("QuadMesh_jp61a")
+
+[node name="Caster Water" type="MeshInstance3D" parent="Previews" unique_id=1675638146]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 10.5, 0, -3.5)
+material_override = SubResource("ShaderMaterial_ow8of")
+mesh = SubResource("QuadMesh_jp61a")
+
+[node name="Caster Earth" type="MeshInstance3D" parent="Previews" unique_id=187305363]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 13.5, 0, -3.5)
+material_override = SubResource("ShaderMaterial_hj4tt")
+mesh = SubResource("QuadMesh_jp61a")
+
+[node name="CameraRig" type="Node3D" parent="." unique_id=235879589 node_paths=PackedStringArray("target")]
+unique_name_in_owner = true
+script = ExtResource("51_73205")
+target = NodePath("../Player")
+
+[node name="Camera" type="Camera3D" parent="CameraRig" unique_id=98329434]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 0.908204, 0.418527, 0, -0.418527, 0.908204, 0, 10, 12.3)
+near = 0.3
+far = 600.0
+fov = 60.0
+
+[node name="PixelOutline" type="MeshInstance3D" parent="CameraRig/Camera" unique_id=61000001]
+extra_cull_margin = 16384.0
+material_override = SubResource("ShaderMaterial_outline")
+cast_shadow = 0
+mesh = SubResource("QuadMesh_outline")
+
+[node name="Grade" type="CanvasLayer" parent="." unique_id=61000002]
+layer = 0
+
+[node name="Screen" type="ColorRect" parent="Grade" unique_id=61000003]
+material = SubResource("ShaderMaterial_grade")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Hud" parent="." unique_id=1932767223 instance=ExtResource("52_0tljd")]
+unique_name_in_owner = true
+
+[node name="StoryUi" parent="." unique_id=64000001 instance=ExtResource("64_story")]
+unique_name_in_owner = true

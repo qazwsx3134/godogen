@@ -1,0 +1,118 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/toast_item.gd" id="1_xg60b"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_03aqc"]
+content_margin_left = 16.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.078431375, 0.13725491, 0.21960784, 0.93)
+border_width_right = 3
+border_width_bottom = 2
+border_color = Color(1, 0.9647059, 0.8666667, 1)
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lgk5y"]
+content_margin_left = 3.0
+content_margin_top = 3.0
+content_margin_right = 3.0
+content_margin_bottom = 3.0
+bg_color = Color(0.14509805, 0.23137255, 0.32156864, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.9647059, 0.8666667, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="ToastItem" type="Control" unique_id=237402813]
+custom_minimum_size = Vector2(380, 72)
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("1_xg60b")
+
+[node name="Motion" type="Control" parent="." unique_id=1464655005]
+unique_name_in_owner = true
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Band" type="PanelContainer" parent="Motion" unique_id=1214040924]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_03aqc")
+
+[node name="Row" type="HBoxContainer" parent="Motion/Band" unique_id=767758122]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="ToastPortraitFrame" type="PanelContainer" parent="Motion/Band/Row" unique_id=1977436454]
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_lgk5y")
+
+[node name="ToastPortraitStack" type="Control" parent="Motion/Band/Row/ToastPortraitFrame" unique_id=167452565]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="ToastPortrait" type="TextureRect" parent="Motion/Band/Row/ToastPortraitFrame/ToastPortraitStack" unique_id=1457366481]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ToastInitials" type="Label" parent="Motion/Band/Row/ToastPortraitFrame/ToastPortraitStack" unique_id=1679691651]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_colors/font_color = Color(1, 0.9647059, 0.8666667, 1)
+theme_override_font_sizes/font_size = 22
+text = "魯"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Words" type="VBoxContainer" parent="Motion/Band/Row" unique_id=1042343771]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = -2
+alignment = 1
+
+[node name="ToastSpeaker" type="Label" parent="Motion/Band/Row/Words" unique_id=837368166]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.81960785, 0.41960785, 1)
+theme_override_font_sizes/font_size = 18
+text = "白鬍子"
+
+[node name="ToastText" type="Label" parent="Motion/Band/Row/Words" unique_id=13820515]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.9647059, 0.8666667, 1)
+theme_override_font_sizes/font_size = 28
+text = "參戰！"
+
+[node name="ToastAccent" type="ColorRect" parent="Motion" unique_id=1400884879]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_bottom = 1.0
+offset_right = 7.0
+mouse_filter = 2
+color = Color(1, 0.81960785, 0.41960785, 1)

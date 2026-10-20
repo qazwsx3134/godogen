@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="PassiveDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/passive_def.gd" id="1_txbng"]
+
+[resource]
+script = ExtResource("1_txbng")
+id = &"might"
+title = "查克拉之力"
+description = "所有忍術傷害 +15%。"
+per_level = 0.15

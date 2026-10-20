@@ -1,0 +1,55 @@
+{
+  "cell_px": 368,
+  "columns": 5,
+  "foot_px": 4,
+  "meters_per_px": 0.02,
+  "pixel": {
+    "colors": 16
+  },
+  "characters": {
+    "pacifista": {
+      "height_px": 345,
+      "directions": 8,
+      "mirror": true,
+      "align": "canvas",
+      "foot_y": 364,
+      "anims": {
+        "walk": {
+          "d": [
+            8,
+            8
+          ],
+          "loop": true,
+          "sheet": {
+            "file": "pacifista_walk.png",
+            "fw": 368,
+            "fh": 368
+          }
+        },
+        "attack": {
+          "d": [
+            8,
+            8
+          ],
+          "loop": false,
+          "sheet": {
+            "file": "pacifista_attack.png",
+            "fw": 368,
+            "fh": 368
+          }
+        },
+        "hit": {
+          "d": [
+            8
+          ],
+          "loop": false,
+          "sheet": {
+            "file": "pacifista_hit.png",
+            "fw": 368,
+            "fh": 368
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="PassiveDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/passive_def.gd" id="1_eoree"]
+
+[resource]
+script = ExtResource("1_eoree")
+id = &"area"
+title = "查克拉擴張"
+description = "所有忍術範圍與火球 +10%。"
+stat = 2

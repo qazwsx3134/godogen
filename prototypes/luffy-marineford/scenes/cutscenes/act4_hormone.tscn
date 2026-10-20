@@ -1,0 +1,91 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/cutscene.gd" id="1_kihet"]
+[ext_resource type="PackedScene" path="res://scenes/route.tscn" id="2_2eif8"]
+[ext_resource type="PackedScene" path="res://scenes/cast_actor.tscn" id="3_yt0b3"]
+
+[sub_resource type="Animation" id="Animation_0nomh"]
+length = 5.6
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Shot:transform")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 5.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Transform3D(-0.9333456, -0.0560067, 0.35458317, 0, 0.9877544, 0.15601662, -0.35897908, 0.14561743, -0.92191625, 3.4, 2.4, 22.5), Transform3D(-0.94221467, -0.041758567, 0.3323969, 0, 0.99220085, 0.12464884, -0.33500966, 0.11744597, -0.93486625, 2.5, 1.9, 24.5)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Shot:fov")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 5.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [50.0, 46.0]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.3, 2.7, 3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"values": [{
+"args": ["伊萬科夫", "草帽小子！再撐一次吧——緊張荷爾蒙！", 2.4],
+"method": &"say"
+}, {
+"args": [0.35],
+"method": &"shake"
+}, {
+"args": ["魯夫", "謝啦，伊萬醬！艾斯，等我！", 2.4],
+"method": &"say"
+}]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Ivankov")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(2.5),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"attack"],
+"method": &"play"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_jw86p"]
+_data = {
+&"main": SubResource("Animation_0nomh")
+}
+
+[node name="Act4Hormone" type="Node3D" unique_id=1807684438]
+script = ExtResource("1_kihet")
+
+[node name="Reference" parent="." unique_id=1675133996 instance=ExtResource("2_2eif8")]
+
+[node name="Shot" type="Camera3D" parent="." unique_id=884508619]
+unique_name_in_owner = true
+transform = Transform3D(-0.9333456, -0.0560067, 0.35458317, 0, 0.9877544, 0.15601662, -0.35897908, 0.14561743, -0.92191625, 3.4, 2.4, 22.5)
+fov = 50.0
+far = 600.0
+
+[node name="Ivankov" parent="." unique_id=685743556 instance=ExtResource("3_yt0b3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 0, 28.6)
+character = "ivankov"
+facing = Vector3(-1, 0, 0)
+
+[node name="Anim" type="AnimationPlayer" parent="." unique_id=2096686301]
+unique_name_in_owner = true
+libraries/ = SubResource("AnimationLibrary_jw86p")

@@ -1,0 +1,148 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/cutscene.gd" id="1_j5fth"]
+[ext_resource type="PackedScene" path="res://scenes/route.tscn" id="2_gp14w"]
+[ext_resource type="PackedScene" path="res://scenes/cast_actor.tscn" id="3_mahui"]
+[ext_resource type="Shader" path="res://shaders/toon_solid.gdshader" id="4_frfmy"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fp68p"]
+render_priority = 0
+shader = ExtResource("4_frfmy")
+shader_parameter/albedo = Color(0.9490196, 0.75686276, 0.30588236, 1)
+shader_parameter/px_per_m = null
+shader_parameter/sun_dir = null
+shader_parameter/light_color = null
+shader_parameter/shadow_color = null
+shader_parameter/bands = null
+shader_parameter/courses = null
+
+[sub_resource type="BoxMesh" id="BoxMesh_74qqo"]
+size = Vector3(3, 2.6, 3)
+
+[sub_resource type="Animation" id="Animation_7adyg"]
+length = 6.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Shot:transform")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Transform3D(1, 0, 0, 0, 0.99861777, 0.052558832, 0, -0.052558832, 0.99861777, 0, 31.4, -244), Transform3D(1, 0, 0, 0, 0.9908301, 0.13511328, 0, -0.13511328, 0.9908301, 0, 33.4, -241)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Shot:fov")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [50.0, 54.0]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.3, 1.4, 2.6, 3.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"values": [{
+"args": ["魯夫", "艾斯！我來了！", 1.6],
+"method": &"say"
+}, {
+"args": ["戰國", "休想得逞！", 1.4],
+"method": &"say"
+}, {
+"args": [1.0],
+"method": &"shake"
+}, {
+"args": ["魯夫", "嗚……艾斯……", 2.2],
+"method": &"say"
+}]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Sengoku")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(1.2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"strike"],
+"method": &"play"
+}]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("GoldenFist:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 1.6, 2.6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 41.4, -261), Vector3(0, 41.4, -261), Vector3(0, 28.7, -260)]
+}
+tracks/5/type = "method"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Luffy")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(2.7),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"down"],
+"method": &"play"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_tvvkr"]
+_data = {
+&"main": SubResource("Animation_7adyg")
+}
+
+[node name="Act4GoldenFist" type="Node3D" unique_id=884616711]
+script = ExtResource("1_j5fth")
+
+[node name="Reference" parent="." unique_id=1675133996 instance=ExtResource("2_gp14w")]
+
+[node name="Shot" type="Camera3D" parent="." unique_id=30009128]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 0.99861777, 0.052558832, 0, -0.052558832, 0.99861777, 0, 31.4, -244)
+fov = 50.0
+far = 600.0
+
+[node name="Ace" parent="." unique_id=685743556 instance=ExtResource("3_mahui")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 27.4, -263)
+character = "ace_chained"
+anim = &"kneel"
+
+[node name="Luffy" parent="." unique_id=1999297200 instance=ExtResource("3_mahui")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 27.4, -260)
+facing = Vector3(0, 0, -1)
+
+[node name="Sengoku" parent="." unique_id=53556708 instance=ExtResource("3_mahui")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 27.4, -267)
+character = "sengoku_buddha"
+
+[node name="GoldenFist" type="MeshInstance3D" parent="." unique_id=791271491]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 41.4, -261)
+material_override = SubResource("ShaderMaterial_fp68p")
+mesh = SubResource("BoxMesh_74qqo")
+
+[node name="Anim" type="AnimationPlayer" parent="." unique_id=1629854111]
+unique_name_in_owner = true
+libraries/ = SubResource("AnimationLibrary_tvvkr")
