@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/ground.png" id="1_xygne"]
+
+[resource]
+shading_mode = 0
+albedo_texture = ExtResource("1_xygne")
+uv1_scale = Vector3(30, 30, 1)
+texture_filter = 2

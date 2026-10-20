@@ -1,0 +1,113 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_ya4ey"]
+[ext_resource type="Material" path="res://materials/ground.tres" id="2_eb6dy"]
+[ext_resource type="Script" path="res://scripts/boss.gd" id="3_trceg"]
+[ext_resource type="Material" path="res://materials/boss.tres" id="4_a8y0u"]
+[ext_resource type="Material" path="res://materials/shadow.tres" id="5_jkv2x"]
+[ext_resource type="PackedScene" path="res://scenes/zone_tile.tscn" id="6_jbj1t"]
+[ext_resource type="ArrayMesh" path="res://meshes/hero_mesh.tres" id="7_muem4"]
+[ext_resource type="Script" path="res://scripts/army.gd" id="8_dp3eg"]
+[ext_resource type="QuadMesh" path="res://meshes/bolt_mesh.tres" id="9_0ld40"]
+[ext_resource type="Script" path="res://scripts/bolts.gd" id="10_gqmmt"]
+[ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="11_yc10j"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_jscy8"]
+size = Vector2(60, 60)
+
+[sub_resource type="QuadMesh" id="QuadMesh_pm3ni"]
+center_offset = Vector3(0, 0.5, 0)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_y6deb"]
+size = Vector2(1, 1)
+
+[sub_resource type="MultiMesh" id="MultiMesh_og1vs"]
+transform_format = 1
+use_colors = true
+use_custom_data = true
+instance_count = 100
+mesh = ExtResource("7_muem4")
+
+[sub_resource type="MultiMesh" id="MultiMesh_2wyq8"]
+transform_format = 1
+use_colors = true
+mesh = ExtResource("9_0ld40")
+
+[node name="Main" type="Node3D" unique_id=185706530]
+script = ExtResource("1_ya4ey")
+
+[node name="Camera" type="Camera3D" parent="." unique_id=273723040]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 0.6598912, 0.7513612, 0, -0.7513612, 0.6598912, 1.1, 11.5, 9.5)
+keep_aspect = 0
+fov = 40.0
+
+[node name="Ground" type="MeshInstance3D" parent="." unique_id=1921574600]
+material_override = ExtResource("2_eb6dy")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_jscy8")
+
+[node name="Boss" type="Node3D" parent="." unique_id=683515905]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.7, 0, 0)
+script = ExtResource("3_trceg")
+
+[node name="BossSprite" type="MeshInstance3D" parent="Boss" unique_id=924366513]
+unique_name_in_owner = true
+transform = Transform3D(4.8, 0, 0, 0, 4.8, 0, 0, 0, 4.8, 0, 0, 0)
+material_override = ExtResource("4_a8y0u")
+cast_shadow = 0
+mesh = SubResource("QuadMesh_pm3ni")
+
+[node name="BossShadow" type="MeshInstance3D" parent="Boss" unique_id=1047451329]
+transform = Transform3D(4.8, 0, 0, 0, 1, 0, 0, 0, 4.8, 0, 0, 0)
+material_override = ExtResource("5_jkv2x")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_y6deb")
+
+[node name="WeakPointAnchor" type="Marker3D" parent="Boss" unique_id=593171194]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 2, 0.3)
+
+[node name="Zones" type="Node3D" parent="." unique_id=1339203888]
+unique_name_in_owner = true
+
+[node name="Zone_遠1" parent="Zones" unique_id=344499197 instance=ExtResource("6_jbj1t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 0, -2.7)
+
+[node name="Zone_近1" parent="Zones" unique_id=800675889 instance=ExtResource("6_jbj1t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 0, -2.7)
+zone_index = 1
+
+[node name="Zone_遠2" parent="Zones" unique_id=722659332 instance=ExtResource("6_jbj1t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 0, 0)
+zone_index = 2
+
+[node name="Zone_近2" parent="Zones" unique_id=2063532356 instance=ExtResource("6_jbj1t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 0, 0)
+zone_index = 3
+
+[node name="Zone_遠3" parent="Zones" unique_id=245997838 instance=ExtResource("6_jbj1t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 0, 2.7)
+zone_index = 4
+
+[node name="Zone_近3" parent="Zones" unique_id=2053731601 instance=ExtResource("6_jbj1t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 0, 2.7)
+zone_index = 5
+
+[node name="Army" type="MultiMeshInstance3D" parent="." unique_id=1287533811]
+unique_name_in_owner = true
+cast_shadow = 0
+custom_aabb = AABB(-16.3, -2, -12, 30, 8, 24)
+multimesh = SubResource("MultiMesh_og1vs")
+script = ExtResource("8_dp3eg")
+
+[node name="Bolts" type="MultiMeshInstance3D" parent="." unique_id=1250711034]
+unique_name_in_owner = true
+cast_shadow = 0
+custom_aabb = AABB(-16.3, -2, -12, 30, 8, 24)
+multimesh = SubResource("MultiMesh_2wyq8")
+script = ExtResource("10_gqmmt")
+
+[node name="Hud" parent="." unique_id=1376261133 instance=ExtResource("11_yc10j")]
+unique_name_in_owner = true

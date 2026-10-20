@@ -1,0 +1,440 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/hud.gd" id="1_oo0fn"]
+[ext_resource type="Theme" path="res://ui/theme.tres" id="2_5ysmq"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6fi6k"]
+content_margin_left = 12.0
+content_margin_right = 12.0
+bg_color = Color(0.86, 0.22, 0.2, 1)
+border_color = Color(0, 0, 0, 0)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uo2fv"]
+content_margin_left = 12.0
+content_margin_right = 12.0
+bg_color = Color(0.16, 0.2, 0.36, 0.85)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 52
+corner_radius_top_right = 52
+corner_radius_bottom_right = 52
+corner_radius_bottom_left = 52
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_047uy"]
+content_margin_left = 12.0
+content_margin_right = 12.0
+bg_color = Color(0.16, 0.2, 0.36, 0.85)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 52
+corner_radius_top_right = 52
+corner_radius_bottom_right = 52
+corner_radius_bottom_left = 52
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5pdws"]
+content_margin_left = 12.0
+content_margin_right = 12.0
+bg_color = Color(0.16, 0.2, 0.36, 0.85)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 52
+corner_radius_top_right = 52
+corner_radius_bottom_right = 52
+corner_radius_bottom_left = 52
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hd3ao"]
+content_margin_left = 12.0
+content_margin_right = 12.0
+bg_color = Color(0.16, 0.2, 0.36, 0.85)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 52
+corner_radius_top_right = 52
+corner_radius_bottom_right = 52
+corner_radius_bottom_left = 52
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0i1j5"]
+content_margin_left = 12.0
+content_margin_right = 12.0
+bg_color = Color(0.16, 0.2, 0.36, 0.85)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 52
+corner_radius_top_right = 52
+corner_radius_bottom_right = 52
+corner_radius_bottom_left = 52
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mphia"]
+content_margin_left = 12.0
+content_margin_right = 12.0
+bg_color = Color(0.16, 0.2, 0.36, 0.85)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 52
+corner_radius_top_right = 52
+corner_radius_bottom_right = 52
+corner_radius_bottom_left = 52
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0m4u7"]
+content_margin_left = 12.0
+content_margin_right = 12.0
+bg_color = Color(0.16, 0.2, 0.36, 0.85)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 52
+corner_radius_top_right = 52
+corner_radius_bottom_right = 52
+corner_radius_bottom_left = 52
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_apjy4"]
+content_margin_left = 12.0
+content_margin_right = 12.0
+bg_color = Color(0.16, 0.2, 0.36, 0.85)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 52
+corner_radius_top_right = 52
+corner_radius_bottom_right = 52
+corner_radius_bottom_left = 52
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5n1hp"]
+content_margin_left = 12.0
+content_margin_right = 12.0
+bg_color = Color(1, 0.85, 0.2, 0.85)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 62
+corner_radius_top_right = 62
+corner_radius_bottom_right = 62
+corner_radius_bottom_left = 62
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eld54"]
+content_margin_left = 12.0
+content_margin_right = 12.0
+bg_color = Color(1, 0.85, 0.2, 0.85)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 62
+corner_radius_top_right = 62
+corner_radius_bottom_right = 62
+corner_radius_bottom_left = 62
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3swnk"]
+content_margin_left = 12.0
+content_margin_right = 12.0
+bg_color = Color(1, 0.85, 0.2, 0.85)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 62
+corner_radius_top_right = 62
+corner_radius_bottom_right = 62
+corner_radius_bottom_left = 62
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qkknv"]
+content_margin_left = 12.0
+content_margin_right = 12.0
+bg_color = Color(1, 0.85, 0.2, 0.85)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 62
+corner_radius_top_right = 62
+corner_radius_bottom_right = 62
+corner_radius_bottom_left = 62
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uxdf7"]
+content_margin_left = 12.0
+content_margin_right = 12.0
+bg_color = Color(1, 0.78, 0.2, 1)
+border_color = Color(0, 0, 0, 0)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="Hud" type="CanvasLayer" unique_id=1376261133]
+script = ExtResource("1_oo0fn")
+
+[node name="Root" type="Control" parent="." unique_id=173100065]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = ExtResource("2_5ysmq")
+
+[node name="Top" type="MarginContainer" parent="Root" unique_id=1150537292]
+layout_mode = 0
+anchor_right = 1.0
+mouse_filter = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 36
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 0
+
+[node name="TopBox" type="VBoxContainer" parent="Root/Top" unique_id=468697141]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="TitleRow" type="HBoxContainer" parent="Root/Top/TopBox" unique_id=1955954336]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 16
+
+[node name="BossName" type="Label" parent="Root/Top/TopBox/TitleRow" unique_id=1599186780]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 30
+text = "關卡王・棍棒巨魔"
+
+[node name="PhaseLabel" type="Label" parent="Root/Top/TopBox/TitleRow" unique_id=456229095]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "第一階段"
+
+[node name="TimerLabel" type="Label" parent="Root/Top/TopBox/TitleRow" unique_id=2068753085]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "150"
+
+[node name="BossHp" type="ProgressBar" parent="Root/Top/TopBox" unique_id=1201317840]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_6fi6k")
+value = 100.0
+show_percentage = false
+
+[node name="BossHpLabel" type="Label" parent="Root/Top/TopBox/BossHp" unique_id=1863371744]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_font_sizes/font_size = 24
+text = "100%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DpsLabel" type="Label" parent="Root/Top/TopBox" unique_id=1370791751]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "存活 100／100   總輸出 0／秒"
+horizontal_alignment = 2
+
+[node name="Banner" type="Label" parent="Root" unique_id=13828910]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_top = 0.17
+anchor_right = 1.0
+anchor_bottom = 0.17
+offset_top = -40.0
+offset_bottom = 40.0
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 46
+text = "重砸！ 移開紅區！"
+horizontal_alignment = 1
+
+[node name="ArrowLeft" type="Button" parent="Root" unique_id=1069262438]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 80.0
+offset_top = 600.0
+offset_right = 184.0
+offset_bottom = 704.0
+theme_override_font_sizes/font_size = 44
+theme_override_styles/normal = SubResource("StyleBoxFlat_uo2fv")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_047uy")
+theme_override_styles/hover = SubResource("StyleBoxFlat_5pdws")
+theme_override_styles/focus = SubResource("StyleBoxFlat_hd3ao")
+text = "◀"
+
+[node name="ArrowRight" type="Button" parent="Root" unique_id=1569580212]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 80.0
+offset_top = 600.0
+offset_right = 184.0
+offset_bottom = 704.0
+theme_override_font_sizes/font_size = 44
+theme_override_styles/normal = SubResource("StyleBoxFlat_0i1j5")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_mphia")
+theme_override_styles/hover = SubResource("StyleBoxFlat_0m4u7")
+theme_override_styles/focus = SubResource("StyleBoxFlat_apjy4")
+text = "▶"
+
+[node name="WeakPoint" type="Button" parent="Root" unique_id=1512794155]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 540.0
+offset_top = 520.0
+offset_right = 664.0
+offset_bottom = 644.0
+theme_override_colors/font_color = Color(0.35, 0.12, 0.05, 1)
+theme_override_colors/font_pressed_color = Color(0.35, 0.12, 0.05, 1)
+theme_override_colors/font_hover_color = Color(0.35, 0.12, 0.05, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_5n1hp")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_eld54")
+theme_override_styles/hover = SubResource("StyleBoxFlat_3swnk")
+theme_override_styles/focus = SubResource("StyleBoxFlat_qkknv")
+text = "弱點"
+
+[node name="Bottom" type="MarginContainer" parent="Root" unique_id=664446489]
+layout_mode = 0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 32
+
+[node name="BottomBox" type="VBoxContainer" parent="Root/Bottom" unique_id=2085144248]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="SkipRow" type="HBoxContainer" parent="Root/Bottom/BottomBox" unique_id=1587321352]
+layout_mode = 2
+mouse_filter = 2
+alignment = 2
+
+[node name="SkipMuster" type="Button" parent="Root/Bottom/BottomBox/SkipRow" unique_id=1014697051]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+text = "跳過集結 ▶"
+
+[node name="ZoneLabel" type="Label" parent="Root/Bottom/BottomBox" unique_id=1241449442]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "選區：近2　17 人"
+
+[node name="MoraleRow" type="HBoxContainer" parent="Root/Bottom/BottomBox" unique_id=1205027250]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="MoraleTitle" type="Label" parent="Root/Bottom/BottomBox/MoraleRow" unique_id=2059142227]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "士氣"
+
+[node name="Morale" type="ProgressBar" parent="Root/Bottom/BottomBox/MoraleRow" unique_id=1771417518]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_uxdf7")
+show_percentage = false
+
+[node name="Actions" type="HBoxContainer" parent="Root/Bottom/BottomBox" unique_id=2091615667]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Regroup" type="Button" parent="Root/Bottom/BottomBox/Actions" unique_id=1654068932]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 104)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "全員歸位"
+
+[node name="Volley" type="Button" parent="Root/Bottom/BottomBox/Actions" unique_id=1164465140]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 104)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "大招"
+
+[node name="Result" type="Control" parent="Root" unique_id=1826357625]
+unique_name_in_owner = true
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Dim" type="ColorRect" parent="Root/Result" unique_id=1204856195]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.03, 0.03, 0.08, 0.55)
+
+[node name="Center" type="CenterContainer" parent="Root/Result" unique_id=1370393556]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Panel" type="PanelContainer" parent="Root/Result/Center" unique_id=851727202]
+custom_minimum_size = Vector2(560, 0)
+layout_mode = 2
+
+[node name="PanelBox" type="VBoxContainer" parent="Root/Result/Center/Panel" unique_id=1662093359]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="ResultTitle" type="Label" parent="Root/Result/Center/Panel/PanelBox" unique_id=1285707024]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 52
+text = "推王成功！"
+horizontal_alignment = 1
+
+[node name="ResultDetail" type="Label" parent="Root/Result/Center/Panel/PanelBox" unique_id=1306858898]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "剩 30.0 秒　存活 85 人"
+horizontal_alignment = 1
+
+[node name="Retry" type="Button" parent="Root/Result/Center/Panel/PanelBox" unique_id=414290516]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+text = "再來一場"

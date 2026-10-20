@@ -1,0 +1,30 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/zone_tile.gd" id="1_2inu2"]
+[ext_resource type="Material" path="res://materials/zone_tile.tres" id="2_fi851"]
+[ext_resource type="FontFile" path="res://ui/fonts/NotoSansTC.ttf" id="3_lsf48"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_jbr3m"]
+size = Vector2(2.8, 2.5)
+
+[node name="ZoneTile" type="Node3D" unique_id=344499197]
+script = ExtResource("1_2inu2")
+
+[node name="Tile" type="MeshInstance3D" parent="." unique_id=1868292519]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0)
+material_override = ExtResource("2_fi851")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_jbr3m")
+
+[node name="ZoneLabel" type="Label3D" parent="." unique_id=1538104013]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, -1.2)
+pixel_size = 0.006
+billboard = 1
+no_depth_test = true
+render_priority = 2
+outline_render_priority = 1
+text = "近2  17人"
+font = ExtResource("3_lsf48")
+font_size = 44
