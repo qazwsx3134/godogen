@@ -1,5 +1,6 @@
 extends SceneTree
-## One-time authoring tool: writes the slice's theme, materials, meshes and scenes.
+## One-time authoring tool: writes the slice's theme, materials, meshes and scenes. The squads' flags, telegraph
+## marks and boss part anchors and buttons come after it, from tools/build_squads.gd.
 ##   uv run --with pillow tools/make_placeholder_art.py            (art first)
 ##   godot --headless --path prototypes/hero-horde-idle --editor --quit
 ##   godot --headless --path prototypes/hero-horde-idle --script res://tools/build_scenes.gd
@@ -41,15 +42,13 @@ func _build() -> void:
 	var hero_mesh: ArrayMesh = _actor_mesh(shadow_mat, heroes_mat, "res://meshes/hero_mesh.tres")
 	var bolt_mesh: QuadMesh = _keep(_bolt_mesh(), "res://meshes/bolt_mesh.tres")
 	var ground_mat: StandardMaterial3D = _keep(_ground_material(), "res://materials/ground.tres")
-	var zone_mat: ShaderMaterial = _material("res://materials/zone_tile.tres", "res://shaders/zone_tile.gdshader", {})
 	if _failed:
 		quit(1)
 		return
 
 	_save(_hud(theme), "res://scenes/hud.tscn", [])
-	_save(_zone_tile(zone_mat), "res://scenes/zone_tile.tscn", [])
 	_save(_main(hero_mesh, bolt_mesh, boss_mat, shadow_mat, ground_mat), "res://scenes/main.tscn",
-		["res://scenes/hud.tscn", "res://scenes/zone_tile.tscn"])
+		["res://scenes/hud.tscn"])
 	quit(1 if _failed else 0)
 
 
@@ -93,19 +92,6 @@ func _main(hero_mesh: ArrayMesh, bolt_mesh: Mesh, boss_mat: Material, shadow_mat
 	shadow.material_override = shadow_mat
 	shadow.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	SceneBuilder.add(boss, shadow, "BossShadow")
-	var weak := Marker3D.new()
-	weak.position = Vector3(0.1, 2.0, 0.3)
-	SceneBuilder.add(boss, SceneBuilder.unique(weak), "WeakPointAnchor")
-
-	var zones := Node3D.new()
-	SceneBuilder.add(main, SceneBuilder.unique(zones), "Zones")
-	var defaults := PushSim.new()
-	for z: int in PushSim.ZONES:
-		var tile: Node3D = SceneBuilder.instance("res://scenes/zone_tile.tscn")
-		tile.position = Vector3(defaults.zone_center[z].x, 0.0, defaults.zone_center[z].y)
-		tile.set(&"zone_index", z)
-		SceneBuilder.add(zones, tile, "Zone_" + PushSim.ZONE_NAMES[z])
-
 	var army := MultiMeshInstance3D.new()
 	army.set_script(Army)
 	army.multimesh = _army_preview(hero_mesh)
@@ -128,7 +114,7 @@ func _main(hero_mesh: ArrayMesh, bolt_mesh: Mesh, boss_mat: Material, shadow_mat
 	return main
 
 
-## The opening formation as saved instances, so the editor shows the six zones full of heroes without running.
+## The opening formation as saved instances, so the editor shows the three squads without running.
 func _army_preview(mesh: Mesh) -> MultiMesh:
 	var mm := MultiMesh.new()
 	mm.transform_format = MultiMesh.TRANSFORM_3D
@@ -142,36 +128,8 @@ func _army_preview(mesh: Mesh) -> MultiMesh:
 		var at := Vector3(sim.goal[i].x, 0.0, sim.goal[i].y)
 		mm.set_instance_transform(i, Transform3D(Basis.from_scale(Vector3.ONE * size), at))
 		mm.set_instance_custom_data(i, Sprite3DSheet.instance_custom(sim.cls[i] * 9 + 4, 0.0, 1, 0.0))
-		mm.set_instance_color(i, Sprite3DSheet.instance_color(Army.tint(i), Army.role(sim.rarity[i])))
+		mm.set_instance_color(i, Sprite3DSheet.instance_color(Army.tint(i, sim.cls[i]), Army.role(sim.rarity[i])))
 	return mm
-
-
-## One zone: ground tile (its PlaneMesh size is the zone's rectangle) and a billboard label at the back edge.
-func _zone_tile(zone_mat: Material) -> Node3D:
-	var root := Node3D.new()
-	root.name = "ZoneTile"
-	root.set_script(load("res://scripts/zone_tile.gd"))
-	var tile := MeshInstance3D.new()
-	var plane := PlaneMesh.new()
-	plane.size = PushSim.ZONE_HALF * 2.0
-	tile.mesh = plane
-	tile.position = Vector3(0.0, 0.02, 0.0)
-	tile.material_override = zone_mat
-	tile.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	SceneBuilder.add(root, SceneBuilder.unique(tile), "Tile")
-	var label := Label3D.new()
-	label.text = "近2  17人"
-	label.font = load(FONT)
-	label.font_size = 44
-	label.outline_size = 12
-	label.pixel_size = 0.006
-	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-	label.no_depth_test = true
-	label.render_priority = 2
-	label.outline_render_priority = 1
-	label.position = Vector3(0.0, 0.1, -PushSim.ZONE_HALF.y + 0.05)
-	SceneBuilder.add(root, SceneBuilder.unique(label), "ZoneLabel")
-	return root
 
 
 func _hud(theme: Theme) -> CanvasLayer:
@@ -215,7 +173,7 @@ func _hud(theme: Theme) -> CanvasLayer:
 	dps.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	SceneBuilder.add(top_box, SceneBuilder.unique(dps), "DpsLabel")
 
-	var banner := _label("重砸！ 移開紅區！", 46)
+	var banner := _label("重砸！ 把旗子拖出紅圈！", 46)
 	banner.anchor_left = 0.0
 	banner.anchor_right = 1.0
 	banner.anchor_top = 0.17
@@ -225,27 +183,6 @@ func _hud(theme: Theme) -> CanvasLayer:
 	banner.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	banner.add_theme_constant_override(&"outline_size", 12)
 	SceneBuilder.add(root, SceneBuilder.unique(banner), "Banner")
-
-	for spec: Array in [["ArrowLeft", "◀"], ["ArrowRight", "▶"]]:
-		var arrow := Button.new()
-		arrow.text = spec[1]
-		arrow.size = Vector2(104, 104)
-		arrow.position = Vector2(80, 600)
-		arrow.add_theme_font_size_override(&"font_size", 44)
-		for state: StringName in [&"normal", &"hover", &"pressed", &"focus"]:
-			arrow.add_theme_stylebox_override(state, _box(Color(0.16, 0.2, 0.36, 0.85), 52, Color.WHITE, 5))
-		SceneBuilder.add(root, SceneBuilder.unique(arrow), spec[0])
-
-	var weak := Button.new()
-	weak.text = "弱點"
-	weak.size = Vector2(124, 124)
-	weak.position = Vector2(540, 520)
-	weak.add_theme_font_size_override(&"font_size", 30)
-	for key: StringName in [&"font_color", &"font_hover_color", &"font_pressed_color"]:
-		weak.add_theme_color_override(key, Color(0.35, 0.12, 0.05))
-	for state: StringName in [&"normal", &"hover", &"pressed", &"focus"]:
-		weak.add_theme_stylebox_override(state, _box(Color(1.0, 0.85, 0.2, 0.85), 62, Color.WHITE, 6))
-	SceneBuilder.add(root, SceneBuilder.unique(weak), "WeakPoint")
 
 	var bottom := _margins(Control.PRESET_BOTTOM_WIDE, 24, 0, 24, 32)
 	SceneBuilder.add(root, bottom, "Bottom")
@@ -261,7 +198,7 @@ func _hud(theme: Theme) -> CanvasLayer:
 	skip.text = "跳過集結 ▶"
 	skip.custom_minimum_size = Vector2(0, 72)
 	SceneBuilder.add(skip_row, SceneBuilder.unique(skip), "SkipMuster")
-	SceneBuilder.add(bottom_box, SceneBuilder.unique(_label("選區：近2　17 人", 28)), "ZoneLabel")
+	SceneBuilder.add(bottom_box, SceneBuilder.unique(_label("近戰團　52 人", 28)), "ZoneLabel")
 	var morale_row := HBoxContainer.new()
 	morale_row.add_theme_constant_override(&"separation", 12)
 	SceneBuilder.add(bottom_box, morale_row, "MoraleRow")
@@ -343,13 +280,14 @@ func _ground_material() -> StandardMaterial3D:
 func _bolt_mesh() -> QuadMesh:
 	var m := StandardMaterial3D.new()
 	m.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	m.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
 	m.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
 	m.billboard_keep_scale = true
 	m.vertex_color_use_as_albedo = true
+	m.vertex_color_is_srgb = true
 	m.no_depth_test = false
+	# One metre; bolts.gd scales each square to its texel size.
 	var quad := QuadMesh.new()
-	quad.size = Vector2(0.4, 0.4)
+	quad.size = Vector2(1.0, 1.0)
 	quad.material = m
 	return quad
 

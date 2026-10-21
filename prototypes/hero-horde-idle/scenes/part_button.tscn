@@ -1,0 +1,93 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/part_button.gd" id="1_ar6fw"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l6gxx"]
+content_margin_left = 12.0
+content_margin_right = 12.0
+bg_color = Color(0.16, 0.2, 0.36, 0.85)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 52
+corner_radius_top_right = 52
+corner_radius_bottom_right = 52
+corner_radius_bottom_left = 52
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lbg37"]
+content_margin_left = 12.0
+content_margin_right = 12.0
+bg_color = Color(0.16, 0.2, 0.36, 0.85)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 52
+corner_radius_top_right = 52
+corner_radius_bottom_right = 52
+corner_radius_bottom_left = 52
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ijkg2"]
+content_margin_left = 12.0
+content_margin_right = 12.0
+bg_color = Color(0.16, 0.2, 0.36, 0.85)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 52
+corner_radius_top_right = 52
+corner_radius_bottom_right = 52
+corner_radius_bottom_left = 52
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qgk3g"]
+content_margin_left = 12.0
+content_margin_right = 12.0
+bg_color = Color(0.16, 0.2, 0.36, 0.85)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 52
+corner_radius_top_right = 52
+corner_radius_bottom_right = 52
+corner_radius_bottom_left = 52
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uy1nj"]
+bg_color = Color(0.08, 0.08, 0.12, 0.85)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_323lg"]
+bg_color = Color(1, 0.55, 0.3, 1)
+
+[node name="PartButton" type="Button" unique_id=506249017]
+custom_minimum_size = Vector2(108, 56)
+offset_right = 108.0
+offset_bottom = 56.0
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_l6gxx")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_lbg37")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ijkg2")
+theme_override_styles/focus = SubResource("StyleBoxFlat_qgk3g")
+text = "角"
+script = ExtResource("1_ar6fw")
+
+[node name="Bar" type="ProgressBar" parent="." unique_id=1870110565]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = -12.0
+offset_right = -10.0
+offset_bottom = -6.0
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_uy1nj")
+theme_override_styles/fill = SubResource("StyleBoxFlat_323lg")
+value = 70.0
+show_percentage = false

@@ -1,0 +1,18 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://materials/ground_mark.tres" id="1_d38l6"]
+[ext_resource type="Script" path="res://scripts/tele_marker.gd" id="2_d87hr"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_opx0t"]
+size = Vector2(1, 1)
+
+[node name="TeleMarker" type="MeshInstance3D" unique_id=548237412]
+transform = Transform3D(4, 0, 0, 0, 1, 0, 0, 0, 4, 0, 0.03, 0)
+material_override = ExtResource("1_d38l6")
+cast_shadow = 0
+instance_shader_parameters/color = Color(1, 0.18, 0.12, 1)
+instance_shader_parameters/fill = 0.5
+instance_shader_parameters/inner_alpha = 0.15
+instance_shader_parameters/texels = Vector2(80, 80)
+mesh = SubResource("PlaneMesh_opx0t")
+script = ExtResource("2_d87hr")
