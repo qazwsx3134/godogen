@@ -1,0 +1,109 @@
+{
+  "_note": "Picked art, packed by tools/pack_stage_art.py. Swap a path to change a pick. Heights in metres.",
+  "boss": {
+    "idle": "art_src/hd1/boss/candidate-01.png",
+    "windup": "art_src/hd1b/windup/candidate-01.png",
+    "stunned": "art_src/hd1b/stunned/candidate-01.png",
+    "slam": "art_src/hd1b/slam/candidate-01.png"
+  },
+  "props": {
+    "pine": {
+      "src": "art_src/hd1/props/pine/candidate-01.png",
+      "height_m": 4.6
+    },
+    "oak": {
+      "src": "art_src/hd1/props/oak/candidate-01.png",
+      "height_m": 4.2
+    },
+    "boulder": {
+      "src": "art_src/hd1/props/boulder/candidate-01.png",
+      "height_m": 1.3
+    },
+    "pillar": {
+      "src": "art_src/hd1/props/pillar/candidate-01.png",
+      "height_m": 2.8
+    },
+    "gate": {
+      "src": "art_src/hd1/props/gate/candidate-01.png",
+      "height_m": 6.2
+    },
+    "brazier": {
+      "src": "art_src/hd1/props/brazier/candidate-01.png",
+      "height_m": 1.5
+    },
+    "banner": {
+      "src": "art_src/hd1/props/banner/candidate-01.png",
+      "height_m": 3.2
+    },
+    "fern": {
+      "src": "art_src/hd1/props/fern/candidate-01.png",
+      "height_m": 0.7
+    }
+  },
+  "tiles": {
+    "grass": {
+      "src": "art_src/hd1/tiles/grass.png",
+      "tile_m": 2.4
+    },
+    "arena": {
+      "src": "art_src/hd1/tiles/arena.png",
+      "tile_m": 2.4,
+      "saturation": 0.5,
+      "cool": 0.06
+    },
+    "cliff": {
+      "src": "art_src/hd1/tiles/cliff.png",
+      "tile_m": 2.4
+    }
+  },
+  "heroes": {
+    "shield": {
+      "ready": "art_src/hd2/shield/candidate-01.png",
+      "run_a": "art_src/hd2b/shield/run_a/candidate-01.png",
+      "run_b": "art_src/hd2b/shield/run_b/candidate-01.png",
+      "strike": "art_src/hd2b/shield/strike/candidate-01.png",
+      "down": "art_src/hd2b/shield/down/candidate-01.png",
+      "volley": "art_src/hd2b/shield/volley/candidate-01.png"
+    },
+    "sword": {
+      "ready": "art_src/hd2/sword/candidate-01.png",
+      "run_a": "art_src/hd2b/sword/run_a/candidate-01.png",
+      "run_b": "art_src/hd2b/sword/run_b/candidate-01.png",
+      "strike": "art_src/hd2b/sword/strike/candidate-01.png",
+      "down": "art_src/hd2b/sword/down/candidate-01.png",
+      "volley": "art_src/hd2b/sword/volley/candidate-01.png"
+    },
+    "spear": {
+      "ready": "art_src/hd2/spear/candidate-01.png",
+      "run_a": "art_src/hd2b/spear/run_a/candidate-01.png",
+      "run_b": "art_src/hd2b/spear/run_b/candidate-01.png",
+      "strike": "art_src/hd2b/spear/strike/candidate-01.png",
+      "down": "art_src/hd2b/spear/down/candidate-01.png",
+      "volley": "art_src/hd2b/spear/volley/candidate-01.png"
+    },
+    "bow": {
+      "ready": "art_src/hd2/bow/candidate-01.png",
+      "run_a": "art_src/hd2b/bow/run_a/candidate-01.png",
+      "run_b": "art_src/hd2b/bow/run_b/candidate-01.png",
+      "strike": "art_src/hd2b/bow/strike/candidate-01.png",
+      "down": "art_src/hd2b/bow/down/candidate-01.png",
+      "volley": "art_src/hd2b/bow/volley/candidate-01.png"
+    },
+    "mage": {
+      "ready": "art_src/hd2/mage/candidate-01.png",
+      "run_a": "art_src/hd2b/mage/run_a/candidate-01.png",
+      "run_b": "art_src/hd2b/mage/run_b/candidate-01.png",
+      "strike": "art_src/hd2b/mage/strike/candidate-01.png",
+      "down": "art_src/hd2b/mage/down/candidate-01.png",
+      "volley": "art_src/hd2b/mage/volley/candidate-01.png"
+    },
+    "healer": {
+      "ready": "art_src/hd2/healer/candidate-01.png",
+      "run_a": "art_src/hd2b/healer/run_a/candidate-01.png",
+      "run_b": "art_src/hd2b/healer/run_b/candidate-01.png",
+      "strike": "art_src/hd2b/healer/strike/candidate-01.png",
+      "down": "art_src/hd2b/healer/down/candidate-01.png",
+      "volley": "art_src/hd2b/healer/volley/candidate-01.png"
+    }
+  }
+}

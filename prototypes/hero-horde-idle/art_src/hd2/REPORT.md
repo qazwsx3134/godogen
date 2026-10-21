@@ -1,0 +1,12 @@
+# hd2 回報（路徑相對本資料夾）
+- route：master_still.py generate --route codex-cli --finish pixel --class hero --facing right --takes 2 --timeout 360；實際 local:codex-cli。
+- shield/：candidate-01.png、candidate-02.png、candidates-contact.png；magenta key。
+- sword/：candidate-01.png、candidate-02.png、candidates-contact.png；green key。
+- spear/：candidate-01.png、candidate-02.png、candidates-contact.png；magenta key。
+- bow/：candidate-01.png、candidate-02.png、candidates-contact.png；magenta key。
+- mage/：candidate-01.png、candidate-02.png、candidates-contact.png；green key。
+- healer/：candidate-01.png、candidate-02.png、candidates-contact.png；magenta key。
+- lineup.png：六職業各取 candidate-01，盾／劍／槍／弓／法／補單列並排，1920×340，腳底對齊。
+- 驗證／後製：12 張均 1024×1024 RGBA、朝右、全身武器留邊；淺色低彩布料，金屬皮革自然上色；forge 去背 opaque_key_px 均 0；按人物頭頂（排除武器）至腳底約 720 px 統一等比縮放，腳底 y=926；原圖、prompt、命令及 QC 見 inputs/。
+- 偏差：盾騎士兩張皆未畫開面頭盔；整批頭身比指定 3.5 頭身偏修長；弓手 02 兜帽落後於頭部。已按規則保留原批，不追加生圖。巨魔 --identity-ref 僅借畫風與光向，未借外型。
+- 額度／時限：6 職業各 2 張，共 12 次生圖成功；無超時、無重試、無額外多骰，最慢 232.749 秒；未回報額度不足，剩餘額度未知。run_generation.py、prepare_delivery.py 為本批製作工具。

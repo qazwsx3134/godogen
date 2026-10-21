@@ -1,0 +1,128 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/push_report_view.gd" id="1_gnrav"]
+[ext_resource type="Texture2D" path="res://assets/heroes/heroes.png" id="2_10pey"]
+[ext_resource type="PackedScene" path="res://scenes/report_row.tscn" id="3_lhfc4"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vok2t"]
+atlas = ExtResource("2_10pey")
+region = Rect2(192, 240, 48, 48)
+
+[node name="PushReport" type="VBoxContainer" unique_id=2093143686]
+theme_override_constants/separation = 14
+script = ExtResource("1_gnrav")
+
+[node name="Mvp" type="HBoxContainer" parent="." unique_id=124126965]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Portrait" type="TextureRect" parent="Mvp" unique_id=110747844]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(96, 96)
+layout_mode = 2
+texture = SubResource("AtlasTexture_vok2t")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="MvpText" type="VBoxContainer" parent="Mvp" unique_id=1679318257]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="MvpName" type="Label" parent="Mvp/MvpText" unique_id=941159809]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.35, 1)
+theme_override_font_sizes/font_size = 32
+text = "MVP　嘉特"
+
+[node name="MvpLine" type="Label" parent="Mvp/MvpText" unique_id=1182768165]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.78, 0.8, 0.9, 1)
+theme_override_font_sizes/font_size = 22
+text = "SSR 補　承傷 873　治療 7036　救援 5 次"
+autowrap_mode = 3
+
+[node name="Boards" type="HBoxContainer" parent="." unique_id=1247301908]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Board_輸出" type="VBoxContainer" parent="Boards" unique_id=880418276]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Title" type="Label" parent="Boards/Board_輸出" unique_id=632430841]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.35, 1)
+theme_override_font_sizes/font_size = 24
+text = "輸出"
+
+[node name="Rows" type="VBoxContainer" parent="Boards/Board_輸出" unique_id=330904917]
+layout_mode = 2
+
+[node name="Row_1" parent="Boards/Board_輸出/Rows" unique_id=1415309580 instance=ExtResource("3_lhfc4")]
+layout_mode = 2
+
+[node name="Row_2" parent="Boards/Board_輸出/Rows" unique_id=822026358 instance=ExtResource("3_lhfc4")]
+layout_mode = 2
+
+[node name="Row_3" parent="Boards/Board_輸出/Rows" unique_id=1135192670 instance=ExtResource("3_lhfc4")]
+layout_mode = 2
+
+[node name="Board_承傷" type="VBoxContainer" parent="Boards" unique_id=652615505]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Title" type="Label" parent="Boards/Board_承傷" unique_id=660224005]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.35, 1)
+theme_override_font_sizes/font_size = 24
+text = "承傷"
+
+[node name="Rows" type="VBoxContainer" parent="Boards/Board_承傷" unique_id=1588929100]
+layout_mode = 2
+
+[node name="Row_1" parent="Boards/Board_承傷/Rows" unique_id=1842541615 instance=ExtResource("3_lhfc4")]
+layout_mode = 2
+
+[node name="Row_2" parent="Boards/Board_承傷/Rows" unique_id=813799004 instance=ExtResource("3_lhfc4")]
+layout_mode = 2
+
+[node name="Row_3" parent="Boards/Board_承傷/Rows" unique_id=1765501050 instance=ExtResource("3_lhfc4")]
+layout_mode = 2
+
+[node name="Board_治療" type="VBoxContainer" parent="Boards" unique_id=1792533787]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Title" type="Label" parent="Boards/Board_治療" unique_id=1208828281]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.35, 1)
+theme_override_font_sizes/font_size = 24
+text = "治療"
+
+[node name="Rows" type="VBoxContainer" parent="Boards/Board_治療" unique_id=1602671234]
+layout_mode = 2
+
+[node name="Row_1" parent="Boards/Board_治療/Rows" unique_id=1914537180 instance=ExtResource("3_lhfc4")]
+layout_mode = 2
+
+[node name="Row_2" parent="Boards/Board_治療/Rows" unique_id=649969363 instance=ExtResource("3_lhfc4")]
+layout_mode = 2
+
+[node name="Row_3" parent="Boards/Board_治療/Rows" unique_id=400595898 instance=ExtResource("3_lhfc4")]
+layout_mode = 2
+
+[node name="Diagnosis" type="Label" parent="." unique_id=642509568]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.62, 0.55, 1)
+theme_override_font_sizes/font_size = 22
+text = "被「落石」打倒 30 人
+近2 最慘：倒下 18 人
+建議：紅區一出現就移區，落下後再全員歸位
+建議養成：補（撐住王的攻擊）"
+autowrap_mode = 3

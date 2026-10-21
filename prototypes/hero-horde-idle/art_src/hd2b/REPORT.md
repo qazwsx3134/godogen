@@ -1,0 +1,12 @@
+# hd2b 回報（路徑相對本資料夾）
+- route：30 張皆 master_still.py edit --route codex-cli --finish pixel --class hero --facing right，實際 local:codex-cli；FIRST／--still 均為 hd2 對應職業的 candidate-01.png，雜湊已核對。
+- shield/：run_a、run_b、strike、down、volley 各有 candidate-01.png；poses-contact.png 為站姿＋五格單列並排；magenta key。
+- sword/：run_a、run_b、strike、down、volley 各有 candidate-01.png；poses-contact.png 為站姿＋五格單列並排；green key。
+- spear/：run_a、run_b、strike、down、volley 各有 candidate-01.png；poses-contact.png 為站姿＋五格單列並排；magenta key。
+- bow/：run_a、run_b、strike、down、volley 各有 candidate-01.png；poses-contact.png 為站姿＋五格單列並排；magenta key。
+- mage/：run_a、run_b、strike、down、volley 各有 candidate-01.png；poses-contact.png 為站姿＋五格單列並排；green key。
+- healer/：run_a、run_b、strike、down、volley 各有 candidate-01.png；poses-contact.png 為站姿＋五格單列並排；magenta key。
+- 對齊／尺寸：均 1024×1024 RGBA，腳底／倒地身體最低點對齊 y=926；槍兵與治療師倒地使用人工基準排除相接武器。六張較貼邊的動作另等比縮至 95.81%～98.72% 以保全武器與留邊，無拉伸；比例調整詳見 inputs/validation.json。
+- 動作偏差：部分跑步 A／B 以跨步與抬膝幅度區分，左右腿交換不完全明確；弓手 run_b 邊跑邊拉弓，volley 為單手舉弓、另一手握拳。保留原批，不追加重骰。
+- 額度／時限／跳過：30 次 edit 各一張成功，無重試、無 generate 備援、無跳過、未回報額度不足，剩餘額度未知；每筆 --timeout 360，最慢 121.628 秒。
+- 驗證／追溯：逐職業目視與約 40 px 縮圖檢查；30 張透明、全身武器留邊，去背 opaque_key_px 均 0，6 張比較圖均 1920×340；原圖、prompt、命令、逐格 QC、40px-contact.png、validation.json 保留於 inputs/，製作腳本位於本資料夾。

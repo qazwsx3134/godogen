@@ -1,0 +1,268 @@
+{
+ "atlas": "heroes.png",
+ "cell_px": 48,
+ "columns": 9,
+ "rows": 6,
+ "foot_px": 2,
+ "meters_per_px": 0.025,
+ "characters": {
+  "shield": {
+   "directions": 1,
+   "mirror": false,
+   "anims": {
+    "run": {
+     "cell": 0,
+     "n": 4,
+     "d": [
+      6,
+      6,
+      6,
+      6
+     ],
+     "loop": true
+    },
+    "attack": {
+     "cell": 4,
+     "n": 3,
+     "d": [
+      10,
+      6,
+      14
+     ],
+     "loop": true
+    },
+    "down": {
+     "cell": 7,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    },
+    "volley": {
+     "cell": 8,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    }
+   }
+  },
+  "sword": {
+   "directions": 1,
+   "mirror": false,
+   "anims": {
+    "run": {
+     "cell": 9,
+     "n": 4,
+     "d": [
+      6,
+      6,
+      6,
+      6
+     ],
+     "loop": true
+    },
+    "attack": {
+     "cell": 13,
+     "n": 3,
+     "d": [
+      10,
+      6,
+      14
+     ],
+     "loop": true
+    },
+    "down": {
+     "cell": 16,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    },
+    "volley": {
+     "cell": 17,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    }
+   }
+  },
+  "spear": {
+   "directions": 1,
+   "mirror": false,
+   "anims": {
+    "run": {
+     "cell": 18,
+     "n": 4,
+     "d": [
+      6,
+      6,
+      6,
+      6
+     ],
+     "loop": true
+    },
+    "attack": {
+     "cell": 22,
+     "n": 3,
+     "d": [
+      10,
+      6,
+      14
+     ],
+     "loop": true
+    },
+    "down": {
+     "cell": 25,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    },
+    "volley": {
+     "cell": 26,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    }
+   }
+  },
+  "bow": {
+   "directions": 1,
+   "mirror": false,
+   "anims": {
+    "run": {
+     "cell": 27,
+     "n": 4,
+     "d": [
+      6,
+      6,
+      6,
+      6
+     ],
+     "loop": true
+    },
+    "attack": {
+     "cell": 31,
+     "n": 3,
+     "d": [
+      10,
+      6,
+      14
+     ],
+     "loop": true
+    },
+    "down": {
+     "cell": 34,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    },
+    "volley": {
+     "cell": 35,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    }
+   }
+  },
+  "mage": {
+   "directions": 1,
+   "mirror": false,
+   "anims": {
+    "run": {
+     "cell": 36,
+     "n": 4,
+     "d": [
+      6,
+      6,
+      6,
+      6
+     ],
+     "loop": true
+    },
+    "attack": {
+     "cell": 40,
+     "n": 3,
+     "d": [
+      10,
+      6,
+      14
+     ],
+     "loop": true
+    },
+    "down": {
+     "cell": 43,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    },
+    "volley": {
+     "cell": 44,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    }
+   }
+  },
+  "healer": {
+   "directions": 1,
+   "mirror": false,
+   "anims": {
+    "run": {
+     "cell": 45,
+     "n": 4,
+     "d": [
+      6,
+      6,
+      6,
+      6
+     ],
+     "loop": true
+    },
+    "attack": {
+     "cell": 49,
+     "n": 3,
+     "d": [
+      10,
+      6,
+      14
+     ],
+     "loop": true
+    },
+    "down": {
+     "cell": 52,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    },
+    "volley": {
+     "cell": 53,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    }
+   }
+  }
+ }
+}
