@@ -1,16 +1,24 @@
 extends RefCounted
-## The palette and Control styling of the game's UI look, 銀魂和紙 (washi with navy-and-silver frames).
+## Control styling for the skin in play (skin.gd registers each skin's look under its id). The base
+## look is 銀魂和紙: washi panels (`panel_paper`), navy-and-silver framed buttons, and the in-play
+## pieces (round HUD, clue tag, folded search bar, toast, QTE prompt) on the skin's `hud` resources.
+## A skin with `"look": "flat"` gets plain StyleBoxes from its palette instead.
 
 const DEFAULT_ID: String = "gintama"
-const LABELS: Dictionary = {"gintama": "銀魂和紙"}
 
-## Full panels (log, save slots, chapters, case file, confirmations) on washi in the gintama edition.
-const GINTAMA_PAPER_ROLES: Array[String] = ["menu", "log", "slots", "confirmation"]
-const GINTAMA_PAPER: String = "res://assets/ui/gintama_panel_paper.png"
-## The in-play pieces of the gintama edition (round HUD, clue chips, folded search bar, toast, QTE
-## prompt): washi with a navy rule, the navy-and-silver plaque and the serif, as resources in this
-## folder so they can be tuned in the Inspector.
-const GINTAMA_HUD_DIR: String = "res://assets/ui/gintama_hud/"
+## Full panels (log, save slots, chapters, case file, confirmations) on the skin's panel paper.
+const PAPER_ROLES: Array[String] = ["menu", "log", "slots", "confirmation"]
+## The base skin's look, used until skin.gd registers it (scenes opened in the editor, tools).
+const BASE_LOOK: Dictionary = {
+	"look": "washi",
+	"panel_paper": "res://assets/ui/gintama_panel_paper.png",
+	"plaque": "res://assets/ui/gintama_heading_plaque.png",
+	"hud": {"panel": "res://assets/ui/gintama_hud/hud_panel.tres", "clue_chip": "res://assets/ui/gintama_hud/clue_chip.tres",
+		"toast": "res://assets/ui/gintama_hud/toast.tres", "font": "res://assets/ui/gintama_hud/serif.tres"},
+}
+
+## Registered looks by skin id: {look, palette (merged over the base), panel_paper, plaque, hud}.
+static var _looks: Dictionary = {}
 
 const PALETTES: Dictionary = {
 	"gintama": {
@@ -48,20 +56,51 @@ const PALETTES: Dictionary = {
 }
 
 
+## Takes a skin's look (from skin.gd): its palette keys (CSS hex) over the base palette.
+static func register_look(id: String, skin: Dictionary) -> void:
+	var colors: Dictionary = (PALETTES[DEFAULT_ID] as Dictionary).duplicate()
+	var own: Dictionary = skin.get("palette", {}) as Dictionary
+	for key: String in own.keys():
+		colors[key] = Color(str(own[key])) if own[key] is String else own[key]
+	_looks[id] = {"look": str(skin.get("look", "washi")), "palette": colors,
+		"panel_paper": str(skin.get("panel_paper", "")), "plaque": str(skin.get("plaque", "")),
+		"hud": (skin.get("hud", {}) as Dictionary).duplicate()}
+
+
 static func style_ids() -> Array[String]:
-	return ["gintama"]
+	var ids: Array[String] = [DEFAULT_ID]
+	for id: String in _looks.keys():
+		if not ids.has(id):
+			ids.append(id)
+	return ids
 
 
 static func normalize_id(style_id: String) -> String:
-	return style_id if PALETTES.has(style_id) else DEFAULT_ID
-
-
-static func style_label(style_id: String) -> String:
-	return str(LABELS.get(normalize_id(style_id), LABELS[DEFAULT_ID]))
+	return style_id if _looks.has(style_id) else DEFAULT_ID
 
 
 static func palette(style_id: String) -> Dictionary:
-	return PALETTES[normalize_id(style_id)] as Dictionary
+	return _look(style_id)["palette"] as Dictionary
+
+
+## True for the washi family of looks (paper panels, framed buttons); false for "flat".
+static func washi(style_id: String) -> bool:
+	return str(_look(style_id)["look"]) == "washi"
+
+
+## A HUD resource of the skin (panel, clue_chip, toast: StyleBox; font: Font), null when it has none.
+static func hud_resource(style_id: String, key: String) -> Resource:
+	var path: String = str((_look(style_id)["hud"] as Dictionary).get(key, ""))
+	return load(path) if not path.is_empty() and ResourceLoader.exists(path) else null
+
+
+static func _look(style_id: String) -> Dictionary:
+	if _looks.has(style_id):
+		return _looks[style_id]
+	if not _looks.has(DEFAULT_ID):
+		_looks[DEFAULT_ID] = {"look": "washi", "palette": PALETTES[DEFAULT_ID], "panel_paper": BASE_LOOK["panel_paper"],
+			"plaque": BASE_LOOK["plaque"], "hud": BASE_LOOK["hud"]}
+	return _looks[DEFAULT_ID]
 
 
 static func apply_button(button: Button, style_id: String, role: String = "standard", active: bool = false, scale_factor: float = 1.0) -> void:
@@ -77,21 +116,21 @@ static func apply_button(button: Button, style_id: String, role: String = "stand
 	button.add_theme_stylebox_override("focus", button_style(normalized, role, "focus", active, density))
 	button.add_theme_stylebox_override("disabled", button_style(normalized, role, "disabled", active, density))
 	var p: Dictionary = palette(normalized)
-	if normalized == "gintama" and role in ["reading_action", "primary", "selector", "danger_action"]:
+	if washi(normalized) and role in ["reading_action", "primary", "selector", "danger_action"]:
 		var font: FontVariation = FontVariation.new()
 		font.base_font = load("res://assets/fonts/NotoSerifTC.ttf")
 		font.variation_opentype = {TextServerManager.get_primary_interface().name_to_tag("wght"): 500.0}
 		button.add_theme_font_override("font", font)
-	var regular_ink: Color = _button_ink(p, role, active, "normal")
+	var regular_ink: Color = _button_ink(p, role, active, "normal", washi(normalized))
 	button.add_theme_color_override("font_color", regular_ink)
-	button.add_theme_color_override("font_hover_color", _button_ink(p, role, active, "hover"))
-	button.add_theme_color_override("font_pressed_color", _button_ink(p, role, active, "pressed"))
+	button.add_theme_color_override("font_hover_color", _button_ink(p, role, active, "hover", washi(normalized)))
+	button.add_theme_color_override("font_pressed_color", _button_ink(p, role, active, "pressed", washi(normalized)))
 	button.add_theme_color_override("font_focus_color", regular_ink)
-	button.add_theme_color_override("font_disabled_color", _button_ink(p, role, active, "disabled"))
+	button.add_theme_color_override("font_disabled_color", _button_ink(p, role, active, "disabled", washi(normalized)))
 
 
 static func button_style(style_id: String, role: String, state: String, active: bool = false, scale_factor: float = 1.0) -> StyleBoxFlat:
-	if style_id == "gintama" and role in ["reading_action", "primary", "selector", "danger_action"]:
+	if washi(style_id) and role in ["reading_action", "primary", "selector", "danger_action"]:
 		var frame: StyleBoxFlat = StyleBoxFlat.new()
 		frame.bg_color = Color("#08283d") if not active else Color("#275978")
 		frame.border_color = Color("#bfc7ce")
@@ -151,7 +190,7 @@ static func button_style(style_id: String, role: String, state: String, active: 
 			pressed_bg = (p["accent"] as Color).darkened(0.12)
 			border_width = maxi(1, roundi(2.0 * density))
 			radius = roundi(99.0 * density)
-		elif style_id == "gintama":
+		elif washi(style_id):
 			normal_bg = p["panel"] as Color
 			normal_border = p["accent"] as Color
 			hover_bg = p["surface_hover"] as Color
@@ -195,7 +234,7 @@ static func button_style(style_id: String, role: String, state: String, active: 
 			normal_border = Color(0.85, 0.89, 0.86, 0.28)
 			hover_bg = Color(0.76, 0.87, 0.85, 0.17)
 			hover_border = p["accent"] as Color
-		elif style_id == "gintama":
+		elif washi(style_id):
 			normal_bg = p["surface"] as Color
 			normal_border = p["rule"] as Color
 			hover_bg = p["surface_hover"] as Color
@@ -223,7 +262,7 @@ static func button_style(style_id: String, role: String, state: String, active: 
 			normal_bg = p["surface"] as Color
 			normal_border = p["text"] as Color
 			border_width = maxi(2, roundi(2.0 * density))
-		elif style_id == "gintama":
+		elif washi(style_id):
 			normal_bg = p["panel"] as Color
 			normal_border = p["rule"] as Color
 			hover_bg = p["surface_hover"] as Color
@@ -310,7 +349,7 @@ static func button_style(style_id: String, role: String, state: String, active: 
 	result.content_margin_top = margins.y
 	result.content_margin_right = margins.z
 	result.content_margin_bottom = margins.w
-	if style_id == "gintama" and role in ["standard", "slot_card", "slot_card_empty", "slot_card_invalid"]:
+	if washi(style_id) and role in ["standard", "slot_card", "slot_card_empty", "slot_card_invalid"]:
 		# Paper chips with a navy rule, as in settings_panel_gintama.tscn.
 		result.set_border_width_all(roundi(float(3 if state in ["hover", "focus"] else 2) * density))
 		result.set_corner_radius_all(roundi(17.0 * density))
@@ -416,8 +455,9 @@ static func apply_label(label: Label, style_id: String, role: String = "body", s
 		label.add_theme_color_override("font_outline_color", p["text_outline"] as Color)
 		label.add_theme_constant_override("outline_size", roundi(1.0 * density))
 	if role == "toast":
-		if normalize_id(style_id) == "gintama":
-			label.add_theme_stylebox_override("normal", gintama_hud("toast") as StyleBox)
+		var toast: StyleBox = hud_resource(style_id, "toast") as StyleBox
+		if toast != null:
+			label.add_theme_stylebox_override("normal", toast)
 			label.add_theme_color_override("font_color", p["name_ink"] as Color)
 			label.add_theme_constant_override("outline_size", 0)
 		else:
@@ -428,17 +468,17 @@ static func apply_label(label: Label, style_id: String, role: String = "body", s
 
 static func apply_panel(panel: Control, style_id: String, role: String = "menu", scale_factor: float = 1.0) -> void:
 	panel.set_meta("ui_style_role", role)
-	if normalize_id(style_id) == "gintama" and role in GINTAMA_PAPER_ROLES:
-		panel.add_theme_stylebox_override("panel", gintama_paper(panel_style(style_id, role, scale_factor)))
+	if role in PAPER_ROLES and not str(_look(style_id)["panel_paper"]).is_empty():
+		panel.add_theme_stylebox_override("panel", paper(style_id, panel_style(style_id, role, scale_factor)))
 		return
 	panel.add_theme_stylebox_override("panel", panel_style(style_id, role, scale_factor))
 
 
-## The washi paper of settings_panel_gintama.tscn (gintama_panel_paper.png: frame, waves and
-## blossoms kept whole in the corners), with the content margins of `flat`.
-static func gintama_paper(flat: StyleBox) -> StyleBoxTexture:
+## The skin's panel paper (gintama_panel_paper.png: frame, waves and blossoms kept whole in the
+## corners), with the content margins of `flat`.
+static func paper(style_id: String, flat: StyleBox) -> StyleBoxTexture:
 	var paper: StyleBoxTexture = StyleBoxTexture.new()
-	paper.texture = load(GINTAMA_PAPER) as Texture2D
+	paper.texture = load(str(_look(style_id)["panel_paper"])) as Texture2D
 	paper.texture_margin_left = 280.0
 	paper.texture_margin_top = 140.0
 	paper.texture_margin_right = 245.0
@@ -448,13 +488,14 @@ static func gintama_paper(flat: StyleBox) -> StyleBoxTexture:
 	return paper
 
 
-## A title plaque (第 N 章 on a chapter card, a name on the case file): the navy plaque with the
-## cloud in the gintama edition, the edition's name tag elsewhere. Its label takes `name_ink`.
+## A title plaque (第 N 章 on a chapter card, a name on the case file): the skin's `plaque` picture
+## (the navy plaque with the cloud), or its name tag when it has none. Its label takes `name_ink`.
 static func name_plaque(style_id: String) -> StyleBox:
-	if normalize_id(style_id) != "gintama":
+	var plaque: String = str(_look(style_id)["plaque"])
+	if plaque.is_empty():
 		return panel_style(style_id, "name")
 	var box: StyleBoxTexture = StyleBoxTexture.new()
-	box.texture = load("res://assets/ui/gintama_heading_plaque.png") as Texture2D
+	box.texture = load(plaque) as Texture2D
 	box.texture_margin_left = 60.0
 	box.texture_margin_right = 30.0
 	box.texture_margin_top = 20.0
@@ -466,15 +507,11 @@ static func name_plaque(style_id: String) -> StyleBox:
 	return box
 
 
-## hud_panel, clue_chip, toast (StyleBoxFlat) or serif (FontVariation) from GINTAMA_HUD_DIR.
-static func gintama_hud(resource_name: String) -> Resource:
-	return load(GINTAMA_HUD_DIR + resource_name + ".tres")
-
-
-## The gintama serif on an in-play label or button; other editions keep the game font.
+## The skin's HUD font on an in-play label or button; the game font when it has none.
 static func set_hud_font(control: Control, style_id: String) -> void:
-	if normalize_id(style_id) == "gintama":
-		control.add_theme_font_override("font", gintama_hud("serif") as Font)
+	var font: Font = hud_resource(style_id, "font") as Font
+	if font != null:
+		control.add_theme_font_override("font", font)
 	else:
 		control.remove_theme_font_override("font")
 
@@ -487,12 +524,12 @@ static func contrast_ratio(foreground: Color, background: Color) -> float:
 	return (brighter + 0.05) / (darker + 0.05)
 
 
-static func _button_ink(p: Dictionary, role: String, active: bool, state: String) -> Color:
-	if p == PALETTES["gintama"] and role in ["reading_action", "primary", "selector", "danger_action"]:
+static func _button_ink(p: Dictionary, role: String, active: bool, state: String, framed: bool = false) -> Color:
+	if framed and role in ["reading_action", "primary", "selector", "danger_action"]:
 		return Color("#99a8b3") if state == "disabled" else Color("#f8f3e9")
 	if state == "disabled":
 		return p["disabled"] as Color
-	if p == PALETTES["gintama"] and state == "pressed":
+	if framed and state == "pressed":
 		return p["accent_ink"] as Color
 	if role == "quickbar":
 		return p["quick_active_ink"] as Color if active else p["quick_text"] as Color

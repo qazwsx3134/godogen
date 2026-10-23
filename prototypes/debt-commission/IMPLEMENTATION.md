@@ -206,3 +206,54 @@ Web 網址帶 `?qa=1` 時，`window.__debtQA` 為唯讀快照：`screen`（title
 - **流程小節點**：步驟依序排成小節點；連續同類（例如一串 `say`）可以收合成一組「對話 ×N」，展開後逐句顯示。收合狀態只存在 layout sidecar（`<id>.layout.json`），不進劇本 JSON。多節點組成一個大場景的分組（A08）也放 sidecar，runner 不讀。
 - 終止步驟的規則不變（`end`／`choice`／`goto`… 在最後）。
 - `data/stories.json` 每筆可加 `authoring`：`"dialogue"`（`story_src` 建置，編輯器唯讀）或 `"graph"`（編輯器 JSON 是唯一來源）。`main.gd` 只讀 `id`／`kind`／`path`／`save`，多的欄位不影響遊戲。「轉成圖編輯來源」複製成新的故事 id、拿掉 `generated_from`，不覆蓋原本的建置產物。
+
+## 外觀包（2026-10-23，換作品只換素材）
+
+目標：換掉一組外觀、一張用語表與故事資料，就能把這套系統做成別部作品的視覺小說；銀魂是第一個外觀包。四層分開：
+
+| 層 | 放哪裡 | 誰決定 |
+| --- | --- | --- |
+| 外觀 | `skins/<id>/skin.json`（場景、配色、HUD 資源、生命圖示、標題背景與音樂） | 故事在 `stories.json` 的 `skin` |
+| 用語 | `skin.json` 的 `terms` 與 `texts` | 同上 |
+| 故事內容 | `data/asset_catalog.json`、劇本 | 故事本身（K2 故事包之後每個故事有自己的 catalog） |
+| 玩法 | 劇本有沒有 `boke_round`／`investigate` | 故事本身；沒有就不顯示玩法介面 |
+
+### `stories.json`
+
+每筆選填 `skin`（外觀包 id，預設 `gintama`）。選了哪個故事（標題畫面也算）就換成它的外觀；換外觀時對話框、選項面板、目錄、標題、設定、Game Over 與結算重新掛上該外觀的 scene。`main.gd` 只讀 `id`／`kind`／`path`／`save`／`skin`／`cover`，其他欄位不影響遊戲。
+
+### `skins/<id>/skin.json`
+
+只寫要改的欄位，沒寫的沿用 `skins/gintama/skin.json`（基準外觀包，所有欄位都有）。
+
+```json
+{
+  "id": "gintama",
+  "name": "銀魂和紙",
+  "scenes": {"dialogue_box": "res://…", "choice_sheet": "…", "menu": "…", "title": "…", "settings": "…",
+             "game_over": "…", "result": "…"},
+  "palette": {"text": "#203047", "…": "…"},
+  "hud": {"panel": "res://…tres", "clue_chip": "…", "toast": "…", "font": "res://…tres"},
+  "life_icon": "res://scenes/ui/glasses_icon.tscn",
+  "title": {"background": "<catalog 背景 id>", "bgm": "<catalog 音樂 id>"},
+  "terms": {"rebut": "吐槽", "life": "眼鏡", "power": "吐槽之力", "super": "超必殺", "whiff": "冷場",
+            "thought": "心聲", "materials": "吐槽素材", "case_file": "案件檔"},
+  "texts": {"title_logo": "萬事屋\n吐槽 ADV", "tagline": "今夜，也先把帳算清。", "menu_kicker": "夜班委託・目錄",
+            "menu_heading": "稍停一格"}
+}
+```
+
+- `scenes` 的每個 scene 腳本與節點名稱和基準外觀包相同（`%名稱` 不變），只換外觀；新作品可以只換其中幾個。
+- `look`：`washi`（和紙紙框、深藍銀框按鈕，基準外觀）或 `flat`（依 `palette` 畫平面 StyleBox，沒有圖也能用）。`panel_paper`（全版面板的底圖）與 `plaque`（名牌底圖）寫空字串就不用圖。
+- `palette` 的鍵與 `ui_styles.gd` 的 `PALETTES["gintama"]` 相同，只寫要改的鍵。
+- `terms` 是程式裡的玩法用語（toast、HUD、案件檔、結算）；`texts` 是 scene 裡的靜態字。scene 裡的 Label／Button 加 metadata `skin_text = "<texts 的鍵>"` 就由外觀包供字；字串裡的 `{rebut}`、`{life}`… 換成 `terms`。scene 仍是可編輯的來源（編輯器裡看到基準外觀的字）。
+- 生命圖示 scene 有 `broken`、`charged`、`color`、`crack_color` 四個屬性（`glasses_icon.tscn` 是範例）。
+
+### 從程式搬到資料的
+
+- `data/asset_catalog.json` 根層 `default_pov`（沒寫 `pov` 的選項由誰想；原本寫死新八）、`default_background`（故事開始前的背景；原本寫死萬事屋客廳）。故事根層可以各自覆寫 `default_pov`。
+- catalog 角色選填 `voice_pitch`（打字音的音高 Hz；原本寫死在 `stage_effects.gd`）。
+
+### 沒有玩法的故事
+
+劇本沒有 `boke_round` 與 `investigate` 時，HUD、案件檔與素材／人物檔案的目錄列、設定的「{rebut}輔助」都不顯示，當一般視覺小說玩。

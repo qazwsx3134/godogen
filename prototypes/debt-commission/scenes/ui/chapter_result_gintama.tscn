@@ -283,6 +283,7 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 42
 theme_override_colors/font_color = Color(0.3254902, 0.38039216, 0.45490196, 1)
 text = "吐槽成功"
+metadata/skin_text = "result_caught"
 
 [node name="Caught" type="Label" parent="Scroll/Center/Card/Column/Stats" unique_id=654395039]
 unique_name_in_owner = true
@@ -353,6 +354,7 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 42
 theme_override_colors/font_color = Color(0.3254902, 0.38039216, 0.45490196, 1)
 text = "剩下的眼鏡"
+metadata/skin_text = "result_life"
 
 [node name="GlassesLeft" type="Label" parent="Scroll/Center/Card/Column/Stats" unique_id=1549225104]
 unique_name_in_owner = true
@@ -388,6 +390,7 @@ theme_override_font_sizes/font_size = 44
 theme_override_colors/font_color = Color(0.3254902, 0.38039216, 0.45490196, 1)
 text = "吐槽評價"
 vertical_alignment = 1
+metadata/skin_text = "result_grade"
 
 [node name="Grade" type="Label" parent="Scroll/Center/Card/Column/GradeRow" unique_id=1023592606]
 unique_name_in_owner = true

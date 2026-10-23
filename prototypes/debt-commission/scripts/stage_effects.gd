@@ -158,7 +158,7 @@ func play_type_tick(speaker: String, cluster: String, thought: bool, skipping: b
 		return
 	var key: String = "type/" + speaker
 	if not _streams.has(key):
-		var pitch: float = float({"gintoki": 230, "shinpachi": 390, "kagura": 560, "otose": 180, "sadaharu": 130}.get(speaker, 300))
+		var pitch: float = float(((_catalog.get("characters", {}) as Dictionary).get(speaker, {}) as Dictionary).get("voice_pitch", 300))
 		_streams[key] = Synth.ramp(pitch, pitch * 1.05, 0.028, 0.24, 0.0)
 	_typing_player.stream = _streams[key]
 	_typing_player.play()

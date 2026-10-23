@@ -90,7 +90,7 @@ func set_topics(talk: Array, moves: Array) -> Dictionary:
 			button.text = str(entry.get("label", ""))
 			button.name = "%s_%s" % [group[2], entry.get("id", "")]
 			_style_like(button, boke_listen)
-			if style_id == "gintama":
+			if UI_STYLES.washi(style_id):
 				UI_STYLES.apply_button(button, style_id, "reading_action")
 			list.add_child(button)
 			buttons["%s:%s" % [group[2], entry.get("id", "")]] = button

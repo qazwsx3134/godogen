@@ -3028,6 +3028,7 @@ theme_override_fonts/font = SubResource("FontVariation_rovm4")
 theme_override_font_sizes/font_size = 44
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 text = "◆ 吐槽輔助"
+metadata/skin_text = "assist_label"
 
 [node name="Assist" type="HBoxContainer" parent="Area/Card/Layout/SettingsScroll/Rows" unique_id=835244047]
 unique_name_in_owner = true

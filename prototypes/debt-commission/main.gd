@@ -8,7 +8,6 @@ extends Control
 
 const STORY_RUNNER_SCRIPT: Script = preload("res://scripts/story_runner.gd")
 const DialogueBox = preload("res://scripts/dialogue_box.gd")
-const DIALOGUE_SCENE: PackedScene = preload("res://scenes/ui/dialogue_box_gintama.tscn")
 const ChoiceSheet = preload("res://scripts/choice_sheet.gd")
 const MenuPanel = preload("res://scripts/menu_panel.gd")
 const TitleScreen = preload("res://scripts/title_screen.gd")
@@ -21,10 +20,6 @@ const QTE_SCENE: PackedScene = preload("res://scenes/ui/qte_ring.tscn")
 const RoundHud = preload("res://scripts/round_hud.gd")
 const ROUND_HUD_SCENE: PackedScene = preload("res://scenes/ui/round_hud.tscn")
 const GameOverScreen = preload("res://scripts/game_over.gd")
-const GAME_OVER_SCENE: PackedScene = preload("res://scenes/ui/game_over_gintama.tscn")
-const MENU_SCENE: PackedScene = preload("res://scenes/ui/menu_panel_gintama.tscn")
-const TITLE_SCENE: PackedScene = preload("res://scenes/ui/title_screen_gintama.tscn")
-const CHOICE_SHEET_SCENE: PackedScene = preload("res://scenes/ui/choice_sheet_gintama.tscn")
 ## A director choice sits in its own sheet (scenes/ui/choice_sheet_director.tscn).
 const DIRECTOR_SHEET: PackedScene = preload("res://scenes/ui/choice_sheet_director.tscn")
 const SPRITE_SCRIPT: Script = preload("res://scripts/placeholder_sprite.gd")
@@ -33,15 +28,11 @@ const CHARACTER_SCENE: String = "res://scenes/characters/%s.tscn"
 ## A spot to search, laid over its object in the background picture; and the folded reading box.
 const HOTSPOT_SCENE: PackedScene = preload("res://scenes/ui/hotspot.tscn")
 const INVESTIGATE_BAR_SCENE: PackedScene = preload("res://scenes/ui/investigate_bar.tscn")
-const CHAPTER_RESULT_SCENE: PackedScene = preload("res://scenes/ui/chapter_result_gintama.tscn")
 const CHAPTER_SELECT_SCENE: PackedScene = preload("res://scenes/ui/chapter_select.tscn")
 const CREDITS_ROLL_SCENE: PackedScene = preload("res://scenes/ui/credits_roll.tscn")
 const GALLERY_SCENE: PackedScene = preload("res://scenes/ui/gallery_panel.tscn")
 ## The tools and assets every story uses, last on 製作名單: {title, credits: [{role, names}]}.
 const GAME_CREDITS_PATH: String = "res://data/credits.json"
-## The title's music; heard on the title, so 鑑賞 lists it from the start.
-const TITLE_BGM: String = "bgm_gintama_35"
-const SETTINGS_SCENE: PackedScene = preload("res://scenes/ui/settings_panel_gintama.tscn")
 const SETTINGS_SCRIPT: Script = preload("res://scripts/settings.gd")
 const SAVE_TRANSFER: Script = preload("res://scripts/save_transfer.gd")
 const STORY_LIBRARY: Script = preload("res://scripts/story_library.gd")
@@ -56,6 +47,8 @@ const DEFAULT_HOTSPOT_SIZE: Array = [0.12, 0.12]
 const SEARCH_CAST_ALPHA: float = 0.55
 const SAVE_SLOTS_SCRIPT: Script = preload("res://scripts/save_slots.gd")
 const UI_STYLES_SCRIPT: Script = preload("res://scripts/ui_styles.gd")
+## 外觀包 (skins/<id>/skin.json): scenes, look, life icon, title picture and music, and words.
+const SKIN: Script = preload("res://scripts/skin.gd")
 const CASE_FILE_SCENE: PackedScene = preload("res://scenes/ui/case_file_panel.tscn")
 
 const DESIGN_WIDTH: float = 1080.0
@@ -78,6 +71,8 @@ const DEFAULT_BOKE_TIMER_SECONDS: float = 8.0
 @export var progress_path: String = "user://progress.cfg"
 ## Text speed, auto-play speed and volumes (settings.gd), each an index into its choices.
 @export var settings_path: String = "user://settings.cfg"
+## Where skins/<id>/skin.json are looked up (tests point it at fixtures).
+@export var skins_root: String = "res://skins/"
 var _story_choices: Array[Dictionary] = []
 ## The registry, titles, credits and progress (scripts/story_library.gd); _story_choices is its list.
 var _library: RefCounted = null
@@ -281,7 +276,9 @@ var _safe_bottom: float = 0.0
 
 var _audio_players: Dictionary = {}
 var _audio_muted: bool = false
-## The UI look (scripts/ui_styles.gd).
+## The skin in play (scripts/skin.gd): the current story's `skin`, the base skin until a story loads.
+var _skin: Dictionary = {}
+## Its id, the look ui_styles.gd paints with.
 var _ui_style_id: String = UI_STYLES_SCRIPT.DEFAULT_ID
 
 var _screen_mode: String = "title"
@@ -499,7 +496,7 @@ func _open_settings() -> void:
 		return
 	_settings_return = _screen_mode
 	_screen_mode = "settings"
-	_settings_panel.call("open", _settings, _settings_return == "title")
+	_settings_panel.call("open", _settings, _settings_return == "title", _phase3_enabled)
 	_publish_qa_state()
 
 
@@ -706,6 +703,7 @@ func _refresh_story_switch() -> void:
 
 
 func _load_story() -> void:
+	_use_skin()
 	_save_validation_probe = null
 	_runner = STORY_RUNNER_SCRIPT.new() as RefCounted
 	_story_ready = bool(_runner.call("load_story", story_path))
@@ -816,14 +814,11 @@ func _build_background() -> void:
 		if preview != null:
 			preview.free()
 		_slot_markers[str(marker.name)] = marker
-	_place_tag = _make_label(_bg_layer, "萬事屋・客廳", 40, COLOR_TEXT)
+	_place_tag = _make_label(_bg_layer, "", 40, COLOR_TEXT)
 	_place_tag.set_meta("ui_style_role", "scene_overlay")
 	_place_tag.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.72))
 	_place_tag.add_theme_constant_override("outline_size", 4)
-	var initial_bg: String = "yorozuya_living_room"
-	if not _backgrounds.has(initial_bg) and not _backgrounds.is_empty():
-		initial_bg = str(_backgrounds.keys()[0])
-	_apply_background(initial_bg)
+	_apply_background(_default_background_id())
 
 
 ## A background whose paper is left transparent (hand-drawn art often is) laid on white, so the
@@ -953,7 +948,7 @@ func _build_dialogue() -> void:
 ## controls and the shown line move into the new box, and the old one is freed.
 func _mount_dialogue_box() -> void:
 	var old: DialogueBox = _dialog_panel
-	_dialog_panel = DIALOGUE_SCENE.instantiate() as DialogueBox
+	_dialog_panel = SKIN.scene(_skin, "dialogue_box").instantiate() as DialogueBox
 	_dialog_layer.add_child(_dialog_panel)
 	_dialog_panel.apply_reading_settings(SETTINGS_SCRIPT.FONT_SCALES[int(_settings.get("font_size",1))],
 		SETTINGS_SCRIPT.PAPER_OPACITIES[int(_settings.get("paper_opacity",2))])
@@ -1025,7 +1020,7 @@ func _mount_choice_sheet() -> void:
 
 ## The scene the choice on screen asks for: the director's own, or the edition's.
 func _choice_sheet_scene() -> PackedScene:
-	return DIRECTOR_SHEET if _sheet_perspective == "director" else CHOICE_SHEET_SCENE
+	return DIRECTOR_SHEET if _sheet_perspective == "director" else SKIN.scene(_skin, "choice_sheet")
 
 
 ## Puts a fresh sheet of that scene in place of the mounted one; the one place that decides which it is.
@@ -1054,7 +1049,7 @@ func _show_choice_sheet() -> void:
 	var labels: PackedStringArray = []
 	for option: Dictionary in _current_options:
 		labels.append(_dict_string(option, "label"))
-	var hint: String = "選一句吐槽" if _sheet_timed else ("選一個接下來的發展" if _sheet_perspective == "director" else "選一句回應")
+	var hint: String = _words("選一句{rebut}") if _sheet_timed else ("選一個接下來的發展" if _sheet_perspective == "director" else "選一句回應")
 	_choice_buttons = _choice_sheet.show_options(_sheet_prompt, labels, hint, _sheet_tones)
 	_choice_sheet.set_note(_sheet_note)
 	for index: int in range(_choice_buttons.size()):
@@ -1067,7 +1062,7 @@ func _show_choice_sheet() -> void:
 			_screen_mode != "tsukkomi")
 	_choice_sheet.censor_bar.visible = _sheet_timed and _sheet_censor
 	_choice_sheet.super_button.visible = _sheet_timed and _sheet_super
-	_choice_sheet.super_button.text = str(_current_command.get("super_label", "超必殺！"))
+	_choice_sheet.super_button.text = str(_current_command.get("super_label", _term("super") + "！"))
 	_refresh_reading_ui()
 
 
@@ -1088,7 +1083,7 @@ func _chapter_title() -> String:
 ## takes over whether it is open.
 func _mount_menu() -> void:
 	var old: MenuPanel = _menu_overlay
-	_menu_overlay = MENU_SCENE.instantiate() as MenuPanel
+	_menu_overlay = SKIN.scene(_skin, "menu").instantiate() as MenuPanel
 	_popup_layer.add_child(_menu_overlay)
 	_popup_layer.move_child(_menu_overlay, 0)
 	_menu_panel = _menu_overlay.panel
@@ -1177,7 +1172,7 @@ func _build_toast() -> void:
 ## The current edition's title screen above the popups; an edition switch keeps whether it shows.
 func _mount_title() -> void:
 	var old: TitleScreen = _title_screen
-	_title_screen = TITLE_SCENE.instantiate() as TitleScreen
+	_title_screen = SKIN.scene(_skin, "title").instantiate() as TitleScreen
 	_game.add_child(_title_screen)
 	_game.move_child(_title_screen, _popup_layer.get_index() + 1)
 	_story_switch = _title_screen.story_switch
@@ -1200,7 +1195,7 @@ func _mount_title() -> void:
 ## The current edition's 設定 panel; a switch puts the new one where the old one was among the
 ## overlays and keeps it open if it was.
 func _mount_settings() -> void:
-	var scene: PackedScene = SETTINGS_SCENE
+	var scene: PackedScene = SKIN.scene(_skin, "settings")
 	var old: Control = _settings_panel
 	if old != null and old.scene_file_path == scene.resource_path:
 		return
@@ -1214,7 +1209,7 @@ func _mount_settings() -> void:
 		return
 	_game.move_child(_settings_panel, old.get_index())
 	if old.visible:
-		_settings_panel.call("open", _settings, _settings_return == "title")
+		_settings_panel.call("open", _settings, _settings_return == "title", _phase3_enabled)
 	_game.remove_child(old)
 	old.queue_free()
 	_layout()
@@ -1223,7 +1218,7 @@ func _mount_settings() -> void:
 ## The current edition's Game Over and chapter result (the gintama edition has its own scenes). A
 ## switch happens from the title or 目錄, while both are hidden.
 func _mount_end_screens() -> void:
-	var over_scene: PackedScene = GAME_OVER_SCENE
+	var over_scene: PackedScene = SKIN.scene(_skin, "game_over")
 	if _game_over == null or _game_over.scene_file_path != over_scene.resource_path:
 		var old_over: Control = _game_over
 		_game_over = over_scene.instantiate() as GameOverScreen
@@ -1234,7 +1229,7 @@ func _mount_end_screens() -> void:
 		if old_over != null:
 			_overlay_layer.move_child(_game_over, old_over.get_index())
 			old_over.queue_free()
-	var result_scene: PackedScene = CHAPTER_RESULT_SCENE
+	var result_scene: PackedScene = SKIN.scene(_skin, "result")
 	if _chapter_result == null or _chapter_result.scene_file_path != result_scene.resource_path:
 		var old_result: Control = _chapter_result
 		_chapter_result = result_scene.instantiate() as Control
@@ -1252,9 +1247,10 @@ func _refresh_title() -> void:
 	_continue_button.disabled = not _has_valid_save()
 	_begin_button.disabled = not _story_ready
 	_title_screen.set_error(_story_error if not _story_error.is_empty() else _archived_save_notice)
-	var exterior: String = str((_backgrounds.get("yorozuya_exterior", {}) as Dictionary).get("path", ""))
-	if not exterior.is_empty() and ResourceLoader.exists(exterior):
-		_title_screen.background.texture = _paper_backed(exterior)
+	var title_bg: String = str((_skin.get("title", {}) as Dictionary).get("background", ""))
+	var picture: String = str((_backgrounds.get(title_bg, {}) as Dictionary).get("path", ""))
+	if not picture.is_empty() and ResourceLoader.exists(picture):
+		_title_screen.background.texture = _paper_backed(picture)
 
 
 func _build_slot_picker() -> void:
@@ -1443,8 +1439,9 @@ func _read_safe_area(viewport_size: Vector2) -> void:
 
 func _show_title() -> void:
 	_cancel_generation()
-	_effects.play_bgm(TITLE_BGM)
-	_library.unlock("bgm", TITLE_BGM)
+	var title_bgm: String = str((_skin.get("title", {}) as Dictionary).get("bgm", ""))
+	_effects.play_bgm(title_bgm)
+	_library.unlock("bgm", title_bgm)  # heard on the title, so 鑑賞 lists it from the start
 	_close_qte()
 	_close_overlays()
 	_set_ui_hidden(false)
@@ -1516,7 +1513,7 @@ func _start_new_story() -> void:
 	for sprite: Control in _sprites.values():
 		sprite.visible = false
 		sprite.call("set_expression", "neutral")
-	_apply_background("yorozuya_living_room")
+	_apply_background(_default_background_id())
 	for actor_id: String in _sprites.keys():
 		_layout_sprite(actor_id)
 	_show_story_screen()
@@ -1726,7 +1723,7 @@ func _present_say(command: Dictionary, restored: bool) -> void:
 
 func _present_investigation(command: Dictionary, restored: bool) -> void:
 	_current_command = command.duplicate(true)
-	_current_speaker = "shinpachi"
+	_current_speaker = _default_pov()  # whoever thinks while searching
 	_full_text = _dict_string(command, "prompt", "調查現場，尋找線索。")
 	_current_line_key = _line_key(command, "investigate")
 	if _dict_string(command, "place", "home") != "home":
@@ -1745,7 +1742,7 @@ func _present_investigation(command: Dictionary, restored: bool) -> void:
 	_investigation_continue_button.visible = true
 	_boke_controls.visible = false
 	_dialog_panel.set_reading_enabled(false)
-	_set_name_plate("shinpachi", true)
+	_set_name_plate(_default_pov(), true)
 	if _dict_bool(command, "keep_cast"):
 		var home_key: String = _dict_string(command, "id", _dict_string(command, "node"))
 		var place: String = _dict_string(command, "place", "home")
@@ -1775,7 +1772,7 @@ func _present_investigation(command: Dictionary, restored: bool) -> void:
 	_show_topics(_current_command)
 	_update_investigation_controls()
 	if not _line_logged:
-		_append_history({"key": _current_line_key, "kind": "investigate", "speaker": "shinpachi",
+		_append_history({"key": _current_line_key, "kind": "investigate", "speaker": _default_pov(),
 			"text": _full_text})
 		_line_logged = true
 	_refresh_phase3_hud()
@@ -2156,7 +2153,7 @@ func _render_round_bar() -> void:
 	_boke_listen_button.disabled = heard
 	_boke_listen_button.text = "已聽過" if heard else "聽下去"
 	_boke_tsukkomi_button.disabled = RoundView.action(command).is_empty()
-	_boke_tsukkomi_button.text = "已接住" if RoundView.caught(command) else "吐槽！"
+	_boke_tsukkomi_button.text = "已接住" if RoundView.caught(command) else _term("rebut") + "！"
 	_dialog_panel.censor_bar.visible = RoundView.censor(command)
 
 
@@ -2265,7 +2262,7 @@ func _refresh_placard() -> void:
 func _on_super_pressed() -> void:
 	if _screen_mode != "tsukkomi" or _story_busy or not bool(_current_command.get("super_available", false)):
 		return
-	_round_action(func() -> Dictionary: return _runner.call("use_super"), "超必殺吐槽", "tsukkomi", "超必殺吐槽！全部戳破")
+	_round_action(func() -> Dictionary: return _runner.call("use_super"), _words("{super}{rebut}"), "tsukkomi", _words("{super}{rebut}！全部戳破"))
 
 
 func _start_qte(command: Dictionary) -> void:
@@ -2369,20 +2366,20 @@ func _resolve_boke_presentation(result: Dictionary, option_label: String = "", p
 	var feedback: String = ""
 	match _last_boke_result:
 		"perfect":
-			feedback = "完美吐槽！吐槽之力 +30"
+			feedback = _words("完美{rebut}！{power} +30")
 			_effects.play_perfect_voice(int((_runner.get("stats") as Dictionary).get("perfect", 1)))
 		"weak":
-			feedback = "普通吐槽！吐槽之力 +10"
+			feedback = _words("普通{rebut}！{power} +10")
 		"fail":
-			feedback = "冷場！眼鏡 -1" if not bool(result.get("game_over", false)) else "眼鏡耗盡・Game Over"
+			feedback = _words("{whiff}！{life} -1") if not bool(result.get("game_over", false)) else _words("{life}耗盡・Game Over")
 		"hidden":
-			feedback = "放棄吐槽・狀態不變"
+			feedback = _words("放棄{rebut}・狀態不變")
 	if not feedback_override.is_empty():
 		feedback = feedback_override
 	var power: int = int((_runner.get("gameplay") as Dictionary).get("power", 0))
 	var maximum: int = int((_runner.get("gameplay") as Dictionary).get("max_power", 100))
 	if power >= maximum and _previous_power < maximum:
-		_effects.play({"op": "cutin", "text": "吐槽之力全滿！", "speaker": "shinpachi"}, _skip)
+		_effects.play({"op": "cutin", "text": _words("{power}全滿！"), "speaker": _default_pov()}, _skip)
 		_effects.play({"op": "se", "id": "power_up"}, _skip)
 	_previous_power = power
 	_refresh_phase3_hud()
@@ -2512,7 +2509,7 @@ func _set_text_tone(tone: String) -> void:
 ## springs in with a clap.
 func _present_choice(command: Dictionary) -> void:
 	var director: bool = _dict_string(command, "perspective", "pov") == "director"
-	var pov: String = _dict_string(command, "pov", STORY_RUNNER_SCRIPT.DEFAULT_POV)
+	var pov: String = _dict_string(command, "pov", _default_pov())
 	_current_command = command.duplicate(true)
 	_current_speaker = "" if director else pov
 	_full_text = _dict_string(command, "prompt", "接下來發生什麼？" if director else "我該怎麼做……？")
@@ -2685,6 +2682,7 @@ func _choose_story(choice: Dictionary) -> void:
 	config.save(STORY_CHOICE_PATH)
 	_story_error = ""
 	_load_story()
+	_apply_ui_style()  # the new story's skin, when it differs
 	_dialog_panel.set_chapter(_chapter_title())
 	_refresh_story_switch()
 	_refresh_gameplay_ui()
@@ -2710,7 +2708,7 @@ func _set_name_plate(speaker: String, thought: bool) -> void:
 	for actor_id: String in speaker.split("+"):
 		if _actors.has(actor_id):
 			names.append(str((_actors[actor_id] as Dictionary)["name"]))
-	_dialog_panel.set_speaker("・".join(names) + ("・心聲" if thought and not names.is_empty() else ""))
+	_dialog_panel.set_speaker("・".join(names) + ("・" + _term("thought") if thought and not names.is_empty() else ""))
 
 
 ## Whoever speaks (both, for a line said together) comes on stage at their slot and to the front;
@@ -2741,7 +2739,7 @@ func _clear_stage() -> void:
 
 
 func _sprite(actor_id: String) -> Control:
-	return _sprites.get(actor_id, _sprites.get("shinpachi")) as Control
+	return _sprites.get(actor_id, _sprites.get(_default_pov())) as Control
 
 
 func _clear_choices() -> void:
@@ -3002,7 +3000,7 @@ func _open_log() -> void:
 			var names: PackedStringArray = []
 			for actor in _dict_string(entry,"speaker","narrator").split("+",false):
 				names.append(str((_actors.get(actor,{}) as Dictionary).get("name","旁白")))
-			heading.text = "、".join(names) + ("・心聲" if _dict_bool(entry,"thought") else "")
+			heading.text = "、".join(names) + ("・" + _term("thought") if _dict_bool(entry,"thought") else "")
 		_apply_ui_style_recursive(row)
 	_log_overlay.visible = true
 	_refresh_phase3_hud()
@@ -3311,7 +3309,7 @@ func _refresh_phase3_hud() -> void:
 		clues.append({"name": str(info.get("name", item_id)), "picture": _catalog_picture(info)})
 	_phase3_hud.show_clues(clues, _screen_mode != "investigate")
 	if _menu_items.has("material"):
-		(_menu_items["material"] as Button).text = "吐槽素材（%d）" % items.size()
+		(_menu_items["material"] as Button).text = _words("{materials}（%d）") % items.size()
 	if _command_op(current) == "boke_round" and _effective_boke_ui_mode() == "tsukkomi":
 		var prefix: String = "倒數" if _screen_mode == "tsukkomi" else "暫停"
 		_phase3_timer_label.text = "%s %02d 秒" % [prefix, ceili(_boke_time_remaining)]
@@ -3364,6 +3362,7 @@ func _open_case_file(tab: String) -> void:
 			if option.has("require"):
 				usable[str(option["require"])] = str(option.get("id", ""))
 	_case_file_panel.call("set_style", _ui_style_id)
+	_case_file_panel.set("terms", _skin.get("terms", {}))
 	_case_file_panel.call("open", _runner.call("case_file"), tab, pictures, usable)
 	_toast.visible = false  # a clue's toast would sit over the panel
 	_refresh_phase3_hud()
@@ -3712,10 +3711,35 @@ func _slot_file_exists(path: String) -> bool:
 	return false
 
 
+## The picture before a story starts: the catalog's `default_background`, else its first background.
 func _default_background_id() -> String:
-	if _backgrounds.has("yorozuya_living_room"):
-		return "yorozuya_living_room"
+	var named: String = str(_catalog.get("default_background", ""))
+	if _backgrounds.has(named):
+		return named
 	return str(_backgrounds.keys()[0]) if not _backgrounds.is_empty() else ""
+
+
+## The skin of the story at story_path (its registry `skin`, else the base skin).
+func _use_skin() -> void:
+	var index: int = _story_choice_index()
+	var id: String = str(_story_choices[index].get("skin", "")) if index >= 0 else ""
+	_skin = SKIN.load_skin(id, skins_root)
+	_ui_style_id = str(_skin["id"])
+
+
+## A word of the game from the skin (rebut, life, power, super, whiff, thought, materials).
+func _term(key: String) -> String:
+	return SKIN.term(_skin, key)
+
+
+## `text` with its {term}s in the skin's words.
+func _words(text: String) -> String:
+	return SKIN.words(_skin, text)
+
+
+## Whose thought an unmarked choice is and who thinks while searching (StoryRunner.default_pov).
+func _default_pov() -> String:
+	return str(_runner.call("default_pov")) if _runner != null else ""
 
 
 # ---------------------------------------------------------------- 小工具
@@ -3818,7 +3842,9 @@ func _apply_ui_style() -> void:
 	if _dialog_panel == null:
 		return
 	_comedy_layer.stop()
-	if _dialog_panel.style_id != _ui_style_id:
+	if _dialog_panel.scene_file_path != SKIN.scene(_skin, "dialogue_box").resource_path \
+			or _title_screen.scene_file_path != SKIN.scene(_skin, "title").resource_path \
+			or _menu_overlay.scene_file_path != SKIN.scene(_skin, "menu").resource_path:
 		_mount_dialogue_box()
 		_mount_choice_sheet()
 		_mount_menu()
@@ -3831,8 +3857,10 @@ func _apply_ui_style() -> void:
 	_apply_stage_style()
 	if _effects != null:
 		_effects.set_style(_ui_style_id)
+	_phase3_hud.set_life_icon(load(str(_skin.get("life_icon", ""))) as PackedScene)
 	_phase3_hud.set_style(_ui_style_id)
 	_investigate_bar.call("set_style", _ui_style_id)
+	_refresh_phase3_hud()
 
 
 ## The photo treatment of each edition (ui_stage_style.gd) on the stage and title photos, and
@@ -3846,6 +3874,10 @@ func _apply_stage_style() -> void:
 
 
 func _apply_ui_style_recursive(node: Node) -> void:
+	if node.has_meta("skin_text") and (node is Label or node is Button):
+		var words: String = SKIN.text(_skin, str(node.get_meta("skin_text")))
+		if not words.is_empty():
+			node.set("text", words)
 	var role: String = str(node.get_meta("ui_style_role", ""))
 	if node is Button and not role.is_empty():
 		var button: Button = node as Button
@@ -4100,7 +4132,7 @@ func _choice_qa_state(current: Dictionary) -> Dictionary:
 	for option: Dictionary in _current_options:
 		tones.append(_dict_string(option, "tone"))
 	return {"perspective": "director" if director else "pov",
-		"pov": "" if director else _dict_string(current, "pov", STORY_RUNNER_SCRIPT.DEFAULT_POV),
+		"pov": "" if director else _dict_string(current, "pov", _default_pov()),
 		"note": _dict_string(current, "note"),
 		"sheet": "director" if _choice_sheet.perspective == "director" else _choice_sheet.style_id,
 		"tones": tones}

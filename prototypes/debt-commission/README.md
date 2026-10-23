@@ -47,6 +47,18 @@ Godot 4.7 手機直立視覺小說，依 [V1 Roadmap](../../docs/story-telling-g
 
 B 超必殺演出（2026-10-06）已接入 `?sample=phase4_rounds`，使用既有素材與程序特效。眼鏡的 `charged` 可在 `scenes/ui/glasses_icon.tscn` Inspector 開啟，預覽金色氣焰；執行時由力量控制。[氣焰手機畫面](docs/super-aura-phone.png) · [窄手機畫面](docs/super-aura-320x568.png) · [光束畫面](docs/super-beam-phone.png)。後續 C → D → E 見 [TODO](TODO.md)。
 
+## 做別部作品：外觀包
+
+換掉外觀包、用語與故事資料，就能把這套系統做成別部作品的視覺小說（契約見 [IMPLEMENTATION.md「外觀包」](IMPLEMENTATION.md)）：
+
+1. 建 `skins/<作品 id>/skin.json`，只寫要改的欄位，其他沿用 `skins/gintama/skin.json`。最少只要 `terms`（例如把「吐槽／眼鏡／吐槽之力」換成「反駁／刃／決心」）與 `texts`（標題、標語、目錄標題）。
+2. 要換畫面風格：`look` 寫 `flat` 並給 `palette`，不需要任何圖；要做有質感的紙框或木框，就複製 `scenes/ui/*_gintama.tscn` 改圖，在 `scenes` 指過去（節點名稱不要改）。
+3. 生命圖示：做一個有 `broken`、`charged`、`color`、`crack_color` 屬性的小 scene，填進 `life_icon`。
+4. 在 `data/stories.json` 的故事加 `"skin": "<作品 id>"`。
+5. 故事用到的角色、背景、音樂登記在 `data/asset_catalog.json`（每個故事各自一份要等 K2 故事包）；`default_pov`、`default_background` 決定預設的心聲角色與開場背景，角色的 `voice_pitch` 是打字音高。
+
+`tests/fixtures/skins/plain/` 是不用任何新圖的範例（扁平配色、刃形生命圖示、「反駁／決心」用語），`tests/test_skin.gd` 驗證它換得過去也換得回來。劇本沒有吐槽回合與調查時，HUD、案件檔與「輔助」設定都不出現，就是一般的視覺小說。
+
 ## 打開故事編輯器（網頁）
 
 劇本節點編輯器是 `tools/story_editor/` 裡的網頁，不用建置、不用 npm。在**這個資料夾**啟動本機專案服務，再用瀏覽器開網址：
@@ -84,7 +96,8 @@ bash tools/serve_web.sh
 | 檔案 | 用途 |
 | --- | --- |
 | `main.gd` | 直立外殼：背景、立繪、特效、對話與選項、彈出視窗；手勢、AUTO／SKIP、選單、紀錄、存讀檔、QA |
-| `scripts/ui_styles.gd` | 銀魂和紙的配色與按鈕狀態（依 node 的 `ui_style_role` 套用） |
+| `scripts/skin.gd`、`skins/gintama/skin.json` | 外觀包：載入並合併 `skins/<id>/skin.json`（場景、外觀、生命圖示、標題、用語） |
+| `scripts/ui_styles.gd` | 依外觀包的配色與素材畫按鈕與面板（依 node 的 `ui_style_role` 套用） |
 | `scripts/ui_stage_style.gd` | 背景照片的和紙色調 |
 | `scenes/stage.tscn` | 舞台：各背景的取景框、左中右通用站位（編輯器裡可拖曳） |
 | `scenes/comedy/tsukkomi_impact.tscn`、`small_reaction.tscn`、`full_manga_panel.tscn`、`emotion_band.tscn` | 漫畫吐槽疊加層的四個 preset（`ComedyLayer` 實例化，腳本 `scripts/comedy_preset.gd`）。根節點的 `@export` 可調：`dim_in`、`cutin_at`、`cutin_slide`、`shake_at`、`sound_at`、`burst_at`、`hold_until`、`fade_at`、`end_at`（秒）、`shake_strength`、`sound_id`、`stage_zoom`、`font_max`、`cutin_exit`（從 `fade_at` 起 cut-in 往右滑出、只有 `Dim` 淡出）；`SpeedLines`（`speed_lines.gd`）調線數、顏色、中心空白；`Burst`（`burst_shape.gd`）調尖角數、填色、框線；`CutInPanel`／`Portrait` 是傾斜漫畫格與臉圖；`Text` 的字體與描邊在 scene 裡。編輯器未執行就看得到新八 `shout` 與「現在是工作時間吧！！！」。`emotion_band` 是驚訝之類情緒的橫向純色長條：從左滑入、停住、往右滑出，條上左邊是臉、右邊是台詞；預設顏色是 `CutInPanel` StyleBox 的 `bg_color`，每一句可在劇本用 `color` 自訂（`do comedy("emotion_band", "kagura", "欸！？", "#7ec8ff")`），條的位置與高度是它的 anchor。缺的 preset scene 由 `tools/make_comedy_scenes.gd` 補建，已有的不覆寫 |
@@ -136,6 +149,8 @@ XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://t
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_credits.gd
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_save_transfer.gd
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_gallery.gd
+XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_skin.gd
+XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_search_cast.gd
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_ep00.gd
 
 # 先匯出、啟動伺服器；需要已安裝 Playwright 及 Chromium 的 Node 環境。

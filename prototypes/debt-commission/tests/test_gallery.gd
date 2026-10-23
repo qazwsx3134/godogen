@@ -53,7 +53,7 @@ func _play_and_browse() -> void:
 		await _frames(1)
 	_expect(game._screen_mode == "investigate", "chapter 1 reaches the search")
 	_expect(game._library.unlocked_ids("bg") == ["yorozuya_kitchen", "yorozuya_living_room"]
-		and game._library.unlocked_ids("bgm") == [game.TITLE_BGM, "bgm_daily"],
+		and game._library.unlocked_ids("bgm") == [str(game._skin["title"]["bgm"]), "bgm_daily"],
 		"the title music, then the kitchen, the living room and 日常 are met on the way: %s %s" % [game._library.unlocked_ids("bg"), game._library.unlocked_ids("bgm")])
 	game._show_title()
 	await _frames(2)

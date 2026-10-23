@@ -68,12 +68,12 @@ func _run() -> void:
 func _hud_uses_its_resources() -> void:
 	var game: Control = _new_game()
 	await _frames(3)
-	var serif: Font = UI_STYLES_SCRIPT.gintama_hud("serif") as Font
-	var hud_panel: StyleBox = UI_STYLES_SCRIPT.gintama_hud("hud_panel") as StyleBox
+	var serif: Font = UI_STYLES_SCRIPT.hud_resource("gintama", "font") as Font
+	var hud_panel: StyleBox = UI_STYLES_SCRIPT.hud_resource("gintama", "panel") as StyleBox
 	_expect(game._phase3_hud.panel.get_theme_stylebox("panel") == hud_panel and
 		(game._investigate_bar.get("panel") as Control).get_theme_stylebox("panel") == hud_panel,
 		"the HUD and the search bar use gintama_hud/hud_panel.tres")
-	_expect(game._toast.get_theme_stylebox("normal") == UI_STYLES_SCRIPT.gintama_hud("toast") and
+	_expect(game._toast.get_theme_stylebox("normal") == UI_STYLES_SCRIPT.hud_resource("gintama", "toast") and
 		game._toast.get_theme_font("font") == serif and game._phase3_hud.power_value.get_theme_font("font") == serif,
 		"the toast is the navy plaque and HUD text is the serif")
 	game.queue_free()

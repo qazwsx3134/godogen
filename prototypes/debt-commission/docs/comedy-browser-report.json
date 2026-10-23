@@ -1,6 +1,6 @@
 {
   "url": "http://127.0.0.1:5197/?qa=1&sample=comedy",
-  "started": "2026-10-23T07:35:38.791Z",
+  "started": "2026-10-23T08:18:18.139Z",
   "runs": [
     {
       "route": "comedy-phone",
@@ -13,7 +13,7 @@
         "tsukkomi_impact plays over the reading screen (comedy.active), the story waits, then the next line shows whole (phone)",
         "small_reaction plays without covering the reading box",
         "full_manga_panel plays to its end",
-        "a tap during tsukkomi_impact fast-forwards it (gone 328 ms after the tap, browser clock) and shows the next line whole without advancing"
+        "a tap during tsukkomi_impact fast-forwards it (gone 331 ms after the tap, browser clock) and shows the next line whole without advancing"
       ],
       "errors": []
     },
@@ -28,11 +28,11 @@
         "tsukkomi_impact plays over the reading screen (comedy.active), the story waits, then the next line shows whole (narrow)",
         "small_reaction plays without covering the reading box",
         "full_manga_panel plays to its end",
-        "a tap during tsukkomi_impact fast-forwards it (gone 236 ms after the tap, browser clock) and shows the next line whole without advancing"
+        "a tap during tsukkomi_impact fast-forwards it (gone 240 ms after the tap, browser clock) and shows the next line whole without advancing"
       ],
       "errors": []
     }
   ],
   "passed": true,
-  "finished": "2026-10-23T07:36:19.165Z"
+  "finished": "2026-10-23T08:19:00.219Z"
 }

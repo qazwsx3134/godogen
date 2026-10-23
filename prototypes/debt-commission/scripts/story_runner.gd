@@ -61,10 +61,9 @@ const VALID_EXPRESSIONS: Array[String] = ["neutral", "smile", "annoyed", "surpri
 ## `comedy` presets (scripts/comedy_layer.gd): the manga overlay a line of the script asks for.
 const VALID_COMEDY_PRESETS: Array[String] = ["tsukkomi_impact", "small_reaction", "full_manga_panel", "emotion_band"]
 ## `choice` perspectives: a reaction in a character's head (pov, the default) or the player stepping out
-## as the director to decide what happens next. A pov choice says whose thought it is (`pov`, default
-## Shinpachi) and may tag its options with a tone; a director choice may carry a footnote (`note`).
+## as the director to decide what happens next. A pov choice says whose thought it is (`pov`, else
+## default_pov()) and may tag its options with a tone; a director choice may carry a footnote (`note`).
 const VALID_PERSPECTIVES: Array[String] = ["pov", "director"]
-const DEFAULT_POV: String = "shinpachi"
 const VALID_TONES: Array[String] = ["loud", "calm", "tired"]
 const VALID_DIRECTIONS: Array[String] = ["left", "right", "up", "down"]
 const VALID_SOUNDS: Array[String] = ["paper", "knock", "step", "stamp"]
@@ -233,6 +232,19 @@ func has_gameplay() -> bool:
 
 
 ## The story's own `title` and `note`, for the title screen.
+## Whose thought a choice without `pov` is (and who thinks while searching): the story's own
+## `default_pov`, else the catalog's, else its first character.
+func default_pov() -> String:
+    var own: String = String(_story.get("default_pov", ""))
+    if not own.is_empty():
+        return own
+    var characters: Dictionary = _asset_catalog.get("characters", {}) as Dictionary
+    var from_catalog: String = String(_asset_catalog.get("default_pov", ""))
+    if characters.has(from_catalog):
+        return from_catalog
+    return String(characters.keys()[0]) if not characters.is_empty() else ""
+
+
 func story_info() -> Dictionary:
     return {"title": String(_story.get("title", "")), "note": String(_story.get("note", "")),
         "credits": (_story.get("credits", []) as Array).duplicate(true)}
@@ -1414,6 +1426,8 @@ func _validate_asset_catalog(value: Variant) -> String:
         var character_path_error: String = _validate_optional_asset_path(character, "character", character_id)
         if not character_path_error.is_empty():
             return character_path_error
+        if character.has("voice_pitch") and (not _is_number(character["voice_pitch"]) or float(character["voice_pitch"]) <= 0.0):
+            return "character '%s' voice_pitch must be a positive number (Hz)" % character_id
         if character.has("expressions"):
             if typeof(character["expressions"]) != TYPE_DICTIONARY:
                 return "character '%s' expressions must map expression ids to pictures" % character_id
@@ -1441,6 +1455,13 @@ func _validate_asset_catalog(value: Variant) -> String:
         var item_path_error: String = _validate_optional_asset_path(item, "item", item_id)
         if not item_path_error.is_empty():
             return item_path_error
+
+    # Optional defaults: whose thought an unmarked choice is, and the picture before a story starts.
+    if catalog.has("default_pov") and (typeof(catalog["default_pov"]) != TYPE_STRING or not characters.has(catalog["default_pov"])):
+        return "default_pov must be a character id"
+    if catalog.has("default_background") and (typeof(catalog["default_background"]) != TYPE_STRING
+            or not backgrounds.has(catalog["default_background"])):
+        return "default_background must be a background id"
 
     # Optional audio: entries without a path play a synthesized placeholder.
     for collection: String in ["sounds", "music"]:
@@ -1517,6 +1538,9 @@ func _validate_story(value: Variant, asset_catalog: Dictionary) -> String:
     if root.has("carry") and (not root["carry"] is Array \
             or not (root["carry"] as Array).all(func(key: Variant) -> bool: return typeof(key) == TYPE_STRING and initial_flags.has(key))):
         return "carry must list flags declared in initial_flags"
+    if root.has("default_pov") and (typeof(root["default_pov"]) != TYPE_STRING
+            or not _catalog_has_character(asset_catalog, String(root["default_pov"]))):
+        return "default_pov must be a character in the asset catalog"
     if root.has("credits"):
         var credits_error: String = validate_credits(root["credits"])
         if not credits_error.is_empty():

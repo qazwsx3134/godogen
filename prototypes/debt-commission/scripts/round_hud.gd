@@ -8,16 +8,11 @@ const GLASSES_ICON: PackedScene = preload("res://scenes/ui/glasses_icon.tscn")
 const CLUE_CHIP: PackedScene = preload("res://scenes/ui/clue_chip.tscn")
 const UI_STYLES: Script = preload("res://scripts/ui_styles.gd")
 
-const TINTS: Dictionary = {
-	"cinema": {"bg": Color(0.031, 0.063, 0.098, 0.82), "border": Color(0.65, 0.8, 0.81, 0.5), "width": 1,
-		"text": Color("#e6e5dc"), "soft": Color("#bec9c9"), "gauge": Color("#a9d0cf"), "alert": Color("#ffb2a1")},
-	"ledger": {"bg": Color(0.949, 0.91, 0.824, 0.95), "border": Color("#b9a681"), "width": 1,
-		"text": Color("#382f28"), "soft": Color("#76634c"), "gauge": Color("#a94432"), "alert": Color("#8f2d22")},
-	"manga": {"bg": Color("#f5f3e9"), "border": Color("#242522"), "width": 2,
-		"text": Color("#242522"), "soft": Color("#5f605b"), "gauge": Color("#e4be32"), "alert": Color("#e74e36")},
-	"gintama": {"bg": Color(0.973, 0.953, 0.914, 0.94), "border": Color("#385673"), "width": 1,
-		"text": Color("#203047"), "soft": Color("#536174"), "gauge": Color("#203e5e"), "alert": Color("#963e4b")},
-}
+## The HUD's colours from the skin's palette (ui_styles.gd).
+static func tint_of(style_id: String) -> Dictionary:
+	var p: Dictionary = UI_STYLES.palette(style_id)
+	return {"bg": Color(p["panel_soft"] as Color, 0.94), "border": p["rule"], "width": 1, "text": p["text"],
+		"soft": p["muted"], "gauge": p["accent"], "alert": p["danger"]}
 
 @onready var panel: PanelContainer = %Panel
 ## One glasses_icon.tscn per pair; show_stats matches the story's max glasses.
@@ -30,12 +25,14 @@ const TINTS: Dictionary = {
 @onready var clue_header: Label = %ClueHeader
 ## One clue_chip.tscn per clue, in the order they were found.
 @onready var clue_list: VBoxContainer = %ClueList
-var _tint: Dictionary = TINTS["cinema"]
+var _tint: Dictionary = {}
+## The life icon scene (the skin's `life_icon`): broken, charged, color and crack_color properties.
+var life_icon: PackedScene = GLASSES_ICON
 var _style_id: String = "cinema"
 
 
 func set_style(style_id: String) -> void:
-	var tint: Dictionary = TINTS.get(style_id, TINTS["cinema"])
+	var tint: Dictionary = tint_of(style_id)
 	_tint = tint
 	_style_id = style_id
 	var unit: float = 1080.0 / 390.0
@@ -45,10 +42,11 @@ func set_style(style_id: String) -> void:
 	for label: Label in [power_value, combo, find_child("PowerCaption") as Label]:
 		label.add_theme_color_override("font_color", tint["text"])
 	timer.add_theme_color_override("font_color", tint["alert"])
-	clue_header.add_theme_color_override("font_color", Color.WHITE if style_id == "cinema" else tint["text"])
+	clue_header.add_theme_color_override("font_color", tint["text"])
 	UI_STYLES.set_hud_font(clue_header, style_id)
-	if style_id == "gintama":
-		clue_header.add_theme_stylebox_override("normal", UI_STYLES.gintama_hud("clue_chip") as StyleBox)
+	var chip_box: StyleBox = UI_STYLES.hud_resource(style_id, "clue_chip") as StyleBox
+	if chip_box != null:
+		clue_header.add_theme_stylebox_override("normal", chip_box)
 	else:
 		clue_header.remove_theme_stylebox_override("normal")
 	for icon: Control in glasses.get_children():
@@ -65,11 +63,21 @@ func set_style(style_id: String) -> void:
 	power_bar.add_theme_stylebox_override("fill", fill)
 
 
+## Uses another life icon scene; the row is rebuilt on the next show_stats.
+func set_life_icon(scene: PackedScene) -> void:
+	if scene == null or scene == life_icon:
+		return
+	life_icon = scene
+	for icon: Node in glasses.get_children():
+		glasses.remove_child(icon)
+		icon.queue_free()
+
+
 func show_stats(glasses_left: int, max_glasses: int, power: int, max_power: int, combo_count: int) -> void:
 	while glasses.get_child_count() > max_glasses:
 		glasses.get_child(-1).free()
 	while glasses.get_child_count() < max_glasses:
-		var icon: Control = GLASSES_ICON.instantiate() as Control
+		var icon: Control = life_icon.instantiate() as Control
 		glasses.add_child(icon)
 		_paint_icon(icon)
 	for index: int in range(max_glasses):
@@ -107,8 +115,9 @@ func _paint_icon(icon: Control) -> void:
 
 
 func _paint_chip(chip: Control) -> void:
-	if _style_id == "gintama":
-		chip.add_theme_stylebox_override("panel", UI_STYLES.gintama_hud("clue_chip") as StyleBox)
+	var chip_box: StyleBox = UI_STYLES.hud_resource(_style_id, "clue_chip") as StyleBox
+	if chip_box != null:
+		chip.add_theme_stylebox_override("panel", chip_box)
 	else:
 		var box: StyleBoxFlat = _panel_box(_tint["width"])
 		box.set_corner_radius_all(0)
@@ -120,10 +129,11 @@ func _paint_chip(chip: Control) -> void:
 
 
 ## The panel behind the stats (and, square, the clue chips) in this edition; the gintama
-## edition's is assets/ui/gintama_hud/hud_panel.tres.
+## skin's `hud.panel` when it has one (the base skin's is assets/ui/gintama_hud/hud_panel.tres).
 func _panel_box(width: float) -> StyleBoxFlat:
-	if _style_id == "gintama":
-		return UI_STYLES.gintama_hud("hud_panel") as StyleBoxFlat
+	var own: StyleBox = UI_STYLES.hud_resource(_style_id, "panel") as StyleBox
+	if own is StyleBoxFlat:
+		return own as StyleBoxFlat
 	var unit: float = 1080.0 / 390.0
 	var box: StyleBoxFlat = StyleBoxFlat.new()
 	box.bg_color = _tint["bg"]

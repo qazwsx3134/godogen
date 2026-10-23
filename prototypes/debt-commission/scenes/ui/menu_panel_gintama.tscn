@@ -1191,7 +1191,6 @@ grow_vertical = 2
 mouse_filter = 2
 theme = SubResource("Theme_ee2nr")
 script = ExtResource("2_3x304")
-style_id = "gintama"
 
 [node name="Dim" type="ColorRect" parent="." unique_id=1225411973]
 unique_name_in_owner = true
@@ -1254,6 +1253,7 @@ theme_override_colors/font_color = Color(0.3254902, 0.38039216, 0.45490196, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
 text = "夜班委託・目錄"
+metadata/skin_text = "menu_kicker"
 
 [node name="Heading" type="Label" parent="Area/Center/Panel/Padding/Column/Heading/HeadingText" unique_id=634478117]
 layout_mode = 2
@@ -1265,6 +1265,7 @@ theme_override_colors/font_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
 text = "稍停一格"
+metadata/skin_text = "menu_heading"
 
 [node name="Close" type="Button" parent="Area/Center/Panel/Padding/Column/Heading" unique_id=194446670]
 unique_name_in_owner = true

@@ -33,8 +33,13 @@ func _ready() -> void:
 
 
 ## import_allowed: false while a story is open (目錄), where an import would pull saves from under it.
-func open(values: Dictionary, import_allowed: bool = true) -> void:
+## gameplay: false for a story without rounds or searches, which hides the 輔助 row.
+func open(values: Dictionary, import_allowed: bool = true, gameplay: bool = true) -> void:
 	_values = values.duplicate()
+	for node_name: String in ["AssistRule", "AssistLabel", "Assist"]:
+		var node: Control = find_child(node_name, true, false) as Control
+		if node != null:
+			node.visible = gameplay
 	import_button.disabled = not import_allowed
 	import_button.text = "匯入存檔" if import_allowed else "匯入存檔（回標題）"
 	_paint()

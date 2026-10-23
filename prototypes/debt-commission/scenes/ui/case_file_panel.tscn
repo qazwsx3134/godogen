@@ -34,6 +34,7 @@ size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 46
 text = "吐槽素材"
 metadata/ui_style_role = "selector"
+metadata/skin_text = "materials_tab"
 
 [node name="CaseFileTab_profiles" type="Button" parent="Margins/Layout/Tabs" unique_id=257083451]
 unique_name_in_owner = true
@@ -161,6 +162,7 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 34
 text = "◆ 拿來吐槽"
 metadata/ui_style_role = "accent"
+metadata/skin_text = "use_material_head"
 
 [node name="UseRow" type="CenterContainer" parent="Margins/Layout/CaseFileDetail/DetailColumn" unique_id=388531684]
 layout_mode = 2
@@ -172,6 +174,7 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 48
 text = "拿來吐槽"
 metadata/ui_style_role = "primary"
+metadata/skin_text = "use_material"
 
 [node name="WaveRoom" type="Control" parent="Margins/Layout/CaseFileDetail/DetailColumn" unique_id=1760931843]
 custom_minimum_size = Vector2(0, 72)

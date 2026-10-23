@@ -13,7 +13,9 @@ signal material_used(option_id: String)
 const UI_STYLES: Script = preload("res://scripts/ui_styles.gd")
 const CARD_SCENE: PackedScene = preload("res://scenes/ui/case_file_card.tscn")
 
-var _style_id: String = "cinema"
+var _style_id: String = "gintama"
+## The skin's words (skin.gd terms): rebut, materials, …
+var terms: Dictionary = {"rebut": "吐槽", "materials": "吐槽素材"}
 var _entries: Dictionary = {"materials": [], "profiles": []}
 var _pictures: Dictionary = {}
 var _usable: Dictionary = {}
@@ -85,7 +87,7 @@ func _show_tab(tab: String) -> void:
 		card.get_node("Content/Picture").call("show_item", entry_name, _picture_of(str(entry.get("id", ""))))
 		_grid.add_child(card)
 		card.pressed.connect(_select.bind(index))
-	_empty.text = "還沒有取得吐槽素材。" if _tab == "materials" else "還沒有解鎖人物檔案。"
+	_empty.text = "還沒有取得%s。" % terms["materials"] if _tab == "materials" else "還沒有解鎖人物檔案。"
 	_empty.visible = entries.is_empty()
 	_select(0)
 
@@ -106,10 +108,10 @@ func _select(index: int) -> void:
 	var usable: bool = _tab == "materials" and _usable.has(entry_id)
 	_use_button.visible = usable
 	_use_head.visible = usable
-	_kind.text = "◆ 吐槽素材情報" if _tab == "materials" else "◆ 人物檔案"
+	_kind.text = "◆ %s情報" % terms["materials"] if _tab == "materials" else "◆ 人物檔案"
 	_order.text = "第 %d 件／共 %d 件" % [_selected + 1, entries.size()] if _tab == "materials" \
 		else "第 %d 人／共 %d 人" % [_selected + 1, entries.size()]
-	_status.text = ("現在可以拿來吐槽！" if usable else "收在案件檔裡，吐槽時可以拿出來") if _tab == "materials" \
+	_status.text = ("現在可以拿來%s！" % terms["rebut"] if usable else "收在案件檔裡，%s時可以拿出來" % terms["rebut"]) if _tab == "materials" \
 		else "已解鎖的人物檔案"
 	_paint_card()
 

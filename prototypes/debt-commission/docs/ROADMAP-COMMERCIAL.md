@@ -17,7 +17,7 @@
 ```
 等你決定 ──→ K2 故事包的優先順序、第一章署名 ──→ Claude／Codex 才動手
 等你做（真人）  C2 試讀、C3 音效、B04/B17 真機
-Claude 下一批   外觀包（換作品只換素材）→ G6（碰到哪拆到哪）
+Claude 下一批   K2 故事包（每個故事自己的 catalog）→ G6（碰到哪拆到哪）
 Codex 進行中    步驟中文名稱、A03 存回專案＋A05 一鍵驗證
 ```
 
@@ -32,7 +32,7 @@ Codex 進行中    步驟中文名稱、A03 存回專案＋A05 一鍵驗證
 - B04／B17 Android Chrome、iOS Safari 實機：首次點擊、切到背景再回來是否有聲音（B05）、單手操作、遊玩時間、金色氣焰與光束的強度（TODO.md B 段）。
 
 **Claude 下一批（建議順序）**
-1. 外觀包：使用者要「換掉一些元素就能變成別部動畫（例如進擊的巨人）的視覺小說」。先盤點銀魂專屬的元素（外觀／故事內容／遊戲機制），再把外觀做成 `skins/<作品>/`，用一個測試外觀證明換得掉。
+1. K2 故事包：外觀包已能跟著故事換，但角色、背景、音樂仍在共用的 `data/asset_catalog.json`；換作品要能各帶自己的 catalog（等你排優先順序）。
 2. G6 拆分 `main.gd`：調查、回合、QA 快照在功能碰到時再拆。
 3. 之後：B06 PWA safe area（真機確認需要才做）、G4 流程圖、G7 多語系、C4 第二章流程（與你一起）。
 
@@ -128,6 +128,7 @@ M5 內容：第一章定稿 → 第二章起量產（與 M2／M3 並行）
 | U2 | ☑ P2 | 其他三款的對話框名牌會浮在結算畫面上面（2026-10-19：預防性修正，`chapter_result.tscn`、`game_over.tscn` 根節點比照銀魂款設 `z_index = 2`；這輪沒重現原問題，也沒拍 cinema 結算截圖驗證）（2026-10-23 截圖確認：cinema、ledger、manga 三款的結算畫面上，對話框名牌都在暗幕底下） | `tools/shots_chapter1.gd` 系列截圖 | S | C |
 | U4 | ☑ P1 | 參考 `docs/gintama-like/new/` 的銀魂手遊介面（使用者 2026-10-23 指定 status、scene、episode；決定：版面照參考、配色維持和紙）：章節選擇改成章節路線圖、案件檔下半部改成 status 卡。scene（對話）沿用作者已核准的銀魂和紙對話框，沒有改。順手修：十幾個 Label 用任意斷行，「。」會被排到行首，全部改成依字詞斷行；線索 toast 會蓋住案件檔 | `scenes/ui/episode_card.tscn`、`tools/add_episode_cards.gd`、`tools/restyle_case_file.gd`；`tests/test_credits.gd`、`tests/test_phase4_ui.gd` | M | C |
 | U5 | ☑ P1 | 只留銀魂和紙（使用者 2026-10-23）：刪掉月下映畫、委託簿、吐槽分鏡三款的 20 個 scene、標題／目錄／設定的換風格按鈕、偏好檔 `ui_preferences.cfg`、`tools/check_ui_parity.mjs` 與沒在用的 `ui_reference.gd`；銀魂款借用別款的列 scene 改指向自己的。順手修：調查時沒有熱區的角色隱形、有熱區的半透明，回合的線索列縮成「線索 ×N」小牌；標題與對話的雲形名牌不再被拉伸（對話名牌九宮格、依名字變寬） | `tools/remove_style_switches.gd`、`tools/fix_gintama_plaques.gd`；`tests/test_ui_styles.gd`、`tests/test_search_cast.gd` | M | C |
+| K6 | ☑ P1 | 外觀包（使用者 2026-10-23：「換掉一些元素就能變成別部動畫的視覺小說」；決定：玩法可以關、外觀跟著故事走）：`skins/<id>/skin.json`（場景、`washi`／`flat` 外觀、配色、HUD 資源、生命圖示、標題背景與音樂、用語 `terms`、scene 靜態字 `texts`）；故事在 `stories.json` 寫 `skin`。寫死的新八、萬事屋客廳、各角色打字音高搬進 catalog（`default_pov`、`default_background`、`voice_pitch`）。沒有回合與調查的故事不顯示 HUD、案件檔與「輔助」設定 | `scripts/skin.gd`、`skins/gintama/skin.json`、`tests/fixtures/skins/plain/`；`tests/test_skin.gd` | L | C |
 
 ### M5 內容
 | ID | 優先 | 項目 | 證據 | 量 | 負責 |

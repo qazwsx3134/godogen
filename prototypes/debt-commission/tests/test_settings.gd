@@ -92,6 +92,7 @@ func _run() -> void:
 
 func _new_game() -> Control:
 	var game: Control = (load("res://main.tscn") as PackedScene).instantiate() as Control
+	game.story_path = "res://data/phase3_story.json"  # has rounds, so 設定 shows the 輔助 row
 	game.settings_path = SETTINGS_PATH
 	game.save_path = SAVE
 	root.add_child(game)

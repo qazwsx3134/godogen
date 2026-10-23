@@ -18,9 +18,10 @@ func _ready() -> void:
 
 
 func set_style(style_id: String) -> void:
-	var tint: Dictionary = HUD.TINTS.get(style_id, HUD.TINTS["cinema"])
-	if UI_STYLES.normalize_id(style_id) == "gintama":
-		panel.add_theme_stylebox_override("panel", UI_STYLES.gintama_hud("hud_panel") as StyleBox)
+	var tint: Dictionary = HUD.tint_of(style_id)
+	var own: StyleBox = UI_STYLES.hud_resource(style_id, "panel") as StyleBox
+	if own != null:
+		panel.add_theme_stylebox_override("panel", own)
 	else:
 		var box: StyleBoxFlat = StyleBoxFlat.new()
 		box.bg_color = tint["bg"]

@@ -25,10 +25,11 @@ func _ready() -> void:
 	set_process(false)
 
 
-## The gintama edition writes the prompt in its serif with a navy edge; others keep the scene's look.
+## The prompt in the skin's HUD font with an edge in its name-plate colour (washi looks); a flat look
+## keeps the scene's.
 func set_style(style_id: String) -> void:
 	UI_STYLES.set_hud_font(prompt, style_id)
-	if UI_STYLES.normalize_id(style_id) == "gintama":
+	if UI_STYLES.washi(style_id):
 		prompt.add_theme_color_override("font_outline_color", UI_STYLES.palette(style_id)["name_bg"] as Color)
 		prompt.add_theme_constant_override("outline_size", 14)
 
