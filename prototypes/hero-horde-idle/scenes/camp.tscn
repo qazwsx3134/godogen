@@ -1,0 +1,450 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://ui/theme.tres" id="1_crmxo"]
+[ext_resource type="Script" path="res://scripts/camp.gd" id="2_nawe8"]
+[ext_resource type="Texture2D" path="res://assets/ui/hero_page_bg.png" id="3_40kdf"]
+[ext_resource type="PackedScene" path="res://scenes/march_view.tscn" id="4_tt7v5"]
+[ext_resource type="Texture2D" path="res://assets/stage/boss.png" id="5_xqowg"]
+[ext_resource type="PackedScene" path="res://scenes/ornament_rule.tscn" id="6_nawe8"]
+[ext_resource type="PackedScene" path="res://scenes/reward_row.tscn" id="6_t5w3m"]
+[ext_resource type="PackedScene" path="res://scenes/settings_panel.tscn" id="7_ddxxn"]
+
+[sub_resource type="Gradient" id="Gradient_g0ujn"]
+offsets = PackedFloat32Array(0, 1, 0.4)
+colors = PackedColorArray(0.06, 0.1, 0.09, 0.35, 0.06, 0.1, 0.09, 0.95, 0.06, 0.1, 0.09, 0.1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_wfmch"]
+gradient = SubResource("Gradient_g0ujn")
+width = 4
+height = 128
+fill_from = Vector2(0.5, 0)
+fill_to = Vector2(0.5, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_esv4c"]
+atlas = ExtResource("5_xqowg")
+region = Rect2(0, 0, 200, 200)
+
+[node name="Camp" type="Control" unique_id=79676195]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_crmxo")
+script = ExtResource("2_nawe8")
+
+[node name="Background" type="TextureRect" parent="." unique_id=1296290099]
+texture_filter = 1
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource("3_40kdf")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Shade" type="TextureRect" parent="." unique_id=1354245218]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_wfmch")
+expand_mode = 1
+
+[node name="Margins" type="MarginContainer" parent="." unique_id=1230264774]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 36
+
+[node name="Column" type="VBoxContainer" parent="Margins" unique_id=1325637787]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Top" type="HBoxContainer" parent="Margins/Column" unique_id=1193755342]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="GoldTitle" type="Label" parent="Margins/Column/Top" unique_id=2033851259]
+layout_mode = 2
+theme_type_variation = &"Dim"
+theme_override_font_sizes/font_size = 20
+text = "金幣"
+
+[node name="Gold" type="Label" parent="Margins/Column/Top" unique_id=294540534]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.8509804, 0.69803923, 0.43137255, 1)
+theme_override_font_sizes/font_size = 32
+text = "1280"
+
+[node name="ShardsTitle" type="Label" parent="Margins/Column/Top" unique_id=1890202982]
+layout_mode = 2
+theme_type_variation = &"Dim"
+theme_override_font_sizes/font_size = 20
+text = "突破素材"
+
+[node name="Shards" type="Label" parent="Margins/Column/Top" unique_id=1455086125]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.8509804, 0.69803923, 0.43137255, 1)
+theme_override_font_sizes/font_size = 32
+text = "3"
+
+[node name="Spacer" type="Control" parent="Margins/Column/Top" unique_id=1771572385]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="SettingsButton" type="Button" parent="Margins/Column/Top" unique_id=1166368428]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "設定"
+
+[node name="Title" type="Label" parent="Margins/Column" unique_id=323284228]
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.04, 0.03, 1)
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 60
+text = "全員推王"
+horizontal_alignment = 1
+
+[node name="MarchFrame" type="PanelContainer" parent="Margins/Column" unique_id=392783492]
+layout_mode = 2
+size_flags_vertical = 3
+theme_type_variation = &"Pill"
+
+[node name="MarchView" parent="Margins/Column/MarchFrame" unique_id=2145938034 instance=ExtResource("4_tt7v5")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarchPanel" type="PanelContainer" parent="Margins/Column" unique_id=420763115]
+layout_mode = 2
+
+[node name="Column" type="VBoxContainer" parent="Margins/Column/MarchPanel" unique_id=2076227333]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Top" type="HBoxContainer" parent="Margins/Column/MarchPanel/Column" unique_id=1304117360]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Lines" type="VBoxContainer" parent="Margins/Column/MarchPanel/Column/Top" unique_id=701544414]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="MarchLine" type="Label" parent="Margins/Column/MarchPanel/Column/Top/Lines" unique_id=1244275193]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 24
+text = "已累積 3 小時（上限 8）"
+
+[node name="MarchNext" type="Label" parent="Margins/Column/MarchPanel/Column/Top/Lines" unique_id=867061240]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Dim"
+theme_override_font_sizes/font_size = 20
+text = "下一小時 42:10"
+
+[node name="Claim" type="Button" parent="Margins/Column/MarchPanel/Column/Top" unique_id=1157327632]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 72)
+layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+theme_override_font_sizes/font_size = 26
+text = "領取 3 小時"
+
+[node name="MarchBar" type="ProgressBar" parent="Margins/Column/MarchPanel/Column" unique_id=1980847493]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+theme_type_variation = &"ExpBar"
+value = 30.0
+show_percentage = false
+
+[node name="MarchToast" type="Label" parent="Margins/Column/MarchPanel/Column" unique_id=1815109717]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62352943, 0.8156863, 0.56078434, 1)
+theme_override_font_sizes/font_size = 20
+autowrap_mode = 3
+
+[node name="TodoPanel" type="PanelContainer" parent="Margins/Column" unique_id=276017232]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Column" type="VBoxContainer" parent="Margins/Column/TodoPanel" unique_id=90346992]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Title" type="Label" parent="Margins/Column/TodoPanel/Column" unique_id=8531452]
+layout_mode = 2
+theme_type_variation = &"Dim"
+theme_override_font_sizes/font_size = 22
+text = "待辦"
+
+[node name="TodoList" type="VBoxContainer" parent="Margins/Column/TodoPanel/Column" unique_id=268970315]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Todo_1" type="Button" parent="Margins/Column/TodoPanel/Column/TodoList" unique_id=1883377973]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_type_variation = &"FlatButton"
+theme_override_font_sizes/font_size = 23
+text = "•  行軍累積了 3 小時，可以領取"
+alignment = 0
+
+[node name="Todo_2" type="Button" parent="Margins/Column/TodoPanel/Column/TodoList" unique_id=1678513036]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_type_variation = &"FlatButton"
+theme_override_font_sizes/font_size = 23
+text = "•  劍 職業等級可以升到 19（370 金）"
+alignment = 0
+
+[node name="Todo_3" type="Button" parent="Margins/Column/TodoPanel/Column/TodoList" unique_id=126613701]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_type_variation = &"FlatButton"
+theme_override_font_sizes/font_size = 23
+text = "•  行軍小隊有英雄可以突破（1 素材）"
+alignment = 0
+
+[node name="NextCard" type="PanelContainer" parent="Margins/Column" unique_id=79833027]
+layout_mode = 2
+
+[node name="Row" type="HBoxContainer" parent="Margins/Column/NextCard" unique_id=634239147]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="BossThumb" type="TextureRect" parent="Margins/Column/NextCard/Row" unique_id=495471148]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(150, 150)
+layout_mode = 2
+texture = SubResource("AtlasTexture_esv4c")
+expand_mode = 1
+stretch_mode = 5
+flip_h = true
+
+[node name="Column" type="VBoxContainer" parent="Margins/Column/NextCard/Row" unique_id=1304397175]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="RegionName" type="Label" parent="Margins/Column/NextCard/Row/Column" unique_id=998858607]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Dim"
+theme_override_font_sizes/font_size = 22
+text = "黃昏要塞"
+
+[node name="StageRow" type="HBoxContainer" parent="Margins/Column/NextCard/Row/Column" unique_id=1527226916]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="StageLabel" type="Label" parent="Margins/Column/NextCard/Row/Column/StageRow" unique_id=1804875916]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.8509804, 0.69803923, 0.43137255, 1)
+theme_override_font_sizes/font_size = 52
+text = "1-1"
+
+[node name="BossName" type="Label" parent="Margins/Column/NextCard/Row/Column/StageRow" unique_id=1620389797]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 36
+text = "棍棒巨魔"
+
+[node name="PowerLine" type="Label" parent="Margins/Column/NextCard/Row/Column" unique_id=714086287]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 22
+text = "我方戰力 870 ／ 推薦 950"
+
+[node name="Push" type="Button" parent="Margins/Column/NextCard/Row/Column" unique_id=424416176]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 92)
+layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+theme_override_font_sizes/font_size = 42
+text = "推王"
+
+[node name="OfflineReport" type="Control" parent="." unique_id=748315571]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Dim" type="ColorRect" parent="OfflineReport" unique_id=1234479241]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.02, 0.04, 0.03, 0.75)
+
+[node name="Center" type="CenterContainer" parent="OfflineReport" unique_id=531832961]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Panel" type="PanelContainer" parent="OfflineReport/Center" unique_id=829462244]
+custom_minimum_size = Vector2(620, 0)
+layout_mode = 2
+theme_type_variation = &"Dialog"
+
+[node name="Column" type="VBoxContainer" parent="OfflineReport/Center/Panel" unique_id=1728535323]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="OfflineTitle" type="Label" parent="OfflineReport/Center/Panel/Column" unique_id=1376369600]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 44
+text = "離線戰報"
+horizontal_alignment = 1
+
+[node name="Rule" parent="OfflineReport/Center/Panel/Column" unique_id=451753129 instance=ExtResource("6_nawe8")]
+layout_mode = 2
+
+[node name="OfflineText" type="Label" parent="OfflineReport/Center/Panel/Column" unique_id=2069494543]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(540, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 26
+text = "你不在的時候，行軍小隊走了 3 小時。"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="OfflineScroll" type="ScrollContainer" parent="OfflineReport/Center/Panel/Column" unique_id=1624274035]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 470)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Sections" type="VBoxContainer" parent="OfflineReport/Center/Panel/Column/OfflineScroll" unique_id=300397337]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="ResourcesSection" type="VBoxContainer" parent="OfflineReport/Center/Panel/Column/OfflineScroll/Sections" unique_id=438121309]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Title" type="Label" parent="OfflineReport/Center/Panel/Column/OfflineScroll/Sections/ResourcesSection" unique_id=943541406]
+layout_mode = 2
+theme_type_variation = &"Dim"
+theme_override_font_sizes/font_size = 22
+text = "資源"
+
+[node name="ResourcesGrid" type="GridContainer" parent="OfflineReport/Center/Panel/Column/OfflineScroll/Sections/ResourcesSection" unique_id=355700750]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 8
+columns = 2
+
+[node name="Preview_0" parent="OfflineReport/Center/Panel/Column/OfflineScroll/Sections/ResourcesSection/ResourcesGrid" unique_id=2064784954 instance=ExtResource("6_t5w3m")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Preview_1" parent="OfflineReport/Center/Panel/Column/OfflineScroll/Sections/ResourcesSection/ResourcesGrid" unique_id=365333571 instance=ExtResource("6_t5w3m")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="GearSection" type="VBoxContainer" parent="OfflineReport/Center/Panel/Column/OfflineScroll/Sections" unique_id=747785282]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Title" type="Label" parent="OfflineReport/Center/Panel/Column/OfflineScroll/Sections/GearSection" unique_id=288513303]
+layout_mode = 2
+theme_type_variation = &"Dim"
+theme_override_font_sizes/font_size = 22
+text = "裝備"
+
+[node name="GearGrid" type="GridContainer" parent="OfflineReport/Center/Panel/Column/OfflineScroll/Sections/GearSection" unique_id=1919936418]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 8
+columns = 2
+
+[node name="HeroesSection" type="VBoxContainer" parent="OfflineReport/Center/Panel/Column/OfflineScroll/Sections" unique_id=226670085]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Title" type="Label" parent="OfflineReport/Center/Panel/Column/OfflineScroll/Sections/HeroesSection" unique_id=92931119]
+layout_mode = 2
+theme_type_variation = &"Dim"
+theme_override_font_sizes/font_size = 22
+text = "英雄升級"
+
+[node name="HeroesGrid" type="GridContainer" parent="OfflineReport/Center/Panel/Column/OfflineScroll/Sections/HeroesSection" unique_id=1582243831]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 8
+columns = 2
+
+[node name="OfflineClaim" type="Button" parent="OfflineReport/Center/Panel/Column" unique_id=1111183815]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+theme_override_font_sizes/font_size = 34
+text = "領取"
+
+[node name="OfflineAd" type="Button" parent="OfflineReport/Center/Panel/Column" unique_id=249236836]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "看廣告　金幣再領一次"
+
+[node name="SettingsOverlay" type="Control" parent="." unique_id=47515057]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Dim" type="ColorRect" parent="SettingsOverlay" unique_id=1644166548]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.02, 0.04, 0.03, 0.75)
+
+[node name="Center" type="CenterContainer" parent="SettingsOverlay" unique_id=1599462556]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="SettingsPanel" parent="SettingsOverlay/Center" unique_id=636462645 instance=ExtResource("7_ddxxn")]
+unique_name_in_owner = true
+layout_mode = 2

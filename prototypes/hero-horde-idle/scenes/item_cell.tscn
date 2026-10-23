@@ -1,0 +1,157 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://ui/theme.tres" id="1_dqqlr"]
+[ext_resource type="Script" path="res://scripts/item_cell.gd" id="2_v782p"]
+[ext_resource type="Texture2D" path="res://assets/ui/items/w_sword.png" id="3_ohc2m"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xyd2x"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_87kf2"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_y6n1s"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sra5e"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_grve4"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6xb46"]
+
+[sub_resource type="Gradient" id="Gradient_6je78"]
+colors = PackedColorArray(1, 1, 1, 1, 0.42, 0.42, 0.42, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_0ywjk"]
+gradient = SubResource("Gradient_6je78")
+width = 4
+fill_from = Vector2(0.5, 0)
+fill_to = Vector2(0.5, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p6a6m"]
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="ItemCell" type="Button" unique_id=1412069887]
+custom_minimum_size = Vector2(112, 112)
+offset_right = 112.0
+offset_bottom = 112.0
+theme = ExtResource("1_dqqlr")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_xyd2x")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_87kf2")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_y6n1s")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_sra5e")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_grve4")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_6xb46")
+toggle_mode = true
+script = ExtResource("2_v782p")
+
+[node name="Bg" type="TextureRect" parent="." unique_id=161189641]
+unique_name_in_owner = true
+self_modulate = Color(0.47843137, 0.30980393, 0.68235296, 1)
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_0ywjk")
+expand_mode = 1
+
+[node name="Icon" type="TextureRect" parent="." unique_id=354829060]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 8.0
+offset_right = -10.0
+offset_bottom = -14.0
+mouse_filter = 2
+texture = ExtResource("3_ohc2m")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="New" type="ColorRect" parent="." unique_id=1196094243]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 32.0
+offset_bottom = 26.0
+mouse_filter = 2
+color = Color(0.65882355, 0.2509804, 0.18431373, 1)
+
+[node name="Text" type="Label" parent="New" unique_id=1263923990]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 17
+text = "新"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Caption" type="Label" parent="." unique_id=114714627]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = -32.0
+offset_right = 60.0
+offset_bottom = -2.0
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_colors/font_outline_color = Color(0.04, 0.05, 0.04, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 22
+text = "劍"
+vertical_alignment = 2
+
+[node name="Corner" type="Label" parent="." unique_id=1455373890]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -80.0
+offset_top = -32.0
+offset_right = -6.0
+offset_bottom = -2.0
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_colors/font_outline_color = Color(0.04, 0.05, 0.04, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 22
+text = "×2"
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="Face" type="TextureRect" parent="." unique_id=517305531]
+unique_name_in_owner = true
+visible = false
+texture_filter = 1
+layout_mode = 0
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -50.0
+offset_top = -62.0
+offset_right = -4.0
+offset_bottom = -4.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Frame" type="Panel" parent="." unique_id=774954680]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_p6a6m")

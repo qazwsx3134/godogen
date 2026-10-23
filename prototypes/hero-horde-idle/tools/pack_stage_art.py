@@ -10,8 +10,19 @@ in-game height, reduced to a small palette and given a hard alpha edge. Writes
   assets/stage/<tile>.png       grass, arena, cliff: downscaled and made seamless
   assets/heroes/heroes.png+json one row per class, 9 cells of 48 px in the sprite3d sheets.json layout
                                 (run 4, attack 3, down, volley); a missing pose uses the class's ready stance
+  assets/flags/<squad>.png      the squad's banner, two frames side by side (cloth swinging), pole foot aligned
+  assets/heroes/portraits/      each class's ready stance at PORTRAIT_PX tall for the 養成 screens, plus
+                                portraits.json: the head-and-shoulders square of each (the roster's card crop)
+  assets/ui/sig/<move>.png      招牌技 icons, SIG_ICON_PX square (selected.json "ui" "sig")
+  assets/ui/class/<class>.png   class pennants keyed off their flat magenta, CLASS_ICON_PX tall ("ui" "class")
+  assets/ui/hero_page_bg.png    the hero page's backdrop at half the 720 px UI width ("ui" "hero_bg")
+  assets/ui/items/<id>.png      道具 icons (relics, materials) keyed off their magenta, fitted into ITEM_ICON_PX ("ui" "items")
+  assets/ui/nav/<tab>.png       nav bar icons keyed off their magenta, fitted into NAV_ICON_PX ("ui" "nav")
+  assets/ui/bg/recruit.png      the 招募 page's tavern at half the UI width ("ui" "recruit_bg")
+Steps can be named to run only those: ... pack_stage_art.py portraits ui
 """
 import json
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -109,10 +120,116 @@ def heroes(classes: dict) -> None:
         "foot_px": HERO_FOOT, "meters_per_px": M_PER_PX, "characters": chars}, indent=1) + "\n")
 
 
+PORTRAIT_PX = 160
+
+
+def portraits(classes: dict) -> None:
+    """The ready stance, larger than the battle sprites (the hero page shows it at 2x). The face square sits on the
+    densest band of columns near the top (the head and chest, not a raised weapon), from just above the head."""
+    out_dir = ROOT / "assets" / "heroes" / "portraits"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    faces = {}
+    for cls in HERO_CLASSES:
+        poses = classes.get(cls)
+        if not poses or not poses.get("ready"):
+            continue
+        px = pixelate(subject(Path(poses["ready"])), PORTRAIT_PX, 64)
+        px.save(out_dir / f"{cls}.png")
+        a = (np.array(px)[..., 3] > 0).astype(int)
+        side = min(round(PORTRAIT_PX * 0.42), px.width)
+        # Weapons are thin: the densest square-wide column band over the top of the figure is the head and chest.
+        cols = a[: side + side // 2].sum(axis=0)
+        x = int(np.argmax(np.convolve(cols, np.ones(side, int), "valid")))
+        rows = np.nonzero(a[:, x + side // 4: x + side - side // 4].sum(axis=1) >= 3)[0]
+        y = int(max(0, min(rows[0] - 2, PORTRAIT_PX - side)))
+        faces[cls] = [x, y, side, side]
+    (out_dir / "portraits.json").write_text(json.dumps({"height_px": PORTRAIT_PX, "face": faces}, indent=1) + "\n")
+
+
+SIG_ICON_PX = 96
+CLASS_ICON_PX = 88
+BG_WIDTH = 360
+ITEM_ICON_PX = 96
+NAV_ICON_PX = 64
+
+
+def key_magenta(img: Image.Image) -> Image.Image:
+    """Flat #FF00FF background -> transparent; pinkish edge pixels lose their magenta cast."""
+    a = np.array(img.convert("RGBA")).astype(int)
+    r, g, b = a[..., 0], a[..., 1], a[..., 2]
+    bg = (r > 180) & (b > 180) & (g < 110) & (abs(r - b) < 70)
+    fringe = (r > 140) & (b > 140) & (g < r - 50) & ~bg
+    a[..., 3] = np.where(bg, 0, a[..., 3])
+    a[..., 0] = np.where(fringe, (r + g) // 2, r)
+    a[..., 2] = np.where(fringe, (b + g) // 2, b)
+    return Image.fromarray(a.clip(0, 255).astype(np.uint8), "RGBA")
+
+
+def ui_art(spec: dict) -> None:
+    out = ROOT / "assets" / "ui"
+    for sub in ("sig", "class"):
+        (out / sub).mkdir(parents=True, exist_ok=True)
+    for name, src in spec.get("sig", {}).items():
+        img = Image.open(ROOT / src).convert("RGBA")
+        side = min(img.size)
+        img = img.crop(((img.width - side) // 2, (img.height - side) // 2,
+                        (img.width + side) // 2, (img.height + side) // 2))
+        pixelate(img, SIG_ICON_PX, 48).save(out / "sig" / f"{name}.png")
+    for name, src in spec.get("class", {}).items():
+        img = key_magenta(Image.open(ROOT / src))
+        img = img.crop(alpha_box(img))
+        pixelate(img, CLASS_ICON_PX, 32).save(out / "class" / f"{name}.png")
+    for sub, side, colors in (("items", ITEM_ICON_PX, 48), ("nav", NAV_ICON_PX, 24)):
+        (out / sub).mkdir(parents=True, exist_ok=True)
+        for name, src in spec.get(sub, {}).items():
+            img = key_magenta(Image.open(ROOT / src))
+            img = img.crop(alpha_box(img))
+            fit = side - 8
+            h = max(1, round(fit * img.height / max(img.width, img.height)))
+            small = pixelate(img, h, colors)
+            if small.width > fit:  # a wide one: fit the width instead
+                small = pixelate(img, max(1, round(h * fit / small.width)), colors)
+            square = Image.new("RGBA", (side, side), (0, 0, 0, 0))
+            square.paste(small, ((side - small.width) // 2, (side - small.height) // 2))
+            square.save(out / sub / f"{name}.png")
+    if spec.get("recruit_bg"):
+        (out / "bg").mkdir(parents=True, exist_ok=True)
+        img = Image.open(ROOT / spec["recruit_bg"]).convert("RGB")
+        h = round(img.height * BG_WIDTH / img.width)
+        img.resize((BG_WIDTH, h), Image.BOX).quantize(64, method=Image.Quantize.MEDIANCUT,
+                                                      dither=Image.Dither.NONE).convert("RGB").save(out / "bg" / "recruit.png")
+    if spec.get("hero_bg"):
+        img = Image.open(ROOT / spec["hero_bg"]).convert("RGB")
+        h = round(img.height * BG_WIDTH / img.width)
+        img.resize((BG_WIDTH, h), Image.BOX).quantize(64, method=Image.Quantize.MEDIANCUT,
+                                                      dither=Image.Dither.NONE).convert("RGB").save(out / "hero_page_bg.png")
+
+
 def prop(name: str, spec: dict) -> None:
     img = pixelate(subject(Path(spec["src"])), round(spec["height_m"] / M_PER_PX))
     (OUT / "props").mkdir(parents=True, exist_ok=True)
     img.save(OUT / "props" / f"{name}.png")
+
+
+def flag(name: str, spec: dict) -> None:
+    """Both frames share one crop box (the generator aligned the pole's foot on one canvas), so the pole stands
+    still while the cloth swings; each frame is a cell of the same width with the pole's foot at its bottom centre."""
+    srcs = [Image.open(ROOT / spec[k]).convert("RGBA") for k in ("frame_a", "frame_b")]
+    boxes = [alpha_box(im) for im in srcs]
+    box = (min(b[0] for b in boxes), min(b[1] for b in boxes), max(b[2] for b in boxes), max(b[3] for b in boxes))
+    height = round(spec["height_m"] / M_PER_PX)
+    frames = [pixelate(im.crop(box), height, 32) for im in srcs]
+    # The pole's foot (lowest opaque pixels) goes to the cell's centre column, where the flag stands in the game.
+    a = np.array(frames[0])[..., 3]
+    bottom = np.nonzero(a.any(axis=1))[0].max()
+    foot = int(round(np.nonzero(a[bottom])[0].mean()))
+    half = max(foot, max(f.width for f in frames) - foot) + 1
+    cell = half * 2
+    sheet = Image.new("RGBA", (cell * len(frames), height), (0, 0, 0, 0))
+    for k, f in enumerate(frames):
+        sheet.paste(f, (k * cell + half - foot, 0))
+    (ROOT / "assets" / "flags").mkdir(parents=True, exist_ok=True)
+    sheet.save(ROOT / "assets" / "flags" / f"{name}.png")
 
 
 def tile(name: str, spec: dict) -> None:
@@ -148,6 +265,12 @@ def tile(name: str, spec: dict) -> None:
 if __name__ == "__main__":
     sel = json.loads((ROOT / "art_src" / "selected.json").read_text())
     OUT.mkdir(parents=True, exist_ok=True)
+    if sys.argv[1:]:
+        if "portraits" in sys.argv[1:]:
+            portraits(sel["heroes"])
+        if "ui" in sys.argv[1:]:
+            ui_art(sel.get("ui", {}))
+        sys.exit(0)
     boss(sel["boss"])
     for name, spec in sel.get("props", {}).items():
         prop(name, spec)
@@ -155,4 +278,8 @@ if __name__ == "__main__":
         tile(name, spec)
     if sel.get("heroes"):
         heroes(sel["heroes"])
+        portraits(sel["heroes"])
+    for name, spec in sel.get("flags", {}).items():
+        flag(name, spec)
+    ui_art(sel.get("ui", {}))
     print("packed into", OUT)

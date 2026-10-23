@@ -1,0 +1,7 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://shaders/ui_sprite.gdshader" id="1_uisp"]
+
+[resource]
+shader = ExtResource("1_uisp")
+shader_parameter/outline = Color(0.05, 0.05, 0.08, 1)

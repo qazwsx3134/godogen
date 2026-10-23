@@ -105,5 +105,59 @@
       "down": "art_src/hd2b/healer/down/candidate-01.png",
       "volley": "art_src/hd2b/healer/volley/candidate-01.png"
     }
+  },
+  "flags": {
+    "melee": {
+      "frame_a": "art_src/flags/melee/frame_a/candidate-01.png",
+      "frame_b": "art_src/flags/melee/frame_b/candidate-01.png",
+      "height_m": 2.4
+    },
+    "ranged": {
+      "frame_a": "art_src/flags/ranged/frame_a/candidate-01.png",
+      "frame_b": "art_src/flags/ranged/frame_b/candidate-01.png",
+      "height_m": 2.4
+    },
+    "support": {
+      "frame_a": "art_src/flags/support/frame_a/candidate-01.png",
+      "frame_b": "art_src/flags/support/frame_b/candidate-01.png",
+      "height_m": 2.4
+    }
+  },
+  "ui": {
+    "sig": {
+      "wall": "art_src/ui_icons/sig/wall.png",
+      "cleave": "art_src/ui_icons/sig/cleave.png",
+      "gale": "art_src/ui_icons/sig/gale.png",
+      "pierce": "art_src/ui_icons/sig/pierce.png",
+      "arrow": "art_src/ui_icons/sig/arrow.png",
+      "meteor": "art_src/ui_icons/sig/meteor.png",
+      "dawn": "art_src/ui_icons/sig/dawn.png"
+    },
+    "class": {
+      "shield": "art_src/ui_icons/class/shield.png",
+      "sword": "art_src/ui_icons/class/sword.png",
+      "spear": "art_src/ui_icons/class/spear.png",
+      "bow": "art_src/ui_icons/class/bow.png",
+      "mage": "art_src/ui_icons/class/mage.png",
+      "healer": "art_src/ui_icons/class/healer.png"
+    },
+    "hero_bg": "art_src/ui_icons/bg/hero_page.png",
+    "items": {
+      "r_sun": "art_src/ui_icons2/items/r_sun.png",
+      "r_frost": "art_src/ui_icons2/items/r_frost.png",
+      "r_flame": "art_src/ui_icons2/items/r_flame.png",
+      "r_leaf": "art_src/ui_icons2/items/r_leaf.png",
+      "m_stone": "art_src/ui_icons2/items/m_stone.png",
+      "m_shard": "art_src/ui_icons2/items/m_shard.png",
+      "m_ticket": "art_src/ui_icons2/items/m_ticket.png"
+    },
+    "nav": {
+      "camp": "art_src/ui_icons2/nav/camp.png",
+      "growth": "art_src/ui_icons2/nav/growth.png",
+      "recruit": "art_src/ui_icons2/nav/recruit.png",
+      "items": "art_src/ui_icons2/nav/items.png",
+      "stages": "art_src/ui_icons2/nav/stages.png"
+    },
+    "recruit_bg": "art_src/ui_icons2/bg/recruit.png"
   }
 }

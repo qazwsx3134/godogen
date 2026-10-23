@@ -1,0 +1,631 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://ui/theme.tres" id="1_lk1l5"]
+[ext_resource type="Script" path="res://scripts/recruit_page.gd" id="2_jciig"]
+[ext_resource type="Texture2D" path="res://assets/ui/bg/recruit.png" id="3_u8t41"]
+[ext_resource type="Texture2D" path="res://assets/heroes/portraits/sword.png" id="4_xsmuu"]
+[ext_resource type="PackedScene" path="res://scenes/pull_card.tscn" id="5_f4mfh"]
+[ext_resource type="Texture2D" path="res://assets/ui/items/m_ticket.png" id="6_8ktdy"]
+[ext_resource type="PackedScene" path="res://scenes/ornament_rule.tscn" id="6_jciig"]
+
+[sub_resource type="Gradient" id="Gradient_644v2"]
+offsets = PackedFloat32Array(0, 1, 0.45)
+colors = PackedColorArray(0.06, 0.1, 0.09, 0.3, 0.06, 0.1, 0.09, 0.97, 0.06, 0.1, 0.09, 0.15)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_tk8ta"]
+gradient = SubResource("Gradient_644v2")
+width = 4
+height = 128
+fill_from = Vector2(0.5, 0)
+fill_to = Vector2(0.5, 1)
+
+[node name="Recruit" type="Control" unique_id=420944997]
+clip_contents = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_lk1l5")
+script = ExtResource("2_jciig")
+
+[node name="Background" type="TextureRect" parent="." unique_id=898672048]
+texture_filter = 1
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource("3_u8t41")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Shade" type="TextureRect" parent="." unique_id=139946164]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_tk8ta")
+expand_mode = 1
+
+[node name="Margins" type="MarginContainer" parent="." unique_id=967132191]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 36
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="Column" type="VBoxContainer" parent="Margins" unique_id=693322721]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Top" type="HBoxContainer" parent="Margins/Column" unique_id=1840303297]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="Margins/Column/Top" unique_id=1007027036]
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 44
+text = "招募"
+
+[node name="Spacer" type="Control" parent="Margins/Column/Top" unique_id=1906149809]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="GoldTitle" type="Label" parent="Margins/Column/Top" unique_id=395170452]
+layout_mode = 2
+theme_type_variation = &"Dim"
+theme_override_font_sizes/font_size = 20
+text = "金幣"
+
+[node name="Gold" type="Label" parent="Margins/Column/Top" unique_id=1991354617]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.8509804, 0.69803923, 0.43137255, 1)
+theme_override_font_sizes/font_size = 32
+text = "4820"
+
+[node name="TicketsTitle" type="Label" parent="Margins/Column/Top" unique_id=1064577493]
+layout_mode = 2
+theme_type_variation = &"Dim"
+theme_override_font_sizes/font_size = 20
+text = "招募券"
+
+[node name="Tickets" type="Label" parent="Margins/Column/Top" unique_id=1598667949]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.8509804, 0.69803923, 0.43137255, 1)
+theme_override_font_sizes/font_size = 32
+text = "12"
+
+[node name="ShopButton" type="Button" parent="Margins/Column/Top" unique_id=957043974]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 60)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "商店"
+
+[node name="Stage" type="Control" parent="Margins/Column" unique_id=473652692]
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="BannerArt" type="TextureRect" parent="Margins/Column/Stage" unique_id=552840323]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 150.0
+mouse_filter = 2
+texture = ExtResource("4_xsmuu")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Heading" type="VBoxContainer" parent="Margins/Column/Stage" unique_id=59148636]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 4.0
+offset_bottom = 4.0
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Pool" type="Label" parent="Margins/Column/Stage/Heading" unique_id=571881701]
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_colors/font_outline_color = Color(0.04, 0.05, 0.04, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 30
+text = "限時卡池"
+
+[node name="BannerName" type="Label" parent="Margins/Column/Stage/Heading" unique_id=260699827]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_colors/font_outline_color = Color(0.04, 0.05, 0.04, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 64
+text = "蘿德"
+
+[node name="BannerTag" type="Label" parent="Margins/Column/Stage/Heading" unique_id=303913573]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.8509804, 0.69803923, 0.43137255, 1)
+theme_override_colors/font_outline_color = Color(0.04, 0.05, 0.04, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 28
+text = "SSR　｜　劍士"
+
+[node name="TimerRow" type="HBoxContainer" parent="Margins/Column" unique_id=632040916]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="CountdownTitle" type="Label" parent="Margins/Column/TimerRow" unique_id=63498750]
+layout_mode = 2
+theme_type_variation = &"Dim"
+theme_override_font_sizes/font_size = 22
+text = "卡池倒數"
+
+[node name="Countdown" type="Label" parent="Margins/Column/TimerRow" unique_id=305621796]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.8509804, 0.69803923, 0.43137255, 1)
+theme_override_font_sizes/font_size = 34
+text = "02:18:36"
+
+[node name="Spacer" type="Control" parent="Margins/Column/TimerRow" unique_id=1528336215]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="RatesButton" type="Button" parent="Margins/Column/TimerRow" unique_id=504561532]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 56)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "機率說明"
+
+[node name="Pity" type="PanelContainer" parent="Margins/Column" unique_id=319647572]
+layout_mode = 2
+
+[node name="Column" type="VBoxContainer" parent="Margins/Column/Pity" unique_id=257567848]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Row" type="HBoxContainer" parent="Margins/Column/Pity/Column" unique_id=691375469]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Margins/Column/Pity/Column/Row" unique_id=972635922]
+layout_mode = 2
+theme_type_variation = &"Dim"
+theme_override_font_sizes/font_size = 22
+text = "保底"
+
+[node name="PityLine" type="Label" parent="Margins/Column/Pity/Column/Row" unique_id=2106852578]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 28
+text = "再 23 抽必出 SSR"
+horizontal_alignment = 1
+
+[node name="PityCount" type="Label" parent="Margins/Column/Pity/Column/Row" unique_id=62981071]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Dim"
+theme_override_font_sizes/font_size = 22
+text = "7／30"
+
+[node name="PityBar" type="ProgressBar" parent="Margins/Column/Pity/Column" unique_id=1026803939]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+max_value = 30.0
+value = 7.0
+show_percentage = false
+
+[node name="RecentTitle" type="Label" parent="Margins/Column" unique_id=243144170]
+layout_mode = 2
+theme_type_variation = &"Dim"
+theme_override_font_sizes/font_size = 22
+text = "近期獲得"
+
+[node name="Recent" type="HBoxContainer" parent="Margins/Column" unique_id=1031634313]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="Recent_0" parent="Margins/Column/Recent" unique_id=600359567 instance=ExtResource("5_f4mfh")]
+layout_mode = 2
+
+[node name="Recent_1" parent="Margins/Column/Recent" unique_id=1547627921 instance=ExtResource("5_f4mfh")]
+layout_mode = 2
+
+[node name="Recent_2" parent="Margins/Column/Recent" unique_id=143034343 instance=ExtResource("5_f4mfh")]
+layout_mode = 2
+
+[node name="Recent_3" parent="Margins/Column/Recent" unique_id=1226121128 instance=ExtResource("5_f4mfh")]
+layout_mode = 2
+
+[node name="Recent_4" parent="Margins/Column/Recent" unique_id=2072311567 instance=ExtResource("5_f4mfh")]
+layout_mode = 2
+
+[node name="AdPull" type="Button" parent="Margins/Column" unique_id=1989957473]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "看廣告　免費單抽"
+
+[node name="Buttons" type="HBoxContainer" parent="Margins/Column" unique_id=913323356]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Single" type="Button" parent="Margins/Column/Buttons" unique_id=677747039]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 28
+text = "單抽
+招募券 ×1"
+
+[node name="Ten" type="Button" parent="Margins/Column/Buttons" unique_id=677906467]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"PrimaryButton"
+theme_override_font_sizes/font_size = 28
+text = "十連
+招募券 ×10"
+
+[node name="Toast" type="Label" parent="Margins/Column" unique_id=1714155074]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62352943, 0.8156863, 0.56078434, 1)
+theme_override_font_sizes/font_size = 20
+autowrap_mode = 3
+
+[node name="RatesOverlay" type="Control" parent="." unique_id=399796817]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Dim" type="ColorRect" parent="RatesOverlay" unique_id=1967169664]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.02, 0.04, 0.03, 0.8)
+
+[node name="Center" type="CenterContainer" parent="RatesOverlay" unique_id=1242697958]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Panel" type="PanelContainer" parent="RatesOverlay/Center" unique_id=737435576]
+custom_minimum_size = Vector2(640, 0)
+layout_mode = 2
+theme_type_variation = &"Dialog"
+
+[node name="Column" type="VBoxContainer" parent="RatesOverlay/Center/Panel" unique_id=532371833]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Title" type="Label" parent="RatesOverlay/Center/Panel/Column" unique_id=1671955650]
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 38
+text = "機率說明"
+horizontal_alignment = 1
+
+[node name="Rule" parent="RatesOverlay/Center/Panel/Column" unique_id=451753129 instance=ExtResource("6_jciig")]
+layout_mode = 2
+
+[node name="RatesText" type="Label" parent="RatesOverlay/Center/Panel/Column" unique_id=822261441]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(560, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 24
+text = "N　55%"
+autowrap_mode = 3
+
+[node name="Note" type="Label" parent="RatesOverlay/Center/Panel/Column" unique_id=610987334]
+layout_mode = 2
+theme_type_variation = &"Dim"
+theme_override_font_sizes/font_size = 19
+text = "每次招募各自獨立計算；保底次數跨卡池保留。"
+
+[node name="RatesClose" type="Button" parent="RatesOverlay/Center/Panel/Column" unique_id=699804800]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 76)
+layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+theme_override_font_sizes/font_size = 30
+text = "好"
+
+[node name="ShopOverlay" type="Control" parent="." unique_id=41438507]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Dim" type="ColorRect" parent="ShopOverlay" unique_id=185269168]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.02, 0.04, 0.03, 0.8)
+
+[node name="Center" type="CenterContainer" parent="ShopOverlay" unique_id=800288230]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Panel" type="PanelContainer" parent="ShopOverlay/Center" unique_id=1146392012]
+custom_minimum_size = Vector2(640, 0)
+layout_mode = 2
+theme_type_variation = &"Dialog"
+
+[node name="Column" type="VBoxContainer" parent="ShopOverlay/Center/Panel" unique_id=1379246131]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Title" type="Label" parent="ShopOverlay/Center/Panel/Column" unique_id=1891082594]
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 38
+text = "商店"
+horizontal_alignment = 1
+
+[node name="Rule" parent="ShopOverlay/Center/Panel/Column" unique_id=1713846209 instance=ExtResource("6_jciig")]
+layout_mode = 2
+
+[node name="ShopNote" type="Label" parent="ShopOverlay/Center/Panel/Column" unique_id=1422769261]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8509804, 0.4509804, 0.3529412, 1)
+theme_override_font_sizes/font_size = 20
+text = "測試商店：不會真的扣款"
+horizontal_alignment = 1
+
+[node name="Products" type="VBoxContainer" parent="ShopOverlay/Center/Panel/Column" unique_id=1928114181]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Product_0" type="HBoxContainer" parent="ShopOverlay/Center/Panel/Column/Products" unique_id=89521205]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Icon" type="TextureRect" parent="ShopOverlay/Center/Panel/Column/Products/Product_0" unique_id=566998127]
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+texture = ExtResource("6_8ktdy")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Words" type="VBoxContainer" parent="ShopOverlay/Center/Panel/Column/Products/Product_0" unique_id=947721599]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="Name" type="Label" parent="ShopOverlay/Center/Panel/Column/Products/Product_0/Words" unique_id=1553859330]
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 26
+text = "招募券 ×10"
+
+[node name="Tag" type="Label" parent="ShopOverlay/Center/Panel/Column/Products/Product_0/Words" unique_id=1280047431]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8509804, 0.69803923, 0.43137255, 1)
+theme_override_font_sizes/font_size = 18
+text = "多送 10 張"
+
+[node name="Buy" type="Button" parent="ShopOverlay/Center/Panel/Column/Products/Product_0" unique_id=509788759]
+custom_minimum_size = Vector2(170, 64)
+layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+theme_override_font_sizes/font_size = 24
+text = "NT$ 90"
+
+[node name="Product_1" type="HBoxContainer" parent="ShopOverlay/Center/Panel/Column/Products" unique_id=1769544527]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Icon" type="TextureRect" parent="ShopOverlay/Center/Panel/Column/Products/Product_1" unique_id=2136496941]
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+texture = ExtResource("6_8ktdy")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Words" type="VBoxContainer" parent="ShopOverlay/Center/Panel/Column/Products/Product_1" unique_id=433629351]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="Name" type="Label" parent="ShopOverlay/Center/Panel/Column/Products/Product_1/Words" unique_id=1680481324]
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 26
+text = "招募券 ×10"
+
+[node name="Tag" type="Label" parent="ShopOverlay/Center/Panel/Column/Products/Product_1/Words" unique_id=925758296]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8509804, 0.69803923, 0.43137255, 1)
+theme_override_font_sizes/font_size = 18
+text = "多送 10 張"
+
+[node name="Buy" type="Button" parent="ShopOverlay/Center/Panel/Column/Products/Product_1" unique_id=172713888]
+custom_minimum_size = Vector2(170, 64)
+layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+theme_override_font_sizes/font_size = 24
+text = "NT$ 90"
+
+[node name="Product_2" type="HBoxContainer" parent="ShopOverlay/Center/Panel/Column/Products" unique_id=605146054]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Icon" type="TextureRect" parent="ShopOverlay/Center/Panel/Column/Products/Product_2" unique_id=1305954147]
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+texture = ExtResource("6_8ktdy")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Words" type="VBoxContainer" parent="ShopOverlay/Center/Panel/Column/Products/Product_2" unique_id=224975127]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="Name" type="Label" parent="ShopOverlay/Center/Panel/Column/Products/Product_2/Words" unique_id=748817068]
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 26
+text = "招募券 ×10"
+
+[node name="Tag" type="Label" parent="ShopOverlay/Center/Panel/Column/Products/Product_2/Words" unique_id=1028083635]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8509804, 0.69803923, 0.43137255, 1)
+theme_override_font_sizes/font_size = 18
+text = "多送 10 張"
+
+[node name="Buy" type="Button" parent="ShopOverlay/Center/Panel/Column/Products/Product_2" unique_id=664955995]
+custom_minimum_size = Vector2(170, 64)
+layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+theme_override_font_sizes/font_size = 24
+text = "NT$ 90"
+
+[node name="Restore" type="Button" parent="ShopOverlay/Center/Panel/Column" unique_id=1213935390]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "恢復購買"
+
+[node name="ShopClose" type="Button" parent="ShopOverlay/Center/Panel/Column" unique_id=1564108110]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 76)
+layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+theme_override_font_sizes/font_size = 30
+text = "好"
+
+[node name="ResultsOverlay" type="Control" parent="." unique_id=290061518]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Dim" type="ColorRect" parent="ResultsOverlay" unique_id=336191432]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.02, 0.04, 0.03, 0.8)
+
+[node name="Center" type="CenterContainer" parent="ResultsOverlay" unique_id=83447754]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Panel" type="PanelContainer" parent="ResultsOverlay/Center" unique_id=760499667]
+custom_minimum_size = Vector2(640, 0)
+layout_mode = 2
+theme_type_variation = &"Dialog"
+
+[node name="Column" type="VBoxContainer" parent="ResultsOverlay/Center/Panel" unique_id=2072467571]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="ResultsTitle" type="Label" parent="ResultsOverlay/Center/Panel/Column" unique_id=1402406953]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 38
+text = "招募結果"
+horizontal_alignment = 1
+
+[node name="Rule" parent="ResultsOverlay/Center/Panel/Column" unique_id=1035863767 instance=ExtResource("6_jciig")]
+layout_mode = 2
+
+[node name="ResultCards" type="GridContainer" parent="ResultsOverlay/Center/Panel/Column" unique_id=1406601181]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 5
+
+[node name="Result_0" parent="ResultsOverlay/Center/Panel/Column/ResultCards" unique_id=293969231 instance=ExtResource("5_f4mfh")]
+layout_mode = 2
+
+[node name="Result_1" parent="ResultsOverlay/Center/Panel/Column/ResultCards" unique_id=2083098206 instance=ExtResource("5_f4mfh")]
+layout_mode = 2
+
+[node name="Result_2" parent="ResultsOverlay/Center/Panel/Column/ResultCards" unique_id=1128981506 instance=ExtResource("5_f4mfh")]
+layout_mode = 2
+
+[node name="Result_3" parent="ResultsOverlay/Center/Panel/Column/ResultCards" unique_id=768749059 instance=ExtResource("5_f4mfh")]
+layout_mode = 2
+
+[node name="Result_4" parent="ResultsOverlay/Center/Panel/Column/ResultCards" unique_id=1477304965 instance=ExtResource("5_f4mfh")]
+layout_mode = 2
+
+[node name="Result_5" parent="ResultsOverlay/Center/Panel/Column/ResultCards" unique_id=1642831519 instance=ExtResource("5_f4mfh")]
+layout_mode = 2
+
+[node name="Result_6" parent="ResultsOverlay/Center/Panel/Column/ResultCards" unique_id=698658882 instance=ExtResource("5_f4mfh")]
+layout_mode = 2
+
+[node name="Result_7" parent="ResultsOverlay/Center/Panel/Column/ResultCards" unique_id=571423986 instance=ExtResource("5_f4mfh")]
+layout_mode = 2
+
+[node name="Result_8" parent="ResultsOverlay/Center/Panel/Column/ResultCards" unique_id=244906517 instance=ExtResource("5_f4mfh")]
+layout_mode = 2
+
+[node name="Result_9" parent="ResultsOverlay/Center/Panel/Column/ResultCards" unique_id=643187200 instance=ExtResource("5_f4mfh")]
+layout_mode = 2
+
+[node name="ResultsText" type="Label" parent="ResultsOverlay/Center/Panel/Column" unique_id=1144162194]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8509804, 0.69803923, 0.43137255, 1)
+theme_override_font_sizes/font_size = 22
+text = "英雄之魂化為突破素材 +18"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="ResultsClose" type="Button" parent="ResultsOverlay/Center/Panel/Column" unique_id=202546830]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 76)
+layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+theme_override_font_sizes/font_size = 30
+text = "好"

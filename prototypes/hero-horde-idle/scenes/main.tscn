@@ -17,9 +17,13 @@
 [ext_resource type="PackedScene" path="res://scenes/tele_marker.tscn" id="11_jscy8"]
 [ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="11_yc10j"]
 [ext_resource type="PackedScene" path="res://scenes/squad_flag.tscn" id="12_pm3ni"]
+[ext_resource type="Texture2D" path="res://assets/flags/ranged.png" id="13_pm3ni"]
+[ext_resource type="Texture2D" path="res://assets/flags/support.png" id="14_y6deb"]
 [ext_resource type="Script" path="res://scripts/impact_fx.gd" id="16_gqmmt"]
 [ext_resource type="Material" path="res://materials/fx_chunk.tres" id="17_yc10j"]
 [ext_resource type="Material" path="res://materials/fx_ring.tres" id="18_jscy8"]
+[ext_resource type="PackedScene" path="res://scenes/captain_plate.tscn" id="19_og1vs"]
+[ext_resource type="PackedScene" path="res://scenes/name_popup.tscn" id="19_y6deb"]
 [ext_resource type="Script" path="res://scripts/sfx.gd" id="20_pm3ni"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_pm3ni"]
@@ -122,11 +126,13 @@ color = Color(0.95, 0.35, 0.25, 1)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.3, 0, -1.6)
 squad_index = 1
 color = Color(0.3, 0.8, 0.95, 1)
+banner = ExtResource("13_pm3ni")
 
 [node name="Flag_輔助團" parent="Flags" unique_id=458986909 instance=ExtResource("12_pm3ni")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 0, 2.2)
 squad_index = 2
 color = Color(1, 0.82, 0.3, 1)
+banner = ExtResource("14_y6deb")
 
 [node name="Army" type="MultiMeshInstance3D" parent="." unique_id=1287533811]
 unique_name_in_owner = true
@@ -141,6 +147,45 @@ cast_shadow = 0
 custom_aabb = AABB(-16.3, -2, -12, 30, 8, 24)
 multimesh = SubResource("MultiMesh_2wyq8")
 script = ExtResource("10_gqmmt")
+
+[node name="CaptainPlates" type="Node3D" parent="." unique_id=1354733327]
+unique_name_in_owner = true
+
+[node name="Plate_1" parent="CaptainPlates" unique_id=333072345 instance=ExtResource("19_og1vs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1.5, 0)
+
+[node name="Plate_2" parent="CaptainPlates" unique_id=522725375 instance=ExtResource("19_og1vs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 1.5, 0.6)
+
+[node name="Plate_3" parent="CaptainPlates" unique_id=1829497096 instance=ExtResource("19_og1vs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 1.5, 1.2)
+
+[node name="Popups" type="Node3D" parent="." unique_id=2053468022]
+unique_name_in_owner = true
+
+[node name="Popup_1" parent="Popups" unique_id=461990709 instance=ExtResource("19_y6deb")]
+visible = false
+
+[node name="Popup_2" parent="Popups" unique_id=583528546 instance=ExtResource("19_y6deb")]
+visible = false
+
+[node name="Popup_3" parent="Popups" unique_id=1536481918 instance=ExtResource("19_y6deb")]
+visible = false
+
+[node name="Popup_4" parent="Popups" unique_id=257174351 instance=ExtResource("19_y6deb")]
+visible = false
+
+[node name="Popup_5" parent="Popups" unique_id=1063279538 instance=ExtResource("19_y6deb")]
+visible = false
+
+[node name="Popup_6" parent="Popups" unique_id=691531408 instance=ExtResource("19_y6deb")]
+visible = false
+
+[node name="Popup_7" parent="Popups" unique_id=1468623904 instance=ExtResource("19_y6deb")]
+visible = false
+
+[node name="Popup_8" parent="Popups" unique_id=91177135 instance=ExtResource("19_y6deb")]
+visible = false
 
 [node name="ImpactFx" type="Node3D" parent="." unique_id=814387536]
 unique_name_in_owner = true

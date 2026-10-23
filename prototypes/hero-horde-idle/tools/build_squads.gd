@@ -1,6 +1,6 @@
 extends SceneTree
-## One-time authoring tool for the 三團 field: writes the item scenes scenes/squad_flag.tscn (a squad's flag and its
-## ground ring), scenes/tele_marker.tscn (a telegraph shape on the ground) and scenes/part_button.tscn (a boss part
+## One-time authoring tool for the 三團 field: writes the item scenes scenes/squad_flag.tscn (a squad's banner, label
+## and ground ellipse), scenes/tele_marker.tscn (a telegraph shape on the ground) and scenes/part_button.tscn (a boss part
 ## to aim at, with its HP bar; a dark round button like the HUD's), the shared materials/ground_mark.tres, and patches:
 ##   main.tscn  Flags (3 flags at the squads' muster points), TeleMarkers (a pool of 3), and the boss part anchors
 ##              PartLegs / PartArm / PartHorns (Marker3D on the boss, adjust them in the editor)
@@ -17,6 +17,8 @@ const MARKER := "res://scenes/tele_marker.tscn"
 const PART := "res://scenes/part_button.tscn"
 const FONT := "res://ui/fonts/NotoSansTC.ttf"
 const MARKERS := 3
+## The squads' banners, packed by tools/pack_stage_art.py from art_src/flags.
+const BANNERS := ["res://assets/flags/melee.png", "res://assets/flags/ranged.png", "res://assets/flags/support.png"]
 const SQUAD_COLORS := [Color(0.95, 0.35, 0.25), Color(0.3, 0.8, 0.95), Color(1.0, 0.82, 0.3)]
 const TELE_RED := Color(1.0, 0.18, 0.12)
 ## Anchors on the boss (relative to Boss), read off the idle frame.
@@ -61,28 +63,10 @@ func _flag(mark_mat: Material) -> Node3D:
 	ring.set_instance_shader_parameter(&"texels", Vector2(48.0, 100.0))
 	SceneBuilder.add(root, SceneBuilder.unique(ring), "Ring")
 
-	var wood := StandardMaterial3D.new()
-	wood.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	wood.albedo_color = Color(0.3, 0.2, 0.12)
-	var pole := MeshInstance3D.new()
-	var box := BoxMesh.new()
-	box.size = Vector3(0.07, 2.4, 0.07)
-	box.material = wood
-	pole.mesh = box
-	pole.position = Vector3(0.0, 1.2, 0.0)
-	SceneBuilder.add(root, pole, "Pole")
-
-	var cloth_mat := StandardMaterial3D.new()
-	cloth_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	cloth_mat.cull_mode = BaseMaterial3D.CULL_DISABLED
-	cloth_mat.albedo_color = Color.WHITE
-	var cloth := MeshInstance3D.new()
-	var quad := QuadMesh.new()
-	quad.size = Vector2(0.9, 0.6)
-	cloth.mesh = quad
-	cloth.material_override = cloth_mat
-	cloth.position = Vector3(0.47, 2.08, 0.0)
-	SceneBuilder.add(root, SceneBuilder.unique(cloth), "Cloth")
+	var banner := MeshInstance3D.new()
+	banner.set_script(load("res://scripts/flag_banner.gd"))
+	SceneBuilder.add(root, SceneBuilder.unique(banner), "Banner")
+	root.set(&"banner", load(BANNERS[0]))
 
 	var label := Label3D.new()
 	label.text = "近戰團 52"
@@ -168,6 +152,7 @@ func _patch_main() -> bool:
 		flag.position = Vector3(PushSim.HOME[s].x, 0.0, PushSim.HOME[s].y)
 		flag.set(&"squad_index", s)
 		flag.set(&"color", SQUAD_COLORS[s])
+		flag.set(&"banner", load(BANNERS[s]))
 		SceneBuilder.add(flags, flag, "Flag_" + PushSim.SQUAD_NAMES[s])
 	var markers := Node3D.new()
 	SceneBuilder.add(main, SceneBuilder.unique(markers), "TeleMarkers")

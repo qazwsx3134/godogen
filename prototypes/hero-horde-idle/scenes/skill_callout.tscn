@@ -1,0 +1,67 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://ui/theme.tres" id="1_uwped"]
+[ext_resource type="Script" path="res://scripts/skill_callout.gd" id="2_wdf6q"]
+[ext_resource type="Texture2D" path="res://assets/heroes/portraits/mage.png" id="3_i5f7i"]
+
+[node name="SkillCallout" type="Control" unique_id=256987424]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 500.0
+offset_bottom = 124.0
+mouse_filter = 2
+theme = ExtResource("1_uwped")
+script = ExtResource("2_wdf6q")
+
+[node name="Panel" type="PanelContainer" parent="." unique_id=902049561]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme_type_variation = &"HudPanel"
+
+[node name="Row" type="HBoxContainer" parent="Panel" unique_id=1582422715]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Frame" type="PanelContainer" parent="Panel/Row" unique_id=1319308554]
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"Pill"
+
+[node name="Portrait" type="TextureRect" parent="Panel/Row/Frame" unique_id=1164528861]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(88, 88)
+layout_mode = 2
+texture = ExtResource("3_i5f7i")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Text" type="VBoxContainer" parent="Panel/Row" unique_id=146740616]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="SkillName" type="Label" parent="Panel/Row/Text" unique_id=2126980310]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.8509804, 0.69803923, 0.43137255, 1)
+theme_override_font_sizes/font_size = 34
+text = "「隕石術」"
+
+[node name="HeroLine" type="Label" parent="Panel/Row/Text" unique_id=517292065]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 22
+text = "SSR 法‧溫嘉"
+
+[node name="Desc" type="Label" parent="Panel/Row/Text" unique_id=545848254]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Dim"
+theme_override_font_sizes/font_size = 20
+text = "隕石砸向瞄準的部位"

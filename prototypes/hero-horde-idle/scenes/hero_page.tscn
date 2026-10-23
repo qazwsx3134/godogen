@@ -1,0 +1,524 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://ui/theme.tres" id="1_xdqq6"]
+[ext_resource type="Script" path="res://scripts/hero_page.gd" id="2_j2mtf"]
+[ext_resource type="Texture2D" path="res://assets/ui/hero_page_bg.png" id="3_en5np"]
+[ext_resource type="Texture2D" path="res://assets/heroes/portraits/sword.png" id="4_mcroo"]
+
+[sub_resource type="Gradient" id="Gradient_em7gj"]
+offsets = PackedFloat32Array(0, 1, 0.45)
+colors = PackedColorArray(0.06, 0.1, 0.09, 0, 0.06, 0.1, 0.09, 0.92, 0.06, 0.1, 0.09, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_1k42e"]
+gradient = SubResource("Gradient_em7gj")
+width = 4
+height = 128
+fill_from = Vector2(0.5, 0)
+fill_to = Vector2(0.5, 1)
+
+[sub_resource type="Gradient" id="Gradient_j18py"]
+colors = PackedColorArray(0, 0, 0, 0.55, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_p7x0r"]
+gradient = SubResource("Gradient_j18py")
+width = 128
+height = 128
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_htd2k"]
+atlas = ExtResource("4_mcroo")
+region = Rect2(32, 14, 67, 67)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_55tt8"]
+atlas = ExtResource("4_mcroo")
+region = Rect2(32, 14, 67, 67)
+
+[node name="HeroPage" type="Control" unique_id=1216253330]
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource("1_xdqq6")
+script = ExtResource("2_j2mtf")
+
+[node name="Background" type="TextureRect" parent="." unique_id=2082620024]
+texture_filter = 1
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource("3_en5np")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Shade" type="TextureRect" parent="." unique_id=1041469470]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_1k42e")
+expand_mode = 1
+
+[node name="Ground" type="TextureRect" parent="." unique_id=886056215]
+layout_mode = 0
+offset_left = 250.0
+offset_top = 510.0
+offset_right = 690.0
+offset_bottom = 580.0
+texture = SubResource("GradientTexture2D_p7x0r")
+expand_mode = 1
+
+[node name="Portrait" type="TextureRect" parent="." unique_id=1433442417]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 240.0
+offset_top = 96.0
+offset_right = 690.0
+offset_bottom = 546.0
+texture = ExtResource("4_mcroo")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Margins" type="MarginContainer" parent="." unique_id=1810067389]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 16
+
+[node name="Column" type="VBoxContainer" parent="Margins" unique_id=1445881529]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Top" type="HBoxContainer" parent="Margins/Column" unique_id=1220614971]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Back" type="Button" parent="Margins/Column/Top" unique_id=1066256302]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+theme_type_variation = &"FlatButton"
+text = "‹ 英雄名冊"
+
+[node name="Spacer" type="Control" parent="Margins/Column/Top" unique_id=1216943557]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="GoldTitle" type="Label" parent="Margins/Column/Top" unique_id=1871796149]
+layout_mode = 2
+theme_type_variation = &"Dim"
+theme_override_font_sizes/font_size = 20
+text = "金幣"
+
+[node name="Gold" type="Label" parent="Margins/Column/Top" unique_id=413686010]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.8509804, 0.69803923, 0.43137255, 1)
+theme_override_font_sizes/font_size = 32
+text = "1280"
+
+[node name="ShardsTitle" type="Label" parent="Margins/Column/Top" unique_id=1458227038]
+layout_mode = 2
+theme_type_variation = &"Dim"
+theme_override_font_sizes/font_size = 20
+text = "素材"
+
+[node name="Shards" type="Label" parent="Margins/Column/Top" unique_id=261004527]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.8509804, 0.69803923, 0.43137255, 1)
+theme_override_font_sizes/font_size = 32
+text = "3"
+
+[node name="Stats" type="VBoxContainer" parent="Margins/Column" unique_id=1911628479]
+custom_minimum_size = Vector2(0, 450)
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="HeroName" type="Label" parent="Margins/Column/Stats" unique_id=1204907999]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 80
+text = "蘿德"
+
+[node name="NameRule" type="ColorRect" parent="Margins/Column/Stats" unique_id=1982015163]
+custom_minimum_size = Vector2(240, 2)
+layout_mode = 2
+size_flags_horizontal = 0
+color = Color(0.6627451, 0.5294118, 0.3529412, 1)
+
+[node name="Identity" type="HBoxContainer" parent="Margins/Column/Stats" unique_id=30398944]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Rarity" type="Label" parent="Margins/Column/Stats/Identity" unique_id=404338860]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.8509804, 0.69803923, 0.43137255, 1)
+theme_override_font_sizes/font_size = 36
+text = "SSR"
+
+[node name="Bar" type="VSeparator" parent="Margins/Column/Stats/Identity" unique_id=547497775]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="ClassName" type="Label" parent="Margins/Column/Stats/Identity" unique_id=1380243903]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 32
+text = "劍士"
+
+[node name="Gap3" type="Control" parent="Margins/Column/Stats" unique_id=1820923438]
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="LevelRow" type="HBoxContainer" parent="Margins/Column/Stats" unique_id=770445572]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="LvTitle" type="Label" parent="Margins/Column/Stats/LevelRow" unique_id=298599258]
+layout_mode = 2
+size_flags_vertical = 8
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.7882353, 0.627451, 0.41568628, 1)
+theme_override_font_sizes/font_size = 40
+text = "Lv"
+
+[node name="Level" type="Label" parent="Margins/Column/Stats/LevelRow" unique_id=1923355816]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 96
+text = "4"
+
+[node name="Cap" type="Label" parent="Margins/Column/Stats/LevelRow" unique_id=547913521]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 8
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 36
+text = "／10"
+
+[node name="Exp" type="ProgressBar" parent="Margins/Column/Stats" unique_id=795109957]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 10)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_type_variation = &"ExpBar"
+value = 40.0
+show_percentage = false
+
+[node name="Gap6" type="Control" parent="Margins/Column/Stats" unique_id=960628331]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="AscendLine" type="Label" parent="Margins/Column/Stats" unique_id=1154450216]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 28
+text = "突破 ★0／5"
+
+[node name="PowerLine" type="Label" parent="Margins/Column/Stats" unique_id=377911999]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Dim"
+theme_override_font_sizes/font_size = 24
+text = "強度 ×1.00"
+
+[node name="Gap9" type="Control" parent="Margins/Column/Stats" unique_id=439937921]
+custom_minimum_size = Vector2(0, 6)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="CaptainToggle" type="Button" parent="Margins/Column/Stats" unique_id=1469392563]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(190, 52)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_font_sizes/font_size = 24
+text = "設為隊長"
+
+[node name="Rule" type="HSeparator" parent="Margins/Column" unique_id=105065280]
+layout_mode = 2
+
+[node name="SigSection" type="VBoxContainer" parent="Margins/Column" unique_id=1415861698]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Title" type="Label" parent="Margins/Column/SigSection" unique_id=1528916153]
+layout_mode = 2
+theme_type_variation = &"Dim"
+theme_override_font_sizes/font_size = 24
+text = "招牌技"
+
+[node name="Rule" type="HSeparator" parent="Margins/Column/SigSection" unique_id=1715352261]
+layout_mode = 2
+
+[node name="Row" type="HBoxContainer" parent="Margins/Column/SigSection" unique_id=168460159]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="SigIconFrame" type="PanelContainer" parent="Margins/Column/SigSection/Row" unique_id=1685931909]
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"Pill"
+
+[node name="SigIcon" type="TextureRect" parent="Margins/Column/SigSection/Row/SigIconFrame" unique_id=1639895176]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(88, 88)
+layout_mode = 2
+texture = SubResource("AtlasTexture_htd2k")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Text" type="VBoxContainer" parent="Margins/Column/SigSection/Row" unique_id=849063398]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="SigName" type="Label" parent="Margins/Column/SigSection/Row/Text" unique_id=1128666122]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 36
+text = "斷鋼斬"
+
+[node name="SigDesc" type="Label" parent="Margins/Column/SigSection/Row/Text" unique_id=1572354623]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Dim"
+theme_override_font_sizes/font_size = 22
+text = "重擊，連部位一起削。
+開戰 10 秒起，每 28 秒施放一次。"
+
+[node name="ValueRule" type="VSeparator" parent="Margins/Column/SigSection/Row" unique_id=1507500197]
+layout_mode = 2
+
+[node name="Value" type="VBoxContainer" parent="Margins/Column/SigSection/Row" unique_id=1445200647]
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="Caption" type="Label" parent="Margins/Column/SigSection/Row/Value" unique_id=419898731]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 22
+text = "強化"
+horizontal_alignment = 1
+
+[node name="SigBonus" type="Label" parent="Margins/Column/SigSection/Row/Value" unique_id=538854686]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 46
+text = "+0%"
+horizontal_alignment = 1
+
+[node name="PromoteSection" type="VBoxContainer" parent="Margins/Column" unique_id=496722468]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Title" type="Label" parent="Margins/Column/PromoteSection" unique_id=1583320258]
+layout_mode = 2
+theme_type_variation = &"Dim"
+theme_override_font_sizes/font_size = 24
+text = "晉升"
+
+[node name="Rule" type="HSeparator" parent="Margins/Column/PromoteSection" unique_id=1629407512]
+layout_mode = 2
+
+[node name="Row" type="HBoxContainer" parent="Margins/Column/PromoteSection" unique_id=293360154]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Text" type="VBoxContainer" parent="Margins/Column/PromoteSection/Row" unique_id=626318865]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="PromoteName" type="Label" parent="Margins/Column/PromoteSection/Row/Text" unique_id=1288639557]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 32
+text = "再突破 2 次 → R"
+
+[node name="PromoteDesc" type="Label" parent="Margins/Column/PromoteSection/Row/Text" unique_id=1709924052]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Dim"
+theme_override_font_sizes/font_size = 22
+text = "每突破 2 次升一階稀有度，最高 SR。"
+
+[node name="ValueRule" type="VSeparator" parent="Margins/Column/PromoteSection/Row" unique_id=584078449]
+layout_mode = 2
+
+[node name="Value" type="VBoxContainer" parent="Margins/Column/PromoteSection/Row" unique_id=1582524898]
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="Caption" type="Label" parent="Margins/Column/PromoteSection/Row/Value" unique_id=2097502420]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 22
+text = "目前"
+horizontal_alignment = 1
+
+[node name="RarityNow" type="Label" parent="Margins/Column/PromoteSection/Row/Value" unique_id=684004315]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 46
+text = "N"
+horizontal_alignment = 1
+
+[node name="ClassSection" type="VBoxContainer" parent="Margins/Column" unique_id=1343528634]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Title" type="Label" parent="Margins/Column/ClassSection" unique_id=1331030660]
+layout_mode = 2
+theme_type_variation = &"Dim"
+theme_override_font_sizes/font_size = 24
+text = "職業加成"
+
+[node name="Rule" type="HSeparator" parent="Margins/Column/ClassSection" unique_id=731119824]
+layout_mode = 2
+
+[node name="Row" type="HBoxContainer" parent="Margins/Column/ClassSection" unique_id=1007606949]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="ClassIconFrame" type="PanelContainer" parent="Margins/Column/ClassSection/Row" unique_id=260036935]
+layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"Pill"
+
+[node name="ClassIcon" type="TextureRect" parent="Margins/Column/ClassSection/Row/ClassIconFrame" unique_id=1426961827]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(88, 88)
+layout_mode = 2
+texture = SubResource("AtlasTexture_55tt8")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Text" type="VBoxContainer" parent="Margins/Column/ClassSection/Row" unique_id=52063637]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="LevelRow" type="HBoxContainer" parent="Margins/Column/ClassSection/Row/Text" unique_id=855252556]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="Margins/Column/ClassSection/Row/Text/LevelRow" unique_id=48440506]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 28
+text = "職業等級"
+
+[node name="ClassLevel" type="Label" parent="Margins/Column/ClassSection/Row/Text/LevelRow" unique_id=1972175679]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 44
+text = "14"
+
+[node name="ClassDesc" type="Label" parent="Margins/Column/ClassSection/Row/Text" unique_id=1715732171]
+layout_mode = 2
+theme_type_variation = &"Dim"
+theme_override_font_sizes/font_size = 22
+text = "提升同職業每一位英雄的能力。"
+
+[node name="ValueRule" type="VSeparator" parent="Margins/Column/ClassSection/Row" unique_id=1178398134]
+layout_mode = 2
+
+[node name="Value" type="VBoxContainer" parent="Margins/Column/ClassSection/Row" unique_id=188636944]
+custom_minimum_size = Vector2(170, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="Caption" type="Label" parent="Margins/Column/ClassSection/Row/Value" unique_id=1096165344]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 22
+text = "全職業英雄"
+horizontal_alignment = 1
+
+[node name="ClassMult" type="Label" parent="Margins/Column/ClassSection/Row/Value" unique_id=1610785988]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 46
+text = "×2.72"
+horizontal_alignment = 1
+
+[node name="Fill" type="Control" parent="Margins/Column" unique_id=417927255]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="CostLine" type="Label" parent="Margins/Column" unique_id=1438599566]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Dim"
+theme_override_font_sizes/font_size = 24
+text = "突破素材 1／持有 3"
+
+[node name="Buttons" type="HBoxContainer" parent="Margins/Column" unique_id=1930425586]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Ascend" type="Button" parent="Margins/Column/Buttons" unique_id=652947529]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 88)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.3
+theme_type_variation = &"PrimaryButton"
+theme_override_font_sizes/font_size = 34
+text = "突破（1 素材）"
+
+[node name="SendMarch" type="Button" parent="Margins/Column/Buttons" unique_id=1289071233]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 88)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 26
+text = "派去行軍（第 1 格）"

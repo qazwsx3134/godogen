@@ -1,0 +1,30 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/ui/frame/rule_diamond.png" id="1_igtxu"]
+
+[node name="OrnamentRule" type="HBoxContainer" unique_id=368454576]
+mouse_filter = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="Left" type="ColorRect" parent="." unique_id=181208546]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_filter = 2
+color = Color(0.6627451, 0.5294118, 0.3529412, 1)
+
+[node name="Diamond" type="TextureRect" parent="." unique_id=1589586850]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("1_igtxu")
+stretch_mode = 3
+
+[node name="Right" type="ColorRect" parent="." unique_id=2039412851]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_filter = 2
+color = Color(0.6627451, 0.5294118, 0.3529412, 1)

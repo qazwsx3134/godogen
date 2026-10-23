@@ -22,6 +22,8 @@ const FLASH_FROM := 0.5
 @onready var _parts: Array[Marker3D] = [%PartLegs, %PartArm, %PartHorns]
 
 var _material: ShaderMaterial
+## The stage's colour for this boss (stages.gd REGIONS "boss_tint"), on top of the stage lighting.
+var body_tint := Color.WHITE
 var _flash: float = 0.0
 var _shake: float = 0.0
 var _time: float = 0.0
@@ -90,8 +92,8 @@ func step(sim: PushSim, dt: float) -> void:
 	_material.set_shader_parameter(&"flash", clampf(flash, 0.0, 1.0))
 	_material.set_shader_parameter(&"flash_color", flash_color)
 	_material.set_shader_parameter(&"dissolve", _dissolve)
-	if lighting.is_valid():
-		_material.set_shader_parameter(&"tint", lighting.call(global_position + Vector3(0.0, 2.4, 0.0)))
+	var lit: Color = lighting.call(global_position + Vector3(0.0, 2.4, 0.0)) if lighting.is_valid() else Color.WHITE
+	_material.set_shader_parameter(&"tint", lit * body_tint)
 	_sprite.position.x = sin(_time * 70.0) * 0.12 * _shake - sin(_swing * PI) * 0.35
 	_swing = maxf(_swing - dt * 4.0, 0.0)
 	_flash = maxf(_flash - dt * 10.0, 0.0)

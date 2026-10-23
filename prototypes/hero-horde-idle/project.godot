@@ -11,8 +11,13 @@ config_version=5
 [application]
 
 config/name="hero-horde-idle"
-run/main_scene="res://scenes/main.tscn"
+run/main_scene="res://scenes/home.tscn"
 config/features=PackedStringArray("4.7", "Mobile")
+
+[autoload]
+
+App="*res://scenes/app.tscn"
+Store="*res://scenes/store.tscn"
 
 [display]
 

@@ -1,17 +1,17 @@
 extends MultiMeshInstance3D
 ## All 100 heroes in one MultiMesh (two draw calls: shadows and sprites). Reads domain/push_sim.gd every frame:
 ## positions, walking, HP (hurt heroes redden, hits flash), 陣亡 (lie down, greyed) and skill casts.
-## Rarity shows as the outline: SR purple, SSR gold. `lighting` (stage.gd sprite_light) tints each hero by
-## the coloured lights around them. The saved scene holds the opening formation as an
+## Every hero has the same dark outline (rarity is not drawn in the crowd). `lighting` (stage.gd sprite_light) tints each hero by
+## the coloured lights around them. Captains (setup()'s `captains`) are drawn CAPTAIN_SCALE larger. The saved scene
+## holds the opening formation as an
 ## editor preview; step() overwrites it at runtime.
 
 const PushSim = preload("res://domain/push_sim.gd")
 const Sprite3DSheet = preload("res://addons/proto_kit/sprite3d_sheet.gd")
 const SHEETS := "res://assets/heroes/heroes.json"
 const CLASS_KEYS := ["shield", "sword", "spear", "bow", "mage", "healer"]
-## Outline by rarity: N and R dark (every hero keeps a crisp silhouette in the crowd), SR purple, SSR gold. Only the
-## 22 rare heroes get a coloured line, so they stand out instead of the whole crowd flickering.
-const RARITY_ROLE := [7, 7, 5, Sprite3DSheet.ROLE_ELITE]
+## The outline role per rarity: dark for all, so every hero keeps a crisp silhouette and the crowd reads by class tint.
+const RARITY_ROLE := [7, 7, 7, 7]
 ## Class tint hues and strength: shield blue, sword red, spear amber, bow green, mage violet, healer near-white.
 const CLASS_HUES := [0.6, 0.01, 0.09, 0.3, 0.76, 0.12]
 const CLASS_SAT := [0.32, 0.3, 0.3, 0.3, 0.32, 0.08]
@@ -19,6 +19,7 @@ const CAST_POSE := 0.6
 const FALL_TIME := 0.4
 const HURT_RED := Color(1.0, 0.35, 0.3)
 const FALLEN_GREY := Color(0.35, 0.35, 0.4)
+const CAPTAIN_SCALE := 1.35
 
 signal fired(from: Vector3, to: Vector3, color: Color)
 ## A hero just fell, at their feet.
@@ -36,6 +37,7 @@ var _flash := PackedFloat32Array()
 var _prev_hp := PackedFloat32Array()
 var _fell_age := PackedFloat32Array()
 var _volley_t: float = 0.0
+var _scale := PackedFloat32Array()
 
 
 ## A per-hero tint over the pale generated outfits: the class hue (so a crowd reads by class), shifted a little per
@@ -53,7 +55,8 @@ static func _hash(i: int, salt: int) -> float:
 	return float((i * 7919 + salt * 104729) % 1009) / 1009.0
 
 
-func setup(sim: PushSim, boss_target: Vector3) -> void:
+## captains: hero indexes drawn larger.
+func setup(sim: PushSim, boss_target: Vector3, captains := PackedInt32Array()) -> void:
 	_sim = sim
 	target = boss_target
 	if _sheets.is_empty():
@@ -72,11 +75,21 @@ func setup(sim: PushSim, boss_target: Vector3) -> void:
 		_tick[i] = _hash(i, 6) * 60.0
 		_shot[i] = _hash(i, 7)
 	_volley_t = 0.0
+	_scale.resize(n)
+	_scale.fill(1.0)
+	for i: int in captains:
+		if i >= 0 and i < n:
+			_scale[i] = CAPTAIN_SCALE
 	multimesh.instance_count = n
 
 
 func volley() -> void:
 	_volley_t = CAST_POSE
+
+
+## World position just over a hero's head (captain nameplates).
+func head(i: int) -> Vector3:
+	return _ground(i) + Vector3(0.0, _size * _scale[i] + 0.15, 0.0)
 
 
 ## World position of a hero's hands, where bolts start.
@@ -124,7 +137,7 @@ func step(dt: float) -> void:
 		if lighting.is_valid():
 			color *= lighting.call(at + Vector3(0.0, _size * 0.5, 0.0))
 		var drawn: Vector2i = _sheets[c].cell(anim, 0, int(_tick[i]))
-		var basis := Basis(Vector3.BACK, spin).scaled(Vector3.ONE * _size)
+		var basis := Basis(Vector3.BACK, spin).scaled(Vector3.ONE * _size * _scale[i])
 		mm.set_instance_transform(i, Transform3D(basis, at))
 		mm.set_instance_custom_data(i, Sprite3DSheet.instance_custom(drawn.x, _flash[i], drawn.y, 0.0))
 		mm.set_instance_color(i, Sprite3DSheet.instance_color(color, role(sim.rarity[i])))

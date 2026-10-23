@@ -10,6 +10,10 @@ extends Node3D
 const PushSim = preload("res://domain/push_sim.gd")
 const Haptics = preload("res://addons/proto_kit/haptics.gd")
 const PushReport = preload("res://domain/push_report.gd")
+const Progression = preload("res://domain/progression.gd")
+const Portraits = preload("res://scripts/portraits.gd")
+const Stages = preload("res://domain/stages.gd")
+const HOME_SCENE := "res://scenes/home.tscn"
 const WARN := Color(1.0, 0.4, 0.35)
 const GOOD := Color(0.55, 1.0, 0.6)
 const GOLD := Color(1.0, 0.85, 0.3)
@@ -31,11 +35,17 @@ const TELE_HIT_STOP := 0.07
 const ROCK_FALL := 0.45
 ## What breaking each part takes away, for the banner (PushSim.Part order).
 const PART_EFFECTS := ["動作變慢", "不能橫掃", "不能落石"]
+## Name popups over heroes casting skills: SR in white-blue, SSR (with their 招牌技) in gold.
+const NAME_SR := Color(0.75, 0.9, 1.0)
+const NAME_SSR := Color(1.0, 0.85, 0.35)
+const CAPTAIN_SHOT_GAP := 20.0
 
 @export var volley_shot: CameraShot
 @export var break_shot: CameraShot
 @export var phase2_shot: CameraShot
 @export var won_shot: CameraShot
+## A captain casting a skill: a gentle push toward them, at most once per CAPTAIN_SHOT_GAP seconds.
+@export var captain_shot: CameraShot = preload("res://camera/captain.tres")
 
 @onready var _army: MultiMeshInstance3D = %Army
 @onready var _boss: Node3D = %Boss
@@ -44,11 +54,24 @@ const PART_EFFECTS := ["動作變慢", "不能橫掃", "不能落石"]
 @onready var _camera: Camera3D = %Camera
 @onready var _flags: Node3D = %Flags
 @onready var _markers: Node3D = %TeleMarkers
+@onready var _popups: Node3D = %Popups
+@onready var _plates: Node3D = %CaptainPlates
 @onready var _stage: Node3D = %Stage
 @onready var _fx: Node3D = %ImpactFx
 @onready var _sfx: Node = %Sfx
 
 var sim: PushSim
+## The player's growth (domain/progression.gd): the roster every push is built from; a finished push pays into it and
+## saves. Set before the scene enters the tree to use other progress (tests, screenshots); otherwise loaded from
+## save_path.
+var progress: RefCounted = null
+## The 關卡 to push (domain/stages.gd, 1-based; 0 = the next one not yet cleared). Set before the scene enters the tree
+## (stage select); 挑戰下一關 moves it on.
+var stage_n: int = 0
+## The stage of the push on screen.
+var pushing: int = 1
+## "" = the App's progress_path (the player's save), or Progression.SAVE_PATH without the App.
+var save_path: String = ""
 var selected: int = PushSim.MELEE
 var _flag_nodes: Array = []
 ## The squad under the press, where it started, and the ground point under the finger once it is a drag (INF = not
@@ -64,34 +87,53 @@ var _hit_stop: float = 0.0
 var _rocks_dropped: bool = false
 var haptics := Haptics.new()
 var _names: PackedStringArray = PushReport.load_names()
+var _captain_shot_at: float = -INF
 
 
 func _ready() -> void:
 	_army.lighting = _stage.sprite_light
 	haptics.clock = func() -> int: return int(_time * 1000.0)
-	for sig: StringName in [&"part_pressed", &"regroup_pressed", &"volley_pressed",
-			&"skip_pressed", &"retry_pressed"]:
+	for sig: StringName in [&"part_pressed", &"squad_pressed", &"regroup_pressed", &"volley_pressed",
+			&"skip_pressed", &"retry_pressed", &"grow_pressed", &"next_pressed", &"camp_pressed"]:
 		_hud.connect(sig, func(_a: Variant = null) -> void: _sfx.play(&"tap"))
 	_boss.lighting = _stage.sprite_light
 	for flag: Node in _flags.get_children():
 		_flag_nodes.append(flag)
 	_flag_nodes.sort_custom(func(a: Node, b: Node) -> bool: return a.squad_index < b.squad_index)
 	_hud.part_pressed.connect(func(p: int) -> void: sim.aim_at(p))
+	_hud.squad_pressed.connect(func(s: int) -> void: selected = s)
 	_hud.regroup_pressed.connect(func() -> void: sim.regroup())
 	_hud.volley_pressed.connect(func() -> void: sim.volley())
 	_hud.skip_pressed.connect(func() -> void: sim.skip_muster())
 	_hud.retry_pressed.connect(new_push)
+	_hud.next_pressed.connect(func() -> void:
+		stage_n = progress.next_stage()
+		new_push())
+	_hud.grow_pressed.connect(_leave.bind(&"growth"))
+	_hud.camp_pressed.connect(_leave.bind(&"camp"))
+	var app: Node = get_node_or_null(^"/root/App")
+	if app != null:
+		stage_n = app.take(&"stage_n", stage_n)
+		haptics.enabled = app.settings.haptics
 	_army.fired.connect(_bolts.fire)
 	_army.fell.connect(func(at: Vector3) -> void: _fx.burst(at + Vector3(0.0, 0.05, 0.0), 5, &"dust", 1.2, 1.2, 2, 0.5))
 	new_push()
 
 
 func new_push() -> void:
-	sim = PushSim.new(randi())
+	if progress == null:
+		var app: Node = get_node_or_null(^"/root/App")
+		progress = app.progress() if app != null and save_path == "" else Progression.load_from(_save_path())
+	pushing = stage_n if stage_n > 0 and progress.unlocked(stage_n) else progress.next_stage()
+	sim = PushSim.new(randi(), progress.roster(), Stages.stage(pushing))
+	var region: Dictionary = Stages.REGIONS[Stages.region(pushing)]
+	_boss.body_tint = region.boss_tint
+	_stage.set_region_light(region.light)
+	_hud.set_stage(Stages.label(pushing), Stages.boss_name(pushing))
 	for flag: Node in _flag_nodes:
 		sim.set_home(flag.squad_index, flag.home)
 	sim.event.connect(_on_event)
-	_army.setup(sim, _boss_target())
+	_army.setup(sim, _boss_target(), progress.captains)
 	_boss.reset()
 	_bolts.clear()
 	_stage.reset()
@@ -121,6 +163,13 @@ func _process(delta: float) -> void:
 		for shape: Dictionary in sim.tele_shapes:
 			_fx.drop(_ground3(shape.c), 6, &"rock", sim.tele_t, 7.0, shape.r * 0.7, 13)
 	_fx.step(dt)
+	for popup: Node in _popups.get_children():
+		popup.step(dt)
+	_show_captains()
+	if sim.fighting() and sim.t > 14.0 and sim.tele_t <= 0.0 and sim.aim < 0:
+		_tip("parts", "點王身上的角或手臂，遠程團就集中打那裡；打壞了王會倒地、少一招")
+	elif sim.fighting() and sim.morale >= PushSim.MORALE_MAX:
+		_tip("volley", "士氣滿了！按「大招」全軍齊射")
 	_hud.show_state(sim, selected, delta)
 	var warn_progress: float = clampf(1.0 - sim.tele_t / PushSim.TELE_WARN, 0.02, 1.0)
 	var pulse: float = 0.5 + 0.5 * sin(_time * 20.0)
@@ -139,6 +188,33 @@ func _process(delta: float) -> void:
 	for p: int in PushSim.PART_NAMES.size():
 		points.append(_camera.unproject_position(_boss.part_point(p)))
 	_hud.place_parts(sim, points, sim.fighting())
+
+
+## A first-push hint, once per save (progression.gd tip_once; saved with the push's result).
+func _tip(key: String, text: String) -> void:
+	if progress.tip_once(key):
+		_hud.coach(text)
+
+
+## Leaves the push for the home screen, on its `tab` page (through the App's fade when it is there).
+func _leave(tab: StringName) -> void:
+	get_tree().paused = false
+	var app: Node = get_node_or_null(^"/root/App")
+	if app != null:
+		app.go(HOME_SCENE, {"tab": tab})
+	else:
+		get_tree().change_scene_to_file(HOME_SCENE)
+
+
+## 隊長: each captain's nameplate over their head (the pool in the scene holds Progression.MAX_CAPTAINS).
+func _show_captains() -> void:
+	for k: int in _plates.get_child_count():
+		var plate: Node = _plates.get_child(k)
+		if k < progress.captains.size():
+			var i: int = progress.captains[k]
+			plate.show_captain(_army.head(i), PushReport.hero_name(_names, i), sim.alive(i))
+		else:
+			plate.visible = false
 
 
 ## Field input (the HUD's buttons take their own presses first): press on a squad and drag to move its flag; tap a
@@ -222,12 +298,14 @@ func _on_event(kind: StringName, value: float) -> void:
 	match kind:
 		&"fight":
 			_say("推王開始！", GOLD, 1.0)
+			_tip("flag", "按住旗子拖動，整團就會跟著走；點一團再點地面也可以")
 		&"tele_warn":
 			_camera.release()
 			_rocks_dropped = false
 			_sfx.play(&"warn")
 			haptics.buzz(0)
 			_hud.banner("%s！ 把旗子拖出紅圈！" % PushSim.ATTACK_NAMES[sim.tele_kind], WARN, value)
+			_tip("dodge", "紅圈落下時，站在裡面的人會受重傷——快把那一團的旗子拖出來")
 		&"tele_hit":
 			_camera.add_trauma(0.6)
 			_hit_stop = maxf(_hit_stop, TELE_HIT_STOP)
@@ -281,7 +359,12 @@ func _on_event(kind: StringName, value: float) -> void:
 					_bolts.fire(_army.hand(i), _boss_target() + spread, SKILL_COLOR, k * 0.08)
 				_boss.hit(0.25)
 				_fx.burst(_boss_target(), 5, &"gold" if sim.rarity[i] == 3 else &"cyan", 2.0, 1.5, 2, 0.4)
+			if sim.rarity[i] == PushSim.SR:
+				_pop_name(i, NAME_SR)
 			_sfx.play(&"skill", 0.08)
+			_captain_shot(i)
+		&"signature":
+			_signature(int(value))
 		&"revive":
 			_sfx.play(&"revive")
 			_say("復活！", GOOD, 1.0)
@@ -323,6 +406,70 @@ func _volley(amount: float) -> void:
 	_say("大招！ %d" % roundi(amount), GOLD, 1.4)
 
 
+## An SSR's 招牌技: the callout card, the hero's name over their head, and the move's own effect.
+func _signature(i: int) -> void:
+	var move: int = sim.sig[i]
+	var line: String = "SSR %s‧%s" % [PushSim.CLASS_NAMES[sim.cls[i]], PushReport.hero_name(_names, i)]
+	_hud.skill_callout(Portraits.face(sim.cls[i]), PushSim.SIG_NAMES[move], line, PushSim.SIG_DESC[move])
+	_pop_name(i, NAME_SSR, PushSim.SIG_NAMES[move])
+	_sfx.play(&"signature")
+	haptics.buzz(1)
+	_captain_shot(i)
+	var hero: Vector3 = _ground3(sim.pos[i])
+	var squad_at: Vector3 = _ground3(sim.squad_center(sim.squad[i]))
+	var target: Vector3 = _boss.part_point(sim.aim) if sim.aim >= 0 else _boss_target()
+	match move:
+		PushSim.Sig.WALL:
+			var half: Vector2 = sim.block_half(sim.squad[i])
+			_fx.ring(squad_at, maxf(half.x, half.y) + 0.4, &"steel", 0.7)
+			_fx.burst(squad_at + Vector3(0.0, 0.3, 0.0), 24, &"steel", 2.5, 3.0, 3, 0.8)
+		PushSim.Sig.CLEAVE:
+			_boss.hit(0.9)
+			_hit_stop = maxf(_hit_stop, 0.06)
+			_fx.burst(_boss.part_point(PushSim.Part.LEGS), 26, &"steel", 3.5, 3.0, 4, 0.8)
+			_fx.ring(_boss.global_position, 2.2, &"slam", 0.4)
+		PushSim.Sig.GALE:
+			_fx.ring(squad_at, 2.6, &"cyan", 0.6)
+			_fx.sweep(squad_at + Vector3(0.0, 0.0, -2.5), squad_at + Vector3(0.0, 0.0, 2.5), 40, &"cyan", Vector3(5.0, 0.0, 0.0))
+		PushSim.Sig.PIERCE:
+			_boss.hit(0.6)
+			_fx.burst(_boss_target(), 20, &"steel", 3.0, 2.5, 3, 0.7)
+			_fx.ring(_boss.global_position, 2.8, &"cyan", 0.5)
+		PushSim.Sig.ARROW:
+			for k: int in 6:
+				_bolts.fire(_army.hand(i), target + Vector3(randf_range(-0.2, 0.2), randf_range(-0.2, 0.2), 0.0), NAME_SSR, k * 0.04)
+			_boss.hit(0.8)
+			_fx.burst(target, 18, &"gold", 3.0, 2.5, 3, 0.7)
+		PushSim.Sig.METEOR:
+			_boss.hit(1.0)
+			_hit_stop = maxf(_hit_stop, 0.08)
+			_camera.add_trauma(0.5)
+			_fx.drop(_boss.global_position + Vector3(-0.6, 0.0, 0.4), 14, &"slam", 0.45, 9.0, 0.9, 12)
+			_fx.ring(_boss.global_position, 3.4, &"slam", 0.6)
+		PushSim.Sig.DAWN:
+			_fx.ring(hero, PushSim.HEAL_RANGE, &"gold", 0.8)
+			_fx.burst(hero + Vector3(0.0, 0.5, 0.0), 30, &"gold", 2.0, 4.0, 3, 1.0)
+			_stage.flash_volley(hero + Vector3(0.0, 1.5, 0.0))
+
+
+## A hero's name rising over their head (skipped when every popup is busy).
+func _pop_name(i: int, color: Color, extra: String = "") -> void:
+	for popup: Node in _popups.get_children():
+		if not popup.busy():
+			var text_value: String = PushReport.hero_name(_names, i)
+			if extra != "":
+				text_value += "「%s」" % extra
+			popup.pop(_ground3(sim.pos[i]) + Vector3(0.0, 1.6, 0.0), text_value, color)
+			return
+
+
+## Now and then the camera leans toward a captain who casts (隊長: the player's own heroes in the crowd).
+func _captain_shot(i: int) -> void:
+	if progress.is_captain(i) and _time - _captain_shot_at >= CAPTAIN_SHOT_GAP:
+		_captain_shot_at = _time
+		_shot(captain_shot, _army.head(i))
+
+
 ## A cinematic move, unless it would take the field away from someone who must step out of red.
 func _shot(shot: CameraShot, focus: Vector3) -> void:
 	if sim.tele_threatens():
@@ -362,4 +509,15 @@ func _ground3(p: Vector2) -> Vector3:
 
 func _show_result(won: bool, detail: String) -> void:
 	var report: Dictionary = PushReport.build(sim, _names)
-	_hud.show_result(won, detail, report, sim.cls[report.mvp])
+	var rewards: Dictionary = progress.push_rewards(sim, pushing)
+	progress.save(_save_path())
+	var next: int = progress.next_stage()
+	_hud.show_result(won, detail, report, sim.cls[report.mvp], rewards, Stages.label(next) if won and next > pushing else "")
+	stage_n = pushing
+
+
+func _save_path() -> String:
+	if save_path == "":
+		var app: Node = get_node_or_null(^"/root/App")
+		save_path = app.progress_path if app != null else Progression.SAVE_PATH
+	return save_path

@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/app.gd" id="1_0wu41"]
+
+[node name="App" type="CanvasLayer" unique_id=1004294173]
+layer = 100
+script = ExtResource("1_0wu41")
+
+[node name="Fade" type="ColorRect" parent="." unique_id=545441317]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.043137256, 0.07058824, 0.0627451, 1)

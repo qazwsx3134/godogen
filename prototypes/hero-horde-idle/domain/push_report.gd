@@ -126,6 +126,8 @@ static func _mvp_line(sim: PushSim, i: int, sum_dealt: float) -> String:
 		parts.append("治療 %s" % short(sim.stat_healed[i]))
 	if sim.stat_saves[i] > 0:
 		parts.append("救援 %d 次" % sim.stat_saves[i])
+	if sim.sig_casts[i] > 0:
+		parts.append("「%s」×%d" % [PushSim.SIG_NAMES[sim.sig[i]], sim.sig_casts[i]])
 	return "　".join(parts)
 
 

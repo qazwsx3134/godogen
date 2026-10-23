@@ -16,6 +16,9 @@ extends RefCounted
 ## damage x STAGGER_MULT), and the part stays broken for the push: legs -> he moves slower; arm -> no 橫掃, smaller 重砸; horns -> no
 ## 落石. Every broken part is also a wound: all damage to him is WOUND_PER_PART higher per part. A disabled attack's
 ## turn becomes a 重砸, which can only be shrunk, never removed.
+##
+## A stage (domain/stages.gd) scales the boss: his HP and his parts' HP by "hp", his attacks' damage by "dmg", and the
+## gaps between his attacks by "tempo" (< 1 = faster). Without one (or at stage 1) every number is the constant below.
 
 signal event(kind: StringName, value: float)
 
@@ -65,7 +68,7 @@ const FIELD_MAX := Vector2(2.1, 3.4)
 const BOSS_POS := Vector2(3.7, 0.0)
 const BOSS_FRONT := 2.4
 ## Melee whose feet are within this of the boss's front can hit him.
-const MELEE_REACH := 2.1
+const MELEE_REACH := 2.3
 const HEAL_RANGE := 3.4
 const WALK_SPEED := 3.5
 ## Each hero walks at WALK_SPEED times a factor in this range, so a moving squad strings out.
@@ -73,7 +76,7 @@ const WALK_SPREAD := Vector2(0.8, 1.15)
 
 const DURATION := 150.0
 const MUSTER_TIME := 6.0
-const BOSS_HP := 57000.0
+const BOSS_HP := 67000.0
 const PHASE2_AT := 0.5
 const MORALE_MAX := 100.0
 const MORALE_PER_DAMAGE := 0.01
@@ -137,11 +140,47 @@ const AURA_BOW := 1.3
 const AURA_MAGE := 0.7
 const AURA_HEALER := 2.0
 
+## 招牌技 (signature moves): every SSR has its own, on a long cooldown, cast by itself when its moment comes (on
+## top of its regular skill). The view shows each cast with a callout (portrait, hero, move).
+enum Sig { WALL, CLEAVE, GALE, PIERCE, ARROW, METEOR, DAWN }
+const SIG_NAMES := ["不動城牆", "斷鋼斬", "疾風連斬", "破甲突刺", "穿雲箭", "隕石術", "黎明之光"]
+const SIG_DESC := ["整團 2 秒不受傷", "重擊，連部位一起削", "近戰傷害 ×1.5", "王受到的傷害 +25%", "重擊瞄準的部位",
+	"隕石砸向瞄準的部位", "治療身邊的人並救回 3 人"]
+## The SSRs' moves per class, in roster order (the sword class has two SSRs).
+const CLASS_SIGS := [[Sig.WALL], [Sig.CLEAVE, Sig.GALE], [Sig.PIERCE], [Sig.ARROW], [Sig.METEOR], [Sig.DAWN]]
+const SIG_CD := 28.0
+const SIG_PER_LEVEL := 0.15
+## The first casts come SIG_FIRST s into the fight, SIG_STAGGER apart.
+const SIG_FIRST := 10.0
+const SIG_STAGGER := 3.0
+## 不動城牆: cast when its squad stands in a telegraph about to land; nothing hurts that squad for WALL_TIME.
+const WALL_TIME := 2.0
+## Burst moves: this many times the hero's attack.
+const CLEAVE_BURST := 25.0
+const ARROW_BURST := 30.0
+const METEOR_BURST := 36.0
+const GALE_TIME := 6.0
+const GALE_MULT := 1.5
+const PIERCE_TIME := 8.0
+const PIERCE_MULT := 1.25
+## 黎明之光: when DAWN_FALLEN heroes lie within reach, or someone in reach is under DAWN_LOW: heals everyone in reach
+## by DAWN_HEAL of their HP and revives up to DAWN_REVIVE.
+const DAWN_FALLEN := 3
+const DAWN_LOW := 0.4
+const DAWN_HEAL := 0.4
+const DAWN_REVIVE := 3
+
 var phase: int = Phase.MUSTER
 var muster_t: float = 0.0
 ## Fight seconds since the muster ended; the push timer.
 var t: float = 0.0
 var boss_hp: float = BOSS_HP
+## The stage's numbers (see the header): BOSS_HP, PART_HP, AUTO_DAMAGE and TELE_DAMAGE scaled, and the attack tempo.
+var boss_max_hp: float = BOSS_HP
+var part_max_hp := PackedFloat32Array(PART_HP)
+var auto_damage: float = AUTO_DAMAGE
+var tele_damage: float = TELE_DAMAGE
+var tempo: float = 1.0
 var phase2: bool = false
 var morale: float = 0.0
 var damage_dealt: float = 0.0
@@ -161,6 +200,16 @@ var speed := PackedFloat32Array()
 var skill_cd := PackedFloat32Array()
 ## Fight time of the last skill cast, for the view's cast pose (-1 = never).
 var cast_at := PackedFloat32Array()
+## Each hero's 招牌技 (Sig, -1 = none), its cooldown and how often it was cast (for the push report).
+var sig := PackedInt32Array()
+var sig_cd := PackedFloat32Array()
+var sig_casts := PackedInt32Array()
+## How strong each hero's 招牌技 is (1 + SIG_PER_LEVEL per ascension): bursts and heals scale with it.
+var sig_mult := PackedFloat32Array()
+## Seconds left of 不動城牆 per squad, 疾風連斬 and 破甲突刺.
+var wall_t := PackedFloat32Array()
+var gale_t: float = 0.0
+var pierce_t: float = 0.0
 
 ## Each squad's flag (where it gathers), where it mustered (全員歸位 goes back there) and guard time left.
 var flag := PackedVector2Array()
@@ -207,18 +256,44 @@ var death_t := PackedFloat32Array()
 var _cause: int = CAUSE_AUTO
 
 
-func _init(seed_value: int = 1) -> void:
+## Base HP and attack of a hero of class c and rarity r, before growth.
+static func base_stats(c: int, r: int) -> Vector2:
+	var hp_value: float = HP[c] * RARITY_MULT[r] * (PASSIVE_MULT if r >= R and c == SHIELD else 1.0)
+	var atk_value: float = ATK[c] * RARITY_MULT[r] * (PASSIVE_MULT if r >= R and c != SHIELD else 1.0)
+	return Vector2(hp_value, atk_value)
+
+
+## The hero roster is fixed (ROSTER by class, RARITY_COUNTS by rarity, in that order). `roster` (from
+## progression.gd) grows it: per hero "rarity" (an N or R promoted by ascension), "hp_mult", "atk_mult" (levels) and
+## "sig_level" (an SSR's ascensions make its 招牌技 stronger); without it every hero is at its base. `stage`: see the
+## header ({"hp", "dmg", "tempo"}; missing keys are 1).
+func _init(seed_value: int = 1, roster: Dictionary = {}, stage: Dictionary = {}) -> void:
 	_rng.seed = seed_value
+	var hp_scale: float = stage.get("hp", 1.0)
+	boss_max_hp = BOSS_HP * hp_scale
+	boss_hp = boss_max_hp
+	for k: int in part_max_hp.size():
+		part_max_hp[k] = PART_HP[k] * hp_scale
+	auto_damage = AUTO_DAMAGE * stage.get("dmg", 1.0)
+	tele_damage = TELE_DAMAGE * stage.get("dmg", 1.0)
+	tempo = stage.get("tempo", 1.0)
 	for c: int in ROSTER.size():
 		for r: int in 4:
 			for n: int in RARITY_COUNTS[c][r]:
-				var mult: float = RARITY_MULT[r] * (PASSIVE_MULT if r >= R else 1.0)
 				cls.append(c)
 				rarity.append(r)
 				squad.append(CLASS_SQUAD[c])
-				max_hp.append(HP[c] * RARITY_MULT[r] * (PASSIVE_MULT if r >= R and c == SHIELD else 1.0))
-				atk.append(ATK[c] * (mult if c != SHIELD else RARITY_MULT[r]))
 	var n: int = cls.size()
+	sig_mult.resize(n)
+	sig_mult.fill(1.0)
+	for i: int in n:
+		if roster.has("rarity"):
+			rarity[i] = roster.rarity[i]
+		var base: Vector2 = base_stats(cls[i], rarity[i])
+		max_hp.append(base.x * (roster.hp_mult[i] if roster.has("hp_mult") else 1.0))
+		atk.append(base.y * (roster.atk_mult[i] if roster.has("atk_mult") else 1.0))
+		if roster.has("sig_level"):
+			sig_mult[i] = 1.0 + SIG_PER_LEVEL * roster.sig_level[i]
 	hp = max_hp.duplicate()
 	skill_cd.resize(n)
 	speed.resize(n)
@@ -228,6 +303,21 @@ func _init(seed_value: int = 1) -> void:
 		speed[i] = WALK_SPEED * _rng.randf_range(WALK_SPREAD.x, WALK_SPREAD.y)
 	cast_at.resize(n)
 	cast_at.fill(-1.0)
+	sig.resize(n)
+	sig.fill(-1)
+	sig_cd.resize(n)
+	sig_casts.resize(n)
+	var ssr_seen := {}
+	var order: int = 0
+	for i: int in n:
+		if rarity[i] != SSR:
+			continue
+		var k: int = ssr_seen.get(cls[i], 0)
+		ssr_seen[cls[i]] = k + 1
+		sig[i] = CLASS_SIGS[cls[i]][mini(k, CLASS_SIGS[cls[i]].size() - 1)]
+		sig_cd[i] = SIG_FIRST + order * SIG_STAGGER
+		order += 1
+	wall_t.resize(SQUADS)
 	stat_dealt.resize(n)
 	stat_taken.resize(n)
 	stat_healed.resize(n)
@@ -246,7 +336,7 @@ func _init(seed_value: int = 1) -> void:
 		home.append(HOME[s])
 		_form(s)
 		_aura.append(_aura_of(s))
-	part_hp = PackedFloat32Array(PART_HP)
+	part_hp = part_max_hp.duplicate()
 	for i: int in n:
 		# Muster: everyone starts off-screen left, inner classes first.
 		pos[i] = Vector2(-11.0 - cls[i] * 0.8 - _rng.randf() * 2.5, goal[i].y)
@@ -289,6 +379,11 @@ func living() -> int:
 
 func broken(p: int) -> bool:
 	return part_hp[p] <= 0.0
+
+
+## Everything that makes the boss take more damage right now: wounds, the knockdown, 破甲突刺.
+func damage_mult() -> float:
+	return wound() * (STAGGER_MULT if stagger_t > 0.0 else 1.0) * (PIERCE_MULT if pierce_t > 0.0 else 1.0)
 
 
 ## Damage multiplier from broken parts.
@@ -346,7 +441,7 @@ func time_left() -> float:
 
 
 func hp_ratio() -> float:
-	return boss_hp / BOSS_HP
+	return boss_hp / boss_max_hp
 
 
 func fighting() -> bool:
@@ -426,8 +521,8 @@ func volley() -> bool:
 	for i: int in cls.size():
 		if hp[i] > 0.0:
 			amount += atk[i]
-			stat_dealt[i] += atk[i] * VOLLEY_SECONDS * wound()
-	amount *= VOLLEY_SECONDS * wound()
+			stat_dealt[i] += atk[i] * VOLLEY_SECONDS * damage_mult()
+	amount *= VOLLEY_SECONDS * damage_mult()
 	event.emit(&"volley", amount)
 	_deal(amount, false)
 	return true
@@ -443,12 +538,16 @@ func _start_fight() -> void:
 func _fight(dt: float) -> void:
 	t += dt
 	arm_down_t = maxf(arm_down_t - dt, 0.0)
+	gale_t = maxf(gale_t - dt, 0.0)
+	pierce_t = maxf(pierce_t - dt, 0.0)
 	for s: int in SQUADS:
+		wall_t[s] = maxf(wall_t[s] - dt, 0.0)
 		guard_t[s] = maxf(guard_t[s] - dt, 0.0)
 		_aura[s] = _aura_of(s)
 	_regen_of()
 	for i: int in cls.size():
 		skill_cd[i] = maxf(skill_cd[i] - dt, 0.0)
+		sig_cd[i] = maxf(sig_cd[i] - dt, 0.0)
 	_walk(dt)
 	if not phase2 and hp_ratio() <= PHASE2_AT:
 		phase2 = true
@@ -463,7 +562,7 @@ func _fight(dt: float) -> void:
 	else:
 		_auto_t -= dt
 		if _auto_t <= 0.0:
-			_auto_t += AUTO_EVERY[p] * slow
+			_auto_t += AUTO_EVERY[p] * slow * tempo
 			_auto_attack()
 
 	if stagger_t > 0.0:
@@ -478,7 +577,7 @@ func _fight(dt: float) -> void:
 		if t >= _next_tele - warn:
 			_telegraph(TELE_CYCLE[p][_tele_index % 3], maxf(_next_tele - t, dt))
 			_tele_index += 1
-			_next_tele += TELE_EVERY[p] * slow
+			_next_tele += TELE_EVERY[p] * slow * tempo
 
 	_heal_t -= dt
 	if _heal_t <= 0.0:
@@ -489,9 +588,12 @@ func _fight(dt: float) -> void:
 			hp[i] = minf(hp[i] + _regen[i] * dt, max_hp[i])
 
 	_auto_skills()
+	_signatures()
+	if phase != Phase.FIGHT:
+		return
 	var melee_sum: float = 0.0
 	var ranged_sum: float = 0.0
-	var mult: float = (STAGGER_MULT if stagger_t > 0.0 else 1.0) * wound()
+	var mult: float = damage_mult()
 	var aimed: bool = aim >= 0
 	for i: int in cls.size():
 		if hp[i] <= 0.0 or moving(i) or cls[i] == HEALER:
@@ -501,7 +603,7 @@ func _fight(dt: float) -> void:
 		if cls[i] <= SPEAR:
 			if not in_reach(pos[i]):
 				continue
-			d *= a.melee
+			d *= a.melee * (GALE_MULT if gale_t > 0.0 else 1.0)
 			melee_sum += d
 			stat_dealt[i] += d * dt
 		else:
@@ -509,8 +611,7 @@ func _fight(dt: float) -> void:
 			ranged_sum += d
 			stat_dealt[i] += d * dt * (PART_BODY_SHARE if aimed else 1.0)
 	# Melee wear down the legs (the arm while the club is down); aimed ranged shots wear down their part.
-	var melee_part: int = Part.ARM if arm_down_t > 0.0 and not broken(Part.ARM) else Part.LEGS
-	_wear(melee_part, melee_sum * dt)
+	_wear(_melee_part(), melee_sum * dt)
 	if aimed:
 		_wear(aim, ranged_sum * dt)
 		ranged_sum *= PART_BODY_SHARE
@@ -519,6 +620,11 @@ func _fight(dt: float) -> void:
 	if phase == Phase.FIGHT and (t >= DURATION or living() == 0):
 		phase = Phase.LOST
 		event.emit(&"lost", hp_ratio())
+
+
+## The part melee hit: the arm while the club lies on the ground after a 重砸, else the legs.
+func _melee_part() -> int:
+	return Part.ARM if arm_down_t > 0.0 and not broken(Part.ARM) else Part.LEGS
 
 
 func _wear(p: int, amount: float) -> void:
@@ -622,7 +728,7 @@ func _auto_skills() -> void:
 			_:
 				if cls[i] <= SPEAR and not in_reach(pos[i]):
 					continue
-				var b: float = atk[i] * SKILL_BURST[cls[i]] * _aura[s].all * wound()
+				var b: float = atk[i] * SKILL_BURST[cls[i]] * _aura[s].all * damage_mult()
 				stat_dealt[i] += b
 				burst += b
 		skill_cd[i] = SKILL_CD * _aura[s].cd
@@ -630,6 +736,60 @@ func _auto_skills() -> void:
 		event.emit(&"skill", float(i))
 	if burst > 0.0:
 		_deal(burst, true)
+
+
+## Casts every ready 招牌技 whose moment has come (see Sig). Called each fight step, after the regular skills.
+func _signatures() -> void:
+	for i: int in cls.size():
+		if sig[i] < 0 or hp[i] <= 0.0 or sig_cd[i] > 0.0 or moving(i) or phase != Phase.FIGHT:
+			continue
+		var s: int = squad[i]
+		match sig[i]:
+			Sig.WALL:
+				if not (tele_t > 0.0 and tele_t < 0.8 and squad_threatened(s) > 0):
+					continue
+				wall_t[s] = WALL_TIME
+				stat_saves[i] += 1
+			Sig.CLEAVE:
+				if not in_reach(pos[i]):
+					continue
+				var b: float = atk[i] * CLEAVE_BURST * sig_mult[i] * damage_mult()
+				_wear(_melee_part(), b)
+				stat_dealt[i] += b
+				_deal(b, true)
+			Sig.GALE:
+				if not in_reach(pos[i]):
+					continue
+				gale_t = GALE_TIME
+			Sig.PIERCE:
+				if not in_reach(pos[i]):
+					continue
+				pierce_t = PIERCE_TIME
+			Sig.ARROW, Sig.METEOR:
+				var b: float = atk[i] * (ARROW_BURST if sig[i] == Sig.ARROW else METEOR_BURST) * sig_mult[i] * damage_mult()
+				if aim >= 0:
+					_wear(aim, b)
+					b *= PART_BODY_SHARE
+				stat_dealt[i] += b
+				_deal(b, true)
+			Sig.DAWN:
+				var fallen: Array[int] = []
+				for j: int in cls.size():
+					if hp[j] <= 0.0 and pos[j].distance_squared_to(pos[i]) <= HEAL_RANGE * HEAL_RANGE:
+						fallen.append(j)
+				if fallen.size() < DAWN_FALLEN and _lowest_near(pos[i]) >= DAWN_LOW:
+					continue
+				for j: int in cls.size():
+					if hp[j] > 0.0 and pos[j].distance_squared_to(pos[i]) <= HEAL_RANGE * HEAL_RANGE:
+						var h: float = minf(max_hp[j] * DAWN_HEAL * sig_mult[i], max_hp[j] - hp[j])
+						hp[j] += h
+						stat_healed[i] += h
+				for k: int in mini(fallen.size(), DAWN_REVIVE):
+					_revive(fallen[k])
+					stat_saves[i] += 1
+		sig_cd[i] = SIG_CD
+		sig_casts[i] += 1
+		event.emit(&"signature", float(i))
 
 
 ## The hero nearest the boss, and whoever stands within AUTO_SPLASH of them: shields first, then the healthiest.
@@ -653,7 +813,7 @@ func _auto_attack() -> void:
 	var fell: int = 0
 	_cause = CAUSE_AUTO
 	for k: int in hits:
-		fell += _hurt(victims[k], AUTO_DAMAGE)
+		fell += _hurt(victims[k], auto_damage)
 	event.emit(&"auto", float(target))
 	if fell > 0:
 		event.emit(&"fallen", float(fell))
@@ -690,7 +850,7 @@ func _land() -> void:
 	for i: int in cls.size():
 		if hp[i] > 0.0 and _in_shapes(pos[i]):
 			tele_hit_count += 1
-			fell += _hurt(i, TELE_DAMAGE)
+			fell += _hurt(i, tele_damage)
 	if tele_kind == Attack.SLAM:
 		arm_down_t = ARM_DOWN
 	event.emit(&"tele_hit", float(fell))
@@ -713,6 +873,8 @@ func _inside(shape: Dictionary, p: Vector2) -> bool:
 ## Damages a hero after squad guard and shield aura. Returns 1 if they fell.
 func _hurt(i: int, amount: float) -> int:
 	var s: int = squad[i]
+	if wall_t[s] > 0.0:
+		return 0
 	var d: float = amount * _aura[s].taken * (GUARD_MULT if guard_t[s] > 0.0 else 1.0)
 	stat_taken[i] += minf(d, hp[i])
 	hp[i] = maxf(hp[i] - d, 0.0)

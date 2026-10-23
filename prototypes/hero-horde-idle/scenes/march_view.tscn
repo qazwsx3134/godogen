@@ -1,0 +1,358 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://ui/theme.tres" id="1_08or2"]
+[ext_resource type="Script" path="res://scripts/march_view.gd" id="2_qy0ma"]
+[ext_resource type="Shader" path="res://shaders/ui_scroll.gdshader" id="3_0aksr"]
+[ext_resource type="Texture2D" path="res://assets/ui/hero_page_bg.png" id="4_1yfcr"]
+[ext_resource type="Texture2D" path="res://assets/stage/props/pine.png" id="5_rsg20"]
+[ext_resource type="Texture2D" path="res://assets/stage/props/boulder.png" id="6_a22xl"]
+[ext_resource type="Texture2D" path="res://assets/stage/props/oak.png" id="7_t7q75"]
+[ext_resource type="Texture2D" path="res://assets/stage/grass.png" id="8_0ol82"]
+[ext_resource type="Material" path="res://materials/ui_sprite_dark.tres" id="9_02eky"]
+[ext_resource type="Texture2D" path="res://assets/heroes/heroes.png" id="10_yvubt"]
+[ext_resource type="Texture2D" path="res://assets/stage/boss.png" id="11_b2od4"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hjklq"]
+shader = ExtResource("3_0aksr")
+shader_parameter/tex = ExtResource("4_1yfcr")
+shader_parameter/tiles = Vector2(2.3, 1)
+shader_parameter/offset = null
+shader_parameter/mirror = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0s6vn"]
+shader = ExtResource("3_0aksr")
+shader_parameter/tex = ExtResource("8_0ol82")
+shader_parameter/tiles = Vector2(3.4166667, 0.47916666)
+shader_parameter/offset = null
+shader_parameter/mirror = false
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rrik6"]
+atlas = ExtResource("10_yvubt")
+region = Rect2(0, 48, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ddt2x"]
+atlas = ExtResource("10_yvubt")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sooq6"]
+atlas = ExtResource("10_yvubt")
+region = Rect2(96, 96, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r5how"]
+atlas = ExtResource("10_yvubt")
+region = Rect2(144, 144, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bih73"]
+atlas = ExtResource("10_yvubt")
+region = Rect2(0, 192, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ynaxr"]
+atlas = ExtResource("11_b2od4")
+region = Rect2(0, 0, 200, 200)
+
+[node name="MarchView" type="Control" unique_id=1201352103]
+custom_minimum_size = Vector2(0, 300)
+clip_contents = true
+layout_mode = 3
+anchors_preset = 0
+offset_right = 656.0
+offset_bottom = 420.0
+mouse_filter = 2
+theme = ExtResource("1_08or2")
+script = ExtResource("2_qy0ma")
+
+[node name="Far" type="TextureRect" parent="." unique_id=1847320169]
+unique_name_in_owner = true
+self_modulate = Color(1.7, 1.75, 1.7, 1)
+material = SubResource("ShaderMaterial_hjklq")
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -92.0
+mouse_filter = 2
+texture = ExtResource("4_1yfcr")
+expand_mode = 1
+
+[node name="Props" type="Control" parent="." unique_id=1718973589]
+unique_name_in_owner = true
+anchors_preset = 0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -322.0
+offset_bottom = -82.0
+mouse_filter = 2
+
+[node name="Prop_0" type="TextureRect" parent="Props" unique_id=660036187]
+modulate = Color(0.75, 0.82, 0.78, 1)
+texture_filter = 1
+layout_mode = 0
+offset_left = 40.0
+offset_top = 83.59999
+offset_right = 138.6
+offset_bottom = 240.0
+mouse_filter = 2
+texture = ExtResource("5_rsg20")
+expand_mode = 1
+
+[node name="Prop_1" type="TextureRect" parent="Props" unique_id=99732469]
+modulate = Color(0.75, 0.82, 0.78, 1)
+texture_filter = 1
+layout_mode = 0
+offset_left = 260.0
+offset_top = 188.0
+offset_right = 319.0
+offset_bottom = 240.0
+mouse_filter = 2
+texture = ExtResource("6_a22xl")
+expand_mode = 1
+
+[node name="Prop_2" type="TextureRect" parent="Props" unique_id=1663058319]
+modulate = Color(0.75, 0.82, 0.78, 1)
+texture_filter = 1
+layout_mode = 0
+offset_left = 380.0
+offset_top = 105.59999
+offset_right = 543.2
+offset_bottom = 240.0
+mouse_filter = 2
+texture = ExtResource("7_t7q75")
+expand_mode = 1
+
+[node name="Prop_3" type="TextureRect" parent="Props" unique_id=569629497]
+modulate = Color(0.75, 0.82, 0.78, 1)
+texture_filter = 1
+layout_mode = 0
+offset_left = 600.0
+offset_top = 111.2
+offset_right = 681.2
+offset_bottom = 240.0
+mouse_filter = 2
+texture = ExtResource("5_rsg20")
+expand_mode = 1
+
+[node name="Ground" type="TextureRect" parent="." unique_id=1452709588]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_0s6vn")
+layout_mode = 0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -92.0
+mouse_filter = 2
+texture = ExtResource("8_0ol82")
+expand_mode = 1
+
+[node name="Field" type="Control" parent="." unique_id=1954705999]
+anchors_preset = 0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -322.0
+offset_bottom = -80.0
+mouse_filter = 2
+
+[node name="Heroes" type="Control" parent="Field" unique_id=1412388958]
+unique_name_in_owner = true
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Hero_1" type="TextureRect" parent="Field/Heroes" unique_id=2045134174]
+texture_filter = 1
+material = ExtResource("9_02eky")
+layout_mode = 0
+offset_left = 320.0
+offset_top = 118.0
+offset_right = 440.0
+offset_bottom = 238.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_rrik6")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Hero_2" type="TextureRect" parent="Field/Heroes" unique_id=1352768721]
+texture_filter = 1
+material = ExtResource("9_02eky")
+layout_mode = 0
+offset_left = 246.0
+offset_top = 130.0
+offset_right = 366.0
+offset_bottom = 250.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_ddt2x")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Hero_3" type="TextureRect" parent="Field/Heroes" unique_id=1080173717]
+texture_filter = 1
+material = ExtResource("9_02eky")
+layout_mode = 0
+offset_left = 172.0
+offset_top = 118.0
+offset_right = 292.0
+offset_bottom = 238.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_sooq6")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Hero_4" type="TextureRect" parent="Field/Heroes" unique_id=938130608]
+texture_filter = 1
+material = ExtResource("9_02eky")
+layout_mode = 0
+offset_left = 98.0
+offset_top = 130.0
+offset_right = 218.0
+offset_bottom = 250.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_r5how")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Hero_5" type="TextureRect" parent="Field/Heroes" unique_id=1124669380]
+texture_filter = 1
+material = ExtResource("9_02eky")
+layout_mode = 0
+offset_left = 24.0
+offset_top = 118.0
+offset_right = 144.0
+offset_bottom = 238.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_bih73")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Enemy" type="TextureRect" parent="Field" unique_id=389050290]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 470.0
+offset_top = 90.0
+offset_right = 620.0
+offset_bottom = 240.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_ynaxr")
+expand_mode = 1
+stretch_mode = 5
+flip_h = true
+
+[node name="EnemyHp" type="ProgressBar" parent="Field" unique_id=1651834746]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 500.0
+offset_top = 76.0
+offset_right = 590.0
+offset_bottom = 103.0
+mouse_filter = 2
+theme_type_variation = &"HpBar"
+value = 60.0
+show_percentage = false
+
+[node name="Popups" type="Control" parent="Field" unique_id=238152680]
+unique_name_in_owner = true
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Popup_1" type="Label" parent="Field/Popups" unique_id=1054061475]
+layout_mode = 0
+offset_left = 480.0
+offset_top = 40.0
+offset_right = 480.0
+offset_bottom = 40.0
+theme_type_variation = &"FieldLabel"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 26
+text = "128"
+
+[node name="Popup_2" type="Label" parent="Field/Popups" unique_id=1179906595]
+layout_mode = 0
+offset_left = 500.0
+offset_top = 40.0
+offset_right = 500.0
+offset_bottom = 40.0
+theme_type_variation = &"FieldLabel"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 26
+text = "128"
+
+[node name="Popup_3" type="Label" parent="Field/Popups" unique_id=1610182330]
+layout_mode = 0
+offset_left = 520.0
+offset_top = 40.0
+offset_right = 520.0
+offset_bottom = 40.0
+theme_type_variation = &"FieldLabel"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 26
+text = "128"
+
+[node name="Popup_4" type="Label" parent="Field/Popups" unique_id=269346992]
+layout_mode = 0
+offset_left = 540.0
+offset_top = 40.0
+offset_right = 540.0
+offset_bottom = 40.0
+theme_type_variation = &"FieldLabel"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 26
+text = "128"
+
+[node name="Popup_5" type="Label" parent="Field/Popups" unique_id=886260184]
+layout_mode = 0
+offset_left = 560.0
+offset_top = 40.0
+offset_right = 560.0
+offset_bottom = 40.0
+theme_type_variation = &"FieldLabel"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 26
+text = "128"
+
+[node name="Popup_6" type="Label" parent="Field/Popups" unique_id=458736701]
+layout_mode = 0
+offset_left = 580.0
+offset_top = 40.0
+offset_right = 580.0
+offset_bottom = 40.0
+theme_type_variation = &"FieldLabel"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 26
+text = "128"
+
+[node name="RegionLabel" type="Label" parent="." unique_id=14871502]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 14.0
+offset_top = 10.0
+offset_right = 14.0
+offset_bottom = 10.0
+theme_type_variation = &"FieldLabel"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 22
+text = "行軍中‧黃昏要塞"
+
+[node name="KillLabel" type="Label" parent="." unique_id=1217766745]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -160.0
+offset_top = 10.0
+offset_right = -14.0
+theme_type_variation = &"FieldLabel"
+theme_override_colors/font_color = Color(0.8509804, 0.69803923, 0.43137255, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 22
+text = "擊倒 0"
+horizontal_alignment = 2

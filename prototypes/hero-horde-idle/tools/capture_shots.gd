@@ -1,6 +1,7 @@
 extends SceneTree
 ## Screenshots of the push at fixed moments (muster, fight, a 重砸 circle, the squad walking out of it, the slam
-## landing, a 落石 pair over the back squads, aiming at the horns, the horns breaking, volley, phase 2 hurt, result),
+## landing, a 落石 pair over the back squads, aiming at the horns, the horns breaking, the SSR mage's 隕石術, volley,
+## phase 2 hurt, result), then the 養成 roster and two hero pages (an SSR with its 招牌技, an N with its next rarity step),
 ## for reviewing layout at phone sizes. Needs a display; keep the default Mobile renderer (gl_compatibility has no depth
 ## of field, so the stage looks different):
 ##   godot --path prototypes/hero-horde-idle --resolution 390x844 --script res://tools/capture_shots.gd -- <out dir>
@@ -8,21 +9,27 @@ extends SceneTree
 ## Writes <out dir>/<W>x<H>_<n>_<moment>.png.
 
 const PushSim = preload("res://domain/push_sim.gd")
+const Progression = preload("res://domain/progression.gd")
+const Screenshot = preload("res://addons/proto_kit/screenshot.gd")
 
 var _out: String
 var _main: Node
 
 
 func _initialize() -> void:
-	var args := OS.get_cmdline_user_args()
-	_out = args[0] if args.size() > 0 else "user://shots"
-	DirAccess.make_dir_recursive_absolute(_out)
+	_out = Screenshot.out_dir()
 	_run.call_deferred()
 
 
 func _run() -> void:
 	seed(7)
 	_main = (load("res://scenes/main.tscn") as PackedScene).instantiate()
+	# Heroes near the push's reference strength, saved aside so the player's progress is never touched.
+	var progress := Progression.new()
+	progress.class_level.fill(12)
+	progress.captains = PackedInt32Array([3, 60])  # a shield up front and an archer at the back
+	_main.progress = progress
+	_main.save_path = "user://progress_shots.json"
 	root.add_child(_main)
 	await _frames(2)
 	var sim: PushSim = _main.sim
@@ -61,6 +68,12 @@ func _run() -> void:
 	await _shot("6b_horns_break", 12)
 	await _frames(240)
 
+	for i: int in sim.cls.size():
+		if sim.sig[i] == PushSim.Sig.METEOR:
+			sim.sig_cd[i] = 0.0
+	await _shot("6c_meteor", 20)
+	await _frames(120)
+
 	sim.morale = PushSim.MORALE_MAX
 	sim.volley()
 	await _shot("7_volley", 9)
@@ -70,20 +83,38 @@ func _run() -> void:
 			sim.hp[i] = 0.0
 		else:
 			sim.hp[i] = sim.max_hp[i] * 0.4
-	sim.boss_hp = PushSim.BOSS_HP * 0.45
+	sim.boss_hp = sim.boss_max_hp * 0.45
 	await _shot("8_phase2_hurt", 30)
 
 	sim.t = PushSim.DURATION - 0.01
 	await _shot("9_result", 8)
+
+	# The growth screen after a few rounds: some gold and shards, a levelled march squad.
+	_main.queue_free()
+	var grown := Progression.new()
+	for k: int in 3:
+		grown.march_hour()
+		grown.gold += 2000
+		grown.auto_spend()
+	grown.shards = 3
+	var growth: Control = (load("res://scenes/growth.tscn") as PackedScene).instantiate()
+	growth.progress = grown
+	growth.save_path = "user://progress_shots.json"
+	root.add_child(growth)
+	await _frames(3)
+	growth.select_class(1)
+	await _shot("10_growth", 4)
+	# The hero page: the SSR sword (its 招牌技), then an N (the next rarity step).
+	growth.select_hero(growth.find_child("Cards", true, false).get_child(0).hero)
+	await _shot("11_hero_ssr", 3)
+	growth.select_hero(growth.find_child("Cards", true, false).get_child(12).hero)
+	await _shot("12_hero_n", 3)
 	quit(0)
 
 
 func _shot(moment: String, frames: int) -> void:
 	await _frames(frames)
-	var image: Image = root.get_texture().get_image()
-	var path := "%s/%dx%d_%s.png" % [_out, image.get_width(), image.get_height(), moment]
-	image.save_png(path)
-	print("shot: ", path)
+	Screenshot.save(root, _out, moment)
 
 
 func _frames(n: int) -> void:

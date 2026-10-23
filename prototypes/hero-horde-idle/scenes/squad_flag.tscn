@@ -1,29 +1,17 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/squad_flag.gd" id="1_2r0yi"]
+[ext_resource type="Texture2D" path="res://assets/flags/melee.png" id="2_4h8ay"]
 [ext_resource type="Material" path="res://materials/ground_mark.tres" id="2_nqnt2"]
 [ext_resource type="FontFile" path="res://ui/fonts/NotoSansTC.ttf" id="3_4h8ay"]
+[ext_resource type="Script" path="res://scripts/flag_banner.gd" id="4_wkvq5"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_wkvq5"]
 size = Vector2(1, 1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ukpbx"]
-shading_mode = 0
-albedo_color = Color(0.3, 0.2, 0.12, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_1tisb"]
-material = SubResource("StandardMaterial3D_ukpbx")
-size = Vector3(0.07, 2.4, 0.07)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mg7i6"]
-cull_mode = 2
-shading_mode = 0
-
-[sub_resource type="QuadMesh" id="QuadMesh_ctw3s"]
-size = Vector2(0.9, 0.6)
-
 [node name="SquadFlag" type="Node3D" unique_id=320180032]
 script = ExtResource("1_2r0yi")
+banner = ExtResource("2_4h8ay")
 
 [node name="Ring" type="MeshInstance3D" parent="." unique_id=1428711610]
 unique_name_in_owner = true
@@ -35,15 +23,9 @@ instance_shader_parameters/shape = 0.0
 instance_shader_parameters/texels = Vector2(48, 100)
 mesh = SubResource("PlaneMesh_wkvq5")
 
-[node name="Pole" type="MeshInstance3D" parent="." unique_id=1959275236]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
-mesh = SubResource("BoxMesh_1tisb")
-
-[node name="Cloth" type="MeshInstance3D" parent="." unique_id=331087426]
+[node name="Banner" type="MeshInstance3D" parent="." unique_id=1677125237]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.47, 2.08, 0)
-material_override = SubResource("StandardMaterial3D_mg7i6")
-mesh = SubResource("QuadMesh_ctw3s")
+script = ExtResource("4_wkvq5")
 
 [node name="FlagLabel" type="Label3D" parent="." unique_id=204271832]
 unique_name_in_owner = true

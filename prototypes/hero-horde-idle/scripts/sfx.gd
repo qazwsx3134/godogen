@@ -5,6 +5,7 @@ extends "res://addons/proto_kit/sfx_bank.gd"
 ##   thud     普通攻擊 lands                               fall     heroes fell
 ##   skill    an SR/SSR skill fires                       volley   大招
 ##   aim      a boss part is aimed at                     break    a boss part breaks
+##   signature an SSR's 招牌技
 ##   phase2   the boss enrages                            revive   an SSR healer revives someone
 ##   move     a squad is moved or regrouped                tap      a HUD button
 ##   won / lost
@@ -21,6 +22,7 @@ func _ready() -> void:
 		&"skill": Synth.ramp(600.0, 1100.0, 0.12, 0.2, 0.1),
 		&"volley": Synth.click(0.6, 0.55, 5.0),
 		&"aim": Synth.notes([987.77, 1318.5], 0.06),
+		&"signature": Synth.notes([659.25, 880.0, 1174.66, 1760.0], 0.07),
 		&"break": Synth.click(0.35, 0.55, 10.0),
 		&"phase2": Synth.ramp(160.0, 70.0, 0.9, 0.5, 0.2, 0.7),
 		&"revive": Synth.notes([523.25, 783.99, 1046.5], 0.08, true),

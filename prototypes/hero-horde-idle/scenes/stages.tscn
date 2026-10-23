@@ -1,0 +1,79 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://ui/theme.tres" id="1_3gvtk"]
+[ext_resource type="Script" path="res://scripts/stages.gd" id="2_1siwl"]
+[ext_resource type="Texture2D" path="res://assets/ui/hero_page_bg.png" id="3_ndu0x"]
+[ext_resource type="PackedScene" path="res://scenes/stage_row.tscn" id="4_clkqk"]
+
+[node name="Stages" type="Control" unique_id=840845356]
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource("1_3gvtk")
+script = ExtResource("2_1siwl")
+
+[node name="Background" type="TextureRect" parent="." unique_id=1430770631]
+texture_filter = 1
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource("3_ndu0x")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Dim" type="ColorRect" parent="." unique_id=487899581]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.05, 0.08, 0.07, 0.82)
+
+[node name="Margins" type="MarginContainer" parent="." unique_id=1312307700]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 20
+
+[node name="Column" type="VBoxContainer" parent="Margins" unique_id=1587761930]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="Margins/Column" unique_id=1928703715]
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 48
+text = "關卡"
+
+[node name="Rule" type="HSeparator" parent="Margins/Column" unique_id=1902237407]
+layout_mode = 2
+
+[node name="Scroll" type="ScrollContainer" parent="Margins/Column" unique_id=483421552]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="StageList" type="VBoxContainer" parent="Margins/Column/Scroll" unique_id=1566291072]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="PreviewRegion" type="Label" parent="Margins/Column/Scroll/StageList" unique_id=1833761138]
+layout_mode = 2
+theme_type_variation = &"Dim"
+theme_override_font_sizes/font_size = 24
+text = "黃昏要塞"
+
+[node name="Preview_1" parent="Margins/Column/Scroll/StageList" unique_id=2078639081 instance=ExtResource("4_clkqk")]
+layout_mode = 2
+
+[node name="Preview_2" parent="Margins/Column/Scroll/StageList" unique_id=2025647406 instance=ExtResource("4_clkqk")]
+layout_mode = 2
+
+[node name="Preview_3" parent="Margins/Column/Scroll/StageList" unique_id=1461650430 instance=ExtResource("4_clkqk")]
+layout_mode = 2

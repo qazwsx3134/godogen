@@ -1,0 +1,203 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://ui/theme.tres" id="1_yu5fn"]
+[ext_resource type="Script" path="res://scripts/home.gd" id="2_ip4d6"]
+[ext_resource type="PackedScene" path="res://scenes/camp.tscn" id="3_gi00y"]
+[ext_resource type="PackedScene" path="res://scenes/growth.tscn" id="4_rpgsi"]
+[ext_resource type="PackedScene" path="res://scenes/recruit.tscn" id="5_ju5sp"]
+[ext_resource type="PackedScene" path="res://scenes/items.tscn" id="6_o7pnx"]
+[ext_resource type="PackedScene" path="res://scenes/stages.tscn" id="7_aish6"]
+[ext_resource type="Texture2D" path="res://assets/ui/nav/camp.png" id="8_snnha"]
+[ext_resource type="Texture2D" path="res://assets/ui/nav/growth.png" id="9_e42qu"]
+[ext_resource type="Texture2D" path="res://assets/ui/nav/recruit.png" id="10_ppa51"]
+[ext_resource type="Texture2D" path="res://assets/ui/nav/items.png" id="11_kc6b6"]
+[ext_resource type="Texture2D" path="res://assets/ui/nav/stages.png" id="12_jdxxw"]
+
+[node name="Home" type="Control" unique_id=662971311]
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource("1_yu5fn")
+script = ExtResource("2_ip4d6")
+
+[node name="Background" type="ColorRect" parent="." unique_id=48774706]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.05882353, 0.101960786, 0.08627451, 1)
+
+[node name="Pages" type="Control" parent="." unique_id=777491202]
+unique_name_in_owner = true
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -116.0
+mouse_filter = 2
+
+[node name="CampPage" parent="Pages" unique_id=13693085 instance=ExtResource("3_gi00y")]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+
+[node name="GrowthPage" parent="Pages" unique_id=1939272138 instance=ExtResource("4_rpgsi")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+
+[node name="RecruitPage" parent="Pages" unique_id=1480400900 instance=ExtResource("5_ju5sp")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+
+[node name="ItemsPage" parent="Pages" unique_id=1040201627 instance=ExtResource("6_o7pnx")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+
+[node name="StagesPage" parent="Pages" unique_id=813331579 instance=ExtResource("7_aish6")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+
+[node name="NavBar" type="PanelContainer" parent="." unique_id=1734864456]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -116.0
+
+[node name="NavButtons" type="HBoxContainer" parent="NavBar" unique_id=969279872]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="NavCamp" type="Button" parent="NavBar/NavButtons" unique_id=436525302]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TabButton"
+theme_override_constants/icon_max_width = 46
+theme_override_font_sizes/font_size = 26
+toggle_mode = true
+text = "營地"
+icon = ExtResource("8_snnha")
+icon_alignment = 1
+vertical_icon_alignment = 0
+
+[node name="Dot" type="ColorRect" parent="NavBar/NavButtons/NavCamp" unique_id=139953984]
+visible = false
+layout_mode = 0
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 40.0
+offset_top = 22.0
+offset_right = 54.0
+offset_bottom = 36.0
+mouse_filter = 2
+color = Color(0.8509804, 0.4509804, 0.3529412, 1)
+
+[node name="NavGrowth" type="Button" parent="NavBar/NavButtons" unique_id=350279915]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TabButton"
+theme_override_constants/icon_max_width = 46
+theme_override_font_sizes/font_size = 26
+toggle_mode = true
+text = "養成"
+icon = ExtResource("9_e42qu")
+icon_alignment = 1
+vertical_icon_alignment = 0
+
+[node name="Dot" type="ColorRect" parent="NavBar/NavButtons/NavGrowth" unique_id=1857055088]
+visible = false
+layout_mode = 0
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 40.0
+offset_top = 22.0
+offset_right = 54.0
+offset_bottom = 36.0
+mouse_filter = 2
+color = Color(0.8509804, 0.4509804, 0.3529412, 1)
+
+[node name="NavRecruit" type="Button" parent="NavBar/NavButtons" unique_id=1883094665]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TabButton"
+theme_override_constants/icon_max_width = 46
+theme_override_font_sizes/font_size = 26
+toggle_mode = true
+text = "招募"
+icon = ExtResource("10_ppa51")
+icon_alignment = 1
+vertical_icon_alignment = 0
+
+[node name="Dot" type="ColorRect" parent="NavBar/NavButtons/NavRecruit" unique_id=929575617]
+visible = false
+layout_mode = 0
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 40.0
+offset_top = 22.0
+offset_right = 54.0
+offset_bottom = 36.0
+mouse_filter = 2
+color = Color(0.8509804, 0.4509804, 0.3529412, 1)
+
+[node name="NavItems" type="Button" parent="NavBar/NavButtons" unique_id=2103532197]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TabButton"
+theme_override_constants/icon_max_width = 46
+theme_override_font_sizes/font_size = 26
+toggle_mode = true
+text = "道具"
+icon = ExtResource("11_kc6b6")
+icon_alignment = 1
+vertical_icon_alignment = 0
+
+[node name="Dot" type="ColorRect" parent="NavBar/NavButtons/NavItems" unique_id=1309442272]
+visible = false
+layout_mode = 0
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 40.0
+offset_top = 22.0
+offset_right = 54.0
+offset_bottom = 36.0
+mouse_filter = 2
+color = Color(0.8509804, 0.4509804, 0.3529412, 1)
+
+[node name="NavStages" type="Button" parent="NavBar/NavButtons" unique_id=1106775502]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TabButton"
+theme_override_constants/icon_max_width = 46
+theme_override_font_sizes/font_size = 26
+toggle_mode = true
+text = "關卡"
+icon = ExtResource("12_jdxxw")
+icon_alignment = 1
+vertical_icon_alignment = 0
+
+[node name="Dot" type="ColorRect" parent="NavBar/NavButtons/NavStages" unique_id=1987319593]
+visible = false
+layout_mode = 0
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 40.0
+offset_top = 22.0
+offset_right = 54.0
+offset_bottom = 36.0
+mouse_filter = 2
+color = Color(0.8509804, 0.4509804, 0.3529412, 1)
