@@ -1,14 +1,8 @@
 extends RefCounted
-## Shared palette and Control styling for the four selectable presentation styles.
+## The palette and Control styling of the game's UI look, 銀魂和紙 (washi with navy-and-silver frames).
 
 const DEFAULT_ID: String = "gintama"
-const PREFERENCE_PATH: String = "user://ui_preferences.cfg"
-const LABELS: Dictionary = {
-	"cinema": "月下映畫",
-	"ledger": "萬事屋委託簿",
-	"manga": "吐槽分鏡",
-	"gintama": "銀魂和紙",
-}
+const LABELS: Dictionary = {"gintama": "銀魂和紙"}
 
 ## Full panels (log, save slots, chapters, case file, confirmations) on washi in the gintama edition.
 const GINTAMA_PAPER_ROLES: Array[String] = ["menu", "log", "slots", "confirmation"]
@@ -19,102 +13,6 @@ const GINTAMA_PAPER: String = "res://assets/ui/gintama_panel_paper.png"
 const GINTAMA_HUD_DIR: String = "res://assets/ui/gintama_hud/"
 
 const PALETTES: Dictionary = {
-	"cinema": {
-		"canvas": Color("#0b0d18"),
-		"panel": Color("#0d1722"),
-		"panel_soft": Color(0.035, 0.065, 0.095, 0.94),
-		"surface": Color("#15232f"),
-		"surface_hover": Color("#203541"),
-		"text": Color("#f4f1e9"),
-		"muted": Color("#c1cccf"),
-		"accent": Color("#a9d0cf"),
-		"accent_ink": Color("#13262b"),
-		"thought": Color("#a9c8f3"),
-		"danger": Color("#ffb2a1"),
-		"disabled": Color("#84939b"),
-		"disabled_surface": Color("#26333b"),
-		"rule": Color("#77999b"),
-		"focus": Color("#d4efeb"),
-		"name_bg": Color("#547f82"),
-		"name_ink": Color("#f5f4ec"),
-		"floating_bg": Color("#15232f"),
-		"floating_ink": Color("#f4f1e9"),
-		"quick_text": Color("#d4ddda"),
-		"quick_bg": Color(0.04, 0.075, 0.105, 0.2),
-		"quick_active": Color("#a9d0cf"),
-		"quick_active_ink": Color("#13262b"),
-		"scene_outline": Color(0.015, 0.025, 0.04, 0.96),
-		"text_outline": Color(0.015, 0.025, 0.04, 0.92),
-		"button_radius": 5,
-		"panel_radius": 8,
-		"button_border": 1,
-		"panel_border": 1,
-		"focus_border": 3,
-	},
-	"ledger": {
-		"canvas": Color("#e3dac8"),
-		"panel": Color("#f2e8d2"),
-		"panel_soft": Color("#eee3cc"),
-		"surface": Color("#e7dbc3"),
-		"surface_hover": Color("#f8efde"),
-		"text": Color("#382f28"),
-		"muted": Color("#6d5c47"),
-		"accent": Color("#a94432"),
-		"accent_ink": Color("#fff7e8"),
-		"thought": Color("#66533f"),
-		"danger": Color("#8f2d22"),
-		"disabled": Color("#766f64"),
-		"disabled_surface": Color("#d9cfbc"),
-		"rule": Color("#a99773"),
-		"focus": Color("#842e23"),
-		"name_bg": Color("#a94432"),
-		"name_ink": Color("#fff7e8"),
-		"floating_bg": Color("#a94432"),
-		"floating_ink": Color("#fff7e8"),
-		"quick_text": Color("#665642"),
-		"quick_bg": Color(0.53, 0.4, 0.25, 0.0),
-		"quick_active": Color("#a94432"),
-		"quick_active_ink": Color("#fff7e8"),
-		"scene_outline": Color(0.12, 0.075, 0.045, 0.96),
-		"text_outline": Color("#f2e8d2"),
-		"button_radius": 2,
-		"panel_radius": 2,
-		"button_border": 1,
-		"panel_border": 1,
-		"focus_border": 3,
-	},
-	"manga": {
-		"canvas": Color("#222320"),
-		"panel": Color("#f5f3e9"),
-		"panel_soft": Color("#f0eee4"),
-		"surface": Color("#fbfaf4"),
-		"surface_hover": Color("#fff2a9"),
-		"text": Color("#242522"),
-		"muted": Color("#555650"),
-		"accent": Color("#b83424"),
-		"accent_ink": Color("#fff9eb"),
-		"thought": Color("#444641"),
-		"danger": Color("#a3291d"),
-		"disabled": Color("#62635d"),
-		"disabled_surface": Color("#d9d8d0"),
-		"rule": Color("#242522"),
-		"focus": Color("#d8a900"),
-		"name_bg": Color("#ffdc41"),
-		"name_ink": Color("#242522"),
-		"floating_bg": Color("#ffdc41"),
-		"floating_ink": Color("#242522"),
-		"quick_text": Color("#41433e"),
-		"quick_bg": Color(0.96, 0.95, 0.9, 0.22),
-		"quick_active": Color("#ffdc41"),
-		"quick_active_ink": Color("#242522"),
-		"scene_outline": Color(0.06, 0.06, 0.055, 0.96),
-		"text_outline": Color("#f5f3e9"),
-		"button_radius": 0,
-		"panel_radius": 0,
-		"button_border": 2,
-		"panel_border": 2,
-		"focus_border": 4,
-	},
 	"gintama": {
 		"canvas": Color("#e8dfcf"),
 		"panel": Color("#f4eddf"),
@@ -151,7 +49,7 @@ const PALETTES: Dictionary = {
 
 
 static func style_ids() -> Array[String]:
-	return ["cinema", "ledger", "manga", "gintama"]
+	return ["gintama"]
 
 
 static func normalize_id(style_id: String) -> String:
@@ -164,19 +62,6 @@ static func style_label(style_id: String) -> String:
 
 static func palette(style_id: String) -> Dictionary:
 	return PALETTES[normalize_id(style_id)] as Dictionary
-
-
-static func load_preference(path: String = PREFERENCE_PATH) -> String:
-	var config: ConfigFile = ConfigFile.new()
-	if config.load(path) != OK:
-		return DEFAULT_ID
-	return normalize_id(str(config.get_value("ui", "style", DEFAULT_ID)))
-
-
-static func save_preference(style_id: String, path: String = PREFERENCE_PATH) -> Error:
-	var config: ConfigFile = ConfigFile.new()
-	config.set_value("ui", "style", normalize_id(style_id))
-	return config.save(path)
 
 
 static func apply_button(button: Button, style_id: String, role: String = "standard", active: bool = false, scale_factor: float = 1.0) -> void:

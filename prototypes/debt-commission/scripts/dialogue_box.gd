@@ -15,7 +15,7 @@ const UI_STYLES: Script = preload("res://scripts/ui_styles.gd")
 const TOPIC_SCENE: PackedScene = preload("res://scenes/ui/investigate_topic.tscn")
 
 ## Which edition this scene draws (set in the scene).
-@export_enum("cinema", "ledger", "manga", "gintama") var style_id: String = "cinema"
+@export var style_id: String = "gintama"
 
 @onready var speaker_row: Control = %SpeakerRow
 ## The plaque width set in the scene, the narrowest it gets.

@@ -320,7 +320,6 @@ func _new_game() -> Control:
 	var game: Control = MAIN_SCENE.instantiate() as Control
 	game.story_path = STORY
 	game.save_path = TEST_SAVE
-	game.ui_preference_path = TEST_UI
 	root.add_child(game)
 	return game
 

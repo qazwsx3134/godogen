@@ -1207,24 +1207,18 @@ async function choicesRoute(viewport, tag) {
   await screenshot(page, `preview-choice-director-${tag}`, docs);
   result.checks.push(`the director's choice: sheet=director, footnote "${directorStep.note}", ${value.choices.length} cards each at least 48 CSS px, stage unchanged (${tag})`);
 
-  // 4. 目錄 over the director's choice: changing the edition keeps the director's sheet.
-  const styleOrder = ['cinema', 'ledger', 'manga'];
-  const other = styleOrder.find(style => style !== value.ui_style);
+  // 4. 目錄 over the director's choice: closing it brings back the director's sheet and its cards.
   await controlAny(page, ['menu'], true, '目錄');
   await waitFor(page, () => window.__debtQA?.screen === 'menu', null, 10000);
-  await control(page, `menu_style_${other}`, true);
-  await waitFor(page, expected => window.__debtQA?.ui_style === expected, other, 10000);
   value = await state(page);
-  assert.equal(value.ui_style, other, `the edition is now ${other}`);
   assert.equal(value.choice.sheet, 'director', 'the director\'s sheet is still the one under 目錄');
   await controlAny(page, ['menu_close', 'menu_resume'], true, 'menu close');
   await waitFor(page, () => window.__debtQA?.screen === 'choice', null, 10000);
   value = await state(page);
   assert.deepEqual(value.choice, { perspective: 'director', pov: '', note: directorStep.note, sheet: 'director', tones: ['', '', ''] });
   assert.equal(value.choices.length, directorStep.options.length, 'all the cards are still there');
-  inside(value.choice_sheet, value.game, 'the director\'s sheet after the edition changed');
-  await screenshot(page, `choices-director-${other}-${tag}`);
-  result.checks.push(`changing the edition (${other}) from 目錄 over the director's choice keeps the director's sheet and its cards (${tag})`);
+  inside(value.choice_sheet, value.game, 'the director\'s sheet after 目錄');
+  result.checks.push(`opening and closing 目錄 over the director's choice keeps the director's sheet and its cards (${tag})`);
 
   // 5. A card, tapped: its branch, its flag, and the end.
   const picked = directorStep.options[1];

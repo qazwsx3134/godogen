@@ -38,7 +38,6 @@ func _play_and_browse() -> void:
 	game.story_path = "res://data/chapter1_story.json"
 	game.save_path = FILES[3]
 	game.progress_path = FILES[0]
-	game.ui_preference_path = FILES[1]
 	game.settings_path = FILES[2]
 	root.add_child(game)
 	await _frames(3)

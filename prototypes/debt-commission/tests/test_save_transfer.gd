@@ -137,7 +137,6 @@ func _new_game() -> Control:
 	game.save_path = GAME_FILES[0]
 	game.progress_path = GAME_FILES[3]
 	game.settings_path = GAME_FILES[4]
-	game.ui_preference_path = GAME_FILES[5]
 	root.add_child(game)
 	return game
 

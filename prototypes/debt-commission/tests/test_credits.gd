@@ -126,7 +126,6 @@ func _new_game(motion: int) -> Control:
 	game.story_path = FIXTURE
 	game.save_path = FILES[3]
 	game.progress_path = FILES[0]
-	game.ui_preference_path = FILES[1]
 	game.settings_path = FILES[2]
 	root.add_child(game)
 	return game

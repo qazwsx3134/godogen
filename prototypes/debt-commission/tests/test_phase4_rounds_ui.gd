@@ -130,10 +130,6 @@ func _test_testimony_and_combo() -> void:
 	await _play_until(game, func() -> bool: return game._screen_mode == "tsukkomi", "combo line 2")
 	_expect(is_equal_approx(float(game._current_command["timer_seconds"]), 6.0) and game._choice_sheet.super_button.visible,
 		"after a catch the timer drops to 6 s and the full gauge lights the super")
-	game._set_ui_style("ledger", false)
-	await _frames(2)
-	_expect(game._choice_sheet.style_id == "ledger" and game._choice_sheet.super_button.visible and
-		game._screen_mode == "tsukkomi", "switching edition keeps the super on the new sheet")
 	await _press(game._choice_sheet.super_button)
 	await _play_until(game, func() -> bool: return game._screen_mode == "qte", "the QTE")
 	_expect(game._qte != null and game._runner.stats["perfect"] == 9, "the super catches both remaining option lines (%s)" % [game._runner.stats])
@@ -261,9 +257,7 @@ func _test_placard_on_stage() -> void:
 		"on the timed sheet the placard glows and still answers")
 	var sheet_top: float = game._choice_sheet.get_global_rect().position.y
 	_expect(sheet_top >= board.end.y - 0.5, "the options sheet stays below the board (%s vs %s)" % [sheet_top, board.end.y])
-	game._set_ui_style("manga", false)
-	await _frames(2)
-	_expect(elisabeth.call("placard_glowing") and elisabeth.call("placard_text") == "犯人是神樂", "switching edition keeps the placard")
+	_expect(elisabeth.call("placard_glowing") and elisabeth.call("placard_text") == "犯人是神樂", "the board shows its line")
 	await _tap(game._placard_hit_rect().get_center())
 	_expect(game._runner.node_id == "k_l2_placard" and game._runner.round_state["caught"].get("l2") == "perfect",
 		"tapping the glowing board catches line 2 perfectly")
@@ -271,7 +265,6 @@ func _test_placard_on_stage() -> void:
 	await _play_until(game, func() -> bool: return elisabeth.call("placard_text") == "我只是路過", "the flip")
 	await _play_until(game, func() -> bool: return game._screen_mode == "boke_round", "back to the round")
 	_expect(elisabeth.call("placard_text") == "我只是路過" and not game._placard_open(), "back on the round the board says 我只是路過")
-	game._set_ui_style("cinema", false)
 	game.queue_free()
 	await _frames(2)
 	_cleanup()
@@ -340,7 +333,6 @@ func _new_game() -> Control:
 	var game: Control = MAIN_SCENE.instantiate() as Control
 	game.story_path = SAMPLE
 	game.save_path = TEST_SAVE
-	game.ui_preference_path = "user://phase4_rounds_ui_test.cfg"
 	root.add_child(game)
 	return game
 

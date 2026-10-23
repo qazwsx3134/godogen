@@ -25,7 +25,7 @@ This repository is not a published game repo. It is the source that `publish.sh`
 
 ## Editing Rules
 
-- **debt-commission 的介面基準**：新增或修改對話框與按鈕時，沿用作者已驗收的「銀魂和紙」透明 PNG 與場景元件（`dialogue_box_gintama.tscn`、`gintama_reading_*.tscn`）；它是新安裝的預設風格。紙框、波紋與櫻花使用整張透明底圖，保留四角與裁切，不重新手繪。文字與功能保持獨立 node；新面板與按鈕也沿用和紙／深藍銀框的處理。
+- **debt-commission 的介面基準**：新增或修改對話框與按鈕時，沿用作者已驗收的「銀魂和紙」透明 PNG 與場景元件（`dialogue_box_gintama.tscn`、`gintama_reading_*.tscn`）；它是遊戲唯一的介面外觀，沒有執行時切換。紙框、波紋與櫻花使用整張透明底圖，保留四角與裁切，不重新手繪。文字與功能保持獨立 node；新面板與按鈕也沿用和紙／深藍銀框的處理。
 
 - Do not create or maintain `.claude/skills/` or `.agents/skills/` in this source repo.
 - Don't give obvious guidance. The agent is a highly capable LLM, and the deliverable (a recorded video, or a live URL the user watches) surfaces its own mistakes — so keep the guides to what the model can't infer or discover fast.
@@ -38,7 +38,7 @@ This repository is not a published game repo. It is the source that `publish.sh`
 - **版面交給 node**：位置與大小用 anchor、offset 和 Container（VBox／HBox／Grid／Margin）表達，程式不要每幀或每次縮放時改寫 `position`／`size`；否則編輯器裡的調整一執行就被蓋掉。
 - **行為交給腳本**：scene 的根 node 掛腳本，用 `%唯一名稱`（Scene Unique Name）取得子 node，在 `_ready` 連接 signal。
 - **重複的東西做成小 scene 再實例化**：選項按鈕、素材卡片、熱區、存檔欄位各做一個 item scene，程式依資料 `instantiate()`。
-- **只有必須在執行時決定的才留在程式**：依劇本資料換的內容（哪個角色、哪張背景）、依畫面比例與 Safe Area 的整體縮放、執行時切換的 UI 風格（`ui_styles.gd` 依 node 的 `ui_style_role` metadata 套色）、特效與動畫。
+- **只有必須在執行時決定的才留在程式**：依劇本資料換的內容（哪個角色、哪張背景）、依畫面比例與 Safe Area 的整體縮放、`ui_styles.gd` 依 node 的 `ui_style_role` metadata 套上的和紙配色、特效與動畫。
 - **新建或大改 scene 時**，用 Godot 存檔（編輯器，或 headless 腳本以 `PackedScene.pack()` + `ResourceSaver.save()`），不要手寫大型 `.tscn` 文字；存完用 headless 匯入確認沒有錯誤。
 - **測試**直接 `instantiate()` scene，用 node 名稱找元件，與執行時的樹一致。
 - **交付物包含可編輯的場景樹**：每個主要畫面、戰鬥區與重複物件都有實際的 `.tscn`，不能只交付空的根 node，再由 `_ready()` 建出所有內容。主要 scene 在編輯器未執行時就能看到版面與代表性物件；Theme、StyleBox、靜態文字、顏色與間距留在 scene／resource。

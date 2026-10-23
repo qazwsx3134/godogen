@@ -23,7 +23,7 @@ func _run() -> void:
 		"defaults keep the old text speed and full volume")
 	await _press(game._title_screen.settings_button)
 	var buttons: Dictionary = game._settings_panel.call("buttons")
-	_expect(game._screen_mode == "settings" and game._settings_panel.visible and buttons.size() == 4 + 3 + 5 + 5 + 3 + 3 + 2 + 2 + 4 + 2,  # …, 介面風格, 存檔備份
+	_expect(game._screen_mode == "settings" and game._settings_panel.visible and buttons.size() == 4 + 3 + 5 + 5 + 3 + 3 + 2 + 2 + 2,  # …, 吐槽輔助, 存檔備份
 		"設定 opens from the title with every choice")
 	await _press(buttons["text_speed_3"])
 	await _press(buttons["bgm_volume_2"])
@@ -33,7 +33,7 @@ func _run() -> void:
 	await _press(buttons["motion_1"])
 	await _press(buttons["assist_1"])
 	_expect(game._effects.reduce_motion and is_equal_approx(game._timer_total({"timer_seconds": 8.0}), 12.0)
-		and (buttons["paper_opacity_2"] as Button).button_pressed == (game._settings_panel.paint_from_style == false),
+		and (buttons["paper_opacity_2"] as Button).button_pressed,
 		"畫面效果 減少 tones down effects, 吐槽輔助 寬鬆 gives the timed choice half again, other rows keep their pick")
 	var saved: Dictionary = Settings.load_settings(SETTINGS_PATH)
 	_expect(saved["text_speed"] == 3 and saved["bgm_volume"] == 2 and saved["se_volume"] == 0
@@ -94,7 +94,6 @@ func _new_game() -> Control:
 	var game: Control = (load("res://main.tscn") as PackedScene).instantiate() as Control
 	game.settings_path = SETTINGS_PATH
 	game.save_path = SAVE
-	game.ui_preference_path = UI
 	root.add_child(game)
 	return game
 

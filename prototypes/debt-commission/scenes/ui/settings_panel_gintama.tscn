@@ -2212,8 +2212,6 @@ shadow_offset = Vector2(0, 4)
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_rnma6"]
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_j5n7a"]
-
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2amoj"]
 content_margin_left = 96.0
 content_margin_top = 14.0
@@ -2325,7 +2323,6 @@ anchor_bottom = 1.0
 theme = SubResource("Theme_oejm3")
 theme_override_styles/panel = SubResource("StyleBoxFlat_h2vpk")
 script = ExtResource("2_rnma6")
-paint_from_style = false
 
 [node name="Area" type="MarginContainer" parent="." unique_id=753360942]
 layout_mode = 0
@@ -3081,115 +3078,6 @@ theme_override_font_sizes/font_size = 42
 toggle_mode = true
 button_group = SubResource("ButtonGroup_rnma6")
 text = "寬鬆"
-autowrap_mode = 3
-
-[node name="UiStyleRule" type="ColorRect" parent="Area/Card/Layout/SettingsScroll/Rows" unique_id=507064095]
-custom_minimum_size = Vector2(0, 2)
-layout_mode = 2
-color = Color(0.22, 0.34, 0.45, 0.22)
-
-[node name="UiStyleLabel" type="Label" parent="Area/Card/Layout/SettingsScroll/Rows" unique_id=1661154765]
-layout_mode = 2
-theme_override_fonts/font = SubResource("FontVariation_rovm4")
-theme_override_font_sizes/font_size = 44
-theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-text = "◆ 介面風格"
-
-[node name="UiStyle" type="HBoxContainer" parent="Area/Card/Layout/SettingsScroll/Rows" unique_id=929075768]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_constants/separation = 14
-
-[node name="UiStyle0" type="Button" parent="Area/Card/Layout/SettingsScroll/Rows/UiStyle" unique_id=1522661412]
-custom_minimum_size = Vector2(0, 136)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/normal = SubResource("StyleBoxFlat_4jn88")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_lgujd")
-theme_override_styles/hover = SubResource("StyleBoxFlat_q3s4f")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_lgujd")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_ws0ij")
-theme_override_styles/focus = SubResource("StyleBoxFlat_5mi06")
-theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_focus_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
-theme_override_fonts/font = SubResource("FontVariation_nooyu")
-theme_override_font_sizes/font_size = 42
-toggle_mode = true
-button_group = SubResource("ButtonGroup_j5n7a")
-text = "映畫"
-autowrap_mode = 3
-
-[node name="UiStyle1" type="Button" parent="Area/Card/Layout/SettingsScroll/Rows/UiStyle" unique_id=1731753722]
-custom_minimum_size = Vector2(0, 136)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/normal = SubResource("StyleBoxFlat_pysra")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_cgp7b")
-theme_override_styles/hover = SubResource("StyleBoxFlat_tddpn")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_cgp7b")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_e70t4")
-theme_override_styles/focus = SubResource("StyleBoxFlat_noptu")
-theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_focus_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
-theme_override_fonts/font = SubResource("FontVariation_nooyu")
-theme_override_font_sizes/font_size = 42
-toggle_mode = true
-button_group = SubResource("ButtonGroup_j5n7a")
-text = "委託簿"
-autowrap_mode = 3
-
-[node name="UiStyle2" type="Button" parent="Area/Card/Layout/SettingsScroll/Rows/UiStyle" unique_id=1776823705]
-custom_minimum_size = Vector2(0, 136)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/normal = SubResource("StyleBoxFlat_85ulb")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_huhfa")
-theme_override_styles/hover = SubResource("StyleBoxFlat_mj3rc")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_huhfa")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_nlnm8")
-theme_override_styles/focus = SubResource("StyleBoxFlat_m06t5")
-theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_focus_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
-theme_override_fonts/font = SubResource("FontVariation_nooyu")
-theme_override_font_sizes/font_size = 42
-toggle_mode = true
-button_group = SubResource("ButtonGroup_j5n7a")
-text = "分鏡"
-autowrap_mode = 3
-
-[node name="UiStyle3" type="Button" parent="Area/Card/Layout/SettingsScroll/Rows/UiStyle" unique_id=1592761487]
-custom_minimum_size = Vector2(0, 136)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/normal = SubResource("StyleBoxFlat_4jn88")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_lgujd")
-theme_override_styles/hover = SubResource("StyleBoxFlat_q3s4f")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_lgujd")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_ws0ij")
-theme_override_styles/focus = SubResource("StyleBoxFlat_5mi06")
-theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_focus_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
-theme_override_fonts/font = SubResource("FontVariation_nooyu")
-theme_override_font_sizes/font_size = 42
-toggle_mode = true
-button_group = SubResource("ButtonGroup_j5n7a")
-text = "銀魂和紙"
 autowrap_mode = 3
 
 [node name="SavesRule" type="ColorRect" parent="Area/Card/Layout/SettingsScroll/Rows" unique_id=1630060631]

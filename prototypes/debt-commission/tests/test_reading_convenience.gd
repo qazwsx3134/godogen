@@ -6,7 +6,6 @@ func _run() -> void:
 	var game=load("res://main.tscn").instantiate()
 	game.story_path="res://tests/fixtures/reading_convenience_story.json"
 	game.save_path="user://test_reading_convenience.save"
-	game.ui_preference_path="user://test_reading_convenience_ui.cfg"
 	game.settings_path="user://test_reading_convenience_settings.cfg"
 	for base in [game.save_path,Slots.quick_path(game.save_path)]:
 		for suffix in ["",".bak",".tmp",".old"]:

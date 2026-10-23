@@ -5,7 +5,7 @@ extends "res://tools/shots_chapter1.gd"
 ## text running off the game area. Screens: title, 設定, 章節選擇, 製作名單, 鑑賞 (both tabs), every line up to the
 ## search, the search and its folded bar, 回顧, 目錄, 存檔, 案件檔, the round, the tsukkomi sheet, the
 ## QTE, Game Over and the chapter result. Each screen is also saved as a PNG. Needs a window:
-##   Godot --path . --resolution 780x1688 --script res://tools/text_fit_audit.gd -- <out_dir> [style]
+##   Godot --path . --resolution 780x1688 --script res://tools/text_fit_audit.gd -- <out_dir>
 ## (on a Retina Mac 780x1688 is a 390 CSS px phone, 640x1136 a 320 one). Exit code 1 when anything
 ## is cut; <out_dir>/text_fit.json has the details.
 
@@ -19,7 +19,6 @@ var _screens: Array[String] = []
 func _run() -> void:
 	var args: PackedStringArray = OS.get_cmdline_user_args()
 	_out = args[0] if args.size() > 0 else "user://text_fit"
-	var style: String = args[1] if args.size() > 1 else "gintama"
 	DirAccess.make_dir_recursive_absolute(_out)
 	var settings: ConfigFile = ConfigFile.new()
 	settings.set_value("settings", "font_size", 2)
@@ -27,13 +26,10 @@ func _run() -> void:
 	_game = MAIN.instantiate() as Control
 	_game.story_path = "res://data/chapter1_story.json"
 	_game.save_path = "user://shots_chapter1.save"
-	_game.ui_preference_path = "user://shots_ui.cfg"
 	_game.settings_path = "user://shots_settings.cfg"
 	_game.progress_path = "user://shots_progress.cfg"
 	root.add_child(_game)
 	await _frames(5)
-	_game.call("_on_ui_style_selected", style)
-	await _frames(3)
 	await _audit("title")
 	_game.call("_open_settings")
 	await _audit("settings")
@@ -106,7 +102,7 @@ func _run() -> void:
 		"line": {"text": "這副眼鏡，今天還算有用阿魯。"}}, "神樂", true, "劇本 測試作者｜繪 畫師甲、畫師乙")
 	result.visible = true
 	await _audit("result")
-	var report: Dictionary = {"style": style, "screens": _screens, "issues": _issues, "notes": _notes}
+	var report: Dictionary = {"screens": _screens, "issues": _issues, "notes": _notes}
 	var file: FileAccess = FileAccess.open(_out.path_join("text_fit.json"), FileAccess.WRITE)
 	file.store_string(JSON.stringify(report, "  "))
 	file.close()

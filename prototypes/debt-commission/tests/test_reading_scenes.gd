@@ -27,7 +27,6 @@ func _run() -> void:
 		packed.free()
 	var game=load("res://main.tscn").instantiate()
 	game.save_path="user://reading_scene_editor.save"
-	game.ui_preference_path="user://reading_scene_editor_ui.cfg"
 	root.add_child(game)
 	await _frames(3)
 	# These edits simulate the saved node properties, which layout/ready must not overwrite.

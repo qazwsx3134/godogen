@@ -2,7 +2,7 @@
 
 目前已完成與待辦清單見[進度紀錄](../../docs/story-telling-game/STATUS.md)。
 
-介面提供「月下映畫／萬事屋委託簿／吐槽分鏡／銀魂和紙」四款風格，可在設定的「介面風格」或遊戲選單切換並記住偏好。見[風格與驗證紀錄](docs/UI-REDESIGN-OPTIONS.md)及[互動比較頁](docs/ui-options/index.html)。
+介面是「銀魂和紙」：和紙紙框、深藍銀框按鈕、明體字。早期試過的另外三款（月下映畫、萬事屋委託簿、吐槽分鏡）已刪除，比較紀錄留在 [UI-REDESIGN-OPTIONS](docs/UI-REDESIGN-OPTIONS.md)。
 
 Godot 4.7 手機直立視覺小說，依 [V1 Roadmap](../../docs/story-telling-game/ROADMAP.md) 與 [gintama0923](../../docs/gintama-like/new/gintama0923.md) 製作。狀態：**Phase 1、Phase 2 與 Phase 3 技術短循環已完成自動驗收；Phase 4 的回合玩法（逐句槽點、第四面牆消音條與伊莉莎白的牌子、條件式放棄吐槽、連擊、QTE、超必殺、演出效果）與調查的對話／移動話題有可玩的技術試片與自動驗收**；第一章草稿 v0.2 已做成上機試讀版，作者試讀修訂與真人手機試玩待完成。
 
@@ -21,9 +21,9 @@ Godot 4.7 手機直立視覺小說，依 [V1 Roadmap](../../docs/story-telling-g
 | 點畫面任一處 | 打字中顯示整句；打完進下一句 |
 | 長按畫面 | 隱藏全部 UI，再點一下恢復（恢復的那一下不推進） |
 | 往上滑 | 開啟對話紀錄 |
-| 目錄 | 開啟選單，切換風格、存讀檔、設定及其他閱讀功能 |
+| 目錄 | 開啟選單：存讀檔、設定及其他閱讀功能 |
 | 章節選擇 | 標題上的故事名稱：本篇章節依序排列，前一章結算過才開放，顯示最佳評價；「結局收集」列出每章的結局，看過的顯示名稱、沒看過的是「？？？」；試玩片段一直開放。選了就回到標題，按「開始故事」或「繼續」 |
-| 設定 | 標題或目錄裡：文字速度（慢／標準／快／瞬間）、自動播放速度、背景音樂與音效音量、字級及紙框透明度、畫面效果（減少震動與閃光）、吐槽輔助（寬鬆：選詞時間 ×1.5、QTE 判定窗 ×2）與介面風格，立刻生效並記住；目錄的「音效」開關仍可一鍵靜音 |
+| 設定 | 標題或目錄裡：文字速度（慢／標準／快／瞬間）、自動播放速度、背景音樂與音效音量、字級及紙框透明度、畫面效果（減少震動與閃光）、吐槽輔助（寬鬆：選詞時間 ×1.5、QTE 判定窗 ×2）與存檔備份，立刻生效並記住；目錄的「音效」開關仍可一鍵靜音 |
 | 章節結算 | 章節最後：吐槽成功／出手、PERFECT、最高連擊、冷場、隱藏裝傻、剩下的眼鏡、Game Over 次數與評價（剩 5 副 S、4 副 A、3–2 副 B、1 副 C，每次 Game Over 降一級），依評價顯示一句話；「下一章」或「回標題」 |
 | 推進鈕（›／續／→） | 補完當句或推進劇情 |
 | 選單／標題讀檔 | 選擇指定手動欄位；讀檔頁也可選自動續讀檔 |
@@ -84,13 +84,13 @@ bash tools/serve_web.sh
 | 檔案 | 用途 |
 | --- | --- |
 | `main.gd` | 直立外殼：背景、立繪、特效、對話與選項、彈出視窗；手勢、AUTO／SKIP、選單、紀錄、存讀檔、QA |
-| `scripts/ui_styles.gd` | 四款介面風格與按鈕狀態 |
-| `scripts/ui_stage_style.gd` | 與介面風格一致的場景色調 |
+| `scripts/ui_styles.gd` | 銀魂和紙的配色與按鈕狀態（依 node 的 `ui_style_role` 套用） |
+| `scripts/ui_stage_style.gd` | 背景照片的和紙色調 |
 | `scenes/stage.tscn` | 舞台：各背景的取景框、左中右通用站位（編輯器裡可拖曳） |
 | `scenes/comedy/tsukkomi_impact.tscn`、`small_reaction.tscn`、`full_manga_panel.tscn`、`emotion_band.tscn` | 漫畫吐槽疊加層的四個 preset（`ComedyLayer` 實例化，腳本 `scripts/comedy_preset.gd`）。根節點的 `@export` 可調：`dim_in`、`cutin_at`、`cutin_slide`、`shake_at`、`sound_at`、`burst_at`、`hold_until`、`fade_at`、`end_at`（秒）、`shake_strength`、`sound_id`、`stage_zoom`、`font_max`、`cutin_exit`（從 `fade_at` 起 cut-in 往右滑出、只有 `Dim` 淡出）；`SpeedLines`（`speed_lines.gd`）調線數、顏色、中心空白；`Burst`（`burst_shape.gd`）調尖角數、填色、框線；`CutInPanel`／`Portrait` 是傾斜漫畫格與臉圖；`Text` 的字體與描邊在 scene 裡。編輯器未執行就看得到新八 `shout` 與「現在是工作時間吧！！！」。`emotion_band` 是驚訝之類情緒的橫向純色長條：從左滑入、停住、往右滑出，條上左邊是臉、右邊是台詞；預設顏色是 `CutInPanel` StyleBox 的 `bg_color`，每一句可在劇本用 `color` 自訂（`do comedy("emotion_band", "kagura", "欸！？", "#7ec8ff")`），條的位置與高度是它的 anchor。缺的 preset scene 由 `tools/make_comedy_scenes.gd` 補建，已有的不覆寫 |
-| `scenes/ui/choice_sheet_<cinema\|ledger\|manga>.tscn`、`choice_item_<風格>.tscn` | POV 選項與限時吐槽的選項面板（腳本 `scripts/choice_sheet.gd`）。每個 `choice_item_<風格>.tscn` 的 `%Tone` 是語氣標記（只在有 `tone` 的列顯示：位置、大小、顏色在 scene 裡）；面板根節點的 `index_numerals`、`count_format` 可調 |
-| `scenes/ui/choice_sheet_director.tscn`、`choice_item_director.tscn` | 導演選擇面板（四款 UI 風格共用，腳本同上）。`%Banner` 抬頭文字、`%Note` 註腳樣式、`TopTape`／`BottomTape`／每列的 `Stick`（`scripts/stripe_bar.gd`：`color_a`、`color_b`、`stripe_width`、`lean`，編輯器裡直接看得到條紋）、`Panel` 的框線與底色、卡片列的 StyleBox（`choice_item_director.tscn`：一般／按下的邊框與底色、左邊 `content_margin_left` 留給「SCENE 01」）；根節點的 `index_format`（"SCENE %02d"）、`count_format`、`pop_seconds`（彈入秒數）、`pop_from_scale`（彈入起始縮放）可調。由 `tools/make_director_scenes.gd` 產生一次，之後 scene 是來源檔 |
-| `scenes/characters/<角色>.tscn` | 每個角色的大小與取景（腳本 `scripts/placeholder_sprite.gd`，manga 風格轉黑白） |
+| `scenes/ui/choice_sheet_gintama.tscn`、`choice_item_gintama.tscn` | POV 選項與限時吐槽的選項面板（腳本 `scripts/choice_sheet.gd`）。`choice_item_gintama.tscn` 的 `%Tone` 是語氣標記（只在有 `tone` 的列顯示：位置、大小、顏色在 scene 裡）；面板根節點的 `index_numerals`、`count_format` 可調 |
+| `scenes/ui/choice_sheet_director.tscn`、`choice_item_director.tscn` | 導演選擇面板（腳本同上）。`%Banner` 抬頭文字、`%Note` 註腳樣式、`TopTape`／`BottomTape`／每列的 `Stick`（`scripts/stripe_bar.gd`：`color_a`、`color_b`、`stripe_width`、`lean`，編輯器裡直接看得到條紋）、`Panel` 的框線與底色、卡片列的 StyleBox（`choice_item_director.tscn`：一般／按下的邊框與底色、左邊 `content_margin_left` 留給「SCENE 01」）；根節點的 `index_format`（"SCENE %02d"）、`count_format`、`pop_seconds`（彈入秒數）、`pop_from_scale`（彈入起始縮放）可調。由 `tools/make_director_scenes.gd` 產生一次，之後 scene 是來源檔 |
+| `scenes/characters/<角色>.tscn` | 每個角色的大小與取景（腳本 `scripts/placeholder_sprite.gd`） |
 | `scripts/story_runner.gd` | 劇本節點執行、資料檢查、條件跳轉與閱讀位置 |
 | `scripts/save_slots.gd` | 手動欄位命名、暫存寫入與備份還原 |
 | `data/debt_story.json` | 已核准的討債試玩文本 |
@@ -150,10 +150,9 @@ node tools/browser_check.mjs --comedy --playwright /path/to/node_modules/@playwr
 node tools/browser_check.mjs --choices --playwright /path/to/node_modules/@playwright/test
 node tools/browser_check.mjs --ep00 --playwright /path/to/node_modules/@playwright/test
 node tools/browser_check.mjs --backup --playwright /path/to/node_modules/@playwright/test
-node tools/check_ui_parity.mjs --playwright /path/to/node_modules/@playwright/test
 ```
 
-`--url` 可指定試玩位址；`--chromium /path/to/chrome-headless-shell` 可指定 Chromium。瀏覽器檢查以真實 canvas 滑鼠與觸控操作（長按、上滑用 CDP 觸控事件）；預設走討債兩條路線，`--phase2` 走劇本測試兩條路線，`--slots` 驗證觸控存讀檔與 18 格分頁，`--phase3` 走調查與吐槽並驗證限時選詞讀檔，`--comedy` 在漫畫吐槽片段驗證疊加層播放中、點擊快轉不推進下一句（390×844 與 320×568，截圖與報告存 `docs/`），`--ep00` 在 EP00 走兩條路線（390×844：路徑 A 選 `loud`、看漫畫吐槽層、調查裡點銀時三次與草莓牛奶、委託書、導演選第三個；路徑 B 選 `tired`、不找委託書、導演選第一個，並在調查與導演選項各存手動欄位、重新整理後讀檔回到同一個事件），320×568 再跑路徑 A 到調查為止，截圖存 `docs/preview-ep00-*.png`、報告存 `docs/ep00-browser-report.json`；`--choices` 在兩種選項片段驗證 POV 選項（語氣標記、選了接對應的反應與旗標）、導演選擇（導演面板、註腳、卡片至少 48 CSS px、舞台不變、從目錄換 UI 風格仍是導演面板、選一張卡走到結局與旗標；390×844 與 320×568，截圖與報告存 `docs/`），`--rounds` 在回合試片用觸控點消音條、伊莉莎白的牌子（閱讀時與 320×568 的選詞面板旁，檢查牌子至少 48 CSS px 且沒被選項面板蓋住）、超必殺與 QTE，並在 320×568 檢查回合操作列；`--investigate` 在四線索試片用觸控點對話與移動話題（390×844 與 320×568）、到廚房查冰箱（畫面外台詞）再回到客廳；`check_ui_parity.mjs` 在 390×844 與 320×568 下檢查四款風格（前三款以 HTML 樣稿、銀魂和紙以 v2 Option A 為基準），檢查每個可點元件至少 48 CSS px、都在畫面內且互不重疊。網址帶 `?qa=1` 時才啟用唯讀的 `window.__debtQA`；一般試玩網址不啟用。
+`--url` 可指定試玩位址；`--chromium /path/to/chrome-headless-shell` 可指定 Chromium。瀏覽器檢查以真實 canvas 滑鼠與觸控操作（長按、上滑用 CDP 觸控事件）；預設走討債兩條路線，`--phase2` 走劇本測試兩條路線，`--slots` 驗證觸控存讀檔與 18 格分頁，`--phase3` 走調查與吐槽並驗證限時選詞讀檔，`--comedy` 在漫畫吐槽片段驗證疊加層播放中、點擊快轉不推進下一句（390×844 與 320×568，截圖與報告存 `docs/`），`--ep00` 在 EP00 走兩條路線（390×844：路徑 A 選 `loud`、看漫畫吐槽層、調查裡點銀時三次與草莓牛奶、委託書、導演選第三個；路徑 B 選 `tired`、不找委託書、導演選第一個，並在調查與導演選項各存手動欄位、重新整理後讀檔回到同一個事件），320×568 再跑路徑 A 到調查為止，截圖存 `docs/preview-ep00-*.png`、報告存 `docs/ep00-browser-report.json`；`--choices` 在兩種選項片段驗證 POV 選項（語氣標記、選了接對應的反應與旗標）、導演選擇（導演面板、註腳、卡片至少 48 CSS px、舞台不變、開關目錄後仍是導演面板、選一張卡走到結局與旗標；390×844 與 320×568，截圖與報告存 `docs/`），`--rounds` 在回合試片用觸控點消音條、伊莉莎白的牌子（閱讀時與 320×568 的選詞面板旁，檢查牌子至少 48 CSS px 且沒被選項面板蓋住）、超必殺與 QTE，並在 320×568 檢查回合操作列；`--investigate` 在四線索試片用觸控點對話與移動話題（390×844 與 320×568）、到廚房查冰箱（畫面外台詞）再回到客廳；`--backup` 驗證設定裡的存檔匯出、壞檔拒絕與匯入。網址帶 `?qa=1` 時才啟用唯讀的 `window.__debtQA`；一般試玩網址不啟用。
 
 ## Godot MCP
 
@@ -189,26 +188,26 @@ node tools/check_ui_parity.mjs --playwright /path/to/node_modules/@playwright/te
 | 舞台（背景取景、角色站位） | ✅ 已轉換 | `scenes/stage.tscn`（見下方「舞台」） |
 | 角色立繪 | ✅ 已轉換 | `scenes/characters/<角色>.tscn`（腳本 `scripts/placeholder_sprite.gd`），`tools/make_character_scenes.gd` 補建 |
 | 素材／人物檔案 | ✅ 已轉換 | `scenes/ui/case_file_panel.tscn`，卡片 `case_file_card.tscn` |
-| 標題畫面 | ✅ 已轉換 | `scenes/ui/title_screen_cinema.tscn`、`title_screen_ledger.tscn`、`title_screen_manga.tscn`、`title_screen_gintama.tscn`（腳本 `scripts/title_screen.gd`）；卡片裡的風格鈕列 `Styles` 在 scene 裡設為隱藏，打開 visible 就回到標題上 |
-| 章節選擇、設定、章節結算 | ✅ 已轉換 | `scenes/ui/chapter_select.tscn`（每列 `chapter_row.tscn`；「結局收集」`EndingsHeading`／`%Endings`，每列 `ending_row.tscn`）、`settings_panel.tscn`（最後三列 `Motion`、`Assist`、`UiStyle`，各自一個 ButtonGroup，按鈕文字與間距可在 scene 改）、`chapter_result.tscn`（四款共用；銀魂和紙另有 `settings_panel_gintama.tscn`、`chapter_result_gintama.tscn`） |
+| 標題畫面 | ✅ 已轉換 | `scenes/ui/title_screen_gintama.tscn`（腳本 `scripts/title_screen.gd`） |
+| 章節選擇、設定、章節結算 | ✅ 已轉換 | `scenes/ui/chapter_select.tscn`（每列 `chapter_row.tscn`；「結局收集」`EndingsHeading`／`%Endings`，每列 `ending_row.tscn`）、`settings_panel_gintama.tscn`（每列一個 ButtonGroup，最後是存檔備份；按鈕文字與間距可在 scene 改）、`chapter_result_gintama.tscn` |
 | 素材圖片 | ✅ 已轉換 | `scenes/ui/item_picture.tscn`：catalog 有 `path` 就顯示圖，沒有就畫名稱第一個字的色卡；素材卡與素材詳細都用它 |
-| 對話框與工具列 | ✅ 已轉換 | `scenes/ui/dialogue_box_cinema.tscn`、`dialogue_box_ledger.tscn`、`dialogue_box_manga.tscn`、`dialogue_box_gintama.tscn`（腳本 `scripts/dialogue_box.gd`） |
-| 目錄 | ✅ 已轉換 | `scenes/ui/menu_panel_cinema.tscn`、`menu_panel_ledger.tscn`、`menu_panel_manga.tscn`、`menu_panel_gintama.tscn`（腳本 `scripts/menu_panel.gd`），每列是 `menu_row_<風格>.tscn` |
+| 對話框與工具列 | ✅ 已轉換 | `scenes/ui/dialogue_box_gintama.tscn`（腳本 `scripts/dialogue_box.gd`），工具列是 `gintama_reading_*.tscn` |
+| 目錄 | ✅ 已轉換 | `scenes/ui/menu_panel_gintama.tscn`（腳本 `scripts/menu_panel.gd`），每列是 `menu_row_gintama.tscn` |
 | 對話紀錄 | ✅ 已轉換 | `scenes/ui/dialogue_log.tscn`、逐句 `log_entry.tscn` |
 | 存讀檔面板與覆寫確認 | ✅ 已轉換 | `scenes/ui/save_slots_panel.tscn`、`save_slot_card.tscn`、`save_overwrite_confirmation.tscn` |
 | 結尾按鈕 | ✅ 已轉換 | `scenes/ui/end_controls.tscn` |
-| 吐槽回合的操作列與消音條 | ✅ 已轉換 | 在四款對話框 scene 的 Actions 裡（‹ ›、句數、聽下去、吐槽！、`CensorBar`）；選項面板另有 `CensorBar` 與 `Super`；顯示什麼由 `scripts/round_view.gd` 決定 |
+| 吐槽回合的操作列與消音條 | ✅ 已轉換 | 在對話框 scene 的 Actions 裡（‹ ›、句數、聽下去、吐槽！、`CensorBar`）；選項面板另有 `CensorBar` 與 `Super`；顯示什麼由 `scripts/round_view.gd` 決定 |
 | 超必殺光束 | ✅ 已轉換 | `scenes/ui/beam.tscn`（`Strip` 調 anchors／offsets 與厚度，`Aura`／`Light`／`Core` 調顏色，根 node 的 `reveal_seconds` 調展開秒數；`shaders/beam.gdshader` 調脈動速度與邊緣；正常執行不重建） |
-| QTE、cut-in、Game Over | ✅ 已轉換 | `scenes/ui/qte_ring.tscn`、`cutin.tscn`、`game_over.tscn`（四款共用；銀魂和紙另有 `game_over_gintama.tscn`） |
-| 選項面板 | ✅ 已轉換 | POV 選項與限時吐槽：`scenes/ui/choice_sheet_cinema.tscn`、`choice_sheet_ledger.tscn`、`choice_sheet_manga.tscn`、`choice_sheet_gintama.tscn`（腳本 `scripts/choice_sheet.gd`），每列是 `choice_item_<風格>.tscn`（`%Tone` 語氣標記）；導演選擇：`scenes/ui/choice_sheet_director.tscn`（四款共用），每列是 `choice_item_director.tscn` |
-| 眼鏡／吐槽之力 HUD、線索小牌 | ✅ 已轉換 | `scenes/ui/round_hud.tscn`（四款共用，`set_style` 換色），眼鏡 `glasses_icon.tscn`、線索 `clue_chip.tscn` |
-| 調查點、收起後的調查列 | ✅ 已轉換 | `scenes/ui/hotspot.tscn`（依劇本放在背景圖上）、`scenes/ui/investigate_bar.tscn`；「收起」鈕在四款對話框 scene 的 `InvestigationRow` |
-| 調查的對話／移動話題 | ✅ 已轉換 | 四款對話框 scene 的 `InvestigationTopics`（`TalkRow`／`MoveRow`，標籤與間距在 scene 裡），每個話題是 `scenes/ui/investigate_topic.tscn`（大小與字級在這裡，顏色跟著該款的「聽下去」） |
+| QTE、cut-in、Game Over | ✅ 已轉換 | `scenes/ui/qte_ring.tscn`、`cutin.tscn`、`game_over_gintama.tscn` |
+| 選項面板 | ✅ 已轉換 | POV 選項與限時吐槽：`scenes/ui/choice_sheet_gintama.tscn`（腳本 `scripts/choice_sheet.gd`），每列是 `choice_item_gintama.tscn`（`%Tone` 語氣標記）；導演選擇：`scenes/ui/choice_sheet_director.tscn`，每列 `choice_item_director.tscn` |
+| 眼鏡／吐槽之力 HUD、線索小牌 | ✅ 已轉換 | `scenes/ui/round_hud.tscn`（`set_style` 套和紙資源），眼鏡 `glasses_icon.tscn`、線索 `clue_chip.tscn` |
+| 調查點、收起後的調查列 | ✅ 已轉換 | `scenes/ui/hotspot.tscn`（依劇本放在背景圖上）、`scenes/ui/investigate_bar.tscn`；「收起」鈕在對話框 scene 的 `InvestigationRow` |
+| 調查的對話／移動話題 | ✅ 已轉換 | 對話框 scene 的 `InvestigationTopics`（`TalkRow`／`MoveRow`，標籤與間距在 scene 裡），每個話題是 `scenes/ui/investigate_topic.tscn`（大小與字級在這裡，顏色跟著該款的「聽下去」） |
 | 伊莉莎白的牌子 | ✅ 已轉換 | `scenes/characters/elisabeth.tscn` 的 `Placard`（對齊圖上白牌子的框，可拖曳、縮放、旋轉）、`Text`（字級與顏色）、`Glow`（選詞時的光框樣式）；牌子上的字由劇本決定 |
-| 漫畫吐槽疊加層 | ✅ 已轉換 | `scenes/comedy/*.tscn`（四個 preset，四款 UI 風格共用；`ComedyLayer` 在 `main.tscn`） |
+| 漫畫吐槽疊加層 | ✅ 已轉換 | `scenes/comedy/*.tscn`（四個 preset；`ComedyLayer` 在 `main.tscn`） |
 | 結尾按鈕 | 待轉換（做成小 item scene） | |
 
-**銀魂和紙（第四款）**：`scenes/ui/dialogue_box_gintama.tscn` 的 `NameOverlap/SpeakerRow` 決定雲形名牌跨在紙框上方的位置；`NamePlate/CloudPlaque` 使用含喇叭的透明名牌 PNG，名字仍由 `SpeakerName` 更新。`Padding` 調整正文留白，`Frame/PaperCutout` 是含紙紋、波紋、櫻花與下一句三角的完整透明底圖；用 NinePatch 保留四角，`Frame.clip_contents` 限制繪製範圍。[去背素材與提示詞](assets/ui/GINTAMA-EXTRACTION.md)保留來源和製作紀錄。正文與名字的明體字重保存在 `FontVariation`，見[字型來源與授權](assets/fonts/NotoSerifTC-SOURCE.md)。紙框下方 `ToolbarMargin/Toolbar` 依序實例化 `gintama_reading_log.tscn`、`gintama_reading_auto.tscn`、`gintama_reading_skip.tscn`、`gintama_reading_menu.tscn`；小場景的 `Surface/CutoutArt` 是含圖示的透明按鈕底圖，`Contents/Caption` 調整標籤，根 Button 保留至少 48 CSS px 的觸控高度。另有 `title_screen_gintama.tscn`、`menu_panel_gintama.tscn`、`choice_sheet_gintama.tscn` 與 `choice_item_gintama.tscn`；標題與目錄的 `Styles` 是兩欄四款選擇器。標題卡 `CardArea/Card` 與設定卡 `Area/Card` 的底圖是去掉下一句三角的和紙 `gintama_panel_paper.png`（StyleBoxTexture 九宮格，只拉長第 140–168 列與第 280–805 欄的素紙，波紋與櫻花不變形），故事切換鈕與設定的 `Header/Plaque` 是去掉喇叭的雲形名牌 `gintama_heading_plaque.png`；按鈕樣式寫在 scene 裡：深藍銀框是主要動作，和紙色是一般選項，選中的設定是深藍金邊（`settings_panel.gd` 的 `paint_from_style` 關掉，選項是同一個 `ButtonGroup` 的 toggle）。目錄 `Area/Center/Panel` 也是這張和紙，標題 `Heading` 用雲形名牌，`Rows` 裡沒有 `ui_style_role` 的列是和紙色按鈕（快速存讀檔等三列沿用工具列的深藍）。Game Over 與章節結算的銀魂版 `game_over_gintama.tscn`、`chapter_result_gintama.tscn` 把共用版的 `Column` 放進和紙卡 `Center/Card`，根節點 `z_index = 2` 讓卡片蓋過對話框的名牌；`main.gd` 的 `GAME_OVER_SCENES`／`RESULT_SCENES` 依款式掛載。對話紀錄、存檔欄位、覆寫確認、章節選擇、人物檔案等共用面板在銀魂和紙下由 `ui_styles.gd` 依 `ui_style_role`（`menu`／`log`／`slots`／`confirmation`）換成同一張和紙（`GINTAMA_PAPER_ROLES`），`standard` 按鈕與存檔卡是和紙色圓角卡；其他三款不變。這兩張圖與這些 scene 由 `tools/make_gintama_panels.gd` 產生一次（`-- textures`，`--import`，再 `-- scenes`），之後 scene 是來源檔，沒有 `--force` 不覆寫。場景是維護來源，正常執行不會重建；`tools/add_gintama_edition_scenes.gd` 是早期一次性製作紀錄，已存在新場景時會拒絕執行。
+**銀魂和紙**：`scenes/ui/dialogue_box_gintama.tscn` 的 `NameOverlap/SpeakerRow` 決定雲形名牌跨在紙框上方的位置；`NamePlate/CloudPlaque` 使用含喇叭的透明名牌 PNG，名字仍由 `SpeakerName` 更新。`Padding` 調整正文留白，`Frame/PaperCutout` 是含紙紋、波紋、櫻花與下一句三角的完整透明底圖；用 NinePatch 保留四角，`Frame.clip_contents` 限制繪製範圍。[去背素材與提示詞](assets/ui/GINTAMA-EXTRACTION.md)保留來源和製作紀錄。正文與名字的明體字重保存在 `FontVariation`，見[字型來源與授權](assets/fonts/NotoSerifTC-SOURCE.md)。紙框下方 `ToolbarMargin/Toolbar` 依序實例化 `gintama_reading_log.tscn`、`gintama_reading_auto.tscn`、`gintama_reading_skip.tscn`、`gintama_reading_menu.tscn`；小場景的 `Surface/CutoutArt` 是含圖示的透明按鈕底圖，`Contents/Caption` 調整標籤，根 Button 保留至少 48 CSS px 的觸控高度。另有 `title_screen_gintama.tscn`、`menu_panel_gintama.tscn`、`choice_sheet_gintama.tscn` 與 `choice_item_gintama.tscn`。標題卡 `CardArea/Card` 與設定卡 `Area/Card` 的底圖是去掉下一句三角的和紙 `gintama_panel_paper.png`（StyleBoxTexture 九宮格，只拉長第 140–168 列與第 280–805 欄的素紙，波紋與櫻花不變形），故事切換鈕與設定的 `Header/Plaque` 是去掉喇叭的雲形名牌 `gintama_heading_plaque.png`；按鈕樣式寫在 scene 裡：深藍銀框是主要動作，和紙色是一般選項，選中的設定是深藍金邊（選項是同一個 `ButtonGroup` 的 toggle）。目錄 `Area/Center/Panel` 也是這張和紙，標題 `Heading` 用雲形名牌，`Rows` 裡沒有 `ui_style_role` 的列是和紙色按鈕（快速存讀檔等三列沿用工具列的深藍）。Game Over 與章節結算 `game_over_gintama.tscn`、`chapter_result_gintama.tscn` 是和紙卡 `Center/Card`（結算卡外面包一層 `Scroll`，矮螢幕可捲），根節點 `z_index = 2` 讓卡片蓋過對話框的名牌。對話紀錄、存檔欄位、覆寫確認、章節選擇、人物檔案等共用面板在銀魂和紙下由 `ui_styles.gd` 依 `ui_style_role`（`menu`／`log`／`slots`／`confirmation`）換成同一張和紙（`GINTAMA_PAPER_ROLES`），`standard` 按鈕與存檔卡是和紙色圓角卡。這兩張圖與這些 scene 由 `tools/make_gintama_panels.gd` 產生一次（`-- textures`，`--import`，再 `-- scenes`），之後 scene 是來源檔，沒有 `--force` 不覆寫。場景是維護來源，正常執行不會重建；`tools/add_gintama_edition_scenes.gd` 是早期一次性製作紀錄，已存在新場景時會拒絕執行。
 
 **舞台**：打開 `scenes/stage.tscn`。
 
@@ -219,9 +218,9 @@ node tools/check_ui_parity.mjs --playwright /path/to/node_modules/@playwright/te
 - `StageArea` 的底邊、`DialogueGuide`（對話框示意）由程式處理，已鎖定，不用調。
 - 新角色：先在 `data/asset_catalog.json` 登記圖片，再跑 `godot --headless --path . --script res://tools/make_character_scenes.gd`，會替還沒有 scene 的角色建一個（已經有的不會動）。
 - 編輯器的畫框是 1080×1920，手機（390×844）的遊戲區是 1080×2337，比較長：站位跟著對話框走，一樣準；背景的裁切在手機上會不同，調完用手機尺寸跑一次確認。
-- 標題畫面的大樓是另一張：`scenes/ui/title_screen_<風格>.tscn` 的 `Background`，三款各一份，一樣用拉框取景。
+- 標題畫面的大樓是另一張：`scenes/ui/title_screen_gintama.tscn` 的 `Background`，一樣用拉框取景。
 
-**在編輯器裡調整**：雙擊 `scenes/ui/*.tscn` 打開，左邊場景樹點選 node，右邊屬性面板改位置、大小、字級、間距；Container 的間距在 Theme Overrides 裡。對話框、選項面板、目錄與標題畫面各三款 scene（導演選擇面板一份，四款共用）的配色、字級與框線都存在 scene 裡（框線由 `scripts/ui_ornament.gd` 繪製，編輯器裡也畫得出來），看到的就是遊戲裡的樣子；其他畫面（對話紀錄、存讀檔欄位、結尾按鈕）的顏色與框線仍是執行時依 UI 風格（A／B／C）套上，編輯器裡是 Godot 預設灰色。之後可以把三種風格做成 Theme 資源，讓編輯器也顯示真實配色。
+**在編輯器裡調整**：雙擊 `scenes/ui/*.tscn` 打開，左邊場景樹點選 node，右邊屬性面板改位置、大小、字級、間距；Container 的間距在 Theme Overrides 裡。對話框、選項面板、導演選擇面板、目錄與標題畫面的配色、字級與框線都存在 scene 裡（框線由 `scripts/ui_ornament.gd` 繪製，編輯器裡也畫得出來），看到的就是遊戲裡的樣子；其他畫面（對話紀錄、存讀檔欄位、結尾按鈕）的顏色與框線仍是執行時由 `ui_styles.gd` 套上，編輯器裡是 Godot 預設灰色。
 
 ## 發現
 

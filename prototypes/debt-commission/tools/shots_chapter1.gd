@@ -1,8 +1,8 @@
 extends SceneTree
-## Screenshots of chapter 1's in-play screens for a UI style: investigation (open and folded to its
+## Screenshots of chapter 1's in-play screens: investigation (open and folded to its
 ## bar), the clue toast, the round HUD, the tsukkomi sheet with the placard, the QTE ring.
 ## Needs a window (not --headless):
-##   Godot --path . --resolution 585x1266 --script res://tools/shots_chapter1.gd -- <out_dir> [style]
+##   Godot --path . --resolution 585x1266 --script res://tools/shots_chapter1.gd -- <out_dir>
 ## Saves go to user://shots_*; run with an isolated HOME so real saves are untouched.
 
 const MAIN: PackedScene = preload("res://main.tscn")
@@ -19,40 +19,37 @@ func _init() -> void:
 func _run() -> void:
 	var args: PackedStringArray = OS.get_cmdline_user_args()
 	_out = args[0] if args.size() > 0 else "user://shots"
-	var style: String = args[1] if args.size() > 1 else "gintama"
+	var prefix: String = "chapter1"
 	DirAccess.make_dir_recursive_absolute(_out)
 	_game = MAIN.instantiate() as Control
 	_game.story_path = "res://data/chapter1_story.json"
 	_game.save_path = "user://shots_chapter1.save"
-	_game.ui_preference_path = "user://shots_ui.cfg"
 	_game.settings_path = "user://shots_settings.cfg"
 	_game.progress_path = "user://shots_progress.cfg"
 	root.add_child(_game)
 	await _frames(5)
-	_game.call("_on_ui_style_selected", style)
-	await _frames(3)
 	_game.call("_on_begin_pressed")
 	if not await _play_until(func() -> bool: return _game._screen_mode == "investigate", "investigation"):
 		return _quit(1)
-	await _shot(style + "_investigate")
+	await _shot(prefix + "_investigate")
 	_game.call("_set_investigation_collapsed", true)
-	await _shot(style + "_investigate_bar")
+	await _shot(prefix + "_investigate_bar")
 	_game.call("_set_investigation_collapsed", false)
 	for i: int in range(CLUES.size()):
 		_game.call("_collect_hotspot", CLUES[i])
 		if i == 0:
-			await _shot(style + "_toast", 6)
+			await _shot(prefix + "_toast", 6)
 		if not await _play_until(func() -> bool: return _game._screen_mode == "investigate", "back to search"):
 			return _quit(1)
 	_game.call("_on_investigation_continue_pressed")
 	if not await _play_until(func() -> bool: return _game._screen_mode == "boke_round", "round 1"):
 		return _quit(1)
-	await _shot(style + "_round")
+	await _shot(prefix + "_round")
 	_game.call("_on_boke_tsukkomi_pressed")
-	await _shot(style + "_tsukkomi")
+	await _shot(prefix + "_tsukkomi")
 	# The QTE ring as the chapter's finale draws it, over the current stage.
 	_game.call("_start_qte", {"qte": {"duration": 2.0, "window": 0.18}})
-	await _shot(style + "_qte", 30)
+	await _shot(prefix + "_qte", 30)
 	print("SHOTS OK ", _out)
 	_quit(0)
 

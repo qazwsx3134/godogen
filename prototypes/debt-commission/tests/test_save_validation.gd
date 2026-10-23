@@ -42,7 +42,6 @@ func _test_shell_cache() -> void:
 	var game := MAIN.instantiate()
 	game.story_path = SOURCE
 	game.save_path = SAVE
-	game.ui_preference_path = "user://studio_save_validation_ui.cfg"
 	game.settings_path = "user://studio_save_validation_settings.cfg"
 	game.progress_path = "user://studio_save_validation_progress.cfg"
 	root.add_child(game)

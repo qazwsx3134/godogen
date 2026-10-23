@@ -104,7 +104,6 @@ func _new_game() -> Control:
 	game.story_path = "res://tests/fixtures/chapter_a_story.json"
 	game.save_path = SAVES[0]
 	game.progress_path = PROGRESS
-	game.ui_preference_path = UI
 	root.add_child(game)
 	return game
 

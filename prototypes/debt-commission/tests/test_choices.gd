@@ -21,7 +21,7 @@ const TEST_UI: String = "user://choices_test_ui.cfg"
 const TEST_SETTINGS: String = "user://choices_test_settings.cfg"
 const DIRECTOR_SHEET: String = "res://scenes/ui/choice_sheet_director.tscn"
 const DIRECTOR_ITEM: String = "res://scenes/ui/choice_item_director.tscn"
-const STYLES: Array[String] = ["cinema", "ledger", "manga", "gintama"]
+const STYLES: Array[String] = ["gintama"]
 const DIRECTOR_PROMPT: String = "接下來發生什麼？"
 const DIRECTOR_NOTE: String = "※製作組經費有限"
 const POV_LABELS: Array[String] = ["問題是你有工作的時候也在休息啊！！", "那請問這個月的房租打算怎麼辦？", "……算了，我甚至不知道從哪裡開始說。"]
@@ -30,10 +30,7 @@ const GLYPHS: Dictionary = {"loud": "！", "calm": "？", "tired": "…"}
 ## Nothing the game or this test does may write these.
 const SCENE_FILES: Array[String] = [
 	"res://main.tscn", DIRECTOR_SHEET, DIRECTOR_ITEM,
-	"res://scenes/ui/choice_sheet_cinema.tscn", "res://scenes/ui/choice_sheet_ledger.tscn", "res://scenes/ui/choice_sheet_manga.tscn",
-	"res://scenes/ui/choice_sheet_gintama.tscn",
-	"res://scenes/ui/choice_item_cinema.tscn", "res://scenes/ui/choice_item_ledger.tscn", "res://scenes/ui/choice_item_manga.tscn",
-	"res://scenes/ui/choice_item_gintama.tscn",
+	"res://scenes/ui/choice_sheet_gintama.tscn", "res://scenes/ui/choice_item_gintama.tscn",
 	"res://scenes/ui/dialogue_box_gintama.tscn", "res://scenes/ui/menu_panel_gintama.tscn", "res://scenes/ui/title_screen_gintama.tscn"]
 
 ## One mistake of a story per case: where it is edited, how, and what the loader must say.
@@ -136,7 +133,6 @@ func _run() -> void:
 	await _test_pov_choice()
 	await _test_director_choice()
 	await _test_every_edition_and_kind()
-	await _test_switching_edition()
 	await _test_sheet_follows_the_choice()
 	await _test_saves()
 	await _test_pop_in()
@@ -392,7 +388,7 @@ func _test_legacy_choice_in_the_shell() -> void:
 	var game: Control = await _new_game(DEBT_STORY)
 	await _to_choice(game, "the debt story's first choice")
 	var sheet: Control = game._choice_sheet
-	_expect(sheet.get("perspective") == "pov" and sheet.style_id == "cinema" and sheet.scene_file_path == "res://scenes/ui/choice_sheet_cinema.tscn",
+	_expect(sheet.get("perspective") == "pov" and sheet.style_id == "gintama" and sheet.scene_file_path == "res://scenes/ui/choice_sheet_gintama.tscn",
 		"an unmarked choice is in the edition's sheet")
 	_expect(game._current_speaker == "shinpachi" and game._dialog_panel.speaker_name.text == "新八・心聲",
 		"it is Shinpachi's thought: %s" % game._dialog_panel.speaker_name.text)
@@ -401,10 +397,10 @@ func _test_legacy_choice_in_the_shell() -> void:
 		"Shinpachi is in focus with the thinking face")
 	_expect(game._choice_buttons.size() == 2 and game._choice_buttons.all(func(row: Button) -> bool: return not (row.get_node("%Tone") as Control).visible),
 		"no row shows a tone marker")
-	var base: StyleBox = ((load("res://scenes/ui/choice_item_cinema.tscn") as PackedScene).instantiate() as Control).get_theme_stylebox("normal")
+	var base: StyleBox = ((load("res://scenes/ui/choice_item_gintama.tscn") as PackedScene).instantiate() as Control).get_theme_stylebox("normal")
 	_expect(game._choice_buttons.all(func(row: Button) -> bool: return row.get_theme_stylebox("normal") == base),
 		"each row keeps the scene's own styles")
-	_expect(game._choice_qa_state(game._runner_current()) == {"perspective": "pov", "pov": "shinpachi", "note": "", "sheet": "cinema", "tones": ["", ""]},
+	_expect(game._choice_qa_state(game._runner_current()) == {"perspective": "pov", "pov": "shinpachi", "note": "", "sheet": "gintama", "tones": ["", ""]},
 		"the QA choice field: %s" % [game._choice_qa_state(game._runner_current())])
 	await _press(game._choice_buttons[0])
 	_expect(game._runner.flags.get("question_method") == "hear_first", "choosing still sets its flags and goes on")
@@ -427,9 +423,9 @@ func _test_pov_choice() -> void:
 	_expect(gintoki.visible and gintoki.modulate.r > 0.9 and str(gintoki.get("expression")) == "thinking",
 		"that character is in focus with the thinking face")
 	_expect(not game._sprites["shinpachi"].visible or game._sprites["shinpachi"].modulate.r < 0.9, "Shinpachi is not the one in focus")
-	_expect(sheet.get("perspective") == "pov" and sheet.style_id == "cinema" and sheet.get_node("%Prompt").text == "這句要怎麼吐槽才好……？",
+	_expect(sheet.get("perspective") == "pov" and sheet.style_id == "gintama" and sheet.get_node("%Prompt").text == "這句要怎麼吐槽才好……？",
 		"it is the edition's sheet with the prompt")
-	var base: StyleBoxFlat = ((load("res://scenes/ui/choice_item_cinema.tscn") as PackedScene).instantiate() as Control).get_theme_stylebox("normal") as StyleBoxFlat
+	var base: StyleBoxFlat = ((load("res://scenes/ui/choice_item_gintama.tscn") as PackedScene).instantiate() as Control).get_theme_stylebox("normal") as StyleBoxFlat
 	var rows: Array[Button] = game._choice_buttons
 	var tones: Array[String] = ["loud", "", "tired"]
 	for index: int in range(3):
@@ -437,7 +433,7 @@ func _test_pov_choice() -> void:
 		var tone: String = tones[index]
 		_expect(rows[index].text == POV_LABELS[index] and rows[index].name == "Choice_%d" % index, "row %d is %s, named Choice_%d" % [index, POV_LABELS[index], index])
 		if tone.is_empty():
-			var scene_index: Control = ((load("res://scenes/ui/choice_item_cinema.tscn") as PackedScene).instantiate() as Control).get_node("%Index") as Control
+			var scene_index: Control = ((load("res://scenes/ui/choice_item_gintama.tscn") as PackedScene).instantiate() as Control).get_node("%Index") as Control
 			var row_index: Control = rows[index].get_node("%Index") as Control
 			_expect(not marker.visible and rows[index].get_theme_stylebox("normal") == base
 				and is_equal_approx(row_index.offset_left, scene_index.offset_left) and is_equal_approx(row_index.offset_right, scene_index.offset_right),
@@ -445,14 +441,14 @@ func _test_pov_choice() -> void:
 		else:
 			var style: StyleBoxFlat = rows[index].get_theme_stylebox("normal") as StyleBoxFlat
 			_expect(marker.visible and marker.text == GLYPHS[tone], "row %d shows the marker %s" % [index, GLYPHS[tone]])
-			_expect(style != base and style.content_margin_left > base.content_margin_left and is_equal_approx(base.content_margin_left, 141.23077),
+			_expect(style != base and style.content_margin_left > base.content_margin_left and base.content_margin_left > 0.0,
 				"row %d has a style of its own that starts its label after the marker (%.1f > %.1f)" % [index, style.content_margin_left, base.content_margin_left])
 			_expect(marker.get_global_rect().end.x <= rows[index].get_global_rect().position.x + style.content_margin_left * game._panel_scale + 0.5
 				and rows[index].get_global_rect().encloses(marker.get_global_rect()),
 				"row %d: the marker %s is inside the row %s, before its label (margin %.1f)" % [index, marker.get_global_rect(), rows[index].get_global_rect(), style.content_margin_left])
 	_expect(game._font.has_char("！".unicode_at(0)) and game._font.has_char("？".unicode_at(0)) and game._font.has_char("…".unicode_at(0)),
 		"the embedded font draws ！ ？ … (no tofu)")
-	_expect(game._choice_qa_state(game._runner_current()) == {"perspective": "pov", "pov": "gintoki", "note": "", "sheet": "cinema", "tones": tones},
+	_expect(game._choice_qa_state(game._runner_current()) == {"perspective": "pov", "pov": "gintoki", "note": "", "sheet": "gintama", "tones": tones},
 		"the QA choice field: %s" % [game._choice_qa_state(game._runner_current())])
 	var logged: Array = game._history.filter(func(entry: Dictionary) -> bool: return entry.get("text") == "這句要怎麼吐槽才好……？")
 	_expect(logged.size() == 1 and logged[0]["speaker"] == "gintoki" and logged[0]["thought"] == true,
@@ -517,7 +513,7 @@ func _test_director_choice() -> void:
 
 func _test_every_edition_and_kind() -> void:
 	for style: String in STYLES:
-		var game: Control = await _new_game(SAMPLE, style)
+		var game: Control = await _new_game(SAMPLE)
 		await _to_choice(game, "%s: the POV choice" % style)
 		var sheet: Control = game._choice_sheet
 		_expect(sheet.get("perspective") == "pov" and sheet.style_id == style and sheet.scene_file_path == "res://scenes/ui/choice_sheet_%s.tscn" % style,
@@ -539,55 +535,6 @@ func _test_every_edition_and_kind() -> void:
 		await _free(game)
 
 
-func _test_switching_edition() -> void:
-	var game: Control = await _new_game()
-	await _to_director(game)
-	var shown: Array[String] = []
-	for row: Button in game._choice_buttons:
-		shown.append(row.text)
-	for style: String in ["ledger", "manga", "cinema", "gintama"]:
-		game._effects._se_player.stop()
-		game._effects._se_player.stream = null
-		game._set_ui_style(style, false)
-		await _frames(3)
-		var sheet: Control = game._choice_sheet
-		var labels: Array[String] = []
-		for row: Button in game._choice_buttons:
-			labels.append(row.text)
-		_expect(sheet.get("perspective") == "director" and sheet.scene_file_path == DIRECTOR_SHEET and game._dialog_panel.style_id == style,
-			"after switching to %s the director's choice is still in the director's sheet" % style)
-		_expect(labels == shown and sheet.get_node("%Note").text == DIRECTOR_NOTE and sheet.get_node("%Prompt").text == DIRECTOR_PROMPT
-			and sheet.visible and not game._dialog_panel.visible and game._choice_buttons.all(func(row: Button) -> bool: return row.get_parent() == sheet.choices),
-			"%s: the same question, footnote and cards are on it" % style)
-		_expect(not sheet.is_popping() and (sheet.get_node("%Panel") as Control).scale == Vector2.ONE and game._effects._se_player.stream == null,
-			"%s: the new sheet is at rest, no new pop and no new clap" % style)
-	# With 目錄 open on top, the edition is picked there.
-	game._open_menu()
-	await _frames(2)
-	game._on_ui_style_selected("gintama")
-	await _frames(3)
-	_expect(game._screen_mode == "menu" and game._ui_style_id == "gintama" and
-		preload("res://scripts/ui_styles.gd").load_preference(game.ui_preference_path) == "gintama" and
-		game._choice_sheet.get("perspective") == "director" and game._choice_qa_state(game._runner_current())["sheet"] == "director",
-		"switching to the paper edition from 目錄 saves it and keeps the director's sheet under it")
-	game._close_menu()
-	await _frames(2)
-	_expect(game._choice_buttons.size() == 3 and game._choice_sheet.visible, "closing 目錄 shows the cards again")
-	await _press(game._choice_buttons[0])
-	await _until(func() -> bool: return game._runner.node_id == "ending_tose", "and one can still be chosen")
-	await _free(game)
-
-	# A POV choice follows the edition too, tones and all.
-	game = await _new_game()
-	await _to_choice(game, "the POV choice")
-	game._set_ui_style("gintama", false)
-	await _frames(3)
-	var markers: Array = game._choice_buttons.map(func(row: Button) -> String: return (row.get_node("%Tone") as Label).text if (row.get_node("%Tone") as Label).visible else "")
-	_expect(game._choice_sheet.style_id == "gintama" and game._choice_sheet.get("perspective") == "pov" and markers == ["！", "？", "…"],
-		"the POV choice is rebuilt in the paper sheet with its tones: %s" % [markers])
-	await _free(game)
-
-
 ## Which sheet is mounted follows the choice that is up: the director's after a POV choice, the edition's
 ## again after it, and the edition's for a timed tsukkomi.
 func _test_sheet_follows_the_choice() -> void:
@@ -601,14 +548,14 @@ func _test_sheet_follows_the_choice() -> void:
 	var story: Dictionary = {"id": "choices_chain_check", "version": "t1", "title": "check", "entry": "d1", "initial_flags": phase3["initial_flags"], "nodes": nodes}
 	_write(CHAIN_STORY, story)
 	_expect(bool(_load_story(story).get("_loaded")), "the chain story loads")
-	var game: Control = await _new_game(CHAIN_STORY, "ledger")
+	var game: Control = await _new_game(CHAIN_STORY)
 	await _to_choice(game, "the first director choice")
 	_expect(game._choice_sheet.get("perspective") == "director", "d1 is a director choice")
 	await _press(game._choice_buttons[0])
 	await _until(func() -> bool: return game._screen_mode == "choice" and game._runner.node_id == "p1", "the POV choice follows")
 	await _frames(2)
-	_expect(game._choice_sheet.get("perspective") == "pov" and game._choice_sheet.style_id == "ledger" and game._choice_sheet.scene_file_path.ends_with("choice_sheet_ledger.tscn"),
-		"after a director choice the next POV choice is back in the ledger sheet")
+	_expect(game._choice_sheet.get("perspective") == "pov" and game._choice_sheet.style_id == "gintama" and game._choice_sheet.scene_file_path.ends_with("choice_sheet_gintama.tscn"),
+		"after a director choice the next POV choice is back in the washi sheet")
 	await _press(game._choice_buttons[1])
 	await _until(func() -> bool: return game._screen_mode == "choice" and game._runner.node_id == "d2", "the second director choice follows")
 	await _until(func() -> bool: return not game._choice_sheet.is_popping(), "it settles")
@@ -620,26 +567,26 @@ func _test_sheet_follows_the_choice() -> void:
 	await _until(func() -> bool: return game._screen_mode == "tsukkomi", "the options come up")
 	await _frames(2)
 	var sheet: Control = game._choice_sheet
-	_expect(sheet.get("perspective") == "pov" and sheet.style_id == "ledger" and sheet.scene_file_path.ends_with("choice_sheet_ledger.tscn") and sheet.timer_row.visible
+	_expect(sheet.get("perspective") == "pov" and sheet.style_id == "gintama" and sheet.scene_file_path.ends_with("choice_sheet_gintama.tscn") and sheet.timer_row.visible
 		and game._choice_buttons.size() > 0 and game._choice_qa_state(game._runner_current()).is_empty(),
 		"a timed tsukkomi after a director choice is in the edition's sheet with its countdown")
 	await _free(game)
 
 
 func _test_saves() -> void:
-	var game: Control = await _new_game(SAMPLE, "manga")
+	var game: Control = await _new_game(SAMPLE)
 	await _to_director(game)
 	_expect(game._save_game(), "the director's choice is saved")
 	var payload: Dictionary = game._build_save_payload("")
 	await _free(game)
 
-	game = await _new_game(SAMPLE, "manga")
+	game = await _new_game(SAMPLE)
 	game._on_continue_pressed()
 	await _frames(4)
 	_expect(_is_director_choice(game), "継 from the save lands on the director's choice, in the director's sheet: %s" % game._screen_mode)
 	await _free(game)
 
-	game = await _new_game(SAMPLE, "ledger")
+	game = await _new_game(SAMPLE)
 	_expect(game._validate_save_payload(payload), "the slot payload is valid")
 	game._load_payload_from_picker(payload, "已讀取")
 	await _frames(4)
@@ -729,10 +676,9 @@ func _test_narrow_phones() -> void:
 	for phone: Vector2i in [Vector2i(390, 844), Vector2i(320, 568)]:
 		root.size = phone
 		await _frames(3)
-		# The POV sheet is each edition's own (the manga one has the least room: the slash at the right and the marker
-		# at the left); the director's is the same in all of them, so it is measured once.
+		# The washi POV sheet and the director's sheet, each with three and six options.
 		for kind: String in ["pov", "director"]:
-			for style: String in (STYLES if kind == "pov" else ["cinema"]):
+			for style: String in STYLES:
 				for count: int in [3, 6]:
 					var game: Control = await _game_with_choice(kind, count, phone.x, style)
 					await _until(func() -> bool: return not game._choice_sheet.is_popping(), "the sheet settles")
@@ -747,13 +693,13 @@ func _game_with_choice(kind: String, count: int, width: int, style: String) -> C
 	var label: String = "%d px, %s, %s, %d options" % [width, style, kind, count]
 	var game: Control
 	if count == 3:
-		game = await _new_game(SAMPLE, style)
+		game = await _new_game(SAMPLE)
 		if kind == "pov":
 			await _to_choice(game, label)
 		else:
 			await _to_director(game)
 	else:
-		game = await _new_game(MANY_STORY, style)
+		game = await _new_game(MANY_STORY)
 		await _to_choice(game, label)
 		if kind == "director":
 			game._on_choice_pressed("pov_0")
@@ -816,18 +762,14 @@ func _check_layout(game: Control, css_width: int, label: String, kind: String, c
 
 # ---------------------------------------------------------------- helpers
 
-func _new_game(story: String = SAMPLE, style: String = "cinema") -> Control:
+func _new_game(story: String = SAMPLE) -> Control:
 	var game: Control = MAIN_SCENE.instantiate() as Control
 	game.story_path = story
 	game.save_path = TEST_SAVE
-	game.ui_preference_path = TEST_UI
 	game.settings_path = TEST_SETTINGS
 	root.add_child(game)
 	await _frames(3)
 	_expect(game._story_ready, "the story loads: %s" % game._story_error)
-	if style != game._ui_style_id:
-		game._set_ui_style(style, false)
-		await _frames(2)
 	return game
 
 

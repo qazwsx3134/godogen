@@ -2,14 +2,14 @@
 
 全部未完成項目（誰來做、建議順序）集中在 [商業級打磨 Roadmap 的待辦總覽](docs/ROADMAP-COMMERCIAL.md#待辦總覽2026-10-23-更新)；本頁保留 UI 與第一章的細項紀錄。
 
-- 2026-09-26：[三款可切換介面風格](docs/UI-REDESIGN-OPTIONS.md)均已加入 Godot，從標題或遊戲選單選擇並記住偏好；[互動比較頁](docs/ui-options/index.html)提供並排比較及單款試看。已打磨按鈕狀態、風格選擇字級、選單寬度與一般對話留白，待真人手機試玩。
+- 2026-10-23：介面只留「銀魂和紙」，另外三款（月下映畫、萬事屋委託簿、吐槽分鏡）已刪除；早期比較紀錄見 [UI-REDESIGN-OPTIONS](docs/UI-REDESIGN-OPTIONS.md)。
 
 - 重新設計對話框與常用元件。先試底部滿版、半透明對話層、上緣分隔線，再與目前畫面比較；參考：[圖一](example/image.jpg)、[圖二](example/螢幕擷取畫面%202026-09-24%20021146.jpg)、[圖三](example/螢幕擷取畫面%202026-09-24%20021221.jpg)。
 - 試用 shader 做事件或場景轉換；ASCII 與駭客風格是候選方向，需先看可讀性與故事氣質。
 
-[底部對話層與素材 Web 試版比較](docs/UI-TRIAL.md)保留早期試作截圖；目前提供四款可切換風格，預設為作者已確認的銀魂和紙，仍待 Android Chrome 與 iOS Safari 實機試玩。shader 轉場尚未試作；優先順序與驗收方式見[進度紀錄](../../docs/story-telling-game/STATUS.md)。
+[底部對話層與素材 Web 試版比較](docs/UI-TRIAL.md)保留早期試作截圖；介面是作者已確認的銀魂和紙，仍待 Android Chrome 與 iOS Safari 實機試玩。shader 轉場尚未試作；優先順序與驗收方式見[進度紀錄](../../docs/story-telling-game/STATUS.md)。
 
-對話框要照著圖做銀魂風：第四款「銀魂和紙」以 [v2 Option A](../../docs/story-telling-game/v2/story-telling-ui2.jpeg) 為基準。2026-10-06 修正紙框比例、跨框雲形名字牌、明體字型、青海波與櫻花，底列補齊 LOG／AUTO／SKIP／MENU 的圖示與實際功能；[原圖與實際對話並排](docs/gintama-reference-comparison.png)、[驗證紀錄](docs/UI-REDESIGN-OPTIONS.md#第四款還原修正2026-10-06)。追加修正波紋溢出：使用原圖經 imagegen 去背／清字的透明 PNG，波紋與櫻花合在紙框底圖中，保留四角並加裁切限制。作者已確認可採用；後續對話框與新按鈕沿用此樣式。新安裝預設為銀魂和紙，既有風格偏好仍保留。
+對話框要照著圖做銀魂風：「銀魂和紙」以 [v2 Option A](../../docs/story-telling-game/v2/story-telling-ui2.jpeg) 為基準。2026-10-06 修正紙框比例、跨框雲形名字牌、明體字型、青海波與櫻花，底列補齊 LOG／AUTO／SKIP／MENU 的圖示與實際功能；[原圖與實際對話並排](docs/gintama-reference-comparison.png)、[驗證紀錄](docs/UI-REDESIGN-OPTIONS.md#第四款還原修正2026-10-06)。追加修正波紋溢出：使用原圖經 imagegen 去背／清字的透明 PNG，波紋與櫻花合在紙框底圖中，保留四角並加裁切限制。作者已確認可採用；後續對話框與新按鈕沿用此樣式。新安裝預設為銀魂和紙，既有風格偏好仍保留。
 
 ## 後續實作順序（2026-10-06）
 
@@ -17,12 +17,12 @@
 
 ### C 文字演出
 
-- [x] 對話框正文改成 `RichTextLabel`，保留四款 scene 的字型、顏色、陰影、行距與留白。
+- [x] 對話框正文改成 `RichTextLabel`，保留對話框 scene 的字型、顏色、陰影、行距與留白。
 - [x] 重點字上色、放大與抖動；句中停頓、指定段落慢速、標點自然停頓。打字、快轉、補完、紀錄與 QA 都按可讀字元計數。
 - [x] 依角色音高播放打字音；心聲／旁白的音效政策，以及靜音、音量與略讀行為一併驗證。
 - [x] perfect 時的語音接口：`assets/audio/voice/shinpachi_tsukkomi_NN.ogg`；沒有錄音時正常運作。
 - [x] `fade` 指令、背景交叉淡化、立繪淡入淡出與說話彈跳。重開、切章節、讀檔和略讀應取消舊演出，回復正確舞台。
-- [x] 驗證 390×844／320×568 的長台詞、四款 UI、AUTO／SKIP／點擊補完與存讀檔。
+- [x] 驗證 390×844／320×568 的長台詞、各款 UI（當時四款）、AUTO／SKIP／點擊補完與存讀檔。
 
 ### D 閱讀便利
 

@@ -8,13 +8,7 @@ extends Control
 
 const STORY_RUNNER_SCRIPT: Script = preload("res://scripts/story_runner.gd")
 const DialogueBox = preload("res://scripts/dialogue_box.gd")
-## One reading-box scene per UI edition; switching the edition swaps the scene.
-const DIALOGUE_SCENES: Dictionary = {
-	"cinema": preload("res://scenes/ui/dialogue_box_cinema.tscn"),
-	"ledger": preload("res://scenes/ui/dialogue_box_ledger.tscn"),
-	"manga": preload("res://scenes/ui/dialogue_box_manga.tscn"),
-	"gintama": preload("res://scenes/ui/dialogue_box_gintama.tscn"),
-}
+const DIALOGUE_SCENE: PackedScene = preload("res://scenes/ui/dialogue_box_gintama.tscn")
 const ChoiceSheet = preload("res://scripts/choice_sheet.gd")
 const MenuPanel = preload("res://scripts/menu_panel.gd")
 const TitleScreen = preload("res://scripts/title_screen.gd")
@@ -27,26 +21,11 @@ const QTE_SCENE: PackedScene = preload("res://scenes/ui/qte_ring.tscn")
 const RoundHud = preload("res://scripts/round_hud.gd")
 const ROUND_HUD_SCENE: PackedScene = preload("res://scenes/ui/round_hud.tscn")
 const GameOverScreen = preload("res://scripts/game_over.gd")
-const GAME_OVER_SCENE: PackedScene = preload("res://scenes/ui/game_over.tscn")
-const MENU_SCENES: Dictionary = {
-	"cinema": preload("res://scenes/ui/menu_panel_cinema.tscn"),
-	"ledger": preload("res://scenes/ui/menu_panel_ledger.tscn"),
-	"manga": preload("res://scenes/ui/menu_panel_manga.tscn"),
-	"gintama": preload("res://scenes/ui/menu_panel_gintama.tscn"),
-}
-const TITLE_SCENES: Dictionary = {
-	"cinema": preload("res://scenes/ui/title_screen_cinema.tscn"),
-	"ledger": preload("res://scenes/ui/title_screen_ledger.tscn"),
-	"manga": preload("res://scenes/ui/title_screen_manga.tscn"),
-	"gintama": preload("res://scenes/ui/title_screen_gintama.tscn"),
-}
-const CHOICE_SHEETS: Dictionary = {
-	"cinema": preload("res://scenes/ui/choice_sheet_cinema.tscn"),
-	"ledger": preload("res://scenes/ui/choice_sheet_ledger.tscn"),
-	"manga": preload("res://scenes/ui/choice_sheet_manga.tscn"),
-	"gintama": preload("res://scenes/ui/choice_sheet_gintama.tscn"),
-}
-## A director choice sits in its own sheet whatever the edition (scenes/ui/choice_sheet_director.tscn).
+const GAME_OVER_SCENE: PackedScene = preload("res://scenes/ui/game_over_gintama.tscn")
+const MENU_SCENE: PackedScene = preload("res://scenes/ui/menu_panel_gintama.tscn")
+const TITLE_SCENE: PackedScene = preload("res://scenes/ui/title_screen_gintama.tscn")
+const CHOICE_SHEET_SCENE: PackedScene = preload("res://scenes/ui/choice_sheet_gintama.tscn")
+## A director choice sits in its own sheet (scenes/ui/choice_sheet_director.tscn).
 const DIRECTOR_SHEET: PackedScene = preload("res://scenes/ui/choice_sheet_director.tscn")
 const SPRITE_SCRIPT: Script = preload("res://scripts/placeholder_sprite.gd")
 ## Each character's own size and framing (tools/make_character_scenes.gd creates missing ones).
@@ -54,10 +33,7 @@ const CHARACTER_SCENE: String = "res://scenes/characters/%s.tscn"
 ## A spot to search, laid over its object in the background picture; and the folded reading box.
 const HOTSPOT_SCENE: PackedScene = preload("res://scenes/ui/hotspot.tscn")
 const INVESTIGATE_BAR_SCENE: PackedScene = preload("res://scenes/ui/investigate_bar.tscn")
-const CHAPTER_RESULT_SCENE: PackedScene = preload("res://scenes/ui/chapter_result.tscn")
-## Editions with their own Game Over／chapter result; the others share the scenes above.
-const GAME_OVER_SCENES: Dictionary = {"gintama": preload("res://scenes/ui/game_over_gintama.tscn")}
-const RESULT_SCENES: Dictionary = {"gintama": preload("res://scenes/ui/chapter_result_gintama.tscn")}
+const CHAPTER_RESULT_SCENE: PackedScene = preload("res://scenes/ui/chapter_result_gintama.tscn")
 const CHAPTER_SELECT_SCENE: PackedScene = preload("res://scenes/ui/chapter_select.tscn")
 const CREDITS_ROLL_SCENE: PackedScene = preload("res://scenes/ui/credits_roll.tscn")
 const GALLERY_SCENE: PackedScene = preload("res://scenes/ui/gallery_panel.tscn")
@@ -65,11 +41,7 @@ const GALLERY_SCENE: PackedScene = preload("res://scenes/ui/gallery_panel.tscn")
 const GAME_CREDITS_PATH: String = "res://data/credits.json"
 ## The title's music; heard on the title, so 鑑賞 lists it from the start.
 const TITLE_BGM: String = "bgm_gintama_35"
-const SETTINGS_SCENE: PackedScene = preload("res://scenes/ui/settings_panel.tscn")
-## Editions with their own 設定 scene; the others share SETTINGS_SCENE (coloured by ui_styles.gd).
-const SETTINGS_SCENES: Dictionary = {
-	"gintama": preload("res://scenes/ui/settings_panel_gintama.tscn"),
-}
+const SETTINGS_SCENE: PackedScene = preload("res://scenes/ui/settings_panel_gintama.tscn")
 const SETTINGS_SCRIPT: Script = preload("res://scripts/settings.gd")
 const SAVE_TRANSFER: Script = preload("res://scripts/save_transfer.gd")
 const STORY_LIBRARY: Script = preload("res://scripts/story_library.gd")
@@ -91,7 +63,6 @@ const DESIGN_WIDTH: float = 1080.0
 const CSS_PX: float = DESIGN_WIDTH / 390.0
 const FONT_PATH: String = "res://assets/fonts/story-cjk.ttc"
 const SAVE_SCHEMA: int = 3
-const UI_PREFERENCE_PATH: String = "user://ui_preferences.cfg"
 const PHASE3_STORY_PATH: String = "res://data/phase3_story.json"
 const PHASE3_SAVE_PATH: String = "user://strawberry_phase3.save"
 const STORY_CHOICE_PATH: String = "user://story_choice.cfg"
@@ -121,7 +92,6 @@ var _chapter_select: Control = null
 var _settings_panel: Control = null
 var _settings: Dictionary = {}
 var _settings_return: String = "title"
-var ui_preference_path: String = UI_PREFERENCE_PATH
 
 const DIALOG_RATIO: float = 0.28
 const EDGE: float = 24.0
@@ -194,8 +164,6 @@ var _effects: StageEffects = null
 var _motion: StageMotion = null
 ## The mounted title_screen and menu_panel scenes; the buttons and dictionaries below point into them.
 var _title_screen: TitleScreen = null
-var _title_style_buttons: Dictionary = {}
-var _menu_style_buttons: Dictionary = {}
 
 var _place_tag: Label = null
 var _sprites: Dictionary = {}
@@ -313,6 +281,7 @@ var _safe_bottom: float = 0.0
 
 var _audio_players: Dictionary = {}
 var _audio_muted: bool = false
+## The UI look (scripts/ui_styles.gd).
 var _ui_style_id: String = UI_STYLES_SCRIPT.DEFAULT_ID
 
 var _screen_mode: String = "title"
@@ -374,7 +343,6 @@ func _ready() -> void:
 	ui_theme.default_font = _font
 	ui_theme.default_font_size = 44
 	theme = ui_theme
-	_ui_style_id = UI_STYLES_SCRIPT.load_preference(ui_preference_path)
 
 	_library = STORY_LIBRARY.new(stories_path, progress_path)
 	_story_choices = _library.stories
@@ -531,7 +499,6 @@ func _open_settings() -> void:
 		return
 	_settings_return = _screen_mode
 	_screen_mode = "settings"
-	_settings_panel.call("set_style", _ui_style_id)
 	_settings_panel.call("open", _settings, _settings_return == "title")
 	_publish_qa_state()
 
@@ -601,7 +568,7 @@ func _record_ending(command: Dictionary, game_over: bool = false) -> void:
 
 ## Every file a backup holds: each story's saves, progress, settings and the UI choices.
 func _backup_paths() -> Array[String]:
-	return SAVE_TRANSFER.backup_paths(_story_choices, [progress_path, settings_path, ui_preference_path, STORY_CHOICE_PATH])
+	return SAVE_TRANSFER.backup_paths(_story_choices, [progress_path, settings_path, STORY_CHOICE_PATH])
 
 
 ## 匯出存檔: the Web build downloads the backup; a desktop build asks where to write it.
@@ -986,7 +953,7 @@ func _build_dialogue() -> void:
 ## controls and the shown line move into the new box, and the old one is freed.
 func _mount_dialogue_box() -> void:
 	var old: DialogueBox = _dialog_panel
-	_dialog_panel = (DIALOGUE_SCENES[_ui_style_id] as PackedScene).instantiate() as DialogueBox
+	_dialog_panel = DIALOGUE_SCENE.instantiate() as DialogueBox
 	_dialog_layer.add_child(_dialog_panel)
 	_dialog_panel.apply_reading_settings(SETTINGS_SCRIPT.FONT_SCALES[int(_settings.get("font_size",1))],
 		SETTINGS_SCRIPT.PAPER_OPACITIES[int(_settings.get("paper_opacity",2))])
@@ -1058,7 +1025,7 @@ func _mount_choice_sheet() -> void:
 
 ## The scene the choice on screen asks for: the director's own, or the edition's.
 func _choice_sheet_scene() -> PackedScene:
-	return DIRECTOR_SHEET if _sheet_perspective == "director" else CHOICE_SHEETS[_ui_style_id]
+	return DIRECTOR_SHEET if _sheet_perspective == "director" else CHOICE_SHEET_SCENE
 
 
 ## Puts a fresh sheet of that scene in place of the mounted one; the one place that decides which it is.
@@ -1121,16 +1088,14 @@ func _chapter_title() -> String:
 ## takes over whether it is open.
 func _mount_menu() -> void:
 	var old: MenuPanel = _menu_overlay
-	_menu_overlay = (MENU_SCENES[_ui_style_id] as PackedScene).instantiate() as MenuPanel
+	_menu_overlay = MENU_SCENE.instantiate() as MenuPanel
 	_popup_layer.add_child(_menu_overlay)
 	_popup_layer.move_child(_menu_overlay, 0)
 	_menu_panel = _menu_overlay.panel
 	_menu_close = _menu_overlay.close_button
 	_menu_items = _menu_overlay.rows
-	_menu_style_buttons = _menu_overlay.style_buttons
 	_menu_overlay.closed.connect(_close_menu)
 	_menu_overlay.row_pressed.connect(_on_menu_row_pressed)
-	_menu_overlay.style_pressed.connect(_on_ui_style_selected)
 	_menu_overlay.visible = old != null and old.visible
 	if old != null:
 		_popup_layer.remove_child(old)
@@ -1178,7 +1143,6 @@ func _refresh_menu_rows() -> void:
 	for key: String in ["material", "profile"]:
 		(_menu_items[key] as Button).visible = _phase3_enabled
 	_menu_overlay.set_row_hint("mute", "關" if _audio_muted else "開")
-	_menu_overlay.set_active_style(_ui_style_id)
 	_refresh_phase3_hud()
 
 
@@ -1213,20 +1177,18 @@ func _build_toast() -> void:
 ## The current edition's title screen above the popups; an edition switch keeps whether it shows.
 func _mount_title() -> void:
 	var old: TitleScreen = _title_screen
-	_title_screen = (TITLE_SCENES[_ui_style_id] as PackedScene).instantiate() as TitleScreen
+	_title_screen = TITLE_SCENE.instantiate() as TitleScreen
 	_game.add_child(_title_screen)
 	_game.move_child(_title_screen, _popup_layer.get_index() + 1)
 	_story_switch = _title_screen.story_switch
 	_begin_button = _title_screen.begin_button
 	_continue_button = _title_screen.continue_button
 	_title_load_button = _title_screen.load_button
-	_title_style_buttons = _title_screen.style_buttons
 	_title_screen.begin_pressed.connect(_on_begin_pressed)
 	_title_screen.continue_pressed.connect(_on_continue_pressed)
 	_title_screen.load_pressed.connect(func() -> void: _open_slot_picker("load"))
 	_title_screen.story_switch_pressed.connect(_on_story_switch_pressed)
 	_title_screen.settings_pressed.connect(_open_settings)
-	_title_screen.style_pressed.connect(_on_ui_style_selected)
 	_fit_bottom_panel(_title_screen.card_area)
 	if old != null:
 		_title_screen.visible = old.visible
@@ -1238,14 +1200,13 @@ func _mount_title() -> void:
 ## The current edition's 設定 panel; a switch puts the new one where the old one was among the
 ## overlays and keeps it open if it was.
 func _mount_settings() -> void:
-	var scene: PackedScene = SETTINGS_SCENES.get(_ui_style_id, SETTINGS_SCENE) as PackedScene
+	var scene: PackedScene = SETTINGS_SCENE
 	var old: Control = _settings_panel
 	if old != null and old.scene_file_path == scene.resource_path:
 		return
 	_settings_panel = scene.instantiate() as Control
 	_game.add_child(_settings_panel)
 	_settings_panel.connect("changed", _on_setting_changed)
-	_settings_panel.connect("style_picked", _on_ui_style_selected)
 	_settings_panel.connect("closed", _close_settings)
 	_settings_panel.connect("export_saves", _export_saves)
 	_settings_panel.connect("import_saves", _import_saves)
@@ -1253,7 +1214,6 @@ func _mount_settings() -> void:
 		return
 	_game.move_child(_settings_panel, old.get_index())
 	if old.visible:
-		_settings_panel.call("set_style", _ui_style_id)
 		_settings_panel.call("open", _settings, _settings_return == "title")
 	_game.remove_child(old)
 	old.queue_free()
@@ -1263,7 +1223,7 @@ func _mount_settings() -> void:
 ## The current edition's Game Over and chapter result (the gintama edition has its own scenes). A
 ## switch happens from the title or 目錄, while both are hidden.
 func _mount_end_screens() -> void:
-	var over_scene: PackedScene = GAME_OVER_SCENES.get(_ui_style_id, GAME_OVER_SCENE) as PackedScene
+	var over_scene: PackedScene = GAME_OVER_SCENE
 	if _game_over == null or _game_over.scene_file_path != over_scene.resource_path:
 		var old_over: Control = _game_over
 		_game_over = over_scene.instantiate() as GameOverScreen
@@ -1274,7 +1234,7 @@ func _mount_end_screens() -> void:
 		if old_over != null:
 			_overlay_layer.move_child(_game_over, old_over.get_index())
 			old_over.queue_free()
-	var result_scene: PackedScene = RESULT_SCENES.get(_ui_style_id, CHAPTER_RESULT_SCENE) as PackedScene
+	var result_scene: PackedScene = CHAPTER_RESULT_SCENE
 	if _chapter_result == null or _chapter_result.scene_file_path != result_scene.resource_path:
 		var old_result: Control = _chapter_result
 		_chapter_result = result_scene.instantiate() as Control
@@ -1292,7 +1252,6 @@ func _refresh_title() -> void:
 	_continue_button.disabled = not _has_valid_save()
 	_begin_button.disabled = not _story_ready
 	_title_screen.set_error(_story_error if not _story_error.is_empty() else _archived_save_notice)
-	_title_screen.set_active_style(_ui_style_id)
 	var exterior: String = str((_backgrounds.get("yorozuya_exterior", {}) as Dictionary).get("path", ""))
 	if not exterior.is_empty() and ResourceLoader.exists(exterior):
 		_title_screen.background.texture = _paper_backed(exterior)
@@ -3855,20 +3814,6 @@ func _set_button_style(button: Button, role: String, active: bool = false) -> vo
 	UI_STYLES_SCRIPT.apply_button(button, _ui_style_id, role, active)
 
 
-func _on_ui_style_selected(style_id: String) -> void:
-	_set_ui_style(style_id)
-
-
-func _set_ui_style(style_id: String, persist: bool = true) -> void:
-	_ui_style_id = UI_STYLES_SCRIPT.normalize_id(style_id)
-	if persist:
-		var save_error: Error = UI_STYLES_SCRIPT.save_preference(_ui_style_id, ui_preference_path)
-		if save_error != OK:
-			push_warning("Could not save UI style preference: %s" % error_string(save_error))
-	_apply_ui_style()
-	_publish_qa_state()
-
-
 func _apply_ui_style() -> void:
 	if _dialog_panel == null:
 		return
@@ -3969,10 +3914,6 @@ func _write_qa_state() -> void:
 	var setting_buttons: Dictionary = _settings_panel.call("buttons")
 	for setting_id: String in setting_buttons.keys():
 		named["setting_" + setting_id] = setting_buttons[setting_id]
-	for style_id: String in _title_style_buttons.keys():
-		named["title_style_" + style_id] = _title_style_buttons[style_id]
-	for style_id: String in _menu_style_buttons.keys():
-		named["menu_style_" + style_id] = _menu_style_buttons[style_id]
 	# While 目錄 is open its dim covers everything else, so only its own controls can be tapped.
 	var modal: Control = _menu_overlay if _menu_overlay.visible else null
 	var gallery_items: Dictionary = _gallery.call("items")
@@ -3985,13 +3926,6 @@ func _write_qa_state() -> void:
 		var control: Control = named[control_name]
 		if _tappable(control) and (modal == null or modal.is_ancestor_of(control)):
 			controls[control_name] = _rect(control)
-	for style_id: String in UI_STYLES_SCRIPT.style_ids():
-		var title_style_button: Button = _title_style_buttons.get(style_id) as Button
-		var menu_style_button: Button = _menu_style_buttons.get(style_id) as Button
-		if title_style_button != null and _tappable(title_style_button):
-			controls["style_" + style_id] = _rect(title_style_button)
-		elif menu_style_button != null and _tappable(menu_style_button):
-			controls["style_" + style_id] = _rect(menu_style_button)
 	var hotspot_state: Array[Dictionary] = []
 	for raw_hotspot: Variant in current.get("hotspots", []):
 		if not raw_hotspot is Dictionary:

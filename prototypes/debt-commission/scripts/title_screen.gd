@@ -1,17 +1,15 @@
 extends Control
-## Title screen, one scene per UI edition: scenes/ui/title_screen_<style>.tscn. The
-## story's exterior photo under the edition's wash, and a card at the bottom: which sample story
-## (tap for 章節選擇), the game title and 開始故事 / 繼續 / 讀取存檔・設定. The scene keeps an edition
-## picker (Styles) hidden: players pick the edition in 設定's 介面風格 or in 目錄.
+## Title screen (scenes/ui/title_screen_gintama.tscn): the story's exterior photo under a wash, and
+## a card at the bottom: the story on its plaque (tap for 章節選擇), the game title and
+## 開始故事 / 繼續 / 讀取存檔・設定.
 
 signal begin_pressed
 signal continue_pressed
 signal load_pressed
 signal settings_pressed
 signal story_switch_pressed
-signal style_pressed(style_id: String)
 
-@export_enum("cinema", "ledger", "manga", "gintama") var style_id: String = "cinema"
+@export var style_id: String = "gintama"
 
 @onready var background: TextureRect = %Background
 ## Bottom-anchored card area; main.gd scales it up on narrow phones.
@@ -22,9 +20,6 @@ signal style_pressed(style_id: String)
 @onready var load_button: Button = %Load
 @onready var settings_button: Button = %Settings
 @onready var error_label: Label = %Error
-@onready var style_buttons: Dictionary = {
-	"cinema": %Style_cinema, "ledger": %Style_ledger, "manga": %Style_manga, "gintama": %Style_gintama,
-}
 
 
 func _ready() -> void:
@@ -33,8 +28,6 @@ func _ready() -> void:
 	load_button.pressed.connect(func() -> void: load_pressed.emit())
 	settings_button.pressed.connect(func() -> void: settings_pressed.emit())
 	story_switch.pressed.connect(func() -> void: story_switch_pressed.emit())
-	for id: String in style_buttons.keys():
-		(style_buttons[id] as Button).pressed.connect(func() -> void: style_pressed.emit(id))
 	card_area.resized.connect(func() -> void: card_area.pivot_offset = Vector2(0.0, card_area.size.y))
 
 
@@ -43,6 +36,3 @@ func set_error(message: String) -> void:
 	error_label.visible = not message.is_empty()
 
 
-func set_active_style(id: String) -> void:
-	for key: String in style_buttons.keys():
-		(style_buttons[key] as Button).set_pressed_no_signal(key == id)
