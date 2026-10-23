@@ -106,11 +106,7 @@
 1. 複製 `stories/example/` 成 `stories/<作品 id>/`（id 用英文小寫加底線）。
 2. 改 `pack.json`：作品名 `title`、外觀包 `skin`、封面 `cover`、署名 `credits`，以及 `stories` 裡每一章的 `id`（全遊戲不能重複）、`kind`（`chapter` 本篇／`sample` 試玩片段）、`path`。
 3. 改 `catalog.json`：這部作品的角色、背景、素材、音效與音樂，格式同 `data/asset_catalog.json`。圖放在作品資料夾的 `art/`，路徑可以直接寫 `art/xxx.png`（相對於這個資料夾）。尺寸規格見 [創作者美術規格](ART-SPEC.md)。
-4. 劇本寫在作品資料夾裡的 `.dialogue`（＋同名 `.blocks.json`），建置輸出到同一個資料夾：
-
-   ```bash
-   godot --headless --path . --script res://tools/story_build/build_story.gd -- stories/<作品>/ch1.dialogue stories/<作品>/ch1_story.json
-   ```
+4. 劇本寫在作品資料夾裡的 `.dialogue` 或 `.ds`（＋同名 `.blocks.json`）。在「檔案系統」點選它，按「專案 → 工具 → 劇本：建置並試玩」：輸出到同一個資料夾的 `<名稱>_story.json`，用這部作品的角色設定檢查。第一次建置時會自動登記進 `pack.json`（排在最後、當本篇章節；順序或 `kind` 要改請找主編）。故事 id 和別的故事撞名時不會寫入，訊息會說撞到誰。
 
    說話者用這部作品 catalog 裡的角色名字或 id。
 5. 外觀：在 `skins/<外觀 id>/skin.json` 寫配色與用語（見 README「做別部作品：外觀包」），`pack.json` 的 `skin` 指過去；`skins/example/` 是不用圖的扁平範例。

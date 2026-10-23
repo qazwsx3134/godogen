@@ -10,27 +10,61 @@ extends RefCounted
 const DmSource = preload("res://tools/story_build/dm_source.gd")
 const ParleySource = preload("res://tools/story_build/parley_source.gd")
 const StoryRunner = preload("res://scripts/story_runner.gd")
+const StoryLibrary = preload("res://scripts/story_library.gd")
 const TsukkomiRound = preload("res://scripts/tsukkomi_round.gd")
 const AtomicFile = preload("res://addons/proto_kit/atomic_file.gd")
 const CHECK_PATH: String = "user://story_build_check.json"
 const BLOCK_OPS: Array[String] = ["investigate", "boke_round"]
 
 
-## Where a source's story goes: story_src/<name>.ds -> data/<name>_story.json.
+## Where a source's story goes: story_src/<name>.ds -> data/<name>_story.json; a work's
+## stories/<作品>/<name>.dialogue -> beside it, stories/<作品>/<name>_story.json.
 static func output_path_for(source_path: String) -> String:
+	if source_path.begins_with("res://stories/") and FileAccess.file_exists(source_path.get_base_dir().path_join("pack.json")):
+		return source_path.get_base_dir().path_join("%s_story.json" % source_path.get_file().get_basename())
 	return "res://data/%s_story.json" % source_path.get_file().get_basename()
 
 
-## Builds source_path and writes it to output_path (default: output_path_for). Returns
-## {"output": path, "version": String, "error": String}.
+## Builds source_path and writes it to output_path (default: output_path_for). A story written into
+## a work's folder is listed in its pack.json the first time (a 本篇 chapter, at the end). Returns
+## {"output": path, "version": String, "error": String, "registered": bool}.
 static func build_and_write(source_path: String, output_path: String = "") -> Dictionary:
 	var output: String = output_path if not output_path.is_empty() else output_path_for(source_path)
 	var built: Dictionary = build(source_path)
 	if not String(built["error"]).is_empty():
-		return {"output": output, "version": "", "error": built["error"]}
+		return {"output": output, "version": "", "error": built["error"], "registered": false}
+	var pack_path: String = output.get_base_dir().path_join("pack.json")
+	var in_pack: bool = output.begins_with("res://stories/") and FileAccess.file_exists(pack_path)
+	var listing: Dictionary = pack_listing(pack_path, output, str(built["story"]["id"])) if in_pack else {"error": "", "add": false}
+	if not str(listing["error"]).is_empty():
+		return {"output": output, "version": "", "error": listing["error"], "registered": false}
 	if AtomicFile.write_text(output, to_json(built["story"])) != OK:
-		return {"output": output, "version": "", "error": "cannot write %s" % output}
-	return {"output": output, "version": built["story"]["version"], "error": ""}
+		return {"output": output, "version": "", "error": "cannot write %s" % output, "registered": false}
+	if listing["add"]:
+		var pack: Dictionary = listing["pack"]
+		(pack["stories"] as Array).append({"id": built["story"]["id"], "kind": "chapter", "path": output.get_file()})
+		if AtomicFile.write_text(pack_path, JSON.stringify(pack, "  ", false) + "\n") != OK:
+			return {"output": output, "version": built["story"]["version"], "error": "cannot write %s" % pack_path, "registered": false}
+	return {"output": output, "version": built["story"]["version"], "error": "", "registered": bool(listing["add"])}
+
+
+## Whether the story at `output` (id `story_id`) must be added to the work's pack.json:
+## {error, add, pack}. Already listed by its file: nothing to add. An id another story of any work
+## (or data/stories.json) already has: an error, nothing is written.
+static func pack_listing(pack_path: String, output: String, story_id: String) -> Dictionary:
+	var pack: Variant = JSON.parse_string(FileAccess.get_file_as_string(pack_path))
+	if not pack is Dictionary or not (pack as Dictionary).get("stories") is Array:
+		return {"error": "%s：pack.json 讀不了或沒有 stories 陣列" % pack_path, "add": false}
+	for entry: Variant in pack["stories"]:
+		if entry is Dictionary and str((entry as Dictionary).get("path", "")) == output.get_file():
+			return {"error": "", "add": false, "pack": pack}
+	var taken: Array[Dictionary] = StoryLibrary.read_registry("res://data/stories.json")
+	for folder: String in DirAccess.get_directories_at("res://stories/"):
+		taken.append_array(StoryLibrary.read_pack("res://stories/".path_join(folder)))
+	for entry: Dictionary in taken:
+		if str(entry["id"]) == story_id:
+			return {"error": "故事 id「%s」已經被 %s 用了；在 .blocks.json 的 story.id 換一個" % [story_id, entry["path"]], "add": false}
+	return {"error": "", "add": true, "pack": pack}
 
 
 ## Returns {"story": Dictionary, "error": String}; exactly one of them is empty.

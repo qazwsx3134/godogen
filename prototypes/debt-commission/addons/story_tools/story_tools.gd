@@ -32,7 +32,7 @@ func _on_build(play: bool) -> void:
 	var sources: Array = Array(EditorInterface.get_selected_paths()).filter(func(path: String) -> bool:
 		return path.get_extension() in ["ds", "dialogue"])
 	if sources.size() != 1:
-		_tell("先在左下的「檔案系統」面板點選一個劇本檔（story_src 資料夾裡的 .ds 或 .dialogue），再選這個選單。\n在 Parley 或 Dialogue 分頁裡改過的話，記得先存檔（Ctrl+S）。")
+		_tell("先在左下的「檔案系統」面板點選一個劇本檔（story_src 或 stories/<作品> 資料夾裡的 .ds 或 .dialogue），再選這個選單。\n在 Parley 或 Dialogue 分頁裡改過的話，記得先存檔（Ctrl+S）。")
 		return
 	var result: Dictionary = StoryBuilder.build_and_write(sources[0])
 	if not String(result["error"]).is_empty():
@@ -40,7 +40,8 @@ func _on_build(play: bool) -> void:
 		return
 	EditorInterface.get_resource_filesystem().scan()
 	if not play:
-		_tell("建置完成：%s\n版本 %s（版本改變時，這個故事的舊存檔會失效）" % [result["output"], result["version"]])
+		_tell("建置完成：%s\n版本 %s（版本改變時，這個故事的舊存檔會失效）%s" % [result["output"], result["version"],
+			"\n第一次建置：已登記進作品的 pack.json（排在最後，本篇章節）。" if result["registered"] else ""])
 		return
 	var file: FileAccess = FileAccess.open(PREVIEW_STORY_FILE, FileAccess.WRITE)
 	file.store_string(String(result["output"]))
