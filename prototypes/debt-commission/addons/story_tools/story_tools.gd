@@ -12,6 +12,8 @@ const PREVIEW_SAVE: String = "user://story_preview.save"
 const MENU_BUILD: String = "劇本：建置選取的檔案"
 const MENU_PLAY: String = "劇本：建置並試玩"
 const MENU_ART_CHECK: String = "作品：投稿檢查"
+const MENU_PARLEY: String = "Parley：更新角色清單"
+const PARLEY_STORES_SCRIPT: String = "res://tools/story_build/parley_stores.gd"
 const ART_CHECK_SCRIPT: String = "res://tools/art_check/art_check.gd"
 const ART_CHECK_OUT: String = "res://build/art_check/"
 
@@ -20,12 +22,14 @@ func _enter_tree() -> void:
 	add_tool_menu_item(MENU_BUILD, _on_build.bind(false))
 	add_tool_menu_item(MENU_PLAY, _on_build.bind(true))
 	add_tool_menu_item(MENU_ART_CHECK, _on_art_check)
+	add_tool_menu_item(MENU_PARLEY, _on_parley_stores)
 
 
 func _exit_tree() -> void:
 	remove_tool_menu_item(MENU_BUILD)
 	remove_tool_menu_item(MENU_PLAY)
 	remove_tool_menu_item(MENU_ART_CHECK)
+	remove_tool_menu_item(MENU_PARLEY)
 
 
 func _on_build(play: bool) -> void:
@@ -73,6 +77,15 @@ func _on_art_check() -> void:
 	_tell("投稿檢查：%s\n錯誤 %d、待辦 %d、建議 %d、缺授權 %d\n\n報告：%s\n（要檢查別的作品，先在「檔案系統」點選 stories 裡那個作品的資料夾）"
 		% [report["title"], (report["errors"] as Array).size(), (report["todo"] as Array).size(),
 		(report["suggestions"] as Array).size(), (report["no_license"] as Array).size(), path])
+
+
+## Every work's characters into Parley's character list (tools/story_build/parley_stores.gd).
+func _on_parley_stores() -> void:
+	var result: Dictionary = (load(PARLEY_STORES_SCRIPT) as GDScript).update()
+	EditorInterface.get_resource_filesystem().scan()
+	_tell(("角色清單已更新：%d 個角色%s。\n已經開著的 .ds 要重新打開才看得到新角色。" % [result["count"],
+		"，新增 " + "、".join(PackedStringArray(result["added"])) if not (result["added"] as Array).is_empty() else ""])
+		if result["ok"] else "角色清單沒能寫入（characters/character_store.tres）。")
 
 
 func _tell(message: String) -> void:
