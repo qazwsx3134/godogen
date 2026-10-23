@@ -13,7 +13,7 @@ const out=path.resolve(arg('--out','/tmp/debt-skin-smoke'));fs.mkdirSync(out,{re
 const port=arg('--port','8884');
 const put=(relative,value)=>{const file=path.join(fixture,relative);fs.mkdirSync(path.dirname(file),{recursive:true});fs.writeFileSync(file,typeof value==='string'||Buffer.isBuffer(value)?value:JSON.stringify(value,null,2)+'\n');};
 const copy=relative=>put(relative,fs.readFileSync(path.join(root,relative)));
-for(const file of ['index.html','editor.js','editor_state.js','story_core.js','editor.css'])copy('tools/story_editor/'+file);
+for(const file of ['index.html','editor.js','editor_state.js','story_core.js','catalog_editor.js','editor.css'])copy('tools/story_editor/'+file);
 copy('scripts/story_runner.gd');
 const catalog=JSON.parse(fs.readFileSync(path.join(root,'data/asset_catalog.json')));put('data/asset_catalog.json',catalog);
 for(const bg of Object.values(catalog.backgrounds))if(bg.path)copy(bg.path.replace('res://',''));

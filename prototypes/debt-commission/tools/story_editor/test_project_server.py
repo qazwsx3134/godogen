@@ -34,6 +34,11 @@ class ProjectServiceTests(unittest.TestCase):
         # A work's catalog (res://stories/<作品>/catalog.json) is read from the temporary project.
         self.server.project.check = lambda candidate, catalog=None: service.validate_candidate(
             candidate, ROOT, GODOT, catalog and str(self.root / catalog[len('res://'):]))
+        # Catalog checks read the temporary project; the replaced catalog keeps its res:// name so
+        # works that extend it read the candidate.
+        local = lambda path: path if not path.startswith('res://') else str(self.root / path[len('res://'):])
+        self.server.project.check_catalog = lambda candidate, replaces, pairs: service.validate_catalog(
+            candidate, ROOT, GODOT, replaces, [(local(story), catalog if catalog == replaces else local(catalog)) for story, catalog in pairs])
         self.thread = threading.Thread(target=self.server.serve_forever, daemon=True)
         self.thread.start()
         self.token = self.server.project.token
@@ -303,6 +308,79 @@ class ProjectServiceTests(unittest.TestCase):
         capabilities = json.loads(connection.getresponse().read())
         connection.close()
         self.assertEqual(capabilities['packs'][0]['pack']['stories'][0]['id'], 'titan_ch1')
+
+    def get(self, route):
+        connection = http.client.HTTPConnection('127.0.0.1', self.server.server_port, timeout=60)
+        connection.request('GET', route)
+        response = connection.getresponse()
+        value = json.loads(response.read())
+        connection.close()
+        return response.status, value
+
+    def add_catalog_project(self):
+        shutil.copy(ROOT / 'data/asset_catalog.json', self.root / 'data/asset_catalog.json')
+        folder = self.root / 'stories/titan'
+        (folder / 'art').mkdir(parents=True)
+        (folder / 'art/wall.png').write_bytes((ROOT / 'tests/fixtures/packs/titan/art/wall.png').read_bytes())
+        (folder / 'art/.hidden.png').write_bytes(b'x')
+        (folder / 'art/wall.png.import').write_bytes(b'x')
+        (folder / 'pack.json').write_bytes(service.json_bytes({'id': 'titan', 'title': '城牆', 'stories': [{'id': 'titan_ch1', 'path': 'titan_ch1_story.json'}]}))
+        (folder / 'catalog.json').write_bytes(service.json_bytes({'extends': 'res://data/asset_catalog.json',
+            'characters': {'eren': {'name': '艾連', 'color': '#7a9a6a', 'slot': 'center'}}}))
+        story = self.pack_story('titan_ch1', 'eren')
+        story['nodes']['start']['steps'].insert(1, {'op': 'say', 'speaker': 'elisabeth', 'text': '（看板）'})
+        (folder / 'titan_ch1_story.json').write_bytes(service.json_bytes(story))
+        return folder
+
+    def candidates_left(self):
+        return list(self.root.rglob('.catalog-candidate-*'))
+
+    def test_catalog_round_trip_unknown_fields_and_files(self):
+        folder = self.add_catalog_project()
+        status, base = self.get('/api/catalog?path=data/asset_catalog.json')
+        self.assertEqual(status, 200, base)
+        before = (self.root / 'data/asset_catalog.json').read_bytes()
+        status, result = self.request({'path': 'data/asset_catalog.json', 'base_hash': base['hash'], 'catalog': base['catalog']}, '/api/catalog')
+        self.assertEqual(status, 200, result)
+        self.assertEqual((self.root / 'data/asset_catalog.json').read_bytes(), before, 'an unchanged save keeps the bytes')
+        status, work = self.get('/api/catalog?path=stories/titan/catalog.json')
+        self.assertEqual(work['files'], ['art/wall.png'], 'pictures in the work, in its own relative form')
+        self.assertEqual(work['catalog']['extends'], 'res://data/asset_catalog.json', 'the raw file, not the merged catalog')
+        catalog = work['catalog']
+        picture = 'res://tests/fixtures/packs/titan/art/wall.png'  # validation runs in the real project
+        catalog['characters']['eren'].update({'path': picture, 'future': {'keep': [1]},
+                                              'license': {'author': ['畫師甲'], 'source': '委託', 'license': '自有', 'approved': False}})
+        status, result = self.request({'path': 'stories/titan/catalog.json', 'base_hash': work['hash'], 'catalog': catalog}, '/api/catalog')
+        self.assertEqual(status, 200, result)
+        saved = json.loads((folder / 'catalog.json').read_bytes())
+        self.assertEqual(saved['characters']['eren']['future'], {'keep': [1]})
+        self.assertEqual(saved['characters']['eren']['path'], picture)
+        self.assertNotIn('shinpachi', saved['characters'], 'what it extends is not copied in')
+        self.assertEqual(self.request({'path': 'stories/titan/catalog.json', 'base_hash': work['hash'], 'catalog': catalog}, '/api/catalog')[0], 409)
+        self.assertEqual(self.request({'path': 'data/stories.json', 'base_hash': None, 'catalog': {}}, '/api/catalog')[0], 400)
+        self.assertEqual(self.get('/api/catalog?path=../x/catalog.json')[0], 400)
+        self.assertEqual(self.candidates_left(), [])
+
+    def test_catalog_edits_that_break_stories_are_refused(self):
+        folder = self.add_catalog_project()
+        status, work = self.get('/api/catalog?path=stories/titan/catalog.json')
+        before = (folder / 'catalog.json').read_bytes()
+        catalog = deepcopy(work['catalog']); del catalog['characters']['eren']
+        status, result = self.request({'path': 'stories/titan/catalog.json', 'base_hash': work['hash'], 'catalog': catalog}, '/api/catalog')
+        self.assertEqual(status, 422, result)
+        self.assertIn('titan_ch1_story.json', '\n'.join(result['errors']))
+        self.assertEqual((folder / 'catalog.json').read_bytes(), before)
+        # The game's catalog: a work that extends it uses 伊莉莎白, so removing her there is refused too.
+        status, base = self.get('/api/catalog?path=data/asset_catalog.json')
+        catalog = deepcopy(base['catalog']); del catalog['characters']['elisabeth']
+        status, result = self.request({'path': 'data/asset_catalog.json', 'base_hash': base['hash'], 'catalog': catalog}, '/api/catalog')
+        self.assertEqual(status, 422, result)
+        self.assertIn('titan_ch1_story.json', '\n'.join(result['errors']))
+        catalog = deepcopy(base['catalog']); catalog['backgrounds']['bad'] = {'label': '壞', 'top': '#000'}
+        status, result = self.request({'path': 'data/asset_catalog.json', 'base_hash': base['hash'], 'catalog': catalog}, '/api/catalog')
+        self.assertEqual(status, 422, result)
+        self.assertIn('bad', '\n'.join(result['errors']))
+        self.assertEqual(self.candidates_left(), [])
 
 
 if __name__ == '__main__':

@@ -24,6 +24,10 @@ STORY_PATH = re.compile(r'data/([A-Za-z0-9_]{1,80})_story\.json\Z')
 # A story of a work (IMPLEMENTATION.md「故事包」): its registry is that folder's pack.json.
 PACK_STORY_PATH = re.compile(r'stories/([A-Za-z_][A-Za-z0-9_]{0,79})/([A-Za-z0-9_]{1,80})_story\.json\Z')
 WORK_ID = re.compile(r'[a-z_][a-z0-9_]{0,39}\Z')
+# The catalogs the 素材設定 page edits: the game's, or a work's own.
+CATALOG_PATH = re.compile(r'(?:data/asset_catalog\.json|stories/([A-Za-z_][A-Za-z0-9_]{0,79})/catalog\.json)\Z')
+BASE_CATALOG = 'res://data/asset_catalog.json'
+MEDIA = {'.png', '.jpg', '.jpeg', '.webp', '.ogg', '.mp3', '.wav'}
 BASE_REGISTRY = 'data/stories.json'
 
 
@@ -91,6 +95,20 @@ def atomic_write(path, data):
     finally:
         if temp:
             temp.unlink(missing_ok=True)
+
+
+def validate_catalog(candidate, root, godot, replaces, pairs):
+    """check_catalog.gd: the candidate standing in for `replaces`, and each (story, its catalog)."""
+    args = [f'--candidate={candidate}', f'--replaces={replaces}', *[f'{story}={catalog}' for story, catalog in pairs]]
+    with godot_environment(timeout=45) as environment:
+        run = subprocess.run([godot, '--headless', '--path', str(root), '--script',
+                              'res://tools/story_editor/check_catalog.gd', '--', *args],
+                             env=environment, capture_output=True, text=True, timeout=120)
+    output = run.stdout + '\n' + run.stderr
+    errors = [line.strip()[len('ERROR '):] for line in output.splitlines() if line.startswith('ERROR ')]
+    if run.returncode or not any(line.startswith('OK ') for line in run.stdout.splitlines()):
+        return errors or ['Godot 未能完成驗證。' + ('\n' + output[-3000:] if output.strip() else '')]
+    return []
 
 
 def validate_candidate(candidate, root, godot, catalog=None):
@@ -179,6 +197,87 @@ class StoryProject:
         if work is None:
             return None
         return f'res://stories/{work}/catalog.json' if self.safe_path(f'stories/{work}/catalog.json').is_file() else None
+
+    def catalog_stories(self, relative):
+        """(story res:// path, its catalog res:// path) for every story an edit of `relative` can break:
+        a work's own stories, or for the game's catalog every story there is (works may extend it)."""
+        match = CATALOG_PATH.fullmatch(relative)
+        pairs = []
+        packs = self.list_packs()
+        if match[1] is None:
+            for entry in self.registry()[2]['stories']:
+                path = str(entry.get('path', ''))
+                if path.startswith('res://data/') and self.safe_path(path[6:]).is_file():
+                    pairs.append((path, BASE_CATALOG))
+        for pack in packs:
+            if match[1] is not None and pack['id'] != match[1]:
+                continue
+            catalog = self.catalog_for(pack['id']) or BASE_CATALOG
+            for entry in pack['pack']['stories']:
+                path = entry_path(entry, pack['id'])
+                if path.startswith('res://') and self.safe_path(path[6:]).is_file():
+                    pairs.append((path, catalog))
+        return pairs
+
+    def catalog_files(self, relative):
+        """Pictures and sounds a catalog can point at, in its own form: a work's relative to its
+        folder, the game's as res://assets/…"""
+        match = CATALOG_PATH.fullmatch(relative)
+        root = self.safe_path(f'stories/{match[1]}' if match[1] else 'assets')
+        files = []
+        for path in sorted(root.rglob('*')) if root.is_dir() else []:
+            parts = path.relative_to(root).parts
+            if path.is_file() and not path.is_symlink() and path.suffix.lower() in MEDIA and not any(p.startswith('.') for p in parts):
+                files.append('/'.join(parts) if match[1] else 'res://assets/' + '/'.join(parts))
+        return files
+
+    def read_catalog(self, relative):
+        if not isinstance(relative, str) or not CATALOG_PATH.fullmatch(relative):
+            raise ProjectError(400, '只能編輯 data/asset_catalog.json 或 stories/<作品>/catalog.json。')
+        raw = self.read_bytes(self.safe_path(relative))
+        try:
+            catalog = parse_json(raw) if raw is not None else {'backgrounds': {}, 'characters': {}, 'items': {}}
+        except (ValueError, UnicodeError, RecursionError) as error:
+            raise ProjectError(409, '素材設定無法解析，請先修正檔案：' + str(error)) from error
+        return {'path': relative, 'catalog': catalog, 'hash': digest(raw) if raw is not None else None,
+                'files': self.catalog_files(relative)}
+
+    def check_catalog(self, candidate, replaces, pairs):
+        return validate_catalog(candidate, self.root, self.godot, replaces, pairs)
+
+    def save_catalog(self, request):
+        if not isinstance(request, dict) or not isinstance(request.get('catalog'), dict):
+            raise ProjectError(400, '需要素材設定物件。')
+        relative, base = request.get('path'), request.get('base_hash')
+        if not isinstance(relative, str) or not CATALOG_PATH.fullmatch(relative):
+            raise ProjectError(400, '只能編輯 data/asset_catalog.json 或 stories/<作品>/catalog.json。')
+        if 'base_hash' not in request or base is not None and (not isinstance(base, str) or not re.fullmatch('[0-9a-f]{64}', base)):
+            raise ProjectError(400, '缺少開檔時的基底 hash。')
+        target = self.safe_path(relative)
+        if not target.parent.is_dir():
+            raise ProjectError(404, '作品資料夾不存在。')
+        with self.mutex:
+            current = self.read_bytes(target)
+            if base != (digest(current) if current is not None else None):
+                raise ProjectError(409, '素材設定已被別人改過，未覆寫。請重新開啟素材設定再改。')
+            data = json_bytes(request['catalog'])
+            # Beside the catalog it replaces, so relative art paths resolve the same; never left behind.
+            candidate = target.parent / f'.catalog-candidate-{uuid.uuid4().hex}.json'
+            try:
+                atomic_write(candidate, data)
+                try:
+                    errors = self.check_catalog(str(candidate), 'res://' + relative, self.catalog_stories(relative))
+                except (OSError, subprocess.TimeoutExpired, TimeoutError) as error:
+                    raise ProjectError(503, '驗證未完成，素材設定沒有存。', errors=[str(error)]) from error
+            finally:
+                candidate.unlink(missing_ok=True)
+            if errors:
+                raise ProjectError(422, '驗證未通過，素材設定沒有存。', errors=errors)
+            if self.read_bytes(target) != current:
+                raise ProjectError(409, '驗證期間素材設定被改過，未覆寫。')
+            atomic_write(target, data)
+            return {'ok': True, 'path': relative, 'hash': digest(data), 'catalog': request['catalog'],
+                    'message': '素材設定驗證通過，已存回專案。'}
 
     def new_work(self, request):
         """A new work folder: pack.json without stories and a starting catalog of its own."""
@@ -414,6 +513,13 @@ class ProjectHandler(SimpleHTTPRequestHandler):
             except ProjectError as error:
                 self.json_response(error.status, error.details)
             return
+        if parsed.path == '/api/catalog':
+            try:
+                query = dict(part.split('=', 1) for part in parsed.query.split('&') if '=' in part)
+                self.json_response(200, self.server.project.read_catalog(unquote(query.get('path', ''))))
+            except ProjectError as error:
+                self.json_response(error.status, error.details)
+            return
         if parsed.path == '/':
             self.send_response(302)
             self.send_header('Location', '/tools/story_editor/')
@@ -449,7 +555,7 @@ class ProjectHandler(SimpleHTTPRequestHandler):
                 raise ProjectError(403, '請從本機編輯器頁面存檔。')
             if self.headers.get('X-Story-Editor-Token') != self.server.project.token:
                 raise ProjectError(403, '本機服務憑證不符，請重新開啟編輯器。')
-            if urlsplit(self.path).path not in ('/api/save', '/api/registry', '/api/work'):
+            if urlsplit(self.path).path not in ('/api/save', '/api/registry', '/api/work', '/api/catalog'):
                 raise ProjectError(404, '沒有這個操作。')
             if self.headers.get('Content-Type', '').split(';')[0].strip().lower() != 'application/json':
                 raise ProjectError(415, '只接受 JSON。')
@@ -471,7 +577,8 @@ class ProjectHandler(SimpleHTTPRequestHandler):
             action = urlsplit(self.path).path
             project = self.server.project
             result = (project.save_registry(request) if action == '/api/registry'
-                      else project.new_work(request) if action == '/api/work' else project.save(request))
+                      else project.new_work(request) if action == '/api/work'
+                      else project.save_catalog(request) if action == '/api/catalog' else project.save(request))
             self.json_response(200, result)
         except ProjectError as error:
             self.close_connection = True

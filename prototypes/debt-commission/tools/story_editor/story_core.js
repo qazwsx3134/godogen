@@ -497,6 +497,79 @@
     return { story: copy, registry: nextRegistry };
   }
 
+  // ---- 美術待辦: scripts/asset_usage.gd rule for rule (test_core compares both on the same work)
+  const COLLECTIONS = ['backgrounds', 'characters', 'items', 'sounds', 'music'];
+  /** {backgrounds|items|sounds|music: {id: [nodes]}, characters: {id: {nodes, expressions: {face: [nodes]}}}, investigation: {id: true}} */
+  function usedAssets(story, catalog, defaultPov = '') {
+    const found = { backgrounds: {}, characters: {}, items: {}, sounds: {}, music: {}, investigation: {} };
+    const state = { povChoice: false, povs: new Set(defaultPov ? [defaultPov] : []) };
+    const has = (collection, id) => typeof id === 'string' && id !== '' && Object.prototype.hasOwnProperty.call(catalog?.[collection] || {}, id);
+    const note = (collection, id, node) => { if (has(collection, String(id))) ((found[collection][id] ||= new Set())).add(node); };
+    const face = (id, expression, node) => {
+      if (!has('characters', String(id))) return;
+      const entry = (found.characters[id] ||= { nodes: new Set(), expressions: {} });
+      entry.nodes.add(node); (entry.expressions[expression] ||= new Set()).add(node);
+    };
+    const walk = (value, node, inRound, inInvestigation) => {
+      if (Array.isArray(value)) { for (const item of value) walk(item, node, inRound, inInvestigation); return; }
+      if (!value || typeof value !== 'object') return;
+      const op = String(value.op ?? '');
+      inRound = inRound || op === 'boke_round';
+      inInvestigation = inInvestigation || op === 'investigate';
+      if (op === 'bg') note('backgrounds', String(value.id ?? ''), node);
+      else if (op === 'bgm') note('music', String(value.id ?? ''), node);
+      else if (op === 'se') note('sounds', String(value.id ?? ''), node);
+      else if (op === 'item') note('items', String(value.id ?? ''), node);
+      else if (op === 'char' || op === 'profile') face(String(value.id ?? ''), String(value.expression ?? 'neutral'), node);
+      else if (op === 'expression') face(String(value.actor ?? ''), String(value.value ?? 'neutral'), node);
+      else if (op === 'choice' && String(value.perspective ?? 'pov') !== 'director') state.povChoice = true;
+      for (const [key, field] of Object.entries(value)) {
+        if (key === 'bg' || key === 'background') {
+          note('backgrounds', String(field), node);
+          if (inInvestigation && typeof field === 'string') found.investigation[field] = true;
+        } else if (key === 'speaker') {
+          const look = inRound ? 'annoyed' : String(value.expression ?? 'neutral');
+          for (const speaker of String(field).split('+').filter(Boolean)) face(speaker, look, node);
+        } else if (key === 'actor' || key === 'character') face(String(field), 'neutral', node);
+        else if (key === 'pov') { if (has('characters', field)) state.povs.add(field); }
+        else if (key === 'item' || key === 'require' || key === 'has') note('items', String(field), node);
+        else if (key === 'items' && Array.isArray(field)) for (const item of field) note('items', String(item), node);
+        if (field && typeof field === 'object') walk(field, node, inRound, inInvestigation);
+      }
+    };
+    for (const [id, node] of Object.entries(story?.nodes || {})) walk(node, id, false, false);
+    if (state.povChoice) for (const pov of state.povs) face(pov, 'thinking', '（選項時）');
+    const sorted = set => [...set].sort();
+    const result = { investigation: found.investigation };
+    for (const collection of COLLECTIONS) {
+      result[collection] = {};
+      for (const [id, value] of Object.entries(found[collection])) result[collection][id] = collection === 'characters'
+        ? { nodes: sorted(value.nodes), expressions: Object.fromEntries(Object.entries(value.expressions).map(([f, n]) => [f, sorted(n)])) }
+        : sorted(value);
+    }
+    return result;
+  }
+  /** The default POV as StoryRunner.default_pov(): the story's, the catalog's, else its first character. */
+  const defaultPov = (story, catalog) => story?.default_pov || catalog?.default_pov || Object.keys(catalog?.characters || {})[0] || '';
+  /** 美術待辦 by node, as tools/art_check reports them: [{kind: background|character|face, id, face?, text}]. */
+  function missingArt(story, catalog) {
+    const used = usedAssets(story, catalog, defaultPov(story, catalog));
+    const byNode = {};
+    const add = (nodes, item) => { for (const node of nodes) (byNode[node] ||= []).push(item); };
+    for (const [id, nodes] of Object.entries(used.backgrounds)) {
+      const bg = catalog.backgrounds[id];
+      if (!bg.path && String(bg.top ?? '') !== String(bg.bottom ?? '')) add(nodes, { kind: 'background', id, text: `背景「${bg.label || id}」還沒有圖（漸層）` });
+    }
+    for (const [id, value] of Object.entries(used.characters)) {
+      const character = catalog.characters[id];
+      if (!character.path) { add(value.nodes, { kind: 'character', id, text: `立繪「${character.name || id}」還沒有圖（剪影）` }); continue; }
+      for (const [look, nodes] of Object.entries(value.expressions)) {
+        if (look !== 'neutral' && !character.expressions?.[look]) add(nodes, { kind: 'face', id, face: look, text: `「${character.name || id}」的表情 ${look} 還沒有圖` });
+      }
+    }
+    return byNode;
+  }
+
   // ---- story packs (IMPLEMENTATION.md「故事包」): the same rules as story_library.gd / story_runner.gd
   const packSave = (work, id) => `user://pack_${work}_${id}.save`;
   const inFolder = (folder, path) => (typeof path === 'string' && path && !path.includes('://') ? `${folder}/${path}` : path);
@@ -535,7 +608,7 @@
 
   const api = {
     STEP_GROUPS, STEP_LABELS, stepLabel, foldShape, stepGroup, stepRuns, runExpanded, flowRows, effectiveMedia, graphCopy, availableExpressions,
-    packEntries, resolveCatalog,
+    packEntries, resolveCatalog, usedAssets, missingArt,
     stringify, exportText, formatNumber, edgesOf, setEdge, clearEdge, analyze, reachableFrom, isEnding, renameNode, deleteNode,
     uniqueId, newNode, newStory, newStep, insertIndex, STEP_TEMPLATES, GEOM, OP_ICONS, icon, summaryOf, cardSize, portOffset,
     inPortOffset, autoLayout, parseGdStrings, FALLBACK_ENUMS, projectUrl, finalOp, NEEDS_NO_NEXT, FORBIDS_NEXT,

@@ -348,6 +348,7 @@
     foldShapes = shapes;
     S.a = Core.analyze(S.story);
     S.media = Core.effectiveMedia(S.story, S.a);
+    S.missingArt = S.catalog ? Core.missingArt(S.story, S.catalog) : {};
     if (S.sel && S.sel.type === 'node' && !(S.sel.id in S.story.nodes)) S.sel = null;
     if (S.sel && S.sel.type === 'edge') {
       const edges = S.a.edges[S.sel.node];
@@ -597,6 +598,8 @@
       id === S.story.entry && el('span', { class: 'badge entry' }, 'ENTRY'),
       ending && el('span', { class: 'badge end' }, '結局'),
       lost && el('span', { class: 'badge lost' }, '到不了'),
+      S.missingArt?.[id]?.length > 0 && el('span', { class: 'badge missing-art', title: S.missingArt[id].map(m => m.text).join('\n') },
+        `缺圖 ${S.missingArt[id].length}`),
       el('span', { class: 'nid' }, id)),
     el('div', { class: 'scene-body', style: { height: (size.body + 16) + 'px' } }, sceneMedia(id), el('div', { class: 'flow' }, flowNodes(id))),
     el('div', { class: 'ports' }, edges.map(edge => portRow(id, edge))));
@@ -607,7 +610,7 @@
     const alive = new Set(Object.keys(S.story.nodes));
     for (const [id, cached] of cardCache) if (!alive.has(id)) { cached.el.remove(); cardCache.delete(id); }
     for (const id of alive) {
-      const signature = JSON.stringify([S.story.nodes[id], S.layout[id], S.media[id], id === S.story.entry, S.a.unreachable.includes(id), S.sel?.type === 'node' && S.sel.id === id, S.sel?.type === 'edge' && S.sel.node === id ? S.sel.key : null, auditionId]);
+      const signature = JSON.stringify([S.story.nodes[id], S.layout[id], S.media[id], S.catalogVersion || 0, S.missingArt?.[id] || null, id === S.story.entry, S.a.unreachable.includes(id), S.sel?.type === 'node' && S.sel.id === id, S.sel?.type === 'edge' && S.sel.node === id ? S.sel.key : null, auditionId]);
       const cached = cardCache.get(id);
       if (cached?.signature === signature && cached.el.parentNode === cardsEl) continue;
       const node = buildCard(id);
@@ -1320,6 +1323,30 @@
     if (S.stories.some(e => e.id === id)) { failure(`已經有 ${id} 這個故事。`); return; }
     startNewStory(id, work);
   });
+  /** 素材設定 of the open story's catalog file: its work's catalog.json, else data/asset_catalog.json. */
+  async function openCatalog() {
+    if (!S.service) return;
+    const work = workOf(projectSource.path);
+    const path = work ? `stories/${work}/catalog.json` : 'data/asset_catalog.json';
+    try {
+      const loaded = await getJson(`../../api/catalog?path=${encodeURIComponent(path)}`);
+      globalThis.CatalogEditor.open({
+        el, enums: S.enums, projectUrl: Core.projectUrl,
+        loaded: { ...loaded, inherited: work && loaded.catalog.extends ? S.baseCatalog : null },
+        post: (url, body) => fetch(url, {method:'POST', headers:{'Content-Type':'application/json','X-Story-Editor-Token':S.service.token}, body:JSON.stringify(body)}),
+        onSaved: reloadCatalogs,
+      });
+    } catch (err) { failure(`素材設定打不開：${err.message}`); }
+  }
+  /** After 素材設定 saves: the game's catalog and every work's again (a work may extend the game's). */
+  async function reloadCatalogs() {
+    S.baseCatalog = await getJson('../../data/asset_catalog.json');
+    await Promise.all(S.packs.map(p => loadPackCatalog(p.id)));
+    useCatalog();
+    S.catalogVersion = (S.catalogVersion || 0) + 1;
+    if (S.story) { recompute(); renderAll(); }
+  }
+  $('btnCatalog').addEventListener('click', openCatalog);
   $('btnNewWork').addEventListener('click', async () => {
     if (!S.service || (S.dirty && !confirm('目前的修改還沒確認儲存，要放棄嗎？'))) return;
     const id = (prompt('作品 id（英文小寫、數字、底線，例如 titan）') || '').trim();
@@ -1403,6 +1430,7 @@
     S.online = stories.status === 'fulfilled' && catalog.status === 'fulfilled';
     const picker = $('storySelect');
     $('btnNewWork').hidden = !S.service;
+    $('btnCatalog').hidden = !S.service;
     const wanted = new URLSearchParams(location.search).get('story');
     const entry = S.stories.find(s => s.id === wanted);
     if (entry && !S.story && loadTicket === 0) {
@@ -1436,5 +1464,6 @@
     get projectSource() { return projectSource; },
     anchorOut, anchorIn, toWorld, sizeOf, convertStory, isReadOnly, stopAudio,
     get conversionRegistry() { return conversionRegistry; },
+    openCatalog,
   };
 })();

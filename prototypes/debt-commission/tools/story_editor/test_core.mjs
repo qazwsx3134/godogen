@@ -322,4 +322,27 @@ for (const name of files) {
     save: 'user://pack_titan_titan_ch1_graph.save', authoring: 'graph' });
   log('ok  story packs: rows with res:// paths and per-work saves; catalogs resolve relative art and extends; a work copy stays in its folder');
 }
+{
+  // 美術待辦: the same answers as scripts/asset_usage.gd + tools/art_check (tests/test_art_check.gd pins both).
+  const read = rel => JSON.parse(fs.readFileSync(path.join(project, rel), 'utf8'));
+  const catalog = Core.resolveCatalog(read('tests/fixtures/art_check/shapes/catalog.json'), 'res://tests/fixtures/art_check/shapes');
+  const byNode = Core.missingArt(read('tests/fixtures/art_check/shapes/ch1_story.json'), catalog);
+  const todo = new Set(Object.values(byNode).flat().map(m => [m.kind, m.id, m.face || ''].join(':')));
+  assert.deepEqual([...todo].sort(), ['background:dusk:', 'character:shadow:', 'face:hero:angry'], 'the art check fixture work\'s three to-dos (not the flat black)');
+  assert.deepEqual(Object.keys(byNode).sort(), ['hall', 'start']);
+  const small = { backgrounds: { room: {}, yard: {} }, characters: { a: {}, b: {} }, items: { key: {} }, sounds: {}, music: { song: {} } };
+  const story = { nodes: {
+    n1: { steps: [{ op: 'investigate', places: [{ bg: 'yard', hotspots: [{ item: 'key', character: 'b' }] }] },
+      { op: 'say', speaker: 'a+b', text: '', expression: 'smile' }, { op: 'bgm', id: 'song' },
+      { op: 'say', speaker: 'nobody', text: '' }, { op: 'bg', id: 'room' }] },
+    n2: { steps: [{ op: 'boke_round', lines: [{ speaker: 'b', text: '' }] },
+      { op: 'choice', options: [{ text: 'x', require: 'key', next: 'n1' }] }] } } };
+  const used = Core.usedAssets(story, small, 'a');
+  assert.deepEqual(used.backgrounds, { room: ['n1'], yard: ['n1'] }); assert.deepEqual(used.investigation, { yard: true });
+  assert.deepEqual(used.items, { key: ['n1', 'n2'] }); assert.deepEqual(used.music, { song: ['n1'] });
+  assert.deepEqual(used.characters.a.expressions, { smile: ['n1'], thinking: ['（選項時）'] });
+  assert.deepEqual(used.characters.b.expressions, { neutral: ['n1'], smile: ['n1'], annoyed: ['n2'] });
+  assert.equal(used.characters.nobody, undefined);
+  log('ok  missing-art marks: same to-dos as the GDScript art check; same usage (rounds annoyed, POV thinking) as asset_usage.gd');
+}
 log('ALL PASSED');

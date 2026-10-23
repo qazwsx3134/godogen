@@ -2,14 +2,32 @@
   "default_pov": "aki",
   "default_background": "station_night",
   "backgrounds": {
-    "station_night": {"label": "夜晚的車站", "top": "#1b2440", "bottom": "#3d4f7a"},
-    "rooftop": {"label": "頂樓", "top": "#e9a86b", "bottom": "#5b3a5e"}
+    "station_night": {
+      "label": "夜晚的車站",
+      "top": "#1b2440",
+      "bottom": "#3d4f7a"
+    },
+    "rooftop": {
+      "label": "頂樓",
+      "top": "#e9a86b",
+      "bottom": "#5b3a5e"
+    }
   },
   "characters": {
-    "aki": {"name": "秋", "color": "#d98c5f", "slot": "left", "voice_pitch": 420,
-            "profile": "趕不上末班車的上班族。"},
-    "ren": {"name": "蓮", "color": "#6f9fd8", "slot": "right", "voice_pitch": 260,
-            "profile": "在月台上等一個不會來的人。"}
+    "aki": {
+      "name": "秋",
+      "color": "#d98c5f",
+      "slot": "left",
+      "voice_pitch": 420,
+      "profile": "趕不上末班車的上班族。"
+    },
+    "ren": {
+      "name": "蓮",
+      "color": "#6f9fd8",
+      "slot": "right",
+      "voice_pitch": 260,
+      "profile": "在月台上等一個不會來的人。"
+    }
   },
   "items": {},
   "sounds": {},

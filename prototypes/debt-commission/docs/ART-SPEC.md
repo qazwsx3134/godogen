@@ -68,7 +68,7 @@
 
 ## 授權
 
-每張交出去的圖（和音樂、音效）在 catalog 那一筆加上 `license`，製作名單會自動列出作者：
+每張交出去的圖（和音樂、音效）在編輯器「素材設定」那一筆填授權（或在 catalog 那一筆加上 `license`），製作名單會自動列出作者：
 
 ```json
 "license": {"author": "你的名字", "source": "委託繪製", "license": "自有", "approved": false}

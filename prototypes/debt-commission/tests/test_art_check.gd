@@ -58,6 +58,11 @@ func _shapes() -> void:
 	_expect(not text.contains("（hall） 是"), "a background of the advised size has no suggestion")
 	_expect(report["no_license"] == ["backgrounds/hall"], "only the picture without an author lacks a license: %s" % [report["no_license"]])
 	_expect(report["unused"] == ["backgrounds/spare"], "unused: %s" % [report["unused"]])
+	var probe: Dictionary = {"suggestions": []}
+	ArtCheck._imported(probe, SHAPES + "art/room.png")
+	ArtCheck._imported(probe, SHAPES + "catalog.json")  # a file Godot never imports
+	_expect(probe["suggestions"].size() == 1 and str(probe["suggestions"][0]).contains("還沒匯入"),
+		"a file with no .import beside it is flagged; an imported picture is not")
 	var markdown: String = ArtCheck.to_markdown(report)
 	_expect(markdown.contains("# 投稿檢查：檢查用作品") and markdown.contains("| 0 | 3 | 5 | 1 |"), "the report's summary row")
 

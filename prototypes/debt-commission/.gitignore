@@ -4,3 +4,4 @@ build/
 test-results/
 export_credentials.cfg
 
+.catalog-candidate-*.json

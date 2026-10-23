@@ -332,3 +332,13 @@ catalog 的每筆素材（`backgrounds`、`characters`、`items`、`sounds`、`m
 - 另列缺授權與劇本沒用到的素材。
 
 入口：Godot「專案 → 工具 → 作品：投稿檢查」（檢查「檔案系統」選取的作品資料夾），或 `godot --headless --path . --script res://tools/art_check/run.gd [-- stories/<作品>]`（有錯誤時 exit 1）。報告寫到 `build/art_check/<作品>.md`，不進 git。
+
+## 素材設定與缺圖標記（編輯器）
+
+- 編輯器的「素材設定」編輯 catalog 檔本身（作品的相對路徑與 `extends` 原樣保留，繼承的項目唯讀），經 `GET/POST /api/catalog` 存回。存檔前 `tools/story_editor/check_catalog.gd` 用 runner 的 catalog 與劇本驗證檢查：候選檔放在原 catalog 旁（`.catalog-candidate-*.json`，不進 git、驗完即刪），經 `StoryRunner.read_catalog(path, redirect)` 頂替原檔，`extends` 它的作品也讀到候選檔。
+- 場景卡「缺圖」與投稿檢查同一套規則：`story_core.js` 的 `usedAssets`／`missingArt` 逐條對應 `scripts/asset_usage.gd` 與 `tools/art_check`，`test_core.mjs` 用同一個 fixture 作品對照兩邊。
+
+## 素材設定與缺圖標記（編輯器）
+
+- 編輯器的「素材設定」編輯 catalog 檔本身（作品的相對路徑與 `extends` 原樣保留，繼承的項目唯讀），經 `GET/POST /api/catalog` 存回。存檔前 `tools/story_editor/check_catalog.gd` 用 runner 的 catalog 與劇本驗證檢查：候選檔放在原 catalog 旁（`.catalog-candidate-*.json`，不進 git、驗完即刪），經 `StoryRunner.read_catalog(path, redirect)` 頂替原檔，`extends` 它的作品也讀到候選檔。
+- 場景卡「缺圖」與投稿檢查同一套規則：`story_core.js` 的 `usedAssets`／`missingArt` 逐條對應 `scripts/asset_usage.gd` 與 `tools/art_check`，`test_core.mjs` 用同一個 fixture 作品對照兩邊。

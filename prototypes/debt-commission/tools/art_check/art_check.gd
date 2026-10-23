@@ -153,6 +153,13 @@ static func _picture(path: String) -> Variant:
 	return image
 
 
+## Pictures and sounds the editor has not imported yet have no `.import` beside them; the game
+## (and a teammate's checkout) needs it committed with the file.
+static func _imported(report: Dictionary, path: String) -> void:
+	if FileAccess.file_exists(path) and not FileAccess.file_exists(path + ".import"):
+		report["suggestions"].append("`%s` 還沒匯入：打開 Godot 一次讓它匯入，再把它旁邊的 .import 一起提交" % path)
+
+
 static func _license(report: Dictionary, collection: String, id: String, info: Dictionary) -> void:
 	var license: Variant = info.get("license")
 	if not str(info.get("path", "")).is_empty() and not (license is Dictionary and not AssetUsage.authors(license).is_empty()):
@@ -177,6 +184,7 @@ static func _check_backgrounds(report: Dictionary, catalog: Dictionary, usage: D
 		if picture is String:
 			report["errors"].append("%s：`%s` %s" % [name, path, picture])
 			continue
+		_imported(report, path)
 		var size: Vector2i = (picture as Image).get_size()
 		if size.x < BACKGROUND_MIN.x or size.y < BACKGROUND_MIN.y:
 			report["suggestions"].append("%s 是 %d×%d，建議高 ≥ %d、寬 ≥ %d（長手機上放大約 %.1f 倍）"
@@ -202,6 +210,7 @@ static func _check_characters(report: Dictionary, catalog: Dictionary, usage: Di
 		if picture is String:
 			report["errors"].append("%s：`%s` %s" % [name, path, picture])
 			continue
+		_imported(report, path)
 		var image: Image = picture
 		_portrait_shape(report, name, image)
 		var pictures: Dictionary = info.get("expressions", {}) if info.get("expressions") is Dictionary else {}
@@ -214,6 +223,7 @@ static func _check_characters(report: Dictionary, catalog: Dictionary, usage: Di
 					id, face, _where(used["expressions"][face])])
 				continue
 			var face_picture: Variant = _picture(str(pictures[face]))
+			_imported(report, str(pictures[face]))
 			if face_picture is String:
 				report["errors"].append("%s 的表情 %s：`%s` %s" % [name, face, pictures[face], face_picture])
 			elif (face_picture as Image).get_width() < image.get_width() or (face_picture as Image).get_height() < image.get_height():
@@ -252,6 +262,7 @@ static func _check_items_and_sounds(report: Dictionary, catalog: Dictionary, usa
 		if picture is String:
 			report["errors"].append("線索圖 %s（%s）：`%s` %s" % [info.get("name", id), id, path, picture])
 			continue
+		_imported(report, path)
 		var size: Vector2i = (picture as Image).get_size()
 		if size.x != size.y or size.x < ITEM_MIN:
 			report["suggestions"].append("線索圖 %s（%s）是 %d×%d，建議正方形、≥ %d" % [info.get("name", id), id, size.x, size.y, ITEM_MIN])
@@ -264,6 +275,7 @@ static func _check_items_and_sounds(report: Dictionary, catalog: Dictionary, usa
 			_license(report, collection, id, info)
 			if not FileAccess.file_exists(path):
 				report["errors"].append("%s %s：`%s` 檔案不存在" % ["音效" if collection == "sounds" else "音樂", id, path])
+			_imported(report, path)
 
 
 static func _size_text(image: Image) -> String:

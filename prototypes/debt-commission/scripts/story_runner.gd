@@ -1364,11 +1364,14 @@ static func catalog_path_for(story_path: String) -> String:
 
 ## The catalog at `path` with what it `extends` laid under it and its relative asset paths made
 ## res:// (relative to its own folder): {catalog} or {error}. Not validated.
-static func read_catalog(path: String) -> Dictionary:
-    if not FileAccess.file_exists(path):
+## `redirect` {catalog path: file to read instead} lets a candidate stand in for a catalog, also
+## where another catalog `extends` it (the story editor checks an edit before saving it).
+static func read_catalog(path: String, redirect: Dictionary = {}) -> Dictionary:
+    var source: String = String(redirect.get(path, path))
+    if not FileAccess.file_exists(source):
         return {"error": "catalog file does not exist: %s" % path}
     var parser := JSON.new()
-    if parser.parse(FileAccess.get_file_as_string(path)) != OK:
+    if parser.parse(FileAccess.get_file_as_string(source)) != OK:
         return {"error": "invalid catalog JSON in %s: %s" % [path, parser.get_error_message()]}
     if not parser.data is Dictionary:
         return {"error": "%s: root must be an object" % path}
@@ -1378,7 +1381,7 @@ static func read_catalog(path: String) -> Dictionary:
     var base_path: String = String(own["extends"])
     if base_path == path or not base_path.begins_with("res://"):
         return {"error": "%s: extends must name another res:// catalog" % path}
-    var base: Dictionary = read_catalog(base_path)
+    var base: Dictionary = read_catalog(base_path, redirect)
     if base.has("error"):
         return base
     var merged: Dictionary = (base["catalog"] as Dictionary).duplicate(true)
