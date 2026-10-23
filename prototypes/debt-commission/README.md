@@ -49,24 +49,19 @@ B 超必殺演出（2026-10-06）已接入 `?sample=phase4_rounds`，使用既�
 
 ## 打開故事編輯器（網頁）
 
-劇本節點編輯器是 `tools/story_editor/` 裡的靜態網頁，不用建置、不用 npm。在**這個資料夾**開一個本機伺服器，再用瀏覽器開網址：
+劇本節點編輯器是 `tools/story_editor/` 裡的網頁，不用建置、不用 npm。在**這個資料夾**啟動本機專案服務，再用瀏覽器開網址：
 
 ```bash
 cd prototypes/debt-commission
-python3 -m http.server 8000 --bind 127.0.0.1
+python3 tools/story_editor/project_server.py --port 8000 --godot /Applications/Godot.app/Contents/MacOS/Godot
+# http://127.0.0.1:8000/tools/story_editor/
 ```
 
-- 開 <http://127.0.0.1:8000/tools/story_editor/>：可選的故事來自 `data/stories.json`，角色、表情與指令清單也從專案讀進來。
-- 直接開某個故事：在網址後面加 `?story=<id>`，例如 <http://127.0.0.1:8000/tools/story_editor/?story=chapter1>、`?story=ep00`（id 見 `data/stories.json`）。
-- 8000 被占用就換別的埠，例如 `python3 -m http.server 8001 --bind 127.0.0.1`，網址的埠跟著改。遊戲試玩用的是 5193（`tools/serve_web.sh`），兩個可以同時開。
-- 不開伺服器也能雙擊 `tools/story_editor/index.html`，再用「開啟…」選 `data/*_story.json`；這樣讀不到角色清單，角色欄改成手打。
-- 存檔方式：編輯器只能「匯出 JSON」下載。把下載的檔案放回 `data/` 後，**一定要**跑一次檢查，重算存檔用的 `version`（Mac 上 `godot` 換成 `/Applications/Godot.app/Contents/MacOS/Godot`）：
+本機專案服務提供「驗證並存檔」：圖編輯的故事直接存回 `data/`，新故事通過檢查後自動登記進 `data/stories.json`；開檔後磁碟上的檔案若被改過，會拒絕覆寫。驗證失敗時保留草稿，遊戲繼續使用上次通過的版本。用 `.dialogue` 建置的故事在編輯器裡唯讀，先「轉成圖編輯來源」建立新的故事 id 才能編輯。用一般靜態伺服器或直接雙擊 `index.html` 開啟時，改用匯出下載的流程。操作見 [編輯器說明](docs/STORY-EDITOR.md)。
 
-  ```bash
-  godot --headless --path . --script res://tools/story_editor/check_story.gd -- data/<故事>_story.json --write
-  ```
-
-  印出 `OK` 才算完成。第一章這類用 `.dialogue` 寫的故事，在編輯器裡只看不改（改 `story_src/` 再建置）。拖曳、接線、搜尋、草稿復原等操作見 [編輯器說明](docs/STORY-EDITOR.md)。
+- 直接開某個故事：網址後面加 `?story=<id>`，例如 `?story=chapter1`（id 見 `data/stories.json`）。
+- 8000 被占用就換 `--port`。遊戲試玩用的是 5193（`tools/serve_web.sh`），兩個可以同時開。
+- 多個人或多個 agent 同時跑 Godot 時，先把環境變數 `GODOT_LOCK` 設成大家約定的同一個絕對路徑，驗證會排隊不互相干擾。
 
 ## 開發與 Web 匯出
 
@@ -106,6 +101,11 @@ bash tools/serve_web.sh
 | `data/ep00_story.json` | EP00 vertical slice（`story_src/ep00.dialogue`＋`ep00.blocks.json` 建置；`?sample=ep00`）：六個場景、三個 POV 選項、導演選項與三個結局；`tests/test_ep00.gd` 窮舉所有路徑 |
 | `data/asset_catalog.json` | 背景、人物、吐槽素材及可替換圖片的統一設定 |
 | `data/stories.json` | 章節選擇裡的故事：依序的本篇（`kind: "chapter"`）與試玩片段（`"sample"`），各自的劇本與存檔路徑。新增故事加一行，不用改程式 |
+| `scripts/story_library.gd` | 故事清單、標題與署名、通關評價、結局、跨章旗標與鑑賞解鎖（`progress.cfg`） |
+| `data/credits.json` | 製作名單最後一段：引擎、劇本工具、字型、音樂、音效的來源與授權 |
+| `docs/ART-SPEC.md` | 創作者美術規格：背景、立繪、表情、線索圖的尺寸與檔名 |
+| `tools/text_fit_audit.gd` | 最大字級逐畫面檢查文字有沒有被切（同樣要開視窗跑），報告 `text_fit.json` 與每個畫面的截圖；有被切就結束碼 1 |
+| `tools/shots_chapter1.gd` | 第一章遊玩畫面截圖（調查、收合列、toast、回合、QTE），要開視窗跑；Mac Retina 用 `--resolution 780x1688` 才是 390 CSS px 寬 |
 | `IMPLEMENTATION.md` | StoryRunner、catalog 與外殼的介面契約 |
 
 角色的名字、顏色與預設站位集中在 `data/asset_catalog.json`；有圖片時填入對應 `path` 即可替換背景或立繪；尚無圖片的角色透過姓名與台詞呈現。新故事用 `bg`、`char`、`say`、`choice`、`flag`、`goto`、`item`。舊劇本的 `move`／`face`／`camera` 屬於先前的俯視舞台，VN 版面略過它們；`show`／`hide`／`expression` 仍對應立繪。新增章節的欄位與驗證規則見 [介面契約](IMPLEMENTATION.md)。
@@ -133,6 +133,9 @@ XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://t
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_investigation.gd
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_comedy.gd
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_choices.gd
+XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_credits.gd
+XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_save_transfer.gd
+XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_gallery.gd
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_ep00.gd
 
 # 先匯出、啟動伺服器；需要已安裝 Playwright 及 Chromium 的 Node 環境。
@@ -146,6 +149,7 @@ node tools/browser_check.mjs --investigate --playwright /path/to/node_modules/@p
 node tools/browser_check.mjs --comedy --playwright /path/to/node_modules/@playwright/test
 node tools/browser_check.mjs --choices --playwright /path/to/node_modules/@playwright/test
 node tools/browser_check.mjs --ep00 --playwright /path/to/node_modules/@playwright/test
+node tools/browser_check.mjs --backup --playwright /path/to/node_modules/@playwright/test
 node tools/check_ui_parity.mjs --playwright /path/to/node_modules/@playwright/test
 ```
 
@@ -187,7 +191,7 @@ node tools/check_ui_parity.mjs --playwright /path/to/node_modules/@playwright/te
 | 素材／人物檔案 | ✅ 已轉換 | `scenes/ui/case_file_panel.tscn`，卡片 `case_file_card.tscn` |
 | 標題畫面 | ✅ 已轉換 | `scenes/ui/title_screen_cinema.tscn`、`title_screen_ledger.tscn`、`title_screen_manga.tscn`、`title_screen_gintama.tscn`（腳本 `scripts/title_screen.gd`）；卡片裡的風格鈕列 `Styles` 在 scene 裡設為隱藏，打開 visible 就回到標題上 |
 | 章節選擇、設定、章節結算 | ✅ 已轉換 | `scenes/ui/chapter_select.tscn`（每列 `chapter_row.tscn`；「結局收集」`EndingsHeading`／`%Endings`，每列 `ending_row.tscn`）、`settings_panel.tscn`（最後三列 `Motion`、`Assist`、`UiStyle`，各自一個 ButtonGroup，按鈕文字與間距可在 scene 改）、`chapter_result.tscn`（四款共用；銀魂和紙另有 `settings_panel_gintama.tscn`、`chapter_result_gintama.tscn`） |
-| 素材圖片 | ✅ 已轉換 | `scenes/ui/item_picture.tscn`：catalog 有 `path` 就顯示圖，沒有就畫名稱第一個字的色卡；線索欄、素材卡與素材詳細都用它 |
+| 素材圖片 | ✅ 已轉換 | `scenes/ui/item_picture.tscn`：catalog 有 `path` 就顯示圖，沒有就畫名稱第一個字的色卡；素材卡與素材詳細都用它 |
 | 對話框與工具列 | ✅ 已轉換 | `scenes/ui/dialogue_box_cinema.tscn`、`dialogue_box_ledger.tscn`、`dialogue_box_manga.tscn`、`dialogue_box_gintama.tscn`（腳本 `scripts/dialogue_box.gd`） |
 | 目錄 | ✅ 已轉換 | `scenes/ui/menu_panel_cinema.tscn`、`menu_panel_ledger.tscn`、`menu_panel_manga.tscn`、`menu_panel_gintama.tscn`（腳本 `scripts/menu_panel.gd`），每列是 `menu_row_<風格>.tscn` |
 | 對話紀錄 | ✅ 已轉換 | `scenes/ui/dialogue_log.tscn`、逐句 `log_entry.tscn` |
@@ -197,7 +201,7 @@ node tools/check_ui_parity.mjs --playwright /path/to/node_modules/@playwright/te
 | 超必殺光束 | ✅ 已轉換 | `scenes/ui/beam.tscn`（`Strip` 調 anchors／offsets 與厚度，`Aura`／`Light`／`Core` 調顏色，根 node 的 `reveal_seconds` 調展開秒數；`shaders/beam.gdshader` 調脈動速度與邊緣；正常執行不重建） |
 | QTE、cut-in、Game Over | ✅ 已轉換 | `scenes/ui/qte_ring.tscn`、`cutin.tscn`、`game_over.tscn`（四款共用；銀魂和紙另有 `game_over_gintama.tscn`） |
 | 選項面板 | ✅ 已轉換 | POV 選項與限時吐槽：`scenes/ui/choice_sheet_cinema.tscn`、`choice_sheet_ledger.tscn`、`choice_sheet_manga.tscn`、`choice_sheet_gintama.tscn`（腳本 `scripts/choice_sheet.gd`），每列是 `choice_item_<風格>.tscn`（`%Tone` 語氣標記）；導演選擇：`scenes/ui/choice_sheet_director.tscn`（四款共用），每列是 `choice_item_director.tscn` |
-| 眼鏡／吐槽之力 HUD、線索欄 | ✅ 已轉換 | `scenes/ui/round_hud.tscn`（四款共用，`set_style` 換色），眼鏡 `glasses_icon.tscn`、線索 `clue_chip.tscn` |
+| 眼鏡／吐槽之力 HUD、線索小牌 | ✅ 已轉換 | `scenes/ui/round_hud.tscn`（四款共用，`set_style` 換色），眼鏡 `glasses_icon.tscn`、線索 `clue_chip.tscn` |
 | 調查點、收起後的調查列 | ✅ 已轉換 | `scenes/ui/hotspot.tscn`（依劇本放在背景圖上）、`scenes/ui/investigate_bar.tscn`；「收起」鈕在四款對話框 scene 的 `InvestigationRow` |
 | 調查的對話／移動話題 | ✅ 已轉換 | 四款對話框 scene 的 `InvestigationTopics`（`TalkRow`／`MoveRow`，標籤與間距在 scene 裡），每個話題是 `scenes/ui/investigate_topic.tscn`（大小與字級在這裡，顏色跟著該款的「聽下去」） |
 | 伊莉莎白的牌子 | ✅ 已轉換 | `scenes/characters/elisabeth.tscn` 的 `Placard`（對齊圖上白牌子的框，可拖曳、縮放、旋轉）、`Text`（字級與顏色）、`Glow`（選詞時的光框樣式）；牌子上的字由劇本決定 |

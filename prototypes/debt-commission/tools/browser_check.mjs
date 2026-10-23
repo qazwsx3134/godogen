@@ -15,6 +15,7 @@ const investigateOnly = process.argv.includes('--investigate');
 const comedyOnly = process.argv.includes('--comedy');
 const choicesOnly = process.argv.includes('--choices');
 const ep00Only = process.argv.includes('--ep00');
+const backupOnly = process.argv.includes('--backup');
 const arg = (name, fallback) => {
   const index = process.argv.indexOf(name);
   return index >= 0 ? process.argv[index + 1] : fallback;
@@ -28,6 +29,7 @@ else if (investigateOnly) url.searchParams.set('sample', 'phase4');
 else if (comedyOnly) url.searchParams.set('sample', 'comedy');
 else if (choicesOnly) url.searchParams.set('sample', 'choices');
 else if (ep00Only) url.searchParams.set('sample', 'ep00');
+else if (backupOnly) url.searchParams.set('sample', 'chapter1');
 else if (phase2Only || slotsOnly) url.searchParams.set('sample', 'phase2');
 else url.searchParams.set('sample', 'debt');  // the default routes read the debt baseline; the bare URL opens chapter 1
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -129,6 +131,9 @@ async function gesture(page, view, from, to, holdMs, touch) {
 async function reveal(page, touch) {
   const before = await state(page);
   if (before.screen !== 'story' || before.text_complete) return false;
+  // A line with only a few characters left (定春's 「汪。」) finishes typing before the tap lands,
+  // so the tap advances instead; only check the reveal where there is text left to reveal.
+  if ([...(before.full_text ?? '')].length - [...(before.text ?? '')].length < 6) return false;
   await controlAny(page, ['dialogue', 'advance', 'next'], touch, 'dialogue reveal');
   const after = await state(page);
   assert.equal(key(after), key(before), 'First tap completes the current line without advancing');
@@ -1439,6 +1444,10 @@ async function ep00PathA(viewport, tag, firstHalf) {
   // 4. The search: only Gintoki is on stage; his spot is his portrait; his lines by tap count.
   value = await tools.readUntil(v => v.screen === 'investigate', 'the search', seen);
   assert.equal(value.node_id, 's04_room');
+  // Shinpachi and Kagura step out with a fade as the search opens; read the stage once it has settled.
+  await waitFor(page, () => Object.entries(window.__debtQA.sprites).filter(([, sprite]) => sprite.visible).length === 1, null, 4000)
+    .catch(() => {});
+  value = await state(page);
   assert.deepEqual(Object.entries(value.sprites).filter(([, sprite]) => sprite.visible).map(([id]) => id), ['gintoki'], 'Gintoki alone is on stage');
   assert.deepEqual(value.phase3.hotspots.map(spot => spot.id), ['gintoki', 'strawberry_milk', 'job_document', 'television']);
   assert.equal(value.phase3.investigation.complete, true, 'nothing is required: 繼續 is open');
@@ -1662,8 +1671,97 @@ async function ep00PathB() {
   await context.close();
 }
 
+// Waits until Godot's file system has synced user://<name> to IndexedDB with the given contents
+// (base64), or removed it (null). The sync runs in the background, so a page reload right after a
+// save can lose it, and a key that is merely present may still hold an older write.
+async function idbFileIs(page, name, base64, timeout = 15000) {
+  const read = file => page.evaluate(async target => {
+    const db = await new Promise((ok, fail) => { const r = indexedDB.open('/userfs'); r.onsuccess = () => ok(r.result); r.onerror = fail; });
+    try {
+      if (!db.objectStoreNames.contains('FILE_DATA')) return null;
+      const store = db.transaction('FILE_DATA').objectStore('FILE_DATA');
+      const keys = await new Promise(ok => { const r = store.getAllKeys(); r.onsuccess = () => ok(r.result.map(String)); });
+      const key = keys.find(candidate => candidate.endsWith(`/${target}`));  // /userfs/<user data dir>/<file>
+      if (!key) return null;
+      const entry = await new Promise(ok => { const r = db.transaction('FILE_DATA').objectStore('FILE_DATA').get(key); r.onsuccess = () => ok(r.result); });
+      let binary = '';
+      for (const byte of new Uint8Array(entry.contents)) binary += String.fromCharCode(byte);
+      return btoa(binary);
+    } finally { db.close(); }
+  }, file);
+  const deadline = Date.now() + timeout;
+  for (;;) {
+    if (await read(name) === base64) return;
+    assert.ok(Date.now() < deadline, `IndexedDB never held the expected user://${name} (${base64 === null ? 'removed' : 'imported copy'})`);
+    await page.waitForTimeout(250);
+  }
+}
+
+// 存檔備份: 設定's 匯出存檔 downloads every save; 匯入存檔 takes a file from the browser's picker and
+// replaces the whole set (a backup without the chapter's autosave removes 繼續, the full one brings it back).
+async function backupRoute() {
+  const { context, page, errors } = await openPage({ width: 390, height: 844 }, true);
+  const result = { route: 'backup', checks: [], errors };
+  report.runs.push(result);
+  await control(page, 'begin', true);
+  await waitFor(page, () => window.__debtQA?.screen === 'story', null, 30000);
+  await page.waitForTimeout(1500);  // the autosave reaches IndexedDB in the background
+  await page.reload({ waitUntil: 'load', timeout: 120000 });
+  await waitFor(page, () => window.__debtQA?.screen === 'title', null, 120000);
+  assert.ok((await state(page)).controls.continue, '繼續 is offered after playing');
+  await control(page, 'title_settings', true);
+  await control(page, 'setting_text_speed_2', true);  // settings.cfg joins the backup next to the autosave
+  const downloading = page.waitForEvent('download');
+  await control(page, 'setting_saves_export', true);
+  const download = await downloading;
+  assert.match(download.suggestedFilename(), /^debt-commission-saves-.*\.json$/);
+  const full = path.join(output, 'backup-full.json');
+  await download.saveAs(full);
+  const backup = JSON.parse(await fs.readFile(full, 'utf8'));
+  assert.equal(backup.format, 'debt-commission-saves');
+  const saveName = Object.keys(backup.files).find(name => name.startsWith('strawberry_chapter1') && name.endsWith('.save'));
+  assert.ok(saveName && backup.files['settings.cfg'], `the backup holds the chapter's autosave and the settings: ${Object.keys(backup.files).join(', ')}`);
+  await waitFor(page, () => window.__debtQA?.toast === '已下載存檔備份', null, 5000);
+  result.checks.push(`匯出存檔 downloads ${download.suggestedFilename()} with ${Object.keys(backup.files).length} files`);
+
+  const importFile = async file => {
+    const choosing = page.waitForEvent('filechooser');
+    await control(page, 'setting_saves_import', true);
+    await (await choosing).setFiles(file);
+  };
+  const bad = path.join(output, 'backup-bad.json');
+  await fs.writeFile(bad, '{"format": "something else"}');
+  await importFile(bad);
+  await waitFor(page, () => window.__debtQA?.toast === '這不是這個遊戲的存檔備份檔。', null, 10000);
+  assert.equal((await state(page)).screen, 'settings', 'a wrong file leaves 設定 open');
+  result.checks.push('a file that is not a backup is refused with a reason');
+
+  const trimmed = path.join(output, 'backup-without-autosave.json');
+  const withoutSave = { ...backup, files: { ...backup.files } };
+  delete withoutSave.files[saveName];
+  await fs.writeFile(trimmed, JSON.stringify(withoutSave));
+  await importFile(trimmed);
+  await idbFileIs(page, saveName, null);
+  await waitFor(page, () => window.__debtQA?.screen === 'title' && !window.__debtQA.controls.continue, null, 20000)
+    .catch(async error => { const v = await state(page); throw new Error(`${error.message}; screen=${v.screen} toast=${v.toast} continue=${!!v.controls.continue} errors=${errors.join(' | ')}`); });
+  result.checks.push('importing a backup without the autosave replaces the set: 繼續 is gone');
+  await control(page, 'title_settings', true);
+  await importFile(full);
+  await waitFor(page, () => window.__debtQA?.screen === 'title' && !!window.__debtQA.controls.continue, null, 20000);
+  await idbFileIs(page, saveName, backup.files[saveName]);
+  await page.reload({ waitUntil: 'load', timeout: 120000 });
+  await waitFor(page, () => window.__debtQA?.screen === 'title', null, 120000);
+  assert.ok((await state(page)).controls.continue, 'the imported autosave survives a page reload');
+  result.checks.push('importing the full backup brings 繼續 back, and it survives a reload');
+  assert.deepEqual(errors, [], 'no browser or Godot runtime errors');
+  console.log(`PASS backup: ${result.checks.length} check groups`);
+  await context.close();
+}
+
 try {
-  if (ep00Only) {
+  if (backupOnly) {
+    await backupRoute();
+  } else if (ep00Only) {
     await ep00PathA({ width: 390, height: 844 }, 'phone', false);
     await ep00PathB();
     await ep00PathA({ width: 320, height: 568 }, 'narrow', true);

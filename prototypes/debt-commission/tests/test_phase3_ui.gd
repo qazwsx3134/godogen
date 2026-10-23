@@ -80,10 +80,10 @@ func _test_investigation_save_boke_load_and_perfect() -> void:
 		"a found spot keeps its mark")
 	_expect(not resumed._investigate_collapsed and resumed._dialog_panel.visible and not resumed._investigation_continue_button.disabled,
 		"finding the last clue brings the reading box back with 繼續")
-	_expect(resumed._phase3_hud.clues.visible and resumed._phase3_hud.clue_list.get_child_count() == 1
+	_expect(not resumed._phase3_hud.clues.visible and resumed._phase3_hud.clue_list.get_child_count() == 1
 		and (resumed._phase3_hud.clue_list.get_child(0).get_node("Row/Name") as Label).text.contains("草莓牛奶瓶")
-		and resumed._phase3_hud.clue_list.get_child(0).get_node("Row/Picture").texture == null,
-		"the clue column lists the acquired clue")
+		and resumed._phase3_hud.clue_header.text == "線索 ×1",
+		"the clue is kept and counted, and the tag stays off the stage while searching")
 	_expect(resumed._investigation_continue_button.disabled == false, "clue enables investigation continuation")
 	_expect(resumed._save_game(), "checked investigation state saves")
 	resumed._on_investigation_continue_pressed()

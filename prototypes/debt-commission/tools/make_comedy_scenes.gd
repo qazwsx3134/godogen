@@ -206,7 +206,7 @@ func _build_emotion_band() -> Control:
 	text.offset_bottom = 60.0
 	text.bbcode_enabled = true
 	text.scroll_active = false
-	text.autowrap_mode = TextServer.AUTOWRAP_ARBITRARY
+	text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	text.add_theme_font_override("normal_font", _bold)
 	text.add_theme_font_override("bold_font", _bold)
 	text.add_theme_font_size_override("normal_font_size", 80)
@@ -279,7 +279,7 @@ func _burst(parent: Control, anchors: Vector4, fill: Color, spikes: int, inner: 
 	text.offset_bottom = font_size * 0.75
 	text.bbcode_enabled = true
 	text.scroll_active = false
-	text.autowrap_mode = TextServer.AUTOWRAP_ARBITRARY
+	text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	text.add_theme_font_override("normal_font", _bold)
 	text.add_theme_font_override("bold_font", _bold)
 	text.add_theme_font_size_override("normal_font_size", int(font_size * 0.75))

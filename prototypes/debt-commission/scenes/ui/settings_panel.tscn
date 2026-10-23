@@ -383,3 +383,30 @@ size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 36
 text = "銀魂和紙"
 autowrap_mode = 3
+
+[node name="SavesLabel" type="Label" parent="Margins/Layout/SettingsScroll/Rows" unique_id=2041021500]
+layout_mode = 2
+theme_override_font_sizes/font_size = 44
+text = "存檔備份（換裝置或重灌前先匯出）"
+
+[node name="Saves" type="HBoxContainer" parent="Margins/Layout/SettingsScroll/Rows" unique_id=419650686]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="SavesExport" type="Button" parent="Margins/Layout/SettingsScroll/Rows/Saves" unique_id=1654562039]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 133)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 36
+text = "匯出存檔"
+autowrap_mode = 3
+
+[node name="SavesImport" type="Button" parent="Margins/Layout/SettingsScroll/Rows/Saves" unique_id=2080016715]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 133)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 36
+text = "匯入存檔"
+autowrap_mode = 3

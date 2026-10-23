@@ -169,7 +169,7 @@ theme_override_fonts/font = SubResource("FontVariation_25w5n")
 theme_override_font_sizes/font_size = 32
 theme_override_colors/font_color = Color(0.1254902, 0.23921569, 0.3254902, 1)
 text = "第一章・閱讀段落"
-autowrap_mode = 1
+autowrap_mode = 3
 metadata/ui_style_role = "body"
 
 [node name="SavedTime" type="Label" parent="Margins/Row/Description" unique_id=1286123803]
@@ -179,5 +179,5 @@ theme_override_fonts/font = SubResource("FontVariation_25w5n")
 theme_override_font_sizes/font_size = 24
 theme_override_colors/font_color = Color(0.1254902, 0.23921569, 0.3254902, 1)
 text = "尚無存檔"
-autowrap_mode = 1
+autowrap_mode = 3
 metadata/ui_style_role = "body"

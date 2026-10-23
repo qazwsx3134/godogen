@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://scripts/title_screen.gd" id="2_6akxm"]
 [ext_resource type="Texture2D" path="res://assets/image/yorosuya-outside.png" id="3_wrwl1"]
 [ext_resource type="Texture2D" path="res://assets/ui/gintama_panel_paper.png" id="4_wrwl1"]
-[ext_resource type="Texture2D" path="res://assets/ui/gintama_heading_plaque.png" id="5_06etv"]
+[ext_resource type="Texture2D" path="res://assets/ui/gintama_heading_plaque_tall.png" id="5_wrwl1"]
 [ext_resource type="FontFile" path="res://assets/fonts/NotoSerifTC.ttf" id="6_o2w1w"]
 
 [sub_resource type="Theme" id="Theme_3mlw3"]
@@ -33,15 +33,15 @@ texture_margin_right = 245.0
 texture_margin_bottom = 122.0
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_06etv"]
-content_margin_left = 96.0
-content_margin_top = 14.0
-content_margin_right = 64.0
-content_margin_bottom = 14.0
-texture = ExtResource("5_06etv")
-texture_margin_left = 64.0
-texture_margin_top = 20.0
-texture_margin_right = 40.0
-texture_margin_bottom = 20.0
+content_margin_left = 120.0
+content_margin_top = 8.0
+content_margin_right = 80.0
+content_margin_bottom = 8.0
+texture = ExtResource("5_wrwl1")
+texture_margin_left = 104.0
+texture_margin_top = 32.0
+texture_margin_right = 65.0
+texture_margin_bottom = 32.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o2w1w"]
 
@@ -901,9 +901,9 @@ theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.91
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 theme_override_font_sizes/font_size = 36
-text = "請幫我向你老闆討債｜第一場
-點這裡切換試玩內容（1/4）"
-autowrap_mode = 3
+text = "第一章　章節選擇 ›"
+text_overrun_behavior = 3
+clip_text = true
 
 [node name="LogoGap" type="Control" parent="CardArea/Card/Padding/Column" unique_id=859970223]
 custom_minimum_size = Vector2(0, 16.615385)

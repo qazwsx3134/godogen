@@ -129,8 +129,62 @@ func _run() -> void:
 	_expect(invalid_game._ui_style_id == "gintama", "main applies the fallback for an invalid preference")
 	invalid_game.queue_free()
 	await _frames(2)
+	for style_id: String in UI_STYLES_SCRIPT.style_ids():
+		var box: Control = load("res://scenes/ui/dialogue_box_%s.tscn" % style_id).instantiate() as Control
+		var body: RichTextLabel = box.find_child("Text", true, false) as RichTextLabel
+		_expect(body != null and _covers(body.get_theme_font("normal_font"), "寫著我吐槽"),
+			"%s dialogue text font (with fallbacks) has the story's Chinese glyphs" % style_id)
+		box.free()
+	await _hud_follows_style()
 	_cleanup_files()
 	_finish("UI STYLE TESTS")
+
+
+## The gintama edition puts the in-play HUD, clue chips, search bar and toast on its own
+## resources (assets/ui/gintama_hud/); switching away gives them back the edition's look.
+func _hud_follows_style() -> void:
+	var game: Control = _new_game()
+	await _frames(3)
+	var serif: Font = UI_STYLES_SCRIPT.gintama_hud("serif") as Font
+	var hud_panel: StyleBox = UI_STYLES_SCRIPT.gintama_hud("hud_panel") as StyleBox
+	game._on_ui_style_selected("gintama")
+	await _frames(2)
+	var toast: Label = game._toast
+	var bar_panel: Control = game._investigate_bar.get("panel")
+	_expect(game._phase3_hud.panel.get_theme_stylebox("panel") == hud_panel and
+		bar_panel.get_theme_stylebox("panel") == hud_panel,
+		"gintama HUD and search bar use gintama_hud/hud_panel.tres")
+	_expect(toast.get_theme_stylebox("normal") == UI_STYLES_SCRIPT.gintama_hud("toast") and
+		toast.get_theme_font("font") == serif and game._phase3_hud.power_value.get_theme_font("font") == serif,
+		"gintama toast is the navy plaque and HUD text is the serif")
+	game._on_ui_style_selected("cinema")
+	await _frames(2)
+	_expect(not toast.has_theme_font_override("font") and
+		not game._phase3_hud.power_value.has_theme_font_override("font") and
+		game._phase3_hud.panel.get_theme_stylebox("panel") != hud_panel and
+		toast.get_theme_stylebox("normal") != UI_STYLES_SCRIPT.gintama_hud("toast"),
+		"switching to cinema restores the game font and its own HUD and toast")
+	game.queue_free()
+	await _frames(2)
+
+
+func _covers(font: Font, text: String) -> bool:
+	if font == null:
+		return false
+	for character: String in text:
+		if not _font_has(font, character.unicode_at(0)):
+			return false
+	return true
+
+
+func _font_has(font: Font, code: int) -> bool:
+	if font.has_char(code):
+		return true
+	for fallback: Font in font.fallbacks:
+		if _font_has(fallback, code):
+			return true
+	return font is FontVariation and (font as FontVariation).base_font != null and \
+		_font_has((font as FontVariation).base_font, code)
 
 
 func _new_game(preference_path: String = TEST_PREFERENCE) -> Control:
@@ -170,7 +224,7 @@ func _dialogue_is_readable(game: Control, style_id: String) -> bool:
 	if style_id != "gintama":
 		return readable
 	var paper_cutout: NinePatchRect = game._dialog_panel.find_child("PaperCutout", true, false) as NinePatchRect
-	var plaque: TextureRect = game._dialog_panel.find_child("CloudPlaque", true, false) as TextureRect
+	var plaque: NinePatchRect = game._dialog_panel.find_child("CloudPlaque", true, false) as NinePatchRect
 	if paper_cutout == null or paper_cutout.texture == null or plaque == null or plaque.texture == null:
 		return false
 	var image: Image = paper_cutout.texture.get_image()

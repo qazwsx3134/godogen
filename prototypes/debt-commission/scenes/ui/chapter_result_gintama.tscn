@@ -224,6 +224,8 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme = SubResource("Theme_82y1d")
 script = ExtResource("2_5t4q8")
 
@@ -234,24 +236,31 @@ anchor_bottom = 1.0
 mouse_filter = 2
 color = Color(0.02, 0.06, 0.1, 0.78)
 
-[node name="Center" type="CenterContainer" parent="." unique_id=719745434]
+[node name="Scroll" type="ScrollContainer" parent="." unique_id=1803725861]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
+
+[node name="Center" type="CenterContainer" parent="Scroll" unique_id=719745434]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 mouse_filter = 2
 
-[node name="Card" type="PanelContainer" parent="Center" unique_id=1592247492]
+[node name="Card" type="PanelContainer" parent="Scroll/Center" unique_id=1592247492]
 layout_mode = 2
-mouse_filter = 2
+mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxTexture_ev7mv")
 
-[node name="Column" type="VBoxContainer" parent="Center/Card" unique_id=944387568]
+[node name="Column" type="VBoxContainer" parent="Scroll/Center/Card" unique_id=944387568]
 custom_minimum_size = Vector2(640, 0)
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 33
 
-[node name="Heading" type="Label" parent="Center/Card/Column" unique_id=1374726564]
+[node name="Heading" type="Label" parent="Scroll/Center/Card/Column" unique_id=1374726564]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_ttoty")
@@ -259,8 +268,9 @@ theme_override_font_sizes/font_size = 61
 theme_override_colors/font_color = Color(0.03137255, 0.15686275, 0.23921569, 1)
 text = "～ 第一章 完 ～"
 horizontal_alignment = 1
+autowrap_mode = 3
 
-[node name="Stats" type="GridContainer" parent="Center/Card/Column" unique_id=1287497924]
+[node name="Stats" type="GridContainer" parent="Scroll/Center/Card/Column" unique_id=1287497924]
 layout_mode = 2
 size_flags_horizontal = 4
 mouse_filter = 2
@@ -268,13 +278,13 @@ theme_override_constants/h_separation = 78
 theme_override_constants/v_separation = 17
 columns = 2
 
-[node name="CaughtCaption" type="Label" parent="Center/Card/Column/Stats" unique_id=1331239488]
+[node name="CaughtCaption" type="Label" parent="Scroll/Center/Card/Column/Stats" unique_id=1331239488]
 layout_mode = 2
 theme_override_font_sizes/font_size = 42
 theme_override_colors/font_color = Color(0.3254902, 0.38039216, 0.45490196, 1)
 text = "吐槽成功"
 
-[node name="Caught" type="Label" parent="Center/Card/Column/Stats" unique_id=654395039]
+[node name="Caught" type="Label" parent="Scroll/Center/Card/Column/Stats" unique_id=654395039]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 42
@@ -282,13 +292,13 @@ theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 text = "12 / 14"
 horizontal_alignment = 2
 
-[node name="PerfectCaption" type="Label" parent="Center/Card/Column/Stats" unique_id=1864543256]
+[node name="PerfectCaption" type="Label" parent="Scroll/Center/Card/Column/Stats" unique_id=1864543256]
 layout_mode = 2
 theme_override_font_sizes/font_size = 42
 theme_override_colors/font_color = Color(0.3254902, 0.38039216, 0.45490196, 1)
 text = "PERFECT"
 
-[node name="Perfect" type="Label" parent="Center/Card/Column/Stats" unique_id=547701712]
+[node name="Perfect" type="Label" parent="Scroll/Center/Card/Column/Stats" unique_id=547701712]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 42
@@ -296,13 +306,13 @@ theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 text = "7"
 horizontal_alignment = 2
 
-[node name="ComboCaption" type="Label" parent="Center/Card/Column/Stats" unique_id=1344850914]
+[node name="ComboCaption" type="Label" parent="Scroll/Center/Card/Column/Stats" unique_id=1344850914]
 layout_mode = 2
 theme_override_font_sizes/font_size = 42
 theme_override_colors/font_color = Color(0.3254902, 0.38039216, 0.45490196, 1)
 text = "最高連擊"
 
-[node name="Combo" type="Label" parent="Center/Card/Column/Stats" unique_id=1763710804]
+[node name="Combo" type="Label" parent="Scroll/Center/Card/Column/Stats" unique_id=1763710804]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 42
@@ -310,13 +320,13 @@ theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 text = "5"
 horizontal_alignment = 2
 
-[node name="FailsCaption" type="Label" parent="Center/Card/Column/Stats" unique_id=1452247349]
+[node name="FailsCaption" type="Label" parent="Scroll/Center/Card/Column/Stats" unique_id=1452247349]
 layout_mode = 2
 theme_override_font_sizes/font_size = 42
 theme_override_colors/font_color = Color(0.3254902, 0.38039216, 0.45490196, 1)
 text = "冷場次數"
 
-[node name="Fails" type="Label" parent="Center/Card/Column/Stats" unique_id=1220849163]
+[node name="Fails" type="Label" parent="Scroll/Center/Card/Column/Stats" unique_id=1220849163]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 42
@@ -324,13 +334,13 @@ theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 text = "2"
 horizontal_alignment = 2
 
-[node name="HiddenCaption" type="Label" parent="Center/Card/Column/Stats" unique_id=1056385978]
+[node name="HiddenCaption" type="Label" parent="Scroll/Center/Card/Column/Stats" unique_id=1056385978]
 layout_mode = 2
 theme_override_font_sizes/font_size = 42
 theme_override_colors/font_color = Color(0.3254902, 0.38039216, 0.45490196, 1)
 text = "隱藏裝傻"
 
-[node name="Hidden" type="Label" parent="Center/Card/Column/Stats" unique_id=2145012595]
+[node name="Hidden" type="Label" parent="Scroll/Center/Card/Column/Stats" unique_id=2145012595]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 42
@@ -338,13 +348,13 @@ theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 text = "1 / 3"
 horizontal_alignment = 2
 
-[node name="GlassesLeftCaption" type="Label" parent="Center/Card/Column/Stats" unique_id=311242531]
+[node name="GlassesLeftCaption" type="Label" parent="Scroll/Center/Card/Column/Stats" unique_id=311242531]
 layout_mode = 2
 theme_override_font_sizes/font_size = 42
 theme_override_colors/font_color = Color(0.3254902, 0.38039216, 0.45490196, 1)
 text = "剩下的眼鏡"
 
-[node name="GlassesLeft" type="Label" parent="Center/Card/Column/Stats" unique_id=1549225104]
+[node name="GlassesLeft" type="Label" parent="Scroll/Center/Card/Column/Stats" unique_id=1549225104]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 42
@@ -352,13 +362,13 @@ theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 text = "4 / 5"
 horizontal_alignment = 2
 
-[node name="GameOversCaption" type="Label" parent="Center/Card/Column/Stats" unique_id=2142503734]
+[node name="GameOversCaption" type="Label" parent="Scroll/Center/Card/Column/Stats" unique_id=2142503734]
 layout_mode = 2
 theme_override_font_sizes/font_size = 42
 theme_override_colors/font_color = Color(0.3254902, 0.38039216, 0.45490196, 1)
 text = "Game Over"
 
-[node name="GameOvers" type="Label" parent="Center/Card/Column/Stats" unique_id=1174348516]
+[node name="GameOvers" type="Label" parent="Scroll/Center/Card/Column/Stats" unique_id=1174348516]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 42
@@ -366,20 +376,20 @@ theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 text = "0"
 horizontal_alignment = 2
 
-[node name="GradeRow" type="HBoxContainer" parent="Center/Card/Column" unique_id=743477613]
+[node name="GradeRow" type="HBoxContainer" parent="Scroll/Center/Card/Column" unique_id=743477613]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 28
 alignment = 1
 
-[node name="GradeCaption" type="Label" parent="Center/Card/Column/GradeRow" unique_id=1786068113]
+[node name="GradeCaption" type="Label" parent="Scroll/Center/Card/Column/GradeRow" unique_id=1786068113]
 layout_mode = 2
 theme_override_font_sizes/font_size = 44
 theme_override_colors/font_color = Color(0.3254902, 0.38039216, 0.45490196, 1)
 text = "吐槽評價"
 vertical_alignment = 1
 
-[node name="Grade" type="Label" parent="Center/Card/Column/GradeRow" unique_id=1023592606]
+[node name="Grade" type="Label" parent="Scroll/Center/Card/Column/GradeRow" unique_id=1023592606]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_ttoty")
@@ -387,7 +397,7 @@ theme_override_font_sizes/font_size = 94
 theme_override_colors/font_color = Color(0.5882353, 0.24313726, 0.29411766, 1)
 text = "【 A 】"
 
-[node name="Quote" type="Label" parent="Center/Card/Column" unique_id=2140883968]
+[node name="Quote" type="Label" parent="Scroll/Center/Card/Column" unique_id=2140883968]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 42
@@ -396,13 +406,23 @@ text = "神樂：「這副眼鏡，今天還算有用阿魯。」"
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="Buttons" type="HBoxContainer" parent="Center/Card/Column" unique_id=1632034198]
+[node name="Credit" type="Label" parent="Scroll/Center/Card/Column" unique_id=510756682]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0.72)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+text = "劇本 作者名字｜繪 畫師名字"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Buttons" type="HBoxContainer" parent="Scroll/Center/Card/Column" unique_id=1632034198]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 33
 alignment = 1
 
-[node name="Next" type="Button" parent="Center/Card/Column/Buttons" unique_id=672287633]
+[node name="Next" type="Button" parent="Scroll/Center/Card/Column/Buttons" unique_id=672287633]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(332.3077, 132.92308)
 layout_mode = 2
@@ -422,7 +442,7 @@ theme_override_fonts/font = SubResource("FontVariation_ttoty")
 theme_override_font_sizes/font_size = 44
 text = "下一章"
 
-[node name="Title" type="Button" parent="Center/Card/Column/Buttons" unique_id=120003892]
+[node name="Title" type="Button" parent="Scroll/Center/Card/Column/Buttons" unique_id=120003892]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(332.3077, 132.92308)
 layout_mode = 2

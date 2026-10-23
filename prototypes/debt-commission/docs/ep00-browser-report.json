@@ -1,6 +1,6 @@
 {
-  "url": "http://127.0.0.1:5193/?qa=1&sample=ep00",
-  "started": "2026-10-02T09:28:00.240Z",
+  "url": "http://127.0.0.1:5197/?qa=1&sample=ep00",
+  "started": "2026-10-23T06:43:31.355Z",
   "runs": [
     {
       "route": "ep00-a-phone",
@@ -11,7 +11,7 @@
       "touch": true,
       "checks": [
         "scene one: 5 lines, living room, left/centre/right, faces change, typing, 3 tap(s) finishing a line, the dog off stage (phone)",
-        "the POV choice is Shinpachi's thought in the cinema sheet, three rows loud/calm/tired, each at least 48 CSS px and inside the game area (phone)",
+        "the POV choice is Shinpachi's thought in the gintama sheet, three rows loud/calm/tired, each at least 48 CSS px and inside the game area (phone)",
         "the loud row goes to s03_loud and sets pov_style=loud; tsukkomi_impact plays over the reading screen, the story waits, a tap ends it and does not skip Kagura's line, then Kagura answers (phone)",
         "the search keeps Gintoki alone on stage with four optional spots and 繼續 open; 3 tap(s) on his portrait play 「幹嘛。」「你一直點我也不會掉道具。」「這不是手遊角色首頁。」 in order (phone)",
         "dragging the picture and tapping: the milk (Kagura off stage, examined_strawberry_milk=true) and the job document (item job_document, found_job=true), both checked (phone)",
@@ -46,7 +46,7 @@
       "touch": true,
       "checks": [
         "scene one: 5 lines, living room, left/centre/right, faces change, typing, 3 tap(s) finishing a line, the dog off stage (narrow)",
-        "the POV choice is Shinpachi's thought in the cinema sheet, three rows loud/calm/tired, each at least 48 CSS px and inside the game area (narrow)",
+        "the POV choice is Shinpachi's thought in the gintama sheet, three rows loud/calm/tired, each at least 48 CSS px and inside the game area (narrow)",
         "the loud row goes to s03_loud and sets pov_style=loud; tsukkomi_impact plays over the reading screen, the story waits, it ends by itself, then Kagura answers (narrow)",
         "the search keeps Gintoki alone on stage with four optional spots and 繼續 open; 1 tap(s) on his portrait play 「幹嘛。」 in order (narrow)",
         "the whole first half fits 320×568: every control inside the viewport (narrow)"
@@ -55,5 +55,5 @@
     }
   ],
   "passed": true,
-  "finished": "2026-10-02T09:29:03.080Z"
+  "finished": "2026-10-23T06:44:40.758Z"
 }

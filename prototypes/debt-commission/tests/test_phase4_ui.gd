@@ -108,7 +108,7 @@ func _test_title_story_switch() -> void:
 	_expect(rows.keys() == ["chapter1", "debt", "phase2", "phase3", "phase4", "phase4_rounds", "comedy", "choices", "ep00", "text_effects"]
 		and (rows["debt"] as Button).text.contains("請幫我向你老闆討債") and (rows["phase4"] as Button).text.contains("試玩片段"),
 		"rows list each story by its own title, samples marked as such: %s" % [rows.keys()])
-	_expect(not game._chapter_select.find_child("ChaptersEmpty", true, false).visible and rows["chapter1"].text.contains("草莓牛奶"), "本篇 lists the playable first chapter")
+	_expect(not game._chapter_select.find_child("ChaptersEmpty", true, false).visible and game._chapter_select.row_text("chapter1").contains("草莓牛奶"), "本篇 lists the playable first chapter")
 	await _frames(3)  # laid out before the row below 結局收集 is scrolled into view
 	await _press(rows["phase4"])
 	_expect(game._screen_mode == "title" and not game._chapter_select.visible and game._story_ready,

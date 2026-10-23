@@ -20,7 +20,8 @@ func _init() -> void:
 		row.set_meta("ui_style_role", "body")
 		var packed_row: PackedScene = PackedScene.new()
 		packed_row.pack(row)
-		_check(ResourceSaver.save(packed_row, ROW_PATH), ROW_PATH)
+		if not _check(ResourceSaver.save(packed_row, ROW_PATH), ROW_PATH):
+			return
 		row.free()
 	var select: Node = (load(SELECT_PATH) as PackedScene).instantiate(PackedScene.GEN_EDIT_STATE_MAIN)
 	var list: Node = select.get_node("Margins/Layout/Scroll/List")
@@ -53,13 +54,17 @@ func _init() -> void:
 		endings.add_child(row)
 		row.owner = select
 	var packed: PackedScene = PackedScene.new()
-	_check(packed.pack(select), "pack")
-	var after: int = _count(packed.instantiate())
+	if not _check(packed.pack(select), "pack"):
+		return
+	var check: Node = packed.instantiate()
+	var after: int = _count(check)
+	check.free()
 	if after != before + 4:
 		push_error("node count %d -> %d, expected +4" % [before, after])
 		quit(1)
 		return
-	_check(ResourceSaver.save(packed, SELECT_PATH), SELECT_PATH)
+	if not _check(ResourceSaver.save(packed, SELECT_PATH), SELECT_PATH):
+		return
 	print("chapter_select: %d -> %d nodes" % [before, after])
 	select.free()
 	quit()
@@ -72,7 +77,10 @@ func _count(node: Node) -> int:
 	return total
 
 
-func _check(err: Error, what: String) -> void:
+## false (and exit code 1) when err is an error; callers stop there.
+func _check(err: Error, what: String) -> bool:
 	if err != OK:
 		push_error("%s failed: %s" % [what, error_string(err)])
 		quit(1)
+		return false
+	return true

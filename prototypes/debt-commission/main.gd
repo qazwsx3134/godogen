@@ -59,17 +59,29 @@ const CHAPTER_RESULT_SCENE: PackedScene = preload("res://scenes/ui/chapter_resul
 const GAME_OVER_SCENES: Dictionary = {"gintama": preload("res://scenes/ui/game_over_gintama.tscn")}
 const RESULT_SCENES: Dictionary = {"gintama": preload("res://scenes/ui/chapter_result_gintama.tscn")}
 const CHAPTER_SELECT_SCENE: PackedScene = preload("res://scenes/ui/chapter_select.tscn")
+const CREDITS_ROLL_SCENE: PackedScene = preload("res://scenes/ui/credits_roll.tscn")
+const GALLERY_SCENE: PackedScene = preload("res://scenes/ui/gallery_panel.tscn")
+## The tools and assets every story uses, last on 製作名單: {title, credits: [{role, names}]}.
+const GAME_CREDITS_PATH: String = "res://data/credits.json"
+## The title's music; heard on the title, so 鑑賞 lists it from the start.
+const TITLE_BGM: String = "bgm_gintama_35"
 const SETTINGS_SCENE: PackedScene = preload("res://scenes/ui/settings_panel.tscn")
 ## Editions with their own 設定 scene; the others share SETTINGS_SCENE (coloured by ui_styles.gd).
 const SETTINGS_SCENES: Dictionary = {
 	"gintama": preload("res://scenes/ui/settings_panel_gintama.tscn"),
 }
 const SETTINGS_SCRIPT: Script = preload("res://scripts/settings.gd")
+const SAVE_TRANSFER: Script = preload("res://scripts/save_transfer.gd")
+const STORY_LIBRARY: Script = preload("res://scripts/story_library.gd")
+const ATOMIC_FILE: Script = preload("res://addons/proto_kit/atomic_file.gd")
 const DialogueText: Script = preload("res://scripts/dialogue_text.gd")
 const StageMotion: Script = preload("res://scripts/stage_motion.gd")
 const ReadingRollback: Script = preload("res://scripts/reading_rollback.gd")
 ## A spot's size when the story gives none, as fractions of the picture.
 const DEFAULT_HOTSPOT_SIZE: Array = [0.12, 0.12]
+## While searching, a character with a spot on their portrait stays this see-through, so the room
+## behind them can still be searched.
+const SEARCH_CAST_ALPHA: float = 0.55
 const SAVE_SLOTS_SCRIPT: Script = preload("res://scripts/save_slots.gd")
 const UI_STYLES_SCRIPT: Script = preload("res://scripts/ui_styles.gd")
 const CASE_FILE_SCENE: PackedScene = preload("res://scenes/ui/case_file_panel.tscn")
@@ -96,7 +108,14 @@ const DEFAULT_BOKE_TIMER_SECONDS: float = 8.0
 ## Text speed, auto-play speed and volumes (settings.gd), each an index into its choices.
 @export var settings_path: String = "user://settings.cfg"
 var _story_choices: Array[Dictionary] = []
-var _story_titles: Dictionary = {}
+## The registry, titles, credits and progress (scripts/story_library.gd); _story_choices is its list.
+var _library: RefCounted = null
+var _credits_roll: Control = null
+var _gallery: Control = null
+## The story music to bring back when a 鑑賞 preview stops.
+var _music_before_preview: String = ""
+## Kept alive while the browser's file picker is open (save_transfer import).
+var _web_backup_callback: JavaScriptObject = null
 var _chapter_result: Control = null
 var _chapter_select: Control = null
 var _settings_panel: Control = null
@@ -248,6 +267,8 @@ var _investigation_pans: Dictionary = {}
 var _cast_pan_origins: Dictionary = {}
 var _round_stages: Dictionary = {}
 var _investigation_home_casts: Dictionary = {}
+## The search has made its cast see-through or invisible (_set_search_cast) until it ends.
+var _search_cast_active: bool = false
 var _pan_key: String = ""
 ## The character scene holding a placard (elisabeth.tscn's `Placard`), if any.
 var _placard_holder: Control = null
@@ -355,7 +376,8 @@ func _ready() -> void:
 	theme = ui_theme
 	_ui_style_id = UI_STYLES_SCRIPT.load_preference(ui_preference_path)
 
-	_story_choices = _read_story_choices()
+	_library = STORY_LIBRARY.new(stories_path, progress_path)
+	_story_choices = _library.stories
 	_settings = SETTINGS_SCRIPT.load_settings(settings_path)
 	_select_story_variant()
 	_load_story()
@@ -369,17 +391,6 @@ func _ready() -> void:
 	_layout()
 	_detect_qa_mode()
 	_show_title()
-
-
-## Each entry: {id, kind ("chapter" or "sample"), path, save}.
-func _read_story_choices() -> Array[Dictionary]:
-	var choices: Array[Dictionary] = []
-	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(stories_path))
-	if parsed is Dictionary:
-		for entry: Variant in (parsed as Dictionary).get("stories", []):
-			if entry is Dictionary and (entry as Dictionary).has_all(["id", "path", "save"]):
-				choices.append(entry as Dictionary)
-	return choices
 
 
 func _select_story_variant() -> void:
@@ -417,6 +428,7 @@ func _open_chapter_select() -> void:
 		return
 	_screen_mode = "chapter_select"
 	var entries: Array[Dictionary] = []
+	var chapter_number: int = 0
 	for index: int in range(_story_choices.size()):
 		var choice: Dictionary = _story_choices[index]
 		var kind: String = str(choice.get("kind", "sample"))
@@ -428,29 +440,15 @@ func _open_chapter_select() -> void:
 		var endings: String = "" if locked else _ending_note(choice)
 		if not endings.is_empty():
 			note += "・" + endings
+		if kind == "chapter":
+			chapter_number += 1
 		entries.append({"index": index, "id": str(choice["id"]), "kind": kind, "title": _story_title(choice),
-			"note": note, "locked": locked, "current": index == _story_choice_index()})
+			"note": note, "credit": _credit_line(_story_credits(choice)), "locked": locked,
+			"current": index == _story_choice_index(), "number": chapter_number, "badge": note,
+			"cover": _library.cover(choice, _backgrounds) if kind == "chapter" else ""})
 	_chapter_select.call("set_style", _ui_style_id)
 	_chapter_select.call("open", entries, _chapter_endings())
 	_publish_qa_state()
-
-
-## 結局收集: every `ending` of each chapter (samples excluded) with whether it was reached.
-func _chapter_endings() -> Array[Dictionary]:
-	var rows: Array[Dictionary] = []
-	var config: ConfigFile = ConfigFile.new()
-	config.load(progress_path)
-	for choice: Dictionary in _story_choices:
-		if str(choice.get("kind", "")) != "chapter":
-			continue
-		var story: Variant = JSON.parse_string(FileAccess.get_file_as_string(str(choice["path"])))
-		if not story is Dictionary:
-			continue
-		var seen: Array = config.get_value("endings", str(choice["id"]), [])
-		var chapter: String = _story_title(choice).get_slice("・", 0)
-		for ending: Dictionary in STORY_RUNNER_SCRIPT.endings_of(story):
-			rows.append({"chapter": chapter, "title": str(ending["title"]), "seen": seen.has(ending["id"])})
-	return rows
 
 
 func _on_chapter_picked(index: int) -> void:
@@ -465,13 +463,66 @@ func _close_chapter_select() -> void:
 	_show_title()
 
 
-## A story's own title (read once from its file).
-func _story_title(choice: Dictionary) -> String:
-	var path: String = str(choice["path"])
-	if not _story_titles.has(path):
-		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
-		_story_titles[path] = str((parsed as Dictionary).get("title", choice["id"])) if parsed is Dictionary else str(choice["id"])
-	return _story_titles[path]
+## 製作名單 from 章節選擇: every story with credits, in the chapter list's order, then the game's.
+func _open_credits() -> void:
+	if _screen_mode != "chapter_select":
+		return
+	_screen_mode = "credits"
+	_credits_roll.call("open", _credit_sections(), int(_settings.get("motion", 0)) == 0)
+	_apply_ui_style_recursive(_credits_roll)  # 關閉 and the rows it just added
+	_publish_qa_state()
+
+
+## 鑑賞 from 章節選擇: every background and track with a file, the ones met in play shown.
+func _open_gallery() -> void:
+	if _screen_mode != "chapter_select":
+		return
+	_screen_mode = "gallery"
+	var level: float = 0.0 if _audio_muted else SETTINGS_SCRIPT.VOLUMES[int(_settings["bgm_volume"])]
+	_gallery.call("open", _gallery_entries("backgrounds", "bg"), _gallery_entries("music", "bgm"),
+		linear_to_db(level) if level > 0.0 else -80.0)
+	_style_gallery()
+	_publish_qa_state()
+
+
+func _style_gallery() -> void:
+	_apply_ui_style_recursive(_gallery)
+	_gallery.call("match_captions")
+
+
+## [{id, label, path, seen}] for the catalog `section`'s entries that have a file, in catalog order.
+func _gallery_entries(section: String, kind: String) -> Array[Dictionary]:
+	var entries: Array[Dictionary] = []
+	var seen: Array = _library.unlocked_ids(kind)
+	var assets: Dictionary = _catalog.get(section, {}) as Dictionary
+	for id: String in assets.keys():
+		var path: String = str((assets[id] as Dictionary).get("path", ""))
+		if not path.is_empty() and ResourceLoader.exists(path):
+			entries.append({"id": id, "label": str((assets[id] as Dictionary).get("label", id)), "path": path, "seen": seen.has(id)})
+	return entries
+
+
+func _close_gallery() -> void:
+	if _screen_mode == "gallery":
+		_screen_mode = "chapter_select"
+	_publish_qa_state()
+
+
+## While a 鑑賞 track plays the story's music pauses; it comes back when the preview stops.
+func _on_gallery_previewing(active: bool) -> void:
+	if active:
+		if not _effects.current_bgm.is_empty():
+			_music_before_preview = _effects.current_bgm
+		_effects.play_bgm("")
+	elif not _music_before_preview.is_empty():
+		_effects.play_bgm(_music_before_preview)
+		_music_before_preview = ""
+
+
+func _close_credits() -> void:
+	if _screen_mode == "credits":
+		_screen_mode = "chapter_select"
+	_publish_qa_state()
 
 
 ## 設定 from the title or from 目錄 (which stays open underneath).
@@ -481,7 +532,7 @@ func _open_settings() -> void:
 	_settings_return = _screen_mode
 	_screen_mode = "settings"
 	_settings_panel.call("set_style", _ui_style_id)
-	_settings_panel.call("open", _settings)
+	_settings_panel.call("open", _settings, _settings_return == "title")
 	_publish_qa_state()
 
 
@@ -489,6 +540,152 @@ func _close_settings() -> void:
 	_settings_panel.visible = false
 	_screen_mode = _settings_return
 	_publish_qa_state()
+
+
+# ---------------------------------------------------------------- 故事清單與進度（story_library.gd）
+
+func _story_title(choice: Dictionary) -> String:
+	return _library.title(choice)
+
+
+func _story_credits(choice: Dictionary) -> Array:
+	return _library.credits(choice)
+
+
+static func _credit_line(credits: Array) -> String:
+	return STORY_LIBRARY.credit_line(credits)
+
+
+func _credit_sections() -> Array[Dictionary]:
+	return _library.credit_sections(GAME_CREDITS_PATH)
+
+
+func _chapter_endings() -> Array[Dictionary]:
+	return _library.chapter_endings()
+
+
+func _ending_note(choice: Dictionary) -> String:
+	return _library.ending_note(choice)
+
+
+func _cleared_grade(story_id: String) -> String:
+	return _library.cleared_grade(story_id)
+
+
+func _story_unlocked(index: int) -> bool:
+	return _library.unlocked(index)
+
+
+## The chapter after the current one, {} when this is not a chapter or the last.
+func _next_chapter() -> Dictionary:
+	return _library.next_chapter(_story_choice_index())
+
+
+## The `carry` flags of the chapter before the current one.
+func _previous_chapter_carry() -> Dictionary:
+	return _library.previous_carry(_story_choice_index())
+
+
+func _record_clear(grade: String) -> void:
+	_library.record_clear(_progress_id(), grade)
+
+
+## An `end`/`result` reached: its `ending` joins the story's seen endings, and (unless it is a
+## Game Over) the story's `carry` flags are kept for the next chapter.
+func _record_ending(command: Dictionary, game_over: bool = false) -> void:
+	_library.record_ending(_progress_id(), _dict_string(command, "ending", ""),
+		{} if game_over else _runner.call("carry_out") as Dictionary)
+
+
+# ---------------------------------------------------------------- 存檔備份
+
+## Every file a backup holds: each story's saves, progress, settings and the UI choices.
+func _backup_paths() -> Array[String]:
+	return SAVE_TRANSFER.backup_paths(_story_choices, [progress_path, settings_path, ui_preference_path, STORY_CHOICE_PATH])
+
+
+## 匯出存檔: the Web build downloads the backup; a desktop build asks where to write it.
+func _export_saves() -> void:
+	var now: String = Time.get_datetime_string_from_system()
+	var text: String = SAVE_TRANSFER.export_text(_backup_paths(), now)
+	var file_name: String = "debt-commission-saves-%s.json" % now.replace(":", "").replace("T", "-")
+	if OS.has_feature("web"):
+		JavaScriptBridge.download_buffer(text.to_utf8_buffer(), file_name, "application/json")
+		_show_toast("已下載存檔備份")
+		return
+	_file_dialog(FileDialog.FILE_MODE_SAVE_FILE, file_name, func(path: String) -> void:
+		_show_toast("已匯出存檔備份" if ATOMIC_FILE.write_text(path, text) == OK else "存檔備份寫入失敗"))
+
+
+## 匯入存檔 (from the title only): the player picks a backup file, which replaces every save.
+func _import_saves() -> void:
+	if _screen_mode != "settings" or _settings_return != "title":
+		return
+	if OS.has_feature("web"):
+		_pick_web_backup()
+		return
+	_file_dialog(FileDialog.FILE_MODE_OPEN_FILE, "", func(path: String) -> void:
+		_import_backup_text(FileAccess.get_file_as_string(path)))
+
+
+## Checks a backup and, when it is good, replaces the saves with it and starts again from the
+## title. A bad file changes nothing and says why.
+func _import_backup_text(text: String) -> bool:
+	var allowed: Array[String] = _backup_paths()
+	var parsed: Dictionary = SAVE_TRANSFER.parse_import(text, allowed)
+	var error: String = str(parsed["error"])
+	if error.is_empty():
+		error = SAVE_TRANSFER.apply_import(parsed["files"], allowed)
+	if not error.is_empty():
+		_show_toast(error)
+		return false
+	_reload_after_import()
+	return true
+
+
+func _reload_after_import() -> void:
+	if get_tree().current_scene == self:
+		get_tree().reload_current_scene.call_deferred()
+		return
+	# Main inside another scene (tests): read the imported settings, progress and saves back in place.
+	_settings = SETTINGS_SCRIPT.load_settings(settings_path)
+	_library = STORY_LIBRARY.new(stories_path, progress_path)
+	_story_choices = _library.stories
+	_close_settings()
+	_refresh_title()
+	_show_toast("已匯入存檔")
+
+
+## The browser's file picker; its text comes back through a JavaScript callback.
+func _pick_web_backup() -> void:
+	_web_backup_callback = JavaScriptBridge.create_callback(func(args: Array) -> void:
+		_import_backup_text(str(args[0]) if not args.is_empty() else ""))
+	JavaScriptBridge.get_interface("window").debtImportBackup = _web_backup_callback
+	JavaScriptBridge.eval("""(() => {
+		const input = document.createElement('input');
+		input.type = 'file';
+		input.accept = '.json,application/json';
+		input.addEventListener('change', () => {
+			const file = input.files && input.files[0];
+			if (file) file.text().then(text => window.debtImportBackup(text), () => window.debtImportBackup(''));
+		});
+		input.click();
+	})()""", true)
+
+
+func _file_dialog(mode: FileDialog.FileMode, file_name: String, done: Callable) -> void:
+	var dialog: FileDialog = FileDialog.new()
+	dialog.file_mode = mode
+	dialog.access = FileDialog.ACCESS_FILESYSTEM
+	dialog.use_native_dialog = true
+	dialog.filters = PackedStringArray(["*.json ; 存檔備份"])
+	dialog.current_file = file_name
+	dialog.file_selected.connect(func(path: String) -> void:
+		dialog.queue_free()
+		done.call(path))
+	dialog.canceled.connect(dialog.queue_free)
+	add_child(dialog)
+	dialog.popup_centered_ratio(0.8)
 
 
 func _on_setting_changed(key: String, value: int) -> void:
@@ -537,7 +734,8 @@ func _refresh_story_switch() -> void:
 	var info: Dictionary = _runner.call("story_info") as Dictionary if _story_ready else {}
 	var title: String = str(info.get("title", story_path.get_file()))
 	var index: int = _story_choice_index()
-	_story_switch.text = "%s\n章節選擇 ›" % title
+	# One line on the plaque: a chapter goes by its number (第一章・… → 第一章), others by their title.
+	_story_switch.text = "%s　章節選擇 ›" % (title.get_slice("・", 0) if title.contains("・") else title)
 
 
 func _load_story() -> void:
@@ -614,6 +812,16 @@ func _build_ui() -> void:
 	_game.add_child(_chapter_select)  # above the title screen
 	_chapter_select.connect("picked", _on_chapter_picked)
 	_chapter_select.connect("closed", _close_chapter_select)
+	_chapter_select.connect("credits_pressed", _open_credits)
+	_chapter_select.connect("gallery_pressed", _open_gallery)
+	_credits_roll = CREDITS_ROLL_SCENE.instantiate() as Control
+	_game.add_child(_credits_roll)  # over 章節選擇
+	_credits_roll.connect("closed", _close_credits)
+	_gallery = GALLERY_SCENE.instantiate() as Control
+	_game.add_child(_gallery)  # over 章節選擇
+	_gallery.connect("closed", _close_gallery)
+	_gallery.connect("tab_changed", _style_gallery)
+	_gallery.connect("previewing", _on_gallery_previewing)
 	_mount_settings()
 	_mount_end_screens()
 	_effects = StageEffects.new()
@@ -1039,12 +1247,14 @@ func _mount_settings() -> void:
 	_settings_panel.connect("changed", _on_setting_changed)
 	_settings_panel.connect("style_picked", _on_ui_style_selected)
 	_settings_panel.connect("closed", _close_settings)
+	_settings_panel.connect("export_saves", _export_saves)
+	_settings_panel.connect("import_saves", _import_saves)
 	if old == null:
 		return
 	_game.move_child(_settings_panel, old.get_index())
 	if old.visible:
 		_settings_panel.call("set_style", _ui_style_id)
-		_settings_panel.call("open", _settings)
+		_settings_panel.call("open", _settings, _settings_return == "title")
 	_game.remove_child(old)
 	old.queue_free()
 	_layout()
@@ -1169,6 +1379,8 @@ func _layout() -> void:
 	_layout_slot_picker(width, height, top, bottom)
 	_case_file_panel.call("layout", Rect2(0.0, top, width, bottom - top))
 	_fit_panel_area(_chapter_select, Rect2(0.0, top, width, bottom - top))
+	_fit_panel_area(_credits_roll, Rect2(0.0, top, width, bottom - top))
+	_fit_panel_area(_gallery, Rect2(0.0, top, width, bottom - top))
 	_fit_panel_area(_settings_panel, Rect2(0.0, top, width, bottom - top))
 	if _screen_mode == "investigate":
 		_layout_hotspots()
@@ -1272,7 +1484,8 @@ func _read_safe_area(viewport_size: Vector2) -> void:
 
 func _show_title() -> void:
 	_cancel_generation()
-	_effects.play_bgm("bgm_gintama_35")
+	_effects.play_bgm(TITLE_BGM)
+	_library.unlock("bgm", TITLE_BGM)
 	_close_qte()
 	_close_overlays()
 	_set_ui_hidden(false)
@@ -1340,6 +1553,7 @@ func _start_new_story() -> void:
 	_runner.call("reset")
 	for actor_id: String in _actors.keys():
 		_actor_slots[actor_id] = str((_actors[actor_id] as Dictionary).get("slot", "center"))
+	_forget_search_cast()
 	for sprite: Control in _sprites.values():
 		sprite.visible = false
 		sprite.call("set_expression", "neutral")
@@ -1353,7 +1567,38 @@ func _start_new_story() -> void:
 # ---------------------------------------------------------------- 故事推進
 
 func _start_drive() -> void:
+	_restore_search_cast()  # a spot's or a topic's scene, or the story after the search
 	call_deferred("_drive_story", _generation)
+
+
+## The cast must not cover the room being searched: whoever has a spot on their portrait stays,
+## see-through (their spot, checked or not, counts only while they are on stage); everyone else
+## turns invisible (alpha 0, still on stage) until the search ends or a scene plays from it. Only
+## alpha changes, so whoever was already leaving the stage still leaves.
+func _set_search_cast(command: Dictionary) -> void:
+	var tappable: Dictionary = {}
+	for raw: Variant in command.get("hotspots", []):
+		if raw is Dictionary and (raw as Dictionary).has("character"):
+			tappable[str((raw as Dictionary)["character"])] = true
+	for actor_id: String in _sprites:
+		var sprite: Control = _sprites[actor_id]
+		if not sprite.visible:
+			continue
+		sprite.modulate.a = SEARCH_CAST_ALPHA if tappable.has(actor_id) else 0.0
+	_search_cast_active = true
+
+
+## The stage is being set anew (new story, a save, an empty stage): nobody comes back from a search.
+func _forget_search_cast() -> void:
+	_search_cast_active = false
+
+
+func _restore_search_cast() -> void:
+	if not _search_cast_active:
+		return
+	for sprite: Control in _sprites.values():
+		sprite.modulate.a = 1.0
+	_search_cast_active = false
 
 
 func _drive_story(generation: int) -> void:
@@ -1408,6 +1653,7 @@ func _drive_story(generation: int) -> void:
 				if _dict_string(command, "id") != _current_bg_id:
 					_clear_stage()  # a new scene starts with nobody on stage
 				_apply_background(_dict_string(command, "id"), true)
+				_library.unlock("bg", _dict_string(command, "id"))
 			"char":
 				_apply_character(command)
 			"show":
@@ -1423,6 +1669,8 @@ func _drive_story(generation: int) -> void:
 						return
 			"shake", "flash", "cutin", "bgm", "se", "beam":
 				_effects.play(command, _skip)
+				if _command_op(command) == "bgm":
+					_library.unlock("bgm", _dict_string(command, "id"))
 			"freeze":
 				var hold: float = _effects.play(command, _skip)
 				if hold > 0.0:
@@ -1553,11 +1801,13 @@ func _present_investigation(command: Dictionary, restored: bool) -> void:
 				_actor_slots[actor_id] = str(pose.get("position", "center"))
 				sprite.call("set_expression", str(pose.get("expression", "neutral")))
 			sprite.modulate = Color.WHITE  # nobody is in focus while searching: any of them can be tapped
+		_set_search_cast(command)
 	else:
 		_clear_stage()  # the player searches the room itself
 	var place_bg: String = _dict_string(command, "bg")
 	if not place_bg.is_empty() and place_bg != _current_bg_id:
 		_apply_background(place_bg)  # each place of the search shows its own picture
+		_library.unlock("bg", place_bg)
 	_set_text_tone("thought")
 	_layout()
 	_set_visible_text(_full_text, true)
@@ -2065,6 +2315,7 @@ func _start_qte(command: Dictionary) -> void:
 	_qte = QTE_SCENE.instantiate() as QteRing
 	_overlay_layer.add_child(_qte)
 	_qte.resolved.connect(_on_qte_resolved)
+	_qte.set_style(_ui_style_id)
 	_qte.start(RoundView.qte(command))
 	_publish_qa_state()
 
@@ -2440,7 +2691,7 @@ func _present_result(command: Dictionary) -> void:
 	_record_ending(command)
 	var speaker: String = str((summary.get("line", {}) as Dictionary).get("speaker", "narrator"))
 	_chapter_result.call("show_result", summary, str((_actors.get(speaker, {}) as Dictionary).get("name", "")),
-		not _next_chapter().is_empty())
+		not _next_chapter().is_empty(), _credit_line((_runner.call("story_info") as Dictionary).get("credits", []) as Array))
 	_chapter_result.visible = true
 	_toast.visible = false
 	_refresh_phase3_hud()
@@ -2464,87 +2715,6 @@ func _progress_id() -> String:
 	if index >= 0:
 		return str(_story_choices[index]["id"])
 	return str((_runner.call("story_info") as Dictionary).get("id", story_path.get_file()))
-
-
-func _record_clear(grade: String) -> void:
-	var config: ConfigFile = ConfigFile.new()
-	config.load(progress_path)
-	var best: String = str(config.get_value("cleared", _progress_id(), ""))
-	var grades: Array = STORY_RUNNER_SCRIPT.GRADES
-	if best.is_empty() or grades.find(grade) < grades.find(best):
-		config.set_value("cleared", _progress_id(), grade)
-		config.save(progress_path)
-
-
-## An `end`/`result` reached: its `ending` id joins this story's seen endings, and (unless it is
-## a Game Over) the story's `carry` flags are kept under its id for the next chapter.
-func _record_ending(command: Dictionary, game_over: bool = false) -> void:
-	var config: ConfigFile = ConfigFile.new()
-	config.load(progress_path)
-	var ending: String = _dict_string(command, "ending", "")
-	var seen: Array = config.get_value("endings", _progress_id(), [])
-	if not ending.is_empty() and not seen.has(ending):
-		config.set_value("endings", _progress_id(), seen + [ending])
-	var carried: Dictionary = {} if game_over else _runner.call("carry_out") as Dictionary
-	if not carried.is_empty():
-		config.set_value("carry", _progress_id(), carried)
-	if not carried.is_empty() or not ending.is_empty():
-		config.save(progress_path)
-
-
-## The `carry` values the chapter before this one ended with; {} for samples, the first
-## chapter, or when that chapter has not reached an end. Replaying a chapter never reads its own.
-func _previous_chapter_carry() -> Dictionary:
-	var index: int = _story_choice_index()
-	if index < 0 or str(_story_choices[index].get("kind", "")) != "chapter":
-		return {}
-	for earlier: int in range(index - 1, -1, -1):
-		if str(_story_choices[earlier].get("kind", "")) == "chapter":
-			var config: ConfigFile = ConfigFile.new()
-			config.load(progress_path)
-			return config.get_value("carry", str(_story_choices[earlier]["id"]), {}) as Dictionary
-	return {}
-
-
-## "結局 1/3" for a story with `ending`s, "" without (its JSON is read for the total).
-func _ending_note(choice: Dictionary) -> String:
-	var story: Variant = JSON.parse_string(FileAccess.get_file_as_string(str(choice.get("path", ""))))
-	if not story is Dictionary:
-		return ""
-	var endings: Array[Dictionary] = STORY_RUNNER_SCRIPT.endings_of(story)
-	if endings.is_empty():
-		return ""
-	var config: ConfigFile = ConfigFile.new()
-	config.load(progress_path)
-	var seen: Array = config.get_value("endings", str(choice["id"]), [])
-	return "結局 %d/%d" % [endings.filter(func(e: Dictionary) -> bool: return seen.has(e["id"])).size(), endings.size()]
-
-
-## The best grade of a cleared story, "" when not cleared.
-func _cleared_grade(story_id: String) -> String:
-	var config: ConfigFile = ConfigFile.new()
-	return str(config.get_value("cleared", story_id, "")) if config.load(progress_path) == OK else ""
-
-
-## The chapter after the current one in the registry, {} when this is not a chapter or the last.
-func _next_chapter() -> Dictionary:
-	var index: int = _story_choice_index()
-	if index < 0 or str(_story_choices[index].get("kind", "")) != "chapter":
-		return {}
-	for later: int in range(index + 1, _story_choices.size()):
-		if str(_story_choices[later].get("kind", "")) == "chapter":
-			return _story_choices[later]
-	return {}
-
-
-## A chapter opens once the chapter before it is cleared; samples are always open.
-func _story_unlocked(index: int) -> bool:
-	if str(_story_choices[index].get("kind", "")) != "chapter":
-		return true
-	for earlier: int in range(index - 1, -1, -1):
-		if str(_story_choices[earlier].get("kind", "")) == "chapter":
-			return not _cleared_grade(str(_story_choices[earlier]["id"])).is_empty()
-	return true
 
 
 ## Switches the title to another story (and remembers it for the next run).
@@ -2604,6 +2774,7 @@ func _focus_speaker(speaker: String, expression: String) -> void:
 
 
 func _clear_stage() -> void:
+	_forget_search_cast()
 	if _motion != null:
 		_motion.cancel_characters()
 	for sprite: Control in _sprites.values():
@@ -2628,6 +2799,17 @@ func _clear_choices() -> void:
 # ---------------------------------------------------------------- 手勢
 
 func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel") and _screen_mode == "credits":
+		get_viewport().set_input_as_handled()
+		_credits_roll.call("close")
+		return
+	if event.is_action_pressed("ui_cancel") and _screen_mode == "gallery":
+		get_viewport().set_input_as_handled()
+		if bool(_gallery.call("viewer_open")):
+			_gallery.call("close_viewer")
+		else:
+			_gallery.call("close")
+		return
 	if event.is_action_pressed("ui_cancel") and _screen_mode == "case_file":
 		get_viewport().set_input_as_handled()
 		_close_case_file()
@@ -2892,6 +3074,9 @@ func _close_overlays() -> void:
 		_chapter_result.visible = false
 	if _chapter_select != null:
 		_chapter_select.visible = false
+		_credits_roll.visible = false
+		if _gallery.visible:
+			_gallery.call("close")
 		_settings_panel.visible = false
 	if _menu_overlay != null:
 		_menu_overlay.visible = false
@@ -3165,7 +3350,7 @@ func _refresh_phase3_hud() -> void:
 	for item_id: Variant in items:
 		var info: Dictionary = catalog_items.get(str(item_id), {}) as Dictionary
 		clues.append({"name": str(info.get("name", item_id)), "picture": _catalog_picture(info)})
-	_phase3_hud.show_clues(clues)
+	_phase3_hud.show_clues(clues, _screen_mode != "investigate")
 	if _menu_items.has("material"):
 		(_menu_items["material"] as Button).text = "吐槽素材（%d）" % items.size()
 	if _command_op(current) == "boke_round" and _effective_boke_ui_mode() == "tsukkomi":
@@ -3221,6 +3406,7 @@ func _open_case_file(tab: String) -> void:
 				usable[str(option["require"])] = str(option.get("id", ""))
 	_case_file_panel.call("set_style", _ui_style_id)
 	_case_file_panel.call("open", _runner.call("case_file"), tab, pictures, usable)
+	_toast.visible = false  # a clue's toast would sit over the panel
 	_refresh_phase3_hud()
 	_publish_qa_state()
 
@@ -3483,6 +3669,7 @@ func _apply_save_payload(payload: Dictionary) -> bool:
 		_boke_timer_round_id = ""
 		_boke_time_remaining = 0.0
 	_apply_background(str(payload.get("background", _default_background_id())))
+	_forget_search_cast()
 	var sprites: Dictionary = payload["sprites"]
 	for actor_id: String in _sprites.keys():
 		var state: Dictionary = sprites.get(actor_id, {"visible": false}) as Dictionary
@@ -3765,6 +3952,9 @@ func _write_qa_state() -> void:
 		"game_over_retry": _game_over_retry_button, "game_over_title": _game_over.title_button,
 		"result_next": _chapter_result.get("next_button"), "result_title": _chapter_result.get("title_button"),
 		"chapter_close": _chapter_select.get("close_button"), "settings_close": _settings_panel.get("close_button"),
+		"chapter_credits": _chapter_select.get("credits_button"), "credits_close": _credits_roll.get("close_button"),
+		"chapter_gallery": _chapter_select.get("gallery_button"), "gallery_close": _gallery.get("close_button"),
+		"gallery_tab_pictures": _gallery.get("pictures_tab"), "gallery_tab_music": _gallery.get("music_tab"),
 		"title_settings": _title_screen.settings_button, "story_switch": _title_screen.story_switch,
 		"censor": _choice_sheet.censor_bar if _choice_sheet.censor_bar.is_visible_in_tree() else _dialog_panel.censor_bar,
 		"super": _choice_sheet.super_button,
@@ -3785,7 +3975,10 @@ func _write_qa_state() -> void:
 		named["menu_style_" + style_id] = _menu_style_buttons[style_id]
 	# While 目錄 is open its dim covers everything else, so only its own controls can be tapped.
 	var modal: Control = _menu_overlay if _menu_overlay.visible else null
-	for panel: Control in [_settings_panel, _chapter_select]:  # opened over the title or 目錄
+	var gallery_items: Dictionary = _gallery.call("items")
+	for item_id: String in gallery_items.keys():
+		named["gallery_" + item_id] = gallery_items[item_id]
+	for panel: Control in [_settings_panel, _chapter_select, _credits_roll, _gallery]:  # opened over the title or 目錄
 		if panel.visible:
 			modal = panel
 	for control_name: String in named.keys():
@@ -3814,6 +4007,8 @@ func _write_qa_state() -> void:
 		if hotspot.has("character") and covered:
 			reach.end.y = minf(reach.end.y, _dialog_panel.get_global_rect().position.y)
 			covered = false
+		if _investigate_bar.visible:  # the folded bar takes the taps on whatever it covers
+			reach.end.y = minf(reach.end.y, _investigate_bar.get_global_rect().position.y)
 		var reachable: bool = reach.has_area() and Rect2(_game.global_position, _game.size).encloses(reach) and not covered
 		hotspot_state.append({
 			"id": hotspot_id,
@@ -3893,6 +4088,11 @@ func _write_qa_state() -> void:
 			return {"id": str(choice["id"]), "grade": _cleared_grade(str(choice["id"])), "endings": _ending_note(choice)})
 			if _screen_mode in ["title", "chapter_select", "result"] else [],
 		"ending_rows": _chapter_select.call("ending_rows") if _screen_mode == "chapter_select" else [],
+		"credits": {"rolling": bool(_credits_roll.get("rolling")), "lines": _credits_roll.call("lines")}
+			if _screen_mode == "credits" else {},
+		"gallery": {"tab": str(_gallery.get("tab")), "playing": str(_gallery.get("playing_id")),
+			"viewer": bool(_gallery.call("viewer_open")), "bg": _library.unlocked_ids("bg"), "bgm": _library.unlocked_ids("bgm")}
+			if _screen_mode == "gallery" else {},
 		"settings": _settings.duplicate(),
 		"ui_style": _ui_style_id,
 		"toast": _toast.text if _toast.visible else "",

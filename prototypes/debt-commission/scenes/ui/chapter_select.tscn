@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/chapter_select.gd" id="1_euilf"]
-[ext_resource type="PackedScene" path="res://scenes/ui/chapter_row.tscn" id="2_usf8y"]
+[ext_resource type="PackedScene" path="res://scenes/ui/episode_card.tscn" id="2_usf8y"]
 [ext_resource type="PackedScene" path="res://scenes/ui/ending_row.tscn" id="3_usf8y"]
 
 [node name="ChapterSelect" type="Panel" unique_id=2001074598]
@@ -36,6 +36,22 @@ text = "章節選擇"
 vertical_alignment = 1
 metadata/ui_style_role = "accent"
 
+[node name="Gallery" type="Button" parent="Margins/Layout/Header" unique_id=2055107151]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
+layout_mode = 2
+theme_override_font_sizes/font_size = 38
+text = "鑑賞"
+metadata/ui_style_role = "standard"
+
+[node name="Credits" type="Button" parent="Margins/Layout/Header" unique_id=1945748368]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
+layout_mode = 2
+theme_override_font_sizes/font_size = 38
+text = "製作名單"
+metadata/ui_style_role = "standard"
+
 [node name="Close" type="Button" parent="Margins/Layout/Header" unique_id=37013827]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(132.92308, 132.92308)
@@ -62,15 +78,13 @@ metadata/ui_style_role = "muted"
 [node name="Chapters" type="VBoxContainer" parent="Margins/Layout/Scroll/List" unique_id=924685747]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 0
 
-[node name="Preview0" parent="Margins/Layout/Scroll/List/Chapters" unique_id=1347557441 instance=ExtResource("2_usf8y")]
+[node name="Preview0" parent="Margins/Layout/Scroll/List/Chapters" unique_id=1175827945 instance=ExtResource("2_usf8y")]
 layout_mode = 2
 
-[node name="Preview1" parent="Margins/Layout/Scroll/List/Chapters" unique_id=1642803917 instance=ExtResource("2_usf8y")]
+[node name="Preview1" parent="Margins/Layout/Scroll/List/Chapters" unique_id=675749470 instance=ExtResource("2_usf8y")]
 layout_mode = 2
-text = "第二章
-完成前一章後開放"
 
 [node name="ChaptersEmpty" type="Label" parent="Margins/Layout/Scroll/List" unique_id=654426488]
 unique_name_in_owner = true

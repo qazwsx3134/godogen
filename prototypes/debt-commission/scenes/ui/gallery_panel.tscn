@@ -1,0 +1,122 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/gallery_panel.gd" id="1_mmj4g"]
+[ext_resource type="PackedScene" path="res://scenes/ui/gallery_picture.tscn" id="2_63ceu"]
+
+[node name="GalleryPanel" type="Panel" unique_id=19934867]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_mmj4g")
+metadata/ui_style_role = "log"
+
+[node name="Margins" type="MarginContainer" parent="." unique_id=1714785002]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="Layout" type="VBoxContainer" parent="Margins" unique_id=1056985352]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Header" type="HBoxContainer" parent="Margins/Layout" unique_id=1840991128]
+custom_minimum_size = Vector2(0, 112)
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Heading" type="Label" parent="Margins/Layout/Header" unique_id=204603021]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 52
+text = "鑑賞"
+vertical_alignment = 1
+metadata/ui_style_role = "accent"
+
+[node name="Close" type="Button" parent="Margins/Layout/Header" unique_id=110098769]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(132.92308, 132.92308)
+layout_mode = 2
+theme_override_font_sizes/font_size = 60
+text = "×"
+metadata/ui_style_role = "standard"
+
+[node name="Tabs" type="HBoxContainer" parent="Margins/Layout" unique_id=1583605700]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="PicturesTab" type="Button" parent="Margins/Layout/Tabs" unique_id=170388616]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 42
+text = "畫廊"
+metadata/ui_style_role = "selector"
+
+[node name="MusicTab" type="Button" parent="Margins/Layout/Tabs" unique_id=1132614118]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 42
+text = "音樂"
+metadata/ui_style_role = "selector"
+
+[node name="Progress" type="Label" parent="Margins/Layout" unique_id=1004511089]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 34
+text = "已看過 1/3"
+metadata/ui_style_role = "muted"
+
+[node name="Scroll" type="ScrollContainer" parent="Margins/Layout" unique_id=916194439]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="List" type="VBoxContainer" parent="Margins/Layout/Scroll" unique_id=2124910252]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Pictures" type="GridContainer" parent="Margins/Layout/Scroll/List" unique_id=1200320028]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 16
+columns = 2
+
+[node name="Preview0" parent="Margins/Layout/Scroll/List/Pictures" unique_id=1882561822 instance=ExtResource("2_63ceu")]
+layout_mode = 2
+
+[node name="Preview1" parent="Margins/Layout/Scroll/List/Pictures" unique_id=423789888 instance=ExtResource("2_63ceu")]
+layout_mode = 2
+
+[node name="Music" type="VBoxContainer" parent="Margins/Layout/Scroll/List" unique_id=1635249913]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Viewer" type="ColorRect" parent="." unique_id=1727160188]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.02, 0.025, 0.04, 0.96)
+
+[node name="ViewerPicture" type="TextureRect" parent="Viewer" unique_id=1494866353]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Player" type="AudioStreamPlayer" parent="." unique_id=1338051776]
+unique_name_in_owner = true

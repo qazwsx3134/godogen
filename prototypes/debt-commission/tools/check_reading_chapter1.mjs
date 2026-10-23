@@ -33,7 +33,7 @@ try{await Promise.all([{width:390,height:844},{width:320,height:568}].map(async 
  await menu();await tap('menu_rollback');await wait(s=>window.__debtQA?.source_id===s,first.source_id);
  await tap('stage');await menu();await tap('menu_quick_load');await wait(s=>window.__debtQA?.source_id===s,first.source_id);
  await menu();await tap('menu_settings');await wait(()=>window.__debtQA?.screen==='settings');
- await tap('setting_font_size_2');await tap('setting_paper_opacity_0');let s=await state();assert.equal(s.settings.font_size,2);assert.equal(s.settings.paper_opacity,0);
+ await tap('setting_font_size_2');await tap('setting_paper_opacity_0');await wait(()=>window.__debtQA?.settings?.font_size===2&&window.__debtQA.settings.paper_opacity===0,null,10000);let s=await state();assert.equal(s.settings.font_size,2);assert.equal(s.settings.paper_opacity,0);
  await page.screenshot({path:`${out}/${viewport.width}-settings.png`});await tap('settings_close');await wait(()=>window.__debtQA?.screen==='menu');await tap('menu_close');
  await menu();await tapTo('menu_save','save_slots');await tapTo('slot_1','menu');await tapTo('menu_save','save_slots');await tapTo('slot_1','slot_confirm');
  await tap('slot_confirm_no');await tap('slot_next');assert.equal((await state()).slot_page,1);await tap('slot_prev');await page.screenshot({path:`${out}/${viewport.width}-save.png`});await tap('slot_close');await tap('menu_close');

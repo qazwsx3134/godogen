@@ -105,6 +105,8 @@ static func build_text(text: String, source_path: String) -> Dictionary:
 		story["note"] = meta["note"]
 	if meta.has("carry"):
 		story["carry"] = meta["carry"]
+	if meta.has("credits"):
+		story["credits"] = meta["credits"]
 	story["version"] = fingerprint(story)
 
 	var runner_error: String = _validate_with_runner(story)

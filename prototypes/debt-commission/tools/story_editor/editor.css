@@ -135,3 +135,31 @@ button:disabled { opacity: .45; cursor: default; }
 #searchResults { list-style: none; padding: 0; margin: 0; max-height: 200px; overflow-y: auto; }
 #searchResults button { white-space: normal; text-align: left; width: 100%; margin-bottom: 4px; overflow-wrap: anywhere; }
 .search-hit { outline: 2px solid var(--sel); }
+
+/* Scene cards: body geometry is shared with StoryCore.cardSize. */
+.scene-body { padding: 8px 12px; overflow: hidden; }
+.scene-media { height: 64px; display: flex; align-items: center; gap: 8px; overflow: hidden; }
+.scene-media > div { flex: 1; min-width: 0; }
+.media-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 11px; line-height: 20px; }
+.bg-thumb { width: 64px; height: 44px; display: inline-flex; flex: none; align-items: center; justify-content: center; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
+.bg-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.bg-thumb.empty, .muted { color: var(--muted); font-size: 11px; }
+.scene-media .audition { font-size: 10px; padding: 3px; }
+.flow { display: flex; flex-direction: column; }
+.flow-node { border-radius: 3px; border: 0; border-left: 3px solid var(--group-color); background: #252830; color: var(--text); margin: 2px 0; height: 21px; min-height: 21px; padding: 1px 7px; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: left; font-size: 11px; }
+.flow-node:hover { background: #454b59; }
+.group-dialogue { --group-color: #82b7eb; } .group-narration { --group-color: #bdafdb; }
+.group-character { --group-color: #8fd2ab; } .group-scene { --group-color: #dcb97f; }
+.group-sound { --group-color: #8acacb; } .group-event { --group-color: #eb9e88; }
+.group-effect { --group-color: #d79bc4; } .group-legacy { --group-color: #9098a5; }
+.character-preview { max-width: 100%; height: 140px; object-fit: contain; background: #151820; }
+.condition-child { border-left: 2px solid var(--line); margin: 5px 0; padding-left: 6px; }
+button:focus-visible, .btn:focus-within { outline: 2px solid var(--sel); outline-offset: 2px; }
+[hidden] { display: none !important; }
+
+.step-picker { margin-top: 10px; }
+.step-picker > select { width: 100%; background: #14151a; border: 0; padding: 8px; }
+.step-picker optgroup { padding: 3px 0; color: var(--muted); }
+.step-picker option { padding: 3px 10px; }
+
+.op-code { margin-left: 8px; color: var(--muted); font-size: 10px; font-weight: normal; }

@@ -1,6 +1,8 @@
 extends Panel
 ## 吐槽素材／人物檔案 (scenes/ui/case_file_panel.tscn): tabs, a four-column grid of what the
-## player has, and the selected entry's picture and text below. Layout lives in the scene; this
+## player has, and below it the selected entry's status card — a ◆ ribbon, the name on a plaque,
+## its place in the list and whether it can be used now beside the picture in a ring, then ◆ 說明
+## and, while it can answer the timed choice, ◆ 拿來吐槽. Layout lives in the scene; this
 ## script fills it. During the timed tsukkomi choice, a material that backs one of the visible
 ## options offers 「拿來吐槽」, which answers with that option.
 ## Colors come from ui_styles.gd through each node's `ui_style_role` metadata.
@@ -25,6 +27,13 @@ var _selected: int = 0
 @onready var _detail_name: Label = %CaseFileName
 @onready var _detail_text: Label = %CaseFileText
 @onready var _use_button: Button = %CaseFileUse
+@onready var _kind: Label = %CaseFileKind
+@onready var _order: Label = %CaseFileOrder
+@onready var _status: Label = %CaseFileStatus
+@onready var _use_head: Label = %CaseFileUseHead
+@onready var _plaque: PanelContainer = %CaseFileNamePlaque
+@onready var _ring: PanelContainer = %CaseFileRing
+@onready var _detail: Control = %CaseFileDetail
 
 
 func _ready() -> void:
@@ -93,8 +102,33 @@ func _select(index: int) -> void:
 	_detail_name.text = str(entry.get("name", ""))
 	_detail_text.text = str(entry.get("description", entry.get("profile", "")))
 	_picture.call("show_item", _detail_name.text, _picture_of(entry_id))
-	_picture.visible = not entries.is_empty()  # a placeholder until the entry has art
-	_use_button.visible = _tab == "materials" and _usable.has(entry_id)
+	_detail.visible = not entries.is_empty()
+	var usable: bool = _tab == "materials" and _usable.has(entry_id)
+	_use_button.visible = usable
+	_use_head.visible = usable
+	_kind.text = "◆ 吐槽素材情報" if _tab == "materials" else "◆ 人物檔案"
+	_order.text = "第 %d 件／共 %d 件" % [_selected + 1, entries.size()] if _tab == "materials" \
+		else "第 %d 人／共 %d 人" % [_selected + 1, entries.size()]
+	_status.text = ("現在可以拿來吐槽！" if usable else "收在案件檔裡，吐槽時可以拿出來") if _tab == "materials" \
+		else "已解鎖的人物檔案"
+	_paint_card()
+
+
+## The plaque, the picture ring and the plaque's ink in the current edition.
+func _paint_card() -> void:
+	var p: Dictionary = UI_STYLES.palette(_style_id)
+	_plaque.add_theme_stylebox_override("panel", UI_STYLES.name_plaque(_style_id))
+	_detail_name.add_theme_color_override("font_color", p["name_ink"] as Color)
+	UI_STYLES.set_hud_font(_detail_name, _style_id)
+	var ring: StyleBoxFlat = StyleBoxFlat.new()
+	ring.bg_color = p["panel_soft"] as Color
+	ring.border_color = p["rule"] as Color
+	ring.set_border_width_all(6)
+	ring.set_corner_radius_all(150)
+	ring.set_content_margin_all(28.0)
+	ring.shadow_color = Color(0.06, 0.1, 0.18, 0.25)
+	ring.shadow_size = 6
+	_ring.add_theme_stylebox_override("panel", ring)
 
 
 func _picture_of(entry_id: String) -> Texture2D:

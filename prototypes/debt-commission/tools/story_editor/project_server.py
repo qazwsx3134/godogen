@@ -1,0 +1,335 @@
+#!/usr/bin/env python3
+"""Loopback project server: validate private candidates before publishing graph sources."""
+import argparse
+import hashlib
+from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+import json
+import math
+import os
+from pathlib import Path
+import re
+import secrets
+import signal
+import shutil
+import subprocess
+import tempfile
+import threading
+from urllib.parse import unquote, urlsplit
+import uuid
+
+from godot_guard import godot_environment
+
+MAX_BODY = 4 * 1024 * 1024
+STORY_PATH = re.compile(r'data/([A-Za-z0-9_]{1,80})_story\.json\Z')
+SERVICE = 'debt-story-editor-v1'
+
+
+class ProjectError(Exception):
+    def __init__(self, status, message, **details):
+        super().__init__(message)
+        self.status, self.details = status, {'error': message, **details}
+
+
+def digest(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def json_bytes(value):
+    return (json.dumps(value, ensure_ascii=False, indent=2, allow_nan=False) + '\n').encode('utf-8')
+
+
+def parse_json(data):
+    def pairs(items):
+        result = {}
+        for key, value in items:
+            if key in result:
+                raise ValueError('JSON 有重複欄位：' + key)
+            result[key] = value
+        return result
+    def invalid_number(value):
+        raise ValueError('不接受非有限數字：' + value)
+    def finite_float(value):
+        number = float(value)
+        if not math.isfinite(number):
+            raise ValueError('數字超出範圍')
+        return number
+    return json.loads(data.decode('utf-8'), object_pairs_hook=pairs, parse_constant=invalid_number, parse_float=finite_float)
+
+
+def atomic_write(path, data):
+    temp = None
+    try:
+        with tempfile.NamedTemporaryFile(dir=path.parent, prefix='.' + path.name + '-', suffix='.tmp', delete=False) as handle:
+            temp = Path(handle.name)
+            handle.write(data)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temp, path)
+    finally:
+        if temp:
+            temp.unlink(missing_ok=True)
+
+
+def validate_candidate(candidate, root, godot):
+    with godot_environment(timeout=45) as environment:
+        run = subprocess.run([godot, '--headless', '--path', str(root), '--script',
+                              'res://tools/story_editor/check_story.gd', '--', str(candidate), '--write'],
+                             env=environment, capture_output=True, text=True, timeout=90)
+    output = run.stdout + '\n' + run.stderr
+    errors = [line.strip() for line in output.splitlines() if line.startswith(('ERROR ', 'FAILED '))]
+    if run.returncode or not any(line.startswith('OK ') for line in run.stdout.splitlines()):
+        return errors or ['Godot 未能完成驗證。' + ('\n' + output[-3000:] if output.strip() else '')]
+    return []
+
+
+class StoryProject:
+    def __init__(self, root, godot):
+        self.root = Path(root).resolve()
+        self.godot = godot
+        self.token = secrets.token_urlsafe(32)
+        self.mutex = threading.Lock()
+
+    def safe_path(self, relative):
+        if not isinstance(relative, str) or not relative or relative.startswith('/') or '\\' in relative:
+            raise ProjectError(400, '路徑不合法。')
+        parts = relative.split('/')
+        if any(part in ('', '.', '..') for part in parts):
+            raise ProjectError(400, '路徑不合法。')
+        target = self.root
+        for part in parts:
+            target = target / part
+            if target.is_symlink():
+                raise ProjectError(403, '不允許符號連結。')
+        if not target.resolve().is_relative_to(self.root):
+            raise ProjectError(403, '路徑超出專案。')
+        return target
+
+    def read_bytes(self, path):
+        if path.exists():
+            if not path.is_file():
+                raise ProjectError(400, '目標不是檔案。')
+            if path.stat().st_size > MAX_BODY:
+                raise ProjectError(413, '專案檔案超過大小限制。')
+            return path.read_bytes()
+        return None
+
+    def registry(self):
+        path = self.safe_path('data/stories.json')
+        raw = self.read_bytes(path)
+        try:
+            value = parse_json(raw or b'')
+            if not isinstance(value, dict) or not isinstance(value.get('stories'), list) or not all(isinstance(e, dict) for e in value['stories']):
+                raise ValueError('stories 必須是陣列')
+        except (ValueError, UnicodeError, RecursionError) as error:
+            raise ProjectError(500, '無法讀取故事登記：' + str(error)) from error
+        return path, raw, value
+
+    def authorize(self, relative, story):
+        match = STORY_PATH.fullmatch(relative) if isinstance(relative, str) else None
+        if not match:
+            raise ProjectError(400, '只能儲存 data/<名稱>_story.json。')
+        path = self.safe_path(relative)
+        registry_path, registry_raw, registry = self.registry()
+        entries = [e for e in registry['stories'] if e.get('path') == 'res://' + relative]
+        if len(entries) > 1:
+            raise ProjectError(409, '故事登記的路徑重複，請先修正 registry。')
+        if entries and entries[0].get('authoring') != 'graph':
+            raise ProjectError(403, '此故事由來源檔建置，請先轉成圖編輯來源。')
+        current = self.read_bytes(path)
+        if current:
+            try:
+                old_story = parse_json(current)
+            except (ValueError, UnicodeError, RecursionError) as error:
+                raise ProjectError(409, '磁碟故事無法解析；保留現況，請先另存新故事。') from error
+            if isinstance(old_story, dict) and 'generated_from' in old_story:
+                raise ProjectError(403, '不可覆寫建置產物。')
+        if 'generated_from' in story:
+            raise ProjectError(403, '建置產物必須先複製成圖編輯來源。')
+        return path, current, registry_path, registry_raw, registry, entries, match[1]
+
+    def check(self, candidate):
+        return validate_candidate(candidate, self.root, self.godot)
+
+    def save(self, request):
+        if not isinstance(request, dict) or not isinstance(request.get('story'), dict):
+            raise ProjectError(400, '需要 story JSON 物件。')
+        relative, story, base = request.get('path'), request['story'], request.get('base_hash')
+        if base is not None and (not isinstance(base, str) or not re.fullmatch('[0-9a-f]{64}', base)):
+            raise ProjectError(400, '基底 hash 格式不合法。')
+        if 'base_hash' not in request:
+            raise ProjectError(400, '缺少開檔時的基底 hash。')
+        with self.mutex:
+            target, current, registry_path, registry_raw, registry, entries, new_id = self.authorize(relative, story)
+            if base != (digest(current) if current is not None else None):
+                raise ProjectError(409, '磁碟檔案已變更，未覆寫。請先匯出目前修改，再重新開啟專案版本比較。')
+            if not entries:
+                if story.get('id') != new_id or any(e.get('id') == new_id for e in registry['stories']):
+                    raise ProjectError(409, '新故事的檔名、id 必須一致，且不能與既有登記重複。')
+            # Candidates are private and persistent on failure; no invalid file is published to data/.
+            draft_root = self.safe_path('tools/story_editor/.drafts')
+            draft_root.mkdir(parents=True, exist_ok=True)
+            candidate_dir = draft_root / uuid.uuid4().hex
+            candidate_dir.mkdir()
+            candidate = candidate_dir / target.name
+            atomic_write(candidate, json_bytes(story))
+            try:
+                errors = self.check(candidate)
+            except (OSError, subprocess.TimeoutExpired, TimeoutError) as error:
+                raise ProjectError(503, '驗證未完成；修改已保留為待修草稿。', errors=[str(error)], draft=candidate_dir.name) from error
+            if errors:
+                raise ProjectError(422, '驗證未通過；修改已保留，遊戲仍使用上次通過的版本。', errors=errors, draft=candidate_dir.name)
+            validated = candidate.read_bytes()
+            # Re-read after Godot: an external editor may have changed the story or registry while checking.
+            target, latest, registry_path, registry_raw, registry, entries, new_id = self.authorize(relative, story)
+            if base != (digest(latest) if latest is not None else None):
+                raise ProjectError(409, '驗證期間磁碟檔案已變更，未覆寫；修改已保留為待修草稿。', draft=candidate_dir.name)
+            registered = None
+            if not entries:
+                if any(e.get('id') == new_id for e in registry['stories']):
+                    raise ProjectError(409, '驗證期間已有同名故事登記，未覆寫。', draft=candidate_dir.name)
+                registered = {'id': new_id, 'kind': 'sample', 'path': 'res://' + relative,
+                              'save': 'user://' + new_id + '.save', 'authoring': 'graph'}
+                registry['stories'].append(registered)
+            try:
+                atomic_write(target, validated)
+                if registered:
+                    try:
+                        atomic_write(registry_path, json_bytes(registry))
+                    except OSError:
+                        if latest is None:
+                            target.unlink()
+                        else:
+                            atomic_write(target, latest)
+                        raise
+            except OSError as error:
+                raise ProjectError(500, '檔案未能完整儲存；修改已保留為待修草稿。', errors=[str(error)], draft=candidate_dir.name) from error
+            shutil.rmtree(candidate_dir, ignore_errors=True)
+            return {'ok': True, 'path': relative, 'hash': digest(validated), 'text': validated.decode('utf-8'),
+                    'registered': registered, 'message': '驗證通過，已存回專案。'}
+
+
+class ProjectHandler(SimpleHTTPRequestHandler):
+    def __init__(self, request, client_address, server):
+        super().__init__(request, client_address, server, directory=str(server.project.root))
+
+    def setup(self):
+        super().setup()
+        self.connection.settimeout(30)
+
+    def end_headers(self):
+        self.send_header('X-Story-Editor-Service', SERVICE)
+        self.send_header('Cache-Control', 'no-store')
+        self.send_header('X-Content-Type-Options', 'nosniff')
+        super().end_headers()
+
+    def valid_host(self):
+        port = self.server.server_port
+        return self.headers.get('Host') in (f'127.0.0.1:{port}', f'localhost:{port}')
+
+    def json_response(self, status, value):
+        data = json_bytes(value)
+        self.send_response(status)
+        self.send_header('Content-Type', 'application/json; charset=utf-8')
+        self.send_header('Content-Length', str(len(data)))
+        self.end_headers()
+        self.wfile.write(data)
+
+    def do_GET(self):
+        if not self.valid_host():
+            self.send_error(403)
+            return
+        parsed = urlsplit(self.path)
+        if parsed.path == '/api/capabilities':
+            self.json_response(200, {'service': SERVICE, 'token': self.server.project.token})
+            return
+        if parsed.path == '/':
+            self.send_response(302)
+            self.send_header('Location', '/tools/story_editor/')
+            self.end_headers()
+            return
+        super().do_GET()
+
+    def do_HEAD(self):
+        if not self.valid_host():
+            self.send_error(403)
+            return
+        super().do_HEAD()
+
+    def send_head(self):
+        try:
+            parts = unquote(urlsplit(self.path).path).strip('/').split('/')
+            if any(p.startswith('.') or p == '..' or '\\' in p for p in parts):
+                raise ProjectError(403, '私有路徑不可讀取。')
+            self.server.project.safe_path('/'.join(p for p in parts if p))
+        except ProjectError:
+            self.send_error(403)
+            return None
+        return super().send_head()
+
+    def list_directory(self, path):
+        self.send_error(403)
+        return None
+
+    def do_POST(self):
+        try:
+            origin = self.headers.get('Origin')
+            if not self.valid_host() or (origin and origin != 'http://' + self.headers.get('Host', '')):
+                raise ProjectError(403, '請從本機編輯器頁面存檔。')
+            if self.headers.get('X-Story-Editor-Token') != self.server.project.token:
+                raise ProjectError(403, '本機服務憑證不符，請重新開啟編輯器。')
+            if urlsplit(self.path).path != '/api/save':
+                raise ProjectError(404, '沒有這個操作。')
+            if self.headers.get('Content-Type', '').split(';')[0].strip().lower() != 'application/json':
+                raise ProjectError(415, '只接受 JSON。')
+            if self.headers.get('Transfer-Encoding'):
+                raise ProjectError(400, '不接受分塊請求。')
+            try:
+                length = int(self.headers.get('Content-Length', ''))
+            except ValueError:
+                raise ProjectError(411, '需要 Content-Length。')
+            if not 0 < length <= MAX_BODY:
+                raise ProjectError(413, '請求大小超過限制。')
+            body = self.rfile.read(length)
+            if len(body) != length:
+                raise ProjectError(400, '請求內容不完整。')
+            try:
+                request = parse_json(body)
+            except (ValueError, UnicodeError, RecursionError) as error:
+                raise ProjectError(400, '不是合法 JSON。') from error
+            self.json_response(200, self.server.project.save(request))
+        except ProjectError as error:
+            self.close_connection = True
+            self.json_response(error.status, error.details)
+        except (OSError, ValueError, RecursionError) as error:
+            self.close_connection = True
+            self.json_response(500, {'error': '服務未能儲存；目前修改仍在編輯器。', 'errors': [str(error)]})
+
+
+def make_server(root, godot, port):
+    server = ThreadingHTTPServer(('127.0.0.1', port), ProjectHandler)
+    server.daemon_threads = False
+    server.project = StoryProject(root, godot)
+    return server
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--project', default=str(Path(__file__).resolve().parents[2]))
+    parser.add_argument('--port', type=int, default=8000)
+    parser.add_argument('--godot', default=shutil.which('godot') or '/Applications/Godot.app/Contents/MacOS/Godot')
+    args = parser.parse_args()
+    server = make_server(args.project, args.godot, args.port)
+    def stop(signum, frame):
+        raise KeyboardInterrupt
+    signal.signal(signal.SIGTERM, stop)
+    print(f'Story editor: http://127.0.0.1:{server.server_port}/tools/story_editor/', flush=True)
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        server.server_close()
+
+
+if __name__ == '__main__':
+    main()

@@ -6,5 +6,6 @@
 custom_minimum_size = Vector2(72, 36)
 layout_mode = 3
 anchors_preset = 0
+size_flags_vertical = 4
 mouse_filter = 2
 script = ExtResource("1_fjsvt")

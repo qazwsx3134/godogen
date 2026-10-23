@@ -4,11 +4,14 @@ extends Panel
 ## its row is the value), and 介面風格, whose buttons pick the UI edition (style_picked). main.gd
 ## keeps the values (settings.gd) and applies them. Colours come from ui_styles.gd, except in an
 ## edition scene with `paint_from_style` off (settings_panel_gintama.tscn): its buttons are toggles
-## styled in the scene, and the chosen one is shown pressed.
+## styled in the scene, and the chosen one is shown pressed. 存檔備份 asks main.gd to export or import
+## every save (save_transfer.gd); importing is only offered from the title.
 
 signal changed(key: String, value: int)
 signal style_picked(style_id: String)
 signal closed
+signal export_saves
+signal import_saves
 
 const UI_STYLES: Script = preload("res://scripts/ui_styles.gd")
 ## The 介面風格 row's buttons, in order.
@@ -26,11 +29,15 @@ var _values: Dictionary = {}
 	"font_size": %FontSize, "paper_opacity": %PaperOpacity, "motion": %Motion, "assist": %Assist,
 }
 @onready var _style_row: Container = %UiStyle
+@onready var export_button: Button = %SavesExport
+@onready var import_button: Button = %SavesImport
 
 
 func _ready() -> void:
 	visible = false
 	close_button.pressed.connect(func() -> void: closed.emit())
+	export_button.pressed.connect(func() -> void: export_saves.emit())
+	import_button.pressed.connect(func() -> void: import_saves.emit())
 	for key: String in _rows.keys():
 		var row: Container = _rows[key]
 		for index: int in range(row.get_child_count()):
@@ -45,8 +52,11 @@ func set_style(style_id: String) -> void:
 	_style_id = style_id
 
 
-func open(values: Dictionary) -> void:
+## import_allowed: false while a story is open (目錄), where an import would pull saves from under it.
+func open(values: Dictionary, import_allowed: bool = true) -> void:
 	_values = values.duplicate()
+	import_button.disabled = not import_allowed
+	import_button.text = "匯入存檔" if import_allowed else "匯入存檔（回標題）"
 	_paint()
 	visible = true
 
@@ -60,6 +70,8 @@ func buttons() -> Dictionary:
 			found["%s_%d" % [key, index]] = row.get_child(index)
 	for index: int in range(STYLE_IDS.size()):
 		found["ui_style_" + STYLE_IDS[index]] = _style_row.get_child(index)
+	found["saves_export"] = export_button
+	found["saves_import"] = import_button
 	return found
 
 
@@ -78,6 +90,9 @@ func _paint() -> void:
 				UI_STYLES.apply_button(row.get_child(index) as Button, _style_id, "selector", chosen)
 			else:
 				(row.get_child(index) as Button).set_pressed_no_signal(chosen)
+	if paint_from_style:
+		for button: Button in [export_button, import_button]:
+			UI_STYLES.apply_button(button, _style_id, "standard")
 	for index: int in range(STYLE_IDS.size()):
 		var current: bool = STYLE_IDS[index] == _style_id
 		if paint_from_style:

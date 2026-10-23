@@ -1,0 +1,86 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/credits_roll.gd" id="1_ngeid"]
+[ext_resource type="PackedScene" path="res://scenes/ui/credits_section.tscn" id="2_pcjb0"]
+[ext_resource type="PackedScene" path="res://scenes/ui/credits_entry.tscn" id="3_slemu"]
+
+[node name="CreditsRoll" type="Control" unique_id=533803946]
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_ngeid")
+
+[node name="Dim" type="ColorRect" parent="." unique_id=1182842478]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.035, 0.045, 0.075, 0.95)
+
+[node name="Heading" type="Label" parent="." unique_id=546287645]
+layout_mode = 0
+anchor_right = 1.0
+offset_top = 48.0
+offset_bottom = 160.0
+theme_override_font_sizes/font_size = 56
+theme_override_colors/font_color = Color(1, 0.99215686, 0.9607843, 1)
+text = "製作名單"
+horizontal_alignment = 1
+autowrap_mode = 3
+metadata/ui_style_role = "title_overlay"
+
+[node name="Scroll" type="ScrollContainer" parent="." unique_id=1689913850]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 72.0
+offset_top = 180.0
+offset_right = -72.0
+offset_bottom = -220.0
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
+
+[node name="Roll" type="VBoxContainer" parent="Scroll" unique_id=819046181]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 44
+
+[node name="LeadIn" type="Control" parent="Scroll/Roll" unique_id=783583529]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+
+[node name="PreviewSection" parent="Scroll/Roll" unique_id=319255937 instance=ExtResource("2_pcjb0")]
+layout_mode = 2
+
+[node name="PreviewEntry" parent="Scroll/Roll" unique_id=308724174 instance=ExtResource("3_slemu")]
+layout_mode = 2
+
+[node name="End" type="Label" parent="Scroll/Roll" unique_id=962104277]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 240)
+layout_mode = 2
+theme_override_font_sizes/font_size = 44
+theme_override_colors/font_color = Color(1, 0.99215686, 0.9607843, 1)
+text = "— 完 —"
+horizontal_alignment = 1
+autowrap_mode = 3
+metadata/ui_style_role = "scene_overlay"
+
+[node name="Close" type="Button" parent="." unique_id=1255882395]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(332.3077, 132.92308)
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -166.0
+offset_top = -180.0
+offset_right = 166.0
+offset_bottom = -48.0
+theme_override_font_sizes/font_size = 44
+text = "關閉"
+metadata/ui_style_role = "primary"

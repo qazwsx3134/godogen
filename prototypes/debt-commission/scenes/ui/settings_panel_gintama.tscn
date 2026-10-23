@@ -3192,6 +3192,66 @@ button_group = SubResource("ButtonGroup_j5n7a")
 text = "銀魂和紙"
 autowrap_mode = 3
 
+[node name="SavesRule" type="ColorRect" parent="Area/Card/Layout/SettingsScroll/Rows" unique_id=1630060631]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+color = Color(0.22, 0.34, 0.45, 0.22)
+
+[node name="SavesLabel" type="Label" parent="Area/Card/Layout/SettingsScroll/Rows" unique_id=2111901811]
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_rovm4")
+theme_override_font_sizes/font_size = 44
+theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+text = "存檔備份（換裝置或重灌前先匯出）"
+
+[node name="Saves" type="HBoxContainer" parent="Area/Card/Layout/SettingsScroll/Rows" unique_id=1839089028]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="SavesExport" type="Button" parent="Area/Card/Layout/SettingsScroll/Rows/Saves" unique_id=58105672]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 136)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_4jn88")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_lgujd")
+theme_override_styles/hover = SubResource("StyleBoxFlat_q3s4f")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_lgujd")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_ws0ij")
+theme_override_styles/focus = SubResource("StyleBoxFlat_5mi06")
+theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/font_focus_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
+theme_override_fonts/font = SubResource("FontVariation_nooyu")
+theme_override_font_sizes/font_size = 42
+text = "匯出存檔"
+autowrap_mode = 3
+
+[node name="SavesImport" type="Button" parent="Area/Card/Layout/SettingsScroll/Rows/Saves" unique_id=1924989907]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 136)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_pysra")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_cgp7b")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tddpn")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_cgp7b")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_e70t4")
+theme_override_styles/focus = SubResource("StyleBoxFlat_noptu")
+theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/font_focus_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
+theme_override_fonts/font = SubResource("FontVariation_nooyu")
+theme_override_font_sizes/font_size = 42
+text = "匯入存檔"
+autowrap_mode = 3
+
 [node name="Header" type="HBoxContainer" parent="." unique_id=1756956909]
 layout_mode = 0
 anchor_right = 1.0

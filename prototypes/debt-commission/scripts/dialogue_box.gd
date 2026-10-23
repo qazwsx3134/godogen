@@ -18,6 +18,8 @@ const TOPIC_SCENE: PackedScene = preload("res://scenes/ui/investigate_topic.tscn
 @export_enum("cinema", "ledger", "manga", "gintama") var style_id: String = "cinema"
 
 @onready var speaker_row: Control = %SpeakerRow
+## The plaque width set in the scene, the narrowest it gets.
+var _plate_width: float = 0.0
 @onready var speaker_mark: Label = %SpeakerMark
 @onready var speaker_name: Label = %SpeakerName
 @onready var chapter: Label = %Chapter
@@ -108,9 +110,18 @@ func _style_like(button: Button, model: Button) -> void:
 			button.add_theme_color_override(color, model.get_theme_color(color))
 
 
-## display_name "" shows the narrator.
+## display_name "" shows the narrator. A plaque drawn as a nine-patch (CloudPlaque) widens for a
+## long name, so the name never runs into its ends; it is never narrower than in the scene.
 func set_speaker(display_name: String) -> void:
 	speaker_name.text = display_name if not display_name.is_empty() else "旁白"
+	if not speaker_row.has_node("NamePlate/CloudPlaque") or not speaker_row.get_node("NamePlate/CloudPlaque") is NinePatchRect:
+		return
+	if _plate_width <= 0.0:
+		_plate_width = speaker_row.offset_right - speaker_row.offset_left
+	var ends: float = speaker_name.offset_left - speaker_name.offset_right  # left inset + right inset
+	var text_width: float = speaker_name.get_theme_font("font").get_string_size(speaker_name.text,
+		HORIZONTAL_ALIGNMENT_LEFT, -1, speaker_name.get_theme_font_size("font_size")).x
+	speaker_row.offset_right = speaker_row.offset_left + maxf(_plate_width, text_width + ends + 24.0)
 
 
 func set_chapter(value: String) -> void:

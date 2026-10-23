@@ -19,14 +19,18 @@ func _ready() -> void:
 
 func set_style(style_id: String) -> void:
 	var tint: Dictionary = HUD.TINTS.get(style_id, HUD.TINTS["cinema"])
-	var box: StyleBoxFlat = StyleBoxFlat.new()
-	box.bg_color = tint["bg"]
-	box.border_color = tint["border"]
-	box.set_border_width_all(roundi(float(tint["width"]) * 1080.0 / 390.0))
-	panel.add_theme_stylebox_override("panel", box)
+	if UI_STYLES.normalize_id(style_id) == "gintama":
+		panel.add_theme_stylebox_override("panel", UI_STYLES.gintama_hud("hud_panel") as StyleBox)
+	else:
+		var box: StyleBoxFlat = StyleBoxFlat.new()
+		box.bg_color = tint["bg"]
+		box.border_color = tint["border"]
+		box.set_border_width_all(roundi(float(tint["width"]) * 1080.0 / 390.0))
+		panel.add_theme_stylebox_override("panel", box)
 	progress.add_theme_color_override("font_color", tint["text"])
+	UI_STYLES.set_hud_font(progress, style_id)
 	UI_STYLES.apply_button(expand_button, style_id, "quickbar")
 
 
 func set_progress(found: int, total: int) -> void:
-	progress.text = "線索 %d/%d・左右拖曳背景，點畫面上的東西調查" % [found, total]
+	progress.text = "線索 %d/%d\n拖曳背景，點可疑的地方" % [found, total]

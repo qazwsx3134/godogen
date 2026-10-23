@@ -268,6 +268,7 @@ theme_override_font_sizes/font_size = 72
 theme_override_colors/font_color = Color(0.03137255, 0.15686275, 0.23921569, 1)
 text = "新八的本體已損毀"
 horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="Message" type="Label" parent="Center/Card/Column" unique_id=1017759231]
 unique_name_in_owner = true

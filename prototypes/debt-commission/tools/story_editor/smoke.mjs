@@ -1,6 +1,6 @@
 // Browser smoke test of the story editor with real mouse input (Chromium via playwright-core).
 //   node tools/story_editor/smoke.mjs --playwright <playwright-core dir> --chromium <chrome-headless-shell> \
-//        --out <dir for the screenshot and the exported JSON> [--godot godot] [--port 8765]
+//        --out <dir for the screenshot and the exported JSON> [--godot godot] [--port 8879]
 // Serves the project root with python3 -m http.server, opens /tools/story_editor/?story=ep00, edits the story
 // with the mouse, downloads the result, and (with --godot) runs check_story.gd --write on a copy of it.
 // A second page opens index.html from file:// and loads a story through the file picker.
@@ -11,13 +11,14 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { batch1Regression } from './batch1_regression.mjs';
+import { sceneRegression } from './scene_regression.mjs';
 
 const require = createRequire(import.meta.url);
 const arg = (name, fallback) => { const i = process.argv.indexOf(name); return i >= 0 ? process.argv[i + 1] : fallback; };
 const { chromium } = require(arg('--playwright', 'playwright-core'));
 const project = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const out = path.resolve(arg('--out', 'story_editor_smoke'));
-const serverPort = Number(arg('--port', '8765'));
+const serverPort = Number(arg('--port', '8879'));
 fs.mkdirSync(out, { recursive: true });
 const log = (...parts) => console.log(...parts);
 
@@ -26,19 +27,26 @@ const browser = await chromium.launch({ headless: true, executablePath: arg('--c
 const errors = [];
 try {
   for (let tries = 0; ; tries++) {
-    try { if ((await fetch(`http://127.0.0.1:${serverPort}/data/stories.json`)).ok) break; } catch (err) { /* not up yet */ }
+    try {
+      const response = await fetch(`http://127.0.0.1:${serverPort}/tools/story_editor/index.html`);
+      if (response.ok && (await response.text()).includes('id="storySelect"')) break;
+    } catch (err) { /* not up yet */ }
+    assert.ok(server.exitCode === null, `test server exited (port ${serverPort} may be occupied)`);
     assert.ok(tries < 50, 'http server did not start');
     await new Promise(resolve => setTimeout(resolve, 100));
   }
-  if (process.argv.includes('--batch1-only')) {
+  if (process.argv.includes('--scene-only')) {
+    await sceneRegression(browser, `http://127.0.0.1:${serverPort}/tools/story_editor/`, out);
+  } else if (process.argv.includes('--batch1-only')) {
     await batch1Regression(browser, `http://127.0.0.1:${serverPort}/tools/story_editor/`, out);
   } else {
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   page.on('pageerror', e => errors.push(e.message));
   page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
   await page.goto(`http://127.0.0.1:${serverPort}/tools/story_editor/?story=ep00`);
-  await page.waitForFunction(() => window.StoryEditor && window.StoryEditor.story, null, { timeout: 15000 });
+  await page.waitForFunction(() => window.StoryEditor && window.StoryEditor.story, null, { timeout: 15000 }).catch(async err => { console.log('LOAD FAILURE', errors, (await page.content()).slice(0,2000)); throw err; });
 
+  assert.equal(await page.locator('#btnProjectSave').isHidden(), true, 'static server keeps download workflow');
   const original = JSON.parse(fs.readFileSync(path.join(project, 'data', 'ep00_story.json'), 'utf8'));
   const exported = () => page.evaluate(() => JSON.parse(window.StoryEditor.exportText()));
   const state = () => page.evaluate(() => ({ v: { ...window.StoryEditor.state.v }, problems: window.StoryEditor.state.a.problems, sel: window.StoryEditor.state.sel }));
@@ -89,7 +97,7 @@ try {
       const found = [];
       for (const card of document.querySelectorAll('.card')) {
         const id = card.dataset.node;
-        const size = E.core.cardSize(E.story.nodes[id], E.state.a.edges[id].length);
+        const size = E.sizeOf(id);
         if (card.offsetHeight !== Math.round(size.h) || card.scrollHeight > card.offsetHeight) found.push(`${id} height ${card.offsetHeight}/${card.scrollHeight} vs ${size.h}`);
         E.state.a.edges[id].forEach((edge, i) => {
           const dot = card.querySelector(`.prow[data-edge="${CSS.escape(edge.key)}"] .dot`);
@@ -105,6 +113,8 @@ try {
     assert.deepEqual(bad, []);
     log('ok  every card height and output-port position equals the computed geometry');
   }
+
+  await page.evaluate(() => StoryEditor.convertStory('ep00_smoke_graph'));
 
   // 3. Wheel zoom keeps the world point under the cursor; dragging the background pans.
   {
@@ -212,10 +222,10 @@ try {
     await box.locator('details summary').click();
     await box.locator('textarea.json').focus();
     assert.ok((await box.locator('textarea.json').inputValue()).includes('編輯器改過的台詞'), 'the JSON box shows the current step once focused');
-    await box.locator('select').nth(1).selectOption('smile');
+    await box.locator('select').nth(1).selectOption('angry');
     let say = (await exported()).nodes.s01_open.steps[sayIndex];
     assert.equal(say.text, '編輯器改過的台詞');
-    assert.equal(say.expression, 'smile');
+    assert.equal(say.expression, 'angry');
     assert.equal(say.speaker, sayBefore.speaker);
     await box.locator('select').nth(1).selectOption('');
     await box.locator('input[type=checkbox]').check();
@@ -226,6 +236,7 @@ try {
     assert.deepEqual({ ...say, text: sayBefore.text }, sayBefore, 'every other field of the step is untouched');
     // JSON box: a broken edit is refused, a good one applies.
     const json = step.locator('textarea.json');
+    await step.locator('details summary').click();
     await json.fill('{ not json');
     await json.dispatchEvent('change');
     assert.match(await step.locator('.err').first().innerText(), /沒有改動/);
@@ -314,7 +325,7 @@ try {
   const downloadPromise = page.waitForEvent('download');
   await page.locator('#btnExport').click();
   const download = await downloadPromise;
-  assert.equal(download.suggestedFilename(), 'ep00_story.json');
+  assert.equal(download.suggestedFilename(), 'ep00_smoke_graph_story.json');
   const exportPath = path.join(out, 'editor-export.json');
   await download.saveAs(exportPath);
   const text = fs.readFileSync(exportPath, 'utf8');
@@ -349,7 +360,7 @@ try {
 
   // 13. Positions live in localStorage and a <id>.layout.json sidecar, never in the story.
   {
-    assert.deepEqual(Object.keys(final).sort(), Object.keys(original).sort(), 'no layout keys at the story root');
+    assert.deepEqual(Object.keys(final).sort(), Object.keys(original).filter(k => k !== 'generated_from').sort(), 'no layout keys at the story root');
     for (const node of Object.values(final.nodes)) assert.ok(Object.keys(node).every(k => ['steps', 'title', 'next'].includes(k)), `unexpected node key in ${Object.keys(node)}`);
     await show('s02_pov', 0.8);
     const layoutOf = () => page.evaluate(() => JSON.parse(JSON.stringify(window.StoryEditor.state.layout)));
@@ -360,17 +371,19 @@ try {
     assert.ok(Math.abs(moved.s02_pov.x - start.s02_pov.x - 60) < 2 && Math.abs(moved.s02_pov.y - start.s02_pov.y - 40) < 2, `node drag at 0.8 zoom moves 48x32 px = 60x40 world: ${JSON.stringify([start.s02_pov, moved.s02_pov])}`);
     await page.reload();
     await page.waitForFunction(() => window.StoryEditor && window.StoryEditor.story);
+    await page.setInputFiles('#fileOpen', exportPath);
+    await page.waitForFunction(() => StoryEditor.story.id === 'ep00_smoke_graph');
     assert.deepEqual((await layoutOf()).s02_pov, moved.s02_pov, 'reload restores the position from localStorage');
     const layoutDownload = page.waitForEvent('download');
     await page.locator('#btnLayoutExport').click();
     const layoutFile = path.join(out, 'ep00.layout.json');
     const layoutDl = await layoutDownload;
-    assert.equal(layoutDl.suggestedFilename(), 'ep00.layout.json');
+    assert.equal(layoutDl.suggestedFilename(), 'ep00_smoke_graph.layout.json');
     await layoutDl.saveAs(layoutFile);
     const sidecar = JSON.parse(fs.readFileSync(layoutFile, 'utf8'));
-    assert.equal(sidecar.story, 'ep00');
+    assert.equal(sidecar.story, 'ep00_smoke_graph');
     assert.deepEqual(sidecar.nodes.s02_pov, moved.s02_pov);
-    assert.equal(Object.keys(sidecar.nodes).length, Object.keys(original.nodes).length, 'every node has a position');
+    assert.equal(Object.keys(sidecar.nodes).length, Object.keys(final.nodes).length, 'every node has a position');
     await page.locator('#btnLayout').click();
     assert.notDeepEqual((await layoutOf()).s02_pov, moved.s02_pov, 'auto layout moved it back');
     await page.setInputFiles('#layoutOpen', layoutFile);
@@ -413,6 +426,7 @@ try {
   await filePage.waitForFunction(() => window.StoryEditor);
   await filePage.setInputFiles('#fileOpen', path.join(project, 'data', 'choices_story.json'));
   await filePage.waitForFunction(() => window.StoryEditor.story);
+  assert.equal(await filePage.locator('#btnProjectSave').isHidden(), true, 'file URL keeps download workflow');
   const choices = JSON.parse(fs.readFileSync(path.join(project, 'data', 'choices_story.json'), 'utf8'));
   assert.equal(await filePage.locator('.card').count(), Object.keys(choices.nodes).length);
   assert.ok(await filePage.locator('#banner .note.info').count() >= 1, 'offline notice');
@@ -423,6 +437,7 @@ try {
 
   assert.deepEqual(errors.filter(e => !/favicon/.test(e)), [], 'no page errors');
   await batch1Regression(browser, `http://127.0.0.1:${serverPort}/tools/story_editor/`, out);
+  await sceneRegression(browser, `http://127.0.0.1:${serverPort}/tools/story_editor/`, out);
   log('ALL PASSED');
   }
 } finally {

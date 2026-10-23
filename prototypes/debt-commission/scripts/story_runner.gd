@@ -234,7 +234,23 @@ func has_gameplay() -> bool:
 
 ## The story's own `title` and `note`, for the title screen.
 func story_info() -> Dictionary:
-    return {"title": String(_story.get("title", "")), "note": String(_story.get("note", ""))}
+    return {"title": String(_story.get("title", "")), "note": String(_story.get("note", "")),
+        "credits": (_story.get("credits", []) as Array).duplicate(true)}
+
+
+## A story's optional `credits` (and data/credits.json's): [{role, names: [String]}], every
+## string non-empty. Returns "" when valid.
+func validate_credits(credits: Variant) -> String:
+    if not credits is Array:
+        return "credits must be an array of {role, names}"
+    for entry: Variant in credits:
+        if not entry is Dictionary or not _is_non_empty_string((entry as Dictionary).get("role")):
+            return "each credit needs a non-empty role"
+        var names: Variant = (entry as Dictionary).get("names")
+        if not names is Array or (names as Array).is_empty() \
+                or not (names as Array).all(func(name: Variant) -> bool: return _is_non_empty_string(name)):
+            return "credit '%s' needs a non-empty list of names" % (entry as Dictionary)["role"]
+    return ""
 
 
 func get_asset_catalog() -> Dictionary:
@@ -1501,6 +1517,10 @@ func _validate_story(value: Variant, asset_catalog: Dictionary) -> String:
     if root.has("carry") and (not root["carry"] is Array \
             or not (root["carry"] as Array).all(func(key: Variant) -> bool: return typeof(key) == TYPE_STRING and initial_flags.has(key))):
         return "carry must list flags declared in initial_flags"
+    if root.has("credits"):
+        var credits_error: String = validate_credits(root["credits"])
+        if not credits_error.is_empty():
+            return credits_error
 
     var nodes: Dictionary = root["nodes"] as Dictionary
     if nodes.is_empty():

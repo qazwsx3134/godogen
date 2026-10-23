@@ -37,7 +37,7 @@ static func install(g: Control) -> void:
 	d["sheet_frame"] = _ornament(sheet,"choices")
 	d["choice_kicker"] = g._make_label(sheet,"回應時機",38,Color.WHITE)
 	d["choice_title"] = g._make_label(sheet,"這句要怎麼接？",60,Color.WHITE)
-	d["choice_title"].autowrap_mode = TextServer.AUTOWRAP_ARBITRARY
+	d["choice_title"].autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	d["choice_hint"] = g._make_label(sheet,"選一句回應",38,Color.WHITE)
 	d["choice_count"] = g._make_label(sheet,"",38,Color.WHITE)
 	d["choice_count"].horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT

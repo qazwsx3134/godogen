@@ -1,0 +1,10 @@
+{
+  "title": "使用的工具與素材",
+  "credits": [
+    {"role": "遊戲引擎", "names": ["Godot Engine 4.7（MIT License）"]},
+    {"role": "劇本工具", "names": ["Dialogue Manager 4.1.0 — Nathan Hoad（MIT License）", "Parley 2.1.0 — Bisterix Studio（MIT License）"]},
+    {"role": "字型", "names": ["Noto Serif TC — Google（SIL Open Font License 1.1）", "文泉驛正黑 WenQuanYi Zen Hei（GPL v2，含字型嵌入例外）", "Open Sans（SIL Open Font License 1.1）"]},
+    {"role": "音樂", "names": ["The Complete GINTAMA Soundtrack Collection（私人原型，僅本機使用）"]},
+    {"role": "音效", "names": ["遊戲內合成的佔位音"]}
+  ]
+}

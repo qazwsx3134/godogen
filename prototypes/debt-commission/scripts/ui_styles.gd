@@ -13,6 +13,10 @@ const LABELS: Dictionary = {
 ## Full panels (log, save slots, chapters, case file, confirmations) on washi in the gintama edition.
 const GINTAMA_PAPER_ROLES: Array[String] = ["menu", "log", "slots", "confirmation"]
 const GINTAMA_PAPER: String = "res://assets/ui/gintama_panel_paper.png"
+## The in-play pieces of the gintama edition (round HUD, clue chips, folded search bar, toast, QTE
+## prompt): washi with a navy rule, the navy-and-silver plaque and the serif, as resources in this
+## folder so they can be tuned in the Inspector.
+const GINTAMA_HUD_DIR: String = "res://assets/ui/gintama_hud/"
 
 const PALETTES: Dictionary = {
 	"cinema": {
@@ -527,7 +531,14 @@ static func apply_label(label: Label, style_id: String, role: String = "body", s
 		label.add_theme_color_override("font_outline_color", p["text_outline"] as Color)
 		label.add_theme_constant_override("outline_size", roundi(1.0 * density))
 	if role == "toast":
-		label.add_theme_stylebox_override("normal", panel_style(style_id, "toast", density))
+		if normalize_id(style_id) == "gintama":
+			label.add_theme_stylebox_override("normal", gintama_hud("toast") as StyleBox)
+			label.add_theme_color_override("font_color", p["name_ink"] as Color)
+			label.add_theme_constant_override("outline_size", 0)
+		else:
+			label.add_theme_stylebox_override("normal", panel_style(style_id, "toast", density))
+	if role in ["toast", "scene_overlay"]:
+		set_hud_font(label, style_id)
 
 
 static func apply_panel(panel: Control, style_id: String, role: String = "menu", scale_factor: float = 1.0) -> void:
@@ -550,6 +561,37 @@ static func gintama_paper(flat: StyleBox) -> StyleBoxTexture:
 	for side: Side in [SIDE_LEFT, SIDE_TOP, SIDE_RIGHT, SIDE_BOTTOM]:
 		paper.set_content_margin(side, maxf(flat.get_content_margin(side), 24.0))
 	return paper
+
+
+## A title plaque (第 N 章 on a chapter card, a name on the case file): the navy plaque with the
+## cloud in the gintama edition, the edition's name tag elsewhere. Its label takes `name_ink`.
+static func name_plaque(style_id: String) -> StyleBox:
+	if normalize_id(style_id) != "gintama":
+		return panel_style(style_id, "name")
+	var box: StyleBoxTexture = StyleBoxTexture.new()
+	box.texture = load("res://assets/ui/gintama_heading_plaque.png") as Texture2D
+	box.texture_margin_left = 60.0
+	box.texture_margin_right = 30.0
+	box.texture_margin_top = 20.0
+	box.texture_margin_bottom = 20.0
+	box.content_margin_left = 72.0
+	box.content_margin_right = 48.0
+	box.content_margin_top = 8.0
+	box.content_margin_bottom = 8.0
+	return box
+
+
+## hud_panel, clue_chip, toast (StyleBoxFlat) or serif (FontVariation) from GINTAMA_HUD_DIR.
+static func gintama_hud(resource_name: String) -> Resource:
+	return load(GINTAMA_HUD_DIR + resource_name + ".tres")
+
+
+## The gintama serif on an in-play label or button; other editions keep the game font.
+static func set_hud_font(control: Control, style_id: String) -> void:
+	if normalize_id(style_id) == "gintama":
+		control.add_theme_font_override("font", gintama_hud("serif") as Font)
+	else:
+		control.remove_theme_font_override("font")
 
 
 static func contrast_ratio(foreground: Color, background: Color) -> float:

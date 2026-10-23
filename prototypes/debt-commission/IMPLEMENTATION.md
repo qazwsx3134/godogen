@@ -22,7 +22,7 @@
 - `case_file() -> Dictionary`：`{materials: [{id,name,description}], profiles: [{id,name,profile}]}`，依取得順序列出素材與已解鎖的人物檔案，文字取自素材設定；給素材／人物檔案畫面用。
 - 公開 `flags: Dictionary`、`items: Array[String]`、`profiles: Array[String]`、`gameplay: Dictionary`、`checked_hotspots: Dictionary`（主地點以調查 id 為鍵，其他地點是 `<調查 id>/<地點 id>`）、`investigations: Dictionary`（`{調查 id: {place, talked, counts?}}`，`counts` 是 `{lines 熱區 id: 點擊次數}`，第一次點才出現）、`cast: Array`（目前在場的角色 id。舞台在外殼手上，外殼在問調查之前設定，不存檔；只有 `character` 熱區看它，沒設定就是沒人在場）、`placard: String`、`error_message: String`、`node_id: String`、`step_index: int`。
 
-故事根資料：`id`、`version`、`title`、`entry`、`initial_flags`、`nodes`。每個 node 有 `title`、`steps`、選擇性的 `next`。
+故事根資料：`id`、`version`、`title`、`entry`、`initial_flags`、`nodes`。每個 node 有 `title`、`steps`、選擇性的 `next`。選填 `credits`：`[{role, names: [字串]}]`，每個字串都不能空（`validate_credits`）；`story_info()` 帶出，章節列第三行與結算卡顯示前三個職務，製作名單列出全部。`.dialogue` 故事寫在 `blocks.json` 的 `story.credits`，建置照抄。不參與 `version`。全遊戲共用的工具與素材授權在 `data/credits.json`（`{title, credits}`，同一格式），排在製作名單最後。
 
 V1 可呈現 op：
 
@@ -36,7 +36,7 @@ V1 可呈現 op：
 - `end`: `text`。
 - `result`: 章節結算，章節的最後一步。`title`（例如「～ 第一章 完 ～」）、`lines: {S|A|B|C: {speaker, text}}`（依評價顯示的一句）、可選 `hidden_total`（本章隱藏裝傻總數）。`chapter_result()` 回傳 `title`、`grade`、`line`、`caught`、`tries`、`perfect`、`max_combo`、`fails`、`hidden`、`hidden_total`、`glasses`、`max_glasses`、`game_overs`。評價只看剩下的眼鏡：5 副 S、4 副 A、3–2 副 B、1 副 C，每次 Game Over 降一級、最低 C（`grade_for`）。`stats` 記在 runner、不隨檢查點重試回溯，v1 與 v2 回合都會累計；眼鏡在回合之間不回滿。
 - `investigate`: `id`、`prompt`、`hotspots: [{id,label,pos:[x,y],size?:[w,h],item?,goto?,optional?}]`；`pos` 是調查點中心、`size` 是大小（預設 0.12×0.12），都是背景圖寬高的比例，所以左右拖曳背景時調查點跟著圖走。熱區至少有 `item`（取得素材）、`goto`（查看後台詞的節點）或 `lines` 其中一個；`optional: true` 的熱區不擋「繼續」。可選欄位：
-  - `keep_cast`（bool，預設 false）：true 時開始調查不讓角色退場（預設是全部退場），場上的人全部亮著，調查像是可點擊的場景。
+  - `keep_cast`（bool，預設 false）：true 時開始調查不讓角色全部退場（預設是全部退場），調查像是可點擊的場景。為了不擋住要找的東西：身上有角色熱區的人留在場上、半透明（`SEARCH_CAST_ALPHA` 0.55）；其他人調查期間隱形（透明度 0，仍算在場），從調查演出一段劇情（熱區、話題）或離開調查時回復不透明；本來就在退場的人照常退場。
   - 熱區 `character`（catalog 角色 id）：範圍是那個角色的立繪在畫面上的範圍，取代 `pos`／`size`（兩個都不能寫），只能用在 `keep_cast: true` 的調查。角色不在場時這個熱區不存在（點不到），也不算必查，所以不擋「繼續」；在場與否以外殼的 `cast` 為準。
   - 熱區 `lines`（節點 id 陣列，非空）：與 `goto` 二選一。每次點都演出（不受「已查過不重播」限制）：第 n 次點演出 `lines[n]`，超過就重複最後一個；第一次點算已查、才給素材與寫 `set`。每個節點最後 `goto` 回放調查的節點，和 `goto` 反應一樣，所以有 `lines` 的調查也必須是節點的第一步。
   - 熱區 `set`（`{旗標: 值}`）：第一次查時寫入。旗標要在 `initial_flags` 宣告，型別與全劇本其他寫入一致（納入旗標一致性檢查與存檔允許的值），之後的 `condition` 照常讀得到。
@@ -122,9 +122,9 @@ godot --headless --path . --script res://tools/story_build/build_story.gd -- sto
 - 章節選擇與設定是全螢幕面板，窄手機時和其他面板一樣依 `_panel_scale` 等比放大，按鈕維持 48 CSS px 以上。
 - 換 UI 風格時，對話框、選項面板（導演面板三款共用，不換）、目錄與標題畫面都換成該風格的 scene，畫面上的狀態原樣帶過去。背景照片套 `scripts/ui_stage_style.gd` 的色調，C 分鏡的立繪另轉黑白。這些 scene 都以 390 CSS px 寬的畫面為準，更窄的手機由 main 等比放大（`_ui_scale`）。
 - 吐槽回合：Phase 3 與 v2 回合共用對話框 Actions 裡的操作列（‹ ›、句數與接住標記、聽下去、吐槽！）和消音條，顯示什麼由 `scripts/round_view.gd` 決定。證言回合按「吐槽！」依該句打開選詞、開始 QTE 或揮空；連擊回合每句直接打開選詞（時限依連擊縮短）或 QTE。QTE 是 `scenes/ui/qte_ring.tscn`：以 `Time.get_ticks_usec` 計時，點一下回報與「縮到剛好」的時間差，過了 `late_after` 沒點就回報太晚。選詞時選項面板另外顯示消音條，以及吐槽力滿時的「超必殺！」；面板比畫面可用高度還高時，選項列改為捲動。v2 的聽下去直接演出 runner 跳去的節點。
-- 登場：角色開口才上場（`_focus_speaker`，合聲的每個人都算），在自己的站位；已在場的人留著、變暗，說話的人移到最前面。`char` 只設定站位與表情，`visible: false`（`hide`）才讓人退場；換到不同背景時與開始調查時全部退場（`keep_cast: true` 的調查不退場，全部亮著）。
+- 登場：角色開口才上場（`_focus_speaker`，合聲的每個人都算），在自己的站位；已在場的人留著、變暗，說話的人移到最前面。`char` 只設定站位與表情，`visible: false`（`hide`）才讓人退場；換到不同背景時與開始調查時全部退場（`keep_cast: true` 的調查：身上有角色熱區的人半透明留著，其他人隱形，見上方 `keep_cast`）。對話名牌是九宮格（`CloudPlaque`），名字長時只拉長中段，雲紋與右端不變形。
 - 調查：對話框的 `InvestigationTopics` 有「對話」與「移動」兩排（沒有項目的那排隱藏），每個話題或地點是 `scenes/ui/investigate_topic.tscn`，樣式照該款對話框的「聽下去」鈕；點話題演出它的節點、演完回到調查（背景拖到哪裡就回到哪裡），點地點換成那個地點的背景、熱區與話題。熱區有查看後台詞時，點到就演出、演完回到調查。「繼續」在任何地點都能按，離開時換回主地點的背景。調查點是 `scenes/ui/hotspot.tscn`，放在當前背景框裡一層蓋住整張圖的節點上（依 `pos`／`size` 用 anchor 定位），找到前不顯示。角色熱區（`character`）改放在 `InteractionLayer`：範圍是該角色立繪（`placeholder_sprite.gd::art_rect()`，剪到遊戲區內）在畫面上的範圍，視窗改變時跟著立繪重排，角色不在場就不建。點擊判定時，疊在一起的熱區物件勝過角色（角色熱區是整張立繪，不能把物件蓋住）、物件取面積小的，兩個角色取在前面（`CharacterLayer` 較後面）的；已查過的熱區不再回應，`lines` 熱區例外，每次點都演出。調查期間背景框撐開成整張圖（等比蓋滿框、置中），拖曳畫面左右平移、不會超出圖的邊，離開調查時還原框的位置。點擊在放開時判定：拖過的不算，點在對話框上的不算，命中區至少 48 CSS px。對話框的 `InvestigationRow` 有「收起」，收起後改顯示 `scenes/ui/investigate_bar.tscn`（進度與「展開」）；最後一個線索找到時自動展開。
-- HUD 是 `scenes/ui/round_hud.tscn`（眼鏡圖示 `glasses_icon.tscn`、吐槽之力、連擊、倒數；面板下方右側是線索欄，每個線索一個 `clue_chip.tscn`）；Game Over 是 `scenes/ui/game_over.tscn`（碎眼鏡、結尾文字、檢查點重試、回標題），取代一般結尾按鈕。
+- HUD 是 `scenes/ui/round_hud.tscn`（眼鏡圖示 `glasses_icon.tscn`、吐槽之力、連擊、倒數；面板下方右側是「線索 ×N」小牌，線索本身在案件檔裡，調查時這塊小牌也收起（收合列已有線索數）；`clue_chip.tscn` 仍記錄每個線索供 QA）；Game Over 是 `scenes/ui/game_over.tscn`（碎眼鏡、結尾文字、檢查點重試、回標題），取代一般結尾按鈕。
 - **ComedyLayer**（`main.tscn` 的 `Game/ComedyLayer`，腳本 `scripts/comedy_layer.gd`，`DialogueLayer` 之上、`OverlayLayer` 之下，平常隱藏）：`play(step) -> float`（回傳 preset 長度）、`fast_forward()`、`stop()`、`is_active()`、`qa_state()`。每個 preset 是 `scenes/comedy/<preset>.tscn`，根節點掛 `scripts/comedy_preset.gd`，時間軸與效果是根節點的 `@export`（秒）：`tsukkomi_impact` 0.00 舞台變暗、0.05 speaker 顏藝 cut-in 從左緣滑入、0.10 震動 big、0.12 音效 `comedy_don`、0.15 爆炸框大字（紅黑混排）彈出並讓 `BackgroundLayer`／`CharacterLayer` zoom 1.0→1.05、0.90 停住、1.20 淡出、1.35 結束，蓋住立繪與對話框；`small_reaction` 不遮對話框，小爆炸框掛在 speaker 立繪頭部上方（speaker 不在場就在對話框上緣中間），音效 `comedy_pop`、不震動、約 0.9 秒；`full_manga_panel` 白底漫畫大格＋速度線＋大張 cut-in＋大字，震動 big、`comedy_don`、約 1.8 秒。三款 UI 風格共用同一套外觀。
   - 震動與音效走 `StageEffects`（`add_shake_layer` 讓預設的 preset 跟著舞台震動；新音效 `comedy_don`、`comedy_pop` 在 catalog 的 `sounds`，有合成佔位音）。zoom 用 `scale` 動 `BackgroundLayer`、`CharacterLayer`（`pivot_offset` 設在中心），播放前記下兩層的 `scale` 與 `pivot_offset`，`stop()` 一律還原。
   - 劇情等 preset 播完才前進（`main.gd` 的 `comedy` 分派在 await 後檢查 `generation`）。ComedyLayer 內所有 node 的 `mouse_filter` 都是 IGNORE，點擊由 `DialogueLayer` 底下的 `TapCatcher` 接：播放中的一次點擊（含按下時 preset 在播、放開時已結束的那一下，以及 `ui_accept`／續）只呼叫 `fast_forward()`，≤0.15 秒淡出結束，不推進劇情，下一句照常打字、完整顯示。
@@ -139,6 +139,11 @@ godot --headless --path . --script res://tools/story_build/build_story.gd -- sto
 - 劇本指令：`bg` 切換背景、`char` 控制立繪與站位，`say`／`choice`／`end` 顯示；舊故事的 `show`／`hide`／`expression` 仍改立繪，`sound`／`wait` 仍執行，`move`／`face`／`camera` 無 VN 對應而略過；演出指令見上。
 - `story_path` 與 `save_path` 可在場景設定；Web `?sample=phase2` 與 `?sample=phase3` 各開啟固定技術片段及獨立存檔命名空間。
 - `save_path` 是自動續讀檔；同一命名空間另有 18 個手動欄位（3 頁 × 6 格）。目錄的「儲存進度」開啟欄位，目錄與標題的「讀取存檔」可指定欄位或自動檔；覆寫有確認。新遊戲只重設自動進度。
+- 故事清單與進度（`scripts/story_library.gd`，main 持有一個）：`data/stories.json` 的清單、各故事的標題與署名、`progress.cfg` 裡的最佳評價（`cleared`）、看過的結局（`endings`）、跨章旗標（`carry`），以及鑑賞的解鎖（`gallery` 段的 `bg`、`bgm`：劇情裡第一次出現的背景與音樂 id，依出現順序；標題曲在標題畫面就算聽過）。章節解鎖、下一章、結局收集與製作名單都由它算。
+- 章節選擇的本篇是章節路線圖（參考 `docs/gintama-like/new/episode.webp` 的版面，配色沿用各款介面）：每章一張 `scenes/ui/episode_card.tscn`——「第 N 章」名牌（銀魂款用 `gintama_heading_plaque.png`，其他款用該款名牌，`ui_styles.name_plaque()`）、封面縮圖、遮罩上的標題與「評價・結局」、卡下的署名；卡與卡之間點點相連、左右交錯；目前的章節加筆刷角框（`scripts/brush_corners.gd`），未開放的章節變暗並寫「完成前一章後開放」。封面是登記檔的選填 `cover`，沒有就取劇本從入口走到的第一張有圖的背景（`story_library.cover()`）。試玩片段仍是一般列。
+- 案件檔的下半部是 status 卡（參考 `status.webp`）：`%CaseFileDetail` 和紙卡，裡面是「◆ 吐槽素材情報／◆ 人物檔案」、名牌上的名稱、件數與狀態、圓框裡的圖、◆ 說明，可以拿來吐槽時多一段 ◆ 拿來吐槽。由 `tools/restyle_case_file.gd` 產生；`CaseFilePicture`、`CaseFileName`、`CaseFileText`、`CaseFileUse` 名稱不變。
+- 鑑賞（`scenes/ui/gallery_panel.tscn`，章節選擇的「鑑賞」）：「畫廊」列出 catalog 裡有圖的背景，「音樂」列出有音檔的曲目；沒遇過的顯示「？？？」並停用。點看過的圖全螢幕顯示，點聽過的曲子在這裡播放（再點停止），播放時劇情音樂暫停、停止或關閉後接回。返回鍵先關大圖，再關鑑賞。
+- 存檔備份（`scripts/save_transfer.gd`）：設定的「匯出存檔」把每個故事的自動檔、快速格與 18 格手動欄位，加上 `progress.cfg`、`settings.cfg`、介面偏好與故事選擇，打包成一個 JSON（`{format: "debt-commission-saves", version: 1, exported_at, files: {檔名: base64}}`）；Web 直接下載，桌機用原生檔案對話框。「匯入存檔」只在從標題開的設定可以按：檔名不在上述清單、版本較新、存檔解不出字典、cfg 解析失敗，或一個檔都沒有，就整份拒絕並說明原因、不動任何檔。通過時整組取代：備份沒有的檔案刪掉，被取代或刪掉的檔先複製成 `<檔>.before_import`，再重新載入主場景。
 - 存檔 schema 3：runner snapshot、當前背景、各角色立繪的可見性／表情／站位、回顧紀錄；手動欄位另有章節、時間與小型場景縮圖。穩定的 say／choice／end／investigate／boke_round 寫入自動檔，手動欄位只在玩家選定後寫入。吐槽回合另存 `boke_ui_screen`，選詞階段才存 `boke_timer_remaining`；舊的有倒數但無畫面欄位的存檔會還原到選詞階段。讀檔先驗證劇本 ID／版本與狀態；寫入採暫存檔及備份，避免覆寫中斷破壞原有欄位。
 
 ## 角色立繪（scripts/placeholder_sprite.gd）
@@ -178,3 +183,26 @@ Web 網址帶 `?qa=1` 時，`window.__debtQA` 為唯讀快照：`screen`（title
 - 角色熱區可寫 `art_region: [x,y,w,h]`，全部為立繪的 0–1 比例，正寬高且不能越界；需搭配 `character`。省略仍使用整張立繪。背景拖曳時保留角色相對位置，熱區跟隨；側地點暫時收起家中角色，返回或讀檔恢復。
 - v2 回合選填 `retry`（節點 id）：檢查點先還原，再播該節點並回到回合。第一章用 G05 備用眼鏡台詞；未填仍直接回到回合。此欄位參與劇本版本。
 - `rules.type_lines: true` 讓證言與連擊發言依閱讀設定逐字顯示，補完後才開連擊選詞／QTE，避免讀句子消耗反應時間。既有試片省略時維持直接呈現。
+
+## 編輯器的場景檢視（2026-10-23，Claude 定、Codex 實作）
+
+使用者要求編輯器以「場景」為單位：一個場景由背景、BGM、對話、立繪、旁白、音效、事件與效果組成，場景接場景。這是**編輯器的呈現方式**：runner schema、`.dialogue` 建置與 op 清單都不變，遊戲端不用改。
+
+- **場景＝一個 node。** 場景接場景就是現有的節點連線。
+- **場景卡標題列**顯示「有效背景」縮圖與「有效 BGM」試聽。有效值＝這個節點裡最後一個 `bg`／`bgm`；節點裡沒有時沿用前一場景的出口狀態：所有前驅一致就顯示並標「沿用」，不一致標「依路線不同」，從 entry 一路都沒有標「無」。`bgm` 的 `id: ""` 是停止音樂。縮圖用 catalog `backgrounds[id].path`，沒有 path 用 `top`／`bottom` 漸層；試聽用 `music[id].path`，沒有 path 標「佔位（無音檔）」。
+- **步驟分類**（「新增步驟」選單與卡片上的流程小節點用同一套）：
+
+  | 分類 | op |
+  | --- | --- |
+  | 對話 | `say`（speaker 不是 `narrator`）、`comedy` |
+  | 旁白 | `say`（speaker 是 `narrator` 或空白） |
+  | 立繪 | `char`、`profile` |
+  | 背景・音樂 | `bg`、`bgm` |
+  | 音效 | `se` |
+  | 事件 | `choice`、`condition`、`flag`、`item`、`goto`、`investigate`、`boke_round`、`placard`、`end`、`result` |
+  | 效果 | `shake`、`flash`、`fade`、`freeze`、`cutin`、`beam` |
+  | 舊版（只有 `debt` 用，不放進新增選單） | `show`、`hide`、`move`、`face`、`expression`、`camera`、`wait`、`sound`、`set_flag` |
+
+- **流程小節點**：步驟依序排成小節點；連續同類（例如一串 `say`）可以收合成一組「對話 ×N」，展開後逐句顯示。收合狀態只存在 layout sidecar（`<id>.layout.json`），不進劇本 JSON。多節點組成一個大場景的分組（A08）也放 sidecar，runner 不讀。
+- 終止步驟的規則不變（`end`／`choice`／`goto`… 在最後）。
+- `data/stories.json` 每筆可加 `authoring`：`"dialogue"`（`story_src` 建置，編輯器唯讀）或 `"graph"`（編輯器 JSON 是唯一來源）。`main.gd` 只讀 `id`／`kind`／`path`／`save`，多的欄位不影響遊戲。「轉成圖編輯來源」複製成新的故事 id、拿掉 `generated_from`，不覆蓋原本的建置產物。
