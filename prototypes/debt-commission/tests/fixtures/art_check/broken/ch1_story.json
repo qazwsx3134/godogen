@@ -1,0 +1,27 @@
+{
+  "id": "broken_ch1",
+  "version": "s-test",
+  "title": "壞",
+  "entry": "start",
+  "initial_flags": {},
+  "nodes": {
+    "start": {
+      "title": "壞",
+      "steps": [
+        {
+          "op": "bg",
+          "id": "void"
+        },
+        {
+          "op": "say",
+          "speaker": "nobody",
+          "text": "？"
+        },
+        {
+          "op": "end",
+          "text": ""
+        }
+      ]
+    }
+  }
+}

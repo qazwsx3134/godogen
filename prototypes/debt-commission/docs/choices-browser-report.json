@@ -1,6 +1,6 @@
 {
   "url": "http://127.0.0.1:5197/?qa=1&sample=choices",
-  "started": "2026-10-23T14:49:44.841Z",
+  "started": "2026-10-23T15:56:18.104Z",
   "runs": [
     {
       "route": "choices-phone",
@@ -36,5 +36,5 @@
     }
   ],
   "passed": true,
-  "finished": "2026-10-23T14:50:05.408Z"
+  "finished": "2026-10-23T15:56:38.355Z"
 }

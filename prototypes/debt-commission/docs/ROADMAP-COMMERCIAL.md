@@ -15,14 +15,13 @@
 細節與證據在下方各里程碑的表格；這裡只列還沒完成的，依「誰來做」分組。
 
 ```
-等你決定 ──→ 第一章署名、K4／K5 優先順序 ──→ Claude／Codex 才動手
+等你決定 ──→ 第一章署名 ──→ Claude／Codex 才動手
 等你做（真人）  C2 試讀、C3 音效、B04/B17 真機
 Claude 下一批   G6（碰到哪拆到哪）
 Codex 進行中    步驟中文名稱、A03 存回專案＋A05 一鍵驗證
 ```
 
 **等你決定**
-- K4 投稿檢查、K5 授權欄位的優先順序（屬 Codex）。
 - 第一章的署名：劇本、美術各寫什麼名字（寫進 `story_src/chapter1.blocks.json` 的 `story.credits`，製作名單與章節列就會出現）。
 - 舊的 repo 層級問題（不屬本專案、這輪沒動）：`.claude/` 約 200 個檔案在 `.gitignore` 裡卻仍被追蹤；`prototypes/survivor-series/art_src/` 有 274 張候選圖被它自己的 `.gitignore` 排除卻仍被追蹤。要不要移出版控。
 
@@ -38,7 +37,7 @@ Codex 進行中    步驟中文名稱、A03 存回專案＋A05 一鍵驗證
 **Codex**
 - 已完成（2026-10-23）：編輯器以「場景」為單位（契約見 `IMPLEMENTATION.md`「編輯器的場景檢視」）——場景卡的背景縮圖與 BGM 試聽（沿用／依路線不同／無）、可收合的流程小節點、分七類的新增步驟，以及 A01、A10／A11 的一部分、A12 量測。
 - 已完成：步驟改用中文名稱、A03 存回專案檔案＋A05 一鍵驗證並存檔、編輯器的外觀包／封面／預設視角（codex-03）。編輯器的故事包支援由 Claude 完成。
-- 之後：A07、A09、A14；發行／品質 B01、B02、B03、B08、B13、B16；創作者 K4、K5。
+- 之後：A07、A09、A14；發行／品質 B01、B02、B03、B08、B13、B16。
 
 ## 里程碑
 
@@ -143,8 +142,8 @@ M5 內容：第一章定稿 → 第二章起量產（與 M2／M3 並行）
 | K1 | ☑ P1 | 創作者美術規格：背景與立繪的尺寸、透明 PNG、表情命名、取景，附蠟筆風現有圖當範例 | `docs/ART-SPEC.md`（2026-10-23），`docs/AUTHORING.md` 開頭連過去 | S | C |
 | K2 | ☑ P1 | 故事包：一個故事一個資料夾（劇本、自己的素材 catalog、作者資訊），放進去就出現在章節選擇，不改程式（2026-10-23：`stories/<作品>/pack.json`＋`catalog.json`＋劇本與 `art/`，放進去就出現在章節選擇；catalog 可寫相對路徑與 `extends`；換作品時重建立繪、音效與音樂；解鎖、下一章、跨章旗標、「第 N 章」、結局收集、鑑賞都按作品分開；撞 id 的故事不載入；沒有回合的本篇走到結尾就算破關。附範例作品 `stories/example/`（末班車，出現在章節選擇）與扁平外觀 `skins/example/`；匯出設定帶上 `stories/`、`skins/` 的 JSON。編輯器：作品分組、作品自己的 catalog、存回作品資料夾與 `pack.json`、「新作品」範本） | `scripts/story_library.gd`、`StoryRunner.catalog_path_for`／`read_catalog`；`tests/test_story_packs.gd`、`browser_check.mjs --packs`、`tools/story_editor/pack_smoke.mjs` | M/L | C＋X |
 | K3 | ☑ P1 | 署名：章節選擇與結算顯示作者／畫師，片尾名單（併入 G5）（2026-10-23：故事根層選填 `credits: [{role, names}]`，`.dialogue` 故事寫在 `blocks.json` 的 `story`；章節列第三行與結算卡顯示前三個職務。第一章的作者／畫師名字待使用者提供） | `scripts/story_runner.gd` `validate_credits`；`tests/test_credits.gd` | S/M | C |
-| K4 | ◐ P1 | 投稿檢查：一鍵檢查缺圖、缺表情、尺寸不符與劇本錯誤，產生創作者看得懂的報告 | `check_story.gd` 經 runner 查劇本與素材 id；尚無尺寸／缺表情的投稿報告 | M | X |
-| K5 | P1 | 創作者素材的授權聲明欄位（與 B01 manifest 共用格式） | `assets/image/` 沒有來源 manifest | S | X＋U |
+| K4 | ☑ P1 | 投稿檢查：一鍵檢查缺圖、缺表情、尺寸不符與劇本錯誤，產生創作者看得懂的報告（2026-10-23：`tools/art_check/`，Godot 選單「作品：投稿檢查」與 `run.gd`；錯誤／美術待辦／建議／缺授權／沒用到，報告在 `build/art_check/`） | `tools/art_check/art_check.gd`、`tests/test_art_check.gd` | M | X |
+| K5 | ☑ P1 | 創作者素材的授權聲明欄位（與 B01 manifest 共用格式）（2026-10-23：catalog 每筆可有 `license`（author、source、license、approved、role），製作名單自動列出故事用到的素材作者；格式見 IMPLEMENTATION.md「素材授權」，B01 沿用） | `scripts/asset_usage.gd`、`story_library.credit_sections` | S | X＋U |
 
 ## 協作方式
 

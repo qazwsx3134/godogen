@@ -7,6 +7,7 @@ extends RefCounted
 ## result card, 製作名單 and 鑑賞 read it.
 
 const StoryRunner = preload("res://scripts/story_runner.gd")
+const AssetUsage = preload("res://scripts/asset_usage.gd")
 
 ## Each entry: {id, kind ("chapter" or "sample"), path, save, work, work_title} and optional skin,
 ## cover, credits; the base work's entries first, then each pack's in folder order. `work` is "" for
@@ -80,7 +81,7 @@ static func _in_folder(folder: String, path: String) -> String:
 ## The registry entries that have an id, a path and a save.
 static func read_registry(path: String) -> Array[Dictionary]:
 	var entries: Array[Dictionary] = []
-	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path)) if FileAccess.file_exists(path) else null
 	if parsed is Dictionary:
 		for entry: Variant in (parsed as Dictionary).get("stories", []):
 			if entry is Dictionary and (entry as Dictionary).has_all(["id", "path", "save"]):
@@ -119,16 +120,44 @@ static func credit_line(credit_list: Array) -> String:
 
 
 ## 製作名單: every story with credits, in the registry's order, then the game's own
-## ({title, credits} at `game_credits_path`).
+## ({title, credits} at `game_credits_path`). A story's credits are followed by the makers of the
+## pictures and music it uses (their catalog `license`), without repeating a name under a role.
 func credit_sections(game_credits_path: String) -> Array[Dictionary]:
 	var sections: Array[Dictionary] = []
 	for entry: Dictionary in stories:
-		if not credits(entry).is_empty():
-			sections.append({"title": title(entry), "credits": credits(entry)})
-	var game: Variant = JSON.parse_string(FileAccess.get_file_as_string(game_credits_path))
+		var rows: Array = _with_asset_credits(credits(entry), entry)
+		if not rows.is_empty():
+			sections.append({"title": title(entry), "credits": rows})
+	var game: Variant = JSON.parse_string(FileAccess.get_file_as_string(game_credits_path)) \
+		if FileAccess.file_exists(game_credits_path) else null
 	if game is Dictionary and StoryRunner.new().validate_credits((game as Dictionary).get("credits")).is_empty():
 		sections.append({"title": str((game as Dictionary).get("title", "")), "credits": (game as Dictionary)["credits"]})
 	return sections
+
+
+## `own` credits and then, role by role, the asset makers of the story not named there already.
+func _with_asset_credits(own: Array, entry: Dictionary) -> Array:
+	var path: String = str(entry["path"])
+	var story: Variant = JSON.parse_string(FileAccess.get_file_as_string(path)) if FileAccess.file_exists(path) else null
+	var catalog: Dictionary = StoryRunner.read_catalog(StoryRunner.catalog_path_for(path)).get("catalog", {})
+	if not story is Dictionary or catalog.is_empty():
+		return own
+	var pov: String = str((story as Dictionary).get("default_pov", catalog.get("default_pov", "")))
+	var rows: Array = own.duplicate(true)
+	for asset_row: Dictionary in AssetUsage.credits(catalog, AssetUsage.used(story, catalog, pov)):
+		var named: Array = []
+		for row: Dictionary in rows:
+			if row["role"] == asset_row["role"]:
+				named.append_array(row["names"])
+		var names: Array = (asset_row["names"] as Array).filter(func(n: String) -> bool: return not named.has(n))
+		if names.is_empty():
+			continue
+		var existing: Array = rows.filter(func(row: Dictionary) -> bool: return row["role"] == asset_row["role"])
+		if existing.is_empty():
+			rows.append({"role": asset_row["role"], "names": names})
+		else:
+			(existing[0]["names"] as Array).append_array(names)
+	return rows
 
 
 ## The picture on a story's 章節選擇 card: the registry's `cover` when it names a picture, else the

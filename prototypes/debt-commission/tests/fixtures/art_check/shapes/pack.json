@@ -1,0 +1,19 @@
+{
+  "id": "shapes",
+  "title": "檢查用作品",
+  "credits": [
+    {
+      "role": "立繪",
+      "names": [
+        "畫師甲"
+      ]
+    }
+  ],
+  "stories": [
+    {
+      "id": "shapes_ch1",
+      "kind": "chapter",
+      "path": "ch1_story.json"
+    }
+  ]
+}

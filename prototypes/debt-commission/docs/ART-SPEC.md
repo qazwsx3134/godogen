@@ -63,5 +63,26 @@
 
 1. 檔案放 `assets/image/`（表情放 `assets/image/expressions/`）。原圖、生成時的提示詞、沒採用的版本放 `art_src/`，不要放進 `assets/`。
 2. 在 `data/asset_catalog.json` 加上 id 與 `path`：id 用英文小寫加底線，顯示名稱（`label`、`name`）寫中文。
-3. 劇本引用那個 id，跑一次檢查（見 [故事編輯器](STORY-EDITOR.md) 的 check_story）；缺圖、id 打錯都會在這一步報出來。
+3. 劇本引用那個 id，跑一次檢查（見 [故事編輯器](STORY-EDITOR.md) 的 check_story）；缺圖、id 打錯都會在這一步報出來。故事包的圖放作品資料夾的 `art/`，登記在作品的 `catalog.json`，路徑可寫 `art/xxx.png`。
 4. 在手機尺寸實際看一次：背景的主要內容有沒有被對話框蓋住、角色之間比例對不對、換表情時人有沒有跳動。
+
+## 授權
+
+每張交出去的圖（和音樂、音效）在 catalog 那一筆加上 `license`，製作名單會自動列出作者：
+
+```json
+"license": {"author": "你的名字", "source": "委託繪製", "license": "自有", "approved": false}
+```
+
+`author` 可以是一個名字或名字陣列；`approved` 由主編確認後改成 `true`。角色的 `license` 也涵蓋它的表情圖。欄位說明見 IMPLEMENTATION.md「素材授權」。
+
+## 投稿檢查
+
+交稿前在 Godot 點「檔案系統」裡你的作品資料夾（`stories/<作品>`；本作不用選），再按「專案 → 工具 → 作品：投稿檢查」。報告會自動打開，分成：
+
+- **錯誤**：一定要修，例如 `path` 寫了但檔案不在。
+- **美術待辦**：劇本用到、還沒有圖的背景、角色與表情，附上該畫的尺寸與檔名。可以當成你的工作清單。
+- **建議**：尺寸、透明底、腳底線、留白等不合本頁規格的地方。
+- **缺授權**、**劇本沒用到的素材**。
+
+報告在 `build/art_check/`，不會進 git，不用提交。

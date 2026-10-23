@@ -301,3 +301,34 @@ stories/<作品 id>/
 
 - 章節解鎖、下一章、跨章旗標 `carry`、「第 N 章」編號、結局收集都只在同一部作品裡算：故事包的第 1 章不必先破基準作品的第 1 章，也讀不到別部作品的旗標。
 - `progress.cfg` 的 `cleared`／`endings`／`carry` 以故事 id 為鍵（id 全遊戲唯一，不會撞）。鑑賞的解鎖分作品記：基準作品用 `gallery` 段的 `bg`／`bgm`，故事包用 `<作品 id>/bg`、`<作品 id>/bgm`。
+
+## 素材授權（2026-10-23，K5；B01 共用格式）
+
+catalog 的每筆素材（`backgrounds`、`characters`、`items`、`sounds`、`music`）可以有 `license`：
+
+```json
+"license": {"author": "畫師甲", "source": "委託繪製", "license": "自有", "approved": true, "role": "立繪"}
+```
+
+| 欄位 | 意思 |
+|---|---|
+| `author` | 作者，一個名字或名字陣列；製作名單用它 |
+| `source` | 來源：委託、自繪、素材網站網址…… |
+| `license` | 授權：自有、CC BY 4.0、購買授權…… |
+| `approved` | 主編確認可以公開使用 |
+| `role` | 選填，製作名單的職稱；預設依類別：背景、立繪、線索圖、音效、音樂 |
+
+- 角色的 `license` 也涵蓋它的表情圖。runner 不檢查這些欄位（未知欄位照常載入）。
+- **製作名單**：每個故事的段落是 story／`pack.json` 的 `credits`，後面接這個故事實際用到（`scripts/asset_usage.gd`）的素材作者，依職稱分組；同一職稱下已經列過的名字不重複。章節卡上的一行署名只用 `credits`。
+- **投稿檢查**把「有圖但沒有 `author`」的素材列為缺授權。B01 的公開版 allowlist 之後以 `approved` 為準。
+
+## 投稿檢查（K4）
+
+`tools/art_check/art_check.gd`：一部作品（`data/` 或 `stories/<作品>/`）的劇本用到哪些素材（`asset_usage.gd`，含遊戲自己換的臉：吐槽回合說話者 `annoyed`、POV 選項時 `thinking`），對照 [ART-SPEC.md](docs/ART-SPEC.md)：
+
+- 錯誤：遊戲載入不了的劇本；`path` 指的檔案不存在或讀不了。
+- 待辦：用到了但還沒有圖的背景（漸層；`top` 與 `bottom` 同色的純色背景除外）、角色（剪影）、表情。
+- 建議：背景小於 1080×2340、調查背景窄於 4:3、立繪不透明／低於 1600／腳底沒貼底邊／四周留白超過 15%、表情畫布比定稿小、線索圖不是 ≥512 的正方形。圖從原檔讀，不看匯入後的貼圖。
+- 另列缺授權與劇本沒用到的素材。
+
+入口：Godot「專案 → 工具 → 作品：投稿檢查」（檢查「檔案系統」選取的作品資料夾），或 `godot --headless --path . --script res://tools/art_check/run.gd [-- stories/<作品>]`（有錯誤時 exit 1）。報告寫到 `build/art_check/<作品>.md`，不進 git。

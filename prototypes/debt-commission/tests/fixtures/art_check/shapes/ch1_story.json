@@ -1,0 +1,64 @@
+{
+  "id": "shapes_ch1",
+  "version": "s-test",
+  "title": "第一章",
+  "entry": "start",
+  "initial_flags": {},
+  "nodes": {
+    "start": {
+      "title": "開場",
+      "steps": [
+        {
+          "op": "bg",
+          "id": "room"
+        },
+        {
+          "op": "char",
+          "id": "hero",
+          "expression": "smile",
+          "position": "left"
+        },
+        {
+          "op": "say",
+          "speaker": "hero",
+          "text": "這裡是房間。",
+          "expression": "angry"
+        },
+        {
+          "op": "say",
+          "speaker": "plain+shadow",
+          "text": "我們也在。"
+        },
+        {
+          "op": "item",
+          "id": "key"
+        },
+        {
+          "op": "goto",
+          "target": "hall"
+        }
+      ]
+    },
+    "hall": {
+      "title": "大廳",
+      "steps": [
+        {
+          "op": "bg",
+          "id": "hall"
+        },
+        {
+          "op": "bg",
+          "id": "dusk"
+        },
+        {
+          "op": "bg",
+          "id": "black"
+        },
+        {
+          "op": "end",
+          "text": "完"
+        }
+      ]
+    }
+  }
+}

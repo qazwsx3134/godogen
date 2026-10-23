@@ -116,7 +116,10 @@ bash tools/serve_web.sh
 | `data/stories.json` | 章節選擇裡的故事：依序的本篇（`kind: "chapter"`）與試玩片段（`"sample"`），各自的劇本與存檔路徑。新增故事加一行，不用改程式 |
 | `scripts/story_library.gd` | 故事清單、標題與署名、通關評價、結局、跨章旗標與鑑賞解鎖（`progress.cfg`） |
 | `data/credits.json` | 製作名單最後一段：引擎、劇本工具、字型、音樂、音效的來源與授權 |
-| `docs/ART-SPEC.md` | 創作者美術規格：背景、立繪、表情、線索圖的尺寸與檔名 |
+| `docs/ART-SPEC.md` | 創作者美術規格：背景、立繪、表情、線索圖的尺寸與檔名；授權欄位與投稿檢查 |
+| `docs/COLLABORATION.md` | 多人合作（文本、美術、主編）：檔案分工、流程、GitHub Desktop 同步、交稿清單 |
+| `scripts/asset_usage.gd` | 劇本用到哪些素材（含遊戲自己換的表情）與素材作者；製作名單與投稿檢查共用 |
+| `tools/art_check/` | 投稿檢查：缺圖待辦、規格建議、壞掉的路徑與劇本、缺授權；「專案 → 工具 → 作品：投稿檢查」或 `run.gd`，報告在 `build/art_check/` |
 | `tools/text_fit_audit.gd` | 最大字級逐畫面檢查文字有沒有被切（同樣要開視窗跑），報告 `text_fit.json` 與每個畫面的截圖；有被切就結束碼 1 |
 | `tools/shots_chapter1.gd` | 第一章遊玩畫面截圖（調查、收合列、toast、回合、QTE），要開視窗跑；Mac Retina 用 `--resolution 780x1688` 才是 390 CSS px 寬 |
 | `IMPLEMENTATION.md` | StoryRunner、catalog 與外殼的介面契約 |
