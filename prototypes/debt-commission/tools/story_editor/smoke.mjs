@@ -331,6 +331,9 @@ try {
   const text = fs.readFileSync(exportPath, 'utf8');
   assert.equal(text, await page.evaluate(() => window.StoryEditor.exportText()));
   await page.setInputFiles('#verifySaved', exportPath);
+  const registryEvent=page.waitForEvent('download');await page.locator('#btnRegistry').click();
+  const registryFile=path.join(out,'export-registry.json');await (await registryEvent).saveAs(registryFile);
+  await page.setInputFiles('#verifySaved',registryFile);
   await page.waitForFunction(() => !window.StoryEditor.state.dirty);
   assert.equal(await page.evaluate(() => window.StoryEditor.state.dirty), false, 'verified download acknowledges saved content');
   const final = JSON.parse(text);

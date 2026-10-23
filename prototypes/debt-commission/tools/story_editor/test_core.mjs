@@ -282,9 +282,15 @@ for (const name of files) {
 
 {
   const source = JSON.parse(read('ep00_story.json'));
+  source.default_pov = 'gintoki';
   source.credits = [{ role: '劇本', names: ['作者'] }, { role: '繪', names: ['畫師'], extra: { names: ['甲', '乙'] } }];
   assert.deepEqual(JSON.parse(Core.exportText(source)), source);
-  const copy = Core.graphCopy(source, 'credits_graph');
+  const registry = {stories:[{id:source.id,skin:'plain',cover:'res://assets/image/cover.png',future:{names:['keep']}}]};
+  const copy = Core.graphCopy(source, 'credits_graph',registry);
+  assert.equal(copy.story.default_pov,'gintoki');
+  assert.equal(copy.registry.stories.at(-1).skin,'plain');
+  assert.equal(copy.registry.stories.at(-1).cover,'res://assets/image/cover.png');
+  assert.deepEqual(copy.registry.stories.at(-1).future,{names:['keep']});
   assert.deepEqual(copy.story.credits, source.credits);
   copy.story.credits[1].extra.names.push('丙');
   assert.deepEqual(source.credits[1].extra.names, ['甲', '乙']);

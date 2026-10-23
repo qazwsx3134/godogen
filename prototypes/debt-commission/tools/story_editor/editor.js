@@ -67,6 +67,58 @@
   let projectSource = { path: '', hash: null, ready: true };
   let projectSaving = false;
   let saveIssues = [];
+  const registryText = value => JSON.stringify(value || {stories:[]}, null, 2) + '\n';
+  let confirmedRegistryText = '';
+  let registryBaseHash = null;
+  function currentRegistryEntry() {
+    return (conversionRegistry || S.registry)?.stories?.find(e => e.path === 'res://' + projectSource.path) ||
+      {id:S.story.id,kind:'sample',path:'res://' + projectSource.path,save:`user://${S.story.id}.save`,authoring:isReadOnly()?'dialogue':'graph'};
+  }
+  const registryDirty = () => !!conversionRegistry && registryText(conversionRegistry) !== confirmedRegistryText;
+  const registryChanged = () => !!conversionRegistry && registryText(conversionRegistry) !== registryText(S.registry);
+  function editRegistry(key, value) {
+    if (!conversionRegistry) conversionRegistry = JSON.parse(JSON.stringify(S.registry || {stories:[]}));
+    let entry = conversionRegistry.stories.find(e => e.path === 'res://' + projectSource.path);
+    if (!entry) { entry = {...currentRegistryEntry()}; conversionRegistry.stories.push(entry); }
+    if (value === '') delete entry[key]; else entry[key] = value;
+    history.commit(snapshot()); refreshDirty(); saveDraft(); renderBanner(); renderStatus(); renderHistory();
+    if (key === 'cover') renderInfo();
+    applyReadOnly();
+  }
+  async function loadSkins() {
+    if (S.service?.skins?.length) return S.service.skins;
+    const ids = [...new Set(['gintama', ...S.stories.map(e=>e.skin).filter(id=>typeof id==='string' && /^[A-Za-z0-9_-]+$/.test(id))])];
+    return Promise.all(ids.map(async id => {
+      if (location.protocol !== 'file:') try {
+        const value = await getJson(`../../skins/${id}/skin.json`);
+        return {id,name:value.name || id};
+      } catch { /* Keep registry-used ids selectable even if their manifest is unavailable. */ }
+      return {id,name:id==='gintama'?'銀魂和紙':'名稱未載入'};
+    }));
+  }
+  function registryControls() {
+    const entry = currentRegistryEntry();
+    const skin = select2((S.skins || []).map(s=>({value:s.id,label:`${s.id} · ${s.name}`})),entry.skin,value=>editRegistry('skin',value),'預設：gintama');
+    skin.id='storySkin'; skin.dataset.registryField='true';
+    const covers = Object.values(S.catalog?.backgrounds || {}).filter(bg=>bg.path).map(bg=>({value:bg.path,label:bg.label || bg.path}));
+    const cover = select2(covers,entry.cover,value=>editRegistry('cover',value),'自動：故事第一張背景');
+    cover.id='storyCover'; cover.dataset.registryField='true';
+    return [field('外觀包',skin),field('章節封面',cover,
+      entry.cover && el('img',{class:'cover-preview',src:Core.projectUrl(entry.cover),alt:'章節封面預覽'}))];
+  }
+  function voicePitch(step) {
+    const id=step.id || step.speaker;
+    const value=S.catalog?.characters?.[id]?.voice_pitch;
+    return field('打字音高',el('code',{class:'voice-pitch'},id==='narrator'?'旁白（無打字音）':Number.isFinite(value)?`${value} Hz`:'未設定（用預設音高）'));
+  }
+  function exportRegistry() {
+    const text = registryText(conversionRegistry || S.registry);
+    download('stories.json',text);
+    pendingExport={text,key:draftKey,kind:'registry'};
+    S.notice='已下載故事登記。請選回檔案確認內容；下載不會自動合併進專案。';
+    saveDraft();renderBanner();renderStatus();
+  }
+
   async function textHash(text) {
     const bytes = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
     return [...new Uint8Array(bytes)].map(byte => byte.toString(16).padStart(2, '0')).join('');
@@ -74,6 +126,7 @@
   function resetProjectSource(story, name, rawText) {
     projectSource = { path: `data/${/^[A-Za-z0-9_]+_story\.json$/.test(name) ? name : story.id + '_story.json'}`, hash: null, ready: rawText === null };
     projectSaving = false; saveIssues = [];
+    confirmedRegistryText=registryText(S.registry);registryBaseHash=S.registryHash || null;
     if (rawText !== null && location.protocol !== 'file:') {
       const source = projectSource;
       textHash(rawText).then(hash => {
@@ -86,50 +139,55 @@
   function renderProjectSave() {
     const control = $('btnProjectSave');
     control.hidden = !S.service;
-    control.disabled = !S.story || isReadOnly() || projectSaving || !projectSource.ready;
-    control.textContent = projectSaving ? '驗證存檔中…' : '驗證並存檔';
+    control.disabled = !S.story || projectSaving || !projectSource.ready || (isReadOnly() && !registryChanged());
+    control.textContent = projectSaving ? '存檔中…' : isReadOnly() && registryChanged() ? '存回外觀設定' : '驗證並存檔';
   }
   async function saveProject() {
-    if (!S.service || !S.story || isReadOnly() || projectSaving || !projectSource.ready) return;
-    const source = projectSource;
-    const sentText = storyText();
-    projectSaving = true; saveIssues = []; S.error = ''; S.notice = '';
-    renderBanner(); renderProjectSave(); renderProblems(); renderStatus();
+    const metadataOnly=isReadOnly();
+    if (!S.service || !S.story || projectSaving || !projectSource.ready || (metadataOnly && !registryChanged())) return;
+    const source=projectSource, sentText=storyText(), sentRegistry=registryText(conversionRegistry || S.registry);
+    const request={path:source.path,base_hash:source.hash,story:JSON.parse(sentText),
+      registry_entry:JSON.parse(JSON.stringify(currentRegistryEntry())),registry_hash:registryBaseHash,update_registry:registryChanged()};
+    projectSaving=true;saveIssues=[];S.error='';S.notice='';
+    renderBanner();renderProjectSave();renderProblems();renderStatus();
     try {
-      const response = await fetch('../../api/save', { method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-Story-Editor-Token': S.service.token },
-        body: JSON.stringify({ path: source.path, base_hash: source.hash, story: JSON.parse(sentText) }) });
-      const result = await response.json();
-      if (projectSource !== source) return;
-      if (!response.ok || result.ok !== true) {
-        const errors = [result.error || '儲存失敗', ...(result.errors || [])];
-        saveIssues = errors.map(message => ({ type: 'validation', message }));
-        failure(errors[0]); saveDraft(); renderProblems(); renderStatus(); return;
+      const response=await fetch(metadataOnly?'../../api/registry':'../../api/save',{method:'POST',
+        headers:{'Content-Type':'application/json','X-Story-Editor-Token':S.service.token},body:JSON.stringify(request)});
+      const result=await response.json();
+      if(projectSource!==source)return;
+      if(!response.ok || result.ok!==true){
+        const errors=[result.error || '儲存失敗',...(result.errors || [])];
+        saveIssues=errors.map(message=>({type:'validation',message}));
+        failure(errors[0]);saveDraft();renderProblems();renderStatus();return;
       }
-      source.hash = result.hash;
-      const saved = JSON.parse(result.text);
-      const unchanged = storyText() === sentText;
-      if (unchanged) S.story = saved;
-      else S.story.version = saved.version;
-      originalStory = JSON.stringify(saved);
-      confirmedText = Core.exportText(saved);
-      pendingExport = null; S.error = '';
-      if (result.registered && !S.stories.some(entry => entry.id === result.registered.id)) {
-        S.stories.push(result.registered);
-        $('storySelect').hidden = false;
-        $('storySelect').append(el('option', {value:result.registered.id}, `${result.registered.id}（${result.registered.kind}）`));
+      const unchanged=storyText()===sentText;
+      const registryUnchanged=registryText(conversionRegistry || S.registry)===sentRegistry;
+      const latestEntry=JSON.parse(JSON.stringify(currentRegistryEntry()));
+      if(!metadataOnly){
+        source.hash=result.hash;
+        const saved=JSON.parse(result.text);
+        if(unchanged)S.story=saved;else S.story.version=saved.version;
+        originalStory=JSON.stringify(saved);confirmedText=Core.exportText(saved);
       }
-      conversionRegistry = null;
-      refreshDirty();
-      S.notice = S.dirty ? '已驗證並存回剛才的版本；此頁另有後續修改，請再次存檔。' : '驗證通過，已存回專案。';
-      recompute(); ensureLayout();
-      if (unchanged) history.replaceCurrent(snapshot());
-      saveDraft(); renderAll();
-    } catch (err) {
-      if (projectSource === source) failure(`無法確認存檔結果：${err.message}。修改仍保留，請先匯出；重試若提示衝突，請重開專案版本比較。`);
-    } finally {
-      if (projectSource === source) { projectSaving = false; renderProjectSave(); }
-    }
+      if(result.registry){
+        S.registry=result.registry;S.stories=result.registry.stories;S.registryHash=result.registry_hash;
+        registryBaseHash=result.registry_hash;confirmedRegistryText=registryText(result.registry);
+        conversionRegistry=null;
+        if(!registryUnchanged){
+          conversionRegistry=JSON.parse(JSON.stringify(S.registry));
+          const entry=conversionRegistry.stories.find(e=>e.path==='res://'+source.path);
+          if(entry)for(const key of ['skin','cover']){if(key in latestEntry)entry[key]=latestEntry[key];else delete entry[key];}
+        }
+        $('storySelect').hidden=!S.stories.length;
+        $('storySelect').replaceChildren(el('option',{value:''},'從專案開啟…'),...S.stories.map(e=>el('option',{value:e.id},`${e.id}（${e.kind}）`)));
+        $('storySelect').value=S.stories.find(e=>e.path==='res://'+source.path)?.id || '';
+      }
+      pendingExport=null;S.error='';refreshDirty();
+      S.notice=S.dirty?'已存回送出的版本；此頁另有後續修改，請再次存檔。':metadataOnly?'外觀設定已存回專案。':'驗證通過，已存回專案。';
+      recompute();ensureLayout();if(unchanged && registryUnchanged)history.replaceCurrent(snapshot());
+      saveDraft();renderAll();
+    } catch(err){if(projectSource===source)failure(`無法確認存檔結果：${err.message}。修改仍保留，請先匯出；重試若提示衝突，請重開專案版本比較。`);}
+    finally{if(projectSource===source){projectSaving=false;renderProjectSave();}}
   }
   async function detectService() {
     if (!/^https?:$/.test(location.protocol)) return null;
@@ -146,7 +204,7 @@
   }
   function refreshDirty() {
     S.modified = JSON.stringify(S.story) !== originalStory;
-    S.dirty = confirmedText === null || storyText() !== confirmedText;
+    S.dirty = confirmedText === null || storyText() !== confirmedText || registryDirty();
   }
   function renderHistory() {
     $('btnUndo').disabled = !history?.canUndo;
@@ -163,7 +221,7 @@
         storageError = ''; renderBanner(); return;
       }
       const record = { format: 1, name: S.name, base: JSON.parse(originalStory),
-        confirmedText, ...snapshot(), projectSource, updatedAt: new Date().toISOString() };
+        confirmedText, confirmedRegistryText, registryBaseHash, ...snapshot(), projectSource, updatedAt: new Date().toISOString() };
       const raw = JSON.stringify(record);
       localStorage.setItem(draftKey, raw);
       draftRaw = raw;
@@ -203,6 +261,8 @@
     S.layout = cleanLayout(record.layout);
     S.sel = null;
     confirmedText = record.confirmedText;
+    confirmedRegistryText=record.confirmedRegistryText ?? registryText(S.registry);
+    registryBaseHash=record.registryBaseHash ?? registryBaseHash;
     recompute(); ensureLayout(); refreshDirty();
     history.reset(snapshot());
     S.notice = '已復原草稿。請匯出並選回下載檔案確認儲存；草稿不會自動覆寫專案。';
@@ -460,7 +520,7 @@
   }
   let conversionRegistry = null;
   function convertStory(id) {
-    const result = Core.graphCopy(S.story, id, { ...(S.registry || {}), stories: S.stories });
+    const result = Core.graphCopy(S.story,id,conversionRegistry || {...(S.registry || {}),stories:S.stories},currentRegistryEntry());
     const layout = JSON.parse(JSON.stringify(S.layout));
     loadStory(result.story, `${id}_story.json`);
     S.layout = layout; conversionRegistry = result.registry;
@@ -739,7 +799,7 @@
     bg: step => [field('背景', assetSelect('backgrounds', step)), field('預覽', thumbnail(step.id))],
     bgm: step => [field('BGM', assetSelect('music', step, 'id', '無（停止音樂）')), field('試聽', audioButton(step.id))],
     se: step => [field('音效', assetSelect('sounds', step))],
-    char: step => [field('角色', assetSelect('characters', step)), field('表情', expressionControl(step)),
+    char: step => [field('角色', assetSelect('characters', step)), field('表情', expressionControl(step)), voicePitch(step),
       field('預覽', characterPreview(step)), field('站位', select2(['left', 'center', 'right'], step.position, v => { if (v) step.position = v; else delete step.position; touch(); }, '（角色預設）')),
       field('顯示', select2([{value:'default',label:'預設'},{value:'true',label:'顯示'},{value:'false',label:'隱藏'}], step.visible === undefined ? 'default' : String(step.visible), v => { if(v === 'default') delete step.visible; else step.visible = v === 'true'; touch(); })), field('', checkbox(step, 'enter', '登場'))],
     profile: step => [field('角色檔案', assetSelect('characters', step))],
@@ -753,7 +813,7 @@
       field('成立 then', nodeSelect(step.then, v => {step.then=v;touch();})), field('否則 else', nodeSelect(step.else,v => {step.else=v;touch();}))],
 
     say: step => [field('speaker', speakerControl(step, 'speaker')), field('text', textArea(step, 'text')),
-      field('expression', expressionControl(step)), field('', checkbox(step, 'thought', '心聲（thought）'))],
+      field('expression', expressionControl(step)), voicePitch(step), field('', checkbox(step, 'thought', '心聲（thought）'))],
     goto: step => [field('target', nodeSelect(step.target, v => { step.target = v; touch(); }))],
     end: step => [field('text', textArea(step, 'text', false, 2))],
     comedy: step => [
@@ -762,7 +822,7 @@
         if (v !== 'emotion_band') delete step.color;  // story_runner.gd accepts `color` on emotion_band only
         touch({ inspector: true });
       })),
-      field('speaker', speakerControl(step, 'speaker', false)), field('text', textArea(step, 'text')), field('expression', expressionControl(step)),
+      field('speaker', speakerControl(step, 'speaker', false)), field('text', textArea(step, 'text')), field('expression', expressionControl(step)), voicePitch(step),
       step.preset === 'emotion_band' && field('color', colorControl(step))],
     choice: step => {
       const options = Array.isArray(step.options) ? step.options : [];
@@ -823,7 +883,9 @@
       field('title', textInput(story, 'title')),
       field('entry', select2(nodeIds(), story.entry, v => { story.entry = v; touch(); })),
       field('version', el('code', {}, story.version ?? '（無）'), el('div', { id: 'versionHint', class: 'err', style: { color: 'var(--muted)' } })),
-      field('flags', flags, flagsErr));
+      field('flags', flags, flagsErr),
+      ...registryControls(),
+      field('預設視角',select2(Object.entries(S.catalog?.characters || {}).map(([id,c])=>({value:id,label:`${c.name || id} · ${id}`})),story.default_pov,v=>{if(v)story.default_pov=v;else delete story.default_pov;touch();},`用 catalog 預設（${S.catalog?.default_pov || '未設定'}）`)));
   }
 
   function renderVersionHint() {
@@ -832,7 +894,7 @@
   }
 
   function applyReadOnly() {
-    for (const area of [$('info'), $('inspector')]) area.querySelectorAll('input,textarea,select,button').forEach(c => { c.disabled = isReadOnly() && !c.hasAttribute('data-audition'); });
+    for (const area of [$('info'), $('inspector')]) area.querySelectorAll('input,textarea,select,button').forEach(c => { c.disabled = isReadOnly() && !c.hasAttribute('data-audition') && !c.dataset.registryField; });
   }
 
   function renderInspector() {
@@ -1122,7 +1184,7 @@
       const text = await file.text();
       if (pending !== pendingExport || pending.key !== draftKey) return;
       if (text !== pending.text) throw new Error('檔案內容與這次匯出不同，尚未確認儲存');
-      confirmedText = pending.text;
+      if(pending.kind==='registry')confirmedRegistryText=pending.text;else confirmedText=pending.text;
       S.error = '';
       pendingExport = null;
       refreshDirty();
@@ -1206,7 +1268,7 @@
     if (id === null) return;
     try { convertStory(id.trim()); } catch (err) { failure(err.message); }
   });
-  $('btnRegistry').addEventListener('click', () => download('stories.json', JSON.stringify(conversionRegistry, null, 2) + '\n'));
+  $('btnRegistry').addEventListener('click', exportRegistry);
   $('btnProjectSave').addEventListener('click', saveProject);
   $('btnExport').addEventListener('click', exportStory);
   $('btnUndo').addEventListener('click', () => restoreHistory(history?.undo()));
@@ -1247,7 +1309,10 @@
       detectService(),
     ]);
     if (service.status === 'fulfilled') S.service = service.value;
-    if (stories.status === 'fulfilled') { S.registry = stories.value; S.stories = stories.value.stories || []; }
+    const registry=S.service?.registry || (stories.status==='fulfilled'?stories.value:null);
+    if(registry){S.registry=registry;S.stories=registry.stories || [];}
+    S.registryHash=S.service?.registry_hash || null;
+    S.skins=await loadSkins();
     if (catalog.status === 'fulfilled' && isObj(catalog.value.characters)) S.catalog = catalog.value;
     if (runner.status === 'fulfilled') {
       for (const name of Object.keys(S.enums)) {

@@ -62,6 +62,16 @@
 - item：取得道具；flag：設定 JSON 純量或加減整數；condition：單一 flag/equals，或遞迴 AND／OR／NOT、旗標比較與持有道具，搭配 then／else 目標。
 - 純量文字輸入要加雙引號，例如 `"已見面"`；數字與 true／false 直接填。新旗標先在故事的 flags 區宣告。條件值型別與合法性由 check_story 最終確認。
 
+## 故事外觀與預設視角
+
+「故事」資訊區可選外觀包、章節封面與預設視角。外觀包顯示 id 與 name；專案服務列出 `skins/*/skin.json`，靜態服務列出 registry 已使用的 id 加上 gintama。封面從 catalog 有圖片的背景中選取，可預覽；空白使用遊戲的自動封面。外觀包空白使用 gintama。
+
+skin／cover 寫在 stories.json 的故事列，不進劇本 JSON。建置故事的文字仍唯讀，外觀欄位可編輯；專案服務的「存回外觀設定」只更新 registry，不重建或改寫劇本。既有列只改 skin／cover，其餘欄位保留；新故事及圖編輯副本保留來源列的外觀與未知欄位，並建立自己的 id、path、save 與 graph 來源。
+
+預設視角寫入劇本根層 default_pov；空白移除該鍵，使用 catalog 的預設角色。根層 credits 與未編輯欄位原樣保留。角色、對話及喜劇演出的表單顯示 catalog voice_pitch（Hz），僅供查閱；音高應修改 catalog。
+
+外觀儲存會核對開啟時的 registry SHA-256，避免覆蓋其他作者的修改；劇本與外觀一起送出時，驗證後再次核對兩份檔案。靜態下載須分別確認劇本 JSON 與 stories.json，兩份內容都確認後才解除未儲存提醒。registry 下載供作者合併至最新專案版本。
+
 ## 來源與轉成圖編輯來源
 
 registry 的 `authoring` 是 `dialogue` 或 `graph`。帶 generated_from 或登記為 dialogue 的故事是唯讀，可檢視、搜尋、試聽與調整版面。按「轉成圖編輯來源」，指定未使用的新 id：建立獨立圖編輯副本，拿掉 generated_from，version 設為 s-unset，原故事保留。
@@ -167,3 +177,11 @@ node tools/story_editor/project_smoke.mjs --playwright <playwright-core 目錄> 
 ```
 
 第一支使用暫存 data 與遊戲實際的 Godot validator，檢查成功寫入／版本、衝突、建置產物拒絕、路徑與請求限制、失敗候選保留、新故事登記與 registry 寫入失敗。第二支依派工驗收暫時修改 phase3，實跑存檔、check_story、遊戲的 test_phase3_story、並行輸入與衝突截圖，finally 還原原始 bytes 並確認 diff 空白；它要求先設定 GODOT_LOCK。
+
+外觀包回歸使用暫存專案，不修改正式 data：
+
+```bash
+node tools/story_editor/skin_smoke.mjs --playwright <playwright-core 目錄> --chromium <Chrome 路徑> --out <輸出資料夾>
+```
+
+此測試涵蓋目錄與靜態外觀清單、唯讀故事的外觀存回、轉副本保留未知欄位、default_pov／credits、voice_pitch 及兩份下載確認。服務與此測試內部自行取得 GODOT_LOCK；不要再包一層 run_coordinated.py，以免重複等自己的鎖。

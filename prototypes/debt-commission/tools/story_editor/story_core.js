@@ -484,12 +484,13 @@
     }
     return result;
   }
-  function graphCopy(story, id, registry = { stories: [] }) {
+  function graphCopy(story, id, registry = { stories: [] }, sourceEntry = null) {
     if (!/^[A-Za-z0-9_]+$/.test(id) || id === story.id || registry.stories.some(s => s.id === id)) throw new Error('請使用未存在的新故事 id（英文、數字、底線）');
     const copy = JSON.parse(JSON.stringify(story));
     copy.id = id; copy.version = 's-unset'; delete copy.generated_from;
     const nextRegistry = JSON.parse(JSON.stringify(registry));
-    nextRegistry.stories.push({ id, kind: 'sample', path: `res://data/${id}_story.json`, save: `user://${id}.save`, authoring: 'graph' });
+    const source = sourceEntry || registry.stories.find(entry => entry.id === story.id) || {};
+    nextRegistry.stories.push({ ...JSON.parse(JSON.stringify(source)), id, kind: 'sample', path: `res://data/${id}_story.json`, save: `user://${id}.save`, authoring: 'graph' });
     return { story: copy, registry: nextRegistry };
   }
   function availableExpressions(catalog, id) {

@@ -124,6 +124,66 @@ class StoryProject:
             raise ProjectError(500, '無法讀取故事登記：' + str(error)) from error
         return path, raw, value
 
+    def list_skins(self):
+        root = self.safe_path('skins')
+        if not root.is_dir():
+            return []
+        skins = []
+        for directory in sorted(root.iterdir()):
+            if directory.is_symlink() or not directory.is_dir() or not re.fullmatch(r'[A-Za-z0-9_-]{1,80}', directory.name):
+                continue
+            try:
+                raw = self.read_bytes(self.safe_path(f'skins/{directory.name}/skin.json'))
+                value = parse_json(raw or b'')
+                if isinstance(value, dict):
+                    skins.append({'id': directory.name, 'name': str(value.get('name', directory.name))})
+            except (ProjectError, ValueError, UnicodeError, RecursionError):
+                continue
+        return skins
+
+    def metadata(self, entry):
+        if not isinstance(entry, dict):
+            raise ProjectError(400, '需要故事登記物件。')
+        if 'skin' in entry and (not isinstance(entry['skin'], str) or entry['skin'] != '' and not re.fullmatch(r'[A-Za-z0-9_-]{1,80}', entry['skin'])):
+            raise ProjectError(400, '外觀包 id 格式不合法。')
+        if 'cover' in entry:
+            cover = entry['cover']
+            if cover == '':
+                return {key: entry[key] for key in ('skin', 'cover') if key in entry}
+            if not isinstance(cover, str) or not cover.startswith('res://'):
+                raise ProjectError(400, '封面必須是 res:// 專案圖片路徑。')
+            self.safe_path(cover[6:])
+        return {key: entry[key] for key in ('skin', 'cover') if key in entry}
+
+    def change_metadata(self, request, raw, registry, entry):
+        if request.get('registry_hash') != digest(raw):
+            raise ProjectError(409, '故事登記已變更，未覆寫外觀設定。請下載目前登記，再重新開啟比較。')
+        changes = self.metadata(request.get('registry_entry'))
+        before = dict(entry)
+        for key in ('skin', 'cover'):
+            if key in changes:
+                entry[key] = changes[key]
+            else:
+                entry.pop(key, None)
+        return before != entry
+
+    def save_registry(self, request):
+        if not isinstance(request, dict):
+            raise ProjectError(400, '需要外觀設定物件。')
+        relative = request.get('path')
+        if not isinstance(relative, str) or not STORY_PATH.fullmatch(relative):
+            raise ProjectError(400, '故事路徑不合法。')
+        self.safe_path(relative)
+        with self.mutex:
+            target, raw, registry = self.registry()
+            entries = [e for e in registry['stories'] if e.get('path') == 'res://' + relative]
+            if len(entries) != 1:
+                raise ProjectError(409, '外觀設定需要唯一的既有故事登記。')
+            self.change_metadata(request, raw, registry, entries[0])
+            updated = json_bytes(registry)
+            atomic_write(target, updated)
+            return {'ok': True, 'registry': registry, 'registry_hash': digest(updated), 'message': '外觀設定已存回專案。'}
+
     def authorize(self, relative, story):
         match = STORY_PATH.fullmatch(relative) if isinstance(relative, str) else None
         if not match:
@@ -165,6 +225,10 @@ class StoryProject:
             if not entries:
                 if story.get('id') != new_id or any(e.get('id') == new_id for e in registry['stories']):
                     raise ProjectError(409, '新故事的檔名、id 必須一致，且不能與既有登記重複。')
+            if entries and request.get('update_registry'):
+                self.change_metadata(request, registry_raw, registry, entries[0])
+            if not entries and request.get('registry_entry') is not None:
+                self.metadata(request['registry_entry'])
             # Candidates are private and persistent on failure; no invalid file is published to data/.
             draft_root = self.safe_path('tools/story_editor/.drafts')
             draft_root.mkdir(parents=True, exist_ok=True)
@@ -184,15 +248,21 @@ class StoryProject:
             if base != (digest(latest) if latest is not None else None):
                 raise ProjectError(409, '驗證期間磁碟檔案已變更，未覆寫；修改已保留為待修草稿。', draft=candidate_dir.name)
             registered = None
+            registry_changed = False
+            if entries and request.get('update_registry'):
+                registry_changed = self.change_metadata(request, registry_raw, registry, entries[0])
             if not entries:
                 if any(e.get('id') == new_id for e in registry['stories']):
                     raise ProjectError(409, '驗證期間已有同名故事登記，未覆寫。', draft=candidate_dir.name)
-                registered = {'id': new_id, 'kind': 'sample', 'path': 'res://' + relative,
-                              'save': 'user://' + new_id + '.save', 'authoring': 'graph'}
+                registered = dict(request.get('registry_entry') or {})
+                self.metadata(registered)
+                registered.update({'id': new_id, 'kind': 'sample', 'path': 'res://' + relative,
+                                   'save': 'user://' + new_id + '.save', 'authoring': 'graph'})
+                registry_changed = True
                 registry['stories'].append(registered)
             try:
                 atomic_write(target, validated)
-                if registered:
+                if registry_changed:
                     try:
                         atomic_write(registry_path, json_bytes(registry))
                     except OSError:
@@ -205,7 +275,9 @@ class StoryProject:
                 raise ProjectError(500, '檔案未能完整儲存；修改已保留為待修草稿。', errors=[str(error)], draft=candidate_dir.name) from error
             shutil.rmtree(candidate_dir, ignore_errors=True)
             return {'ok': True, 'path': relative, 'hash': digest(validated), 'text': validated.decode('utf-8'),
-                    'registered': registered, 'message': '驗證通過，已存回專案。'}
+                    'registered': registered, 'registry': registry,
+                    'registry_hash': digest(json_bytes(registry) if registry_changed else registry_raw),
+                    'message': '驗證通過，已存回專案。'}
 
 
 class ProjectHandler(SimpleHTTPRequestHandler):
@@ -240,7 +312,12 @@ class ProjectHandler(SimpleHTTPRequestHandler):
             return
         parsed = urlsplit(self.path)
         if parsed.path == '/api/capabilities':
-            self.json_response(200, {'service': SERVICE, 'token': self.server.project.token})
+            try:
+                _, raw, registry = self.server.project.registry()
+                self.json_response(200, {'service': SERVICE, 'token': self.server.project.token,
+                                        'registry': registry, 'registry_hash': digest(raw), 'skins': self.server.project.list_skins()})
+            except ProjectError as error:
+                self.json_response(error.status, error.details)
             return
         if parsed.path == '/':
             self.send_response(302)
@@ -277,7 +354,7 @@ class ProjectHandler(SimpleHTTPRequestHandler):
                 raise ProjectError(403, '請從本機編輯器頁面存檔。')
             if self.headers.get('X-Story-Editor-Token') != self.server.project.token:
                 raise ProjectError(403, '本機服務憑證不符，請重新開啟編輯器。')
-            if urlsplit(self.path).path != '/api/save':
+            if urlsplit(self.path).path not in ('/api/save', '/api/registry'):
                 raise ProjectError(404, '沒有這個操作。')
             if self.headers.get('Content-Type', '').split(';')[0].strip().lower() != 'application/json':
                 raise ProjectError(415, '只接受 JSON。')
@@ -296,7 +373,8 @@ class ProjectHandler(SimpleHTTPRequestHandler):
                 request = parse_json(body)
             except (ValueError, UnicodeError, RecursionError) as error:
                 raise ProjectError(400, '不是合法 JSON。') from error
-            self.json_response(200, self.server.project.save(request))
+            result = self.server.project.save_registry(request) if urlsplit(self.path).path == '/api/registry' else self.server.project.save(request)
+            self.json_response(200, result)
         except ProjectError as error:
             self.close_connection = True
             self.json_response(error.status, error.details)
