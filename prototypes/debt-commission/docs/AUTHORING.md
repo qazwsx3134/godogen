@@ -101,6 +101,8 @@
 
 一部作品一個資料夾，放進 `stories/` 就會出現在章節選擇，不用改程式。範例是 `stories/example/`（末班車，沒有任何圖：漸層背景、剪影角色）。
 
+用劇本節點編輯器（本機服務模式，見 [STORY-EDITOR.md](STORY-EDITOR.md)「作品」）時，按「新作品」就會建好下面 1～3 的資料夾與第一章，存檔時自動登記；以下是手動做法與各檔案的意思。
+
 1. 複製 `stories/example/` 成 `stories/<作品 id>/`（id 用英文小寫加底線）。
 2. 改 `pack.json`：作品名 `title`、外觀包 `skin`、封面 `cover`、署名 `credits`，以及 `stories` 裡每一章的 `id`（全遊戲不能重複）、`kind`（`chapter` 本篇／`sample` 試玩片段）、`path`。
 3. 改 `catalog.json`：這部作品的角色、背景、素材、音效與音樂，格式同 `data/asset_catalog.json`。圖放在作品資料夾的 `art/`，路徑可以直接寫 `art/xxx.png`（相對於這個資料夾）。尺寸規格見 [創作者美術規格](ART-SPEC.md)。

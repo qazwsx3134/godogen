@@ -31,7 +31,9 @@ class ProjectServiceTests(unittest.TestCase):
         self.registry_path.write_bytes(service.json_bytes(self.registry))
         self.server = service.make_server(self.root, GODOT, 0)
         # Target files are temporary; validation still uses the game's actual runner/catalog/build code.
-        self.server.project.check = lambda candidate: service.validate_candidate(candidate, ROOT, GODOT)
+        # A work's catalog (res://stories/<作品>/catalog.json) is read from the temporary project.
+        self.server.project.check = lambda candidate, catalog=None: service.validate_candidate(
+            candidate, ROOT, GODOT, catalog and str(self.root / catalog[len('res://'):]))
         self.thread = threading.Thread(target=self.server.serve_forever, daemon=True)
         self.thread.start()
         self.token = self.server.project.token
@@ -150,7 +152,7 @@ class ProjectServiceTests(unittest.TestCase):
     def test_external_change_during_validation_is_not_overwritten(self):
         payload = self.payload()
         changed = self.original + b'\n'
-        def concurrent(candidate):
+        def concurrent(candidate, catalog=None):
             (self.root / payload['path']).write_bytes(changed)
             return []
         self.server.project.check = concurrent
@@ -216,7 +218,7 @@ class ProjectServiceTests(unittest.TestCase):
     def test_registry_change_during_check_preserves_story(self):
         payload=self.payload()
         payload.update({'update_registry':True,'registry_hash':service.digest(self.registry_path.read_bytes()),'registry_entry':{'skin':'alpha'}})
-        def concurrent(candidate):
+        def concurrent(candidate, catalog=None):
             latest=deepcopy(self.registry);latest['other_writer']='keep'
             self.registry_path.write_bytes(service.json_bytes(latest))
             return []
@@ -225,6 +227,82 @@ class ProjectServiceTests(unittest.TestCase):
         self.assertEqual(status,409,result)
         self.assertEqual((self.root/'data/phase3_story.json').read_bytes(),self.original)
         self.assertEqual(json.loads(self.registry_path.read_bytes())['other_writer'],'keep')
+
+    def pack_story(self, story_id, speaker):
+        return {'id': story_id, 'title': '作品的一章', 'entry': 'start', 'version': 's-unset', 'initial_flags': {},
+                'nodes': {'start': {'title': '起點', 'steps': [{'op': 'say', 'speaker': speaker, 'text': '你好'},
+                                                             {'op': 'end', 'text': '完'}]}}}
+
+    def add_example_work(self):
+        folder = self.root / 'stories/example'
+        folder.mkdir(parents=True)
+        for name in ('pack.json', 'catalog.json'):
+            shutil.copy(ROOT / 'stories/example' / name, folder / name)
+        return folder
+
+    def test_pack_story_uses_its_work_catalog_and_pack(self):
+        folder = self.add_example_work()
+        pack_before = json.loads((folder / 'pack.json').read_bytes())
+        registry_before = self.registry_path.read_bytes()
+        story = self.pack_story('example_ch3', 'aki')  # 秋 is only in the work's catalog
+        status, result = self.request({'path': 'stories/example/example_ch3_story.json', 'base_hash': None, 'story': story,
+                                       'registry_entry': {'kind': 'chapter', 'save': 'user://x.save', 'skin': 'example'}})
+        self.assertEqual(status, 200, result)
+        pack = json.loads((folder / 'pack.json').read_bytes())
+        self.assertEqual(pack['stories'][:-1], pack_before['stories'])
+        self.assertEqual(pack['stories'][-1], {'id': 'example_ch3', 'kind': 'chapter', 'path': 'example_ch3_story.json',
+                                               'authoring': 'graph', 'skin': 'example'})
+        self.assertEqual((result['owner'], result['pack']), ('stories/example/pack.json', pack))
+        self.assertEqual(result['pack_hash'], service.digest((folder / 'pack.json').read_bytes()))
+        self.assertNotIn('registry', result)
+        self.assertEqual(self.registry_path.read_bytes(), registry_before)
+        self.assertRegex(json.loads((folder / 'example_ch3_story.json').read_bytes())['version'], r'^s-[0-9a-f]{12}$')
+        # The same lines under data/ are checked against the game's catalog, which has no 秋.
+        story['id'] = 'example_base'
+        status, result = self.request({'path': 'data/example_base_story.json', 'base_hash': None, 'story': story})
+        self.assertEqual(status, 422, result)
+        self.assertIn('aki', '\n'.join(result['errors']))
+        # Saving it again edits the registered graph story; its metadata goes to the pack.
+        written = (folder / 'example_ch3_story.json').read_bytes()
+        status, result = self.request({'path': 'stories/example/example_ch3_story.json', 'base_hash': service.digest(written),
+                                       'story': json.loads(written), 'registry_entry': {'cover': 'res://stories/example/art/c.png'},
+                                       'update_registry': True, 'registry_hash': service.digest((folder / 'pack.json').read_bytes())})
+        self.assertEqual(status, 200, result)
+        self.assertEqual(result['pack']['stories'][-1].get('cover'), 'res://stories/example/art/c.png')
+
+    def test_story_ids_are_unique_across_works_and_folders_need_a_pack(self):
+        self.add_example_work()
+        status, result = self.request({'path': 'stories/example/phase3_story.json', 'base_hash': None,
+                                       'story': self.pack_story('phase3', 'aki')})
+        self.assertEqual(status, 409, result)
+        status, result = self.request({'path': 'data/example_ch1_story.json', 'base_hash': None,
+                                       'story': self.pack_story('example_ch1', 'narrator')})
+        self.assertEqual(status, 409, result)
+        status, result = self.request({'path': 'stories/nowork/nowork_ch1_story.json', 'base_hash': None,
+                                       'story': self.pack_story('nowork_ch1', 'narrator')})
+        self.assertEqual(status, 404, result)
+        self.assertFalse((self.root / 'stories/nowork').exists())
+
+    def test_new_work_scaffold_lists_and_validates(self):
+        status, result = self.request({'id': 'titan', 'title': '城牆'}, '/api/work')
+        self.assertEqual(status, 200, result)
+        folder = self.root / 'stories/titan'
+        self.assertEqual(json.loads((folder / 'pack.json').read_bytes()), {'id': 'titan', 'title': '城牆', 'stories': []})
+        self.assertTrue((folder / 'art').is_dir())
+        self.assertEqual([p['id'] for p in result['packs']], ['titan'])
+        self.assertEqual(self.request({'id': 'titan', 'title': 'again'}, '/api/work')[0], 409)
+        for bad in ({'id': 'Titan', 'title': 'x'}, {'id': '1st', 'title': 'x'}, {'id': '../x', 'title': 'x'}, {'id': 'ok_id', 'title': ' '}):
+            self.assertEqual(self.request(bad, '/api/work')[0], 400, bad)
+        # The scaffold's own 主角 passes the game's validation; the chapter joins the pack.
+        status, result = self.request({'path': 'stories/titan/titan_ch1_story.json', 'base_hash': None,
+                                       'story': self.pack_story('titan_ch1', 'hero'), 'registry_entry': {'kind': 'chapter'}})
+        self.assertEqual(status, 200, result)
+        self.assertEqual([e['id'] for e in result['pack']['stories']], ['titan_ch1'])
+        connection = http.client.HTTPConnection('127.0.0.1', self.server.server_port, timeout=30)
+        connection.request('GET', '/api/capabilities')
+        capabilities = json.loads(connection.getresponse().read())
+        connection.close()
+        self.assertEqual(capabilities['packs'][0]['pack']['stories'][0]['id'], 'titan_ch1')
 
 
 if __name__ == '__main__':

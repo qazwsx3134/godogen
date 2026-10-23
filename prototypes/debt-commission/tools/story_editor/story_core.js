@@ -490,8 +490,42 @@
     copy.id = id; copy.version = 's-unset'; delete copy.generated_from;
     const nextRegistry = JSON.parse(JSON.stringify(registry));
     const source = sourceEntry || registry.stories.find(entry => entry.id === story.id) || {};
-    nextRegistry.stories.push({ ...JSON.parse(JSON.stringify(source)), id, kind: 'sample', path: `res://data/${id}_story.json`, save: `user://${id}.save`, authoring: 'graph' });
+    // A work's story is copied into the same work folder (its catalog and pack.json).
+    const place = source.work ? { kind: source.kind || 'chapter', path: `res://stories/${source.work}/${id}_story.json`, save: packSave(source.work, id) }
+      : { kind: 'sample', path: `res://data/${id}_story.json`, save: `user://${id}.save` };
+    nextRegistry.stories.push({ ...JSON.parse(JSON.stringify(source)), id, ...place, authoring: 'graph' });
     return { story: copy, registry: nextRegistry };
+  }
+
+  // ---- story packs (IMPLEMENTATION.md「故事包」): the same rules as story_library.gd / story_runner.gd
+  const packSave = (work, id) => `user://pack_${work}_${id}.save`;
+  const inFolder = (folder, path) => (typeof path === 'string' && path && !path.includes('://') ? `${folder}/${path}` : path);
+  /** A pack's stories as registry rows with res:// paths and their work; skin/cover stay the row's own. */
+  function packEntries(pack, work) {
+    return (Array.isArray(pack?.stories) ? pack.stories : []).filter(e => e && typeof e === 'object' && e.id && e.path)
+      .map(e => ({ ...JSON.parse(JSON.stringify(e)), kind: e.kind || 'sample', path: inFolder(`res://stories/${work}`, e.path),
+        save: packSave(work, e.id), work, work_title: String(pack.title || work) }));
+  }
+  /** StoryRunner.read_catalog: asset paths relative to the catalog's folder, laid over what it `extends`. */
+  function resolveCatalog(own, folder, base = null) {
+    const result = JSON.parse(JSON.stringify(own || {}));
+    for (const collection of ['backgrounds', 'characters', 'items', 'sounds', 'music']) {
+      for (const entry of Object.values(result[collection] || {})) {
+        if (!entry || typeof entry !== 'object') continue;
+        for (const field of ['path', 'scene']) if (field in entry) entry[field] = inFolder(folder, entry[field]);
+        if (entry.expressions && typeof entry.expressions === 'object')
+          for (const key of Object.keys(entry.expressions)) entry.expressions[key] = inFolder(folder, entry.expressions[key]);
+      }
+    }
+    if (!('extends' in result)) return result;
+    const merged = JSON.parse(JSON.stringify(base || {}));
+    for (const [key, value] of Object.entries(result)) {
+      if (key === 'extends') continue;
+      if (merged[key] && typeof merged[key] === 'object' && !Array.isArray(merged[key]) && value && typeof value === 'object' && !Array.isArray(value))
+        Object.assign(merged[key], value);
+      else merged[key] = value;
+    }
+    return merged;
   }
   function availableExpressions(catalog, id) {
     const c = catalog?.characters?.[id];
@@ -501,6 +535,7 @@
 
   const api = {
     STEP_GROUPS, STEP_LABELS, stepLabel, foldShape, stepGroup, stepRuns, runExpanded, flowRows, effectiveMedia, graphCopy, availableExpressions,
+    packEntries, resolveCatalog,
     stringify, exportText, formatNumber, edgesOf, setEdge, clearEdge, analyze, reachableFrom, isEnding, renameNode, deleteNode,
     uniqueId, newNode, newStory, newStep, insertIndex, STEP_TEMPLATES, GEOM, OP_ICONS, icon, summaryOf, cardSize, portOffset,
     inPortOffset, autoLayout, parseGdStrings, FALLBACK_ENUMS, projectUrl, finalOp, NEEDS_NO_NEXT, FORBIDS_NEXT,

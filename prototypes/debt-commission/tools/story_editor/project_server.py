@@ -21,6 +21,29 @@ from godot_guard import godot_environment
 
 MAX_BODY = 4 * 1024 * 1024
 STORY_PATH = re.compile(r'data/([A-Za-z0-9_]{1,80})_story\.json\Z')
+# A story of a work (IMPLEMENTATION.md「故事包」): its registry is that folder's pack.json.
+PACK_STORY_PATH = re.compile(r'stories/([A-Za-z_][A-Za-z0-9_]{0,79})/([A-Za-z0-9_]{1,80})_story\.json\Z')
+WORK_ID = re.compile(r'[a-z_][a-z0-9_]{0,39}\Z')
+BASE_REGISTRY = 'data/stories.json'
+
+
+def story_match(relative):
+    """(story id from the file name, registry file, work id or None), or None for a path not saved here."""
+    if not isinstance(relative, str):
+        return None
+    match = STORY_PATH.fullmatch(relative)
+    if match:
+        return match[1], BASE_REGISTRY, None
+    match = PACK_STORY_PATH.fullmatch(relative)
+    if match:
+        return match[2], f'stories/{match[1]}/pack.json', match[1]
+    return None
+
+
+def entry_path(entry, work):
+    """The res:// path of a registry entry; a pack's paths are relative to its folder."""
+    path = str(entry.get('path', ''))
+    return path if work is None or '://' in path else f'res://stories/{work}/{path}'
 SERVICE = 'debt-story-editor-v1'
 
 
@@ -70,10 +93,11 @@ def atomic_write(path, data):
             temp.unlink(missing_ok=True)
 
 
-def validate_candidate(candidate, root, godot):
+def validate_candidate(candidate, root, godot, catalog=None):
+    flags = [f'--catalog={catalog}'] if catalog else []
     with godot_environment(timeout=45) as environment:
         run = subprocess.run([godot, '--headless', '--path', str(root), '--script',
-                              'res://tools/story_editor/check_story.gd', '--', str(candidate), '--write'],
+                              'res://tools/story_editor/check_story.gd', '--', str(candidate), '--write', *flags],
                              env=environment, capture_output=True, text=True, timeout=90)
     output = run.stdout + '\n' + run.stderr
     errors = [line.strip() for line in output.splitlines() if line.startswith(('ERROR ', 'FAILED '))]
@@ -113,16 +137,73 @@ class StoryProject:
             return path.read_bytes()
         return None
 
-    def registry(self):
-        path = self.safe_path('data/stories.json')
+    def registry(self, relative=BASE_REGISTRY):
+        path = self.safe_path(relative)
         raw = self.read_bytes(path)
+        if raw is None and relative != BASE_REGISTRY:
+            raise ProjectError(404, f'作品資料夾沒有 pack.json：{relative}')
         try:
             value = parse_json(raw or b'')
             if not isinstance(value, dict) or not isinstance(value.get('stories'), list) or not all(isinstance(e, dict) for e in value['stories']):
                 raise ValueError('stories 必須是陣列')
         except (ValueError, UnicodeError, RecursionError) as error:
-            raise ProjectError(500, '無法讀取故事登記：' + str(error)) from error
+            raise ProjectError(500, f'無法讀取故事登記 {relative}：' + str(error)) from error
         return path, raw, value
+
+    def list_packs(self):
+        """Every stories/<work>/pack.json that reads: [{id, title, path, hash, pack}]."""
+        root = self.safe_path('stories')
+        packs = []
+        if not root.is_dir():
+            return packs
+        for directory in sorted(root.iterdir()):
+            if directory.is_symlink() or not directory.is_dir() or not PACK_STORY_PATH.fullmatch(f'stories/{directory.name}/x_story.json'):
+                continue
+            relative = f'stories/{directory.name}/pack.json'
+            try:
+                _, raw, pack = self.registry(relative)
+            except ProjectError:
+                continue
+            packs.append({'id': directory.name, 'title': str(pack.get('title', directory.name)), 'path': relative,
+                          'hash': digest(raw), 'pack': pack})
+        return packs
+
+    def taken_ids(self):
+        ids = {e.get('id') for e in self.registry()[2]['stories']}
+        for pack in self.list_packs():
+            ids.update(e.get('id') for e in pack['pack']['stories'])
+        return ids
+
+    def catalog_for(self, work):
+        """The --catalog for check_story: the work's catalog.json when it has one (StoryRunner.catalog_path_for)."""
+        if work is None:
+            return None
+        return f'res://stories/{work}/catalog.json' if self.safe_path(f'stories/{work}/catalog.json').is_file() else None
+
+    def new_work(self, request):
+        """A new work folder: pack.json without stories and a starting catalog of its own."""
+        if not isinstance(request, dict):
+            raise ProjectError(400, '需要作品物件。')
+        work, title = request.get('id'), request.get('title')
+        if not isinstance(work, str) or not WORK_ID.fullmatch(work):
+            raise ProjectError(400, '作品 id 只能用英文小寫、數字與底線，且不以數字開頭。')
+        if not isinstance(title, str) or not title.strip() or len(title) > 80:
+            raise ProjectError(400, '請填作品名稱（80 字以內）。')
+        with self.mutex:
+            folder = self.safe_path(f'stories/{work}')
+            if folder.exists():
+                raise ProjectError(409, f'已經有 stories/{work}/ 這個作品資料夾。')
+            pack = {'id': work, 'title': title.strip(), 'stories': []}
+            catalog = {'default_pov': 'hero', 'default_background': 'room',
+                       'backgrounds': {'room': {'label': '房間', 'top': '#2e2a45', 'bottom': '#b9794f'}},
+                       'characters': {'hero': {'name': '主角', 'color': '#d98c5f', 'slot': 'center'}},
+                       'items': {}, 'sounds': {}, 'music': {}}
+            folder.mkdir(parents=True)
+            (folder / 'art').mkdir()
+            atomic_write(folder / 'catalog.json', json_bytes(catalog))
+            atomic_write(folder / 'pack.json', json_bytes(pack))
+            return {'ok': True, 'packs': self.list_packs(), 'catalog': catalog,
+                    'message': f'已建立作品 stories/{work}/：pack.json、catalog.json（主角與一張漸層背景）、art/。'}
 
     def list_skins(self):
         root = self.safe_path('skins')
@@ -167,30 +248,39 @@ class StoryProject:
                 entry.pop(key, None)
         return before != entry
 
+    def registry_reply(self, owner, registry, raw):
+        """The saved registry in a reply: the base registry, or the work's pack with its owner path."""
+        if owner == BASE_REGISTRY:
+            return {'registry': registry, 'registry_hash': digest(raw)}
+        return {'owner': owner, 'pack': registry, 'pack_hash': digest(raw)}
+
     def save_registry(self, request):
         if not isinstance(request, dict):
             raise ProjectError(400, '需要外觀設定物件。')
         relative = request.get('path')
-        if not isinstance(relative, str) or not STORY_PATH.fullmatch(relative):
+        matched = story_match(relative)
+        if not matched:
             raise ProjectError(400, '故事路徑不合法。')
+        _, owner, work = matched
         self.safe_path(relative)
         with self.mutex:
-            target, raw, registry = self.registry()
-            entries = [e for e in registry['stories'] if e.get('path') == 'res://' + relative]
+            target, raw, registry = self.registry(owner)
+            entries = [e for e in registry['stories'] if entry_path(e, work) == 'res://' + relative]
             if len(entries) != 1:
                 raise ProjectError(409, '外觀設定需要唯一的既有故事登記。')
             self.change_metadata(request, raw, registry, entries[0])
             updated = json_bytes(registry)
             atomic_write(target, updated)
-            return {'ok': True, 'registry': registry, 'registry_hash': digest(updated), 'message': '外觀設定已存回專案。'}
+            return {'ok': True, **self.registry_reply(owner, registry, updated), 'message': '外觀設定已存回專案。'}
 
     def authorize(self, relative, story):
-        match = STORY_PATH.fullmatch(relative) if isinstance(relative, str) else None
-        if not match:
-            raise ProjectError(400, '只能儲存 data/<名稱>_story.json。')
+        matched = story_match(relative)
+        if not matched:
+            raise ProjectError(400, '只能儲存 data/<名稱>_story.json 或 stories/<作品>/<名稱>_story.json。')
+        new_id, owner, work = matched
         path = self.safe_path(relative)
-        registry_path, registry_raw, registry = self.registry()
-        entries = [e for e in registry['stories'] if e.get('path') == 'res://' + relative]
+        registry_path, registry_raw, registry = self.registry(owner)
+        entries = [e for e in registry['stories'] if entry_path(e, work) == 'res://' + relative]
         if len(entries) > 1:
             raise ProjectError(409, '故事登記的路徑重複，請先修正 registry。')
         if entries and entries[0].get('authoring') != 'graph':
@@ -205,10 +295,10 @@ class StoryProject:
                 raise ProjectError(403, '不可覆寫建置產物。')
         if 'generated_from' in story:
             raise ProjectError(403, '建置產物必須先複製成圖編輯來源。')
-        return path, current, registry_path, registry_raw, registry, entries, match[1]
+        return path, current, registry_path, registry_raw, registry, entries, new_id, owner, work
 
-    def check(self, candidate):
-        return validate_candidate(candidate, self.root, self.godot)
+    def check(self, candidate, catalog=None):
+        return validate_candidate(candidate, self.root, self.godot, catalog)
 
     def save(self, request):
         if not isinstance(request, dict) or not isinstance(request.get('story'), dict):
@@ -219,11 +309,11 @@ class StoryProject:
         if 'base_hash' not in request:
             raise ProjectError(400, '缺少開檔時的基底 hash。')
         with self.mutex:
-            target, current, registry_path, registry_raw, registry, entries, new_id = self.authorize(relative, story)
+            target, current, registry_path, registry_raw, registry, entries, new_id, owner, work = self.authorize(relative, story)
             if base != (digest(current) if current is not None else None):
                 raise ProjectError(409, '磁碟檔案已變更，未覆寫。請先匯出目前修改，再重新開啟專案版本比較。')
             if not entries:
-                if story.get('id') != new_id or any(e.get('id') == new_id for e in registry['stories']):
+                if story.get('id') != new_id or new_id in self.taken_ids():
                     raise ProjectError(409, '新故事的檔名、id 必須一致，且不能與既有登記重複。')
             if entries and request.get('update_registry'):
                 self.change_metadata(request, registry_raw, registry, entries[0])
@@ -237,14 +327,14 @@ class StoryProject:
             candidate = candidate_dir / target.name
             atomic_write(candidate, json_bytes(story))
             try:
-                errors = self.check(candidate)
+                errors = self.check(candidate, self.catalog_for(work))
             except (OSError, subprocess.TimeoutExpired, TimeoutError) as error:
                 raise ProjectError(503, '驗證未完成；修改已保留為待修草稿。', errors=[str(error)], draft=candidate_dir.name) from error
             if errors:
                 raise ProjectError(422, '驗證未通過；修改已保留，遊戲仍使用上次通過的版本。', errors=errors, draft=candidate_dir.name)
             validated = candidate.read_bytes()
             # Re-read after Godot: an external editor may have changed the story or registry while checking.
-            target, latest, registry_path, registry_raw, registry, entries, new_id = self.authorize(relative, story)
+            target, latest, registry_path, registry_raw, registry, entries, new_id, owner, work = self.authorize(relative, story)
             if base != (digest(latest) if latest is not None else None):
                 raise ProjectError(409, '驗證期間磁碟檔案已變更，未覆寫；修改已保留為待修草稿。', draft=candidate_dir.name)
             registered = None
@@ -252,12 +342,17 @@ class StoryProject:
             if entries and request.get('update_registry'):
                 registry_changed = self.change_metadata(request, registry_raw, registry, entries[0])
             if not entries:
-                if any(e.get('id') == new_id for e in registry['stories']):
+                if new_id in self.taken_ids():
                     raise ProjectError(409, '驗證期間已有同名故事登記，未覆寫。', draft=candidate_dir.name)
                 registered = dict(request.get('registry_entry') or {})
                 self.metadata(registered)
-                registered.update({'id': new_id, 'kind': 'sample', 'path': 'res://' + relative,
-                                   'save': 'user://' + new_id + '.save', 'authoring': 'graph'})
+                if work is None:
+                    registered.update({'id': new_id, 'kind': 'sample', 'path': 'res://' + relative,
+                                       'save': 'user://' + new_id + '.save', 'authoring': 'graph'})
+                else:  # the game derives save, work and work_title of a pack's story
+                    kind = registered.get('kind') if registered.get('kind') in ('chapter', 'sample') else 'chapter'
+                    registered = {key: registered[key] for key in ('skin', 'cover') if registered.get(key)}
+                    registered.update({'id': new_id, 'kind': kind, 'path': relative.rsplit('/', 1)[1], 'authoring': 'graph'})
                 registry_changed = True
                 registry['stories'].append(registered)
             try:
@@ -275,8 +370,7 @@ class StoryProject:
                 raise ProjectError(500, '檔案未能完整儲存；修改已保留為待修草稿。', errors=[str(error)], draft=candidate_dir.name) from error
             shutil.rmtree(candidate_dir, ignore_errors=True)
             return {'ok': True, 'path': relative, 'hash': digest(validated), 'text': validated.decode('utf-8'),
-                    'registered': registered, 'registry': registry,
-                    'registry_hash': digest(json_bytes(registry) if registry_changed else registry_raw),
+                    'registered': registered, **self.registry_reply(owner, registry, json_bytes(registry) if registry_changed else registry_raw),
                     'message': '驗證通過，已存回專案。'}
 
 
@@ -315,7 +409,8 @@ class ProjectHandler(SimpleHTTPRequestHandler):
             try:
                 _, raw, registry = self.server.project.registry()
                 self.json_response(200, {'service': SERVICE, 'token': self.server.project.token,
-                                        'registry': registry, 'registry_hash': digest(raw), 'skins': self.server.project.list_skins()})
+                                        'registry': registry, 'registry_hash': digest(raw), 'skins': self.server.project.list_skins(),
+                                        'packs': self.server.project.list_packs()})
             except ProjectError as error:
                 self.json_response(error.status, error.details)
             return
@@ -354,7 +449,7 @@ class ProjectHandler(SimpleHTTPRequestHandler):
                 raise ProjectError(403, '請從本機編輯器頁面存檔。')
             if self.headers.get('X-Story-Editor-Token') != self.server.project.token:
                 raise ProjectError(403, '本機服務憑證不符，請重新開啟編輯器。')
-            if urlsplit(self.path).path not in ('/api/save', '/api/registry'):
+            if urlsplit(self.path).path not in ('/api/save', '/api/registry', '/api/work'):
                 raise ProjectError(404, '沒有這個操作。')
             if self.headers.get('Content-Type', '').split(';')[0].strip().lower() != 'application/json':
                 raise ProjectError(415, '只接受 JSON。')
@@ -373,7 +468,10 @@ class ProjectHandler(SimpleHTTPRequestHandler):
                 request = parse_json(body)
             except (ValueError, UnicodeError, RecursionError) as error:
                 raise ProjectError(400, '不是合法 JSON。') from error
-            result = self.server.project.save_registry(request) if urlsplit(self.path).path == '/api/registry' else self.server.project.save(request)
+            action = urlsplit(self.path).path
+            project = self.server.project
+            result = (project.save_registry(request) if action == '/api/registry'
+                      else project.new_work(request) if action == '/api/work' else project.save(request))
             self.json_response(200, result)
         except ProjectError as error:
             self.close_connection = True

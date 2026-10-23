@@ -49,6 +49,7 @@
   const S = {
     story: null, name: '', layout: {}, v: { x: 0, y: 0, k: 1 }, sel: null, a: null, dirty: false, modified: false, notice: '', error: '',
     catalog: null, online: false, stories: [], enums: JSON.parse(JSON.stringify(Core.FALLBACK_ENUMS)),
+    baseCatalog: null, packs: [], packCatalogs: {},
   };
   const nodeIds = () => Object.keys(S.story.nodes).sort();
   const snapshot = () => ({ story: S.story, layout: S.layout, sel: S.sel, conversionRegistry });
@@ -70,14 +71,50 @@
   const registryText = value => JSON.stringify(value || {stories:[]}, null, 2) + '\n';
   let confirmedRegistryText = '';
   let registryBaseHash = null;
+  // A story's registry is data/stories.json, or for stories/<作品>/ that work's pack.json (shown with
+  // res:// paths, as story_library.gd reads it; the service writes the pack's own form).
+  const workOf = path => /^stories\/([A-Za-z_][A-Za-z0-9_]*)\//.exec(path || '')?.[1] || null;
+  const packOf = work => S.packs.find(p => p.id === work) || null;
+  function ownerRegistry() {
+    const pack = packOf(workOf(projectSource.path));
+    return pack ? {stories: Core.packEntries(pack.pack, pack.id)} : (S.registry || {stories: []});
+  }
+  const ownerHash = () => packOf(workOf(projectSource.path))?.hash ?? (S.registryHash || null);
+  function rebuildStories() {
+    S.stories = [...(S.registry?.stories || []), ...S.packs.flatMap(p => Core.packEntries(p.pack, p.id))];
+    const picker = $('storySelect');
+    picker.hidden = !S.stories.length;
+    const option = e => el('option', { value: e.id }, `${e.id}（${e.kind}）`);
+    picker.replaceChildren(el('option', { value: '' }, '從專案開啟…'), ...(S.registry?.stories || []).map(option),
+      ...S.packs.map(p => el('optgroup', { label: `作品：${p.title}` }, ...Core.packEntries(p.pack, p.id).map(option))));
+    picker.value = S.stories.find(e => e.path === 'res://' + projectSource.path)?.id || '';
+  }
+  /** The open story's catalog: its work's catalog.json, else data/asset_catalog.json. */
+  function useCatalog() {
+    const work = workOf(projectSource.path);
+    S.catalog = (work && S.packCatalogs[work]) || S.baseCatalog;
+  }
+  async function loadCatalog(resPath, depth = 0) {
+    if (resPath === 'res://data/asset_catalog.json' && S.baseCatalog) return S.baseCatalog;
+    const own = await getJson(Core.projectUrl(resPath));
+    const base = typeof own.extends === 'string' && depth < 4 ? await loadCatalog(own.extends, depth + 1) : null;
+    return Core.resolveCatalog(own, resPath.replace(/\/[^/]*$/, ''), base);
+  }
+  async function loadPackCatalog(work) {
+    try { S.packCatalogs[work] = await loadCatalog(`res://stories/${work}/catalog.json`); }
+    catch { delete S.packCatalogs[work]; }  // no catalog.json: the game's catalog
+  }
   function currentRegistryEntry() {
-    return (conversionRegistry || S.registry)?.stories?.find(e => e.path === 'res://' + projectSource.path) ||
-      {id:S.story.id,kind:'sample',path:'res://' + projectSource.path,save:`user://${S.story.id}.save`,authoring:isReadOnly()?'dialogue':'graph'};
+    const work = workOf(projectSource.path), pack = packOf(work);
+    return (conversionRegistry || ownerRegistry())?.stories?.find(e => e.path === 'res://' + projectSource.path) ||
+      (pack ? {id:S.story.id,kind:'chapter',path:'res://' + projectSource.path,save:`user://pack_${work}_${S.story.id}.save`,
+        work,work_title:String(pack.pack.title || work),authoring:'graph'}
+        : {id:S.story.id,kind:'sample',path:'res://' + projectSource.path,save:`user://${S.story.id}.save`,authoring:isReadOnly()?'dialogue':'graph'});
   }
   const registryDirty = () => !!conversionRegistry && registryText(conversionRegistry) !== confirmedRegistryText;
-  const registryChanged = () => !!conversionRegistry && registryText(conversionRegistry) !== registryText(S.registry);
+  const registryChanged = () => !!conversionRegistry && registryText(conversionRegistry) !== registryText(ownerRegistry());
   function editRegistry(key, value) {
-    if (!conversionRegistry) conversionRegistry = JSON.parse(JSON.stringify(S.registry || {stories:[]}));
+    if (!conversionRegistry) conversionRegistry = JSON.parse(JSON.stringify(ownerRegistry()));
     let entry = conversionRegistry.stories.find(e => e.path === 'res://' + projectSource.path);
     if (!entry) { entry = {...currentRegistryEntry()}; conversionRegistry.stories.push(entry); }
     if (value === '') delete entry[key]; else entry[key] = value;
@@ -87,7 +124,7 @@
   }
   async function loadSkins() {
     if (S.service?.skins?.length) return S.service.skins;
-    const ids = [...new Set(['gintama', ...S.stories.map(e=>e.skin).filter(id=>typeof id==='string' && /^[A-Za-z0-9_-]+$/.test(id))])];
+    const ids = [...new Set(['gintama', ...[...S.stories, ...S.packs.map(p=>p.pack)].map(e=>e.skin).filter(id=>typeof id==='string' && /^[A-Za-z0-9_-]+$/.test(id))])];
     return Promise.all(ids.map(async id => {
       if (location.protocol !== 'file:') try {
         const value = await getJson(`../../skins/${id}/skin.json`);
@@ -98,10 +135,12 @@
   }
   function registryControls() {
     const entry = currentRegistryEntry();
-    const skin = select2((S.skins || []).map(s=>({value:s.id,label:`${s.id} · ${s.name}`})),entry.skin,value=>editRegistry('skin',value),'預設：gintama');
+    const pack = packOf(workOf(projectSource.path))?.pack;
+    const skin = select2((S.skins || []).map(s=>({value:s.id,label:`${s.id} · ${s.name}`})),entry.skin,value=>editRegistry('skin',value),
+      `預設：${pack?.skin || 'gintama'}${pack ? '（作品）' : ''}`);
     skin.id='storySkin'; skin.dataset.registryField='true';
     const covers = Object.values(S.catalog?.backgrounds || {}).filter(bg=>bg.path).map(bg=>({value:bg.path,label:bg.label || bg.path}));
-    const cover = select2(covers,entry.cover,value=>editRegistry('cover',value),'自動：故事第一張背景');
+    const cover = select2(covers,entry.cover,value=>editRegistry('cover',value),pack?.cover ? '預設：作品封面' : '自動：故事第一張背景');
     cover.id='storyCover'; cover.dataset.registryField='true';
     return [field('外觀包',skin),field('章節封面',cover,
       entry.cover && el('img',{class:'cover-preview',src:Core.projectUrl(entry.cover),alt:'章節封面預覽'}))];
@@ -112,6 +151,7 @@
     return field('打字音高',el('code',{class:'voice-pitch'},id==='narrator'?'旁白（無打字音）':Number.isFinite(value)?`${value} Hz`:'未設定（用預設音高）'));
   }
   function exportRegistry() {
+    if (workOf(projectSource.path)) { failure(`作品的登記在 stories/${workOf(projectSource.path)}/pack.json，請用「驗證並存檔」存回。`); return; }
     const text = registryText(conversionRegistry || S.registry);
     download('stories.json',text);
     pendingExport={text,key:draftKey,kind:'registry'};
@@ -123,10 +163,11 @@
     const bytes = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
     return [...new Uint8Array(bytes)].map(byte => byte.toString(16).padStart(2, '0')).join('');
   }
-  function resetProjectSource(story, name, rawText) {
-    projectSource = { path: `data/${/^[A-Za-z0-9_]+_story\.json$/.test(name) ? name : story.id + '_story.json'}`, hash: null, ready: rawText === null };
+  function resetProjectSource(story, name, rawText, path = null) {
+    projectSource = { path: path || `data/${/^[A-Za-z0-9_]+_story\.json$/.test(name) ? name : story.id + '_story.json'}`, hash: null, ready: rawText === null };
     projectSaving = false; saveIssues = [];
-    confirmedRegistryText=registryText(S.registry);registryBaseHash=S.registryHash || null;
+    useCatalog();
+    confirmedRegistryText=registryText(ownerRegistry());registryBaseHash=ownerHash();
     if (rawText !== null && location.protocol !== 'file:') {
       const source = projectSource;
       textHash(rawText).then(hash => {
@@ -145,7 +186,7 @@
   async function saveProject() {
     const metadataOnly=isReadOnly();
     if (!S.service || !S.story || projectSaving || !projectSource.ready || (metadataOnly && !registryChanged())) return;
-    const source=projectSource, sentText=storyText(), sentRegistry=registryText(conversionRegistry || S.registry);
+    const source=projectSource, sentText=storyText(), sentRegistry=registryText(conversionRegistry || ownerRegistry());
     const request={path:source.path,base_hash:source.hash,story:JSON.parse(sentText),
       registry_entry:JSON.parse(JSON.stringify(currentRegistryEntry())),registry_hash:registryBaseHash,update_registry:registryChanged()};
     projectSaving=true;saveIssues=[];S.error='';S.notice='';
@@ -161,7 +202,7 @@
         failure(errors[0]);saveDraft();renderProblems();renderStatus();return;
       }
       const unchanged=storyText()===sentText;
-      const registryUnchanged=registryText(conversionRegistry || S.registry)===sentRegistry;
+      const registryUnchanged=registryText(conversionRegistry || ownerRegistry())===sentRegistry;
       const latestEntry=JSON.parse(JSON.stringify(currentRegistryEntry()));
       if(!metadataOnly){
         source.hash=result.hash;
@@ -169,18 +210,21 @@
         if(unchanged)S.story=saved;else S.story.version=saved.version;
         originalStory=JSON.stringify(saved);confirmedText=Core.exportText(saved);
       }
-      if(result.registry){
-        S.registry=result.registry;S.stories=result.registry.stories;S.registryHash=result.registry_hash;
-        registryBaseHash=result.registry_hash;confirmedRegistryText=registryText(result.registry);
+      if(result.registry || result.pack){
+        if(result.pack){  // only that work's pack.json changed
+          const work=workOf(source.path), known=packOf(work);
+          if(known){known.pack=result.pack;known.hash=result.pack_hash;}
+          else S.packs.push({id:work,title:String(result.pack.title || work),path:result.owner,hash:result.pack_hash,pack:result.pack});
+          registryBaseHash=result.pack_hash;
+        } else {S.registry=result.registry;S.registryHash=result.registry_hash;registryBaseHash=result.registry_hash;}
+        confirmedRegistryText=registryText(ownerRegistry());
         conversionRegistry=null;
         if(!registryUnchanged){
-          conversionRegistry=JSON.parse(JSON.stringify(S.registry));
+          conversionRegistry=JSON.parse(JSON.stringify(ownerRegistry()));
           const entry=conversionRegistry.stories.find(e=>e.path==='res://'+source.path);
           if(entry)for(const key of ['skin','cover']){if(key in latestEntry)entry[key]=latestEntry[key];else delete entry[key];}
         }
-        $('storySelect').hidden=!S.stories.length;
-        $('storySelect').replaceChildren(el('option',{value:''},'從專案開啟…'),...S.stories.map(e=>el('option',{value:e.id},`${e.id}（${e.kind}）`)));
-        $('storySelect').value=S.stories.find(e=>e.path==='res://'+source.path)?.id || '';
+        rebuildStories();
       }
       pendingExport=null;S.error='';refreshDirty();
       S.notice=S.dirty?'已存回送出的版本；此頁另有後續修改，請再次存檔。':metadataOnly?'外觀設定已存回專案。':'驗證通過，已存回專案。';
@@ -261,7 +305,8 @@
     S.layout = cleanLayout(record.layout);
     S.sel = null;
     confirmedText = record.confirmedText;
-    confirmedRegistryText=record.confirmedRegistryText ?? registryText(S.registry);
+    useCatalog();
+    confirmedRegistryText=record.confirmedRegistryText ?? registryText(ownerRegistry());
     registryBaseHash=record.registryBaseHash ?? registryBaseHash;
     recompute(); ensureLayout(); refreshDirty();
     history.reset(snapshot());
@@ -330,13 +375,13 @@
     try { localStorage.setItem(LAYOUT_KEY + S.story.id, JSON.stringify(S.layout)); } catch (err) { storageFailure(err); }
   }
 
-  function loadStory(story, name, key = null, rawText = null) {
+  function loadStory(story, name, key = null, rawText = null, path = null) {
     ++loadTicket;
     drag = null;
     stopAudio(); conversionRegistry = null;
     S.story = story;
     S.name = name || `${story.id}_story.json`;
-    resetProjectSource(story, S.name, rawText);
+    resetProjectSource(story, S.name, rawText, path);
     S.sel = null;
     S.dirty = false;
     S.modified = false;
@@ -516,13 +561,14 @@
     return nodes;
   }
   function isReadOnly() {
-    return !!S.story && (!!S.story.generated_from || S.stories.some(e => e.path?.split('/').pop() === S.name && e.authoring === 'dialogue'));
+    return !!S.story && (!!S.story.generated_from || S.stories.some(e => e.path === 'res://' + projectSource.path && e.authoring === 'dialogue'));
   }
   let conversionRegistry = null;
   function convertStory(id) {
-    const result = Core.graphCopy(S.story,id,conversionRegistry || {...(S.registry || {}),stories:S.stories},currentRegistryEntry());
+    if (S.stories.some(e => e.id === id)) throw new Error('請使用未存在的新故事 id（英文、數字、底線）');
+    const result = Core.graphCopy(S.story,id,conversionRegistry || ownerRegistry(),currentRegistryEntry());
     const layout = JSON.parse(JSON.stringify(S.layout));
-    loadStory(result.story, `${id}_story.json`);
+    loadStory(result.story, `${id}_story.json`, null, null, result.registry.stories.at(-1).path.replace(/^res:\/\//, ''));
     S.layout = layout; conversionRegistry = result.registry;
     confirmedText = null; history.reset(snapshot()); refreshDirty(); saveDraft(); saveLayout();
     S.notice = '圖編輯副本已建立。匯出故事後跑 check_story；下載 stories.json 並合併登記，讓遊戲讀到新故事。原始故事保留。';
@@ -1157,13 +1203,13 @@
     return '';
   }
 
-  function openText(text, name) {
+  function openText(text, name, path = null) {
     if (S.dirty && !confirm('目前的修改還沒確認儲存，要放棄嗎？')) return;
     let story;
     try { story = JSON.parse(text); } catch (err) { S.error = `${name}：不是合法的 JSON（${err.message}）`; renderBanner(); return; }
     const problem = shapeError(story);
     if (problem) { S.error = `${name}：${problem}`; renderBanner(); return; }
-    loadStory(story, name, null, text);
+    loadStory(story, name, null, text, path);
   }
 
   function exportStory() {
@@ -1250,18 +1296,48 @@
       const response = await fetch(Core.projectUrl(entry.path));
       if (!response.ok) throw new Error(response.status);
       const text = await response.text();
-      if (ticket === loadTicket) openText(text, entry.path.split('/').pop());
+      if (ticket === loadTicket) openText(text, entry.path.split('/').pop(), entry.path.replace(/^res:\/\//, ''));
     } catch (err) { if (ticket === loadTicket) failure(`讀不到 ${entry.path}（${err.message}）`); }
   });
-  $('btnNewStory').addEventListener('click', () => {
-    if (S.dirty && !confirm('目前的修改還沒確認儲存，要放棄嗎？')) return;
-    const id = (prompt('新故事的 id（英文、數字、底線）', 'my_story') || '').trim();
-    if (!/^[A-Za-z0-9_]+$/.test(id)) return;
-    loadStory(Core.newStory(id), `${id}_story.json`);
+  /** A blank story at data/<id>_story.json, or in a work's folder (registered in its pack.json on save). */
+  function startNewStory(id, work = null) {
+    loadStory(Core.newStory(id), `${id}_story.json`, null, null, work ? `stories/${work}/${id}_story.json` : null);
     confirmedText = null;
     refreshDirty(); saveDraft();
     renderStatus();
     renderVersionHint();
+  }
+  $('btnNewStory').addEventListener('click', () => {
+    if (S.dirty && !confirm('目前的修改還沒確認儲存，要放棄嗎？')) return;
+    let work = null;
+    if (S.packs.length) {
+      work = (prompt(`放在哪個作品？填作品 id；留空＝本作（data/）。\n${S.packs.map(p => `${p.id}：${p.title}`).join('\n')}`,
+        workOf(projectSource.path) || '') || '').trim() || null;
+      if (work && !packOf(work)) { failure(`沒有 ${work} 這個作品。`); return; }
+    }
+    const id = (prompt('新故事的 id（英文、數字、底線）', work ? `${work}_ch${Core.packEntries(packOf(work).pack, work).length + 1}` : 'my_story') || '').trim();
+    if (!/^[A-Za-z0-9_]+$/.test(id)) return;
+    if (S.stories.some(e => e.id === id)) { failure(`已經有 ${id} 這個故事。`); return; }
+    startNewStory(id, work);
+  });
+  $('btnNewWork').addEventListener('click', async () => {
+    if (!S.service || (S.dirty && !confirm('目前的修改還沒確認儲存，要放棄嗎？'))) return;
+    const id = (prompt('作品 id（英文小寫、數字、底線，例如 titan）') || '').trim();
+    if (!id) return;
+    const title = (prompt('作品名稱（章節選擇裡的標題）', id) || '').trim();
+    if (!title) return;
+    try {
+      const response = await fetch('../../api/work', {method:'POST',
+        headers:{'Content-Type':'application/json','X-Story-Editor-Token':S.service.token},body:JSON.stringify({id,title})});
+      const result = await response.json();
+      if (!response.ok || result.ok !== true) { failure(result.error || '建立作品失敗'); return; }
+      S.packs = result.packs;
+      await loadPackCatalog(id);
+      rebuildStories();
+      startNewStory(`${id}_ch1`, id);
+      S.notice = `${result.message} 第一章已開好，按「驗證並存檔」後它會登記進 pack.json。`;
+      renderBanner();
+    } catch (err) { failure(`建立作品失敗：${err.message}`); }
   });
   $('btnConvert').addEventListener('click', () => {
     const id = prompt('新故事 id（原故事保留）', `${S.story.id}_graph`);
@@ -1310,10 +1386,14 @@
     ]);
     if (service.status === 'fulfilled') S.service = service.value;
     const registry=S.service?.registry || (stories.status==='fulfilled'?stories.value:null);
-    if(registry){S.registry=registry;S.stories=registry.stories || [];}
+    if(registry)S.registry=registry;
     S.registryHash=S.service?.registry_hash || null;
+    S.packs=S.service?.packs || [];  // works are listed by the service (a static server lists no folders)
+    if (catalog.status === 'fulfilled' && isObj(catalog.value.characters)) S.baseCatalog = catalog.value;
+    await Promise.all(S.packs.map(p => loadPackCatalog(p.id)));
+    useCatalog();
+    rebuildStories();  // the skin list includes the ids the stories use
     S.skins=await loadSkins();
-    if (catalog.status === 'fulfilled' && isObj(catalog.value.characters)) S.catalog = catalog.value;
     if (runner.status === 'fulfilled') {
       for (const name of Object.keys(S.enums)) {
         const list = Core.parseGdStrings(runner.value, name);
@@ -1322,10 +1402,7 @@
     }
     S.online = stories.status === 'fulfilled' && catalog.status === 'fulfilled';
     const picker = $('storySelect');
-    if (S.stories.length) {
-      picker.hidden = false;
-      picker.replaceChildren(el('option', { value: '' }, '從專案開啟…'), ...S.stories.map(s => el('option', { value: s.id }, `${s.id}（${s.kind}）`)));
-    }
+    $('btnNewWork').hidden = !S.service;
     const wanted = new URLSearchParams(location.search).get('story');
     const entry = S.stories.find(s => s.id === wanted);
     if (entry && !S.story && loadTicket === 0) {
@@ -1335,7 +1412,7 @@
       try {
         const key = localStorage.getItem(LAST_DRAFT);
         const raw = key?.startsWith(DRAFT_KEY) && localStorage.getItem(key);
-        if (raw) { const record = validDraft(raw); loadStory(record.base, record.name, key); }
+        if (raw) { const record = validDraft(raw); loadStory(record.base, record.name, key, null, record.projectSource?.path || null); }
       } catch (err) { storageFailure(err); }
     }
   }

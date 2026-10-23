@@ -128,6 +128,16 @@ godot --headless --path prototypes/debt-commission \
 
 編輯器自己只檢查結構（連線、到不了、`next` 規則）；素材 id、旗標、表情寫對沒有，以 check_story 為準。
 
+## 作品（故事包）
+
+本機專案服務會列出 `stories/*/pack.json` 的作品，故事選單裡每部作品一個分組（依資料夾名排序，與遊戲相同）。作品的故事讀自己的 `catalog.json`：相對路徑以作品資料夾為準，`extends` 先鋪上被繼承的 catalog，所以角色、表情、背景縮圖與封面選單都是那部作品的；`data/` 的故事仍用 `data/asset_catalog.json`。
+
+- **新作品**：輸入作品 id（英文小寫、數字、底線）與名稱，服務建立 `stories/<id>/`，內含 `pack.json`、只有「主角」與一張漸層背景的 `catalog.json`、空的 `art/`，並開好第一章 `<id>_ch1`。按「驗證並存檔」後第一章登記進 `pack.json`（`kind` 為 `chapter`）。
+- **新故事**：有作品時會先問放在哪個作品，留空就是 `data/`。
+- **存回**：作品的故事存成 `stories/<作品>/<id>_story.json`，以作品的 catalog 驗證；新故事、外觀與封面寫進該作品的 `pack.json`（只寫 `id`、`kind`、`path`、`authoring` 與選填的 `skin`、`cover`；存檔位置、作品名由遊戲推導），不動 `data/stories.json`。外觀包選單的「預設」是作品的 `skin`。
+- 故事 id 在所有作品與 `data/` 之間不能重複；轉成圖編輯來源時，作品的故事複製在同一個作品資料夾。
+- 角色與背景的新增仍在 `catalog.json` 裡改（格式同 `data/asset_catalog.json`，背景要有 `top`／`bottom` 漸層色）。
+
 ## 讓遊戲讀到新故事
 
 在 `data/stories.json` 的 `stories` 陣列加一筆，順序就是章節選擇的順序：
@@ -158,6 +168,7 @@ node tools/story_editor/smoke.mjs --playwright <playwright-core 目錄> --chromi
 
 ## 限制
 
+- 作品清單、「新作品」與存回作品需要本機專案服務；靜態服務列不了資料夾，只列 `data/stories.json`。
 - 下載檔比對確認只表示磁碟檔內容與匯出相同；存回專案請使用本機專案服務。未確認儲存時關頁面會提醒。
 - 調查、吐槽回合、result 等大型 op 與舊版指令用 JSON 框編輯。
 - 吐槽回合可能有數十條出線，卡片仍會很高；放大、搜尋定位或調整卡片位置。
@@ -184,4 +195,12 @@ node tools/story_editor/project_smoke.mjs --playwright <playwright-core 目錄> 
 node tools/story_editor/skin_smoke.mjs --playwright <playwright-core 目錄> --chromium <Chrome 路徑> --out <輸出資料夾>
 ```
 
-此測試涵蓋目錄與靜態外觀清單、唯讀故事的外觀存回、轉副本保留未知欄位、default_pov／credits、voice_pitch 及兩份下載確認。服務與此測試內部自行取得 GODOT_LOCK；不要再包一層 run_coordinated.py，以免重複等自己的鎖。
+此測試涵蓋目錄與靜態外觀清單、唯讀故事的外觀存回、轉副本保留未知欄位、default_pov／credits、voice_pitch 及兩份下載確認。
+
+作品回歸（同樣使用暫存專案）：
+
+```bash
+node tools/story_editor/pack_smoke.mjs --playwright <playwright-core 目錄> --chromium <Chrome 路徑> --out <輸出資料夾>
+```
+
+涵蓋作品分組、作品 catalog（相對路徑）、作品故事的存回與 pack.json 封面、「新作品」建立資料夾並存回第一章、新故事放進作品，以及回到 `data/` 故事時換回遊戲 catalog。服務與此測試內部自行取得 GODOT_LOCK；不要再包一層 run_coordinated.py，以免重複等自己的鎖。

@@ -298,4 +298,28 @@ for (const name of files) {
   assert.equal(Core.stepLabel({op:'char'}), '角色登場／表情');
   log('ok  root credits round trip and graph conversion preserve unknown nested fields, copy isolation; Chinese labels');
 }
+{
+  // 故事包: rows and catalogs as story_library.gd / StoryRunner.read_catalog read them (titan test work).
+  const read = rel => JSON.parse(fs.readFileSync(path.join(project, rel), 'utf8'));
+  const pack = read('tests/fixtures/packs/titan/pack.json');
+  const rows = Core.packEntries(pack, 'titan');
+  assert.deepEqual(rows.map(e => [e.id, e.kind, e.path, e.save, e.work, e.work_title]), [
+    ['titan_ch1', 'chapter', 'res://stories/titan/ch1_story.json', 'user://pack_titan_titan_ch1.save', 'titan', '測試作品：城牆'],
+    ['titan_ch2', 'chapter', 'res://stories/titan/ch2_story.json', 'user://pack_titan_titan_ch2.save', 'titan', '測試作品：城牆']]);
+  assert.equal(rows[0].cover, undefined, "a row keeps only its own cover; the pack's is the default");
+  const base = read('data/asset_catalog.json');
+  const own = { extends: 'res://data/asset_catalog.json', characters: { eren: { name: '艾連', path: 'art/eren.png', expressions: { angry: 'art/eren_angry.png', calm: 'res://x.png' } } },
+    backgrounds: { wall: { top: '#000', bottom: '#111', path: 'art/wall.png' } } };
+  const catalog = Core.resolveCatalog(own, 'res://stories/titan', base);
+  assert.equal(catalog.characters.eren.path, 'res://stories/titan/art/eren.png');
+  assert.deepEqual(catalog.characters.eren.expressions, { angry: 'res://stories/titan/art/eren_angry.png', calm: 'res://x.png' });
+  assert.ok(catalog.characters.shinpachi && catalog.backgrounds.yorozuya_living_room && catalog.backgrounds.wall, 'extends lays the base under it');
+  assert.equal(catalog.extends, undefined); assert.equal(base.characters.eren, undefined, 'the base is not changed');
+  assert.equal(Core.resolveCatalog(read('tests/fixtures/packs/titan/catalog.json'), 'res://tests/fixtures/packs/titan').backgrounds.wall.path,
+    'res://tests/fixtures/packs/titan/art/wall.png');
+  const copy = Core.graphCopy({ id: 'titan_ch1', nodes: {}, generated_from: 'x' }, 'titan_ch1_graph', { stories: rows }, rows[0]);
+  assert.deepEqual(copy.registry.stories.at(-1), { ...rows[0], id: 'titan_ch1_graph', path: 'res://stories/titan/titan_ch1_graph_story.json',
+    save: 'user://pack_titan_titan_ch1_graph.save', authoring: 'graph' });
+  log('ok  story packs: rows with res:// paths and per-work saves; catalogs resolve relative art and extends; a work copy stays in its folder');
+}
 log('ALL PASSED');
