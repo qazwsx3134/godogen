@@ -109,7 +109,8 @@ var _placard_before_normalize: String = ""
 var _round_before_normalize: Dictionary = {}
 
 
-func load_story(path: String) -> bool:
+## catalog_path: the catalog to check it against; "" uses catalog_path_for(path).
+func load_story(path: String, catalog_path: String = "") -> bool:
     if not FileAccess.file_exists(path):
         return _reject("Story file does not exist: %s" % path)
 
@@ -123,7 +124,7 @@ func load_story(path: String) -> bool:
         return _reject("Invalid story JSON at %s: %s" % [path, parser.get_error_message()])
 
     var parsed: Variant = parser.data
-    var catalog_result: Dictionary = _read_asset_catalog()
+    var catalog_result: Dictionary = _read_asset_catalog(catalog_path if not catalog_path.is_empty() else catalog_path_for(path))
     if not bool(catalog_result.get("ok", false)):
         return _reject("Invalid asset catalog: %s" % String(catalog_result.get("error", "unknown error")))
 
@@ -1355,25 +1356,73 @@ func _validate_phase3_ids(nodes: Dictionary) -> String:
     return ""
 
 
-func _read_asset_catalog() -> Dictionary:
-    if not FileAccess.file_exists(ASSET_CATALOG_PATH):
-        return {"ok": false, "error": "catalog file does not exist: %s" % ASSET_CATALOG_PATH}
+## The catalog a story uses: catalog.json beside the story file (a story pack), else the game's.
+static func catalog_path_for(story_path: String) -> String:
+    var beside: String = story_path.get_base_dir().path_join("catalog.json")
+    return beside if story_path.begins_with("res://") and FileAccess.file_exists(beside) else ASSET_CATALOG_PATH
 
-    var file: FileAccess = FileAccess.open(ASSET_CATALOG_PATH, FileAccess.READ)
-    if file == null:
-        return {"ok": false, "error": "unable to open catalog file"}
 
+## The catalog at `path` with what it `extends` laid under it and its relative asset paths made
+## res:// (relative to its own folder): {catalog} or {error}. Not validated.
+static func read_catalog(path: String) -> Dictionary:
+    if not FileAccess.file_exists(path):
+        return {"error": "catalog file does not exist: %s" % path}
     var parser := JSON.new()
-    var parse_error: Error = parser.parse(file.get_as_text())
-    if parse_error != OK:
-        return {"ok": false, "error": "invalid catalog JSON: %s" % parser.get_error_message()}
+    if parser.parse(FileAccess.get_file_as_string(path)) != OK:
+        return {"error": "invalid catalog JSON in %s: %s" % [path, parser.get_error_message()]}
+    if not parser.data is Dictionary:
+        return {"error": "%s: root must be an object" % path}
+    var own: Dictionary = _resolved_paths(parser.data as Dictionary, path.get_base_dir())
+    if not own.has("extends"):
+        return {"catalog": own}
+    var base_path: String = String(own["extends"])
+    if base_path == path or not base_path.begins_with("res://"):
+        return {"error": "%s: extends must name another res:// catalog" % path}
+    var base: Dictionary = read_catalog(base_path)
+    if base.has("error"):
+        return base
+    var merged: Dictionary = (base["catalog"] as Dictionary).duplicate(true)
+    for key: String in own.keys():
+        if key == "extends":
+            continue
+        if merged.get(key) is Dictionary and own[key] is Dictionary:
+            (merged[key] as Dictionary).merge(own[key] as Dictionary, true)
+        else:
+            merged[key] = own[key]
+    return {"catalog": merged}
 
-    var parsed: Variant = parser.data
-    var validation_error: String = _validate_asset_catalog(parsed)
+
+## Asset paths that are not res:// (path, expression pictures, a character's scene) are made
+## relative to `folder`.
+static func _resolved_paths(catalog: Dictionary, folder: String) -> Dictionary:
+    var result: Dictionary = catalog.duplicate(true)
+    var resolve: Callable = func(value: Variant) -> Variant:
+        return folder.path_join(String(value)) if value is String and not String(value).is_empty() \
+            and not String(value).contains("://") else value
+    for collection: String in ["backgrounds", "characters", "items", "sounds", "music"]:
+        if not result.get(collection) is Dictionary:
+            continue
+        for id: Variant in (result[collection] as Dictionary).keys():
+            var entry: Variant = result[collection][id]
+            if not entry is Dictionary:
+                continue
+            for field: String in ["path", "scene"]:
+                if (entry as Dictionary).has(field):
+                    entry[field] = resolve.call(entry[field])
+            if (entry as Dictionary).get("expressions") is Dictionary:
+                for expression: Variant in (entry["expressions"] as Dictionary).keys():
+                    entry["expressions"][expression] = resolve.call(entry["expressions"][expression])
+    return result
+
+
+func _read_asset_catalog(path: String = ASSET_CATALOG_PATH) -> Dictionary:
+    var read: Dictionary = read_catalog(path)
+    if read.has("error"):
+        return {"ok": false, "error": read["error"]}
+    var validation_error: String = _validate_asset_catalog(read["catalog"])
     if not validation_error.is_empty():
         return {"ok": false, "error": validation_error}
-
-    return {"ok": true, "catalog": (parsed as Dictionary).duplicate(true)}
+    return {"ok": true, "catalog": (read["catalog"] as Dictionary).duplicate(true)}
 
 
 func _validate_asset_catalog(value: Variant) -> String:
@@ -1426,6 +1475,10 @@ func _validate_asset_catalog(value: Variant) -> String:
         var character_path_error: String = _validate_optional_asset_path(character, "character", character_id)
         if not character_path_error.is_empty():
             return character_path_error
+        if character.has("scene"):
+            var scene_error: String = _validate_optional_asset_path({"path": character["scene"]}, "character scene", character_id)
+            if not scene_error.is_empty():
+                return scene_error
         if character.has("voice_pitch") and (not _is_number(character["voice_pitch"]) or float(character["voice_pitch"]) <= 0.0):
             return "character '%s' voice_pitch must be a positive number (Hz)" % character_id
         if character.has("expressions"):

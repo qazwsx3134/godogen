@@ -39,6 +39,15 @@ func _the_story_brings_its_skin() -> void:
 	await _frames(3)
 	_expect(game._ui_style_id == "plain" and game._title_screen.scene_file_path.ends_with("plain/title.tscn"),
 		"chapter A (skin plain) mounts its title scene")
+	var dialogue_box: Node = game._dialog_panel
+	game._skin = SkinPack.load_skin("settings_only", SKINS)
+	game._apply_ui_style()
+	_expect(game._settings_panel.scene_file_path.ends_with("settings_only/settings.tscn")
+		and game._dialog_panel.scene_file_path == dialogue_box.scene_file_path,
+		"a skin replacing only the settings panel remounts it: %s" % game._settings_panel.scene_file_path)
+	game._skin = SkinPack.load_skin("plain", SKINS)
+	game._apply_ui_style()
+	await _frames(1)
 	_expect((game._title_screen.find_child("Logo", true, false) as Label).text == "測試作品\n反駁 ADV"
 		and (game._menu_overlay.find_child("HeadingText", true, false).get_node("Heading") as Label).text == "暫停",
 		"its texts replace the scene's words: %s / %s" % [(game._title_screen.find_child("Logo", true, false) as Label).text,

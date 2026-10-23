@@ -12,7 +12,6 @@ const ParleySource = preload("res://tools/story_build/parley_source.gd")
 const StoryRunner = preload("res://scripts/story_runner.gd")
 const TsukkomiRound = preload("res://scripts/tsukkomi_round.gd")
 const AtomicFile = preload("res://addons/proto_kit/atomic_file.gd")
-const CATALOG_PATH: String = "res://data/asset_catalog.json"
 const CHECK_PATH: String = "user://story_build_check.json"
 const BLOCK_OPS: Array[String] = ["investigate", "boke_round"]
 
@@ -59,9 +58,12 @@ static func build_text(text: String, source_path: String) -> Dictionary:
 		if not meta.get(key, null) is String or String(meta[key]).is_empty():
 			return _fail("%s: story.%s must be a non-empty string" % [blocks_path, key])
 
-	var catalog: Variant = _read_json(CATALOG_PATH)
-	if not catalog is Dictionary:
-		return _fail("cannot read %s" % CATALOG_PATH)
+	# The story pack's catalog when the source sits in one (StoryRunner.catalog_path_for).
+	var catalog_path: String = StoryRunner.catalog_path_for(source_path)
+	var read: Dictionary = StoryRunner.read_catalog(catalog_path)
+	if read.has("error"):
+		return _fail(str(read["error"]))
+	var catalog: Variant = read["catalog"]
 	var context: Dictionary = {"speakers": _speaker_table(catalog as Dictionary), "source": source_path}
 
 	var parsed: Dictionary
@@ -111,7 +113,7 @@ static func build_text(text: String, source_path: String) -> Dictionary:
 		story["default_pov"] = meta["default_pov"]
 	story["version"] = fingerprint(story)
 
-	var runner_error: String = _validate_with_runner(story)
+	var runner_error: String = _validate_with_runner(story, catalog_path)
 	if not runner_error.is_empty():
 		return _fail("%s: StoryRunner rejects the output: %s" % [source_path, runner_error])
 	return {"story": story, "error": ""}
@@ -307,11 +309,11 @@ static func _unreachable(entry: String, nodes: Dictionary) -> Array[String]:
 	return missing
 
 
-static func _validate_with_runner(story: Dictionary) -> String:
+static func _validate_with_runner(story: Dictionary, catalog_path: String = StoryRunner.ASSET_CATALOG_PATH) -> String:
 	if AtomicFile.write_text(CHECK_PATH, to_json(story)) != OK:
 		return "cannot write %s" % CHECK_PATH
 	var runner: RefCounted = StoryRunner.new()
-	var ok: bool = runner.call("load_story", CHECK_PATH)
+	var ok: bool = runner.call("load_story", CHECK_PATH, catalog_path)
 	DirAccess.remove_absolute(CHECK_PATH)
 	return "" if ok else String(runner.get("error_message"))
 

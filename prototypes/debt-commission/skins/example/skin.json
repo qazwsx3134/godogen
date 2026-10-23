@@ -1,0 +1,16 @@
+{
+  "id": "example",
+  "name": "範例外觀（扁平）",
+  "look": "flat",
+  "palette": {
+    "canvas": "#10131d", "panel": "#171c2b", "panel_soft": "#1d2436", "surface": "#242c42",
+    "surface_hover": "#2f3955", "text": "#eef0f6", "muted": "#a9b1c6", "accent": "#e9a86b",
+    "accent_ink": "#171c2b", "rule": "#5d6a8c", "focus": "#ffc98f", "name_bg": "#3d4f7a",
+    "name_ink": "#eef0f6", "danger": "#ff8a7a", "disabled": "#6f7690", "disabled_surface": "#20263a",
+    "quick_text": "#cfd5e4", "quick_active": "#2f3955", "quick_active_ink": "#eef0f6", "text_outline": "#10131d"
+  },
+  "panel_paper": "",
+  "plaque": "",
+  "title": {"background": "station_night", "bgm": ""},
+  "texts": {"title_logo": "末班車", "tagline": "故事包範例", "menu_kicker": "末班車・目錄", "menu_heading": "暫停"}
+}

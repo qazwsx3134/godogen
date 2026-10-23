@@ -1,0 +1,5 @@
+{
+  "story": {"id": "example_ch1", "title": "第一章・月台", "note": "故事包範例（沒有任何圖：漸層背景與剪影角色）", "initial_flags": {"waited": false}},
+  "titles": {"platform": "月台", "stay": "留下來", "leave": "離開"},
+  "blocks": {}
+}

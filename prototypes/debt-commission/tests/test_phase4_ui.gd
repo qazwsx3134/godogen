@@ -105,7 +105,7 @@ func _test_title_story_switch() -> void:
 	var rows: Dictionary = game._chapter_select.call("rows")
 	_expect(game._screen_mode == "chapter_select" and game._chapter_select.visible and rows.size() == game._story_choices.size(),
 		"the story label opens 章節選擇 with every story")
-	_expect(rows.keys() == ["chapter1", "debt", "phase2", "phase3", "phase4", "phase4_rounds", "comedy", "choices", "ep00", "text_effects"]
+	_expect(rows.keys() == ["chapter1", "example_ch1", "example_ch2", "debt", "phase2", "phase3", "phase4", "phase4_rounds", "comedy", "choices", "ep00", "text_effects"]
 		and (rows["debt"] as Button).text.contains("請幫我向你老闆討債") and (rows["phase4"] as Button).text.contains("試玩片段"),
 		"rows list each story by its own title, samples marked as such: %s" % [rows.keys()])
 	_expect(not game._chapter_select.find_child("ChaptersEmpty", true, false).visible and game._chapter_select.row_text("chapter1").contains("草莓牛奶"), "本篇 lists the playable first chapter")
@@ -253,6 +253,7 @@ func _new_game(save_path: String) -> Control:
 	var game: Control = MAIN_SCENE.instantiate() as Control
 	game.story_path = STORY_PATH
 	game.save_path = save_path
+	game.packs_root = "res://tests/fixtures/no_packs/"  # only data/stories.json
 	root.add_child(game)
 	return game
 

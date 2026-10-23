@@ -97,6 +97,24 @@
 - **Dialogue 分頁（文字寫法）**：習慣像寫劇本一樣打字的人，可以改用 `.dialogue` 檔，範例是 `story_src/phase4.dialogue`，建置與試玩用同一個選單。兩種寫法效果完全相同，同一個故事選一種寫就好。
 - **Puzzles 分頁（解謎規劃）**：畫「哪條線索解開哪個謎題」的依賴圖，只用來規劃，不會影響遊戲。
 
+## 八、做一部自己的作品（故事包）
+
+一部作品一個資料夾，放進 `stories/` 就會出現在章節選擇，不用改程式。範例是 `stories/example/`（末班車，沒有任何圖：漸層背景、剪影角色）。
+
+1. 複製 `stories/example/` 成 `stories/<作品 id>/`（id 用英文小寫加底線）。
+2. 改 `pack.json`：作品名 `title`、外觀包 `skin`、封面 `cover`、署名 `credits`，以及 `stories` 裡每一章的 `id`（全遊戲不能重複）、`kind`（`chapter` 本篇／`sample` 試玩片段）、`path`。
+3. 改 `catalog.json`：這部作品的角色、背景、素材、音效與音樂，格式同 `data/asset_catalog.json`。圖放在作品資料夾的 `art/`，路徑可以直接寫 `art/xxx.png`（相對於這個資料夾）。尺寸規格見 [創作者美術規格](ART-SPEC.md)。
+4. 劇本寫在作品資料夾裡的 `.dialogue`（＋同名 `.blocks.json`），建置輸出到同一個資料夾：
+
+   ```bash
+   godot --headless --path . --script res://tools/story_build/build_story.gd -- stories/<作品>/ch1.dialogue stories/<作品>/ch1_story.json
+   ```
+
+   說話者用這部作品 catalog 裡的角色名字或 id。
+5. 外觀：在 `skins/<外觀 id>/skin.json` 寫配色與用語（見 README「做別部作品：外觀包」），`pack.json` 的 `skin` 指過去；`skins/example/` 是不用圖的扁平範例。
+
+本篇依 `pack.json` 的順序解鎖：第一章一開始就能玩，破關後開下一章；跨章旗標、結局收集、鑑賞都只在這部作品裡算，不會和其他作品混在一起。沒有吐槽回合的章節走到結尾就算破關。
+
 ## 目前的限制
 
 - 調查／吐槽劇本會自動啟用眼鏡、吐槽之力、素材與 Game Over 重試；第一章範例是 `chapter1.dialogue`＋`chapter1.blocks.json`。

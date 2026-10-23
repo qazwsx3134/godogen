@@ -55,6 +55,8 @@ func open(entries: Array, endings: Array = []) -> void:
 			list.remove_child(row)
 			row.queue_free()
 	_row_texts.clear()
+	var last_work: String = ""
+	var cards_in_work: int = 0
 	for entry: Dictionary in entries:
 		var text: String = "%s\n%s" % [entry["title"], entry["note"]]
 		if not str(entry.get("credit", "")).is_empty():
@@ -62,7 +64,19 @@ func open(entries: Array, endings: Array = []) -> void:
 		_row_texts[str(entry["id"])] = text
 		var button: Button
 		if str(entry["kind"]) == "chapter":
-			var card: Control = _episode_card(entry, _chapters.get_child_count())
+			var work: String = str(entry.get("work", ""))
+			if work != last_work:
+				last_work = work
+				cards_in_work = 0
+				if not work.is_empty():  # another work's chapters under its title
+					var heading: Label = Label.new()
+					heading.name = "Work_%s" % work
+					heading.text = str(entry.get("work_title", work))
+					heading.add_theme_font_size_override("font_size", 44)
+					_chapters.add_child(heading)
+					UI_STYLES.apply_label(heading, _style_id, "accent")
+			var card: Control = _episode_card(entry, cards_in_work)
+			cards_in_work += 1
 			_chapters.add_child(card)
 			button = card.get_node("%Card") as Button
 		else:
@@ -99,7 +113,7 @@ func rows() -> Dictionary:
 	var found: Dictionary = {}
 	for list: VBoxContainer in [_chapters, _samples]:
 		for row: Node in list.get_children():
-			if not row.is_queued_for_deletion():
+			if not row.is_queued_for_deletion() and str(row.name).begins_with("ChapterRow_"):
 				found[str(row.name).trim_prefix("ChapterRow_")] = row if row is Button else row.get_node("%Card")
 	return found
 

@@ -1,0 +1,5 @@
+{
+  "id": "settings_only",
+  "name": "只換設定面板",
+  "scenes": {"settings": "res://tests/fixtures/skins/settings_only/settings.tscn"}
+}

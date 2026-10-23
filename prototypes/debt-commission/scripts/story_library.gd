@@ -1,24 +1,80 @@
 extends RefCounted
-## The stories the player can pick (data/stories.json) and what the player has reached in them
-## (user://progress.cfg): each story's title and credits, the best grade of a cleared chapter, the
-## endings seen, the `carry` flags a chapter ended with, which chapter opens next, the credits roll,
-## and the backgrounds and music met in play for 鑑賞. main.gd owns one; 章節選擇, the result card,
-## 製作名單 and 鑑賞 read it.
+## The stories the player can pick and what the player has reached in them (user://progress.cfg).
+## Stories come from data/stories.json (the base work) and from story packs, stories/<work>/pack.json
+## (IMPLEMENTATION.md「故事包」). Per story: title and credits, the best grade of a cleared chapter,
+## the endings seen, the `carry` flags a chapter ended with, which chapter opens next; per work: the
+## chapter order and the backgrounds and music met in play for 鑑賞. main.gd owns one; 章節選擇, the
+## result card, 製作名單 and 鑑賞 read it.
 
 const StoryRunner = preload("res://scripts/story_runner.gd")
 
-## Each entry: {id, kind ("chapter" or "sample"), path, save}, in the registry's order.
+## Each entry: {id, kind ("chapter" or "sample"), path, save, work, work_title} and optional skin,
+## cover, credits; the base work's entries first, then each pack's in folder order. `work` is "" for
+## the base work.
 var stories: Array[Dictionary] = []
 var progress_path: String = ""
+## Story ids a pack listed that were already taken (those entries are left out).
+var rejected: Array[String] = []
 ## Title and credits by story path, read once from the story file.
 var _meta: Dictionary = {}
 ## 鑑賞 unlocks by kind ("bg", "bgm"), read once: {kind: Array of ids}.
 var _unlocked: Dictionary = {}
 
 
-func _init(stories_path: String, progress_file: String) -> void:
+func _init(stories_path: String, progress_file: String, packs_root: String = "res://stories/") -> void:
 	stories = read_registry(stories_path)
+	for entry: Dictionary in stories:
+		entry["work"] = ""
+		entry["work_title"] = ""
+	_add_packs(packs_root)
 	progress_path = progress_file
+
+
+## Every stories/<work>/pack.json, in folder order; a story id already taken is left out.
+func _add_packs(packs_root: String) -> void:
+	if not DirAccess.dir_exists_absolute(packs_root):
+		return
+	var folders: PackedStringArray = DirAccess.get_directories_at(packs_root)
+	var sorted: Array = Array(folders)
+	sorted.sort()
+	for folder: String in sorted:
+		for entry: Dictionary in read_pack(packs_root.path_join(folder)):
+			if stories.any(func(other: Dictionary) -> bool: return other["id"] == entry["id"]):
+				rejected.append(str(entry["id"]))
+				push_error("story pack %s: story id '%s' is already taken; left out" % [folder, entry["id"]])
+				continue
+			stories.append(entry)
+
+
+## The entries of the pack in `folder` (pack.json), with paths made res:// and the work's skin,
+## cover and credits as each story's defaults. [] when there is no valid pack.json.
+static func read_pack(folder: String) -> Array[Dictionary]:
+	var entries: Array[Dictionary] = []
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(folder.path_join("pack.json")))
+	if not parsed is Dictionary or not str((parsed as Dictionary).get("id", "")).is_valid_identifier():
+		return entries
+	var pack: Dictionary = parsed as Dictionary
+	var work: String = str(pack["id"])
+	for raw: Variant in pack.get("stories", []):
+		if not raw is Dictionary or not (raw as Dictionary).has_all(["id", "path"]):
+			continue
+		var entry: Dictionary = (raw as Dictionary).duplicate(true)
+		entry["kind"] = str(entry.get("kind", "sample"))
+		entry["path"] = _in_folder(folder, str(entry["path"]))
+		entry["save"] = "user://pack_%s_%s.save" % [work, entry["id"]]
+		entry["work"] = work
+		entry["work_title"] = str(pack.get("title", work))
+		for key: String in ["skin", "cover", "credits"]:
+			if not entry.has(key) and pack.has(key):
+				entry[key] = pack[key]
+		if entry.has("cover"):
+			entry["cover"] = _in_folder(folder, str(entry["cover"]))
+		entries.append(entry)
+	return entries
+
+
+static func _in_folder(folder: String, path: String) -> String:
+	return path if path.contains("://") else folder.path_join(path)
 
 
 ## The registry entries that have an id, a path and a save.
@@ -46,9 +102,12 @@ func title(entry: Dictionary) -> String:
 	return str(_read_meta(entry)["title"])
 
 
-## A story's `credits` ([] when it has none or they are malformed).
+## A story's `credits`, else its work's ([] when there are none or they are malformed).
 func credits(entry: Dictionary) -> Array:
-	return _read_meta(entry)["credits"]
+	var own: Array = _read_meta(entry)["credits"]
+	if own.is_empty() and entry.get("credits") is Array and StoryRunner.new().validate_credits(entry["credits"]).is_empty():
+		return entry["credits"]
+	return own
 
 
 ## Credits in one line for a chapter row or the result card: 「劇本 甲｜繪 乙、丙」, the first three roles.
@@ -73,9 +132,11 @@ func credit_sections(game_credits_path: String) -> Array[Dictionary]:
 
 
 ## The picture on a story's 章節選擇 card: the registry's `cover` when it names a picture, else the
-## first background with a picture the story shows, walking its nodes from `entry`. "" for none.
-## backgrounds: the asset catalog's `backgrounds`.
-func cover(entry: Dictionary, backgrounds: Dictionary) -> String:
+## first background with a picture the story shows, walking its nodes from `entry`, in that story's
+## own catalog. "" for none.
+func cover(entry: Dictionary) -> String:
+	var catalog: Dictionary = StoryRunner.read_catalog(StoryRunner.catalog_path_for(str(entry["path"]))).get("catalog", {})
+	var backgrounds: Dictionary = catalog.get("backgrounds", {}) as Dictionary
 	var named: String = str(entry.get("cover", ""))
 	if not named.is_empty() and ResourceLoader.exists(named):
 		return named
@@ -192,6 +253,8 @@ func chapter_endings() -> Array[Dictionary]:
 			continue
 		var seen: Array = _seen_endings(str(entry["id"]))
 		var chapter: String = title(entry).get_slice("・", 0)
+		if not str(entry["work"]).is_empty():
+			chapter = "%s・%s" % [entry["work_title"], chapter]
 		for ending: Dictionary in StoryRunner.endings_of(story):
 			rows.append({"chapter": chapter, "title": str(ending["title"]), "seen": seen.has(ending["id"])})
 	return rows
@@ -202,7 +265,7 @@ func next_chapter(index: int) -> Dictionary:
 	if index < 0 or str(stories[index].get("kind", "")) != "chapter":
 		return {}
 	for later: int in range(index + 1, stories.size()):
-		if str(stories[later].get("kind", "")) == "chapter":
+		if str(stories[later].get("kind", "")) == "chapter" and stories[later]["work"] == stories[index]["work"]:
 			return stories[later]
 	return {}
 
@@ -220,7 +283,7 @@ func _chapter_before(index: int) -> int:
 	if index < 0 or str(stories[index].get("kind", "")) != "chapter":
 		return -1
 	for earlier: int in range(index - 1, -1, -1):
-		if str(stories[earlier].get("kind", "")) == "chapter":
+		if str(stories[earlier].get("kind", "")) == "chapter" and stories[earlier]["work"] == stories[index]["work"]:
 			return earlier
 	return -1
 
@@ -233,7 +296,13 @@ func _seen_endings(story_id: String) -> Array:
 
 # ---------------------------------------------------------------- 鑑賞
 
-## Marks a background ("bg") or music ("bgm") id as met in play; written once per id.
+## The progress.cfg key of a work's 鑑賞 unlocks: "bg"/"bgm" for the base work, "<work>/bg" for a pack.
+static func gallery_key(work: String, kind: String) -> String:
+	return kind if work.is_empty() else "%s/%s" % [work, kind]
+
+
+## Marks a background ("bg") or music ("bgm") id as met in play; written once per id. `kind` may be
+## a work's key (gallery_key).
 func unlock(kind: String, id: String) -> void:
 	if id.is_empty() or unlocked_ids(kind).has(id):
 		return

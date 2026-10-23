@@ -123,6 +123,7 @@ func _new_game(motion: int) -> Control:
 	settings.save(FILES[2])
 	var game: Control = (load("res://main.tscn") as PackedScene).instantiate() as Control
 	game.stories_path = REGISTRY
+	game.packs_root = "res://tests/fixtures/no_packs/"  # only the registry's stories
 	game.story_path = FIXTURE
 	game.save_path = FILES[3]
 	game.progress_path = FILES[0]

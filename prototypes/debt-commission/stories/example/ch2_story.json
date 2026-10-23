@@ -1,0 +1,39 @@
+{
+  "entry": "rooftop",
+  "generated_from": "stories/example/ch2.dialogue",
+  "id": "example_ch2",
+  "initial_flags": {},
+  "nodes": {
+    "rooftop": {
+      "steps": [
+        {
+          "id": "rooftop",
+          "op": "bg"
+        },
+        {
+          "op": "say",
+          "speaker": "narrator",
+          "text": "天快亮了。"
+        },
+        {
+          "op": "say",
+          "speaker": "ren",
+          "text": "他沒有來。"
+        },
+        {
+          "op": "say",
+          "speaker": "aki",
+          "text": "嗯。可是天亮了，第一班車要來了。"
+        },
+        {
+          "op": "end",
+          "text": "範例作品到此結束。"
+        }
+      ],
+      "title": "頂樓"
+    }
+  },
+  "note": "完成第一章後開放",
+  "title": "第二章・頂樓",
+  "version": "s-525c07be090a"
+}

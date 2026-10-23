@@ -257,3 +257,47 @@ Web 網址帶 `?qa=1` 時，`window.__debtQA` 為唯讀快照：`screen`（title
 ### 沒有玩法的故事
 
 劇本沒有 `boke_round` 與 `investigate` 時，HUD、案件檔與素材／人物檔案的目錄列、設定的「{rebut}輔助」都不顯示，當一般視覺小說玩。
+
+## 故事包（2026-10-23，K2）
+
+一部作品一個資料夾，放進 `stories/` 就出現在章節選擇，不改程式。`data/stories.json` 裡原有的故事算「基準作品」，行為不變。
+
+```
+stories/<作品 id>/
+  pack.json        作品資訊與章節順序
+  catalog.json     這部作品的角色、背景、素材、音效、音樂（格式同 data/asset_catalog.json）
+  <章節>_story.json 劇本（.dialogue 原始檔可放同一層，建置輸出到同一層）
+  art/、audio/     這部作品的圖與聲音
+```
+
+### `pack.json`
+
+```json
+{
+  "id": "example", "title": "範例作品", "skin": "example", "cover": "art/cover.png",
+  "credits": [{"role": "劇本", "names": ["作者名字"]}],
+  "stories": [
+    {"id": "example_ch1", "kind": "chapter", "path": "ch1_story.json"},
+    {"id": "example_side", "kind": "sample", "path": "side_story.json"}
+  ]
+}
+```
+
+- `stories` 依序列出，欄位同 `data/stories.json`（`id`、`kind`、`path`，選填 `skin`、`cover`）；`path`、`cover` 可寫相對於作品資料夾的路徑。`save` 不用寫，自動是 `user://pack_<作品 id>_<故事 id>.save`。作品層的 `skin`、`cover`、`credits` 是每章的預設，章節自己寫的優先。
+- 故事 id 全遊戲唯一：和已登記的重複時，那一筆不載入，錯誤寫進 log（`push_error`），其他照常。
+- 章節選擇：基準作品在前，故事包依資料夾名排在後面；每部作品的本篇有一個小標題、從「第 1 章」編號，試玩片段列的第二行是作品名。
+- 沒有吐槽回合的本篇，走到不是 Game Over 的 `end` 就記為破關（`cleared` 寫 `完`，章節列顯示「已完成」），下一章才能開。
+
+### 素材設定（catalog）
+
+- 規則（`StoryRunner.catalog_path_for(story_path)`，執行、建置、`check_story`、編輯器都照這條）：劇本所在資料夾有 `catalog.json` 就用它，否則用 `data/asset_catalog.json`。
+- 作品的 catalog 裡，`path`、`expressions` 的圖、角色的 `scene` 可寫相對於 catalog 所在資料夾的路徑，載入時先換成 `res://` 再驗證，之後讀 catalog 的都拿到完整路徑。
+- 選填 `"extends": "res://data/asset_catalog.json"`：先讀那份再蓋上自己的（同 id 以自己的為準），給想沿用基準角色的外傳用。
+- 角色選填 `scene`：這個角色的站姿框 scene（沒寫就找 `scenes/characters/<id>.tscn`，再沒有就用預設取景）。
+- 每個素材項目之後會加授權欄位（B01／K5），格式保留給它。
+- 換到 catalog 不同的故事時，外殼重建角色立繪，並把新 catalog 交給音效、音樂與漫畫吐槽層。
+
+### 進度按作品分開
+
+- 章節解鎖、下一章、跨章旗標 `carry`、「第 N 章」編號、結局收集都只在同一部作品裡算：故事包的第 1 章不必先破基準作品的第 1 章，也讀不到別部作品的旗標。
+- `progress.cfg` 的 `cleared`／`endings`／`carry` 以故事 id 為鍵（id 全遊戲唯一，不會撞）。鑑賞的解鎖分作品記：基準作品用 `gallery` 段的 `bg`／`bgm`，故事包用 `<作品 id>/bg`、`<作品 id>/bgm`。

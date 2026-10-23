@@ -40,6 +40,8 @@ const ATOMIC_FILE: Script = preload("res://addons/proto_kit/atomic_file.gd")
 const DialogueText: Script = preload("res://scripts/dialogue_text.gd")
 const StageMotion: Script = preload("res://scripts/stage_motion.gd")
 const ReadingRollback: Script = preload("res://scripts/reading_rollback.gd")
+## The `cleared` mark of a chapter without rounds (no grade to give), reached at its end.
+const CLEARED_WITHOUT_GRADE: String = "完"
 ## A spot's size when the story gives none, as fractions of the picture.
 const DEFAULT_HOTSPOT_SIZE: Array = [0.12, 0.12]
 ## While searching, a character with a spot on their portrait stays this see-through, so the room
@@ -73,6 +75,8 @@ const DEFAULT_BOKE_TIMER_SECONDS: float = 8.0
 @export var settings_path: String = "user://settings.cfg"
 ## Where skins/<id>/skin.json are looked up (tests point it at fixtures).
 @export var skins_root: String = "res://skins/"
+## Where story packs are found: <packs_root>/<work>/pack.json (IMPLEMENTATION.md「故事包」).
+@export var packs_root: String = "res://stories/"
 var _story_choices: Array[Dictionary] = []
 ## The registry, titles, credits and progress (scripts/story_library.gd); _story_choices is its list.
 var _library: RefCounted = null
@@ -341,7 +345,7 @@ func _ready() -> void:
 	ui_theme.default_font_size = 44
 	theme = ui_theme
 
-	_library = STORY_LIBRARY.new(stories_path, progress_path)
+	_library = STORY_LIBRARY.new(stories_path, progress_path, packs_root)
 	_story_choices = _library.stories
 	_settings = SETTINGS_SCRIPT.load_settings(settings_path)
 	_select_story_variant()
@@ -393,24 +397,27 @@ func _open_chapter_select() -> void:
 		return
 	_screen_mode = "chapter_select"
 	var entries: Array[Dictionary] = []
-	var chapter_number: int = 0
+	var chapter_numbers: Dictionary = {}  # 第 N 章 counts within each work
 	for index: int in range(_story_choices.size()):
 		var choice: Dictionary = _story_choices[index]
 		var kind: String = str(choice.get("kind", "sample"))
 		var locked: bool = not _story_unlocked(index)
 		var grade: String = _cleared_grade(str(choice["id"]))
-		var note: String = "試玩片段"
+		var note: String = str(choice.get("work_title", "")) if not str(choice.get("work_title", "")).is_empty() else "試玩片段"
 		if kind == "chapter":
-			note = "完成前一章後開放" if locked else ("最佳評價 " + grade if not grade.is_empty() else "未完成")
+			note = "完成前一章後開放" if locked else ("未完成" if grade.is_empty()
+				else "已完成" if grade == CLEARED_WITHOUT_GRADE else "最佳評價 " + grade)
 		var endings: String = "" if locked else _ending_note(choice)
 		if not endings.is_empty():
 			note += "・" + endings
+		var work: String = str(choice.get("work", ""))
 		if kind == "chapter":
-			chapter_number += 1
+			chapter_numbers[work] = int(chapter_numbers.get(work, 0)) + 1
 		entries.append({"index": index, "id": str(choice["id"]), "kind": kind, "title": _story_title(choice),
 			"note": note, "credit": _credit_line(_story_credits(choice)), "locked": locked,
-			"current": index == _story_choice_index(), "number": chapter_number, "badge": note,
-			"cover": _library.cover(choice, _backgrounds) if kind == "chapter" else ""})
+			"current": index == _story_choice_index(), "number": int(chapter_numbers.get(work, 0)), "badge": note,
+			"cover": _library.cover(choice) if kind == "chapter" else "", "work": work,
+			"work_title": str(choice.get("work_title", ""))})
 	_chapter_select.call("set_style", _ui_style_id)
 	_chapter_select.call("open", entries, _chapter_endings())
 	_publish_qa_state()
@@ -458,7 +465,7 @@ func _style_gallery() -> void:
 ## [{id, label, path, seen}] for the catalog `section`'s entries that have a file, in catalog order.
 func _gallery_entries(section: String, kind: String) -> Array[Dictionary]:
 	var entries: Array[Dictionary] = []
-	var seen: Array = _library.unlocked_ids(kind)
+	var seen: Array = _library.unlocked_ids(_gallery_key(kind))
 	var assets: Dictionary = _catalog.get(section, {}) as Dictionary
 	for id: String in assets.keys():
 		var path: String = str((assets[id] as Dictionary).get("path", ""))
@@ -613,7 +620,7 @@ func _reload_after_import() -> void:
 		return
 	# Main inside another scene (tests): read the imported settings, progress and saves back in place.
 	_settings = SETTINGS_SCRIPT.load_settings(settings_path)
-	_library = STORY_LIBRARY.new(stories_path, progress_path)
+	_library = STORY_LIBRARY.new(stories_path, progress_path, packs_root)
 	_story_choices = _library.stories
 	_close_settings()
 	_refresh_title()
@@ -716,12 +723,33 @@ func _load_story() -> void:
 	var initial_snapshot: Dictionary = _runner.call("snapshot") as Dictionary
 	_archive_other_version_save(str(initial_snapshot.get("story_id", "")), str(initial_snapshot.get("version", "")))
 	_phase3_enabled = bool(_runner.call("has_gameplay"))
-	_catalog = _runner.call("get_asset_catalog") as Dictionary
+	var catalog: Dictionary = _runner.call("get_asset_catalog") as Dictionary
+	var new_cast: bool = catalog != _catalog and not _sprites.is_empty()
+	_catalog = catalog
 	_actors = _catalog.get("characters", {}) as Dictionary
 	_backgrounds = _catalog.get("backgrounds", {}) as Dictionary
 	for actor_id: String in _actors.keys():
 		var info: Dictionary = _actors[actor_id] as Dictionary
 		_actor_slots[actor_id] = str(info.get("slot", "center"))
+	if new_cast:
+		_rebuild_cast()
+
+
+## Another work's catalog (a story pack): its characters replace the cast on stage, and effects,
+## music and the comedy layer read its sounds and names.
+func _rebuild_cast() -> void:
+	_forget_search_cast()
+	for sprite: Control in _sprites.values():
+		_char_layer.remove_child(sprite)
+		sprite.queue_free()
+	_sprites.clear()
+	_placard_holder = null
+	_build_sprites()
+	for actor_id: String in _sprites.keys():
+		_layout_sprite(actor_id)
+	_effects.set_catalog(_catalog)
+	_comedy_layer.set("_catalog", _catalog)
+	_apply_stage_style()
 
 
 ## The `version` of the story a save was made on when it differs from this build's ("" when it matches or
@@ -872,7 +900,8 @@ func _apply_background(background_id: String, animate: bool = false) -> void:
 func _build_sprites() -> void:
 	for actor_id: String in _actors.keys():
 		var info: Dictionary = _actors[actor_id] as Dictionary
-		var scene_path: String = CHARACTER_SCENE % actor_id
+		# A pack character's own framing (catalog `scene`), else scenes/characters/<id>.tscn.
+		var scene_path: String = str(info.get("scene", CHARACTER_SCENE % actor_id))
 		var sprite: Control = (load(scene_path) as PackedScene).instantiate() as Control \
 			if ResourceLoader.exists(scene_path) else SPRITE_SCRIPT.new() as Control
 		_char_layer.add_child(sprite)
@@ -1247,10 +1276,23 @@ func _refresh_title() -> void:
 	_continue_button.disabled = not _has_valid_save()
 	_begin_button.disabled = not _story_ready
 	_title_screen.set_error(_story_error if not _story_error.is_empty() else _archived_save_notice)
+	# The skin's title background in the story's catalog: its picture, or its top/bottom gradient.
 	var title_bg: String = str((_skin.get("title", {}) as Dictionary).get("background", ""))
-	var picture: String = str((_backgrounds.get(title_bg, {}) as Dictionary).get("path", ""))
+	if not _backgrounds.has(title_bg):
+		title_bg = _default_background_id()
+	var info: Dictionary = _backgrounds.get(title_bg, {}) as Dictionary
+	var picture: String = str(info.get("path", ""))
 	if not picture.is_empty() and ResourceLoader.exists(picture):
 		_title_screen.background.texture = _paper_backed(picture)
+	elif not info.is_empty():
+		var gradient: Gradient = Gradient.new()
+		gradient.set_color(0, Color(str(info.get("top", "#2e2a45"))))
+		gradient.set_color(1, Color(str(info.get("bottom", "#b9794f"))))
+		var texture: GradientTexture2D = GradientTexture2D.new()
+		texture.gradient = gradient
+		texture.fill_from = Vector2(0.5, 0.0)
+		texture.fill_to = Vector2(0.5, 1.0)
+		_title_screen.background.texture = texture
 
 
 func _build_slot_picker() -> void:
@@ -1441,7 +1483,7 @@ func _show_title() -> void:
 	_cancel_generation()
 	var title_bgm: String = str((_skin.get("title", {}) as Dictionary).get("bgm", ""))
 	_effects.play_bgm(title_bgm)
-	_library.unlock("bgm", title_bgm)  # heard on the title, so 鑑賞 lists it from the start
+	_library.unlock(_gallery_key("bgm"), title_bgm)  # heard on the title, so 鑑賞 lists it from the start
 	_close_qte()
 	_close_overlays()
 	_set_ui_hidden(false)
@@ -1609,7 +1651,7 @@ func _drive_story(generation: int) -> void:
 				if _dict_string(command, "id") != _current_bg_id:
 					_clear_stage()  # a new scene starts with nobody on stage
 				_apply_background(_dict_string(command, "id"), true)
-				_library.unlock("bg", _dict_string(command, "id"))
+				_library.unlock(_gallery_key("bg"), _dict_string(command, "id"))
 			"char":
 				_apply_character(command)
 			"show":
@@ -1626,7 +1668,7 @@ func _drive_story(generation: int) -> void:
 			"shake", "flash", "cutin", "bgm", "se", "beam":
 				_effects.play(command, _skip)
 				if _command_op(command) == "bgm":
-					_library.unlock("bgm", _dict_string(command, "id"))
+					_library.unlock(_gallery_key("bgm"), _dict_string(command, "id"))
 			"freeze":
 				var hold: float = _effects.play(command, _skip)
 				if hold > 0.0:
@@ -1763,7 +1805,7 @@ func _present_investigation(command: Dictionary, restored: bool) -> void:
 	var place_bg: String = _dict_string(command, "bg")
 	if not place_bg.is_empty() and place_bg != _current_bg_id:
 		_apply_background(place_bg)  # each place of the search shows its own picture
-		_library.unlock("bg", place_bg)
+		_library.unlock(_gallery_key("bg"), place_bg)
 	_set_text_tone("thought")
 	_layout()
 	_set_visible_text(_full_text, true)
@@ -2593,6 +2635,9 @@ func _present_end(command: Dictionary) -> void:
 	var snapshot: Dictionary = _runner.call("snapshot") as Dictionary
 	var game_over: bool = bool(snapshot.get("game_over_active", false))
 	_record_ending(command, game_over)
+	var index: int = _story_choice_index()
+	if not game_over and not _phase3_enabled and index >= 0 and str(_story_choices[index].get("kind", "")) == "chapter":
+		_record_clear(CLEARED_WITHOUT_GRADE)  # a chapter with no rounds is cleared by reaching its end
 	_end_box.visible = not game_over
 	_game_over_retry_button.visible = game_over
 	if game_over:
@@ -3727,6 +3772,12 @@ func _use_skin() -> void:
 	_ui_style_id = str(_skin["id"])
 
 
+## The 鑑賞 unlock key of the current story's work ("bg"/"bgm" for the base work).
+func _gallery_key(kind: String) -> String:
+	var index: int = _story_choice_index()
+	return STORY_LIBRARY.gallery_key(str(_story_choices[index].get("work", "")) if index >= 0 else "", kind)
+
+
 ## A word of the game from the skin (rebut, life, power, super, whiff, thought, materials).
 func _term(key: String) -> String:
 	return SKIN.term(_skin, key)
@@ -3842,9 +3893,15 @@ func _apply_ui_style() -> void:
 	if _dialog_panel == null:
 		return
 	_comedy_layer.stop()
-	if _dialog_panel.scene_file_path != SKIN.scene(_skin, "dialogue_box").resource_path \
-			or _title_screen.scene_file_path != SKIN.scene(_skin, "title").resource_path \
-			or _menu_overlay.scene_file_path != SKIN.scene(_skin, "menu").resource_path:
+	# Every UI scene the skin names is compared, so a skin replacing only one (say settings) remounts.
+	var mounted: Dictionary = {"dialogue_box": _dialog_panel, "choice_sheet": _choice_sheet, "menu": _menu_overlay,
+		"title": _title_screen, "settings": _settings_panel, "game_over": _game_over, "result": _chapter_result}
+	var stale: bool = false
+	for role: String in mounted:
+		var node: Node = mounted[role]
+		var wanted: String = (_choice_sheet_scene() if role == "choice_sheet" else SKIN.scene(_skin, role)).resource_path
+		stale = stale or (node != null and node.scene_file_path != wanted)
+	if stale:
 		_mount_dialogue_box()
 		_mount_choice_sheet()
 		_mount_menu()
@@ -4057,7 +4114,7 @@ func _write_qa_state() -> void:
 		"credits": {"rolling": bool(_credits_roll.get("rolling")), "lines": _credits_roll.call("lines")}
 			if _screen_mode == "credits" else {},
 		"gallery": {"tab": str(_gallery.get("tab")), "playing": str(_gallery.get("playing_id")),
-			"viewer": bool(_gallery.call("viewer_open")), "bg": _library.unlocked_ids("bg"), "bgm": _library.unlocked_ids("bgm")}
+			"viewer": bool(_gallery.call("viewer_open")), "bg": _library.unlocked_ids(_gallery_key("bg")), "bgm": _library.unlocked_ids(_gallery_key("bgm"))}
 			if _screen_mode == "gallery" else {},
 		"settings": _settings.duplicate(),
 		"ui_style": _ui_style_id,

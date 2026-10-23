@@ -16,6 +16,7 @@ const comedyOnly = process.argv.includes('--comedy');
 const choicesOnly = process.argv.includes('--choices');
 const ep00Only = process.argv.includes('--ep00');
 const backupOnly = process.argv.includes('--backup');
+const packsOnly = process.argv.includes('--packs');
 const arg = (name, fallback) => {
   const index = process.argv.indexOf(name);
   return index >= 0 ? process.argv[index + 1] : fallback;
@@ -30,6 +31,7 @@ else if (comedyOnly) url.searchParams.set('sample', 'comedy');
 else if (choicesOnly) url.searchParams.set('sample', 'choices');
 else if (ep00Only) url.searchParams.set('sample', 'ep00');
 else if (backupOnly) url.searchParams.set('sample', 'chapter1');
+else if (packsOnly) url.searchParams.set('sample', 'chapter1');
 else if (phase2Only || slotsOnly) url.searchParams.set('sample', 'phase2');
 else url.searchParams.set('sample', 'debt');  // the default routes read the debt baseline; the bare URL opens chapter 1
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -1752,8 +1754,44 @@ async function backupRoute() {
   await context.close();
 }
 
+// 故事包: the exported build finds stories/example/pack.json, lists it in 章節選擇 with its own
+// skin, plays its first chapter to the end (no rounds), and that opens its second chapter.
+async function packsRoute() {
+  const { context, page, errors } = await openPage({ width: 390, height: 844 }, true);
+  const result = { route: 'packs', checks: [], errors };
+  report.runs.push(result);
+  await control(page, 'story_switch', true);
+  await waitFor(page, () => window.__debtQA?.screen === 'chapter_select', null, 10000);
+  let value = await state(page);
+  assert.ok(value.controls.chapter_example_ch1, `the example pack is listed: ${Object.keys(value.controls).join(', ')}`);
+  assert.ok(!value.controls.chapter_example_ch2, 'its second chapter is locked');
+  await control(page, 'chapter_example_ch1', true);
+  await waitFor(page, () => window.__debtQA?.screen === 'title' && window.__debtQA.ui_style === 'example', null, 10000);
+  result.checks.push('the example pack is found in the exported build and its chapter brings its skin');
+  await control(page, 'begin', true);
+  for (let i = 0; i < 60; i++) {
+    value = await state(page);
+    if (value.screen === 'end') break;
+    if (value.screen === 'choice') await tapAt(page, value.viewport, center(value.choices[0].rect), true);
+    else if (value.screen === 'story') await controlAny(page, ['dialogue', 'advance', 'next'], true, 'next line');
+    await page.waitForTimeout(250);
+  }
+  assert.equal((await state(page)).screen, 'end', 'the first chapter reaches its end');
+  await control(page, 'title', true);
+  await waitFor(page, () => window.__debtQA?.screen === 'title', null, 10000);
+  await control(page, 'story_switch', true);
+  await waitFor(page, () => window.__debtQA?.screen === 'chapter_select', null, 10000);
+  assert.ok((await state(page)).controls.chapter_example_ch2, 'its second chapter opens');
+  result.checks.push('a chapter without rounds is cleared at its end and opens the work\'s next chapter');
+  assert.deepEqual(errors, [], 'no browser or Godot runtime errors');
+  console.log(`PASS packs: ${result.checks.length} check groups`);
+  await context.close();
+}
+
 try {
-  if (backupOnly) {
+  if (packsOnly) {
+    await packsRoute();
+  } else if (backupOnly) {
     await backupRoute();
   } else if (ep00Only) {
     await ep00PathA({ width: 390, height: 844 }, 'phone', false);

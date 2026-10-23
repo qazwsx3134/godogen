@@ -48,6 +48,15 @@ var type_ticks: int = 0
 
 
 ## shake_layers move together on a shake; overlay holds the flash, the freeze and cut-ins.
+## Another work's catalog: its sounds, music, names and voice pitches (cached streams are dropped).
+func set_catalog(catalog: Dictionary) -> void:
+	_catalog = catalog
+	_names.clear()
+	for actor_id: String in (catalog.get("characters", {}) as Dictionary).keys():
+		_names[actor_id] = str(catalog["characters"][actor_id].get("name", actor_id))
+	_streams.clear()
+
+
 func setup(shake_layers: Array[Control], overlay: Control, catalog: Dictionary) -> void:
 	_shake_layers = shake_layers
 	_overlay = overlay

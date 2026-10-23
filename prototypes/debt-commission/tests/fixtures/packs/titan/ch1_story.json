@@ -1,0 +1,9 @@
+{
+  "id": "titan_ch1", "version": "s-test", "title": "第一章・城牆", "entry": "start",
+  "initial_flags": {"wall_seen": false}, "carry": ["wall_seen"],
+  "nodes": {"start": {"title": "城牆", "steps": [
+    {"op": "bg", "id": "wall"}, {"op": "bgm", "id": "bgm_wall"},
+    {"op": "say", "speaker": "eren", "text": "牆的另一邊是什麼？"},
+    {"op": "flag", "key": "wall_seen", "value": true},
+    {"op": "end", "text": "第一章完。"}]}}
+}
