@@ -1,6 +1,6 @@
 # 浮空劍域：接續狀態
 
-2026-10-24。目前做 M0：[RO 戰鬥切片](../../design/ro-slice.md)。
+2026-10-24。M0 [RO 戰鬥切片](../../design/ro-slice.md)與 M1 [單層閉環](../../design/m1-loop.md)已完成並提交；下一步是技能串聯（研究中）。
 
 ## 分工
 
@@ -36,8 +36,20 @@
 - C2（Codex）：切片交叉 review → `production/reviews/codex-slice-review.md`。R1–R6 全部成立、已修並補回歸測試（同 tick 傷害共同快照、Q 不換鎖定目標、同伴略過不可達目標、暫停時拒收戰鬥指令、重開還原名牌、藥水拒絕原因）；R7 改以實際按鍵狀態清除拖曳；R8 觸控目標全部 ≥104 設計 px（約 44 pt）。Codex 之後額度用完，暫不派工。
 - 使用者 2026-10-24：畫面滿意；動作偏僵 → 已加程序化呼吸／彈步／突進／受擊；接下來重心放在功能開發。
 
+## M1（2026-10-24 完成）
+
+- 本機存檔（AtomicFile＋IndexedDB）、Run／Profile 分離、kill receipt、營地（商店／出售／倉庫／委託／換裝）、撤退、守門者、世代交替。驗收見 m1-loop.md 末節。
+- 使用者決定：M1 起做本機存檔；版控直接在目前分支 commit（含其他未提交檔案），不開新分支。
+- 守門者是低多邊形石像暫代，HD 美術等 Codex 額度恢復。
+
+## 技能串聯（進行中）
+
+- 使用者要求：研究 pokesurvivor.com 的技能聯動，加入本作——學到的技能可以串起來，但不能隨意串聯。
+- 研究派給 Herdr pane `psresearch`（Sonnet，max effort），派工單 `.claude/tasks/skybound-blades/r1-pokesurvivor-links.md`，報告寫到 `research/pokesurvivor/2026-10-24-skill-links.md`。
+- 報告交回後：Claude 寫 `design/skill-links.md`（本作規則），再實作。
+
 ## 下一步
 
-1. 處理 C2 的確定缺陷。
-2. 使用者在手機實機試玩（手感、FPS、按鈕大小），回饋後調整。
-3. 依 mechanism-plan 進 M1：任務／物品實例／倉庫／遠征結算，共用 `domain/battle.gd`。
+1. 收研究報告 → 設計並實作技能串聯。
+2. 使用者手機實機試玩（手感、FPS、按鈕大小）。
+3. 第二層與更多技能（implementation-plan M2）。

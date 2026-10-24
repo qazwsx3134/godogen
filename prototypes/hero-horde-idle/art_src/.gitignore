@@ -1,0 +1,8 @@
+# Source art stays out of git (images live on disk only; back them up separately).
+# Prompts, specs, reports and scripts are kept.
+*.png
+*.webp
+*.jpg
+*.jpeg
+*.mp4
+*.webm
