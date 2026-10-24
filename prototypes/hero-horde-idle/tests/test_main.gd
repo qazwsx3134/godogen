@@ -99,6 +99,9 @@ func _run() -> void:
 	sim.t = PushSim.DURATION - 0.01
 	await _until(func() -> bool: return hud.find_child("Result", true, false).visible, "result shows when time runs out")
 	_expect(sim.phase == PushSim.Phase.LOST, "time out is a loss")
+	var report: Label = hud.find_child("Report", true, false)
+	_expect(report.is_visible_in_tree() and report.text.begins_with("MVP：") and report.text.contains("時間到"),
+		"result shows the 推王戰報 with an MVP and the time-out advice")
 	await _press(hud.find_child("Retry", true, false))
 	_expect(main.sim != sim and main.sim.phase == PushSim.Phase.MUSTER, "retry starts a fresh push with a muster")
 

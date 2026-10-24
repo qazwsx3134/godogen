@@ -33,6 +33,17 @@
 2. 操作得好能贏。
 3. 作者玩 5 場，至少有一次是因為「拖太晚」或「區塊搭配錯」才輸，而且還想再玩。
 
+## 推王戰報（v2 第一項，已實作）
+
+2026-10-24。依[守城英雄傳研究](../../research/castle-heroes/2026-10-24/README.md)：貢獻統計要分清時間窗與歸因，並且把治療、減傷等非傷害貢獻也算進去，否則玩家只會留下輸出最高的角色。結算面板 `%Report` 顯示以下內容：
+
+- **MVP**：貢獻＝輸出＋治療＋減免＋救人（每救回一人算他最大生命的 40%），單位都是血量。
+- **各項前三名**：輸出（普攻、技能、大招）、承傷、治療（補師普補與技能補）、減免（盾的守護替那一區擋下的傷害）、救人（SSR 補師復活）。全部是整場累計，不是每秒。
+- **倒下**：預警攻擊與普攻各倒下幾次，再依招式列建議，倒下人數最多的排前面（例如「落石打倒 48 人：它打兩個遠欄區，預警時把那兩區往 ▶ 移」）。時間到才輸時，另外列出弱點點中幾次、大招放了幾次。
+- 英雄還沒有名字，暫時寫成「SSR 劍#2」（稀有度、職業、同職業同稀有度的第幾名）。
+- 沒做的：前往養成的按鈕（養成畫面還沒做）、SSR 補師光環的回血歸因、技能施放時頭上跳名字。
+- 測試：`test_balance` 檢查每名英雄的輸出加總等於全軍輸出、拖太晚的機器人主要死於預警攻擊、輸掉時一定有建議；`test_main` 檢查時間到後結算顯示戰報與「時間到」的建議。
+
 ## 原型 v2 規格（已定案，尚未實作）
 
 要驗證的假設：「推王 → 推王戰報 → 養成 → 再推」這個循環，讓玩家看得到自己的英雄變強，打輸了會想回去養。
@@ -95,7 +106,7 @@ godot --headless --path . --script res://tests/test_main.gd      # 像玩家一�
 |---|---|
 | `scenes/main.tscn` | `Camera`（位置、角度、`fov`）、`Ground`、`Boss`（`BossSprite` 大小、`WeakPointAnchor` 弱點位置）、`Zones`（六個區塊；移動或縮放區塊就是改區的範圍，執行時交給模擬）、`Army`（存檔裡是開戰陣形的預覽，執行時依模擬重畫）、`Bolts`、`Hud` |
 | `scenes/zone_tile.tscn` | 一區：地面區塊 `Tile`（`PlaneMesh` 大小＝區的範圍）與名稱標籤 `ZoneLabel` |
-| `scenes/hud.tscn` | 上方王血條、階段與時限，提示文字 `Banner`，弱點按鈕 `WeakPoint`，下方選區文字、移區箭頭 `ArrowLeft`／`ArrowRight`（執行時跟著選區移動），`Actions`（全員歸位、大招）與士氣條，結算 `Result`；間距、字級、顏色都在 scene 與 `ui/theme.tres` |
+| `scenes/hud.tscn` | 上方王血條、階段與時限，提示文字 `Banner`，弱點按鈕 `WeakPoint`，下方選區文字、移區箭頭 `ArrowLeft`／`ArrowRight`（執行時跟著選區移動），`Actions`（全員歸位、大招）與士氣條，結算 `Result`（含可捲動的推王戰報 `ReportScroll`／`Report`）；間距、字級、顏色都在 scene 與 `ui/theme.tres` |
 | `materials/*.tres` | 英雄、王、影子、地面、區塊的外觀（區塊用 `shaders/zone_tile.gdshader`） |
 
 正常執行與測試不會重建 scene。`tools/build_scenes.gd` 是一次性產生器：已存在的 scene 會跳過，要重建就先刪掉那個檔。暫用圖由 `tools/make_placeholder_art.py` 產生（`uv run --with pillow`）。

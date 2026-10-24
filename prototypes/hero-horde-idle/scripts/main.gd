@@ -186,10 +186,10 @@ func _on_event(kind: StringName, value: float) -> void:
 		&"won":
 			_punch = 1.0
 			_trauma = 1.0
-			_hud.show_result(true, "剩 %.1f 秒　存活 %d 人" % [value, sim.living()])
+			_hud.show_result(true, "剩 %.1f 秒　存活 %d 人" % [value, sim.living()], report_text(sim))
 		&"lost":
 			var why: String = "全軍覆沒" if sim.living() == 0 else "時間到"
-			_hud.show_result(false, "%s　王還剩 %d%% 血" % [why, ceili(value * 100.0)])
+			_hud.show_result(false, "%s　王還剩 %d%% 血" % [why, ceili(value * 100.0)], report_text(sim))
 
 
 ## A banner that never covers an unanswered telegraph (someone still stands in red): that cue decides who dies.
@@ -209,3 +209,25 @@ func _volley(amount: float) -> void:
 	_punch = 1.0
 	_trauma = 1.0
 	_say("大招！ %d" % roundi(amount), GOLD, 1.4)
+
+
+## 推王戰報 text: MVP, the top three per contribution (cumulative over the push), falls by cause, then advice.
+static func report_text(s: PushSim) -> String:
+	var r: Dictionary = s.report()
+	var lines := PackedStringArray()
+	var mvp: int = r.mvp
+	lines.append("MVP：%s　貢獻 %d（輸出＋治療＋減免＋救人）" % [s.hero_name(mvp), roundi(s.contribution(mvp))])
+	var titles := {"dealt": "輸出", "taken": "承傷", "healed": "治療", "spared": "減免", "saves": "救人"}
+	for m: String in titles:
+		var top: Array = r.top[m]
+		if top.is_empty():
+			continue
+		var names := PackedStringArray(top.map(func(e: Array) -> String: return "%s %d" % [s.hero_name(e[0]), roundi(e[1])]))
+		lines.append("%s：%s" % [titles[m], " · ".join(names)])
+	if s.falls.is_empty():
+		lines.append("沒有人倒下")
+	else:
+		lines.append("倒下 %d 次：預警攻擊 %d · 普攻 %d" % [s.falls.size(), r.tele_falls, r.auto_falls])
+	for line: String in r.advice:
+		lines.append("建議：" + line)
+	return "\n".join(lines)

@@ -29,7 +29,29 @@ func _init() -> void:
 		_expect(human.phase == PushSim.Phase.WON and human.time_left() >= 10.0,
 			"seed %d: human wins with 10+ s left (got %s)" % [seed_value, _line(human)])
 		_expect(late.phase == PushSim.Phase.LOST, "seed %d: late dodging loses" % seed_value)
+		_check_report(seed_value, idle, good, late)
 	_finish("BALANCE TESTS")
+
+
+## 推王戰報: per-hero damage adds up to the army's, and a lost push names a cause that matches how it was lost.
+func _check_report(seed_value: int, idle: PushSim, good: PushSim, late: PushSim) -> void:
+	for sim: PushSim in [idle, good, late]:
+		var sum: float = 0.0
+		for d: float in sim.dealt:
+			sum += d
+		_expect(absf(sum - sim.damage_dealt) <= sim.damage_dealt * 0.01,
+			"seed %d report: hero damage sums to the army's (%.0f vs %.0f)" % [seed_value, sum, sim.damage_dealt])
+	var r: Dictionary = late.report()
+	_expect(int(r.tele_falls) > int(r.auto_falls) and not (r.advice as PackedStringArray).is_empty(),
+		"seed %d report: late dodging falls mostly to telegraphs (%d vs 普攻 %d)" % [seed_value, r.tele_falls, r.auto_falls])
+	var gr_lost: Dictionary = idle.report()
+	_expect((gr_lost.advice as PackedStringArray).size() >= 1, "seed %d report: a lost push gets advice" % seed_value)
+	var gr: Dictionary = good.report()
+	_expect(good.contribution(gr.mvp) > 0.0 and gr.top.dealt[0][1] >= gr.top.dealt[-1][1],
+		"seed %d report: an MVP with a contribution and a sorted damage ranking" % seed_value)
+	if seed_value == SEEDS[0]:
+		print("late report: mvp %s causes %s advice %s" % [late.hero_name(r.mvp), r.causes, r.advice])
+		print("idle advice: %s" % [idle.report().advice])
 
 
 func _play(seed_value: int, opts: Dictionary) -> PushSim:

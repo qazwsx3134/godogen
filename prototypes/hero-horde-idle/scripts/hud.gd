@@ -30,6 +30,7 @@ signal retry_pressed
 @onready var _result: Control = %Result
 @onready var _result_title: Label = %ResultTitle
 @onready var _result_detail: Label = %ResultDetail
+@onready var _report: Label = %Report
 @onready var _retry: Button = %Retry
 
 var _banner_t: float = 0.0
@@ -93,9 +94,12 @@ func place_arrow(side: int, at: Vector2, shown: bool) -> void:
 		arrow.position = at - arrow.size / 2.0
 
 
-func show_result(won: bool, detail: String) -> void:
+## report = the 推王戰報 text (rankings, falls, advice); it scrolls inside the result panel.
+func show_result(won: bool, detail: String, report: String = "") -> void:
 	_result_title.text = "推王成功！" if won else "推王失敗……"
 	_result_detail.text = detail
+	_report.text = report
+	_report.get_parent().visible = report != ""
 	_result.visible = true
 	_weak.visible = false
 	_arrow_left.visible = false

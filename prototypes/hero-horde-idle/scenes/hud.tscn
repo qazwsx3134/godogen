@@ -199,6 +199,8 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 theme = ExtResource("2_5ysmq")
 
@@ -273,8 +275,8 @@ anchor_right = 1.0
 anchor_bottom = 0.17
 offset_top = -40.0
 offset_bottom = 40.0
-theme_override_constants/outline_size = 12
 theme_override_font_sizes/font_size = 46
+theme_override_constants/outline_size = 12
 text = "重砸！ 移開紅區！"
 horizontal_alignment = 1
 
@@ -285,11 +287,11 @@ offset_left = 80.0
 offset_top = 600.0
 offset_right = 184.0
 offset_bottom = 704.0
-theme_override_font_sizes/font_size = 44
 theme_override_styles/normal = SubResource("StyleBoxFlat_uo2fv")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_047uy")
 theme_override_styles/hover = SubResource("StyleBoxFlat_5pdws")
 theme_override_styles/focus = SubResource("StyleBoxFlat_hd3ao")
+theme_override_font_sizes/font_size = 44
 text = "◀"
 
 [node name="ArrowRight" type="Button" parent="Root" unique_id=1569580212]
@@ -299,11 +301,11 @@ offset_left = 80.0
 offset_top = 600.0
 offset_right = 184.0
 offset_bottom = 704.0
-theme_override_font_sizes/font_size = 44
 theme_override_styles/normal = SubResource("StyleBoxFlat_0i1j5")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_mphia")
 theme_override_styles/hover = SubResource("StyleBoxFlat_0m4u7")
 theme_override_styles/focus = SubResource("StyleBoxFlat_apjy4")
+theme_override_font_sizes/font_size = 44
 text = "▶"
 
 [node name="WeakPoint" type="Button" parent="Root" unique_id=1512794155]
@@ -313,14 +315,14 @@ offset_left = 540.0
 offset_top = 520.0
 offset_right = 664.0
 offset_bottom = 644.0
-theme_override_colors/font_color = Color(0.35, 0.12, 0.05, 1)
-theme_override_colors/font_pressed_color = Color(0.35, 0.12, 0.05, 1)
-theme_override_colors/font_hover_color = Color(0.35, 0.12, 0.05, 1)
-theme_override_font_sizes/font_size = 30
 theme_override_styles/normal = SubResource("StyleBoxFlat_5n1hp")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_eld54")
 theme_override_styles/hover = SubResource("StyleBoxFlat_3swnk")
 theme_override_styles/focus = SubResource("StyleBoxFlat_qkknv")
+theme_override_colors/font_color = Color(0.35, 0.12, 0.05, 1)
+theme_override_colors/font_pressed_color = Color(0.35, 0.12, 0.05, 1)
+theme_override_colors/font_hover_color = Color(0.35, 0.12, 0.05, 1)
+theme_override_font_sizes/font_size = 30
 text = "弱點"
 
 [node name="Bottom" type="MarginContainer" parent="Root" unique_id=664446489]
@@ -412,7 +414,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="Panel" type="PanelContainer" parent="Root/Result/Center" unique_id=851727202]
-custom_minimum_size = Vector2(560, 0)
+custom_minimum_size = Vector2(660, 0)
 layout_mode = 2
 
 [node name="PanelBox" type="VBoxContainer" parent="Root/Result/Center/Panel" unique_id=1662093359]
@@ -432,6 +434,22 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 30
 text = "剩 30.0 秒　存活 85 人"
 horizontal_alignment = 1
+
+[node name="ReportScroll" type="ScrollContainer" parent="Root/Result/Center/Panel/PanelBox" unique_id=1116689137]
+custom_minimum_size = Vector2(0, 620)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Report" type="Label" parent="Root/Result/Center/Panel/PanelBox/ReportScroll" unique_id=820305890]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "MVP：SSR 劍 1　貢獻 4210
+輸出：SSR 劍 1 3120 · SSR 法 1 2890 · SR 槍 2 1940
+倒下 12 人：預警 8 · 普攻 4
+建議：橫掃打倒 5 人：它打整條近欄，預警時把近欄往 ◀ 移"
+autowrap_mode = 3
 
 [node name="Retry" type="Button" parent="Root/Result/Center/Panel/PanelBox" unique_id=414290516]
 unique_name_in_owner = true

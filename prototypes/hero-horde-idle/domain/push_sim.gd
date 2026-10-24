@@ -136,6 +136,20 @@ var focus_t: float = 0.0
 var break_t: float = 0.0
 var break_gauge: float = 0.0
 
+## 推王戰報 (battle report) bookkeeping, per hero: boss damage dealt, damage taken, HP healed on allies, damage the
+## hero's guard spared its zone, allies revived. Every fall is filed by cause (普攻 or the telegraph's name) and zone.
+const CAUSE_AUTO := "普攻"
+var dealt := PackedFloat32Array()
+var taken := PackedFloat32Array()
+var healed := PackedFloat32Array()
+var spared := PackedFloat32Array()
+var saves := PackedInt32Array()
+var falls: Array[Dictionary] = []  # {hero, cause, zone, t}
+var weak_opened: int = 0
+var weak_hits: int = 0
+var volleys: int = 0
+var guard_by := PackedInt32Array()
+
 var _next_tele: float = TELE_FIRST
 var _tele_index: int = 0
 var _auto_t: float = 1.0
@@ -153,6 +167,8 @@ func _init(seed_value: int = 1) -> void:
 			zone_center.append(Vector2(ZONE_X[col], ZONE_Z[row]))
 			zone_half.append(ZONE_HALF)
 	guard_t.resize(ZONES)
+	guard_by.resize(ZONES)
+	guard_by.fill(-1)
 	for c: int in ROSTER.size():
 		var k: int = 0
 		for r: int in 4:
@@ -167,6 +183,8 @@ func _init(seed_value: int = 1) -> void:
 				zone.append(((k + c) % 3) * 2 + col)
 				k += 1
 	hp = max_hp.duplicate()
+	for arr: Variant in [dealt, taken, healed, spared, saves]:
+		arr.resize(cls.size())
 	home = zone.duplicate()
 	skill_cd.resize(cls.size())
 	for i: int in cls.size():
@@ -317,15 +335,18 @@ func _auto_skills() -> void:
 				if not threatened:
 					continue
 				guard_t[z] = GUARD_TIME
+				guard_by[z] = i
 			HEALER:
 				var fallen_here: bool = rarity[i] == SSR and _fallen_in(z) >= 0
 				if _lowest_near(z) >= LOW_HP and not fallen_here:
 					continue
-				_heal_around(z, SKILL_HEAL * RARITY_MULT[rarity[i]])
-				if fallen_here:
-					_revive(z)
+				_heal_around(z, SKILL_HEAL * RARITY_MULT[rarity[i]], i)
+				if fallen_here and _revive(z):
+					saves[i] += 1
 			_:
-				burst += atk[i] * SKILL_BURST[cls[i]] * _aura[z].all
+				var d: float = atk[i] * SKILL_BURST[cls[i]] * _aura[z].all
+				dealt[i] += d
+				burst += d
 		skill_cd[i] = SKILL_CD * _aura[z].cd
 		cast_at[i] = t
 		event.emit(&"skill", float(i))
@@ -337,6 +358,7 @@ func tap_weak_point() -> bool:
 	if not fighting() or weak_t <= 0.0:
 		return false
 	weak_t = 0.0
+	weak_hits += 1
 	focus_t = FOCUS_TIME
 	break_gauge += BREAK_PER_WEAK
 	event.emit(&"weak_hit", break_gauge)
@@ -351,10 +373,12 @@ func volley() -> bool:
 	if not fighting() or morale < MORALE_MAX:
 		return false
 	morale = 0.0
+	volleys += 1
 	var amount: float = 0.0
 	for i: int in cls.size():
 		if hp[i] > 0.0:
 			amount += atk[i]
+			dealt[i] += atk[i] * VOLLEY_SECONDS
 	amount *= VOLLEY_SECONDS
 	event.emit(&"volley", amount)
 	_deal(amount, false)
@@ -404,6 +428,7 @@ func _fight(dt: float) -> void:
 			event.emit(&"weak_close", 0.0)
 	elif t >= _next_weak:
 		weak_t = WEAK_OPEN
+		weak_opened += 1
 		_next_weak += WEAK_EVERY
 		event.emit(&"weak_open", WEAK_OPEN)
 
@@ -438,6 +463,8 @@ func _fight(dt: float) -> void:
 			if focus_t > 0.0:
 				d *= FOCUS_MULT
 		amount += d
+		# ponytail: credited before _deal clamps at 0 HP, so the killing step may over-credit by one step's damage.
+		dealt[i] += d * dt * (BREAK_MULT if break_t > 0.0 else 1.0)
 	if break_t > 0.0:
 		amount *= BREAK_MULT
 	dps = amount
@@ -517,7 +544,7 @@ func _auto_attack() -> void:
 	var hits: int = mini(AUTO_TARGETS + victims.size() / AUTO_EXTRA_PER, victims.size())
 	var fell: int = 0
 	for k: int in hits:
-		fell += _hurt(victims[k], AUTO_DAMAGE)
+		fell += _hurt(victims[k], AUTO_DAMAGE, CAUSE_AUTO)
 	event.emit(&"auto", float(target))
 	if fell > 0:
 		event.emit(&"fallen", float(fell))
@@ -552,18 +579,24 @@ func _land() -> void:
 	for i: int in cls.size():
 		if hp[i] > 0.0 and zone_at(pos[i]) in tele_zones:
 			tele_hit_count += 1
-			fell += _hurt(i, TELE_DAMAGE)
+			fell += _hurt(i, TELE_DAMAGE, ATTACK_NAMES[tele_kind])
 	event.emit(&"tele_hit", float(fell))
 	tele_zones = PackedInt32Array()
 
 
 ## Damages a hero after zone guard and shield aura. Returns 1 if they fell.
-func _hurt(i: int, amount: float) -> int:
+func _hurt(i: int, amount: float, cause: String) -> int:
 	var z: int = zone[i]
-	var d: float = amount * _aura[z].taken * (GUARD_MULT if guard_t[z] > 0.0 else 1.0)
+	var d: float = amount * _aura[z].taken
+	if guard_t[z] > 0.0:
+		if guard_by[z] >= 0:
+			spared[guard_by[z]] += d * (1.0 - GUARD_MULT)
+		d *= GUARD_MULT
+	taken[i] += minf(d, hp[i])
 	hp[i] = maxf(hp[i] - d, 0.0)
 	if hp[i] == 0.0:
 		fallen_total += 1
+		falls.append({"hero": i, "cause": cause, "zone": z, "t": t})
 		return 1
 	return 0
 
@@ -580,23 +613,27 @@ func _healers() -> void:
 				worst = hp[j] / max_hp[j]
 				target = j
 		if target >= 0:
+			healed[i] += minf(amount, max_hp[target] - hp[target])
 			hp[target] = minf(hp[target] + amount, max_hp[target])
 
 
-func _heal_around(z: int, amount: float) -> void:
+## ponytail: the SSR healer aura's regen is not credited to anyone; credit it once auras show in the report.
+func _heal_around(z: int, amount: float, healer: int) -> void:
 	for j: int in cls.size():
 		if hp[j] > 0.0 and _near(z, zone[j]):
+			healed[healer] += minf(amount, max_hp[j] - hp[j])
 			hp[j] = minf(hp[j] + amount, max_hp[j])
 
 
-func _revive(z: int) -> void:
+func _revive(z: int) -> bool:
 	var j: int = _fallen_in(z)
 	if j < 0:
-		return
+		return false
 	hp[j] = max_hp[j] * REVIVE_HP
 	fallen_total -= 1
 	_reslot(z)
 	event.emit(&"revive", float(z))
+	return true
 
 
 func _fallen_in(z: int) -> int:
@@ -628,3 +665,68 @@ func _deal(amount: float, earns_morale: bool) -> void:
 	if boss_hp == 0.0 and phase == Phase.FIGHT:
 		phase = Phase.WON
 		event.emit(&"won", time_left())
+
+
+# --- 推王戰報 -------------------------------------------------------------------
+
+## "SSR 劍#2": rarity, class and number within that class and rarity (heroes have no names yet).
+func hero_name(i: int) -> String:
+	var n: int = 1
+	for j: int in i:
+		if cls[j] == cls[i] and rarity[j] == rarity[i]:
+			n += 1
+	return "%s %s#%d" % [RARITY_NAMES[rarity[i]], CLASS_NAMES[cls[i]], n]
+
+
+## MVP score in HP-sized units: boss damage + HP healed + damage spared by guard + the HP each revive gave back.
+func contribution(i: int) -> float:
+	return dealt[i] + healed[i] + spared[i] + saves[i] * max_hp[i] * REVIVE_HP
+
+
+## {mvp, top: {metric: [[hero, value], ...] best 3 with a value > 0}, causes: {cause: falls}, zone_falls: [per zone],
+## tele_falls / auto_falls: falls to telegraphs vs 普攻, advice: what to change next push, most falls first}.
+## Cumulative over the push, not per second. A wipe ends in 普攻 falls once the army is thin, so read the two totals
+## before the per-cause lines.
+func report() -> Dictionary:
+	var metrics := {"dealt": dealt, "taken": taken, "healed": healed, "spared": spared, "saves": saves}
+	var top := {}
+	for m: String in metrics:
+		var arr: Variant = metrics[m]
+		var order: Array = range(cls.size()).filter(func(i: int) -> bool: return arr[i] > 0)
+		order.sort_custom(func(a: int, b: int) -> bool: return arr[a] > arr[b] or (arr[a] == arr[b] and a < b))
+		top[m] = order.slice(0, 3).map(func(i: int) -> Array: return [i, arr[i]])
+	var mvp: int = 0
+	for i: int in cls.size():
+		if contribution(i) > contribution(mvp):
+			mvp = i
+	var causes := {}
+	var zone_falls := PackedInt32Array()
+	zone_falls.resize(ZONES)
+	var auto_zone_falls := PackedInt32Array()
+	auto_zone_falls.resize(ZONES)
+	for f: Dictionary in falls:
+		causes[f.cause] = int(causes.get(f.cause, 0)) + 1
+		zone_falls[f.zone] += 1
+		if f.cause == CAUSE_AUTO:
+			auto_zone_falls[f.zone] += 1
+	var advice: Array = []  # [falls, line]
+	var tips := {"重砸": "它打人最多的一區，別把人全合在一起，預警時把那區移開",
+		"橫掃": "它打整條近欄，預警時把近欄往 ◀ 移，落下後再歸位",
+		"落石": "它打兩個遠欄區，預警時把那兩區往 ▶ 移"}
+	for cause: String in causes:
+		var n: int = causes[cause]
+		if n < 3:
+			continue
+		if cause == CAUSE_AUTO:
+			var z: int = Array(auto_zone_falls).find(Array(auto_zone_falls).max())
+			advice.append([n, "普攻在%s打倒 %d 人：它集中打近欄人最多的區，那區要有盾，人越擠一次打到越多人" % [ZONE_NAMES[z], n]])
+		else:
+			advice.append([n, "%s打倒 %d 人：%s" % [cause, n, tips[cause]]])
+	var tele_falls: int = falls.size() - int(causes.get(CAUSE_AUTO, 0))
+	advice.sort_custom(func(a: Array, b: Array) -> bool: return a[0] > b[0])
+	var lines := PackedStringArray(advice.map(func(a: Array) -> String: return a[1]))
+	if phase == Phase.LOST and living() > 0:
+		lines.append("時間到，王還剩 %d%%：弱點點中 %d／%d 次、大招 %d 次——點弱點破防，士氣滿就放大招" % [
+			ceili(hp_ratio() * 100.0), weak_hits, weak_opened, volleys])
+	return {"mvp": mvp, "top": top, "causes": causes, "zone_falls": zone_falls, "tele_falls": tele_falls,
+		"auto_falls": int(causes.get(CAUSE_AUTO, 0)), "advice": lines}
