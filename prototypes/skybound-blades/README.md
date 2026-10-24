@@ -15,10 +15,12 @@ GODOT=/Applications/Godot.app/Contents/MacOS/Godot
 $GODOT --headless --path . --import                     # 第一次或新增素材後
 $GODOT --path .                                          # 開視窗玩
 # 測試（依序跑；嚴格檢查 log）
-GODOT_BIN=$GODOT ../godot-kit/tools/run_tests.sh . battle field:60 text
+GODOT_BIN=$GODOT ../godot-kit/tools/run_tests.sh . battle run save camp field:60 text sprites
 # 網頁版：build/web/，從 localhost 開
 GODOT_BIN=$GODOT ../godot-kit/tools/web/build_web.sh .
 ```
+
+檢查角色圖集：`$GODOT --path . res://addons/proto_kit/sprite_inspector.tscn`（方向、速度、逐幀、格線與自動檢查，見 godot-kit README）。
 
 操作：點地面移動（按住拖曳持續移動）、點怪物鎖定追打、WASD／方向鍵、空白鍵自動狩獵、Q 裂空斬、E 藥水、R 急救包、T 撤退、B 背包（換裝）、C 營地（在營地內）、Esc 暫停、滾輪縮放。
 

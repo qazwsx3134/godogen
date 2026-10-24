@@ -37,6 +37,8 @@ func _run() -> void:
 	await _test_floating_stick()
 	await _test_scene_loader()
 	await _test_harness_input()
+	_test_sprite_check()
+	await _test_sprite_inspector()
 	_finish("PROTO KIT TESTS")
 
 
@@ -1094,3 +1096,75 @@ IYSMMecghBBCCKGUkDHmHIQQQgghhFI65yCEUEoJpZRSSucchBBCCKWUUkoJIYQQQiillFJKKSGEEEop
 pZRSSimllBJCCKGUUkoppZRSQgillFJKKaWUUkooIYRSSimllFJKCSWUUkoppZRSSikhlFJKKaWUUkoppQAAgAMHAIAAI+gko8oibDThwgMQAAAAAgACTACB
 AYKCUQgChBEIAAAAAAAIAPgAAEgKgIiIaOYMDhASFBYYGhweICIkAAAAAAAAAAAAAAAABE9nZ1MABKAAAAAAAAAAXNkzfgIAAABPkcwMAgEBAAA=
 """
+
+
+## A 4x1 atlas of 32 px cells: 0 good (feet on the line), 1 feet 6 px higher, 2 art touching the right edge, 3 empty.
+func _sprite_check_sheet() -> Resource:
+	const SpriteSheet = preload("res://addons/proto_kit/sprite3d_sheet.gd")
+	var image := Image.create(128, 32, false, Image.FORMAT_RGBA8)
+	var foot := 32 - 4 - 1
+	image.fill_rect(Rect2i(10, foot - 15, 12, 16), Color.WHITE)           # cell 0: bottom row = foot line
+	image.fill_rect(Rect2i(32 + 10, foot - 21, 12, 16), Color.WHITE)      # cell 1: 6 px above it
+	image.fill_rect(Rect2i(64 + 20, foot - 15, 12, 16), Color.WHITE)      # cell 2: right edge (x 84..95 = cell end)
+	var sheet: Resource = SpriteSheet.new()
+	sheet.atlas = ImageTexture.create_from_image(image)
+	sheet.columns = 4
+	sheet.rows = 1
+	sheet.cell_px = 32
+	sheet.foot_px = 4
+	sheet.directions = 1
+	sheet.mirror = true
+	sheet.anims = {
+		"walk": {"cell": 0, "n": 2, "d": [5, 5], "loop": true},   # cells 0, 1: feet jump 6 px
+		"hit": {"cell": 2, "n": 1, "d": [5], "loop": false},      # cell 2: edge contact
+		"die": {"cell": 3, "n": 2, "d": [5, 5], "loop": false},   # cells 3, 4: empty, then past the atlas
+	}
+	return sheet
+
+
+func _test_sprite_check() -> void:
+	const SpriteCheck = preload("res://addons/proto_kit/sprite_check.gd")
+	var sheet := _sprite_check_sheet()
+	var image := SpriteCheck.atlas_image(sheet)
+	var good: Dictionary = SpriteCheck.cell_info(sheet, image, 0)
+	_expect(not good.empty and good.foot_y == 27 and is_equal_approx(good.foot_x, 15.5) and good.touches.is_empty(),
+		"sprite_check: foot row, foot centre and no edge contact on a good cell (%s)" % good)
+	var frames := SpriteCheck.frames(sheet, &"walk", 1)
+	_expect(frames.size() == 2 and frames[0].cell == 0 and frames[1].cell == 1 and frames[0].flip,
+		"sprite_check: frames keep the sheet order and the mirror of the direction")
+	var issues := SpriteCheck.check_sheet(sheet)
+	var texts := PackedStringArray()
+	for i: Dictionary in issues:
+		texts.append("%s/%s/%d" % [i.level, i.anim, i.cell])
+	var has := func(level: String, anim: String, needle: String) -> bool:
+		return issues.any(func(i: Dictionary) -> bool: return i.level == level and i.anim == anim and String(i.text).contains(needle))
+	_expect(has.call("warn", "walk", "腳底跳動 6"), "sprite_check: a 6 px foot jump is reported (%s)" % [texts])
+	_expect(has.call("warn", "hit", "碰到格子邊緣"), "sprite_check: art on the cell edge is reported")
+	_expect(has.call("error", "die", "空白格"), "sprite_check: an empty frame is an error")
+	_expect(has.call("error", "die", "超出圖集"), "sprite_check: a cell past the atlas is an error")
+	_expect(not issues.any(func(i: Dictionary) -> bool: return i.anim == "walk" and i.cell == 0),
+		"sprite_check: the good cell has no issue of its own")
+	var walk_rows := issues.filter(func(i: Dictionary) -> bool: return String(i.text).contains("腳底跳動"))
+	_expect(walk_rows.size() == 1, "sprite_check: a mirrored direction is not reported twice")
+
+
+func _test_sprite_inspector() -> void:
+	var page: Control = load("res://addons/proto_kit/sprite_inspector.tscn").instantiate()
+	root.add_child(page)
+	await process_frame
+	page.sheets = [{"label": "test", "sheet": _sprite_check_sheet()}]
+	page.select_sheet(0)
+	page.select_anim(&"walk")
+	page.set_playing(false)
+	page.select_direction(1)
+	var strip: Node = page.get_node("%FrameStrip")
+	_expect(strip.get_child_count() == 2, "inspector: one thumbnail per frame")
+	_expect(page._view.flip and page._view.cell == 0, "inspector: direction 1 draws the mirrored row")
+	var z: float = page.current_zoom()
+	page.step_frame(1)
+	_expect(page._view.cell == 1 and is_equal_approx(page.current_zoom(), z), "inspector: stepping keeps one zoom for all frames")
+	page.step_frame(1)
+	_expect(page.frame == 0, "inspector: stepping wraps in the sheet's order")
+	_expect(page._issues.item_count == page._issue_rows.size() and page._issue_rows.size() >= 4, "inspector: every issue is listed")
+	page.queue_free()
+	await process_frame

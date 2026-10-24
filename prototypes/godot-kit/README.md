@@ -21,6 +21,7 @@
 | [`floating_stick.gd`](addons/proto_kit/floating_stick.gd) | 浮動虛擬搖桿：平時看不見，按下才在手指下出現，輸出螢幕向量 | sugarcane-tanks |
 | [`scene_loader.gd`](addons/proto_kit/scene_loader.gd) | 載入畫面的邏輯：執行緒載入、進度不倒退也不跑在時鐘前面、失敗可重試、離開時收掉任務 | sugarcane-tanks |
 | [`sprite3d*.gdshader`](addons/proto_kit/sprite3d.gdshader)、[`sprite3d_sheet.gd`](addons/proto_kit/sprite3d_sheet.gd)、[`sprite3d_actor.gd`](addons/proto_kit/sprite3d_actor.gd) | 2D 角色圖立在 3D 世界（pokebonk.com／仙境傳說式）：billboard、腳底貼地、依鏡頭相對方向選 1／4／8 方向（含鏡像與遲滯）、描邊身分色、閃白、溶解、x-ray 剪影、殘影、腳下影子，MultiMesh 大軍可用。搭配 `tools/sprite_atlas.py` | madara-survivor、horde-25d（2026-10-19 從這兩份抽出） |
+| [`sprite_check.gd`](addons/proto_kit/sprite_check.gd)、[`sprite_inspector.tscn`](addons/proto_kit/sprite_inspector.tscn) | sprite 動畫測試頁：方向切換、速度、逐幀、格線、洋蔥皮，自動抓切錯格、空白幀與腳底跳動；只讀，不縮放不重排 | skybound-blades；madara-survivor、horde-25d 的 sheet 在程式裡建，存成 `.tres` 後可用 |
 
 GDScript、Godot 4.7。只用於 `prototypes/`，不接進 `publish.sh`（見 [ADR 0001](../docs/adr/0001-prototypes-live-in-godogen.md)）。
 
@@ -437,6 +438,30 @@ mm.set_instance_color(i, Sprite3DSheet.instance_color(Color.WHITE, Sprite3DSheet
 shader 預設值是 madara-survivor 的（`frames` 4×6、`lean` 1、`foot_gutter` 0.047）。horde-25d 的不同處（4×2 格、`lean` 0.35、無腳底帶、深色硬邊影子）寫在它自己的材質與 `tools/build_scenes.gd` 的 `LOOK`／`ACTOR`。
 
 換成 kit 版時的驗證（2026-10-19）：兩個原型的測試都通過；同 seed 錄影，madara 第 10、39 格逐像素相同；horde-25d 第 10 格相同，第 39 格只差在主角 x-ray：舊版沒有往鏡頭推，會在主角自己身上畫條紋，kit 用 madara 的修法（`toward_camera` 0.35）。gallery 在 Compatibility 與 Mobile 渲染器畫面相同。
+
+## sprite_inspector：sprite 動畫測試頁
+
+檢查角色圖集有沒有切錯格、錯幀、腳底跳動。只讀不改：不會逐幀縮放角色，不會重排幀順序，也不寫回 sheet。
+
+```bash
+godot --path prototypes/<原型> res://addons/proto_kit/sprite_inspector.tscn
+godot --path prototypes/<原型> res://addons/proto_kit/sprite_inspector.tscn -- --sheet res://resources/sheets/leader.tres
+godot --path prototypes/<原型> res://addons/proto_kit/sprite_inspector.tscn -- --json res://assets/sprites/sheets.json
+```
+
+- **來源**：自動找專案裡所有用 `sprite3d_sheet.gd` 的 `.tres`，以及 `tools/sprite_atlas.py` 產生的 `sheets.json`（略過 `addons/` 與有 `.gdignore` 的資料夾）。sheet 只在程式裡建的原型，用 `--sheet` 指定存好的 `.tres`。
+- **方向切換**：依 sheet 的方向數列出按鈕（8／4／2 向），顯示這個方向用的是哪一列、是不是鏡像，和 shader 選的格子一樣（走 `sheet.cell()`）。
+- **速度與逐幀**：0.1x～4x，依每格的 `d`（tick）播放；`←／→` 逐格、空白鍵播放／暫停，下方縮圖列點一下跳到該格。
+- **格線與檢查**：格子邊框、像素格（放大 6 倍以上時）、紅色腳底線（`cell_px − foot_px`）、藍色虛線（第 1 格的腳底）、黃色外框與腳點、中線、洋蔥皮（疊上一格）。右邊是整張圖集與格線、格號，目前動畫的格子是藍框，現在這格是橘框。
+- **倍率**：「整格等比」用同一個倍率把整格放進畫面，所有幀共用，換幀時不會改；也可以選固定倍率。
+- **自動檢查**（`sprite_check.gd`，也能在測試裡用）：格號超出圖集、空白格（錯誤）；圖碰到格子邊緣、同一動畫各幀腳底差超過 2 px、腳底不在腳底線上（警告）。點一列檢查結果就跳到那一格。
+
+```gdscript
+const SpriteCheck = preload("res://addons/proto_kit/sprite_check.gd")
+var issues := SpriteCheck.check_sheet(load("res://resources/sheets/leader.tres"))   # [] = 沒問題
+```
+
+畫面是 `sprite_inspector.tscn`，用 `tools/build_sprite_inspector.gd` 產生後就當原始檔維護，重跑產生器要加 `-- --force`。中文字型依序找專案的 GUI 字型、專案裡第一個 `.ttf／.otf`、系統字型。已採用：skybound-blades（`tests/test_sprites.gd` 檢查全部角色 sheet）。
 
 ## tools/：字型子集與網頁匯出
 
