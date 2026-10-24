@@ -651,7 +651,7 @@ func _clock(seconds: float) -> String:
 
 
 func _show_trip(trip: Dictionary) -> void:
-	if int(trip.kills) == 0 and (trip.gear as Array).is_empty():
+	if int(trip.kills) == 0 and (trip.gear as Array).is_empty() and (trip.get("dealt", {}) as Dictionary).is_empty():
 		return
 	var lines := PackedStringArray(["擊倒 %d 隻 · +%d EXP · +%d 金幣" % [int(trip.kills), int(trip.exp), int(trip.gold)]])
 	for item_id: String in trip.items:

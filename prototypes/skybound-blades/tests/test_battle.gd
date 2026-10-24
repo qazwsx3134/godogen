@@ -431,7 +431,8 @@ func test_battle_guardian_cover_reduces_charged_blow() -> void:
 			break
 	_expect(covered, "cover: the guardian covers on the charge")
 	var boss: Battle.Unit = b.monsters()[0]
-	var raw := boss.attack * 1.8 - b.leader.defense * 0.6
+	var sweep: Dictionary = (tuning.bosses["gatekeeper"].moves as Array).filter(func(m: Dictionary) -> bool: return m.id == "sweep")[0]
+	var raw := boss.attack * float(sweep.power) - b.leader.defense * 0.6
 	if sweep_hits.has(b.leader.id):
 		_expect(float(sweep_hits[b.leader.id]) < raw * 0.6, "cover: the leader takes a fraction of the sweep (%d vs ~%d)" % [sweep_hits[b.leader.id], raw])
 

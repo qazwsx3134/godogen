@@ -830,7 +830,7 @@ func _resolve_pending_hits() -> void:
 				var inside: bool = m.alive and not in_camp(m) and m.pos.distance_to(hit.center) <= float(hit.radius)
 				if inside:
 					_roll_hit(src, m, float(hit.power), "boss")
-				if m.alive and (hit.threatened as Array).has(m.id):
+				if m.alive and (hit.threatened as Array).has(m.id) and not (m == guardian and hit.covered):
 					run.note_warning(not inside)
 			_emit({"type": "boss_impact", "unit": src.id, "move": hit.move, "center": hit.center, "radius": hit.radius})
 			continue

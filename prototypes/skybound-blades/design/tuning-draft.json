@@ -113,7 +113,7 @@
     "dodge_react_ms": 400,
     "dodge_margin_cells": 0.6,
     "dodge_roles": ["guardian", "support"],
-    "dodge_note": "roles in dodge_roles step out of a boss warning react_ms after it starts; the guardian holds for a sweep it covers; the leader (if listed) only while auto-hunting. Gatekeeper Lv5 x20 seeds: none 1055 taken/37 s kill; guardian+support 498/49 s; all three 435/86 s (design/boss-warnings.md)"
+    "dodge_note": "roles in dodge_roles step out of a boss warning react_ms after it starts; the guardian holds for a sweep it covers; the leader (if listed) only while auto-hunting. gatekeeper moves were raised so a party that never dodges loses (tools/boss_measure.gd, design/boss-warnings.md)"
   },
   "items": [
     {
@@ -716,7 +716,7 @@
           "radius_cells": 3.6,
           "warning_ms": 2000,
           "cooldown_ms": 10000,
-          "power": 1.8,
+          "power": 3.2,
           "targets": "all"
         },
         {
@@ -725,7 +725,7 @@
           "radius_cells": 1.5,
           "warning_ms": 1200,
           "cooldown_ms": 8000,
-          "power": 2.0,
+          "power": 3.5,
           "targets": "current"
         }
       ]

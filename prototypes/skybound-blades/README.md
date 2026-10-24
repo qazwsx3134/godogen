@@ -31,7 +31,7 @@ GODOT_BIN=$GODOT ../godot-kit/tools/web/build_web.sh .
 | `domain/` | 純模擬（不碰節點）：`battle.gd` 固定 50 ms 步進的戰鬥、AI、營地、撤退、守層者；`run.gd` 一代的成長、背包、裝備實例、委託與 kill receipt；`profile.gd` 跨代的倉庫與紀念碑；`save_service.gd` 存檔／備份／tombstone；`tuning.gd` 讀 `design/tuning-draft.json`；`stepper.gd` 把畫面 delta 換成步數 |
 | `game/` | 呈現：`field.gd` 讀場景配置、存讀檔、轉輸入為指令、轉事件為特效／音效／HUD；`camp_menu.gd` 營地視窗的內容與動作；`actor_view.gd` 角色外觀、插值與程序化動作；`boss_view.gd` 守門者（低多邊形石像，HD 美術待補）；`fx.gd`、`prop.gd`、`camp.gd`、`sfx.gd` |
 | `ui/` | `hud.tscn`＋`hud.gd`（只用 signal 與 `refresh()` 對外）、`camp_panel.tscn`、`item_row.tscn`、`party_row.tscn`、`theme.tres` |
-| `tools/` | `build_slice.gd`（scene 產生器，只在製作時跑）、`pack_sprites.py`（原畫 → 圖集）、`shot.gd`（截圖）、`pacing_calc.py`（節奏試算） |
+| `tools/` | `build_slice.gd`（scene 產生器，只在製作時跑）、`pack_sprites.py`（原畫 → 圖集）、`shot.gd`（截圖）、`pacing_calc.py`（節奏試算）、`boss_measure.gd`（守門者各閃避設定的勝率與補給） |
 
 ## 主要 scene 與可調欄位
 
