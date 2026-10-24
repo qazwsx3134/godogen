@@ -2,7 +2,7 @@
 
 單機 AI 隊伍的爬塔放置 RPG；角色永久死亡，保留帳號傳承。目標是 Web 桌機與手機橫向，戰鬥呈現是 RO 式 HD 2.5D：3D 地圖＋godot-kit sprite3d 的 HD billboard 角色，點敵人追打、自動狩獵與兩名 AI 隊友。
 
-目前交付：第一個可玩切片（[RO 戰鬥切片](design/ro-slice.md)），風庭遺跡一個狩獵區，可在桌機與手機橫向的網頁版遊玩。角色與怪物是本作原創的 HD 插畫（`art_src/chars/`），場景是低多邊形 3D。
+目前交付：[RO 戰鬥切片](design/ro-slice.md)＋[M1 單層閉環](design/m1-loop.md)：風庭遺跡的狩獵區、營地（補給、倉庫、委託、換裝）、撤退、守層者「守門者」、本機存檔與世代交替，可在桌機與手機橫向的網頁版遊玩。角色與怪物是本作原創的 HD 插畫（`art_src/chars/`），場景是低多邊形 3D。
 
 ## 原型假說
 
@@ -20,22 +20,22 @@ GODOT_BIN=$GODOT ../godot-kit/tools/run_tests.sh . battle field:60 text
 GODOT_BIN=$GODOT ../godot-kit/tools/web/build_web.sh .
 ```
 
-操作：點地面移動（按住拖曳持續移動）、點怪物鎖定追打、WASD／方向鍵、空白鍵自動狩獵、Q 裂空斬、E 藥水、R 急救包、F 回報委託、Esc 暫停、滾輪縮放。
+操作：點地面移動（按住拖曳持續移動）、點怪物鎖定追打、WASD／方向鍵、空白鍵自動狩獵、Q 裂空斬、E 藥水、R 急救包、T 撤退、B 背包（換裝）、C 營地（在營地內）、Esc 暫停、滾輪縮放。
 
 ## 程式結構
 
 | 位置 | 內容 |
 |---|---|
-| `domain/` | 純模擬（不碰節點）：`battle.gd` 固定 50 ms 步進的戰鬥、AI、補給、獎勵、任務；`tuning.gd` 讀 `design/tuning-draft.json` 並算能力值；`stepper.gd` 把畫面 delta 換成步數 |
-| `game/` | 呈現：`field.gd` 讀場景配置、轉輸入為指令、轉事件為特效／音效／HUD；`actor_view.gd` 角色外觀與插值；`fx.gd`、`prop.gd`、`sfx.gd` |
-| `ui/` | `hud.tscn`＋`hud.gd`（只用 signal 與 `refresh()` 對外）、`party_row.tscn`、`theme.tres` |
+| `domain/` | 純模擬（不碰節點）：`battle.gd` 固定 50 ms 步進的戰鬥、AI、營地、撤退、守層者；`run.gd` 一代的成長、背包、裝備實例、委託與 kill receipt；`profile.gd` 跨代的倉庫與紀念碑；`save_service.gd` 存檔／備份／tombstone；`tuning.gd` 讀 `design/tuning-draft.json`；`stepper.gd` 把畫面 delta 換成步數 |
+| `game/` | 呈現：`field.gd` 讀場景配置、存讀檔、轉輸入為指令、轉事件為特效／音效／HUD；`camp_menu.gd` 營地視窗的內容與動作；`actor_view.gd` 角色外觀、插值與程序化動作；`boss_view.gd` 守門者（低多邊形石像，HD 美術待補）；`fx.gd`、`prop.gd`、`camp.gd`、`sfx.gd` |
+| `ui/` | `hud.tscn`＋`hud.gd`（只用 signal 與 `refresh()` 對外）、`camp_panel.tscn`、`item_row.tscn`、`party_row.tscn`、`theme.tres` |
 | `tools/` | `build_slice.gd`（scene 產生器，只在製作時跑）、`pack_sprites.py`（原畫 → 圖集）、`shot.gd`（截圖）、`pacing_calc.py`（節奏試算） |
 
 ## 主要 scene 與可調欄位
 
 | Scene | 在編輯器可直接調整 |
 |---|---|
-| `scenes/field.tscn` | `%Party` 三人與 `%Monsters` 每隻怪的位置（開局即依此出生）、怪物節點的 `kind_id`；`%Props` 道具的位置／旋轉／縮放與 `block_radius`（>0 才擋路）；根節點的 `bounds`、`battle_seed`、`camera_distance`、`pick_radius_px`；`Sun`、`WorldEnvironment`、`Ground` 材質參數 |
+| `scenes/field.tscn` | `%Camp` 的位置與 `radius`（安全區）；`%Party` 三人與 `%Monsters` 每隻怪（含守門者）的位置（開局即依此出生）、怪物節點的 `kind_id`；`%Props` 道具的位置／旋轉／縮放與 `block_radius`（>0 才擋路）；根節點的 `bounds`、`battle_seed`、`camera_distance`、`pick_radius_px`；`Sun`、`WorldEnvironment`、`Ground` 材質參數 |
 | `scenes/actors/actor.tscn` | `head_height`（名牌與血條高度）、`show_nameplate`、`dissolve_on_down`、`nameplate_color`、`sheet`（`resources/sheets/*.tres`：動畫格與每格停留時間） |
 | `ui/hud.tscn` | 所有面板的錨點與位置、按鈕大小、文字；配色與字級在 `ui/theme.tres` |
 | `scenes/props/*.tscn` | 低多邊形道具的組成與 `block_radius` |

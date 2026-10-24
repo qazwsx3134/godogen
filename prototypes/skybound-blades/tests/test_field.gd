@@ -25,9 +25,14 @@ func _run() -> void:
 	# Hit stops run on the wall clock; under --fixed-fps that would slow many test frames. Use frames.
 	field.time_control.clock = func() -> int: return Engine.get_process_frames() * 1000 / 60
 	await test_field_layout_reads_the_authored_scene()
+	# The party starts in the safe camp; the combat cases below happen out in the field.
+	for m: RefCounted in field.battle.party():
+		m.pos = Vector2(-4.0, 0.0) + Vector2(m.id * 0.9, 0.0)
+	await _frames(2)
 	await test_field_click_monster_chases_and_kills()
 	await test_field_walk_animation_advances()
 	await test_field_hud_auto_button_toggles_auto_hunt()
+	field.profile.warehouse_gold = 77  # must survive the death
 	await test_field_leader_down_shows_end_and_keeps_rendering()
 	await test_field_restart_resets_the_run()
 	test_field_saves_only_its_own_file()
@@ -81,7 +86,7 @@ func test_field_click_monster_chases_and_kills() -> void:
 func test_field_walk_animation_advances() -> void:
 	var b := _battle()
 	var leader_view: Node3D = field.views[b.leader.id]
-	await _tap(field.camera.unproject_position(Vector3(b.leader.pos.x + 4.0, 0, b.leader.pos.y - 2.5)))
+	await _tap(field.camera.unproject_position(Vector3(b.leader.pos.x + 2.5, 0, b.leader.pos.y + 2.5)))
 	await _frames(30)
 	var visual: Node3D = leader_view.get_node("Visual")
 	var t0: float = visual.ticks
@@ -134,9 +139,14 @@ func test_field_restart_resets_the_run() -> void:
 	await _press(hud.get_node("%RestartButton"))
 	await _frames(3)
 	var b := _battle()
-	_expect(not b.ended and b.level == 1 and b.gold == 0 and b.kills == 0, "restart: a fresh run")
-	_expect(int(b.inventory.tonic_small) == 5 and b.leader.hp == b.leader.max_hp, "restart: supplies and HP from tuning")
-	_expect(not hud.get_node("%EndPanel").visible, "restart: end panel hidden")
+	_expect(not b.ended and b.level == 1 and b.gold == 0 and b.kills == 0, "next generation: a fresh run")
+	_expect(b.run.generation == 2 and field.profile.memorial.size() == 1, "next generation: generation 2, one memorial entry")
+	_expect(int(b.inventory.tonic_small) == 5 and b.leader.hp == b.leader.max_hp, "next generation: issued supplies and full HP")
+	_expect(b.in_camp(b.leader), "next generation: starts in camp")
+	_expect(not hud.get_node("%EndPanel").visible, "next generation: end panel hidden")
+	_expect(field.profile.warehouse_gold == 77, "next generation: the warehouse survived")
+	var doc: Dictionary = SaveService.new(SAVE).load_state()
+	_expect(doc.run is Dictionary and String(doc.run.id) == b.run.id, "next generation: saved as the live run")
 
 
 func test_field_saves_only_its_own_file() -> void:
