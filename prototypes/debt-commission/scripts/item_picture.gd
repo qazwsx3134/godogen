@@ -12,6 +12,11 @@ const TINTS: Array[Color] = [Color("#c9a24a"), Color("#a94432"), Color("#4f7fcf"
 	set(value):
 		label = value
 		queue_redraw()
+## Placeholder card colour; fully transparent = pick one of TINTS from the name.
+@export var tint: Color = Color(0, 0, 0, 0):
+	set(value):
+		tint = value
+		queue_redraw()
 
 
 func _ready() -> void:
@@ -30,7 +35,7 @@ func _draw() -> void:
 	var side: float = minf(size.x, size.y)
 	var rect: Rect2 = Rect2((size - Vector2(side, side)) * 0.5, Vector2(side, side))
 	var box: StyleBoxFlat = StyleBoxFlat.new()
-	box.bg_color = Color(TINTS[absi(label.hash()) % TINTS.size()], 0.9)
+	box.bg_color = Color(tint if tint.a > 0.0 else TINTS[absi(label.hash()) % TINTS.size()], 0.9)
 	box.border_color = Color(1.0, 1.0, 1.0, 0.75)
 	box.set_border_width_all(maxi(1, roundi(side * 0.035)))
 	box.set_corner_radius_all(roundi(side * 0.16))

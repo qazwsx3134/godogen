@@ -443,11 +443,42 @@ static func label_color(style_id: String, role: String) -> Color:
 			return p["text"] as Color
 
 
+## WCAG contrast ratio between two colours (1 to 21).
+static func contrast(a: Color, b: Color) -> float:
+	var la: float = _luminance(a)
+	var lb: float = _luminance(b)
+	return (maxf(la, lb) + 0.05) / (minf(la, lb) + 0.05)
+
+
+static func _luminance(c: Color) -> float:
+	var ch: Array[float] = []
+	for v: float in [c.r, c.g, c.b]:
+		ch.append(v / 12.92 if v <= 0.03928 else pow((v + 0.055) / 1.055, 2.4))
+	return 0.2126 * ch[0] + 0.7152 * ch[1] + 0.0729 * ch[2]
+
+
+## A character's name colour readable on the paper panels: `ink` if the catalog gives one, else `color` darkened
+## until it reaches 4.5:1 against the style's panel colour (body text, WCAG AA).
+static func ink_for(info: Dictionary, style_id: String) -> Color:
+	var ground: Color = palette(style_id)["panel"] as Color
+	if str(info.get("ink", "")).is_valid_html_color():
+		return Color(str(info["ink"]))
+	var c: Color = Color(str(info.get("color", "#203047")))
+	for i: int in 40:
+		if contrast(c, ground) >= 4.5:
+			break
+		c = c.darkened(0.06)
+	return c
+
+
 static func apply_label(label: Label, style_id: String, role: String = "body", scale_factor: float = 1.0) -> void:
 	var p: Dictionary = palette(style_id)
 	var density: float = maxf(1.0, scale_factor)
 	label.set_meta("ui_style_role", role)
 	label.add_theme_color_override("font_color", label_color(style_id, role))
+	# A character's own ink (dialogue log names) wins over the role colour, on the washi looks only.
+	if label.has_meta("ui_style_ink") and washi(style_id):
+		label.add_theme_color_override("font_color", label.get_meta("ui_style_ink") as Color)
 	if role in ["scene_overlay", "title_overlay"]:
 		label.add_theme_color_override("font_outline_color", p["scene_outline"] as Color)
 		label.add_theme_constant_override("outline_size", roundi((5.0 if role == "title_overlay" else 4.0) * density))

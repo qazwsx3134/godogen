@@ -3036,21 +3036,48 @@ func _open_log() -> void:
 	for entry: Dictionary in _history:
 		var row: Control = preload("res://scenes/ui/log_entry.tscn").instantiate()
 		_log_entries.add_child(row)
-		var heading: Label = row.get_node("%Speaker")
-		var text: Label = row.get_node("%Text")
-		text.text = _dict_string(entry,"text")
-		if _dict_string(entry,"kind") == "choice":
-			heading.text = "▶ 選擇"
-		else:
-			var names: PackedStringArray = []
-			for actor in _dict_string(entry,"speaker","narrator").split("+",false):
-				names.append(str((_actors.get(actor,{}) as Dictionary).get("name","旁白")))
-			heading.text = "、".join(names) + ("・" + _term("thought") if _dict_bool(entry,"thought") else "")
+		_fill_log_row(row, entry)
 		_apply_ui_style_recursive(row)
 	_log_overlay.visible = true
 	_refresh_phase3_hud()
 	_scroll_log_to_bottom()
 	_publish_qa_state()
+
+
+## One log line, read like a chat (from the 異獸髮廊 study, docs/interactive-fiction/ref-beastfolk-barber): other
+## speakers on the left with an avatar and their own name ink, the POV and the player's choices on the right without
+## one, narration centred. A duet (a+b) takes the first speaker's avatar and ink. Name ink is washi-only (ui_styles).
+func _fill_log_row(row: Control, entry: Dictionary) -> void:
+	var heading: Label = row.get_node("%Speaker")
+	var text: Label = row.get_node("%Text")
+	var avatar: Control = row.get_node("%Avatar")
+	text.text = _dict_string(entry,"text")
+	var speakers: PackedStringArray = _dict_string(entry,"speaker","narrator").split("+",false)
+	var first: String = speakers[0] if not speakers.is_empty() else "narrator"
+	var side: HorizontalAlignment = HORIZONTAL_ALIGNMENT_LEFT
+	if _dict_string(entry,"kind") == "choice":
+		heading.text = "▶ 選擇"
+		side = HORIZONTAL_ALIGNMENT_RIGHT
+	else:
+		var names: PackedStringArray = []
+		for actor in speakers:
+			names.append(str((_actors.get(actor,{}) as Dictionary).get("name","旁白")))
+		heading.text = "、".join(names) + ("・" + _term("thought") if _dict_bool(entry,"thought") else "")
+		if not _actors.has(first):
+			side = HORIZONTAL_ALIGNMENT_CENTER
+		elif first == _default_pov():
+			side = HORIZONTAL_ALIGNMENT_RIGHT
+	var info: Dictionary = _actors.get(first, {}) as Dictionary
+	avatar.visible = side == HORIZONTAL_ALIGNMENT_LEFT
+	if avatar.visible:
+		var ink: Color = UI_STYLES_SCRIPT.ink_for(info, _ui_style_id)
+		heading.set_meta("ui_style_ink", ink)
+		avatar.set("tint", ink)
+		var picture: String = str(info.get("avatar", ""))
+		avatar.call("show_item", str(info.get("name", "?")),
+			load(picture) as Texture2D if not picture.is_empty() and ResourceLoader.exists(picture) else null)
+	heading.horizontal_alignment = side
+	text.horizontal_alignment = side
 
 
 func _scroll_log_to_bottom() -> void:

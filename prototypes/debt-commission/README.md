@@ -211,7 +211,7 @@ node tools/browser_check.mjs --backup --playwright /path/to/node_modules/@playwr
 | 素材圖片 | ✅ 已轉換 | `scenes/ui/item_picture.tscn`：catalog 有 `path` 就顯示圖，沒有就畫名稱第一個字的色卡；素材卡與素材詳細都用它 |
 | 對話框與工具列 | ✅ 已轉換 | `scenes/ui/dialogue_box_gintama.tscn`（腳本 `scripts/dialogue_box.gd`），工具列是 `gintama_reading_*.tscn` |
 | 目錄 | ✅ 已轉換 | `scenes/ui/menu_panel_gintama.tscn`（腳本 `scripts/menu_panel.gd`），每列是 `menu_row_gintama.tscn` |
-| 對話紀錄 | ✅ 已轉換 | `scenes/ui/dialogue_log.tscn`、逐句 `log_entry.tscn` |
+| 對話紀錄 | ✅ 已轉換 | `scenes/ui/dialogue_log.tscn`、逐句 `log_entry.tscn`（`Avatar`＋`Body/Speaker`、`Body/Text`）。排版像聊天：其他角色靠左，有頭像與名字色；POV 角色與玩家的選擇靠右；旁白置中。名字色在銀魂和紙下使用 catalog 的 `ink`，沒填時由 `color` 加深到與和紙對比 ≥ 4.5（`ui_styles.ink_for`）。頭像預設為首字色卡，catalog 補上 `avatar` 圖片就會自動取代 |
 | 存讀檔面板與覆寫確認 | ✅ 已轉換 | `scenes/ui/save_slots_panel.tscn`、`save_slot_card.tscn`、`save_overwrite_confirmation.tscn` |
 | 結尾按鈕 | ✅ 已轉換 | `scenes/ui/end_controls.tscn` |
 | 吐槽回合的操作列與消音條 | ✅ 已轉換 | 在對話框 scene 的 Actions 裡（‹ ›、句數、聽下去、吐槽！、`CensorBar`）；選項面板另有 `CensorBar` 與 `Super`；顯示什麼由 `scripts/round_view.gd` 決定 |

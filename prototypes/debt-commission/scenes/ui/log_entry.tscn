@@ -1,5 +1,6 @@
 [gd_scene format=3]
 
+[ext_resource type="PackedScene" path="res://scenes/ui/item_picture.tscn" id="1_25w5n"]
 [ext_resource type="FontFile" path="res://assets/fonts/NotoSerifTC.ttf" id="1_sypon"]
 
 [sub_resource type="FontVariation" id="FontVariation_25w5n"]
@@ -8,10 +9,23 @@ variation_opentype = {
 2003265652: 500.0
 }
 
-[node name="LogEntry" type="VBoxContainer" unique_id=633091046]
+[node name="LogEntry" type="HBoxContainer" unique_id=1998972921]
+theme_override_constants/separation = 20
+
+[node name="Avatar" parent="." unique_id=408534221 instance=ExtResource("1_25w5n")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(88, 88)
+layout_mode = 2
+size_flags_vertical = 0
+label = "銀"
+
+[node name="Body" type="VBoxContainer" parent="." unique_id=1323433940]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/separation = 14
 
-[node name="Speaker" type="Label" parent="." unique_id=70178966]
+[node name="Speaker" type="Label" parent="Body" unique_id=70178966]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_25w5n")
@@ -20,7 +34,7 @@ theme_override_colors/font_color = Color(0.1254902, 0.23921569, 0.3254902, 1)
 text = "銀時"
 metadata/ui_style_role = "body"
 
-[node name="Text" type="Label" parent="." unique_id=134455952]
+[node name="Text" type="Label" parent="Body" unique_id=134455952]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_25w5n")

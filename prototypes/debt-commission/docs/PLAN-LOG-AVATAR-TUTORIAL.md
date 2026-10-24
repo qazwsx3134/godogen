@@ -1,6 +1,6 @@
 # 計畫：對話紀錄的頭像與名字色、第一次出現新功能的教學導覽
 
-狀態：**計畫，尚未實作**（2026-10-24）。
+狀態：**A 已實作**（2026-10-24，`tests/test_dialogue_log.gd`；對齊採用預設：POV 與選擇靠右、旁白置中）；B 尚未實作。
 來源：《異獸髮廊》試玩版研究（`docs/interactive-fiction/ref-beastfolk-barber/README.md`）對照本專案現況。
 範圍：只借結構，**銀魂和紙風格不變**（`AGENTS.md` 的介面基準）。
 
