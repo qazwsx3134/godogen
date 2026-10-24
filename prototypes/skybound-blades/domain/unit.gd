@@ -50,6 +50,10 @@ var unreachable: Dictionary = {}  # target id -> sim time when it may be chosen 
 var stuck_ms: float = 0.0
 var stuck_best: float = INF
 
+var is_boss: bool = false
+var cover_until_ms: float = -1.0
+var cover_ratio: float = 1.0
+
 # Monster rewards.
 var base_exp: float = 0.0
 var gold: int = 0

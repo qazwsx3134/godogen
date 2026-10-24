@@ -1,44 +1,49 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://game/field.gd" id="1_honqg"]
-[ext_resource type="Shader" path="res://materials/meadow.gdshader" id="2_oexpq"]
-[ext_resource type="Material" path="res://resources/materials/low_poly_92.tres" id="3_ei6mx"]
-[ext_resource type="ArrayMesh" path="res://resources/meshes/cliff.res" id="4_rpjg5"]
-[ext_resource type="PackedScene" path="res://scenes/props/arch.tscn" id="5_v2b0a"]
-[ext_resource type="PackedScene" path="res://scenes/props/blocker.tscn" id="6_5by1f"]
-[ext_resource type="PackedScene" path="res://scenes/props/oak.tscn" id="7_odu0x"]
-[ext_resource type="PackedScene" path="res://scenes/props/pine.tscn" id="8_7b553"]
-[ext_resource type="PackedScene" path="res://scenes/props/boulder.tscn" id="9_rh7ir"]
-[ext_resource type="PackedScene" path="res://scenes/props/pillar_broken.tscn" id="10_c62i7"]
-[ext_resource type="PackedScene" path="res://scenes/props/pillar.tscn" id="11_y7jqv"]
-[ext_resource type="PackedScene" path="res://scenes/props/wall.tscn" id="12_s1x0y"]
-[ext_resource type="PackedScene" path="res://scenes/props/crystal.tscn" id="13_jurrb"]
-[ext_resource type="ArrayMesh" path="res://resources/meshes/blade.res" id="14_brsai"]
-[ext_resource type="PackedScene" path="res://scenes/actors/actor.tscn" id="15_dls0l"]
-[ext_resource type="Resource" path="res://resources/sheets/leader.tres" id="16_kit4v"]
-[ext_resource type="Resource" path="res://resources/sheets/guardian.tres" id="17_54snu"]
-[ext_resource type="Resource" path="res://resources/sheets/support.tres" id="18_j3ovn"]
-[ext_resource type="Resource" path="res://resources/sheets/meadow_slime.tres" id="19_2bthm"]
-[ext_resource type="Resource" path="res://resources/sheets/briar_boar.tres" id="20_3dk6h"]
-[ext_resource type="Resource" path="res://resources/sheets/ruin_hound.tres" id="21_65w64"]
-[ext_resource type="Shader" path="res://shaders/select_ring.gdshader" id="22_b4hb6"]
-[ext_resource type="Script" path="res://game/sfx.gd" id="23_myg8p"]
-[ext_resource type="Script" path="res://addons/proto_kit/time_control.gd" id="24_sprlr"]
-[ext_resource type="PackedScene" path="res://ui/hud.tscn" id="25_a7vu3"]
+[ext_resource type="Script" path="res://game/field.gd" id="1_5by1f"]
+[ext_resource type="Shader" path="res://materials/meadow.gdshader" id="2_odu0x"]
+[ext_resource type="Material" path="res://resources/materials/low_poly_92.tres" id="3_7b553"]
+[ext_resource type="ArrayMesh" path="res://resources/meshes/cliff.res" id="4_rh7ir"]
+[ext_resource type="PackedScene" path="res://scenes/props/arch.tscn" id="5_c62i7"]
+[ext_resource type="PackedScene" path="res://scenes/props/blocker.tscn" id="6_y7jqv"]
+[ext_resource type="PackedScene" path="res://scenes/props/oak.tscn" id="7_s1x0y"]
+[ext_resource type="PackedScene" path="res://scenes/props/pine.tscn" id="8_jurrb"]
+[ext_resource type="PackedScene" path="res://scenes/props/boulder.tscn" id="9_brsai"]
+[ext_resource type="PackedScene" path="res://scenes/props/pillar_broken.tscn" id="10_dls0l"]
+[ext_resource type="PackedScene" path="res://scenes/props/pillar.tscn" id="11_kit4v"]
+[ext_resource type="PackedScene" path="res://scenes/props/wall.tscn" id="12_54snu"]
+[ext_resource type="PackedScene" path="res://scenes/props/crystal.tscn" id="13_j3ovn"]
+[ext_resource type="PackedScene" path="res://scenes/props/tent.tscn" id="14_2bthm"]
+[ext_resource type="PackedScene" path="res://scenes/props/campfire.tscn" id="15_3dk6h"]
+[ext_resource type="PackedScene" path="res://scenes/props/banner.tscn" id="16_65w64"]
+[ext_resource type="ArrayMesh" path="res://resources/meshes/blade.res" id="17_b4hb6"]
+[ext_resource type="PackedScene" path="res://scenes/camp.tscn" id="18_myg8p"]
+[ext_resource type="PackedScene" path="res://scenes/actors/actor.tscn" id="19_sprlr"]
+[ext_resource type="Resource" path="res://resources/sheets/leader.tres" id="20_a7vu3"]
+[ext_resource type="Resource" path="res://resources/sheets/guardian.tres" id="21_lrx6g"]
+[ext_resource type="Resource" path="res://resources/sheets/support.tres" id="22_0rfd7"]
+[ext_resource type="Resource" path="res://resources/sheets/meadow_slime.tres" id="23_20atc"]
+[ext_resource type="Resource" path="res://resources/sheets/briar_boar.tres" id="24_gy8kp"]
+[ext_resource type="Resource" path="res://resources/sheets/ruin_hound.tres" id="25_g34wu"]
+[ext_resource type="PackedScene" path="res://scenes/actors/gatekeeper.tscn" id="26_dp0gn"]
+[ext_resource type="Shader" path="res://shaders/select_ring.gdshader" id="27_rseai"]
+[ext_resource type="Script" path="res://game/sfx.gd" id="28_lotq0"]
+[ext_resource type="Script" path="res://addons/proto_kit/time_control.gd" id="29_v16w6"]
+[ext_resource type="PackedScene" path="res://ui/hud.tscn" id="30_1ma64"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_lrx6g"]
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_bjpwq"]
 sky_top_color = Color(0.37254903, 0.62352943, 0.84705883, 1)
 sky_horizon_color = Color(0.8117647, 0.8901961, 0.93333334, 1)
 ground_bottom_color = Color(0.56078434, 0.7490196, 0.8784314, 1)
 ground_horizon_color = Color(0.8117647, 0.8901961, 0.93333334, 1)
 sun_angle_max = 20.0
 
-[sub_resource type="Sky" id="Sky_0rfd7"]
-sky_material = SubResource("ProceduralSkyMaterial_lrx6g")
+[sub_resource type="Sky" id="Sky_fvok6"]
+sky_material = SubResource("ProceduralSkyMaterial_bjpwq")
 
-[sub_resource type="Environment" id="Environment_20atc"]
+[sub_resource type="Environment" id="Environment_byx4f"]
 background_mode = 2
-sky = SubResource("Sky_0rfd7")
+sky = SubResource("Sky_fvok6")
 ambient_light_source = 3
 ambient_light_energy = 0.42
 tonemap_mode = 2
@@ -52,9 +57,9 @@ fog_light_color = Color(0.7882353, 0.8666667, 0.9137255, 1)
 fog_density = 0.006
 fog_sky_affect = 0.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_gy8kp"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_67mr7"]
 render_priority = 0
-shader = ExtResource("2_oexpq")
+shader = ExtResource("2_odu0x")
 shader_parameter/grass_dark = null
 shader_parameter/grass_light = null
 shader_parameter/dirt = null
@@ -62,219 +67,235 @@ shader_parameter/stone = null
 shader_parameter/flower_a = null
 shader_parameter/flower_b = null
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_g34wu"]
+[sub_resource type="PlaneMesh" id="PlaneMesh_5guq2"]
 size = Vector2(34, 24)
 
-[sub_resource type="MultiMesh" id="MultiMesh_dp0gn"]
+[sub_resource type="MultiMesh" id="MultiMesh_tepdp"]
 transform_format = 1
 instance_count = 44
-mesh = ExtResource("4_rpjg5")
+mesh = ExtResource("4_rh7ir")
 
-[sub_resource type="MultiMesh" id="MultiMesh_rseai"]
+[sub_resource type="MultiMesh" id="MultiMesh_b5obe"]
 transform_format = 1
 instance_count = 322
-mesh = ExtResource("14_brsai")
+mesh = ExtResource("17_b4hb6")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_lotq0"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e7p74"]
 render_priority = 0
-shader = ExtResource("22_b4hb6")
+shader = ExtResource("27_rseai")
 shader_parameter/tint = Color(0.5, 0.9, 1, 1)
 shader_parameter/dashes = 6.0
 shader_parameter/speed = 1.5
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_v16w6"]
+[sub_resource type="PlaneMesh" id="PlaneMesh_pyn7s"]
 size = Vector2(1.2, 1.2)
 
-[node name="Field" type="Node3D" unique_id=1466978727]
-script = ExtResource("1_honqg")
+[node name="Field" type="Node3D" unique_id=253446437]
+script = ExtResource("1_5by1f")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=540158025]
-environment = SubResource("Environment_20atc")
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1736772434]
+environment = SubResource("Environment_byx4f")
 
-[node name="Sun" type="DirectionalLight3D" parent="." unique_id=2110160166]
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=1772325592]
 transform = Transform3D(0.7880108, 0.48514786, -0.37903908, 0, 0.6156615, 0.7880107, 0.6156615, -0.62096095, 0.4851479, 0, 0, 0)
 light_color = Color(1, 0.94509804, 0.8392157, 1)
 shadow_enabled = true
 shadow_opacity = 0.7
 directional_shadow_max_distance = 60.0
 
-[node name="Ground" type="MeshInstance3D" parent="." unique_id=1302481739]
-material_override = SubResource("ShaderMaterial_gy8kp")
+[node name="Ground" type="MeshInstance3D" parent="." unique_id=1236395528]
+material_override = SubResource("ShaderMaterial_67mr7")
 cast_shadow = 0
-mesh = SubResource("PlaneMesh_g34wu")
+mesh = SubResource("PlaneMesh_5guq2")
 
-[node name="Cliffs" type="Node3D" parent="." unique_id=591586929]
+[node name="Cliffs" type="Node3D" parent="." unique_id=1422295705]
 
-[node name="Rim" type="MultiMeshInstance3D" parent="Cliffs" unique_id=776648885]
-material_override = ExtResource("3_ei6mx")
-multimesh = SubResource("MultiMesh_dp0gn")
+[node name="Rim" type="MultiMeshInstance3D" parent="Cliffs" unique_id=590967772]
+material_override = ExtResource("3_7b553")
+multimesh = SubResource("MultiMesh_tepdp")
 
-[node name="Underside" type="MeshInstance3D" parent="Cliffs" unique_id=593574426]
+[node name="Underside" type="MeshInstance3D" parent="Cliffs" unique_id=2073651826]
 transform = Transform3D(19, 0, 0, 0, 6, 0, 0, 0, 13, 0, -3.2, 0)
-material_override = ExtResource("3_ei6mx")
-mesh = ExtResource("4_rpjg5")
+material_override = ExtResource("3_7b553")
+mesh = ExtResource("4_rh7ir")
 
-[node name="Props" type="Node3D" parent="." unique_id=1141727642]
+[node name="Props" type="Node3D" parent="." unique_id=808923363]
 unique_name_in_owner = true
 
-[node name="Arch1" parent="Props" unique_id=1034396341 instance=ExtResource("5_v2b0a")]
+[node name="Arch1" parent="Props" unique_id=1034396341 instance=ExtResource("5_c62i7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 0, -8.6)
 
-[node name="Blocker1" parent="Props" unique_id=2069163227 instance=ExtResource("6_5by1f")]
+[node name="Blocker1" parent="Props" unique_id=2069163227 instance=ExtResource("6_y7jqv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.2, 0, -8.6)
 
-[node name="Blocker2" parent="Props" unique_id=261880328 instance=ExtResource("6_5by1f")]
+[node name="Blocker2" parent="Props" unique_id=776431158 instance=ExtResource("6_y7jqv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.8, 0, -8.6)
 
-[node name="Oak1" parent="Props" unique_id=2054827276 instance=ExtResource("7_odu0x")]
+[node name="Oak1" parent="Props" unique_id=2054827276 instance=ExtResource("7_s1x0y")]
 transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, -15, 0, 6.5)
 
-[node name="Oak2" parent="Props" unique_id=893841450 instance=ExtResource("7_odu0x")]
+[node name="Oak2" parent="Props" unique_id=1265214605 instance=ExtResource("7_s1x0y")]
 transform = Transform3D(0.91925335, 0, 0.77134514, 0, 1.2, 0, -0.77134514, 0, 0.91925335, 13.8, 0, -8.2)
 
-[node name="Oak3" parent="Props" unique_id=156801506 instance=ExtResource("7_odu0x")]
+[node name="Oak3" parent="Props" unique_id=1286180125 instance=ExtResource("7_s1x0y")]
 transform = Transform3D(0.9848077, 0, 0.17364818, 0, 1, 0, -0.17364818, 0, 0.9848077, 4.5, 0, 9.4)
 
-[node name="Pine1" parent="Props" unique_id=1947107956 instance=ExtResource("8_7b553")]
+[node name="Pine1" parent="Props" unique_id=1947107956 instance=ExtResource("8_jurrb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.6, 0, -2)
 
-[node name="Pine2" parent="Props" unique_id=1520900914 instance=ExtResource("8_7b553")]
+[node name="Pine2" parent="Props" unique_id=982362444 instance=ExtResource("8_jurrb")]
 transform = Transform3D(1.15, 0, 0, 0, 1.15, 0, 0, 0, 1.15, 15.4, 0, 3.5)
 
-[node name="Pine3" parent="Props" unique_id=954878442 instance=ExtResource("8_7b553")]
+[node name="Pine3" parent="Props" unique_id=836331403 instance=ExtResource("8_jurrb")]
 transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 10.5, 0, 9.6)
 
-[node name="Boulder1" parent="Props" unique_id=312446 instance=ExtResource("9_rh7ir")]
+[node name="Boulder1" parent="Props" unique_id=312446 instance=ExtResource("9_brsai")]
 transform = Transform3D(0.9396926, 0, 0.34202012, 0, 1, 0, -0.34202012, 0, 0.9396926, -3.5, 0, -2.2)
 
-[node name="Boulder2" parent="Props" unique_id=138788040 instance=ExtResource("9_rh7ir")]
+[node name="Boulder2" parent="Props" unique_id=1628358345 instance=ExtResource("9_brsai")]
 transform = Transform3D(0.4104242, 0, 1.1276312, 0, 1.2, 0, -1.1276312, 0, 0.4104242, 6, 0, 4.2)
 
-[node name="Boulder3" parent="Props" unique_id=1459674833 instance=ExtResource("9_rh7ir")]
+[node name="Boulder3" parent="Props" unique_id=1316121240 instance=ExtResource("9_brsai")]
 transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 1.5, 0, -7)
 
-[node name="PillarBroken1" parent="Props" unique_id=1413358543 instance=ExtResource("10_c62i7")]
+[node name="PillarBroken1" parent="Props" unique_id=1413358543 instance=ExtResource("10_dls0l")]
 transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, -6.5, 0, 5)
 
-[node name="PillarBroken2" parent="Props" unique_id=340302726 instance=ExtResource("10_c62i7")]
+[node name="PillarBroken2" parent="Props" unique_id=389496673 instance=ExtResource("10_dls0l")]
 transform = Transform3D(-0.50000006, 0, 0.8660254, 0, 1, 0, -0.8660254, 0, -0.50000006, 9, 0, -3)
 
-[node name="Pillar1" parent="Props" unique_id=1440207290 instance=ExtResource("11_y7jqv")]
+[node name="Pillar1" parent="Props" unique_id=1440207290 instance=ExtResource("11_kit4v")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 2.5)
 
-[node name="Wall1" parent="Props" unique_id=420751345 instance=ExtResource("12_s1x0y")]
+[node name="Wall1" parent="Props" unique_id=420751345 instance=ExtResource("12_54snu")]
 transform = Transform3D(0.99026805, 0, 0.1391731, 0, 1, 0, -0.1391731, 0, 0.99026805, -1, 0, 7.6)
 
-[node name="Wall2" parent="Props" unique_id=1307802747 instance=ExtResource("12_s1x0y")]
+[node name="Wall2" parent="Props" unique_id=1521968984 instance=ExtResource("12_54snu")]
 transform = Transform3D(0.8660254, 0, -0.5, 0, 1, 0, 0.5, 0, 0.8660254, 11.5, 0, 6.4)
 
-[node name="Crystal1" parent="Props" unique_id=2126861427 instance=ExtResource("13_jurrb")]
+[node name="Crystal1" parent="Props" unique_id=2126861427 instance=ExtResource("13_j3ovn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 0, -1)
 
-[node name="Crystal2" parent="Props" unique_id=196816586 instance=ExtResource("13_jurrb")]
+[node name="Crystal2" parent="Props" unique_id=145295843 instance=ExtResource("13_j3ovn")]
 transform = Transform3D(0.56568545, 0, 0.56568545, 0, 0.8, 0, -0.56568545, 0, 0.56568545, -9.5, 0, -6)
 
-[node name="Grass" type="MultiMeshInstance3D" parent="." unique_id=1570250880]
-material_override = ExtResource("3_ei6mx")
-cast_shadow = 0
-multimesh = SubResource("MultiMesh_rseai")
+[node name="Tent" parent="Props" unique_id=874485287 instance=ExtResource("14_2bthm")]
+transform = Transform3D(0.8660254, 0, 0.5, 0, 1, 0, -0.5, 0, 0.8660254, -13.2, 0, -1.4)
 
-[node name="Party" type="Node3D" parent="." unique_id=185961202]
+[node name="Campfire" parent="Props" unique_id=1048689418 instance=ExtResource("15_3dk6h")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0, 1.6)
+
+[node name="Banner" parent="Props" unique_id=2063513046 instance=ExtResource("16_65w64")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.6, 0, -1.6)
+
+[node name="Grass" type="MultiMeshInstance3D" parent="." unique_id=1527328482]
+material_override = ExtResource("3_7b553")
+cast_shadow = 0
+multimesh = SubResource("MultiMesh_b5obe")
+
+[node name="Camp" parent="." unique_id=595736203 instance=ExtResource("18_myg8p")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 0, 0.6)
+
+[node name="Party" type="Node3D" parent="." unique_id=1824371006]
 unique_name_in_owner = true
 
-[node name="Leader" parent="Party" unique_id=1272283179 instance=ExtResource("15_dls0l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, 0)
+[node name="Leader" parent="Party" unique_id=1272283179 instance=ExtResource("19_sprlr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.4, 0, 0.2)
 kind_id = "leader"
-sheet = ExtResource("16_kit4v")
+sheet = ExtResource("20_a7vu3")
 dissolve_on_down = false
 nameplate_color = Color(1, 0.89411765, 0.6392157, 1)
 
-[node name="Guardian" parent="Party" unique_id=982259651 instance=ExtResource("15_dls0l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.6, 0, 1.2)
+[node name="Guardian" parent="Party" unique_id=1898291734 instance=ExtResource("19_sprlr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.8, 0, 0.9)
 kind_id = "guardian"
-sheet = ExtResource("17_54snu")
+sheet = ExtResource("21_lrx6g")
 dissolve_on_down = false
 nameplate_color = Color(0.7490196, 0.9019608, 1, 1)
 show_nameplate = false
 head_height = 2.05
 
-[node name="Support" parent="Party" unique_id=867588325 instance=ExtResource("15_dls0l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.6, 0, 1.5)
+[node name="Support" parent="Party" unique_id=615844212 instance=ExtResource("19_sprlr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.6, 0, 1.4)
 kind_id = "support"
-sheet = ExtResource("18_j3ovn")
+sheet = ExtResource("22_0rfd7")
 dissolve_on_down = false
 nameplate_color = Color(0.7490196, 0.9019608, 1, 1)
 show_nameplate = false
 head_height = 1.95
 
-[node name="Monsters" type="Node3D" parent="." unique_id=1523888667]
+[node name="Monsters" type="Node3D" parent="." unique_id=359294064]
 unique_name_in_owner = true
 
-[node name="MeadowSlime1" parent="Monsters" unique_id=1118280238 instance=ExtResource("15_dls0l")]
+[node name="MeadowSlime1" parent="Monsters" unique_id=250835624 instance=ExtResource("19_sprlr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5, 0, 1.5)
-sheet = ExtResource("19_2bthm")
+sheet = ExtResource("23_20atc")
 head_height = 0.95
 
-[node name="MeadowSlime2" parent="Monsters" unique_id=1081765986 instance=ExtResource("15_dls0l")]
+[node name="MeadowSlime2" parent="Monsters" unique_id=1127287714 instance=ExtResource("19_sprlr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, -4)
-sheet = ExtResource("19_2bthm")
+sheet = ExtResource("23_20atc")
 head_height = 0.95
 
-[node name="MeadowSlime3" parent="Monsters" unique_id=476901224 instance=ExtResource("15_dls0l")]
+[node name="MeadowSlime3" parent="Monsters" unique_id=202624166 instance=ExtResource("19_sprlr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 4.5)
-sheet = ExtResource("19_2bthm")
+sheet = ExtResource("23_20atc")
 head_height = 0.95
 
-[node name="MeadowSlime4" parent="Monsters" unique_id=784145229 instance=ExtResource("15_dls0l")]
+[node name="MeadowSlime4" parent="Monsters" unique_id=610044651 instance=ExtResource("19_sprlr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -5.5)
-sheet = ExtResource("19_2bthm")
+sheet = ExtResource("23_20atc")
 head_height = 0.95
 
-[node name="BriarBoar5" parent="Monsters" unique_id=1326266814 instance=ExtResource("15_dls0l")]
+[node name="BriarBoar5" parent="Monsters" unique_id=505680383 instance=ExtResource("19_sprlr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0, -3.5)
 kind_id = "briar_boar"
-sheet = ExtResource("20_3dk6h")
+sheet = ExtResource("24_gy8kp")
 head_height = 1.35
 
-[node name="BriarBoar6" parent="Monsters" unique_id=1477015816 instance=ExtResource("15_dls0l")]
+[node name="BriarBoar6" parent="Monsters" unique_id=755712507 instance=ExtResource("19_sprlr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 0, 1)
 kind_id = "briar_boar"
-sheet = ExtResource("20_3dk6h")
+sheet = ExtResource("24_gy8kp")
 head_height = 1.35
 
-[node name="BriarBoar7" parent="Monsters" unique_id=1430230232 instance=ExtResource("15_dls0l")]
+[node name="BriarBoar7" parent="Monsters" unique_id=1437686204 instance=ExtResource("19_sprlr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 6)
 kind_id = "briar_boar"
-sheet = ExtResource("20_3dk6h")
+sheet = ExtResource("24_gy8kp")
 head_height = 1.35
 
-[node name="RuinHound8" parent="Monsters" unique_id=1990603468 instance=ExtResource("15_dls0l")]
+[node name="RuinHound8" parent="Monsters" unique_id=418600352 instance=ExtResource("19_sprlr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 1.5)
 kind_id = "ruin_hound"
-sheet = ExtResource("21_65w64")
+sheet = ExtResource("25_g34wu")
 head_height = 1.35
 
-[node name="RuinHound9" parent="Monsters" unique_id=1739104132 instance=ExtResource("15_dls0l")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.5, 0, -5)
+[node name="RuinHound9" parent="Monsters" unique_id=148704287 instance=ExtResource("19_sprlr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 5.5)
 kind_id = "ruin_hound"
-sheet = ExtResource("21_65w64")
+sheet = ExtResource("25_g34wu")
 head_height = 1.35
 
-[node name="MoveMarker" type="MeshInstance3D" parent="." unique_id=591273205]
+[node name="Gatekeeper" parent="Monsters" unique_id=1491528074 instance=ExtResource("26_dp0gn")]
+transform = Transform3D(-0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, -0.70710677, 11.5, 0, -6)
+
+[node name="MoveMarker" type="MeshInstance3D" parent="." unique_id=1885422274]
 unique_name_in_owner = true
 visible = false
-material_override = SubResource("ShaderMaterial_lotq0")
+material_override = SubResource("ShaderMaterial_e7p74")
 cast_shadow = 0
-mesh = SubResource("PlaneMesh_v16w6")
+mesh = SubResource("PlaneMesh_pyn7s")
 
-[node name="Effects" type="Node3D" parent="." unique_id=1880398543]
+[node name="Effects" type="Node3D" parent="." unique_id=356370808]
 unique_name_in_owner = true
 
-[node name="CameraRig" type="Node3D" parent="." unique_id=1595370822]
+[node name="CameraRig" type="Node3D" parent="." unique_id=1048441087]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.4, 0, 0.2)
 
-[node name="Camera" type="Camera3D" parent="CameraRig" unique_id=878455222]
+[node name="Camera" type="Camera3D" parent="CameraRig" unique_id=5034502]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 0.76604444, 0.6427876, 0, -0.6427876, 0.76604444, 0, 9.641814, 11.490666)
 fov = 34.0
@@ -282,13 +303,13 @@ near = 0.3
 far = 200.0
 metadata/pitch_deg = 40.0
 
-[node name="Sfx" type="Node" parent="." unique_id=1341720588]
+[node name="Sfx" type="Node" parent="." unique_id=2124785261]
 unique_name_in_owner = true
-script = ExtResource("23_myg8p")
+script = ExtResource("28_lotq0")
 
-[node name="TimeControl" type="Node" parent="." unique_id=408029656]
+[node name="TimeControl" type="Node" parent="." unique_id=494425326]
 unique_name_in_owner = true
 process_mode = 3
-script = ExtResource("24_sprlr")
+script = ExtResource("29_v16w6")
 
-[node name="HUD" parent="." unique_id=654381260 instance=ExtResource("25_a7vu3")]
+[node name="HUD" parent="." unique_id=1829825578 instance=ExtResource("30_1ma64")]

@@ -59,11 +59,15 @@ func _build() -> void:
 	make_sheets()
 	make_meshes()
 	make_actor()
-	for prop: String in ["boulder", "pillar", "pillar_broken", "oak", "pine", "wall", "arch", "crystal", "blocker"]:
+	for prop: String in ["boulder", "pillar", "pillar_broken", "oak", "pine", "wall", "arch", "crystal", "blocker", "tent", "campfire", "banner"]:
 		make_prop(prop)
+	make_camp()
+	make_boss()
 	make_fx()
 	make_theme()
 	make_party_row()
+	make_item_row()
+	make_camp_panel()
 	make_hud()
 	make_field()
 	print("build_slice: %s" % ("ok" if problems == 0 else "%d problem(s)" % problems))
@@ -260,6 +264,16 @@ func make_meshes() -> void:
 		"lintel": faceted(box(Vector3(4.2, 0.6, 0.9)), stone, 0.08, 14),
 		"crystal": faceted(cylinder(0.0, 0.32, 1.3, 5), Color("7fe3e0"), 0.15, 15),
 		"cliff": faceted(cylinder(1.0, 0.55, 1.0, 9), Color("665e51"), 0.12, 16),
+		"tent": faceted(cylinder(0.0, 1.3, 1.6, 6), Color("c9b48a"), 0.08, 17),
+		"log": faceted(cylinder(0.12, 0.12, 0.9, 6), Color("6b4a31"), 0.1, 18),
+		"flame": faceted(cylinder(0.0, 0.22, 0.55, 5), Color("ffb347"), 0.15, 19),
+		"pole": faceted(cylinder(0.05, 0.06, 2.6, 5), Color("5a4330"), 0.05, 20),
+		"flag": faceted(box(Vector3(0.9, 0.55, 0.04)), Color("2f7f86"), 0.06, 21),
+		"golem_torso": faceted(box(Vector3(1.7, 1.5, 1.1)), Color("7a7366"), 0.12, 22),
+		"golem_head": faceted(box(Vector3(0.8, 0.7, 0.75)), Color("857d6f"), 0.1, 23),
+		"golem_arm": faceted(box(Vector3(0.5, 1.5, 0.5)), Color("6f685c"), 0.12, 24),
+		"golem_leg": faceted(box(Vector3(0.6, 0.9, 0.6)), Color("665f53"), 0.12, 25),
+		"golem_eye": faceted(box(Vector3(0.5, 0.1, 0.05)), Color("7fe3e0"), 0.0, 26),
 	}
 	for name: String in meshes:
 		save_resource(meshes[name], "res://resources/meshes/%s.res" % name)
@@ -360,6 +374,25 @@ func make_prop(kind: String) -> void:
 			radius = 0.45
 		"blocker":
 			radius = 0.6  # invisible: blocks where another prop's geometry stands (arch posts)
+		"tent":
+			mesh_node(root, "Canvas", lowpoly("tent"), mat, Vector3(0, 0.8, 0))
+			radius = 1.1
+		"campfire":
+			for i in 3:
+				var wood := mesh_node(root, "Log%d" % i, lowpoly("log"), mat, Vector3(0, 0.1, 0))
+				wood.rotation_degrees = Vector3(0, i * 60.0, 90)
+			var flame := mesh_node(root, "Flame", lowpoly("flame"), vertex_color_material(0.35), Vector3(0, 0.38, 0))
+			flame.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+			var light := add(root, OmniLight3D.new(), "Glow") as OmniLight3D
+			light.position = Vector3(0, 0.8, 0)
+			light.light_color = Color("ffb35c")
+			light.light_energy = 1.4
+			light.omni_range = 4.5
+			radius = 0.45
+		"banner":
+			mesh_node(root, "Pole", lowpoly("pole"), mat, Vector3(0, 1.3, 0))
+			mesh_node(root, "Flag", lowpoly("flag"), mat, Vector3(0.48, 2.25, 0))
+			radius = 0.2
 	var gizmo := TorusMesh.new()
 	gizmo.inner_radius = 0.96
 	gizmo.outer_radius = 1.0
@@ -370,6 +403,69 @@ func make_prop(kind: String) -> void:
 	g.visible = false
 	root.block_radius = radius
 	save(root, "res://scenes/props/%s.tscn" % kind)
+
+
+# --- Camp and boss ------------------------------------------------------------------
+
+func make_camp() -> void:
+	var root := Node3D.new()
+	root.name = "Camp"
+	root.set_script(load("res://game/camp.gd"))
+	var ring := mesh_node(root, "SafeRing", flat_plane(Vector2(2.0, 2.0)),
+		shader_material("res://shaders/select_ring.gdshader", {"tint": Color(0.55, 0.95, 0.6), "dashes": 18.0, "speed": 0.15}),
+		Vector3(0, 0.03, 0))
+	ring.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	root.radius = 3.0
+	save(root, "res://scenes/camp.tscn")
+
+
+## Placeholder floor guardian: low-poly stone golem (no HD art yet). Same node contract as actor.tscn.
+func make_boss() -> void:
+	var root := Node3D.new()
+	root.name = "Gatekeeper"
+	root.set_script(load("res://game/boss_view.gd"))
+	root.kind_id = "gatekeeper"
+	root.head_height = 3.4
+	root.nameplate_color = Color("ffb08a")
+	var visual := add(root, Node3D.new(), "Visual") as Node3D
+	var mat := vertex_color_material()
+	var body := add(visual, Node3D.new(), "Body") as Node3D
+	mesh_node(body, "LegL", lowpoly("golem_leg"), mat, Vector3(-0.45, 0.45, 0))
+	mesh_node(body, "LegR", lowpoly("golem_leg"), mat, Vector3(0.45, 0.45, 0))
+	mesh_node(body, "Torso", lowpoly("golem_torso"), mat, Vector3(0, 1.65, 0))
+	var head := add(body, Node3D.new(), "Head") as Node3D
+	head.position = Vector3(0, 2.75, 0.05)
+	mesh_node(head, "Skull", lowpoly("golem_head"), mat)
+	var eye_mat := StandardMaterial3D.new()
+	eye_mat.albedo_color = Color("7fe3e0")
+	eye_mat.emission_enabled = true
+	eye_mat.emission = Color("7fe3e0")
+	eye_mat.emission_energy_multiplier = 2.0
+	mesh_node(head, "Eyes", lowpoly("golem_eye"), eye_mat, Vector3(0, 0.05, 0.39))
+	for side: Array in [["ArmL", -1.15], ["ArmR", 1.15]]:
+		var pivot := add(body, Node3D.new(), side[0]) as Node3D
+		pivot.position = Vector3(side[1], 2.2, 0)
+		mesh_node(pivot, "Stone", lowpoly("golem_arm"), mat, Vector3(0, -0.7, 0))
+	var shadow := mesh_node(visual, "Shadow", flat_plane(Vector2(3.2, 3.2)),
+		shader_material("res://addons/proto_kit/sprite3d_shadow.gdshader", {"strength": 0.45}), Vector3(0, 0.02, 0))
+	shadow.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	var plate := add(root, Label3D.new(), "Nameplate") as Label3D
+	plate.font = font
+	plate.font_size = 34
+	plate.pixel_size = 0.0075
+	plate.outline_size = 8
+	plate.outline_modulate = Color(0.05, 0.05, 0.07, 0.9)
+	plate.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	plate.no_depth_test = true
+	plate.render_priority = 2
+	plate.position = Vector3(0, 3.7, 0)
+	plate.text = "守門者"
+	var bar := mesh_node(root, "HpBar", quad(Vector2(2.2, 0.18)), shader_material("res://shaders/hp_bar.gdshader"),
+		Vector3(0, 3.5, 0))
+	bar.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	mesh_node(root, "SelectRing", flat_plane(Vector2(3.4, 3.4)),
+		shader_material("res://shaders/select_ring.gdshader", {"tint": Color(1.0, 0.42, 0.32)}), Vector3(0, 0.03, 0))
+	save(root, "res://scenes/actors/gatekeeper.tscn")
 
 
 # --- Effects --------------------------------------------------------------------
@@ -394,6 +490,7 @@ func make_fx() -> void:
 	pillar.cap_top = false
 	pillar.cap_bottom = false
 	_fx("light_pillar", pillar, "res://shaders/fx_light_pillar.gdshader", 1.3, Vector3(0, 2.25, 0))
+	_fx("ground_warning", flat_plane(Vector2(2.0, 2.0)), "res://shaders/ground_warning.gdshader", 2.0, Vector3(0, 0.05, 0))
 
 
 func _fx(name: String, mesh: Mesh, shader: String, duration: float, offset: Vector3) -> void:
@@ -537,6 +634,56 @@ func make_party_row() -> void:
 	save(row, "res://ui/party_row.tscn")
 
 
+func make_item_row() -> void:
+	var row := PanelContainer.new()
+	row.name = "ItemRow"
+	row.set_script(load("res://ui/item_row.gd"))
+	row.custom_minimum_size = Vector2(0, 104)
+	var h := hbox(row, "Row", 12)
+	var text := vbox(h, "Text", 2)
+	text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	text.alignment = BoxContainer.ALIGNMENT_CENTER
+	label(text, "RowTitle", "見習長劍", true)
+	label(text, "RowDetail", "攻擊 +6", true, "SmallLabel")
+	var actions := hbox(h, "RowActions", 8)
+	B.unique(actions)
+	for i in 3:
+		var b := add(actions, Button.new(), "Action%d" % i) as Button
+		b.text = "動作"
+		b.custom_minimum_size = Vector2(150, 96)
+		b.focus_mode = Control.FOCUS_NONE
+	save(row, "res://ui/item_row.tscn")
+
+
+func make_camp_panel() -> void:
+	var panel := PanelContainer.new()
+	panel.name = "CampPanel"
+	panel.set_script(load("res://ui/camp_panel.gd"))
+	panel.set_anchors_preset(Control.PRESET_CENTER)
+	panel.offset_left = -560
+	panel.offset_right = 560
+	panel.offset_top = -380
+	panel.offset_bottom = 380
+	var v := vbox(panel, "Rows", 10)
+	var top := hbox(v, "Top", 16)
+	label(top, "CampTitle", "營地", false, "TitleLabel")
+	var header := label(top, "CampHeader", "金幣 0 · 倉庫 0", true)
+	header.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	header.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	button(top, "CampClose", "關閉", Vector2(150, 96))
+	var tabs := add(v, TabContainer.new(), "CampTabs", true) as TabContainer
+	tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	tabs.add_theme_font_size_override("font_size", 26)
+	# Page node names are the tab titles (TabContainer shows a child's name).
+	for page_name: String in ["補給", "倉庫", "委託", "裝備"]:
+		var scroll := add(tabs, ScrollContainer.new(), page_name) as ScrollContainer
+		scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+		var list := vbox(scroll, "List", 8)
+		list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		list.mouse_filter = Control.MOUSE_FILTER_PASS
+	save(panel, "res://ui/camp_panel.tscn")
+
+
 func make_hud() -> void:
 	var hud := CanvasLayer.new()
 	hud.name = "HUD"
@@ -548,7 +695,7 @@ func make_hud() -> void:
 
 	# Top-left: resources and party.
 	var top_left := vbox(frame, "TopLeft", 8)
-	anchored(top_left, Control.PRESET_TOP_LEFT, Rect2(24, 20, 364, 400))
+	anchored(top_left, Control.PRESET_TOP_LEFT, Rect2(24, 20, 540, 520))
 	var res := panel(top_left, "Resources")
 	res.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var res_row := hbox(res, "Row", 14)
@@ -562,6 +709,10 @@ func make_hud() -> void:
 		add(party_list, B.instance("res://ui/party_row.tscn"), "Member%d" % (i + 1))
 	var auto_potion := button(top_left, "AutoPotionButton", "自動喝藥：60% 以下", Vector2(330, 104), false, true)
 	auto_potion.button_pressed = true
+	var menu_row := hbox(top_left, "MenuRow", 10)
+	button(menu_row, "BagButton", "背包 B", Vector2(160, 104))
+	button(menu_row, "CampButton", "營地 C", Vector2(160, 104))
+	button(menu_row, "RetreatButton", "撤退 T", Vector2(160, 104))
 
 	# Top-center: target frame and status.
 	var top_center := vbox(frame, "TopCenter", 6)
@@ -584,7 +735,8 @@ func make_hud() -> void:
 
 	# Left-middle: quest tracker.
 	var quest := panel(frame, "QuestPanel")
-	anchored(quest, Control.PRESET_CENTER_LEFT, Rect2(24, -10, 364, 240))
+	# Right side, between the top-right buttons and the action cluster; the left holds the party and the log.
+	anchored(quest, Control.PRESET_CENTER_RIGHT, Rect2(-388, -300, -24, -70))
 	var qv := vbox(quest, "Rows", 6)
 	label(qv, "QuestTitle", "委託 · 草原清掃", false, "TitleLabel")
 	label(qv, "QuestProgress", "草原史萊姆  0 / 5", true)
@@ -666,6 +818,16 @@ func make_hud() -> void:
 			c.custom_minimum_size = Vector2(360, 104)
 			c.focus_mode = Control.FOCUS_NONE
 			c.set_meta("setting", spec[2]))
+	_modal(frame, "TripPanel", "遠征結算", func(v: VBoxContainer) -> void:
+		var trip := label(v, "TripSummary", "擊倒 0 隻", true)
+		trip.custom_minimum_size = Vector2(560, 0)
+		trip.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		button(v, "TripClose", "好", Vector2(360, 104)))
+	var camp_dim := add(frame, ColorRect.new(), "CampLayer", true) as ColorRect
+	camp_dim.color = Color(0.02, 0.03, 0.05, 0.5)
+	camp_dim.set_anchors_preset(Control.PRESET_FULL_RECT)
+	camp_dim.mouse_filter = Control.MOUSE_FILTER_STOP
+	add(camp_dim, B.instance("res://ui/camp_panel.tscn"), "CampPanel")
 	_modal(frame, "RotatePanel", "請將手機轉為橫向", func(v: VBoxContainer) -> void:
 		label(v, "RotateHint", "橫向畫面才能看清戰場，冒險已暫停。", false).horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER)
 	_modal(frame, "EndPanel", "冒險結束", func(v: VBoxContainer) -> void:
@@ -674,7 +836,7 @@ func make_hud() -> void:
 		summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		summary.custom_minimum_size = Vector2(520, 0)
 		button(v, "RestartButton", "再出發一次", Vector2(360, 104)))
-	save(hud, "res://ui/hud.tscn", ["res://ui/party_row.tscn"])
+	save(hud, "res://ui/hud.tscn", ["res://ui/party_row.tscn", "res://ui/camp_panel.tscn"])
 
 
 func _modal(frame: Control, name: String, title: String, fill: Callable) -> void:
@@ -802,19 +964,31 @@ func make_field() -> void:
 			blades.multimesh.set_instance_transform(i, Transform3D(tilt, centre + offset))
 			i += 1
 
+	var camp := add(field, B.instance("res://scenes/camp.tscn"), "Camp", true) as Node3D
+	camp.position = Vector3(-11.0, 0, 0.6)
+	for spec: Array in [["tent", Vector3(-13.2, 0, -1.4), 30.0], ["campfire", Vector3(-11.0, 0, 1.6), 0.0],
+			["banner", Vector3(-8.6, 0, -1.6), 0.0]]:
+		var piece := add(props, B.instance("res://scenes/props/%s.tscn" % spec[0]), String(spec[0]).to_pascal_case()) as Node3D
+		piece.position = spec[1]
+		piece.rotation_degrees.y = spec[2]
+
 	var party := add(field, Node3D.new(), "Party", true) as Node3D
-	for spec: Array in [["Leader", "leader", Vector3(-10, 0, 0)], ["Guardian", "guardian", Vector3(-11.6, 0, 1.2)], ["Support", "support", Vector3(-8.6, 0, 1.5)]]:
+	for spec: Array in [["Leader", "leader", Vector3(-10.4, 0, 0.2)], ["Guardian", "guardian", Vector3(-11.8, 0, 0.9)], ["Support", "support", Vector3(-9.6, 0, 1.4)]]:
 		_place_actor(party, spec[0], spec[1], spec[2])
 	var monsters := add(field, Node3D.new(), "Monsters", true) as Node3D
 	var spawns := [
 		["meadow_slime", Vector3(-5.5, 0, 1.5)], ["meadow_slime", Vector3(-6.0, 0, -4.0)], ["meadow_slime", Vector3(-1.0, 0, 4.5)],
 		["meadow_slime", Vector3(-2.0, 0, -5.5)], ["briar_boar", Vector3(3.5, 0, -3.5)], ["briar_boar", Vector3(5.5, 0, 1.0)],
-		["briar_boar", Vector3(1.0, 0, 6.0)], ["ruin_hound", Vector3(10.0, 0, 1.5)], ["ruin_hound", Vector3(11.5, 0, -5.0)],
+		["briar_boar", Vector3(1.0, 0, 6.0)], ["ruin_hound", Vector3(10.0, 0, 1.5)], ["ruin_hound", Vector3(8.0, 0, 5.5)],
 	]
 	var m := 0
 	for spec: Array in spawns:
 		m += 1
 		_place_actor(monsters, "%s%d" % [String(spec[0]).to_pascal_case(), m], spec[0], spec[1])
+
+	var boss := add(monsters, B.instance("res://scenes/actors/gatekeeper.tscn"), "Gatekeeper") as Node3D
+	boss.position = Vector3(11.5, 0, -6.0)
+	boss.rotation_degrees.y = -135.0
 
 	var marker := mesh_node(field, "MoveMarker", flat_plane(Vector2(1.2, 1.2)),
 		shader_material("res://shaders/select_ring.gdshader", {"tint": Color(0.5, 0.9, 1.0), "dashes": 6.0, "speed": 1.5}))
@@ -824,7 +998,7 @@ func make_field() -> void:
 	add(field, Node3D.new(), "Effects", true)
 
 	var rig := add(field, Node3D.new(), "CameraRig", true) as Node3D
-	rig.position = Vector3(-10, 0, 0)
+	rig.position = Vector3(-10.4, 0, 0.2)
 	rig.rotation_degrees.y = 0.0
 	var cam := add(rig, Camera3D.new(), "Camera", true) as Camera3D
 	cam.fov = 34.0
@@ -841,7 +1015,8 @@ func make_field() -> void:
 	time.set_script(load("res://addons/proto_kit/time_control.gd"))
 	time.process_mode = Node.PROCESS_MODE_ALWAYS
 	add(field, B.instance("res://ui/hud.tscn"), "HUD")
-	var refs := ["res://scenes/actors/actor.tscn", "res://ui/hud.tscn", "res://scenes/props/oak.tscn"]
+	var refs := ["res://scenes/actors/actor.tscn", "res://ui/hud.tscn", "res://scenes/props/oak.tscn",
+		"res://scenes/camp.tscn", "res://scenes/actors/gatekeeper.tscn"]
 	save(field, "res://scenes/field.tscn", refs)
 
 

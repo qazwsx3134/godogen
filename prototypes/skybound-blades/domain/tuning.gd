@@ -10,6 +10,7 @@ var items: Dictionary = {}
 var equipment: Dictionary = {}
 var skills: Dictionary = {}
 var quests: Dictionary = {}
+var bosses: Dictionary = {}
 var utilities: Dictionary = {}
 var weapon_speed: Dictionary = {}
 
@@ -29,6 +30,8 @@ func _init(source: Dictionary) -> void:
 			"skills": skills, "quest_definitions": quests}[list_name]
 		for entry: Dictionary in data[list_name]:
 			target[entry.id] = entry
+	for entry: Dictionary in data.bosses:
+		bosses[entry.id] = entry
 	for entry: Dictionary in data.party.utilities:
 		utilities[entry.id] = entry
 	for entry: Dictionary in data.weapon_profiles:
@@ -55,8 +58,9 @@ func xp_penalty(team_level: int, monster_level: int) -> float:
 	return maxf(0.1, pow(0.8, maxi(0, team_level - monster_level - 3)))
 
 
-## Final stats of a party member at an expedition level: role-scaled base plus gear.
-func member_stats(role: String, level: int) -> Dictionary:
+## Final stats of a party member at an expedition level: role-scaled base plus worn gear
+## (instances {template, bonus}); worn = null means the role's initial equipment at plain quality.
+func member_stats(role: String, level: int, worn: Variant = null) -> Dictionary:
 	var hero: Dictionary = data.hero
 	var ratio: Dictionary = data.party.roles[role]
 	var base_hp: float = hero.hp_base + hero.hp_per_level * (level - 1)
@@ -72,14 +76,20 @@ func member_stats(role: String, level: int) -> Dictionary:
 		"style": "sword",
 		"shield": false,
 	}
-	for item_id: String in data.party.initial_equipment[role]:
-		var template: Dictionary = equipment[item_id]
+	var pieces: Array = []
+	if worn == null:
+		for item_id: String in data.party.initial_equipment[role]:
+			pieces.append({"template": item_id, "bonus": equipment[item_id].bonus})
+	else:
+		pieces = worn
+	for piece: Dictionary in pieces:
+		var template: Dictionary = equipment[piece.template]
 		if template.slot == "weapon":
 			stats.style = template.style
 		if template.slot == "offhand":
 			stats.shield = true
-		for key: String in template.bonus:
-			stats[key] = stats.get(key, 0.0) + float(template.bonus[key])
+		for key: String in piece.bonus:
+			stats[key] = stats.get(key, 0.0) + float(piece.bonus[key])
 	stats.attack_ms = attack_interval_ms(stats.agility, stats.style, stats.shield)
 	return stats
 

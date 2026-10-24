@@ -1,0 +1,54 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/item_row.gd" id="1_418jv"]
+
+[node name="ItemRow" type="PanelContainer" unique_id=873988268]
+custom_minimum_size = Vector2(0, 104)
+script = ExtResource("1_418jv")
+
+[node name="Row" type="HBoxContainer" parent="." unique_id=1485819036]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="Text" type="VBoxContainer" parent="Row" unique_id=1090077610]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="RowTitle" type="Label" parent="Row/Text" unique_id=1395078750]
+unique_name_in_owner = true
+layout_mode = 2
+text = "見習長劍"
+
+[node name="RowDetail" type="Label" parent="Row/Text" unique_id=130247874]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "攻擊 +6"
+
+[node name="RowActions" type="HBoxContainer" parent="Row" unique_id=14915124]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="Action0" type="Button" parent="Row/RowActions" unique_id=1450846381]
+custom_minimum_size = Vector2(150, 96)
+layout_mode = 2
+focus_mode = 0
+text = "動作"
+
+[node name="Action1" type="Button" parent="Row/RowActions" unique_id=1176432301]
+custom_minimum_size = Vector2(150, 96)
+layout_mode = 2
+focus_mode = 0
+text = "動作"
+
+[node name="Action2" type="Button" parent="Row/RowActions" unique_id=819513928]
+custom_minimum_size = Vector2(150, 96)
+layout_mode = 2
+focus_mode = 0
+text = "動作"

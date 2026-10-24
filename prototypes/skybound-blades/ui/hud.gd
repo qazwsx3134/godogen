@@ -12,6 +12,11 @@ signal pause_toggled(on: bool)
 signal restart_pressed
 signal zoom_requested(step: int)
 signal setting_changed(key: String, value: bool)
+signal retreat_pressed
+signal bag_pressed
+signal camp_pressed
+signal camp_action(action: Dictionary)
+signal camp_closed
 
 const PartyRow = preload("res://ui/party_row.gd")
 
@@ -36,12 +41,25 @@ func _ready() -> void:
 	%PauseRestartButton.pressed.connect(func() -> void: restart_pressed.emit())
 	%ZoomInButton.pressed.connect(func() -> void: zoom_requested.emit(-1))
 	%ZoomOutButton.pressed.connect(func() -> void: zoom_requested.emit(1))
+	%RetreatButton.pressed.connect(func() -> void: retreat_pressed.emit())
+	%BagButton.pressed.connect(func() -> void: bag_pressed.emit())
+	%CampButton.pressed.connect(func() -> void: camp_pressed.emit())
+	%TripClose.pressed.connect(func() -> void: %TripPanel.hide())
+	var camp_panel: Node = %CampLayer.get_node("CampPanel")
+	camp_panel.action.connect(func(a: Dictionary) -> void: camp_action.emit(a))
+	camp_panel.closed.connect(func() -> void:
+		%CampLayer.hide()
+		camp_closed.emit())
+	# Restarting a generation by hand would undo a death: only the end panel starts the next one.
+	%PauseRestartButton.hide()
 	for check: CheckButton in [%DamageNumbersCheck, %ShakeCheck, %HapticsCheck]:
 		var key: String = check.get_meta("setting")
 		check.toggled.connect(func(on: bool) -> void: setting_changed.emit(key, on))
 	%EndPanel.hide()
 	%PausePanel.hide()
 	%RotatePanel.hide()
+	%TripPanel.hide()
+	%CampLayer.hide()
 	%Toast.modulate.a = 0.0
 	for label: Label in _feed:
 		label.text = ""
@@ -99,6 +117,9 @@ func refresh(s: Dictionary) -> void:
 	%EmergencyCount.text = "×%d" % s.emergency
 	%EmergencyButton.disabled = s.ended or s.emergency <= 0 or s.emergency_cd > 0.0
 	%StatusLabel.text = s.status
+	%CampButton.visible = s.in_camp
+	%RetreatButton.disabled = s.ended or s.in_camp or s.retreating
+	%RetreatButton.text = "撤退中…" if s.retreating else "撤退 T"
 
 
 func log_line(text: String, kind: String = "") -> void:
@@ -117,6 +138,33 @@ func toast(text: String) -> void:
 	_toast_left = 1.6
 
 
+## tabs = {page name: {"rows": [...]}}; tab = page to select ("" keeps the current one).
+func show_camp(tabs: Dictionary, header: String, tab: String = "") -> void:
+	var panel: Node = %CampLayer.get_node("CampPanel")
+	panel.show_tabs(tabs, header)
+	if tab != "":
+		panel.select_tab(tab)
+	%CampLayer.show()
+	panel.show()
+
+
+func camp_open() -> bool:
+	return %CampLayer.visible
+
+
+func camp_tab() -> String:
+	return %CampLayer.get_node("CampPanel").current_tab_name()
+
+
+func hide_camp() -> void:
+	%CampLayer.hide()
+
+
+func show_trip(text: String) -> void:
+	%TripSummary.text = text
+	%TripPanel.show()
+
+
 func show_rotate(on: bool) -> void:
 	%RotatePanel.visible = on
 
@@ -129,3 +177,9 @@ func show_end(summary: String) -> void:
 func hide_end() -> void:
 	%EndPanel.hide()
 	%PausePanel.hide()
+	%TripPanel.hide()
+	%CampLayer.hide()
+
+
+func set_end_button(text: String) -> void:
+	%RestartButton.text = text

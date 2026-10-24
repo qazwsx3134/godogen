@@ -9,6 +9,7 @@ extends RefCounted
 
 const Tuning = preload("res://domain/tuning.gd")
 const Unit = preload("res://domain/unit.gd")
+const Run = preload("res://domain/run.gd")
 
 enum Walk { ARRIVED, MOVING, STUCK }
 
@@ -25,14 +26,27 @@ var support: Unit
 
 var auto_hunt: bool = false
 var auto_potion: bool = true
-var level: int = 1
-var experience: float = 0.0
-var gold: int = 0
-var materials: Dictionary = {}
-var kills: int = 0
-var inventory: Dictionary = {}
-var quest: Dictionary = {}
+## Growth, carried items and quests live on the Run; these read through to it.
+var run: Run
+var level: int:
+	get: return run.level
+var experience: float:
+	get: return run.experience
+var gold: int:
+	get: return run.gold
+var kills: int:
+	get: return run.kills
+var inventory: Dictionary:
+	get: return run.stacks
+## The quest the HUD tracks (tuning field.slice_quest_id).
+var tracked_quest: String
 var ended: bool = false
+## Camp: a safe circle {pos, radius}. Monsters never enter it or attack anyone inside.
+var camp: Dictionary = {}
+var auto_retreat: bool = true
+## Sim time when the party's retreat completes; < 0 when none is running.
+var retreat_at_ms: float = -1.0
+var _was_in_camp: bool = true
 
 var _events: Array[Dictionary] = []
 var _next_event_id: int = 1
@@ -46,14 +60,17 @@ var _combat: Dictionary
 
 
 ## setup = {seed, bounds: Rect2, obstacles: [{pos, radius}], party_spawn: Vector2,
-## monsters: [{id: String, pos: Vector2}]}. Positions are ground cells (x, z).
+## monsters: [{id: String, pos: Vector2}], run: Run (optional: a fresh one), camp: {pos, radius} (optional)}.
+## Positions are ground cells (x, z).
 func _init(tuning_: Tuning, setup: Dictionary) -> void:
 	tuning = tuning_
 	_field = tuning.section("field")
 	_combat = tuning.section("combat")
 	dt_ms = float(tuning.step_ms())
 	rng.seed = int(setup.get("seed", 1))
+	run = setup.get("run") if setup.get("run") != null else Run.new(tuning, "run-1")
 	bounds = setup.bounds
+	camp = setup.get("camp", {})
 	for obstacle: Dictionary in setup.obstacles:
 		obstacles.append({"pos": obstacle.pos, "radius": float(obstacle.radius)})
 	var names := {"leader": "隊長", "guardian": "盾衛", "support": "援護"}
@@ -63,11 +80,7 @@ func _init(tuning_: Tuning, setup: Dictionary) -> void:
 	support = _add_member("support", names.support, setup.party_spawn + Vector2(slots[1][0], slots[1][1]))
 	for spec: Dictionary in setup.monsters:
 		_add_monster(spec.id, spec.pos)
-	for entry: Dictionary in tuning.section("hero").initial_issued_items:
-		inventory[entry.base_item_id] = int(entry.qty)
-	var quest_def: Dictionary = tuning.quests[_field.slice_quest_id]
-	quest = {"id": quest_def.id, "target": quest_def.objective.target, "count": int(quest_def.objective.count),
-		"progress": 0, "claims": 0, "available_at_ms": 0.0, "reward": quest_def.reward}
+	tracked_quest = _field.slice_quest_id
 
 
 # --- Public API -------------------------------------------------------------
@@ -101,11 +114,11 @@ func monsters() -> Array[Unit]:
 
 
 func xp_needed() -> int:
-	return tuning.xp_needed(level)
+	return run.xp_needed()
 
 
 func quest_ready() -> bool:
-	return now_ms >= quest.available_at_ms and quest.progress >= quest.count
+	return run.quest_ready(tracked_quest, now_ms)
 
 
 func skill_ready_in_ms() -> float:
@@ -135,7 +148,56 @@ func step() -> void:
 	_land_hits()
 	if not ended:
 		_sustain()
+		_check_retreat()
 	_separate()
+
+
+func in_camp(u: Unit) -> bool:
+	return not camp.is_empty() and u.pos.distance_to(camp.pos) <= float(camp.radius)
+
+
+func retreating() -> bool:
+	return retreat_at_ms >= 0.0
+
+
+# --- Camp and retreat ---------------------------------------------------------
+
+## A whole-party order: completes retreat_ms later (it does not stop incoming blows meanwhile).
+func _start_retreat(reason: String) -> void:
+	if retreating() or camp.is_empty() or in_camp(leader):
+		if reason == "manual":
+			_emit({"type": "refused", "what": "retreat", "reason": "already" if retreating() else "in_camp"})
+		return
+	retreat_at_ms = now_ms + float(tuning.section("simulation").retreat_ms)
+	_emit({"type": "retreat_started", "reason": reason, "at": retreat_at_ms})
+
+
+func _check_retreat() -> void:
+	if not retreating() and auto_retreat and not in_camp(leader) \
+			and leader.hp_ratio() < float(tuning.section("automation").retreat_threshold):
+		_start_retreat("auto")
+	if retreating() and now_ms >= retreat_at_ms:
+		retreat_at_ms = -1.0
+		var slots: Array = _field.follow_slots_cells
+		var offsets := [Vector2.ZERO, Vector2(slots[0][0], slots[0][1]) * 0.6, Vector2(slots[1][0], slots[1][1]) * 0.6]
+		var members := party()
+		for i in members.size():
+			var m: Unit = members[i]
+			m.pos = camp.pos + offsets[i]
+			m.order = Unit.Order.NONE
+			m.target_id = -1
+			m.steer = Vector2.ZERO
+			_reset_stuck(m)
+		for mon: Unit in monsters():
+			if mon.target_id >= 0 and unit(mon.target_id).team == 0:
+				mon.target_id = -1
+		auto_hunt = false
+		_emit({"type": "retreated"})
+	var inside := in_camp(leader)
+	if inside and not _was_in_camp:
+		_emit({"type": "returned", "trip": run.trip.duplicate(true)})
+		run.reset_trip()
+	_was_in_camp = inside
 
 
 # --- Setup ------------------------------------------------------------------
@@ -158,8 +220,8 @@ func _add_member(role: String, display_name: String, at: Vector2) -> Unit:
 
 
 func _apply_member_stats(u: Unit) -> void:
-	var stats: Dictionary = tuning.member_stats(u.role, level)
-	u.level = level
+	var stats: Dictionary = run.member_stats(u.role)
+	u.level = run.level
 	u.max_hp = stats.max_hp
 	u.attack = stats.attack
 	u.defense = stats.defense
@@ -170,7 +232,7 @@ func _apply_member_stats(u: Unit) -> void:
 
 
 func _add_monster(monster_id: String, at: Vector2) -> Unit:
-	var def: Dictionary = tuning.monsters[monster_id]
+	var def: Dictionary = tuning.monsters[monster_id] if tuning.monsters.has(monster_id) else tuning.bosses[monster_id]
 	var u := Unit.new()
 	u.id = units.size()
 	u.team = 1
@@ -185,9 +247,10 @@ func _add_monster(monster_id: String, at: Vector2) -> Unit:
 	u.attack = float(def.attack)
 	u.defense = float(def.defense)
 	u.crit_chance = float(_combat.crit_chance)
-	u.attack_ms = float(def.attack_interval_ms)
+	u.is_boss = tuning.bosses.has(monster_id)
+	u.attack_ms = float(def.get("attack_interval_ms", def.get("normal_interval_ms", 2000)))
 	u.range_cells = float(_combat.melee_range_cells)
-	u.speed = float(_field.monster_move_cells_per_s.get(monster_id, 2.4))
+	u.speed = float(def.get("move_cells_per_s", _field.monster_move_cells_per_s.get(monster_id, 2.4)))
 	u.base_exp = float(def.base_exp)
 	u.gold = int(def.gold)
 	u.facing = Vector2(-1, 1).normalized()
@@ -238,7 +301,12 @@ func _apply(cmd: Dictionary) -> void:
 		"emergency":
 			_use_emergency(leader, true)
 		"claim":
-			_claim_quest()
+			if not in_camp(leader):
+				_emit({"type": "refused", "what": "claim", "reason": "not_in_camp"})
+			else:
+				_claim_quest(String(cmd.get("quest", tracked_quest)))
+		"retreat":
+			_start_retreat("manual")
 
 
 # --- Leader ------------------------------------------------------------------
@@ -329,7 +397,7 @@ func _think_support(u: Unit) -> void:
 		_follow(u)
 		return
 	var bandage: Dictionary = tuning.utilities["bandage_ally"]
-	if u.is_ready("bandage_ally", now_ms) and int(inventory.get("bandage", 0)) > 0 and now_ms >= u.busy_until_ms:
+	if u.is_ready("bandage_ally", now_ms) and run.count("bandage") > 0 and now_ms >= u.busy_until_ms:
 		var patient: Unit = null
 		for m: Unit in party():
 			if m.alive and m.hp_ratio() < float(bandage.trigger_hp_ratio):
@@ -416,7 +484,7 @@ func _taunt(u: Unit) -> void:
 
 
 func _bandage(u: Unit, patient: Unit, bandage: Dictionary) -> void:
-	inventory.bandage = int(inventory.bandage) - 1
+	run.consume("bandage")
 	u.cooldowns["bandage_ally"] = now_ms + float(bandage.cooldown_ms)
 	u.busy_until_ms = now_ms + 600.0
 	u.action_ms = now_ms
@@ -429,7 +497,14 @@ func _bandage(u: Unit, patient: Unit, bandage: Dictionary) -> void:
 # --- Monsters -----------------------------------------------------------------
 
 func _think_monster(u: Unit) -> void:
+	if u.is_boss:
+		_think_boss(u)
+		return
 	var leash := float(_field.leash_radius_cells)
+	var current: Unit = _valid_target(u)
+	if current != null and in_camp(current):
+		u.target_id = -1
+		u.taunted_by = -1
 	if u.returning:
 		if _walk(u, u.spawn, 0.1) != Walk.MOVING:
 			u.returning = false
@@ -438,7 +513,7 @@ func _think_monster(u: Unit) -> void:
 	if u.taunted_by >= 0 and now_ms >= u.taunt_until_ms:
 		u.taunted_by = -1
 	var target: Unit = _valid_target(u)
-	if u.taunted_by >= 0 and unit(u.taunted_by).alive:
+	if u.taunted_by >= 0 and unit(u.taunted_by).alive and not in_camp(unit(u.taunted_by)):
 		target = unit(u.taunted_by)
 	if target == null:
 		target = _nearest_member(u.pos, float(_field.aggro_radius_cells))
@@ -454,11 +529,78 @@ func _think_monster(u: Unit) -> void:
 		_walk(u, u.spawn, 0.1)
 
 
+## Floor guardian: chases within its own aggro/leash, and spends its moves on telegraphed areas
+## (tuning bosses[].moves): the circle is fixed when the warning starts, so stepping out dodges.
+func _think_boss(u: Unit) -> void:
+	var def: Dictionary = tuning.bosses[u.kind_id]
+	var leash := float(def.get("leash_radius_cells", 12.0))
+	if u.returning:
+		if _walk(u, u.spawn, 0.1) != Walk.MOVING:
+			u.returning = false
+			u.hp = u.max_hp
+		return
+	var target: Unit = _valid_target(u)
+	if target != null and in_camp(target):
+		target = null
+	if target == null:
+		target = _nearest_member(u.pos, float(def.get("aggro_radius_cells", 6.0)))
+	if target != null and u.spawn.distance_to(u.pos) > leash:
+		target = null
+		u.returning = true
+		_emit({"type": "leash", "unit": u.id})
+	u.target_id = target.id if target != null else -1
+	if target == null:
+		if u.pos.distance_to(u.spawn) > 0.3:
+			_walk(u, u.spawn, 0.1)
+		return
+	if now_ms >= u.busy_until_ms and u.pos.distance_to(target.pos) <= 5.0:
+		for move: Dictionary in def.moves:
+			if u.is_ready(move.id, now_ms):
+				_telegraph(u, move, target)
+				return
+	_engage(u, target)
+
+
+func _telegraph(u: Unit, move: Dictionary, target: Unit) -> void:
+	var warning := float(move.warning_ms)
+	var center: Vector2 = u.pos if move.targets == "all" else target.pos
+	u.cooldowns[move.id] = now_ms + float(move.cooldown_ms)
+	u.busy_until_ms = now_ms + warning + 500.0
+	u.next_attack_ms = maxf(u.next_attack_ms, u.busy_until_ms)
+	u.facing = _face(u.pos, target.pos, u.facing)
+	u.action_ms = now_ms
+	u.action = &"skill"
+	_pending_hits.append({"at": now_ms + warning, "src": u.id, "area": true, "center": center,
+		"radius": float(move.radius_cells), "power": float(move.power), "move": move.id})
+	_emit({"type": "telegraph", "unit": u.id, "move": move.id, "name": String(move.get("name", move.id)),
+		"center": center, "radius": float(move.radius_cells), "warning_ms": warning})
+	if move.targets == "all":
+		_cover(warning)
+
+
+## Guardian's cover (tuning party.utilities.cover): allies near the guardian take
+## damage_taken_ratio of a charged blow that lands inside the window.
+func _cover(warning_ms: float) -> void:
+	var cover: Dictionary = tuning.utilities["cover"]
+	if not guardian.alive or not guardian.is_ready("cover", now_ms):
+		return
+	guardian.cooldowns["cover"] = now_ms + float(cover.cooldown_ms)
+	guardian.action_ms = now_ms
+	guardian.action = &"skill"
+	var covered: Array[int] = []
+	for m: Unit in party():
+		if m.alive and m.pos.distance_to(guardian.pos) <= 3.5:
+			m.cover_until_ms = now_ms + warning_ms + float(cover.duration_ms) * 0.5
+			m.cover_ratio = float(cover.damage_taken_ratio)
+			covered.append(m.id)
+	_emit({"type": "cover", "unit": guardian.id, "covered": covered})
+
+
 func _nearest_member(at: Vector2, radius: float) -> Unit:
 	var best: Unit = null
 	var best_d := radius
 	for m: Unit in party():
-		if m.alive:
+		if m.alive and not in_camp(m):
 			var d := at.distance_to(m.pos)
 			if d <= best_d:
 				best_d = d
@@ -553,6 +695,15 @@ func _resolve_pending_hits() -> void:
 	_pending_hits = later
 	for hit: Dictionary in due:
 		var src: Unit = unit(hit.src)
+		if hit.get("area", false):
+			# Boss move: whoever stands in the warned circle when it lands.
+			if not src.alive:
+				continue
+			for m: Unit in party():
+				if m.alive and not in_camp(m) and m.pos.distance_to(hit.center) <= float(hit.radius):
+					_roll_hit(src, m, float(hit.power), "boss")
+			_emit({"type": "boss_impact", "unit": src.id, "move": hit.move, "center": hit.center, "radius": hit.radius})
+			continue
 		var dst: Unit = unit(hit.dst)
 		if not src.alive or not dst.alive or src.pos.distance_to(dst.pos) > hit.range:
 			_emit({"type": "whiff", "unit": src.id})
@@ -589,7 +740,11 @@ func _land_hits() -> void:
 		var dst: Unit = unit(h.dst)
 		if not dst.alive:
 			continue
-		dst.hp = maxf(0.0, dst.hp - h.amount)
+		var amount: float = h.amount
+		if dst.cover_until_ms >= now_ms:
+			amount = maxf(1.0, roundf(amount * dst.cover_ratio))
+			h.amount = amount
+		dst.hp = maxf(0.0, dst.hp - amount)
 		dst.last_attacker = src.id
 		dst.last_hit_ms = now_ms
 		if dst == leader and auto_hunt:
@@ -623,49 +778,55 @@ func _down(u: Unit, killer: Unit) -> void:
 			other.target_id = -1
 	_pending_hits.assign(_pending_hits.filter(func(hit: Dictionary) -> bool: return hit.src != u.id))
 	if u.team == 1:
-		u.respawn_at_ms = now_ms + float(_field.respawn_ms)
+		var def: Dictionary = tuning.bosses.get(u.kind_id, {})
+		u.respawn_at_ms = now_ms + float(def.get("respawn_ms", _field.respawn_ms))
+		_pending_hits.assign(_pending_hits.filter(func(hit: Dictionary) -> bool: return hit.src != u.id))
 	elif u == leader:
 		ended = true
 		_emit({"type": "run_ended", "level": level, "kills": kills})
 
 
 func _reward(m: Unit) -> void:
-	var gained := m.base_exp * tuning.xp_penalty(level, m.level)
-	kills += 1
-	gold += m.gold
-	var material := ""
-	if rng.randf() < float(tuning.section("loot").material_chance):
-		material = tuning.data.zones[0].material_id
-		materials[material] = int(materials.get(material, 0)) + 1
-	if m.kind_id == quest.target and now_ms >= quest.available_at_ms and quest.progress < quest.count:
-		quest.progress += 1
-	_emit({"type": "reward", "unit": m.id, "exp": gained, "gold": m.gold, "material": material})
-	_gain_exp(gained)
+	var paid := run.record_kill(run.next_kill_id(), m.kind_id, m.level, rng, now_ms)
+	if paid.is_empty():
+		return
+	_emit({"type": "reward", "unit": m.id, "exp": paid.exp, "gold": int(paid.gold), "material": paid.material,
+		"gear": paid.gear})
+	_on_levels(int(paid.levels))
 
 
+## Test and quest hook: EXP from outside a kill.
 func _gain_exp(amount: float) -> void:
-	experience += amount
-	while experience >= xp_needed() and level < int(tuning.section("simulation").max_level):
-		experience -= xp_needed()
-		level += 1
-		for m: Unit in party():
+	_on_levels(run.gain_exp(amount))
+
+
+func _on_levels(gained: int) -> void:
+	if gained <= 0:
+		return
+	for m: Unit in party():
+		_apply_member_stats(m)
+		if m.alive:
+			m.hp = m.max_hp
+	_emit({"type": "level_up", "level": run.level})
+
+
+## Recomputes a member's stats after a gear change, keeping the HP ratio.
+func refresh_member(role: String) -> void:
+	for m: Unit in party():
+		if m.role == role:
+			var ratio := m.hp_ratio()
 			_apply_member_stats(m)
 			if m.alive:
-				m.hp = m.max_hp
-		_emit({"type": "level_up", "level": level})
+				m.hp = m.max_hp * ratio
 
 
-func _claim_quest() -> void:
-	if not quest_ready():
+func _claim_quest(qid: String) -> void:
+	var paid := run.claim(qid, now_ms)
+	if paid.is_empty():
 		_emit({"type": "refused", "what": "claim", "reason": "not_ready"})
 		return
-	var reward: Dictionary = quest.reward
-	quest.progress = 0
-	quest.claims += 1
-	quest.available_at_ms = now_ms + float(tuning.section("quests").repeat_cooldown_ms)
-	gold += int(reward.gold)
-	_emit({"type": "quest_claimed", "exp": int(reward.exp), "gold": int(reward.gold)})
-	_gain_exp(float(reward.exp))
+	_emit({"type": "quest_claimed", "quest": qid, "exp": int(paid.exp), "gold": int(paid.gold)})
+	_on_levels(int(paid.levels))
 
 
 # --- Sustain ------------------------------------------------------------------
@@ -691,20 +852,20 @@ func _sustain() -> void:
 	for m: Unit in order:
 		if m.hp_ratio() >= threshold:
 			continue
-		if m.hot_left_ms <= 0.0 and int(inventory.get("tonic_small", 0)) > 0:
+		if m.hot_left_ms <= 0.0 and run.count("tonic_small") > 0:
 			_use_tonic(m, false)
 		elif m.hp_ratio() < emergency_line:
 			_use_emergency(m, false)
 
 
 func _use_tonic(m: Unit, manual: bool) -> void:
-	if not m.alive or int(inventory.get("tonic_small", 0)) <= 0 or m.hot_left_ms > 0.0 or m.hp >= m.max_hp:
+	if not m.alive or run.count("tonic_small") <= 0 or m.hot_left_ms > 0.0 or m.hp >= m.max_hp:
 		if manual:
-			var reason := "none" if int(inventory.get("tonic_small", 0)) <= 0 else ("hot" if m.hot_left_ms > 0.0 else "full")
+			var reason := "none" if run.count("tonic_small") <= 0 else ("hot" if m.hot_left_ms > 0.0 else "full")
 			_emit({"type": "refused", "what": "tonic", "reason": reason})
 		return
 	var item: Dictionary = tuning.items["tonic_small"]
-	inventory.tonic_small = int(inventory.tonic_small) - 1
+	run.consume("tonic_small")
 	m.hot_left_ms = float(item.duration_ms)
 	m.hot_rate = float(item.heal_flat) / float(item.duration_ms)
 	_emit({"type": "potion", "unit": m.id, "item": "tonic_small", "auto": not manual})
@@ -712,13 +873,13 @@ func _use_tonic(m: Unit, manual: bool) -> void:
 
 func _use_emergency(m: Unit, manual: bool) -> void:
 	var item: Dictionary = tuning.items["emergency_kit"]
-	if not m.alive or int(inventory.get("emergency_kit", 0)) <= 0 or not m.is_ready("emergency_kit", now_ms) \
+	if not m.alive or run.count("emergency_kit") <= 0 or not m.is_ready("emergency_kit", now_ms) \
 			or m.hp >= m.max_hp:
 		if manual:
-			var reason := "none" if int(inventory.get("emergency_kit", 0)) <= 0 else ("full" if m.hp >= m.max_hp else "cooldown")
+			var reason := "none" if run.count("emergency_kit") <= 0 else ("full" if m.hp >= m.max_hp else "cooldown")
 			_emit({"type": "refused", "what": "emergency", "reason": reason})
 		return
-	inventory.emergency_kit = int(inventory.emergency_kit) - 1
+	run.consume("emergency_kit")
 	m.cooldowns["emergency_kit"] = now_ms + float(item.cooldown_ms)
 	var amount := _heal(m, m.max_hp * float(item.heal_max_hp_ratio))
 	_emit({"type": "heal", "unit": m.id, "source": m.id, "amount": amount, "kind": "emergency"})
@@ -793,7 +954,10 @@ func _displace(u: Unit, v: Vector2, goal: Vector2) -> void:
 		return
 	var body := float(_field.unit_radius_cells)
 	var next := u.pos + v
-	for o: Dictionary in obstacles:
+	var solid: Array = obstacles
+	if u.team == 1 and not camp.is_empty():
+		solid = solid + [camp]
+	for o: Dictionary in solid:
 		var r: float = o.radius + body
 		if next.distance_to(o.pos) >= r:
 			continue

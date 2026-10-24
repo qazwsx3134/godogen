@@ -3,6 +3,8 @@ extends "res://addons/proto_kit/test_kit.gd"
 ## Run with game time: prototypes/godot-kit/tools/run_tests.sh prototypes/skybound-blades field:60
 
 const FIELD := "res://scenes/field.tscn"
+const SAVE := "user://test_field/save.json"
+const SaveService = preload("res://domain/save_service.gd")
 
 var field: Node3D
 var _user_files_before: PackedStringArray
@@ -16,6 +18,8 @@ func _run() -> void:
 	_user_files_before = _user_files()
 	root.size = Vector2i(1440, 900)
 	field = load(FIELD).instantiate()
+	field.save_path = SAVE
+	SaveService.new(SAVE).erase()
 	root.add_child(field)
 	await _frames(3)
 	# Hit stops run on the wall clock; under --fixed-fps that would slow many test frames. Use frames.
@@ -26,7 +30,9 @@ func _run() -> void:
 	await test_field_hud_auto_button_toggles_auto_hunt()
 	await test_field_leader_down_shows_end_and_keeps_rendering()
 	await test_field_restart_resets_the_run()
-	test_field_no_user_writes()
+	test_field_saves_only_its_own_file()
+	SaveService.new(SAVE).erase()
+	DirAccess.remove_absolute("user://test_field")
 	_finish("FIELD")
 
 
@@ -133,8 +139,15 @@ func test_field_restart_resets_the_run() -> void:
 	_expect(not hud.get_node("%EndPanel").visible, "restart: end panel hidden")
 
 
-func test_field_no_user_writes() -> void:
-	_expect(_user_files() == _user_files_before, "save: the slice writes nothing to user:// (%s)" % [_user_files()])
+func test_field_saves_only_its_own_file() -> void:
+	_expect(FileAccess.file_exists(SAVE), "save: the field writes its save file")
+	var expected := _user_files_before.duplicate()
+	if not "test_field/" in expected:
+		expected.append("test_field/")
+	var now := _user_files()
+	now.sort()
+	expected.sort()
+	_expect(now == expected, "save: nothing else appears in user:// (%s)" % [now])
 
 
 func _user_files() -> PackedStringArray:

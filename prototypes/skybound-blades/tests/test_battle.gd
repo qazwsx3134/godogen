@@ -30,12 +30,22 @@ func _init() -> void:
 	test_battle_skill_keeps_a_locked_far_target()
 	test_battle_companion_skips_unreachable_threat()
 	test_battle_tonic_refusal_reasons()
+	test_battle_camp_is_safe()
+	test_battle_retreat_returns_party_after_delay()
+	test_battle_auto_retreat_at_low_hp()
+	test_battle_boss_telegraphs_before_impact()
+	test_battle_boss_area_can_be_dodged()
+	test_battle_guardian_cover_reduces_charged_blow()
+	test_battle_boss_kill_opens_main_quest()
 	_finish("BATTLE")
 
 
-func _battle(monsters: Array = [], obstacles: Array = [], seed: int = 7) -> Battle:
+func _battle(monsters: Array = [], obstacles: Array = [], seed: int = 7, camp: Dictionary = {}) -> Battle:
 	return Battle.new(tuning, {"seed": seed, "bounds": Rect2(-15, -10, 30, 20), "obstacles": obstacles,
-		"party_spawn": Vector2(-8, 0), "monsters": monsters})
+		"party_spawn": Vector2(-8, 0), "monsters": monsters, "camp": camp})
+
+
+const CAMP := {"pos": Vector2(-12, 0), "radius": 2.5}
 
 
 func _run(b: Battle, seconds: float, until: Callable = Callable()) -> void:
@@ -115,7 +125,7 @@ func test_battle_manual_attack_kills_and_rewards() -> void:
 	var rewards := _events(b, "reward")
 	_expect(rewards.size() == 1 and is_equal_approx(rewards[0].exp, 18.0), "manual: one reward, 18 EXP")
 	_expect(b.gold == 3 and is_equal_approx(b.experience, 18.0), "manual: gold and EXP banked")
-	_expect(b.quest.progress == 1, "manual: slime counts toward the hunt quest")
+	_expect(b.run.quests[b.tracked_quest].progress == 1, "manual: slime counts toward the hunt quest")
 
 
 func test_battle_companions_fight_without_auto() -> void:
@@ -189,13 +199,17 @@ func test_battle_leader_down_ends_run() -> void:
 
 
 func test_battle_quest_claim() -> void:
-	var b := _battle()
-	b.quest.progress = 5
+	var b := _battle([], [], 7, CAMP)
+	b.command({"type": "claim"})
+	b.step()
+	_expect(_events(b, "refused").size() == 1, "quest: no claim outside camp")
+	b.leader.pos = CAMP.pos
+	b.run.quests[b.tracked_quest].progress = 5
 	var gold := b.gold
 	b.command({"type": "claim"})
 	b.step()
 	_expect(b.gold == gold + 30 and is_equal_approx(b.experience, 50.0), "quest: reward paid once")
-	_expect(b.quest.progress == 0 and not b.quest_ready(), "quest: resets and waits for the repeat cooldown")
+	_expect(b.run.quests[b.tracked_quest].progress == 0 and not b.quest_ready(), "quest: resets and waits for the repeat cooldown")
 	b.command({"type": "claim"})
 	b.step()
 	_expect(b.gold == gold + 30, "quest: double claim refused")
@@ -309,3 +323,121 @@ func test_battle_tonic_refusal_reasons() -> void:
 	b.step()
 	var r := _events(b, "refused")
 	_expect(r.size() == 1 and r[0].reason == "full", "R6: full HP is not 'no potions'")
+
+
+func test_battle_camp_is_safe() -> void:
+	var b := _battle([{"id": "ruin_hound", "pos": Vector2(-8, 0)}], [], 7, CAMP)
+	var hound: Battle.Unit = b.monsters()[0]
+	for m: Battle.Unit in b.party():
+		m.pos = CAMP.pos + Vector2(0.3 * m.id, 0)
+	var hurt := false
+	for i in 200:
+		b.step()
+		for e: Dictionary in b.drain_events():
+			if e.type == "hit" and b.unit(e.unit).team == 0:
+				hurt = true
+	_expect(not hurt, "camp: nobody inside the camp is hit")
+	_expect(hound.pos.distance_to(CAMP.pos) >= float(CAMP.radius) - 0.01, "camp: monsters stay outside")
+
+
+func test_battle_retreat_returns_party_after_delay() -> void:
+	var b := _battle([], [], 7, CAMP)
+	b.step()
+	b.drain_events()
+	b.run.record_kill(b.run.next_kill_id(), "meadow_slime", 1, b.rng, b.now_ms)
+	b.command({"type": "retreat"})
+	b.step()
+	_expect(b.retreating() and not b.in_camp(b.leader), "retreat: takes time")
+	_run(b, 1.9)
+	_expect(b.retreating(), "retreat: still running before 2 s")
+	_run(b, 0.3)
+	_expect(not b.retreating() and b.in_camp(b.leader) and b.in_camp(b.guardian), "retreat: party in camp after 2 s")
+	var returned := _events(b, "returned")
+	_expect(returned.size() == 1 and int(returned[0].trip.kills) == 1, "retreat: trip summary on arrival")
+	_expect(int(b.run.trip.kills) == 0, "retreat: the next trip starts empty")
+
+
+func test_battle_auto_retreat_at_low_hp() -> void:
+	var b := _battle([], [], 7, CAMP)
+	b.auto_potion = false
+	b.inventory.bandage = 0  # otherwise the support bandages the leader back above 25% first
+	b.leader.hp = b.leader.max_hp * 0.2
+	b.step()
+	_expect(b.retreating(), "auto retreat: below 25% the party withdraws")
+
+
+func _boss_battle() -> Battle:
+	var b := _battle([{"id": "gatekeeper", "pos": Vector2(-5, 0)}], [], 7, CAMP)
+	b.auto_potion = false
+	b.auto_retreat = false
+	for m: Battle.Unit in b.party():
+		m.max_hp = 1.0e5
+		m.hp = 1.0e5
+	return b
+
+
+func test_battle_boss_telegraphs_before_impact() -> void:
+	var b := _boss_battle()
+	var warned := {}
+	var gaps: Array[float] = []
+	for i in 400:
+		b.step()
+		for e: Dictionary in b.drain_events():
+			if e.type == "telegraph":
+				warned[e.move] = e.t
+			if e.type == "boss_impact" and warned.has(e.move):
+				gaps.append(e.t - warned[e.move])
+	_expect(gaps.size() >= 2, "boss: both moves fire (%d impacts)" % gaps.size())
+	_expect(gaps.all(func(g: float) -> bool: return g >= 1200.0), "boss: every impact is warned >= 1.2 s ahead %s" % [gaps])
+
+
+func test_battle_boss_area_can_be_dodged() -> void:
+	var b := _boss_battle()
+	var boss: Battle.Unit = b.monsters()[0]
+	var center := Vector2.INF
+	for i in 400:
+		b.step()
+		for e: Dictionary in b.drain_events():
+			if e.type == "telegraph" and e.move == "sweep":
+				center = e.center
+		if center != Vector2.INF:
+			break
+	# Everyone steps well outside the warned circle before it lands.
+	for m: Battle.Unit in b.party():
+		m.pos = center + Vector2(0, 6.5 + m.id * 0.5)
+	var hit_party := false
+	for i in 50:
+		b.step()
+		for e: Dictionary in b.drain_events():
+			if e.type == "hit" and e.kind == "boss":
+				hit_party = true
+	_expect(not hit_party, "boss: leaving the warned circle dodges the sweep")
+
+
+func test_battle_guardian_cover_reduces_charged_blow() -> void:
+	var b := _boss_battle()
+	var sweep_hits: Dictionary = {}
+	var covered := false
+	for i in 400:
+		b.step()
+		for e: Dictionary in b.drain_events():
+			if e.type == "cover":
+				covered = true
+			if e.type == "hit" and e.kind == "boss":
+				sweep_hits[e.unit] = e.amount
+		if not sweep_hits.is_empty():
+			break
+	_expect(covered, "cover: the guardian covers on the charge")
+	var boss: Battle.Unit = b.monsters()[0]
+	var raw := boss.attack * 1.8 - b.leader.defense * 0.6
+	if sweep_hits.has(b.leader.id):
+		_expect(float(sweep_hits[b.leader.id]) < raw * 0.6, "cover: the leader takes a fraction of the sweep (%d vs ~%d)" % [sweep_hits[b.leader.id], raw])
+
+
+func test_battle_boss_kill_opens_main_quest() -> void:
+	var b := _boss_battle()
+	var boss: Battle.Unit = b.monsters()[0]
+	b._step_hits.append({"src": b.leader.id, "dst": boss.id, "amount": 1.0e6, "crit": false, "block": false, "kind": "attack"})
+	b._land_hits()
+	_expect(not boss.alive and b.run.quest_ready("seal_1", b.now_ms), "boss: first clear makes the main quest claimable")
+	_expect(b.gold >= 90, "boss: pays its gold")

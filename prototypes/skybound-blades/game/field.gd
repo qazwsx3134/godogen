@@ -14,6 +14,11 @@ const HitBurst = preload("res://scenes/fx/hit_burst.tscn")
 const SlashArc = preload("res://scenes/fx/slash_arc.tscn")
 const GroundPulse = preload("res://scenes/fx/ground_pulse.tscn")
 const LightPillar = preload("res://scenes/fx/light_pillar.tscn")
+const GroundWarning = preload("res://scenes/fx/ground_warning.tscn")
+const Run = preload("res://domain/run.gd")
+const Profile = preload("res://domain/profile.gd")
+const SaveService = preload("res://domain/save_service.gd")
+const CampMenu = preload("res://game/camp_menu.gd")
 
 ## Playable ground, in cells on the XZ plane (x, z, width, depth).
 @export var bounds: Rect2 = Rect2(-14, -9, 28, 18)
@@ -24,6 +29,9 @@ const LightPillar = preload("res://scenes/fx/light_pillar.tscn")
 @export var pick_radius_px: float = 72.0
 @export var damage_numbers: bool = true
 @export var screen_shake: bool = true
+## Local save (user:// is IndexedDB on the web). Tests point this at their own file.
+@export var save_path: String = "user://skybound_save.json"
+@export var autosave_seconds: float = 10.0
 
 @onready var camera_rig: Node3D = %CameraRig
 @onready var camera: Camera3D = %Camera
@@ -50,11 +58,18 @@ var _shake_time: float = 0.0
 var _marker_left: float = 0.0
 var _elapsed: float = 0.0
 var _end_shown: bool = false
+var profile: Profile
+var save_service: SaveService
+var camp_menu: CampMenu
+var _save_left: float = 0.0
+var _camp_refresh_left: float = 0.0
 
 
 func _ready() -> void:
 	tuning = Tuning.load_default()
 	_setup = read_layout()
+	camp_menu = CampMenu.new(tuning)
+	save_service = SaveService.new(save_path)
 	hud.auto_toggled.connect(func(on: bool) -> void: send({"type": "auto", "on": on}))
 	hud.auto_potion_toggled.connect(func(on: bool) -> void: send({"type": "auto_potion", "on": on}))
 	hud.skill_pressed.connect(func() -> void: send({"type": "skill"}))
@@ -64,11 +79,41 @@ func _ready() -> void:
 	hud.pause_toggled.connect(func(on: bool) -> void:
 		paused = on
 		_drag_moving = false)
-	hud.restart_pressed.connect(restart)
+	hud.restart_pressed.connect(func() -> void:
+		if battle.ended:
+			next_generation())
 	hud.zoom_requested.connect(zoom)
 	hud.setting_changed.connect(_on_setting)
-	restart()
-	hud.log_line("抵達風庭遺跡。點地面移動，點怪物攻擊，或開啟自動狩獵。")
+	hud.retreat_pressed.connect(func() -> void: send({"type": "retreat"}))
+	hud.bag_pressed.connect(func() -> void: open_camp("裝備"))
+	hud.camp_pressed.connect(func() -> void: open_camp("補給"))
+	hud.camp_action.connect(_on_camp_action)
+	load_game()
+	hud.log_line("第 %d 代冒險者抵達風庭遺跡的營地。點地面移動，點怪物攻擊，或開啟自動狩獵。" % battle.run.generation)
+
+
+## Loads the saved Profile and Run; a missing save or a fallen run starts a new generation.
+func load_game() -> void:
+	var doc := save_service.load_state()
+	profile = Profile.from_dict(doc.get("profile", {})) if doc.has("profile") else Profile.new()
+	if doc.get("run") is Dictionary:
+		_start_battle(Run.from_dict(tuning, doc.run))
+	else:
+		_start_battle(Run.new(tuning, "g%d" % profile.generation, profile.generation))
+	save_game()
+
+
+func save_game() -> void:
+	var run_doc: Variant = null if battle.ended else battle.run.to_dict()
+	save_service.save({"profile": profile.to_dict(), "run": run_doc})
+	_save_left = autosave_seconds
+
+
+## After a fallen leader: the next generation starts from the camp with issued supplies.
+func next_generation() -> void:
+	_start_battle(Run.new(tuning, "g%d" % profile.generation, profile.generation))
+	save_game()
+	hud.log_line("第 %d 代冒險者出發。倉庫裡的東西都還在。" % battle.run.generation)
 
 
 ## The authored scene as battle input: ground positions are (x, z) of global positions.
@@ -82,12 +127,17 @@ func read_layout() -> Dictionary:
 		if radius > 0.0:
 			obstacles.append({"pos": _ground(prop.global_position), "radius": radius * prop.scale.x})
 	var leader_view: Node3D = %Party.get_node("Leader")
+	var camp: Node3D = %Camp
 	return {"seed": battle_seed, "bounds": bounds, "obstacles": obstacles,
-		"party_spawn": _ground(leader_view.global_position), "monsters": monsters}
+		"party_spawn": _ground(leader_view.global_position), "monsters": monsters,
+		"camp": {"pos": _ground(camp.global_position), "radius": float(camp.get("radius"))}}
 
 
-func restart() -> void:
-	battle = Battle.new(tuning, _setup)
+func _start_battle(run: Run) -> void:
+	var setup := _setup.duplicate()
+	setup.run = run
+	setup.seed = battle_seed + run.generation * 7919
+	battle = Battle.new(tuning, setup)
 	stepper = Stepper.new(tuning.step_ms())
 	views.clear()
 	var party_views := {"leader": %Party.get_node("Leader"), "guardian": %Party.get_node("Guardian"),
@@ -153,6 +203,13 @@ func _process(delta: float) -> void:
 			if _drag_repeat <= 0.0:
 				_drag_repeat = 0.15
 				_order_move(get_viewport().get_mouse_position(), false)
+		_save_left -= delta
+		if _save_left <= 0.0:
+			save_game()
+		if hud.camp_open():
+			_camp_refresh_left -= delta
+			if _camp_refresh_left <= 0.0:
+				refresh_camp()
 	var frozen := paused or portrait
 	var frame_delta := 0.0 if frozen else delta
 	var alpha := stepper.alpha() if not frozen else 1.0
@@ -165,8 +222,44 @@ func _process(delta: float) -> void:
 	hud.refresh(hud_state())
 	if battle.ended and not _end_shown:
 		_end_shown = true
-		hud.show_end("抵達 Lv.%d · 擊倒 %d 隻 · 金幣 %d · %s\n此為戰鬥切片，隊長倒下只結束本輪，不寫入任何存檔。" % [
-			battle.level, battle.kills, battle.gold, _clock(_elapsed)])
+		var run := battle.run
+		hud.set_end_button("第 %d 代出發" % profile.generation)
+		hud.show_end("第 %d 代冒險者在 Lv.%d 倒下 · 擊倒 %d 隻 · %s\n身上的金幣、物品與裝備都失去了。\n倉庫保留：金幣 %d、物品 %d 種、裝備 %d 件。" % [
+			run.generation, run.level, run.kills, _clock(_elapsed), profile.warehouse_gold,
+			profile.warehouse_items.size(), profile.warehouse_gear.size()])
+
+
+# --- Camp window -------------------------------------------------------------------
+
+func open_camp(tab: String) -> void:
+	if battle.ended:
+		return
+	var in_camp := battle.in_camp(battle.leader)
+	hud.show_camp(camp_menu.tabs(battle.run, profile, in_camp, battle.now_ms), camp_menu.header(battle.run, profile, in_camp), tab)
+	_camp_refresh_left = 0.5
+
+
+func refresh_camp() -> void:
+	var in_camp := battle.in_camp(battle.leader)
+	hud.show_camp(camp_menu.tabs(battle.run, profile, in_camp, battle.now_ms), camp_menu.header(battle.run, profile, in_camp))
+	_camp_refresh_left = 0.5
+
+
+func _on_camp_action(a: Dictionary) -> void:
+	if battle.ended:
+		return
+	if a.type == "claim":
+		battle.command({"type": "claim", "quest": a.quest})
+		sfx.play(&"ui")
+		return
+	var line := camp_menu.apply(a, battle.run, profile, battle.in_camp(battle.leader))
+	if a.type in ["equip", "unequip"]:
+		battle.refresh_member(a.role)
+	if line != "":
+		hud.toast(line)
+	sfx.play(&"ui")
+	save_game()
+	refresh_camp()
 
 
 # --- Input --------------------------------------------------------------------
@@ -195,6 +288,11 @@ func _unhandled_input(event: InputEvent) -> void:
 			KEY_E: send({"type": "tonic"})
 			KEY_R: send({"type": "emergency"})
 			KEY_F: send({"type": "claim"})
+			KEY_T: send({"type": "retreat"})
+			KEY_B: open_camp("裝備")
+			KEY_C:
+				if battle.in_camp(battle.leader):
+					open_camp("補給")
 			KEY_ESCAPE: hud.set_paused(not paused)
 
 
@@ -324,6 +422,9 @@ func _handle_events(events: Array[Dictionary]) -> void:
 				hud.log_line("委託回報：+%d EXP、+%d 金幣。" % [e.exp, e.gold], "loot")
 				hud.toast("委託完成")
 				sfx.play(&"quest", 0.0)
+				save_game()
+				if hud.camp_open():
+					refresh_camp()
 			"auto":
 				hud.toast("自動狩獵：開" if e.on else "自動狩獵：關")
 			"leash":
@@ -332,6 +433,33 @@ func _handle_events(events: Array[Dictionary]) -> void:
 				sfx.play(&"run_end", 0.0)
 				haptics.buzz(2)
 				add_trauma(0.6)
+				_record_death()
+			"telegraph":
+				var warn: Node3D = GroundWarning.instantiate()
+				effects.add_child(warn)
+				warn.duration = float(e.warning_ms) / 1000.0
+				warn.global_position = Vector3(e.center.x, 0.0, e.center.y)
+				warn.scale = Vector3(e.radius, 1.0, e.radius)
+				warn.play(Color("ff4a2e"))
+				hud.toast("%s：%s！" % [battle.unit(e.unit).display_name, e.name])
+				sfx.play(&"taunt")
+			"boss_impact":
+				_spawn_at(GroundPulse, Vector3(e.center.x, 0.0, e.center.y), Color("ff8a5c"))
+				add_trauma(0.45)
+				haptics.buzz(1)
+				sfx.play(&"enemy_down")
+			"cover":
+				_spawn_at(GroundPulse, views[e.unit].global_position, Color("8fd3ff"))
+				_float(e.unit, "掩護！", Color("8fd3ff"), 1.1)
+			"retreat_started":
+				hud.toast("撤退中… 2 秒後回到營地" if e.reason == "manual" else "生命危險，自動撤退！")
+				sfx.play(&"blocked")
+			"retreated":
+				for m: Battle.Unit in battle.party():
+					_spawn_at(LightPillar, views[m.id].global_position, Color("9fe0ff"))
+			"returned":
+				_show_trip(e.trip)
+				save_game()
 
 
 func _on_hit(e: Dictionary) -> void:
@@ -376,17 +504,25 @@ func _on_reward(e: Dictionary) -> void:
 	if e.material != "":
 		text += "、%s ×1" % tuning.items[e.material].name
 		sfx.play(&"loot")
+	if e.get("gear", "") != "":
+		var inst: Dictionary = battle.run.gear[e.gear]
+		text += "、裝備「%s」" % camp_menu.gear_name(inst)
+		_float(m.id, camp_menu.gear_name(inst), Color("ffd87a") if inst.quality == "plain" else Color("b48cff"), 1.0)
+		sfx.play(&"quest", 0.0)
 	hud.log_line(text, "loot")
-	if battle.quest_ready() and battle.quest.progress == battle.quest.count and m.kind_id == battle.quest.target:
+	var tracked: Dictionary = tuning.quests[battle.tracked_quest]
+	if battle.quest_ready() and m.kind_id == tracked.objective.target \
+			and battle.run.quest_progress(battle.tracked_quest) == int(tracked.objective.count):
 		hud.toast("委託達成，可以回報")
 
 
 func _on_refused(e: Dictionary) -> void:
 	var lines := {
+		"retreat": {"in_camp": "已經在營地", "already": "撤退中"},
 		"skill": {"no_target": "附近沒有可攻擊的敵人", "too_far": "目標太遠，靠近一點再施放"},
 		"tonic": {"hot": "藥效還在持續", "none": "沒有回復藥水", "full": "生命已經全滿"},
 		"emergency": {"cooldown": "急救包冷卻中", "none": "急救包用完了", "full": "生命已經全滿"},
-		"claim": {"not_ready": "委託還沒完成"},
+		"claim": {"not_ready": "委託還沒完成", "not_in_camp": "回到營地才能回報委託"},
 	}
 	hud.toast(lines.get(e.what, {}).get(e.reason, "現在不能這麼做"))
 
@@ -443,21 +579,25 @@ func hud_state() -> Dictionary:
 	var t: Battle.Unit = battle.unit(battle.leader.target_id)
 	if t != null and t.alive:
 		target = {"name": t.display_name, "level": t.level, "hp": t.hp, "max": t.max_hp}
-	var q: Dictionary = battle.quest
-	var cooldown := maxf(0.0, (float(q.available_at_ms) - battle.now_ms) / 1000.0)
+	var qid := battle.tracked_quest
+	var q: Dictionary = tuning.quests[qid]
+	var state: Dictionary = battle.run.quests[qid]
+	var cooldown := maxf(0.0, (float(state.available_at_ms) - battle.now_ms) / 1000.0)
 	var material_id: String = tuning.data.zones[0].material_id
 	return {
 		"level": battle.level, "exp": battle.experience, "exp_need": battle.xp_needed(), "gold": battle.gold,
-		"material": int(battle.materials.get(material_id, 0)),
+		"material": battle.run.count(material_id),
 		"party": party, "target": target,
-		"quest": {"target_name": tuning.monsters[q.target].name, "progress": q.progress if cooldown <= 0.0 else 0,
-			"count": q.count, "ready": battle.quest_ready(), "cooldown_s": cooldown,
+		"quest": {"target_name": tuning.monsters[q.objective.target].name,
+			"progress": battle.run.quest_progress(qid) if cooldown <= 0.0 else 0,
+			"count": int(q.objective.count), "ready": battle.quest_ready(), "cooldown_s": cooldown,
 			"exp": int(q.reward.exp), "gold": int(q.reward.gold)},
 		"auto": battle.auto_hunt, "auto_potion": battle.auto_potion,
 		"skill_cd": battle.skill_ready_in_ms(), "skill_total": float(tuning.skills["cleave"].cooldown_ms),
 		"tonic": int(battle.inventory.get("tonic_small", 0)), "emergency": int(battle.inventory.get("emergency_kit", 0)),
 		"emergency_cd": maxf(0.0, float(battle.leader.cooldowns.get("emergency_kit", 0.0)) - battle.now_ms),
 		"ended": battle.ended, "status": _status(),
+		"in_camp": battle.in_camp(battle.leader), "retreating": battle.retreating(),
 	}
 
 
@@ -466,6 +606,10 @@ func _status() -> String:
 		return "冒險結束"
 	if paused or portrait:
 		return "暫停中"
+	if battle.retreating():
+		return "撤退中"
+	if battle.in_camp(battle.leader) and battle.leader.order != Battle.Unit.Order.MOVE:
+		return "營地（安全）"
 	var leader := battle.leader
 	if leader.steer != Vector2.ZERO or leader.order == Battle.Unit.Order.MOVE:
 		return "移動中"
@@ -481,3 +625,31 @@ func _ground(p: Vector3) -> Vector2:
 
 func _clock(seconds: float) -> String:
 	return "%d:%02d" % [int(seconds) / 60, int(seconds) % 60]
+
+
+func _show_trip(trip: Dictionary) -> void:
+	if int(trip.kills) == 0 and (trip.gear as Array).is_empty():
+		return
+	var lines := PackedStringArray(["擊倒 %d 隻 · +%d EXP · +%d 金幣" % [int(trip.kills), int(trip.exp), int(trip.gold)]])
+	for item_id: String in trip.items:
+		lines.append("%s ×%d" % [camp_menu.item_name(item_id), int(trip.items[item_id])])
+	for gid: String in trip.gear:
+		if battle.run.gear.has(gid):
+			lines.append("裝備：%s" % camp_menu.gear_name(battle.run.gear[gid]))
+	var used := PackedStringArray()
+	for item_id: String in trip.used:
+		used.append("%s ×%d" % [camp_menu.item_name(item_id), int(trip.used[item_id])])
+	if not used.is_empty():
+		lines.append("用掉：" + "、".join(used))
+	hud.show_trip("\n".join(lines))
+
+
+## Tombstone first, then the profile (memorial, generation) and a save with no live run.
+func _record_death() -> void:
+	save_service.mark_dead(battle.run.id)
+	var killer := ""
+	var leader := battle.leader
+	if battle.unit(leader.last_attacker) != null:
+		killer = battle.unit(leader.last_attacker).display_name
+	profile.record_death(battle.run, killer)
+	save_game()

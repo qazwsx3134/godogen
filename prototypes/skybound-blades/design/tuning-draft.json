@@ -99,26 +99,26 @@
   },
   "items": [
     {
-      "id": "tonic_small",
+      "id": "tonic_small", "name": "回復藥水",
       "kind": "regen",
       "heal_flat": 60,
       "duration_ms": 6000,
       "buy_gold": 12
     },
     {
-      "id": "emergency_kit",
+      "id": "emergency_kit", "name": "急救包",
       "kind": "instant_heal",
       "heal_max_hp_ratio": 0.35,
       "cooldown_ms": 20000,
       "buy_gold": 40
     },
     {
-      "id": "bandage",
+      "id": "bandage", "name": "繃帶",
       "kind": "ai_heal_material",
       "buy_gold": 10
     },
     {
-      "id": "ration",
+      "id": "ration", "name": "口糧",
       "kind": "commission_supply",
       "buy_gold": 10
     },
@@ -596,7 +596,7 @@
   ],
   "bosses": [
     {
-      "id": "gatekeeper",
+      "id": "gatekeeper", "name": "守門者", "level": 5, "base_exp": 320, "gold": 90, "move_cells_per_s": 2.0, "aggro_radius_cells": 6.0, "respawn_ms": 180000,
       "floor": 1,
       "recommended_level": 5,
       "hp": 1600,
@@ -606,6 +606,8 @@
       "moves": [
         {
           "id": "sweep",
+          "name": "蓄力橫掃",
+          "radius_cells": 3.6,
           "warning_ms": 2000,
           "cooldown_ms": 10000,
           "power": 1.8,
@@ -613,6 +615,8 @@
         },
         {
           "id": "stone_fist",
+          "name": "石拳",
+          "radius_cells": 1.5,
           "warning_ms": 1200,
           "cooldown_ms": 8000,
           "power": 2.0,
