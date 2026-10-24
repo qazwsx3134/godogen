@@ -296,7 +296,25 @@ func claim(qid: String, now_ms: float) -> Dictionary:
 # --- Trips ----------------------------------------------------------------------
 
 func reset_trip() -> void:
-	trip = {"kills": 0, "exp": 0.0, "gold": 0, "items": {}, "gear": [], "used": {}}
+	trip = {"kills": 0, "exp": 0.0, "gold": 0, "items": {}, "gear": [], "used": {}, "dealt": {}, "taken": {},
+		"warned": {"dodged": 0, "hit": 0}}
+
+
+## Damage after cover and block. `source` is "role:skill" or "role:attack"; trips saved before this have no key.
+func note_damage(dealer_source: String, taker_role: String, amount: float) -> void:
+	if dealer_source != "":
+		var dealt: Dictionary = trip.get_or_add("dealt", {})
+		dealt[dealer_source] = float(dealt.get(dealer_source, 0.0)) + amount
+	if taker_role != "":
+		var taken: Dictionary = trip.get_or_add("taken", {})
+		taken[taker_role] = float(taken.get(taker_role, 0.0)) + amount
+
+
+## A member who stood in a boss warning when it began: stepped out in time or got hit.
+func note_warning(dodged: bool) -> void:
+	var w: Dictionary = trip.get_or_add("warned", {"dodged": 0, "hit": 0})
+	var key := "dodged" if dodged else "hit"
+	w[key] = int(w.get(key, 0)) + 1
 
 
 # --- Save -----------------------------------------------------------------------

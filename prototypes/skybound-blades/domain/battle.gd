@@ -328,6 +328,9 @@ func _apply(cmd: Dictionary) -> void:
 # --- Leader ------------------------------------------------------------------
 
 func _think_leader(u: Unit) -> void:
+	if auto_hunt and u.steer == Vector2.ZERO and u.order != Unit.Order.MOVE and _dodge(u):
+		_cancel_chain(u, "dodge")
+		return
 	if not u.chain_next.is_empty() and now_ms >= float(u.chain_next.at):
 		_continue_chain(u)
 	if u.steer != Vector2.ZERO:
@@ -394,6 +397,8 @@ func _valid_target(u: Unit) -> Unit:
 # --- Companions ---------------------------------------------------------------
 
 func _think_guardian(u: Unit) -> void:
+	if _dodge(u):
+		return
 	if _too_far_from_leader(u):
 		_follow(u)
 		return
@@ -411,6 +416,8 @@ func _think_guardian(u: Unit) -> void:
 
 
 func _think_support(u: Unit) -> void:
+	if _dodge(u):
+		return
 	if _too_far_from_leader(u):
 		_follow(u)
 		return
@@ -588,20 +595,25 @@ func _telegraph(u: Unit, move: Dictionary, target: Unit) -> void:
 	u.facing = _face(u.pos, target.pos, u.facing)
 	u.action_ms = now_ms
 	u.action = &"skill"
-	_pending_hits.append({"at": now_ms + warning, "src": u.id, "area": true, "center": center,
-		"radius": float(move.radius_cells), "power": float(move.power), "move": move.id})
+	var radius := float(move.radius_cells)
+	var threatened: Array[int] = []
+	for m: Unit in party():
+		if m.alive and not in_camp(m) and m.pos.distance_to(center) <= radius:
+			threatened.append(m.id)
 	_emit({"type": "telegraph", "unit": u.id, "move": move.id, "name": String(move.get("name", move.id)),
-		"center": center, "radius": float(move.radius_cells), "warning_ms": warning})
-	if move.targets == "all":
-		_cover(warning)
+		"center": center, "radius": radius, "warning_ms": warning})
+	var covered: bool = move.targets == "all" and _cover(warning)
+	_pending_hits.append({"at": now_ms + warning, "src": u.id, "area": true, "center": center, "radius": radius,
+		"power": float(move.power), "move": move.id, "warned_at": now_ms, "threatened": threatened,
+		"covered": covered, "dodging": []})
 
 
 ## Guardian's cover (tuning party.utilities.cover): allies near the guardian take
 ## damage_taken_ratio of a charged blow that lands inside the window.
-func _cover(warning_ms: float) -> void:
+func _cover(warning_ms: float) -> bool:
 	var cover: Dictionary = tuning.utilities["cover"]
 	if not guardian.alive or not guardian.is_ready("cover", now_ms):
-		return
+		return false
 	guardian.cooldowns["cover"] = now_ms + float(cover.cooldown_ms)
 	guardian.action_ms = now_ms
 	guardian.action = &"skill"
@@ -612,6 +624,39 @@ func _cover(warning_ms: float) -> void:
 			m.cover_ratio = float(cover.damage_taken_ratio)
 			covered.append(m.id)
 	_emit({"type": "cover", "unit": guardian.id, "covered": covered})
+	return true
+
+
+## AI step-out (tuning automation.dodge_*): dodge_react_ms after a boss warning starts, a member still inside the
+## circle walks away from the boss until it is dodge_margin_cells clear. The guardian holds for a sweep it covers.
+## True while dodging; the member does nothing else that step.
+func _dodge(u: Unit) -> bool:
+	var auto: Dictionary = tuning.section("automation")
+	if not bool(auto.get("dodge_enabled", false)) or in_camp(u) or not (auto.dodge_roles as Array).has(u.role):
+		return false
+	for hit: Dictionary in _pending_hits:
+		if not hit.get("area", false) or now_ms < float(hit.warned_at) + float(auto.dodge_react_ms):
+			continue
+		if u == guardian and hit.covered:
+			continue
+		var clear := float(hit.radius) + float(auto.dodge_margin_cells)
+		var p: Vector2 = u.pos - hit.center
+		if p.length() >= clear:
+			continue
+		# Away from the boss: a targeted blow is centred on the victim, so "away from the centre" is undefined there.
+		var away: Vector2 = u.pos - unit(hit.src).pos
+		away = away.normalized() if away.length() > 0.01 else Vector2.RIGHT.rotated(u.id)
+		for d: Vector2 in [away, away.rotated(PI / 2.0), away.rotated(-PI / 2.0), -away]:
+			var pd := p.dot(d)
+			var goal := _clamp_to_bounds(u.pos + d * (-pd + sqrt(pd * pd - p.length_squared() + clear * clear) + 0.1))
+			if goal.distance_to(hit.center) < clear:
+				continue  # a wall or the field edge is in the way; try another side
+			if not (hit.dodging as Array).has(u.id):
+				hit.dodging.append(u.id)
+				_emit({"type": "dodge", "unit": u.id, "move": hit.move})
+			_walk(u, goal, 0.05)
+			return true
+	return false
 
 
 func _nearest_member(at: Vector2, radius: float) -> Unit:
@@ -782,8 +827,11 @@ func _resolve_pending_hits() -> void:
 			if not src.alive:
 				continue
 			for m: Unit in party():
-				if m.alive and not in_camp(m) and m.pos.distance_to(hit.center) <= float(hit.radius):
+				var inside: bool = m.alive and not in_camp(m) and m.pos.distance_to(hit.center) <= float(hit.radius)
+				if inside:
 					_roll_hit(src, m, float(hit.power), "boss")
+				if m.alive and (hit.threatened as Array).has(m.id):
+					run.note_warning(not inside)
 			_emit({"type": "boss_impact", "unit": src.id, "move": hit.move, "center": hit.center, "radius": hit.radius})
 			continue
 		var dst: Unit = unit(hit.dst)
@@ -840,6 +888,9 @@ func _land_hits() -> void:
 		if dst.cover_until_ms >= now_ms:
 			amount = maxf(1.0, roundf(amount * dst.cover_ratio))
 			h.amount = amount
+		# Trip stats count effective damage: after cover and block, without overkill.
+		run.note_damage("%s:%s" % [src.role, h.get("meta", {}).get("skill", "attack")] if src.team == 0 else "",
+			dst.role if dst.team == 0 else "", minf(amount, dst.hp))
 		dst.hp = maxf(0.0, dst.hp - amount)
 		dst.last_attacker = src.id
 		dst.last_hit_ms = now_ms

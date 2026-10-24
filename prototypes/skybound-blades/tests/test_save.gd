@@ -42,6 +42,8 @@ func test_save_round_trip_keeps_run_and_profile() -> void:
 		run.record_kill(run.next_kill_id(), "briar_boar", 2, _rng())
 	var sword := run.make_gear("novice_sword", "rare")
 	run.equip("leader", sword.id)
+	run.note_damage("leader:cleave", "", 120.0)
+	run.note_warning(true)
 	var profile := Profile.new()
 	profile.warehouse_gold = 40
 	_expect(s.save({"profile": profile.to_dict(), "run": run.to_dict()}) == OK, "round trip: save ok")
@@ -54,6 +56,12 @@ func test_save_round_trip_keeps_run_and_profile() -> void:
 	_expect(back.receipts.size() == 6 and back.record_kill(run.receipts.keys()[0], "briar_boar", 2, _rng()).is_empty(),
 		"round trip: kill receipts still block replays")
 	_expect(back.next_kill_id() == run.next_kill_id(), "round trip: id sequence continues")
+	_expect(is_equal_approx(float(back.trip.dealt["leader:cleave"]), 120.0) and int(back.trip.warned.dodged) == 1,
+		"round trip: trip damage and warning stats")
+	var old_trip := Run.from_dict(tuning, doc.run)
+	old_trip.trip = {"kills": 0, "exp": 0.0, "gold": 0, "items": {}, "gear": [], "used": {}}  # saved before the stats
+	old_trip.note_damage("leader:attack", "leader", 5.0)
+	_expect(float(old_trip.trip.dealt["leader:attack"]) == 5.0, "round trip: a trip saved before the stats still records")
 	_expect(Profile.from_dict(doc.profile).warehouse_gold == 40, "round trip: warehouse")
 
 

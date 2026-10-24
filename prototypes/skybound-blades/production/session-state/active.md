@@ -54,6 +54,11 @@
 - 原畫移出 git：兩個 art_src 的圖片忽略，skybound 定稿 33 張走 Git LFS（`.gitattributes`）。本機備份分支 `backup/before-art-rewrite` 仍保留舊歷史，等使用者確認後刪除並 gc，`.git` 才會縮小。
 - godot-kit 新增 sprite 動畫測試頁 `sprite_inspector.tscn`＋`sprite_check.gd`；skybound `tests/test_sprites.gd` 檢查 6 張角色 sheet。
 
+## 王的預警與本趟輸出（2026-10-24）
+
+- 依 `research/` 的流浪仙境與守城英雄傳研究：盾衛與援護會在預警後 0.4 秒走出紅圈（tuning `automation.dodge_*`），遠征結算顯示本趟輸出占比、承傷與預警閃過次數。設計、20 seed 量測與未採用的候選見 `design/boss-warnings.md`。
+- 發現：守門者在 Lv5 太弱（不論誰閃都 20 戰全勝、0 倒下），待調高。
+
 ## 下一步
 
 1. 試玩連招手感並調整（標記窗口、傷害加成）。

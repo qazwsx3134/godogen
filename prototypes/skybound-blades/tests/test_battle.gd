@@ -37,6 +37,8 @@ func _init() -> void:
 	test_battle_boss_area_can_be_dodged()
 	test_battle_guardian_cover_reduces_charged_blow()
 	test_battle_boss_kill_opens_main_quest()
+	test_battle_ai_dodge_steps_out_of_boss_warnings()
+	test_battle_trip_damage_splits_by_member_and_source()
 	_finish("BATTLE")
 
 
@@ -441,3 +443,49 @@ func test_battle_boss_kill_opens_main_quest() -> void:
 	b._land_hits()
 	_expect(not boss.alive and b.run.quest_ready("seal_1", b.now_ms), "boss: first clear makes the main quest claimable")
 	_expect(b.gold >= 90, "boss: pays its gold")
+
+
+## Boss hits per role over 30 s of the seeded gatekeeper fight (leader auto-hunting), with dodge_roles set.
+func _boss_hits_by_role(roles: Array) -> Dictionary:
+	var auto: Dictionary = tuning.section("automation")
+	var was: Array = auto.dodge_roles
+	auto.dodge_roles = roles
+	var b := _boss_battle()
+	b.auto_hunt = true
+	var hits := {"leader": 0, "guardian": 0, "support": 0}
+	for i in 600:
+		b.step()
+		for e: Dictionary in b.drain_events():
+			if e.type == "hit" and e.kind == "boss":
+				hits[b.unit(e.unit).role] += 1
+	auto.dodge_roles = was
+	return hits
+
+
+func test_battle_ai_dodge_steps_out_of_boss_warnings() -> void:
+	# Arrange / Act: the same seeded fight with nobody dodging, then with the support and the leader dodging.
+	var off := _boss_hits_by_role([])
+	var on := _boss_hits_by_role(["leader", "support"])
+	var support_only := _boss_hits_by_role(["support"])
+	# Assert
+	_expect(int(off.leader) >= 1 and int(off.support) >= 1, "dodge off: leader and support stand in the warnings %s" % off)
+	_expect(int(on.leader) == 0 and int(on.support) == 0, "dodge on: they step out before impact %s" % on)
+	_expect(int(support_only.leader) >= 1 and int(support_only.support) == 0,
+		"dodge: only listed roles step out %s" % support_only)
+
+
+func test_battle_trip_damage_splits_by_member_and_source() -> void:
+	# Arrange
+	var b := _battle([{"id": "meadow_slime", "pos": Vector2(-7, 0)}])
+	var slime: Battle.Unit = b.monsters()[0]
+	slime.hp = 30.0
+	# Act: a normal swing, then an overkill skill blow.
+	b._step_hits.append({"src": b.leader.id, "dst": slime.id, "amount": 10.0, "crit": false, "block": false, "kind": "attack"})
+	b._land_hits()
+	b._step_hits.append({"src": b.leader.id, "dst": slime.id, "amount": 500.0, "crit": false, "block": false,
+		"kind": "skill", "meta": {"skill": "cleave", "cast": 1, "step": 0, "chain": [], "primary": true}})
+	b._land_hits()
+	# Assert
+	var dealt: Dictionary = b.run.trip.dealt
+	_expect(float(dealt["leader:attack"]) == 10.0, "trip damage: the swing counts under leader:attack")
+	_expect(float(dealt["leader:cleave"]) == 20.0, "trip damage: overkill is not counted (%s)" % dealt)

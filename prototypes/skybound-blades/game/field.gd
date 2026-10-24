@@ -399,7 +399,7 @@ func _handle_events(events: Array[Dictionary]) -> void:
 					hud.log_line("%s！" % skill_name)
 			"chain_break":
 				var why := {"cooldown": "還在冷卻", "too_far": "目標太遠", "tag_gone": "標記消失", "miss": "沒有命中",
-					"whiff": "打空了", "moved": "移動取消"}
+					"whiff": "打空了", "moved": "移動取消", "dodge": "閃避預警"}
 				hud.toast("連招中斷：%s %s" % [Skills.skill_name(tuning, e.skill), why.get(e.reason, e.reason)])
 			"mastery_up":
 				hud.log_line("%s 熟練度提升到 %d。" % [Skills.skill_name(tuning, e.skill), int(e.level)], "level")
@@ -465,6 +465,8 @@ func _handle_events(events: Array[Dictionary]) -> void:
 				add_trauma(0.45)
 				haptics.buzz(1)
 				sfx.play(&"enemy_down")
+			"dodge":
+				_float(e.unit, "閃避！", Color("c9f0ff"), 0.9)
 			"cover":
 				_spawn_at(GroundPulse, views[e.unit].global_position, Color("8fd3ff"))
 				_float(e.unit, "掩護！", Color("8fd3ff"), 1.1)
@@ -662,7 +664,42 @@ func _show_trip(trip: Dictionary) -> void:
 		used.append("%s ×%d" % [camp_menu.item_name(item_id), int(trip.used[item_id])])
 	if not used.is_empty():
 		lines.append("用掉：" + "、".join(used))
+	lines.append_array(trip_damage_lines(trip))
 	hud.show_trip("\n".join(lines))
+
+
+## 本趟輸出（累積、有效傷害、不含溢出）by member and source, then damage taken and boss warnings.
+## Trips saved before these stats existed have no keys and show nothing.
+func trip_damage_lines(trip: Dictionary) -> PackedStringArray:
+	var out := PackedStringArray()
+	var dealt: Dictionary = trip.get("dealt", {})
+	var total := 0.0
+	for k: String in dealt:
+		total += float(dealt[k])
+	if total > 0.0:
+		var names := {"leader": "隊長", "guardian": "盾衛", "support": "援護"}
+		var parts := PackedStringArray()
+		for role: String in ["leader", "guardian", "support"]:
+			var mine := 0.0
+			var by_source := PackedStringArray()
+			for k: String in dealt:
+				if k.begins_with(role + ":"):
+					mine += float(dealt[k])
+					var sid := k.get_slice(":", 1)
+					by_source.append("%s %d%%" % ["普攻" if sid == "attack" else Skills.skill_name(tuning, sid),
+						roundi(100.0 * float(dealt[k]) / total)])
+			if mine > 0.0:
+				parts.append("%s %d%%%s" % [names[role], roundi(100.0 * mine / total),
+					"（%s）" % "、".join(by_source) if by_source.size() > 1 else ""])
+		out.append("本趟輸出 %d：%s" % [roundi(total), " · ".join(parts)])
+	var taken: Dictionary = trip.get("taken", {})
+	if not taken.is_empty():
+		out.append("承受：隊長 %d · 盾衛 %d · 援護 %d" % [roundi(float(taken.get("leader", 0.0))),
+			roundi(float(taken.get("guardian", 0.0))), roundi(float(taken.get("support", 0.0)))])
+	var w: Dictionary = trip.get("warned", {})
+	if int(w.get("dodged", 0)) + int(w.get("hit", 0)) > 0:
+		out.append("守層者預警：閃過 %d · 被擊中 %d" % [int(w.dodged), int(w.hit)])
+	return out
 
 
 ## Tombstone first, then the profile (memorial, generation) and a save with no live run.

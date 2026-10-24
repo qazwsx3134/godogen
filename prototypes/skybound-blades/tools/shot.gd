@@ -1,6 +1,6 @@
 extends SceneTree
 ## Screenshot tool (needs a window):
-##   godot --path . --resolution 1440x900 --script res://tools/shot.gd -- <out.png> [seconds] [auto|camp|boss]
+##   godot --path . --resolution 1440x900 --script res://tools/shot.gd -- <out.png> [seconds] [auto|camp|skills|trip|boss]
 ## Uses its own save file (erased first), so shots never touch the player's save.
 const SaveService = preload("res://domain/save_service.gd")
 
@@ -34,6 +34,11 @@ func _go() -> void:
 			r.seals = 2
 			load("res://domain/skills.gd").link(field.tuning, r, "leader", "rising")
 			field.open_camp("技能")
+		"trip":
+			field._show_trip({"kills": 14, "exp": 236.0, "gold": 61, "items": {"green_core": 3}, "gear": [], "used": {"tonic_small": 2},
+				"dealt": {"leader:attack": 820.0, "leader:cleave": 610.0, "leader:rising": 240.0, "guardian:attack": 540.0,
+				"support:attack": 190.0}, "taken": {"leader": 310.0, "guardian": 690.0, "support": 120.0},
+				"warned": {"dodged": 7, "hit": 2}})
 		"boss":
 			var b: RefCounted = field.battle
 			for m: RefCounted in b.party():
