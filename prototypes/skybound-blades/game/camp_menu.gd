@@ -1,8 +1,9 @@
 extends RefCounted
 ## Builds the camp / bag window rows from the Run and Profile, and applies the actions they
 ## carry. Shop, warehouse and quest hand-in only work in camp; gear can be changed anywhere.
-## Pages: 補給 (shop + sell), 倉庫, 委託, 裝備.
+## Pages: 補給 (shop + sell), 倉庫, 委託, 裝備, 技能 (learn, slots, chain).
 
+const Skills = preload("res://domain/skills.gd")
 const SHOP := ["tonic_small", "emergency_kit", "bandage", "ration"]
 const QUALITY := {"plain": "", "fine": "精製", "rare": "稀有", "named": "傳名"}
 const STAT := {"attack": "攻擊", "defense": "防禦", "max_hp": "生命", "agility": "敏捷", "crit_chance": "爆擊",
@@ -66,7 +67,8 @@ func header(run: RefCounted, profile: RefCounted, in_camp: bool) -> String:
 
 func tabs(run: RefCounted, profile: RefCounted, in_camp: bool, now_ms: float) -> Dictionary:
 	return {"補給": {"rows": _supplies(run, in_camp)}, "倉庫": {"rows": _warehouse(run, profile, in_camp)},
-		"委託": {"rows": _quests(run, in_camp, now_ms)}, "裝備": {"rows": _gear(run)}}
+		"委託": {"rows": _quests(run, in_camp, now_ms)}, "裝備": {"rows": _gear(run)},
+		"技能": {"rows": _skills(run, in_camp)}}
 
 
 func _supplies(run: RefCounted, in_camp: bool) -> Array:
@@ -180,6 +182,46 @@ func _delta(run: RefCounted, inst: Dictionary) -> String:
 	return ("→ " + " · ".join(parts)) if not parts.is_empty() else "→ 無變化"
 
 
+## The leader's skills: chain header, then every skill of the weapon style with what it needs and leaves.
+func _skills(run: RefCounted, in_camp: bool) -> Array:
+	var role := "leader"
+	var chain := Skills.chain(run, role)
+	var names := PackedStringArray()
+	for id: String in chain:
+		names.append(Skills.skill_name(tuning, id))
+	var slots := Skills.slot_count(tuning, run.level)
+	var rows: Array = [{"title": "連攜印 %d · 技能格 %d · 連招：%s" % [int(run.seals), slots, " → ".join(names) if not names.is_empty() else "—"],
+		"detail": "接上一招花 1 個連攜印；解除不退印。後一招要接得住前一招留下的標記",
+		"actions": [{"label": "解除最後一段", "action": {"type": "unlink"}, "enabled": in_camp and chain.size() > 1}]}]
+	var style: String = run.member_stats(role).style
+	for id: String in Skills.style_skills(tuning, style):
+		var def: Dictionary = tuning.skills[id]
+		var mastery := Skills.mastery_level(run, role, id)
+		var iface := "需要「%s」→ 留下「%s」" % [Skills.tag_name(tuning, def.get("needs")), Skills.tag_name(tuning, def.get("leaves"))]
+		if mastery == 0:
+			var block := Skills.learn_block(tuning, run, role, id)
+			rows.append({"title": "%s　未學會" % def.name, "detail": "%s · %s" % [iface, block if block != "" else "可以學習"],
+				"actions": [{"label": "學習", "action": {"type": "learn", "skill": id}, "enabled": in_camp and block == ""}]})
+			continue
+		var entry: Dictionary = run.learned[role][id]
+		var status := ""
+		if id in chain:
+			status = "連招第 %d 招" % (chain.find(id) + 1)
+		elif id in (run.slots.get(role, []) as Array):
+			status = "第 %d 格" % ((run.slots[role] as Array).find(id) + 1)
+		var link_block := Skills.link_block(tuning, run, role, id)
+		var actions: Array = []
+		for i in mini(slots, 2):
+			actions.append({"label": "放第 %d 格" % (i + 1), "action": {"type": "equip_skill", "skill": id, "slot": i},
+				"enabled": in_camp and Skills.equip_block(tuning, run, role, id, i) == ""})
+		actions.append({"label": "接上連招", "action": {"type": "link", "skill": id}, "enabled": in_camp and link_block == ""})
+		rows.append({"title": "%s　熟練 %d（%d / %d）%s" % [def.name, mastery, int(entry.exp), Skills.mastery_need(mastery),
+			"　" + status if status != "" else ""],
+			"detail": "%s%s" % [iface, "" if link_block == "" or id in chain else " · 不能接：" + link_block],
+			"actions": actions})
+	return rows
+
+
 # --- Actions --------------------------------------------------------------------
 
 ## Applies a non-battle action. Returns a toast line ("" = nothing to say). Claims go through
@@ -229,4 +271,16 @@ func apply(a: Dictionary, run: RefCounted, profile: RefCounted, in_camp: bool) -
 			return "已存入倉庫" if profile.deposit_gear(run, a.id) else "穿著中或配發的裝備不能存倉"
 		"withdraw_gear":
 			return "已取出" if profile.withdraw_gear(run, a.id) else "找不到這件裝備"
+		"learn":
+			var why := Skills.learn(tuning, run, "leader", a.skill)
+			return why if why != "" else "學會了%s" % Skills.skill_name(tuning, a.skill)
+		"equip_skill":
+			var why := Skills.equip(tuning, run, "leader", a.skill, int(a.slot))
+			return why if why != "" else "%s放進第 %d 格" % [Skills.skill_name(tuning, a.skill), int(a.slot) + 1]
+		"link":
+			var why := Skills.link(tuning, run, "leader", a.skill)
+			return why if why != "" else "連招接上%s（剩 %d 個連攜印）" % [Skills.skill_name(tuning, a.skill), int(run.seals)]
+		"unlink":
+			var why := Skills.unlink_last(tuning, run, "leader")
+			return why if why != "" else "已解除最後一段（連攜印不退）"
 	return ""

@@ -50,6 +50,12 @@ var unreachable: Dictionary = {}  # target id -> sim time when it may be chosen 
 var stuck_ms: float = 0.0
 var stuck_best: float = INF
 
+## Skill-chain interface marks on this unit: tag -> sim time it expires (design/skill-links.md).
+var tags: Dictionary = {}
+var def_until_ms: float = -1.0
+var def_ratio: float = 1.0
+## A chain follow-up waiting for the end of the current skill: {id, step, target, chain, at}; {} when none.
+var chain_next: Dictionary = {}
 var is_boss: bool = false
 var cover_until_ms: float = -1.0
 var cover_ratio: float = 1.0
@@ -57,6 +63,14 @@ var cover_ratio: float = 1.0
 # Monster rewards.
 var base_exp: float = 0.0
 var gold: int = 0
+
+
+func has_tag(tag: Variant, now_ms: float) -> bool:
+	return tag != null and float(tags.get(tag, -1.0)) >= now_ms
+
+
+func defense_now(now_ms: float) -> float:
+	return defense * (def_ratio if def_until_ms >= now_ms else 1.0)
 
 
 func hp_ratio() -> float:

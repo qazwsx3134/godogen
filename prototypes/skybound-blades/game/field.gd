@@ -19,6 +19,7 @@ const Run = preload("res://domain/run.gd")
 const Profile = preload("res://domain/profile.gd")
 const SaveService = preload("res://domain/save_service.gd")
 const CampMenu = preload("res://game/camp_menu.gd")
+const Skills = preload("res://domain/skills.gd")
 
 ## Playable ground, in cells on the XZ plane (x, z, width, depth).
 @export var bounds: Rect2 = Rect2(-14, -9, 28, 18)
@@ -386,9 +387,23 @@ func _handle_events(events: Array[Dictionary]) -> void:
 					_spawn_slash(src, battle.unit(e.target))
 			"cast":
 				var caster: Battle.Unit = battle.unit(e.unit)
-				_spawn_at(GroundPulse, views[caster.id].global_position, Color("ffd479"))
+				var step := int(e.get("step", 0))
+				_spawn_at(GroundPulse, views[caster.id].global_position, Color("ffd479") if step == 0 else Color("ff9df0"))
 				sfx.play(&"skill")
-				hud.log_line("裂空斬！")
+				var skill_name := Skills.skill_name(tuning, e.skill)
+				if step > 0:
+					_float(caster.id, "連招 %d　%s" % [step + 1, skill_name], Color("ffb3f2"), 1.15)
+					hud.log_line("連招 %d／%d：%s！" % [step + 1, int(e.chain_len), skill_name])
+					add_trauma(0.1, 0.3)
+				else:
+					hud.log_line("%s！" % skill_name)
+			"chain_break":
+				var why := {"cooldown": "還在冷卻", "too_far": "目標太遠", "tag_gone": "標記消失", "miss": "沒有命中",
+					"whiff": "打空了", "moved": "移動取消"}
+				hud.toast("連招中斷：%s %s" % [Skills.skill_name(tuning, e.skill), why.get(e.reason, e.reason)])
+			"mastery_up":
+				hud.log_line("%s 熟練度提升到 %d。" % [Skills.skill_name(tuning, e.skill), int(e.level)], "level")
+				_float(e.unit, "熟練 Lv.%d" % int(e.level), Color("9fe0ff"), 0.9)
 			"down": _on_down(e)
 			"reward": _on_reward(e)
 			"level_up":
@@ -420,6 +435,8 @@ func _handle_events(events: Array[Dictionary]) -> void:
 			"refused": _on_refused(e)
 			"quest_claimed":
 				hud.log_line("委託回報：+%d EXP、+%d 金幣。" % [e.exp, e.gold], "loot")
+				if battle.run.seal_receipts.has("quest:" + String(e.get("quest", ""))) and int(battle.run.seals) > 0:
+					_announce_seals()
 				hud.toast("委託完成")
 				sfx.play(&"quest", 0.0)
 				save_game()
@@ -504,6 +521,8 @@ func _on_reward(e: Dictionary) -> void:
 	if e.material != "":
 		text += "、%s ×1" % tuning.items[e.material].name
 		sfx.play(&"loot")
+	if int(e.get("seals", 0)) > 0:
+		_announce_seals()
 	if e.get("gear", "") != "":
 		var inst: Dictionary = battle.run.gear[e.gear]
 		text += "、裝備「%s」" % camp_menu.gear_name(inst)
@@ -593,7 +612,9 @@ func hud_state() -> Dictionary:
 			"count": int(q.objective.count), "ready": battle.quest_ready(), "cooldown_s": cooldown,
 			"exp": int(q.reward.exp), "gold": int(q.reward.gold)},
 		"auto": battle.auto_hunt, "auto_potion": battle.auto_potion,
-		"skill_cd": battle.skill_ready_in_ms(), "skill_total": float(tuning.skills["cleave"].cooldown_ms),
+		"skill_cd": battle.skill_ready_in_ms(),
+		"skill_total": battle.skill_cooldown_ms(battle.leader, battle.slot_skill(0)) if battle.slot_skill(0) != "" else 1.0,
+		"skill_label": _skill_label(),
 		"tonic": int(battle.inventory.get("tonic_small", 0)), "emergency": int(battle.inventory.get("emergency_kit", 0)),
 		"emergency_cd": maxf(0.0, float(battle.leader.cooldowns.get("emergency_kit", 0.0)) - battle.now_ms),
 		"ended": battle.ended, "status": _status(),
@@ -653,3 +674,18 @@ func _record_death() -> void:
 		killer = battle.unit(leader.last_attacker).display_name
 	profile.record_death(battle.run, killer)
 	save_game()
+
+
+## "裂空斬 +2" for the chain in slot 1.
+func _skill_label() -> String:
+	var head := battle.slot_skill(0)
+	if head == "":
+		return "技能\nQ"
+	var chain := Skills.chain(battle.run, "leader")
+	var name := Skills.skill_name(tuning, head)
+	return ("%s +%d\nQ" % [name, chain.size() - 1]) if chain.size() > 1 else ("%s\nQ" % name)
+
+
+func _announce_seals() -> void:
+	hud.toast("獲得連攜印（共 %d）：到營地「技能」頁串連招" % int(battle.run.seals))
+	sfx.play(&"level_up", 0.0)

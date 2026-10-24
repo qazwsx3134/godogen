@@ -4,6 +4,7 @@ extends RefCounted
 ## Everything here is lost when the leader falls; the Profile (warehouse, memorial) is not.
 
 const Tuning = preload("res://domain/tuning.gd")
+const Skills = preload("res://domain/skills.gd")
 
 var tuning: Tuning
 var id: String
@@ -26,6 +27,13 @@ var quests: Dictionary = {}
 var receipts: Dictionary = {}
 ## Since leaving camp: {kills, exp, gold, items: {id: qty}, gear: [ids], used: {id: qty}}
 var trip: Dictionary = {}
+## Skills (domain/skills.gd): role -> {skill id: {level, exp}}; role -> [slot skill ids]; role -> [chain skill ids].
+var learned: Dictionary = {}
+var slots: Dictionary = {}
+var chains: Dictionary = {}
+## Seals (連攜印) to spend on links, and the sources already paid (each pays once per run).
+var seals: int = 0
+var seal_receipts: Dictionary = {}
 var _next_seq: int = 1
 
 
@@ -43,6 +51,11 @@ func _init(tuning_: Tuning, run_id: String, generation_: int = 1) -> void:
 	for q: Dictionary in tuning.data.quest_definitions:
 		if int(q.floor) == 1:
 			quests[q.id] = {"progress": 0, "claims": 0, "available_at_ms": 0.0}
+	# The leader starts with the first skill of its weapon style in the first slot.
+	var first: String = Skills.style_skills(tuning, tuning.member_stats("leader", 1).style)[0]
+	learned = {"leader": {first: {"level": 1, "exp": 0.0}}}
+	slots = {"leader": [first]}
+	chains = {"leader": [first]}
 	reset_trip()
 
 
@@ -91,7 +104,19 @@ func record_kill(kill_id: String, monster_id: String, monster_level: int, rng: R
 			if state.progress < int(q.objective.count) and _quest_open(qid, now_ms):
 				state.progress += 1
 	result.levels = gain_exp(gained)
+	if tuning.bosses.has(monster_id):
+		result.seals = grant_seal("boss:" + monster_id,
+			int(tuning.section("skill_links").seal_sources.first_floor_guardian_kill_per_run))
 	return result
+
+
+## Pays a seal source once per run. Returns how many seals it gave (0 when already paid).
+func grant_seal(source: String, amount: int) -> int:
+	if amount <= 0 or seal_receipts.has(source):
+		return 0
+	seal_receipts[source] = true
+	seals += amount
+	return amount
 
 
 func next_kill_id() -> String:
@@ -262,7 +287,10 @@ func claim(qid: String, now_ms: float) -> Dictionary:
 	var reward: Dictionary = q.reward
 	add_gold(int(reward.get("gold", 0)))
 	var levels := gain_exp(float(reward.get("exp", 0)))
-	return {"quest": qid, "exp": int(reward.get("exp", 0)), "gold": int(reward.get("gold", 0)), "levels": levels}
+	var seal_amount := int(tuning.section("skill_links").seal_sources.quest_rewards.get(qid, 0))
+	var got_seals := grant_seal("quest:" + qid, seal_amount)
+	return {"quest": qid, "exp": int(reward.get("exp", 0)), "gold": int(reward.get("gold", 0)), "levels": levels,
+		"seals": got_seals}
 
 
 # --- Trips ----------------------------------------------------------------------
@@ -276,7 +304,8 @@ func reset_trip() -> void:
 func to_dict() -> Dictionary:
 	return {"id": id, "generation": generation, "level": level, "experience": experience, "gold": gold,
 		"kills": kills, "stacks": stacks, "issued": issued, "gear": gear, "equipped": equipped, "quests": quests,
-		"receipts": receipts.keys(), "trip": trip, "next_seq": _next_seq}
+		"receipts": receipts.keys(), "trip": trip, "next_seq": _next_seq, "learned": learned, "slots": slots,
+		"chains": chains, "seals": seals, "seal_receipts": seal_receipts.keys()}
 
 
 static func from_dict(tuning_: Tuning, d: Dictionary) -> RefCounted:
@@ -298,6 +327,19 @@ static func from_dict(tuning_: Tuning, d: Dictionary) -> RefCounted:
 		r.receipts[kid] = true
 	r.trip = d.get("trip", r.trip)
 	r._next_seq = int(d.next_seq)
+	if d.has("learned"):
+		r.learned = {}
+		for role: String in d.learned:
+			r.learned[role] = {}
+			for sid: String in d.learned[role]:
+				var e: Dictionary = d.learned[role][sid]
+				r.learned[role][sid] = {"level": int(e.level), "exp": float(e.exp)}
+		r.slots = d.slots
+		r.chains = d.chains
+		r.seals = int(d.seals)
+		r.seal_receipts = {}
+		for src: String in d.get("seal_receipts", []):
+			r.seal_receipts[src] = true
 	return r
 
 

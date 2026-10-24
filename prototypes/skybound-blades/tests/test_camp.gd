@@ -74,7 +74,10 @@ func test_camp_rows_cover_every_page() -> void:
 	var p := Profile.new()
 	r.make_gear("novice_sword", "rare")
 	var tabs := menu.tabs(r, p, true, 0.0)
-	_expect(tabs.keys() == ["補給", "倉庫", "委託", "裝備"], "pages: four tabs")
+	_expect(tabs.keys() == ["補給", "倉庫", "委託", "裝備", "技能"], "pages: five tabs")
+	var skill_rows: Array = tabs["技能"].rows
+	_expect(String(skill_rows[0].title).contains("連攜印 0") and skill_rows.size() == 6,
+		"pages: skills page = chain header + the five sword skills")
 	_expect(tabs["委託"].rows.size() == 4, "pages: the four floor-1 quests are listed")
 	var gear_rows: Array = tabs["裝備"].rows
 	_expect(String(gear_rows[-1].detail).contains("→ 攻擊 +2"), "pages: a bag item shows its stat change (%s)" % gear_rows[-1].detail)

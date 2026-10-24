@@ -107,6 +107,7 @@ func refresh(s: Dictionary) -> void:
 	%AutoLabel.text = "自動\n狩獵中" if s.auto else "自動\n狩獵"
 	%AutoPotionButton.set_pressed_no_signal(s.auto_potion)
 	%SkillCooldown.max_value = s.skill_total
+	%SkillName.text = s.skill_label
 	%SkillCooldown.value = s.skill_cd
 	%SkillTime.text = "%.1f" % (s.skill_cd / 1000.0) if s.skill_cd > 0.0 else ""
 	%SkillButton.disabled = s.ended

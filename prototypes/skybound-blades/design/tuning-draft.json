@@ -18,12 +18,25 @@
   "field": {
     "note": "RO combat slice movement and field AI; distances in ground cells (1 cell = 1 m)",
     "party_move_cells_per_s": 3.8,
-    "monster_move_cells_per_s": {"meadow_slime": 2.2, "briar_boar": 3.0, "ruin_hound": 3.4},
+    "monster_move_cells_per_s": {
+      "meadow_slime": 2.2,
+      "briar_boar": 3.0,
+      "ruin_hound": 3.4
+    },
     "unit_radius_cells": 0.35,
     "aggro_radius_cells": 4.5,
     "leash_radius_cells": 9.0,
     "respawn_ms": 10000,
-    "follow_slots_cells": [[-1.6, 1.2], [1.4, 1.5]],
+    "follow_slots_cells": [
+      [
+        -1.6,
+        1.2
+      ],
+      [
+        1.4,
+        1.5
+      ]
+    ],
     "companion_engage_radius_cells": 6.0,
     "companion_leash_cells": 8.0,
     "heal_range_cells": 6.0,
@@ -99,26 +112,30 @@
   },
   "items": [
     {
-      "id": "tonic_small", "name": "回復藥水",
+      "id": "tonic_small",
+      "name": "回復藥水",
       "kind": "regen",
       "heal_flat": 60,
       "duration_ms": 6000,
       "buy_gold": 12
     },
     {
-      "id": "emergency_kit", "name": "急救包",
+      "id": "emergency_kit",
+      "name": "急救包",
       "kind": "instant_heal",
       "heal_max_hp_ratio": 0.35,
       "cooldown_ms": 20000,
       "buy_gold": 40
     },
     {
-      "id": "bandage", "name": "繃帶",
+      "id": "bandage",
+      "name": "繃帶",
       "kind": "ai_heal_material",
       "buy_gold": 10
     },
     {
-      "id": "ration", "name": "口糧",
+      "id": "ration",
+      "name": "口糧",
       "kind": "commission_supply",
       "buy_gold": 10
     },
@@ -193,7 +210,28 @@
       "cooldown_ms": 6000,
       "range_cells": 1.5,
       "mastery_exp_per_cast": 5,
-      "mastery_cap": 10
+      "mastery_cap": 10,
+      "name": "裂空斬",
+      "needs": null,
+      "leaves": "opening"
+    },
+    {
+      "id": "rising",
+      "name": "昇龍斬",
+      "style": "sword",
+      "required_level": 3,
+      "previous_skill": "cleave",
+      "previous_mastery_required": 2,
+      "power": 1.3,
+      "hits": 1,
+      "cast_ms": 400,
+      "recovery_ms": 350,
+      "cooldown_ms": 5000,
+      "range_cells": 1.5,
+      "mastery_exp_per_cast": 5,
+      "mastery_cap": 10,
+      "needs": "opening",
+      "leaves": "launched"
     },
     {
       "id": "parry",
@@ -213,7 +251,29 @@
         "family": "guard",
         "duration_ms": 2000,
         "damage_taken_ratio": 0.6
-      }
+      },
+      "name": "架擋反擊",
+      "needs": null,
+      "leaves": "opening"
+    },
+    {
+      "id": "whirl",
+      "name": "迴旋斬",
+      "style": "sword",
+      "required_level": 8,
+      "previous_skill": "rising",
+      "previous_mastery_required": 2,
+      "power": 1.1,
+      "hits": 1,
+      "cast_ms": 500,
+      "recovery_ms": 400,
+      "cooldown_ms": 9000,
+      "range_cells": 2.2,
+      "area_cells": 2.2,
+      "mastery_exp_per_cast": 5,
+      "mastery_cap": 10,
+      "needs": "launched",
+      "leaves": "opening"
     },
     {
       "id": "break",
@@ -233,7 +293,10 @@
         "family": "armor_break",
         "duration_ms": 4000,
         "defense_ratio": 0.8
-      }
+      },
+      "name": "破甲重擊",
+      "needs": "opening",
+      "leaves": "armor_break"
     },
     {
       "id": "thrust",
@@ -248,7 +311,10 @@
       "cooldown_ms": 4000,
       "range_cells": 1.5,
       "mastery_exp_per_cast": 5,
-      "mastery_cap": 10
+      "mastery_cap": 10,
+      "name": "突刺",
+      "needs": null,
+      "leaves": "opening"
     },
     {
       "id": "needle_chain",
@@ -263,7 +329,10 @@
       "cooldown_ms": 8000,
       "range_cells": 1.5,
       "mastery_exp_per_cast": 5,
-      "mastery_cap": 10
+      "mastery_cap": 10,
+      "name": "連刺",
+      "needs": "opening",
+      "leaves": "marked"
     },
     {
       "id": "mark",
@@ -283,7 +352,10 @@
         "family": "mark",
         "duration_ms": 4000,
         "damage_taken_ratio": 1.1
-      }
+      },
+      "name": "弱點標記",
+      "needs": "marked",
+      "leaves": "marked"
     },
     {
       "id": "shield_bash",
@@ -298,7 +370,10 @@
       "cooldown_ms": 6000,
       "range_cells": 1.5,
       "mastery_exp_per_cast": 5,
-      "mastery_cap": 10
+      "mastery_cap": 10,
+      "name": "盾擊",
+      "needs": null,
+      "leaves": "stagger"
     },
     {
       "id": "steadfast",
@@ -318,7 +393,10 @@
         "family": "guard",
         "duration_ms": 2000,
         "damage_taken_ratio": 0.6
-      }
+      },
+      "name": "堅守",
+      "needs": null,
+      "leaves": "stagger"
     },
     {
       "id": "crush",
@@ -338,7 +416,10 @@
         "family": "armor_break",
         "duration_ms": 4000,
         "defense_ratio": 0.8
-      }
+      },
+      "name": "震甲",
+      "needs": "stagger",
+      "leaves": "armor_break"
     }
   ],
   "party": {
@@ -449,7 +530,11 @@
     "ration_per_started_hour": 1,
     "recompute_level_penalty_each_minute": true,
     "per_min_values_are_before_ratio": true,
-    "ratio_applies_to": ["exp", "gold", "material"],
+    "ratio_applies_to": [
+      "exp",
+      "gold",
+      "material"
+    ],
     "level_penalty_reference": "mean penalty over the zone monster levels, equal weights"
   },
   "zones": [
@@ -504,7 +589,8 @@
   ],
   "monsters": [
     {
-      "id": "meadow_slime", "name": "草原史萊姆",
+      "id": "meadow_slime",
+      "name": "草原史萊姆",
       "level": 1,
       "hp": 55,
       "attack": 9,
@@ -514,7 +600,8 @@
       "attack_interval_ms": 2000
     },
     {
-      "id": "briar_boar", "name": "荊棘野豬",
+      "id": "briar_boar",
+      "name": "荊棘野豬",
       "level": 2,
       "hp": 85,
       "attack": 13,
@@ -524,7 +611,8 @@
       "attack_interval_ms": 2000
     },
     {
-      "id": "ruin_hound", "name": "遺跡獵犬",
+      "id": "ruin_hound",
+      "name": "遺跡獵犬",
       "level": 3,
       "hp": 120,
       "attack": 17,
@@ -534,7 +622,8 @@
       "attack_interval_ms": 2000
     },
     {
-      "id": "moss_beetle", "name": "苔甲蟲",
+      "id": "moss_beetle",
+      "name": "苔甲蟲",
       "level": 6,
       "hp": 260,
       "attack": 25,
@@ -544,7 +633,8 @@
       "attack_interval_ms": 2000
     },
     {
-      "id": "brood_spider", "name": "巢蛛",
+      "id": "brood_spider",
+      "name": "巢蛛",
       "level": 8,
       "hp": 390,
       "attack": 32,
@@ -554,7 +644,8 @@
       "attack_interval_ms": 2000
     },
     {
-      "id": "stone_sentinel", "name": "石哨兵",
+      "id": "stone_sentinel",
+      "name": "石哨兵",
       "level": 9,
       "hp": 510,
       "attack": 38,
@@ -564,7 +655,8 @@
       "attack_interval_ms": 2000
     },
     {
-      "id": "crystal_moth", "name": "晶蛾",
+      "id": "crystal_moth",
+      "name": "晶蛾",
       "level": 11,
       "hp": 650,
       "attack": 45,
@@ -574,7 +666,8 @@
       "attack_interval_ms": 2000
     },
     {
-      "id": "forge_hound", "name": "爐火獵犬",
+      "id": "forge_hound",
+      "name": "爐火獵犬",
       "level": 13,
       "hp": 850,
       "attack": 55,
@@ -584,7 +677,8 @@
       "attack_interval_ms": 2000
     },
     {
-      "id": "ore_guardian", "name": "礦石守衛",
+      "id": "ore_guardian",
+      "name": "礦石守衛",
       "level": 14,
       "hp": 1050,
       "attack": 65,
@@ -596,7 +690,14 @@
   ],
   "bosses": [
     {
-      "id": "gatekeeper", "name": "守門者", "level": 5, "base_exp": 320, "gold": 90, "move_cells_per_s": 2.0, "aggro_radius_cells": 6.0, "respawn_ms": 180000,
+      "id": "gatekeeper",
+      "name": "守門者",
+      "level": 5,
+      "base_exp": 320,
+      "gold": 90,
+      "move_cells_per_s": 2.0,
+      "aggro_radius_cells": 6.0,
+      "respawn_ms": 180000,
       "floor": 1,
       "recommended_level": 5,
       "hp": 1600,
@@ -1057,5 +1158,47 @@
         "gold": 120
       }
     }
-  ]
+  ],
+  "skill_links": {
+    "note": "design/skill-links.md: chains of learned skills joined by tag interfaces",
+    "tags": {
+      "opening": "破綻",
+      "launched": "浮空",
+      "armor_break": "破甲",
+      "marked": "標記",
+      "stagger": "失衡"
+    },
+    "tag_window_ms": 1500,
+    "max_chain_length": 3,
+    "chains_per_member": 1,
+    "seal_cost_per_link": 1,
+    "min_mastery_to_link": 2,
+    "follow_cast_ratio": 0.5,
+    "follow_damage_bonus_per_step": 0.1,
+    "unlink_refunds_seal": false,
+    "seal_sources": {
+      "first_floor_guardian_kill_per_run": 1,
+      "quest_rewards": {
+        "seal_1": 1,
+        "gather_1": 1
+      }
+    },
+    "skill_slots_by_level": [
+      [
+        1,
+        1
+      ],
+      [
+        10,
+        2
+      ],
+      [
+        25,
+        3
+      ]
+    ],
+    "mastery_need_formula": "ceil(100 * 1.6 ** (mastery_level - 1))",
+    "mastery_power_per_level": 0.05,
+    "mastery_cooldown_formula": "max(0.75, 1 - 0.02 * (mastery_level - 1))"
+  }
 }

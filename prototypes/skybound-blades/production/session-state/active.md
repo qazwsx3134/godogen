@@ -42,14 +42,20 @@
 - 使用者決定：M1 起做本機存檔；版控直接在目前分支 commit（含其他未提交檔案），不開新分支。
 - 守門者是低多邊形石像暫代，HD 美術等 Codex 額度恢復。
 
-## 技能串聯（進行中）
+## 技能連招（2026-10-24 完成第一版）
 
-- 使用者要求：研究 pokesurvivor.com 的技能聯動，加入本作——學到的技能可以串起來，但不能隨意串聯。
-- 研究派給 Herdr pane `psresearch`（Sonnet，max effort），派工單 `.claude/tasks/skybound-blades/r1-pokesurvivor-links.md`，報告寫到 `research/pokesurvivor/2026-10-24-skill-links.md`。
-- 報告交回後：Claude 寫 `design/skill-links.md`（本作規則），再實作。
+- 研究：`research/pokesurvivor/2026-10-24-skill-links.md`（羈絆＝同格同時發動；五層防隨意串聯）。
+- 使用者決定：維持 RO 即時戰鬥（不改回合制）；串聯形式＝連招序列。
+- 設計與驗收：`design/skill-links.md`。標記接口（破綻／浮空／破甲…）、連攜印（守層者首殺、主線、收集委託各 1）、每人 1 條、最長 3 招、解除不退印、連招只佔 1 格。單手劍新增昇龍斬、迴旋斬。
+- 只開放隊長；細劍／槌盾的接口已寫進 tuning，等換武器與 AI 技能。
+
+## 版控與工具（2026-10-24）
+
+- 原畫移出 git：兩個 art_src 的圖片忽略，skybound 定稿 33 張走 Git LFS（`.gitattributes`）。本機備份分支 `backup/before-art-rewrite` 仍保留舊歷史，等使用者確認後刪除並 gc，`.git` 才會縮小。
+- godot-kit 新增 sprite 動畫測試頁 `sprite_inspector.tscn`＋`sprite_check.gd`；skybound `tests/test_sprites.gd` 檢查 6 張角色 sheet。
 
 ## 下一步
 
-1. 收研究報告 → 設計並實作技能串聯。
+1. 試玩連招手感並調整（標記窗口、傷害加成）。
 2. 使用者手機實機試玩（手感、FPS、按鈕大小）。
 3. 第二層與更多技能（implementation-plan M2）。

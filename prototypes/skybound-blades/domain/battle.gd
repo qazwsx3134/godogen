@@ -10,6 +10,7 @@ extends RefCounted
 const Tuning = preload("res://domain/tuning.gd")
 const Unit = preload("res://domain/unit.gd")
 const Run = preload("res://domain/run.gd")
+const Skills = preload("res://domain/skills.gd")
 
 enum Walk { ARRIVED, MOVING, STUCK }
 
@@ -53,6 +54,8 @@ var _next_event_id: int = 1
 var _commands: Array[Dictionary] = []
 var _pending_hits: Array[Dictionary] = []
 var _step_hits: Array[Dictionary] = []
+var _next_cast_id: int = 1
+var _mastered_casts: Dictionary = {}
 var _search_at_ms: float = 0.0
 var _by_id: Dictionary = {}
 var _field: Dictionary
@@ -121,8 +124,19 @@ func quest_ready() -> bool:
 	return run.quest_ready(tracked_quest, now_ms)
 
 
-func skill_ready_in_ms() -> float:
-	return maxf(0.0, float(leader.cooldowns.get("cleave", 0.0)) - now_ms)
+## The leader's skill in slot `index` (0-based), or "".
+func slot_skill(index: int) -> String:
+	var slots: Array = run.slots.get("leader", [])
+	return String(slots[index]) if index < slots.size() else ""
+
+
+func skill_ready_in_ms(index: int = 0) -> float:
+	var id := slot_skill(index)
+	return maxf(0.0, float(leader.cooldowns.get(id, 0.0)) - now_ms) if id != "" else 0.0
+
+
+func skill_cooldown_ms(u: Unit, id: String) -> float:
+	return float(tuning.skills[id].cooldown_ms) * Skills.cooldown_ratio(Skills.mastery_level(run, u.role, id))
 
 
 func step() -> void:
@@ -268,6 +282,7 @@ func _register(u: Unit) -> void:
 func _apply(cmd: Dictionary) -> void:
 	match cmd.type:
 		"move":
+			_cancel_chain(leader, "moved")
 			leader.order = Unit.Order.MOVE
 			leader.move_goal = _clamp_to_bounds(cmd.pos)
 			leader.target_id = -1
@@ -285,6 +300,7 @@ func _apply(cmd: Dictionary) -> void:
 			leader.steer = vec.normalized() if vec.length() > 0.01 else Vector2.ZERO
 			if leader.steer != Vector2.ZERO:
 				leader.order = Unit.Order.NONE
+				_cancel_chain(leader, "moved")
 		"auto":
 			auto_hunt = bool(cmd.on)
 			if auto_hunt and leader.order == Unit.Order.MOVE:
@@ -295,7 +311,7 @@ func _apply(cmd: Dictionary) -> void:
 		"auto_potion":
 			auto_potion = bool(cmd.on)
 		"skill":
-			_try_skill(leader, true)
+			_try_skill(leader, true, slot_skill(int(cmd.get("slot", 0))))
 		"tonic":
 			_use_tonic(leader, true)
 		"emergency":
@@ -312,6 +328,8 @@ func _apply(cmd: Dictionary) -> void:
 # --- Leader ------------------------------------------------------------------
 
 func _think_leader(u: Unit) -> void:
+	if not u.chain_next.is_empty() and now_ms >= float(u.chain_next.at):
+		_continue_chain(u)
 	if u.steer != Vector2.ZERO:
 		_displace(u, u.steer * u.speed * dt_ms / 1000.0, u.pos + u.steer * 10.0)
 		return
@@ -339,7 +357,7 @@ func _think_leader(u: Unit) -> void:
 	if target == null:
 		return
 	if auto_hunt:
-		_try_skill(u, false)
+		_auto_skill(u)
 	_engage(u, target)
 
 
@@ -646,10 +664,16 @@ func _engage(u: Unit, t: Unit) -> void:
 	_roll_hit(u, t, 1.0, "attack")
 
 
-func _try_skill(u: Unit, manual: bool) -> bool:
-	var skill: Dictionary = tuning.skills["cleave"]
-	if not u.alive or now_ms < u.busy_until_ms or not u.is_ready("cleave", now_ms):
+## Casts `id` on the current target (manual: else the nearest monster in reach). A cast of the chain head starts the
+## member's chain; follow-ups are cast by _continue_chain when the previous blow lands.
+func _try_skill(u: Unit, manual: bool, id: String) -> bool:
+	if id == "" or not u.alive or now_ms < u.busy_until_ms or not u.chain_next.is_empty():
 		return false
+	if not u.is_ready(id, now_ms):
+		if manual:
+			_emit({"type": "refused", "what": "skill", "reason": "cooldown"})
+		return false
+	var skill: Dictionary = tuning.skills[id]
 	# A locked target out of reach is not swapped for a nearer one: the player chose it.
 	var t: Unit = _valid_target(u)
 	if t != null and t.pos.distance_to(u.pos) > float(skill.range_cells):
@@ -662,17 +686,75 @@ func _try_skill(u: Unit, manual: bool) -> bool:
 		if manual:
 			_emit({"type": "refused", "what": "skill", "reason": "no_target"})
 		return false
+	var chain := Skills.chain(run, u.role)
+	_cast(u, id, t, 0, chain if not chain.is_empty() and chain[0] == id else [id])
+	return true
+
+
+## Auto hunt: the first ready skill in slot order.
+func _auto_skill(u: Unit) -> void:
+	var slots: Array = run.slots.get(u.role, [])
+	for id: String in slots:
+		if id != "" and _try_skill(u, false, id):
+			return
+
+
+func _cast(u: Unit, id: String, t: Unit, step: int, chain: Array) -> void:
+	var skill: Dictionary = tuning.skills[id]
+	var cfg := Skills.links(tuning)
+	var mastery := Skills.mastery_level(run, u.role, id)
+	var cast_ms := float(skill.cast_ms) * (float(cfg.follow_cast_ratio) if step > 0 else 1.0)
+	var power := float(skill.power) * Skills.power_ratio(tuning, mastery) \
+		* (1.0 + float(cfg.follow_damage_bonus_per_step) * step)
 	u.target_id = t.id
-	u.cooldowns["cleave"] = now_ms + float(skill.cooldown_ms)
-	u.busy_until_ms = now_ms + float(skill.cast_ms) + float(skill.recovery_ms)
+	u.cooldowns[id] = now_ms + skill_cooldown_ms(u, id)
+	u.busy_until_ms = now_ms + cast_ms + float(skill.recovery_ms)
 	u.next_attack_ms = maxf(u.next_attack_ms, u.busy_until_ms)
 	u.facing = _face(u.pos, t.pos, u.facing)
 	u.action_ms = now_ms
 	u.action = &"skill"
-	_pending_hits.append({"at": now_ms + float(skill.cast_ms), "src": u.id, "dst": t.id,
-		"power": float(skill.power), "range": float(skill.range_cells) + 0.6})
-	_emit({"type": "cast", "unit": u.id, "target": t.id, "skill": "cleave"})
-	return true
+	var effect: Dictionary = skill.get("effect", {})
+	if effect.get("family", "") == "guard":
+		var current := u.cover_ratio if u.cover_until_ms >= now_ms else 1.0
+		u.cover_until_ms = now_ms + cast_ms + float(effect.duration_ms)
+		u.cover_ratio = minf(current, float(effect.damage_taken_ratio))
+	var cast_id := _next_cast_id
+	_next_cast_id += 1
+	var hits := int(skill.get("hits", 1))
+	for h in hits:
+		_pending_hits.append({"at": now_ms + cast_ms + h * 150.0, "src": u.id, "dst": t.id, "power": power,
+			"range": float(skill.range_cells) + 0.6, "skill": id, "cast": cast_id, "step": step, "chain": chain,
+			"last": h == hits - 1})
+	_emit({"type": "cast", "unit": u.id, "target": t.id, "skill": id, "step": step, "chain_len": chain.size()})
+
+
+## The previous chain blow landed: cast the next skill if every condition still holds, else say why it broke.
+func _continue_chain(u: Unit) -> void:
+	var c: Dictionary = u.chain_next
+	u.chain_next = {}
+	var t: Unit = unit(int(c.target))
+	if t == null or not t.alive:
+		return
+	var id: String = c.id
+	var skill: Dictionary = tuning.skills[id]
+	var reason := ""
+	if not u.is_ready(id, now_ms):
+		reason = "cooldown"
+	elif t.pos.distance_to(u.pos) > float(skill.range_cells) + 0.3:
+		reason = "too_far"
+	elif not t.has_tag(skill.get("needs"), now_ms):
+		reason = "tag_gone"
+	if reason != "":
+		_emit({"type": "chain_break", "unit": u.id, "skill": id, "step": int(c.step), "reason": reason})
+		return
+	_cast(u, id, t, int(c.step), c.chain)
+
+
+func _cancel_chain(u: Unit, reason: String) -> void:
+	if u.chain_next.is_empty():
+		return
+	_emit({"type": "chain_break", "unit": u.id, "skill": u.chain_next.id, "step": int(u.chain_next.step), "reason": reason})
+	u.chain_next = {}
 
 
 func _nearest_monster(at: Vector2, radius: float) -> Unit:
@@ -707,27 +789,41 @@ func _resolve_pending_hits() -> void:
 		var dst: Unit = unit(hit.dst)
 		if not src.alive or not dst.alive or src.pos.distance_to(dst.pos) > hit.range:
 			_emit({"type": "whiff", "unit": src.id})
+			if hit.get("last", false) and int(hit.step) + 1 < (hit.chain as Array).size() and src.alive:
+				_emit({"type": "chain_break", "unit": src.id, "skill": hit.chain[int(hit.step) + 1],
+					"step": int(hit.step) + 1, "reason": "whiff"})
 			continue
-		_roll_hit(src, dst, hit.power, "skill")
+		var meta := {"skill": hit.skill, "cast": hit.cast, "step": hit.step, "chain": hit.chain, "primary": hit.last}
+		_roll_hit(src, dst, hit.power, "skill", meta)
+		var area := float(tuning.skills[hit.skill].get("area_cells", 0.0))
+		if area > 0.0 and hit.last:
+			for m: Unit in units:
+				if m != dst and m.team != src.team and m.alive and m.pos.distance_to(src.pos) <= area:
+					_roll_hit(src, m, hit.power, "skill", {"skill": hit.skill, "cast": hit.cast, "step": hit.step,
+						"chain": [], "primary": false})
 
 
 ## Rolls one blow now (the RNG order stays the unit-id order) and queues its damage for _land_hits.
-func _roll_hit(src: Unit, dst: Unit, power: float, kind: String) -> void:
+func _roll_hit(src: Unit, dst: Unit, power: float, kind: String, meta: Dictionary = {}) -> void:
 	var hit_chance := clampf(float(_combat.base_hit) - float(_combat.base_evade), float(_combat.min_hit),
 		float(_combat.max_hit))
 	if rng.randf() >= hit_chance:
 		_emit({"type": "miss", "unit": dst.id, "source": src.id, "kind": kind})
+		if meta.get("primary", false) and int(meta.step) + 1 < (meta.chain as Array).size():
+			_emit({"type": "chain_break", "unit": src.id, "skill": meta.chain[int(meta.step) + 1],
+				"step": int(meta.step) + 1, "reason": "miss"})
 		return
 	var variance: Array = _combat.damage_variance
 	var raw := src.attack * power * rng.randf_range(float(variance[0]), float(variance[1]))
-	var amount := maxf(1.0, roundf(raw - dst.defense * float(_combat.defense_factor)))
+	var amount := maxf(1.0, roundf(raw - dst.defense_now(now_ms) * float(_combat.defense_factor)))
 	var crit := rng.randf() < src.crit_chance
 	if crit:
 		amount = roundf(amount * float(_combat.crit_multiplier))
 	var block := dst.block_chance > 0.0 and rng.randf() < dst.block_chance
 	if block:
 		amount = maxf(1.0, roundf(amount * float(_combat.shield_block_damage_ratio)))
-	_step_hits.append({"src": src.id, "dst": dst.id, "amount": amount, "crit": crit, "block": block, "kind": kind})
+	_step_hits.append({"src": src.id, "dst": dst.id, "amount": amount, "crit": crit, "block": block, "kind": kind,
+		"meta": meta})
 
 
 ## Every blow of the step lands on the same snapshot; then deaths, then rewards. If the leader
@@ -752,7 +848,9 @@ func _land_hits() -> void:
 		if dst.team == 1 and dst.target_id < 0 and not dst.returning:
 			dst.target_id = src.id
 		_emit({"type": "hit", "unit": dst.id, "source": src.id, "amount": int(h.amount), "crit": h.crit,
-			"block": h.block, "kind": h.kind})
+			"block": h.block, "kind": h.kind, "step": int(h.get("meta", {}).get("step", 0))})
+		if not (h.get("meta", {}) as Dictionary).is_empty():
+			_skill_landed(src, dst, h.meta)
 		if dst.hp <= 0.0 and not killers.has(dst.id):
 			killers[dst.id] = src
 			fallen.append(dst)
@@ -764,6 +862,29 @@ func _land_hits() -> void:
 	for u: Unit in fallen:
 		if u.team == 1:
 			_reward(u)
+
+
+## A skill blow landed: leave its mark, apply its effect, pay mastery once per cast, queue the chain's next step.
+func _skill_landed(src: Unit, dst: Unit, meta: Dictionary) -> void:
+	var skill: Dictionary = tuning.skills[meta.skill]
+	if dst.hp > 0.0:
+		var leaves: Variant = skill.get("leaves")
+		if leaves != null:
+			dst.tags[leaves] = now_ms + float(Skills.links(tuning).tag_window_ms)
+		var effect: Dictionary = skill.get("effect", {})
+		if effect.get("family", "") == "armor_break":
+			dst.def_until_ms = now_ms + float(effect.duration_ms)
+			dst.def_ratio = float(effect.defense_ratio)
+	if src.team == 0 and not _mastered_casts.has(meta.cast):
+		_mastered_casts[meta.cast] = true
+		var rose := Skills.add_mastery(tuning, run, src.role, meta.skill)
+		if rose > 0:
+			_emit({"type": "mastery_up", "unit": src.id, "skill": meta.skill, "level": rose})
+	var chain: Array = meta.chain
+	var next_step := int(meta.step) + 1
+	if meta.primary and next_step < chain.size() and dst.hp > 0.0 and src.alive:
+		src.chain_next = {"id": chain[next_step], "step": next_step, "target": dst.id, "chain": chain,
+			"at": maxf(now_ms, src.busy_until_ms)}
 
 
 func _down(u: Unit, killer: Unit) -> void:
@@ -791,7 +912,7 @@ func _reward(m: Unit) -> void:
 	if paid.is_empty():
 		return
 	_emit({"type": "reward", "unit": m.id, "exp": paid.exp, "gold": int(paid.gold), "material": paid.material,
-		"gear": paid.gear})
+		"gear": paid.gear, "seals": int(paid.get("seals", 0))})
 	_on_levels(int(paid.levels))
 
 

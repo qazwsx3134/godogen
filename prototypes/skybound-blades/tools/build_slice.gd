@@ -675,7 +675,7 @@ func make_camp_panel() -> void:
 	tabs.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	tabs.add_theme_font_size_override("font_size", 26)
 	# Page node names are the tab titles (TabContainer shows a child's name).
-	for page_name: String in ["補給", "倉庫", "委託", "裝備"]:
+	for page_name: String in ["補給", "倉庫", "委託", "裝備", "技能"]:
 		var scroll := add(tabs, ScrollContainer.new(), page_name) as ScrollContainer
 		scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 		var list := vbox(scroll, "List", 8)
@@ -773,7 +773,7 @@ func make_hud() -> void:
 	ring.texture_progress = _disc_texture(Color(0.02, 0.03, 0.05, 0.78))
 	ring.nine_patch_stretch = true
 	ring.value = 0
-	var skill_label := label(skill, "SkillName", "裂空斬\nQ", false)
+	var skill_label := label(skill, "SkillName", "裂空斬\nQ", true)
 	skill_label.set_anchors_preset(Control.PRESET_FULL_RECT)
 	skill_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	skill_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER

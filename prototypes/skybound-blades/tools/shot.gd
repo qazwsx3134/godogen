@@ -27,6 +27,13 @@ func _go() -> void:
 			r.make_gear("hard_leather", "fine")
 			r.add_item("green_core", 4)
 			field.open_camp("裝備")
+		"skills":
+			var r: RefCounted = field.battle.run
+			r.level = 9
+			r.learned.leader = {"cleave": {"level": 3, "exp": 40.0}, "rising": {"level": 2, "exp": 10.0}, "whirl": {"level": 2, "exp": 0.0}}
+			r.seals = 2
+			load("res://domain/skills.gd").link(field.tuning, r, "leader", "rising")
+			field.open_camp("技能")
 		"boss":
 			var b: RefCounted = field.battle
 			for m: RefCounted in b.party():
