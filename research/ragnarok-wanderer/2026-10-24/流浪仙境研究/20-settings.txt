@@ -1,0 +1,120 @@
+Browser tab: 1, Title: "流浪仙境 Ragnarok Wanderer", URL: "https://xianjingro.netlify.app/".
+0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/
+	1 container app
+		2 container stageWrap
+			3 image Description: 戰鬥畫面, ID: stage
+			19 container lstack
+				98 container v114box
+					99 button 聊天室
+					100 button 收起聊天框
+					101 container
+						102 text 請屎皇 ：暴擊釋放
+					103 container
+						104 text cyz0416 ：感謝解答
+					105 container
+						106 text 花寒弦 ：活動圖哪個裝備最值得刷?
+				20 button 活動荒野回響, ID: ssChip
+					129 text 活動
+					130 text 荒野回響
+				23 button ✦ 任務分解 3 件裝備0/3, ID: questChip
+					131 text ✦ 
+					132 text 任務
+					133 text 分解 3 件裝備
+					134 text 0/3
+				27 container mapChip
+					135 text 普隆德拉南門 LV1-6
+			117 button 可占卜天氣, Help: 到朱諾找占卜師占卜天氣, ID: v125wx
+		6 container side
+			7 container ro-brand
+				8 text ✧
+				9 text 流浪仙境
+				136 text ● 已自動存檔
+			11 tab group tabs
+				12 tab (selectable, settable, boolean) 角色, Value: 0
+				13 tab (selectable, settable, boolean) 背包, Value: 0
+背包
+				14 tab (selectable, settable, boolean) 技能, Value: 0
+				18 tab (selectable, settable, boolean) 聊天, Value: 0
+				15 tab (selectable, settable, boolean) 地圖, Value: 0
+				16 tab (selected, settable, boolean) 選單, Value: 1
+			128 container panel
+				137 button < 選單
+				138 heading 設定, Value: 2
+					139 text 設定
+				140 definition list
+					141 container 存檔
+						142 text 存檔
+					143 text 本機瀏覽器（每 15 秒）
+					144 container 總擊殺
+						145 text 總擊殺
+					146 text 158
+					147 container 每分鐘擊殺
+						148 text 每分鐘擊殺
+					149 text 30.8
+				150 text 版本  流浪仙境 v3.5.1
+				151 button 重新整理
+				152 text 加入手機主畫面
+				153 button iPhone
+				154 button Android
+				155 heading ✦ 存檔備份, Value: 3
+					156 text ✦  存檔備份
+				157 text 包含所有角色、裝備、寶石與共用倉庫。下載備份後，可在另一個瀏覽器或開啟位置匯入。
+				158 button 產生備份碼
+				159 text entry area Description: 匯出的存檔碼, ID: ro-backup-code
+				160 container
+					161 text 匯入備份檔 
+					162 button 匯入備份檔, ID: ro-backup-file
+				163 text entry area (settable) Description: 貼上存檔碼, ID: ro-backup-input
+				164 button 讀取並預覽
+				165 heading ✦ 戰鬥 說明, Value: 3
+					166 text ✦  戰鬥
+					167 button 說明
+				168 container
+					169 checkbox (settable, integer) Description: 自動挑戰 Boss, Value: 0
+					170 text 自動挑戰 Boss
+				171 container
+					172 text 生命在 
+					173 text 80%
+					174 text  以上才自動挑戰
+				175 slider (settable, integer) 生命在 80% 以上才自動挑戰, Value: 80, ID: abHp
+				176 heading ✦ 確認視窗, Value: 3
+					177 text ✦  確認視窗
+				178 container
+					179 checkbox (settable, integer) Description: 煉金、分解不需二次確認, Value: 0
+					180 text 煉金、分解不需二次確認
+				181 heading ✦ 畫面, Value: 3
+					182 text ✦  畫面
+				183 container
+					184 checkbox (settable, integer) Description: 隱藏傷害數字, Value: 0
+					185 text 隱藏傷害數字
+				186 container
+					187 checkbox (settable, integer) Description: 關閉畫面晃動, Value: 0
+					188 text 關閉畫面晃動
+				189 container
+					190 checkbox (settable, integer) Description: 低畫質（較舊的電腦適用：不顯示深淵黑霧、暗角與餘燼，光照改用簡化畫法）, Value: 0
+					191 text 低畫質（較舊的電腦適用：不顯示深淵黑霧、暗角與餘燼，光照改用簡化畫法）
+				192 container
+					193 checkbox (settable, integer) Description: 關閉打擊與技能特效（命中火花、命中停頓、技能動畫與光效、擊中特效）, Value: 0
+					194 text 關閉打擊與技能特效（命中火花、命中停頓、技能動畫與光效、擊中特效）
+				195 container
+					196 checkbox (settable, integer) Description: 隱藏紅點通知, Value: 0
+					197 text 隱藏紅點通知
+				198 text 純畫面模式（僅顯示戰鬥畫面）
+				199 button 開啟
+				200 text 摸魚模式（終端機畫面）
+				201 button 開啟
+				202 heading ✦ 聲音, Value: 3
+					203 text ✦  聲音
+				204 container
+					205 text 音樂 
+					206 text 50%
+				207 slider (settable, integer) 音樂 50%, Value: 50, ID: vol_mus
+				208 container
+					209 text 音效 
+					210 text 70%
+				211 slider (settable, integer) 音效 70%, Value: 70, ID: vol_sfx
+				212 heading ✦ 刪除角色, Value: 3
+					213 text ✦  刪除角色
+				214 button 刪除這個角色
+
+The focused UI element is 0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/

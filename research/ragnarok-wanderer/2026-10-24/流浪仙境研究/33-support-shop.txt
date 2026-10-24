@@ -1,0 +1,100 @@
+Browser tab: 1, Title: "流浪仙境 Ragnarok Wanderer", URL: "https://xianjingro.netlify.app/".
+0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/
+	1 container app
+		2 container stageWrap
+			3 image Description: 戰鬥畫面, ID: stage
+			19 container lstack
+				98 container v114box
+					99 button 聊天室
+					100 button 收起聊天框
+					101 container
+						102 text 請屎皇 ：暴擊釋放
+					103 container
+						104 text cyz0416 ：感謝解答
+					105 container
+						106 text 花寒弦 ：活動圖哪個裝備最值得刷?
+				23 button ✦ 任務分解 3 件裝備0/3, ID: questChip
+					220 text ✦ 
+					221 text 任務
+					222 text 分解 3 件裝備
+					223 text 0/3
+				27 container mapChip
+					224 text 普隆德拉 城鎮
+			219 button 離開城鎮, ID: bossBtn
+			117 button 可占卜天氣, Help: 到朱諾找占卜師占卜天氣, ID: v125wx
+		6 container side
+			7 container ro-brand
+				8 text ✧
+				9 text 流浪仙境
+				225 text ● 已自動存檔
+			11 tab group tabs
+				12 tab (selectable, settable, boolean) 角色, Value: 0
+				13 tab (selectable, settable, boolean) 背包, Value: 0
+背包
+				14 tab (selectable, settable, boolean) 技能, Value: 0
+				18 tab (selectable, settable, boolean) 聊天, Value: 0
+				15 tab (selectable, settable, boolean) 地圖, Value: 0
+				16 tab (selected, settable, boolean) 選單, Value: 1
+			128 container panel
+				226 button < 返回城鎮
+				227 heading 道具商人 說明 Zeny 60, Value: 2
+					228 text 道具商人
+					229 button 說明
+					230 image Zeny
+					231 text 60
+				232 checkbox 補給, Value: 0
+				233 checkbox 主動技能, Value: 0
+				234 checkbox 輔助技能, Value: 1
+				235 container
+					236 text 其他流派的輔助只能從變異寶石取得。轉職後才會販售流派專屬寶石；同種寶石可重複購買，皆可放入格子
+					237 button 說明
+				238 container
+					239 image
+					240 text ×1
+				241 text 狂怒
+				242 text 輔助
+				243 button (disabled) 200 Zeny購買
+					244 image Zeny
+					245 text 200
+				246 text 雙手劍加速
+				247 text 輔助
+				248 button (disabled) 200 Zeny購買
+					249 image Zeny
+					250 text 200
+				251 text 衝鋒精通
+				252 text 輔助
+				253 button (disabled) 200 Zeny購買
+					254 image Zeny
+					255 text 200
+				256 text 致命一擊
+				257 text 輔助
+				258 button (disabled) 200 Zeny購買
+					259 image Zeny
+					260 text 200
+				261 text 集中攻擊
+				262 text 輔助
+				263 button (disabled) 200 Zeny購買
+					264 image Zeny
+					265 text 200
+				266 text 犧牲祈福
+				267 text 輔助
+				268 button (disabled) 200 Zeny購買
+					269 image Zeny
+					270 text 200
+				271 text 極限突破
+				272 text 輔助
+				273 button (disabled) 200 Zeny購買
+					274 image Zeny
+					275 text 200
+				276 text 劍術精通
+				277 text 輔助
+				278 button (disabled) 200 Zeny購買
+					279 image Zeny
+					280 text 200
+				281 text 生命回復力提升
+				282 text 輔助
+				283 button (disabled) 200 Zeny購買
+					284 image Zeny
+					285 text 200
+
+The focused UI element is 0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/

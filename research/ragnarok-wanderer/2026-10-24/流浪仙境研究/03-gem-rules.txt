@@ -1,0 +1,133 @@
+Browser tab: 1, Title: "流浪仙境 Ragnarok Wanderer", URL: "https://xianjingro.netlify.app/".
+0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/
+	1 container app
+		2 container stageWrap
+			3 image Description: 戰鬥畫面, ID: stage
+			19 container lstack
+				98 container v114box
+					99 button 聊天室
+					100 button 收起聊天框
+					101 container
+						102 text 請屎皇 ：暴擊釋放
+					103 container
+						104 text cyz0416 ：感謝解答
+					105 container
+						106 text 花寒弦 ：活動圖哪個裝備最值得刷?
+				20 button 活動荒野回響, ID: ssChip
+					143 text 活動
+					144 text 荒野回響
+				23 button ✦ 任務將技能寶石放入技能格, ID: questChip
+					145 text ✦ 
+					146 text 任務
+					147 text 將技能寶石放入技能格
+				27 container mapChip
+					148 text 普隆德拉南門 LV1-6
+			5 button (disabled) BOSS8/30, ID: bossBtn
+				149 text BOSS 8/30
+			117 button 可占卜天氣, Help: 到朱諾找占卜師占卜天氣, ID: v125wx
+		6 container side
+			7 container ro-brand
+				8 text ✧
+				9 text 流浪仙境
+				150 text ● 已自動存檔
+			11 tab group tabs
+				12 tab (selectable, settable, boolean) 角色, Value: 0
+				13 tab (selectable, settable, boolean) 背包, Value: 0
+背包
+				14 tab (selected, settable, boolean) 技能, Value: 1
+				18 tab (selectable, settable, boolean) 聊天, Value: 0
+				15 tab (selectable, settable, boolean) 地圖, Value: 0
+				16 tab (selectable, settable, boolean) 選單, Value: 0
+			32 container
+				33 heading 技能寶石盤 說明, Value: 2
+					34 text 技能寶石盤
+					35 button 說明
+				36 text 構築
+				37 button 說明
+				38 checkbox 1
+				39 checkbox 2, Value: 0
+				40 checkbox 3, Value: 0
+				41 button 複製
+				42 text 已解鎖  8/36  格（每 3 級 +1 格） ◆ 主動技能 ◇ 輔助寶石 相鄰且標籤相容時連動
+				43 container sgrid
+					44 button 格子 1,1（未解鎖）
+					45 button 格子 2,1（未解鎖）
+					46 button 格子 3,1（未解鎖）
+					47 button 格子 4,1（未解鎖）
+					48 button 格子 5,1（未解鎖）
+					49 button 格子 6,1（未解鎖）
+					50 button 格子 1,2（未解鎖）
+					51 button 格子 2,2（未解鎖）
+					52 button 格子 3,2
+					53 button 格子 4,2
+					54 button 格子 5,2（未解鎖）
+					55 button 格子 6,2（未解鎖）
+					56 button 格子 1,3（未解鎖）
+					57 button 格子 2,3
+					58 button 格子 3,3
+					59 button 格子 4,3
+					60 button 格子 5,3
+					61 button 格子 6,3（未解鎖）
+					62 button 格子 1,4（未解鎖）
+					63 button 格子 2,4（未解鎖）
+					64 button 格子 3,4
+					65 button 格子 4,4
+					66 button 格子 5,4（未解鎖）
+					67 button 格子 6,4（未解鎖）
+					68 button 格子 1,5（未解鎖）
+					69 button 格子 2,5（未解鎖）
+					70 button 格子 3,5（未解鎖）
+					71 button 格子 4,5（未解鎖）
+					72 button 格子 5,5（未解鎖）
+					73 button 格子 6,5（未解鎖）
+					74 button 格子 1,6（未解鎖）
+					75 button 格子 2,6（未解鎖）
+					76 button 格子 3,6（未解鎖）
+					77 button 格子 4,6（未解鎖）
+					78 button 格子 5,6（未解鎖）
+					79 button 格子 6,6（未解鎖）
+				80 button (disabled) 旋轉
+				81 button (disabled) 取下
+				82 button (disabled) 取消選取
+				83 button (disabled) 清空
+				84 button ▼ 未放置的寶石 1 顆
+					85 text ▼ 未放置的寶石 
+					86 text 1
+					87 text  顆
+				88 checkbox 主動 1, Value: 1
+				89 checkbox 輔助 0, Value: 0
+				90 checkbox 狂擊, Value: 0
+					91 image
+					92 text 狂擊
+				93 button 分解寶石
+				94 heading ✦ 已啟用技能與連動, Value: 3
+					95 text ✦  已啟用技能與連動
+				96 text 格子中尚無主動寶石，角色僅會普通攻擊。
+		97 container sheet
+			118 heading 技能拼圖, Value: 2
+				119 text 技能拼圖
+			120 checkbox 操作, Value: 0
+			121 checkbox 寶石規則, Value: 1
+			122 checkbox 特殊效果, Value: 0
+			123 checkbox 中毒, Value: 0
+			124 text 主動寶石
+			125 text 冷卻結束後自動施放
+			126 text 輔助寶石
+			127 text 僅強化上下左右相鄰的主動寶石 標籤須相符：範圍、投射物、元素、神聖等 每個職業有自己的專屬輔助 商人只販售本職業的寶石
+			128 text 被動寶石
+			129 text 每職業 2 種 放入技能格即生效，不需相鄰 也不會連結主動寶石 同種被動只計算 1 顆
+			130 text 外框顏色
+			131 text 技能盤上每顆寶石以粗外框區分： 主動技能深藍、輔助寶石深紫、變異寶石橘金、 穿梭寶石青綠 選取中為金色 沒有圖示的格子會寫上技能名字
+			132 text 技能屬性
+			133 text 技能說明開頭標示屬性（火、水、風、地、毒、 聖、暗、念、無） 目前只有聖屬性有相剋： 聖屬性技能對不死屬性怪物傷害 ×1.5 其他屬性沒有傷害加減
+			134 text 元素標籤
+			135 text 施加燃燒、冰緩或感電的技能帶有元素標籤 召喚元素精靈也算
+			136 text 同名主動
+			137 text 同種主動寶石可放置多顆 各自冷卻、各自施放 同名的持續與光環技能僅計算一顆
+			138 text 同名輔助
+			139 text 同種輔助寶石也可放置多顆，相鄰效果會疊加 範圍增加相加，減少相乘 冷卻縮減上限 70%
+			140 text 額外施放
+			141 text 連續射擊與二刀連擊可疊加，沒有上限 用於召喚技能時 召喚物每次攻擊會多攻擊（60% 傷害）
+			142 button 知道了
+
+The focused UI element is 0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/

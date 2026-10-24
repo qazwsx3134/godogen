@@ -1,0 +1,265 @@
+Browser tab: 1, Title: "流浪仙境 Ragnarok Wanderer", URL: "https://xianjingro.netlify.app/".
+0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/
+	1 container app
+		2 container stageWrap
+			3 image Description: 戰鬥畫面, ID: stage
+			19 container lstack
+				98 container v114box
+					99 button 聊天室
+					100 button 收起聊天框
+					101 container
+						102 text 請屎皇 ：暴擊釋放
+					103 container
+						104 text cyz0416 ：感謝解答
+					105 container
+						106 text 花寒弦 ：活動圖哪個裝備最值得刷?
+				23 button ✦ 任務分解 3 件裝備0/3, ID: questChip
+					220 text ✦ 
+					221 text 任務
+					222 text 分解 3 件裝備
+					223 text 0/3
+				27 container mapChip
+					224 text 普隆德拉 城鎮
+			219 button 離開城鎮, ID: bossBtn
+			117 button 可占卜天氣, Help: 到朱諾找占卜師占卜天氣, ID: v125wx
+		6 container side
+			7 container ro-brand
+				8 text ✧
+				9 text 流浪仙境
+				225 text ● 已自動存檔
+			11 tab group tabs
+				12 tab (selectable, settable, boolean) 角色, Value: 0
+				13 tab (selectable, settable, boolean) 背包, Value: 0
+背包
+				14 tab (selectable, settable, boolean) 技能, Value: 0
+				18 tab (selectable, settable, boolean) 聊天, Value: 0
+				15 tab (selectable, settable, boolean) 地圖, Value: 0
+				16 tab (selected, settable, boolean) 選單, Value: 1
+			128 container panel
+				226 button < 選單
+				227 heading 音樂與音效來源, Value: 2
+					228 text 音樂與音效來源
+				229 container
+					230 text 本遊戲的背景音樂與音效皆為 OpenGameArt 上以 CC0 或 CC-BY 釋出的素材，非 Ragnarok Online 原版音訊。CC-BY 素材依授權標示作者、出處與授權條款。
+					231 text 現在播放：「Fairy Adventure」 by MintoDog
+				232 heading ✦ 背景音樂, Value: 3
+					233 text ✦  背景音樂
+				234 container
+					235 text 標題／選單
+					236 text 「Soliloquy」 by Matthew Pablo
+					237 link Description: https://opengameart.org/content/soliloquy, Value: opengameart.org/content/soliloquy
+					238 text 授權：
+					239 link Description: CC-BY 3.0, Value: creativecommons.org/licenses/by/3.0/
+					240 text 　變更：音量標準化，轉檔為 MP3
+				241 container
+					242 text 普隆德拉南門
+					243 text 「Fairy Adventure」 by MintoDog
+					244 link Description: https://opengameart.org/content/fairy-adventure, Value: opengameart.org/content/fairy-adventure
+					245 text 授權：
+					246 link Description: CC0, Value: creativecommons.org/publicdomain/zero/1.0/
+					247 text 　變更：音量標準化，轉檔為 MP3
+				248 container
+					249 text 斐揚森林
+					250 text 「Asianoriental1」 by Tozan
+					251 link Description: https://opengameart.org/content/asianoriental1, Value: opengameart.org/content/asianoriental1
+					252 text 授權：
+					253 link Description: CC0, Value: creativecommons.org/publicdomain/zero/1.0/
+					254 text 　變更：音量標準化，轉檔為 MP3
+				255 container
+					256 text 妙勒尼礦坑
+					257 text 「Treading The Unknown」 by Jonathan Shaw (www.jshaw.co.uk)
+					258 link Description: https://opengameart.org/node/96780, Value: opengameart.org/node/96780
+					259 text 授權：作者 EULA（署名即可使用，等同 CC-BY）　變更：音量標準化，轉檔為 MP3
+				260 container
+					261 text 夢羅克沙漠
+					262 text 「Desert Loop」 by iamoneabe
+					263 link Description: https://opengameart.org/content/desert-loop, Value: opengameart.org/content/desert-loop
+					264 text 授權：
+					265 link Description: CC0, Value: creativecommons.org/publicdomain/zero/1.0/
+					266 text 　變更：音量標準化，轉檔為 MP3
+				267 container
+					268 text 依斯魯得海底洞穴
+					269 text 「Underwater Theme」 by CleytonKauffman
+					270 link Description: https://opengameart.org/content/underwater-theme, Value: opengameart.org/content/underwater-theme
+					271 text 授權：
+					272 link Description: CC0, Value: creativecommons.org/publicdomain/zero/1.0/
+					273 text 　變更：音量標準化，轉檔為 MP3
+				274 container
+					275 text 拉赫冰洞
+					276 text 「The Ice Cavern」 by Peter Eastman
+					277 link Description: https://opengameart.org/content/the-ice-cavern, Value: opengameart.org/content/the-ice-cavern
+					278 text 授權：
+					279 link Description: CC-BY 3.0, Value: creativecommons.org/licenses/by/3.0/
+					280 text 　變更：音量標準化，轉檔為 MP3
+				281 container
+					282 text 諾可羅德火山
+					283 text 「Another Volcano」 by Marty Opsahl (Mega Pixel Music Lab)
+					284 link Description: https://opengameart.org/content/another-volcano, Value: opengameart.org/content/another-volcano
+					285 text 授權：
+					286 link Description: CC-BY 3.0, Value: creativecommons.org/licenses/by/3.0/
+					287 text 　變更：音量標準化，轉檔為 MP3
+				288 container
+					289 text 葛城修道院
+					290 text 「Cathedral」 by Umplix
+					291 link Description: https://opengameart.org/content/cathedral-0, Value: opengameart.org/content/cathedral-0
+					292 text 授權：
+					293 link Description: CC0, Value: creativecommons.org/publicdomain/zero/1.0/
+					294 text 　變更：音量標準化，轉檔為 MP3
+				295 container
+					296 text 古城騎士團
+					297 text 「In Darkness」 by Of Far Different Nature
+					298 link Description: https://opengameart.org/node/107840, Value: opengameart.org/node/107840
+					299 text 授權：
+					300 link Description: CC-BY 4.0, Value: creativecommons.org/licenses/by/4.0/
+					301 text 　變更：音量標準化，轉檔為 MP3
+				302 container
+					303 text 龜島深處
+					304 text 「Jungle Jumpin'」 by Scott Elliott
+					305 link Description: https://opengameart.org/node/165025, Value: opengameart.org/node/165025
+					306 text 授權：
+					307 link Description: CC-BY 4.0, Value: creativecommons.org/licenses/by/4.0/
+					308 text 　變更：音量標準化，轉檔為 MP3
+				309 container
+					310 text 達納托斯之塔
+					311 text 「Mystical Theme」 by Alexandr Zhelanov
+					312 link Description: https://opengameart.org/content/mystical-theme, Value: opengameart.org/content/mystical-theme
+					313 text 授權：
+					314 link Description: CC-BY 3.0, Value: creativecommons.org/licenses/by/3.0/
+					315 text 　變更：音量標準化，轉檔為 MP3
+				316 container
+					317 text 尼芙菲姆
+					318 text 「Spooky Waltz（4 Music Box Tracks）」 by Aureolus_Omicron
+					319 link Description: https://opengameart.org/node/136996, Value: opengameart.org/node/136996
+					320 text 授權：
+					321 link Description: CC0, Value: creativecommons.org/publicdomain/zero/1.0/
+					322 text 　變更：取用 musicbox1_spooky_waltz，轉檔為 MP3
+				323 container
+					324 text 朱諾・魔大陸
+					325 text 「City in the Clouds」 by Peter Eastman
+					326 link Description: https://opengameart.org/content/city-in-the-clouds, Value: opengameart.org/content/city-in-the-clouds
+					327 text 授權：
+					328 link Description: CC-BY 3.0, Value: creativecommons.org/licenses/by/3.0/
+					329 text 　變更：音量標準化，轉檔為 MP3
+				330 container
+					331 text 深淵之湖
+					332 text 「Darkness March」 by Alexandr Zhelanov
+					333 link Description: https://opengameart.org/node/83150, Value: opengameart.org/node/83150
+					334 text 授權：
+					335 link Description: CC-BY 4.0, Value: creativecommons.org/licenses/by/4.0/
+					336 text 　變更：音量標準化，轉檔為 MP3
+				337 container
+					338 text 生體研究所
+					339 text 「Dark Sci-Fi Audio Pack — pulse」 by SRG774
+					340 link Description: https://opengameart.org/content/dark-sci-fi-audio-pack, Value: opengameart.org/content/dark-sci-fi-audio-pack
+					341 text 授權：
+					342 link Description: CC0, Value: creativecommons.org/publicdomain/zero/1.0/
+					343 text 　變更：取用 pulse，轉檔為 MP3
+				344 container
+					345 text 諸神黃昏
+					346 text 「Colossal Boss Battle Theme」 by Matthew Pablo
+					347 link Description: https://opengameart.org/content/colossal-boss-battle-theme, Value: opengameart.org/content/colossal-boss-battle-theme
+					348 text 授權：
+					349 link Description: CC-BY 3.0, Value: creativecommons.org/licenses/by/3.0/
+					350 text 　變更：使用 Blackmoor Colossus Loop 版本，轉檔為 MP3
+				351 container
+					352 text 神域 Boss：雷神索爾
+					353 text 「Final Confrontation」 by tcarisland
+					354 link Description: https://opengameart.org/content/final-confrontation, Value: opengameart.org/content/final-confrontation
+					355 text 授權：
+					356 link Description: CC-BY 4.0, Value: creativecommons.org/licenses/by/4.0/
+					357 text 　變更：音量標準化，轉檔為 MP3
+				358 container
+					359 text 神域 Boss：海神
+					360 text 「Underwater Boss' Temple Song」 by Señor Moreno
+					361 link Description: https://opengameart.org/content/underwater-boss-temple-song, Value: opengameart.org/content/underwater-boss-temple-song
+					362 text 授權：
+					363 link Description: CC-BY 4.0, Value: creativecommons.org/licenses/by/4.0/
+					364 text 　變更：音量標準化，轉檔為 MP3
+				365 container
+					366 text 神域 Boss：闇答萊屍、魔王闇答萊屍
+					367 text 「Against Evil」 by Alexandr Zhelanov
+					368 link Description: https://opengameart.org/node/145591, Value: opengameart.org/node/145591
+					369 text 授權：
+					370 link Description: CC-BY 4.0, Value: creativecommons.org/licenses/by/4.0/
+					371 text 　變更：音量標準化，轉檔為 MP3
+				372 container
+					373 text 一般地圖 Boss
+					374 text 「Battle Theme A」 by cynicmusic
+					375 link Description: https://opengameart.org/content/battle-theme-a, Value: opengameart.org/content/battle-theme-a
+					376 text 授權：
+					377 link Description: CC0, Value: creativecommons.org/publicdomain/zero/1.0/
+					378 text 　變更：音量標準化，轉檔為 MP3
+				379 container
+					380 text 守護者／試煉／巴風特等 Boss
+					381 text 「Boss Battle #2 [Symphonic Metal]」 by nene
+					382 link Description: https://opengameart.org/node/84428, Value: opengameart.org/node/84428
+					383 text 授權：
+					384 link Description: CC0, Value: creativecommons.org/publicdomain/zero/1.0/
+					385 text 　變更：合併前奏與循環段，轉檔為 MP3
+				386 container
+					387 text 無盡之塔／無限武鬥場
+					388 text 「Heavy Dungeon」 by MintoDog
+					389 link Description: https://opengameart.org/node/181405, Value: opengameart.org/node/181405
+					390 text 授權：
+					391 link Description: CC0, Value: creativecommons.org/publicdomain/zero/1.0/
+					392 text 　變更：音量標準化，轉檔為 MP3
+				393 heading ✦ 音效, Value: 3
+					394 text ✦  音效
+				395 container
+					396 text 普通打擊
+					397 text 「Thwack Sounds」 by AntumDeluge
+					398 link Description: https://opengameart.org/content/thwack-sounds, Value: opengameart.org/content/thwack-sounds
+					399 text 授權：
+					400 link Description: CC0, Value: creativecommons.org/publicdomain/zero/1.0/
+					401 text 　變更：取用 4 個，裁切靜音、轉 WAV
+				402 container
+					403 text 暴擊
+					404 text 「20 Sword Sound Effects（sword clash）」 by StarNinjas
+					405 link Description: https://opengameart.org/content/20-sword-sound-effects-attacks-and-clashes, Value: opengameart.org/content/20-sword-sound-effects-attacks-and-clashes
+					406 text 授權：
+					407 link Description: CC0, Value: creativecommons.org/publicdomain/zero/1.0/
+					408 text 　變更：取用 3 個，裁切靜音、轉 WAV
+				409 container
+					410 text 怪物消失
+					411 text 「Poof Noises」 by dklon
+					412 link Description: https://opengameart.org/node/121039, Value: opengameart.org/node/121039
+					413 text 授權：
+					414 link Description: CC-BY 3.0, Value: creativecommons.org/licenses/by/3.0/
+					415 text 　變更：裁切靜音、音量標準化、轉 WAV
+				416 container
+					417 text 升級
+					418 text 「Victory Fanfare Short」 by cynicmusic
+					419 link Description: https://opengameart.org/content/victory-fanfare-short, Value: opengameart.org/content/victory-fanfare-short
+					420 text 授權：
+					421 link Description: CC0, Value: creativecommons.org/publicdomain/zero/1.0/
+					422 text 　變更：截取前 4.2 秒並淡出
+				423 container
+					424 text 任務完成、介面點擊
+					425 text 「Interface Sounds」 by Kenney (www.kenney.nl)
+					426 link Description: https://opengameart.org/content/interface-sounds, Value: opengameart.org/content/interface-sounds
+					427 text 授權：
+					428 link Description: CC0, Value: creativecommons.org/publicdomain/zero/1.0/
+					429 text 　變更：取用 confirmation_002、click_001
+				430 container
+					431 text 拾取、掉落、藥水
+					432 text 「RPG Sound Pack」 by artisticdude
+					433 link Description: https://opengameart.org/content/rpg-sound-pack, Value: opengameart.org/content/rpg-sound-pack
+					434 text 授權：
+					435 link Description: CC0, Value: creativecommons.org/publicdomain/zero/1.0/
+					436 text 　變更：取用 coin、metal-small1、bubble
+				437 container
+					438 text 裝備掉落
+					439 text 「50 RPG sound effects」 by Kenney (www.kenney.nl)
+					440 link Description: https://opengameart.org/content/50-rpg-sound-effects, Value: opengameart.org/content/50-rpg-sound-effects
+					441 text 授權：
+					442 link Description: CC0, Value: creativecommons.org/publicdomain/zero/1.0/
+					443 text 　變更：取用 dropLeather
+				444 container
+					445 text 稀有掉落閃光
+					446 text 「Shimmer glitter magic」 by The Berklee College of Music
+					447 link Description: https://opengameart.org/node/2286, Value: opengameart.org/node/2286
+					448 text 授權：
+					449 link Description: CC-BY 3.0, Value: creativecommons.org/licenses/by/3.0/
+					450 text 　變更：轉 WAV、音量標準化
+
+The focused UI element is 0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/

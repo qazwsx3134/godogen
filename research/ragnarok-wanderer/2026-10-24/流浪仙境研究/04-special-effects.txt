@@ -1,0 +1,142 @@
+Browser tab: 1, Title: "流浪仙境 Ragnarok Wanderer", URL: "https://xianjingro.netlify.app/".
+0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/
+	1 container app
+		2 container stageWrap
+			3 image Description: 戰鬥畫面, ID: stage
+			19 container lstack
+				98 container v114box
+					99 button 聊天室
+					100 button 收起聊天框
+					101 container
+						102 text 請屎皇 ：暴擊釋放
+					103 container
+						104 text cyz0416 ：感謝解答
+					105 container
+						106 text 花寒弦 ：活動圖哪個裝備最值得刷?
+				20 button 活動荒野回響, ID: ssChip
+					118 text 活動
+					119 text 荒野回響
+				23 button ✦ 任務將技能寶石放入技能格, ID: questChip
+					120 text ✦ 
+					121 text 任務
+					122 text 將技能寶石放入技能格
+				27 container mapChip
+					123 text 普隆德拉南門 LV1-6
+			5 button (disabled) BOSS10/30, ID: bossBtn
+				124 text BOSS 10/30
+			125 text 升級！等級 4
+			117 button 可占卜天氣, Help: 到朱諾找占卜師占卜天氣, ID: v125wx
+		6 container side
+			7 container ro-brand
+				8 text ✧
+				9 text 流浪仙境
+				126 text ● 已自動存檔
+			11 tab group tabs
+				12 tab (selectable, settable, boolean) 角色, Value: 0
+				13 tab (selectable, settable, boolean) 背包, Value: 0
+背包
+				14 tab (selected, settable, boolean) 技能, Value: 1
+				18 tab (selectable, settable, boolean) 聊天, Value: 0
+				15 tab (selectable, settable, boolean) 地圖, Value: 0
+				16 tab (selectable, settable, boolean) 選單, Value: 0
+			32 container
+				33 heading 技能寶石盤 說明, Value: 2
+					34 text 技能寶石盤
+					35 button 說明
+				36 text 構築
+				37 button 說明
+				38 checkbox 1
+				39 checkbox 2, Value: 0
+				40 checkbox 3, Value: 0
+				41 button 複製
+				42 text 已解鎖  8/36  格（每 3 級 +1 格） ◆ 主動技能 ◇ 輔助寶石 相鄰且標籤相容時連動
+				43 container sgrid
+					44 button 格子 1,1（未解鎖）
+					45 button 格子 2,1（未解鎖）
+					46 button 格子 3,1（未解鎖）
+					47 button 格子 4,1（未解鎖）
+					48 button 格子 5,1（未解鎖）
+					49 button 格子 6,1（未解鎖）
+					50 button 格子 1,2（未解鎖）
+					51 button 格子 2,2（未解鎖）
+					52 button 格子 3,2
+					53 button 格子 4,2
+					54 button 格子 5,2（未解鎖）
+					55 button 格子 6,2（未解鎖）
+					56 button 格子 1,3（未解鎖）
+					57 button 格子 2,3
+					58 button 格子 3,3
+					59 button 格子 4,3
+					60 button 格子 5,3
+					61 button 格子 6,3（未解鎖）
+					62 button 格子 1,4（未解鎖）
+					63 button 格子 2,4（未解鎖）
+					64 button 格子 3,4
+					65 button 格子 4,4
+					66 button 格子 5,4（未解鎖）
+					67 button 格子 6,4（未解鎖）
+					68 button 格子 1,5（未解鎖）
+					69 button 格子 2,5（未解鎖）
+					70 button 格子 3,5（未解鎖）
+					71 button 格子 4,5（未解鎖）
+					72 button 格子 5,5（未解鎖）
+					73 button 格子 6,5（未解鎖）
+					74 button 格子 1,6（未解鎖）
+					75 button 格子 2,6（未解鎖）
+					76 button 格子 3,6（未解鎖）
+					77 button 格子 4,6（未解鎖）
+					78 button 格子 5,6（未解鎖）
+					79 button 格子 6,6（未解鎖）
+				80 button (disabled) 旋轉
+				81 button (disabled) 取下
+				82 button (disabled) 取消選取
+				83 button (disabled) 清空
+				84 button ▼ 未放置的寶石 1 顆
+					85 text ▼ 未放置的寶石 
+					86 text 1
+					87 text  顆
+				88 checkbox 主動 1, Value: 1
+				89 checkbox 輔助 0, Value: 0
+				90 checkbox 狂擊, Value: 0
+					91 image
+					92 text 狂擊
+				93 button 分解寶石
+				94 heading ✦ 已啟用技能與連動, Value: 3
+					95 text ✦  已啟用技能與連動
+				96 text 格子中尚無主動寶石，角色僅會普通攻擊。
+		97 container sheet
+			127 heading 技能拼圖, Value: 2
+				128 text 技能拼圖
+			129 checkbox 操作, Value: 0
+			130 checkbox 寶石規則, Value: 0
+			131 checkbox 特殊效果, Value: 1
+			132 checkbox 中毒, Value: 0
+			133 text 擊退與僵直
+			134 text 技能與普攻命中時 怪物會短暫僵直（0.1～0.35 秒 停止移動、仍可攻擊） 並被微微擊退（一下最多約 5 px 不會被推出你的攻擊距離） 菁英僵直減半、頭目不僵直 目標被打離攻擊距離太遠時 會改打離自己最近的怪
+			135 text 流血
+			136 text 流血技能（例如大地之擊）使敵人流血： 每秒受到此次傷害的 20%，持續 4 秒 敵人移動時（含擊退）流血傷害 ×2
+			137 text 自動念咒
+			138 text 連結「自動念咒」的主動寶石不會自動施放 改為暴擊時施放（每顆每 0.5 秒最多一次 傷害 ×60%） 暴擊率越高，觸發越頻繁
+			139 text 定身
+			140 text 定位陷阱命中的敵人定身 1 秒：無法移動 但仍會攻擊身旁的你
+			141 text 變異寶石
+			142 text 所有怪物都可能掉落本職業的變異寶石（菁英、 頭目機率較高） 效果數值、格數或元素會改變 掉率： 一般怪 0.003%、菁英 0.015%、頭目 0.15%、闇答萊屍 7.5% 沒有傷害的主動技能（挑釁、詛咒、增益、 光環）： 「傷害」改為「效果 ±」 元素變異改為附加詛咒（衰弱、緩慢、脆弱、 石化、睡眠、致盲、混亂抽 1 種） 多重變異附加兩種詛咒 25% 機率變成被動（不用施放、常駐生效） 30% 機率是失敗變異——反噬（施放時自己也 中那種詛咒）或代價（施放時消耗生命）
+			143 text 詛咒
+			144 text 衰弱：造成的傷害降低 緩慢：移動與攻擊速度降低 脆弱：受到的傷害提高 石化 2 秒：無法移動與攻擊 睡眠 3 秒：無法移動與攻擊，被打就醒 叫醒的那一下必定暴擊 致盲 6 秒：攻擊 40% 落空 混亂 4 秒：亂走，攻擊 30% 打到旁邊的怪 頭目的石化、睡眠、致盲、混亂時間減半 強控抗性： 石化、睡眠、混亂每次被同一顆寶石施加 該詛咒的抗性 +34%（持續時間 ×（1 − 抗性）） 滿 100% 時免疫，直到抗性回落到 0 抗性每秒 −10%，怪物頭上會顯示抗性
+			145 text 合成
+			146 text 消耗 3 顆同技能的變異寶石與 1000 Zeny 合成 1 顆該技能的變異寶石 形狀重新隨機 於「未放置的寶石」展開該技能，按「合成」
+			147 text 穿梭寶石
+			148 text 其他職業的專屬輔助寶石 名稱標示「（穿梭）」 可連結你職業的主動寶石，但無法變異 不需要時可在「分解寶石」分解 所有怪物都可能掉落（菁英、頭目機率較高）
+			149 text 分解寶石
+			150 text 於「未放置的寶石」按「分解寶石」 可一次選取多顆 每顆獲得 100 Zeny 傳說、穿梭寶石也可以分解
+			151 text 精靈模式
+			152 text 於技能頁切換召喚元素精靈的模式 侵略：各自追擊最近的怪物 守護：優先攻擊離你最近的敵人
+			153 text 召喚物傷害
+			154 text 召喚物受「傷害增加」與「召喚物傷害」加成 不受「技能傷害」加成
+			155 text 英靈召喚
+			156 text 周圍的敵人改為攻擊英靈 頭目的技能仍以你為目標 英靈使用你的護甲、閃避與生命回復
+			157 text 冰緩
+			158 text 降低敵人的移動與攻擊速度，效果上限 75% 菁英詞綴的攻擊也會變慢
+			159 button 知道了
+
+The focused UI element is 0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/

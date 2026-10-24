@@ -1,0 +1,96 @@
+Browser tab: 1, Title: "流浪仙境 Ragnarok Wanderer", URL: "https://xianjingro.netlify.app/".
+0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/
+	1 container app
+		2 container stageWrap
+			3 image Description: 戰鬥畫面, ID: stage
+			19 container lstack
+				98 container v114box
+					99 button 聊天室
+					100 button 收起聊天框
+					101 container
+						102 text 請屎皇 ：暴擊釋放
+					103 container
+						104 text cyz0416 ：感謝解答
+					105 container
+						106 text 花寒弦 ：活動圖哪個裝備最值得刷?
+				23 button ✦ 任務分解 3 件裝備0/3, ID: questChip
+					220 text ✦ 
+					221 text 任務
+					222 text 分解 3 件裝備
+					223 text 0/3
+				27 container mapChip
+					224 text 普隆德拉 城鎮
+			219 button 離開城鎮, ID: bossBtn
+			117 button 可占卜天氣, Help: 到朱諾找占卜師占卜天氣, ID: v125wx
+		6 container side
+			7 container ro-brand
+				8 text ✧
+				9 text 流浪仙境
+				225 text ● 已自動存檔
+			11 tab group tabs
+				12 tab (selectable, settable, boolean) 角色, Value: 0
+				13 tab (selectable, settable, boolean) 背包, Value: 0
+背包
+				14 tab (selectable, settable, boolean) 技能, Value: 0
+				18 tab (selectable, settable, boolean) 聊天, Value: 0
+				15 tab (selectable, settable, boolean) 地圖, Value: 0
+				16 tab (selected, settable, boolean) 選單, Value: 1
+			128 container panel
+				226 button < 返回城鎮
+				227 heading 共用倉庫 說明, Value: 2
+					228 text 共用倉庫
+					229 button 說明
+				230 container
+					231 text 所有角色共用・已存放  0/500
+				232 checkbox 裝備, Value: 1
+				233 checkbox 寶石, Value: 0
+				234 checkbox 倉庫, Value: 1
+				235 checkbox 身上, Value: 0
+				236 pop up button (collapsed, settable) Description: 排序, Value: 最新取得, Secondary Actions: Expand
+					237 menu
+						238 (selected) 最新取得
+						239 稀有度
+						240 物品等級
+						241 部位
+				242 pop up button (collapsed, settable) Description: 部位篩選, Value: 全部部位, Secondary Actions: Expand
+					243 menu
+						244 (selected) 全部部位
+						245 武器
+						246 副手
+						247 頭飾
+						248 鎧甲
+						249 披肩
+						250 鞋子
+						251 飾品・左
+						252 飾品・右
+				253 pop up button (collapsed, settable) Description: 稀有度篩選, Value: 全部稀有度, Secondary Actions: Expand
+					254 menu
+						255 (selected) 全部稀有度
+						256 普通
+						257 魔法
+						258 稀有
+						259 傳奇
+						260 神話
+						261 獨特
+						262 主宰
+						263 有插槽
+						264 有空插槽
+						265 已鑲卡片
+				266 pop up button (collapsed, settable) Description: 規則篩選, Value: 不限規則, Secondary Actions: Expand
+					267 menu
+						268 (selected) 不限規則
+						269 符合保留規則
+						270 不符合保留規則
+						271 自訂條件
+						272 已鎖定
+						273 未鎖定
+				274 text 0  件
+				275 checkbox 多選, Value: 0
+				276 heading ✦ 倉庫, Value: 3
+					277 text ✦  倉庫
+				278 text 倉庫沒有裝備。
+				279 container
+					280 text 點選左側裝備
+					281 text 查看詳細資訊
+
+The focused UI element is 0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/

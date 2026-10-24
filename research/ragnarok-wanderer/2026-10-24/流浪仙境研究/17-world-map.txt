@@ -1,0 +1,130 @@
+Browser tab: 1, Title: "流浪仙境 Ragnarok Wanderer", URL: "https://xianjingro.netlify.app/".
+0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/
+	1 container app
+		2 container stageWrap
+			3 image Description: 戰鬥畫面, ID: stage
+			19 container lstack
+				98 container v114box
+					99 button 聊天室
+					100 button 收起聊天框
+					101 container
+						102 text 請屎皇 ：暴擊釋放
+					103 container
+						104 text cyz0416 ：感謝解答
+					105 container
+						106 text 花寒弦 ：活動圖哪個裝備最值得刷?
+				20 button 活動荒野回響, ID: ssChip
+					118 text 活動
+					119 text 荒野回響
+				23 button ✦ 任務分解 3 件裝備0/3, ID: questChip
+					127 text ✦ 
+					121 text 任務
+					122 text 分解 3 件裝備
+					123 text 0/3
+				27 container mapChip
+					124 text 普隆德拉南門 LV1-6
+			5 button 挑戰 BOSS, ID: bossBtn
+			125 text 任務完成：藥水 ×5
+			117 button 可占卜天氣, Help: 到朱諾找占卜師占卜天氣, ID: v125wx
+		6 container side
+			7 container ro-brand
+				8 text ✧
+				9 text 流浪仙境
+				126 text ● 已自動存檔
+			11 tab group tabs
+				12 tab (selectable, settable, boolean) 角色, Value: 0
+				13 tab (selectable, settable, boolean) 背包, Value: 0
+背包
+				14 tab (selectable, settable, boolean) 技能, Value: 0
+				18 tab (selectable, settable, boolean) 聊天, Value: 0
+				15 tab (selected, settable, boolean) 地圖, Value: 1
+				16 tab (selectable, settable, boolean) 選單, Value: 0
+			128 container panel
+				129 heading ✦ 城鎮 說明, Value: 3
+					130 text ✦  城鎮
+					131 button 說明
+				132 button 前往普隆德拉
+				133 button 前往斐揚
+				134 button 前往吉芬
+				135 button 前往朱諾
+				136 checkbox 一般地圖, Value: 1
+				137 checkbox 挑戰 NEW, Value: 0
+					138 text 挑戰
+					139 text NEW
+				140 checkbox 活動, Value: 0
+				141 checkbox 試煉 NEW, Value: 0
+					142 text 試煉
+					143 text NEW
+				144 checkbox 統計, Value: 0
+				145 heading ✦ 選擇地圖 說明, Value: 3
+					146 text ✦  選擇地圖
+					147 button 說明
+				148 button 普隆德拉南門
+					149 text 普隆德拉南門
+					150 text NOW
+					151 text LV1-6
+					152 image Boss
+					153 text 30/30
+					154 image Boss
+					155 text 天使波利
+					156 text 掛機
+					157 text 4m
+					158 text 擊殺
+					159 text 150
+				160 button (disabled) 斐揚森林
+					161 text 斐揚森林 LV6-13 LOCK 擊敗上一張地圖的 Boss 解鎖
+				162 button (disabled) 妙勒尼礦坑
+					163 text 妙勒尼礦坑 LV13-21 LOCK 擊敗上一張地圖的 Boss 解鎖
+				164 button (disabled) 夢羅克沙漠
+					165 text 夢羅克沙漠 LV21-29 LOCK 擊敗上一張地圖的 Boss 解鎖
+				166 button (disabled) 依斯魯得海底洞穴
+					167 text 依斯魯得海底洞穴 LV29-37 LOCK 擊敗上一張地圖的 Boss 解鎖
+				168 button (disabled) 拉赫冰洞
+					169 text 拉赫冰洞 LV37-45 LOCK 擊敗上一張地圖的 Boss 解鎖
+				170 button (disabled) 諾可羅德火山
+					171 text 諾可羅德火山 LV45-53 LOCK 擊敗上一張地圖的 Boss 解鎖
+				172 text 中期加成：怪物數量 +3・生成速度 +20%
+				173 button (disabled) 葛城修道院
+					174 text 葛城修道院 LV53-61 LOCK 擊敗上一張地圖的 Boss 解鎖
+				175 text 中期加成：怪物數量 +3・生成速度 +20%
+				176 button (disabled) 古城騎士團
+					177 text 古城騎士團 LV61-69 LOCK 擊敗上一張地圖的 Boss 解鎖
+				178 text 中期加成：怪物數量 +3・生成速度 +20%
+				179 button (disabled) 龜島深處
+					180 text 龜島深處 LV69-77 LOCK 擊敗上一張地圖的 Boss 解鎖
+				181 text 中期加成：怪物數量 +3・生成速度 +20%
+				182 button (disabled) 達納托斯之塔
+					183 text 達納托斯之塔 LV77-82 LOCK 擊敗上一張地圖的 Boss 解鎖
+				184 text 中期加成：怪物數量 +3・生成速度 +20%
+				185 button (disabled) 尼芙菲姆
+					186 text 尼芙菲姆 LV78-85 LOCK 擊敗上一張地圖的 Boss 解鎖
+				187 text 終局加成：怪物數量 +9・菁英率 +6%・生成速度 +45%
+				188 button (disabled) 朱諾・魔大陸
+					189 text 朱諾・魔大陸 LV85-92 LOCK 擊敗上一張地圖的 Boss 解鎖
+				190 text 終局加成：怪物數量 +9・菁英率 +6%・生成速度 +45%
+				191 button (disabled) 深淵之湖
+					192 text 深淵之湖 LV92-99 LOCK 擊敗上一張地圖的 Boss 解鎖
+				193 text 終局加成：怪物數量 +9・菁英率 +6%・生成速度 +45%
+				194 button (disabled) 生體研究所
+					195 text 生體研究所 LV99-106 LOCK 擊敗上一張地圖的 Boss 解鎖
+				196 text 終局加成：怪物數量 +9・菁英率 +6%・生成速度 +45%
+		197 container sheet
+			198 heading 地圖, Value: 2
+				199 text 地圖
+			200 text 自動掛機
+			201 text 角色會在目前的地圖自動戰鬥
+			202 text 挑戰 Boss
+			203 text 擊殺足夠的怪物後，按「挑戰 BOSS」 限時 90 秒 越後面的地圖，所需擊殺數越多
+			204 text 解鎖地圖
+			205 text 首次擊敗 Boss 後，解鎖下一張地圖
+			206 text 掛機統計
+			207 text 記錄進入此地圖後的成果 切換地圖後重新計算
+			208 text 終局加成
+			209 text Lv78 以後的 4 張主線地圖與所有深淵階級： 怪物數量 +9・菁英率 +6%・生成速度 +45%
+			210 text 中期加成
+			211 text 第 7～11 張地圖： 怪物數量 +3・生成速度 +20%
+			212 text 怪物強度
+			213 text Lv40 以後的怪物生命與傷害逐級提高 Lv100 達到上限： 生命 ×1.5（地圖頭目 ×1.25）、傷害 ×1.25 試煉、魔王、武鬥場、活動不受影響
+			214 button 知道了
+
+The focused UI element is 15 tab (selected, settable, boolean) 地圖, Value: 1

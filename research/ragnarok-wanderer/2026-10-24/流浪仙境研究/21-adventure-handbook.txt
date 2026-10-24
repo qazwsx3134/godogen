@@ -1,0 +1,210 @@
+Browser tab: 1, Title: "流浪仙境 Ragnarok Wanderer", URL: "https://xianjingro.netlify.app/".
+0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/
+	1 container app
+		2 container stageWrap
+			3 image Description: 戰鬥畫面, ID: stage
+			19 container lstack
+				98 container v114box
+					99 button 聊天室
+					100 button 收起聊天框
+					101 container
+						102 text 請屎皇 ：暴擊釋放
+					103 container
+						104 text cyz0416 ：感謝解答
+					105 container
+						106 text 花寒弦 ：活動圖哪個裝備最值得刷?
+				20 button 活動荒野回響, ID: ssChip
+					137 text 活動
+					138 text 荒野回響
+				23 button ✦ 任務分解 3 件裝備0/3, ID: questChip
+					139 text ✦ 
+					140 text 任務
+					141 text 分解 3 件裝備
+					142 text 0/3
+				27 container mapChip
+					143 text 普隆德拉南門 LV1-6
+			117 button 可占卜天氣, Help: 到朱諾找占卜師占卜天氣, ID: v125wx
+		6 container side
+			7 container ro-brand
+				8 text ✧
+				9 text 流浪仙境
+				136 text ● 已自動存檔
+			11 tab group tabs
+				12 tab (selectable, settable, boolean) 角色, Value: 0
+				13 tab (selectable, settable, boolean) 背包, Value: 0
+背包
+				14 tab (selectable, settable, boolean) 技能, Value: 0
+				18 tab (selectable, settable, boolean) 聊天, Value: 0
+				15 tab (selectable, settable, boolean) 地圖, Value: 0
+				16 tab (selected, settable, boolean) 選單, Value: 1
+			128 container panel
+				144 button < 選單
+				145 heading 冒險手冊, Value: 2
+					146 text 冒險手冊
+				147 text 流浪仙境
+				148 text 自動尋敵、移動與戰鬥。你負責裝備、技能拼圖與長期養成。
+				149 text 技能棋盤從 8 格起，每 3 級增加 1 格，最多 36 格。輔助寶石只強化上下左右相鄰、標籤相符的主動技能。
+				150 text 裝備、寶石與進度會自動儲存在目前瀏覽器。可於設定匯出完整備份。
+				151 heading ✦ 裝備與卡片, Value: 3
+					152 text ✦  裝備與卡片
+				153 text 裝備分 8 個部位：武器、盾牌、頭飾、鎧甲、披肩、鞋子、飾品 ×2；雙手武器無法搭配盾牌。裝備沒有詞綴，改為基底素質＋固定額外素質（掉落時浮動 50%～150%）。
+				154 text 卡片插槽依稀有度：武器：普通 0～1、魔法 0～1、稀有 0～2、傳奇 0～3、神話 0～5、主宰 0～7、獨特 0～3；其他部位：普通 0、魔法 0～1、稀有 0～1、傳奇 0～2、神話 0～3、主宰 0～4、獨特 0～2。每多 1 孔機率大幅降低（約 60%／30%／10%…）。158 種怪物卡片分 6 階，在「煉金」鑲嵌、合成；精煉 +1～+10 強化基底。
+				155 text 選單「蒐藏」可查看卡片圖鑑、怪物屬性與地圖加成。
+				156 heading ✦ 菁英詞條, Value: 3
+					157 text ✦  菁英詞條
+				158 container
+					159 text 加速術 　移動速度 ×1.8，攻擊間隔 ×0.7
+				160 container
+					161 text 石化皮膚 　受到的傷害 −50%
+				162 container
+					163 text 自爆 　死亡時在原地引爆（約 0.9 秒後，可閃避）
+				164 container
+					165 text 箭雨 　每 3.5 秒向四周射出 10 支箭
+				166 container
+					167 text 吸血 　擊中你時回復自身 5% 最大生命
+				168 container
+					169 text 冰凍術 　每 4 秒在你的位置產生冰霧，移動速度 −50%
+				170 container
+					171 text 治癒術 　每 5 秒回復 6% 最大生命
+				172 container
+					173 text 雷擊術 　每 4.5 秒在你的位置降下雷擊（有預警範圍，可閃避）
+				174 container
+					175 text 念屬性 　普通攻擊與召喚物對牠的傷害 −50%（技能不受影響）
+				176 container
+					177 text 毒性攻擊 　擊中你時使你中毒 4 秒，每秒損失 1.2% 最大生命（不會低於 25%）
+				178 heading ✦ 詛咒, Value: 3
+					179 text ✦  詛咒
+				180 container
+					181 text 衰弱 　6 秒：造成的傷害 −25% （技能：天使之怒）
+				182 container
+					183 text 緩慢 　6 秒：移動與攻擊速度 −30% （技能：泥沼地）
+				184 container
+					185 text 脆弱 　6 秒：受到的傷害 +25% （技能：弱點詛咒）
+				186 container
+					187 text 石化 　2 秒：無法移動與攻擊
+				188 container
+					189 text 睡眠 　3 秒：無法移動與攻擊；被打就醒，叫醒的那一下必定暴擊
+				190 container
+					191 text 致盲 　6 秒：攻擊 40% 落空
+				192 container
+					193 text 混亂 　4 秒：亂走，攻擊 30% 打到旁邊的怪
+				194 container
+					195 text 頭目 　石化、睡眠、致盲、混亂的時間減半。
+				196 container
+					197 text 強控抗性 　石化、睡眠、混亂每次被同一個來源（同一顆寶石）施加，該詛咒的抗性 +34%，持續時間 ×（1 − 抗性）；抗性滿 100% 時免疫，直到抗性回落到 0 才會再中；抗性每秒 −10%。怪物頭上的狀態圖示旁會顯示抗性。
+				198 container
+					199 text 來源 　詛咒類技能；沒有傷害的主動技能的變異寶石（元素變異改為附加詛咒，多重變異附加兩種，變成被動或光環時持續施加）。
+				200 container
+					201 text 反噬 　失敗變異的反噬：施放時自己也中那種詛咒 3 秒——衰弱：你的傷害 ×0.75；緩慢：攻擊與移動速度 ×0.7；脆弱：受到的傷害 ×1.25；致盲：暴擊率 −20%；混亂：攻擊 20% 落空；石化、睡眠：定身 0.8 秒。
+				202 heading ✦ 技能, Value: 3
+					203 text ✦  技能
+				204 text 每職業有專屬的輔助寶石與 2 種被動寶石；其他職業的輔助只能靠怪物掉落（穿梭寶石，無法變異）。技能標示 RO 屬性，聖屬性對不死怪物傷害 ×1.5。
+				205 heading ✦ 六職業 × 四流派, Value: 3
+					206 text ✦  六職業 × 四流派
+				207 text 劍士
+				208 container
+					209 text 騎士（均衡流）
+					210 text 槍騎：突進、定點連撞或龍息持續傷害；槍擊可接燃燒、破甲與反擊。
+				211 container
+					212 text 十字軍（神聖流）
+					213 text 聖騎：以生命、護盾或治療支撐審判；可走聖刃、刻印或復仇。
+				214 container
+					215 text 騎士（暴力流）
+					216 text 狂戰：高速普攻、沉重螺旋或劍波輪替；怒氣可投入追擊、續戰或長時間狂暴。
+				217 container
+					218 text 十字軍（鐵壁流）
+					219 text 鐵壁：保留護甲轉傷害；用反射、格擋反擊或盾擊，把防具選擇轉成打法。
+				220 text 弓箭手
+				221 container
+					222 text 獵人（狙殺流）
+					223 text 狙殺：蓄力重箭、弱點連射或破甲標定；以狙擊、銳利射擊與二連矢循環。
+				224 container
+					225 text 詩人（樂箭流）
+					226 text 樂箭：把樂曲編進普攻，選擇連射、回曲或每第三箭的重音。
+				227 container
+					228 text 獵人（陷阱流）
+					229 text 陷阱：保留閃避換傷害；接觸、箭矢引爆與定時爆破能自由搭配毒、破甲與拘束。
+				230 container
+					231 text 詩人（合奏流）
+					232 text 合奏：維持樂章、雙曲同奏或樂靈伴奏；用傷害節拍或護盾塑造自己的樂團。
+				233 container
+					234 text 舞孃（魅舞流）
+					235 text 魅舞：魅惑、靈魂舞伴或替身；遇到頭目會生成自己的舞伴，不依賴小怪。
+				236 container
+					237 text 舞孃（鞭舞流）
+					238 text 鞭舞：連鞭、回鞭與纏縛；以節奏、距離或尖叫製造單體破綻。
+				239 container
+					240 text 獵人（馭鷹流）
+					241 text 獵鷹持續追獵；選擇啄擊連段、俯衝或弓鷹協攻，再搭配毒爪、破甲或狙擊號令。
+				242 text 魔法師
+				243 container
+					244 text 巫師（元素流）
+					245 text 元素：單系、雙系反應或三系共鳴；可維持異常、提前引爆或鎖定頭目。
+				246 container
+					247 text 賢者（精靈流）
+					248 text 精靈：玩家施法指揮精靈；選集火、護衛或領域駐守，與自主攻擊的生命體區分。
+				249 container
+					250 text 巫師（禁咒流）
+					251 text 禁咒：延遲重咒、引導或刻印領域；用持續壓制、分段追擊或濃縮結算打頭目。
+				252 container
+					253 text 賢者（自動念咒流）
+					254 text 魔導：普攻、暴擊或防禦觸發念咒；咒刃、單法連發與雙法接力各有搭配。
+				255 container
+					256 text 巫師（元素召喚流）
+					257 text 三元素使魔自主作戰：火靈累積燃燒、冰靈碎晶、雷靈連擊；用施法選擇契約，再搭配元素輪轉與反應。
+				258 text 盜賊
+				259 container
+					260 text 刺客（平A流）
+					261 text 平A刺客：雙擊、重刃或持續追擊，可再分為毒刀、暴傷與影刃；四連奧義能跨線搭配。
+				262 container
+					263 text 流氓（偷襲流）
+					264 text 偷襲：開場潛行、再潛或誘餌，配合背刺、竊取或剝甲；頭目戰也能反覆偷襲。
+				265 container
+					266 text 刺客（技能流）
+					267 text 技能刺客：近身累積連擊點，以集中終結、短週期終結或刀痕追斬搭配。
+				268 container
+					269 text 流氓（暗咒流）
+					270 text 暗咒：單體契約、雙咒或隨行詛咒，分為持續侵蝕、傷害回聲與延遲結算。
+				271 container
+					272 text 刺客（幻影流）
+					273 text 分身自主出刀；選擇快刀、終結模仿或延遲影殺，再搭配毒刀、暴擊或連擊點。
+				274 text 服事
+				275 container
+					276 text 祭司（聖光流）
+					277 text 聖光：有效治療、護盾與溢補都有攻擊出口；自動戰鬥不需要故意保持低血量。
+				278 container
+					279 text 武僧（連拳流）
+					280 text 連拳：普攻三連、技能穿插或第三拳終結；氣球可蓄住、回收或用於重拳。
+				281 container
+					282 text 祭司（祈禱流）
+					283 text 祈禱：固定聖壇、隨行聖壇與雙重祭壇；以審判、屏障和禱告維持攻勢。
+				284 container
+					285 text 武僧（爆氣流）
+					286 text 爆氣：少量快打、全氣重擊或留氣續戰；指彈、近身重震與閃電追拳各自成形。
+				287 container
+					288 text 祭司（聖靈流）
+					289 text 聖靈主動追蹤頭目；選擇往返聖矢、守護反擊或審判印記，聖壇與天使之怒變成號令。
+				290 text 商人
+				291 container
+					292 text 鐵匠（戰鬥流）
+					293 text 戰鬥鐵匠：快錘、破甲重錘與手推車；以火花、完美鍛造或修復維持攻勢。
+				294 container
+					295 text 鍊金術師（生命體流）
+					296 text 生命體：單隻巨獸、繁殖群或藥劑突變；生命體能自主作戰，與精靈指揮不同。
+				297 container
+					298 text 鐵匠（機械流）
+					299 text 機械：大地之擊武裝、機甲加農砲與斧頭龍捲。FAW 仍可正常設置；砲台專屬強化請選「砲陣」分支。
+				300 container
+					301 text 鍊金術師（毒雲流）
+					302 text 毒雲：地面毒域、寄生毒或毒液濺射；養毒、收割與腐蝕引爆各自搭配。
+				303 container
+					304 text 鐵匠（砲陣流）
+					305 text 完整砲台編隊；選擇雙管、穿甲重砲或快速輪射，再搭配追蹤校準、彈幕節奏或主砲協同。
+				306 container
+					307 text 鍊金術師（植生流）
+					308 text 植物附著追蹤頭目；選擇毒藤、捕食或結果，再用毒雲施肥、孢子催熟或吸收養分。
+				309 heading ✦ 版本與素材, Value: 3
+					310 text ✦  版本與素材
+				311 text 玩法基底：自走勇者 v0.2.822。人物、裝備、技能與魔物美術取自 RO 公開素材服務 ragassets。本機版帳號獨立保存。
+
+The focused UI element is 0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/

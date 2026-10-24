@@ -1,0 +1,124 @@
+Browser tab: 1, Title: "流浪仙境 Ragnarok Wanderer", URL: "https://xianjingro.netlify.app/".
+0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/
+	1 container app
+		2 container stageWrap
+			3 image Description: 戰鬥畫面, ID: stage
+			19 container lstack
+				98 container v114box
+					99 button 聊天室
+					100 button 收起聊天框
+					101 container
+						102 text 請屎皇 ：暴擊釋放
+					103 container
+						104 text cyz0416 ：感謝解答
+					105 container
+						106 text 花寒弦 ：活動圖哪個裝備最值得刷?
+				23 button ✦ 任務分解 3 件裝備0/3, ID: questChip
+					220 text ✦ 
+					221 text 任務
+					222 text 分解 3 件裝備
+					223 text 0/3
+				27 container mapChip
+					224 text 普隆德拉 城鎮
+			219 button 離開城鎮, ID: bossBtn
+			117 button 可占卜天氣, Help: 到朱諾找占卜師占卜天氣, ID: v125wx
+		6 container side
+			7 container ro-brand
+				8 text ✧
+				9 text 流浪仙境
+				302 text ● 已自動存檔
+			11 tab group tabs
+				12 tab (selectable, settable, boolean) 角色, Value: 0
+				13 tab (selectable, settable, boolean) 背包, Value: 0
+背包
+				14 tab (selectable, settable, boolean) 技能, Value: 0
+				18 tab (selectable, settable, boolean) 聊天, Value: 0
+				15 tab (selected, settable, boolean) 地圖, Value: 1
+				16 tab (selectable, settable, boolean) 選單, Value: 0
+			128 container panel
+				303 heading ✦ 城鎮 說明, Value: 3
+					304 text ✦  城鎮
+					305 button 說明
+				306 button 前往普隆德拉
+				307 button 前往斐揚
+				308 button 前往吉芬
+				309 button 前往朱諾
+				310 text 普隆德拉
+				311 text 王國首都・中央噴水池廣場
+				312 button 離開城鎮
+				313 button 卡普拉 倉庫・任務
+					314 text 卡普拉
+					315 text 倉庫・任務
+				316 button 鐵匠 精煉・鑲嵌・合成
+					317 text 鐵匠
+					318 text 精煉・鑲嵌・合成
+				319 button 道具商人 技能商店
+					320 text 道具商人
+					321 text 技能商店
+				322 button 哈米德 轉職
+					323 text 哈米德
+					324 text 轉職
+				325 checkbox 一般地圖, Value: 0
+				326 checkbox 挑戰, Value: 0
+				327 checkbox 活動, Value: 1
+				328 checkbox 試煉, Value: 0
+				329 checkbox 統計, Value: 0
+				330 heading ✦ 活動 說明, Value: 3
+					331 text ✦  活動
+					332 button 說明
+				333 button (disabled) 米德加爾特・共生秘境
+					334 text 荒野回響 LV90 90 級開放
+				335 text 米德加爾特・共生秘境
+				336 text 生態印記・10 片挑戰一次 菌冠波利母體
+				337 text 0/10
+				338 button (disabled) 挑戰
+				339 container
+					340 checkbox (settable, integer) Description: 自動, Value: 0
+					341 text 自動
+				342 text 古林鹿靈
+				343 text 0/10
+				344 button (disabled) 挑戰
+				345 container
+					346 checkbox (settable, integer) Description: 自動, Value: 0
+					347 text 自動
+				348 text 熔殼機械甲蟲
+				349 text 0/10
+				350 button (disabled) 挑戰
+				351 container
+					352 checkbox (settable, integer) Description: 自動, Value: 0
+					353 text 自動
+				354 text 掉落 活動獨特
+				355 container
+					356 heading ✦ 荒野回響 · 原創生態首領, Value: 3
+						357 text ✦  荒野回響 · 原創生態首領
+					358 image 菌冠波利母體
+					359 text 孢林之心
+					360 text 菌冠波利母體
+					361 text 吸收古樹汁液的波利群聚體，以菌絲守護繁殖地。
+					362 text 孢子花環 · 菌床萌發 · 黏液奔流
+					363 image 古林鹿靈
+					364 text 月枝守望者
+					365 text 古林鹿靈
+					366 text 棲居林間聖泉的鹿形精靈，角枝會隨月光生長。
+					367 text 根鬚穿刺 · 月枝交錯 · 森息回環
+					368 image 熔殼機械甲蟲
+					369 text 廢礦鍛爐
+					370 text 熔殼機械甲蟲
+					371 text 以礦石為食的古代採掘機體，熔爐與甲殼已長成一體。
+					372 text 熔渣落點 · 鍛爐掃射 · 熱核震波
+				373 container
+					374 heading 活動獨特裝備 只在「米德加爾特・共生秘境」掉落（地圖怪物與化身都可能掉落）, Value: 4
+						375 text 活動獨特裝備
+						376 text 只在「米德加爾特・共生秘境」掉落（地圖怪物與化身都可能掉落）
+					377 text 審判者之劍 武器 總傷害額外 +30%；對生命 90% 以上的敵人必定暴擊 神諭之冠 頭飾 冷卻縮減 +12%；冷卻 4 秒以上的技能傷害倍率 +40% 女武神之鎧 鎧甲 受到的傷害 −15%；最大生命額外 +20% 萬象斗篷 披肩 技能擊中時，12% 機率同時附加燃燒、冰緩與感電；元素異常效果 +30% 生命之泉 飾品・右 每秒回復最大生命 1.2%；擊殺時回復 3% 最大生命 榮耀之戒 飾品・左 暴擊率 +5%；暴擊時獲得 1 個暴擊球（最多 3 個，8 秒）；每個暴擊球使暴擊率 +3%、暴擊傷害 +15%；擊殺菁英或頭目時暴擊球補滿
+		301 container sheet
+			378 image 道具商人
+			379 text [道具商人]
+			380 text 普隆德拉
+			381 text 歡迎光臨！這裡有適合劍士的技能寶石和補給品，慢慢挑。
+			382 button 購買 技能寶石・補給
+				383 text 購買
+				384 text 技能寶石・補給
+			385 button 離開
+
+The focused UI element is 319 button 道具商人 技能商店

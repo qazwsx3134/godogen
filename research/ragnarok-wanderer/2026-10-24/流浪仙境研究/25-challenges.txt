@@ -1,0 +1,95 @@
+Browser tab: 1, Title: "流浪仙境 Ragnarok Wanderer", URL: "https://xianjingro.netlify.app/".
+0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/
+	1 container app
+		2 container stageWrap
+			3 image Description: 戰鬥畫面, ID: stage
+			19 container lstack
+				98 container v114box
+					99 button 聊天室
+					100 button 收起聊天框
+					101 container
+						102 text 請屎皇 ：暴擊釋放
+					103 container
+						104 text cyz0416 ：感謝解答
+					105 container
+						106 text 花寒弦 ：活動圖哪個裝備最值得刷?
+				20 button 活動荒野回響, ID: ssChip
+					229 text 活動
+					230 text 荒野回響
+				23 button ✦ 任務分解 3 件裝備0/3, ID: questChip
+					231 text ✦ 
+					232 text 任務
+					233 text 分解 3 件裝備
+					234 text 0/3
+				27 container mapChip
+					235 text 普隆德拉南門 LV1-6
+			219 button 挑戰 BOSS, ID: bossBtn
+			117 button 可占卜天氣, Help: 到朱諾找占卜師占卜天氣, ID: v125wx
+		6 container side
+			7 container ro-brand
+				8 text ✧
+				9 text 流浪仙境
+				228 text ● 已自動存檔
+			11 tab group tabs
+				12 tab (selectable, settable, boolean) 角色, Value: 0
+				13 tab (selectable, settable, boolean) 背包, Value: 0
+背包
+				14 tab (selectable, settable, boolean) 技能, Value: 0
+				18 tab (selectable, settable, boolean) 聊天, Value: 0
+				15 tab (selected, settable, boolean) 地圖, Value: 1
+				16 tab (selectable, settable, boolean) 選單, Value: 0
+			128 container panel
+				236 heading ✦ 城鎮 說明, Value: 3
+					237 text ✦  城鎮
+					238 button 說明
+				239 button 前往普隆德拉
+				240 button 前往斐揚
+				241 button 前往吉芬
+				242 button 前往朱諾
+				243 checkbox 一般地圖, Value: 0
+				244 checkbox 挑戰, Value: 1
+				245 checkbox 活動, Value: 0
+				246 checkbox 試煉 NEW, Value: 0
+					247 text 試煉
+					248 text NEW
+				249 checkbox 統計, Value: 0
+				250 heading ✦ 挑戰 說明, Value: 3
+					251 text ✦  挑戰
+					252 button 說明
+				253 container
+					254 heading ✦ 無限武鬥場, Value: 3
+						255 text ✦  無限武鬥場
+					256 text 層數無上限・每層怪物生命 ×1.1、傷害 ×1.06、同時最多 8 隻怪物・每 10 層為頭目關・每通過 10 層隨機增加一個負面效果（可能重複疊加，層數越高效果越強，各有上限；本次挑戰內持續）。 最高紀錄  0  層
+					257 button (disabled) Lv.50 開放
+					258 checkbox (settable, integer) Description: 自動, Value: 0
+					259 text 自動
+				260 container
+					261 heading ✦ MVP 武道場 說明, Value: 3
+						262 text ✦  MVP 武道場
+						263 button 說明
+					264 text 消耗 5 張 MVP 門票，隨機挑戰 1 隻帶屬性的 MVP：強度相當於無限武鬥場第 50 層頭目，限時 150 秒。勝利必得 3 顆高純度魔力礦石，10% 掉落傳說的魔力礦石、3% 掉落該 MVP 的專屬裝備。 月夜貓 火屬性
+					265 text 月夜貓的鈴鐺
+					266 text 擊敗  0 蜂后 風屬性
+					267 text 蜂后的薄翼
+					268 text 擊敗  0 蟻后 地屬性
+					269 text 蟻后的甲殼盾
+					270 text 擊敗  0 冰狼哈提 水屬性
+					271 text 哈提的冰牙頭盔
+					272 text 擊敗  0 德古拉男爵 暗屬性
+					273 text 德古拉的禮服
+					274 text 擊敗  0 海盜德瑞克 不死屬性
+					275 text 德瑞克的船長靴
+					276 text 擊敗  0 闇答萊屍 念屬性
+					277 text 闇答萊屍的冥王項鍊
+					278 text 擊敗  0 MVP 門票  0/5
+					279 button (disabled) Lv.30 開放
+					280 checkbox (settable, integer) Description: 自動挑戰：門票滿 5 張時自動挑戰 MVP, Value: 0
+					281 text 自動挑戰：門票滿 5 張時自動挑戰 MVP
+				282 container
+					283 heading ✦ 組隊副本・地獄級頭目 說明, Value: 3
+						284 text ✦  組隊副本・地獄級頭目
+						285 button 說明
+					286 text 帶同一存檔的其他角色組成 3～5 人隊伍（隊友使用各自上次存檔的快照，完整施放自己的技能盤），一路往上挑戰地獄頭目，每層生命與傷害 ×1.15。入場後整個帳號冷卻 2 小時。 最高 第  0  層 復活卷軸  0
+					287 button 組隊
+
+The focused UI element is 0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/

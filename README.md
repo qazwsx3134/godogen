@@ -16,6 +16,7 @@ A published repo is intentionally thin: a runtime manifest, a one-page engine gu
 
 - `prompts/runtime.md` — the runtime manifest
 - `asset-gen/` — the cross-engine asset-generation skill
+- [research/](research/README.md) — 遊戲研究報告、實測截圖與 Godot 設計參考
 - `engines/babylon.md`, `engines/godot.md`, `engines/bevy.md` — per-engine guides
 - [publish.sh](publish.sh) — renders the runtime layout for the chosen engine and host agent
 

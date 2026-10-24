@@ -1,0 +1,576 @@
+Browser tab: 1, Title: "流浪仙境 Ragnarok Wanderer", URL: "https://xianjingro.netlify.app/".
+0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/
+	1 container app
+		2 container stageWrap
+			3 image Description: 戰鬥畫面, ID: stage
+			19 container lstack
+				98 container v114box
+					99 button 聊天室
+					100 button 收起聊天框
+					101 container
+						102 text 請屎皇 ：暴擊釋放
+					103 container
+						104 text cyz0416 ：感謝解答
+					105 container
+						106 text 花寒弦 ：活動圖哪個裝備最值得刷?
+				23 button ✦ 任務分解 3 件裝備0/3, ID: questChip
+					220 text ✦ 
+					221 text 任務
+					222 text 分解 3 件裝備
+					223 text 0/3
+				27 container mapChip
+					224 text 普隆德拉 城鎮
+			219 button 離開城鎮, ID: bossBtn
+			117 button 可占卜天氣, Help: 到朱諾找占卜師占卜天氣, ID: v125wx
+		6 container side
+			7 container ro-brand
+				8 text ✧
+				9 text 流浪仙境
+				225 text ● 已自動存檔
+			11 tab group tabs
+				12 tab (selectable, settable, boolean) 角色, Value: 0
+				13 tab (selectable, settable, boolean) 背包, Value: 0
+背包
+				14 tab (selectable, settable, boolean) 技能, Value: 0
+				18 tab (selectable, settable, boolean) 聊天, Value: 0
+				15 tab (selectable, settable, boolean) 地圖, Value: 0
+				16 tab (selected, settable, boolean) 選單, Value: 1
+			128 container panel
+				226 button < 選單
+				227 heading 卡片圖鑑 說明, Value: 2
+					228 text 卡片圖鑑
+					229 button 說明
+				230 text 同帳號角色共用已取得卡片與蒐藏加成；持有張數與裝備鑲卡仍屬於目前角色。未登入的本機角色另行共用，不與登入帳號混合。
+				231 text 蒐藏度  0/158 持有卡片  0  張
+				232 text 每蒐集 1 種卡片（取得過即算），傷害增加與最大生命各 +0.12%。目前 +0%。
+				233 button (collapsed) 怪物屬性一覽, Secondary Actions: Expand
+					234 text 怪物屬性一覽
+				235 checkbox 全部, Value: 1
+				236 checkbox 普通, Value: 0
+				237 checkbox 精良, Value: 0
+				238 checkbox 稀有, Value: 0
+				239 checkbox 史詩, Value: 0
+				240 checkbox 傳說, Value: 0
+				241 checkbox 神話, Value: 0
+				242 heading ✦ 普通 鑲嵌成功率 85%・一般怪物, Value: 3
+					243 text ✦ 
+					244 text 普通
+					245 text 鑲嵌成功率 85%・一般怪物
+				246 text ？？？
+				247 text 武器卡片
+				248 text 尚未取得
+				249 text ？？？
+				250 text 武器卡片
+				251 text 尚未取得
+				252 text ？？？
+				253 text 武器卡片
+				254 text 尚未取得
+				255 text ？？？
+				256 text 武器卡片
+				257 text 尚未取得
+				258 text ？？？
+				259 text 武器卡片
+				260 text 尚未取得
+				261 text ？？？
+				262 text 盾牌卡片
+				263 text 尚未取得
+				264 text ？？？
+				265 text 盾牌卡片
+				266 text 尚未取得
+				267 text ？？？
+				268 text 盾牌卡片
+				269 text 尚未取得
+				270 text ？？？
+				271 text 盾牌卡片
+				272 text 尚未取得
+				273 text ？？？
+				274 text 頭飾卡片
+				275 text 尚未取得
+				276 text ？？？
+				277 text 頭飾卡片
+				278 text 尚未取得
+				279 text ？？？
+				280 text 頭飾卡片
+				281 text 尚未取得
+				282 text ？？？
+				283 text 頭飾卡片
+				284 text 尚未取得
+				285 text ？？？
+				286 text 鎧甲卡片
+				287 text 尚未取得
+				288 text ？？？
+				289 text 鎧甲卡片
+				290 text 尚未取得
+				291 text ？？？
+				292 text 鎧甲卡片
+				293 text 尚未取得
+				294 text ？？？
+				295 text 鎧甲卡片
+				296 text 尚未取得
+				297 text ？？？
+				298 text 鎧甲卡片
+				299 text 尚未取得
+				300 text ？？？
+				301 text 披肩卡片
+				302 text 尚未取得
+				303 text ？？？
+				304 text 披肩卡片
+				305 text 尚未取得
+				306 text ？？？
+				307 text 披肩卡片
+				308 text 尚未取得
+				309 text ？？？
+				310 text 披肩卡片
+				311 text 尚未取得
+				312 text ？？？
+				313 text 鞋子卡片
+				314 text 尚未取得
+				315 text ？？？
+				316 text 鞋子卡片
+				317 text 尚未取得
+				318 text ？？？
+				319 text 鞋子卡片
+				320 text 尚未取得
+				321 text ？？？
+				322 text 鞋子卡片
+				323 text 尚未取得
+				324 text ？？？
+				325 text 飾品卡片
+				326 text 尚未取得
+				327 text ？？？
+				328 text 飾品卡片
+				329 text 尚未取得
+				330 text ？？？
+				331 text 飾品卡片
+				332 text 尚未取得
+				333 text ？？？
+				334 text 飾品卡片
+				335 text 尚未取得
+				336 heading ✦ 精良 鑲嵌成功率 70%・一般怪物（中後期地圖較多）、菁英, Value: 3
+					337 text ✦ 
+					338 text 精良
+					339 text 鑲嵌成功率 70%・一般怪物（中後期地圖較多）、菁英
+				340 text ？？？
+				341 text 武器卡片
+				342 text 尚未取得
+				343 text ？？？
+				344 text 武器卡片
+				345 text 尚未取得
+				346 text ？？？
+				347 text 武器卡片
+				348 text 尚未取得
+				349 text ？？？
+				350 text 武器卡片
+				351 text 尚未取得
+				352 text ？？？
+				353 text 武器卡片
+				354 text 尚未取得
+				355 text ？？？
+				356 text 盾牌卡片
+				357 text 尚未取得
+				358 text ？？？
+				359 text 盾牌卡片
+				360 text 尚未取得
+				361 text ？？？
+				362 text 盾牌卡片
+				363 text 尚未取得
+				364 text ？？？
+				365 text 盾牌卡片
+				366 text 尚未取得
+				367 text ？？？
+				368 text 頭飾卡片
+				369 text 尚未取得
+				370 text ？？？
+				371 text 頭飾卡片
+				372 text 尚未取得
+				373 text ？？？
+				374 text 頭飾卡片
+				375 text 尚未取得
+				376 text ？？？
+				377 text 頭飾卡片
+				378 text 尚未取得
+				379 text ？？？
+				380 text 鎧甲卡片
+				381 text 尚未取得
+				382 text ？？？
+				383 text 鎧甲卡片
+				384 text 尚未取得
+				385 text ？？？
+				386 text 鎧甲卡片
+				387 text 尚未取得
+				388 text ？？？
+				389 text 鎧甲卡片
+				390 text 尚未取得
+				391 text ？？？
+				392 text 披肩卡片
+				393 text 尚未取得
+				394 text ？？？
+				395 text 披肩卡片
+				396 text 尚未取得
+				397 text ？？？
+				398 text 披肩卡片
+				399 text 尚未取得
+				400 text ？？？
+				401 text 披肩卡片
+				402 text 尚未取得
+				403 text ？？？
+				404 text 鞋子卡片
+				405 text 尚未取得
+				406 text ？？？
+				407 text 鞋子卡片
+				408 text 尚未取得
+				409 text ？？？
+				410 text 鞋子卡片
+				411 text 尚未取得
+				412 text ？？？
+				413 text 飾品卡片
+				414 text 尚未取得
+				415 text ？？？
+				416 text 飾品卡片
+				417 text 尚未取得
+				418 text ？？？
+				419 text 飾品卡片
+				420 text 尚未取得
+				421 text ？？？
+				422 text 飾品卡片
+				423 text 尚未取得
+				424 heading ✦ 稀有 鑲嵌成功率 55%・菁英、地圖頭目, Value: 3
+					425 text ✦ 
+					426 text 稀有
+					427 text 鑲嵌成功率 55%・菁英、地圖頭目
+				428 text ？？？
+				429 text 武器卡片
+				430 text 尚未取得
+				431 text ？？？
+				432 text 武器卡片
+				433 text 尚未取得
+				434 text ？？？
+				435 text 武器卡片
+				436 text 尚未取得
+				437 text ？？？
+				438 text 盾牌卡片
+				439 text 尚未取得
+				440 text ？？？
+				441 text 盾牌卡片
+				442 text 尚未取得
+				443 text ？？？
+				444 text 盾牌卡片
+				445 text 尚未取得
+				446 text ？？？
+				447 text 頭飾卡片
+				448 text 尚未取得
+				449 text ？？？
+				450 text 頭飾卡片
+				451 text 尚未取得
+				452 text ？？？
+				453 text 頭飾卡片
+				454 text 尚未取得
+				455 text ？？？
+				456 text 頭飾卡片
+				457 text 尚未取得
+				458 text ？？？
+				459 text 鎧甲卡片
+				460 text 尚未取得
+				461 text ？？？
+				462 text 鎧甲卡片
+				463 text 尚未取得
+				464 text ？？？
+				465 text 鎧甲卡片
+				466 text 尚未取得
+				467 text ？？？
+				468 text 披肩卡片
+				469 text 尚未取得
+				470 text ？？？
+				471 text 披肩卡片
+				472 text 尚未取得
+				473 text ？？？
+				474 text 披肩卡片
+				475 text 尚未取得
+				476 text ？？？
+				477 text 披肩卡片
+				478 text 尚未取得
+				479 text ？？？
+				480 text 鞋子卡片
+				481 text 尚未取得
+				482 text ？？？
+				483 text 鞋子卡片
+				484 text 尚未取得
+				485 text ？？？
+				486 text 鞋子卡片
+				487 text 尚未取得
+				488 text ？？？
+				489 text 飾品卡片
+				490 text 尚未取得
+				491 text ？？？
+				492 text 飾品卡片
+				493 text 尚未取得
+				494 text ？？？
+				495 text 飾品卡片
+				496 text 尚未取得
+				497 text ？？？
+				498 text 飾品卡片
+				499 text 尚未取得
+				500 heading ✦ 史詩 鑲嵌成功率 40%・地圖頭目、守護者、巴風特、無盡之塔與武鬥場頭目關, Value: 3
+					501 text ✦ 
+					502 text 史詩
+					503 text 鑲嵌成功率 40%・地圖頭目、守護者、巴風特、無盡之塔與武鬥場頭目關
+				504 text ？？？
+				505 text 武器卡片
+				506 text 尚未取得
+				507 text ？？？
+				508 text 武器卡片
+				509 text 尚未取得
+				510 text ？？？
+				511 text 武器卡片
+				512 text 尚未取得
+				513 text ？？？
+				514 text 盾牌卡片
+				515 text 尚未取得
+				516 text ？？？
+				517 text 盾牌卡片
+				518 text 尚未取得
+				519 text ？？？
+				520 text 盾牌卡片
+				521 text 尚未取得
+				522 text ？？？
+				523 text 頭飾卡片
+				524 text 尚未取得
+				525 text ？？？
+				526 text 頭飾卡片
+				527 text 尚未取得
+				528 text ？？？
+				529 text 頭飾卡片
+				530 text 尚未取得
+				531 text ？？？
+				532 text 鎧甲卡片
+				533 text 尚未取得
+				534 text ？？？
+				535 text 鎧甲卡片
+				536 text 尚未取得
+				537 text ？？？
+				538 text 披肩卡片
+				539 text 尚未取得
+				540 text ？？？
+				541 text 披肩卡片
+				542 text 尚未取得
+				543 text ？？？
+				544 text 鞋子卡片
+				545 text 尚未取得
+				546 text ？？？
+				547 text 鞋子卡片
+				548 text 尚未取得
+				549 text ？？？
+				550 text 飾品卡片
+				551 text 尚未取得
+				552 text ？？？
+				553 text 飾品卡片
+				554 text 尚未取得
+				555 text ？？？
+				556 text 飾品卡片
+				557 text 尚未取得
+				558 heading ✦ 傳說 鑲嵌成功率 28%・守護者、巴風特、無盡之塔、武鬥場、魔王、活動神；深淵頭目與 Lv78 以後 4 張新地圖的頭目另有 3% 掉落隨機傳說卡片, Value: 3
+					559 text ✦ 
+					560 text 傳說
+					561 text 鑲嵌成功率 28%・守護者、巴風特、無盡之塔、武鬥場、魔王、活動神；深淵頭目與 Lv78 以後 4 張新地圖的頭目另有 3% 掉落隨機傳說卡片
+				562 text ？？？
+				563 text 武器卡片
+				564 text 尚未取得
+				565 text ？？？
+				566 text 武器卡片
+				567 text 尚未取得
+				568 text ？？？
+				569 text 盾牌卡片
+				570 text 尚未取得
+				571 text ？？？
+				572 text 頭飾卡片
+				573 text 尚未取得
+				574 text ？？？
+				575 text 頭飾卡片
+				576 text 尚未取得
+				577 text ？？？
+				578 text 鎧甲卡片
+				579 text 尚未取得
+				580 text ？？？
+				581 text 鎧甲卡片
+				582 text 尚未取得
+				583 text ？？？
+				584 text 披肩卡片
+				585 text 尚未取得
+				586 text ？？？
+				587 text 披肩卡片
+				588 text 尚未取得
+				589 text ？？？
+				590 text 鞋子卡片
+				591 text 尚未取得
+				592 text ？？？
+				593 text 飾品卡片
+				594 text 尚未取得
+				595 text ？？？
+				596 text 飾品卡片
+				597 text 尚未取得
+				598 text ？？？
+				599 text 頭飾卡片
+				600 text 尚未取得
+				601 text ？？？
+				602 text 盾牌卡片
+				603 text 尚未取得
+				604 text ？？？
+				605 text 披肩卡片
+				606 text 尚未取得
+				607 text ？？？
+				608 text 武器卡片
+				609 text 尚未取得
+				610 text ？？？
+				611 text 武器卡片
+				612 text 尚未取得
+				613 text ？？？
+				614 text 武器卡片
+				615 text 尚未取得
+				616 text ？？？
+				617 text 盾牌卡片
+				618 text 尚未取得
+				619 text ？？？
+				620 text 盾牌卡片
+				621 text 尚未取得
+				622 text ？？？
+				623 text 盾牌卡片
+				624 text 尚未取得
+				625 text ？？？
+				626 text 頭飾卡片
+				627 text 尚未取得
+				628 text ？？？
+				629 text 頭飾卡片
+				630 text 尚未取得
+				631 text ？？？
+				632 text 鎧甲卡片
+				633 text 尚未取得
+				634 text ？？？
+				635 text 鎧甲卡片
+				636 text 尚未取得
+				637 text ？？？
+				638 text 鎧甲卡片
+				639 text 尚未取得
+				640 text ？？？
+				641 text 披肩卡片
+				642 text 尚未取得
+				643 text ？？？
+				644 text 披肩卡片
+				645 text 尚未取得
+				646 text ？？？
+				647 text 鞋子卡片
+				648 text 尚未取得
+				649 text ？？？
+				650 text 鞋子卡片
+				651 text 尚未取得
+				652 text ？？？
+				653 text 鞋子卡片
+				654 text 尚未取得
+				655 text ？？？
+				656 text 鞋子卡片
+				657 text 尚未取得
+				658 text ？？？
+				659 text 鞋子卡片
+				660 text 尚未取得
+				661 text ？？？
+				662 text 飾品卡片
+				663 text 尚未取得
+				664 text ？？？
+				665 text 飾品卡片
+				666 text 尚未取得
+				667 text ？？？
+				668 text 飾品卡片
+				669 text 尚未取得
+				670 text ？？？
+				671 text 飾品卡片
+				672 text 尚未取得
+				673 heading ✦ 神話 鑲嵌成功率 18%・魔王闇答萊屍、活動神化身、武鬥場 30 層以上頭目關；或傳說卡片合成, Value: 3
+					674 text ✦ 
+					675 text 神話
+					676 text 鑲嵌成功率 18%・魔王闇答萊屍、活動神化身、武鬥場 30 層以上頭目關；或傳說卡片合成
+				677 text ？？？
+				678 text 武器卡片
+				679 text 尚未取得
+				680 text ？？？
+				681 text 武器卡片
+				682 text 尚未取得
+				683 text ？？？
+				684 text 盾牌卡片
+				685 text 尚未取得
+				686 text ？？？
+				687 text 頭飾卡片
+				688 text 尚未取得
+				689 text ？？？
+				690 text 鎧甲卡片
+				691 text 尚未取得
+				692 text ？？？
+				693 text 披肩卡片
+				694 text 尚未取得
+				695 text ？？？
+				696 text 鞋子卡片
+				697 text 尚未取得
+				698 text ？？？
+				699 text 飾品卡片
+				700 text 尚未取得
+				701 text ？？？
+				702 text 武器卡片
+				703 text 尚未取得
+				704 text ？？？
+				705 text 盾牌卡片
+				706 text 尚未取得
+				707 text ？？？
+				708 text 盾牌卡片
+				709 text 尚未取得
+				710 text ？？？
+				711 text 頭飾卡片
+				712 text 尚未取得
+				713 text ？？？
+				714 text 頭飾卡片
+				715 text 尚未取得
+				716 text ？？？
+				717 text 鎧甲卡片
+				718 text 尚未取得
+				719 text ？？？
+				720 text 鎧甲卡片
+				721 text 尚未取得
+				722 text ？？？
+				723 text 披肩卡片
+				724 text 尚未取得
+				725 text ？？？
+				726 text 披肩卡片
+				727 text 尚未取得
+				728 text ？？？
+				729 text 鞋子卡片
+				730 text 尚未取得
+				731 text ？？？
+				732 text 鞋子卡片
+				733 text 尚未取得
+				734 text ？？？
+				735 text 飾品卡片
+				736 text 尚未取得
+				737 text ？？？
+				738 text 飾品卡片
+				739 text 尚未取得
+		740 container sheet
+			741 heading 卡片圖鑑, Value: 2
+				742 text 卡片圖鑑
+			743 text 帳號共用
+			744 text 同帳號所有角色共用卡片圖鑑的已取得紀錄與原 蒐藏加成 卡片實物、持有張數和鑲卡不轉移 首次更新合併該帳號既有角色的紀錄 並隨雲端存檔同步 未登入本機與各登入帳號互相獨立
+			745 text 怪物卡片
+			746 text 共 158 種，名稱取自 RO 分為普通、精良、稀有、史詩、傳說、神話 6 階 卡片是強化素材，不限定由哪種怪物掉落
+			747 text 一般怪物
+			748 text 每次擊殺 0.1% 機率掉落普通或精良卡片 越後面的地圖精良越多 菁英掉落率 ×6，最高到稀有
+			749 text 頭目
+			750 text 地圖頭目 1% 掉落稀有或史詩 Lv78 以後 4 張新地圖的頭目與所有深淵頭目 另有 3% 掉落隨機傳說卡片 魔王、巴風特約 0.5% 掉落史詩或傳說
+			751 text 高強度內容
+			752 text 魔王闇答萊屍 1% 掉落傳說卡片 活動神化身 1.5% 掉落傳說或神話 無限武鬥場每 10 層頭目關機率隨層數提高 30 層起掉落傳說或神話
+			753 text 使用
+			754 text 卡片在鐵匠的「鑲嵌」插入裝備插槽 依部位限制 合成在鐵匠的「卡片合成」
+			755 text 蒐藏度
+			756 text 每蒐集到 1 種卡片（取得過即算 之後用掉也保留） 傷害增加與最大生命各 +0.12% 全部蒐集 +19%
+			757 text 屬性
+			758 text 每種怪物有攻擊屬性（水、地、火、風、毒、 聖、暗、念、不死、無） 卡片圖鑑上方可查看 屬性抗性降低該屬性怪物的傷害，上限 75%
+			759 text 地圖蒐藏
+			760 text 每張地圖的擊殺加成是另一個系統 在選單「地圖蒐藏」查看
+			761 button 知道了
+
+The focused UI element is 0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/

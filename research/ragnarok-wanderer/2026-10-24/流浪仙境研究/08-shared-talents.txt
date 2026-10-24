@@ -1,0 +1,774 @@
+Browser tab: 1, Title: "流浪仙境 Ragnarok Wanderer", URL: "https://xianjingro.netlify.app/".
+0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/
+	1 container app
+		2 container stageWrap
+			3 image Description: 戰鬥畫面, ID: stage
+			19 container lstack
+				98 container v114box
+					99 button 聊天室
+					100 button 收起聊天框
+					101 container
+						102 text 請屎皇 ：暴擊釋放
+					103 container
+						104 text cyz0416 ：感謝解答
+					105 container
+						106 text 花寒弦 ：活動圖哪個裝備最值得刷?
+				20 button 活動荒野回響, ID: ssChip
+					271 text 活動
+					272 text 荒野回響
+				23 button ✦ 任務擊殺 15 隻怪物9/15, ID: questChip
+					273 text ✦ 
+					274 text 任務
+					275 text 擊殺 15 隻怪物
+					276 text 9/15
+				27 container mapChip
+					277 text 普隆德拉南門 LV1-6
+			5 button (disabled) BOSS29/30, ID: bossBtn
+				278 text BOSS 29/30
+			117 button 可占卜天氣, Help: 到朱諾找占卜師占卜天氣, ID: v125wx
+		6 container side
+			7 container ro-brand
+				8 text ✧
+				9 text 流浪仙境
+				127 text ● 已自動存檔
+			11 tab group tabs
+				12 tab (selected, settable, boolean) 角色, Value: 1
+				13 tab (selectable, settable, boolean) 背包, Value: 0
+背包
+				14 tab (selectable, settable, boolean) 技能, Value: 0
+				18 tab (selectable, settable, boolean) 聊天, Value: 0
+				15 tab (selectable, settable, boolean) 地圖, Value: 0
+				16 tab (selectable, settable, boolean) 選單, Value: 0
+			128 container panel
+				129 text 研究旅人
+				130 text 劍士  LV6
+				131 button ♂ 男, Help: 點一下更改性別
+				132 button 切換角色
+				133 text 構築
+				134 button 說明
+				135 checkbox 1
+				136 checkbox 2, Value: 0
+				137 checkbox 3, Value: 0
+				138 button 複製
+				139 checkbox 屬性, Value: 1
+				140 checkbox 職業天賦, Value: 0
+				141 image 劍士
+				142 text MIDGARD ADVENTURER
+				143 heading 研究旅人 Lv.6, Value: 2
+					144 text 研究旅人  Lv.6
+				145 text 劍鋒所向，守護之誓
+				146 container
+					147 text 基本素質 · 共用天賦
+					148 button 說明
+					149 text 剩餘 4 點
+					150 container 每點 +0.2 攻擊、+0.08% 總傷害額外（天賦樹 9＋裝備與卡片 1）
+						151 text STR
+						152 text  力量
+						153 container
+							154 text 10 （+1）
+					155 container 每點 +8 生命、+0.25% 最大生命額外（天賦樹 7）
+						156 text VIT
+						157 text  體質
+						158 text 7
+					159 container 每點 +0.35% 攻速、+2 閃避（天賦樹 3）
+						160 text AGI
+						161 text  敏捷
+						162 text 3
+					163 container 每點 +0.13% 暴擊率、+0.32% 暴擊傷害（天賦樹 1）
+						164 text LUK
+						165 text  幸運
+						166 text 1
+					167 container 每點 +0.33% 技能傷害、+0.08% 技能傷害額外（天賦樹 1）
+						168 text INT
+						169 text  智力
+						170 text 1
+					171 container 每點 +0.16 攻擊、+0.09% 冷卻縮減（天賦樹 3）
+						172 text DEX
+						173 text  靈巧
+						174 text 3
+					175 button 開啟共用天賦樹 終極天賦 0 / 2
+						176 text 開啟共用天賦樹
+						177 text 終極天賦 0 / 2
+				178 heading 劍士・等級 6 說明, Value: 2
+					179 text 劍士・等級  6
+					180 button 說明
+				181 button Description: 普通 長劍, Help: 普通 · 長劍
+				182 button (disabled) 副手（空）
+				183 button (disabled) 頭飾（空）
+				184 button (disabled) 鎧甲（空）
+				185 button (disabled) 披肩（空）
+				186 button (disabled) 鞋子（空）
+				187 button (disabled) 飾品・左（空）
+				188 button (disabled) 飾品・右（空）
+				189 heading ✦ 攻擊, Value: 3
+					190 text ✦  攻擊
+				191 definition list
+					192 container 預估 DPS（含技能）
+						193 text 預估 DPS（含技能）
+					194 text 24
+					195 container 武器傷害
+						196 text 武器傷害
+					197 text 7-10
+					198 container 每秒攻擊次數
+						199 text 每秒攻擊次數
+					200 container
+						201 text 1.45
+					202 container 行動速度
+						203 text 行動速度
+					204 container
+						205 text X1.00
+					206 container 傷害增加 / 技能傷害
+						207 text 傷害增加 / 技能傷害
+					208 text +0% / +0.33%
+					209 container 暴擊率 / 暴擊傷害
+						210 text 暴擊率 / 暴擊傷害
+					211 text 8.1% / 150.32%
+					212 container 冷卻縮減 / 技能範圍
+						213 text 冷卻縮減 / 技能範圍
+					214 text 0.3% / +0%
+				215 heading ✦ 防禦, Value: 3
+					216 text ✦  防禦
+				217 definition list
+					218 container 最大生命
+						219 text 最大生命
+					220 text 247
+					221 container 護甲
+						222 text 護甲
+					223 text 0（職業加成 +20%）
+					224 container 固定扣減
+						225 text 固定扣減
+					226 text 每次 −0（最多減半）
+					227 container 護甲減傷
+						228 text 護甲減傷
+					229 text 0%／上限 85%
+					230 container 閃避 / 閃避率
+						231 text 閃避 / 閃避率
+					232 container
+						233 text 6 / 1.2%／上限 45%
+					234 container 以 Lv6 怪物計算（怪物等級越高越難減傷與閃避；低於 Lv60 以 60 計）
+						235 text 以 Lv6 怪物計算（怪物等級越高越難減傷與閃避；低於 Lv60 以 60 計）
+					236 container 每秒回復
+						237 text 每秒回復
+					238 text 2.5
+					239 container 擊殺回復
+						240 text 擊殺回復
+					241 text 0
+					242 container 移動速度
+						243 text 移動速度
+					244 container
+						245 text 32
+					246 container 復活時間
+						247 text 復活時間
+					248 text 10.0 秒
+				249 heading ✦ 自動藥水, Value: 3
+					250 text ✦  自動藥水
+				251 container
+					252 text 生命低於 
+					253 text 40%
+					254 text  時自動使用藥水
+					255 text （冷卻 4 秒，回復 35%，剩餘  10  瓶）
+				256 slider (settable, integer) 生命低於 40% 時自動使用藥水 （冷卻 4 秒，回復 35%，剩餘 10 瓶）, Value: 40, ID: potPct
+				257 container
+					258 checkbox (settable, integer) Description: 藥水用完時自動購買（Zeny 30／5 瓶）, Value: 0
+					259 text 藥水用完時自動購買（Zeny  30 ／ 5  瓶）
+				260 heading ✦ 戰鬥方式, Value: 3
+					261 text ✦  戰鬥方式
+				262 container
+					263 checkbox (settable, integer) Description: 消極模式：遠離怪物，進入攻擊範圍才攻擊（含頭目戰）, Value: 0
+					264 text 消極模式：遠離怪物，進入攻擊範圍才攻擊（含頭目戰）
+				265 container
+					266 checkbox (settable, integer) Description: 關閉普通攻擊：只施放技能, Value: 0
+					267 text 關閉普通攻擊：只施放技能
+				268 container
+					269 checkbox (settable, integer) Description: 怪物自動靠攏（一般地圖；Lv.70 以下為半個畫面內，Lv.70 以上為整張地圖；消極模式時不作用）, Value: 1
+					270 text 怪物自動靠攏（一般地圖；Lv.70 以下為半個畫面內，Lv.70 以上為整張地圖；消極模式時不作用）
+		279 container sheet
+			280 container
+				281 heading 共用天賦樹, Value: 2
+					282 text 共用天賦樹
+				283 text 剩餘  4  / 4 點 · 終極天賦  0 / 2
+				284 container 天賦頁
+					285 checkbox 天賦頁 1, Help: 使用中, Value: 1
+					286 button ＋, Help: 新增空白天賦頁（最多 10 頁）
+					287 button 改名
+				288 button 關閉
+			289 container
+				290 checkbox 天賦星圖, Value: 1
+				291 checkbox 終極總覽 · 49, Value: 0
+				292 checkbox 模擬器, Value: 0
+				293 button 縮小天賦樹
+				294 text 250%
+				295 button 放大天賦樹
+				296 button 重設天賦樹視角
+				297 checkbox 圖例, Value: 0
+				298 container 可拖曳的天賦星圖
+					299 container 共用天賦樹：星座狀素質路徑、二十四個專精、六個交會、三十六個終極天賦 (showing 0-500 of 822 items)
+						300 text 冒險者起點
+						301 text 六職業共用
+						302 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						303 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						304 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						305 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						306 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						307 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						308 button Description: 破陣衝鋒（技能），未點亮, Help: 破陣衝鋒（技能）：範圍技能傷害倍率 +18%，技能範圍 +10%
+							309 text 技
+						310 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						311 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						312 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						313 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						314 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						315 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						316 button Description: 靈巧 +6，未點亮, Help: 靈巧 +6（2 點）
+							317 text DEX
+						318 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						319 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						320 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						321 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						322 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						323 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						324 button Description: 力量 +6，未點亮, Help: 力量 +6（2 點）
+							325 text STR
+						326 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						327 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						328 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						329 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						330 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						331 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						332 button Description: 致命弱點（暴擊），未點亮, Help: 致命弱點（暴擊）：暴擊傷害 +36%，對菁英與 Boss 擊中傷害倍率 +6%
+							333 text 暴
+						334 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						335 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						336 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						337 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						338 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						339 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						340 button Description: 戰地急救（防禦・生命），未點亮, Help: 戰地急救（防禦・生命）：擊殺回復 +20，藥水效果 +30%，每秒回復最大生命 0.3%
+							341 text 防
+						342 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						343 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						344 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						345 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						346 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						347 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						348 button Description: 不屈意志（防禦・生命），未點亮, Help: 不屈意志（防禦・生命）：最大生命 +10%，護甲 +25%
+							349 text 防
+						350 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						351 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						352 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						353 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						354 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						355 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						356 button Description: 精密調律（技能），未點亮, Help: 精密調律（技能）：技能傷害 +11%，冷卻縮減 +7%，暴擊率 +4%
+							357 text 技
+						358 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						359 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						360 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						361 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						362 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						363 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						364 button Description: 命運伏線（暴擊），未點亮, Help: 命運伏線（暴擊）：幸運 +6，暴擊傷害 +10%
+							365 text 暴
+						366 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						367 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						368 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						369 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						370 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						371 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						372 button Description: 體質 +6，未點亮, Help: 體質 +6（2 點）
+							373 text VIT
+						374 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						375 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						376 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						377 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						378 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						379 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						380 button Description: 幸運 +6，未點亮, Help: 幸運 +6（2 點）
+							381 text LUK
+						382 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						383 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						384 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						385 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						386 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						387 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						388 button Description: 力量 +6，未點亮, Help: 力量 +6（2 點）
+							389 text STR
+						390 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						391 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						392 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						393 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						394 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						395 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						396 button Description: 敏捷 +6，未點亮, Help: 敏捷 +6（2 點）
+							397 text AGI
+						398 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						399 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						400 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						401 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						402 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						403 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						404 button Description: 靈巧 +6，未點亮, Help: 靈巧 +6（2 點）
+							405 text DEX
+						406 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						407 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						408 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						409 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						410 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						411 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						412 button Description: 靈巧 +6，未點亮, Help: 靈巧 +6（2 點）
+							413 text DEX
+						414 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						415 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						416 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						417 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						418 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						419 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						420 button Description: 迅捷節拍（冷卻・速度），未點亮, Help: 迅捷節拍（冷卻・速度）：攻擊速度 +22%，冷卻縮減 +4%
+							421 text 速
+						422 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						423 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						424 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						425 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						426 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						427 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						428 button Description: 蝕骨毒理（毒），未點亮, Help: 蝕骨毒理（毒）：中毒傷害 +60%，中毒上限 +1 層
+							429 text 毒
+						430 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						431 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						432 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						433 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						434 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						435 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						436 button Description: 血戰續行（傷害），未點亮, Help: 血戰續行（傷害）：流血傷害 +66%，擊殺回復 +15
+							437 text 傷
+						438 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						439 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						440 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						441 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						442 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						443 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						444 button Description: 敏捷 +6，未點亮, Help: 敏捷 +6（2 點）
+							445 text AGI
+						446 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						447 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						448 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						449 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						450 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						451 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						452 button Description: 靈巧連結（技能），未點亮, Help: 靈巧連結（技能）：靈巧 +6，技能範圍 +8%
+							453 text 技
+						454 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						455 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						456 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						457 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						458 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						459 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						460 button Description: 風之足跡（防禦・生命），未點亮, Help: 風之足跡（防禦・生命）：閃避 +96、閃避 +36%，移動速度 +10%
+							461 text 防
+						462 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						463 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						464 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						465 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						466 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						467 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						468 button Description: 智力 +6，未點亮, Help: 智力 +6（2 點）
+							469 text INT
+						470 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						471 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						472 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						473 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						474 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						475 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						476 button Description: 力量 +6，未點亮, Help: 力量 +6（2 點）
+							477 text STR
+						478 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						479 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						480 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						481 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						482 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						483 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						484 button Description: 重鎚專注（傷害），未點亮, Help: 重鎚專注（傷害）：冷卻 4 秒以上的技能傷害倍率 +20%，暴擊傷害 +12%
+							485 text 傷
+						486 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						487 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						488 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						489 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						490 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						491 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						492 button Description: 魔力編織（技能），未點亮, Help: 魔力編織（技能）：智力 +6，技能傷害 +8%
+							493 text 技
+						494 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						495 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						496 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						497 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						498 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						499 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						500 button Description: 連擊本能（冷卻・速度），未點亮, Help: 連擊本能（冷卻・速度）：冷卻 3 秒以下的技能冷卻 −15%，攻擊速度 +8%
+							501 text 速
+						502 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						503 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						504 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						505 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						506 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						507 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						508 button Description: 毒霧擴散（毒），未點亮, Help: 毒霧擴散（毒）：中毒技能範圍 +20%，中毒技能傷害倍率 +18%
+							509 text 毒
+						510 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						511 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						512 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						513 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						514 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						515 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						516 button Description: 鷹眼之星（暴擊），未點亮, Help: 鷹眼之星（暴擊）：暴擊率 +10%，暴擊傷害 +24%
+							517 text 暴
+						518 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						519 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						520 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						521 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						522 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						523 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						524 button Description: 智力 +6，未點亮, Help: 智力 +6（2 點）
+							525 text INT
+						526 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						527 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						528 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						529 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						530 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						531 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						532 button Description: 碎甲之勢（傷害），未點亮, Help: 碎甲之勢（傷害）：傷害 +28%，暴擊傷害 +18%
+							533 text 傷
+						534 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						535 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						536 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						537 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						538 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						539 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						540 button Description: 泉源之心（防禦・生命），未點亮, Help: 泉源之心（防禦・生命）：最大生命 +11%，每秒回復最大生命 0.5%，藥水效果 +18%
+							541 text 防
+						542 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						543 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						544 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						545 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						546 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						547 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						548 button Description: 共生契印（召喚），未點亮, Help: 共生契印（召喚）：召喚物傷害 +53%，召喚攻擊速度 +18%
+							549 text 召
+						550 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						551 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						552 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						553 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						554 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						555 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						556 button Description: 冰雷交鳴（元素），未點亮, Help: 冰雷交鳴（元素）：帶冰緩或感電效果的技能傷害倍率 +22%
+							557 text 元
+						558 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						559 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						560 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						561 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						562 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						563 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						564 button Description: 靈巧 +6，未點亮, Help: 靈巧 +6（2 點）
+							565 text DEX
+						566 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						567 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						568 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						569 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						570 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						571 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						572 button Description: 輕盈身法（防禦・生命），未點亮, Help: 輕盈身法（防禦・生命）：敏捷 +6，閃避 +8%
+							573 text 防
+						574 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						575 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						576 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						577 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						578 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						579 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						580 button Description: 法術迴路（元素），未點亮, Help: 法術迴路（元素）：連鎖技能的連鎖次數 +1，法術技能暴擊率 +8%
+							581 text 元
+						582 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						583 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						584 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						585 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						586 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						587 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						588 button Description: 戰場直覺（技能），未點亮, Help: 戰場直覺（技能）：力量 +6，技能範圍 +8%
+							589 text 技
+						590 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						591 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						592 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						593 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						594 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						595 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						596 button Description: 敏捷 +6，未點亮, Help: 敏捷 +6（2 點）
+							597 text AGI
+						598 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						599 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						600 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						601 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						602 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						603 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						604 button Description: 力量 +6，未點亮, Help: 力量 +6（2 點）
+							605 text STR
+						606 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						607 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						608 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						609 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						610 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						611 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						612 button Description: 敏捷 +6，未點亮, Help: 敏捷 +6（2 點）
+							613 text AGI
+						614 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						615 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						616 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						617 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						618 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						619 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						620 button Description: 智力 +6，未點亮, Help: 智力 +6（2 點）
+							621 text INT
+						622 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						623 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						624 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						625 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						626 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						627 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						628 button Description: 靈巧 +6，未點亮, Help: 靈巧 +6（2 點）
+							629 text DEX
+						630 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						631 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						632 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						633 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						634 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						635 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						636 button Description: 機關巧手（技能），未點亮, Help: 機關巧手（技能）：陷阱技能額外施放 +1，陷阱與召喚技能冷卻 −15%
+							637 text 技
+						638 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						639 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						640 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						641 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						642 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						643 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						644 button Description: 鋼鐵之膚（防禦・生命），未點亮, Help: 鋼鐵之膚（防禦・生命）：護甲 +40%，最大生命 +8%
+							645 text 防
+						646 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						647 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						648 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						649 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						650 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						651 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						652 button Description: 穩固根基（防禦・生命），未點亮, Help: 穩固根基（防禦・生命）：體質 +6，生命 +5%
+							653 text 防
+						654 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						655 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						656 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						657 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						658 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						659 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						660 button Description: 咒術工藝（詛咒），未點亮, Help: 咒術工藝（詛咒）：詛咒效果 +25%，詛咒技能冷卻 −20%
+							661 text 咒
+						662 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						663 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						664 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						665 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						666 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						667 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						668 button Description: 元素延展（元素），未點亮, Help: 元素延展（元素）：燃燒傷害 +36%，元素異常效果 +24%，技能範圍 +14%
+							669 text 元
+						670 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						671 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						672 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						673 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						674 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						675 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						676 button Description: 符文共鳴（技能），未點亮, Help: 符文共鳴（技能）：技能傷害 +36%，冷卻縮減 +5%
+							677 text 技
+						678 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						679 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						680 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						681 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						682 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						683 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						684 button Description: 流星彈道（技能），未點亮, Help: 流星彈道（技能）：投射物技能的投射物 +1，投射物技能傷害倍率 +8%
+							685 text 技
+						686 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						687 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						688 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						689 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						690 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						691 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						692 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						693 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						694 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						695 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						696 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						697 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						698 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						699 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						700 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						701 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						702 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						703 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						704 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						705 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						706 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						707 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						708 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						709 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						710 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						711 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						712 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						713 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						714 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						715 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						716 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						717 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						718 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						719 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						720 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						721 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						722 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						723 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						724 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						725 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						726 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						727 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						728 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						729 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						730 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						731 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						732 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						733 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						734 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						735 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						736 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						737 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						738 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						739 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						740 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						741 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						742 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						743 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						744 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						745 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						746 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						747 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						748 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						749 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						750 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						751 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						752 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						753 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						754 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						755 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						756 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						757 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						758 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						759 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						760 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						761 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						762 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						763 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						764 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						765 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						766 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						767 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						768 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						769 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						770 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						771 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						772 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						773 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						774 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						775 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						776 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						777 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						778 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						779 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						780 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						781 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						782 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						783 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						784 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						785 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						786 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						787 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						788 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						789 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						790 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						791 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						792 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						793 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						794 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						795 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						796 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						797 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						798 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						799 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						800 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						801 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						802 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						803 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						804 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						805 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						806 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						807 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						808 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						809 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						810 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						811 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						812 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						813 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						814 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						815 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						816 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						817 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						818 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						819 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						820 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						821 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						822 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						823 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						824 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						825 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						826 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						827 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						828 button Description: 幸運 +2，未點亮, Help: 幸運 +2（1 點）
+						829 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						830 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						831 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						832 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						833 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						834 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						835 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						836 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						837 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						838 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						839 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						840 button Description: 靈巧 +2，未點亮, Help: 靈巧 +2（1 點）
+						841 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						842 button Description: 智力 +2，未點亮, Help: 智力 +2（1 點）
+						843 button Description: 體質 +2，未點亮, Help: 體質 +2（1 點）
+						844 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						845 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+						846 button Description: 力量 +2，未點亮, Help: 力量 +2（1 點）
+						847 button Description: 敏捷 +2，未點亮, Help: 敏捷 +2（1 點）
+			848 container
+				849 text 奧秘路線 · 素質路徑
+				850 heading ✦ 智力 +2, Value: 3
+					851 text ✦  智力 +2
+				852 text 智力 +2。素質路徑節點。 未投入 · 1 點
+				853 button 投入 1 點
+				854 button (disabled) 退回
+				855 button 套用並儲存
+				856 text 可投入；按套用後才會生效。
+				857 heading 配置後素質, Value: 4
+					858 text 配置後素質
+				859 text 力量 9 體質 7 敏捷 3 幸運 1 智力 1 靈巧 3
+				860 heading 已選終極天賦, Value: 4
+					861 text 已選終極天賦
+				862 text 尚未選擇 天賦點隨等級平均取得，Lv.127 共 116 點：剛好夠任意兩個終極天賦（最貴的組合正好用完）。素質節點 1 點、素質 +2（素質之星 2 點、+6）；專精 4 點；交會 3 點；終極 30 點。點選遠處的天賦可「沿最短路徑點到這裡」。重配免費；Boss 或試煉戰鬥中不能套用。
+			863 container
+				864 button 重置草稿
+				865 button 還原目前配置
+				866 button 套用並儲存
+
+The focused UI element is 175 button 開啟共用天賦樹 終極天賦 0 / 2

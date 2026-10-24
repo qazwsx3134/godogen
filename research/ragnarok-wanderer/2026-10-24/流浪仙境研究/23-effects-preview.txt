@@ -1,0 +1,107 @@
+Browser tab: 1, Title: "流浪仙境 Ragnarok Wanderer", URL: "https://xianjingro.netlify.app/".
+0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/
+	1 container app
+		2 container stageWrap
+			3 image Description: 戰鬥畫面, ID: stage
+			19 container lstack
+				98 container v114box
+					99 button 聊天室
+					100 button 收起聊天框
+					101 container
+						102 text 請屎皇 ：暴擊釋放
+					103 container
+						104 text cyz0416 ：感謝解答
+					105 container
+						106 text 花寒弦 ：活動圖哪個裝備最值得刷?
+				20 button 活動荒野回響, ID: ssChip
+					203 text 活動
+					204 text 荒野回響
+				23 button ✦ 任務分解 3 件裝備0/3, ID: questChip
+					205 text ✦ 
+					206 text 任務
+					207 text 分解 3 件裝備
+					208 text 0/3
+				27 container mapChip
+					209 text 普隆德拉南門 LV1-6
+			210 text 天使波利進入狂怒！
+			117 button 可占卜天氣, Help: 到朱諾找占卜師占卜天氣, ID: v125wx
+		6 container side
+			7 container ro-brand
+				8 text ✧
+				9 text 流浪仙境
+				211 text ● 已自動存檔
+			11 tab group tabs
+				12 tab (selectable, settable, boolean) 角色, Value: 0
+				13 tab (selectable, settable, boolean) 背包, Value: 0
+背包
+				14 tab (selectable, settable, boolean) 技能, Value: 0
+				18 tab (selectable, settable, boolean) 聊天, Value: 0
+				15 tab (selectable, settable, boolean) 地圖, Value: 0
+				16 tab (selected, settable, boolean) 選單, Value: 1
+			128 container panel
+				212 button < 選單
+				213 heading 特效 說明, Value: 2
+					214 text 特效
+					215 button 說明
+				216 heading ✦ 拖尾, Value: 3
+					217 text ✦  拖尾
+				218 button (disabled) 聖・天使之羽 普隆德拉南門
+					219 text 聖・天使之羽 普隆德拉南門
+				220 button (disabled) 地・森之息 斐揚森林
+					221 text 地・森之息 斐揚森林
+				222 button (disabled) 念・魂光 妙勒尼礦坑
+					223 text 念・魂光 妙勒尼礦坑
+				224 button (disabled) 地・流沙 夢羅克沙漠
+					225 text 地・流沙 夢羅克沙漠
+				226 button (disabled) 水・泡沫 依斯魯得海底洞穴
+					227 text 水・泡沫 依斯魯得海底洞穴
+				228 button (disabled) 水・霜凍 拉赫冰洞
+					229 text 水・霜凍 拉赫冰洞
+				230 button (disabled) 火・火焰 諾可羅德火山
+					231 text 火・火焰 諾可羅德火山
+				232 button (disabled) 毒・毒霧 葛城修道院
+					233 text 毒・毒霧 葛城修道院
+				234 button (disabled) 無・Zeny 古城騎士團
+					235 text 無・Zeny 古城騎士團
+				236 button (disabled) 暗・暗影 龜島深處
+					237 text 暗・暗影 龜島深處
+				238 button (disabled) 風・雷光 達納托斯之塔
+					239 text 風・雷光 達納托斯之塔
+				240 button (disabled) 不死・冥火 尼芙菲姆
+					241 text 不死・冥火 尼芙菲姆
+				242 button (disabled) 聖・十字光 朱諾・魔大陸
+					243 text 聖・十字光 朱諾・魔大陸
+				244 button (disabled) 火・熔岩 深淵之湖
+					245 text 火・熔岩 深淵之湖
+				246 button (disabled) 暗・血霧 生體研究所
+					247 text 暗・血霧 生體研究所
+				248 heading ✦ 擊中特效, Value: 3
+					249 text ✦  擊中特效
+				250 button 風屬性・雷擊 0/2000
+					251 text 風屬性・雷擊
+					252 text 0/2000
+				253 button 水屬性・冰晶 0/2000
+					254 text 水屬性・冰晶
+					255 text 0/2000
+				256 button 念屬性・靈魂擊 0/2000
+					257 text 念屬性・靈魂擊
+					258 text 0/2000
+				259 heading ✦ 擊殺特效, Value: 3
+					260 text ✦  擊殺特效
+				261 button 風屬性・怒雷 0/10000
+					262 text 風屬性・怒雷
+					263 text 0/10000
+				264 button 水屬性・冰爆 0/10000
+					265 text 水屬性・冰爆
+					266 text 0/10000
+				267 button 暗屬性・冥界之門 0/10000
+					268 text 暗屬性・冥界之門
+					269 text 0/10000
+		202 container sheet
+			270 heading 擊中特效「風屬性・雷擊」, Value: 2
+				271 text 擊中特效「風屬性・雷擊」
+			272 image gfPrev
+			273 text 菌冠波利母體・擊殺海葵 0/2000 擊殺 2000 隻解鎖
+			274 button 關閉
+
+The focused UI element is 250 button 風屬性・雷擊 0/2000

@@ -1,0 +1,103 @@
+Browser tab: 1, Title: "流浪仙境 Ragnarok Wanderer", URL: "https://xianjingro.netlify.app/".
+0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/
+	1 container app
+		2 container stageWrap
+			3 image Description: 戰鬥畫面, ID: stage
+			19 container lstack
+				98 container v114box
+					99 button 聊天室
+					100 button 收起聊天框
+					101 container
+						102 text 請屎皇 ：暴擊釋放
+					103 container
+						104 text cyz0416 ：感謝解答
+					105 container
+						106 text 花寒弦 ：活動圖哪個裝備最值得刷?
+				20 button 活動荒野回響, ID: ssChip
+					229 text 活動
+					230 text 荒野回響
+				23 button ✦ 任務分解 3 件裝備0/3, ID: questChip
+					231 text ✦ 
+					232 text 任務
+					233 text 分解 3 件裝備
+					234 text 0/3
+				27 container mapChip
+					235 text 普隆德拉南門 LV1-6
+			219 button 挑戰 BOSS, ID: bossBtn
+			117 button 可占卜天氣, Help: 到朱諾找占卜師占卜天氣, ID: v125wx
+		6 container side
+			7 container ro-brand
+				8 text ✧
+				9 text 流浪仙境
+				236 text ● 已自動存檔
+			11 tab group tabs
+				12 tab (selectable, settable, boolean) 角色, Value: 0
+				13 tab (selectable, settable, boolean) 背包, Value: 0
+背包
+				14 tab (selectable, settable, boolean) 技能, Value: 0
+				18 tab (selectable, settable, boolean) 聊天, Value: 0
+				15 tab (selected, settable, boolean) 地圖, Value: 1
+				16 tab (selectable, settable, boolean) 選單, Value: 0
+			128 container panel
+				237 heading ✦ 城鎮 說明, Value: 3
+					238 text ✦  城鎮
+					239 button 說明
+				240 button 前往普隆德拉
+				241 button 前往斐揚
+				242 button 前往吉芬
+				243 button 前往朱諾
+				244 checkbox 一般地圖, Value: 0
+				245 checkbox 挑戰, Value: 0
+				246 checkbox 活動, Value: 1
+				247 checkbox 試煉, Value: 0
+				248 checkbox 統計, Value: 0
+				249 heading ✦ 活動 說明, Value: 3
+					250 text ✦  活動
+					251 button 說明
+				252 button (disabled) 米德加爾特・共生秘境
+					253 text 荒野回響 LV90 90 級開放
+				254 text 米德加爾特・共生秘境
+				255 text 生態印記・10 片挑戰一次 菌冠波利母體
+				256 text 0/10
+				257 button (disabled) 挑戰
+				258 container
+					259 checkbox (settable, integer) Description: 自動, Value: 0
+					260 text 自動
+				261 text 古林鹿靈
+				262 text 0/10
+				263 button (disabled) 挑戰
+				264 container
+					265 checkbox (settable, integer) Description: 自動, Value: 0
+					266 text 自動
+				267 text 熔殼機械甲蟲
+				268 text 0/10
+				269 button (disabled) 挑戰
+				270 container
+					271 checkbox (settable, integer) Description: 自動, Value: 0
+					272 text 自動
+				273 text 掉落 活動獨特
+				274 container
+					275 heading ✦ 荒野回響 · 原創生態首領, Value: 3
+						276 text ✦  荒野回響 · 原創生態首領
+					277 image 菌冠波利母體
+					278 text 孢林之心
+					279 text 菌冠波利母體
+					280 text 吸收古樹汁液的波利群聚體，以菌絲守護繁殖地。
+					281 text 孢子花環 · 菌床萌發 · 黏液奔流
+					282 image 古林鹿靈
+					283 text 月枝守望者
+					284 text 古林鹿靈
+					285 text 棲居林間聖泉的鹿形精靈，角枝會隨月光生長。
+					286 text 根鬚穿刺 · 月枝交錯 · 森息回環
+					287 image 熔殼機械甲蟲
+					288 text 廢礦鍛爐
+					289 text 熔殼機械甲蟲
+					290 text 以礦石為食的古代採掘機體，熔爐與甲殼已長成一體。
+					291 text 熔渣落點 · 鍛爐掃射 · 熱核震波
+				292 container
+					293 heading 活動獨特裝備 只在「米德加爾特・共生秘境」掉落（地圖怪物與化身都可能掉落）, Value: 4
+						294 text 活動獨特裝備
+						295 text 只在「米德加爾特・共生秘境」掉落（地圖怪物與化身都可能掉落）
+					296 text 審判者之劍 武器 總傷害額外 +30%；對生命 90% 以上的敵人必定暴擊 神諭之冠 頭飾 冷卻縮減 +12%；冷卻 4 秒以上的技能傷害倍率 +40% 女武神之鎧 鎧甲 受到的傷害 −15%；最大生命額外 +20% 萬象斗篷 披肩 技能擊中時，12% 機率同時附加燃燒、冰緩與感電；元素異常效果 +30% 生命之泉 飾品・右 每秒回復最大生命 1.2%；擊殺時回復 3% 最大生命 榮耀之戒 飾品・左 暴擊率 +5%；暴擊時獲得 1 個暴擊球（最多 3 個，8 秒）；每個暴擊球使暴擊率 +3%、暴擊傷害 +15%；擊殺菁英或頭目時暴擊球補滿
+
+The focused UI element is 0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/

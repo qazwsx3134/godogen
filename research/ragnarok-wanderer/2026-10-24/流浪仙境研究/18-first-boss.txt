@@ -1,0 +1,114 @@
+Browser tab: 1, Title: "流浪仙境 Ragnarok Wanderer", URL: "https://xianjingro.netlify.app/".
+0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/
+	1 container app
+		2 container stageWrap
+			3 image Description: 戰鬥畫面, ID: stage
+			19 container lstack
+				98 container v114box
+					99 button 聊天室
+					100 button 收起聊天框
+					101 container
+						102 text 請屎皇 ：暴擊釋放
+					103 container
+						104 text cyz0416 ：感謝解答
+					105 container
+						106 text 花寒弦 ：活動圖哪個裝備最值得刷?
+				20 button 活動荒野回響, ID: ssChip
+					129 text 活動
+					130 text 荒野回響
+				23 button ✦ 任務分解 3 件裝備0/3, ID: questChip
+					131 text ✦ 
+					132 text 任務
+					133 text 分解 3 件裝備
+					134 text 0/3
+				27 container mapChip
+					135 text 普隆德拉南門 LV1-6
+			136 container toasts
+				137 text Boss 出現：天使波利（限時 90 秒）
+				138 text 升級！等級 11
+				139 text 任務完成：藥水 ×5
+			117 button 可占卜天氣, Help: 到朱諾找占卜師占卜天氣, ID: v125wx
+		6 container side
+			7 container ro-brand
+				8 text ✧
+				9 text 流浪仙境
+				126 text ● 已自動存檔
+			11 tab group tabs
+				12 tab (selectable, settable, boolean) 角色, Value: 0
+				13 tab (selectable, settable, boolean) 背包, Value: 0
+背包
+				14 tab (selectable, settable, boolean) 技能, Value: 0
+				18 tab (selectable, settable, boolean) 聊天, Value: 0
+				15 tab (selected, settable, boolean) 地圖, Value: 1
+				16 tab (selectable, settable, boolean) 選單, Value: 0
+			128 container panel
+				140 heading ✦ 城鎮 說明, Value: 3
+					141 text ✦  城鎮
+					142 button 說明
+				143 button (disabled) 前往普隆德拉
+				144 button (disabled) 前往斐揚
+				145 button (disabled) 前往吉芬
+				146 button (disabled) 前往朱諾
+				147 checkbox 一般地圖, Value: 1
+				148 checkbox 挑戰 NEW, Value: 0
+					149 text 挑戰
+					150 text NEW
+				151 checkbox 活動, Value: 0
+				152 checkbox 試煉 NEW, Value: 0
+					153 text 試煉
+					154 text NEW
+				155 checkbox 統計, Value: 0
+				156 heading ✦ 選擇地圖 說明, Value: 3
+					157 text ✦  選擇地圖
+					158 button 說明
+				159 button 普隆德拉南門
+					160 text 普隆德拉南門
+					161 text NOW
+					162 text LV1-6
+					163 image Boss
+					164 text 30/30
+					165 image Boss
+					166 text 天使波利
+					167 text 掛機
+					168 text 4m
+					169 text 擊殺
+					170 text 155
+				171 button (disabled) 斐揚森林
+					172 text 斐揚森林 LV6-13 LOCK 擊敗上一張地圖的 Boss 解鎖
+				173 button (disabled) 妙勒尼礦坑
+					174 text 妙勒尼礦坑 LV13-21 LOCK 擊敗上一張地圖的 Boss 解鎖
+				175 button (disabled) 夢羅克沙漠
+					176 text 夢羅克沙漠 LV21-29 LOCK 擊敗上一張地圖的 Boss 解鎖
+				177 button (disabled) 依斯魯得海底洞穴
+					178 text 依斯魯得海底洞穴 LV29-37 LOCK 擊敗上一張地圖的 Boss 解鎖
+				179 button (disabled) 拉赫冰洞
+					180 text 拉赫冰洞 LV37-45 LOCK 擊敗上一張地圖的 Boss 解鎖
+				181 button (disabled) 諾可羅德火山
+					182 text 諾可羅德火山 LV45-53 LOCK 擊敗上一張地圖的 Boss 解鎖
+				183 text 中期加成：怪物數量 +3・生成速度 +20%
+				184 button (disabled) 葛城修道院
+					185 text 葛城修道院 LV53-61 LOCK 擊敗上一張地圖的 Boss 解鎖
+				186 text 中期加成：怪物數量 +3・生成速度 +20%
+				187 button (disabled) 古城騎士團
+					188 text 古城騎士團 LV61-69 LOCK 擊敗上一張地圖的 Boss 解鎖
+				189 text 中期加成：怪物數量 +3・生成速度 +20%
+				190 button (disabled) 龜島深處
+					191 text 龜島深處 LV69-77 LOCK 擊敗上一張地圖的 Boss 解鎖
+				192 text 中期加成：怪物數量 +3・生成速度 +20%
+				193 button (disabled) 達納托斯之塔
+					194 text 達納托斯之塔 LV77-82 LOCK 擊敗上一張地圖的 Boss 解鎖
+				195 text 中期加成：怪物數量 +3・生成速度 +20%
+				196 button (disabled) 尼芙菲姆
+					197 text 尼芙菲姆 LV78-85 LOCK 擊敗上一張地圖的 Boss 解鎖
+				198 text 終局加成：怪物數量 +9・菁英率 +6%・生成速度 +45%
+				199 button (disabled) 朱諾・魔大陸
+					200 text 朱諾・魔大陸 LV85-92 LOCK 擊敗上一張地圖的 Boss 解鎖
+				201 text 終局加成：怪物數量 +9・菁英率 +6%・生成速度 +45%
+				202 button (disabled) 深淵之湖
+					203 text 深淵之湖 LV92-99 LOCK 擊敗上一張地圖的 Boss 解鎖
+				204 text 終局加成：怪物數量 +9・菁英率 +6%・生成速度 +45%
+				205 button (disabled) 生體研究所
+					206 text 生體研究所 LV99-106 LOCK 擊敗上一張地圖的 Boss 解鎖
+				207 text 終局加成：怪物數量 +9・菁英率 +6%・生成速度 +45%
+
+The focused UI element is 0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/

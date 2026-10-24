@@ -1,0 +1,313 @@
+{
+  "game": "流浪仙境 Ragnarok Wanderer",
+  "url": "https://xianjingro.netlify.app/",
+  "date": "2026-10-24",
+  "viewport": {
+    "width": 362,
+    "height": 616,
+    "dpr": 1
+  },
+  "screenshots": [
+    {
+      "id": "01-character-creation",
+      "title": "創角與六大職業",
+      "file": "screenshots/01-character-creation.png",
+      "bytes": 27099,
+      "sha256": "8c213a9d141b5eee1865ab3b8e7d98189f563ba1bb3deb401863e885d477d924"
+    },
+    {
+      "id": "02-skill-tutorial",
+      "title": "技能拼圖教學",
+      "file": "screenshots/02-skill-tutorial.png",
+      "bytes": 28808,
+      "sha256": "5f8ed9393e507484e885270c8c3c901139127e2450293dd56e86a5e68c859380"
+    },
+    {
+      "id": "03-gem-rules",
+      "title": "技能寶石與標籤連動規則",
+      "file": "screenshots/03-gem-rules.png",
+      "bytes": 39855,
+      "sha256": "840d069d95d7230c804307e2a529196f981f7ca3e38b81ae4aec10c3993fbd58"
+    },
+    {
+      "id": "04-special-effects",
+      "title": "特殊效果與狀態說明",
+      "file": "screenshots/04-special-effects.png",
+      "bytes": 41992,
+      "sha256": "648691f83d99b148d379ac6e5b3013ce59d37780e6cd43a28e2b92e35eb3c011"
+    },
+    {
+      "id": "05-poison-rules",
+      "title": "中毒與持續傷害規則",
+      "file": "screenshots/05-poison-rules.png",
+      "bytes": 38651,
+      "sha256": "a6ea0e736507c23af8fbe4b6ac2518700a51fb27ed7bc516b13479631e9cb77e"
+    },
+    {
+      "id": "06-first-gem-build",
+      "title": "放入狂擊與任務回饋",
+      "file": "screenshots/06-first-gem-build.png",
+      "bytes": 33376,
+      "sha256": "6bbc3a2a96e69c1e55cd5b5899ced882b3491ec3bb4ab3704cda2210b6c0b027"
+    },
+    {
+      "id": "07-character-stats",
+      "title": "角色素質與裝備欄",
+      "file": "screenshots/07-character-stats.png",
+      "bytes": 42137,
+      "sha256": "082e23306c42095242efb14065629eecf34e5e1875fe630555716f97fbacd07e"
+    },
+    {
+      "id": "08-shared-talents",
+      "title": "共用天賦樹",
+      "file": "screenshots/08-shared-talents.png",
+      "bytes": 35426,
+      "sha256": "aa9a36e9ac759c69a5aec63b2f88b7893b1be1daad847198f3a149c5e45a04cc"
+    },
+    {
+      "id": "09-keystone-overview",
+      "title": "終極天賦總覽與構築方向",
+      "file": "screenshots/09-keystone-overview.png",
+      "bytes": 37009,
+      "sha256": "d880ff55b42aaeb1e7b6743d03c25d0a0523f43a035b1cc5b5d4238807d896ad"
+    },
+    {
+      "id": "10-talent-simulator",
+      "title": "天賦模擬器",
+      "file": "screenshots/10-talent-simulator.png",
+      "bytes": 37888,
+      "sha256": "92a53febae6066fa5b0cfe59d0be95cc6b0199cf369e67d70b31764c0209f949"
+    },
+    {
+      "id": "11-class-talents",
+      "title": "劍士職業天賦",
+      "file": "screenshots/11-class-talents.png",
+      "bytes": 46695,
+      "sha256": "02895eedb8fda2eda5cdc29c1b5289c574a976cb8f70d68b7dd5466ef6f5bc80"
+    },
+    {
+      "id": "12-inventory",
+      "title": "背包、裝備與篩選",
+      "file": "screenshots/12-inventory.png",
+      "bytes": 39016,
+      "sha256": "0115083dc8a1f8e48630849a1f263e517d98ea15c57a210b845b436b95cadd93"
+    },
+    {
+      "id": "13-equipment-comparison",
+      "title": "傳奇裝備比較",
+      "file": "screenshots/13-equipment-comparison.png",
+      "bytes": 32740,
+      "sha256": "4c7cf5e947987d7dd478d2146755bd818964ecb3ea82d6db553337101592881e"
+    },
+    {
+      "id": "14-equipped-upgrade",
+      "title": "換裝成功與輔助寶石任務",
+      "file": "screenshots/14-equipped-upgrade.png",
+      "bytes": 29739,
+      "sha256": "e49e0c224c0c9462b27ad744615d8115d642ed8179411af7cc4070bd43859811"
+    },
+    {
+      "id": "15-skill-board",
+      "title": "技能盤與輔助狂怒",
+      "file": "screenshots/15-skill-board.png",
+      "bytes": 35094,
+      "sha256": "168b1802dc2cd40aa14b1f08f37fcd4f37c2e987e9127918a0b2a0b5953ce740"
+    },
+    {
+      "id": "16-support-linked",
+      "title": "狂怒相鄰連動驗證",
+      "file": "screenshots/16-support-linked.png",
+      "bytes": 34366,
+      "sha256": "8a4a685b8dd82e29352931ec7cad3cc464584aa0ebb748a2c478e2bb3ab4a338"
+    },
+    {
+      "id": "17-world-map",
+      "title": "世界地圖與城鎮",
+      "file": "screenshots/17-world-map.png",
+      "bytes": 37839,
+      "sha256": "842e87bfebd65fc7291ad94fc6e9c48c9b03a2815dc0ed8e151f8669a73f629d"
+    },
+    {
+      "id": "18-first-boss",
+      "title": "天使波利頭目戰",
+      "file": "screenshots/18-first-boss.png",
+      "bytes": 47286,
+      "sha256": "c30f128f6b347e09460d1c5248ad820d16a34402736ebb863c65db3238f01fc3"
+    },
+    {
+      "id": "19-main-menu",
+      "title": "系統選單與功能總覽",
+      "file": "screenshots/19-main-menu.png",
+      "bytes": 44677,
+      "sha256": "c6903e52e92d63dabc21c6460a78352260666d24da8987707c6ccd56d1906760"
+    },
+    {
+      "id": "20-settings",
+      "title": "存檔、顯示與音效設定",
+      "file": "screenshots/20-settings.png",
+      "bytes": 38061,
+      "sha256": "d3598b569178027ca5efd383948674ad15c581e06e12298a0fdba4bca1c86a2e"
+    },
+    {
+      "id": "21-adventure-handbook",
+      "title": "冒險手冊與經濟規則",
+      "file": "screenshots/21-adventure-handbook.png",
+      "bytes": 38738,
+      "sha256": "3ba76dad7b912d3b72e3d16fed3b32d2b92beb7fb8e8cdc0fdad602cee68a5f2"
+    },
+    {
+      "id": "22-effects",
+      "title": "戰鬥視覺效果與傷害提示",
+      "file": "screenshots/22-effects.png",
+      "bytes": 37831,
+      "sha256": "fbe3a5120250e72718caf7de55a81245ac96cadf80c809fab0fa70b68cd363d5"
+    },
+    {
+      "id": "23-effects-preview",
+      "title": "雷擊特效預覽",
+      "file": "screenshots/23-effects-preview.png",
+      "bytes": 26985,
+      "sha256": "dea87b7ccbcbbec48de24987a23fc5a27bededf5a4f5d4f8a19adc7dbf2821b6"
+    },
+    {
+      "id": "24-boss-cleared",
+      "title": "擊敗首領後斐揚森林解鎖",
+      "file": "screenshots/24-boss-cleared.png",
+      "bytes": 49336,
+      "sha256": "75704a41c298d53fd8dc402d361f93263275871f64dc51cf3ce2e0ca01fe542b"
+    },
+    {
+      "id": "25-challenges",
+      "title": "挑戰模式與解鎖門檻",
+      "file": "screenshots/25-challenges.png",
+      "bytes": 48293,
+      "sha256": "42dc63be83de028e4638c88880878c21e162019423e3cc7102f21b5a9b651cbb"
+    },
+    {
+      "id": "26-trials",
+      "title": "轉職與進階試煉",
+      "file": "screenshots/26-trials.png",
+      "bytes": 48215,
+      "sha256": "68de9b974751f3113a26854e1a4244efac78d03a35ae7d13d77fd99fb671b5da"
+    },
+    {
+      "id": "27-event",
+      "title": "荒野回響活動",
+      "file": "screenshots/27-event.png",
+      "bytes": 48095,
+      "sha256": "cd1a2b03c1270d6dea8dc94a22922bb1caf0e894e71177972e7618a91b03ac94"
+    },
+    {
+      "id": "28-town",
+      "title": "普隆德拉城鎮與NPC",
+      "file": "screenshots/28-town.png",
+      "bytes": 50104,
+      "sha256": "4d5ce2c75734229f88b89cac68d73b39832b6a8bb887184d05d3e4d8f176f630"
+    },
+    {
+      "id": "29-forging",
+      "title": "精煉、卡片與合成經濟",
+      "file": "screenshots/29-forging.png",
+      "bytes": 26599,
+      "sha256": "48804c0ff1b23137b84eab7b5d8f817495d0431e98c5fc9f25aee24051de26b9"
+    },
+    {
+      "id": "30-gem-shop",
+      "title": "技能商店與貨幣消耗",
+      "file": "screenshots/30-gem-shop.png",
+      "bytes": 25545,
+      "sha256": "8262d45934bd23a60b269ba4eaa2b98ccae282f5f04d0a75e4c19b666920da37"
+    },
+    {
+      "id": "31-shop-catalog",
+      "title": "職業寶石與補給價格",
+      "file": "screenshots/31-shop-catalog.png",
+      "bytes": 44222,
+      "sha256": "c7ea1f04bb36cc5629c6fca8eff7f2098640b9ad96d8bede38b19b92ffff9897"
+    },
+    {
+      "id": "32-active-shop",
+      "title": "劍士主動技能清單",
+      "file": "screenshots/32-active-shop.png",
+      "bytes": 47956,
+      "sha256": "e83829008a5604984c8a92a4b212223ee455081cf024a8bede264f60918c0d80"
+    },
+    {
+      "id": "33-support-shop",
+      "title": "輔助與被動技能價格",
+      "file": "screenshots/33-support-shop.png",
+      "bytes": 47681,
+      "sha256": "a8813adb2432ac5b200970b691b2abe8934d3b1c348d507e684bd3eda534a5fb"
+    },
+    {
+      "id": "34-kafra",
+      "title": "共用倉庫與任務",
+      "file": "screenshots/34-kafra.png",
+      "bytes": 24266,
+      "sha256": "631dbf677a9904219c9d8399b6e39a83edd255582f3fdc31982cfb2874b88b72"
+    },
+    {
+      "id": "35-shared-storage",
+      "title": "跨角色共用倉庫",
+      "file": "screenshots/35-shared-storage.png",
+      "bytes": 45707,
+      "sha256": "3b7ac3380ecfab1c8dc9d046b1f0fa64f4039d43892a8fcc3929992f130680e5"
+    },
+    {
+      "id": "36-card-codex",
+      "title": "卡片掉落與圖鑑",
+      "file": "screenshots/36-card-codex.png",
+      "bytes": 43910,
+      "sha256": "203eb24cabcbf4e3282eb6cc536f497262c550776c46e063c6c01a55662fae64"
+    },
+    {
+      "id": "37-map-collection",
+      "title": "地圖擊殺里程碑與全局加成",
+      "file": "screenshots/37-map-collection.png",
+      "bytes": 42065,
+      "sha256": "e36f920207d234a79ac4a8198c88c5a7a13b028610f19db5e4226d0b26573b97"
+    },
+    {
+      "id": "38-audio-credits",
+      "title": "音樂音效來源",
+      "file": "screenshots/38-audio-credits.png",
+      "bytes": 47488,
+      "sha256": "80a1d5031ae7cb953bfff3f6ae8d95d67ba06ec32c4d58e8d2ad5424b7d58faa"
+    },
+    {
+      "id": "39-training",
+      "title": "訓練場與實測DPS",
+      "file": "screenshots/39-training.png",
+      "bytes": 38528,
+      "sha256": "f7ef345e6fe8d720395fd8908cd089b9c492b507a8b270eb8f867de26abc5137"
+    },
+    {
+      "id": "40-training-result",
+      "title": "短樣本傷害來源分布",
+      "file": "screenshots/40-training-result.png",
+      "bytes": 39390,
+      "sha256": "d85f71994d4c66a8f0e5784a3b134652f6429e360fbbe0bd0fd89191804ae731"
+    },
+    {
+      "id": "41-final-build",
+      "title": "研究角色最終技能構築",
+      "file": "screenshots/41-final-build.png",
+      "bytes": 34635,
+      "sha256": "541d4fb2f510e717be4aa846c22df35d93fb1cad537e1263e34b3e67f0b70d2a"
+    },
+    {
+      "id": "42-challenge-details",
+      "title": "無限武鬥場與MVP細節",
+      "file": "screenshots/42-challenge-details.png",
+      "bytes": 40181,
+      "sha256": "40acf1760141276db5448421e177d078c007dec1678ca74d2e996f4b0eeb2c14"
+    },
+    {
+      "id": "43-challenge-overview",
+      "title": "武鬥場難度成長與門檻",
+      "file": "screenshots/43-challenge-overview.png",
+      "bytes": 45086,
+      "sha256": "83dc91b4c5b351910b1df8b9e5bfe4746db4baa1e06c642eccc952cbbfa61c7b"
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+Browser tab: 1, Title: "流浪仙境 Ragnarok Wanderer", URL: "https://xianjingro.netlify.app/".
+0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/
+	1 container app
+		2 container stageWrap
+			3 image Description: 戰鬥畫面, ID: stage
+			19 container lstack
+				98 container v114box
+					99 button 聊天室
+					100 button 收起聊天框
+					101 container
+						102 text 請屎皇 ：暴擊釋放
+					103 container
+						104 text cyz0416 ：感謝解答
+					105 container
+						106 text 花寒弦 ：活動圖哪個裝備最值得刷?
+				23 button ✦ 任務分解 3 件裝備0/3, ID: questChip
+					220 text ✦ 
+					221 text 任務
+					222 text 分解 3 件裝備
+					223 text 0/3
+				27 container mapChip
+					224 text 普隆德拉 城鎮
+			219 button 離開城鎮, ID: bossBtn
+			117 button 可占卜天氣, Help: 到朱諾找占卜師占卜天氣, ID: v125wx
+		6 container side
+			7 container ro-brand
+				8 text ✧
+				9 text 流浪仙境
+				302 text ● 已自動存檔
+			11 tab group tabs
+				12 tab (selectable, settable, boolean) 角色, Value: 0
+				13 tab (selectable, settable, boolean) 背包, Value: 0
+背包
+				14 tab (selectable, settable, boolean) 技能, Value: 0
+				18 tab (selectable, settable, boolean) 聊天, Value: 0
+				15 tab (selectable, settable, boolean) 地圖, Value: 0
+				16 tab (selected, settable, boolean) 選單, Value: 1
+			128 container panel
+				303 button < 返回城鎮
+				304 heading 道具商人 說明 Zeny 60, Value: 2
+					305 text 道具商人
+					306 button 說明
+					307 image Zeny
+					308 text 60
+				309 checkbox 補給, Value: 1
+				310 checkbox 主動技能, Value: 0
+				311 checkbox 輔助技能, Value: 0
+				312 text ×15
+				313 text 生命藥水 ×5
+				314 text 回復 35% 生命
+				315 button 30 Zeny購買
+					316 image Zeny
+					317 text 30
+		301 container sheet
+			318 heading 商人, Value: 2
+				319 text 商人
+			320 text Zeny
+			321 text 分解裝備可獲得 Zeny 可在此購買藥水與本職業的技能寶石
+			322 text 職業專屬
+			323 text 道具商人只販售本職業的主動、輔助與被動寶石 其他職業的輔助只能靠怪物掉落（穿梭寶石）
+			324 text 素材
+			325 text 精煉素材在鐵匠的「素材」購買 魔力礦石只能靠掉落取得
+			326 text 流派寶石
+			327 text 商店只販售一轉基本技能、通用輔助 以及目前流派與職業的專屬技能與輔助： 除了流派專屬的寶石 同一條職業線的兩個流派都能買到該職業線的技能 一轉起販售二轉職技能、 三轉後加上三轉職技能、 四轉後加上四轉職技能（例： 騎士線四轉成盧恩騎士後開放龍之吐息、 點燃爆破、冰霜龍息、劍氣衝擊） 其他流派的寶石只能從變異寶石取得 取得後可正常放上技能盤
+			328 button 知道了
+
+The focused UI element is 0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/

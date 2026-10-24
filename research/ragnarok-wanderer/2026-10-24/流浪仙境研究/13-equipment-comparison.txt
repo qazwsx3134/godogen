@@ -1,0 +1,194 @@
+Browser tab: 1, Title: "流浪仙境 Ragnarok Wanderer", URL: "https://xianjingro.netlify.app/".
+0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/
+	1 container app
+		2 container stageWrap
+			3 image Description: 戰鬥畫面, ID: stage
+			19 container lstack
+				98 container v114box
+					99 button 聊天室
+					100 button 收起聊天框
+					101 container
+						102 text 請屎皇 ：暴擊釋放
+					103 container
+						104 text cyz0416 ：感謝解答
+					105 container
+						106 text 花寒弦 ：活動圖哪個裝備最值得刷?
+				20 button 活動荒野回響, ID: ssChip
+					280 text 活動
+					281 text 荒野回響
+				23 button ✦ 任務穿上一件裝備, ID: questChip
+					668 text ✦ 
+					283 text 任務
+					284 text 穿上一件裝備
+				27 container mapChip
+					285 text 普隆德拉南門 LV1-6
+			5 button 挑戰 BOSS, ID: bossBtn
+			117 button 可占卜天氣, Help: 到朱諾找占卜師占卜天氣, ID: v125wx
+		6 container side
+			7 container ro-brand
+				8 text ✧
+				9 text 流浪仙境
+				669 text ● 已自動存檔
+			11 tab group tabs
+				12 tab (selectable, settable, boolean) 角色, Value: 0
+				13 tab (selected, settable, boolean) 背包, Value: 1
+				14 tab (selectable, settable, boolean) 技能, Value: 0
+技能
+				18 tab (selectable, settable, boolean) 聊天, Value: 0
+				15 tab (selectable, settable, boolean) 地圖, Value: 0
+				16 tab (selectable, settable, boolean) 選單, Value: 0
+			670 container
+				671 text 裝備建議
+				672 pop up button (collapsed, settable) Description: 較好的裝備篩選, Value: 全部裝備, Secondary Actions: Expand
+					673 menu
+						674 (selected) 全部裝備
+						675 較好的裝備・建議更換
+						676 建議更換・輸出提升
+						677 建議更換・生存提升
+				678 text 依目前配裝、技能和可穿戴等級比較
+				679 checkbox 裝備 15/5000, Value: 1
+				680 checkbox 卡片 0, Value: 0
+				681 pop up button (collapsed, settable) Description: 排序, Value: 最新取得, Secondary Actions: Expand
+					682 menu
+						683 (selected) 最新取得
+						684 稀有度
+						685 物品等級
+						686 部位
+						687 裝備後 DPS
+						688 裝備後生命
+						689 護甲
+						690 閃避
+						691 基底品質
+						692 插槽數
+						693 精煉值
+				694 pop up button (collapsed, settable) Description: 部位篩選, Value: 全部部位, Secondary Actions: Expand
+					695 menu
+						696 (selected) 全部部位
+						697 武器
+						698 副手
+						699 頭飾
+						700 鎧甲
+						701 披肩
+						702 鞋子
+						703 飾品・左
+						704 飾品・右
+				705 pop up button (collapsed, settable) Description: 稀有度篩選, Value: 全部稀有度, Secondary Actions: Expand
+					706 menu
+						707 (selected) 全部稀有度
+						708 普通
+						709 魔法
+						710 稀有
+						711 傳奇
+						712 神話
+						713 獨特
+						714 主宰
+						715 有插槽
+						716 有空插槽
+						717 已鑲卡片
+				718 pop up button (collapsed, settable) Description: 規則篩選, Value: 不限規則, Secondary Actions: Expand
+					719 menu
+						720 (selected) 不限規則
+						721 符合保留規則
+						722 不符合保留規則
+						723 自訂條件
+						724 已鎖定
+						725 未鎖定
+				726 checkbox 拾取篩選 ▼, Value: 0
+				727 checkbox 批次分解 ▼, Value: 0
+				728 checkbox 多選, Value: 0
+				729 checkbox 保留規則 ▼, Value: 0
+				730 heading ✦ 身上裝備, Value: 3
+					731 text ✦  身上裝備
+				732 button Description: 普通 長劍, Help: 普通 · 長劍
+				733 button (disabled) 副手（空）
+				734 button (disabled) 頭飾（空）
+				735 button (disabled) 鎧甲（空）
+				736 button (disabled) 披肩（空）
+				737 button (disabled) 鞋子（空）
+				738 button (disabled) 飾品・左（空）
+				739 button (disabled) 飾品・右（空）
+				740 heading ✦ 背包, Value: 3
+					741 text ✦  背包
+				742 button Description: 普通 髮箍, Help: 普通 · 髮箍
+					743 text 6
+					744 text ▲
+				745 button Description: 普通 涼鞋, Help: 普通 · 涼鞋
+					746 text 4
+					747 text ▲
+				748 button Description: 普通 項鍊, Help: 普通 · 項鍊
+					749 text 3
+					750 text ▲
+				751 button Description: 稀有 長劍, Help: 稀有 · 長劍
+					752 text 5
+					753 text ▲
+				754 button Description: 魔法 連帽披肩 [1], Help: 魔法 · 連帽披肩 [1]
+					755 text 6
+					756 text ▲
+				757 button Description: 稀有 棉襯衫, Help: 稀有 · 棉襯衫
+					758 text 1
+					759 text ▲
+				760 button Description: 傳奇 長劍 [1], Help: 傳奇 · 長劍 [1]
+					761 text 5
+					762 text ▲
+				763 button Description: 普通 棉襯衫, Help: 普通 · 棉襯衫
+					764 text 1
+					765 text ▲
+				766 button Description: 普通 項鍊, Help: 普通 · 項鍊
+					767 text 3
+					768 text ▲
+				769 button Description: 普通 棉襯衫, Help: 普通 · 棉襯衫
+					770 text 5
+					771 text ▲
+				772 button Description: 魔法 涼鞋, Help: 魔法 · 涼鞋
+					773 text 6
+					774 text ▲
+				775 button Description: 普通 長劍, Help: 普通 · 長劍
+					776 text 6
+					777 text ▲
+				778 button Description: 魔法 長劍, Help: 魔法 · 長劍
+					779 text 3
+					780 text ▲
+				781 button Description: 普通 髮箍, Help: 普通 · 髮箍
+					782 text 6
+					783 text ▲
+				784 button Description: 普通 項鍊, Help: 普通 · 項鍊
+					785 text 4
+					786 text ▲
+				787 container
+					788 text ▼ 往下捲動・共  15  件
+	789 container v122sheet
+		790 container
+			791 button 關閉
+			792 text 長劍 [1] 武器・ LV5 ・ 需求  LV1
+			793 text 傳奇 ↑ 建議更換 · 輸出提升 預估輸出 +171.9% · 有效生命 +2.9% 依目前技能與面板估算；獨特詞綴的觸發條件仍需比較。
+			794 button 裝備
+			795 button 比較
+			796 button 精煉 +0
+			797 button 鑲嵌卡片 0/1
+			798 checkbox 鎖定, Value: 0
+			799 button 分解 +24
+				800 text 分解 
+				801 text +24
+			802 button 存入倉庫
+			803 text 攻擊 16-27 攻速 1.43 暴擊 8% 單手 品質  134% 精煉  +0 插槽  0/1 力量 +3 最大生命 +15 擊中時 2.5% 機率使敵人燃燒 空插槽（可鑲嵌武器卡片）
+			804 definition list
+				805 container 換下「長劍」後
+					806 text 換下「長劍」後
+				807 container DPS
+					808 text DPS
+				809 container
+					810 text 66  +42
+				811 container 生命
+					812 text 生命
+				813 container
+					814 text 324  +9
+				815 container 護甲
+					816 text 護甲
+				817 container
+					818 text 0  0
+				819 container 閃避
+					820 text 閃避
+				821 container
+					822 text 6  0
+
+The focused UI element is 0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/

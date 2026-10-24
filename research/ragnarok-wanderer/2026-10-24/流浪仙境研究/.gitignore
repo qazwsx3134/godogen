@@ -1,0 +1,2 @@
+# Screenshots stay local (not in git or LFS); index.html and manifests reference them.
+/screenshots/

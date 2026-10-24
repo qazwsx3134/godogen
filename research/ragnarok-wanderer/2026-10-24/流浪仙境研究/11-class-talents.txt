@@ -1,0 +1,107 @@
+Browser tab: 1, Title: "流浪仙境 Ragnarok Wanderer", URL: "https://xianjingro.netlify.app/".
+0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/
+	1 container app
+		2 container stageWrap
+			3 image Description: 戰鬥畫面, ID: stage
+			19 container lstack
+				98 container v114box
+					99 button 聊天室
+					100 button 收起聊天框
+					101 container
+						102 text 請屎皇 ：暴擊釋放
+					103 container
+						104 text cyz0416 ：感謝解答
+					105 container
+						106 text 花寒弦 ：活動圖哪個裝備最值得刷?
+				20 button 活動荒野回響, ID: ssChip
+					280 text 活動
+					281 text 荒野回響
+				23 button ✦ 任務穿上一件裝備, ID: questChip
+					282 text ✦ 
+					283 text 任務
+					284 text 穿上一件裝備
+				27 container mapChip
+					285 text 普隆德拉南門 LV1-6
+			5 button 挑戰 BOSS, ID: bossBtn
+			117 button 可占卜天氣, Help: 到朱諾找占卜師占卜天氣, ID: v125wx
+		6 container side
+			7 container ro-brand
+				8 text ✧
+				9 text 流浪仙境
+				634 text ● 已自動存檔
+			11 tab group tabs
+				12 tab (selected, settable, boolean) 角色, Value: 1
+				13 tab (selectable, settable, boolean) 背包, Value: 0
+背包
+				14 tab (selectable, settable, boolean) 技能, Value: 0
+技能
+				18 tab (selectable, settable, boolean) 聊天, Value: 0
+				15 tab (selectable, settable, boolean) 地圖, Value: 0
+				16 tab (selectable, settable, boolean) 選單, Value: 0
+			128 container panel
+				635 text 研究旅人
+				636 text 劍士  LV10
+				637 button ♂ 男, Help: 點一下更改性別
+				638 button 切換角色
+				639 text 構築
+				640 button 說明
+				641 checkbox 1
+				642 checkbox 2, Value: 0
+				643 checkbox 3, Value: 0
+				644 button 複製
+				645 checkbox 屬性, Value: 0
+				646 checkbox 職業天賦, Value: 1
+				647 heading 職業天賦 說明, Value: 2
+					648 text 職業天賦
+					649 button 說明
+				650 text 達到 30 級後，到城鎮找哈米德接受「一轉・初心試煉」。
+				651 button 前往城鎮找哈米德
+				652 text 職業機制・極限槽
+				653 text 劍士
+				654 content list
+					655 container
+						656 AXListMarker • 
+						657 text 累積：技能每次擊中 +3（每次施放最多 +12）、普通攻擊擊中 +1.5、受到傷害時每損失 10% 最大生命 +6；連結「極限突破」的技能累積 ×2。
+					658 container
+						659 AXListMarker • 
+						660 text 滿 100 後，下一個會造成傷害的技能成為極限技：傷害 ×2.5、範圍在原本範圍上 ×1.3；由連結「極限突破」的技能施放時傷害再 ×1.5。挑釁等沒有傷害的技能不會用掉滿槽。
+					661 container
+						662 AXListMarker • 
+						663 text 完成二轉後依流派追加效果：均衡流暈眩、神聖流護盾、暴力流攻速、鐵壁流聖盾震擊。
+					664 container
+						665 AXListMarker • 
+						666 text 角色腳下的細條是極限槽，滿槽時閃爍金色。
+		667 container sheet
+			668 heading 職業天賦, Value: 2
+				669 text 職業天賦
+			670 text 配點與裝備
+			671 text 每分支 8 排、每排 3 選 1、每項 2 點 可跨欄搭配 第 1 排保留屬性選裝方向 機械的靈巧改強化自身攻速 獨立召喚分支的第 2、3 排強化召喚與連結 原狙殺、技能刺客、祈禱、機械、 毒雲已改成自身技能玩法 每累積取得 2 點解鎖下一排 單排退點不移除後續排
+			672 text 技能魔化
+			673 text 魔化保留原技能標籤與來源寶石 傷害、暴擊、屬性、冷卻與額外施放按原連結生效 投射物增加實際散射箭 範圍擴大實際命中區域，不一律換成單體倍率 持續召喚的額外施放作用於攻擊輪次 不重複疊上施法額外次數
+			674 text 普攻與追加命中
+			675 text 平A就是普攻 四連、二刀刃舞與拳法追擊套用普攻傷害 不再重複乘技能傷害 四連每擊可上毒、累積暴傷與擲雙擊 雙擊不再觸發雙擊，影刃不生影刃 追擊不再觸發四連 原副手追擊不重複累計主手第幾擊
+			676 text 觸發冷卻
+			677 text 天賦冷卻是獨立的觸發間隔 不受技能冷卻縮減影響 自動念咒、追加傷害與存儲傷害不再啟動自己 同名持續效果刷新或替換，不無限疊加 離開戰鬥8秒、死亡、 切換配點或技能盤後清除暫存效果
+			678 text 頭目與陷阱
+			679 text 免疫位移、 魅惑或束縛的頭目仍取得文字列出的傷害／減傷 效果 引爆箭3秒未引爆時自動起爆 避免停用普攻後失效 定時雷會追蹤原目標結算 閃避轉陷阱傷害保留原公式 護甲轉傷害保留現行線性公式 反射不再重複套用護甲轉傷害
+			680 text 生命、護盾與召喚
+			681 text 新增護盾一般最多為生命上限25% 不削低原有更大護盾 聖壇護盾上限20% 新生命支付最低留1點，不是傷害事件 主動治療連動只計成功施法中的治療 不計藥水、自然回復或天賦自己的回復 新增舞伴、影刃與靈王使用玩家素質 不複製頭目生命或傷害
+			682 text 版本與退點
+			683 text v1.4.3 保留既有配點 ID、總點數、 職業分支、裝備、寶石與已達層數 調整後的奧義可能需要更換技能盤上的來源技能 可於挑戰外免費單排改選 圖鑑列基礎實裝值 面板 DPS 不能完整表達延遲、條件與存儲傷害
+			684 text 召喚繼承
+			685 text 召喚攻擊承接來源寶石的傷害、暴擊、數量、 攻速與額外施放 沒有生命欄的改造召喚物 召喚生命加成改為傷害 每個名額維持獨立攻擊 只有生命體巨獸保留合併 巨獸完整換算名額 守護仍保留原有60%減傷上限 存儲追擊以來源已結算傷害計算 不重複乘暴擊或武器倍率
+			686 text 獨立召喚分支
+			687 text 獵人有馭鷹、刺客有幻影、祭司有聖靈、 鐵匠有砲陣、鍊金有植生 巫師新增元素召喚 從轉職流派選單選擇，各有完整 8 排 第 4 排決定攻擊方式、第 5 排自由搭配 第 8 排改造召喚技能 對單一頭目也能觸發
+			688 text 召喚攻擊輪次
+			689 text 寫「每第幾輪」的效果 由每隻召喚物的自主攻擊各自計數 號令與輔助追加不增加輪次 寫「每第幾次命中」的聖靈審判、爆裂彈匣、 樂團重音等效果 則由同一角色的同類召喚共享命中計數 俯衝與重砲的基礎間隔仍會受召喚攻速縮短
+			690 text 過熱與排熱
+			691 text 熱量上限 100 機甲加農砲每次 +25、斧頭龍捲每次 +30 另乘熱量累積加成 每秒自然減少 6 達 100 時歸零 在角色周圍 34 距離（受範圍加成）爆發 400% 武器傷害 另乘過熱傷害加成 過熱不會自傷或停止攻擊 恆溫不會過熱 排熱射擊先消耗至多 40 熱量、 不再由該次加農砲生熱 超載爆發另外提高過熱傷害並給予 5 秒機械增傷
+			692 text 單排退點
+			693 text 挑戰外可免費退回任一排 2 點或直接改選本排 後續排保留 每累積取得 2 點解鎖一排，最高 8 排 頭目、爬塔、試煉、競技場、 守衛及組隊副本中禁止更動
+			694 text 召喚分工
+			695 text 馭鷹是啄擊與雷翼接力 幻影是自主快刀與終結模仿 聖靈是往返聖矢與審判 砲陣是射擊節奏 植生是毒藤與開花 元素召喚是三元素使魔與契約 只有生命體保留多隻合為巨獸 原狙殺、技能刺客、祈禱、機械、 毒雲的召喚天賦已換成自身技能玩法 原技能盤不自動更換 請依新奧義指定技能調整
+			696 text 砲陣編隊與連射
+			697 text 砲陣擴編 +2 浮游砲群將包含輔助的總數翻倍 雙管副彈與兩輪一次的輪射均套用奧義彈組 輔助追加與協同號令不增加自主輪次 追加不遞迴
+			698 button 知道了
+
+The focused UI element is 0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/

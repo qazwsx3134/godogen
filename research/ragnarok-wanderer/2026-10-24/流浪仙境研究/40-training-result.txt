@@ -1,0 +1,91 @@
+Browser tab: 1, Title: "流浪仙境 Ragnarok Wanderer", URL: "https://xianjingro.netlify.app/".
+0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/
+	1 container app
+		2 container stageWrap
+			3 image Description: 戰鬥畫面, ID: stage
+			19 container lstack
+				98 container v114box
+					99 button 聊天室
+					100 button 收起聊天框
+					101 container
+						102 text 請屎皇 ：暴擊釋放
+					103 container
+						104 text cyz0416 ：感謝解答
+					105 container
+						106 text 花寒弦 ：活動圖哪個裝備最值得刷?
+				220 button DPS 94・傷害來源 ▾ 平均 87・0:15 狂擊 65% 56 0.3次/秒 普通攻擊 35% 31 1.2次/秒, ID: trnChip
+					221 container
+						222 text DPS  94 ・傷害來源 ▾
+					223 text 平均 87・0:15
+					224 text 狂擊
+					225 text 65%
+					226 text 56
+					227 text 0.3次/秒
+					228 text 普通攻擊
+					229 text 35%
+					230 text 31
+					231 text 1.2次/秒
+				27 container mapChip
+					232 text 訓練場 專屬場地
+			219 button 離開, ID: bossBtn
+			117 button 可占卜天氣, Help: 到朱諾找占卜師占卜天氣, ID: v125wx
+		6 container side
+			7 container ro-brand
+				8 text ✧
+				9 text 流浪仙境
+				233 text ● 已自動存檔
+			11 tab group tabs
+				12 tab (selectable, settable, boolean) 角色, Value: 0
+				13 tab (selectable, settable, boolean) 背包, Value: 0
+背包
+				14 tab (selectable, settable, boolean) 技能, Value: 0
+				18 tab (selectable, settable, boolean) 聊天, Value: 0
+				15 tab (selected, settable, boolean) 地圖, Value: 1
+				16 tab (selectable, settable, boolean) 選單, Value: 0
+			128 container panel
+				234 heading ✦ 城鎮 說明, Value: 3
+					235 text ✦  城鎮
+					236 button 說明
+				237 button 前往普隆德拉
+				238 button 前往斐揚
+				239 button 前往吉芬
+				240 button 前往朱諾
+				241 checkbox 一般地圖, Value: 0
+				242 checkbox 挑戰, Value: 0
+				243 checkbox 活動, Value: 0
+				244 checkbox 試煉, Value: 1
+				245 checkbox 統計, Value: 0
+				246 heading ✦ 轉職試煉 說明, Value: 3
+					247 text ✦  轉職試煉
+					248 button 說明
+				249 text 轉職試煉由城鎮的 哈米德 主持：等級到了就去找他接受試煉，通過後再找他選擇職業與流派。
+				250 button 前往城鎮找哈米德
+				251 heading ✦ 訓練場 說明, Value: 3
+					252 text ✦  訓練場
+					253 button 說明
+				254 text 類型
+				255 checkbox 一般, Value: 1
+				256 checkbox 菁英, Value: 0
+				257 checkbox Boss, Value: 0
+				258 text 數量
+				259 checkbox 1 隻, Value: 1
+				260 checkbox 3 隻, Value: 0
+				261 checkbox 6 隻, Value: 0
+				262 text 模式
+				263 checkbox 不死, Value: 1
+				264 checkbox 會死亡, Value: 0
+				265 text 位置
+				266 checkbox 固定, Value: 1
+				267 checkbox 可推動, Value: 0
+				268 text 攻擊
+				269 checkbox 不攻擊, Value: 1
+				270 checkbox 會攻擊, Value: 0
+				271 button 重置統計
+				272 button 離開訓練場
+				273 container trnFull
+					274 text 傷害來源
+					275 text 狂擊 65% 56 0.3次/秒 普通攻擊 35% 31 1.2次/秒
+					276 text 增傷效果
+					277 text 暴擊 ×1.02 4%
+
+The focused UI element is 0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/

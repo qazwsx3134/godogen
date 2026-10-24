@@ -1,0 +1,238 @@
+{
+  "date": "2026-10-24",
+  "version": "0.34.1",
+  "count": 33,
+  "screenshots": [
+    {
+      "file": "01-mine-tutorial.jpg",
+      "title": "礦洞教學",
+      "note": "人類產金幣、獸人產鑽石的分工。",
+      "bytes": 191563,
+      "sha256": "89d6fe47a10285955405ab3e7e72390aa4e3051dcf5c010ca5d9fb93436ead32"
+    },
+    {
+      "file": "02-mine-layout.jpg",
+      "title": "礦洞完整版面",
+      "note": "場景展示、產率、兩條工人成長與材料成本。",
+      "bytes": 184641,
+      "sha256": "d0e072517aa87bd7b697cecb08a776b98ce5aaa4acf5d0dde925b12a747f961d"
+    },
+    {
+      "file": "03-facility-unlock.jpg",
+      "title": "招募設施解鎖",
+      "note": "城堡 Lv.5、100 金幣。",
+      "bytes": 118853,
+      "sha256": "a8dd7eb55e228be05fb4ee9339e8d8cbc04445407039184fd9326883aa599cb3"
+    },
+    {
+      "file": "04-recruit-layout.jpg",
+      "title": "招募教學",
+      "note": "單抽與十抽、跳過動畫、池等級進度。",
+      "bytes": 157099,
+      "sha256": "4c863eac629f8c609d20d2f7e6d16f98b83d2663642040ea905db8d3abed17f3"
+    },
+    {
+      "file": "05-recruit-result.jpg",
+      "title": "招募結果",
+      "note": "取得烈焰塔，顯示 R 與 NEW。",
+      "bytes": 129762,
+      "sha256": "99c799a033471774d29b72bfe38956c4622c2e738735bc16cc2cdd2a2c15946d"
+    },
+    {
+      "file": "06-tower-details.jpg",
+      "title": "塔的管理模板",
+      "note": "烈焰塔屬性、技能與兩個裝備槽。",
+      "bytes": 144548,
+      "sha256": "b476f4131e2ec6c6ac63c22ca475c13f23d8491464d9588f4ccf4fc2db0b63b4"
+    },
+    {
+      "file": "07-battle-beam-vfx.jpg",
+      "title": "戰鬥與光束特效",
+      "note": "光束核心／外緣、投射物、傷害排行與技能列。",
+      "bytes": 236021,
+      "sha256": "558d66a57fa990b1e29af585ea3a0f68f3babd3f9c47d7525dad65413e2b1e7e"
+    },
+    {
+      "file": "08-defense-task.jpg",
+      "title": "防守任務教學",
+      "note": "擊殺任意怪物 20，獎勵金幣 500。",
+      "bytes": 186722,
+      "sha256": "2e3d933cdae5d2a5de87b6d6da0bfa4316a8adce7e40a5e544e03c87d7123a9d"
+    },
+    {
+      "file": "09-main-layout.jpg",
+      "title": "主畫面 layout",
+      "note": "HP／MP、波次、場景、任務與底部控制列。",
+      "bytes": 240464,
+      "sha256": "d2d5e0aee2840604daa2c8c442906b5b4bdba1f6e5dbb3ea2da79474da90b92f"
+    },
+    {
+      "file": "10-full-version-roadmap.jpg",
+      "title": "正式版內容介紹",
+      "note": "遊戲內公布的內容量；非全部已實測。",
+      "bytes": 221407,
+      "sha256": "5e57450bfa092ec4b62ceaa7ecfe1b96b29d9efc99dfdf0672493ebf49a96994"
+    },
+    {
+      "file": "11-unit-detail-layout.jpg",
+      "title": "英雄雙頁管理",
+      "note": "左側詳情、右側分類卡片、底部編隊。",
+      "bytes": 198834,
+      "sha256": "d010af49e18fe4c7987503ebbf45c7a772bc336722d79eea5121272fa216c83e"
+    },
+    {
+      "file": "12-inventory-empty.jpg",
+      "title": "倉庫與空狀態",
+      "note": "裝備／材料／碎片 tabs 與批次管理。",
+      "bytes": 160734,
+      "sha256": "fd26431aba479cc856d1cafcb036e540095701eaa84a65357be40f7062e78b13"
+    },
+    {
+      "file": "13-global-statistics.jpg",
+      "title": "全局屬性上半部",
+      "note": "全局、英雄、各元素、暴擊與冷卻。",
+      "bytes": 182894,
+      "sha256": "b3d2b9010d6cf5af2574413257e6ac45300694220045fe15e9cc9a753941b2f5"
+    },
+    {
+      "file": "14-global-statistics-lower.jpg",
+      "title": "全局屬性下半部",
+      "note": "隊長、防禦塔、主炮攻速等獨立加成。",
+      "bytes": 184363,
+      "sha256": "7750e131f753cbaed77d85c57cce71c828d9a2fcfeeddb9bc3099da799ef3b8a"
+    },
+    {
+      "file": "15-active-skill.jpg",
+      "title": "火焰炮手主動技能",
+      "note": "242% 火傷、燃燒、12 秒與 60 MP。",
+      "bytes": 205447,
+      "sha256": "6e9b17eeae534fc917ecadf62fa83d1912e59a33b9686da084c0be4983edf4c9"
+    },
+    {
+      "file": "16-basic-attack.jpg",
+      "title": "普通攻擊說明",
+      "note": "焰矢射擊，100% 火屬性傷害。",
+      "bytes": 200859,
+      "sha256": "1f7cf1e2c307aa9b5a22072ff53b17df0dc4b0bb0708423499809f23d47d8284"
+    },
+    {
+      "file": "17-passive-star-gate.jpg",
+      "title": "被動與星級門檻",
+      "note": "燃燒大師；4 星解鎖。",
+      "bytes": 203629,
+      "sha256": "d2ee76d8ecf91e6dfa3bd304105d6585d51fe1fc57d9922a443ed5f0ec09d00a"
+    },
+    {
+      "file": "18-unit-level-up.jpg",
+      "title": "單位升級",
+      "note": "火焰炮手 Lv.5→6，攻擊 8.4→9。",
+      "bytes": 203505,
+      "sha256": "1ee461d1b3e857779ef0444ad08a14c454e52382ea8655058e4bbe8c63091b32"
+    },
+    {
+      "file": "19-star-progression.jpg",
+      "title": "升星介面",
+      "note": "碎片進度、攻擊 +5% 預覽、一鍵升星。",
+      "bytes": 198751,
+      "sha256": "9655857443b74d99c093ff0d8211efe1c568cb70621b6961c3f1f2ffa577125c"
+    },
+    {
+      "file": "20-targeting-policy.jpg",
+      "title": "攻擊方式選單",
+      "note": "最近／Boss／遠程／高血／低血／飛行。",
+      "bytes": 201073,
+      "sha256": "4640e41efc5a460f975d404a72202d8a8cdcccab813208e45b800715948a307d"
+    },
+    {
+      "file": "21-tower-skill.jpg",
+      "title": "烈焰塔技能",
+      "note": "豪火球，258% 範圍火傷、12 秒。",
+      "bytes": 197715,
+      "sha256": "3d8381a6c952a262b065b7c932a19df35a25480cad407eb39db8a67460329867"
+    },
+    {
+      "file": "22-cannon-attack.jpg",
+      "title": "主炮技能",
+      "note": "銀核弩射，130% 物理傷害。",
+      "bytes": 194975,
+      "sha256": "3e413ad16c0bcad4b48848f77ad4eb6d7b8cd123a2ce3518c9862c785b4761b8"
+    },
+    {
+      "file": "23-captain-unavailable.jpg",
+      "title": "隊長取得提示",
+      "note": "當前尚未取得隊長，不代表全 Demo 無此系統。",
+      "bytes": 195966,
+      "sha256": "a02125a6b2c5074b4dfda7a47e2e0a6d566731556ff0981cacb33137b6b52434"
+    },
+    {
+      "file": "24-loadout-presets.jpg",
+      "title": "編隊預設",
+      "note": "編隊 1～5 的下拉選單。",
+      "bytes": 195683,
+      "sha256": "f05b77edbd837933e10968051b8ada418707b1cb8415890b791123917f638a99"
+    },
+    {
+      "file": "25-battle-hud.jpg",
+      "title": "戰鬥 HUD",
+      "note": "技能槽、冷卻圈、1X、自動施法和傷害柱。",
+      "bytes": 222301,
+      "sha256": "a701b5e1fc665f58bf669e2848bf78af6bc794cabd898ea83812aa394ced71bc"
+    },
+    {
+      "file": "26-recruit-progress.jpg",
+      "title": "招募累積進度",
+      "note": "Lv.1、1/20，單抽 10／十抽 100。",
+      "bytes": 237746,
+      "sha256": "6c25bbbfbf183eae96b092da58cace84eed1a469398268b9ea946addaa3513eb"
+    },
+    {
+      "file": "27-recruit-rules.jpg",
+      "title": "招募規則",
+      "note": "卡池升級提高稀有率，重複角色轉碎片。",
+      "bytes": 139671,
+      "sha256": "7688e3a815d55d25ce67b2d127d671cadb082aea03934bb81c68061e0d5b262e"
+    },
+    {
+      "file": "28-recruit-probabilities.jpg",
+      "title": "招募機率表",
+      "note": "鑽石 0.8%、黃金 6.4%、白銀 92.8%。",
+      "bytes": 298616,
+      "sha256": "9cbd8fd989829ea22763d9acd968579f4ca6e4d9fdd90596e520a0fef825632f"
+    },
+    {
+      "file": "29-training-unlock.jpg",
+      "title": "城堡訓練所門檻",
+      "note": "城堡 Lv.20、1,000 金幣。",
+      "bytes": 177898,
+      "sha256": "b35ab04662cb7290917cc09b801c2c4337a4e13b556a4145b9f26f2768aa10a7"
+    },
+    {
+      "file": "30-talent-unlock.jpg",
+      "title": "天賦管理局門檻",
+      "note": "城堡 Lv.60、10,000 金幣。",
+      "bytes": 176739,
+      "sha256": "2ad41f5839f1606d4dab43943c6fec84951211fee5530ac919dc135d231fc556"
+    },
+    {
+      "file": "31-treasure-unlock.jpg",
+      "title": "寶物祭壇門檻",
+      "note": "最大英雄等級 155、10,000 金幣。",
+      "bytes": 177221,
+      "sha256": "9ce44215334a5c7558fe46e73bbe10d17787ba322f95afff2048497c224c6c3e"
+    },
+    {
+      "file": "32-blacksmith-unlock.jpg",
+      "title": "鐵匠鋪門檻",
+      "note": "裝備總數 5、10,000 金幣。",
+      "bytes": 176179,
+      "sha256": "0667e76baa8f2322c77160d1859d1f3f5f42889a9b9aa63ec327fabbb4e1d549"
+    },
+    {
+      "file": "33-black-market-unlock.jpg",
+      "title": "黑市門檻",
+      "note": "本版第 85 波、100 鑽石；與舊攻略不同。",
+      "bytes": 176200,
+      "sha256": "7e1bfa21347748d7597b82bb3d22b78bcd6765f0ff55f96867433cce136a59e7"
+    }
+  ]
+}

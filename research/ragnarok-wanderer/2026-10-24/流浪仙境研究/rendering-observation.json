@@ -1,0 +1,18 @@
+{
+  "buttons": 77,
+  "canvas": [
+    {
+      "cssHeight": 142,
+      "cssWidth": 358,
+      "height": 142,
+      "id": "stage",
+      "width": 358
+    }
+  ],
+  "images": 16,
+  "viewport": {
+    "dpr": 1,
+    "height": 616,
+    "width": 362
+  }
+}

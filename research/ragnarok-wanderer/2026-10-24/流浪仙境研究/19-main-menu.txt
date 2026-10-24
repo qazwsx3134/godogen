@@ -1,0 +1,57 @@
+Browser tab: 1, Title: "流浪仙境 Ragnarok Wanderer", URL: "https://xianjingro.netlify.app/".
+0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/
+	1 container app
+		2 container stageWrap
+			3 image Description: 戰鬥畫面, ID: stage
+			19 container lstack
+				98 container v114box
+					99 button 聊天室
+					100 button 收起聊天框
+					101 container
+						102 text 請屎皇 ：暴擊釋放
+					103 container
+						104 text cyz0416 ：感謝解答
+					105 container
+						106 text 花寒弦 ：活動圖哪個裝備最值得刷?
+				20 button 活動荒野回響, ID: ssChip
+					129 text 活動
+					130 text 荒野回響
+				23 button ✦ 任務分解 3 件裝備0/3, ID: questChip
+					131 text ✦ 
+					132 text 任務
+					133 text 分解 3 件裝備
+					134 text 0/3
+				27 container mapChip
+					135 text 普隆德拉南門 LV1-6
+			136 text Boss 出現：天使波利（限時 90 秒）
+			117 button 可占卜天氣, Help: 到朱諾找占卜師占卜天氣, ID: v125wx
+		6 container side
+			7 container ro-brand
+				8 text ✧
+				9 text 流浪仙境
+				126 text ● 已自動存檔
+			11 tab group tabs
+				12 tab (selectable, settable, boolean) 角色, Value: 0
+				13 tab (selectable, settable, boolean) 背包, Value: 0
+背包
+				14 tab (selectable, settable, boolean) 技能, Value: 0
+				18 tab (selectable, settable, boolean) 聊天, Value: 0
+				15 tab (selectable, settable, boolean) 地圖, Value: 0
+				16 tab (selected, settable, boolean) 選單, Value: 1
+			128 container panel
+				137 button 卡片圖鑑
+				138 button 地圖蒐藏
+				139 button 特效
+				140 button 線上排行
+				141 button 隊伍排行
+				142 button 音樂與音效來源
+				143 button 更新日誌
+				144 button 綁定
+				145 button 設定
+				146 button 天賦圖鑑
+				147 button 冒險手冊
+				148 button 共用天賦樹
+				149 link Description: Discord, Value: discord.gg/wxnPHdS9Fw
+				150 link Description: LINE群, Value: line.me/ti/g2/XSY7WdF9AXgqKmcIydvSW-ZI6IkBa8Yj3hfstA?utm_source=invitation&utm_medium=link_copy&utm_campaign=default
+
+The focused UI element is 16 tab (selected, settable, boolean) 選單, Value: 1

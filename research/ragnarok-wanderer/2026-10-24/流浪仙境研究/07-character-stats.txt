@@ -1,0 +1,187 @@
+Browser tab: 1, Title: "流浪仙境 Ragnarok Wanderer", URL: "https://xianjingro.netlify.app/".
+0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/
+	1 container app
+		2 container stageWrap
+			3 image Description: 戰鬥畫面, ID: stage
+			19 container lstack
+				98 container v114box
+					99 button 聊天室
+					100 button 收起聊天框
+					101 container
+						102 text 請屎皇 ：暴擊釋放
+					103 container
+						104 text cyz0416 ：感謝解答
+					105 container
+						106 text 花寒弦 ：活動圖哪個裝備最值得刷?
+				20 button 活動荒野回響, ID: ssChip
+					118 text 活動
+					119 text 荒野回響
+				23 button ✦ 任務擊殺 15 隻怪物5/15, ID: questChip
+					120 text ✦ 
+					121 text 任務
+					122 text 擊殺 15 隻怪物
+					123 text 5/15
+				27 container mapChip
+					124 text 普隆德拉南門 LV1-6
+			5 button (disabled) BOSS25/30, ID: bossBtn
+				125 text BOSS 25/30
+			126 text 升級！等級 6・技能格 10 格
+			117 button 可占卜天氣, Help: 到朱諾找占卜師占卜天氣, ID: v125wx
+		6 container side
+			7 container ro-brand
+				8 text ✧
+				9 text 流浪仙境
+				127 text ● 已自動存檔
+			11 tab group tabs
+				12 tab (selected, settable, boolean) 角色, Value: 1
+				13 tab (selectable, settable, boolean) 背包, Value: 0
+背包
+				14 tab (selectable, settable, boolean) 技能, Value: 0
+				18 tab (selectable, settable, boolean) 聊天, Value: 0
+				15 tab (selectable, settable, boolean) 地圖, Value: 0
+				16 tab (selectable, settable, boolean) 選單, Value: 0
+			128 container panel
+				129 text 研究旅人
+				130 text 劍士  LV6
+				131 button ♂ 男, Help: 點一下更改性別
+				132 button 切換角色
+				133 text 構築
+				134 button 說明
+				135 checkbox 1
+				136 checkbox 2, Value: 0
+				137 checkbox 3, Value: 0
+				138 button 複製
+				139 checkbox 屬性, Value: 1
+				140 checkbox 職業天賦, Value: 0
+				141 image 劍士
+				142 text MIDGARD ADVENTURER
+				143 heading 研究旅人 Lv.6, Value: 2
+					144 text 研究旅人  Lv.6
+				145 text 劍鋒所向，守護之誓
+				146 container
+					147 text 基本素質 · 共用天賦
+					148 button 說明
+					149 text 剩餘 4 點
+					150 container 每點 +0.2 攻擊、+0.08% 總傷害額外（天賦樹 9＋裝備與卡片 1）
+						151 text STR
+						152 text  力量
+						153 container
+							154 text 10 （+1）
+					155 container 每點 +8 生命、+0.25% 最大生命額外（天賦樹 7）
+						156 text VIT
+						157 text  體質
+						158 text 7
+					159 container 每點 +0.35% 攻速、+2 閃避（天賦樹 3）
+						160 text AGI
+						161 text  敏捷
+						162 text 3
+					163 container 每點 +0.13% 暴擊率、+0.32% 暴擊傷害（天賦樹 1）
+						164 text LUK
+						165 text  幸運
+						166 text 1
+					167 container 每點 +0.33% 技能傷害、+0.08% 技能傷害額外（天賦樹 1）
+						168 text INT
+						169 text  智力
+						170 text 1
+					171 container 每點 +0.16 攻擊、+0.09% 冷卻縮減（天賦樹 3）
+						172 text DEX
+						173 text  靈巧
+						174 text 3
+					175 button 開啟共用天賦樹 終極天賦 0 / 2
+						176 text 開啟共用天賦樹
+						177 text 終極天賦 0 / 2
+				178 heading 劍士・等級 6 說明, Value: 2
+					179 text 劍士・等級  6
+					180 button 說明
+				181 button Description: 普通 長劍, Help: 普通 · 長劍
+				182 button (disabled) 副手（空）
+				183 button (disabled) 頭飾（空）
+				184 button (disabled) 鎧甲（空）
+				185 button (disabled) 披肩（空）
+				186 button (disabled) 鞋子（空）
+				187 button (disabled) 飾品・左（空）
+				188 button (disabled) 飾品・右（空）
+				189 heading ✦ 攻擊, Value: 3
+					190 text ✦  攻擊
+				191 definition list
+					192 container 預估 DPS（含技能）
+						193 text 預估 DPS（含技能）
+					194 text 24
+					195 container 武器傷害
+						196 text 武器傷害
+					197 text 7-10
+					198 container 每秒攻擊次數
+						199 text 每秒攻擊次數
+					200 container
+						201 text 1.45
+					202 container 行動速度
+						203 text 行動速度
+					204 container
+						205 text X1.00
+					206 container 傷害增加 / 技能傷害
+						207 text 傷害增加 / 技能傷害
+					208 text +0% / +0.33%
+					209 container 暴擊率 / 暴擊傷害
+						210 text 暴擊率 / 暴擊傷害
+					211 text 8.1% / 150.32%
+					212 container 冷卻縮減 / 技能範圍
+						213 text 冷卻縮減 / 技能範圍
+					214 text 0.3% / +0%
+				215 heading ✦ 防禦, Value: 3
+					216 text ✦  防禦
+				217 definition list
+					218 container 最大生命
+						219 text 最大生命
+					220 text 247
+					221 container 護甲
+						222 text 護甲
+					223 text 0（職業加成 +20%）
+					224 container 固定扣減
+						225 text 固定扣減
+					226 text 每次 −0（最多減半）
+					227 container 護甲減傷
+						228 text 護甲減傷
+					229 text 0%／上限 85%
+					230 container 閃避 / 閃避率
+						231 text 閃避 / 閃避率
+					232 container
+						233 text 6 / 1.2%／上限 45%
+					234 container 以 Lv6 怪物計算（怪物等級越高越難減傷與閃避；低於 Lv60 以 60 計）
+						235 text 以 Lv6 怪物計算（怪物等級越高越難減傷與閃避；低於 Lv60 以 60 計）
+					236 container 每秒回復
+						237 text 每秒回復
+					238 text 2.5
+					239 container 擊殺回復
+						240 text 擊殺回復
+					241 text 0
+					242 container 移動速度
+						243 text 移動速度
+					244 container
+						245 text 32
+					246 container 復活時間
+						247 text 復活時間
+					248 text 10.0 秒
+				249 heading ✦ 自動藥水, Value: 3
+					250 text ✦  自動藥水
+				251 container
+					252 text 生命低於 
+					253 text 40%
+					254 text  時自動使用藥水
+					255 text （冷卻 4 秒，回復 35%，剩餘  10  瓶）
+				256 slider (settable, integer) 生命低於 40% 時自動使用藥水 （冷卻 4 秒，回復 35%，剩餘 10 瓶）, Value: 40, ID: potPct
+				257 container
+					258 checkbox (settable, integer) Description: 藥水用完時自動購買（Zeny 30／5 瓶）, Value: 0
+					259 text 藥水用完時自動購買（Zeny  30 ／ 5  瓶）
+				260 heading ✦ 戰鬥方式, Value: 3
+					261 text ✦  戰鬥方式
+				262 container
+					263 checkbox (settable, integer) Description: 消極模式：遠離怪物，進入攻擊範圍才攻擊（含頭目戰）, Value: 0
+					264 text 消極模式：遠離怪物，進入攻擊範圍才攻擊（含頭目戰）
+				265 container
+					266 checkbox (settable, integer) Description: 關閉普通攻擊：只施放技能, Value: 0
+					267 text 關閉普通攻擊：只施放技能
+				268 container
+					269 checkbox (settable, integer) Description: 怪物自動靠攏（一般地圖；Lv.70 以下為半個畫面內，Lv.70 以上為整張地圖；消極模式時不作用）, Value: 1
+					270 text 怪物自動靠攏（一般地圖；Lv.70 以下為半個畫面內，Lv.70 以上為整張地圖；消極模式時不作用）
+
+The focused UI element is 12 tab (selected, settable, boolean) 角色, Value: 1

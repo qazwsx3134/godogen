@@ -1,0 +1,103 @@
+Browser tab: 1, Title: "流浪仙境 Ragnarok Wanderer", URL: "https://xianjingro.netlify.app/".
+0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/
+	1 container app
+		2 container stageWrap
+			3 image Description: 戰鬥畫面, ID: stage
+			19 container lstack
+				98 container v114box
+					99 button 聊天室
+					100 button 收起聊天框
+					101 container
+						102 text 請屎皇 ：暴擊釋放
+					103 container
+						104 text cyz0416 ：感謝解答
+					105 container
+						106 text 花寒弦 ：活動圖哪個裝備最值得刷?
+				23 button ✦ 任務分解 3 件裝備0/3, ID: questChip
+					220 text ✦ 
+					221 text 任務
+					222 text 分解 3 件裝備
+					223 text 0/3
+				27 container mapChip
+					224 text 普隆德拉 城鎮
+			219 button 離開城鎮, ID: bossBtn
+			117 button 可占卜天氣, Help: 到朱諾找占卜師占卜天氣, ID: v125wx
+		6 container side
+			7 container ro-brand
+				8 text ✧
+				9 text 流浪仙境
+				225 text ● 已自動存檔
+			11 tab group tabs
+				12 tab (selectable, settable, boolean) 角色, Value: 0
+				13 tab (selectable, settable, boolean) 背包, Value: 0
+背包
+				14 tab (selectable, settable, boolean) 技能, Value: 0
+				18 tab (selectable, settable, boolean) 聊天, Value: 0
+				15 tab (selectable, settable, boolean) 地圖, Value: 0
+				16 tab (selected, settable, boolean) 選單, Value: 1
+			128 container panel
+				226 button < 選單
+				227 heading 地圖蒐藏 說明, Value: 2
+					228 text 地圖蒐藏
+					229 button 說明
+				230 button 活動卡牌
+					231 text S1
+					232 text 活動卡牌・荒野回響
+					233 text 90 級開放
+					234 text 菌冠波利母體
+					235 text 0/2000
+					236 text 古林鹿靈
+					237 text 0/2000
+					238 text 熔殼機械甲蟲
+					239 text 0/2000
+				240 button 普隆德拉南門
+					241 text 01
+					242 text 普隆德拉南門
+					243 text +4% 移動速度
+					244 text 225/500
+				245 button 斐揚森林
+					246 text 02
+					247 text 斐揚森林
+					248 text +4% 傷害
+					249 text 0/500
+				250 button (disabled) 未解鎖
+					251 text 03
+					252 text LOCK
+				253 button (disabled) 未解鎖
+					254 text 04
+					255 text LOCK
+				256 button (disabled) 未解鎖
+					257 text 05
+					258 text LOCK
+				259 button (disabled) 未解鎖
+					260 text 06
+					261 text LOCK
+				262 button (disabled) 未解鎖
+					263 text 07
+					264 text LOCK
+				265 button (disabled) 未解鎖
+					266 text 08
+					267 text LOCK
+				268 button (disabled) 未解鎖
+					269 text 09
+					270 text LOCK
+				271 button (disabled) 未解鎖
+					272 text 10
+					273 text LOCK
+				274 button (disabled) 未解鎖
+					275 text 11
+					276 text LOCK
+				277 button (disabled) 未解鎖
+					278 text 12
+					279 text LOCK
+				280 button (disabled) 未解鎖
+					281 text 13
+					282 text LOCK
+				283 button (disabled) 未解鎖
+					284 text 14
+					285 text LOCK
+				286 button (disabled) 未解鎖
+					287 text 15
+					288 text LOCK
+
+The focused UI element is 0 AXWebArea 流浪仙境 Ragnarok Wanderer, URL: xianjingro.netlify.app/
