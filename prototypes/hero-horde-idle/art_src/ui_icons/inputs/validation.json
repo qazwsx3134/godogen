@@ -1,0 +1,331 @@
+[
+  {
+    "id": "sig/wall",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGB",
+    "sha256": "5a0ee873fe46a6a009bfedbf2d007a417fbed242ba1ff33f86ddf349dbcefc59"
+  },
+  {
+    "id": "sig/cleave",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGB",
+    "sha256": "c5458f7c2f5a7389ee591f61e95c0877b600d2c6f95a2faee571f0a7ca930576"
+  },
+  {
+    "id": "sig/gale",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGB",
+    "sha256": "d8ce85beef65ebb815bcbed5fb4482b9559b68a8831d05cf45616fb9c72cb24d"
+  },
+  {
+    "id": "sig/pierce",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGB",
+    "sha256": "e946bad220ec44a0117a510e48f9cdde1bf43ce9c25533691793f6cb87015741"
+  },
+  {
+    "id": "sig/arrow",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGB",
+    "sha256": "04088c7877c4cd204bac8aa1a319c6fbfc2262f7f52adc31e075e214ab003f8e"
+  },
+  {
+    "id": "sig/meteor",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGB",
+    "sha256": "549f193570f951d9dd6d5c833901216ace4e8664b79df1c19b53bde240b4c180"
+  },
+  {
+    "id": "sig/dawn",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGB",
+    "sha256": "3c274e4879728366c205ac0e7d1b9775b67b16fdb27c83c81f324e8b00ae37a7"
+  },
+  {
+    "id": "class/shield",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGB",
+    "sha256": "60aff75d3661cc11de6d0c0342d7032bc4ae93b18d72f3de2cc0e5f2dd04e59f",
+    "exterior_samples_rgb": [
+      [
+        240,
+        14,
+        242
+      ],
+      [
+        239,
+        34,
+        239
+      ],
+      [
+        249,
+        5,
+        250
+      ],
+      [
+        249,
+        12,
+        246
+      ],
+      [
+        247,
+        20,
+        243
+      ],
+      [
+        242,
+        30,
+        240
+      ]
+    ],
+    "exact_ff00ff_samples": 0
+  },
+  {
+    "id": "class/sword",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGB",
+    "sha256": "4e5d9a63f6d0808b85c9661e25c630c9e4f07b36b287eaa2f209c059f7a714d9",
+    "exterior_samples_rgb": [
+      [
+        239,
+        15,
+        242
+      ],
+      [
+        237,
+        38,
+        239
+      ],
+      [
+        246,
+        6,
+        250
+      ],
+      [
+        247,
+        13,
+        245
+      ],
+      [
+        243,
+        19,
+        243
+      ],
+      [
+        240,
+        31,
+        239
+      ]
+    ],
+    "exact_ff00ff_samples": 0
+  },
+  {
+    "id": "class/spear",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGB",
+    "sha256": "673ee1dfa24cc485fc17a31dfb988a64eafbe8d25055acbf982ff93162c4e61e",
+    "exterior_samples_rgb": [
+      [
+        237,
+        13,
+        242
+      ],
+      [
+        236,
+        37,
+        236
+      ],
+      [
+        247,
+        6,
+        249
+      ],
+      [
+        248,
+        15,
+        246
+      ],
+      [
+        244,
+        19,
+        243
+      ],
+      [
+        240,
+        33,
+        239
+      ]
+    ],
+    "exact_ff00ff_samples": 0
+  },
+  {
+    "id": "class/bow",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGB",
+    "sha256": "e2b8cd43ae1dd789d2c07cd1754122566c187868aa84339cf420acf5fa49a60c",
+    "exterior_samples_rgb": [
+      [
+        240,
+        14,
+        242
+      ],
+      [
+        239,
+        37,
+        238
+      ],
+      [
+        248,
+        5,
+        250
+      ],
+      [
+        249,
+        13,
+        247
+      ],
+      [
+        246,
+        22,
+        244
+      ],
+      [
+        242,
+        33,
+        241
+      ]
+    ],
+    "exact_ff00ff_samples": 0
+  },
+  {
+    "id": "class/mage",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGB",
+    "sha256": "d457fe71eaee8c218c8c0cf67280e57d31006570122b04948a9efd05e5e80af7",
+    "exterior_samples_rgb": [
+      [
+        240,
+        14,
+        241
+      ],
+      [
+        240,
+        36,
+        237
+      ],
+      [
+        248,
+        5,
+        250
+      ],
+      [
+        249,
+        13,
+        246
+      ],
+      [
+        245,
+        19,
+        243
+      ],
+      [
+        242,
+        30,
+        240
+      ]
+    ],
+    "exact_ff00ff_samples": 0
+  },
+  {
+    "id": "class/healer",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGB",
+    "sha256": "f061f036aa516e5abf56f157c0d1475d7eb994025b690dc6be8304c6db79038e",
+    "exterior_samples_rgb": [
+      [
+        239,
+        13,
+        240
+      ],
+      [
+        239,
+        37,
+        238
+      ],
+      [
+        248,
+        5,
+        250
+      ],
+      [
+        248,
+        13,
+        246
+      ],
+      [
+        245,
+        17,
+        243
+      ],
+      [
+        241,
+        31,
+        240
+      ]
+    ],
+    "exact_ff00ff_samples": 0
+  },
+  {
+    "id": "bg/hero_page",
+    "size": [
+      948,
+      1659
+    ],
+    "mode": "RGB",
+    "sha256": "24565dd498b5aa58c87c18219ebb88f70813870b9540eab3dcb926b758311dc6",
+    "bottom_40_percent_mean_rgb": [
+      9.42874027756596,
+      18.29339986528392,
+      14.2612475217325
+    ]
+  }
+]

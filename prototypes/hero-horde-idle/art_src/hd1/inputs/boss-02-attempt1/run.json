@@ -1,0 +1,46 @@
+{
+  "schema": "generate2dsprite.master_run.v1",
+  "tool": {
+    "name": "master_still",
+    "version": "0.4.0"
+  },
+  "command": "generate",
+  "created": "2026-10-21T03:13:16.231Z",
+  "name": "hd1-boss",
+  "class": "hero",
+  "finish": "pixel",
+  "facing": "left",
+  "key": "#FF00FF",
+  "prompt": {
+    "path": "prompt.txt",
+    "sha256": "2023a9f552cc62a00b29ade044c8abaab42e6c2f9505374de914a446db0ea711",
+    "bytes": 2249
+  },
+  "spec": {
+    "path": "spec.json",
+    "sha256": "bed0a886c2f9acc517689677b1ea90223aa985d8483b2406525163828d22595d",
+    "bytes": 1631
+  },
+  "references": [],
+  "media": {
+    "cli": "route_media.py",
+    "cli_source": "sibling",
+    "cli_sha256": "5f920b3c8f37118e144f40c1c021cba87b691413cd83cb4dc5437ad500df6562",
+    "route_requested": "codex-cli",
+    "size": "1024x1024",
+    "args": [],
+    "timeout_s": 360.0
+  },
+  "takes": [
+    {
+      "take": 1,
+      "exit_code": 1,
+      "seconds": 0.409,
+      "media": null,
+      "status": "fail",
+      "error": "local:codex-cli: LEDGER: the ledger could not be used ([Errno 1] Operation not permitted: '.forge/ledger.lock'); nothing was run"
+    }
+  ],
+  "status": "fail",
+  "warnings": []
+}

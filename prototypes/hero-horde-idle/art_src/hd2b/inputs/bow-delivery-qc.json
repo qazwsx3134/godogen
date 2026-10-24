@@ -1,0 +1,267 @@
+[
+  {
+    "class": "bow",
+    "action": "run_a",
+    "run": "inputs/bow-run_a-edit-1/run.json",
+    "command": "edit",
+    "canvas_size": [
+      1024,
+      1024
+    ],
+    "raw_size": [
+      1254,
+      1254
+    ],
+    "canvas_scale": 0.8165869218500797,
+    "vertical_translation_px": 0,
+    "source_anchor": 926,
+    "anchor_method": "lowest visible subject point",
+    "baseline": 926,
+    "containment_scale": 1.0,
+    "target_baseline": 926,
+    "bbox": [
+      38,
+      112,
+      980,
+      926
+    ],
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          251.0,
+          3.0,
+          251.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.6953353733761691,
+        "distance_from_declared": 6.4
+      },
+      "quality": "soft",
+      "interior_despill": false,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.02180124880939782,
+        "semitransparent_fraction": 0.04077214088846504,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 98,
+        "visible_px": 477115
+      }
+    },
+    "warnings": []
+  },
+  {
+    "class": "bow",
+    "action": "run_b",
+    "run": "inputs/bow-run_b-edit-1/run.json",
+    "command": "edit",
+    "canvas_size": [
+      1024,
+      1024
+    ],
+    "raw_size": [
+      1254,
+      1254
+    ],
+    "canvas_scale": 0.8165869218500797,
+    "vertical_translation_px": 3,
+    "source_anchor": 923,
+    "anchor_method": "lowest visible subject point",
+    "baseline": 926,
+    "containment_scale": 1.0,
+    "target_baseline": 926,
+    "bbox": [
+      111,
+      72,
+      957,
+      926
+    ],
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          248.0,
+          3.0,
+          250.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.7463587015966769,
+        "distance_from_declared": 9.11
+      },
+      "quality": "soft",
+      "interior_despill": false,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.01178026205072725,
+        "semitransparent_fraction": 0.042944723466205904,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 82,
+        "visible_px": 397022
+      }
+    },
+    "warnings": []
+  },
+  {
+    "class": "bow",
+    "action": "strike",
+    "run": "inputs/bow-strike-edit-1/run.json",
+    "command": "edit",
+    "canvas_size": [
+      1024,
+      1024
+    ],
+    "raw_size": [
+      1254,
+      1254
+    ],
+    "canvas_scale": 0.8165869218500797,
+    "vertical_translation_px": -25,
+    "source_anchor": 951,
+    "anchor_method": "lowest visible subject point",
+    "baseline": 926,
+    "containment_scale": 0.9827956989247312,
+    "target_baseline": 926,
+    "bbox": [
+      118,
+      12,
+      978,
+      928
+    ],
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          250.0,
+          3.0,
+          251.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.7127253395195979,
+        "distance_from_declared": 7.07
+      },
+      "quality": "soft",
+      "interior_despill": false,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.009792056331829684,
+        "semitransparent_fraction": 0.04035765802007881,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 21,
+        "visible_px": 449927
+      }
+    },
+    "warnings": []
+  },
+  {
+    "class": "bow",
+    "action": "down",
+    "run": "inputs/bow-down-edit-1/run.json",
+    "command": "edit",
+    "canvas_size": [
+      1024,
+      1024
+    ],
+    "raw_size": [
+      1254,
+      1254
+    ],
+    "canvas_scale": 0.8165869218500797,
+    "vertical_translation_px": 40,
+    "source_anchor": 886,
+    "anchor_method": "largest body component",
+    "baseline": 926,
+    "containment_scale": 1.0,
+    "target_baseline": 926,
+    "bbox": [
+      43,
+      201,
+      998,
+      927
+    ],
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          251.0,
+          4.0,
+          251.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.7246266492677976,
+        "distance_from_declared": 6.93
+      },
+      "quality": "soft",
+      "interior_despill": false,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.004574042309891366,
+        "semitransparent_fraction": 0.04419191040531481,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 29,
+        "visible_px": 431097
+      }
+    },
+    "warnings": []
+  },
+  {
+    "class": "bow",
+    "action": "volley",
+    "run": "inputs/bow-volley-edit-1/run.json",
+    "command": "edit",
+    "canvas_size": [
+      1024,
+      1024
+    ],
+    "raw_size": [
+      1254,
+      1254
+    ],
+    "canvas_scale": 0.8165869218500797,
+    "vertical_translation_px": -6,
+    "source_anchor": 932,
+    "anchor_method": "lowest visible subject point",
+    "baseline": 926,
+    "containment_scale": 0.9692470837751855,
+    "target_baseline": 926,
+    "bbox": [
+      140,
+      12,
+      912,
+      926
+    ],
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          250.0,
+          3.0,
+          250.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.7469094114145738,
+        "distance_from_declared": 7.68
+      },
+      "quality": "soft",
+      "interior_despill": false,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.09178267832943206,
+        "semitransparent_fraction": 0.042864100086046145,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 1147,
+        "visible_px": 396299
+      }
+    },
+    "warnings": []
+  }
+]

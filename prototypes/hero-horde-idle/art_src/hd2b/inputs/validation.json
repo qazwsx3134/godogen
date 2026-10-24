@@ -1,0 +1,21 @@
+{
+  "poses": 30,
+  "contacts": 6,
+  "source_references": "all hd2 candidate-01 hashes verified",
+  "route": "local:codex-cli",
+  "mode": "edit",
+  "attempts": 30,
+  "fallbacks": 0,
+  "skipped": [],
+  "max_generation_seconds": 121.628,
+  "baseline": 926,
+  "opaque_key_pixels": 0,
+  "containment_scales": {
+    "shield/volley": 0.965153,
+    "spear/strike": 0.987167,
+    "bow/strike": 0.982796,
+    "bow/volley": 0.969247,
+    "mage/volley": 0.983854,
+    "healer/volley": 0.958071
+  }
+}

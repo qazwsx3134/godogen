@@ -1,0 +1,84 @@
+{
+  "schema": "generate2dsprite.master_run.v1",
+  "tool": {
+    "name": "master_still",
+    "version": "0.4.0"
+  },
+  "command": "edit",
+  "created": "2026-10-21T03:30:06.950Z",
+  "name": "hd1b-slam",
+  "class": "hero",
+  "finish": "pixel",
+  "facing": "left",
+  "key": "#FF00FF",
+  "prompt": {
+    "path": "prompt.txt",
+    "sha256": "ee6081eeeaf530551c03e5b647bdc72d0f3494751135666c8f0307fa6fa2345d",
+    "bytes": 2305
+  },
+  "spec": {
+    "path": "spec.json",
+    "sha256": "5aafeeb21fda371dba05c9cdf678315bf24b3593925ce2e9b1b37e49c0a6daa3",
+    "bytes": 1632
+  },
+  "references": [
+    {
+      "role": "edit",
+      "ordinal": "FIRST",
+      "path": "../../../hd1/boss/candidate-01.png",
+      "sha256": "08233e79b418561a1cb9f9f2b3240b93d55411ca8323c069adf7fd14e47790ed",
+      "bytes": 759849
+    }
+  ],
+  "media": {
+    "cli": "route_media.py",
+    "cli_source": "sibling",
+    "cli_sha256": "5f920b3c8f37118e144f40c1c021cba87b691413cd83cb4dc5437ad500df6562",
+    "route_requested": "codex-cli",
+    "size": "1024x1024",
+    "args": [],
+    "timeout_s": 360.0
+  },
+  "takes": [
+    {
+      "take": 1,
+      "exit_code": 0,
+      "seconds": 62.536,
+      "media": {
+        "status": "ok",
+        "route": "local:codex-cli",
+        "sha256": "0cb07aa1fc909dd2f810eddb38222ccd1ef54ba5cb927728267d0032358bca51",
+        "estimateUsd": 0.0,
+        "kind": "image",
+        "label": "Codex (local CLI)",
+        "model": "codex-image_gen",
+        "verifiedBefore": true
+      },
+      "copied": false,
+      "artifact": {
+        "path": "takes/take-01/generated.png",
+        "sha256": "0cb07aa1fc909dd2f810eddb38222ccd1ef54ba5cb927728267d0032358bca51",
+        "bytes": 1927837,
+        "size": [
+          1254,
+          1254
+        ]
+      },
+      "status": "ok",
+      "route": "local:codex-cli"
+    }
+  ],
+  "status": "ok",
+  "edit": {
+    "still": {
+      "path": "../../../hd1/boss/candidate-01.png",
+      "sha256": "08233e79b418561a1cb9f9f2b3240b93d55411ca8323c069adf7fd14e47790ed",
+      "bytes": 759849
+    },
+    "change": "the moment of impact: club smashed down onto the ground in front of him (to the left), body bent forward, a few small rock chips flying (no dust cloud covering the body) Keep the complete body, horns, hands, feet and entire club fully inside the square canvas with safe margins. Do not shrink or zoom the troll to fit the new pose: keep the same head size and standing-equivalent anatomical scale as the FIRST image. Keep the feet on the same ground baseline at approximately 90 percent of image height. No ground plate, cast shadow, text, border, aura, or dust cloud. Background outside the subject is flat pure magenta #FF00FF only.",
+    "keep": "the exact same troll identity, grey-green skin and warm dusk palette, two curved ivory horns, tusks, leather and iron-plate harness, same huge spiked wooden club, body proportions, pixel-art style, warm upper-left sunlight and cool blue-violet shadows, elevated three-quarter camera about 45 degrees above, entire body and face turned LEFT, same anatomical body scale and canvas proportions",
+    "extra": [],
+    "framing": "the top of the figure about 13 percent below the top edge, its lowest point about 10 percent above the bottom edge, its left-most point about 15 percent from the left edge and its right-most point about 15 percent from the right edge"
+  },
+  "warnings": []
+}

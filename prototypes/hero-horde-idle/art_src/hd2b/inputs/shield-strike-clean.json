@@ -1,0 +1,32 @@
+{
+  "matte": {
+    "requested": "soft",
+    "key_estimate": {
+      "key": [
+        250.0,
+        3.0,
+        250.0
+      ],
+      "source": "border_median",
+      "valid": true,
+      "ring_share": 1.0,
+      "coverage": 0.6928043975387214,
+      "distance_from_declared": 7.68
+    },
+    "quality": "soft",
+    "interior_despill": false,
+    "qa": {
+      "opaque_key_px": 0,
+      "outer_ring_spill_fraction": 0.0020017157563625965,
+      "semitransparent_fraction": 0.025150807247053937,
+      "enclosed_key_pockets": 0,
+      "key_hued_px": 8,
+      "visible_px": 481575
+    }
+  },
+  "raw_size": [
+    1254,
+    1254
+  ],
+  "source": "inputs/shield-strike-edit-1/takes/take-01/generated.png"
+}

@@ -1,0 +1,75 @@
+{
+  "tool": "Codex built-in image_gen",
+  "references": [
+    "/Users/peter/repo/godot/godogen/prototypes/hero-horde-idle/art_src/ui_concepts/round3/refs/current_camp.png",
+    "/Users/peter/repo/godot/godogen/prototypes/hero-horde-idle/art_src/ui_concepts/round3/refs/current_roster.png",
+    "/Users/peter/repo/godot/godogen/prototypes/hero-horde-idle/art_src/ui_concepts/round3/refs/current_hero_page.png",
+    "/Users/peter/repo/godot/godogen/prototypes/hero-horde-idle/art_src/ui_concepts/round3/refs/style_target.png"
+  ],
+  "items": [
+    {
+      "id": "A_recruit",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-73eba6de-2256-408b-ac36-7ff6807e17f7.png",
+      "attempts": 1,
+      "version": "gacha; A/B before uniform rarity-frame update; C after",
+      "extra_edit_reference": null
+    },
+    {
+      "id": "A_items",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-cb2f9ec9-749d-4859-a7c7-c53feda1abc5.png",
+      "attempts": 1,
+      "version": "gacha; A/B before uniform rarity-frame update; C after",
+      "extra_edit_reference": "inputs/A_items_before_drop_update.png"
+    },
+    {
+      "id": "B_recruit",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-091143e5-d469-4fe9-b7e3-1e95433c9253.png",
+      "attempts": 1,
+      "version": "gacha; A/B before uniform rarity-frame update; C after",
+      "extra_edit_reference": null
+    },
+    {
+      "id": "B_items",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-768d14de-3731-4008-af21-296ea5da18b4.png",
+      "attempts": 1,
+      "version": "gacha; A/B before uniform rarity-frame update; C after",
+      "extra_edit_reference": null
+    },
+    {
+      "id": "C_recruit",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-f26d0d1e-ba7a-4aa9-920b-c9398a3ce58d.png",
+      "attempts": 1,
+      "version": "gacha; A/B before uniform rarity-frame update; C after",
+      "extra_edit_reference": null
+    },
+    {
+      "id": "C_items",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-281c9ec9-e595-46d5-bbca-86085dd2b09f.png",
+      "attempts": 2,
+      "version": "gacha; A/B before uniform rarity-frame update; C after",
+      "extra_edit_reference": "inputs/C_items_attempt-01.png"
+    }
+  ],
+  "old_outputs": [
+    {
+      "id": "A_recruit_old",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-00d701f4-0684-49d1-8706-4a3d7ccf2862.png"
+    },
+    {
+      "id": "B_recruit_old",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-513d602f-26b5-46d1-8631-77866dc7d042.png"
+    },
+    {
+      "id": "inputs/A_items_before_drop_update",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-876232c2-8f4c-4b0f-ba55-41047b6a902f.png"
+    },
+    {
+      "id": "inputs/C_items_attempt-01",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-c217d54c-5adc-462c-8e90-1eea87fea8b6.png"
+    }
+  ],
+  "calls": 10,
+  "technical_failures": 0,
+  "quality_retries": 1,
+  "quota": "No quota error; balance unknown"
+}

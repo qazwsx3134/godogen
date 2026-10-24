@@ -1,0 +1,22 @@
+{
+  "schema": "generate2dsprite.master_spec.v1",
+  "name": "hd1-props-pillar",
+  "subject": "one broken ancient stone column, fluted, cracked top, ivy at the base",
+  "identity": "one broken ancient stone column, fluted, cracked top, ivy at the base detailed HD-2D pixel art game asset in the style of Octopath Traveler and Triangle Strategy: rich hand-placed shading, crisp 1-pixel dark outline, limited warm dusk palette (amber, moss green, slate blue-grey, weathered stone), lit by a warm low sun from the upper-left with cool blue-violet shadows, seen from an elevated three-quarter view about 45 degrees above, no background, no ground plate, no cast shadow, no text, no border.",
+  "pose": null,
+  "recap": "one broken ancient stone column, fluted, cracked top, ivy at the base",
+  "facing": "none",
+  "facing_parts": null,
+  "view": "elevated three-quarter view about 45 degrees above",
+  "class": "prop",
+  "finish": "pixel",
+  "key": "#FF00FF",
+  "genre": null,
+  "pronoun": "they",
+  "identity_ref": null,
+  "style_ref": null,
+  "allowed_text": null,
+  "extra_bans": [],
+  "opaque_parts": null,
+  "extra": "For this object image, the shared style describes pixel shading, palette, outlines and camera only: ignore its humanoid proportions, head count, standing pose and feet clauses. Do not draw any person or creature. Draw only the requested object, completely contained with safe margins, no ground plate or cast shadow. No smooth vector or anime illustration. The flat key colour outside the object is the chroma-key backdrop."
+}

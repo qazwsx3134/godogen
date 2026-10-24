@@ -1,0 +1,22 @@
+{
+  "schema": "generate2dsprite.master_spec.v1",
+  "name": "hd2b-mage-run_a",
+  "subject": "the exact accepted mage human hero from the FIRST image",
+  "identity": "the EXACT SAME accepted human character identity as the FIRST image: same face, hairstyle, facial hair if any, accepted outfit and equipment, very light low-saturation cloth, weapon design, natural metal/leather/skin/hair colours, body proportions, standing-equivalent anatomical body scale and head size, detailed HD-2D pixel-art style, warm light from upper-left with cool shadows, elevated three-quarter camera about 45 degrees above; RIGHT-facing for every upright action. Preserve the actual accepted image including its headgear; do not redesign it",
+  "pose": null,
+  "recap": "the exact accepted mage human hero from the FIRST image",
+  "facing": "right",
+  "facing_parts": null,
+  "view": "elevated three-quarter view about 45 degrees above, body and face turned RIGHT",
+  "class": "hero",
+  "finish": "pixel",
+  "key": "#00FF00",
+  "genre": null,
+  "pronoun": "they",
+  "identity_ref": null,
+  "style_ref": null,
+  "allowed_text": null,
+  "extra_bans": [],
+  "opaque_parts": null,
+  "extra": null
+}

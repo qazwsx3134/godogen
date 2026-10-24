@@ -1,0 +1,32 @@
+{
+  "matte": {
+    "requested": "soft",
+    "key_estimate": {
+      "key": [
+        248.0,
+        3.0,
+        250.0
+      ],
+      "source": "border_median",
+      "valid": true,
+      "ring_share": 1.0,
+      "coverage": 0.7463587015966769,
+      "distance_from_declared": 9.11
+    },
+    "quality": "soft",
+    "interior_despill": false,
+    "qa": {
+      "opaque_key_px": 0,
+      "outer_ring_spill_fraction": 0.01178026205072725,
+      "semitransparent_fraction": 0.042944723466205904,
+      "enclosed_key_pockets": 0,
+      "key_hued_px": 82,
+      "visible_px": 397022
+    }
+  },
+  "raw_size": [
+    1254,
+    1254
+  ],
+  "source": "inputs/bow-run_b-edit-1/takes/take-01/generated.png"
+}

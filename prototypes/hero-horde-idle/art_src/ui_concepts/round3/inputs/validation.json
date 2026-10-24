@@ -1,0 +1,56 @@
+[
+  {
+    "id": "A_recruit",
+    "size": [
+      853,
+      1844
+    ],
+    "mode": "RGB",
+    "sha256": "de65b5b3581b85f0afb04e0e623e7ef7188671a91db6c924fe21ef76bd586d1d"
+  },
+  {
+    "id": "A_items",
+    "size": [
+      853,
+      1844
+    ],
+    "mode": "RGB",
+    "sha256": "047ac42e6f45f69713ccf871067305f13e86c9eb1037aa1f520233b6ba34c33f"
+  },
+  {
+    "id": "B_recruit",
+    "size": [
+      853,
+      1844
+    ],
+    "mode": "RGB",
+    "sha256": "fb64ef3f10fa502f46e7beaac3a63d1d5af0676b7d335f1260ed33106c42d8d2"
+  },
+  {
+    "id": "B_items",
+    "size": [
+      853,
+      1844
+    ],
+    "mode": "RGB",
+    "sha256": "c9c88cca442d4ede6e27fbf50e44cca4e1d74f49116b3ed556762f61254581c8"
+  },
+  {
+    "id": "C_recruit",
+    "size": [
+      853,
+      1844
+    ],
+    "mode": "RGB",
+    "sha256": "08d89a29d1bd99b87935326bf107a1e62e09ebd7ab60dd207d5a53aae6fa43e1"
+  },
+  {
+    "id": "C_items",
+    "size": [
+      853,
+      1844
+    ],
+    "mode": "RGB",
+    "sha256": "e7f633a56ad83eed3192b93ff39e836d71e0f2aa9b0ac924e0c922105d566c0c"
+  }
+]

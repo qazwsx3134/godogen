@@ -1,0 +1,11 @@
+Create exactly ONE square image (1024x1024).
+
+Style: premium 16-bit pixel art (SNES era), crisp visible chunky pixels, limited palette, strong dark outline, 3-tone cel shading, no smooth gradients, no blur. No text, no letters, no numbers, no logo, no watermark, no signature, no UI, no border, no frame, no grid.
+
+Subject: a small cluster of ferns and tall grass tufts with a few tiny white flowers, elevated three-quarter view about 45 degrees above. A small cluster of ferns and tall grass tufts with a few tiny white flowers detailed HD-2D pixel art game asset in the style of Octopath Traveler and Triangle Strategy: rich hand-placed shading, crisp 1-pixel dark outline, limited warm dusk palette (amber, moss green, slate blue-grey, weathered stone), lit by a warm low sun from the upper-left with cool blue-violet shadows, seen from an elevated three-quarter view about 45 degrees above, no background, no ground plate, no cast shadow, no text, no border.
+
+Size and position: one single object, the top of the object (including every attached part) about 20 percent below the top edge of the canvas and its lowest point about 20 percent above the bottom edge (the object about 60 percent of the canvas height), centred horizontally, generous empty magenta margin on every side, nothing touching or crossing the edges. The whole object is drawn with solid, fully opaque pixels: no transparency, no semi-transparent glow, no soft aura, nothing blended with the background.
+
+For this object image, the shared style describes pixel shading, palette, outlines and camera only: ignore its humanoid proportions, head count, standing pose and feet clauses. Do not draw any person or creature. Draw only the requested object, completely contained with safe margins, no ground plate or cast shadow. No smooth vector or anime illustration. The flat key colour outside the object is the chroma-key backdrop.
+
+Background: solid flat pure magenta #FF00FF everywhere outside the object, no shadow, no ground, no glow on the background.

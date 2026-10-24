@@ -1,0 +1,267 @@
+[
+  {
+    "class": "sword",
+    "action": "run_a",
+    "run": "inputs/sword-run_a-edit-1/run.json",
+    "command": "edit",
+    "canvas_size": [
+      1024,
+      1024
+    ],
+    "raw_size": [
+      1254,
+      1254
+    ],
+    "canvas_scale": 0.8165869218500797,
+    "vertical_translation_px": 20,
+    "source_anchor": 906,
+    "anchor_method": "lowest visible subject point",
+    "baseline": 926,
+    "containment_scale": 1.0,
+    "target_baseline": 926,
+    "bbox": [
+      125,
+      159,
+      951,
+      926
+    ],
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          3.0,
+          249.0,
+          5.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.780058835649367,
+        "distance_from_declared": 8.37
+      },
+      "quality": "soft",
+      "interior_despill": true,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.0,
+        "semitransparent_fraction": 0.029495487155750982,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 0,
+        "visible_px": 345680
+      }
+    },
+    "warnings": []
+  },
+  {
+    "class": "sword",
+    "action": "run_b",
+    "run": "inputs/sword-run_b-edit-1/run.json",
+    "command": "edit",
+    "canvas_size": [
+      1024,
+      1024
+    ],
+    "raw_size": [
+      1254,
+      1254
+    ],
+    "canvas_scale": 0.8165869218500797,
+    "vertical_translation_px": 24,
+    "source_anchor": 902,
+    "anchor_method": "lowest visible subject point",
+    "baseline": 926,
+    "containment_scale": 1.0,
+    "target_baseline": 926,
+    "bbox": [
+      89,
+      114,
+      983,
+      928
+    ],
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          3.0,
+          249.0,
+          4.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.7554085300244958,
+        "distance_from_declared": 7.81
+      },
+      "quality": "soft",
+      "interior_despill": true,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.0,
+        "semitransparent_fraction": 0.02494218397592148,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 0,
+        "visible_px": 384409
+      }
+    },
+    "warnings": []
+  },
+  {
+    "class": "sword",
+    "action": "strike",
+    "run": "inputs/sword-strike-edit-1/run.json",
+    "command": "edit",
+    "canvas_size": [
+      1024,
+      1024
+    ],
+    "raw_size": [
+      1254,
+      1254
+    ],
+    "canvas_scale": 0.8165869218500797,
+    "vertical_translation_px": 58,
+    "source_anchor": 868,
+    "anchor_method": "lowest visible subject point",
+    "baseline": 926,
+    "containment_scale": 1.0,
+    "target_baseline": 926,
+    "bbox": [
+      56,
+      255,
+      1011,
+      926
+    ],
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          3.0,
+          249.0,
+          4.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.8016929557473501,
+        "distance_from_declared": 7.81
+      },
+      "quality": "soft",
+      "interior_despill": true,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.0,
+        "semitransparent_fraction": 0.026670773811815745,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 0,
+        "visible_px": 311652
+      }
+    },
+    "warnings": []
+  },
+  {
+    "class": "sword",
+    "action": "down",
+    "run": "inputs/sword-down-edit-1/run.json",
+    "command": "edit",
+    "canvas_size": [
+      1024,
+      1024
+    ],
+    "raw_size": [
+      1254,
+      1254
+    ],
+    "canvas_scale": 0.8165869218500797,
+    "vertical_translation_px": 109,
+    "source_anchor": 817,
+    "anchor_method": "largest body component",
+    "baseline": 926,
+    "containment_scale": 1.0,
+    "target_baseline": 926,
+    "bbox": [
+      26,
+      322,
+      998,
+      986
+    ],
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          4.0,
+          249.0,
+          4.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.7566752897903741,
+        "distance_from_declared": 8.25
+      },
+      "quality": "soft",
+      "interior_despill": true,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.0,
+        "semitransparent_fraction": 0.031507984864452124,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 0,
+        "visible_px": 382411
+      }
+    },
+    "warnings": []
+  },
+  {
+    "class": "sword",
+    "action": "volley",
+    "run": "inputs/sword-volley-edit-1/run.json",
+    "command": "edit",
+    "canvas_size": [
+      1024,
+      1024
+    ],
+    "raw_size": [
+      1254,
+      1254
+    ],
+    "canvas_scale": 0.8165869218500797,
+    "vertical_translation_px": -35,
+    "source_anchor": 961,
+    "anchor_method": "lowest visible subject point",
+    "baseline": 926,
+    "containment_scale": 1.0,
+    "target_baseline": 926,
+    "bbox": [
+      124,
+      25,
+      921,
+      926
+    ],
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          3.0,
+          249.0,
+          2.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.753128744000061,
+        "distance_from_declared": 7.0
+      },
+      "quality": "soft",
+      "interior_despill": true,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.0,
+        "semitransparent_fraction": 0.027860401577441556,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 0,
+        "visible_px": 387970
+      }
+    },
+    "warnings": []
+  }
+]

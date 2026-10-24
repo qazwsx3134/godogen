@@ -1,0 +1,33 @@
+{
+  "frames": 6,
+  "contacts": 3,
+  "preview": "flags-40px.png",
+  "preview_subject_heights": [
+    96,
+    96,
+    96
+  ],
+  "modes": {
+    "generate": 3,
+    "edit": 3
+  },
+  "attempts": 6,
+  "retries": 0,
+  "skipped": [],
+  "anchors": {
+    "melee": [
+      510,
+      818
+    ],
+    "ranged": [
+      486,
+      818
+    ],
+    "support": [
+      455,
+      818
+    ]
+  },
+  "opaque_key_pixels": 0,
+  "max_generation_seconds": 84.876
+}

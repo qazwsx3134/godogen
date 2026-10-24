@@ -1,0 +1,208 @@
+[
+  {
+    "id": "items/r_sun",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGB",
+    "sha256": "eaffa7025d0f1f2ee9cf704388112dfd302bd15fd96c4977f7f77f6aa672d308",
+    "corner_mean_rgb": [
+      250.22,
+      2.97,
+      250.13
+    ],
+    "exact_ff00ff_corner_ratio": 0.0,
+    "corner_unique_rgb_count": 173
+  },
+  {
+    "id": "items/r_frost",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGB",
+    "sha256": "856b7efc447d11ddce181c315d7118ddeb83039b07f4c6e1ff29bfc74f85f765",
+    "corner_mean_rgb": [
+      250.77,
+      3.27,
+      250.22
+    ],
+    "exact_ff00ff_corner_ratio": 0.0,
+    "corner_unique_rgb_count": 167
+  },
+  {
+    "id": "items/r_flame",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGB",
+    "sha256": "abf55b5f534812c89024531fd126563a6a3b5abad568c5ec789ce66eb8da4d13",
+    "corner_mean_rgb": [
+      251.43,
+      3.47,
+      250.22
+    ],
+    "exact_ff00ff_corner_ratio": 0.0,
+    "corner_unique_rgb_count": 168
+  },
+  {
+    "id": "items/r_leaf",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGB",
+    "sha256": "b992d3d5a43d65c773a7fe6f2e28479fc0e8fa5e08ff765579c96bf5b4d27d4a",
+    "corner_mean_rgb": [
+      251.18,
+      3.26,
+      250.59
+    ],
+    "exact_ff00ff_corner_ratio": 0.0,
+    "corner_unique_rgb_count": 157
+  },
+  {
+    "id": "items/m_stone",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGB",
+    "sha256": "7cc588b0d0ee6b137cef61020b1e1bcd1c9ebae3e9fdd77f234887209363f046",
+    "corner_mean_rgb": [
+      251.47,
+      3.42,
+      250.47
+    ],
+    "exact_ff00ff_corner_ratio": 0.0,
+    "corner_unique_rgb_count": 168
+  },
+  {
+    "id": "items/m_shard",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGB",
+    "sha256": "b213ce10af4048f8153e1872dc48968975388e95d8a2c20e063a5d10cdaf79d0",
+    "corner_mean_rgb": [
+      251.34,
+      3.29,
+      250.63
+    ],
+    "exact_ff00ff_corner_ratio": 0.0,
+    "corner_unique_rgb_count": 155
+  },
+  {
+    "id": "items/m_ticket",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGB",
+    "sha256": "ffffa2a19948c160fbd2bf0eaa805baf000605d364e62457be895f47a0ff86dd",
+    "corner_mean_rgb": [
+      251.13,
+      3.0,
+      250.49
+    ],
+    "exact_ff00ff_corner_ratio": 0.0,
+    "corner_unique_rgb_count": 150
+  },
+  {
+    "id": "nav/camp",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGB",
+    "sha256": "91327bba0c077a8fca3214f8de165c53e3fa1e187a91514ba993c05fb3f48a2a",
+    "corner_mean_rgb": [
+      251.24,
+      4.21,
+      249.96
+    ],
+    "exact_ff00ff_corner_ratio": 0.0,
+    "corner_unique_rgb_count": 161
+  },
+  {
+    "id": "nav/growth",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGB",
+    "sha256": "cb55e64671aefec8564ceb1c5b993e51d113026db3ceef93d2a663af2cd5f883",
+    "corner_mean_rgb": [
+      251.26,
+      4.08,
+      249.99
+    ],
+    "exact_ff00ff_corner_ratio": 0.0,
+    "corner_unique_rgb_count": 168
+  },
+  {
+    "id": "nav/recruit",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGB",
+    "sha256": "1947bc7ebf4b11a82637b5bce6aef3aa9a631987767bdae71543359a6cb9bce3",
+    "corner_mean_rgb": [
+      250.09,
+      4.79,
+      248.94
+    ],
+    "exact_ff00ff_corner_ratio": 0.0,
+    "corner_unique_rgb_count": 182
+  },
+  {
+    "id": "nav/items",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGB",
+    "sha256": "4784d499b9e9ae293bd3926ec9bfec09bcbb93bcf67c5fdac6660c0c9df979cc",
+    "corner_mean_rgb": [
+      249.73,
+      4.23,
+      248.81
+    ],
+    "exact_ff00ff_corner_ratio": 0.0,
+    "corner_unique_rgb_count": 203
+  },
+  {
+    "id": "nav/stages",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGB",
+    "sha256": "fdd05acd4a591a3b062a9eabf1ce52fbdc90f1656dce0d50f18a1cfd05b6945a",
+    "corner_mean_rgb": [
+      250.24,
+      4.21,
+      249.39
+    ],
+    "exact_ff00ff_corner_ratio": 0.0,
+    "corner_unique_rgb_count": 207
+  },
+  {
+    "id": "bg/recruit",
+    "size": [
+      948,
+      1659
+    ],
+    "mode": "RGB",
+    "sha256": "822f2b9735acd5de47530fd25563374ef8bbca76beb7631027d5456c891491c3",
+    "bottom_30_percent_mean_rgb": [
+      12.195505651297172,
+      21.44133707827089,
+      14.070128615728738
+    ]
+  }
+]

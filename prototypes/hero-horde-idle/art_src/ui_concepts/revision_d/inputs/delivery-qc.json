@@ -1,0 +1,26 @@
+[
+  {
+    "name": "growth_roster.png",
+    "size": [
+      854,
+      1842
+    ],
+    "bytes": 2149999
+  },
+  {
+    "name": "growth_detail.png",
+    "size": [
+      853,
+      1844
+    ],
+    "bytes": 2109801
+  },
+  {
+    "name": "battle.png",
+    "size": [
+      853,
+      1844
+    ],
+    "bytes": 2707762
+  }
+]

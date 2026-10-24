@@ -1,0 +1,65 @@
+{
+  "stopped": false,
+  "results": [
+    {
+      "team": "melee",
+      "frame": "frame_a",
+      "attempt": 1,
+      "mode": "generate",
+      "status": "ok",
+      "run": "inputs/melee-frame_a-1",
+      "seconds": 65.703,
+      "errors": []
+    },
+    {
+      "team": "melee",
+      "frame": "frame_b",
+      "attempt": 1,
+      "mode": "edit",
+      "status": "ok",
+      "run": "inputs/melee-frame_b-1",
+      "seconds": 49.21,
+      "errors": []
+    },
+    {
+      "team": "ranged",
+      "frame": "frame_a",
+      "attempt": 1,
+      "mode": "generate",
+      "status": "ok",
+      "run": "inputs/ranged-frame_a-1",
+      "seconds": 60.57,
+      "errors": []
+    },
+    {
+      "team": "ranged",
+      "frame": "frame_b",
+      "attempt": 1,
+      "mode": "edit",
+      "status": "ok",
+      "run": "inputs/ranged-frame_b-1",
+      "seconds": 60.557,
+      "errors": []
+    },
+    {
+      "team": "support",
+      "frame": "frame_a",
+      "attempt": 1,
+      "mode": "generate",
+      "status": "ok",
+      "run": "inputs/support-frame_a-1",
+      "seconds": 82.325,
+      "errors": []
+    },
+    {
+      "team": "support",
+      "frame": "frame_b",
+      "attempt": 1,
+      "mode": "edit",
+      "status": "ok",
+      "run": "inputs/support-frame_b-1",
+      "seconds": 84.876,
+      "errors": []
+    }
+  ]
+}

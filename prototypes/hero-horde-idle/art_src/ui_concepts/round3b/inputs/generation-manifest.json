@@ -1,0 +1,55 @@
+{
+  "tool": "Codex built-in image_gen",
+  "items": [
+    {
+      "id": "hero",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-85209e99-f610-40dc-b7b3-4bf31b6d0876.png",
+      "refs": [
+        "/Users/peter/repo/godot/godogen/prototypes/hero-horde-idle/art_src/ui_concepts/round3b/refs/ref_hero.png",
+        "/Users/peter/repo/godot/godogen/prototypes/hero-horde-idle/art_src/ui_concepts/round3b/refs/style_target.png",
+        "/Users/peter/repo/godot/godogen/prototypes/hero-horde-idle/art_src/ui_concepts/round3b/refs/current_roster.png",
+        "/Users/peter/repo/godot/godogen/prototypes/hero-horde-idle/art_src/ui_concepts/round3b/refs/current_hero_page.png",
+        "/Users/peter/repo/godot/godogen/prototypes/hero-horde-idle/art_src/ui_concepts/round3b/refs/current_camp.png"
+      ],
+      "attempts": 1,
+      "status": "delivered"
+    },
+    {
+      "id": "team",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-735b375f-89ac-4241-86e8-29b0442a242a.png",
+      "refs": [
+        "/Users/peter/repo/godot/godogen/prototypes/hero-horde-idle/art_src/ui_concepts/round3b/refs/ref_team.png",
+        "/Users/peter/repo/godot/godogen/prototypes/hero-horde-idle/art_src/ui_concepts/round3b/refs/style_target.png",
+        "/Users/peter/repo/godot/godogen/prototypes/hero-horde-idle/art_src/ui_concepts/round3b/refs/current_roster.png",
+        "/Users/peter/repo/godot/godogen/prototypes/hero-horde-idle/art_src/ui_concepts/round3b/refs/current_camp.png",
+        "/Users/peter/repo/godot/godogen/prototypes/hero-horde-idle/art_src/ui_concepts/round3b/inputs/team-attempt-01.png"
+      ],
+      "attempts": 2,
+      "status": "warning: residual rarity-tinted fine card edges after one correction"
+    },
+    {
+      "id": "backpack",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-483d97cf-cd5e-4886-b745-a1040167cebb.png",
+      "refs": [
+        "/Users/peter/repo/godot/godogen/prototypes/hero-horde-idle/art_src/ui_concepts/round3b/refs/ref_backpack.png",
+        "/Users/peter/repo/godot/godogen/prototypes/hero-horde-idle/art_src/ui_concepts/round3b/refs/style_target.png",
+        "/Users/peter/repo/godot/godogen/prototypes/hero-horde-idle/art_src/ui_concepts/round3b/refs/current_roster.png",
+        "/Users/peter/repo/godot/godogen/prototypes/hero-horde-idle/art_src/ui_concepts/round3b/refs/current_hero_page.png",
+        "/Users/peter/repo/godot/godogen/prototypes/hero-horde-idle/art_src/ui_concepts/round3b/refs/current_camp.png"
+      ],
+      "attempts": 1,
+      "status": "delivered"
+    }
+  ],
+  "rejected_or_previous": [
+    {
+      "id": "team-attempt-01",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-5c523197-83bf-4737-910c-6cc5a23fd713.png",
+      "reason": "Rarity-coloured thin borders"
+    }
+  ],
+  "successful_image_calls": 4,
+  "rejected_tool_arguments": 1,
+  "rejected_arguments_reason": "Correction initially supplied 6 references; tool permits at most 5. No image generated; corrected to 5.",
+  "quota": "No quota error reported; remaining quota unknown"
+}

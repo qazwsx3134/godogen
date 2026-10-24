@@ -1,0 +1,32 @@
+[
+  {
+    "id": "hero",
+    "size": [
+      853,
+      1844
+    ],
+    "mode": "RGB",
+    "sha256": "1a164bd8c5ab5da075e634f9c56588d1c438b311a6ccc19043a75b11570dd437",
+    "status": "delivered"
+  },
+  {
+    "id": "team",
+    "size": [
+      853,
+      1844
+    ],
+    "mode": "RGB",
+    "sha256": "5f46b788674c6d4d28e9c3a1eed5ca6e8c71fe2d787fa60c9ecaa8367d3c4085",
+    "status": "warning: residual rarity-tinted fine card edges after one correction"
+  },
+  {
+    "id": "backpack",
+    "size": [
+      853,
+      1844
+    ],
+    "mode": "RGB",
+    "sha256": "e96d34e95e8f22c78340757091cea21e4c5110292ffd16d2201b543308555883",
+    "status": "delivered"
+  }
+]

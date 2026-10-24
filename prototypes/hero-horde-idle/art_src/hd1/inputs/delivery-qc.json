@@ -1,0 +1,156 @@
+[
+  {
+    "path": "boss/candidate-01.png",
+    "size": [
+      1024,
+      1024
+    ],
+    "bbox": [
+      151,
+      138,
+      872,
+      927
+    ],
+    "pad_warnings": []
+  },
+  {
+    "path": "boss/candidate-02.png",
+    "size": [
+      1024,
+      1024
+    ],
+    "bbox": [
+      163,
+      138,
+      861,
+      926
+    ],
+    "pad_warnings": []
+  },
+  {
+    "path": "boss/candidate-03.png",
+    "size": [
+      1024,
+      1024
+    ],
+    "bbox": [
+      144,
+      138,
+      880,
+      926
+    ],
+    "pad_warnings": []
+  },
+  {
+    "path": "props/pine/candidate-01.png",
+    "size": [
+      1024,
+      1024
+    ],
+    "bbox": [
+      318,
+      204,
+      706,
+      819
+    ],
+    "pad_warnings": []
+  },
+  {
+    "path": "props/oak/candidate-01.png",
+    "size": [
+      1024,
+      1024
+    ],
+    "bbox": [
+      139,
+      205,
+      885,
+      819
+    ],
+    "pad_warnings": []
+  },
+  {
+    "path": "props/boulder/candidate-01.png",
+    "size": [
+      1024,
+      1024
+    ],
+    "bbox": [
+      164,
+      204,
+      860,
+      819
+    ],
+    "pad_warnings": []
+  },
+  {
+    "path": "props/pillar/candidate-01.png",
+    "size": [
+      1024,
+      1024
+    ],
+    "bbox": [
+      351,
+      204,
+      673,
+      819
+    ],
+    "pad_warnings": []
+  },
+  {
+    "path": "props/gate/candidate-01.png",
+    "size": [
+      1024,
+      1024
+    ],
+    "bbox": [
+      148,
+      204,
+      876,
+      819
+    ],
+    "pad_warnings": []
+  },
+  {
+    "path": "props/brazier/candidate-01.png",
+    "size": [
+      1024,
+      1024
+    ],
+    "bbox": [
+      324,
+      205,
+      700,
+      819
+    ],
+    "pad_warnings": []
+  },
+  {
+    "path": "props/banner/candidate-01.png",
+    "size": [
+      1024,
+      1024
+    ],
+    "bbox": [
+      351,
+      205,
+      673,
+      819
+    ],
+    "pad_warnings": []
+  },
+  {
+    "path": "props/fern/candidate-01.png",
+    "size": [
+      1024,
+      1024
+    ],
+    "bbox": [
+      118,
+      204,
+      905,
+      819
+    ],
+    "pad_warnings": []
+  }
+]

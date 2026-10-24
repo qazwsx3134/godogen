@@ -1,0 +1,10 @@
+{
+  "tool": "built-in image_gen",
+  "attempt": 1,
+  "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-f650fed2-e79b-4aff-b7c1-477723a2022b.png",
+  "output": "/Users/peter/repo/godot/godogen/prototypes/hero-horde-idle/art_src/ui_concepts/detail_refinement_v2/hero_detail.png",
+  "references": [
+    "/Users/peter/repo/godot/godogen/prototypes/hero-horde-idle/art_src/ui_concepts/detail_refinement/hero_detail.png",
+    "/Users/peter/repo/godot/godogen/prototypes/hero-horde-idle/art_src/ui_concepts/revision_d/growth_detail.png"
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "matte": {
+    "requested": "soft",
+    "key_estimate": {
+      "key": [
+        251.0,
+        3.0,
+        251.0
+      ],
+      "source": "border_median",
+      "valid": true,
+      "ring_share": 0.9988463081861958,
+      "coverage": 0.8076089527864899,
+      "distance_from_declared": 6.4
+    },
+    "quality": "soft",
+    "interior_despill": false,
+    "qa": {
+      "opaque_key_px": 0,
+      "outer_ring_spill_fraction": 0.02977584476413516,
+      "semitransparent_fraction": 0.039026818906001064,
+      "enclosed_key_pockets": 0,
+      "key_hued_px": 200,
+      "visible_px": 301280
+    }
+  },
+  "raw_size": [
+    1254,
+    1254
+  ],
+  "source": "inputs/spear-strike-edit-1/takes/take-01/generated.png"
+}

@@ -1,0 +1,148 @@
+[
+  {
+    "pose": "windup",
+    "raw_size": [
+      1254,
+      1254
+    ],
+    "canvas_size": [
+      1024,
+      1024
+    ],
+    "uniform_canvas_scale": 0.8165869218500797,
+    "vertical_translation_px": -35,
+    "baseline_alpha_gt16": 926,
+    "foot_window": null,
+    "bbox": [
+      148,
+      19,
+      1001,
+      926
+    ],
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          249.0,
+          3.0,
+          251.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.6929379414899435,
+        "distance_from_declared": 7.81
+      },
+      "quality": "soft",
+      "interior_despill": false,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.015874939408628212,
+        "semitransparent_fraction": 0.0350761621745184,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 12,
+        "visible_px": 481210
+      }
+    },
+    "run": "inputs/windup-edit-1"
+  },
+  {
+    "pose": "slam",
+    "raw_size": [
+      1254,
+      1254
+    ],
+    "canvas_size": [
+      1024,
+      1024
+    ],
+    "uniform_canvas_scale": 0.8165869218500797,
+    "vertical_translation_px": 65,
+    "baseline_alpha_gt16": 926,
+    "foot_window": [
+      820,
+      690,
+      1000,
+      1024
+    ],
+    "bbox": [
+      44,
+      217,
+      978,
+      978
+    ],
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          249.0,
+          3.0,
+          251.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.6885761416735983,
+        "distance_from_declared": 7.81
+      },
+      "quality": "soft",
+      "interior_despill": false,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.02305092927830075,
+        "semitransparent_fraction": 0.03370500994940252,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 12,
+        "visible_px": 487969
+      }
+    },
+    "run": "inputs/slam-edit-1"
+  },
+  {
+    "pose": "stunned",
+    "raw_size": [
+      1254,
+      1254
+    ],
+    "canvas_size": [
+      1024,
+      1024
+    ],
+    "uniform_canvas_scale": 0.8165869218500797,
+    "vertical_translation_px": 9,
+    "baseline_alpha_gt16": 926,
+    "foot_window": null,
+    "bbox": [
+      71,
+      116,
+      934,
+      927
+    ],
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          252.0,
+          3.0,
+          251.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.6828928926637312,
+        "distance_from_declared": 5.83
+      },
+      "quality": "soft",
+      "interior_despill": false,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.0022371364653243847,
+        "semitransparent_fraction": 0.030802994003544366,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 7,
+        "visible_px": 497127
+      }
+    },
+    "run": "inputs/stunned-edit-1"
+  }
+]

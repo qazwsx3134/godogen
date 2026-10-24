@@ -1,0 +1,27 @@
+{
+  "schema": "generate2dsprite.master_spec.v1",
+  "name": "hd2-healer",
+  "subject": "a cleric healer with a short staff ending in a golden sun ring, light flowing robe with a stole, a small satchel",
+  "identity": "a cleric healer with a short staff ending in a golden sun ring, light flowing robe with a stole, a small satchel detailed HD-2D pixel art game sprite in the style of Octopath Traveler and Triangle Strategy: rich hand-placed shading, crisp 1-pixel dark outline, limited palette, compact heroic proportions about 3.5 heads tall, lit by a warm low sun from the upper-left with cool shadows, seen from an elevated three-quarter view about 45 degrees above, body and face turned toward the right, standing in a ready combat stance, full body with feet visible on an invisible ground line, no background, no cast shadow, no text. The cloth parts of the outfit are very light and low-saturation (off-white, pale grey, cream) so the game can recolour them; metal, leather, hair and skin keep natural colours.",
+  "pose": null,
+  "recap": "a cleric healer with a short staff ending in a golden sun ring, light flowing robe with a stole, a small satchel",
+  "facing": "right",
+  "facing_parts": null,
+  "view": "elevated three-quarter view about 45 degrees above, body and face turned RIGHT",
+  "class": "hero",
+  "finish": "pixel",
+  "key": "#FF00FF",
+  "genre": null,
+  "pronoun": "they",
+  "identity_ref": {
+    "path": "../../../hd1/boss/candidate-01.png",
+    "sha256": "08233e79b418561a1cb9f9f2b3240b93d55411ca8323c069adf7fd14e47790ed",
+    "what": "the same game world pixel-art STYLE reference ONLY; NOT the new human hero identity",
+    "copy": "ONLY the HD-2D pixel-art texture, hand-placed shading, crisp dark outline, warm upper-left dusk light, cool shadows and elevated 45-degree camera. This image is NOT the subject identity: do NOT copy its troll anatomy, horns, tusks, green skin, hulking body, armour design, club, pose or left-facing direction. Draw the new HUMAN class described by the text, facing RIGHT, about 3.5 heads tall."
+  },
+  "style_ref": null,
+  "allowed_text": null,
+  "extra_bans": [],
+  "opaque_parts": null,
+  "extra": "The FIRST image is strictly a STYLE reference, never a character identity reference. Draw exactly ONE HUMAN hero, compact heroic proportions about 3.5 heads tall, consistent with a six-class set. All cloth is very light, low-saturation off-white, pale grey or cream, including tabards, padded coats, cloaks, bandanas, robes and stoles; no strongly coloured fabric. Metal, leather, skin and hair keep natural colours. Lock the camera about 45 degrees above, face and body RIGHT. Keep the same standing-equivalent human body height and head size across classes. On the square canvas, the soles are near y=90%, the crown of the head near y=26%, leaving room above for raised weapon tips. Keep the whole body, shield, quiver, staff, spear and all weapon tips inside the canvas with safe margins. Long weapons must not make the human smaller. No ground plate or cast shadow. Use the specified flat key backdrop everywhere outside the subject; retain opaque pixel art for any crystal glow."
+}

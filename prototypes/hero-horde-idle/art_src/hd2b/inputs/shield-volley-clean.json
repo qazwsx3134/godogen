@@ -1,0 +1,32 @@
+{
+  "matte": {
+    "requested": "soft",
+    "key_estimate": {
+      "key": [
+        250.0,
+        3.0,
+        250.0
+      ],
+      "source": "border_median",
+      "valid": true,
+      "ring_share": 1.0,
+      "coverage": 0.7178292621505918,
+      "distance_from_declared": 7.68
+    },
+    "quality": "soft",
+    "interior_despill": false,
+    "qa": {
+      "opaque_key_px": 0,
+      "outer_ring_spill_fraction": 0.002187864644107351,
+      "semitransparent_fraction": 0.026386435648714603,
+      "enclosed_key_pockets": 0,
+      "key_hued_px": 5,
+      "visible_px": 442159
+    }
+  },
+  "raw_size": [
+    1254,
+    1254
+  ],
+  "source": "inputs/shield-volley-edit-1/takes/take-01/generated.png"
+}

@@ -1,0 +1,267 @@
+[
+  {
+    "class": "mage",
+    "action": "run_a",
+    "run": "inputs/mage-run_a-edit-1/run.json",
+    "command": "edit",
+    "canvas_size": [
+      1024,
+      1024
+    ],
+    "raw_size": [
+      1254,
+      1254
+    ],
+    "canvas_scale": 0.8165869218500797,
+    "vertical_translation_px": -13,
+    "source_anchor": 939,
+    "anchor_method": "lowest visible subject point",
+    "baseline": 926,
+    "containment_scale": 1.0,
+    "target_baseline": 926,
+    "bbox": [
+      195,
+      58,
+      838,
+      926
+    ],
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          3.0,
+          249.0,
+          4.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.7506772586097693,
+        "distance_from_declared": 7.81
+      },
+      "quality": "soft",
+      "interior_despill": true,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.0,
+        "semitransparent_fraction": 0.027432286908547134,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 0,
+        "visible_px": 391874
+      }
+    },
+    "warnings": []
+  },
+  {
+    "class": "mage",
+    "action": "run_b",
+    "run": "inputs/mage-run_b-edit-1/run.json",
+    "command": "edit",
+    "canvas_size": [
+      1024,
+      1024
+    ],
+    "raw_size": [
+      1254,
+      1254
+    ],
+    "canvas_scale": 0.8165869218500797,
+    "vertical_translation_px": 3,
+    "source_anchor": 923,
+    "anchor_method": "lowest visible subject point",
+    "baseline": 926,
+    "containment_scale": 1.0,
+    "target_baseline": 926,
+    "bbox": [
+      169,
+      31,
+      856,
+      926
+    ],
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          3.0,
+          249.0,
+          3.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.7221796153425466,
+        "distance_from_declared": 7.35
+      },
+      "quality": "soft",
+      "interior_despill": true,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.0,
+        "semitransparent_fraction": 0.023043859588860724,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 0,
+        "visible_px": 436689
+      }
+    },
+    "warnings": []
+  },
+  {
+    "class": "mage",
+    "action": "strike",
+    "run": "inputs/mage-strike-edit-1/run.json",
+    "command": "edit",
+    "canvas_size": [
+      1024,
+      1024
+    ],
+    "raw_size": [
+      1254,
+      1254
+    ],
+    "canvas_scale": 0.8165869218500797,
+    "vertical_translation_px": 18,
+    "source_anchor": 908,
+    "anchor_method": "lowest visible subject point",
+    "baseline": 926,
+    "containment_scale": 1.0,
+    "target_baseline": 926,
+    "bbox": [
+      71,
+      148,
+      1010,
+      926
+    ],
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          3.0,
+          249.0,
+          6.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.7295207171182996,
+        "distance_from_declared": 9.0
+      },
+      "quality": "soft",
+      "interior_despill": true,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.0,
+        "semitransparent_fraction": 0.03361837594048744,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 0,
+        "visible_px": 424381
+      }
+    },
+    "warnings": []
+  },
+  {
+    "class": "mage",
+    "action": "down",
+    "run": "inputs/mage-down-edit-1/run.json",
+    "command": "edit",
+    "canvas_size": [
+      1024,
+      1024
+    ],
+    "raw_size": [
+      1254,
+      1254
+    ],
+    "canvas_scale": 0.8165869218500797,
+    "vertical_translation_px": 11,
+    "source_anchor": 915,
+    "anchor_method": "largest body component",
+    "baseline": 926,
+    "containment_scale": 1.0,
+    "target_baseline": 926,
+    "bbox": [
+      59,
+      354,
+      1002,
+      974
+    ],
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          3.0,
+          249.0,
+          3.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.7499593008910561,
+        "distance_from_declared": 7.35
+      },
+      "quality": "soft",
+      "interior_despill": true,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.0,
+        "semitransparent_fraction": 0.0250646974551062,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 0,
+        "visible_px": 392983
+      }
+    },
+    "warnings": []
+  },
+  {
+    "class": "mage",
+    "action": "volley",
+    "run": "inputs/mage-volley-edit-1/run.json",
+    "command": "edit",
+    "canvas_size": [
+      1024,
+      1024
+    ],
+    "raw_size": [
+      1254,
+      1254
+    ],
+    "canvas_scale": 0.8165869218500797,
+    "vertical_translation_px": -1,
+    "source_anchor": 927,
+    "anchor_method": "lowest visible subject point",
+    "baseline": 926,
+    "containment_scale": 0.9838536060279871,
+    "target_baseline": 926,
+    "bbox": [
+      170,
+      13,
+      854,
+      926
+    ],
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          3.0,
+          248.0,
+          4.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.7312618758728051,
+        "distance_from_declared": 8.6
+      },
+      "quality": "soft",
+      "interior_despill": true,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.0,
+        "semitransparent_fraction": 0.025787890985722067,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 0,
+        "visible_px": 422330
+      }
+    },
+    "warnings": []
+  }
+]

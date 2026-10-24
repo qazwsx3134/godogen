@@ -1,0 +1,84 @@
+{
+  "files": [
+    {
+      "name": "A_growth.png",
+      "size": [
+        854,
+        1842
+      ],
+      "bytes": 2469956
+    },
+    {
+      "name": "B_growth.png",
+      "size": [
+        854,
+        1842
+      ],
+      "bytes": 2837323
+    },
+    {
+      "name": "C_growth.png",
+      "size": [
+        854,
+        1842
+      ],
+      "bytes": 2795630
+    },
+    {
+      "name": "D_growth.png",
+      "size": [
+        854,
+        1842
+      ],
+      "bytes": 1883984
+    },
+    {
+      "name": "E_growth.png",
+      "size": [
+        854,
+        1842
+      ],
+      "bytes": 2042326
+    },
+    {
+      "name": "A_battle.png",
+      "size": [
+        853,
+        1844
+      ],
+      "bytes": 3136543
+    },
+    {
+      "name": "B_battle.png",
+      "size": [
+        853,
+        1844
+      ],
+      "bytes": 3296714
+    },
+    {
+      "name": "C_battle.png",
+      "size": [
+        853,
+        1844
+      ],
+      "bytes": 3251014
+    },
+    {
+      "name": "D_battle.png",
+      "size": [
+        853,
+        1844
+      ],
+      "bytes": 2848151
+    },
+    {
+      "name": "E_battle.png",
+      "size": [
+        853,
+        1844
+      ],
+      "bytes": 2866572
+    }
+  ]
+}
