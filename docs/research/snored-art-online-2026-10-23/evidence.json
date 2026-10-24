@@ -1,0 +1,45 @@
+{
+  "observed_at": "2026-10-23T17:16:28.589749+08:00",
+  "origin": "https://dev-sao.potato-proxy.com/",
+  "method": "Public Chromium browsing and unauthenticated GET; no account creation or authenticated gameplay",
+  "assets": [
+    {
+      "url": "https://dev-sao.potato-proxy.com/assets/main-Bril-Iat.js",
+      "decoded_bytes": 522134,
+      "sha256": "dcddd9876690d3cc6f400ac381bf9c1382fc743174d835084e26d321482cfa67"
+    },
+    {
+      "url": "https://dev-sao.potato-proxy.com/assets/main-C6PIkfv6.css",
+      "decoded_bytes": 72868,
+      "sha256": "844767f54b73d4d63daad66edead3a5eb551d457b920bd762aa661f165b5b834"
+    }
+  ],
+  "screens": {
+    "desktop": [
+      1440,
+      1000
+    ],
+    "mobile": [
+      390,
+      844
+    ]
+  },
+  "inputs": {
+    "account": {
+      "required": true,
+      "autocomplete": "username",
+      "associated_labels": 0
+    },
+    "password": {
+      "required": true,
+      "autocomplete": "current-password",
+      "associated_labels": 0
+    }
+  },
+  "mobile": {
+    "viewport_width": 390,
+    "document_width": 390,
+    "main_button_height_css_px": 32.765625,
+    "language_buttons_height_css_px": 21.1875
+  }
+}

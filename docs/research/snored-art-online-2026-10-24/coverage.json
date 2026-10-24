@@ -1,0 +1,49 @@
+{
+  "beforeReward": "研調7940 「被困者」 Lv3\nHP\n523 / 523\nEXP\n237 / 498\n47.59%\n摳 120\n技能\n線性攻雞 Lv1 · 就緒",
+  "afterReward": "研調7940 「被困者」 Lv4\nHP\n685 / 685\nEXP\n99 / 918\n10.78%\n摳 344\n技能\n線性攻雞 Lv1 · 就緒",
+  "quests": "主線\n第一章　森林的秘藥 第 1 層 · 1/1\n森林邊的小屋裡，一個女孩發著高燒。她的母親說，森林裡開花石人草的陪珠，能做成解藥。\n▸ 取得「開花石人草的陪珠」 0/1\n提示：森林裡的石人草大多沒開花。偶爾會有一株頂著花苞的混在裡面，多打一些看看。\n支線 · 進行中 1/10\n討伐「開花石人草」 ×1 0/1\n聽說牠偶爾會在「火爐咖村森林」附近出現……\n第 1 層 · 獎勵：235 EXP · 85 摳 · 轉移水晶×1\n放棄\n這一層的任務\n✓ 討伐「小型石人草」 ×4\n小型石人草的皮又厚又硬，沒人想打，懸賞金越堆越高。\n獎勵：360 EXP · 224 摳 · 回復水晶×1\n回顧 1\n▸ ✓ 序章　被困者 第 1 層",
+  "skills": "技能格 1/1\nLv10 開放下一個技能格\n細劍\n1. 線性攻雞 Lv1 (69%)\n單體 · ×1.96 · 冷卻 4s\nLv2 → 單體 · ×2.02 · 冷卻 3.9s\n最基本的直線突刺，快到看不見。\n☑ 使用\n斜線刺雞 流血\n需要 Lv5 · 需要【線性攻雞】Lv3\n斜向的二連刺。\n▸ 單手劍 1",
+  "chat": [
+    {
+      "tab": "world",
+      "formVisible": true,
+      "inputAttributes": {
+        "maxlength": 60,
+        "disabled": false
+      },
+      "emptyState": "history received; not copied"
+    },
+    {
+      "tab": "party",
+      "formVisible": false,
+      "inputAttributes": {
+        "maxlength": 60,
+        "disabled": false
+      },
+      "emptyState": "沒有隊伍"
+    },
+    {
+      "tab": "knock",
+      "formVisible": false,
+      "inputAttributes": {
+        "maxlength": 60,
+        "disabled": false
+      },
+      "emptyState": "還沒有好友"
+    }
+  ],
+  "friends": "好友 0\n還沒有好友。",
+  "personActions": [
+    {
+      "text": "邀請組隊",
+      "party": "invite",
+      "disabled": false
+    },
+    {
+      "text": "加好友",
+      "friend": "request",
+      "disabled": false
+    }
+  ],
+  "character": "研調7940 「被困者」 Lv4\n最前線：第 1 層\n稱號 「被困者」 1 ▾\n能力\nHP 685\nHP 回復 3.7/s\n攻擊 23\n防禦 35\n敏捷 15\n爆擊 9.2%\n迴避 0.0%\n爆擊傷害 160%\n命中 95%\n格擋 0.0%\n攻速 144\n移動速度 100\n裝備\n武器\n細建\n攻擊+4 攻速129 爆擊+2%\n副手 —\n頭部 —\n身體 —\n鞋子 —\n項鍊 —\n戒指\n木製戒脂\n敏捷+2 爆擊+2%\n戒指 —\n背包\n全部\n7\n武器\n1\n副手\n0\n頭盔\n0\n身體\n0\n鞋子\n0\n項鍊\n0\n戒指\n0\n消耗\n3\n強化\n0\n素材\n3\n獨特\n0\n單手劍小建 ×1\n攻擊+7 ▲3 攻速100 ▼29 爆擊+0% ▼2% 爆擊傷害+21% ▲21% · 需要 Lv1\n垃圾裝備\n回復要水 ×1\nHP+760\n回復水晶 ×1\nHP 全滿\n急救要水 ×1\nHP+600\n石人草藤蔓 ×1\n狼皮鞋 ×1\n山豬肉乾 ×4"
+}

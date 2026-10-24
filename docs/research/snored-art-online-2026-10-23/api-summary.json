@@ -1,0 +1,57 @@
+[
+  {
+    "path": "/api/world",
+    "status": 200,
+    "keys": [
+      "total",
+      "dead",
+      "alive",
+      "active"
+    ],
+    "total": 10313,
+    "dead": 4505,
+    "alive": 5808,
+    "active": 1191
+  },
+  {
+    "path": "/api/ranking",
+    "status": 200,
+    "keys": [
+      "computedAt",
+      "entries",
+      "deeds",
+      "firstClears"
+    ],
+    "computedAt": 1792300535111,
+    "entries": {
+      "count": 10,
+      "sampleKeys": [
+        "name",
+        "floor",
+        "createdAt",
+        "death"
+      ]
+    },
+    "deeds": {
+      "count": 10,
+      "sampleKeys": [
+        "name",
+        "floor",
+        "firstClears",
+        "lastAttacks",
+        "dead"
+      ]
+    },
+    "firstClears": {
+      "count": 40,
+      "sampleKeys": [
+        "floor",
+        "name",
+        "at",
+        "team",
+        "la",
+        "boss"
+      ]
+    }
+  }
+]
