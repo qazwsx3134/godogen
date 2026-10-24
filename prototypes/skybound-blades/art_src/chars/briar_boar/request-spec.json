@@ -1,0 +1,20 @@
+{
+  "name": "briar_boar",
+  "class": "mob",
+  "pronoun": "it",
+  "subject": "a stout wild boar monster, about waist height to the hero",
+  "identity": "shaggy dark-brown fur, a crest of tangled thorny briar vines with small white flowers growing along its spine, two curved ivory tusks, small fierce amber eyes, mossy hooves",
+  "pose": "head lowered, about to charge",
+  "recap": "dark-brown boar with a thorny briar crest along its spine and curved ivory tusks",
+  "finish": "hd",
+  "facing": "right",
+  "key": "#FF00FF",
+  "genre": "a Ragnarok-Online-style HD 2.5D action RPG set in floating sky-tower ruins",
+  "view": "elevated three-quarter overhead view about 35 degrees, body turned diagonally toward the lower-right",
+  "extra_bans": [
+    "pixel art",
+    "magenta, pink or red-violet colours on the character",
+    "cast shadow on the ground",
+    "text or logos"
+  ]
+}

@@ -1,0 +1,170 @@
+{
+  "schema": "generate2dsprite.master.v1",
+  "tool": {
+    "name": "master_still",
+    "version": "0.4.0"
+  },
+  "created": "2026-10-24T02:59:35.902Z",
+  "name": "captain",
+  "subject": "a young sky-tower adventurer swordsman, 3-head-tall chibi-leaning proportions",
+  "identity_recap": "young teal-haired swordsman in a sky-blue tunic, cream scarf and single steel pauldron, holding a one-handed arming sword",
+  "facing": "right",
+  "view": "elevated three-quarter overhead view about 35 degrees, body turned diagonally toward the lower-right",
+  "finish": "hd",
+  "class": "hero",
+  "framing": {
+    "canvas": [
+      1024,
+      1024
+    ],
+    "subject_height_px": 788,
+    "top_margin_px": 138,
+    "lead_px": 0,
+    "preset": "hero",
+    "subject_bbox": [
+      81,
+      138,
+      943,
+      926
+    ],
+    "anchor": [
+      688.5,
+      926.0
+    ],
+    "opaque_area_px": 195480,
+    "width_limited": false
+  },
+  "key": "#FF00FF",
+  "files": {
+    "master": {
+      "path": "master.png",
+      "sha256": "115b196752c16855575b3a4eb36a0823124e6685cd7cd2cca98b4b363b05b2cd",
+      "bytes": 435175,
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    "cutout": {
+      "path": "master_rgba.png",
+      "sha256": "7c5ed8bc9c6c37cc14d2b951f9aac8c64ce4dd71350c026ac1bfb2bb66de3fb6",
+      "bytes": 512512,
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    "source": {
+      "path": "source.png",
+      "sha256": "07674a8eaadd6a980720edaebd8dc326e13d6dc533bff287124bf20ae8a746fd",
+      "bytes": 1644820,
+      "size": [
+        1254,
+        1254
+      ]
+    },
+    "spec": {
+      "path": "spec.json",
+      "sha256": "5aec24aaff3fa919aca25081e6e485987a324fa7bded13500772c0222ebd9b38",
+      "bytes": 1365
+    },
+    "prompt": {
+      "path": "prompt.txt",
+      "sha256": "11191a5f3a8d74fdc69ef4cb6f875610ddafa47b17df994018e1088bf1d30f49",
+      "bytes": 2100
+    }
+  },
+  "references": [],
+  "transform": {
+    "mapping": "master = scale * source + offset (continuous pixel coordinates: pixel i spans [i, i + 1))",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "source_subject_bbox": [
+      81,
+      127,
+      1179,
+      1131
+    ],
+    "crop_box": [
+      75,
+      121,
+      1185,
+      1137
+    ],
+    "crop_margin_px": 6,
+    "scale": 0.7848605577689243,
+    "offset": [
+      17.53784860557772,
+      38.322709163346616
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "resampler": "lanczos",
+    "premultiplied": true,
+    "alpha_floor_px": 4461,
+    "subject_parts": 1,
+    "ignored_parts": 0,
+    "ignored_px": 0,
+    "source_touches": [],
+    "key_rgb": [
+      255,
+      0,
+      255
+    ]
+  },
+  "route": "local:codex-cli",
+  "provenance": {
+    "command": "generate",
+    "run": "../r1",
+    "take": 2,
+    "source_name": "generated.png",
+    "source_sha256": "07674a8eaadd6a980720edaebd8dc326e13d6dc533bff287124bf20ae8a746fd",
+    "media": {
+      "status": "ok",
+      "route": "local:codex-cli",
+      "sha256": "07674a8eaadd6a980720edaebd8dc326e13d6dc533bff287124bf20ae8a746fd",
+      "estimateUsd": 0.0,
+      "kind": "image",
+      "label": "Codex (local CLI)",
+      "model": "codex-image_gen",
+      "verifiedBefore": true
+    },
+    "media_cli_source": "sibling",
+    "edit": null
+  },
+  "matte": {
+    "requested": "soft",
+    "key_estimate": {
+      "key": [
+        251.0,
+        4.0,
+        251.0
+      ],
+      "source": "border_median",
+      "valid": true,
+      "ring_share": 1.0,
+      "coverage": 0.795761060618779,
+      "distance_from_declared": 6.93
+    },
+    "quality": "soft",
+    "interior_despill": true,
+    "qa": {
+      "opaque_key_px": 0,
+      "outer_ring_spill_fraction": 0.0,
+      "semitransparent_fraction": 0.036244589251949434,
+      "enclosed_key_pockets": 0,
+      "key_hued_px": 0,
+      "visible_px": 319965
+    },
+    "key_choice": {
+      "status": "ok",
+      "overlap_share": 0.0,
+      "rule": "reject a key when more than 0.5% of subject pixels have key dominance >= 40; first acceptable candidate wins"
+    }
+  },
+  "warnings": []
+}

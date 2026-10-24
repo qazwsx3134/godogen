@@ -1,0 +1,20 @@
+{
+  "name": "medic",
+  "class": "hero",
+  "pronoun": "he",
+  "subject": "a nimble field medic scout, 3-head-tall proportions",
+  "identity": "messy ash-blond hair under a moss-green hood, gentle grey eyes, small round spectacles; moss-green short cape over an off-white field coat with many pockets; a cross-body satchel full of rolled linen bandages and herb bundles; a short straight sword sheathed on the hip; tan gloves; soft brown boots; no religious symbols, no red cross",
+  "pose": "light-footed stance, one hand pulling a bandage roll from the satchel",
+  "recap": "ash-blond field medic in a moss-green hooded cape and off-white coat, with spectacles and a satchel of bandage rolls",
+  "finish": "hd",
+  "facing": "right",
+  "key": "#FF00FF",
+  "genre": "a Ragnarok-Online-style HD 2.5D action RPG set in floating sky-tower ruins",
+  "view": "elevated three-quarter overhead view about 35 degrees, body turned diagonally toward the lower-right",
+  "extra_bans": [
+    "pixel art",
+    "magenta, pink or red-violet colours on the character",
+    "cast shadow on the ground",
+    "text or logos"
+  ]
+}

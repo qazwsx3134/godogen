@@ -1,0 +1,20 @@
+{
+  "name": "ruin_hound",
+  "class": "mob",
+  "pronoun": "it",
+  "subject": "a lean ancient ruin hound, about waist height to the hero",
+  "identity": "slate-grey short fur, a cracked pale-stone mask covering the upper face with two glowing cyan eye slits, a stone collar carved with faint cyan runes, long legs, a whip-thin tail with a stone tip",
+  "pose": "low prowling stance, front paw lifted",
+  "recap": "lean slate-grey hound with a cracked stone mask, glowing cyan eye slits and a runed stone collar",
+  "finish": "hd",
+  "facing": "right",
+  "key": "#FF00FF",
+  "genre": "a Ragnarok-Online-style HD 2.5D action RPG set in floating sky-tower ruins",
+  "view": "elevated three-quarter overhead view about 35 degrees, body turned diagonally toward the lower-right",
+  "extra_bans": [
+    "pixel art",
+    "magenta, pink or red-violet colours on the character",
+    "cast shadow on the ground",
+    "text or logos"
+  ]
+}

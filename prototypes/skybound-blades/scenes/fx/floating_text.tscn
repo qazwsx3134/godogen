@@ -1,0 +1,14 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/NotoSansTC.ttf" id="1_0spqk"]
+
+[node name="FloatingText" type="Label3D" unique_id=1871715373]
+pixel_size = 0.0065
+billboard = 1
+no_depth_test = true
+render_priority = 4
+outline_modulate = Color(0.06, 0.04, 0.03, 0.95)
+text = "128"
+font = ExtResource("1_0spqk")
+font_size = 64
+outline_size = 14

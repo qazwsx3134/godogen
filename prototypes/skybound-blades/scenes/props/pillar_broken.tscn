@@ -1,0 +1,38 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/prop.gd" id="1_tcntc"]
+[ext_resource type="Material" path="res://resources/materials/low_poly_92.tres" id="2_knra5"]
+[ext_resource type="ArrayMesh" path="res://resources/meshes/plinth.res" id="3_ljm2h"]
+[ext_resource type="ArrayMesh" path="res://resources/meshes/pillar_stub.res" id="4_4c3xl"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wxtlx"]
+shading_mode = 0
+albedo_color = Color(1, 0.3, 0.2, 1)
+
+[sub_resource type="TorusMesh" id="TorusMesh_gq0xj"]
+inner_radius = 0.96
+
+[node name="PillarBroken" type="Node3D" unique_id=1413358543]
+script = ExtResource("1_tcntc")
+block_radius = 0.75
+
+[node name="Plinth" type="MeshInstance3D" parent="." unique_id=1376272241]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.17, 0)
+material_override = ExtResource("2_knra5")
+mesh = ExtResource("3_ljm2h")
+
+[node name="Stub" type="MeshInstance3D" parent="." unique_id=1825247885]
+transform = Transform3D(0.93715614, 0.07300513, 0.341187, -0.052208472, 0.9961969, -0.06975647, -0.344982, 0.047559857, 0.9374036, 0, 0.94, 0)
+material_override = ExtResource("2_knra5")
+mesh = ExtResource("4_4c3xl")
+
+[node name="Fallen" type="MeshInstance3D" parent="." unique_id=653338643]
+transform = Transform3D(0.028587993, -0.81865305, 0.57357645, 0.99939084, 0.034899496, 0, -0.020017529, 0.57322705, 0.81915206, 1.1, 0.4, 0.4)
+material_override = ExtResource("2_knra5")
+mesh = ExtResource("4_4c3xl")
+
+[node name="BlockGizmo" type="MeshInstance3D" parent="." unique_id=1436700371]
+transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 0.05, 0)
+visible = false
+material_override = SubResource("StandardMaterial3D_wxtlx")
+mesh = SubResource("TorusMesh_gq0xj")

@@ -1,0 +1,32 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/prop.gd" id="1_6gt2m"]
+[ext_resource type="Material" path="res://resources/materials/low_poly_92.tres" id="2_34e76"]
+[ext_resource type="ArrayMesh" path="res://resources/meshes/rock.res" id="3_j7j3j"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bvf5t"]
+shading_mode = 0
+albedo_color = Color(1, 0.3, 0.2, 1)
+
+[sub_resource type="TorusMesh" id="TorusMesh_y2d0t"]
+inner_radius = 0.96
+
+[node name="Boulder" type="Node3D" unique_id=312446]
+script = ExtResource("1_6gt2m")
+block_radius = 0.95
+
+[node name="Rock" type="MeshInstance3D" parent="." unique_id=658426865]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+material_override = ExtResource("2_34e76")
+mesh = ExtResource("3_j7j3j")
+
+[node name="Rock2" type="MeshInstance3D" parent="." unique_id=4159320]
+transform = Transform3D(0.45, 0, 0, 0, 0.45, 0, 0, 0, 0.45, 0.75, 0.2, 0.35)
+material_override = ExtResource("2_34e76")
+mesh = ExtResource("3_j7j3j")
+
+[node name="BlockGizmo" type="MeshInstance3D" parent="." unique_id=2088291007]
+transform = Transform3D(0.95, 0, 0, 0, 0.95, 0, 0, 0, 0.95, 0, 0.05, 0)
+visible = false
+material_override = SubResource("StandardMaterial3D_bvf5t")
+mesh = SubResource("TorusMesh_y2d0t")

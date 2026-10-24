@@ -1,0 +1,9 @@
+Create exactly ONE square image (1024x1024).
+
+Style: premium HD 2D game art for a Ragnarok-Online-style HD 2.5D action RPG set in floating sky-tower ruins: a clean, high-resolution hand-painted sprite illustration with crisp sharp edges, a clean dark outline, rich but controlled colours, cel shading with soft highlights and clear light and shadow shapes, fine readable detail, no blur, no photo-realism, no 3D render look. No text, no letters, no numbers, no logo, no watermark, no signature, no UI, no border, no frame, no grid, no pixel art, no magenta, pink or red-violet colours on the character, no cast shadow on the ground, no text or logos.
+
+Subject: a lean ancient ruin hound, about waist height to the hero, elevated three-quarter overhead view about 35 degrees, body turned diagonally toward the lower-right, clearly FACING RIGHT: its face, gaze and chest turn toward the RIGHT edge of the image; forward is RIGHT and its back is toward the LEFT edge. Slate-grey short fur, a cracked pale-stone mask covering the upper face with two glowing cyan eye slits, a stone collar carved with faint cyan runes, long legs, a whip-thin tail with a stone tip. Low prowling stance, front paw lifted.
+
+Size and position: one single figure, the top of the figure (including hair, headgear, raised weapons and effects) about 35 percent below the top edge of the canvas and its lowest point about 15 percent above the bottom edge (the figure about 50 percent of the canvas height), the body a little left of centre so there is extra empty room on the RIGHT side for forward motion, generous empty magenta margin on every side, nothing touching or crossing the edges. The whole figure is drawn with solid, fully opaque pixels: no transparency, no semi-transparent glow, no soft aura, nothing blended with the background.
+
+Background: solid flat pure magenta #FF00FF everywhere outside the character, no shadow, no ground, no glow on the background.

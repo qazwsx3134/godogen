@@ -1,0 +1,27 @@
+{
+  "schema": "generate2dsprite.master_spec.v1",
+  "name": "captain",
+  "subject": "a young sky-tower adventurer swordsman, 3-head-tall chibi-leaning proportions",
+  "identity": "short windswept dark-teal hair, bright amber eyes, determined smile; light steel shoulder guard on the left shoulder only; sky-blue short tunic over cream undershirt; brown leather belt with a small pouch; dark grey trousers; brown boots; a long cream travelling scarf trailing behind; a straight one-handed arming sword with a plain brass guard held in the right hand; no shield",
+  "pose": "ready stance, sword held low and forward, weight on the front foot",
+  "recap": "young teal-haired swordsman in a sky-blue tunic, cream scarf and single steel pauldron, holding a one-handed arming sword",
+  "facing": "right",
+  "facing_parts": null,
+  "view": "elevated three-quarter overhead view about 35 degrees, body turned diagonally toward the lower-right",
+  "class": "hero",
+  "finish": "hd",
+  "key": "#FF00FF",
+  "genre": "a Ragnarok-Online-style HD 2.5D action RPG set in floating sky-tower ruins",
+  "pronoun": "he",
+  "identity_ref": null,
+  "style_ref": null,
+  "allowed_text": null,
+  "extra_bans": [
+    "pixel art",
+    "magenta, pink or red-violet colours on the character",
+    "cast shadow on the ground",
+    "text or logos"
+  ],
+  "opaque_parts": null,
+  "extra": null
+}

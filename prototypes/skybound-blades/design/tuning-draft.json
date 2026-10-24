@@ -1,0 +1,1057 @@
+{
+  "schema_version": 1,
+  "status": "proposal_unvalidated",
+  "units": {
+    "time": "ms",
+    "chance": "0..1",
+    "flat_stat": "integer",
+    "position": "ground grid cells"
+  },
+  "simulation": {
+    "step_ms": 50,
+    "search_ms": 2000,
+    "retreat_ms": 2000,
+    "max_level": 30,
+    "level_xp_formula": "ceil(200 * level ** 1.8)",
+    "low_level_xp_formula": "max(0.1, 0.8 ** max(0, team_level - monster_level - 3))"
+  },
+  "field": {
+    "note": "RO combat slice movement and field AI; distances in ground cells (1 cell = 1 m)",
+    "party_move_cells_per_s": 3.8,
+    "monster_move_cells_per_s": {"meadow_slime": 2.2, "briar_boar": 3.0, "ruin_hound": 3.4},
+    "unit_radius_cells": 0.35,
+    "aggro_radius_cells": 4.5,
+    "leash_radius_cells": 9.0,
+    "respawn_ms": 10000,
+    "follow_slots_cells": [[-1.6, 1.2], [1.4, 1.5]],
+    "companion_engage_radius_cells": 6.0,
+    "companion_leash_cells": 8.0,
+    "heal_range_cells": 6.0,
+    "natural_regen_max_hp_ratio_per_s": 0.005,
+    "emergency_auto_threshold_ratio": 0.5,
+    "stuck_ms": 1000,
+    "stuck_progress_cells": 0.15,
+    "unreachable_retry_ms": 5000,
+    "slice_quest_id": "hunt_1_0"
+  },
+  "hero": {
+    "hp_base": 120,
+    "hp_per_level": 36,
+    "attack_base": 14,
+    "attack_per_level": 3,
+    "defense_base": 5,
+    "defense_per_level": 2,
+    "agility_base": 10,
+    "agility_per_level": 1,
+    "starting_gold": 0,
+    "initial_items_binding": "current_run; no sale or warehouse transfer; keep separate from unbound stacks",
+    "initial_issued_items": [
+      {
+        "base_item_id": "tonic_small",
+        "qty": 5
+      },
+      {
+        "base_item_id": "emergency_kit",
+        "qty": 1
+      },
+      {
+        "base_item_id": "bandage",
+        "qty": 5
+      },
+      {
+        "base_item_id": "ration",
+        "qty": 3
+      }
+    ],
+    "manual_registration": {
+      "minimum_skill_level": 3,
+      "requires_return_to_hub": true,
+      "inherited_skill_starts_at_level": 1,
+      "maximum_manual_choices_per_run": 1
+    }
+  },
+  "combat": {
+    "base_hit": 0.95,
+    "min_hit": 0.2,
+    "max_hit": 0.99,
+    "crit_chance": 0.05,
+    "crit_multiplier": 1.5,
+    "damage_variance": [
+      0.9,
+      1.1
+    ],
+    "defense_factor": 0.6,
+    "attack_base_ms": 2000,
+    "attack_min_ms": 350,
+    "melee_range_cells": 1.5,
+    "base_evade": 0,
+    "max_evade": 0.3,
+    "shield_block_damage_ratio": 0.5,
+    "same_family_buff_rule": "strongest magnitude; refresh duration; do not multiply duplicates",
+    "shield_speed_ratio_non_mace": 0.8
+  },
+  "automation": {
+    "potion_threshold": 0.6,
+    "retreat_threshold": 0.25,
+    "stop_new_encounter_without_heal": true,
+    "minimum_gold_reserve": 30,
+    "settings_submit": "on_change_end"
+  },
+  "items": [
+    {
+      "id": "tonic_small",
+      "kind": "regen",
+      "heal_flat": 60,
+      "duration_ms": 6000,
+      "buy_gold": 12
+    },
+    {
+      "id": "emergency_kit",
+      "kind": "instant_heal",
+      "heal_max_hp_ratio": 0.35,
+      "cooldown_ms": 20000,
+      "buy_gold": 40
+    },
+    {
+      "id": "bandage",
+      "kind": "ai_heal_material",
+      "buy_gold": 10
+    },
+    {
+      "id": "ration",
+      "kind": "commission_supply",
+      "buy_gold": 10
+    },
+    {
+      "id": "green_core",
+      "name": "綠芯",
+      "kind": "material",
+      "sell_gold": 2,
+      "buyable": false
+    },
+    {
+      "id": "rain_moss",
+      "name": "雨苔",
+      "kind": "material",
+      "sell_gold": 4,
+      "buyable": false
+    },
+    {
+      "id": "star_ore",
+      "name": "星礦",
+      "kind": "material",
+      "sell_gold": 6,
+      "buyable": false
+    },
+    {
+      "id": "weapon_shard",
+      "name": "磨刃晶片",
+      "kind": "material",
+      "sell_gold": 10,
+      "buyable": false
+    },
+    {
+      "id": "armor_patch",
+      "name": "護甲晶片",
+      "kind": "material",
+      "sell_gold": 10,
+      "buyable": false
+    },
+    {
+      "id": "charm_dust",
+      "name": "飾品晶塵",
+      "kind": "material",
+      "sell_gold": 15,
+      "buyable": false
+    }
+  ],
+  "weapon_profiles": [
+    {
+      "id": "sword",
+      "speed_ratio": 1.0
+    },
+    {
+      "id": "rapier",
+      "speed_ratio": 1.25
+    },
+    {
+      "id": "mace",
+      "speed_ratio": 0.8
+    }
+  ],
+  "skills": [
+    {
+      "id": "cleave",
+      "style": "sword",
+      "required_level": 1,
+      "previous_skill": null,
+      "previous_mastery_required": 0,
+      "power": 1.6,
+      "hits": 1,
+      "cast_ms": 500,
+      "recovery_ms": 400,
+      "cooldown_ms": 6000,
+      "range_cells": 1.5,
+      "mastery_exp_per_cast": 5,
+      "mastery_cap": 10
+    },
+    {
+      "id": "parry",
+      "style": "sword",
+      "required_level": 5,
+      "previous_skill": "cleave",
+      "previous_mastery_required": 3,
+      "power": 1.0,
+      "hits": 1,
+      "cast_ms": 500,
+      "recovery_ms": 400,
+      "cooldown_ms": 10000,
+      "range_cells": 1.5,
+      "mastery_exp_per_cast": 5,
+      "mastery_cap": 10,
+      "effect": {
+        "family": "guard",
+        "duration_ms": 2000,
+        "damage_taken_ratio": 0.6
+      }
+    },
+    {
+      "id": "break",
+      "style": "sword",
+      "required_level": 15,
+      "previous_skill": "parry",
+      "previous_mastery_required": 3,
+      "power": 2.0,
+      "hits": 1,
+      "cast_ms": 500,
+      "recovery_ms": 400,
+      "cooldown_ms": 14000,
+      "range_cells": 1.5,
+      "mastery_exp_per_cast": 5,
+      "mastery_cap": 10,
+      "effect": {
+        "family": "armor_break",
+        "duration_ms": 4000,
+        "defense_ratio": 0.8
+      }
+    },
+    {
+      "id": "thrust",
+      "style": "rapier",
+      "required_level": 1,
+      "previous_skill": null,
+      "previous_mastery_required": 0,
+      "power": 1.2,
+      "hits": 1,
+      "cast_ms": 500,
+      "recovery_ms": 400,
+      "cooldown_ms": 4000,
+      "range_cells": 1.5,
+      "mastery_exp_per_cast": 5,
+      "mastery_cap": 10
+    },
+    {
+      "id": "needle_chain",
+      "style": "rapier",
+      "required_level": 5,
+      "previous_skill": "thrust",
+      "previous_mastery_required": 3,
+      "power": 0.7,
+      "hits": 2,
+      "cast_ms": 500,
+      "recovery_ms": 400,
+      "cooldown_ms": 8000,
+      "range_cells": 1.5,
+      "mastery_exp_per_cast": 5,
+      "mastery_cap": 10
+    },
+    {
+      "id": "mark",
+      "style": "rapier",
+      "required_level": 15,
+      "previous_skill": "needle_chain",
+      "previous_mastery_required": 3,
+      "power": 1.4,
+      "hits": 1,
+      "cast_ms": 500,
+      "recovery_ms": 400,
+      "cooldown_ms": 12000,
+      "range_cells": 1.5,
+      "mastery_exp_per_cast": 5,
+      "mastery_cap": 10,
+      "effect": {
+        "family": "mark",
+        "duration_ms": 4000,
+        "damage_taken_ratio": 1.1
+      }
+    },
+    {
+      "id": "shield_bash",
+      "style": "mace",
+      "required_level": 1,
+      "previous_skill": null,
+      "previous_mastery_required": 0,
+      "power": 1.5,
+      "hits": 1,
+      "cast_ms": 500,
+      "recovery_ms": 400,
+      "cooldown_ms": 6000,
+      "range_cells": 1.5,
+      "mastery_exp_per_cast": 5,
+      "mastery_cap": 10
+    },
+    {
+      "id": "steadfast",
+      "style": "mace",
+      "required_level": 5,
+      "previous_skill": "shield_bash",
+      "previous_mastery_required": 3,
+      "power": 0.8,
+      "hits": 1,
+      "cast_ms": 500,
+      "recovery_ms": 400,
+      "cooldown_ms": 10000,
+      "range_cells": 1.5,
+      "mastery_exp_per_cast": 5,
+      "mastery_cap": 10,
+      "effect": {
+        "family": "guard",
+        "duration_ms": 2000,
+        "damage_taken_ratio": 0.6
+      }
+    },
+    {
+      "id": "crush",
+      "style": "mace",
+      "required_level": 15,
+      "previous_skill": "steadfast",
+      "previous_mastery_required": 3,
+      "power": 2.2,
+      "hits": 1,
+      "cast_ms": 500,
+      "recovery_ms": 400,
+      "cooldown_ms": 14000,
+      "range_cells": 1.5,
+      "mastery_exp_per_cast": 5,
+      "mastery_cap": 10,
+      "effect": {
+        "family": "armor_break",
+        "duration_ms": 4000,
+        "defense_ratio": 0.8
+      }
+    }
+  ],
+  "party": {
+    "max_members": 3,
+    "shared_expedition_level": true,
+    "roles": {
+      "leader": {
+        "hp_ratio": 1.0,
+        "attack_ratio": 1.0,
+        "defense_ratio": 1.0
+      },
+      "guardian": {
+        "hp_ratio": 1.35,
+        "attack_ratio": 0.8,
+        "defense_ratio": 1.4
+      },
+      "support": {
+        "hp_ratio": 0.9,
+        "attack_ratio": 0.85,
+        "defense_ratio": 0.9
+      }
+    },
+    "utilities": [
+      {
+        "id": "taunt",
+        "role": "guardian",
+        "cooldown_ms": 10000,
+        "duration_ms": 4000,
+        "effect": "force_target_guardian"
+      },
+      {
+        "id": "cover",
+        "role": "guardian",
+        "cooldown_ms": 12000,
+        "duration_ms": 2000,
+        "damage_taken_ratio": 0.25,
+        "trigger": "boss_charge"
+      },
+      {
+        "id": "bandage_ally",
+        "role": "support",
+        "cooldown_ms": 10000,
+        "trigger_hp_ratio": 0.45,
+        "heal_max_hp_ratio": 0.2,
+        "remove_poison_stacks": 1,
+        "consume_item": "bandage"
+      }
+    ],
+    "initial_equipment": {
+      "leader": [
+        "novice_sword",
+        "traveler_coat"
+      ],
+      "guardian": [
+        "guard_mace",
+        "wood_shield",
+        "chain_mail"
+      ],
+      "support": [
+        "novice_sword",
+        "traveler_coat"
+      ]
+    },
+    "replacement_recruit_gold_formula": "30 + 10 * expedition_level"
+  },
+  "enhancement": {
+    "attempts_by_quality": {
+      "plain": 4,
+      "fine": 6,
+      "rare": 8,
+      "named": 10
+    },
+    "materials_per_attempt_min": 1,
+    "materials_per_attempt_max": 3,
+    "success_formula": "clamp(0.90 - 0.08 * plus + 0.05 * (materials - 1), 0.35, 0.95)",
+    "failure_consumes_attempt": true,
+    "failure_destroys": false,
+    "failure_downgrades": false,
+    "flat_gain_ratio": 0.1,
+    "flat_gain_min": 1,
+    "speed_points_per_success": 3,
+    "crit_percentage_points_per_success": 1,
+    "crit_damage_percentage_points_per_success": 4,
+    "material_by_slot": {
+      "weapon": "weapon_shard",
+      "offhand": "armor_patch",
+      "head": "armor_patch",
+      "body": "armor_patch",
+      "feet": "armor_patch",
+      "neck": "charm_dust",
+      "ring": "charm_dust"
+    },
+    "cost_formula": "max(20, round(template_price * 0.3 * (1 + 0.5 * plus)))"
+  },
+  "quests": {
+    "active_limit": 10,
+    "repeat_cooldown_ms": 300000,
+    "kill_progress_since_accept_only": true,
+    "consume_collection_on_claim": true,
+    "claim_only_in_hub": true
+  },
+  "commission": {
+    "cap_ms": 28800000,
+    "reward_ratio": 0.5,
+    "rare_drop_allowed": false,
+    "boss_progress_allowed": false,
+    "can_die": false,
+    "ration_per_started_hour": 1,
+    "recompute_level_penalty_each_minute": true,
+    "per_min_values_are_before_ratio": true,
+    "ratio_applies_to": ["exp", "gold", "material"],
+    "level_penalty_reference": "mean penalty over the zone monster levels, equal weights"
+  },
+  "zones": [
+    {
+      "id": "wind_garden",
+      "floor": 1,
+      "monster_ids": [
+        "meadow_slime",
+        "briar_boar",
+        "ruin_hound"
+      ],
+      "commission_exp_per_min": 72,
+      "commission_gold_per_min": 12,
+      "commission_material_per_min": 1,
+      "material_id": "green_core",
+      "elite_chance": 0.05,
+      "commission_unlock_kills": 10,
+      "commission_material_fractional": "carry remainder inside receipt; floor on final payout"
+    },
+    {
+      "id": "rain_corridor",
+      "floor": 2,
+      "monster_ids": [
+        "moss_beetle",
+        "brood_spider",
+        "stone_sentinel"
+      ],
+      "commission_exp_per_min": 160,
+      "commission_gold_per_min": 24,
+      "commission_material_per_min": 1,
+      "material_id": "rain_moss",
+      "elite_chance": 0.05,
+      "commission_unlock_kills": 10,
+      "commission_material_fractional": "carry remainder inside receipt; floor on final payout"
+    },
+    {
+      "id": "star_forge",
+      "floor": 3,
+      "monster_ids": [
+        "crystal_moth",
+        "forge_hound",
+        "ore_guardian"
+      ],
+      "commission_exp_per_min": 300,
+      "commission_gold_per_min": 40,
+      "commission_material_per_min": 1,
+      "material_id": "star_ore",
+      "elite_chance": 0.05,
+      "commission_unlock_kills": 10,
+      "commission_material_fractional": "carry remainder inside receipt; floor on final payout"
+    }
+  ],
+  "monsters": [
+    {
+      "id": "meadow_slime", "name": "草原史萊姆",
+      "level": 1,
+      "hp": 55,
+      "attack": 9,
+      "defense": 2,
+      "base_exp": 18,
+      "gold": 3,
+      "attack_interval_ms": 2000
+    },
+    {
+      "id": "briar_boar", "name": "荊棘野豬",
+      "level": 2,
+      "hp": 85,
+      "attack": 13,
+      "defense": 3,
+      "base_exp": 27,
+      "gold": 4,
+      "attack_interval_ms": 2000
+    },
+    {
+      "id": "ruin_hound", "name": "遺跡獵犬",
+      "level": 3,
+      "hp": 120,
+      "attack": 17,
+      "defense": 4,
+      "base_exp": 38,
+      "gold": 6,
+      "attack_interval_ms": 2000
+    },
+    {
+      "id": "moss_beetle", "name": "苔甲蟲",
+      "level": 6,
+      "hp": 260,
+      "attack": 25,
+      "defense": 8,
+      "base_exp": 50,
+      "gold": 12,
+      "attack_interval_ms": 2000
+    },
+    {
+      "id": "brood_spider", "name": "巢蛛",
+      "level": 8,
+      "hp": 390,
+      "attack": 32,
+      "defense": 10,
+      "base_exp": 65,
+      "gold": 16,
+      "attack_interval_ms": 2000
+    },
+    {
+      "id": "stone_sentinel", "name": "石哨兵",
+      "level": 9,
+      "hp": 510,
+      "attack": 38,
+      "defense": 12,
+      "base_exp": 80,
+      "gold": 20,
+      "attack_interval_ms": 2000
+    },
+    {
+      "id": "crystal_moth", "name": "晶蛾",
+      "level": 11,
+      "hp": 650,
+      "attack": 45,
+      "defense": 16,
+      "base_exp": 105,
+      "gold": 26,
+      "attack_interval_ms": 2000
+    },
+    {
+      "id": "forge_hound", "name": "爐火獵犬",
+      "level": 13,
+      "hp": 850,
+      "attack": 55,
+      "defense": 20,
+      "base_exp": 130,
+      "gold": 32,
+      "attack_interval_ms": 2000
+    },
+    {
+      "id": "ore_guardian", "name": "礦石守衛",
+      "level": 14,
+      "hp": 1050,
+      "attack": 65,
+      "defense": 24,
+      "base_exp": 150,
+      "gold": 37,
+      "attack_interval_ms": 2000
+    }
+  ],
+  "bosses": [
+    {
+      "id": "gatekeeper",
+      "floor": 1,
+      "recommended_level": 5,
+      "hp": 1600,
+      "attack": 32,
+      "defense": 10,
+      "normal_interval_ms": 2200,
+      "moves": [
+        {
+          "id": "sweep",
+          "warning_ms": 2000,
+          "cooldown_ms": 10000,
+          "power": 1.8,
+          "targets": "all"
+        },
+        {
+          "id": "stone_fist",
+          "warning_ms": 1200,
+          "cooldown_ms": 8000,
+          "power": 2.0,
+          "targets": "current"
+        }
+      ]
+    },
+    {
+      "id": "brood_queen",
+      "floor": 2,
+      "recommended_level": 10,
+      "hp": 4200,
+      "attack": 65,
+      "defense": 20,
+      "normal_interval_ms": 2200,
+      "moves": [
+        {
+          "id": "venom",
+          "warning_ms": 1500,
+          "cooldown_ms": 12000,
+          "power": 0.8,
+          "targets": "all",
+          "poison_max_hp_ratio_per_sec": 0.01,
+          "poison_duration_ms": 6000,
+          "poison_max_stacks": 3
+        },
+        {
+          "id": "hatch",
+          "warning_ms": 2000,
+          "cooldown_ms": 20000,
+          "summon": "brood_spider",
+          "count": 2,
+          "max_active_summons": 4
+        }
+      ]
+    },
+    {
+      "id": "crystal_core",
+      "floor": 3,
+      "recommended_level": 15,
+      "hp": 9000,
+      "attack": 95,
+      "defense": 28,
+      "normal_interval_ms": 2400,
+      "moves": [
+        {
+          "id": "armor_shell",
+          "warning_ms": 1500,
+          "cooldown_ms": 18000,
+          "duration_ms": 6000,
+          "defense_ratio": 2.0
+        },
+        {
+          "id": "counter_stance",
+          "warning_ms": 2000,
+          "cooldown_ms": 16000,
+          "duration_ms": 3000,
+          "reflect_damage_ratio": 0.25,
+          "per_hit_reflect_max_hp_cap": 0.08
+        }
+      ]
+    }
+  ],
+  "equipment_templates": [
+    {
+      "id": "novice_sword",
+      "name": "見習長劍",
+      "slot": "weapon",
+      "style": "sword",
+      "buy_gold": 60,
+      "bonus": {
+        "attack": 6
+      }
+    },
+    {
+      "id": "training_rapier",
+      "name": "訓練細劍",
+      "slot": "weapon",
+      "style": "rapier",
+      "buy_gold": 60,
+      "bonus": {
+        "attack": 4,
+        "crit_chance": 0.02
+      }
+    },
+    {
+      "id": "guard_mace",
+      "name": "守備槌",
+      "slot": "weapon",
+      "style": "mace",
+      "buy_gold": 60,
+      "bonus": {
+        "attack": 8
+      }
+    },
+    {
+      "id": "wood_shield",
+      "name": "木護盾",
+      "slot": "offhand",
+      "buy_gold": 45,
+      "bonus": {
+        "defense": 4,
+        "max_hp": 15,
+        "block_chance": 0.1
+      }
+    },
+    {
+      "id": "traveler_coat",
+      "name": "旅人上衣",
+      "slot": "body",
+      "buy_gold": 50,
+      "bonus": {
+        "defense": 3,
+        "max_hp": 15,
+        "agility": 2
+      }
+    },
+    {
+      "id": "hard_leather",
+      "name": "硬皮護甲",
+      "slot": "body",
+      "buy_gold": 70,
+      "bonus": {
+        "defense": 6,
+        "max_hp": 25
+      }
+    },
+    {
+      "id": "chain_mail",
+      "name": "鐵鎖胸甲",
+      "slot": "body",
+      "buy_gold": 100,
+      "bonus": {
+        "defense": 10,
+        "max_hp": 40,
+        "agility": -1
+      }
+    },
+    {
+      "id": "cloth_cap",
+      "name": "厚布帽",
+      "slot": "head",
+      "buy_gold": 30,
+      "bonus": {
+        "defense": 2,
+        "max_hp": 10
+      }
+    },
+    {
+      "id": "trail_boots",
+      "name": "行路靴",
+      "slot": "feet",
+      "buy_gold": 30,
+      "bonus": {
+        "defense": 2,
+        "agility": 2
+      }
+    },
+    {
+      "id": "bronze_ring",
+      "name": "青銅戒",
+      "slot": "ring",
+      "buy_gold": 40,
+      "bonus": {
+        "max_hp": 10,
+        "crit_chance": 0.01
+      }
+    },
+    {
+      "id": "wood_charm",
+      "name": "木符墜",
+      "slot": "neck",
+      "buy_gold": 45,
+      "bonus": {
+        "max_hp": 20,
+        "defense": 1
+      }
+    }
+  ],
+  "equipment_generation": {
+    "tier_stat_ratios": [
+      1,
+      1.5,
+      2
+    ],
+    "tier_required_levels": [
+      1,
+      6,
+      11
+    ],
+    "quality_positive_stat_ratios": {
+      "plain": 1,
+      "fine": 1.15,
+      "rare": 1.3,
+      "named": 1.5
+    },
+    "negative_stat_quality_scaled": false,
+    "flat_rounding": "nearest integer",
+    "instance_id": "run_id:event_sequence",
+    "visible_armor_layering": false
+  },
+  "loot": {
+    "gold_every_kill": true,
+    "material_chance": 0.7,
+    "gear_chance": 0.15,
+    "enhancement_material_chance": 0.03,
+    "gear_quality_weights": {
+      "plain": 80,
+      "fine": 18,
+      "rare": 2
+    },
+    "boss_first_clear_per_run_named_weapon": true,
+    "kill_receipt_required": true,
+    "bag_capacity_limit": null
+  },
+  "elites": [
+    {
+      "id": "elite_1",
+      "base_monster_id": "ruin_hound",
+      "hp_ratio": 2,
+      "attack_ratio": 1.3,
+      "defense_ratio": 1.2,
+      "exp_ratio": 1.5
+    },
+    {
+      "id": "elite_2",
+      "base_monster_id": "stone_sentinel",
+      "hp_ratio": 2,
+      "attack_ratio": 1.3,
+      "defense_ratio": 1.2,
+      "exp_ratio": 1.5
+    },
+    {
+      "id": "elite_3",
+      "base_monster_id": "ore_guardian",
+      "hp_ratio": 2,
+      "attack_ratio": 1.3,
+      "defense_ratio": 1.2,
+      "exp_ratio": 1.5
+    }
+  ],
+  "quest_definitions": [
+    {
+      "id": "seal_1",
+      "kind": "main",
+      "floor": 1,
+      "objective": {
+        "type": "boss_kill",
+        "target": "gatekeeper",
+        "count": 1
+      },
+      "requires": null,
+      "consume_on_claim": false,
+      "repeatable": false,
+      "reward": {
+        "exp": 400,
+        "gold": 100,
+        "unlock_camp": 2
+      }
+    },
+    {
+      "id": "hunt_1_0",
+      "kind": "kill",
+      "floor": 1,
+      "objective": {
+        "type": "monster_kill",
+        "target": "meadow_slime",
+        "count": 5
+      },
+      "consume_on_claim": false,
+      "repeatable": true,
+      "reward": {
+        "exp": 50,
+        "gold": 30
+      }
+    },
+    {
+      "id": "hunt_1_1",
+      "kind": "kill",
+      "floor": 1,
+      "objective": {
+        "type": "monster_kill",
+        "target": "briar_boar",
+        "count": 5
+      },
+      "consume_on_claim": false,
+      "repeatable": true,
+      "reward": {
+        "exp": 50,
+        "gold": 30
+      }
+    },
+    {
+      "id": "gather_1",
+      "kind": "collect",
+      "floor": 1,
+      "objective": {
+        "type": "item_count",
+        "target": "green_core",
+        "count": 5
+      },
+      "consume_on_claim": true,
+      "repeatable": false,
+      "reward": {
+        "exp": 80,
+        "gold": 40
+      }
+    },
+    {
+      "id": "seal_2",
+      "kind": "main",
+      "floor": 2,
+      "objective": {
+        "type": "boss_kill",
+        "target": "brood_queen",
+        "count": 1
+      },
+      "requires": "seal_1",
+      "consume_on_claim": false,
+      "repeatable": false,
+      "reward": {
+        "exp": 1200,
+        "gold": 300,
+        "unlock_camp": 3
+      }
+    },
+    {
+      "id": "hunt_2_0",
+      "kind": "kill",
+      "floor": 2,
+      "objective": {
+        "type": "monster_kill",
+        "target": "moss_beetle",
+        "count": 5
+      },
+      "consume_on_claim": false,
+      "repeatable": true,
+      "reward": {
+        "exp": 150,
+        "gold": 60
+      }
+    },
+    {
+      "id": "hunt_2_1",
+      "kind": "kill",
+      "floor": 2,
+      "objective": {
+        "type": "monster_kill",
+        "target": "brood_spider",
+        "count": 5
+      },
+      "consume_on_claim": false,
+      "repeatable": true,
+      "reward": {
+        "exp": 150,
+        "gold": 60
+      }
+    },
+    {
+      "id": "gather_2",
+      "kind": "collect",
+      "floor": 2,
+      "objective": {
+        "type": "item_count",
+        "target": "rain_moss",
+        "count": 5
+      },
+      "consume_on_claim": true,
+      "repeatable": false,
+      "reward": {
+        "exp": 200,
+        "gold": 80
+      }
+    },
+    {
+      "id": "seal_3",
+      "kind": "main",
+      "floor": 3,
+      "objective": {
+        "type": "boss_kill",
+        "target": "crystal_core",
+        "count": 1
+      },
+      "requires": "seal_2",
+      "consume_on_claim": false,
+      "repeatable": false,
+      "reward": {
+        "exp": 2400,
+        "gold": 600,
+        "unlock_camp": 3
+      }
+    },
+    {
+      "id": "hunt_3_0",
+      "kind": "kill",
+      "floor": 3,
+      "objective": {
+        "type": "monster_kill",
+        "target": "crystal_moth",
+        "count": 5
+      },
+      "consume_on_claim": false,
+      "repeatable": true,
+      "reward": {
+        "exp": 300,
+        "gold": 100
+      }
+    },
+    {
+      "id": "hunt_3_1",
+      "kind": "kill",
+      "floor": 3,
+      "objective": {
+        "type": "monster_kill",
+        "target": "forge_hound",
+        "count": 5
+      },
+      "consume_on_claim": false,
+      "repeatable": true,
+      "reward": {
+        "exp": 300,
+        "gold": 100
+      }
+    },
+    {
+      "id": "gather_3",
+      "kind": "collect",
+      "floor": 3,
+      "objective": {
+        "type": "item_count",
+        "target": "star_ore",
+        "count": 5
+      },
+      "consume_on_claim": true,
+      "repeatable": false,
+      "reward": {
+        "exp": 400,
+        "gold": 120
+      }
+    }
+  ]
+}

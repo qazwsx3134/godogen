@@ -1,0 +1,170 @@
+{
+  "schema": "generate2dsprite.master.v1",
+  "tool": {
+    "name": "master_still",
+    "version": "0.4.0"
+  },
+  "created": "2026-10-24T02:59:41.126Z",
+  "name": "ruin_hound",
+  "subject": "a lean ancient ruin hound, about waist height to the hero",
+  "identity_recap": "lean slate-grey hound with a cracked stone mask, glowing cyan eye slits and a runed stone collar",
+  "facing": "right",
+  "view": "elevated three-quarter overhead view about 35 degrees, body turned diagonally toward the lower-right",
+  "finish": "hd",
+  "class": "mob",
+  "framing": {
+    "canvas": [
+      1024,
+      1024
+    ],
+    "subject_height_px": 471,
+    "top_margin_px": 406,
+    "lead_px": 100,
+    "preset": "mob",
+    "subject_bbox": [
+      110,
+      406,
+      714,
+      877
+    ],
+    "anchor": [
+      576.0,
+      877.0
+    ],
+    "opaque_area_px": 88133,
+    "width_limited": false
+  },
+  "key": "#FF00FF",
+  "files": {
+    "master": {
+      "path": "master.png",
+      "sha256": "3de9543adedd9e99a5377255f736cb800fd3a6669295351c8061d61859730501",
+      "bytes": 223838,
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    "cutout": {
+      "path": "master_rgba.png",
+      "sha256": "737c84bf71f74cfa4ca310db64d1c8d75da5012d27589d11534614191f60d09f",
+      "bytes": 257295,
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    "source": {
+      "path": "source.png",
+      "sha256": "d80cd6cb32db686699c5d0f9f594bc3e9fbcdfade9b4f950911b37c6a0b7a84e",
+      "bytes": 1589692,
+      "size": [
+        1254,
+        1254
+      ]
+    },
+    "spec": {
+      "path": "spec.json",
+      "sha256": "bbdbabb0bf923d5b55aa4802558036c3cc78fbee9b707dff15cb45fed1b80c16",
+      "bytes": 1108
+    },
+    "prompt": {
+      "path": "prompt.txt",
+      "sha256": "67ca6a023ee1a6c0513e8e5fd35cbc8b56660221829b997cdaddddfb5d734285",
+      "bytes": 1944
+    }
+  },
+  "references": [],
+  "transform": {
+    "mapping": "master = scale * source + offset (continuous pixel coordinates: pixel i spans [i, i + 1))",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "source_subject_bbox": [
+      40,
+      259,
+      1076,
+      1068
+    ],
+    "crop_box": [
+      34,
+      253,
+      1082,
+      1074
+    ],
+    "crop_margin_px": 6,
+    "scale": 0.5822002472187886,
+    "offset": [
+      87.13226205191597,
+      255.21013597033374
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "resampler": "lanczos",
+    "premultiplied": true,
+    "alpha_floor_px": 2593,
+    "subject_parts": 1,
+    "ignored_parts": 0,
+    "ignored_px": 0,
+    "source_touches": [],
+    "key_rgb": [
+      255,
+      0,
+      255
+    ]
+  },
+  "route": "local:codex-cli",
+  "provenance": {
+    "command": "generate",
+    "run": "../r1",
+    "take": 1,
+    "source_name": "generated.png",
+    "source_sha256": "d80cd6cb32db686699c5d0f9f594bc3e9fbcdfade9b4f950911b37c6a0b7a84e",
+    "media": {
+      "status": "ok",
+      "route": "local:codex-cli",
+      "sha256": "d80cd6cb32db686699c5d0f9f594bc3e9fbcdfade9b4f950911b37c6a0b7a84e",
+      "estimateUsd": 0.0,
+      "kind": "image",
+      "label": "Codex (local CLI)",
+      "model": "codex-image_gen",
+      "verifiedBefore": true
+    },
+    "media_cli_source": "sibling",
+    "edit": null
+  },
+  "matte": {
+    "requested": "soft",
+    "key_estimate": {
+      "key": [
+        251.0,
+        3.0,
+        251.0
+      ],
+      "source": "border_median",
+      "valid": true,
+      "ring_share": 1.0,
+      "coverage": 0.832907264536577,
+      "distance_from_declared": 6.4
+    },
+    "quality": "soft",
+    "interior_despill": true,
+    "qa": {
+      "opaque_key_px": 0,
+      "outer_ring_spill_fraction": 0.0,
+      "semitransparent_fraction": 0.032421370921557995,
+      "enclosed_key_pockets": 0,
+      "key_hued_px": 0,
+      "visible_px": 261926
+    },
+    "key_choice": {
+      "status": "ok",
+      "overlap_share": 0.0,
+      "rule": "reject a key when more than 0.5% of subject pixels have key dominance >= 40; first acceptable candidate wins"
+    }
+  },
+  "warnings": []
+}

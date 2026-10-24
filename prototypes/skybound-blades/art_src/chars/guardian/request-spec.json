@@ -1,0 +1,20 @@
+{
+  "name": "guardian",
+  "class": "hero",
+  "pronoun": "she",
+  "subject": "a stocky tower guardian knight, 3-head-tall proportions",
+  "identity": "tied-back copper-brown hair, calm steady eyes; rounded steel half-plate over a deep teal surcoat with a pale gold wing emblem; chainmail sleeves; a large round wooden shield rimmed in iron held on the left arm, painted teal with a gold wing; a short flanged iron mace in the right hand; sturdy grey boots",
+  "pose": "guard stance, shield raised to chest height, mace ready at the hip",
+  "recap": "stocky copper-haired guardian in steel half-plate and teal surcoat, carrying a large round teal shield and a flanged mace",
+  "finish": "hd",
+  "facing": "right",
+  "key": "#FF00FF",
+  "genre": "a Ragnarok-Online-style HD 2.5D action RPG set in floating sky-tower ruins",
+  "view": "elevated three-quarter overhead view about 35 degrees, body turned diagonally toward the lower-right",
+  "extra_bans": [
+    "pixel art",
+    "magenta, pink or red-violet colours on the character",
+    "cast shadow on the ground",
+    "text or logos"
+  ]
+}

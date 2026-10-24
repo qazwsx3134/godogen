@@ -1,0 +1,48 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/prop.gd" id="1_hpydw"]
+[ext_resource type="Material" path="res://resources/materials/low_poly_92.tres" id="2_mc2u4"]
+[ext_resource type="ArrayMesh" path="res://resources/meshes/plinth.res" id="3_21n3d"]
+[ext_resource type="ArrayMesh" path="res://resources/meshes/pillar.res" id="4_dwv0v"]
+[ext_resource type="ArrayMesh" path="res://resources/meshes/lintel.res" id="5_wmn5l"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0vtjo"]
+shading_mode = 0
+albedo_color = Color(1, 0.3, 0.2, 1)
+
+[sub_resource type="TorusMesh" id="TorusMesh_3sr7p"]
+inner_radius = 0.96
+
+[node name="Arch" type="Node3D" unique_id=1034396341]
+script = ExtResource("1_hpydw")
+
+[node name="PlinthL" type="MeshInstance3D" parent="." unique_id=638905567]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7, 0.17, 0)
+material_override = ExtResource("2_mc2u4")
+mesh = ExtResource("3_21n3d")
+
+[node name="ColumnL" type="MeshInstance3D" parent="." unique_id=1149127066]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7, 1.74, 0)
+material_override = ExtResource("2_mc2u4")
+mesh = ExtResource("4_dwv0v")
+
+[node name="PlinthR" type="MeshInstance3D" parent="." unique_id=1623468522]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7, 0.17, 0)
+material_override = ExtResource("2_mc2u4")
+mesh = ExtResource("3_21n3d")
+
+[node name="ColumnR" type="MeshInstance3D" parent="." unique_id=2121086127]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7, 1.74, 0)
+material_override = ExtResource("2_mc2u4")
+mesh = ExtResource("4_dwv0v")
+
+[node name="Lintel" type="MeshInstance3D" parent="." unique_id=1585995366]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.4, 0)
+material_override = ExtResource("2_mc2u4")
+mesh = ExtResource("5_wmn5l")
+
+[node name="BlockGizmo" type="MeshInstance3D" parent="." unique_id=797897856]
+transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0.05, 0)
+visible = false
+material_override = SubResource("StandardMaterial3D_0vtjo")
+mesh = SubResource("TorusMesh_3sr7p")
