@@ -105,10 +105,10 @@ func _test_title_story_switch() -> void:
 	var rows: Dictionary = game._chapter_select.call("rows")
 	_expect(game._screen_mode == "chapter_select" and game._chapter_select.visible and rows.size() == game._story_choices.size(),
 		"the story label opens 章節選擇 with every story")
-	_expect(rows.keys() == ["chapter1", "debt", "phase2", "phase3", "phase4", "phase4_rounds", "comedy", "choices", "ep00", "text_effects"]
+	_expect(rows.keys() == ["chapter1", "example_ch1", "example_ch2", "debt", "phase2", "phase3", "phase4", "phase4_rounds", "comedy", "choices", "ep00", "text_effects"]
 		and (rows["debt"] as Button).text.contains("請幫我向你老闆討債") and (rows["phase4"] as Button).text.contains("試玩片段"),
 		"rows list each story by its own title, samples marked as such: %s" % [rows.keys()])
-	_expect(not game._chapter_select.find_child("ChaptersEmpty", true, false).visible and rows["chapter1"].text.contains("草莓牛奶"), "本篇 lists the playable first chapter")
+	_expect(not game._chapter_select.find_child("ChaptersEmpty", true, false).visible and game._chapter_select.row_text("chapter1").contains("草莓牛奶"), "本篇 lists the playable first chapter")
 	await _frames(3)  # laid out before the row below 結局收集 is scrolled into view
 	await _press(rows["phase4"])
 	_expect(game._screen_mode == "title" and not game._chapter_select.visible and game._story_ready,
@@ -204,10 +204,8 @@ func _test_talk_and_move() -> void:
 		"the played topic is gone")
 	_expect(is_equal_approx(game._pan, pan) and not game._sprites["kagura"].visible, "the picture is where it was left; the stage is clear again")
 
-	game._set_ui_style("ledger", false)
-	await _frames(2)
-	_expect(game._dialog_panel.style_id == "ledger" and game._topic_buttons.has("move:kitchen")
-		and game._dialog_panel.move_list.get_child_count() == 1, "switching edition moves the topics into the new box")
+	_expect(game._topic_buttons.has("move:kitchen") and game._dialog_panel.move_list.get_child_count() == 1,
+		"the box offers the way to the kitchen")
 	await _press(game._topic_buttons["move:kitchen"])
 	_expect(game._current_bg_id == "yorozuya_kitchen" and game._hotspots.keys() == ["fridge"] and game._place_tag.text == "萬事屋廚房"
 		and game._topic_buttons.keys() == ["move:home"] and (game._topic_buttons["move:home"] as Button).text == "客廳",
@@ -231,7 +229,6 @@ func _test_talk_and_move() -> void:
 	await _until(func() -> bool: return game._screen_mode == "investigate", "back to the search")
 	_expect(game._current_bg_id == "yorozuya_living_room" and game._hotspots.size() == 4 and game._runner.items.is_empty(),
 		"the searched-out kitchen sends the player home; the fridge gave no material")
-	game._set_ui_style("cinema", false)
 	game.queue_free()
 	await _frames(2)
 	_cleanup_saves()
@@ -256,6 +253,7 @@ func _new_game(save_path: String) -> Control:
 	var game: Control = MAIN_SCENE.instantiate() as Control
 	game.story_path = STORY_PATH
 	game.save_path = save_path
+	game.packs_root = "res://tests/fixtures/no_packs/"  # only data/stories.json
 	root.add_child(game)
 	return game
 

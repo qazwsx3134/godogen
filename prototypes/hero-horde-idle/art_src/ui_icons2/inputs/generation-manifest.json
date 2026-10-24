@@ -1,0 +1,101 @@
+{
+  "tool": "Codex built-in image_gen",
+  "items": [
+    {
+      "id": "items/r_sun",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-45c50ffe-4ea3-43c6-b095-69f3eb526319.png",
+      "attempts": 1,
+      "elapsed_seconds": 37,
+      "reference": null
+    },
+    {
+      "id": "items/r_frost",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-d52a634e-5379-4893-8ef5-2d57b5e65aff.png",
+      "attempts": 1,
+      "elapsed_seconds": 29,
+      "reference": null
+    },
+    {
+      "id": "items/r_flame",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-0bd33776-e6b8-43a4-808f-737f6fa012b5.png",
+      "attempts": 1,
+      "elapsed_seconds": 35,
+      "reference": null
+    },
+    {
+      "id": "items/r_leaf",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-15851acf-98c0-4090-9a4f-76c6e42dc1ff.png",
+      "attempts": 1,
+      "elapsed_seconds": 27,
+      "reference": null
+    },
+    {
+      "id": "items/m_stone",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-e50c912d-5e25-4f07-8d7f-aa50599eee04.png",
+      "attempts": 1,
+      "elapsed_seconds": 37,
+      "reference": null
+    },
+    {
+      "id": "items/m_shard",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-6a4a50d4-fa5f-481f-8c05-4b007f73a6eb.png",
+      "attempts": 1,
+      "elapsed_seconds": 30,
+      "reference": null
+    },
+    {
+      "id": "items/m_ticket",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-f7e4306a-fb78-41fa-a4c6-69aa3482d3b1.png",
+      "attempts": 1,
+      "elapsed_seconds": 35,
+      "reference": null
+    },
+    {
+      "id": "nav/camp",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-365a2ed9-3cab-44c9-8259-bfba06ef850d.png",
+      "attempts": 1,
+      "elapsed_seconds": 24,
+      "reference": null
+    },
+    {
+      "id": "nav/growth",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-d6441b47-9a1d-479c-a242-b34508e517bc.png",
+      "attempts": 1,
+      "elapsed_seconds": 44,
+      "reference": "nav/camp.png"
+    },
+    {
+      "id": "nav/recruit",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-e5dd9eec-6e49-4711-a45d-5a1edc1bbe56.png",
+      "attempts": 1,
+      "elapsed_seconds": 36,
+      "reference": "nav/camp.png"
+    },
+    {
+      "id": "nav/items",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-d332f4b4-abc3-43bd-8a79-d95b4a74a484.png",
+      "attempts": 1,
+      "elapsed_seconds": 28,
+      "reference": "nav/camp.png"
+    },
+    {
+      "id": "nav/stages",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-389170b8-7957-4e21-a004-d14f5c6d21a3.png",
+      "attempts": 1,
+      "elapsed_seconds": 30,
+      "reference": "nav/camp.png"
+    },
+    {
+      "id": "bg/recruit",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-16525da5-c94b-40fb-92e3-f2d48d312a58.png",
+      "attempts": 1,
+      "elapsed_seconds": 25,
+      "reference": null
+    }
+  ],
+  "total_calls": 13,
+  "retries": 0,
+  "skipped": [],
+  "timeouts": [],
+  "quota": "No quota error reported; remaining quota unavailable"
+}

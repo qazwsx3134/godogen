@@ -1,0 +1,105 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/camp_panel.gd" id="1_r3you"]
+
+[node name="CampPanel" type="PanelContainer" unique_id=1807826647]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -560.0
+offset_top = -380.0
+offset_right = 560.0
+offset_bottom = 380.0
+script = ExtResource("1_r3you")
+
+[node name="Rows" type="VBoxContainer" parent="." unique_id=1441142773]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="Top" type="HBoxContainer" parent="Rows" unique_id=827269287]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 16
+
+[node name="CampTitle" type="Label" parent="Rows/Top" unique_id=1927049756]
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+text = "營地"
+
+[node name="CampHeader" type="Label" parent="Rows/Top" unique_id=2055818602]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "金幣 0 · 倉庫 0"
+vertical_alignment = 1
+
+[node name="CampClose" type="Button" parent="Rows/Top" unique_id=584843733]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 96)
+layout_mode = 2
+focus_mode = 0
+text = "關閉"
+
+[node name="CampTabs" type="TabContainer" parent="Rows" unique_id=1955132621]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 26
+current_tab = 0
+
+[node name="補給" type="ScrollContainer" parent="Rows/CampTabs" unique_id=919150355]
+visible = false
+layout_mode = 2
+horizontal_scroll_mode = 0
+metadata/_tab_index = 0
+
+[node name="List" type="VBoxContainer" parent="Rows/CampTabs/補給" unique_id=42028425]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="倉庫" type="ScrollContainer" parent="Rows/CampTabs" unique_id=1296265000]
+visible = false
+layout_mode = 2
+horizontal_scroll_mode = 0
+metadata/_tab_index = 1
+
+[node name="List" type="VBoxContainer" parent="Rows/CampTabs/倉庫" unique_id=2041229002]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="委託" type="ScrollContainer" parent="Rows/CampTabs" unique_id=2020653766]
+visible = false
+layout_mode = 2
+horizontal_scroll_mode = 0
+metadata/_tab_index = 2
+
+[node name="List" type="VBoxContainer" parent="Rows/CampTabs/委託" unique_id=1891473518]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="裝備" type="ScrollContainer" parent="Rows/CampTabs" unique_id=325514873]
+visible = false
+layout_mode = 2
+horizontal_scroll_mode = 0
+metadata/_tab_index = 3
+
+[node name="List" type="VBoxContainer" parent="Rows/CampTabs/裝備" unique_id=528025810]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="技能" type="ScrollContainer" parent="Rows/CampTabs" unique_id=1765730080]
+visible = false
+layout_mode = 2
+horizontal_scroll_mode = 0
+metadata/_tab_index = 4
+
+[node name="List" type="VBoxContainer" parent="Rows/CampTabs/技能" unique_id=236027991]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8

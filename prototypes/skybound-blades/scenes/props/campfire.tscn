@@ -1,0 +1,51 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/prop.gd" id="1_qxf8f"]
+[ext_resource type="Material" path="res://resources/materials/low_poly_92.tres" id="2_hocco"]
+[ext_resource type="ArrayMesh" path="res://resources/meshes/log.res" id="3_uw18v"]
+[ext_resource type="Material" path="res://resources/materials/low_poly_35.tres" id="4_oagb3"]
+[ext_resource type="ArrayMesh" path="res://resources/meshes/flame.res" id="5_fibnk"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gikb7"]
+shading_mode = 0
+albedo_color = Color(1, 0.3, 0.2, 1)
+
+[sub_resource type="TorusMesh" id="TorusMesh_gne65"]
+inner_radius = 0.96
+
+[node name="Campfire" type="Node3D" unique_id=1048689418]
+script = ExtResource("1_qxf8f")
+block_radius = 0.45
+
+[node name="Log0" type="MeshInstance3D" parent="." unique_id=1642113938]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0, 0.1, 0)
+material_override = ExtResource("2_hocco")
+mesh = ExtResource("3_uw18v")
+
+[node name="Log1" type="MeshInstance3D" parent="." unique_id=1442011285]
+transform = Transform3D(-2.1855692e-08, -0.49999997, 0.86602545, 1, -4.371139e-08, 0, 3.7855173e-08, 0.86602545, 0.49999997, 0, 0.1, 0)
+material_override = ExtResource("2_hocco")
+mesh = ExtResource("3_uw18v")
+
+[node name="Log2" type="MeshInstance3D" parent="." unique_id=1484411423]
+transform = Transform3D(2.1855696e-08, 0.50000006, 0.8660254, 1, -4.371139e-08, 0, 3.7855173e-08, 0.8660254, -0.50000006, 0, 0.1, 0)
+material_override = ExtResource("2_hocco")
+mesh = ExtResource("3_uw18v")
+
+[node name="Flame" type="MeshInstance3D" parent="." unique_id=213451487]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.38, 0)
+material_override = ExtResource("4_oagb3")
+cast_shadow = 0
+mesh = ExtResource("5_fibnk")
+
+[node name="Glow" type="OmniLight3D" parent="." unique_id=1738607292]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+light_color = Color(1, 0.7019608, 0.36078432, 1)
+light_energy = 1.4
+omni_range = 4.5
+
+[node name="BlockGizmo" type="MeshInstance3D" parent="." unique_id=358821864]
+transform = Transform3D(0.45, 0, 0, 0, 0.45, 0, 0, 0, 0.45, 0, 0.05, 0)
+visible = false
+material_override = SubResource("StandardMaterial3D_gikb7")
+mesh = SubResource("TorusMesh_gne65")

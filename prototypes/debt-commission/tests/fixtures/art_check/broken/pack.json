@@ -1,0 +1,11 @@
+{
+  "id": "broken",
+  "title": "壞掉的作品",
+  "stories": [
+    {
+      "id": "broken_ch1",
+      "kind": "chapter",
+      "path": "ch1_story.json"
+    }
+  ]
+}

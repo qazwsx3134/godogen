@@ -1,0 +1,29 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/fx.gd" id="1_el5gs"]
+[ext_resource type="Shader" path="res://shaders/fx_light_pillar.gdshader" id="2_ydhao"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u3hx4"]
+render_priority = 0
+shader = ExtResource("2_ydhao")
+shader_parameter/tint = null
+shader_parameter/progress = null
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_mwq6n"]
+top_radius = 0.75
+bottom_radius = 0.75
+height = 4.5
+radial_segments = 16
+rings = 1
+cap_top = false
+cap_bottom = false
+
+[node name="LightPillar" type="Node3D" unique_id=1430939531]
+script = ExtResource("1_el5gs")
+duration = 1.3
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=870510706]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.25, 0)
+material_override = SubResource("ShaderMaterial_u3hx4")
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_mwq6n")

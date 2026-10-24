@@ -1,0 +1,305 @@
+{
+  "stopped": false,
+  "results": [
+    {
+      "class": "shield",
+      "action": "run_a",
+      "mode": "edit",
+      "attempt": 1,
+      "status": "ok",
+      "run": "inputs/shield-run_a-edit-1",
+      "seconds": 79.149,
+      "errors": []
+    },
+    {
+      "class": "shield",
+      "action": "run_b",
+      "mode": "edit",
+      "attempt": 1,
+      "status": "ok",
+      "run": "inputs/shield-run_b-edit-1",
+      "seconds": 73.327,
+      "errors": []
+    },
+    {
+      "class": "shield",
+      "action": "strike",
+      "mode": "edit",
+      "attempt": 1,
+      "status": "ok",
+      "run": "inputs/shield-strike-edit-1",
+      "seconds": 86.001,
+      "errors": []
+    },
+    {
+      "class": "shield",
+      "action": "down",
+      "mode": "edit",
+      "attempt": 1,
+      "status": "ok",
+      "run": "inputs/shield-down-edit-1",
+      "seconds": 82.047,
+      "errors": []
+    },
+    {
+      "class": "shield",
+      "action": "volley",
+      "mode": "edit",
+      "attempt": 1,
+      "status": "ok",
+      "run": "inputs/shield-volley-edit-1",
+      "seconds": 100.473,
+      "errors": []
+    },
+    {
+      "class": "sword",
+      "action": "run_a",
+      "mode": "edit",
+      "attempt": 1,
+      "status": "ok",
+      "run": "inputs/sword-run_a-edit-1",
+      "seconds": 78.937,
+      "errors": []
+    },
+    {
+      "class": "sword",
+      "action": "run_b",
+      "mode": "edit",
+      "attempt": 1,
+      "status": "ok",
+      "run": "inputs/sword-run_b-edit-1",
+      "seconds": 84.247,
+      "errors": []
+    },
+    {
+      "class": "sword",
+      "action": "strike",
+      "mode": "edit",
+      "attempt": 1,
+      "status": "ok",
+      "run": "inputs/sword-strike-edit-1",
+      "seconds": 77.894,
+      "errors": []
+    },
+    {
+      "class": "sword",
+      "action": "down",
+      "mode": "edit",
+      "attempt": 1,
+      "status": "ok",
+      "run": "inputs/sword-down-edit-1",
+      "seconds": 87.012,
+      "errors": []
+    },
+    {
+      "class": "sword",
+      "action": "volley",
+      "mode": "edit",
+      "attempt": 1,
+      "status": "ok",
+      "run": "inputs/sword-volley-edit-1",
+      "seconds": 90.208,
+      "errors": []
+    },
+    {
+      "class": "spear",
+      "action": "run_a",
+      "mode": "edit",
+      "attempt": 1,
+      "status": "ok",
+      "run": "inputs/spear-run_a-edit-1",
+      "seconds": 70.417,
+      "errors": []
+    },
+    {
+      "class": "spear",
+      "action": "run_b",
+      "mode": "edit",
+      "attempt": 1,
+      "status": "ok",
+      "run": "inputs/spear-run_b-edit-1",
+      "seconds": 70.561,
+      "errors": []
+    },
+    {
+      "class": "spear",
+      "action": "strike",
+      "mode": "edit",
+      "attempt": 1,
+      "status": "ok",
+      "run": "inputs/spear-strike-edit-1",
+      "seconds": 64.079,
+      "errors": []
+    },
+    {
+      "class": "spear",
+      "action": "down",
+      "mode": "edit",
+      "attempt": 1,
+      "status": "ok",
+      "run": "inputs/spear-down-edit-1",
+      "seconds": 68.568,
+      "errors": []
+    },
+    {
+      "class": "spear",
+      "action": "volley",
+      "mode": "edit",
+      "attempt": 1,
+      "status": "ok",
+      "run": "inputs/spear-volley-edit-1",
+      "seconds": 89.375,
+      "errors": []
+    },
+    {
+      "class": "bow",
+      "action": "run_a",
+      "mode": "edit",
+      "attempt": 1,
+      "status": "ok",
+      "run": "inputs/bow-run_a-edit-1",
+      "seconds": 85.469,
+      "errors": []
+    },
+    {
+      "class": "bow",
+      "action": "run_b",
+      "mode": "edit",
+      "attempt": 1,
+      "status": "ok",
+      "run": "inputs/bow-run_b-edit-1",
+      "seconds": 90.872,
+      "errors": []
+    },
+    {
+      "class": "bow",
+      "action": "strike",
+      "mode": "edit",
+      "attempt": 1,
+      "status": "ok",
+      "run": "inputs/bow-strike-edit-1",
+      "seconds": 99.847,
+      "errors": []
+    },
+    {
+      "class": "bow",
+      "action": "down",
+      "mode": "edit",
+      "attempt": 1,
+      "status": "ok",
+      "run": "inputs/bow-down-edit-1",
+      "seconds": 83.047,
+      "errors": []
+    },
+    {
+      "class": "bow",
+      "action": "volley",
+      "mode": "edit",
+      "attempt": 1,
+      "status": "ok",
+      "run": "inputs/bow-volley-edit-1",
+      "seconds": 75.521,
+      "errors": []
+    },
+    {
+      "class": "mage",
+      "action": "run_a",
+      "mode": "edit",
+      "attempt": 1,
+      "status": "ok",
+      "run": "inputs/mage-run_a-edit-1",
+      "seconds": 77.955,
+      "errors": []
+    },
+    {
+      "class": "mage",
+      "action": "run_b",
+      "mode": "edit",
+      "attempt": 1,
+      "status": "ok",
+      "run": "inputs/mage-run_b-edit-1",
+      "seconds": 87.079,
+      "errors": []
+    },
+    {
+      "class": "mage",
+      "action": "strike",
+      "mode": "edit",
+      "attempt": 1,
+      "status": "ok",
+      "run": "inputs/mage-strike-edit-1",
+      "seconds": 91.816,
+      "errors": []
+    },
+    {
+      "class": "mage",
+      "action": "down",
+      "mode": "edit",
+      "attempt": 1,
+      "status": "ok",
+      "run": "inputs/mage-down-edit-1",
+      "seconds": 121.628,
+      "errors": []
+    },
+    {
+      "class": "mage",
+      "action": "volley",
+      "mode": "edit",
+      "attempt": 1,
+      "status": "ok",
+      "run": "inputs/mage-volley-edit-1",
+      "seconds": 88.781,
+      "errors": []
+    },
+    {
+      "class": "healer",
+      "action": "run_a",
+      "mode": "edit",
+      "attempt": 1,
+      "status": "ok",
+      "run": "inputs/healer-run_a-edit-1",
+      "seconds": 110.928,
+      "errors": []
+    },
+    {
+      "class": "healer",
+      "action": "run_b",
+      "mode": "edit",
+      "attempt": 1,
+      "status": "ok",
+      "run": "inputs/healer-run_b-edit-1",
+      "seconds": 85.432,
+      "errors": []
+    },
+    {
+      "class": "healer",
+      "action": "strike",
+      "mode": "edit",
+      "attempt": 1,
+      "status": "ok",
+      "run": "inputs/healer-strike-edit-1",
+      "seconds": 69.677,
+      "errors": []
+    },
+    {
+      "class": "healer",
+      "action": "down",
+      "mode": "edit",
+      "attempt": 1,
+      "status": "ok",
+      "run": "inputs/healer-down-edit-1",
+      "seconds": 88.21,
+      "errors": []
+    },
+    {
+      "class": "healer",
+      "action": "volley",
+      "mode": "edit",
+      "attempt": 1,
+      "status": "ok",
+      "run": "inputs/healer-volley-edit-1",
+      "seconds": 99.351,
+      "errors": []
+    }
+  ]
+}

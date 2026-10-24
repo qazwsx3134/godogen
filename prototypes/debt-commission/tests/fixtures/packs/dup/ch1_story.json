@@ -1,0 +1,6 @@
+{
+  "id": "titan_ch2", "version": "s-test", "title": "第二章・門", "entry": "start",
+  "initial_flags": {"wall_seen": false},
+  "nodes": {"start": {"title": "門", "steps": [
+    {"op": "say", "speaker": "eren", "text": "門開了。"}, {"op": "end", "text": "第二章完。"}]}}
+}

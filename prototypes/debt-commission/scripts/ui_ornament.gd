@@ -5,7 +5,7 @@ extends Control
 ## editor too, so scenes show their real frame. `unit` is one CSS pixel of the HTML reference
 ## in local pixels: 1080 / 390 at the design width.
 
-@export_enum("cinema", "ledger", "manga", "gintama") var style_id: String = "cinema":
+@export var style_id: String = "gintama":
 	set(value):
 		style_id = value
 		queue_redraw()

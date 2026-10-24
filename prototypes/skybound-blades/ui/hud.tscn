@@ -1,0 +1,656 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/hud.gd" id="1_7ihmi"]
+[ext_resource type="Theme" path="res://ui/theme.tres" id="2_en2x2"]
+[ext_resource type="PackedScene" path="res://ui/party_row.tscn" id="3_1v5rv"]
+[ext_resource type="PackedScene" path="res://ui/camp_panel.tscn" id="4_q43x7"]
+
+[sub_resource type="Gradient" id="Gradient_srpbi"]
+offsets = PackedFloat32Array(0, 0.96, 1)
+colors = PackedColorArray(0.02, 0.03, 0.05, 0.78, 0.02, 0.03, 0.05, 0.78, 0.02, 0.03, 0.05, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_spcu4"]
+gradient = SubResource("Gradient_srpbi")
+width = 256
+height = 256
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[node name="HUD" type="CanvasLayer" unique_id=1203319074]
+script = ExtResource("1_7ihmi")
+
+[node name="Frame" type="Control" parent="." unique_id=912200173]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = ExtResource("2_en2x2")
+
+[node name="TopLeft" type="VBoxContainer" parent="Frame" unique_id=1984364061]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 540.0
+offset_bottom = 520.0
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="Resources" type="PanelContainer" parent="Frame/TopLeft" unique_id=1656967678]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Row" type="HBoxContainer" parent="Frame/TopLeft/Resources" unique_id=934487628]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="LevelLabel" type="Label" parent="Frame/TopLeft/Resources/Row" unique_id=1157818320]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+text = "Lv.1"
+
+[node name="GoldIcon" type="Label" parent="Frame/TopLeft/Resources/Row" unique_id=1309769176]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "金幣"
+
+[node name="GoldLabel" type="Label" parent="Frame/TopLeft/Resources/Row" unique_id=1795563550]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+
+[node name="MaterialIcon" type="Label" parent="Frame/TopLeft/Resources/Row" unique_id=413279718]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "綠芯"
+
+[node name="MaterialLabel" type="Label" parent="Frame/TopLeft/Resources/Row" unique_id=1537446237]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+
+[node name="PartyList" type="VBoxContainer" parent="Frame/TopLeft" unique_id=530424815]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="Member1" parent="Frame/TopLeft/PartyList" unique_id=649768032 instance=ExtResource("3_1v5rv")]
+layout_mode = 2
+
+[node name="Member2" parent="Frame/TopLeft/PartyList" unique_id=844135386 instance=ExtResource("3_1v5rv")]
+layout_mode = 2
+
+[node name="Member3" parent="Frame/TopLeft/PartyList" unique_id=562272821 instance=ExtResource("3_1v5rv")]
+layout_mode = 2
+
+[node name="AutoPotionButton" type="Button" parent="Frame/TopLeft" unique_id=2065154963]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(330, 104)
+layout_mode = 2
+focus_mode = 0
+toggle_mode = true
+button_pressed = true
+text = "自動喝藥：60% 以下"
+
+[node name="MenuRow" type="HBoxContainer" parent="Frame/TopLeft" unique_id=587267563]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="BagButton" type="Button" parent="Frame/TopLeft/MenuRow" unique_id=2128813629]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 104)
+layout_mode = 2
+focus_mode = 0
+text = "背包 B"
+
+[node name="CampButton" type="Button" parent="Frame/TopLeft/MenuRow" unique_id=10250015]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 104)
+layout_mode = 2
+focus_mode = 0
+text = "營地 C"
+
+[node name="RetreatButton" type="Button" parent="Frame/TopLeft/MenuRow" unique_id=2129378203]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 104)
+layout_mode = 2
+focus_mode = 0
+text = "撤退 T"
+
+[node name="TopCenter" type="VBoxContainer" parent="Frame" unique_id=705149390]
+layout_mode = 0
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -230.0
+offset_top = 20.0
+offset_right = 230.0
+offset_bottom = 140.0
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="TargetFrame" type="PanelContainer" parent="Frame/TopCenter" unique_id=265973623]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Rows" type="VBoxContainer" parent="Frame/TopCenter/TargetFrame" unique_id=738717003]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="TargetName" type="Label" parent="Frame/TopCenter/TargetFrame/Rows" unique_id=1091019163]
+unique_name_in_owner = true
+layout_mode = 2
+text = "草原史萊姆  Lv.1"
+horizontal_alignment = 1
+
+[node name="TargetBar" type="ProgressBar" parent="Frame/TopCenter/TargetFrame/Rows" unique_id=389718321]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"EnemyBar"
+value = 70.0
+show_percentage = false
+
+[node name="StatusLabel" type="Label" parent="Frame/TopCenter" unique_id=247229908]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "待命"
+horizontal_alignment = 1
+
+[node name="TopRight" type="HBoxContainer" parent="Frame" unique_id=1629795274]
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -366.0
+offset_top = 20.0
+offset_right = -24.0
+offset_bottom = 124.0
+mouse_filter = 2
+theme_override_constants/separation = 10
+alignment = 2
+
+[node name="ZoomInButton" type="Button" parent="Frame/TopRight" unique_id=1321607351]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(104, 104)
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"RoundButton"
+text = "＋"
+
+[node name="ZoomOutButton" type="Button" parent="Frame/TopRight" unique_id=1482287710]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(104, 104)
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"RoundButton"
+text = "－"
+
+[node name="PauseButton" type="Button" parent="Frame/TopRight" unique_id=2129840039]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(104, 104)
+layout_mode = 2
+focus_mode = 0
+theme_type_variation = &"RoundButton"
+text = "暫停"
+
+[node name="QuestPanel" type="PanelContainer" parent="Frame" unique_id=1363738143]
+layout_mode = 0
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -388.0
+offset_top = -300.0
+offset_right = -24.0
+offset_bottom = -70.0
+
+[node name="Rows" type="VBoxContainer" parent="Frame/QuestPanel" unique_id=1006835695]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="QuestTitle" type="Label" parent="Frame/QuestPanel/Rows" unique_id=323137672]
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+text = "委託 · 草原清掃"
+
+[node name="QuestProgress" type="Label" parent="Frame/QuestPanel/Rows" unique_id=97888215]
+unique_name_in_owner = true
+layout_mode = 2
+text = "草原史萊姆  0 / 5"
+
+[node name="QuestReward" type="Label" parent="Frame/QuestPanel/Rows" unique_id=1778281263]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "報酬  50 EXP · 30 金幣"
+
+[node name="ClaimButton" type="Button" parent="Frame/QuestPanel/Rows" unique_id=987353688]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 104)
+layout_mode = 2
+focus_mode = 0
+text = "回報委託"
+
+[node name="Feed" type="VBoxContainer" parent="Frame" unique_id=1976627925]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 28.0
+offset_top = -220.0
+offset_right = 820.0
+offset_bottom = -52.0
+mouse_filter = 2
+theme_override_constants/separation = 2
+alignment = 2
+
+[node name="Line0" type="Label" parent="Frame/Feed" unique_id=1762072293]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+theme_override_constants/outline_size = 6
+
+[node name="Line1" type="Label" parent="Frame/Feed" unique_id=227170105]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+theme_override_constants/outline_size = 6
+
+[node name="Line2" type="Label" parent="Frame/Feed" unique_id=382483906]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+theme_override_constants/outline_size = 6
+
+[node name="Line3" type="Label" parent="Frame/Feed" unique_id=848302378]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+theme_override_constants/outline_size = 6
+
+[node name="Line4" type="Label" parent="Frame/Feed" unique_id=1386960227]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+theme_override_constants/outline_size = 6
+
+[node name="ExpRow" type="Control" parent="Frame" unique_id=484418463]
+anchors_preset = 0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -30.0
+mouse_filter = 2
+
+[node name="ExpBar" type="ProgressBar" parent="Frame/ExpRow" unique_id=1021168965]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme_type_variation = &"ExpBar"
+value = 70.0
+show_percentage = false
+
+[node name="ExpLabel" type="Label" parent="Frame/ExpRow" unique_id=1108218073]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_type_variation = &"SmallLabel"
+text = "EXP 0 / 200"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ActionCluster" type="Control" parent="Frame" unique_id=625850514]
+unique_name_in_owner = true
+anchors_preset = 0
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -420.0
+offset_top = -362.0
+offset_right = -24.0
+offset_bottom = -44.0
+mouse_filter = 2
+
+[node name="SkillButton" type="Button" parent="Frame/ActionCluster" unique_id=1657709287]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(164, 164)
+layout_mode = 0
+offset_left = 232.0
+offset_top = 154.0
+offset_right = 232.0
+offset_bottom = 154.0
+focus_mode = 0
+theme_type_variation = &"RoundButton"
+
+[node name="SkillCooldown" type="TextureProgressBar" parent="Frame/ActionCluster/SkillButton" unique_id=398761120]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+fill_mode = 5
+nine_patch_stretch = true
+texture_progress = SubResource("GradientTexture2D_spcu4")
+
+[node name="SkillName" type="Label" parent="Frame/ActionCluster/SkillButton" unique_id=797806569]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "裂空斬
+Q"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SkillTime" type="Label" parent="Frame/ActionCluster/SkillButton" unique_id=380632241]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_type_variation = &"TitleLabel"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="AutoButton" type="Button" parent="Frame/ActionCluster" unique_id=1607947589]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(124, 124)
+layout_mode = 0
+offset_left = 92.0
+offset_top = 194.0
+offset_right = 92.0
+offset_bottom = 194.0
+focus_mode = 0
+theme_type_variation = &"RoundButton"
+toggle_mode = true
+
+[node name="AutoLabel" type="Label" parent="Frame/ActionCluster/AutoButton" unique_id=1295668336]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "自動
+狩獵"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TonicButton" type="Button" parent="Frame/ActionCluster" unique_id=1421782478]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 0
+offset_left = 118.0
+offset_top = 58.0
+offset_right = 118.0
+offset_bottom = 58.0
+focus_mode = 0
+theme_type_variation = &"RoundButton"
+
+[node name="Name" type="Label" parent="Frame/ActionCluster/TonicButton" unique_id=1424622670]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 22.0
+theme_type_variation = &"SmallLabel"
+text = "藥水 E"
+horizontal_alignment = 1
+
+[node name="TonicCount" type="Label" parent="Frame/ActionCluster/TonicButton" unique_id=1260809263]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -18.0
+theme_type_variation = &"TitleLabel"
+text = "×5"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="EmergencyButton" type="Button" parent="Frame/ActionCluster" unique_id=84435536]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 110)
+layout_mode = 0
+offset_left = 262.0
+offset_top = 14.0
+offset_right = 262.0
+offset_bottom = 14.0
+focus_mode = 0
+theme_type_variation = &"RoundButton"
+
+[node name="Name" type="Label" parent="Frame/ActionCluster/EmergencyButton" unique_id=546083967]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 22.0
+theme_type_variation = &"SmallLabel"
+text = "急救 R"
+horizontal_alignment = 1
+
+[node name="EmergencyCount" type="Label" parent="Frame/ActionCluster/EmergencyButton" unique_id=308988975]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -18.0
+theme_type_variation = &"TitleLabel"
+text = "×5"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="Toast" type="Label" parent="Frame" unique_id=1163103222]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -400.0
+offset_top = 170.0
+offset_right = 400.0
+offset_bottom = 220.0
+theme_type_variation = &"TitleLabel"
+theme_override_constants/outline_size = 8
+horizontal_alignment = 1
+
+[node name="PausePanel" type="ColorRect" parent="Frame" unique_id=2000567667]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.02, 0.03, 0.05, 0.62)
+
+[node name="Center" type="CenterContainer" parent="Frame/PausePanel" unique_id=2143229460]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Box" type="PanelContainer" parent="Frame/PausePanel/Center" unique_id=45222778]
+layout_mode = 2
+
+[node name="Rows" type="VBoxContainer" parent="Frame/PausePanel/Center/Box" unique_id=131722325]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+alignment = 1
+
+[node name="Title" type="Label" parent="Frame/PausePanel/Center/Box/Rows" unique_id=2074499221]
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+text = "暫停"
+horizontal_alignment = 1
+
+[node name="ResumeButton" type="Button" parent="Frame/PausePanel/Center/Box/Rows" unique_id=1228415587]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(360, 104)
+layout_mode = 2
+focus_mode = 0
+text = "繼續冒險"
+
+[node name="PauseRestartButton" type="Button" parent="Frame/PausePanel/Center/Box/Rows" unique_id=1390576902]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(360, 104)
+layout_mode = 2
+focus_mode = 0
+text = "重新開始本輪"
+
+[node name="SettingsTitle" type="Label" parent="Frame/PausePanel/Center/Box/Rows" unique_id=338558549]
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "設定"
+
+[node name="DamageNumbersCheck" type="CheckButton" parent="Frame/PausePanel/Center/Box/Rows" unique_id=1871276825]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(360, 104)
+layout_mode = 2
+focus_mode = 0
+button_pressed = true
+text = "傷害數字"
+metadata/setting = "damage_numbers"
+
+[node name="ShakeCheck" type="CheckButton" parent="Frame/PausePanel/Center/Box/Rows" unique_id=926573588]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(360, 104)
+layout_mode = 2
+focus_mode = 0
+button_pressed = true
+text = "畫面震動"
+metadata/setting = "screen_shake"
+
+[node name="HapticsCheck" type="CheckButton" parent="Frame/PausePanel/Center/Box/Rows" unique_id=1386681361]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(360, 104)
+layout_mode = 2
+focus_mode = 0
+button_pressed = true
+text = "手機震動"
+metadata/setting = "haptics"
+
+[node name="TripPanel" type="ColorRect" parent="Frame" unique_id=2085637307]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.02, 0.03, 0.05, 0.62)
+
+[node name="Center" type="CenterContainer" parent="Frame/TripPanel" unique_id=411653725]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Box" type="PanelContainer" parent="Frame/TripPanel/Center" unique_id=1018527079]
+layout_mode = 2
+
+[node name="Rows" type="VBoxContainer" parent="Frame/TripPanel/Center/Box" unique_id=237109332]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+alignment = 1
+
+[node name="Title" type="Label" parent="Frame/TripPanel/Center/Box/Rows" unique_id=49066691]
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+text = "遠征結算"
+horizontal_alignment = 1
+
+[node name="TripSummary" type="Label" parent="Frame/TripPanel/Center/Box/Rows" unique_id=614832564]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(560, 0)
+layout_mode = 2
+text = "擊倒 0 隻"
+autowrap_mode = 3
+
+[node name="TripClose" type="Button" parent="Frame/TripPanel/Center/Box/Rows" unique_id=438281247]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(360, 104)
+layout_mode = 2
+focus_mode = 0
+text = "好"
+
+[node name="CampLayer" type="ColorRect" parent="Frame" unique_id=1254708746]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.02, 0.03, 0.05, 0.5)
+
+[node name="CampPanel" parent="Frame/CampLayer" unique_id=1807826647 instance=ExtResource("4_q43x7")]
+layout_mode = 0
+
+[node name="RotatePanel" type="ColorRect" parent="Frame" unique_id=1041462849]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.02, 0.03, 0.05, 0.62)
+
+[node name="Center" type="CenterContainer" parent="Frame/RotatePanel" unique_id=2116107277]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Box" type="PanelContainer" parent="Frame/RotatePanel/Center" unique_id=721626357]
+layout_mode = 2
+
+[node name="Rows" type="VBoxContainer" parent="Frame/RotatePanel/Center/Box" unique_id=627662376]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+alignment = 1
+
+[node name="Title" type="Label" parent="Frame/RotatePanel/Center/Box/Rows" unique_id=1318050949]
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+text = "請將手機轉為橫向"
+horizontal_alignment = 1
+
+[node name="RotateHint" type="Label" parent="Frame/RotatePanel/Center/Box/Rows" unique_id=75702063]
+layout_mode = 2
+text = "橫向畫面才能看清戰場，冒險已暫停。"
+horizontal_alignment = 1
+
+[node name="EndPanel" type="ColorRect" parent="Frame" unique_id=1745058879]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.02, 0.03, 0.05, 0.62)
+
+[node name="Center" type="CenterContainer" parent="Frame/EndPanel" unique_id=1442385573]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Box" type="PanelContainer" parent="Frame/EndPanel/Center" unique_id=1698941055]
+layout_mode = 2
+
+[node name="Rows" type="VBoxContainer" parent="Frame/EndPanel/Center/Box" unique_id=1328931420]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+alignment = 1
+
+[node name="Title" type="Label" parent="Frame/EndPanel/Center/Box/Rows" unique_id=2064377747]
+layout_mode = 2
+theme_type_variation = &"TitleLabel"
+text = "冒險結束"
+horizontal_alignment = 1
+
+[node name="EndSummary" type="Label" parent="Frame/EndPanel/Center/Box/Rows" unique_id=775318010]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(520, 0)
+layout_mode = 2
+text = "抵達 Lv.1 · 擊倒 0 隻"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="RestartButton" type="Button" parent="Frame/EndPanel/Center/Box/Rows" unique_id=1019775473]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(360, 104)
+layout_mode = 2
+focus_mode = 0
+text = "再出發一次"

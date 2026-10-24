@@ -109,4 +109,4 @@ theme_override_font_sizes/bold_font_size = 80
 bbcode_enabled = true
 text = "[color=#141414]阿銀居然有接過委託[/color][color=#d7191c]阿魯！？[/color]"
 scroll_active = false
-autowrap_mode = 1
+autowrap_mode = 3

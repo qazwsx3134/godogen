@@ -1,14 +1,13 @@
 extends Control
-## 目錄, one scene per UI edition: scenes/ui/menu_panel_<style>.tscn, rows from
-## scenes/ui/menu_row_<edition>.tscn. A dimmed screen with a centred panel: heading and ×, then
-## rows (回到故事 first) and the edition picker. On a short screen the rows scroll (fit).
+## 目錄 (scenes/ui/menu_panel_gintama.tscn; washi rows from menu_row_washi.tscn, the navy quick rows from menu_row_gintama.tscn): a dimmed
+## screen with a centred panel, heading and ×, then the rows (回到故事 first). On a short screen the
+## rows scroll (fit).
 ## main.gd decides what each row does and which rows show.
 
 signal closed
 signal row_pressed(row_id: String)
-signal style_pressed(style_id: String)
 
-@export_enum("cinema", "ledger", "manga", "gintama") var style_id: String = "cinema"
+@export var style_id: String = "gintama"
 
 ## Full-screen margin around the panel; main.gd scales it up on narrow phones.
 @onready var area: Control = %Area
@@ -21,9 +20,6 @@ signal style_pressed(style_id: String)
 	"log": %Log, "skip": %Skip, "mute": %Mute, "settings": %Settings, "title": %Title,
 	"rollback": %Rollback, "quick_save": %QuickSave, "quick_load": %QuickLoad,
 }
-@onready var style_buttons: Dictionary = {
-	"cinema": %Style_cinema, "ledger": %Style_ledger, "manga": %Style_manga, "gintama": %Style_gintama,
-}
 
 
 func _ready() -> void:
@@ -34,8 +30,6 @@ func _ready() -> void:
 			closed.emit())
 	for row_id: String in rows.keys():
 		(rows[row_id] as Button).pressed.connect(func() -> void: row_pressed.emit(row_id))
-	for id: String in style_buttons.keys():
-		(style_buttons[id] as Button).pressed.connect(func() -> void: style_pressed.emit(id))
 	panel.resized.connect(func() -> void: panel.pivot_offset = panel.size * 0.5)
 
 
@@ -43,9 +37,6 @@ func set_row_hint(row_id: String, hint: String) -> void:
 	((rows[row_id] as Button).get_node("%Hint") as Label).text = hint
 
 
-func set_active_style(id: String) -> void:
-	for key: String in style_buttons.keys():
-		(style_buttons[key] as Button).set_pressed_no_signal(key == id)
 
 
 ## Height the panel may take, in this scene's own pixels: the rows scroll past it.

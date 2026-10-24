@@ -1,0 +1,97 @@
+{
+  "observed_at": "2026-10-23T23:58:07.430410+08:00",
+  "authorization": "User explicitly approved creating a research account",
+  "character": "研調7940",
+  "scope": "First-floor new character; completed prologue, level 2. No boss clear or multiplayer combat. No paid transactions or social messages.",
+  "initial": {
+    "level": 1,
+    "max_hp": 200,
+    "currency": 100,
+    "equipment": [
+      "starter one-handed sword"
+    ],
+    "potion_count": 5
+  },
+  "combat_observation": {
+    "first_boar_exp": 13,
+    "first_boar_currency": 6,
+    "loot_seen": [
+      "ordinary materials",
+      "starter ring"
+    ],
+    "prologue_requires_boars": 5
+  },
+  "same_level_equipment_comparison": {
+    "level": 2,
+    "ring": "same starter ring on both",
+    "sword": {
+      "attack": 20,
+      "defense": 17,
+      "agi": 13,
+      "crit_percent": 7.1,
+      "crit_damage_percent": 181,
+      "attack_speed_display": 109
+    },
+    "rapier": {
+      "attack": 17,
+      "defense": 17,
+      "agi": 13,
+      "crit_percent": 9.2,
+      "crit_damage_percent": 160,
+      "attack_speed_display": 140
+    }
+  },
+  "transactions": [
+    {
+      "action": "buy starter rapier",
+      "currency_before": 138,
+      "price": 130,
+      "currency_after": 8
+    },
+    {
+      "action": "sell 1 ordinary boar material",
+      "currency_before": 8,
+      "currency_after": 13
+    },
+    {
+      "action": "buy back 1 ordinary boar material",
+      "currency_before": 13,
+      "currency_after": 8,
+      "initial_countdown_display": "10:00"
+    }
+  ],
+  "prologue_rewards": [
+    "title",
+    "teleport crystal x1",
+    "instant heal potion x1"
+  ],
+  "tested_teleport": {
+    "origin": "first-floor forest",
+    "destination": "first-floor town",
+    "crystal_before": 1,
+    "crystal_after": 0
+  },
+  "final": {
+    "level": 2,
+    "max_hp": 362,
+    "hp": 362,
+    "exp": 162,
+    "exp_next": 214,
+    "currency": 8,
+    "area": "first-floor town",
+    "auto_hunt": false,
+    "equipment": [
+      "starter rapier",
+      "starter ring"
+    ],
+    "inventory": {
+      "starter_sword": 1,
+      "regen_potion": 5,
+      "instant_heal": 1,
+      "boar_material": 3,
+      "wolf_material": 1,
+      "teleport_crystal": 0
+    }
+  },
+  "privacy": "Screenshots mask chat, nearby players and top broadcasts; credentials and authentication state remain outside repository."
+}

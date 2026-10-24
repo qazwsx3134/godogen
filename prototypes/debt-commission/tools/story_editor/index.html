@@ -13,6 +13,11 @@
   <label class="btn" title="開啟任一 *_story.json">開啟…<input id="fileOpen" type="file" accept=".json,application/json" hidden></label>
   <select id="storySelect" title="data/stories.json 列出的故事" hidden></select>
   <button id="btnNewStory" title="從一個空白故事開始">新故事</button>
+  <button id="btnNewWork" title="在 stories/ 建一個作品資料夾（需要本機服務）" hidden>新作品</button>
+  <button id="btnCatalog" title="這個故事的角色、背景、線索、音樂與授權（需要本機服務）" hidden>素材設定</button>
+  <button id="btnConvert" hidden>轉成圖編輯來源</button>
+  <button id="btnRegistry" hidden>下載 stories.json</button>
+  <button id="btnProjectSave" class="primary" hidden>驗證並存檔</button>
   <button id="btnExport" class="primary" title="下載 JSON（鍵排序、縮排與建置輸出相同）">匯出 JSON</button>
   <label class="btn" title="選回已下載的 JSON，比對成功才確認儲存">確認下載檔…<input id="verifySaved" type="file" accept=".json,application/json" hidden></label>
   <button id="btnUndo" disabled title="Ctrl/Cmd+Z">復原</button>
@@ -47,6 +52,7 @@
 </main>
 <script src="story_core.js"></script>
 <script src="editor_state.js"></script>
+<script src="catalog_editor.js"></script>
 <script src="editor.js"></script>
 </body>
 </html>

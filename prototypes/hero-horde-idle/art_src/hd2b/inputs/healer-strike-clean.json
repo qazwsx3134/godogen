@@ -1,0 +1,32 @@
+{
+  "matte": {
+    "requested": "soft",
+    "key_estimate": {
+      "key": [
+        252.0,
+        3.0,
+        251.0
+      ],
+      "source": "border_median",
+      "valid": true,
+      "ring_share": 1.0,
+      "coverage": 0.7006853984315581,
+      "distance_from_declared": 5.83
+    },
+    "quality": "soft",
+    "interior_despill": false,
+    "qa": {
+      "opaque_key_px": 0,
+      "outer_ring_spill_fraction": 0.001455604075691412,
+      "semitransparent_fraction": 0.04642247267759563,
+      "enclosed_key_pockets": 0,
+      "key_hued_px": 48,
+      "visible_px": 468480
+    }
+  },
+  "raw_size": [
+    1254,
+    1254
+  ],
+  "source": "inputs/healer-strike-edit-1/takes/take-01/generated.png"
+}

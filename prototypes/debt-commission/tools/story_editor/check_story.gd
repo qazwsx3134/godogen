@@ -11,6 +11,8 @@ extends SceneTree
 ## --reach-all prints, for each node taken as the start, the nodes it cannot reach (test_core.mjs compares
 ## that table with the editor's own reachability).
 ## A relative path is relative to the project; absolute and user:// paths are kept.
+## --catalog=res://stories/<作品>/catalog.json checks it against that catalog, for a copy kept outside
+## its work's folder (the editor service's private candidates); otherwise StoryRunner.catalog_path_for.
 
 const StoryBuilder = preload("res://tools/story_build/story_builder.gd")
 const StoryRunner = preload("res://scripts/story_runner.gd")
@@ -21,7 +23,7 @@ func _init() -> void:
 	var args: PackedStringArray = OS.get_cmdline_user_args()
 	var paths: Array = Array(args).filter(func(a: String) -> bool: return not a.begins_with("--"))
 	if paths.size() != 1:
-		printerr("usage: check_story.gd -- <story.json> [--write] [--reach-all]")
+		printerr("usage: check_story.gd -- <story.json> [--write] [--reach-all] [--catalog=res://…]")
 		quit(2)
 		return
 	var path: String = _project_path(paths[0])
@@ -48,8 +50,12 @@ func _init() -> void:
 		return
 
 	var problems: Array[String] = []
+	var catalog: String = ""
+	for arg: String in args:
+		if arg.begins_with("--catalog="):
+			catalog = arg.trim_prefix("--catalog=")
 	var runner: RefCounted = StoryRunner.new()
-	if not runner.call("load_story", path):
+	if not runner.call("load_story", path, catalog):
 		problems.append("StoryRunner rejects it: %s" % runner.get("error_message"))
 	var unreachable: Array[String] = StoryBuilder._unreachable(entry, nodes)
 	if not unreachable.is_empty():
@@ -63,7 +69,7 @@ func _init() -> void:
 			problems.append("cannot write %s" % path)
 		else:
 			wrote = true
-			if not runner.call("load_story", path):
+			if not runner.call("load_story", path, catalog):
 				problems.append("StoryRunner rejects the rewritten file: %s" % runner.get("error_message"))
 	elif stale:
 		var how: String = "run again with --write to fix it" if problems.is_empty() else "--write fixes it once the errors above are gone"

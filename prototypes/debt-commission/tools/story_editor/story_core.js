@@ -298,7 +298,7 @@
 
   // ---------------------------------------------------------------- card content and geometry
 
-  const GEOM = { width: 280, header: 34, summaryRow: 19, portRow: 22, pad: 8, maxRows: 4, gapX: 150, gapY: 36 };
+  const GEOM = { width: 340, header: 34, summaryRow: 19, portRow: 22, pad: 8, maxRows: 4, gapX: 150, gapY: 36 };
 
   const OP_ICONS = {
     say: '💬', choice: '❓', condition: '🔀', goto: '↪️', investigate: '🔍', boke_round: '🎤', comedy: '💥',
@@ -341,9 +341,8 @@
   }
 
   /** Card size from the same numbers the stylesheet gets (index.html sets them as CSS variables). */
-  function cardSize(node, edgeCount) {
-    const summary = summaryOf(node);
-    const body = (summary.rows.length + (summary.chips.length ? 1 : 0)) * GEOM.summaryRow;
+  function cardSize(node, edgeCount, layout) {
+    const body = 64 + flowRows(node, layout) * 25;
     return { w: GEOM.width, h: GEOM.header + GEOM.pad + body + GEOM.pad + edgeCount * GEOM.portRow + (edgeCount ? GEOM.pad : 0), body };
   }
 
@@ -360,10 +359,10 @@
    * one block per connected group. A child starts no higher than its first parent, which keeps
    * most lines short. Returns {id: {x, y}}.
    */
-  function autoLayout(story, analysis = analyze(story)) {
+  function autoLayout(story, analysis = analyze(story), layout = {}) {
     const nodes = asObject(story.nodes);
     const sizes = {};
-    for (const id of Object.keys(nodes)) sizes[id] = cardSize(nodes[id], analysis.edges[id].length);
+    for (const id of Object.keys(nodes)) sizes[id] = cardSize(nodes[id], analysis.edges[id].length, layout[id]);
     const placed = {};
     let top = 0;
     const lay = start => {
@@ -417,7 +416,199 @@
   /** Where a story path of stories.json (res://data/x.json) is fetched from, relative to tools/story_editor/. */
   const projectUrl = path => path.replace(/^res:\/\//, '../../');
 
+  // Scene presentation metadata is shared by cards and the add-step menu.
+  const STEP_GROUPS = [
+    { id: 'dialogue', label: '對話', ops: ['say', 'comedy'] },
+    { id: 'narration', label: '旁白', ops: ['say'] },
+    { id: 'character', label: '立繪', ops: ['char', 'profile'] },
+    { id: 'scene', label: '背景・音樂', ops: ['bg', 'bgm'] },
+    { id: 'sound', label: '音效', ops: ['se'] },
+    { id: 'event', label: '事件', ops: ['choice', 'condition', 'flag', 'item', 'goto', 'investigate', 'boke_round', 'placard', 'end', 'result'] },
+    { id: 'effect', label: '效果', ops: ['shake', 'flash', 'fade', 'freeze', 'cutin', 'beam'] },
+    { id: 'legacy', label: '舊版', ops: ['show', 'hide', 'move', 'face', 'expression', 'camera', 'wait', 'sound', 'set_flag'] },
+  ];
+  const STEP_LABELS = {
+    say: '台詞', comedy: '漫畫吐槽', char: '角色登場／表情', profile: '解鎖人物檔案', bg: '換背景', bgm: '背景音樂', se: '音效',
+    choice: '選項', condition: '條件分歧', flag: '設定旗標', item: '取得道具', goto: '跳到場景', investigate: '調查',
+    boke_round: '吐槽回合', placard: '舉牌', end: '結束', result: '章節結算', shake: '畫面震動', flash: '閃光',
+    fade: '淡入淡出', freeze: '停格', cutin: '切入特寫', beam: '光束', show: '顯示角色', hide: '隱藏角色', move: '移動角色',
+    face: '角色朝向', expression: '變更表情', camera: '鏡頭', wait: '等待', sound: '音效', set_flag: '設定旗標',
+  };
+  const stepLabel = step => step.op === 'say' && stepGroup(step).id === 'narration' ? '旁白' : STEP_LABELS[step.op] || '舊版指令';
+  const foldShape = node => JSON.stringify(node.steps.map(step => stepGroup(step).id));
+  function stepGroup(step) {
+    if (step.op === 'say') return STEP_GROUPS[step.speaker && step.speaker !== 'narrator' ? 0 : 1];
+    return STEP_GROUPS.find(g => g.ops.includes(step.op)) || STEP_GROUPS[7];
+  }
+  function stepRuns(node) {
+    const runs = [];
+    node.steps.forEach((step, index) => {
+      const group = stepGroup(step);
+      const last = runs[runs.length - 1];
+      if (last?.group.id === group.id) last.indices.push(index);
+      else runs.push({ key: `${index}:${group.id}`, group, indices: [index] });
+    });
+    return runs;
+  }
+  const runExpanded = (layout, run) => layout?.expanded?.[run.key] === true;
+  function flowRows(node, layout) {
+    return stepRuns(node).reduce((n, run) => n + (run.indices.length > 1 ? 1 + (runExpanded(layout, run) ? run.indices.length : 0) : 1), 0);
+  }
+  // Finite-set dataflow: seed only entry (including incoming loop states); unreachable cycles stay empty.
+  // Every edge kind from edgesOf participates, so investigation and round reactions are included.
+  function effectiveMedia(story, analysis = analyze(story)) {
+    const ids = Object.keys(story.nodes);
+    const result = {};
+    for (const op of ['bg', 'bgm']) {
+      const state = Object.fromEntries(ids.map(id => [id, new Set()]));
+      let changed = true;
+      while (changed) {
+        changed = false;
+        for (const id of ids) {
+          const incoming = state[id];
+          if (id === story.entry && !incoming.has('')) { incoming.add(''); changed = true; }
+          if (!incoming.size) continue;
+          const last = story.nodes[id].steps.filter(s => s.op === op).at(-1);
+          const outgoing = last ? [last.id || ''] : incoming;
+          for (const edge of analysis.edges[id]) if (state[edge.target]) for (const value of outgoing) {
+            if (!state[edge.target].has(value)) { state[edge.target].add(value); changed = true; }
+          }
+        }
+      }
+      for (const id of ids) {
+        const last = story.nodes[id].steps.filter(s => s.op === op).at(-1);
+        const values = last ? [last.id || ''] : [...state[id]].sort();
+        const status = values.length > 1 ? 'mixed' : !values.length || values[0] === '' ? 'none' : last ? 'explicit' : 'inherited';
+        (result[id] ||= {})[op] = { id: values.length === 1 ? values[0] : '', status, values };
+      }
+    }
+    return result;
+  }
+  function graphCopy(story, id, registry = { stories: [] }, sourceEntry = null) {
+    if (!/^[A-Za-z0-9_]+$/.test(id) || id === story.id || registry.stories.some(s => s.id === id)) throw new Error('請使用未存在的新故事 id（英文、數字、底線）');
+    const copy = JSON.parse(JSON.stringify(story));
+    copy.id = id; copy.version = 's-unset'; delete copy.generated_from;
+    const nextRegistry = JSON.parse(JSON.stringify(registry));
+    const source = sourceEntry || registry.stories.find(entry => entry.id === story.id) || {};
+    // A work's story is copied into the same work folder (its catalog and pack.json).
+    const place = source.work ? { kind: source.kind || 'chapter', path: `res://stories/${source.work}/${id}_story.json`, save: packSave(source.work, id) }
+      : { kind: 'sample', path: `res://data/${id}_story.json`, save: `user://${id}.save` };
+    nextRegistry.stories.push({ ...JSON.parse(JSON.stringify(source)), id, ...place, authoring: 'graph' });
+    return { story: copy, registry: nextRegistry };
+  }
+
+  // ---- 美術待辦: scripts/asset_usage.gd rule for rule (test_core compares both on the same work)
+  const COLLECTIONS = ['backgrounds', 'characters', 'items', 'sounds', 'music'];
+  /** {backgrounds|items|sounds|music: {id: [nodes]}, characters: {id: {nodes, expressions: {face: [nodes]}}}, investigation: {id: true}} */
+  function usedAssets(story, catalog, defaultPov = '') {
+    const found = { backgrounds: {}, characters: {}, items: {}, sounds: {}, music: {}, investigation: {} };
+    const state = { povChoice: false, povs: new Set(defaultPov ? [defaultPov] : []) };
+    const has = (collection, id) => typeof id === 'string' && id !== '' && Object.prototype.hasOwnProperty.call(catalog?.[collection] || {}, id);
+    const note = (collection, id, node) => { if (has(collection, String(id))) ((found[collection][id] ||= new Set())).add(node); };
+    const face = (id, expression, node) => {
+      if (!has('characters', String(id))) return;
+      const entry = (found.characters[id] ||= { nodes: new Set(), expressions: {} });
+      entry.nodes.add(node); (entry.expressions[expression] ||= new Set()).add(node);
+    };
+    const walk = (value, node, inRound, inInvestigation) => {
+      if (Array.isArray(value)) { for (const item of value) walk(item, node, inRound, inInvestigation); return; }
+      if (!value || typeof value !== 'object') return;
+      const op = String(value.op ?? '');
+      inRound = inRound || op === 'boke_round';
+      inInvestigation = inInvestigation || op === 'investigate';
+      if (op === 'bg') note('backgrounds', String(value.id ?? ''), node);
+      else if (op === 'bgm') note('music', String(value.id ?? ''), node);
+      else if (op === 'se') note('sounds', String(value.id ?? ''), node);
+      else if (op === 'item') note('items', String(value.id ?? ''), node);
+      else if (op === 'char' || op === 'profile') face(String(value.id ?? ''), String(value.expression ?? 'neutral'), node);
+      else if (op === 'expression') face(String(value.actor ?? ''), String(value.value ?? 'neutral'), node);
+      else if (op === 'choice' && String(value.perspective ?? 'pov') !== 'director') state.povChoice = true;
+      for (const [key, field] of Object.entries(value)) {
+        if (key === 'bg' || key === 'background') {
+          note('backgrounds', String(field), node);
+          if (inInvestigation && typeof field === 'string') found.investigation[field] = true;
+        } else if (key === 'speaker') {
+          const look = inRound ? 'annoyed' : String(value.expression ?? 'neutral');
+          for (const speaker of String(field).split('+').filter(Boolean)) face(speaker, look, node);
+        } else if (key === 'actor' || key === 'character') face(String(field), 'neutral', node);
+        else if (key === 'pov') { if (has('characters', field)) state.povs.add(field); }
+        else if (key === 'item' || key === 'require' || key === 'has') note('items', String(field), node);
+        else if (key === 'items' && Array.isArray(field)) for (const item of field) note('items', String(item), node);
+        if (field && typeof field === 'object') walk(field, node, inRound, inInvestigation);
+      }
+    };
+    for (const [id, node] of Object.entries(story?.nodes || {})) walk(node, id, false, false);
+    if (state.povChoice) for (const pov of state.povs) face(pov, 'thinking', '（選項時）');
+    const sorted = set => [...set].sort();
+    const result = { investigation: found.investigation };
+    for (const collection of COLLECTIONS) {
+      result[collection] = {};
+      for (const [id, value] of Object.entries(found[collection])) result[collection][id] = collection === 'characters'
+        ? { nodes: sorted(value.nodes), expressions: Object.fromEntries(Object.entries(value.expressions).map(([f, n]) => [f, sorted(n)])) }
+        : sorted(value);
+    }
+    return result;
+  }
+  /** The default POV as StoryRunner.default_pov(): the story's, the catalog's, else its first character. */
+  const defaultPov = (story, catalog) => story?.default_pov || catalog?.default_pov || Object.keys(catalog?.characters || {})[0] || '';
+  /** 美術待辦 by node, as tools/art_check reports them: [{kind: background|character|face, id, face?, text}]. */
+  function missingArt(story, catalog) {
+    const used = usedAssets(story, catalog, defaultPov(story, catalog));
+    const byNode = {};
+    const add = (nodes, item) => { for (const node of nodes) (byNode[node] ||= []).push(item); };
+    for (const [id, nodes] of Object.entries(used.backgrounds)) {
+      const bg = catalog.backgrounds[id];
+      if (!bg.path && String(bg.top ?? '') !== String(bg.bottom ?? '')) add(nodes, { kind: 'background', id, text: `背景「${bg.label || id}」還沒有圖（漸層）` });
+    }
+    for (const [id, value] of Object.entries(used.characters)) {
+      const character = catalog.characters[id];
+      if (!character.path) { add(value.nodes, { kind: 'character', id, text: `立繪「${character.name || id}」還沒有圖（剪影）` }); continue; }
+      for (const [look, nodes] of Object.entries(value.expressions)) {
+        if (look !== 'neutral' && !character.expressions?.[look]) add(nodes, { kind: 'face', id, face: look, text: `「${character.name || id}」的表情 ${look} 還沒有圖` });
+      }
+    }
+    return byNode;
+  }
+
+  // ---- story packs (IMPLEMENTATION.md「故事包」): the same rules as story_library.gd / story_runner.gd
+  const packSave = (work, id) => `user://pack_${work}_${id}.save`;
+  const inFolder = (folder, path) => (typeof path === 'string' && path && !path.includes('://') ? `${folder}/${path}` : path);
+  /** A pack's stories as registry rows with res:// paths and their work; skin/cover stay the row's own. */
+  function packEntries(pack, work) {
+    return (Array.isArray(pack?.stories) ? pack.stories : []).filter(e => e && typeof e === 'object' && e.id && e.path)
+      .map(e => ({ ...JSON.parse(JSON.stringify(e)), kind: e.kind || 'sample', path: inFolder(`res://stories/${work}`, e.path),
+        save: packSave(work, e.id), work, work_title: String(pack.title || work) }));
+  }
+  /** StoryRunner.read_catalog: asset paths relative to the catalog's folder, laid over what it `extends`. */
+  function resolveCatalog(own, folder, base = null) {
+    const result = JSON.parse(JSON.stringify(own || {}));
+    for (const collection of ['backgrounds', 'characters', 'items', 'sounds', 'music']) {
+      for (const entry of Object.values(result[collection] || {})) {
+        if (!entry || typeof entry !== 'object') continue;
+        for (const field of ['path', 'scene']) if (field in entry) entry[field] = inFolder(folder, entry[field]);
+        if (entry.expressions && typeof entry.expressions === 'object')
+          for (const key of Object.keys(entry.expressions)) entry.expressions[key] = inFolder(folder, entry.expressions[key]);
+      }
+    }
+    if (!('extends' in result)) return result;
+    const merged = JSON.parse(JSON.stringify(base || {}));
+    for (const [key, value] of Object.entries(result)) {
+      if (key === 'extends') continue;
+      if (merged[key] && typeof merged[key] === 'object' && !Array.isArray(merged[key]) && value && typeof value === 'object' && !Array.isArray(value))
+        Object.assign(merged[key], value);
+      else merged[key] = value;
+    }
+    return merged;
+  }
+  function availableExpressions(catalog, id) {
+    const c = catalog?.characters?.[id];
+    if (!c) return [];
+    return [...(c.path ? ['neutral'] : []), ...Object.keys(c.expressions || {}).filter(k => c.expressions[k])].filter((v, i, a) => a.indexOf(v) === i);
+  }
+
   const api = {
+    STEP_GROUPS, STEP_LABELS, stepLabel, foldShape, stepGroup, stepRuns, runExpanded, flowRows, effectiveMedia, graphCopy, availableExpressions,
+    packEntries, resolveCatalog, usedAssets, missingArt,
     stringify, exportText, formatNumber, edgesOf, setEdge, clearEdge, analyze, reachableFrom, isEnding, renameNode, deleteNode,
     uniqueId, newNode, newStory, newStep, insertIndex, STEP_TEMPLATES, GEOM, OP_ICONS, icon, summaryOf, cardSize, portOffset,
     inPortOffset, autoLayout, parseGdStrings, FALLBACK_ENUMS, projectUrl, finalOp, NEEDS_NO_NEXT, FORBIDS_NEXT,

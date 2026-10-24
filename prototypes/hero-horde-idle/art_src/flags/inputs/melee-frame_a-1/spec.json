@@ -1,0 +1,22 @@
+{
+  "schema": "generate2dsprite.master_spec.v1",
+  "name": "flags-melee-frame_a",
+  "subject": "a tall crimson war banner with a white crossed sword and shield emblem on a dark wooden pole",
+  "identity": "a tall narrow vertical war banner of a heroes' army: a straight dark wooden pole with a small brass spear-tip finial and a short crossbar at the top, a long rectangular cloth hanging from the crossbar with a swallowtail (two-pointed) bottom edge and a thin gold trim, a single bold simple emblem in the middle of the cloth that reads clearly when the banner is tiny, the cloth gently curving in a light breeze, the pole's foot is a plain iron spike (no stand) detailed HD-2D pixel art game asset in the style of Octopath Traveler and Triangle Strategy: rich hand-placed shading, crisp 1-pixel dark outline, lit by a warm low sun from the upper-left with cool shadows, seen from an elevated three-quarter view about 45 degrees above, one tall vertical war banner standing upright, the whole pole and cloth fully visible with margin, no background, no ground plate, no cast shadow, no text, no letters, no border. bright crimson red cloth, emblem: a white crossed sword over a round shield",
+  "pose": null,
+  "recap": "a tall crimson war banner with a white crossed sword and shield emblem on a dark wooden pole",
+  "facing": "none",
+  "facing_parts": null,
+  "view": "elevated three-quarter view about 45 degrees above",
+  "class": "prop",
+  "finish": "pixel",
+  "key": "#00FF00",
+  "genre": null,
+  "pronoun": "they",
+  "identity_ref": null,
+  "style_ref": null,
+  "allowed_text": "one simple white team emblem only; absolutely no lettering",
+  "extra_bans": [],
+  "opaque_parts": null,
+  "extra": "For this prop, the shared style describes pixel shading, outlines, light direction and elevated camera only; do not draw a person or creature. This is a NEW, clean, bright friendly-army command banner, not an old tattered navy background decoration: saturated team colour, intact fabric, no weathering, no tears. The cloth hangs vertically from the short upper crossbar, with a clear TWO-POINTED SWALLOWTAIL hem, thin gold trim, and exactly one large bold WHITE team emblem centered on the cloth. Simplify the emblem to a few strong shapes, outlined in dark slate so it stays legible even white against golden-yellow cloth at only 96 pixels tall. Do not draw any words, letters or numbers. All parts completely contained with safe margins. The wooden pole is straight and vertical with one plain iron spike at the bottom, no stand or ground plate. For this first frame the lower cloth gently curves slightly RIGHT; leave clear empty margin to both sides for the other animation frame. The sun-ring motif, when requested, is an eight-rayed round ring with a small central round disc and alternating long and short pointed rays, matching the cleric staff motif but rendered as one simple WHITE cloth emblem, not a gold staff or human figure. No cast shadow or glow on the flat chroma-key backdrop."
+}

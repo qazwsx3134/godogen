@@ -1,0 +1,119 @@
+{
+  "schema": "generate2dsprite.master_run.v1",
+  "tool": {
+    "name": "master_still",
+    "version": "0.4.0"
+  },
+  "command": "edit",
+  "created": "2026-10-24T03:05:17.842Z",
+  "name": "medic",
+  "class": "hero",
+  "finish": "hd",
+  "facing": "right",
+  "key": "#FF00FF",
+  "prompt": {
+    "path": "prompt.txt",
+    "sha256": "40e902e3cdc05322ef4e4ef84cea973e78096190b1b64ff415e57305e56d6751",
+    "bytes": 1790
+  },
+  "spec": {
+    "path": "spec.json",
+    "sha256": "096ccff2dff181b74117fd700c6eefac28551350d33a9a281cab3d42a1d6d875",
+    "bytes": 1291
+  },
+  "references": [
+    {
+      "role": "edit",
+      "ordinal": "FIRST",
+      "path": "../../master/master.png",
+      "sha256": "aff0ac9b7f4e9f071d54c3ab6370475160bdb1d7ab8c75e2c7df5b75452e2cbf",
+      "bytes": 408068
+    }
+  ],
+  "media": {
+    "cli": "route_media.py",
+    "cli_source": "sibling",
+    "cli_sha256": "5f920b3c8f37118e144f40c1c021cba87b691413cd83cb4dc5437ad500df6562",
+    "route_requested": "codex-cli",
+    "size": "1024x1024",
+    "args": [
+      "--timeout",
+      "165"
+    ],
+    "timeout_s": 175.0
+  },
+  "takes": [
+    {
+      "take": 1,
+      "exit_code": 0,
+      "seconds": 38.585,
+      "media": {
+        "status": "ok",
+        "route": "local:codex-cli",
+        "sha256": "15a32adb9aa84f7627556b659af64d182ffcacce0b2dc69b51232b3bc0ba6c0d",
+        "estimateUsd": 0.0,
+        "kind": "image",
+        "label": "Codex (local CLI)",
+        "model": "codex-image_gen",
+        "verifiedBefore": true
+      },
+      "copied": false,
+      "artifact": {
+        "path": "takes/take-01/generated.png",
+        "sha256": "15a32adb9aa84f7627556b659af64d182ffcacce0b2dc69b51232b3bc0ba6c0d",
+        "bytes": 1600718,
+        "size": [
+          1254,
+          1254
+        ]
+      },
+      "status": "ok",
+      "route": "local:codex-cli"
+    },
+    {
+      "take": 2,
+      "exit_code": 0,
+      "seconds": 68.015,
+      "media": {
+        "status": "ok",
+        "route": "local:codex-cli",
+        "sha256": "a7cb09e1c932a07ce002386d2b31fa3ec7c75168a93faf644ab133b1b400e41b",
+        "estimateUsd": 0.0,
+        "kind": "image",
+        "label": "Codex (local CLI)",
+        "model": "codex-image_gen",
+        "verifiedBefore": true
+      },
+      "copied": false,
+      "artifact": {
+        "path": "takes/take-02/generated.png",
+        "sha256": "a7cb09e1c932a07ce002386d2b31fa3ec7c75168a93faf644ab133b1b400e41b",
+        "bytes": 1600957,
+        "size": [
+          1254,
+          1254
+        ]
+      },
+      "status": "ok",
+      "route": "local:codex-cli"
+    }
+  ],
+  "status": "ok",
+  "edit": {
+    "still": {
+      "path": "../../master/master.png",
+      "sha256": "aff0ac9b7f4e9f071d54c3ab6370475160bdb1d7ab8c75e2c7df5b75452e2cbf",
+      "bytes": 408068
+    },
+    "change": "THE ONLY CHANGE: light jogging stride, left leg forward, one hand holding the satchel strap",
+    "keep": "same character identity, face, hair, outfit, colours, equipment, proportions and HD illustration style; same elevated three-quarter view; the character still faces the lower-right; flat magenta backdrop; no ground shadow; nothing cropped",
+    "extra": [],
+    "framing": "the top of the figure about 13 percent below the top edge, its lowest point about 10 percent above the bottom edge, its left-most point about 30 percent from the left edge and its right-most point about 30 percent from the right edge"
+  },
+  "warnings": [],
+  "contact": {
+    "path": "takes.png",
+    "sha256": "99a6aa4f0907e23e2e41b729dd217fed3aa33f38e61eb45495dbb6997adcdd77",
+    "bytes": 224498
+  }
+}

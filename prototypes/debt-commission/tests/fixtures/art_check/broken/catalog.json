@@ -1,0 +1,19 @@
+{
+  "default_pov": "ghost",
+  "backgrounds": {
+    "void": {
+      "label": "虛空",
+      "top": "#000",
+      "bottom": "#111",
+      "path": "art/missing.png"
+    }
+  },
+  "characters": {
+    "ghost": {
+      "name": "幽靈",
+      "color": "#cccccc",
+      "slot": "center"
+    }
+  },
+  "items": {}
+}

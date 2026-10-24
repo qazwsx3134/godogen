@@ -1,0 +1,134 @@
+{
+  "schema": "generate2dsprite.master_pad.v1",
+  "tool": {
+    "name": "master_still",
+    "version": "0.4.0"
+  },
+  "created": "2026-10-21T08:57:23.145Z",
+  "source": {
+    "name": "generated.png",
+    "sha256": "5553b8515c54b8308d54d3956b29ff78846be91eb8a8e1f800831e3de7a572d3",
+    "bytes": 1294926,
+    "size": [
+      1254,
+      1254
+    ]
+  },
+  "class": "prop",
+  "facing": "none",
+  "key": "#FF00FF",
+  "framing": {
+    "canvas": [
+      1024,
+      1024
+    ],
+    "subject_height_px": 614,
+    "top_margin_px": 205,
+    "lead_px": 0,
+    "preset": "prop",
+    "subject_bbox": [
+      418,
+      205,
+      607,
+      819
+    ],
+    "anchor": [
+      456.0,
+      819.0
+    ],
+    "opaque_area_px": 59805,
+    "width_limited": false
+  },
+  "transform": {
+    "mapping": "master = scale * source + offset (continuous pixel coordinates: pixel i spans [i, i + 1))",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "source_subject_bbox": [
+      458,
+      39,
+      809,
+      1185
+    ],
+    "crop_box": [
+      452,
+      33,
+      815,
+      1191
+    ],
+    "crop_margin_px": 6,
+    "scale": 0.5357766143106457,
+    "offset": [
+      172.58551483420592,
+      184.10471204188482
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "resampler": "lanczos",
+    "premultiplied": true,
+    "alpha_floor_px": 1549,
+    "subject_parts": 1,
+    "ignored_parts": 0,
+    "ignored_px": 0,
+    "source_touches": [],
+    "key_rgb": [
+      255,
+      0,
+      255
+    ]
+  },
+  "matte": {
+    "requested": "soft",
+    "key_estimate": {
+      "key": [
+        252.0,
+        4.0,
+        251.0
+      ],
+      "source": "border_median",
+      "valid": true,
+      "ring_share": 1.0,
+      "coverage": 0.86606368393072,
+      "distance_from_declared": 6.4
+    },
+    "quality": "soft",
+    "interior_despill": true,
+    "qa": {
+      "opaque_key_px": 0,
+      "outer_ring_spill_fraction": 0.0,
+      "semitransparent_fraction": 0.029865161910380723,
+      "enclosed_key_pockets": 0,
+      "key_hued_px": 0,
+      "visible_px": 210178
+    }
+  },
+  "key_choice": {
+    "status": "ok",
+    "overlap_share": 0.0,
+    "rule": "reject a key when more than 0.5% of subject pixels have key dominance >= 40; first acceptable candidate wins"
+  },
+  "files": {
+    "padded": {
+      "path": "padded.png",
+      "sha256": "efc392690e476feb591aa8b653eb831d954a67a788a38aa3d575a3b8ddfb0cc5",
+      "bytes": 115204,
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    "cutout": {
+      "path": "padded_rgba.png",
+      "sha256": "686b2198b4f705af81a37f5b46017d70ca0577b0f2159521456aac210824d789",
+      "bytes": 134645,
+      "size": [
+        1024,
+        1024
+      ]
+    }
+  },
+  "warnings": []
+}

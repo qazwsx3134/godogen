@@ -1,0 +1,87 @@
+{
+  "default_pov": "hero",
+  "default_background": "room",
+  "backgrounds": {
+    "room": {
+      "label": "房間",
+      "top": "#000",
+      "bottom": "#111",
+      "path": "art/room.png",
+      "license": {
+        "author": "畫師甲",
+        "source": "委託",
+        "license": "自有",
+        "approved": true
+      }
+    },
+    "hall": {
+      "label": "大廳",
+      "top": "#000",
+      "bottom": "#111",
+      "path": "art/hall.png"
+    },
+    "dusk": {
+      "label": "黃昏",
+      "top": "#f80",
+      "bottom": "#408"
+    },
+    "black": {
+      "label": "黑幕",
+      "top": "#000000",
+      "bottom": "#000000"
+    },
+    "spare": {
+      "label": "備用",
+      "top": "#111",
+      "bottom": "#222"
+    }
+  },
+  "characters": {
+    "hero": {
+      "name": "主角",
+      "color": "#d98c5f",
+      "slot": "left",
+      "path": "art/hero.png",
+      "expressions": {
+        "smile": "art/hero_smile.png"
+      },
+      "license": {
+        "author": [
+          "畫師甲",
+          "畫師丙"
+        ],
+        "source": "委託",
+        "license": "自有",
+        "approved": true
+      }
+    },
+    "plain": {
+      "name": "路人",
+      "color": "#888888",
+      "slot": "right",
+      "path": "art/plain.png",
+      "license": {
+        "author": "畫師丁",
+        "role": "路人設計"
+      }
+    },
+    "shadow": {
+      "name": "影子",
+      "color": "#333333",
+      "slot": "center"
+    }
+  },
+  "items": {
+    "key": {
+      "path": "art/key.png",
+      "license": {
+        "author": "畫師乙",
+        "role": "道具"
+      },
+      "name": "鑰匙",
+      "description": "一把鑰匙。"
+    }
+  },
+  "sounds": {},
+  "music": {}
+}

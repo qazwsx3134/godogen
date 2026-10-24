@@ -1,0 +1,44 @@
+# Source art stays out of git: every image here is ignored except the approved finals below,
+# which go through Git LFS (see /.gitattributes). Rejected takes and work files are reproducible
+# from the prompts and spec.json kept next to them.
+*.png
+*.webp
+*.jpg
+*.jpeg
+*.mp4
+*.webm
+
+# Approved masters (idle frame) and the pose takes chosen in chars/selection.json
+!chars/briar_boar/master/master_rgba.png
+!chars/captain/master/master_rgba.png
+!chars/guardian/master/master_rgba.png
+!chars/meadow_slime/master/master_rgba.png
+!chars/medic/master/master_rgba.png
+!chars/ruin_hound/master/master_rgba.png
+!chars/briar_boar/poses/attack/takes/take-01/generated.png
+!chars/briar_boar/poses/down/takes/take-01/generated.png
+!chars/briar_boar/poses/walk_a/takes/take-02/generated.png
+!chars/briar_boar/poses/walk_b/takes/take-01/generated.png
+!chars/captain/poses/attack/takes/take-01/generated.png
+!chars/captain/poses/down/takes/take-01/generated.png
+!chars/captain/poses/skill/takes/take-02/generated.png
+!chars/captain/poses/walk_a/takes/take-02/generated.png
+!chars/captain/poses/walk_b/takes/take-01/generated.png
+!chars/guardian/poses/attack/takes/take-02/generated.png
+!chars/guardian/poses/down/takes/take-01/generated.png
+!chars/guardian/poses/skill/takes/take-01/generated.png
+!chars/guardian/poses/walk_a/takes/take-02/generated.png
+!chars/guardian/poses/walk_b/takes/take-01/generated.png
+!chars/meadow_slime/poses/attack/takes/take-02/generated.png
+!chars/meadow_slime/poses/down/takes/take-01/generated.png
+!chars/meadow_slime/poses/walk_a/takes/take-01/generated.png
+!chars/meadow_slime/poses/walk_b/takes/take-01/generated.png
+!chars/medic/poses/attack/takes/take-02/generated.png
+!chars/medic/poses/down/takes/take-01/generated.png
+!chars/medic/poses/skill/takes/take-01/generated.png
+!chars/medic/poses/walk_a/takes/take-02/generated.png
+!chars/medic/poses/walk_b/takes/take-01/generated.png
+!chars/ruin_hound/poses/attack/takes/take-01/generated.png
+!chars/ruin_hound/poses/down/takes/take-02/generated.png
+!chars/ruin_hound/poses/walk_a/takes/take-02/generated.png
+!chars/ruin_hound/poses/walk_b/takes/take-01/generated.png

@@ -1,0 +1,142 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/boss_view.gd" id="1_jan63"]
+[ext_resource type="Material" path="res://resources/materials/low_poly_92.tres" id="2_1ktuq"]
+[ext_resource type="ArrayMesh" path="res://resources/meshes/golem_leg.res" id="3_qrf1x"]
+[ext_resource type="ArrayMesh" path="res://resources/meshes/golem_torso.res" id="4_12acx"]
+[ext_resource type="ArrayMesh" path="res://resources/meshes/golem_head.res" id="5_el7tp"]
+[ext_resource type="ArrayMesh" path="res://resources/meshes/golem_eye.res" id="6_dcmv3"]
+[ext_resource type="ArrayMesh" path="res://resources/meshes/golem_arm.res" id="7_vuylr"]
+[ext_resource type="Shader" path="res://addons/proto_kit/sprite3d_shadow.gdshader" id="8_u2a0j"]
+[ext_resource type="FontFile" path="res://assets/fonts/NotoSansTC.ttf" id="9_a74ns"]
+[ext_resource type="Shader" path="res://shaders/hp_bar.gdshader" id="10_av8u2"]
+[ext_resource type="Shader" path="res://shaders/select_ring.gdshader" id="11_t1bk3"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gsdr8"]
+albedo_color = Color(0.49803922, 0.8901961, 0.8784314, 1)
+emission_enabled = true
+emission = Color(0.49803922, 0.8901961, 0.8784314, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_25ndp"]
+render_priority = 0
+shader = ExtResource("8_u2a0j")
+shader_parameter/color = null
+shader_parameter/strength = 0.45
+shader_parameter/size = null
+shader_parameter/ground_y = null
+shader_parameter/ground_from_instance = null
+shader_parameter/use_instance_custom = null
+shader_parameter/air_height = null
+shader_parameter/lift = null
+shader_parameter/stepped = null
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_h7gdu"]
+size = Vector2(3.2, 3.2)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rkhc2"]
+render_priority = 0
+shader = ExtResource("10_av8u2")
+shader_parameter/ratio = null
+shader_parameter/trail = null
+shader_parameter/fill_color = null
+shader_parameter/low_color = null
+shader_parameter/trail_color = null
+shader_parameter/back_color = null
+shader_parameter/frame_color = null
+shader_parameter/border = null
+
+[sub_resource type="QuadMesh" id="QuadMesh_a3wv2"]
+size = Vector2(2.2, 0.18)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7axlg"]
+render_priority = 0
+shader = ExtResource("11_t1bk3")
+shader_parameter/tint = Color(1, 0.42, 0.32, 1)
+shader_parameter/dashes = null
+shader_parameter/speed = null
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_hxh6x"]
+size = Vector2(3.4, 3.4)
+
+[node name="Gatekeeper" type="Node3D" unique_id=1491528074]
+script = ExtResource("1_jan63")
+kind_id = "gatekeeper"
+nameplate_color = Color(1, 0.6901961, 0.5411765, 1)
+head_height = 3.4
+
+[node name="Visual" type="Node3D" parent="." unique_id=1843395479]
+
+[node name="Body" type="Node3D" parent="Visual" unique_id=1610099063]
+
+[node name="LegL" type="MeshInstance3D" parent="Visual/Body" unique_id=544148122]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45, 0.45, 0)
+material_override = ExtResource("2_1ktuq")
+mesh = ExtResource("3_qrf1x")
+
+[node name="LegR" type="MeshInstance3D" parent="Visual/Body" unique_id=1110811498]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 0.45, 0)
+material_override = ExtResource("2_1ktuq")
+mesh = ExtResource("3_qrf1x")
+
+[node name="Torso" type="MeshInstance3D" parent="Visual/Body" unique_id=380262115]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.65, 0)
+material_override = ExtResource("2_1ktuq")
+mesh = ExtResource("4_12acx")
+
+[node name="Head" type="Node3D" parent="Visual/Body" unique_id=579716238]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.75, 0.05)
+
+[node name="Skull" type="MeshInstance3D" parent="Visual/Body/Head" unique_id=1624222699]
+material_override = ExtResource("2_1ktuq")
+mesh = ExtResource("5_el7tp")
+
+[node name="Eyes" type="MeshInstance3D" parent="Visual/Body/Head" unique_id=456976027]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0.39)
+material_override = SubResource("StandardMaterial3D_gsdr8")
+mesh = ExtResource("6_dcmv3")
+
+[node name="ArmL" type="Node3D" parent="Visual/Body" unique_id=922206989]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.15, 2.2, 0)
+
+[node name="Stone" type="MeshInstance3D" parent="Visual/Body/ArmL" unique_id=1670449028]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.7, 0)
+material_override = ExtResource("2_1ktuq")
+mesh = ExtResource("7_vuylr")
+
+[node name="ArmR" type="Node3D" parent="Visual/Body" unique_id=209609027]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.15, 2.2, 0)
+
+[node name="Stone" type="MeshInstance3D" parent="Visual/Body/ArmR" unique_id=517401355]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.7, 0)
+material_override = ExtResource("2_1ktuq")
+mesh = ExtResource("7_vuylr")
+
+[node name="Shadow" type="MeshInstance3D" parent="Visual" unique_id=341823472]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0)
+material_override = SubResource("ShaderMaterial_25ndp")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_h7gdu")
+
+[node name="Nameplate" type="Label3D" parent="." unique_id=989868762]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.7, 0)
+pixel_size = 0.0075
+billboard = 1
+no_depth_test = true
+render_priority = 2
+outline_modulate = Color(0.05, 0.05, 0.07, 0.9)
+text = "守門者"
+font = ExtResource("9_a74ns")
+font_size = 34
+outline_size = 8
+
+[node name="HpBar" type="MeshInstance3D" parent="." unique_id=1782896681]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
+material_override = SubResource("ShaderMaterial_rkhc2")
+cast_shadow = 0
+mesh = SubResource("QuadMesh_a3wv2")
+
+[node name="SelectRing" type="MeshInstance3D" parent="." unique_id=1735939030]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.03, 0)
+material_override = SubResource("ShaderMaterial_7axlg")
+mesh = SubResource("PlaneMesh_hxh6x")

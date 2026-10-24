@@ -1,0 +1,20 @@
+{
+  "name": "meadow_slime",
+  "class": "mob",
+  "pronoun": "it",
+  "subject": "a round meadow slime monster, about knee height to the hero",
+  "identity": "translucent jade-green jelly body with a soft highlight, a single clover sprout and two tiny leaves growing from the top, dark bead eyes and a small open mouth, a few grass blades and a pebble suspended inside the jelly",
+  "pose": "squashed ready-to-hop shape",
+  "recap": "translucent jade-green slime with a clover sprout on top and grass blades suspended inside",
+  "finish": "hd",
+  "facing": "right",
+  "key": "#FF00FF",
+  "genre": "a Ragnarok-Online-style HD 2.5D action RPG set in floating sky-tower ruins",
+  "view": "elevated three-quarter overhead view about 35 degrees, body turned diagonally toward the lower-right",
+  "extra_bans": [
+    "pixel art",
+    "magenta, pink or red-violet colours on the character",
+    "cast shadow on the ground",
+    "text or logos"
+  ]
+}

@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://scripts/menu_panel.gd" id="2_3x304"]
 [ext_resource type="Texture2D" path="res://assets/ui/gintama_panel_paper.png" id="3_wni0k"]
 [ext_resource type="FontFile" path="res://assets/fonts/NotoSerifTC.ttf" id="4_rcuof"]
-[ext_resource type="PackedScene" path="res://scenes/ui/menu_row_manga.tscn" id="4_wni0k"]
+[ext_resource type="PackedScene" path="res://scenes/ui/menu_row_washi.tscn" id="4_wni0k"]
 [ext_resource type="PackedScene" path="res://scenes/ui/menu_row_gintama.tscn" id="5_3x304"]
 [ext_resource type="Texture2D" path="res://assets/ui/gintama_heading_plaque.png" id="5_ucuoe"]
 
@@ -899,382 +899,6 @@ corner_radius_bottom_left = 30
 shadow_color = Color(0.03, 0.09, 0.14, 0.22)
 shadow_offset = Vector2(0, 4)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ibgu3"]
-content_margin_left = 16.0
-content_margin_top = 10.0
-content_margin_right = 16.0
-content_margin_bottom = 10.0
-bg_color = Color(0.9843137, 0.96862745, 0.93333334, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.21960784, 0.3372549, 0.4509804, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-shadow_color = Color(0.03, 0.09, 0.14, 0.22)
-shadow_size = 3
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ivalb"]
-content_margin_left = 16.0
-content_margin_top = 10.0
-content_margin_right = 16.0
-content_margin_bottom = 10.0
-bg_color = Color(0.03137255, 0.15686275, 0.23921569, 1)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.84313726, 0.75686276, 0.54509807, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-shadow_color = Color(0.03, 0.09, 0.14, 0.22)
-shadow_size = 3
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8uu2n"]
-content_margin_left = 16.0
-content_margin_top = 10.0
-content_margin_right = 16.0
-content_margin_bottom = 10.0
-bg_color = Color(0.9019608, 0.92941177, 0.94509804, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.1254902, 0.24313726, 0.36862746, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-shadow_color = Color(0.03, 0.09, 0.14, 0.22)
-shadow_size = 3
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gi6uv"]
-content_margin_left = 16.0
-content_margin_top = 10.0
-content_margin_right = 16.0
-content_margin_bottom = 10.0
-bg_color = Color(0.8666667, 0.84705883, 0.80784315, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.6627451, 0.69411767, 0.72156864, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-shadow_color = Color(0.03, 0.09, 0.14, 0.22)
-shadow_size = 3
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ge35n"]
-content_margin_left = 16.0
-content_margin_top = 10.0
-content_margin_right = 16.0
-content_margin_bottom = 10.0
-bg_color = Color(0, 0, 0, 0)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.84313726, 0.75686276, 0.54509807, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-shadow_color = Color(0.03, 0.09, 0.14, 0.22)
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yasjt"]
-content_margin_left = 16.0
-content_margin_top = 10.0
-content_margin_right = 16.0
-content_margin_bottom = 10.0
-bg_color = Color(0.9843137, 0.96862745, 0.93333334, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.21960784, 0.3372549, 0.4509804, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-shadow_color = Color(0.03, 0.09, 0.14, 0.22)
-shadow_size = 3
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0tcci"]
-content_margin_left = 16.0
-content_margin_top = 10.0
-content_margin_right = 16.0
-content_margin_bottom = 10.0
-bg_color = Color(0.03137255, 0.15686275, 0.23921569, 1)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.84313726, 0.75686276, 0.54509807, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-shadow_color = Color(0.03, 0.09, 0.14, 0.22)
-shadow_size = 3
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_td4gc"]
-content_margin_left = 16.0
-content_margin_top = 10.0
-content_margin_right = 16.0
-content_margin_bottom = 10.0
-bg_color = Color(0.9019608, 0.92941177, 0.94509804, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.1254902, 0.24313726, 0.36862746, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-shadow_color = Color(0.03, 0.09, 0.14, 0.22)
-shadow_size = 3
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hg502"]
-content_margin_left = 16.0
-content_margin_top = 10.0
-content_margin_right = 16.0
-content_margin_bottom = 10.0
-bg_color = Color(0.8666667, 0.84705883, 0.80784315, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.6627451, 0.69411767, 0.72156864, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-shadow_color = Color(0.03, 0.09, 0.14, 0.22)
-shadow_size = 3
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qmdft"]
-content_margin_left = 16.0
-content_margin_top = 10.0
-content_margin_right = 16.0
-content_margin_bottom = 10.0
-bg_color = Color(0, 0, 0, 0)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.84313726, 0.75686276, 0.54509807, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-shadow_color = Color(0.03, 0.09, 0.14, 0.22)
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q4ds3"]
-content_margin_left = 16.0
-content_margin_top = 10.0
-content_margin_right = 16.0
-content_margin_bottom = 10.0
-bg_color = Color(0.9843137, 0.96862745, 0.93333334, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.21960784, 0.3372549, 0.4509804, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-shadow_color = Color(0.03, 0.09, 0.14, 0.22)
-shadow_size = 3
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6xxca"]
-content_margin_left = 16.0
-content_margin_top = 10.0
-content_margin_right = 16.0
-content_margin_bottom = 10.0
-bg_color = Color(0.03137255, 0.15686275, 0.23921569, 1)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.84313726, 0.75686276, 0.54509807, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-shadow_color = Color(0.03, 0.09, 0.14, 0.22)
-shadow_size = 3
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r3fw2"]
-content_margin_left = 16.0
-content_margin_top = 10.0
-content_margin_right = 16.0
-content_margin_bottom = 10.0
-bg_color = Color(0.9019608, 0.92941177, 0.94509804, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.1254902, 0.24313726, 0.36862746, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-shadow_color = Color(0.03, 0.09, 0.14, 0.22)
-shadow_size = 3
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_leqi2"]
-content_margin_left = 16.0
-content_margin_top = 10.0
-content_margin_right = 16.0
-content_margin_bottom = 10.0
-bg_color = Color(0.8666667, 0.84705883, 0.80784315, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.6627451, 0.69411767, 0.72156864, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-shadow_color = Color(0.03, 0.09, 0.14, 0.22)
-shadow_size = 3
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6rkf3"]
-content_margin_left = 16.0
-content_margin_top = 10.0
-content_margin_right = 16.0
-content_margin_bottom = 10.0
-bg_color = Color(0, 0, 0, 0)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.84313726, 0.75686276, 0.54509807, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-shadow_color = Color(0.03, 0.09, 0.14, 0.22)
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_14d6o"]
-content_margin_left = 16.0
-content_margin_top = 10.0
-content_margin_right = 16.0
-content_margin_bottom = 10.0
-bg_color = Color(0.9843137, 0.96862745, 0.93333334, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.21960784, 0.3372549, 0.4509804, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-shadow_color = Color(0.03, 0.09, 0.14, 0.22)
-shadow_size = 3
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7s52n"]
-content_margin_left = 16.0
-content_margin_top = 10.0
-content_margin_right = 16.0
-content_margin_bottom = 10.0
-bg_color = Color(0.03137255, 0.15686275, 0.23921569, 1)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.84313726, 0.75686276, 0.54509807, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-shadow_color = Color(0.03, 0.09, 0.14, 0.22)
-shadow_size = 3
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a7v8p"]
-content_margin_left = 16.0
-content_margin_top = 10.0
-content_margin_right = 16.0
-content_margin_bottom = 10.0
-bg_color = Color(0.9019608, 0.92941177, 0.94509804, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.1254902, 0.24313726, 0.36862746, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-shadow_color = Color(0.03, 0.09, 0.14, 0.22)
-shadow_size = 3
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ru33n"]
-content_margin_left = 16.0
-content_margin_top = 10.0
-content_margin_right = 16.0
-content_margin_bottom = 10.0
-bg_color = Color(0.8666667, 0.84705883, 0.80784315, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.6627451, 0.69411767, 0.72156864, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-shadow_color = Color(0.03, 0.09, 0.14, 0.22)
-shadow_size = 3
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y3v3x"]
-content_margin_left = 16.0
-content_margin_top = 10.0
-content_margin_right = 16.0
-content_margin_bottom = 10.0
-bg_color = Color(0, 0, 0, 0)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.84313726, 0.75686276, 0.54509807, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-shadow_color = Color(0.03, 0.09, 0.14, 0.22)
-shadow_offset = Vector2(0, 4)
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v6p6s"]
 content_margin_left = 16.0
 content_margin_top = 10.0
@@ -1567,7 +1191,6 @@ grow_vertical = 2
 mouse_filter = 2
 theme = SubResource("Theme_ee2nr")
 script = ExtResource("2_3x304")
-style_id = "gintama"
 
 [node name="Dim" type="ColorRect" parent="." unique_id=1225411973]
 unique_name_in_owner = true
@@ -1630,6 +1253,7 @@ theme_override_colors/font_color = Color(0.3254902, 0.38039216, 0.45490196, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
 text = "夜班委託・目錄"
+metadata/skin_text = "menu_kicker"
 
 [node name="Heading" type="Label" parent="Area/Center/Panel/Padding/Column/Heading/HeadingText" unique_id=634478117]
 layout_mode = 2
@@ -1641,6 +1265,7 @@ theme_override_colors/font_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
 text = "稍停一格"
+metadata/skin_text = "menu_heading"
 
 [node name="Close" type="Button" parent="Area/Center/Panel/Padding/Column/Heading" unique_id=194446670]
 unique_name_in_owner = true
@@ -1683,9 +1308,7 @@ theme_override_constants/separation = 19
 
 [node name="Resume" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1248057889 instance=ExtResource("4_wni0k")]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
-size_flags_horizontal = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_gh4hh")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_i46qt")
 theme_override_styles/hover = SubResource("StyleBoxFlat_xlsuw")
@@ -1699,104 +1322,54 @@ theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
-theme_override_font_sizes/font_size = 47
 text = "回到故事"
-alignment = 0
 
 [node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Resume" index="0" unique_id=826033919]
-unique_name_in_owner = true
-layout_mode = 0
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -33.23077
-offset_right = -33.23077
 offset_bottom = 23.0
-grow_horizontal = 0
-theme_override_font_sizes/font_size = 47
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
 text = "→"
-vertical_alignment = 1
 
-[node name="Rollback" type="Button" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1089343561 instance=ExtResource("5_3x304")]
+[node name="Rollback" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1089343561 instance=ExtResource("5_3x304")]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
-size_flags_horizontal = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_ycr80")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_y6ouf")
 theme_override_styles/hover = SubResource("StyleBoxFlat_j13ny")
 theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_7fvvg")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_swwey")
 theme_override_styles/focus = SubResource("StyleBoxFlat_wcyfu")
-theme_override_colors/font_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_focus_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_hover_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_hover_pressed_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
-theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_8md3b")
-theme_override_font_sizes/font_size = 47
 text = "回上一句"
-alignment = 0
-metadata/ui_style_role = "reading_action"
-metadata/ui_style_active = false
 
-[node name="QuickSave" type="Button" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=2049675069 instance=ExtResource("5_3x304")]
+[node name="QuickSave" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=2049675069 instance=ExtResource("5_3x304")]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
-size_flags_horizontal = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_ycr80")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_y6ouf")
 theme_override_styles/hover = SubResource("StyleBoxFlat_j13ny")
 theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_7fvvg")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_swwey")
 theme_override_styles/focus = SubResource("StyleBoxFlat_wcyfu")
-theme_override_colors/font_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_focus_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_hover_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_hover_pressed_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
-theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_8md3b")
-theme_override_font_sizes/font_size = 47
 text = "快速存檔"
-alignment = 0
-metadata/ui_style_role = "reading_action"
-metadata/ui_style_active = false
 
-[node name="QuickLoad" type="Button" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1760311257 instance=ExtResource("5_3x304")]
+[node name="QuickLoad" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1760311257 instance=ExtResource("5_3x304")]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
-size_flags_horizontal = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_ycr80")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_y6ouf")
 theme_override_styles/hover = SubResource("StyleBoxFlat_j13ny")
 theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_7fvvg")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_swwey")
 theme_override_styles/focus = SubResource("StyleBoxFlat_wcyfu")
-theme_override_colors/font_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_focus_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_hover_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_hover_pressed_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
-theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_8md3b")
-theme_override_font_sizes/font_size = 47
 text = "快速讀檔"
-alignment = 0
-metadata/ui_style_role = "reading_action"
-metadata/ui_style_active = false
 
 [node name="Save" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1978079474 instance=ExtResource("4_wni0k")]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
-size_flags_horizontal = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_0mfb2")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_udo05")
 theme_override_styles/hover = SubResource("StyleBoxFlat_dxlod")
@@ -1810,32 +1383,16 @@ theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
-theme_override_font_sizes/font_size = 47
-text = "儲存進度"
-alignment = 0
 
 [node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Save" index="0" unique_id=826033919]
-unique_name_in_owner = true
-layout_mode = 0
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -33.23077
-offset_right = -33.23077
 offset_bottom = 23.0
-grow_horizontal = 0
-theme_override_font_sizes/font_size = 47
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
-text = "＋"
-vertical_alignment = 1
 
 [node name="Load" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=646477398 instance=ExtResource("4_wni0k")]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
-size_flags_horizontal = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_e7nmc")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_fxgot")
 theme_override_styles/hover = SubResource("StyleBoxFlat_8x726")
@@ -1849,32 +1406,17 @@ theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
-theme_override_font_sizes/font_size = 47
 text = "讀取存檔"
-alignment = 0
 
 [node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Load" index="0" unique_id=826033919]
-unique_name_in_owner = true
-layout_mode = 0
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -33.23077
-offset_right = -33.23077
 offset_bottom = 23.0
-grow_horizontal = 0
-theme_override_font_sizes/font_size = 47
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
-text = "＋"
-vertical_alignment = 1
 
 [node name="Material" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1255567864 instance=ExtResource("4_wni0k")]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
-size_flags_horizontal = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_pmvcn")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_3egq6")
 theme_override_styles/hover = SubResource("StyleBoxFlat_0lltd")
@@ -1888,32 +1430,17 @@ theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
-theme_override_font_sizes/font_size = 47
 text = "吐槽素材"
-alignment = 0
 
 [node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Material" index="0" unique_id=826033919]
-unique_name_in_owner = true
-layout_mode = 0
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -33.23077
-offset_right = -33.23077
 offset_bottom = 23.0
-grow_horizontal = 0
-theme_override_font_sizes/font_size = 47
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
-text = "＋"
-vertical_alignment = 1
 
 [node name="Profile" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=65704121 instance=ExtResource("4_wni0k")]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
-size_flags_horizontal = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_62ofh")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_ueo5h")
 theme_override_styles/hover = SubResource("StyleBoxFlat_1yhl0")
@@ -1927,32 +1454,17 @@ theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
-theme_override_font_sizes/font_size = 47
 text = "人物檔案"
-alignment = 0
 
 [node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Profile" index="0" unique_id=826033919]
-unique_name_in_owner = true
-layout_mode = 0
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -33.23077
-offset_right = -33.23077
 offset_bottom = 23.0
-grow_horizontal = 0
-theme_override_font_sizes/font_size = 47
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
-text = "＋"
-vertical_alignment = 1
 
 [node name="Log" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=639856437 instance=ExtResource("4_wni0k")]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
-size_flags_horizontal = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_lgf2j")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_h60c8")
 theme_override_styles/hover = SubResource("StyleBoxFlat_j8ugn")
@@ -1966,32 +1478,17 @@ theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
-theme_override_font_sizes/font_size = 47
 text = "故事回顧"
-alignment = 0
 
 [node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Log" index="0" unique_id=826033919]
-unique_name_in_owner = true
-layout_mode = 0
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -33.23077
-offset_right = -33.23077
 offset_bottom = 23.0
-grow_horizontal = 0
-theme_override_font_sizes/font_size = 47
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
-text = "＋"
-vertical_alignment = 1
 
 [node name="Skip" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=831211539 instance=ExtResource("4_wni0k")]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
-size_flags_horizontal = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_m2cw8")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_3f4jj")
 theme_override_styles/hover = SubResource("StyleBoxFlat_mc1ys")
@@ -2005,201 +1502,17 @@ theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
-theme_override_font_sizes/font_size = 47
 text = "略讀"
-alignment = 0
 
 [node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Skip" index="0" unique_id=826033919]
-unique_name_in_owner = true
-layout_mode = 0
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -33.23077
-offset_right = -33.23077
 offset_bottom = 23.0
-grow_horizontal = 0
-theme_override_font_sizes/font_size = 47
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
-text = "＋"
-vertical_alignment = 1
-
-[node name="Styles" type="GridContainer" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1113662056]
-layout_mode = 2
-theme_override_constants/h_separation = 8
-theme_override_constants/v_separation = 6
-columns = 2
-
-[node name="Style_cinema" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Styles" unique_id=124628568 instance=ExtResource("4_wni0k")]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 132.92308)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/normal = SubResource("StyleBoxFlat_ibgu3")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_ivalb")
-theme_override_styles/hover = SubResource("StyleBoxFlat_8uu2n")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_ivalb")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_gi6uv")
-theme_override_styles/focus = SubResource("StyleBoxFlat_ge35n")
-theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_focus_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
-theme_override_fonts/font = SubResource("FontVariation_nooyu")
-theme_override_font_sizes/font_size = 39
-toggle_mode = true
-text = "A 映畫"
-alignment = 0
-
-[node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Styles/Style_cinema" index="0" unique_id=826033919]
-unique_name_in_owner = true
-layout_mode = 0
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -33.23077
-offset_right = -33.23077
-offset_bottom = 23.0
-grow_horizontal = 0
-theme_override_font_sizes/font_size = 47
-theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
-theme_override_constants/outline_size = 0
-text = "＋"
-vertical_alignment = 1
-
-[node name="Style_ledger" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Styles" unique_id=1476427261 instance=ExtResource("4_wni0k")]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 132.92308)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/normal = SubResource("StyleBoxFlat_yasjt")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_0tcci")
-theme_override_styles/hover = SubResource("StyleBoxFlat_td4gc")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_0tcci")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_hg502")
-theme_override_styles/focus = SubResource("StyleBoxFlat_qmdft")
-theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_focus_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
-theme_override_fonts/font = SubResource("FontVariation_nooyu")
-theme_override_font_sizes/font_size = 39
-toggle_mode = true
-text = "B 委託簿"
-alignment = 0
-
-[node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Styles/Style_ledger" index="0" unique_id=826033919]
-unique_name_in_owner = true
-layout_mode = 0
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -33.23077
-offset_right = -33.23077
-offset_bottom = 23.0
-grow_horizontal = 0
-theme_override_font_sizes/font_size = 47
-theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
-theme_override_constants/outline_size = 0
-text = "＋"
-vertical_alignment = 1
-
-[node name="Style_manga" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Styles" unique_id=1807100089 instance=ExtResource("4_wni0k")]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 132.92308)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/normal = SubResource("StyleBoxFlat_q4ds3")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_6xxca")
-theme_override_styles/hover = SubResource("StyleBoxFlat_r3fw2")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_6xxca")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_leqi2")
-theme_override_styles/focus = SubResource("StyleBoxFlat_6rkf3")
-theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_focus_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
-theme_override_fonts/font = SubResource("FontVariation_nooyu")
-theme_override_font_sizes/font_size = 39
-toggle_mode = true
-button_pressed = true
-text = "C 分鏡"
-alignment = 0
-
-[node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Styles/Style_manga" index="0" unique_id=826033919]
-unique_name_in_owner = true
-layout_mode = 0
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -33.23077
-offset_right = -33.23077
-offset_bottom = 23.0
-grow_horizontal = 0
-theme_override_font_sizes/font_size = 47
-theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
-theme_override_constants/outline_size = 0
-text = "＋"
-vertical_alignment = 1
-
-[node name="Style_gintama" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Styles" unique_id=537607322 instance=ExtResource("4_wni0k")]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 132.92308)
-layout_mode = 2
-size_flags_horizontal = 3
-tooltip_text = "銀魂和紙"
-theme_override_styles/normal = SubResource("StyleBoxFlat_14d6o")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_7s52n")
-theme_override_styles/hover = SubResource("StyleBoxFlat_a7v8p")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_7s52n")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_ru33n")
-theme_override_styles/focus = SubResource("StyleBoxFlat_y3v3x")
-theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_focus_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
-theme_override_fonts/font = SubResource("FontVariation_nooyu")
-theme_override_font_sizes/font_size = 39
-toggle_mode = true
-button_pressed = true
-text = "D 銀魂和紙"
-alignment = 0
-
-[node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Styles/Style_gintama" index="0" unique_id=826033919]
-unique_name_in_owner = true
-layout_mode = 0
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -33.23077
-offset_right = -33.23077
-offset_bottom = 23.0
-grow_horizontal = 0
-theme_override_font_sizes/font_size = 47
-theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
-theme_override_constants/outline_size = 0
-text = "＋"
-vertical_alignment = 1
 
 [node name="Mute" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=882528724 instance=ExtResource("4_wni0k")]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
-size_flags_horizontal = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_v6p6s")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_7q5k2")
 theme_override_styles/hover = SubResource("StyleBoxFlat_wlq5s")
@@ -2213,32 +1526,18 @@ theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
-theme_override_font_sizes/font_size = 47
 text = "音效"
-alignment = 0
 
 [node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Mute" index="0" unique_id=826033919]
-unique_name_in_owner = true
-layout_mode = 0
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -33.23077
-offset_right = -33.23077
 offset_bottom = 23.0
-grow_horizontal = 0
-theme_override_font_sizes/font_size = 47
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
 text = "開"
-vertical_alignment = 1
 
-[node name="Settings" type="Button" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=674233957 instance=ExtResource("4_wni0k")]
+[node name="Settings" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=674233957 instance=ExtResource("4_wni0k")]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
-size_flags_horizontal = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_li553")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_ryu2s")
 theme_override_styles/hover = SubResource("StyleBoxFlat_fft02")
@@ -2252,15 +1551,11 @@ theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
-theme_override_font_sizes/font_size = 47
 text = "設定"
-alignment = 0
 
 [node name="Title" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1688545038 instance=ExtResource("4_wni0k")]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
-size_flags_horizontal = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_j6pdb")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_bnbo8")
 theme_override_styles/hover = SubResource("StyleBoxFlat_332t1")
@@ -2274,26 +1569,13 @@ theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
-theme_override_font_sizes/font_size = 47
 text = "回標題"
-alignment = 0
 
 [node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Title" index="0" unique_id=826033919]
-unique_name_in_owner = true
-layout_mode = 0
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -33.23077
-offset_right = -33.23077
 offset_bottom = 23.0
-grow_horizontal = 0
-theme_override_font_sizes/font_size = 47
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
-text = "＋"
-vertical_alignment = 1
 
 [editable path="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Resume"]
 [editable path="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Save"]
@@ -2302,9 +1584,5 @@ vertical_alignment = 1
 [editable path="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Profile"]
 [editable path="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Log"]
 [editable path="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Skip"]
-[editable path="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Styles/Style_cinema"]
-[editable path="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Styles/Style_ledger"]
-[editable path="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Styles/Style_manga"]
-[editable path="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Styles/Style_gintama"]
 [editable path="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Mute"]
 [editable path="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Title"]

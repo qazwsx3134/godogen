@@ -1,0 +1,106 @@
+[
+  {
+    "team": "ranged",
+    "frame": "frame_a",
+    "mode": "generate",
+    "run": "inputs/ranged-frame_a-1/run.json",
+    "canvas_size": [
+      1024,
+      1024
+    ],
+    "bbox": [
+      415,
+      205,
+      608,
+      819
+    ],
+    "iron_tip_anchor": [
+      486,
+      818
+    ],
+    "translation_px": [
+      0,
+      0
+    ],
+    "pole_height_normalized": 614,
+    "pad_scale": 0.548704200178731,
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          251.0,
+          3.0,
+          251.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.8773347934138667,
+        "distance_from_declared": 6.4
+      },
+      "quality": "soft",
+      "interior_despill": true,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.0,
+        "semitransparent_fraction": 0.030338814642951895,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 0,
+        "visible_px": 192229
+      }
+    },
+    "warnings": []
+  },
+  {
+    "team": "ranged",
+    "frame": "frame_b",
+    "mode": "edit",
+    "run": "inputs/ranged-frame_b-1/run.json",
+    "canvas_size": [
+      1024,
+      1024
+    ],
+    "bbox": [
+      385,
+      205,
+      601,
+      819
+    ],
+    "iron_tip_anchor": [
+      486,
+      818
+    ],
+    "translation_px": [
+      -18,
+      0
+    ],
+    "pole_height_normalized": 614,
+    "pad_scale": 0.8197596795727636,
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          251.0,
+          3.0,
+          251.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.94145051624276,
+        "distance_from_declared": 6.4
+      },
+      "quality": "soft",
+      "interior_despill": true,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.0,
+        "semitransparent_fraction": 0.05259247929731029,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 0,
+        "visible_px": 91534
+      }
+    },
+    "warnings": []
+  }
+]

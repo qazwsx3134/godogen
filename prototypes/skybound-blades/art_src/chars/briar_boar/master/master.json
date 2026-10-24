@@ -1,0 +1,170 @@
+{
+  "schema": "generate2dsprite.master.v1",
+  "tool": {
+    "name": "master_still",
+    "version": "0.4.0"
+  },
+  "created": "2026-10-24T02:59:40.045Z",
+  "name": "briar_boar",
+  "subject": "a stout wild boar monster, about waist height to the hero",
+  "identity_recap": "dark-brown boar with a thorny briar crest along its spine and curved ivory tusks",
+  "facing": "right",
+  "view": "elevated three-quarter overhead view about 35 degrees, body turned diagonally toward the lower-right",
+  "finish": "hd",
+  "class": "mob",
+  "framing": {
+    "canvas": [
+      1024,
+      1024
+    ],
+    "subject_height_px": 471,
+    "top_margin_px": 406,
+    "lead_px": 100,
+    "preset": "mob",
+    "subject_bbox": [
+      106,
+      406,
+      719,
+      877
+    ],
+    "anchor": [
+      473.5,
+      877.0
+    ],
+    "opaque_area_px": 155286,
+    "width_limited": false
+  },
+  "key": "#FF00FF",
+  "files": {
+    "master": {
+      "path": "master.png",
+      "sha256": "25e2c5fe90bda853dc6d6b79040b28b3a7939a32352d3ab9245a17e6432bbc38",
+      "bytes": 364612,
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    "cutout": {
+      "path": "master_rgba.png",
+      "sha256": "5a44126b94fa485f114ce213f6ce123627d0b505b51a506f3a2749bfa3a52a43",
+      "bytes": 423200,
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    "source": {
+      "path": "source.png",
+      "sha256": "58fad62c507dbb5bd48bd11ae9ae5d471fb3cf31d143ef8e47bf753c02272904",
+      "bytes": 1732629,
+      "size": [
+        1254,
+        1254
+      ]
+    },
+    "spec": {
+      "path": "spec.json",
+      "sha256": "c60ce5ee28edb9007f53f29c226ef1c2f1aae1f55eeba37ba0db39e60018ce13",
+      "bytes": 1062
+    },
+    "prompt": {
+      "path": "prompt.txt",
+      "sha256": "def8634107c55ac5e635a2182c47fa8cfedd47218bd250afdf6247cf601c4ef7",
+      "bytes": 1914
+    }
+  },
+  "references": [],
+  "transform": {
+    "mapping": "master = scale * source + offset (continuous pixel coordinates: pixel i spans [i, i + 1))",
+    "source_size": [
+      1254,
+      1254
+    ],
+    "source_subject_bbox": [
+      80,
+      338,
+      1025,
+      1065
+    ],
+    "crop_box": [
+      74,
+      332,
+      1031,
+      1071
+    ],
+    "crop_margin_px": 6,
+    "scale": 0.6478679504814305,
+    "offset": [
+      54.05295735900961,
+      187.0206327372765
+    ],
+    "canvas": [
+      1024,
+      1024
+    ],
+    "resampler": "lanczos",
+    "premultiplied": true,
+    "alpha_floor_px": 3236,
+    "subject_parts": 1,
+    "ignored_parts": 0,
+    "ignored_px": 0,
+    "source_touches": [],
+    "key_rgb": [
+      255,
+      0,
+      255
+    ]
+  },
+  "route": "local:codex-cli",
+  "provenance": {
+    "command": "generate",
+    "run": "../r1",
+    "take": 2,
+    "source_name": "generated.png",
+    "source_sha256": "58fad62c507dbb5bd48bd11ae9ae5d471fb3cf31d143ef8e47bf753c02272904",
+    "media": {
+      "status": "ok",
+      "route": "local:codex-cli",
+      "sha256": "58fad62c507dbb5bd48bd11ae9ae5d471fb3cf31d143ef8e47bf753c02272904",
+      "estimateUsd": 0.0,
+      "kind": "image",
+      "label": "Codex (local CLI)",
+      "model": "codex-image_gen",
+      "verifiedBefore": true
+    },
+    "media_cli_source": "sibling",
+    "edit": null
+  },
+  "matte": {
+    "requested": "soft",
+    "key_estimate": {
+      "key": [
+        251.0,
+        3.0,
+        251.0
+      ],
+      "source": "border_median",
+      "valid": true,
+      "ring_share": 1.0,
+      "coverage": 0.762258062875036,
+      "distance_from_declared": 6.4
+    },
+    "quality": "soft",
+    "interior_despill": true,
+    "qa": {
+      "opaque_key_px": 0,
+      "outer_ring_spill_fraction": 0.0,
+      "semitransparent_fraction": 0.03180544822256569,
+      "enclosed_key_pockets": 0,
+      "key_hued_px": 0,
+      "visible_px": 372672
+    },
+    "key_choice": {
+      "status": "ok",
+      "overlap_share": 0.0,
+      "rule": "reject a key when more than 0.5% of subject pixels have key dominance >= 40; first acceptable candidate wins"
+    }
+  },
+  "warnings": []
+}

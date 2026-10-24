@@ -1,0 +1,84 @@
+{
+  "schema": "generate2dsprite.master_run.v1",
+  "tool": {
+    "name": "master_still",
+    "version": "0.4.0"
+  },
+  "command": "edit",
+  "created": "2026-10-21T08:53:53.667Z",
+  "name": "flags-melee-frame_b",
+  "class": "prop",
+  "finish": "pixel",
+  "facing": "none",
+  "key": "#00FF00",
+  "prompt": {
+    "path": "prompt.txt",
+    "sha256": "9a5bfa345058978b57bf0a57d2d373a6d2abb8efce66a040fdf8885b6df00f6a",
+    "bytes": 2041
+  },
+  "spec": {
+    "path": "spec.json",
+    "sha256": "239a13aee1a13d4658799a5e0e32b22f8b58f5a3f7c5f9a9be0d06ddc8a16815",
+    "bytes": 1712
+  },
+  "references": [
+    {
+      "role": "edit",
+      "ordinal": "FIRST",
+      "path": "../../melee/frame_a/candidate-01.png",
+      "sha256": "e28e1787d93426400a1543e967c477361b6b0e6753403c8cce43b4ed43410e2f",
+      "bytes": 164563
+    }
+  ],
+  "media": {
+    "cli": "route_media.py",
+    "cli_source": "sibling",
+    "cli_sha256": "5f920b3c8f37118e144f40c1c021cba87b691413cd83cb4dc5437ad500df6562",
+    "route_requested": "codex-cli",
+    "size": "1024x1024",
+    "args": [],
+    "timeout_s": 360.0
+  },
+  "takes": [
+    {
+      "take": 1,
+      "exit_code": 0,
+      "seconds": 49.21,
+      "media": {
+        "status": "ok",
+        "route": "local:codex-cli",
+        "sha256": "495a0397ba49c7b56a6f09a290b5d595a231548e533a5f8e4591c5fccc86aa5e",
+        "estimateUsd": 0.0,
+        "kind": "image",
+        "label": "Codex (local CLI)",
+        "model": "codex-image_gen",
+        "verifiedBefore": true
+      },
+      "copied": false,
+      "artifact": {
+        "path": "takes/take-01/generated.png",
+        "sha256": "495a0397ba49c7b56a6f09a290b5d595a231548e533a5f8e4591c5fccc86aa5e",
+        "bytes": 1292606,
+        "size": [
+          1254,
+          1254
+        ]
+      },
+      "status": "ok",
+      "route": "local:codex-cli"
+    }
+  ],
+  "status": "ok",
+  "edit": {
+    "still": {
+      "path": "../../melee/frame_a/candidate-01.png",
+      "sha256": "e28e1787d93426400a1543e967c477361b6b0e6753403c8cce43b4ed43410e2f",
+      "bytes": 164563
+    },
+    "change": "the cloth flutters the other way in the breeze: its swallowtail end swings slightly to the left and the folds shift; the pole, finial, crossbar, emblem, colours and size stay exactly the same",
+    "keep": "the exact same banner design, upright dark wooden pole, brass spear-tip finial, short crossbar, plain bottom iron spike, single white emblem and its exact shape, bright cloth colour, thin gold trim, two swallowtail tips, pixel-art style, warm upper-left light and cool shadows, elevated 45-degree camera, same dimensions and same pole position. Do not move or bend the pole; do not redesign, mirror or replace the emblem; only the cloth and its folds move",
+    "extra": [],
+    "framing": "the top of the object about 20 percent below the top edge, its lowest point about 20 percent above the bottom edge, its left-most point about 39 percent from the left edge and its right-most point about 39 percent from the right edge"
+  },
+  "warnings": []
+}

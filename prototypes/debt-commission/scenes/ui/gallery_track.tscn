@@ -1,0 +1,9 @@
+[gd_scene format=3]
+
+[node name="GalleryTrack" type="Button" unique_id=300144433]
+custom_minimum_size = Vector2(0, 132.92308)
+theme_override_font_sizes/font_size = 40
+text = "♪ 日常"
+alignment = 0
+autowrap_mode = 3
+metadata/ui_style_role = "selector"

@@ -1,0 +1,32 @@
+{
+  "matte": {
+    "requested": "soft",
+    "key_estimate": {
+      "key": [
+        250.0,
+        3.0,
+        250.0
+      ],
+      "source": "border_median",
+      "valid": true,
+      "ring_share": 1.0,
+      "coverage": 0.7634707691368482,
+      "distance_from_declared": 7.68
+    },
+    "quality": "soft",
+    "interior_despill": false,
+    "qa": {
+      "opaque_key_px": 0,
+      "outer_ring_spill_fraction": 0.00743052459503641,
+      "semitransparent_fraction": 0.03079597196244025,
+      "enclosed_key_pockets": 0,
+      "key_hued_px": 39,
+      "visible_px": 370503
+    }
+  },
+  "raw_size": [
+    1254,
+    1254
+  ],
+  "source": "inputs/spear-run_a-edit-1/takes/take-01/generated.png"
+}

@@ -1,0 +1,32 @@
+{
+  "matte": {
+    "requested": "soft",
+    "key_estimate": {
+      "key": [
+        249.0,
+        3.0,
+        250.0
+      ],
+      "source": "border_median",
+      "valid": true,
+      "ring_share": 1.0,
+      "coverage": 0.7021607411307739,
+      "distance_from_declared": 8.37
+    },
+    "quality": "soft",
+    "interior_despill": false,
+    "qa": {
+      "opaque_key_px": 0,
+      "outer_ring_spill_fraction": 0.006327683615819209,
+      "semitransparent_fraction": 0.035085575882283594,
+      "enclosed_key_pockets": 0,
+      "key_hued_px": 17,
+      "visible_px": 466545
+    }
+  },
+  "raw_size": [
+    1254,
+    1254
+  ],
+  "source": "inputs/healer-volley-edit-1/takes/take-01/generated.png"
+}

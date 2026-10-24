@@ -1,0 +1,106 @@
+[
+  {
+    "team": "support",
+    "frame": "frame_a",
+    "mode": "generate",
+    "run": "inputs/support-frame_a-1/run.json",
+    "canvas_size": [
+      1024,
+      1024
+    ],
+    "bbox": [
+      418,
+      205,
+      607,
+      819
+    ],
+    "iron_tip_anchor": [
+      455,
+      818
+    ],
+    "translation_px": [
+      0,
+      0
+    ],
+    "pole_height_normalized": 614,
+    "pad_scale": 0.5357766143106457,
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          252.0,
+          4.0,
+          251.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.86606368393072,
+        "distance_from_declared": 6.4
+      },
+      "quality": "soft",
+      "interior_despill": true,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.0,
+        "semitransparent_fraction": 0.029865161910380723,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 0,
+        "visible_px": 210178
+      }
+    },
+    "warnings": []
+  },
+  {
+    "team": "support",
+    "frame": "frame_b",
+    "mode": "edit",
+    "run": "inputs/support-frame_b-1/run.json",
+    "canvas_size": [
+      1024,
+      1024
+    ],
+    "bbox": [
+      384,
+      205,
+      606,
+      819
+    ],
+    "iron_tip_anchor": [
+      455,
+      818
+    ],
+    "translation_px": [
+      -17,
+      0
+    ],
+    "pole_height_normalized": 614,
+    "pad_scale": 0.8164893617021277,
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          251.0,
+          4.0,
+          251.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.9376661350345561,
+        "distance_from_declared": 6.93
+      },
+      "quality": "soft",
+      "interior_despill": true,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.0,
+        "semitransparent_fraction": 0.053822736544315866,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 0,
+        "visible_px": 97561
+      }
+    },
+    "warnings": []
+  }
+]

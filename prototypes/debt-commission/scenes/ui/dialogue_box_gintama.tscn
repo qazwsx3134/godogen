@@ -9,7 +9,6 @@
 [ext_resource type="Texture2D" path="res://assets/ui/gintama_icon_advance.svg" id="7_amexu"]
 [ext_resource type="PackedScene" path="res://scenes/ui/gintama_reading_log.tscn" id="8_qywm6"]
 [ext_resource type="PackedScene" path="res://scenes/ui/gintama_reading_auto.tscn" id="9_g6mmy"]
-[ext_resource type="Script" path="res://scripts/gintama_reading_button.gd" id="9_qvxcl"]
 [ext_resource type="PackedScene" path="res://scenes/ui/gintama_reading_skip.tscn" id="10_053nw"]
 [ext_resource type="PackedScene" path="res://scenes/ui/gintama_reading_menu.tscn" id="11_2u5mq"]
 
@@ -972,21 +971,23 @@ anchor_bottom = 1.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_n8u6h")
 
-[node name="CloudPlaque" type="TextureRect" parent="PaperAndToolbar/NameOverlap/SpeakerRow/NamePlate" unique_id=534340446]
+[node name="CloudPlaque" type="NinePatchRect" parent="PaperAndToolbar/NameOverlap/SpeakerRow/NamePlate" unique_id=671231901]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-mouse_filter = 2
 texture = ExtResource("3_qvxcl")
-expand_mode = 1
+patch_margin_left = 64
+patch_margin_right = 72
 
 [node name="SpeakerName" type="Label" parent="PaperAndToolbar/NameOverlap/SpeakerRow" unique_id=1773459287]
 unique_name_in_owner = true
 layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
 offset_left = 71.0
 offset_top = 5.0
-offset_right = 271.0
-offset_bottom = 72.0
+offset_right = -79.0
+offset_bottom = -10.0
 theme_override_fonts/font = SubResource("FontVariation_qywm6")
 theme_override_font_sizes/font_size = 47
 theme_override_colors/font_color = Color(0.972549, 0.9529412, 0.9137255, 1)
@@ -1385,72 +1386,54 @@ layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 61
 
-[node name="Log" type="Button" parent="PaperAndToolbar/ToolbarMargin/Toolbar" unique_id=632778124 instance=ExtResource("8_qywm6")]
+[node name="Log" parent="PaperAndToolbar/ToolbarMargin/Toolbar" unique_id=632778124 instance=ExtResource("8_qywm6")]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 133)
 layout_mode = 2
-size_flags_horizontal = 3
-tooltip_text = "紀錄"
 theme_override_styles/normal = SubResource("StyleBoxEmpty_vmuew")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_nmnt4")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_nq8uc")
 theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_mu2bm")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_vruql")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_xy32q")
-script = ExtResource("9_qvxcl")
 normal_surface = SubResource("StyleBoxFlat_a60pk")
 hover_surface = SubResource("StyleBoxFlat_llyv6")
 active_surface = SubResource("StyleBoxFlat_kc6xy")
 
-[node name="Auto" type="Button" parent="PaperAndToolbar/ToolbarMargin/Toolbar" unique_id=992363603 instance=ExtResource("9_g6mmy")]
+[node name="Auto" parent="PaperAndToolbar/ToolbarMargin/Toolbar" unique_id=992363603 instance=ExtResource("9_g6mmy")]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 133)
 layout_mode = 2
-size_flags_horizontal = 3
-tooltip_text = "自動閱讀"
 theme_override_styles/normal = SubResource("StyleBoxEmpty_ph4ip")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_ftg5c")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_gxkvl")
 theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_4cr1i")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_alg66")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_em1q6")
-toggle_mode = true
-script = ExtResource("9_qvxcl")
 normal_surface = SubResource("StyleBoxFlat_ensc7")
 hover_surface = SubResource("StyleBoxFlat_ydu6f")
 active_surface = SubResource("StyleBoxFlat_riqsd")
 
-[node name="Skip" type="Button" parent="PaperAndToolbar/ToolbarMargin/Toolbar" unique_id=1861651720 instance=ExtResource("10_053nw")]
+[node name="Skip" parent="PaperAndToolbar/ToolbarMargin/Toolbar" unique_id=1861651720 instance=ExtResource("10_053nw")]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 133)
 layout_mode = 2
-size_flags_horizontal = 3
-tooltip_text = "跳過已顯示台詞"
 theme_override_styles/normal = SubResource("StyleBoxEmpty_qoilp")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_wk3bc")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_5m8uh")
 theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_jgse7")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_n4nb1")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_0cyxi")
-toggle_mode = true
-script = ExtResource("9_qvxcl")
 normal_surface = SubResource("StyleBoxFlat_7km5t")
 hover_surface = SubResource("StyleBoxFlat_w55u1")
 active_surface = SubResource("StyleBoxFlat_snbm7")
 
-[node name="Menu" type="Button" parent="PaperAndToolbar/ToolbarMargin/Toolbar" unique_id=125961985 instance=ExtResource("11_2u5mq")]
+[node name="Menu" parent="PaperAndToolbar/ToolbarMargin/Toolbar" unique_id=125961985 instance=ExtResource("11_2u5mq")]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 133)
 layout_mode = 2
-size_flags_horizontal = 3
-tooltip_text = "選單"
 theme_override_styles/normal = SubResource("StyleBoxEmpty_typ2l")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_7c0tw")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_s5opn")
 theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_xy76x")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_808rs")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_0ma3d")
-script = ExtResource("9_qvxcl")
 normal_surface = SubResource("StyleBoxFlat_opugl")
 hover_surface = SubResource("StyleBoxFlat_e2phs")
 active_surface = SubResource("StyleBoxFlat_1xldt")

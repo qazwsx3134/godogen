@@ -1,0 +1,119 @@
+{
+  "schema": "generate2dsprite.master_run.v1",
+  "tool": {
+    "name": "master_still",
+    "version": "0.4.0"
+  },
+  "command": "edit",
+  "created": "2026-10-24T03:11:26.001Z",
+  "name": "medic",
+  "class": "hero",
+  "finish": "hd",
+  "facing": "right",
+  "key": "#FF00FF",
+  "prompt": {
+    "path": "prompt.txt",
+    "sha256": "8941eba83ed3bab24387de9279e23599fe9d23ab864914abee8fbb107f43d347",
+    "bytes": 1820
+  },
+  "spec": {
+    "path": "spec.json",
+    "sha256": "096ccff2dff181b74117fd700c6eefac28551350d33a9a281cab3d42a1d6d875",
+    "bytes": 1291
+  },
+  "references": [
+    {
+      "role": "edit",
+      "ordinal": "FIRST",
+      "path": "../../master/master.png",
+      "sha256": "aff0ac9b7f4e9f071d54c3ab6370475160bdb1d7ab8c75e2c7df5b75452e2cbf",
+      "bytes": 408068
+    }
+  ],
+  "media": {
+    "cli": "route_media.py",
+    "cli_source": "sibling",
+    "cli_sha256": "5f920b3c8f37118e144f40c1c021cba87b691413cd83cb4dc5437ad500df6562",
+    "route_requested": "codex-cli",
+    "size": "1024x1024",
+    "args": [
+      "--timeout",
+      "165"
+    ],
+    "timeout_s": 175.0
+  },
+  "takes": [
+    {
+      "take": 1,
+      "exit_code": 0,
+      "seconds": 74.979,
+      "media": {
+        "status": "ok",
+        "route": "local:codex-cli",
+        "sha256": "0cf4585d8c035716f6b8f3de9c37d360f5de8573a43ee3caab0ec743a09e6afc",
+        "estimateUsd": 0.0,
+        "kind": "image",
+        "label": "Codex (local CLI)",
+        "model": "codex-image_gen",
+        "verifiedBefore": true
+      },
+      "copied": false,
+      "artifact": {
+        "path": "takes/take-01/generated.png",
+        "sha256": "0cf4585d8c035716f6b8f3de9c37d360f5de8573a43ee3caab0ec743a09e6afc",
+        "bytes": 1698206,
+        "size": [
+          1254,
+          1254
+        ]
+      },
+      "status": "ok",
+      "route": "local:codex-cli"
+    },
+    {
+      "take": 2,
+      "exit_code": 0,
+      "seconds": 44.5,
+      "media": {
+        "status": "ok",
+        "route": "local:codex-cli",
+        "sha256": "ba6f963a8f6d96cd1c4c0192db51cf32da6267146dacd6805a3bc2b67b38463c",
+        "estimateUsd": 0.0,
+        "kind": "image",
+        "label": "Codex (local CLI)",
+        "model": "codex-image_gen",
+        "verifiedBefore": true
+      },
+      "copied": false,
+      "artifact": {
+        "path": "takes/take-02/generated.png",
+        "sha256": "ba6f963a8f6d96cd1c4c0192db51cf32da6267146dacd6805a3bc2b67b38463c",
+        "bytes": 1672789,
+        "size": [
+          1254,
+          1254
+        ]
+      },
+      "status": "ok",
+      "route": "local:codex-cli"
+    }
+  ],
+  "status": "ok",
+  "edit": {
+    "still": {
+      "path": "../../master/master.png",
+      "sha256": "aff0ac9b7f4e9f071d54c3ab6370475160bdb1d7ab8c75e2c7df5b75452e2cbf",
+      "bytes": 408068
+    },
+    "change": "THE ONLY CHANGE: tossing an unrolling linen bandage forward with both hands, small green herb leaves fluttering around it",
+    "keep": "same character identity, face, hair, outfit, colours, equipment, proportions and HD illustration style; same elevated three-quarter view; the character still faces the lower-right; flat magenta backdrop; no ground shadow; nothing cropped",
+    "extra": [],
+    "framing": "the top of the figure about 13 percent below the top edge, its lowest point about 10 percent above the bottom edge, its left-most point about 30 percent from the left edge and its right-most point about 30 percent from the right edge"
+  },
+  "warnings": [],
+  "contact": {
+    "path": "takes.png",
+    "sha256": "4e61023f45795822d5a09dc823a979d43b96e1c18454927b75c022ef2d71a03c",
+    "bytes": 240011
+  }
+}

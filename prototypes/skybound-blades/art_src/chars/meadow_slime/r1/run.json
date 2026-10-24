@@ -1,0 +1,127 @@
+{
+  "schema": "generate2dsprite.master_run.v1",
+  "tool": {
+    "name": "master_still",
+    "version": "0.4.0"
+  },
+  "command": "generate",
+  "created": "2026-10-24T02:55:14.690Z",
+  "name": "meadow_slime",
+  "class": "mob",
+  "finish": "hd",
+  "facing": "right",
+  "key": "#FF00FF",
+  "prompt": {
+    "path": "prompt.txt",
+    "sha256": "9ce2d5deec82039bfcd9a445fb160fc89881a7b6cea16cc43671bd6b794fc17a",
+    "bytes": 1961
+  },
+  "spec": {
+    "path": "spec.json",
+    "sha256": "e56e88ff3656b184aa5f8ee49372927ab613888caf1a633f3c43cf62fef1cf66",
+    "bytes": 1121
+  },
+  "references": [],
+  "media": {
+    "cli": "route_media.py",
+    "cli_source": "sibling",
+    "cli_sha256": "5f920b3c8f37118e144f40c1c021cba87b691413cd83cb4dc5437ad500df6562",
+    "route_requested": "codex-cli",
+    "size": "1024x1024",
+    "args": [
+      "--timeout",
+      "340"
+    ],
+    "timeout_s": 360.0
+  },
+  "takes": [
+    {
+      "take": 1,
+      "exit_code": 0,
+      "seconds": 52.571,
+      "media": {
+        "status": "ok",
+        "route": "local:codex-cli",
+        "sha256": "ba3ff8fcbb3431f18c6f38d524bd066f2709d9defb39787f30f78b5d9cfd9d5a",
+        "estimateUsd": 0.0,
+        "kind": "image",
+        "label": "Codex (local CLI)",
+        "model": "codex-image_gen",
+        "verifiedBefore": true
+      },
+      "copied": false,
+      "artifact": {
+        "path": "takes/take-01/generated.png",
+        "sha256": "ba3ff8fcbb3431f18c6f38d524bd066f2709d9defb39787f30f78b5d9cfd9d5a",
+        "bytes": 1419129,
+        "size": [
+          1254,
+          1254
+        ]
+      },
+      "status": "ok",
+      "route": "local:codex-cli"
+    },
+    {
+      "take": 2,
+      "exit_code": 0,
+      "seconds": 34.343,
+      "media": {
+        "status": "ok",
+        "route": "local:codex-cli",
+        "sha256": "965b1ea513dc21ba7cc8bc0485ef68a9c0f1217309fe7112574ab8e076ff175f",
+        "estimateUsd": 0.0,
+        "kind": "image",
+        "label": "Codex (local CLI)",
+        "model": "codex-image_gen",
+        "verifiedBefore": true
+      },
+      "copied": false,
+      "artifact": {
+        "path": "takes/take-02/generated.png",
+        "sha256": "965b1ea513dc21ba7cc8bc0485ef68a9c0f1217309fe7112574ab8e076ff175f",
+        "bytes": 1414831,
+        "size": [
+          1254,
+          1254
+        ]
+      },
+      "status": "ok",
+      "route": "local:codex-cli"
+    },
+    {
+      "take": 3,
+      "exit_code": 0,
+      "seconds": 33.114,
+      "media": {
+        "status": "ok",
+        "route": "local:codex-cli",
+        "sha256": "ff59f865fec0d898fa1b93b1e4f3d3a3a0454bb1538833b8ce1c9e1e7fc25b30",
+        "estimateUsd": 0.0,
+        "kind": "image",
+        "label": "Codex (local CLI)",
+        "model": "codex-image_gen",
+        "verifiedBefore": true
+      },
+      "copied": false,
+      "artifact": {
+        "path": "takes/take-03/generated.png",
+        "sha256": "ff59f865fec0d898fa1b93b1e4f3d3a3a0454bb1538833b8ce1c9e1e7fc25b30",
+        "bytes": 1446651,
+        "size": [
+          1254,
+          1254
+        ]
+      },
+      "status": "ok",
+      "route": "local:codex-cli"
+    }
+  ],
+  "status": "ok",
+  "warnings": [],
+  "contact": {
+    "path": "takes.png",
+    "sha256": "6c05d33f114011a13d2b65c5fbe604407f8d7e63fb6ef777c12a39d919e30fce",
+    "bytes": 312808
+  }
+}

@@ -1,0 +1,397 @@
+{
+  "status": "ok",
+  "ok": 27,
+  "total": 27,
+  "seconds": 478.479,
+  "results": [
+    {
+      "role": "captain",
+      "pose": "walk_a",
+      "status": "ok",
+      "attempts": [
+        {
+          "attempt": 1,
+          "exit_code": 0,
+          "seconds": 89.504,
+          "log": "captain/poses/walk_a-attempt1.log"
+        }
+      ]
+    },
+    {
+      "role": "briar_boar",
+      "pose": "walk_a",
+      "status": "ok",
+      "attempts": [
+        {
+          "attempt": 1,
+          "exit_code": 0,
+          "seconds": 94.264,
+          "log": "briar_boar/poses/walk_a-attempt1.log"
+        }
+      ]
+    },
+    {
+      "role": "ruin_hound",
+      "pose": "walk_a",
+      "status": "ok",
+      "attempts": [
+        {
+          "attempt": 1,
+          "exit_code": 0,
+          "seconds": 95.843,
+          "log": "ruin_hound/poses/walk_a-attempt1.log"
+        }
+      ]
+    },
+    {
+      "role": "meadow_slime",
+      "pose": "walk_a",
+      "status": "ok",
+      "attempts": [
+        {
+          "attempt": 1,
+          "exit_code": 0,
+          "seconds": 96.579,
+          "log": "meadow_slime/poses/walk_a-attempt1.log"
+        }
+      ]
+    },
+    {
+      "role": "guardian",
+      "pose": "walk_a",
+      "status": "ok",
+      "attempts": [
+        {
+          "attempt": 1,
+          "exit_code": 0,
+          "seconds": 97.756,
+          "log": "guardian/poses/walk_a-attempt1.log"
+        }
+      ]
+    },
+    {
+      "role": "medic",
+      "pose": "walk_a",
+      "status": "ok",
+      "attempts": [
+        {
+          "attempt": 1,
+          "exit_code": 0,
+          "seconds": 107.77,
+          "log": "medic/poses/walk_a-attempt1.log"
+        }
+      ]
+    },
+    {
+      "role": "captain",
+      "pose": "walk_b",
+      "status": "ok",
+      "attempts": [
+        {
+          "attempt": 1,
+          "exit_code": 0,
+          "seconds": 84.892,
+          "log": "captain/poses/walk_b-attempt1.log"
+        }
+      ]
+    },
+    {
+      "role": "briar_boar",
+      "pose": "walk_b",
+      "status": "ok",
+      "attempts": [
+        {
+          "attempt": 1,
+          "exit_code": 0,
+          "seconds": 76.96,
+          "log": "briar_boar/poses/walk_b-attempt1.log"
+        }
+      ]
+    },
+    {
+      "role": "meadow_slime",
+      "pose": "walk_b",
+      "status": "ok",
+      "attempts": [
+        {
+          "attempt": 1,
+          "exit_code": 0,
+          "seconds": 84.22,
+          "log": "meadow_slime/poses/walk_b-attempt1.log"
+        }
+      ]
+    },
+    {
+      "role": "medic",
+      "pose": "walk_b",
+      "status": "ok",
+      "attempts": [
+        {
+          "attempt": 1,
+          "exit_code": 0,
+          "seconds": 94.595,
+          "log": "medic/poses/walk_b-attempt1.log"
+        }
+      ]
+    },
+    {
+      "role": "ruin_hound",
+      "pose": "walk_b",
+      "status": "ok",
+      "attempts": [
+        {
+          "attempt": 1,
+          "exit_code": 0,
+          "seconds": 83.525,
+          "log": "ruin_hound/poses/walk_b-attempt1.log"
+        }
+      ]
+    },
+    {
+      "role": "guardian",
+      "pose": "walk_b",
+      "status": "ok",
+      "attempts": [
+        {
+          "attempt": 1,
+          "exit_code": 0,
+          "seconds": 151.725,
+          "log": "guardian/poses/walk_b-attempt1.log"
+        }
+      ]
+    },
+    {
+      "role": "guardian",
+      "pose": "attack",
+      "status": "ok",
+      "attempts": [
+        {
+          "attempt": 1,
+          "exit_code": 0,
+          "seconds": 79.247,
+          "log": "guardian/poses/attack-attempt1.log"
+        }
+      ]
+    },
+    {
+      "role": "captain",
+      "pose": "attack",
+      "status": "ok",
+      "attempts": [
+        {
+          "attempt": 1,
+          "exit_code": 0,
+          "seconds": 87.668,
+          "log": "captain/poses/attack-attempt1.log"
+        }
+      ]
+    },
+    {
+      "role": "medic",
+      "pose": "attack",
+      "status": "ok",
+      "attempts": [
+        {
+          "attempt": 1,
+          "exit_code": 0,
+          "seconds": 84.401,
+          "log": "medic/poses/attack-attempt1.log"
+        }
+      ]
+    },
+    {
+      "role": "meadow_slime",
+      "pose": "attack",
+      "status": "ok",
+      "attempts": [
+        {
+          "attempt": 1,
+          "exit_code": 0,
+          "seconds": 82.369,
+          "log": "meadow_slime/poses/attack-attempt1.log"
+        }
+      ]
+    },
+    {
+      "role": "briar_boar",
+      "pose": "attack",
+      "status": "ok",
+      "attempts": [
+        {
+          "attempt": 1,
+          "exit_code": 0,
+          "seconds": 83.503,
+          "log": "briar_boar/poses/attack-attempt1.log"
+        }
+      ]
+    },
+    {
+      "role": "ruin_hound",
+      "pose": "attack",
+      "status": "ok",
+      "attempts": [
+        {
+          "attempt": 1,
+          "exit_code": 0,
+          "seconds": 89.311,
+          "log": "ruin_hound/poses/attack-attempt1.log"
+        }
+      ]
+    },
+    {
+      "role": "captain",
+      "pose": "down",
+      "status": "ok",
+      "attempts": [
+        {
+          "attempt": 1,
+          "exit_code": 0,
+          "seconds": 85.755,
+          "log": "captain/poses/down-attempt1.log"
+        }
+      ]
+    },
+    {
+      "role": "briar_boar",
+      "pose": "down",
+      "status": "ok",
+      "attempts": [
+        {
+          "attempt": 1,
+          "exit_code": 0,
+          "seconds": 73.413,
+          "log": "briar_boar/poses/down-attempt1.log"
+        }
+      ]
+    },
+    {
+      "role": "guardian",
+      "pose": "down",
+      "status": "ok",
+      "attempts": [
+        {
+          "attempt": 1,
+          "exit_code": 0,
+          "seconds": 93.527,
+          "log": "guardian/poses/down-attempt1.log"
+        }
+      ]
+    },
+    {
+      "role": "meadow_slime",
+      "pose": "down",
+      "status": "ok",
+      "attempts": [
+        {
+          "attempt": 1,
+          "exit_code": 0,
+          "seconds": 83.417,
+          "log": "meadow_slime/poses/down-attempt1.log"
+        }
+      ]
+    },
+    {
+      "role": "medic",
+      "pose": "down",
+      "status": "ok",
+      "attempts": [
+        {
+          "attempt": 1,
+          "exit_code": 0,
+          "seconds": 94.236,
+          "log": "medic/poses/down-attempt1.log"
+        }
+      ]
+    },
+    {
+      "role": "ruin_hound",
+      "pose": "down",
+      "status": "ok",
+      "attempts": [
+        {
+          "attempt": 1,
+          "exit_code": 0,
+          "seconds": 74.812,
+          "log": "ruin_hound/poses/down-attempt1.log"
+        }
+      ]
+    },
+    {
+      "role": "captain",
+      "pose": "skill",
+      "status": "ok",
+      "attempts": [
+        {
+          "attempt": 1,
+          "exit_code": 0,
+          "seconds": 79.934,
+          "log": "captain/poses/skill-attempt1.log"
+        }
+      ]
+    },
+    {
+      "role": "guardian",
+      "pose": "skill",
+      "status": "ok",
+      "attempts": [
+        {
+          "attempt": 1,
+          "exit_code": 0,
+          "seconds": 94.227,
+          "log": "guardian/poses/skill-attempt1.log"
+        }
+      ]
+    },
+    {
+      "role": "medic",
+      "pose": "skill",
+      "status": "ok",
+      "attempts": [
+        {
+          "attempt": 1,
+          "exit_code": 0,
+          "seconds": 120.321,
+          "log": "medic/poses/skill-attempt1.log"
+        }
+      ]
+    }
+  ],
+  "master_hashes": {
+    "captain/master/spec.json": "5aec24aaff3fa919aca25081e6e485987a324fa7bded13500772c0222ebd9b38",
+    "captain/master/master.png": "115b196752c16855575b3a4eb36a0823124e6685cd7cd2cca98b4b363b05b2cd",
+    "captain/master/prompt.txt": "11191a5f3a8d74fdc69ef4cb6f875610ddafa47b17df994018e1088bf1d30f49",
+    "captain/master/source.png": "07674a8eaadd6a980720edaebd8dc326e13d6dc533bff287124bf20ae8a746fd",
+    "captain/master/master.json": "da8edfca869fc7ceae5f180ea3122dcb73aeff50fd09bcb5683ad1d2c75ade89",
+    "captain/master/master_rgba.png": "7c5ed8bc9c6c37cc14d2b951f9aac8c64ce4dd71350c026ac1bfb2bb66de3fb6",
+    "guardian/master/spec.json": "5ef1f37682675a05e647265770cb4b04efc134b579c601cc3c8e755b5f83c26d",
+    "guardian/master/master.png": "2482a8f55306a7a6a3559850c347962f408c216772f19c3cc77ed4aea98d58ee",
+    "guardian/master/prompt.txt": "31fbcf0b7e4abe80058a678ce923f39aa39afe2980d99c5a9b5921ecf3339d87",
+    "guardian/master/source.png": "7fa4b8f661bc7b604d7932264df213c18a92dd516a0f72440fb88b34bd08d85b",
+    "guardian/master/master.json": "31f04eddd6989c26f8109aee7d8845556e332c6b05efd168c65fab9f4ef5b61d",
+    "guardian/master/master_rgba.png": "21b4ae8a3e8febbfbf6c32bbf08ca477ef383e4d2efe096d008288ec4544655d",
+    "medic/master/spec.json": "096ccff2dff181b74117fd700c6eefac28551350d33a9a281cab3d42a1d6d875",
+    "medic/master/master.png": "aff0ac9b7f4e9f071d54c3ab6370475160bdb1d7ab8c75e2c7df5b75452e2cbf",
+    "medic/master/prompt.txt": "9c02d2aead37b9e89d4f15fb4a0771174cf8263148332a7d41e72e4a8f0c0bad",
+    "medic/master/source.png": "07c0754719ae8c27ecf69813516a35cd68a598a34a9b4a56fdf005bc9c43a77d",
+    "medic/master/master.json": "746597e6e9b424c25b4efafad60bb4cf6753bb4340da1738175d2986e7ac504b",
+    "medic/master/master_rgba.png": "5704a1782d6c7dec8314d5d8965c8f63aa122d8e20b8c2cdbb5873be4bedb8de",
+    "meadow_slime/master/spec.json": "e56e88ff3656b184aa5f8ee49372927ab613888caf1a633f3c43cf62fef1cf66",
+    "meadow_slime/master/master.png": "a9ee2ce6e824f85b6e76e1af6cd91cbe4ec886c2515ec603de6d1a279be77483",
+    "meadow_slime/master/prompt.txt": "9ce2d5deec82039bfcd9a445fb160fc89881a7b6cea16cc43671bd6b794fc17a",
+    "meadow_slime/master/source.png": "ff59f865fec0d898fa1b93b1e4f3d3a3a0454bb1538833b8ce1c9e1e7fc25b30",
+    "meadow_slime/master/master.json": "7c9c164e7ce5acc433b96bd482a58c4a6bbdc12e624be59e88a8000c697eb7a5",
+    "meadow_slime/master/master_rgba.png": "84bc82168bcba2a79d9d78af3d9d14143934626eaf374434cc729a9dd1b35571",
+    "briar_boar/master/spec.json": "c60ce5ee28edb9007f53f29c226ef1c2f1aae1f55eeba37ba0db39e60018ce13",
+    "briar_boar/master/master.png": "25e2c5fe90bda853dc6d6b79040b28b3a7939a32352d3ab9245a17e6432bbc38",
+    "briar_boar/master/prompt.txt": "def8634107c55ac5e635a2182c47fa8cfedd47218bd250afdf6247cf601c4ef7",
+    "briar_boar/master/source.png": "58fad62c507dbb5bd48bd11ae9ae5d471fb3cf31d143ef8e47bf753c02272904",
+    "briar_boar/master/master.json": "36ccf366f411853d32c1df7e099a3fb8186d883730868dceebf6eac7b234d8c1",
+    "briar_boar/master/master_rgba.png": "5a44126b94fa485f114ce213f6ce123627d0b505b51a506f3a2749bfa3a52a43",
+    "ruin_hound/master/spec.json": "bbdbabb0bf923d5b55aa4802558036c3cc78fbee9b707dff15cb45fed1b80c16",
+    "ruin_hound/master/master.png": "3de9543adedd9e99a5377255f736cb800fd3a6669295351c8061d61859730501",
+    "ruin_hound/master/prompt.txt": "67ca6a023ee1a6c0513e8e5fd35cbc8b56660221829b997cdaddddfb5d734285",
+    "ruin_hound/master/source.png": "d80cd6cb32db686699c5d0f9f594bc3e9fbcdfade9b4f950911b37c6a0b7a84e",
+    "ruin_hound/master/master.json": "2c747d0d0761436fe3b91347015ce723d1d69d0c0e24718745221e9808541e9d",
+    "ruin_hound/master/master_rgba.png": "737c84bf71f74cfa4ca310db64d1c8d75da5012d27589d11534614191f60d09f"
+  }
+}

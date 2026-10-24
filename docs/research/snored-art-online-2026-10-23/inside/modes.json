@@ -1,0 +1,107 @@
+[
+  {
+    "theme": "color",
+    "title": "Snored Art Online",
+    "left": "研調7940 Lv2\nHP\n362 / 362\nEXP\n132 / 214\n61.68%\n摳 8\n技能\n線性攻雞 Lv1 · 就緒",
+    "info": "第 1 層 · 起司之鎮\n所有玩家的起點。廣場中央的黑鐵公裡，刻著每位玩家的名字。",
+    "view": {
+      "theme": "color",
+      "mapButtons": 9,
+      "logPosition": {
+        "x": 135,
+        "y": 463.375,
+        "width": 300,
+        "height": 331.125,
+        "top": 463.375,
+        "right": 435,
+        "bottom": 794.5,
+        "left": 135
+      },
+      "prefs": {
+        "lang": "zh",
+        "theme": "color",
+        "logHidden": [],
+        "worldHidden": [],
+        "logTab": "combat",
+        "mapView": "mini",
+        "logTabReset": 1,
+        "themeReset": 1
+      }
+    }
+  },
+  {
+    "theme": "mono",
+    "title": "Snored Art Online",
+    "left": "研調7940 Lv2\nHP\n362 / 362\nEXP\n132 / 214\n61.68%\n摳 8\n技能\n線性攻雞 Lv1 · 就緒",
+    "info": "第 1 層 · 起司之鎮\n所有玩家的起點。廣場中央的黑鐵公裡，刻著每位玩家的名字。",
+    "view": {
+      "theme": "mono",
+      "mapButtons": 9,
+      "logPosition": {
+        "x": 135,
+        "y": 463.375,
+        "width": 300,
+        "height": 331.125,
+        "top": 463.375,
+        "right": 435,
+        "bottom": 794.5,
+        "left": 135
+      },
+      "prefs": {
+        "lang": "zh",
+        "theme": "mono",
+        "logHidden": [],
+        "worldHidden": [],
+        "logTab": "combat",
+        "mapView": "mini",
+        "logTabReset": 1,
+        "themeReset": 1
+      }
+    }
+  },
+  {
+    "theme": "work",
+    "title": "Actions · build #1931 failed · GitHub",
+    "left": "研調7940 Lv2\nHP 362 / 362 100%\nEXP 132 / 214 61.68%\n摳 8\n技能\n線性攻雞 Lv1 · 就緒",
+    "info": "第 1 層 · 起司之鎮\n所有玩家的起點。廣場中央的黑鐵公裡，刻著每位玩家的名字。",
+    "view": {
+      "theme": "work",
+      "mapButtons": 0,
+      "logPosition": {
+        "x": 135,
+        "y": 423.8125,
+        "width": 300,
+        "height": 331.125,
+        "top": 423.8125,
+        "right": 435,
+        "bottom": 754.9375,
+        "left": 135
+      },
+      "prefs": {
+        "lang": "zh",
+        "theme": "work",
+        "logHidden": [],
+        "worldHidden": [],
+        "logTab": "combat",
+        "mapView": "mini",
+        "logTabReset": 1,
+        "themeReset": 1
+      }
+    }
+  },
+  {
+    "mapView": "mini",
+    "route": "路線\n地圖\n文字\n⌂\n·\n≈\n·\n?\n·\n?\n☠\n?\n·\n?\n▲\n?\n◆\n⌂\n⌂ 起司之鎮"
+  },
+  {
+    "mapView": "text",
+    "route": "路線\n地圖\n文字\n⌂ 起司之鎮 ← 目前位置\n· 稀飯原野 Lv1-2\n· 火爐咖村森林 Lv??? ◆ 主線\n· 稀飯原野外圍 Lv???\n☠ 火爐咖村森林秘境 Lv???\n· 火爐咖村森林深處 Lv???\n▲ 第1層 謎宮區 Lv???\n◆ 第1層 頭目房間\n⌂ 第 2 層 · 污兒巴士 （未解鎖）"
+  },
+  {
+    "mobile": {
+      "width": 390,
+      "docWidth": 390,
+      "tabsWidth": 390
+    }
+  }
+]

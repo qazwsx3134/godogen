@@ -6,7 +6,6 @@ func _run() -> void:
 	var game = load("res://main.tscn").instantiate()
 	game.story_path = "res://data/text_effects_story.json"
 	game.save_path = "user://test_text_presentation.save"
-	game.ui_preference_path = "user://test_text_presentation_ui.cfg"
 	root.add_child(game)
 	await _frames(3)
 	game._on_begin_pressed()
@@ -16,10 +15,6 @@ func _run() -> void:
 	game._complete_current_line()
 	_expect(game._history.back().text==game._full_text and game._text_complete, "tap completion stores plain dialogue in the log")
 	var payload=game._build_save_payload("")
-	for style in UI.style_ids():
-		game._set_ui_style(style,false)
-		await _frames(2)
-		_expect(game._text_label is RichTextLabel and game._text_label.get_parsed_text()==game._full_text, "formatted dialogue survives %s style switch" % style)
 	game._advance_current_line()
 	await _until(func() -> bool: return game._screen_mode=="story" and game._current_speaker=="shinpachi", "shaking reply")
 	_expect(game._text_label.text.contains("[shake"), "emphasized reply uses RichText's shake effect")

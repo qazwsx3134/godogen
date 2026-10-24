@@ -1,4 +1,6 @@
 {
+  "default_pov": "shinpachi",
+  "default_background": "yorozuya_living_room",
   "backgrounds": {
     "yorozuya_living_room": {
       "label": "萬事屋・客廳",
@@ -38,7 +40,8 @@
         "panic": "res://assets/image/expressions/shinpachi_panic.png",
         "shout": "res://assets/image/expressions/shinpachi_shout.png",
         "thinking": "res://assets/image/expressions/shinpachi_thinking.png"
-      }
+      },
+      "voice_pitch": 390
     },
     "gintoki": {
       "name": "銀時",
@@ -55,7 +58,8 @@
         "panic": "res://assets/image/expressions/gintoki_nervous.png",
         "serious": "res://assets/image/expressions/gintoki_serious.png",
         "angry": "res://assets/image/expressions/gintoki_angry.png"
-      }
+      },
+      "voice_pitch": 230
     },
     "otose": {
       "name": "登勢",
@@ -72,7 +76,8 @@
         "smile": "res://assets/image/expressions/otose_smile.png",
         "smug": "res://assets/image/expressions/otose_smug.png",
         "thinking": "res://assets/image/expressions/otose_thinking.png"
-      }
+      },
+      "voice_pitch": 180
     },
     "kagura": {
       "name": "神樂",
@@ -89,7 +94,8 @@
         "angry": "res://assets/image/expressions/kagura_angry.png",
         "annoyed": "res://assets/image/expressions/kagura_annoyed.png",
         "nosepick": "res://assets/image/expressions/kagura_nosepick.png"
-      }
+      },
+      "voice_pitch": 560
     },
     "sadaharu": {
       "name": "定春",
@@ -101,7 +107,8 @@
         "cry": "res://assets/image/expressions/sadaharu_cry.png",
         "smile": "res://assets/image/expressions/sadaharu_smile.png",
         "smug": "res://assets/image/expressions/sadaharu_smug.png"
-      }
+      },
+      "voice_pitch": 130
     },
     "elisabeth": {
       "name": "伊莉莎白",

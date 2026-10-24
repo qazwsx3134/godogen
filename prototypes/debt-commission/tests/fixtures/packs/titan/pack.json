@@ -1,0 +1,8 @@
+{
+  "id": "titan", "title": "測試作品：城牆", "cover": "art/wall.png",
+  "credits": [{"role": "劇本", "names": ["測試作者"]}],
+  "stories": [
+    {"id": "titan_ch1", "kind": "chapter", "path": "ch1_story.json"},
+    {"id": "titan_ch2", "kind": "chapter", "path": "ch2_story.json"}
+  ]
+}

@@ -16,7 +16,6 @@ func _run() -> void:
 	_cleanup_saves()
 	main = (load("res://main.tscn") as PackedScene).instantiate() as Control
 	main.save_path = TEST_SAVE
-	main.ui_preference_path = TEST_UI
 	root.add_child(main)
 	await _frames(3)
 	_expect(main._screen_mode == "title", "starts on title")
@@ -65,12 +64,6 @@ func _run() -> void:
 	_expect(main._screen_mode == "menu" and _progress_key() == story_position, "tap 目錄 opens the menu without advancing")
 	_expect(main._menu_items["save"].is_visible_in_tree() and not main._menu_items["skip"].disabled,
 		"the menu offers 儲存進度 and 略讀")
-	await _reveal_menu(main._menu_style_buttons["ledger"])
-	await _tap(main._menu_style_buttons["ledger"].get_global_rect().get_center())
-	await _frames(2)
-	_expect(main._dialog_panel.style_id == "ledger" and main._text_label.text == main._full_text and
-		main._dialog_layer.get_children().filter(func(n: Node) -> bool: return n.has_method("set_tone")).size() == 1,
-		"B 委託簿 in the menu swaps in the ledger box with the same line")
 	await _tap(main._menu_items["save"].get_global_rect().get_center())
 	_expect(main._screen_mode == "save_slots", "儲存進度 opens the save-slot picker")
 	_expect(not FileAccess.file_exists(SAVE_SLOTS_SCRIPT.manual_path(TEST_SAVE, 1)), "opening the picker does not save a slot")
@@ -79,7 +72,7 @@ func _run() -> void:
 	_expect(main._screen_mode == "menu", "closing the picker returns to the menu")
 	await _tap(main._game.position + Vector2(20, main._game.size.y * 0.5))
 	_expect(main._screen_mode == "story" and _key() == before, "tap dim background closes menu without advancing")
-	_expect(main._advance_button.is_visible_in_tree(), "續 shows in the new box after the menu closes")
+	_expect(main._advance_button.is_visible_in_tree(), "續 shows in the box after the menu closes")
 
 	await _tap(main._advance_button.get_global_rect().get_center())
 	await _until(func() -> bool: return _key() != before and main._screen_mode == "story", "tap 續 advances")

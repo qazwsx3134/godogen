@@ -1,0 +1,33 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/prop.gd" id="1_dmlrp"]
+[ext_resource type="Material" path="res://resources/materials/low_poly_92.tres" id="2_vpd47"]
+[ext_resource type="ArrayMesh" path="res://resources/meshes/wall.res" id="3_vn2o6"]
+[ext_resource type="ArrayMesh" path="res://resources/meshes/wall_top.res" id="4_8vkge"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qwh3n"]
+shading_mode = 0
+albedo_color = Color(1, 0.3, 0.2, 1)
+
+[sub_resource type="TorusMesh" id="TorusMesh_xnbkd"]
+inner_radius = 0.96
+
+[node name="Wall" type="Node3D" unique_id=420751345]
+script = ExtResource("1_dmlrp")
+block_radius = 1.2
+
+[node name="Base" type="MeshInstance3D" parent="." unique_id=949221136]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+material_override = ExtResource("2_vpd47")
+mesh = ExtResource("3_vn2o6")
+
+[node name="Top" type="MeshInstance3D" parent="." unique_id=1331522995]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1.45, 0)
+material_override = ExtResource("2_vpd47")
+mesh = ExtResource("4_8vkge")
+
+[node name="BlockGizmo" type="MeshInstance3D" parent="." unique_id=1735612880]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0.05, 0)
+visible = false
+material_override = SubResource("StandardMaterial3D_qwh3n")
+mesh = SubResource("TorusMesh_xnbkd")

@@ -1,0 +1,32 @@
+{
+  "matte": {
+    "requested": "soft",
+    "key_estimate": {
+      "key": [
+        3.0,
+        249.0,
+        3.0
+      ],
+      "source": "border_median",
+      "valid": true,
+      "ring_share": 1.0,
+      "coverage": 0.7221796153425466,
+      "distance_from_declared": 7.35
+    },
+    "quality": "soft",
+    "interior_despill": true,
+    "qa": {
+      "opaque_key_px": 0,
+      "outer_ring_spill_fraction": 0.0,
+      "semitransparent_fraction": 0.023043859588860724,
+      "enclosed_key_pockets": 0,
+      "key_hued_px": 0,
+      "visible_px": 436689
+    }
+  },
+  "raw_size": [
+    1254,
+    1254
+  ],
+  "source": "inputs/mage-run_b-edit-1/takes/take-01/generated.png"
+}

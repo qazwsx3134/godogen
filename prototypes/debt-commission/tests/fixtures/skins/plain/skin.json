@@ -1,0 +1,23 @@
+{
+  "id": "plain",
+  "name": "測試外觀",
+  "look": "flat",
+  "scenes": {"title": "res://tests/fixtures/skins/plain/title.tscn"},
+  "palette": {
+    "canvas": "#141c16", "panel": "#1d2a1f", "panel_soft": "#243126", "surface": "#2e3d30",
+    "surface_hover": "#3b4d3d", "text": "#f1efe4", "muted": "#b9c2b1", "accent": "#c8a24a",
+    "accent_ink": "#1d2a1f", "rule": "#8a9a7d", "focus": "#e8c36a", "name_bg": "#5c3a1e",
+    "name_ink": "#f1efe4", "danger": "#e0705a", "disabled": "#7d877a", "disabled_surface": "#2a332b",
+    "quick_text": "#d8dccf", "quick_active": "#3b4d3d", "quick_active_ink": "#f1efe4",
+    "text_outline": "#141c16"
+  },
+  "panel_paper": "",
+  "plaque": "",
+  "hud": {"panel": "res://tests/fixtures/skins/plain/hud_panel.tres", "clue_chip": "", "toast": "", "font": ""},
+  "life_icon": "res://tests/fixtures/skins/plain/blade_icon.tscn",
+  "title": {"background": "yorozuya_kitchen", "bgm": "bgm_daily"},
+  "terms": {"rebut": "反駁", "life": "刃", "power": "決心", "super": "必殺", "whiff": "失手", "thought": "內心",
+            "materials": "證據"},
+  "texts": {"title_logo": "測試作品\n反駁 ADV", "tagline": "這是外觀包測試。", "menu_kicker": "作戰會議",
+            "menu_heading": "暫停"}
+}

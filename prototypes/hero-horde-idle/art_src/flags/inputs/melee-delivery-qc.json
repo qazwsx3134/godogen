@@ -1,0 +1,106 @@
+[
+  {
+    "team": "melee",
+    "frame": "frame_a",
+    "mode": "generate",
+    "run": "inputs/melee-frame_a-1/run.json",
+    "canvas_size": [
+      1024,
+      1024
+    ],
+    "bbox": [
+      396,
+      205,
+      629,
+      819
+    ],
+    "iron_tip_anchor": [
+      510,
+      818
+    ],
+    "translation_px": [
+      0,
+      0
+    ],
+    "pole_height_normalized": 614,
+    "pad_scale": 0.6013712047012733,
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          3.0,
+          248.0,
+          2.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.8739561314479471,
+        "distance_from_declared": 7.87
+      },
+      "quality": "soft",
+      "interior_despill": true,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.0,
+        "semitransparent_fraction": 0.035647771951164114,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 0,
+        "visible_px": 198133
+      }
+    },
+    "warnings": []
+  },
+  {
+    "team": "melee",
+    "frame": "frame_b",
+    "mode": "edit",
+    "run": "inputs/melee-frame_b-1/run.json",
+    "canvas_size": [
+      1024,
+      1024
+    ],
+    "bbox": [
+      367,
+      205,
+      629,
+      820
+    ],
+    "iron_tip_anchor": [
+      510,
+      818
+    ],
+    "translation_px": [
+      -14,
+      0
+    ],
+    "pole_height_normalized": 614,
+    "pad_scale": 0.8164893617021277,
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          4.0,
+          248.0,
+          5.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.9289380839368248,
+        "distance_from_declared": 9.49
+      },
+      "quality": "soft",
+      "interior_despill": true,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.0,
+        "semitransparent_fraction": 0.050239148737975386,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 0,
+        "visible_px": 111646
+      }
+    },
+    "warnings": []
+  }
+]

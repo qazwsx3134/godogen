@@ -1,0 +1,119 @@
+{
+  "schema": "generate2dsprite.master_run.v1",
+  "tool": {
+    "name": "master_still",
+    "version": "0.4.0"
+  },
+  "command": "edit",
+  "created": "2026-10-24T03:08:04.851Z",
+  "name": "briar_boar",
+  "class": "mob",
+  "finish": "hd",
+  "facing": "right",
+  "key": "#FF00FF",
+  "prompt": {
+    "path": "prompt.txt",
+    "sha256": "153c7f78958da74f4d882a40b62b3a557103e121a0c1641a61934f1d7e16020c",
+    "bytes": 1772
+  },
+  "spec": {
+    "path": "spec.json",
+    "sha256": "c60ce5ee28edb9007f53f29c226ef1c2f1aae1f55eeba37ba0db39e60018ce13",
+    "bytes": 1062
+  },
+  "references": [
+    {
+      "role": "edit",
+      "ordinal": "FIRST",
+      "path": "../../master/master.png",
+      "sha256": "25e2c5fe90bda853dc6d6b79040b28b3a7939a32352d3ab9245a17e6432bbc38",
+      "bytes": 364612
+    }
+  ],
+  "media": {
+    "cli": "route_media.py",
+    "cli_source": "sibling",
+    "cli_sha256": "5f920b3c8f37118e144f40c1c021cba87b691413cd83cb4dc5437ad500df6562",
+    "route_requested": "codex-cli",
+    "size": "1024x1024",
+    "args": [
+      "--timeout",
+      "165"
+    ],
+    "timeout_s": 175.0
+  },
+  "takes": [
+    {
+      "take": 1,
+      "exit_code": 0,
+      "seconds": 48.876,
+      "media": {
+        "status": "ok",
+        "route": "local:codex-cli",
+        "sha256": "c747528ad4dd375c764db0289481daa4be9d6b556ab3cb3d8fdf98b6b47a3dfe",
+        "estimateUsd": 0.0,
+        "kind": "image",
+        "label": "Codex (local CLI)",
+        "model": "codex-image_gen",
+        "verifiedBefore": true
+      },
+      "copied": false,
+      "artifact": {
+        "path": "takes/take-01/generated.png",
+        "sha256": "c747528ad4dd375c764db0289481daa4be9d6b556ab3cb3d8fdf98b6b47a3dfe",
+        "bytes": 1648212,
+        "size": [
+          1254,
+          1254
+        ]
+      },
+      "status": "ok",
+      "route": "local:codex-cli"
+    },
+    {
+      "take": 2,
+      "exit_code": 0,
+      "seconds": 33.856,
+      "media": {
+        "status": "ok",
+        "route": "local:codex-cli",
+        "sha256": "1c4e6cbbc870a32280979de2ff109c5a22018ca1a7853506eaaba2ad8e9fd19c",
+        "estimateUsd": 0.0,
+        "kind": "image",
+        "label": "Codex (local CLI)",
+        "model": "codex-image_gen",
+        "verifiedBefore": true
+      },
+      "copied": false,
+      "artifact": {
+        "path": "takes/take-02/generated.png",
+        "sha256": "1c4e6cbbc870a32280979de2ff109c5a22018ca1a7853506eaaba2ad8e9fd19c",
+        "bytes": 1580801,
+        "size": [
+          1254,
+          1254
+        ]
+      },
+      "status": "ok",
+      "route": "local:codex-cli"
+    }
+  ],
+  "status": "ok",
+  "edit": {
+    "still": {
+      "path": "../../master/master.png",
+      "sha256": "25e2c5fe90bda853dc6d6b79040b28b3a7939a32352d3ab9245a17e6432bbc38",
+      "bytes": 364612
+    },
+    "change": "THE ONLY CHANGE: charging tusk-first toward the lower-right, head down, front legs stretched mid-gallop",
+    "keep": "same character identity, face, hair, outfit, colours, equipment, proportions and HD illustration style; same elevated three-quarter view; the character still faces the lower-right; flat magenta backdrop; no ground shadow; nothing cropped",
+    "extra": [],
+    "framing": "the top of the figure about 40 percent below the top edge, its lowest point about 14 percent above the bottom edge, its left-most point about 10 percent from the left edge and its right-most point about 30 percent from the right edge"
+  },
+  "warnings": [],
+  "contact": {
+    "path": "takes.png",
+    "sha256": "4c674fce9a09d9caf12d3bbc06f3434c106b1dc0a1aa94e93ed7fb0f7aaebf01",
+    "bytes": 228364
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "entry": "platform",
+  "generated_from": "stories/example/ch1.dialogue",
+  "id": "example_ch1",
+  "initial_flags": {
+    "waited": false
+  },
+  "nodes": {
+    "leave": {
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "narrator",
+          "text": "秋走出了車站。身後，月台的燈一盞一盞熄掉。"
+        },
+        {
+          "op": "end",
+          "text": "第一章完。"
+        }
+      ],
+      "title": "離開"
+    },
+    "platform": {
+      "steps": [
+        {
+          "id": "station_night",
+          "op": "bg"
+        },
+        {
+          "op": "say",
+          "speaker": "narrator",
+          "text": "最後一班車的燈，消失在隧道裡。"
+        },
+        {
+          "op": "say",
+          "speaker": "aki",
+          "text": "……又沒趕上。"
+        },
+        {
+          "op": "say",
+          "speaker": "ren",
+          "text": "下一班要等到明天早上喔。"
+        },
+        {
+          "op": "say",
+          "speaker": "aki",
+          "text": "那你呢？你也沒趕上？"
+        },
+        {
+          "op": "say",
+          "speaker": "ren",
+          "text": "我不是在等車。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "ask",
+              "label": "「那你在等什麼？」",
+              "next": "stay",
+              "set_flags": {
+                "waited": true
+              }
+            },
+            {
+              "id": "go",
+              "label": "「……那我先走了。」",
+              "next": "leave"
+            }
+          ],
+          "pov": "aki",
+          "prompt": "要繼續問下去嗎？"
+        }
+      ],
+      "title": "月台"
+    },
+    "stay": {
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "ren",
+          "text": "等一個說好要來的人。"
+        },
+        {
+          "op": "say",
+          "speaker": "aki",
+          "text": "那我陪你等一下吧。反正也回不去了。"
+        },
+        {
+          "op": "end",
+          "text": "第一章完。"
+        }
+      ],
+      "title": "留下來"
+    }
+  },
+  "note": "故事包範例（沒有任何圖：漸層背景與剪影角色）",
+  "title": "第一章・月台",
+  "version": "s-ca2b7fee27f0"
+}

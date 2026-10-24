@@ -1,0 +1,9 @@
+Create exactly ONE square image (1024x1024).
+
+The FIRST attached image is the approved master still on a flat magenta #FF00FF background: a young sky-tower adventurer swordsman, 3-head-tall chibi-leaning proportions.
+
+Reproduce the FIRST image exactly: the same single figure at exactly the same size and the same position on the canvas (the top of the figure about 13 percent below the top edge, its lowest point about 10 percent above the bottom edge, its left-most point about 8 percent from the left edge and its right-most point about 8 percent from the right edge), the same pose, elevated three-quarter overhead view about 35 degrees, body turned diagonally toward the lower-right, facing RIGHT, the same young teal-haired swordsman in a sky-blue tunic, cream scarf and single steel pauldron, holding a one-handed arming sword. Same premium HD 2D game-art style as the FIRST image: crisp sharp edges, a clean dark outline, rich but controlled colours, cel shading with soft highlights, fine readable detail, no blur, no photo-realism, no 3D render look.
+
+THE ONLY CHANGE: THE ONLY CHANGE: mid-stride running pose, right leg forward and left leg back, sword held low at the right side, scarf trailing behind. Everything else (same character identity, face, hair, outfit, colours, equipment, proportions and HD illustration style; same elevated three-quarter view; the character still faces the lower-right; flat magenta backdrop; no ground shadow; nothing cropped) stays exactly as in the FIRST image.
+
+Background: solid flat pure magenta #FF00FF everywhere outside the character, no shadow, no ground, no glow on the background. No text, no letters, no numbers, no logo, no watermark, no signature, no UI, no border, no frame, no grid, no pixel art, no magenta, pink or red-violet colours on the character, no cast shadow on the ground, no text or logos.

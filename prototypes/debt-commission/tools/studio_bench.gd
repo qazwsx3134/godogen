@@ -7,7 +7,6 @@ func _run() -> void:
 	var game = load("res://main.tscn").instantiate()
 	game.story_path = "res://data/chapter1_story.json"
 	game.save_path = "user://studio_bench.save"
-	game.ui_preference_path = "user://studio_bench_ui.cfg"
 	game.settings_path = "user://studio_bench_settings.cfg"
 	game.progress_path = "user://studio_bench_progress.cfg"
 	root.add_child(game)

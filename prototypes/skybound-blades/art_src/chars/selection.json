@@ -1,0 +1,8 @@
+{
+  "captain": {"walk_a": {"take": 2}, "walk_b": {"take": 1}, "attack": {"take": 1}, "down": {"take": 1}, "skill": {"take": 2}},
+  "guardian": {"walk_a": {"take": 2}, "walk_b": {"take": 1}, "attack": {"take": 2}, "down": {"take": 1}, "skill": {"take": 1}},
+  "medic": {"walk_a": {"take": 2}, "walk_b": {"take": 1}, "attack": {"take": 2}, "down": {"take": 1}, "skill": {"take": 1}},
+  "meadow_slime": {"walk_a": {"take": 1}, "walk_b": {"take": 1}, "attack": {"take": 2}, "down": {"take": 1}},
+  "briar_boar": {"walk_a": {"take": 2}, "walk_b": {"take": 1}, "attack": {"take": 1}, "down": {"take": 1}},
+  "ruin_hound": {"walk_a": {"take": 2}, "walk_b": {"take": 1}, "attack": {"take": 1}, "down": {"take": 2}}
+}

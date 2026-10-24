@@ -1,0 +1,267 @@
+[
+  {
+    "class": "spear",
+    "action": "run_a",
+    "run": "inputs/spear-run_a-edit-1/run.json",
+    "command": "edit",
+    "canvas_size": [
+      1024,
+      1024
+    ],
+    "raw_size": [
+      1254,
+      1254
+    ],
+    "canvas_scale": 0.8165869218500797,
+    "vertical_translation_px": 23,
+    "source_anchor": 903,
+    "anchor_method": "lowest visible subject point",
+    "baseline": 926,
+    "containment_scale": 1.0,
+    "target_baseline": 926,
+    "bbox": [
+      61,
+      188,
+      1010,
+      926
+    ],
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          250.0,
+          3.0,
+          250.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.7634707691368482,
+        "distance_from_declared": 7.68
+      },
+      "quality": "soft",
+      "interior_despill": false,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.00743052459503641,
+        "semitransparent_fraction": 0.03079597196244025,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 39,
+        "visible_px": 370503
+      }
+    },
+    "warnings": []
+  },
+  {
+    "class": "spear",
+    "action": "run_b",
+    "run": "inputs/spear-run_b-edit-1/run.json",
+    "command": "edit",
+    "canvas_size": [
+      1024,
+      1024
+    ],
+    "raw_size": [
+      1254,
+      1254
+    ],
+    "canvas_scale": 0.8165869218500797,
+    "vertical_translation_px": 40,
+    "source_anchor": 886,
+    "anchor_method": "lowest visible subject point",
+    "baseline": 926,
+    "containment_scale": 1.0,
+    "target_baseline": 926,
+    "bbox": [
+      71,
+      198,
+      1002,
+      926
+    ],
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          251.0,
+          3.0,
+          251.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.7633461281157076,
+        "distance_from_declared": 6.4
+      },
+      "quality": "soft",
+      "interior_despill": false,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.007946210268948655,
+        "semitransparent_fraction": 0.034280873290812745,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 291,
+        "visible_px": 370644
+      }
+    },
+    "warnings": []
+  },
+  {
+    "class": "spear",
+    "action": "strike",
+    "run": "inputs/spear-strike-edit-1/run.json",
+    "command": "edit",
+    "canvas_size": [
+      1024,
+      1024
+    ],
+    "raw_size": [
+      1254,
+      1254
+    ],
+    "canvas_scale": 0.8165869218500797,
+    "vertical_translation_px": 106,
+    "source_anchor": 820,
+    "anchor_method": "lowest visible subject point",
+    "baseline": 926,
+    "containment_scale": 0.9871668311944719,
+    "target_baseline": 926,
+    "bbox": [
+      16,
+      335,
+      1016,
+      929
+    ],
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          251.0,
+          3.0,
+          251.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 0.9988463081861958,
+        "coverage": 0.8076089527864899,
+        "distance_from_declared": 6.4
+      },
+      "quality": "soft",
+      "interior_despill": false,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.02977584476413516,
+        "semitransparent_fraction": 0.039026818906001064,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 200,
+        "visible_px": 301280
+      }
+    },
+    "warnings": []
+  },
+  {
+    "class": "spear",
+    "action": "down",
+    "run": "inputs/spear-down-edit-1/run.json",
+    "command": "edit",
+    "canvas_size": [
+      1024,
+      1024
+    ],
+    "raw_size": [
+      1254,
+      1254
+    ],
+    "canvas_scale": 0.8165869218500797,
+    "vertical_translation_px": 99,
+    "source_anchor": 827,
+    "anchor_method": "visually annotated foot/body baseline",
+    "baseline": 926,
+    "containment_scale": 1.0,
+    "target_baseline": 926,
+    "bbox": [
+      14,
+      414,
+      1011,
+      980
+    ],
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          250.0,
+          4.0,
+          250.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.7654255982133091,
+        "distance_from_declared": 8.12
+      },
+      "quality": "soft",
+      "interior_despill": false,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.0019307348859659709,
+        "semitransparent_fraction": 0.03687818109033275,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 4,
+        "visible_px": 367209
+      }
+    },
+    "warnings": []
+  },
+  {
+    "class": "spear",
+    "action": "volley",
+    "run": "inputs/spear-volley-edit-1/run.json",
+    "command": "edit",
+    "canvas_size": [
+      1024,
+      1024
+    ],
+    "raw_size": [
+      1254,
+      1254
+    ],
+    "canvas_scale": 0.8165869218500797,
+    "vertical_translation_px": -31,
+    "source_anchor": 957,
+    "anchor_method": "lowest visible subject point",
+    "baseline": 926,
+    "containment_scale": 1.0,
+    "target_baseline": 926,
+    "bbox": [
+      71,
+      45,
+      1007,
+      926
+    ],
+    "matte": {
+      "requested": "soft",
+      "key_estimate": {
+        "key": [
+          251.0,
+          3.0,
+          251.0
+        ],
+        "source": "border_median",
+        "valid": true,
+        "ring_share": 1.0,
+        "coverage": 0.7365114250029888,
+        "distance_from_declared": 6.4
+      },
+      "quality": "soft",
+      "interior_despill": false,
+      "qa": {
+        "opaque_key_px": 0,
+        "outer_ring_spill_fraction": 0.006915983606557377,
+        "semitransparent_fraction": 0.028492092529639385,
+        "enclosed_key_pockets": 0,
+        "key_hued_px": 128,
+        "visible_px": 412711
+      }
+    },
+    "warnings": []
+  }
+]

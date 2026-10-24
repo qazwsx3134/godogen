@@ -340,7 +340,6 @@ func _test_leaving_clears() -> void:
 	var exits: Dictionary = {
 		"回標題": func(game: Control) -> void: game._show_title(),
 		"讀欄位": func(game: Control) -> void: game._load_payload_from_picker(game.get_meta("early_payload"), "已讀取"),
-		"換 UI 風格": func(game: Control) -> void: game._set_ui_style("ledger", false),
 		"重試／續讀": func(game: Control) -> void: game._render_restored_current(),
 		"重新開始": func(game: Control) -> void: game._start_new_story(),
 	}
@@ -394,10 +393,8 @@ func _test_saves() -> void:
 
 
 func _test_presets_in_every_style() -> void:
-	for style: String in ["cinema", "ledger", "manga", "gintama"]:
+	for style: String in ["gintama"]:
 		var game: Control = await _new_game()
-		game._set_ui_style(style, false)
-		await _frames(2)
 		game._on_begin_pressed()
 		await _until(func() -> bool: return game._screen_mode == "story", "story starts (%s)" % style)
 		await _complete_line(game)
@@ -535,7 +532,6 @@ func _new_game() -> Control:
 	var game: Control = MAIN_SCENE.instantiate() as Control
 	game.story_path = STORY
 	game.save_path = TEST_SAVE
-	game.ui_preference_path = TEST_UI
 	game.settings_path = TEST_SETTINGS
 	root.add_child(game)
 	await _frames(3)

@@ -42,7 +42,7 @@ size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 36
 text = "線索 1/4・左右拖曳背景，點畫面上的東西調查"
 vertical_alignment = 1
-autowrap_mode = 1
+autowrap_mode = 3
 
 [node name="Expand" type="Button" parent="Panel/Padding/Row" unique_id=720953095]
 unique_name_in_owner = true

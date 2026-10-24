@@ -1,0 +1,23 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/fx.gd" id="1_om7ca"]
+[ext_resource type="Shader" path="res://shaders/fx_burst.gdshader" id="2_wx23o"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mi42f"]
+render_priority = 0
+shader = ExtResource("2_wx23o")
+shader_parameter/tint = null
+shader_parameter/progress = null
+shader_parameter/spikes = null
+
+[sub_resource type="QuadMesh" id="QuadMesh_0flyj"]
+size = Vector2(1.5, 1.5)
+
+[node name="HitBurst" type="Node3D" unique_id=643445632]
+script = ExtResource("1_om7ca")
+duration = 0.28
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=763591169]
+material_override = SubResource("ShaderMaterial_mi42f")
+cast_shadow = 0
+mesh = SubResource("QuadMesh_0flyj")

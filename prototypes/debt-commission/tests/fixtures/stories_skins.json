@@ -1,0 +1,7 @@
+{
+  "stories": [
+    {"id": "chapter_a", "kind": "chapter", "path": "res://tests/fixtures/chapter_a_story.json", "save": "user://skin_chapter_a.save", "skin": "plain"},
+    {"id": "phase3", "kind": "sample", "path": "res://data/phase3_story.json", "save": "user://skin_phase3.save"},
+    {"id": "debt", "kind": "sample", "path": "res://data/debt_story.json", "save": "user://skin_debt.save"}
+  ]
+}

@@ -1,0 +1,682 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/story-cjk.ttc" id="1_k0x6y"]
+[ext_resource type="Script" path="res://scripts/title_screen.gd" id="2_6akxm"]
+[ext_resource type="Texture2D" path="res://assets/image/yorosuya-outside.png" id="3_wrwl1"]
+[ext_resource type="Texture2D" path="res://assets/ui/gintama_panel_paper.png" id="4_wrwl1"]
+[ext_resource type="Texture2D" path="res://assets/ui/gintama_heading_plaque_tall.png" id="5_wrwl1"]
+[ext_resource type="FontFile" path="res://assets/fonts/NotoSerifTC.ttf" id="6_o2w1w"]
+
+[sub_resource type="Theme" id="Theme_3mlw3"]
+default_font = ExtResource("1_k0x6y")
+
+[sub_resource type="Gradient" id="Gradient_lxfn6"]
+offsets = PackedFloat32Array(0, 0.28, 1)
+colors = PackedColorArray(0.08627451, 0.08627451, 0.078431375, 0.2509804, 0.08627451, 0.08627451, 0.078431375, 0.14117648, 0.08627451, 0.08627451, 0.078431375, 0.7882353)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_puxgx"]
+gradient = SubResource("Gradient_lxfn6")
+width = 4
+height = 256
+fill_from = Vector2(0.5, 0)
+fill_to = Vector2(0.5, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wrwl1"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+texture = ExtResource("4_wrwl1")
+texture_margin_left = 280.0
+texture_margin_top = 140.0
+texture_margin_right = 245.0
+texture_margin_bottom = 122.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_06etv"]
+content_margin_left = 120.0
+content_margin_top = 8.0
+content_margin_right = 80.0
+content_margin_bottom = 8.0
+texture = ExtResource("5_wrwl1")
+texture_margin_left = 104.0
+texture_margin_top = 32.0
+texture_margin_right = 65.0
+texture_margin_bottom = 32.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o2w1w"]
+
+[sub_resource type="FontVariation" id="FontVariation_nooyu"]
+base_font = ExtResource("6_o2w1w")
+variation_opentype = {
+2003265652: 500.0
+}
+
+[sub_resource type="FontVariation" id="FontVariation_rovm4"]
+base_font = ExtResource("6_o2w1w")
+variation_opentype = {
+2003265652: 800.0
+}
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d8t3a"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 10.0
+bg_color = Color(0.03137255, 0.15686275, 0.23921569, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.7490196, 0.78039217, 0.80784315, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+shadow_color = Color(0.03, 0.09, 0.14, 0.22)
+shadow_size = 3
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rnxwc"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 10.0
+bg_color = Color(0.03137255, 0.15686275, 0.23921569, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.84313726, 0.75686276, 0.54509807, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+shadow_color = Color(0.03, 0.09, 0.14, 0.22)
+shadow_size = 3
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3aof4"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 10.0
+bg_color = Color(0.1254902, 0.3019608, 0.41568628, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.84313726, 0.75686276, 0.54509807, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+shadow_color = Color(0.03, 0.09, 0.14, 0.22)
+shadow_size = 3
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qftft"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 10.0
+bg_color = Color(0.8666667, 0.84705883, 0.80784315, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.6627451, 0.69411767, 0.72156864, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+shadow_color = Color(0.03, 0.09, 0.14, 0.22)
+shadow_size = 3
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k3ckl"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 10.0
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.84313726, 0.75686276, 0.54509807, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+shadow_color = Color(0.03, 0.09, 0.14, 0.22)
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w3ghr"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 10.0
+bg_color = Color(0.03137255, 0.15686275, 0.23921569, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.7490196, 0.78039217, 0.80784315, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+shadow_color = Color(0.03, 0.09, 0.14, 0.22)
+shadow_size = 3
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_drc3w"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 10.0
+bg_color = Color(0.03137255, 0.15686275, 0.23921569, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.84313726, 0.75686276, 0.54509807, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+shadow_color = Color(0.03, 0.09, 0.14, 0.22)
+shadow_size = 3
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5pocv"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 10.0
+bg_color = Color(0.1254902, 0.3019608, 0.41568628, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.84313726, 0.75686276, 0.54509807, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+shadow_color = Color(0.03, 0.09, 0.14, 0.22)
+shadow_size = 3
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nxlql"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 10.0
+bg_color = Color(0.8666667, 0.84705883, 0.80784315, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.6627451, 0.69411767, 0.72156864, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+shadow_color = Color(0.03, 0.09, 0.14, 0.22)
+shadow_size = 3
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jxetd"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 10.0
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.84313726, 0.75686276, 0.54509807, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+shadow_color = Color(0.03, 0.09, 0.14, 0.22)
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u378i"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 10.0
+bg_color = Color(0.9843137, 0.96862745, 0.93333334, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.21960784, 0.3372549, 0.4509804, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+shadow_color = Color(0.03, 0.09, 0.14, 0.22)
+shadow_size = 3
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bmqjd"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 10.0
+bg_color = Color(0.03137255, 0.15686275, 0.23921569, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.84313726, 0.75686276, 0.54509807, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+shadow_color = Color(0.03, 0.09, 0.14, 0.22)
+shadow_size = 3
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_30pe4"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 10.0
+bg_color = Color(0.9019608, 0.92941177, 0.94509804, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.1254902, 0.24313726, 0.36862746, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+shadow_color = Color(0.03, 0.09, 0.14, 0.22)
+shadow_size = 3
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kwyft"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 10.0
+bg_color = Color(0.8666667, 0.84705883, 0.80784315, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.6627451, 0.69411767, 0.72156864, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+shadow_color = Color(0.03, 0.09, 0.14, 0.22)
+shadow_size = 3
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yt04b"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 10.0
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.84313726, 0.75686276, 0.54509807, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+shadow_color = Color(0.03, 0.09, 0.14, 0.22)
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rir4f"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 10.0
+bg_color = Color(0.9843137, 0.96862745, 0.93333334, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.21960784, 0.3372549, 0.4509804, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+shadow_color = Color(0.03, 0.09, 0.14, 0.22)
+shadow_size = 3
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jaiq8"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 10.0
+bg_color = Color(0.03137255, 0.15686275, 0.23921569, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.84313726, 0.75686276, 0.54509807, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+shadow_color = Color(0.03, 0.09, 0.14, 0.22)
+shadow_size = 3
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ojn4e"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 10.0
+bg_color = Color(0.9019608, 0.92941177, 0.94509804, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.1254902, 0.24313726, 0.36862746, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+shadow_color = Color(0.03, 0.09, 0.14, 0.22)
+shadow_size = 3
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sbjno"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 10.0
+bg_color = Color(0.8666667, 0.84705883, 0.80784315, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.6627451, 0.69411767, 0.72156864, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+shadow_color = Color(0.03, 0.09, 0.14, 0.22)
+shadow_size = 3
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cdr3e"]
+content_margin_left = 16.0
+content_margin_top = 10.0
+content_margin_right = 16.0
+content_margin_bottom = 10.0
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.84313726, 0.75686276, 0.54509807, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+shadow_color = Color(0.03, 0.09, 0.14, 0.22)
+shadow_offset = Vector2(0, 4)
+
+[node name="TitleScreen" type="Control" unique_id=993743438]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_3mlw3")
+script = ExtResource("2_6akxm")
+
+[node name="Background" type="TextureRect" parent="." unique_id=1805936986]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource("3_wrwl1")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Wash" type="TextureRect" parent="." unique_id=607047581]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_puxgx")
+expand_mode = 1
+
+[node name="Version" type="Label" parent="." unique_id=551651105]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0.75)
+layout_mode = 0
+offset_left = 38.769234
+offset_top = 38.769234
+offset_right = 38.769234
+offset_bottom = 38.769234
+theme_override_font_sizes/font_size = 33
+theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
+theme_override_constants/outline_size = 0
+text = "v0.5"
+
+[node name="CardArea" type="MarginContainer" parent="." unique_id=1909849087]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 48
+
+[node name="Card" type="PanelContainer" parent="CardArea" unique_id=989293584]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_wrwl1")
+
+[node name="Padding" type="MarginContainer" parent="CardArea/Card" unique_id=1483512475]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 60
+theme_override_constants/margin_top = 52
+theme_override_constants/margin_right = 60
+theme_override_constants/margin_bottom = 116
+
+[node name="Column" type="VBoxContainer" parent="CardArea/Card/Padding" unique_id=308454242]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="StorySwitch" type="Button" parent="CardArea/Card/Padding/Column" unique_id=965061597]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_06etv")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_06etv")
+theme_override_styles/hover = SubResource("StyleBoxTexture_06etv")
+theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_06etv")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_06etv")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_o2w1w")
+theme_override_colors/font_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_focus_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_hover_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
+theme_override_fonts/font = SubResource("FontVariation_nooyu")
+theme_override_font_sizes/font_size = 36
+text = "第一章　章節選擇 ›"
+text_overrun_behavior = 3
+clip_text = true
+
+[node name="LogoGap" type="Control" parent="CardArea/Card/Padding/Column" unique_id=859970223]
+custom_minimum_size = Vector2(0, 16.615385)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Logo" type="Label" parent="CardArea/Card/Padding/Column" unique_id=1628986822]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/line_spacing = -18
+theme_override_fonts/font = SubResource("FontVariation_rovm4")
+theme_override_font_sizes/font_size = 124
+theme_override_colors/font_color = Color(0.03137255, 0.15686275, 0.23921569, 1)
+theme_override_colors/font_outline_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_constants/outline_size = 10
+text = "萬事屋
+吐槽 ADV"
+horizontal_alignment = 1
+metadata/skin_text = "title_logo"
+
+[node name="TaglineGap" type="Control" parent="CardArea/Card/Padding/Column" unique_id=1943485073]
+custom_minimum_size = Vector2(0, 13.846154)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Tagline" type="Label" parent="CardArea/Card/Padding/Column" unique_id=833930705]
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_nooyu")
+theme_override_font_sizes/font_size = 44
+theme_override_colors/font_color = Color(0.3254902, 0.38039216, 0.45490196, 1)
+theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
+theme_override_constants/outline_size = 0
+text = "今夜，也先把帳算清。"
+horizontal_alignment = 1
+metadata/skin_text = "tagline"
+
+[node name="TaglineRule" type="ColorRect" parent="CardArea/Card/Padding/Column" unique_id=1559341071]
+custom_minimum_size = Vector2(0, 3)
+layout_mode = 2
+mouse_filter = 2
+color = Color(0.84, 0.76, 0.55, 0.9)
+
+[node name="ButtonsGap" type="Control" parent="CardArea/Card/Padding/Column" unique_id=1594229004]
+custom_minimum_size = Vector2(0, 38.76923)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Begin" type="Button" parent="CardArea/Card/Padding/Column" unique_id=1173026288]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_d8t3a")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_rnxwc")
+theme_override_styles/hover = SubResource("StyleBoxFlat_3aof4")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_rnxwc")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_qftft")
+theme_override_styles/focus = SubResource("StyleBoxFlat_k3ckl")
+theme_override_colors/font_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_focus_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_hover_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
+theme_override_fonts/font = SubResource("FontVariation_nooyu")
+theme_override_font_sizes/font_size = 44
+text = "開始故事　→"
+
+[node name="ContinueGap" type="Control" parent="CardArea/Card/Padding/Column" unique_id=229134943]
+custom_minimum_size = Vector2(0, 13.846154)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Continue" type="Button" parent="CardArea/Card/Padding/Column" unique_id=1191718900]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_w3ghr")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_drc3w")
+theme_override_styles/hover = SubResource("StyleBoxFlat_5pocv")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_drc3w")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_nxlql")
+theme_override_styles/focus = SubResource("StyleBoxFlat_jxetd")
+theme_override_colors/font_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_focus_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_hover_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
+theme_override_fonts/font = SubResource("FontVariation_nooyu")
+theme_override_font_sizes/font_size = 44
+text = "繼續"
+
+[node name="LoadGap" type="Control" parent="CardArea/Card/Padding/Column" unique_id=1045957972]
+custom_minimum_size = Vector2(0, 13.846154)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="LoadRow" type="HBoxContainer" parent="CardArea/Card/Padding/Column" unique_id=532467173]
+layout_mode = 2
+theme_override_constants/separation = 28
+
+[node name="Load" type="Button" parent="CardArea/Card/Padding/Column/LoadRow" unique_id=2109146958]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_u378i")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_bmqjd")
+theme_override_styles/hover = SubResource("StyleBoxFlat_30pe4")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_bmqjd")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_kwyft")
+theme_override_styles/focus = SubResource("StyleBoxFlat_yt04b")
+theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/font_focus_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
+theme_override_fonts/font = SubResource("FontVariation_nooyu")
+theme_override_font_sizes/font_size = 44
+text = "讀取存檔"
+
+[node name="Settings" type="Button" parent="CardArea/Card/Padding/Column/LoadRow" unique_id=99863272]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_rir4f")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_jaiq8")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ojn4e")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_jaiq8")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_sbjno")
+theme_override_styles/focus = SubResource("StyleBoxFlat_cdr3e")
+theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/font_focus_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
+theme_override_fonts/font = SubResource("FontVariation_nooyu")
+theme_override_font_sizes/font_size = 44
+text = "設定"
+
+[node name="Error" type="Label" parent="CardArea/Card/Padding/Column" unique_id=1624239118]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 39
+theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
+theme_override_constants/outline_size = 0
+horizontal_alignment = 1
+autowrap_mode = 3

@@ -1,0 +1,37 @@
+[
+  {
+    "name": "growth_roster",
+    "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-9e16325f-9b5b-4382-942c-e7fc5876bfe9.png",
+    "output": "/Users/peter/repo/godot/godogen/prototypes/hero-horde-idle/art_src/ui_concepts/revision_d/growth_roster.png",
+    "tool": "built-in image_gen",
+    "attempt": 1,
+    "references": [
+      "/Users/peter/repo/godot/godogen/prototypes/hero-horde-idle/art_src/ui_concepts/D_battle.png",
+      "/Users/peter/repo/godot/godogen/prototypes/hero-horde-idle/art_src/hd2/lineup.png",
+      "/Users/peter/repo/godot/godogen/prototypes/hero-horde-idle/art_src/hd2/sword/candidate-01.png"
+    ]
+  },
+  {
+    "name": "growth_detail",
+    "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-bc723f97-3302-4600-b509-4097e89dc0c8.png",
+    "output": "/Users/peter/repo/godot/godogen/prototypes/hero-horde-idle/art_src/ui_concepts/revision_d/growth_detail.png",
+    "tool": "built-in image_gen",
+    "attempt": 1,
+    "references": [
+      "/Users/peter/repo/godot/godogen/prototypes/hero-horde-idle/art_src/ui_concepts/D_battle.png",
+      "/Users/peter/repo/godot/godogen/prototypes/hero-horde-idle/art_src/hd2/sword/candidate-01.png"
+    ]
+  },
+  {
+    "name": "battle",
+    "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-c6f96a54-aadb-4d54-9e05-034beb1a224d.png",
+    "output": "/Users/peter/repo/godot/godogen/prototypes/hero-horde-idle/art_src/ui_concepts/revision_d/battle.png",
+    "tool": "built-in image_gen",
+    "attempt": 1,
+    "references": [
+      "/Users/peter/repo/godot/godogen/prototypes/hero-horde-idle/art_src/ui_concepts/refs/battle_telegraph_now.png",
+      "/Users/peter/repo/godot/godogen/prototypes/hero-horde-idle/art_src/ui_concepts/D_battle.png",
+      "/Users/peter/repo/godot/godogen/prototypes/hero-horde-idle/art_src/flags/flags-40px.png"
+    ]
+  }
+]

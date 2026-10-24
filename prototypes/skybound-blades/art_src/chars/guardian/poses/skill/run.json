@@ -1,0 +1,119 @@
+{
+  "schema": "generate2dsprite.master_run.v1",
+  "tool": {
+    "name": "master_still",
+    "version": "0.4.0"
+  },
+  "command": "edit",
+  "created": "2026-10-24T03:10:52.501Z",
+  "name": "guardian",
+  "class": "hero",
+  "finish": "hd",
+  "facing": "right",
+  "key": "#FF00FF",
+  "prompt": {
+    "path": "prompt.txt",
+    "sha256": "4a1f062e5a78e61cd1622bc7703aa83b007db8610975ec140ea4660775c63888",
+    "bytes": 1806
+  },
+  "spec": {
+    "path": "spec.json",
+    "sha256": "5ef1f37682675a05e647265770cb4b04efc134b579c601cc3c8e755b5f83c26d",
+    "bytes": 1270
+  },
+  "references": [
+    {
+      "role": "edit",
+      "ordinal": "FIRST",
+      "path": "../../master/master.png",
+      "sha256": "2482a8f55306a7a6a3559850c347962f408c216772f19c3cc77ed4aea98d58ee",
+      "bytes": 589161
+    }
+  ],
+  "media": {
+    "cli": "route_media.py",
+    "cli_source": "sibling",
+    "cli_sha256": "5f920b3c8f37118e144f40c1c021cba87b691413cd83cb4dc5437ad500df6562",
+    "route_requested": "codex-cli",
+    "size": "1024x1024",
+    "args": [
+      "--timeout",
+      "165"
+    ],
+    "timeout_s": 175.0
+  },
+  "takes": [
+    {
+      "take": 1,
+      "exit_code": 0,
+      "seconds": 38.083,
+      "media": {
+        "status": "ok",
+        "route": "local:codex-cli",
+        "sha256": "ae1e1c923e33e45f6aa5baee7e5ebff8b516ea82f53c56b495868af044af4562",
+        "estimateUsd": 0.0,
+        "kind": "image",
+        "label": "Codex (local CLI)",
+        "model": "codex-image_gen",
+        "verifiedBefore": true
+      },
+      "copied": false,
+      "artifact": {
+        "path": "takes/take-01/generated.png",
+        "sha256": "ae1e1c923e33e45f6aa5baee7e5ebff8b516ea82f53c56b495868af044af4562",
+        "bytes": 1906449,
+        "size": [
+          1254,
+          1254
+        ]
+      },
+      "status": "ok",
+      "route": "local:codex-cli"
+    },
+    {
+      "take": 2,
+      "exit_code": 0,
+      "seconds": 55.27,
+      "media": {
+        "status": "ok",
+        "route": "local:codex-cli",
+        "sha256": "43bee4883dc3b905d8b174337f60d6768dc36653ad55893b1ea5b41875e90e97",
+        "estimateUsd": 0.0,
+        "kind": "image",
+        "label": "Codex (local CLI)",
+        "model": "codex-image_gen",
+        "verifiedBefore": true
+      },
+      "copied": false,
+      "artifact": {
+        "path": "takes/take-02/generated.png",
+        "sha256": "43bee4883dc3b905d8b174337f60d6768dc36653ad55893b1ea5b41875e90e97",
+        "bytes": 1842363,
+        "size": [
+          1254,
+          1254
+        ]
+      },
+      "status": "ok",
+      "route": "local:codex-cli"
+    }
+  ],
+  "status": "ok",
+  "edit": {
+    "still": {
+      "path": "../../master/master.png",
+      "sha256": "2482a8f55306a7a6a3559850c347962f408c216772f19c3cc77ed4aea98d58ee",
+      "bytes": 589161
+    },
+    "change": "THE ONLY CHANGE: taunting war cry, shield thrust forward and mace raised high, mouth open shouting",
+    "keep": "same character identity, face, hair, outfit, colours, equipment, proportions and HD illustration style; same elevated three-quarter view; the character still faces the lower-right; flat magenta backdrop; no ground shadow; nothing cropped",
+    "extra": [],
+    "framing": "the top of the figure about 13 percent below the top edge, its lowest point about 10 percent above the bottom edge, its left-most point about 20 percent from the left edge and its right-most point about 20 percent from the right edge"
+  },
+  "warnings": [],
+  "contact": {
+    "path": "takes.png",
+    "sha256": "f8de68ac749c39f1e697f3b6cd91a030bd3fdfffa9ccc7454c7bffd3d789ab4e",
+    "bytes": 269933
+  }
+}

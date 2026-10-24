@@ -1,0 +1,37 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/image/yorosuya-inside.png" id="1_curh1"]
+
+[node name="GalleryPicture" type="Button" unique_id=1882561822]
+custom_minimum_size = Vector2(0, 380)
+size_flags_horizontal = 3
+metadata/ui_style_role = "selector"
+
+[node name="Column" type="VBoxContainer" parent="." unique_id=1919641923]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = -12.0
+offset_bottom = -12.0
+mouse_filter = 2
+
+[node name="Thumb" type="TextureRect" parent="Column" unique_id=2144208268]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+texture = ExtResource("1_curh1")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Caption" type="Label" parent="Column" unique_id=112976898]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 34
+text = "萬事屋・客廳"
+horizontal_alignment = 1
+autowrap_mode = 3
+metadata/ui_style_role = "body"

@@ -1,0 +1,8 @@
+{
+  "default_pov": "eren",
+  "default_background": "wall",
+  "backgrounds": {"wall": {"label": "城牆", "top": "#556070", "bottom": "#2a2f38", "path": "art/wall.png"}},
+  "characters": {"eren": {"name": "艾連", "color": "#7a9a6a", "slot": "center", "voice_pitch": 300}},
+  "items": {},
+  "music": {"bgm_wall": {"label": "城牆"}}
+}

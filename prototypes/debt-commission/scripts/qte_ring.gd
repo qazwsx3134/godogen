@@ -6,6 +6,8 @@ extends Control
 
 signal resolved(tapped: bool, offset: float)
 
+const UI_STYLES: Script = preload("res://scripts/ui_styles.gd")
+
 ## Target ring radius in local px.
 @export var target_radius: float = 190.0
 @export var ring_color: Color = Color("#fffdf5")
@@ -21,6 +23,15 @@ var _done: bool = true
 
 func _ready() -> void:
 	set_process(false)
+
+
+## The prompt in the skin's HUD font with an edge in its name-plate colour (washi looks); a flat look
+## keeps the scene's.
+func set_style(style_id: String) -> void:
+	UI_STYLES.set_hud_font(prompt, style_id)
+	if UI_STYLES.washi(style_id):
+		prompt.add_theme_color_override("font_outline_color", UI_STYLES.palette(style_id)["name_bg"] as Color)
+		prompt.add_theme_constant_override("outline_size", 14)
 
 
 ## qte: the slot's {duration, window, late_after, ...}.

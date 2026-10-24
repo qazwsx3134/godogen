@@ -1,0 +1,65 @@
+{
+  "schema": "generate2dsprite.master_run.v1",
+  "tool": {
+    "name": "master_still",
+    "version": "0.4.0"
+  },
+  "command": "generate",
+  "created": "2026-10-24T02:46:51.853Z",
+  "name": "captain",
+  "class": "hero",
+  "finish": "hd",
+  "facing": "right",
+  "key": "#FF00FF",
+  "prompt": {
+    "path": "prompt.txt",
+    "sha256": "11191a5f3a8d74fdc69ef4cb6f875610ddafa47b17df994018e1088bf1d30f49",
+    "bytes": 2100
+  },
+  "spec": {
+    "path": "spec.json",
+    "sha256": "5aec24aaff3fa919aca25081e6e485987a324fa7bded13500772c0222ebd9b38",
+    "bytes": 1365
+  },
+  "references": [],
+  "media": {
+    "cli": "route_media.py",
+    "cli_source": "sibling",
+    "cli_sha256": "5f920b3c8f37118e144f40c1c021cba87b691413cd83cb4dc5437ad500df6562",
+    "route_requested": "codex-cli",
+    "size": "1024x1024",
+    "args": [
+      "--timeout",
+      "340"
+    ],
+    "timeout_s": 360.0
+  },
+  "takes": [
+    {
+      "take": 1,
+      "exit_code": 1,
+      "seconds": 0.66,
+      "media": null,
+      "status": "fail",
+      "error": "local:codex-cli: PROVIDER_ERROR: the Codex CLI exited with an error (WARNING: proceeding, even though we could not create PATH aliases: Operation not permitted (os error 1) Error: failed to initialize in-process app-server client) (run 7dcd5cf27cf94d4ea4757ea7316521d3)"
+    },
+    {
+      "take": 2,
+      "exit_code": 1,
+      "seconds": 0.398,
+      "media": null,
+      "status": "fail",
+      "error": "local:codex-cli: PROVIDER_ERROR: the Codex CLI exited with an error (WARNING: proceeding, even though we could not create PATH aliases: Operation not permitted (os error 1) Error: failed to initialize in-process app-server client) (run 1462c69043cc4839b5e7758330389e7b)"
+    },
+    {
+      "take": 3,
+      "exit_code": 1,
+      "seconds": 0.344,
+      "media": null,
+      "status": "fail",
+      "error": "local:codex-cli: PROVIDER_ERROR: the Codex CLI exited with an error (WARNING: proceeding, even though we could not create PATH aliases: Operation not permitted (os error 1) Error: failed to initialize in-process app-server client) (run fcd858e804344ed58878128672da5699)"
+    }
+  ],
+  "status": "fail",
+  "warnings": []
+}

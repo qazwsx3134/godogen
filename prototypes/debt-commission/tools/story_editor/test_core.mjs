@@ -227,4 +227,122 @@ for (const name of files) {
   assert.equal(Authoring.search(story, '  ').length, 0);
   log('ok  authoring history: coalescing, branching, limit, clone isolation, reset; recursive Unicode literal search');
 }
+// Scene view contract: shared classification, route joins, fixed points, layout and copies.
+{
+  for (const group of Core.STEP_GROUPS) for (const op of group.ops) {
+    if (op === 'say') continue;
+    assert.equal(Core.stepGroup({op}).id, group.id, op);
+  }
+  assert.equal(Core.stepGroup({op:'say',speaker:'narrator'}).id,'narration');
+  assert.equal(Core.stepGroup({op:'say',speaker:''}).id,'narration');
+  assert.equal(Core.stepGroup({op:'say',speaker:'gintoki'}).id,'dialogue');
+  assert.equal(Core.STEP_GROUPS.slice(0,7).flatMap(g=>g.ops).some(op=>Core.STEP_GROUPS[7].ops.includes(op)),false);
+  const node = {steps:[{op:'say',speaker:'a'},{op:'say',speaker:'b'},{op:'bg',id:'room'},{op:'bgm',id:'song'},{op:'end',text:''}]};
+  const runs=Core.stepRuns(node);assert.deepEqual(runs.map(r=>r.indices),[[0,1],[2,3],[4]]);
+  const layout=JSON.parse(JSON.stringify({x:10,y:20,expanded:{[runs[0].key]:true}}));
+  assert.equal(Core.runExpanded(layout,runs[0]),true);assert.equal(Core.runExpanded(layout,runs[1]),false);
+  assert.equal(Core.cardSize(node,1,layout).h-Core.cardSize(node,1).h,50);
+  const n=(steps,next)=>({steps,...(next?{next}: {})});
+  const story={id:'routes',entry:'start',nodes:{
+    start:n([{op:'choice',options:[{next:'a'},{next:'b'}]}]),
+    a:n([{op:'bg',id:'room'},{op:'bgm',id:'song'}],'join'),
+    b:n([{op:'bg',id:'other'},{op:'bgm',id:'song'}],'join'),
+    join:n([{op:'say',speaker:'narrator',text:'join'}],'stop'),
+    stop:n([{op:'bgm',id:''}],'after'),after:n([{op:'end',text:''}]),
+    orphan:n([{op:'goto',target:'orphan'}]),
+  }};
+  let media=Core.effectiveMedia(story);
+  assert.equal(media.join.bg.status,'mixed');assert.equal(media.join.bgm.status,'inherited');assert.equal(media.join.bgm.id,'song');
+  story.nodes.b.steps[1].id='other_song';
+  assert.equal(Core.effectiveMedia(story).join.bgm.status,'mixed');
+  story.nodes.b.steps[1].id='song';
+  assert.equal(media.start.bg.status,'none');assert.equal(media.after.bgm.status,'none');assert.equal(media.orphan.bg.status,'none');
+  story.nodes.b.steps[0].id='room';media=Core.effectiveMedia(story);assert.equal(media.join.bg.status,'inherited');assert.equal(media.join.bg.id,'room');
+  story.nodes.join.next='a';media=Core.effectiveMedia(story);assert.equal(media.join.bg.id,'room'); // converges with cycle
+  story.nodes.b.steps= [{op:'goto',target:'join'}];media=Core.effectiveMedia(story);assert.equal(media.join.bg.status,'mixed'); // none is a distinct route
+  story.nodes.join.steps.push({op:'bg',id:'explicit'},{op:'bg',id:'last'});assert.equal(Core.effectiveMedia(story).join.bg.id,'last');
+  const catalog=JSON.parse(fs.readFileSync(path.join(project,'data','asset_catalog.json'),'utf8'));
+  assert.ok(Core.availableExpressions(catalog,'gintoki').includes('angry'));
+  assert.ok(!Core.availableExpressions(catalog,'gintoki').includes('cry'));
+  assert.deepEqual(Core.availableExpressions(catalog,'missing'),[]);
+  const source=JSON.parse(read('ep00_story.json')), before=JSON.stringify(source);
+  const registry={metadata:'preserved',stories:[{id:'ep00',path:'res://data/ep00_story.json',authoring:'dialogue'}]};
+  const copy=Core.graphCopy(source,'ep00_graph',registry);
+  assert.equal(copy.story.id,'ep00_graph');assert.equal(copy.story.generated_from,undefined);assert.equal(copy.story.version,'s-unset');
+  assert.equal(copy.registry.stories.at(-1).authoring,'graph');assert.equal(copy.registry.metadata,'preserved');
+  assert.equal(JSON.stringify(source),before);assert.equal(registry.stories.length,1);
+  assert.throws(()=>Core.graphCopy(source,'ep00',registry));assert.throws(()=>Core.graphCopy(source,'../bad',registry));
+  const dense=Core.newStory('dense');dense.nodes={};dense.entry='n0';
+  for(let i=0;i<240;i++)dense.nodes['n'+i]=n([{op:'say',speaker:'narrator',text:'dense'},...(i===239?[{op:'end',text:''}]:[])],i===239?null:'n'+(i+1));
+  assert.equal(Core.analyze(dense).unreachable.length,0);assert.equal(Object.keys(Core.autoLayout(dense)).length,240);
+  const copyFile=path.join(out,'ep00_graph.json');fs.writeFileSync(copyFile,Core.exportText(copy.story));
+  assert.equal(checkStory(copyFile,'--write').code,0);
+  log('ok  scene classification, joins/none/cycles/last explicit media, collapse geometry, expressions, graph conversion and 240 nodes');
+}
+
+{
+  const source = JSON.parse(read('ep00_story.json'));
+  source.default_pov = 'gintoki';
+  source.credits = [{ role: '劇本', names: ['作者'] }, { role: '繪', names: ['畫師'], extra: { names: ['甲', '乙'] } }];
+  assert.deepEqual(JSON.parse(Core.exportText(source)), source);
+  const registry = {stories:[{id:source.id,skin:'plain',cover:'res://assets/image/cover.png',future:{names:['keep']}}]};
+  const copy = Core.graphCopy(source, 'credits_graph',registry);
+  assert.equal(copy.story.default_pov,'gintoki');
+  assert.equal(copy.registry.stories.at(-1).skin,'plain');
+  assert.equal(copy.registry.stories.at(-1).cover,'res://assets/image/cover.png');
+  assert.deepEqual(copy.registry.stories.at(-1).future,{names:['keep']});
+  assert.deepEqual(copy.story.credits, source.credits);
+  copy.story.credits[1].extra.names.push('丙');
+  assert.deepEqual(source.credits[1].extra.names, ['甲', '乙']);
+  assert.equal(Core.stepLabel({op:'say',speaker:'narrator'}), '旁白');
+  assert.equal(Core.stepLabel({op:'char'}), '角色登場／表情');
+  log('ok  root credits round trip and graph conversion preserve unknown nested fields, copy isolation; Chinese labels');
+}
+{
+  // 故事包: rows and catalogs as story_library.gd / StoryRunner.read_catalog read them (titan test work).
+  const read = rel => JSON.parse(fs.readFileSync(path.join(project, rel), 'utf8'));
+  const pack = read('tests/fixtures/packs/titan/pack.json');
+  const rows = Core.packEntries(pack, 'titan');
+  assert.deepEqual(rows.map(e => [e.id, e.kind, e.path, e.save, e.work, e.work_title]), [
+    ['titan_ch1', 'chapter', 'res://stories/titan/ch1_story.json', 'user://pack_titan_titan_ch1.save', 'titan', '測試作品：城牆'],
+    ['titan_ch2', 'chapter', 'res://stories/titan/ch2_story.json', 'user://pack_titan_titan_ch2.save', 'titan', '測試作品：城牆']]);
+  assert.equal(rows[0].cover, undefined, "a row keeps only its own cover; the pack's is the default");
+  const base = read('data/asset_catalog.json');
+  const own = { extends: 'res://data/asset_catalog.json', characters: { eren: { name: '艾連', path: 'art/eren.png', expressions: { angry: 'art/eren_angry.png', calm: 'res://x.png' } } },
+    backgrounds: { wall: { top: '#000', bottom: '#111', path: 'art/wall.png' } } };
+  const catalog = Core.resolveCatalog(own, 'res://stories/titan', base);
+  assert.equal(catalog.characters.eren.path, 'res://stories/titan/art/eren.png');
+  assert.deepEqual(catalog.characters.eren.expressions, { angry: 'res://stories/titan/art/eren_angry.png', calm: 'res://x.png' });
+  assert.ok(catalog.characters.shinpachi && catalog.backgrounds.yorozuya_living_room && catalog.backgrounds.wall, 'extends lays the base under it');
+  assert.equal(catalog.extends, undefined); assert.equal(base.characters.eren, undefined, 'the base is not changed');
+  assert.equal(Core.resolveCatalog(read('tests/fixtures/packs/titan/catalog.json'), 'res://tests/fixtures/packs/titan').backgrounds.wall.path,
+    'res://tests/fixtures/packs/titan/art/wall.png');
+  const copy = Core.graphCopy({ id: 'titan_ch1', nodes: {}, generated_from: 'x' }, 'titan_ch1_graph', { stories: rows }, rows[0]);
+  assert.deepEqual(copy.registry.stories.at(-1), { ...rows[0], id: 'titan_ch1_graph', path: 'res://stories/titan/titan_ch1_graph_story.json',
+    save: 'user://pack_titan_titan_ch1_graph.save', authoring: 'graph' });
+  log('ok  story packs: rows with res:// paths and per-work saves; catalogs resolve relative art and extends; a work copy stays in its folder');
+}
+{
+  // 美術待辦: the same answers as scripts/asset_usage.gd + tools/art_check (tests/test_art_check.gd pins both).
+  const read = rel => JSON.parse(fs.readFileSync(path.join(project, rel), 'utf8'));
+  const catalog = Core.resolveCatalog(read('tests/fixtures/art_check/shapes/catalog.json'), 'res://tests/fixtures/art_check/shapes');
+  const byNode = Core.missingArt(read('tests/fixtures/art_check/shapes/ch1_story.json'), catalog);
+  const todo = new Set(Object.values(byNode).flat().map(m => [m.kind, m.id, m.face || ''].join(':')));
+  assert.deepEqual([...todo].sort(), ['background:dusk:', 'character:shadow:', 'face:hero:angry'], 'the art check fixture work\'s three to-dos (not the flat black)');
+  assert.deepEqual(Object.keys(byNode).sort(), ['hall', 'start']);
+  const small = { backgrounds: { room: {}, yard: {} }, characters: { a: {}, b: {} }, items: { key: {} }, sounds: {}, music: { song: {} } };
+  const story = { nodes: {
+    n1: { steps: [{ op: 'investigate', places: [{ bg: 'yard', hotspots: [{ item: 'key', character: 'b' }] }] },
+      { op: 'say', speaker: 'a+b', text: '', expression: 'smile' }, { op: 'bgm', id: 'song' },
+      { op: 'say', speaker: 'nobody', text: '' }, { op: 'bg', id: 'room' }] },
+    n2: { steps: [{ op: 'boke_round', lines: [{ speaker: 'b', text: '' }] },
+      { op: 'choice', options: [{ text: 'x', require: 'key', next: 'n1' }] }] } } };
+  const used = Core.usedAssets(story, small, 'a');
+  assert.deepEqual(used.backgrounds, { room: ['n1'], yard: ['n1'] }); assert.deepEqual(used.investigation, { yard: true });
+  assert.deepEqual(used.items, { key: ['n1', 'n2'] }); assert.deepEqual(used.music, { song: ['n1'] });
+  assert.deepEqual(used.characters.a.expressions, { smile: ['n1'], thinking: ['（選項時）'] });
+  assert.deepEqual(used.characters.b.expressions, { neutral: ['n1'], smile: ['n1'], annoyed: ['n2'] });
+  assert.equal(used.characters.nobody, undefined);
+  log('ok  missing-art marks: same to-dos as the GDScript art check; same usage (rounds annoyed, POV thinking) as asset_usage.gd');
+}
 log('ALL PASSED');

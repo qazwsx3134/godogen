@@ -1,0 +1,84 @@
+{
+  "schema": "generate2dsprite.master_run.v1",
+  "tool": {
+    "name": "master_still",
+    "version": "0.4.0"
+  },
+  "command": "edit",
+  "created": "2026-10-21T06:30:13.931Z",
+  "name": "hd2b-sword-strike",
+  "class": "hero",
+  "finish": "pixel",
+  "facing": "right",
+  "key": "#00FF00",
+  "prompt": {
+    "path": "prompt.txt",
+    "sha256": "d7622ecd2fe7edcf51e500b111399aa7171ee1f59d8dacaf209ee364bf5d0831",
+    "bytes": 2705
+  },
+  "spec": {
+    "path": "spec.json",
+    "sha256": "f190cc383974d1414935c6a1258275f7fa47adf7db139e83965ee3876a0afaf9",
+    "bytes": 1178
+  },
+  "references": [
+    {
+      "role": "edit",
+      "ordinal": "FIRST",
+      "path": "../../../hd2/sword/candidate-01.png",
+      "sha256": "a7b90aff263f71bdbf33f50c415c41697e8d1542afe01be0166a411539f99589",
+      "bytes": 570603
+    }
+  ],
+  "media": {
+    "cli": "route_media.py",
+    "cli_source": "sibling",
+    "cli_sha256": "5f920b3c8f37118e144f40c1c021cba87b691413cd83cb4dc5437ad500df6562",
+    "route_requested": "codex-cli",
+    "size": "1024x1024",
+    "args": [],
+    "timeout_s": 360.0
+  },
+  "takes": [
+    {
+      "take": 1,
+      "exit_code": 0,
+      "seconds": 77.894,
+      "media": {
+        "status": "ok",
+        "route": "local:codex-cli",
+        "sha256": "6abec37718bd2c41e40c56d71234e7b41e2fff00528e72ee72810de518f00522",
+        "estimateUsd": 0.0,
+        "kind": "image",
+        "label": "Codex (local CLI)",
+        "model": "codex-image_gen",
+        "verifiedBefore": true
+      },
+      "copied": false,
+      "artifact": {
+        "path": "takes/take-01/generated.png",
+        "sha256": "6abec37718bd2c41e40c56d71234e7b41e2fff00528e72ee72810de518f00522",
+        "bytes": 1602539,
+        "size": [
+          1254,
+          1254
+        ]
+      },
+      "status": "ok",
+      "route": "local:codex-cli"
+    }
+  ],
+  "status": "ok",
+  "edit": {
+    "still": {
+      "path": "../../../hd2/sword/candidate-01.png",
+      "sha256": "a7b90aff263f71bdbf33f50c415c41697e8d1542afe01be0166a411539f99589",
+      "bytes": 570603
+    },
+    "change": "the attack at full extension: a wide horizontal slash, longsword swept forward to the right This is one single clear key pose for a character displayed only 40 pixels tall: exaggerate the action and use a bold readable silhouette. Change only the pose; keep the original head size and standing-equivalent body scale relative to the canvas, do not zoom the camera and do not shrink the character to fit long weapons. Keep the full body, hands, feet, clothing and every weapon tip inside the square canvas with generous safe margins, no clipping. Keep the lowest contacting foot near y=90% of canvas height, or the lowest BODY point at that same ground line for the fallen pose. No ground plate, floor, cast shadow, text, border, motion streaks, detached attack effects or dust cloud. Crystal or sun-ring glow must stay small and attached, with crisp opaque pixel clusters. Outside the complete subject use only the specified flat chroma-key colour.",
+    "keep": "the EXACT SAME accepted human character identity as the FIRST image: same face, hairstyle, facial hair if any, accepted outfit and equipment, very light low-saturation cloth, weapon design, natural metal/leather/skin/hair colours, body proportions, standing-equivalent anatomical body scale and head size, detailed HD-2D pixel-art style, warm light from upper-left with cool shadows, elevated three-quarter camera about 45 degrees above; RIGHT-facing for every upright action. Preserve the actual accepted image including its headgear; do not redesign it",
+    "extra": [],
+    "framing": "the top of the figure about 12 percent below the top edge, its lowest point about 10 percent above the bottom edge, its left-most point about 17 percent from the left edge and its right-most point about 10 percent from the right edge"
+  },
+  "warnings": []
+}

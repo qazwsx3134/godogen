@@ -18,7 +18,7 @@ const TEST_SAVE: String = "user://ep00_test.save"
 const TEST_UI: String = "user://ep00_test_ui.cfg"
 const TEST_SETTINGS: String = "user://ep00_test_settings.cfg"
 const TITLE: String = "EP00 今天也沒有工作的萬事屋（Prototype v0.1，非核准）"
-const POV_SHEET: String = "res://scenes/ui/choice_sheet_cinema.tscn"
+const POV_SHEET: String = "res://scenes/ui/choice_sheet_gintama.tscn"
 const DIRECTOR_SHEET: String = "res://scenes/ui/choice_sheet_director.tscn"
 const POV_PROMPT: String = "這句要怎麼吐槽才好……？"
 const POV_LABELS: Array[String] = ["問題是你有工作的時候也在休息啊！！", "首先，請你把桌上那疊委託書看完。", "……算了，我甚至不知道從哪裡開始說。"]
@@ -455,14 +455,14 @@ func _test_pov_choice_panel() -> void:
 	await _read_until(game, func() -> bool: return game._screen_mode == "choice", "the POV choice")
 	await _frames(3)
 	var sheet: Control = game._choice_sheet
-	_expect(sheet.get("perspective") == "pov" and sheet.scene_file_path == POV_SHEET and sheet.style_id == "cinema",
+	_expect(sheet.get("perspective") == "pov" and sheet.scene_file_path == POV_SHEET and sheet.style_id == "gintama",
 		"a POV choice is in the edition's ordinary panel, not the director's: %s" % sheet.scene_file_path)
 	_expect(sheet.get_node("%Prompt").text == POV_PROMPT, "the prompt is Shinpachi's thought")
 	var labels: Array[String] = []
 	for row: Button in game._choice_buttons:
 		labels.append(row.text)
 	_expect(labels == POV_LABELS, "the three rows: %s" % [labels])
-	_expect(game._choice_qa_state(game._runner_current()) == {"perspective": "pov", "pov": "shinpachi", "note": "", "sheet": "cinema", "tones": POV_STYLES},
+	_expect(game._choice_qa_state(game._runner_current()) == {"perspective": "pov", "pov": "shinpachi", "note": "", "sheet": "gintama", "tones": POV_STYLES},
 		"the QA choice field: %s" % [game._choice_qa_state(game._runner_current())])
 	_expect(game._current_speaker == "shinpachi" and game._dialog_panel.speaker_name.text == "新八・心聲", "Shinpachi is the one thinking (%s)" % game._dialog_panel.speaker_name.text)
 	var markers: Array = game._choice_buttons.map(func(row: Button) -> String: return (row.get_node("%Tone") as Label).text)
@@ -792,9 +792,9 @@ func _test_old_save_does_not_replay_the_overlay() -> void:
 
 
 ## The chapter label is the story's title up to the first （ ("EP00 今天也沒有工作的萬事屋"), more than the speaker row has room
-## for: in every edition's box it trims with an ellipsis instead of being cut off on its left.
+## for: the box trims it with an ellipsis instead of cutting it off on its left.
 func _test_chapter_label_trims_with_an_ellipsis() -> void:
-	for style: String in ["cinema", "ledger", "manga", "gintama"]:
+	for style: String in ["gintama"]:
 		var box: Control = (load("res://scenes/ui/dialogue_box_%s.tscn" % style) as PackedScene).instantiate() as Control
 		var chapter: Label = box.get_node("%Chapter") as Label
 		_expect(chapter.text_overrun_behavior == TextServer.OVERRUN_TRIM_ELLIPSIS and chapter.clip_text and chapter.horizontal_alignment == HORIZONTAL_ALIGNMENT_RIGHT,
@@ -858,10 +858,8 @@ func _new_game() -> Control:
 	var game: Control = MAIN_SCENE.instantiate() as Control
 	game.story_path = STORY
 	game.save_path = TEST_SAVE
-	game.ui_preference_path = TEST_UI
 	game.settings_path = TEST_SETTINGS
 	root.add_child(game)
-	game._set_ui_style("cinema", false)
 	await _frames(3)
 	_expect(game._story_ready, "EP00 loads in the shell: %s" % game._story_error)
 	return game

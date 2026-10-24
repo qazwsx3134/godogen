@@ -1,7 +1,7 @@
 extends Control
 ## The chapter result (scenes/ui/chapter_result.tscn), shown by a story's `result` step: the
 ## chapter's numbers, the grade from the glasses left, a closing line for that grade, and
-## 下一章 (when a next chapter exists) or 回標題.
+## 下一章 (when a next chapter exists) or 回標題, with who wrote and drew the chapter under the line.
 
 signal next_pressed
 signal title_pressed
@@ -16,6 +16,7 @@ signal title_pressed
 @onready var game_overs: Label = %GameOvers
 @onready var grade: Label = %Grade
 @onready var quote: Label = %Quote
+@onready var credit: Label = %Credit
 @onready var next_button: Button = %Next
 @onready var title_button: Button = %Title
 
@@ -27,7 +28,10 @@ func _ready() -> void:
 
 
 ## summary: StoryRunner.chapter_result(). speaker_name: the closing line's speaker as shown.
-func show_result(summary: Dictionary, speaker_name: String, has_next: bool) -> void:
+## credit_line: the story's credits in one line ("" hides it).
+func show_result(summary: Dictionary, speaker_name: String, has_next: bool, credit_line: String = "") -> void:
+	credit.text = credit_line
+	credit.visible = not credit_line.is_empty()
 	var ending: String = str(summary.get("ending_title", ""))
 	heading.text = str(summary.get("title", "")) + ("" if ending.is_empty() else "\n結局「%s」" % ending)
 	caught.text = "%d / %d" % [int(summary.get("caught", 0)), int(summary.get("tries", 0))]

@@ -23,7 +23,7 @@ static func text(command: Dictionary) -> String:
 
 static func speaker(command: Dictionary) -> String:
 	var own: String = str(line(command).get("speaker", ""))
-	return own if not own.is_empty() else str(command.get("speaker", "gintoki"))
+	return own if not own.is_empty() else str(command.get("speaker", ""))
 
 
 static func listened(command: Dictionary) -> bool:

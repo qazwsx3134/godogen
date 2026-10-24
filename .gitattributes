@@ -2,3 +2,6 @@
 # Committed with CRLF by their upstream; keep as-is.
 prototypes/debt-commission/addons/godot_mcp_toolkit/** -text
 docs/gintama-like/new/gintama0923.md -text
+
+# Approved source art (finals only; see the art_src/.gitignore next to them)
+prototypes/skybound-blades/art_src/**/*.png filter=lfs diff=lfs merge=lfs -text

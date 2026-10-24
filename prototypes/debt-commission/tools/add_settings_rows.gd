@@ -61,7 +61,9 @@ func _add_rows(path: String) -> void:
 		push_error("pack failed: " + path)
 		quit(1)
 		return
-	var after: int = _count(packed.instantiate())
+	var check: Node = packed.instantiate()
+	var after: int = _count(check)
+	check.free()
 	if after != before + added:
 		push_error("%s node count %d -> %d, expected +%d" % [path, before, after, added])
 		quit(1)

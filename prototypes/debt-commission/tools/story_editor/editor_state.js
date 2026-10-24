@@ -19,6 +19,7 @@
       this.mergeKey = mergeKey;
       return true;
     }
+    replaceCurrent(value) { this.entries[this.index] = clone(value); this.breakMerge(); }
     undo() { if (!this.canUndo) return null; this.index--; this.breakMerge(); return this.current; }
     redo() { if (!this.canRedo) return null; this.index++; this.breakMerge(); return this.current; }
   }

@@ -10,7 +10,6 @@ func _game() -> Control:
 	var game: Control = MAIN.instantiate() as Control
 	game.story_path = SAMPLE
 	game.save_path = "user://super_effects_test.save"
-	game.ui_preference_path = "user://super_effects_test.cfg"
 	root.add_child(game)
 	return game
 func _run() -> void:
@@ -38,9 +37,7 @@ func _run() -> void:
 	_expect(notifications == 1, "crossing full power emits one cut-in")
 	await _until_combo(game)
 	_expect(game._choice_sheet.super_button.visible and game._choice_sheet.super_button.text == "龜派氣功！", "custom label on the super button")
-	game._set_ui_style("gintama", false)
-	await _frames(2)
-	_expect(game._choice_sheet.super_button.text == "龜派氣功！" and _charged(game) == 5, "edition switch keeps super label and aura")
+	_expect(_charged(game) == 5, "the living glasses keep their aura")
 	var payload: Dictionary = game._build_save_payload("")
 	var resumed: Control = _game()
 	await _frames(3)

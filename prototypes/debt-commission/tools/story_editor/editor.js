@@ -49,9 +49,10 @@
   const S = {
     story: null, name: '', layout: {}, v: { x: 0, y: 0, k: 1 }, sel: null, a: null, dirty: false, modified: false, notice: '', error: '',
     catalog: null, online: false, stories: [], enums: JSON.parse(JSON.stringify(Core.FALLBACK_ENUMS)),
+    baseCatalog: null, packs: [], packCatalogs: {},
   };
   const nodeIds = () => Object.keys(S.story.nodes).sort();
-  const snapshot = () => ({ story: S.story, layout: S.layout, sel: S.sel });
+  const snapshot = () => ({ story: S.story, layout: S.layout, sel: S.sel, conversionRegistry });
   let history = null;
   let originalStory = '';
   let confirmedText = null;
@@ -64,6 +65,182 @@
   let loadTicket = 0;
   let fieldSession = 0;
 
+  let projectSource = { path: '', hash: null, ready: true };
+  let projectSaving = false;
+  let saveIssues = [];
+  const registryText = value => JSON.stringify(value || {stories:[]}, null, 2) + '\n';
+  let confirmedRegistryText = '';
+  let registryBaseHash = null;
+  // A story's registry is data/stories.json, or for stories/<作品>/ that work's pack.json (shown with
+  // res:// paths, as story_library.gd reads it; the service writes the pack's own form).
+  const workOf = path => /^stories\/([A-Za-z_][A-Za-z0-9_]*)\//.exec(path || '')?.[1] || null;
+  const packOf = work => S.packs.find(p => p.id === work) || null;
+  function ownerRegistry() {
+    const pack = packOf(workOf(projectSource.path));
+    return pack ? {stories: Core.packEntries(pack.pack, pack.id)} : (S.registry || {stories: []});
+  }
+  const ownerHash = () => packOf(workOf(projectSource.path))?.hash ?? (S.registryHash || null);
+  function rebuildStories() {
+    S.stories = [...(S.registry?.stories || []), ...S.packs.flatMap(p => Core.packEntries(p.pack, p.id))];
+    const picker = $('storySelect');
+    picker.hidden = !S.stories.length;
+    const option = e => el('option', { value: e.id }, `${e.id}（${e.kind}）`);
+    picker.replaceChildren(el('option', { value: '' }, '從專案開啟…'), ...(S.registry?.stories || []).map(option),
+      ...S.packs.map(p => el('optgroup', { label: `作品：${p.title}` }, ...Core.packEntries(p.pack, p.id).map(option))));
+    picker.value = S.stories.find(e => e.path === 'res://' + projectSource.path)?.id || '';
+  }
+  /** The open story's catalog: its work's catalog.json, else data/asset_catalog.json. */
+  function useCatalog() {
+    const work = workOf(projectSource.path);
+    S.catalog = (work && S.packCatalogs[work]) || S.baseCatalog;
+  }
+  async function loadCatalog(resPath, depth = 0) {
+    if (resPath === 'res://data/asset_catalog.json' && S.baseCatalog) return S.baseCatalog;
+    const own = await getJson(Core.projectUrl(resPath));
+    const base = typeof own.extends === 'string' && depth < 4 ? await loadCatalog(own.extends, depth + 1) : null;
+    return Core.resolveCatalog(own, resPath.replace(/\/[^/]*$/, ''), base);
+  }
+  async function loadPackCatalog(work) {
+    try { S.packCatalogs[work] = await loadCatalog(`res://stories/${work}/catalog.json`); }
+    catch { delete S.packCatalogs[work]; }  // no catalog.json: the game's catalog
+  }
+  function currentRegistryEntry() {
+    const work = workOf(projectSource.path), pack = packOf(work);
+    return (conversionRegistry || ownerRegistry())?.stories?.find(e => e.path === 'res://' + projectSource.path) ||
+      (pack ? {id:S.story.id,kind:'chapter',path:'res://' + projectSource.path,save:`user://pack_${work}_${S.story.id}.save`,
+        work,work_title:String(pack.pack.title || work),authoring:'graph'}
+        : {id:S.story.id,kind:'sample',path:'res://' + projectSource.path,save:`user://${S.story.id}.save`,authoring:isReadOnly()?'dialogue':'graph'});
+  }
+  const registryDirty = () => !!conversionRegistry && registryText(conversionRegistry) !== confirmedRegistryText;
+  const registryChanged = () => !!conversionRegistry && registryText(conversionRegistry) !== registryText(ownerRegistry());
+  function editRegistry(key, value) {
+    if (!conversionRegistry) conversionRegistry = JSON.parse(JSON.stringify(ownerRegistry()));
+    let entry = conversionRegistry.stories.find(e => e.path === 'res://' + projectSource.path);
+    if (!entry) { entry = {...currentRegistryEntry()}; conversionRegistry.stories.push(entry); }
+    if (value === '') delete entry[key]; else entry[key] = value;
+    history.commit(snapshot()); refreshDirty(); saveDraft(); renderBanner(); renderStatus(); renderHistory();
+    if (key === 'cover') renderInfo();
+    applyReadOnly();
+  }
+  async function loadSkins() {
+    if (S.service?.skins?.length) return S.service.skins;
+    const ids = [...new Set(['gintama', ...[...S.stories, ...S.packs.map(p=>p.pack)].map(e=>e.skin).filter(id=>typeof id==='string' && /^[A-Za-z0-9_-]+$/.test(id))])];
+    return Promise.all(ids.map(async id => {
+      if (location.protocol !== 'file:') try {
+        const value = await getJson(`../../skins/${id}/skin.json`);
+        return {id,name:value.name || id};
+      } catch { /* Keep registry-used ids selectable even if their manifest is unavailable. */ }
+      return {id,name:id==='gintama'?'銀魂和紙':'名稱未載入'};
+    }));
+  }
+  function registryControls() {
+    const entry = currentRegistryEntry();
+    const pack = packOf(workOf(projectSource.path))?.pack;
+    const skin = select2((S.skins || []).map(s=>({value:s.id,label:`${s.id} · ${s.name}`})),entry.skin,value=>editRegistry('skin',value),
+      `預設：${pack?.skin || 'gintama'}${pack ? '（作品）' : ''}`);
+    skin.id='storySkin'; skin.dataset.registryField='true';
+    const covers = Object.values(S.catalog?.backgrounds || {}).filter(bg=>bg.path).map(bg=>({value:bg.path,label:bg.label || bg.path}));
+    const cover = select2(covers,entry.cover,value=>editRegistry('cover',value),pack?.cover ? '預設：作品封面' : '自動：故事第一張背景');
+    cover.id='storyCover'; cover.dataset.registryField='true';
+    return [field('外觀包',skin),field('章節封面',cover,
+      entry.cover && el('img',{class:'cover-preview',src:Core.projectUrl(entry.cover),alt:'章節封面預覽'}))];
+  }
+  function voicePitch(step) {
+    const id=step.id || step.speaker;
+    const value=S.catalog?.characters?.[id]?.voice_pitch;
+    return field('打字音高',el('code',{class:'voice-pitch'},id==='narrator'?'旁白（無打字音）':Number.isFinite(value)?`${value} Hz`:'未設定（用預設音高）'));
+  }
+  function exportRegistry() {
+    if (workOf(projectSource.path)) { failure(`作品的登記在 stories/${workOf(projectSource.path)}/pack.json，請用「驗證並存檔」存回。`); return; }
+    const text = registryText(conversionRegistry || S.registry);
+    download('stories.json',text);
+    pendingExport={text,key:draftKey,kind:'registry'};
+    S.notice='已下載故事登記。請選回檔案確認內容；下載不會自動合併進專案。';
+    saveDraft();renderBanner();renderStatus();
+  }
+
+  async function textHash(text) {
+    const bytes = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+    return [...new Uint8Array(bytes)].map(byte => byte.toString(16).padStart(2, '0')).join('');
+  }
+  function resetProjectSource(story, name, rawText, path = null) {
+    projectSource = { path: path || `data/${/^[A-Za-z0-9_]+_story\.json$/.test(name) ? name : story.id + '_story.json'}`, hash: null, ready: rawText === null };
+    projectSaving = false; saveIssues = [];
+    useCatalog();
+    confirmedRegistryText=registryText(ownerRegistry());registryBaseHash=ownerHash();
+    if (rawText !== null && location.protocol !== 'file:') {
+      const source = projectSource;
+      textHash(rawText).then(hash => {
+        if (projectSource !== source) return;
+        source.hash = hash; source.ready = true;
+        renderProjectSave(); if (S.dirty) saveDraft();
+      }).catch(err => { if (projectSource === source) failure(`無法建立存檔基底：${err.message}。請先匯出。`); });
+    }
+  }
+  function renderProjectSave() {
+    const control = $('btnProjectSave');
+    control.hidden = !S.service;
+    control.disabled = !S.story || projectSaving || !projectSource.ready || (isReadOnly() && !registryChanged());
+    control.textContent = projectSaving ? '存檔中…' : isReadOnly() && registryChanged() ? '存回外觀設定' : '驗證並存檔';
+  }
+  async function saveProject() {
+    const metadataOnly=isReadOnly();
+    if (!S.service || !S.story || projectSaving || !projectSource.ready || (metadataOnly && !registryChanged())) return;
+    const source=projectSource, sentText=storyText(), sentRegistry=registryText(conversionRegistry || ownerRegistry());
+    const request={path:source.path,base_hash:source.hash,story:JSON.parse(sentText),
+      registry_entry:JSON.parse(JSON.stringify(currentRegistryEntry())),registry_hash:registryBaseHash,update_registry:registryChanged()};
+    projectSaving=true;saveIssues=[];S.error='';S.notice='';
+    renderBanner();renderProjectSave();renderProblems();renderStatus();
+    try {
+      const response=await fetch(metadataOnly?'../../api/registry':'../../api/save',{method:'POST',
+        headers:{'Content-Type':'application/json','X-Story-Editor-Token':S.service.token},body:JSON.stringify(request)});
+      const result=await response.json();
+      if(projectSource!==source)return;
+      if(!response.ok || result.ok!==true){
+        const errors=[result.error || '儲存失敗',...(result.errors || [])];
+        saveIssues=errors.map(message=>({type:'validation',message}));
+        failure(errors[0]);saveDraft();renderProblems();renderStatus();return;
+      }
+      const unchanged=storyText()===sentText;
+      const registryUnchanged=registryText(conversionRegistry || ownerRegistry())===sentRegistry;
+      const latestEntry=JSON.parse(JSON.stringify(currentRegistryEntry()));
+      if(!metadataOnly){
+        source.hash=result.hash;
+        const saved=JSON.parse(result.text);
+        if(unchanged)S.story=saved;else S.story.version=saved.version;
+        originalStory=JSON.stringify(saved);confirmedText=Core.exportText(saved);
+      }
+      if(result.registry || result.pack){
+        if(result.pack){  // only that work's pack.json changed
+          const work=workOf(source.path), known=packOf(work);
+          if(known){known.pack=result.pack;known.hash=result.pack_hash;}
+          else S.packs.push({id:work,title:String(result.pack.title || work),path:result.owner,hash:result.pack_hash,pack:result.pack});
+          registryBaseHash=result.pack_hash;
+        } else {S.registry=result.registry;S.registryHash=result.registry_hash;registryBaseHash=result.registry_hash;}
+        confirmedRegistryText=registryText(ownerRegistry());
+        conversionRegistry=null;
+        if(!registryUnchanged){
+          conversionRegistry=JSON.parse(JSON.stringify(ownerRegistry()));
+          const entry=conversionRegistry.stories.find(e=>e.path==='res://'+source.path);
+          if(entry)for(const key of ['skin','cover']){if(key in latestEntry)entry[key]=latestEntry[key];else delete entry[key];}
+        }
+        rebuildStories();
+      }
+      pendingExport=null;S.error='';refreshDirty();
+      S.notice=S.dirty?'已存回送出的版本；此頁另有後續修改，請再次存檔。':metadataOnly?'外觀設定已存回專案。':'驗證通過，已存回專案。';
+      recompute();ensureLayout();if(unchanged && registryUnchanged)history.replaceCurrent(snapshot());
+      saveDraft();renderAll();
+    } catch(err){if(projectSource===source)failure(`無法確認存檔結果：${err.message}。修改仍保留，請先匯出；重試若提示衝突，請重開專案版本比較。`);}
+    finally{if(projectSource===source){projectSaving=false;renderProjectSave();}}
+  }
+  async function detectService() {
+    if (!/^https?:$/.test(location.protocol)) return null;
+    const response = await fetch('../../data/stories.json', {method:'HEAD'});
+    if (response.headers.get('X-Story-Editor-Service') !== 'debt-story-editor-v1') return null;
+    const service = await getJson('../../api/capabilities');
+    return service.service === 'debt-story-editor-v1' ? service : null;
+  }
+
   function failure(message) { S.error = message; renderBanner(); }
   function storageFailure(err) {
     storageError = `瀏覽器儲存失敗：${err.message}。修改仍在此頁，請立即匯出；草稿／座標尚未備份。`;
@@ -71,7 +248,7 @@
   }
   function refreshDirty() {
     S.modified = JSON.stringify(S.story) !== originalStory;
-    S.dirty = confirmedText === null || storyText() !== confirmedText;
+    S.dirty = confirmedText === null || storyText() !== confirmedText || registryDirty();
   }
   function renderHistory() {
     $('btnUndo').disabled = !history?.canUndo;
@@ -88,7 +265,7 @@
         storageError = ''; renderBanner(); return;
       }
       const record = { format: 1, name: S.name, base: JSON.parse(originalStory),
-        confirmedText, ...snapshot(), updatedAt: new Date().toISOString() };
+        confirmedText, confirmedRegistryText, registryBaseHash, ...snapshot(), projectSource, updatedAt: new Date().toISOString() };
       const raw = JSON.stringify(record);
       localStorage.setItem(draftKey, raw);
       draftRaw = raw;
@@ -121,10 +298,16 @@
     const record = pendingDraft;
     pendingDraft = null;
     S.story = record.story;
+    if (record.projectSource?.path && (record.projectSource.hash === null || /^[0-9a-f]{64}$/.test(record.projectSource.hash))) projectSource = { ...record.projectSource, ready: true };
+    saveIssues = [];
+    conversionRegistry = record.conversionRegistry || null;
     S.name = record.name;
     S.layout = cleanLayout(record.layout);
     S.sel = null;
     confirmedText = record.confirmedText;
+    useCatalog();
+    confirmedRegistryText=record.confirmedRegistryText ?? registryText(ownerRegistry());
+    registryBaseHash=record.registryBaseHash ?? registryBaseHash;
     recompute(); ensureLayout(); refreshDirty();
     history.reset(snapshot());
     S.notice = '已復原草稿。請匯出並選回下載檔案確認儲存；草稿不會自動覆寫專案。';
@@ -145,19 +328,27 @@
     if (!value) return;
     ++loadTicket;
     drag = null;
-    S.story = value.story; S.layout = value.layout; S.sel = value.sel;
+    S.story = value.story; S.layout = value.layout; S.sel = value.sel; conversionRegistry = value.conversionRegistry || null;
     recompute(); ensureLayout(); refreshDirty();
     saveLayout(); saveDraft(); renderAll();
   }
   function cleanLayout(layout) {
-    return Object.fromEntries(Object.entries(layout).filter(([id, p]) => id in S.story.nodes && isObj(p) && Number.isFinite(p.x) && Number.isFinite(p.y)));
+    return Object.fromEntries(Object.entries(layout).filter(([id, p]) => id in S.story.nodes && isObj(p) && Number.isFinite(p.x) && Number.isFinite(p.y)).map(([id,p]) => [id, {x:p.x, y:p.y, ...(isObj(p.expanded) ? {expanded: Object.fromEntries(Object.entries(p.expanded).filter(([k,v]) => /^\d+:[a-z]+$/.test(k) && typeof v === 'boolean'))} : {})}]));
   }
 
 
   // ---------------------------------------------------------------- state
 
-  function recompute() {
+  let foldShapes = {};
+  function recompute(resetExpanded = false) {
+    const shapes = Object.fromEntries(Object.entries(S.story.nodes).map(([id, node]) => [id, Core.foldShape(node)]));
+    if (resetExpanded) for (const id of Object.keys(shapes)) {
+      if (foldShapes[id] && shapes[id] !== foldShapes[id] && S.layout[id]) delete S.layout[id].expanded;
+    }
+    foldShapes = shapes;
     S.a = Core.analyze(S.story);
+    S.media = Core.effectiveMedia(S.story, S.a);
+    S.missingArt = S.catalog ? Core.missingArt(S.story, S.catalog) : {};
     if (S.sel && S.sel.type === 'node' && !(S.sel.id in S.story.nodes)) S.sel = null;
     if (S.sel && S.sel.type === 'edge') {
       const edges = S.a.edges[S.sel.node];
@@ -165,12 +356,12 @@
     }
   }
 
-  const sizeOf = id => Core.cardSize(S.story.nodes[id], S.a.edges[id].length);
+  const sizeOf = id => Core.cardSize(S.story.nodes[id], S.a.edges[id].length, S.layout[id]);
 
   function ensureLayout() {
     const missing = Object.keys(S.story.nodes).filter(id => !S.layout[id]);
     if (!missing.length) return;
-    const auto = Core.autoLayout(S.story, S.a);
+    const auto = Core.autoLayout(S.story, S.a, S.layout);
     for (const id of missing) S.layout[id] = auto[id];
   }
 
@@ -185,11 +376,13 @@
     try { localStorage.setItem(LAYOUT_KEY + S.story.id, JSON.stringify(S.layout)); } catch (err) { storageFailure(err); }
   }
 
-  function loadStory(story, name, key = null) {
+  function loadStory(story, name, key = null, rawText = null, path = null) {
     ++loadTicket;
     drag = null;
+    stopAudio(); conversionRegistry = null;
     S.story = story;
     S.name = name || `${story.id}_story.json`;
+    resetProjectSource(story, S.name, rawText, path);
     S.sel = null;
     S.dirty = false;
     S.modified = false;
@@ -210,7 +403,7 @@
 
   /** Call after every change to S.story. opts.inspector rebuilds the sidebar editor (not while typing in it). */
   function touch(opts = {}) {
-    recompute();
+    recompute(true);
     ensureLayout();
     history.commit(snapshot(), opts.merge || null);
     refreshDirty();
@@ -219,6 +412,7 @@
     renderCanvas();
     renderProblems();
     if (opts.inspector) renderInspector();
+    applyReadOnly();
     renderStatus();
     renderVersionHint();
     saveLayout();
@@ -238,7 +432,7 @@
     if (sel && sel.type === 'node') cardEl(sel.id)?.classList.add('selected');
     if (sel && sel.type === 'edge') cardEl(sel.node)?.querySelector(`.prow[data-edge="${CSS.escape(sel.key)}"]`)?.classList.add('selected');
     drawEdges();
-    renderInspector();
+    renderInspector(); applyReadOnly();
   }
 
   // ---------------------------------------------------------------- view
@@ -303,10 +497,90 @@
     }, el('span', { class: 'plabel' }, edge.label), el('span', { class: 'dot' }));
   }
 
+  const mediaLabels = { explicit: '', inherited: '沿用', mixed: '依路線不同', none: '無' };
+  let audition = null;
+  let auditionId = '';
+  function stopAudio() {
+    audition?.pause(); audition = null; auditionId = '';
+    document.querySelectorAll('[data-audition]').forEach(b => { b.textContent = '▶ 試聽'; b.setAttribute('aria-pressed', 'false'); });
+  }
+  function audioButton(id) {
+    const asset = S.catalog?.music?.[id];
+    if (!id) return el('span', { class: 'muted' }, '無');
+    if (!asset?.path) return el('span', { class: 'muted' }, '佔位（無音檔）');
+    const b = button(auditionId === id ? '■ 停止' : '▶ 試聽', async () => {
+      const stopping = auditionId === id; stopAudio(); if (stopping) return;
+      const player = new Audio(Core.projectUrl(asset.path)); audition = player; auditionId = id;
+      document.querySelectorAll('[data-audition]').forEach(x => { if (x.dataset.audition === id) { x.textContent = '■ 停止'; x.setAttribute('aria-pressed', 'true'); } });
+      player.addEventListener('ended', () => { if (audition === player) stopAudio(); });
+      try { await player.play(); } catch (err) { if (audition === player) { stopAudio(); failure(`試聽失敗：${err.message}`); } }
+    }, 'small audition');
+    b.dataset.audition = id; b.setAttribute('aria-pressed', String(auditionId === id)); return b;
+  }
+  function thumbnail(id) {
+    const asset = S.catalog?.backgrounds?.[id];
+    if (!asset) return el('span', { class: 'bg-thumb empty', title: id || '無背景' }, id ? '?' : '—');
+    const box = el('span', { class: 'bg-thumb', title: asset.label || id });
+    if (asset.path) box.append(el('img', { src: Core.projectUrl(asset.path), alt: asset.label || id, loading: 'lazy', onerror: () => { box.textContent = '缺圖'; } }));
+    else if (/^#[0-9a-f]{3,8}$/i.test(asset.top || '') && /^#[0-9a-f]{3,8}$/i.test(asset.bottom || '')) box.style.background = `linear-gradient(${asset.top}, ${asset.bottom})`;
+    return box;
+  }
+  function sceneMedia(id) {
+    const { bg, bgm } = S.media[id];
+    const label = (kind, value) => `${kind}：${mediaLabels[value.status]}${value.id ? ` ${S.catalog?.[kind === '背景' ? 'backgrounds' : 'music']?.[value.id]?.label || value.id}` : ''}`;
+    return el('div', { class: 'scene-media' }, thumbnail(bg.id),
+      el('div', {}, el('div', { class: 'media-label', title: label('背景', bg) }, label('背景', bg)),
+        el('div', { class: 'media-label', title: label('BGM', bgm) }, label('BGM', bgm))),
+      bgm.status !== 'mixed' && audioButton(bgm.id));
+  }
+  function openStep(id, index) {
+    select({ type: 'node', id, step: index });
+    const target = $('inspector').querySelector(`[data-step="${index}"]`);
+    if (target) { target.scrollIntoView({ block: 'nearest' }); target.classList.add('search-hit'); target.querySelector('textarea,input,select')?.focus({ preventScroll: true }); }
+  }
+  function flowNodes(id) {
+    const node = S.story.nodes[id];
+    const nodes = [];
+    const stepButton = (index, group) => {
+      const step = node.steps[index];
+      const detail = step.text || step.prompt || step.id || step.key || step.target || '';
+      const name = Core.stepLabel(step);
+      const b = button(`${index + 1} · ${name}${detail ? ` · ${detail}` : ''}`, () => openStep(id, index), `flow-node group-${group.id}`);
+      b.title = `${step.op} · ${detail}`; b.dataset.step = index; return b;
+    };
+    for (const run of Core.stepRuns(node)) {
+      if (run.indices.length === 1) { nodes.push(stepButton(run.indices[0], run.group)); continue; }
+      const expanded = Core.runExpanded(S.layout[id], run);
+      const characters = run.group.id === 'character' ? [...new Set(run.indices.map(i => S.catalog?.characters?.[node.steps[i].id]?.name || node.steps[i].id).filter(Boolean))] : [];
+      const b = button(`${expanded ? '▾' : '▸'} ${run.group.label} ×${run.indices.length}${characters.length ? '：' + characters.join('、') : ''}`, () => {
+        (S.layout[id].expanded ||= {})[run.key] = !expanded;
+        history.commit(snapshot()); saveLayout(); saveDraft(); renderHistory(); renderCanvas();
+      }, `flow-node flow-group group-${run.group.id}`);
+      b.setAttribute('aria-expanded', String(expanded)); b.dataset.run = run.key; nodes.push(b);
+      if (expanded) nodes.push(...run.indices.map(index => stepButton(index, run.group)));
+    }
+    return nodes;
+  }
+  function isReadOnly() {
+    return !!S.story && (!!S.story.generated_from || S.stories.some(e => e.path === 'res://' + projectSource.path && e.authoring === 'dialogue'));
+  }
+  let conversionRegistry = null;
+  function convertStory(id) {
+    if (S.stories.some(e => e.id === id)) throw new Error('請使用未存在的新故事 id（英文、數字、底線）');
+    const result = Core.graphCopy(S.story,id,conversionRegistry || ownerRegistry(),currentRegistryEntry());
+    const layout = JSON.parse(JSON.stringify(S.layout));
+    loadStory(result.story, `${id}_story.json`, null, null, result.registry.stories.at(-1).path.replace(/^res:\/\//, ''));
+    S.layout = layout; conversionRegistry = result.registry;
+    confirmedText = null; history.reset(snapshot()); refreshDirty(); saveDraft(); saveLayout();
+    S.notice = '圖編輯副本已建立。匯出故事後跑 check_story；下載 stories.json 並合併登記，讓遊戲讀到新故事。原始故事保留。';
+    renderAll(); fit();
+    return result;
+  }
+
   function buildCard(id) {
     const node = S.story.nodes[id];
     const edges = S.a.edges[id];
-    const size = Core.cardSize(node, edges.length);
+    const size = sizeOf(id);
     const summary = Core.summaryOf(node);
     const pos = S.layout[id];
     const ending = Core.isEnding(node);
@@ -324,15 +598,25 @@
       id === S.story.entry && el('span', { class: 'badge entry' }, 'ENTRY'),
       ending && el('span', { class: 'badge end' }, '結局'),
       lost && el('span', { class: 'badge lost' }, '到不了'),
+      S.missingArt?.[id]?.length > 0 && el('span', { class: 'badge missing-art', title: S.missingArt[id].map(m => m.text).join('\n') },
+        `缺圖 ${S.missingArt[id].length}`),
       el('span', { class: 'nid' }, id)),
-    el('div', { class: 'body' },
-      summary.rows.map(row => el('div', { class: 'srow' }, el('i', {}, row.icon), el('span', { class: 'stext' }, row.text))),
-      summary.chips.length > 0 && el('div', { class: 'srow chips' }, summary.chips.map(chip => el('span', { title: chip.op }, chip.icon + (chip.count > 1 ? '×' + chip.count : ''))))),
+    el('div', { class: 'scene-body', style: { height: (size.body + 16) + 'px' } }, sceneMedia(id), el('div', { class: 'flow' }, flowNodes(id))),
     el('div', { class: 'ports' }, edges.map(edge => portRow(id, edge))));
   }
 
+  const cardCache = new Map();
   function renderCanvas() {
-    cardsEl.replaceChildren(...Object.keys(S.story.nodes).map(buildCard));
+    const alive = new Set(Object.keys(S.story.nodes));
+    for (const [id, cached] of cardCache) if (!alive.has(id)) { cached.el.remove(); cardCache.delete(id); }
+    for (const id of alive) {
+      const signature = JSON.stringify([S.story.nodes[id], S.layout[id], S.media[id], S.catalogVersion || 0, S.missingArt?.[id] || null, id === S.story.entry, S.a.unreachable.includes(id), S.sel?.type === 'node' && S.sel.id === id, S.sel?.type === 'edge' && S.sel.node === id ? S.sel.key : null, auditionId]);
+      const cached = cardCache.get(id);
+      if (cached?.signature === signature && cached.el.parentNode === cardsEl) continue;
+      const node = buildCard(id);
+      if (cached?.el.parentNode === cardsEl) cached.el.replaceWith(node); else cardsEl.append(node);
+      cardCache.set(id, { signature, el: node });
+    }
     drawEdges();
   }
 
@@ -390,6 +674,7 @@
   function renderBanner() {
     const box = $('banner');
     box.replaceChildren();
+    renderProjectSave();
     if (storageError) box.append(el('p', { class: 'note error', role: 'alert', id: 'storageError' }, storageError));
     if (pendingDraft) {
       const changed = JSON.stringify(pendingDraft.base) !== originalStory;
@@ -400,8 +685,11 @@
     if (draftBlocked) box.append(button('刪除損壞草稿（需確認）', discardDraft, 'danger'));
     if (pendingExport) box.append(el('p', { class: 'note warn', id: 'exportPending' }, '已送出下載，尚未確認儲存。請按「確認下載檔…」選回剛才的 JSON；比對成功才解除離頁提醒。'));
     if (S.error) box.append(el('p', { class: 'note error' }, S.error));
-    if (S.story && S.story.generated_from) {
-      box.append(el('p', { class: 'note warn' }, `此檔由 ${S.story.generated_from} 建置，改這裡會被重建蓋掉。要長期維護請改來源檔；這裡匯出的 JSON 適合當新故事自己的來源。`));
+    $('btnAddNode').disabled = isReadOnly();
+    $('btnConvert').hidden = !isReadOnly();
+    $('btnRegistry').hidden = !conversionRegistry;
+    if (isReadOnly()) {
+      box.append(el('p', { class: 'note warn' }, `此故事為唯讀，來源：${S.story.generated_from || "dialogue"}。請改來源檔，或「轉成圖編輯來源」建立新故事。`));
     }
     if (!S.online) {
       box.append(el('p', { class: 'note info' }, '沒有連到專案資料：角色與素材的下拉改為文字輸入，列表用內建清單。要有下拉請在專案根目錄跑 python3 -m http.server，再開 /tools/story_editor/。'));
@@ -412,7 +700,7 @@
   function renderStatus() {
     if (!S.story) { $('status').textContent = '開啟一個 *_story.json，或按「新故事」'; return; }
     const count = Object.keys(S.story.nodes).length;
-    $('status').textContent = `${S.name}${S.dirty ? ' ●未確認儲存' : ''} · ${count} 節點 · ${S.a.problems.length} 個問題`;
+    $('status').textContent = `${S.name}${S.dirty ? ' ●未確認儲存' : ''} · ${count} 節點 · ${S.a.problems.length + saveIssues.length} 個問題`;
     document.title = `${S.dirty ? '● ' : ''}${S.story.id} · 劇本節點編輯器`;
   }
 
@@ -439,11 +727,11 @@
 
   function renderProblems() {
     const list = $('problems');
-    const problems = S.a.problems;
+    const problems = [...S.a.problems, ...saveIssues];
     $('problemTitle').textContent = `問題清單（${problems.length}）`;
     list.replaceChildren(...(problems.length
       ? problems.map(problem => el('li', { data: { type: problem.type, node: problem.node || '' }, onclick: () => jumpTo(problem) },
-        el('span', {}, PROBLEM_ICON[problem.type] || '⚠'), el('span', {}, el('b', {}, problem.node || 'entry'), '　', problem.message)))
+        el('span', {}, PROBLEM_ICON[problem.type] || '⚠'), el('span', {}, el('b', {}, problem.node || (problem.type === 'validation' ? '驗證' : 'entry')), '　', problem.message)))
       : [el('li', { class: 'ok' }, '✓ 沒有發現問題')]));
   }
 
@@ -480,11 +768,11 @@
     if (!S.catalog) return textInput(obj, key, false, 'catalog 角色 id');
     const options = [...(narrator ? [{ value: 'narrator', label: 'narrator（旁白）' }] : []),
       ...Object.entries(S.catalog.characters || {}).map(([id, c]) => ({ value: id, label: `${id}（${(c && c.name) || id}）` }))];
-    return select2(options, obj[key], v => { obj[key] = v; touch(); });
+    return select2(options, obj[key], v => { obj[key] = v; touch({inspector:true}); });
   }
-  const expressionControl = step => select2(S.enums.VALID_EXPRESSIONS, step.expression, v => {
+  const expressionControl = step => select2(S.catalog ? Core.availableExpressions(S.catalog, step.id || step.speaker) : S.enums.VALID_EXPRESSIONS, step.expression, v => {
     if (v === '') delete step.expression; else step.expression = v;
-    touch();
+    touch({inspector:true});
   }, '（預設）');
   /** `color` of an emotion_band: "#rrggbb" typed or picked; 清除 (or an empty box) removes the key, so the scene's own yellow shows. */
   const BAND_DEFAULT_COLOR = '#ffd23f';  // the CutInPanel StyleBox in scenes/comedy/emotion_band.tscn
@@ -510,9 +798,71 @@
     button('✕', () => { array.splice(index, 1); touch({ inspector: true }); }, 'small danger'),
   ];
 
+  function assetSelect(section, step, key = 'id', empty) {
+    if (!S.catalog) return textInput(step, key);
+    return select2(Object.entries(S.catalog[section] || {}).map(([id, a]) => ({ value: id, label: `${a.label || a.name || id} · ${id}` })), step[key], v => {
+      step[key] = v; stopAudio(); touch({ inspector: true });
+    }, empty);
+  }
+  function characterPreview(step) {
+    const c = S.catalog?.characters?.[step.id || step.speaker];
+    const path = c?.expressions?.[step.expression] || c?.path;
+    return path && el('img', { class: 'character-preview', alt: `${c.name || step.id} ${step.expression || 'neutral'}`, src: Core.projectUrl(path) });
+  }
+  function scalarControl(obj, key, numberOnly = false) {
+    const input = el('input', { type: 'text', value: JSON.stringify(obj[key] ?? (numberOnly ? 1 : true)), 'aria-label': key });
+    const error = el('div', { class: 'err', role: 'alert' });
+    input.addEventListener('change', () => {
+      try {
+        const value = JSON.parse(input.value);
+        if (!(typeof value === 'string' || typeof value === 'boolean' || typeof value === 'number' && Number.isFinite(value))) throw new Error('請填 JSON 純量（文字加雙引號）');
+        if (numberOnly && !Number.isInteger(value)) throw new Error('增減值必須是整數');
+        obj[key] = value; error.textContent = ''; touch();
+      } catch (err) { error.textContent = err.message; }
+    });
+    return el('div', {}, input, error);
+  }
+  function flagSelect(obj, key) {
+    return select2(Object.keys(S.story.initial_flags || {}), obj[key], v => { obj[key] = v; touch(); }, '選擇旗標');
+  }
+  function testForm(test, replace) {
+    if (!isObj(test) || (test.all && !Array.isArray(test.all)) || (test.any && !Array.isArray(test.any))) return [el('p', {class:'note warn'}, '條件格式無法顯示；請用 JSON 修正並跑 check_story。')];
+    const kind = test.all ? 'all' : test.any ? 'any' : test.not ? 'not' : 'has' in test ? 'has' : 'flag';
+    const kinds = [{ value: 'flag', label: '旗標比較' }, { value: 'has', label: '持有道具' }, { value: 'all', label: '全部成立 AND' }, { value: 'any', label: '任一成立 OR' }, { value: 'not', label: '反轉 NOT' }];
+    const seed = () => ({ flag: Object.keys(S.story.initial_flags || {})[0] || '', cmp: '==', value: true });
+    const parts = [field('條件種類', select2(kinds, kind, v => {
+      replace(v === 'all' || v === 'any' ? { [v]: [seed()] } : v === 'not' ? { not: seed() } : v === 'has' ? { has: '' } : seed());
+      touch({ inspector: true });
+    }))];
+    if (kind === 'all' || kind === 'any') {
+      parts.push(...test[kind].map((child, i) => el('div', { class: 'condition-child' }, ...testForm(child, v => { test[kind][i] = v; }),
+        test[kind].length > 1 && button('刪除此條件', () => { test[kind].splice(i, 1); touch({ inspector: true }); }, 'small'))));
+      parts.push(button('＋條件', () => { test[kind].push(seed()); touch({ inspector: true }); }, 'small'));
+    } else if (kind === 'not') parts.push(el('div', { class: 'condition-child' }, ...testForm(test.not, v => { test.not = v; })));
+    else if (kind === 'has') parts.push(field('道具', assetSelect('items', test, 'has')));
+    else parts.push(field('旗標', flagSelect(test, 'flag')), field('比較', select2(['==', '!=', '<', '<=', '>', '>='], test.cmp, v => { test.cmp = v; touch(); })), field('值 JSON', scalarControl(test, 'value')));
+    return parts;
+  }
+
   const FORMS = {
+    bg: step => [field('背景', assetSelect('backgrounds', step)), field('預覽', thumbnail(step.id))],
+    bgm: step => [field('BGM', assetSelect('music', step, 'id', '無（停止音樂）')), field('試聽', audioButton(step.id))],
+    se: step => [field('音效', assetSelect('sounds', step))],
+    char: step => [field('角色', assetSelect('characters', step)), field('表情', expressionControl(step)), voicePitch(step),
+      field('預覽', characterPreview(step)), field('站位', select2(['left', 'center', 'right'], step.position, v => { if (v) step.position = v; else delete step.position; touch(); }, '（角色預設）')),
+      field('顯示', select2([{value:'default',label:'預設'},{value:'true',label:'顯示'},{value:'false',label:'隱藏'}], step.visible === undefined ? 'default' : String(step.visible), v => { if(v === 'default') delete step.visible; else step.visible = v === 'true'; touch(); })), field('', checkbox(step, 'enter', '登場'))],
+    profile: step => [field('角色檔案', assetSelect('characters', step))],
+    item: step => [field('取得道具', assetSelect('items', step))],
+    flag: step => [field('旗標', flagSelect(step, 'key')), field('操作', select2([{value:'value',label:'設定值'},{value:'add',label:'加減整數'}], 'add' in step ? 'add' : 'value', v => { delete step.value; delete step.add; step[v] = v === 'add' ? 1 : true; touch({inspector:true}); })), field('值 JSON', scalarControl(step, 'add' in step ? 'add' : 'value', 'add' in step))],
+    condition: step => [field('條件模式', select2([{value:'simple',label:'單一旗標等於'},{value:'tree',label:'複合條件'}], 'test' in step ? 'tree' : 'simple', v => {
+      if(v === 'tree') { step.test = {flag:step.flag || '',cmp:'==',value:step.equals ?? true}; delete step.flag; delete step.equals; }
+      else { delete step.test; step.flag = ''; step.equals = true; }
+      touch({inspector:true});
+    })), ...('test' in step ? testForm(step.test, v => {step.test=v;}) : [field('旗標', flagSelect(step,'flag')), field('等於 JSON', scalarControl(step,'equals'))]),
+      field('成立 then', nodeSelect(step.then, v => {step.then=v;touch();})), field('否則 else', nodeSelect(step.else,v => {step.else=v;touch();}))],
+
     say: step => [field('speaker', speakerControl(step, 'speaker')), field('text', textArea(step, 'text')),
-      field('expression', expressionControl(step)), field('', checkbox(step, 'thought', '心聲（thought）'))],
+      field('expression', expressionControl(step)), voicePitch(step), field('', checkbox(step, 'thought', '心聲（thought）'))],
     goto: step => [field('target', nodeSelect(step.target, v => { step.target = v; touch(); }))],
     end: step => [field('text', textArea(step, 'text', false, 2))],
     comedy: step => [
@@ -521,7 +871,7 @@
         if (v !== 'emotion_band') delete step.color;  // story_runner.gd accepts `color` on emotion_band only
         touch({ inspector: true });
       })),
-      field('speaker', speakerControl(step, 'speaker', false)), field('text', textArea(step, 'text')), field('expression', expressionControl(step)),
+      field('speaker', speakerControl(step, 'speaker', false)), field('text', textArea(step, 'text')), field('expression', expressionControl(step)), voicePitch(step),
       step.preset === 'emotion_band' && field('color', colorControl(step))],
     choice: step => {
       const options = Array.isArray(step.options) ? step.options : [];
@@ -558,7 +908,7 @@
       if (!err.textContent) touch({ inspector: true });
     });
     return el('div', { class: 'step', data: { step: index } },
-      el('div', { class: 'step-head' }, el('span', {}, `#${index}`), el('span', { class: 'op' }, `${Core.icon(step.op)} ${step.op}`), rowButtons(node.steps, index)),
+      el('div', { class: 'step-head' }, el('span', {}, `#${index}`), el('span', { class: 'op', title: step.op }, `${Core.icon(step.op)} ${Core.stepLabel(step)}`, el('small', {class:'op-code'}, step.op)), rowButtons(node.steps, index)),
       el('div', { class: 'step-body' }, form ? form(step) : [], el('details', { open: !form }, el('summary', {}, 'JSON（所有欄位）'), json, err)));
   }
 
@@ -582,12 +932,18 @@
       field('title', textInput(story, 'title')),
       field('entry', select2(nodeIds(), story.entry, v => { story.entry = v; touch(); })),
       field('version', el('code', {}, story.version ?? '（無）'), el('div', { id: 'versionHint', class: 'err', style: { color: 'var(--muted)' } })),
-      field('flags', flags, flagsErr));
+      field('flags', flags, flagsErr),
+      ...registryControls(),
+      field('預設視角',select2(Object.entries(S.catalog?.characters || {}).map(([id,c])=>({value:id,label:`${c.name || id} · ${id}`})),story.default_pov,v=>{if(v)story.default_pov=v;else delete story.default_pov;touch();},`用 catalog 預設（${S.catalog?.default_pov || '未設定'}）`)));
   }
 
   function renderVersionHint() {
     const hint = $('versionHint');
     if (hint) hint.textContent = S.modified ? '已修改：匯出時 version 寫成 s-unset，要跑 check_story.gd --write 才會算出正確值' : '沒改過：匯出會原樣寫回';
+  }
+
+  function applyReadOnly() {
+    for (const area of [$('info'), $('inspector')]) area.querySelectorAll('input,textarea,select,button').forEach(c => { c.disabled = isReadOnly() && !c.hasAttribute('data-audition') && !c.dataset.registryField; });
   }
 
   function renderInspector() {
@@ -638,10 +994,14 @@
       button(id === S.story.entry ? '✓ 這是 entry' : '設為 entry', () => { S.story.entry = id; renderInfo(); touch({ inspector: true }); }),
       button('刪除節點', () => removeNode(id), 'danger')));
     box.append(el('h3', {}, `步驟（${node.steps.length}）`), ...node.steps.map((step, index) => stepBox(node, step, index)));
-    const op = el('select', {}, S.enums.VALID_OPS.map(name => el('option', { value: name }, `${Core.icon(name)} ${name}`)));
-    op.value = 'say';
-    box.append(el('div', { class: 'actions' }, op, button('＋ 新增步驟', () => {
-      node.steps.splice(Core.insertIndex(node, op.value), 0, Core.newStep(op.value));
+    const op = el('select', { id: 'addStepOp', size: 16, 'aria-label': '新增步驟分類' }, Core.STEP_GROUPS.slice(0, 7).map(group => el('optgroup', {label: group.label}, group.ops.map(name => el('option', {value: `${group.id}:${name}`}, `${Core.icon(name)} ${Core.stepLabel({op:name,speaker:group.id === 'narration' ? 'narrator' : 'speaker'})}（${name}）`)))));
+    op.value = 'dialogue:say';
+    box.append(el('details', {id: 'addStepPicker', class: 'step-picker'}, el('summary', {}, '選擇步驟類型（七類）'), op));
+    box.append(el('div', { class: 'actions' }, button('＋ 新增步驟', () => {
+      const [category, name] = op.value.split(':');
+      const step = Core.newStep(name);
+      if (name === 'say') step.speaker = category === 'narration' ? 'narrator' : Object.keys(S.catalog?.characters || {})[0] || 'speaker';
+      node.steps.splice(Core.insertIndex(node, name), 0, step);
       touch({ inspector: true });
     })));
   }
@@ -654,6 +1014,7 @@
     renderInspector();
     renderStatus();
     renderVersionHint();
+    applyReadOnly();
     renderHistory();
     renderSearch();
   }
@@ -661,6 +1022,7 @@
   // ---------------------------------------------------------------- editing actions
 
   function addNode(pos, connect) {
+    if (isReadOnly()) return;
     const id = Core.uniqueId(S.story, 'node');
     S.story.nodes[id] = Core.newNode();
     S.layout[id] = { x: Math.round(pos.x), y: Math.round(pos.y) };
@@ -671,6 +1033,7 @@
     return id;
   }
   function removeNode(id) {
+    if (isReadOnly()) return;
     if (!confirm(`刪除節點「${id}」？指向它的出線會留著並標成紅色，之後可以重新連。`)) return;
     Core.deleteNode(S.story, id);
     delete S.layout[id];
@@ -679,6 +1042,7 @@
     touch({ inspector: true });
   }
   function disconnect(nodeId, edge) {
+    if (isReadOnly()) return;
     Core.clearEdge(S.story, nodeId, edge);
     touch({ inspector: true });
   }
@@ -700,13 +1064,13 @@
   }
 
   view.addEventListener('pointerdown', ev => {
-    if (ev.button !== 0) return;
+    if (ev.button !== 0 || ev.target.closest('button,input,select')) return;
     const t = ev.target;
     if (t.closest('.cut')) { disconnectSelected(); return; }
     const row = t.closest('.prow');
     const card = t.closest('.card');
     const edgeHit = t.closest('.edge');
-    if (row && card) {
+    if (row && card && !isReadOnly()) {
       const id = card.dataset.node;
       const edge = S.a.edges[id].find(e => e.key === row.dataset.edge);
       drag = { type: 'link', id, edge, index: S.a.edges[id].indexOf(edge), sx: ev.clientX, sy: ev.clientY, moved: false, hover: null };
@@ -738,7 +1102,7 @@
       applyView();
     } else if (drag.type === 'node') {
       const w = toWorld(ev.clientX, ev.clientY);
-      S.layout[drag.id] = { x: Math.round(w.x - drag.ox), y: Math.round(w.y - drag.oy) };
+      S.layout[drag.id] = { ...S.layout[drag.id], x: Math.round(w.x - drag.ox), y: Math.round(w.y - drag.oy) };
       const card = cardEl(drag.id);
       card.style.left = S.layout[drag.id].x + 'px';
       card.style.top = S.layout[drag.id].y + 'px';
@@ -814,6 +1178,7 @@
     if (/^(INPUT|TEXTAREA|SELECT)$/.test(ev.target.tagName) || !S.story) return;
     if ((ev.key === 'Delete' || ev.key === 'Backspace') && S.sel) {
       ev.preventDefault();
+      if (isReadOnly()) return;
       if (S.sel.type === 'node') removeNode(S.sel.id); else disconnectSelected();
     } else if (ev.key === 'Escape') {
       select(null);
@@ -841,13 +1206,13 @@
     return '';
   }
 
-  function openText(text, name) {
+  function openText(text, name, path = null) {
     if (S.dirty && !confirm('目前的修改還沒確認儲存，要放棄嗎？')) return;
     let story;
     try { story = JSON.parse(text); } catch (err) { S.error = `${name}：不是合法的 JSON（${err.message}）`; renderBanner(); return; }
     const problem = shapeError(story);
     if (problem) { S.error = `${name}：${problem}`; renderBanner(); return; }
-    loadStory(story, name);
+    loadStory(story, name, null, text, path);
   }
 
   function exportStory() {
@@ -868,7 +1233,7 @@
       const text = await file.text();
       if (pending !== pendingExport || pending.key !== draftKey) return;
       if (text !== pending.text) throw new Error('檔案內容與這次匯出不同，尚未確認儲存');
-      confirmedText = pending.text;
+      if(pending.kind==='registry')confirmedRegistryText=pending.text;else confirmedText=pending.text;
       S.error = '';
       pendingExport = null;
       refreshDirty();
@@ -880,7 +1245,7 @@
   function exportLayout() {
     if (!S.story) return;
     const nodes = {};
-    for (const id of nodeIds()) nodes[id] = { x: S.layout[id].x, y: S.layout[id].y };
+    for (const id of nodeIds()) nodes[id] = JSON.parse(JSON.stringify(S.layout[id]));
     download(`${S.story.id}.layout.json`, JSON.stringify({ story: S.story.id, nodes }, null, 2) + '\n');
   }
   function importLayout(text) {
@@ -890,7 +1255,7 @@
     S.error = data.story && data.story !== S.story.id ? `注意：這份座標是給「${data.story}」的，套用到「${S.story.id}」。` : '';
     for (const id of Object.keys(S.story.nodes)) {
       const p = data.nodes[id];
-      if (isObj(p) && Number.isFinite(p.x) && Number.isFinite(p.y)) S.layout[id] = { x: p.x, y: p.y };
+      if (isObj(p) && Number.isFinite(p.x) && Number.isFinite(p.y)) S.layout[id] = cleanLayout({ [id]: p })[id];
     }
     ensureLayout();
     history.commit(snapshot());
@@ -934,19 +1299,80 @@
       const response = await fetch(Core.projectUrl(entry.path));
       if (!response.ok) throw new Error(response.status);
       const text = await response.text();
-      if (ticket === loadTicket) openText(text, entry.path.split('/').pop());
+      if (ticket === loadTicket) openText(text, entry.path.split('/').pop(), entry.path.replace(/^res:\/\//, ''));
     } catch (err) { if (ticket === loadTicket) failure(`讀不到 ${entry.path}（${err.message}）`); }
   });
-  $('btnNewStory').addEventListener('click', () => {
-    if (S.dirty && !confirm('目前的修改還沒確認儲存，要放棄嗎？')) return;
-    const id = (prompt('新故事的 id（英文、數字、底線）', 'my_story') || '').trim();
-    if (!/^[A-Za-z0-9_]+$/.test(id)) return;
-    loadStory(Core.newStory(id), `${id}_story.json`);
+  /** A blank story at data/<id>_story.json, or in a work's folder (registered in its pack.json on save). */
+  function startNewStory(id, work = null) {
+    loadStory(Core.newStory(id), `${id}_story.json`, null, null, work ? `stories/${work}/${id}_story.json` : null);
     confirmedText = null;
     refreshDirty(); saveDraft();
     renderStatus();
     renderVersionHint();
+  }
+  $('btnNewStory').addEventListener('click', () => {
+    if (S.dirty && !confirm('目前的修改還沒確認儲存，要放棄嗎？')) return;
+    let work = null;
+    if (S.packs.length) {
+      work = (prompt(`放在哪個作品？填作品 id；留空＝本作（data/）。\n${S.packs.map(p => `${p.id}：${p.title}`).join('\n')}`,
+        workOf(projectSource.path) || '') || '').trim() || null;
+      if (work && !packOf(work)) { failure(`沒有 ${work} 這個作品。`); return; }
+    }
+    const id = (prompt('新故事的 id（英文、數字、底線）', work ? `${work}_ch${Core.packEntries(packOf(work).pack, work).length + 1}` : 'my_story') || '').trim();
+    if (!/^[A-Za-z0-9_]+$/.test(id)) return;
+    if (S.stories.some(e => e.id === id)) { failure(`已經有 ${id} 這個故事。`); return; }
+    startNewStory(id, work);
   });
+  /** 素材設定 of the open story's catalog file: its work's catalog.json, else data/asset_catalog.json. */
+  async function openCatalog() {
+    if (!S.service) return;
+    const work = workOf(projectSource.path);
+    const path = work ? `stories/${work}/catalog.json` : 'data/asset_catalog.json';
+    try {
+      const loaded = await getJson(`../../api/catalog?path=${encodeURIComponent(path)}`);
+      globalThis.CatalogEditor.open({
+        el, enums: S.enums, projectUrl: Core.projectUrl,
+        loaded: { ...loaded, inherited: work && loaded.catalog.extends ? S.baseCatalog : null },
+        post: (url, body) => fetch(url, {method:'POST', headers:{'Content-Type':'application/json','X-Story-Editor-Token':S.service.token}, body:JSON.stringify(body)}),
+        onSaved: reloadCatalogs,
+      });
+    } catch (err) { failure(`素材設定打不開：${err.message}`); }
+  }
+  /** After 素材設定 saves: the game's catalog and every work's again (a work may extend the game's). */
+  async function reloadCatalogs() {
+    S.baseCatalog = await getJson('../../data/asset_catalog.json');
+    await Promise.all(S.packs.map(p => loadPackCatalog(p.id)));
+    useCatalog();
+    S.catalogVersion = (S.catalogVersion || 0) + 1;
+    if (S.story) { recompute(); renderAll(); }
+  }
+  $('btnCatalog').addEventListener('click', openCatalog);
+  $('btnNewWork').addEventListener('click', async () => {
+    if (!S.service || (S.dirty && !confirm('目前的修改還沒確認儲存，要放棄嗎？'))) return;
+    const id = (prompt('作品 id（英文小寫、數字、底線，例如 titan）') || '').trim();
+    if (!id) return;
+    const title = (prompt('作品名稱（章節選擇裡的標題）', id) || '').trim();
+    if (!title) return;
+    try {
+      const response = await fetch('../../api/work', {method:'POST',
+        headers:{'Content-Type':'application/json','X-Story-Editor-Token':S.service.token},body:JSON.stringify({id,title})});
+      const result = await response.json();
+      if (!response.ok || result.ok !== true) { failure(result.error || '建立作品失敗'); return; }
+      S.packs = result.packs;
+      await loadPackCatalog(id);
+      rebuildStories();
+      startNewStory(`${id}_ch1`, id);
+      S.notice = `${result.message} 第一章已開好，按「驗證並存檔」後它會登記進 pack.json。`;
+      renderBanner();
+    } catch (err) { failure(`建立作品失敗：${err.message}`); }
+  });
+  $('btnConvert').addEventListener('click', () => {
+    const id = prompt('新故事 id（原故事保留）', `${S.story.id}_graph`);
+    if (id === null) return;
+    try { convertStory(id.trim()); } catch (err) { failure(err.message); }
+  });
+  $('btnRegistry').addEventListener('click', exportRegistry);
+  $('btnProjectSave').addEventListener('click', saveProject);
   $('btnExport').addEventListener('click', exportStory);
   $('btnUndo').addEventListener('click', () => restoreHistory(history?.undo()));
   $('btnRedo').addEventListener('click', () => restoreHistory(history?.redo()));
@@ -959,7 +1385,9 @@
   });
   $('btnLayout').addEventListener('click', () => {
     if (!S.story) return;
-    S.layout = Core.autoLayout(S.story, S.a);
+    const positions = Core.autoLayout(S.story, S.a, S.layout);
+    for (const id of Object.keys(positions)) positions[id].expanded = S.layout[id]?.expanded || {};
+    S.layout = positions;
     history.commit(snapshot());
     renderCanvas();
     saveLayout(); saveDraft(); renderHistory();
@@ -978,12 +1406,21 @@
   }
 
   async function loadProject() {
-    const [stories, catalog, runner] = await Promise.allSettled([
+    const [stories, catalog, runner, service] = await Promise.allSettled([
       getJson('../../data/stories.json'), getJson('../../data/asset_catalog.json'),
       fetch('../../scripts/story_runner.gd').then(r => (r.ok ? r.text() : Promise.reject(new Error(r.status)))),
+      detectService(),
     ]);
-    if (stories.status === 'fulfilled') S.stories = stories.value.stories || [];
-    if (catalog.status === 'fulfilled' && isObj(catalog.value.characters)) S.catalog = catalog.value;
+    if (service.status === 'fulfilled') S.service = service.value;
+    const registry=S.service?.registry || (stories.status==='fulfilled'?stories.value:null);
+    if(registry)S.registry=registry;
+    S.registryHash=S.service?.registry_hash || null;
+    S.packs=S.service?.packs || [];  // works are listed by the service (a static server lists no folders)
+    if (catalog.status === 'fulfilled' && isObj(catalog.value.characters)) S.baseCatalog = catalog.value;
+    await Promise.all(S.packs.map(p => loadPackCatalog(p.id)));
+    useCatalog();
+    rebuildStories();  // the skin list includes the ids the stories use
+    S.skins=await loadSkins();
     if (runner.status === 'fulfilled') {
       for (const name of Object.keys(S.enums)) {
         const list = Core.parseGdStrings(runner.value, name);
@@ -992,10 +1429,8 @@
     }
     S.online = stories.status === 'fulfilled' && catalog.status === 'fulfilled';
     const picker = $('storySelect');
-    if (S.stories.length) {
-      picker.hidden = false;
-      picker.replaceChildren(el('option', { value: '' }, '從專案開啟…'), ...S.stories.map(s => el('option', { value: s.id }, `${s.id}（${s.kind}）`)));
-    }
+    $('btnNewWork').hidden = !S.service;
+    $('btnCatalog').hidden = !S.service;
     const wanted = new URLSearchParams(location.search).get('story');
     const entry = S.stories.find(s => s.id === wanted);
     if (entry && !S.story && loadTicket === 0) {
@@ -1005,7 +1440,7 @@
       try {
         const key = localStorage.getItem(LAST_DRAFT);
         const raw = key?.startsWith(DRAFT_KEY) && localStorage.getItem(key);
-        if (raw) { const record = validDraft(raw); loadStory(record.base, record.name, key); }
+        if (raw) { const record = validDraft(raw); loadStory(record.base, record.name, key, null, record.projectSource?.path || null); }
       } catch (err) { storageFailure(err); }
     }
   }
@@ -1025,6 +1460,10 @@
     exportText: storyText,
     loadStory, fit, centerOn, select, readStoryFile, verifyDownload,
     setView(v) { S.v = { ...S.v, ...v }; applyView(); },
-    anchorOut, anchorIn, toWorld,
+    saveProject,
+    get projectSource() { return projectSource; },
+    anchorOut, anchorIn, toWorld, sizeOf, convertStory, isReadOnly, stopAudio,
+    get conversionRegistry() { return conversionRegistry; },
+    openCatalog,
   };
 })();

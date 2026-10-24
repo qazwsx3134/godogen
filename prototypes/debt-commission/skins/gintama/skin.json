@@ -1,0 +1,52 @@
+{
+  "id": "gintama",
+  "name": "銀魂和紙",
+  "look": "washi",
+  "scenes": {
+    "dialogue_box": "res://scenes/ui/dialogue_box_gintama.tscn",
+    "choice_sheet": "res://scenes/ui/choice_sheet_gintama.tscn",
+    "menu": "res://scenes/ui/menu_panel_gintama.tscn",
+    "title": "res://scenes/ui/title_screen_gintama.tscn",
+    "settings": "res://scenes/ui/settings_panel_gintama.tscn",
+    "game_over": "res://scenes/ui/game_over_gintama.tscn",
+    "result": "res://scenes/ui/chapter_result_gintama.tscn"
+  },
+  "palette": {},
+  "panel_paper": "res://assets/ui/gintama_panel_paper.png",
+  "hud": {
+    "panel": "res://assets/ui/gintama_hud/hud_panel.tres",
+    "clue_chip": "res://assets/ui/gintama_hud/clue_chip.tres",
+    "toast": "res://assets/ui/gintama_hud/toast.tres",
+    "font": "res://assets/ui/gintama_hud/serif.tres"
+  },
+  "plaque": "res://assets/ui/gintama_heading_plaque.png",
+  "life_icon": "res://scenes/ui/glasses_icon.tscn",
+  "title": {
+    "background": "yorozuya_exterior",
+    "bgm": "bgm_gintama_35"
+  },
+  "terms": {
+    "rebut": "吐槽",
+    "life": "眼鏡",
+    "power": "吐槽之力",
+    "super": "超必殺",
+    "whiff": "冷場",
+    "thought": "心聲",
+    "materials": "吐槽素材"
+  },
+  "texts": {
+    "title_logo": "萬事屋\n吐槽 ADV",
+    "tagline": "今夜，也先把帳算清。",
+    "menu_kicker": "夜班委託・目錄",
+    "menu_heading": "稍停一格",
+    "power_caption": "{power}",
+    "assist_label": "◆ {rebut}輔助",
+    "materials_tab": "{materials}",
+    "use_material": "拿來{rebut}",
+    "use_material_head": "◆ 拿來{rebut}",
+    "result_caught": "{rebut}成功",
+    "result_grade": "{rebut}評價",
+    "result_life": "剩下的{life}",
+    "game_over_message": "{life}耗盡。"
+  }
+}

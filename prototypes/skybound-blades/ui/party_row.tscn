@@ -1,0 +1,44 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/party_row.gd" id="1_q3pmj"]
+
+[node name="PartyRow" type="PanelContainer" unique_id=649768032]
+custom_minimum_size = Vector2(330, 0)
+mouse_filter = 2
+script = ExtResource("1_q3pmj")
+
+[node name="Rows" type="VBoxContainer" parent="." unique_id=142909859]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="Top" type="HBoxContainer" parent="Rows" unique_id=1424624924]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="MemberName" type="Label" parent="Rows/Top" unique_id=2081904540]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "隊長"
+
+[node name="MemberState" type="Label" parent="Rows/Top" unique_id=1661174713]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+theme_override_colors/font_color = Color(0.6117647, 0.9411765, 0.5411765, 1)
+
+[node name="MemberHp" type="Label" parent="Rows/Top" unique_id=1106250542]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "135 / 135"
+
+[node name="MemberBar" type="ProgressBar" parent="Rows" unique_id=1706202483]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+mouse_filter = 2
+value = 70.0
+show_percentage = false

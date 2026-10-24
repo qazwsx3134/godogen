@@ -2,7 +2,8 @@ extends SceneTree
 ## Build StoryRunner JSON from an authoring source:
 ##   godot --headless --path . --script res://tools/story_build/build_story.gd -- \
 ##       story_src/phase4.dialogue [data/phase4_story.json] [--check]
-## The output defaults to data/<name>_story.json.
+## The output defaults to data/<name>_story.json; a work's source (stories/<作品>/) builds beside
+## itself and is listed in that work's pack.json the first time.
 ## --check writes nothing and exits 1 when the output file differs from a fresh build.
 
 const StoryBuilder = preload("res://tools/story_build/story_builder.gd")
@@ -33,7 +34,8 @@ func _init() -> void:
 		printerr("STORY BUILD FAILED: ", result["error"])
 		quit(1)
 		return
-	print("STORY BUILT: %s -> %s (version %s)" % [source, result["output"], result["version"]])
+	print("STORY BUILT: %s -> %s (version %s)%s" % [source, result["output"], result["version"],
+		" (listed in pack.json)" if result["registered"] else ""])
 	quit(0)
 
 

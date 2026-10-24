@@ -1,0 +1,22 @@
+{
+  "schema": "generate2dsprite.master_spec.v1",
+  "name": "hd1-boss",
+  "subject": "a hulking grey-green horned mountain troll with tusks, an iron-plate harness and a huge spiked wooden club",
+  "identity": "hulking grey-green mountain troll about three times human height, hunched broad shoulders, two curved ivory horns, small glowing amber eyes, tusked underbite, crude leather-and-iron-plate harness, carrying a huge spiked wooden club resting on one shoulder. detailed HD-2D pixel art game asset in the style of Octopath Traveler and Triangle Strategy: rich hand-placed shading, crisp 1-pixel dark outline, limited warm dusk palette (amber, moss green, slate blue-grey, weathered stone), lit by a warm low sun from the upper-left with cool blue-violet shadows, seen from an elevated three-quarter view about 45 degrees above, no background, no ground plate, no cast shadow, no text, no border.",
+  "pose": "standing idle, menacing",
+  "recap": "a hulking grey-green horned mountain troll with tusks, an iron-plate harness and a huge spiked wooden club",
+  "facing": "left",
+  "facing_parts": null,
+  "view": "elevated three-quarter view about 45 degrees above",
+  "class": "hero",
+  "finish": "pixel",
+  "key": "#FF00FF",
+  "genre": null,
+  "pronoun": "they",
+  "identity_ref": null,
+  "style_ref": null,
+  "allowed_text": null,
+  "extra_bans": [],
+  "opaque_parts": null,
+  "extra": "The entire body, face, gaze and chest face LEFT toward the heroes. Full body, both horns, both feet and the complete club inside the image with generous safe margins. The flat magenta outside the subject is only the chroma-key backdrop."
+}

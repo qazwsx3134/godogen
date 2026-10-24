@@ -1,0 +1,43 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/prop.gd" id="1_mrxsc"]
+[ext_resource type="Material" path="res://resources/materials/low_poly_92.tres" id="2_e8o3n"]
+[ext_resource type="ArrayMesh" path="res://resources/meshes/trunk.res" id="3_evvqy"]
+[ext_resource type="ArrayMesh" path="res://resources/meshes/pine_cone.res" id="4_rotcp"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u1a3d"]
+shading_mode = 0
+albedo_color = Color(1, 0.3, 0.2, 1)
+
+[sub_resource type="TorusMesh" id="TorusMesh_jrose"]
+inner_radius = 0.96
+
+[node name="Pine" type="Node3D" unique_id=1947107956]
+script = ExtResource("1_mrxsc")
+block_radius = 0.45
+
+[node name="Trunk" type="MeshInstance3D" parent="." unique_id=1863565506]
+transform = Transform3D(0.8, 0, 0, 0, 0.7, 0, 0, 0, 0.8, 0, 0.6, 0)
+material_override = ExtResource("2_e8o3n")
+mesh = ExtResource("3_evvqy")
+
+[node name="Tier0" type="MeshInstance3D" parent="." unique_id=1332061767]
+transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, 0, 1.6, 0)
+material_override = ExtResource("2_e8o3n")
+mesh = ExtResource("4_rotcp")
+
+[node name="Tier1" type="MeshInstance3D" parent="." unique_id=2007962014]
+transform = Transform3D(0.95, 0, 0, 0, 0.95, 0, 0, 0, 0.95, 0, 2.35, 0)
+material_override = ExtResource("2_e8o3n")
+mesh = ExtResource("4_rotcp")
+
+[node name="Tier2" type="MeshInstance3D" parent="." unique_id=826496890]
+transform = Transform3D(0.65, 0, 0, 0, 0.65, 0, 0, 0, 0.65, 0, 3.1, 0)
+material_override = ExtResource("2_e8o3n")
+mesh = ExtResource("4_rotcp")
+
+[node name="BlockGizmo" type="MeshInstance3D" parent="." unique_id=1378550264]
+transform = Transform3D(0.45, 0, 0, 0, 0.45, 0, 0, 0, 0.45, 0, 0.05, 0)
+visible = false
+material_override = SubResource("StandardMaterial3D_u1a3d")
+mesh = SubResource("TorusMesh_jrose")

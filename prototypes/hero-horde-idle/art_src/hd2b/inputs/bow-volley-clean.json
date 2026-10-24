@@ -1,0 +1,32 @@
+{
+  "matte": {
+    "requested": "soft",
+    "key_estimate": {
+      "key": [
+        250.0,
+        3.0,
+        250.0
+      ],
+      "source": "border_median",
+      "valid": true,
+      "ring_share": 1.0,
+      "coverage": 0.7469094114145738,
+      "distance_from_declared": 7.68
+    },
+    "quality": "soft",
+    "interior_despill": false,
+    "qa": {
+      "opaque_key_px": 0,
+      "outer_ring_spill_fraction": 0.09178267832943206,
+      "semitransparent_fraction": 0.042864100086046145,
+      "enclosed_key_pockets": 0,
+      "key_hued_px": 1147,
+      "visible_px": 396299
+    }
+  },
+  "raw_size": [
+    1254,
+    1254
+  ],
+  "source": "inputs/bow-volley-edit-1/takes/take-01/generated.png"
+}

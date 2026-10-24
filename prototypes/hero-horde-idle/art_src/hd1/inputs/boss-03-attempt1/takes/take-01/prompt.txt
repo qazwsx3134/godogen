@@ -1,0 +1,11 @@
+Create exactly ONE square image (1024x1024).
+
+Style: premium 16-bit pixel art (SNES era), crisp visible chunky pixels, limited palette, strong dark outline, 3-tone cel shading, no smooth gradients, no blur. No text, no letters, no numbers, no logo, no watermark, no signature, no UI, no border, no frame, no grid.
+
+Subject: a hulking grey-green horned mountain troll with tusks, an iron-plate harness and a huge spiked wooden club, elevated three-quarter view about 45 degrees above, clearly FACING LEFT: their face, gaze and chest turn toward the LEFT edge of the image; forward is LEFT and their back is toward the RIGHT edge. Hulking grey-green mountain troll about three times human height, hunched broad shoulders, two curved ivory horns, small glowing amber eyes, tusked underbite, crude leather-and-iron-plate harness, carrying a huge spiked wooden club resting on one shoulder. detailed HD-2D pixel art game asset in the style of Octopath Traveler and Triangle Strategy: rich hand-placed shading, crisp 1-pixel dark outline, limited warm dusk palette (amber, moss green, slate blue-grey, weathered stone), lit by a warm low sun from the upper-left with cool blue-violet shadows, seen from an elevated three-quarter view about 45 degrees above, no background, no ground plate, no cast shadow, no text, no border. Standing idle, menacing.
+
+Size and position: one single figure, the top of the figure (including hair, headgear, raised weapons and effects) about 14 percent below the top edge of the canvas and its lowest point about 14 percent above the bottom edge (the figure about 72 percent of the canvas height), centred horizontally, generous empty magenta margin on every side, nothing touching or crossing the edges. The whole figure is drawn with solid, fully opaque pixels: no transparency, no semi-transparent glow, no soft aura, nothing blended with the background.
+
+The entire body, face, gaze and chest face LEFT toward the heroes. Full body, both horns, both feet and the complete club inside the image with generous safe margins. The flat magenta outside the subject is only the chroma-key backdrop.
+
+Background: solid flat pure magenta #FF00FF everywhere outside the character, no shadow, no ground, no glow on the background.

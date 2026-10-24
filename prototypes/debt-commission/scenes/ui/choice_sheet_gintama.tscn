@@ -4,7 +4,6 @@
 [ext_resource type="Script" path="res://scripts/choice_sheet.gd" id="2_exs52"]
 [ext_resource type="PackedScene" path="res://scenes/ui/choice_item_gintama.tscn" id="3_s3rmd"]
 [ext_resource type="Script" path="res://scripts/ui_ornament.gd" id="4_6va0e"]
-[ext_resource type="PackedScene" path="res://scenes/ui/choice_item_ledger.tscn" id="5_l4o0k"]
 
 [sub_resource type="Theme" id="Theme_lnu0f"]
 default_font = ExtResource("1_fek4b")
@@ -849,7 +848,7 @@ size_flags_horizontal = 3
 mouse_filter = 2
 theme_override_constants/separation = 0
 
-[node name="Sample1" parent="Panel/Padding/Column/ChoicesScroll/Choices" unique_id=2071340155 instance=ExtResource("5_l4o0k")]
+[node name="Sample1" parent="Panel/Padding/Column/ChoicesScroll/Choices" unique_id=2071340155 instance=ExtResource("3_s3rmd")]
 custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_ax8d8")
@@ -909,7 +908,7 @@ text = "！"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Sample2" parent="Panel/Padding/Column/ChoicesScroll/Choices" unique_id=1964257344 instance=ExtResource("5_l4o0k")]
+[node name="Sample2" parent="Panel/Padding/Column/ChoicesScroll/Choices" unique_id=1964257344 instance=ExtResource("3_s3rmd")]
 custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_n5l2m")
@@ -969,7 +968,7 @@ text = "！"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Sample3" parent="Panel/Padding/Column/ChoicesScroll/Choices" unique_id=248567096 instance=ExtResource("5_l4o0k")]
+[node name="Sample3" parent="Panel/Padding/Column/ChoicesScroll/Choices" unique_id=248567096 instance=ExtResource("3_s3rmd")]
 custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_5trho")
@@ -1029,7 +1028,7 @@ text = "！"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Sample4" parent="Panel/Padding/Column/ChoicesScroll/Choices" unique_id=883311600 instance=ExtResource("5_l4o0k")]
+[node name="Sample4" parent="Panel/Padding/Column/ChoicesScroll/Choices" unique_id=883311600 instance=ExtResource("3_s3rmd")]
 custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_vjva8")

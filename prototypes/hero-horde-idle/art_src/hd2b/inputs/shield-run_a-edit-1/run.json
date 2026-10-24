@@ -1,0 +1,84 @@
+{
+  "schema": "generate2dsprite.master_run.v1",
+  "tool": {
+    "name": "master_still",
+    "version": "0.4.0"
+  },
+  "command": "edit",
+  "created": "2026-10-21T06:20:18.362Z",
+  "name": "hd2b-shield-run_a",
+  "class": "hero",
+  "finish": "pixel",
+  "facing": "right",
+  "key": "#FF00FF",
+  "prompt": {
+    "path": "prompt.txt",
+    "sha256": "8d123bb11fd4d7662a9c8e497fdde96971ca9fd7bf667f1d20035913fb7b0a44",
+    "bytes": 2819
+  },
+  "spec": {
+    "path": "spec.json",
+    "sha256": "78fe3917235db797f161bf03290bb92c72f09dae9dd30981a951f537ba60592d",
+    "bytes": 1180
+  },
+  "references": [
+    {
+      "role": "edit",
+      "ordinal": "FIRST",
+      "path": "../../../hd2/shield/candidate-01.png",
+      "sha256": "4892f4e5be3385227081fd8d0b17059321018e77adc48446a0e10917dced1ec7",
+      "bytes": 756035
+    }
+  ],
+  "media": {
+    "cli": "route_media.py",
+    "cli_source": "sibling",
+    "cli_sha256": "5f920b3c8f37118e144f40c1c021cba87b691413cd83cb4dc5437ad500df6562",
+    "route_requested": "codex-cli",
+    "size": "1024x1024",
+    "args": [],
+    "timeout_s": 360.0
+  },
+  "takes": [
+    {
+      "take": 1,
+      "exit_code": 0,
+      "seconds": 79.149,
+      "media": {
+        "status": "ok",
+        "route": "local:codex-cli",
+        "sha256": "dc4c23520b546621734842aec6c2374cd01c517ab0d27c94f934dacda2f375f8",
+        "estimateUsd": 0.0,
+        "kind": "image",
+        "label": "Codex (local CLI)",
+        "model": "codex-image_gen",
+        "verifiedBefore": true
+      },
+      "copied": false,
+      "artifact": {
+        "path": "takes/take-01/generated.png",
+        "sha256": "dc4c23520b546621734842aec6c2374cd01c517ab0d27c94f934dacda2f375f8",
+        "bytes": 1865951,
+        "size": [
+          1254,
+          1254
+        ]
+      },
+      "status": "ok",
+      "route": "local:codex-cli"
+    }
+  ],
+  "status": "ok",
+  "edit": {
+    "still": {
+      "path": "../../../hd2/shield/candidate-01.png",
+      "sha256": "4892f4e5be3385227081fd8d0b17059321018e77adc48446a0e10917dced1ec7",
+      "bytes": 756035
+    },
+    "change": "running to the right, leaning forward, left leg forward and right leg pushing back, weapon carried; clearly extend the LEFT lead leg in front and the RIGHT leg behind, keep the feet visibly separated This is one single clear key pose for a character displayed only 40 pixels tall: exaggerate the action and use a bold readable silhouette. Change only the pose; keep the original head size and standing-equivalent body scale relative to the canvas, do not zoom the camera and do not shrink the character to fit long weapons. Keep the full body, hands, feet, clothing and every weapon tip inside the square canvas with generous safe margins, no clipping. Keep the lowest contacting foot near y=90% of canvas height, or the lowest BODY point at that same ground line for the fallen pose. No ground plate, floor, cast shadow, text, border, motion streaks, detached attack effects or dust cloud. Crystal or sun-ring glow must stay small and attached, with crisp opaque pixel clusters. Outside the complete subject use only the specified flat chroma-key colour.",
+    "keep": "the EXACT SAME accepted human character identity as the FIRST image: same face, hairstyle, facial hair if any, accepted outfit and equipment, very light low-saturation cloth, weapon design, natural metal/leather/skin/hair colours, body proportions, standing-equivalent anatomical body scale and head size, detailed HD-2D pixel-art style, warm light from upper-left with cool shadows, elevated three-quarter camera about 45 degrees above; RIGHT-facing for every upright action. Preserve the actual accepted image including its headgear; do not redesign it",
+    "extra": [],
+    "framing": "the top of the figure about 20 percent below the top edge, its lowest point about 10 percent above the bottom edge, its left-most point about 17 percent from the left edge and its right-most point about 16 percent from the right edge"
+  },
+  "warnings": []
+}

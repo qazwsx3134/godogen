@@ -1,0 +1,31 @@
+{
+  "id": "example",
+  "title": "範例作品：末班車",
+  "skin": "example",
+  "credits": [
+    {
+      "role": "劇本",
+      "names": [
+        "範例作者"
+      ]
+    },
+    {
+      "role": "說明",
+      "names": [
+        "故事包的格式示範，見 docs/AUTHORING.md"
+      ]
+    }
+  ],
+  "stories": [
+    {
+      "id": "example_ch1",
+      "kind": "chapter",
+      "path": "ch1_story.json"
+    },
+    {
+      "id": "example_ch2",
+      "kind": "chapter",
+      "path": "ch2_story.json"
+    }
+  ]
+}

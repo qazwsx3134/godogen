@@ -1,0 +1,102 @@
+{
+  "tool": "Codex built-in image_gen",
+  "items": [
+    {
+      "id": "sig/wall",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-b198c043-ebd1-417e-b322-ab85e72b4ed0.png",
+      "attempts": 1,
+      "reference": null
+    },
+    {
+      "id": "sig/cleave",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-5f913ace-8384-4a03-85af-8be2d6b960f8.png",
+      "attempts": 1,
+      "reference": null
+    },
+    {
+      "id": "sig/gale",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-0f00134c-b808-46c3-b1ff-b19149654874.png",
+      "attempts": 1,
+      "reference": null
+    },
+    {
+      "id": "sig/pierce",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-aceb74f8-729e-462e-a1d1-23a8b11717cf.png",
+      "attempts": 1,
+      "reference": null
+    },
+    {
+      "id": "sig/arrow",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-1f3ec9c8-43ba-4926-813e-2cddf58b6bb4.png",
+      "attempts": 1,
+      "reference": null
+    },
+    {
+      "id": "sig/meteor",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-35a39017-f584-48b2-a28c-c17495775432.png",
+      "attempts": 1,
+      "reference": null
+    },
+    {
+      "id": "sig/dawn",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-c81483a3-1769-4645-acd5-7e008ed930c7.png",
+      "attempts": 1,
+      "reference": null
+    },
+    {
+      "id": "class/shield",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-2871a503-7ee4-409d-99ef-089c56f8425e.png",
+      "attempts": 2,
+      "reference": "inputs/shield-attempt-01.png"
+    },
+    {
+      "id": "class/sword",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-4d551e39-4c8c-4797-a778-59f986fb1ba0.png",
+      "attempts": 1,
+      "reference": "class/shield.png"
+    },
+    {
+      "id": "class/spear",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-284191a4-566b-4ef3-a993-a54ec65a4d11.png",
+      "attempts": 1,
+      "reference": "class/shield.png"
+    },
+    {
+      "id": "class/bow",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-fb6736df-1b30-4523-b6ee-76b98203510d.png",
+      "attempts": 1,
+      "reference": "class/shield.png"
+    },
+    {
+      "id": "class/mage",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-e402896e-4672-4547-8913-ad9598a89af2.png",
+      "attempts": 1,
+      "reference": "class/shield.png"
+    },
+    {
+      "id": "class/healer",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-b93c2857-4fa9-4b9d-a738-422ccf01f93a.png",
+      "attempts": 1,
+      "reference": "class/shield.png"
+    },
+    {
+      "id": "bg/hero_page",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-b2cd4ed3-9a4a-484d-80d5-8dc0875e5c47.png",
+      "attempts": 2,
+      "reference": "inputs/background-attempt-01.png"
+    }
+  ],
+  "rejected": [
+    {
+      "id": "class/shield",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-14fb8ed4-ba19-47eb-86fc-b1380e9c1d2d.png",
+      "reason": "Wooden physical shield instead of pale cream symbol"
+    },
+    {
+      "id": "bg/hero_page",
+      "source": "/Users/peter/.codex/generated_images/01a15c61-ac1c-7c71-be94-7c4e51518b0e/exec-a97a08ab-314e-4d80-a6ae-3dc95f7c8140.png",
+      "reason": "Orange sunset too bright and warm for low-contrast forest-green UI"
+    }
+  ],
+  "quota": "No quota error reported; remaining quota unavailable"
+}

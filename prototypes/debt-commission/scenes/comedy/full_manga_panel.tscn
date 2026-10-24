@@ -168,4 +168,4 @@ theme_override_font_sizes/bold_font_size = 127
 bbcode_enabled = true
 text = "[color=#141414]現在是工作時[/color][color=#d7191c]間吧！！！[/color]"
 scroll_active = false
-autowrap_mode = 1
+autowrap_mode = 3

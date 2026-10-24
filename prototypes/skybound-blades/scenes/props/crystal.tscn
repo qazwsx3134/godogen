@@ -1,0 +1,37 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/prop.gd" id="1_y6lft"]
+[ext_resource type="Material" path="res://resources/materials/low_poly_35.tres" id="2_fodxd"]
+[ext_resource type="ArrayMesh" path="res://resources/meshes/crystal.res" id="3_8vkdb"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v4i6g"]
+shading_mode = 0
+albedo_color = Color(1, 0.3, 0.2, 1)
+
+[sub_resource type="TorusMesh" id="TorusMesh_yf1je"]
+inner_radius = 0.96
+
+[node name="Crystal" type="Node3D" unique_id=2126861427]
+script = ExtResource("1_y6lft")
+block_radius = 0.45
+
+[node name="Shard0" type="MeshInstance3D" parent="." unique_id=871366935]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+material_override = ExtResource("2_fodxd")
+mesh = ExtResource("3_8vkdb")
+
+[node name="Shard1" type="MeshInstance3D" parent="." unique_id=865237851]
+transform = Transform3D(0.67288315, 0.19294615, 0, -0.18350269, 0.6399499, -0.2163119, -0.05962364, 0.20793235, 0.6657396, 0.35, 0.6, 0.2)
+material_override = ExtResource("2_fodxd")
+mesh = ExtResource("3_8vkdb")
+
+[node name="Shard2" type="MeshInstance3D" parent="." unique_id=162351756]
+transform = Transform3D(0.5868886, -0.12474702, 0, 0.12104151, 0.5694555, 0.14515315, -0.030179037, -0.1419812, 0.58217746, -0.3, 0.6, 0.25)
+material_override = ExtResource("2_fodxd")
+mesh = ExtResource("3_8vkdb")
+
+[node name="BlockGizmo" type="MeshInstance3D" parent="." unique_id=1308001141]
+transform = Transform3D(0.45, 0, 0, 0, 0.45, 0, 0, 0, 0.45, 0, 0.05, 0)
+visible = false
+material_override = SubResource("StandardMaterial3D_v4i6g")
+mesh = SubResource("TorusMesh_yf1je")
