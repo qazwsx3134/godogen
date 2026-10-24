@@ -296,7 +296,7 @@ func claim(qid: String, now_ms: float) -> Dictionary:
 # --- Trips ----------------------------------------------------------------------
 
 func reset_trip() -> void:
-	trip = {"kills": 0, "exp": 0.0, "gold": 0, "items": {}, "gear": [], "used": {}, "dealt": {}, "taken": {},
+	trip = {"kills": 0, "exp": 0.0, "gold": 0, "items": {}, "gear": [], "used": {}, "dealt": {}, "taken": {}, "healed": {},
 		"warned": {"dodged": 0, "hit": 0}}
 
 
@@ -308,6 +308,12 @@ func note_damage(dealer_source: String, taker_role: String, amount: float) -> vo
 	if taker_role != "":
 		var taken: Dictionary = trip.get_or_add("taken", {})
 		taken[taker_role] = float(taken.get(taker_role, 0.0)) + amount
+
+
+## HP a member restored to an ally (the support's bandage); potions are supplies, not a member's work.
+func note_heal(healer_role: String, amount: float) -> void:
+	var healed: Dictionary = trip.get_or_add("healed", {})
+	healed[healer_role] = float(healed.get(healer_role, 0.0)) + amount
 
 
 ## A member who stood in a boss warning when it began: stepped out in time or got hit.

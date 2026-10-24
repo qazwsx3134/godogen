@@ -516,6 +516,7 @@ func _bandage(u: Unit, patient: Unit, bandage: Dictionary) -> void:
 	u.action = &"skill"
 	u.facing = _face(u.pos, patient.pos, u.facing)
 	var amount := _heal(patient, patient.max_hp * float(bandage.heal_max_hp_ratio))
+	run.note_heal(u.role, amount)
 	_emit({"type": "heal", "unit": patient.id, "source": u.id, "amount": amount, "kind": "bandage"})
 
 

@@ -19,6 +19,8 @@ func _init() -> void:
 	test_camp_sell_materials_and_gear()
 	test_camp_warehouse_round_trip()
 	test_camp_rows_cover_every_page()
+	test_camp_gear_compare_ranks_upgrades_first()
+	test_camp_tab_badges_count_what_needs_attention()
 	_finish("CAMP")
 
 
@@ -81,3 +83,38 @@ func test_camp_rows_cover_every_page() -> void:
 	_expect(tabs["委託"].rows.size() == 4, "pages: the four floor-1 quests are listed")
 	var gear_rows: Array = tabs["裝備"].rows
 	_expect(String(gear_rows[-1].detail).contains("→ 攻擊 +2"), "pages: a bag item shows its stat change (%s)" % gear_rows[-1].detail)
+
+
+func test_camp_gear_compare_ranks_upgrades_first() -> void:
+	# Arrange: the leader wears the plain novice sword (+6); the bag has a same sword and a rare one (+8).
+	var r := Run.new(tuning, "c6")
+	var same := r.make_gear("novice_sword", "plain")
+	var rare := r.make_gear("novice_sword", "rare")
+	var armor := r.make_gear("hard_leather", "fine")  # loses the travel coat's agility: a trade-off with a bigger total
+	menu.role = "leader"
+	# Act
+	var g := menu.gain(r, "leader", rare)
+	var rows: Array = menu.tabs(r, Profile.new(), true, 0.0)["裝備"].rows
+	var bag_rows := rows.filter(func(row: Dictionary) -> bool: return String(row.title).contains("背包"))
+	# Assert: +2 attack on 20 = +10% output, no toughness change; the upgrade is listed first and marked.
+	_expect(is_equal_approx(g.output, 0.1) and is_equal_approx(g.toughness, 0.0), "compare: rare sword = output +10%% (%s)" % g)
+	_expect(String(bag_rows[0].title).begins_with("▲較佳") and String(bag_rows[0].detail).contains("輸出 +10%"),
+		"compare: the upgrade comes first, marked, with its output change (%s / %s)" % [bag_rows[0].title, bag_rows[0].detail])
+	_expect(String(bag_rows[1].title).begins_with("取捨") and String(bag_rows[1].title).contains(menu.gear_name(armor)),
+		"compare: the trade-off comes after the upgrade (%s)" % bag_rows[1].title)
+	_expect(not String(bag_rows[2].title).contains("較佳") and String(bag_rows[2].detail).contains("輸出 ±0%"),
+		"compare: the identical sword is not marked (%s)" % bag_rows[2].title)
+	_expect(menu.upgrades(r).map(func(u: Dictionary) -> String: return u.id) == [rare.id] and same.id != rare.id,
+		"compare: only the rare sword counts as an upgrade")
+
+
+func test_camp_tab_badges_count_what_needs_attention() -> void:
+	# Arrange: a fresh run with nothing to do, then one upgrade in the bag.
+	var r := Run.new(tuning, "c7")
+	var before := menu.tabs(r, Profile.new(), true, 0.0)
+	r.make_gear("novice_sword", "rare")
+	# Act
+	var after := menu.tabs(r, Profile.new(), true, 0.0)
+	# Assert
+	_expect(int(before["裝備"].badge) == 0 and int(before["委託"].badge) == 0, "badges: nothing to do shows no number")
+	_expect(int(after["裝備"].badge) == 1, "badges: one upgrade in the bag = 裝備 1")

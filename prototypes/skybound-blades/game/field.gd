@@ -696,6 +696,9 @@ func trip_damage_lines(trip: Dictionary) -> PackedStringArray:
 	if not taken.is_empty():
 		out.append("承受：隊長 %d · 盾衛 %d · 援護 %d" % [roundi(float(taken.get("leader", 0.0))),
 			roundi(float(taken.get("guardian", 0.0))), roundi(float(taken.get("support", 0.0)))])
+	var healed := float((trip.get("healed", {}) as Dictionary).get("support", 0.0))
+	if healed > 0.0:
+		out.append("治療：援護用繃帶救回 %d 生命" % roundi(healed))
 	var w: Dictionary = trip.get("warned", {})
 	if int(w.get("dodged", 0)) + int(w.get("hit", 0)) > 0:
 		out.append("守層者預警：閃過 %d · 被擊中 %d" % [int(w.dodged), int(w.hit)])

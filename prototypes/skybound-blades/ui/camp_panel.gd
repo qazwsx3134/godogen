@@ -17,13 +17,15 @@ func _ready() -> void:
 		closed.emit())
 
 
-## tabs = {tab node name: {"rows": [row, ...], "hint": String}}; header = gold/warehouse line.
+## tabs = {tab node name: {"rows": [row, ...], "badge": int}}; header = gold/warehouse line.
 func show_tabs(tabs: Dictionary, header: String) -> void:
 	_header.text = header
 	for tab_name: String in tabs:
 		var page := _tabs.get_node_or_null(tab_name)
 		if page == null:
 			continue
+		var badge := int(tabs[tab_name].get("badge", 0))
+		_tabs.set_tab_title(page.get_index(), tab_name + (" %d" % badge if badge > 0 else ""))
 		var list: VBoxContainer = page.get_node("List")
 		var rows: Array = tabs[tab_name].rows
 		while list.get_child_count() < rows.size():

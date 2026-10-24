@@ -55,7 +55,7 @@ M0 RO 戰鬥切片：可玩，驗收狀態見 [ro-slice.md](design/ro-slice.md) 
 
 ## 文件
 
-- [最新：王的預警與本趟輸出](design/boss-warnings.md)（依流浪仙境、守城英雄傳研究）
+- [最新：王的預警與本趟輸出](design/boss-warnings.md)、[營地裝備比較與分頁提示](design/camp-compare.md)（依流浪仙境、守城英雄傳研究）
 - [MMORPG 機制研究](../../docs/research/echoes-of-aincrad-mmorpg-systems-2026-10-24.md)
 - [目前交付：RO 戰鬥切片](design/ro-slice.md)
 - [切片之後：機制開發順序](design/mechanism-plan.md)

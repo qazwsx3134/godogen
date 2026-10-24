@@ -65,10 +65,66 @@ func header(run: RefCounted, profile: RefCounted, in_camp: bool) -> String:
 		"" if in_camp else "   （在野外：只能換裝）"]
 
 
+## badge = how many things on that page want the player's attention (shown on the tab).
 func tabs(run: RefCounted, profile: RefCounted, in_camp: bool, now_ms: float) -> Dictionary:
 	return {"補給": {"rows": _supplies(run, in_camp)}, "倉庫": {"rows": _warehouse(run, profile, in_camp)},
-		"委託": {"rows": _quests(run, in_camp, now_ms)}, "裝備": {"rows": _gear(run)},
-		"技能": {"rows": _skills(run, in_camp)}}
+		"委託": {"rows": _quests(run, in_camp, now_ms), "badge": _claimable(run, now_ms)},
+		"裝備": {"rows": _gear(run), "badge": upgrades(run).size()},
+		"技能": {"rows": _skills(run, in_camp), "badge": _learnable(run)}}
+
+
+func _claimable(run: RefCounted, now_ms: float) -> int:
+	return run.quests.keys().filter(func(qid: String) -> bool: return run.quest_ready(qid, now_ms)).size()
+
+
+func _learnable(run: RefCounted) -> int:
+	var style: String = run.member_stats("leader").style
+	return Skills.style_skills(tuning, style).filter(func(id: String) -> bool:
+		return Skills.mastery_level(run, "leader", id) == 0 and Skills.learn_block(tuning, run, "leader", id) == "").size()
+
+
+# --- Gear comparison --------------------------------------------------------------
+
+## Estimated output and toughness of a stat block, for comparing gear (not a combat prediction):
+##   output    = attack × swings per second × average crit factor
+##   toughness = max HP × how much the floor guardian's blow shrinks after defense and block
+## ponytail: one reference enemy (the floor-1 guardian); use the current floor's enemies once there is a floor 2.
+func power(stats: Dictionary) -> Dictionary:
+	var combat: Dictionary = tuning.section("combat")
+	var crit := 1.0 + float(stats.crit_chance) * (float(combat.crit_multiplier) - 1.0)
+	var blow := float(tuning.bosses["gatekeeper"].attack)
+	var taken := maxf(1.0, blow - float(stats.defense) * float(combat.defense_factor)) / blow
+	taken *= 1.0 - float(stats.block_chance) * (1.0 - float(combat.shield_block_damage_ratio))
+	return {"output": float(stats.attack) * 1000.0 / float(stats.attack_ms) * crit, "toughness": float(stats.max_hp) / taken}
+
+
+func stats_if_worn(run: RefCounted, who: String, inst: Dictionary) -> Dictionary:
+	var slot: String = tuning.equipment[inst.template].slot
+	var worn: Array = []
+	for gid: String in run.equipped_ids(who):
+		if tuning.equipment[run.gear[gid].template].slot != slot:
+			worn.append(run.gear[gid])
+	worn.append(inst)
+	return tuning.member_stats(who, run.level, worn)
+
+
+## {output, toughness}: fractional change if `who` wore `inst` instead of what is in that slot now.
+func gain(run: RefCounted, who: String, inst: Dictionary) -> Dictionary:
+	var now := power(run.member_stats(who))
+	var after := power(stats_if_worn(run, who, inst))
+	return {"output": after.output / now.output - 1.0, "toughness": after.toughness / now.toughness - 1.0}
+
+
+## Bag pieces that make some member stronger on one axis and weaker on none: [{id, role}], one per piece.
+func upgrades(run: RefCounted) -> Array:
+	var out: Array = []
+	for inst: Dictionary in run.bag_gear():
+		for who: String in ROLE:
+			var g := gain(run, who, inst)
+			if _tag(g).begins_with("▲"):
+				out.append({"id": inst.id, "role": who})
+				break
+	return out
 
 
 func _supplies(run: RefCounted, in_camp: bool) -> Array:
@@ -158,21 +214,35 @@ func _gear(run: RefCounted) -> Array:
 		var inst: Dictionary = run.gear[gid]
 		rows.append({"title": "%s：%s" % [SLOT[slot], gear_name(inst)], "detail": bonus_text(inst.bonus),
 			"actions": [{"label": "卸下", "action": {"type": "unequip", "role": role, "slot": slot}, "enabled": true}]})
-	for inst: Dictionary in run.bag_gear():
-		rows.append({"title": "背包：%s" % gear_name(inst), "detail": "%s　%s" % [bonus_text(inst.bonus), _delta(run, inst)],
+	# Upgrades for this member first, then trade-offs, each by total gain (research: show the difference before
+	# the swap on two axes, not just raw stats).
+	var bag: Array = run.bag_gear()
+	var rank := func(inst: Dictionary) -> float:
+		var g := gain(run, role, inst)
+		return {"▲較佳　": 2.0, "取捨　": 1.0}.get(_tag(g), 0.0) * 100.0 + g.output + g.toughness
+	bag.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return rank.call(a) > rank.call(b))
+	for inst: Dictionary in bag:
+		var g := gain(run, role, inst)
+		var tag := _tag(g)
+		rows.append({"title": "%s背包：%s" % [tag, gear_name(inst)],
+			"detail": "%s　%s ｜ 輸出 %s · 耐久 %s" % [bonus_text(inst.bonus), _delta(run, inst), _pct(g.output), _pct(g.toughness)],
 			"actions": [{"label": "裝備", "action": {"type": "equip", "role": role, "id": inst.id}, "enabled": true}]})
 	return rows
 
 
+func _tag(g: Dictionary) -> String:
+	if g.output >= -0.001 and g.toughness >= -0.001 and maxf(g.output, g.toughness) > 0.005:
+		return "▲較佳　"
+	return "取捨　" if g.output > 0.005 or g.toughness > 0.005 else ""
+
+
+func _pct(f: float) -> String:
+	return "±0%" if absf(f) < 0.005 else "%+d%%" % roundi(f * 100.0)
+
+
 ## Stat change if the selected role wore this piece, e.g. "→ 攻擊 +2 · 生命 -15".
 func _delta(run: RefCounted, inst: Dictionary) -> String:
-	var slot: String = tuning.equipment[inst.template].slot
-	var worn: Array = []
-	for gid: String in run.equipped_ids(role):
-		if tuning.equipment[run.gear[gid].template].slot != slot:
-			worn.append(run.gear[gid])
-	worn.append(inst)
-	var after: Dictionary = tuning.member_stats(role, run.level, worn)
+	var after := stats_if_worn(run, role, inst)
 	var now: Dictionary = run.member_stats(role)
 	var parts := PackedStringArray()
 	for stat: String in ["attack", "defense", "max_hp"]:
