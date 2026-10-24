@@ -1,0 +1,23 @@
+{
+  "note": "First-time guides (docs/PLAN-LOG-AVATAR-TUTORIAL.md B). Each shows once, the first time its screen opens; at most 3 steps, one thing per step, two lines each. target = a name main.gd resolves (_tutorial_target).",
+  "tutorials": [
+    {
+      "id": "boke",
+      "trigger": "boke_round",
+      "steps": [
+        {"target": "boke_switch", "title": "裝傻與吐槽", "text": "對方的話分成好幾句。\n用 < > 切換，找出哪一句在裝傻。"},
+        {"target": "boke_listen", "title": "聽下去", "text": "讓對方多說一點。\n有些破綻要聽完才抓得到。"},
+        {"target": "boke_tsukkomi", "title": "吐槽！", "text": "抓到就按這裡。選詞只有幾秒，\n逾時算冷場；圈縮小時在圈內點下去。"}
+      ]
+    },
+    {
+      "id": "investigate",
+      "trigger": "investigate",
+      "steps": [
+        {"target": "investigate_scene", "title": "調查", "text": "拖曳畫面看看四周，\n點可疑的地方就能取得線索。"},
+        {"target": "investigate_collapse", "title": "收起對話框", "text": "對話框擋住畫面時按這裡，\n再點一次就展開。"},
+        {"target": "investigate_continue", "title": "繼續故事", "text": "線索找夠了，\n按這裡繼續。"}
+      ]
+    }
+  ]
+}

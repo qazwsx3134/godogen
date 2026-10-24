@@ -73,6 +73,10 @@ const DEFAULT_BOKE_TIMER_SECONDS: float = 8.0
 @export var progress_path: String = "user://progress.cfg"
 ## Text speed, auto-play speed and volumes (settings.gd), each an index into its choices.
 @export var settings_path: String = "user://settings.cfg"
+## First-time guides (data/tutorials.json); which ones were seen is kept in progress_path [tutorial].
+@export_file("*.json") var tutorials_path: String = "res://data/tutorials.json"
+## False never shows a guide (the player's 教學提示 setting can also turn them off).
+@export var tutorials_enabled: bool = true
 ## Where skins/<id>/skin.json are looked up (tests point it at fixtures).
 @export var skins_root: String = "res://skins/"
 ## Where story packs are found: <packs_root>/<work>/pack.json (IMPLEMENTATION.md「故事包」).
@@ -330,6 +334,8 @@ var _stage_bottom: float = 0.0
 var _panel_scale: float = 1.0
 
 var _qa_enabled: bool = false
+var _tutorial: Control = null
+var _tutorials: Array = []
 var _qa_elapsed: float = 0.0
 
 
@@ -797,6 +803,7 @@ func _build_ui() -> void:
 	_build_investigate_bar()
 	_mount_menu()
 	_build_log()
+	_build_tutorial()
 	_build_case_file()
 	_build_toast()
 	_mount_title()
@@ -1188,6 +1195,89 @@ func _build_log() -> void:
 	_log_close.pressed.connect(_close_log)
 
 
+# ---------------------------------------------------------------- 第一次教學（異獸髮廊研究，docs/PLAN-LOG-AVATAR-TUTORIAL.md B）
+
+func _build_tutorial() -> void:
+	_tutorial = preload("res://scenes/ui/tutorial_overlay.tscn").instantiate()
+	_popup_layer.add_child(_tutorial)  # last child: above every other popup
+	_tutorial.visible = false
+	_tutorial.connect("finished", _on_tutorial_finished)
+	_apply_ui_style_recursive(_tutorial)
+	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(tutorials_path)) \
+		if FileAccess.file_exists(tutorials_path) else null  # a plain JSON file ships as-is (export include_filter)
+	_tutorials = (data as Dictionary).get("tutorials", []) if data is Dictionary else []
+
+
+## Guides show for players only. ponytail: headless runs (the test suites) and ?qa=1 browser checks skip them unless
+## DEBT_TUTORIAL=1 / &tutorial=1 asks, so the 40-odd existing suites need no per-file switch.
+func _tutorials_on() -> bool:
+	if not tutorials_enabled or int(_settings.get("tutorial", 0)) != 0:
+		return false
+	if DisplayServer.get_name() == "headless" and OS.get_environment("DEBT_TUTORIAL") != "1":
+		return false
+	if _qa_enabled and not bool(JavaScriptBridge.eval("new URLSearchParams(window.location.search).get('tutorial') === '1'")):
+		return false
+	return true
+
+
+## The guide for `trigger` (a screen mode), once: only if that screen is still up and nothing else covers it.
+func _maybe_tutorial(trigger: String) -> void:
+	if _screen_mode != trigger or _tutorial.visible or not _tutorials_on():
+		return
+	if trigger == "boke_round" and not _boke_controls.visible:
+		return  # combo lines open their slot at once; the guide waits for a round the player reads
+	var seen: Array = _tutorials_seen()
+	for def: Dictionary in _tutorials:
+		if str(def.get("trigger", "")) == trigger and str(def.get("id", "")) not in seen:
+			_set_auto(false)
+			_set_skip(false)
+			_tutorial.call("start", str(def.id), def.get("steps", []), _tutorial_target)
+			_publish_qa_state()
+			return
+
+
+func _tutorial_target(target: String) -> Control:
+	match target:
+		"boke_switch": return _boke_previous_button.get_parent() as Control
+		"boke_listen": return _boke_listen_button
+		"boke_tsukkomi": return _boke_tsukkomi_button
+		"investigate_scene": return _stage_area  # the picture above the reading box
+		"investigate_collapse": return _dialog_panel.collapse_tab
+		"investigate_continue": return _investigation_continue_button
+	return null
+
+
+func _on_tutorial_finished(id: String, _skipped: bool) -> void:
+	var seen: Array = _tutorials_seen()
+	if id not in seen:
+		seen.append(id)
+	_write_tutorials_seen(seen)
+	_publish_qa_state()
+
+
+func _tutorials_seen() -> Array:
+	var config: ConfigFile = ConfigFile.new()
+	if config.load(progress_path) != OK:
+		return []
+	var seen: Variant = config.get_value("tutorial", "seen", [])
+	return (seen as Array).duplicate() if seen is Array else []
+
+
+## Writes [tutorial] seen into progress_path, keeping its other sections ([cleared], endings).
+func _write_tutorials_seen(seen: Array) -> void:
+	var config: ConfigFile = ConfigFile.new()
+	config.load(progress_path)
+	config.set_value("tutorial", "seen", seen)
+	if ATOMIC_FILE.write_text(progress_path, config.encode_to_text()) != OK:
+		_show_toast("教學進度無法儲存")
+
+
+## 設定 → 重看教學: every guide shows again the next time its screen opens.
+func _replay_tutorials() -> void:
+	_write_tutorials_seen([])
+	_show_toast("下次進入吐槽與調查時會再顯示教學")
+
+
 func _build_toast() -> void:
 	_toast = _make_label(_popup_layer, "", 40, COLOR_TEXT)
 	_toast.name = "Toast"
@@ -1234,6 +1324,7 @@ func _mount_settings() -> void:
 	_settings_panel.connect("closed", _close_settings)
 	_settings_panel.connect("export_saves", _export_saves)
 	_settings_panel.connect("import_saves", _import_saves)
+	_settings_panel.connect("replay_tutorials", _replay_tutorials)
 	if old == null:
 		return
 	_game.move_child(_settings_panel, old.get_index())
@@ -1381,6 +1472,8 @@ func _layout() -> void:
 	_fit_panel_area(_settings_panel, Rect2(0.0, top, width, bottom - top))
 	if _screen_mode == "investigate":
 		_layout_hotspots()
+	if _tutorial != null and _tutorial.visible:
+		_tutorial.call("_place")
 	_publish_qa_state()
 
 
@@ -1778,6 +1871,7 @@ func _present_investigation(command: Dictionary, restored: bool) -> void:
 	_clear_choices()
 	_clear_hotspots()
 	_screen_mode = "investigate"
+	_maybe_tutorial.call_deferred("investigate")
 	_dialog_layer.visible = true
 	_dialog_panel.visible = true  # the prompt shows first; 收起 folds the box away
 	_end_box.visible = false
@@ -2139,6 +2233,7 @@ func _present_boke_round(command: Dictionary, restored: bool, requested_ui_mode:
 	_dialog_layer.visible = true
 	_dialog_panel.visible = true
 	_boke_controls.visible = not RoundView.automatic(command)
+	_maybe_tutorial.call_deferred("boke_round")
 	_dialog_panel.set_reading_enabled(false)
 	_set_name_plate(_current_speaker, false)
 	_focus_speaker(_current_speaker, "annoyed")
@@ -4117,7 +4212,7 @@ func _write_qa_state() -> void:
 	var state: Dictionary = {
 		# While the menu pops in, its rows are scaled and not yet laid out: report busy until it settles.
 		# The director's sheet springs in the same way.
-		"screen": "busy" if (_screen_mode == "menu" and _menu_panel.scale != Vector2.ONE) or _choice_sheet.is_popping() else _screen_mode,
+		"screen": "tutorial" if _tutorial != null and _tutorial.visible else "busy" if (_screen_mode == "menu" and _menu_panel.scale != Vector2.ONE) or _choice_sheet.is_popping() else _screen_mode,
 		"text": _visible_text,
 		"full_text": _full_text,
 		"speaker": _current_speaker,

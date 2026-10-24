@@ -2,7 +2,8 @@ extends RefCounted
 ## Player settings (ConfigFile [settings]): each is an index into its list of choices, which is
 ## also the button's position in its row of scenes/ui/settings_panel.tscn. The defaults are the
 ## speeds and volumes the game had before settings existed. `motion` 1 tones down screen shake and
-## flashes; `assist` 1 gives the timed choice more time and the QTE a wider window.
+## flashes; `assist` 1 gives the timed choice more time and the QTE a wider window; `tutorial` 1 turns the first-time
+## guides off (data/tutorials.json).
 
 ## Seconds per character; 0 shows the whole line at once.
 const TEXT_INTERVALS: Array[float] = [0.06, 0.032, 0.016, 0.0]
@@ -15,9 +16,9 @@ const PAPER_OPACITIES: Array[float] = [0.65, 0.82, 1.0]
 const ASSIST_TIMER_FACTOR: float = 1.5
 const ASSIST_QTE_WINDOW_FACTOR: float = 2.0
 const DEFAULTS: Dictionary = {"text_speed": 1, "auto_speed": 1, "bgm_volume": 4, "se_volume": 4, "font_size": 1, "paper_opacity": 2,
-	"motion": 0, "assist": 0}
+	"motion": 0, "assist": 0, "tutorial": 0}
 const SIZES: Dictionary = {"text_speed": 4, "auto_speed": 3, "bgm_volume": 5, "se_volume": 5, "font_size": 3, "paper_opacity": 3,
-	"motion": 2, "assist": 2}
+	"motion": 2, "assist": 2, "tutorial": 2}
 const AtomicFile = preload("res://addons/proto_kit/atomic_file.gd")
 
 

@@ -1,6 +1,6 @@
 extends Panel
 ## 設定 (scenes/ui/settings_panel_gintama.tscn): text speed, auto-play speed, music and sound volume,
-## reading size and paper, 畫面效果 and 吐槽輔助, each a row of toggles styled in the scene (the
+## reading size and paper, 畫面效果, 吐槽輔助 and 教學提示 (with 重看教學), each a row of toggles styled in the scene (the
 ## button's position in its row is the value; the chosen one shows pressed). main.gd keeps the
 ## values (settings.gd) and applies them. 存檔備份 asks main.gd to export or import every save
 ## (save_transfer.gd); importing is only offered from the title.
@@ -9,6 +9,7 @@ signal changed(key: String, value: int)
 signal closed
 signal export_saves
 signal import_saves
+signal replay_tutorials
 
 var _values: Dictionary = {}
 
@@ -16,6 +17,7 @@ var _values: Dictionary = {}
 @onready var _rows: Dictionary = {
 	"text_speed": %TextSpeed, "auto_speed": %AutoSpeed, "bgm_volume": %BgmVolume, "se_volume": %SeVolume,
 	"font_size": %FontSize, "paper_opacity": %PaperOpacity, "motion": %Motion, "assist": %Assist,
+	"tutorial": %Tutorial,
 }
 @onready var export_button: Button = %SavesExport
 @onready var import_button: Button = %SavesImport
@@ -26,6 +28,9 @@ func _ready() -> void:
 	close_button.pressed.connect(func() -> void: closed.emit())
 	export_button.pressed.connect(func() -> void: export_saves.emit())
 	import_button.pressed.connect(func() -> void: import_saves.emit())
+	%TutorialReplay.pressed.connect(func() -> void:
+		%TutorialReplay.disabled = true  # once per opening; it only clears the "seen" list
+		replay_tutorials.emit())
 	for key: String in _rows.keys():
 		var row: Container = _rows[key]
 		for index: int in range(row.get_child_count()):
@@ -41,6 +46,7 @@ func open(values: Dictionary, import_allowed: bool = true, gameplay: bool = true
 		if node != null:
 			node.visible = gameplay
 	import_button.disabled = not import_allowed
+	%TutorialReplay.disabled = false
 	import_button.text = "匯入存檔" if import_allowed else "匯入存檔（回標題）"
 	_paint()
 	visible = true

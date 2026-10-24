@@ -128,7 +128,7 @@ corner_radius_bottom_left = 30
 shadow_color = Color(0.03, 0.09, 0.14, 0.22)
 shadow_offset = Vector2(0, 4)
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_47jq6"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_yvdp0"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bpqjm"]
 content_margin_left = 16.0
@@ -506,7 +506,7 @@ corner_radius_bottom_left = 30
 shadow_color = Color(0.03, 0.09, 0.14, 0.22)
 shadow_offset = Vector2(0, 4)
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_d0mef"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_rnma6"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_spbyv"]
 content_margin_left = 16.0
@@ -790,7 +790,7 @@ corner_radius_bottom_left = 30
 shadow_color = Color(0.03, 0.09, 0.14, 0.22)
 shadow_offset = Vector2(0, 4)
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_nwnsi"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_j5n7a"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jv12m"]
 content_margin_left = 16.0
@@ -1262,7 +1262,7 @@ corner_radius_bottom_left = 30
 shadow_color = Color(0.03, 0.09, 0.14, 0.22)
 shadow_offset = Vector2(0, 4)
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_o71a7"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_fmry8"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n681v"]
 content_margin_left = 16.0
@@ -1734,7 +1734,7 @@ corner_radius_bottom_left = 30
 shadow_color = Color(0.03, 0.09, 0.14, 0.22)
 shadow_offset = Vector2(0, 4)
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_7o40l"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_nooyu"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cpxwm"]
 content_margin_left = 16.0
@@ -2018,7 +2018,7 @@ corner_radius_bottom_left = 30
 shadow_color = Color(0.03, 0.09, 0.14, 0.22)
 shadow_offset = Vector2(0, 4)
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_eoglj"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_oejm3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pysra"]
 content_margin_left = 16.0
@@ -2208,9 +2208,11 @@ corner_radius_bottom_left = 30
 shadow_color = Color(0.03, 0.09, 0.14, 0.22)
 shadow_offset = Vector2(0, 4)
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_yvdp0"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_h2vpk"]
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_rnma6"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_8g1j7"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_rovm4"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2amoj"]
 content_margin_left = 96.0
@@ -2382,7 +2384,7 @@ theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 theme_override_font_sizes/font_size = 42
 toggle_mode = true
-button_group = SubResource("ButtonGroup_47jq6")
+button_group = SubResource("ButtonGroup_yvdp0")
 text = "慢"
 
 [node name="TextSpeed1" type="Button" parent="Area/Card/Layout/SettingsScroll/Rows/TextSpeed" unique_id=1885379873]
@@ -2404,7 +2406,7 @@ theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 theme_override_font_sizes/font_size = 42
 toggle_mode = true
-button_group = SubResource("ButtonGroup_47jq6")
+button_group = SubResource("ButtonGroup_yvdp0")
 text = "標準"
 
 [node name="TextSpeed2" type="Button" parent="Area/Card/Layout/SettingsScroll/Rows/TextSpeed" unique_id=1927808078]
@@ -2426,7 +2428,7 @@ theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 theme_override_font_sizes/font_size = 42
 toggle_mode = true
-button_group = SubResource("ButtonGroup_47jq6")
+button_group = SubResource("ButtonGroup_yvdp0")
 text = "快"
 
 [node name="TextSpeed3" type="Button" parent="Area/Card/Layout/SettingsScroll/Rows/TextSpeed" unique_id=427490740]
@@ -2448,7 +2450,7 @@ theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 theme_override_font_sizes/font_size = 42
 toggle_mode = true
-button_group = SubResource("ButtonGroup_47jq6")
+button_group = SubResource("ButtonGroup_yvdp0")
 text = "瞬間"
 
 [node name="AutoSpeedRule" type="ColorRect" parent="Area/Card/Layout/SettingsScroll/Rows" unique_id=246366667]
@@ -2487,7 +2489,7 @@ theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 theme_override_font_sizes/font_size = 42
 toggle_mode = true
-button_group = SubResource("ButtonGroup_d0mef")
+button_group = SubResource("ButtonGroup_rnma6")
 text = "慢"
 
 [node name="AutoSpeed1" type="Button" parent="Area/Card/Layout/SettingsScroll/Rows/AutoSpeed" unique_id=1853814784]
@@ -2509,7 +2511,7 @@ theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 theme_override_font_sizes/font_size = 42
 toggle_mode = true
-button_group = SubResource("ButtonGroup_d0mef")
+button_group = SubResource("ButtonGroup_rnma6")
 text = "標準"
 
 [node name="AutoSpeed2" type="Button" parent="Area/Card/Layout/SettingsScroll/Rows/AutoSpeed" unique_id=1813318812]
@@ -2531,7 +2533,7 @@ theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 theme_override_font_sizes/font_size = 42
 toggle_mode = true
-button_group = SubResource("ButtonGroup_d0mef")
+button_group = SubResource("ButtonGroup_rnma6")
 text = "快"
 
 [node name="BgmVolumeRule" type="ColorRect" parent="Area/Card/Layout/SettingsScroll/Rows" unique_id=1425028028]
@@ -2570,7 +2572,7 @@ theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 theme_override_font_sizes/font_size = 42
 toggle_mode = true
-button_group = SubResource("ButtonGroup_nwnsi")
+button_group = SubResource("ButtonGroup_j5n7a")
 text = "關"
 
 [node name="BgmVolume1" type="Button" parent="Area/Card/Layout/SettingsScroll/Rows/BgmVolume" unique_id=695657761]
@@ -2592,7 +2594,7 @@ theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 theme_override_font_sizes/font_size = 42
 toggle_mode = true
-button_group = SubResource("ButtonGroup_nwnsi")
+button_group = SubResource("ButtonGroup_j5n7a")
 text = "25"
 
 [node name="BgmVolume2" type="Button" parent="Area/Card/Layout/SettingsScroll/Rows/BgmVolume" unique_id=686944036]
@@ -2614,7 +2616,7 @@ theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 theme_override_font_sizes/font_size = 42
 toggle_mode = true
-button_group = SubResource("ButtonGroup_nwnsi")
+button_group = SubResource("ButtonGroup_j5n7a")
 text = "50"
 
 [node name="BgmVolume3" type="Button" parent="Area/Card/Layout/SettingsScroll/Rows/BgmVolume" unique_id=787004239]
@@ -2636,7 +2638,7 @@ theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 theme_override_font_sizes/font_size = 42
 toggle_mode = true
-button_group = SubResource("ButtonGroup_nwnsi")
+button_group = SubResource("ButtonGroup_j5n7a")
 text = "75"
 
 [node name="BgmVolume4" type="Button" parent="Area/Card/Layout/SettingsScroll/Rows/BgmVolume" unique_id=1679697223]
@@ -2658,7 +2660,7 @@ theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 theme_override_font_sizes/font_size = 42
 toggle_mode = true
-button_group = SubResource("ButtonGroup_nwnsi")
+button_group = SubResource("ButtonGroup_j5n7a")
 text = "100"
 
 [node name="SeVolumeRule" type="ColorRect" parent="Area/Card/Layout/SettingsScroll/Rows" unique_id=799886761]
@@ -2697,7 +2699,7 @@ theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 theme_override_font_sizes/font_size = 42
 toggle_mode = true
-button_group = SubResource("ButtonGroup_o71a7")
+button_group = SubResource("ButtonGroup_fmry8")
 text = "關"
 
 [node name="SeVolume1" type="Button" parent="Area/Card/Layout/SettingsScroll/Rows/SeVolume" unique_id=2018515200]
@@ -2719,7 +2721,7 @@ theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 theme_override_font_sizes/font_size = 42
 toggle_mode = true
-button_group = SubResource("ButtonGroup_o71a7")
+button_group = SubResource("ButtonGroup_fmry8")
 text = "25"
 
 [node name="SeVolume2" type="Button" parent="Area/Card/Layout/SettingsScroll/Rows/SeVolume" unique_id=846700839]
@@ -2741,7 +2743,7 @@ theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 theme_override_font_sizes/font_size = 42
 toggle_mode = true
-button_group = SubResource("ButtonGroup_o71a7")
+button_group = SubResource("ButtonGroup_fmry8")
 text = "50"
 
 [node name="SeVolume3" type="Button" parent="Area/Card/Layout/SettingsScroll/Rows/SeVolume" unique_id=1256350657]
@@ -2763,7 +2765,7 @@ theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 theme_override_font_sizes/font_size = 42
 toggle_mode = true
-button_group = SubResource("ButtonGroup_o71a7")
+button_group = SubResource("ButtonGroup_fmry8")
 text = "75"
 
 [node name="SeVolume4" type="Button" parent="Area/Card/Layout/SettingsScroll/Rows/SeVolume" unique_id=731953056]
@@ -2785,7 +2787,7 @@ theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 theme_override_font_sizes/font_size = 42
 toggle_mode = true
-button_group = SubResource("ButtonGroup_o71a7")
+button_group = SubResource("ButtonGroup_fmry8")
 text = "100"
 
 [node name="FontSizeRule" type="ColorRect" parent="Area/Card/Layout/SettingsScroll/Rows" unique_id=1191633357]
@@ -2824,7 +2826,7 @@ theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 theme_override_font_sizes/font_size = 42
 toggle_mode = true
-button_group = SubResource("ButtonGroup_7o40l")
+button_group = SubResource("ButtonGroup_nooyu")
 text = "小"
 
 [node name="FontSize1" type="Button" parent="Area/Card/Layout/SettingsScroll/Rows/FontSize" unique_id=359023322]
@@ -2846,7 +2848,7 @@ theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 theme_override_font_sizes/font_size = 42
 toggle_mode = true
-button_group = SubResource("ButtonGroup_7o40l")
+button_group = SubResource("ButtonGroup_nooyu")
 text = "標準"
 
 [node name="FontSize2" type="Button" parent="Area/Card/Layout/SettingsScroll/Rows/FontSize" unique_id=1521122023]
@@ -2868,7 +2870,7 @@ theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 theme_override_font_sizes/font_size = 42
 toggle_mode = true
-button_group = SubResource("ButtonGroup_7o40l")
+button_group = SubResource("ButtonGroup_nooyu")
 text = "大"
 
 [node name="PaperOpacityRule" type="ColorRect" parent="Area/Card/Layout/SettingsScroll/Rows" unique_id=1634202616]
@@ -2907,7 +2909,7 @@ theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 theme_override_font_sizes/font_size = 42
 toggle_mode = true
-button_group = SubResource("ButtonGroup_eoglj")
+button_group = SubResource("ButtonGroup_oejm3")
 text = "65%"
 
 [node name="PaperOpacity1" type="Button" parent="Area/Card/Layout/SettingsScroll/Rows/PaperOpacity" unique_id=2012108901]
@@ -2929,7 +2931,7 @@ theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 theme_override_font_sizes/font_size = 42
 toggle_mode = true
-button_group = SubResource("ButtonGroup_eoglj")
+button_group = SubResource("ButtonGroup_oejm3")
 text = "82%"
 
 [node name="PaperOpacity2" type="Button" parent="Area/Card/Layout/SettingsScroll/Rows/PaperOpacity" unique_id=1636227927]
@@ -2951,7 +2953,7 @@ theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 theme_override_font_sizes/font_size = 42
 toggle_mode = true
-button_group = SubResource("ButtonGroup_eoglj")
+button_group = SubResource("ButtonGroup_oejm3")
 text = "100%"
 
 [node name="MotionRule" type="ColorRect" parent="Area/Card/Layout/SettingsScroll/Rows" unique_id=1539450543]
@@ -2990,7 +2992,7 @@ theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 theme_override_font_sizes/font_size = 42
 toggle_mode = true
-button_group = SubResource("ButtonGroup_yvdp0")
+button_group = SubResource("ButtonGroup_h2vpk")
 text = "標準"
 autowrap_mode = 3
 
@@ -3013,7 +3015,7 @@ theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 theme_override_font_sizes/font_size = 42
 toggle_mode = true
-button_group = SubResource("ButtonGroup_yvdp0")
+button_group = SubResource("ButtonGroup_h2vpk")
 text = "減少震動與閃光"
 autowrap_mode = 3
 
@@ -3054,7 +3056,7 @@ theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 theme_override_font_sizes/font_size = 42
 toggle_mode = true
-button_group = SubResource("ButtonGroup_rnma6")
+button_group = SubResource("ButtonGroup_8g1j7")
 text = "標準"
 autowrap_mode = 3
 
@@ -3077,8 +3079,97 @@ theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 theme_override_font_sizes/font_size = 42
 toggle_mode = true
-button_group = SubResource("ButtonGroup_rnma6")
+button_group = SubResource("ButtonGroup_8g1j7")
 text = "寬鬆"
+autowrap_mode = 3
+
+[node name="TutorialRule" type="ColorRect" parent="Area/Card/Layout/SettingsScroll/Rows" unique_id=659427741]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+color = Color(0.22, 0.34, 0.45, 0.22)
+
+[node name="TutorialLabel" type="Label" parent="Area/Card/Layout/SettingsScroll/Rows" unique_id=1404034875]
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_rovm4")
+theme_override_font_sizes/font_size = 44
+theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+text = "◆ 教學提示"
+
+[node name="Tutorial" type="HBoxContainer" parent="Area/Card/Layout/SettingsScroll/Rows" unique_id=249305129]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Tutorial0" type="Button" parent="Area/Card/Layout/SettingsScroll/Rows/Tutorial" unique_id=834095762]
+custom_minimum_size = Vector2(0, 136)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_4jn88")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_lgujd")
+theme_override_styles/hover = SubResource("StyleBoxFlat_q3s4f")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_lgujd")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_ws0ij")
+theme_override_styles/focus = SubResource("StyleBoxFlat_5mi06")
+theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/font_focus_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
+theme_override_fonts/font = SubResource("FontVariation_nooyu")
+theme_override_font_sizes/font_size = 42
+toggle_mode = true
+button_group = SubResource("ButtonGroup_rovm4")
+text = "顯示"
+autowrap_mode = 3
+
+[node name="Tutorial1" type="Button" parent="Area/Card/Layout/SettingsScroll/Rows/Tutorial" unique_id=447954451]
+custom_minimum_size = Vector2(0, 136)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_pysra")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_cgp7b")
+theme_override_styles/hover = SubResource("StyleBoxFlat_tddpn")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_cgp7b")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_e70t4")
+theme_override_styles/focus = SubResource("StyleBoxFlat_noptu")
+theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/font_focus_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
+theme_override_fonts/font = SubResource("FontVariation_nooyu")
+theme_override_font_sizes/font_size = 42
+toggle_mode = true
+button_group = SubResource("ButtonGroup_rovm4")
+text = "不顯示"
+autowrap_mode = 3
+
+[node name="TutorialTools" type="HBoxContainer" parent="Area/Card/Layout/SettingsScroll/Rows" unique_id=1440945753]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="TutorialReplay" type="Button" parent="Area/Card/Layout/SettingsScroll/Rows/TutorialTools" unique_id=1378328318]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 136)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_4jn88")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_lgujd")
+theme_override_styles/hover = SubResource("StyleBoxFlat_q3s4f")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_lgujd")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_ws0ij")
+theme_override_styles/focus = SubResource("StyleBoxFlat_5mi06")
+theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/font_focus_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
+theme_override_fonts/font = SubResource("FontVariation_nooyu")
+theme_override_font_sizes/font_size = 42
+text = "重看教學"
 autowrap_mode = 3
 
 [node name="SavesRule" type="ColorRect" parent="Area/Card/Layout/SettingsScroll/Rows" unique_id=1630060631]
