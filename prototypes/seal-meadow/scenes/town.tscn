@@ -1,0 +1,76 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://materials/town_grass.tres" id="m_grass"]
+[ext_resource type="Material" path="res://materials/town_plaza.tres" id="m_plaza"]
+[ext_resource type="Script" path="res://scripts/town.gd" id="1_yn4qk"]
+[ext_resource type="PackedScene" path="res://scenes/props/oak.tscn" id="3_5q1rr"]
+[ext_resource type="PackedScene" path="res://scenes/props/pine.tscn" id="4_po04c"]
+[ext_resource type="PackedScene" path="res://scenes/props/bush.tscn" id="5_u4arb"]
+[ext_resource type="PackedScene" path="res://scenes/props/rock.tscn" id="6_icc4n"]
+[ext_resource type="PackedScene" path="res://scenes/npc.tscn" id="7_b0eaf"]
+[ext_resource type="PackedScene" path="res://scenes/portal.tscn" id="8_uutfq"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_i0mj0"]
+size = Vector2(44, 44)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_55swn"]
+top_radius = 7.5
+bottom_radius = 7.5
+height = 0.04
+radial_segments = 24
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ckatl"]
+size = Vector3(44, 0.2, 44)
+
+[node name="Town" type="Node3D" unique_id=1270515040]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 300, 0, 0)
+script = ExtResource("1_yn4qk")
+
+[node name="Ground" type="StaticBody3D" parent="." unique_id=2112949487]
+
+[node name="Grass" type="MeshInstance3D" parent="Ground" unique_id=1118400004]
+material_override = ExtResource("m_grass")
+mesh = SubResource("PlaneMesh_i0mj0")
+
+[node name="Plaza" type="MeshInstance3D" parent="Ground" unique_id=601496442]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0)
+material_override = ExtResource("m_plaza")
+mesh = SubResource("CylinderMesh_55swn")
+
+[node name="Collision" type="CollisionShape3D" parent="Ground" unique_id=20552360]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+shape = SubResource("BoxShape3D_ckatl")
+
+[node name="Props" type="Node3D" parent="." unique_id=565796395]
+unique_name_in_owner = true
+
+[node name="Oak" parent="Props" unique_id=304957877 instance=ExtResource("3_5q1rr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, -8)
+
+[node name="Oak2" parent="Props" unique_id=738284918 instance=ExtResource("3_5q1rr")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 10, 0, -9)
+
+[node name="Oak3" parent="Props" unique_id=1113792304 instance=ExtResource("3_5q1rr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 8)
+
+[node name="Pine" parent="Props" unique_id=1447446225 instance=ExtResource("4_po04c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 0, 6)
+
+[node name="Bush" parent="Props" unique_id=2049990892 instance=ExtResource("5_u4arb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 8)
+
+[node name="Bush2" parent="Props" unique_id=788307435 instance=ExtResource("5_u4arb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, -3)
+
+[node name="Rock" parent="Props" unique_id=736364934 instance=ExtResource("6_icc4n")]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, -9, 0, 2)
+
+[node name="Elder" parent="." unique_id=1989931651 instance=ExtResource("7_b0eaf")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="ToMeadow" parent="." unique_id=1406541362 instance=ExtResource("8_uutfq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 11)
+label = "往蓬蓬草原"
+zone = "meadow"
+arrival = Vector3(0, 0, 7)

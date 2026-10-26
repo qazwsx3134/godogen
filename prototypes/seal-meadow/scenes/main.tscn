@@ -5,6 +5,13 @@
 [ext_resource type="PackedScene" path="res://scenes/player.tscn" id="3_o6xl0"]
 [ext_resource type="Script" path="res://scripts/camera_rig.gd" id="4_tipki"]
 [ext_resource type="PackedScene" path="res://ui/hud.tscn" id="5_85g3d"]
+[ext_resource type="Script" path="res://addons/proto_kit/game_clock.gd" id="6_clock"]
+[ext_resource type="Script" path="res://scripts/combat.gd" id="7_combat"]
+[ext_resource type="Script" path="res://scripts/sfx.gd" id="8_sfx"]
+[ext_resource type="Script" path="res://addons/proto_kit/time_control.gd" id="9_time"]
+[ext_resource type="PackedScene" path="res://scenes/town.tscn" id="10_town"]
+[ext_resource type="PackedScene" path="res://scenes/portal.tscn" id="11_portal"]
+[ext_resource type="PackedScene" path="res://scenes/pet_follower.tscn" id="12_pet"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_choun"]
 shading_mode = 0
@@ -45,3 +52,31 @@ mesh = SubResource("TorusMesh_ya4ey")
 
 [node name="HUD" parent="." unique_id=1941662517 instance=ExtResource("5_85g3d")]
 unique_name_in_owner = true
+
+[node name="GameClock" type="Node" parent="." unique_id=902114771]
+unique_name_in_owner = true
+script = ExtResource("6_clock")
+
+[node name="Combat" type="Node" parent="." unique_id=377210945]
+unique_name_in_owner = true
+script = ExtResource("7_combat")
+
+[node name="Sfx" type="Node" parent="." unique_id=1558320417]
+unique_name_in_owner = true
+script = ExtResource("8_sfx")
+
+[node name="TimeControl" type="Node" parent="." unique_id=1093854120]
+unique_name_in_owner = true
+process_mode = 3
+script = ExtResource("9_time")
+
+[node name="Town" parent="." unique_id=1730492215 instance=ExtResource("10_town")]
+unique_name_in_owner = true
+
+[node name="ToTown" parent="." unique_id=1462086014 instance=ExtResource("11_portal")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
+arrival = Vector3(300, 0, 5)
+
+[node name="Pet" parent="." unique_id=2041768391 instance=ExtResource("12_pet")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 4.6)

@@ -8,9 +8,9 @@ script = ExtResource("2_g84vc")
 atlas = ExtResource("1_ftheg")
 columns = 10
 rows = 5
-cell_px = 384
-foot_px = 8
-meters_per_px = 0.0056
+cell_px = 256
+foot_px = 6
+meters_per_px = 0.0084
 anims = {
 "attack": {
 "cell": 6.0,

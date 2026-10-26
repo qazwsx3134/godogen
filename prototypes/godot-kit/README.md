@@ -595,3 +595,15 @@ sugarcane-tanks 已經在 2026-10-04 搬出 repo，現在是 `/mnt/d/repo/godot/
 - **新增模組**：同樣的程式在第二個原型也出現時再抽進來，並在 `tests/test_proto_kit.gd` 補測試。
 - **為什麼用複製**：這個 repo 在 Windows／WSL 上 checkout 時，git 會把 symlink 變成純文字檔；Godot 匯出也需要實體檔案，所以用複製而不用 symlink。skill 也一樣：`~/.claude/skills/` 裡的 symlink 指向某一台機器的 clone、不在 repo 裡，別的帳號拿不到。`install_skills.sh` 在每份副本放 `.godot-kit-skill` 標記，只更新自己裝的；同名但不是它裝的資料夾不碰，舊的 symlink 換成副本（只刪連結，不動目標）。
 - **改 skill**：只改 `godot-kit/skills/`，改完跑 `./install_skills.sh`。直接改 `~/.claude/skills/` 裡的副本，下次安裝會被蓋掉。
+
+## 待辦模組
+
+seal-meadow 規劃中的新模組（2026-10-27，細節見 [seal-meadow roadmap](../seal-meadow/production/roadmap.md)「共用模組計畫」）。照上方「第二個原型出現再抽」的規則：前三個其他原型也要用，直接寫進 kit；其餘先在 seal-meadow 寫，有第二個使用者再搬。
+
+| 模組 | 解決什麼 | 狀態 |
+|---|---|---|
+| `game_clock.gd` | 可注入的遊戲時鐘、背景暫停；取代各原型各自處理 `--fixed-fps` 與牆上時鐘 | 已完成，seal-meadow 使用中（測試：`tests/test_m0_modules.gd`） |
+| `tap_picker_3d.gd` | 3D 點擊選地面／角色、加大點選半徑、UI 擋住不穿透 | 已完成，seal-meadow 使用中（測試：`tests/test_m0_modules.gd`） |
+| `save_slots.gd` | 存檔版本、遷移鏈、備份還原；寫檔用 `atomic_file` | 已完成，seal-meadow 使用中（測試：`tests/test_m0_modules.gd`） |
+| `inventory.gd`、`stat_block.gd`、`drop_table.gd`、`ability_gate.gd`、`level_curve.gd`、`threat_table.gd`、`spawn_zone.gd` | RPG 背包交易、屬性加成、掉表、技能冷卻、升級曲線、仇恨與生怪 | 先在 seal-meadow（M1） |
+| `content_registry`、`first_time_guide`、`quest_tracker.gd`、`daily_reset.gd` | 資料引用檢查、首次教學（從 debt-commission 抽）、任務追蹤、每日重置 | 之後 |

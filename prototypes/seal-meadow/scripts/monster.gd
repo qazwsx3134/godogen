@@ -1,6 +1,7 @@
 extends Node3D
 ## One monster: wanders around its home, chases when provoked (or on sight if aggressive), leashes back
-## when dragged too far, dies into XP and respawns at home.
+## when dragged too far, dies (Combat hands out the XP) and respawns at home. Social aggro: hitting one wakes
+## every calm monster of the same kind within pack_radius, so a pack is pulled with one tap.
 
 signal died(monster: Node3D)
 
@@ -20,10 +21,17 @@ const Fx = preload("res://scripts/fx.gd")
 @export var wander_radius: float = 5.0
 @export var xp_reward: int = 6
 @export var respawn_seconds: float = 10.0
+## Key into Items.DROPS.
+@export var drop_table: String = "jelly"
+## Same-kind monsters this close join the fight when this one is hit. 0 = fights alone.
+@export var pack_radius: float = 6.0
 
 @onready var actor: Node3D = $Actor
 
 var hp: int = 30
+var combat: Node
+## Changes on every respawn, so a target lock taken on the old life never carries over.
+var spawn_id: int = 0
 var blockers: Array[Vector3] = []
 var _home: Vector3
 var _provoked: bool = false
@@ -118,13 +126,15 @@ func _try_attack(player: Node3D) -> void:
 	if hp <= 0 or player.dead:
 		return
 	if player.position.distance_to(position) <= attack_range * 1.4:
-		player.take_damage(damage + randi_range(0, 2))
+		combat.attack(self, player, damage, 1.0, false)
 
 
 func take_damage(amount: int, from: Node3D, crit: bool = false) -> void:
 	if hp <= 0:
 		return
 	hp -= amount
+	if not _provoked:
+		_alert_pack()
 	_provoked = true
 	_returning = false
 	actor.hurt()
@@ -137,15 +147,23 @@ func take_damage(amount: int, from: Node3D, crit: bool = false) -> void:
 		_die(from)
 
 
+func _alert_pack() -> void:
+	if pack_radius <= 0.0:
+		return
+	for m: Node3D in get_tree().get_nodes_in_group("monster"):
+		if m != self and m.scene_file_path == scene_file_path and m.is_alive() and not m._returning \
+				and m.position.distance_to(position) <= pack_radius:
+			m._provoked = true
+
+
 func _die(from: Node3D) -> void:
 	actor.moving = false
 	actor.set_dead(true)
 	died.emit(self)
-	if from != null and from.has_method("gain_xp"):
-		from.gain_xp(xp_reward, display_name)
 	await get_tree().create_timer(respawn_seconds, false).timeout
 	position = _home
 	_snap()
+	spawn_id += 1
 	hp = max_hp
 	_provoked = false
 	_returning = false

@@ -2,7 +2,8 @@ extends RefCounted
 ## A companion pet you keep alive and raise (Seal Online style): its hunger drains while you are out in the field,
 ## it asks for a food it wants, feeding gives XP by the item's worth (more for the wanted food), it climbs levels
 ## +0..+9 inside a stage, and at +9 with full XP it can try to evolve with materials into a type that sets its stats.
-## Starving costs XP and refills the bar; starving with under 2 % XP left, the pet runs away.
+## Starving costs XP and refills the bar; starving with under 2 % XP left, the pet runs away (unless the game passes
+## "can_run_away": false, which keeps it with the XP loss only).
 ## `const PetCare = preload("res://addons/proto_kit/pet_care.gd")`
 ##
 ##   var pet := PetCare.new({"egg": "seed", "foods": ["apple", "fish", "bread"]}, rng)
@@ -42,6 +43,7 @@ var _play_refill: float
 var _wanted_mult: float
 var _starve_xp: float
 var _max_stage: int
+var _can_run_away: bool
 var _foods: Array
 var _types: Dictionary
 var _asked: bool = false
@@ -62,6 +64,7 @@ func _init(options: Dictionary, rng: RandomNumberGenerator) -> void:
 	_wanted_mult = float(options.get("wanted_mult", 2.0))
 	_starve_xp = float(options.get("starve_xp", 0.2))
 	_max_stage = int(options.get("max_stage", 7))
+	_can_run_away = bool(options.get("can_run_away", true))
 	_types = options.get("types", {})
 
 
@@ -89,7 +92,7 @@ func tick(delta: float, in_town: bool = false) -> Array[Dictionary]:
 		events.append({"type": "hungry", "wants": wants})
 	if hunger <= 0.0:
 		# Empty bar: XP is lost and the bar refills; with under 2 % XP left there is nothing to lose and it runs away.
-		if xp < xp_to_next() * 0.02:
+		if _can_run_away and xp < xp_to_next() * 0.02:
 			alive = false
 			events.append({"type": "ran_away"})
 			return events

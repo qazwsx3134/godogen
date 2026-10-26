@@ -12,6 +12,7 @@ max_hp = 95
 damage = 10
 move_speed = 3.2
 aggressive = true
+drop_table = "hound"
 xp_reward = 30
 
 [node name="Actor" parent="." unique_id=474859758 instance=ExtResource("2_p018g")]

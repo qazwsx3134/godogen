@@ -1,0 +1,27 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/loot_drop.gd" id="1_inrc7"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_bixry"]
+radius = 0.18
+height = 0.36
+radial_segments = 8
+rings = 4
+
+[node name="LootDrop" type="Node3D" unique_id=1545928628]
+script = ExtResource("1_inrc7")
+
+[node name="Gem" type="MeshInstance3D" parent="." unique_id=1122325983]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35, 0)
+mesh = SubResource("SphereMesh_bixry")
+
+[node name="NameLabel" type="Label3D" parent="." unique_id=181161686]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0)
+pixel_size = 0.006
+billboard = 1
+no_depth_test = true
+text = "物品"
+font_size = 36
+outline_size = 8

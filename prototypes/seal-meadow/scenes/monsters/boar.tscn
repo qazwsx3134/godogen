@@ -11,6 +11,8 @@ level = 4
 max_hp = 70
 damage = 7
 move_speed = 2.6
+drop_table = "boar"
+pack_radius = 0.0
 xp_reward = 18
 
 [node name="Actor" parent="." unique_id=1019322429 instance=ExtResource("2_6g34k")]

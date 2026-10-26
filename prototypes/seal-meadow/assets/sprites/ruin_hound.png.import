@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ebuyt4sf0ctr"
-path="res://.godot/imported/ruin_hound.png-8065a47fb05184d89d95ff9d86c13c83.ctex"
+path.s3tc="res://.godot/imported/ruin_hound.png-8065a47fb05184d89d95ff9d86c13c83.s3tc.ctex"
+path.etc2="res://.godot/imported/ruin_hound.png-8065a47fb05184d89d95ff9d86c13c83.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/sprites/ruin_hound.png"
-dest_files=["res://.godot/imported/ruin_hound.png-8065a47fb05184d89d95ff9d86c13c83.ctex"]
+dest_files=["res://.godot/imported/ruin_hound.png-8065a47fb05184d89d95ff9d86c13c83.s3tc.ctex", "res://.godot/imported/ruin_hound.png-8065a47fb05184d89d95ff9d86c13c83.etc2.ctex"]
 
 [params]
 
-compress/mode=1
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.9
 compress/uastc_level=0

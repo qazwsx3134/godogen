@@ -10,6 +10,7 @@ display_name = "蓬蓬果凍"
 max_hp = 32
 damage = 3
 move_speed = 2.2
+respawn_seconds = 5.0
 xp_reward = 8
 
 [node name="Actor" parent="." unique_id=1288264965 instance=ExtResource("2_3yr13")]

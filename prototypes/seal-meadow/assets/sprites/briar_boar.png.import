@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cd2xs42051biw"
-path="res://.godot/imported/briar_boar.png-65330a82477b49ffd903812933e02acb.ctex"
+path.s3tc="res://.godot/imported/briar_boar.png-65330a82477b49ffd903812933e02acb.s3tc.ctex"
+path.etc2="res://.godot/imported/briar_boar.png-65330a82477b49ffd903812933e02acb.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/sprites/briar_boar.png"
-dest_files=["res://.godot/imported/briar_boar.png-65330a82477b49ffd903812933e02acb.ctex"]
+dest_files=["res://.godot/imported/briar_boar.png-65330a82477b49ffd903812933e02acb.s3tc.ctex", "res://.godot/imported/briar_boar.png-65330a82477b49ffd903812933e02acb.etc2.ctex"]
 
 [params]
 
-compress/mode=1
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.9
 compress/uastc_level=0

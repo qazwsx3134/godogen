@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "scope": "planning-document integrity only",
+  "systems": 40,
+  "acyclic": true,
+  "reciprocal_dependencies": true,
+  "phase_order_valid": true,
+  "acceptance_criteria": 120,
+  "markdown_files_checked": 49,
+  "local_links_checked": 615,
+  "diagrams_checked": 8,
+  "runtime_tests": "NOT RUN",
+  "device_tests": "NOT RUN"
+}

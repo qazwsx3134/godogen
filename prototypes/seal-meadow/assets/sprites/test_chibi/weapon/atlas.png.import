@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://btrme0bvvvia4"
-path="res://.godot/imported/atlas.png-b281c9fb33a87f25fdb79fd832592df7.ctex"
+path.s3tc="res://.godot/imported/atlas.png-b281c9fb33a87f25fdb79fd832592df7.s3tc.ctex"
+path.etc2="res://.godot/imported/atlas.png-b281c9fb33a87f25fdb79fd832592df7.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/sprites/test_chibi/weapon/atlas.png"
-dest_files=["res://.godot/imported/atlas.png-b281c9fb33a87f25fdb79fd832592df7.ctex"]
+dest_files=["res://.godot/imported/atlas.png-b281c9fb33a87f25fdb79fd832592df7.s3tc.ctex", "res://.godot/imported/atlas.png-b281c9fb33a87f25fdb79fd832592df7.etc2.ctex"]
 
 [params]
 
-compress/mode=1
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.9
 compress/uastc_level=0

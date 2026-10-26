@@ -1,0 +1,16 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/pet_follower.gd" id="1_wfn1n"]
+[ext_resource type="PackedScene" path="res://scenes/actors/actor.tscn" id="2_dsa8o"]
+[ext_resource type="Resource" path="res://resources/sheets/meadow_slime.tres" id="3_8bdxk"]
+
+[node name="PetFollower" type="Node3D" unique_id=1509661303]
+script = ExtResource("1_wfn1n")
+
+[node name="Actor" parent="." unique_id=1546409307 instance=ExtResource("2_dsa8o")]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, 0, 0, 0)
+sheet = ExtResource("3_8bdxk")
+display_name = "蓬蓬幼苗 +0"
+nameplate_color = Color(0.72156864, 0.9490196, 0.5411765, 1)
+dissolve_on_down = false
+head_height = 0.6

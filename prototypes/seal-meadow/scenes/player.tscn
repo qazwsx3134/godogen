@@ -15,4 +15,4 @@ display_name = "你"
 nameplate_color = Color(0.62352943, 0.8784314, 1, 1)
 dissolve_on_down = false
 head_height = 1.8
-layer_sheets = Array[Resource]([ExtResource("4_smehm"), ExtResource("5_ur7pv")])
+layer_sheets = Array[Resource]([null, ExtResource("4_smehm"), ExtResource("5_ur7pv")])

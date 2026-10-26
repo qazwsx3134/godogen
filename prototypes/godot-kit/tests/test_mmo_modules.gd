@@ -117,6 +117,9 @@ func _test_refine() -> void:
 
 
 func _test_pet() -> void:
+	var loyal := PetCare.new({"egg": "seed", "foods": ["apple"], "can_run_away": false}, _rng())
+	loyal.tick(99999.0)
+	_expect(loyal.alive and loyal.hunger == 1.0, "can_run_away false: an empty bar refills, the pet stays")
 	var foods := ["apple", "fish", "bread"]
 	var pet := PetCare.new({"egg": "seed", "foods": foods, "drain": 0.01,
 		"types": {"warrior": {"damage": 2.0}}}, _rng())

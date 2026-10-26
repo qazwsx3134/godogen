@@ -1,0 +1,46 @@
+{
+  "atlas": "atlas.png",
+  "cell_px": 256,
+  "columns": 10,
+  "rows": 5,
+  "foot_px": 6,
+  "meters_per_px": 0.0084,
+  "characters": {
+    "test_chibi_tunic": {
+      "directions": 8,
+      "mirror": true,
+      "anims": {
+        "idle": {
+          "cell": 0,
+          "n": 2,
+          "d": [
+            30,
+            30
+          ],
+          "loop": true
+        },
+        "walk": {
+          "cell": 2,
+          "n": 4,
+          "d": [
+            9,
+            9,
+            9,
+            9
+          ],
+          "loop": true
+        },
+        "attack": {
+          "cell": 6,
+          "n": 3,
+          "d": [
+            8,
+            6,
+            14
+          ],
+          "loop": false
+        }
+      }
+    }
+  }
+}

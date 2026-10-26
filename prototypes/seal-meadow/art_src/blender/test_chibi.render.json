@@ -4,18 +4,20 @@
   "root": "Rig",
   "front_rotation_deg": 0,
   "directions": 8,
-  "cell_px": 384,
-  "foot_px": 8,
-  "meters_per_px": 0.0056,
-  "ground_margin_px": 36,
+  "cell_px": 256,
+  "foot_px": 6,
+  "meters_per_px": 0.0084,
+  "ground_margin_px": 24,
   "pitch_deg": 40,
-  "outline_m": 0.012,
+  "outline_m": 0.014,
   "outline_color": [0.17, 0.1, 0.07],
   "sun": true,
   "layers": {
     "body": {"collection": "body"},
     "hair": {"collection": "hair", "holdout": ["body"]},
-    "weapon": {"collection": "weapon_sword", "holdout": ["body"]}
+    "weapon": {"collection": "weapon_sword", "holdout": ["body"]},
+    "iron": {"collection": "weapon_iron", "holdout": ["body"]},
+    "tunic": {"collection": "outfit_tunic", "holdout": ["body"]}
   },
   "anims": {
     "idle": {"action": "idle", "frames": [1, 13], "d": [30, 30], "loop": true},

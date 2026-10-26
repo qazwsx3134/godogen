@@ -1,10 +1,10 @@
 {
   "atlas": "atlas.png",
-  "cell_px": 384,
+  "cell_px": 256,
   "columns": 10,
   "rows": 5,
-  "foot_px": 8,
-  "meters_per_px": 0.0056,
+  "foot_px": 6,
+  "meters_per_px": 0.0084,
   "characters": {
     "test_chibi_weapon": {
       "directions": 8,

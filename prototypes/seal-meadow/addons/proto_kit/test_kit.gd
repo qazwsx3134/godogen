@@ -3,11 +3,35 @@ extends SceneTree
 ## `extends "res://addons/proto_kit/test_kit.gd"`, run the suite from _init (or a deferred
 ## _run for UI tests that need the tree), then call _finish("SUITE NAME").
 ##
-## Godot exits 0 even after a SCRIPT ERROR, so a runner must also grep the log for
-## "SCRIPT ERROR|Parse Error"; the exit code alone can show a broken suite as green.
+## A SCRIPT ERROR anywhere during the run (a null access in the game or the test) counts as a failure, so a
+## suite whose test function died halfway never prints PASSED. Parse errors stop the script before it runs at
+## all, so a runner should still grep the log for "Parse Error".
 
 var failures: Array[String] = []
 var checks: int = 0
+## Registered from the member initializer: subclasses define their own _init without calling super().
+var _script_errors: _ScriptErrors = _listen()
+
+
+class _ScriptErrors extends Logger:
+	var lines: Array[String] = []
+	var _lock := Mutex.new()
+
+	func _log_error(function: String, file: String, line: int, _code: String, rationale: String,
+			_editor_notify: bool, error_type: int, _backtraces: Array[ScriptBacktrace]) -> void:
+		if error_type == ERROR_TYPE_SCRIPT:
+			_lock.lock()
+			lines.append("%s (%s:%d %s)" % [rationale, file, line, function])
+			_lock.unlock()
+
+	func _log_message(_message: String, _error: bool) -> void:
+		pass
+
+
+static func _listen() -> _ScriptErrors:
+	var errors := _ScriptErrors.new()
+	OS.add_logger(errors)
+	return errors
 
 
 func _expect(condition: bool, label: String) -> void:
@@ -18,6 +42,9 @@ func _expect(condition: bool, label: String) -> void:
 
 
 func _finish(suite: String) -> void:
+	OS.remove_logger(_script_errors)
+	for line: String in _script_errors.lines:
+		failures.append("SCRIPT ERROR: " + line)
 	if failures.is_empty():
 		print("%s PASSED" % suite)
 		quit(0)

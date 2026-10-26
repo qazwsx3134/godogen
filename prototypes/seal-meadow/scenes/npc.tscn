@@ -1,0 +1,16 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/npc.gd" id="1_rv78h"]
+[ext_resource type="PackedScene" path="res://scenes/actors/actor.tscn" id="2_7n8xq"]
+[ext_resource type="Resource" path="res://resources/sheets/leader.tres" id="3_4wlns"]
+
+[node name="Npc" type="Node3D" unique_id=1989931651]
+script = ExtResource("1_rv78h")
+npc_name = "村長 蓬伯"
+
+[node name="Actor" parent="." unique_id=1205937424 instance=ExtResource("2_7n8xq")]
+sheet = ExtResource("3_4wlns")
+display_name = "村長 蓬伯"
+nameplate_color = Color(1, 0.84313726, 0.36862746, 1)
+dissolve_on_down = false
+head_height = 1.9

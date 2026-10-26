@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bfl4o2s3yyyps"
-path="res://.godot/imported/meadow_slime.png-bf66b1f6e2e0b885bbc0fe210c6861a3.ctex"
+path.s3tc="res://.godot/imported/meadow_slime.png-bf66b1f6e2e0b885bbc0fe210c6861a3.s3tc.ctex"
+path.etc2="res://.godot/imported/meadow_slime.png-bf66b1f6e2e0b885bbc0fe210c6861a3.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/sprites/meadow_slime.png"
-dest_files=["res://.godot/imported/meadow_slime.png-bf66b1f6e2e0b885bbc0fe210c6861a3.ctex"]
+dest_files=["res://.godot/imported/meadow_slime.png-bf66b1f6e2e0b885bbc0fe210c6861a3.s3tc.ctex", "res://.godot/imported/meadow_slime.png-bf66b1f6e2e0b885bbc0fe210c6861a3.etc2.ctex"]
 
 [params]
 
-compress/mode=1
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.9
 compress/uastc_level=0

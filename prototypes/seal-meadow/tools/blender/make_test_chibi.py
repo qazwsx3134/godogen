@@ -128,8 +128,11 @@ def main():
     skin, grey, dark = toon("skin", srgb("ffd9b8")), toon("undies", srgb("c9c6d2")), toon("eye", srgb("2a1f1f"))
     blush, hair_c = toon("blush", srgb("ff9aa8")), toon("hair", srgb("8a5a32"))
     steel, brass, grip = toon("steel", srgb("d7dde6")), toon("brass", srgb("e2b34a")), toon("grip", srgb("6b4426"))
+    iron, ruby = toon("iron", srgb("9aa4b4")), toon("ruby", srgb("c8323c"))
+    cloth, belt = toon("cloth", srgb("c8a36b")), toon("belt", srgb("5a3a22"))
 
     body, hair, sword = collection("body"), collection("hair"), collection("weapon_sword")
+    iron_sword, tunic = collection("weapon_iron"), collection("outfit_tunic")
     sphere, cyl, cube, cone = (bpy.ops.mesh.primitive_uv_sphere_add, bpy.ops.mesh.primitive_cylinder_add,
                                bpy.ops.mesh.primitive_cube_add, bpy.ops.mesh.primitive_cone_add)
     parts = [  # (collection, op, name, material, loc, scale, rot, bone, kwargs)
@@ -151,6 +154,13 @@ def main():
         (sword, cube, "Blade", steel, (-0.28, -0.42, 0.6), (0.018, 0.34, 0.045), (0, 0, 0), "arm.R", {}),
         (sword, cube, "Guard", brass, (-0.28, -0.08, 0.6), (0.03, 0.025, 0.11), (0, 0, 0), "arm.R", {}),
         (sword, cyl, "Grip", grip, (-0.28, 0.0, 0.6), (1, 1, 1), (90, 0, 0), "arm.R", {"radius": 0.025, "depth": 0.14}),
+        # iron sword: longer, wider blade, red guard (equipment layer "iron")
+        (iron_sword, cube, "IronBlade", iron, (-0.28, -0.5, 0.6), (0.026, 0.43, 0.06), (0, 0, 0), "arm.R", {}),
+        (iron_sword, cube, "IronGuard", ruby, (-0.28, -0.08, 0.6), (0.04, 0.03, 0.15), (0, 0, 0), "arm.R", {}),
+        (iron_sword, cyl, "IronGrip", grip, (-0.28, 0.0, 0.6), (1, 1, 1), (90, 0, 0), "arm.R", {"radius": 0.028, "depth": 0.16}),
+        # cloth tunic over the torso, with a belt (equipment layer "tunic")
+        (tunic, cyl, "Tunic", cloth, (0, 0, 0.73), (1, 0.85, 1), (0, 0, 0), "spine", {"radius": 0.215, "depth": 0.48}),
+        (tunic, cyl, "Belt", belt, (0, 0, 0.6), (1, 0.85, 1), (0, 0, 0), "spine", {"radius": 0.222, "depth": 0.06}),
     ]
     for i, a in enumerate(range(0, 360, 45)):  # hair spikes around the crown
         r = math.radians(a)
