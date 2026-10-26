@@ -22,6 +22,11 @@
 | [`scene_loader.gd`](addons/proto_kit/scene_loader.gd) | 載入畫面的邏輯：執行緒載入、進度不倒退也不跑在時鐘前面、失敗可重試、離開時收掉任務 | sugarcane-tanks |
 | [`sprite3d*.gdshader`](addons/proto_kit/sprite3d.gdshader)、[`sprite3d_sheet.gd`](addons/proto_kit/sprite3d_sheet.gd)、[`sprite3d_actor.gd`](addons/proto_kit/sprite3d_actor.gd) | 2D 角色圖立在 3D 世界（pokebonk.com／仙境傳說式）：billboard、腳底貼地、依鏡頭相對方向選 1／4／8 方向（含鏡像與遲滯）、描邊身分色、閃白、溶解、x-ray 剪影、殘影、腳下影子，MultiMesh 大軍可用。搭配 `tools/sprite_atlas.py` | madara-survivor、horde-25d（2026-10-19 從這兩份抽出） |
 | [`sprite_check.gd`](addons/proto_kit/sprite_check.gd)、[`sprite_inspector.tscn`](addons/proto_kit/sprite_inspector.tscn) | sprite 動畫測試頁：方向切換、速度、逐幀、格線、洋蔥皮，自動抓切錯格、空白幀與腳底跳動；只讀，不縮放不重排 | skybound-blades；madara-survivor、horde-25d 的 sheet 在程式裡建，存成 `.tres` 後可用 |
+| [`auto_caster.gd`](addons/proto_kit/auto_caster.gd) | survivors 的自動施法：冷卻、射程、目標規則（最近／生命最高／全部…）、優先打首領與精英、斬殺線、持續傷害、暈眩（首領減免）、增益與觸發距離、吸血、等級加成 | **尚未採用**（2026-10-26 依 [Azeroth Survivors 分析](../../docs/research/azeroth-survivors-2026-10-26.md)寫成） |
+| [`rarity.gd`](addons/proto_kit/rarity.gd) | 卡片稀有度：五階權重、運氣、依稀有度給傷害／冷卻／目標數加成；搭配 `card_draft` | **尚未採用**（同上） |
+| [`run_timeline.gd`](addons/proto_kit/run_timeline.gd) | 一局的導演：首領與事件時間表、生怪速度曲線、各時段敵人種類、精英機率、同場上限 | **尚未採用**（同上） |
+| [`talent_tiers.gd`](addons/proto_kit/talent_tiers.gd) | 三系天賦：每 5 點開一行、前置、10/20/30 里程碑、多組方案、免費重置、單局經驗換點數 | **尚未採用**（同上） |
+| [`loot_ledger.gd`](addons/proto_kit/loot_ledger.gd) | 首領掉落與永久收藏：區域解鎖、掉率、已擁有不重複掉、穿戴屬性、各階進度、下一批可拿的裝備 | **尚未採用**（同上） |
 
 GDScript、Godot 4.7。只用於 `prototypes/`，不接進 `publish.sh`（見 [ADR 0001](../docs/adr/0001-prototypes-live-in-godogen.md)）。
 
@@ -462,6 +467,15 @@ var issues := SpriteCheck.check_sheet(load("res://resources/sheets/leader.tres")
 ```
 
 畫面是 `sprite_inspector.tscn`，用 `tools/build_sprite_inspector.gd` 產生後就當原始檔維護，重跑產生器要加 `-- --force`。中文字型依序找專案的 GUI 字型、專案裡第一個 `.ttf／.otf`、系統字型。已採用：skybound-blades（`tests/test_sprites.gd` 檢查全部角色 sheet）。
+
+## Survivors 模組：自動施法、稀有度、一局時間軸、天賦、掉落收藏
+
+2026-10-26 依 [Azeroth Survivors 分析](../../docs/research/azeroth-survivors-2026-10-26.md)寫成，**目前沒有原型採用**。各模組怎麼在一局裡串起來，見該文件第 6 節「組合方式」。測試：`tools/run_tests.sh prototypes/godot-kit survivor_modules`（91 項檢查）。
+
+- 全部是純邏輯 `RefCounted`，資料格式寫在各檔檔頭；給定種子時結果固定，都有 `to_dict`／`from_dict`。
+- `auto_caster.gd` 只決定「打誰、打多少」；位置、碰撞、特效、傷害數字由遊戲處理。敵人用 `{id, pos, hp, max_hp, tags}` 傳入，`pos` 可以是 Vector2 或 Vector3（3D 量地面距離）。
+- `rarity.gd` 的預設數值是從實際卡片讀到的近似值（例如史詩新法術 +34%、傳說升級冷卻 −23% 且 +2 目標），採用時依自己的平衡調整。
+- `run_timeline.gd` 的亂數狀態以字串存檔：64 位元整數存成 JSON 數字會失去精度，讀回來的亂數序列就會不同。
 
 ## tools/：字型子集與網頁匯出
 
