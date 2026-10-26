@@ -1,0 +1,21 @@
+ATTACHED: the approved concept image of this {SUBJECT} (base body, or one equipment piece worn on the base body). Keep its design exactly.
+
+Create an ORTHOGRAPHIC MODELING REFERENCE SHEET for 3D modeling: three views side by side in one row, same height, same scale, soles on one shared baseline.
+1. FRONT view, facing the viewer
+2. SIDE view, in exact profile facing screen right
+3. BACK view, seen from directly behind
+
+POSE (identical in all three views)
+A-pose: arms straight, angled down about 45 degrees away from the body, palms facing down, fingers slightly spread; legs straight, feet a little apart, toes pointing forward. Neutral face.
+
+VIEW
+True orthographic projection, eye level, no perspective, no camera tilt, no foreshortening. Every feature lines up horizontally across the three views (eyes, chin, shoulders, waist, knees, soles at the same heights).
+
+EQUIPMENT SHEETS
+When the subject is an equipment piece, draw the base body in very light flat grey with no detail, and the equipment piece in full colour and detail on top of it, worn exactly where it belongs.
+
+STYLE
+Clean line art with flat colour fills, minimal shading, clear part boundaries so the shapes can be modelled. Not pixel art, not a 3D render.
+
+OUTPUT
+Canvas 3072 x 1024, each view centred in its own 1024 px slot, figure about 900 px tall. Transparent or plain white background. No labels, no text, no arrows, no measurement lines, no grid.

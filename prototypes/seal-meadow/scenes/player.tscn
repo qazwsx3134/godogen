@@ -1,0 +1,18 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/player.gd" id="1_qlg0r"]
+[ext_resource type="PackedScene" path="res://scenes/actors/actor.tscn" id="2_tuyoq"]
+[ext_resource type="Resource" path="res://resources/sheets/test_chibi_body.tres" id="3_fjrip"]
+[ext_resource type="Resource" path="res://resources/sheets/test_chibi_hair.tres" id="4_smehm"]
+[ext_resource type="Resource" path="res://resources/sheets/test_chibi_weapon.tres" id="5_ur7pv"]
+
+[node name="Player" type="Node3D" unique_id=1241062925]
+script = ExtResource("1_qlg0r")
+
+[node name="Actor" parent="." unique_id=573523889 instance=ExtResource("2_tuyoq")]
+sheet = ExtResource("3_fjrip")
+display_name = "你"
+nameplate_color = Color(0.62352943, 0.8784314, 1, 1)
+dissolve_on_down = false
+head_height = 1.8
+layer_sheets = Array[Resource]([ExtResource("4_smehm"), ExtResource("5_ur7pv")])

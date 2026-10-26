@@ -1,0 +1,47 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_tbgi4"]
+[ext_resource type="PackedScene" path="res://scenes/meadow.tscn" id="2_tefeu"]
+[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="3_o6xl0"]
+[ext_resource type="Script" path="res://scripts/camera_rig.gd" id="4_tipki"]
+[ext_resource type="PackedScene" path="res://ui/hud.tscn" id="5_85g3d"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_choun"]
+shading_mode = 0
+albedo_color = Color(0.6666667, 0.9490196, 0.47843137, 1)
+
+[sub_resource type="TorusMesh" id="TorusMesh_ya4ey"]
+inner_radius = 0.28
+outer_radius = 0.4
+rings = 12
+ring_segments = 4
+
+[node name="Main" type="Node3D" unique_id=1714564457]
+script = ExtResource("1_tbgi4")
+
+[node name="Meadow" parent="." unique_id=1125439954 instance=ExtResource("2_tefeu")]
+unique_name_in_owner = true
+
+[node name="Player" parent="." unique_id=1241062925 instance=ExtResource("3_o6xl0")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.023358222, 4)
+
+[node name="CameraRig" type="Node3D" parent="." unique_id=1185623350]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 0.7431448, 0.6691306, 0, -0.6691306, 0.7431448, 0, 1.0233582, 4)
+script = ExtResource("4_tipki")
+target_path = NodePath("../Player")
+
+[node name="Camera" type="Camera3D" parent="CameraRig" unique_id=128838909]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 14)
+fov = 40.0
+far = 300.0
+
+[node name="ClickMarker" type="MeshInstance3D" parent="." unique_id=1682231194]
+unique_name_in_owner = true
+material_override = SubResource("StandardMaterial3D_choun")
+cast_shadow = 0
+mesh = SubResource("TorusMesh_ya4ey")
+
+[node name="HUD" parent="." unique_id=1941662517 instance=ExtResource("5_85g3d")]
+unique_name_in_owner = true

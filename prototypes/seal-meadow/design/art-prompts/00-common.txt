@@ -1,0 +1,9 @@
+STYLE
+Original character art for a cozy nostalgic chibi fantasy MMORPG. 2 to 2.5 heads tall, round face, large expressive eyes, short limbs, small hands and feet. Clean dark-brown outlines of medium weight, soft cel shading with two tones plus one small highlight, warm saturated but gentle colours. Readable silhouette at 120 px tall. Not pixel art, not 3D render, not realistic. Not based on any existing game, character or franchise.
+
+CAMERA
+Seen from an elevated three-quarter camera about 40 degrees above the ground, orthographic feel, no perspective distortion. Light comes from the upper left.
+
+OUTPUT
+One single character only, full body, nothing cropped, centred horizontally, feet resting on a common baseline near the bottom of the canvas. Transparent background (real alpha). No ground, no cast shadow, no floor line, no text, no logo, no frame, no border, no extra copies, no props other than those described.
+(If transparent output is not available, replace the background sentence with: Flat pure #FF00FF background; no magenta or pink on the subject.)

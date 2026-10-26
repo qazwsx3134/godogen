@@ -1,0 +1,16 @@
+ATTACHED: one base body frame (direction {DIRECTION}, pose {POSE}). It is a position and scale guide only.
+
+Draw ONLY a HAIRSTYLE that fits exactly on this bald head, as a separate paper-doll layer.
+
+HAIRSTYLE (pick one per image)
+A) short spiky hair, warm chestnut brown, a few chunky spikes on top and a short fringe falling over the forehead, tidy at the back of the neck.
+B) twin tails, soft pink-blonde, straight-cut fringe, two shoulder-length tails tied with small red ribbons at the sides of the head.
+
+Rules
+- Canvas 512 x 512, same as the attached frame. The hair must sit in exactly the same pixel position and scale as the head in the attached frame, so it lines up when stacked on top of it.
+- Draw the hair only. Do NOT draw the face, head, ears, body or any skin; leave everything that is not hair fully transparent.
+- Hair that would be hidden behind the head from this direction is not drawn. Strands that move (tails, fringe) follow the motion of the pose.
+- Same outline weight, cel shading and upper-left lighting as the attached frame.
+
+OUTPUT
+Transparent background (real alpha). Nothing but the hair. No text, no shadow on the ground.

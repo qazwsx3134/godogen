@@ -1,0 +1,53 @@
+[gd_scene format=3]
+
+[ext_resource type="Shader" path="res://shaders/lowpoly.gdshader" id="1_di44y"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4723a"]
+render_priority = 0
+shader = ExtResource("1_di44y")
+shader_parameter/albedo = Color(0.49803922, 0.8117647, 0.41568628, 1)
+shader_parameter/use_vertex_color = false
+shader_parameter/rim_strength = 0.08
+
+[sub_resource type="SphereMesh" id="SphereMesh_pxw4a"]
+radius = 0.55
+height = 1.1
+radial_segments = 7
+rings = 4
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h7vln"]
+render_priority = 0
+shader = ExtResource("1_di44y")
+shader_parameter/albedo = Color(0.30980393, 0.68235296, 0.33333334, 1)
+shader_parameter/use_vertex_color = false
+shader_parameter/rim_strength = 0.08
+
+[sub_resource type="SphereMesh" id="SphereMesh_y62c1"]
+radius = 0.45
+height = 0.9
+radial_segments = 7
+rings = 4
+
+[sub_resource type="SphereMesh" id="SphereMesh_co27k"]
+radius = 0.42
+height = 0.84
+radial_segments = 7
+rings = 4
+
+[node name="Bush" type="Node3D" unique_id=2049990892]
+metadata/block_radius = 0.0
+
+[node name="Middle" type="MeshInstance3D" parent="." unique_id=1494547231]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.35, 0)
+material_override = SubResource("ShaderMaterial_4723a")
+mesh = SubResource("SphereMesh_pxw4a")
+
+[node name="Right" type="MeshInstance3D" parent="." unique_id=1707240293]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 0.3, 0.2)
+material_override = SubResource("ShaderMaterial_h7vln")
+mesh = SubResource("SphereMesh_y62c1")
+
+[node name="Left" type="MeshInstance3D" parent="." unique_id=1694517391]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0.28, -0.1)
+material_override = SubResource("ShaderMaterial_h7vln")
+mesh = SubResource("SphereMesh_co27k")

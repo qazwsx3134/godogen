@@ -1,0 +1,18 @@
+ATTACHED: (1) the approved base body master, (2) the approved five-direction turnaround. They are the identity reference; copy head size, proportions, face, skin tone, undershirt, shorts, outline weight and colours exactly. Do not redesign anything.
+
+Draw ONE animation frame of this base body.
+DIRECTION: {DIRECTION}
+POSE: {POSE}
+
+Rules
+- Only the joints move; head size, body length and limb thickness stay identical to the references.
+- The head stays bald. No clothing or items beyond the grey undershirt and shorts.
+- Scale is locked: the head is the same pixel size as in the turnaround, the figure stands about 380 px tall when upright on a 512 x 512 canvas, and the soles (or the lowest body part for lying poses) rest 8 px above the bottom edge, centred horizontally.
+- The camera stays at the elevated 40-degree three-quarter view.
+- Do not mirror the reference to fake a different leg; draw the pose as described.
+
+STYLE
+Original character art for a cozy nostalgic chibi fantasy MMORPG. Clean dark-brown outlines, soft two-tone cel shading with one highlight, light from the upper left. Not pixel art, not 3D render.
+
+OUTPUT
+One figure only, nothing cropped. Transparent background (real alpha). No ground, no cast shadow, no motion lines, no speed effects, no text.

@@ -1,0 +1,16 @@
+ATTACHED: one base body frame (direction {DIRECTION}, pose {POSE}). It is a position and scale guide only.
+
+Draw ONLY an OUTFIT that fits exactly over this body, as a separate paper-doll layer.
+
+OUTFIT (pick one per image)
+A) Novice clothes: loose cream linen tunic with short sleeves and a rope belt, brown knee-length shorts, simple brown cloth shoes, no armour.
+B) Leather warrior gear: sky-blue tunic, brown leather chest piece with two brass rivets, one rounded steel pauldron on the left shoulder only, brown leather bracers, dark-grey trousers, sturdy brown boots.
+
+Rules
+- Canvas 512 x 512, same as the attached frame. Every piece of clothing must sit exactly where that body part is in the attached frame, at the same scale, following the same pose, so it lines up when stacked on top.
+- Draw the clothing only. Do NOT draw the head, face, neck skin, hands or any visible skin; leave all of that fully transparent. Openings (neck hole, sleeve ends) stay open.
+- Clothing covers the grey undershirt and shorts completely.
+- Same outline weight, cel shading and upper-left lighting as the attached frame.
+
+OUTPUT
+Transparent background (real alpha). Nothing but the outfit. No text, no ground shadow.

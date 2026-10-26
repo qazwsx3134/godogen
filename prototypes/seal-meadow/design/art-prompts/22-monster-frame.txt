@@ -1,0 +1,19 @@
+ATTACHED: (1) the approved master of this monster, (2) its approved three-direction turnaround. Copy its identity exactly; do not redesign anything.
+
+MONSTER
+{MONSTER}
+
+Draw ONE animation frame of this monster.
+DIRECTION: {DIRECTION}
+POSE: {POSE}
+
+Rules
+- Only the body squashes, stretches and the limbs move; shapes, colours and face stay identical to the references. Use squash and stretch generously, it is a cute bouncy creature.
+- Scale is locked to the turnaround: canvas 256 x 256, same pixel size as in the turnaround, lowest point 8 px above the bottom edge (a hop may lift it up to 30 px), centred horizontally.
+- The camera stays at the elevated 40-degree view.
+
+STYLE
+Original creature art for a cozy nostalgic chibi fantasy MMORPG. Clean dark-brown outlines, soft two-tone cel shading with one highlight, light from the upper left. Not pixel art, not 3D render.
+
+OUTPUT
+One creature only, nothing cropped. Transparent background (real alpha). No ground, no cast shadow, no motion lines, no text.

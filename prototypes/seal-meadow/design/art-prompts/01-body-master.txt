@@ -1,0 +1,19 @@
+Create the BASE BODY for a paper-doll character system: a bald chibi mannequin that every hairstyle, outfit and weapon will later be layered on top of.
+
+SUBJECT
+A young adventurer base body, gender-neutral, 2.3 heads tall. Large round head with no hair at all (smooth scalp, same skin colour), big friendly dark-brown eyes with one white highlight each, small nose dot, small smile, light pink blush on the cheeks. Warm light skin tone. Wearing only plain light-grey fitted undershirt with short sleeves and plain light-grey knee-length shorts, barefoot. Empty relaxed hands with visible fingers, no gloves, no accessories, no jewellery, no belt.
+
+POSE
+Neutral standing pose, facing the viewer with the body turned very slightly toward the lower-right, arms loose at the sides a little away from the body so the silhouette of each arm is clear, feet a shoulder-width apart.
+
+SIZE
+The figure stands 380 px tall on a 512 x 512 canvas, soles of the feet 8 px above the bottom edge.
+
+STYLE
+Original character art for a cozy nostalgic chibi fantasy MMORPG. 2 to 2.5 heads tall, round face, large expressive eyes, short limbs, small hands and feet. Clean dark-brown outlines of medium weight, soft cel shading with two tones plus one small highlight, warm saturated but gentle colours. Readable silhouette at 120 px tall. Not pixel art, not 3D render, not realistic. Not based on any existing game, character or franchise.
+
+CAMERA
+Seen from an elevated three-quarter camera about 40 degrees above the ground, orthographic feel, no perspective distortion. Light comes from the upper left.
+
+OUTPUT
+One single character only, full body, nothing cropped, centred horizontally, feet resting on a common baseline near the bottom of the canvas. Transparent background (real alpha). No ground, no cast shadow, no floor line, no text, no logo, no frame, no border, no extra copies, no props.

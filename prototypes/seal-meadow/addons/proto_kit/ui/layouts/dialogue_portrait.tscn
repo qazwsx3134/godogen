@@ -1,0 +1,95 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://addons/proto_kit/ui/themes/dark_gothic.tres" id="1_2i1vm"]
+
+[node name="DialoguePortrait" type="Control" unique_id=286478622]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 390.0
+offset_bottom = 844.0
+theme = ExtResource("1_2i1vm")
+metadata/ui_layout_id = "dialogue_portrait"
+metadata/authored_node_count = 16
+
+[node name="Backdrop" type="Panel" parent="." unique_id=1755927069]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="SafeMargin" type="MarginContainer" parent="." unique_id=832717509]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="Body" type="VBoxContainer" parent="SafeMargin" unique_id=90638995]
+layout_mode = 2
+
+[node name="Stage" type="PanelContainer" parent="SafeMargin/Body" unique_id=773605364]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Content" type="VBoxContainer" parent="SafeMargin/Body/Stage" unique_id=1461046856]
+layout_mode = 2
+
+[node name="Place" type="Label" parent="SafeMargin/Body/Stage/Content" unique_id=241040191]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TitleLabel"
+text = "林間小徑"
+autowrap_mode = 3
+
+[node name="PortraitRow" type="HBoxContainer" parent="SafeMargin/Body" unique_id=1076735435]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="SafeMargin/Body/PortraitRow" unique_id=56575460]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "旅人"
+autowrap_mode = 3
+
+[node name="Portrait" type="Label" parent="SafeMargin/Body/PortraitRow" unique_id=975962728]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TitleLabel"
+text = "◇"
+horizontal_alignment = 2
+autowrap_mode = 3
+
+[node name="Dialogue" type="PanelContainer" parent="SafeMargin/Body" unique_id=694149826]
+layout_mode = 2
+
+[node name="Content" type="VBoxContainer" parent="SafeMargin/Body/Dialogue" unique_id=559808792]
+layout_mode = 2
+
+[node name="Text" type="Label" parent="SafeMargin/Body/Dialogue/Content" unique_id=1270913644]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "前方就是林地的出口。
+準備好了，我們就出發吧。"
+autowrap_mode = 3
+
+[node name="Actions" type="HBoxContainer" parent="SafeMargin/Body/Dialogue/Content" unique_id=753563786]
+layout_mode = 2
+
+[node name="Skip" type="Button" parent="SafeMargin/Body/Dialogue/Content/Actions" unique_id=1983489119]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "略過"
+
+[node name="Next" type="Button" parent="SafeMargin/Body/Dialogue/Content/Actions" unique_id=1662973172]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "繼續 ›"

@@ -1,0 +1,19 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/monster.gd" id="1_dcnrg"]
+[ext_resource type="PackedScene" path="res://scenes/actors/actor.tscn" id="2_6g34k"]
+[ext_resource type="Resource" path="res://resources/sheets/briar_boar.tres" id="3_8qmvo"]
+
+[node name="Boar" type="Node3D" unique_id=818126461]
+script = ExtResource("1_dcnrg")
+display_name = "刺莓野豬"
+level = 4
+max_hp = 70
+damage = 7
+move_speed = 2.6
+xp_reward = 18
+
+[node name="Actor" parent="." unique_id=1019322429 instance=ExtResource("2_6g34k")]
+sheet = ExtResource("3_8qmvo")
+display_name = "刺莓野豬"
+head_height = 1.35

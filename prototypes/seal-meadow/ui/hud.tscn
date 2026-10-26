@@ -1,0 +1,216 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/hud.gd" id="1_276te"]
+[ext_resource type="FontFile" path="res://assets/fonts/NotoSansTC.ttf" id="2_546lt"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jf26r"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.1, 0.13, 0.26, 0.82)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.9098039, 0.7607843, 0.3529412, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="Theme" id="Theme_7ihmi"]
+default_font = ExtResource("2_546lt")
+default_font_size = 16
+Label/colors/font_color = Color(0.95686275, 0.91764706, 0.8235294, 1)
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_jf26r")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_en2x2"]
+bg_color = Color(0, 0, 0, 0.5)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1v5rv"]
+bg_color = Color(0.8784314, 0.28235295, 0.30980393, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q43x7"]
+bg_color = Color(0, 0, 0, 0.5)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_srpbi"]
+bg_color = Color(0.9490196, 0.75686276, 0.30588236, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_spcu4"]
+bg_color = Color(0, 0, 0, 0.5)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ff8ar"]
+bg_color = Color(0.8784314, 0.28235295, 0.30980393, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="HUD" type="CanvasLayer" unique_id=1941662517]
+script = ExtResource("1_276te")
+
+[node name="Root" type="Control" parent="." unique_id=82535548]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = SubResource("Theme_7ihmi")
+
+[node name="Status" type="PanelContainer" parent="Root" unique_id=1474061790]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 12.0
+offset_bottom = 12.0
+mouse_filter = 2
+
+[node name="Rows" type="VBoxContainer" parent="Root/Status" unique_id=602072060]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Head" type="HBoxContainer" parent="Root/Status/Rows" unique_id=2074946937]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="Root/Status/Rows/Head" unique_id=1502995867]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+text = "你"
+
+[node name="LevelLabel" type="Label" parent="Root/Status/Rows/Head" unique_id=1791242782]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.84313726, 0.36862746, 1)
+theme_override_font_sizes/font_size = 18
+text = "Lv 1"
+
+[node name="HpBar" type="ProgressBar" parent="Root/Status/Rows" unique_id=1986563662]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 18)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_en2x2")
+theme_override_styles/fill = SubResource("StyleBoxFlat_1v5rv")
+value = 100.0
+show_percentage = false
+
+[node name="HpText" type="Label" parent="Root/Status/Rows/HpBar" unique_id=612194214]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.8)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 12
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="XpBar" type="ProgressBar" parent="Root/Status/Rows" unique_id=978488640]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_q43x7")
+theme_override_styles/fill = SubResource("StyleBoxFlat_srpbi")
+value = 100.0
+show_percentage = false
+
+[node name="XpText" type="Label" parent="Root/Status/Rows/XpBar" unique_id=553007488]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.8)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 12
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TargetPanel" type="PanelContainer" parent="Root" unique_id=1419510472]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -150.0
+offset_top = 12.0
+offset_right = 150.0
+mouse_filter = 2
+
+[node name="Rows" type="VBoxContainer" parent="Root/TargetPanel" unique_id=1507840284]
+layout_mode = 2
+
+[node name="TargetName" type="Label" parent="Root/TargetPanel/Rows" unique_id=690469804]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "目標"
+horizontal_alignment = 1
+
+[node name="TargetHpBar" type="ProgressBar" parent="Root/TargetPanel/Rows" unique_id=533247419]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_spcu4")
+theme_override_styles/fill = SubResource("StyleBoxFlat_ff8ar")
+value = 100.0
+show_percentage = false
+
+[node name="LogPanel" type="PanelContainer" parent="Root" unique_id=324960302]
+layout_mode = 0
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = -172.0
+offset_right = 452.0
+offset_bottom = -12.0
+mouse_filter = 2
+
+[node name="Log" type="RichTextLabel" parent="Root/LogPanel" unique_id=1567561151]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+theme_override_font_sizes/normal_font_size = 14
+bbcode_enabled = true
+scroll_following = true
+
+[node name="Help" type="Label" parent="Root" unique_id=910228233]
+layout_mode = 0
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -560.0
+offset_top = -56.0
+offset_right = -14.0
+offset_bottom = -12.0
+theme_override_colors/font_outline_color = Color(0.05, 0.08, 0.15, 0.85)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 14
+text = "左鍵：移動／攻擊（按住持續走）　右鍵拖曳：轉鏡頭　滾輪：縮放
+WASD：移動　空白鍵：打最近的怪　T：白天／黃昏"
+horizontal_alignment = 2

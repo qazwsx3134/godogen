@@ -1,0 +1,33 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/test_chibi/weapon/atlas.png" id="1_ftheg"]
+[ext_resource type="Script" path="res://addons/proto_kit/sprite3d_sheet.gd" id="2_g84vc"]
+
+[resource]
+script = ExtResource("2_g84vc")
+atlas = ExtResource("1_ftheg")
+columns = 10
+rows = 5
+cell_px = 384
+foot_px = 8
+meters_per_px = 0.0056
+anims = {
+"attack": {
+"cell": 6.0,
+"d": [8.0, 6.0, 14.0],
+"loop": false,
+"n": 3.0
+},
+"idle": {
+"cell": 0.0,
+"d": [30.0, 30.0],
+"loop": true,
+"n": 2.0
+},
+"walk": {
+"cell": 2.0,
+"d": [9.0, 9.0, 9.0, 9.0],
+"loop": true,
+"n": 4.0
+}
+}

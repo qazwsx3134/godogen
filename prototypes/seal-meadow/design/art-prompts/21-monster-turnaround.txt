@@ -1,0 +1,14 @@
+ATTACHED: the approved master of this monster. Keep its identity exactly: same shapes, proportions, colours, face, outline weight.
+
+Create a TURNAROUND SHEET of this same monster: three copies side by side in one row, evenly spaced, same scale, lowest points on the same baseline, same neutral resting pose. From left to right:
+1. facing the viewer
+2. side profile facing screen right
+3. facing away from the viewer, seen fully from behind
+
+Only the monster rotates; the camera stays at the same elevated 40-degree angle. Canvas 768 x 256, each copy centred in its own 256 px slot at the height given by its SIZE line, lowest point 8 px above the bottom edge.
+
+STYLE
+Original creature art for a cozy nostalgic chibi fantasy MMORPG. Clean dark-brown outlines, soft two-tone cel shading with one highlight, light from the upper left. Not pixel art, not 3D render.
+
+OUTPUT
+Transparent background (real alpha). No ground, no shadows, no labels, no text.

@@ -1,0 +1,25 @@
+{
+  "name": "test_chibi",
+  "out": "../render/test_chibi",
+  "root": "Rig",
+  "front_rotation_deg": 0,
+  "directions": 8,
+  "cell_px": 384,
+  "foot_px": 8,
+  "meters_per_px": 0.0056,
+  "ground_margin_px": 36,
+  "pitch_deg": 40,
+  "outline_m": 0.012,
+  "outline_color": [0.17, 0.1, 0.07],
+  "sun": true,
+  "layers": {
+    "body": {"collection": "body"},
+    "hair": {"collection": "hair", "holdout": ["body"]},
+    "weapon": {"collection": "weapon_sword", "holdout": ["body"]}
+  },
+  "anims": {
+    "idle": {"action": "idle", "frames": [1, 13], "d": [30, 30], "loop": true},
+    "walk": {"action": "walk", "frames": [1, 7, 13, 19], "d": [9, 9, 9, 9], "loop": true},
+    "attack": {"action": "attack", "frames": [6, 10, 14], "d": [8, 6, 14], "loop": false}
+  }
+}

@@ -1,0 +1,16 @@
+ATTACHED: one base body frame (direction {DIRECTION}, pose {POSE}). It is a position and scale guide only.
+
+Draw ONLY a WEAPON held in the character's own right hand, as a separate paper-doll layer.
+
+WEAPON (pick one per image)
+A) Wooden practice sword: pale wood blade with a rounded tip, simple cross guard wrapped in brown cloth, about as long as the character's leg.
+B) Broadsword: wide steel blade with a soft shine, chunky brass cross guard, brown leather grip, round brass pommel, about as long as the character's leg plus the head.
+
+Rules
+- Canvas 512 x 512. The grip sits exactly inside the character's right hand in the attached frame, and the blade angle follows the pose (raised overhead for wind-up, sweeping for the strike, low for idle and walk).
+- Draw the weapon only, plus the fingers of the right hand that wrap in front of the grip, using the skin colour of the attached frame. No other body parts.
+- Parts of the weapon hidden behind the body from this direction are not drawn.
+- Same outline weight, cel shading and upper-left lighting as the attached frame. No glow, no trails, no motion effects.
+
+OUTPUT
+Transparent background (real alpha). Nothing but the weapon (and the gripping fingers). No text.

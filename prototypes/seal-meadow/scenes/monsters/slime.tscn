@@ -1,0 +1,18 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/monster.gd" id="1_w53bb"]
+[ext_resource type="PackedScene" path="res://scenes/actors/actor.tscn" id="2_3yr13"]
+[ext_resource type="Resource" path="res://resources/sheets/meadow_slime.tres" id="3_82nhe"]
+
+[node name="Slime" type="Node3D" unique_id=328618569]
+script = ExtResource("1_w53bb")
+display_name = "蓬蓬果凍"
+max_hp = 32
+damage = 3
+move_speed = 2.2
+xp_reward = 8
+
+[node name="Actor" parent="." unique_id=1288264965 instance=ExtResource("2_3yr13")]
+sheet = ExtResource("3_82nhe")
+display_name = "蓬蓬果凍"
+head_height = 1.0

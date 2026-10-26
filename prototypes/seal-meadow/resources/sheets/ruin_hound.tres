@@ -1,0 +1,39 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/ruin_hound.png" id="1_yx5ke"]
+[ext_resource type="Script" path="res://addons/proto_kit/sprite3d_sheet.gd" id="2_21p12"]
+
+[resource]
+script = ExtResource("2_21p12")
+atlas = ExtResource("1_yx5ke")
+columns = 5
+cell_px = 512
+foot_px = 8
+meters_per_px = 0.0042
+directions = 1
+anims = {
+"attack": {
+"cell": 3,
+"d": [22],
+"loop": false,
+"n": 1
+},
+"down": {
+"cell": 4,
+"d": [60],
+"loop": false,
+"n": 1
+},
+"idle": {
+"cell": 0,
+"d": [60],
+"loop": true,
+"n": 1
+},
+"walk": {
+"cell": 1,
+"d": [11, 11],
+"loop": true,
+"n": 2
+}
+}

@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://shaders/lowpoly.gdshader" id="1_6i8hj"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_6i8hj")
+shader_parameter/albedo = Color(0.9254902, 0.8392157, 0.6431373, 1)
+shader_parameter/use_vertex_color = false
+shader_parameter/rim_strength = 0.08

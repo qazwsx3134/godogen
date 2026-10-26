@@ -1,0 +1,20 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/monster.gd" id="1_h42tv"]
+[ext_resource type="PackedScene" path="res://scenes/actors/actor.tscn" id="2_p018g"]
+[ext_resource type="Resource" path="res://resources/sheets/ruin_hound.tres" id="3_881ci"]
+
+[node name="Hound" type="Node3D" unique_id=1576128131]
+script = ExtResource("1_h42tv")
+display_name = "遺跡獵犬"
+level = 6
+max_hp = 95
+damage = 10
+move_speed = 3.2
+aggressive = true
+xp_reward = 30
+
+[node name="Actor" parent="." unique_id=474859758 instance=ExtResource("2_p018g")]
+sheet = ExtResource("3_881ci")
+display_name = "遺跡獵犬"
+head_height = 1.3

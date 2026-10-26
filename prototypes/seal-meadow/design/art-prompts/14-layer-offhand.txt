@@ -1,0 +1,15 @@
+ATTACHED: one base body frame (direction {DIRECTION}, pose {POSE}). It is a position and scale guide only.
+
+Draw ONLY a SHIELD strapped to the character's own left forearm, as a separate paper-doll layer.
+
+SHIELD
+Small round wooden buckler, warm oak planks, iron rim, iron boss in the centre, a painted green four-leaf clover emblem.
+
+Rules
+- Canvas 512 x 512. The shield sits exactly on the left forearm of the attached frame, at its scale, angled to follow the pose.
+- Draw the shield only. No arm, hand or other body parts.
+- From back-facing directions show the back of the shield (wooden planks and leather straps) only where it is visible.
+- Same outline weight, cel shading and upper-left lighting as the attached frame.
+
+OUTPUT
+Transparent background (real alpha). Nothing but the shield. No text.

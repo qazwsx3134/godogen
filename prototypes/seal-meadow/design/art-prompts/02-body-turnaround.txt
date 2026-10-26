@@ -1,0 +1,16 @@
+ATTACHED: the approved base body master. Keep its identity exactly: same head size, proportions, face, skin tone, grey undershirt and shorts, line weight and colours.
+
+Create a TURNAROUND SHEET of this same base body: five copies standing side by side in one row, evenly spaced, all at the same scale with the soles on the same baseline. Same neutral standing pose in every copy, arms slightly away from the body. From left to right:
+1. facing the viewer
+2. turned diagonally toward the lower-right of the screen (three-quarter front)
+3. side profile facing screen right
+4. turned diagonally toward the upper-right of the screen (three-quarter back)
+5. facing away from the viewer, seen fully from behind
+
+Only the body rotates; the camera stays at the same elevated 40-degree angle for all five. The head stays bald. Canvas 2560 x 512, each figure 380 px tall centred in its own 512 px slot, soles 8 px above the bottom edge.
+
+STYLE
+Original character art for a cozy nostalgic chibi fantasy MMORPG. Clean dark-brown outlines, soft two-tone cel shading with one highlight. Not pixel art, not 3D render.
+
+OUTPUT
+Transparent background (real alpha). No ground, no shadows, no labels, no numbers, no text, no guide lines.

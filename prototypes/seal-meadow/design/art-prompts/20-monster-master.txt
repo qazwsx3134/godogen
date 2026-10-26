@@ -1,0 +1,42 @@
+OPTIONAL ATTACHMENT: the approved player base body master, used ONLY as a scale and style reference. Do not draw the player.
+
+Create the MASTER design of one original cute field monster. Fill in one MONSTER block below.
+
+MONSTER
+{paste one block}
+
+POSE
+Neutral resting pose facing the viewer, turned very slightly toward the lower-right.
+
+SIZE
+The monster is clearly smaller than the player character: use the SIZE line of the block. Canvas 256 x 256 (the player would be 380 px tall at this same scale), lowest point 8 px above the bottom edge, centred horizontally.
+
+STYLE
+Original creature art for a cozy nostalgic chibi fantasy MMORPG. Round, soft, friendly shapes, big glossy eyes, clean dark-brown outlines, soft two-tone cel shading with one highlight, light from the upper left. Elevated three-quarter camera about 40 degrees above the ground. Not pixel art, not 3D render, not scary. Not based on any existing game, creature or franchise.
+
+OUTPUT
+One creature only, nothing cropped. Transparent background (real alpha). No ground, no cast shadow, no text, no frame.
+
+---------------------------------------------------------------------
+MONSTER BLOCKS (copy one into {paste one block})
+---------------------------------------------------------------------
+
+[puffbun 蓬蓬兔]
+IDENTITY: A round fluffy bunny-like puffball. Body is one soft sphere of pale pink fluff with a cream belly patch, two long upright ears with peach inner ears that droop slightly at the tips, a tiny cotton tail, two stubby feet, no visible arms. Big round black eyes with two white highlights, small "w" shaped mouth, pink blush ovals.
+SIZE: about 150 px tall including the ears (0.40 of the player's height).
+MOVES BY: hopping.
+
+[mosscap 苔菇仔]
+IDENTITY: A small walking mushroom. Wide dome cap in warm tomato red with large cream polka dots and a patch of green moss and one tiny fern sprout on top; short thick cream stem that is also the body; a sleepy face on the stem (half-closed eyes, small open mouth); two stubby cream legs and two tiny nub arms.
+SIZE: about 170 px tall including the cap (0.45 of the player's height).
+MOVES BY: waddling on its two short legs.
+
+[tusklet 小獠豬]
+IDENTITY: A chubby piglet-boar. Barrel-shaped body with short chestnut-brown fur and a darker brown tuft of mane along the spine, round pink snout with two nostrils, two small curved cream tusks, small triangle ears, tiny curly tail, four short legs with dark hooves. Determined little eyebrows over shiny black eyes.
+SIZE: about 190 px tall at the top of the ears (0.50 of the player's height), longer than tall.
+MOVES BY: trotting on four legs; charges head-first.
+
+[pebblet 石頭仔]
+IDENTITY: A small round rock golem. Body is one big lavender-grey boulder with a few cracks and a cap of bright green moss on top with one small white flower; two chunky pebble fists floating close to its sides (not attached by arms); two small stone feet. Glowing warm-yellow eyes set in a carved grumpy face, a stern little brow ridge.
+SIZE: about 230 px tall including the moss (0.60 of the player's height). It is the biggest of the four but still well below the player's shoulder.
+MOVES BY: heavy stomping waddle; punches with the floating fists.

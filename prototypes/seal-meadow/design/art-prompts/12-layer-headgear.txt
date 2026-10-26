@@ -1,0 +1,15 @@
+ATTACHED: (1) one base body frame (direction {DIRECTION}, pose {POSE}); (2) optionally the matching hair layer. Position and scale guides only.
+
+Draw ONLY a HEADGEAR item that sits on this head, as a separate paper-doll layer.
+
+HEADGEAR
+Red cloth headband tied around the forehead, a small knot at the back with two short tails that flutter with the motion of the pose.
+
+Rules
+- Canvas 512 x 512. The headband wraps the head at exactly the head's position and scale in the attached frame, resting just above the eyebrows and over the hair.
+- Draw the headband only. No head, face, hair or skin; everything else fully transparent.
+- Parts that would be hidden behind the head from this direction are not drawn.
+- Same outline weight, cel shading and upper-left lighting as the attached frame.
+
+OUTPUT
+Transparent background (real alpha). Nothing but the headband. No text.
