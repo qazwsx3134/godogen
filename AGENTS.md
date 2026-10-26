@@ -2,6 +2,14 @@
 
 This repository is not a published game repo. It is the source that `publish.sh` renders into a runtime game repo for a chosen engine and host agent.
 
+## 進度紀錄與交接
+
+- 接手工作先讀 repo 根目錄的 `Progress.md`，再讀目前遊戲的 README 與 session-state；以使用者最新指示決定是否恢復開發。
+- **每次 commit 前**，更新 `Progress.md`，將此次相關的進度紀錄一併提交。使用者說「要出門」「出門」「下班」、暫停或交接時，也先更新此檔，記錄目前可安全停下的狀態，再暫停工作；這些話本身不額外授權 commit、push 或繼續開發。
+- 紀錄至少包含：日期、專案與分支、已完成／部分完成／未完成、使用者延期事項、驗證命令與結果／未驗證範圍、重要檔案、已知限制或阻礙、下一步及工作區未提交狀態。測試未重跑就註明沿用哪次證據，不能把舊結果寫成本次新驗證。
+- 將遊戲實作基準 commit 與交接文件分開描述，避免為了在文件寫入它自己的 commit hash 而反覆提交；最新提交以 `git log -1` 查核。多專案並行時保留其他專案章節，不用自己的進度覆蓋別人的紀錄。
+- 同步修正相關 README／session-state 的過時狀態，並保留不屬於本次工作的修改。沒有明確授權時不自動 push。
+
 ## Codex model preferences
 
 - The main Codex session uses **GPT-6 Sol** (`gpt-6-sol`) with **max** reasoning effort. It owns planning, shared design decisions, integration, review, and final acceptance.

@@ -2,6 +2,8 @@
 
 2026-10-27，使用者要求做到段落後暫停並 commit 到 master。
 
+遊戲基準已提交 `57d79ac`。完整交接以 repo 根目錄 [Progress.md](../../../../Progress.md) 為準；使用者新增規則：每次 commit、出門／下班／暫停前更新該檔。本次僅補交接文件，開發維持暫停。
+
 已完成：一般 Godot 視窗、6 角色／6 關卡、首領、自動戰鬥與刷圖、編隊／治療／羈絆、培養、裝備容量與待領、6 天賦、圖鑑、戰報、備份存檔、可編輯 scenes、Web 匯出。桌面置頂／透明／焦點延期。
 
 驗證入口：README、evidence/domain-test.log、ui-test.log、font-test.log、web/report.json。邏輯 67 項與 UI／編輯器契約 32 項通過。瀏覽器完成真實操作與 IndexedDB 存檔重開。
