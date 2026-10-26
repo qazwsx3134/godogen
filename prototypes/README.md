@@ -30,6 +30,7 @@ claude mcp add --transport http scenario https://mcp.scenario.com/mcp
 
 ## 既有原型
 
+- [夢靈遠行 · Dreamling Trails](dreamling-idle/README.md)：橫向放置 RPG 第一個可玩版本，包含編隊、自動戰鬥、養成、裝備、天賦與本機存檔；[參考研究與 roadmap](../docs/research/idle-game/README.md)。
 - [Taskbar Hero：遠征紀事](taskbar-hero/README.md)：手機直式 Idle RPG，從可編輯 scene／node 的騎士自動戰鬥開始；[規格與開發狀態](../docs/taskbar-hero-mobile-spec/README.md)。
 - [口袋怪獸日記](pixel-monster/README.md)：iOS 優先的直式像素養成遊戲，包含照顧、模擬步行孵化、訓練、NPC 對戰、分歧進化與本機收藏；[iOS CI/CD](pixel-monster/docs/IOS-CICD.md)。
 - [消失的草莓牛奶](missing-strawberry-milk/README.md)：本輪互動小說原型；[功能基線](missing-strawberry-milk/QA-BASELINE.md)與[真人試玩計畫](missing-strawberry-milk/PLAYTEST.md)。相關題材詞彙見 [CONTEXT.md](CONTEXT.md)。

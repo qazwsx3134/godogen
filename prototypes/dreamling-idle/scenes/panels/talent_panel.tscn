@@ -1,0 +1,60 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/items/talent_card.tscn" id="1_ums0c"]
+
+[node name="TalentPanel" type="MarginContainer" unique_id=1544942287]
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="PanelScroll" type="ScrollContainer" parent="." unique_id=678132788]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Body" type="VBoxContainer" parent="PanelScroll" unique_id=383465207]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="PanelScroll/Body" unique_id=369135465]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8745098, 0.81960785, 0.70980394, 1)
+theme_override_font_sizes/font_size = 23
+text = "旅途天賦"
+
+[node name="Hint" type="Label" parent="PanelScroll/Body" unique_id=803661769]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.65882355, 0.70980394, 0.79607844, 1)
+theme_override_font_sizes/font_size = 17
+text = "勇氣 → 結伴／流轉     根脈 → 拾光／甘霖回響。購買後，下波套用新的隊伍能力。"
+
+[node name="TalentCards" type="GridContainer" parent="PanelScroll/Body" unique_id=1799418582]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 12
+columns = 3
+
+[node name="Might" parent="PanelScroll/Body/TalentCards" unique_id=2114166713 instance=ExtResource("1_ums0c")]
+layout_mode = 2
+
+[node name="Vitality" parent="PanelScroll/Body/TalentCards" unique_id=505192968 instance=ExtResource("1_ums0c")]
+layout_mode = 2
+talent_id = "vitality"
+
+[node name="Company" parent="PanelScroll/Body/TalentCards" unique_id=118773267 instance=ExtResource("1_ums0c")]
+layout_mode = 2
+talent_id = "company"
+
+[node name="Tempo" parent="PanelScroll/Body/TalentCards" unique_id=400471236 instance=ExtResource("1_ums0c")]
+layout_mode = 2
+talent_id = "tempo"
+
+[node name="Fortune" parent="PanelScroll/Body/TalentCards" unique_id=1094054030 instance=ExtResource("1_ums0c")]
+layout_mode = 2
+talent_id = "fortune"
+
+[node name="Echo" parent="PanelScroll/Body/TalentCards" unique_id=1501478862 instance=ExtResource("1_ums0c")]
+layout_mode = 2
+talent_id = "echo"

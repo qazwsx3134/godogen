@@ -1,0 +1,109 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://addons/proto_kit/ui/themes/dark_gothic.tres" id="1_5euu1"]
+
+[node name="CardDraft" type="Control" unique_id=1106482870]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 390.0
+offset_bottom = 844.0
+theme = ExtResource("1_5euu1")
+metadata/ui_layout_id = "card_draft"
+metadata/authored_node_count = 17
+
+[node name="Backdrop" type="Panel" parent="." unique_id=543646528]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="SafeMargin" type="MarginContainer" parent="." unique_id=2051286339]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="Body" type="VBoxContainer" parent="SafeMargin" unique_id=362826573]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="SafeMargin/Body" unique_id=21842104]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TitleLabel"
+text = "新等級 12"
+autowrap_mode = 3
+
+[node name="Subtitle" type="Label" parent="SafeMargin/Body" unique_id=1680119595]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CaptionLabel"
+text = "選擇一項強化"
+autowrap_mode = 3
+
+[node name="Cards" type="VBoxContainer" parent="SafeMargin/Body" unique_id=443778210]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Card0" type="Button" parent="SafeMargin/Body/Cards" unique_id=1955906154]
+custom_minimum_size = Vector2(0, 112)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "烈焰斬 · Lv.2"
+
+[node name="Card1" type="Button" parent="SafeMargin/Body/Cards" unique_id=662650870]
+custom_minimum_size = Vector2(0, 112)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "生命強化 · +20%"
+
+[node name="Card2" type="Button" parent="SafeMargin/Body/Cards" unique_id=1889239065]
+custom_minimum_size = Vector2(0, 112)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "疾風步 · Lv.1"
+
+[node name="Actions" type="HBoxContainer" parent="SafeMargin/Body" unique_id=1898711352]
+layout_mode = 2
+
+[node name="Reroll" type="Button" parent="SafeMargin/Body/Actions" unique_id=1783413256]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "重抽 ·3"
+
+[node name="Banish" type="Button" parent="SafeMargin/Body/Actions" unique_id=1600956454]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "放逐 ·1"
+
+[node name="Detail" type="PanelContainer" parent="SafeMargin/Body" unique_id=1694475262]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Content" type="VBoxContainer" parent="SafeMargin/Body/Detail" unique_id=556012467]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="SafeMargin/Body/Detail/Content" unique_id=524920474]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "烈焰斬"
+autowrap_mode = 3
+
+[node name="Description" type="Label" parent="SafeMargin/Body/Detail/Content" unique_id=693705523]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CaptionLabel"
+text = "目前 120 → 購買後 156
+火焰分支 2 / 3"
+autowrap_mode = 3

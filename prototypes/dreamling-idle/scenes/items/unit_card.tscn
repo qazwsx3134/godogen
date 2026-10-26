@@ -1,0 +1,81 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/unit_card.gd" id="1_6mix7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/briar_boar.png" id="2_kl41p"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a6m5h"]
+atlas = ExtResource("2_kl41p")
+region = Rect2(0, 80, 512, 432)
+
+[node name="UnitCard" type="PanelContainer" unique_id=167089729]
+custom_minimum_size = Vector2(212, 162)
+theme_type_variation = &"Card"
+script = ExtResource("1_6mix7")
+
+[node name="Body" type="VBoxContainer" parent="." unique_id=740347954]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Top" type="HBoxContainer" parent="Body" unique_id=1073746669]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Portrait" type="TextureRect" parent="Body/Top" unique_id=448326959]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(68, 68)
+layout_mode = 2
+texture = SubResource("AtlasTexture_a6m5h")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Labels" type="VBoxContainer" parent="Body/Top" unique_id=1819843090]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="CardName" type="Label" parent="Body/Top/Labels" unique_id=1957440375]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.90588236, 0.87058824, 0.7882353, 1)
+theme_override_font_sizes/font_size = 19
+text = "苔角  Lv.1"
+
+[node name="CardRole" type="Label" parent="Body/Top/Labels" unique_id=1905367440]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6431373, 0.6901961, 0.77254903, 1)
+theme_override_font_sizes/font_size = 15
+text = "森靈 · 守護"
+
+[node name="CardStats" type="Label" parent="Body/Top/Labels" unique_id=521467265]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.70980394, 0.76862746, 0.7411765, 1)
+theme_override_font_sizes/font_size = 15
+text = "攻 15 · 血 176"
+
+[node name="CardXP" type="ProgressBar" parent="Body" unique_id=430637854]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+show_percentage = false
+
+[node name="Actions" type="HBoxContainer" parent="Body" unique_id=342589573]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Inspect" type="Button" parent="Body/Actions" unique_id=1628369395]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+text = "查看"
+
+[node name="Deploy" type="Button" parent="Body/Actions" unique_id=427548614]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+text = "上陣"

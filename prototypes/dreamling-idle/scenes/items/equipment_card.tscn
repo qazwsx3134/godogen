@@ -1,0 +1,82 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/equipment_card.gd" id="1_lablq"]
+
+[node name="EquipmentCard" type="PanelContainer" unique_id=6416801]
+custom_minimum_size = Vector2(242, 184)
+theme_type_variation = &"Card"
+script = ExtResource("1_lablq")
+
+[node name="Body" type="VBoxContainer" parent="." unique_id=362328630]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Top" type="HBoxContainer" parent="Body" unique_id=1913152121]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ItemIcon" type="Label" parent="Body/Top" unique_id=327010627]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.78431374, 0.7019608, 0.9098039, 1)
+theme_override_font_sizes/font_size = 32
+text = "刃"
+
+[node name="Labels" type="VBoxContainer" parent="Body/Top" unique_id=1046766318]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="ItemName" type="Label" parent="Body/Top/Labels" unique_id=2002637359]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.84313726, 0.7058824, 1)
+theme_override_font_sizes/font_size = 18
+text = "旅人短刃"
+
+[node name="ItemKind" type="Label" parent="Body/Top/Labels" unique_id=1283939593]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.57254905, 0.62352943, 0.7176471, 1)
+theme_override_font_sizes/font_size = 14
+text = "武器"
+
+[node name="ItemStats" type="Label" parent="Body" unique_id=1654339907]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75686276, 0.79607844, 0.8627451, 1)
+theme_override_font_sizes/font_size = 16
+text = "攻擊 6（+6）
+生命 0（+0）· 甲 0"
+
+[node name="ItemOwner" type="Label" parent="Body" unique_id=1762528806]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.59607846, 0.6784314, 0.6156863, 1)
+theme_override_font_sizes/font_size = 14
+text = "背包中 · 售價 15"
+
+[node name="Actions" type="HBoxContainer" parent="Body" unique_id=215742558]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="EquipItem" type="Button" parent="Body/Actions" unique_id=258837136]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+text = "穿戴"
+
+[node name="LockItem" type="Button" parent="Body/Actions" unique_id=210757642]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "鎖定"
+
+[node name="SellItem" type="Button" parent="Body/Actions" unique_id=877824218]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "出售"

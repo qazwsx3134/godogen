@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "scope": "Document integrity only; existing prototype tests are recorded separately; no new-game acceptance performed",
+  "markdown_files": 39,
+  "system_briefs": 30,
+  "acceptance_cases": 60,
+  "priority_counts": {
+    "MVP": 17,
+    "Deferred": 1,
+    "Vertical Slice": 6,
+    "Alpha": 6
+  },
+  "active_systems": 29,
+  "deferred_systems": 1,
+  "active_acceptance_cases": 58,
+  "deferred_acceptance_cases": 2,
+  "local_links_checked": 316,
+  "dag_valid": true,
+  "video_samples": 39,
+  "source_video_hash_valid": true,
+  "errors": []
+}

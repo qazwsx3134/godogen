@@ -1,0 +1,164 @@
+{
+  "date": "2026-10-27",
+  "engine": "4.7.stable.official.5b4e0cb0f",
+  "scope": "Selected existing logic tests; no native desktop OS or complete new-game acceptance",
+  "results": [
+    {
+      "project": "godot-kit",
+      "suite": "genre_modules",
+      "status": "PASS",
+      "exit_code": 0,
+      "log": "evidence/reuse-tests/godot-kit-genre_modules.log",
+      "command": [
+        "godot",
+        "--headless",
+        "--path",
+        "/mnt/d/repo/godot/godogen/prototypes/godot-kit",
+        "--script",
+        "res://tests/test_genre_modules.gd"
+      ],
+      "summary": [
+        "checks: 725",
+        "GENRE MODULES TESTS PASSED"
+      ],
+      "environment": {
+        "XDG_DATA_HOME": "/tmp/idle-existing-audit-20261027/godot-kit-genre_modules/data",
+        "XDG_CONFIG_HOME": "/tmp/idle-existing-audit-20261027/godot-kit-genre_modules/config"
+      }
+    },
+    {
+      "project": "godot-kit",
+      "suite": "survivor_modules",
+      "status": "PASS",
+      "exit_code": 0,
+      "log": "evidence/reuse-tests/godot-kit-survivor_modules.log",
+      "command": [
+        "godot",
+        "--headless",
+        "--path",
+        "/mnt/d/repo/godot/godogen/prototypes/godot-kit",
+        "--script",
+        "res://tests/test_survivor_modules.gd"
+      ],
+      "summary": [
+        "checks: 109",
+        "SURVIVOR MODULES TESTS PASSED"
+      ],
+      "environment": {
+        "XDG_DATA_HOME": "/tmp/idle-existing-audit-20261027/godot-kit-survivor_modules/data",
+        "XDG_CONFIG_HOME": "/tmp/idle-existing-audit-20261027/godot-kit-survivor_modules/config"
+      }
+    },
+    {
+      "project": "godot-kit",
+      "suite": "m0_modules",
+      "status": "PASS",
+      "exit_code": 0,
+      "log": "evidence/reuse-tests/godot-kit-m0_modules.log",
+      "command": [
+        "godot",
+        "--headless",
+        "--path",
+        "/mnt/d/repo/godot/godogen/prototypes/godot-kit",
+        "--script",
+        "res://tests/test_m0_modules.gd"
+      ],
+      "summary": [
+        "checks: 20",
+        "M0 MODULES TESTS PASSED"
+      ],
+      "environment": {
+        "XDG_DATA_HOME": "/tmp/idle-existing-audit-20261027/godot-kit-m0_modules/data",
+        "XDG_CONFIG_HOME": "/tmp/idle-existing-audit-20261027/godot-kit-m0_modules/config"
+      }
+    },
+    {
+      "project": "taskbar-hero",
+      "suite": "progression_v2",
+      "status": "PASS",
+      "exit_code": 0,
+      "log": "evidence/reuse-tests/taskbar-hero-progression_v2.log",
+      "command": [
+        "godot",
+        "--headless",
+        "--path",
+        "/mnt/d/repo/godot/godogen/prototypes/taskbar-hero",
+        "--script",
+        "res://tests/test_progression_v2.gd"
+      ],
+      "summary": [
+        "PROGRESSION V2 PASSED"
+      ],
+      "environment": {
+        "XDG_DATA_HOME": "/tmp/idle-existing-audit-20261027/taskbar-hero-progression_v2/data",
+        "XDG_CONFIG_HOME": "/tmp/idle-existing-audit-20261027/taskbar-hero-progression_v2/config"
+      }
+    },
+    {
+      "project": "taskbar-hero",
+      "suite": "waves",
+      "status": "PASS",
+      "exit_code": 0,
+      "log": "evidence/reuse-tests/taskbar-hero-waves.log",
+      "command": [
+        "godot",
+        "--headless",
+        "--path",
+        "/mnt/d/repo/godot/godogen/prototypes/taskbar-hero",
+        "--script",
+        "res://tests/test_waves.gd"
+      ],
+      "summary": [
+        "PARTY WAVES PARALLAX AND SOAK PASSED"
+      ],
+      "environment": {
+        "XDG_DATA_HOME": "/tmp/idle-existing-audit-20261027/taskbar-hero-waves/data",
+        "XDG_CONFIG_HOME": "/tmp/idle-existing-audit-20261027/taskbar-hero-waves/config"
+      }
+    },
+    {
+      "project": "skybound-blades",
+      "suite": "battle",
+      "status": "PASS",
+      "exit_code": 0,
+      "log": "evidence/reuse-tests/skybound-blades-battle.log",
+      "command": [
+        "godot",
+        "--headless",
+        "--path",
+        "/mnt/d/repo/godot/godogen/prototypes/skybound-blades",
+        "--script",
+        "res://tests/test_battle.gd"
+      ],
+      "summary": [
+        "BATTLE PASSED"
+      ],
+      "environment": {
+        "XDG_DATA_HOME": "/tmp/idle-existing-audit-20261027/skybound-blades-battle/data",
+        "XDG_CONFIG_HOME": "/tmp/idle-existing-audit-20261027/skybound-blades-battle/config"
+      }
+    },
+    {
+      "project": "skybound-blades",
+      "suite": "run",
+      "status": "PASS",
+      "exit_code": 0,
+      "log": "evidence/reuse-tests/skybound-blades-run.log",
+      "command": [
+        "godot",
+        "--headless",
+        "--path",
+        "/mnt/d/repo/godot/godogen/prototypes/skybound-blades",
+        "--script",
+        "res://tests/test_run.gd"
+      ],
+      "summary": [
+        "RUN PASSED"
+      ],
+      "environment": {
+        "XDG_DATA_HOME": "/tmp/idle-existing-audit-20261027/skybound-blades-run/data",
+        "XDG_CONFIG_HOME": "/tmp/idle-existing-audit-20261027/skybound-blades-run/config"
+      }
+    }
+  ]
+}

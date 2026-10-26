@@ -1,0 +1,129 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/items/unit_card.tscn" id="1_unpb5"]
+
+[node name="RosterPanel" type="MarginContainer" unique_id=641599943]
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="PanelScroll" type="ScrollContainer" parent="." unique_id=386477566]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Columns" type="HBoxContainer" parent="PanelScroll" unique_id=1064674156]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 20
+
+[node name="Roster" type="VBoxContainer" parent="PanelScroll/Columns" unique_id=1654815850]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="PanelScroll/Columns/Roster" unique_id=1095706954]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8745098, 0.81960785, 0.70980394, 1)
+theme_override_font_sizes/font_size = 22
+text = "同行夥伴"
+
+[node name="UnitCards" type="GridContainer" parent="PanelScroll/Columns/Roster" unique_id=1384708995]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 3
+
+[node name="Moss" parent="PanelScroll/Columns/Roster/UnitCards" unique_id=167089729 instance=ExtResource("1_unpb5")]
+layout_mode = 2
+
+[node name="Ember" parent="PanelScroll/Columns/Roster/UnitCards" unique_id=1778794020 instance=ExtResource("1_unpb5")]
+layout_mode = 2
+definition_id = "ember"
+
+[node name="Dew" parent="PanelScroll/Columns/Roster/UnitCards" unique_id=862574942 instance=ExtResource("1_unpb5")]
+layout_mode = 2
+definition_id = "dew"
+
+[node name="Moon" parent="PanelScroll/Columns/Roster/UnitCards" unique_id=2077620346 instance=ExtResource("1_unpb5")]
+layout_mode = 2
+definition_id = "moon"
+
+[node name="Sun" parent="PanelScroll/Columns/Roster/UnitCards" unique_id=350273899 instance=ExtResource("1_unpb5")]
+layout_mode = 2
+definition_id = "sun"
+
+[node name="Spark" parent="PanelScroll/Columns/Roster/UnitCards" unique_id=303717731 instance=ExtResource("1_unpb5")]
+layout_mode = 2
+definition_id = "spark"
+
+[node name="Details" type="PanelContainer" parent="PanelScroll/Columns" unique_id=358564058]
+custom_minimum_size = Vector2(360, 0)
+layout_mode = 2
+
+[node name="DetailBody" type="VBoxContainer" parent="PanelScroll/Columns/Details" unique_id=1406736944]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="DetailName" type="Label" parent="PanelScroll/Columns/Details/DetailBody" unique_id=1577235903]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9098039, 0.84313726, 0.70980394, 1)
+theme_override_font_sizes/font_size = 25
+text = "苔角 · 守護"
+
+[node name="DetailTags" type="Label" parent="PanelScroll/Columns/Details/DetailBody" unique_id=986589762]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.70980394, 0.6431373, 0.8392157, 1)
+theme_override_font_sizes/font_size = 17
+text = "森靈 ／ 大地"
+
+[node name="DetailDescription" type="Label" parent="PanelScroll/Columns/Details/DetailBody" unique_id=975939475]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.70980394, 0.75686276, 0.83137256, 1)
+theme_override_font_sizes/font_size = 17
+text = "厚實的苔甲守住最前排。和另一名森靈同行，整隊生命提高15%。"
+autowrap_mode = 3
+
+[node name="DetailStats" type="Label" parent="PanelScroll/Columns/Details/DetailBody" unique_id=2059058548]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8235294, 0.8666667, 0.85490197, 1)
+theme_override_font_sizes/font_size = 18
+text = "生命 176
+攻擊 15
+護甲 24
+攻擊間隔 1.65 秒"
+
+[node name="DetailXP" type="Label" parent="PanelScroll/Columns/Details/DetailBody" unique_id=215311945]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.56078434, 0.6313726, 0.7254902, 1)
+theme_override_font_sizes/font_size = 16
+text = "Lv.1 · EXP 0／36"
+autowrap_mode = 3
+
+[node name="Spacer" type="Control" parent="PanelScroll/Columns/Details/DetailBody" unique_id=240070475]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Train" type="Button" parent="PanelScroll/Columns/Details/DetailBody" unique_id=983310083]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "訓練升級 · 18 金"
+
+[node name="Recruit" type="Button" parent="PanelScroll/Columns/Details/DetailBody" unique_id=1820307747]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "邀請同行"

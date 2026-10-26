@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "url": "http://127.0.0.1:8797/?qa=1&resume=1",
+  "checks": [
+    "fresh profile and real battlefield loaded",
+    "mouse pause",
+    "mouse party replacement",
+    "paid training through canvas",
+    "six-page navigation",
+    "IndexedDB persistence across engine restart",
+    "compact viewport keeps save control reachable"
+  ],
+  "errors": [],
+  "viewports": [
+    "1280x900",
+    "960x675"
+  ],
+  "scope": "real browser canvas input, pause, party replacement, training, navigation, IndexedDB reload, compact viewport; no real-device performance claim"
+}

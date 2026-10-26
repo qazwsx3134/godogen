@@ -1,0 +1,554 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/NotoSansTC.otf" id="1_ya4ey"]
+[ext_resource type="Script" path="res://scripts/main.gd" id="2_eb6dy"]
+[ext_resource type="PackedScene" path="res://scenes/world/battle_lane.tscn" id="3_trceg"]
+[ext_resource type="PackedScene" path="res://scenes/panels/roster_panel.tscn" id="4_a8y0u"]
+[ext_resource type="PackedScene" path="res://scenes/panels/equipment_panel.tscn" id="5_jkv2x"]
+[ext_resource type="PackedScene" path="res://scenes/panels/map_panel.tscn" id="6_jbj1t"]
+[ext_resource type="PackedScene" path="res://scenes/panels/talent_panel.tscn" id="7_muem4"]
+[ext_resource type="PackedScene" path="res://scenes/panels/codex_panel.tscn" id="8_dp3eg"]
+[ext_resource type="PackedScene" path="res://scenes/panels/report_panel.tscn" id="9_0ld40"]
+[ext_resource type="Script" path="res://scripts/simulation_driver.gd" id="10_gqmmt"]
+[ext_resource type="Script" path="res://scripts/sfx.gd" id="11_yc10j"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jm5n4"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.105882354, 0.1254902, 0.1882353, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.1764706, 0.20392157, 0.27058825, 1)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w4svv"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.84705883, 0.7607843, 0.54901963, 1)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4gw00"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.20784314, 0.21568628, 0.30980393, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.6666667, 0.627451, 0.8392157, 1)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7gp8n"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.16078432, 0.17254902, 0.25490198, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2901961, 0.27058825, 0.38039216, 1)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h6lw8"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.28627452, 0.25882354, 0.37254903, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.7764706, 0.7137255, 0.9254902, 1)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_674b1"]
+content_margin_left = 12.0
+content_margin_top = 12.0
+content_margin_right = 12.0
+content_margin_bottom = 12.0
+bg_color = Color(0.1254902, 0.14901961, 0.21960784, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.21568628, 0.25490198, 0.3372549, 1)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f5pw2"]
+content_margin_left = 14.0
+content_margin_top = 14.0
+content_margin_right = 14.0
+content_margin_bottom = 14.0
+bg_color = Color(0.09803922, 0.12156863, 0.18039216, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2, 0.22352941, 0.30588236, 1)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mjqav"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.0627451, 0.09019608, 0.13333334, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.0627451, 0.09019608, 0.13333334, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gleev"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.6, 0.7882353, 0.6901961, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.6, 0.7882353, 0.6901961, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cch1h"]
+content_margin_left = 12.0
+content_margin_top = 12.0
+content_margin_right = 12.0
+content_margin_bottom = 12.0
+bg_color = Color(0.16862746, 0.18039216, 0.25882354, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.7176471, 0.63529414, 0.87058824, 1)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fvlsr"]
+content_margin_left = 14.0
+content_margin_top = 14.0
+content_margin_right = 14.0
+content_margin_bottom = 14.0
+bg_color = Color(0.09019608, 0.11372549, 0.16862746, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.21176471, 0.23137255, 0.3137255, 1)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d1iku"]
+content_margin_left = 11.0
+content_margin_top = 11.0
+content_margin_right = 11.0
+content_margin_bottom = 11.0
+bg_color = Color(0.1882353, 0.20784314, 0.29411766, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.46666667, 0.44313726, 0.5568628, 1)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7glbq"]
+content_margin_left = 11.0
+content_margin_top = 11.0
+content_margin_right = 11.0
+content_margin_bottom = 11.0
+bg_color = Color(0.1882353, 0.1882353, 0.2784314, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.7176471, 0.63529414, 0.87058824, 1)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rrgx7"]
+content_margin_left = 11.0
+content_margin_top = 11.0
+content_margin_right = 11.0
+content_margin_bottom = 11.0
+bg_color = Color(0.10980392, 0.13333334, 0.19607843, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.20392157, 0.22352941, 0.29803923, 1)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
+
+[sub_resource type="Theme" id="Theme_tg843"]
+default_font = ExtResource("1_ya4ey")
+default_font_size = 18
+Button/colors/font_color = Color(0.8666667, 0.8509804, 0.92941177, 1)
+Button/colors/font_disabled_color = Color(0.44705883, 0.49411765, 0.5803922, 1)
+Button/colors/font_hover_color = Color(1, 1, 1, 1)
+Button/styles/disabled = SubResource("StyleBoxFlat_jm5n4")
+Button/styles/focus = SubResource("StyleBoxFlat_w4svv")
+Button/styles/hover = SubResource("StyleBoxFlat_4gw00")
+Button/styles/normal = SubResource("StyleBoxFlat_7gp8n")
+Button/styles/pressed = SubResource("StyleBoxFlat_h6lw8")
+Card/base_type = &"PanelContainer"
+Card/styles/panel = SubResource("StyleBoxFlat_674b1")
+Label/colors/font_color = Color(0.8627451, 0.8862745, 0.92941177, 1)
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_f5pw2")
+ProgressBar/font_sizes/font_size = 1
+ProgressBar/styles/background = SubResource("StyleBoxFlat_mjqav")
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_gleev")
+SelectedCard/base_type = &"PanelContainer"
+SelectedCard/styles/panel = SubResource("StyleBoxFlat_cch1h")
+TabContainer/colors/font_selected_color = Color(0.92941177, 0.8745098, 0.76862746, 1)
+TabContainer/colors/font_unselected_color = Color(0.57254905, 0.62352943, 0.7176471, 1)
+TabContainer/font_sizes/font_size = 20
+TabContainer/styles/panel = SubResource("StyleBoxFlat_fvlsr")
+TabContainer/styles/tab_hovered = SubResource("StyleBoxFlat_d1iku")
+TabContainer/styles/tab_selected = SubResource("StyleBoxFlat_7glbq")
+TabContainer/styles/tab_unselected = SubResource("StyleBoxFlat_rrgx7")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jscy8"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.09803922, 0.12156863, 0.18039216, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2, 0.22352941, 0.30588236, 1)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_right = 9
+corner_radius_bottom_left = 9
+
+[node name="DreamlingTrails" type="Control" unique_id=521848927]
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = SubResource("Theme_tg843")
+script = ExtResource("2_eb6dy")
+
+[node name="Background" type="ColorRect" parent="." unique_id=410342955]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.05882353, 0.08235294, 0.13333334, 1)
+
+[node name="OuterMargin" type="MarginContainer" parent="." unique_id=161262988]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="BodyRows" type="VBoxContainer" parent="OuterMargin" unique_id=1622453683]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Header" type="HBoxContainer" parent="OuterMargin/BodyRows" unique_id=2021167367]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Brand" type="VBoxContainer" parent="OuterMargin/BodyRows/Header" unique_id=1608354668]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="HeaderTitle" type="Label" parent="OuterMargin/BodyRows/Header/Brand" unique_id=2061461059]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9137255, 0.84705883, 0.69803923, 1)
+theme_override_font_sizes/font_size = 30
+text = "夢靈遠行"
+
+[node name="Subtitle" type="Label" parent="OuterMargin/BodyRows/Header/Brand" unique_id=33624162]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.56078434, 0.61960787, 0.72156864, 1)
+theme_override_font_sizes/font_size = 14
+text = "DREAMLING TRAILS  /  讓小小的旅程，慢慢變強"
+
+[node name="Collection" type="Label" parent="OuterMargin/BodyRows/Header" unique_id=566501416]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6509804, 0.7137255, 0.7764706, 1)
+theme_override_font_sizes/font_size = 17
+text = "同行 3／6 · 擊倒 0"
+
+[node name="Gold" type="Label" parent="OuterMargin/BodyRows/Header" unique_id=1026532740]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92156863, 0.7921569, 0.54509807, 1)
+theme_override_font_sizes/font_size = 24
+text = "100 金"
+
+[node name="Pause" type="Button" parent="OuterMargin/BodyRows/Header" unique_id=688586054]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "暫停"
+
+[node name="Sound" type="Button" parent="OuterMargin/BodyRows/Header" unique_id=157947620]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "聲音：關"
+
+[node name="Save" type="Button" parent="OuterMargin/BodyRows/Header" unique_id=2133957639]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "儲存"
+
+[node name="HelpBar" type="PanelContainer" parent="OuterMargin/BodyRows" unique_id=349179618]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_jscy8")
+
+[node name="Row" type="HBoxContainer" parent="OuterMargin/BodyRows/HelpBar" unique_id=1274982127]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="HelpText" type="Label" parent="OuterMargin/BodyRows/HelpBar/Row" unique_id=187697982]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.7490196, 0.7921569, 0.7254902, 1)
+theme_override_font_sizes/font_size = 17
+text = "先看小隊自動作戰。卡關時加入露露補血，或在天賦購買「結伴」開第三格。"
+autowrap_mode = 3
+
+[node name="DismissHelp" type="Button" parent="OuterMargin/BodyRows/HelpBar/Row" unique_id=375395361]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "知道了"
+
+[node name="BattlePanel" type="PanelContainer" parent="OuterMargin/BodyRows" unique_id=551305523]
+layout_mode = 2
+
+[node name="Rows" type="VBoxContainer" parent="OuterMargin/BodyRows/BattlePanel" unique_id=1162175175]
+layout_mode = 2
+theme_override_constants/separation = 7
+
+[node name="Status" type="HBoxContainer" parent="OuterMargin/BodyRows/BattlePanel/Rows" unique_id=516624697]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="CurrentStage" type="Label" parent="OuterMargin/BodyRows/BattlePanel/Rows/Status" unique_id=363693582]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.89411765, 0.81960785, 0.6784314, 1)
+theme_override_font_sizes/font_size = 21
+text = "01-01 霧林邊境"
+
+[node name="BattleState" type="Label" parent="OuterMargin/BodyRows/BattlePanel/Rows/Status" unique_id=378528926]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6509804, 0.72156864, 0.80784315, 1)
+theme_override_font_sizes/font_size = 17
+text = "第 1／3 波 · 敵人 3"
+
+[node name="AutoAdvance" type="CheckButton" parent="OuterMargin/BodyRows/BattlePanel/Rows/Status" unique_id=801278351]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "自動前進"
+
+[node name="BattleLane" parent="OuterMargin/BodyRows/BattlePanel/Rows" unique_id=663136969 instance=ExtResource("3_trceg")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="StageProgress" type="ProgressBar" parent="OuterMargin/BodyRows/BattlePanel/Rows" unique_id=585530957]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 2
+show_percentage = false
+
+[node name="PartySummary" type="HBoxContainer" parent="OuterMargin/BodyRows" unique_id=698530323]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="PartyStatus" type="Label" parent="OuterMargin/BodyRows/PartySummary" unique_id=166460643]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6784314, 0.63529414, 0.8117647, 1)
+theme_override_font_sizes/font_size = 16
+text = "上陣 2／2 · 配置已生效"
+
+[node name="BondSummary" type="Label" parent="OuterMargin/BodyRows/PartySummary" unique_id=404280985]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.64705884, 0.76862746, 0.7058824, 1)
+theme_override_font_sizes/font_size = 16
+text = "2名同族可啟動羈絆"
+
+[node name="Pages" type="TabContainer" parent="OuterMargin/BodyRows" unique_id=1269242097]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 350)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+current_tab = 0
+tab_0/title = "夢靈"
+tab_1/title = "裝備"
+tab_2/title = "地圖"
+tab_3/title = "天賦"
+tab_4/title = "圖鑑"
+tab_5/title = "戰報"
+
+[node name="RosterPanel" parent="OuterMargin/BodyRows/Pages" unique_id=641599943 instance=ExtResource("4_a8y0u")]
+unique_name_in_owner = true
+layout_mode = 2
+metadata/_tab_index = 0
+metadata/_tab_name = "夢靈"
+
+[node name="EquipmentPanel" parent="OuterMargin/BodyRows/Pages" unique_id=92284674 instance=ExtResource("5_jkv2x")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+metadata/_tab_name = "裝備"
+
+[node name="MapPanel" parent="OuterMargin/BodyRows/Pages" unique_id=836277481 instance=ExtResource("6_jbj1t")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+metadata/_tab_name = "地圖"
+
+[node name="TalentPanel" parent="OuterMargin/BodyRows/Pages" unique_id=1544942287 instance=ExtResource("7_muem4")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+metadata/_tab_index = 3
+metadata/_tab_name = "天賦"
+
+[node name="CodexPanel" parent="OuterMargin/BodyRows/Pages" unique_id=1124762326 instance=ExtResource("8_dp3eg")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+metadata/_tab_index = 4
+metadata/_tab_name = "圖鑑"
+
+[node name="ReportPanel" parent="OuterMargin/BodyRows/Pages" unique_id=250526899 instance=ExtResource("9_0ld40")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+metadata/_tab_index = 5
+metadata/_tab_name = "戰報"
+
+[node name="RecoveryNotice" type="Label" parent="OuterMargin/BodyRows" unique_id=27772512]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.9411765, 0.6627451, 0.61960787, 1)
+theme_override_font_sizes/font_size = 16
+autowrap_mode = 3
+
+[node name="Toast" type="Label" parent="OuterMargin/BodyRows" unique_id=387821278]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.84705883, 0.8627451, 0.79607844, 1)
+theme_override_font_sizes/font_size = 17
+text = "先看隊伍自動作戰；每次調整都會在下一波一起生效。"
+text_overrun_behavior = 3
+
+[node name="Footer" type="HBoxContainer" parent="OuterMargin/BodyRows" unique_id=2012568103]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="BagSummary" type="Label" parent="OuterMargin/BodyRows/Footer" unique_id=234625200]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5058824, 0.5686275, 0.6666667, 1)
+theme_override_font_sizes/font_size = 14
+text = "背包 1／36 · 待領 0／64"
+
+[node name="SaveStatus" type="Label" parent="OuterMargin/BodyRows/Footer" unique_id=194432348]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5058824, 0.5686275, 0.6666667, 1)
+theme_override_font_sizes/font_size = 14
+text = "每20秒自動儲存 · 關閉後暫停收益"
+
+[node name="SimulationDriver" type="Node" parent="." unique_id=882064950]
+unique_name_in_owner = true
+script = ExtResource("10_gqmmt")
+
+[node name="Sfx" type="Node" parent="." unique_id=373749881]
+unique_name_in_owner = true
+script = ExtResource("11_yc10j")
+voices = 5
+volume_db = -14.0

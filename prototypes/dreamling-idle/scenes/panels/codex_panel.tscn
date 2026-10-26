@@ -1,0 +1,22 @@
+[gd_scene format=3]
+
+[node name="CodexPanel" type="MarginContainer" unique_id=1124762326]
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="CodexText" type="RichTextLabel" parent="." unique_id=328986462]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 18
+bbcode_enabled = true
+text = "[font_size=24]旅途中的六位夢靈[/font_size]
+
+苔角 · 森靈／守護
+燼尾 · 獸靈／突襲
+露露 · 森靈／療癒
+
+探索新的獵場，遇見更多同行夥伴。"

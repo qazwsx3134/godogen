@@ -1,0 +1,134 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/items/equipment_card.tscn" id="1_o8d4u"]
+
+[node name="EquipmentPanel" type="MarginContainer" unique_id=92284674]
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="Body" type="VBoxContainer" parent="." unique_id=781599968]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Selection" type="HBoxContainer" parent="Body" unique_id=211644119]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="Body/Selection" unique_id=519457019]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8745098, 0.81960785, 0.70980394, 1)
+theme_override_font_sizes/font_size = 22
+text = "為夥伴準備行裝"
+
+[node name="EquipUnit" type="OptionButton" parent="Body/Selection" unique_id=1877640499]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 36)
+layout_mode = 2
+selected = 0
+item_count = 1
+popup/item_0/text = "苔角"
+popup/item_0/id = 0
+
+[node name="Spacer" type="Control" parent="Body/Selection" unique_id=1692433135]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ClaimPending" type="Button" parent="Body/Selection" unique_id=1208117243]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "領取待領裝備（0）"
+
+[node name="Slots" type="HBoxContainer" parent="Body" unique_id=1285341571]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="WeaponSlot" type="PanelContainer" parent="Body/Slots" unique_id=784537073]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Row" type="HBoxContainer" parent="Body/Slots/WeaponSlot" unique_id=1020301106]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Caption" type="Label" parent="Body/Slots/WeaponSlot/Row" unique_id=1265971975]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.65882355, 0.6039216, 0.78039217, 1)
+theme_override_font_sizes/font_size = 17
+text = "武器"
+
+[node name="WeaponName" type="Label" parent="Body/Slots/WeaponSlot/Row" unique_id=264527783]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8627451, 0.8862745, 0.92941177, 1)
+theme_override_font_sizes/font_size = 18
+text = "未穿戴"
+
+[node name="RemoveWeapon" type="Button" parent="Body/Slots/WeaponSlot/Row" unique_id=1479019775]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "卸下"
+
+[node name="ArmorSlot" type="PanelContainer" parent="Body/Slots" unique_id=1878022946]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Row" type="HBoxContainer" parent="Body/Slots/ArmorSlot" unique_id=977631097]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Caption" type="Label" parent="Body/Slots/ArmorSlot/Row" unique_id=8431331]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.65882355, 0.6039216, 0.78039217, 1)
+theme_override_font_sizes/font_size = 17
+text = "護具"
+
+[node name="ArmorName" type="Label" parent="Body/Slots/ArmorSlot/Row" unique_id=1656340887]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8627451, 0.8862745, 0.92941177, 1)
+theme_override_font_sizes/font_size = 18
+text = "未穿戴"
+
+[node name="RemoveArmor" type="Button" parent="Body/Slots/ArmorSlot/Row" unique_id=587476463]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "卸下"
+
+[node name="Hint" type="Label" parent="Body" unique_id=1803262457]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6117647, 0.6666667, 0.7529412, 1)
+theme_override_font_sizes/font_size = 16
+text = "括號顯示與目前穿戴的差值。鎖定可保護裝備；滿包掉落會保存在待領箱。"
+
+[node name="GearScroll" type="ScrollContainer" parent="Body" unique_id=1009853164]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="GearCards" type="GridContainer" parent="Body/GearScroll" unique_id=1158709496]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 12
+columns = 4
+
+[node name="PreviewGear0" parent="Body/GearScroll/GearCards" unique_id=6416801 instance=ExtResource("1_o8d4u")]
+layout_mode = 2
+
+[node name="PreviewGear1" parent="Body/GearScroll/GearCards" unique_id=794264675 instance=ExtResource("1_o8d4u")]
+layout_mode = 2
+
+[node name="PreviewGear2" parent="Body/GearScroll/GearCards" unique_id=841439416 instance=ExtResource("1_o8d4u")]
+layout_mode = 2

@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-27",
+  "stage": "first playable checkpoint; development paused at user request",
+  "engine": "4.7.stable.official.5b4e0cb0f",
+  "domain": {
+    "status": "PASS",
+    "checks": 67,
+    "log": "domain-test.log"
+  },
+  "ui_editor_contract": {
+    "status": "PASS",
+    "checks": 32,
+    "log": "ui-test.log"
+  },
+  "font": {
+    "status": "PASS",
+    "log": "font-test.log"
+  },
+  "kit_sync": "PASS",
+  "web": {
+    "status": "PASS",
+    "url": "http://127.0.0.1:8797/?qa=1&resume=1",
+    "checks": [
+      "fresh profile and real battlefield loaded",
+      "mouse pause",
+      "mouse party replacement",
+      "paid training through canvas",
+      "six-page navigation",
+      "IndexedDB persistence across engine restart",
+      "compact viewport keeps save control reachable"
+    ],
+    "errors": [],
+    "viewports": [
+      "1280x900",
+      "960x675"
+    ],
+    "scope": "real browser canvas input, pause, party replacement, training, navigation, IndexedDB reload, compact viewport; no real-device performance claim"
+  },
+  "limits": [
+    "No desktop shell features",
+    "No offline rewards, evolution or workshop",
+    "No real-device performance, 8-hour soak or release certification",
+    "Temporary existing artwork; no AI image generation in this task"
+  ]
+}

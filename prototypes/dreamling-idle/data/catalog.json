@@ -1,0 +1,350 @@
+{
+  "version": 1,
+  "units": [
+    {
+      "id": "moss",
+      "name": "苔角",
+      "race": "grove",
+      "race_name": "森靈",
+      "element": "earth",
+      "element_name": "大地",
+      "job": "tank",
+      "job_name": "守護",
+      "art": "briar_boar",
+      "color": "#b7ddb0",
+      "hp": 176,
+      "attack": 15,
+      "defense": 24,
+      "speed": 90,
+      "range": 100,
+      "interval": 1.65,
+      "heal": 0,
+      "heal_cd": 0,
+      "unlock": 0,
+      "cost": 0,
+      "description": "厚實的苔甲守住最前排。和另一名森靈同行，整隊生命提高15%。"
+    },
+    {
+      "id": "ember",
+      "name": "燼尾",
+      "race": "beast",
+      "race_name": "獸靈",
+      "element": "fire",
+      "element_name": "火焰",
+      "job": "striker",
+      "job_name": "突襲",
+      "art": "ruin_hound",
+      "color": "#f4c69e",
+      "hp": 108,
+      "attack": 25,
+      "defense": 8,
+      "speed": 115,
+      "range": 195,
+      "interval": 1.15,
+      "heal": 0,
+      "heal_cd": 0,
+      "unlock": 0,
+      "cost": 0,
+      "description": "敏捷的主力輸出。獸靈兩人同行可讓全隊攻擊提高12%。"
+    },
+    {
+      "id": "dew",
+      "name": "露露",
+      "race": "grove",
+      "race_name": "森靈",
+      "element": "water",
+      "element_name": "流水",
+      "job": "healer",
+      "job_name": "療癒",
+      "art": "meadow_slime",
+      "color": "#a6e4e2",
+      "hp": 116,
+      "attack": 11,
+      "defense": 10,
+      "speed": 85,
+      "range": 220,
+      "interval": 1.9,
+      "heal": 2.6,
+      "heal_cd": 5.5,
+      "unlock": 0,
+      "cost": 0,
+      "description": "每5.5秒照顧血量比例最低的隊友。有效治療的50%轉為對最近敵人的甘霖傷害。"
+    },
+    {
+      "id": "moon",
+      "name": "月牙",
+      "race": "beast",
+      "race_name": "獸靈",
+      "element": "wind",
+      "element_name": "疾風",
+      "job": "striker",
+      "job_name": "遊擊",
+      "art": "ruin_hound",
+      "color": "#ceb8ff",
+      "hp": 132,
+      "attack": 30,
+      "defense": 11,
+      "speed": 125,
+      "range": 230,
+      "interval": 1.35,
+      "heal": 0,
+      "heal_cd": 0,
+      "unlock": 1,
+      "cost": 150,
+      "description": "月光中的遠距離遊擊手。通過霧林邊境後，可花金幣邀請同行。"
+    },
+    {
+      "id": "sun",
+      "name": "曜角",
+      "race": "grove",
+      "race_name": "森靈",
+      "element": "light",
+      "element_name": "星光",
+      "job": "tank",
+      "job_name": "護衛",
+      "art": "briar_boar",
+      "color": "#f1d99d",
+      "hp": 236,
+      "attack": 20,
+      "defense": 32,
+      "speed": 85,
+      "range": 105,
+      "interval": 1.8,
+      "heal": 0,
+      "heal_cd": 0,
+      "unlock": 3,
+      "cost": 240,
+      "description": "守護星光的古老夢靈。更高的生命與護甲適合承受首領的重擊。"
+    },
+    {
+      "id": "spark",
+      "name": "星芽",
+      "race": "spirit",
+      "race_name": "星靈",
+      "element": "light",
+      "element_name": "星光",
+      "job": "healer",
+      "job_name": "祈願",
+      "art": "meadow_slime",
+      "color": "#f3c7e8",
+      "hp": 142,
+      "attack": 18,
+      "defense": 12,
+      "speed": 90,
+      "range": 240,
+      "interval": 1.75,
+      "heal": 3.1,
+      "heal_cd": 5.0,
+      "unlock": 4,
+      "cost": 300,
+      "description": "星光系的治療者。和曜角同隊可啟動星光羈絆，治療轉化傷害的效果也會增強。"
+    }
+  ],
+  "stages": [
+    {
+      "id": "mist",
+      "name": "霧林邊境",
+      "subtitle": "柔軟的草地，第一段旅程",
+      "theme": "#b9c7e3",
+      "hp": 47,
+      "attack": 7,
+      "gold": 9,
+      "xp": 9,
+      "boss": false
+    },
+    {
+      "id": "moss_path",
+      "name": "苔石小徑",
+      "subtitle": "讓療癒者也加入隊伍吧",
+      "theme": "#abd0bd",
+      "hp": 77,
+      "attack": 10,
+      "gold": 12,
+      "xp": 12,
+      "boss": false
+    },
+    {
+      "id": "sunset",
+      "name": "落日廢墟",
+      "subtitle": "獸靈的迅捷，或森靈的韌性",
+      "theme": "#e5bdaf",
+      "hp": 112,
+      "attack": 14,
+      "gold": 16,
+      "xp": 16,
+      "boss": false
+    },
+    {
+      "id": "moonbridge",
+      "name": "月影長橋",
+      "subtitle": "第三波：守橋巨獸",
+      "theme": "#bdb1dc",
+      "hp": 155,
+      "attack": 18,
+      "gold": 22,
+      "xp": 20,
+      "boss": true
+    },
+    {
+      "id": "stardust",
+      "name": "星屑荒野",
+      "subtitle": "裝備與隊伍開始缺一不可",
+      "theme": "#c6bedc",
+      "hp": 210,
+      "attack": 23,
+      "gold": 28,
+      "xp": 25,
+      "boss": false
+    },
+    {
+      "id": "heartwood",
+      "name": "古樹之心",
+      "subtitle": "第三波：古樹守望者",
+      "theme": "#d4c897",
+      "hp": 275,
+      "attack": 29,
+      "gold": 36,
+      "xp": 32,
+      "boss": true
+    }
+  ],
+  "talents": [
+    {
+      "id": "might",
+      "name": "勇氣",
+      "description": "每級：全隊攻擊 +8%",
+      "max_level": 5,
+      "cost_base": 60,
+      "cost_growth": 1.65,
+      "adj": [
+        "root"
+      ],
+      "effect": {
+        "attack": 0.08
+      }
+    },
+    {
+      "id": "vitality",
+      "name": "根脈",
+      "description": "每級：全隊生命 +10%",
+      "max_level": 5,
+      "cost_base": 50,
+      "cost_growth": 1.6,
+      "adj": [
+        "root"
+      ],
+      "effect": {
+        "hp": 0.1
+      }
+    },
+    {
+      "id": "company",
+      "name": "結伴",
+      "description": "上陣格 +1；先購買勇氣1級",
+      "max_level": 1,
+      "cost_base": 150,
+      "cost_growth": 1,
+      "adj": [
+        "might"
+      ],
+      "effect": {
+        "slots": 1
+      }
+    },
+    {
+      "id": "tempo",
+      "name": "流轉",
+      "description": "每級：攻擊／治療冷卻 -6%",
+      "max_level": 3,
+      "cost_base": 110,
+      "cost_growth": 1.8,
+      "adj": [
+        "might"
+      ],
+      "effect": {
+        "cooldown": 0.06
+      }
+    },
+    {
+      "id": "fortune",
+      "name": "拾光",
+      "description": "每級：擊殺金幣 +12%",
+      "max_level": 5,
+      "cost_base": 70,
+      "cost_growth": 1.7,
+      "adj": [
+        "vitality"
+      ],
+      "effect": {
+        "gold": 0.12
+      }
+    },
+    {
+      "id": "echo",
+      "name": "甘霖回響",
+      "description": "每級：治療轉化傷害 +25%",
+      "max_level": 3,
+      "cost_base": 100,
+      "cost_growth": 1.8,
+      "adj": [
+        "vitality"
+      ],
+      "effect": {
+        "reaction": 0.25
+      }
+    }
+  ],
+  "gear": [
+    {
+      "id": "blade",
+      "name": "旅人短刃",
+      "slot": "weapon",
+      "attack": 6,
+      "hp": 0,
+      "defense": 0
+    },
+    {
+      "id": "branch",
+      "name": "晨露枝杖",
+      "slot": "weapon",
+      "attack": 5,
+      "hp": 10,
+      "defense": 0
+    },
+    {
+      "id": "fang",
+      "name": "月牙護符",
+      "slot": "weapon",
+      "attack": 9,
+      "hp": 0,
+      "defense": 0
+    },
+    {
+      "id": "linen",
+      "name": "棉布護衣",
+      "slot": "armor",
+      "attack": 0,
+      "hp": 28,
+      "defense": 4
+    },
+    {
+      "id": "bark",
+      "name": "古木甲片",
+      "slot": "armor",
+      "attack": 0,
+      "hp": 38,
+      "defense": 7
+    },
+    {
+      "id": "cloak",
+      "name": "星塵披風",
+      "slot": "armor",
+      "attack": 2,
+      "hp": 24,
+      "defense": 3
+    }
+  ],
+  "bag_capacity": 36,
+  "pending_capacity": 64,
+  "level_cap": 20
+}

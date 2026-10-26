@@ -1,0 +1,65 @@
+[
+  {
+    "file": "bond.png",
+    "width": 1276,
+    "height": 875,
+    "bytes": 302364,
+    "sha256": "39a8be26277a64e6311ed48fb2589e4f8d923d7c60698e9d07d2edfc6a2db351"
+  },
+  {
+    "file": "map.png",
+    "width": 1149,
+    "height": 898,
+    "bytes": 262333,
+    "sha256": "4a30f7db93731c4d1b94d9213f63b087543786b4a2a62d3785dd7393f3aa47f3"
+  },
+  {
+    "file": "perk.png",
+    "width": 1214,
+    "height": 653,
+    "bytes": 77179,
+    "sha256": "af090b18614bd59c65e7a633d289744a850d0ce1fcc668a177f50cda59ae45a3"
+  },
+  {
+    "file": "perk2.png",
+    "width": 1292,
+    "height": 881,
+    "bytes": 264974,
+    "sha256": "9e1cdb2a76e897e5178cc268ef8760a53e56c238dc179e63137f8384eecf79bd"
+  },
+  {
+    "file": "skill.png",
+    "width": 1919,
+    "height": 1079,
+    "bytes": 1017233,
+    "sha256": "85781f7fa2d24aeaa74185e18db3b8e6c6cb61218aae0185b0dd4a01ae6464e0"
+  },
+  {
+    "file": "status.png",
+    "width": 1896,
+    "height": 1079,
+    "bytes": 1023203,
+    "sha256": "256afd144f13f7b9d7a3c87b50d10833ad9845a2fa1d3504a8cf04229c3e1fc8"
+  },
+  {
+    "file": "status2.png",
+    "width": 1095,
+    "height": 772,
+    "bytes": 288937,
+    "sha256": "bb06df8558c9ed5dde19973fee201d2e94aab473058aede4fb272740d3ee266e"
+  },
+  {
+    "file": "status3.png",
+    "width": 1009,
+    "height": 947,
+    "bytes": 369576,
+    "sha256": "37ecd43d50dcaebc94283e63433a35a74a712d9ef536b38181ccab0490c7f0f0"
+  },
+  {
+    "file": "workshop.png",
+    "width": 1200,
+    "height": 866,
+    "bytes": 276108,
+    "sha256": "dd07172c455f82a45708e55e1e92cc59211f17bed2e274f65cf205c353370e47"
+  }
+]

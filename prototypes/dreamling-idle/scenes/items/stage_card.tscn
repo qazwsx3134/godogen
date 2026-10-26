@@ -1,0 +1,51 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/stage_card.gd" id="1_s1loj"]
+
+[node name="StageCard" type="PanelContainer" unique_id=1699565251]
+custom_minimum_size = Vector2(365, 158)
+theme_type_variation = &"Card"
+script = ExtResource("1_s1loj")
+
+[node name="Body" type="VBoxContainer" parent="." unique_id=1005333711]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Title" type="HBoxContainer" parent="Body" unique_id=250329571]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="StageNumber" type="Label" parent="Body/Title" unique_id=949950787]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6666667, 0.6313726, 0.80784315, 1)
+theme_override_font_sizes/font_size = 16
+text = "01 — 01"
+
+[node name="StageName" type="Label" parent="Body/Title" unique_id=1069282538]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.90588236, 0.84705883, 0.7176471, 1)
+theme_override_font_sizes/font_size = 22
+text = "霧林邊境"
+
+[node name="StageDescription" type="Label" parent="Body" unique_id=1444401992]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68235296, 0.73333335, 0.8156863, 1)
+theme_override_font_sizes/font_size = 16
+text = "柔軟的草地，第一段旅程"
+
+[node name="StageReward" type="Label" parent="Body" unique_id=348698111]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.59607846, 0.7294118, 0.6627451, 1)
+theme_override_font_sizes/font_size = 15
+text = "擊殺 9 金／9 EXP · 三波遭遇"
+
+[node name="Travel" type="Button" parent="Body" unique_id=2135050412]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "前往挑戰"

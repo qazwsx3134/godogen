@@ -1,0 +1,33 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/talent_card.gd" id="1_1timk"]
+
+[node name="TalentCard" type="PanelContainer" unique_id=2114166713]
+custom_minimum_size = Vector2(365, 140)
+theme_type_variation = &"Card"
+script = ExtResource("1_1timk")
+
+[node name="Body" type="VBoxContainer" parent="." unique_id=1974639657]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TalentName" type="Label" parent="Body" unique_id=1602571908]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8784314, 0.8, 0.6666667, 1)
+theme_override_font_sizes/font_size = 22
+text = "勇氣  0／5"
+
+[node name="TalentDescription" type="Label" parent="Body" unique_id=1725431306]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7058824, 0.75686276, 0.8352941, 1)
+theme_override_font_sizes/font_size = 16
+text = "每級：全隊攻擊 +8%"
+
+[node name="BuyTalent" type="Button" parent="Body" unique_id=870474152]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+text = "提升 · 60 金"

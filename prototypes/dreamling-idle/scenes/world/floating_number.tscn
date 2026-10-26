@@ -1,0 +1,13 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" path="res://assets/fonts/NotoSansTC.otf" id="1_u66il"]
+[ext_resource type="Script" path="res://scripts/floating_number.gd" id="2_ttcy6"]
+
+[node name="FloatingNumber" type="Label" unique_id=1593938557]
+theme_override_colors/font_shadow_color = Color(0.0627451, 0.07450981, 0.11372549, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_fonts/font = ExtResource("1_u66il")
+theme_override_font_sizes/font_size = 23
+text = "24"
+script = ExtResource("2_ttcy6")

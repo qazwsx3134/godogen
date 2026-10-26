@@ -1,0 +1,458 @@
+[
+  {
+    "id": "S01",
+    "slug": "content-definitions",
+    "name": "資料定義與內容登錄",
+    "category": "Core",
+    "priority": "MVP",
+    "phase": "M1",
+    "depends_on": [],
+    "document": "systems/s01-content-definitions.md",
+    "status": "本新案研究／規格草案；未審核／未整合實作；repo既有基礎見重用盤點",
+    "reuse_audit": "reuse-audit.md"
+  },
+  {
+    "id": "S02",
+    "slug": "simulation-clock",
+    "name": "模擬時鐘與事件排程",
+    "category": "Core",
+    "priority": "MVP",
+    "phase": "M1",
+    "depends_on": [
+      "S01"
+    ],
+    "document": "systems/s02-simulation-clock.md",
+    "status": "本新案研究／規格草案；未審核／未整合實作；repo既有基礎見重用盤點",
+    "reuse_audit": "reuse-audit.md"
+  },
+  {
+    "id": "S03",
+    "slug": "desktop-shell",
+    "name": "桌面視窗與工作區整合",
+    "category": "Core",
+    "priority": "Deferred",
+    "phase": "Deferred",
+    "depends_on": [],
+    "document": "systems/s03-desktop-shell.md",
+    "status": "使用者指定延期；目前不製作、不阻擋M1～M6",
+    "reuse_audit": "reuse-audit.md"
+  },
+  {
+    "id": "S04",
+    "slug": "battle-presentation",
+    "name": "橫向戰鬥帶與場景表現",
+    "category": "Gameplay",
+    "priority": "MVP",
+    "phase": "M1",
+    "depends_on": [
+      "S01"
+    ],
+    "document": "systems/s04-battle-presentation.md",
+    "status": "本新案研究／規格草案；未審核／未整合實作；repo既有基礎見重用盤點",
+    "reuse_audit": "reuse-audit.md"
+  },
+  {
+    "id": "S05",
+    "slug": "unit-identity",
+    "name": "夢靈個體、職業與性格",
+    "category": "Gameplay",
+    "priority": "MVP",
+    "phase": "M1",
+    "depends_on": [
+      "S01"
+    ],
+    "document": "systems/s05-unit-identity.md",
+    "status": "本新案研究／規格草案；未審核／未整合實作；repo既有基礎見重用盤點",
+    "reuse_audit": "reuse-audit.md"
+  },
+  {
+    "id": "S06",
+    "slug": "stat-modifiers",
+    "name": "屬性計算與加成來源",
+    "category": "Gameplay",
+    "priority": "MVP",
+    "phase": "M1",
+    "depends_on": [
+      "S01",
+      "S05"
+    ],
+    "document": "systems/s06-stat-modifiers.md",
+    "status": "本新案研究／規格草案；未審核／未整合實作；repo既有基礎見重用盤點",
+    "reuse_audit": "reuse-audit.md"
+  },
+  {
+    "id": "S07",
+    "slug": "targeting-movement",
+    "name": "自動選敵、水平移動與AI",
+    "category": "Gameplay",
+    "priority": "MVP",
+    "phase": "M1",
+    "depends_on": [
+      "S02",
+      "S06"
+    ],
+    "document": "systems/s07-targeting-movement.md",
+    "status": "本新案研究／規格草案；未審核／未整合實作；repo既有基礎見重用盤點",
+    "reuse_audit": "reuse-audit.md"
+  },
+  {
+    "id": "S08",
+    "slug": "damage-health-defeat",
+    "name": "傷害、治療、生命與戰敗",
+    "category": "Gameplay",
+    "priority": "MVP",
+    "phase": "M1",
+    "depends_on": [
+      "S02",
+      "S06",
+      "S07"
+    ],
+    "document": "systems/s08-damage-health-defeat.md",
+    "status": "本新案研究／規格草案；未審核／未整合實作；repo既有基礎見重用盤點",
+    "reuse_audit": "reuse-audit.md"
+  },
+  {
+    "id": "S09",
+    "slug": "skills-autocast",
+    "name": "技能、冷卻與自動施放",
+    "category": "Gameplay",
+    "priority": "MVP",
+    "phase": "M2",
+    "depends_on": [
+      "S02",
+      "S06",
+      "S07",
+      "S08"
+    ],
+    "document": "systems/s09-skills-autocast.md",
+    "status": "本新案研究／規格草案；未審核／未整合實作；repo既有基礎見重用盤點",
+    "reuse_audit": "reuse-audit.md"
+  },
+  {
+    "id": "S10",
+    "slug": "keywords-reactions",
+    "name": "關鍵詞、狀態與事件連鎖",
+    "category": "Gameplay",
+    "priority": "Vertical Slice",
+    "phase": "M3",
+    "depends_on": [
+      "S02",
+      "S08"
+    ],
+    "document": "systems/s10-keywords-reactions.md",
+    "status": "本新案研究／規格草案；未審核／未整合實作；repo既有基礎見重用盤點",
+    "reuse_audit": "reuse-audit.md"
+  },
+  {
+    "id": "S11",
+    "slug": "formation",
+    "name": "隊伍編成與上陣格",
+    "category": "Gameplay",
+    "priority": "MVP",
+    "phase": "M2",
+    "depends_on": [
+      "S05",
+      "S06"
+    ],
+    "document": "systems/s11-formation.md",
+    "status": "本新案研究／規格草案；未審核／未整合實作；repo既有基礎見重用盤點",
+    "reuse_audit": "reuse-audit.md"
+  },
+  {
+    "id": "S12",
+    "slug": "race-element-bonds",
+    "name": "種族與屬性羈絆",
+    "category": "Gameplay",
+    "priority": "Vertical Slice",
+    "phase": "M3",
+    "depends_on": [
+      "S06",
+      "S11"
+    ],
+    "document": "systems/s12-race-element-bonds.md",
+    "status": "本新案研究／規格草案；未審核／未整合實作；repo既有基礎見重用盤點",
+    "reuse_audit": "reuse-audit.md"
+  },
+  {
+    "id": "S13",
+    "slug": "xp-innate-affixes",
+    "name": "經驗、等級與天生詞綴",
+    "category": "Progression",
+    "priority": "MVP",
+    "phase": "M2",
+    "depends_on": [
+      "S05",
+      "S06"
+    ],
+    "document": "systems/s13-xp-innate-affixes.md",
+    "status": "本新案研究／規格草案；未審核／未整合實作；repo既有基礎見重用盤點",
+    "reuse_audit": "reuse-audit.md"
+  },
+  {
+    "id": "S14",
+    "slug": "acquisition-roster",
+    "name": "夢靈取得、保留與管理",
+    "category": "Economy",
+    "priority": "MVP",
+    "phase": "M2",
+    "depends_on": [
+      "S05",
+      "S17",
+      "S18"
+    ],
+    "document": "systems/s14-acquisition-roster.md",
+    "status": "本新案研究／規格草案；未審核／未整合實作；repo既有基礎見重用盤點",
+    "reuse_audit": "reuse-audit.md"
+  },
+  {
+    "id": "S15",
+    "slug": "duplicate-evolution",
+    "name": "重複夢靈、融煉與進化",
+    "category": "Progression",
+    "priority": "Alpha",
+    "phase": "M4",
+    "depends_on": [
+      "S05",
+      "S11",
+      "S13",
+      "S17",
+      "S18"
+    ],
+    "document": "systems/s15-duplicate-evolution.md",
+    "status": "本新案研究／規格草案；未審核／未整合實作；repo既有基礎見重用盤點",
+    "reuse_audit": "reuse-audit.md"
+  },
+  {
+    "id": "S16",
+    "slug": "equipment",
+    "name": "裝備、穿戴與比較",
+    "category": "Gameplay",
+    "priority": "MVP",
+    "phase": "M2",
+    "depends_on": [
+      "S05",
+      "S06",
+      "S17"
+    ],
+    "document": "systems/s16-equipment.md",
+    "status": "本新案研究／規格草案；未審核／未整合實作；repo既有基礎見重用盤點",
+    "reuse_audit": "reuse-audit.md"
+  },
+  {
+    "id": "S17",
+    "slug": "inventory-warehouse",
+    "name": "背包、倉庫與容量",
+    "category": "Economy",
+    "priority": "MVP",
+    "phase": "M2",
+    "depends_on": [
+      "S01"
+    ],
+    "document": "systems/s17-inventory-warehouse.md",
+    "status": "本新案研究／規格草案；未審核／未整合實作；repo既有基礎見重用盤點",
+    "reuse_audit": "reuse-audit.md"
+  },
+  {
+    "id": "S18",
+    "slug": "rewards-economy",
+    "name": "掉落、金幣與獎勵交易",
+    "category": "Economy",
+    "priority": "MVP",
+    "phase": "M2",
+    "depends_on": [
+      "S01",
+      "S08",
+      "S17"
+    ],
+    "document": "systems/s18-rewards-economy.md",
+    "status": "本新案研究／規格草案；未審核／未整合實作；repo既有基礎見重用盤點",
+    "reuse_audit": "reuse-audit.md"
+  },
+  {
+    "id": "S19",
+    "slug": "stages-bosses",
+    "name": "地圖、關卡、刷圖與首領入口",
+    "category": "Progression",
+    "priority": "MVP",
+    "phase": "M2",
+    "depends_on": [
+      "S01",
+      "S08",
+      "S18"
+    ],
+    "document": "systems/s19-stages-bosses.md",
+    "status": "本新案研究／規格草案；未審核／未整合實作；repo既有基礎見重用盤點",
+    "reuse_audit": "reuse-audit.md"
+  },
+  {
+    "id": "S20",
+    "slug": "talent-upgrades",
+    "name": "天賦星圖與永久能力解鎖",
+    "category": "Progression",
+    "priority": "Vertical Slice",
+    "phase": "M3",
+    "depends_on": [
+      "S06",
+      "S18"
+    ],
+    "document": "systems/s20-talent-upgrades.md",
+    "status": "本新案研究／規格草案；未審核／未整合實作；repo既有基礎見重用盤點",
+    "reuse_audit": "reuse-audit.md"
+  },
+  {
+    "id": "S21",
+    "slug": "workshop-crafting",
+    "name": "工坊、製作與熟練度",
+    "category": "Economy",
+    "priority": "Alpha",
+    "phase": "M4",
+    "depends_on": [
+      "S17",
+      "S18"
+    ],
+    "document": "systems/s21-workshop-crafting.md",
+    "status": "本新案研究／規格草案；未審核／未整合實作；repo既有基礎見重用盤點",
+    "reuse_audit": "reuse-audit.md"
+  },
+  {
+    "id": "S22",
+    "slug": "codex-shiny",
+    "name": "圖鑑、分類、閃光與收藏",
+    "category": "Progression",
+    "priority": "Alpha",
+    "phase": "M4",
+    "depends_on": [
+      "S05",
+      "S14",
+      "S15",
+      "S16"
+    ],
+    "document": "systems/s22-codex-shiny.md",
+    "status": "本新案研究／規格草案；未審核／未整合實作；repo既有基礎見重用盤點",
+    "reuse_audit": "reuse-audit.md"
+  },
+  {
+    "id": "S23",
+    "slug": "save-migration",
+    "name": "存檔、版本遷移與復原",
+    "category": "Persistence",
+    "priority": "MVP",
+    "phase": "M2",
+    "depends_on": [
+      "S01"
+    ],
+    "document": "systems/s23-save-migration.md",
+    "status": "本新案研究／規格草案；未審核／未整合實作；repo既有基礎見重用盤點",
+    "reuse_audit": "reuse-audit.md"
+  },
+  {
+    "id": "S24",
+    "slug": "offline-catchup",
+    "name": "離線收益、睡眠與補算",
+    "category": "Persistence",
+    "priority": "Vertical Slice",
+    "phase": "M3",
+    "depends_on": [
+      "S02",
+      "S08",
+      "S18",
+      "S19",
+      "S23"
+    ],
+    "document": "systems/s24-offline-catchup.md",
+    "status": "本新案研究／規格草案；未審核／未整合實作；repo既有基礎見重用盤點",
+    "reuse_audit": "reuse-audit.md"
+  },
+  {
+    "id": "S25",
+    "slug": "management-ui",
+    "name": "管理介面、提示與資訊層級",
+    "category": "UI",
+    "priority": "MVP",
+    "phase": "M2",
+    "depends_on": [
+      "S11",
+      "S17",
+      "S23"
+    ],
+    "document": "systems/s25-management-ui.md",
+    "status": "本新案研究／規格草案；未審核／未整合實作；repo既有基礎見重用盤點",
+    "reuse_audit": "reuse-audit.md"
+  },
+  {
+    "id": "S26",
+    "slug": "onboarding-unlocks",
+    "name": "新手引導與漸進解鎖",
+    "category": "Meta",
+    "priority": "Vertical Slice",
+    "phase": "M3",
+    "depends_on": [
+      "S19",
+      "S20",
+      "S25"
+    ],
+    "document": "systems/s26-onboarding-unlocks.md",
+    "status": "本新案研究／規格草案；未審核／未整合實作；repo既有基礎見重用盤點",
+    "reuse_audit": "reuse-audit.md"
+  },
+  {
+    "id": "S27",
+    "slug": "settings-accessibility",
+    "name": "設定、可讀性與低打擾模式",
+    "category": "Meta",
+    "priority": "Alpha",
+    "phase": "M4",
+    "depends_on": [
+      "S23"
+    ],
+    "document": "systems/s27-settings-accessibility.md",
+    "status": "本新案研究／規格草案；未審核／未整合實作；repo既有基礎見重用盤點",
+    "reuse_audit": "reuse-audit.md"
+  },
+  {
+    "id": "S28",
+    "slug": "logs-balance-harness",
+    "name": "戰鬥紀錄、收益統計與平衡工具",
+    "category": "Meta",
+    "priority": "Vertical Slice",
+    "phase": "M3",
+    "depends_on": [
+      "S02",
+      "S08",
+      "S18"
+    ],
+    "document": "systems/s28-logs-balance-harness.md",
+    "status": "本新案研究／規格草案；未審核／未整合實作；repo既有基礎見重用盤點",
+    "reuse_audit": "reuse-audit.md"
+  },
+  {
+    "id": "S29",
+    "slug": "audio-feedback",
+    "name": "音訊、通知聲與聲音優先級",
+    "category": "Audio",
+    "priority": "Alpha",
+    "phase": "M4",
+    "depends_on": [
+      "S27"
+    ],
+    "document": "systems/s29-audio-feedback.md",
+    "status": "本新案研究／規格草案；未審核／未整合實作；repo既有基礎見重用盤點",
+    "reuse_audit": "reuse-audit.md"
+  },
+  {
+    "id": "S30",
+    "slug": "background-performance",
+    "name": "背景效能、長時間運作與品質預算",
+    "category": "Core",
+    "priority": "Alpha",
+    "phase": "M5",
+    "depends_on": [
+      "S02",
+      "S04",
+      "S28"
+    ],
+    "document": "systems/s30-background-performance.md",
+    "status": "本新案研究／規格草案；未審核／未整合實作；repo既有基礎見重用盤點",
+    "reuse_audit": "reuse-audit.md"
+  }
+]
