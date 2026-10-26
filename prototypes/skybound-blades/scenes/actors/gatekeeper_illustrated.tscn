@@ -1,0 +1,177 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://game/illustrated_boss.gd" id="1_34pud"]
+[ext_resource type="Texture2D" path="res://resources/textures/gatekeeper_illustrated.res" id="2_d3611"]
+[ext_resource type="Script" path="res://addons/proto_kit/sprite3d_sheet.gd" id="3_u3hmy"]
+[ext_resource type="Script" path="res://addons/proto_kit/sprite3d_actor.gd" id="4_bld8k"]
+[ext_resource type="Shader" path="res://shaders/sprite3d_hd.gdshader" id="5_cpexa"]
+[ext_resource type="Shader" path="res://addons/proto_kit/sprite3d_shadow.gdshader" id="6_noglt"]
+[ext_resource type="FontFile" path="res://assets/fonts/NotoSansTC.ttf" id="7_86xwm"]
+[ext_resource type="Shader" path="res://shaders/hp_bar.gdshader" id="8_6pu0d"]
+[ext_resource type="Shader" path="res://shaders/select_ring.gdshader" id="9_fuwj5"]
+
+[sub_resource type="Resource" id="Resource_ef18h"]
+script = ExtResource("3_u3hmy")
+atlas = ExtResource("2_d3611")
+cell_px = 1024
+foot_px = 17
+meters_per_px = 0.0035676810073452256
+directions = 1
+anims = {
+"attack": {
+"cell": 0,
+"d": [30],
+"loop": false,
+"n": 1
+},
+"down": {
+"cell": 0,
+"d": [30],
+"loop": false,
+"n": 1
+},
+"idle": {
+"cell": 0,
+"d": [30],
+"loop": true,
+"n": 1
+},
+"skill": {
+"cell": 0,
+"d": [30],
+"loop": false,
+"n": 1
+},
+"walk": {
+"cell": 0,
+"d": [30],
+"loop": true,
+"n": 1
+}
+}
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ynpc8"]
+render_priority = 0
+shader = ExtResource("5_cpexa")
+shader_parameter/atlas = ExtResource("2_d3611")
+shader_parameter/frames = Vector2(1, 1)
+shader_parameter/use_instance_custom = null
+shader_parameter/use_instance_color = null
+shader_parameter/lean = 0.85
+shader_parameter/foot_gutter = 0.016601563
+shader_parameter/frame = null
+shader_parameter/facing = null
+shader_parameter/phase = null
+shader_parameter/flash = null
+shader_parameter/dissolve = null
+shader_parameter/bob = 0.0
+shader_parameter/hit_squash = 0.35
+shader_parameter/alpha_cut = 0.45
+shader_parameter/tint = null
+shader_parameter/light = 1.0
+shader_parameter/flash_color = Color(1, 0.95, 0.85, 1)
+shader_parameter/outline = null
+shader_parameter/outline_player = null
+shader_parameter/outline_elite = null
+shader_parameter/outline_boss = null
+shader_parameter/outline_ally = null
+shader_parameter/outline_role_5 = null
+shader_parameter/outline_role_6 = null
+shader_parameter/outline_role_7 = null
+shader_parameter/dissolve_color = null
+shader_parameter/dissolve_edge = null
+shader_parameter/see_through_enabled = null
+shader_parameter/focus = null
+shader_parameter/focus_height = null
+shader_parameter/see_through = null
+shader_parameter/see_radius = null
+
+[sub_resource type="QuadMesh" id="QuadMesh_wvsla"]
+center_offset = Vector3(0, 0.5, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_82r6b"]
+render_priority = 0
+shader = ExtResource("6_noglt")
+shader_parameter/color = null
+shader_parameter/strength = 0.42
+shader_parameter/size = null
+shader_parameter/ground_y = null
+shader_parameter/ground_from_instance = null
+shader_parameter/use_instance_custom = null
+shader_parameter/air_height = null
+shader_parameter/lift = null
+shader_parameter/stepped = null
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_5xy1r"]
+size = Vector2(1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v2u6i"]
+render_priority = 0
+shader = ExtResource("8_6pu0d")
+shader_parameter/ratio = null
+shader_parameter/trail = null
+shader_parameter/fill_color = null
+shader_parameter/low_color = null
+shader_parameter/trail_color = null
+shader_parameter/back_color = null
+shader_parameter/frame_color = null
+shader_parameter/border = null
+
+[sub_resource type="QuadMesh" id="QuadMesh_rm8ha"]
+size = Vector2(1, 0.12)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_av1j1"]
+render_priority = 0
+shader = ExtResource("9_fuwj5")
+shader_parameter/tint = Color(1, 0.42, 0.32, 1)
+shader_parameter/dashes = null
+shader_parameter/speed = null
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_0saqo"]
+size = Vector2(1.6, 1.6)
+
+[node name="Gatekeeper" type="Node3D" unique_id=1272283179]
+script = ExtResource("1_34pud")
+kind_id = "gatekeeper"
+sheet = SubResource("Resource_ef18h")
+nameplate_color = Color(0.9372549, 0.8117647, 0.6, 1)
+head_height = 3.6
+
+[node name="Visual" type="Node3D" parent="." unique_id=957925346]
+script = ExtResource("4_bld8k")
+sheet = SubResource("Resource_ef18h")
+
+[node name="Sprite" type="MeshInstance3D" parent="Visual" unique_id=219594919]
+transform = Transform3D(3.6533053, 0, 0, 0, 3.6533053, 0, 0, 0, 3.6533053, 0, 0, 0)
+material_override = SubResource("ShaderMaterial_ynpc8")
+cast_shadow = 0
+mesh = SubResource("QuadMesh_wvsla")
+
+[node name="Shadow" type="MeshInstance3D" parent="Visual" unique_id=119172038]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
+material_override = SubResource("ShaderMaterial_82r6b")
+mesh = SubResource("PlaneMesh_5xy1r")
+
+[node name="Nameplate" type="Label3D" parent="." unique_id=554899287]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.92, 0)
+pixel_size = 0.0075
+billboard = 1
+no_depth_test = true
+render_priority = 2
+outline_modulate = Color(0.05, 0.05, 0.07, 0.9)
+text = "名稱"
+font = ExtResource("7_86xwm")
+font_size = 30
+outline_size = 8
+
+[node name="HpBar" type="MeshInstance3D" parent="." unique_id=1937210894]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.68, 0)
+material_override = SubResource("ShaderMaterial_v2u6i")
+cast_shadow = 0
+mesh = SubResource("QuadMesh_rm8ha")
+
+[node name="SelectRing" type="MeshInstance3D" parent="." unique_id=1958414206]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.03, 0)
+material_override = SubResource("ShaderMaterial_av1j1")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_0saqo")

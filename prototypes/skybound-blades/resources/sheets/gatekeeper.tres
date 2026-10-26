@@ -1,0 +1,44 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Texture2D" path="res://resources/textures/gatekeeper_illustrated.res" id="1_dk06x"]
+[ext_resource type="Script" path="res://addons/proto_kit/sprite3d_sheet.gd" id="2_pdotr"]
+
+[resource]
+script = ExtResource("2_pdotr")
+atlas = ExtResource("1_dk06x")
+cell_px = 1024
+foot_px = 17
+meters_per_px = 0.0035676810073452256
+directions = 1
+anims = {
+"attack": {
+"cell": 0,
+"d": [30],
+"loop": false,
+"n": 1
+},
+"down": {
+"cell": 0,
+"d": [30],
+"loop": false,
+"n": 1
+},
+"idle": {
+"cell": 0,
+"d": [30],
+"loop": true,
+"n": 1
+},
+"skill": {
+"cell": 0,
+"d": [30],
+"loop": false,
+"n": 1
+},
+"walk": {
+"cell": 0,
+"d": [30],
+"loop": true,
+"n": 1
+}
+}

@@ -1,0 +1,10 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+seed 1  idle LOST  68%  62.6s fell 100 | good WON    0%  33.0s fell 12 | human WON    0%  32.2s fell 17 | late LOST  63%  62.6s fell 100
+late report: mvp SSR 補#1 causes { "落石": 48, "普攻": 39, "橫掃": 9, "重砸": 9 } advice ["落石打倒 48 人：它打兩個遠欄區，預警時把那兩區往 ▶ 移", "普攻在近1打倒 39 人：它集中打近欄人最多的區，那區要有盾，人越擠一次打到越多人", "橫掃打倒 9 人：它打整條近欄，預警時把近欄往 ◀ 移，落下後再歸位", "重砸打倒 9 人：它打人最多的一區，別把人全合在一起，預警時把那區移開"]
+idle advice: ["落石打倒 48 人：它打兩個遠欄區，預警時把那兩區往 ▶ 移", "普攻在近1打倒 39 人：它集中打近欄人最多的區，那區要有盾，人越擠一次打到越多人", "橫掃打倒 9 人：它打整條近欄，預警時把近欄往 ◀ 移，落下後再歸位", "重砸打倒 9 人：它打人最多的一區，別把人全合在一起，預警時把那區移開"]
+seed 2  idle LOST  68%  67.4s fell 100 | good WON    0%  33.1s fell 6 | human WON    0%  32.5s fell 14 | late LOST  62%  67.4s fell 100
+seed 3  idle LOST  63%  48.2s fell 100 | good WON    0%  33.0s fell 8 | human WON    0%  35.5s fell 10 | late LOST  58%  48.2s fell 100
+seed 4  idle LOST  68%  57.8s fell 100 | good WON    0%  33.1s fell 8 | human WON    0%  32.1s fell 17 | late LOST  63%  57.8s fell 100
+seed 5  idle LOST  69%  75.4s fell 100 | good WON    0%  33.1s fell 6 | human WON    0%  36.0s fell 9 | late LOST  63%  75.4s fell 100
+BALANCE TESTS PASSED

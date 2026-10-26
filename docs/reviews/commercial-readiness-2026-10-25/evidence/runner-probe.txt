@@ -1,0 +1,2 @@
+PASS genre_modules
+logs: /tmp/godot-tests.a6GuaR

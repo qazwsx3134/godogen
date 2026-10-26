@@ -1,0 +1,19 @@
+Create exactly ONE isolated original stone guardian game sprite on a 1024 x 1024 canvas.
+
+REFERENCE ROLE
+If an approved Skybound Blades party illustration is attached, use it ONLY for the clean contour, broad cel shading, light direction and HD illustration finish. Do not copy its face, clothes, anatomy, sword or scarf. This subject is a new original boss for the same floating-ruins world.
+
+SUBJECT AND SILHOUETTE
+The Windcourt Gatekeeper: an ancient squat stone sentinel built from large pale warm-grey masonry blocks, with a small recessed head, broad lintel-like shoulders, huge stone forearms and short stable legs. A dark recessed face carries two narrow cyan eyes. A single restrained cyan inset core sits in the chest, entirely contained inside its stone housing. Dark slate joints clearly separate the limbs from the torso. Weathered brass clamps and sparse moss on upward-facing stone planes suggest an old sky-tower ruin. Keep the masses simple and recognizable at small game scale; avoid dense engraved ornament. No written runes, numbers, human clothing, sword, shield or floating ornaments.
+
+POSE AND CAMERA
+Grounded neutral combat stance, both heavy fists held low and slightly apart from the torso, clear gaps between arms and chest and between legs. The image faces diagonally toward lower-right, viewed from an elevated three-quarter camera matching the party reference, around 35 degrees downward. Both top planes and front planes remain visible. Show weight through planted feet and broad shoulders; not a cinematic frontal portrait or extreme perspective. The boss should read as heavy and dangerous, not friendly or comic.
+
+STYLE AND LIGHT
+HD hand-painted 2D game illustration, crisp dark contour with slightly softer internal lines, large readable cel-shaded surfaces, light from upper-left, restrained warm stone and cool cyan contrast. The cyan eyes and core are colored surfaces with small highlights, not a glow cloud. No photorealism, pixel art, 3D render, dramatic rim lighting or excessive surface noise.
+
+CANVAS AND OUTPUT
+One complete figure, centered horizontally. Neutral body occupies roughly 70 percent of canvas height, the lowest planted foot near y=900; leave room above and beside it for later raised-arm animation. Keep all extremities at least 64 px inside the edges. True transparent background, clean alpha edges, opaque stone and metal. No floor, ground shadow, debris, effects, scene background, checkerboard pattern, text, watermark, UI, border, multiple views or extra figures.
+
+SKYBOUND ART DIRECTION — PC TREE OF SAVIOR REFERENCE
+Use the PC version of Tree of Savior as a reference for storybook fantasy material treatment: subtle dry-brush variation inside broad color masses, warm ivory highlights, muted moss and slate secondary colors, and rich but restrained leather and stone surfaces. Keep silhouette edges crisp and preserve the attached Skybound character's identity and palette. Texture belongs inside the subject, never as a paper-colored background or an all-over grain filter. Do not copy an existing Tree of Savior character, costume, emblem or UI asset.

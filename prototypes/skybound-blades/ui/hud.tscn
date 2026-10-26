@@ -25,6 +25,8 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 theme = ExtResource("2_en2x2")
 
@@ -32,7 +34,7 @@ theme = ExtResource("2_en2x2")
 layout_mode = 0
 offset_left = 24.0
 offset_top = 20.0
-offset_right = 540.0
+offset_right = 372.0
 offset_bottom = 520.0
 mouse_filter = 2
 theme_override_constants/separation = 8
@@ -87,9 +89,16 @@ layout_mode = 2
 [node name="Member3" parent="Frame/TopLeft/PartyList" unique_id=562272821 instance=ExtResource("3_1v5rv")]
 layout_mode = 2
 
+[node name="ExpeditionStatus" type="Label" parent="Frame/TopLeft" unique_id=1643947249]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SmallLabel"
+text = "營地安全 · 出發前確認補給"
+autowrap_mode = 3
+
 [node name="AutoPotionButton" type="Button" parent="Frame/TopLeft" unique_id=2065154963]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(330, 104)
+custom_minimum_size = Vector2(330, 72)
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
@@ -103,21 +112,21 @@ theme_override_constants/separation = 10
 
 [node name="BagButton" type="Button" parent="Frame/TopLeft/MenuRow" unique_id=2128813629]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(160, 104)
+custom_minimum_size = Vector2(100, 72)
 layout_mode = 2
 focus_mode = 0
 text = "背包 B"
 
 [node name="CampButton" type="Button" parent="Frame/TopLeft/MenuRow" unique_id=10250015]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(160, 104)
+custom_minimum_size = Vector2(100, 72)
 layout_mode = 2
 focus_mode = 0
 text = "營地 C"
 
 [node name="RetreatButton" type="Button" parent="Frame/TopLeft/MenuRow" unique_id=2129378203]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(160, 104)
+custom_minimum_size = Vector2(100, 72)
 layout_mode = 2
 focus_mode = 0
 text = "撤退 T"
@@ -169,17 +178,17 @@ horizontal_alignment = 1
 layout_mode = 0
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -366.0
+offset_left = -260.0
 offset_top = 20.0
 offset_right = -24.0
-offset_bottom = 124.0
+offset_bottom = 92.0
 mouse_filter = 2
 theme_override_constants/separation = 10
 alignment = 2
 
 [node name="ZoomInButton" type="Button" parent="Frame/TopRight" unique_id=1321607351]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(104, 104)
+custom_minimum_size = Vector2(72, 72)
 layout_mode = 2
 focus_mode = 0
 theme_type_variation = &"RoundButton"
@@ -187,7 +196,7 @@ text = "＋"
 
 [node name="ZoomOutButton" type="Button" parent="Frame/TopRight" unique_id=1482287710]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(104, 104)
+custom_minimum_size = Vector2(72, 72)
 layout_mode = 2
 focus_mode = 0
 theme_type_variation = &"RoundButton"
@@ -195,7 +204,7 @@ text = "－"
 
 [node name="PauseButton" type="Button" parent="Frame/TopRight" unique_id=2129840039]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(104, 104)
+custom_minimum_size = Vector2(72, 72)
 layout_mode = 2
 focus_mode = 0
 theme_type_variation = &"RoundButton"
@@ -246,8 +255,8 @@ layout_mode = 0
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 28.0
-offset_top = -220.0
-offset_right = 820.0
+offset_top = -192.0
+offset_right = 456.0
 offset_bottom = -52.0
 mouse_filter = 2
 theme_override_constants/separation = 2
@@ -257,26 +266,31 @@ alignment = 2
 layout_mode = 2
 theme_type_variation = &"SmallLabel"
 theme_override_constants/outline_size = 6
+text_overrun_behavior = 3
 
 [node name="Line1" type="Label" parent="Frame/Feed" unique_id=227170105]
 layout_mode = 2
 theme_type_variation = &"SmallLabel"
 theme_override_constants/outline_size = 6
+text_overrun_behavior = 3
 
 [node name="Line2" type="Label" parent="Frame/Feed" unique_id=382483906]
 layout_mode = 2
 theme_type_variation = &"SmallLabel"
 theme_override_constants/outline_size = 6
+text_overrun_behavior = 3
 
 [node name="Line3" type="Label" parent="Frame/Feed" unique_id=848302378]
 layout_mode = 2
 theme_type_variation = &"SmallLabel"
 theme_override_constants/outline_size = 6
+text_overrun_behavior = 3
 
 [node name="Line4" type="Label" parent="Frame/Feed" unique_id=1386960227]
 layout_mode = 2
 theme_type_variation = &"SmallLabel"
 theme_override_constants/outline_size = 6
+text_overrun_behavior = 3
 
 [node name="ExpRow" type="Control" parent="Frame" unique_id=484418463]
 anchors_preset = 0
@@ -310,26 +324,23 @@ vertical_alignment = 1
 [node name="ActionCluster" type="Control" parent="Frame" unique_id=625850514]
 unique_name_in_owner = true
 anchors_preset = 0
-anchor_left = 1.0
+anchor_left = 0.5
 anchor_top = 1.0
-anchor_right = 1.0
+anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -420.0
-offset_top = -362.0
-offset_right = -24.0
+offset_left = -238.0
+offset_top = -164.0
+offset_right = 238.0
 offset_bottom = -44.0
 mouse_filter = 2
 
 [node name="SkillButton" type="Button" parent="Frame/ActionCluster" unique_id=1657709287]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(164, 164)
+custom_minimum_size = Vector2(110, 112)
 layout_mode = 0
-offset_left = 232.0
-offset_top = 154.0
-offset_right = 232.0
-offset_bottom = 154.0
+offset_right = 110.0
+offset_bottom = 112.0
 focus_mode = 0
-theme_type_variation = &"RoundButton"
 
 [node name="SkillCooldown" type="TextureProgressBar" parent="Frame/ActionCluster/SkillButton" unique_id=398761120]
 unique_name_in_owner = true
@@ -346,6 +357,7 @@ unique_name_in_owner = true
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_bottom = -26.0
 text = "裂空斬
 Q"
 horizontal_alignment = 1
@@ -356,20 +368,19 @@ unique_name_in_owner = true
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-theme_type_variation = &"TitleLabel"
+offset_bottom = -6.0
+theme_type_variation = &"SmallLabel"
 horizontal_alignment = 1
 vertical_alignment = 2
 
 [node name="AutoButton" type="Button" parent="Frame/ActionCluster" unique_id=1607947589]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(124, 124)
+custom_minimum_size = Vector2(110, 112)
 layout_mode = 0
-offset_left = 92.0
-offset_top = 194.0
-offset_right = 92.0
-offset_bottom = 194.0
+offset_left = 366.0
+offset_right = 476.0
+offset_bottom = 112.0
 focus_mode = 0
-theme_type_variation = &"RoundButton"
 toggle_mode = true
 
 [node name="AutoLabel" type="Label" parent="Frame/ActionCluster/AutoButton" unique_id=1295668336]
@@ -384,14 +395,12 @@ vertical_alignment = 1
 
 [node name="TonicButton" type="Button" parent="Frame/ActionCluster" unique_id=1421782478]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(110, 110)
+custom_minimum_size = Vector2(110, 112)
 layout_mode = 0
-offset_left = 118.0
-offset_top = 58.0
-offset_right = 118.0
-offset_bottom = 58.0
+offset_left = 122.0
+offset_right = 232.0
+offset_bottom = 112.0
 focus_mode = 0
-theme_type_variation = &"RoundButton"
 
 [node name="Name" type="Label" parent="Frame/ActionCluster/TonicButton" unique_id=1424622670]
 layout_mode = 0
@@ -415,14 +424,12 @@ vertical_alignment = 2
 
 [node name="EmergencyButton" type="Button" parent="Frame/ActionCluster" unique_id=84435536]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(110, 110)
+custom_minimum_size = Vector2(110, 112)
 layout_mode = 0
-offset_left = 262.0
-offset_top = 14.0
-offset_right = 262.0
-offset_bottom = 14.0
+offset_left = 244.0
+offset_right = 354.0
+offset_bottom = 112.0
 focus_mode = 0
-theme_type_variation = &"RoundButton"
 
 [node name="Name" type="Label" parent="Frame/ActionCluster/EmergencyButton" unique_id=546083967]
 layout_mode = 0
@@ -475,7 +482,7 @@ layout_mode = 2
 [node name="Rows" type="VBoxContainer" parent="Frame/PausePanel/Center/Box" unique_id=131722325]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/separation = 14
+theme_override_constants/separation = 8
 alignment = 1
 
 [node name="Title" type="Label" parent="Frame/PausePanel/Center/Box/Rows" unique_id=2074499221]
@@ -486,14 +493,14 @@ horizontal_alignment = 1
 
 [node name="ResumeButton" type="Button" parent="Frame/PausePanel/Center/Box/Rows" unique_id=1228415587]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(360, 104)
+custom_minimum_size = Vector2(420, 68)
 layout_mode = 2
 focus_mode = 0
 text = "繼續冒險"
 
 [node name="PauseRestartButton" type="Button" parent="Frame/PausePanel/Center/Box/Rows" unique_id=1390576902]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(360, 104)
+custom_minimum_size = Vector2(420, 68)
 layout_mode = 2
 focus_mode = 0
 text = "重新開始本輪"
@@ -505,7 +512,7 @@ text = "設定"
 
 [node name="DamageNumbersCheck" type="CheckButton" parent="Frame/PausePanel/Center/Box/Rows" unique_id=1871276825]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(360, 104)
+custom_minimum_size = Vector2(420, 68)
 layout_mode = 2
 focus_mode = 0
 button_pressed = true
@@ -514,7 +521,7 @@ metadata/setting = "damage_numbers"
 
 [node name="ShakeCheck" type="CheckButton" parent="Frame/PausePanel/Center/Box/Rows" unique_id=926573588]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(360, 104)
+custom_minimum_size = Vector2(420, 68)
 layout_mode = 2
 focus_mode = 0
 button_pressed = true
@@ -523,12 +530,21 @@ metadata/setting = "screen_shake"
 
 [node name="HapticsCheck" type="CheckButton" parent="Frame/PausePanel/Center/Box/Rows" unique_id=1386681361]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(360, 104)
+custom_minimum_size = Vector2(420, 68)
 layout_mode = 2
 focus_mode = 0
 button_pressed = true
 text = "手機震動"
 metadata/setting = "haptics"
+
+[node name="AutoRetreatCheck" type="CheckButton" parent="Frame/PausePanel/Center/Box/Rows" unique_id=181325318]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(420, 68)
+layout_mode = 2
+focus_mode = 0
+button_pressed = true
+text = "低生命自動撤退（仍會受傷）"
+metadata/setting = "auto_retreat"
 
 [node name="TripPanel" type="ColorRect" parent="Frame" unique_id=2085637307]
 unique_name_in_owner = true
@@ -579,7 +595,10 @@ anchor_bottom = 1.0
 color = Color(0.02, 0.03, 0.05, 0.5)
 
 [node name="CampPanel" parent="Frame/CampLayer" unique_id=1807826647 instance=ExtResource("4_q43x7")]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = 8
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="RotatePanel" type="ColorRect" parent="Frame" unique_id=1041462849]
 unique_name_in_owner = true

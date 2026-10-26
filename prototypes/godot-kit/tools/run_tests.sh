@@ -9,8 +9,9 @@
 #   - its process exits 0,
 #   - the log has no `SCRIPT ERROR`, `Parse Error` or `Failed to load script`, and no line that starts with `FAIL`,
 #   - the log says PASSED.
-# The project is imported first (`--editor --quit`) so files added since the last run are known.
-# Environment: GODOT_BIN (default `godot`), TEST_TIMEOUT (seconds per suite, default 600).
+# The project is imported first (`--editor --quit`) so files added since the last run are known; an import that fails or
+# outlives TEST_TIMEOUT fails the whole run.
+# Environment: GODOT_BIN (default `godot`), TEST_TIMEOUT (seconds for the import and per suite, default 600).
 # Logs go to a new folder under $TMPDIR; its path is printed. Exit code 1 if any suite failed.
 set -u
 godot="${GODOT_BIN:-godot}"
@@ -20,7 +21,13 @@ run_suites() {
 	local project="$1" logs failed=0 suite name fps extra log rc
 	shift
 	logs="$(mktemp -d "${TMPDIR:-/tmp}/godot-tests.XXXXXX")"
-	"$godot" --headless --path "$project" --editor --quit >"$logs/import.log" 2>&1
+	timeout "$limit" "$godot" --headless --path "$project" --editor --quit >"$logs/import.log" 2>&1
+	rc=$?
+	if [ $rc -ne 0 ]; then
+		echo "FAIL import (exit $rc) - $logs/import.log"
+		echo "logs: $logs"
+		return 1
+	fi
 	local suites=("$@")
 	if [ ${#suites[@]} -eq 0 ]; then
 		for file in "$project"/tests/test_*.gd; do
@@ -78,6 +85,11 @@ if [ "${1:-}" = "--self-test" ]; then
 	expect "a suite that prints PASSED and exits 0 after a SCRIPT ERROR still fails" '[ "$rc" -eq 1 ] && echo "$out" | grep -q "^FAIL runtime"'
 	out="$(run_suites "$scratch" 2>&1)" && rc=0 || rc=$?
 	expect "with no suite names every tests/test_*.gd runs, and one failure fails the run" '[ "$rc" -eq 1 ] && echo "$out" | grep -q "^PASS good" && echo "$out" | grep -q "^FAIL failing" && echo "$out" | grep -q "^FAIL broken" && echo "$out" | grep -q "^FAIL silent" && echo "$out" | grep -q "^FAIL runtime"'
+	fake="$scratch/fake_godot"
+	printf '#!/usr/bin/env bash\nfor a in "$@"; do [ "$a" = --editor ] && exit 17; done\necho "GOOD TESTS PASSED"\n' > "$fake"
+	chmod +x "$fake"
+	out="$(godot="$fake" run_suites "$scratch" good 2>&1)" && rc=0 || rc=$?
+	expect "a failed import fails the run before any suite" '[ "$rc" -eq 1 ] && echo "$out" | grep -q "^FAIL import (exit 17)" && ! echo "$out" | grep -q "^PASS"'
 	empty="$(mktemp -d)"
 	out="$(run_suites "$empty" 2>&1)" && rc=0 || rc=$?
 	expect "a project without tests is reported, not passed" '[ "$rc" -eq 2 ] && echo "$out" | grep -q "no tests"'

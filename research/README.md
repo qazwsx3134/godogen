@@ -4,6 +4,9 @@
 
 | 研究對象 | 日期 | 入口 | 重點 |
 |---|---|---|---|
+| Azeroth Idle | 2026-10-26 | [前端原始碼研究](azeroth-idle/2026-10-26/README.md) | 真 vanilla 伺服器上的 AI 英雄、策略＋決策收件匣、WASM 客戶端與 AZI 協定 |
+| 獵戶座之藍 Orion Blue | 2026-10-25 | [實機研究與可玩原型](orion-blue/2026-10-25/README.md) | 橫向海灣、悠閒釣魚、居民與原創 Godot 小品 |
+| 類型掃描：Shardbreakers 與兩款放置／倖存者遊戲 | 2026-10-25 | [類型判斷、UI 樣式目錄與模組規格](genre-scan/2026-10-25/README.md) | ARPG roguelite、放置 RPG 星圖、卡牌升級倖存者；三組 UI 樣式與 godot-kit 模組 |
 | 守城英雄傳 | 2026-10-24 | [研究報告與截圖](castle-heroes/2026-10-24/README.md) | 守城機制、UI layout、component 與 Godot UI 參考 |
 | 流浪仙境 Ragnarok Wanderer | 2026-10-24 | [研究報告與截圖](ragnarok-wanderer/2026-10-24/README.md) | 自動戰鬥、技能拼圖、天賦、裝備經濟、終局與渲染 |
 | PokéSurvivor | 2026-10-15 | [既有研究交接](pokesurvivor/2026-10-15/README.md) | 精靈動畫、素材與 VFX；狀態以交接文件為準 |

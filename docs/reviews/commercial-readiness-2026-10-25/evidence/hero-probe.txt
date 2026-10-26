@@ -1,0 +1,8 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+IDLE dt=0.01666666666667 seconds=87.416666666663 boss_hp=32749.5079935504 falls=100
+IDLE dt=0.03333333333333 seconds=87.3999999999976 boss_hp=32627.5976705208 falls=100
+IDLE dt=0.06666666666667 seconds=87.4666666666668 boss_hp=32759.7688907388 falls=100
+IDLE dt=0.5 seconds=75.0 boss_hp=33618.7319839446 falls=100
+IDLE dt=2.0 seconds=80.0 boss_hp=34347.8140128196 falls=100
+REVIVE restored_hp=120.0 contribution=66.0 healer_max=165.0 target_max=300.0

@@ -3,10 +3,11 @@
 [ext_resource type="Script" path="res://game/field.gd" id="1_5by1f"]
 [ext_resource type="Shader" path="res://materials/meadow.gdshader" id="2_odu0x"]
 [ext_resource type="Material" path="res://resources/materials/low_poly_92.tres" id="3_7b553"]
+[ext_resource type="Texture2D" path="res://assets/art/polish-v2/ground.png" id="3_c62i7"]
 [ext_resource type="ArrayMesh" path="res://resources/meshes/cliff.res" id="4_rh7ir"]
 [ext_resource type="PackedScene" path="res://scenes/props/arch.tscn" id="5_c62i7"]
 [ext_resource type="PackedScene" path="res://scenes/props/blocker.tscn" id="6_y7jqv"]
-[ext_resource type="PackedScene" path="res://scenes/props/oak.tscn" id="7_s1x0y"]
+[ext_resource type="PackedScene" path="res://scenes/props/oak_illustrated.tscn" id="8_c62i7"]
 [ext_resource type="PackedScene" path="res://scenes/props/pine.tscn" id="8_jurrb"]
 [ext_resource type="PackedScene" path="res://scenes/props/boulder.tscn" id="9_brsai"]
 [ext_resource type="PackedScene" path="res://scenes/props/pillar_broken.tscn" id="10_dls0l"]
@@ -19,15 +20,16 @@
 [ext_resource type="ArrayMesh" path="res://resources/meshes/blade.res" id="17_b4hb6"]
 [ext_resource type="PackedScene" path="res://scenes/camp.tscn" id="18_myg8p"]
 [ext_resource type="PackedScene" path="res://scenes/actors/actor.tscn" id="19_sprlr"]
-[ext_resource type="Resource" path="res://resources/sheets/leader.tres" id="20_a7vu3"]
+[ext_resource type="Resource" path="res://resources/sheets/leader_polish.tres" id="21_7b553"]
 [ext_resource type="Resource" path="res://resources/sheets/guardian.tres" id="21_lrx6g"]
 [ext_resource type="Resource" path="res://resources/sheets/support.tres" id="22_0rfd7"]
 [ext_resource type="Resource" path="res://resources/sheets/meadow_slime.tres" id="23_20atc"]
 [ext_resource type="Resource" path="res://resources/sheets/briar_boar.tres" id="24_gy8kp"]
 [ext_resource type="Resource" path="res://resources/sheets/ruin_hound.tres" id="25_g34wu"]
-[ext_resource type="PackedScene" path="res://scenes/actors/gatekeeper.tscn" id="26_dp0gn"]
 [ext_resource type="Shader" path="res://shaders/select_ring.gdshader" id="27_rseai"]
+[ext_resource type="PackedScene" path="res://scenes/actors/gatekeeper_illustrated.tscn" id="27_y7jqv"]
 [ext_resource type="Script" path="res://game/sfx.gd" id="28_lotq0"]
+[ext_resource type="Resource" path="res://resources/sheets/gatekeeper.tres" id="28_rh7ir"]
 [ext_resource type="Script" path="res://addons/proto_kit/time_control.gd" id="29_v16w6"]
 [ext_resource type="PackedScene" path="res://ui/hud.tscn" id="30_1ma64"]
 
@@ -53,19 +55,22 @@ glow_enabled = true
 glow_intensity = 0.45
 glow_bloom = 0.05
 fog_enabled = true
-fog_light_color = Color(0.7882353, 0.8666667, 0.9137255, 1)
+fog_light_color = Color(0.78039217, 0.8392157, 0.8235294, 1)
 fog_density = 0.006
 fog_sky_affect = 0.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_67mr7"]
 render_priority = 0
 shader = ExtResource("2_odu0x")
-shader_parameter/grass_dark = null
-shader_parameter/grass_light = null
-shader_parameter/dirt = null
-shader_parameter/stone = null
-shader_parameter/flower_a = null
-shader_parameter/flower_b = null
+shader_parameter/grass_dark = Color(0.32156864, 0.41960785, 0.31764707, 1)
+shader_parameter/grass_light = Color(0.5686275, 0.63529414, 0.4509804, 1)
+shader_parameter/dirt = Color(0.68235296, 0.5686275, 0.4117647, 1)
+shader_parameter/stone = Color(0.7019608, 0.6666667, 0.5686275, 1)
+shader_parameter/flower_a = Color(0.93333334, 0.8784314, 0.72156864, 1)
+shader_parameter/flower_b = Color(0.7254902, 0.78039217, 0.8235294, 1)
+shader_parameter/painted_grass = ExtResource("3_c62i7")
+shader_parameter/painted_grass_mix = 0.7
+shader_parameter/texture_world_scale = null
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_5guq2"]
 size = Vector2(34, 24)
@@ -92,6 +97,7 @@ size = Vector2(1.2, 1.2)
 
 [node name="Field" type="Node3D" unique_id=253446437]
 script = ExtResource("1_5by1f")
+camera_distance = 18.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1736772434]
 environment = SubResource("Environment_byx4f")
@@ -131,13 +137,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.2, 0, -8.6)
 [node name="Blocker2" parent="Props" unique_id=776431158 instance=ExtResource("6_y7jqv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.8, 0, -8.6)
 
-[node name="Oak1" parent="Props" unique_id=2054827276 instance=ExtResource("7_s1x0y")]
+[node name="Oak1" parent="Props" unique_id=562928393 instance=ExtResource("8_c62i7")]
 transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, -15, 0, 6.5)
 
-[node name="Oak2" parent="Props" unique_id=1265214605 instance=ExtResource("7_s1x0y")]
+[node name="Oak2" parent="Props" unique_id=1843529472 instance=ExtResource("8_c62i7")]
 transform = Transform3D(0.91925335, 0, 0.77134514, 0, 1.2, 0, -0.77134514, 0, 0.91925335, 13.8, 0, -8.2)
 
-[node name="Oak3" parent="Props" unique_id=1286180125 instance=ExtResource("7_s1x0y")]
+[node name="Oak3" parent="Props" unique_id=1609104111 instance=ExtResource("8_c62i7")]
 transform = Transform3D(0.9848077, 0, 0.17364818, 0, 1, 0, -0.17364818, 0, 0.9848077, 4.5, 0, 9.4)
 
 [node name="Pine1" parent="Props" unique_id=1947107956 instance=ExtResource("8_jurrb")]
@@ -203,7 +209,7 @@ unique_name_in_owner = true
 [node name="Leader" parent="Party" unique_id=1272283179 instance=ExtResource("19_sprlr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.4, 0, 0.2)
 kind_id = "leader"
-sheet = ExtResource("20_a7vu3")
+sheet = ExtResource("21_7b553")
 dissolve_on_down = false
 nameplate_color = Color(1, 0.89411765, 0.6392157, 1)
 
@@ -278,8 +284,9 @@ kind_id = "ruin_hound"
 sheet = ExtResource("25_g34wu")
 head_height = 1.35
 
-[node name="Gatekeeper" parent="Monsters" unique_id=1491528074 instance=ExtResource("26_dp0gn")]
+[node name="Gatekeeper" parent="Monsters" unique_id=679364845 instance=ExtResource("27_y7jqv")]
 transform = Transform3D(-0.70710677, 0, -0.70710677, 0, 1, 0, 0.70710677, 0, -0.70710677, 11.5, 0, -6)
+sheet = ExtResource("28_rh7ir")
 
 [node name="MoveMarker" type="MeshInstance3D" parent="." unique_id=1885422274]
 unique_name_in_owner = true

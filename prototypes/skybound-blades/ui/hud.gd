@@ -52,7 +52,7 @@ func _ready() -> void:
 		camp_closed.emit())
 	# Restarting a generation by hand would undo a death: only the end panel starts the next one.
 	%PauseRestartButton.hide()
-	for check: CheckButton in [%DamageNumbersCheck, %ShakeCheck, %HapticsCheck]:
+	for check: CheckButton in [%DamageNumbersCheck, %ShakeCheck, %HapticsCheck, %AutoRetreatCheck]:
 		var key: String = check.get_meta("setting")
 		check.toggled.connect(func(on: bool) -> void: setting_changed.emit(key, on))
 	%EndPanel.hide()
@@ -76,6 +76,11 @@ func _process(delta: float) -> void:
 			label.modulate.a = clampf(1.0 - (age - 6.0) / 2.0, 0.25, 1.0)
 
 
+func show_preferences(settings: Dictionary) -> void:
+	for check: CheckButton in [%DamageNumbersCheck, %ShakeCheck, %HapticsCheck, %AutoRetreatCheck]:
+		check.set_pressed_no_signal(bool(settings.get(String(check.get_meta("setting")), true)))
+
+
 func set_paused(on: bool) -> void:
 	%PausePanel.visible = on
 	pause_toggled.emit(on)
@@ -84,6 +89,7 @@ func set_paused(on: bool) -> void:
 ## state: see field.gd hud_state().
 func refresh(s: Dictionary) -> void:
 	_last = s
+	%ExpeditionStatus.text = s.get("expedition_status", "")
 	%LevelLabel.text = "Lv.%d" % s.level
 	%GoldLabel.text = "%d" % s.gold
 	%MaterialLabel.text = "%d" % s.material
@@ -147,6 +153,59 @@ func show_camp(tabs: Dictionary, header: String, tab: String = "") -> void:
 		panel.select_tab(tab)
 	%CampLayer.show()
 	panel.show()
+
+
+## Phone layout (field.gd fit_screen draws the UI for a 600-high screen): offsets [left, top, right, bottom] that
+## replace the scene's own while compact, so the corners do not overlap. The desktop layout stays in hud.tscn.
+const COMPACT_OFFSETS := {
+	"TopRight": [-366.0, 20.0, -24.0, 124.0],
+	"TopLeft": [24.0, 20.0, 372.0, 520.0],  # narrower party column, leaves the top centre to the target bar
+	"TopCenter": [-200.0, 20.0, 200.0, 140.0],
+	"QuestPanel": [-388.0, 128.0, -24.0, 128.0],  # top-anchored under the zoom/pause row; grows to its content
+	"Feed": [390.0, -220.0, 860.0, -52.0],
+	"ActionCluster": [-420.0, -362.0, -24.0, -44.0],
+	"ActionCluster/SkillButton": [232.0, 154.0, 396.0, 318.0],
+	"ActionCluster/AutoButton": [92.0, 194.0, 216.0, 318.0],
+	"ActionCluster/TonicButton": [118.0, 58.0, 228.0, 168.0],
+	"ActionCluster/EmergencyButton": [262.0, 14.0, 372.0, 124.0],  # bottom centre, between the menu buttons and the skill buttons
+}
+
+
+func set_compact(on: bool) -> void:
+	%CampLayer.get_node("CampPanel").set_compact(on)
+	for button: Control in $Frame/TopRight.get_children():
+		if not button.has_meta("desk_minimum"):
+			button.set_meta("desk_minimum", button.custom_minimum_size)
+		button.custom_minimum_size = Vector2(104, 104) if on else button.get_meta("desk_minimum")
+	for node_name: String in COMPACT_OFFSETS:
+		var node: Control = $Frame.get_node(node_name)
+		if not node.has_meta("desk_layout"):
+			node.set_meta("desk_layout", [node.anchor_top, node.anchor_bottom,
+				node.offset_left, node.offset_top, node.offset_right, node.offset_bottom])
+		if node_name == "ActionCluster":
+			if not node.has_meta("desk_anchor_x"):
+				node.set_meta("desk_anchor_x", [node.anchor_left, node.anchor_right])
+			var anchors: Array = node.get_meta("desk_anchor_x")
+			node.anchor_left = 1.0 if on else anchors[0]
+			node.anchor_right = 1.0 if on else anchors[1]
+		if node_name.begins_with("ActionCluster/"):
+			if not node.has_meta("desk_minimum"):
+				node.set_meta("desk_minimum", node.custom_minimum_size)
+			node.custom_minimum_size = Vector2.ZERO if on else node.get_meta("desk_minimum")
+			node.theme_type_variation = &"RoundButton" if on else &""
+		var desk: Array = node.get_meta("desk_layout")
+		var o: Array = COMPACT_OFFSETS[node_name] if on else desk.slice(2)
+		if node_name == "QuestPanel":
+			node.anchor_top = 0.0 if on else desk[0]
+			node.anchor_bottom = 0.0 if on else desk[1]
+		node.offset_left = o[0]
+		node.offset_top = o[1]
+		node.offset_right = o[2]
+		node.offset_bottom = o[3]
+	# Quests are handed in from the camp's 委託 tab; on a phone the button would sit on the skill buttons, and the
+	# title takes the body size so the panel ends above them.
+	%ClaimButton.visible = not on
+	$Frame/QuestPanel/Rows/QuestTitle.theme_type_variation = &"" if on else &"TitleLabel"
 
 
 func camp_open() -> bool:

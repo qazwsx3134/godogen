@@ -19,6 +19,7 @@ func _init() -> void:
 	test_skills_link_needs_seals_and_mastery()
 	test_skills_chain_length_capped()
 	test_skills_unlink_does_not_refund()
+	test_skills_equip_other_slots_keeps_the_chain()
 	test_skills_seals_pay_once()
 	test_skills_chain_fires_in_battle()
 	test_skills_chain_breaks_on_cooldown()
@@ -97,6 +98,20 @@ func test_skills_unlink_does_not_refund() -> void:
 	_expect(Skills.unlink_last(tuning, r, "leader") == "" and Skills.chain(r, "leader") == ["cleave"] and r.seals == 0,
 		"unlink: back to one skill, the seal is gone")
 	_expect(Skills.equip_block(tuning, r, "leader", "rising", 0).contains("連招") == false, "unlink: slot 1 free to change again")
+
+
+func test_skills_equip_other_slots_keeps_the_chain() -> void:
+	# Arrange: Lv.10 (two slots), cleave in slot 1 with a paid rising link
+	var r := _ready_run(10, 1)
+	Skills.link(tuning, r, "leader", "rising")
+	# Act / Assert
+	_expect(Skills.equip(tuning, r, "leader", "whirl", 1) == "" and Skills.chain(r, "leader") == ["cleave", "rising"]
+		and r.slots.leader == ["cleave", "whirl"], "equip: slot 2 changes without touching the chain (%s)" % [r.chains.leader])
+	_expect(Skills.equip(tuning, r, "leader", "cleave", 1).contains("連招起手") and r.slots.leader[0] == "cleave",
+		"equip: a linked head cannot move out of slot 1")
+	Skills.unlink_last(tuning, r, "leader")
+	_expect(Skills.equip(tuning, r, "leader", "whirl", 0) == "" and r.slots.leader == ["whirl"] and Skills.chain(r, "leader") == ["whirl"],
+		"equip: an unlinked head can be replaced and the new skill heads the chain")
 
 
 func test_skills_seals_pay_once() -> void:

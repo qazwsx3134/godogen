@@ -144,6 +144,7 @@ var taken := PackedFloat32Array()
 var healed := PackedFloat32Array()
 var spared := PackedFloat32Array()
 var saves := PackedInt32Array()
+var revived := PackedFloat32Array()  # HP the revives gave back (the target's, not the healer's)
 var falls: Array[Dictionary] = []  # {hero, cause, zone, t}
 var weak_opened: int = 0
 var weak_hits: int = 0
@@ -183,7 +184,7 @@ func _init(seed_value: int = 1) -> void:
 				zone.append(((k + c) % 3) * 2 + col)
 				k += 1
 	hp = max_hp.duplicate()
-	for arr: Variant in [dealt, taken, healed, spared, saves]:
+	for arr: Variant in [dealt, taken, healed, spared, saves, revived]:
 		arr.resize(cls.size())
 	home = zone.duplicate()
 	skill_cd.resize(cls.size())
@@ -276,6 +277,22 @@ func fighting() -> bool:
 	return phase == Phase.FIGHT
 
 
+## advance(): frames feed the sim in fixed STEP ticks, so the frame rate never changes the fight. A frame longer
+## than MAX_FRAME (a hitch, a backgrounded browser tab) only advances MAX_FRAME: the push pauses, it does not skip ahead.
+const STEP := 1.0 / 60.0
+const MAX_FRAME := 0.25
+var ticks: int = 0
+var _pending: float = 0.0
+
+
+func advance(frame_dt: float) -> void:
+	_pending += minf(frame_dt, MAX_FRAME)
+	while _pending >= STEP:
+		_pending -= STEP
+		ticks += 1
+		step(STEP)
+
+
 func step(dt: float) -> void:
 	if phase == Phase.MUSTER:
 		muster_t += dt
@@ -341,8 +358,8 @@ func _auto_skills() -> void:
 				if _lowest_near(z) >= LOW_HP and not fallen_here:
 					continue
 				_heal_around(z, SKILL_HEAL * RARITY_MULT[rarity[i]], i)
-				if fallen_here and _revive(z):
-					saves[i] += 1
+				if fallen_here:
+					_revive(z, i)
 			_:
 				var d: float = atk[i] * SKILL_BURST[cls[i]] * _aura[z].all
 				dealt[i] += d
@@ -625,11 +642,13 @@ func _heal_around(z: int, amount: float, healer: int) -> void:
 			hp[j] = minf(hp[j] + amount, max_hp[j])
 
 
-func _revive(z: int) -> bool:
+func _revive(z: int, healer: int) -> bool:
 	var j: int = _fallen_in(z)
 	if j < 0:
 		return false
 	hp[j] = max_hp[j] * REVIVE_HP
+	saves[healer] += 1
+	revived[healer] += hp[j]
 	fallen_total -= 1
 	_reslot(z)
 	event.emit(&"revive", float(z))
@@ -680,7 +699,7 @@ func hero_name(i: int) -> String:
 
 ## MVP score in HP-sized units: boss damage + HP healed + damage spared by guard + the HP each revive gave back.
 func contribution(i: int) -> float:
-	return dealt[i] + healed[i] + spared[i] + saves[i] * max_hp[i] * REVIVE_HP
+	return dealt[i] + healed[i] + spared[i] + revived[i]
 
 
 ## {mvp, top: {metric: [[hero, value], ...] best 3 with a value > 0}, causes: {cause: falls}, zone_falls: [per zone],

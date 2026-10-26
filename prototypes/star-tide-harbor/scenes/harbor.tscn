@@ -1,0 +1,971 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/harbor.gd" id="1_06fma"]
+[ext_resource type="Texture2D" path="res://assets/sky.svg" id="2_x8dif"]
+[ext_resource type="Texture2D" path="res://assets/islands.svg" id="3_to2tm"]
+[ext_resource type="Shader" path="res://assets/water.gdshader" id="4_x6xh0"]
+[ext_resource type="Texture2D" path="res://assets/water.svg" id="5_amevc"]
+[ext_resource type="Texture2D" path="res://assets/tree.svg" id="6_le6ba"]
+[ext_resource type="Shader" path="res://assets/foliage.gdshader" id="6_umck7"]
+[ext_resource type="Texture2D" path="res://assets/boat.svg" id="7_umck7"]
+[ext_resource type="Texture2D" path="res://assets/pier.svg" id="8_atapp"]
+[ext_resource type="Texture2D" path="res://assets/reeds0.svg" id="9_ipob6"]
+[ext_resource type="Texture2D" path="res://assets/reeds1.svg" id="10_6hbcu"]
+[ext_resource type="Texture2D" path="res://assets/reeds2.svg" id="11_4n1ub"]
+[ext_resource type="Texture2D" path="res://assets/reeds3.svg" id="12_i4k2h"]
+[ext_resource type="PackedScene" path="res://scenes/mira.tscn" id="13_31ws5"]
+[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="14_c6oou"]
+[ext_resource type="Texture2D" path="res://assets/fish2.svg" id="15_ijwd0"]
+[ext_resource type="FontFile" path="res://assets/ui_font.ttf" id="16_kbqqm"]
+[ext_resource type="Script" path="res://scripts/fireflies.gd" id="16_x8dif"]
+[ext_resource type="PackedScene" path="res://scenes/fishing.tscn" id="18_to2tm"]
+[ext_resource type="PackedScene" path="res://scenes/cabin.tscn" id="20_atapp"]
+[ext_resource type="PackedScene" path="res://scenes/depth_layers.tscn" id="21_ipob6"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r0abs"]
+shader = ExtResource("4_x6xh0")
+shader_parameter/amplitude = null
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6hbcu"]
+shader = ExtResource("6_umck7")
+shader_parameter/sway = null
+shader_parameter/phase = 0.8
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4n1ub"]
+shader = ExtResource("6_umck7")
+shader_parameter/sway = null
+shader_parameter/phase = 13.3
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i4k2h"]
+shader = ExtResource("6_umck7")
+shader_parameter/sway = null
+shader_parameter/phase = 18.5
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_31ws5"]
+shader = ExtResource("6_umck7")
+shader_parameter/sway = null
+shader_parameter/phase = 22.400000000000002
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vjkeh"]
+content_margin_left = 16.0
+content_margin_top = 9.0
+content_margin_right = 16.0
+content_margin_bottom = 9.0
+bg_color = Color(0.9529412, 0.8745098, 0.69803923, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.56078434, 0.6666667, 0.6509804, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g6oms"]
+content_margin_left = 16.0
+content_margin_top = 9.0
+content_margin_right = 16.0
+content_margin_bottom = 9.0
+bg_color = Color(0.8509804, 0.8509804, 0.72156864, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.56078434, 0.6666667, 0.6509804, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u7kdu"]
+content_margin_left = 16.0
+content_margin_top = 9.0
+content_margin_right = 16.0
+content_margin_bottom = 9.0
+bg_color = Color(0.6117647, 0.74509805, 0.69411767, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.56078434, 0.6666667, 0.6509804, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m3peh"]
+content_margin_left = 16.0
+content_margin_top = 9.0
+content_margin_right = 16.0
+content_margin_bottom = 9.0
+bg_color = Color(0.16078432, 0.24705882, 0.32941177, 0.92941177)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.56078434, 0.6666667, 0.6509804, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h2w3f"]
+content_margin_left = 16.0
+content_margin_top = 9.0
+content_margin_right = 16.0
+content_margin_bottom = 9.0
+bg_color = Color(0.11372549, 0.19215687, 0.27450982, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.56078434, 0.6666667, 0.6509804, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_omh8q"]
+content_margin_left = 16.0
+content_margin_top = 9.0
+content_margin_right = 16.0
+content_margin_bottom = 9.0
+bg_color = Color(0.6509804, 0.8039216, 0.70980394, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.56078434, 0.6666667, 0.6509804, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="Theme" id="Theme_bu0bk"]
+default_font = ExtResource("16_kbqqm")
+default_font_size = 18
+Button/colors/font_color = Color(0.15294118, 0.24705882, 0.32941177, 1)
+Button/colors/font_hover_color = Color(0.15294118, 0.24705882, 0.32941177, 1)
+Button/styles/hover = SubResource("StyleBoxFlat_vjkeh")
+Button/styles/normal = SubResource("StyleBoxFlat_g6oms")
+Button/styles/pressed = SubResource("StyleBoxFlat_u7kdu")
+Label/colors/font_color = Color(0.96862745, 0.93333334, 0.8509804, 1)
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_m3peh")
+ProgressBar/styles/background = SubResource("StyleBoxFlat_h2w3f")
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_omh8q")
+
+[node name="Harbor" type="Node2D" unique_id=721136732]
+script = ExtResource("1_06fma")
+
+[node name="Background" type="CanvasLayer" parent="." unique_id=1848858609]
+layer = -10
+
+[node name="Sky" type="Sprite2D" parent="Background" unique_id=747245753]
+texture = ExtResource("2_x8dif")
+centered = false
+
+[node name="Islands" type="Sprite2D" parent="Background" unique_id=1389338202]
+unique_name_in_owner = true
+texture = ExtResource("3_to2tm")
+centered = false
+
+[node name="Water" type="Sprite2D" parent="Background" unique_id=666085307]
+material = SubResource("ShaderMaterial_r0abs")
+position = Vector2(0, 480)
+texture = ExtResource("5_amevc")
+centered = false
+
+[node name="World" type="Node2D" parent="." unique_id=829475094]
+unique_name_in_owner = true
+
+[node name="AlienTree80" type="Sprite2D" parent="World" unique_id=741335737]
+material = SubResource("ShaderMaterial_6hbcu")
+position = Vector2(80, 245)
+texture = ExtResource("6_le6ba")
+centered = false
+
+[node name="AlienTree1330" type="Sprite2D" parent="World" unique_id=117032]
+material = SubResource("ShaderMaterial_4n1ub")
+position = Vector2(1330, 245)
+texture = ExtResource("6_le6ba")
+centered = false
+
+[node name="AlienTree1850" type="Sprite2D" parent="World" unique_id=1636736716]
+material = SubResource("ShaderMaterial_i4k2h")
+position = Vector2(1850, 245)
+texture = ExtResource("6_le6ba")
+centered = false
+
+[node name="AlienTree2240" type="Sprite2D" parent="World" unique_id=706679204]
+material = SubResource("ShaderMaterial_31ws5")
+position = Vector2(2240, 245)
+texture = ExtResource("6_le6ba")
+centered = false
+
+[node name="BoatReflection" type="Sprite2D" parent="World" unique_id=377284202]
+modulate = Color(0.65, 0.8, 0.84, 0.2)
+position = Vector2(190, 785)
+scale = Vector2(1, -0.85)
+texture = ExtResource("7_umck7")
+centered = false
+
+[node name="HomeBoat" type="Sprite2D" parent="World" unique_id=2026416183]
+unique_name_in_owner = true
+position = Vector2(190, 314)
+texture = ExtResource("7_umck7")
+centered = false
+
+[node name="Pier" type="Sprite2D" parent="World" unique_id=1050652636]
+position = Vector2(0, 521)
+texture = ExtResource("8_atapp")
+centered = false
+
+[node name="Reeds00" type="Sprite2D" parent="World" unique_id=1430551489]
+modulate = Color(0.8, 0.9, 0.9, 0.8)
+position = Vector2(0, 570)
+texture = ExtResource("9_ipob6")
+centered = false
+
+[node name="Reeds01" type="Sprite2D" parent="World" unique_id=1058855175]
+modulate = Color(0.8, 0.9, 0.9, 0.8)
+position = Vector2(99, 580)
+texture = ExtResource("10_6hbcu")
+centered = false
+
+[node name="Reeds02" type="Sprite2D" parent="World" unique_id=1350916416]
+modulate = Color(0.8, 0.9, 0.9, 0.8)
+position = Vector2(198, 590)
+texture = ExtResource("11_4n1ub")
+centered = false
+
+[node name="Reeds03" type="Sprite2D" parent="World" unique_id=604773026]
+modulate = Color(0.8, 0.9, 0.9, 0.8)
+position = Vector2(297, 570)
+texture = ExtResource("12_i4k2h")
+centered = false
+
+[node name="Reeds04" type="Sprite2D" parent="World" unique_id=76178353]
+modulate = Color(0.8, 0.9, 0.9, 0.8)
+position = Vector2(396, 580)
+texture = ExtResource("9_ipob6")
+centered = false
+
+[node name="Reeds05" type="Sprite2D" parent="World" unique_id=5177904]
+modulate = Color(0.8, 0.9, 0.9, 0.8)
+position = Vector2(495, 590)
+texture = ExtResource("10_6hbcu")
+centered = false
+
+[node name="Reeds06" type="Sprite2D" parent="World" unique_id=746003391]
+modulate = Color(0.8, 0.9, 0.9, 0.8)
+position = Vector2(594, 570)
+texture = ExtResource("11_4n1ub")
+centered = false
+
+[node name="Reeds07" type="Sprite2D" parent="World" unique_id=1453741612]
+modulate = Color(0.8, 0.9, 0.9, 0.8)
+position = Vector2(693, 580)
+texture = ExtResource("12_i4k2h")
+centered = false
+
+[node name="Reeds08" type="Sprite2D" parent="World" unique_id=790394461]
+modulate = Color(0.8, 0.9, 0.9, 0.8)
+position = Vector2(792, 590)
+texture = ExtResource("9_ipob6")
+centered = false
+
+[node name="Reeds09" type="Sprite2D" parent="World" unique_id=383073861]
+modulate = Color(0.8, 0.9, 0.9, 0.8)
+position = Vector2(891, 570)
+texture = ExtResource("10_6hbcu")
+centered = false
+
+[node name="Reeds10" type="Sprite2D" parent="World" unique_id=2083088178]
+modulate = Color(0.8, 0.9, 0.9, 0.8)
+position = Vector2(990, 580)
+texture = ExtResource("11_4n1ub")
+centered = false
+
+[node name="Reeds11" type="Sprite2D" parent="World" unique_id=538526138]
+modulate = Color(0.8, 0.9, 0.9, 0.8)
+position = Vector2(1089, 590)
+texture = ExtResource("12_i4k2h")
+centered = false
+
+[node name="Reeds12" type="Sprite2D" parent="World" unique_id=1523196910]
+modulate = Color(0.8, 0.9, 0.9, 0.8)
+position = Vector2(1188, 570)
+texture = ExtResource("9_ipob6")
+centered = false
+
+[node name="Reeds13" type="Sprite2D" parent="World" unique_id=242106197]
+modulate = Color(0.8, 0.9, 0.9, 0.8)
+position = Vector2(1287, 580)
+texture = ExtResource("10_6hbcu")
+centered = false
+
+[node name="Reeds14" type="Sprite2D" parent="World" unique_id=31816511]
+modulate = Color(0.8, 0.9, 0.9, 0.8)
+position = Vector2(1386, 590)
+texture = ExtResource("11_4n1ub")
+centered = false
+
+[node name="Reeds15" type="Sprite2D" parent="World" unique_id=1986669488]
+modulate = Color(0.8, 0.9, 0.9, 0.8)
+position = Vector2(1485, 570)
+texture = ExtResource("12_i4k2h")
+centered = false
+
+[node name="Reeds16" type="Sprite2D" parent="World" unique_id=1516924725]
+modulate = Color(0.8, 0.9, 0.9, 0.8)
+position = Vector2(1584, 580)
+texture = ExtResource("9_ipob6")
+centered = false
+
+[node name="Reeds17" type="Sprite2D" parent="World" unique_id=1239552602]
+modulate = Color(0.8, 0.9, 0.9, 0.8)
+position = Vector2(1683, 590)
+texture = ExtResource("10_6hbcu")
+centered = false
+
+[node name="Reeds18" type="Sprite2D" parent="World" unique_id=2109150662]
+modulate = Color(0.8, 0.9, 0.9, 0.8)
+position = Vector2(1782, 570)
+texture = ExtResource("11_4n1ub")
+centered = false
+
+[node name="Reeds19" type="Sprite2D" parent="World" unique_id=2134027779]
+modulate = Color(0.8, 0.9, 0.9, 0.8)
+position = Vector2(1881, 580)
+texture = ExtResource("12_i4k2h")
+centered = false
+
+[node name="Reeds20" type="Sprite2D" parent="World" unique_id=1240388663]
+modulate = Color(0.8, 0.9, 0.9, 0.8)
+position = Vector2(1980, 590)
+texture = ExtResource("9_ipob6")
+centered = false
+
+[node name="Reeds21" type="Sprite2D" parent="World" unique_id=1664189985]
+modulate = Color(0.8, 0.9, 0.9, 0.8)
+position = Vector2(2079, 570)
+texture = ExtResource("10_6hbcu")
+centered = false
+
+[node name="Reeds22" type="Sprite2D" parent="World" unique_id=265399514]
+modulate = Color(0.8, 0.9, 0.9, 0.8)
+position = Vector2(2178, 580)
+texture = ExtResource("11_4n1ub")
+centered = false
+
+[node name="Reeds23" type="Sprite2D" parent="World" unique_id=1210090018]
+modulate = Color(0.8, 0.9, 0.9, 0.8)
+position = Vector2(2277, 590)
+texture = ExtResource("12_i4k2h")
+centered = false
+
+[node name="Reeds24" type="Sprite2D" parent="World" unique_id=1224392520]
+modulate = Color(0.8, 0.9, 0.9, 0.8)
+position = Vector2(2376, 570)
+texture = ExtResource("9_ipob6")
+centered = false
+
+[node name="Mira" parent="World" unique_id=1088084407 instance=ExtResource("13_31ws5")]
+unique_name_in_owner = true
+position = Vector2(1040, 521)
+
+[node name="Player" parent="World" unique_id=625682965 instance=ExtResource("14_c6oou")]
+unique_name_in_owner = true
+position = Vector2(690, 521)
+
+[node name="Rod" type="Line2D" parent="World" unique_id=1593732009]
+unique_name_in_owner = true
+visible = false
+points = PackedVector2Array(707, 481, 751, 430)
+width = 3.0
+default_color = Color(0.8980392, 0.81960785, 0.6745098, 1)
+
+[node name="FishingLine" type="Line2D" parent="World" unique_id=2089802602]
+unique_name_in_owner = true
+width = 1.2
+default_color = Color(1, 0.9529412, 0.81960785, 1)
+
+[node name="Bobber" type="Sprite2D" parent="World" unique_id=137161573]
+unique_name_in_owner = true
+visible = false
+scale = Vector2(0.13, 0.2)
+texture = ExtResource("15_ijwd0")
+
+[node name="HomeLights" type="Node2D" parent="World" unique_id=22579122]
+unique_name_in_owner = true
+visible = false
+
+[node name="Lamp240" type="Polygon2D" parent="World/HomeLights" unique_id=52279756]
+position = Vector2(240, 369.72723)
+color = Color(1, 0.8666667, 0.6392157, 1)
+polygon = PackedVector2Array(-3, 0, 3, 0, 5, 8, -5, 8)
+
+[node name="Lamp272" type="Polygon2D" parent="World/HomeLights" unique_id=492297377]
+position = Vector2(272, 369.8418)
+color = Color(1, 0.8666667, 0.6392157, 1)
+polygon = PackedVector2Array(-3, 0, 3, 0, 5, 8, -5, 8)
+
+[node name="Lamp304" type="Polygon2D" parent="World/HomeLights" unique_id=1537561260]
+position = Vector2(304, 368.35104)
+color = Color(1, 0.8666667, 0.6392157, 1)
+polygon = PackedVector2Array(-3, 0, 3, 0, 5, 8, -5, 8)
+
+[node name="Lamp336" type="Polygon2D" parent="World/HomeLights" unique_id=603937556]
+position = Vector2(336, 365.74924)
+color = Color(1, 0.8666667, 0.6392157, 1)
+polygon = PackedVector2Array(-3, 0, 3, 0, 5, 8, -5, 8)
+
+[node name="Lamp368" type="Polygon2D" parent="World/HomeLights" unique_id=236307196]
+position = Vector2(368, 362.89902)
+color = Color(1, 0.8666667, 0.6392157, 1)
+polygon = PackedVector2Array(-3, 0, 3, 0, 5, 8, -5, 8)
+
+[node name="Lamp400" type="Polygon2D" parent="World/HomeLights" unique_id=143966598]
+position = Vector2(400, 360.7454)
+color = Color(1, 0.8666667, 0.6392157, 1)
+polygon = PackedVector2Array(-3, 0, 3, 0, 5, 8, -5, 8)
+
+[node name="Lamp432" type="Polygon2D" parent="World/HomeLights" unique_id=1798196381]
+position = Vector2(432, 360.0024)
+color = Color(1, 0.8666667, 0.6392157, 1)
+polygon = PackedVector2Array(-3, 0, 3, 0, 5, 8, -5, 8)
+
+[node name="Lamp464" type="Polygon2D" parent="World/HomeLights" unique_id=378494428]
+position = Vector2(464, 360.91638)
+color = Color(1, 0.8666667, 0.6392157, 1)
+polygon = PackedVector2Array(-3, 0, 3, 0, 5, 8, -5, 8)
+
+[node name="Lamp496" type="Polygon2D" parent="World/HomeLights" unique_id=1749144969]
+position = Vector2(496, 363.1843)
+color = Color(1, 0.8666667, 0.6392157, 1)
+polygon = PackedVector2Array(-3, 0, 3, 0, 5, 8, -5, 8)
+
+[node name="Lamp528" type="Polygon2D" parent="World/HomeLights" unique_id=1820946227]
+position = Vector2(528, 366.0542)
+color = Color(1, 0.8666667, 0.6392157, 1)
+polygon = PackedVector2Array(-3, 0, 3, 0, 5, 8, -5, 8)
+
+[node name="Fireflies" type="Node2D" parent="World" unique_id=2071319907]
+script = ExtResource("16_x8dif")
+
+[node name="Light00" type="Polygon2D" parent="World/Fireflies" unique_id=398640166]
+position = Vector2(715.49316, 549.95184)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(715.49316, 549.95184)
+
+[node name="Light01" type="Polygon2D" parent="World/Fireflies" unique_id=1220216108]
+position = Vector2(1849.9464, 516.7224)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(1849.9464, 516.7224)
+
+[node name="Light02" type="Polygon2D" parent="World/Fireflies" unique_id=1800299346]
+position = Vector2(1914.0541, 513.3386)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(1914.0541, 513.3386)
+
+[node name="Light03" type="Polygon2D" parent="World/Fireflies" unique_id=1076902203]
+position = Vector2(1282.9585, 435.3437)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(1282.9585, 435.3437)
+
+[node name="Light04" type="Polygon2D" parent="World/Fireflies" unique_id=2072267934]
+position = Vector2(581.3535, 440.8932)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(581.3535, 440.8932)
+
+[node name="Light05" type="Polygon2D" parent="World/Fireflies" unique_id=970884923]
+position = Vector2(2253.0234, 433.70636)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(2253.0234, 433.70636)
+
+[node name="Light06" type="Polygon2D" parent="World/Fireflies" unique_id=1350292535]
+position = Vector2(276.1989, 386.31024)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(276.1989, 386.31024)
+
+[node name="Light07" type="Polygon2D" parent="World/Fireflies" unique_id=1206236252]
+position = Vector2(842.3083, 517.04254)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(842.3083, 517.04254)
+
+[node name="Light08" type="Polygon2D" parent="World/Fireflies" unique_id=224645706]
+position = Vector2(51.7482, 482.7245)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(51.7482, 482.7245)
+
+[node name="Light09" type="Polygon2D" parent="World/Fireflies" unique_id=1941817230]
+position = Vector2(1910.3658, 404.37186)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(1910.3658, 404.37186)
+
+[node name="Light10" type="Polygon2D" parent="World/Fireflies" unique_id=2041919502]
+position = Vector2(244.03658, 541.6503)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(244.03658, 541.6503)
+
+[node name="Light11" type="Polygon2D" parent="World/Fireflies" unique_id=2032087363]
+position = Vector2(338.4365, 468.13013)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(338.4365, 468.13013)
+
+[node name="Light12" type="Polygon2D" parent="World/Fireflies" unique_id=1816803533]
+position = Vector2(821.4146, 481.44708)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(821.4146, 481.44708)
+
+[node name="Light13" type="Polygon2D" parent="World/Fireflies" unique_id=895392274]
+position = Vector2(329.9873, 441.24542)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(329.9873, 441.24542)
+
+[node name="Light14" type="Polygon2D" parent="World/Fireflies" unique_id=1883574036]
+position = Vector2(2290.0078, 521.54114)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(2290.0078, 521.54114)
+
+[node name="Light15" type="Polygon2D" parent="World/Fireflies" unique_id=1110340037]
+position = Vector2(1784.373, 538.0487)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(1784.373, 538.0487)
+
+[node name="Light16" type="Polygon2D" parent="World/Fireflies" unique_id=1264795277]
+position = Vector2(714.3141, 398.32)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(714.3141, 398.32)
+
+[node name="Light17" type="Polygon2D" parent="World/Fireflies" unique_id=1022543806]
+position = Vector2(971.4554, 449.7047)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(971.4554, 449.7047)
+
+[node name="Light18" type="Polygon2D" parent="World/Fireflies" unique_id=779106034]
+position = Vector2(1926.5261, 363.6221)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(1926.5261, 363.6221)
+
+[node name="Light19" type="Polygon2D" parent="World/Fireflies" unique_id=34383346]
+position = Vector2(996.4978, 447.96567)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(996.4978, 447.96567)
+
+[node name="Light20" type="Polygon2D" parent="World/Fireflies" unique_id=1875997692]
+position = Vector2(1106.3339, 471.42703)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(1106.3339, 471.42703)
+
+[node name="Light21" type="Polygon2D" parent="World/Fireflies" unique_id=1737759475]
+position = Vector2(795.09174, 423.9231)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(795.09174, 423.9231)
+
+[node name="Light22" type="Polygon2D" parent="World/Fireflies" unique_id=372363925]
+position = Vector2(1593.913, 403.23825)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(1593.913, 403.23825)
+
+[node name="Light23" type="Polygon2D" parent="World/Fireflies" unique_id=1536633100]
+position = Vector2(1646.9442, 482.33047)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(1646.9442, 482.33047)
+
+[node name="Light24" type="Polygon2D" parent="World/Fireflies" unique_id=1896589805]
+position = Vector2(2110.7761, 350.87924)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(2110.7761, 350.87924)
+
+[node name="Light25" type="Polygon2D" parent="World/Fireflies" unique_id=1485989454]
+position = Vector2(2005.6685, 540.7704)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(2005.6685, 540.7704)
+
+[node name="Light26" type="Polygon2D" parent="World/Fireflies" unique_id=1666967553]
+position = Vector2(2036.0642, 508.52478)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(2036.0642, 508.52478)
+
+[node name="Light27" type="Polygon2D" parent="World/Fireflies" unique_id=547443490]
+position = Vector2(1661.5205, 546.5437)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(1661.5205, 546.5437)
+
+[node name="Light28" type="Polygon2D" parent="World/Fireflies" unique_id=214382247]
+position = Vector2(470.34302, 441.06793)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(470.34302, 441.06793)
+
+[node name="Light29" type="Polygon2D" parent="World/Fireflies" unique_id=1992837107]
+position = Vector2(529.2008, 374.7946)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(529.2008, 374.7946)
+
+[node name="Light30" type="Polygon2D" parent="World/Fireflies" unique_id=1266277277]
+position = Vector2(1530.7814, 435.34857)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(1530.7814, 435.34857)
+
+[node name="Light31" type="Polygon2D" parent="World/Fireflies" unique_id=154067883]
+position = Vector2(991.9602, 442.78238)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(991.9602, 442.78238)
+
+[node name="Light32" type="Polygon2D" parent="World/Fireflies" unique_id=427387525]
+position = Vector2(896.9536, 456.53937)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(896.9536, 456.53937)
+
+[node name="Light33" type="Polygon2D" parent="World/Fireflies" unique_id=1722377878]
+position = Vector2(71.95642, 443.90762)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(71.95642, 443.90762)
+
+[node name="Light34" type="Polygon2D" parent="World/Fireflies" unique_id=908899]
+position = Vector2(141.5946, 403.76166)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(141.5946, 403.76166)
+
+[node name="Light35" type="Polygon2D" parent="World/Fireflies" unique_id=1315013556]
+position = Vector2(1673.5763, 487.0856)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(1673.5763, 487.0856)
+
+[node name="Light36" type="Polygon2D" parent="World/Fireflies" unique_id=116281305]
+position = Vector2(1384.571, 434.7389)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(1384.571, 434.7389)
+
+[node name="Light37" type="Polygon2D" parent="World/Fireflies" unique_id=1027375213]
+position = Vector2(1828.9945, 420.3012)
+color = Color(0.9764706, 0.8666667, 0.60784316, 1)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+metadata/origin = Vector2(1828.9945, 420.3012)
+
+[node name="Camera" type="Camera2D" parent="." unique_id=37252998]
+unique_name_in_owner = true
+position = Vector2(690, 360)
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=208044257]
+layer = 3
+
+[node name="Screen" type="Control" parent="HUD" unique_id=303713049]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = SubResource("Theme_bu0bk")
+
+[node name="TitlePanel" type="PanelContainer" parent="HUD/Screen" unique_id=1709404081]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 28.0
+offset_top = 24.0
+offset_right = 308.0
+offset_bottom = 128.0
+
+[node name="TitleContent" type="VBoxContainer" parent="HUD/Screen/TitlePanel" unique_id=2043778666]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="HUD/Screen/TitlePanel/TitleContent" unique_id=1237996461]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "星 潮 小 港"
+
+[node name="Subtitle" type="Label" parent="HUD/Screen/TitlePanel/TitleContent" unique_id=1959847890]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "STAR TIDE HARBOR  /  薄暮海灣"
+
+[node name="StatusPanel" type="PanelContainer" parent="HUD/Screen" unique_id=827992654]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 850.0
+offset_top = 24.0
+offset_right = 1250.0
+offset_bottom = 120.0
+
+[node name="StatusContent" type="VBoxContainer" parent="HUD/Screen/StatusPanel" unique_id=124655076]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Resources" type="Label" parent="HUD/Screen/StatusPanel/StatusContent" unique_id=206807861]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "星砂 0　｜　素材 0　｜　圖鑑 0 / 6"
+
+[node name="Quest" type="Label" parent="HUD/Screen/StatusPanel/StatusContent" unique_id=1363781692]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "今日小願望：釣起 3 尾魚，認識米菈"
+
+[node name="SceneHint" type="Label" parent="HUD/Screen" unique_id=2137593557]
+unique_name_in_owner = true
+modulate = Color(0.94509804, 0.85882354, 0.7764706, 1)
+layout_mode = 0
+offset_left = 30.0
+offset_top = 145.0
+offset_right = 30.0
+offset_bottom = 145.0
+theme_override_font_sizes/font_size = 17
+text = "這裡沒有需要趕上的時間。"
+
+[node name="ActionPanel" type="PanelContainer" parent="HUD/Screen" unique_id=789983458]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 28.0
+offset_top = 628.0
+offset_right = 1252.0
+offset_bottom = 694.0
+
+[node name="Actions" type="HBoxContainer" parent="HUD/Screen/ActionPanel" unique_id=4620871]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="WalkHint" type="Label" parent="HUD/Screen/ActionPanel/Actions" unique_id=463525800]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "A / D 散步　｜　E 交談"
+
+[node name="@Control@2" type="Control" parent="HUD/Screen/ActionPanel/Actions" unique_id=593313091]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+
+[node name="FishButton" type="Button" parent="HUD/Screen/ActionPanel/Actions" unique_id=1651864120]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 44)
+layout_mode = 2
+focus_mode = 0
+text = "釣魚  [ 空白鍵 ]"
+
+[node name="AutoButton" type="Button" parent="HUD/Screen/ActionPanel/Actions" unique_id=1335254635]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 44)
+layout_mode = 2
+focus_mode = 0
+text = "輔助釣魚  [ Tab ]"
+
+[node name="BookButton" type="Button" parent="HUD/Screen/ActionPanel/Actions" unique_id=2001664207]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 44)
+layout_mode = 2
+focus_mode = 0
+text = "魚類圖鑑  [ B ]"
+
+[node name="HomeButton" type="Button" parent="HUD/Screen/ActionPanel/Actions" unique_id=1657421075]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 44)
+layout_mode = 2
+focus_mode = 0
+text = "船艙佈置  [ H ]"
+
+[node name="Journal" type="PanelContainer" parent="HUD/Screen" unique_id=1585770039]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 228.0
+offset_top = 140.0
+offset_right = 1052.0
+offset_bottom = 588.0
+
+[node name="JournalContent" type="VBoxContainer" parent="HUD/Screen/Journal" unique_id=1741327293]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="JournalTitle" type="Label" parent="HUD/Screen/Journal/JournalContent" unique_id=1976530476]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "海灣的六封來信　／　魚類圖鑑"
+
+[node name="FishGrid" type="GridContainer" parent="HUD/Screen/Journal/JournalContent" unique_id=1306941353]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 14
+theme_override_constants/v_separation = 12
+columns = 3
+
+[node name="JournalActions" type="HBoxContainer" parent="HUD/Screen/Journal/JournalContent" unique_id=1707894279]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="RecycleButton" type="Button" parent="HUD/Screen/Journal/JournalContent/JournalActions" unique_id=29813010]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 44)
+layout_mode = 2
+focus_mode = 0
+text = "分解重複魚 → 星砂與素材"
+
+[node name="CloseBook" type="Button" parent="HUD/Screen/Journal/JournalContent/JournalActions" unique_id=953573657]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 44)
+layout_mode = 2
+focus_mode = 0
+text = "回到海邊"
+
+[node name="Dialog" type="PanelContainer" parent="HUD/Screen" unique_id=560488889]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 340.0
+offset_top = 348.0
+offset_right = 940.0
+offset_bottom = 608.0
+
+[node name="DialogContent" type="VBoxContainer" parent="HUD/Screen/Dialog" unique_id=969138093]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="DialogName" type="Label" parent="HUD/Screen/Dialog/DialogContent" unique_id=951798894]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "米菈　／　潮汐觀測員"
+
+[node name="DialogText" type="Label" parent="HUD/Screen/Dialog/DialogContent" unique_id=1382680544]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(560, 86)
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+autowrap_mode = 3
+
+[node name="DialogActions" type="HBoxContainer" parent="HUD/Screen/Dialog/DialogContent" unique_id=925798209]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="GiftButton" type="Button" parent="HUD/Screen/Dialog/DialogContent/DialogActions" unique_id=7245750]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 44)
+layout_mode = 2
+focus_mode = 0
+text = "送她一尾魚"
+
+[node name="CloseDialog" type="Button" parent="HUD/Screen/Dialog/DialogContent/DialogActions" unique_id=1344129792]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 44)
+layout_mode = 2
+focus_mode = 0
+text = "下次再聊"
+
+[node name="CatchCard" type="PanelContainer" parent="HUD/Screen" unique_id=1574972376]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 448.0
+offset_top = 260.0
+offset_right = 832.0
+offset_bottom = 453.0
+
+[node name="CatchContent" type="VBoxContainer" parent="HUD/Screen/CatchCard" unique_id=1140820597]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="CatchPicture" type="TextureRect" parent="HUD/Screen/CatchCard/CatchContent" unique_id=1509922101]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 70)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CatchName" type="Label" parent="HUD/Screen/CatchCard/CatchContent" unique_id=506942915]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "潮光魚"
+
+[node name="CatchDetail" type="Label" parent="HUD/Screen/CatchCard/CatchContent" unique_id=873982208]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "第一次遇見！已收錄圖鑑"
+
+[node name="ToastPanel" type="PanelContainer" parent="HUD/Screen" unique_id=737484788]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 390.0
+offset_top = 190.0
+offset_right = 890.0
+offset_bottom = 244.0
+
+[node name="ToastText" type="Label" parent="HUD/Screen/ToastPanel" unique_id=1375132373]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+
+[node name="Ambient" type="AudioStreamPlayer" parent="." unique_id=1157169887]
+unique_name_in_owner = true
+volume_db = -24.0
+
+[node name="SFX" type="AudioStreamPlayer" parent="." unique_id=1749734563]
+unique_name_in_owner = true
+volume_db = -18.0
+
+[node name="FishingLayer" type="CanvasLayer" parent="." unique_id=671846585]
+layer = 5
+
+[node name="Fishing" parent="FishingLayer" unique_id=1987175098 instance=ExtResource("18_to2tm")]
+unique_name_in_owner = true
+anchors_preset = 15
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CabinLayer" type="CanvasLayer" parent="." unique_id=1108700048]
+layer = 4
+
+[node name="Cabin" parent="CabinLayer" unique_id=9491438 instance=ExtResource("20_atapp")]
+unique_name_in_owner = true
+anchors_preset = 15
+
+[node name="DepthLayers" parent="." unique_id=1828746877 instance=ExtResource("21_ipob6")]
+unique_name_in_owner = true

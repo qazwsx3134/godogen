@@ -1,0 +1,372 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://assets/harbor_theme.tres" id="1_ixm0y"]
+[ext_resource type="Script" path="res://scripts/cabin.gd" id="2_84mq0"]
+[ext_resource type="Texture2D" path="res://assets/cabin.svg" id="3_1hpa6"]
+[ext_resource type="Texture2D" path="res://assets/prop_plant.svg" id="4_em8ck"]
+
+[node name="Cabin" type="Control" unique_id=9491438]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = ExtResource("1_ixm0y")
+script = ExtResource("2_84mq0")
+
+[node name="CabinArt" type="Sprite2D" parent="." unique_id=681639444]
+unique_name_in_owner = true
+texture = ExtResource("3_1hpa6")
+centered = false
+
+[node name="Grid" type="Node2D" parent="." unique_id=748226707]
+unique_name_in_owner = true
+
+[node name="Column0" type="ColorRect" parent="Grid" unique_id=32672682]
+unique_name_in_owner = true
+offset_left = 160.0
+offset_top = 352.0
+offset_right = 161.0
+offset_bottom = 608.0
+mouse_filter = 2
+color = Color(1, 0.9, 0.7, 0.12)
+
+[node name="Column1" type="ColorRect" parent="Grid" unique_id=275934540]
+unique_name_in_owner = true
+offset_left = 224.0
+offset_top = 352.0
+offset_right = 225.0
+offset_bottom = 608.0
+mouse_filter = 2
+color = Color(1, 0.9, 0.7, 0.12)
+
+[node name="Column2" type="ColorRect" parent="Grid" unique_id=1722501243]
+unique_name_in_owner = true
+offset_left = 288.0
+offset_top = 352.0
+offset_right = 289.0
+offset_bottom = 608.0
+mouse_filter = 2
+color = Color(1, 0.9, 0.7, 0.12)
+
+[node name="Column3" type="ColorRect" parent="Grid" unique_id=509728770]
+unique_name_in_owner = true
+offset_left = 352.0
+offset_top = 352.0
+offset_right = 353.0
+offset_bottom = 608.0
+mouse_filter = 2
+color = Color(1, 0.9, 0.7, 0.12)
+
+[node name="Column4" type="ColorRect" parent="Grid" unique_id=749632354]
+unique_name_in_owner = true
+offset_left = 416.0
+offset_top = 352.0
+offset_right = 417.0
+offset_bottom = 608.0
+mouse_filter = 2
+color = Color(1, 0.9, 0.7, 0.12)
+
+[node name="Column5" type="ColorRect" parent="Grid" unique_id=1127259013]
+unique_name_in_owner = true
+offset_left = 480.0
+offset_top = 352.0
+offset_right = 481.0
+offset_bottom = 608.0
+mouse_filter = 2
+color = Color(1, 0.9, 0.7, 0.12)
+
+[node name="Column6" type="ColorRect" parent="Grid" unique_id=599386022]
+unique_name_in_owner = true
+offset_left = 544.0
+offset_top = 352.0
+offset_right = 545.0
+offset_bottom = 608.0
+mouse_filter = 2
+color = Color(1, 0.9, 0.7, 0.12)
+
+[node name="Column7" type="ColorRect" parent="Grid" unique_id=1852923780]
+unique_name_in_owner = true
+offset_left = 608.0
+offset_top = 352.0
+offset_right = 609.0
+offset_bottom = 608.0
+mouse_filter = 2
+color = Color(1, 0.9, 0.7, 0.12)
+
+[node name="Column8" type="ColorRect" parent="Grid" unique_id=754804548]
+unique_name_in_owner = true
+offset_left = 672.0
+offset_top = 352.0
+offset_right = 673.0
+offset_bottom = 608.0
+mouse_filter = 2
+color = Color(1, 0.9, 0.7, 0.12)
+
+[node name="Column9" type="ColorRect" parent="Grid" unique_id=1656291667]
+unique_name_in_owner = true
+offset_left = 736.0
+offset_top = 352.0
+offset_right = 737.0
+offset_bottom = 608.0
+mouse_filter = 2
+color = Color(1, 0.9, 0.7, 0.12)
+
+[node name="Column10" type="ColorRect" parent="Grid" unique_id=706509097]
+unique_name_in_owner = true
+offset_left = 800.0
+offset_top = 352.0
+offset_right = 801.0
+offset_bottom = 608.0
+mouse_filter = 2
+color = Color(1, 0.9, 0.7, 0.12)
+
+[node name="Column11" type="ColorRect" parent="Grid" unique_id=707181594]
+unique_name_in_owner = true
+offset_left = 864.0
+offset_top = 352.0
+offset_right = 865.0
+offset_bottom = 608.0
+mouse_filter = 2
+color = Color(1, 0.9, 0.7, 0.12)
+
+[node name="Column12" type="ColorRect" parent="Grid" unique_id=1850441339]
+unique_name_in_owner = true
+offset_left = 928.0
+offset_top = 352.0
+offset_right = 929.0
+offset_bottom = 608.0
+mouse_filter = 2
+color = Color(1, 0.9, 0.7, 0.12)
+
+[node name="Column13" type="ColorRect" parent="Grid" unique_id=1023679646]
+unique_name_in_owner = true
+offset_left = 992.0
+offset_top = 352.0
+offset_right = 993.0
+offset_bottom = 608.0
+mouse_filter = 2
+color = Color(1, 0.9, 0.7, 0.12)
+
+[node name="Column14" type="ColorRect" parent="Grid" unique_id=628616025]
+unique_name_in_owner = true
+offset_left = 1056.0
+offset_top = 352.0
+offset_right = 1057.0
+offset_bottom = 608.0
+mouse_filter = 2
+color = Color(1, 0.9, 0.7, 0.12)
+
+[node name="Column15" type="ColorRect" parent="Grid" unique_id=2092882864]
+unique_name_in_owner = true
+offset_left = 1120.0
+offset_top = 352.0
+offset_right = 1121.0
+offset_bottom = 608.0
+mouse_filter = 2
+color = Color(1, 0.9, 0.7, 0.12)
+
+[node name="Row0" type="ColorRect" parent="Grid" unique_id=668623390]
+unique_name_in_owner = true
+offset_left = 160.0
+offset_top = 352.0
+offset_right = 1120.0
+offset_bottom = 353.0
+mouse_filter = 2
+color = Color(1, 0.9, 0.7, 0.12)
+
+[node name="Row1" type="ColorRect" parent="Grid" unique_id=964717149]
+unique_name_in_owner = true
+offset_left = 160.0
+offset_top = 416.0
+offset_right = 1120.0
+offset_bottom = 417.0
+mouse_filter = 2
+color = Color(1, 0.9, 0.7, 0.12)
+
+[node name="Row2" type="ColorRect" parent="Grid" unique_id=1634289977]
+unique_name_in_owner = true
+offset_left = 160.0
+offset_top = 480.0
+offset_right = 1120.0
+offset_bottom = 481.0
+mouse_filter = 2
+color = Color(1, 0.9, 0.7, 0.12)
+
+[node name="Row3" type="ColorRect" parent="Grid" unique_id=1881824750]
+unique_name_in_owner = true
+offset_left = 160.0
+offset_top = 544.0
+offset_right = 1120.0
+offset_bottom = 545.0
+mouse_filter = 2
+color = Color(1, 0.9, 0.7, 0.12)
+
+[node name="Row4" type="ColorRect" parent="Grid" unique_id=80442391]
+unique_name_in_owner = true
+offset_left = 160.0
+offset_top = 608.0
+offset_right = 1120.0
+offset_bottom = 609.0
+mouse_filter = 2
+color = Color(1, 0.9, 0.7, 0.12)
+
+[node name="Placed" type="Node2D" parent="." unique_id=853329121]
+unique_name_in_owner = true
+
+[node name="CursorCell" type="ColorRect" parent="." unique_id=1430244460]
+unique_name_in_owner = true
+z_index = 2000
+layout_mode = 0
+offset_left = 162.0
+offset_top = 355.0
+offset_right = 222.0
+offset_bottom = 413.0
+mouse_filter = 2
+color = Color(0.4, 0.9, 0.78, 0.16)
+
+[node name="Preview" type="Sprite2D" parent="." unique_id=675144648]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0.5)
+z_index = 2001
+position = Vector2(320, 450)
+texture = ExtResource("4_em8ck")
+centered = false
+offset = Vector2(-64, -160)
+
+[node name="TopShade" type="ColorRect" parent="." unique_id=1528461336]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 1280.0
+offset_bottom = 148.0
+mouse_filter = 2
+color = Color(0.09019608, 0.1764706, 0.2627451, 1)
+
+[node name="CabinTitle" type="Label" parent="." unique_id=1475233318]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 28.0
+offset_top = 16.0
+offset_right = 28.0
+offset_bottom = 16.0
+theme_override_font_sizes/font_size = 27
+text = "我的小船　／　把漂泊的地方，佈置成家"
+
+[node name="CabinSubtitle" type="Label" parent="." unique_id=622533445]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 30.0
+offset_top = 55.0
+offset_right = 30.0
+offset_bottom = 55.0
+theme_override_font_sizes/font_size = 16
+text = "暖木、海色與一點來自異星的綠。家具樣品可免費試擺。"
+
+[node name="Lamp" type="Button" parent="." unique_id=1003895069]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 28.0
+offset_top = 83.0
+offset_right = 158.0
+offset_bottom = 127.0
+focus_mode = 0
+text = "暖光立燈"
+
+[node name="Plant" type="Button" parent="." unique_id=1898453985]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 166.0
+offset_top = 83.0
+offset_right = 296.0
+offset_bottom = 127.0
+focus_mode = 0
+text = "異星盆栽"
+
+[node name="Chair" type="Button" parent="." unique_id=961188114]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 304.0
+offset_top = 83.0
+offset_right = 434.0
+offset_bottom = 127.0
+focus_mode = 0
+text = "木製躺椅"
+
+[node name="Shelf" type="Button" parent="." unique_id=1891868624]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 442.0
+offset_top = 83.0
+offset_right = 572.0
+offset_bottom = 127.0
+focus_mode = 0
+text = "收藏層架"
+
+[node name="Move" type="Button" parent="." unique_id=227273661]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 590.0
+offset_top = 83.0
+offset_right = 682.0
+offset_bottom = 127.0
+focus_mode = 0
+text = "移動"
+
+[node name="Remove" type="Button" parent="." unique_id=459968972]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 690.0
+offset_top = 83.0
+offset_right = 782.0
+offset_bottom = 127.0
+focus_mode = 0
+text = "收回"
+
+[node name="WarmLights" type="Button" parent="." unique_id=875551068]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 800.0
+offset_top = 83.0
+offset_right = 1045.0
+offset_bottom = 127.0
+focus_mode = 0
+text = "船外暖燈 · 2 素材"
+
+[node name="ExitCabin" type="Button" parent="." unique_id=74797586]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1063.0
+offset_top = 83.0
+offset_right = 1251.0
+offset_bottom = 127.0
+focus_mode = 0
+text = "完成  [ Esc ]"
+
+[node name="BottomShade" type="ColorRect" parent="." unique_id=1267182882]
+unique_name_in_owner = true
+layout_mode = 0
+offset_top = 615.0
+offset_right = 1280.0
+offset_bottom = 720.0
+mouse_filter = 2
+color = Color(0.09019608, 0.1764706, 0.2627451, 1)
+
+[node name="CabinStatus" type="Label" parent="." unique_id=1502248068]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 30.0
+offset_top = 629.0
+offset_right = 30.0
+offset_bottom = 629.0
+theme_override_font_sizes/font_size = 20
+text = "已佈置 0 / 20"
+
+[node name="CabinHelp" type="Label" parent="." unique_id=638279715]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 30.0
+offset_top = 672.0
+offset_right = 30.0
+offset_bottom = 672.0
+theme_override_font_sizes/font_size = 17
+text = "點地板放置；R 翻轉；右鍵取消預覽。"

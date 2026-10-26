@@ -1,0 +1,21 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/furniture.gd" id="1_uouto"]
+[ext_resource type="Texture2D" path="res://assets/prop_glow.svg" id="2_yxmve"]
+[ext_resource type="Texture2D" path="res://assets/prop_lamp.svg" id="3_qmgrm"]
+
+[node name="Furniture" type="Node2D" unique_id=1237237777]
+script = ExtResource("1_uouto")
+
+[node name="Glow" type="Sprite2D" parent="." unique_id=551098355]
+unique_name_in_owner = true
+visible = false
+position = Vector2(-128, -218)
+texture = ExtResource("2_yxmve")
+centered = false
+
+[node name="Art" type="Sprite2D" parent="." unique_id=1897670176]
+unique_name_in_owner = true
+position = Vector2(-64, -160)
+texture = ExtResource("3_qmgrm")
+centered = false

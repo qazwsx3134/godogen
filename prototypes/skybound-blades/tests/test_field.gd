@@ -25,6 +25,8 @@ func _run() -> void:
 	# Hit stops run on the wall clock; under --fixed-fps that would slow many test frames. Use frames.
 	field.time_control.clock = func() -> int: return Engine.get_process_frames() * 1000 / 60
 	await test_field_layout_reads_the_authored_scene()
+	await test_field_cast_visual_obeys_simulation_duration()
+	test_field_uses_reviewed_art_resources()
 	# The party starts in the safe camp; the combat cases below happen out in the field.
 	for m: RefCounted in field.battle.party():
 		m.pos = Vector2(-4.0, 0.0) + Vector2(m.id * 0.9, 0.0)
@@ -35,7 +37,12 @@ func _run() -> void:
 	field.profile.warehouse_gold = 77  # must survive the death
 	await test_field_leader_down_shows_end_and_keeps_rendering()
 	await test_field_restart_resets_the_run()
+	test_field_preferences_apply_and_survive_reload()
 	test_field_saves_only_its_own_file()
+	test_field_failed_save_warns_and_retries_soon()
+	test_field_expedition_status_matches_risk()
+	await test_field_death_failure_retries_before_next_generation()
+	await test_field_phone_screen_scales_ui_and_fills_camp()
 	SaveService.new(SAVE).erase()
 	DirAccess.remove_absolute("user://test_field")
 	_finish("FIELD")
@@ -59,7 +66,7 @@ func test_field_layout_reads_the_authored_scene() -> void:
 		"layout: a monster spawns where it stands in field.tscn")
 	_expect(b.obstacles.size() >= 10, "layout: props with block_radius become obstacles (%d)" % b.obstacles.size())
 	var cluster: Control = field.get_node("HUD").get_node("%ActionCluster")
-	_expect(is_equal_approx(cluster.offset_left, -420.0) and is_equal_approx(cluster.offset_bottom, -44.0),
+	_expect(is_equal_approx(cluster.anchor_left, 0.5) and is_equal_approx(cluster.offset_left, -238.0) and is_equal_approx(cluster.offset_bottom, -44.0),
 		"layout: HUD offsets stay as saved in hud.tscn")
 
 
@@ -160,6 +167,65 @@ func test_field_saves_only_its_own_file() -> void:
 	_expect(now == expected, "save: nothing else appears in user:// (%s)" % [now])
 
 
+func test_field_failed_save_warns_and_retries_soon() -> void:
+	# Arrange: a save path under the save *file*, so its folder cannot be made
+	var good: RefCounted = field.save_service
+	field.save_service = SaveService.new(SAVE + "/blocked.json")
+	# Act
+	var err: Error = field.save_game()
+	# Assert
+	_expect(err != OK and String(field.hud._feed_lines[0].text).contains("存檔失敗") and field._save_left <= field.SAVE_RETRY,
+		"save: a failed write warns the player and retries soon (%s)" % error_string(err))
+	field.save_service = good
+	_expect(field.save_game() == OK and field._save_left == field.autosave_seconds, "save: the next good write resets the timer")
+
+
+func test_field_phone_screen_scales_ui_and_fills_camp() -> void:
+	# Arrange: an 844x390 landscape phone (CSS px; headless has a device pixel ratio of 1)
+	root.size = Vector2i(844, 390)
+	field.fit_screen()
+	field.battle.run.make_gear("novice_sword", "rare")
+	field.open_camp("裝備")
+	await _frames(2)
+	# Act
+	var panel: Control = field.hud.get_node("%CampLayer/CampPanel")
+	var visible := field.get_viewport().get_visible_rect()
+	var row: Control = null
+	for r: Control in panel.get_node("Rows/CampTabs/裝備/List").get_children():
+		if r.visible and r._row.has("more"):
+			row = r
+	# Assert
+	_expect(is_equal_approx(root.content_scale_factor, 900.0 / field.phone_design_height),
+		"phone: the UI is drawn for a %d-high screen" % int(field.phone_design_height))
+	_expect(visible.encloses(panel.get_global_rect()) and panel.size.x > visible.size.x * 0.9,
+		"phone: the camp fills the screen (%s in %s)" % [panel.get_global_rect(), visible])
+	_expect(not field.hud.get_node("%ClaimButton").visible, "phone: quests are handed in from the camp")
+	_expect((panel.get_theme_stylebox("panel") as StyleBoxFlat).bg_color.a == 1.0, "phone: the HUD does not show through the camp")
+	if row != null:
+		var button: Control = row.get_node("%RowActions").get_child(0)
+		_expect(button.size.y >= 68.0 and button.size.y < 96.0 and row.size.y < 96.0,
+			"phone: rows are shorter but buttons stay >= 44 CSS px (row %.0f, button %.0f)" % [row.size.y, button.size.y])
+		var tap := InputEventMouseButton.new()
+		tap.button_index = MOUSE_BUTTON_LEFT
+		tap.pressed = true
+		row.gui_input.emit(tap)
+		_expect(String(row.get_node("%RowDetail").text).contains(String(row._row.more)), "phone: tapping a gear row shows its stats")
+	else:
+		_expect(false, "phone: the bag has a gear row to compare")
+	# Back to the desktop window
+	root.size = Vector2i(1440, 900)
+	field.fit_screen()
+	field.hud.hide_camp()
+	await _frames(2)
+	_expect(is_equal_approx(root.content_scale_factor, 1.0) and is_equal_approx(panel.offset_left, -560.0)
+		and field.hud.get_node("%ClaimButton").visible, "desktop: the scene's own layout comes back (%s, %s, %s)" % [
+			root.content_scale_factor, panel.offset_left, field.hud.get_node("%ClaimButton").visible])
+	if row != null:
+		_expect(is_equal_approx(row.custom_minimum_size.y, 104.0)
+			and is_equal_approx(row.get_node("%RowActions").get_child(0).custom_minimum_size.y, 96.0),
+			"desktop: rows get the scene's heights back")
+
+
 func _user_files() -> PackedStringArray:
 	var out := PackedStringArray()
 	var dir := DirAccess.open("user://")
@@ -171,3 +237,87 @@ func _user_files() -> PackedStringArray:
 		if name != "logs" and name != "shader_cache" and name != "vulkan":
 			out.append(name + "/")
 	return out
+
+
+func test_field_death_failure_retries_before_next_generation() -> void:
+	var good: RefCounted = field.save_service
+	var generation: int = field.profile.generation
+	var memorials: int = field.profile.memorial.size()
+	field.save_service = SaveService.new(SAVE + "/blocked.json")
+	field.battle.ended = true
+	field._record_death()
+	_expect(field.profile.generation == generation and not field._pending_death.is_empty(),
+		"death failure: profile stays unchanged until journal is durable")
+	field.next_generation()
+	_expect(field.battle.ended and field.profile.generation == generation,
+		"death failure: next generation waits for persistence")
+	field.save_service = good
+	field._save_left = 0.0
+	await _frames(2)
+	_expect(field._pending_death.is_empty() and field.profile.generation == generation + 1,
+		"death retry: defeat screen retries without simulation")
+	_expect(field.profile.memorial.size() == memorials + 1, "death retry: memorial added once")
+	field.next_generation()
+	_expect(not field.battle.ended and field.battle.run.generation == generation + 1,
+		"death retry: next generation starts after durable save")
+
+
+func test_field_expedition_status_matches_risk() -> void:
+	var b: RefCounted = field.battle
+	var at: Vector2 = b.leader.pos
+	b.leader.pos = Vector2(-4, 0)
+	var tonic: int = b.run.count("tonic_small")
+	b.run.stacks["tonic_small"] = 0
+	_expect(field.expedition_status().contains("藥水用盡"), "risk: empty supplies are visible")
+	b.retreat_at_ms = b.now_ms + 1500.0
+	_expect(field.expedition_status().contains("1.5") and field.expedition_status().contains("仍會受傷"),
+		"risk: retreat displays remaining time and exposure")
+	b.retreat_at_ms = -1.0
+	b.leader.pos = at
+	b.run.stacks["tonic_small"] = tonic
+
+
+func test_field_preferences_apply_and_survive_reload() -> void:
+	field._on_setting("screen_shake", false)
+	field._on_setting("auto_retreat", false)
+	field.load_game()
+	_expect(not field.screen_shake and not field.battle.auto_retreat,
+		"settings: reloading applies the saved preferences to gameplay")
+	_expect(not field.hud.get_node("%AutoRetreatCheck").button_pressed,
+		"settings: checkbox reflects saved preference without emitting changes")
+	field._on_setting("screen_shake", true)
+	field._on_setting("auto_retreat", true)
+
+
+func test_field_cast_visual_obeys_simulation_duration() -> void:
+	var actor: Node3D = load("res://scenes/actors/actor.tscn").instantiate()
+	actor.sheet = load("res://resources/sheets/leader_polish.tres")
+	root.add_child(actor)
+	await _frames(1)
+	var unit: RefCounted = field.battle.leader
+	actor.bind(unit)
+	var previous_action: StringName = unit.action
+	var previous_ms: float = unit.action_ms
+	unit.action = &"skill"
+	unit.action_ms += 1.0
+	actor.prepare_cast(0.2)
+	actor.sync(unit, 1.0, 0.1, false)
+	_expect(actor.visual.anim == &"anticipation", "cast art: holds anticipation during actual cast")
+	actor.sync(unit, 1.0, 0.0, false)
+	_expect(actor.visual.anim == &"anticipation", "cast art: pause freezes anticipation")
+	actor.sync(unit, 1.0, 0.11, false)
+	_expect(actor.visual.anim == &"skill", "cast art: impact follows cast completion")
+	unit.action = previous_action
+	unit.action_ms = previous_ms
+	actor.free()
+
+
+func test_field_uses_reviewed_art_resources() -> void:
+	var leader: Node = field.get_node("%Party/Leader")
+	_expect(leader.sheet.resource_path == "res://resources/sheets/leader_polish.tres",
+		"art: leader uses the shared reviewed sheet, not an embedded stale copy")
+	for actor: Node in field.get_node("%Monsters").get_children():
+		if actor.kind_id == "gatekeeper":
+			_expect(actor.sheet.resource_path == "res://resources/sheets/gatekeeper.tres"
+				and actor.sheet.atlas.resource_path.ends_with("gatekeeper_illustrated.res"),
+				"art: actual field boss uses normalized atlas")

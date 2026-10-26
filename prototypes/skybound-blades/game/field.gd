@@ -20,6 +20,8 @@ const Profile = preload("res://domain/profile.gd")
 const SaveService = preload("res://domain/save_service.gd")
 const CampMenu = preload("res://game/camp_menu.gd")
 const Skills = preload("res://domain/skills.gd")
+## A failed write is told to the player and retried in SAVE_RETRY seconds instead of the full autosave interval.
+const SAVE_RETRY := 5.0
 
 ## Playable ground, in cells on the XZ plane (x, z, width, depth).
 @export var bounds: Rect2 = Rect2(-14, -9, 28, 18)
@@ -28,6 +30,10 @@ const Skills = preload("res://domain/skills.gd")
 @export var camera_distance_range: Vector2 = Vector2(11.0, 26.0)
 ## Screen radius (design px, 1440x900) inside which a click picks a monster.
 @export var pick_radius_px: float = 72.0
+## Phones in landscape (screen short side under phone_short_css CSS px): the UI is drawn for phone_design_height
+## instead of 900, so text and buttons come out 900 / phone_design_height times larger, and the camp fills the screen.
+@export var phone_short_css: float = 500.0
+@export var phone_design_height: float = 600.0
 @export var damage_numbers: bool = true
 @export var screen_shake: bool = true
 ## Local save (user:// is IndexedDB on the web). Tests point this at their own file.
@@ -64,6 +70,7 @@ var save_service: SaveService
 var camp_menu: CampMenu
 var _save_left: float = 0.0
 var _camp_refresh_left: float = 0.0
+var _pending_death: Dictionary = {}
 
 
 func _ready() -> void:
@@ -89,6 +96,8 @@ func _ready() -> void:
 	hud.bag_pressed.connect(func() -> void: open_camp("裝備"))
 	hud.camp_pressed.connect(func() -> void: open_camp("補給"))
 	hud.camp_action.connect(_on_camp_action)
+	get_window().size_changed.connect(fit_screen)
+	fit_screen()
 	load_game()
 	hud.log_line("第 %d 代冒險者抵達風庭遺跡的營地。點地面移動，點怪物攻擊，或開啟自動狩獵。" % battle.run.generation)
 
@@ -104,14 +113,29 @@ func load_game() -> void:
 	save_game()
 
 
-func save_game() -> void:
-	var run_doc: Variant = null if battle.ended else battle.run.to_dict()
-	save_service.save({"profile": profile.to_dict(), "run": run_doc})
+func save_game() -> Error:
+	if not _pending_death.is_empty():
+		var journal_error := save_service.mark_dead(String(_pending_death.id), _pending_death.profile)
+		if journal_error != OK:
+			hud.log_line("死亡紀錄尚未保存，請留在此頁，5 秒後重試。", "warn")
+			_save_left = SAVE_RETRY
+			return journal_error
+		profile = Profile.from_dict(_pending_death.profile)
+		_pending_death.clear()
+	var run_doc: Variant = null if battle.ended else battle.run.to_dict(battle.now_ms)
+	var err := save_service.save({"profile": profile.to_dict(), "run": run_doc})
+	if err != OK:
+		hud.log_line("存檔失敗（%s），%d 秒後重試。" % [error_string(err), int(SAVE_RETRY)], "warn")
+		_save_left = minf(autosave_seconds, SAVE_RETRY)
+		return err
 	_save_left = autosave_seconds
+	return OK
 
 
 ## After a fallen leader: the next generation starts from the camp with issued supplies.
 func next_generation() -> void:
+	if save_game() != OK:
+		return
 	_start_battle(Run.new(tuning, "g%d" % profile.generation, profile.generation))
 	save_game()
 	hud.log_line("第 %d 代冒險者出發。倉庫裡的東西都還在。" % battle.run.generation)
@@ -139,6 +163,7 @@ func _start_battle(run: Run) -> void:
 	setup.run = run
 	setup.seed = battle_seed + run.generation * 7919
 	battle = Battle.new(tuning, setup)
+	_apply_preferences()
 	stepper = Stepper.new(tuning.step_ms())
 	views.clear()
 	var party_views := {"leader": %Party.get_node("Leader"), "guardian": %Party.get_node("Guardian"),
@@ -176,6 +201,16 @@ func send(cmd: Dictionary) -> void:
 	sfx.play(&"ui")
 
 
+func fit_screen() -> void:
+	var window := get_window()
+	var short_css := minf(window.size.x, window.size.y) / maxf(1.0, DisplayServer.screen_get_scale())
+	var phone := short_css < phone_short_css
+	var factor := 900.0 / phone_design_height if phone else 1.0
+	if not is_equal_approx(window.content_scale_factor, factor):
+		window.content_scale_factor = factor
+	hud.set_compact(phone)
+
+
 func zoom(step: int) -> void:
 	camera_distance = clampf(camera_distance + step * 2.0, camera_distance_range.x, camera_distance_range.y)
 
@@ -211,12 +246,19 @@ func _process(delta: float) -> void:
 			_camp_refresh_left -= delta
 			if _camp_refresh_left <= 0.0:
 				refresh_camp()
+	# Persistence retries must also run on the defeat screen, where simulation is stopped.
+	if battle.ended:
+		_save_left -= delta
+		if _save_left <= 0.0:
+			save_game()
 	var frozen := paused or portrait
 	var frame_delta := 0.0 if frozen else delta
 	var alpha := stepper.alpha() if not frozen else 1.0
 	var target_id := battle.leader.target_id
 	for id: int in views:
 		views[id].sync(battle.unit(id), alpha, frame_delta, id == target_id)
+	for prop: Node in get_tree().get_nodes_in_group("skybound_illustrated_props"):
+		prop.set_focus(views[battle.leader.id].global_position)
 	_follow_camera(delta)
 	_marker_left = maxf(0.0, _marker_left - frame_delta)
 	move_marker.visible = _marker_left > 0.0 and battle.leader.order == Battle.Unit.Order.MOVE
@@ -387,6 +429,7 @@ func _handle_events(events: Array[Dictionary]) -> void:
 					_spawn_slash(src, battle.unit(e.target))
 			"cast":
 				var caster: Battle.Unit = battle.unit(e.unit)
+				views[caster.id].prepare_cast(float(e.get("cast_ms", 0.0)) / 1000.0)
 				var step := int(e.get("step", 0))
 				_spawn_at(GroundPulse, views[caster.id].global_position, Color("ffd479") if step == 0 else Color("ff9df0"))
 				sfx.play(&"skill")
@@ -452,6 +495,8 @@ func _handle_events(events: Array[Dictionary]) -> void:
 				add_trauma(0.6)
 				_record_death()
 			"telegraph":
+				if views[e.unit].has_method("begin_telegraph"):
+					views[e.unit].begin_telegraph(float(e.warning_ms) / 1000.0)
 				var warn: Node3D = GroundWarning.instantiate()
 				effects.add_child(warn)
 				warn.duration = float(e.warning_ms) / 1000.0
@@ -461,6 +506,8 @@ func _handle_events(events: Array[Dictionary]) -> void:
 				hud.toast("%s：%s！" % [battle.unit(e.unit).display_name, e.name])
 				sfx.play(&"taunt")
 			"boss_impact":
+				if views[e.unit].has_method("show_impact"):
+					views[e.unit].show_impact()
 				_spawn_at(GroundPulse, Vector3(e.center.x, 0.0, e.center.y), Color("ff8a5c"))
 				add_trauma(0.45)
 				haptics.buzz(1)
@@ -584,13 +631,37 @@ func _spawn_slash(src: Battle.Unit, dst: Battle.Unit) -> void:
 
 
 func _on_setting(key: String, value: bool) -> void:
-	match key:
-		"damage_numbers": damage_numbers = value
-		"screen_shake": screen_shake = value
-		"haptics": haptics.enabled = value
+	if not profile.settings.has(key):
+		return
+	profile.settings[key] = value
+	_apply_preferences()
+	save_game()
+
+
+func _apply_preferences() -> void:
+	damage_numbers = bool(profile.settings.damage_numbers)
+	screen_shake = bool(profile.settings.screen_shake)
+	haptics.enabled = bool(profile.settings.haptics)
+	battle.auto_retreat = bool(profile.settings.auto_retreat)
+	hud.show_preferences(profile.settings)
 
 
 # --- HUD state ----------------------------------------------------------------
+
+## Visible risk information, not a promise of safe automation.
+func expedition_status() -> String:
+	if battle.ended:
+		return "遠征結束 · 倉庫保留"
+	if battle.retreating():
+		return "撤退中 %.1f 秒 · 仍會受傷" % maxf(0.0, (battle.retreat_at_ms - battle.now_ms) / 1000.0)
+	if battle.in_camp(battle.leader):
+		return "營地安全 · 出發前確認補給"
+	if battle.run.count("tonic_small") == 0:
+		return "藥水用盡 · 按 T 撤退回營"
+	if battle.leader.hp_ratio() < 0.35:
+		return "生命偏低 · 撤退仍會受傷"
+	return "野外狩獵 · 隊長倒下即結束這一代"
+
 
 func hud_state() -> Dictionary:
 	var party: Array = []
@@ -608,6 +679,7 @@ func hud_state() -> Dictionary:
 	return {
 		"level": battle.level, "exp": battle.experience, "exp_need": battle.xp_needed(), "gold": battle.gold,
 		"material": battle.run.count(material_id),
+		"expedition_status": expedition_status(),
 		"party": party, "target": target,
 		"quest": {"target_name": tuning.monsters[q.objective.target].name,
 			"progress": battle.run.quest_progress(qid) if cooldown <= 0.0 else 0,
@@ -707,12 +779,16 @@ func trip_damage_lines(trip: Dictionary) -> PackedStringArray:
 
 ## Tombstone first, then the profile (memorial, generation) and a save with no live run.
 func _record_death() -> void:
-	save_service.mark_dead(battle.run.id)
+	if not _pending_death.is_empty():
+		save_game()
+		return
 	var killer := ""
 	var leader := battle.leader
 	if battle.unit(leader.last_attacker) != null:
 		killer = battle.unit(leader.last_attacker).display_name
-	profile.record_death(battle.run, killer)
+	var committed := Profile.from_dict(profile.to_dict().duplicate(true))
+	committed.record_death(battle.run, killer)
+	_pending_death = {"id": battle.run.id, "profile": committed.to_dict()}
 	save_game()
 
 

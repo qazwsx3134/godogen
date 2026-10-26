@@ -1,0 +1,4 @@
+# third-party game screenshots stay local (public repo)
+*.png
+*.jpg
+*.jpeg

@@ -1,0 +1,26 @@
+{
+	"checks": [
+		"authored scene survives ready",
+		"aim/cast/underwater lure",
+		"reel/release changes line length",
+		"no bite from passive timer",
+		"attraction/fight/struggle/catch with assistance",
+		"tension versus retrieval",
+		"release lowers tension",
+		"tap cooldown and struggle reward",
+		"line-break and slack escape",
+		"collection",
+		"duplicate-only recycle",
+		"resident talk/gift limit",
+		"decoration cost/idempotence",
+		"furniture placement/bounds/overlap",
+		"furniture move/mirror/recall",
+		"layout persistence serialization",
+		"camera bounds",
+		"depth layer relative speeds",
+		"far-shore fish pool",
+		"scene immutability"
+	],
+	"failures": [],
+	"passed": true
+}

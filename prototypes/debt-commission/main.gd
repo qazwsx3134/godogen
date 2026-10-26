@@ -564,14 +564,16 @@ func _previous_chapter_carry() -> Dictionary:
 
 
 func _record_clear(grade: String) -> void:
-	_library.record_clear(_progress_id(), grade)
+	if _library.record_clear(_progress_id(), grade) != OK:
+		_show_toast("通關紀錄無法儲存")
 
 
 ## An `end`/`result` reached: its `ending` joins the story's seen endings, and (unless it is a
 ## Game Over) the story's `carry` flags are kept for the next chapter.
 func _record_ending(command: Dictionary, game_over: bool = false) -> void:
-	_library.record_ending(_progress_id(), _dict_string(command, "ending", ""),
-		{} if game_over else _runner.call("carry_out") as Dictionary)
+	if _library.record_ending(_progress_id(), _dict_string(command, "ending", ""),
+			{} if game_over else _runner.call("carry_out") as Dictionary) != OK:
+		_show_toast("結局紀錄無法儲存")
 
 
 # ---------------------------------------------------------------- 存檔備份

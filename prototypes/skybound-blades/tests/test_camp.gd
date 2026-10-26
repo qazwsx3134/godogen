@@ -82,7 +82,10 @@ func test_camp_rows_cover_every_page() -> void:
 		"pages: skills page = chain header + the five sword skills")
 	_expect(tabs["委託"].rows.size() == 4, "pages: the four floor-1 quests are listed")
 	var gear_rows: Array = tabs["裝備"].rows
-	_expect(String(gear_rows[-1].detail).contains("→ 攻擊 +2"), "pages: a bag item shows its stat change (%s)" % gear_rows[-1].detail)
+	_expect(String(gear_rows[-1].get("more", "")).contains("→ 攻擊 +2"),
+		"pages: a bag item keeps its stat change under 詳情 (%s)" % gear_rows[-1].get("more", ""))
+	_expect(String(gear_rows[-1].detail).begins_with("輸出 ") and not String(gear_rows[-1].detail).contains("→"),
+		"pages: a bag item's line shows only output and toughness (%s)" % gear_rows[-1].detail)
 
 
 func test_camp_gear_compare_ranks_upgrades_first() -> void:

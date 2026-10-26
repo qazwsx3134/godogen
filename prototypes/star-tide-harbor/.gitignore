@@ -1,0 +1,5 @@
+.godot/
+*.log
+evidence/*.png
+evidence/*.jpg
+evidence/*.webp

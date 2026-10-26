@@ -30,7 +30,51 @@ func _init() -> void:
 			"seed %d: human wins with 10+ s left (got %s)" % [seed_value, _line(human)])
 		_expect(late.phase == PushSim.Phase.LOST, "seed %d: late dodging loses" % seed_value)
 		_check_report(seed_value, idle, good, late)
+	test_push_sim_revive_credits_the_target_hp()
+	test_push_sim_advance_ignores_the_frame_rate()
 	_finish("BALANCE TESTS")
+
+
+func test_push_sim_advance_ignores_the_frame_rate() -> void:
+	# Arrange: the same idle push fed by uneven frames (with hitches) and by exact ticks
+	var frames := PushSim.new(1)
+	var ticks := PushSim.new(1)
+	frames.skip_muster()
+	ticks.skip_muster()
+	var pattern: Array[float] = [1.0 / 30.0, 1.0 / 144.0, 0.05, 2.0, 1.0 / 60.0]
+	# Act
+	var k: int = 0
+	while frames.fighting():
+		frames.advance(pattern[k % pattern.size()])
+		k += 1
+	for i: int in frames.ticks:
+		ticks.step(PushSim.STEP)
+	# Assert
+	_expect(frames.boss_hp == ticks.boss_hp and frames.fallen_total == ticks.fallen_total,
+		"advance: uneven frames play the same fight as fixed ticks (%.2f vs %.2f)" % [frames.boss_hp, ticks.boss_hp])
+	var stalled := PushSim.new(1)
+	stalled.advance(10.0)
+	_expect(stalled.ticks <= ceili(PushSim.MAX_FRAME / PushSim.STEP), "advance: a 10 s stall advances at most MAX_FRAME")
+
+
+func test_push_sim_revive_credits_the_target_hp() -> void:
+	# Arrange: an SSR healer and a fallen hero with a different max HP in its zone
+	var sim := PushSim.new(1)
+	var healer: int = -1
+	for i: int in sim.cls.size():
+		if sim.cls[i] == PushSim.HEALER and sim.rarity[i] == PushSim.SSR:
+			healer = i
+	var target: int = 0 if healer != 0 else 1
+	sim.zone[target] = sim.zone[healer]
+	sim.max_hp[target] = sim.max_hp[healer] * 2.0
+	sim.hp[target] = 0.0
+	var before: float = sim.contribution(healer)
+	# Act
+	var ok: bool = sim._revive(sim.zone[healer], healer)
+	# Assert
+	var restored: float = sim.hp[target]
+	_expect(ok and sim.saves[healer] == 1 and is_equal_approx(sim.contribution(healer) - before, restored),
+		"revive: the healer is credited the target's restored HP (%.0f, got %.0f)" % [restored, sim.contribution(healer) - before])
 
 
 ## 推王戰報: per-hero damage adds up to the army's, and a lost push names a cause that matches how it was lost.

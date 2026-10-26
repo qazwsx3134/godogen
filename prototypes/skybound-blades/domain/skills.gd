@@ -114,7 +114,7 @@ static func equip_block(tuning: RefCounted, run: RefCounted, role: String, id: S
 	if index < 0 or index >= slot_count(tuning, run.level):
 		return "技能格不足（Lv.10 開第 2 格）"
 	var chain: Array = run.chains.get(role, [])
-	if index == 0 and chain.size() > 1:
+	if chain.size() > 1 and (index == 0 or id == chain[0]):
 		return "第 1 格是連招起手，先解除連招"
 	if id in chain.slice(1):
 		return "已在連招中，不必另佔格子"
@@ -126,14 +126,19 @@ static func equip(tuning: RefCounted, run: RefCounted, role: String, id: String,
 	if block != "":
 		return block
 	var slots: Array = run.slots.get(role, []).duplicate()
-	slots.erase(id)
+	var head: String = slots[0] if not slots.is_empty() else ""
+	var from := slots.find(id)
+	if from >= 0:
+		slots[from] = ""  # leave the gap: the other slots keep their places
 	while slots.size() <= index:
 		slots.append("")
 	slots[index] = id
 	while not slots.is_empty() and slots[-1] == "":
 		slots.pop_back()
 	run.slots[role] = slots
-	run.chains[role] = [slots[0]] if not slots.is_empty() and slots[0] != "" else []
+	var new_head: String = slots[0] if not slots.is_empty() else ""
+	if new_head != head:  # only a new chain head resets the chain; equip_block keeps a linked head in place
+		run.chains[role] = [new_head] if new_head != "" else []
 	return ""
 
 

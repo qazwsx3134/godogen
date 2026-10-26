@@ -1,0 +1,702 @@
+Godot Engine v4.7.stable.official.5b4e0cb0f - https://godotengine.org
+
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+[   0% ] [90m[1mfirst_scan_filesystem[22m | Started Project initialization (5 steps)[39m[0m
+[   0% ] [90m[1mfirst_scan_filesystem[22m | Scanning file structure...[39m[0m
+[  16% ] [90m[1mfirst_scan_filesystem[22m | Loading global class names...[39m[0m
+[  33% ] [90m[1mfirst_scan_filesystem[22m | Verifying GDExtensions...[39m[0m
+[  50% ] [90m[1mfirst_scan_filesystem[22m | Creating autoload scripts...[39m[0m
+[  66% ] [90m[1mfirst_scan_filesystem[22m | Initializing plugins...[39m[0m
+Godot MCP Toolkit v1.0.2 — by NPGameDev · npgamedev.com
+[MCPExtensions] Hot-reload watcher active
+[MCPServer] port: scanning 6550-6560 (default)
+[MCPServer] session token written to user://addons/godot_mcp_toolkit/project_instance_508c1c1fc568/mcp_token
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] start (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:322)
+       [3] compose (res://addons/godot_mcp_toolkit/core/plugin_composer.gd:91)
+       [4] _enter_tree (res://addons/godot_mcp_toolkit/plugin.gd:47)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] start (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:322)
+       [3] compose (res://addons/godot_mcp_toolkit/core/plugin_composer.gd:91)
+       [4] _enter_tree (res://addons/godot_mcp_toolkit/plugin.gd:47)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] start (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:322)
+       [3] compose (res://addons/godot_mcp_toolkit/core/plugin_composer.gd:91)
+       [4] _enter_tree (res://addons/godot_mcp_toolkit/plugin.gd:47)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] start (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:322)
+       [3] compose (res://addons/godot_mcp_toolkit/core/plugin_composer.gd:91)
+       [4] _enter_tree (res://addons/godot_mcp_toolkit/plugin.gd:47)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] start (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:322)
+       [3] compose (res://addons/godot_mcp_toolkit/core/plugin_composer.gd:91)
+       [4] _enter_tree (res://addons/godot_mcp_toolkit/plugin.gd:47)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] start (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:322)
+       [3] compose (res://addons/godot_mcp_toolkit/core/plugin_composer.gd:91)
+       [4] _enter_tree (res://addons/godot_mcp_toolkit/plugin.gd:47)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] start (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:322)
+       [3] compose (res://addons/godot_mcp_toolkit/core/plugin_composer.gd:91)
+       [4] _enter_tree (res://addons/godot_mcp_toolkit/plugin.gd:47)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] start (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:322)
+       [3] compose (res://addons/godot_mcp_toolkit/core/plugin_composer.gd:91)
+       [4] _enter_tree (res://addons/godot_mcp_toolkit/plugin.gd:47)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] start (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:322)
+       [3] compose (res://addons/godot_mcp_toolkit/core/plugin_composer.gd:91)
+       [4] _enter_tree (res://addons/godot_mcp_toolkit/plugin.gd:47)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] start (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:322)
+       [3] compose (res://addons/godot_mcp_toolkit/core/plugin_composer.gd:91)
+       [4] _enter_tree (res://addons/godot_mcp_toolkit/plugin.gd:47)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] start (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:322)
+       [3] compose (res://addons/godot_mcp_toolkit/core/plugin_composer.gd:91)
+       [4] _enter_tree (res://addons/godot_mcp_toolkit/plugin.gd:47)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] start (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:322)
+       [3] compose (res://addons/godot_mcp_toolkit/core/plugin_composer.gd:91)
+       [4] _enter_tree (res://addons/godot_mcp_toolkit/plugin.gd:47)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] start (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:322)
+       [3] compose (res://addons/godot_mcp_toolkit/core/plugin_composer.gd:91)
+       [4] _enter_tree (res://addons/godot_mcp_toolkit/plugin.gd:47)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] start (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:322)
+       [3] compose (res://addons/godot_mcp_toolkit/core/plugin_composer.gd:91)
+       [4] _enter_tree (res://addons/godot_mcp_toolkit/plugin.gd:47)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] start (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:322)
+       [3] compose (res://addons/godot_mcp_toolkit/core/plugin_composer.gd:91)
+       [4] _enter_tree (res://addons/godot_mcp_toolkit/plugin.gd:47)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] start (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:322)
+       [3] compose (res://addons/godot_mcp_toolkit/core/plugin_composer.gd:91)
+       [4] _enter_tree (res://addons/godot_mcp_toolkit/plugin.gd:47)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] start (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:322)
+       [3] compose (res://addons/godot_mcp_toolkit/core/plugin_composer.gd:91)
+       [4] _enter_tree (res://addons/godot_mcp_toolkit/plugin.gd:47)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] start (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:322)
+       [3] compose (res://addons/godot_mcp_toolkit/core/plugin_composer.gd:91)
+       [4] _enter_tree (res://addons/godot_mcp_toolkit/plugin.gd:47)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] start (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:322)
+       [3] compose (res://addons/godot_mcp_toolkit/core/plugin_composer.gd:91)
+       [4] _enter_tree (res://addons/godot_mcp_toolkit/plugin.gd:47)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] start (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:322)
+       [3] compose (res://addons/godot_mcp_toolkit/core/plugin_composer.gd:91)
+       [4] _enter_tree (res://addons/godot_mcp_toolkit/plugin.gd:47)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] start (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:322)
+       [3] compose (res://addons/godot_mcp_toolkit/core/plugin_composer.gd:91)
+       [4] _enter_tree (res://addons/godot_mcp_toolkit/plugin.gd:47)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] start (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:322)
+       [3] compose (res://addons/godot_mcp_toolkit/core/plugin_composer.gd:91)
+       [4] _enter_tree (res://addons/godot_mcp_toolkit/plugin.gd:47)
+WARNING: [MCPServer] no free port in 6550-6560; will retry every ~1s
+     at: push_warning (core/variant/variant_utility.cpp:1033)
+     GDScript backtrace (most recent call first):
+         [0] _note_listen_failure (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:355)
+         [1] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:287)
+         [2] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+         [3] start (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:322)
+         [4] compose (res://addons/godot_mcp_toolkit/core/plugin_composer.gd:91)
+         [5] _enter_tree (res://addons/godot_mcp_toolkit/plugin.gd:47)
+[  83% ] [90m[1mfirst_scan_filesystem[22m | Starting file scan...[39m[0m
+[92m[ DONE ][39m [1mfirst_scan_filesystem[22m
+[0m
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+   GDScript backtrace (most recent call first):
+       [0] _scan_and_listen (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:276)
+       [1] ensure_listening (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:254)
+       [2] pump (res://addons/godot_mcp_toolkit/transport/ws_transport.gd:221)
+       [3] _poll_connections (res://addons/godot_mcp_toolkit/transport/mcp_server.gd:591)
+[   0% ] [90m[1mupdate_scripts_classes[22m | Started Registering global classes... (4 steps)[39m[0m
+[   0% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  20% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  40% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[  60% ] [90m[1mupdate_scripts_classes[22m | [39m[0m
+[92m[ DONE ][39m [1mupdate_scripts_classes[22m
+[0m
+[   0% ] [90m[1mloading_editor_layout[22m | Started Loading editor (5 steps)[39m[0m
+[   0% ] [90m[1mloading_editor_layout[22m | Loading editor layout...[39m[0m
+[  16% ] [90m[1mloading_editor_layout[22m | Loading docks...[39m[0m
+[  33% ] [90m[1mloading_editor_layout[22m | Reopening scenes...[39m[0m
+[  50% ] [90m[1mloading_editor_layout[22m | Loading central editor layout...[39m[0m
+[  66% ] [90m[1mloading_editor_layout[22m | Loading plugin window layout...[39m[0m
+[  83% ] [90m[1mloading_editor_layout[22m | Editor layout ready.[39m[0m
+[92m[ DONE ][39m [1mloading_editor_layout[22m
+[0m
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+   at: _inet_open (drivers/unix/net_socket_unix.cpp:288)
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+   at: listen (core/io/tcp_server.cpp:56)
+[MCPServer] stopped
+[MCPRegistry] deregistered /mnt/d/repo/godot/godogen/prototypes/debt-commission
+WARNING: 33 RIDs of type "Canvas" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 730 RIDs of type "CanvasItem" were leaked.
+   at: _free_rids (servers/rendering/renderer_canvas_cull.cpp:2735)
+WARNING: 2388 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2535)
+ERROR: 140 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)
+ERROR: 33 RID allocations of type 'N16RendererViewport8ViewportE' were leaked at exit.
+ERROR: 95 RID allocations of type 'PN13RendererDummy14TextureStorage12DummyTextureE' were leaked at exit.
+ERROR: 805 RID allocations of type 'PN18TextServerAdvanced22ShapedTextDataAdvancedE' were leaked at exit.
+ERROR: 30 RID allocations of type 'PN18TextServerAdvanced12FontAdvancedE' were leaked at exit.
+ERROR: 2 RID allocations of type 'PN18TextServerAdvanced27FontAdvancedLinkedVariationE' were leaked at exit.
+ERROR: 27 RID allocations of type 'PN13RichTextLabel4ItemE' were leaked at exit.

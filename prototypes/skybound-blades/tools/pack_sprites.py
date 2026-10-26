@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Pack approved character art into one-row atlases for resources/sheets/*.tres.
 
-    ~/repo/agent-sprite-forge/.venv/bin/python tools/pack_sprites.py [--only captain,guardian] [--check]
+    ~/repo/agent-sprite-forge/.venv/bin/python tools/pack_sprites.py [--only captain,guardian]
 
 Inputs (art_src/chars/<art>/): master/master_rgba.png (idle) and poses/<pose>/takes/take-NN/generated.png
-(magenta key, keyed here). art_src/chars/selection.json picks the take per pose and optional per-frame
+(native RGBA or legacy magenta key). art_src/chars/selection.json picks the take per pose and optional per-frame
 scale/offset fixes: {"captain": {"walk_a": {"take": 2, "scale": 1.0, "dx": 0}}}.
 
 Every frame of a character uses one scale, set so the idle pose stands height_m tall at METERS_PER_PX
@@ -17,14 +17,12 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from pathlib import Path
 
 from PIL import Image
 
-FORGE = Path.home() / "repo/agent-sprite-forge/shared"
-sys.path.insert(0, str(FORGE))
-import forge_matte  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 CHARS = ROOT / "art_src/chars"
@@ -64,7 +62,17 @@ def bbox_crop(img: Image.Image) -> Image.Image:
 
 
 def keyed(path: Path) -> Image.Image:
-    image, info = forge_matte.key_still(Image.open(path).convert("RGBA"), key="magenta")
+    image = Image.open(path).convert("RGBA")
+    # Native alpha must survive untouched, including anti-aliased edges and original pink details.
+    if image.getchannel("A").getextrema()[0] < 255:
+        return image
+    forge = Path(os.environ.get("SPRITE_FORGE_SHARED", str(Path.home() / "repo/agent-sprite-forge/shared")))
+    if not (forge / "forge_matte.py").is_file():
+        raise RuntimeError(f"{path}: opaque input needs legacy magenta keying; supply RGBA art or set "
+                           "SPRITE_FORGE_SHARED to the folder containing forge_matte.py")
+    sys.path.insert(0, str(forge))
+    import forge_matte
+    image, _info = forge_matte.key_still(image, key="magenta")
     return image
 
 

@@ -2,6 +2,8 @@
 
 2026-10-26。蓬蓬草原（`prototypes/seal-meadow`）的參考對象。
 
+> 製作基準（2026-10-26 使用者已確認）：以手機執行為前提，固定方向／俯角鏡頭，不製作旋轉鏡頭與連招。本文的原作連招、操作與模組接入順序保留為早期研究紀錄，不作為本遊戲待辦。詳細證據與現行建議見[深入研究](seal-online-deep-dive-2026-10-26/README.md)，實作與驗收以[手機製作基準](../../prototypes/seal-meadow/design/mobile-production-baseline.md)為準。
+
 資料來源：
 - 使用者正在玩的 US 版客戶端截圖（視窗標題 `US_LIVE_x64`）。
 - [Seal Online Wiki（fandom）](https://sealonline.fandom.com/)：職業、命中公式、寵物、精煉、操作與連招、光環。
@@ -162,7 +164,7 @@
 
 新模組都是純邏輯（RefCounted），測試在 `godot-kit/tests/test_mmo_modules.gd`，共 47 項檢查。
 
-### 接進蓬蓬草原的順序（建議）
+### 早期模組接入提案（歷史研究；手機製作不採用連招）
 
 ```
 1 combo_input    最能改變手感：玩家目前只會點怪等它死

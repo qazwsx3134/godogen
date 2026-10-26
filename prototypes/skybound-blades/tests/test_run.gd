@@ -19,6 +19,7 @@ func _init() -> void:
 	test_run_gear_bonus_is_template_times_quality()
 	test_run_equip_moves_gear_and_changes_stats()
 	test_run_trip_tracks_the_outing()
+	test_run_quest_cooldown_survives_save_and_load()
 	_finish("RUN")
 
 
@@ -112,3 +113,23 @@ func test_run_trip_tracks_the_outing() -> void:
 		"trip: kills, gold and supplies used are summed")
 	r.reset_trip()
 	_expect(int(r.trip.kills) == 0, "trip: resets on return")
+
+
+func test_run_quest_cooldown_survives_save_and_load() -> void:
+	# Arrange: a repeatable quest claimed 10 minutes into play
+	var r := _run()
+	var qid := ""
+	for id: String in r.quests:
+		if bool(tuning.quests[id].repeatable):
+			qid = id
+			break
+	r.quests[qid].progress = int(tuning.quests[qid].objective.count)
+	_expect(not r.claim(qid, 600000.0).is_empty(), "cooldown: the quest is claimed")
+	var cooldown := float(tuning.section("quests").repeat_cooldown_ms)
+	# Act: save 100 s later, load into a battle whose clock starts at 0, then save and load again
+	var back: Run = Run.from_dict(tuning, JSON.parse_string(JSON.stringify(r.to_dict(700000.0))))
+	var again: Run = Run.from_dict(tuning, JSON.parse_string(JSON.stringify(back.to_dict(0.0))))
+	# Assert
+	_expect(is_equal_approx(float(back.quests[qid].available_at_ms), cooldown - 100000.0),
+		"cooldown: the wait left after loading is the wait left when saved (%s)" % back.quests[qid].available_at_ms)
+	_expect(is_equal_approx(float(again.quests[qid].available_at_ms), cooldown - 100000.0), "cooldown: loading twice adds nothing")

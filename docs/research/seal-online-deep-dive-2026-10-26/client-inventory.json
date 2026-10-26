@@ -1,0 +1,1434 @@
+{
+  "root": "/mnt/d/games/SealOnline",
+  "method": "filesystem stat, ZIP central-directory metadata, WAV headers, plaintext shader markers; no payload decryption or game execution",
+  "directories": {
+    "(root)": {
+      "files": 40,
+      "bytes": 38076442,
+      "extensions": {
+        ".bak": 2,
+        ".exe": 7,
+        ".txt": 2,
+        ".des": 1,
+        ".inf": 1,
+        ".seal": 1,
+        ".ini": 3,
+        ".fx": 3,
+        ".mmd": 1,
+        ".dll": 4,
+        ".tex": 6,
+        ".png": 1,
+        ".sys": 3,
+        ".lib": 1,
+        ".vxd": 1,
+        ".ver": 3
+      }
+    },
+    "GameGuard": {
+      "files": 27,
+      "bytes": 60160613,
+      "extensions": {
+        ".erl": 10,
+        ".des": 13,
+        ".ver": 1,
+        ".ini": 1,
+        ".jpg": 1,
+        ".now": 1
+      }
+    },
+    "GameSystemFile": {
+      "files": 58,
+      "bytes": 83236888,
+      "extensions": {
+        ".txt": 1,
+        ".fx": 1,
+        ".dll": 45,
+        ".cfg": 11
+      }
+    },
+    "UIfont": {
+      "files": 8,
+      "bytes": 29117944,
+      "extensions": {
+        ".ttf": 8
+      }
+    },
+    "actor": {
+      "files": 1,
+      "bytes": 72393042,
+      "extensions": {
+        ".spak": 1
+      }
+    },
+    "bgm": {
+      "files": 67,
+      "bytes": 196068319,
+      "extensions": {
+        ".mp3": 67
+      }
+    },
+    "client": {
+      "files": 2,
+      "bytes": 3522,
+      "extensions": {
+        ".mmd": 1,
+        ".cfg": 1
+      }
+    },
+    "etc": {
+      "files": 3,
+      "bytes": 154371150,
+      "extensions": {
+        ".spak": 1,
+        ".edp": 1,
+        ".edt": 1
+      }
+    },
+    "interface": {
+      "files": 1,
+      "bytes": 122318056,
+      "extensions": {
+        ".spak": 1
+      }
+    },
+    "item": {
+      "files": 1,
+      "bytes": 20875841,
+      "extensions": {
+        ".spak": 1
+      }
+    },
+    "map": {
+      "files": 2,
+      "bytes": 631507384,
+      "extensions": {
+        ".spak": 2
+      }
+    },
+    "monster": {
+      "files": 1,
+      "bytes": 442857728,
+      "extensions": {
+        ".spak": 1
+      }
+    },
+    "resource": {
+      "files": 1,
+      "bytes": 12656102,
+      "extensions": {
+        ".spak": 1
+      }
+    },
+    "sfx": {
+      "files": 1,
+      "bytes": 171215728,
+      "extensions": {
+        ".spak": 1
+      }
+    },
+    "skill": {
+      "files": 1,
+      "bytes": 69339047,
+      "extensions": {
+        ".spak": 1
+      }
+    },
+    "sound": {
+      "files": 2920,
+      "bytes": 481161608,
+      "extensions": {
+        ".wav": 2909,
+        ".mp3": 1,
+        ".dll": 1,
+        ".m3d": 6,
+        ".flt": 1,
+        ".asi": 2
+      }
+    },
+    "wear": {
+      "files": 1,
+      "bytes": 422780350,
+      "extensions": {
+        ".spak": 1
+      }
+    }
+  },
+  "archives": [
+    {
+      "path": "actor/actor.SPAK",
+      "bytes": 72393042,
+      "entries": 1722,
+      "encrypted_flag_entries": 1722,
+      "declared_uncompressed_bytes": 159798458,
+      "extensions": {
+        ".act": 62,
+        ".an1": 1331,
+        ".ase": 14,
+        ".bn1": 115,
+        ".boe": 2,
+        ".dds": 2,
+        ".ms1": 148,
+        ".msh": 2,
+        ".sha": 23,
+        ".tex": 13,
+        ".tga": 2,
+        ".tx1": 7,
+        ".txt": 1
+      },
+      "filename_examples": [
+        "Arrowstorm_C_m.an1",
+        "Arrowstorm_C_w.an1",
+        "Arrow_of_Judgment_C_m.an1",
+        "Arrow_of_Judgment_C_w.an1",
+        "Bloody_Dance_Skill_C_m.an1",
+        "Core_Meltdown_Skill_C_ep.an1",
+        "Core_Meltdown_Skill_C_ep.ms1",
+        "Core_Meltdown_Skill_C_ep.sha",
+        "Core_Meltdown_Skill_C_m.an1",
+        "Core_Meltdown_Skill_C_w.an1",
+        "Crushing_Force_Skill_C_m.an1",
+        "Donutshockwave_C_ep.an1"
+      ],
+      "name_matches": {
+        "pet": [
+          "E_trumpet_W.an1",
+          "E_turmpet_W.an1",
+          "M_battlepetl_ friendship01.an1",
+          "M_battlepetl_ friendship02.an1",
+          "M_battlepetl_ friendship03.an1",
+          "M_battlepetl_ friendship04.an1",
+          "W_battlepetl_ friendship01.an1",
+          "W_battlepetl_ friendship02.an1",
+          "W_battlepetl_ friendship03.an1",
+          "W_battlepetl_ friendship04.an1"
+        ],
+        "quest": [],
+        "refin": [],
+        "costume": [],
+        "guard": [
+          "G_Mecha_Guardian_ani_hit_M.an1",
+          "G_Mecha_Guardian_ani_hit_W.an1",
+          "G_Mecha_Guardian_ani_hit_W.ase",
+          "G_Mecha_Guardian_ani_stand_M.an1",
+          "G_Mecha_Guardian_ani_stand_W.an1",
+          "G_Mecha_Guardian_ani_stand_W.ase",
+          "G_Mecha_Guardian_ani_walk_M.an1",
+          "G_Mecha_Guardian_ani_walk_W.an1",
+          "G_Mecha_Guardian_ani_walk_W.ase"
+        ],
+        "aura": [],
+        "guild": [],
+        "couple": [],
+        "party": [
+          "Gourmet_1031_PartyFinding_m.an1",
+          "Gourmet_1031_PartyFinding_w.an1"
+        ],
+        "trade": [],
+        "fish": [
+          "m_fishtd_fail.an1",
+          "m_fishtd_fight.an1",
+          "m_fishtd_get.an1",
+          "m_fishtd_happy.an1",
+          "m_fishtd_pitch.an1",
+          "m_fishtd_stand.an1",
+          "m_fishtd_wait.an1",
+          "w_fishtd_fail.an1",
+          "w_fishtd_fight.an1",
+          "w_fishtd_get.an1",
+          "w_fishtd_happy.an1",
+          "w_fishtd_pitch.an1"
+        ]
+      }
+    },
+    {
+      "path": "etc/etc.SPAK",
+      "bytes": 140280058,
+      "entries": 764,
+      "encrypted_flag_entries": 764,
+      "declared_uncompressed_bytes": 238212888,
+      "extensions": {
+        ".dat": 6,
+        ".dll": 1,
+        ".ed1": 1,
+        ".ed10": 1,
+        ".ed11": 1,
+        ".ed12": 1,
+        ".ed13": 1,
+        ".ed14": 1,
+        ".ed15": 1,
+        ".ed16": 1,
+        ".ed17": 1,
+        ".ed2": 1,
+        ".ed3": 1,
+        ".ed4": 1,
+        ".ed5": 1,
+        ".ed6": 1,
+        ".ed7": 1,
+        ".ed8": 1,
+        ".ed9": 1,
+        ".edt": 514,
+        ".mdt": 111,
+        ".mmd": 1,
+        ".nam": 4,
+        ".scr": 6,
+        ".sol": 11,
+        ".sys": 1,
+        ".tex": 92
+      },
+      "filename_examples": [
+        "accessory.edt",
+        "additonal_reward.edt",
+        "add_groggy.edt",
+        "AI_Mon.edt",
+        "Animation_flag.edt",
+        "attendance_reward.edt",
+        "auragraphic.edt",
+        "body.edt",
+        "bonus_result.edt",
+        "buff.edt",
+        "buffdesc.edt",
+        "constant.edt"
+      ],
+      "name_matches": {
+        "pet": [
+          "pet_decomposition.edt",
+          "BattlePetActor.sol",
+          "BattlePetController.sol",
+          "BattlePetLocalController.sol",
+          "bpet.edt",
+          "bpet_buff.edt",
+          "bpet_emotion.edt",
+          "bpet_growthrate.edt",
+          "bpet_level.edt",
+          "bpet_model.edt",
+          "bpet_skill.edt",
+          "bpet_sys.edt"
+        ],
+        "quest": [
+          "Dailyquest_data.edt",
+          "quest_indun.edt",
+          "quest.edt",
+          "usaquest.edt",
+          "Dailyquest_data.scr",
+          "Adjust_quest_num.edt",
+          "dailyquest_fieldlist.edt",
+          "quest_drop.edt"
+        ],
+        "refin": [
+          "equipmentrefine.edt",
+          "gemrefine.edt",
+          "gemrefine_cash.edt",
+          "gemrefine_runestone.edt",
+          "refinedamagestat.edt"
+        ],
+        "costume": [
+          "costume_exchange.edt",
+          "costume_rank_step_stats.edt",
+          "costume_smelting.edt"
+        ],
+        "guard": [
+          "guarder.edt"
+        ],
+        "aura": [
+          "auragraphic.edt",
+          "itemequipmentaura.edt"
+        ],
+        "guild": [],
+        "couple": [],
+        "party": [],
+        "trade": [
+          "itemtrademall.edt",
+          "itemtrademall.scr"
+        ],
+        "fish": [
+          "qu_fishing.tex"
+        ]
+      }
+    },
+    {
+      "path": "interface/interface.SPAK",
+      "bytes": 122318056,
+      "entries": 1506,
+      "encrypted_flag_entries": 1506,
+      "declared_uncompressed_bytes": 908423218,
+      "extensions": {
+        ".dat": 1,
+        ".db": 1,
+        ".dds": 2,
+        ".edt": 1,
+        ".exe": 1,
+        ".mdt": 352,
+        ".men": 306,
+        ".png": 2,
+        ".spr": 199,
+        ".te1": 1,
+        ".tex": 628,
+        ".tga": 12
+      },
+      "filename_examples": [
+        "helpnpc36626.mdt",
+        "helpnpc36627.mdt",
+        "helpnpc36628.mdt",
+        "helpnpc37234.mdt",
+        "helpnpc37238.mdt",
+        "loading.tex",
+        "m_3tier_class_apostle.tex",
+        "m_3tier_class_archer.tex",
+        "m_3tier_class_artisan.tex",
+        "m_3tier_class_assassin.tex",
+        "m_3tier_class_berserker.tex",
+        "m_3tier_class_chef.tex"
+      ],
+      "name_matches": {
+        "pet": [
+          "battle_pet_info .tex",
+          "battle_pet_Info.tex",
+          "battle_pet_ui01.tex",
+          "battle_pet_ui03.tex",
+          "Bpet_GageBar.men",
+          "Bpet_main.men",
+          "e_pet_sign.tex",
+          "maingreen_ChangeBpet.men",
+          "PetDie.mdt",
+          "petmix.men",
+          "petmix.spr",
+          "petmix.tex"
+        ],
+        "quest": [
+          "mainblue_Quest.men",
+          "mainblue_Quest.spr",
+          "mainblue_quest.tex",
+          "mainblue_quest02.tex",
+          "main_quest.tex",
+          "quest.spr",
+          "quest.tex",
+          "quest.men",
+          "DailyQuest_icon.men",
+          "Daily_Quest.men",
+          "Daily_Quest.spr",
+          "Daily_Quest.tex"
+        ],
+        "refin": [],
+        "costume": [
+          "item_costume_add.men",
+          "item_costume_buy.men",
+          "item_costume_gift.men",
+          "costume_mix.tex",
+          "costume_mix.men",
+          "costume_mix.spr",
+          "costume_exchange.tex",
+          "costume_exchange.men",
+          "costume_exchange.spr",
+          "costume_purchase.men",
+          "costume_change.tex",
+          "CostumeCloset.men"
+        ],
+        "guard": [
+          "guarder.spr",
+          "guarder.tex",
+          "guarder.men"
+        ],
+        "aura": [
+          "AuraSystem01.tex",
+          "AuraSystem02.tex",
+          "AuraSystem03.tex",
+          "Aura_System.men",
+          "Aura_System.spr",
+          "selecttalk_Aura.men",
+          "selecttalk_Aura.spr",
+          "selecttalk_Aura.tex"
+        ],
+        "guild": [
+          "battle_guild.men",
+          "guild_list.men",
+          "guild_list.spr",
+          "guild_list.tex",
+          "guild_load.men",
+          "guild_load.spr",
+          "guild_load.tex",
+          "honor_guild_list.men",
+          "honor_guild_list.spr",
+          "honor_guild_list.tex",
+          "mainGreen_guild.men",
+          "mainGreen_guild.spr"
+        ],
+        "couple": [
+          "coupleselect.men",
+          "coupleselect.spr",
+          "mainButton_couple.spr",
+          "mainbutton_couple.tex",
+          "mainred_messenger_couple.tex",
+          "mainred_messenger_couple_heartani.tex",
+          "couple_button.men",
+          "couple_button.spr",
+          "couple_button.tex",
+          "couple_eff.men",
+          "mainButton_couple.men",
+          "coupleselect.tex"
+        ],
+        "party": [
+          "mainred_messenger_party.tex",
+          "party.tex",
+          "party_00.tex",
+          "party_00_old.tex",
+          "party_create.tex",
+          "party_research.men",
+          "party_select.tex",
+          "Unity_Party.dds",
+          "Unity_Party.men",
+          "Unity_Party.spr",
+          "Unity_Party.tex",
+          "uni_party_create.tex"
+        ],
+        "trade": [
+          "tradeselect.spr",
+          "tradeselect.men",
+          "tradeselect.tex"
+        ],
+        "fish": [
+          "fish.tex",
+          "mainBlue_FishingOnSkill.men",
+          "mainBlue_FishingOnSkill.spr",
+          "mainblue_fishingonskill.tex",
+          "mainblue_skill_fish02-34.tex",
+          "mainblue_skill_fish02.tex",
+          "mainblue_skill_fish03.tex",
+          "_ex_mainBlue_fishing.men"
+        ]
+      }
+    },
+    {
+      "path": "item/item.SPAK",
+      "bytes": 20875841,
+      "entries": 132,
+      "encrypted_flag_entries": 132,
+      "declared_uncompressed_bytes": 87230237,
+      "extensions": {
+        ".act": 1,
+        ".an1": 4,
+        ".bn1": 1,
+        ".ms1": 35,
+        ".png": 3,
+        ".tex": 84,
+        ".tga": 3,
+        ".txt": 1
+      },
+      "filename_examples": [
+        "itemicon20.tex",
+        "itemicon20a.tex",
+        "itemicon20b.tex",
+        "itemicon21.tex",
+        "itemicon21a.tex",
+        "itemicon21b.tex",
+        "ani1.txt",
+        "coin.tex",
+        "itemicon1.tex",
+        "itemicon10.tex",
+        "itemicon10a.tex",
+        "itemicon10b.tex"
+      ],
+      "name_matches": {
+        "pet": [],
+        "quest": [
+          "R_quest01.tex",
+          "R_quest02.tex",
+          "R_quest03.tex",
+          "R_questmark01.an1",
+          "R_questmark01.ms1",
+          "R_questmark02.an1",
+          "R_questmark02.ms1",
+          "R_questmark03.an1",
+          "R_questmark03.ms1"
+        ],
+        "refin": [],
+        "costume": [],
+        "guard": [],
+        "aura": [],
+        "guild": [],
+        "couple": [],
+        "party": [],
+        "trade": [],
+        "fish": []
+      }
+    },
+    {
+      "path": "map/map.SPAK",
+      "bytes": 596987262,
+      "entries": 7613,
+      "encrypted_flag_entries": 7613,
+      "declared_uncompressed_bytes": 1782428879,
+      "extensions": {
+        ".an1": 1134,
+        ".ase": 2,
+        ".bmp": 15,
+        ".bn1": 2,
+        ".db": 1,
+        ".dds": 149,
+        ".edt": 3,
+        ".gcm": 45,
+        ".gwm": 38,
+        ".h": 1,
+        ".log": 34,
+        ".map": 176,
+        ".mdt": 157,
+        ".meta": 1,
+        ".mete": 2,
+        ".ms1": 3525,
+        ".msh": 18,
+        ".obj": 2,
+        ".psd": 10,
+        ".scr": 3,
+        ".sha": 190,
+        ".shader": 1,
+        ".tex": 2054,
+        ".tga": 5,
+        ".txt": 2,
+        ".wmp": 43
+      },
+      "filename_examples": [
+        "207_lightmap.dds",
+        "210_lightmap.dds",
+        "217.gcm",
+        "217.gwm",
+        "217.map",
+        "217.mdt",
+        "217.wmp",
+        "217_MapBlock.dds",
+        "218.gcm",
+        "218.gwm",
+        "218.map",
+        "218.mdt"
+      ],
+      "name_matches": {
+        "pet": [
+          "house_sevis_bigshop_pet_t01.tex",
+          "iceD_capet.ms1",
+          "iceD_capet.tex",
+          "object_under_five_carpet_A01.ms1",
+          "object_under_five_carpet_A01.tex",
+          "object_under_five_carpet_B01.ms1",
+          "WT_Carpet_01.ms1",
+          "wt_carpet_01.tex",
+          "object_samael_c_carpet_a01.ms1",
+          "object_samael_d_carpet_a01.ms1",
+          "object_samael_d_carpet_a01.tex",
+          "object_samael_d_carpet_a02.ms1"
+        ],
+        "quest": [
+          "house_elim_request.an1",
+          "house_elim_request.ms1",
+          "house_elim_request.tex",
+          "House_Gourmet_Request.an1",
+          "House_Gourmet_Request.ms1",
+          "House_Gourmet_Request.tex",
+          "house_madelin_request.an1",
+          "house_madelin_request.ms1",
+          "house_madelin_request.tex",
+          "house_quest_burninner_j00.ms1",
+          "house_quest_burninner_j00.tex",
+          "house_quest_burninner_j01.tex"
+        ],
+        "refin": [],
+        "costume": [],
+        "guard": [
+          "house_raim_guard.an1",
+          "house_raim_guard.ms1",
+          "house_raim_guardtower.ms1",
+          "house_raim_guard_broken.ms1",
+          "house_raim_guardtower_broken.ms1",
+          "object_rine_guardtower_a01.ms1",
+          "object_rine_guardtower_a01.tex",
+          "object_rine_guardtower_a02.ms1"
+        ],
+        "aura": [],
+        "guild": [
+          "A_Guild_startingpoint_blue.an1",
+          "A_Guild_startingpoint_blue.ms1",
+          "A_Guild_startingpoint_red.an1",
+          "A_Guild_startingpoint_red.ms1",
+          "house_guild_emblem_k00.tex",
+          "house_guild_fame_k00.an1",
+          "house_guild_fame_k00.ms1",
+          "house_guild_fame_k00.msh",
+          "house_guild_fame_k00.tex",
+          "house_guild_fame_k01.tex",
+          "house_guild_fame_k02.tex",
+          "house_guild_stage_k00.an1"
+        ],
+        "couple": [],
+        "party": [
+          "object_chat-partysky_01.tex",
+          "object_chat-partywall_01.tex",
+          "object_chat_partyflat_01.tex",
+          "object_chat_partyfo_01.tex",
+          "object_chat_partyfo_02.tex",
+          "object_chat_partystone_01.tex",
+          "object_chat_party_01.an1",
+          "object_chat_party_01.ms1",
+          "object_tdundeon_partyline.an1",
+          "object_tdundeon_partyline.ms1"
+        ],
+        "trade": [],
+        "fish": [
+          "Bluefish.an1",
+          "Bluefish.ms1",
+          "Fishblue.an1",
+          "Fishblue.ms1",
+          "fishblue.tex",
+          "Fishgreen.an1",
+          "Fishgreen.ms1",
+          "fishgreen.tex",
+          "Fishyell.an1",
+          "Fishyell.ms1",
+          "fishyell.tex",
+          "Greenfish.an1"
+        ]
+      }
+    },
+    {
+      "path": "map/minimap/minimap.SPAK",
+      "bytes": 34520122,
+      "entries": 497,
+      "encrypted_flag_entries": 497,
+      "declared_uncompressed_bytes": 83701741,
+      "extensions": {
+        ".edt": 232,
+        ".men": 55,
+        ".min": 1,
+        ".scr": 1,
+        ".spr": 55,
+        ".tex": 149,
+        ".tga": 4
+      },
+      "filename_examples": [
+        "warp.edt",
+        "2013_mini_01.men",
+        "2013_mini_01.spr",
+        "2013_mini_01.tex",
+        "2013_mini_02.spr",
+        "2013_mini_02.tex",
+        "2013_mini_04.men",
+        "2013_mini_04.spr",
+        "2013_mini_04.tex",
+        "2013_mini_09.men",
+        "2013_mini_09.spr",
+        "2013_mini_09.tex"
+      ],
+      "name_matches": {
+        "pet": [],
+        "quest": [],
+        "refin": [],
+        "costume": [],
+        "guard": [],
+        "aura": [],
+        "guild": [],
+        "couple": [],
+        "party": [],
+        "trade": [],
+        "fish": []
+      }
+    },
+    {
+      "path": "monster/monster.SPAK",
+      "bytes": 442857728,
+      "entries": 8099,
+      "encrypted_flag_entries": 8099,
+      "declared_uncompressed_bytes": 1127755025,
+      "extensions": {
+        ".act": 970,
+        ".an1": 3465,
+        ".ase": 162,
+        ".bn1": 956,
+        ".dat": 2,
+        ".dds": 10,
+        ".edt": 2,
+        ".jpg": 1,
+        ".mat": 122,
+        ".mp4": 8,
+        ".ms1": 1046,
+        ".psd": 4,
+        ".sha": 15,
+        ".te1": 32,
+        ".tex": 1231,
+        ".tga": 70,
+        ".txt": 3
+      },
+      "filename_examples": [
+        "am_dd.an1",
+        "am_f2.an1",
+        "am_fw.an1",
+        "am_pi.an1",
+        "am_rn.an1",
+        "am_w1.an1",
+        "Arrowscall_M.an1",
+        "Arrowscall_W.an1",
+        "aw_dd.an1",
+        "aw_f2.an1",
+        "aw_fw.an1",
+        "aw_pi.an1"
+      ],
+      "name_matches": {
+        "pet": [
+          "E_Bpet_dark.act",
+          "E_Bpet_dark.an1",
+          "E_Bpet_dark.bn1",
+          "E_Bpet_dark.ms1",
+          "e_Bpet_dark.tex",
+          "E_Bpet_dark_attack.an1",
+          "E_Bpet_dark_attack_ef.an1",
+          "E_Bpet_dark_die.an1",
+          "E_Bpet_dark_struck.an1",
+          "E_Bpet_fire.act",
+          "E_Bpet_fire_attack.an1",
+          "E_Bpet_fire_die.an1"
+        ],
+        "quest": [
+          "questmon_fire00.an1",
+          "questmon_fire00.ms1",
+          "questmon_fire01.an1",
+          "questmon_fire01.ms1",
+          "questmon_fire02.an1",
+          "questmon_fire02.ms1",
+          "spingskul_quest.tex",
+          "Taspquestcast.an1",
+          "Taspquestdd.an1",
+          "Taspquestf1.an1",
+          "Taspquestfw.an1",
+          "Taspquestms.an1"
+        ],
+        "refin": [],
+        "costume": [
+          "Nacostumefw.an1",
+          "N_costume.act",
+          "N_costume.bn1",
+          "N_costume.ms1"
+        ],
+        "guard": [
+          "N_in_guard.act",
+          "N_in_guard.an1",
+          "N_in_guard.bn1",
+          "N_in_guard.ms1",
+          "n_in_guard.tex",
+          "n_in_guard_face.tex",
+          "R_DraGuard_Mage.dds",
+          "R_DraGuard_Mage.tex",
+          "R_DraGuard_Warrior.tex",
+          "T_Bpostguardian.act",
+          "T_Bpostguardian_dd.an1",
+          "T_Bpostguardian_f1.an1"
+        ],
+        "aura": [],
+        "guild": [
+          "A_GuildZonesim.tex",
+          "A_Guild_point_blue.an1",
+          "A_Guild_point_blue.ms1",
+          "A_Guild_point_red.an1",
+          "A_Guild_point_red.ms1",
+          "Guild_trap1(dd).an1",
+          "Guild_trap1(dd).bn1",
+          "Guild_trap1(dd).ms1",
+          "Guild_trap1(fw).an1",
+          "Guild_trap1(fw).bn1",
+          "Guild_trap1(fw).ms1",
+          "N_GuildHonorGirl.act"
+        ],
+        "couple": [],
+        "party": [],
+        "trade": [],
+        "fish": [
+          "N_FishingMark.act",
+          "N_FishingMark.an1",
+          "N_FishingMark.bn1",
+          "N_FishingMark.ms1",
+          "n_fishingmark.tex",
+          "r_fishstaff2.tex",
+          "Tahumanfishcast.an1",
+          "Tahumanfishdd.an1",
+          "Tahumanfishf1.an1",
+          "Tahumanfishfw.an1",
+          "Tahumanfishms.an1",
+          "Tahumanfishpi.an1"
+        ]
+      }
+    },
+    {
+      "path": "resource/resource.SPAK",
+      "bytes": 12656102,
+      "entries": 175,
+      "encrypted_flag_entries": 175,
+      "declared_uncompressed_bytes": 44070481,
+      "extensions": {
+        ".an1": 7,
+        ".ani": 1,
+        ".bn1": 1,
+        ".ico": 1,
+        ".men": 2,
+        ".ms1": 14,
+        ".msh": 3,
+        ".sha": 1,
+        ".spr": 3,
+        ".te1": 2,
+        ".tex": 140
+      },
+      "filename_examples": [
+        "bg.tex",
+        "ch_archi_block01.tex",
+        "ch_archi_block_02.tex",
+        "ch_badk02.tex",
+        "ch_curtain.tex",
+        "ch_door01.tex",
+        "ch_flower02.tex",
+        "ch_platform01.tex",
+        "ch_platform02.tex",
+        "ch_woodwall01.tex",
+        "at00.tex",
+        "bg_color_circle.tex"
+      ],
+      "name_matches": {
+        "pet": [
+          "pet_taget.tex"
+        ],
+        "quest": [
+          "house_madelin_request.tex",
+          "R_quest01.tex",
+          "R_quest02.tex",
+          "R_quest03.tex",
+          "R_questmark01.an1",
+          "R_questmark01.ms1",
+          "R_questmark02.an1",
+          "R_questmark02.ms1",
+          "R_questmark03.an1",
+          "R_questmark03.ms1"
+        ],
+        "refin": [],
+        "costume": [],
+        "guard": [],
+        "aura": [],
+        "guild": [],
+        "couple": [],
+        "party": [],
+        "trade": [],
+        "fish": []
+      }
+    },
+    {
+      "path": "sfx/sfx.SPAK",
+      "bytes": 171215728,
+      "entries": 4013,
+      "encrypted_flag_entries": 4013,
+      "declared_uncompressed_bytes": 759436353,
+      "extensions": {
+        ".an1": 39,
+        ".ase": 2,
+        ".bmp": 2,
+        ".bn1": 1,
+        ".dat": 1,
+        ".edt": 1,
+        ".ini": 1,
+        ".jpg": 2,
+        ".ms1": 41,
+        ".png": 3,
+        ".sfx": 9,
+        ".sha": 6,
+        ".shader": 55,
+        ".te1": 106,
+        ".tex": 3290,
+        ".tga": 450,
+        ".txt": 4
+      },
+      "filename_examples": [
+        "ani1.txt",
+        "Bloody_Dance_Skill_C_ep.an1",
+        "Bloody_Dance_Skill_C_ep.ms1",
+        "Bloody_Dance_Skill_C_ep.sha",
+        "chr.sfx",
+        "crack_ground.tex",
+        "crack_ground.tga",
+        "Crushing_Force_Skill_C_ep.an1",
+        "Crushing_Force_Skill_C_ep.ms1",
+        "Crushing_Force_Skill_C_ep.sha",
+        "Effect.ini",
+        "effect_ICEMAGIC_Dragon.png"
+      ],
+      "name_matches": {
+        "pet": [
+          "6th_pet_wear_effects.shader",
+          "e_pet_sign.tex",
+          "npet_tiger02.tex",
+          "npet_tiger03.tex",
+          "npet_tiger04.tex",
+          "npet_tiger05.tex",
+          "npet_tiger06.tex",
+          "pet_quest_color.tex",
+          "pet_smoke.te1",
+          "pet_smoke.tex",
+          "pet_smoke01.tex",
+          "pet_smoke02.tex"
+        ],
+        "quest": [
+          "em_sign_question.tex",
+          "em_sign_question2.tex",
+          "house_sevis_request_t01.tex",
+          "house_sevis_request_t02.tex",
+          "pet_quest_color.tex",
+          "question.tex",
+          "sfx_sevis_request_t01.tex",
+          "shade_house_elim_request.tex"
+        ],
+        "refin": [
+          "itemrefine_01.tex",
+          "itemrefine_02.tex",
+          "itemrefine_03.tex",
+          "itemrefine_04.tex",
+          "itemrefine_05.tex",
+          "itemrefine_06.tex",
+          "itemrefine_07.tex",
+          "itemrefine_08.tex",
+          "itemrefine_09.tex",
+          "itemrefine_10.tex",
+          "itemrefine_11.tex",
+          "itemrefine_11_1.tex"
+        ],
+        "costume": [],
+        "guard": [
+          "defense_guard_c.tex",
+          "firstguard_ball.tex",
+          "firstguard_bill00.tex",
+          "firstguard_bill01.tex",
+          "firstguard_bill02.tex",
+          "firstguard_bill03.tex",
+          "firstguard_bill04.tex",
+          "firstguard_bill05.tex",
+          "firstguard_bill06.tex",
+          "firstguard_bill07.tex",
+          "infinity_guard_c.tex",
+          "infinity_guard_c01.tex"
+        ],
+        "aura": [
+          "vfx_aura_02.tex",
+          "vfx_aura_02.tga",
+          "vfx_aura_white_strong.tex",
+          "vfx_aura_white_strong.tga",
+          "vfx_aura_yellow.tex",
+          "vfx_aura_yellow.tga",
+          "A_Aura_featherdown_black.tex",
+          "A_Aura_featherdown_red.tex",
+          "A_Aura_featherdown_white.tex",
+          "A_Aura_lightning_blue.tex",
+          "A_Aura_lightning_blue2.tex",
+          "A_Aura_lightning_purple.tex"
+        ],
+        "guild": [
+          "a_guild_point_lightblue.tex",
+          "a_guild_point_redlight.tex",
+          "a_guild_score10.tex",
+          "a_guild_score30.tex",
+          "guildflag01.tex",
+          "guildflag02.tex",
+          "guildpoint_pick.tex",
+          "guild_cloud.tex",
+          "guild_draw.tex",
+          "guild_fame_k00_eff.tex",
+          "guild_fame_k01_eff.tex",
+          "guild_loser.tex"
+        ],
+        "couple": [
+          "couple_candle00.tex",
+          "couple_candle01.tex",
+          "couple_candle02.tex",
+          "couple_candle03.tex",
+          "couple_candle04.tex",
+          "couple_candle05.tex",
+          "couple_candle06.tex",
+          "couple_candle07.tex"
+        ],
+        "party": [
+          "mark_party01.te1",
+          "Mark_Party01.tex",
+          "mark_party01_b.te1",
+          "mark_party01_b.tex",
+          "mark_party01_g.te1",
+          "mark_party01_g.tex",
+          "mark_party01_r.te1",
+          "mark_party01_r.tex",
+          "mark_party02.te1",
+          "Mark_Party02.tex",
+          "mark_party03.te1",
+          "Mark_Party03.tex"
+        ],
+        "trade": [],
+        "fish": [
+          "fish_faild_01.tex",
+          "fish_get_01.tex",
+          "fish_goodpoint_01.tex",
+          "fish_goodpoint_02.tex",
+          "fish_great_01.tex",
+          "fish_great_02.tex",
+          "fish_great_03.tex",
+          "itemmall_fish.tex",
+          "leeslei_fish.tex"
+        ]
+      }
+    },
+    {
+      "path": "skill/skill.SPAK",
+      "bytes": 69339047,
+      "entries": 3988,
+      "encrypted_flag_entries": 3988,
+      "declared_uncompressed_bytes": 215582503,
+      "extensions": {
+        ".act": 2,
+        ".an1": 1657,
+        ".ase": 8,
+        ".bmp": 2,
+        ".bn1": 74,
+        ".cfg": 1,
+        ".dat": 4,
+        ".dds": 2,
+        ".edt": 1,
+        ".mat": 5,
+        ".ms1": 1664,
+        ".sfx": 3,
+        ".sha": 92,
+        ".shader": 6,
+        ".spr": 1,
+        ".tex": 405,
+        ".tga": 56,
+        ".tx1": 2,
+        ".txt": 3
+      },
+      "filename_examples": [
+        "ArrowStorm_P_ep.an1",
+        "ArrowStorm_P_ep.ms1",
+        "Arrow_of_Judgment_T_ep.an1",
+        "Arrow_of_Judgment_T_ep.ms1",
+        "Arrow_of_Judgment_T_ep_hit.an1",
+        "Arrow_of_Judgment_T_ep_hit.ms1",
+        "A_Aura_Spiral_Blue.an1",
+        "A_Aura_Spiral_Blue.ms1",
+        "A_Aura_Spiral_Blue.sha",
+        "A_Aura_Spiral_Common.ase",
+        "A_Aura_Spiral_Navy.an1",
+        "A_Aura_Spiral_Navy.ms1"
+      ],
+      "name_matches": {
+        "pet": [
+          "battlepet_skill1.tex",
+          "battlepet_skill2.tex",
+          "cr_menace_pet.an1",
+          "cr_menace_pet.ms1",
+          "E_Bpet_dark_attack_ef.an1",
+          "E_Bpet_dark_attack_ef.ms1",
+          "E_Bpet_dark_die_ef.an1",
+          "E_Bpet_dark_die_ef.ms1",
+          "E_Bpet_dark_ef.an1",
+          "E_Bpet_dark_ef.ms1",
+          "E_Bpet_dark_skill01_ef.an1",
+          "E_Bpet_dark_skill01_ef.ms1"
+        ],
+        "quest": [
+          "Taspquestsk1_skill.an1",
+          "Taspquestsk1_skill.ms1"
+        ],
+        "refin": [],
+        "costume": [],
+        "guard": [
+          "Defense_Guard_c.an1",
+          "Defense_Guard_c.ms1",
+          "E_Infinity_Guard.an1",
+          "E_Infinity_Guard.ms1",
+          "Infinity_Guard_c01.an1",
+          "Infinity_Guard_c01.ms1",
+          "K2B_A03_ReflectionGuard.an1",
+          "K2B_A03_ReflectionGuard.ms1",
+          "K2B_A04_DivineGuard.an1",
+          "K2B_A04_DivineGuard.ms1",
+          "royalguard_light_dd.an1",
+          "royalguard_light_dd.ms1"
+        ],
+        "aura": [
+          "A_Aura_Spiral_Blue.an1",
+          "A_Aura_Spiral_Blue.ms1",
+          "A_Aura_Spiral_Blue.sha",
+          "A_Aura_Spiral_Common.ase",
+          "A_Aura_Spiral_Navy.an1",
+          "A_Aura_Spiral_Navy.ms1",
+          "A_Aura_Spiral_Navy.sha",
+          "A_Aura_Spiral_Red.an1",
+          "A_Aura_Spiral_Red.ms1",
+          "A_Aura_Spiral_Red.sha",
+          "A_Aura_Spiral_Yellow.an1",
+          "A_Aura_Spiral_Yellow.ms1"
+        ],
+        "guild": [
+          "a_guildflag.tex",
+          "A_guildflag01.an1",
+          "A_guildflag01.ms1",
+          "A_guildflag02.an1",
+          "A_guildflag02.ms1",
+          "A_GuildZonesim.an1",
+          "A_GuildZonesim.ms1",
+          "A_GuildZonesim.tex",
+          "A_Guild_point_blue_eff.an1",
+          "A_Guild_point_blue_eff.ms1",
+          "A_Guild_point_red_eff.an1",
+          "A_Guild_point_red_eff.ms1"
+        ],
+        "couple": [],
+        "party": [
+          "itemmall_double_partyexp.an1",
+          "itemmall_double_partyexp.ms1",
+          "Mark_Party01.tex",
+          "Mark_Party02.tex",
+          "Mark_Party03.tex",
+          "Mark_Party04.tex",
+          "Mark_Party05.tex",
+          "N_party_skill_r.an1",
+          "N_party_skill_r.ms1",
+          "union_party_mark1.mat",
+          "union_party_mark1.ms1",
+          "union_party_mark1_01.tex"
+        ],
+        "trade": [],
+        "fish": [
+          "fish_faila!!_01.tex",
+          "fish_faild_02.tex",
+          "fish_get_01.tex",
+          "fish_goodpoint_01.tex",
+          "fish_goodpoint_02.tex",
+          "fish_great_01.tex",
+          "fish_great_02.tex",
+          "fish_great_03.tex",
+          "itemmall_fish.an1",
+          "itemmall_fish.ms1",
+          "itemmall_fish.tex",
+          "T_humanfish_skill.an1"
+        ]
+      }
+    },
+    {
+      "path": "wear/wear.SPAK",
+      "bytes": 422780350,
+      "entries": 11578,
+      "encrypted_flag_entries": 11578,
+      "declared_uncompressed_bytes": 1196530264,
+      "extensions": {
+        ".act": 392,
+        ".an1": 1114,
+        ".ase": 100,
+        ".bmp": 6,
+        ".bn1": 901,
+        ".dat": 1,
+        ".db": 1,
+        ".dds": 11,
+        ".edt": 19,
+        ".mat": 41,
+        ".ms1": 5517,
+        ".sha": 69,
+        ".te1": 11,
+        ".tex": 3351,
+        ".tga": 43,
+        ".txt": 1
+      },
+      "filename_examples": [
+        "A_Beastrobe.an1",
+        "A_Beastrobe.ase",
+        "A_Beastrobe.bn1",
+        "A_Beastrobe.ms1",
+        "A_Beastrobe.sha",
+        "a_beastrobe.tex",
+        "A_Beastrobe.tga",
+        "A_Beastrobe_acc_ef.an1",
+        "A_Beastrobe_acc_ef.ms1",
+        "A_Beastrobe_acc_ef.sha",
+        "a_wing_abyssal_bon.tex",
+        "G_Mecha_Guardian.act"
+      ],
+      "name_matches": {
+        "pet": [
+          "h_head_peterpan.tex",
+          "h_peterpan.tex",
+          "item_battlepet_Egg.ms1",
+          "item_battlepet_Egg.tex",
+          "M_body_peterpan.ms1",
+          "M_foot_peterpan.ms1",
+          "M_head_peterpan.ms1",
+          "M_leg_peterpan.ms1",
+          "W_body_peterpan.ms1",
+          "W_foot_peterpan.ms1",
+          "W_head_peterpan.ms1",
+          "W_leg_peterpan.ms1"
+        ],
+        "quest": [],
+        "refin": [],
+        "costume": [
+          "Costume_m_disco.tex",
+          "Costume_T_Rex_M.tex",
+          "Costume_T_Rex_W.tex",
+          "Costume_w_disco.tex",
+          "m_gyunwoo_costume.tex",
+          "m_halloween_mariachi_costume.tex",
+          "m_twi_hero_costume.tex",
+          "m_twi_native_costume.tex",
+          "R_Thaicostume.ms1",
+          "R_Thaicostume.tex",
+          "w_gyunwoo_costume.tex",
+          "w_halloween_mariachi_costume.tex"
+        ],
+        "guard": [
+          "G_Mecha_Guardian.act",
+          "G_Mecha_Guardian.an1",
+          "G_Mecha_Guardian.ase",
+          "G_Mecha_Guardian.bn1",
+          "G_Mecha_Guardian.ms1",
+          "G_Mecha_Guardian.sha",
+          "g_mecha_guardian.tex",
+          "G_Mecha_Guardian.tga",
+          "G_Mecha_Guardian_ani_hit.an1",
+          "G_Mecha_Guardian_ani_hit.ase",
+          "G_Mecha_Guardian_ani_hit.bn1",
+          "G_Mecha_Guardian_ani_hit.ms1"
+        ],
+        "aura": [
+          "A_Aura_featherdown_black.an1",
+          "A_Aura_featherdown_black.bn1",
+          "A_Aura_featherdown_black.ms1",
+          "A_Aura_featherdown_black.sha",
+          "A_Aura_featherdown_black.tex",
+          "A_Aura_featherdown_red.an1",
+          "A_Aura_featherdown_red.bn1",
+          "A_Aura_featherdown_red.ms1",
+          "A_Aura_featherdown_red.sha",
+          "A_Aura_featherdown_red.tex",
+          "A_Aura_featherdown_white.an1",
+          "A_Aura_featherdown_white.bn1"
+        ],
+        "guild": [],
+        "couple": [
+          "hair_couple.tex",
+          "h_couple.tex",
+          "H_couple_hj.tex",
+          "H_couple_hj_head.tex",
+          "H_couple_jw.tex",
+          "H_couple_jw2.tex",
+          "H_couple_jw2_head.tex",
+          "H_couple_jw_head.tex",
+          "M_body_couple.ms1",
+          "M_body_wintercouple.ms1",
+          "M_couple_hj.ms1",
+          "M_couple_jw.ms1"
+        ],
+        "party": [
+          "M_PartyCap_Blue.ms1",
+          "M_PartyCap_Red.ms1",
+          "W_PartyCap_Blue.ms1",
+          "W_PartyCap_Red.ms1"
+        ],
+        "trade": [],
+        "fish": [
+          "A_fishmantail.ms1",
+          "A_fishmantail.tex",
+          "G_crawfish.act",
+          "G_crawfishw1.an1",
+          "G_crawfishw1.bn1",
+          "G_crawfishw1.ms1",
+          "G_crawfishw2.an1",
+          "G_crawfishw3.an1",
+          "L_fishShield.ms1",
+          "R_fishbone.ms1",
+          "R_fishbone.tex",
+          "R_fishstaff.ms1"
+        ]
+      }
+    }
+  ],
+  "archive_entry_total": 40087,
+  "wav_formats": {
+    "22050Hz/1ch/16bit": 936,
+    "22050Hz/2ch/16bit": 5,
+    "44100Hz/1ch/16bit": 1850,
+    "44100Hz/2ch/16bit": 27,
+    "48000Hz/2ch/24bit": 64,
+    "not_readable_by_python_wave": 27
+  },
+  "shader_markers": {
+    "so3deffect.fx": {
+      "VSScale": [
+        45,
+        194
+      ],
+      "VSSelect": [
+        64,
+        231
+      ],
+      "WorldView": [
+        7,
+        54,
+        55,
+        73,
+        75,
+        93,
+        109,
+        125,
+        141,
+        142
+      ],
+      "GlowThickness": [
+        9,
+        55,
+        74,
+        75
+      ],
+      "CullMode": [
+        196,
+        233
+      ],
+      "TOutLine": [
+        189
+      ]
+    },
+    "TextOutlineGlow.fx": {
+      "PS_Glow": [
+        50,
+        201
+      ],
+      "PS_OutlineStacked": [
+        86
+      ],
+      "PS_Combined": [
+        124,
+        218
+      ]
+    },
+    "phase.fx": {
+      "NoiseTex": [
+        31,
+        44
+      ],
+      "progress": [
+        7,
+        93,
+        94,
+        97,
+        98,
+        185,
+        186,
+        189,
+        190
+      ],
+      "ps_dissolve": [
+        81,
+        226
+      ],
+      "PS_Combined": [
+        121,
+        235
+      ]
+    }
+  },
+  "client_build_files": {
+    "version_usa.ver": "\n#define VERSION_MAJOR\t\t\t0\n#define VERSION_MINOR\t\t\t0\n#define VERSION_BUILD\t\t\t160\n#define VERSION_QFE\t\t\t\t1\n\n#define VERSION_BUILD_DATE\t\t\"20/10/2026\"\n#define VERSION_BUILD_TIME\t\t\"18:19:21\"\n",
+    "version_usa_x64.ver": "#define VERSION_MAJOR\t1\n#define VERSION_MINOR\t0\n#define VERSION_BUILD\t35\n#define VERSION_QFE\t0\n#define VERSION_BUILD_DATE\t\"20/10/2026\"\n#define VERSION_BUILD_TIME\t\"18:24:51\"\n"
+  },
+  "capture_files": 0
+}

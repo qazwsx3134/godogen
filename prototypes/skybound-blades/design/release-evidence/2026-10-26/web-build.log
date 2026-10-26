@@ -1,0 +1,19 @@
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+[92m[ DONE ][39m [1mfirst_scan_filesystem[22m
+[92m[ DONE ][39m [1msavepack[22m
+ERROR: Condition "_sock == -1" is true. Returning: FAILED
+ERROR: Condition "err != OK" is true. Returning: ERR_CANT_CREATE
+/mnt/d/repo/godot/godogen/prototypes/skybound-blades/build/web/index.js: IDBFS patched
+pack v4, engine 4.7.0, 235 files, 10.43 MB
+  scenes/resources      5.54 MB
+  textures              3.10 MB
+  font                  1.52 MB
+  scripts               0.21 MB
+  other                 0.07 MB
+     279840  index.js
+   10455580  index.pck
+      21443  index.png
+   39509339  index.wasm
+zip: /mnt/d/repo/godot/godogen/prototypes/skybound-blades/build/skybound-blades-web.zip (20M)
+folder for butler: /mnt/d/repo/godot/godogen/prototypes/skybound-blades/build/web

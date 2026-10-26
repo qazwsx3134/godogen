@@ -1,0 +1,9 @@
+{
+  "url": "http://127.0.0.1:8774/",
+  "errors": [],
+  "viewports": [
+    "1440x900",
+    "844x390"
+  ],
+  "scope": "startup, resize, pause screen; not real-device FPS or save durability"
+}

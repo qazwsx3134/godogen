@@ -16,7 +16,12 @@ func _init() -> void:
 	tuning = Tuning.load_default()
 	test_save_round_trip_keeps_run_and_profile()
 	test_save_corrupt_main_falls_back_to_backup()
+	test_save_invalid_main_loads_backup_and_keeps_it()
 	test_save_tombstoned_run_never_loads_alive()
+	test_death_journal_recovers_profile_after_interrupted_main()
+	test_schema_rejects_nested_damage()
+	test_atomic_recovery_and_rejected_bytes()
+	test_preferences_round_trip()
 	test_save_warehouse_rules()
 	SaveService.new(PATH).erase()
 	DirAccess.remove_absolute("user://test_saves")
@@ -75,6 +80,29 @@ func test_save_corrupt_main_falls_back_to_backup() -> void:
 	_expect(int(s.load_state().profile.warehouse_gold) == 1, "backup: a corrupt main file loads the last good copy")
 
 
+func test_save_invalid_main_loads_backup_and_keeps_it() -> void:
+	# Arrange: a good save in .bak, then a main file from a newer version, then one with an empty run
+	var s := _fresh()
+	s.save({"profile": {"warehouse_gold": 1}, "run": null})
+	s.save({"profile": {"warehouse_gold": 2}, "run": null})
+	for bad: Dictionary in [{"schema": 999, "profile": {"warehouse_gold": 9}, "run": null}, {"schema": 1, "profile": {}, "run": {}}]:
+		var f := FileAccess.open(PATH, FileAccess.WRITE)
+		f.store_string(JSON.stringify(bad))
+		f.close()
+		# Act: load, then save over it the way field.load_game does
+		var loaded := s.load_state()
+		s.save({"profile": loaded.profile, "run": null})
+		# Assert
+		_expect(int(loaded.profile.warehouse_gold) == 1, "invalid main (schema %s): the backup loads" % bad.schema)
+		_expect(int(s.load_state().profile.warehouse_gold) == 1 and int(JSON.parse_string(
+			FileAccess.get_file_as_string(PATH + ".bak")).profile.warehouse_gold) == 1, "invalid main: the good backup survives the next save")
+		_expect(JSON.parse_string(FileAccess.get_file_as_string(PATH + ".rejected")).hash() == JSON.parse_string(JSON.stringify(bad)).hash(),
+			"invalid main: the rejected file is kept aside")
+		f = FileAccess.open(PATH, FileAccess.WRITE)  # put the good backup back as main for the next case
+		f.store_string(FileAccess.get_file_as_string(PATH + ".bak"))
+		f.close()
+
+
 func test_save_tombstoned_run_never_loads_alive() -> void:
 	var s := _fresh()
 	var run := Run.new(tuning, "g7")
@@ -99,3 +127,70 @@ func test_save_warehouse_rules() -> void:
 	_expect(profile.deposit_gold(run, 30) and run.gold == 20 and profile.warehouse_gold == 30, "warehouse: gold stored")
 	var next := Run.new(tuning, "g3", 2)
 	_expect(profile.withdraw_gear(next, spare.id) and next.gear.has(spare.id), "warehouse: the next generation takes it out")
+
+
+func test_death_journal_recovers_profile_after_interrupted_main() -> void:
+	var service := _fresh()
+	var run := Run.new(tuning, "g1", 1)
+	var before := Profile.new()
+	before.warehouse_gold = 42
+	service.save({"profile": before.to_dict(), "run": run.to_dict()})
+	var after := Profile.from_dict(before.to_dict().duplicate(true))
+	after.record_death(run, "守門者")
+	_expect(service.mark_dead(run.id, after.to_dict()) == OK, "journal: death snapshot commits")
+	# Simulate termination before the main save. A fresh service must recover both sides of the death.
+	var restored := SaveService.new(PATH).load_state()
+	_expect(restored.run == null and int(restored.profile.generation) == 2,
+		"journal: interrupted main cannot resurrect or reuse the dead generation")
+	_expect(restored.profile.memorial.size() == 1 and int(restored.profile.warehouse_gold) == 42,
+		"journal: memorial and warehouse recover together")
+	service.save({"profile": restored.profile, "run": Run.new(tuning, "g2", 2).to_dict()})
+	_expect(service.load_state().run.id == "g2", "journal: next generation is not tombstoned")
+
+
+func test_schema_rejects_nested_damage() -> void:
+	var service := _fresh()
+	var good := {"schema": 1, "profile": Profile.new().to_dict(), "run": Run.new(tuning, "g1").to_dict()}
+	for field: String in ["stacks", "gear", "equipped", "quests", "learned", "slots", "chains", "receipts", "trip"]:
+		var bad := good.duplicate(true)
+		bad.run[field] = "broken"
+		_expect(not service.valid(bad), "schema: rejects wrong container " + field)
+	var bad := good.duplicate(true)
+	bad.run.quests[bad.run.quests.keys()[0]].progress = []
+	_expect(not service.valid(bad), "schema: rejects nested quest type")
+	bad = good.duplicate(true)
+	bad.run.gear[bad.run.gear.keys()[0]].template = "unknown-template"
+	_expect(not service.valid(bad), "schema: rejects unknown equipment")
+	bad = good.duplicate(true)
+	bad.profile.warehouse_items = []
+	_expect(not service.valid(bad), "schema: rejects malformed warehouse")
+	_expect(service.save({"profile": {}, "run": {}}) == ERR_INVALID_DATA,
+		"schema: invalid runtime state is not written")
+
+
+func test_atomic_recovery_and_rejected_bytes() -> void:
+	var service := _fresh()
+	var state := {"profile": {"warehouse_gold": 37}, "run": null}
+	service.save(state)
+	DirAccess.rename_absolute(PATH, PATH + ".old")
+	_expect(service.load_state().profile.warehouse_gold == 37 and service.load_source.ends_with(".old"),
+		"atomic: recovers interrupted fallback rename")
+	service.save(state)
+	var file := FileAccess.open(PATH, FileAccess.WRITE)
+	file.store_string("not valid json")
+	file.close()
+	_expect(service.save(state) == OK and FileAccess.get_file_as_string(PATH + ".rejected") == "not valid json",
+		"recovery: preserves corrupt original bytes before replacement")
+
+
+func test_preferences_round_trip() -> void:
+	var profile := Profile.new()
+	profile.settings.screen_shake = false
+	profile.settings.auto_retreat = false
+	var service := _fresh()
+	service.save({"profile": profile.to_dict(), "run": null})
+	var restored := Profile.from_dict(service.load_state().profile)
+	_expect(not restored.settings.screen_shake and not restored.settings.auto_retreat,
+		"settings: account preferences survive load")
+	var legacy := Profile.from_dict({"settings": {"screen_shake": "false"}})
+	_expect(legacy.settings.screen_shake and legacy.settings.auto_retreat, "settings: malformed or absent values keep defaults")

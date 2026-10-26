@@ -22,6 +22,9 @@
 | [`scene_loader.gd`](addons/proto_kit/scene_loader.gd) | 載入畫面的邏輯：執行緒載入、進度不倒退也不跑在時鐘前面、失敗可重試、離開時收掉任務 | sugarcane-tanks |
 | [`sprite3d*.gdshader`](addons/proto_kit/sprite3d.gdshader)、[`sprite3d_sheet.gd`](addons/proto_kit/sprite3d_sheet.gd)、[`sprite3d_actor.gd`](addons/proto_kit/sprite3d_actor.gd) | 2D 角色圖立在 3D 世界（pokebonk.com／仙境傳說式）：billboard、腳底貼地、依鏡頭相對方向選 1／4／8 方向（含鏡像與遲滯）、描邊身分色、閃白、溶解、x-ray 剪影、殘影、腳下影子，MultiMesh 大軍可用。搭配 `tools/sprite_atlas.py` | madara-survivor、horde-25d（2026-10-19 從這兩份抽出） |
 | [`sprite_check.gd`](addons/proto_kit/sprite_check.gd)、[`sprite_inspector.tscn`](addons/proto_kit/sprite_inspector.tscn) | sprite 動畫測試頁：方向切換、速度、逐幀、格線、洋蔥皮，自動抓切錯格、空白幀與腳底跳動；只讀，不縮放不重排 | skybound-blades；madara-survivor、horde-25d 的 sheet 在程式裡建，存成 `.tres` 後可用 |
+| [`card_draft.gd`](addons/proto_kit/card_draft.gd) | 升級三選一：加權抽牌、有次數的重抽與放逐、佔欄位的技能與不佔欄位的強化、分支進度滿才出現終極牌，可存讀檔（含亂數狀態） | **尚未採用**（2026-10-25 依[類型掃描](../../research/genre-scan/2026-10-25/README.md)的遊戲 B 寫成） |
+| [`upgrade_tree.gd`](addons/proto_kit/upgrade_tree.gd) | 花貨幣升節點等級：成本曲線或逐級價格、相鄰才可買的天賦星圖、沒有邊就是永久成長商店；「目前／購買後／還差 N」預覽、屬性加總、洗點退款 | **尚未採用**（同上，遊戲 A 星圖與遊戲 B 永久成長） |
+| [`run_goals.gd`](addons/proto_kit/run_goals.gd) | 局內目標：依難度層開放、單局或跨局累計、完成一次就永久解鎖獎勵、`已領／總數` | **尚未採用**（同上，Shardbreakers 任務頁） |
 | [`auto_caster.gd`](addons/proto_kit/auto_caster.gd) | survivors 的自動施法：冷卻、射程、目標規則（最近／生命最高／全部…）、優先打首領與精英、斬殺線、持續傷害、暈眩（首領減免）、增益與觸發距離、吸血、等級加成 | **尚未採用**（2026-10-26 依 [Azeroth Survivors 分析](../../docs/research/azeroth-survivors-2026-10-26.md)寫成） |
 | [`rarity.gd`](addons/proto_kit/rarity.gd) | 卡片稀有度：五階權重、運氣、依稀有度給傷害／冷卻／目標數加成；搭配 `card_draft` | **尚未採用**（同上） |
 | [`run_timeline.gd`](addons/proto_kit/run_timeline.gd) | 一局的導演：首領與事件時間表、生怪速度曲線、各時段敵人種類、精英機率、同場上限 | **尚未採用**（同上） |
@@ -31,6 +34,7 @@
 | [`combo_input.gd`](addons/proto_kit/combo_input.gd) | 節奏連招（希望 Online 的 A/S/D）：連招條、節拍與容許誤差、雙鍵和弦、逐段加傷與攻速、收尾加成 | **尚未採用**（2026-10-26 依[希望 Online 分析](../../docs/research/seal-online-2026-10-26.md)寫成；預定給 seal-meadow） |
 | [`refine_ladder.gd`](addons/proto_kit/refine_ladder.gd) | 裝備精煉 +0～+12：各段寶石與成功率、失敗保留／退級／消失、成功率加成、保險道具、期望成本試算 | **尚未採用**（同上） |
 | [`pet_care.gd`](addons/proto_kit/pet_care.gd) | 寵物養成：飢餓與想吃的食物、依售價給經驗、+0～+9 與 7 階、進化配方與稀有、餓到跑掉、城鎮暫停 | **尚未採用**（同上） |
+| [`ui/`](addons/proto_kit/ui/)（`ui_theme.gd`、`ui_styles.json`、`themes/*.tres`、`layouts/*.tscn`） | 3 組純色 UI 樣式（暗黑哥德／像素金框／森林藤蔓）與 8 個手機直式版型 scene：放置分割面板、分頁彈窗、升級三選一、設定列、任務列、ARPG HUD、結算報表、肖像對話框 | **尚未採用**（同上；樣式與版型說明見[UI 樣式與版型目錄](../../research/genre-scan/2026-10-25/ui-style-catalog.md)） |
 
 GDScript、Godot 4.7。只用於 `prototypes/`，不接進 `publish.sh`（見 [ADR 0001](../docs/adr/0001-prototypes-live-in-godogen.md)）。
 
@@ -471,6 +475,17 @@ var issues := SpriteCheck.check_sheet(load("res://resources/sheets/leader.tres")
 ```
 
 畫面是 `sprite_inspector.tscn`，用 `tools/build_sprite_inspector.gd` 產生後就當原始檔維護，重跑產生器要加 `-- --force`。中文字型依序找專案的 GUI 字型、專案裡第一個 `.ttf／.otf`、系統字型。已採用：skybound-blades（`tests/test_sprites.gd` 檢查全部角色 sheet）。
+
+## 類型掃描模組：升級三選一、升級樹、局內目標、UI 樣式與版型
+
+2026-10-25 依[類型掃描研究](../../research/genre-scan/2026-10-25/README.md)寫成，**目前沒有原型採用**，收錄的理由是使用者要做成共用參考；第一個採用的原型負責回報 API 哪裡不順。測試：`tools/run_tests.sh prototypes/godot-kit genre_modules`。
+
+- `card_draft.gd`、`upgrade_tree.gd`、`run_goals.gd`：純邏輯、`RefCounted`，亂數由呼叫端傳入的 `RandomNumberGenerator` 決定；資料格式寫在各檔檔頭，規格與驗收條件見研究資料夾的 `module-specs.md`。
+- `ui/`：`UiTheme.build("<id>")` 在執行時產生 Theme，三個 `themes/<id>.tres` 是同一份 token 存成的 resource，供編輯器直接套用。版型 scene 只有排版與佔位文字，不接任何遊戲流程。開分頁、選牌抽屜等互動由採用的遊戲自己接 signal。
+- **採用前要做**：
+  - 字型：Theme 用的是 `SystemFont`，網頁版沒有系統字型會出現缺字方塊。採用的遊戲要換成自己打包的字型，並跑 `font_check.gd`。
+  - 網頁匯出：`ui_styles.json` 不是 Godot resource，匯出設定要把 `*.json` 加進 include filter，或改用 `themes/*.tres`。
+- 不要拿來取代 debt-commission 的銀魂和紙外觀（見 AGENTS.md）。
 
 ## Survivors 模組：自動施法、稀有度、一局時間軸、天賦、掉落收藏、寶箱
 

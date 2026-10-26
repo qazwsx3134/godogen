@@ -325,8 +325,10 @@ func note_warning(dodged: bool) -> void:
 
 # --- Save -----------------------------------------------------------------------
 
-func to_dict() -> Dictionary:
-	return {"id": id, "generation": generation, "level": level, "experience": experience, "gold": gold,
+## `now_ms` is the battle clock at save time. A loaded run starts a new battle at 0 ms, so from_dict shifts the
+## quest cooldowns back by it: a cooldown counts play time only.
+func to_dict(now_ms: float = 0.0) -> Dictionary:
+	return {"clock_ms": now_ms, "id": id, "generation": generation, "level": level, "experience": experience, "gold": gold,
 		"kills": kills, "stacks": stacks, "issued": issued, "gear": gear, "equipped": equipped, "quests": quests,
 		"receipts": receipts.keys(), "trip": trip, "next_seq": _next_seq, "learned": learned, "slots": slots,
 		"chains": chains, "seals": seals, "seal_receipts": seal_receipts.keys()}
@@ -343,9 +345,11 @@ static func from_dict(tuning_: Tuning, d: Dictionary) -> RefCounted:
 	r.gear = d.gear
 	r.equipped = d.equipped
 	r.quests = {}
+	var clock_ms := float(d.get("clock_ms", 0.0))
 	for qid: String in d.quests:
 		var q: Dictionary = d.quests[qid]
-		r.quests[qid] = {"progress": int(q.progress), "claims": int(q.claims), "available_at_ms": float(q.available_at_ms)}
+		r.quests[qid] = {"progress": int(q.progress), "claims": int(q.claims),
+			"available_at_ms": maxf(0.0, float(q.available_at_ms) - clock_ms)}
 	r.receipts = {}
 	for kid: String in d.receipts:
 		r.receipts[kid] = true

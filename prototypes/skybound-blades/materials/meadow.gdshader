@@ -8,6 +8,10 @@ uniform vec3 dirt : source_color = vec3(0.56, 0.45, 0.30);
 uniform vec3 stone : source_color = vec3(0.62, 0.58, 0.50);
 uniform vec3 flower_a : source_color = vec3(0.98, 0.93, 0.70);
 uniform vec3 flower_b : source_color = vec3(0.70, 0.78, 0.98);
+// Optional painted albedo, assigned in the saved field scene after art import.
+uniform sampler2D painted_grass : source_color, filter_linear_mipmap_anisotropic, repeat_disable;
+uniform float painted_grass_mix : hint_range(0.0, 1.0) = 0.0;
+uniform float texture_world_scale : hint_range(0.02, 1.0) = 0.18;
 varying vec3 world;
 
 float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
@@ -29,6 +33,11 @@ void fragment() {
 	float n = fbm(p * 0.22);
 	vec3 grass = mix(grass_dark, grass_light, smoothstep(0.3, 0.75, n));
 	grass *= 0.92 + 0.16 * noise(p * 3.1);
+	if (painted_grass_mix > 0.0) {
+		// Mirrored UVs make opposite input edges unnecessary: no color jump at tile boundaries.
+		vec2 paint_uv = 1.0 - abs(mod(p * texture_world_scale, vec2(2.0)) - 1.0);
+		grass = mix(grass, texture(painted_grass, paint_uv).rgb, painted_grass_mix);
+	}
 	// Path: a gentle S-curve across the field, its edge broken by noise.
 	float center = sin(p.x * 0.17) * 2.2 + sin(p.x * 0.05 + 1.0) * 1.5;
 	float d = abs(p.y - center) + (fbm(p * 0.9) - 0.5) * 1.1;

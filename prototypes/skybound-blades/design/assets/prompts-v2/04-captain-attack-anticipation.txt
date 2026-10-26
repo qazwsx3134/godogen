@@ -1,0 +1,19 @@
+Create exactly ONE production game sprite on a 1024 x 1024 canvas, not a character sheet.
+
+REFERENCE AND IDENTITY
+The attached image is the approved captain master. It is the authority for this character's actual head-to-body ratio, face, body volume, costume construction and equipment placement. Preserve these features: windswept dark teal hair, amber eyes, sky-blue tunic, cream sleeves and long cream scarf, brown leather belt and boots, dark trousers, the existing single steel shoulder guard, and the same straight sword with a simple brass guard. Keep each asymmetric item on the same anatomical side as the reference. Do not redesign, mirror, simplify the character into a different chibi ratio, add a shield, or add equipment. Change the pose as specified below; do NOT freeze the reference pose.
+
+CAMERA AND RENDERING
+Match the reference's elevated three-quarter game camera and orientation: facing diagonally toward the lower-right of the image, never toward the viewer or left. Keep the same camera distance, visible top planes, light from upper-left, crisp illustrated contour, broad cel-shaded forms and restrained highlights. Preserve the reference's face and material language. Prioritize a readable silhouette at approximately 100 screen pixels tall; small ornament must not obscure the arms, sword or legs. Hand-painted HD 2D illustration, not pixel art, photorealism or a 3D render.
+
+POSE
+Readable anticipation for a one-handed diagonal sword cut. Plant both boots with a stable base, rear knee bent and torso turned slightly back while still facing lower-right. Draw the sword back above the sword-side shoulder with a bent elbow; keep blade, face and shoulder guard separately readable. Free arm counterbalances away from the cutting path. Scarf lags gently opposite the torso turn. Show stored weight, not the strike itself. No second sword, extra arm, detached blade or motion trail.
+
+FRAME REGISTRATION
+Keep skull size, torso length and limb thickness equal to the reference, rather than resizing the body to fit each pose. Use a fixed ground contact line near y=920 of the 1024 canvas and keep the pelvis near the reference's horizontal body center. The lowest supporting boot touches this line; the swinging boot may lift. Keep the entire sword, scarf and hair inside the canvas with at least 48 px clearance. Where the sword extends sideways, use the available empty space instead of shrinking the whole character. Allow limbs and scarf to move; do not force the old silhouette or bounding box. No ground plane, floor shadow, dust, speed lines, blade trails, aura or effects baked into the sprite.
+
+OUTPUT
+True transparent background with clean anti-aliased alpha edges; no checkerboard pattern painted into the image. Opaque character materials, including the scarf and sword. No text, watermark, border, frame, UI or additional figures. Return one isolated complete character image.
+
+SKYBOUND ART DIRECTION — PC TREE OF SAVIOR REFERENCE
+Use the PC version of Tree of Savior as a reference for storybook fantasy material treatment: subtle dry-brush variation inside broad color masses, warm ivory highlights, muted moss and slate secondary colors, and rich but restrained leather and stone surfaces. Keep silhouette edges crisp and preserve the attached Skybound character's identity and palette. Texture belongs inside the subject, never as a paper-colored background or an all-over grain filter. Do not copy an existing Tree of Savior character, costume, emblem or UI asset.

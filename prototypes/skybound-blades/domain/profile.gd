@@ -8,6 +8,8 @@ var warehouse_gear: Dictionary = {}  # instance id -> instance (same shape as Ru
 var memorial: Array = []  # [{generation, level, kills, cause, floor}]
 var generation: int = 1
 var seen_monsters: Dictionary = {}
+## Account preferences survive generation changes; missing/invalid values keep defaults.
+var settings: Dictionary = {"damage_numbers": true, "screen_shake": true, "haptics": true, "auto_retreat": true}
 
 
 func deposit_gold(run: RefCounted, amount: int) -> bool:
@@ -68,7 +70,7 @@ func record_death(run: RefCounted, cause: String) -> void:
 
 func to_dict() -> Dictionary:
 	return {"warehouse_gold": warehouse_gold, "warehouse_items": warehouse_items, "warehouse_gear": warehouse_gear,
-		"memorial": memorial, "generation": generation, "seen_monsters": seen_monsters}
+		"memorial": memorial, "generation": generation, "seen_monsters": seen_monsters, "settings": settings}
 
 
 static func from_dict(d: Dictionary) -> RefCounted:
@@ -79,6 +81,10 @@ static func from_dict(d: Dictionary) -> RefCounted:
 	p.memorial = d.get("memorial", [])
 	p.generation = int(d.get("generation", 1))
 	p.seen_monsters = d.get("seen_monsters", {})
+	if d.get("settings") is Dictionary:
+		for key: String in p.settings:
+			if d.settings.get(key) is bool:
+				p.settings[key] = d.settings[key]
 	return p
 
 

@@ -4,7 +4,7 @@ extends "res://addons/proto_kit/test_kit.gd"
 ##   godot --path . res://addons/proto_kit/sprite_inspector.tscn -- --sheet <sheet>
 
 const SpriteCheck = preload("res://addons/proto_kit/sprite_check.gd")
-const SHEETS := ["leader", "guardian", "support", "meadow_slime", "briar_boar", "ruin_hound"]
+const SHEETS := ["leader", "guardian", "support", "meadow_slime", "briar_boar", "ruin_hound", "gatekeeper", "leader_polish"]
 
 
 func _init() -> void:

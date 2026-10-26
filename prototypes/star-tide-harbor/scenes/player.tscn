@@ -1,0 +1,11 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/player.svg" id="1_3vyb7"]
+
+[node name="Player" type="Node2D" unique_id=625682965]
+
+[node name="Body" type="Sprite2D" parent="." unique_id=2034149088]
+unique_name_in_owner = true
+position = Vector2(-24, -74)
+texture = ExtResource("1_3vyb7")
+centered = false

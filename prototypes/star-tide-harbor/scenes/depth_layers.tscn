@@ -1,0 +1,37 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/depth_layers.gd" id="1_p4ae4"]
+[ext_resource type="Texture2D" path="res://assets/midshore.svg" id="2_aq3m8"]
+[ext_resource type="Shader" path="res://assets/foliage.gdshader" id="2_wgdj2"]
+[ext_resource type="Texture2D" path="res://assets/foreground.svg" id="4_rhuax"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_aq3m8"]
+shader = ExtResource("2_wgdj2")
+shader_parameter/sway = 3.0
+shader_parameter/phase = null
+
+[node name="DepthLayers" type="CanvasLayer" unique_id=1828746877]
+layer = -7
+script = ExtResource("1_p4ae4")
+
+[node name="MidShore" type="Node2D" parent="." unique_id=1200446213]
+unique_name_in_owner = true
+position = Vector2(0, 302)
+
+[node name="DistantForest" type="Sprite2D" parent="MidShore" unique_id=1201704705]
+unique_name_in_owner = true
+texture = ExtResource("2_aq3m8")
+centered = false
+
+[node name="ForegroundLayer" type="CanvasLayer" parent="." unique_id=1234368611]
+unique_name_in_owner = true
+
+[node name="NearPlants" type="Node2D" parent="ForegroundLayer" unique_id=1254855851]
+unique_name_in_owner = true
+position = Vector2(0, 460)
+
+[node name="ForegroundPlants" type="Sprite2D" parent="ForegroundLayer/NearPlants" unique_id=1566980039]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_aq3m8")
+texture = ExtResource("4_rhuax")
+centered = false

@@ -225,7 +225,8 @@ func _gear(run: RefCounted) -> Array:
 		var g := gain(run, role, inst)
 		var tag := _tag(g)
 		rows.append({"title": "%s背包：%s" % [tag, gear_name(inst)],
-			"detail": "%s　%s ｜ 輸出 %s · 耐久 %s" % [bonus_text(inst.bonus), _delta(run, inst), _pct(g.output), _pct(g.toughness)],
+			"detail": "輸出 %s · 耐久 %s" % [_pct(g.output), _pct(g.toughness)],
+			"more": "%s　%s" % [bonus_text(inst.bonus), _delta(run, inst)],
 			"actions": [{"label": "裝備", "action": {"type": "equip", "role": role, "id": inst.id}, "enabled": true}]})
 	return rows
 

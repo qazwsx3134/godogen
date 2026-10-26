@@ -1,0 +1,5 @@
+Create ONE seamless 1024x1024 square ground albedo texture for an original hand-painted fantasy RPG, inspired by the storybook material treatment of the PC game Tree of Savior.
+
+Straight overhead orthographic view of short meadow grass and moss. Muted sage, olive and dusty forest green in broad organic paint shapes; a few dry straw strokes and small earthy gaps provide material character. Small-scale texture is subordinate to the large color masses. Restrained dry-brush edges, no heavy black outlines. The terrain should recede visually behind characters and bright danger markers.
+
+This is a seamless repeatable flat material swatch: all four opposite edges join cleanly, uniform detail density, no central subject or focal point. No perspective, cast shadows, directional lighting, gradient vignette, paths, large rocks, flowers, buildings, characters, sky, text, grid, border or UI. No photorealistic blades of grass. Fully opaque output. Do not bake highlights or ambient occlusion; the 3D scene supplies lighting. One texture, not a showcase of multiple materials.

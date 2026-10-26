@@ -1,0 +1,22 @@
+extends SceneTree
+const Sim = preload("res://domain/push_sim.gd")
+func _initialize() -> void:
+	for dt: float in [1.0/60.0, 1.0/30.0, 1.0/15.0, 0.5, 2.0]:
+		var sim = Sim.new(1)
+		sim.skip_muster()
+		while sim.fighting(): sim.step(dt)
+		print("IDLE dt=", dt, " seconds=", sim.t, " boss_hp=", sim.boss_hp, " falls=", sim.fallen_total)
+	var sim = Sim.new(1)
+	var healer: int = -1
+	var target: int = -1
+	for i: int in sim.cls.size():
+		if sim.cls[i] == Sim.HEALER and sim.rarity[i] == Sim.SSR: healer = i
+	for i: int in sim.cls.size():
+		if sim.cls[i] == Sim.SHIELD and sim.zone[i] == sim.zone[healer]: target = i
+	if target < 0: target = 0
+	sim.zone[target] = sim.zone[healer]
+	sim.hp[target] = 0
+	sim._revive(sim.zone[healer])
+	sim.saves[healer] = 1
+	print("REVIVE restored_hp=", sim.hp[target], " contribution=", sim.contribution(healer), " healer_max=", sim.max_hp[healer], " target_max=", sim.max_hp[target])
+	quit()

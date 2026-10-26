@@ -64,7 +64,7 @@ func new_push() -> void:
 
 func _process(delta: float) -> void:
 	_time += delta
-	sim.step(delta)
+	sim.advance(delta)
 	_army.step(delta)
 	_boss.step(sim, delta)
 	_bolts.step(delta)

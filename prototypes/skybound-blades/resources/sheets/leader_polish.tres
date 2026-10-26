@@ -1,0 +1,51 @@
+[gd_resource type="Resource" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/captain-v2.png" id="1_nc4tl"]
+[ext_resource type="Script" path="res://addons/proto_kit/sprite3d_sheet.gd" id="2_rkvpk"]
+
+[resource]
+script = ExtResource("2_rkvpk")
+atlas = ExtResource("1_nc4tl")
+columns = 7
+cell_px = 576
+foot_px = 8
+meters_per_px = 0.0042
+directions = 1
+anims = {
+&"anticipation": {
+"cell": 3,
+"d": [60],
+"loop": true,
+"n": 1
+},
+"attack": {
+"cell": 4,
+"d": [20],
+"loop": false,
+"n": 1
+},
+"down": {
+"cell": 5,
+"d": [60],
+"loop": false,
+"n": 1
+},
+"idle": {
+"cell": 0,
+"d": [60],
+"loop": true,
+"n": 1
+},
+"skill": {
+"cell": 4,
+"d": [15],
+"loop": false,
+"n": 1
+},
+"walk": {
+"cell": 1,
+"d": [9, 9],
+"loop": true,
+"n": 2
+}
+}

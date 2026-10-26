@@ -66,3 +66,11 @@
 1. 試玩連招手感並調整（標記窗口、傷害加成）。
 2. 使用者手機實機試玩（手感、FPS、按鈕大小）。
 3. 第二層與更多技能（implementation-plan M2）。
+
+
+## 2026-10-26 使用者直接指派的完善與接入
+
+- 使用者授權主 session 完善 Skybound，圖片工作指定 GPT-6 Luna max；前述 10-24 Claude/Codex 限定派工記錄為歷史狀態，本次以使用者直接指令為準。
+- Luna worker 七張原圖＋一張未採用步態修正版已交回；主 session 採用 Boss、草地、橡樹、蓄力與命中，保留原有跑步。
+- 增加偏好設定保存、自動撤退開關、nested save schema 驗證與 `.old` 恢復；保留前一輪死亡 journal 重試。
+- 實際採用檔案、工具、測試與限制見 [接入紀錄](../../design/integration-2026-10-26.md)。此次不 commit、不發布。

@@ -771,7 +771,7 @@ func _cast(u: Unit, id: String, t: Unit, step: int, chain: Array) -> void:
 		_pending_hits.append({"at": now_ms + cast_ms + h * 150.0, "src": u.id, "dst": t.id, "power": power,
 			"range": float(skill.range_cells) + 0.6, "skill": id, "cast": cast_id, "step": step, "chain": chain,
 			"last": h == hits - 1})
-	_emit({"type": "cast", "unit": u.id, "target": t.id, "skill": id, "step": step, "chain_len": chain.size()})
+	_emit({"type": "cast", "unit": u.id, "target": t.id, "skill": id, "step": step, "chain_len": chain.size(), "cast_ms": cast_ms})
 
 
 ## The previous chain blow landed: cast the next skill if every condition still holds, else say why it broke.

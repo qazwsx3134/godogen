@@ -1,0 +1,35 @@
+extends SceneTree
+const Tuning = preload("res://domain/tuning.gd")
+const Run = preload("res://domain/run.gd")
+const Battle = preload("res://domain/battle.gd")
+const Save = preload("res://domain/save_service.gd")
+const Atomic = preload("res://addons/proto_kit/atomic_file.gd")
+func _initialize() -> void:
+	var tuning = Tuning.load_default()
+	var run = Run.new(tuning, "review", 1)
+	for qid: String in run.quests:
+		if bool(tuning.quests[qid].repeatable):
+			run.quests[qid].progress = int(tuning.quests[qid].objective.count)
+			var reward: Dictionary = run.claim(qid, 600000.0)
+			var after = Run.from_dict(tuning, run.to_dict())
+			var battle = Battle.new(tuning, {"run": after, "bounds": Rect2(-14,-9,28,18), "obstacles": [], "party_spawn": Vector2.ZERO, "monsters": []})
+			print("COOLDOWN quest=", qid, " claim_ok=", not reward.is_empty(), " intended_ms=", tuning.section("quests").repeat_cooldown_ms, " restored_now_ms=", battle.now_ms, " restored_wait_ms=", after.quests[qid].available_at_ms - battle.now_ms)
+			break
+	var skills = load("res://domain/skills.gd")
+	run.level = 10
+	run.learned.leader = {"cleave": {"level": 3, "exp": 0.0}, "rising": {"level": 2, "exp": 0.0}, "whirl": {"level": 2, "exp": 0.0}}
+	run.slots.leader = ["cleave"]
+	run.chains.leader = ["cleave", "rising"]
+	print("CHAIN_BEFORE=", run.chains.leader)
+	var equip_result: String = skills.equip(tuning, run, "leader", "whirl", 1)
+	print("EQUIP_SECOND_SLOT result=", equip_result, " chain_after=", run.chains.leader, " slots=", run.slots.leader)
+	var path := "user://review_backup.json"
+	var service = Save.new(path)
+	service.erase()
+	Atomic.write_text(path + ".bak", JSON.stringify({"schema": 1, "profile": {"generation": 3}, "run": null}))
+	Atomic.write_text(path, JSON.stringify({"schema": 999, "profile": {"generation": 9}, "run": null}))
+	print("BAD_SCHEMA_MAIN_WITH_GOOD_BACKUP=", service.load_state())
+	Atomic.write_text(path, JSON.stringify({"schema": 1, "run": {}}))
+	print("INCOMPLETE_RUN_ACCEPTED=", service.load_state())
+	service.erase()
+	quit()

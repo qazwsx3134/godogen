@@ -46,6 +46,8 @@ var _clock: float = 0.0
 var _phase: float = 0.0
 var _squash: float = 0.0
 var _action_total: float = 0.3
+var _cast_left: float = 0.0
+var _showing_cast: bool = false
 
 
 func _ready() -> void:
@@ -77,6 +79,8 @@ func bind(unit: RefCounted) -> void:
 	_was_alive = unit.alive
 	_shown_action_ms = unit.action_ms
 	_action_left = 0.0
+	_cast_left = 0.0
+	_showing_cast = false
 	_hp_show_left = 0.0
 	visual.dissolve = 0.0
 	visual.flash = 0.0
@@ -95,6 +99,11 @@ func remember(unit: RefCounted) -> void:
 ## After the steps of a frame.
 func capture(unit: RefCounted) -> void:
 	_curr = Vector3(unit.pos.x, 0.0, unit.pos.y)
+
+
+## Cast duration comes from the simulation event, including shortened chain casts.
+func prepare_cast(seconds: float) -> void:
+	_cast_left = maxf(seconds, 0.0)
 
 
 ## Every rendered frame, also while paused or after the run ended (delta 0 freezes time only).
@@ -116,6 +125,18 @@ func sync(unit: RefCounted, alpha: float, delta: float, targeted: bool) -> void:
 		_action_left = maxf(0.3, Sheet.length_ticks(a) / 60.0)
 		_action_total = _action_left
 		visual.play(unit.action, true)
+		_showing_cast = unit.action == &"skill" and _cast_left > 0.0 and sheet != null and sheet.anims.has("anticipation")
+		if _showing_cast:
+			visual.play(&"anticipation", true)
+			_action_left = maxf(_action_left, _cast_left + 0.25)
+			_action_total = _action_left
+		else:
+			_cast_left = 0.0
+	if _showing_cast:
+		_cast_left = maxf(0.0, _cast_left - delta)
+		if _cast_left <= 0.0:
+			_showing_cast = false
+			visual.play(&"skill", true)
 	_action_left = maxf(0.0, _action_left - delta)
 	if not unit.alive:
 		visual.play(&"down")

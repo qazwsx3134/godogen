@@ -164,7 +164,8 @@ func _apply_cli() -> void:
 # --- Selection --------------------------------------------------------------------
 
 func select_sheet(index: int) -> void:
-	_sheet_list.select(index)
+	if index < _sheet_list.item_count:  # `sheets` set from code has no list rows
+		_sheet_list.select(index)
 	sheet = sheets[index].sheet
 	image = SpriteCheck.atlas_image(sheet)
 	image_size = image.get_size() if image != null else Vector2i.ZERO

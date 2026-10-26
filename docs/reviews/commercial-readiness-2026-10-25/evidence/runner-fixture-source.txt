@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+for arg in "$@"; do
+  if [ "$arg" = "--editor" ]; then
+    echo 'IMPORT FAILED (review fixture)' >&2
+    exit 17
+  fi
+done
+echo 'GENRE MODULES TESTS PASSED (review fixture)'
+exit 0

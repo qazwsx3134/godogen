@@ -8,6 +8,7 @@ extends RefCounted
 
 const StoryRunner = preload("res://scripts/story_runner.gd")
 const AssetUsage = preload("res://scripts/asset_usage.gd")
+const AtomicFile = preload("res://addons/proto_kit/atomic_file.gd")
 
 ## Each entry: {id, kind ("chapter" or "sample"), path, save, work, work_title} and optional skin,
 ## cover, credits; the base work's entries first, then each pack's in folder order. `work` is "" for
@@ -223,28 +224,44 @@ func cleared_grade(story_id: String) -> String:
 
 
 ## Keeps `grade` when it beats the story's best.
-func record_clear(story_id: String, grade: String) -> void:
-	var config: ConfigFile = ConfigFile.new()
-	config.load(progress_path)
+func record_clear(story_id: String, grade: String) -> Error:
+	var config: ConfigFile = _progress()
+	if config == null:
+		return ERR_FILE_CORRUPT
 	var best: String = str(config.get_value("cleared", story_id, ""))
 	var grades: Array = StoryRunner.GRADES
 	if best.is_empty() or grades.find(grade) < grades.find(best):
 		config.set_value("cleared", story_id, grade)
-		config.save(progress_path)
+		return _commit(config)
+	return OK
 
 
 ## An `end`/`result` reached: `ending` ("" for none) joins the story's seen endings, and a
 ## non-empty `carried` replaces the flags it hands to the next chapter.
-func record_ending(story_id: String, ending: String, carried: Dictionary) -> void:
-	var config: ConfigFile = ConfigFile.new()
-	config.load(progress_path)
+func record_ending(story_id: String, ending: String, carried: Dictionary) -> Error:
+	var config: ConfigFile = _progress()
+	if config == null:
+		return ERR_FILE_CORRUPT
 	var seen: Array = config.get_value("endings", story_id, [])
 	if not ending.is_empty() and not seen.has(ending):
 		config.set_value("endings", story_id, seen + [ending])
 	if not carried.is_empty():
 		config.set_value("carry", story_id, carried)
 	if not carried.is_empty() or not ending.is_empty():
-		config.save(progress_path)
+		return _commit(config)
+	return OK
+
+
+## progress.cfg for an update, or null when the file exists but cannot be read: then nothing writes over it and
+## wipes the other chapters' progress.
+func _progress() -> ConfigFile:
+	var config: ConfigFile = ConfigFile.new()
+	var err: Error = config.load(progress_path)
+	return config if err == OK or err == ERR_FILE_NOT_FOUND else null
+
+
+func _commit(config: ConfigFile) -> Error:
+	return AtomicFile.write_text(progress_path, config.encode_to_text())
 
 
 ## The `carry` values the chapter before stories[index] ended with; {} for samples, the first
@@ -332,14 +349,18 @@ static func gallery_key(work: String, kind: String) -> String:
 
 ## Marks a background ("bg") or music ("bgm") id as met in play; written once per id. `kind` may be
 ## a work's key (gallery_key).
-func unlock(kind: String, id: String) -> void:
+## The id joins the list only once it is on disk, so a failed write is retried the next time it is met.
+func unlock(kind: String, id: String) -> Error:
 	if id.is_empty() or unlocked_ids(kind).has(id):
-		return
-	(_unlocked[kind] as Array).append(id)
-	var config: ConfigFile = ConfigFile.new()
-	config.load(progress_path)
-	config.set_value("gallery", kind, _unlocked[kind])
-	config.save(progress_path)
+		return OK
+	var config: ConfigFile = _progress()
+	if config == null:
+		return ERR_FILE_CORRUPT
+	config.set_value("gallery", kind, (_unlocked[kind] as Array) + [id])
+	var err: Error = _commit(config)
+	if err == OK:
+		(_unlocked[kind] as Array).append(id)
+	return err
 
 
 ## The ids of `kind` met in play, in the order they were first met.

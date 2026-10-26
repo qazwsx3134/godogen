@@ -1,0 +1,237 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://assets/harbor_theme.tres" id="1_k2yc3"]
+[ext_resource type="Script" path="res://scripts/fishing.gd" id="2_plaby"]
+[ext_resource type="Texture2D" path="res://assets/sky.svg" id="3_xdeje"]
+[ext_resource type="Texture2D" path="res://assets/underwater.svg" id="4_7b4ts"]
+[ext_resource type="Texture2D" path="res://assets/boat.svg" id="5_ra8kw"]
+[ext_resource type="Texture2D" path="res://assets/fish0.svg" id="6_e0ruo"]
+[ext_resource type="Texture2D" path="res://assets/fish1.svg" id="7_rgvc8"]
+[ext_resource type="Texture2D" path="res://assets/fish2.svg" id="8_u61h1"]
+[ext_resource type="Texture2D" path="res://assets/fish3.svg" id="9_dmgxt"]
+[ext_resource type="Texture2D" path="res://assets/fish4.svg" id="10_qx2ef"]
+[ext_resource type="Texture2D" path="res://assets/fish5.svg" id="11_4e0vh"]
+
+[node name="Fishing" type="Control" unique_id=1987175098]
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = ExtResource("1_k2yc3")
+script = ExtResource("2_plaby")
+
+[node name="Sky" type="ColorRect" parent="." unique_id=1769447401]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 1280.0
+offset_bottom = 720.0
+mouse_filter = 2
+color = Color(0.09411765, 0.18039216, 0.3137255, 1)
+
+[node name="SkyArt" type="TextureRect" parent="." unique_id=444022698]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 1280.0
+offset_bottom = 720.0
+mouse_filter = 2
+texture = ExtResource("3_xdeje")
+expand_mode = 1
+
+[node name="Water" type="ColorRect" parent="." unique_id=1020773281]
+unique_name_in_owner = true
+layout_mode = 0
+offset_top = 250.0
+offset_right = 1280.0
+offset_bottom = 720.0
+mouse_filter = 2
+color = Color(0.078431375, 0.24705882, 0.34901962, 1)
+
+[node name="SeaArt" type="TextureRect" parent="." unique_id=1809328902]
+unique_name_in_owner = true
+layout_mode = 0
+offset_top = 250.0
+offset_right = 1280.0
+offset_bottom = 720.0
+mouse_filter = 2
+texture = ExtResource("4_7b4ts")
+
+[node name="WaterSurface" type="ColorRect" parent="." unique_id=672828306]
+unique_name_in_owner = true
+layout_mode = 0
+offset_top = 249.0
+offset_right = 1280.0
+offset_bottom = 252.0
+mouse_filter = 2
+color = Color(0.5529412, 0.84705883, 0.83137256, 1)
+
+[node name="Boat" type="Sprite2D" parent="." unique_id=1779106991]
+unique_name_in_owner = true
+position = Vector2(140, 168)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("5_ra8kw")
+
+[node name="Rod" type="Line2D" parent="." unique_id=902038832]
+unique_name_in_owner = true
+points = PackedVector2Array(180, 205, 230, 180)
+width = 4.0
+default_color = Color(0.9529412, 0.8, 0.6392157, 1)
+
+[node name="Shoal" type="Node2D" parent="." unique_id=265178697]
+unique_name_in_owner = true
+
+[node name="Fish0" type="Sprite2D" parent="Shoal" unique_id=82752705]
+unique_name_in_owner = true
+modulate = Color(0.65, 0.9, 0.9, 0.8)
+position = Vector2(450, 380)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("6_e0ruo")
+
+[node name="Fish1" type="Sprite2D" parent="Shoal" unique_id=302129116]
+unique_name_in_owner = true
+modulate = Color(0.65, 0.9, 0.9, 0.8)
+position = Vector2(585, 458)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("7_rgvc8")
+
+[node name="Fish2" type="Sprite2D" parent="Shoal" unique_id=423975654]
+unique_name_in_owner = true
+modulate = Color(0.65, 0.9, 0.9, 0.8)
+position = Vector2(720, 536)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("8_u61h1")
+
+[node name="Fish3" type="Sprite2D" parent="Shoal" unique_id=1345628976]
+unique_name_in_owner = true
+modulate = Color(0.65, 0.9, 0.9, 0.8)
+position = Vector2(855, 380)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("9_dmgxt")
+
+[node name="Fish4" type="Sprite2D" parent="Shoal" unique_id=1400595118]
+unique_name_in_owner = true
+modulate = Color(0.65, 0.9, 0.9, 0.8)
+position = Vector2(990, 458)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("10_qx2ef")
+
+[node name="Fish5" type="Sprite2D" parent="Shoal" unique_id=1013366444]
+unique_name_in_owner = true
+modulate = Color(0.65, 0.9, 0.9, 0.8)
+position = Vector2(1125, 536)
+scale = Vector2(0.7, 0.7)
+texture = ExtResource("11_4e0vh")
+
+[node name="Line" type="Line2D" parent="." unique_id=1496399998]
+unique_name_in_owner = true
+points = PackedVector2Array(230, 180, 500, 390, 720, 460)
+width = 2.0
+
+[node name="Lure" type="Polygon2D" parent="." unique_id=1449761514]
+unique_name_in_owner = true
+position = Vector2(720, 460)
+color = Color(1, 0.8627451, 0.69411767, 1)
+polygon = PackedVector2Array(-5, -8, 7, 0, 0, 10, -7, 3)
+
+[node name="Aim" type="Line2D" parent="." unique_id=1910819657]
+unique_name_in_owner = true
+position = Vector2(720, 460)
+points = PackedVector2Array(-15, 0, 15, 0, 0, 0, 0, -15, 0, 15)
+width = 2.0
+default_color = Color(0.972549, 0.87058824, 0.6901961, 1)
+
+[node name="TopShade" type="ColorRect" parent="." unique_id=1007646354]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 1280.0
+offset_bottom = 120.0
+mouse_filter = 2
+color = Color(0.035, 0.08, 0.14, 0.86)
+
+[node name="StageTitle" type="Label" parent="." unique_id=1823699285]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 30.0
+offset_top = 18.0
+offset_right = 30.0
+offset_bottom = 18.0
+theme_override_font_sizes/font_size = 26
+text = "01　選擇拋竿位置與方向"
+
+[node name="Telemetry" type="Label" parent="." unique_id=45365451]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 30.0
+offset_top = 62.0
+offset_right = 30.0
+offset_bottom = 62.0
+theme_override_font_sizes/font_size = 17
+text = "線長 8.0 m　｜　張力 0%　｜　手動操作"
+
+[node name="Leave" type="Button" parent="." unique_id=928683680]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1005.0
+offset_top = 28.0
+offset_right = 1250.0
+offset_bottom = 76.0
+text = "返回小港  [ S / Esc ]"
+
+[node name="BottomShade" type="ColorRect" parent="." unique_id=451010384]
+unique_name_in_owner = true
+layout_mode = 0
+offset_top = 598.0
+offset_right = 1280.0
+offset_bottom = 720.0
+mouse_filter = 2
+color = Color(0.035, 0.08, 0.14, 0.94)
+
+[node name="Status" type="Label" parent="." unique_id=652617954]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 30.0
+offset_top = 610.0
+offset_right = 30.0
+offset_bottom = 610.0
+theme_override_font_sizes/font_size = 22
+text = "從固定竿位向海灣拋出魚餌"
+
+[node name="Instructions" type="Label" parent="." unique_id=1893521922]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 30.0
+offset_top = 659.0
+offset_right = 1250.0
+offset_bottom = 713.0
+theme_override_font_sizes/font_size = 17
+text = "點選水域拋竿。"
+autowrap_mode = 3
+
+[node name="Tension" type="ProgressBar" parent="." unique_id=436876052]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 420.0
+offset_top = 140.0
+offset_right = 860.0
+offset_bottom = 167.0
+show_percentage = false
+
+[node name="TensionLabel" type="Label" parent="." unique_id=1966962131]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 505.0
+offset_top = 113.0
+offset_right = 505.0
+offset_bottom = 113.0
+theme_override_font_sizes/font_size = 16
+text = "魚線張力　鬆 ← → 緊"
+
+[node name="StruggleBar" type="ProgressBar" parent="." unique_id=891061832]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 420.0
+offset_top = 178.0
+offset_right = 860.0
+offset_bottom = 205.0
+show_percentage = false
