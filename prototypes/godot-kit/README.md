@@ -27,6 +27,7 @@
 | [`run_timeline.gd`](addons/proto_kit/run_timeline.gd) | 一局的導演：首領與事件時間表、生怪速度曲線、各時段敵人種類、精英機率、同場上限 | **尚未採用**（同上） |
 | [`talent_tiers.gd`](addons/proto_kit/talent_tiers.gd) | 三系天賦：每 5 點開一行、前置、10/20/30 里程碑、多組方案、免費重置、單局經驗換點數 | **尚未採用**（同上） |
 | [`loot_ledger.gd`](addons/proto_kit/loot_ledger.gd) | 首領掉落與永久收藏：區域解鎖、掉率、已擁有不重複掉、穿戴屬性、各階進度、下一批可拿的裝備 | **尚未採用**（同上） |
+| [`chest_shop.gd`](addons/proto_kit/chest_shop.gd) | 局內寶箱：花金幣開、每開一次漲價（倍率＋固定增量＋上限）、加權隨機獎勵、每局次數上限 | **尚未採用**（同上） |
 
 GDScript、Godot 4.7。只用於 `prototypes/`，不接進 `publish.sh`（見 [ADR 0001](../docs/adr/0001-prototypes-live-in-godogen.md)）。
 
@@ -468,9 +469,9 @@ var issues := SpriteCheck.check_sheet(load("res://resources/sheets/leader.tres")
 
 畫面是 `sprite_inspector.tscn`，用 `tools/build_sprite_inspector.gd` 產生後就當原始檔維護，重跑產生器要加 `-- --force`。中文字型依序找專案的 GUI 字型、專案裡第一個 `.ttf／.otf`、系統字型。已採用：skybound-blades（`tests/test_sprites.gd` 檢查全部角色 sheet）。
 
-## Survivors 模組：自動施法、稀有度、一局時間軸、天賦、掉落收藏
+## Survivors 模組：自動施法、稀有度、一局時間軸、天賦、掉落收藏、寶箱
 
-2026-10-26 依 [Azeroth Survivors 分析](../../docs/research/azeroth-survivors-2026-10-26.md)寫成，**目前沒有原型採用**。各模組怎麼在一局裡串起來，見該文件第 6 節「組合方式」。測試：`tools/run_tests.sh prototypes/godot-kit survivor_modules`（91 項檢查）。
+2026-10-26 依 [Azeroth Survivors 分析](../../docs/research/azeroth-survivors-2026-10-26.md)寫成，**目前沒有原型採用**。各模組怎麼在一局裡串起來，見該文件第 6 節「組合方式」。測試：`tools/run_tests.sh prototypes/godot-kit survivor_modules`（109 項檢查）。
 
 - 全部是純邏輯 `RefCounted`，資料格式寫在各檔檔頭；給定種子時結果固定，都有 `to_dict`／`from_dict`。
 - `auto_caster.gd` 只決定「打誰、打多少」；位置、碰撞、特效、傷害數字由遊戲處理。敵人用 `{id, pos, hp, max_hp, tags}` 傳入，`pos` 可以是 Vector2 或 Vector3（3D 量地面距離）。

@@ -5,6 +5,7 @@ const Rarity = preload("res://addons/proto_kit/rarity.gd")
 const RunTimeline = preload("res://addons/proto_kit/run_timeline.gd")
 const TalentTiers = preload("res://addons/proto_kit/talent_tiers.gd")
 const LootLedger = preload("res://addons/proto_kit/loot_ledger.gd")
+const ChestShop = preload("res://addons/proto_kit/chest_shop.gd")
 
 
 func _rng(seed_value: int = 7) -> RandomNumberGenerator:
@@ -28,6 +29,7 @@ func _run() -> void:
 	_test_timeline()
 	_test_talents()
 	_test_ledger()
+	_test_chests()
 	print("checks: ", checks)
 	_finish("SURVIVOR MODULES TESTS")
 
@@ -272,3 +274,33 @@ func _test_ledger() -> void:
 	var copy := LootLedger.new(_zones())
 	copy.from_dict(JSON.parse_string(JSON.stringify(l.to_dict())))
 	_expect(copy.unlocked == 2 and copy.owns("helm2") and copy.worn().head == "helm2", "ledger restores")
+
+
+func _test_chests() -> void:
+	var pool: Array[Dictionary] = [{"id": "potion", "weight": 3.0}, {"id": "tome", "weight": 1.0, "max": 2}]
+	var shop := ChestShop.new(pool, _rng(), {"base": 20, "growth": 1.5})
+	_expect([shop.price(0), shop.price(1), shop.price(2), shop.price(3)] == [20, 30, 45, 68], "price grows by growth")
+	_expect(ChestShop.new(pool, _rng(), {"base": 10, "growth": 1.0, "step": 5}).price(3) == 25, "step adds a flat amount")
+	_expect(ChestShop.new(pool, _rng(), {"base": 20, "growth": 2.0, "max_price": 100}).price(5) == 100, "max_price caps")
+	var poor := shop.open(19)
+	_expect(not poor.ok and poor.gold == 19 and shop.opened == 0 and shop.price() == 20, "not enough gold changes nothing")
+	var r := shop.open(100)
+	_expect(r.ok and r.spent == 20 and r.gold == 80 and shop.opened == 1 and shop.price() == 30, "open spends and raises the price")
+	var counts := {"potion": 0, "tome": 0}
+	var many := ChestShop.new(pool, _rng(11), {"base": 0, "growth": 1.0})
+	for i in 400:
+		var got := many.open(0)
+		counts[got.reward.id] += 1
+	_expect(counts.tome == 2 and counts.potion == 398, "per-run max limits a reward (%s)" % [counts])
+	var only_capped: Array[Dictionary] = [{"id": "tome", "max": 1}]
+	var capped := ChestShop.new(only_capped, _rng(), {"base": 0, "growth": 1.0})
+	_expect(capped.open(0).ok and not capped.can_open(999) and not capped.open(999).ok, "empty pool cannot be opened")
+	capped.reset()
+	_expect(capped.opened == 0 and capped.open(0).ok, "reset starts a new run")
+	var a := ChestShop.new(pool, _rng(5), {"base": 0, "growth": 1.0})
+	a.open(0)
+	a.open(0)
+	var b := ChestShop.new(pool, _rng(99), {"base": 0, "growth": 1.0})
+	b.from_dict(JSON.parse_string(JSON.stringify(a.to_dict())))
+	for i in 10:
+		_expect(a.open(0).reward.id == b.open(0).reward.id, "restored shop continues identically %d" % i)
