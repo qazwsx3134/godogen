@@ -28,6 +28,9 @@
 | [`talent_tiers.gd`](addons/proto_kit/talent_tiers.gd) | 三系天賦：每 5 點開一行、前置、10/20/30 里程碑、多組方案、免費重置、單局經驗換點數 | **尚未採用**（同上） |
 | [`loot_ledger.gd`](addons/proto_kit/loot_ledger.gd) | 首領掉落與永久收藏：區域解鎖、掉率、已擁有不重複掉、穿戴屬性、各階進度、下一批可拿的裝備 | **尚未採用**（同上） |
 | [`chest_shop.gd`](addons/proto_kit/chest_shop.gd) | 局內寶箱：花金幣開、每開一次漲價（倍率＋固定增量＋上限）、加權隨機獎勵、每局次數上限 | **尚未採用**（同上） |
+| [`combo_input.gd`](addons/proto_kit/combo_input.gd) | 節奏連招（希望 Online 的 A/S/D）：連招條、節拍與容許誤差、雙鍵和弦、逐段加傷與攻速、收尾加成 | **尚未採用**（2026-10-26 依[希望 Online 分析](../../docs/research/seal-online-2026-10-26.md)寫成；預定給 seal-meadow） |
+| [`refine_ladder.gd`](addons/proto_kit/refine_ladder.gd) | 裝備精煉 +0～+12：各段寶石與成功率、失敗保留／退級／消失、成功率加成、保險道具、期望成本試算 | **尚未採用**（同上） |
+| [`pet_care.gd`](addons/proto_kit/pet_care.gd) | 寵物養成：飢餓與想吃的食物、依售價給經驗、+0～+9 與 7 階、進化配方與稀有、餓到跑掉、城鎮暫停 | **尚未採用**（同上） |
 
 GDScript、Godot 4.7。只用於 `prototypes/`，不接進 `publish.sh`（見 [ADR 0001](../docs/adr/0001-prototypes-live-in-godogen.md)）。
 
@@ -477,6 +480,15 @@ var issues := SpriteCheck.check_sheet(load("res://resources/sheets/leader.tres")
 - `auto_caster.gd` 只決定「打誰、打多少」；位置、碰撞、特效、傷害數字由遊戲處理。敵人用 `{id, pos, hp, max_hp, tags}` 傳入，`pos` 可以是 Vector2 或 Vector3（3D 量地面距離）。
 - `rarity.gd` 的預設數值是從實際卡片讀到的近似值（例如史詩新法術 +34%、傳說升級冷卻 −23% 且 +2 目標），採用時依自己的平衡調整。
 - `run_timeline.gd` 的亂數狀態以字串存檔：64 位元整數存成 JSON 數字會失去精度，讀回來的亂數序列就會不同。
+
+## MMO 模組：節奏連招、精煉、寵物
+
+2026-10-26 依[希望 Online 分析](../../docs/research/seal-online-2026-10-26.md)寫成，**目前沒有原型採用**，預定先接進 seal-meadow（順序見該文件第 7 節）。測試：`tools/run_tests.sh prototypes/godot-kit mmo_modules`（47 項檢查）。
+
+- 全部是純邏輯 `RefCounted`，資料格式寫在各檔檔頭。
+- `combo_input.gd` 不讀 `Input`：遊戲把按鍵和時間（秒）傳進 `press()`，每幀呼叫 `update()`。雙鍵和弦是在 `chord_window` 內按下的鍵，所以一個步驟要等這段時間過了才確定。節拍和容許誤差的預設值是暫定的，要實際試手感。
+- `refine_ladder.gd` 的預設梯子照希望 Online：水晶 100%、紅寶石 70/60/50% 失敗只損失寶石、鑽石失敗退級或消失。維基沒寫鑽石和粉紅鑽石的成功率，那幾段是暫定值；用 `expected_stones()` 試算平衡。
+- `pet_care.gd` 的經驗表與餵食公式照希望 Online 維基；進化配方、類型屬性、稀有加成由遊戲自己給。
 
 ## tools/：字型子集與網頁匯出
 
