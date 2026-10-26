@@ -1,3 +1,4 @@
 .godot/
 build/
 art_src/render/
+*.blend1
