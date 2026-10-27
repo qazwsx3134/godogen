@@ -4,9 +4,9 @@
 [ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Bold.otf" id="2_udfo4"]
 [ext_resource type="Texture2D" path="res://assets/reference/idel.png" id="3_07ogn"]
 
-[sub_resource type="Theme" id="Theme_krmap"]
+[sub_resource type="Theme" id="Theme_8iqth"]
 default_font = ExtResource("1_8iqth")
-default_font_size = 26
+default_font_size = 30
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qcr5e"]
 bg_color = Color(0.16470589, 0.20784314, 0.3019608, 1)
@@ -129,7 +129,8 @@ custom_minimum_size = Vector2(941, 100)
 layout_mode = 3
 anchors_preset = 0
 mouse_filter = 2
-theme = SubResource("Theme_krmap")
+theme = SubResource("Theme_8iqth")
+metadata/fusion_readable = true
 
 [node name="Backdrop" type="Panel" parent="." unique_id=188368196]
 layout_mode = 0
@@ -148,7 +149,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("2_udfo4")
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 23
 theme_override_styles/normal = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/hover = SubResource("StyleBoxFlat_wnl7x")
@@ -175,9 +176,10 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("2_udfo4")
-theme_override_font_sizes/font_size = 27
+theme_override_font_sizes/font_size = 31
 text = "Lv. 1"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="ExperienceBar" type="ProgressBar" parent="." unique_id=242180931]
 layout_mode = 0
@@ -192,9 +194,9 @@ show_percentage = false
 
 [node name="GoldFrame" type="Panel" parent="." unique_id=1153920539]
 layout_mode = 0
-offset_left = 411.0
+offset_left = 319.0
 offset_top = 19.0
-offset_right = 615.0
+offset_right = 523.0
 offset_bottom = 81.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_pwkfr")
@@ -202,9 +204,9 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_pwkfr")
 [node name="GoldIcon" type="TextureRect" parent="." unique_id=1899878651]
 texture_filter = 1
 layout_mode = 0
-offset_left = 421.0
+offset_left = 329.0
 offset_top = 26.0
-offset_right = 463.0
+offset_right = 371.0
 offset_bottom = 70.0
 mouse_filter = 2
 texture = SubResource("AtlasTexture_r3dve")
@@ -212,24 +214,25 @@ expand_mode = 1
 
 [node name="GoldBadge" type="Label" parent="." unique_id=1014851601]
 layout_mode = 0
-offset_left = 466.0
+offset_left = 374.0
 offset_top = 24.0
-offset_right = 604.0
+offset_right = 512.0
 offset_bottom = 73.0
 theme_override_colors/font_color = Color(1, 0.88235295, 0.6039216, 1)
 theme_override_colors/font_outline_color = Color(1, 0.88235295, 0.6039216, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("2_udfo4")
-theme_override_font_sizes/font_size = 25
+theme_override_font_sizes/font_size = 29
 text = "500"
 horizontal_alignment = 1
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="GemFrame" type="Panel" parent="." unique_id=894151748]
 layout_mode = 0
-offset_left = 627.0
+offset_left = 535.0
 offset_top = 19.0
-offset_right = 789.0
+offset_right = 697.0
 offset_bottom = 81.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_pwkfr")
@@ -237,9 +240,9 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_pwkfr")
 [node name="GemIcon" type="TextureRect" parent="." unique_id=421843401]
 texture_filter = 1
 layout_mode = 0
-offset_left = 638.0
+offset_left = 546.0
 offset_top = 24.0
-offset_right = 677.0
+offset_right = 585.0
 offset_bottom = 71.0
 mouse_filter = 2
 texture = SubResource("AtlasTexture_qosbw")
@@ -247,18 +250,19 @@ expand_mode = 1
 
 [node name="GemBadge" type="Label" parent="." unique_id=608783685]
 layout_mode = 0
-offset_left = 681.0
+offset_left = 589.0
 offset_top = 23.0
-offset_right = 779.0
+offset_right = 687.0
 offset_bottom = 73.0
 theme_override_colors/font_color = Color(0.60784316, 0.8509804, 0.9843137, 1)
 theme_override_colors/font_outline_color = Color(0.60784316, 0.8509804, 0.9843137, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("2_udfo4")
-theme_override_font_sizes/font_size = 25
+theme_override_font_sizes/font_size = 29
 text = "320"
 horizontal_alignment = 1
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="SettingsButton" type="Button" parent="." unique_id=2030296127]
 layout_mode = 0
@@ -270,7 +274,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("2_udfo4")
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 23
 theme_override_styles/normal = SubResource("StyleBoxFlat_3x8hc")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_3x8hc")
 theme_override_styles/hover = SubResource("StyleBoxFlat_3x8hc")
@@ -288,3 +292,23 @@ offset_bottom = 63.0
 mouse_filter = 2
 texture = SubResource("AtlasTexture_fituc")
 expand_mode = 1
+
+[node name="OverviewButton" type="Button" parent="." unique_id=1067308317]
+layout_mode = 0
+offset_left = 745.0
+offset_top = 12.0
+offset_right = 829.0
+offset_bottom = 88.0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.94509804, 0.72156864, 1)
+theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
+theme_override_fonts/font = ExtResource("2_udfo4")
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_3x8hc")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_3x8hc")
+theme_override_styles/hover = SubResource("StyleBoxFlat_3x8hc")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_yhv7p")
+theme_override_styles/focus = SubResource("StyleBoxFlat_30n4r")
+text = "總覽"
+metadata/action = "settings"

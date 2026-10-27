@@ -48,14 +48,14 @@ alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"Heading"
-theme_override_colors/font_color = Color(0.8509804, 0.69803923, 0.43137255, 1)
+theme_override_colors/font_color = Color(0.62, 0.43, 0.13, 1)
 theme_override_font_sizes/font_size = 34
 text = "「隕石術」"
 
 [node name="HeroLine" type="Label" parent="Panel/Row/Text" unique_id=517292065]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_colors/font_color = Color(0.29, 0.204, 0.141, 1)
 theme_override_font_sizes/font_size = 22
 text = "SSR 法‧溫嘉"
 

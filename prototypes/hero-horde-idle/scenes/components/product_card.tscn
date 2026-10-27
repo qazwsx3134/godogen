@@ -4,9 +4,9 @@
 [ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Bold.otf" id="2_my375"]
 [ext_resource type="Texture2D" path="res://assets/reference/store.png" id="3_sgasp"]
 
-[sub_resource type="Theme" id="Theme_krmap"]
+[sub_resource type="Theme" id="Theme_c1klj"]
 default_font = ExtResource("1_c1klj")
-default_font_size = 26
+default_font_size = 30
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wnl7x"]
 bg_color = Color(0.96862745, 0.9098039, 0.8352941, 1)
@@ -70,7 +70,8 @@ custom_minimum_size = Vector2(215, 416)
 layout_mode = 3
 anchors_preset = 0
 mouse_filter = 2
-theme = SubResource("Theme_krmap")
+theme = SubResource("Theme_c1klj")
+metadata/fusion_readable = true
 
 [node name="Frame" type="Panel" parent="." unique_id=1354302986]
 layout_mode = 0
@@ -89,10 +90,11 @@ theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("2_my375")
-theme_override_font_sizes/font_size = 27
+theme_override_font_sizes/font_size = 31
 text = "金幣袋"
 horizontal_alignment = 1
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="Icon" type="TextureRect" parent="." unique_id=1190465468]
 texture_filter = 1
@@ -115,10 +117,11 @@ theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("2_my375")
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 31
 text = "× 10,000"
 horizontal_alignment = 1
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="Description" type="Label" parent="." unique_id=778888411]
 layout_mode = 0
@@ -129,10 +132,11 @@ offset_bottom = 322.0
 theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 26
 text = "供強化與冒險使用。"
 horizontal_alignment = 1
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="BuyButton" type="Button" parent="." unique_id=423179425]
 layout_mode = 0
@@ -144,7 +148,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("2_my375")
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 29
 theme_override_styles/normal = SubResource("StyleBoxFlat_gnuvx")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_gnuvx")
 theme_override_styles/hover = SubResource("StyleBoxFlat_gnuvx")

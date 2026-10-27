@@ -4,9 +4,9 @@
 [ext_resource type="Texture2D" path="res://assets/reference/adventure.png" id="2_xadp1"]
 [ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Bold.otf" id="3_sbqtm"]
 
-[sub_resource type="Theme" id="Theme_krmap"]
+[sub_resource type="Theme" id="Theme_g3y8y"]
 default_font = ExtResource("1_g3y8y")
-default_font_size = 26
+default_font_size = 30
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wnl7x"]
 bg_color = Color(0.96862745, 0.9098039, 0.8352941, 1)
@@ -72,7 +72,8 @@ custom_minimum_size = Vector2(164, 203)
 layout_mode = 3
 anchors_preset = 0
 mouse_filter = 2
-theme = SubResource("Theme_krmap")
+theme = SubResource("Theme_g3y8y")
+metadata/fusion_readable = true
 
 [node name="Frame" type="Panel" parent="." unique_id=1579769063]
 layout_mode = 0
@@ -102,10 +103,11 @@ theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("3_sbqtm")
-theme_override_font_sizes/font_size = 25
+theme_override_font_sizes/font_size = 29
 text = "目前進度"
 horizontal_alignment = 1
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="Status" type="Label" parent="." unique_id=1548571106]
 layout_mode = 0
@@ -116,10 +118,11 @@ offset_bottom = 193.0
 theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 19
+theme_override_font_sizes/font_size = 25
 text = "開放"
 horizontal_alignment = 1
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="SelectButton" type="Button" parent="." unique_id=421497645]
 layout_mode = 0
@@ -129,7 +132,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("3_sbqtm")
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 23
 theme_override_styles/normal = SubResource("StyleBoxEmpty_711xe")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_711xe")
 theme_override_styles/hover = SubResource("StyleBoxFlat_sxgmc")

@@ -24,6 +24,11 @@ const LOG_SIZE := 60
 const TOAST_TIME := 2.2
 ## Time away shorter than this (a push, a quick switch) is paid into the log; longer opens the 離線戰報.
 const REPORT_AFTER := 600
+## Where home.tscn puts the strip, the nav bar, the toast and the top of the pages' sky (_fit moves them down).
+const ARENA_Y := 470.0
+const NAV_Y := 1536.0
+const TOAST_Y := 1440.0
+const SKY_TOP := 110.0
 
 var progress: RefCounted = null
 ## Where progress is saved ("" = the App's path, or the player's save).
@@ -50,6 +55,8 @@ func _enter_tree() -> void:
 
 
 func _ready() -> void:
+	get_viewport().size_changed.connect(_fit)
+	_fit()
 	var app: Node = get_node_or_null(^"/root/App")
 	if progress == null:
 		progress = app.progress() if app != null and save_path == "" else Progression.load_from(_path())
@@ -67,6 +74,10 @@ func _ready() -> void:
 	for k: int in mini(nav.get_child_count(), NAV_TABS.size()):
 		(nav.get_child(k) as Button).pressed.connect(show_tab.bind(NAV_TABS[k]))
 	%Header.get_node("AvatarButton").pressed.connect(show_tab.bind(&"overview"))
+	%Header.get_node("OverviewButton").pressed.connect(show_tab.bind(&"overview"))
+	%Heroes.equip_requested.connect(func(i: int) -> void:
+		%Equipment.show_hero(i)
+		show_tab(&"equipment"))
 	%Header.get_node("SettingsButton").pressed.connect(func() -> void: %SettingsOverlay.visible = true)
 	%SettingsPanel.closed.connect(func() -> void: %SettingsOverlay.visible = false)
 	%DialogOk.pressed.connect(func() -> void: %Dialog.visible = false)
@@ -78,6 +89,18 @@ func _ready() -> void:
 	add_log("小隊在 %s 出發。" % Stages.label(progress.march_stage))
 	show_tab(app.take(&"tab", &"overview") if app != null else &"overview")
 	_claim_offline()
+
+
+## Phones are taller than the 941 x 1672 layout: the screen keeps its width and the extra height goes above the
+## pages, as more sky over the 行軍 strip; the header stays on top, the pages and the nav bar sit on the bottom.
+func _fit() -> void:
+	var extra: float = maxf(get_viewport_rect().size.y - SIZE.y, 0.0)
+	%Pages.position.y = extra
+	_arena.position.y = ARENA_Y + extra
+	%Navigation.position.y = NAV_Y + extra
+	%NavDots.position.y = extra
+	%Toast.position.y = TOAST_Y + extra
+	%SkyFill.size = Vector2(SIZE.x, SKY_TOP + extra)
 
 
 func _path() -> String:
@@ -237,7 +260,7 @@ func _claim_offline() -> void:
 	for i: int in _offline.levels:
 		lines.append("%s 升了 %d 級" % [Names.hero_name(names, i), _offline.levels[i]])
 	if _offline.seconds >= progress.offline_cap_hours() * 3600:
-		lines.append("\n（已達離線上限 %d 小時；訓練「休息」可以延長）" % progress.offline_cap_hours())
+		lines.append("\n（已達離線上限 %d 小時；點亮天賦「休息」可以延長）" % progress.offline_cap_hours())
 	add_log("離開 %d 分鐘：擊倒 %d，金幣 +%s" % [_offline.seconds / 60, _offline.kills, _short(_offline.gold)])
 	if _offline.seconds >= REPORT_AFTER:
 		dialog("離線戰報", "\n".join(lines), "看廣告 金幣 ×2" if _offline.gold > 0 else "")

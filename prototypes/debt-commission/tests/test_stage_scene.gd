@@ -9,6 +9,7 @@ const STAGE_PATH: String = "res://scenes/stage.tscn"
 const KAGURA_PATH: String = "res://scenes/characters/kagura.tscn"
 const TEST_SAVE: String = "user://stage_scene_test.save"
 const TEST_UI: String = "user://stage_scene_test_ui.cfg"
+const EDITED_STAGE: String = "user://edited_stage_scene_test.tscn"
 
 
 func _init() -> void:
@@ -21,12 +22,27 @@ func _run() -> void:
 	var source: Node = (load(STAGE_PATH) as PackedScene).instantiate()
 	for slot: String in ["left", "center", "right"]:
 		_expect(source.has_node("StageArea/%s/Preview" % slot), "the %s slot shows a portrait in the editor" % slot)
+	for pair: Array in [["left", "shinpachi"], ["center", "gintoki"], ["right", "kagura"]]:
+		var preview: Node = source.get_node("StageArea/%s/Preview/%s" % pair)
+		_expect(preview.owner == source and preview.scene_file_path == "res://scenes/characters/%s.tscn" % pair[1],
+			"%s preview remains an instance of the editable character scene" % pair[0])
 	_expect(source.has_node("DialogueGuide") and source.has_node("Backgrounds/Default"), "editor guide and default frame exist")
+	# Save an edited copy, exactly as an author does in Godot, without touching the source scene.
+	var edited_left: Control = source.get_node("StageArea/left")
+	edited_left.offset_left += 120.0
+	edited_left.offset_right += 120.0
+	var saved_offset: float = edited_left.offset_left
+	var saved_stage: PackedScene = PackedScene.new()
+	_expect(saved_stage.pack(source) == OK and ResourceSaver.save(saved_stage, EDITED_STAGE) == OK,
+		"an edited stage can be saved")
 	source.free()
+	var edited_bytes: String = FileAccess.get_file_as_string(EDITED_STAGE)
 
 	var game: Control = (load("res://main.tscn") as PackedScene).instantiate() as Control
 	game.story_path = "res://data/phase4_story.json"
 	game.save_path = TEST_SAVE
+	game.settings_path = TEST_UI
+	game.stage_scene = ResourceLoader.load(EDITED_STAGE, "", ResourceLoader.CACHE_MODE_IGNORE)
 	root.add_child(game)
 	await _frames(3)
 	game._on_begin_pressed()
@@ -80,6 +96,7 @@ func _run() -> void:
 	await _frames(2)
 	var marker: Control = game._slot_markers["left"]
 	var sprite: Control = game._sprites["kagura"]
+	_expect(is_equal_approx(marker.offset_left, saved_offset), "the saved stage edit survives game startup")
 	_expect(_stands_in(sprite, marker), "kagura's standing box fills the left slot and stands on its bottom edge")
 	var kagura_framing: float = _art_ratio(sprite)
 	_expect(kagura_framing > 1.05, "kagura's art is framed larger than her box, as set in her own scene")
@@ -94,7 +111,7 @@ func _run() -> void:
 	await _frames(2)
 	var scale_y: float = game._game.get_global_transform().get_scale().y
 	_expect(absf(marker.get_global_rect().end.y - (game._stage_bottom + marker.offset_bottom) * scale_y) < 0.5,
-		"the slot's bottom edge keeps its offset from the dialogue box's top")
+		"the slot's bottom edge keeps its offset from the stage bottom")
 
 	marker.offset_left += 120.0
 	marker.offset_right += 120.0
@@ -104,6 +121,20 @@ func _run() -> void:
 	await _frames(2)
 	_expect(_stands_in(sprite, marker) and sprite.get_global_rect().size.y < height_before - 300.0,
 		"moving and shrinking the slot moves and shrinks the actor")
+
+	marker.offset_top -= 400.0
+	game._layout()
+	game._complete_current_line()
+	await _frames(4)
+	var short_rect: Rect2 = game._dialog_panel.get_global_rect()
+	var sprite_rect: Rect2 = sprite.get_global_rect()
+	game._dialog_panel.text.text = "這是一段用來確認長台詞不會改變舞台站位的文字。".repeat(8)
+	game._dialog_panel.text.visible_characters = -1
+	await _frames(12)
+	_expect(game._dialog_panel.get_global_rect().is_equal_approx(short_rect), "long dialogue keeps the reading box the same size")
+	_expect(sprite.get_global_rect().is_equal_approx(sprite_rect) and _stands_in(sprite, marker),
+		"changing dialogue length leaves the edited portrait position and scale untouched")
+	_expect(game._dialog_panel.has_next_page(), "long dialogue can be read within the fixed box")
 
 	for id: String in ["yorozuya_exterior", "yorozuya_kitchen"]:
 		game._apply_background(id)
@@ -120,7 +151,8 @@ func _run() -> void:
 	await _frames(2)
 	_expect(FileAccess.get_file_as_string(STAGE_PATH) == scene_before and FileAccess.get_file_as_string(KAGURA_PATH) == kagura_before,
 		"playing leaves the stage and character scenes unchanged")
-	for path: String in [TEST_SAVE, TEST_UI]:
+	_expect(FileAccess.get_file_as_string(EDITED_STAGE) == edited_bytes, "playing never rewrites the saved edited stage")
+	for path: String in [TEST_SAVE, TEST_UI, EDITED_STAGE]:
 		if FileAccess.file_exists(path):
 			DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
 	_finish("stage scene")

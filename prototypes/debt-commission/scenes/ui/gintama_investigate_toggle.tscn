@@ -1,0 +1,132 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/gintama_reading_button.gd" id="1_bvhy1"]
+[ext_resource type="Texture2D" path="res://assets/ui/gintama_extracted_menu.png" id="2_tulpf"]
+[ext_resource type="Texture2D" path="res://assets/ui/gintama_icon_menu.svg" id="3_g1lwd"]
+[ext_resource type="FontFile" path="res://assets/fonts/NotoSerifTC.ttf" id="4_jn3h4"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_typ2l"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7c0tw"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_s5opn"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xy76x"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_808rs"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0ma3d"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mo5d4"]
+content_margin_left = 18.0
+content_margin_top = 10.0
+content_margin_right = 18.0
+content_margin_bottom = 10.0
+bg_color = Color(0.03137255, 0.15686275, 0.23921569, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.7490196, 0.78039217, 0.80784315, 1)
+corner_radius_top_left = 17
+corner_radius_top_right = 17
+corner_radius_bottom_right = 17
+corner_radius_bottom_left = 17
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4r0cg"]
+content_margin_left = 18.0
+content_margin_top = 10.0
+content_margin_right = 18.0
+content_margin_bottom = 10.0
+bg_color = Color(0.1254902, 0.3019608, 0.41568628, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.84313726, 0.75686276, 0.54509807, 1)
+corner_radius_top_left = 17
+corner_radius_top_right = 17
+corner_radius_bottom_right = 17
+corner_radius_bottom_left = 17
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_201d3"]
+content_margin_left = 18.0
+content_margin_top = 10.0
+content_margin_right = 18.0
+content_margin_bottom = 10.0
+bg_color = Color(0.19607843, 0.39607844, 0.50980395, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.7490196, 0.78039217, 0.80784315, 1)
+corner_radius_top_left = 17
+corner_radius_top_right = 17
+corner_radius_bottom_right = 17
+corner_radius_bottom_left = 17
+
+[sub_resource type="FontVariation" id="FontVariation_tigw3"]
+base_font = ExtResource("4_jn3h4")
+variation_opentype = {
+2003265652: 500.0
+}
+
+[node name="InvestigationToggle" type="Button" unique_id=125961985]
+custom_minimum_size = Vector2(195, 150)
+size_flags_horizontal = 0
+tooltip_text = "展開"
+theme_override_styles/normal = SubResource("StyleBoxEmpty_typ2l")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_7c0tw")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_s5opn")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_xy76x")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_808rs")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_0ma3d")
+script = ExtResource("1_bvhy1")
+normal_surface = SubResource("StyleBoxFlat_mo5d4")
+hover_surface = SubResource("StyleBoxFlat_4r0cg")
+active_surface = SubResource("StyleBoxFlat_201d3")
+
+[node name="Surface" type="Panel" parent="." unique_id=1550677594]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 44.0
+offset_bottom = -44.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_mo5d4")
+
+[node name="CutoutArt" type="TextureRect" parent="Surface" unique_id=2048631398]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource("2_tulpf")
+expand_mode = 1
+
+[node name="Contents" type="HBoxContainer" parent="Surface" unique_id=1164846061]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Icon" type="TextureRect" parent="Surface/Contents" unique_id=1960964776]
+visible = false
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("3_g1lwd")
+expand_mode = 1
+
+[node name="Caption" type="Label" parent="Surface/Contents" unique_id=948021775]
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_tigw3")
+theme_override_font_sizes/font_size = 27
+theme_override_colors/font_color = Color(0.9607843, 0.95686275, 0.93333334, 1)
+text = "展開 ▲"
+vertical_alignment = 1

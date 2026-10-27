@@ -5,8 +5,8 @@ extends "res://tools/shots_chapter1.gd"
 ## text running off the game area. Screens: title, 設定, 章節選擇, 製作名單, 鑑賞 (both tabs), every line up to the
 ## search, the search and its folded bar, 回顧, 目錄, 存檔, 案件檔, the round, the tsukkomi sheet, the
 ## QTE, Game Over and the chapter result. Each screen is also saved as a PNG. Needs a window:
-##   Godot --path . --resolution 780x1688 --script res://tools/text_fit_audit.gd -- <out_dir>
-## (on a Retina Mac 780x1688 is a 390 CSS px phone, 640x1136 a 320 one). Exit code 1 when anything
+##   Godot --path . --resolution 1280x720 --script res://tools/text_fit_audit.gd -- <out_dir>
+## Try 1136x640 for a smaller landscape window. Exit code 1 when anything
 ## is cut; <out_dir>/text_fit.json has the details.
 
 var _issues: Array[Dictionary] = []
@@ -28,6 +28,7 @@ func _run() -> void:
 	_game.save_path = "user://shots_chapter1.save"
 	_game.settings_path = "user://shots_settings.cfg"
 	_game.progress_path = "user://shots_progress.cfg"
+	_game.tutorials_enabled = false  # inspect the screens themselves; tutorial has its own test
 	root.add_child(_game)
 	await _frames(5)
 	await _audit("title")
@@ -87,8 +88,19 @@ func _run() -> void:
 		return _quit(1)
 	_game.call("_complete_current_line")
 	await _audit("round")
+	# The first statement has no slot; the second really opens the timed four-choice sheet.
+	_game.call("_on_boke_next_pressed")
+	_game.call("_complete_current_line")
 	_game.call("_on_boke_tsukkomi_pressed")
 	await _frames(20)
+	if _game._screen_mode != "tsukkomi" or _game._choice_buttons.size() != 4:
+		printerr("TEXT FIT FAILED: did not reach the timed four-choice sheet")
+		return _quit(1)
+	var choice_viewport: Rect2 = _game._choice_sheet.choices_scroll.get_global_rect().grow(1.0)
+	for row: Button in _game._choice_buttons:
+		if not choice_viewport.encloses(row.get_global_rect()):
+			_issues.append({"screen": "tsukkomi", "node": str(row.get_path()),
+				"reason": "choice is clipped by its scroll viewport", "text": row.text})
 	await _audit("tsukkomi")
 	_game.call("_start_qte", {"current_line": {"qte": {"duration": 30.0, "late_after": 31.0}}})
 	await _audit("qte")

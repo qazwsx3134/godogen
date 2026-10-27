@@ -6,10 +6,12 @@
 [ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Bold.otf" id="3_ipdlw"]
 [ext_resource type="Texture2D" path="res://assets/reference/idel.png" id="4_qy5q4"]
 [ext_resource type="Texture2D" path="res://assets/reference/monster.png" id="5_l7jjd"]
+[ext_resource type="StyleBox" path="res://ui/blue.tres" id="7_ipdlw"]
+[ext_resource type="StyleBox" path="res://ui/gold.tres" id="8_qy5q4"]
 
-[sub_resource type="Theme" id="Theme_krmap"]
+[sub_resource type="Theme" id="Theme_ipdlw"]
 default_font = ExtResource("1_bla64")
-default_font_size = 26
+default_font_size = 30
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1s2ed"]
 atlas = ExtResource("2_u1dji")
@@ -195,9 +197,10 @@ custom_minimum_size = Vector2(941, 1672)
 layout_mode = 3
 anchors_preset = 0
 mouse_filter = 2
-theme = SubResource("Theme_krmap")
+theme = SubResource("Theme_ipdlw")
 script = ExtResource("2_bla64")
 metadata/page_id = "equipment"
+metadata/fusion_readable = true
 
 [node name="DistantLandscape" type="TextureRect" parent="." unique_id=704439185]
 texture_filter = 1
@@ -344,6 +347,7 @@ theme_override_fonts/font = ExtResource("3_ipdlw")
 theme_override_font_sizes/font_size = 39
 text = "裝備"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="ManagementTab" type="Button" parent="." unique_id=1814263233]
 visible = false
@@ -356,7 +360,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("3_ipdlw")
-theme_override_font_sizes/font_size = 21
+theme_override_font_sizes/font_size = 27
 theme_override_styles/normal = SubResource("StyleBoxFlat_pwkfr")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_7r3wi")
 theme_override_styles/hover = SubResource("StyleBoxFlat_dnlsv")
@@ -379,7 +383,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("3_ipdlw")
-theme_override_font_sizes/font_size = 21
+theme_override_font_sizes/font_size = 27
 theme_override_styles/normal = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/hover = SubResource("StyleBoxFlat_wnl7x")
@@ -409,9 +413,10 @@ theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("3_ipdlw")
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 30
 text = "職業武庫"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="UpgradeArmoryButton" type="Button" parent="." unique_id=804996195]
 unique_name_in_owner = true
@@ -424,7 +429,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("3_ipdlw")
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 23
 theme_override_styles/normal = SubResource("StyleBoxFlat_pwkfr")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_7r3wi")
 theme_override_styles/hover = SubResource("StyleBoxFlat_dnlsv")
@@ -456,10 +461,11 @@ offset_bottom = 917.0
 theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 26
 text = "Lv.1"
 horizontal_alignment = 1
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="ArmoryGrid" type="GridContainer" parent="." unique_id=1710170949]
 unique_name_in_owner = true
@@ -480,7 +486,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("3_ipdlw")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 21
 theme_override_styles/normal = SubResource("StyleBoxFlat_yhv7p")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_yhv7p")
 theme_override_styles/hover = SubResource("StyleBoxFlat_yhv7p")
@@ -498,7 +504,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("3_ipdlw")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 21
 theme_override_styles/normal = SubResource("StyleBoxFlat_yhv7p")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_yhv7p")
 theme_override_styles/hover = SubResource("StyleBoxFlat_yhv7p")
@@ -516,7 +522,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("3_ipdlw")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 21
 theme_override_styles/normal = SubResource("StyleBoxFlat_yhv7p")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_yhv7p")
 theme_override_styles/hover = SubResource("StyleBoxFlat_yhv7p")
@@ -534,7 +540,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("3_ipdlw")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 21
 theme_override_styles/normal = SubResource("StyleBoxFlat_yhv7p")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_yhv7p")
 theme_override_styles/hover = SubResource("StyleBoxFlat_yhv7p")
@@ -552,7 +558,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("3_ipdlw")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 21
 theme_override_styles/normal = SubResource("StyleBoxFlat_yhv7p")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_yhv7p")
 theme_override_styles/hover = SubResource("StyleBoxFlat_yhv7p")
@@ -570,7 +576,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("3_ipdlw")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 21
 theme_override_styles/normal = SubResource("StyleBoxFlat_yhv7p")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_yhv7p")
 theme_override_styles/hover = SubResource("StyleBoxFlat_yhv7p")
@@ -600,9 +606,10 @@ theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("3_ipdlw")
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 23
 text = "主角屬性　基礎 + 裝備"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="ArmoryLine0" type="Label" parent="." unique_id=423900966]
 unique_name_in_owner = true
@@ -614,9 +621,10 @@ offset_bottom = 728.0
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 19
+theme_override_font_sizes/font_size = 25
 text = "攻擊　—"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="ArmoryLine1" type="Label" parent="." unique_id=791939489]
 unique_name_in_owner = true
@@ -628,9 +636,10 @@ offset_bottom = 766.0
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 19
+theme_override_font_sizes/font_size = 25
 text = "防禦　—"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="ArmoryLine2" type="Label" parent="." unique_id=611009939]
 unique_name_in_owner = true
@@ -642,9 +651,10 @@ offset_bottom = 804.0
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 19
+theme_override_font_sizes/font_size = 25
 text = "生命　—"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="ArmoryLine3" type="Label" parent="." unique_id=1099478748]
 unique_name_in_owner = true
@@ -656,9 +666,10 @@ offset_bottom = 842.0
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 19
+theme_override_font_sizes/font_size = 25
 text = "速度　—"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="ArmoryLine4" type="Label" parent="." unique_id=144370255]
 unique_name_in_owner = true
@@ -670,9 +681,10 @@ offset_bottom = 880.0
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 19
+theme_override_font_sizes/font_size = 25
 text = "暴擊　—"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="ArmoryLine5" type="Label" parent="." unique_id=880367398]
 unique_name_in_owner = true
@@ -684,9 +696,10 @@ offset_bottom = 918.0
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 19
+theme_override_font_sizes/font_size = 25
 text = "回復　—"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="MonsterEquipmentPanel" type="Panel" parent="." unique_id=1055762852]
 layout_mode = 0
@@ -707,9 +720,10 @@ theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("3_ipdlw")
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 30
 text = "專屬飾品"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="UseMonsterButton" type="Button" parent="." unique_id=260342904]
 visible = false
@@ -722,7 +736,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("3_ipdlw")
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 22
 theme_override_styles/normal = SubResource("StyleBoxFlat_pwkfr")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_7r3wi")
 theme_override_styles/hover = SubResource("StyleBoxFlat_dnlsv")
@@ -734,6 +748,7 @@ metadata/action = "equipment_owner:selected_monster"
 
 [node name="SquadPick0" type="Button" parent="." unique_id=568459196]
 unique_name_in_owner = true
+visible = false
 layout_mode = 0
 offset_left = 196.0
 offset_top = 958.0
@@ -743,7 +758,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("3_ipdlw")
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 22
 theme_override_styles/normal = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/hover = SubResource("StyleBoxFlat_wnl7x")
@@ -757,6 +772,7 @@ metadata/action = "equipment_monster:0"
 
 [node name="SquadPick1" type="Button" parent="." unique_id=608571010]
 unique_name_in_owner = true
+visible = false
 layout_mode = 0
 offset_left = 337.0
 offset_top = 958.0
@@ -766,7 +782,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("3_ipdlw")
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 22
 theme_override_styles/normal = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/hover = SubResource("StyleBoxFlat_wnl7x")
@@ -779,6 +795,7 @@ metadata/action = "equipment_monster:1"
 
 [node name="SquadPick2" type="Button" parent="." unique_id=1530225627]
 unique_name_in_owner = true
+visible = false
 layout_mode = 0
 offset_left = 478.0
 offset_top = 958.0
@@ -788,7 +805,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("3_ipdlw")
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 22
 theme_override_styles/normal = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/hover = SubResource("StyleBoxFlat_wnl7x")
@@ -801,6 +818,7 @@ metadata/action = "equipment_monster:2"
 
 [node name="SquadPick3" type="Button" parent="." unique_id=191986643]
 unique_name_in_owner = true
+visible = false
 layout_mode = 0
 offset_left = 619.0
 offset_top = 958.0
@@ -810,7 +828,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("3_ipdlw")
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 22
 theme_override_styles/normal = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/hover = SubResource("StyleBoxFlat_wnl7x")
@@ -843,10 +861,11 @@ offset_bottom = 1209.0
 theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 26
 text = "Lv.1"
 horizontal_alignment = 1
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="MonsterSlotGrid" type="GridContainer" parent="." unique_id=1676806039]
 layout_mode = 0
@@ -867,7 +886,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("3_ipdlw")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 21
 theme_override_styles/normal = SubResource("StyleBoxFlat_yhv7p")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_yhv7p")
 theme_override_styles/hover = SubResource("StyleBoxFlat_yhv7p")
@@ -886,7 +905,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("3_ipdlw")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 21
 theme_override_styles/normal = SubResource("StyleBoxFlat_yhv7p")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_yhv7p")
 theme_override_styles/hover = SubResource("StyleBoxFlat_yhv7p")
@@ -905,7 +924,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("3_ipdlw")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 21
 theme_override_styles/normal = SubResource("StyleBoxFlat_yhv7p")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_yhv7p")
 theme_override_styles/hover = SubResource("StyleBoxFlat_yhv7p")
@@ -924,7 +943,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("3_ipdlw")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 21
 theme_override_styles/normal = SubResource("StyleBoxFlat_yhv7p")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_yhv7p")
 theme_override_styles/hover = SubResource("StyleBoxFlat_yhv7p")
@@ -943,7 +962,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("3_ipdlw")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 21
 theme_override_styles/normal = SubResource("StyleBoxFlat_yhv7p")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_yhv7p")
 theme_override_styles/hover = SubResource("StyleBoxFlat_yhv7p")
@@ -962,7 +981,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("3_ipdlw")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 21
 theme_override_styles/normal = SubResource("StyleBoxFlat_yhv7p")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_yhv7p")
 theme_override_styles/hover = SubResource("StyleBoxFlat_yhv7p")
@@ -992,9 +1011,10 @@ theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("3_ipdlw")
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 23
 text = "怪獸屬性　基礎 + 裝備"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="CharmLine0" type="Label" parent="." unique_id=1916938869]
 unique_name_in_owner = true
@@ -1006,9 +1026,10 @@ offset_bottom = 1067.0
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 23
 text = "攻擊　—"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="CharmLine1" type="Label" parent="." unique_id=399048559]
 unique_name_in_owner = true
@@ -1020,9 +1041,10 @@ offset_bottom = 1098.0
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 23
 text = "防禦　—"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="CharmLine2" type="Label" parent="." unique_id=889165325]
 unique_name_in_owner = true
@@ -1034,9 +1056,10 @@ offset_bottom = 1129.0
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 23
 text = "生命　—"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="CharmLine3" type="Label" parent="." unique_id=426679188]
 unique_name_in_owner = true
@@ -1048,9 +1071,10 @@ offset_bottom = 1160.0
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 23
 text = "速度　—"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="CharmLine4" type="Label" parent="." unique_id=624896903]
 unique_name_in_owner = true
@@ -1062,9 +1086,10 @@ offset_bottom = 1191.0
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 23
 text = "暴擊　—"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="CharmLine5" type="Label" parent="." unique_id=426712449]
 unique_name_in_owner = true
@@ -1076,9 +1101,10 @@ offset_bottom = 1222.0
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 23
 text = "回復　—"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="EquipmentInventoryPanel" type="Panel" parent="." unique_id=879016754]
 layout_mode = 0
@@ -1099,9 +1125,10 @@ theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("3_ipdlw")
-theme_override_font_sizes/font_size = 25
+theme_override_font_sizes/font_size = 29
 text = "裝備背包"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="EquipFilter" type="HBoxContainer" parent="." unique_id=1603478275]
 unique_name_in_owner = true
@@ -1119,7 +1146,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("3_ipdlw")
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 22
 theme_override_styles/normal = SubResource("StyleBoxFlat_pwkfr")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_7r3wi")
 theme_override_styles/hover = SubResource("StyleBoxFlat_dnlsv")
@@ -1138,7 +1165,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("3_ipdlw")
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 22
 theme_override_styles/normal = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/hover = SubResource("StyleBoxFlat_wnl7x")
@@ -1156,7 +1183,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("3_ipdlw")
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 22
 theme_override_styles/normal = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/hover = SubResource("StyleBoxFlat_wnl7x")
@@ -1175,7 +1202,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("3_ipdlw")
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 22
 theme_override_styles/normal = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/hover = SubResource("StyleBoxFlat_wnl7x")
@@ -1194,7 +1221,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("3_ipdlw")
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 22
 theme_override_styles/normal = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/hover = SubResource("StyleBoxFlat_wnl7x")
@@ -1241,10 +1268,11 @@ offset_bottom = 1397.0
 theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 23
+theme_override_font_sizes/font_size = 30
 text = "目前沒有相容的裝備。"
 horizontal_alignment = 1
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="ManagementHint" type="Label" parent="." unique_id=1448181526]
 visible = false
@@ -1256,9 +1284,10 @@ offset_bottom = 1500.0
 theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 22
 text = "點選裝備即可穿戴；點選已裝備欄位可選取卸下。"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="SelectedItemInfo" type="Label" parent="." unique_id=275965854]
 unique_name_in_owner = true
@@ -1272,9 +1301,10 @@ theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("3_ipdlw")
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 23
 text = "尚未選取裝備"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="SelectedItemCost" type="Label" parent="." unique_id=440175631]
 unique_name_in_owner = true
@@ -1287,9 +1317,10 @@ offset_bottom = 1500.0
 theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 22
 text = "強化費用：—"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="UnequipButton" type="Button" parent="." unique_id=233481227]
 visible = false
@@ -1302,7 +1333,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("3_ipdlw")
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 22
 theme_override_styles/normal = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/hover = SubResource("StyleBoxFlat_wnl7x")
@@ -1323,7 +1354,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("3_ipdlw")
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 22
 theme_override_styles/normal = SubResource("StyleBoxFlat_gnuvx")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_gnuvx")
 theme_override_styles/hover = SubResource("StyleBoxFlat_gnuvx")
@@ -1334,6 +1365,7 @@ metadata/action = "upgrade"
 
 [node name="SquadPick4" type="Button" parent="." unique_id=961385220]
 unique_name_in_owner = true
+visible = false
 layout_mode = 0
 offset_left = 760.0
 offset_top = 958.0
@@ -1343,7 +1375,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("3_ipdlw")
-theme_override_font_sizes/font_size = 17
+theme_override_font_sizes/font_size = 22
 theme_override_styles/normal = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/hover = SubResource("StyleBoxFlat_wnl7x")
@@ -1353,3 +1385,75 @@ toggle_mode = true
 button_group = SubResource("ButtonGroup_mapuh")
 text = "怪獸 4"
 metadata/action = "equipment_monster:3"
+
+[node name="PrevHolder" type="Button" parent="." unique_id=1998346113]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 196.0
+offset_top = 954.0
+offset_right = 280.0
+offset_bottom = 1000.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
+theme_override_fonts/font = ExtResource("3_ipdlw")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = ExtResource("7_ipdlw")
+theme_override_styles/pressed = ExtResource("7_ipdlw")
+theme_override_styles/hover = ExtResource("7_ipdlw")
+theme_override_styles/disabled = ExtResource("7_ipdlw")
+theme_override_styles/focus = ExtResource("7_ipdlw")
+text = "◀"
+
+[node name="HolderName" type="Label" parent="." unique_id=611586104]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 286.0
+offset_top = 954.0
+offset_right = 806.0
+offset_bottom = 1000.0
+theme_override_colors/font_color = Color(0.2901961, 0.20392157, 0.14117648, 1)
+theme_override_fonts/font = ExtResource("3_ipdlw")
+theme_override_font_sizes/font_size = 32
+text = "英雄名字"
+horizontal_alignment = 1
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="NextHolder" type="Button" parent="." unique_id=1892479087]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 812.0
+offset_top = 954.0
+offset_right = 906.0
+offset_bottom = 1000.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
+theme_override_fonts/font = ExtResource("3_ipdlw")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = ExtResource("7_ipdlw")
+theme_override_styles/pressed = ExtResource("7_ipdlw")
+theme_override_styles/hover = ExtResource("7_ipdlw")
+theme_override_styles/disabled = ExtResource("7_ipdlw")
+theme_override_styles/focus = ExtResource("7_ipdlw")
+text = "▶"
+
+[node name="AutoEquipButton" type="Button" parent="." unique_id=1474178799]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 690.0
+offset_top = 536.0
+offset_right = 913.0
+offset_bottom = 592.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
+theme_override_fonts/font = ExtResource("3_ipdlw")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = ExtResource("8_qy5q4")
+theme_override_styles/pressed = ExtResource("8_qy5q4")
+theme_override_styles/hover = ExtResource("8_qy5q4")
+theme_override_styles/disabled = ExtResource("8_qy5q4")
+theme_override_styles/focus = ExtResource("8_qy5q4")
+text = "一鍵裝備"

@@ -200,13 +200,33 @@ for (const name of files) {
   log(`ok  new story: stale version reported, then ${okLine(fixed)}`);
 }
 
-// 9. insertIndex keeps new lines ahead of the closing step.
+// 9. New scenes can become branches without putting an unreachable choice after the placeholder end.
 {
   const node = Core.newNode();
   assert.equal(Core.insertIndex(node, 'say'), 1);
   assert.equal(Core.insertIndex(node, 'end'), 2);
   assert.equal(Core.insertIndex({ steps: [] }, 'say'), 0);
-  log('ok  insertIndex');
+  assert.equal(Core.addStep(node, Core.newStep('choice')), '');
+  assert.deepEqual(node.steps.map(step => step.op), ['say', 'choice']);
+  assert.equal(Core.addStep(node, {op: 'say', speaker: 'narrator', text: '在選項前'}), '');
+  assert.deepEqual(node.steps.map(step => step.op), ['say', 'say', 'choice']);
+  const before = JSON.stringify(node);
+  assert.match(Core.addStep(node, Core.newStep('end')), /已有結尾或分支/);
+  assert.equal(JSON.stringify(node), before, 'a real branch is not silently replaced');
+  const linked = {steps: [{op: 'say', speaker: 'narrator', text: '有後續'}], next: 'elsewhere'};
+  assert.match(Core.addStep(linked, Core.newStep('choice')), /先斷開連線/);
+  assert.equal(linked.steps.length, 1);
+
+  const invalid = Core.newStory('terminal_order');
+  invalid.nodes.start.steps.push({op: 'say', speaker: 'narrator', text: '永遠不會出現'});
+  assert.ok(Core.analyze(invalid).problems.some(problem => problem.type === 'terminal-middle'));
+  const file = path.join(out, 'terminal_order_story.json');
+  fs.writeFileSync(file, Core.exportText(invalid));
+  const result = checkStory(file, '--write');
+  assert.equal(result.code, 1, result.text);
+  assert.match(result.text, /later steps cannot execute/);
+  assert.equal(JSON.parse(fs.readFileSync(file, 'utf8')).version, 's-unset', 'invalid story was not published');
+  log('ok  placeholder end is replaced by a branch; authored endings are kept; unreachable steps are rejected');
 }
 // 10. History branching, bounded snapshots and recursive literal search.
 {

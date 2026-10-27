@@ -1,6 +1,6 @@
 extends Control
 
-## V1 直立視覺小說外殼。
+## 橫向視覺小說外殼。
 ##
 ## 分層由下到上：背景 → 立繪 → 特效 → 對話框（scenes/ui/dialogue_box_<風格>.tscn）→ 彈出視窗。
 ## 故事流程由 scripts/story_runner.gd 執行；背景、立繪與素材從同一份 catalog 載入。
@@ -25,6 +25,8 @@ const DIRECTOR_SHEET: PackedScene = preload("res://scenes/ui/choice_sheet_direct
 const SPRITE_SCRIPT: Script = preload("res://scripts/placeholder_sprite.gd")
 ## Each character's own size and framing (tools/make_character_scenes.gd creates missing ones).
 const CHARACTER_SCENE: String = "res://scenes/characters/%s.tscn"
+## Background frames and the left/center/right standing slots, laid out in the editor.
+const STAGE_SCENE: PackedScene = preload("res://scenes/stage.tscn")
 ## A spot to search, laid over its object in the background picture; and the folded reading box.
 const HOTSPOT_SCENE: PackedScene = preload("res://scenes/ui/hotspot.tscn")
 const INVESTIGATE_BAR_SCENE: PackedScene = preload("res://scenes/ui/investigate_bar.tscn")
@@ -53,9 +55,9 @@ const UI_STYLES_SCRIPT: Script = preload("res://scripts/ui_styles.gd")
 const SKIN: Script = preload("res://scripts/skin.gd")
 const CASE_FILE_SCENE: PackedScene = preload("res://scenes/ui/case_file_panel.tscn")
 
-const DESIGN_WIDTH: float = 1080.0
-## One CSS px of the HTML reference (docs/ui-options) in logical px.
-const CSS_PX: float = DESIGN_WIDTH / 390.0
+const DESIGN_WIDTH: float = 1920.0
+## One CSS px at the 720 px wide landscape reference size.
+const CSS_PX: float = DESIGN_WIDTH / 720.0
 const FONT_PATH: String = "res://assets/fonts/story-cjk.ttc"
 const SAVE_SCHEMA: int = 3
 const PHASE3_STORY_PATH: String = "res://data/phase3_story.json"
@@ -64,7 +66,12 @@ const STORY_CHOICE_PATH: String = "user://story_choice.cfg"
 const DEFAULT_BOKE_TIMER_SECONDS: float = 8.0
 
 @export_file("*.json") var story_path: String = "res://data/debt_story.json"
+## An authoring preview can use a temporary story while retaining the work's catalog and skin.
+@export_file("*.json") var story_catalog_override: String = ""
+@export var story_skin_override: String = ""
 @export var save_path: String = "user://debt_commission.save"
+## Editable stage scene with the background frames and left/center/right portrait slots.
+@export var stage_scene: PackedScene = STAGE_SCENE
 ## The stories the player can pick (data/stories.json): chapters in order, then samples, each with
 ## its own save namespace. Web builds preselect one with ?sample=<id>; a desktop/editor run
 ## remembers the last choice.
@@ -96,10 +103,7 @@ var _settings_panel: Control = null
 var _settings: Dictionary = {}
 var _settings_return: String = "title"
 
-const DIALOG_RATIO: float = 0.28
 const EDGE: float = 24.0
-const DIALOG_GAP: float = 12.0
-const QUICKBAR_HEIGHT: float = 160.0
 const LONG_PRESS_SEC: float = 0.5
 const TAP_SLOP: float = 30.0
 const SWIPE_DISTANCE: float = 140.0
@@ -116,8 +120,6 @@ const AUDIO_PATHS: Dictionary = {
 	"stamp": "res://assets/audio/stamp.wav",
 }
 
-## Background frames and the left/center/right standing slots, laid out in the editor.
-const STAGE_SCENE: PackedScene = preload("res://scenes/stage.tscn")
 
 const COLOR_PANEL: Color = Color(0.035, 0.045, 0.09, 0.76)
 const COLOR_PANEL_SOLID: Color = Color("#101530")
@@ -221,13 +223,16 @@ var _phase3_timer_label: Label = null
 var _investigation_continue_button: Button = null
 ## Investigation: spots by id (hotspot.tscn) on a layer covering the whole picture. While searching,
 ## the background frame is stretched to the whole picture (_picture, in game coordinates before
-## panning) and slides sideways by _pan within _pan_range; _frame_offsets restores it afterwards.
+## panning) and slides within the available horizontal and vertical ranges; _frame_offsets restores it afterwards.
 var _hotspots: Dictionary = {}
 var _hotspot_layer: Control = null
 var _picture: Rect2 = Rect2()
 var _pan: float = 0.0
 var _pan_start: float = 0.0
 var _pan_range: Vector2 = Vector2.ZERO
+var _pan_y: float = 0.0
+var _pan_y_start: float = 0.0
+var _pan_y_range: Vector2 = Vector2.ZERO
 var _frame_offsets: Array[float] = []
 var _investigate_bar: Control = null
 var _investigate_collapsed: bool = false
@@ -235,7 +240,9 @@ var _investigate_collapsed: bool = false
 var _topic_buttons: Dictionary = {}
 ## How far each place of a search was panned ("<investigation>/<place>"), kept across its reactions.
 var _investigation_pans: Dictionary = {}
+var _investigation_pans_y: Dictionary = {}
 var _cast_pan_origins: Dictionary = {}
+var _cast_pan_y_origins: Dictionary = {}
 var _round_stages: Dictionary = {}
 var _investigation_home_casts: Dictionary = {}
 ## The search has made its cast see-through or invisible (_set_search_cast) until it ends.
@@ -328,8 +335,7 @@ var _gesture_start: Vector2 = Vector2.ZERO
 var _gesture_token: int = 0
 var _toast_token: int = 0
 var _text_tone: String = "body"
-## Nominal top of the reading area: sprites, hotspots and choices sit above it, so they stay put
-## while the dialogue box grows or shrinks with each line.
+## Bottom of the authored stage. It is independent of the dialogue's content and visibility.
 var _stage_bottom: float = 0.0
 var _panel_scale: float = 1.0
 
@@ -348,7 +354,7 @@ func _ready() -> void:
 			_font = loaded_font as Font
 	var ui_theme: Theme = Theme.new()
 	ui_theme.default_font = _font
-	ui_theme.default_font_size = 44
+	ui_theme.default_font_size = 34
 	theme = ui_theme
 
 	_library = STORY_LIBRARY.new(stories_path, progress_path, packs_root)
@@ -361,6 +367,7 @@ func _ready() -> void:
 	_motion = StageMotion.new()
 	add_child(_motion)
 	_motion.setup(_stage_area.get_node("%BackgroundGhost"), %SceneFade)
+	_motion.set_reduce_motion(int(_settings.get("motion", 0)) == 1)
 	_apply_ui_style()
 	get_viewport().size_changed.connect(_layout)
 	_layout()
@@ -673,6 +680,10 @@ func _on_setting_changed(key: String, value: int) -> void:
 		_show_toast("設定無法儲存，這次遊玩仍會套用")
 	if key == "motion":
 		_effects.reduce_motion = value == 1
+		if _motion != null:
+			_motion.set_reduce_motion(value == 1)
+		_dialog_panel.set_reduce_motion(value == 1)
+		_investigate_bar.call("set_reduce_motion", value == 1)
 	if key.ends_with("_volume"):
 		_apply_audio_levels()
 	if key in ["font_size", "paper_opacity"]:
@@ -721,7 +732,7 @@ func _load_story() -> void:
 	_use_skin()
 	_save_validation_probe = null
 	_runner = STORY_RUNNER_SCRIPT.new() as RefCounted
-	_story_ready = bool(_runner.call("load_story", story_path))
+	_story_ready = bool(_runner.call("load_story", story_path, story_catalog_override))
 	if not _story_ready:
 		_story_error = _runner_string("error_message", "故事資料尚未就緒。")
 		return
@@ -839,7 +850,7 @@ func _build_ui() -> void:
 
 func _build_background() -> void:
 	_background_gradient = Gradient.new()
-	var stage: Control = STAGE_SCENE.instantiate() as Control
+	var stage: Control = stage_scene.instantiate() as Control
 	_bg_layer.add_child(stage)
 	stage.get_node("DialogueGuide").free()  # editor-only guide
 	for frame: TextureRect in stage.get_node("Backgrounds").get_children():
@@ -851,7 +862,7 @@ func _build_background() -> void:
 		if preview != null:
 			preview.free()
 		_slot_markers[str(marker.name)] = marker
-	_place_tag = _make_label(_bg_layer, "", 40, COLOR_TEXT)
+	_place_tag = _make_label(_bg_layer, "", 32, COLOR_TEXT)
 	_place_tag.set_meta("ui_style_role", "scene_overlay")
 	_place_tag.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.72))
 	_place_tag.add_theme_constant_override("outline_size", 4)
@@ -988,6 +999,7 @@ func _mount_dialogue_box() -> void:
 	var old: DialogueBox = _dialog_panel
 	_dialog_panel = SKIN.scene(_skin, "dialogue_box").instantiate() as DialogueBox
 	_dialog_layer.add_child(_dialog_panel)
+	_dialog_panel.set_reduce_motion(int(_settings.get("motion", 0)) == 1)
 	_dialog_panel.apply_reading_settings(SETTINGS_SCRIPT.FONT_SCALES[int(_settings.get("font_size",1))],
 		SETTINGS_SCRIPT.PAPER_OPACITIES[int(_settings.get("paper_opacity",2))])
 	_dialog_layer.move_child(_dialog_panel, _tap_catcher.get_index() + 1)
@@ -1281,7 +1293,7 @@ func _replay_tutorials() -> void:
 
 
 func _build_toast() -> void:
-	_toast = _make_label(_popup_layer, "", 40, COLOR_TEXT)
+	_toast = _make_label(_popup_layer, "", 32, COLOR_TEXT)
 	_toast.name = "Toast"
 	_toast.set_meta("ui_style_role", "toast")
 	_toast.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -1305,7 +1317,6 @@ func _mount_title() -> void:
 	_title_screen.load_pressed.connect(func() -> void: _open_slot_picker("load"))
 	_title_screen.story_switch_pressed.connect(_on_story_switch_pressed)
 	_title_screen.settings_pressed.connect(_open_settings)
-	_fit_bottom_panel(_title_screen.card_area)
 	if old != null:
 		_title_screen.visible = old.visible
 		_game.remove_child(old)
@@ -1431,7 +1442,7 @@ func _layout() -> void:
 	if _game == null:
 		return
 	var viewport_size: Vector2 = get_viewport_rect().size
-	# stretch expand 讓邏輯尺寸至少 1080×1920；遊戲區固定 1080 寬，較長的手機往下延伸，桌機左右留黑邊。
+	# The project keeps a 16:9 logical canvas; excess window space becomes letterboxing.
 	var width: float = minf(viewport_size.x, DESIGN_WIDTH)
 	var height: float = viewport_size.y
 	_game.position = Vector2(floorf((viewport_size.x - width) * 0.5), 0.0)
@@ -1444,26 +1455,23 @@ func _layout() -> void:
 	_place_tag.size = Vector2(width * 0.6, 60.0)
 	_phase3_hud.offset_top = _safe_top
 
-	# 對話框與選項面板依內容往上長、貼齊底部；這裡只讓出手機手勢列，並在窄螢幕等比放大（見 _ui_scale）。
+	# Bottom panels respect the device safe area. The portrait stage remains independent of them.
 	_panel_scale = _ui_scale()
 	_fit_bottom_panel(_dialog_panel)
 	_fit_bottom_panel(_investigate_bar)
 	_fit_choice_sheet()
-	var dialog_height: float = roundf(height * DIALOG_RATIO) if _phase3_enabled else clampf(height * 0.20, 360.0, 440.0)
-	var dialog_y: float = bottom - (QUICKBAR_HEIGHT + DIALOG_GAP + dialog_height) * _panel_scale
-	_stage_bottom = dialog_y
-	_stage_area.offset_bottom = dialog_y - height
+	_stage_bottom = _anchored_rect(_stage_area, Rect2(Vector2.ZERO, _game.size)).end.y
 
 	_fit_full_area(_end_box)
 
 	for actor_id: String in _sprites.keys():
 		_layout_sprite(actor_id)
+	_refresh_cast_pan_origins()
 
 	_fit_menu()
 	_fit_full_area(_game_over)
 	_fit_full_area(_chapter_result)
 	_fit_full_area(_comedy_layer)
-	_fit_bottom_panel(_title_screen.card_area)
 	_fit_panel_area(_log_overlay, Rect2(0.0,top,width,bottom-top))
 
 	_layout_slot_picker(width, height, top, bottom)
@@ -1479,15 +1487,14 @@ func _layout() -> void:
 	_publish_qa_state()
 
 
-## The scenes are drawn for a 390 CSS px wide game area (1080 / 390 logical px per CSS px). On a
-## narrower phone they would shrink with it, so the box scales up by 390 / CSS width to keep its
-## buttons at least 48 CSS px. CSS px = screen px / device pixel ratio.
+## The landscape scenes are drawn for a 720 CSS px wide game area. A small increase on narrower
+## windows helps touch targets, with a cap so the reading and investigation panels still fit.
 func _ui_scale() -> float:
 	var screen_px: float = _game.size.x * get_viewport().get_final_transform().get_scale().x
 	var css_px: float = screen_px / maxf(1.0, DisplayServer.screen_get_scale())
-	var k: float = 390.0 / maxf(css_px, 1.0)
+	var k: float = 720.0 / maxf(css_px, 1.0)
 	# 0.4 % headroom: a 48 CSS px button scaled to exactly 48 measures 47.997 after rounding.
-	return 1.0 if k <= 1.0 else minf(k * 1.004, 1.5)
+	return 1.0 if k <= 1.0 else minf(k * 1.004, 1.15)
 
 
 ## Full-screen scene part at _panel_scale, laid out smaller so that scaled it covers the game area.
@@ -1507,12 +1514,12 @@ func _fit_panel_area(panel: Control, area: Rect2) -> void:
 	panel.offset_bottom = area.position.y + area.size.y / _panel_scale - _game.size.y
 
 
-## The sheet at _panel_scale, kept below the place name and the HUD (about 96 CSS px from the top).
+## The sheet at _panel_scale, kept below the place name and the HUD.
 ## While a placard answers the line being chosen, the sheet also stays below the board.
 func _fit_choice_sheet() -> void:
 	_fit_bottom_panel(_choice_sheet)
 	if _game != null and _game.size.y > 0.0:
-		var top: float = _safe_top + 96.0 * CSS_PX
+		var top: float = _safe_top + 64.0 * CSS_PX
 		if _screen_mode == "tsukkomi" and _placard_open():
 			top = maxf(top, (_placard_holder.call("placard_rect") as Rect2).end.y - _game.global_position.y + 4.0 * CSS_PX)
 		_choice_sheet.set_max_height((_game.size.y - top - _safe_bottom) / _panel_scale)
@@ -1523,6 +1530,13 @@ func _fit_bottom_panel(panel: Control) -> void:
 	panel.scale = Vector2(_panel_scale, _panel_scale)
 	panel.offset_right = _game.size.x / _panel_scale - _game.size.x
 	panel.offset_bottom = -_safe_bottom
+
+
+func _refresh_cast_pan_origins() -> void:
+	for actor_id: String in _cast_pan_origins.keys():
+		if _sprites.has(actor_id):
+			_cast_pan_origins[actor_id] = (_sprites[actor_id] as Control).position.x
+			_cast_pan_y_origins[actor_id] = (_sprites[actor_id] as Control).position.y
 
 
 func _layout_sprite(actor_id: String) -> void:
@@ -1539,7 +1553,9 @@ func _layout_sprite(actor_id: String) -> void:
 	var reference: Vector2 = SPRITE_SCRIPT.REFERENCE_SIZE
 	sprite.size = reference
 	sprite.pivot_offset = Vector2(reference.x * 0.5, reference.y)
-	sprite.scale = Vector2.ONE * (box.size.y / reference.y)
+	# An exceptionally tall reading box or a very small authored slot may leave no stage height.
+	# Never flip a portrait by applying a negative scale when the slot collapses.
+	sprite.scale = Vector2.ONE * maxf(0.0, box.size.y / reference.y)
 	sprite.position = Vector2(box.get_center().x, box.end.y) - sprite.pivot_offset
 
 
@@ -1639,6 +1655,7 @@ func _start_new_story() -> void:
 	_last_boke_result = ""
 	_clear_hotspots()
 	_investigation_pans.clear()
+	_investigation_pans_y.clear()
 	_investigation_home_casts.clear()
 	_story_error = ""
 	_set_auto(false)
@@ -1831,6 +1848,7 @@ func _present_say(command: Dictionary, restored: bool) -> void:
 	_line_plan = DialogueText.compile(_dict_string(command, "text"), _text_interval(),
 		_text_label.get_theme_font_size("normal_font_size"))
 	_full_text = str(_line_plan["plain"])
+	_dialog_panel.reset_reading_page()
 	_current_line_key = _line_key(command, "say")
 	_line_logged = _history_has_key(_current_line_key)
 	_line_generation += 1
@@ -1922,6 +1940,8 @@ func _build_investigate_bar() -> void:
 	_dialog_layer.add_child(_investigate_bar)
 	_investigate_bar.visible = false
 	_investigate_bar.connect("expand_pressed", _set_investigation_collapsed.bind(false))
+	_investigate_bar.connect("continue_pressed", _on_investigation_continue_pressed)
+	_investigate_bar.call("set_reduce_motion", int(_settings.get("motion", 0)) == 1)
 
 
 ## Folds the reading box into the one-line bar (or back) while searching.
@@ -1941,7 +1961,9 @@ func _build_hotspots(command: Dictionary) -> void:
 		for actor: String in _sprites.keys():
 			if (_sprites[actor] as Control).visible:
 				_cast_pan_origins[actor] = (_sprites[actor] as Control).position.x
+				_cast_pan_y_origins[actor] = (_sprites[actor] as Control).position.y
 	_pan = float(_investigation_pans.get(_pan_key, 0.0))  # back from a reaction: where the player left it
+	_pan_y = float(_investigation_pans_y.get(_pan_key, 0.0))
 	var frame: TextureRect = _background_rect
 	_frame_offsets = [frame.offset_left, frame.offset_top, frame.offset_right, frame.offset_bottom]
 	_hotspot_layer = Control.new()
@@ -1993,7 +2015,8 @@ func _layout_hotspots() -> void:
 		var drawn: Vector2 = art * maxf(own.size.x / art.x, own.size.y / art.y)
 		_picture = Rect2(own.position + (own.size - drawn) * 0.5, drawn)
 	_pan_range = Vector2(minf(0.0, _game.size.x - _picture.end.x), maxf(0.0, -_picture.position.x))
-	_set_pan(_pan)
+	_pan_y_range = Vector2(minf(0.0, _game.size.y - _picture.end.y), maxf(0.0, -_picture.position.y))
+	_set_pan(_pan, _pan_y)
 	_place_cast_hotspots()
 
 
@@ -2017,8 +2040,10 @@ func _place_cast_hotspots() -> void:
 		spot.size = shown.size
 
 
-func _set_pan(value: float) -> void:
+func _set_pan(value: float, vertical: Variant = null) -> void:
 	_pan = clampf(value, _pan_range.x, _pan_range.y)
+	if vertical != null:
+		_pan_y = clampf(float(vertical), _pan_y_range.x, _pan_y_range.y)
 	if _hotspot_layer == null or not is_instance_valid(_hotspot_layer):
 		return
 	var frame: TextureRect = _hotspot_layer.get_parent() as TextureRect
@@ -2026,19 +2051,27 @@ func _set_pan(value: float) -> void:
 	var end: Vector2 = _game.size * Vector2(frame.anchor_right, frame.anchor_bottom)
 	frame.offset_left = _picture.position.x + _pan - start.x
 	frame.offset_right = _picture.end.x + _pan - end.x
-	frame.offset_top = _picture.position.y - start.y
-	frame.offset_bottom = _picture.end.y - end.y
+	frame.offset_top = _picture.position.y + _pan_y - start.y
+	frame.offset_bottom = _picture.end.y + _pan_y - end.y
 	for actor: String in _cast_pan_origins.keys():
 		(_sprites[actor] as Control).position.x = float(_cast_pan_origins[actor]) + _pan
+		(_sprites[actor] as Control).position.y = float(_cast_pan_y_origins.get(actor, (_sprites[actor] as Control).position.y)) + _pan_y
+	if not _pan_key.is_empty():
+		_investigation_pans[_pan_key] = _pan
+		_investigation_pans_y[_pan_key] = _pan_y
 	_place_cast_hotspots()
 
 
 func _clear_hotspots() -> void:
 	for actor: String in _cast_pan_origins.keys():
 		(_sprites[actor] as Control).position.x = float(_cast_pan_origins[actor])
+		if _cast_pan_y_origins.has(actor):
+			(_sprites[actor] as Control).position.y = float(_cast_pan_y_origins[actor])
 	_cast_pan_origins.clear()
+	_cast_pan_y_origins.clear()
 	if not _pan_key.is_empty() and _hotspot_layer != null:
 		_investigation_pans[_pan_key] = _pan
+		_investigation_pans_y[_pan_key] = _pan_y
 	_pan_key = ""
 	_topic_buttons.clear()
 	if _dialog_panel != null:
@@ -2057,6 +2090,8 @@ func _clear_hotspots() -> void:
 	_hotspots.clear()
 	_pan = 0.0
 	_pan_range = Vector2.ZERO
+	_pan_y = 0.0
+	_pan_y_range = Vector2.ZERO
 	_investigate_collapsed = false
 	if _investigate_bar != null:
 		_investigate_bar.visible = false
@@ -2152,7 +2187,7 @@ func _update_investigation_controls() -> void:
 	var progress: Array = _current_command.get("progress", [0, 0]) as Array
 	_investigation_continue_button.disabled = not all_checked
 	_investigation_continue_button.text = "線索已取得・繼續" if all_checked else "先調查所有位置"
-	_investigate_bar.call("set_progress", int(progress[0]), int(progress[1]))
+	_investigate_bar.call("set_progress", int(progress[0]), int(progress[1]), all_checked)
 
 
 ## The 對話 and 移動 rows of the reading box for this place of the search.
@@ -2633,8 +2668,9 @@ func _set_visible_text(value: String, complete: bool) -> void:
 	var markup: String = str(_line_plan["rendered"]) if typing and _line_plan.has("rendered") and str(_line_plan.get("plain", "")) == _full_text else (_full_text if typing else value)
 	if _text_label.text != markup:
 		_text_label.text = markup
+		_dialog_panel.reset_reading_page()
 	_text_label.visible_characters = value.length() if typing and not complete else -1
-	_advance_button.visible = _command_op(_current_command) == "say"  # not the screen mode: lines finish behind 目錄 too
+	_dialog_panel.set_line_advance(_command_op(_current_command) == "say")
 
 
 func _set_text_tone(tone: String) -> void:
@@ -2817,6 +2853,9 @@ func _progress_id() -> String:
 
 ## Switches the title to another story (and remembers it for the next run).
 func _choose_story(choice: Dictionary) -> void:
+	# A temporary preview's catalog and skin belong only to that preview.
+	story_catalog_override = ""
+	story_skin_override = ""
 	story_path = choice["path"]
 	save_path = choice["save"]
 	var config: ConfigFile = ConfigFile.new()
@@ -2938,6 +2977,7 @@ func _on_catcher_input(event: InputEvent) -> void:
 			_gesture_long = false
 			_gesture_start = button.global_position
 			_pan_start = _pan
+			_pan_y_start = _pan_y
 			_gesture_token += 1
 			_wait_long_press(_gesture_token)
 			return
@@ -2958,7 +2998,7 @@ func _on_catcher_input(event: InputEvent) -> void:
 			return
 		var delta: Vector2 = button.global_position - _gesture_start
 		if _gesture_moved:
-			if -delta.y > SWIPE_DISTANCE and absf(delta.x) < -delta.y:
+			if _screen_mode != "investigate" and -delta.y > SWIPE_DISTANCE and absf(delta.x) < -delta.y:
 				_open_log()
 			return
 		if _placard_open() and _placard_hit_rect().has_point(button.global_position):
@@ -2974,7 +3014,8 @@ func _on_catcher_input(event: InputEvent) -> void:
 			_gesture_moved = true
 			_gesture_token += 1
 		if _gesture_moved and _screen_mode == "investigate":
-			_set_pan(_pan_start + motion.global_position.x - _gesture_start.x)  # drag the picture sideways
+			_set_pan(_pan_start + motion.global_position.x - _gesture_start.x,
+				_pan_y_start + motion.global_position.y - _gesture_start.y)
 
 
 func _wait_long_press(token: int) -> void:
@@ -2992,6 +3033,11 @@ func _on_screen_tap() -> void:
 		return
 	if _skip:
 		_set_skip(false)
+		return
+	if _screen_mode in ["story", "boke_round", "investigate"] and _text_complete and _dialog_panel.advance_reading_page():
+		if _auto and _screen_mode == "story":
+			_line_generation += 1  # restart the auto delay for the newly revealed page
+			_auto_step(_line_generation)
 		return
 	if _screen_mode == "boke_round" and not _text_complete:
 		_complete_current_line()
@@ -3049,10 +3095,14 @@ func _set_skip(value: bool) -> void:
 func _auto_step(token: int) -> void:
 	if _screen_mode != "story" or not _text_complete:
 		return
-	await get_tree().create_timer((AUTO_DELAY_SEC + DialogueText.readable_count(_full_text) * AUTO_PER_CHAR_SEC)
+	await get_tree().create_timer((AUTO_DELAY_SEC + DialogueText.readable_count(_full_text) * AUTO_PER_CHAR_SEC
+		/ _dialog_panel.reading_page_count())
 		* SETTINGS_SCRIPT.AUTO_FACTORS[int(_settings["auto_speed"])]).timeout
 	if _auto and token == _line_generation and _screen_mode == "story" and not _ui_hidden and not _story_busy:
-		_advance_current_line()
+		if _dialog_panel.advance_reading_page():
+			_auto_step(token)
+		else:
+			_advance_current_line()
 
 
 func _skip_step(token: int) -> void:
@@ -3098,6 +3148,7 @@ func _open_menu() -> void:
 	_refresh_menu_rows()  # after the switch: the HUD and the sheet read the countdown as paused
 	_fit_menu()
 	_menu_overlay.visible = true
+	_menu_overlay.rows_scroll.scroll_vertical = 0
 	_menu_overlay.pop_in().finished.connect(_publish_qa_state)
 	_publish_qa_state()
 
@@ -3636,6 +3687,7 @@ func _build_save_payload(preview_png: String) -> Dictionary:
 		"bgm": _effects.current_bgm,
 		"round_stages": _round_stages.duplicate(true),
 		"investigation_pans": _investigation_pans.duplicate(true),
+		"investigation_pans_y": _investigation_pans_y.duplicate(true),
 		"investigation_home_casts": _investigation_home_casts.duplicate(true),
 	}
 	if _command_op(current) == "boke_round":
@@ -3734,12 +3786,13 @@ func _validate_save_payload(payload: Dictionary) -> bool:
 		if typeof(payload["boke_ui_screen"]) != TYPE_STRING or str(payload["boke_ui_screen"]) not in ["boke_round", "tsukkomi"]:
 			return false
 	# Save validation uses independent mutable state, sharing the loaded story definition.
-	for key: String in ["round_stages", "investigation_pans", "investigation_home_casts"]:
+	for key: String in ["round_stages", "investigation_pans", "investigation_pans_y", "investigation_home_casts"]:
 		if not payload.get(key, {}) is Dictionary:
 			return false
-	for pan: Variant in (payload.get("investigation_pans", {}) as Dictionary).values():
-		if typeof(pan) not in [TYPE_INT, TYPE_FLOAT] or not is_finite(float(pan)):
-			return false
+	for key: String in ["investigation_pans", "investigation_pans_y"]:
+		for pan: Variant in (payload.get(key, {}) as Dictionary).values():
+			if typeof(pan) not in [TYPE_INT, TYPE_FLOAT] or not is_finite(float(pan)):
+				return false
 	for stage: Variant in (payload.get("round_stages", {}) as Dictionary).values():
 		if not stage is Dictionary or not _backgrounds.has(str(stage.get("background", ""))) or typeof(stage.get("bgm", "")) != TYPE_STRING or not _valid_saved_cast(stage.get("sprites")):
 			return false
@@ -3809,6 +3862,7 @@ func _apply_save_payload(payload: Dictionary) -> bool:
 	_previous_power = int((_runner.get("gameplay") as Dictionary).get("power", 0))
 	_round_stages = (payload.get("round_stages",{}) as Dictionary).duplicate(true)
 	_investigation_pans = (payload.get("investigation_pans",{}) as Dictionary).duplicate(true)
+	_investigation_pans_y = (payload.get("investigation_pans_y",{}) as Dictionary).duplicate(true)
 	_investigation_home_casts = (payload.get("investigation_home_casts",{}) as Dictionary).duplicate(true)
 	_history.clear()
 	for entry: Variant in payload["history"]:
@@ -3892,6 +3946,8 @@ func _default_background_id() -> String:
 func _use_skin() -> void:
 	var index: int = _story_choice_index()
 	var id: String = str(_story_choices[index].get("skin", "")) if index >= 0 else ""
+	if not story_skin_override.is_empty():
+		id = story_skin_override
 	_skin = SKIN.load_skin(id, skins_root)
 	_ui_style_id = str(_skin["id"])
 
@@ -4105,6 +4161,7 @@ func _write_qa_state() -> void:
 		"menu": _choice_sheet.menu_button if _choice_sheet.is_visible_in_tree() else _menu_button, "menu_close": _menu_close, "log_close": _log_close,
 		"restart": _restart_button, "title": _end_title_button, "investigate_continue": _investigation_continue_button,
 		"investigate_collapse": _dialog_panel.investigation_collapse, "investigate_expand": _investigate_bar.get("expand_button"),
+		"investigate_folded_continue": _investigate_bar.get("continue_button"),
 		"boke_previous": _boke_previous_button, "boke_next": _boke_next_button,
 		"boke_listen": _boke_listen_button, "boke_tsukkomi": _boke_tsukkomi_button,
 		"game_over_retry": _game_over_retry_button, "game_over_title": _game_over.title_button,
@@ -4248,6 +4305,7 @@ func _write_qa_state() -> void:
 		"dialog": _rect(_dialog_panel) if _dialog_panel.is_visible_in_tree() else {},
 		"quickbar": _rect(_quickbar) if _quickbar.is_visible_in_tree() else {},
 		"choice_sheet": _rect(_choice_sheet) if _choice_sheet.is_visible_in_tree() else {},
+		"choice_viewport": _rect(_choice_sheet.choices_scroll) if _choice_sheet.is_visible_in_tree() else {},
 		"name_plate": _rect(_name_plate) if _name_plate.is_visible_in_tree() else {},
 		"sprites": sprites,
 		"placard": {"text": str(_placard_holder.call("placard_text")) if _placard_holder != null else "",
@@ -4267,7 +4325,8 @@ func _write_qa_state() -> void:
 				"moves": (current.get("moves", []) as Array).map(func(move: Dictionary) -> String: return str(move["id"])),
 				"complete": bool(current.get("complete", false)), "progress": current.get("progress", [])}
 				if _command_op(current) == "investigate" else {},
-			"pan": {"offset": _pan, "min": _pan_range.x, "max": _pan_range.y},
+			"pan": {"offset": _pan, "min": _pan_range.x, "max": _pan_range.y,
+				"vertical_offset": _pan_y, "vertical_min": _pan_y_range.x, "vertical_max": _pan_y_range.y},
 			"investigate_collapsed": _investigate_collapsed,
 			"boke_screen_mode": _effective_boke_ui_mode() if _command_op(current) == "boke_round" else "",
 			"boke_line_index": int(current.get("line_index", -1)),

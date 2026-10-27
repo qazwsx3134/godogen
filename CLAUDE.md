@@ -1,5 +1,7 @@
 @AGENTS.md
 
+KISS 與分層測試驗收（規劃不測／L1 單元／L2 單元＋簡易回歸／L3 手動驗收後完整測試）見 `AGENTS.md`「KISS 與分層測試驗收」，已由上一行載入。
+
 <!-- updated: 2026-10-03 -->
 
 ## Claude Code 子 agent：用 Herdr 開 Sonnet
@@ -23,6 +25,8 @@
 
 ## 教訓紀錄（append-only；格式見 ~/claude-institution/rules/maintenance-protocol.md）
 
+**所有原型踩過的坑統一列在 [`prototypes/LESSONS.md`](prototypes/LESSONS.md)**：開工前或遇到不合理的失敗時先查那份。新的坑從 2026-10-27 起寫在那份檔案，不再追加到下方；下方舊條目已全部收進去，保留原文。
+
 做 Godot 原型到 itch.io 網頁版的完整做法與坑，見 skill `godot-prototype-to-itch`（原始檔在 `prototypes/godot-kit/skills/`，用 `prototypes/godot-kit/install_skills.sh` 複製安裝，不用 symlink）。
 
 - 2026-10-02 | 選卡鎖與震動間隔 | 用 `Time.get_ticks_msec()`（牆上時鐘）做玩法邏輯；測試用 `--fixed-fps 60`，遊戲時間比牆上時間快很多，鎖把機器人的點擊全吞掉，十幾個不相干的測試連環失敗 | 用 `create_timer(秒, true, false, true)`（遊戲時間）或可注入的時鐘 | 影響玩法的計時一律用遊戲時間
@@ -38,3 +42,4 @@
 - 2026-10-14 | 外部改 erwin-run 的 `.tscn` 時，使用者的 Godot 編輯器正開著同一個專案 | 沒先查就改，編輯器裡存檔會把修改蓋回去 | 改 scene 前 `ps aux | grep -i godot` 看編輯器有沒有開；有就提醒使用者重新載入、不要存舊版 | 編輯器開著時改 scene 檔要先講
 - 2026-10-14 | erwin-run 的 `.gitignore` 早就寫了 `.godot/`、`build/` | 規則加在檔案提交之後，所以 257 個檔案一直被追蹤、每次都顯示已修改 | `git ls-files -ci --exclude-standard` 找出來，`git rm -r --cached` 移出版控（本機檔案保留） | 新增忽略規則後，查一次有沒有已經被追蹤的檔案
 - 2026-10-14 | 推含大量圖檔與音檔的 commit 到 GitHub | `git push` 回 HTTP 400、遠端意外掛斷 | 只對那一次用 `git -c http.postBuffer=524288000 push` | 推大檔失敗先加大 postBuffer，不要改全域設定
+- 2026-10-27 | 在 macOS 上用 `XDG_DATA_HOME=/tmp/...` 隔離 Godot 試跑 | 以為存檔會寫到 /tmp，結果 macOS 的 user:// 一律在 `~/Library/Application Support/Godot/app_userdata/<專案>`，正常啟動讀到作者的真實存檔，把 v1 轉成 v2 覆蓋（原檔無備份） | 試跑前先 `ls` 那個資料夾並 `cp` 存檔到 ~/.claude/backups；遊戲提供 `-- --save=<名稱>` 之類的參數改存檔路徑 | macOS 上 XDG 不隔離 user://，碰真實存檔前先備份

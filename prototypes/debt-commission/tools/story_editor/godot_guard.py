@@ -7,6 +7,13 @@ import time
 
 
 @contextmanager
+def isolated_environment():
+    """Give an interactive preview its own user:// without holding the Godot lock."""
+    with tempfile.TemporaryDirectory(prefix='debt-editor-home-') as test_home:
+        yield {**os.environ, 'HOME': test_home}
+
+
+@contextmanager
 def godot_environment(timeout=None):
     value = os.environ.get('GODOT_LOCK')
     lock = Path(value).expanduser().absolute() if value else None
@@ -24,8 +31,8 @@ def godot_environment(timeout=None):
                     if deadline and time.monotonic() >= deadline:
                         raise TimeoutError('Godot 正由另一個工作使用，請稍後重試。')
                     time.sleep(0.2)
-        with tempfile.TemporaryDirectory(prefix='debt-editor-home-') as test_home:
-            yield {**os.environ, 'HOME': test_home}
+        with isolated_environment() as environment:
+            yield environment
     finally:
         if acquired is not None:
             try:

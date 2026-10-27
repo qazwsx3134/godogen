@@ -35,7 +35,7 @@ const ROW_STATES: Array[StringName] = [&"normal", &"pressed", &"hover", &"hover_
 
 @onready var prompt: Label = %Prompt
 @onready var count: Label = %Count
-@onready var choices: VBoxContainer = %Choices
+@onready var choices: Container = %Choices
 @onready var choices_scroll: ScrollContainer = %ChoicesScroll
 @onready var timer_row: Control = %Timer
 @onready var timer_bar: ProgressBar = %TimerBar
@@ -82,6 +82,7 @@ func show_options(prompt_text: String, labels: PackedStringArray, hint: String, 
 	for index: int in range(total):
 		var row: Button = item_scene.instantiate() as Button
 		row.text = labels[index]
+		row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		(row.get_node("%Index") as Label).text = index_numerals[index] if index < index_numerals.size() else index_format % (index + 1)
 		choices.add_child(row)
 		rows.append(row)
@@ -164,7 +165,11 @@ func set_max_height(value: float) -> void:
 func _cap_height() -> void:
 	var content: float = choices.get_combined_minimum_size().y
 	var fixed: float = get_combined_minimum_size().y - choices_scroll.get_combined_minimum_size().y
-	var room: float = maxf(48.0 * 1080.0 / 390.0, max_height - fixed)
+	var row_height: float = 0.0
+	for child: Node in choices.get_children():
+		if child is Control and (child as Control).visible:
+			row_height = maxf(row_height, (child as Control).get_combined_minimum_size().y)
+	var room: float = maxf(row_height, max_height - fixed)
 	var scroll: bool = content > room + 0.5
 	var mode: ScrollContainer.ScrollMode = ScrollContainer.SCROLL_MODE_AUTO if scroll else ScrollContainer.SCROLL_MODE_DISABLED
 	var height: float = room if scroll else 0.0

@@ -83,6 +83,7 @@ offset_right = 162.0
 offset_bottom = 194.0
 mouse_filter = 2
 theme = SubResource("Theme_3lmab")
+metadata/fusion_readable = true
 
 [node name="Frame" type="Panel" parent="." unique_id=1993937660]
 layout_mode = 0
@@ -126,10 +127,11 @@ offset_bottom = 151.0
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 27
+theme_override_font_sizes/font_size = 31
 text = "x18"
 horizontal_alignment = 1
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="Title" type="Label" parent="." unique_id=980063797]
 layout_mode = 0
@@ -139,17 +141,18 @@ offset_bottom = 188.0
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 30
 text = "回復藥水"
 horizontal_alignment = 1
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="InspectButton" type="Button" parent="." unique_id=756105167]
 layout_mode = 0
 offset_right = 162.0
 offset_bottom = 194.0
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 35
 theme_override_styles/normal = SubResource("StyleBoxEmpty_gri2e")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_31a1c")
 theme_override_styles/hover = SubResource("StyleBoxFlat_ff3py")

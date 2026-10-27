@@ -9,105 +9,15 @@
 [ext_resource type="Texture2D" path="res://assets/ui/gintama_icon_advance.svg" id="7_amexu"]
 [ext_resource type="PackedScene" path="res://scenes/ui/gintama_reading_log.tscn" id="8_qywm6"]
 [ext_resource type="PackedScene" path="res://scenes/ui/gintama_reading_auto.tscn" id="9_g6mmy"]
+[ext_resource type="Script" path="res://scripts/gintama_reading_button.gd" id="9_qvxcl"]
 [ext_resource type="PackedScene" path="res://scenes/ui/gintama_reading_skip.tscn" id="10_053nw"]
 [ext_resource type="PackedScene" path="res://scenes/ui/gintama_reading_menu.tscn" id="11_2u5mq"]
+[ext_resource type="PackedScene" path="res://scenes/ui/gintama_investigate_toggle.tscn" id="13_g6mmy"]
+[ext_resource type="Texture2D" path="res://assets/ui/gintama_extracted_menu.png" id="14_053nw"]
+[ext_resource type="Texture2D" path="res://assets/ui/gintama_icon_menu.svg" id="15_2u5mq"]
 
 [sub_resource type="Theme" id="Theme_kqggf"]
 default_font = ExtResource("1_h3wp5")
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8h5sr"]
-bg_color = Color(0.9607843, 0.9529412, 0.9137255, 1)
-border_width_left = 6
-border_width_top = 6
-border_width_right = 6
-border_color = Color(0.14117648, 0.14509805, 0.13333334, 1)
-corner_radius_top_left = 11
-corner_radius_top_right = 11
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yoc7x"]
-content_margin_left = 30.461538
-content_margin_right = 30.461538
-bg_color = Color(0.9607843, 0.9372549, 0.8901961, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.21960784, 0.3372549, 0.4509804, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p6l4i"]
-content_margin_left = 30.461538
-content_margin_right = 30.461538
-bg_color = Color(0.1254902, 0.24313726, 0.36862746, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.09411765, 0.21176471, 0.3137255, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_24bsy"]
-content_margin_left = 30.461538
-content_margin_right = 30.461538
-bg_color = Color(0.9019608, 0.92941177, 0.94509804, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.1254902, 0.24313726, 0.36862746, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rjos2"]
-content_margin_left = 30.461538
-content_margin_right = 30.461538
-bg_color = Color(0.1254902, 0.24313726, 0.36862746, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.09411765, 0.21176471, 0.3137255, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5ngo0"]
-content_margin_left = 30.461538
-content_margin_right = 30.461538
-bg_color = Color(0.8666667, 0.84705883, 0.80784315, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hwgjy"]
-content_margin_left = 30.461538
-content_margin_right = 30.461538
-bg_color = Color(0.9607843, 0.9372549, 0.8901961, 1)
-draw_center = false
-border_width_left = 5
-border_width_top = 5
-border_width_right = 5
-border_width_bottom = 5
-border_color = Color(0.09411765, 0.21176471, 0.3137255, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n8u6h"]
 content_margin_left = 0.0
@@ -897,6 +807,74 @@ corner_radius_top_right = 17
 corner_radius_bottom_right = 17
 corner_radius_bottom_left = 17
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qtrv3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xtycp"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_whc87"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0udxm"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_v3g4j"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6j0l8"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hgqtv"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mo5d4"]
+content_margin_left = 18.0
+content_margin_top = 10.0
+content_margin_right = 18.0
+content_margin_bottom = 10.0
+bg_color = Color(0.03137255, 0.15686275, 0.23921569, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.7490196, 0.78039217, 0.80784315, 1)
+corner_radius_top_left = 17
+corner_radius_top_right = 17
+corner_radius_bottom_right = 17
+corner_radius_bottom_left = 17
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4r0cg"]
+content_margin_left = 18.0
+content_margin_top = 10.0
+content_margin_right = 18.0
+content_margin_bottom = 10.0
+bg_color = Color(0.1254902, 0.3019608, 0.41568628, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.84313726, 0.75686276, 0.54509807, 1)
+corner_radius_top_left = 17
+corner_radius_top_right = 17
+corner_radius_bottom_right = 17
+corner_radius_bottom_left = 17
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_201d3"]
+content_margin_left = 18.0
+content_margin_top = 10.0
+content_margin_right = 18.0
+content_margin_bottom = 10.0
+bg_color = Color(0.19607843, 0.39607844, 0.50980395, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.7490196, 0.78039217, 0.80784315, 1)
+corner_radius_top_left = 17
+corner_radius_top_right = 17
+corner_radius_bottom_right = 17
+corner_radius_bottom_left = 17
+
+[sub_resource type="FontVariation" id="FontVariation_tigw3"]
+base_font = ExtResource("4_qywm6")
+variation_opentype = {
+2003265652: 500.0
+}
+
 [node name="DialogueBox" type="MarginContainer" unique_id=1345810013]
 anchor_top = 1.0
 anchor_right = 1.0
@@ -909,41 +887,6 @@ theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 14
 theme_override_constants/margin_bottom = 6
 script = ExtResource("2_l144r")
-style_id = "gintama"
-
-[node name="Corner" type="Control" parent="." unique_id=1098711187]
-layout_mode = 2
-mouse_filter = 2
-
-[node name="CollapseTab" type="PanelContainer" parent="Corner" unique_id=1328109147]
-unique_name_in_owner = true
-visible = false
-layout_mode = 0
-anchor_left = 1.0
-anchor_right = 1.0
-offset_right = -33.0
-grow_horizontal = 0
-grow_vertical = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_8h5sr")
-
-[node name="InvestigationCollapse" type="Button" parent="Corner/CollapseTab" unique_id=1156491704]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(132.92308, 132.92308)
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_yoc7x")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_p6l4i")
-theme_override_styles/hover = SubResource("StyleBoxFlat_24bsy")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_rjos2")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_5ngo0")
-theme_override_styles/focus = SubResource("StyleBoxFlat_hwgjy")
-theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_focus_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
-theme_override_font_sizes/font_size = 39
-text = "收起 ▼"
 
 [node name="PaperAndToolbar" type="VBoxContainer" parent="." unique_id=1696884775]
 layout_mode = 2
@@ -989,7 +932,7 @@ offset_top = 5.0
 offset_right = -79.0
 offset_bottom = -10.0
 theme_override_fonts/font = SubResource("FontVariation_qywm6")
-theme_override_font_sizes/font_size = 47
+theme_override_font_sizes/font_size = 35
 theme_override_colors/font_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
@@ -1005,7 +948,7 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 77.53847
 theme_override_fonts/font = SubResource("FontVariation_2vbhb")
-theme_override_font_sizes/font_size = 39
+theme_override_font_sizes/font_size = 29
 theme_override_colors/font_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
@@ -1020,7 +963,7 @@ layout_mode = 0
 offset_right = 1.0
 offset_bottom = 23.0
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 39
+theme_override_font_sizes/font_size = 29
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
@@ -1042,7 +985,7 @@ texture = ExtResource("4_qvxcl")
 expand_mode = 1
 
 [node name="Panel" type="PanelContainer" parent="PaperAndToolbar" unique_id=1652215764]
-custom_minimum_size = Vector2(0, 293)
+custom_minimum_size = Vector2(0, 255)
 layout_mode = 2
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_72qkb")
@@ -1070,7 +1013,7 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -195.0
+offset_left = -460.0
 offset_top = -163.0
 offset_right = -62.0
 offset_bottom = -30.0
@@ -1087,7 +1030,7 @@ theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255,
 theme_override_colors/font_hover_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
-theme_override_font_sizes/font_size = 69
+theme_override_font_sizes/font_size = 52
 
 [node name="Triangle" type="TextureRect" parent="PaperAndToolbar/Panel/Frame/Advance" unique_id=816483292]
 visible = false
@@ -1104,11 +1047,25 @@ mouse_filter = 2
 texture = ExtResource("7_amexu")
 expand_mode = 1
 
+[node name="PageHint" type="Label" parent="PaperAndToolbar/Panel/Frame/Advance" unique_id=488511794]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+anchor_top = 1.0
+anchor_right = 0.72
+anchor_bottom = 1.0
+offset_top = -38.0
+theme_override_font_sizes/font_size = 26
+theme_override_colors/font_color = Color(0.1254902, 0.25882354, 0.33333334, 1)
+text = "繼續閱讀 ›"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="Padding" type="MarginContainer" parent="PaperAndToolbar/Panel" unique_id=1481040746]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 88
-theme_override_constants/margin_top = 66
+theme_override_constants/margin_top = 52
 theme_override_constants/margin_right = 88
 theme_override_constants/margin_bottom = 0
 
@@ -1125,12 +1082,13 @@ mouse_filter = 2
 
 [node name="Text" type="RichTextLabel" parent="PaperAndToolbar/Panel/Padding/Column" unique_id=706095957]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 125)
 layout_mode = 2
-size_flags_vertical = 4
+size_flags_vertical = 3
 mouse_filter = 2
 theme_override_constants/line_separation = 12
 theme_override_fonts/normal_font = SubResource("FontVariation_g6mmy")
-theme_override_font_sizes/normal_font_size = 48
+theme_override_font_sizes/normal_font_size = 36
 theme_override_colors/default_color = Color(0.09803922, 0.09803922, 0.09803922, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
@@ -1139,17 +1097,15 @@ theme_override_constants/shadow_offset_x = 1
 theme_override_constants/shadow_offset_y = 1
 theme_override_constants/outline_size = 0
 theme_override_fonts/bold_font = SubResource("FontVariation_g6mmy")
-theme_override_font_sizes/bold_font_size = 48
+theme_override_font_sizes/bold_font_size = 36
 theme_override_fonts/bold_italics_font = SubResource("FontVariation_g6mmy")
-theme_override_font_sizes/bold_italics_font_size = 48
+theme_override_font_sizes/bold_italics_font_size = 36
 theme_override_fonts/italics_font = SubResource("FontVariation_g6mmy")
-theme_override_font_sizes/italics_font_size = 48
+theme_override_font_sizes/italics_font_size = 36
 theme_override_fonts/mono_font = SubResource("FontVariation_g6mmy")
-theme_override_font_sizes/mono_font_size = 48
+theme_override_font_sizes/mono_font_size = 36
 bbcode_enabled = true
 text = "今天也完全沒有工作啊。"
-fit_content = true
-scroll_active = false
 visible_characters_behavior = 1
 
 [node name="Actions" type="VBoxContainer" parent="PaperAndToolbar/Panel/Padding/Column" unique_id=2027768419]
@@ -1176,7 +1132,7 @@ theme_override_constants/separation = 20
 [node name="TalkTag" type="Label" parent="PaperAndToolbar/Panel/Padding/Column/Actions/InvestigationTopics/TalkRow" unique_id=1108484241]
 custom_minimum_size = Vector2(96, 132.92308)
 layout_mode = 2
-theme_override_font_sizes/font_size = 36
+theme_override_font_sizes/font_size = 27
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
@@ -1200,7 +1156,7 @@ theme_override_constants/separation = 20
 [node name="MoveTag" type="Label" parent="PaperAndToolbar/Panel/Padding/Column/Actions/InvestigationTopics/MoveRow" unique_id=2119232671]
 custom_minimum_size = Vector2(96, 132.92308)
 layout_mode = 2
-theme_override_font_sizes/font_size = 36
+theme_override_font_sizes/font_size = 27
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
@@ -1241,7 +1197,7 @@ theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255,
 theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
-theme_override_font_sizes/font_size = 42
+theme_override_font_sizes/font_size = 32
 text = "檢查完成・繼續"
 
 [node name="RoundControls" type="VBoxContainer" parent="PaperAndToolbar/Panel/Padding/Column/Actions" unique_id=215531898]
@@ -1254,7 +1210,7 @@ theme_override_constants/separation = 22
 [node name="BokeLineIndex" type="Label" parent="PaperAndToolbar/Panel/Padding/Column/Actions/RoundControls" unique_id=1587516934]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 36
+theme_override_font_sizes/font_size = 27
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
@@ -1279,7 +1235,7 @@ theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255,
 theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
-theme_override_font_sizes/font_size = 44
+theme_override_font_sizes/font_size = 33
 text = "▇▇▇▇"
 
 [node name="RoundBar" type="HBoxContainer" parent="PaperAndToolbar/Panel/Padding/Column/Actions/RoundControls" unique_id=1130762068]
@@ -1303,7 +1259,7 @@ theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255,
 theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
-theme_override_font_sizes/font_size = 42
+theme_override_font_sizes/font_size = 32
 text = "<"
 
 [node name="BokeNext" type="Button" parent="PaperAndToolbar/Panel/Padding/Column/Actions/RoundControls/RoundBar" unique_id=1430882116]
@@ -1322,7 +1278,7 @@ theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255,
 theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
-theme_override_font_sizes/font_size = 42
+theme_override_font_sizes/font_size = 32
 text = ">"
 
 [node name="Gap" type="Control" parent="PaperAndToolbar/Panel/Padding/Column/Actions/RoundControls/RoundBar" unique_id=1006893471]
@@ -1346,7 +1302,7 @@ theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255,
 theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
-theme_override_font_sizes/font_size = 42
+theme_override_font_sizes/font_size = 32
 text = "聽下去"
 
 [node name="BokeTsukkomi" type="Button" parent="PaperAndToolbar/Panel/Padding/Column/Actions/RoundControls/RoundBar" unique_id=227746704]
@@ -1365,11 +1321,11 @@ theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255,
 theme_override_colors/font_hover_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
-theme_override_font_sizes/font_size = 42
+theme_override_font_sizes/font_size = 32
 text = "吐槽！"
 
 [node name="FooterGap" type="Control" parent="PaperAndToolbar/Panel/Padding/Column" unique_id=756270504]
-custom_minimum_size = Vector2(0, 145)
+custom_minimum_size = Vector2(0, 62)
 layout_mode = 2
 mouse_filter = 2
 
@@ -1384,56 +1340,154 @@ theme_override_constants/margin_right = 46
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/separation = 61
+theme_override_constants/separation = 24
+alignment = 1
 
-[node name="Log" parent="PaperAndToolbar/ToolbarMargin/Toolbar" unique_id=632778124 instance=ExtResource("8_qywm6")]
+[node name="Log" type="Button" parent="PaperAndToolbar/ToolbarMargin/Toolbar" unique_id=632778124 instance=ExtResource("8_qywm6")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(195, 150)
 layout_mode = 2
+size_flags_horizontal = 0
+tooltip_text = "紀錄"
 theme_override_styles/normal = SubResource("StyleBoxEmpty_vmuew")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_nmnt4")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_nq8uc")
 theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_mu2bm")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_vruql")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_xy32q")
+script = ExtResource("9_qvxcl")
 normal_surface = SubResource("StyleBoxFlat_a60pk")
 hover_surface = SubResource("StyleBoxFlat_llyv6")
 active_surface = SubResource("StyleBoxFlat_kc6xy")
 
-[node name="Auto" parent="PaperAndToolbar/ToolbarMargin/Toolbar" unique_id=992363603 instance=ExtResource("9_g6mmy")]
+[node name="Auto" type="Button" parent="PaperAndToolbar/ToolbarMargin/Toolbar" unique_id=992363603 instance=ExtResource("9_g6mmy")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(195, 150)
 layout_mode = 2
+size_flags_horizontal = 0
+tooltip_text = "自動閱讀"
 theme_override_styles/normal = SubResource("StyleBoxEmpty_ph4ip")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_ftg5c")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_gxkvl")
 theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_4cr1i")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_alg66")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_em1q6")
+toggle_mode = true
+script = ExtResource("9_qvxcl")
 normal_surface = SubResource("StyleBoxFlat_ensc7")
 hover_surface = SubResource("StyleBoxFlat_ydu6f")
 active_surface = SubResource("StyleBoxFlat_riqsd")
 
-[node name="Skip" parent="PaperAndToolbar/ToolbarMargin/Toolbar" unique_id=1861651720 instance=ExtResource("10_053nw")]
+[node name="Skip" type="Button" parent="PaperAndToolbar/ToolbarMargin/Toolbar" unique_id=1861651720 instance=ExtResource("10_053nw")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(195, 150)
 layout_mode = 2
+size_flags_horizontal = 0
+tooltip_text = "跳過已顯示台詞"
 theme_override_styles/normal = SubResource("StyleBoxEmpty_qoilp")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_wk3bc")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_5m8uh")
 theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_jgse7")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_n4nb1")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_0cyxi")
+toggle_mode = true
+script = ExtResource("9_qvxcl")
 normal_surface = SubResource("StyleBoxFlat_7km5t")
 hover_surface = SubResource("StyleBoxFlat_w55u1")
 active_surface = SubResource("StyleBoxFlat_snbm7")
 
-[node name="Menu" parent="PaperAndToolbar/ToolbarMargin/Toolbar" unique_id=125961985 instance=ExtResource("11_2u5mq")]
+[node name="Menu" type="Button" parent="PaperAndToolbar/ToolbarMargin/Toolbar" unique_id=125961985 instance=ExtResource("11_2u5mq")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(195, 150)
 layout_mode = 2
+size_flags_horizontal = 0
+tooltip_text = "選單"
 theme_override_styles/normal = SubResource("StyleBoxEmpty_typ2l")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_7c0tw")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_s5opn")
 theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_xy76x")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_808rs")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_0ma3d")
+script = ExtResource("9_qvxcl")
 normal_surface = SubResource("StyleBoxFlat_opugl")
 hover_surface = SubResource("StyleBoxFlat_e2phs")
 active_surface = SubResource("StyleBoxFlat_1xldt")
+
+[node name="Corner" type="Control" parent="." unique_id=1098711187]
+z_index = 2
+layout_mode = 2
+mouse_filter = 2
+
+[node name="CollapseTab" type="PanelContainer" parent="Corner" unique_id=1328109147]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_right = -33.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_qtrv3")
+
+[node name="InvestigationCollapse" parent="Corner/CollapseTab" unique_id=836903984 instance=ExtResource("13_g6mmy")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(195, 150)
+layout_mode = 2
+size_flags_horizontal = 0
+tooltip_text = "收起 ▼"
+theme_override_styles/normal = SubResource("StyleBoxEmpty_xtycp")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_whc87")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_0udxm")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_v3g4j")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_6j0l8")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hgqtv")
+script = ExtResource("9_qvxcl")
+normal_surface = SubResource("StyleBoxFlat_mo5d4")
+hover_surface = SubResource("StyleBoxFlat_4r0cg")
+active_surface = SubResource("StyleBoxFlat_201d3")
+
+[node name="Surface" parent="Corner/CollapseTab/InvestigationCollapse" index="0" unique_id=1550677594]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 44.0
+offset_bottom = -44.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_mo5d4")
+
+[node name="CutoutArt" parent="Corner/CollapseTab/InvestigationCollapse/Surface" index="0" unique_id=2048631398]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource("14_053nw")
+expand_mode = 1
+
+[node name="Contents" parent="Corner/CollapseTab/InvestigationCollapse/Surface" index="1" unique_id=1164846061]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Icon" parent="Corner/CollapseTab/InvestigationCollapse/Surface/Contents" index="0" unique_id=1960964776]
+visible = false
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("15_2u5mq")
+expand_mode = 1
+
+[node name="Caption" parent="Corner/CollapseTab/InvestigationCollapse/Surface/Contents" index="1" unique_id=948021775]
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_tigw3")
+theme_override_font_sizes/font_size = 27
+theme_override_colors/font_color = Color(0.9607843, 0.95686275, 0.93333334, 1)
+text = "收起 ▼"
+vertical_alignment = 1
+
+[editable path="Corner/CollapseTab/InvestigationCollapse"]

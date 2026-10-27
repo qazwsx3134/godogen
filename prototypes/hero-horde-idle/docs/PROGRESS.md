@@ -4,7 +4,7 @@
 
 ## 現在在哪裡
 
-v3.0 融合版（分支 `fusion-idle`，從 `hero-horde-squads` 開出；worktree 在 `~/repo/godot/godogen-fusion`）。全員推王為主幹，併入遠征紀事的七頁介面與裝備撿寶、夢靈遠行的小隊編成與羈絆。
+v3.0 融合版（在 `fusion-idle` 開發，2026-10-27 合併進 master：`7b6964a`）。全員推王為主幹，併入遠征紀事的七頁介面與裝備撿寶、夢靈遠行的小隊編成與羈絆。
 
 ```
  已完成                                         驗證狀態（2026-10-27）
@@ -18,6 +18,23 @@ v3.0 融合版（分支 `fusion-idle`，從 `hero-horde-squads` 開出；worktre
  存檔 v2（v1 舊檔：職業等級退款、裝備轉實例）     test_progression
 ```
 
+## 第二輪回饋（2026-10-27 下午，未 commit）
+
+作者說「畫面太小看不清楚」「挑戰王的 UI 風格要對齊放置畫面」「訓練換成點亮天賦」「要能幫所有英雄裝備、要有一鍵裝備」「總覽放在設定鈕左邊」。
+
+| 項目 | 狀態 | 檔案 |
+|---|---|---|
+| 天賦星圖：9 個節點（劍術、拾光、耐力／速度、結伴、休息／遠程、近戰、輔助專精），連線依 `need` 自動畫，點節點看詳情、按「點亮」 | 完成 | `domain/talents.gd`、`scenes/components/talent_node.tscn`、`scripts/talent_links.gd`、`scripts/pages/train_page.gd` |
+| 團專精：每級該團攻擊與生命 ×1.02，最多 10 級，起價 10 萬、每級 ×1.7（第一版 ×1.05 讓第三地區戰力爆衝，`test_stages` 不過，已調弱） | 完成，`test_stages` 通過 | `domain/talents.gd`、`progression.gd base_power` |
+| 裝備頁：飾品持有者 ◀ ▶ 切換全部 100 名（行軍中在前）、「一鍵裝備」；英雄頁「裝備」鈕跳到該英雄 | 完成 | `scripts/pages/equipment_page.gd`、`heroes_page.gd`、`home.gd` |
+| 頂欄：金幣／招募券框左移，設定鈕左邊「總覽」鈕（頭像仍可回總覽） | 完成 | `scenes/components/header.tscn` |
+| 字級：七頁與元件的小字 ×1.3（≤24）／×1.15（≤32），單行字超出顯示「…」；頁面預設字 30；總覽待辦最多 3 列 | 完成，需作者確認夠不夠大 | `tools/build_fusion_ui_v2.gd` |
+| 細長螢幕：頁面與導覽列貼底，上方補天空色 `SkyFill`；預覽視窗 430×932 | 完成，還沒重拍截圖 | `scripts/home.gd _fit`、`project.godot` |
+| 推王風格：`ui/theme.tres` 改紙色面板、藍色一般鈕、金色主要鈕、Noto Sans CJK、紅血條／金士氣；HUD、結算、戰報、設定的淺色字改墨色（提示條與王血條數字保留白字） | 完成，截圖看過 | `tools/theme_taskbar.gd`（可重跑）、`scenes/hud.tscn` 等 |
+| 刪除 `art_src` 95 個殘留 `.import` | 完成 | — |
+
+已知限制：主畫面仍照螢幕寬度縮放（941 寬的版面），細長手機多出來的高度只拿來放天空，字的實際大小靠字級放大；若作者還覺得小，下一步是減少每列格數或重排版面。原本 `training_row.tscn` 已不用，留在 components 沒刪。
+
 ## 等作者決定的事
 
 1. **試玩手感**：前 15 分鐘的節奏（新玩家先打 1-1 拿約 2.3 萬金，第一個訓練 3000 金）、行軍戰場的可讀性、七頁的資訊量。
@@ -29,7 +46,8 @@ v3.0 融合版（分支 `fusion-idle`，從 `hero-horde-squads` 開出；worktre
 ## 回來時要先處理
 
 - **作者的存檔已轉成 v2**：2026-10-27 試跑時遊戲讀到 `~/Library/Application Support/Godot/app_userdata/hero-horde-idle/progress.json`（macOS 的 user:// 不看 `XDG_DATA_HOME`），把 v1 存檔轉成 v2 並補了 8 小時離線收益。原始 v1 沒有備份（atomic_file 不留 .bak；APFS 本機快照只有系統更新快照，Time Machine 若有備份可能還在）；轉換後的快照在 `~/.claude/backups/20261027-hero-horde-idle-progress-v2-migrated.json`。舊分支 `hero-horde-squads` 的遊戲讀不懂 v2，會當成新玩家並覆蓋它，不要在舊分支用同一個存檔玩。試玩請用 `-- --save=<名稱>`。
-- **工作區未提交**：融合版的修改都還沒 commit（作者沒有授權 commit）。
+- **合併時沒帶進來的 master 修改**：master 上 `1b119d0`（推王戰報）、`0a65639` 是建在舊的六區架構上，合併採用融合版；其中兩個點子融合版沒有：推王的固定步進 `advance()`（每幀最多 0.25 秒，切背景回來不快轉）與戰報的「救回的血量」統計。要的話再移植。
+- **Git LFS 警告**：合併時 git-lfs 提示 84 個 `art_src` 檔「應該是指標卻不是」（分支直接存成一般檔案，master 的 LFS 規則要求指標），沒有轉換。
 - **兩款原型保留不動**：`prototypes/taskbar-hero`、`prototypes/dreamling-idle`（在 master）當參考；這裡的頁面、元件、atlas、字型是從 taskbar-hero 複製來的。
 - 其他原型的 `addons/proto_kit/` 副本和 kit 不一致，只對這款跑 `sync.sh`。
 - **字型**：主畫面用完整的 Noto Sans CJK TC（`fonts/`，兩個約 33 MB），推王的子集字型（`ui/fonts/`）缺「珂菇隼鷲」，已在匯入設定加上 Noto Sans CJK 當 fallback。上架前要切子集（godot-kit `subset_font.py`）縮包體。

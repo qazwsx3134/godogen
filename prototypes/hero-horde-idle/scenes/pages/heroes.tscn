@@ -9,9 +9,9 @@
 [ext_resource type="StyleBox" path="res://ui/green.tres" id="7_j1y2y"]
 [ext_resource type="StyleBox" path="res://ui/blue.tres" id="8_e00n6"]
 
-[sub_resource type="Theme" id="Theme_krmap"]
+[sub_resource type="Theme" id="Theme_apwjv"]
 default_font = ExtResource("1_yec7j")
-default_font_size = 26
+default_font_size = 30
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1s2ed"]
 atlas = ExtResource("2_wokph")
@@ -148,9 +148,10 @@ custom_minimum_size = Vector2(941, 1672)
 layout_mode = 3
 anchors_preset = 0
 mouse_filter = 2
-theme = SubResource("Theme_krmap")
+theme = SubResource("Theme_apwjv")
 script = ExtResource("2_apwjv")
 metadata/page_id = "monster"
+metadata/fusion_readable = true
 
 [node name="DistantLandscape" type="TextureRect" parent="." unique_id=1773976979]
 texture_filter = 1
@@ -308,6 +309,7 @@ theme_override_fonts/font = ExtResource("4_wcyik")
 theme_override_font_sizes/font_size = 42
 text = "英雄名冊"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="DetailHint" type="Label" parent="." unique_id=1915047485]
 unique_name_in_owner = true
@@ -319,9 +321,10 @@ offset_bottom = 637.0
 theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 21
+theme_override_font_sizes/font_size = 27
 text = "點名冊裡的英雄看詳情；突破、上陣行軍、設為隊長都在這裡。"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="DetailPanel" type="Panel" parent="." unique_id=1419241947]
 layout_mode = 0
@@ -364,9 +367,10 @@ theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("4_wcyik")
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 37
 text = "怪獸名稱"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="PetLevel" type="Label" parent="." unique_id=1832895608]
 unique_name_in_owner = true
@@ -378,9 +382,10 @@ offset_bottom = 743.0
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 29
 text = "Lv.1"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="PetExperience" type="ProgressBar" parent="." unique_id=973076521]
 unique_name_in_owner = true
@@ -404,10 +409,11 @@ offset_bottom = 738.0
 theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 21
+theme_override_font_sizes/font_size = 27
 text = "0 / 0"
 horizontal_alignment = 1
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="PetStatus" type="Label" parent="." unique_id=1958564883]
 unique_name_in_owner = true
@@ -419,9 +425,10 @@ offset_bottom = 778.0
 theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 26
 text = "未部署"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="Stat0" type="Label" parent="." unique_id=2050617378]
 unique_name_in_owner = true
@@ -433,9 +440,10 @@ offset_bottom = 824.0
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 29
 text = "攻擊　—"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="Stat1" type="Label" parent="." unique_id=1630855594]
 unique_name_in_owner = true
@@ -447,9 +455,10 @@ offset_bottom = 864.0
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 29
 text = "防禦　—"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="Stat2" type="Label" parent="." unique_id=284326306]
 unique_name_in_owner = true
@@ -461,9 +470,10 @@ offset_bottom = 904.0
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 29
 text = "生命　—"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="PetStatSpeed" type="Label" parent="." unique_id=1922914393]
 visible = false
@@ -475,9 +485,10 @@ offset_bottom = 944.0
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 29
 text = "速度　—"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="PetStatCrit" type="Label" parent="." unique_id=1583724234]
 visible = false
@@ -489,9 +500,10 @@ offset_bottom = 984.0
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 29
 text = "暴擊　—"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="PetStatRegen" type="Label" parent="." unique_id=236806586]
 visible = false
@@ -503,9 +515,10 @@ offset_bottom = 1024.0
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 29
 text = "回復　—"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="Skill0" type="Label" parent="." unique_id=1917360524]
 unique_name_in_owner = true
@@ -517,7 +530,7 @@ offset_bottom = 824.0
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 21
+theme_override_font_sizes/font_size = 27
 text = "攻擊　—"
 vertical_alignment = 1
 clip_text = true
@@ -533,7 +546,7 @@ offset_bottom = 864.0
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 21
+theme_override_font_sizes/font_size = 27
 text = "防禦　—"
 vertical_alignment = 1
 clip_text = true
@@ -549,7 +562,7 @@ offset_bottom = 904.0
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 21
+theme_override_font_sizes/font_size = 27
 text = "生命　—"
 vertical_alignment = 1
 clip_text = true
@@ -565,9 +578,10 @@ offset_bottom = 944.0
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 21
+theme_override_font_sizes/font_size = 27
 text = "速度　—"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="PetBonusCrit" type="Label" parent="." unique_id=1219492238]
 visible = false
@@ -579,9 +593,10 @@ offset_bottom = 984.0
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 21
+theme_override_font_sizes/font_size = 27
 text = "暴擊　—"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="PetBonusRegen" type="Label" parent="." unique_id=1546326584]
 visible = false
@@ -593,9 +608,10 @@ offset_bottom = 1024.0
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 21
+theme_override_font_sizes/font_size = 27
 text = "回復　—"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="CollectionPanel" type="Panel" parent="." unique_id=959264777]
 layout_mode = 0
@@ -616,9 +632,10 @@ theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("4_wcyik")
-theme_override_font_sizes/font_size = 29
+theme_override_font_sizes/font_size = 33
 text = "我的英雄"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="CollectionCount" type="Label" parent="." unique_id=1262983144]
 unique_name_in_owner = true
@@ -631,9 +648,10 @@ theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("4_wcyik")
-theme_override_font_sizes/font_size = 23
+theme_override_font_sizes/font_size = 30
 text = "已部署 0 隻"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="BondLine" type="Label" parent="." unique_id=478685042]
 unique_name_in_owner = true
@@ -645,9 +663,10 @@ offset_bottom = 1101.0
 theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 19
+theme_override_font_sizes/font_size = 25
 text = "點「查看」切換詳情；以「部署／撤下」獨立管理同行名單。"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="ActionRow" type="HBoxContainer" parent="." unique_id=1310037278]
 layout_mode = 0
@@ -665,7 +684,7 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
 theme_override_fonts/font = ExtResource("4_wcyik")
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 30
 theme_override_styles/normal = ExtResource("6_scaiy")
 theme_override_styles/pressed = ExtResource("6_scaiy")
 theme_override_styles/hover = ExtResource("6_scaiy")
@@ -681,7 +700,7 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
 theme_override_fonts/font = ExtResource("4_wcyik")
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 30
 theme_override_styles/normal = ExtResource("7_j1y2y")
 theme_override_styles/pressed = ExtResource("7_j1y2y")
 theme_override_styles/hover = ExtResource("7_j1y2y")
@@ -697,13 +716,29 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
 theme_override_fonts/font = ExtResource("4_wcyik")
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 30
 theme_override_styles/normal = ExtResource("8_e00n6")
 theme_override_styles/pressed = ExtResource("8_e00n6")
 theme_override_styles/hover = ExtResource("8_e00n6")
 theme_override_styles/disabled = ExtResource("8_e00n6")
 theme_override_styles/focus = ExtResource("8_e00n6")
 text = "設為隊長"
+
+[node name="EquipButton" type="Button" parent="ActionRow" unique_id=1710220734]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
+theme_override_fonts/font = ExtResource("4_wcyik")
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = ExtResource("8_e00n6")
+theme_override_styles/pressed = ExtResource("8_e00n6")
+theme_override_styles/hover = ExtResource("8_e00n6")
+theme_override_styles/disabled = ExtResource("8_e00n6")
+theme_override_styles/focus = ExtResource("8_e00n6")
+text = "裝備"
 
 [node name="FormFilter" type="HBoxContainer" parent="." unique_id=2086392088]
 unique_name_in_owner = true
@@ -721,7 +756,7 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
 theme_override_fonts/font = ExtResource("4_wcyik")
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 29
 theme_override_styles/normal = ExtResource("8_e00n6")
 theme_override_styles/pressed = ExtResource("8_e00n6")
 theme_override_styles/hover = ExtResource("8_e00n6")
@@ -737,7 +772,7 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
 theme_override_fonts/font = ExtResource("4_wcyik")
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 29
 theme_override_styles/normal = ExtResource("8_e00n6")
 theme_override_styles/pressed = ExtResource("8_e00n6")
 theme_override_styles/hover = ExtResource("8_e00n6")
@@ -753,7 +788,7 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
 theme_override_fonts/font = ExtResource("4_wcyik")
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 29
 theme_override_styles/normal = ExtResource("8_e00n6")
 theme_override_styles/pressed = ExtResource("8_e00n6")
 theme_override_styles/hover = ExtResource("8_e00n6")
@@ -769,7 +804,7 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
 theme_override_fonts/font = ExtResource("4_wcyik")
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 29
 theme_override_styles/normal = ExtResource("8_e00n6")
 theme_override_styles/pressed = ExtResource("8_e00n6")
 theme_override_styles/hover = ExtResource("8_e00n6")

@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 import shutil
+import subprocess
 import tempfile
 import threading
 import unittest
@@ -100,6 +101,96 @@ class ProjectServiceTests(unittest.TestCase):
         draft = self.root / 'tools/story_editor/.drafts' / rejected['draft'] / 'phase3_story.json'
         self.assertEqual(json.loads(draft.read_bytes()), bad['story'])
         self.assertEqual((self.root / payload['path']).read_bytes(), written)
+
+    def test_preview_unsaved_scene_flags_items_and_isolated_user_data(self):
+        story = {'id': 'preview_test', 'version': 's-unset', 'title': '試玩測試', 'entry': 'start',
+                 'initial_flags': {'seen': False}, 'nodes': {
+                     'start': {'title': '起點', 'steps': [{'op': 'say', 'speaker': 'narrator', 'text': '起點'}], 'next': 'middle'},
+                     'middle': {'title': '中途', 'steps': [{'op': 'say', 'speaker': 'narrator', 'text': '未存檔的場景'},
+                                          {'op': 'condition', 'flag': 'seen', 'equals': True, 'then': 'yes', 'else': 'no'}]},
+                     'yes': {'title': '是', 'steps': [{'op': 'end', 'text': '是'}]},
+                     'no': {'title': '否', 'steps': [{'op': 'end', 'text': '否'}]}}}
+        request = {'path': 'data/preview_test_story.json', 'story': story, 'node': 'middle',
+                   'flags': {'seen': True}, 'items': ['milk_bottle']}
+        project = self.server.project
+        project.check_preview = lambda candidate, catalog=None: service.validate_candidate(
+            candidate, ROOT, GODOT, catalog, allow_unreachable=True)
+        launched = {}
+        def launch(config, environment):
+            launched['config'] = json.loads(config.read_text())
+            launched['environment'] = environment
+            process = subprocess.Popen([GODOT, '--headless', '--path', str(ROOT), '--quit-after', '600',
+                                        '--scene', 'res://tools/story_build/preview.tscn', '--',
+                                        f'--editor-preview={config}'], env=environment,
+                                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            launched['process'] = process
+            return process
+        project.launch_preview = launch
+        try:
+            status, response = self.request(request, route='/api/preview')
+            self.assertEqual(status, 200, response)
+            report = json.loads(Path(launched['config']['status']).read_text())
+            self.assertTrue(report['ok'])
+            self.assertEqual(report['snapshot']['node_id'], 'middle')
+            self.assertEqual(report['snapshot']['flags']['seen'], True)
+            self.assertEqual(report['snapshot']['items'], ['milk_bottle'])
+            self.assertTrue(report['user_dir'].startswith(launched['environment']['HOME']))
+            self.assertFalse((self.root / request['path']).exists(), 'preview does not save or register a draft')
+            self.assertEqual(json.loads(self.registry_path.read_bytes()), self.registry)
+            self.assertEqual((self.root / 'data/phase3_story.json').read_bytes(), self.original)
+        finally:
+            if launched.get('process') and launched['process'].poll() is None:
+                launched['process'].terminate()
+                launched['process'].wait(timeout=5)
+
+        self.assertEqual(self.request({**request, 'node': 'missing'}, route='/api/preview')[0], 400)
+        self.assertEqual(self.request({**request, 'flags': {'seen': 'yes'}}, route='/api/preview')[0], 400)
+        self.assertEqual(self.request({**request, 'flags': {'other': True}}, route='/api/preview')[0], 400)
+        self.assertEqual(self.request({**request, 'path': '../outside_story.json'}, route='/api/preview')[0], 400)
+        status, response = self.request({**request, 'items': ['not_a_real_item']}, route='/api/preview')
+        self.assertEqual(status, 422, response)
+        self.assertFalse((self.root / request['path']).exists())
+        with patch.object(project, 'launch_preview', side_effect=OSError('missing executable')):
+            status, response = self.request(request, route='/api/preview')
+        self.assertEqual(status, 503, response)
+        self.assertIn('Godot', response['error'])
+        self.assertEqual(json.loads(self.registry_path.read_bytes()), self.registry)
+
+    def test_preview_uses_work_catalog_and_skin_for_a_built_story(self):
+        work = self.root / 'stories/example'
+        work.mkdir(parents=True)
+        (work / 'pack.json').write_bytes(service.json_bytes({'id': 'example', 'skin': 'example', 'stories': []}))
+        (work / 'catalog.json').write_bytes((ROOT / 'stories/example/catalog.json').read_bytes())
+        story = {'id': 'preview_work', 'title': '作品試玩', 'version': 's-unset', 'entry': 'start',
+                 'generated_from': 'ch1.dialogue', 'initial_flags': {}, 'nodes': {
+                     'start': {'title': '月台', 'steps': [{'op': 'say', 'speaker': 'aki', 'text': '測試作品角色'},
+                                                        {'op': 'end', 'text': '完'}]}}}
+        project = self.server.project
+        project.check_preview = lambda candidate, catalog=None: service.validate_candidate(
+            candidate, ROOT, GODOT, catalog, allow_unreachable=True)
+        launched = {}
+        def launch(config, environment):
+            launched['config'] = json.loads(config.read_text())
+            launched['process'] = subprocess.Popen(
+                [GODOT, '--headless', '--path', str(ROOT), '--quit-after', '600',
+                 '--scene', 'res://tools/story_build/preview.tscn', '--', f'--editor-preview={config}'],
+                env=environment, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            return launched['process']
+        project.launch_preview = launch
+        try:
+            status, result = self.request({'path': 'stories/example/preview_work_story.json', 'story': story,
+                                           'node': 'start', 'skin': 'example'}, route='/api/preview')
+            self.assertEqual(status, 200, result)
+            report = json.loads(Path(launched['config']['status']).read_text())
+            self.assertEqual(report['skin'], 'example')
+            self.assertEqual(report['snapshot']['node_id'], 'start')
+            self.assertEqual(launched['config']['catalog'], 'res://stories/example/catalog.json')
+            self.assertFalse((work / 'preview_work_story.json').exists())
+            self.assertEqual(json.loads((work / 'pack.json').read_bytes())['stories'], [])
+        finally:
+            if launched.get('process') and launched['process'].poll() is None:
+                launched['process'].terminate()
+                launched['process'].wait(timeout=5)
 
     def test_register_new_story_and_preserve_registry_rows(self):
         story = {'id': 'new_graph', 'title': '新故事', 'entry': 'start', 'version': 's-unset', 'initial_flags': {},

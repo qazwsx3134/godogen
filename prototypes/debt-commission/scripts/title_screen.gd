@@ -12,7 +12,7 @@ signal story_switch_pressed
 @export var style_id: String = "gintama"
 
 @onready var background: TextureRect = %Background
-## Bottom-anchored card area; main.gd scales it up on narrow phones.
+## Authored card area; main.gd applies the shared interface scale.
 @onready var card_area: Control = %CardArea
 @onready var story_switch: Button = %StorySwitch
 @onready var begin_button: Button = %Begin

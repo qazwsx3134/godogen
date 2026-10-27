@@ -179,7 +179,7 @@ func show_result(won: bool, detail: String, report: Dictionary = {}, mvp_class: 
 			row.show_row(line[0], line[1], line[2], line[3])
 	_next.visible = next_label != ""
 	_next.text = "挑戰下一關　%s" % next_label
-	# One main action: 挑戰下一關 after a win, 去訓練 after a loss.
+	# One main action: 挑戰下一關 after a win, 去點天賦 after a loss.
 	_grow.theme_type_variation = &"" if _next.visible else &"PrimaryButton"
 	_report.visible = not report.is_empty()
 	if not report.is_empty():

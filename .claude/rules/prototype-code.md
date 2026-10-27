@@ -30,6 +30,9 @@ relaxed to maximize iteration speed. The goal is learning, not production qualit
 - Prototypes must not be deployed or shipped
 
 ## Godot Prototypes: Shared Kit
+Before starting work on a prototype, and whenever something fails for no obvious reason,
+search `prototypes/LESSONS.md`: every pitfall hit across the prototypes is listed there
+with its fix. Add new pitfalls to that file.
 Godot prototypes share placeholder audio (`synth.gd`), crash-safe save writes
 (`atomic_file.gd`), and a headless test base (`test_kit.gd`) from
 `prototypes/godot-kit/`, so a new prototype uses these instead of writing its own. The kit also has the game-feel and release pieces

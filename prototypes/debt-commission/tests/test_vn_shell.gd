@@ -64,6 +64,7 @@ func _run() -> void:
 	_expect(main._screen_mode == "menu" and _progress_key() == story_position, "tap 目錄 opens the menu without advancing")
 	_expect(main._menu_items["save"].is_visible_in_tree() and not main._menu_items["skip"].disabled,
 		"the menu offers 儲存進度 and 略讀")
+	await _reveal_menu(main._menu_items["save"])
 	await _tap(main._menu_items["save"].get_global_rect().get_center())
 	_expect(main._screen_mode == "save_slots", "儲存進度 opens the save-slot picker")
 	_expect(not FileAccess.file_exists(SAVE_SLOTS_SCRIPT.manual_path(TEST_SAVE, 1)), "opening the picker does not save a slot")

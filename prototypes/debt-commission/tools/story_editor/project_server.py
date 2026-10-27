@@ -14,10 +14,12 @@ import shutil
 import subprocess
 import tempfile
 import threading
+import time
+from copy import deepcopy
 from urllib.parse import unquote, urlsplit
 import uuid
 
-from godot_guard import godot_environment
+from godot_guard import godot_environment, isolated_environment
 
 MAX_BODY = 4 * 1024 * 1024
 STORY_PATH = re.compile(r'data/([A-Za-z0-9_]{1,80})_story\.json\Z')
@@ -111,8 +113,10 @@ def validate_catalog(candidate, root, godot, replaces, pairs):
     return []
 
 
-def validate_candidate(candidate, root, godot, catalog=None):
+def validate_candidate(candidate, root, godot, catalog=None, allow_unreachable=False):
     flags = [f'--catalog={catalog}'] if catalog else []
+    if allow_unreachable:
+        flags.append('--allow-unreachable')
     with godot_environment(timeout=45) as environment:
         run = subprocess.run([godot, '--headless', '--path', str(root), '--script',
                               'res://tools/story_editor/check_story.gd', '--', str(candidate), '--write', *flags],
@@ -399,6 +403,112 @@ class StoryProject:
     def check(self, candidate, catalog=None):
         return validate_candidate(candidate, self.root, self.godot, catalog)
 
+    def check_preview(self, candidate, catalog=None):
+        return validate_candidate(candidate, self.root, self.godot, catalog, allow_unreachable=True)
+
+    def launch_preview(self, config_path, environment):
+        return subprocess.Popen([self.godot, '--path', str(self.root), '--scene',
+                                 'res://tools/story_build/preview.tscn', '--',
+                                 f'--editor-preview={config_path}'], env=environment,
+                                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+    def preview(self, request):
+        """Validate and play an in-memory snapshot in a private, disposable user directory."""
+        if not isinstance(request, dict) or not isinstance(request.get('story'), dict):
+            raise ProjectError(400, '需要 story JSON 物件。')
+        relative = request.get('path')
+        matched = story_match(relative)
+        if not matched:
+            raise ProjectError(400, '故事路徑不合法。')
+        _, owner, work = matched
+        self.safe_path(relative)
+        if work is not None:
+            self.registry(owner)  # Only an existing work may supply a catalog.
+        story = deepcopy(request['story'])
+        node, flags, items = request.get('node'), request.get('flags', {}), request.get('items', [])
+        nodes, initial_flags = story.get('nodes'), story.get('initial_flags')
+        if not isinstance(nodes, dict) or not isinstance(node, str) or node not in nodes:
+            raise ProjectError(400, '請選擇故事裡的場景。')
+        if not isinstance(nodes[node], dict) or not isinstance(nodes[node].get('steps'), list):
+            raise ProjectError(400, '這個場景的步驟格式不正確。')
+        if not isinstance(initial_flags, dict) or not isinstance(flags, dict) or not set(flags).issubset(initial_flags):
+            raise ProjectError(400, '試玩旗標必須是故事已宣告的旗標。')
+        for key, value in flags.items():
+            original = initial_flags[key]
+            same_type = (type(value) is type(original) or
+                         type(value) in (int, float) and type(original) in (int, float))
+            if not same_type or not isinstance(value, (str, bool, int, float)):
+                raise ProjectError(400, f'旗標 {key} 的值與原本型別不同。')
+        if not isinstance(items, list) or any(not isinstance(item, str) or not item for item in items) or len(set(items)) != len(items):
+            raise ProjectError(400, '試玩線索清單不合法。')
+        skin = request.get('skin', '')
+        if not isinstance(skin, str) or (skin and not re.fullmatch(r'[A-Za-z0-9_-]{1,80}', skin)):
+            raise ProjectError(400, '外觀包 id 格式不合法。')
+        story['entry'] = node
+        story['initial_flags'].update(flags)
+        story['nodes'][node]['steps'] = [{'op': 'item', 'id': item} for item in items] + story['nodes'][node]['steps']
+
+        scratch = tempfile.TemporaryDirectory(prefix='debt-story-preview-')
+        environment_context = None
+        process = None
+        handed_off = False
+        try:
+            directory = Path(scratch.name)
+            candidate, status_path = directory / 'story.json', directory / 'status.json'
+            atomic_write(candidate, json_bytes(story))
+            try:
+                errors = self.check_preview(candidate, self.catalog_for(work))
+            except (OSError, subprocess.TimeoutExpired, TimeoutError) as error:
+                raise ProjectError(503, '試玩驗證未完成，修改仍在編輯器。', errors=[str(error)]) from error
+            if errors:
+                raise ProjectError(422, '試玩驗證未通過，修改仍在編輯器。', errors=errors)
+            config_path = directory / 'request.json'
+            atomic_write(config_path, json_bytes({'story': str(candidate), 'status': str(status_path),
+                                                  'catalog': self.catalog_for(work) or '', 'skin': skin}))
+            environment_context = isolated_environment()
+            environment = environment_context.__enter__()
+            try:
+                process = self.launch_preview(config_path, environment)
+            except OSError as error:
+                raise ProjectError(503, '無法啟動 Godot，請確認執行檔路徑。', errors=[str(error)]) from error
+            deadline = time.monotonic() + 20
+            status = None
+            while time.monotonic() < deadline:
+                if status_path.is_file():
+                    try:
+                        status = parse_json(status_path.read_bytes())
+                        break
+                    except (ValueError, UnicodeError):
+                        pass  # The game may still be writing its startup report.
+                if process.poll() is not None:
+                    break
+                time.sleep(0.05)
+            if not isinstance(status, dict) or not status.get('ok'):
+                detail = str(status.get('error', '遊戲未能啟動，請確認 Godot 4.7 與圖形環境。')) if isinstance(status, dict) else '遊戲未能啟動，請確認 Godot 4.7 與圖形環境。'
+                raise ProjectError(503, detail)
+
+            def reap():
+                try:
+                    process.wait()
+                finally:
+                    environment_context.__exit__(None, None, None)
+                    scratch.cleanup()
+            threading.Thread(target=reap, daemon=True).start()
+            handed_off = True
+            return {'ok': True, 'message': '試玩已開啟；關閉遊戲視窗即可返回編輯器。'}
+        finally:
+            if not handed_off:
+                if process is not None and process.poll() is None:
+                    process.terminate()
+                    try:
+                        process.wait(timeout=3)
+                    except subprocess.TimeoutExpired:
+                        process.kill()
+                        process.wait()
+                if environment_context is not None:
+                    environment_context.__exit__(None, None, None)
+                scratch.cleanup()
+
     def save(self, request):
         if not isinstance(request, dict) or not isinstance(request.get('story'), dict):
             raise ProjectError(400, '需要 story JSON 物件。')
@@ -555,7 +665,7 @@ class ProjectHandler(SimpleHTTPRequestHandler):
                 raise ProjectError(403, '請從本機編輯器頁面存檔。')
             if self.headers.get('X-Story-Editor-Token') != self.server.project.token:
                 raise ProjectError(403, '本機服務憑證不符，請重新開啟編輯器。')
-            if urlsplit(self.path).path not in ('/api/save', '/api/registry', '/api/work', '/api/catalog'):
+            if urlsplit(self.path).path not in ('/api/save', '/api/registry', '/api/work', '/api/catalog', '/api/preview'):
                 raise ProjectError(404, '沒有這個操作。')
             if self.headers.get('Content-Type', '').split(';')[0].strip().lower() != 'application/json':
                 raise ProjectError(415, '只接受 JSON。')
@@ -578,7 +688,8 @@ class ProjectHandler(SimpleHTTPRequestHandler):
             project = self.server.project
             result = (project.save_registry(request) if action == '/api/registry'
                       else project.new_work(request) if action == '/api/work'
-                      else project.save_catalog(request) if action == '/api/catalog' else project.save(request))
+                      else project.save_catalog(request) if action == '/api/catalog'
+                      else project.preview(request) if action == '/api/preview' else project.save(request))
             self.json_response(200, result)
         except ProjectError as error:
             self.close_connection = True

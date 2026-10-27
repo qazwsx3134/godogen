@@ -4,9 +4,9 @@
 [ext_resource type="Texture2D" path="res://assets/reference/backpack.png" id="2_w27o7"]
 [ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Bold.otf" id="3_fsiit"]
 
-[sub_resource type="Theme" id="Theme_krmap"]
+[sub_resource type="Theme" id="Theme_hmtxd"]
 default_font = ExtResource("1_hmtxd")
-default_font_size = 26
+default_font_size = 30
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wnl7x"]
 bg_color = Color(0.96862745, 0.9098039, 0.8352941, 1)
@@ -85,7 +85,8 @@ custom_minimum_size = Vector2(118, 70)
 layout_mode = 3
 anchors_preset = 0
 mouse_filter = 2
-theme = SubResource("Theme_krmap")
+theme = SubResource("Theme_hmtxd")
+metadata/fusion_readable = true
 
 [node name="Frame" type="Panel" parent="." unique_id=1233683396]
 layout_mode = 0
@@ -115,7 +116,7 @@ theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("3_fsiit")
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 20
 text = "短劍"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -130,10 +131,11 @@ offset_bottom = 64.0
 theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 18
 text = "Lv.1"
 horizontal_alignment = 1
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="EquippedBy" type="Label" parent="." unique_id=1029866666]
 layout_mode = 0
@@ -144,9 +146,10 @@ offset_bottom = 65.0
 theme_override_colors/font_color = Color(0.30980393, 0.50980395, 0.3647059, 1)
 theme_override_colors/font_outline_color = Color(0.30980393, 0.50980395, 0.3647059, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 14
 horizontal_alignment = 1
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="SelectButton" type="Button" parent="." unique_id=1956575845]
 layout_mode = 0
@@ -156,7 +159,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("3_fsiit")
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = SubResource("StyleBoxEmpty_711xe")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_1p12t")
 theme_override_styles/hover = SubResource("StyleBoxFlat_gwyms")

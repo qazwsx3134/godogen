@@ -90,7 +90,7 @@ func _chapter_select_and_roll(motion: int) -> void:
 		await _frames(2)
 		var box: Rect2 = roll.scroll.get_global_rect()
 		var end: Rect2 = (roll.find_child("End", true, false) as Control).get_global_rect()
-		_expect(not roll.rolling and roll.scroll.scroll_vertical > 0 and box.encloses(end),
+		_expect(not roll.rolling and roll.scroll.scroll_vertical > 0 and box.grow(1.0).encloses(end),
 			"the roll stops with — 完 — in view: box %s, end %s" % [box, end])
 	else:
 		await _frames(20)

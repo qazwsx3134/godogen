@@ -18,7 +18,7 @@
 等你決定 ──→ 第一章署名 ──→ Claude／Codex 才動手
 等你做（真人）  C2 試讀、C3 音效、B04/B17 真機
 Claude 下一批   G6（碰到哪拆到哪）
-Codex 進行中    步驟中文名稱、A03 存回專案＋A05 一鍵驗證
+編輯器下一步    A07 複製子圖、A11 複雜互動表單；依第一篇短篇的實際需要調整
 ```
 
 **等你決定**
@@ -37,7 +37,9 @@ Codex 進行中    步驟中文名稱、A03 存回專案＋A05 一鍵驗證
 **Codex**
 - 已完成（2026-10-23）：編輯器以「場景」為單位（契約見 `IMPLEMENTATION.md`「編輯器的場景檢視」）——場景卡的背景縮圖與 BGM 試聽（沿用／依路線不同／無）、可收合的流程小節點、分七類的新增步驟，以及 A01、A10／A11 的一部分、A12 量測。
 - 已完成：步驟改用中文名稱、A03 存回專案檔案＋A05 一鍵驗證並存檔、編輯器的外觀包／封面／預設視角（codex-03）。編輯器的故事包支援由 Claude 完成。
-- 之後：A07、A09、A14；發行／品質 B01、B02、B03、B08、B13、B16。
+- 2026-10-27：從選定場景試玩（A09）：可帶入旗標／線索，在獨立遊戲資料中玩尚未存檔的內容；前置舞台與互動狀態不自動重建。
+- 2026-10-27：新場景的佔位結尾會在新增分支時替換；結尾後有無法執行的步驟時，編輯器與遊戲驗證皆會報錯。已用瀏覽器從空白建立三個結局，再讓 StoryRunner 逐條走完；M2 的 30 節點完整作者驗收仍待實作與試用。
+- 之後：A07、A11；發行／品質 B01、B02、B03、B08、B13、B16。
 
 ## 里程碑
 
@@ -74,8 +76,8 @@ M5 內容：第一章定稿 → 第二章起量產（與 M2／M3 並行）
 | --- | --- | --- | --- | --- | --- |
 | A02 | ☑ P1 | undo/redo（以命令為單位記錄；連續的文字輸入合併成一步） | `editor_state.js:5–23` History；`editor.js:468` 合併聚焦輸入（Codex 2026-10-23 盤點） | M | X |
 | A04 | ☑ P1 | 草稿自動存到 localStorage 並能復原；確認存檔真的成功才清掉 dirty；寫入失敗時持續提示 | `editor.js:80–142` 草稿復原／刪除與衝突；`864–877` 比對下載才解除 dirty | M | X |
-| A03 | P1 | 透過本機專案服務直接存回檔案：原子寫入、以基底 hash 偵測衝突 | 目前只能下載 | M | X |
-| A05 | ◐ P1 | 一鍵「驗證並存檔」：呼叫 Godot 的 `check_story.gd`，不在 JS 重寫 fingerprint | `check_story.gd` 有 CLI 驗證／`--write`；編輯器內還沒有一鍵驗證存檔 | M | X |
+| A03 | ☑ P1 | 透過本機專案服務直接存回檔案：原子寫入、以基底 hash 偵測衝突 | `project_server.py`、`test_project_server.py` | M | X |
+| A05 | ☑ P1 | 一鍵「驗證並存檔」：呼叫 Godot 的 `check_story.gd`，不在 JS 重寫 fingerprint | `editor.js`、`check_story.gd`、`test_project_server.py` | M | X |
 | A13 | ☑ P1 | 錯誤處理：讀檔失敗、儲存空間滿、快速切換故事時的請求競態 | `editor.js:903,929` loadTicket 防競態；`batch1_regression.mjs:120,166` | M | X |
 
 ### M2 能寫完一章（編輯器）
@@ -83,11 +85,11 @@ M5 內容：第一章定稿 → 第二章起量產（與 M2／M3 並行）
 | --- | --- | --- | --- | --- | --- |
 | A06 | ☑ P1 | 全文搜尋（節點 ID、台詞、角色）並能跳轉 | `editor_state.js:25` 巢狀全文搜尋；`editor.js:439` 定位步驟 | S | X |
 | A07 | P1 | 多選、複製貼上子圖（內部連線重新對應，ID 不衝突） | 目前只能單選 | M | X |
-| A09 | P1 | 從任一節點開始試玩（可預設旗標與道具，使用獨立存檔） | `preview.gd` 只能指定故事 | M | X＋C |
+| A09 | ◐ P1 | 從選定場景試玩（旗標／線索、未存稿與作品素材，獨立遊戲資料）；前置舞台及進行中的回合／調查狀態不自動重建 | `preview.gd`、`project_server.py`、`preview_smoke.mjs`、`test_project_server.py` | M | X＋C |
 | A10 | ◐ P1 | 素材面板：背景、立繪、表情的縮圖；表情只列該角色有的（2026-10-23：背景縮圖、BGM 試聽、角色表情篩選與預覽已做；獨立的素材面板未做） | `editor.js:577` 表情只列該角色有圖的；`:328` 背景縮圖；角色預覽圖；BGM 試聽 | M | X |
 | A11 | ◐ P1 | 表單：condition、旗標、道具、bg、char、bgm、se、result，再來是 investigate 與 boke_round 的範本（2026-10-23：result、investigate、boke_round 仍用 JSON） | `editor.js:651` bg／bgm／se／char／profile／item／flag／condition 表單，`:632` 遞迴條件樹 | L | X |
 | A12 | ◐ P1 | 200+ 節點的密集圖效能：先量測再改成局部更新（2026-10-23：已量測並做卡片局部更新；邊線局部更新與重算節流未做） | `tools/story_editor/measure_scene.mjs`；chapter1 開啟 173→226 ms、拖動 20 次 408→437 ms、改欄位 9.3→8.6 ms；`editor.js:414` 未變卡片保留 DOM | M | X |
-| A14 | ◐ P1 | 測試補上 200+ 節點、存檔失敗、多分頁等案例 | `test_core.mjs:49` 十故事往返；`batch1_regression.mjs` 存檔失敗與多分頁；尚無 200+ 節點案例 | M | X |
+| A14 | ☑ P1 | 測試補上 200+ 節點、存檔失敗、多分頁等案例 | `test_core.mjs`／`scene_regression.mjs` 的 240 節點；`batch1_regression.mjs` 存檔失敗與多分頁 | M | X |
 | A08 | ◐ P2 | 群組、註解框、折疊（存在 layout sidecar，不改 runner schema）（2026-10-23：步驟收合已做；跨場景分組與註解框未做） | `story_core.js:420` 連續同類步驟收合，存在 layout sidecar | M | X |
 
 ### M3 劇本系統補齊（遊戲本體）

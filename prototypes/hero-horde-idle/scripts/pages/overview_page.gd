@@ -20,6 +20,8 @@ var names := PackedStringArray()
 ## The march log's lines, newest last (the home screen fills it).
 var log_lines: PackedStringArray = []
 var _todo: Array = []
+## Rows of 可以做的事 that fit above the log (the rest wait their turn).
+const TODO_ROWS := 3
 
 
 func _ready() -> void:
@@ -65,7 +67,7 @@ func refresh() -> void:
 			(card.get_node("EquippedBy") as Label).text = "去英雄頁上陣"
 	var bonds: Dictionary = progress.bonds()
 	%BondLabel.text = "羈絆：" + ("、".join(bonds.lines) if not bonds.lines.is_empty() else "同形態 2 人以上就有羈絆")
-	_todo = progress.todo()
+	_todo = progress.todo().slice(0, TODO_ROWS)
 	for k: int in %TodoList.get_child_count():
 		var b: Button = %TodoList.get_child(k)
 		b.visible = k < _todo.size()

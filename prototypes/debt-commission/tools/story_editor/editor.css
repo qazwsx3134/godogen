@@ -92,6 +92,25 @@ main { display: flex; flex: 1; min-height: 0; }
 #side { width: 390px; flex: none; overflow-y: auto; background: var(--panel); border-left: 1px solid var(--line); padding: 8px 10px 40px; }
 #side details { margin: 0 0 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel-2); }
 #side summary { cursor: pointer; padding: 6px 10px; font-weight: 600; }
+.preview-config { padding-bottom: 8px; }
+.preview-config .note, .preview-section, .preview-config .actions { margin: 8px 10px; }
+.preview-section > strong { display: block; margin-bottom: 6px; }
+.preview-item { display: flex; align-items: center; gap: 6px; margin: 5px 0; }
+.preview-item input { flex: none; }
+.stage-position-editor { min-width: 0; }
+.stage-position-preview { position: relative; height: 180px; overflow: hidden; border: 1px solid #505b6c; border-radius: 6px;
+  background: linear-gradient(180deg, #252e39, #394454); display: grid; grid-template-columns: repeat(3, 1fr); }
+.stage-position-guide { color: #b7c4d0; border-right: 1px dashed rgba(220, 230, 240, .22); text-align: center; padding-top: 7px; font-size: 11px; }
+.stage-position-guide:last-of-type { border-right: 0; }
+.stage-position-guide.selected { background: rgba(163, 197, 218, .10); }
+.stage-position-actor { position: absolute; bottom: 4px; height: 142px; width: 43%; transform: translateX(-50%); cursor: grab; touch-action: none; user-select: none; }
+.stage-position-actor.dragging { cursor: grabbing; }
+.stage-position-actor img { width: 100%; height: 100%; object-fit: contain; object-position: center bottom; pointer-events: none; background: transparent; }
+.stage-position-placeholder { display: grid; place-items: center; height: 100%; color: #e4ebee; border-radius: 36% 36% 10% 10%; background: #627081; }
+.stage-position-actions { display: flex; gap: 5px; margin-top: 6px; }
+.stage-position-actions button { flex: 1; justify-content: center; }
+.stage-position-actions button.selected { border-color: #82bde9; color: #d9f0ff; background: #274459; }
+.stage-position-editor .note { margin: 6px 0 0; }
 #info, #problems { padding: 4px 10px 10px; margin: 0; }
 #problems { list-style: none; max-height: 220px; overflow-y: auto; }
 #problems li { display: flex; gap: 6px; padding: 4px 6px; border-radius: 4px; cursor: pointer; line-height: 1.35; }

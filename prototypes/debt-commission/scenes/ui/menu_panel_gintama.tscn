@@ -1217,7 +1217,9 @@ alignment = 1
 
 [node name="Panel" type="PanelContainer" parent="Area/Center" unique_id=1420674435]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(1050, 0)
 layout_mode = 2
+size_flags_horizontal = 4
 theme_override_styles/panel = SubResource("StyleBoxTexture_ffciv")
 
 [node name="Padding" type="MarginContainer" parent="Area/Center/Panel" unique_id=133130653]
@@ -1248,7 +1250,7 @@ alignment = 1
 [node name="Kicker" type="Label" parent="Area/Center/Panel/Padding/Column/Heading/HeadingText" unique_id=1690382417]
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
-theme_override_font_sizes/font_size = 39
+theme_override_font_sizes/font_size = 29
 theme_override_colors/font_color = Color(0.3254902, 0.38039216, 0.45490196, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
@@ -1260,7 +1262,7 @@ layout_mode = 2
 size_flags_horizontal = 0
 theme_override_styles/normal = SubResource("StyleBoxTexture_h6g8a")
 theme_override_fonts/font = SubResource("FontVariation_rovm4")
-theme_override_font_sizes/font_size = 61
+theme_override_font_sizes/font_size = 46
 theme_override_colors/font_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
@@ -1285,7 +1287,7 @@ theme_override_colors/font_hover_color = Color(0.972549, 0.9529412, 0.9137255, 1
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
-theme_override_font_sizes/font_size = 64
+theme_override_font_sizes/font_size = 48
 text = "×"
 
 [node name="HeadingGap" type="Control" parent="Area/Center/Panel/Padding/Column" unique_id=2121036532]
@@ -1299,16 +1301,19 @@ layout_mode = 2
 follow_focus = true
 horizontal_scroll_mode = 0
 
-[node name="Rows" type="VBoxContainer" parent="Area/Center/Panel/Padding/Column/RowsScroll" unique_id=1807839941]
+[node name="Rows" type="GridContainer" parent="Area/Center/Panel/Padding/Column/RowsScroll" unique_id=18566416]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-mouse_filter = 2
-theme_override_constants/separation = 19
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 16
+columns = 2
 
 [node name="Resume" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1248057889 instance=ExtResource("4_wni0k")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_gh4hh")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_i46qt")
 theme_override_styles/hover = SubResource("StyleBoxFlat_xlsuw")
@@ -1322,54 +1327,104 @@ theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
+theme_override_font_sizes/font_size = 35
 text = "回到故事"
+alignment = 0
 
 [node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Resume" index="0" unique_id=826033919]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -33.23077
+offset_right = -33.23077
 offset_bottom = 23.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 47
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
 text = "→"
+vertical_alignment = 1
 
-[node name="Rollback" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1089343561 instance=ExtResource("5_3x304")]
+[node name="Rollback" type="Button" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1089343561 instance=ExtResource("5_3x304")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_ycr80")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_y6ouf")
 theme_override_styles/hover = SubResource("StyleBoxFlat_j13ny")
 theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_7fvvg")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_swwey")
 theme_override_styles/focus = SubResource("StyleBoxFlat_wcyfu")
+theme_override_colors/font_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_focus_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_hover_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_8md3b")
+theme_override_font_sizes/font_size = 35
 text = "回上一句"
+alignment = 0
+metadata/ui_style_role = "reading_action"
+metadata/ui_style_active = false
 
-[node name="QuickSave" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=2049675069 instance=ExtResource("5_3x304")]
+[node name="QuickSave" type="Button" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=2049675069 instance=ExtResource("5_3x304")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_ycr80")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_y6ouf")
 theme_override_styles/hover = SubResource("StyleBoxFlat_j13ny")
 theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_7fvvg")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_swwey")
 theme_override_styles/focus = SubResource("StyleBoxFlat_wcyfu")
+theme_override_colors/font_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_focus_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_hover_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_8md3b")
+theme_override_font_sizes/font_size = 35
 text = "快速存檔"
+alignment = 0
+metadata/ui_style_role = "reading_action"
+metadata/ui_style_active = false
 
-[node name="QuickLoad" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1760311257 instance=ExtResource("5_3x304")]
+[node name="QuickLoad" type="Button" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1760311257 instance=ExtResource("5_3x304")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_ycr80")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_y6ouf")
 theme_override_styles/hover = SubResource("StyleBoxFlat_j13ny")
 theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_7fvvg")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_swwey")
 theme_override_styles/focus = SubResource("StyleBoxFlat_wcyfu")
+theme_override_colors/font_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_focus_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_hover_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
+theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_8md3b")
+theme_override_font_sizes/font_size = 35
 text = "快速讀檔"
+alignment = 0
+metadata/ui_style_role = "reading_action"
+metadata/ui_style_active = false
 
 [node name="Save" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1978079474 instance=ExtResource("4_wni0k")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_0mfb2")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_udo05")
 theme_override_styles/hover = SubResource("StyleBoxFlat_dxlod")
@@ -1383,16 +1438,32 @@ theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
+theme_override_font_sizes/font_size = 35
+text = "儲存進度"
+alignment = 0
 
 [node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Save" index="0" unique_id=826033919]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -33.23077
+offset_right = -33.23077
 offset_bottom = 23.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 47
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
+text = "＋"
+vertical_alignment = 1
 
 [node name="Load" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=646477398 instance=ExtResource("4_wni0k")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_e7nmc")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_fxgot")
 theme_override_styles/hover = SubResource("StyleBoxFlat_8x726")
@@ -1406,17 +1477,32 @@ theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
+theme_override_font_sizes/font_size = 35
 text = "讀取存檔"
+alignment = 0
 
 [node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Load" index="0" unique_id=826033919]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -33.23077
+offset_right = -33.23077
 offset_bottom = 23.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 47
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
+text = "＋"
+vertical_alignment = 1
 
 [node name="Material" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1255567864 instance=ExtResource("4_wni0k")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_pmvcn")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_3egq6")
 theme_override_styles/hover = SubResource("StyleBoxFlat_0lltd")
@@ -1430,17 +1516,32 @@ theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
+theme_override_font_sizes/font_size = 35
 text = "吐槽素材"
+alignment = 0
 
 [node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Material" index="0" unique_id=826033919]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -33.23077
+offset_right = -33.23077
 offset_bottom = 23.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 47
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
+text = "＋"
+vertical_alignment = 1
 
 [node name="Profile" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=65704121 instance=ExtResource("4_wni0k")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_62ofh")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_ueo5h")
 theme_override_styles/hover = SubResource("StyleBoxFlat_1yhl0")
@@ -1454,17 +1555,32 @@ theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
+theme_override_font_sizes/font_size = 35
 text = "人物檔案"
+alignment = 0
 
 [node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Profile" index="0" unique_id=826033919]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -33.23077
+offset_right = -33.23077
 offset_bottom = 23.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 47
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
+text = "＋"
+vertical_alignment = 1
 
 [node name="Log" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=639856437 instance=ExtResource("4_wni0k")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_lgf2j")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_h60c8")
 theme_override_styles/hover = SubResource("StyleBoxFlat_j8ugn")
@@ -1478,17 +1594,32 @@ theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
+theme_override_font_sizes/font_size = 35
 text = "故事回顧"
+alignment = 0
 
 [node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Log" index="0" unique_id=826033919]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -33.23077
+offset_right = -33.23077
 offset_bottom = 23.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 47
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
+text = "＋"
+vertical_alignment = 1
 
 [node name="Skip" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=831211539 instance=ExtResource("4_wni0k")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_m2cw8")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_3f4jj")
 theme_override_styles/hover = SubResource("StyleBoxFlat_mc1ys")
@@ -1502,17 +1633,32 @@ theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
+theme_override_font_sizes/font_size = 35
 text = "略讀"
+alignment = 0
 
 [node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Skip" index="0" unique_id=826033919]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -33.23077
+offset_right = -33.23077
 offset_bottom = 23.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 47
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
+text = "＋"
+vertical_alignment = 1
 
 [node name="Mute" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=882528724 instance=ExtResource("4_wni0k")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_v6p6s")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_7q5k2")
 theme_override_styles/hover = SubResource("StyleBoxFlat_wlq5s")
@@ -1526,18 +1672,32 @@ theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
+theme_override_font_sizes/font_size = 35
 text = "音效"
+alignment = 0
 
 [node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Mute" index="0" unique_id=826033919]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -33.23077
+offset_right = -33.23077
 offset_bottom = 23.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 47
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
 text = "開"
+vertical_alignment = 1
 
-[node name="Settings" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=674233957 instance=ExtResource("4_wni0k")]
+[node name="Settings" type="Button" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=674233957 instance=ExtResource("4_wni0k")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_li553")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_ryu2s")
 theme_override_styles/hover = SubResource("StyleBoxFlat_fft02")
@@ -1551,11 +1711,15 @@ theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
+theme_override_font_sizes/font_size = 35
 text = "設定"
+alignment = 0
 
 [node name="Title" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1688545038 instance=ExtResource("4_wni0k")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_j6pdb")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_bnbo8")
 theme_override_styles/hover = SubResource("StyleBoxFlat_332t1")
@@ -1569,13 +1733,26 @@ theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
+theme_override_font_sizes/font_size = 35
 text = "回標題"
+alignment = 0
 
 [node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Title" index="0" unique_id=826033919]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -33.23077
+offset_right = -33.23077
 offset_bottom = 23.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 47
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
+text = "＋"
+vertical_alignment = 1
 
 [editable path="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Resume"]
 [editable path="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Save"]

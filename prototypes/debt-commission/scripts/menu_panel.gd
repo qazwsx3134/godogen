@@ -14,7 +14,7 @@ signal row_pressed(row_id: String)
 @onready var panel: Control = %Panel
 @onready var close_button: Button = %Close
 @onready var rows_scroll: ScrollContainer = %RowsScroll
-@onready var row_list: VBoxContainer = %Rows
+@onready var row_list: Container = %Rows
 @onready var rows: Dictionary = {
 	"resume": %Resume, "save": %Save, "load": %Load, "material": %Material, "profile": %Profile,
 	"log": %Log, "skip": %Skip, "mute": %Mute, "settings": %Settings, "title": %Title,

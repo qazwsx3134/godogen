@@ -8,9 +8,9 @@
 [ext_resource type="PackedScene" path="res://scenes/components/equipment_bag_card.tscn" id="6_4s711"]
 [ext_resource type="StyleBox" path="res://ui/blue.tres" id="7_ka4at"]
 
-[sub_resource type="Theme" id="Theme_krmap"]
+[sub_resource type="Theme" id="Theme_1tcn0"]
 default_font = ExtResource("1_mf081")
-default_font_size = 26
+default_font_size = 30
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1s2ed"]
 atlas = ExtResource("2_6x5rv")
@@ -107,9 +107,10 @@ custom_minimum_size = Vector2(941, 1672)
 layout_mode = 3
 anchors_preset = 0
 mouse_filter = 2
-theme = SubResource("Theme_krmap")
+theme = SubResource("Theme_1tcn0")
 script = ExtResource("2_1tcn0")
 metadata/page_id = "overview"
+metadata/fusion_readable = true
 
 [node name="DistantLandscape" type="TextureRect" parent="." unique_id=1888316906]
 texture_filter = 1
@@ -256,6 +257,7 @@ theme_override_fonts/font = ExtResource("3_1tcn0")
 theme_override_font_sizes/font_size = 42
 text = "遠征總覽"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="MarchStatus" type="Label" parent="." unique_id=1830117254]
 unique_name_in_owner = true
@@ -268,9 +270,10 @@ theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("3_1tcn0")
-theme_override_font_sizes/font_size = 25
+theme_override_font_sizes/font_size = 29
 text = "遠征進行中"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="HeroSummaryFrame" type="Panel" parent="." unique_id=1281270159]
 layout_mode = 0
@@ -305,9 +308,10 @@ theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("3_1tcn0")
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 32
 text = "主角與遠征夥伴"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="SquadLine" type="Label" parent="." unique_id=1710707022]
 unique_name_in_owner = true
@@ -319,7 +323,7 @@ offset_bottom = 784.0
 theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 23
+theme_override_font_sizes/font_size = 30
 text = "擊倒 0 隻　·　金幣 0"
 vertical_alignment = 1
 autowrap_mode = 3
@@ -343,9 +347,10 @@ theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("3_1tcn0")
-theme_override_font_sizes/font_size = 27
+theme_override_font_sizes/font_size = 31
 text = "戰鬥紀錄"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="CombatLogScroll" type="ScrollContainer" parent="." unique_id=10607504]
 unique_name_in_owner = true
@@ -363,7 +368,7 @@ size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 29
 text = "小隊出發了。"
 vertical_alignment = 1
 autowrap_mode = 3
@@ -402,7 +407,7 @@ offset_bottom = 944.0
 theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 23
+theme_override_font_sizes/font_size = 30
 text = "擊倒 0 隻　·　金幣 0"
 vertical_alignment = 1
 autowrap_mode = 3
@@ -426,9 +431,10 @@ theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("3_1tcn0")
-theme_override_font_sizes/font_size = 27
+theme_override_font_sizes/font_size = 31
 text = "可以做的事"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="TodoList" type="VBoxContainer" parent="." unique_id=871260239]
 unique_name_in_owner = true
@@ -446,7 +452,7 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
 theme_override_fonts/font = ExtResource("3_1tcn0")
-theme_override_font_sizes/font_size = 23
+theme_override_font_sizes/font_size = 30
 theme_override_styles/normal = ExtResource("7_ka4at")
 theme_override_styles/pressed = ExtResource("7_ka4at")
 theme_override_styles/hover = ExtResource("7_ka4at")
@@ -461,7 +467,7 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
 theme_override_fonts/font = ExtResource("3_1tcn0")
-theme_override_font_sizes/font_size = 23
+theme_override_font_sizes/font_size = 30
 theme_override_styles/normal = ExtResource("7_ka4at")
 theme_override_styles/pressed = ExtResource("7_ka4at")
 theme_override_styles/hover = ExtResource("7_ka4at")
@@ -476,7 +482,7 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
 theme_override_fonts/font = ExtResource("3_1tcn0")
-theme_override_font_sizes/font_size = 23
+theme_override_font_sizes/font_size = 30
 theme_override_styles/normal = ExtResource("7_ka4at")
 theme_override_styles/pressed = ExtResource("7_ka4at")
 theme_override_styles/hover = ExtResource("7_ka4at")
@@ -491,7 +497,7 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
 theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
 theme_override_fonts/font = ExtResource("3_1tcn0")
-theme_override_font_sizes/font_size = 23
+theme_override_font_sizes/font_size = 30
 theme_override_styles/normal = ExtResource("7_ka4at")
 theme_override_styles/pressed = ExtResource("7_ka4at")
 theme_override_styles/hover = ExtResource("7_ka4at")

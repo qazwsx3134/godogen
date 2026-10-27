@@ -5,11 +5,19 @@ var veil: ColorRect
 var _background_tween: Tween
 var _fade_tween: Tween
 var _characters: Dictionary = {}
+var reduce_motion: bool = false
 
 func setup(background_ghost: TextureRect, scene_fade: ColorRect) -> void:
 	ghost = background_ghost
 	veil = scene_fade
 	reset()
+
+
+func set_reduce_motion(reduced: bool) -> void:
+	reduce_motion = reduced
+	if reduced:
+		reset()
+
 
 func capture_background(frame: TextureRect) -> void:
 	if _background_tween != null and _background_tween.is_valid():
@@ -24,6 +32,9 @@ func capture_background(frame: TextureRect) -> void:
 	ghost.visible = true
 
 func crossfade(duration: float = 0.28) -> void:
+	if reduce_motion:
+		ghost.visible = false
+		return
 	_background_tween = create_tween()
 	_background_tween.tween_property(ghost, "modulate:a", 0.0, duration)
 	_background_tween.tween_callback(func() -> void: ghost.visible = false)
@@ -34,6 +45,9 @@ func fade(direction: String, duration: float, skipping: bool) -> float:
 	if skipping:
 		veil.modulate.a = 0.0
 		return 0.0
+	if reduce_motion:
+		veil.modulate.a = 1.0 if direction == "out" else 0.0
+		return 0.0
 	_fade_tween = create_tween()
 	_fade_tween.tween_property(veil, "modulate:a", 1.0 if direction == "out" else 0.0, duration)
 	return duration
@@ -41,7 +55,7 @@ func fade(direction: String, duration: float, skipping: bool) -> float:
 func character(sprite: Control, kind: String, skipping: bool) -> void:
 	_cancel_character(sprite)
 	var art: Control = sprite.get_node_or_null("Art") as Control
-	if art == null or skipping:
+	if art == null or skipping or reduce_motion:
 		if kind == "leave":
 			sprite.visible = false
 		return
@@ -58,7 +72,7 @@ func character(sprite: Control, kind: String, skipping: bool) -> void:
 			tween.tween_callback(func() -> void: sprite.visible = false)
 		"speak":
 			tween.set_trans(Tween.TRANS_SINE)
-			tween.tween_property(art, "position:y", original.y - 16.0, 0.07)
+			tween.tween_property(art, "position:y", original.y - 10.0, 0.07)
 			tween.tween_property(art, "position:y", original.y, 0.12)
 	# Never let a delayed callback from an old line hide the new line's character.
 	tween.tween_callback(_finish_character.bind(sprite))

@@ -181,7 +181,7 @@ func hero_cap(i: int) -> int:
 func base_power(i: int) -> float:
 	var c: int = base_class(i)
 	return START_POWER * pow(HERO_STEP, hero_level[i] - 1) * weapon_mult(c) * charm_mult(i) * (1.0 + captain_buff(c)) \
-		* codex_mult()
+		* codex_mult() * Talents.spec_mult(PushSim.CLASS_SQUAD[c], talent)
 
 
 ## Hero i's attack against the push's reference (1.0 = the balance tests' roster).
@@ -267,7 +267,7 @@ func roster() -> Dictionary:
 	return r
 
 
-# --- 訓練 -----------------------------------------------------------------------------------------------------
+# --- 天賦 -----------------------------------------------------------------------------------------------------
 
 func talent_cost(k: int) -> int:
 	return Talents.cost(k, talent[k])
@@ -602,7 +602,7 @@ func todo() -> Array:
 		if cost >= 0 and talent_open(k) and gold >= cost and (best < 0 or cost < talent_cost(best)):
 			best = k
 	if best >= 0:
-		out.append({"kind": "talent", "text": "%s 可以訓練到 Lv%d（%d 金）" % [Talents.ROWS[best].name, talent[best] + 1,
+		out.append({"kind": "talent", "text": "天賦 %s 可以點亮到 Lv%d（%d 金）" % [Talents.ROWS[best].name, talent[best] + 1,
 			talent_cost(best)], "tab": &"train"})
 	for i: int in march:
 		var cost: int = ascend_cost(i)

@@ -585,7 +585,7 @@ async function slotsRoute() {
 }
 
 async function phase3Route() {
-  const { context, page, errors } = await openPage({ width: 390, height: 844 }, true);
+  const { context, page, errors } = await openPage({ width: 800, height: 450 }, true);
   const result = { route: 'phase3-touch', checks: [], errors };
   report.runs.push(result);
   await control(page, 'begin', true);
@@ -604,9 +604,10 @@ async function phase3Route() {
   await waitFor(page, () => window.__debtQA?.phase3?.investigate_collapsed === true, null, 10000);
   value = await state(page);
   let spot = value.phase3.hotspots[0];
-  const from = { x: value.viewport.width / 2, y: value.viewport.height * 0.35 };
-  const shift = value.game.x + value.game.width / 2 - (spot.screen_rect.x + spot.screen_rect.width / 2);
-  await gesture(page, value.viewport, from, { x: from.x + shift, y: from.y }, 50, true);
+  const from = { x: value.game.x + value.game.width * 0.35, y: value.game.y + value.game.height * 0.25 };
+  const shiftX = value.game.x + value.game.width / 2 - (spot.screen_rect.x + spot.screen_rect.width / 2);
+  const shiftY = value.game.y + value.game.height * 0.65 - (spot.screen_rect.y + spot.screen_rect.height / 2);
+  await gesture(page, value.viewport, from, { x: from.x + shiftX, y: from.y + shiftY }, 50, true);
   await page.waitForTimeout(300);
   value = await state(page);
   spot = value.phase3.hotspots[0];
@@ -656,19 +657,21 @@ async function phase3Route() {
   assert.ok(value.phase3.timer_remaining > 0 && value.phase3.timer_remaining <= 8);
   assert.ok(value.choices.some(choice => choice.id === 'point_to_bottle'));
   value.choices.forEach(choice => {
-    assertInside(choice.rect, value.viewport, `390×844 ${choice.id}`);
-    assertContained(choice.rect, value.choice_sheet?.width ? value.choice_sheet : value.dialog, `390×844 ${choice.id}`);
+    assertInside(choice.rect, value.viewport, `800×450 ${choice.id}`);
+    assertContained(choice.rect, value.choice_sheet?.width ? value.choice_sheet : value.dialog, `800×450 ${choice.id}`);
+    assertContained(choice.rect, value.choice_viewport, `800×450 visible ${choice.id}`);
   });
   await screenshot(page, 'phase3-tsukkomi-phone');
-  await page.setViewportSize({ width: 320, height: 568 });
+  await page.setViewportSize({ width: 640, height: 360 });
   await page.waitForTimeout(250);
   const narrow = await state(page);
   narrow.choices.forEach(choice => {
-    assertInside(choice.rect, narrow.viewport, `320×568 ${choice.id}`);
-    assertContained(choice.rect, narrow.choice_sheet?.width ? narrow.choice_sheet : narrow.dialog, `320×568 ${choice.id}`);
+    assertInside(choice.rect, narrow.viewport, `640×360 ${choice.id}`);
+    assertContained(choice.rect, narrow.choice_sheet?.width ? narrow.choice_sheet : narrow.dialog, `640×360 ${choice.id}`);
+    assertContained(choice.rect, narrow.choice_viewport, `640×360 visible ${choice.id}`);
   });
-  await screenshot(page, 'phase3-tsukkomi-320x568');
-  await page.setViewportSize({ width: 390, height: 844 });
+  await screenshot(page, 'phase3-tsukkomi-640x360');
+  await page.setViewportSize({ width: 800, height: 450 });
   await page.waitForTimeout(250);
   value = await state(page);
   const beforePause = value.phase3.timer_remaining;
@@ -678,7 +681,7 @@ async function phase3Route() {
   assert.equal(value.screen, 'menu');
   assert.ok(Math.abs(value.phase3.timer_remaining - beforePause) < 0.7, 'menu pauses the choice timer');
   await controlAny(page, ['menu_close', 'menu_resume', 'resume'], true, 'menu close/resume');
-  result.checks.push('Tsukkomi opens four clue-filtered choices inside the unified bottom sheet; the eight-second timer pauses in menu and options fit 320×568');
+  result.checks.push('Tsukkomi opens four clue-filtered choices; the timer pauses in menu and options fit 640×360');
 
   await openSaveSlots(page, true);
   await control(page, 'slot_2', true);
@@ -985,7 +988,7 @@ async function investigateRoute() {
 
 // The manga overlay (?sample=comedy): every preset plays over the reading screen, a tap on one only ends
 // it (the line after it shows whole and is not advanced), and the overlay never survives a reload.
-// Run at 390×844 and 320×568; the screenshots go to docs/.
+// Run at 800×450 and 640×360; the screenshots go to test-results/.
 async function comedyRoute(viewport, tag) {
   const { context, page, errors } = await openPage(viewport, true);
   const result = { route: `comedy-${tag}`, viewport, touch: true, checks: [], errors };
@@ -1168,10 +1171,11 @@ async function choicesRoute(viewport, tag) {
     assert.equal(row.label, povStep.options[index].label);
     assert.ok(row.rect.height / (value.game.width / viewport.width) >= 48 - 0.1, `row ${index} is at least 48 CSS px tall`);
     inside(row.rect, value.game, `row ${index}`);
+    assertContained(row.rect, value.choice_viewport, `visible row ${index}`);
   }
   assert.ok(value.choice_sheet.width > 0);
   inside(value.choice_sheet, value.game, 'the POV sheet');
-  await screenshot(page, tag === 'phone' ? 'preview-choice-pov-phone' : 'choices-pov-narrow', tag === 'phone' ? docs : output);
+  await screenshot(page, `choices-pov-${tag}`);
   result.checks.push(`the POV choice shows Shinpachi's thought in the ${value.ui_style} sheet with tones loud, calm, tired; every row is at least 48 CSS px (${tag})`);
 
   // 2. The loud row, tapped: it leads to its own reaction and sets its flag.
@@ -1202,11 +1206,12 @@ async function choicesRoute(viewport, tag) {
     assert.equal(row.label, directorStep.options[index].label);
     assert.ok(row.rect.height / (value.game.width / viewport.width) >= 48 - 0.1, `card ${index} is at least 48 CSS px tall`);
     inside(row.rect, value.game, `card ${index}`);
+    assertContained(row.rect, value.choice_viewport, `visible card ${index}`);
   }
   inside(value.choice_sheet, value.game, 'the director\'s sheet');
   assert.ok(value.controls.menu, '目錄 is on the director\'s sheet too');
   inside(value.controls.menu, value.game, '目錄');
-  await screenshot(page, `preview-choice-director-${tag}`, docs);
+  await screenshot(page, `choices-director-${tag}`);
   result.checks.push(`the director's choice: sheet=director, footnote "${directorStep.note}", ${value.choices.length} cards each at least 48 CSS px, stage unchanged (${tag})`);
 
   // 4. 目錄 over the director's choice: closing it brings back the director's sheet and its cards.
@@ -1798,8 +1803,8 @@ try {
     await ep00PathB();
     await ep00PathA({ width: 320, height: 568 }, 'narrow', true);
   } else if (choicesOnly) {
-    await choicesRoute({ width: 390, height: 844 }, 'phone');
-    await choicesRoute({ width: 320, height: 568 }, 'narrow');
+    await choicesRoute({ width: 800, height: 450 }, 'wide');
+    await choicesRoute({ width: 640, height: 360 }, 'small');
   } else if (comedyOnly) {
     await comedyRoute({ width: 390, height: 844 }, 'phone');
     await comedyRoute({ width: 320, height: 568 }, 'narrow');
@@ -1836,7 +1841,7 @@ try {
   const reportName = ep00Only ? 'ep00-browser-report.json' : choicesOnly ? 'choices-browser-report.json' : comedyOnly ? 'comedy-browser-report.json' : smokeOnly ? 'smoke-report.json' : slotsOnly ? 'slots-report.json'
     : phase3Only ? 'phase3-report.json' : roundsOnly ? 'rounds-report.json' : investigateOnly ? 'investigate-report.json'
     : phase2Only ? 'phase2-report.json' : 'browser-report.json';
-  await fs.writeFile(path.join(comedyOnly || choicesOnly || ep00Only ? docs : output, reportName), `${JSON.stringify(report, null, 2)}\n`);
+  await fs.writeFile(path.join(comedyOnly || ep00Only ? docs : output, reportName), `${JSON.stringify(report, null, 2)}\n`);
   await browser.close();
   console.log(`Evidence: ${output}`);
 }

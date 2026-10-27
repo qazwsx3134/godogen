@@ -1,12 +1,15 @@
 extends Control
 ## 英雄 (scenes/pages/heroes.tscn, Taskbar Hero's monster.png page): the selected hero (portrait, level, attack, HP,
-## power, their form's passive, class skill and 招牌技 or charm) with 突破, 上陣行軍 and 設為隊長, then the roster:
+## power, their form's passive, class skill and 招牌技 or charm) with 突破, 上陣行軍, 裝備 (the 裝備 page on them) and
+## 設為隊長, then the roster:
 ## one equipment_item_card per hero, filtered by form, sorted by rarity and level. The header line counts the 圖鑑
 ## (heroes 覺醒 by a first ascension) and its bonus; the bond line shows the march squad's 羈絆.
 
 signal changed
 signal open_tab(tab: StringName)
 signal message(text: String)
+## The 裝備 button: open the 裝備 page on this hero's 專屬飾品.
+signal equip_requested(hero: int)
 
 const CARD := preload("res://scenes/components/equipment_item_card.tscn")
 const Progression = preload("res://domain/progression.gd")
@@ -49,7 +52,8 @@ func _ready() -> void:
 			message.emit("%s %s" % [_name(selected), "下陣休息" if marching else "加入行軍小隊"])
 			changed.emit()
 		else:
-			message.emit("小隊至少要留一人" if marching else "小隊滿了（%d 格）：先讓一名下陣，或在訓練頁練「結伴」" % progress.slots()))
+			message.emit("小隊至少要留一人" if marching else "小隊滿了（%d 格）：先讓一名下陣，或在天賦頁點亮「結伴」" % progress.slots()))
+	%EquipButton.pressed.connect(func() -> void: equip_requested.emit(selected))
 	%CaptainButton.pressed.connect(func() -> void:
 		if progress.toggle_captain(selected):
 			changed.emit()

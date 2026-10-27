@@ -2,7 +2,6 @@
 
 [ext_resource type="FontFile" path="res://assets/fonts/story-cjk.ttc" id="1_547t3"]
 [ext_resource type="Script" path="res://scripts/choice_sheet.gd" id="2_jmmyh"]
-[ext_resource type="PackedScene" path="res://scenes/ui/choice_item_director.tscn" id="3_guyla"]
 [ext_resource type="Script" path="res://scripts/stripe_bar.gd" id="4_rvt8c"]
 [ext_resource type="PackedScene" path="res://scenes/ui/choice_item_director.tscn" id="5_1y42o"]
 
@@ -25,7 +24,87 @@ spacing_glyph = 4
 base_font = ExtResource("1_547t3")
 variation_embolden = 0.8
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vt4hl"]
+content_margin_left = 244.0
+content_margin_top = 58.0
+content_margin_right = 28.0
+content_margin_bottom = 22.0
+bg_color = Color(0.101960786, 0.101960786, 0.10980392, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.95686275, 0.94509804, 0.9098039, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3un8s"]
+content_margin_left = 244.0
+content_margin_top = 58.0
+content_margin_right = 28.0
+content_margin_bottom = 22.0
+bg_color = Color(0.22745098, 0.19607843, 0, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(1, 0.83137256, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6vhpl"]
+content_margin_left = 244.0
+content_margin_top = 58.0
+content_margin_right = 28.0
+content_margin_bottom = 22.0
+bg_color = Color(0.14901961, 0.14901961, 0.15686275, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(1, 0.83137256, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_soflw"]
+content_margin_left = 244.0
+content_margin_top = 58.0
+content_margin_right = 28.0
+content_margin_bottom = 22.0
+bg_color = Color(0.22745098, 0.19607843, 0, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(1, 0.83137256, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1vfl6"]
+content_margin_left = 244.0
+content_margin_top = 58.0
+content_margin_right = 28.0
+content_margin_bottom = 22.0
+bg_color = Color(0.101960786, 0.101960786, 0.10980392, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.95686275, 0.94509804, 0.9098039, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_numlg"]
+content_margin_left = 244.0
+content_margin_top = 58.0
+content_margin_right = 28.0
+content_margin_bottom = 22.0
+bg_color = Color(0.22745098, 0.19607843, 0, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(1, 0.83137256, 0, 1)
+
 [sub_resource type="FontVariation" id="FontVariation_mahgo"]
+base_font = ExtResource("1_547t3")
+variation_embolden = 0.5
+
+[sub_resource type="FontVariation" id="FontVariation_bquhu"]
+base_font = ExtResource("1_547t3")
+variation_embolden = 0.9
+
+[sub_resource type="FontVariation" id="FontVariation_g7tr8"]
 base_font = ExtResource("1_547t3")
 variation_embolden = 0.5
 
@@ -104,7 +183,7 @@ theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 0
 script = ExtResource("2_jmmyh")
 perspective = "director"
-item_scene = ExtResource("3_guyla")
+item_scene = ExtResource("5_1y42o")
 index_numerals = PackedStringArray()
 index_format = "SCENE %02d"
 count_format = "%s選一"
@@ -122,7 +201,7 @@ mouse_filter = 2
 theme_override_constants/separation = 0
 
 [node name="TopTape" type="Control" parent="Panel/Body" unique_id=998179455]
-custom_minimum_size = Vector2(0, 36)
+custom_minimum_size = Vector2(0, 20)
 clip_contents = true
 layout_mode = 2
 mouse_filter = 2
@@ -134,9 +213,9 @@ stripe_width = 40.0
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 39
-theme_override_constants/margin_top = 30
+theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 39
-theme_override_constants/margin_bottom = 30
+theme_override_constants/margin_bottom = 20
 
 [node name="Column" type="VBoxContainer" parent="Panel/Body/Padding" unique_id=2020191516]
 layout_mode = 2
@@ -147,13 +226,13 @@ theme_override_constants/separation = 0
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_cma0t")
-theme_override_font_sizes/font_size = 56
+theme_override_font_sizes/font_size = 42
 theme_override_colors/font_color = Color(1, 0.83137256, 0, 1)
 text = "── 導演選擇 ──"
 horizontal_alignment = 1
 
 [node name="PromptGap" type="Control" parent="Panel/Body/Padding/Column" unique_id=1066177237]
-custom_minimum_size = Vector2(0, 16)
+custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 mouse_filter = 2
 
@@ -162,7 +241,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/line_spacing = -4
 theme_override_fonts/font = SubResource("FontVariation_36u73")
-theme_override_font_sizes/font_size = 64
+theme_override_font_sizes/font_size = 48
 theme_override_colors/font_color = Color(0.95686275, 0.94509804, 0.9098039, 1)
 text = "接下來發生什麼？"
 horizontal_alignment = 1
@@ -171,13 +250,13 @@ autowrap_mode = 3
 [node name="CensorBar" type="Button" parent="Panel/Body/Padding/Column" unique_id=1043349781]
 unique_name_in_owner = true
 visible = false
-custom_minimum_size = Vector2(120, 133)
+custom_minimum_size = Vector2(120, 150)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "▇▇▇▇"
 
 [node name="ListGap" type="Control" parent="Panel/Body/Padding/Column" unique_id=455402448]
-custom_minimum_size = Vector2(0, 26)
+custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 mouse_filter = 2
 
@@ -188,47 +267,232 @@ follow_focus = true
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 0
 
-[node name="Choices" type="VBoxContainer" parent="Panel/Body/Padding/Column/ChoicesScroll" unique_id=1688929439]
+[node name="Choices" type="GridContainer" parent="Panel/Body/Padding/Column/ChoicesScroll" unique_id=1695153086]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-mouse_filter = 2
-theme_override_constants/separation = 20
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 12
+columns = 2
 
 [node name="Sample1" parent="Panel/Body/Padding/Column/ChoicesScroll/Choices" unique_id=1722768235 instance=ExtResource("5_1y42o")]
+custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_vt4hl")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_3un8s")
+theme_override_styles/hover = SubResource("StyleBoxFlat_6vhpl")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_soflw")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_1vfl6")
+theme_override_styles/focus = SubResource("StyleBoxFlat_numlg")
+theme_override_colors/font_color = Color(0.95686275, 0.94509804, 0.9098039, 1)
+theme_override_colors/font_focus_color = Color(0.95686275, 0.94509804, 0.9098039, 1)
+theme_override_colors/font_pressed_color = Color(0.95686275, 0.94509804, 0.9098039, 1)
+theme_override_colors/font_hover_color = Color(0.95686275, 0.94509804, 0.9098039, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.95686275, 0.94509804, 0.9098039, 1)
+theme_override_colors/font_disabled_color = Color(0.7411765, 0.70980394, 0.6039216, 1)
+theme_override_fonts/font = SubResource("FontVariation_mahgo")
+theme_override_font_sizes/font_size = 35
+text = "登勢闖進來"
+alignment = 0
+autowrap_mode = 3
+
+[node name="Stick" parent="Panel/Body/Padding/Column/ChoicesScroll/Choices/Sample1" index="0" unique_id=651287454]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = 38.0
+grow_horizontal = 2
+mouse_filter = 2
+script = ExtResource("4_rvt8c")
+color_a = Color(0.95686275, 0.94509804, 0.9098039, 1)
+stripe_width = 34.0
+
+[node name="Index" parent="Panel/Body/Padding/Column/ChoicesScroll/Choices/Sample1" index="1" unique_id=799636946]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 20.0
+offset_top = -14.0
+offset_right = 212.0
+offset_bottom = 48.0
+grow_vertical = 2
+theme_override_fonts/font = SubResource("FontVariation_bquhu")
+theme_override_font_sizes/font_size = 33
+theme_override_colors/font_color = Color(1, 0.83137256, 0, 1)
+text = "SCENE 01"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Divider" parent="Panel/Body/Padding/Column/ChoicesScroll/Choices/Sample1" index="2" unique_id=1246090904]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 222.0
+offset_top = 54.0
+offset_right = 225.0
+offset_bottom = -18.0
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 0.83137256, 0, 0.55)
 
 [node name="Sample2" parent="Panel/Body/Padding/Column/ChoicesScroll/Choices" unique_id=344548883 instance=ExtResource("5_1y42o")]
+custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_vt4hl")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_3un8s")
+theme_override_styles/hover = SubResource("StyleBoxFlat_6vhpl")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_soflw")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_1vfl6")
+theme_override_styles/focus = SubResource("StyleBoxFlat_numlg")
+theme_override_colors/font_color = Color(0.95686275, 0.94509804, 0.9098039, 1)
+theme_override_colors/font_focus_color = Color(0.95686275, 0.94509804, 0.9098039, 1)
+theme_override_colors/font_pressed_color = Color(0.95686275, 0.94509804, 0.9098039, 1)
+theme_override_colors/font_hover_color = Color(0.95686275, 0.94509804, 0.9098039, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.95686275, 0.94509804, 0.9098039, 1)
+theme_override_colors/font_disabled_color = Color(0.7411765, 0.70980394, 0.6039216, 1)
+theme_override_fonts/font = SubResource("FontVariation_mahgo")
+theme_override_font_sizes/font_size = 35
 text = "電話突然響了"
+alignment = 0
+autowrap_mode = 3
+
+[node name="Stick" parent="Panel/Body/Padding/Column/ChoicesScroll/Choices/Sample2" index="0" unique_id=651287454]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = 38.0
+grow_horizontal = 2
+mouse_filter = 2
+script = ExtResource("4_rvt8c")
+color_a = Color(0.95686275, 0.94509804, 0.9098039, 1)
+stripe_width = 34.0
 
 [node name="Index" parent="Panel/Body/Padding/Column/ChoicesScroll/Choices/Sample2" index="1" unique_id=799636946]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 20.0
+offset_top = -14.0
+offset_right = 212.0
+offset_bottom = 48.0
+grow_vertical = 2
+theme_override_fonts/font = SubResource("FontVariation_bquhu")
+theme_override_font_sizes/font_size = 33
+theme_override_colors/font_color = Color(1, 0.83137256, 0, 1)
 text = "SCENE 02"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Divider" parent="Panel/Body/Padding/Column/ChoicesScroll/Choices/Sample2" index="2" unique_id=1246090904]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 222.0
+offset_top = 54.0
+offset_right = 225.0
+offset_bottom = -18.0
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 0.83137256, 0, 0.55)
 
 [node name="Sample3" parent="Panel/Body/Padding/Column/ChoicesScroll/Choices" unique_id=688989329 instance=ExtResource("5_1y42o")]
+custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_vt4hl")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_3un8s")
+theme_override_styles/hover = SubResource("StyleBoxFlat_6vhpl")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_soflw")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_1vfl6")
+theme_override_styles/focus = SubResource("StyleBoxFlat_numlg")
+theme_override_colors/font_color = Color(0.95686275, 0.94509804, 0.9098039, 1)
+theme_override_colors/font_focus_color = Color(0.95686275, 0.94509804, 0.9098039, 1)
+theme_override_colors/font_pressed_color = Color(0.95686275, 0.94509804, 0.9098039, 1)
+theme_override_colors/font_hover_color = Color(0.95686275, 0.94509804, 0.9098039, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.95686275, 0.94509804, 0.9098039, 1)
+theme_override_colors/font_disabled_color = Color(0.7411765, 0.70980394, 0.6039216, 1)
+theme_override_fonts/font = SubResource("FontVariation_mahgo")
+theme_override_font_sizes/font_size = 35
 text = "定春帶回奇怪的東西"
+alignment = 0
+autowrap_mode = 3
+
+[node name="Stick" parent="Panel/Body/Padding/Column/ChoicesScroll/Choices/Sample3" index="0" unique_id=651287454]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = 38.0
+grow_horizontal = 2
+mouse_filter = 2
+script = ExtResource("4_rvt8c")
+color_a = Color(0.95686275, 0.94509804, 0.9098039, 1)
+stripe_width = 34.0
 
 [node name="Index" parent="Panel/Body/Padding/Column/ChoicesScroll/Choices/Sample3" index="1" unique_id=799636946]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 20.0
+offset_top = -14.0
+offset_right = 212.0
+offset_bottom = 48.0
+grow_vertical = 2
+theme_override_fonts/font = SubResource("FontVariation_bquhu")
+theme_override_font_sizes/font_size = 33
+theme_override_colors/font_color = Color(1, 0.83137256, 0, 1)
 text = "SCENE 03"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Divider" parent="Panel/Body/Padding/Column/ChoicesScroll/Choices/Sample3" index="2" unique_id=1246090904]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 222.0
+offset_top = 54.0
+offset_right = 225.0
+offset_bottom = -18.0
+grow_vertical = 2
+mouse_filter = 2
+color = Color(1, 0.83137256, 0, 0.55)
 
 [node name="NoteGap" type="Control" parent="Panel/Body/Padding/Column" unique_id=1812421431]
-custom_minimum_size = Vector2(0, 18)
+custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 mouse_filter = 2
 
 [node name="Note" type="Label" parent="Panel/Body/Padding/Column" unique_id=732570285]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_fonts/font = SubResource("FontVariation_mahgo")
-theme_override_font_sizes/font_size = 38
+theme_override_fonts/font = SubResource("FontVariation_g7tr8")
+theme_override_font_sizes/font_size = 29
 theme_override_colors/font_color = Color(0.7411765, 0.70980394, 0.6039216, 1)
 text = "※製作組經費有限"
 horizontal_alignment = 1
 autowrap_mode = 3
 
 [node name="TimerGap" type="Control" parent="Panel/Body/Padding/Column" unique_id=1852976284]
-custom_minimum_size = Vector2(0, 22)
+custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 mouse_filter = 2
 
@@ -242,7 +506,7 @@ theme_override_constants/separation = 25
 
 [node name="TimerLabel" type="Label" parent="Panel/Body/Padding/Column/Timer" unique_id=1585925506]
 layout_mode = 2
-theme_override_font_sizes/font_size = 39
+theme_override_font_sizes/font_size = 29
 theme_override_colors/font_color = Color(0.7411765, 0.70980394, 0.6039216, 1)
 text = "倒數"
 
@@ -260,12 +524,12 @@ show_percentage = false
 [node name="TimerValue" type="Label" parent="Panel/Body/Padding/Column/Timer" unique_id=695575220]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 39
+theme_override_font_sizes/font_size = 29
 theme_override_colors/font_color = Color(0.7411765, 0.70980394, 0.6039216, 1)
 text = "6 秒"
 
 [node name="FooterGap" type="Control" parent="Panel/Body/Padding/Column" unique_id=110532477]
-custom_minimum_size = Vector2(0, 11)
+custom_minimum_size = Vector2(0, 6)
 layout_mode = 2
 mouse_filter = 2
 
@@ -279,7 +543,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 39
+theme_override_font_sizes/font_size = 29
 theme_override_colors/font_color = Color(0.7411765, 0.70980394, 0.6039216, 1)
 text = "選一個接下來的發展"
 vertical_alignment = 1
@@ -290,7 +554,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(112, 0)
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_36u73")
-theme_override_font_sizes/font_size = 36
+theme_override_font_sizes/font_size = 27
 theme_override_colors/font_color = Color(0.7411765, 0.70980394, 0.6039216, 1)
 text = "三選一"
 horizontal_alignment = 2
@@ -299,13 +563,13 @@ vertical_alignment = 1
 [node name="Super" type="Button" parent="Panel/Body/Padding/Column/Footer" unique_id=1962827878]
 unique_name_in_owner = true
 visible = false
-custom_minimum_size = Vector2(210, 132.92308)
+custom_minimum_size = Vector2(210, 150)
 layout_mode = 2
 text = "超必殺！"
 
 [node name="Menu" type="Button" parent="Panel/Body/Padding/Column/Footer" unique_id=736128928]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(177, 132.92308)
+custom_minimum_size = Vector2(177, 150)
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_styles/normal = SubResource("StyleBoxFlat_jrksh")
@@ -321,11 +585,11 @@ theme_override_colors/font_hover_color = Color(1, 0.83137256, 0, 1)
 theme_override_colors/font_hover_pressed_color = Color(1, 0.83137256, 0, 1)
 theme_override_colors/font_disabled_color = Color(1, 0.83137256, 0, 1)
 theme_override_fonts/font = SubResource("FontVariation_36u73")
-theme_override_font_sizes/font_size = 39
+theme_override_font_sizes/font_size = 29
 text = "目錄"
 
 [node name="BottomTape" type="Control" parent="Panel/Body" unique_id=1662838903]
-custom_minimum_size = Vector2(0, 20)
+custom_minimum_size = Vector2(0, 12)
 clip_contents = true
 layout_mode = 2
 mouse_filter = 2

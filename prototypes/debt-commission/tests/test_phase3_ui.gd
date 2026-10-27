@@ -34,6 +34,7 @@ func _test_investigation_save_boke_load_and_perfect() -> void:
 	_expect(game._save_game(), "investigation state saves to autosave")
 	_expect(game._saveable_current_state(), "stable investigation state is saveable")
 	var spot: Control = game._hotspots.get("empty_milk_bottle") as Control
+	var saved_vertical_pan: float = 0.0
 	_expect(spot != null and not bool(spot.get("found")) and not (spot.get_node("Outline") as Control).visible,
 		"the spot lies on the picture and shows nothing until found")
 	_expect(game._sprites.values().all(func(sprite: Control) -> bool: return not sprite.visible),
@@ -41,15 +42,18 @@ func _test_investigation_save_boke_load_and_perfect() -> void:
 	if spot != null:
 		var hit: Rect2 = game._hotspot_hit_rect(spot)
 		_expect(minf(hit.size.x, hit.size.y) >= 48.0 * game.CSS_PX - 0.5, "the spot keeps a 48 CSS px touch target")
-		var middle: Vector2 = game._game.get_global_rect().position + Vector2(game._game.size.x * 0.5, 600.0)
-		var before_x: float = spot.get_global_rect().position.x
-		await _drag(middle, middle + Vector2(300.0, 0.0), 0.1)
-		_expect(absf(spot.get_global_rect().position.x - before_x - 300.0) < 1.0 and game._runner.items.is_empty(),
+		var middle: Vector2 = _search_drag_point(game)
+		var before_y: float = spot.get_global_rect().position.y
+		var shift_y: float = maxf(game._pan_y_range.x, -120.0)
+		await _drag(middle, middle + Vector2(0.0, shift_y), 0.1)
+		_expect(absf(spot.get_global_rect().position.y - before_y - shift_y) < 1.0 and game._runner.items.is_empty(),
 			"dragging slides the picture with its spots, and a drag searches nothing")
-		await _drag(middle, middle + Vector2(3000.0, 0.0), 0.1)
-		_expect(is_equal_approx(game._pan, game._pan_range.y) and game._pan_range.y > 0.0
-			and game._background_rect.get_global_rect().position.x <= game._game.get_global_rect().position.x + 0.5,
-			"the picture stops at its left edge")
+		await _drag(middle, middle + Vector2(0.0, -3000.0), 0.1)
+		_expect(is_equal_approx(game._pan_y, game._pan_y_range.x) and game._pan_y_range.x < 0.0
+			and game._background_rect.get_global_rect().end.y >= game._game.get_global_rect().end.y - 0.5,
+			"the picture stops at its lower edge")
+		saved_vertical_pan = game._pan_y
+		_expect(game._save_game(), "the dragged vertical position is saved")
 		var target: Vector2 = game._hotspot_hit_rect(spot).get_center()
 		_expect(game._dialog_panel.get_global_rect().has_point(target), "fixture: the wastebasket lies under the reading box")
 		await _tap(target)
@@ -66,11 +70,11 @@ func _test_investigation_save_boke_load_and_perfect() -> void:
 	_expect(resumed._runner.call("snapshot").get("node_id", "") == investigation_snapshot.get("node_id", ""),
 		"Continue restores the investigation reading point")
 	_expect(resumed._runner.items.is_empty(), "Continue preserves the unchecked clue state")
+	_expect(is_equal_approx(resumed._pan_y, saved_vertical_pan), "Continue restores the vertical picture position")
 	_expect(resumed._investigation_continue_button.disabled, "restored unchecked investigation still blocks continuation")
 	var resumed_spot: Control = resumed._hotspots["empty_milk_bottle"] as Control
-	var stage_point: Vector2 = resumed._game.get_global_rect().position + Vector2(resumed._game.size.x * 0.5, 600.0)
-	await _drag(stage_point, stage_point + Vector2(resumed._game.get_global_rect().get_center().x
-		- resumed._hotspot_hit_rect(resumed_spot).get_center().x, 0.0), 0.1)  # bring the wastebasket to the middle
+	var stage_point: Vector2 = _search_drag_point(resumed)
+	await _drag(stage_point, stage_point + Vector2(0.0, resumed._pan_y_range.x), 0.1)
 	await _tap(resumed._dialog_panel.investigation_collapse.get_global_rect().get_center())
 	_expect(resumed._investigate_collapsed and not resumed._dialog_panel.visible and resumed._investigate_bar.visible,
 		"收起 folds the reading box into the bar")
@@ -306,6 +310,12 @@ func _test_timeout_five_fails_and_checkpoint_retry() -> void:
 	_expect(game._runner.items.has("milk_bottle"), "checkpoint retry keeps pre-round clue")
 	game.queue_free()
 	await _frames(2)
+
+
+func _search_drag_point(game: Control) -> Vector2:
+	var origin: Vector2 = game._game.get_global_rect().position
+	var dialogue_top: float = game._dialog_panel.get_global_rect().position.y - origin.y
+	return origin + Vector2(game._game.size.x * 0.35, maxf(50.0, minf(game._game.size.y * 0.3, dialogue_top - 50.0)))
 
 
 func _new_game(save_path: String) -> Control:

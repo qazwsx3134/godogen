@@ -10,6 +10,11 @@ This repository is not a published game repo. It is the source that `publish.sh`
 - 將遊戲實作基準 commit 與交接文件分開描述，避免為了在文件寫入它自己的 commit hash 而反覆提交；最新提交以 `git log -1` 查核。多專案並行時保留其他專案章節，不用自己的進度覆蓋別人的紀錄。
 - 同步修正相關 README／session-state 的過時狀態，並保留不屬於本次工作的修改。沒有明確授權時不自動 push。
 
+## 踩過的坑
+
+- 所有原型踩過的坑統一列在 `prototypes/LESSONS.md`，依主題分類、每條附做法與來源。開工前，以及遇到不合理的失敗（測試連環失敗、匯出版行為不同、工具卡住）時，先搜尋這份檔案。
+- 新的坑寫進 `prototypes/LESSONS.md` 對應主題的最後一行，格式與重複時的標記方式見該檔開頭；只屬於單一原型的調校寫在該原型的文件，再到「各原型專屬」表登記。
+
 ## Codex model preferences
 
 - The main Codex session uses **GPT-6 Sol** (`gpt-6-sol`) with **max** reasoning effort. It owns planning, shared design decisions, integration, review, and final acceptance.
@@ -22,6 +27,21 @@ This repository is not a published game repo. It is the source that `publish.sh`
 - 若自行完成的預估成本 **小於委派總成本的 1.2 倍**，就在自己的 session 完成，不特別開子代理。子代理的目的是節省成本；達到門檻才考慮委派，不因為能平行或任務較大就自動開啟。
 - 無法合理判斷能達到門檻時，預設自行完成。決定委派時，簡短說明成本估算與預期節省，勿把估算當成實際帳單。
 - 此門檻適用於內建 subagent、Herdr sibling session 與其他委派方式，優先於一般性的委派／平行工作偏好；使用者當次明確要求開子代理時，以該要求為準。
+
+## KISS 與分層測試驗收
+
+- **KISS（保持簡單）**：選能解決問題的最簡單做法。不預先抽象、不加用不到的參數／設定／層級，不順手擴大範圍；真的出現重複再抽共用。
+- **最低充分證據（minimum sufficient proof）**：只跑足以證明這次改動的那一層測試，不多跑也不少跑。分層只決定跑哪些測試，不免除「完成要有證據」：回報寫明層級、指令與結果。
+
+| 層級 | 情境 | 跑什麼 |
+|---|---|---|
+| 規劃 | 只寫規劃、設計、文件 | 不測試 |
+| L1 | 寫新功能（不碰其他系統） | 只跑該功能的單元測試 |
+| L2 | 與其他系統有交互的功能、回修 bug | 單元測試＋簡易回歸（受影響路徑的少量冒煙測試） |
+| L3 | 大型任務（跨多系統、里程碑） | 過程中照 L1／L2；使用者手動驗收完成後，才跑完整測試 |
+
+- 層級判不準時取高一層。改 `.tscn`／`.tres` 後的 headless 匯入檢查成本很低，任何層級都照做。
+- 各原型的單元測試、簡易回歸與完整測試對應哪些指令，寫在該原型的 README 或 AGENTS.md。
 
 ## Source Layout
 

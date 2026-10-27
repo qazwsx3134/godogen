@@ -1,6 +1,50 @@
 # 進度與 Agent 交接
 
-更新日期：2026-10-27（Asia/Taipei）。目前專案：**夢靈遠行 · Dreamling Trails**，位置 `prototypes/dreamling-idle`。分支 `master`；遊戲實作基準 commit **`57d79ac`**（`feat(dreamling-idle): add first playable idle RPG and system research`）。最新提交另以 `git log -1 --oneline` 確認。
+## 萬事屋吐槽 ADV · debt-commission（2026-10-27）
+
+- **目前工作**：`prototypes/debt-commission`，分支 `master`；實作基準為 `0a65639`，目前最新提交是合併其他專案的 `7b6964a`。本輪修改尚未 commit 或 push。使用者已想到第一篇短篇，會在開發與測試後提供，再一起試寫並完善協作流程；目前沒有替作者編寫新故事。
+- **已完成**：節點編輯器可從選定場景試玩當下的未存稿或唯讀故事，調整旗標與線索；使用作品自己的素材／外觀及獨立暫存遊戲資料。新場景加入分支時會替換預設佔位結尾，編輯器與遊戲驗證會拒絕終止步驟之後不會執行的內容。
+- **本次 UI／手感**：預設改為 16:9 橫向，閱讀與選單字級縮小；LOG／AUTO／SKIP／MENU 按鈕依原圖比例呈現。舞台站位獨立於閱讀框，對話可遮住立繪；一般閱讀框固定，長台詞在框內依文字行分頁，調查或回合控制可依內容增加面板高度。橫向調查可上下及左右拖背景，並保存垂直取景。標題、選項、目錄與案件檔已調整橫向版面。
+- **編輯器與手感**：`scenes/stage.tscn` 的左／中／右站位有實際角色預覽，角色 `Art` 可單獨調整；網頁編輯器的 `char` 可拖曳或按按鈕選左／中／右。閱讀工具列有不影響觸控範圍的按壓回饋；減少畫面效果設定同時作用於按鈕、角色動作及舞台淡入淡出。
+- **本次橫向驗證**：45 組 headless 測試通過（遊戲目錄下 `env GODOT_BIN=/Applications/Godot.app/Contents/MacOS/Godot TEST_TIMEOUT=120 python3 tools/story_editor/run_coordinated.py bash ../godot-kit/tools/run_tests.sh .`，紀錄 `godot-tests.pqtoNJ/`）；最後收緊選項版面後重跑 `choices`、`phase3_ui`、`phase4_rounds_ui`、`landscape_reading`，均通過（`godot-tests.9QRYjq/`）。`tools/text_fit_audit.gd` 以實際視窗及最大字級，在 1136×640 和 1024×768 各檢查 33 個畫面，均無裁字；已確認限時四選項真的進入選擇畫面且完整落在捲動區（`/private/tmp/debt-landscape-fit-small-final2/`、`/private/tmp/debt-landscape-fit-4x3-final2/`）。長台詞兩頁與固定立繪的實際畫面在 `/private/tmp/debt-landscape-reading-v3/`。本機編輯器服務 16 項測試通過。
+- **Web 驗證**：重新匯出後，Chrome 模擬觸控的 Phase 3 調查、四個限時選項、選單暫停與存讀檔共 6 組通過；POV 與導演選項在 800×450、640×360 各 5 組通過，並檢查選項完整落在可見範圍。報告為 `test-results/phase3-report.json`、`test-results/choices-browser-report.json`，兩者均無瀏覽器或遊戲 runtime error。
+- **前次直式 UI 驗證（歷史紀錄）**：44 組 headless 測試通過（`godot-tests.Yzn9Hx/`）；末次按鈕調整後 `reading_feel`、`stage_scene` 通過（`godot-tests.HdatEK/`）。320×568、390×844 各檢查 33 個最大字體畫面，均 0 項截字（`/private/tmp/debt-text-fit-320/`、`/private/tmp/debt-text-fit-390/`）；瀏覽器站位拖曳、未存稿試玩與三結局通過（`/private/tmp/debt-preview-position-final/`）。這些是橫向改版以前的證據。
+- **前一輪驗證**：同日遊戲本體先前 43 組測試、本機服務 16 項、編輯器核心、原有瀏覽器 smoke 與作品包 smoke 通過；橫向改版後只重跑了其中的本機服務測試，編輯器核心與原有 smoke 未重跑。Godot headless 匯入／匯出在離開編輯器時仍報資源／RID 清理警告，匯出成功並通過瀏覽器測試。
+- **已知限制**：場景試玩不會還原前面場景的背景、角色、音樂，或進行中的調查／吐槽回合；必要時從較早場景試玩。複雜的調查、吐槽與結算步驟仍有 JSON 編輯區；複製子圖、30 節點作者驗收、橫向版真人手機試玩與正式音效／文本仍未完成，依第一篇故事實際需求再安排。
+- **重要文件**：[專案 README](prototypes/debt-commission/README.md)、[編輯器操作](prototypes/debt-commission/docs/STORY-EDITOR.md)、[商業級待辦](prototypes/debt-commission/docs/ROADMAP-COMMERCIAL.md)、[此專案 session-state](prototypes/debt-commission/production/session-state/active.md)。
+- **工作區**：保留原有其他修改（根目錄 `AGENTS.md`、`CLAUDE.md` 與 taskbar-hero 相關 AGENTS）；本輪另有 debt-commission 程式、測試與文件變更。`godot-kit/sync.sh --check debt-commission` 報既有 drift，本輪未改共用模組副本。
+- **下一步**：等使用者分享短篇構想，一起拆出場景／分支，再以編輯器寫作、存檔和試玩；依實際卡點調整工具與流程。
+
+本次暫時啟動本機遊戲 `http://127.0.0.1:5198/?sample=phase3` 與編輯器 `http://127.0.0.1:8000/tools/story_editor/`；程序是否仍存活需自行確認。Web 產物在 `build/web/`，可由 `tools/build_web.sh` 重建；隔離 HOME 匯出時需讓 Godot 4.7 的現有匯出範本可見。
+
+編輯器回歸在 `prototypes/debt-commission` 執行；本機服務和 Chrome 需能綁定 localhost、啟動本機瀏覽器。輸出保存在各 `--out` 的暫存資料夾：
+
+```bash
+python3 tools/story_editor/test_project_server.py
+python3 tools/story_editor/run_coordinated.py node tools/story_editor/test_core.mjs --godot /Applications/Godot.app/Contents/MacOS/Godot --out /private/tmp/debt-story-core-test
+node tools/story_editor/preview_smoke.mjs --playwright /Users/peter/.npm/_npx/e41f203b7505f1fb/node_modules/playwright-core --chromium '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --out /private/tmp/debt-preview-smoke
+node tools/story_editor/pack_smoke.mjs --playwright /Users/peter/.npm/_npx/e41f203b7505f1fb/node_modules/playwright-core --chromium '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --out /private/tmp/debt-pack-smoke
+python3 tools/story_editor/run_coordinated.py node tools/story_editor/smoke.mjs --playwright /Users/peter/.npm/_npx/e41f203b7505f1fb/node_modules/playwright-core --chromium '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --godot /Applications/Godot.app/Contents/MacOS/Godot --out /private/tmp/debt-story-browser-smoke
+```
+
+此 checkout 未見 `studio/runtime/codex/`；`studio/README.md` 說明安裝器會產生該目錄並修改 `.codex/`／manifest，本輪沒有執行安裝器。Herdr 環境變數指定的工作區無法解析，本輪由主 session 自行完成。
+
+---
+
+
+## 全員推王融合版 · hero-horde-idle（2026-10-27）
+
+- **目前工作**：使用者要求把 taskbar-hero、hero-horde-idle、dreamling-idle 融合；確認後的決定見 `prototypes/hero-horde-idle/docs/FUSION.md`。分支 `fusion-idle`（從 `hero-horde-squads` 的 `0486a1f` 開出），融合版提交為 `40355fb`，2026-10-27 依使用者指示合併進 master（`7b6964a`，未 push）；原本的獨立 worktree 已移除。合併衝突在 hero-horde-idle 採融合版（master 的 `1b119d0`／`0a65639` 建在舊六區架構上），godot-kit README 與 art_src/.gitignore 兩邊都留；合併後 `test_march`／`test_home`／`test_main` 與 kit 的 `test_proto_kit`／`test_genre_modules`／`test_m0_modules` 通過。
+- **已完成**：遠征紀事七頁主畫面＋常駐行軍戰場；行軍真戰鬥（`domain/march_sim.gd`，固定 tick、打輸退關、離線依實測速率）；100 名英雄分人類 40／怪獸 30／夢靈 30 與形態被動（推王與行軍）；行軍小隊羈絆；訓練取代職業等級；上陣格 3→5；圖鑑；裝備詞綴與自動分解；存檔 v2（v1 轉換）；金幣經濟 ×10；怪獸／夢靈暫用美術（Skybound 動作圖換色）。
+- **驗證（2026-10-27，L2，沿用本輪）**：`test_march`、`test_progression`、`test_stages`（十關全過；good 在 3-4 的推薦戰力閘門放寬到 1.25 倍，理由寫在測試裡）、`test_home`、`test_recruit`、`test_balance`、`test_report`、`test_skills`、`test_main` 全部 PASSED（之後修了推王字型缺字、回前景補算離線、戰報形態頭像，重跑 `test_home`／`test_march`／`test_main`／`test_report`／`test_skills` 通過）；`tools/capture_home.gd`、`tools/capture_shots.gd` 截圖逐頁看過。完整測試等作者手動驗收後再跑一輪。
+- **已知問題**：試跑時誤用作者的真實存檔（macOS 的 user:// 不看 `XDG_DATA_HOME`），v1 存檔已被轉成 v2 並補發 8 小時離線收益，原始 v1 無備份（APFS 本機快照沒有；Time Machine 若有可能還在）；轉換後快照 `~/.claude/backups/20261027-hero-horde-idle-progress-v2-migrated.json`。舊分支遊戲讀不懂 v2。之後試玩用 `-- --save=<名稱>`。
+- **第二輪（2026-10-27 下午，合併後在 master 工作區，全部未 commit）**：使用者回饋「畫面太小、推王 UI 風格要對齊放置畫面、訓練改點亮天賦、所有英雄都能裝備＋一鍵裝備、總覽改放設定鈕左邊」。已做：天賦星圖（9 節點含 3 個團專精，`scenes/components/talent_node.tscn`、`scripts/talent_links.gd`）；裝備頁飾品持有者用 ◀▶ 切換全部英雄、一鍵裝備；英雄頁「裝備」鈕；頂欄「總覽」鈕；主畫面字級放大與單行省略號；長螢幕時頁面貼底、上方補天空（`home.gd _fit`）；預覽視窗 430×932；推王主題 `ui/theme.tres` 換成紙色／藍金按鈕（`tools/theme_taskbar.gd`）並把淺色文字覆寫改墨色。工具：`tools/build_fusion_ui_v2.gd`（已套用）。另刪除 95 個 `art_src` 殘留 `.import`。
+- **第二輪驗證**：專精調到每級 ×1.02、最多 10 級、起價 10 萬後 `test_stages` 與 `test_progression` 通過；主畫面與推王截圖看過（`/tmp/fusion_shots2`、`/tmp/fusion_push2`，暫存）。出門時 `test_home`／`test_main`／`test_march`／`test_progression` 的 L2 回歸正在背景跑，結果見下一行。
+- **下一步**：確認那四支測試結果；重拍七頁截圖（加上天空後的版面與天賦星圖名稱還沒重拍）；作者試玩看字級夠不夠大（目前每頁仍照寬度縮放，細長手機只多出天空）；決定是否 commit（master 工作區另有 debt-commission session 未提交修改，`Progress.md` 不可夾帶提交）。`art_src` 有 84 張 PNG 因 LFS 規則顯示已修改，要 `git add --renormalize` 才會消失，尚未處理。交接細節在 `prototypes/hero-horde-idle/docs/PROGRESS.md`。
+
+## 夢靈遠行 · Dreamling Trails
+
+更新日期：2026-10-27（Asia/Taipei）。本章專案：**夢靈遠行 · Dreamling Trails**，位置 `prototypes/dreamling-idle`。分支 `master`；遊戲實作基準 commit **`57d79ac`**（`feat(dreamling-idle): add first playable idle RPG and system research`）。最新提交另以 `git log -1 --oneline` 確認。
 
 **目前狀態：第一個可玩版本已完成，本段落依使用者要求暫停。** 本次只補交接紀錄與持續維護規則，沒有恢復遊戲功能開發。完整研究的 30 個系統尚未全部實作，也未完成正式發行驗收。
 

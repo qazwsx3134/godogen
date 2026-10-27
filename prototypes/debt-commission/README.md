@@ -4,9 +4,9 @@
 
 介面是「銀魂和紙」：和紙紙框、深藍銀框按鈕、明體字。早期試過的另外三款（月下映畫、萬事屋委託簿、吐槽分鏡）已刪除，比較紀錄留在 [UI-REDESIGN-OPTIONS](docs/UI-REDESIGN-OPTIONS.md)。
 
-Godot 4.7 手機直立視覺小說，依 [V1 Roadmap](../../docs/story-telling-game/ROADMAP.md) 與 [gintama0923](../../docs/gintama-like/new/gintama0923.md) 製作。狀態：**Phase 1、Phase 2 與 Phase 3 技術短循環已完成自動驗收；Phase 4 的回合玩法（逐句槽點、第四面牆消音條與伊莉莎白的牌子、條件式放棄吐槽、連擊、QTE、超必殺、演出效果）與調查的對話／移動話題有可玩的技術試片與自動驗收**；第一章草稿 v0.2 已做成上機試讀版，作者試讀修訂與真人手機試玩待完成。
+Godot 4.7 橫向視覺小說，依 [V1 Roadmap](../../docs/story-telling-game/ROADMAP.md) 與 [gintama0923](../../docs/gintama-like/new/gintama0923.md) 製作。狀態：**Phase 1、Phase 2 與 Phase 3 技術短循環已完成自動驗收；Phase 4 的回合玩法（逐句槽點、第四面牆消音條與伊莉莎白的牌子、條件式放棄吐槽、連擊、QTE、超必殺、演出效果）與調查的對話／移動話題有可玩的技術試片與自動驗收**；第一章草稿 v0.2 已做成上機試讀版，作者試讀修訂與真人手機試玩待完成。
 
-要驗證的假設：直立 VN 版面（滿版背景、立繪、依內容高度配置的底部對話層、整合在框內的閱讀工具列）在手機上單手好讀、好操作；作者只改 JSON 就能換場景、角色、分支與素材條件。[原版、前一版與素材試版比較](docs/UI-TRIAL.md)保留實際 Web 畫面，待手機試玩決定版面。
+遊戲以 16:9 橫向畫面呈現：立繪固定在舞台上，底部閱讀框可以遮住人物，長台詞在框內分頁。預設閱讀與選單字級較小，閱讀字級仍可在設定調整。作者只改 JSON 就能換場景、角色、分支與素材條件。[早期直式版比較](docs/UI-TRIAL.md)保留歷史畫面；橫向版仍待真人手機試玩。
 
 劇情會走向《底特律：變人》、《黑鏡：潘達斯奈基》那種大量分支，所以有一個 ComfyUI 手感的網頁版[劇本節點編輯器](docs/STORY-EDITOR.md)（`tools/story_editor/`）：拖卡片、拉線接分支、標出到不了的節點與結局，讀寫同一份劇本 JSON；匯出後用 `tools/story_editor/check_story.gd` 重算 `version` 並驗證。
 
@@ -18,17 +18,17 @@ Godot 4.7 手機直立視覺小說，依 [V1 Roadmap](../../docs/story-telling-g
 
 | 操作 | 效果 |
 | --- | --- |
-| 點畫面任一處 | 打字中顯示整句；打完進下一句 |
+| 點畫面任一處 | 打字中顯示整句；長台詞先翻到下一頁，讀完才進下一句 |
 | 長按畫面 | 隱藏全部 UI，再點一下恢復（恢復的那一下不推進） |
-| 往上滑 | 開啟對話紀錄 |
+| 往上滑 | 開啟對話紀錄；調查時改為拖曳背景 |
 | 目錄 | 開啟選單：存讀檔、設定及其他閱讀功能 |
 | 章節選擇 | 標題上的故事名稱：本篇章節依序排列，前一章結算過才開放，顯示最佳評價；「結局收集」列出每章的結局，看過的顯示名稱、沒看過的是「？？？」；試玩片段一直開放。選了就回到標題，按「開始故事」或「繼續」 |
-| 設定 | 標題或目錄裡：文字速度（慢／標準／快／瞬間）、自動播放速度、背景音樂與音效音量、字級及紙框透明度、畫面效果（減少震動與閃光）、吐槽輔助（寬鬆：選詞時間 ×1.5、QTE 判定窗 ×2）、教學提示（顯示／不顯示，另有「重看教學」）與存檔備份，立刻生效並記住；目錄的「音效」開關仍可一鍵靜音 |
+| 設定 | 標題或目錄裡：文字速度（慢／標準／快／瞬間）、自動播放速度、背景音樂與音效音量、字級及紙框透明度、畫面效果（減少震動、閃光、立繪與按鈕動作）、吐槽輔助（寬鬆：選詞時間 ×1.5、QTE 判定窗 ×2）、教學提示（顯示／不顯示，另有「重看教學」）與存檔備份，立刻生效並記住；目錄的「音效」開關仍可一鍵靜音 |
 | 章節結算 | 章節最後：吐槽成功／出手、PERFECT、最高連擊、冷場、隱藏裝傻、剩下的眼鏡、Game Over 次數與評價（剩 5 副 S、4 副 A、3–2 副 B、1 副 C，每次 Game Over 降一級），依評價顯示一句話；「下一章」或「回標題」 |
-| 推進鈕（›／續／→） | 補完當句或推進劇情 |
+| 推進鈕（›／續／→） | 補完當句、翻閱長台詞，讀完後推進劇情 |
 | 選單／標題讀檔 | 選擇指定手動欄位；讀檔頁也可選自動續讀檔 |
-| 工具列 | 對話框內的目錄、回顧、自動與「續」；略讀（快轉到下一個選項）、存讀檔、吐槽素材與人物檔案收在目錄裡 |
-| 調查 | 線索是背景圖上的東西，不是按鈕：左右拖曳背景找，點那樣東西就取得線索，找到的會留下淡框與勾；有查看後台詞的會先演完再回來。對話框可按「收起 ▼」縮成底部一條，「展開 ▲」叫回來；全部找到時自動展開，按「繼續」離開。`keep_cast` 調查保留角色，第一章的銀時嘴角跟隨立繪與拖曳；移往廚房時角色留在客廳 |
+| 工具列 | 閱讀框下方的 LOG、AUTO、SKIP、MENU；存讀檔、吐槽素材與人物檔案收在目錄裡 |
+| 調查 | 線索是背景圖上的東西，不是按鈕：拖曳背景找（橫向畫面可上下或左右移動有裁切的部分），點那樣東西就取得線索，找到的會留下淡框與勾；有查看後台詞的會先演完再回來。對話框可按「收起 ▼」縮成底部一條，「展開 ▲」叫回來；全部找到時自動展開，按「繼續」離開。`keep_cast` 調查保留角色，第一章的銀時嘴角跟隨立繪與拖曳；移往廚房時角色留在客廳 |
 | 對話／移動 | 調查時對話框裡的兩排話題：「對話」點了演出那段對話，聊過的不再出現；「移動」換到另一個地點（例如廚房），那裡有自己的背景與熱區，查完會自動回到原地點，也可以按「移動」回去。各地點已查過的熱區保持打勾 |
 | 裝傻發言 | ‹ › 切換句子；有補充時按「聽下去」；按「吐槽！」才進入 8 秒選詞 |
 | 吐槽選詞 | 選吐槽詞；素材會解鎖完美選項，逾時算冷場；選單、紀錄及存檔欄位會暫停倒數 |
@@ -40,9 +40,9 @@ Godot 4.7 手機直立視覺小說，依 [V1 Roadmap](../../docs/story-telling-g
 | QTE | 白圈縮到黃圈時點畫面任一處；太早、太晚或沒點都算冷場 |
 | Game Over | 眼鏡歸零時出現碎眼鏡畫面，可從該回合開頭重試 |
 | 角色 | 開口說話才登場；說過話的人留在畫面上，說話的人在最前面、其他人在後面變暗。換背景（新場景）時全部退場，劇本也能用 `hide()` 讓人先退場 |
-| 狀態列 | 左上是眼鏡（生命，掉一副就碎一副）與吐槽之力；取得的線索依序列在右邊一欄 |
+| 狀態列 | 右上是眼鏡（生命，掉一副就碎一副）與吐槽之力；取得的線索依序列在右邊一欄 |
 
-對話框內提供目錄、回顧、自動與推進鈕；存檔、讀檔、略讀與素材集中在選單。Safe Area 只在 Android／iOS 原生匯出讀取；瀏覽器分頁本身已避開瀏海。讀到穩定劇本位置時寫入獨立的自動續讀檔；手動存檔有 3 頁、每頁 6 格，存入素材、背景、立繪與閱讀位置。新遊戲重設自動續讀進度，手動欄位保留。同一瀏覽器、同一網址重開後可按「繼續」或從指定欄位讀檔。選單的吐槽素材與人物檔案只在有調查或吐槽回合的故事出現。存檔也記住正在播的背景音樂。
+閱讀工具列提供目錄、回顧、自動與略讀；存檔、讀檔與素材集中在選單。Safe Area 只在 Android／iOS 原生匯出讀取；瀏覽器分頁本身已避開瀏海。讀到穩定劇本位置時寫入獨立的自動續讀檔；手動存檔有 3 頁、每頁 6 格，存入素材、背景、立繪與閱讀位置。新遊戲重設自動續讀進度，手動欄位保留。同一瀏覽器、同一網址重開後可按「繼續」或從指定欄位讀檔。選單的吐槽素材與人物檔案只在有調查或吐槽回合的故事出現。存檔也記住正在播的背景音樂。
 
 [素材試版手機畫面](docs/preview-assets-dialogue-phone.png) · [UI 試版比較](docs/UI-TRIAL.md) · [Phase 2 手機畫面](docs/preview-phase2-phone.png) · [多欄位讀檔畫面](docs/preview-save-slots-phone.png) · [驗證紀錄](docs/VERIFICATION.md)
 
@@ -56,7 +56,7 @@ B 超必殺演出（2026-10-06）已接入 `?sample=phase4_rounds`，使用既�
 2. 要換畫面風格：`look` 寫 `flat` 並給 `palette`，不需要任何圖；要做有質感的紙框或木框，就複製 `scenes/ui/*_gintama.tscn` 改圖，在 `scenes` 指過去（節點名稱不要改）。
 3. 生命圖示：做一個有 `broken`、`charged`、`color`、`crack_color` 屬性的小 scene，填進 `life_icon`。
 4. 在 `data/stories.json` 的故事加 `"skin": "<作品 id>"`。
-5. 故事用到的角色、背景、音樂登記在 `data/asset_catalog.json`（每個故事各自一份要等 K2 故事包）；`default_pov`、`default_background` 決定預設的心聲角色與開場背景，角色的 `voice_pitch` 是打字音高。
+5. 故事用到的角色、背景、音樂登記在 `data/asset_catalog.json`；作品包可使用自己的 `stories/<作品>/catalog.json`。`default_pov`、`default_background` 決定預設的心聲角色與開場背景，角色的 `voice_pitch` 是打字音高。
 
 `tests/fixtures/skins/plain/` 是不用任何新圖的範例（扁平配色、刃形生命圖示、「反駁／決心」用語），`tests/test_skin.gd` 驗證它換得過去也換得回來。劇本沒有吐槽回合與調查時，HUD、案件檔與「輔助」設定都不出現，就是一般的視覺小說。
 
@@ -72,13 +72,17 @@ python3 tools/story_editor/project_server.py --port 8000 --godot /Applications/G
 
 本機專案服務提供「驗證並存檔」：圖編輯的故事直接存回 `data/`，新故事通過檢查後自動登記進 `data/stories.json`；開檔後磁碟上的檔案若被改過，會拒絕覆寫。驗證失敗時保留草稿，遊戲繼續使用上次通過的版本。用 `.dialogue` 建置的故事在編輯器裡唯讀，先「轉成圖編輯來源」建立新的故事 id 才能編輯。用一般靜態伺服器或直接雙擊 `index.html` 開啟時，改用匯出下載的流程。操作見 [編輯器說明](docs/STORY-EDITOR.md)。
 
+在本機服務選取場景後，可從側欄「試玩這個場景」設定旗標與線索，直接開啟獨立遊戲視窗。尚未存檔的修改和唯讀故事都能試玩；正式遊戲存檔不受影響。前面場景的背景、角色與進行中的互動不會自動還原，需要時請從較早的場景開始。
+
+角色步驟的「舞台」可拖曳立繪，或按左側／中央／右側來選站位；下拉選單可還原角色預設。這是站位示意，位置與大小的精調見下方 Godot 舞台及角色場景。較長的台詞會顯示「繼續閱讀」，點擊後在同一個閱讀框翻頁。
+
 - 直接開某個故事：網址後面加 `?story=<id>`，例如 `?story=chapter1`（id 見 `data/stories.json`）。
 - 8000 被占用就換 `--port`。遊戲試玩用的是 5193（`tools/serve_web.sh`），兩個可以同時開。
 - 多個人或多個 agent 同時跑 Godot 時，先把環境變數 `GODOT_LOCK` 設成大家約定的同一個絕對路徑，驗證會排隊不互相干擾。
 
 ## 開發與 Web 匯出
 
-此目錄是獨立的 Godot 專案，用 **Godot 4.7 stable** 開啟 `project.godot`，按 F5 試玩。設計尺寸 1080×1920（9:16），`stretch aspect=expand`：較長的手機往下延伸，桌機左右留黑邊。
+此目錄是獨立的 Godot 專案，用 **Godot 4.7 stable** 開啟 `project.godot`，按 F5 試玩。設計尺寸 1920×1080（16:9），`stretch aspect=keep` 保持橫向構圖，比例不同的視窗會留邊；原生手機以橫向啟動。
 
 ```bash
 cd prototypes/debt-commission
@@ -96,7 +100,7 @@ bash tools/serve_web.sh
 
 | 檔案 | 用途 |
 | --- | --- |
-| `main.gd` | 直立外殼：背景、立繪、特效、對話與選項、彈出視窗；手勢、AUTO／SKIP、選單、紀錄、存讀檔、QA |
+| `main.gd` | 橫向外殼：背景、立繪、特效、對話與選項、彈出視窗；手勢、AUTO／SKIP、選單、紀錄、存讀檔、QA |
 | `scripts/skin.gd`、`skins/gintama/skin.json` | 外觀包：載入並合併 `skins/<id>/skin.json`（場景、外觀、生命圖示、標題、用語） |
 | `scripts/ui_styles.gd` | 依外觀包的配色與素材畫按鈕與面板（依 node 的 `ui_style_role` 套用） |
 | `scripts/ui_stage_style.gd` | 背景照片的和紙色調 |
@@ -147,6 +151,9 @@ XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://t
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_phase4_rounds_story.gd
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_phase4_rounds_ui.gd
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_ui_styles.gd
+XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_stage_scene.gd
+XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_reading_feel.gd
+XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_landscape_reading.gd
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_investigation.gd
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_comedy.gd
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_choices.gd
@@ -171,7 +178,7 @@ node tools/browser_check.mjs --ep00 --playwright /path/to/node_modules/@playwrig
 node tools/browser_check.mjs --backup --playwright /path/to/node_modules/@playwright/test
 ```
 
-`--url` 可指定試玩位址；`--chromium /path/to/chrome-headless-shell` 可指定 Chromium。瀏覽器檢查以真實 canvas 滑鼠與觸控操作（長按、上滑用 CDP 觸控事件）；預設走討債兩條路線，`--phase2` 走劇本測試兩條路線，`--slots` 驗證觸控存讀檔與 18 格分頁，`--phase3` 走調查與吐槽並驗證限時選詞讀檔，`--comedy` 在漫畫吐槽片段驗證疊加層播放中、點擊快轉不推進下一句（390×844 與 320×568，截圖與報告存 `docs/`），`--ep00` 在 EP00 走兩條路線（390×844：路徑 A 選 `loud`、看漫畫吐槽層、調查裡點銀時三次與草莓牛奶、委託書、導演選第三個；路徑 B 選 `tired`、不找委託書、導演選第一個，並在調查與導演選項各存手動欄位、重新整理後讀檔回到同一個事件），320×568 再跑路徑 A 到調查為止，截圖存 `docs/preview-ep00-*.png`、報告存 `docs/ep00-browser-report.json`；`--choices` 在兩種選項片段驗證 POV 選項（語氣標記、選了接對應的反應與旗標）、導演選擇（導演面板、註腳、卡片至少 48 CSS px、舞台不變、開關目錄後仍是導演面板、選一張卡走到結局與旗標；390×844 與 320×568，截圖與報告存 `docs/`），`--rounds` 在回合試片用觸控點消音條、伊莉莎白的牌子（閱讀時與 320×568 的選詞面板旁，檢查牌子至少 48 CSS px 且沒被選項面板蓋住）、超必殺與 QTE，並在 320×568 檢查回合操作列；`--investigate` 在四線索試片用觸控點對話與移動話題（390×844 與 320×568）、到廚房查冰箱（畫面外台詞）再回到客廳；`--backup` 驗證設定裡的存檔匯出、壞檔拒絕與匯入。網址帶 `?qa=1` 時才啟用唯讀的 `window.__debtQA`；一般試玩網址不啟用。
+`--url` 可指定試玩位址；`--chromium /path/to/chrome-headless-shell` 可指定 Chromium。瀏覽器檢查以真實 canvas 滑鼠與觸控操作（長按、上滑用 CDP 觸控事件）；預設走討債兩條路線，`--phase2` 走劇本測試兩條路線，`--slots` 驗證觸控存讀檔與 18 格分頁，`--phase3` 以橫向 800×450 與 640×360 走調查、吐槽及限時選詞讀檔，`--comedy` 在漫畫吐槽片段驗證疊加層播放中、點擊快轉不推進下一句（390×844 與 320×568，截圖與報告存 `docs/`），`--ep00` 在 EP00 走兩條路線（390×844：路徑 A 選 `loud`、看漫畫吐槽層、調查裡點銀時三次與草莓牛奶、委託書、導演選第三個；路徑 B 選 `tired`、不找委託書、導演選第一個，並在調查與導演選項各存手動欄位、重新整理後讀檔回到同一個事件），320×568 再跑路徑 A 到調查為止，截圖存 `docs/preview-ep00-*.png`、報告存 `docs/ep00-browser-report.json`；`--choices` 在兩種選項片段驗證 POV 選項（語氣標記、選了接對應的反應與旗標）、導演選擇（導演面板、註腳、卡片至少 48 CSS px、舞台不變、開關目錄後仍是導演面板、選一張卡走到結局與旗標；800×450 與 640×360，截圖與報告存 `test-results/`），`--rounds` 在回合試片用觸控點消音條、伊莉莎白的牌子（閱讀時與 320×568 的選詞面板旁，檢查牌子至少 48 CSS px 且沒被選項面板蓋住）、超必殺與 QTE，並在 320×568 檢查回合操作列；`--investigate` 在四線索試片用觸控點對話與移動話題（390×844 與 320×568）、到廚房查冰箱（畫面外台詞）再回到客廳；`--backup` 驗證設定裡的存檔匯出、壞檔拒絕與匯入。網址帶 `?qa=1` 時才啟用唯讀的 `window.__debtQA`；一般試玩網址不啟用。
 
 ## Godot MCP
 
@@ -227,24 +234,24 @@ node tools/browser_check.mjs --backup --playwright /path/to/node_modules/@playwr
 | 漫畫吐槽疊加層 | ✅ 已轉換 | `scenes/comedy/*.tscn`（四個 preset；`ComedyLayer` 在 `main.tscn`） |
 | 結尾按鈕 | 待轉換（做成小 item scene） | |
 
-**銀魂和紙**：`scenes/ui/dialogue_box_gintama.tscn` 的 `NameOverlap/SpeakerRow` 決定雲形名牌跨在紙框上方的位置；`NamePlate/CloudPlaque` 使用含喇叭的透明名牌 PNG，名字仍由 `SpeakerName` 更新。`Padding` 調整正文留白，`Frame/PaperCutout` 是含紙紋、波紋、櫻花與下一句三角的完整透明底圖；用 NinePatch 保留四角，`Frame.clip_contents` 限制繪製範圍。[去背素材與提示詞](assets/ui/GINTAMA-EXTRACTION.md)保留來源和製作紀錄。正文與名字的明體字重保存在 `FontVariation`，見[字型來源與授權](assets/fonts/NotoSerifTC-SOURCE.md)。紙框下方 `ToolbarMargin/Toolbar` 依序實例化 `gintama_reading_log.tscn`、`gintama_reading_auto.tscn`、`gintama_reading_skip.tscn`、`gintama_reading_menu.tscn`；小場景的 `Surface/CutoutArt` 是含圖示的透明按鈕底圖，`Contents/Caption` 調整標籤，根 Button 保留至少 48 CSS px 的觸控高度。另有 `title_screen_gintama.tscn`、`menu_panel_gintama.tscn`、`choice_sheet_gintama.tscn` 與 `choice_item_gintama.tscn`。標題卡 `CardArea/Card` 與設定卡 `Area/Card` 的底圖是去掉下一句三角的和紙 `gintama_panel_paper.png`（StyleBoxTexture 九宮格，只拉長第 140–168 列與第 280–805 欄的素紙，波紋與櫻花不變形），故事切換鈕與設定的 `Header/Plaque` 是去掉喇叭的雲形名牌 `gintama_heading_plaque.png`；按鈕樣式寫在 scene 裡：深藍銀框是主要動作，和紙色是一般選項，選中的設定是深藍金邊（選項是同一個 `ButtonGroup` 的 toggle）。目錄 `Area/Center/Panel` 也是這張和紙，標題 `Heading` 用雲形名牌，`Rows` 裡沒有 `ui_style_role` 的列是和紙色按鈕（快速存讀檔等三列沿用工具列的深藍）。Game Over 與章節結算 `game_over_gintama.tscn`、`chapter_result_gintama.tscn` 是和紙卡 `Center/Card`（結算卡外面包一層 `Scroll`，矮螢幕可捲），根節點 `z_index = 2` 讓卡片蓋過對話框的名牌。對話紀錄、存檔欄位、覆寫確認、章節選擇、人物檔案等共用面板在銀魂和紙下由 `ui_styles.gd` 依 `ui_style_role`（`menu`／`log`／`slots`／`confirmation`）換成同一張和紙（`GINTAMA_PAPER_ROLES`），`standard` 按鈕與存檔卡是和紙色圓角卡。這兩張圖與這些 scene 由 `tools/make_gintama_panels.gd` 產生一次（`-- textures`，`--import`，再 `-- scenes`），之後 scene 是來源檔，沒有 `--force` 不覆寫。場景是維護來源，正常執行不會重建；`tools/add_gintama_edition_scenes.gd` 是早期一次性製作紀錄，已存在新場景時會拒絕執行。
+**銀魂和紙**：`scenes/ui/dialogue_box_gintama.tscn` 的 `NameOverlap/SpeakerRow` 決定雲形名牌跨在紙框上方的位置；`NamePlate/CloudPlaque` 使用含喇叭的透明名牌 PNG，名字仍由 `SpeakerName` 更新。`Padding` 調整正文留白，`Frame/PaperCutout` 是含紙紋、波紋、櫻花與下一句三角的完整透明底圖；用 NinePatch 保留四角，`Frame.clip_contents` 限制繪製範圍。[去背素材與提示詞](assets/ui/GINTAMA-EXTRACTION.md)保留來源和製作紀錄。正文與名字的明體字重保存在 `FontVariation`，見[字型來源與授權](assets/fonts/NotoSerifTC-SOURCE.md)。紙框下方 `ToolbarMargin/Toolbar` 依序實例化 `gintama_reading_log.tscn`、`gintama_reading_auto.tscn`、`gintama_reading_skip.tscn`、`gintama_reading_menu.tscn`；小場景的 `Surface/CutoutArt` 是含圖示的透明按鈕底圖，`Contents/Caption` 調整標籤，根 Button 保留獨立觸控範圍，圖面維持原圖比例。另有 `title_screen_gintama.tscn`、`menu_panel_gintama.tscn`、`choice_sheet_gintama.tscn` 與 `choice_item_gintama.tscn`。標題卡 `CardArea/Card` 與設定卡 `Area/Card` 的底圖是去掉下一句三角的和紙 `gintama_panel_paper.png`（StyleBoxTexture 九宮格，只拉長第 140–168 列與第 280–805 欄的素紙，波紋與櫻花不變形），故事切換鈕與設定的 `Header/Plaque` 是去掉喇叭的雲形名牌 `gintama_heading_plaque.png`；按鈕樣式寫在 scene 裡：深藍銀框是主要動作，和紙色是一般選項，選中的設定是深藍金邊（選項是同一個 `ButtonGroup` 的 toggle）。目錄 `Area/Center/Panel` 也是這張和紙，標題 `Heading` 用雲形名牌，`Rows` 裡沒有 `ui_style_role` 的列是和紙色按鈕（快速存讀檔等三列沿用工具列的深藍）。Game Over 與章節結算 `game_over_gintama.tscn`、`chapter_result_gintama.tscn` 是和紙卡 `Center/Card`（結算卡外面包一層 `Scroll`，矮螢幕可捲），根節點 `z_index = 2` 讓卡片蓋過對話框的名牌。對話紀錄、存檔欄位、覆寫確認、章節選擇、人物檔案等共用面板在銀魂和紙下由 `ui_styles.gd` 依 `ui_style_role`（`menu`／`log`／`slots`／`confirmation`）換成同一張和紙（`GINTAMA_PAPER_ROLES`），`standard` 按鈕與存檔卡是和紙色圓角卡。這兩張圖與這些 scene 由 `tools/make_gintama_panels.gd` 產生一次（`-- textures`，`--import`，再 `-- scenes`），之後 scene 是來源檔，沒有 `--force` 不覆寫。場景是維護來源，正常執行不會重建；`tools/add_gintama_edition_scenes.gd` 是早期一次性製作紀錄，已存在新場景時會拒絕執行。
 
 **舞台**：打開 `scenes/stage.tscn`。
 
-- **站位（站哪裡）**：`StageArea` 底下的 `left`／`center`／`right` 是三個通用站位，任何角色都能站，由劇本 `char(角色, 表情, 位置)` 決定誰站哪裡（沒寫位置時用 catalog 的 `slot`）。主角通常站 `left`。框的底邊是腳底線、中線是角色的中心；框的高度是標準身高，三個站位一樣高。框裡的虛線剪影只在編輯器顯示，點剪影會選到整個框。站位只有這三個名字，劇本和存檔都認這三個；要多一個位置得改程式（`scripts/story_runner.gd` 的 `VALID_CHARACTER_POSITIONS`）。
+- **站位（站哪裡）**：`StageArea` 底下的 `left`／`center`／`right` 是三個通用站位，任何角色都能站，由劇本 `char` 的位置決定（沒寫位置時用 catalog 的 `slot`）。拖曳框調整位置，拉上下邊調整高度；底邊是腳底線、中線是角色的中心。框裡分別以新八、銀時、神樂的角色場景作預覽，實際站進去的角色由劇本決定，預覽不會出現在遊戲裡。站位只有這三個名字，劇本和存檔都認這三個；要多一個位置得改程式（`scripts/story_runner.gd` 的 `VALID_CHARACTER_POSITIONS`）。
 - **角色（多大、圖怎麼擺）**：每個角色一個 `scenes/characters/<角色>.tscn`。橘色框是站姿框，和站位框同一個大小；拖曳、縮放裡面的 `Art`，就決定這個角色不論站哪個位置的大小與位置（例如神樂的傘很大，她的 `Art` 比框大 1.13 倍）。框本身不用動。畫面上的大小是「站位高度 × 角色自己的比例」。
 - **說話的人會移到最前面**，其他人變暗；站位靠得很近時，沒說話的人可能被擋住。
 - **背景取景**：`Backgrounds` 底下每個 node 對應 catalog 的一個背景 id（`yorozuya_exterior` 就是萬事屋大樓），圖等比填滿框、置中裁切。把框拉得比畫面大，就能選要露出哪一段，例如左邊拉出去，畫面就往右偏。圖以 `data/asset_catalog.json` 為準，這裡的圖只是預覽。沒有自己 node 的背景（或只有漸層色的）用 `Default`。編輯器裡一次只顯示一張：在場景樹點眼睛圖示切換要調的背景；存檔時哪張開著都沒關係，遊戲會自己顯示當下的背景。
-- `StageArea` 的底邊、`DialogueGuide`（對話框示意）由程式處理，已鎖定，不用調。
+- `StageArea` 是固定的整個舞台，立繪位置不隨對話框高度或字數變動；對話框會遮住立繪下半部。`DialogueGuide` 是編輯器用的對話框示意。`main.tscn` 的 `stage_scene` 欄位可指定另一份舞台場景。
 - 新角色：先在 `data/asset_catalog.json` 登記圖片，再跑 `godot --headless --path . --script res://tools/make_character_scenes.gd`，會替還沒有 scene 的角色建一個（已經有的不會動）。
-- 編輯器的畫框是 1080×1920，手機（390×844）的遊戲區是 1080×2337，比較長：站位跟著對話框走，一樣準；背景的裁切在手機上會不同，調完用手機尺寸跑一次確認。
+- 編輯器畫框是 1920×1080；其他比例會保留橫向構圖並留邊。背景以填滿畫面為準，調完可用目標視窗尺寸試玩。
 - 標題畫面的大樓是另一張：`scenes/ui/title_screen_gintama.tscn` 的 `Background`，一樣用拉框取景。
 
 **在編輯器裡調整**：雙擊 `scenes/ui/*.tscn` 打開，左邊場景樹點選 node，右邊屬性面板改位置、大小、字級、間距；Container 的間距在 Theme Overrides 裡。對話框、選項面板、導演選擇面板、目錄與標題畫面的配色、字級與框線都存在 scene 裡（框線由 `scripts/ui_ornament.gd` 繪製，編輯器裡也畫得出來），看到的就是遊戲裡的樣子；其他畫面（對話紀錄、存讀檔欄位、結尾按鈕）的顏色與框線仍是執行時由 `ui_styles.gd` 套上，編輯器裡是 Godot 預設灰色。
 
 ## 發現
 
-- 版面：原版 28% 對話框在 390×844、360×800、320×568 都放得下三行字、兩個選項與懸浮按鈕。底部全寬、無邊框對話層的素材試版也通過主線、Phase 3 四選項與存讀檔 Web 觸控檢查；桌機維持 1080 寬的直式遊戲區。採用哪一版仍待真人手機試玩。
+- 版面：預設橫向 16:9。閱讀框使用固定正文區，長文分頁；四個工具列按鈕保留透明底圖的原始比例。調查及吐槽控制需要時可增加面板高度，舞台仍保持固定。
 - 觸控：以放開手指判定點擊，長按、拖曳、恢復 UI 的那一下都不會誤推進劇情。
 - 劇本資料：不改 GDScript 即可切換背景、立繪、站位、表情與素材條件選項；兩條技術片段路線在 Web 實跑並可續讀。
 - 核心短循環：調查熱區取得素材後，銀時的兩句發言可切換與聽補充；進入吐槽選詞才開始倒數。完美／普通／冷場／隱藏結果、眼鏡、吐槽之力與檢查點可由劇本資料與 UI 測試驗證。
@@ -252,7 +259,7 @@ node tools/browser_check.mjs --backup --playwright /path/to/node_modules/@playwr
 
 ## 素材來源
 
-- 背景與立繪：使用者加入 `assets/image/` 的 PNG（外觀、客廳、廚房 `kitchen.png`；新八、銀時、神樂、登勢、定春、伊莉莎白），在 `data/asset_catalog.json` 登記。站位的虛線剪影是 `assets/editor/stand_in.svg`，只在編輯器顯示。每個角色要畫哪些表情（生氣、慌張、緊張……）見 [表情清單](../../docs/story-telling-game/EXPRESSIONS.md)；表情圖登記在角色的 `expressions`，還沒有的先用原本那張。
+- 背景與立繪：使用者加入 `assets/image/` 的 PNG（外觀、客廳、廚房 `kitchen.png`；新八、銀時、神樂、登勢、定春、伊莉莎白），在 `data/asset_catalog.json` 登記。站位預覽直接實例化既有角色 scene，只在編輯器顯示。每個角色要畫哪些表情（生氣、慌張、緊張……）見 [表情清單](../../docs/story-telling-game/EXPRESSIONS.md)；表情圖登記在角色的 `expressions`，還沒有的先用原本那張。
 - 音效與稀疏背景音：`tools/prepare_audio.py` 產生的原創 PCM WAV，可重建。
 - 中文字型：WenQuanYi Zen Hei，隨附 `assets/fonts/COPYRIGHT.txt` 與 `LICENSE-GPL-2.txt`，包含字型嵌入例外及 M+ FONTS 授權文字。
 

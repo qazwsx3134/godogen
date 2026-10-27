@@ -23,8 +23,8 @@ Store="*res://scenes/store.tscn"
 
 window/size/viewport_width=720
 window/size/viewport_height=1280
-window/size/window_width_override=390
-window/size/window_height_override=844
+window/size/window_width_override=430
+window/size/window_height_override=932
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 window/handheld/orientation=1

@@ -71,8 +71,8 @@ variation_opentype = {
 }
 
 [node name="Menu" type="Button" unique_id=125961985]
-custom_minimum_size = Vector2(0, 133)
-size_flags_horizontal = 3
+custom_minimum_size = Vector2(195, 150)
+size_flags_horizontal = 0
 tooltip_text = "選單"
 theme_override_styles/normal = SubResource("StyleBoxEmpty_typ2l")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_7c0tw")
@@ -90,8 +90,8 @@ unique_name_in_owner = true
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 35.0
-offset_bottom = -36.0
+offset_top = 44.0
+offset_bottom = -44.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_opugl")
 

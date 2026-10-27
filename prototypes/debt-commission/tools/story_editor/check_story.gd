@@ -8,6 +8,8 @@ extends SceneTree
 ## 3. `version` equals StoryBuilder.fingerprint(story). A stale one is reported; with --write it is fixed
 ##    in place and the file is rewritten in the build's format (sorted keys), but only when 1 and 2 pass.
 ## Prints OK and exits 0, or prints every problem and exits 1. Without --write the file is not touched.
+## --allow-unreachable is for a private preview that starts partway through a story; it still runs the
+## game validator and computes the fingerprint, but does not certify the complete story for publication.
 ## --reach-all prints, for each node taken as the start, the nodes it cannot reach (test_core.mjs compares
 ## that table with the editor's own reachability).
 ## A relative path is relative to the project; absolute and user:// paths are kept.
@@ -23,7 +25,7 @@ func _init() -> void:
 	var args: PackedStringArray = OS.get_cmdline_user_args()
 	var paths: Array = Array(args).filter(func(a: String) -> bool: return not a.begins_with("--"))
 	if paths.size() != 1:
-		printerr("usage: check_story.gd -- <story.json> [--write] [--reach-all] [--catalog=res://…]")
+		printerr("usage: check_story.gd -- <story.json> [--write] [--reach-all] [--allow-unreachable] [--catalog=res://…]")
 		quit(2)
 		return
 	var path: String = _project_path(paths[0])
@@ -58,7 +60,7 @@ func _init() -> void:
 	if not runner.call("load_story", path, catalog):
 		problems.append("StoryRunner rejects it: %s" % runner.get("error_message"))
 	var unreachable: Array[String] = StoryBuilder._unreachable(entry, nodes)
-	if not unreachable.is_empty():
+	if not unreachable.is_empty() and not args.has("--allow-unreachable"):
 		problems.append("unreachable from '%s' (%d): %s" % [entry, unreachable.size(), ", ".join(unreachable)])
 	var expected: String = StoryBuilder.fingerprint(story)
 	var stale: bool = String(story.get("version", "")) != expected

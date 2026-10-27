@@ -200,6 +200,11 @@
       const node = asObject(nodes[id]);
       if (!text(node.title)) problems.push({ type: 'node', node: id, message: 'title 不能是空的' });
       if (!asArray(node.steps).length) problems.push({ type: 'node', node: id, message: '沒有任何步驟' });
+      asArray(node.steps).slice(0, -1).forEach((step, index) => {
+        if (NEEDS_NO_NEXT.includes(asObject(step).op))
+          problems.push({type: 'terminal-middle', node: id, step: index,
+            message: `第 ${index + 1} 步「${stepLabel(step)}」之後的步驟不會執行，請調整順序或移除。`});
+      });
       if ('next' in node && FORBIDS_NEXT.includes(finalOp(node))) problems.push({ type: 'terminal-next', node: id, edge: 'next', message: `${finalOp(node)} 節點不能有 next` });
       for (const edge of edges[id]) {
         if (!edge.target) {
@@ -272,6 +277,26 @@
     const steps = node.steps;
     if (TERMINAL_STEP_OPS.includes(op) || !steps.length) return steps.length;
     return TERMINAL_STEP_OPS.includes(steps[steps.length - 1].op) ? steps.length - 1 : steps.length;
+  }
+
+  /** Keep a scene's terminator last; replace only the untouched placeholder ending. */
+  function addStep(node, step) {
+    const steps = node.steps;
+    const previous = steps.findIndex(item => NEEDS_NO_NEXT.includes(asObject(item).op));
+    if (previous >= 0 && previous !== steps.length - 1) return '場景的結尾或分支後面還有步驟，請先調整順序。';
+    const terminal = NEEDS_NO_NEXT.includes(step.op);
+    if (terminal && FORBIDS_NEXT.includes(step.op) && node.next)
+      return '這個場景已有後續連線，請先斷開連線，再新增結尾或選項。';
+    if (terminal && previous >= 0) {
+      const current = steps[previous];
+      if (current.op === 'end' && current.text === '（尚未寫完）' && Object.keys(current).length === 2) {
+        steps.splice(previous, 1, step);
+        return '';
+      }
+      return '這個場景已有結尾或分支，請先刪除原有的終止步驟。';
+    }
+    steps.splice(insertIndex(node, step.op), 0, step);
+    return '';
   }
 
   // Starting points for the ops the sidebar can add. Anything else starts as {op} and is edited as JSON.
@@ -610,7 +635,7 @@
     STEP_GROUPS, STEP_LABELS, stepLabel, foldShape, stepGroup, stepRuns, runExpanded, flowRows, effectiveMedia, graphCopy, availableExpressions,
     packEntries, resolveCatalog, usedAssets, missingArt,
     stringify, exportText, formatNumber, edgesOf, setEdge, clearEdge, analyze, reachableFrom, isEnding, renameNode, deleteNode,
-    uniqueId, newNode, newStory, newStep, insertIndex, STEP_TEMPLATES, GEOM, OP_ICONS, icon, summaryOf, cardSize, portOffset,
+    uniqueId, newNode, newStory, newStep, insertIndex, addStep, STEP_TEMPLATES, GEOM, OP_ICONS, icon, summaryOf, cardSize, portOffset,
     inPortOffset, autoLayout, parseGdStrings, FALLBACK_ENUMS, projectUrl, finalOp, NEEDS_NO_NEXT, FORBIDS_NEXT,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;

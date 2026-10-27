@@ -1652,6 +1652,8 @@ func _validate_node(current_node_id: String, node: Dictionary, nodes: Dictionary
         if not step_error.is_empty():
             return step_error
         final_op = String(step.get("op", ""))
+        if index < steps.size() - 1 and final_op in ["end", "result", "choice", "goto", "condition", "boke_round"]:
+            return "node '%s' step %d (%s) ends the scene; later steps cannot execute" % [current_node_id, index, final_op]
 
     if (final_op == "end" or final_op == "result") and node.has("next"):
         return "%s node '%s' cannot have next" % [final_op, current_node_id]

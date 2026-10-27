@@ -2,9 +2,80 @@
 
 [ext_resource type="FontFile" path="res://assets/fonts/story-cjk.ttc" id="1_c3glf"]
 [ext_resource type="Script" path="res://scripts/investigate_bar.gd" id="2_15hkm"]
+[ext_resource type="PackedScene" path="res://scenes/ui/gintama_investigate_toggle.tscn" id="3_kyohw"]
+[ext_resource type="Script" path="res://scripts/gintama_reading_button.gd" id="4_ls0de"]
+[ext_resource type="Texture2D" path="res://assets/ui/gintama_extracted_menu.png" id="5_uwfu1"]
+[ext_resource type="Texture2D" path="res://assets/ui/gintama_icon_menu.svg" id="6_w0b5w"]
+[ext_resource type="FontFile" path="res://assets/fonts/NotoSerifTC.ttf" id="7_cq16d"]
 
 [sub_resource type="Theme" id="Theme_mw6bh"]
 default_font = ExtResource("1_c3glf")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_typ2l"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7c0tw"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_s5opn"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xy76x"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_808rs"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0ma3d"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mo5d4"]
+content_margin_left = 18.0
+content_margin_top = 10.0
+content_margin_right = 18.0
+content_margin_bottom = 10.0
+bg_color = Color(0.03137255, 0.15686275, 0.23921569, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.7490196, 0.78039217, 0.80784315, 1)
+corner_radius_top_left = 17
+corner_radius_top_right = 17
+corner_radius_bottom_right = 17
+corner_radius_bottom_left = 17
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4r0cg"]
+content_margin_left = 18.0
+content_margin_top = 10.0
+content_margin_right = 18.0
+content_margin_bottom = 10.0
+bg_color = Color(0.1254902, 0.3019608, 0.41568628, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.84313726, 0.75686276, 0.54509807, 1)
+corner_radius_top_left = 17
+corner_radius_top_right = 17
+corner_radius_bottom_right = 17
+corner_radius_bottom_left = 17
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_201d3"]
+content_margin_left = 18.0
+content_margin_top = 10.0
+content_margin_right = 18.0
+content_margin_bottom = 10.0
+bg_color = Color(0.19607843, 0.39607844, 0.50980395, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.7490196, 0.78039217, 0.80784315, 1)
+corner_radius_top_left = 17
+corner_radius_top_right = 17
+corner_radius_bottom_right = 17
+corner_radius_bottom_left = 17
+
+[sub_resource type="FontVariation" id="FontVariation_tigw3"]
+base_font = ExtResource("7_cq16d")
+variation_opentype = {
+2003265652: 500.0
+}
 
 [node name="InvestigateBar" type="MarginContainer" unique_id=1756558891]
 anchor_top = 1.0
@@ -13,40 +84,179 @@ anchor_bottom = 1.0
 grow_vertical = 0
 mouse_filter = 2
 theme = SubResource("Theme_mw6bh")
-theme_override_constants/margin_left = 33
-theme_override_constants/margin_right = 33
-theme_override_constants/margin_bottom = 33
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
 script = ExtResource("2_15hkm")
 
-[node name="Panel" type="PanelContainer" parent="." unique_id=1741052086]
+[node name="Content" type="Control" parent="." unique_id=1072265959]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Panel" type="PanelContainer" parent="Content" unique_id=1741052086]
 unique_name_in_owner = true
-layout_mode = 2
-
-[node name="Padding" type="MarginContainer" parent="Panel" unique_id=1423990264]
-layout_mode = 2
+self_modulate = Color(1, 1, 1, 0.25)
+layout_mode = 0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -80.0
 mouse_filter = 2
-theme_override_constants/margin_left = 22
-theme_override_constants/margin_top = 22
-theme_override_constants/margin_right = 22
-theme_override_constants/margin_bottom = 22
 
-[node name="Row" type="HBoxContainer" parent="Panel/Padding" unique_id=1683234750]
-layout_mode = 2
+[node name="Row" type="HBoxContainer" parent="Content" unique_id=850369988]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
 mouse_filter = 2
-theme_override_constants/separation = 28
+theme_override_constants/separation = 12
 
-[node name="Progress" type="Label" parent="Panel/Padding/Row" unique_id=2106734361]
+[node name="ProgressPadding" type="MarginContainer" parent="Content/Row" unique_id=630127463]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 80
+theme_override_constants/margin_right = 12
+
+[node name="Progress" type="Label" parent="Content/Row/ProgressPadding" unique_id=2106734361]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 36
-text = "線索 1/4・左右拖曳背景，點畫面上的東西調查"
+theme_override_font_sizes/font_size = 28
+theme_override_colors/font_outline_color = Color(1, 0.98, 0.92, 0.85)
+theme_override_constants/outline_size = 3
+text = "線索 1/4 · 拖曳背景調查"
 vertical_alignment = 1
-autowrap_mode = 3
+clip_text = true
 
-[node name="Expand" type="Button" parent="Panel/Padding/Row" unique_id=720953095]
+[node name="Continue" parent="Content/Row" unique_id=125961985 instance=ExtResource("3_kyohw")]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(199.38461, 132.92308)
+visible = false
+custom_minimum_size = Vector2(195, 150)
 layout_mode = 2
-theme_override_font_sizes/font_size = 36
+size_flags_horizontal = 0
+tooltip_text = "繼續 ▶"
+theme_override_styles/normal = SubResource("StyleBoxEmpty_typ2l")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_7c0tw")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_s5opn")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_xy76x")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_808rs")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_0ma3d")
+script = ExtResource("4_ls0de")
+normal_surface = SubResource("StyleBoxFlat_mo5d4")
+hover_surface = SubResource("StyleBoxFlat_4r0cg")
+active_surface = SubResource("StyleBoxFlat_201d3")
+
+[node name="Surface" parent="Content/Row/Continue" index="0" unique_id=1550677594]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -72.0
+offset_bottom = -10.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_mo5d4")
+
+[node name="CutoutArt" parent="Content/Row/Continue/Surface" index="0" unique_id=2048631398]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource("5_uwfu1")
+expand_mode = 1
+
+[node name="Contents" parent="Content/Row/Continue/Surface" index="1" unique_id=1164846061]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Icon" parent="Content/Row/Continue/Surface/Contents" index="0" unique_id=1960964776]
+visible = false
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("6_w0b5w")
+expand_mode = 1
+
+[node name="Caption" parent="Content/Row/Continue/Surface/Contents" index="1" unique_id=948021775]
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_tigw3")
+theme_override_font_sizes/font_size = 27
+theme_override_colors/font_color = Color(0.9607843, 0.95686275, 0.93333334, 1)
+text = "繼續 ▶"
+vertical_alignment = 1
+
+[node name="Expand" parent="Content/Row" unique_id=700992859 instance=ExtResource("3_kyohw")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(195, 150)
+layout_mode = 2
+size_flags_horizontal = 0
+tooltip_text = "展開 ▲"
+theme_override_styles/normal = SubResource("StyleBoxEmpty_typ2l")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_7c0tw")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_s5opn")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_xy76x")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_808rs")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_0ma3d")
+script = ExtResource("4_ls0de")
+normal_surface = SubResource("StyleBoxFlat_mo5d4")
+hover_surface = SubResource("StyleBoxFlat_4r0cg")
+active_surface = SubResource("StyleBoxFlat_201d3")
+
+[node name="Surface" parent="Content/Row/Expand" index="0" unique_id=1550677594]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -72.0
+offset_bottom = -10.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_mo5d4")
+
+[node name="CutoutArt" parent="Content/Row/Expand/Surface" index="0" unique_id=2048631398]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource("5_uwfu1")
+expand_mode = 1
+
+[node name="Contents" parent="Content/Row/Expand/Surface" index="1" unique_id=1164846061]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Icon" parent="Content/Row/Expand/Surface/Contents" index="0" unique_id=1960964776]
+visible = false
+custom_minimum_size = Vector2(34, 34)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+texture = ExtResource("6_w0b5w")
+expand_mode = 1
+
+[node name="Caption" parent="Content/Row/Expand/Surface/Contents" index="1" unique_id=948021775]
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_tigw3")
+theme_override_font_sizes/font_size = 27
+theme_override_colors/font_color = Color(0.9607843, 0.95686275, 0.93333334, 1)
 text = "展開 ▲"
+vertical_alignment = 1
+
+[editable path="Content/Row/Continue"]
+[editable path="Content/Row/Expand"]

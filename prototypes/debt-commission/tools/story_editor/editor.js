@@ -15,7 +15,7 @@
   const SVG_NS = 'http://www.w3.org/2000/svg';
   const LAYOUT_KEY = 'debtStoryEditor.layout.';
   const DASHED = new Set(['spot', 'talk', 'round', 'over']);
-  const PROBLEM_ICON = { unreachable: '🔴', dangling: '🔴', entry: '🔴', unconnected: '🟠', 'terminal-next': '🟠', node: '🟠' };
+  const PROBLEM_ICON = { unreachable: '🔴', dangling: '🔴', entry: '🔴', unconnected: '🟠', 'terminal-next': '🟠', 'terminal-middle': '🔴', node: '🟠' };
 
   const $ = id => document.getElementById(id);
   const view = $('view');
@@ -67,6 +67,7 @@
 
   let projectSource = { path: '', hash: null, ready: true };
   let projectSaving = false;
+  let previewStarting = false;
   let saveIssues = [];
   const registryText = value => JSON.stringify(value || {stories:[]}, null, 2) + '\n';
   let confirmedRegistryText = '';
@@ -708,6 +709,10 @@
     if (problem.node && problem.node in S.story.nodes) {
       centerOn(problem.node);
       select(problem.edge ? { type: 'edge', node: problem.node, key: problem.edge } : { type: 'node', id: problem.node });
+      if (Number.isInteger(problem.step)) {
+        const target = $('inspector').querySelector(`[data-step="${problem.step}"]`);
+        if (target) { target.scrollIntoView({block: 'nearest'}); target.classList.add('search-hit'); }
+      }
     } else {
       $('info').querySelector('select')?.focus();
     }
@@ -804,10 +809,45 @@
       step[key] = v; stopAudio(); touch({ inspector: true });
     }, empty);
   }
-  function characterPreview(step) {
-    const c = S.catalog?.characters?.[step.id || step.speaker];
-    const path = c?.expressions?.[step.expression] || c?.path;
-    return path && el('img', { class: 'character-preview', alt: `${c.name || step.id} ${step.expression || 'neutral'}`, src: Core.projectUrl(path) });
+  /** A visual editor for the runner's existing left/center/right stage positions. */
+  function characterPositionEditor(step) {
+    const character = S.catalog?.characters?.[step.id];
+    const places = ['left', 'center', 'right'];
+    const labels = {left: '左側', center: '中央', right: '右側'};
+    const selected = places.includes(step.position) ? step.position : places.includes(character?.slot) ? character.slot : 'center';
+    const fraction = place => ({left: 1 / 6, center: 1 / 2, right: 5 / 6})[place];
+    const picture = character?.expressions?.[step.expression] || character?.path;
+    const actor = el('div', {class: 'stage-position-actor', style: {left: `${fraction(selected) * 100}%`},
+      title: '拖曳角色到左、中或右站位'},
+      picture ? el('img', {class: 'character-preview', src: Core.projectUrl(picture), alt: `${character?.name || step.id} ${step.expression || 'neutral'}`, draggable: false})
+        : el('span', {class: 'stage-position-placeholder'}, character?.name || step.id || '角色'));
+    const stage = el('div', {class: 'stage-position-preview', 'aria-label': '角色站位示意'},
+      ...places.map(place => el('span', {class: `stage-position-guide ${place === selected ? 'selected' : ''}`}, labels[place])), actor);
+    let dragging = false;
+    const point = event => clamp((event.clientX - stage.getBoundingClientRect().left) / stage.getBoundingClientRect().width, 0, 1);
+    const choose = place => {
+      if (isReadOnly()) return;
+      step.position = place;
+      touch({inspector: true});
+    };
+    actor.addEventListener('pointerdown', event => {
+      if (isReadOnly() || event.button !== 0) return;
+      dragging = true; actor.setPointerCapture(event.pointerId); event.preventDefault();
+      actor.classList.add('dragging');
+    });
+    actor.addEventListener('pointermove', event => { if (dragging) actor.style.left = `${point(event) * 100}%`; });
+    actor.addEventListener('pointerup', event => {
+      if (!dragging) return;
+      dragging = false; actor.classList.remove('dragging');
+      const x = point(event);
+      choose(x < 1 / 3 ? 'left' : x < 2 / 3 ? 'center' : 'right');
+    });
+    actor.addEventListener('pointercancel', () => { dragging = false; actor.classList.remove('dragging'); actor.style.left = `${fraction(selected) * 100}%`; });
+    const buttons = places.map(place => el('button', {type: 'button', class: place === selected ? 'selected' : '',
+      'aria-pressed': String(place === selected), onclick: () => choose(place)}, labels[place]));
+    return el('div', {class: 'stage-position-editor'}, stage,
+      el('div', {class: 'stage-position-actions'}, ...buttons),
+      el('p', {class: 'note'}, '拖曳立繪或按按鈕切換站位。位置與大小的精調在 Godot 的舞台和角色場景。'));
   }
   function scalarControl(obj, key, numberOnly = false) {
     const input = el('input', { type: 'text', value: JSON.stringify(obj[key] ?? (numberOnly ? 1 : true)), 'aria-label': key });
@@ -849,7 +889,8 @@
     bgm: step => [field('BGM', assetSelect('music', step, 'id', '無（停止音樂）')), field('試聽', audioButton(step.id))],
     se: step => [field('音效', assetSelect('sounds', step))],
     char: step => [field('角色', assetSelect('characters', step)), field('表情', expressionControl(step)), voicePitch(step),
-      field('預覽', characterPreview(step)), field('站位', select2(['left', 'center', 'right'], step.position, v => { if (v) step.position = v; else delete step.position; touch(); }, '（角色預設）')),
+      field('站位', select2(['left', 'center', 'right'], step.position, v => { if (v) step.position = v; else delete step.position; touch({inspector: true}); }, '（角色預設）')),
+      field('舞台', characterPositionEditor(step)),
       field('顯示', select2([{value:'default',label:'預設'},{value:'true',label:'顯示'},{value:'false',label:'隱藏'}], step.visible === undefined ? 'default' : String(step.visible), v => { if(v === 'default') delete step.visible; else step.visible = v === 'true'; touch(); })), field('', checkbox(step, 'enter', '登場'))],
     profile: step => [field('角色檔案', assetSelect('characters', step))],
     item: step => [field('取得道具', assetSelect('items', step))],
@@ -943,7 +984,9 @@
   }
 
   function applyReadOnly() {
-    for (const area of [$('info'), $('inspector')]) area.querySelectorAll('input,textarea,select,button').forEach(c => { c.disabled = isReadOnly() && !c.hasAttribute('data-audition') && !c.dataset.registryField; });
+    for (const area of [$('info'), $('inspector')]) area.querySelectorAll('input,textarea,select,button').forEach(c => {
+      c.disabled = (isReadOnly() && !c.hasAttribute('data-audition') && !c.dataset.registryField) || (c.id === 'previewStart' && previewStarting);
+    });
   }
 
   function renderInspector() {
@@ -993,17 +1036,87 @@
     box.append(el('div', { class: 'actions' },
       button(id === S.story.entry ? '✓ 這是 entry' : '設為 entry', () => { S.story.entry = id; renderInfo(); touch({ inspector: true }); }),
       button('刪除節點', () => removeNode(id), 'danger')));
+    if (S.service) box.append(previewControls(id));
     box.append(el('h3', {}, `步驟（${node.steps.length}）`), ...node.steps.map((step, index) => stepBox(node, step, index)));
     const op = el('select', { id: 'addStepOp', size: 16, 'aria-label': '新增步驟分類' }, Core.STEP_GROUPS.slice(0, 7).map(group => el('optgroup', {label: group.label}, group.ops.map(name => el('option', {value: `${group.id}:${name}`}, `${Core.icon(name)} ${Core.stepLabel({op:name,speaker:group.id === 'narration' ? 'narrator' : 'speaker'})}（${name}）`)))));
     op.value = 'dialogue:say';
     box.append(el('details', {id: 'addStepPicker', class: 'step-picker'}, el('summary', {}, '選擇步驟類型（七類）'), op));
+    const addStepError = el('div', {class: 'err', role: 'alert'});
+    box.append(addStepError);
     box.append(el('div', { class: 'actions' }, button('＋ 新增步驟', () => {
       const [category, name] = op.value.split(':');
       const step = Core.newStep(name);
       if (name === 'say') step.speaker = category === 'narration' ? 'narrator' : Object.keys(S.catalog?.characters || {})[0] || 'speaker';
-      node.steps.splice(Core.insertIndex(node, name), 0, step);
+      const error = Core.addStep(node, step);
+      if (error) { addStepError.textContent = error; return; }
       touch({ inspector: true });
     })));
+  }
+
+  function previewControls(id) {
+    const flagInputs = new Map(), itemInputs = new Map();
+    const flagRows = Object.entries(S.story.initial_flags || {}).map(([key, value]) => {
+      let input;
+      if (typeof value === 'boolean') {
+        input = el('select', {'data-audition': 'true'},
+          el('option', {value: 'true'}, '是'), el('option', {value: 'false'}, '否'));
+        input.value = String(value);
+      } else {
+        input = el('input', {type: typeof value === 'number' ? 'number' : 'text',
+          value: String(value), 'data-audition': 'true'});
+        if (typeof value === 'number') input.step = 'any';
+      }
+      flagInputs.set(key, {input, type: typeof value});
+      return field(key, input);
+    });
+    const itemRows = Object.entries(S.catalog?.items || {}).map(([key, value]) => {
+      const input = el('input', {type: 'checkbox', 'data-audition': 'true'});
+      itemInputs.set(key, input);
+      return el('label', {class: 'preview-item'}, input, `${value.name || key}（${key}）`);
+    });
+    const start = el('button', {id: 'previewStart', class: 'primary', 'data-audition': 'true', disabled: previewStarting}, '從這裡試玩');
+    start.addEventListener('click', async () => {
+      if (previewStarting) return;
+      const flags = {};
+      for (const [key, {input, type}] of flagInputs) {
+        if (type === 'number' && (!input.value.trim() || !Number.isFinite(Number(input.value)))) {
+          failure(`旗標 ${key} 請填入數字。`); return;
+        }
+        flags[key] = type === 'boolean' ? input.value === 'true' : type === 'number' ? Number(input.value) : input.value;
+      }
+      const source = projectSource, submitted = storyText();
+      const work = packOf(workOf(source.path));
+      const payload = {path: source.path, story: JSON.parse(submitted), node: id, flags,
+        items: [...itemInputs].filter(([, input]) => input.checked).map(([key]) => key),
+        skin: currentRegistryEntry().skin || work?.pack.skin || ''};
+      previewStarting = true; start.disabled = true; start.textContent = '正在啟動…';
+      S.error = ''; S.notice = ''; saveIssues = []; renderBanner(); renderProblems(); renderStatus();
+      try {
+        const response = await fetch('../../api/preview', {method: 'POST',
+          headers: {'Content-Type': 'application/json', 'X-Story-Editor-Token': S.service.token}, body: JSON.stringify(payload)});
+        const result = await response.json();
+        if (projectSource !== source) return;
+        if (!response.ok || result.ok !== true) {
+          const errors = [result.error || '試玩未能啟動', ...(result.errors || [])];
+          saveIssues = errors.map(message => ({type: 'validation', message}));
+          failure(errors[0]); renderProblems(); return;
+        }
+        S.notice = storyText() === submitted ? result.message : '試玩已開啟，內容是按下按鈕時的版本；後續修改仍在編輯器。';
+        renderBanner(); renderStatus();
+      } catch (err) {
+        if (projectSource === source) failure(`無法啟動試玩：${err.message}。修改仍在編輯器。`);
+      } finally {
+        previewStarting = false;
+        const current = $('previewStart');
+        if (current) { current.disabled = false; current.textContent = '從這裡試玩'; }
+      }
+    });
+    return el('details', {id: 'previewConfig', class: 'preview-config'},
+      el('summary', {}, '試玩這個場景'),
+      el('p', {class: 'note'}, '可調整本次旗標與線索；背景、角色與音樂從這個場景開始，不會自動重播前面的劇情。'),
+      flagRows.length ? el('div', {class: 'preview-section'}, el('strong', {}, '旗標'), ...flagRows) : null,
+      itemRows.length ? el('div', {class: 'preview-section'}, el('strong', {}, '已取得的線索'), ...itemRows) : null,
+      el('div', {class: 'actions'}, start));
   }
 
   function renderAll() {

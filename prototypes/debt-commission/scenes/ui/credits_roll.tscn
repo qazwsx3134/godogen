@@ -6,7 +6,7 @@
 
 [node name="CreditsRoll" type="Control" unique_id=533803946]
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource("1_ngeid")
@@ -22,7 +22,7 @@ layout_mode = 0
 anchor_right = 1.0
 offset_top = 48.0
 offset_bottom = 160.0
-theme_override_font_sizes/font_size = 56
+theme_override_font_sizes/font_size = 42
 theme_override_colors/font_color = Color(1, 0.99215686, 0.9607843, 1)
 text = "製作名單"
 horizontal_alignment = 1
@@ -52,17 +52,26 @@ unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
 
-[node name="PreviewSection" parent="Scroll/Roll" unique_id=319255937 instance=ExtResource("2_pcjb0")]
+[node name="PreviewSection" type="Label" parent="Scroll/Roll" unique_id=319255937 instance=ExtResource("2_pcjb0")]
+custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
+theme_override_font_sizes/font_size = 38
+theme_override_colors/font_color = Color(1, 0.99215686, 0.9607843, 1)
+text = "第一章・萬事屋冰箱草莓牛奶失竊事件"
+horizontal_alignment = 1
+vertical_alignment = 2
+autowrap_mode = 3
+metadata/ui_style_role = "title_overlay"
 
-[node name="PreviewEntry" parent="Scroll/Roll" unique_id=308724174 instance=ExtResource("3_slemu")]
+[node name="PreviewEntry" type="VBoxContainer" parent="Scroll/Roll" unique_id=308724174 instance=ExtResource("3_slemu")]
 layout_mode = 2
+theme_override_constants/separation = 8
 
 [node name="End" type="Label" parent="Scroll/Roll" unique_id=962104277]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 240)
 layout_mode = 2
-theme_override_font_sizes/font_size = 44
+theme_override_font_sizes/font_size = 33
 theme_override_colors/font_color = Color(1, 0.99215686, 0.9607843, 1)
 text = "— 完 —"
 horizontal_alignment = 1
@@ -81,6 +90,6 @@ offset_left = -166.0
 offset_top = -180.0
 offset_right = 166.0
 offset_bottom = -48.0
-theme_override_font_sizes/font_size = 44
+theme_override_font_sizes/font_size = 33
 text = "關閉"
 metadata/ui_style_role = "primary"

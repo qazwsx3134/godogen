@@ -447,13 +447,13 @@ func _test_small_reaction_place() -> void:
 
 func _test_narrow_phone() -> void:
 	var original: Vector2i = root.size
-	for phone: Vector2i in [Vector2i(390, 844), Vector2i(320, 568)]:
+	for phone: Vector2i in [Vector2i(800, 450), Vector2i(640, 360)]:
 		root.size = phone
 		await _frames(3)
 		var game: Control = await _new_game()
 		await _frames(3)
-		var narrow: bool = phone.x < 390
-		_expect(game._panel_scale > 1.2 if narrow else game._panel_scale < 1.01,
+		var narrow: bool = phone.x < 720
+		_expect(game._panel_scale > 1.1 if narrow else game._panel_scale < 1.01,
 			"%d px wide: the panels scale by %.3f" % [phone.x, game._panel_scale])
 		game._on_begin_pressed()
 		await _until(func() -> bool: return game._screen_mode == "story", "story starts")

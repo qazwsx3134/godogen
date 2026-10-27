@@ -79,7 +79,7 @@ theme_override_colors/font_hover_color = Color(0.13333334, 0.13725491, 0.1254902
 theme_override_colors/font_hover_pressed_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
 theme_override_colors/font_disabled_color = Color(0.4, 0.40392157, 0.38039216, 1)
 theme_override_fonts/font = SubResource("FontVariation_re8a5")
-theme_override_font_sizes/font_size = 47
+theme_override_font_sizes/font_size = 35
 text = "儲存進度"
 alignment = 0
 
@@ -92,7 +92,7 @@ anchor_bottom = 1.0
 offset_left = -33.23077
 offset_right = -33.23077
 grow_horizontal = 0
-theme_override_font_sizes/font_size = 47
+theme_override_font_sizes/font_size = 35
 theme_override_colors/font_color = Color(0.13333334, 0.13725491, 0.1254902, 1)
 text = "＋"
 vertical_alignment = 1

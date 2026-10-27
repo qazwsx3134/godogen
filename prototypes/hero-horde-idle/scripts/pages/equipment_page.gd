@@ -1,8 +1,10 @@
 extends Control
 ## 裝備 (scenes/pages/equipment.tscn, Taskbar Hero's equipment.png page). Top: the 職業武庫, one weapon slot per class
-## (every hero of the class shares it) with its 強化 level, paid in 強化石. Middle: the 專屬飾品 of one march hero
-## (picked from the squad). Bottom: the bag's pieces; 裝備 puts the selected one on: a weapon in its class's slot, a
-## charm on the picked hero. The replaced piece goes back to the bag.
+## (every hero of the class shares it) with its 強化 level, paid in 強化石; 一鍵裝備 puts on the best of the bag for
+## everyone (progression.gd auto_equip). Middle: the 專屬飾品 of any hero, stepped through with ◀ ▶ (the march squad
+## first, then by rarity: progression.gd charm_order), or opened on a hero from the 英雄 page (show_hero). Bottom: the
+## bag's pieces; 裝備 puts the selected one on: a weapon in its class's slot, a charm on the shown hero. The replaced
+## piece goes back to the bag.
 
 signal changed
 signal open_tab(tab: StringName)
@@ -21,7 +23,8 @@ enum Filter { ALL, WEAPON, CHARM }
 
 var progress: RefCounted = null
 var selected_class: int = 1
-var holder_slot: int = 0
+## The hero whose 專屬飾品 is shown (-1 = the march leader).
+var holder: int = -1
 var selected_uid: int = -1
 var filter: int = Filter.ALL
 var names := PackedStringArray()
@@ -33,10 +36,15 @@ func _ready() -> void:
 		(%ArmoryGrid.get_child(c) as Button).pressed.connect(func() -> void:
 			selected_class = c
 			refresh())
-	for k: int in 5:
-		(get_node("%%SquadPick%d" % k) as Button).pressed.connect(func() -> void:
-			holder_slot = k
-			refresh())
+	%PrevHolder.pressed.connect(_step_holder.bind(-1))
+	%NextHolder.pressed.connect(_step_holder.bind(1))
+	%AutoEquipButton.pressed.connect(func() -> void:
+		var before: int = progress.bag.size()
+		progress.auto_equip()
+		var worn: int = before - progress.bag.size()
+		message.emit("一鍵裝備：換上 %d 件" % worn if worn > 0 else "沒有更好的裝備可以換")
+		if worn > 0:
+			changed.emit())
 	for k: int in 3:
 		(%EquipFilter.get_child(k) as Button).pressed.connect(func() -> void:
 			filter = k
@@ -52,7 +60,18 @@ func _ready() -> void:
 
 
 func _holder() -> int:
-	return progress.march[mini(holder_slot, progress.march.size() - 1)]
+	return holder if holder >= 0 else progress.march[0]
+
+
+## Opens the page on hero i's 專屬飾品 (the 英雄 page's 裝備 button).
+func show_hero(i: int) -> void:
+	holder = i
+
+
+func _step_holder(by: int) -> void:
+	var order: Array = progress.charm_order()
+	holder = order[posmod(order.find(_holder()) + by, order.size())]
+	refresh()
 
 
 func _equip() -> void:
@@ -106,14 +125,10 @@ func _armory() -> void:
 
 
 func _charm() -> void:
-	for k: int in 5:
-		var pick: Button = get_node("%%SquadPick%d" % k)
-		pick.visible = k < progress.march.size()
-		if pick.visible:
-			pick.text = Names.hero_name(names, progress.march[k])
-			pick.modulate = Color("fff1b8") if k == holder_slot else Color.WHITE
 	var i: int = _holder()
 	var c: int = Progression.base_class(i)
+	%HolderName.text = "%s　%s %s%s%s" % [Names.hero_name(names, i), PushSim.RARITY_NAMES[progress.rarity(i)],
+		Heroes.FORM_NAMES[Heroes.form(i)], PushSim.CLASS_NAMES[c], "・行軍中" if progress.in_march(i) else ""]
 	%CharmHolderPortrait.texture = Portraits.hero_full(Heroes.form(i), c)
 	%CharmHolderLevel.text = "Lv.%d" % progress.hero_level[i]
 	var item: Dictionary = progress.charm[i]

@@ -7,9 +7,9 @@
 [ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Bold.otf" id="4_if7ry"]
 [ext_resource type="PackedScene" path="res://scenes/components/stage_card.tscn" id="5_rbwj5"]
 
-[sub_resource type="Theme" id="Theme_krmap"]
+[sub_resource type="Theme" id="Theme_4gfec"]
 default_font = ExtResource("1_4gfec")
-default_font_size = 26
+default_font_size = 30
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1s2ed"]
 atlas = ExtResource("2_l6sk3")
@@ -248,9 +248,10 @@ custom_minimum_size = Vector2(941, 1672)
 layout_mode = 3
 anchors_preset = 0
 mouse_filter = 2
-theme = SubResource("Theme_krmap")
+theme = SubResource("Theme_4gfec")
 script = ExtResource("2_4gfec")
 metadata/page_id = "adventure"
+metadata/fusion_readable = true
 
 [node name="DistantLandscape" type="TextureRect" parent="." unique_id=1323579610]
 texture_filter = 1
@@ -408,6 +409,7 @@ theme_override_fonts/font = ExtResource("4_if7ry")
 theme_override_font_sizes/font_size = 42
 text = "冒險"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="ChapterButton" type="Button" parent="." unique_id=437507449]
 unique_name_in_owner = true
@@ -420,7 +422,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("4_if7ry")
-theme_override_font_sizes/font_size = 21
+theme_override_font_sizes/font_size = 27
 theme_override_styles/normal = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/hover = SubResource("StyleBoxFlat_wnl7x")
@@ -460,9 +462,10 @@ theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("4_if7ry")
-theme_override_font_sizes/font_size = 31
+theme_override_font_sizes/font_size = 36
 text = "綠風平原"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="ChapterDescription" type="Label" parent="." unique_id=172326959]
 unique_name_in_owner = true
@@ -474,10 +477,11 @@ offset_bottom = 772.0
 theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 21
+theme_override_font_sizes/font_size = 27
 text = "微風吹過的遠征起點。
 擊敗敵人以獲得金幣與怪獸經驗。"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="RouteTitle" type="Label" parent="." unique_id=1230460997]
 unique_name_in_owner = true
@@ -490,9 +494,10 @@ theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("4_if7ry")
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 32
 text = "關卡路線：點選關卡，決定小隊在哪裡行軍"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="StageGrid" type="GridContainer" parent="." unique_id=1050074699]
 unique_name_in_owner = true
@@ -621,9 +626,10 @@ theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("4_if7ry")
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 29
 text = "可能獲得"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="RewardIcon0" type="TextureRect" parent="." unique_id=6978719]
 unique_name_in_owner = true
@@ -683,9 +689,10 @@ offset_bottom = 1127.0
 theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 26
 text = "戰鬥會沿用目前關卡進度，並持續向前推進。"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="DepartButton" type="Button" parent="." unique_id=2035710646]
 unique_name_in_owner = true
@@ -698,7 +705,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("4_if7ry")
-theme_override_font_sizes/font_size = 31
+theme_override_font_sizes/font_size = 36
 theme_override_styles/normal = SubResource("StyleBoxFlat_bks16")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_bks16")
 theme_override_styles/hover = SubResource("StyleBoxFlat_bks16")
@@ -717,10 +724,11 @@ offset_bottom = 1419.0
 theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 19
+theme_override_font_sizes/font_size = 25
 text = "自動戰鬥會在總覽及其他頁面持續。"
 horizontal_alignment = 1
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="MarchHereButton" type="Button" parent="." unique_id=1427392506]
 unique_name_in_owner = true
@@ -733,7 +741,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("4_if7ry")
-theme_override_font_sizes/font_size = 31
+theme_override_font_sizes/font_size = 36
 theme_override_styles/normal = SubResource("StyleBoxFlat_bks16")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_bks16")
 theme_override_styles/hover = SubResource("StyleBoxFlat_bks16")

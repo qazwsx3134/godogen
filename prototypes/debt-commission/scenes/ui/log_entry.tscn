@@ -2,6 +2,11 @@
 
 [ext_resource type="PackedScene" path="res://scenes/ui/item_picture.tscn" id="1_25w5n"]
 [ext_resource type="FontFile" path="res://assets/fonts/NotoSerifTC.ttf" id="1_sypon"]
+[ext_resource type="FontFile" path="res://assets/fonts/story-cjk.ttc" id="2_4qhiu"]
+[ext_resource type="Script" path="res://scripts/item_picture.gd" id="3_lkvxy"]
+
+[sub_resource type="Theme" id="Theme_fwwn3"]
+default_font = ExtResource("2_4qhiu")
 
 [sub_resource type="FontVariation" id="FontVariation_25w5n"]
 base_font = ExtResource("1_sypon")
@@ -12,11 +17,16 @@ variation_opentype = {
 [node name="LogEntry" type="HBoxContainer" unique_id=1998972921]
 theme_override_constants/separation = 20
 
-[node name="Avatar" parent="." unique_id=408534221 instance=ExtResource("1_25w5n")]
+[node name="Avatar" type="TextureRect" parent="." unique_id=408534221 instance=ExtResource("1_25w5n")]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(88, 88)
 layout_mode = 2
 size_flags_vertical = 0
+mouse_filter = 2
+theme = SubResource("Theme_fwwn3")
+expand_mode = 1
+stretch_mode = 5
+script = ExtResource("3_lkvxy")
 label = "銀"
 
 [node name="Body" type="VBoxContainer" parent="." unique_id=1323433940]
@@ -38,7 +48,7 @@ metadata/ui_style_role = "body"
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_25w5n")
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 30
 theme_override_colors/font_color = Color(0.1254902, 0.23921569, 0.3254902, 1)
 text = "今天也完全沒有工作啊。"
 autowrap_mode = 3

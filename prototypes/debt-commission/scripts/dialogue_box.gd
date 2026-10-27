@@ -1,8 +1,8 @@
 extends MarginContainer
 ## The reading box, one scene per UI edition: scenes/ui/dialogue_box_<style>.tscn.
 ## Frames, spacing and colors live in the scene; this script only fills it and reports taps.
-## The box sits at the bottom of the game area and grows upward to fit the whole line, so its
-## height stays put while the line types out (visible_characters after shaping).
+## The authored reading area stays the same height as ordinary lines change. Longer lines
+## remain inside the box and can be read a page at a time.
 
 signal menu_pressed
 signal log_pressed
@@ -32,6 +32,7 @@ var _plate_width: float = 0.0
 @onready var auto_button: Button = %Auto
 @onready var skip_button: Button = get_node_or_null("%Skip") as Button
 @onready var advance_button: Button = %Advance
+@onready var page_hint: Label = get_node_or_null("%PageHint") as Label
 ## Action widgets in the slot: the investigation row (continue) and the round bar with its censor
 ## bar. While main shows the continue button, the 收起 tab on the box's top-right edge shows too.
 @onready var investigation_row: Control = %InvestigationRow
@@ -54,11 +55,15 @@ var _plate_width: float = 0.0
 @onready var _body_color: Color = text.get_theme_color("default_color")
 @onready var _normal_font_size: int = text.get_theme_font_size("normal_font_size")
 var _paper_style: StyleBox
+var _line_advance: bool = false
 
 
 func _ready() -> void:
-	# Scaled up on narrow phones (main.gd _ui_scale), the box grows from its bottom-left corner.
+	# Scaling keeps the authored bottom edge in place.
 	resized.connect(func() -> void: pivot_offset = Vector2(0.0, size.y))
+	text.get_v_scroll_bar().changed.connect(_refresh_page_hint)
+	text.get_v_scroll_bar().value_changed.connect(func(_value: float) -> void: _refresh_page_hint())
+	text.resized.connect(_refresh_page_hint)
 	actions.child_entered_tree.connect(_on_action_added)
 	actions.child_exiting_tree.connect(_on_action_removed)
 	for child: Node in actions.get_children():  # the widgets the scene already holds
@@ -73,6 +78,60 @@ func _ready() -> void:
 	investigation_continue.visibility_changed.connect(func() -> void:
 		investigation_row.visible = investigation_continue.visible
 		collapse_tab.visible = investigation_continue.visible)
+	_refresh_page_hint.call_deferred()
+
+
+## The scrollbar represents the full laid-out line, even while its characters are revealing.
+func reset_reading_page() -> void:
+	text.get_v_scroll_bar().value = 0.0
+	_refresh_page_hint.call_deferred()
+
+
+func set_line_advance(enabled: bool) -> void:
+	_line_advance = enabled
+	_refresh_page_hint()
+
+
+func has_next_page() -> bool:
+	if not text.scroll_active:
+		return false
+	var scroll: VScrollBar = text.get_v_scroll_bar()
+	return scroll.max_value - scroll.page - scroll.value > 1.0
+
+
+func advance_reading_page() -> bool:
+	if not has_next_page():
+		return false
+	var scroll: VScrollBar = text.get_v_scroll_bar()
+	# Start the next page at the last visible wrapped line, so its first line is not cut in half.
+	var next_offset: float = scroll.value
+	var page_end: float = scroll.value + scroll.page
+	for line: int in range(text.get_line_count()):
+		var offset: float = float(text.get_line_offset(line))
+		if offset >= page_end:
+			break
+		if offset > scroll.value + 1.0:
+			next_offset = offset
+	if next_offset <= scroll.value + 1.0:
+		# Extremely tall lines still need to be scrollable.
+		next_offset = scroll.value + maxf(1.0, scroll.page * 0.75)
+	scroll.value = minf(scroll.max_value - scroll.page, next_offset)
+	_refresh_page_hint()
+	return true
+
+
+func reading_page_count() -> int:
+	var scroll: VScrollBar = text.get_v_scroll_bar()
+	return maxi(1, ceili(scroll.max_value / maxf(scroll.page, 1.0)))
+
+
+func _refresh_page_hint() -> void:
+	if not is_node_ready():
+		return
+	var more: bool = has_next_page() and text.visible_characters < 0
+	if page_hint != null:
+		page_hint.visible = more
+	advance_button.visible = _line_advance or more
 
 
 ## Fills the 對話 and 移動 rows with one scenes/ui/investigate_topic.tscn per entry ({id, label}),
@@ -153,6 +212,12 @@ func apply_reading_settings(font_scale: float, paper_alpha: float) -> void:
 		elif style is StyleBoxTexture:
 			(style as StyleBoxTexture).modulate_color.a = (_paper_style as StyleBoxTexture).modulate_color.a * paper_alpha
 		panel.add_theme_stylebox_override("panel", style)
+
+
+func set_reduce_motion(reduced: bool) -> void:
+	for button: Button in [menu_button, log_button, auto_button, skip_button, investigation_collapse]:
+		if button != null and button.has_method("set_reduce_motion"):
+			button.call("set_reduce_motion", reduced)
 
 
 func set_auto(active: bool) -> void:

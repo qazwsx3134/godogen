@@ -1,0 +1,67 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/atlas/training_0.tres" id="1_kxomg"]
+[ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Bold.otf" id="2_wtfv2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k3bmb"]
+bg_color = Color(0.18431373, 0.20392157, 0.27450982, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.5411765, 0.49803922, 0.41568628, 1)
+corner_radius_top_left = 60
+corner_radius_top_right = 60
+corner_radius_bottom_right = 60
+corner_radius_bottom_left = 60
+
+[node name="TalentNode" type="Button" unique_id=1673507367]
+custom_minimum_size = Vector2(150, 176)
+offset_right = 150.0
+offset_bottom = 176.0
+focus_mode = 0
+flat = true
+
+[node name="Ring" type="Panel" parent="." unique_id=781917781]
+layout_mode = 0
+offset_left = 15.0
+offset_right = 135.0
+offset_bottom = 120.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_k3bmb")
+
+[node name="Icon" type="TextureRect" parent="." unique_id=1289852550]
+texture_filter = 1
+layout_mode = 0
+offset_left = 31.0
+offset_top = 16.0
+offset_right = 119.0
+offset_bottom = 104.0
+mouse_filter = 2
+texture = ExtResource("1_kxomg")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Level" type="Label" parent="." unique_id=1045449012]
+layout_mode = 0
+offset_top = 92.0
+offset_right = 150.0
+offset_bottom = 124.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.11372549, 0.14117648, 0.2, 1)
+theme_override_constants/outline_size = 7
+theme_override_fonts/font = ExtResource("2_wtfv2")
+theme_override_font_sizes/font_size = 24
+text = "0/200"
+horizontal_alignment = 1
+
+[node name="Title" type="Label" parent="." unique_id=783058613]
+layout_mode = 0
+offset_top = 126.0
+offset_right = 150.0
+offset_bottom = 172.0
+theme_override_colors/font_color = Color(0.2901961, 0.20392157, 0.14117648, 1)
+theme_override_fonts/font = ExtResource("2_wtfv2")
+theme_override_font_sizes/font_size = 30
+text = "劍術"
+horizontal_alignment = 1

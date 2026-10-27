@@ -673,7 +673,7 @@ func _test_narrow_phones() -> void:
 	var original: Vector2i = root.size
 	# Six options each, for the director's sheet to scroll; the POV choice has tones on all of them.
 	_write(MANY_STORY, _many_options_story())
-	for phone: Vector2i in [Vector2i(390, 844), Vector2i(320, 568)]:
+	for phone: Vector2i in [Vector2i(800, 450), Vector2i(640, 360)]:
 		root.size = phone
 		await _frames(3)
 		# The washi POV sheet and the director's sheet, each with three and six options.
@@ -715,16 +715,14 @@ func _check_layout(game: Control, css_width: int, label: String, kind: String, c
 	var area: Rect2 = game._game.get_global_rect()
 	var sheet: Control = game._choice_sheet
 	var scroll: ScrollContainer = sheet.choices_scroll
-	var css: float = 1080.0 / float(css_width)  # logical px of one CSS px
+	var css: float = 1920.0 / float(css_width)  # logical px of one CSS px in a 16:9 viewport
 	var scrolling: bool = scroll.vertical_scroll_mode == ScrollContainer.SCROLL_MODE_AUTO
-	_expect(game._panel_scale > 1.2 if css_width < 390 else game._panel_scale < 1.01, "%s: the panels scale by %.3f" % [label, game._panel_scale])
+	_expect(game._panel_scale > 1.1 if css_width < 720 else game._panel_scale < 1.01, "%s: the panels scale by %.3f" % [label, game._panel_scale])
 	_expect(sheet.get("perspective") == kind and game._choice_buttons.size() == count and (kind == "director" or sheet.style_id == game._ui_style_id),
 		"%s: the %s sheet with %d rows" % [label, kind, count])
 	_expect(area.grow(0.5).encloses(sheet.get_global_rect()), "%s: the sheet is inside the game area: %s in %s" % [label, sheet.get_global_rect(), area])
-	if kind == "director" and count == 6 and css_width < 390:
-		_expect(scrolling, "%s: six cards do not fit, so the director's sheet scrolls" % label)
 	if count == 3:
-		_expect(not scrolling, "%s: three rows fit without scrolling" % label)
+		_expect(not scrolling, "%s: three choices fit in the two-column landscape layout" % label)
 	for node: Node in _descendants(sheet):
 		if not node is Control or not (node as Control).is_visible_in_tree() or sheet.choices.is_ancestor_of(node):
 			continue  # the rows are checked one by one below

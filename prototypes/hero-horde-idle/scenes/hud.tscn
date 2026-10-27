@@ -70,7 +70,7 @@ text = "暫停"
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"Heading"
-theme_override_colors/font_color = Color(0.8509804, 0.69803923, 0.43137255, 1)
+theme_override_colors/font_color = Color(0.62, 0.43, 0.13, 1)
 theme_override_font_sizes/font_size = 26
 text = "1-1"
 
@@ -79,7 +79,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"Heading"
-theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_colors/font_color = Color(0.29, 0.204, 0.141, 1)
 theme_override_font_sizes/font_size = 32
 text = "棍棒巨魔"
 
@@ -92,7 +92,7 @@ theme_type_variation = &"Pill"
 [node name="PhaseLabel" type="Label" parent="Root/Top/TopPanel/TopBox/TitleRow/PhasePill" unique_id=81915665]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_colors/font_color = Color(0.29, 0.204, 0.141, 1)
 theme_override_font_sizes/font_size = 22
 text = "第一階段"
 
@@ -106,7 +106,7 @@ theme_type_variation = &"Pill"
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"Heading"
-theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_colors/font_color = Color(0.29, 0.204, 0.141, 1)
 theme_override_font_sizes/font_size = 44
 text = "150"
 horizontal_alignment = 1
@@ -238,7 +238,7 @@ theme_type_variation = &"HudPanel"
 [node name="CoachText" type="Label" parent="Root/Coach" unique_id=1701088528]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_colors/font_color = Color(0.29, 0.204, 0.141, 1)
 theme_override_font_sizes/font_size = 26
 text = "按住旗子拖動，整團就會跟著走"
 horizontal_alignment = 1
@@ -334,7 +334,7 @@ theme_override_constants/separation = 12
 
 [node name="MoraleTitle" type="Label" parent="Root/Bottom/BottomBox/BottomPanel/Box/MoraleRow" unique_id=1292894013]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_colors/font_color = Color(0.29, 0.204, 0.141, 1)
 theme_override_font_sizes/font_size = 24
 text = "士氣"
 
@@ -406,7 +406,7 @@ theme_override_constants/separation = 12
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"Heading"
-theme_override_colors/font_color = Color(0.8509804, 0.69803923, 0.43137255, 1)
+theme_override_colors/font_color = Color(0.62, 0.43, 0.13, 1)
 theme_override_font_sizes/font_size = 52
 text = "推王成功！"
 horizontal_alignment = 1
@@ -417,7 +417,7 @@ layout_mode = 2
 [node name="ResultDetail" type="Label" parent="Root/Result/Center/Panel/PanelBox" unique_id=2131803652]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_colors/font_color = Color(0.29, 0.204, 0.141, 1)
 theme_override_font_sizes/font_size = 28
 text = "剩 30.0 秒　存活 85 人"
 horizontal_alignment = 1
@@ -474,7 +474,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"PrimaryButton"
 theme_override_font_sizes/font_size = 26
-text = "去訓練"
+text = "去點天賦"
 
 [node name="ResultCamp" type="Button" parent="Root/Result/Center/Panel/PanelBox/MoreButtons" unique_id=1057236115]
 unique_name_in_owner = true
@@ -516,7 +516,7 @@ theme_override_constants/separation = 16
 [node name="Title" type="Label" parent="Root/PauseMenu/Center/PausePanel/Column" unique_id=1574526868]
 layout_mode = 2
 theme_type_variation = &"Heading"
-theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_colors/font_color = Color(0.29, 0.204, 0.141, 1)
 theme_override_font_sizes/font_size = 44
 text = "暫停"
 horizontal_alignment = 1

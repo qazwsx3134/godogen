@@ -30,7 +30,7 @@ theme_override_constants/separation = 16
 [node name="Heading" type="Label" parent="Margins/Layout/Header" unique_id=204603021]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 52
+theme_override_font_sizes/font_size = 39
 text = "鑑賞"
 vertical_alignment = 1
 metadata/ui_style_role = "accent"
@@ -39,7 +39,7 @@ metadata/ui_style_role = "accent"
 unique_name_in_owner = true
 custom_minimum_size = Vector2(132.92308, 132.92308)
 layout_mode = 2
-theme_override_font_sizes/font_size = 60
+theme_override_font_sizes/font_size = 45
 text = "×"
 metadata/ui_style_role = "standard"
 
@@ -52,7 +52,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 42
+theme_override_font_sizes/font_size = 32
 text = "畫廊"
 metadata/ui_style_role = "selector"
 
@@ -61,7 +61,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 42
+theme_override_font_sizes/font_size = 32
 text = "音樂"
 metadata/ui_style_role = "selector"
 
@@ -89,11 +89,17 @@ theme_override_constants/h_separation = 16
 theme_override_constants/v_separation = 16
 columns = 2
 
-[node name="Preview0" parent="Margins/Layout/Scroll/List/Pictures" unique_id=1882561822 instance=ExtResource("2_63ceu")]
+[node name="Preview0" type="Button" parent="Margins/Layout/Scroll/List/Pictures" unique_id=1882561822 instance=ExtResource("2_63ceu")]
+custom_minimum_size = Vector2(0, 380)
 layout_mode = 2
+size_flags_horizontal = 3
+metadata/ui_style_role = "selector"
 
-[node name="Preview1" parent="Margins/Layout/Scroll/List/Pictures" unique_id=423789888 instance=ExtResource("2_63ceu")]
+[node name="Preview1" type="Button" parent="Margins/Layout/Scroll/List/Pictures" unique_id=423789888 instance=ExtResource("2_63ceu")]
+custom_minimum_size = Vector2(0, 380)
 layout_mode = 2
+size_flags_horizontal = 3
+metadata/ui_style_role = "selector"
 
 [node name="Music" type="VBoxContainer" parent="Margins/Layout/Scroll/List" unique_id=1635249913]
 unique_name_in_owner = true

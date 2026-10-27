@@ -23,6 +23,9 @@ func _run() -> void:
 	var bad_pan=first.duplicate(true)
 	bad_pan.investigation_pans={"home": NAN}
 	_expect(not game._validate_save_payload(bad_pan), "non-finite pan offsets cannot enter a save")
+	bad_pan=first.duplicate(true)
+	bad_pan.investigation_pans_y={"home": NAN}
+	_expect(not game._validate_save_payload(bad_pan), "non-finite vertical pan offsets cannot enter a save")
 	var bad_stage=first.duplicate(true)
 	bad_stage.round_stages={"round": {"background":"yorozuya_living_room", "sprites":{}, "bgm":"bgm_daily"}}
 	_expect(not game._validate_save_payload(bad_stage), "incomplete checkpoint cast is rejected")
@@ -38,7 +41,9 @@ func _run() -> void:
 	_expect(not game._rollback_line(),"rollback cannot pass the beginning of the segment")
 	game._on_setting_changed("font_size",2)
 	game._on_setting_changed("paper_opacity",0)
-	_expect(game._text_label.get_theme_font_size("normal_font_size")==58,"dialogue font size applies immediately")
+	var base_size: int = game._dialog_panel._normal_font_size
+	_expect(game._text_label.get_theme_font_size("normal_font_size") == roundi(base_size * 1.2)
+		and game._text_label.get_theme_font_size("normal_font_size") > base_size, "dialogue font size applies immediately")
 	_expect(is_equal_approx(game._dialog_panel.get_node("PaperAndToolbar/Panel/Frame/PaperCutout").modulate.a,0.65) \
 		and game._text_label.modulate.a==1.0 and game._name_label.modulate.a==1.0,"paper transparency keeps text and name opaque")
 	game._advance_current_line()

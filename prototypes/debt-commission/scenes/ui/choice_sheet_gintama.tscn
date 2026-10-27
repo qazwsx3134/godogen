@@ -729,7 +729,6 @@ theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 22
 theme_override_constants/margin_bottom = 22
 script = ExtResource("2_exs52")
-style_id = "gintama"
 item_scene = ExtResource("3_s3rmd")
 index_numerals = PackedStringArray("壹", "貳", "參", "肆", "伍", "陸", "柒", "捌")
 count_format = "%s擇一"
@@ -744,16 +743,15 @@ theme_override_styles/panel = SubResource("StyleBoxEmpty_mdjiq")
 layout_mode = 2
 mouse_filter = 2
 script = ExtResource("4_6va0e")
-style_id = "gintama"
 kind = "choices"
 
 [node name="Padding" type="MarginContainer" parent="Panel" unique_id=67552345]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/margin_left = 39
-theme_override_constants/margin_top = 39
+theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 39
-theme_override_constants/margin_bottom = 30
+theme_override_constants/margin_bottom = 15
 
 [node name="Column" type="VBoxContainer" parent="Panel/Padding" unique_id=1943907460]
 layout_mode = 2
@@ -774,7 +772,7 @@ theme_override_constants/separation = 8
 [node name="Kicker" type="Label" parent="Panel/Padding/Column/Heading/HeadingText" unique_id=1002604445]
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_uu8yi")
-theme_override_font_sizes/font_size = 39
+theme_override_font_sizes/font_size = 29
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
@@ -785,7 +783,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/line_spacing = -4
 theme_override_fonts/font = SubResource("FontVariation_hqfsn")
-theme_override_font_sizes/font_size = 61
+theme_override_font_sizes/font_size = 46
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
@@ -795,7 +793,7 @@ autowrap_mode = 3
 [node name="CensorBar" type="Button" parent="Panel/Padding/Column/Heading/HeadingText" unique_id=950895771]
 unique_name_in_owner = true
 visible = false
-custom_minimum_size = Vector2(332.3077, 132.92308)
+custom_minimum_size = Vector2(332.3077, 150)
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_styles/normal = SubResource("StyleBoxFlat_2fg45")
@@ -810,21 +808,21 @@ theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255,
 theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
-theme_override_font_sizes/font_size = 44
+theme_override_font_sizes/font_size = 33
 text = "▇▇▇▇"
 
 [node name="Count" type="Label" parent="Panel/Padding/Column/Heading" unique_id=424139612]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_fonts/font = SubResource("FontVariation_1qu7t")
-theme_override_font_sizes/font_size = 39
+theme_override_font_sizes/font_size = 29
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
 text = "四擇一"
 
 [node name="HeadingGap" type="Control" parent="Panel/Padding/Column" unique_id=834255750]
-custom_minimum_size = Vector2(0, 22.153847)
+custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 mouse_filter = 2
 
@@ -841,16 +839,18 @@ follow_focus = true
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 0
 
-[node name="Choices" type="VBoxContainer" parent="Panel/Padding/Column/ChoicesScroll" unique_id=2132994834]
+[node name="Choices" type="GridContainer" parent="Panel/Padding/Column/ChoicesScroll" unique_id=1999047747]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-mouse_filter = 2
-theme_override_constants/separation = 0
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 12
+columns = 2
 
 [node name="Sample1" parent="Panel/Padding/Column/ChoicesScroll/Choices" unique_id=2071340155 instance=ExtResource("3_s3rmd")]
-custom_minimum_size = Vector2(0, 132.92308)
+custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_ax8d8")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_foxvs")
 theme_override_styles/hover = SubResource("StyleBoxFlat_82tpy")
@@ -864,7 +864,7 @@ theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_qf72c")
-theme_override_font_sizes/font_size = 47
+theme_override_font_sizes/font_size = 35
 text = "先問清楚委託人"
 alignment = 0
 autowrap_mode = 3
@@ -909,8 +909,9 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Sample2" parent="Panel/Padding/Column/ChoicesScroll/Choices" unique_id=1964257344 instance=ExtResource("3_s3rmd")]
-custom_minimum_size = Vector2(0, 132.92308)
+custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_n5l2m")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_i0v34")
 theme_override_styles/hover = SubResource("StyleBoxFlat_myh1y")
@@ -924,7 +925,7 @@ theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_qf72c")
-theme_override_font_sizes/font_size = 47
+theme_override_font_sizes/font_size = 35
 text = "這箱先記到新八名下"
 alignment = 0
 autowrap_mode = 3
@@ -969,8 +970,9 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Sample3" parent="Panel/Padding/Column/ChoicesScroll/Choices" unique_id=248567096 instance=ExtResource("3_s3rmd")]
-custom_minimum_size = Vector2(0, 132.92308)
+custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_5trho")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_lgake")
 theme_override_styles/hover = SubResource("StyleBoxFlat_onu4h")
@@ -984,7 +986,7 @@ theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_qf72c")
-theme_override_font_sizes/font_size = 47
+theme_override_font_sizes/font_size = 35
 text = "假裝沒看見收據"
 alignment = 0
 autowrap_mode = 3
@@ -1029,8 +1031,9 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Sample4" parent="Panel/Padding/Column/ChoicesScroll/Choices" unique_id=883311600 instance=ExtResource("3_s3rmd")]
-custom_minimum_size = Vector2(0, 132.92308)
+custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_vjva8")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_xknfh")
 theme_override_styles/hover = SubResource("StyleBoxFlat_ts6k8")
@@ -1044,7 +1047,7 @@ theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_qf72c")
-theme_override_font_sizes/font_size = 47
+theme_override_font_sizes/font_size = 35
 text = "這是甜點，不是證物"
 alignment = 0
 autowrap_mode = 3
@@ -1095,20 +1098,20 @@ mouse_filter = 2
 color = Color(0.25, 0.4, 0.52, 0.25)
 
 [node name="TimerGap" type="Control" parent="Panel/Padding/Column" unique_id=1912831740]
-custom_minimum_size = Vector2(0, 22.153847)
+custom_minimum_size = Vector2(0, 4)
 layout_mode = 2
 mouse_filter = 2
 
 [node name="Timer" type="HBoxContainer" parent="Panel/Padding/Column" unique_id=108883798]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 66.46154)
+custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 25
 
 [node name="TimerLabel" type="Label" parent="Panel/Padding/Column/Timer" unique_id=1821141343]
 layout_mode = 2
-theme_override_font_sizes/font_size = 39
+theme_override_font_sizes/font_size = 29
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
@@ -1130,14 +1133,14 @@ show_percentage = false
 [node name="TimerValue" type="Label" parent="Panel/Padding/Column/Timer" unique_id=155224344]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 39
+theme_override_font_sizes/font_size = 29
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
 text = "6 秒"
 
 [node name="FooterGap" type="Control" parent="Panel/Padding/Column" unique_id=393584829]
-custom_minimum_size = Vector2(0, 11.076923)
+custom_minimum_size = Vector2(0, 2)
 layout_mode = 2
 mouse_filter = 2
 
@@ -1148,10 +1151,10 @@ theme_override_constants/separation = 22
 
 [node name="Feedback" type="Label" parent="Panel/Padding/Column/Footer" unique_id=775258001]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 132.92308)
+custom_minimum_size = Vector2(0, 110)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 39
+theme_override_font_sizes/font_size = 29
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
@@ -1162,7 +1165,7 @@ autowrap_mode = 3
 [node name="Super" type="Button" parent="Panel/Padding/Column/Footer" unique_id=203831214]
 unique_name_in_owner = true
 visible = false
-custom_minimum_size = Vector2(210.46155, 132.92308)
+custom_minimum_size = Vector2(210.46155, 128)
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_styles/normal = SubResource("StyleBoxFlat_rfoly")
@@ -1177,12 +1180,12 @@ theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255,
 theme_override_colors/font_hover_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
-theme_override_font_sizes/font_size = 39
+theme_override_font_sizes/font_size = 29
 text = "超必殺！"
 
 [node name="Menu" type="Button" parent="Panel/Padding/Column/Footer" unique_id=485895852]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(177.23077, 132.92308)
+custom_minimum_size = Vector2(177.23077, 128)
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_styles/normal = SubResource("StyleBoxFlat_vp321")
@@ -1198,7 +1201,7 @@ theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_qcpcf")
-theme_override_font_sizes/font_size = 39
+theme_override_font_sizes/font_size = 29
 text = "目錄"
 
 [editable path="Panel/Padding/Column/ChoicesScroll/Choices/Sample1"]

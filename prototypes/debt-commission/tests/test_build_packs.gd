@@ -63,12 +63,18 @@ func _preview() -> void:
 	game.save_path = "user://build_packs_preview.save"
 	game.progress_path = "user://build_packs_progress.cfg"
 	game.settings_path = "user://build_packs_settings.cfg"
+	game.story_catalog_override = WORK + "catalog.json"
+	game.story_skin_override = "example"
 	root.add_child(game)
 	await _frames(3)
 	_expect(game._sprites.has("aki") and not game._sprites.has("shinpachi"), "the preview plays it with the work's cast")
+	game._choose_story({"id": "phase3", "path": "res://data/phase3_story.json", "save": "user://build_packs_selected.save"})
+	_expect(game.story_catalog_override.is_empty() and game.story_skin_override.is_empty(), "selecting a story clears preview overrides")
+	_expect(game._story_ready and game._sprites.has("shinpachi") and not game._sprites.has("aki") and game._ui_style_id == "gintama",
+		"the selected story uses its own catalog and skin")
 	game.queue_free()
 	await _frames(2)
-	for path: String in ["user://build_packs_preview.save", "user://build_packs_progress.cfg", "user://build_packs_settings.cfg"]:
+	for path: String in ["user://build_packs_preview.save", "user://build_packs_progress.cfg", "user://build_packs_settings.cfg", "user://build_packs_selected.save"]:
 		for suffix: String in ["", ".bak"]:
 			if FileAccess.file_exists(path + suffix):
 				DirAccess.remove_absolute(ProjectSettings.globalize_path(path + suffix))

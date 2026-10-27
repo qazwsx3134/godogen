@@ -2,6 +2,7 @@
 import argparse
 from pathlib import Path
 import signal
+import subprocess
 from project_server import make_server, validate_candidate, validate_catalog
 
 parser = argparse.ArgumentParser()
@@ -25,6 +26,12 @@ def work_catalog(catalog):
 
 
 server.project.check = lambda candidate, catalog=None: validate_candidate(candidate, actual, args.godot, work_catalog(catalog))
+server.project.check_preview = lambda candidate, catalog=None: validate_candidate(
+    candidate, actual, args.godot, work_catalog(catalog), allow_unreachable=True)
+server.project.launch_preview = lambda config, environment: subprocess.Popen(
+    [args.godot, '--headless', '--path', str(actual), '--quit-after', '180', '--scene',
+     'res://tools/story_build/preview.tscn', '--', f'--editor-preview={config}'],
+    env=environment, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
 def catalog_check(candidate, replaces, pairs):

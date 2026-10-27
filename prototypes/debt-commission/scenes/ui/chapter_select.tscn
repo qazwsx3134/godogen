@@ -31,7 +31,7 @@ theme_override_constants/separation = 16
 [node name="Heading" type="Label" parent="Margins/Layout/Header" unique_id=520478484]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 52
+theme_override_font_sizes/font_size = 39
 text = "章節選擇"
 vertical_alignment = 1
 metadata/ui_style_role = "accent"
@@ -40,7 +40,7 @@ metadata/ui_style_role = "accent"
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
-theme_override_font_sizes/font_size = 38
+theme_override_font_sizes/font_size = 29
 text = "鑑賞"
 metadata/ui_style_role = "standard"
 
@@ -48,7 +48,7 @@ metadata/ui_style_role = "standard"
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
-theme_override_font_sizes/font_size = 38
+theme_override_font_sizes/font_size = 29
 text = "製作名單"
 metadata/ui_style_role = "standard"
 
@@ -56,7 +56,7 @@ metadata/ui_style_role = "standard"
 unique_name_in_owner = true
 custom_minimum_size = Vector2(132.92308, 132.92308)
 layout_mode = 2
-theme_override_font_sizes/font_size = 60
+theme_override_font_sizes/font_size = 45
 text = "×"
 metadata/ui_style_role = "standard"
 
@@ -80,11 +80,15 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Preview0" parent="Margins/Layout/Scroll/List/Chapters" unique_id=1175827945 instance=ExtResource("2_usf8y")]
+[node name="Preview0" type="MarginContainer" parent="Margins/Layout/Scroll/List/Chapters" unique_id=1175827945 instance=ExtResource("2_usf8y")]
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_bottom = 30
 
-[node name="Preview1" parent="Margins/Layout/Scroll/List/Chapters" unique_id=675749470 instance=ExtResource("2_usf8y")]
+[node name="Preview1" type="MarginContainer" parent="Margins/Layout/Scroll/List/Chapters" unique_id=675749470 instance=ExtResource("2_usf8y")]
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_bottom = 30
 
 [node name="ChaptersEmpty" type="Label" parent="Margins/Layout/Scroll/List" unique_id=654426488]
 unique_name_in_owner = true
@@ -102,12 +106,23 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="Preview0" parent="Margins/Layout/Scroll/List/Endings" unique_id=1205232061 instance=ExtResource("3_usf8y")]
+[node name="Preview0" type="Label" parent="Margins/Layout/Scroll/List/Endings" unique_id=1205232061 instance=ExtResource("3_usf8y")]
+custom_minimum_size = Vector2(0, 72)
 layout_mode = 2
+theme_override_font_sizes/font_size = 27
+text = "第一章｜這次真的是定春"
+vertical_alignment = 1
+autowrap_mode = 3
+metadata/ui_style_role = "body"
 
-[node name="Preview1" parent="Margins/Layout/Scroll/List/Endings" unique_id=844447821 instance=ExtResource("3_usf8y")]
+[node name="Preview1" type="Label" parent="Margins/Layout/Scroll/List/Endings" unique_id=844447821 instance=ExtResource("3_usf8y")]
+custom_minimum_size = Vector2(0, 72)
 layout_mode = 2
+theme_override_font_sizes/font_size = 27
 text = "第一章｜？？？"
+vertical_alignment = 1
+autowrap_mode = 3
+metadata/ui_style_role = "body"
 
 [node name="SamplesHeading" type="Label" parent="Margins/Layout/Scroll/List" unique_id=1748806400]
 layout_mode = 2

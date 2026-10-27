@@ -4,9 +4,9 @@
 [ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Bold.otf" id="2_chqei"]
 [ext_resource type="Texture2D" path="res://assets/reference/equipment.png" id="3_fnavn"]
 
-[sub_resource type="Theme" id="Theme_krmap"]
+[sub_resource type="Theme" id="Theme_7ojwy"]
 default_font = ExtResource("1_7ojwy")
-default_font_size = 26
+default_font_size = 30
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3x8hc"]
 bg_color = Color(0.1764706, 0.23921569, 0.3529412, 1)
@@ -97,7 +97,8 @@ custom_minimum_size = Vector2(941, 122)
 layout_mode = 3
 anchors_preset = 0
 mouse_filter = 2
-theme = SubResource("Theme_krmap")
+theme = SubResource("Theme_7ojwy")
+metadata/fusion_readable = true
 
 [node name="TrainButton" type="Button" parent="." unique_id=497284241]
 layout_mode = 0
@@ -108,7 +109,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("2_chqei")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 26
 theme_override_styles/normal = SubResource("StyleBoxFlat_3x8hc")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_n1lvj")
 theme_override_styles/hover = SubResource("StyleBoxFlat_n1lvj")
@@ -138,10 +139,11 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("2_chqei")
-theme_override_font_sizes/font_size = 23
-text = "訓練"
+theme_override_font_sizes/font_size = 30
+text = "天賦"
 horizontal_alignment = 1
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="BackpackButton" type="Button" parent="." unique_id=967295405]
 layout_mode = 0
@@ -152,7 +154,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("2_chqei")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 26
 theme_override_styles/normal = SubResource("StyleBoxFlat_3x8hc")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_n1lvj")
 theme_override_styles/hover = SubResource("StyleBoxFlat_n1lvj")
@@ -182,10 +184,11 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("2_chqei")
-theme_override_font_sizes/font_size = 23
+theme_override_font_sizes/font_size = 30
 text = "背包"
 horizontal_alignment = 1
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="MonsterButton" type="Button" parent="." unique_id=120835299]
 layout_mode = 0
@@ -196,7 +199,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("2_chqei")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 26
 theme_override_styles/normal = SubResource("StyleBoxFlat_3x8hc")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_n1lvj")
 theme_override_styles/hover = SubResource("StyleBoxFlat_n1lvj")
@@ -226,10 +229,11 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("2_chqei")
-theme_override_font_sizes/font_size = 23
+theme_override_font_sizes/font_size = 30
 text = "英雄"
 horizontal_alignment = 1
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="EquipmentButton" type="Button" parent="." unique_id=189226577]
 layout_mode = 0
@@ -240,7 +244,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("2_chqei")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 26
 theme_override_styles/normal = SubResource("StyleBoxFlat_3x8hc")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_n1lvj")
 theme_override_styles/hover = SubResource("StyleBoxFlat_n1lvj")
@@ -270,10 +274,11 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("2_chqei")
-theme_override_font_sizes/font_size = 23
+theme_override_font_sizes/font_size = 30
 text = "裝備"
 horizontal_alignment = 1
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="AdventureButton" type="Button" parent="." unique_id=740637191]
 layout_mode = 0
@@ -284,7 +289,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("2_chqei")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 26
 theme_override_styles/normal = SubResource("StyleBoxFlat_3x8hc")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_n1lvj")
 theme_override_styles/hover = SubResource("StyleBoxFlat_n1lvj")
@@ -314,10 +319,11 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("2_chqei")
-theme_override_font_sizes/font_size = 23
+theme_override_font_sizes/font_size = 30
 text = "冒險"
 horizontal_alignment = 1
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="StoreButton" type="Button" parent="." unique_id=1269000686]
 layout_mode = 0
@@ -328,7 +334,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("2_chqei")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 26
 theme_override_styles/normal = SubResource("StyleBoxFlat_3x8hc")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_n1lvj")
 theme_override_styles/hover = SubResource("StyleBoxFlat_n1lvj")
@@ -358,7 +364,8 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("2_chqei")
-theme_override_font_sizes/font_size = 23
+theme_override_font_sizes/font_size = 30
 text = "商店"
 horizontal_alignment = 1
 vertical_alignment = 1
+text_overrun_behavior = 3

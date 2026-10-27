@@ -7,9 +7,9 @@
 [ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Bold.otf" id="4_te0y1"]
 [ext_resource type="PackedScene" path="res://scenes/components/product_card.tscn" id="5_hirrh"]
 
-[sub_resource type="Theme" id="Theme_krmap"]
+[sub_resource type="Theme" id="Theme_tqwwg"]
 default_font = ExtResource("1_tqwwg")
-default_font_size = 26
+default_font_size = 30
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1s2ed"]
 atlas = ExtResource("2_5iicw")
@@ -252,9 +252,10 @@ custom_minimum_size = Vector2(941, 1672)
 layout_mode = 3
 anchors_preset = 0
 mouse_filter = 2
-theme = SubResource("Theme_krmap")
+theme = SubResource("Theme_tqwwg")
 script = ExtResource("2_tqwwg")
 metadata/page_id = "store"
+metadata/fusion_readable = true
 
 [node name="DistantLandscape" type="TextureRect" parent="." unique_id=1867706014]
 texture_filter = 1
@@ -412,6 +413,7 @@ theme_override_fonts/font = ExtResource("4_te0y1")
 theme_override_font_sizes/font_size = 42
 text = "商店"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="StoreSubtitle" type="Label" parent="." unique_id=1347103943]
 unique_name_in_owner = true
@@ -423,9 +425,10 @@ offset_bottom = 637.0
 theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 26
 text = "商品按鈕顯示本機商店資訊，不會進行付款或發放。"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="ProductGrid" type="HBoxContainer" parent="." unique_id=393466374]
 unique_name_in_owner = true
@@ -573,9 +576,10 @@ theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("4_te0y1")
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 35
 text = "每日免費招募"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="GiftDescription" type="Label" parent="." unique_id=97322017]
 unique_name_in_owner = true
@@ -587,10 +591,11 @@ offset_bottom = 1293.0
 theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 26
 text = "觀看獎勵廣告的外觀保留作為商店示範。
 此原型沒有廣告 SDK，也不會記錄領取狀態。"
 vertical_alignment = 1
+text_overrun_behavior = 3
 
 [node name="GiftButton" type="Button" parent="." unique_id=557729347]
 unique_name_in_owner = true
@@ -603,7 +608,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("4_te0y1")
-theme_override_font_sizes/font_size = 23
+theme_override_font_sizes/font_size = 30
 theme_override_styles/normal = SubResource("StyleBoxFlat_pwkfr")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_7r3wi")
 theme_override_styles/hover = SubResource("StyleBoxFlat_dnlsv")
@@ -623,7 +628,7 @@ mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("4_te0y1")
-theme_override_font_sizes/font_size = 23
+theme_override_font_sizes/font_size = 30
 theme_override_styles/normal = SubResource("StyleBoxFlat_pwkfr")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_7r3wi")
 theme_override_styles/hover = SubResource("StyleBoxFlat_dnlsv")
