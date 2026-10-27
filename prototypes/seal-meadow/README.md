@@ -6,9 +6,9 @@
 
 以手機執行與觸控為前提，採固定方向／俯角鏡頭，跟隨角色平移；不製作旋轉鏡頭與短連招，也不安排其他鍵序／節奏連招。戰鬥以點怪追打、自動普攻與少量技能操作為規劃基線，保留換裝、寵物與成長體驗。
 
-詳細操作、安全區、效能與驗收見 [手機製作基準](design/mobile-production-baseline.md)，原作面向與 Godot 對應見 [希望 Online 詳細研究](../../docs/research/seal-online-deep-dive-2026-10-26/README.md)。現有 2.5D 管線先用來驗證手機，不因原作是完整 3D 就直接要求重做角色。下方操作列記錄目前桌面原型，手機適配與相機行為尚待實作。
+詳細操作、安全區、效能與驗收見 [手機製作基準](design/mobile-production-baseline.md)，原作面向與 Godot 對應見 [希望 Online 詳細研究](../../docs/research/seal-online-deep-dive-2026-10-26/README.md)。現有 2.5D 管線先用來驗證手機，不因原作是完整 3D 就直接要求重做角色。固定鏡頭、觸控、背包、村莊、任務、寵物、精煉，以及單機圖鑑與釣魚薄切片已有實作；iPhone 17 Safari 尚未實機驗收。
 
-系統文件與工作包見[製作規劃入口](design/planning/README.md)：包含 40 系統索引與逐系統 dossier、GDD／TDD／UX／資料／QA 交付標準、Godot 架構草案、決策清單與 [M0～M6 Roadmap](production/roadmap.md)。目前均為規劃草案，功能完成以各階段的實作與真機證據為準。
+系統文件與工作包見[製作規劃入口](design/planning/README.md)：包含 40 系統索引與逐系統 dossier、GDD／TDD／UX／資料／QA 交付標準、Godot 架構草案、決策清單與 [M0～M6 Roadmap](production/roadmap.md)。目前優先推進單機內容，多人 M4 延後；M3 最新完整回歸、規格文件及真機／長時間驗收仍待完成。現況與交接見 [PROGRESS.md](PROGRESS.md)，前次回饋見 [REVIEW.md](REVIEW.md)。
 
 > 玩家目前是 Blender 渲染的測試小人紙娃娃（身體＋頭髮＋劍三層，`resources/sheets/test_chibi_*.tres`）。怪物圖**借用 skybound-blades 的原創圖當佔位**（`assets/sprites/`、`resources/sheets/`）。本作自己的圖還沒生成：玩家是 8 方向紙娃娃（素體＋頭髮／服裝／頭飾／武器／盾分層），怪物 4 方向且一律比玩家矮，規格與 prompt 見 [design/art-prompts/](design/art-prompts/README.md)。玩家角色走 3D 建模再渲染成 sprite，完整流程見 [design/pipeline/3d-to-sprite.md](design/pipeline/3d-to-sprite.md)（渲染與打包已用測試小人跑通）。
 
@@ -21,9 +21,11 @@ godot --path .                                   # 開視窗玩
 env -u WAYLAND_DISPLAY xvfb-run -a godot --path . --resolution 1280x720 --script res://tools/shot.gd -- build/shots   # 截圖
 ```
 
-操作：點地面移動（按住持續走）、點怪物攻擊、點地上物品撿起、右下技能鈕或 Q 放範圍揮砍、右上「背包」看收穫並裝備／使用、走進藍色傳送圈往返蓬蓬村、點村長接任務與買賣、蘋果鈕補血（手機觸控與滑鼠相同；鏡頭固定，不能轉）、WASD 移動、空白鍵打最近的怪、T 切換白天／黃昏。
+操作：點地面移動（按住持續走）、點怪物追打；閒置時受到怪物攻擊會自動反擊，手動移動與既有目標優先。點地上物品靠近撿起，點傳送圈或其名稱前往並往返蓬蓬村；點小地圖或「世界地圖」查看兩區與目前位置。右上可開啟寵物／背包，左側可開啟設定與冒險圖鑑；點村長接任務、買賣及購買釣餌，靠近草原池塘的釣點可釣魚。右下技能鈕或 Q 放範圍揮砍，蘋果鈕補血。手機觸控與滑鼠相同；鏡頭固定，不能轉；桌面另有 WASD 移動、空白鍵打最近的怪、T 切換白天／黃昏。
 
-測試（headless）：`tests/test_m0.gd`、`tests/test_m1.gd`、`tests/test_m1_loot.gd`、`tests/test_m2.gd`、`tests/test_content.gd`，執行 `godot --headless --path . -s tests/<檔名>`。核心循環機器人：`godot --headless --path . --fixed-fps 60 -s tests/bot_m1.gd -- 180 7 [knob=value ...]`。
+測試（headless）：`tests/test_m0.gd`、`test_m1.gd`、`test_m1_loot.gd`、`test_m2.gd`、`test_m3.gd`、`test_m3_hardening.gd`、`test_collection.gd`、`test_fishing.gd`、`test_content.gd` 與 `test_review_interactions.gd`；從 repo 根目錄執行 `env XDG_DATA_HOME=/tmp/seal-tests XDG_CONFIG_HOME=/tmp/seal-tests-config TEST_TIMEOUT=120 bash prototypes/godot-kit/tools/run_tests.sh prototypes/seal-meadow`。核心循環短測：`godot --headless --path . --fixed-fps 60 -s tests/bot_m1.gd -- clear 5`。bot 的 `sweeps` 是實際完成施放的次數，`sweep_attempts` 包含被取消的施放。完整 suite 曾在最後存檔驗證修改前通過；本輪各項證據與待重跑項目見 [PROGRESS.md](PROGRESS.md)。
+
+網頁匯出：`Web` 是通用 preset，`Mobile Web` 是 ETC2 手機候選。`build/mobile-web/` 已手動匯出、套 IDBFS 補丁，新增的 `tools/build_mobile_web.sh` 尚未完整驗證，手機版 ZIP 尚未建立；`build/web/` 為 2026-10-27 舊版。最新瀏覽器整體測試因 `/favicon.ico` 404 未通過，詳見交接。未上傳，iPhone 真機相容性待驗證。
 
 ## 結構
 
@@ -35,7 +37,11 @@ env -u WAYLAND_DISPLAY xvfb-run -a godot --path . --resolution 1280x720 --script
 | `scenes/player.tscn` | 玩家數值（`base_hp`、`base_attack`、`attack_range`、`attack_interval`） |
 | `scenes/actors/actor.tscn` | 一隻角色的外觀：sprite、影子、名牌、血條、鎖定圈（從 skybound-blades 複製，腳本換成 `scripts/actor.gd`）；`layer_sheets` 是紙娃娃的額外圖層，由下往上疊 |
 | `tools/blender/`、`tools/import_sheets.gd` | 3D 模型 → 紙娃娃 sprite 的渲染、打包與匯入，見 [3d-to-sprite.md](design/pipeline/3d-to-sprite.md) |
-| `ui/hud.tscn` | 狀態框、目標框、訊息欄、操作說明；配色字型在 `ui/theme.tres` |
+| `ui/hud.tscn` | 狀態框、目標框、訊息欄、小地圖與按鈕；`PetButton`、`MapButton` 的 anchor／offset 可在編輯器調整 |
+| `ui/world_map.tscn` | 可編輯的草原／村莊總覽；`Window`、兩區文字與 `MapClose` 的版面、字級在 scene 中調整，`world_map.gd` 只更新所在區域 |
+| `ui/settings_window.tscn` | 設定視窗；`Window`、`Contents` 的版面與音效／字體／減少停頓選項可在編輯器調整 |
+| `ui/collection_window.tscn`、`ui/achievement_row.tscn` | 冒險圖鑑與可重複實例化的成就列；可調整 `Scroll`、`AchievementRows` 與領取鈕版面 |
+| `scenes/fishing_spot.tscn`、`ui/fishing_window.tscn` | 草原釣點與釣魚視窗；釣點的 `Post`、`Marker`、`Title`，視窗的 `Contents`、`FishingAction` 可在編輯器調整 |
 | `scripts/terrain_height.gd` | 地形高度函式：地形網格由它烘出，角色直接貼著它走（不用物理） |
 | `tools/build_world.gd` | 產生器，只在製作時跑；已存在的檔案預設跳過，`-- --overwrite` 才重建（先看 `git diff`） |
 

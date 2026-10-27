@@ -1,22 +1,58 @@
 # seal-meadow 交接進度
 
-最後更新：2026-10-27（Claude 主 session）。每次 commit、使用者出門或下班時更新這份檔案。
+最後更新：2026-10-28。每次 commit、使用者出門或下班時更新這份檔案。
+
+## 2026-10-28 出門交接：已暫停
+
+**使用者指示**：先補 M3 尚未完成的工作，接著依 `design/planning` 推進；M3 之後選擇**先做單機後續內容**，多人 M4 繼續延後。使用者現在出門並要求交接，停止開發；沒有授權 commit、push 或上傳 itch。分支 `master`，本輪基準 `21604e31`，本專案與根目錄 `Progress.md` 的修改都尚未提交，其他專案工作區修改需保留。
+
+### 已實作／部分完成
+
+- **M3 存檔與交易硬化**：存檔 v5，v1～v4 逐步遷移；同款裝備各有 uid／精煉等級，v4 原本共用的加成會保留到既有每件副本。精煉請求序號可重送同一結果，過舊序號拒絕；交任務的完成狀態在 XP 觸發存檔前更新。新版／損壞存檔停止覆寫；壞主檔可從有效備份恢復且不把壞檔覆蓋到備份。相關：`scripts/inventory.gd`、`player.gd`、`refine.gd`、`quests.gd`、`save_validation.gd`、`main.gd`。
+- **M3 介面／生命週期**：新增音效、加大文字、減少戰鬥停頓設定並保存；背包可捲動，寵物進化有機率／失敗提示與二次確認。切背景清除按住移動、取消未完成施法／普攻；`ui/settings_window.tscn` 是可編輯 scene。
+- **單機 S19**：`collection_book.gd` 與可編輯圖鑑視窗／成就列，紀錄三種怪物、四個可領取成就與聲望稱號，滿包獎勵不消耗／不領取、已領取不重發。舊存檔不推測歷史擊殺；既有任務完成數與寵物階段可用現況判定。未知圖鑑資料會保留。
+- **單機 S33**：草原池塘的可編輯 `scenes/fishing_spot.tscn` 與釣魚視窗；村長賣釣餌，每次前景等待 5 秒，完成時才一起扣餌與發魚／凝膠。停止、移動、受擊、切背景或滿包不消耗；超出範圍不能開釣。小魚可賣或餵寵物。
+- **網頁體積候選**：`export_presets.cfg` 新增 ETC2-only `Mobile Web`，保留原本通用 `Web`。本機 `build/mobile-web/` 已手動匯出並套 IDBFS 補丁；PCK **35.05 MB**、WASM 約 **39.5 MB**。原 `build/web/` 是 2026-10-27 舊版，不代表本輪內容。`tools/build_mobile_web.sh` 已寫但**尚未完整執行驗證，也尚未產生 ZIP**。
+
+### 驗證證據與未完成
+
+- 完整 10 組 suite 在較早版本通過，紀錄 `/tmp/godot-tests.bqN5hB/`；之後又加強存檔內容驗證與圖鑑未知資料保留，**最終版本未重跑完整 suite**。其後單獨重跑 `test_m3_hardening.gd`、`test_collection.gd` 通過；`test_fishing.gd` 的通過在最後存檔驗證修改之前。m1 離開時有 ObjectDB 清理警告；新版存檔保護測試預期印出 `save not loaded: newer` 警告。
+- `tools/m3_economy.gd` 已以 seed 73、10,000 次模擬：現行 +0→+6 平均約 **934.13 金**；假設 +4 失敗退回 +3 的示例約 **1084.42 金**，示例沒有套用到遊戲。正式經濟／規格文件尚未補齊，短模擬不是真人平衡驗收。
+- 手機比例桌面截圖：`/tmp/seal-m3-shots-final/`（設定、寵物、村長、背包、圖鑑、釣魚），非真機。`tools/web_m3_check.mjs` 的隔離 Chromium 測試證明畫布載入、設定存入 IndexedDB／重開、v4 裝備在 Web 升級及等級／金幣保留；**整體仍 FAIL**：測試切到 `index.icon.png` 後瀏覽器請求 `/favicon.ico` 得到 404，報告 `/tmp/seal-web-m3-final/report.json`。遊戲主要資源在伺服器紀錄中為 200；需釐清測試環境／favicon、修正並重跑，不能記為完整瀏覽器通過。本機測試伺服器 8795 已停止。
+- **未完成**：iPhone 17 Safari 真機載入、觸控、背景／強制終止恢復、FPS 與 20～30 分鐘發熱；真人遊玩與平衡；M3 寵物／精煉 GDD、TDD、經濟與 QA 證據；S19／S33 規格與完整回歸；手機候選包 ZIP 與真機相容性。依使用者要求不要再讓機器人跑 25 分鐘，短測可用。其他原型 kit 副本不要自動同步。
+
+### 接手順序
+
+1. 先讀根目錄 `Progress.md`、本檔、`README.md`、`production/session-state/active.md`；以 `git status --short -- Progress.md prototypes/seal-meadow` 確認工作區，保留全部既有未提交修改。
+2. 修正／釐清 `/favicon.ico` 的瀏覽器測試失敗後，以隔離 `XDG_DATA_HOME`／`XDG_CONFIG_HOME` 重跑完整 `bash prototypes/godot-kit/tools/run_tests.sh prototypes/seal-meadow`、短清群 bot、字型／scene 與 `tools/web_m3_check.mjs`。先確認最新 code 皆已包含於候選匯出。
+3. 驗證 `tools/build_mobile_web.sh`，產生 ZIP 並記錄 hash；通用 Web 也需重匯出。補 M3 與 S19／S33 文件、經濟結果及可重現 QA／真機計畫。只有本機／模擬證據時，M3 出口仍標真機未驗證。
+4. 準備可審查的 HTTPS 真機測試方案；上傳 itch 草稿前依既有指示**先取得使用者同意**。真機測完再評估 M3 出口及下一個單機分支；多人保持延後。
 
 ## 一句話現況
 
-M0～M3 的功能都已實作，桌面版 Godot 可以完整玩一輪：點擊戰鬥、範圍揮砍、掉落、背包、村莊、任務、商店、換裝、寵物、精煉、存檔。**還沒有用 iPhone 17 實機測試過**。依照使用者的決定，等一個階段完成後再一起用真機測。
+M0～M3 有桌面可玩的核心循環，本輪補強 M3 並新增單機圖鑑與釣魚切片；最終完整回歸、M3 規格與 iPhone 17 實機驗收尚未完成。先前 `REVIEW.md` 的操作／UI／比例修正與混元 3D 調查也已保留。
 
 ## 怎麼驗證
 
 ```bash
-cd prototypes/seal-meadow
-for t in test_m0 test_m1 test_m1_loot test_m2 test_m3 test_content; do godot --headless --path . -s tests/$t.gd | grep -E "PASSED|FAILED"; done
-xvfb-run -a godot --path . --quit-after 600            # 桌面實跑，不要在使用者桌面跳視窗
-xvfb-run -a godot --path . -s res://tools/measure_vram.gd   # 貼圖記憶體
-godot --headless --path . --fixed-fps 60 -s tests/bot_m1.gd -- clear 5     # 核心指標：揮砍清群
+env XDG_DATA_HOME=/tmp/seal-tests XDG_CONFIG_HOME=/tmp/seal-tests-config bash prototypes/godot-kit/tools/run_tests.sh prototypes/seal-meadow
+env XDG_DATA_HOME=/tmp/seal-bot godot --headless --path prototypes/seal-meadow --fixed-fps 60 -s res://tests/bot_m1.gd -- clear 5
+env XDG_DATA_HOME=/tmp/seal-m3-hardening-test XDG_CONFIG_HOME=/tmp/seal-m3-hardening-config timeout 60 godot --headless --path prototypes/seal-meadow --script res://tests/test_m3_hardening.gd
+env XDG_DATA_HOME=/tmp/seal-collection-tests XDG_CONFIG_HOME=/tmp/seal-collection-config timeout 50 godot --headless --path prototypes/seal-meadow --script res://tests/test_collection.gd
+env XDG_DATA_HOME=/tmp/seal-fishing-tests XDG_CONFIG_HOME=/tmp/seal-fishing-config timeout 50 godot --headless --path prototypes/seal-meadow --script res://tests/test_fishing.gd
 ```
 
-所有 suite 最後一次都通過（2026-10-27）。godot-kit 的 `test_kit` 現在遇到 SCRIPT ERROR 會判定失敗，不會再出現「有錯卻顯示通過」。
+上一輪 7 組 suite 通過（2026-10-27，`/tmp/godot-tests.P3vyHO`）；m1 與 m1_loot 離開時各有 ObjectDB 清理警告。測試包含長按後走去撿物與傳送、重疊點選、反擊／移動、世界地圖、1,000 筆訊息上限及場景編輯後保留。五怪清群短測：普攻 18.0 秒、揮砍 11.1 秒，快 1.62 倍；20 秒 bot 的完成揮砍 2 次／嘗試 2 次。短測不是長時間穩定或平衡驗收。當時 Godot Web 橫向 Chromium 844×390 觸控開關地圖、0 console error／請求失敗；截圖 `/tmp/seal-web-map.png`、`/tmp/seal-web-closed.png`。當時匯出的 `build/web/` 與 `build/seal-meadow-web.zip` 沒有上傳；PCK 64.19 MB、WASM 39.5 MB、zip 約 16 MB，這是舊版。本機伺服器 `http://127.0.0.1:8794/` 是否仍存活需另外確認。
+
+`godot-kit/sync.sh --check seal-meadow` 目前回報 drift；上游有較新的額外模組及 `scene_builder.gd`，本輪沒有同步或修改 kit 副本。第一次沙箱內網頁匯出及測試匯入曾有 Godot socket／editor settings 權限錯誤；之後用隔離設定目錄與授權的環境重新匯出及重跑測試，沒有上述錯誤。
+
+## 本輪 review 實作
+
+- 長按物品／傳送門不會被連續走路事件清掉目標；物品點選半徑 84 px、撿取距離 1.8 m，傳送圈及其名稱皆可點；重疊時依畫面距離選目標。
+- 受到怪物攻擊時，閒置角色會自動反擊；既有有效目標、點地行走與鍵盤移動優先，手動移動也會取消未命中的普攻與互動目標。
+- 右上有較大的寵物／背包按鈕；小地圖與「世界地圖」可開啟可編輯場景 `ui/world_map.tscn`，顯示草原、村莊與目前區域，不直接傳送。
+- 依透明像素的實際身高縮小三種佔位怪物並調整名牌高度；真人手機試玩再定最終比例。`bot_m1.gd` 現在只將 `swept` 事件算作成功施放。
+- 混元 3D 2.1 官方模型可作後續候選，但 VRAM 與地域／輸出授權需要先確認，詳見 `design/pipeline/3d-to-sprite.md`；沒有下載、安裝或生圖。
 
 ## 已完成
 
@@ -30,7 +66,7 @@ godot --headless --path . --fixed-fps 60 -s tests/bot_m1.gd -- clear 5     # 核
 | 記憶體 | 貼圖 180 → 59 MB：sprite 改成 VRAM 壓縮、紙娃娃格子 384 → 256 px；陰影 2048 | `assets/sprites/**.import`、`art_src/blender/test_chibi.render.json` |
 | 修 bug | HP 回復時列表每幀重建，按鈕被刪掉；訊息紀錄沒有上限，造成記憶體洩漏（25 分鐘從 63 漲到 448 MB），已限制最多 60 行；字型缺「獠」字；Town 子節點用到區域座標 | `scripts/hud.gd`、`scripts/main.gd` |
 
-存檔目前是 v4，v1～v3 的舊存檔都有轉換步驟。
+存檔目前是 v5，v1～v4 的舊存檔都有轉換步驟；最終完整回歸與真機驗證尚未完成。
 
 ## 還沒做
 
@@ -40,10 +76,12 @@ godot --headless --path . --fixed-fps 60 -s tests/bot_m1.gd -- clear 5     # 核
    - 機器人從不撤退，6 分鐘死 4～5 次，Lv1 遇到 5 隻一群可能太危險，要靠真人試玩判斷。
    - 收入約 280～600 金／6 分鐘；全部買齊加精煉到 +6 約需 2400 金，大約 4～8 次 session。
    - 寵物進化大約要餵 25～40 次。
-4. **M2-06 多人試驗**：依 D08 延後。多人系統 S28～S39 保留為之後可加入的項目，不刪除。
+4. **M2-06 多人試驗**：依 D08 延後。多人相關系統保留為之後可加入的項目；S19、S33 已優先製作單機薄切片。
 5. **紙娃娃量產**：每個裝備層在 256 px 下一張 2560×1280，約 4.2 MB（壓縮後）。如果要大量換裝，再考慮裁切每層的空白（D05）。
 6. **其他原型的 godot-kit 副本是舊版**：這次只用 `sync.sh` 同步了 seal-meadow，其他原型要等使用者同意再同步。
-7. 機器人 `bot_m1.gd` 的 `sweeps` 會把被取消的施放也算進去；要拿來當指標前請先改。
+7. 已修正 bot 的 `sweeps` 統計；若要重新做長期平衡比較，仍需固定 seed、場景與玩法政策，不能把本輪 20 秒短測當成完整證據。
+
+8. 舊版通用 `Web` 匯出的 PCK 同時包含 S3TC／ETC2 貼圖；新版 `Mobile Web` 候選僅用 ETC2，但載入與真機記憶體仍需實測，且尚未建立 ZIP。不得把舊版壓縮 zip 的 16 MB 誤認為實際 PCK 的下載大小。
 
 ## 注意事項
 

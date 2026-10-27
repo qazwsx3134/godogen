@@ -3,6 +3,22 @@ extends "res://addons/proto_kit/sfx_bank.gd"
 
 const Synth = preload("res://addons/proto_kit/synth.gd")
 
+var enabled: bool = true
+
+
+func set_enabled(value: bool) -> void:
+	enabled = value
+	if not enabled:
+		for voice: AudioStreamPlayer in _players:
+			voice.stop()
+
+
+func play(sound: StringName, min_gap: float = 0.035) -> void:
+	if enabled:
+		super(sound, min_gap)
+	else:
+		played.emit(sound)
+
 
 func _ready() -> void:
 	_streams = {

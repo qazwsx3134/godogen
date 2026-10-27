@@ -12,6 +12,8 @@ const ALL := {
 	"hound_fang": {"name": "獵犬尖牙", "stack": 10, "color": Color("c9d3e6"), "sell": 18},
 	"crystal": {"name": "精煉水晶", "stack": 20, "color": Color("a8e6ff"), "sell": 10, "buy": 40},
 	"ruby": {"name": "紅寶石", "stack": 10, "color": Color("ff3d6e"), "sell": 40, "buy": 160},
+	"fishing_bait": {"name": "釣餌", "stack": 20, "color": Color("edb878"), "buy": 5},
+	"pond_fish": {"name": "草原小魚", "stack": 10, "color": Color("8ddbf1"), "sell": 12, "pet": 90},
 	"iron_sword": {"name": "鐵劍", "stack": 1, "color": Color("d7dde8"), "sell": 60, "buy": 300, "slot": "weapon", "atk": 6,
 		"sheet": "res://resources/sheets/test_chibi_iron.tres"},
 	"cloth_tunic": {"name": "布衣", "stack": 1, "color": Color("c8a36b"), "sell": 40, "buy": 200, "slot": "body", "hp": 25,
@@ -24,7 +26,7 @@ const LAYER := {"body": 0, "weapon": 2}
 const EMPTY_SHEET := {"body": "", "weapon": "res://resources/sheets/test_chibi_weapon.tres"}
 
 ## What the town shop sells, in display order.
-const SHOP := ["apple", "crystal", "ruby", "iron_sword", "cloth_tunic"]
+const SHOP := ["apple", "crystal", "ruby", "fishing_bait", "iron_sword", "cloth_tunic"]
 
 ## Each entry rolls on its own: chance 0..1, count [min, max].
 const DROPS := {

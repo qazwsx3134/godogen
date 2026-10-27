@@ -239,6 +239,13 @@ godot --headless --path . --script res://tools/import_sheets.gd   # sheets.json 
 - 測試小人沒有 `hurt`、`down` 兩個動作，玩家倒下時會改播 `walk`（kit sheet 缺動作時的退回規則）。正式角色要補上。
 - 裝備與裝備之間不會互相遮擋（例如盾和劍），只靠 `layer_sheets` 的固定順序疊放。
 
+## 混元 3D 候選（2026-10-27）
+
+- [Hunyuan3D 2.1 官方專案](https://github.com/Tencent-Hunyuan/Hunyuan3D-2.1)可由圖片產生模型形狀與材質。官方列出的 VRAM 需求為形狀約 10 GB、材質約 21 GB、兩者合計約 29 GB；這是上游需求，尚未在本機量測。
+- 其[社群授權](https://github.com/Tencent-Hunyuan/Hunyuan3D-2.1/blob/main/LICENSE)有地域與分發條件，並限制作品及輸出在歐盟、英國與南韓境內的使用、散佈或展示。正式使用或發布前要依實際版本、發布範圍與條款確認；不能只因模型可免費取得就視為無限制授權。
+- 本作需要獨立素體、頭髮、衣服、武器與同一套動作；生成的模型應先檢查網格、分件與材質，再於 Blender 整理、綁骨及製作動作後走既有渲染流程。這是後續試作方案，尚未驗證生成品質、可換裝性或硬體相容性。
+- 本輪只調查，沒有安裝或產生素材。需要 AI 概念圖時，先依專案約定描述素材並讓使用者選擇直接生成或 opt image prompt。
+
 ## 檔案
 
 | 路徑 | 說明 |

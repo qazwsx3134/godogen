@@ -5,6 +5,7 @@ extends "res://addons/proto_kit/test_kit.gd"
 
 const Items = preload("res://scripts/items.gd")
 const Quests = preload("res://scripts/quests.gd")
+const Fishing = preload("res://scripts/fishing.gd")
 const FontCheck = preload("res://addons/proto_kit/font_check.gd")
 
 
@@ -18,6 +19,8 @@ func _run() -> void:
 	for table: String in Items.DROPS:
 		for e: Dictionary in Items.DROPS[table]:
 			droppable[e.id] = true
+	for id: String in Fishing.CATCHES:
+		droppable[id] = true
 	for id: String in Items.ALL:
 		var def: Dictionary = Items.ALL[id]
 		_expect(droppable.has(id) or Items.SHOP.has(id), "%s can be obtained (drop or shop)" % id)

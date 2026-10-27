@@ -1,0 +1,44 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/fishing_spot.gd" id="1_88uy3"]
+[ext_resource type="FontFile" path="res://assets/fonts/NotoSansTC.ttf" id="2_ukq2v"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m0vdy"]
+albedo_color = Color(0.6627451, 0.4745098, 0.27058825, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_puarw"]
+top_radius = 0.08
+bottom_radius = 0.12
+height = 0.85
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_liquj"]
+shading_mode = 0
+albedo_color = Color(0.44705883, 0.85490197, 0.98039216, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_y5ce8"]
+radius = 0.25
+height = 0.5
+
+[node name="FishingSpot" type="Node3D" unique_id=730590140]
+script = ExtResource("1_88uy3")
+
+[node name="Post" type="MeshInstance3D" parent="." unique_id=26176052]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.42, 0)
+material_override = SubResource("StandardMaterial3D_m0vdy")
+mesh = SubResource("CylinderMesh_puarw")
+
+[node name="Marker" type="MeshInstance3D" parent="." unique_id=8277061]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+material_override = SubResource("StandardMaterial3D_liquj")
+mesh = SubResource("SphereMesh_y5ce8")
+
+[node name="Title" type="Label3D" parent="." unique_id=1874257397]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0)
+pixel_size = 0.006
+billboard = 1
+no_depth_test = true
+modulate = Color(0.62352943, 0.84705883, 1, 1)
+text = "草原釣點"
+font = ExtResource("2_ukq2v")
+font_size = 44
+outline_size = 10

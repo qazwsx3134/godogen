@@ -3,6 +3,10 @@
 [ext_resource type="Script" path="res://scripts/hud.gd" id="1_276te"]
 [ext_resource type="FontFile" path="res://assets/fonts/NotoSansTC.ttf" id="2_546lt"]
 [ext_resource type="Script" path="res://ui/minimap.gd" id="3_546lt"]
+[ext_resource type="PackedScene" path="res://ui/world_map.tscn" id="4_7ihmi"]
+[ext_resource type="PackedScene" path="res://ui/settings_window.tscn" id="5_en2x2"]
+[ext_resource type="PackedScene" path="res://ui/collection_window.tscn" id="6_1v5rv"]
+[ext_resource type="PackedScene" path="res://ui/fishing_window.tscn" id="7_q43x7"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jf26r"]
 content_margin_left = 10.0
@@ -303,13 +307,13 @@ anchor_right = 1.0
 offset_left = -230.0
 offset_top = 12.0
 offset_right = -12.0
-offset_bottom = 64.0
+offset_bottom = 94.0
 focus_mode = 0
 theme_override_styles/normal = SubResource("StyleBoxFlat_jf26r")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_546lt")
 theme_override_styles/hover = SubResource("StyleBoxFlat_jf26r")
 theme_override_styles/focus = SubResource("StyleBoxFlat_jf26r")
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 22
 text = "背包 0/12"
 
 [node name="QuestTracker" type="Label" parent="Root" unique_id=1582640130]
@@ -351,8 +355,42 @@ offset_left = 12.0
 offset_top = 160.0
 offset_right = 162.0
 offset_bottom = 310.0
-mouse_filter = 2
+tooltip_text = "開啟世界地圖"
+mouse_default_cursor_shape = 2
 script = ExtResource("3_546lt")
+
+[node name="MapButton" type="Button" parent="Root" unique_id=219163524]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 12.0
+offset_top = 314.0
+offset_right = 162.0
+offset_bottom = 398.0
+focus_mode = 0
+theme_override_font_sizes/font_size = 22
+text = "世界地圖"
+
+[node name="SettingsButton" type="Button" parent="Root" unique_id=1210593513]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 12.0
+offset_top = 405.0
+offset_right = 162.0
+offset_bottom = 489.0
+focus_mode = 0
+theme_override_font_sizes/font_size = 22
+text = "設定"
+
+[node name="CollectionButton" type="Button" parent="Root" unique_id=611121438]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 170.0
+offset_top = 405.0
+offset_right = 320.0
+offset_bottom = 489.0
+focus_mode = 0
+theme_override_font_sizes/font_size = 22
+text = "冒險圖鑑"
 
 [node name="TutorialPanel" type="PanelContainer" parent="Root" unique_id=349789019]
 unique_name_in_owner = true
@@ -390,19 +428,17 @@ text = "跳過"
 unique_name_in_owner = true
 layout_mode = 0
 anchor_left = 1.0
-anchor_top = 1.0
 anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -350.0
-offset_top = -170.0
-offset_right = -266.0
-offset_bottom = -86.0
+offset_left = -330.0
+offset_top = 12.0
+offset_right = -240.0
+offset_bottom = 94.0
 focus_mode = 0
 theme_override_styles/normal = SubResource("StyleBoxFlat_jf26r")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_jf26r")
 theme_override_styles/hover = SubResource("StyleBoxFlat_jf26r")
 theme_override_styles/focus = SubResource("StyleBoxFlat_jf26r")
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 22
 text = "寵物"
 
 [node name="BagPanel" type="PanelContainer" parent="Root" unique_id=2126863426]
@@ -412,9 +448,9 @@ layout_mode = 0
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -380.0
-offset_top = 72.0
+offset_top = 100.0
 offset_right = -12.0
-offset_bottom = 72.0
+offset_bottom = 600.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_jf26r")
 
 [node name="BagBox" type="VBoxContainer" parent="Root/BagPanel" unique_id=390182238]
@@ -429,9 +465,16 @@ theme_override_font_sizes/font_size = 16
 theme_override_colors/font_color = Color(0.62352943, 0.84705883, 1, 1)
 text = "武器：木劍　衣服：無"
 
-[node name="BagRows" type="VBoxContainer" parent="Root/BagPanel/BagBox" unique_id=1469898365]
+[node name="BagScroll" type="ScrollContainer" parent="Root/BagPanel/BagBox" unique_id=1643211477]
+custom_minimum_size = Vector2(0, 320)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="BagRows" type="VBoxContainer" parent="Root/BagPanel/BagBox/BagScroll" unique_id=1469898365]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="NpcPanel" type="PanelContainer" parent="Root" unique_id=587152141]
 unique_name_in_owner = true
@@ -546,9 +589,9 @@ layout_mode = 0
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -260.0
-offset_top = 72.0
+offset_top = 100.0
 offset_right = 260.0
-offset_bottom = 72.0
+offset_bottom = 100.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_jf26r")
 
 [node name="Box" type="VBoxContainer" parent="Root/PetPanel" unique_id=116940586]
@@ -600,6 +643,36 @@ layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 18
 text = "進化（四葉草＋野豬長牙）"
+
+[node name="WorldMap" parent="Root" unique_id=390261039 instance=ExtResource("4_7ihmi")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SettingsWindow" parent="Root" unique_id=1382214687 instance=ExtResource("5_en2x2")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CollectionWindow" parent="Root" unique_id=369588962 instance=ExtResource("6_1v5rv")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="FishingWindow" parent="Root" unique_id=1356379306 instance=ExtResource("7_q43x7")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
 
 [node name="Fade" type="ColorRect" parent="Root" unique_id=1416011403]
 unique_name_in_owner = true

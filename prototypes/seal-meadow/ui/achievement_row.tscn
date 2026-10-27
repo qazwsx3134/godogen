@@ -1,0 +1,35 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/achievement_row.gd" id="1_j8v6m"]
+
+[node name="AchievementRow" type="HBoxContainer" unique_id=240738513]
+theme_override_constants/separation = 12
+script = ExtResource("1_j8v6m")
+
+[node name="Details" type="VBoxContainer" parent="." unique_id=733053137]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AchievementTitle" type="Label" parent="Details" unique_id=657430617]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+theme_override_colors/font_color = Color(0.972549, 0.8392157, 0.47843137, 1)
+text = "果凍初遇"
+autowrap_mode = 3
+
+[node name="AchievementDetail" type="Label" parent="Details" unique_id=1844046844]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "打倒 1 隻蓬蓬果凍（0/1）
+聲望 +5、金幣 +30"
+autowrap_mode = 3
+
+[node name="AchievementClaim" type="Button" parent="." unique_id=546649805]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 76)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+disabled = true
+text = "未完成"

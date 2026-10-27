@@ -18,4 +18,4 @@ xp_reward = 30
 [node name="Actor" parent="." unique_id=474859758 instance=ExtResource("2_p018g")]
 sheet = ExtResource("3_881ci")
 display_name = "遺跡獵犬"
-head_height = 1.3
+head_height = 0.9

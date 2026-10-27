@@ -59,8 +59,9 @@ func _play(strategy: String, seconds: float, seed_value: int) -> Dictionary:
 	var mem_start := Performance.get_monitor(Performance.MEMORY_STATIC)
 	var nodes_peak := nodes_start
 	var deaths := 0
-	var sweeps := 0
+	var sweep_attempts := 0
 	var sweep_sizes: Array[int] = []
+	player.swept.connect(func(hits: int) -> void: sweep_sizes.append(hits))
 	var was_dead := false
 	var t := 0.0
 	while t < seconds:
@@ -81,8 +82,7 @@ func _play(strategy: String, seconds: float, seed_value: int) -> Dictionary:
 			var close := alive.filter(func(m: Node3D) -> bool: return m._provoked and m.position.distance_to(player.position) <= player.sweep_radius)
 			if close.size() >= min_sweep and player.sweep_left <= 0.0 and player.ap >= player.sweep_cost and not player.casting:
 				if player.use_sweep() == "":
-					sweeps += 1
-					sweep_sizes.append(close.size())
+					sweep_attempts += 1
 				continue
 			var provoked := alive.filter(func(m: Node3D) -> bool: return m._provoked)
 			var calm := alive.filter(func(m: Node3D) -> bool: return not m._provoked)
@@ -94,7 +94,8 @@ func _play(strategy: String, seconds: float, seed_value: int) -> Dictionary:
 	var bag_value := 0
 	for s: Dictionary in player.bag.slots:
 		bag_value += int(preload("res://scripts/items.gd").ALL[s.id].get("sell", 0)) * s.count
-	var result := {"strategy": strategy, "xp": _total_xp(), "level": player.level, "deaths": deaths, "sweeps": sweeps,
+	var result := {"strategy": strategy, "xp": _total_xp(), "level": player.level, "deaths": deaths, "sweeps": sweep_sizes.size(),
+		"sweep_attempts": sweep_attempts,
 		"sweep_sizes": sweep_sizes, "bag_value": bag_value, "bag_slots": player.bag.slots.size(),
 		"nodes": "%d -> %d (peak %d)" % [nodes_start, Performance.get_monitor(Performance.OBJECT_NODE_COUNT), nodes_peak],
 		"static_mb": "%.1f -> %.1f" % [mem_start / 1048576.0, Performance.get_monitor(Performance.MEMORY_STATIC) / 1048576.0]}

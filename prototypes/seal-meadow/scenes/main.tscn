@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" path="res://scenes/town.tscn" id="10_town"]
 [ext_resource type="PackedScene" path="res://scenes/portal.tscn" id="11_portal"]
 [ext_resource type="PackedScene" path="res://scenes/pet_follower.tscn" id="12_pet"]
+[ext_resource type="PackedScene" path="res://scenes/fishing_spot.tscn" id="13_trceg"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_choun"]
 shading_mode = 0
@@ -80,3 +81,7 @@ arrival = Vector3(300, 0, 5)
 [node name="Pet" parent="." unique_id=2041768391 instance=ExtResource("12_pet")]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 4.6)
+
+[node name="FishingSpot" parent="." unique_id=730590140 instance=ExtResource("13_trceg")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.6, 0, -12)

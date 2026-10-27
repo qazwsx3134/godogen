@@ -9,7 +9,7 @@ atlas = ExtResource("1_gmgf2")
 columns = 5
 cell_px = 512
 foot_px = 8
-meters_per_px = 0.0042
+meters_per_px = 0.0032
 directions = 1
 anims = {
 "attack": {

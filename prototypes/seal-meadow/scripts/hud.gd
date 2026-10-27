@@ -32,6 +32,13 @@ extends CanvasLayer
 @onready var sell_button: Button = %SellButton
 @onready var close_button: Button = %CloseButton
 @onready var minimap: Control = %Minimap
+@onready var map_button: Button = %MapButton
+@onready var world_map: Control = %WorldMap
+@onready var settings_button: Button = %SettingsButton
+@onready var settings_window: Control = %SettingsWindow
+@onready var collection_button: Button = %CollectionButton
+@onready var collection_window: Control = %CollectionWindow
+@onready var fishing_window: Control = %FishingWindow
 @onready var tutorial_panel: Control = %TutorialPanel
 @onready var tutorial_text: Label = %TutorialText
 @onready var tutorial_skip: Button = %TutorialSkip
@@ -57,6 +64,8 @@ const REASON_TEXT := {"gold": "金幣不夠。", "bag_full": "背包放不下。
 
 ## Refine button waiting for its second press (slot), so one stray tap never spends a stone.
 var _refine_armed: String = ""
+var _evolve_armed: bool = false
+var _large_text: bool = false
 ## What each list was last built from. HP regen emits stats_changed every frame; lists are rebuilt only when their
 ## content changes, so a button is never freed under the player's finger.
 var _built := {}
@@ -97,13 +106,29 @@ func bind(p: Node3D) -> void:
 	name_label.text = player.player_name
 	sweep_button.pressed.connect(try_sweep)
 	minimap.player = player
+	minimap.gui_input.connect(_on_minimap_input)
+	map_button.pressed.connect(open_world_map)
+	settings_button.pressed.connect(open_settings)
+	settings_window.changed.connect(func(key: String, value: bool) -> void: main.update_setting(key, value))
+	collection_button.pressed.connect(open_collection)
+	collection_window.bind(player, main)
+	collection_window.rows_updated.connect(func() -> void: _apply_text_size(collection_window))
+	fishing_window.start_requested.connect(main.start_fishing)
+	fishing_window.stop_requested.connect(main.cancel_fishing)
 	pet_button.pressed.connect(func() -> void:
-		pet_panel.visible = not pet_panel.visible
-		npc_panel.visible = false
-		bag_panel.visible = false
+		var show := not pet_panel.visible
+		_close_panels()
+		pet_panel.visible = show
 		refresh())
-	pet_close.pressed.connect(func() -> void: pet_panel.visible = false)
+	pet_close.pressed.connect(func() -> void:
+		pet_panel.visible = false
+		_evolve_armed = false)
 	evolve_button.pressed.connect(func() -> void:
+		if not _evolve_armed:
+			_evolve_armed = true
+			_refresh_pet()
+			return
+		_evolve_armed = false
 		var r := {}
 		var reason: String = player.evolve_pet(r)
 		if reason == "":
@@ -115,7 +140,10 @@ func bind(p: Node3D) -> void:
 	tutorial_skip.pressed.connect(func() -> void:
 		player.tutorial.skip()
 		_act(""))
-	bag_button.pressed.connect(func() -> void: bag_panel.visible = not bag_panel.visible)
+	bag_button.pressed.connect(func() -> void:
+		var show := not bag_panel.visible
+		_close_panels()
+		bag_panel.visible = show)
 	apple_button.pressed.connect(func() -> void: _act(player.use_item("apple")))
 	close_button.pressed.connect(func() -> void:
 		npc_panel.visible = false
@@ -129,6 +157,71 @@ func bind(p: Node3D) -> void:
 		_act("" if earned > 0 else "none"))
 	refresh()
 	log_line("歡迎來到蓬蓬草原！點地面移動，點怪物攻擊。", Color("ffd75e"))
+
+
+func _on_minimap_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		open_world_map()
+
+
+func open_world_map() -> void:
+	_close_panels()
+	world_map.show_zone(main.zone)
+
+
+func open_settings() -> void:
+	_close_panels()
+	settings_window.show_settings(main.settings)
+
+
+func open_collection() -> void:
+	_close_panels()
+	collection_window.show_book()
+
+
+func open_fishing() -> void:
+	_close_panels()
+	fishing_window.show_spot(player.bag.count("fishing_bait"))
+
+
+func _close_panels() -> void:
+	bag_panel.visible = false
+	npc_panel.visible = false
+	pet_panel.visible = false
+	world_map.visible = false
+	settings_window.visible = false
+	collection_window.visible = false
+	if fishing_window.visible:
+		main.cancel_fishing()
+		fishing_window.visible = false
+	_refine_armed = ""
+	_evolve_armed = false
+
+
+func close_top_window() -> void:
+	_close_panels()
+
+
+func set_large_text(enabled: bool) -> void:
+	_large_text = enabled
+	_apply_text_size($Root)
+
+
+func _apply_text_size(node: Node) -> void:
+	var key := ""
+	if node is Label or node is BaseButton:
+		key = "font_size"
+	elif node is RichTextLabel:
+		key = "normal_font_size"
+	if not key.is_empty():
+		var control := node as Control
+		if not control.has_meta("base_font_size"):
+			control.set_meta("base_font_size", control.get_theme_font_size(key))
+		var base: int = int(control.get_meta("base_font_size"))
+		if base > 0:
+			control.add_theme_font_size_override(key, roundi(base * (1.25 if _large_text else 1.0)))
+	for child: Node in node.get_children():
+		_apply_text_size(child)
 
 
 func refresh() -> void:
@@ -145,7 +238,7 @@ func refresh() -> void:
 	var worn: PackedStringArray = []
 	for slot: String in player.equipped:
 		var id: String = player.equipped[slot]
-		worn.append("%s：%s" % [SLOT_NAMES[slot], Items.ALL[id].name if id != "" else "無"])
+		worn.append("%s：%s" % [SLOT_NAMES[slot], "%s +%d" % [Items.ALL[id].name, player.refine_level(slot)] if id != "" else "無"])
 	gear_label.text = "　".join(worn)
 	_fill_bag_rows()
 	_refresh_quest()
@@ -163,8 +256,9 @@ func _refresh_pet() -> void:
 	var bonus: PackedStringArray = []
 	for stat: String in p.stats():
 		bonus.append("%s +%d" % ["攻擊" if stat == "atk" else "生命", int(p.stats()[stat])])
-	pet_info.text = "經驗 %d/%d　飽足 %d%%　加成 %s%s" % [p.xp, p.xp_to_next(), int(p.hunger * 100.0), "、".join(bonus),
+	pet_info.text = "經驗 %d/%d　飽足 %d%%　加成 %s%s\n進化成功率 90%%；失敗消耗材料並清空本級經驗。" % [p.xp, p.xp_to_next(), int(p.hunger * 100.0), "、".join(bonus),
 		"\n想吃：%s" % Items.ALL[p.wants].name if p.wants != "" else ""]
+	evolve_button.text = "確認進化？" if _evolve_armed else "進化（四葉草＋野豬長牙）"
 	if not _changed("feed", [player.bag.slots, p.wants]):
 		evolve_button.disabled = not p.can_evolve()
 		return
@@ -175,7 +269,9 @@ func _refresh_pet() -> void:
 		feed_rows.add_child(row)
 		var have: int = player.bag.count(id)
 		row.setup("%s（有 %d）" % [Items.ALL[id].name, have], "想吃！" if p.wants == id else "", "餵", have > 0)
+		_apply_text_size(row)
 		row.action_pressed.connect(func() -> void:
+			_evolve_armed = false
 			var r := {}
 			var reason: String = player.feed_pet(id, r)
 			if reason == "":
@@ -205,15 +301,18 @@ func _fill_bag_rows() -> void:
 		bag_rows.add_child(row)
 		var action := "裝備" if def.has("slot") else ("使用" if def.has("heal") else "")
 		var info := "攻擊 +%d" % def.atk if def.has("atk") else ("生命 +%d" % def.hp if def.has("hp") else "")
-		row.setup("%s ×%d" % [def.name, s.count], info, action)
+		var item_name: String = "%s +%d" % [def.name, int(s.get("refine", 0))] if def.has("slot") else "%s ×%d" % [def.name, s.count]
+		row.setup(item_name, info, action)
+		_apply_text_size(row)
 		var id: String = s.id
+		var uid: String = s.get("uid", "")
 		row.action_pressed.connect(func() -> void:
-			_act(player.equip(id) if def.has("slot") else player.use_item(id)))
+			_act(player.equip(id, uid) if def.has("slot") else player.use_item(id)))
 
 
 ## Opens the NPC panel (Main calls this when the player reaches the NPC).
 func open_npc() -> void:
-	bag_panel.visible = false
+	_close_panels()
 	npc_panel.visible = true
 	_refresh_npc()
 
@@ -246,6 +345,7 @@ func _refresh_npc() -> void:
 		var row: Node = ItemRow.instantiate()
 		shop_rows.add_child(row)
 		row.setup(def.name, "%d 金" % def.buy, "買", player.gold >= def.buy)
+		_apply_text_size(row)
 		row.action_pressed.connect(func() -> void:
 			var r := Shop.buy(player, id)
 			if r == "":
@@ -254,7 +354,7 @@ func _refresh_npc() -> void:
 
 
 func _fill_refine_rows() -> void:
-	if not _changed("refine", [player.equipped, player.refine, player.bag.slots]):
+	if not _changed("refine", [player.gear, player.bag.slots]):
 		return
 	for c in refine_rows.get_children():
 		c.queue_free()
@@ -262,20 +362,27 @@ func _fill_refine_rows() -> void:
 		var id: String = player.equipped[slot]
 		if id == "":
 			continue
-		var level: int = player.refine.get(id, 0)
+		var level: int = player.refine_level(slot)
+		var uid: String = player.gear[slot].uid
 		var row: Node = ItemRow.instantiate()
 		refine_rows.add_child(row)
 		if level >= Refine.max_level():
 			row.setup("%s +%d" % [Items.ALL[id].name, level], "已達上限", "")
+			_apply_text_size(row)
 			continue
 		var step: Dictionary = Refine.STEPS[level]
 		var info := "%s×1　成功率 %d%%" % [Items.ALL[step.stone].name, int(step.chance * 100.0)]
-		var armed := _refine_armed == slot
+		var armed := _refine_armed == uid
 		row.setup("%s +%d → +%d" % [Items.ALL[id].name, level, level + 1], info, "確定？" if armed else "精煉",
 			player.bag.count(step.stone) > 0)
+		_apply_text_size(row)
 		row.action_pressed.connect(func() -> void:
-			if _refine_armed != slot:
-				_refine_armed = slot
+			if player.gear[slot].get("uid", "") != uid:
+				_refine_armed = ""
+				refresh()
+				return
+			if _refine_armed != uid:
+				_refine_armed = uid
 				row.action_button.text = "確定？"
 				return
 			_refine_armed = ""

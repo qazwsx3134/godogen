@@ -1,0 +1,118 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://ui/theme.tres" id="1_53a8f"]
+[ext_resource type="Script" path="res://ui/collection_window.gd" id="2_s86ku"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_17m86"]
+content_margin_left = 16.0
+content_margin_top = 16.0
+content_margin_right = 16.0
+content_margin_bottom = 16.0
+bg_color = Color(0.1254902, 0.18431373, 0.23921569, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.9098039, 0.7607843, 0.3529412, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[node name="CollectionWindow" type="Control" unique_id=369588962]
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource("1_53a8f")
+script = ExtResource("2_s86ku")
+
+[node name="Dim" type="ColorRect" parent="." unique_id=701764935]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.02, 0.04, 0.09, 0.76)
+
+[node name="Window" type="PanelContainer" parent="." unique_id=728606798]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -550.0
+offset_top = -305.0
+offset_right = 550.0
+offset_bottom = 305.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_17m86")
+
+[node name="Contents" type="VBoxContainer" parent="Window" unique_id=67659865]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Header" type="HBoxContainer" parent="Window/Contents" unique_id=130519982]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Window/Contents/Header" unique_id=1873733496]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 36
+text = "冒險圖鑑"
+autowrap_mode = 3
+
+[node name="CollectionClose" type="Button" parent="Window/Contents/Header" unique_id=215824927]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 82)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "關閉"
+
+[node name="FameText" type="Label" parent="Window/Contents" unique_id=537216768]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "聲望 0　稱號：新朋友"
+autowrap_mode = 3
+
+[node name="Scroll" type="ScrollContainer" parent="Window/Contents" unique_id=725848611]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Body" type="VBoxContainer" parent="Window/Contents/Scroll" unique_id=371515307]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="MonstersTitle" type="Label" parent="Window/Contents/Scroll/Body" unique_id=239737307]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "怪物圖鑑"
+autowrap_mode = 3
+
+[node name="MonstersText" type="Label" parent="Window/Contents/Scroll/Body" unique_id=1314366812]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 23
+text = "？？？　提示：蓬蓬草原"
+autowrap_mode = 3
+
+[node name="Divider" type="HSeparator" parent="Window/Contents/Scroll/Body" unique_id=1942427514]
+layout_mode = 2
+
+[node name="AchievementsTitle" type="Label" parent="Window/Contents/Scroll/Body" unique_id=931455167]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "成就與獎勵"
+autowrap_mode = 3
+
+[node name="AchievementRows" type="VBoxContainer" parent="Window/Contents/Scroll/Body" unique_id=552954541]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="CollectionStatus" type="Label" parent="Window/Contents" unique_id=861715877]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+autowrap_mode = 3

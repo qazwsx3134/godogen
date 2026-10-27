@@ -1,9 +1,7 @@
 extends RefCounted
 ## Refining worn equipment, +0 .. +6 (D10: mobile-friendly, no level loss and no destroyed items).
-## Crystal steps always work; ruby steps can fail and then only the ruby is lost. One press = one roll on Combat's
-## seeded rng, and the result is saved right away (Main.town_action), so a retry is a new attempt, not a reroll.
-## ponytail: the level is kept per item id (owning two iron swords shares one level); add item instances when
-## duplicate gear matters.
+## Crystal steps always work; ruby steps can fail and then only the ruby is lost. Levels belong to an equipment
+## instance. A repeated request sequence returns its recorded result, while an older request is rejected.
 
 const Items = preload("res://scripts/items.gd")
 const RefineLadder = preload("res://addons/proto_kit/refine_ladder.gd")
@@ -26,20 +24,29 @@ static func max_level() -> int:
 	return STEPS.size()
 
 
-## Returns "" or why not: none (nothing worn), max, stone. On "", result has ok and the new level.
-static func attempt(player: Node, slot: String, rng: RandomNumberGenerator, result: Dictionary = {}) -> String:
+## Returns "" or why not: none (nothing worn), max, stone, stale. On "", result has ok and the new level.
+## A negative request sequence allocates the next local command; callers may supply one for retries.
+static func attempt(player: Node, slot: String, rng: RandomNumberGenerator, result: Dictionary = {}, request_seq: int = -1) -> String:
+	var seq: int = player.refine_request_seq + 1 if request_seq < 0 else request_seq
+	if seq > 0 and seq == player.refine_request_seq:
+		result.merge(player.refine_last_result, true)
+		return ""
+	if seq <= player.refine_request_seq:
+		return "stale"
 	var id: String = player.equipped.get(slot, "")
 	if id == "":
 		return "none"
-	var level: int = player.refine.get(id, 0)
+	var level: int = player.refine_level(slot)
 	if level >= max_level():
 		return "max"
 	var stone: String = STEPS[level].stone
 	if not player.bag.remove(stone, 1):
 		return "stone"
 	var r: Dictionary = ladder.attempt(level, rng)
-	player.refine[id] = r.level
-	result.merge({"ok": r.ok, "level": r.level, "stone": stone}, true)
+	player.gear[slot].refine = r.level
+	player.refine_request_seq = seq
+	player.refine_last_result = {"ok": r.ok, "level": r.level, "stone": stone, "uid": player.gear[slot].uid}
+	result.merge(player.refine_last_result, true)
 	player.refresh_stats()
 	return ""
 

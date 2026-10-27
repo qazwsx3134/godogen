@@ -73,11 +73,12 @@ func turn_in(player: Node) -> String:
 			return "bag_full"
 	player.bag.slots = trial.slots
 	player.gold += int(q.reward.get("gold", 0))
-	if q.reward.has("xp"):
-		player.gain_xp(int(q.reward.xp), "任務「%s」" % q.title)
 	index += 1
 	accepted = false
 	progress = 0
+	# gain_xp emits stats_changed and can checkpoint immediately: the quest must already be complete.
+	if q.reward.has("xp"):
+		player.gain_xp(int(q.reward.xp), "任務「%s」" % q.title)
 	return ""
 
 

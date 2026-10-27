@@ -1,0 +1,92 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://ui/theme.tres" id="1_6bq85"]
+[ext_resource type="Script" path="res://ui/settings_window.gd" id="2_kqoqg"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8vcrr"]
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
+bg_color = Color(0.1254902, 0.18431373, 0.23921569, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.9098039, 0.7607843, 0.3529412, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[node name="SettingsWindow" type="Control" unique_id=1382214687]
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource("1_6bq85")
+script = ExtResource("2_kqoqg")
+
+[node name="Dim" type="ColorRect" parent="." unique_id=89856022]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.02, 0.04, 0.09, 0.76)
+
+[node name="Window" type="PanelContainer" parent="." unique_id=170321242]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -440.0
+offset_top = -280.0
+offset_right = 440.0
+offset_bottom = 280.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_8vcrr")
+
+[node name="Contents" type="VBoxContainer" parent="Window" unique_id=70999565]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Header" type="HBoxContainer" parent="Window/Contents" unique_id=2079259220]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Window/Contents/Header" unique_id=1912840694]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 36
+text = "遊戲設定"
+
+[node name="SettingsClose" type="Button" parent="Window/Contents/Header" unique_id=761950995]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 82)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "關閉"
+
+[node name="Hint" type="Label" parent="Window/Contents" unique_id=522152557]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "調整音效與閱讀方式"
+
+[node name="SoundToggle" type="CheckButton" parent="Window/Contents" unique_id=821108301]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 82)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "音效"
+
+[node name="LargeTextToggle" type="CheckButton" parent="Window/Contents" unique_id=1553990960]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 82)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "加大文字"
+
+[node name="ReducedMotionToggle" type="CheckButton" parent="Window/Contents" unique_id=410613662]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 82)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "減少戰鬥停頓"

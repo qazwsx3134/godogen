@@ -34,12 +34,12 @@ func _run() -> void:
 	main.save_game()
 	var pet: Dictionary = player.pet.to_dict()
 	pet.erase("hunger")  # keeps draining between the save and the check
-	var refine: Dictionary = player.refine.duplicate()
+	var gear: Dictionary = player.gear.duplicate(true)
 	var atk: int = player.attack_power
 	await _fresh()
 	var pet_now: Dictionary = player.pet.to_dict()
 	pet_now.erase("hunger")
-	_expect(pet_now == pet and player.refine == refine and player.attack_power == atk,
+	_expect(pet_now == pet and player.gear == gear and player.attack_power == atk,
 		"pet, refine levels and the attack they give survive a restart")
 	main.queue_free()
 	_finish("SEAL MEADOW M3 TESTS")
@@ -106,17 +106,17 @@ func _test_refine() -> void:
 	player.bag.add("crystal", 3)
 	for i in 3:
 		Refine.attempt(player, "weapon", rng)
-	_expect(player.refine.iron_sword == 3 and player.bag.count("crystal") == 0 and player.attack_power == atk + 6,
+	_expect(player.refine_level("weapon") == 3 and player.bag.count("crystal") == 0 and player.attack_power == atk + 6,
 		"three crystals: +3, +2 attack each")
 	player.bag.add("ruby", 30)
 	var fails := 0
-	while player.refine.iron_sword < Refine.max_level():
-		var level: int = player.refine.iron_sword
+	while player.refine_level("weapon") < Refine.max_level():
+		var level: int = player.refine_level("weapon")
 		var r := {}
 		Refine.attempt(player, "weapon", rng, r)
 		if not r.ok:
 			fails += 1
-			_expect(player.refine.iron_sword == level, "a failed ruby step keeps the level (D10)")
+			_expect(player.refine_level("weapon") == level, "a failed ruby step keeps the level (D10)")
 	_expect(Refine.attempt(player, "weapon", rng) == "max", "+6 is the top")
 	_expect(player.bag.count("ruby") == 30 - 3 - fails, "one ruby per try, success or not")
 	# UI: the first tap only arms the button
@@ -136,7 +136,7 @@ func _test_refine() -> void:
 	await _frames(2)
 	var rows: Array = hud.refine_rows.get_children().filter(func(r: Node) -> bool: return not r.is_queued_for_deletion())
 	await _press(rows[0].action_button)
-	_expect(player.refine.get("cloth_tunic", 0) == 0 and player.bag.count("crystal") == 1, "first tap only asks to confirm")
+	_expect(player.refine_level("body") == 0 and player.bag.count("crystal") == 1, "first tap only asks to confirm")
 	rows = hud.refine_rows.get_children().filter(func(r: Node) -> bool: return not r.is_queued_for_deletion())
 	await _press(rows[0].action_button)
-	_expect(player.refine.get("cloth_tunic", 0) == 1 and player.bag.count("crystal") == 0, "second tap refines")
+	_expect(player.refine_level("body") == 1 and player.bag.count("crystal") == 0, "second tap refines")

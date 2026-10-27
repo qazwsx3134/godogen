@@ -6,8 +6,17 @@ extends RefCounted
 const Items = preload("res://scripts/items.gd")
 
 var capacity: int = 12
-## [{id, count}], at most `capacity` entries.
+## Stackable items use {id, count}; equipment additionally has a stable uid and its own refine level.
 var slots: Array[Dictionary] = []
+
+
+static func new_equipment_uid() -> String:
+	return Crypto.new().generate_random_bytes(16).hex_encode()
+
+
+static func equipment_record(id: String, level: int = 0, uid: String = "") -> Dictionary:
+	return {"id": id, "count": 1, "uid": uid if not uid.is_empty() else new_equipment_uid(),
+		"refine": clampi(level, 0, 6)}
 
 
 func _init(slot_count: int = 12) -> void:
@@ -36,11 +45,33 @@ func add(id: String, amount: int) -> bool:
 			left -= put
 	while left > 0 and trial.size() < capacity:
 		var put := mini(left, stack)
-		trial.append({"id": id, "count": put})
+		trial.append(equipment_record(id) if Items.ALL[id].has("slot") else {"id": id, "count": put})
 		left -= put
 	if left > 0:
 		return false
 	slots = trial
+	return true
+
+
+## Move a specific equipment instance without throwing away its identity or refinement.
+func take_equipment(id: String, uid: String = "") -> Dictionary:
+	for i in slots.size():
+		var item: Dictionary = slots[i]
+		if item.id == id and Items.ALL[id].has("slot") and (uid.is_empty() or item.get("uid", "") == uid):
+			slots.remove_at(i)
+			return item.duplicate(true)
+	return {}
+
+
+func put_equipment(item: Dictionary) -> bool:
+	var id: String = item.get("id", "")
+	var uid: String = item.get("uid", "")
+	if not Items.ALL.has(id) or not Items.ALL[id].has("slot") or uid.is_empty() or slots.size() >= capacity:
+		return false
+	for existing: Dictionary in slots:
+		if existing.get("uid", "") == uid:
+			return false
+	slots.append(equipment_record(id, int(item.get("refine", 0)), uid))
 	return true
 
 
@@ -76,8 +107,16 @@ func to_data() -> Array:
 ## Unknown ids (removed content) are dropped; counts are clamped to the stack limit.
 func load_data(data: Array) -> void:
 	slots.clear()
+	var seen_uids := {}
 	for s in data:
 		if s is Dictionary and Items.ALL.has(s.get("id", "")) and slots.size() < capacity:
 			var n := clampi(int(s.get("count", 0)), 0, Items.ALL[s.id].stack)
 			if n > 0:
-				slots.append({"id": String(s.id), "count": n})
+				if Items.ALL[s.id].has("slot"):
+					var uid: String = s.get("uid", "")
+					if uid.is_empty() or seen_uids.has(uid):
+						uid = new_equipment_uid()
+					seen_uids[uid] = true
+					slots.append(equipment_record(String(s.id), int(s.get("refine", 0)), uid))
+				else:
+					slots.append({"id": String(s.id), "count": n})

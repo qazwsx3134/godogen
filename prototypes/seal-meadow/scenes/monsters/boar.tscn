@@ -18,4 +18,4 @@ xp_reward = 18
 [node name="Actor" parent="." unique_id=1019322429 instance=ExtResource("2_6g34k")]
 sheet = ExtResource("3_8qmvo")
 display_name = "刺莓野豬"
-head_height = 1.35
+head_height = 0.9

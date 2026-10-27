@@ -1,5 +1,16 @@
 # 進度與 Agent 交接
 
+## 蓬蓬草原 · seal-meadow（2026-10-28，出門交接）
+
+- **狀態與決定**：使用者要求補 M3、依 `design/planning/` 繼續，選擇優先製作單機後續內容，多人 M4 暫緩；現在出門要求交接，已停止開發。分支 `master`、實作基準與目前最新提交 `21604e31`；本次 seal-meadow 程式、場景、測試與文件及本交接尚未 commit／push，保留其他專案現有修改。
+- **已實作，尚待驗收**：M3 存檔 v5／舊版遷移、裝備個別精煉狀態、交易重送與損壞／新版存檔保護、設定與背景處理、寵物進化確認；接著實作單機 S19 圖鑑／成就／聲望和 S33 釣魚薄切片。上一輪 `REVIEW.md` 的長按互動、反擊、寵物鈕、世界地圖與怪物比例修正也都保留。規格、經濟及真機驗收尚未完成，不能將 M3 標為驗收通過。
+- **驗證與限制**：10 組 headless suite 曾通過（`/tmp/godot-tests.bqN5hB/`），但後續修改存檔驗證及圖鑑保留資料後沒有重跑完整回歸；之後 `test_m3_hardening.gd`、`test_collection.gd` 分別通過，`test_fishing.gd` 的通過早於最後存檔驗證修改。Chromium 中畫布載入、設定持久化及 v4→v5 遷移檢查通過，但整體測試因 `/favicon.ico` 404 **FAIL**（`/tmp/seal-web-m3-final/report.json`），原因需處理並重跑。手機比例截圖 `/tmp/seal-m3-shots-final/` 並非真機。
+- **網頁候選**：`build/mobile-web/` 手動匯出並套 IDBFS 補丁，PCK 約 35.05 MB、WASM 約 39.5 MB；`tools/build_mobile_web.sh` 尚未完整驗證，也沒有手機版 ZIP。`build/web/` 是 2026-10-27 舊版。本輪測試伺服器 8795 已停止；沒有上傳。
+- **未完成／下一步**：釐清 favicon／測試失敗，重跑最終完整 suite、短 bot、瀏覽器與匯出腳本，補 M3 及 S19／S33 規格、經濟與 QA 文件；iPhone 17 Safari 觸控、存讀恢復、FPS、20～30 分鐘發熱及真人試玩仍待驗收。使用者要求不要再讓 bot 跑 25 分鐘；其他原型 godot-kit 副本不要自動同步。itch 草稿上傳前須另徵使用者同意；無授權不 commit／push。
+- **接手入口**：`prototypes/seal-meadow/PROGRESS.md`（詳細記錄與指令）、`README.md`、`REVIEW.md`、`production/session-state/active.md`、`production/roadmap.md`；先用 `git status --short -- Progress.md prototypes/seal-meadow` 檢查並保留既有未提交修改。
+
+---
+
 ## 萬事屋吐槽 ADV · debt-commission（2026-10-27）
 
 - **目前工作**：`prototypes/debt-commission`，分支 `master`；實作基準為 `0a65639`，目前最新提交是合併其他專案的 `7b6964a`。本輪修改尚未 commit 或 push。使用者已想到第一篇短篇，會在開發與測試後提供，再一起試寫並完善協作流程；目前沒有替作者編寫新故事。

@@ -1,0 +1,194 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://ui/theme.tres" id="1_jsrsj"]
+[ext_resource type="Script" path="res://ui/world_map.gd" id="2_kkwua"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7jbuk"]
+content_margin_left = 16.0
+content_margin_top = 16.0
+content_margin_right = 16.0
+content_margin_bottom = 16.0
+bg_color = Color(0.1254902, 0.18431373, 0.23921569, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.9098039, 0.7607843, 0.3529412, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1m806"]
+content_margin_left = 16.0
+content_margin_top = 16.0
+content_margin_right = 16.0
+content_margin_bottom = 16.0
+bg_color = Color(0.15294118, 0.29803923, 0.25882354, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.42745098, 0.5803922, 0.48235294, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e4jf3"]
+content_margin_left = 16.0
+content_margin_top = 16.0
+content_margin_right = 16.0
+content_margin_bottom = 16.0
+bg_color = Color(0.23921569, 0.28627452, 0.23137255, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.42745098, 0.5803922, 0.48235294, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[node name="WorldMap" type="Control" unique_id=390261039]
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource("1_jsrsj")
+script = ExtResource("2_kkwua")
+
+[node name="Dim" type="ColorRect" parent="." unique_id=1254929830]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.02, 0.04, 0.09, 0.76)
+
+[node name="Window" type="PanelContainer" parent="." unique_id=798519821]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -550.0
+offset_top = -305.0
+offset_right = 550.0
+offset_bottom = 305.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_7jbuk")
+
+[node name="Contents" type="VBoxContainer" parent="Window" unique_id=1683276142]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Header" type="HBoxContainer" parent="Window/Contents" unique_id=895756192]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Window/Contents/Header" unique_id=2124848983]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 38
+text = "世界地圖"
+autowrap_mode = 3
+
+[node name="MapClose" type="Button" parent="Window/Contents/Header" unique_id=1568846540]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 82)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "關閉"
+
+[node name="Subtitle" type="Label" parent="Window/Contents" unique_id=2125033353]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(0.7882353, 0.8392157, 0.8627451, 1)
+text = "探索兩個已開放的區域"
+autowrap_mode = 3
+
+[node name="Regions" type="HBoxContainer" parent="Window/Contents" unique_id=806765962]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 14
+
+[node name="Meadow" type="PanelContainer" parent="Window/Contents/Regions" unique_id=1733800674]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_1m806")
+
+[node name="Contents" type="VBoxContainer" parent="Window/Contents/Regions/Meadow" unique_id=1393490594]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="Window/Contents/Regions/Meadow/Contents" unique_id=1442218157]
+layout_mode = 2
+theme_override_font_sizes/font_size = 34
+theme_override_colors/font_color = Color(0.972549, 0.8392157, 0.47843137, 1)
+text = "蓬蓬草原"
+autowrap_mode = 3
+
+[node name="Details" type="Label" parent="Window/Contents/Regions/Meadow/Contents" unique_id=169501975]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 26
+text = "果凍與其他怪物
+練功、收集掉落"
+autowrap_mode = 3
+
+[node name="MeadowHere" type="Label" parent="Window/Contents/Regions/Meadow/Contents" unique_id=1724232326]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(0.7294118, 0.9490196, 0.70980394, 1)
+text = "● 目前位置"
+autowrap_mode = 3
+
+[node name="Link" type="Label" parent="Window/Contents/Regions" unique_id=1823701032]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "傳送門
+←    →"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Town" type="PanelContainer" parent="Window/Contents/Regions" unique_id=1241906027]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_e4jf3")
+
+[node name="Contents" type="VBoxContainer" parent="Window/Contents/Regions/Town" unique_id=1506053439]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="Window/Contents/Regions/Town/Contents" unique_id=684580204]
+layout_mode = 2
+theme_override_font_sizes/font_size = 34
+theme_override_colors/font_color = Color(0.972549, 0.8392157, 0.47843137, 1)
+text = "蓬蓬村"
+autowrap_mode = 3
+
+[node name="Details" type="Label" parent="Window/Contents/Regions/Town/Contents" unique_id=465100222]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 26
+text = "村長、任務、商店
+裝備精煉"
+autowrap_mode = 3
+
+[node name="TownHere" type="Label" parent="Window/Contents/Regions/Town/Contents" unique_id=800767740]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(0.7294118, 0.9490196, 0.70980394, 1)
+text = "● 目前位置"
+autowrap_mode = 3
+
+[node name="TravelHint" type="Label" parent="Window/Contents" unique_id=763951745]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(0.7882353, 0.8392157, 0.8627451, 1)
+text = "移動到傳送門並點擊，可往返草原與村莊。"
+autowrap_mode = 3

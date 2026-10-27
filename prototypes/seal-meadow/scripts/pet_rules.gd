@@ -4,7 +4,7 @@ extends RefCounted
 ## Seed egg, two foods, one evolution recipe with two outcomes.
 
 const OPTIONS := {
-	"egg": "seed", "foods": ["apple", "jelly_gel"], "drain": 1.0 / 480.0, "can_run_away": false, "max_stage": 2,
+	"egg": "seed", "foods": ["apple", "jelly_gel", "pond_fish"], "drain": 1.0 / 480.0, "can_run_away": false, "max_stage": 2,
 	"types": {"": {"atk": 1}, "leaf": {"atk": 3, "hp": 10}, "thorn": {"atk": 5}},
 }
 const RECIPES := [
