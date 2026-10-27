@@ -1,0 +1,16 @@
+[gd_resource type="StyleBoxTexture" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/reference/equipment.png" id="1_f7n3b"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3vn3e"]
+atlas = ExtResource("1_f7n3b")
+region = Rect2(8, 527, 925, 994)
+filter_clip = true
+
+[resource]
+texture = SubResource("AtlasTexture_3vn3e")
+texture_margin_left = 18.0
+texture_margin_top = 18.0
+texture_margin_right = 18.0
+texture_margin_bottom = 18.0
+draw_center = false

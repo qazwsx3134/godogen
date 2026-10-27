@@ -1,0 +1,12 @@
+# Round 3 設計稿回報
+- 工具：Codex 內建 image_gen；正式 6 張均為 853×1844 RGB，contact.png 上列招募／下列道具，各列 A、B、C；不是遊戲實作。
+- A：緊湊卡池橫幅＋結果卡列／五欄裝備格＋下方詳情；借 [AFK Arena 背包](https://afk.guide/afk-arena-items/) 與 [Noble Tavern](https://afk.guide/the-noble-tavern/) 的分類與單抽／十連資訊層次。
+- B：主打像素英雄大舞台／六職業清單＋大武器詳情；借 [大陸的霸者畫面集](https://www.rpgfan.com/gallery/octopath-traveler-champions-of-the-continent-screenshots/) 的角色場景層次，抽卡資訊採本派工要求，未複製其 UI 美術。
+- C：可展開卡池目錄／二欄三列職業武庫＋英雄各一格飾品；借 [AFK Journey 官方共享裝備概念](https://play.google.com/store/apps/details?hl=en&id=com.farlightgames.igame.gp)，分類牆為本批轉譯。
+- 需求更新：A_recruit_old.png 保留舊版指名招募；更新到達時已送出的舊 B 另存 B_recruit_old.png；A_items 僅補新獲得與「關卡王與行軍掉落」，前稿留 inputs/。
+- 重試／跳過：共 10 次生成（含需求變更），無技術失敗或跳過；C_items 因黃色角色外描邊修正一次，已達重試上限，未繼續多骰。
+- 彩框清單：正式 A_recruit.png、B_recruit.png 的結果卡仍有金／紫／藍／灰稀有度框及部分彩色小人描邊，依使用者要求保留；舊 A、舊 B 亦保留舊規則。A_items、B_items 無角色稀有度彩框；C 統一古銅框，稀有度只以小字表示，局部小人仍有暖黃材質高光。
+- 已知文字／角色偏差：多張「塔芙」誤成「塔英」（C_items 修正後仍存在）；B 招募側欄菲嘉特頭像不符法師，C 招募將菲嘉特畫成槍兵、伊妮畫成弓手；角色造型與稀有度均需接圖時校正。
+- 已知示意偏差：保底總量 A 為 50、B/C 為 30，均顯示再 23 抽，並非定案數值；部分飾品效果、近期結果與亮選框為生圖補充，C 機率入口重複兩處；各頁保留唯一暖白主按鈕與五個底部入口。
+- 驗證：逐張目視版面、6 張尺寸與不透明度、原始輸出 SHA-256 一致；inputs/prompts.md 含實際完整提示詞及重試，generation-manifest.json／validation.json／research.md 記錄來源與研究。
+- 額度與範圍：未回報額度不足，剩餘額度不可查；只寫入 round3/，未改遊戲檔案；DONE 代表本批生成交付結束，以上偏差保留供選版與後續處理。

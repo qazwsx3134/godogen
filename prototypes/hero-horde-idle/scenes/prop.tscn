@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/prop.gd" id="1_n1e5n"]
+
+[node name="Prop" type="MeshInstance3D" unique_id=1507035561]
+script = ExtResource("1_n1e5n")

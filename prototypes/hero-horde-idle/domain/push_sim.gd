@@ -3,13 +3,30 @@ extends RefCounted
 ## and the view reads its arrays; tests/test_balance.gd plays it headless with bots. Every number is hardcoded on
 ## purpose (prototype); the balance bands it must hit are asserted in tests/test_balance.gd.
 ##
-## The field is six 區 (zones), 2 columns x 3 rows left of the boss: index = row * 2 + col, col 0 遠 (outer), col 1
-## 近 (next to the boss). Heroes have their own HP, stand in one zone, and only melee in a 近 zone reach the boss.
+## The field is open ground left of the boss (x grows toward him, z is up/down the screen). The heroes form three
+## 團 (squads): 近戰 (盾 劍 槍), 遠程 (弓 法), 輔助 (補). Each squad gathers around its flag; moving a flag walks the
+## squad there and it settles into an uneven blob (shields nearest the boss), stragglers trailing behind. Melee only
+## reach the boss from his front band; ranged shoot from anywhere; healers reach whoever stands within HEAL_RANGE.
+## Telegraphed attacks are shapes on the ground (circles and the band in front of the boss): whoever's feet are
+## inside when it lands is hit, so a squad that moves late loses its tail.
+##
+## The boss has parts with their own HP. Melee hit the legs (or the arm while the club lies on the ground after a
+## slam); ranged hit the part the player aims at, at a cost: aimed shots count only PART_BODY_SHARE toward the boss's
+## HP. Breaking a part knocks him down for STAGGER_TIME (the telegraph in flight is cancelled, no attacks, everyone's
+## damage x STAGGER_MULT), and the part stays broken for the push: legs -> he moves slower; arm -> no 橫掃, smaller 重砸; horns -> no
+## 落石. Every broken part is also a wound: all damage to him is WOUND_PER_PART higher per part. A disabled attack's
+## turn becomes a 重砸, which can only be shrunk, never removed.
+##
+## A stage (domain/stages.gd) scales the boss: his HP and his parts' HP by "hp", his attacks' damage by "dmg", and the
+## gaps between his attacks by "tempo" (< 1 = faster). Without one (or at stage 1) every number is the constant below.
 
 signal event(kind: StringName, value: float)
 
+const Heroes = preload("res://domain/heroes.gd")
+
 enum Phase { MUSTER, FIGHT, WON, LOST }
 enum Attack { SLAM, SWEEP, ROCKS }
+enum Part { LEGS, ARM, HORNS }
 
 const CLASS_NAMES := ["盾", "劍", "槍", "弓", "法", "補"]
 const SHIELD := 0
@@ -32,42 +49,83 @@ const PASSIVE_MULT := 1.15
 const ATK := [1.0, 3.0, 2.6, 2.4, 3.4, 0.0]
 const HP := [300.0, 160.0, 150.0, 100.0, 90.0, 110.0]
 
-const ZONES := 6
-const ZONE_NAMES := ["遠1", "近1", "遠2", "近2", "遠3", "近3"]
-const NEAR := 1
-## Default geometry (ground x, z); scripts/main.gd replaces it with the zone tiles' real placement.
-const ZONE_X := [-2.2, 0.8]
-const ZONE_Z := [-2.7, 0.0, 2.7]
-const ZONE_HALF := Vector2(1.4, 1.25)
-## Only this many heroes per zone have room to attack; merged zones leave the rest waiting.
-const CROWD_CAP := 20
+const SQUADS := 3
+const MELEE := 0
+const RANGED := 1
+const SUPPORT := 2
+const SQUAD_NAMES := ["近戰團", "遠程團", "輔助團"]
+## Squad of each class.
+const CLASS_SQUAD := [MELEE, MELEE, MELEE, RANGED, RANGED, SUPPORT]
+## Where each squad musters by default (main.tscn's flags replace it, see set_home), and the blob it settles into:
+## an ellipse this many times taller (along z) than deep (along x), every hero getting SPACING^2 of ground, each
+## nudged up to JITTER off the spiral so the crowd never lines up.
+const HOME := [Vector2(1.35, 0.0), Vector2(-2.3, -1.6), Vector2(-1.2, 2.2)]
+const BLOB_ASPECT := [3.0, 1.3, 1.2]
+const SPACING := 0.42
+const JITTER := 0.09
+const GOLDEN_ANGLE := 2.39996323
+## The open ground a flag can be put on; the boss's body starts at BOSS_FRONT.
+const FIELD_MIN := Vector2(-3.6, -3.4)
+const FIELD_MAX := Vector2(2.1, 3.4)
+const BOSS_POS := Vector2(3.7, 0.0)
+const BOSS_FRONT := 2.4
+## Melee whose feet are within this of the boss's front can hit him.
+const MELEE_REACH := 2.3
+const HEAL_RANGE := 3.4
 const WALK_SPEED := 3.5
+## Each hero walks at WALK_SPEED times a factor in this range, so a moving squad strings out.
+const WALK_SPREAD := Vector2(0.8, 1.15)
 
 const DURATION := 150.0
 const MUSTER_TIME := 6.0
-const BOSS_HP := 48000.0
+const BOSS_HP := 67000.0
 const PHASE2_AT := 0.5
 const MORALE_MAX := 100.0
 const MORALE_PER_DAMAGE := 0.01
 const VOLLEY_SECONDS := 8.0
 
-## 普通攻擊: no warning; hits a few heroes in the target zone, shields first. More crowded, more heroes hit.
+## 普通攻擊: no warning; the hero nearest the boss and whoever stands within AUTO_SPLASH of them, shields first.
+## More crowded, more heroes hit.
 const AUTO_EVERY := [1.6, 1.2]
-const AUTO_DAMAGE := 110.0
+const AUTO_DAMAGE := 150.0
 const AUTO_TARGETS := 2
 const AUTO_EXTRA_PER := 8
-## 預警攻擊: zones are marked TELE_WARN seconds before the hit; whoever is still standing inside takes TELE_DAMAGE.
+const AUTO_SPLASH := 1.3
+## 預警攻擊: shapes are marked TELE_WARN seconds before the hit; whoever still stands inside takes TELE_DAMAGE.
 const TELE_FIRST := 8.0
 const TELE_EVERY := [9.0, 6.5]
 const TELE_WARN := 2.0
 const TELE_DAMAGE := 140.0
 const TELE_CYCLE := [[Attack.SLAM, Attack.ROCKS, Attack.SWEEP], [Attack.SWEEP, Attack.SLAM, Attack.ROCKS]]
 const ATTACK_NAMES := ["重砸", "橫掃", "落石"]
+## 重砸: a circle on the biggest squad. 橫掃: the band SWEEP_REACH deep in front of the boss. 落石: a circle on the
+## 遠程 and on the 輔助 squad.
+const SLAM_RADIUS := 2.0
+const SLAM_RADIUS_NO_ARM := 1.3
+const SWEEP_REACH := 2.5
+const ROCK_RADIUS := 1.5
+## Death causes for the push report: 普通攻擊, then the telegraphed attacks in Attack order.
+const CAUSE_AUTO := 0
+const CAUSE_SLAM := 1
+const CAUSE_NAMES := ["普通攻擊", "重砸", "橫掃", "落石"]
+
+const PART_NAMES := ["腿", "持棍手臂", "角"]
+const PART_HP := [12000.0, 6000.0, 5000.0]
+## Aimed ranged damage counts this much toward the boss's HP (the rest only wears the part down).
+const PART_BODY_SHARE := 0.8
+const STAGGER_TIME := 4.0
+const STAGGER_MULT := 1.5
+const WOUND_PER_PART := 0.12
+## After a 重砸 lands the club lies on the ground this long; melee hit the arm instead of the legs.
+const ARM_DOWN := 2.0
+## Broken legs: attacks come this much slower, warnings this much longer.
+const LEGS_SLOW := 1.3
+const LEGS_WARN := 0.4
 
 const HEAL := 20.0
 const HEAL_EVERY := 1.5
-## 主動技能 cast themselves: damage dealers as soon as they are ready; shields when their zone is about to be hit;
-## healers when someone in reach is low (an SSR healer also when a hero in its zone has fallen).
+## 主動技能 cast themselves: damage dealers as soon as they are ready; shields when their squad is about to be hit;
+## healers when someone in reach is low (an SSR healer also when a hero in reach has fallen).
 const SKILL_CD := 12.0
 const GUARD_TIME := 5.0
 const GUARD_MULT := 0.5
@@ -75,8 +133,8 @@ const SKILL_BURST := [0.0, 6.0, 5.0, 5.0, 8.0, 0.0]
 const SKILL_HEAL := 50.0
 const REVIVE_HP := 0.4
 const LOW_HP := 0.6
-## 光環 (SSR, same zone): shield damage taken, sword melee attack, spear everyone's attack, bow ranged attack,
-## mage skill cooldown, healer regen per second.
+## 光環 (SSR, own squad): shield damage taken, sword melee attack, spear everyone's attack, bow ranged attack, mage
+## skill cooldown; the healer's regen per second reaches everyone within HEAL_RANGE of it.
 const AURA_SHIELD := 0.8
 const AURA_SWORD := 1.25
 const AURA_SPEAR := 1.15
@@ -84,20 +142,47 @@ const AURA_BOW := 1.3
 const AURA_MAGE := 0.7
 const AURA_HEALER := 2.0
 
-const WEAK_FIRST := 15.0
-const WEAK_EVERY := 20.0
-const WEAK_OPEN := 3.0
-const FOCUS_TIME := 4.0
-const FOCUS_MULT := 2.0
-const BREAK_PER_WEAK := 0.5
-const BREAK_TIME := 5.0
-const BREAK_MULT := 1.5
+## 招牌技 (signature moves): every SSR has its own, on a long cooldown, cast by itself when its moment comes (on
+## top of its regular skill). The view shows each cast with a callout (portrait, hero, move).
+enum Sig { WALL, CLEAVE, GALE, PIERCE, ARROW, METEOR, DAWN }
+const SIG_NAMES := ["不動城牆", "斷鋼斬", "疾風連斬", "破甲突刺", "穿雲箭", "隕石術", "黎明之光"]
+const SIG_DESC := ["整團 2 秒不受傷", "重擊，連部位一起削", "近戰傷害 ×1.5", "王受到的傷害 +25%", "重擊瞄準的部位",
+	"隕石砸向瞄準的部位", "治療身邊的人並救回 3 人"]
+## The SSRs' moves per class, in roster order (the sword class has two SSRs).
+const CLASS_SIGS := [[Sig.WALL], [Sig.CLEAVE, Sig.GALE], [Sig.PIERCE], [Sig.ARROW], [Sig.METEOR], [Sig.DAWN]]
+const SIG_CD := 28.0
+const SIG_PER_LEVEL := 0.15
+## The first casts come SIG_FIRST s into the fight, SIG_STAGGER apart.
+const SIG_FIRST := 10.0
+const SIG_STAGGER := 3.0
+## 不動城牆: cast when its squad stands in a telegraph about to land; nothing hurts that squad for WALL_TIME.
+const WALL_TIME := 2.0
+## Burst moves: this many times the hero's attack.
+const CLEAVE_BURST := 25.0
+const ARROW_BURST := 30.0
+const METEOR_BURST := 36.0
+const GALE_TIME := 6.0
+const GALE_MULT := 1.5
+const PIERCE_TIME := 8.0
+const PIERCE_MULT := 1.25
+## 黎明之光: when DAWN_FALLEN heroes lie within reach, or someone in reach is under DAWN_LOW: heals everyone in reach
+## by DAWN_HEAL of their HP and revives up to DAWN_REVIVE.
+const DAWN_FALLEN := 3
+const DAWN_LOW := 0.4
+const DAWN_HEAL := 0.4
+const DAWN_REVIVE := 3
 
 var phase: int = Phase.MUSTER
 var muster_t: float = 0.0
 ## Fight seconds since the muster ended; the push timer.
 var t: float = 0.0
 var boss_hp: float = BOSS_HP
+## The stage's numbers (see the header): BOSS_HP, PART_HP, AUTO_DAMAGE and TELE_DAMAGE scaled, and the attack tempo.
+var boss_max_hp: float = BOSS_HP
+var part_max_hp := PackedFloat32Array(PART_HP)
+var auto_damage: float = AUTO_DAMAGE
+var tele_damage: float = TELE_DAMAGE
+var tempo: float = 1.0
 var phase2: bool = false
 var morale: float = 0.0
 var damage_dealt: float = 0.0
@@ -107,128 +192,170 @@ var fallen_total: int = 0
 
 var cls := PackedInt32Array()
 var rarity := PackedInt32Array()
+var squad := PackedInt32Array()
 var hp := PackedFloat32Array()
 var max_hp := PackedFloat32Array()
 var atk := PackedFloat32Array()
-var zone := PackedInt32Array()
-## The zone a hero was mustered into; 歸位 sends them back there.
-var home := PackedInt32Array()
 var pos := PackedVector2Array()
 var goal := PackedVector2Array()
+var speed := PackedFloat32Array()
 var skill_cd := PackedFloat32Array()
 ## Fight time of the last skill cast, for the view's cast pose (-1 = never).
 var cast_at := PackedFloat32Array()
+## Each hero's 招牌技 (Sig, -1 = none), its cooldown and how often it was cast (for the push report).
+var sig := PackedInt32Array()
+var sig_cd := PackedFloat32Array()
+var sig_casts := PackedInt32Array()
+## How strong each hero's 招牌技 is (1 + SIG_PER_LEVEL per ascension): bursts and heals scale with it.
+var sig_mult := PackedFloat32Array()
+## Each hero's 形態 (domain/heroes.gd; -1 = none, the balance tests' reference roster) and what it brings: the share
+## of dealt damage healed back (怪獸), regen per second as a share of max HP and healing taken (夢靈).
+var form := PackedInt32Array()
+var lifesteal := PackedFloat32Array()
+var form_regen := PackedFloat32Array()
+var heal_taken := PackedFloat32Array()
+## 訓練 速度: skill cooldowns x this.
+var cd_mult: float = 1.0
+## Seconds left of 不動城牆 per squad, 疾風連斬 and 破甲突刺.
+var wall_t := PackedFloat32Array()
+var gale_t: float = 0.0
+var pierce_t: float = 0.0
 
-var zone_center := PackedVector2Array()
-var zone_half := PackedVector2Array()
+## Each squad's flag (where it gathers), where it mustered (全員歸位 goes back there) and guard time left.
+var flag := PackedVector2Array()
+var home := PackedVector2Array()
 var guard_t := PackedFloat32Array()
 
-## The telegraphed attack in flight: kind, target zones and seconds until it lands (0 = none).
+## The telegraphed attack in flight: kind, shapes and seconds until it lands (0 = none). A shape is
+## {"kind": &"circle", "c": Vector2, "r": float} or {"kind": &"band", "x": float} (everything with x >= x).
 var tele_t: float = 0.0
 var tele_kind: int = Attack.SLAM
-var tele_zones := PackedInt32Array()
-## The zone the last auto attack hit, for the view.
-var auto_zone: int = -1
+var tele_shapes: Array = []
+## The hero the last auto attack aimed at (-1 = none), for the view.
+var auto_target: int = -1
 ## Heroes the last telegraphed attack hit (fallen or not).
 var tele_hit_count: int = 0
-var weak_t: float = 0.0
-var focus_t: float = 0.0
-var break_t: float = 0.0
-var break_gauge: float = 0.0
 
-## 推王戰報 (battle report) bookkeeping, per hero: boss damage dealt, damage taken, HP healed on allies, damage the
-## hero's guard spared its zone, allies revived. Every fall is filed by cause (普攻 or the telegraph's name) and zone.
-const CAUSE_AUTO := "普攻"
-var dealt := PackedFloat32Array()
-var taken := PackedFloat32Array()
-var healed := PackedFloat32Array()
-var spared := PackedFloat32Array()
-var saves := PackedInt32Array()
-var revived := PackedFloat32Array()  # HP the revives gave back (the target's, not the healer's)
-var falls: Array[Dictionary] = []  # {hero, cause, zone, t}
-var weak_opened: int = 0
-var weak_hits: int = 0
-var volleys: int = 0
-var guard_by := PackedInt32Array()
+var part_hp := PackedFloat32Array()
+## The part the ranged squad shoots at (-1 = the body).
+var aim: int = -1
+var arm_down_t: float = 0.0
+## Seconds left of the knockdown after a part broke.
+var stagger_t: float = 0.0
 
 var _next_tele: float = TELE_FIRST
 var _tele_index: int = 0
 var _auto_t: float = 1.0
 var _heal_t: float = 0.0
-var _next_weak: float = WEAK_FIRST
 var _rng := RandomNumberGenerator.new()
-## Per-zone aura multipliers, rebuilt every step.
+## Per-squad aura multipliers and per-hero regen, rebuilt every step.
 var _aura := []
+var _regen := PackedFloat32Array()
+
+## Push report counters (push_report.gd reads them). Bookkeeping only: nothing in the fight reads them back.
+var stat_dealt := PackedFloat32Array()
+var stat_taken := PackedFloat32Array()
+var stat_healed := PackedFloat32Array()
+## Saves: an SSR healer's revive, or a shield's guard that took the edge off a hit on its squad.
+var stat_saves := PackedInt32Array()
+## What felled a hero: CAUSE_* (-1 = standing), their squad and when.
+var death_cause := PackedInt32Array()
+var death_squad := PackedInt32Array()
+var death_t := PackedFloat32Array()
+## The attack now hurting heroes (CAUSE_AUTO, or CAUSE_SLAM + Attack); _hurt() books deaths to it.
+var _cause: int = CAUSE_AUTO
 
 
-func _init(seed_value: int = 1) -> void:
+## Base HP and attack of a hero of class c and rarity r, before growth.
+static func base_stats(c: int, r: int) -> Vector2:
+	var hp_value: float = HP[c] * RARITY_MULT[r] * (PASSIVE_MULT if r >= R and c == SHIELD else 1.0)
+	var atk_value: float = ATK[c] * RARITY_MULT[r] * (PASSIVE_MULT if r >= R and c != SHIELD else 1.0)
+	return Vector2(hp_value, atk_value)
+
+
+## The hero roster is fixed (ROSTER by class, RARITY_COUNTS by rarity, in that order). `roster` (from
+## progression.gd) grows it: per hero "rarity" (an N or R promoted by ascension), "hp_mult", "atk_mult" (levels) and
+## "sig_level" (an SSR's ascensions make its 招牌技 stronger); without it every hero is at its base. `stage`: see the
+## header ({"hp", "dmg", "tempo"}; missing keys are 1).
+func _init(seed_value: int = 1, roster: Dictionary = {}, stage: Dictionary = {}) -> void:
 	_rng.seed = seed_value
-	for row: int in 3:
-		for col: int in 2:
-			zone_center.append(Vector2(ZONE_X[col], ZONE_Z[row]))
-			zone_half.append(ZONE_HALF)
-	guard_t.resize(ZONES)
-	guard_by.resize(ZONES)
-	guard_by.fill(-1)
+	var hp_scale: float = stage.get("hp", 1.0)
+	boss_max_hp = BOSS_HP * hp_scale
+	boss_hp = boss_max_hp
+	for k: int in part_max_hp.size():
+		part_max_hp[k] = PART_HP[k] * hp_scale
+	auto_damage = AUTO_DAMAGE * stage.get("dmg", 1.0)
+	tele_damage = TELE_DAMAGE * stage.get("dmg", 1.0)
+	tempo = stage.get("tempo", 1.0)
 	for c: int in ROSTER.size():
-		var k: int = 0
 		for r: int in 4:
 			for n: int in RARITY_COUNTS[c][r]:
-				var mult: float = RARITY_MULT[r] * (PASSIVE_MULT if r >= R else 1.0)
 				cls.append(c)
 				rarity.append(r)
-				max_hp.append(HP[c] * RARITY_MULT[r] * (PASSIVE_MULT if r >= R and c == SHIELD else 1.0))
-				atk.append(ATK[c] * (mult if c != SHIELD else RARITY_MULT[r]))
-				# Melee to the 近 column, ranged and healers to 遠, dealt round-robin over the three rows.
-				var col: int = NEAR if c <= SPEAR else 0
-				zone.append(((k + c) % 3) * 2 + col)
-				k += 1
+				squad.append(CLASS_SQUAD[c])
+	var n: int = cls.size()
+	sig_mult.resize(n)
+	sig_mult.fill(1.0)
+	for i: int in n:
+		if roster.has("rarity"):
+			rarity[i] = roster.rarity[i]
+		var base: Vector2 = base_stats(cls[i], rarity[i])
+		max_hp.append(base.x * (roster.hp_mult[i] if roster.has("hp_mult") else 1.0))
+		atk.append(base.y * (roster.atk_mult[i] if roster.has("atk_mult") else 1.0))
+		if roster.has("sig_level"):
+			sig_mult[i] = 1.0 + SIG_PER_LEVEL * roster.sig_level[i]
+		var f: int = roster.form[i] if roster.has("form") else -1
+		form.append(f)
+		lifesteal.append(Heroes.MONSTER_LIFESTEAL if f == Heroes.MONSTER else 0.0)
+		form_regen.append(Heroes.DREAM_REGEN if f == Heroes.DREAM else 0.0)
+		heal_taken.append(Heroes.DREAM_HEAL_TAKEN if f == Heroes.DREAM else 1.0)
+	cd_mult = roster.get("cd_mult", 1.0)
 	hp = max_hp.duplicate()
-	for arr: Variant in [dealt, taken, healed, spared, saves, revived]:
-		arr.resize(cls.size())
-	home = zone.duplicate()
-	skill_cd.resize(cls.size())
-	for i: int in cls.size():
+	skill_cd.resize(n)
+	speed.resize(n)
+	for i: int in n:
 		# Staggered so the first casts do not all land on the same frame.
 		skill_cd[i] = _rng.randf() * SKILL_CD * 0.5
-	cast_at.resize(cls.size())
+		speed[i] = WALK_SPEED * _rng.randf_range(WALK_SPREAD.x, WALK_SPREAD.y)
+	cast_at.resize(n)
 	cast_at.fill(-1.0)
-	pos.resize(cls.size())
-	goal.resize(cls.size())
-	for z: int in ZONES:
-		_reslot(z)
-	for i: int in cls.size():
+	sig.resize(n)
+	sig.fill(-1)
+	sig_cd.resize(n)
+	sig_casts.resize(n)
+	var ssr_seen := {}
+	var order: int = 0
+	for i: int in n:
+		if rarity[i] != SSR:
+			continue
+		var k: int = ssr_seen.get(cls[i], 0)
+		ssr_seen[cls[i]] = k + 1
+		sig[i] = CLASS_SIGS[cls[i]][mini(k, CLASS_SIGS[cls[i]].size() - 1)]
+		sig_cd[i] = SIG_FIRST + order * SIG_STAGGER
+		order += 1
+	wall_t.resize(SQUADS)
+	stat_dealt.resize(n)
+	stat_taken.resize(n)
+	stat_healed.resize(n)
+	stat_saves.resize(n)
+	death_cause.resize(n)
+	death_squad.resize(n)
+	death_t.resize(n)
+	death_cause.fill(-1)
+	death_squad.fill(-1)
+	_regen.resize(n)
+	pos.resize(n)
+	goal.resize(n)
+	guard_t.resize(SQUADS)
+	for s: int in SQUADS:
+		flag.append(HOME[s])
+		home.append(HOME[s])
+		_form(s)
+		_aura.append(_aura_of(s))
+	part_hp = part_max_hp.duplicate()
+	for i: int in n:
 		# Muster: everyone starts off-screen left, inner classes first.
 		pos[i] = Vector2(-11.0 - cls[i] * 0.8 - _rng.randf() * 2.5, goal[i].y)
-	for z: int in ZONES:
-		_aura.append(_aura_of(z))
-
-
-## Moves a zone's rectangle (the view's tiles are the source of truth) and re-places its heroes.
-func set_zone(z: int, center: Vector2, half: Vector2) -> void:
-	zone_center[z] = center
-	zone_half[z] = half
-	_reslot(z)
-
-
-## The zone whose rectangle is nearest to p, if within `slack` metres (0 = strictly inside). -1 if none.
-func zone_near(p: Vector2, slack: float) -> int:
-	var best: int = -1
-	var best_d: float = slack
-	for z: int in ZONES:
-		var d: Vector2 = ((p - zone_center[z]).abs() - zone_half[z]).max(Vector2.ZERO)
-		if d.length() <= best_d:
-			best_d = d.length()
-			best = z
-	return best
-
-
-func zone_at(p: Vector2) -> int:
-	for z: int in ZONES:
-		var d: Vector2 = (p - zone_center[z]).abs()
-		if d.x <= zone_half[z].x and d.y <= zone_half[z].y:
-			return z
-	return -1
 
 
 func alive(i: int) -> bool:
@@ -239,12 +366,23 @@ func moving(i: int) -> bool:
 	return pos[i].distance_squared_to(goal[i]) > 0.0025
 
 
-func living_in(z: int) -> int:
+func squad_living(s: int) -> int:
 	var n: int = 0
 	for i: int in cls.size():
-		if zone[i] == z and hp[i] > 0.0:
+		if squad[i] == s and hp[i] > 0.0:
 			n += 1
 	return n
+
+
+## Mean position of a squad's living heroes (its flag when nobody is left).
+func squad_center(s: int) -> Vector2:
+	var sum := Vector2.ZERO
+	var n: int = 0
+	for i: int in cls.size():
+		if squad[i] == s and hp[i] > 0.0:
+			sum += pos[i]
+			n += 1
+	return sum / n if n > 0 else flag[s]
 
 
 func living() -> int:
@@ -255,14 +393,63 @@ func living() -> int:
 	return n
 
 
-## True while a telegraphed attack is up and someone still stands in a marked zone.
+func broken(p: int) -> bool:
+	return part_hp[p] <= 0.0
+
+
+## Everything that makes the boss take more damage right now: wounds, the knockdown, 破甲突刺.
+func damage_mult() -> float:
+	return wound() * (STAGGER_MULT if stagger_t > 0.0 else 1.0) * (PIERCE_MULT if pierce_t > 0.0 else 1.0)
+
+
+## Damage multiplier from broken parts.
+func wound() -> float:
+	var n: int = 0
+	for p: int in part_hp.size():
+		if part_hp[p] <= 0.0:
+			n += 1
+	return 1.0 + WOUND_PER_PART * n
+
+
+## Whether ground point p lies inside the telegraph now up.
+func in_tele(p: Vector2) -> bool:
+	if tele_t <= 0.0:
+		return false
+	for shape: Dictionary in tele_shapes:
+		if _inside(shape, p):
+			return true
+	return false
+
+
+## Where a telegraph shape sits on the ground: a circle's centre, the band's middle (in front of the boss).
+static func shape_center(shape: Dictionary) -> Vector2:
+	if shape.kind == &"band":
+		return Vector2((shape.x + BOSS_FRONT) * 0.5, 0.0)
+	return shape.c
+
+
+## True while a telegraphed attack is up and someone still stands in it.
 func tele_threatens() -> bool:
 	if tele_t <= 0.0:
 		return false
 	for i: int in cls.size():
-		if hp[i] > 0.0 and zone_at(pos[i]) in tele_zones:
+		if hp[i] > 0.0 and in_tele(pos[i]):
 			return true
 	return false
+
+
+## Living heroes of squad s standing in the telegraph now up.
+func squad_threatened(s: int) -> int:
+	var n: int = 0
+	for i: int in cls.size():
+		if squad[i] == s and hp[i] > 0.0 and in_tele(pos[i]):
+			n += 1
+	return n
+
+
+## Whether a hero standing at p reaches the boss in melee.
+func in_reach(p: Vector2) -> bool:
+	return p.x >= BOSS_FRONT - MELEE_REACH
 
 
 func time_left() -> float:
@@ -270,27 +457,18 @@ func time_left() -> float:
 
 
 func hp_ratio() -> float:
-	return boss_hp / BOSS_HP
+	return boss_hp / boss_max_hp
 
 
 func fighting() -> bool:
 	return phase == Phase.FIGHT
 
 
-## advance(): frames feed the sim in fixed STEP ticks, so the frame rate never changes the fight. A frame longer
-## than MAX_FRAME (a hitch, a backgrounded browser tab) only advances MAX_FRAME: the push pauses, it does not skip ahead.
-const STEP := 1.0 / 60.0
-const MAX_FRAME := 0.25
-var ticks: int = 0
-var _pending: float = 0.0
-
-
-func advance(frame_dt: float) -> void:
-	_pending += minf(frame_dt, MAX_FRAME)
-	while _pending >= STEP:
-		_pending -= STEP
-		ticks += 1
-		step(STEP)
+## Radii of squad s's blob on the ground (x deep, z wide) for its living heroes.
+func block_half(s: int) -> Vector2:
+	var n: int = maxi(squad_living(s), 1)
+	var a: float = sqrt(n * SPACING * SPACING / (PI * BLOB_ASPECT[s]))
+	return Vector2(a, a * BLOB_ASPECT[s])
 
 
 func step(dt: float) -> void:
@@ -309,80 +487,45 @@ func skip_muster() -> void:
 		_start_fight()
 
 
-## 移區: everyone alive in zone a walks to zone b and merges with it.
-func move_zone(a: int, b: int) -> bool:
-	if not fighting() or a == b or a < 0 or b < 0 or living_in(a) == 0:
+## Moves squad s's muster point (the view's flags are the source of truth); call before the fight starts.
+func set_home(s: int, p: Vector2) -> void:
+	home[s] = p.clamp(FIELD_MIN, FIELD_MAX)
+	flag[s] = home[s]
+	_form(s)
+
+
+## Plants squad s's flag at p (kept on the open field); its heroes walk there and pack into a block.
+func move_flag(s: int, p: Vector2) -> bool:
+	if not fighting() or s < 0 or s >= SQUADS or squad_living(s) == 0:
 		return false
-	for i: int in cls.size():
-		if zone[i] == a and hp[i] > 0.0:
-			zone[i] = b
-	_reslot(b)
-	event.emit(&"move", float(b))
+	flag[s] = p.clamp(FIELD_MIN, FIELD_MAX)
+	_form(s)
+	event.emit(&"move", float(s))
 	return true
 
 
-## 全員歸位: every living hero walks back to the zone it mustered into.
+## 全員歸位: every squad walks back to where it mustered.
 func regroup() -> bool:
 	if not fighting():
 		return false
-	var changed := {}
-	for i: int in cls.size():
-		if hp[i] > 0.0 and zone[i] != home[i]:
-			changed[zone[i]] = true
-			changed[home[i]] = true
-			zone[i] = home[i]
-	if changed.is_empty():
+	var changed: int = 0
+	for s: int in SQUADS:
+		if flag[s] != home[s] and squad_living(s) > 0:
+			flag[s] = home[s]
+			_form(s)
+			changed += 1
+	if changed == 0:
 		return false
-	for z: int in changed:
-		_reslot(z)
-	event.emit(&"regroup", float(changed.size()))
+	event.emit(&"regroup", float(changed))
 	return true
 
 
-## Casts every ready 主動技能 whose moment has come (see SKILL_CD). Called each fight step.
-func _auto_skills() -> void:
-	var burst: float = 0.0
-	for i: int in cls.size():
-		if hp[i] <= 0.0 or rarity[i] < SR or skill_cd[i] > 0.0 or moving(i):
-			continue
-		var z: int = zone[i]
-		match cls[i]:
-			SHIELD:
-				var threatened: bool = (tele_t > 0.0 and tele_t < 1.0 and z in tele_zones) or z == auto_zone
-				if not threatened:
-					continue
-				guard_t[z] = GUARD_TIME
-				guard_by[z] = i
-			HEALER:
-				var fallen_here: bool = rarity[i] == SSR and _fallen_in(z) >= 0
-				if _lowest_near(z) >= LOW_HP and not fallen_here:
-					continue
-				_heal_around(z, SKILL_HEAL * RARITY_MULT[rarity[i]], i)
-				if fallen_here:
-					_revive(z, i)
-			_:
-				var d: float = atk[i] * SKILL_BURST[cls[i]] * _aura[z].all
-				dealt[i] += d
-				burst += d
-		skill_cd[i] = SKILL_CD * _aura[z].cd
-		cast_at[i] = t
-		event.emit(&"skill", float(i))
-	if burst > 0.0:
-		_deal(burst, true)
-
-
-func tap_weak_point() -> bool:
-	if not fighting() or weak_t <= 0.0:
+## The ranged squad shoots at part p (-1 = the body). False if the part is already broken.
+func aim_at(p: int) -> bool:
+	if not fighting() or (p >= 0 and broken(p)) or p == aim:
 		return false
-	weak_t = 0.0
-	weak_hits += 1
-	focus_t = FOCUS_TIME
-	break_gauge += BREAK_PER_WEAK
-	event.emit(&"weak_hit", break_gauge)
-	if break_gauge >= 1.0:
-		break_gauge = 0.0
-		break_t = BREAK_TIME
-		event.emit(&"break", BREAK_TIME)
+	aim = p
+	event.emit(&"aim", float(p))
 	return true
 
 
@@ -390,13 +533,12 @@ func volley() -> bool:
 	if not fighting() or morale < MORALE_MAX:
 		return false
 	morale = 0.0
-	volleys += 1
 	var amount: float = 0.0
 	for i: int in cls.size():
 		if hp[i] > 0.0:
 			amount += atk[i]
-			dealt[i] += atk[i] * VOLLEY_SECONDS
-	amount *= VOLLEY_SECONDS
+			stat_dealt[i] += atk[i] * VOLLEY_SECONDS * damage_mult()
+	amount *= VOLLEY_SECONDS * damage_mult()
 	event.emit(&"volley", amount)
 	_deal(amount, false)
 	return true
@@ -411,119 +553,153 @@ func _start_fight() -> void:
 
 func _fight(dt: float) -> void:
 	t += dt
-	focus_t = maxf(focus_t - dt, 0.0)
-	break_t = maxf(break_t - dt, 0.0)
-	for z: int in ZONES:
-		guard_t[z] = maxf(guard_t[z] - dt, 0.0)
-		_aura[z] = _aura_of(z)
+	arm_down_t = maxf(arm_down_t - dt, 0.0)
+	gale_t = maxf(gale_t - dt, 0.0)
+	pierce_t = maxf(pierce_t - dt, 0.0)
+	for s: int in SQUADS:
+		wall_t[s] = maxf(wall_t[s] - dt, 0.0)
+		guard_t[s] = maxf(guard_t[s] - dt, 0.0)
+		_aura[s] = _aura_of(s)
+	_regen_of()
 	for i: int in cls.size():
 		skill_cd[i] = maxf(skill_cd[i] - dt, 0.0)
+		sig_cd[i] = maxf(sig_cd[i] - dt, 0.0)
 	_walk(dt)
 	if not phase2 and hp_ratio() <= PHASE2_AT:
 		phase2 = true
 		event.emit(&"phase2", 0.0)
 	var p: int = 1 if phase2 else 0
+	var slow: float = LEGS_SLOW if broken(Part.LEGS) else 1.0
 
-	_auto_t -= dt
-	if _auto_t <= 0.0:
-		_auto_t += AUTO_EVERY[p]
-		_auto_attack()
+	if stagger_t > 0.0:
+		# Knocked down: his attack clocks stand still.
+		stagger_t = maxf(stagger_t - dt, 0.0)
+		_next_tele += dt
+	else:
+		_auto_t -= dt
+		if _auto_t <= 0.0:
+			_auto_t += AUTO_EVERY[p] * slow * tempo
+			_auto_attack()
 
-	if tele_t > 0.0:
+	if stagger_t > 0.0:
+		pass
+	elif tele_t > 0.0:
 		tele_t -= dt
 		if tele_t <= 0.0:
 			tele_t = 0.0
 			_land()
-	elif t >= _next_tele - TELE_WARN:
-		_telegraph(TELE_CYCLE[p][_tele_index % 3], maxf(_next_tele - t, dt))
-		_tele_index += 1
-		_next_tele += TELE_EVERY[p]
-
-	if weak_t > 0.0:
-		weak_t = maxf(weak_t - dt, 0.0)
-		if weak_t == 0.0:
-			event.emit(&"weak_close", 0.0)
-	elif t >= _next_weak:
-		weak_t = WEAK_OPEN
-		weak_opened += 1
-		_next_weak += WEAK_EVERY
-		event.emit(&"weak_open", WEAK_OPEN)
+	else:
+		var warn: float = TELE_WARN + (LEGS_WARN if broken(Part.LEGS) else 0.0)
+		if t >= _next_tele - warn:
+			_telegraph(TELE_CYCLE[p][_tele_index % 3], maxf(_next_tele - t, dt))
+			_tele_index += 1
+			_next_tele += TELE_EVERY[p] * slow * tempo
 
 	_heal_t -= dt
 	if _heal_t <= 0.0:
 		_heal_t += HEAL_EVERY
 		_healers()
 	for i: int in cls.size():
-		if hp[i] > 0.0 and hp[i] < max_hp[i]:
-			hp[i] = minf(hp[i] + _aura[zone[i]].regen * dt, max_hp[i])
+		if hp[i] > 0.0 and hp[i] < max_hp[i] and _regen[i] > 0.0:
+			hp[i] = minf(hp[i] + _regen[i] * dt, max_hp[i])
 
 	_auto_skills()
-	var amount: float = 0.0
-	var room := PackedInt32Array()
-	room.resize(ZONES)
+	_signatures()
+	if phase != Phase.FIGHT:
+		return
+	var melee_sum: float = 0.0
+	var ranged_sum: float = 0.0
+	var mult: float = damage_mult()
+	var aimed: bool = aim >= 0
 	for i: int in cls.size():
-		var z: int = zone[i]
-		if hp[i] <= 0.0 or moving(i):
+		if hp[i] <= 0.0 or moving(i) or cls[i] == HEALER:
 			continue
-		var melee: bool = cls[i] <= SPEAR
-		if melee and z % 2 != NEAR:
-			continue
-		if cls[i] == HEALER or room[z] >= CROWD_CAP:
-			continue
-		room[z] += 1
-		var a: Dictionary = _aura[z]
-		var d: float = atk[i] * a.all
-		if melee:
-			d *= a.melee
+		var a: Dictionary = _aura[squad[i]]
+		var d: float = atk[i] * a.all * mult
+		if cls[i] <= SPEAR:
+			if not in_reach(pos[i]):
+				continue
+			d *= a.melee * (GALE_MULT if gale_t > 0.0 else 1.0)
+			melee_sum += d
+			stat_dealt[i] += d * dt
 		else:
 			d *= a.ranged
-			if focus_t > 0.0:
-				d *= FOCUS_MULT
-		amount += d
-		# ponytail: credited before _deal clamps at 0 HP, so the killing step may over-credit by one step's damage.
-		dealt[i] += d * dt * (BREAK_MULT if break_t > 0.0 else 1.0)
-	if break_t > 0.0:
-		amount *= BREAK_MULT
-	dps = amount
-	_deal(amount * dt, true)
+			ranged_sum += d
+			stat_dealt[i] += d * dt * (PART_BODY_SHARE if aimed else 1.0)
+		if lifesteal[i] > 0.0:
+			hp[i] = minf(hp[i] + d * dt * lifesteal[i], max_hp[i])
+	# Melee wear down the legs (the arm while the club is down); aimed ranged shots wear down their part.
+	_wear(_melee_part(), melee_sum * dt)
+	if aimed:
+		_wear(aim, ranged_sum * dt)
+		ranged_sum *= PART_BODY_SHARE
+	dps = melee_sum + ranged_sum
+	_deal(dps * dt, true)
 	if phase == Phase.FIGHT and (t >= DURATION or living() == 0):
 		phase = Phase.LOST
 		event.emit(&"lost", hp_ratio())
 
 
+## The part melee hit: the arm while the club lies on the ground after a 重砸, else the legs.
+func _melee_part() -> int:
+	return Part.ARM if arm_down_t > 0.0 and not broken(Part.ARM) else Part.LEGS
+
+
+func _wear(p: int, amount: float) -> void:
+	if amount <= 0.0 or broken(p):
+		return
+	part_hp[p] = maxf(part_hp[p] - amount, 0.0)
+	if part_hp[p] > 0.0:
+		return
+	if aim == p:
+		aim = -1
+	stagger_t = STAGGER_TIME
+	if tele_t > 0.0:
+		tele_t = 0.0
+		tele_shapes = []
+		event.emit(&"tele_cancel", 0.0)
+	event.emit(&"part_break", float(p))
+
+
 func _walk(dt: float) -> void:
-	var step_m: float = WALK_SPEED * dt
 	for i: int in cls.size():
 		if hp[i] > 0.0:
-			pos[i] = pos[i].move_toward(goal[i], step_m)
+			pos[i] = pos[i].move_toward(goal[i], speed[i] * dt)
 
 
-## Places a zone's living heroes on a grid inside it: shields nearest the boss, healers furthest.
-func _reslot(z: int) -> void:
+## Settles squad s's living heroes into a blob around its flag: a sunflower spiral squashed into the squad's ellipse,
+## each spot nudged by a fixed per-hero amount; the spots nearest the boss go to the shields, then by class.
+func _form(s: int) -> void:
 	var members: Array[int] = []
 	for i: int in cls.size():
-		if zone[i] == z and hp[i] > 0.0:
+		if squad[i] == s and hp[i] > 0.0:
 			members.append(i)
 	if members.is_empty():
 		return
 	members.sort_custom(func(a: int, b: int) -> bool: return cls[a] < cls[b] or (cls[a] == cls[b] and a < b))
 	var n: int = members.size()
-	var w: float = zone_half[z].x * 2.0 * 0.86
-	var h: float = zone_half[z].y * 2.0 * 0.86
-	var cols: int = maxi(ceili(sqrt(n * w / h)), 1)
-	var rows: int = ceili(float(n) / cols)
+	var radii: Vector2 = block_half(s)
+	var spots: Array[Vector2] = []
 	for k: int in n:
-		var c: int = k / rows
-		var r: int = k % rows
-		var x: float = zone_center[z].x + w * 0.5 - (c + 0.5) / cols * w
-		var y: float = zone_center[z].y - h * 0.5 + (r + 0.5) / rows * h
-		goal[members[k]] = Vector2(x, y)
+		var r: float = sqrt((k + 0.5) / n)
+		var angle: float = k * GOLDEN_ANGLE
+		spots.append(Vector2(cos(angle), sin(angle)) * r * radii)
+	spots.sort_custom(func(a: Vector2, b: Vector2) -> bool: return a.x > b.x)
+	for k: int in n:
+		var i: int = members[k]
+		var nudge := Vector2(_hash(i, 1) - 0.5, _hash(i, 2) - 0.5) * 2.0 * JITTER
+		goal[i] = flag[s] + spots[k] + nudge
 
 
-func _aura_of(z: int) -> Dictionary:
-	var a := {"taken": 1.0, "melee": 1.0, "all": 1.0, "ranged": 1.0, "cd": 1.0, "regen": 0.0}
+## A fixed number in 0..1 per hero and salt, so a squad's shape never depends on the random stream.
+static func _hash(i: int, salt: int) -> float:
+	return float((i * 7919 + salt * 104729) % 1009) / 1009.0
+
+
+func _aura_of(s: int) -> Dictionary:
+	var a := {"taken": 1.0, "melee": 1.0, "all": 1.0, "ranged": 1.0, "cd": 1.0}
 	for i: int in cls.size():
-		if zone[i] != z or hp[i] <= 0.0 or rarity[i] != SSR:
+		if squad[i] != s or hp[i] <= 0.0 or rarity[i] != SSR:
 			continue
 		match cls[i]:
 			SHIELD: a.taken = AURA_SHIELD
@@ -531,28 +707,124 @@ func _aura_of(z: int) -> Dictionary:
 			SPEAR: a.all = AURA_SPEAR
 			BOW: a.ranged = AURA_BOW
 			MAGE: a.cd = AURA_MAGE
-			HEALER: a.regen = AURA_HEALER
 	return a
 
 
+## A dreamling's own regen, plus the SSR healer's, which reaches everyone within HEAL_RANGE of it.
+func _regen_of() -> void:
+	for j: int in cls.size():
+		_regen[j] = max_hp[j] * form_regen[j]
+	for h: int in cls.size():
+		if cls[h] != HEALER or rarity[h] != SSR or hp[h] <= 0.0:
+			continue
+		for j: int in cls.size():
+			if hp[j] > 0.0 and pos[j].distance_to(pos[h]) <= HEAL_RANGE:
+				_regen[j] = max_hp[j] * form_regen[j] + AURA_HEALER * heal_taken[j]
+
+
+## Casts every ready 主動技能 whose moment has come (see SKILL_CD). Called each fight step.
+func _auto_skills() -> void:
+	var burst: float = 0.0
+	for i: int in cls.size():
+		if hp[i] <= 0.0 or rarity[i] < SR or skill_cd[i] > 0.0 or moving(i):
+			continue
+		var s: int = squad[i]
+		match cls[i]:
+			SHIELD:
+				var aimed_here: bool = auto_target >= 0 and squad[auto_target] == s
+				if not ((tele_t > 0.0 and tele_t < 1.0 and squad_threatened(s) > 0) or aimed_here):
+					continue
+				guard_t[s] = GUARD_TIME
+				stat_saves[i] += 1
+			HEALER:
+				var fallen: int = _fallen_near(pos[i]) if rarity[i] == SSR else -1
+				if _lowest_near(pos[i]) >= LOW_HP and fallen < 0:
+					continue
+				stat_healed[i] += _heal_around(pos[i], SKILL_HEAL * RARITY_MULT[rarity[i]])
+				if fallen >= 0:
+					_revive(fallen)
+					stat_saves[i] += 1
+			_:
+				if cls[i] <= SPEAR and not in_reach(pos[i]):
+					continue
+				var b: float = atk[i] * SKILL_BURST[cls[i]] * _aura[s].all * damage_mult()
+				stat_dealt[i] += b
+				burst += b
+				if lifesteal[i] > 0.0:
+					hp[i] = minf(hp[i] + b * lifesteal[i], max_hp[i])
+		skill_cd[i] = SKILL_CD * _aura[s].cd * cd_mult
+		cast_at[i] = t
+		event.emit(&"skill", float(i))
+	if burst > 0.0:
+		_deal(burst, true)
+
+
+## Casts every ready 招牌技 whose moment has come (see Sig). Called each fight step, after the regular skills.
+func _signatures() -> void:
+	for i: int in cls.size():
+		if sig[i] < 0 or hp[i] <= 0.0 or sig_cd[i] > 0.0 or moving(i) or phase != Phase.FIGHT:
+			continue
+		var s: int = squad[i]
+		match sig[i]:
+			Sig.WALL:
+				if not (tele_t > 0.0 and tele_t < 0.8 and squad_threatened(s) > 0):
+					continue
+				wall_t[s] = WALL_TIME
+				stat_saves[i] += 1
+			Sig.CLEAVE:
+				if not in_reach(pos[i]):
+					continue
+				var b: float = atk[i] * CLEAVE_BURST * sig_mult[i] * damage_mult()
+				_wear(_melee_part(), b)
+				stat_dealt[i] += b
+				_deal(b, true)
+			Sig.GALE:
+				if not in_reach(pos[i]):
+					continue
+				gale_t = GALE_TIME
+			Sig.PIERCE:
+				if not in_reach(pos[i]):
+					continue
+				pierce_t = PIERCE_TIME
+			Sig.ARROW, Sig.METEOR:
+				var b: float = atk[i] * (ARROW_BURST if sig[i] == Sig.ARROW else METEOR_BURST) * sig_mult[i] * damage_mult()
+				if aim >= 0:
+					_wear(aim, b)
+					b *= PART_BODY_SHARE
+				stat_dealt[i] += b
+				_deal(b, true)
+			Sig.DAWN:
+				var fallen: Array[int] = []
+				for j: int in cls.size():
+					if hp[j] <= 0.0 and pos[j].distance_squared_to(pos[i]) <= HEAL_RANGE * HEAL_RANGE:
+						fallen.append(j)
+				if fallen.size() < DAWN_FALLEN and _lowest_near(pos[i]) >= DAWN_LOW:
+					continue
+				for j: int in cls.size():
+					if hp[j] > 0.0 and pos[j].distance_squared_to(pos[i]) <= HEAL_RANGE * HEAL_RANGE:
+						var h: float = minf(max_hp[j] * DAWN_HEAL * sig_mult[i], max_hp[j] - hp[j])
+						hp[j] += h
+						stat_healed[i] += h
+				for k: int in mini(fallen.size(), DAWN_REVIVE):
+					_revive(fallen[k])
+					stat_saves[i] += 1
+		sig_cd[i] = SIG_CD
+		sig_casts[i] += 1
+		event.emit(&"signature", float(i))
+
+
+## The hero nearest the boss, and whoever stands within AUTO_SPLASH of them: shields first, then the healthiest.
 func _auto_attack() -> void:
 	var target: int = -1
-	var best: int = -1
-	for z: int in ZONES:
-		var n: int = living_in(z)
-		if n == 0:
-			continue
-		# The most crowded 近 zone, then any zone.
-		var score: int = n + (100 if z % 2 == NEAR else 0)
-		if score > best:
-			best = score
-			target = z
-	auto_zone = target
+	for i: int in cls.size():
+		if hp[i] > 0.0 and (target < 0 or pos[i].x > pos[target].x):
+			target = i
+	auto_target = target
 	if target < 0:
 		return
 	var victims: Array[int] = []
 	for i: int in cls.size():
-		if zone[i] == target and hp[i] > 0.0:
+		if hp[i] > 0.0 and pos[i].distance_to(pos[target]) <= AUTO_SPLASH:
 			victims.append(i)
 	victims.sort_custom(func(a: int, b: int) -> bool:
 		if (cls[a] == SHIELD) != (cls[b] == SHIELD):
@@ -560,32 +832,34 @@ func _auto_attack() -> void:
 		return hp[a] > hp[b])
 	var hits: int = mini(AUTO_TARGETS + victims.size() / AUTO_EXTRA_PER, victims.size())
 	var fell: int = 0
+	_cause = CAUSE_AUTO
 	for k: int in hits:
-		fell += _hurt(victims[k], AUTO_DAMAGE, CAUSE_AUTO)
+		fell += _hurt(victims[k], auto_damage)
 	event.emit(&"auto", float(target))
 	if fell > 0:
 		event.emit(&"fallen", float(fell))
 
 
 func _telegraph(kind: int, warn: float) -> void:
+	# A broken part's attack becomes a 重砸.
+	if (kind == Attack.SWEEP and broken(Part.ARM)) or (kind == Attack.ROCKS and broken(Part.HORNS)):
+		kind = Attack.SLAM
 	tele_kind = kind
-	tele_zones = PackedInt32Array()
+	tele_shapes = []
 	match kind:
 		Attack.SLAM:
-			var best: int = -1
-			var target: int = 1
-			for z: int in ZONES:
-				var n: int = living_in(z)
-				if n > best:
-					best = n
-					target = z
-			tele_zones.append(target)
+			var best: int = MELEE
+			for s: int in SQUADS:
+				if squad_living(s) > squad_living(best):
+					best = s
+			var r: float = SLAM_RADIUS_NO_ARM if broken(Part.ARM) else SLAM_RADIUS
+			tele_shapes.append({"kind": &"circle", "c": squad_center(best), "r": r})
 		Attack.SWEEP:
-			tele_zones = PackedInt32Array([1, 3, 5])
+			tele_shapes.append({"kind": &"band", "x": BOSS_FRONT - SWEEP_REACH})
 		Attack.ROCKS:
-			var far := [0, 2, 4]
-			far.remove_at(_rng.randi_range(0, 2))
-			tele_zones = PackedInt32Array(far)
+			for s: int in [RANGED, SUPPORT]:
+				if squad_living(s) > 0:
+					tele_shapes.append({"kind": &"circle", "c": squad_center(s), "r": ROCK_RADIUS})
 	tele_t = warn
 	event.emit(&"tele_warn", warn)
 
@@ -593,31 +867,48 @@ func _telegraph(kind: int, warn: float) -> void:
 func _land() -> void:
 	var fell: int = 0
 	tele_hit_count = 0
+	_cause = CAUSE_SLAM + tele_kind
 	for i: int in cls.size():
-		if hp[i] > 0.0 and zone_at(pos[i]) in tele_zones:
+		if hp[i] > 0.0 and _in_shapes(pos[i]):
 			tele_hit_count += 1
-			fell += _hurt(i, TELE_DAMAGE, ATTACK_NAMES[tele_kind])
+			fell += _hurt(i, tele_damage)
+	if tele_kind == Attack.SLAM:
+		arm_down_t = ARM_DOWN
 	event.emit(&"tele_hit", float(fell))
-	tele_zones = PackedInt32Array()
+	tele_shapes = []
 
 
-## Damages a hero after zone guard and shield aura. Returns 1 if they fell.
-func _hurt(i: int, amount: float, cause: String) -> int:
-	var z: int = zone[i]
-	var d: float = amount * _aura[z].taken
-	if guard_t[z] > 0.0:
-		if guard_by[z] >= 0:
-			spared[guard_by[z]] += d * (1.0 - GUARD_MULT)
-		d *= GUARD_MULT
-	taken[i] += minf(d, hp[i])
+func _in_shapes(p: Vector2) -> bool:
+	for shape: Dictionary in tele_shapes:
+		if _inside(shape, p):
+			return true
+	return false
+
+
+func _inside(shape: Dictionary, p: Vector2) -> bool:
+	if shape.kind == &"band":
+		return p.x >= shape.x
+	return p.distance_to(shape.c) <= shape.r
+
+
+## Damages a hero after squad guard and shield aura. Returns 1 if they fell.
+func _hurt(i: int, amount: float) -> int:
+	var s: int = squad[i]
+	if wall_t[s] > 0.0:
+		return 0
+	var d: float = amount * _aura[s].taken * (GUARD_MULT if guard_t[s] > 0.0 else 1.0)
+	stat_taken[i] += minf(d, hp[i])
 	hp[i] = maxf(hp[i] - d, 0.0)
 	if hp[i] == 0.0:
 		fallen_total += 1
-		falls.append({"hero": i, "cause": cause, "zone": z, "t": t})
+		death_cause[i] = _cause
+		death_squad[i] = s
+		death_t[i] = t
 		return 1
 	return 0
 
 
+## Each healer mends the most hurt hero (by HP ratio) within HEAL_RANGE.
 func _healers() -> void:
 	for i: int in cls.size():
 		if cls[i] != HEALER or hp[i] <= 0.0:
@@ -626,54 +917,50 @@ func _healers() -> void:
 		var target: int = -1
 		var worst: float = 1.0
 		for j: int in cls.size():
-			if hp[j] > 0.0 and hp[j] < max_hp[j] and _near(zone[i], zone[j]) and hp[j] / max_hp[j] < worst:
+			if hp[j] > 0.0 and hp[j] < max_hp[j] and hp[j] / max_hp[j] < worst \
+					and pos[j].distance_squared_to(pos[i]) <= HEAL_RANGE * HEAL_RANGE:
 				worst = hp[j] / max_hp[j]
 				target = j
 		if target >= 0:
-			healed[i] += minf(amount, max_hp[target] - hp[target])
+			amount *= heal_taken[target]
+			stat_healed[i] += minf(amount, max_hp[target] - hp[target])
 			hp[target] = minf(hp[target] + amount, max_hp[target])
 
 
-## ponytail: the SSR healer aura's regen is not credited to anyone; credit it once auras show in the report.
-func _heal_around(z: int, amount: float, healer: int) -> void:
+## Heals everyone within HEAL_RANGE of p; returns how much HP it actually restored.
+func _heal_around(p: Vector2, amount: float) -> float:
+	var total: float = 0.0
 	for j: int in cls.size():
-		if hp[j] > 0.0 and _near(z, zone[j]):
-			healed[healer] += minf(amount, max_hp[j] - hp[j])
-			hp[j] = minf(hp[j] + amount, max_hp[j])
+		if hp[j] > 0.0 and pos[j].distance_squared_to(p) <= HEAL_RANGE * HEAL_RANGE:
+			var a: float = amount * heal_taken[j]
+			total += minf(a, max_hp[j] - hp[j])
+			hp[j] = minf(hp[j] + a, max_hp[j])
+	return total
 
 
-func _revive(z: int, healer: int) -> bool:
-	var j: int = _fallen_in(z)
-	if j < 0:
-		return false
+func _revive(j: int) -> void:
 	hp[j] = max_hp[j] * REVIVE_HP
-	saves[healer] += 1
-	revived[healer] += hp[j]
+	death_cause[j] = -1
 	fallen_total -= 1
-	_reslot(z)
-	event.emit(&"revive", float(z))
-	return true
+	_form(squad[j])
+	event.emit(&"revive", float(j))
 
 
-func _fallen_in(z: int) -> int:
+## A fallen hero lying within HEAL_RANGE of p (-1 if none).
+func _fallen_near(p: Vector2) -> int:
 	for j: int in cls.size():
-		if hp[j] <= 0.0 and zone[j] == z:
+		if hp[j] <= 0.0 and pos[j].distance_squared_to(p) <= HEAL_RANGE * HEAL_RANGE:
 			return j
 	return -1
 
 
-## Lowest HP ratio among the living in a zone and its neighbours.
-func _lowest_near(z: int) -> float:
+## Lowest HP ratio among the living within HEAL_RANGE of p.
+func _lowest_near(p: Vector2) -> float:
 	var low: float = 1.0
 	for j: int in cls.size():
-		if hp[j] > 0.0 and _near(z, zone[j]):
+		if hp[j] > 0.0 and pos[j].distance_squared_to(p) <= HEAL_RANGE * HEAL_RANGE:
 			low = minf(low, hp[j] / max_hp[j])
 	return low
-
-
-## Same zone or orthogonally next to it.
-func _near(a: int, b: int) -> bool:
-	return absi(a / 2 - b / 2) + absi(a % 2 - b % 2) <= 1
 
 
 func _deal(amount: float, earns_morale: bool) -> void:
@@ -684,68 +971,3 @@ func _deal(amount: float, earns_morale: bool) -> void:
 	if boss_hp == 0.0 and phase == Phase.FIGHT:
 		phase = Phase.WON
 		event.emit(&"won", time_left())
-
-
-# --- 推王戰報 -------------------------------------------------------------------
-
-## "SSR 劍#2": rarity, class and number within that class and rarity (heroes have no names yet).
-func hero_name(i: int) -> String:
-	var n: int = 1
-	for j: int in i:
-		if cls[j] == cls[i] and rarity[j] == rarity[i]:
-			n += 1
-	return "%s %s#%d" % [RARITY_NAMES[rarity[i]], CLASS_NAMES[cls[i]], n]
-
-
-## MVP score in HP-sized units: boss damage + HP healed + damage spared by guard + the HP each revive gave back.
-func contribution(i: int) -> float:
-	return dealt[i] + healed[i] + spared[i] + revived[i]
-
-
-## {mvp, top: {metric: [[hero, value], ...] best 3 with a value > 0}, causes: {cause: falls}, zone_falls: [per zone],
-## tele_falls / auto_falls: falls to telegraphs vs 普攻, advice: what to change next push, most falls first}.
-## Cumulative over the push, not per second. A wipe ends in 普攻 falls once the army is thin, so read the two totals
-## before the per-cause lines.
-func report() -> Dictionary:
-	var metrics := {"dealt": dealt, "taken": taken, "healed": healed, "spared": spared, "saves": saves}
-	var top := {}
-	for m: String in metrics:
-		var arr: Variant = metrics[m]
-		var order: Array = range(cls.size()).filter(func(i: int) -> bool: return arr[i] > 0)
-		order.sort_custom(func(a: int, b: int) -> bool: return arr[a] > arr[b] or (arr[a] == arr[b] and a < b))
-		top[m] = order.slice(0, 3).map(func(i: int) -> Array: return [i, arr[i]])
-	var mvp: int = 0
-	for i: int in cls.size():
-		if contribution(i) > contribution(mvp):
-			mvp = i
-	var causes := {}
-	var zone_falls := PackedInt32Array()
-	zone_falls.resize(ZONES)
-	var auto_zone_falls := PackedInt32Array()
-	auto_zone_falls.resize(ZONES)
-	for f: Dictionary in falls:
-		causes[f.cause] = int(causes.get(f.cause, 0)) + 1
-		zone_falls[f.zone] += 1
-		if f.cause == CAUSE_AUTO:
-			auto_zone_falls[f.zone] += 1
-	var advice: Array = []  # [falls, line]
-	var tips := {"重砸": "它打人最多的一區，別把人全合在一起，預警時把那區移開",
-		"橫掃": "它打整條近欄，預警時把近欄往 ◀ 移，落下後再歸位",
-		"落石": "它打兩個遠欄區，預警時把那兩區往 ▶ 移"}
-	for cause: String in causes:
-		var n: int = causes[cause]
-		if n < 3:
-			continue
-		if cause == CAUSE_AUTO:
-			var z: int = Array(auto_zone_falls).find(Array(auto_zone_falls).max())
-			advice.append([n, "普攻在%s打倒 %d 人：它集中打近欄人最多的區，那區要有盾，人越擠一次打到越多人" % [ZONE_NAMES[z], n]])
-		else:
-			advice.append([n, "%s打倒 %d 人：%s" % [cause, n, tips[cause]]])
-	var tele_falls: int = falls.size() - int(causes.get(CAUSE_AUTO, 0))
-	advice.sort_custom(func(a: Array, b: Array) -> bool: return a[0] > b[0])
-	var lines := PackedStringArray(advice.map(func(a: Array) -> String: return a[1]))
-	if phase == Phase.LOST and living() > 0:
-		lines.append("時間到，王還剩 %d%%：弱點點中 %d／%d 次、大招 %d 次——點弱點破防，士氣滿就放大招" % [
-			ceili(hp_ratio() * 100.0), weak_hits, weak_opened, volleys])
-	return {"mvp": mvp, "top": top, "causes": causes, "zone_falls": zone_falls, "tele_falls": tele_falls,
-		"auto_falls": int(causes.get(CAUSE_AUTO, 0)), "advice": lines}

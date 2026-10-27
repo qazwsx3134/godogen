@@ -1,19 +1,30 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_ya4ey"]
-[ext_resource type="Material" path="res://materials/ground.tres" id="2_eb6dy"]
+[ext_resource type="Resource" path="res://camera/volley.tres" id="2_jbj1t"]
+[ext_resource type="Resource" path="res://camera/break.tres" id="3_muem4"]
 [ext_resource type="Script" path="res://scripts/boss.gd" id="3_trceg"]
 [ext_resource type="Material" path="res://materials/boss.tres" id="4_a8y0u"]
+[ext_resource type="Resource" path="res://camera/phase2.tres" id="4_dp3eg"]
+[ext_resource type="Resource" path="res://camera/won.tres" id="5_0ld40"]
 [ext_resource type="Material" path="res://materials/shadow.tres" id="5_jkv2x"]
-[ext_resource type="PackedScene" path="res://scenes/zone_tile.tscn" id="6_jbj1t"]
+[ext_resource type="Script" path="res://scripts/camera_director.gd" id="6_gqmmt"]
 [ext_resource type="ArrayMesh" path="res://meshes/hero_mesh.tres" id="7_muem4"]
+[ext_resource type="PackedScene" path="res://scenes/stage.tscn" id="7_yc10j"]
 [ext_resource type="Script" path="res://scripts/army.gd" id="8_dp3eg"]
 [ext_resource type="QuadMesh" path="res://meshes/bolt_mesh.tres" id="9_0ld40"]
 [ext_resource type="Script" path="res://scripts/bolts.gd" id="10_gqmmt"]
+[ext_resource type="PackedScene" path="res://scenes/tele_marker.tscn" id="11_jscy8"]
 [ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="11_yc10j"]
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_jscy8"]
-size = Vector2(60, 60)
+[ext_resource type="PackedScene" path="res://scenes/squad_flag.tscn" id="12_pm3ni"]
+[ext_resource type="Texture2D" path="res://assets/flags/ranged.png" id="13_pm3ni"]
+[ext_resource type="Texture2D" path="res://assets/flags/support.png" id="14_y6deb"]
+[ext_resource type="Script" path="res://scripts/impact_fx.gd" id="16_gqmmt"]
+[ext_resource type="Material" path="res://materials/fx_chunk.tres" id="17_yc10j"]
+[ext_resource type="Material" path="res://materials/fx_ring.tres" id="18_jscy8"]
+[ext_resource type="PackedScene" path="res://scenes/captain_plate.tscn" id="19_og1vs"]
+[ext_resource type="PackedScene" path="res://scenes/name_popup.tscn" id="19_y6deb"]
+[ext_resource type="Script" path="res://scripts/sfx.gd" id="20_pm3ni"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_pm3ni"]
 center_offset = Vector3(0, 0.5, 0)
@@ -21,31 +32,46 @@ center_offset = Vector3(0, 0.5, 0)
 [sub_resource type="PlaneMesh" id="PlaneMesh_y6deb"]
 size = Vector2(1, 1)
 
-[sub_resource type="MultiMesh" id="MultiMesh_og1vs"]
+[sub_resource type="MultiMesh" id="MultiMesh_yc10j"]
 transform_format = 1
 use_colors = true
 use_custom_data = true
 instance_count = 100
 mesh = ExtResource("7_muem4")
+buffer = PackedFloat32Array(1.2, 0, 0, 2.304109, 0, 1.2, 0, 0, 0, 0, 1.2, -0.817253, 0.69722104, 0.8351129, 1, 0.125, 4, 0, 1, 0, 1.2, 0, 0, 2.2359438, 0, 1.2, 0, 0, 0, 0, 1.2, 0.69605774, 0.68266404, 0.8502829, 1, 0.125, 4, 0, 1, 0, 1.2, 0, 0, 2.1493092, 0, 1.2, 0, 0, 0, 0, 1.2, -0.23748425, 0.76410705, 0.9058766, 1, 0.125, 4, 0, 1, 0, 1.2, 0, 0, 2.1137793, 0, 1.2, 0, 0, 0, 0, 1.2, 1.6233183, 0.74955004, 0.7980813, 1, 0.125, 4, 0, 1, 0, 1.2, 0, 0, 1.9788002, 0, 1.2, 0, 0, 0, 0, 1.2, -1.4724884, 0.73499304, 0.8056336, 1, 0.125, 4, 0, 1, 0, 1.2, 0, 0, 1.9243506, 0, 1.2, 0, 0, 0, 0, 1.2, 1.0967581, 0.7204361, 0.81530493, 1, 0.125, 4, 0, 1, 0, 1.2, 0, 0, 2.0586326, 0, 1.2, 0, 0, 0, 0, 1.2, -0.85377634, 0.7058791, 0.8270954, 1, 0.125, 4, 0, 1, 0, 1.2, 0, 0, 2.0207026, 0, 1.2, 0, 0, 0, 0, 1.2, 0.25885257, 0.6913221, 0.84100485, 1, 0.125, 4, 0, 1, 0, 1.2, 0, 0, 1.9276087, 0, 1.2, 0, 0, 0, 0, 1.2, 1.8393059, 0.7727651, 0.89949423, 1, 0.125, 4, 0, 1, 0, 1.2, 0, 0, 1.8283662, 0, 1.2, 0, 0, 0, 0, 1.2, -0.37330174, 0.75820816, 0.91065437, 1, 0.125, 4, 0, 1, 0, 1.2, 0, 0, 1.7350593, 0, 1.2, 0, 0, 0, 0, 1.2, 0.9975966, 0.74365115, 0.8008863, 1, 0.125, 4, 0, 1, 0, 1.2, 0, 0, 1.6999356, 0, 1.2, 0, 0, 0, 0, 1.2, -1.169307, 0.72909415, 0.8092974, 1, 0.375, 4, 0, 1, 0, 1.2, 0, 0, 1.8508154, 0, 1.2, 0, 0, 0, 0, 1.2, -1.8889325, 0.71453714, 0.81982744, 1, 0.375, 4, 0, 1, 0, 1.2, 0, 0, 1.7829058, 0, 1.2, 0, 0, 0, 0, 1.2, 0.4317938, 0.6999802, 0.8324765, 1, 0.75, 4, 0, 1, 0, 1.2, 0, 0, 1.7288958, 0, 1.2, 0, 0, 0, 0, 1.2, 2.5581746, 1, 0.7050842, 0.7211306, 0.125, 13, 0, 1, 0, 1.2, 0, 0, 1.6903324, 0, 1.2, 0, 0, 0, 0, 1.2, 1.729359, 1, 0.78143704, 0.80923724, 0.125, 13, 0, 1, 0, 1.2, 0, 0, 1.6436075, 0, 1.2, 0, 0, 0, 0, 1.2, -2.627705, 1, 0.8328133, 0.7677899, 0.125, 13, 0, 1, 0, 1.2, 0, 0, 1.569783, 0, 1.2, 0, 0, 0, 0, 1.2, -0.60447854, 1, 0.8050929, 0.7541427, 0.125, 13, 0, 1, 0, 1.2, 0, 0, 1.4596696, 0, 1.2, 0, 0, 0, 0, 1.2, -1.1397192, 1, 0.7753859, 0.7404955, 0.125, 13, 0, 1, 0, 1.2, 0, 0, 1.580207, 0, 1.2, 0, 0, 0, 0, 1.2, 0.646908, 1, 0.7436922, 0.72684836, 0.125, 13, 0, 1, 0, 1.2, 0, 0, 1.5427464, 0, 1.2, 0, 0, 0, 0, 1.2, -1.9308432, 1, 0.71320117, 0.7163903, 0.125, 13, 0, 1, 0, 1.2, 0, 0, 1.508741, 0, 1.2, 0, 0, 0, 0, 1.2, 1.3109907, 1, 0.789554, 0.80721146, 0.125, 13, 0, 1, 0, 1.2, 0, 0, 1.4746982, 0, 1.2, 0, 0, 0, 0, 1.2, 2.2616513, 1, 0.7759068, 0.8110199, 0.125, 13, 0, 1, 0, 1.2, 0, 0, 1.4120406, 0, 1.2, 0, 0, 0, 0, 1.2, -0.071625374, 1, 0.8218196, 0.76225966, 0.125, 13, 0, 1, 0, 1.2, 0, 0, 1.3069193, 0, 1.2, 0, 0, 0, 0, 1.2, -0.5653757, 1, 0.7932942, 0.74861246, 0.125, 13, 0, 1, 0, 1.2, 0, 0, 1.2647456, 0, 1.2, 0, 0, 0, 0, 1.2, -2.4257832, 1, 0.7627821, 0.7349653, 0.125, 13, 0, 1, 0, 1.2, 0, 0, 1.3855135, 0, 1.2, 0, 0, 0, 0, 1.2, 1.8369497, 1, 0.73028344, 0.7213181, 0.125, 13, 0, 1, 0, 1.2, 0, 0, 1.3169069, 0, 1.2, 0, 0, 0, 0, 1.2, -1.6032536, 1, 0.7076709, 0.7195436, 0.125, 13, 0, 1, 0, 1.2, 0, 0, 1.2682818, 0, 1.2, 0, 0, 0, 0, 1.2, 0.98241293, 1, 0.78402376, 0.8085154, 0.125, 13, 0, 1, 0, 1.2, 0, 0, 1.2079858, 0, 1.2, 0, 0, 0, 0, 1.2, 0.2841554, 1, 0.83784354, 0.7703766, 0.375, 13, 0, 1, 0, 1.2, 0, 0, 1.1484107, 0, 1.2, 0, 0, 0, 0, 1.2, 2.4870725, 1, 0.81049967, 0.7567294, 0.375, 13, 0, 1, 0, 1.2, 0, 0, 1.1042613, 0, 1.2, 0, 0, 0, 0, 1.2, -0.92747056, 1, 0.7811692, 0.7430822, 0.375, 13, 0, 1, 0, 1.2, 0, 0, 1.2275667, 0, 1.2, 0, 0, 0, 0, 1.2, -2.780518, 1, 0.7498521, 0.7294351, 0.75, 13, 0, 1, 0, 1.2, 0, 0, 1.1551672, 0, 1.2, 0, 0, 0, 0, 1.2, -2.046335, 1, 0.7165484, 0.7157879, 0.75, 13, 0, 1, 0, 1.2, 0, 0, 1.0980923, 0, 1.2, 0, 0, 0, 0, 1.2, 1.973569, 1, 0.82423055, 0.70214075, 0.125, 22, 0, 1, 0, 1.2, 0, 0, 1.0619915, 0, 1.2, 0, 0, 0, 0, 1.2, -0.19080828, 1, 0.8531647, 0.7784935, 0.125, 22, 0, 1, 0, 1.2, 0, 0, 1.0208609, 0, 1.2, 0, 0, 0, 0, 1.2, 1.2120619, 1, 0.9398762, 0.7648464, 0.125, 22, 0, 1, 0, 1.2, 0, 0, 0.9034101, 0, 1.2, 0, 0, 0, 0, 1.2, 0.5689295, 1, 0.918278, 0.7511992, 0.125, 22, 0, 1, 0, 1.2, 0, 0, 0.869014, 0, 1.2, 0, 0, 0, 0, 1.2, -1.3678002, 1, 0.894693, 0.73755205, 0.125, 22, 0, 1, 0, 1.2, 0, 0, 1.0000972, 0, 1.2, 0, 0, 0, 0, 1.2, -0.69591516, 1, 0.8691216, 0.72390485, 0.125, 22, 0, 1, 0, 1.2, 0, 0, 0.92189795, 0, 1.2, 0, 0, 0, 0, 1.2, -2.233402, 1, 0.8415635, 0.71025765, 0.125, 22, 0, 1, 0, 1.2, 0, 0, 0.88226604, 0, 1.2, 0, 0, 0, 0, 1.2, 2.4430776, 1, 0.8677831, 0.7866105, 0.125, 22, 0, 1, 0, 1.2, 0, 0, 0.80402124, 0, 1.2, 0, 0, 0, 0, 1.2, 1.061674, 1, 0.8428024, 0.77296335, 0.125, 22, 0, 1, 0, 1.2, 0, 0, 0.755876, 0, 1.2, 0, 0, 0, 0, 1.2, 1.7175668, 1, 0.93136334, 0.75931615, 0.125, 22, 0, 1, 0, 1.2, 0, 0, 0.71029776, 0, 1.2, 0, 0, 0, 0, 1.2, 0.1461333, 1, 0.90896004, 0.74566895, 0.125, 22, 0, 1, 0, 1.2, 0, 0, 0.8087814, 0, 1.2, 0, 0, 0, 0, 1.2, -1.4066348, 1, 0.8845702, 0.7320218, 0.125, 22, 0, 1, 0, 1.2, 0, 0, 0.7493644, 0, 1.2, 0, 0, 0, 0, 1.2, -0.60931593, 1, 0.85819364, 0.7183746, 0.125, 22, 0, 1, 0, 1.2, 0, 0, 0.64964294, 0, 1.2, 0, 0, 0, 0, 1.2, 0.5710576, 1, 0.8298305, 0.7047275, 0.125, 22, 0, 1, 0, 1.2, 0, 0, 0.55016595, 0, 1.2, 0, 0, 0, 0, 1.2, 1.2019324, 1, 0.8578996, 0.78108025, 0.375, 22, 0, 1, 0, 1.2, 0, 0, 0.48261878, 0, 1.2, 0, 0, 0, 0, 1.2, -1.2598621, 1, 0.94374603, 0.7674331, 0.375, 22, 0, 1, 0, 1.2, 0, 0, 0.4531016, 0, 1.2, 0, 0, 0, 0, 1.2, -0.32358652, 1, 0.92252433, 0.7537859, 0.375, 22, 0, 1, 0, 1.2, 0, 0, 0.29681033, 0, 1.2, 0, 0, 0, 0, 1.2, 0.42838955, 1, 0.89931595, 0.74013877, 0.75, 22, 0, 1, 0, 1.2, 0, 0, -1.2270397, 0, 1.2, 0, 0, 0, 0, 1.2, -0.88046855, 0.78125834, 1, 0.7264916, 0.125, 31, 0, 1, 0, 1.2, 0, 0, -1.2823218, 0, 1.2, 0, 0, 0, 0, 1.2, -2.1737945, 0.7912444, 1, 0.7128444, 0.125, 31, 0, 1, 0, 1.2, 0, 0, -1.3257728, 0, 1.2, 0, 0, 0, 0, 1.2, -1.4506996, 0.86209446, 1, 0.7891972, 0.125, 31, 0, 1, 0, 1.2, 0, 0, -1.5623211, 0, 1.2, 0, 0, 0, 0, 1.2, -1.8581941, 0.86950314, 1, 0.77555, 0.125, 31, 0, 1, 0, 1.2, 0, 0, -1.6898956, 0, 1.2, 0, 0, 0, 0, 1.2, -0.9650853, 0.76461184, 1, 0.76190287, 0.125, 31, 0, 1, 0, 1.2, 0, 0, -1.7290835, 0, 1.2, 0, 0, 0, 0, 1.2, -2.3393335, 0.7694431, 1, 0.74825567, 0.125, 31, 0, 1, 0, 1.2, 0, 0, -1.7591516, 0, 1.2, 0, 0, 0, 0, 1.2, -2.8223758, 0.77626103, 1, 0.73460853, 0.125, 31, 0, 1, 0, 1.2, 0, 0, -1.6681448, 0, 1.2, 0, 0, 0, 0, 1.2, -1.3040137, 0.78506553, 1, 0.72096133, 0.125, 31, 0, 1, 0, 1.2, 0, 0, -1.7531421, 0, 1.2, 0, 0, 0, 0, 1.2, -0.44121146, 0.7958567, 1, 0.70731413, 0.125, 31, 0, 1, 0, 1.2, 0, 0, -1.880638, 0, 1.2, 0, 0, 0, 0, 1.2, -1.9688913, 0.8648573, 1, 0.78366697, 0.125, 31, 0, 1, 0, 1.2, 0, 0, -2.0337436, 0, 1.2, 0, 0, 0, 0, 1.2, -2.4490473, 0.7700198, 1, 0.7773591, 0.125, 31, 0, 1, 0, 1.2, 0, 0, -2.109905, 0, 1.2, 0, 0, 0, 0, 1.2, -1.2822722, 0.7663302, 1, 0.75637263, 0.125, 31, 0, 1, 0, 1.2, 0, 0, -2.1526427, 0, 1.2, 0, 0, 0, 0, 1.2, -2.808483, 0.7719665, 1, 0.7427255, 0.125, 31, 0, 1, 0, 1.2, 0, 0, -2.010132, 0, 1.2, 0, 0, 0, 0, 1.2, -0.6837735, 0.77958953, 1, 0.7290783, 0.125, 31, 0, 1, 0, 1.2, 0, 0, -2.047678, 0, 1.2, 0, 0, 0, 0, 1.2, -0.067299046, 0.7891991, 1, 0.7154311, 0.375, 31, 0, 1, 0, 1.2, 0, 0, -2.1286929, 0, 1.2, 0, 0, 0, 0, 1.2, -1.6125768, 0.8007952, 1, 0.70178396, 0.375, 31, 0, 1, 0, 1.2, 0, 0, -2.274215, 0, 1.2, 0, 0, 0, 0, 1.2, -2.0654206, 0.86794627, 1, 0.77813673, 0.375, 31, 0, 1, 0, 1.2, 0, 0, -2.3726296, 0, 1.2, 0, 0, 0, 0, 1.2, -0.47537604, 0.7644896, 1, 0.7650591, 0.75, 31, 0, 1, 0, 1.2, 0, 0, -2.462682, 0, 1.2, 0, 0, 0, 0, 1.2, -2.569322, 0.91751444, 0.7342319, 1, 0.125, 40, 0, 1, 0, 1.2, 0, 0, -2.5223799, 0, 1.2, 0, 0, 0, 0, 1.2, -0.876555, 0.892593, 0.71967494, 1, 0.125, 40, 0, 1, 0, 1.2, 0, 0, -2.4198072, 0, 1.2, 0, 0, 0, 0, 1.2, -1.3455316, 0.86555254, 0.70511794, 1, 0.125, 40, 0, 1, 0, 1.2, 0, 0, -2.5217445, 0, 1.2, 0, 0, 0, 0, 1.2, -2.2529714, 0.836393, 0.69056094, 1, 0.125, 40, 0, 1, 0, 1.2, 0, 0, -2.6622205, 0, 1.2, 0, 0, 0, 0, 1.2, -2.980858, 0.8628589, 0.77200395, 1, 0.125, 40, 0, 1, 0, 1.2, 0, 0, -2.7347548, 0, 1.2, 0, 0, 0, 0, 1.2, -0.3439601, 0.8364485, 0.757447, 1, 0.125, 40, 0, 1, 0, 1.2, 0, 0, -2.7754273, 0, 1.2, 0, 0, 0, 0, 1.2, -1.7780547, 0.93133193, 0.74289, 1, 0.125, 40, 0, 1, 0, 1.2, 0, 0, -2.8237405, 0, 1.2, 0, 0, 0, 0, 1.2, -0.68389946, 0.90767086, 0.728333, 1, 0.125, 40, 0, 1, 0, 1.2, 0, 0, -2.8079922, 0, 1.2, 0, 0, 0, 0, 1.2, -1.2350786, 0.8818907, 0.713776, 1, 0.125, 40, 0, 1, 0, 1.2, 0, 0, -2.8460746, 0, 1.2, 0, 0, 0, 0, 1.2, -2.5193172, 0.8539917, 0.69921905, 1, 0.125, 40, 0, 1, 0, 1.2, 0, 0, -2.9062161, 0, 1.2, 0, 0, 0, 0, 1.2, -2.0863552, 0.82397324, 0.68466204, 1, 0.125, 40, 0, 1, 0, 1.2, 0, 0, -3.1069818, 0, 1.2, 0, 0, 0, 0, 1.2, -0.90276086, 0.85241205, 0.76610506, 1, 0.125, 40, 0, 1, 0, 1.2, 0, 0, -3.193726, 0, 1.2, 0, 0, 0, 0, 1.2, -1.6152936, 0.94439995, 0.75154805, 1, 0.375, 40, 0, 1, 0, 1.2, 0, 0, -3.3521876, 0, 1.2, 0, 0, 0, 0, 1.2, -2.1039507, 0.9219993, 0.7369911, 1, 0.375, 40, 0, 1, 0, 1.2, 0, 0, -3.4895065, 0, 1.2, 0, 0, 0, 0, 1.2, -1.1562608, 0.8974795, 0.7224341, 1, 0.75, 40, 0, 1, 0, 1.2, 0, 0, -0.35069853, 0, 1.2, 0, 0, 0, 0, 1.2, 2.0313375, 1, 0.97939503, 0.9269693, 0.125, 49, 0, 1, 0, 1.2, 0, 0, -0.5618524, 0, 1.2, 0, 0, 0, 0, 1.2, 2.4684381, 1, 0.97278786, 0.92333007, 0.125, 49, 0, 1, 0, 1.2, 0, 0, -0.7534989, 0, 1.2, 0, 0, 0, 0, 1.2, 1.8547975, 1, 0.97591597, 0.9436908, 0.125, 49, 0, 1, 0, 1.2, 0, 0, -0.9117417, 0, 1.2, 0, 0, 0, 0, 1.2, 1.3924078, 1, 0.96999604, 0.94005156, 0.125, 49, 0, 1, 0, 1.2, 0, 0, -0.9898985, 0, 1.2, 0, 0, 0, 0, 1.2, 2.512338, 1, 0.9940685, 0.9364123, 0.125, 49, 0, 1, 0, 1.2, 0, 0, -1.0438781, 0, 1.2, 0, 0, 0, 0, 1.2, 3.1195712, 1, 0.98883593, 0.93277305, 0.125, 49, 0, 1, 0, 1.2, 0, 0, -0.9577569, 0, 1.2, 0, 0, 0, 0, 1.2, 2.252359, 1, 0.98307353, 0.92913383, 0.125, 49, 0, 1, 0, 1.2, 0, 0, -1.1081065, 0, 1.2, 0, 0, 0, 0, 1.2, 1.8162099, 1, 0.9767815, 0.92549455, 0.125, 49, 0, 1, 0, 1.2, 0, 0, -1.3084724, 0, 1.2, 0, 0, 0, 0, 1.2, 2.8368728, 1, 0.9699596, 0.92185533, 0.125, 49, 0, 1, 0, 1.2, 0, 0, -1.3879471, 0, 1.2, 0, 0, 0, 0, 1.2, 2.385224, 1, 0.9735809, 0.94221604, 0.125, 49, 0, 1, 0, 1.2, 0, 0, -1.492932, 0, 1.2, 0, 0, 0, 0, 1.2, 1.5123131, 1, 0.9969294, 0.9385768, 0.125, 49, 0, 1, 0, 1.2, 0, 0, -1.6990412, 0, 1.2, 0, 0, 0, 0, 1.2, 2.019975, 1, 0.99201196, 0.9349376, 0.125, 49, 0, 1, 0, 1.2, 0, 0, -1.7482125, 0, 1.2, 0, 0, 0, 0, 1.2, 3.0771956, 1, 0.9865647, 0.9312983, 0.375, 49, 0, 1, 0, 1.2, 0, 0, -1.7380568, 0, 1.2, 0, 0, 0, 0, 1.2, 2.5465693, 1, 0.9805877, 0.9276591, 0.375, 49, 0, 1, 0, 1.2, 0, 0, -1.810768, 0, 1.2, 0, 0, 0, 0, 1.2, 1.7538419, 1, 0.97408086, 0.9240198, 0.75, 49, 0, 1, 0)
 
 [sub_resource type="MultiMesh" id="MultiMesh_2wyq8"]
 transform_format = 1
 use_colors = true
 mesh = ExtResource("9_0ld40")
 
+[sub_resource type="QuadMesh" id="QuadMesh_y6deb"]
+material = ExtResource("17_yc10j")
+
+[sub_resource type="MultiMesh" id="MultiMesh_vxglm"]
+transform_format = 1
+use_colors = true
+mesh = SubResource("QuadMesh_y6deb")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_2f3dj"]
+size = Vector2(1, 1)
+
 [node name="Main" type="Node3D" unique_id=185706530]
 script = ExtResource("1_ya4ey")
+volley_shot = ExtResource("2_jbj1t")
+break_shot = ExtResource("3_muem4")
+phase2_shot = ExtResource("4_dp3eg")
+won_shot = ExtResource("5_0ld40")
 
 [node name="Camera" type="Camera3D" parent="." unique_id=273723040]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 0.6598912, 0.7513612, 0, -0.7513612, 0.6598912, 1.1, 11.5, 9.5)
 keep_aspect = 0
 fov = 40.0
+script = ExtResource("6_gqmmt")
 
-[node name="Ground" type="MeshInstance3D" parent="." unique_id=1921574600]
-material_override = ExtResource("2_eb6dy")
-cast_shadow = 0
-mesh = SubResource("PlaneMesh_jscy8")
+[node name="Stage" parent="." unique_id=1963209884 instance=ExtResource("7_yc10j")]
+unique_name_in_owner = true
 
 [node name="Boss" type="Node3D" parent="." unique_id=683515905]
 unique_name_in_owner = true
@@ -54,7 +80,7 @@ script = ExtResource("3_trceg")
 
 [node name="BossSprite" type="MeshInstance3D" parent="Boss" unique_id=924366513]
 unique_name_in_owner = true
-transform = Transform3D(4.8, 0, 0, 0, 4.8, 0, 0, 0, 4.8, 0, 0, 0)
+transform = Transform3D(5.6, 0, 0, 0, 5.6, 0, 0, 0, 5.6, 0, 0, 0)
 material_override = ExtResource("4_a8y0u")
 cast_shadow = 0
 mesh = SubResource("QuadMesh_pm3ni")
@@ -65,41 +91,54 @@ material_override = ExtResource("5_jkv2x")
 cast_shadow = 0
 mesh = SubResource("PlaneMesh_y6deb")
 
-[node name="WeakPointAnchor" type="Marker3D" parent="Boss" unique_id=593171194]
+[node name="PartLegs" type="Marker3D" parent="Boss" unique_id=893789619]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 2, 0.3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0.3)
 
-[node name="Zones" type="Node3D" parent="." unique_id=1339203888]
+[node name="PartArm" type="Marker3D" parent="Boss" unique_id=867348047]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7, 3.4, 0.3)
+
+[node name="PartHorns" type="Marker3D" parent="Boss" unique_id=989179190]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 4.7, 0.3)
+
+[node name="TeleMarkers" type="Node3D" parent="." unique_id=1365728040]
 unique_name_in_owner = true
 
-[node name="Zone_遠1" parent="Zones" unique_id=344499197 instance=ExtResource("6_jbj1t")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 0, -2.7)
+[node name="Marker_1" parent="TeleMarkers" unique_id=548237412 instance=ExtResource("11_jscy8")]
+visible = false
 
-[node name="Zone_近1" parent="Zones" unique_id=800675889 instance=ExtResource("6_jbj1t")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 0, -2.7)
-zone_index = 1
+[node name="Marker_2" parent="TeleMarkers" unique_id=759532946 instance=ExtResource("11_jscy8")]
+visible = false
 
-[node name="Zone_遠2" parent="Zones" unique_id=722659332 instance=ExtResource("6_jbj1t")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 0, 0)
-zone_index = 2
+[node name="Marker_3" parent="TeleMarkers" unique_id=1301362056 instance=ExtResource("11_jscy8")]
+visible = false
 
-[node name="Zone_近2" parent="Zones" unique_id=2063532356 instance=ExtResource("6_jbj1t")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 0, 0)
-zone_index = 3
+[node name="Flags" type="Node3D" parent="." unique_id=1872129563]
+unique_name_in_owner = true
 
-[node name="Zone_遠3" parent="Zones" unique_id=245997838 instance=ExtResource("6_jbj1t")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, 0, 2.7)
-zone_index = 4
+[node name="Flag_近戰團" parent="Flags" unique_id=320180032 instance=ExtResource("12_pm3ni")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.35, 0, 0)
+color = Color(0.95, 0.35, 0.25, 1)
 
-[node name="Zone_近3" parent="Zones" unique_id=2053731601 instance=ExtResource("6_jbj1t")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 0, 2.7)
-zone_index = 5
+[node name="Flag_遠程團" parent="Flags" unique_id=1908124018 instance=ExtResource("12_pm3ni")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.3, 0, -1.6)
+squad_index = 1
+color = Color(0.3, 0.8, 0.95, 1)
+banner = ExtResource("13_pm3ni")
+
+[node name="Flag_輔助團" parent="Flags" unique_id=458986909 instance=ExtResource("12_pm3ni")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 0, 2.2)
+squad_index = 2
+color = Color(1, 0.82, 0.3, 1)
+banner = ExtResource("14_y6deb")
 
 [node name="Army" type="MultiMeshInstance3D" parent="." unique_id=1287533811]
 unique_name_in_owner = true
 cast_shadow = 0
 custom_aabb = AABB(-16.3, -2, -12, 30, 8, 24)
-multimesh = SubResource("MultiMesh_og1vs")
+multimesh = SubResource("MultiMesh_yc10j")
 script = ExtResource("8_dp3eg")
 
 [node name="Bolts" type="MultiMeshInstance3D" parent="." unique_id=1250711034]
@@ -109,5 +148,121 @@ custom_aabb = AABB(-16.3, -2, -12, 30, 8, 24)
 multimesh = SubResource("MultiMesh_2wyq8")
 script = ExtResource("10_gqmmt")
 
+[node name="CaptainPlates" type="Node3D" parent="." unique_id=1354733327]
+unique_name_in_owner = true
+
+[node name="Plate_1" parent="CaptainPlates" unique_id=333072345 instance=ExtResource("19_og1vs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 1.5, 0)
+
+[node name="Plate_2" parent="CaptainPlates" unique_id=522725375 instance=ExtResource("19_og1vs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 1.5, 0.6)
+
+[node name="Plate_3" parent="CaptainPlates" unique_id=1829497096 instance=ExtResource("19_og1vs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.8, 1.5, 1.2)
+
+[node name="Popups" type="Node3D" parent="." unique_id=2053468022]
+unique_name_in_owner = true
+
+[node name="Popup_1" parent="Popups" unique_id=461990709 instance=ExtResource("19_y6deb")]
+visible = false
+
+[node name="Popup_2" parent="Popups" unique_id=583528546 instance=ExtResource("19_y6deb")]
+visible = false
+
+[node name="Popup_3" parent="Popups" unique_id=1536481918 instance=ExtResource("19_y6deb")]
+visible = false
+
+[node name="Popup_4" parent="Popups" unique_id=257174351 instance=ExtResource("19_y6deb")]
+visible = false
+
+[node name="Popup_5" parent="Popups" unique_id=1063279538 instance=ExtResource("19_y6deb")]
+visible = false
+
+[node name="Popup_6" parent="Popups" unique_id=691531408 instance=ExtResource("19_y6deb")]
+visible = false
+
+[node name="Popup_7" parent="Popups" unique_id=1468623904 instance=ExtResource("19_y6deb")]
+visible = false
+
+[node name="Popup_8" parent="Popups" unique_id=91177135 instance=ExtResource("19_y6deb")]
+visible = false
+
+[node name="ImpactFx" type="Node3D" parent="." unique_id=814387536]
+unique_name_in_owner = true
+script = ExtResource("16_gqmmt")
+
+[node name="Chunks" type="MultiMeshInstance3D" parent="ImpactFx" unique_id=2128113266]
+unique_name_in_owner = true
+cast_shadow = 0
+custom_aabb = AABB(-16, -2, -12, 32, 12, 24)
+multimesh = SubResource("MultiMesh_vxglm")
+
+[node name="Rings" type="Node3D" parent="ImpactFx" unique_id=1988172267]
+unique_name_in_owner = true
+
+[node name="Ring_1" type="MeshInstance3D" parent="ImpactFx/Rings" unique_id=55595351]
+visible = false
+material_override = ExtResource("18_jscy8")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_2f3dj")
+
+[node name="Ring_2" type="MeshInstance3D" parent="ImpactFx/Rings" unique_id=890607353]
+visible = false
+material_override = ExtResource("18_jscy8")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_2f3dj")
+
+[node name="Ring_3" type="MeshInstance3D" parent="ImpactFx/Rings" unique_id=730149660]
+visible = false
+material_override = ExtResource("18_jscy8")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_2f3dj")
+
+[node name="Ring_4" type="MeshInstance3D" parent="ImpactFx/Rings" unique_id=1091754911]
+visible = false
+material_override = ExtResource("18_jscy8")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_2f3dj")
+
+[node name="Ring_5" type="MeshInstance3D" parent="ImpactFx/Rings" unique_id=1057186192]
+visible = false
+material_override = ExtResource("18_jscy8")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_2f3dj")
+
+[node name="Ring_6" type="MeshInstance3D" parent="ImpactFx/Rings" unique_id=1998371714]
+visible = false
+material_override = ExtResource("18_jscy8")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_2f3dj")
+
+[node name="Ring_7" type="MeshInstance3D" parent="ImpactFx/Rings" unique_id=663794252]
+visible = false
+material_override = ExtResource("18_jscy8")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_2f3dj")
+
+[node name="Ring_8" type="MeshInstance3D" parent="ImpactFx/Rings" unique_id=921226502]
+visible = false
+material_override = ExtResource("18_jscy8")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_2f3dj")
+
+[node name="Ring_9" type="MeshInstance3D" parent="ImpactFx/Rings" unique_id=381947282]
+visible = false
+material_override = ExtResource("18_jscy8")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_2f3dj")
+
+[node name="Ring_10" type="MeshInstance3D" parent="ImpactFx/Rings" unique_id=417387066]
+visible = false
+material_override = ExtResource("18_jscy8")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_2f3dj")
+
 [node name="Hud" parent="." unique_id=1376261133 instance=ExtResource("11_yc10j")]
 unique_name_in_owner = true
+
+[node name="Sfx" type="Node" parent="." unique_id=1833710313]
+unique_name_in_owner = true
+script = ExtResource("20_pm3ni")

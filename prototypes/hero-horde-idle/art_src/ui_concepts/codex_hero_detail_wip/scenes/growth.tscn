@@ -1,0 +1,234 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://ui/theme.tres" id="1_0xiul"]
+[ext_resource type="Script" path="res://scripts/growth.gd" id="2_2mssi"]
+[ext_resource type="PackedScene" path="res://scenes/hero_card.tscn" id="3_ffqiw"]
+[ext_resource type="PackedScene" path="res://scenes/hero_detail.tscn" id="4_2mssi"]
+
+[node name="Growth" type="Control" unique_id=531278110]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource("1_0xiul")
+script = ExtResource("2_2mssi")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1349067103]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.07, 0.08, 0.15, 1)
+
+[node name="Margins" type="MarginContainer" parent="." unique_id=1240373384]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 32
+
+[node name="Column" type="VBoxContainer" parent="Margins" unique_id=375219872]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Top" type="HBoxContainer" parent="Margins/Column" unique_id=1958885365]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Title" type="Label" parent="Margins/Column/Top" unique_id=2009793097]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 40
+text = "養成"
+
+[node name="Gold" type="Label" parent="Margins/Column/Top" unique_id=220416331]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.35, 1)
+theme_override_font_sizes/font_size = 28
+text = "金幣 1200"
+
+[node name="Shards" type="Label" parent="Margins/Column/Top" unique_id=486072282]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 28
+text = "突破素材 3"
+
+[node name="MarchTitle" type="Label" parent="Margins/Column" unique_id=1630556771]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.78, 0.8, 0.9, 1)
+theme_override_font_sizes/font_size = 22
+text = "行軍小隊（點一格，再到英雄詳情按「派去行軍」換人）"
+
+[node name="MarchSlots" type="HBoxContainer" parent="Margins/Column" unique_id=592196221]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Slot_1" parent="Margins/Column/MarchSlots" unique_id=1562409055 instance=ExtResource("3_ffqiw")]
+custom_minimum_size = Vector2(128, 172)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Slot_2" parent="Margins/Column/MarchSlots" unique_id=639169625 instance=ExtResource("3_ffqiw")]
+custom_minimum_size = Vector2(128, 172)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Slot_3" parent="Margins/Column/MarchSlots" unique_id=843298373 instance=ExtResource("3_ffqiw")]
+custom_minimum_size = Vector2(128, 172)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Slot_4" parent="Margins/Column/MarchSlots" unique_id=1942590870 instance=ExtResource("3_ffqiw")]
+custom_minimum_size = Vector2(128, 172)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Slot_5" parent="Margins/Column/MarchSlots" unique_id=69386918 instance=ExtResource("3_ffqiw")]
+custom_minimum_size = Vector2(128, 172)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ClassTabs" type="HBoxContainer" parent="Margins/Column" unique_id=1348361165]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Tab_0" type="Button" parent="Margins/Column/ClassTabs" unique_id=1083502826]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 30
+toggle_mode = true
+text = "盾"
+
+[node name="Tab_1" type="Button" parent="Margins/Column/ClassTabs" unique_id=1614510434]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 30
+toggle_mode = true
+text = "劍"
+
+[node name="Tab_2" type="Button" parent="Margins/Column/ClassTabs" unique_id=1130467153]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 30
+toggle_mode = true
+text = "槍"
+
+[node name="Tab_3" type="Button" parent="Margins/Column/ClassTabs" unique_id=998040281]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 30
+toggle_mode = true
+text = "弓"
+
+[node name="Tab_4" type="Button" parent="Margins/Column/ClassTabs" unique_id=1604888845]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 30
+toggle_mode = true
+text = "法"
+
+[node name="Tab_5" type="Button" parent="Margins/Column/ClassTabs" unique_id=929407822]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 30
+toggle_mode = true
+text = "補"
+
+[node name="ClassRow" type="HBoxContainer" parent="Margins/Column" unique_id=505519628]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ClassLine" type="Label" parent="Margins/Column/ClassRow" unique_id=1119909343]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "盾 職業等級 3　全職業英雄 ×1.17"
+autowrap_mode = 3
+
+[node name="ClassUp" type="Button" parent="Margins/Column/ClassRow" unique_id=50296200]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 72)
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "升級（120 金）"
+
+[node name="Scroll" type="ScrollContainer" parent="Margins/Column" unique_id=1583017446]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Cards" type="GridContainer" parent="Margins/Column/Scroll" unique_id=503375262]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 4
+
+[node name="Preview_1" parent="Margins/Column/Scroll/Cards" unique_id=1473004266 instance=ExtResource("3_ffqiw")]
+layout_mode = 2
+
+[node name="Preview_2" parent="Margins/Column/Scroll/Cards" unique_id=363054888 instance=ExtResource("3_ffqiw")]
+layout_mode = 2
+
+[node name="Preview_3" parent="Margins/Column/Scroll/Cards" unique_id=1357824882 instance=ExtResource("3_ffqiw")]
+layout_mode = 2
+
+[node name="Preview_4" parent="Margins/Column/Scroll/Cards" unique_id=1737907583 instance=ExtResource("3_ffqiw")]
+layout_mode = 2
+
+[node name="Toast" type="Label" parent="Margins/Column" unique_id=503183740]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 1, 0.7, 1)
+theme_override_font_sizes/font_size = 22
+text = "行軍回來了：金幣 +1300"
+autowrap_mode = 3
+
+[node name="Actions" type="HBoxContainer" parent="Margins/Column" unique_id=638532571]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="MarchHour" type="Button" parent="Margins/Column/Actions" unique_id=2130288960]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 28
+text = "行軍 1 小時"
+
+[node name="AutoSpend" type="Button" parent="Margins/Column/Actions" unique_id=6992997]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 28
+text = "一鍵養成"
+
+[node name="StartPush" type="Button" parent="Margins/Column/Actions" unique_id=218896683]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 28
+text = "開始推王"
+
+[node name="Detail" parent="." unique_id=1496060292 instance=ExtResource("4_2mssi")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15

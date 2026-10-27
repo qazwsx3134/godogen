@@ -1,0 +1,165 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Medium.otf" id="1_hmtxd"]
+[ext_resource type="Texture2D" path="res://assets/reference/backpack.png" id="2_w27o7"]
+[ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Bold.otf" id="3_fsiit"]
+
+[sub_resource type="Theme" id="Theme_krmap"]
+default_font = ExtResource("1_hmtxd")
+default_font_size = 26
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wnl7x"]
+bg_color = Color(0.96862745, 0.9098039, 0.8352941, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8, 0.7058824, 0.6039216, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 2
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bc6vo"]
+atlas = ExtResource("2_w27o7")
+region = Rect2(77, 937, 91, 98)
+filter_clip = true
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_711xe"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1p12t"]
+bg_color = Color(0.2, 0.26, 0.34, 0.2)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.9411765, 0.78039217, 0.42745098, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gwyms"]
+bg_color = Color(0.2, 0.26, 0.34, 0.16)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.9411765, 0.78039217, 0.42745098, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yhv7p"]
+bg_color = Color(0.9019608, 0.8117647, 0.70980394, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.74509805, 0.6509804, 0.54901963, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_30n4r"]
+bg_color = Color(0.9137255, 0.8352941, 0.73333335, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.8745098, 0.6666667, 0.2901961, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 2
+
+[node name="EquipmentBagCard" type="Control" unique_id=428669624]
+custom_minimum_size = Vector2(118, 70)
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+theme = SubResource("Theme_krmap")
+
+[node name="Frame" type="Panel" parent="." unique_id=1233683396]
+layout_mode = 0
+offset_right = 118.0
+offset_bottom = 70.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_wnl7x")
+
+[node name="Icon" type="TextureRect" parent="." unique_id=1076063188]
+texture_filter = 1
+layout_mode = 0
+offset_left = 5.0
+offset_top = 8.0
+offset_right = 54.0
+offset_bottom = 56.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_bc6vo")
+expand_mode = 1
+
+[node name="Title" type="Label" parent="." unique_id=1059615170]
+layout_mode = 0
+offset_left = 55.0
+offset_top = 6.0
+offset_right = 114.0
+offset_bottom = 43.0
+theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("3_fsiit")
+theme_override_font_sizes/font_size = 15
+text = "短劍"
+horizontal_alignment = 1
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Level" type="Label" parent="." unique_id=2073914082]
+layout_mode = 0
+offset_left = 56.0
+offset_top = 42.0
+offset_right = 113.0
+offset_bottom = 64.0
+theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 14
+text = "Lv.1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EquippedBy" type="Label" parent="." unique_id=1029866666]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 48.0
+offset_right = 52.0
+offset_bottom = 65.0
+theme_override_colors/font_color = Color(0.30980393, 0.50980395, 0.3647059, 1)
+theme_override_colors/font_outline_color = Color(0.30980393, 0.50980395, 0.3647059, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 11
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SelectButton" type="Button" parent="." unique_id=1956575845]
+layout_mode = 0
+offset_right = 118.0
+offset_bottom = 70.0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
+theme_override_fonts/font = ExtResource("3_fsiit")
+theme_override_font_sizes/font_size = 14
+theme_override_styles/normal = SubResource("StyleBoxEmpty_711xe")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_1p12t")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gwyms")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_yhv7p")
+theme_override_styles/focus = SubResource("StyleBoxFlat_30n4r")
+metadata/action = "equipment_item:"

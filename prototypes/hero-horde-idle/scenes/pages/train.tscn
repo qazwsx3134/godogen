@@ -1,0 +1,494 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Medium.otf" id="1_og6bm"]
+[ext_resource type="Script" path="res://scripts/pages/train_page.gd" id="2_og6bm"]
+[ext_resource type="Texture2D" path="res://assets/reference/equipment.png" id="2_xuylc"]
+[ext_resource type="Texture2D" path="res://assets/reference/train.png" id="3_x1pro"]
+[ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Bold.otf" id="4_0vqx5"]
+[ext_resource type="PackedScene" path="res://scenes/components/training_row.tscn" id="5_f76w0"]
+
+[sub_resource type="Theme" id="Theme_krmap"]
+default_font = ExtResource("1_og6bm")
+default_font_size = 26
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1s2ed"]
+atlas = ExtResource("2_xuylc")
+region = Rect2(0, 100, 941, 260)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ohxes"]
+atlas = ExtResource("2_xuylc")
+region = Rect2(0, 360, 56, 110)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eosu5"]
+atlas = ExtResource("2_xuylc")
+region = Rect2(420, 360, 140, 110)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_etb6y"]
+atlas = ExtResource("2_xuylc")
+region = Rect2(420, 360, 140, 110)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q2ooh"]
+atlas = ExtResource("2_xuylc")
+region = Rect2(420, 360, 84, 110)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qe4t3"]
+atlas = ExtResource("2_xuylc")
+region = Rect2(420, 360, 140, 110)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2x0nf"]
+atlas = ExtResource("2_xuylc")
+region = Rect2(420, 360, 140, 110)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6rfy6"]
+atlas = ExtResource("2_xuylc")
+region = Rect2(420, 360, 140, 110)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ybx4v"]
+atlas = ExtResource("2_xuylc")
+region = Rect2(420, 360, 101, 110)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5gu1g"]
+atlas = ExtResource("2_xuylc")
+region = Rect2(0, 470, 941, 55)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3vn3e"]
+atlas = ExtResource("2_xuylc")
+region = Rect2(8, 527, 925, 994)
+filter_clip = true
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5td6a"]
+texture = SubResource("AtlasTexture_3vn3e")
+texture_margin_left = 18.0
+texture_margin_top = 18.0
+texture_margin_right = 18.0
+texture_margin_bottom = 18.0
+draw_center = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yiwht"]
+bg_color = Color(0.91764706, 0.8352941, 0.7411765, 1)
+border_color = Color(1, 1, 1, 0)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 2
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pqj07"]
+atlas = ExtResource("3_x1pro")
+region = Rect2(63, 796, 147, 146)
+filter_clip = true
+
+[sub_resource type="Theme" id="Theme_uy7r5"]
+default_font = ExtResource("1_og6bm")
+default_font_size = 26
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wnl7x"]
+bg_color = Color(0.96862745, 0.9098039, 0.8352941, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8, 0.7058824, 0.6039216, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 2
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bl2ju"]
+atlas = ExtResource("3_x1pro")
+region = Rect2(52, 994, 96, 89)
+filter_clip = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pwkfr"]
+bg_color = Color(0.25490198, 0.3647059, 0.52156866, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.54901963, 0.627451, 0.7411765, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7r3wi"]
+bg_color = Color(0.17254902, 0.2509804, 0.37254903, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.9529412, 0.84313726, 0.56078434, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dnlsv"]
+bg_color = Color(0.32941177, 0.4509804, 0.6156863, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.9529412, 0.84313726, 0.56078434, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yhv7p"]
+bg_color = Color(0.9019608, 0.8117647, 0.70980394, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.74509805, 0.6509804, 0.54901963, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_30n4r"]
+bg_color = Color(0.9137255, 0.8352941, 0.73333335, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.8745098, 0.6666667, 0.2901961, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 2
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r31y1"]
+atlas = ExtResource("3_x1pro")
+region = Rect2(52, 1126, 96, 89)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b5xw7"]
+atlas = ExtResource("3_x1pro")
+region = Rect2(52, 1258, 96, 89)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_01udx"]
+atlas = ExtResource("3_x1pro")
+region = Rect2(52, 1390, 96, 89)
+filter_clip = true
+
+[node name="Train" type="Control" unique_id=341858121]
+custom_minimum_size = Vector2(941, 1672)
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+theme = SubResource("Theme_krmap")
+script = ExtResource("2_og6bm")
+metadata/page_id = "train"
+
+[node name="DistantLandscape" type="TextureRect" parent="." unique_id=680590626]
+texture_filter = 1
+layout_mode = 0
+offset_top = 100.0
+offset_right = 941.0
+offset_bottom = 365.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_1s2ed")
+expand_mode = 1
+
+[node name="LowerLandscape0" type="TextureRect" parent="." unique_id=1218652233]
+texture_filter = 1
+layout_mode = 0
+offset_top = 360.0
+offset_right = 56.0
+offset_bottom = 470.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_ohxes")
+expand_mode = 1
+
+[node name="LowerPatch0_0" type="TextureRect" parent="." unique_id=674040873]
+texture_filter = 1
+layout_mode = 0
+offset_left = 56.0
+offset_top = 360.0
+offset_right = 196.0
+offset_bottom = 470.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_eosu5")
+expand_mode = 1
+
+[node name="LowerPatch0_1" type="TextureRect" parent="." unique_id=1435858287]
+texture_filter = 1
+layout_mode = 0
+offset_left = 196.0
+offset_top = 360.0
+offset_right = 336.0
+offset_bottom = 470.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_etb6y")
+expand_mode = 1
+
+[node name="LowerPatch0_2" type="TextureRect" parent="." unique_id=2134233097]
+texture_filter = 1
+layout_mode = 0
+offset_left = 336.0
+offset_top = 360.0
+offset_right = 420.0
+offset_bottom = 470.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_q2ooh")
+expand_mode = 1
+
+[node name="LowerLandscape2" type="TextureRect" parent="." unique_id=1640088164]
+texture_filter = 1
+layout_mode = 0
+offset_left = 420.0
+offset_top = 360.0
+offset_right = 560.0
+offset_bottom = 470.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_qe4t3")
+expand_mode = 1
+
+[node name="LowerPatch2_4" type="TextureRect" parent="." unique_id=977035823]
+texture_filter = 1
+layout_mode = 0
+offset_left = 560.0
+offset_top = 360.0
+offset_right = 700.0
+offset_bottom = 470.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_2x0nf")
+expand_mode = 1
+
+[node name="LowerPatch2_5" type="TextureRect" parent="." unique_id=1376893882]
+texture_filter = 1
+layout_mode = 0
+offset_left = 700.0
+offset_top = 360.0
+offset_right = 840.0
+offset_bottom = 470.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_6rfy6")
+expand_mode = 1
+
+[node name="LowerPatch2_6" type="TextureRect" parent="." unique_id=2079860165]
+texture_filter = 1
+layout_mode = 0
+offset_left = 840.0
+offset_top = 360.0
+offset_right = 941.0
+offset_bottom = 470.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_ybx4v")
+expand_mode = 1
+
+[node name="Ground" type="TextureRect" parent="." unique_id=778689551]
+texture_filter = 1
+layout_mode = 0
+offset_top = 470.0
+offset_right = 941.0
+offset_bottom = 525.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_5gu1g")
+expand_mode = 1
+
+[node name="BattleSocket" type="Node2D" parent="." unique_id=1119163922]
+unique_name_in_owner = true
+position = Vector2(0, 470)
+
+[node name="ContentPanel" type="Panel" parent="." unique_id=1487244965]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 525.0
+offset_right = 933.0
+offset_bottom = 1520.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_5td6a")
+
+[node name="PaperFill" type="Panel" parent="ContentPanel" unique_id=1586006302]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 18.0
+offset_top = 18.0
+offset_right = -18.0
+offset_bottom = -18.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_yiwht")
+
+[node name="PageIcon" type="TextureRect" parent="." unique_id=238001337]
+texture_filter = 1
+layout_mode = 0
+offset_left = 28.0
+offset_top = 541.0
+offset_right = 94.0
+offset_bottom = 602.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_pqj07")
+expand_mode = 1
+
+[node name="PageTitle" type="Label" parent="." unique_id=896952688]
+layout_mode = 0
+offset_left = 104.0
+offset_top = 538.0
+offset_right = 579.0
+offset_bottom = 604.0
+theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("4_0vqx5")
+theme_override_font_sizes/font_size = 42
+text = "全軍訓練"
+vertical_alignment = 1
+
+[node name="TrainingSubtitle" type="Label" parent="." unique_id=534317363]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 33.0
+offset_top = 602.0
+offset_right = 897.0
+offset_bottom = 638.0
+theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 22
+text = "花金幣訓練全軍，立即生效；劍術與耐力是戰力的主要來源。"
+vertical_alignment = 1
+
+[node name="TrainingScroll" type="ScrollContainer" parent="." unique_id=1197011167]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 26.0
+offset_top = 650.0
+offset_right = 915.0
+offset_bottom = 1506.0
+horizontal_scroll_mode = 0
+
+[node name="TrainingList" type="VBoxContainer" parent="TrainingScroll" unique_id=862685606]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 11
+
+[node name="TrainingRow0" parent="TrainingScroll/TrainingList" unique_id=265172960 instance=ExtResource("5_f76w0")]
+custom_minimum_size = Vector2(889, 190)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = SubResource("Theme_uy7r5")
+
+[node name="Frame" parent="TrainingScroll/TrainingList/TrainingRow0" index="0" unique_id=772292828]
+theme_override_styles/panel = SubResource("StyleBoxFlat_wnl7x")
+
+[node name="Icon" parent="TrainingScroll/TrainingList/TrainingRow0" index="1" unique_id=1701188117]
+texture = SubResource("AtlasTexture_bl2ju")
+
+[node name="TrainButton" parent="TrainingScroll/TrainingList/TrainingRow0" index="7" unique_id=168005273]
+theme_override_styles/normal = SubResource("StyleBoxFlat_pwkfr")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_7r3wi")
+theme_override_styles/hover = SubResource("StyleBoxFlat_dnlsv")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_yhv7p")
+theme_override_styles/focus = SubResource("StyleBoxFlat_30n4r")
+
+[node name="TrainingRow1" parent="TrainingScroll/TrainingList" unique_id=1121940750 instance=ExtResource("5_f76w0")]
+custom_minimum_size = Vector2(889, 190)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = SubResource("Theme_uy7r5")
+
+[node name="Frame" parent="TrainingScroll/TrainingList/TrainingRow1" index="0" unique_id=772292828]
+theme_override_styles/panel = SubResource("StyleBoxFlat_wnl7x")
+
+[node name="Icon" parent="TrainingScroll/TrainingList/TrainingRow1" index="1" unique_id=1701188117]
+texture = SubResource("AtlasTexture_r31y1")
+
+[node name="Title" parent="TrainingScroll/TrainingList/TrainingRow1" index="2" unique_id=1998782497]
+text = "耐力"
+
+[node name="Description" parent="TrainingScroll/TrainingList/TrainingRow1" index="4" unique_id=955340598]
+text = "提升主角的基礎生命值。"
+
+[node name="TrainButton" parent="TrainingScroll/TrainingList/TrainingRow1" index="7" unique_id=168005273]
+theme_override_styles/normal = SubResource("StyleBoxFlat_pwkfr")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_7r3wi")
+theme_override_styles/hover = SubResource("StyleBoxFlat_dnlsv")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_yhv7p")
+theme_override_styles/focus = SubResource("StyleBoxFlat_30n4r")
+metadata/action = "train:1"
+
+[node name="TrainingRow2" parent="TrainingScroll/TrainingList" unique_id=609727214 instance=ExtResource("5_f76w0")]
+custom_minimum_size = Vector2(889, 190)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = SubResource("Theme_uy7r5")
+
+[node name="Frame" parent="TrainingScroll/TrainingList/TrainingRow2" index="0" unique_id=772292828]
+theme_override_styles/panel = SubResource("StyleBoxFlat_wnl7x")
+
+[node name="Icon" parent="TrainingScroll/TrainingList/TrainingRow2" index="1" unique_id=1701188117]
+texture = SubResource("AtlasTexture_b5xw7")
+
+[node name="Title" parent="TrainingScroll/TrainingList/TrainingRow2" index="2" unique_id=1998782497]
+text = "速度"
+
+[node name="Description" parent="TrainingScroll/TrainingList/TrainingRow2" index="4" unique_id=955340598]
+text = "提升主角的基礎移動速度。"
+
+[node name="TrainButton" parent="TrainingScroll/TrainingList/TrainingRow2" index="7" unique_id=168005273]
+theme_override_styles/normal = SubResource("StyleBoxFlat_pwkfr")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_7r3wi")
+theme_override_styles/hover = SubResource("StyleBoxFlat_dnlsv")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_yhv7p")
+theme_override_styles/focus = SubResource("StyleBoxFlat_30n4r")
+metadata/action = "train:2"
+
+[node name="TrainingRow3" parent="TrainingScroll/TrainingList" unique_id=260901152 instance=ExtResource("5_f76w0")]
+custom_minimum_size = Vector2(889, 190)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = SubResource("Theme_uy7r5")
+
+[node name="Frame" parent="TrainingScroll/TrainingList/TrainingRow3" index="0" unique_id=772292828]
+theme_override_styles/panel = SubResource("StyleBoxFlat_wnl7x")
+
+[node name="Icon" parent="TrainingScroll/TrainingList/TrainingRow3" index="1" unique_id=1701188117]
+texture = SubResource("AtlasTexture_01udx")
+
+[node name="Title" parent="TrainingScroll/TrainingList/TrainingRow3" index="2" unique_id=1998782497]
+text = "休息"
+
+[node name="Description" parent="TrainingScroll/TrainingList/TrainingRow3" index="4" unique_id=955340598]
+text = "提升主角的生命回復。"
+
+[node name="TrainButton" parent="TrainingScroll/TrainingList/TrainingRow3" index="7" unique_id=168005273]
+theme_override_styles/normal = SubResource("StyleBoxFlat_pwkfr")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_7r3wi")
+theme_override_styles/hover = SubResource("StyleBoxFlat_dnlsv")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_yhv7p")
+theme_override_styles/focus = SubResource("StyleBoxFlat_30n4r")
+metadata/action = "train:3"
+
+[node name="TrainingRow4" parent="TrainingScroll/TrainingList" unique_id=375165010 instance=ExtResource("5_f76w0")]
+layout_mode = 2
+
+[node name="TrainingRow5" parent="TrainingScroll/TrainingList" unique_id=1538101912 instance=ExtResource("5_f76w0")]
+layout_mode = 2
+
+[editable path="TrainingScroll/TrainingList/TrainingRow0"]
+[editable path="TrainingScroll/TrainingList/TrainingRow1"]
+[editable path="TrainingScroll/TrainingList/TrainingRow2"]
+[editable path="TrainingScroll/TrainingList/TrainingRow3"]

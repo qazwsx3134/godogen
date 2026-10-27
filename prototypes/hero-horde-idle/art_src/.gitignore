@@ -1,8 +1,10 @@
-# Source art stays out of git (images live on disk only; back them up separately).
-# Prompts, specs, reports and scripts are kept.
+# Source art stays out of git (images live on disk only; back them up separately): git keeps the briefs, reports,
+# scripts and selected.json; art picked in selected.json is added with `git add -f`.
 *.png
 *.webp
 *.jpg
 *.jpeg
 *.mp4
 *.webm
+inputs/
+DONE

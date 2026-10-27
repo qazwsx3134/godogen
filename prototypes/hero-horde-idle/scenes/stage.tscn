@@ -1,0 +1,853 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/stage.gd" id="1_dexii"]
+[ext_resource type="Environment" path="res://materials/stage_environment.tres" id="2_yd2gm"]
+[ext_resource type="CameraAttributesPractical" path="res://materials/stage_camera_attributes.tres" id="3_0hg5s"]
+[ext_resource type="Material" path="res://materials/stage_ground.tres" id="4_jl6nj"]
+[ext_resource type="Material" path="res://materials/stage_cliff.tres" id="5_e38vs"]
+[ext_resource type="Material" path="res://materials/stage_cliff_cap.tres" id="6_xfx4c"]
+[ext_resource type="Material" path="res://materials/stage_ember.tres" id="7_5sts7"]
+[ext_resource type="PackedScene" path="res://scenes/prop.tscn" id="7_e38vs"]
+[ext_resource type="Material" path="res://materials/stage_mote.tres" id="8_ddp0b"]
+[ext_resource type="Texture2D" path="res://assets/stage/props/gate.png" id="8_t30jk"]
+[ext_resource type="Texture2D" path="res://assets/stage/props/pine.png" id="8_xfx4c"]
+[ext_resource type="Texture2D" path="res://assets/stage/props/oak.png" id="9_5sts7"]
+[ext_resource type="Texture2D" path="res://assets/stage/props/brazier.png" id="9_d4wp7"]
+[ext_resource type="Shader" path="res://shaders/vignette.gdshader" id="9_t30jk"]
+[ext_resource type="Texture2D" path="res://assets/stage/props/pillar.png" id="10_3bqjo"]
+[ext_resource type="Texture2D" path="res://assets/stage/props/boulder.png" id="10_ddp0b"]
+[ext_resource type="Texture2D" path="res://assets/stage/props/banner.png" id="11_nea6r"]
+[ext_resource type="Texture2D" path="res://assets/stage/props/fern.png" id="15_d4wp7"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_d4wp7"]
+size = Vector2(60, 60)
+
+[sub_resource type="BoxMesh" id="BoxMesh_3bqjo"]
+size = Vector3(3.5, 2.2, 3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_nea6r"]
+size = Vector3(3.7, 0.25, 3.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_drh8o"]
+size = Vector3(4, 3, 3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_uw5rs"]
+size = Vector3(4.2, 0.25, 3.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_oc2wl"]
+size = Vector3(4.2, 2, 3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_1hlks"]
+size = Vector3(4.4, 0.25, 3.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_5i7n2"]
+size = Vector3(3.6, 3.4, 3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_rgw3t"]
+size = Vector3(3.8, 0.25, 3.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_hil6k"]
+size = Vector3(4, 2.4, 3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_yxe0x"]
+size = Vector3(4.2, 0.25, 3.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ko533"]
+size = Vector3(4.2, 3, 3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_5b0fa"]
+size = Vector3(4.4, 0.25, 3.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_tcgx4"]
+size = Vector3(6, 5, 3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_68b7d"]
+size = Vector3(6.2, 0.25, 3.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ebg5g"]
+size = Vector3(6.5, 5.6, 3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_4l3lo"]
+size = Vector3(6.7, 0.25, 3.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_lj74i"]
+size = Vector3(6, 5.2, 3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_rhvad"]
+size = Vector3(6.2, 0.25, 3.2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3bqjo"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.78, 0.76, 0.9, 1)
+albedo_texture = ExtResource("8_t30jk")
+texture_filter = 0
+
+[sub_resource type="QuadMesh" id="QuadMesh_nea6r"]
+size = Vector2(7.35, 6.2000003)
+center_offset = Vector3(0, 3.1000001, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_drh8o"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.92, 0.88, 0.95, 1)
+albedo_texture = ExtResource("9_d4wp7")
+texture_filter = 0
+
+[sub_resource type="QuadMesh" id="QuadMesh_uw5rs"]
+size = Vector2(0.925, 1.5)
+center_offset = Vector3(0, 0.75, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oc2wl"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.92, 0.88, 0.95, 1)
+albedo_texture = ExtResource("9_d4wp7")
+uv1_scale = Vector3(-1, 1, 1)
+texture_filter = 0
+
+[sub_resource type="QuadMesh" id="QuadMesh_1hlks"]
+size = Vector2(0.925, 1.5)
+center_offset = Vector3(0, 0.75, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5i7n2"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.92, 0.88, 0.95, 1)
+albedo_texture = ExtResource("10_3bqjo")
+texture_filter = 0
+
+[sub_resource type="QuadMesh" id="QuadMesh_rgw3t"]
+size = Vector2(1.475, 2.8)
+center_offset = Vector3(0, 1.4, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hil6k"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.78, 0.76, 0.9, 1)
+albedo_texture = ExtResource("10_3bqjo")
+uv1_scale = Vector3(-1, 1, 1)
+texture_filter = 0
+
+[sub_resource type="QuadMesh" id="QuadMesh_yxe0x"]
+size = Vector2(1.475, 2.8)
+center_offset = Vector3(0, 1.4, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ko533"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.92, 0.88, 0.95, 1)
+albedo_texture = ExtResource("10_3bqjo")
+uv1_scale = Vector3(-1, 1, 1)
+texture_filter = 0
+
+[sub_resource type="QuadMesh" id="QuadMesh_5b0fa"]
+size = Vector2(1.475, 2.8)
+center_offset = Vector3(0, 1.4, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tcgx4"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.92, 0.88, 0.95, 1)
+albedo_texture = ExtResource("11_nea6r")
+texture_filter = 0
+
+[sub_resource type="QuadMesh" id="QuadMesh_68b7d"]
+size = Vector2(1.6750001, 3.2)
+center_offset = Vector3(0, 1.6, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ebg5g"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.92, 0.88, 0.95, 1)
+albedo_texture = ExtResource("11_nea6r")
+uv1_scale = Vector3(-1, 1, 1)
+texture_filter = 0
+
+[sub_resource type="QuadMesh" id="QuadMesh_4l3lo"]
+size = Vector2(1.6750001, 3.2)
+center_offset = Vector3(0, 1.6, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lj74i"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.78, 0.76, 0.9, 1)
+albedo_texture = ExtResource("8_xfx4c")
+texture_filter = 0
+
+[sub_resource type="QuadMesh" id="QuadMesh_rhvad"]
+size = Vector2(2.9, 4.6)
+center_offset = Vector3(0, 2.3, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fah6w"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.78, 0.76, 0.9, 1)
+albedo_texture = ExtResource("9_5sts7")
+texture_filter = 0
+
+[sub_resource type="QuadMesh" id="QuadMesh_k86na"]
+size = Vector2(5.1, 4.2000003)
+center_offset = Vector3(0, 2.1000001, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_et1qr"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.78, 0.76, 0.9, 1)
+albedo_texture = ExtResource("8_xfx4c")
+uv1_scale = Vector3(-1, 1, 1)
+texture_filter = 0
+
+[sub_resource type="QuadMesh" id="QuadMesh_j7eln"]
+size = Vector2(2.9, 4.6)
+center_offset = Vector3(0, 2.3, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ud7f8"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.78, 0.76, 0.9, 1)
+albedo_texture = ExtResource("8_xfx4c")
+texture_filter = 0
+
+[sub_resource type="QuadMesh" id="QuadMesh_ub52t"]
+size = Vector2(2.9, 4.6)
+center_offset = Vector3(0, 2.3, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_y4w8u"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.92, 0.88, 0.95, 1)
+albedo_texture = ExtResource("9_5sts7")
+uv1_scale = Vector3(-1, 1, 1)
+texture_filter = 0
+
+[sub_resource type="QuadMesh" id="QuadMesh_7ttsy"]
+size = Vector2(5.1, 4.2000003)
+center_offset = Vector3(0, 2.1000001, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rfmfc"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.92, 0.88, 0.95, 1)
+albedo_texture = ExtResource("10_ddp0b")
+texture_filter = 0
+
+[sub_resource type="QuadMesh" id="QuadMesh_xpg8m"]
+size = Vector2(1.475, 1.3000001)
+center_offset = Vector3(0, 0.65000004, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t3n88"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.92, 0.88, 0.95, 1)
+albedo_texture = ExtResource("10_ddp0b")
+uv1_scale = Vector3(-1, 1, 1)
+texture_filter = 0
+
+[sub_resource type="QuadMesh" id="QuadMesh_srfa6"]
+size = Vector2(1.475, 1.3000001)
+center_offset = Vector3(0, 0.65000004, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ppl1h"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.92, 0.88, 0.95, 1)
+albedo_texture = ExtResource("10_ddp0b")
+texture_filter = 0
+
+[sub_resource type="QuadMesh" id="QuadMesh_cb6mi"]
+size = Vector2(1.475, 1.3000001)
+center_offset = Vector3(0, 0.65000004, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ikkaf"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.92, 0.88, 0.95, 1)
+albedo_texture = ExtResource("10_ddp0b")
+uv1_scale = Vector3(-1, 1, 1)
+texture_filter = 0
+
+[sub_resource type="QuadMesh" id="QuadMesh_u6rgb"]
+size = Vector2(1.475, 1.3000001)
+center_offset = Vector3(0, 0.65000004, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5q4cv"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.92, 0.88, 0.95, 1)
+albedo_texture = ExtResource("15_d4wp7")
+texture_filter = 0
+
+[sub_resource type="QuadMesh" id="QuadMesh_gevjy"]
+size = Vector2(0.90000004, 0.7)
+center_offset = Vector3(0, 0.35, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_y8xxr"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.92, 0.88, 0.95, 1)
+albedo_texture = ExtResource("15_d4wp7")
+uv1_scale = Vector3(-1, 1, 1)
+texture_filter = 0
+
+[sub_resource type="QuadMesh" id="QuadMesh_6fkwf"]
+size = Vector2(0.90000004, 0.7)
+center_offset = Vector3(0, 0.35, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4fv63"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.92, 0.88, 0.95, 1)
+albedo_texture = ExtResource("15_d4wp7")
+texture_filter = 0
+
+[sub_resource type="QuadMesh" id="QuadMesh_ud0t8"]
+size = Vector2(0.90000004, 0.7)
+center_offset = Vector3(0, 0.35, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nopkg"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.92, 0.88, 0.95, 1)
+albedo_texture = ExtResource("15_d4wp7")
+uv1_scale = Vector3(-1, 1, 1)
+texture_filter = 0
+
+[sub_resource type="QuadMesh" id="QuadMesh_ge6dm"]
+size = Vector2(0.90000004, 0.7)
+center_offset = Vector3(0, 0.35, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1vill"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.92, 0.88, 0.95, 1)
+albedo_texture = ExtResource("15_d4wp7")
+texture_filter = 0
+
+[sub_resource type="QuadMesh" id="QuadMesh_xw3ym"]
+size = Vector2(0.90000004, 0.7)
+center_offset = Vector3(0, 0.35, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j2pqm"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.92, 0.88, 0.95, 1)
+albedo_texture = ExtResource("15_d4wp7")
+uv1_scale = Vector3(-1, 1, 1)
+texture_filter = 0
+
+[sub_resource type="QuadMesh" id="QuadMesh_jiu4v"]
+size = Vector2(0.90000004, 0.7)
+center_offset = Vector3(0, 0.35, 0)
+
+[sub_resource type="Gradient" id="Gradient_fah6w"]
+offsets = PackedFloat32Array(0, 1, 0.2, 0.75)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0.8)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_k86na"]
+gradient = SubResource("Gradient_fah6w")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_et1qr"]
+emission_shape = 1
+emission_sphere_radius = 0.2
+direction = Vector3(0, 1, 0)
+spread = 25.0
+initial_velocity_min = 0.3
+initial_velocity_max = 0.8
+gravity = Vector3(0, 1.2, 0)
+color_ramp = SubResource("GradientTexture1D_k86na")
+
+[sub_resource type="QuadMesh" id="QuadMesh_68imh"]
+material = ExtResource("7_5sts7")
+size = Vector2(0.06, 0.06)
+
+[sub_resource type="Gradient" id="Gradient_j7eln"]
+offsets = PackedFloat32Array(0, 1, 0.2, 0.75)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0.8)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ud7f8"]
+gradient = SubResource("Gradient_j7eln")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ub52t"]
+emission_shape = 1
+emission_sphere_radius = 0.2
+direction = Vector3(0, 1, 0)
+spread = 25.0
+initial_velocity_min = 0.3
+initial_velocity_max = 0.8
+gravity = Vector3(0, 1.2, 0)
+color_ramp = SubResource("GradientTexture1D_ud7f8")
+
+[sub_resource type="QuadMesh" id="QuadMesh_y4w8u"]
+material = ExtResource("7_5sts7")
+size = Vector2(0.06, 0.06)
+
+[sub_resource type="Gradient" id="Gradient_7ttsy"]
+offsets = PackedFloat32Array(0, 1, 0.2, 0.75)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0.8)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_rfmfc"]
+gradient = SubResource("Gradient_7ttsy")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_xpg8m"]
+emission_shape = 3
+emission_box_extents = Vector3(8, 1.4, 7)
+direction = Vector3(1, 0.3, 0)
+spread = 180.0
+initial_velocity_min = 0.05
+initial_velocity_max = 0.25
+gravity = Vector3(0, 0.03, 0)
+scale_min = 0.5
+color_ramp = SubResource("GradientTexture1D_rfmfc")
+
+[sub_resource type="QuadMesh" id="QuadMesh_t3n88"]
+material = ExtResource("8_ddp0b")
+size = Vector2(0.07, 0.07)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_srfa6"]
+shader = ExtResource("9_t30jk")
+shader_parameter/corner_color = null
+shader_parameter/strength = null
+shader_parameter/radius = null
+shader_parameter/softness = null
+shader_parameter/sun_wash = null
+shader_parameter/sun_wash_strength = null
+
+[node name="Stage" type="Node3D" unique_id=1988766027]
+script = ExtResource("1_dexii")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=682830569]
+environment = ExtResource("2_yd2gm")
+camera_attributes = ExtResource("3_0hg5s")
+
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=2046124087]
+unique_name_in_owner = true
+transform = Transform3D(-0.78935224, 0.32121652, -0.52320457, 0, 0.8522071, 0.52320457, 0.6139406, 0.4129927, -0.6726916, -7, 7, -9)
+light_color = Color(1, 0.8, 0.6, 1)
+light_energy = 1.5
+shadow_enabled = true
+shadow_opacity = 0.8
+shadow_blur = 1.5
+directional_shadow_mode = 1
+directional_shadow_max_distance = 40.0
+
+[node name="Floor" type="MeshInstance3D" parent="." unique_id=413909161]
+unique_name_in_owner = true
+material_override = ExtResource("4_jl6nj")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_d4wp7")
+
+[node name="Cliffs" type="Node3D" parent="." unique_id=281817013]
+unique_name_in_owner = true
+
+[node name="Cliff_1" type="MeshInstance3D" parent="Cliffs" unique_id=142396532]
+transform = Transform3D(0.9975641, 0, 0.06975647, 0, 1, 0, -0.06975647, 0, 0.9975641, -9, 1.1, -11.5)
+material_override = ExtResource("5_e38vs")
+mesh = SubResource("BoxMesh_3bqjo")
+
+[node name="Cap" type="MeshInstance3D" parent="Cliffs/Cliff_1" unique_id=1076208542]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+material_override = ExtResource("6_xfx4c")
+mesh = SubResource("BoxMesh_nea6r")
+
+[node name="Cliff_2" type="MeshInstance3D" parent="Cliffs" unique_id=1252942903]
+transform = Transform3D(0.9945219, 0, -0.104528464, 0, 1, 0, 0.104528464, 0, 0.9945219, -5.2, 1.5, -12)
+material_override = ExtResource("5_e38vs")
+mesh = SubResource("BoxMesh_drh8o")
+
+[node name="Cap" type="MeshInstance3D" parent="Cliffs/Cliff_2" unique_id=812767444]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+material_override = ExtResource("6_xfx4c")
+mesh = SubResource("BoxMesh_uw5rs")
+
+[node name="Cliff_3" type="MeshInstance3D" parent="Cliffs" unique_id=1297474093]
+transform = Transform3D(0.9986295, 0, 0.05233596, 0, 1, 0, -0.05233596, 0, 0.9986295, -1, 1, -11.8)
+material_override = ExtResource("5_e38vs")
+mesh = SubResource("BoxMesh_oc2wl")
+
+[node name="Cap" type="MeshInstance3D" parent="Cliffs/Cliff_3" unique_id=761588712]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+material_override = ExtResource("6_xfx4c")
+mesh = SubResource("BoxMesh_1hlks")
+
+[node name="Cliff_4" type="MeshInstance3D" parent="Cliffs" unique_id=1515244708]
+transform = Transform3D(0.99939084, 0, -0.034899496, 0, 1, 0, 0.034899496, 0, 0.99939084, 2.6, 1.7, -12.6)
+material_override = ExtResource("5_e38vs")
+mesh = SubResource("BoxMesh_5i7n2")
+
+[node name="Cap" type="MeshInstance3D" parent="Cliffs/Cliff_4" unique_id=253306509]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
+material_override = ExtResource("6_xfx4c")
+mesh = SubResource("BoxMesh_rgw3t")
+
+[node name="Cliff_5" type="MeshInstance3D" parent="Cliffs" unique_id=945276552]
+transform = Transform3D(0.99254614, 0, 0.12186935, 0, 1, 0, -0.12186935, 0, 0.99254614, 6.4, 1.2, -11.6)
+material_override = ExtResource("5_e38vs")
+mesh = SubResource("BoxMesh_hil6k")
+
+[node name="Cap" type="MeshInstance3D" parent="Cliffs/Cliff_5" unique_id=811632496]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+material_override = ExtResource("6_xfx4c")
+mesh = SubResource("BoxMesh_yxe0x")
+
+[node name="Cliff_6" type="MeshInstance3D" parent="Cliffs" unique_id=1814091568]
+transform = Transform3D(0.9961947, 0, -0.08715574, 0, 1, 0, 0.08715574, 0, 0.9961947, 10.2, 1.5, -12.2)
+material_override = ExtResource("5_e38vs")
+mesh = SubResource("BoxMesh_ko533")
+
+[node name="Cap" type="MeshInstance3D" parent="Cliffs/Cliff_6" unique_id=2037335698]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+material_override = ExtResource("6_xfx4c")
+mesh = SubResource("BoxMesh_5b0fa")
+
+[node name="Cliff_7" type="MeshInstance3D" parent="Cliffs" unique_id=1327167960]
+transform = Transform3D(0.99939084, 0, 0.034899496, 0, 1, 0, -0.034899496, 0, 0.99939084, -7, 2.5, -15.5)
+material_override = ExtResource("5_e38vs")
+mesh = SubResource("BoxMesh_tcgx4")
+
+[node name="Cap" type="MeshInstance3D" parent="Cliffs/Cliff_7" unique_id=1276011381]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+material_override = ExtResource("6_xfx4c")
+mesh = SubResource("BoxMesh_68b7d")
+
+[node name="Cliff_8" type="MeshInstance3D" parent="Cliffs" unique_id=1432081011]
+transform = Transform3D(0.9986295, 0, -0.05233596, 0, 1, 0, 0.05233596, 0, 0.9986295, 0.5, 2.8, -16)
+material_override = ExtResource("5_e38vs")
+mesh = SubResource("BoxMesh_ebg5g")
+
+[node name="Cap" type="MeshInstance3D" parent="Cliffs/Cliff_8" unique_id=1296039020]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.8, 0)
+material_override = ExtResource("6_xfx4c")
+mesh = SubResource("BoxMesh_4l3lo")
+
+[node name="Cliff_9" type="MeshInstance3D" parent="Cliffs" unique_id=1542023362]
+transform = Transform3D(0.9961947, 0, 0.08715574, 0, 1, 0, -0.08715574, 0, 0.9961947, 8, 2.6, -15.8)
+material_override = ExtResource("5_e38vs")
+mesh = SubResource("BoxMesh_lj74i")
+
+[node name="Cap" type="MeshInstance3D" parent="Cliffs/Cliff_9" unique_id=1997029722]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6, 0)
+material_override = ExtResource("6_xfx4c")
+mesh = SubResource("BoxMesh_rhvad")
+
+[node name="Props" type="Node3D" parent="." unique_id=579236110]
+unique_name_in_owner = true
+
+[node name="Gate_1" parent="Props" unique_id=1507035561 instance=ExtResource("7_e38vs")]
+transform = Transform3D(1, 0, 0, 0, 0.9702957, 0.2419219, 0, -0.2419219, 0.9702957, 3.9, 0, -8.2)
+material_override = SubResource("StandardMaterial3D_3bqjo")
+mesh = SubResource("QuadMesh_nea6r")
+texture = ExtResource("8_t30jk")
+tint = Color(0.78, 0.76, 0.9, 1)
+
+[node name="Brazier_1" parent="Props" unique_id=42813437 instance=ExtResource("7_e38vs")]
+transform = Transform3D(1, 0, 0, 0, 0.9702957, 0.2419219, 0, -0.2419219, 0.9702957, 1.1, 0, -4.6)
+material_override = SubResource("StandardMaterial3D_drh8o")
+mesh = SubResource("QuadMesh_uw5rs")
+texture = ExtResource("9_d4wp7")
+tint = Color(0.92, 0.88, 0.95, 1)
+
+[node name="Brazier_2" parent="Props" unique_id=977378555 instance=ExtResource("7_e38vs")]
+transform = Transform3D(1, 0, 0, 0, 0.9702957, 0.2419219, 0, -0.2419219, 0.9702957, 6.3, 0, -4.6)
+material_override = SubResource("StandardMaterial3D_oc2wl")
+mesh = SubResource("QuadMesh_1hlks")
+texture = ExtResource("9_d4wp7")
+tint = Color(0.92, 0.88, 0.95, 1)
+flip = true
+
+[node name="Pillar_1" parent="Props" unique_id=1637231083 instance=ExtResource("7_e38vs")]
+transform = Transform3D(1, 0, 0, 0, 0.9702957, 0.2419219, 0, -0.2419219, 0.9702957, -2.6, 0, -6.4)
+material_override = SubResource("StandardMaterial3D_5i7n2")
+mesh = SubResource("QuadMesh_rgw3t")
+texture = ExtResource("10_3bqjo")
+tint = Color(0.92, 0.88, 0.95, 1)
+
+[node name="Pillar_2" parent="Props" unique_id=254309246 instance=ExtResource("7_e38vs")]
+transform = Transform3D(0.8, 0, 0, 0, 0.7762366, 0.19353752, 0, -0.19353752, 0.7762366, 0.4, 0, -7.4)
+material_override = SubResource("StandardMaterial3D_hil6k")
+mesh = SubResource("QuadMesh_yxe0x")
+texture = ExtResource("10_3bqjo")
+tint = Color(0.78, 0.76, 0.9, 1)
+flip = true
+
+[node name="Pillar_3" parent="Props" unique_id=1091582359 instance=ExtResource("7_e38vs")]
+transform = Transform3D(0.9, 0, 0, 0, 0.87326616, 0.2177297, 0, -0.2177297, 0.87326616, 7.6, 0, -6.6)
+material_override = SubResource("StandardMaterial3D_ko533")
+mesh = SubResource("QuadMesh_5b0fa")
+texture = ExtResource("10_3bqjo")
+tint = Color(0.92, 0.88, 0.95, 1)
+flip = true
+
+[node name="Banner_1" parent="Props" unique_id=26845439 instance=ExtResource("7_e38vs")]
+transform = Transform3D(1, 0, 0, 0, 0.9702957, 0.2419219, 0, -0.2419219, 0.9702957, -4.4, 0, -5.6)
+material_override = SubResource("StandardMaterial3D_tcgx4")
+mesh = SubResource("QuadMesh_68b7d")
+texture = ExtResource("11_nea6r")
+tint = Color(0.92, 0.88, 0.95, 1)
+
+[node name="Banner_2" parent="Props" unique_id=232787166 instance=ExtResource("7_e38vs")]
+transform = Transform3D(1, 0, 0, 0, 0.9702957, 0.2419219, 0, -0.2419219, 0.9702957, 8.4, 0, -4.8)
+material_override = SubResource("StandardMaterial3D_ebg5g")
+mesh = SubResource("QuadMesh_4l3lo")
+texture = ExtResource("11_nea6r")
+tint = Color(0.92, 0.88, 0.95, 1)
+flip = true
+
+[node name="Pine_1" parent="Props" unique_id=1518724217 instance=ExtResource("7_e38vs")]
+transform = Transform3D(1.1, 0, 0, 0, 1.0673254, 0.2661141, 0, -0.2661141, 1.0673254, -6, 0, -9.6)
+material_override = SubResource("StandardMaterial3D_lj74i")
+mesh = SubResource("QuadMesh_rhvad")
+texture = ExtResource("8_xfx4c")
+tint = Color(0.78, 0.76, 0.9, 1)
+
+[node name="Oak_1" parent="Props" unique_id=907063532 instance=ExtResource("7_e38vs")]
+transform = Transform3D(1, 0, 0, 0, 0.9702957, 0.2419219, 0, -0.2419219, 0.9702957, -2.4, 0, -10.2)
+material_override = SubResource("StandardMaterial3D_fah6w")
+mesh = SubResource("QuadMesh_k86na")
+texture = ExtResource("9_5sts7")
+tint = Color(0.78, 0.76, 0.9, 1)
+
+[node name="Pine_2" parent="Props" unique_id=1220757133 instance=ExtResource("7_e38vs")]
+transform = Transform3D(1, 0, 0, 0, 0.9702957, 0.2419219, 0, -0.2419219, 0.9702957, 9.6, 0, -9.4)
+material_override = SubResource("StandardMaterial3D_et1qr")
+mesh = SubResource("QuadMesh_j7eln")
+texture = ExtResource("8_xfx4c")
+tint = Color(0.78, 0.76, 0.9, 1)
+flip = true
+
+[node name="Pine_3" parent="Props" unique_id=1955932038 instance=ExtResource("7_e38vs")]
+transform = Transform3D(0.9, 0, 0, 0, 0.87326616, 0.2177297, 0, -0.2177297, 0.87326616, 11, 0, -7.6)
+material_override = SubResource("StandardMaterial3D_ud7f8")
+mesh = SubResource("QuadMesh_ub52t")
+texture = ExtResource("8_xfx4c")
+tint = Color(0.78, 0.76, 0.9, 1)
+
+[node name="Oak_2" parent="Props" unique_id=452798898 instance=ExtResource("7_e38vs")]
+transform = Transform3D(0.9, 0, 0, 0, 0.87326616, 0.2177297, 0, -0.2177297, 0.87326616, -7.6, 0, -6.2)
+material_override = SubResource("StandardMaterial3D_y4w8u")
+mesh = SubResource("QuadMesh_7ttsy")
+texture = ExtResource("9_5sts7")
+tint = Color(0.92, 0.88, 0.95, 1)
+flip = true
+
+[node name="Boulder_1" parent="Props" unique_id=2138192265 instance=ExtResource("7_e38vs")]
+transform = Transform3D(1, 0, 0, 0, 0.9702957, 0.2419219, 0, -0.2419219, 0.9702957, -5.4, 0, -3.6)
+material_override = SubResource("StandardMaterial3D_rfmfc")
+mesh = SubResource("QuadMesh_xpg8m")
+texture = ExtResource("10_ddp0b")
+tint = Color(0.92, 0.88, 0.95, 1)
+
+[node name="Boulder_2" parent="Props" unique_id=1925286354 instance=ExtResource("7_e38vs")]
+transform = Transform3D(1.3, 0, 0, 0, 1.2613844, 0.31449845, 0, -0.31449845, 1.2613844, 7.4, 0, -2.2)
+material_override = SubResource("StandardMaterial3D_t3n88")
+mesh = SubResource("QuadMesh_srfa6")
+texture = ExtResource("10_ddp0b")
+tint = Color(0.92, 0.88, 0.95, 1)
+flip = true
+
+[node name="Boulder_3" parent="Props" unique_id=1365625920 instance=ExtResource("7_e38vs")]
+transform = Transform3D(0.9, 0, 0, 0, 0.87326616, 0.2177297, 0, -0.2177297, 0.87326616, 6.8, 0, 4.2)
+material_override = SubResource("StandardMaterial3D_ppl1h")
+mesh = SubResource("QuadMesh_cb6mi")
+texture = ExtResource("10_ddp0b")
+tint = Color(0.92, 0.88, 0.95, 1)
+
+[node name="Boulder_4" parent="Props" unique_id=58685235 instance=ExtResource("7_e38vs")]
+transform = Transform3D(0.8, 0, 0, 0, 0.7762366, 0.19353752, 0, -0.19353752, 0.7762366, -4.6, 0, 4.8)
+material_override = SubResource("StandardMaterial3D_ikkaf")
+mesh = SubResource("QuadMesh_u6rgb")
+texture = ExtResource("10_ddp0b")
+tint = Color(0.92, 0.88, 0.95, 1)
+flip = true
+
+[node name="Fern_1" parent="Props" unique_id=585431492 instance=ExtResource("7_e38vs")]
+transform = Transform3D(1, 0, 0, 0, 0.9702957, 0.2419219, 0, -0.2419219, 0.9702957, -4.8, 0, 3.4)
+material_override = SubResource("StandardMaterial3D_5q4cv")
+mesh = SubResource("QuadMesh_gevjy")
+texture = ExtResource("15_d4wp7")
+tint = Color(0.92, 0.88, 0.95, 1)
+
+[node name="Fern_2" parent="Props" unique_id=1698593280 instance=ExtResource("7_e38vs")]
+transform = Transform3D(1, 0, 0, 0, 0.9702957, 0.2419219, 0, -0.2419219, 0.9702957, -1.2, 0, 5.2)
+material_override = SubResource("StandardMaterial3D_y8xxr")
+mesh = SubResource("QuadMesh_6fkwf")
+texture = ExtResource("15_d4wp7")
+tint = Color(0.92, 0.88, 0.95, 1)
+flip = true
+
+[node name="Fern_3" parent="Props" unique_id=1264324058 instance=ExtResource("7_e38vs")]
+transform = Transform3D(1, 0, 0, 0, 0.9702957, 0.2419219, 0, -0.2419219, 0.9702957, 2.8, 0, 5)
+material_override = SubResource("StandardMaterial3D_4fv63")
+mesh = SubResource("QuadMesh_ud0t8")
+texture = ExtResource("15_d4wp7")
+tint = Color(0.92, 0.88, 0.95, 1)
+
+[node name="Fern_4" parent="Props" unique_id=1868935674 instance=ExtResource("7_e38vs")]
+transform = Transform3D(1, 0, 0, 0, 0.9702957, 0.2419219, 0, -0.2419219, 0.9702957, 5.6, 0, 4.6)
+material_override = SubResource("StandardMaterial3D_nopkg")
+mesh = SubResource("QuadMesh_ge6dm")
+texture = ExtResource("15_d4wp7")
+tint = Color(0.92, 0.88, 0.95, 1)
+flip = true
+
+[node name="Fern_5" parent="Props" unique_id=341249877 instance=ExtResource("7_e38vs")]
+transform = Transform3D(1, 0, 0, 0, 0.9702957, 0.2419219, 0, -0.2419219, 0.9702957, 8.2, 0, 1.2)
+material_override = SubResource("StandardMaterial3D_1vill")
+mesh = SubResource("QuadMesh_xw3ym")
+texture = ExtResource("15_d4wp7")
+tint = Color(0.92, 0.88, 0.95, 1)
+
+[node name="Fern_6" parent="Props" unique_id=301613854 instance=ExtResource("7_e38vs")]
+transform = Transform3D(1, 0, 0, 0, 0.9702957, 0.2419219, 0, -0.2419219, 0.9702957, -6, 0, 0.8)
+material_override = SubResource("StandardMaterial3D_j2pqm")
+mesh = SubResource("QuadMesh_jiu4v")
+texture = ExtResource("15_d4wp7")
+tint = Color(0.92, 0.88, 0.95, 1)
+flip = true
+
+[node name="BrazierLights" type="Node3D" parent="." unique_id=108818457]
+unique_name_in_owner = true
+
+[node name="Brazier_L" type="OmniLight3D" parent="BrazierLights" unique_id=1617983662]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1000001, 1.3, -4.6)
+light_color = Color(1, 0.6, 0.28, 1)
+light_energy = 1.6
+
+[node name="Brazier_R" type="OmniLight3D" parent="BrazierLights" unique_id=2038724500]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.3, 1.3, -4.6)
+light_color = Color(1, 0.6, 0.28, 1)
+light_energy = 1.6
+
+[node name="Embers_L" type="GPUParticles3D" parent="." unique_id=659058294]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1000001, 0.99999994, -4.6)
+cast_shadow = 0
+amount = 14
+lifetime = 1.4
+preprocess = 1.4
+process_material = SubResource("ParticleProcessMaterial_et1qr")
+draw_pass_1 = SubResource("QuadMesh_68imh")
+
+[node name="Embers_R" type="GPUParticles3D" parent="." unique_id=451994473]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.3, 0.99999994, -4.6)
+cast_shadow = 0
+amount = 14
+lifetime = 1.4
+preprocess = 1.4
+process_material = SubResource("ParticleProcessMaterial_ub52t")
+draw_pass_1 = SubResource("QuadMesh_y4w8u")
+
+[node name="TelegraphLights" type="Node3D" parent="." unique_id=656730538]
+unique_name_in_owner = true
+
+[node name="Telegraph_1" type="OmniLight3D" parent="TelegraphLights" unique_id=702993333]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+visible = false
+light_color = Color(1, 0.18, 0.1, 1)
+omni_range = 3.4
+
+[node name="Telegraph_2" type="OmniLight3D" parent="TelegraphLights" unique_id=1906906676]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+visible = false
+light_color = Color(1, 0.18, 0.1, 1)
+omni_range = 3.4
+
+[node name="Telegraph_3" type="OmniLight3D" parent="TelegraphLights" unique_id=1927635183]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0)
+visible = false
+light_color = Color(1, 0.18, 0.1, 1)
+omni_range = 3.4
+
+[node name="VolleyLight" type="OmniLight3D" parent="." unique_id=414497943]
+unique_name_in_owner = true
+visible = false
+light_color = Color(1, 0.82, 0.4, 1)
+omni_range = 9.0
+
+[node name="Motes" type="GPUParticles3D" parent="." unique_id=1797407556]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1.6, -1)
+cast_shadow = 0
+amount = 48
+lifetime = 7.0
+preprocess = 7.0
+visibility_aabb = AABB(-12, -3, -12, 24, 8, 24)
+process_material = SubResource("ParticleProcessMaterial_xpg8m")
+draw_pass_1 = SubResource("QuadMesh_t3n88")
+
+[node name="Vignette" type="CanvasLayer" parent="." unique_id=1901313592]
+layer = 0
+
+[node name="Shade" type="ColorRect" parent="Vignette" unique_id=1837006935]
+material = SubResource("ShaderMaterial_srfa6")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2

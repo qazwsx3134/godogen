@@ -1,200 +1,33 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scripts/hud.gd" id="1_oo0fn"]
-[ext_resource type="Theme" path="res://ui/theme.tres" id="2_5ysmq"]
+[ext_resource type="Script" path="res://scripts/hud.gd" id="1_0i1j5"]
+[ext_resource type="Theme" path="res://ui/theme.tres" id="2_mphia"]
+[ext_resource type="PackedScene" path="res://scenes/part_button.tscn" id="3_0m4u7"]
+[ext_resource type="PackedScene" path="res://scenes/skill_callout.tscn" id="4_apjy4"]
+[ext_resource type="Texture2D" path="res://assets/flags/melee.png" id="5_5n1hp"]
+[ext_resource type="Texture2D" path="res://assets/flags/ranged.png" id="6_eld54"]
+[ext_resource type="Texture2D" path="res://assets/flags/support.png" id="7_3swnk"]
+[ext_resource type="PackedScene" path="res://scenes/ornament_rule.tscn" id="8_mphia"]
+[ext_resource type="PackedScene" path="res://scenes/push_report.tscn" id="8_qkknv"]
+[ext_resource type="PackedScene" path="res://scenes/reward_row.tscn" id="9_0m4u7"]
+[ext_resource type="PackedScene" path="res://scenes/settings_panel.tscn" id="9_uxdf7"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6fi6k"]
-content_margin_left = 12.0
-content_margin_right = 12.0
-bg_color = Color(0.86, 0.22, 0.2, 1)
-border_color = Color(0, 0, 0, 0)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
+[sub_resource type="AtlasTexture" id="AtlasTexture_5357l"]
+atlas = ExtResource("5_5n1hp")
+region = Rect2(0, 0, 44, 96)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uo2fv"]
-content_margin_left = 12.0
-content_margin_right = 12.0
-bg_color = Color(0.16, 0.2, 0.36, 0.85)
-border_width_left = 5
-border_width_top = 5
-border_width_right = 5
-border_width_bottom = 5
-border_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 52
-corner_radius_top_right = 52
-corner_radius_bottom_right = 52
-corner_radius_bottom_left = 52
+[sub_resource type="AtlasTexture" id="AtlasTexture_iypfu"]
+atlas = ExtResource("6_eld54")
+region = Rect2(0, 0, 42, 96)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_047uy"]
-content_margin_left = 12.0
-content_margin_right = 12.0
-bg_color = Color(0.16, 0.2, 0.36, 0.85)
-border_width_left = 5
-border_width_top = 5
-border_width_right = 5
-border_width_bottom = 5
-border_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 52
-corner_radius_top_right = 52
-corner_radius_bottom_right = 52
-corner_radius_bottom_left = 52
+[sub_resource type="AtlasTexture" id="AtlasTexture_qpprf"]
+atlas = ExtResource("7_3swnk")
+region = Rect2(0, 0, 50, 96)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5pdws"]
-content_margin_left = 12.0
-content_margin_right = 12.0
-bg_color = Color(0.16, 0.2, 0.36, 0.85)
-border_width_left = 5
-border_width_top = 5
-border_width_right = 5
-border_width_bottom = 5
-border_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 52
-corner_radius_top_right = 52
-corner_radius_bottom_right = 52
-corner_radius_bottom_left = 52
+[node name="Hud" type="CanvasLayer" unique_id=1197165831]
+script = ExtResource("1_0i1j5")
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hd3ao"]
-content_margin_left = 12.0
-content_margin_right = 12.0
-bg_color = Color(0.16, 0.2, 0.36, 0.85)
-border_width_left = 5
-border_width_top = 5
-border_width_right = 5
-border_width_bottom = 5
-border_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 52
-corner_radius_top_right = 52
-corner_radius_bottom_right = 52
-corner_radius_bottom_left = 52
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0i1j5"]
-content_margin_left = 12.0
-content_margin_right = 12.0
-bg_color = Color(0.16, 0.2, 0.36, 0.85)
-border_width_left = 5
-border_width_top = 5
-border_width_right = 5
-border_width_bottom = 5
-border_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 52
-corner_radius_top_right = 52
-corner_radius_bottom_right = 52
-corner_radius_bottom_left = 52
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mphia"]
-content_margin_left = 12.0
-content_margin_right = 12.0
-bg_color = Color(0.16, 0.2, 0.36, 0.85)
-border_width_left = 5
-border_width_top = 5
-border_width_right = 5
-border_width_bottom = 5
-border_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 52
-corner_radius_top_right = 52
-corner_radius_bottom_right = 52
-corner_radius_bottom_left = 52
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0m4u7"]
-content_margin_left = 12.0
-content_margin_right = 12.0
-bg_color = Color(0.16, 0.2, 0.36, 0.85)
-border_width_left = 5
-border_width_top = 5
-border_width_right = 5
-border_width_bottom = 5
-border_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 52
-corner_radius_top_right = 52
-corner_radius_bottom_right = 52
-corner_radius_bottom_left = 52
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_apjy4"]
-content_margin_left = 12.0
-content_margin_right = 12.0
-bg_color = Color(0.16, 0.2, 0.36, 0.85)
-border_width_left = 5
-border_width_top = 5
-border_width_right = 5
-border_width_bottom = 5
-border_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 52
-corner_radius_top_right = 52
-corner_radius_bottom_right = 52
-corner_radius_bottom_left = 52
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5n1hp"]
-content_margin_left = 12.0
-content_margin_right = 12.0
-bg_color = Color(1, 0.85, 0.2, 0.85)
-border_width_left = 6
-border_width_top = 6
-border_width_right = 6
-border_width_bottom = 6
-border_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 62
-corner_radius_top_right = 62
-corner_radius_bottom_right = 62
-corner_radius_bottom_left = 62
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eld54"]
-content_margin_left = 12.0
-content_margin_right = 12.0
-bg_color = Color(1, 0.85, 0.2, 0.85)
-border_width_left = 6
-border_width_top = 6
-border_width_right = 6
-border_width_bottom = 6
-border_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 62
-corner_radius_top_right = 62
-corner_radius_bottom_right = 62
-corner_radius_bottom_left = 62
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3swnk"]
-content_margin_left = 12.0
-content_margin_right = 12.0
-bg_color = Color(1, 0.85, 0.2, 0.85)
-border_width_left = 6
-border_width_top = 6
-border_width_right = 6
-border_width_bottom = 6
-border_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 62
-corner_radius_top_right = 62
-corner_radius_bottom_right = 62
-corner_radius_bottom_left = 62
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qkknv"]
-content_margin_left = 12.0
-content_margin_right = 12.0
-bg_color = Color(1, 0.85, 0.2, 0.85)
-border_width_left = 6
-border_width_top = 6
-border_width_right = 6
-border_width_bottom = 6
-border_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 62
-corner_radius_top_right = 62
-corner_radius_bottom_right = 62
-corner_radius_bottom_left = 62
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uxdf7"]
-content_margin_left = 12.0
-content_margin_right = 12.0
-bg_color = Color(1, 0.78, 0.2, 1)
-border_color = Color(0, 0, 0, 0)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
-
-[node name="Hud" type="CanvasLayer" unique_id=1376261133]
-script = ExtResource("1_oo0fn")
-
-[node name="Root" type="Control" parent="." unique_id=173100065]
+[node name="Root" type="Control" parent="." unique_id=1282837754]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -202,257 +35,521 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-theme = ExtResource("2_5ysmq")
+theme = ExtResource("2_mphia")
 
-[node name="Top" type="MarginContainer" parent="Root" unique_id=1150537292]
+[node name="Top" type="MarginContainer" parent="Root" unique_id=577085273]
 layout_mode = 0
 anchor_right = 1.0
 mouse_filter = 2
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_top = 36
-theme_override_constants/margin_right = 24
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 28
+theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 0
 
-[node name="TopBox" type="VBoxContainer" parent="Root/Top" unique_id=468697141]
+[node name="TopPanel" type="PanelContainer" parent="Root/Top" unique_id=190581161]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/separation = 6
+theme_type_variation = &"HudPanel"
 
-[node name="TitleRow" type="HBoxContainer" parent="Root/Top/TopBox" unique_id=1955954336]
+[node name="TopBox" type="VBoxContainer" parent="Root/Top/TopPanel" unique_id=587134186]
 layout_mode = 2
-mouse_filter = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 8
 
-[node name="BossName" type="Label" parent="Root/Top/TopBox/TitleRow" unique_id=1599186780]
+[node name="TitleRow" type="HBoxContainer" parent="Root/Top/TopPanel/TopBox" unique_id=3721111]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Pause" type="Button" parent="Root/Top/TopPanel/TopBox/TitleRow" unique_id=936590728]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(84, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "暫停"
+
+[node name="StageLabel" type="Label" parent="Root/Top/TopPanel/TopBox/TitleRow" unique_id=585342334]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.8509804, 0.69803923, 0.43137255, 1)
+theme_override_font_sizes/font_size = 26
+text = "1-1"
+
+[node name="BossName" type="Label" parent="Root/Top/TopPanel/TopBox/TitleRow" unique_id=1920635508]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 30
-text = "關卡王・棍棒巨魔"
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 32
+text = "棍棒巨魔"
 
-[node name="PhaseLabel" type="Label" parent="Root/Top/TopBox/TitleRow" unique_id=456229095]
+[node name="PhasePill" type="PanelContainer" parent="Root/Top/TopPanel/TopBox/TitleRow" unique_id=1843301118]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_type_variation = &"Pill"
+
+[node name="PhaseLabel" type="Label" parent="Root/Top/TopPanel/TopBox/TitleRow/PhasePill" unique_id=81915665]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 26
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 22
 text = "第一階段"
 
-[node name="TimerLabel" type="Label" parent="Root/Top/TopBox/TitleRow" unique_id=2068753085]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 48
-text = "150"
-
-[node name="BossHp" type="ProgressBar" parent="Root/Top/TopBox" unique_id=1201317840]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 36)
+[node name="TimerBox" type="PanelContainer" parent="Root/Top/TopPanel/TopBox/TitleRow" unique_id=2051102343]
+custom_minimum_size = Vector2(104, 0)
 layout_mode = 2
 mouse_filter = 2
-theme_override_styles/fill = SubResource("StyleBoxFlat_6fi6k")
+theme_type_variation = &"Pill"
+
+[node name="TimerLabel" type="Label" parent="Root/Top/TopPanel/TopBox/TitleRow/TimerBox" unique_id=861932786]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 44
+text = "150"
+horizontal_alignment = 1
+
+[node name="BossHp" type="ProgressBar" parent="Root/Top/TopPanel/TopBox" unique_id=798421814]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+mouse_filter = 2
+theme_type_variation = &"HpBar"
 value = 100.0
 show_percentage = false
 
-[node name="BossHpLabel" type="Label" parent="Root/Top/TopBox/BossHp" unique_id=1863371744]
+[node name="BossHpLabel" type="Label" parent="Root/Top/TopPanel/TopBox/BossHp" unique_id=1681018610]
 unique_name_in_owner = true
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-theme_override_font_sizes/font_size = 24
+theme_type_variation = &"FieldLabel"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 22
 text = "100%"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="DpsLabel" type="Label" parent="Root/Top/TopBox" unique_id=1370791751]
+[node name="DpsLabel" type="Label" parent="Root/Top/TopPanel/TopBox" unique_id=246463983]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "存活 100／100   總輸出 0／秒"
+theme_type_variation = &"Dim"
+theme_override_font_sizes/font_size = 20
+text = "存活 100／100　總輸出 0／秒"
 horizontal_alignment = 2
 
-[node name="Banner" type="Label" parent="Root" unique_id=13828910]
+[node name="BannerStrip" type="PanelContainer" parent="Root" unique_id=1801519462]
 unique_name_in_owner = true
 layout_mode = 0
-anchor_top = 0.17
 anchor_right = 1.0
-anchor_bottom = 0.17
-offset_top = -40.0
-offset_bottom = 40.0
-theme_override_font_sizes/font_size = 46
-theme_override_constants/outline_size = 12
-text = "重砸！ 移開紅區！"
+offset_left = 16.0
+offset_top = 214.0
+offset_right = -16.0
+offset_bottom = 274.0
+mouse_filter = 2
+theme_type_variation = &"HudPanel"
+
+[node name="Row" type="HBoxContainer" parent="Root/BannerStrip" unique_id=889330576]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Bang" type="ColorRect" parent="Root/BannerStrip/Row" unique_id=532260137]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+color = Color(0.70980394, 0.2627451, 0.18431373, 1)
+
+[node name="Mark" type="Label" parent="Root/BannerStrip/Row/Bang" unique_id=462538264]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 30
+text = "!"
 horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="ArrowLeft" type="Button" parent="Root" unique_id=1069262438]
+[node name="Banner" type="Label" parent="Root/BannerStrip/Row" unique_id=60650299]
 unique_name_in_owner = true
-layout_mode = 0
-offset_left = 80.0
-offset_top = 600.0
-offset_right = 184.0
-offset_bottom = 704.0
-theme_override_styles/normal = SubResource("StyleBoxFlat_uo2fv")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_047uy")
-theme_override_styles/hover = SubResource("StyleBoxFlat_5pdws")
-theme_override_styles/focus = SubResource("StyleBoxFlat_hd3ao")
-theme_override_font_sizes/font_size = 44
-text = "◀"
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 30
+text = "重砸！ 把旗子拖出紅圈！"
+vertical_alignment = 1
 
-[node name="ArrowRight" type="Button" parent="Root" unique_id=1569580212]
+[node name="Parts" type="Control" parent="Root" unique_id=896100220]
 unique_name_in_owner = true
-layout_mode = 0
-offset_left = 80.0
-offset_top = 600.0
-offset_right = 184.0
-offset_bottom = 704.0
-theme_override_styles/normal = SubResource("StyleBoxFlat_0i1j5")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_mphia")
-theme_override_styles/hover = SubResource("StyleBoxFlat_0m4u7")
-theme_override_styles/focus = SubResource("StyleBoxFlat_apjy4")
-theme_override_font_sizes/font_size = 44
-text = "▶"
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
 
-[node name="WeakPoint" type="Button" parent="Root" unique_id=1512794155]
-unique_name_in_owner = true
+[node name="PartLegs" parent="Root/Parts" unique_id=1641771628 instance=ExtResource("3_0m4u7")]
 layout_mode = 0
 offset_left = 540.0
-offset_top = 520.0
-offset_right = 664.0
-offset_bottom = 644.0
-theme_override_styles/normal = SubResource("StyleBoxFlat_5n1hp")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_eld54")
-theme_override_styles/hover = SubResource("StyleBoxFlat_3swnk")
-theme_override_styles/focus = SubResource("StyleBoxFlat_qkknv")
-theme_override_colors/font_color = Color(0.35, 0.12, 0.05, 1)
-theme_override_colors/font_pressed_color = Color(0.35, 0.12, 0.05, 1)
-theme_override_colors/font_hover_color = Color(0.35, 0.12, 0.05, 1)
-theme_override_font_sizes/font_size = 30
-text = "弱點"
+offset_top = 380.0
+offset_right = 672.0
+offset_bottom = 440.0
 
-[node name="Bottom" type="MarginContainer" parent="Root" unique_id=664446489]
+[node name="PartArm" parent="Root/Parts" unique_id=2017419477 instance=ExtResource("3_0m4u7")]
+layout_mode = 0
+offset_left = 540.0
+offset_top = 470.0
+offset_right = 672.0
+offset_bottom = 530.0
+part_index = 1
+
+[node name="PartHorns" parent="Root/Parts" unique_id=1659436433 instance=ExtResource("3_0m4u7")]
+layout_mode = 0
+offset_left = 540.0
+offset_top = 560.0
+offset_right = 672.0
+offset_bottom = 620.0
+part_index = 2
+
+[node name="SkillCallout" parent="Root" unique_id=256987424 instance=ExtResource("4_apjy4")]
+unique_name_in_owner = true
+layout_mode = 0
+offset_top = 290.0
+offset_bottom = 414.0
+
+[node name="Coach" type="PanelContainer" parent="Root" unique_id=1281688007]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 48.0
+offset_top = -470.0
+offset_right = -48.0
+offset_bottom = -380.0
+mouse_filter = 2
+theme_type_variation = &"HudPanel"
+
+[node name="CoachText" type="Label" parent="Root/Coach" unique_id=1701088528]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 26
+text = "按住旗子拖動，整團就會跟著走"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Bottom" type="MarginContainer" parent="Root" unique_id=1978411957]
 layout_mode = 0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_vertical = 0
 mouse_filter = 2
-theme_override_constants/margin_left = 24
+theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 0
-theme_override_constants/margin_right = 24
-theme_override_constants/margin_bottom = 32
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 28
 
-[node name="BottomBox" type="VBoxContainer" parent="Root/Bottom" unique_id=2085144248]
+[node name="BottomBox" type="VBoxContainer" parent="Root/Bottom" unique_id=1462102093]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 10
 
-[node name="SkipRow" type="HBoxContainer" parent="Root/Bottom/BottomBox" unique_id=1587321352]
+[node name="SkipRow" type="HBoxContainer" parent="Root/Bottom/BottomBox" unique_id=1512137195]
 layout_mode = 2
 mouse_filter = 2
 alignment = 2
 
-[node name="SkipMuster" type="Button" parent="Root/Bottom/BottomBox/SkipRow" unique_id=1014697051]
+[node name="SkipMuster" type="Button" parent="Root/Bottom/BottomBox/SkipRow" unique_id=489633787]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 72)
+custom_minimum_size = Vector2(220, 72)
 layout_mode = 2
 text = "跳過集結 ▶"
 
-[node name="ZoneLabel" type="Label" parent="Root/Bottom/BottomBox" unique_id=1241449442]
-unique_name_in_owner = true
+[node name="BottomPanel" type="PanelContainer" parent="Root/Bottom/BottomBox" unique_id=1908360590]
 layout_mode = 2
-theme_override_font_sizes/font_size = 28
-text = "選區：近2　17 人"
+theme_type_variation = &"HudPanel"
 
-[node name="MoraleRow" type="HBoxContainer" parent="Root/Bottom/BottomBox" unique_id=1205027250]
+[node name="Box" type="VBoxContainer" parent="Root/Bottom/BottomBox/BottomPanel" unique_id=2093449837]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="MoraleTitle" type="Label" parent="Root/Bottom/BottomBox/MoraleRow" unique_id=2059142227]
+[node name="SquadTabs" type="HBoxContainer" parent="Root/Bottom/BottomBox/BottomPanel/Box" unique_id=16700035]
+unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 28
+theme_override_constants/separation = 8
+
+[node name="Squad_0" type="Button" parent="Root/Bottom/BottomBox/BottomPanel/Box/SquadTabs" unique_id=1054677583]
+texture_filter = 1
+custom_minimum_size = Vector2(0, 84)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CardButton"
+theme_override_constants/h_separation = 10
+theme_override_constants/icon_max_width = 30
+theme_override_font_sizes/font_size = 24
+toggle_mode = true
+text = "近戰團
+52 人"
+icon = SubResource("AtlasTexture_5357l")
+
+[node name="Squad_1" type="Button" parent="Root/Bottom/BottomBox/BottomPanel/Box/SquadTabs" unique_id=1082845012]
+texture_filter = 1
+custom_minimum_size = Vector2(0, 84)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CardButton"
+theme_override_constants/h_separation = 10
+theme_override_constants/icon_max_width = 30
+theme_override_font_sizes/font_size = 24
+toggle_mode = true
+text = "遠程團
+33 人"
+icon = SubResource("AtlasTexture_iypfu")
+
+[node name="Squad_2" type="Button" parent="Root/Bottom/BottomBox/BottomPanel/Box/SquadTabs" unique_id=1426864589]
+texture_filter = 1
+custom_minimum_size = Vector2(0, 84)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CardButton"
+theme_override_constants/h_separation = 10
+theme_override_constants/icon_max_width = 30
+theme_override_font_sizes/font_size = 24
+toggle_mode = true
+text = "輔助團
+15 人"
+icon = SubResource("AtlasTexture_qpprf")
+
+[node name="MoraleRow" type="HBoxContainer" parent="Root/Bottom/BottomBox/BottomPanel/Box" unique_id=1678001174]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="MoraleTitle" type="Label" parent="Root/Bottom/BottomBox/BottomPanel/Box/MoraleRow" unique_id=1292894013]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 24
 text = "士氣"
 
-[node name="Morale" type="ProgressBar" parent="Root/Bottom/BottomBox/MoraleRow" unique_id=1771417518]
+[node name="Morale" type="ProgressBar" parent="Root/Bottom/BottomBox/BottomPanel/Box/MoraleRow" unique_id=1782854104]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 30)
+custom_minimum_size = Vector2(0, 22)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 mouse_filter = 2
-theme_override_styles/fill = SubResource("StyleBoxFlat_uxdf7")
+theme_type_variation = &"MoraleBar"
 show_percentage = false
 
-[node name="Actions" type="HBoxContainer" parent="Root/Bottom/BottomBox" unique_id=2091615667]
+[node name="Hint" type="Label" parent="Root/Bottom/BottomBox/BottomPanel/Box/MoraleRow" unique_id=289891708]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Dim"
+theme_override_font_sizes/font_size = 20
+text = "拖旗子，或點地面移動"
+
+[node name="Actions" type="HBoxContainer" parent="Root/Bottom/BottomBox/BottomPanel/Box" unique_id=736437147]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="Regroup" type="Button" parent="Root/Bottom/BottomBox/Actions" unique_id=1654068932]
+[node name="Regroup" type="Button" parent="Root/Bottom/BottomBox/BottomPanel/Box/Actions" unique_id=588827842]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 104)
+custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 34
 text = "全員歸位"
 
-[node name="Volley" type="Button" parent="Root/Bottom/BottomBox/Actions" unique_id=1164465140]
+[node name="Volley" type="Button" parent="Root/Bottom/BottomBox/BottomPanel/Box/Actions" unique_id=1050266712]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 104)
+custom_minimum_size = Vector2(0, 96)
 layout_mode = 2
 size_flags_horizontal = 3
+theme_type_variation = &"PrimaryButton"
+theme_override_font_sizes/font_size = 34
 text = "大招"
 
-[node name="Result" type="Control" parent="Root" unique_id=1826357625]
+[node name="Result" type="Control" parent="Root" unique_id=1617045203]
 unique_name_in_owner = true
 anchors_preset = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="Dim" type="ColorRect" parent="Root/Result" unique_id=1204856195]
+[node name="Dim" type="ColorRect" parent="Root/Result" unique_id=1763328440]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color(0.03, 0.03, 0.08, 0.55)
+color = Color(0.02, 0.04, 0.03, 0.6)
 
-[node name="Center" type="CenterContainer" parent="Root/Result" unique_id=1370393556]
+[node name="Center" type="CenterContainer" parent="Root/Result" unique_id=1458667830]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="Panel" type="PanelContainer" parent="Root/Result/Center" unique_id=851727202]
-custom_minimum_size = Vector2(660, 0)
+[node name="Panel" type="PanelContainer" parent="Root/Result/Center" unique_id=790693551]
+custom_minimum_size = Vector2(640, 0)
 layout_mode = 2
+theme_type_variation = &"Dialog"
 
-[node name="PanelBox" type="VBoxContainer" parent="Root/Result/Center/Panel" unique_id=1662093359]
+[node name="PanelBox" type="VBoxContainer" parent="Root/Result/Center/Panel" unique_id=1083642032]
 layout_mode = 2
-theme_override_constants/separation = 18
+theme_override_constants/separation = 12
 
-[node name="ResultTitle" type="Label" parent="Root/Result/Center/Panel/PanelBox" unique_id=1285707024]
+[node name="ResultTitle" type="Label" parent="Root/Result/Center/Panel/PanelBox" unique_id=735625020]
 unique_name_in_owner = true
 layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.8509804, 0.69803923, 0.43137255, 1)
 theme_override_font_sizes/font_size = 52
 text = "推王成功！"
 horizontal_alignment = 1
 
-[node name="ResultDetail" type="Label" parent="Root/Result/Center/Panel/PanelBox" unique_id=1306858898]
+[node name="Rule" parent="Root/Result/Center/Panel/PanelBox" unique_id=451753129 instance=ExtResource("8_mphia")]
+layout_mode = 2
+
+[node name="ResultDetail" type="Label" parent="Root/Result/Center/Panel/PanelBox" unique_id=2131803652]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 28
 text = "剩 30.0 秒　存活 85 人"
 horizontal_alignment = 1
 
-[node name="ReportScroll" type="ScrollContainer" parent="Root/Result/Center/Panel/PanelBox" unique_id=1116689137]
-custom_minimum_size = Vector2(0, 620)
-layout_mode = 2
-horizontal_scroll_mode = 0
-
-[node name="Report" type="Label" parent="Root/Result/Center/Panel/PanelBox/ReportScroll" unique_id=820305890]
+[node name="Rewards" type="Label" parent="Root/Result/Center/Panel/PanelBox" unique_id=1253450183]
 unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Dim"
+theme_override_font_sizes/font_size = 22
+text = "獲得"
+
+[node name="RewardGrid" type="GridContainer" parent="Root/Result/Center/Panel/PanelBox" unique_id=1117277107]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 4
+columns = 2
+
+[node name="Preview_0" parent="Root/Result/Center/Panel/PanelBox/RewardGrid" unique_id=2064784954 instance=ExtResource("9_0m4u7")]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 24
-text = "MVP：SSR 劍 1　貢獻 4210
-輸出：SSR 劍 1 3120 · SSR 法 1 2890 · SR 槍 2 1940
-倒下 12 人：預警 8 · 普攻 4
-建議：橫掃打倒 5 人：它打整條近欄，預警時把近欄往 ◀ 移"
-autowrap_mode = 3
 
-[node name="Retry" type="Button" parent="Root/Result/Center/Panel/PanelBox" unique_id=414290516]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 96)
+[node name="Preview_1" parent="Root/Result/Center/Panel/PanelBox/RewardGrid" unique_id=2047321371 instance=ExtResource("9_0m4u7")]
 layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Report" parent="Root/Result/Center/Panel/PanelBox" unique_id=2093143686 instance=ExtResource("8_qkknv")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="NextStage" type="Button" parent="Root/Result/Center/Panel/PanelBox" unique_id=1350771264]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 92)
+layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+text = "挑戰下一關"
+
+[node name="MoreButtons" type="HBoxContainer" parent="Root/Result/Center/Panel/PanelBox" unique_id=825071334]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Retry" type="Button" parent="Root/Result/Center/Panel/PanelBox/MoreButtons" unique_id=1046588904]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 26
 text = "再來一場"
+
+[node name="GoGrow" type="Button" parent="Root/Result/Center/Panel/PanelBox/MoreButtons" unique_id=839477177]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"PrimaryButton"
+theme_override_font_sizes/font_size = 26
+text = "去訓練"
+
+[node name="ResultCamp" type="Button" parent="Root/Result/Center/Panel/PanelBox/MoreButtons" unique_id=1057236115]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 26
+text = "回總覽"
+
+[node name="PauseMenu" type="Control" parent="Root" unique_id=1328182604]
+unique_name_in_owner = true
+process_mode = 3
+visible = false
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Dim" type="ColorRect" parent="Root/PauseMenu" unique_id=1913788745]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.02, 0.04, 0.03, 0.7)
+
+[node name="Center" type="CenterContainer" parent="Root/PauseMenu" unique_id=699653884]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="PausePanel" type="PanelContainer" parent="Root/PauseMenu/Center" unique_id=1382237420]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(520, 0)
+layout_mode = 2
+theme_type_variation = &"Dialog"
+
+[node name="Column" type="VBoxContainer" parent="Root/PauseMenu/Center/PausePanel" unique_id=1224360981]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="Root/PauseMenu/Center/PausePanel/Column" unique_id=1574526868]
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 44
+text = "暫停"
+horizontal_alignment = 1
+
+[node name="Rule" parent="Root/PauseMenu/Center/PausePanel/Column" unique_id=1051137223 instance=ExtResource("8_mphia")]
+layout_mode = 2
+
+[node name="Resume" type="Button" parent="Root/PauseMenu/Center/PausePanel/Column" unique_id=1608837097]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 92)
+layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+text = "繼續"
+
+[node name="PauseSettings" type="Button" parent="Root/PauseMenu/Center/PausePanel/Column" unique_id=1157555116]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 92)
+layout_mode = 2
+text = "設定"
+
+[node name="Retreat" type="Button" parent="Root/PauseMenu/Center/PausePanel/Column" unique_id=1293360709]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 92)
+layout_mode = 2
+text = "撤退回總覽（這場不算）"
+
+[node name="SettingsCenter" type="CenterContainer" parent="Root/PauseMenu" unique_id=1371174446]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="SettingsPanel" parent="Root/PauseMenu/SettingsCenter" unique_id=1961782612 instance=ExtResource("9_uxdf7")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2

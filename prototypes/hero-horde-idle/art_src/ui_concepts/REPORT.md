@@ -1,0 +1,12 @@
+# UI 設計稿回報
+- 工具：Codex 內建 image_gen，以 growth_now、battle_telegraph_now、battle_skill_now 為對應參考；每張戰鬥稿另參考同風格養成稿，未使用 master_still。
+- A 王城藍金：A_growth.png、A_battle.png；深藍、金飾與羊皮紙面板。
+- B 旅人皮革：B_growth.png、B_battle.png；胡桃木、縫線皮革與金屬鉚釘。
+- C 戰旗布幔：C_growth.png、C_battle.png；紅金布幔、盾形分頁與繩索木桿。
+- D 像素復古：D_growth.png、D_battle.png；像素邊框、像素字感與復古視窗。
+- E 清爽手遊：E_growth.png、E_battle.png；半透明玻璃、漸層與較大的選中角色圖。
+- 比較圖：contact-growth.png、contact-battle.png；各五張單列並排，頂部標示 A–E 與繁體中文風格名。
+- 尺寸：要求 1024×2208，服務實際回傳養成 854×1842、戰鬥 853×1844；保留直式原始輸出，未上採樣。比較圖分別 1672×756、1672×758。
+- 偏差：部分中文、名字、數字及技能文案有錯漏（如 B 戰鬥場上近戰團標成 32、底部仍為 52）；英雄卡星數有省略；D 非嚴格 16 色；E 養成背景偏明亮王城；戰場、角色與旗紋細節經生圖重繪，並非原截圖逐像素保留，主要構圖與像素美術方向保留。
+- 額度／跳過：10 張各生成一次成功，無重試、無額外重骰、無跳過，未回報額度不足；剩餘額度未知。依使用者催促並行完成獨立風格。
+- 追溯／驗證：inputs/requests.json、prompt-spec.json 保留完整提示詞與參考圖清單，generation-manifest.json 記錄原圖路徑，delivery-qc.json 記錄尺寸；已逐張目視並核對 10 張原圖與兩張比較圖，make_contacts.py 僅製作比較圖。

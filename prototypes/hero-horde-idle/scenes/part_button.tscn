@@ -1,0 +1,28 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://ui/theme.tres" id="1_l6gxx"]
+[ext_resource type="Script" path="res://scripts/part_button.gd" id="2_lbg37"]
+
+[node name="PartButton" type="Button" unique_id=1641771628]
+custom_minimum_size = Vector2(132, 60)
+offset_right = 132.0
+offset_bottom = 60.0
+theme = ExtResource("1_l6gxx")
+theme_type_variation = &"PartButton"
+text = "角"
+script = ExtResource("2_lbg37")
+
+[node name="Bar" type="ProgressBar" parent="." unique_id=1011183445]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = -16.0
+offset_right = -12.0
+offset_bottom = -8.0
+mouse_filter = 2
+theme_type_variation = &"HpBar"
+value = 70.0
+show_percentage = false

@@ -1,0 +1,21 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" path="res://ui/fonts/NotoSerifTC-Bold.otf" id="1_ihax6"]
+[ext_resource type="Script" path="res://scripts/captain_plate.gd" id="2_wjrig"]
+
+[node name="CaptainPlate" type="Label3D" unique_id=333072345]
+pixel_size = 0.006
+billboard = 1
+no_depth_test = true
+render_priority = 2
+outline_render_priority = 1
+modulate = Color(1, 0.86, 0.52, 1)
+outline_modulate = Color(0.04, 0.08, 0.06, 1)
+text = "隊長‧蘿德
+▼"
+font = ExtResource("1_ihax6")
+font_size = 52
+outline_size = 20
+vertical_alignment = 2
+line_spacing = -14.0
+script = ExtResource("2_wjrig")

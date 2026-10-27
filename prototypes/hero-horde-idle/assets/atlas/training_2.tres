@@ -1,0 +1,8 @@
+[gd_resource type="AtlasTexture" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/reference/train.png" id="1_pwayd"]
+
+[resource]
+atlas = ExtResource("1_pwayd")
+region = Rect2(52, 1258, 96, 89)
+filter_clip = true

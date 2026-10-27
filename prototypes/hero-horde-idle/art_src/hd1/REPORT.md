@@ -1,0 +1,15 @@
+# hd1 回報（路徑皆相對於本資料夾）
+- route：master_still.py generate --route codex-cli --finish pixel（實際 local:codex-cli）；地面貼圖用 Codex 內建 image_gen。
+- boss/：candidate-01.png～candidate-03.png＋candidates-contact.png；hero／magenta／left，直接朝左，未鏡像。
+- props/pine/：candidate-01.png＋candidates-contact.png。
+- props/oak/：candidate-01.png＋candidates-contact.png。
+- props/boulder/：candidate-01.png＋candidates-contact.png。
+- props/pillar/：candidate-01.png＋candidates-contact.png。
+- props/gate/：candidate-01.png＋candidates-contact.png。
+- props/brazier/：candidate-01.png＋candidates-contact.png；green key，火焰完整。
+- props/banner/：candidate-01.png＋candidates-contact.png。
+- props/fern/：candidate-01.png＋candidates-contact.png。
+- tiles/：grass.png、arena.png、cliff.png，各 1 張原始輸出；要求 1024×1024，服務實際回傳 1254×1254，依指示不縮圖、不做無縫後製；接縫仍待後續處理。
+- 偏差：forge v0.4 原生輸出為 takes/.../generated.png，另以 forge pad 去背整理成指定候選檔名及接觸表；城門拱口包含深色石壁細節，非全透空洞。
+- 驗證：11 張 RGBA 均 1024×1024、有透明背景與四周留邊；逐張目視；pad 警告及 opaque_key_px 均 0。原圖／prompt／run／去背紀錄／QC 留在 inputs/，貼圖提示詞見 inputs/tile-prompts.json。
+- 額度／時限：11 次 forge＋3 次內建生圖完成，未回報額度不足，剩餘額度未知；forge 每筆 --timeout 360，最慢 84.065 秒，無超時重試；1 次沙箱 ledger.lock 拒絕未呼叫生圖，取得權限後續行，無額外多骰。

@@ -1,0 +1,40 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/squad_flag.gd" id="1_2r0yi"]
+[ext_resource type="Texture2D" path="res://assets/flags/melee.png" id="2_4h8ay"]
+[ext_resource type="Material" path="res://materials/ground_mark.tres" id="2_nqnt2"]
+[ext_resource type="FontFile" path="res://ui/fonts/NotoSansTC.ttf" id="3_4h8ay"]
+[ext_resource type="Script" path="res://scripts/flag_banner.gd" id="4_wkvq5"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_wkvq5"]
+size = Vector2(1, 1)
+
+[node name="SquadFlag" type="Node3D" unique_id=320180032]
+script = ExtResource("1_2r0yi")
+banner = ExtResource("2_4h8ay")
+
+[node name="Ring" type="MeshInstance3D" parent="." unique_id=1428711610]
+unique_name_in_owner = true
+transform = Transform3D(2.4, 0, 0, 0, 1, 0, 0, 0, 5, 0, 0.035, 0)
+material_override = ExtResource("2_nqnt2")
+cast_shadow = 0
+instance_shader_parameters/inner_alpha = 0.06
+instance_shader_parameters/shape = 0.0
+instance_shader_parameters/texels = Vector2(48, 100)
+mesh = SubResource("PlaneMesh_wkvq5")
+
+[node name="Banner" type="MeshInstance3D" parent="." unique_id=1677125237]
+unique_name_in_owner = true
+script = ExtResource("4_wkvq5")
+
+[node name="FlagLabel" type="Label3D" parent="." unique_id=204271832]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.62, 0)
+pixel_size = 0.006
+billboard = 1
+no_depth_test = true
+render_priority = 2
+outline_render_priority = 1
+text = "近戰團 52"
+font = ExtResource("3_4h8ay")
+font_size = 44

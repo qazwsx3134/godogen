@@ -1,0 +1,17 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" path="res://ui/fonts/NotoSansTC.ttf" id="1_8f0wy"]
+[ext_resource type="Script" path="res://scripts/name_popup.gd" id="2_qninw"]
+
+[node name="NamePopup" type="Label3D" unique_id=461990709]
+pixel_size = 0.006
+billboard = 1
+no_depth_test = true
+render_priority = 3
+outline_render_priority = 2
+modulate = Color(1, 0.85, 0.35, 1)
+text = "卡琳娜"
+font = ExtResource("1_8f0wy")
+font_size = 40
+outline_size = 10
+script = ExtResource("2_qninw")

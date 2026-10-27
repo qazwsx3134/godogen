@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="CameraShot" format=3]
+
+[ext_resource type="Script" path="res://scripts/camera_shot.gd" id="1_nm61c"]
+
+[resource]
+script = ExtResource("1_nm61c")
+push_m = 3.2
+yaw_deg = 6.0
+pitch_deg = -4.0
+fov_delta = -3.0
+ease_in = 0.22
+hold = 0.75
+ease_out = 0.55
+priority = 2
+hit_stop = 0.08
+trauma = 0.5

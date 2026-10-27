@@ -1,0 +1,68 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/store.gd" id="1_atuvt"]
+[ext_resource type="Theme" path="res://ui/theme.tres" id="2_codmc"]
+[ext_resource type="PackedScene" path="res://scenes/ornament_rule.tscn" id="3_codmc"]
+
+[node name="Store" type="CanvasLayer" unique_id=1635248133]
+layer = 90
+script = ExtResource("1_atuvt")
+
+[node name="AdOverlay" type="Control" parent="." unique_id=1265282754]
+unique_name_in_owner = true
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_codmc")
+
+[node name="Dim" type="ColorRect" parent="AdOverlay" unique_id=1561843219]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.92)
+
+[node name="Center" type="CenterContainer" parent="AdOverlay" unique_id=1686092020]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Panel" type="PanelContainer" parent="AdOverlay/Center" unique_id=928436766]
+custom_minimum_size = Vector2(560, 360)
+layout_mode = 2
+theme_type_variation = &"Dialog"
+
+[node name="Column" type="VBoxContainer" parent="AdOverlay/Center/Panel" unique_id=644233389]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="AdTitle" type="Label" parent="AdOverlay/Center/Panel/Column" unique_id=1636241472]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 34
+text = "廣告（測試）"
+horizontal_alignment = 1
+
+[node name="Rule" parent="AdOverlay/Center/Panel/Column" unique_id=451753129 instance=ExtResource("3_codmc")]
+layout_mode = 2
+
+[node name="Body" type="Label" parent="AdOverlay/Center/Panel/Column" unique_id=1543769959]
+layout_mode = 2
+theme_type_variation = &"Dim"
+theme_override_font_sizes/font_size = 24
+text = "這裡會播放獎勵廣告"
+horizontal_alignment = 1
+
+[node name="AdCount" type="Label" parent="AdOverlay/Center/Panel/Column" unique_id=1295750245]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8509804, 0.69803923, 0.43137255, 1)
+theme_override_font_sizes/font_size = 28
+text = "3 秒後領取獎勵"
+horizontal_alignment = 1

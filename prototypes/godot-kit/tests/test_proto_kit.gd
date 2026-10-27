@@ -15,6 +15,15 @@ const SceneLoader = preload("res://addons/proto_kit/scene_loader.gd")
 const PixelVfx = preload("res://addons/proto_kit/pixel_vfx.gd")
 const Sprite3DSheet = preload("res://addons/proto_kit/sprite3d_sheet.gd")
 const Sprite3DActor = preload("res://addons/proto_kit/sprite3d_actor.gd")
+const NineSlice = preload("res://addons/proto_kit/nine_slice.gd")
+const Screenshot = preload("res://addons/proto_kit/screenshot.gd")
+const SceneRouter = preload("res://addons/proto_kit/scene_router.gd")
+const StoreFront = preload("res://addons/proto_kit/store_front.gd")
+const Gacha = preload("res://addons/proto_kit/gacha.gd")
+const Hd2dLook = preload("res://addons/proto_kit/hd2d_look.gd")
+const Hd2dDemo = preload("res://addons/proto_kit/hd2d_demo.gd")
+const PixelCard3D = preload("res://addons/proto_kit/pixel_card3d.gd")
+const CameraShotRes = preload("res://addons/proto_kit/camera_shot.gd")
 const DIR: String = "user://proto_kit_test"
 
 
@@ -26,6 +35,14 @@ func _run() -> void:
 	_test_synth()
 	_test_atomic_file()
 	_test_scene_builder()
+	_test_scene_patch()
+	_test_nine_slice()
+	_test_screenshot()
+	_test_gacha()
+	await _test_store_front()
+	await _test_scene_router()
+	_test_hd2d_pieces()
+	await _test_hd2d_demo()
 	_test_font_check()
 	await _test_sfx_bank()
 	_test_haptics()
@@ -171,6 +188,320 @@ func _test_scene_builder() -> void:
 		_expect(errors.messages.any(func(message: String) -> bool: return message.contains(reported)), "failure push_errors: " + reported)
 	_expect(not FileAccess.file_exists(dir + "/bad.tscn") and not FileAccess.file_exists(dir + "/dropped.tscn"), "a failed save does not leave its file behind")
 	_remove_tree(dir)
+
+
+## open_scene + put: a patch script opens a saved scene, swaps one node, saves it back; running it twice changes nothing.
+func _test_scene_patch() -> void:
+	var dir: String = DIR + "/patch"
+	_remove_tree(dir)
+	var child_path: String = dir + "/badge.tscn"
+	var page_path: String = dir + "/page.tscn"
+	SceneBuilder.save_scene(_named("Badge"), child_path)
+	var page := _named("Page")
+	var column: Node = SceneBuilder.add(page, Node2D.new(), "Column")
+	for key: String in ["Title", "Rule", "Body"]:
+		SceneBuilder.add(column, Node2D.new(), key)
+	SceneBuilder.add(page, SceneBuilder.instance(child_path), "Corner")
+	SceneBuilder.save_scene(page, page_path)
+
+	var errors := ErrorLog.new()
+	OS.add_logger(errors)
+	var missing: Dictionary = SceneBuilder.open_scene(dir + "/none.tscn")
+	OS.remove_logger(errors)
+	_expect(missing.root == null and missing.refs.is_empty(), "open_scene on a missing file gives a null root")
+	var md5: String = ""
+	for run: int in 2:
+		var opened: Dictionary = SceneBuilder.open_scene(page_path)
+		var root: Node = opened.root
+		_expect(root != null and root.scene_file_path.is_empty(), "open_scene gives a plain root, not an instance of the file")
+		_expect(opened.refs == [child_path], "open_scene lists the sub-scenes the file references (%s)" % [opened.refs])
+		var col: Node = root.get_node("Column")
+		SceneBuilder.put(col, SceneBuilder.instance(child_path), "Rule")
+		_expect(col.get_child(1).name == &"Rule" and col.get_child(1).scene_file_path == child_path and col.get_child_count() == 3,
+			"put replaces the node of that name in its place (run %d)" % run)
+		var saved: Dictionary = SceneBuilder.save_scene(root, page_path, {"overwrite": true, "expected_refs": opened.refs})
+		_expect(saved.ok, "the patched scene saves (%s)" % saved.error)
+		if run == 0:
+			md5 = FileAccess.get_md5(page_path)
+	_expect(FileAccess.get_md5(page_path) == md5, "patching twice gives the same file")
+	var reloaded: Node = (ResourceLoader.load(page_path, "PackedScene", ResourceLoader.CACHE_MODE_IGNORE) as PackedScene).instantiate()
+	_expect(reloaded.get_node("Corner").scene_file_path == child_path, "sub-scene instances stay references through a patch")
+	reloaded.free()
+	var parent := Node.new()
+	for key: String in ["A", "B"]:
+		SceneBuilder.add(parent, Node.new(), key)
+	SceneBuilder.put(parent, Node.new(), "New", 0)
+	_expect(parent.get_child(0).name == &"New" and parent.get_child_count() == 3, "put inserts a new name at the given index")
+	parent.free()
+	_remove_tree(dir)
+
+
+func _test_nine_slice() -> void:
+	var dir: String = DIR + "/frames"
+	_remove_tree(dir)
+	DirAccess.make_dir_recursive_absolute(dir)
+	for name: String in ["btn", "btn_pressed"]:
+		var image := Image.create(12, 12, false, Image.FORMAT_RGBA8)
+		image.fill(Color.WHITE if name == "btn" else Color.GRAY)
+		image.save_png(dir + "/%s.png" % name)
+	var box: StyleBoxTexture = NineSlice.box(ImageTexture.create_from_image(Image.create(8, 8, false, Image.FORMAT_RGBA8)), 3, Vector4(4, 5, 6, 7), 2.0)
+	_expect(box.texture_margin_left == 3 and box.texture_margin_bottom == 3, "nine_slice: slice sets all four texture margins")
+	_expect(box.content_margin_left == 4 and box.content_margin_top == 7 and box.content_margin_right == 6 and box.content_margin_bottom == 5,
+		"nine_slice: sink moves the content down (top +2, bottom -2)")
+	var theme := Theme.new()
+	# Plain PNGs under user:// (not imported): read from the file.
+	var pattern: String = dir + "/btn%s.png"
+	var ok: bool = NineSlice.button_states(theme, &"Button", pattern, 3, Vector4(4, 4, 4, 4))
+	var errors := ErrorLog.new()
+	OS.add_logger(errors)
+	var refused: bool = NineSlice.button_states(Theme.new(), &"Button", dir + "/none%s.png", 3, Vector4.ZERO)
+	OS.remove_logger(errors)
+	_expect(not refused, "nine_slice: no normal frame sets nothing")
+	if ok:
+		var normal: StyleBoxTexture = theme.get_stylebox(&"normal", &"Button")
+		var hover: StyleBoxTexture = theme.get_stylebox(&"hover", &"Button")
+		var pressed: StyleBoxTexture = theme.get_stylebox(&"hover_pressed", &"Button")
+		_expect(hover.texture.get_image().get_pixel(0, 0) == normal.texture.get_image().get_pixel(0, 0), "nine_slice: a missing hover frame falls back to normal")
+		_expect(pressed.texture.get_image().get_pixel(0, 0) != normal.texture.get_image().get_pixel(0, 0) and pressed.content_margin_top == 6,
+			"nine_slice: hover_pressed uses the pressed frame and sinks")
+	else:
+		_expect(false, "nine_slice: button_states reads the frames (%s)" % pattern)
+	_remove_tree(dir)
+
+
+func _test_screenshot() -> void:
+	_expect(Screenshot.out_dir("user://fallback") == "user://fallback", "screenshot: no user argument -> the fallback folder")
+	if DisplayServer.get_name() != "headless":
+		return
+	var errors := ErrorLog.new()
+	OS.add_logger(errors)
+	var path: String = Screenshot.save(root, DIR + "/shots", "none")
+	OS.remove_logger(errors)
+	_expect(path == "" and errors.messages.any(func(m: String) -> bool: return m.contains("headless")),
+		"screenshot: headless has no image, says so and saves nothing")
+
+
+## Rates, pity and the featured share, over many pulls on a fixed seed.
+func _test_gacha() -> void:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 1
+	var rates := [55, 30, 12, 3]
+	var counts := [0, 0, 0, 0]
+	for k: int in 20000:
+		counts[Gacha.tier(rng, rates)] += 1
+	for t: int in 4:
+		_expect(absf(counts[t] / 200.0 - rates[t]) < 1.5, "gacha: tier %d comes %.1f%% of pulls (rate %d%%)" % [t, counts[t] / 200.0, rates[t]])
+	var state: int = rng.state
+	_expect(Gacha.tier(rng, rates, true) == 3 and rng.state == state, "gacha: pity gives the top tier without drawing")
+	var pool := PackedInt32Array([10, 11, 12, 13])
+	var featured: int = 0
+	var others := {}
+	for k: int in 20000:
+		var unit: int = Gacha.pick(rng, pool, 12, 0.5)
+		if unit == 12:
+			featured += 1
+		else:
+			others[unit] = others.get(unit, 0) + 1
+	_expect(absf(featured / 20000.0 - 0.5) < 0.015, "gacha: the featured unit is its share of the tier (%.3f)" % (featured / 20000.0))
+	_expect(others.size() == 3 and others.values().all(func(n: int) -> bool: return absf(n / 10000.0 - 1.0 / 3.0) < 0.03),
+		"gacha: the others share the rest evenly (%s)" % others)
+	state = rng.state
+	var one: int = Gacha.pick(rng, pool)
+	var replay := RandomNumberGenerator.new()
+	replay.state = state
+	_expect(one == pool[replay.randi_range(0, 3)], "gacha: a plain pick draws exactly one randi_range (saved streams stay in step)")
+	_expect(Gacha.pick(rng, PackedInt32Array()) == -1, "gacha: an empty pool gives -1")
+
+
+class TestStore extends "res://addons/proto_kit/store_front.gd":
+	var shown: Array = []
+
+	func _ready() -> void:
+		products = {"gems": CONSUMABLE, "no_ads": NON_CONSUMABLE}
+		super()
+
+	func _ad_card_shown(placement: String) -> void:
+		shown.append(placement)
+
+	func _ad_card_tick(seconds_left: int) -> void:
+		shown.append(seconds_left)
+
+	func _ad_card_hidden() -> void:
+		shown.append("hidden")
+
+
+func _test_store_front() -> void:
+	var file: String = DIR + "/store_test.json"
+	DirAccess.make_dir_recursive_absolute(DIR)
+	DirAccess.remove_absolute(file)
+	var store := TestStore.new()
+	store.test_file = file
+	store.ad_seconds = 2.0
+	root.add_child(store)
+	_expect(store.is_test(), "store: the base is the test store")
+	var errors := ErrorLog.new()
+	OS.add_logger(errors)
+	_expect(not await store.buy("nope"), "store: an unknown product is refused")
+	OS.remove_logger(errors)
+	_expect(await store.buy("gems") and (await store.restore()).is_empty(), "store: a consumable is paid and not restored")
+	_expect(await store.buy("no_ads") and await store.buy("no_ads"), "store: a non-consumable can be bought again (the store answers, the game grants once)")
+	_expect(await store.restore() == PackedStringArray(["no_ads"]), "store: restore lists the non-consumable once")
+	var fresh := TestStore.new()
+	fresh.test_file = file
+	root.add_child(fresh)
+	_expect(await fresh.restore() == PackedStringArray(["no_ads"]), "store: what was bought survives a restart (test_file)")
+	fresh.queue_free()
+	var started: int = Time.get_ticks_msec()
+	var watched: Array = []
+	(func() -> void: watched.append(await store.show_ad("bonus"))).call()
+	_expect(store.busy and not await store.show_ad("other"), "store: a second ad is refused while one shows")
+	await _until(func() -> bool: return not watched.is_empty(), "store: the ad ends")
+	_expect(watched == [true], "store: an ad watched to the end pays")
+	_expect(store.shown == ["bonus", 2, 1, "hidden"] and Time.get_ticks_msec() - started >= 1900 and not store.busy,
+		"store: the card counts down ad_seconds of game time (%s)" % [store.shown])
+	store.shown.clear()
+	_expect(await store.show_ad("bonus", true) and store.shown.is_empty(), "store: skip (免廣告) pays without a card")
+	store.queue_free()
+	DirAccess.remove_absolute(file)
+
+
+func _test_scene_router() -> void:
+	var dir: String = DIR + "/router"
+	_remove_tree(dir)
+	for key: String in ["One", "Two"]:
+		SceneBuilder.save_scene(_named(key), dir + "/%s.tscn" % key.to_lower())
+	var router: CanvasLayer = SceneRouter.new()
+	var fade := ColorRect.new()
+	fade.name = "Fade"
+	router.add_child(fade)
+	fade.owner = router
+	fade.unique_name_in_owner = true
+	router.fade_seconds = 0.05
+	root.add_child(router)
+	_expect(not fade.visible, "router: the fade starts hidden")
+	var changed: Array = []
+	router.screen_changed.connect(func(path: String) -> void: changed.append(path))
+	var went: Array = []
+	(func() -> void: went.append(await router.go(dir + "/one.tscn", {&"stage": 3}))).call()
+	_expect(router.busy() and not await router.go(dir + "/two.tscn"), "router: a second go() during a change is ignored")
+	await _until(func() -> bool: return not went.is_empty(), "router: the change ends")
+	_expect(went == [true] and current_scene.name == &"One" and not router.busy(), "router: go() changes the scene")
+	_expect(not fade.visible and fade.mouse_filter == Control.MOUSE_FILTER_IGNORE, "router: the fade is gone and lets taps through")
+	_expect(router.take(&"stage", 1) == 3 and router.take(&"stage", 1) == 1, "router: take() hands a value over once, then the default")
+	_expect(changed == [dir + "/one.tscn"], "router: screen_changed fires once per change")
+	paused = true
+	_expect(await router.go(dir + "/two.tscn") and current_scene.name == &"Two" and not paused, "router: go() from a paused screen unpauses")
+	var errors := ErrorLog.new()
+	OS.add_logger(errors)
+	_expect(not await router.go(dir + "/none.tscn") and current_scene.name == &"Two", "router: a missing scene keeps the current one")
+	OS.remove_logger(errors)
+	router.queue_free()
+	current_scene.queue_free()
+	_remove_tree(dir)
+
+
+## HD-2D pieces on their own: the card's size and lean, the look presets, the shaders compile.
+func _test_hd2d_pieces() -> void:
+	var card: MeshInstance3D = PixelCard3D.new()
+	card.texture = ImageTexture.create_from_image(Image.create(40, 80, false, Image.FORMAT_RGBA8))
+	_expect(card.card_size().is_equal_approx(Vector2(1.0, 2.0)) and (card.mesh as QuadMesh).size.is_equal_approx(Vector2(1.0, 2.0)),
+		"hd2d: a card is its texture times m_per_px (%s)" % card.card_size())
+	_expect(is_equal_approx(card.rotation.x, -deg_to_rad(14.0)) and card.cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_ON,
+		"hd2d: a card leans back 14 degrees and casts the sun's shadow")
+	card.m_per_px = 0.05
+	_expect((card.mesh as QuadMesh).size.is_equal_approx(Vector2(2.0, 4.0)), "hd2d: changing m_per_px rebuilds the card")
+	card.free()
+	var env: Environment = Hd2dLook.environment({"fog_depth_begin": 9.0})
+	_expect(env.fog_enabled and env.fog_depth_begin == 9.0 and env.fog_depth_end == 34.0 and env.tonemap_mode == Environment.TONE_MAPPER_LINEAR,
+		"hd2d: environment() is the dusk preset with overrides")
+	_expect(Hd2dLook.camera_attributes().dof_blur_far_enabled, "hd2d: camera_attributes() blurs the far set")
+	var errors := ErrorLog.new()
+	OS.add_logger(errors)
+	Hd2dLook.environment({"no_such_thing": 1})
+	OS.remove_logger(errors)
+	_expect(errors.messages.any(func(m: String) -> bool: return m.contains("no_such_thing")), "hd2d: an unknown override is reported")
+	for path: String in ["ground_decal", "pixel_vfx3d_ring", "parallax_layer", "hd2d_vignette"]:
+		var shader: Shader = load("res://addons/proto_kit/%s.gdshader" % path)
+		_expect(shader != null and shader.get_shader_uniform_list().size() > 0, "hd2d: %s.gdshader compiles with its uniforms" % path)
+
+
+## The demo diorama runs on kit modules only: lights tint sprites, effects pool and expire, the shot camera comes home,
+## the march strip walks, fights and counts kills, all on game time and their own random streams.
+func _test_hd2d_demo() -> void:
+	var demo: Node = Hd2dDemo.build(Vector2(720, 1280))
+	root.add_child(demo)
+	await process_frame
+	var stage: Node3D = demo.get_node(^"World/Stage")
+	var near: Color = stage.sprite_light(Vector3(-2.0, 0.5, -1.0))
+	var far: Color = stage.sprite_light(Vector3(10.0, 0.5, 10.0))
+	_expect(near.r > far.r + 0.3 and far.is_equal_approx(stage.sprite_key), "hd2d: a sprite by the torch is lit warmer (%s vs %s)" % [near, far])
+	stage.set_region_light(Color(0.5, 0.5, 1.0))
+	_expect(stage.sprite_light(Vector3(10.0, 0.5, 10.0)).is_equal_approx(stage.sprite_key * Color(0.5, 0.5, 1.0)),
+		"hd2d: the region light tints sprites and the sun together")
+
+	var fx: Node3D = demo.get_node(^"World/Fx")
+	fx.burst(Vector3.ZERO, 10, &"rock")
+	fx.step(0.0)
+	fx.step(0.0)
+	_expect(fx._pos.size() == 10, "hd2d: burst adds its chunks")
+	fx.burst(Vector3.ZERO, 1000, &"dust")
+	_expect(fx._pos.size() == fx.max_chunks, "hd2d: chunks stop at max_chunks")
+	for k: int in 5:
+		fx.ring(Vector3.ZERO, 1.0, &"gold")
+	_expect(fx._rings.size() == 4, "hd2d: a ring with every quad busy is skipped")
+	for k: int in 150:
+		fx.step(1.0 / 60.0)
+	_expect(fx._pos.is_empty() and fx._rings.is_empty(), "hd2d: chunks and rings end on game time")
+	var twin: Node3D = Hd2dDemo._fx()
+	root.add_child(twin)
+	twin.step(0.0)  # its two warm-up frames (shaders compiled out of sight) pass first, as fx's did
+	twin.step(0.0)
+	fx.clear()
+	fx.rng.seed = fx.rng_seed
+	for f: Node3D in [fx, twin]:
+		f.burst(Vector3(1, 0, 1), 12, &"slam", 3.0, 3.0, 4)
+		for k: int in 20:
+			f.step(1.0 / 60.0)
+	_expect(fx._pos == twin._pos, "hd2d: the same seed throws the same chunks (its own rng, not randf)")
+	twin.queue_free()
+
+	var camera: Camera3D = demo.get_node(^"World/Camera")
+	var home: Transform3D = camera.transform
+	var shot: Resource = CameraShotRes.new()
+	shot.ease_in = 0.1
+	shot.hold = 0.2
+	shot.ease_out = 0.1
+	shot.priority = 2
+	var weak: Resource = CameraShotRes.new()
+	_expect(camera.play(shot, Vector3(1, 0, 0)) == shot.hit_stop and camera.busy(), "hd2d: a shot plays")
+	_expect(camera.play(weak, Vector3.ZERO) == 0.0, "hd2d: a weaker shot does not cut a stronger one")
+	for k: int in 12:
+		camera._process(1.0 / 60.0)
+	_expect(not camera.transform.is_equal_approx(home), "hd2d: the camera moves toward the focus")
+	for k: int in 40:
+		camera._process(1.0 / 60.0)
+	_expect(not camera.busy() and camera.transform.is_equal_approx(home), "hd2d: the camera eases back home after the hold")
+
+	var strip: Control = demo.get_node(^"Hud/MarchStrip")
+	var spawned: Array = [0]
+	strip.enemy_spawned.connect(func() -> void: spawned[0] += 1)
+	var walked: bool = false
+	var fought: bool = false
+	for k: int in 1800:
+		strip.step(1.0 / 60.0)
+		walked = walked or strip.walking
+		fought = fought or not strip.walking
+	_expect(walked and fought and strip.kills >= 2 and spawned[0] >= strip.kills, "march_strip: walks, fights, kills (%d in 30 s)" % strip.kills)
+	var again: Control = Hd2dDemo._strip(Vector2(720, 260))
+	root.add_child(again)
+	again.set_process(false)
+	await process_frame
+	for k: int in 1800:
+		again.step(1.0 / 60.0)
+	_expect(again.kills == strip.kills, "march_strip: the same seed gives the same march (%d vs %d)" % [again.kills, strip.kills])
+	again.queue_free()
+	demo.queue_free()
+	await process_frame
 
 
 func _named(node_name: String) -> Node:

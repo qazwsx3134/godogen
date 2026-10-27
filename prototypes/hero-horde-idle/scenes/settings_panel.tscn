@@ -1,0 +1,155 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://ui/theme.tres" id="1_tl2iu"]
+[ext_resource type="Script" path="res://scripts/settings_panel.gd" id="2_54ti7"]
+[ext_resource type="PackedScene" path="res://scenes/ornament_rule.tscn" id="3_54ti7"]
+
+[node name="SettingsPanel" type="PanelContainer" unique_id=2097904909]
+custom_minimum_size = Vector2(560, 0)
+theme = ExtResource("1_tl2iu")
+theme_type_variation = &"Dialog"
+script = ExtResource("2_54ti7")
+
+[node name="Column" type="VBoxContainer" parent="." unique_id=248937742]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Title" type="Label" parent="Column" unique_id=767956415]
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 40
+text = "設定"
+
+[node name="Rule" parent="Column" unique_id=368454576 instance=ExtResource("3_54ti7")]
+layout_mode = 2
+
+[node name="SfxRow" type="HBoxContainer" parent="Column" unique_id=31918153]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="Column/SfxRow" unique_id=1299883388]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 28
+text = "音效"
+
+[node name="SfxSlider" type="HSlider" parent="Column/SfxRow" unique_id=257301152]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.05
+value = 0.8
+
+[node name="SfxValue" type="Label" parent="Column/SfxRow" unique_id=601878594]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_type_variation = &"Heading"
+theme_override_colors/font_color = Color(0.8509804, 0.69803923, 0.43137255, 1)
+theme_override_font_sizes/font_size = 26
+text = "80%"
+horizontal_alignment = 2
+
+[node name="HapticsRow" type="HBoxContainer" parent="Column" unique_id=767881005]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Column/HapticsRow" unique_id=1306745022]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 28
+text = "震動"
+
+[node name="Haptics" type="CheckButton" parent="Column/HapticsRow" unique_id=979821819]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+button_pressed = true
+text = "開"
+
+[node name="QualityRow" type="HBoxContainer" parent="Column" unique_id=327467460]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="Column/QualityRow" unique_id=810670177]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 28
+text = "畫質"
+
+[node name="QualityChoices" type="HBoxContainer" parent="Column/QualityRow" unique_id=526544413]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="Choice_0" type="Button" parent="Column/QualityRow/QualityChoices" unique_id=636102431]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+toggle_mode = true
+text = "省電"
+
+[node name="Choice_1" type="Button" parent="Column/QualityRow/QualityChoices" unique_id=1958216418]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+toggle_mode = true
+button_pressed = true
+text = "標準"
+
+[node name="Choice_2" type="Button" parent="Column/QualityRow/QualityChoices" unique_id=836190244]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+toggle_mode = true
+text = "高"
+
+[node name="FpsRow" type="HBoxContainer" parent="Column" unique_id=174345589]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="Column/FpsRow" unique_id=1226095940]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9254902, 0.9019608, 0.8627451, 1)
+theme_override_font_sizes/font_size = 28
+text = "幀率"
+
+[node name="FpsChoices" type="HBoxContainer" parent="Column/FpsRow" unique_id=1082809579]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="Choice_0" type="Button" parent="Column/FpsRow/FpsChoices" unique_id=1944204616]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+toggle_mode = true
+text = "30"
+
+[node name="Choice_1" type="Button" parent="Column/FpsRow/FpsChoices" unique_id=597685718]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+toggle_mode = true
+button_pressed = true
+text = "60"
+
+[node name="Close" type="Button" parent="Column" unique_id=1132972879]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 84)
+layout_mode = 2
+text = "關閉"

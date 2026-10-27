@@ -1,0 +1,310 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://ui/reference_theme.tres" id="1_snnha"]
+[ext_resource type="Script" path="res://scripts/home.gd" id="2_e42qu"]
+[ext_resource type="PackedScene" path="res://scenes/pages/overview.tscn" id="3_ppa51"]
+[ext_resource type="PackedScene" path="res://scenes/pages/train.tscn" id="4_kc6b6"]
+[ext_resource type="PackedScene" path="res://scenes/pages/backpack.tscn" id="5_jdxxw"]
+[ext_resource type="PackedScene" path="res://scenes/pages/heroes.tscn" id="6_6k6s7"]
+[ext_resource type="PackedScene" path="res://scenes/pages/equipment.tscn" id="7_rqor2"]
+[ext_resource type="PackedScene" path="res://scenes/pages/adventure.tscn" id="8_qmde4"]
+[ext_resource type="PackedScene" path="res://scenes/pages/store.tscn" id="9_wa7t7"]
+[ext_resource type="PackedScene" path="res://scenes/march_arena.tscn" id="10_vysw7"]
+[ext_resource type="PackedScene" path="res://scenes/components/header.tscn" id="11_miq5y"]
+[ext_resource type="PackedScene" path="res://scenes/components/navigation.tscn" id="12_mg211"]
+[ext_resource type="Texture2D" path="res://assets/atlas/notification.tres" id="13_sh163"]
+[ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Bold.otf" id="14_okf6m"]
+[ext_resource type="StyleBox" path="res://ui/paper_frame.tres" id="15_6k8sm"]
+[ext_resource type="StyleBox" path="res://ui/paper.tres" id="16_k665q"]
+[ext_resource type="StyleBox" path="res://ui/green.tres" id="17_oku8d"]
+[ext_resource type="StyleBox" path="res://ui/gold.tres" id="18_ri7o4"]
+[ext_resource type="PackedScene" path="res://scenes/settings_panel.tscn" id="19_ucx8p"]
+
+[node name="Home" type="Control" unique_id=1196709444]
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource("1_snnha")
+script = ExtResource("2_e42qu")
+
+[node name="Backdrop" type="ColorRect" parent="." unique_id=1205936388]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.15294118, 0.1882353, 0.2901961, 1)
+
+[node name="Pages" type="Control" parent="." unique_id=2060208962]
+unique_name_in_owner = true
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Overview" parent="Pages" unique_id=1932376761 instance=ExtResource("3_ppa51")]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Train" parent="Pages" unique_id=341858121 instance=ExtResource("4_kc6b6")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Backpack" parent="Pages" unique_id=247185443 instance=ExtResource("5_jdxxw")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Heroes" parent="Pages" unique_id=1165690121 instance=ExtResource("6_6k6s7")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Equipment" parent="Pages" unique_id=952000875 instance=ExtResource("7_rqor2")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Adventure" parent="Pages" unique_id=195391531 instance=ExtResource("8_qmde4")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Store" parent="Pages" unique_id=236980738 instance=ExtResource("9_wa7t7")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="MarchArena" parent="." unique_id=387612959 instance=ExtResource("10_vysw7")]
+unique_name_in_owner = true
+position = Vector2(0, 470)
+
+[node name="Header" parent="." unique_id=1146526086 instance=ExtResource("11_miq5y")]
+unique_name_in_owner = true
+layout_mode = 0
+
+[node name="Navigation" parent="." unique_id=1533503802 instance=ExtResource("12_mg211")]
+unique_name_in_owner = true
+layout_mode = 0
+offset_top = 1536.0
+offset_right = 941.0
+offset_bottom = 1658.0
+
+[node name="NavDots" type="Control" parent="." unique_id=1474702840]
+unique_name_in_owner = true
+anchors_preset = 0
+mouse_filter = 2
+
+[node name="Dot0" type="TextureRect" parent="NavDots" unique_id=1784689332]
+visible = false
+layout_mode = 0
+offset_left = 121.0
+offset_top = 1530.0
+offset_right = 155.0
+offset_bottom = 1564.0
+mouse_filter = 2
+texture = ExtResource("13_sh163")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Dot1" type="TextureRect" parent="NavDots" unique_id=1625585603]
+visible = false
+layout_mode = 0
+offset_left = 274.0
+offset_top = 1530.0
+offset_right = 308.0
+offset_bottom = 1564.0
+mouse_filter = 2
+texture = ExtResource("13_sh163")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Dot2" type="TextureRect" parent="NavDots" unique_id=84754956]
+visible = false
+layout_mode = 0
+offset_left = 427.0
+offset_top = 1530.0
+offset_right = 461.0
+offset_bottom = 1564.0
+mouse_filter = 2
+texture = ExtResource("13_sh163")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Dot3" type="TextureRect" parent="NavDots" unique_id=1806469822]
+visible = false
+layout_mode = 0
+offset_left = 580.0
+offset_top = 1530.0
+offset_right = 614.0
+offset_bottom = 1564.0
+mouse_filter = 2
+texture = ExtResource("13_sh163")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Dot4" type="TextureRect" parent="NavDots" unique_id=1659960062]
+visible = false
+layout_mode = 0
+offset_left = 733.0
+offset_top = 1530.0
+offset_right = 767.0
+offset_bottom = 1564.0
+mouse_filter = 2
+texture = ExtResource("13_sh163")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Dot5" type="TextureRect" parent="NavDots" unique_id=141832349]
+visible = false
+layout_mode = 0
+offset_left = 886.0
+offset_top = 1530.0
+offset_right = 920.0
+offset_bottom = 1564.0
+mouse_filter = 2
+texture = ExtResource("13_sh163")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Toast" type="Label" parent="." unique_id=2080637440]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 40.0
+offset_top = 1440.0
+offset_right = 901.0
+offset_bottom = 1520.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.11372549, 0.14117648, 0.2, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("14_okf6m")
+theme_override_font_sizes/font_size = 28
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Dialog" type="ColorRect" parent="." unique_id=287306109]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.55)
+
+[node name="DialogPanel" type="Panel" parent="Dialog" unique_id=318900339]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 60.0
+offset_top = 360.0
+offset_right = 881.0
+offset_bottom = 1220.0
+theme_override_styles/panel = ExtResource("15_6k8sm")
+
+[node name="DialogFill" type="Panel" parent="Dialog/DialogPanel" unique_id=314695311]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 18.0
+offset_top = 18.0
+offset_right = -18.0
+offset_bottom = -18.0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("16_k665q")
+
+[node name="DialogTitle" type="Label" parent="Dialog/DialogPanel" unique_id=1142854185]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 40.0
+offset_top = 36.0
+offset_right = 781.0
+offset_bottom = 96.0
+theme_override_colors/font_color = Color(0.2901961, 0.20392157, 0.14117648, 1)
+theme_override_fonts/font = ExtResource("14_okf6m")
+theme_override_font_sizes/font_size = 40
+horizontal_alignment = 1
+
+[node name="DialogScroll" type="ScrollContainer" parent="Dialog/DialogPanel" unique_id=1157789945]
+layout_mode = 0
+offset_left = 56.0
+offset_top = 112.0
+offset_right = 765.0
+offset_bottom = 692.0
+horizontal_scroll_mode = 0
+
+[node name="DialogBody" type="Label" parent="Dialog/DialogPanel/DialogScroll" unique_id=1002618211]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.2901961, 0.20392157, 0.14117648, 1)
+theme_override_font_sizes/font_size = 28
+autowrap_mode = 3
+
+[node name="DialogOk" type="Button" parent="Dialog/DialogPanel" unique_id=878737157]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 441.0
+offset_top = 724.0
+offset_right = 761.0
+offset_bottom = 816.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
+theme_override_fonts/font = ExtResource("14_okf6m")
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = ExtResource("17_oku8d")
+theme_override_styles/pressed = ExtResource("17_oku8d")
+theme_override_styles/hover = ExtResource("17_oku8d")
+theme_override_styles/disabled = ExtResource("17_oku8d")
+theme_override_styles/focus = ExtResource("17_oku8d")
+text = "好"
+
+[node name="DialogAlt" type="Button" parent="Dialog/DialogPanel" unique_id=1565283263]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 60.0
+offset_top = 724.0
+offset_right = 420.0
+offset_bottom = 816.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
+theme_override_fonts/font = ExtResource("14_okf6m")
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = ExtResource("18_ri7o4")
+theme_override_styles/pressed = ExtResource("18_ri7o4")
+theme_override_styles/hover = ExtResource("18_ri7o4")
+theme_override_styles/disabled = ExtResource("18_ri7o4")
+theme_override_styles/focus = ExtResource("18_ri7o4")
+text = "看廣告 金幣 ×2"
+
+[node name="SettingsOverlay" type="ColorRect" parent="." unique_id=612445024]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.55)
+
+[node name="SettingsPanel" parent="SettingsOverlay" unique_id=2097904909 instance=ExtResource("19_ucx8p")]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 110.0
+offset_top = 420.0
+offset_right = 831.0
+offset_bottom = 1180.0

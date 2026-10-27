@@ -35,6 +35,14 @@
 | [`refine_ladder.gd`](addons/proto_kit/refine_ladder.gd) | 裝備精煉 +0～+12：各段寶石與成功率、失敗保留／退級／消失、成功率加成、保險道具、期望成本試算 | **尚未採用**（同上） |
 | [`pet_care.gd`](addons/proto_kit/pet_care.gd) | 寵物養成：飢餓與想吃的食物、依售價給經驗、+0～+9 與 7 階、進化配方與稀有、餓到跑掉、城鎮暫停 | **尚未採用**（同上） |
 | [`ui/`](addons/proto_kit/ui/)（`ui_theme.gd`、`ui_styles.json`、`themes/*.tres`、`layouts/*.tscn`） | 3 組純色 UI 樣式（暗黑哥德／像素金框／森林藤蔓）與 8 個手機直式版型 scene：放置分割面板、分頁彈窗、升級三選一、設定列、任務列、ARPG HUD、結算報表、肖像對話框 | **尚未採用**（同上；樣式與版型說明見[UI 樣式與版型目錄](../../research/genre-scan/2026-10-25/ui-style-catalog.md)） |
+| HD-2D 場景組：[`hd2d_stage.gd`](addons/proto_kit/hd2d_stage.gd)、[`hd2d_look.gd`](addons/proto_kit/hd2d_look.gd)、[`pixel_card3d.gd`](addons/proto_kit/pixel_card3d.gd)、[`shot_camera.gd`](addons/proto_kit/shot_camera.gd)＋[`camera_shot.gd`](addons/proto_kit/camera_shot.gd)、[`ground_decal.gdshader`](addons/proto_kit/ground_decal.gdshader)、[`pixel_vfx3d.gd`](addons/proto_kit/pixel_vfx3d.gd)、[`hd2d_demo.gd`](addons/proto_kit/hd2d_demo.gd)／[`hd2d_gallery.gd`](addons/proto_kit/hd2d_gallery.gd) | 八方旅人／RO 式的立體透視模型場景：角色依附近的光染色、霧與景深的外觀預設、立著投影的像素圖卡、固定構圖的運鏡、地面預警、3D 像素特效；做法寫在 skill `hd2d-diorama` | hero-horde-idle（2026-10-23 抽出，改用前後 22 張固定種子截圖逐位元組相同）。**只有一個原型用**：使用者要求抽出 |
+| 放置橫向捲軸：[`march_strip.gd`](addons/proto_kit/march_strip.gd)＋[`parallax_layer.gdshader`](addons/proto_kit/parallax_layer.gdshader) | 隊伍自己往前走、遇怪、停下來打、怪倒下、繼續走；遠景、道具、地面各自的捲動速度與傷害數字 | hero-horde-idle 的行軍畫面；taskbar-hero（`scripts/wave_arena.gd`、`shaders/battle_parallax.gdshader`）與 erwin-run 各有一份捲動，尚未改用 |
+| [`scene_builder.gd`](addons/proto_kit/scene_builder.gd) 的 `open_scene`、`put` | 用腳本修改**已存在**的 scene（像編輯器那樣打開、換掉或插入一個節點、存回去），可以重跑 | hero-horde-idle（`tools/style_dialogs.gd`、`restyle_result.gd`）；debt-commission 的 `tools/add_*` 各寫了一份同樣的開檔，已套用過，沒有回頭改 |
+| [`nine_slice.gd`](addons/proto_kit/nine_slice.gd) | 用一張小 PNG 框住任意大小的按鈕與對話框（9-slice `StyleBoxTexture`），按鈕五種狀態一次設好、按下內容下沉 | hero-horde-idle（`tools/style_theme.gd`）；debt-commission、survivor-series、taskbar-hero 各自手寫 `texture_margin_*`，尚未改用 |
+| [`screenshot.gd`](addons/proto_kit/screenshot.gd) | 截圖工具：存成 `<寬>x<高>_<名稱>.png`、輸出資料夾取第一個 `--` 參數、headless 時明講而不是存空圖 | hero-horde-idle 的三支 `tools/capture_*.gd`；erwin-run、survivor-series、taskbar-hero、luffy-marineford 的截圖腳本各寫一份，尚未改用 |
+| [`scene_router.gd`](addons/proto_kit/scene_router.gd) | 換畫面：淡出、換 scene、淡入，順便交值給下一個畫面（`go(path, hand)`／`take(key, 預設)`），換的途中擋住點擊與第二次換頁 | hero-horde-idle（`scripts/app.gd`）。**只有一個原型用**：使用者要求抽出（2026-10-23） |
+| [`store_front.gd`](addons/proto_kit/store_front.gd) | 內購與獎勵廣告的介面，內建測試商店（不收錢、非消耗品記在檔案裡可恢復購買、廣告卡片用遊戲時間倒數）；換真的 SDK 不用改畫面 | hero-horde-idle（`scripts/store.gd`）。**只有一個原型用**：同上 |
+| [`gacha.gd`](addons/proto_kit/gacha.gd) | 抽卡：機率、保底、限時角色占比，亂數用遊戲自己的串流（存檔重開不會重抽） | hero-horde-idle（`domain/progression.gd`）。**只有一個原型用**：同上 |
 
 GDScript、Godot 4.7。只用於 `prototypes/`，不接進 `publish.sh`（見 [ADR 0001](../docs/adr/0001-prototypes-live-in-godogen.md)）。
 
@@ -505,6 +513,115 @@ var issues := SpriteCheck.check_sheet(load("res://resources/sheets/leader.tres")
 - `refine_ladder.gd` 的預設梯子照希望 Online：水晶 100%、紅寶石 70/60/50% 失敗只損失寶石、鑽石失敗退級或消失。維基沒寫鑽石和粉紅鑽石的成功率，那幾段是暫定值；用 `expected_stones()` 試算平衡。
 - `pet_care.gd` 的經驗表與餵食公式照希望 Online 維基；進化配方、類型屬性、稀有加成由遊戲自己給。
 
+## scene_builder.gd 的 open_scene、put：修改已存在的 scene
+
+產生器建新 scene；已經存在、可能被人在編輯器裡調過的 scene，要用「打開、只改一處、存回去」的修補腳本。打開的方式要和編輯器一樣，否則會出錯：
+
+- 用 `GEN_EDIT_STATE_MAIN` 實例化：子 scene 的實例保持是引用，存回去不會被攤平。
+- 根節點的 `scene_file_path` 要清空：不清的話 `pack()` 會把它存成「繼承自己」的 scene。
+- 存回去時把原本引用的子 scene 列進 `expected_refs`，少了一個就失敗。
+
+```gdscript
+var opened := SceneBuilder.open_scene("res://scenes/hud.tscn")   # {"root": Node, "refs": Array[String]}；檔案壞了 root 是 null
+var column: Node = opened.root.get_node("Result/Panel/Column")
+SceneBuilder.put(column, SceneBuilder.instance(RULE), "Rule", 1)    # 同名節點就地換掉；沒有就插在 index 1
+opened.refs.append(RULE)
+SceneBuilder.save_scene(opened.root, "res://scenes/hud.tscn", {"overwrite": true, "expected_refs": opened.refs})
+```
+
+修補腳本要寫成重跑結果不變（先檢查「已經改過了嗎」），因為重新產生某個 scene 之後要再跑一次。驗證方法：跑之前先備份，重跑後與備份比對，應該逐位元組相同。
+
+## nine_slice.gd：9-slice 框
+
+```gdscript
+const NineSlice = preload("res://addons/proto_kit/nine_slice.gd")
+var theme: Theme = load("res://ui/theme.tres")
+NineSlice.button_states(theme, &"Button", "res://ui/frame/button%s.png", 14, Vector4(20, 8, 20, 8))   # 四邊固定 14 px、內距 (左, 上, 右, 下)
+theme.set_stylebox(&"panel", &"Dialog", NineSlice.box(load("res://ui/frame/dialog.png"), 24, Vector4(34, 26, 34, 30)))
+ResourceSaver.save(theme, "res://ui/theme.tres")
+```
+
+- `button_states` 讀 `button.png`、`button_hover.png`、`button_pressed.png`、`button_disabled.png`，`hover_pressed` 用 pressed 那張；缺的狀態用 normal 那張，連 normal 都沒有就什麼都不設、回 false。按下的兩種狀態內容下沉 `sink`（預設 2 px）。
+- `frame(path)` 先找匯入過的資源，找不到就直接讀 PNG（`user://` 或還沒匯入），所以測試不必先匯入。
+- 從 headless 工具腳本呼叫：載入 theme、只設這幾項、存回去，編輯器裡調過的其他項目保留。像素圖要搭配專案的預設材質過濾 nearest。
+
+## screenshot.gd：截圖
+
+```gdscript
+const Screenshot = preload("res://addons/proto_kit/screenshot.gd")
+var out := Screenshot.out_dir()               # 指令列 -- 後面的第一個參數，否則 user://shots
+Screenshot.save(root, out, "home")            # -> <out>/390x844_home.png，資料夾不存在會建；回傳路徑，失敗回 ""
+```
+
+檔名帶解析度，同一個畫面用不同 `--resolution` 各截一次就能並排比較（16:9 與 19.5:9 手機）。`--headless` 沒有畫面可截，`save` 會 `push_error` 說明並回 ""，不會默默存一張空圖。要開視窗跑：`godot --path . --resolution 390x844 --script res://tools/capture_x.gd -- <輸出資料夾>`。
+
+## scene_router.gd：換畫面與交值
+
+當作 autoload scene 的腳本或腳本的基底。scene 是一個 `layer` 夠高的 `CanvasLayer`，底下放一個填滿畫面、唯一名稱 `%Fade` 的 `ColorRect`（顏色在 scene 裡設）；沒有 `%Fade` 就直接換、不淡入淡出。
+
+```gdscript
+extends "res://addons/proto_kit/scene_router.gd"      # scripts/app.gd：再加遊戲自己的共用狀態（存檔、設定）
+
+App.go("res://scenes/main.tscn", {&"stage": 3})        # 淡出 → 換 scene → 淡入；回傳 false 表示正在換或檔案不存在
+var stage: int = App.take(&"stage", 1)                 # 下一個畫面的 _ready 裡拿；單獨執行（測試）時用預設值
+```
+
+- 淡入淡出用 `PROCESS_MODE_ALWAYS`，換之前先解除暫停，所以暫停選單可以直接 `go()`。
+- 換的途中 `busy()` 為 true：第二次 `go()` 會被忽略，淡出層擋住點擊。換完發出 `screen_changed(path)`。
+- 畫面不要依賴 autoload 才能跑：`take()` 一定給預設值，測試才能直接 `instantiate()` 畫面。
+
+## store_front.gd：內購與獎勵廣告
+
+畫面只呼叫這四個，之後接真的金流與廣告 SDK 時不用改畫面：
+
+```gdscript
+await Store.buy(id)               # true = 付款成功；遊戲自己發放商品並存檔
+await Store.restore()             # 買過的非消耗品 id（恢復購買，App Store 規定要有）
+await Store.show_ad(place, skip)  # true = 廣告看完；skip = 玩家有免廣告，直接給獎勵
+Store.is_test()                   # 測試商店回 true：賣東西的畫面要標「測試」
+```
+
+遊戲的 `store.gd` 繼承它，在 `_ready` 填 `products`（id → `CONSUMABLE` 或 `NON_CONSUMABLE`）再呼叫 `super()`，並覆寫 `_ad_card_shown`、`_ad_card_tick`、`_ad_card_hidden` 來顯示自己的廣告卡片（卡片是遊戲 scene 裡的節點）。商品名稱、價格、內容留在遊戲自己的資料裡，商店只認 id 與種類。
+
+測試商店：不收錢、`buy()` 立刻成功；非消耗品記在 `test_file`，像商店帳號一樣重開還在；廣告是倒數 `ad_seconds` 秒**遊戲時間**的卡片（暫停時不算），同時只能有一支（`busy`）。測試把 `test_file` 指到別處、`ad_seconds` 設 0。接真的 SDK 時覆寫 `_charge`、`_restore_ids`、`_play_ad` 與 `is_test`。
+
+## gacha.gd：抽卡
+
+```gdscript
+const Gacha = preload("res://addons/proto_kit/gacha.gd")
+var tier := Gacha.tier(rng, RATES, pity >= PITY)       # RATES = [55, 30, 12, 3]（N、R、SR、SSR 的百分比）；保底時直接最高級、不抽亂數
+var top := RATES.size() - 1
+pity = 0 if tier == top else pity + 1
+var unit := Gacha.pick(rng, pools[tier], featured if tier == top else -1, 0.5)   # 限時角色占該級的 50%，其餘平分
+```
+
+- 只是純函式：保底計數、角色池、亂數串流都由遊戲保管，亂數狀態跟著進度一起存，重開不會重抽。
+- 用遊戲自己的 `RandomNumberGenerator`，不要用全域 `randf()`。共用同一個串流的話，其他系統一抽，每一抽都會跟著移動，固定種子的測試與平衡量測也會跟著變。
+- 每抽的亂數順序固定，存了 `rng.state` 就不要改：等級一次 `randi_range`（保底時沒有）→ 有限時角色的等級一次 `randf` → 沒抽中限時角色再一次 `randi_range`。
+- 機率說明頁顯示的數字要直接讀同一個 `RATES`，不要另外寫一份。
+
+## HD-2D 場景組與放置橫向捲軸
+
+怎麼組成一個場景（圖層順序、像素密度、光、鏡頭、預警、捲軸、驗證與坑）寫在 skill `hd2d-diorama`（`skills/hd2d-diorama/`），這裡只列入口：
+
+```gdscript
+extends "res://addons/proto_kit/hd2d_stage.gd"            # 舞台根節點：sprite_light(p)、step_lights(dt)、set_region_light(c)
+army.lighting = stage.sprite_light                         # 像素角色不受光，附近點光加到色調上
+env.environment = Hd2dLook.environment({"fog_depth_begin": 12.0})   # 在產生器裡建、存成 .tres
+var stop: float = camera.play(preload("res://camera/volley.tres"), boss.global_position)   # shot_camera
+fx.burst(at, 30, &"rock", 4.5, 4.0, 4)                      # pixel_vfx3d，每幀 fx.step(game_delta)
+mark.set_instance_shader_parameter(&"fill", warn)          # ground_decal，所有標示共用一個材質
+```
+
+```bash
+# 不開遊戲看整組：只用 kit 模組與程式畫的佔位圖
+godot --path prototypes/godot-kit --rendering-method mobile --resolution 540x960 --script res://addons/proto_kit/hd2d_gallery.gd -- <輸出資料夾>
+```
+
+- 原型原本的 shader 改成 `shader_type`＋`render_mode`＋`#include` kit 的 `.gdshaderinc`，材質與 scene 不用動（hero-horde-idle 的 `fx_ring`、`ground_mark`、`vignette`、`ui_scroll` 就是這樣接的）。
+- `shot_camera.gd` 有自己的震屏（和 `camera_shake.gd` 同樣的 trauma 平方、兩個正弦），讓一支腳本管住鏡頭；跟隨主角的鏡頭不在這組。
+- 景深只有 Mobile 與 Forward+ 有，kit 專案預設 Compatibility，所以 gallery 要加 `--rendering-method mobile`。
+
 ## tools/：字型子集與網頁匯出
 
 開發時在命令列跑的工具，**不會**同步進原型，直接從 kit 執行（路徑相對於 `prototypes/` 的上一層，即 repo 根目錄）。每支都有 `--self-test`（不連網、不需要 Godot），改了要重跑；自我測試都做過「弄壞一處、確認會失敗」。
@@ -583,9 +700,13 @@ var issues := SpriteCheck.check_sheet(load("res://resources/sheets/leader.tres")
 
 **抽出來之後還沒做的（要各原型的擁有者處理）**：debt-commission 的 `tools/fetch_web_templates.py`、`tools/build_web.sh` 改成呼叫 kit 的版本；pixel-monster、seichi-pov、taskbar-hero 套字型子集（各省 9–30 MB）並加 `FontCheck` 測試；pachinko 的 `tools/serve.sh` 對照 `web_probe.mjs` 的「網頁版必須從 localhost 或 HTTPS 開」；pixel-monster `ui/main.gd:449` 的 `Input.vibrate_handheld(35)` 改用 `haptics.gd`（要有偵測，網頁版才不會每次呼叫都讓瀏覽器 `console.warn`）；pachinko `scripts/presentation.gd`、pixel-monster `ui/sound.gd`、debt-commission `main.gd`／`scripts/stage_effects.gd` 的音效管理改用 `sfx_bank.gd`（各寫一個繼承它的小腳本、填自己的合成音表，就有檔案優先、同時一個、長音效截斷）。這些原型目前都有未提交的修改，`./sync.sh --check` 對它們全部報 drift（debt-commission、pachinko、pixel-monster、seichi-pov、taskbar-hero），所以這一輪只對 sugarcane-tanks 跑了 `sync.sh`；別一次 `./sync.sh` 全部同步，會把新模組混進別人未完成的變更。
 
+**hero-horde-idle（2026-10-23）看過、沒有抽的**：`domain/settings.gd`（音量、震動、畫質＝3D 渲染比例、幀率；每款遊戲的設定項目不同，`scaling_3d_scale` 與 `Engine.max_fps` 的寫法記在它的檔頭）、`tools/make_ui_frames.py`（程式畫的像素 9-slice 框，配色寫死）、`tools/perf_probe.gd`（量幀時間與 draw call，依賴這款的 `main.tscn`）、離線收益的計時（`progression.gd` 的 `march_hours`）。等第二個原型需要時再抽。
+
+**2.5D 存活類（madara-survivor、luffy-marineford、horde-25d）重複但沒抽的**（2026-10-23 量的 diff 行數；luffy 幾乎是 madara 的複本）：`damage_numbers.gd` 三份完全相同、`glow_pool.gd`（madara＝luffy，horde 差 7 行）、`gems.gd`（差 0／6 行）、`fx.gd`＋`fx_shapes.gdshaderinc`（madara＝luffy 差 6 行）、`ground_ring`／`ground_cone.gdshader`（madara＝luffy）、`touch_stick`／`touch_button.gd`（madara＝luffy）、跟隨鏡頭 `camera_rig.gd`（horde 差 19 行、luffy 多了 preset、借鏡頭、外框等 152 行）。這三個原型都有未提交的修改、`sync.sh --check` 報 drift，抽出來卻不能改用就沒有意義，等要做下一款存活類時再抽。地面 shader 每款不同（沙漠、草地、競技場），不共用。
+
 **目前只有一個原型用，也還沒抽出來**：`juice.gd` 的三級回饋對照表（哪個事件算哪一級是這款遊戲的調校）、升級選卡面板與選卡鎖、`hero_stats.gd` 的能力疊加、敵人基底（依賴 `game.show_damage` 等介面）、載入畫面與製作名單面板的**畫面本身**（只有 `scene_loader.gd` 的邏輯抽出來了）、射線步進投射物（核心只有 8 行 `intersect_ray`，其餘是這款遊戲的碰撞規則）、`balance_run`（決定性的機器人平衡量測，依賴這款遊戲的 `main.gd`）。erwin-run（2026-10-14）又多了三個：**手機方向鎖**（`screens.tscn` 的 `%Portrait` 遮罩、`portrait_changed` 訊號、玩到一半轉直就暫停，加上 `main.gd` 的 `_phone_fullscreen()` 在第一次點擊時請求全螢幕並鎖橫向；任何只能橫玩或只能直玩的網頁原型都用得到）、**Parallax 收尾**（`main.gd` 的 `_ruins_leave()`：讓重複的圖層在不跳格的情況下捲出畫面，換上尾端收尾的圖）、**橫式手機的瀏覽器驗證**（`tools/web_landscape.mjs`，可以併進 `web_probe.mjs` 當 `--landscape`）。等第二個原型需要時再抽。
 
-沿用 sugarcane-tanks 做完整條流程的經驗見 skill `godot-prototype-to-itch`（原始檔在 `skills/godot-prototype-to-itch/`）。角色原畫到動畫 sprite（Claude 挑圖、Codex 生圖、沒有影片 API 時手動生影片）見 skill `character-sprite-forge`（`skills/character-sprite-forge/`）。像素打擊特效見 skill `pixel-vfx`（`skills/pixel-vfx/`）。2D 角色圖立在 3D 世界（pokebonk.com／仙境傳說式 billboard、8 方向、MultiMesh 大軍）的共用規格見 skill `sprite-actors-3d`（`skills/sprite-actors-3d/`）。四個 skill 用 `./install_skills.sh` 複製進 `~/.claude/skills/`（見下方「維護」）。
+沿用 sugarcane-tanks 做完整條流程的經驗見 skill `godot-prototype-to-itch`（原始檔在 `skills/godot-prototype-to-itch/`）。角色原畫到動畫 sprite（Claude 挑圖、Codex 生圖、沒有影片 API 時手動生影片）見 skill `character-sprite-forge`（`skills/character-sprite-forge/`）。像素打擊特效見 skill `pixel-vfx`（`skills/pixel-vfx/`）。HD-2D 場景與放置橫向捲軸的組法見 skill `hd2d-diorama`（`skills/hd2d-diorama/`）。2D 角色圖立在 3D 世界（pokebonk.com／仙境傳說式 billboard、8 方向、MultiMesh 大軍）的共用規格見 skill `sprite-actors-3d`（`skills/sprite-actors-3d/`）。五個 skill 用 `./install_skills.sh` 複製進 `~/.claude/skills/`（見下方「維護」）。
 
 ## 維護
 

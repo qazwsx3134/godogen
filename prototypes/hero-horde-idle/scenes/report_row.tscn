@@ -1,0 +1,31 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/report_row.gd" id="1_lc3lq"]
+
+[node name="ReportRow" type="HBoxContainer" unique_id=1415309580]
+theme_override_constants/separation = 8
+script = ExtResource("1_lc3lq")
+
+[node name="Rank" type="Label" parent="." unique_id=1394867323]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(22, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.851, 0.698, 0.431, 1)
+theme_override_font_sizes/font_size = 22
+text = "1"
+
+[node name="HeroName" type="Label" parent="." unique_id=1302578955]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.925, 0.902, 0.863, 1)
+theme_override_font_sizes/font_size = 22
+text = "卡琳娜"
+clip_text = true
+
+[node name="Value" type="Label" parent="." unique_id=599894557]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.702, 0.675, 0.616, 1)
+theme_override_font_sizes/font_size = 22
+text = "2.4萬"

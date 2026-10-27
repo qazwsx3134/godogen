@@ -1,0 +1,11 @@
+# flags 回報（路徑相對本資料夾）
+- route：master_still.py --route codex-cli --finish pixel --class prop --facing none；實際 local:codex-cli。各團 frame_a 用 generate、frame_b 用 edit，FIRST 為同團 frame_a/candidate-01.png。
+- melee/：frame_a/candidate-01.png、frame_b/candidate-01.png、frames-contact.png；鮮紅布／白劍盾，green key。
+- ranged/：frame_a/candidate-01.png、frame_b/candidate-01.png、frames-contact.png；亮藍布／白弓杖，magenta key。
+- support/：frame_a/candidate-01.png、frame_b/candidate-01.png、frames-contact.png；金黃布／白色八芒日輪，沿用治療師日輪的環、中央圓盤及放射尖芒輪廓，magenta key。
+- flags-40px.png：三團 frame_a 並排，畫布 288×112，每面旗實際高 96 px；已目視確認紅／藍／金及三種圖案可區分。
+- 對齊：六張均 1024×1024 RGBA，forge pad 以旗桿全長等比統一為 614 px；同團兩格鐵尖像素座標完全相同：melee (510,818)、ranged (486,818)、support (455,818)，無拉伸。
+- 驗證：透明背景、旗桿與燕尾布面完整留邊、無文字、無底座；六張去背 opaque_key_px 及 pad 警告均 0；三張比較圖皆 640×340；edit 的 FIRST 雜湊已核對。
+- 偏差：frame_b 的固定構件有細微像素明暗差異，非僅布面像素改變；整體旗形、圖案、配色與尺寸一致，鐵尖已精確對齊，未追加重骰。
+- 額度／時限／跳過：3 次 generate＋3 次 edit 各一張成功；每筆 --timeout 360，最慢 84.876 秒；無超時、無重試、無跳過，未回報額度不足，剩餘額度未知。
+- 追溯：inputs/ 保留原始輸出、prompt、命令、run.json、pad／去背資料、逐團 delivery-qc.json 與 validation.json；run_generation.py、prepare_delivery.py 為本批製作工具。
