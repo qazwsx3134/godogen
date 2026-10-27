@@ -26,6 +26,11 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
 	super()
+	# `-- --save=<name>` plays on user://<name>.json instead of the player's save (trial runs; on macOS Godot keeps
+	# user:// in ~/Library/Application Support whatever XDG_DATA_HOME says).
+	for arg: String in OS.get_cmdline_user_args():
+		if arg.begins_with("--save="):
+			progress_path = "user://%s.json" % arg.trim_prefix("--save=")
 	settings = Settings.load_from(settings_path)
 	settings.apply()
 

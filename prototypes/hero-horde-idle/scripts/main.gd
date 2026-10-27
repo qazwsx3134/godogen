@@ -90,6 +90,11 @@ var _names: PackedStringArray = PushReport.load_names()
 var _captain_shot_at: float = -INF
 
 
+## The push is laid out at 720 x 1280 (the home screen at Taskbar Hero's 941 x 1672): same aspect, its own scale.
+func _enter_tree() -> void:
+	get_tree().root.content_scale_size = Vector2i(720, 1280)
+
+
 func _ready() -> void:
 	_army.lighting = _stage.sprite_light
 	haptics.clock = func() -> int: return int(_time * 1000.0)
@@ -109,8 +114,8 @@ func _ready() -> void:
 	_hud.next_pressed.connect(func() -> void:
 		stage_n = progress.next_stage()
 		new_push())
-	_hud.grow_pressed.connect(_leave.bind(&"growth"))
-	_hud.camp_pressed.connect(_leave.bind(&"camp"))
+	_hud.grow_pressed.connect(_leave.bind(&"train"))
+	_hud.camp_pressed.connect(_leave.bind(&"overview"))
 	var app: Node = get_node_or_null(^"/root/App")
 	if app != null:
 		stage_n = app.take(&"stage_n", stage_n)
@@ -410,7 +415,8 @@ func _volley(amount: float) -> void:
 func _signature(i: int) -> void:
 	var move: int = sim.sig[i]
 	var line: String = "SSR %s‧%s" % [PushSim.CLASS_NAMES[sim.cls[i]], PushReport.hero_name(_names, i)]
-	_hud.skill_callout(Portraits.face(sim.cls[i]), PushSim.SIG_NAMES[move], line, PushSim.SIG_DESC[move])
+	var face: Texture2D = Portraits.face(sim.cls[i]) if sim.form[i] <= 0 else Portraits.hero_sprite(sim.form[i], sim.cls[i])
+	_hud.skill_callout(face, PushSim.SIG_NAMES[move], line, PushSim.SIG_DESC[move])
 	_pop_name(i, NAME_SSR, PushSim.SIG_NAMES[move])
 	_sfx.play(&"signature")
 	haptics.buzz(1)
@@ -512,7 +518,7 @@ func _show_result(won: bool, detail: String) -> void:
 	var rewards: Dictionary = progress.push_rewards(sim, pushing)
 	progress.save(_save_path())
 	var next: int = progress.next_stage()
-	_hud.show_result(won, detail, report, sim.cls[report.mvp], rewards, Stages.label(next) if won and next > pushing else "")
+	_hud.show_result(won, detail, report, Portraits.row_of(sim.form[report.mvp], sim.cls[report.mvp]), rewards, Stages.label(next) if won and next > pushing else "")
 	stage_n = pushing
 
 

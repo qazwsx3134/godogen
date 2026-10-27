@@ -12,10 +12,26 @@ static func material() -> ShaderMaterial:
 	return MATERIAL
 
 
+## Screens drawn as authored, nearest-filtered (the home screen's Taskbar Hero pages, whose panels are 9-slices of
+## the reference art with the centre left out) put their root in this group; nothing under it gets the material.
+const PLAIN := &"plain_pixels"
+
+
+static func _plain(node: Node) -> bool:
+	var n: Node = node
+	while n != null:
+		if n.is_in_group(PLAIN):
+			return true
+		n = n.get_parent()
+	return false
+
+
 static func apply(node: Node) -> void:
 	if not (node is Button or node is PanelContainer or node is Panel or node is TextureRect or node is TextureButton
 			or node is NinePatchRect):
 		return
 	var item := node as CanvasItem
+	if _plain(node):
+		return
 	if item.material == null and not item.use_parent_material:
 		item.material = material()

@@ -38,9 +38,10 @@ func _init() -> void:
 	for n: int in range(1, Stages.COUNT + 1):
 		_expect(idle[n] - good[n] >= 2 and good[n] <= idle[n] * 0.85,
 			"good is ahead of idle at %s (good %d, idle %d)" % [Stages.label(n), good[n], idle[n]])
-	# 推薦戰力 (Stages.recommended): idle play clears at it, good play below it.
+	# 推薦戰力 (Stages.recommended): idle play clears at it, good play near or below it. Late on good clears a stage a
+	# round, so the power it clears at holds a whole round's growth: up to x1.25.
 	for n: int in range(1, Stages.COUNT + 1):
-		_expect(idle_power[n] >= Stages.recommended(n) * 0.9 and good_power[n] <= Stages.recommended(n) * 1.2,
+		_expect(idle_power[n] >= Stages.recommended(n) * 0.9 and good_power[n] <= Stages.recommended(n) * 1.25,
 			"%s: 推薦 %.2f lies between good (%.2f) and idle (%.2f)" % [Stages.label(n), Stages.recommended(n),
 			good_power[n], idle_power[n]])
 	_finish("STAGE TESTS")

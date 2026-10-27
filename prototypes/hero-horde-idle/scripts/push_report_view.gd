@@ -15,10 +15,11 @@ const READY_CELL := 4
 @onready var _diagnosis: Label = %Diagnosis
 
 
-func show_report(report: Dictionary, hero_class: int) -> void:
+## `sheet_row`: the MVP's row of heroes.png (portraits.gd row_of: form and class).
+func show_report(report: Dictionary, sheet_row: int) -> void:
 	var atlas := AtlasTexture.new()
 	atlas.atlas = load(HEROES_ATLAS)
-	atlas.region = Rect2(READY_CELL * CELL, hero_class * CELL, CELL, CELL)
+	atlas.region = Rect2(READY_CELL * CELL, sheet_row * CELL, CELL, CELL)
 	_portrait.texture = atlas
 	_mvp_name.text = "MVP　%s" % report.mvp_name
 	_mvp_line.text = report.mvp_line

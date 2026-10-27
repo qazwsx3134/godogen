@@ -1,0 +1,500 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Medium.otf" id="1_mf081"]
+[ext_resource type="Script" path="res://scripts/pages/overview_page.gd" id="2_1tcn0"]
+[ext_resource type="Texture2D" path="res://assets/reference/equipment.png" id="2_6x5rv"]
+[ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Bold.otf" id="3_1tcn0"]
+[ext_resource type="Texture2D" path="res://assets/reference/idel.png" id="4_4s711"]
+[ext_resource type="PackedScene" path="res://scenes/components/equipment_bag_card.tscn" id="6_4s711"]
+[ext_resource type="StyleBox" path="res://ui/blue.tres" id="7_ka4at"]
+
+[sub_resource type="Theme" id="Theme_krmap"]
+default_font = ExtResource("1_mf081")
+default_font_size = 26
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1s2ed"]
+atlas = ExtResource("2_6x5rv")
+region = Rect2(0, 100, 941, 260)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ohxes"]
+atlas = ExtResource("2_6x5rv")
+region = Rect2(0, 360, 56, 110)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eosu5"]
+atlas = ExtResource("2_6x5rv")
+region = Rect2(420, 360, 140, 110)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_etb6y"]
+atlas = ExtResource("2_6x5rv")
+region = Rect2(420, 360, 140, 110)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q2ooh"]
+atlas = ExtResource("2_6x5rv")
+region = Rect2(420, 360, 84, 110)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qe4t3"]
+atlas = ExtResource("2_6x5rv")
+region = Rect2(420, 360, 140, 110)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2x0nf"]
+atlas = ExtResource("2_6x5rv")
+region = Rect2(420, 360, 140, 110)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6rfy6"]
+atlas = ExtResource("2_6x5rv")
+region = Rect2(420, 360, 140, 110)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ybx4v"]
+atlas = ExtResource("2_6x5rv")
+region = Rect2(420, 360, 101, 110)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5gu1g"]
+atlas = ExtResource("2_6x5rv")
+region = Rect2(0, 470, 941, 55)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3vn3e"]
+atlas = ExtResource("2_6x5rv")
+region = Rect2(8, 527, 925, 994)
+filter_clip = true
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5td6a"]
+texture = SubResource("AtlasTexture_3vn3e")
+texture_margin_left = 18.0
+texture_margin_top = 18.0
+texture_margin_right = 18.0
+texture_margin_bottom = 18.0
+draw_center = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_njdbk"]
+bg_color = Color(0.91764706, 0.8352941, 0.7411765, 1)
+border_color = Color(1, 1, 1, 0)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wnl7x"]
+bg_color = Color(0.96862745, 0.9098039, 0.8352941, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8, 0.7058824, 0.6039216, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 2
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1p1q2"]
+atlas = ExtResource("4_4s711")
+region = Rect2(19, 10, 97, 90)
+filter_clip = true
+
+[node name="Overview" type="Control" unique_id=1932376761]
+custom_minimum_size = Vector2(941, 1672)
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+theme = SubResource("Theme_krmap")
+script = ExtResource("2_1tcn0")
+metadata/page_id = "overview"
+
+[node name="DistantLandscape" type="TextureRect" parent="." unique_id=1888316906]
+texture_filter = 1
+layout_mode = 0
+offset_top = 100.0
+offset_right = 941.0
+offset_bottom = 365.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_1s2ed")
+expand_mode = 1
+
+[node name="LowerLandscape0" type="TextureRect" parent="." unique_id=582634087]
+texture_filter = 1
+layout_mode = 0
+offset_top = 360.0
+offset_right = 56.0
+offset_bottom = 470.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_ohxes")
+expand_mode = 1
+
+[node name="LowerPatch0_0" type="TextureRect" parent="." unique_id=1092225767]
+texture_filter = 1
+layout_mode = 0
+offset_left = 56.0
+offset_top = 360.0
+offset_right = 196.0
+offset_bottom = 470.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_eosu5")
+expand_mode = 1
+
+[node name="LowerPatch0_1" type="TextureRect" parent="." unique_id=1055568288]
+texture_filter = 1
+layout_mode = 0
+offset_left = 196.0
+offset_top = 360.0
+offset_right = 336.0
+offset_bottom = 470.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_etb6y")
+expand_mode = 1
+
+[node name="LowerPatch0_2" type="TextureRect" parent="." unique_id=1010210221]
+texture_filter = 1
+layout_mode = 0
+offset_left = 336.0
+offset_top = 360.0
+offset_right = 420.0
+offset_bottom = 470.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_q2ooh")
+expand_mode = 1
+
+[node name="LowerLandscape2" type="TextureRect" parent="." unique_id=1604244618]
+texture_filter = 1
+layout_mode = 0
+offset_left = 420.0
+offset_top = 360.0
+offset_right = 560.0
+offset_bottom = 470.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_qe4t3")
+expand_mode = 1
+
+[node name="LowerPatch2_4" type="TextureRect" parent="." unique_id=1089796175]
+texture_filter = 1
+layout_mode = 0
+offset_left = 560.0
+offset_top = 360.0
+offset_right = 700.0
+offset_bottom = 470.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_2x0nf")
+expand_mode = 1
+
+[node name="LowerPatch2_5" type="TextureRect" parent="." unique_id=626166190]
+texture_filter = 1
+layout_mode = 0
+offset_left = 700.0
+offset_top = 360.0
+offset_right = 840.0
+offset_bottom = 470.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_6rfy6")
+expand_mode = 1
+
+[node name="LowerPatch2_6" type="TextureRect" parent="." unique_id=1954460689]
+texture_filter = 1
+layout_mode = 0
+offset_left = 840.0
+offset_top = 360.0
+offset_right = 941.0
+offset_bottom = 470.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_ybx4v")
+expand_mode = 1
+
+[node name="Ground" type="TextureRect" parent="." unique_id=1433886506]
+texture_filter = 1
+layout_mode = 0
+offset_top = 470.0
+offset_right = 941.0
+offset_bottom = 525.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_5gu1g")
+expand_mode = 1
+
+[node name="BattleSocket" type="Node2D" parent="." unique_id=579020456]
+unique_name_in_owner = true
+position = Vector2(0, 470)
+
+[node name="ContentPanel" type="Panel" parent="." unique_id=418883368]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 525.0
+offset_right = 933.0
+offset_bottom = 1520.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_5td6a")
+
+[node name="PaperFill" type="Panel" parent="ContentPanel" unique_id=1472637538]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 18.0
+offset_top = 18.0
+offset_right = -18.0
+offset_bottom = -18.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_njdbk")
+
+[node name="PageTitle" type="Label" parent="." unique_id=1830695865]
+layout_mode = 0
+offset_left = 31.0
+offset_top = 538.0
+offset_right = 506.0
+offset_bottom = 604.0
+theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("3_1tcn0")
+theme_override_font_sizes/font_size = 42
+text = "遠征總覽"
+vertical_alignment = 1
+
+[node name="MarchStatus" type="Label" parent="." unique_id=1830117254]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 34.0
+offset_top = 601.0
+offset_right = 907.0
+offset_bottom = 643.0
+theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("3_1tcn0")
+theme_override_font_sizes/font_size = 25
+text = "遠征進行中"
+vertical_alignment = 1
+
+[node name="HeroSummaryFrame" type="Panel" parent="." unique_id=1281270159]
+layout_mode = 0
+offset_left = 27.0
+offset_top = 650.0
+offset_right = 913.0
+offset_bottom = 950.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_wnl7x")
+
+[node name="LeaderPortrait" type="TextureRect" parent="." unique_id=765174406]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 44.0
+offset_top = 664.0
+offset_right = 164.0
+offset_bottom = 784.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_1p1q2")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LeaderName" type="Label" parent="." unique_id=371199480]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 180.0
+offset_top = 664.0
+offset_right = 895.0
+offset_bottom = 708.0
+theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("3_1tcn0")
+theme_override_font_sizes/font_size = 28
+text = "主角與遠征夥伴"
+vertical_alignment = 1
+
+[node name="SquadLine" type="Label" parent="." unique_id=1710707022]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 180.0
+offset_top = 714.0
+offset_right = 895.0
+offset_bottom = 784.0
+theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 23
+text = "擊倒 0 隻　·　金幣 0"
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="LogFrame" type="Panel" parent="." unique_id=1458367188]
+layout_mode = 0
+offset_left = 27.0
+offset_top = 1226.0
+offset_right = 913.0
+offset_bottom = 1506.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_wnl7x")
+
+[node name="LogTitle" type="Label" parent="." unique_id=530493529]
+layout_mode = 0
+offset_left = 46.0
+offset_top = 1234.0
+offset_right = 884.0
+offset_bottom = 1276.0
+theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("3_1tcn0")
+theme_override_font_sizes/font_size = 27
+text = "戰鬥紀錄"
+vertical_alignment = 1
+
+[node name="CombatLogScroll" type="ScrollContainer" parent="." unique_id=10607504]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 44.0
+offset_top = 1280.0
+offset_right = 889.0
+offset_bottom = 1494.0
+horizontal_scroll_mode = 0
+
+[node name="CombatLog" type="Label" parent="CombatLogScroll" unique_id=2060156022]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 22
+text = "小隊出發了。"
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="SquadRow" type="HBoxContainer" parent="." unique_id=726984842]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 44.0
+offset_top = 796.0
+offset_right = 899.0
+offset_bottom = 872.0
+theme_override_constants/separation = 14
+
+[node name="SquadCard0" parent="SquadRow" unique_id=428669624 instance=ExtResource("6_4s711")]
+layout_mode = 2
+
+[node name="SquadCard1" parent="SquadRow" unique_id=133240266 instance=ExtResource("6_4s711")]
+layout_mode = 2
+
+[node name="SquadCard2" parent="SquadRow" unique_id=217611317 instance=ExtResource("6_4s711")]
+layout_mode = 2
+
+[node name="SquadCard3" parent="SquadRow" unique_id=854413275 instance=ExtResource("6_4s711")]
+layout_mode = 2
+
+[node name="SquadCard4" parent="SquadRow" unique_id=1846063195 instance=ExtResource("6_4s711")]
+layout_mode = 2
+
+[node name="BondLabel" type="Label" parent="." unique_id=111258398]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 44.0
+offset_top = 884.0
+offset_right = 899.0
+offset_bottom = 944.0
+theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 23
+text = "擊倒 0 隻　·　金幣 0"
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="TodoFrame" type="Panel" parent="." unique_id=1794719569]
+layout_mode = 0
+offset_left = 27.0
+offset_top = 962.0
+offset_right = 913.0
+offset_bottom = 1214.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_wnl7x")
+
+[node name="TodoTitle" type="Label" parent="." unique_id=972969278]
+layout_mode = 0
+offset_left = 46.0
+offset_top = 968.0
+offset_right = 884.0
+offset_bottom = 1010.0
+theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("3_1tcn0")
+theme_override_font_sizes/font_size = 27
+text = "可以做的事"
+vertical_alignment = 1
+
+[node name="TodoList" type="VBoxContainer" parent="." unique_id=871260239]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 44.0
+offset_top = 1014.0
+offset_right = 896.0
+offset_bottom = 1206.0
+theme_override_constants/separation = 8
+
+[node name="Todo0" type="Button" parent="TodoList" unique_id=1601752764]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
+theme_override_fonts/font = ExtResource("3_1tcn0")
+theme_override_font_sizes/font_size = 23
+theme_override_styles/normal = ExtResource("7_ka4at")
+theme_override_styles/pressed = ExtResource("7_ka4at")
+theme_override_styles/hover = ExtResource("7_ka4at")
+theme_override_styles/disabled = ExtResource("7_ka4at")
+theme_override_styles/focus = ExtResource("7_ka4at")
+alignment = 0
+
+[node name="Todo1" type="Button" parent="TodoList" unique_id=1125894569]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
+theme_override_fonts/font = ExtResource("3_1tcn0")
+theme_override_font_sizes/font_size = 23
+theme_override_styles/normal = ExtResource("7_ka4at")
+theme_override_styles/pressed = ExtResource("7_ka4at")
+theme_override_styles/hover = ExtResource("7_ka4at")
+theme_override_styles/disabled = ExtResource("7_ka4at")
+theme_override_styles/focus = ExtResource("7_ka4at")
+alignment = 0
+
+[node name="Todo2" type="Button" parent="TodoList" unique_id=983382633]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
+theme_override_fonts/font = ExtResource("3_1tcn0")
+theme_override_font_sizes/font_size = 23
+theme_override_styles/normal = ExtResource("7_ka4at")
+theme_override_styles/pressed = ExtResource("7_ka4at")
+theme_override_styles/hover = ExtResource("7_ka4at")
+theme_override_styles/disabled = ExtResource("7_ka4at")
+theme_override_styles/focus = ExtResource("7_ka4at")
+alignment = 0
+
+[node name="Todo3" type="Button" parent="TodoList" unique_id=11513091]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
+theme_override_fonts/font = ExtResource("3_1tcn0")
+theme_override_font_sizes/font_size = 23
+theme_override_styles/normal = ExtResource("7_ka4at")
+theme_override_styles/pressed = ExtResource("7_ka4at")
+theme_override_styles/hover = ExtResource("7_ka4at")
+theme_override_styles/disabled = ExtResource("7_ka4at")
+theme_override_styles/focus = ExtResource("7_ka4at")
+alignment = 0

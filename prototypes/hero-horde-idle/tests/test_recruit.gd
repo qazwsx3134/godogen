@@ -3,9 +3,7 @@ extends "res://addons/proto_kit/test_kit.gd"
 ## shows the same table the roll uses, 招募券 pay for pulls (none without them), a pulled hero brings 突破素材, the
 ## 保底 SSR by the PITY-th pull, the banner turns with the day, one 免費單抽 a day, products granted (免廣告 only once),
 ## pulls on their own random stream (shard and loot drops unchanged), everything saved and an older save starting with
-## the opening tickets. Captains boost their 團 by rarity, two adding up. The page (scenes/recruit.tscn): 十連 shows ten
-## results and saves, the buttons follow the tickets, the ad pull, 商店 buy and 恢復購買 through the test Store; it
-## fits a 16:9 screen above the nav bar.
+## the opening tickets. Captains boost their 團 by rarity, two adding up. The store page is tests/test_home.gd.
 ##   godot --headless --path prototypes/hero-horde-idle --script res://tests/test_recruit.gd
 
 const PushSim = preload("res://domain/push_sim.gd")
@@ -26,7 +24,6 @@ func _init() -> void:
 func _run() -> void:
 	_rules()
 	_captains()
-	await _page()
 	_finish("RECRUIT TESTS")
 
 
@@ -139,60 +136,3 @@ func _first(p: RefCounted, c: int, r: int) -> int:
 		if Progression.base_class(i) == c and p.rarity(i) == r:
 			return i
 	return -1
-
-
-func _page() -> void:
-	root.size = Vector2i(720, 1280)
-	DirAccess.remove_absolute(SAVE_TEST)
-	DirAccess.remove_absolute(STORE_TEST)
-	var store: Node = root.get_node_or_null(^"Store")
-	_expect(store != null, "the Store autoload is there")
-	store.test_file = STORE_TEST
-	store.ad_seconds = 0.0
-	var p := Progression.new(7)
-	var page: Control = load("res://scenes/recruit.tscn").instantiate()
-	page.progress = p
-	page.save_path = SAVE_TEST
-	page.clock = func() -> int: return T0
-	page.offset_bottom = -NAV_H
-	root.add_child(page)
-	await _frames(3)
-	var ten: Button = page.find_child("Ten", true, false)
-	var single: Button = page.find_child("Single", true, false)
-	_expect(ten.get_global_rect().end.y <= 1280 - NAV_H + 1, "十連 sits above the nav bar (%s)" % ten.get_global_rect())
-	_expect(page.find_child("BannerName", true, false).text != "" and not ten.disabled, "the banner and an open 十連")
-	_expect(page.find_child("RatesText", true, false).text == "\n".join(Recruit.rates_lines()), "機率說明 is the rolled table")
-
-	await _press(ten)
-	var results: Control = page.find_child("ResultsOverlay", true, false)
-	var shown: Array = page.find_child("ResultCards", true, false).get_children().filter(func(c: Node) -> bool: return c.visible)
-	_expect(results.visible and shown.size() == 10 and page.last.size() == 10, "十連 shows ten results")
-	_expect(Progression.load_from(SAVE_TEST).pulls == 10, "the pulls are saved")
-	_expect(ten.disabled and single.disabled, "no tickets left: both buttons off")
-	await _press(page.find_child("ResultsClose", true, false))
-
-	var ad: Button = page.find_child("AdPull", true, false)
-	await _press(ad)
-	await _frames(2)
-	_expect(page.last.size() == 1 and p.pulls == 11 and ad.disabled, "看廣告 gives today's 免費單抽, once")
-	await _press(page.find_child("ResultsClose", true, false))
-
-	await _press(page.find_child("ShopButton", true, false))
-	_expect(page.find_child("ShopNote", true, false).visible, "the shop says it is a test store")
-	var rows: Node = page.find_child("Products", true, false)
-	await _press(rows.get_child(0).get_node(^"Buy"))
-	await _frames(2)
-	_expect(p.tickets == 10 and not single.disabled, "buying 招募券 ×10 opens the pulls again")
-	var no_ads: Button = rows.get_child(2).get_node(^"Buy")
-	await _press(no_ads)
-	await _frames(2)
-	_expect(p.owns("no_ads") and no_ads.disabled, "免廣告 bought, its button off")
-	var fresh := Progression.new(7)
-	page.progress = fresh
-	await _press(page.find_child("Restore", true, false))
-	await _frames(2)
-	_expect(fresh.owns("no_ads"), "恢復購買 brings 免廣告 back on a new save")
-
-	page.queue_free()
-	DirAccess.remove_absolute(SAVE_TEST)
-	DirAccess.remove_absolute(STORE_TEST)

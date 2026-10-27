@@ -192,9 +192,9 @@ func _run() -> void:
 	_expect(panel.get_global_rect().position.x >= 0 and panel.get_global_rect().end.x <= 720
 		and panel.get_global_rect().end.y <= 1280, "the result fits a 16:9 screen (%s)" % panel.get_global_rect())
 	_expect((hud.find_child("GoGrow", true, false) as Button).theme_type_variation == &"PrimaryButton",
-		"after a loss 前往養成 is the main action")
+		"after a loss 去訓練 is the main action")
 	_expect(FileAccess.file_exists(SAVE_TEST), "the progress is saved after the push")
-	_expect((hud.find_child("GoGrow", true, false) as Button).visible, "the result offers 前往養成")
+	_expect((hud.find_child("GoGrow", true, false) as Button).visible, "the result offers 去訓練")
 	_expect(not horns.visible and not callout.visible, "part buttons and the callout hide on the result")
 	await _press(hud.find_child("Retry", true, false))
 	_expect(main.sim != sim and main.sim.phase == PushSim.Phase.MUSTER, "retry starts a fresh push with a muster")
@@ -235,11 +235,12 @@ func _run() -> void:
 	_finish("MAIN UI TESTS")
 
 
-## Heroes near the push's reference strength (class level 12: about x1.05), so the checks below are not lost to a
+## Heroes near the push's reference strength (劍術 and 耐力 Lv11: about x1.0), so the checks below are not lost to a
 ## first-day roster.
 func _reference_progress() -> RefCounted:
 	var p := Progression.new()
-	p.class_level.fill(12)
+	p.talent[0] = 11
+	p.talent[1] = 11
 	p.captains = PackedInt32Array([CAPTAIN])
 	return p
 

@@ -29,8 +29,32 @@ static var _face_cache: Dictionary = {}
 static var _sprite_cache: Dictionary = {}
 
 
-## The class's ready stance as drawn in the push, cropped to the figure plus one texel for the outline.
+## heroes.png rows per 形態 (domain/heroes.gd): the six class rows of humans, then monsters, then dreamlings.
+const FORM_PREFIX := ["", "monster_", "dream_"]
+
+
+static func row_of(form: int, c: int) -> int:
+	return maxi(form, 0) * FILES.size() + c
+
+
+## A hero's ready stance by form and class (see sprite_row).
+static func hero_sprite(form: int, c: int) -> AtlasTexture:
+	return sprite_row(row_of(form, c))
+
+
+## A hero's large portrait: the class's for humans, the form's placeholder for the others.
+static func hero_full(form: int, c: int) -> Texture2D:
+	if form <= 0:
+		return full(c)
+	return load(DIR + FORM_PREFIX[form] + FILES[c] + ".png")
+
+
 static func sprite(c: int) -> AtlasTexture:
+	return sprite_row(c)
+
+
+## The ready stance of heroes.png row `row` as drawn in the push, cropped to the figure plus one texel for the outline.
+static func sprite_row(c: int) -> AtlasTexture:
 	if _sprite_cache.has(c):
 		return _sprite_cache[c]
 	var sheet: Texture2D = load(HEROES)

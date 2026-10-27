@@ -10,6 +10,8 @@ const PushSim = preload("res://domain/push_sim.gd")
 const Sprite3DSheet = preload("res://addons/proto_kit/sprite3d_sheet.gd")
 const SHEETS := "res://assets/heroes/heroes.json"
 const CLASS_KEYS := ["shield", "sword", "spear", "bow", "mage", "healer"]
+## heroes.json rows per 形態 (domain/heroes.gd): humans are the class keys, the others are "<form>_<class>".
+const FORM_PREFIX := ["", "monster_", "dream_"]
 ## The outline role per rarity: dark for all, so every hero keeps a crisp silhouette and the crowd reads by class tint.
 const RARITY_ROLE := [7, 7, 7, 7]
 ## Class tint hues and strength: shield blue, sword red, spear amber, bow green, mage violet, healer near-white.
@@ -60,8 +62,9 @@ func setup(sim: PushSim, boss_target: Vector3, captains := PackedInt32Array()) -
 	_sim = sim
 	target = boss_target
 	if _sheets.is_empty():
-		for key: String in CLASS_KEYS:
-			_sheets.append(Sprite3DSheet.from_json(SHEETS, key))
+		for prefix: String in FORM_PREFIX:
+			for key: String in CLASS_KEYS:
+				_sheets.append(Sprite3DSheet.from_json(SHEETS, prefix + key))
 		_size = _sheets[0].size_m()
 	var n: int = sim.cls.size()
 	_tick.resize(n)
@@ -81,6 +84,11 @@ func setup(sim: PushSim, boss_target: Vector3, captains := PackedInt32Array()) -
 		if i >= 0 and i < n:
 			_scale[i] = CAPTAIN_SCALE
 	multimesh.instance_count = n
+
+
+## Hero i's row of sheets: their form's (humans for the balance tests' formless roster) and class.
+func sheet_of(i: int) -> int:
+	return maxi(_sim.form[i], 0) * CLASS_KEYS.size() + _sim.cls[i]
 
 
 func volley() -> void:
@@ -136,7 +144,7 @@ func step(dt: float) -> void:
 
 		if lighting.is_valid():
 			color *= lighting.call(at + Vector3(0.0, _size * 0.5, 0.0))
-		var drawn: Vector2i = _sheets[c].cell(anim, 0, int(_tick[i]))
+		var drawn: Vector2i = _sheets[sheet_of(i)].cell(anim, 0, int(_tick[i]))
 		var basis := Basis(Vector3.BACK, spin).scaled(Vector3.ONE * _size * _scale[i])
 		mm.set_instance_transform(i, Transform3D(basis, at))
 		mm.set_instance_custom_data(i, Sprite3DSheet.instance_custom(drawn.x, _flash[i], drawn.y, 0.0))

@@ -18,7 +18,7 @@ func _run() -> void:
 		seed(7)
 		var main: Node = (load("res://scenes/main.tscn") as PackedScene).instantiate()
 		var progress := Progression.new()
-		progress.class_level.fill(12)
+		progress.talent[0] = 11; progress.talent[1] = 11
 		progress.cleared = Stages.COUNT
 		main.progress = progress
 		main.save_path = "user://progress_shots.json"

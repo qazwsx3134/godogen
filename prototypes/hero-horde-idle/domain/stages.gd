@@ -26,7 +26,7 @@ const REGIONS := [
 ## to win (measured: about 0.95 of the reference push at stage 1), scaled like the boss.
 const RECOMMEND := 0.95
 ## First clear of a stage: FIRST_GOLD x reward, FIRST_SHARDS.
-const FIRST_GOLD := 1500.0
+const FIRST_GOLD := 15000.0
 const FIRST_SHARDS := 2
 
 

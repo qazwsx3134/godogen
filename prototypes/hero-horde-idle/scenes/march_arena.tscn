@@ -1,0 +1,54 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/march_arena.gd" id="1_sh8uj"]
+[ext_resource type="PackedScene" path="res://scenes/march_unit.tscn" id="2_sqxi3"]
+[ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Bold.otf" id="3_xm6l0"]
+
+[node name="MarchArena" type="Node2D" unique_id=387612959]
+script = ExtResource("1_sh8uj")
+
+[node name="Heroes" type="Node2D" parent="." unique_id=1559901215]
+unique_name_in_owner = true
+
+[node name="Hero0" parent="Heroes" unique_id=1153296289 instance=ExtResource("2_sqxi3")]
+position = Vector2(360, 0)
+
+[node name="Hero1" parent="Heroes" unique_id=1092501357 instance=ExtResource("2_sqxi3")]
+position = Vector2(324, 0)
+
+[node name="Hero2" parent="Heroes" unique_id=1374964763 instance=ExtResource("2_sqxi3")]
+position = Vector2(136.8, 0)
+
+[node name="Hero3" parent="Heroes" unique_id=1453259776 instance=ExtResource("2_sqxi3")]
+position = Vector2(201.6, 0)
+
+[node name="Hero4" parent="Heroes" unique_id=1617149369 instance=ExtResource("2_sqxi3")]
+position = Vector2(172.8, 0)
+
+[node name="Enemies" type="Node2D" parent="." unique_id=1916133459]
+unique_name_in_owner = true
+
+[node name="Enemy0" parent="Enemies" unique_id=29741307 instance=ExtResource("2_sqxi3")]
+position = Vector2(560, 0)
+appearance = "SlimeVisual"
+
+[node name="Enemy1" parent="Enemies" unique_id=1898382929 instance=ExtResource("2_sqxi3")]
+position = Vector2(670, 0)
+appearance = "SlimeVisual"
+
+[node name="Enemy2" parent="Enemies" unique_id=1199686918 instance=ExtResource("2_sqxi3")]
+position = Vector2(780, 0)
+appearance = "SlimeVisual"
+
+[node name="WaveLabel" type="Label" parent="." unique_id=669605701]
+unique_name_in_owner = true
+offset_left = 20.0
+offset_top = -350.0
+offset_right = 720.0
+offset_bottom = -310.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.11372549, 0.14117648, 0.2, 1)
+theme_override_constants/outline_size = 6
+theme_override_fonts/font = ExtResource("3_xm6l0")
+theme_override_font_sizes/font_size = 26
+text = "1-1 黃昏要塞　行軍中"

@@ -474,7 +474,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"PrimaryButton"
 theme_override_font_sizes/font_size = 26
-text = "前往養成"
+text = "去訓練"
 
 [node name="ResultCamp" type="Button" parent="Root/Result/Center/Panel/PanelBox/MoreButtons" unique_id=1057236115]
 unique_name_in_owner = true
@@ -482,7 +482,7 @@ custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 26
-text = "回營地"
+text = "回總覽"
 
 [node name="PauseMenu" type="Control" parent="Root" unique_id=1328182604]
 unique_name_in_owner = true
@@ -541,7 +541,7 @@ text = "設定"
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 92)
 layout_mode = 2
-text = "撤退回營地（這場不算）"
+text = "撤退回總覽（這場不算）"
 
 [node name="SettingsCenter" type="CenterContainer" parent="Root/PauseMenu" unique_id=1371174446]
 layout_mode = 0

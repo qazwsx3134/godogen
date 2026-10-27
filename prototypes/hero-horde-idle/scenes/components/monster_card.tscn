@@ -1,0 +1,212 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Medium.otf" id="1_j38ih"]
+[ext_resource type="Texture2D" path="res://assets/reference/monster.png" id="2_o7tve"]
+[ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Bold.otf" id="3_wskw0"]
+
+[sub_resource type="Theme" id="Theme_krmap"]
+default_font = ExtResource("1_j38ih")
+default_font_size = 26
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wnl7x"]
+bg_color = Color(0.96862745, 0.9098039, 0.8352941, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8, 0.7058824, 0.6039216, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 2
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rmkxv"]
+atlas = ExtResource("2_o7tve")
+region = Rect2(62, 1297, 176, 119)
+filter_clip = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pwkfr"]
+bg_color = Color(0.25490198, 0.3647059, 0.52156866, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.54901963, 0.627451, 0.7411765, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7r3wi"]
+bg_color = Color(0.17254902, 0.2509804, 0.37254903, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.9529412, 0.84313726, 0.56078434, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dnlsv"]
+bg_color = Color(0.32941177, 0.4509804, 0.6156863, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.9529412, 0.84313726, 0.56078434, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yhv7p"]
+bg_color = Color(0.9019608, 0.8117647, 0.70980394, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.74509805, 0.6509804, 0.54901963, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_30n4r"]
+bg_color = Color(0.9137255, 0.8352941, 0.73333335, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.8745098, 0.6666667, 0.2901961, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gnuvx"]
+bg_color = Color(0.30588236, 0.5882353, 0.38039216, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.7529412, 0.8862745, 0.5568628, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 2
+
+[node name="MonsterCard" type="Control" unique_id=1566501081]
+custom_minimum_size = Vector2(211, 430)
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+theme = SubResource("Theme_krmap")
+
+[node name="Frame" type="Panel" parent="." unique_id=1149458247]
+layout_mode = 0
+offset_right = 211.0
+offset_bottom = 430.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_wnl7x")
+
+[node name="Icon" type="TextureRect" parent="." unique_id=1655747937]
+texture_filter = 1
+layout_mode = 0
+offset_left = 39.0
+offset_top = 18.0
+offset_right = 172.0
+offset_bottom = 136.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_rmkxv")
+expand_mode = 1
+
+[node name="Level" type="Label" parent="." unique_id=1051731439]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 139.0
+offset_right = 203.0
+offset_bottom = 175.0
+theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("3_wskw0")
+theme_override_font_sizes/font_size = 22
+text = "Lv.1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Title" type="Label" parent="." unique_id=624217081]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 173.0
+offset_right = 203.0
+offset_bottom = 215.0
+theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("3_wskw0")
+theme_override_font_sizes/font_size = 27
+text = "怪獸名稱"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Status" type="Label" parent="." unique_id=1922518279]
+layout_mode = 0
+offset_left = 9.0
+offset_top = 214.0
+offset_right = 202.0
+offset_bottom = 246.0
+theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 19
+text = "未部署"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="InspectButton" type="Button" parent="." unique_id=1148184799]
+layout_mode = 0
+offset_left = 13.0
+offset_top = 271.0
+offset_right = 198.0
+offset_bottom = 329.0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
+theme_override_fonts/font = ExtResource("3_wskw0")
+theme_override_font_sizes/font_size = 23
+theme_override_styles/normal = SubResource("StyleBoxFlat_pwkfr")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_7r3wi")
+theme_override_styles/hover = SubResource("StyleBoxFlat_dnlsv")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_yhv7p")
+theme_override_styles/focus = SubResource("StyleBoxFlat_30n4r")
+text = "查看"
+metadata/action = "monster:0"
+
+[node name="DeploymentButton" type="Button" parent="." unique_id=782992697]
+layout_mode = 0
+offset_left = 13.0
+offset_top = 344.0
+offset_right = 198.0
+offset_bottom = 405.0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
+theme_override_fonts/font = ExtResource("3_wskw0")
+theme_override_font_sizes/font_size = 23
+theme_override_styles/normal = SubResource("StyleBoxFlat_gnuvx")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_gnuvx")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gnuvx")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_yhv7p")
+theme_override_styles/focus = SubResource("StyleBoxFlat_30n4r")
+text = "部署"
+metadata/action = "deploy:sprout"

@@ -2,7 +2,7 @@
  "atlas": "heroes.png",
  "cell_px": 48,
  "columns": 9,
- "rows": 6,
+ "rows": 18,
  "foot_px": 2,
  "meters_per_px": 0.025,
  "characters": {
@@ -256,6 +256,522 @@
     },
     "volley": {
      "cell": 53,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    }
+   }
+  },
+  "monster_shield": {
+   "directions": 1,
+   "mirror": false,
+   "anims": {
+    "run": {
+     "cell": 54,
+     "n": 4,
+     "d": [
+      6,
+      6,
+      6,
+      6
+     ],
+     "loop": true
+    },
+    "attack": {
+     "cell": 58,
+     "n": 3,
+     "d": [
+      10,
+      6,
+      14
+     ],
+     "loop": true
+    },
+    "down": {
+     "cell": 61,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    },
+    "volley": {
+     "cell": 62,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    }
+   }
+  },
+  "monster_sword": {
+   "directions": 1,
+   "mirror": false,
+   "anims": {
+    "run": {
+     "cell": 63,
+     "n": 4,
+     "d": [
+      6,
+      6,
+      6,
+      6
+     ],
+     "loop": true
+    },
+    "attack": {
+     "cell": 67,
+     "n": 3,
+     "d": [
+      10,
+      6,
+      14
+     ],
+     "loop": true
+    },
+    "down": {
+     "cell": 70,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    },
+    "volley": {
+     "cell": 71,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    }
+   }
+  },
+  "monster_spear": {
+   "directions": 1,
+   "mirror": false,
+   "anims": {
+    "run": {
+     "cell": 72,
+     "n": 4,
+     "d": [
+      6,
+      6,
+      6,
+      6
+     ],
+     "loop": true
+    },
+    "attack": {
+     "cell": 76,
+     "n": 3,
+     "d": [
+      10,
+      6,
+      14
+     ],
+     "loop": true
+    },
+    "down": {
+     "cell": 79,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    },
+    "volley": {
+     "cell": 80,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    }
+   }
+  },
+  "monster_bow": {
+   "directions": 1,
+   "mirror": false,
+   "anims": {
+    "run": {
+     "cell": 81,
+     "n": 4,
+     "d": [
+      6,
+      6,
+      6,
+      6
+     ],
+     "loop": true
+    },
+    "attack": {
+     "cell": 85,
+     "n": 3,
+     "d": [
+      10,
+      6,
+      14
+     ],
+     "loop": true
+    },
+    "down": {
+     "cell": 88,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    },
+    "volley": {
+     "cell": 89,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    }
+   }
+  },
+  "monster_mage": {
+   "directions": 1,
+   "mirror": false,
+   "anims": {
+    "run": {
+     "cell": 90,
+     "n": 4,
+     "d": [
+      6,
+      6,
+      6,
+      6
+     ],
+     "loop": true
+    },
+    "attack": {
+     "cell": 94,
+     "n": 3,
+     "d": [
+      10,
+      6,
+      14
+     ],
+     "loop": true
+    },
+    "down": {
+     "cell": 97,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    },
+    "volley": {
+     "cell": 98,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    }
+   }
+  },
+  "monster_healer": {
+   "directions": 1,
+   "mirror": false,
+   "anims": {
+    "run": {
+     "cell": 99,
+     "n": 4,
+     "d": [
+      6,
+      6,
+      6,
+      6
+     ],
+     "loop": true
+    },
+    "attack": {
+     "cell": 103,
+     "n": 3,
+     "d": [
+      10,
+      6,
+      14
+     ],
+     "loop": true
+    },
+    "down": {
+     "cell": 106,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    },
+    "volley": {
+     "cell": 107,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    }
+   }
+  },
+  "dream_shield": {
+   "directions": 1,
+   "mirror": false,
+   "anims": {
+    "run": {
+     "cell": 108,
+     "n": 4,
+     "d": [
+      6,
+      6,
+      6,
+      6
+     ],
+     "loop": true
+    },
+    "attack": {
+     "cell": 112,
+     "n": 3,
+     "d": [
+      10,
+      6,
+      14
+     ],
+     "loop": true
+    },
+    "down": {
+     "cell": 115,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    },
+    "volley": {
+     "cell": 116,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    }
+   }
+  },
+  "dream_sword": {
+   "directions": 1,
+   "mirror": false,
+   "anims": {
+    "run": {
+     "cell": 117,
+     "n": 4,
+     "d": [
+      6,
+      6,
+      6,
+      6
+     ],
+     "loop": true
+    },
+    "attack": {
+     "cell": 121,
+     "n": 3,
+     "d": [
+      10,
+      6,
+      14
+     ],
+     "loop": true
+    },
+    "down": {
+     "cell": 124,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    },
+    "volley": {
+     "cell": 125,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    }
+   }
+  },
+  "dream_spear": {
+   "directions": 1,
+   "mirror": false,
+   "anims": {
+    "run": {
+     "cell": 126,
+     "n": 4,
+     "d": [
+      6,
+      6,
+      6,
+      6
+     ],
+     "loop": true
+    },
+    "attack": {
+     "cell": 130,
+     "n": 3,
+     "d": [
+      10,
+      6,
+      14
+     ],
+     "loop": true
+    },
+    "down": {
+     "cell": 133,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    },
+    "volley": {
+     "cell": 134,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    }
+   }
+  },
+  "dream_bow": {
+   "directions": 1,
+   "mirror": false,
+   "anims": {
+    "run": {
+     "cell": 135,
+     "n": 4,
+     "d": [
+      6,
+      6,
+      6,
+      6
+     ],
+     "loop": true
+    },
+    "attack": {
+     "cell": 139,
+     "n": 3,
+     "d": [
+      10,
+      6,
+      14
+     ],
+     "loop": true
+    },
+    "down": {
+     "cell": 142,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    },
+    "volley": {
+     "cell": 143,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    }
+   }
+  },
+  "dream_mage": {
+   "directions": 1,
+   "mirror": false,
+   "anims": {
+    "run": {
+     "cell": 144,
+     "n": 4,
+     "d": [
+      6,
+      6,
+      6,
+      6
+     ],
+     "loop": true
+    },
+    "attack": {
+     "cell": 148,
+     "n": 3,
+     "d": [
+      10,
+      6,
+      14
+     ],
+     "loop": true
+    },
+    "down": {
+     "cell": 151,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    },
+    "volley": {
+     "cell": 152,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    }
+   }
+  },
+  "dream_healer": {
+   "directions": 1,
+   "mirror": false,
+   "anims": {
+    "run": {
+     "cell": 153,
+     "n": 4,
+     "d": [
+      6,
+      6,
+      6,
+      6
+     ],
+     "loop": true
+    },
+    "attack": {
+     "cell": 157,
+     "n": 3,
+     "d": [
+      10,
+      6,
+      14
+     ],
+     "loop": true
+    },
+    "down": {
+     "cell": 160,
+     "n": 1,
+     "d": [
+      60
+     ],
+     "loop": false
+    },
+    "volley": {
+     "cell": 161,
      "n": 1,
      "d": [
       60

@@ -1,0 +1,8 @@
+[gd_resource type="AtlasTexture" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/reference/monster.png" id="1_bpo23"]
+
+[resource]
+atlas = ExtResource("1_bpo23")
+region = Rect2(719, 1297, 167, 118)
+filter_clip = true

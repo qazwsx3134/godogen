@@ -1,10 +1,10 @@
 # 全員推王（hero-horde-idle）
 
-手機直式放置遊戲：平時派精英小隊行軍刷寶，挑戰時把招募到的所有英雄一起送上場圍攻關卡王。用語見 [CONTEXT.md](CONTEXT.md)。
+手機直式放置遊戲：平時派精英小隊行軍刷寶，挑戰時把招募到的所有英雄一起送上場圍攻關卡王。用語見 [CONTEXT.md](CONTEXT.md)。融合了遠征紀事（`prototypes/taskbar-hero`）與夢靈遠行（`prototypes/dreamling-idle`）的放置與養成，設計見 [docs/FUSION.md](docs/FUSION.md)。
 
-狀態：**暫停中（2026-10-23，作者去做另一個專案）。目前進度、等作者決定的事、要成為商業級還缺什麼，見 [docs/PROGRESS.md](docs/PROGRESS.md)。**
+狀態：**v3.0 融合版做好，等作者試玩（2026-10-27，分支 `fusion-idle`）。目前進度、等作者決定的事、要成為商業級還缺什麼，見 [docs/PROGRESS.md](docs/PROGRESS.md)。**
 
-版本紀錄：**v2.5 前幾關變簡單（作者在 1-1 連王的血都打不到 80% 以下：1-1 到 2-1 的王打七折到五折，像人一樣操作第一場就能過）、離線戰報、行軍收穫與推王結算改成獎勵列表（結算面板在 16:9 手機也放得下）、設定加畫質（3D 解析度 省電／標準／高）與幀率（30／60）、按鈕與彈出視窗換成像素風的雙線古銅框（四角缺口與小菱形，標題下有菱形分隔線）；v2.4 招募與商店：nav bar 五格（營地／養成／招募／道具／關卡，加上 Codex 生的圖示），招募頁照作者選的 round3 B（限時卡池、保底、機率說明、單抽／十連、每天一次看廣告免費單抽），商店（招募券、免廣告、恢復購買；目前是測試商店），隊長給所屬團加成，道具頁照 round3 A 加上行軍小隊的專屬飾品列，推王人群不再用彩色外框標稀有度；v2.3 道具：nav bar 加「道具」（裝備／遺物／素材），職業武庫、專屬飾品、遺物、強化石由關卡王與行軍掉落；英雄卡改用背景色表示稀有度（照作者的 hero.PNG）；v2.2 營地：行軍捲軸畫面、待辦、紅點、推薦戰力；v2.1 主畫面底部 nav bar（營地／養成／關卡）與整理過的英雄卡；v2.0 商業版骨架（10 關 3 地區、營地主畫面與關卡列表、設定、暫停、即時行軍與離線戰報、第一場的操作提示）；v1.9 隊長（畫大、名牌、鏡頭帶到）；v1.8 介面改版（墨綠暖白：推王 HUD、養成名冊、獨立英雄頁，Codex 生的招牌技圖示、職業小旗、英雄頁背景）；推王 v1.7（三團拖旗、地上的預警形狀、王的部位破壞、SSR 招牌技；養成第一版：職業等級、行軍 1 小時、突破、存檔；HD-2D 舞台、電影鏡頭、打擊特效與音效、英雄動作圖、推王戰報）可以玩了，作者看過說「好玩很多」，等手機實測**（in-progress）。驗收標準 1、2 由機器人測試自動檢查；標準 3 要作者自己玩。旗子已換成 Codex 生的團旗；部位按鈕已換成新介面的樣式；預警形狀加了斜紋（色弱也分得出）、深色外框與倒數的亮線（`shaders/ground_mark.gdshader`）。往商業版的路線見 [docs/ROADMAP.md](docs/ROADMAP.md)。
+版本紀錄：**v3.0 融合（docs/FUSION.md）：主畫面換成遠征紀事的七頁（總覽／訓練／背包／英雄／裝備／冒險／商店，上方常駐行軍戰場、羊皮紙面板），行軍改成真的自動戰鬥（3～5 人小隊打波次、清場行軍、打輸退一關、離線依實測速率補算），100 名英雄分人類 40／怪獸 30／夢靈 30（各有形態被動，推王與行軍都有效），行軍小隊的形態羈絆，訓練（全軍天賦）取代職業等級（舊存檔退回金幣），裝備改成一件一件帶詞綴、自動分解，英雄圖鑑（突破過的英雄給全軍加成），金幣經濟放大 10 倍，存檔 v2；v2.5 前幾關變簡單（作者在 1-1 連王的血都打不到 80% 以下：1-1 到 2-1 的王打七折到五折，像人一樣操作第一場就能過）、離線戰報、行軍收穫與推王結算改成獎勵列表（結算面板在 16:9 手機也放得下）、設定加畫質（3D 解析度 省電／標準／高）與幀率（30／60）、按鈕與彈出視窗換成像素風的雙線古銅框（四角缺口與小菱形，標題下有菱形分隔線）；v2.4 招募與商店：nav bar 五格（營地／養成／招募／道具／關卡，加上 Codex 生的圖示），招募頁照作者選的 round3 B（限時卡池、保底、機率說明、單抽／十連、每天一次看廣告免費單抽），商店（招募券、免廣告、恢復購買；目前是測試商店），隊長給所屬團加成，道具頁照 round3 A 加上行軍小隊的專屬飾品列，推王人群不再用彩色外框標稀有度；v2.3 道具：nav bar 加「道具」（裝備／遺物／素材），職業武庫、專屬飾品、遺物、強化石由關卡王與行軍掉落；英雄卡改用背景色表示稀有度（照作者的 hero.PNG）；v2.2 營地：行軍捲軸畫面、待辦、紅點、推薦戰力；v2.1 主畫面底部 nav bar（營地／養成／關卡）與整理過的英雄卡；v2.0 商業版骨架（10 關 3 地區、營地主畫面與關卡列表、設定、暫停、即時行軍與離線戰報、第一場的操作提示）；v1.9 隊長（畫大、名牌、鏡頭帶到）；v1.8 介面改版（墨綠暖白：推王 HUD、養成名冊、獨立英雄頁，Codex 生的招牌技圖示、職業小旗、英雄頁背景）；推王 v1.7（三團拖旗、地上的預警形狀、王的部位破壞、SSR 招牌技；養成第一版：職業等級、行軍 1 小時、突破、存檔；HD-2D 舞台、電影鏡頭、打擊特效與音效、英雄動作圖、推王戰報）可以玩了，作者看過說「好玩很多」，等手機實測**（in-progress）。驗收標準 1、2 由機器人測試自動檢查；標準 3 要作者自己玩。旗子已換成 Codex 生的團旗；部位按鈕已換成新介面的樣式；預警形狀加了斜紋（色弱也分得出）、深色外框與倒數的亮線（`shaders/ground_mark.gdshader`）。往商業版的路線見 [docs/ROADMAP.md](docs/ROADMAP.md)。
 
 ## 要驗證的假設
 
@@ -113,27 +113,27 @@
 ## 執行方式
 
 ```bash
-godot --path prototypes/hero-horde-idle            # 玩（視窗 390×844，直式；從營地開始）
+godot --path prototypes/hero-horde-idle            # 玩（視窗 390×844，直式；從總覽開始）
+godot --path prototypes/hero-horde-idle -- --save=trial   # 試玩用另一個存檔 user://trial.json（macOS 的 user:// 不看 XDG_DATA_HOME）
 godot --editor --path prototypes/hero-horde-idle   # 編輯器
 ```
 
-測試（每支都要同時看 log 裡有沒有 `SCRIPT ERROR`，Godot 出錯仍可能以 0 結束）：
+測試（每支都要同時看 log 裡有沒有 `SCRIPT ERROR`，Godot 出錯仍可能以 0 結束）。分層驗收：L1 只跑改到的系統那支（行軍 `test_march`、養成 `test_progression`、推王 `test_balance`／`test_skills`）；L2 再加 `test_home`、`test_main` 當簡易回歸；L3 等作者手動驗收後全部跑，含約 80 秒的 `test_stages`：
 
 ```bash
 cd prototypes/hero-horde-idle
 godot --headless --path . --script res://tests/test_balance.gd   # 驗收標準 1、2：五個機器人 × 5 個 seed，另外證明打部位明顯有用、像人一樣拖旗子也躲得掉
 godot --headless --path . --script res://tests/test_report.gd    # 推王戰報：全滅、時間到、勝利、打部位四種局面，輸出榜加總等於王受到的傷害
 godot --headless --path . --script res://tests/test_skills.gd    # 招牌技：7 名 SSR 各一招、不動城牆擋下重砸、黎明之光救回 3 人、爆發與增益、打一場會看到大部分招式
-godot --headless --path . --script res://tests/test_progression.gd # 1-1 的養成迴圈：每輪＝推王、拿獎勵、行軍 1 小時、一鍵養成；閒置第 3～6 輪、高手早 2～4 輪、像人一樣兩場內過關；存檔來回
+godot --headless --path . --script res://tests/test_progression.gd # 1-1 的養成迴圈：每輪＝推王、拿獎勵、行軍 1 小時（實測速率）、一鍵養成；閒置第 3～6 輪、高手早 2～4 輪、像人一樣兩場內過關；訓練、上陣格、圖鑑、詞綴與自動分解、存檔來回與 v1 舊存檔轉換
+godot --headless --path . --script res://tests/test_march.gd       # 行軍戰鬥：不同幀率結果一致、波次與行軍、打不過退關、吸血與夢癒、羈絆階級、擊倒收益、離線補算
 godot --headless --path . --script res://tests/test_stages.gd     # 10 關的難度曲線：閒置與高手一輪一輪往上打，每關都打得過、不卡牆、高手一直領先
-godot --headless --path . --script res://tests/test_shell.gd      # 透過 App 真的切換畫面：營地、關卡列表只開 1-1、設定存檔、推王、暫停與繼續、撤退不算、贏了回營地 1-2 開放、養成來回、離開 3 小時回來的離線戰報（領取後分區列出金幣、強化石與 5 名英雄的升級，對話框放得進畫面）
-godot --headless --path . --script res://tests/test_items.gd       # 道具頁：武庫與背包（最好的在前、新標記）、換上與強化、分解、飾品給行軍小隊、遺物與素材分頁（含招募券）、離開清掉「新」，都存檔；放得進 nav bar 上面
-godot --headless --path . --script res://tests/test_recruit.gd     # 招募：機率加總、機率說明與抽卡同一張表、招募券、英雄之魂、保底、每天換池、每天一次免費單抽、商品（免廣告只買一次）、抽卡不動其他掉落、存檔與舊存檔；隊長的團加成；招募頁的十連、看廣告、商店購買與恢復購買
-godot --headless --path . --script res://tests/test_growth.gd      # 養成畫面：分頁、職業升級、英雄頁（SSR 有招牌技、N 顯示晉升）、設為隊長（最多 3 名）、突破、返回名冊、換行軍小隊、行軍 1 小時、一鍵養成，每一步都存檔
+godot --headless --path . --script res://tests/test_recruit.gd     # 招募：機率加總、機率說明與抽卡同一張表、招募券、英雄之魂、保底、每天換池、每天一次免費單抽、商品（免廣告只買一次）、抽卡不動其他掉落、存檔與舊存檔；隊長的團加成
+godot --headless --path . --script res://tests/test_home.gd        # 主畫面用真的按鈕操作：離線戰報、六顆導覽與頭像切頁（行軍不中斷）、擊倒付金幣、訓練、上陣（戰場換人）、裝備、分解、改行軍關卡、十連；scene 裡改的標題執行時保留
 godot --headless --path . --script res://tests/test_main.gd      # 像玩家一樣操作：隊長畫大一點並掛名牌、拖旗子、點英雄或下方團分頁選團、點空地移動、技能自動施放、歸位、點部位按鈕與王身上瞄準、部位被打壞、預警形狀、大招、結算、重來；在 scene 裡移動旗子＝改集結位置
 ```
 
-營地與流程的截圖：`tools/capture_shell.gd`（離線戰報、營地、關卡列表、道具頁與遺物、設定、第一場提示、暫停）；各地區的樣子：`tools/capture_regions.gd`。推王的截圖：`godot --path . --resolution 390x844 --script res://tools/capture_shots.gd -- <輸出資料夾>`，拍集結、開戰、重砸預警、躲開、重砸落下、落石預警、瞄準角、角被打壞、隕石術（招牌技卡）、大招、第二階段受傷、結算、養成名冊、SSR 與 N 的英雄頁十五張。測試與截圖都用自己的存檔路徑和接近參考強度的養成，不會動到玩家的存檔。要用 Mobile 渲染器看（預設）；`gl_compatibility` 沒有景深，畫面會不一樣。Linux 沒有螢幕時前面加 `xvfb-run -a`。
+主畫面七頁的截圖：`godot --path . --resolution 470x836 --script res://tools/capture_home.gd -- <輸出資料夾>`（離線戰報、七頁、十連結果）；各地區的樣子：`tools/capture_regions.gd`。推王的截圖：`godot --path . --resolution 390x844 --script res://tools/capture_shots.gd -- <輸出資料夾>`，拍集結、開戰、重砸預警、躲開、重砸落下、落石預警、瞄準角、角被打壞、隕石術（招牌技卡）、大招、第二階段受傷、結算十二張。測試與截圖都用自己的存檔路徑和接近參考強度的養成，不會動到玩家的存檔。要用 Mobile 渲染器看（預設）；`gl_compatibility` 沒有景深，畫面會不一樣。Linux 沒有螢幕時前面加 `xvfb-run -a`。
 
 幀時間：`godot --path . --resolution 780x1688 --script res://tools/perf_probe.gd`。2026-10-21 在 Mac（Mobile 渲染器）上：平均 2.8 ms、draw call 110–123（v1.1 是 47）；v1.4 在 390×844 平均 5.6 ms、draw call 平均 117、最多 125；v1.5 平均 8.3 ms、draw call 平均 132、最多 138（draw call 多的是旗子、預警形狀、部位按鈕；模擬每一步 0.10 ms，比 v1.4 的 0.13 ms 還少，所以幀時間的增加在畫面那邊、還沒查清楚，這台機器同一版重量也會差 1～2 ms）。手機要實機量。
 
@@ -141,21 +141,17 @@ godot --headless --path . --script res://tests/test_main.gd      # 像玩家一�
 
 | scene | 內容與可調整的地方 |
 |---|---|
-| `scenes/home.tscn` | 主畫面（遊戲從這裡開始）：`Pages` 裡五個分頁（`CampPage`＝camp.tscn、`GrowthPage`＝growth.tscn、`RecruitPage`＝recruit.tscn、`ItemsPage`＝items.tscn、`StagesPage`＝stages.tscn），底部 `NavBar`（營地／養成／招募／道具／關卡，字上面是圖示，切換不淡出，英雄頁也在 NavBar 上面）；每個分頁鈕的 `Dot` 是待辦紅點 |
-| `scenes/camp.tscn` | 營地分頁：金幣與素材、`設定`、標題、`MarchView` 行軍畫面（下方說明）、行軍面板 `MarchPanel`（累積小時、下一小時倒數、領取）、`TodoPanel` 待辦（最多 3 列，點了領取行軍或跳到養成）、下一關卡片 `NextCard`（王的圖、地區、關卡、王名、我方戰力／推薦戰力、推王）；`OfflineReport` 離線戰報與行軍收穫（`OfflineTitle`、`OfflineText`、`OfflineScroll` 裡三段 `ResourcesSection`／`GearSection`／`HeroesSection`，每段的格子放 `reward_row.tscn` 一行：圖示在稀有度色塊上、名稱、數量）、`SettingsOverlay` |
-| `scenes/march_view.tscn` | 營地的行軍畫面（像 Taskbar Hero 的橫向捲軸）：`Far` 遠景、`Props` 樹、`Ground` 地面各自捲動（`shaders/ui_scroll.gdshader`），`Field` 裡行軍小隊 5 人跑步、遇到怪物停下自動攻擊、傷害數字與「+金幣」；高度跟著畫面伸縮，人物、怪物、樹貼著底部。只是演出：行軍獎勵照小時算，每隻怪的金幣＝一小時的金幣平均分給一小時能打倒的怪 |
-| `scenes/stages.tscn` | 關卡分頁：依地區分段的關卡列表（`stage_row.tscn` 實例：關卡、王名、首通獎勵、狀態） |
-| `scenes/settings_panel.tscn`、`scenes/stage_row.tscn`、`scenes/app.tscn` | 設定面板（音效、震動、畫質 `QualityChoices`、幀率 `FpsChoices`；營地與暫停選單共用）；關卡的一列；App 自動載入（換畫面的淡入淡出、共用的進度） |
+| `scenes/home.tscn` | 主畫面（941×1672，遊戲從這裡開始；推王是 720×1280，兩邊切換時各自設 `content_scale_size`）：`Pages` 七頁（`scenes/pages/*.tscn` 的實例）、`MarchArena`（常駐行軍戰場，站在每頁的地面線 y=470）、`Header`（隊長頭像、等級、金幣、招募券、設定）、`Navigation`（訓練／背包／英雄／裝備／冒險／商店）、`NavDots` 紅點、`Toast`、`Dialog`（離線戰報、招募結果、機率說明共用）、`SettingsOverlay` |
+| `scenes/pages/*.tscn` | 遠征紀事的七頁（`tools/build_fusion_ui.gd` 從 `prototypes/taskbar-hero/scenes/pages` 改來）：每頁有自己的風景層（行軍時視差捲動）、羊皮紙面板 `ContentPanel`、標題與內容。總覽（`MarchStatus`、隊長、`SquadRow` 五格、`BondLabel`、`TodoList`、`CombatLog`）；訓練（`TrainingScroll` 裡六列 `training_row`）；背包（`FilterRow`、`ItemsGrid`、`InfoName`／`InfoText`、分解、自動分解）；英雄（`DetailPanel` 數值與技能、`ActionRow` 突破／上陣／隊長、`FormFilter`、`HeroGrid`）；裝備（`ArmoryGrid` 六職業武庫、`SquadPick0..4`、`CharmSlot`、`EquipGrid`）；冒險（`ChapterButton`、`StageGrid`、`MarchHereButton`、`DepartButton`）；商店（`ProductGrid`、`GiftButton`、`RatesButton`）。格子裡的卡片執行時依資料實例化 |
+| `scenes/components/*.tscn` | 遠征紀事的元件：頂欄、導覽、訓練列、物品卡、英雄格（`equipment_item_card`）、裝備小卡、關卡卡、商品卡；圖都是 `assets/atlas/*.tres`（參考圖 `assets/reference/*.png` 的區域），字型 `fonts/NotoSansCJKtc-*` |
+| `scenes/march_arena.tscn`、`scenes/march_unit.tscn` | 行軍戰場：`Heroes` 5 格、`Enemies` 3 格、`WaveLabel`；一名戰鬥者（遠征紀事的單位：英雄用 `HeroSprite`＝`assets/heroes/heroes.png` 的格子，怪物用 `Visuals` 裡從參考圖切出的外框）。站位與數字在 `march_arena.gd`（`FRONT_X`、`SPACING`、各地區的怪物外觀 `LOOKS`） |
+| `scenes/settings_panel.tscn`、`scenes/app.tscn` | 設定面板（音效、震動、畫質 `QualityChoices`、幀率 `FpsChoices`；主畫面與暫停選單共用）；App 自動載入（換畫面的淡入淡出、共用的進度） |
 | `scenes/main.tscn` | `Camera`（存檔的位置、角度、`fov` 就是遊戲構圖；震動幅度）、`Stage`、Main 的四個運鏡欄位、`Boss`（`BossSprite` 大小；`PartLegs`／`PartArm`／`PartHorns` 部位位置）、`Flags`（三面旗子；旗子在 scene 裡的位置就是那團的集結位置，執行時交給模擬；`color` 是團色）、`TeleMarkers`（預警形狀的池）、`Army`（存檔裡是開戰陣形的預覽，執行時依模擬重畫）、`Bolts`、`Hud` |
 | `scenes/squad_flag.tscn`、`scenes/tele_marker.tscn` | 一面旗子（`Banner` 團旗、名稱、選取時的地面橢圓；根 node 的 `banner` 換旗、`color` 是橢圓顏色）；一個預警形狀 |
 | `scenes/hud.tscn` | 上方面板（王名、階段 `PhasePill`、時限 `TimerBox`、王血條、存活與輸出），提示條 `BannerStrip`（文字 `Banner`；框色與「!」方塊執行時依提示換色），部位按鈕 `Parts`（`part_button.tscn` 的實例，執行時跟著王身上的部位），下方面板（三團分頁 `SquadTabs`、士氣條與提示 `Hint`、`Actions` 全員歸位與大招），結算 `Result`；間距、字級在 scene，顏色與框在 `ui/theme.tres` |
 | `scenes/stage.tscn` | `WorldEnvironment`（`materials/stage_environment.tres` 色調、光暈、霧、調色；`stage_camera_attributes.tres` 景深）、`Sun`、`Floor`（`stage_ground.tres`：競技場中心與大小、邊緣破碎程度、草地與石地色調）、`Cliffs`、`Props`（移動、縮放、`tint`、`flip`、`lean_deg`）、`BrazierLights`、`TelegraphLights`、`VolleyLight`、光點與火星粒子、`Vignette`；根 node 的匯出欄位調英雄受光強度與預警光亮度 |
-| `scenes/growth.tscn`、`scenes/hero_card.tscn` | 養成分頁 `Roster`：標題、金幣與素材、一鍵養成、行軍小隊 5 格、職業分頁、職業等級面板與升級、英雄卡格子（`Cards` 裡的 4 張是編輯器預覽，執行時依資料重建）；`HeroPage` 是 `hero_page.tscn` 的實例（平常隱藏）；一張英雄卡（照作者的 `docs/hd-2.5d/hero.PNG`）：沒有框，背景色＝稀有度（`hero_card.gd` 的 `RARITY_BG`：N 灰綠、R 藍、SR 紫、SSR 金，上亮下暗）、左上職業小旗、右上「行」「長」小牌、可以突破時的紅點、推王裡同一個像素小人、下方 `Lv.12` 與五顆星；選中時的暖白框是最上層的 `Frame`（Button 自己的框會被背景蓋住）（要改回職業頭像：`scripts/portraits.gd` 的 `BATTLE_SPRITES = false`） |
-| `scenes/items.tscn`、`scenes/item_cell.tscn` | 道具分頁（照作者的 `docs/hd-2.5d/backpack.PNG` 與 round3 A 稿）：金幣、強化石、一鍵裝備；`Tabs` 裝備／遺物／素材；`Armory` 職業武庫 6 格；`Charms` 行軍小隊 5 人的專屬飾品（round3 A 稿，作者選的；格子右下是配戴的英雄）；`Cells` 背包格子（裡面的 5 格是編輯器預覽，執行時依資料重建）；下方 `Detail` 詳情（大格、名字、種類、效果、說明、`DetailMain` 換上／強化／裝備、`DetailSalvage` 分解）；一格：背景色＝稀有度（跟英雄卡同一組顏色）、圖示、左上「新」、左下 `Caption`、右下 `Corner`（數量、Lv、★）、選中時的 `Frame` |
-| `scenes/recruit.tscn`、`scenes/pull_card.tscn` | 招募分頁（照作者選的 round3 B 稿，稀有度改用背景色）：金幣、招募券、`ShopButton`；`Stage` 限時卡池（`BannerArt` 大圖、`BannerName`、`BannerTag`）；`Countdown` 卡池倒數、`RatesButton`；`Pity` 保底；`Recent` 近期獲得 5 張；`AdPull` 看廣告免費單抽；`Single`／`Ten`；三個覆蓋層 `RatesOverlay` 機率說明、`ShopOverlay` 商店（`Products` 三列、`Restore`、`ShopNote` 測試字樣）、`ResultsOverlay` 結果（`ResultCards` 10 張）；一張抽卡結果＝英雄卡＋名字＋收穫 |
 | `scenes/reward_row.tscn`、`scenes/ornament_rule.tscn` | 獎勵列表的一行；對話框標題下的菱形分隔線 |
 | `scenes/store.tscn` | `Store` 自動載入：測試廣告的倒數卡 `AdOverlay` |
-| `scenes/hero_page.tscn` | 英雄頁：返回、名字、稀有度與職業、Lv／上限與經驗條、突破、強度、站姿大圖 `Portrait`（位置與大小在 scene）、`SigSection` 招牌技（SSR）或 `PromoteSection` 晉升（N、R）、`ClassSection` 職業加成、素材花費、突破與派去行軍 |
 | `ui/theme.tres` | 墨綠暖白的外觀：面板、按鈕（`PrimaryButton` 主要動作、`TabButton`、`CardButton`、`FlatButton`、`PartButton`）、`Heading` 襯線字、`Dim` 次要字、`FieldLabel` 戰場上的描邊字、`HudPanel`、`Pill`、血條／士氣條／經驗條；在編輯器改這個檔就改全部畫面 |
 | `scenes/captain_plate.tscn` | 隊長名牌（`main.tscn` 的 `CaptainPlates` 池，3 個）：字型、字級、描邊、顏色在 scene；倒下時的灰在 `captain_plate.gd` |
 | `scenes/skill_callout.tscn`、`scenes/name_popup.tscn` | 招牌技卡（在 `hud.tscn` 的 `SkillCallout`：頭像、招式名、英雄、效果；位置、字級、框色都在 scene）；頭上升起的名字（`main.tscn` 的 `Popups` 池） |
@@ -165,7 +161,7 @@ godot --headless --path . --script res://tests/test_main.gd      # 像玩家一�
 | `scenes/main.tscn` 的 `ImpactFx`、`Sfx` | 特效池（`Chunks`、`Rings` 各環）與音效；配色在 `impact_fx.gd` 的 `PALETTES`，環的材質 `materials/fx_ring.tres`，碎塊 `materials/fx_chunk.tres` |
 | `materials/*.tres` | 英雄、王、影子的外觀；`ground_mark.tres` 是預警形狀與旗子地面橢圓共用的材質（每個的顏色、填滿程度用 instance uniform） |
 
-正常執行與測試不會重建 scene。`tools/build_scenes.gd`、`tools/build_stage.gd`、`tools/build_fx.gd` 是一次性產生器（2026-10-21 已套用）：已存在的檔案會跳過，要重建就先刪掉那個檔。`tools/place_props.gd` 會整個重排 `Props`，在編輯器裡手動擺過道具後就不要再跑。`tools/build_report.gd` 產生戰報的兩個 scene 並把它放進 `hud.tscn`（已套用）。`tools/build_squads.gd` 產生旗子、預警形狀、部位按鈕三個 item scene，把它們與部位位置放進 `main.tscn`、`hud.tscn`（已套用）。結算面板的獎勵與「前往養成」最早由 `tools/build_growth.gd` 加入。`tools/build_skills.gd` 產生招牌技卡與名字的 scene，放進 `hud.tscn`、`main.tscn`（已套用）。2026-10-22 的介面改版用三支會覆蓋檔案的產生器：`tools/build_theme.gd`（`ui/theme.tres`）、`tools/build_hud.gd`（`hud.tscn`、`part_button.tscn`、`skill_callout.tscn`）、`tools/build_growth.gd`（`growth.tscn`、`hero_page.tscn`、`hero_card.tscn`）；之後在編輯器手動調過的話，重跑前先看 diff，不然會被蓋掉。`tools/build_shell.gd` 產生主畫面（NavBar）、營地與關卡分頁、關卡列、設定面板與 App（會覆蓋，2026-10-22 套用）。`tools/build_items.gd` 產生道具分頁與一格（會覆蓋，2026-10-22 套用）。`tools/build_recruit.gd` 產生招募分頁、抽卡結果卡與 `store.tscn`（會覆蓋，2026-10-22 套用）。按鈕與對話框的框：`python3 tools/make_ui_frames.py` 用程式畫像素 9 宮格（`assets/ui/frame/`），`tools/style_theme.gd` 只改 `ui/theme.tres` 的 Button、PrimaryButton 與新的 `Dialog`（其他調整保留），`tools/restyle_result.gd` 把 `hud.tscn` 的結算面板改成兩欄獎勵列表（`RewardGrid`）、三顆次要按鈕排一列（`MoreButtons`），可以重跑。`tools/style_dialogs.gd` 把 `Dialog` 與菱形分隔線套到離線戰報、設定、招募的三個覆蓋層、測試廣告、結算與暫停（重跑 build_shell／build_recruit／build_hud 之後要再跑它一次；可以重跑）。`tools/build_captains.gd` 產生隊長名牌並把 3 個放進 `main.tscn`（已套用，要開視窗跑）。會存 `main.tscn` 的產生器要開視窗跑（不加 `--headless`），否則英雄陣形預覽的 MultiMesh 資料會存不進去。
+正常執行與測試不會重建 scene。主畫面由 `tools/build_fusion_ui.gd` 產生（2026-10-27 套用；已掛上腳本的頁面會跳過，`home.tscn`、`march_arena.tscn` 已存在就不寫），營地、養成、道具、招募、關卡五個舊分頁與它們的產生器（build_shell／build_growth／build_items／build_recruit／style_dialogs）已移除；下面提到它們的段落是歷史紀錄。`tools/build_scenes.gd`、`tools/build_stage.gd`、`tools/build_fx.gd` 是一次性產生器（2026-10-21 已套用）：已存在的檔案會跳過，要重建就先刪掉那個檔。`tools/place_props.gd` 會整個重排 `Props`，在編輯器裡手動擺過道具後就不要再跑。`tools/build_report.gd` 產生戰報的兩個 scene 並把它放進 `hud.tscn`（已套用）。`tools/build_squads.gd` 產生旗子、預警形狀、部位按鈕三個 item scene，把它們與部位位置放進 `main.tscn`、`hud.tscn`（已套用）。結算面板的獎勵與「前往養成」最早由 `tools/build_growth.gd` 加入。`tools/build_skills.gd` 產生招牌技卡與名字的 scene，放進 `hud.tscn`、`main.tscn`（已套用）。2026-10-22 的介面改版用三支會覆蓋檔案的產生器：`tools/build_theme.gd`（`ui/theme.tres`）、`tools/build_hud.gd`（`hud.tscn`、`part_button.tscn`、`skill_callout.tscn`）、`tools/build_growth.gd`（`growth.tscn`、`hero_page.tscn`、`hero_card.tscn`）；之後在編輯器手動調過的話，重跑前先看 diff，不然會被蓋掉。`tools/build_shell.gd` 產生主畫面（NavBar）、營地與關卡分頁、關卡列、設定面板與 App（會覆蓋，2026-10-22 套用）。`tools/build_items.gd` 產生道具分頁與一格（會覆蓋，2026-10-22 套用）。`tools/build_recruit.gd` 產生招募分頁、抽卡結果卡與 `store.tscn`（會覆蓋，2026-10-22 套用）。按鈕與對話框的框：`python3 tools/make_ui_frames.py` 用程式畫像素 9 宮格（`assets/ui/frame/`），`tools/style_theme.gd` 只改 `ui/theme.tres` 的 Button、PrimaryButton 與新的 `Dialog`（其他調整保留），`tools/restyle_result.gd` 把 `hud.tscn` 的結算面板改成兩欄獎勵列表（`RewardGrid`）、三顆次要按鈕排一列（`MoreButtons`），可以重跑。`tools/style_dialogs.gd` 把 `Dialog` 與菱形分隔線套到離線戰報、設定、招募的三個覆蓋層、測試廣告、結算與暫停（重跑 build_shell／build_recruit／build_hud 之後要再跑它一次；可以重跑）。`tools/build_captains.gd` 產生隊長名牌並把 3 個放進 `main.tscn`（已套用，要開視窗跑）。會存 `main.tscn` 的產生器要開視窗跑（不加 `--headless`），否則英雄陣形預覽的 MultiMesh 資料會存不進去。
 
 美術：Codex 生的原圖在 `art_src/`（派工單、回報、候選圖；Godot 不匯入）。選哪張寫在 `art_src/selected.json`，`uv run --with pillow --with numpy tools/pack_stage_art.py` 把選定的圖縮到統一像素密度、減色、做硬邊透明，地面貼圖做成無縫，輸出到 `assets/stage/`；英雄（`selected.json` 的 `heroes`，缺的動作用站姿代替）打包成 `assets/heroes/heroes.png`＋`heroes.json`；團旗（`flags`，兩格共用裁切、旗桿底部放在格子正中）打包成 `assets/flags/<團>.png`；養成畫面用的職業站姿大圖（160 px 高）與頭像裁切框打包成 `assets/heroes/portraits/`（只重做這一步：`... pack_stage_art.py portraits`）；招牌技圖示、職業小旗與英雄頁背景（`selected.json` 的 `ui`，Codex 生的原圖在 `art_src/ui_icons/`；小旗是洋紅底，打包時去背）打包成 `assets/ui/`（`... pack_stage_art.py ui`），還沒有圖時遊戲用職業頭像代替。武器與飾品圖示（`assets/ui/items/` 的 `w_*`、`c_*`）暫時是從 round3 道具設計稿裁下來的（`python3 tools/crop_item_icons.py`：從裁切框邊緣洪水填色去掉面板底色，縮進 96 px）；遺物、素材、招募券（`r_*`、`m_*`）、nav bar 圖示（`assets/ui/nav/`）與招募頁背景（`assets/ui/bg/recruit.png`）是 Codex 生的（`art_src/ui_icons2/`，洋紅底去背），由 `pack_stage_art.py ui` 打包。同一職業的英雄共用同一張圖。字型：內文 Noto Sans TC，名字與數字用 Noto Serif TC Bold（[notofonts/noto-cjk](https://github.com/notofonts/noto-cjk) 的 SubsetOTF/TC，SIL OFL 1.1，見 `ui/fonts/OFL.txt`），兩者都只保留同一組 6281 個字；新增文字前先確認字型裡有這些字（例如日文的「・」沒有，改用「‧」）。換圖：改 `selected.json` 的路徑再跑一次。git 只收 `art_src/` 的派工單、回報、腳本、`selected.json` 與選定的圖（`art_src/.gitignore` 擋掉其他 png、`inputs/`、`DONE`），新選的圖要用 `git add -f` 加進去。
 

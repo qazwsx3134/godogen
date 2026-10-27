@@ -1,203 +1,310 @@
 [gd_scene format=3]
 
-[ext_resource type="Theme" path="res://ui/theme.tres" id="1_yu5fn"]
-[ext_resource type="Script" path="res://scripts/home.gd" id="2_ip4d6"]
-[ext_resource type="PackedScene" path="res://scenes/camp.tscn" id="3_gi00y"]
-[ext_resource type="PackedScene" path="res://scenes/growth.tscn" id="4_rpgsi"]
-[ext_resource type="PackedScene" path="res://scenes/recruit.tscn" id="5_ju5sp"]
-[ext_resource type="PackedScene" path="res://scenes/items.tscn" id="6_o7pnx"]
-[ext_resource type="PackedScene" path="res://scenes/stages.tscn" id="7_aish6"]
-[ext_resource type="Texture2D" path="res://assets/ui/nav/camp.png" id="8_snnha"]
-[ext_resource type="Texture2D" path="res://assets/ui/nav/growth.png" id="9_e42qu"]
-[ext_resource type="Texture2D" path="res://assets/ui/nav/recruit.png" id="10_ppa51"]
-[ext_resource type="Texture2D" path="res://assets/ui/nav/items.png" id="11_kc6b6"]
-[ext_resource type="Texture2D" path="res://assets/ui/nav/stages.png" id="12_jdxxw"]
+[ext_resource type="Theme" path="res://ui/reference_theme.tres" id="1_snnha"]
+[ext_resource type="Script" path="res://scripts/home.gd" id="2_e42qu"]
+[ext_resource type="PackedScene" path="res://scenes/pages/overview.tscn" id="3_ppa51"]
+[ext_resource type="PackedScene" path="res://scenes/pages/train.tscn" id="4_kc6b6"]
+[ext_resource type="PackedScene" path="res://scenes/pages/backpack.tscn" id="5_jdxxw"]
+[ext_resource type="PackedScene" path="res://scenes/pages/heroes.tscn" id="6_6k6s7"]
+[ext_resource type="PackedScene" path="res://scenes/pages/equipment.tscn" id="7_rqor2"]
+[ext_resource type="PackedScene" path="res://scenes/pages/adventure.tscn" id="8_qmde4"]
+[ext_resource type="PackedScene" path="res://scenes/pages/store.tscn" id="9_wa7t7"]
+[ext_resource type="PackedScene" path="res://scenes/march_arena.tscn" id="10_vysw7"]
+[ext_resource type="PackedScene" path="res://scenes/components/header.tscn" id="11_miq5y"]
+[ext_resource type="PackedScene" path="res://scenes/components/navigation.tscn" id="12_mg211"]
+[ext_resource type="Texture2D" path="res://assets/atlas/notification.tres" id="13_sh163"]
+[ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Bold.otf" id="14_okf6m"]
+[ext_resource type="StyleBox" path="res://ui/paper_frame.tres" id="15_6k8sm"]
+[ext_resource type="StyleBox" path="res://ui/paper.tres" id="16_k665q"]
+[ext_resource type="StyleBox" path="res://ui/green.tres" id="17_oku8d"]
+[ext_resource type="StyleBox" path="res://ui/gold.tres" id="18_ri7o4"]
+[ext_resource type="PackedScene" path="res://scenes/settings_panel.tscn" id="19_ucx8p"]
 
-[node name="Home" type="Control" unique_id=662971311]
+[node name="Home" type="Control" unique_id=1196709444]
 layout_mode = 3
 anchors_preset = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-theme = ExtResource("1_yu5fn")
-script = ExtResource("2_ip4d6")
+theme = ExtResource("1_snnha")
+script = ExtResource("2_e42qu")
 
-[node name="Background" type="ColorRect" parent="." unique_id=48774706]
+[node name="Backdrop" type="ColorRect" parent="." unique_id=1205936388]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color(0.05882353, 0.101960786, 0.08627451, 1)
+mouse_filter = 2
+color = Color(0.15294118, 0.1882353, 0.2901961, 1)
 
-[node name="Pages" type="Control" parent="." unique_id=777491202]
+[node name="Pages" type="Control" parent="." unique_id=2060208962]
 unique_name_in_owner = true
 anchors_preset = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_bottom = -116.0
 mouse_filter = 2
 
-[node name="CampPage" parent="Pages" unique_id=13693085 instance=ExtResource("3_gi00y")]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 15
-
-[node name="GrowthPage" parent="Pages" unique_id=1939272138 instance=ExtResource("4_rpgsi")]
-unique_name_in_owner = true
-visible = false
-layout_mode = 1
-anchors_preset = 15
-
-[node name="RecruitPage" parent="Pages" unique_id=1480400900 instance=ExtResource("5_ju5sp")]
-unique_name_in_owner = true
-visible = false
-layout_mode = 1
-anchors_preset = 15
-
-[node name="ItemsPage" parent="Pages" unique_id=1040201627 instance=ExtResource("6_o7pnx")]
-unique_name_in_owner = true
-visible = false
-layout_mode = 1
-anchors_preset = 15
-
-[node name="StagesPage" parent="Pages" unique_id=813331579 instance=ExtResource("7_aish6")]
-unique_name_in_owner = true
-visible = false
-layout_mode = 1
-anchors_preset = 15
-
-[node name="NavBar" type="PanelContainer" parent="." unique_id=1734864456]
+[node name="Overview" parent="Pages" unique_id=1932376761 instance=ExtResource("3_ppa51")]
 unique_name_in_owner = true
 layout_mode = 0
-anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -116.0
 
-[node name="NavButtons" type="HBoxContainer" parent="NavBar" unique_id=969279872]
+[node name="Train" parent="Pages" unique_id=341858121 instance=ExtResource("4_kc6b6")]
 unique_name_in_owner = true
-layout_mode = 2
-theme_override_constants/separation = 0
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
 
-[node name="NavCamp" type="Button" parent="NavBar/NavButtons" unique_id=436525302]
+[node name="Backpack" parent="Pages" unique_id=247185443 instance=ExtResource("5_jdxxw")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Heroes" parent="Pages" unique_id=1165690121 instance=ExtResource("6_6k6s7")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Equipment" parent="Pages" unique_id=952000875 instance=ExtResource("7_rqor2")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Adventure" parent="Pages" unique_id=195391531 instance=ExtResource("8_qmde4")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Store" parent="Pages" unique_id=236980738 instance=ExtResource("9_wa7t7")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="MarchArena" parent="." unique_id=387612959 instance=ExtResource("10_vysw7")]
+unique_name_in_owner = true
+position = Vector2(0, 470)
+
+[node name="Header" parent="." unique_id=1146526086 instance=ExtResource("11_miq5y")]
+unique_name_in_owner = true
+layout_mode = 0
+
+[node name="Navigation" parent="." unique_id=1533503802 instance=ExtResource("12_mg211")]
+unique_name_in_owner = true
+layout_mode = 0
+offset_top = 1536.0
+offset_right = 941.0
+offset_bottom = 1658.0
+
+[node name="NavDots" type="Control" parent="." unique_id=1474702840]
+unique_name_in_owner = true
+anchors_preset = 0
+mouse_filter = 2
+
+[node name="Dot0" type="TextureRect" parent="NavDots" unique_id=1784689332]
+visible = false
+layout_mode = 0
+offset_left = 121.0
+offset_top = 1530.0
+offset_right = 155.0
+offset_bottom = 1564.0
+mouse_filter = 2
+texture = ExtResource("13_sh163")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Dot1" type="TextureRect" parent="NavDots" unique_id=1625585603]
+visible = false
+layout_mode = 0
+offset_left = 274.0
+offset_top = 1530.0
+offset_right = 308.0
+offset_bottom = 1564.0
+mouse_filter = 2
+texture = ExtResource("13_sh163")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Dot2" type="TextureRect" parent="NavDots" unique_id=84754956]
+visible = false
+layout_mode = 0
+offset_left = 427.0
+offset_top = 1530.0
+offset_right = 461.0
+offset_bottom = 1564.0
+mouse_filter = 2
+texture = ExtResource("13_sh163")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Dot3" type="TextureRect" parent="NavDots" unique_id=1806469822]
+visible = false
+layout_mode = 0
+offset_left = 580.0
+offset_top = 1530.0
+offset_right = 614.0
+offset_bottom = 1564.0
+mouse_filter = 2
+texture = ExtResource("13_sh163")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Dot4" type="TextureRect" parent="NavDots" unique_id=1659960062]
+visible = false
+layout_mode = 0
+offset_left = 733.0
+offset_top = 1530.0
+offset_right = 767.0
+offset_bottom = 1564.0
+mouse_filter = 2
+texture = ExtResource("13_sh163")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Dot5" type="TextureRect" parent="NavDots" unique_id=141832349]
+visible = false
+layout_mode = 0
+offset_left = 886.0
+offset_top = 1530.0
+offset_right = 920.0
+offset_bottom = 1564.0
+mouse_filter = 2
+texture = ExtResource("13_sh163")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Toast" type="Label" parent="." unique_id=2080637440]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 40.0
+offset_top = 1440.0
+offset_right = 901.0
+offset_bottom = 1520.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.11372549, 0.14117648, 0.2, 1)
+theme_override_constants/outline_size = 8
+theme_override_fonts/font = ExtResource("14_okf6m")
+theme_override_font_sizes/font_size = 28
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Dialog" type="ColorRect" parent="." unique_id=287306109]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.55)
+
+[node name="DialogPanel" type="Panel" parent="Dialog" unique_id=318900339]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 60.0
+offset_top = 360.0
+offset_right = 881.0
+offset_bottom = 1220.0
+theme_override_styles/panel = ExtResource("15_6k8sm")
+
+[node name="DialogFill" type="Panel" parent="Dialog/DialogPanel" unique_id=314695311]
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 18.0
+offset_top = 18.0
+offset_right = -18.0
+offset_bottom = -18.0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("16_k665q")
+
+[node name="DialogTitle" type="Label" parent="Dialog/DialogPanel" unique_id=1142854185]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 40.0
+offset_top = 36.0
+offset_right = 781.0
+offset_bottom = 96.0
+theme_override_colors/font_color = Color(0.2901961, 0.20392157, 0.14117648, 1)
+theme_override_fonts/font = ExtResource("14_okf6m")
+theme_override_font_sizes/font_size = 40
+horizontal_alignment = 1
+
+[node name="DialogScroll" type="ScrollContainer" parent="Dialog/DialogPanel" unique_id=1157789945]
+layout_mode = 0
+offset_left = 56.0
+offset_top = 112.0
+offset_right = 765.0
+offset_bottom = 692.0
+horizontal_scroll_mode = 0
+
+[node name="DialogBody" type="Label" parent="Dialog/DialogPanel/DialogScroll" unique_id=1002618211]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme_type_variation = &"TabButton"
-theme_override_constants/icon_max_width = 46
-theme_override_font_sizes/font_size = 26
-toggle_mode = true
-text = "營地"
-icon = ExtResource("8_snnha")
-icon_alignment = 1
-vertical_icon_alignment = 0
+theme_override_colors/font_color = Color(0.2901961, 0.20392157, 0.14117648, 1)
+theme_override_font_sizes/font_size = 28
+autowrap_mode = 3
 
-[node name="Dot" type="ColorRect" parent="NavBar/NavButtons/NavCamp" unique_id=139953984]
-visible = false
-layout_mode = 0
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = 40.0
-offset_top = 22.0
-offset_right = 54.0
-offset_bottom = 36.0
-mouse_filter = 2
-color = Color(0.8509804, 0.4509804, 0.3529412, 1)
-
-[node name="NavGrowth" type="Button" parent="NavBar/NavButtons" unique_id=350279915]
+[node name="DialogOk" type="Button" parent="Dialog/DialogPanel" unique_id=878737157]
 unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-theme_type_variation = &"TabButton"
-theme_override_constants/icon_max_width = 46
-theme_override_font_sizes/font_size = 26
-toggle_mode = true
-text = "養成"
-icon = ExtResource("9_e42qu")
-icon_alignment = 1
-vertical_icon_alignment = 0
-
-[node name="Dot" type="ColorRect" parent="NavBar/NavButtons/NavGrowth" unique_id=1857055088]
-visible = false
 layout_mode = 0
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = 40.0
-offset_top = 22.0
-offset_right = 54.0
-offset_bottom = 36.0
-mouse_filter = 2
-color = Color(0.8509804, 0.4509804, 0.3529412, 1)
+offset_left = 441.0
+offset_top = 724.0
+offset_right = 761.0
+offset_bottom = 816.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
+theme_override_fonts/font = ExtResource("14_okf6m")
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = ExtResource("17_oku8d")
+theme_override_styles/pressed = ExtResource("17_oku8d")
+theme_override_styles/hover = ExtResource("17_oku8d")
+theme_override_styles/disabled = ExtResource("17_oku8d")
+theme_override_styles/focus = ExtResource("17_oku8d")
+text = "好"
 
-[node name="NavRecruit" type="Button" parent="NavBar/NavButtons" unique_id=1883094665]
+[node name="DialogAlt" type="Button" parent="Dialog/DialogPanel" unique_id=1565283263]
 unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-theme_type_variation = &"TabButton"
-theme_override_constants/icon_max_width = 46
-theme_override_font_sizes/font_size = 26
-toggle_mode = true
-text = "招募"
-icon = ExtResource("10_ppa51")
-icon_alignment = 1
-vertical_icon_alignment = 0
-
-[node name="Dot" type="ColorRect" parent="NavBar/NavButtons/NavRecruit" unique_id=929575617]
-visible = false
 layout_mode = 0
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = 40.0
-offset_top = 22.0
-offset_right = 54.0
-offset_bottom = 36.0
-mouse_filter = 2
-color = Color(0.8509804, 0.4509804, 0.3529412, 1)
+offset_left = 60.0
+offset_top = 724.0
+offset_right = 420.0
+offset_bottom = 816.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
+theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
+theme_override_fonts/font = ExtResource("14_okf6m")
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = ExtResource("18_ri7o4")
+theme_override_styles/pressed = ExtResource("18_ri7o4")
+theme_override_styles/hover = ExtResource("18_ri7o4")
+theme_override_styles/disabled = ExtResource("18_ri7o4")
+theme_override_styles/focus = ExtResource("18_ri7o4")
+text = "看廣告 金幣 ×2"
 
-[node name="NavItems" type="Button" parent="NavBar/NavButtons" unique_id=2103532197]
+[node name="SettingsOverlay" type="ColorRect" parent="." unique_id=612445024]
 unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-theme_type_variation = &"TabButton"
-theme_override_constants/icon_max_width = 46
-theme_override_font_sizes/font_size = 26
-toggle_mode = true
-text = "道具"
-icon = ExtResource("11_kc6b6")
-icon_alignment = 1
-vertical_icon_alignment = 0
-
-[node name="Dot" type="ColorRect" parent="NavBar/NavButtons/NavItems" unique_id=1309442272]
 visible = false
 layout_mode = 0
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = 40.0
-offset_top = 22.0
-offset_right = 54.0
-offset_bottom = 36.0
-mouse_filter = 2
-color = Color(0.8509804, 0.4509804, 0.3529412, 1)
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.55)
 
-[node name="NavStages" type="Button" parent="NavBar/NavButtons" unique_id=1106775502]
+[node name="SettingsPanel" parent="SettingsOverlay" unique_id=2097904909 instance=ExtResource("19_ucx8p")]
 unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-theme_type_variation = &"TabButton"
-theme_override_constants/icon_max_width = 46
-theme_override_font_sizes/font_size = 26
-toggle_mode = true
-text = "關卡"
-icon = ExtResource("12_jdxxw")
-icon_alignment = 1
-vertical_icon_alignment = 0
-
-[node name="Dot" type="ColorRect" parent="NavBar/NavButtons/NavStages" unique_id=1987319593]
-visible = false
 layout_mode = 0
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = 40.0
-offset_top = 22.0
-offset_right = 54.0
-offset_bottom = 36.0
-mouse_filter = 2
-color = Color(0.8509804, 0.4509804, 0.3529412, 1)
+offset_left = 110.0
+offset_top = 420.0
+offset_right = 831.0
+offset_bottom = 1180.0

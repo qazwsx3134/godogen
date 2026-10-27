@@ -22,6 +22,8 @@ extends RefCounted
 
 signal event(kind: StringName, value: float)
 
+const Heroes = preload("res://domain/heroes.gd")
+
 enum Phase { MUSTER, FIGHT, WON, LOST }
 enum Attack { SLAM, SWEEP, ROCKS }
 enum Part { LEGS, ARM, HORNS }
@@ -206,6 +208,14 @@ var sig_cd := PackedFloat32Array()
 var sig_casts := PackedInt32Array()
 ## How strong each hero's 招牌技 is (1 + SIG_PER_LEVEL per ascension): bursts and heals scale with it.
 var sig_mult := PackedFloat32Array()
+## Each hero's 形態 (domain/heroes.gd; -1 = none, the balance tests' reference roster) and what it brings: the share
+## of dealt damage healed back (怪獸), regen per second as a share of max HP and healing taken (夢靈).
+var form := PackedInt32Array()
+var lifesteal := PackedFloat32Array()
+var form_regen := PackedFloat32Array()
+var heal_taken := PackedFloat32Array()
+## 訓練 速度: skill cooldowns x this.
+var cd_mult: float = 1.0
 ## Seconds left of 不動城牆 per squad, 疾風連斬 and 破甲突刺.
 var wall_t := PackedFloat32Array()
 var gale_t: float = 0.0
@@ -294,6 +304,12 @@ func _init(seed_value: int = 1, roster: Dictionary = {}, stage: Dictionary = {})
 		atk.append(base.y * (roster.atk_mult[i] if roster.has("atk_mult") else 1.0))
 		if roster.has("sig_level"):
 			sig_mult[i] = 1.0 + SIG_PER_LEVEL * roster.sig_level[i]
+		var f: int = roster.form[i] if roster.has("form") else -1
+		form.append(f)
+		lifesteal.append(Heroes.MONSTER_LIFESTEAL if f == Heroes.MONSTER else 0.0)
+		form_regen.append(Heroes.DREAM_REGEN if f == Heroes.DREAM else 0.0)
+		heal_taken.append(Heroes.DREAM_HEAL_TAKEN if f == Heroes.DREAM else 1.0)
+	cd_mult = roster.get("cd_mult", 1.0)
 	hp = max_hp.duplicate()
 	skill_cd.resize(n)
 	speed.resize(n)
@@ -610,6 +626,8 @@ func _fight(dt: float) -> void:
 			d *= a.ranged
 			ranged_sum += d
 			stat_dealt[i] += d * dt * (PART_BODY_SHARE if aimed else 1.0)
+		if lifesteal[i] > 0.0:
+			hp[i] = minf(hp[i] + d * dt * lifesteal[i], max_hp[i])
 	# Melee wear down the legs (the arm while the club is down); aimed ranged shots wear down their part.
 	_wear(_melee_part(), melee_sum * dt)
 	if aimed:
@@ -692,15 +710,16 @@ func _aura_of(s: int) -> Dictionary:
 	return a
 
 
-## The SSR healer's regen reaches everyone within HEAL_RANGE of it.
+## A dreamling's own regen, plus the SSR healer's, which reaches everyone within HEAL_RANGE of it.
 func _regen_of() -> void:
-	_regen.fill(0.0)
+	for j: int in cls.size():
+		_regen[j] = max_hp[j] * form_regen[j]
 	for h: int in cls.size():
 		if cls[h] != HEALER or rarity[h] != SSR or hp[h] <= 0.0:
 			continue
 		for j: int in cls.size():
 			if hp[j] > 0.0 and pos[j].distance_to(pos[h]) <= HEAL_RANGE:
-				_regen[j] = AURA_HEALER
+				_regen[j] = max_hp[j] * form_regen[j] + AURA_HEALER * heal_taken[j]
 
 
 ## Casts every ready 主動技能 whose moment has come (see SKILL_CD). Called each fight step.
@@ -731,7 +750,9 @@ func _auto_skills() -> void:
 				var b: float = atk[i] * SKILL_BURST[cls[i]] * _aura[s].all * damage_mult()
 				stat_dealt[i] += b
 				burst += b
-		skill_cd[i] = SKILL_CD * _aura[s].cd
+				if lifesteal[i] > 0.0:
+					hp[i] = minf(hp[i] + b * lifesteal[i], max_hp[i])
+		skill_cd[i] = SKILL_CD * _aura[s].cd * cd_mult
 		cast_at[i] = t
 		event.emit(&"skill", float(i))
 	if burst > 0.0:
@@ -901,6 +922,7 @@ func _healers() -> void:
 				worst = hp[j] / max_hp[j]
 				target = j
 		if target >= 0:
+			amount *= heal_taken[target]
 			stat_healed[i] += minf(amount, max_hp[target] - hp[target])
 			hp[target] = minf(hp[target] + amount, max_hp[target])
 
@@ -910,8 +932,9 @@ func _heal_around(p: Vector2, amount: float) -> float:
 	var total: float = 0.0
 	for j: int in cls.size():
 		if hp[j] > 0.0 and pos[j].distance_squared_to(p) <= HEAL_RANGE * HEAL_RANGE:
-			total += minf(amount, max_hp[j] - hp[j])
-			hp[j] = minf(hp[j] + amount, max_hp[j])
+			var a: float = amount * heal_taken[j]
+			total += minf(a, max_hp[j] - hp[j])
+			hp[j] = minf(hp[j] + a, max_hp[j])
 	return total
 
 

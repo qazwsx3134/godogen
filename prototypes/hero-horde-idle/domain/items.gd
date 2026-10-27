@@ -52,6 +52,64 @@ const LOOT_ODDS := [[70, 25, 5, 0], [45, 38, 15, 2], [25, 40, 28, 7]]
 const WEAPON_SHARE := 0.6
 const ICON_DIR := "res://assets/ui/items/%s.png"
 
+## A dropped item is its own piece: {"uid": int, "id": base id (weapon_id / charm_id), "aff": [[key, value]]}. Its
+## affixes (詞綴) are rolled at the drop: AFFIX_COUNT by rarity, distinct keys, each AFFIX_RANGE x (1 + AFFIX_RARITY x
+## rarity). A weapon's attack / HP affixes reach its whole class, a charm's only its hero; 行軍金幣 adds to the march's
+## gold. The bag holds at most BAG_MAX; drops at or under the 自動分解 rarity that beat nothing equipped become 強化石.
+const AFFIX_KEYS := ["atk", "hp", "gold"]
+const AFFIX_NAMES := ["攻擊", "生命", "行軍金幣"]
+const AFFIX_COUNT := [0, 1, 2, 2]
+const AFFIX_RANGE := [Vector2(0.02, 0.05), Vector2(0.02, 0.05), Vector2(0.04, 0.10)]
+const AFFIX_RARITY := 0.5
+const BAG_MAX := 60
+const AUTO_SALVAGE_NAMES := ["關", "N", "N＋R"]
+
+
+## A new piece of base `id` with its affixes rolled on `rng`.
+static func make(uid: int, id: String, rng: RandomNumberGenerator) -> Dictionary:
+	var r: int = rarity(id)
+	var keys: Array = range(AFFIX_KEYS.size())
+	var aff: Array = []
+	for n: int in AFFIX_COUNT[r]:
+		var k: int = keys.pop_at(rng.randi_range(0, keys.size() - 1))
+		var span: Vector2 = AFFIX_RANGE[k] * (1.0 + AFFIX_RARITY * r)
+		aff.append([AFFIX_KEYS[k], snappedf(rng.randf_range(span.x, span.y), 0.001)])
+	return {"uid": uid, "id": id, "aff": aff}
+
+
+## A piece read back from JSON (numbers come back as floats); {} stays {} (an empty slot).
+static func normalize(d: Dictionary) -> Dictionary:
+	if d.is_empty():
+		return {}
+	var aff: Array = []
+	for pair: Array in d.get("aff", []):
+		aff.append([String(pair[0]), float(pair[1])])
+	return {"uid": int(d.uid), "id": String(d.id), "aff": aff}
+
+
+## The piece's affix `key` (0.0 without one, or for an empty slot).
+static func affix(item: Dictionary, key: String) -> float:
+	for pair: Array in item.get("aff", []):
+		if pair[0] == key:
+			return pair[1]
+	return 0.0
+
+
+## How good a piece is, to compare two for the same slot: its rarity's strength plus its affixes (0 for none).
+static func score(item: Dictionary) -> float:
+	if item.is_empty():
+		return 0.0
+	var base: float = WEAPON_MULT[rarity(item.id)] if is_weapon(item.id) else CHARM_MULT[rarity(item.id)]
+	return base + 0.5 * (affix(item, "atk") + affix(item, "hp")) + 0.25 * affix(item, "gold")
+
+
+## The affix lines of a piece, e.g. ["攻擊 +4.2%", "行軍金幣 +6.0%"].
+static func affix_lines(item: Dictionary) -> PackedStringArray:
+	var out := PackedStringArray()
+	for pair: Array in item.get("aff", []):
+		out.append("%s +%.1f%%" % [AFFIX_NAMES[AFFIX_KEYS.find(pair[0])], pair[1] * 100.0])
+	return out
+
 
 static func weapon_id(c: int, r: int) -> String:
 	return "w%d_%d" % [c, r]
@@ -107,19 +165,21 @@ static func relic_text(k: int, stars: int) -> String:
 	return RELICS[k].text % roundi(RELICS[k].per_star * maxi(stars, 1) * 100.0)
 
 
-## The 強化石, items and relic star in a reward (progression.gd claim_march / push_rewards), e.g.
+## The 強化石, items and relic star in a reward (progression.gd claim_offline / march_kill / push_rewards), e.g.
 ## ["強化石 +6", "鋼劍（R）", "遺物 日輪聖印 ★+1"]; the same item twice shows as "×2".
 static func drops_text(got: Dictionary) -> PackedStringArray:
 	var parts := PackedStringArray()
 	if got.get("stones", 0) > 0:
 		parts.append("強化石 +%d" % got.stones)
 	var counts: Dictionary = {}
-	for id: String in got.get("items", []):
-		counts[id] = counts.get(id, 0) + 1
+	for item: Dictionary in got.get("items", []):
+		counts[item.id] = counts.get(item.id, 0) + 1
 	for id: String in counts:
 		parts.append("%s（%s）%s" % [item_name(id), RARITY_NAMES[rarity(id)], " ×%d" % counts[id] if counts[id] > 1 else ""])
 	if got.get("relic", -1) >= 0:
 		parts.append("遺物 %s ★+1" % RELICS[got.relic].name)
 	if got.get("tickets", 0) > 0:
 		parts.append("招募券 +%d" % got.tickets)
+	if got.get("salvaged", 0) > 0:
+		parts.append("自動分解 %d 件" % got.salvaged)
 	return parts

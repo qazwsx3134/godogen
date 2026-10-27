@@ -1,0 +1,202 @@
+[gd_scene format=3]
+
+[ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Medium.otf" id="1_hkrsi"]
+[ext_resource type="Texture2D" path="res://assets/reference/train.png" id="2_kwiu2"]
+[ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Bold.otf" id="3_42w08"]
+
+[sub_resource type="Theme" id="Theme_krmap"]
+default_font = ExtResource("1_hkrsi")
+default_font_size = 26
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wnl7x"]
+bg_color = Color(0.96862745, 0.9098039, 0.8352941, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8, 0.7058824, 0.6039216, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 2
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bl2ju"]
+atlas = ExtResource("2_kwiu2")
+region = Rect2(52, 994, 96, 89)
+filter_clip = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pwkfr"]
+bg_color = Color(0.25490198, 0.3647059, 0.52156866, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.54901963, 0.627451, 0.7411765, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7r3wi"]
+bg_color = Color(0.17254902, 0.2509804, 0.37254903, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.9529412, 0.84313726, 0.56078434, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dnlsv"]
+bg_color = Color(0.32941177, 0.4509804, 0.6156863, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.9529412, 0.84313726, 0.56078434, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yhv7p"]
+bg_color = Color(0.9019608, 0.8117647, 0.70980394, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.74509805, 0.6509804, 0.54901963, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_30n4r"]
+bg_color = Color(0.9137255, 0.8352941, 0.73333335, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.8745098, 0.6666667, 0.2901961, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+corner_detail = 2
+
+[node name="TrainingRow" type="Control" unique_id=265172960]
+custom_minimum_size = Vector2(881, 190)
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+theme = SubResource("Theme_krmap")
+
+[node name="Frame" type="Panel" parent="." unique_id=772292828]
+layout_mode = 0
+offset_right = 881.0
+offset_bottom = 190.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_wnl7x")
+
+[node name="Icon" type="TextureRect" parent="." unique_id=1701188117]
+texture_filter = 1
+layout_mode = 0
+offset_left = 18.0
+offset_top = 38.0
+offset_right = 121.0
+offset_bottom = 142.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_bl2ju")
+expand_mode = 1
+
+[node name="Title" type="Label" parent="." unique_id=1998782497]
+layout_mode = 0
+offset_left = 138.0
+offset_top = 16.0
+offset_right = 348.0
+offset_bottom = 64.0
+theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("3_42w08")
+theme_override_font_sizes/font_size = 32
+text = "劍術"
+vertical_alignment = 1
+
+[node name="TrainingLevel" type="Label" parent="." unique_id=525441856]
+layout_mode = 0
+offset_left = 140.0
+offset_top = 67.0
+offset_right = 290.0
+offset_bottom = 101.0
+theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 23
+text = "Lv.0"
+vertical_alignment = 1
+
+[node name="Description" type="Label" parent="." unique_id=955340598]
+layout_mode = 0
+offset_left = 140.0
+offset_top = 104.0
+offset_right = 583.0
+offset_bottom = 138.0
+theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 21
+text = "提升主角的基礎攻擊力。"
+vertical_alignment = 1
+
+[node name="CurrentValue" type="Label" parent="." unique_id=947734958]
+layout_mode = 0
+offset_left = 354.0
+offset_top = 22.0
+offset_right = 624.0
+offset_bottom = 58.0
+theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 21
+text = "目前攻擊：—"
+vertical_alignment = 1
+
+[node name="NextCost" type="Label" parent="." unique_id=158560676]
+layout_mode = 0
+offset_left = 354.0
+offset_top = 65.0
+offset_right = 624.0
+offset_bottom = 101.0
+theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 21
+text = "下一級費用：—"
+vertical_alignment = 1
+
+[node name="TrainButton" type="Button" parent="." unique_id=168005273]
+layout_mode = 0
+offset_left = 665.0
+offset_top = 51.0
+offset_right = 860.0
+offset_bottom = 133.0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
+theme_override_fonts/font = ExtResource("3_42w08")
+theme_override_font_sizes/font_size = 23
+theme_override_styles/normal = SubResource("StyleBoxFlat_pwkfr")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_7r3wi")
+theme_override_styles/hover = SubResource("StyleBoxFlat_dnlsv")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_yhv7p")
+theme_override_styles/focus = SubResource("StyleBoxFlat_30n4r")
+text = "立即提升"
+metadata/action = "train:0"

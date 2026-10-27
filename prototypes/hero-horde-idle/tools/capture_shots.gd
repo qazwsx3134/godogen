@@ -26,7 +26,7 @@ func _run() -> void:
 	_main = (load("res://scenes/main.tscn") as PackedScene).instantiate()
 	# Heroes near the push's reference strength, saved aside so the player's progress is never touched.
 	var progress := Progression.new()
-	progress.class_level.fill(12)
+	progress.talent[0] = 11; progress.talent[1] = 11
 	progress.captains = PackedInt32Array([3, 60])  # a shield up front and an archer at the back
 	_main.progress = progress
 	_main.save_path = "user://progress_shots.json"
@@ -89,26 +89,7 @@ func _run() -> void:
 	sim.t = PushSim.DURATION - 0.01
 	await _shot("9_result", 8)
 
-	# The growth screen after a few rounds: some gold and shards, a levelled march squad.
-	_main.queue_free()
-	var grown := Progression.new()
-	for k: int in 3:
-		grown.march_hour()
-		grown.gold += 2000
-		grown.auto_spend()
-	grown.shards = 3
-	var growth: Control = (load("res://scenes/growth.tscn") as PackedScene).instantiate()
-	growth.progress = grown
-	growth.save_path = "user://progress_shots.json"
-	root.add_child(growth)
-	await _frames(3)
-	growth.select_class(1)
-	await _shot("10_growth", 4)
-	# The hero page: the SSR sword (its 招牌技), then an N (the next rarity step).
-	growth.select_hero(growth.find_child("Cards", true, false).get_child(0).hero)
-	await _shot("11_hero_ssr", 3)
-	growth.select_hero(growth.find_child("Cards", true, false).get_child(12).hero)
-	await _shot("12_hero_n", 3)
+	# The home screen's pages are tools/capture_home.gd.
 	quit(0)
 
 

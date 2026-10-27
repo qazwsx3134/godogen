@@ -17,7 +17,7 @@ signal skip_pressed
 signal retry_pressed
 signal grow_pressed
 signal next_pressed
-## 回營地 from the result, or 撤退 from the pause menu.
+## 回總覽 from the result, or 撤退 from the pause menu.
 signal camp_pressed
 
 @onready var _boss_hp: ProgressBar = %BossHp
@@ -179,7 +179,7 @@ func show_result(won: bool, detail: String, report: Dictionary = {}, mvp_class: 
 			row.show_row(line[0], line[1], line[2], line[3])
 	_next.visible = next_label != ""
 	_next.text = "挑戰下一關　%s" % next_label
-	# One main action: 挑戰下一關 after a win, 前往養成 after a loss.
+	# One main action: 挑戰下一關 after a win, 去訓練 after a loss.
 	_grow.theme_type_variation = &"" if _next.visible else &"PrimaryButton"
 	_report.visible = not report.is_empty()
 	if not report.is_empty():
@@ -198,8 +198,8 @@ func _reward_lines(got: Dictionary) -> Array:
 	for spec: Array in [["shards", "突破素材"], ["stones", "強化石"], ["tickets", "招募券"]]:
 		if got.get(spec[0], 0) > 0:
 			out.append([Items.material_icon(spec[0]), -1, spec[1], "+%d" % got[spec[0]]])
-	for id: String in got.get("items", []):
-		out.append([Items.icon(id), Items.rarity(id), Items.item_name(id), ""])
+	for item: Dictionary in got.get("items", []):
+		out.append([Items.icon(item.id), Items.rarity(item.id), Items.item_name(item.id), " ".join(Items.affix_lines(item))])
 	if got.get("relic", -1) >= 0:
 		out.append([Items.relic_icon(got.relic), 3, Items.RELICS[got.relic].name, "★+1"])
 	return out
