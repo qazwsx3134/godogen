@@ -309,6 +309,7 @@
     condition: () => ({ op: 'condition', flag: '', equals: true, then: '', else: '' }),
     bg: () => ({ op: 'bg', id: '' }),
     char: () => ({ op: 'char', id: '' }),
+    portrait_effect: () => ({ op: 'portrait_effect', id: '', effect: 'shake' }),
     flag: () => ({ op: 'flag', key: '', value: true }),
     item: () => ({ op: 'item', id: '' }),
     se: () => ({ op: 'se', id: '' }),
@@ -327,7 +328,7 @@
 
   const OP_ICONS = {
     say: '💬', choice: '❓', condition: '🔀', goto: '↪️', investigate: '🔍', boke_round: '🎤', comedy: '💥',
-    end: '🏁', result: '📊', bg: '🖼️', char: '🧍', item: '🎒', flag: '🚩', set_flag: '🚩', profile: '📇', se: '🔊',
+    end: '🏁', result: '📊', bg: '🖼️', char: '🧍', portrait_effect: '✨', item: '🎒', flag: '🚩', set_flag: '🚩', profile: '📇', se: '🔊',
     sound: '🔊', bgm: '🎵', shake: '📳', flash: '⚡', cutin: '🎬', freeze: '⏸️', fade: '🌗', beam: '🔆', placard: '🪧',
     wait: '⏳', show: '🧍', hide: '🫥', move: '🚶', face: '👀', expression: '🙂', camera: '🎥',
   };
@@ -430,12 +431,14 @@
 
   // Used when story_runner.gd cannot be fetched (file://); test_core.mjs checks them against the real file.
   const FALLBACK_ENUMS = {
-    VALID_OPS: ['bg', 'char', 'say', 'choice', 'item', 'flag', 'show', 'hide', 'move', 'face', 'expression', 'camera', 'wait',
+    VALID_OPS: ['bg', 'char', 'portrait_effect', 'say', 'choice', 'item', 'flag', 'show', 'hide', 'move', 'face', 'expression', 'camera', 'wait',
       'sound', 'end', 'result', 'set_flag', 'condition', 'goto', 'investigate', 'boke_round', 'profile', 'shake', 'flash',
       'cutin', 'comedy', 'freeze', 'fade', 'beam', 'bgm', 'se', 'placard'],
     VALID_EXPRESSIONS: ['neutral', 'smile', 'annoyed', 'surprised', 'thinking', 'sweat', 'smug', 'shout', 'broken', 'angry',
       'panic', 'nervous', 'serious', 'cry', 'nosepick', 'mock', 'sit_serious', 'sit_talking'],
     VALID_COMEDY_PRESETS: ['tsukkomi_impact', 'small_reaction', 'full_manga_panel', 'emotion_band'],
+    VALID_CHARACTER_TRANSITIONS: ['fade', 'slide_left', 'slide_right', 'instant'],
+    VALID_PORTRAIT_EFFECTS: ['shake', 'bounce'],
   };
 
   /** Where a story path of stories.json (res://data/x.json) is fetched from, relative to tools/story_editor/. */
@@ -445,7 +448,7 @@
   const STEP_GROUPS = [
     { id: 'dialogue', label: '對話', ops: ['say', 'comedy'] },
     { id: 'narration', label: '旁白', ops: ['say'] },
-    { id: 'character', label: '立繪', ops: ['char', 'profile'] },
+    { id: 'character', label: '立繪', ops: ['char', 'portrait_effect', 'profile'] },
     { id: 'scene', label: '背景・音樂', ops: ['bg', 'bgm'] },
     { id: 'sound', label: '音效', ops: ['se'] },
     { id: 'event', label: '事件', ops: ['choice', 'condition', 'flag', 'item', 'goto', 'investigate', 'boke_round', 'placard', 'end', 'result'] },
@@ -453,7 +456,7 @@
     { id: 'legacy', label: '舊版', ops: ['show', 'hide', 'move', 'face', 'expression', 'camera', 'wait', 'sound', 'set_flag'] },
   ];
   const STEP_LABELS = {
-    say: '台詞', comedy: '漫畫吐槽', char: '角色登場／表情', profile: '解鎖人物檔案', bg: '換背景', bgm: '背景音樂', se: '音效',
+    say: '台詞', comedy: '漫畫吐槽', char: '角色登場／表情', portrait_effect: '立繪動作', profile: '解鎖人物檔案', bg: '換背景', bgm: '背景音樂', se: '音效',
     choice: '選項', condition: '條件分歧', flag: '設定旗標', item: '取得道具', goto: '跳到場景', investigate: '調查',
     boke_round: '吐槽回合', placard: '舉牌', end: '結束', result: '章節結算', shake: '畫面震動', flash: '閃光',
     fade: '淡入淡出', freeze: '停格', cutin: '切入特寫', beam: '光束', show: '顯示角色', hide: '隱藏角色', move: '移動角色',
@@ -545,7 +548,7 @@
       else if (op === 'bgm') note('music', String(value.id ?? ''), node);
       else if (op === 'se') note('sounds', String(value.id ?? ''), node);
       else if (op === 'item') note('items', String(value.id ?? ''), node);
-      else if (op === 'char' || op === 'profile') face(String(value.id ?? ''), String(value.expression ?? 'neutral'), node);
+      else if (op === 'char' || op === 'portrait_effect' || op === 'profile') face(String(value.id ?? ''), String(value.expression ?? 'neutral'), node);
       else if (op === 'expression') face(String(value.actor ?? ''), String(value.value ?? 'neutral'), node);
       else if (op === 'choice' && String(value.perspective ?? 'pov') !== 'director') state.povChoice = true;
       for (const [key, field] of Object.entries(value)) {

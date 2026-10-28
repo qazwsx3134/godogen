@@ -10,6 +10,7 @@ signal message(text: String)
 
 const CARD := preload("res://scenes/components/inventory_card.tscn")
 const Items = preload("res://domain/items.gd")
+const Progression = preload("res://domain/progression.gd")
 const UiArt = preload("res://scripts/ui_art.gd")
 
 ## inventory_card's drawn size (its root has no minimum of its own).
@@ -92,6 +93,8 @@ func _list() -> Array:
 			if progress.relic_stars[k] > 0 or filter == Filter.RELIC:
 				out.append({"kind": "relic", "index": k})
 	if filter in [Filter.ALL, Filter.MATERIAL]:
+		for k: int in Progression.POTIONS.size():
+			out.append({"kind": "potion", "index": k})
 		for key: String in ["shards", "stones", "tickets"]:
 			out.append({"kind": "material", "key": key})
 	return out
@@ -101,19 +104,23 @@ func _fill(card: Control, e: Dictionary) -> void:
 	var icon: TextureRect = card.get_node("Icon")
 	var title: Label = card.get_node("Title")
 	var count: Label = card.get_node("Quantity")
-	var frame: Control = card.get_node("Frame")
-	frame.self_modulate = Color.WHITE
+	var stripe: ColorRect = card.get_node("RarityBar")
+	stripe.visible = e.kind == "piece"
 	match e.kind:
 		"piece":
 			var item: Dictionary = e.item
 			icon.texture = UiArt.item_icon(item.id)
 			title.text = Items.item_name(item.id)
 			count.text = ("新 " if progress.fresh.has(item.uid) else "") + Items.RARITY_NAMES[Items.rarity(item.id)]
-			frame.self_modulate = UiArt.rarity_color(Items.rarity(item.id)).lerp(Color.WHITE, 0.45)
+			stripe.color = UiArt.rarity_color(Items.rarity(item.id))
 		"relic":
 			icon.texture = UiArt.relic_icon(e.index)
 			title.text = Items.RELICS[e.index].name
 			count.text = "★%d" % progress.relic_stars[e.index]
+		"potion":
+			icon.texture = UiArt.potion_icon(e.index)
+			title.text = Progression.POTIONS[e.index].name
+			count.text = "×%d" % progress.potions[e.index]
 		"material":
 			icon.texture = UiArt.material_icon(e.key)
 			title.text = {"shards": "突破素材", "stones": "強化石", "tickets": "招募券"}[e.key]
@@ -134,12 +141,16 @@ func _show_info() -> void:
 		"relic":
 			var k: int = selected.index
 			%InfoName.text = "%s ★%d／%d" % [Items.RELICS[k].name, progress.relic_stars[k], Items.MAX_STARS]
-			%InfoText.text = Items.relic_text(k, progress.relic_stars[k]) + "\n首通關卡與打贏關卡王時可能得到星星。"
+			%InfoText.text = Items.relic_text(k, progress.relic_stars[k]) + "\n首次登上樓層與打贏樓層王時可能得到星星。"
+		"potion":
+			var pk: int = selected.index
+			%InfoName.text = "%s ×%d" % [Progression.POTIONS[pk].name, progress.potions[pk]]
+			%InfoText.text = "一瓶給一名英雄 %d 經驗（到等級上限為止），沒在行軍的英雄也能養。在英雄頁點英雄→升級使用。行軍與打贏樓層王會得到。" % Progression.POTIONS[pk].exp
 		"material":
 			%InfoName.text = {"shards": "突破素材", "stones": "強化石", "tickets": "招募券"}[selected.key]
-			%InfoText.text = {"shards": "英雄突破用。關卡王必掉，招募與行軍也會得到。",
-				"stones": "職業武庫強化用。分解裝備、打贏關卡王、行軍都會得到。",
-				"tickets": "商店招募用。首通關卡得 10 張。"}[selected.key]
+			%InfoText.text = {"shards": "英雄突破用。樓層王必掉，招募與行軍也會得到。",
+				"stones": "職業武庫強化用。分解裝備、打贏樓層王、行軍都會得到。",
+				"tickets": "商店招募用。首次登上樓層得 10 張。"}[selected.key]
 		_:
 			%InfoName.text = "點選物品看詳情"
 			%InfoText.text = "背包 %d／%d 件" % [progress.bag.size(), Items.BAG_MAX]

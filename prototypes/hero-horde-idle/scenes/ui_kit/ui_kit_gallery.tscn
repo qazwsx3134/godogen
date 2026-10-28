@@ -1,0 +1,374 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/atlas/battle_sky.tres" id="1_ip2dg"]
+[ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Bold.otf" id="2_kx1yv"]
+[ext_resource type="PackedScene" path="res://scenes/ui_kit/sao_boss_bar.tscn" id="3_1ab8w"]
+[ext_resource type="PackedScene" path="res://scenes/ui_kit/sao_timer_bar.tscn" id="4_ktrc7"]
+[ext_resource type="PackedScene" path="res://scenes/ui_kit/sao_unit_bar.tscn" id="5_hnrty"]
+[ext_resource type="PackedScene" path="res://scenes/ui_kit/sao_toast.tscn" id="6_7ndj2"]
+[ext_resource type="PackedScene" path="res://scenes/ui_kit/sao_party_card.tscn" id="7_8yecq"]
+[ext_resource type="StyleBox" path="res://ui/sao_window.tres" id="8_l5ufw"]
+[ext_resource type="StyleBox" path="res://ui/sao_titlebar.tres" id="9_ukq0t"]
+[ext_resource type="StyleBox" path="res://ui/sao_section.tres" id="10_lbipb"]
+[ext_resource type="StyleBox" path="res://ui/sao_button.tres" id="11_u5ilw"]
+[ext_resource type="StyleBox" path="res://ui/sao_primary.tres" id="12_nmqbd"]
+[ext_resource type="StyleBox" path="res://ui/sao_card.tres" id="13_lun67"]
+[ext_resource type="StyleBox" path="res://ui/sao_bar.tres" id="14_iasxm"]
+[ext_resource type="StyleBox" path="res://ui/sao_ring.tres" id="15_886m5"]
+[ext_resource type="StyleBox" path="res://ui/sao_disc.tres" id="16_vh4uc"]
+[ext_resource type="StyleBox" path="res://ui/sao_ring_active.tres" id="17_x7llt"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_a4558"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_edioc"]
+
+[node name="UiKitGallery" type="Control" unique_id=237037893]
+custom_minimum_size = Vector2(941, 1672)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 941.0
+offset_bottom = 1672.0
+mouse_filter = 2
+
+[node name="Backdrop" type="TextureRect" parent="." unique_id=2014877349]
+texture_filter = 1
+layout_mode = 0
+offset_right = 941.0
+offset_bottom = 960.0
+texture = ExtResource("1_ip2dg")
+expand_mode = 1
+
+[node name="Dim" type="ColorRect" parent="." unique_id=1909149145]
+layout_mode = 0
+offset_right = 941.0
+offset_bottom = 960.0
+color = Color(0, 0, 0, 0.35)
+
+[node name="MenuBackdrop" type="ColorRect" parent="." unique_id=1881088103]
+layout_mode = 0
+offset_top = 960.0
+offset_right = 941.0
+offset_bottom = 1672.0
+color = Color(0.7, 0.74, 0.78, 1)
+
+[node name="Caption3" type="Label" parent="." unique_id=96299783]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 20.0
+offset_right = 900.0
+offset_bottom = 60.0
+theme_override_colors/font_color = Color(0.96, 0.97, 0.98, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.07, 0.09, 1)
+theme_override_constants/outline_size = 6
+theme_override_fonts/font = ExtResource("2_kx1yv")
+theme_override_font_sizes/font_size = 26
+text = "HUD 層：戰鬥畫面上（深色玻璃＋細框＋斜切血條）"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Caption4" type="Label" parent="." unique_id=1410481997]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 70.0
+offset_right = 900.0
+offset_bottom = 110.0
+theme_override_colors/font_color = Color(0.96, 0.97, 0.98, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.07, 0.09, 1)
+theme_override_constants/outline_size = 6
+theme_override_fonts/font = ExtResource("2_kx1yv")
+theme_override_font_sizes/font_size = 26
+text = "樓層王血條 sao_boss_bar"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="BossBar" parent="." unique_id=1954835636 instance=ExtResource("3_1ab8w")]
+layout_mode = 0
+offset_left = 140.0
+offset_top = 104.0
+offset_right = 800.0
+offset_bottom = 188.0
+
+[node name="Caption6" type="Label" parent="." unique_id=284295666]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 210.0
+offset_right = 900.0
+offset_bottom = 250.0
+theme_override_colors/font_color = Color(0.96, 0.97, 0.98, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.07, 0.09, 1)
+theme_override_constants/outline_size = 6
+theme_override_fonts/font = ExtResource("2_kx1yv")
+theme_override_font_sizes/font_size = 26
+text = "倒數長條 sao_timer_bar"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="TimerBar" parent="." unique_id=1039521659 instance=ExtResource("4_ktrc7")]
+layout_mode = 0
+offset_left = 140.0
+offset_top = 250.0
+offset_right = 800.0
+offset_bottom = 266.0
+
+[node name="Caption8" type="Label" parent="." unique_id=231446421]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 300.0
+offset_right = 900.0
+offset_bottom = 340.0
+theme_override_colors/font_color = Color(0.96, 0.97, 0.98, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.07, 0.09, 1)
+theme_override_constants/outline_size = 6
+theme_override_fonts/font = ExtResource("2_kx1yv")
+theme_override_font_sizes/font_size = 26
+text = "頭上血條 sao_unit_bar（綠／黃／紅）"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="UnitBar0" parent="." unique_id=236764688 instance=ExtResource("5_hnrty")]
+layout_mode = 0
+offset_left = 140.0
+offset_top = 344.0
+offset_right = 212.0
+offset_bottom = 358.0
+
+[node name="UnitBar1" parent="." unique_id=1702985698 instance=ExtResource("5_hnrty")]
+layout_mode = 0
+offset_left = 250.0
+offset_top = 344.0
+offset_right = 322.0
+offset_bottom = 358.0
+
+[node name="UnitBar2" parent="." unique_id=707955406 instance=ExtResource("5_hnrty")]
+layout_mode = 0
+offset_left = 360.0
+offset_top = 344.0
+offset_right = 432.0
+offset_bottom = 358.0
+
+[node name="Caption12" type="Label" parent="." unique_id=53890480]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 390.0
+offset_right = 900.0
+offset_bottom = 430.0
+theme_override_colors/font_color = Color(0.96, 0.97, 0.98, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.07, 0.09, 1)
+theme_override_constants/outline_size = 6
+theme_override_fonts/font = ExtResource("2_kx1yv")
+theme_override_font_sizes/font_size = 26
+text = "通知條 sao_toast"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Toast" parent="." unique_id=715619158 instance=ExtResource("6_7ndj2")]
+layout_mode = 0
+offset_left = 140.0
+offset_top = 430.0
+offset_right = 700.0
+offset_bottom = 494.0
+
+[node name="Caption14" type="Label" parent="." unique_id=928624658]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 520.0
+offset_right = 900.0
+offset_bottom = 560.0
+theme_override_colors/font_color = Color(0.96, 0.97, 0.98, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.07, 0.09, 1)
+theme_override_constants/outline_size = 6
+theme_override_fonts/font = ExtResource("2_kx1yv")
+theme_override_font_sizes/font_size = 26
+text = "隊伍卡 sao_party_card"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="PartyCard" parent="." unique_id=1395064304 instance=ExtResource("7_8yecq")]
+layout_mode = 0
+offset_left = 150.0
+offset_top = 560.0
+offset_right = 530.0
+offset_bottom = 678.0
+
+[node name="Caption16" type="Label" parent="." unique_id=281127779]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 980.0
+offset_right = 900.0
+offset_bottom = 1020.0
+theme_override_colors/font_color = Color(0.18, 0.19, 0.21, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.07, 0.09, 1)
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("2_kx1yv")
+theme_override_font_sizes/font_size = 26
+text = "選單層：白色視窗、標題列、刻線、白鈕／金色主要鈕、圓形導覽"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Window" type="Panel" parent="." unique_id=1467328569]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 1030.0
+offset_right = 600.0
+offset_bottom = 1360.0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("8_l5ufw")
+
+[node name="TitleBar" type="Panel" parent="Window" unique_id=1981484688]
+layout_mode = 0
+offset_right = 560.0
+offset_bottom = 70.0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("9_ukq0t")
+
+[node name="Title" type="Label" parent="Window" unique_id=1665556031]
+layout_mode = 0
+offset_left = 24.0
+offset_right = 424.0
+offset_bottom = 70.0
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.07, 0.09, 1)
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("2_kx1yv")
+theme_override_font_sizes/font_size = 34
+text = "視窗標題"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Section" type="Panel" parent="Window" unique_id=1235939773]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 150.0
+offset_right = 540.0
+offset_bottom = 320.0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("10_lbipb")
+
+[node name="Body" type="Label" parent="Window" unique_id=1224744889]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 84.0
+offset_right = 524.0
+offset_bottom = 134.0
+theme_override_colors/font_color = Color(0.52, 0.53, 0.5, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.07, 0.09, 1)
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("2_kx1yv")
+theme_override_font_sizes/font_size = 24
+text = "區塊之間用上方刻線分隔"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Button" type="Button" parent="Window" unique_id=1667826308]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 180.0
+offset_right = 264.0
+offset_bottom = 244.0
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_focus_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_fonts/font = ExtResource("2_kx1yv")
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = ExtResource("11_u5ilw")
+theme_override_styles/pressed = ExtResource("11_u5ilw")
+theme_override_styles/hover = ExtResource("11_u5ilw")
+theme_override_styles/disabled = ExtResource("11_u5ilw")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_a4558")
+text = "一般按鈕"
+
+[node name="Primary" type="Button" parent="Window" unique_id=1752188545]
+layout_mode = 0
+offset_left = 290.0
+offset_top = 180.0
+offset_right = 530.0
+offset_bottom = 244.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("2_kx1yv")
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = ExtResource("12_nmqbd")
+theme_override_styles/pressed = ExtResource("12_nmqbd")
+theme_override_styles/hover = ExtResource("12_nmqbd")
+theme_override_styles/disabled = ExtResource("12_nmqbd")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_edioc")
+text = "主要按鈕"
+
+[node name="Card" type="Panel" parent="Window" unique_id=1011527573]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 256.0
+offset_right = 264.0
+offset_bottom = 312.0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("13_lun67")
+
+[node name="RarityBar" type="ColorRect" parent="Window/Card" unique_id=1926882919]
+layout_mode = 0
+offset_left = 2.0
+offset_top = 4.0
+offset_right = 10.0
+offset_bottom = 52.0
+color = Color(0.8156863, 0.5411765, 0.08627451, 1)
+
+[node name="Text" type="Label" parent="Window/Card" unique_id=1659543076]
+layout_mode = 0
+offset_left = 18.0
+offset_right = 238.0
+offset_bottom = 56.0
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.07, 0.09, 1)
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("2_kx1yv")
+theme_override_font_sizes/font_size = 20
+text = "白底卡＋稀有度色條"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="NavSample" type="Panel" parent="." unique_id=1477421762]
+layout_mode = 0
+offset_left = 640.0
+offset_top = 1030.0
+offset_right = 900.0
+offset_bottom = 1170.0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("14_iasxm")
+
+[node name="Ring0" type="Panel" parent="NavSample" unique_id=1910243430]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 10.0
+offset_right = 120.0
+offset_bottom = 110.0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("15_886m5")
+
+[node name="Disc0" type="Panel" parent="NavSample" unique_id=1959064284]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 15.0
+offset_right = 115.0
+offset_bottom = 105.0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("16_vh4uc")
+
+[node name="Ring1" type="Panel" parent="NavSample" unique_id=772605276]
+layout_mode = 0
+offset_left = 140.0
+offset_top = 10.0
+offset_right = 240.0
+offset_bottom = 110.0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("17_x7llt")
+
+[node name="Disc1" type="Panel" parent="NavSample" unique_id=2086539882]
+layout_mode = 0
+offset_left = 145.0
+offset_top = 15.0
+offset_right = 235.0
+offset_bottom = 105.0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("16_vh4uc")

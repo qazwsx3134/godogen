@@ -1,25 +1,13 @@
 [gd_scene format=3]
 
 [ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Medium.otf" id="1_s3yib"]
+[ext_resource type="StyleBox" path="res://ui/sao_card.tres" id="2_5g2g1"]
 [ext_resource type="Texture2D" path="res://assets/reference/backpack.png" id="2_ox4p1"]
 [ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Bold.otf" id="3_5g2g1"]
 
 [sub_resource type="Theme" id="Theme_s3yib"]
 default_font = ExtResource("1_s3yib")
 default_font_size = 30
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wnl7x"]
-bg_color = Color(0.96862745, 0.9098039, 0.8352941, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.8, 0.7058824, 0.6039216, 1)
-corner_radius_top_left = 7
-corner_radius_top_right = 7
-corner_radius_bottom_right = 7
-corner_radius_bottom_left = 7
-corner_detail = 2
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bc6vo"]
 atlas = ExtResource("2_ox4p1")
@@ -67,56 +55,59 @@ corner_radius_bottom_right = 7
 corner_radius_bottom_left = 7
 corner_detail = 2
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_30n4r"]
-bg_color = Color(0.9137255, 0.8352941, 0.73333335, 1)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.8745098, 0.6666667, 0.2901961, 1)
-corner_radius_top_left = 7
-corner_radius_top_right = 7
-corner_radius_bottom_right = 7
-corner_radius_bottom_left = 7
-corner_detail = 2
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_krmap"]
 
 [node name="EquipmentItemCard" type="Control" unique_id=1844036774]
-custom_minimum_size = Vector2(164, 145)
+custom_minimum_size = Vector2(200, 150)
 layout_mode = 3
 anchors_preset = 0
+offset_right = 200.0
+offset_bottom = 150.0
 mouse_filter = 2
 theme = SubResource("Theme_s3yib")
 metadata/fusion_readable = true
+metadata/sao_style = true
+metadata/ux_spacing = true
 
 [node name="Frame" type="Panel" parent="." unique_id=7035838]
 layout_mode = 0
-offset_right = 164.0
-offset_bottom = 145.0
+offset_right = 200.0
+offset_bottom = 150.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_wnl7x")
+theme_override_styles/panel = ExtResource("2_5g2g1")
+
+[node name="RarityBar" type="ColorRect" parent="." unique_id=150771511]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 2.0
+offset_top = 4.0
+offset_right = 10.0
+offset_bottom = 146.0
+mouse_filter = 2
+color = Color(0.5411765, 0.5058824, 0.4392157, 1)
 
 [node name="Icon" type="TextureRect" parent="." unique_id=8706804]
 texture_filter = 1
 layout_mode = 0
-offset_left = 46.0
-offset_top = 7.0
-offset_right = 118.0
-offset_bottom = 74.0
+offset_left = 62.0
+offset_top = 8.0
+offset_right = 138.0
+offset_bottom = 78.0
 mouse_filter = 2
 texture = SubResource("AtlasTexture_bc6vo")
 expand_mode = 1
 
 [node name="Title" type="Label" parent="." unique_id=135093002]
 layout_mode = 0
-offset_left = 5.0
-offset_top = 76.0
-offset_right = 159.0
-offset_bottom = 107.0
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+offset_left = 16.0
+offset_top = 80.0
+offset_right = 192.0
+offset_bottom = 114.0
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_outline_color = Color(0.24, 0.26, 0.3, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("3_5g2g1")
-theme_override_font_sizes/font_size = 29
+theme_override_font_sizes/font_size = 26
 text = "短劍"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -124,39 +115,42 @@ text_overrun_behavior = 3
 
 [node name="Level" type="Label" parent="." unique_id=1390211685]
 layout_mode = 0
-offset_left = 5.0
-offset_top = 108.0
-offset_right = 78.0
-offset_bottom = 135.0
-theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
-theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+offset_left = 16.0
+offset_top = 114.0
+offset_right = 116.0
+offset_bottom = 144.0
+theme_override_colors/font_color = Color(0.5, 0.53, 0.58, 1)
+theme_override_colors/font_outline_color = Color(0.5, 0.53, 0.58, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 25
+theme_override_font_sizes/font_size = 22
 text = "Lv.1"
-horizontal_alignment = 1
 vertical_alignment = 1
 text_overrun_behavior = 3
 
 [node name="EquippedBy" type="Label" parent="." unique_id=284739502]
 layout_mode = 0
-offset_left = 78.0
-offset_top = 108.0
-offset_right = 159.0
-offset_bottom = 135.0
-theme_override_colors/font_color = Color(0.30980393, 0.50980395, 0.3647059, 1)
-theme_override_colors/font_outline_color = Color(0.30980393, 0.50980395, 0.3647059, 1)
+offset_left = 104.0
+offset_top = 114.0
+offset_right = 192.0
+offset_bottom = 144.0
+theme_override_colors/font_color = Color(0.5, 0.53, 0.58, 1)
+theme_override_colors/font_outline_color = Color(0.5, 0.53, 0.58, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 21
-horizontal_alignment = 1
+theme_override_font_sizes/font_size = 18
+horizontal_alignment = 2
 vertical_alignment = 1
 text_overrun_behavior = 3
 
 [node name="SelectButton" type="Button" parent="." unique_id=1108661187]
 layout_mode = 0
-offset_right = 164.0
-offset_bottom = 145.0
+offset_right = 200.0
+offset_bottom = 150.0
 mouse_default_cursor_shape = 2
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_focus_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_pressed_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_hover_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("3_5g2g1")
 theme_override_font_sizes/font_size = 23
@@ -164,5 +158,5 @@ theme_override_styles/normal = SubResource("StyleBoxEmpty_711xe")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_gox3y")
 theme_override_styles/hover = SubResource("StyleBoxFlat_hq2df")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_yhv7p")
-theme_override_styles/focus = SubResource("StyleBoxFlat_30n4r")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_krmap")
 metadata/action = "backpack_item:"

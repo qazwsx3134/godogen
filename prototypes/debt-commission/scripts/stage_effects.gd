@@ -121,10 +121,14 @@ func play(step: Dictionary, skipping: bool) -> float:
 		return 0.0
 	match op:
 		"beam":
+			for effect: Node in _overlay.get_children():
+				if effect.has_method("make_room_for_beam"):
+					effect.call("make_room_for_beam")
 			var beam: Control = BEAM_SCENE.instantiate() as Control
 			beam.set_meta("stage_effect", true)
 			_overlay.add_child(beam)
-			beam.call("play", float(step.get("duration", 0.8)))
+			_overlay.move_child(beam, 0)  # the caption stays above the light
+			beam.call("play", float(step.get("duration", 0.8)), reduce_motion)
 		"se":
 			_play_se(str(step.get("id", "")))
 		"shake":

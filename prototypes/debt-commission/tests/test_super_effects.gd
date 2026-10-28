@@ -13,7 +13,7 @@ func _game() -> Control:
 	root.add_child(game)
 	return game
 func _run() -> void:
-	root.size = Vector2i(1080, 1920)
+	root.size = Vector2i(1280, 720)
 	var built: Dictionary = BUILDER.build("res://story_src/phase4_rounds.dialogue")
 	_expect(str(built.error).is_empty(), "source builds with beam(): %s" % built.error)
 	_expect(BUILDER.to_json(built.story) == FileAccess.get_file_as_string(SAMPLE), "generated story matches authoring source")
@@ -33,6 +33,9 @@ func _run() -> void:
 	_expect(_charged(game) == 0, "no aura below full power")
 	await _press(game._choice_buttons[0])
 	_expect(game._runner.gameplay.power == 100 and _charged(game) == 5, "perfect caps power and lights the living glasses")
+	_expect(game._comedy_layer.is_active(), "the chosen retort plays before the full-power notification")
+	game._on_screen_tap()
+	await _until(func() -> bool: return not game._comedy_layer.is_active() and _notifications(game) > 0, "full-power notification follows the retort")
 	var notifications: int = _notifications(game)
 	_expect(notifications == 1, "crossing full power emits one cut-in")
 	await _until_combo(game)
@@ -56,6 +59,13 @@ func _run() -> void:
 	await _until(func() -> bool: return _beam(game) != null, "the super spawns its beam")
 	var beam: Control = _beam(game)
 	_expect(_ignores_input(beam), "every beam node ignores pointer input")
+	_expect(beam.get_node("%OriginGlow") != null and (beam.get_node("%Strip/Core") as ColorRect).material is ShaderMaterial,
+		"the beam has an energy origin and a shaped core")
+	var caption_above_beam: bool = false
+	for effect: Node in game._overlay_layer.get_children():
+		if effect.has_method("make_room_for_beam"):
+			caption_above_beam = effect.get_node("%Bubble").get_parent() == effect.get_node("%BeamCaptionArea") and effect.get_index() > beam.get_index()
+	_expect(caption_above_beam, "the super caption uses its upper area above the beam")
 	var logical_point: Vector2 = game._game.position + Vector2(game._game.size.x * 0.5, game._game.size.y * 0.42)
 	await _tap(logical_point)
 	_expect(game._text_complete, "tap through the beam completes the current line")

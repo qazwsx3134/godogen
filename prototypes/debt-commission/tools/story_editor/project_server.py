@@ -9,6 +9,7 @@ import os
 from pathlib import Path
 import re
 import secrets
+import sys
 import signal
 import shutil
 import subprocess
@@ -20,6 +21,9 @@ from urllib.parse import unquote, urlsplit
 import uuid
 
 from godot_guard import godot_environment, isolated_environment
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+import persona_context
 
 MAX_BODY = 4 * 1024 * 1024
 STORY_PATH = re.compile(r'data/([A-Za-z0-9_]{1,80})_story\.json\Z')
@@ -134,6 +138,47 @@ class StoryProject:
         self.godot = godot
         self.token = secrets.token_urlsafe(32)
         self.mutex = threading.Lock()
+
+    def persona_root(self):
+        """Only the active authoring library, never archives or proposal bundles."""
+        root = self.safe_path('authoring')
+        for folder in ('characters', 'memories'):
+            directory = self.safe_path('authoring/' + folder)
+            for path in directory.glob('*.json'):
+                self.safe_path(path.relative_to(self.root).as_posix())
+        self.safe_path('authoring/confirmations.json')
+        return root
+
+    def persona_review(self):
+        root = self.persona_root()
+        if not root.exists():
+            return {'available': False, 'records': []}
+        try:
+            records, manifest = persona_context.load(root), persona_context.approvals(root)
+            return {'available': True, 'records': [
+                {'content': item, 'sha256': persona_context.digest(item),
+                 'confirmed': bool(persona_context.confirmed(item, manifest))}
+                for item in records.values()]}
+        except (OSError, ValueError, TypeError, KeyError) as error:
+            raise ProjectError(422, '人格與記憶資料無法讀取，請修正後重新載入。', errors=[str(error)]) from error
+
+    def persona_context(self, request):
+        if not isinstance(request, dict):
+            raise ProjectError(400, '請選擇角色與記憶。')
+        characters, memories, hashes = (request.get('characters'), request.get('memories', []), request.get('hashes'))
+        if (not isinstance(characters, list) or not isinstance(memories, list)
+                or not all(isinstance(x, str) for x in characters + memories)
+                or not isinstance(hashes, dict)):
+            raise ProjectError(400, '角色、記憶與檢閱版本格式不正確。')
+        root = self.persona_root()
+        try:
+            result = persona_context.context(root, characters, memories)
+        except (OSError, ValueError, TypeError, KeyError) as error:
+            raise ProjectError(422, '未能產生上下文；請檢查選取項目與人類確認狀態。', errors=[str(error)]) from error
+        current = {key: value['sha256'] for key, value in result['versions'].items()}
+        if hashes != current:
+            raise ProjectError(409, '資料已更新，請關閉面板再開啟，重新檢閱後選取。')
+        return result
 
     def safe_path(self, relative):
         if not isinstance(relative, str) or not relative or relative.startswith('/') or '\\' in relative:
@@ -614,6 +659,12 @@ class ProjectHandler(SimpleHTTPRequestHandler):
             self.send_error(403)
             return
         parsed = urlsplit(self.path)
+        if parsed.path == '/api/personas':
+            try:
+                self.json_response(200, self.server.project.persona_review())
+            except ProjectError as error:
+                self.json_response(error.status, error.details)
+            return
         if parsed.path == '/api/capabilities':
             try:
                 _, raw, registry = self.server.project.registry()
@@ -665,7 +716,7 @@ class ProjectHandler(SimpleHTTPRequestHandler):
                 raise ProjectError(403, '請從本機編輯器頁面存檔。')
             if self.headers.get('X-Story-Editor-Token') != self.server.project.token:
                 raise ProjectError(403, '本機服務憑證不符，請重新開啟編輯器。')
-            if urlsplit(self.path).path not in ('/api/save', '/api/registry', '/api/work', '/api/catalog', '/api/preview'):
+            if urlsplit(self.path).path not in ('/api/save', '/api/registry', '/api/work', '/api/catalog', '/api/preview', '/api/persona-context'):
                 raise ProjectError(404, '沒有這個操作。')
             if self.headers.get('Content-Type', '').split(';')[0].strip().lower() != 'application/json':
                 raise ProjectError(415, '只接受 JSON。')
@@ -687,6 +738,7 @@ class ProjectHandler(SimpleHTTPRequestHandler):
             action = urlsplit(self.path).path
             project = self.server.project
             result = (project.save_registry(request) if action == '/api/registry'
+                      else project.persona_context(request) if action == '/api/persona-context'
                       else project.new_work(request) if action == '/api/work'
                       else project.save_catalog(request) if action == '/api/catalog'
                       else project.preview(request) if action == '/api/preview' else project.save(request))

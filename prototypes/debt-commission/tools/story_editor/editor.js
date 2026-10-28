@@ -891,7 +891,20 @@
     char: step => [field('角色', assetSelect('characters', step)), field('表情', expressionControl(step)), voicePitch(step),
       field('站位', select2(['left', 'center', 'right'], step.position, v => { if (v) step.position = v; else delete step.position; touch({inspector: true}); }, '（角色預設）')),
       field('舞台', characterPositionEditor(step)),
-      field('顯示', select2([{value:'default',label:'預設'},{value:'true',label:'顯示'},{value:'false',label:'隱藏'}], step.visible === undefined ? 'default' : String(step.visible), v => { if(v === 'default') delete step.visible; else step.visible = v === 'true'; touch(); })), field('', checkbox(step, 'enter', '登場'))],
+      field('角色狀態', select2([{value:'prepare',label:'準備站位（開口時登場）'}, {value:'enter',label:'立刻登場'}, {value:'leave',label:'退場'}],
+        step.visible === false ? 'leave' : step.enter ? 'enter' : 'prepare', v => {
+          delete step.visible; delete step.enter;
+          if (v === 'enter') { step.visible = true; step.enter = true; }
+          else if (v === 'leave') step.visible = false;
+          touch({inspector: true});
+        })),
+      field('進退場動畫', select2([{value:'fade',label:'淡入／淡出'}, {value:'slide_left',label:'左側滑動＋淡化'},
+        {value:'slide_right',label:'右側滑動＋淡化'}, {value:'instant',label:'直接切換'}], step.transition,
+        v => { if (v) step.transition = v; else delete step.transition; touch(); }, '預設（淡入／淡出）'),
+        el('small', {}, '選擇立刻登場或退場時生效。'))],
+    portrait_effect: step => [field('角色', assetSelect('characters', step)),
+      field('立繪動作', select2([{value:'shake',label:'抖動'}, {value:'bounce',label:'彈跳'}], step.effect,
+        v => { step.effect = v; touch(); })), el('p', {class:'note'}, '對已登場的角色生效，可放在台詞前。')],
     profile: step => [field('角色檔案', assetSelect('characters', step))],
     item: step => [field('取得道具', assetSelect('items', step))],
     flag: step => [field('旗標', flagSelect(step, 'key')), field('操作', select2([{value:'value',label:'設定值'},{value:'add',label:'加減整數'}], 'add' in step ? 'add' : 'value', v => { delete step.value; delete step.add; step[v] = v === 'add' ? 1 : true; touch({inspector:true}); })), field('值 JSON', scalarControl(step, 'add' in step ? 'add' : 'value', 'add' in step))],
@@ -910,9 +923,12 @@
       field('preset', select2(S.enums.VALID_COMEDY_PRESETS, step.preset, v => {
         step.preset = v;
         if (v !== 'emotion_band') delete step.color;  // story_runner.gd accepts `color` on emotion_band only
+        if (v !== 'tsukkomi_impact') delete step.side;
         touch({ inspector: true });
       })),
       field('speaker', speakerControl(step, 'speaker', false)), field('text', textArea(step, 'text')), field('expression', expressionControl(step)), voicePitch(step),
+      step.preset === 'tsukkomi_impact' && field('出場位置', select2([{ value: 'left', label: '左側' }, { value: 'right', label: '右側' }], step.side,
+        v => { if (v) step.side = v; else delete step.side; touch(); }, '預設（左側）')),
       step.preset === 'emotion_band' && field('color', colorControl(step))],
     choice: step => {
       const options = Array.isArray(step.options) ? step.options : [];
@@ -1460,6 +1476,100 @@
     if (S.story) { recompute(); renderAll(); }
   }
   $('btnCatalog').addEventListener('click', openCatalog);
+  async function openPersonas() {
+    if (!S.service || $('personaPanel')) return;
+    const message = el('p', {id: 'personaMessage', role: 'status'}, '載入人格與記憶…');
+    const list = el('div', {class: 'persona-records'});
+    const output = el('textarea', {id: 'personaOutput', readOnly: true, hidden: true,
+      'aria-label': '已確認的 agent 編劇上下文', rows: 12});
+    let exported = '', busy = false;
+    const generate = el('button', {id: 'personaGenerate', class: 'primary', disabled: true}, '產生編劇參考');
+    const save = el('button', {id: 'personaDownload', disabled: true,
+      onclick: () => { if (exported) download('authoring-context.json', exported); }}, '下載 JSON');
+    const panel = el('dialog', {id: 'personaPanel', 'aria-labelledby': 'personaTitle',
+      onkeydown: event => event.stopPropagation(), onclose: () => panel.remove()},
+      el('div', {class: 'catalog-head'}, el('strong', {id: 'personaTitle'}, '編劇參考：人格與記憶'),
+        el('button', {onclick: () => panel.close(), autofocus: true}, '關閉')),
+      el('div', {class: 'persona-body'},
+        el('p', {}, '萬事屋共同編劇資料。勾選本次需要的角色與記憶；不會自動套用到其他作品。'),
+        el('p', {class: 'catalog-note'}, '只讀取已確認內容。人格或記憶有修改時，須重新與作者確認；新劇情不會自動變成記憶。'),
+        message, list, el('div', {class: 'persona-actions'}, generate, save), output));
+    document.body.append(panel);
+    panel.showModal();
+    try {
+      const response = await fetch('../../api/personas');
+      const data = await response.json();
+      if (!response.ok) throw new Error([data.error, ...(data.errors || [])].join('\n'));
+      if (!panel.isConnected) return;
+      const rows = data.records.map(record => ({...record, input: el('input', {type: 'checkbox',
+        data: {personaId: record.content.id}, disabled: !record.confirmed})}));
+      const selected = kind => rows.filter(r => r.content.kind === kind && r.input.checked);
+      function update() {
+        exported = ''; output.value = ''; output.hidden = true; save.disabled = true;
+        const owners = new Set(selected('character').map(r => r.content.id));
+        for (const row of rows) {
+          const allowed = row.confirmed && (row.content.kind === 'character' || owners.has(row.content.owner));
+          if (!allowed) row.input.checked = false;
+          row.input.disabled = busy || !allowed;
+        }
+        generate.disabled = busy || !selected('character').length;
+        message.textContent = rows.length ? '先查看內容，再勾選角色；記憶需另外勾選，且須包含記憶擁有者。' : '尚未建立人格與記憶資料，請先與作者共同整理。';
+      }
+      const labels = {core:'人格核心', surface:'外在表現', internal:'內在動機', contradictions:'矛盾',
+        behavior:'情境反應', voice:'語氣', relationships:'人物關係', boundaries:'行為界線',
+        examples:'正例', avoid:'避免', scenario_pairs:'情境正反例', situation:'情境', fits:'正例', misfit:'反例', reason:'依據',
+        questioned:'被質問', treated_unfairly:'受委屈', companion_in_danger:'同伴遇險',
+        everyday:'日常', serious:'重大事情', small:'小事', important:'重視的事', when_wrong:'自己有錯時',
+        first_action:'先做什麼', speech:'說話方式', comedy_flexibility:'喜劇彈性', rhythm:'節奏',
+        serious_when:'認真觸發', cannot_without_setup:'不能無鋪陳這樣寫', allowed_variation:'保留變化', would_not_do:'行為底線',
+        scenario_variations:'關係差異例句', target:'對象', stance:'態度', same_intent:'表達意圖', line:'台詞',
+        summary:'記憶內容', owner:'記憶擁有者', known_to:'知情角色', category:'類別', mutable:'可否改寫', sources:'來源',
+        money:'金錢', serious_trigger:'認真觸發', gintoki:'銀時', shinpachi:'新八', kagura:'神樂'};
+      function readable(value) {
+        if (Array.isArray(value)) return el('ul', {}, value.map(item => el('li', {}, readable(item))));
+        if (isObj(value)) return el('dl', {}, Object.entries(value).flatMap(([key, item]) =>
+          [el('dt', {}, labels[key] || key), el('dd', {}, readable(item))]));
+        return el('span', {}, typeof value === 'boolean' ? (value ? '是' : '否') : String(value));
+      }
+      for (const kind of ['character', 'memory']) {
+        list.append(el('h3', {}, kind === 'character' ? '角色人格' : '記憶（預設不載入）'));
+        for (const row of rows.filter(r => r.content.kind === kind)) {
+          const item = row.content;
+          row.input.addEventListener('change', update);
+          const body = Object.fromEntries(Object.entries(item).filter(([key]) =>
+            !['schema_version','kind','id','revision','name','proposal_meta'].includes(key)));
+          list.append(el('article', {class: 'persona-record'},
+            el('label', {}, row.input, ` ${item.name || item.id} · 第 ${item.revision} 版 · ${row.confirmed ? '已確認' : '待人類確認／內容已變更'}`),
+            el('details', {}, el('summary', {}, '查看完整參考內容'), readable(body),
+              el('p', {class:'persona-hash'}, `SHA-256：${row.sha256}`))));
+        }
+      }
+      generate.addEventListener('click', async () => {
+        const characters = selected('character').map(r => r.content.id);
+        const memories = selected('memory').map(r => r.content.id);
+        const hashes = Object.fromEntries(rows.filter(r => r.input.checked).map(r => [r.content.id, r.sha256]));
+        busy = true; update(); message.textContent = '核對人類確認與內容版本…';
+        try {
+          const response = await fetch('../../api/persona-context', {method: 'POST',
+            headers: {'Content-Type':'application/json', 'X-Story-Editor-Token': S.service.token},
+            body: JSON.stringify({characters, memories, hashes})});
+          const result = await response.json();
+          if (!response.ok) throw new Error([result.error, ...(result.errors || [])].join('\n'));
+          if (!panel.isConnected) return;
+          exported = JSON.stringify(result, null, 2) + '\n'; output.value = exported;
+          output.hidden = false; save.disabled = false;
+          message.textContent = `已產生 ${characters.length} 位角色、${memories.length} 條記憶的參考，可複製下方內容或下載給 agent。`;
+        } catch (error) { message.textContent = error.message; }
+        finally {
+          busy = false;
+          for (const row of rows) row.input.disabled = !row.confirmed || (row.content.kind === 'memory' && !characters.includes(row.content.owner));
+          generate.disabled = !characters.length;
+        }
+      });
+      update();
+    } catch (error) { if (panel.isConnected) message.textContent = `編劇參考無法載入：${error.message}`; }
+  }
+  $('btnPersonas').addEventListener('click', openPersonas);
   $('btnNewWork').addEventListener('click', async () => {
     if (!S.service || (S.dirty && !confirm('目前的修改還沒確認儲存，要放棄嗎？'))) return;
     const id = (prompt('作品 id（英文小寫、數字、底線，例如 titan）') || '').trim();
@@ -1544,6 +1654,7 @@
     const picker = $('storySelect');
     $('btnNewWork').hidden = !S.service;
     $('btnCatalog').hidden = !S.service;
+    $('btnPersonas').hidden = !S.service;
     const wanted = new URLSearchParams(location.search).get('story');
     const entry = S.stories.find(s => s.id === wanted);
     if (entry && !S.story && loadTicket === 0) {

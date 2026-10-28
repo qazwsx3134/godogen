@@ -1,0 +1,17 @@
+[gd_scene format=3]
+
+[ext_resource type="StyleBox" path="res://ui/sao_gauge.tres" id="1_phh8i"]
+[ext_resource type="StyleBox" path="res://ui/sao_gauge_green.tres" id="2_viyvd"]
+[ext_resource type="Script" path="res://scripts/ui_kit/sao_gauge.gd" id="3_qw8w5"]
+
+[node name="SaoGauge" type="ProgressBar" unique_id=1903625054]
+custom_minimum_size = Vector2(60, 8)
+offset_right = 300.0
+offset_bottom = 24.0
+mouse_filter = 2
+theme_override_styles/background = ExtResource("1_phh8i")
+theme_override_styles/fill = ExtResource("2_viyvd")
+max_value = 1.0
+value = 0.8
+show_percentage = false
+script = ExtResource("3_qw8w5")

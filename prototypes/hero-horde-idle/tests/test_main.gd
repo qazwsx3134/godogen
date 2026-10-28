@@ -33,10 +33,14 @@ func _run() -> void:
 	cam = main.find_child("Camera", true, false)
 	sim = main.sim
 	_expect(main.find_child("Army", true, false).multimesh.instance_count == 100, "all 100 heroes are drawn")
+	var sheet: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/heroes/heroes.json"))
+	var frames: Vector2 = (load("res://materials/heroes.tres") as ShaderMaterial).get_shader_parameter(&"frames")
+	_expect(frames == Vector2(sheet.columns, sheet.rows),
+		"the heroes' material uses the atlas grid %s (a 6-row grid on the 18-row atlas squashed every hero)" % frames)
 	_expect(main.find_child("Flags", true, false).get_child_count() == PushSim.SQUADS, "three squad flags in the scene")
 	_expect(sim.phase == PushSim.Phase.MUSTER, "a push opens with the muster")
-	_expect(main.pushing == 1 and (hud.find_child("StageLabel", true, false) as Label).text == "1-1" and
-		is_equal_approx(sim.boss_max_hp, PushSim.BOSS_HP * Stages.stage(1).hp), "a fresh save pushes stage 1-1 (its eased boss)")
+	_expect(main.pushing == 1 and (hud.find_child("StageLabel", true, false) as Label).text == "第1層" and
+		is_equal_approx(sim.boss_max_hp, PushSim.BOSS_HP * Stages.stage(1).hp), "a fresh save pushes 第1層 (its eased boss)")
 	var counts := [0, 0, 0, 0]
 	for r: int in sim.rarity:
 		counts[r] += 1
@@ -180,6 +184,25 @@ func _run() -> void:
 	var hp: float = sim.boss_hp
 	await _press(hud.find_child("Volley", true, false))
 	_expect(sim.morale < 1.0 and sim.boss_hp < hp - 1000.0, "volley spends the full bar on a big hit")
+	# 士氣 follows how often heroes strike and get hit, not how hard.
+	var alive: int = -1
+	for i: int in sim.hp.size():
+		if sim.hp[i] > sim.max_hp[i] * 0.5:
+			alive = i
+			break
+	sim.morale = 50.0
+	sim._hurt(alive, 1.0)
+	_expect(is_equal_approx(sim.morale, 50.0 - PushSim.MORALE_PER_HURT), "a hero hit by the boss costs 士氣 (%.1f)" % sim.morale)
+	var strong: PushSim = PushSim.new(3, Progression.new(3).roster())
+	var weak: PushSim = PushSim.new(3, Progression.new(3).roster())
+	for k: int in strong.atk.size():
+		strong.atk[k] *= 20.0
+	for sim_k: PushSim in [strong, weak]:
+		sim_k.skip_muster()
+		sim_k.morale = 0.0
+		for f: int in 60:
+			sim_k.step(1.0 / 60.0)
+	_expect(absf(strong.morale - weak.morale) < 0.5, "twenty times the attack fills 士氣 no faster (%.2f vs %.2f)" % [strong.morale, weak.morale])
 
 	sim.t = PushSim.DURATION - 0.01
 	await _until(func() -> bool: return hud.find_child("Result", true, false).visible, "result shows when time runs out")
@@ -203,12 +226,12 @@ func _run() -> void:
 	_expect(not coach.visible, "a hint already seen does not come back")
 	_expect(main.sim.home[PushSim.MELEE] == sim.home[PushSim.MELEE], "a retry musters where the scene puts the flags")
 
-	# Win 1-1: a first clear pays its bonus and opens 1-2, which 挑戰下一關 starts with a tougher boss.
+	# Win 第1層: a first clear pays its bonus and opens 第2層, which 挑戰下一層 starts with a tougher boss.
 	main.sim.skip_muster()
 	main.sim.boss_hp = 1.0
 	await _until(func() -> bool: return hud.find_child("Result", true, false).visible, "the win shows the result")
 	var next: Button = hud.find_child("NextStage", true, false)
-	_expect(main.progress.cleared == 1 and next.visible and next.text.contains("1-2"), "a first clear offers 1-2 (%s)" % next.text)
+	_expect(main.progress.cleared == 1 and next.visible and next.text.contains("第2層"), "a first clear offers 第2層 (%s)" % next.text)
 	_expect((hud.find_child("ResultTitle", true, false) as Label).text == "首次通關！", "the title says it was the first clear")
 	await _frames(2)
 	var won_panel: Rect2 = hud.find_child("Result", true, false).find_child("Panel", true, false).get_global_rect()
@@ -216,7 +239,7 @@ func _run() -> void:
 		"a first clear's result, with all its drops, fits a 16:9 screen (%s)" % won_panel)
 	await _press(next)
 	_expect(main.pushing == 2 and main.sim.boss_max_hp > sim.boss_max_hp * 2.0 and
-		(hud.find_child("StageLabel", true, false) as Label).text == "1-2", "挑戰下一關 pushes 1-2 with a tougher boss")
+		(hud.find_child("StageLabel", true, false) as Label).text == "第2層", "挑戰下一層 pushes 第2層 with a tougher boss")
 
 	# The scene is the layout: a flag moved in the scene is where that squad musters.
 	var edited: Node = (load("res://scenes/main.tscn") as PackedScene).instantiate()

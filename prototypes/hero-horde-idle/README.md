@@ -4,7 +4,7 @@
 
 狀態：**v3.0 融合版做好，等作者試玩（2026-10-27，分支 `fusion-idle`）。目前進度、等作者決定的事、要成為商業級還缺什麼，見 [docs/PROGRESS.md](docs/PROGRESS.md)。**
 
-版本紀錄：**v3.0 融合（docs/FUSION.md）：主畫面換成遠征紀事的七頁（總覽／訓練／背包／英雄／裝備／冒險／商店，上方常駐行軍戰場、羊皮紙面板），行軍改成真的自動戰鬥（3～5 人小隊打波次、清場行軍、打輸退一關、離線依實測速率補算），100 名英雄分人類 40／怪獸 30／夢靈 30（各有形態被動，推王與行軍都有效），行軍小隊的形態羈絆，訓練（全軍天賦）取代職業等級（舊存檔退回金幣），裝備改成一件一件帶詞綴、自動分解，英雄圖鑑（突破過的英雄給全軍加成），金幣經濟放大 10 倍，存檔 v2；v2.5 前幾關變簡單（作者在 1-1 連王的血都打不到 80% 以下：1-1 到 2-1 的王打七折到五折，像人一樣操作第一場就能過）、離線戰報、行軍收穫與推王結算改成獎勵列表（結算面板在 16:9 手機也放得下）、設定加畫質（3D 解析度 省電／標準／高）與幀率（30／60）、按鈕與彈出視窗換成像素風的雙線古銅框（四角缺口與小菱形，標題下有菱形分隔線）；v2.4 招募與商店：nav bar 五格（營地／養成／招募／道具／關卡，加上 Codex 生的圖示），招募頁照作者選的 round3 B（限時卡池、保底、機率說明、單抽／十連、每天一次看廣告免費單抽），商店（招募券、免廣告、恢復購買；目前是測試商店），隊長給所屬團加成，道具頁照 round3 A 加上行軍小隊的專屬飾品列，推王人群不再用彩色外框標稀有度；v2.3 道具：nav bar 加「道具」（裝備／遺物／素材），職業武庫、專屬飾品、遺物、強化石由關卡王與行軍掉落；英雄卡改用背景色表示稀有度（照作者的 hero.PNG）；v2.2 營地：行軍捲軸畫面、待辦、紅點、推薦戰力；v2.1 主畫面底部 nav bar（營地／養成／關卡）與整理過的英雄卡；v2.0 商業版骨架（10 關 3 地區、營地主畫面與關卡列表、設定、暫停、即時行軍與離線戰報、第一場的操作提示）；v1.9 隊長（畫大、名牌、鏡頭帶到）；v1.8 介面改版（墨綠暖白：推王 HUD、養成名冊、獨立英雄頁，Codex 生的招牌技圖示、職業小旗、英雄頁背景）；推王 v1.7（三團拖旗、地上的預警形狀、王的部位破壞、SSR 招牌技；養成第一版：職業等級、行軍 1 小時、突破、存檔；HD-2D 舞台、電影鏡頭、打擊特效與音效、英雄動作圖、推王戰報）可以玩了，作者看過說「好玩很多」，等手機實測**（in-progress）。驗收標準 1、2 由機器人測試自動檢查；標準 3 要作者自己玩。旗子已換成 Codex 生的團旗；部位按鈕已換成新介面的樣式；預警形狀加了斜紋（色弱也分得出）、深色外框與倒數的亮線（`shaders/ground_mark.gdshader`）。往商業版的路線見 [docs/ROADMAP.md](docs/ROADMAP.md)。
+版本紀錄：**v3.1（2026-10-28）：介面改成平面白（白色視窗加標題列與刻線、白底卡片加稀有度色條、金色主要鈕、圓形導覽、行軍戰場左上的斜切血條名牌；樣式集中在 `ui/sao_*.tres`，推王的 `ui/theme.tres` 同一套色），關卡改成樓層（第1～10層，每層一隻有名字的樓層王，兩條血、打掉第一條就狂暴換招），拿掉裝備分頁（英雄頁點英雄看詳情與裝備欄位），天賦 18 個節點（深的要打倒樓層王、英雄等級達標）。** **v3.0 融合（docs/FUSION.md）：主畫面換成遠征紀事的七頁（總覽／訓練／背包／英雄／裝備／冒險／商店，上方常駐行軍戰場、羊皮紙面板），行軍改成真的自動戰鬥（3～5 人小隊打波次、清場行軍、打輸退一關、離線依實測速率補算），100 名英雄分人類 40／怪獸 30／夢靈 30（各有形態被動，推王與行軍都有效），行軍小隊的形態羈絆，訓練（全軍天賦）取代職業等級（舊存檔退回金幣），裝備改成一件一件帶詞綴、自動分解，英雄圖鑑（突破過的英雄給全軍加成），金幣經濟放大 10 倍，存檔 v2；v2.5 前幾關變簡單（作者在 1-1 連王的血都打不到 80% 以下：1-1 到 2-1 的王打七折到五折，像人一樣操作第一場就能過）、離線戰報、行軍收穫與推王結算改成獎勵列表（結算面板在 16:9 手機也放得下）、設定加畫質（3D 解析度 省電／標準／高）與幀率（30／60）、按鈕與彈出視窗換成像素風的雙線古銅框（四角缺口與小菱形，標題下有菱形分隔線）；v2.4 招募與商店：nav bar 五格（營地／養成／招募／道具／關卡，加上 Codex 生的圖示），招募頁照作者選的 round3 B（限時卡池、保底、機率說明、單抽／十連、每天一次看廣告免費單抽），商店（招募券、免廣告、恢復購買；目前是測試商店），隊長給所屬團加成，道具頁照 round3 A 加上行軍小隊的專屬飾品列，推王人群不再用彩色外框標稀有度；v2.3 道具：nav bar 加「道具」（裝備／遺物／素材），職業武庫、專屬飾品、遺物、強化石由關卡王與行軍掉落；英雄卡改用背景色表示稀有度（照作者的 hero.PNG）；v2.2 營地：行軍捲軸畫面、待辦、紅點、推薦戰力；v2.1 主畫面底部 nav bar（營地／養成／關卡）與整理過的英雄卡；v2.0 商業版骨架（10 關 3 地區、營地主畫面與關卡列表、設定、暫停、即時行軍與離線戰報、第一場的操作提示）；v1.9 隊長（畫大、名牌、鏡頭帶到）；v1.8 介面改版（墨綠暖白：推王 HUD、養成名冊、獨立英雄頁，Codex 生的招牌技圖示、職業小旗、英雄頁背景）；推王 v1.7（三團拖旗、地上的預警形狀、王的部位破壞、SSR 招牌技；養成第一版：職業等級、行軍 1 小時、突破、存檔；HD-2D 舞台、電影鏡頭、打擊特效與音效、英雄動作圖、推王戰報）可以玩了，作者看過說「好玩很多」，等手機實測**（in-progress）。驗收標準 1、2 由機器人測試自動檢查；標準 3 要作者自己玩。旗子已換成 Codex 生的團旗；部位按鈕已換成新介面的樣式；預警形狀加了斜紋（色弱也分得出）、深色外框與倒數的亮線（`shaders/ground_mark.gdshader`）。往商業版的路線見 [docs/ROADMAP.md](docs/ROADMAP.md)。
 
 ## 要驗證的假設
 
@@ -30,7 +30,7 @@
   - 王倒地 4 秒：正在倒數的預警取消、不攻擊，全軍傷害 ×1.5。
   - 傷口：每打壞一個部位，王受到的傷害 +12%。
   - 少一招：腿 → 動作變慢（攻擊與預警間隔 ×1.3、預警多 0.4 秒）；持棍手臂 → 不能橫掃、重砸的圓變小；角 → 不能落石。被拿掉的那一招改成重砸，重砸只會變小、不會消失。
-- **士氣與大招**：士氣只用來放大招；士氣滿時所有活著的英雄同時出招。
+- **士氣與大招**：士氣只用來放大招；士氣滿時所有活著的英雄同時出招。士氣依出手頻率累積（每名攻擊中的英雄每秒 +0.08），英雄被王打到扣 1、被打倒再扣 3，跟傷害多少無關（`push_sim.gd MORALE_*`）。
 - **失敗條件**：時間到，或全軍覆沒。
 
 ## 畫面與鏡頭（v1.2，HD-2D）
@@ -129,11 +129,11 @@ godot --headless --path . --script res://tests/test_progression.gd # 1-1 的養�
 godot --headless --path . --script res://tests/test_march.gd       # 行軍戰鬥：不同幀率結果一致、波次與行軍、打不過退關、吸血與夢癒、羈絆階級、擊倒收益、離線補算
 godot --headless --path . --script res://tests/test_stages.gd     # 10 關的難度曲線：閒置與高手一輪一輪往上打，每關都打得過、不卡牆、高手一直領先
 godot --headless --path . --script res://tests/test_recruit.gd     # 招募：機率加總、機率說明與抽卡同一張表、招募券、英雄之魂、保底、每天換池、每天一次免費單抽、商品（免廣告只買一次）、抽卡不動其他掉落、存檔與舊存檔；隊長的團加成
-godot --headless --path . --script res://tests/test_home.gd        # 主畫面用真的按鈕操作：離線戰報、六顆導覽與頭像切頁（行軍不中斷）、擊倒付金幣、訓練、上陣（戰場換人）、裝備、分解、改行軍關卡、十連；scene 裡改的標題執行時保留
+godot --headless --path . --script res://tests/test_home.gd        # 主畫面用真的按鈕操作：離線戰報、五顆導覽與總覽鈕切頁（行軍不中斷）、擊倒付金幣、點亮天賦、上陣（戰場換人）、英雄詳情與數值明細、從裝備欄位換武器、分解、改行軍關卡、十連；scene 裡改的標題執行時保留
 godot --headless --path . --script res://tests/test_main.gd      # 像玩家一樣操作：隊長畫大一點並掛名牌、拖旗子、點英雄或下方團分頁選團、點空地移動、技能自動施放、歸位、點部位按鈕與王身上瞄準、部位被打壞、預警形狀、大招、結算、重來；在 scene 裡移動旗子＝改集結位置
 ```
 
-主畫面七頁的截圖：`godot --path . --resolution 470x836 --script res://tools/capture_home.gd -- <輸出資料夾>`（離線戰報、七頁、十連結果）；各地區的樣子：`tools/capture_regions.gd`。推王的截圖：`godot --path . --resolution 390x844 --script res://tools/capture_shots.gd -- <輸出資料夾>`，拍集結、開戰、重砸預警、躲開、重砸落下、落石預警、瞄準角、角被打壞、隕石術（招牌技卡）、大招、第二階段受傷、結算十二張。測試與截圖都用自己的存檔路徑和接近參考強度的養成，不會動到玩家的存檔。要用 Mobile 渲染器看（預設）；`gl_compatibility` 沒有景深，畫面會不一樣。Linux 沒有螢幕時前面加 `xvfb-run -a`。
+主畫面六頁的截圖：`godot --path . --resolution 470x836 --script res://tools/capture_home.gd -- <輸出資料夾>`（離線戰報、六頁、英雄詳情、十連結果）；各地區的樣子：`tools/capture_regions.gd`。推王的截圖：`godot --path . --resolution 390x844 --script res://tools/capture_shots.gd -- <輸出資料夾>`，拍集結、開戰、重砸預警、躲開、重砸落下、落石預警、瞄準角、角被打壞、隕石術（招牌技卡）、大招、第二階段受傷、結算十二張。測試與截圖都用自己的存檔路徑和接近參考強度的養成，不會動到玩家的存檔。要用 Mobile 渲染器看（預設）；`gl_compatibility` 沒有景深，畫面會不一樣。Linux 沒有螢幕時前面加 `xvfb-run -a`。
 
 幀時間：`godot --path . --resolution 780x1688 --script res://tools/perf_probe.gd`。2026-10-21 在 Mac（Mobile 渲染器）上：平均 2.8 ms、draw call 110–123（v1.1 是 47）；v1.4 在 390×844 平均 5.6 ms、draw call 平均 117、最多 125；v1.5 平均 8.3 ms、draw call 平均 132、最多 138（draw call 多的是旗子、預警形狀、部位按鈕；模擬每一步 0.10 ms，比 v1.4 的 0.13 ms 還少，所以幀時間的增加在畫面那邊、還沒查清楚，這台機器同一版重量也會差 1～2 ms）。手機要實機量。
 
@@ -141,8 +141,9 @@ godot --headless --path . --script res://tests/test_main.gd      # 像玩家一�
 
 | scene | 內容與可調整的地方 |
 |---|---|
-| `scenes/home.tscn` | 主畫面（941×1672，遊戲從這裡開始；推王是 720×1280，兩邊切換時各自設 `content_scale_size`）：`Pages` 七頁（`scenes/pages/*.tscn` 的實例）、`MarchArena`（常駐行軍戰場，站在每頁的地面線 y=470）、`Header`（隊長頭像、等級、金幣、招募券、設定）、`Navigation`（訓練／背包／英雄／裝備／冒險／商店）、`NavDots` 紅點、`Toast`、`Dialog`（離線戰報、招募結果、機率說明共用）、`SettingsOverlay` |
-| `scenes/pages/*.tscn` | 遠征紀事的七頁（`tools/build_fusion_ui.gd` 從 `prototypes/taskbar-hero/scenes/pages` 改來）：每頁有自己的風景層（行軍時視差捲動）、羊皮紙面板 `ContentPanel`、標題與內容。總覽（`MarchStatus`、隊長、`SquadRow` 五格、`BondLabel`、`TodoList`、`CombatLog`）；訓練（`TrainingScroll` 裡六列 `training_row`）；背包（`FilterRow`、`ItemsGrid`、`InfoName`／`InfoText`、分解、自動分解）；英雄（`DetailPanel` 數值與技能、`ActionRow` 突破／上陣／隊長、`FormFilter`、`HeroGrid`）；裝備（`ArmoryGrid` 六職業武庫、`SquadPick0..4`、`CharmSlot`、`EquipGrid`）；冒險（`ChapterButton`、`StageGrid`、`MarchHereButton`、`DepartButton`）；商店（`ProductGrid`、`GiftButton`、`RatesButton`）。格子裡的卡片執行時依資料實例化 |
+| `scenes/home.tscn` | 主畫面（941×1672，遊戲從這裡開始；推王是 720×1280，兩邊切換時各自設 `content_scale_size`）：`Pages` 六頁（`scenes/pages/*.tscn` 的實例）、`MarchArena`（常駐行軍戰場，站在每頁的地面線 y=470）、`Header`（總覽、金幣、招募券、設定）、`Navigation`（天賦／背包／英雄／冒險／商店）、`NavDots` 紅點、`Toast`、`Dialog`（離線戰報、招募結果、機率說明共用）、`SettingsOverlay` |
+| `scenes/pages/*.tscn` | 遠征紀事的六頁（`tools/build_fusion_ui.gd` 從 `prototypes/taskbar-hero/scenes/pages` 改來）：每頁有自己的風景層（行軍時視差捲動）、羊皮紙面板 `ContentPanel`、標題與內容。總覽（`MarchStatus`、隊長、`SquadRow` 五格、`BondLabel`、`TodoList`、`CombatLog`）；天賦（`TalentScroll` 裡的 `TalentTree` 星圖，18 個 `talent_node`，`DetailFrame` 與 `LightButton`；節點位置在編輯器拖曳，連線跟著走）；背包（`FilterRow`、`ItemsGrid`、`InfoName`／`InfoText`、分解、自動分解）；英雄（預設是名冊：`AutoEquipButton` 一鍵裝備、`FormFilter`、`HeroGrid`；點英雄打開蓋在頁面上的 `HeroDetail`：`DetailPanel` 數值與技能、`ActionRow` 突破／上陣／隊長、`FactorGrid` 數值明細、`WeaponSlot`／`CharmSlot` 裝備欄位、`UpgradeWeapon` 強化、`SwapGrid` 可換的裝備）；冒險（`ChapterButton`、`StageGrid`、`MarchHereButton`、`DepartButton`）；商店（`ProductGrid`、`GiftButton`、`RatesButton`）。格子裡的卡片執行時依資料實例化 |
+| `ui/sao_*.tres`、`scenes/ui_kit/*.tscn` | 刀劍神域風 UI 規範與元件庫（`docs/SAO_UI_SPEC.md`）：樣式一種角色一個檔（`tools/sao_style.gd` 產生；`tools/sao_details.gd` 加標題列／圓形導覽／稀有度色條）。HUD 元件：`sao_gauge` 斜切血條、`sao_unit_bar` 頭上血條（`march_unit.tscn` 的 `HealthBar`）、`sao_boss_bar` 樓層王血條與 `sao_timer_bar` 倒數長條（`hud.tscn` 上方）、`sao_toast` 通知、`sao_party_card` 隊伍卡；`ui_kit_gallery.tscn` 一頁看全部（`tools/build_ui_kit.gd`、`tools/build_sao_hud.gd`） |
 | `scenes/components/*.tscn` | 遠征紀事的元件：頂欄、導覽、訓練列、物品卡、英雄格（`equipment_item_card`）、裝備小卡、關卡卡、商品卡；圖都是 `assets/atlas/*.tres`（參考圖 `assets/reference/*.png` 的區域），字型 `fonts/NotoSansCJKtc-*` |
 | `scenes/march_arena.tscn`、`scenes/march_unit.tscn` | 行軍戰場：`Heroes` 5 格、`Enemies` 3 格、`WaveLabel`；一名戰鬥者（遠征紀事的單位：英雄用 `HeroSprite`＝`assets/heroes/heroes.png` 的格子，怪物用 `Visuals` 裡從參考圖切出的外框）。站位與數字在 `march_arena.gd`（`FRONT_X`、`SPACING`、各地區的怪物外觀 `LOOKS`） |
 | `scenes/settings_panel.tscn`、`scenes/app.tscn` | 設定面板（音效、震動、畫質 `QualityChoices`、幀率 `FpsChoices`；主畫面與暫停選單共用）；App 自動載入（換畫面的淡入淡出、共用的進度） |

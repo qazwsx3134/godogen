@@ -1,22 +1,21 @@
 extends Node2D
 ## One fighter on the 行軍 strip (scenes/march_unit.tscn; Taskbar Hero's party unit). A hero shows %HeroSprite, a
 ## cell of assets/heroes/heroes.png (the same pixel art as in the push); a monster shows one of the Visuals cut from
-## the reference art (Polygon2D outlines). The bar over the head is its HP; pop() floats a damage or reward number.
+## the reference art (Polygon2D outlines). %HealthBar over the head is its HP (the SAO kit's unit bar); pop() floats a
+## damage or reward number.
 ## scripts/march_arena.gd moves and animates it from domain/march_sim.gd; nothing here reads the simulation.
 
 const LOOKS := ["KnightVisual", "SlimeVisual", "PetVisual", "FoxVisual", "AquaVisual", "MushroomVisual", "SoldierVisual",
 	"DummyVisual"]
 const CELL := 48
 const POP_TIME := 0.7
-const BAR_SCALE := Vector2(1.3, 1.1)
-const BAR_HALF := 24.0
 
 ## "Hero" or one of LOOKS.
 @export var appearance: String = "Hero"
 var _pop_t: float = -1.0
 
 @onready var _sprite: Sprite2D = %HeroSprite
-@onready var _fill: Polygon2D = %HealthFill
+@onready var _bar: Control = %HealthBar
 @onready var _feedback: Label = $DamageFeedback
 
 
@@ -40,9 +39,7 @@ func set_hero_cell(row: int, cell: int, tint: Color) -> void:
 
 
 func set_health(ratio: float) -> void:
-	var r: float = clampf(ratio, 0.0, 1.0)
-	_fill.scale = Vector2(BAR_SCALE.x * r, BAR_SCALE.y)
-	_fill.position.x = -BAR_HALF * BAR_SCALE.x * (1.0 - r)
+	_bar.set_ratio(ratio)
 
 
 func pop(text: String, color: Color) -> void:

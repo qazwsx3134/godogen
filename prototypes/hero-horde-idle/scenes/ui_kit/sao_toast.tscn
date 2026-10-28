@@ -1,0 +1,124 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui_kit/sao_toast.gd" id="1_4chf5"]
+[ext_resource type="StyleBox" path="res://ui/sao_hud_glass.tres" id="2_o311y"]
+[ext_resource type="StyleBox" path="res://ui/sao_diamond.tres" id="3_6bkte"]
+[ext_resource type="StyleBox" path="res://ui/sao_primary.tres" id="4_4hywq"]
+[ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Bold.otf" id="5_a0rd4"]
+
+[node name="SaoToast" type="Control" unique_id=715619158]
+custom_minimum_size = Vector2(560, 64)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 560.0
+offset_bottom = 64.0
+mouse_filter = 2
+script = ExtResource("1_4chf5")
+
+[node name="Glass" type="Panel" parent="." unique_id=599295754]
+layout_mode = 0
+offset_right = 560.0
+offset_bottom = 64.0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("2_o311y")
+
+[node name="Tick0" type="ColorRect" parent="." unique_id=1277970330]
+layout_mode = 0
+offset_right = 12.0
+offset_bottom = 2.0
+mouse_filter = 2
+color = Color(0.9, 0.92, 0.94, 0.9)
+
+[node name="Tick1" type="ColorRect" parent="." unique_id=786976497]
+layout_mode = 0
+offset_right = 2.0
+offset_bottom = 12.0
+mouse_filter = 2
+color = Color(0.9, 0.92, 0.94, 0.9)
+
+[node name="Tick2" type="ColorRect" parent="." unique_id=1604100179]
+layout_mode = 0
+offset_left = 548.0
+offset_right = 560.0
+offset_bottom = 2.0
+mouse_filter = 2
+color = Color(0.9, 0.92, 0.94, 0.9)
+
+[node name="Tick3" type="ColorRect" parent="." unique_id=7988082]
+layout_mode = 0
+offset_left = 558.0
+offset_right = 560.0
+offset_bottom = 12.0
+mouse_filter = 2
+color = Color(0.9, 0.92, 0.94, 0.9)
+
+[node name="Tick4" type="ColorRect" parent="." unique_id=503445009]
+layout_mode = 0
+offset_top = 62.0
+offset_right = 12.0
+offset_bottom = 64.0
+mouse_filter = 2
+color = Color(0.9, 0.92, 0.94, 0.9)
+
+[node name="Tick5" type="ColorRect" parent="." unique_id=441943749]
+layout_mode = 0
+offset_top = 52.0
+offset_right = 2.0
+offset_bottom = 64.0
+mouse_filter = 2
+color = Color(0.9, 0.92, 0.94, 0.9)
+
+[node name="Tick6" type="ColorRect" parent="." unique_id=1679763055]
+layout_mode = 0
+offset_left = 548.0
+offset_top = 62.0
+offset_right = 560.0
+offset_bottom = 64.0
+mouse_filter = 2
+color = Color(0.9, 0.92, 0.94, 0.9)
+
+[node name="Tick7" type="ColorRect" parent="." unique_id=1860106464]
+layout_mode = 0
+offset_left = 558.0
+offset_top = 52.0
+offset_right = 560.0
+offset_bottom = 64.0
+mouse_filter = 2
+color = Color(0.9, 0.92, 0.94, 0.9)
+
+[node name="Mark" type="Panel" parent="." unique_id=1727952589]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 19.0
+offset_right = 51.0
+offset_bottom = 45.0
+rotation = 0.7853982
+pivot_offset = Vector2(13, 13)
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("3_6bkte")
+
+[node name="MarkCore" type="Panel" parent="." unique_id=1294303700]
+layout_mode = 0
+offset_left = 33.0
+offset_top = 27.0
+offset_right = 43.0
+offset_bottom = 37.0
+rotation = 0.7853982
+pivot_offset = Vector2(5, 5)
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("4_4hywq")
+
+[node name="Text" type="Label" parent="." unique_id=1488169028]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 70.0
+offset_right = 546.0
+offset_bottom = 64.0
+theme_override_colors/font_color = Color(0.96, 0.97, 0.98, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.07, 0.09, 1)
+theme_override_constants/outline_size = 6
+theme_override_fonts/font = ExtResource("5_a0rd4")
+theme_override_font_sizes/font_size = 26
+text = "打倒《棍棒巨魔》。"
+vertical_alignment = 1
+text_overrun_behavior = 3

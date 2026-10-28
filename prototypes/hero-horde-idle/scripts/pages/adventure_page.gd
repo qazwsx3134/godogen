@@ -1,7 +1,7 @@
 extends Control
 ## 冒險 (scenes/pages/adventure.tscn, Taskbar Hero's adventure.png page): the region picked with the chapter button,
 ## its stages as stage cards (cleared / the boss to beat / locked; the one the squad marches at is marked). A card
-## picks a stage: 在此行軍 sends the march there, 挑戰關卡王 starts that stage's 推王 (push_requested).
+## picks a stage: 在此行軍 sends the march there, 挑戰樓層王 starts that stage's 推王 (push_requested).
 
 signal changed
 signal open_tab(tab: StringName)
@@ -29,7 +29,7 @@ func _ready() -> void:
 				selected = n
 				refresh()
 			else:
-				message.emit("先打倒前一關的關卡王"))
+				message.emit("先打倒上一層的樓層王"))
 	%MarchHereButton.pressed.connect(func() -> void:
 		if progress.set_march_stage(selected):
 			message.emit("小隊前往 %s 行軍" % Stages.label(selected))
@@ -47,9 +47,9 @@ func refresh() -> void:
 		if not progress.unlocked(selected):
 			selected = Stages.REGIONS[region].first
 	var info: Dictionary = Stages.REGIONS[region]
-	%ChapterButton.text = "第%d章 %s　⌄" % [region + 1, info.name]
-	%ChapterTitle.text = "第%d章　%s" % [region + 1, info.name]
-	%ChapterDescription.text = "關卡王：%s\n推薦戰力 %.2f　目前 %.2f" % [info.boss, Stages.recommended(selected), progress.team_power()]
+	%ChapterButton.text = "%s　第%d～%d層　⌄" % [info.name, info.first, _last(region)]
+	%ChapterTitle.text = "%s　第%d～%d層" % [info.name, info.first, _last(region)]
+	%ChapterDescription.text = "樓層王：%s\n推薦戰力 %.2f　目前 %.2f" % [Stages.boss_name(selected), Stages.recommended(selected), progress.team_power()]
 	for k: int in %StageGrid.get_child_count():
 		var card: Control = %StageGrid.get_child(k)
 		var n: int = info.first + k
@@ -59,7 +59,7 @@ func refresh() -> void:
 		# Locked cards are greyed here; the button stays live (its disabled look covers the card) and says why.
 		(card.get_node("SelectButton") as Button).disabled = false
 		(card.get_node("Title") as Label).text = Stages.label(n)
-		var status: String = "已通關" if n <= progress.cleared else ("關卡王" if progress.unlocked(n) else "未開放")
+		var status: String = "已通關" if n <= progress.cleared else ("樓層王" if progress.unlocked(n) else "未開放")
 		if n == progress.march_stage:
 			status += "・行軍中"
 		(card.get_node("Status") as Label).text = status
@@ -71,11 +71,11 @@ func refresh() -> void:
 		var icon: TextureRect = get_node("%%RewardIcon%d" % k)
 		icon.texture = UiArt.material_icon(icons[k]) if k < 3 else UiArt.tex(UiArt.WEAPONS[1])
 	var unlocked: bool = progress.unlocked(selected)
-	%LaunchNote.text = "%s：行軍每次擊倒 %d 金幣；關卡王必掉突破素材與裝備" % [Stages.label(selected), progress.kill_gold(selected)]
+	%LaunchNote.text = "%s：行軍每次擊倒 %d 金幣；樓層王必掉突破素材與裝備" % [Stages.label(selected), progress.kill_gold(selected)]
 	%MarchHereButton.disabled = not unlocked or progress.march_stage == selected
 	%MarchHereButton.text = "行軍中" if progress.march_stage == selected else "在此行軍"
 	%DepartButton.disabled = not unlocked
-	%DepartButton.text = "挑戰關卡王" if selected > progress.cleared else "再戰關卡王"
+	%DepartButton.text = "挑戰樓層王" if selected > progress.cleared else "再戰樓層王"
 	var ready: bool = progress.team_power() >= Stages.recommended(selected)
 	%DepartHint.text = "戰力 %.2f／推薦 %.2f%s" % [progress.team_power(), Stages.recommended(selected),
 		"" if ready else "（偏弱，操作好也能贏）"]

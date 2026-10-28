@@ -20,6 +20,11 @@ signal next_pressed
 ## 回總覽 from the result, or 撤退 from the pause menu.
 signal camp_pressed
 
+const Progression = preload("res://domain/progression.gd")
+const POTION_ICONS := ["res://assets/atlas/item_0.tres", "res://assets/atlas/item_0.tres", "res://assets/atlas/product_3.tres"]
+const GAUGE_GREEN := preload("res://ui/sao_gauge_green.tres")
+const GAUGE_YELLOW := preload("res://ui/sao_gauge_yellow.tres")
+const GAUGE_RED := preload("res://ui/sao_gauge_red.tres")
 @onready var _boss_hp: ProgressBar = %BossHp
 @onready var _stage_label: Label = %StageLabel
 @onready var _boss_name: Label = %BossName
@@ -84,9 +89,16 @@ func _ready() -> void:
 
 
 func show_state(sim: PushSim, selected: int, dt: float) -> void:
-	_boss_hp.value = sim.hp_ratio() * 100.0
-	_boss_hp_label.text = "%d%%" % ceili(sim.hp_ratio() * 100.0)
-	_phase.text = "第二階段" if sim.phase2 else "第一階段"
+	# The 樓層王's two bars: the gauge shows the bar being cut, the label how many bars are left.
+	var r: float = sim.hp_ratio()
+	var top: bool = r > PushSim.PHASE2_AT
+	var within: float = (r - PushSim.PHASE2_AT) / (1.0 - PushSim.PHASE2_AT) if top else r / PushSim.PHASE2_AT
+	_boss_hp.value = within * 100.0
+	_boss_hp.add_theme_stylebox_override(&"fill", GAUGE_GREEN if top else (GAUGE_YELLOW if within > 0.4 else GAUGE_RED))
+	%BossBar.set_bar(within, 2 if top else 1)
+	%TimerBar.set_time(sim.time_left(), PushSim.DURATION)
+	_boss_hp_label.text = "×%d　%d%%" % [2 if top else 1, ceili(r * 100.0)]
+	_phase.text = "狂暴：招式改變" if sim.phase2 else "第一條血"
 	_timer.text = "%d" % ceili(sim.time_left())
 	_timer.modulate = Color(1.0, 0.4, 0.35) if sim.time_left() <= 20.0 and sim.fighting() else Color.WHITE
 	_dps.text = "存活 %d／%d   總輸出 %d／秒" % [sim.living(), sim.cls.size(), roundi(sim.dps)]
@@ -132,6 +144,7 @@ func resume() -> void:
 func set_stage(label: String, boss: String) -> void:
 	_stage_label.text = label
 	_boss_name.text = boss
+	%BossBar.set_boss(boss)
 
 
 ## The banner strip: `color` frames it and fills its "!" square (red for a telegraph, gold for good news).
@@ -161,7 +174,7 @@ func skill_callout(face: Texture2D, skill_name: String, hero_line: String, desc:
 
 ## The result panel; with a push_report.gd report (and the MVP's class for the portrait) it shows the 推王戰報 too, and
 ## with progression.gd push_rewards() what the push paid.
-## next_label: the stage 挑戰下一關 opens ("" hides the button).
+## next_label: the stage 挑戰下一層 opens ("" hides the button).
 func show_result(won: bool, detail: String, report: Dictionary = {}, mvp_class: int = 0, rewards: Dictionary = {},
 		next_label: String = "") -> void:
 	_result_title.text = ("首次通關！" if rewards.get("first", false) else "推王成功！") if won else "推王失敗……"
@@ -178,8 +191,8 @@ func show_result(won: bool, detail: String, report: Dictionary = {}, mvp_class: 
 			_reward_grid.add_child(row)
 			row.show_row(line[0], line[1], line[2], line[3])
 	_next.visible = next_label != ""
-	_next.text = "挑戰下一關　%s" % next_label
-	# One main action: 挑戰下一關 after a win, 去點天賦 after a loss.
+	_next.text = "挑戰下一層　%s" % next_label
+	# One main action: 挑戰下一層 after a win, 去點天賦 after a loss.
 	_grow.theme_type_variation = &"" if _next.visible else &"PrimaryButton"
 	_report.visible = not report.is_empty()
 	if not report.is_empty():
@@ -198,6 +211,10 @@ func _reward_lines(got: Dictionary) -> Array:
 	for spec: Array in [["shards", "突破素材"], ["stones", "強化石"], ["tickets", "招募券"]]:
 		if got.get(spec[0], 0) > 0:
 			out.append([Items.material_icon(spec[0]), -1, spec[1], "+%d" % got[spec[0]]])
+	var held: Array = got.get("potions", [0, 0, 0])
+	for k: int in held.size():
+		if held[k] > 0:
+			out.append([load(POTION_ICONS[k]), -1, Progression.POTIONS[k].name, "+%d" % held[k]])
 	for item: Dictionary in got.get("items", []):
 		out.append([Items.icon(item.id), Items.rarity(item.id), Items.item_name(item.id), " ".join(Items.affix_lines(item))])
 	if got.get("relic", -1) >= 0:

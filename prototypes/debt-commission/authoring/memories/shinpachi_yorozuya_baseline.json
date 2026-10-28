@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "kind": "memory",
+  "id": "shinpachi_yorozuya_baseline",
+  "revision": 1,
+  "category": "canon",
+  "owner": "shinpachi",
+  "summary": "新八在萬事屋工作，經常回應銀時與神樂造成的日常混亂。",
+  "known_to": [
+    "gintoki",
+    "shinpachi",
+    "kagura"
+  ],
+  "mutable": false,
+  "sources": [
+    "docs/story-telling-game/v2/conversation4.md（萬事屋日常情境）；待作者確認的本作共識，不代表已查核全部原作設定。"
+  ]
+}

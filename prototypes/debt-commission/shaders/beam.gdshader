@@ -1,10 +1,10 @@
 shader_type canvas_item;
-uniform float pulse_speed = 14.0;
+uniform float pulse_speed = 5.0;
 uniform float edge_softness : hint_range(0.01, 0.4) = 0.12;
 void fragment() {
-	float center = 0.5 + 0.04 * sin(UV.x * 32.0 - TIME * pulse_speed);
-	float width = 0.38 + 0.06 * sin(UV.x * 55.0 + TIME * 9.0);
+	float center = 0.5 + 0.012 * sin(UV.x * 18.0 - TIME * pulse_speed);
+	float width = mix(0.12, 0.40, smoothstep(0.0, 0.42, UV.x));
 	float envelope = 1.0 - smoothstep(width - edge_softness, width, abs(UV.y - center));
-	float streak = 0.72 + 0.28 * sin(UV.x * 80.0 - TIME * pulse_speed);
-	COLOR.a *= envelope * streak;
+	float origin = smoothstep(0.0, 0.06, UV.x);
+	COLOR.a *= envelope * origin;
 }

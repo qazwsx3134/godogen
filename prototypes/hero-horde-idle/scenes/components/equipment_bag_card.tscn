@@ -1,25 +1,13 @@
 [gd_scene format=3]
 
 [ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Medium.otf" id="1_hmtxd"]
+[ext_resource type="StyleBox" path="res://ui/sao_card.tres" id="2_fsiit"]
 [ext_resource type="Texture2D" path="res://assets/reference/backpack.png" id="2_w27o7"]
 [ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Bold.otf" id="3_fsiit"]
 
 [sub_resource type="Theme" id="Theme_hmtxd"]
 default_font = ExtResource("1_hmtxd")
 default_font_size = 30
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wnl7x"]
-bg_color = Color(0.96862745, 0.9098039, 0.8352941, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.8, 0.7058824, 0.6039216, 1)
-corner_radius_top_left = 7
-corner_radius_top_right = 7
-corner_radius_bottom_right = 7
-corner_radius_bottom_left = 7
-corner_detail = 2
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bc6vo"]
 atlas = ExtResource("2_w27o7")
@@ -67,18 +55,7 @@ corner_radius_bottom_right = 7
 corner_radius_bottom_left = 7
 corner_detail = 2
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_30n4r"]
-bg_color = Color(0.9137255, 0.8352941, 0.73333335, 1)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.8745098, 0.6666667, 0.2901961, 1)
-corner_radius_top_left = 7
-corner_radius_top_right = 7
-corner_radius_bottom_right = 7
-corner_radius_bottom_left = 7
-corner_detail = 2
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1p12t"]
 
 [node name="EquipmentBagCard" type="Control" unique_id=428669624]
 custom_minimum_size = Vector2(118, 70)
@@ -87,13 +64,24 @@ anchors_preset = 0
 mouse_filter = 2
 theme = SubResource("Theme_hmtxd")
 metadata/fusion_readable = true
+metadata/sao_style = true
 
 [node name="Frame" type="Panel" parent="." unique_id=1233683396]
 layout_mode = 0
 offset_right = 118.0
 offset_bottom = 70.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_wnl7x")
+theme_override_styles/panel = ExtResource("2_fsiit")
+
+[node name="RarityBar" type="ColorRect" parent="." unique_id=1470977082]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 2.0
+offset_top = 4.0
+offset_right = 10.0
+offset_bottom = 66.0
+mouse_filter = 2
+color = Color(0.5411765, 0.5058824, 0.4392157, 1)
 
 [node name="Icon" type="TextureRect" parent="." unique_id=1076063188]
 texture_filter = 1
@@ -112,8 +100,8 @@ offset_left = 55.0
 offset_top = 6.0
 offset_right = 114.0
 offset_bottom = 43.0
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_outline_color = Color(0.24, 0.26, 0.3, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("3_fsiit")
 theme_override_font_sizes/font_size = 20
@@ -128,8 +116,8 @@ offset_left = 56.0
 offset_top = 42.0
 offset_right = 113.0
 offset_bottom = 64.0
-theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
-theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+theme_override_colors/font_color = Color(0.5, 0.53, 0.58, 1)
+theme_override_colors/font_outline_color = Color(0.5, 0.53, 0.58, 1)
 theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 18
 text = "Lv.1"
@@ -143,8 +131,8 @@ offset_left = 2.0
 offset_top = 48.0
 offset_right = 52.0
 offset_bottom = 65.0
-theme_override_colors/font_color = Color(0.30980393, 0.50980395, 0.3647059, 1)
-theme_override_colors/font_outline_color = Color(0.30980393, 0.50980395, 0.3647059, 1)
+theme_override_colors/font_color = Color(0.5, 0.53, 0.58, 1)
+theme_override_colors/font_outline_color = Color(0.5, 0.53, 0.58, 1)
 theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 14
 horizontal_alignment = 1
@@ -156,7 +144,11 @@ layout_mode = 0
 offset_right = 118.0
 offset_bottom = 70.0
 mouse_default_cursor_shape = 2
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_focus_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_pressed_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_hover_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("3_fsiit")
 theme_override_font_sizes/font_size = 18
@@ -164,5 +156,5 @@ theme_override_styles/normal = SubResource("StyleBoxEmpty_711xe")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_1p12t")
 theme_override_styles/hover = SubResource("StyleBoxFlat_gwyms")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_yhv7p")
-theme_override_styles/focus = SubResource("StyleBoxFlat_30n4r")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1p12t")
 metadata/action = "equipment_item:"

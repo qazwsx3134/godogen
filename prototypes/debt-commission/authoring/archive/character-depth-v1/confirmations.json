@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "records": {
+    "gintoki": {
+      "decision": "confirmed",
+      "sha256": "c6ee982b5aadb95aaaa8b7c0e2496d84c10b1dd88fa3f56c842b5b515f0f0976",
+      "reviewer": "本對話協作人類（作者）",
+      "evidence": "本對話：展示三份角色人格及三條基礎記憶後，協作人類回覆：「這幾項 可以 請問人格跟記憶要列多一點比較好嗎？」；確認範圍為所展示六筆 revision 1，不涵蓋後續新增或修改。",
+      "confirmed_at": "2026-10-28T09:27:59.871623+00:00"
+    },
+    "kagura": {
+      "decision": "confirmed",
+      "sha256": "7c4e9026ba4d288f8da02ec8d8be46444934e9677715f981391a699f5fa59c8e",
+      "reviewer": "本對話協作人類（作者）",
+      "evidence": "本對話：展示三份角色人格及三條基礎記憶後，協作人類回覆：「這幾項 可以 請問人格跟記憶要列多一點比較好嗎？」；確認範圍為所展示六筆 revision 1，不涵蓋後續新增或修改。",
+      "confirmed_at": "2026-10-28T09:27:59.926874+00:00"
+    },
+    "shinpachi": {
+      "decision": "confirmed",
+      "sha256": "39dee2bb7fccb0ebae36cc80207e00c5cd9a3bc960339ffca10b69ad9a1406a0",
+      "reviewer": "本對話協作人類（作者）",
+      "evidence": "本對話：展示三份角色人格及三條基礎記憶後，協作人類回覆：「這幾項 可以 請問人格跟記憶要列多一點比較好嗎？」；確認範圍為所展示六筆 revision 1，不涵蓋後續新增或修改。",
+      "confirmed_at": "2026-10-28T09:27:59.978544+00:00"
+    },
+    "gintoki_yorozuya_baseline": {
+      "decision": "confirmed",
+      "sha256": "afcb0d71393cf3a425f8ecbc0a714731ad8c8295a0a19ee37c2fa7520e9614f9",
+      "reviewer": "本對話協作人類（作者）",
+      "evidence": "本對話：展示三份角色人格及三條基礎記憶後，協作人類回覆：「這幾項 可以 請問人格跟記憶要列多一點比較好嗎？」；確認範圍為所展示六筆 revision 1，不涵蓋後續新增或修改。",
+      "confirmed_at": "2026-10-28T09:28:00.035973+00:00"
+    },
+    "kagura_yorozuya_baseline": {
+      "decision": "confirmed",
+      "sha256": "e9ae85397f5c66a4ca09350d95fda895fafb6588bb8d87f1e3c94a94cfbdd68d",
+      "reviewer": "本對話協作人類（作者）",
+      "evidence": "本對話：展示三份角色人格及三條基礎記憶後，協作人類回覆：「這幾項 可以 請問人格跟記憶要列多一點比較好嗎？」；確認範圍為所展示六筆 revision 1，不涵蓋後續新增或修改。",
+      "confirmed_at": "2026-10-28T09:28:00.089780+00:00"
+    },
+    "shinpachi_yorozuya_baseline": {
+      "decision": "confirmed",
+      "sha256": "9ff78521ad3cc9588a5c441b11dba3caf660d7a3c3b8e5a95fbfbd081edbc0bb",
+      "reviewer": "本對話協作人類（作者）",
+      "evidence": "本對話：展示三份角色人格及三條基礎記憶後，協作人類回覆：「這幾項 可以 請問人格跟記憶要列多一點比較好嗎？」；確認範圍為所展示六筆 revision 1，不涵蓋後續新增或修改。",
+      "confirmed_at": "2026-10-28T09:28:00.141984+00:00"
+    }
+  }
+}

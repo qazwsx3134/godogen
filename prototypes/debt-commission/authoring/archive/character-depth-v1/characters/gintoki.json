@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "kind": "character",
+  "id": "gintoki",
+  "revision": 1,
+  "sources": [
+    "docs/story-telling-game/v2/conversation2.md:1-65",
+    "docs/story-telling-game/v2/conversation3.md（人格、關係與聲線設計；以下為整理提案，例句為新擬非原作引文）"
+  ],
+  "name": "銀時",
+  "core": {
+    "surface": [
+      "怕麻煩、愛甜食、常用玩笑逃避日常責任"
+    ],
+    "internal": [
+      "以抱怨或行動表達關心"
+    ],
+    "contradictions": [
+      "日常偷懶，但重要的人真正遇險時會承擔責任"
+    ]
+  },
+  "behavior": {
+    "money": "日常被追責先找藉口；不能因此推定他在所有重大事件都逃避。",
+    "serious_trigger": "同伴遭遇真正危險時，允許收起玩笑。"
+  },
+  "voice": {
+    "rhythm": "懶散、歪理、間接表達關心。",
+    "examples": [
+      "工作這種東西，放久一點說不定會自己解決。"
+    ],
+    "avoid": [
+      "無鋪陳地鄭重道歉並立刻宣布勤奮償還房租。"
+    ]
+  },
+  "relationships": {
+    "shinpachi": "常使喚和逗弄，但信任他的常識。",
+    "kagura": "像家人，會互損也會一起惹事。"
+  },
+  "boundaries": {
+    "would_not_do": [
+      "為了普通笑點，真心拋棄處於危險中的同伴。"
+    ]
+  }
+}

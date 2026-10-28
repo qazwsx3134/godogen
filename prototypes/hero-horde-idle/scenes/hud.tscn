@@ -3,7 +3,9 @@
 [ext_resource type="Script" path="res://scripts/hud.gd" id="1_0i1j5"]
 [ext_resource type="Theme" path="res://ui/theme.tres" id="2_mphia"]
 [ext_resource type="PackedScene" path="res://scenes/part_button.tscn" id="3_0m4u7"]
+[ext_resource type="PackedScene" path="res://scenes/ui_kit/sao_boss_bar.tscn" id="3_5n1hp"]
 [ext_resource type="PackedScene" path="res://scenes/skill_callout.tscn" id="4_apjy4"]
+[ext_resource type="PackedScene" path="res://scenes/ui_kit/sao_timer_bar.tscn" id="4_eld54"]
 [ext_resource type="Texture2D" path="res://assets/flags/melee.png" id="5_5n1hp"]
 [ext_resource type="Texture2D" path="res://assets/flags/ranged.png" id="6_eld54"]
 [ext_resource type="Texture2D" path="res://assets/flags/support.png" id="7_3swnk"]
@@ -11,6 +13,8 @@
 [ext_resource type="PackedScene" path="res://scenes/push_report.tscn" id="8_qkknv"]
 [ext_resource type="PackedScene" path="res://scenes/reward_row.tscn" id="9_0m4u7"]
 [ext_resource type="PackedScene" path="res://scenes/settings_panel.tscn" id="9_uxdf7"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3swnk"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5357l"]
 atlas = ExtResource("5_5n1hp")
@@ -50,6 +54,7 @@ theme_override_constants/margin_bottom = 0
 layout_mode = 2
 mouse_filter = 2
 theme_type_variation = &"HudPanel"
+theme_override_styles/panel = SubResource("StyleBoxEmpty_3swnk")
 
 [node name="TopBox" type="VBoxContainer" parent="Root/Top/TopPanel" unique_id=587134186]
 layout_mode = 2
@@ -63,11 +68,19 @@ theme_override_constants/separation = 10
 unique_name_in_owner = true
 custom_minimum_size = Vector2(84, 64)
 layout_mode = 2
+size_flags_vertical = 8
 theme_override_font_sizes/font_size = 22
 text = "暫停"
 
+[node name="BossBar" parent="Root/Top/TopPanel/TopBox/TitleRow" unique_id=1954835636 instance=ExtResource("3_5n1hp")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 84)
+layout_mode = 2
+size_flags_horizontal = 3
+
 [node name="StageLabel" type="Label" parent="Root/Top/TopPanel/TopBox/TitleRow" unique_id=585342334]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 theme_type_variation = &"Heading"
 theme_override_colors/font_color = Color(0.62, 0.43, 0.13, 1)
@@ -76,6 +89,7 @@ text = "1-1"
 
 [node name="BossName" type="Label" parent="Root/Top/TopPanel/TopBox/TitleRow" unique_id=1920635508]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"Heading"
@@ -84,6 +98,7 @@ theme_override_font_sizes/font_size = 32
 text = "棍棒巨魔"
 
 [node name="PhasePill" type="PanelContainer" parent="Root/Top/TopPanel/TopBox/TitleRow" unique_id=1843301118]
+visible = false
 layout_mode = 2
 size_flags_vertical = 4
 mouse_filter = 2
@@ -97,6 +112,7 @@ theme_override_font_sizes/font_size = 22
 text = "第一階段"
 
 [node name="TimerBox" type="PanelContainer" parent="Root/Top/TopPanel/TopBox/TitleRow" unique_id=2051102343]
+visible = false
 custom_minimum_size = Vector2(104, 0)
 layout_mode = 2
 mouse_filter = 2
@@ -111,8 +127,15 @@ theme_override_font_sizes/font_size = 44
 text = "150"
 horizontal_alignment = 1
 
+[node name="TimerBar" parent="Root/Top/TopPanel/TopBox" unique_id=1039521659 instance=ExtResource("4_eld54")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+size_flags_horizontal = 3
+
 [node name="BossHp" type="ProgressBar" parent="Root/Top/TopPanel/TopBox" unique_id=798421814]
 unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 mouse_filter = 2
@@ -135,6 +158,7 @@ vertical_alignment = 1
 
 [node name="DpsLabel" type="Label" parent="Root/Top/TopPanel/TopBox" unique_id=246463983]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 theme_type_variation = &"Dim"
 theme_override_font_sizes/font_size = 20
@@ -453,7 +477,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 92)
 layout_mode = 2
 theme_type_variation = &"PrimaryButton"
-text = "挑戰下一關"
+text = "挑戰下一層"
 
 [node name="MoreButtons" type="HBoxContainer" parent="Root/Result/Center/Panel/PanelBox" unique_id=825071334]
 layout_mode = 2

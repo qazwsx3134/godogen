@@ -40,7 +40,7 @@ func _light() -> void:
 		message.emit("點亮 %s Lv%d" % [Talents.ROWS[k].name, progress.talent[k]])
 		changed.emit()
 	elif not progress.talent_open(k):
-		message.emit("還不能點亮：需要 " + Talents.need_text(k, progress.talent))
+		message.emit("還不能點亮：需要 " + progress.talent_need(k))
 	elif progress.talent_cost(k) < 0:
 		message.emit("已經點滿了")
 	else:
@@ -92,7 +92,7 @@ func refresh() -> void:
 	%DetailIcon.texture = UiArt.talent_icon(k)
 	%DetailName.text = "%s　Lv. %d／%d" % [Talents.ROWS[k].name, progress.talent[k], Talents.ROWS[k].max]
 	%DetailText.text = Talents.effect_text(k, progress.talent)
-	%DetailNeed.text = "" if progress.talent_open(k) else "需要 " + Talents.need_text(k, progress.talent)
+	%DetailNeed.text = "" if progress.talent_open(k) else "需要 " + progress.talent_need(k)
 	%DetailCost.text = "已點滿" if cost < 0 else "%s 金幣" % _short(cost)
 	%LightButton.disabled = not _affordable(k)
 	%LightButton.text = "點亮" if progress.talent_open(k) else "未開放"

@@ -28,10 +28,10 @@ Godot 4.7 橫向視覺小說，依 [V1 Roadmap](../../docs/story-telling-game/RO
 | 推進鈕（›／續／→） | 補完當句、翻閱長台詞，讀完後推進劇情 |
 | 選單／標題讀檔 | 選擇指定手動欄位；讀檔頁也可選自動續讀檔 |
 | 工具列 | 閱讀框下方的 LOG、AUTO、SKIP、MENU；存讀檔、吐槽素材與人物檔案收在目錄裡 |
-| 調查 | 線索是背景圖上的東西，不是按鈕：拖曳背景找（橫向畫面可上下或左右移動有裁切的部分），點那樣東西就取得線索，找到的會留下淡框與勾；有查看後台詞的會先演完再回來。對話框可按「收起 ▼」縮成底部一條，「展開 ▲」叫回來；全部找到時自動展開，按「繼續」離開。`keep_cast` 調查保留角色，第一章的銀時嘴角跟隨立繪與拖曳；移往廚房時角色留在客廳 |
+| 調查 | 線索是背景圖上的東西，不是按鈕：拖曳背景找（橫向畫面可上下或左右移動有裁切的部分），點那樣東西就取得線索，找到的會留下淡框與勾；有查看後台詞的會先演完再回來。按「收起 ▼」後，底部會留下半透明細列；可從列上拖曳或點擊背景，按「展開 ▲」叫回對話框。全部找到時會顯示「繼續」，收合後也能直接按「繼續」離開。`keep_cast` 調查保留角色，第一章的銀時嘴角跟隨立繪與拖曳；移往廚房時角色留在客廳 |
 | 對話／移動 | 調查時對話框裡的兩排話題：「對話」點了演出那段對話，聊過的不再出現；「移動」換到另一個地點（例如廚房），那裡有自己的背景與熱區，查完會自動回到原地點，也可以按「移動」回去。各地點已查過的熱區保持打勾 |
 | 裝傻發言 | ‹ › 切換句子；有補充時按「聽下去」；按「吐槽！」才進入 8 秒選詞 |
-| 吐槽選詞 | 選吐槽詞；素材會解鎖完美選項，逾時算冷場；選單、紀錄及存檔欄位會暫停倒數 |
+| 吐槽選詞 | 選吐槽詞；完美或普通吐槽會先顯示左右交替的漫畫格與台詞，點一下可快轉演出，再接回故事。素材會解鎖完美選項，逾時算冷場；選單、紀錄及存檔欄位會暫停倒數 |
 | 第一次教學 | 第一次進入調查、第一次遇到裝傻回合時，畫面壓暗並框住要講的按鈕，和紙說明卡一步講一件事（各 3 步，`data/tutorials.json`）；「下一步」或「略過」，看過就不再出現。教學出現在倒數開始前。headless 測試與 `?qa=1` 的瀏覽器檢查預設不顯示（`DEBT_TUTORIAL=1`、`&tutorial=1` 可開） |
 | Phase 4 證言回合 | 每句可能藏一個槽點，全部接住才結束。句數旁 ● 已接住、○ 還有槽點、· 沒有槽點；在沒有槽點的句子按「吐槽！」是揮空（冷場）；同一處失敗 3 次，神樂會提示 |
 | 消音條 | 台詞裡出現發亮的黑色消音條時，點它就是吐槽：閱讀時不計時，選詞時也能點 |
@@ -46,7 +46,9 @@ Godot 4.7 橫向視覺小說，依 [V1 Roadmap](../../docs/story-telling-game/RO
 
 [素材試版手機畫面](docs/preview-assets-dialogue-phone.png) · [UI 試版比較](docs/UI-TRIAL.md) · [Phase 2 手機畫面](docs/preview-phase2-phone.png) · [多欄位讀檔畫面](docs/preview-save-slots-phone.png) · [驗證紀錄](docs/VERIFICATION.md)
 
-B 超必殺演出（2026-10-06）已接入 `?sample=phase4_rounds`，使用既有素材與程序特效。眼鏡的 `charged` 可在 `scenes/ui/glasses_icon.tscn` Inspector 開啟，預覽金色氣焰；執行時由力量控制。[氣焰手機畫面](docs/super-aura-phone.png) · [窄手機畫面](docs/super-aura-320x568.png) · [光束畫面](docs/super-beam-phone.png)。後續 C → D → E 見 [TODO](TODO.md)。
+B 超必殺演出已接入 `?sample=phase4_rounds`，使用既有素材與程序特效。眼鏡的 `charged` 可在 `scenes/ui/glasses_icon.tscn` Inspector 開啟，預覽金色氣焰；執行時由力量控制。`scenes/ui/beam.tscn` 的 `Strip`、`OriginGlow` 可在 Godot 調整光束位置與起點；同時出現的台詞位於 `scenes/ui/cutin.tscn` 的 `BeamCaptionArea`。後續 C → D → E 見 [TODO](TODO.md)。
+
+漫畫吐槽的左右構圖分別存於 `scenes/comedy/tsukkomi_impact.tscn` 與 `scenes/comedy/tsukkomi_impact_right.tscn`。在 Godot 可調整 `CutInPanel`、`PanelLines` 與 `Burst`；劇情編輯器的 `comedy`／`tsukkomi_impact` 有「出場位置」可選，預設左側。純文字劇本可寫 `do comedy("tsukkomi_impact", "shinpachi", "現在是工作時間吧！", "right")`。既有新八吐槽的 `cutin` 會呈現為漫畫格；緊接光束的必殺台詞與連擊通知保留各自演出。如果選詞剛說過相同台詞，不會重播漫畫格。故事 JSON 與存檔版本不因這項呈現調整而改變。
 
 ## 做別部作品：外觀包
 
@@ -62,6 +64,8 @@ B 超必殺演出（2026-10-06）已接入 `?sample=phase4_rounds`，使用既�
 
 ## 打開故事編輯器（網頁）
 
+agent 共同編劇的人格與記憶資料放在 [authoring/](authoring/README.md)：三角色人格 revision 2 與三條基礎記憶 revision 1 已由作者確認，完整內容見 [確認清單](authoring/REVIEW.md)。本機編輯器上方「編劇參考」可查看、選取並下載給外部 agent 的上下文；記憶預設不選，未確認或修改過的內容會被阻擋。人格修改與確認仍走檔案／CLI，內建 AI Writer 尚未提供。最新系統／編輯器交接與驗證見 [HANDOFF.md](docs/HANDOFF.md)。
+
 劇本節點編輯器是 `tools/story_editor/` 裡的網頁，不用建置、不用 npm。在**這個資料夾**啟動本機專案服務，再用瀏覽器開網址：
 
 ```bash
@@ -74,7 +78,7 @@ python3 tools/story_editor/project_server.py --port 8000 --godot /Applications/G
 
 在本機服務選取場景後，可從側欄「試玩這個場景」設定旗標與線索，直接開啟獨立遊戲視窗。尚未存檔的修改和唯讀故事都能試玩；正式遊戲存檔不受影響。前面場景的背景、角色與進行中的互動不會自動還原，需要時請從較早的場景開始。
 
-角色步驟的「舞台」可拖曳立繪，或按左側／中央／右側來選站位；下拉選單可還原角色預設。這是站位示意，位置與大小的精調見下方 Godot 舞台及角色場景。較長的台詞會顯示「繼續閱讀」，點擊後在同一個閱讀框翻頁。
+角色步驟的「舞台」可拖曳立繪，或按左側／中央／右側來選站位；「角色狀態」選立刻登場或退場後，可選淡化、左右滑動或直接切換。另可加入「立繪動作」讓已登場的人物抖動或彈跳，放在台詞前即可一起播放。這是站位示意，位置與大小的精調見下方 Godot 舞台及角色場景。較長的台詞會顯示「繼續閱讀」，點擊後在同一個閱讀框翻頁。
 
 - 直接開某個故事：網址後面加 `?story=<id>`，例如 `?story=chapter1`（id 見 `data/stories.json`）。
 - 8000 被占用就換 `--port`。遊戲試玩用的是 5193（`tools/serve_web.sh`），兩個可以同時開。
@@ -153,6 +157,7 @@ XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://t
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_ui_styles.gd
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_stage_scene.gd
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_reading_feel.gd
+XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_portrait_motion.gd
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_landscape_reading.gd
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_investigation.gd
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_comedy.gd
@@ -228,7 +233,7 @@ node tools/browser_check.mjs --backup --playwright /path/to/node_modules/@playwr
 | QTE、cut-in、Game Over | ✅ 已轉換 | `scenes/ui/qte_ring.tscn`、`cutin.tscn`、`game_over_gintama.tscn` |
 | 選項面板 | ✅ 已轉換 | POV 選項與限時吐槽：`scenes/ui/choice_sheet_gintama.tscn`（腳本 `scripts/choice_sheet.gd`），每列是 `choice_item_gintama.tscn`（`%Tone` 語氣標記）；導演選擇：`scenes/ui/choice_sheet_director.tscn`，每列 `choice_item_director.tscn` |
 | 眼鏡／吐槽之力 HUD、線索小牌 | ✅ 已轉換 | `scenes/ui/round_hud.tscn`（`set_style` 套和紙資源），眼鏡 `glasses_icon.tscn`、線索 `clue_chip.tscn` |
-| 調查點、收起後的調查列 | ✅ 已轉換 | `scenes/ui/hotspot.tscn`（依劇本放在背景圖上）、`scenes/ui/investigate_bar.tscn`；「收起」鈕在對話框 scene 的 `InvestigationRow` |
+| 調查點、收起後的調查列 | ✅ 已轉換 | `scenes/ui/hotspot.tscn`（依劇本放在背景圖上）、`scenes/ui/investigate_bar.tscn`（`Panel` 的 `self_modulate` 調整透明度）；「收起」鈕在對話框 scene 的 `Corner/CollapseTab`，按鈕外觀共用 `gintama_investigate_toggle.tscn` |
 | 調查的對話／移動話題 | ✅ 已轉換 | 對話框 scene 的 `InvestigationTopics`（`TalkRow`／`MoveRow`，標籤與間距在 scene 裡），每個話題是 `scenes/ui/investigate_topic.tscn`（大小與字級在這裡，顏色跟著該款的「聽下去」） |
 | 伊莉莎白的牌子 | ✅ 已轉換 | `scenes/characters/elisabeth.tscn` 的 `Placard`（對齊圖上白牌子的框，可拖曳、縮放、旋轉）、`Text`（字級與顏色）、`Glow`（選詞時的光框樣式）；牌子上的字由劇本決定 |
 | 漫畫吐槽疊加層 | ✅ 已轉換 | `scenes/comedy/*.tscn`（四個 preset；`ComedyLayer` 在 `main.tscn`） |

@@ -1,6 +1,6 @@
 extends Control
-## The home screen (scenes/home.tscn, the main scene; Taskbar Hero's layout at 941 x 1672): the header (the march
-## leader, gold, 招募券, settings), seven pages over the nav bar, and the 行軍 strip (scenes/march_arena.tscn) playing
+## The home screen (scenes/home.tscn, the main scene; Taskbar Hero's layout at 941 x 1672): the header (總覽, gold,
+## 招募券, settings), six pages over the nav bar, and the 行軍 strip (scenes/march_arena.tscn) playing
 ## on top of every page. Switching pages hides and shows them at once; the strip keeps fighting and its scenery
 ## binds to the shown page's landscape. Pages tell this screen what they changed (`changed`) and it saves, refreshes
 ## the header, the shown page and the nav dots, and restarts the march when its squad or stage changed (growth alone
@@ -15,10 +15,15 @@ const Portraits = preload("res://scripts/portraits.gd")
 const Names = preload("res://domain/push_report.gd")
 const PixelUi = preload("res://scripts/pixel_ui.gd")
 const PUSH := "res://scenes/main.tscn"
+## The nav bar's round buttons: the shown page's ring and caption turn gold (tools/sao_style.gd writes the rings).
+const RING_OFF := preload("res://ui/sao_ring.tres")
+const RING_ON := preload("res://ui/sao_ring_active.tres")
+const NAV_INK := Color(0.90, 0.91, 0.92)
+const NAV_GOLD := Color(0.95, 0.75, 0.25)
 const SIZE := Vector2i(941, 1672)
-const TABS := [&"overview", &"train", &"backpack", &"heroes", &"equipment", &"adventure", &"store"]
+const TABS := [&"overview", &"train", &"backpack", &"heroes", &"adventure", &"store"]
 ## The nav buttons' tabs, in navigation.tscn's order.
-const NAV_TABS := [&"train", &"backpack", &"heroes", &"equipment", &"adventure", &"store"]
+const NAV_TABS := [&"train", &"backpack", &"heroes", &"adventure", &"store"]
 const SAVE_EVERY := 15.0
 const LOG_SIZE := 60
 const TOAST_TIME := 2.2
@@ -45,7 +50,7 @@ var _squad_key: String = ""
 var _offline: Dictionary = {}
 
 @onready var _pages: Dictionary = {&"overview": %Overview, &"train": %Train, &"backpack": %Backpack, &"heroes": %Heroes,
-	&"equipment": %Equipment, &"adventure": %Adventure, &"store": %Store}
+	&"adventure": %Adventure, &"store": %Store}
 @onready var _arena: Node2D = %MarchArena
 
 
@@ -73,11 +78,7 @@ func _ready() -> void:
 	var nav: Control = %Navigation
 	for k: int in mini(nav.get_child_count(), NAV_TABS.size()):
 		(nav.get_child(k) as Button).pressed.connect(show_tab.bind(NAV_TABS[k]))
-	%Header.get_node("AvatarButton").pressed.connect(show_tab.bind(&"overview"))
 	%Header.get_node("OverviewButton").pressed.connect(show_tab.bind(&"overview"))
-	%Heroes.equip_requested.connect(func(i: int) -> void:
-		%Equipment.show_hero(i)
-		show_tab(&"equipment"))
 	%Header.get_node("SettingsButton").pressed.connect(func() -> void: %SettingsOverlay.visible = true)
 	%SettingsPanel.closed.connect(func() -> void: %SettingsOverlay.visible = false)
 	%DialogOk.pressed.connect(func() -> void: %Dialog.visible = false)
@@ -156,7 +157,14 @@ func show_tab(which: StringName) -> void:
 	page.refresh()
 	var nav: Control = %Navigation
 	for k: int in mini(nav.get_child_count(), NAV_TABS.size()):
-		(nav.get_child(k) as Button).modulate = Color("fff1b8") if NAV_TABS[k] == which else Color.WHITE
+		var button := nav.get_child(k) as Button
+		var on: bool = NAV_TABS[k] == which
+		var ring := button.get_node_or_null(^"Ring") as Panel
+		if ring != null:
+			ring.add_theme_stylebox_override(&"panel", RING_ON if on else RING_OFF)
+		var caption := button.get_node_or_null(^"Caption") as Label
+		if caption != null:
+			caption.add_theme_color_override(&"font_color", NAV_GOLD if on else NAV_INK)
 	_refresh_header()
 	_update_dots()
 
@@ -185,11 +193,14 @@ func _on_kill(got: Dictionary) -> void:
 		_arena.pending = true
 	if got.shards > 0:
 		add_log("撿到突破素材 ×%d" % got.shards)
+	for k: int in got.potions.size():
+		if got.potions[k] > 0:
+			add_log("撿到%s ×%d" % [Progression.POTIONS[k].name, got.potions[k]])
 	for item: Dictionary in got.items:
 		add_log("撿到 %s（%s）" % [Items.item_name(item.id), Items.RARITY_NAMES[Items.rarity(item.id)]])
 	if got.salvaged > 0:
 		add_log("自動分解了 %d 件裝備" % got.salvaged)
-	if not got.items.is_empty() or got.shards > 0:
+	if not got.items.is_empty() or got.shards > 0 or got.potions.max() > 0:
 		_pages[tab].refresh()
 
 
@@ -221,23 +232,15 @@ func dialog(title: String, body: String, alt: String = "") -> void:
 
 func _refresh_header() -> void:
 	var header: Control = %Header
-	var leader: int = progress.march[0]
-	var c: int = Progression.base_class(leader)
-	var portrait: TextureRect = header.get_node("AvatarButton/Portrait")
-	portrait.texture = Portraits.hero_sprite(Heroes.form(leader), c)
-	portrait.self_modulate = Portraits.tint(leader, c)
-	(header.get_node("LevelLabel") as Label).text = "Lv. %d　%s" % [progress.hero_level[leader], Names.hero_name(names, leader)]
-	var bar: ProgressBar = header.get_node("ExperienceBar")
-	bar.max_value = Progression.EXP_PER_LEVEL * progress.hero_level[leader]
-	bar.value = progress.hero_exp[leader]
 	(header.get_node("GoldBadge") as Label).text = _short(progress.gold)
 	(header.get_node("GemBadge") as Label).text = str(progress.tickets)
 
 
 func _update_dots() -> void:
 	var kinds: Array = progress.todo().map(func(item: Dictionary) -> String: return item.kind)
-	var on: Array = [kinds.has("talent"), progress.fresh.size() > 0, kinds.has("ascend") or kinds.has("slot"),
-		kinds.has("equip") or kinds.has("armory"), false, kinds.has("recruit") or progress.ad_pull_ready(clock.call())]
+	var on: Array = [kinds.has("talent"), progress.fresh.size() > 0,
+		kinds.has("ascend") or kinds.has("slot") or kinds.has("equip") or kinds.has("armory"), false,
+		kinds.has("recruit") or progress.ad_pull_ready(clock.call())]
 	var dots: Control = %NavDots
 	for k: int in mini(dots.get_child_count(), on.size()):
 		(dots.get_child(k) as Control).visible = on[k]
@@ -256,6 +259,9 @@ func _claim_offline() -> void:
 	lines.append("金幣 +%s" % _short(_offline.gold))
 	if _offline.shards > 0:
 		lines.append("突破素材 +%d" % _offline.shards)
+	for k: int in _offline.potions.size():
+		if _offline.potions[k] > 0:
+			lines.append("%s +%d（英雄頁可給沒行軍的英雄升級）" % [Progression.POTIONS[k].name, _offline.potions[k]])
 	lines.append_array(Items.drops_text(_offline))
 	for i: int in _offline.levels:
 		lines.append("%s 升了 %d 級" % [Names.hero_name(names, i), _offline.levels[i]])

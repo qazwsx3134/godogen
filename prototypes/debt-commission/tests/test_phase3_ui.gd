@@ -78,6 +78,38 @@ func _test_investigation_save_boke_load_and_perfect() -> void:
 	await _tap(resumed._dialog_panel.investigation_collapse.get_global_rect().get_center())
 	_expect(resumed._investigate_collapsed and not resumed._dialog_panel.visible and resumed._investigate_bar.visible,
 		"收起 folds the reading box into the bar")
+	await _frames(3)
+	var bar: Control = resumed._investigate_bar
+	var backdrop: Control = bar.get("panel") as Control
+	var expand: Button = bar.get("expand_button") as Button
+	var collapse_face: Control = resumed._dialog_panel.investigation_collapse.get_node("Surface")
+	var toolbar_face: Control = resumed._dialog_panel.menu_button.get_node("Surface")
+	_expect(absf(collapse_face.size.y - toolbar_face.size.y) < 1.0,
+		"the collapse button has the same compact visible height as the reading toolbar")
+	_expect(absf(bar.get_global_rect().end.y - resumed._game.get_global_rect().end.y) < 1.0
+		and absf(backdrop.get_global_rect().end.y - resumed._game.get_global_rect().end.y) < 1.0
+		and backdrop.self_modulate.a <= 0.3,
+		"the folded strip sits at the bottom and its backdrop is translucent")
+	_expect(not (bar.get("continue_button") as Button).visible, "the folded Continue stays hidden until all clues are found")
+	await _tap(expand.get_global_rect().get_center())
+	_expect(not resumed._investigate_collapsed and resumed._dialog_panel.visible, "展開 restores the reading box")
+	await _tap(resumed._dialog_panel.investigation_collapse.get_global_rect().get_center())
+	resumed._set_pan(resumed._pan, 0.0)
+	var start_on_strip: Vector2 = Vector2(resumed._game.get_global_rect().size.x * 0.2, backdrop.get_global_rect().get_center().y)
+	if resumed._hotspot_hit_rect(resumed_spot).has_point(start_on_strip):
+		start_on_strip.x = resumed._game.get_global_rect().size.x * 0.5
+	var strip_tap_reached_background: Array[bool] = [false]
+	var watch_tap: Callable = func(event: InputEvent) -> void:
+		if event is InputEventMouseButton and (event as InputEventMouseButton).pressed:
+			strip_tap_reached_background[0] = true
+	resumed._tap_catcher.gui_input.connect(watch_tap)
+	await _tap(start_on_strip)
+	resumed._tap_catcher.gui_input.disconnect(watch_tap)
+	_expect(strip_tap_reached_background[0], "taps on the translucent strip reach the background")
+	await _drag(start_on_strip, start_on_strip + Vector2(0.0, -120.0), 0.1)
+	_expect(resumed._pan_y < -1.0 and resumed._runner.items.is_empty(),
+		"dragging through the translucent strip moves the background without collecting a clue")
+	resumed._set_pan(resumed._pan, resumed._pan_y_range.x)
 	await _tap(resumed._hotspot_hit_rect(resumed_spot).get_center())
 	_expect(resumed._runner.items == ["milk_bottle"], "tapping the object in the picture grants its clue")
 	_expect(bool(resumed_spot.get("found")) and (resumed_spot.get_node("Outline") as Control).visible,
@@ -226,11 +258,23 @@ func _test_investigation_save_boke_load_and_perfect() -> void:
 	_expect(is_equal_approx(loaded._boke_time_remaining, float(boke_payload["boke_timer_remaining"])),
 		"loaded boke resumes from the saved countdown remainder")
 	loaded._on_boke_option_pressed("point_to_bottle")
+	_expect(loaded._comedy_layer.is_active() and loaded._comedy_layer.qa_state().get("side") == "left"
+		and loaded._screen_mode == "busy", "the first spoken retort opens the left manga panel before its reaction")
+	_expect(not loaded._toast.visible, "the previous save notification does not cover the manga bubble")
+	var retort: RichTextLabel = loaded._comedy_layer.get_child(0).get_node("%Text") as RichTextLabel
+	_expect(retort.get_parsed_text() == "證據就在你手邊。", "the manga bubble shows the spoken part of the chosen option")
+	loaded._on_screen_tap()
 	await _until(func() -> bool: return loaded._screen_mode == "story" and loaded._runner.node_id == "perfect", "perfect result feedback")
 	_expect(String(loaded._last_boke_result) == "perfect", "perfect choice reports result feedback")
 	_expect(int(loaded._runner.gameplay["power"]) == 30, "perfect result updates power HUD state")
 	_expect(loaded._phase3_stats_label.text.contains("30/100"), "HUD visibly reflects perfect power increase")
 	_expect(loaded._toast.text.contains("完美吐槽"), "perfect outcome displays result feedback")
+	loaded._load_payload_from_picker(boke_payload, "已讀取")
+	loaded._on_boke_option_pressed("weak_comeback")
+	_expect(loaded._comedy_layer.is_active() and loaded._comedy_layer.qa_state().get("side") == "right",
+		"the next spoken retort alternates to the right")
+	loaded._on_screen_tap()
+	await _until(func() -> bool: return loaded._screen_mode == "story" and loaded._runner.node_id == "weak", "second retort returns to story")
 	loaded.queue_free()
 	await _frames(2)
 
@@ -251,6 +295,7 @@ func _test_weak_and_hidden_feedback() -> void:
 	await _start_to_round(hidden)
 	hidden._on_boke_tsukkomi_pressed()
 	hidden._on_boke_option_pressed("secret_comeback")
+	_expect(not hidden._comedy_layer.is_active(), "giving up does not shout an unspoken retort")
 	await _until(func() -> bool: return hidden._screen_mode == "story" and hidden._runner.node_id == "hidden", "hidden result feedback")
 	_expect(String(hidden._last_boke_result) == "hidden", "give-up route reports hidden result")
 	_expect(int(hidden._runner.gameplay["glasses"]) == 5 and int(hidden._runner.gameplay["power"]) == 0,

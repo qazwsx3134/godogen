@@ -1,25 +1,13 @@
 [gd_scene format=3]
 
 [ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Medium.otf" id="1_g3y8y"]
+[ext_resource type="StyleBox" path="res://ui/sao_card.tres" id="2_sbqtm"]
 [ext_resource type="Texture2D" path="res://assets/reference/adventure.png" id="2_xadp1"]
 [ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Bold.otf" id="3_sbqtm"]
 
 [sub_resource type="Theme" id="Theme_g3y8y"]
 default_font = ExtResource("1_g3y8y")
 default_font_size = 30
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wnl7x"]
-bg_color = Color(0.96862745, 0.9098039, 0.8352941, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.8, 0.7058824, 0.6039216, 1)
-corner_radius_top_left = 7
-corner_radius_top_right = 7
-corner_radius_bottom_right = 7
-corner_radius_bottom_left = 7
-corner_detail = 2
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nmeg2"]
 atlas = ExtResource("2_xadp1")
@@ -54,18 +42,7 @@ corner_radius_bottom_right = 7
 corner_radius_bottom_left = 7
 corner_detail = 2
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_30n4r"]
-bg_color = Color(0.9137255, 0.8352941, 0.73333335, 1)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.8745098, 0.6666667, 0.2901961, 1)
-corner_radius_top_left = 7
-corner_radius_top_right = 7
-corner_radius_bottom_right = 7
-corner_radius_bottom_left = 7
-corner_detail = 2
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nmeg2"]
 
 [node name="StageCard" type="Control" unique_id=518838396]
 custom_minimum_size = Vector2(164, 203)
@@ -74,13 +51,14 @@ anchors_preset = 0
 mouse_filter = 2
 theme = SubResource("Theme_g3y8y")
 metadata/fusion_readable = true
+metadata/sao_style = true
 
 [node name="Frame" type="Panel" parent="." unique_id=1579769063]
 layout_mode = 0
 offset_right = 164.0
 offset_bottom = 203.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_wnl7x")
+theme_override_styles/panel = ExtResource("2_sbqtm")
 
 [node name="Icon" type="TextureRect" parent="." unique_id=980609310]
 texture_filter = 1
@@ -99,8 +77,8 @@ offset_left = 8.0
 offset_top = 130.0
 offset_right = 156.0
 offset_bottom = 167.0
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_outline_color = Color(0.3, 0.31, 0.29, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("3_sbqtm")
 theme_override_font_sizes/font_size = 29
@@ -115,8 +93,8 @@ offset_left = 8.0
 offset_top = 165.0
 offset_right = 156.0
 offset_bottom = 193.0
-theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
-theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+theme_override_colors/font_color = Color(0.52, 0.53, 0.5, 1)
+theme_override_colors/font_outline_color = Color(0.52, 0.53, 0.5, 1)
 theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 25
 text = "開放"
@@ -129,7 +107,11 @@ layout_mode = 0
 offset_right = 164.0
 offset_bottom = 203.0
 mouse_default_cursor_shape = 2
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_focus_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_pressed_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_hover_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("3_sbqtm")
 theme_override_font_sizes/font_size = 23
@@ -137,5 +119,5 @@ theme_override_styles/normal = SubResource("StyleBoxEmpty_711xe")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_711xe")
 theme_override_styles/hover = SubResource("StyleBoxFlat_sxgmc")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_yhv7p")
-theme_override_styles/focus = SubResource("StyleBoxFlat_30n4r")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_nmeg2")
 metadata/action = "stage:0"

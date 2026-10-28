@@ -43,9 +43,9 @@ func _run() -> void:
 		"two hours away: the offline report, gold paid (%d)" % p.gold)
 	home.get_node("%DialogOk").pressed.emit()
 
-	# Nav: each button opens its page; the avatar returns to 總覽; the strip keeps marching.
+	# Nav: each button opens its page; 總覽 returns to 總覽; the strip keeps marching.
 	var nav: Control = home.get_node("%Navigation")
-	var tabs: Array = [&"train", &"backpack", &"heroes", &"equipment", &"adventure", &"store"]
+	var tabs: Array = [&"train", &"backpack", &"heroes", &"adventure", &"store"]
 	var arena: Node2D = home.get_node("%MarchArena")
 	var sim: RefCounted = arena.sim
 	for k: int in tabs.size():
@@ -53,8 +53,8 @@ func _run() -> void:
 		await _frames(1)
 		_expect(home.tab == tabs[k] and home.get_node("%Pages").get_child(k + 1).visible, "nav %d opens %s" % [k, tabs[k]])
 	_expect(arena.sim == sim, "switching pages keeps the same march")
-	home.get_node("%Header").get_node("AvatarButton").pressed.emit()
-	_expect(home.tab == &"overview", "the avatar returns to 總覽")
+	home.get_node("%Header").get_node("OverviewButton").pressed.emit()
+	_expect(home.tab == &"overview", "the 總覽 button returns to 總覽")
 	var gold: int = p.gold
 	for k: int in 1200:
 		arena.step(0.05)
@@ -62,12 +62,13 @@ func _run() -> void:
 			break
 	_expect(arena.sim.kills > 0 and p.gold > gold, "a march kill pays gold (%d -> %d)" % [gold, p.gold])
 
-	# 訓練.
+	# 天賦.
 	home.show_tab(&"train")
-	var row: Control = home.get_node("%Train").get_node("%TrainingList").get_child(Talents.SWORD)
+	var train: Control = home.get_node("%Train")
+	(train.get_node("%TalentTree").get_node("Node%d" % Talents.SWORD) as Button).pressed.emit()
 	gold = p.gold
-	(row.get_node("TrainButton") as Button).pressed.emit()
-	_expect(p.talent[Talents.SWORD] == 1 and p.gold == gold - 3000, "訓練 劍術 for 3000 gold")
+	train.get_node("%LightButton").pressed.emit()
+	_expect(p.talent[Talents.SWORD] == 1 and p.gold == gold - 3000, "點亮 劍術 for 3000 gold")
 
 	# 英雄: select a hero not marching and send them (the squad has 3 slots: call one back first).
 	home.show_tab(&"heroes")
@@ -79,16 +80,42 @@ func _run() -> void:
 	var before: RefCounted = arena.sim
 	heroes.get_node("%MarchButton").pressed.emit()
 	_expect(p.in_march(51) and arena.sim != before and arena.sim.hero.has(51), "上陣 sends 51 marching; the strip restarts with them")
+	heroes.close_detail()
+	_expect(not heroes.get_node("%HeroDetail").visible, "the page shows the roster")
 	var card: Control = heroes.get_node("%HeroGrid").get_child(0)
 	(card.get_node("SelectButton") as Button).pressed.emit()
-	_expect(heroes.selected == heroes._order[0], "a roster card selects its hero")
+	_expect(heroes.selected == heroes._order[0] and heroes.get_node("%HeroDetail").visible,
+		"a roster card opens its hero's detail over the page")
+	heroes.get_node("%StatsButton").pressed.emit()
+	var shown: int = 0
+	for l: Node in heroes.get_node("%FactorGrid").get_children():
+		shown += 1 if (l as Label).visible else 0
+	_expect(heroes.get_node("%StatsPopup").visible and shown >= 2, "數值明細 opens a pop-up listing the sources (%d)" % shown)
+	heroes.get_node("%StatsClose").pressed.emit()
+	home.show_tab(&"train")
+	home.show_tab(&"heroes")
+	_expect(not heroes.get_node("%HeroDetail").visible, "coming back to 英雄 opens the roster")
 
-	# 裝備: the weapon from the bag into the 劍 armory.
-	home.show_tab(&"equipment")
-	var equipment: Control = home.get_node("%Equipment")
-	equipment.selected_uid = w.uid
-	equipment.get_node("%EquipButton").pressed.emit()
+	# 裝備: a 劍 hero's weapon slot opens the picker; pick the SR sword, compare, 裝備.
+	heroes.open_detail(33)
+	heroes.get_node("%WeaponSlot").pressed.emit()
+	var swap: Control = heroes.get_node("%CandidateGrid").get_child(0)
+	_expect(heroes.get_node("%EquipPopup").visible and swap.visible and heroes._swaps[0].uid == w.uid,
+		"the 劍 weapon slot opens the picker with the bag's SR sword")
+	(swap.get_node("SelectButton") as Button).pressed.emit()
+	_expect(heroes.picked == w.uid and heroes.get_node("%CompareText").text.contains("換上"), "picking it shows the comparison")
+	heroes.get_node("%EquipConfirm").pressed.emit()
 	_expect(p.weapon_rarity(1) == 2 and p.bag_index(w.uid) < 0, "裝備 puts the SR sword in the 劍 armory")
+	heroes.get_node("%EquipClose").pressed.emit()
+	# 升級: a hero who is not marching drinks a medium potion (3000 EXP) and levels up.
+	p.potions = PackedInt32Array([0, 1, 0])
+	heroes.open_detail(60)
+	var lv: int = p.hero_level[60]
+	heroes.get_node("%LevelButton").pressed.emit()
+	heroes.get_node("%UseOne1").pressed.emit()
+	_expect(heroes.get_node("%LevelPopup").visible and not p.in_march(60) and p.hero_level[60] > lv and p.potions[1] == 0,
+		"升級 with a 經驗藥水 levels a resting hero")
+	heroes.close_detail()
 
 	# 背包: salvage the charm.
 	home.show_tab(&"backpack")

@@ -66,7 +66,7 @@ var sim: PushSim
 ## save_path.
 var progress: RefCounted = null
 ## The 關卡 to push (domain/stages.gd, 1-based; 0 = the next one not yet cleared). Set before the scene enters the tree
-## (stage select); 挑戰下一關 moves it on.
+## (stage select); 挑戰下一層 moves it on.
 var stage_n: int = 0
 ## The stage of the push on screen.
 var pushing: int = 1

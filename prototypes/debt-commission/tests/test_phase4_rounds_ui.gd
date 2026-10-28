@@ -94,6 +94,10 @@ func _test_testimony_and_combo() -> void:
 	_expect(game._screen_mode == "tsukkomi" and game._choice_sheet.visible and game._choice_buttons.size() == 3 and
 		not game._choice_sheet.super_button.visible, "line 2: 吐槽！ opens the timed sheet with its three options")
 	await _press(game._choice_buttons[0])
+	_expect(game._comedy_layer.is_active(), "the chosen material retort appears as a manga panel")
+	game._on_screen_tap()
+	await _until(func() -> bool: return game._screen_mode == "story" and game._runner.node_id == "r1_l2_a", "the material reaction follows")
+	_expect(not game._comedy_layer.is_active(), "the same authored cut-in does not repeat the chosen retort")
 	await _play_until(game, func() -> bool: return game._screen_mode == "boke_round", "back from line 2")
 	_expect(game._runner.gameplay["power"] == 30 and game._boke_tsukkomi_button.disabled and
 		game._boke_tsukkomi_button.text == "已接住" and game._boke_line_label.text.ends_with("·●○○"),
@@ -102,6 +106,10 @@ func _test_testimony_and_combo() -> void:
 	await _press(game._boke_next_button)
 	_expect(game._current_speaker == "kagura" and game._dialog_panel.censor_bar.visible, "line 3 shows its censor bar while reading")
 	await _press(game._dialog_panel.censor_bar)
+	await _until(func() -> bool: return game._comedy_layer.is_active(), "the censor-bar retort plays")
+	var retort: RichTextLabel = game._comedy_layer.get_child(0).get_node("%Text") as RichTextLabel
+	_expect(retort.get_parsed_text() == "消音條底下是你的名字啊！！", "a scripted Shinpachi cut-in uses the manga panel")
+	game._on_screen_tap()
 	await _play_until(game, func() -> bool: return game._screen_mode == "boke_round", "back from the censor bar")
 	_expect(game._runner.gameplay["power"] == 60 and game._runner.stats["perfect"] == 2, "tearing off the bar is a perfect catch, untimed")
 

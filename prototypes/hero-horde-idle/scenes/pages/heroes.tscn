@@ -4,10 +4,19 @@
 [ext_resource type="Script" path="res://scripts/pages/heroes_page.gd" id="2_apwjv"]
 [ext_resource type="Texture2D" path="res://assets/reference/equipment.png" id="2_wokph"]
 [ext_resource type="Texture2D" path="res://assets/reference/monster.png" id="3_8oy8p"]
+[ext_resource type="StyleBox" path="res://ui/sao_window.tres" id="4_0y3f4"]
 [ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Bold.otf" id="4_wcyik"]
-[ext_resource type="StyleBox" path="res://ui/gold.tres" id="6_scaiy"]
-[ext_resource type="StyleBox" path="res://ui/green.tres" id="7_j1y2y"]
-[ext_resource type="StyleBox" path="res://ui/blue.tres" id="8_e00n6"]
+[ext_resource type="StyleBox" path="res://ui/sao_inset.tres" id="5_3fn6b"]
+[ext_resource type="StyleBox" path="res://ui/sao_titlebar.tres" id="6_3fn6b"]
+[ext_resource type="StyleBox" path="res://ui/sao_section.tres" id="8_6sstq"]
+[ext_resource type="StyleBox" path="res://ui/sao_button.tres" id="9_mfayb"]
+[ext_resource type="StyleBox" path="res://ui/sao_button_hover.tres" id="10_7ueyu"]
+[ext_resource type="StyleBox" path="res://ui/slot.tres" id="10_e00n6"]
+[ext_resource type="StyleBox" path="res://ui/sao_disabled.tres" id="11_37leu"]
+[ext_resource type="StyleBox" path="res://ui/sao_primary.tres" id="12_c3utk"]
+[ext_resource type="StyleBox" path="res://ui/sao_primary_hover.tres" id="13_iv1t8"]
+[ext_resource type="StyleBox" path="res://ui/sao_track.tres" id="14_jbp1c"]
+[ext_resource type="StyleBox" path="res://ui/sao_fill.tres" id="15_kh52k"]
 
 [sub_resource type="Theme" id="Theme_apwjv"]
 default_font = ExtResource("1_yec7j")
@@ -63,85 +72,61 @@ atlas = ExtResource("2_wokph")
 region = Rect2(0, 470, 941, 55)
 filter_clip = true
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_3vn3e"]
-atlas = ExtResource("2_wokph")
-region = Rect2(8, 527, 925, 994)
-filter_clip = true
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5td6a"]
-texture = SubResource("AtlasTexture_3vn3e")
-texture_margin_left = 18.0
-texture_margin_top = 18.0
-texture_margin_right = 18.0
-texture_margin_bottom = 18.0
-draw_center = false
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vrk3s"]
-bg_color = Color(0.91764706, 0.8352941, 0.7411765, 1)
-border_color = Color(1, 1, 1, 0)
-corner_radius_top_left = 7
-corner_radius_top_right = 7
-corner_radius_bottom_right = 7
-corner_radius_bottom_left = 7
-corner_detail = 2
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_xyghq"]
 atlas = ExtResource("3_8oy8p")
 region = Rect2(50, 674, 269, 243)
 filter_clip = true
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wnl7x"]
-bg_color = Color(0.96862745, 0.9098039, 0.8352941, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.8, 0.7058824, 0.6039216, 1)
-corner_radius_top_left = 7
-corner_radius_top_right = 7
-corner_radius_bottom_right = 7
-corner_radius_bottom_left = 7
-corner_detail = 2
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mjp4j"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yhv7p"]
-bg_color = Color(0.9019608, 0.8117647, 0.70980394, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.74509805, 0.6509804, 0.54901963, 1)
-corner_radius_top_left = 7
-corner_radius_top_right = 7
-corner_radius_bottom_right = 7
-corner_radius_bottom_left = 7
-corner_detail = 2
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_72tfl"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_r4kd5"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_qk2k6"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8lkag"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_we0j6"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nl15e"]
 atlas = ExtResource("3_8oy8p")
 region = Rect2(50, 674, 269, 243)
 filter_clip = true
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4undo"]
-bg_color = Color(0.14901961, 0.20392157, 0.29803923, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.44313726, 0.50980395, 0.6117647, 1)
-corner_radius_top_left = 7
-corner_radius_top_right = 7
-corner_radius_bottom_right = 7
-corner_radius_bottom_left = 7
-corner_detail = 2
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_senyt"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yjasw"]
-bg_color = Color(0.53333336, 0.7921569, 0.4627451, 1)
-border_color = Color(0.53333336, 0.7921569, 0.4627451, 1)
-corner_radius_top_left = 7
-corner_radius_top_right = 7
-corner_radius_bottom_right = 7
-corner_radius_bottom_left = 7
-corner_detail = 2
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_p1mvk"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bhmcv"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yr0t0"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f0dci"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3fn6b"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6sstq"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mfayb"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7ueyu"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_37leu"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c3utk"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_iv1t8"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jbp1c"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kh52k"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ye2hb"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_14rqu"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0tlxj"]
 
 [node name="Heroes" type="Control" unique_id=1165690121]
 custom_minimum_size = Vector2(941, 1672)
@@ -152,6 +137,8 @@ theme = SubResource("Theme_apwjv")
 script = ExtResource("2_apwjv")
 metadata/page_id = "monster"
 metadata/fusion_readable = true
+metadata/sao_style = true
+metadata/ux_spacing = true
 
 [node name="DistantLandscape" type="TextureRect" parent="." unique_id=1773976979]
 texture_filter = 1
@@ -271,9 +258,10 @@ offset_top = 525.0
 offset_right = 933.0
 offset_bottom = 1520.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_5td6a")
+theme_override_styles/panel = ExtResource("4_0y3f4")
 
 [node name="PaperFill" type="Panel" parent="ContentPanel" unique_id=334309284]
+visible = false
 show_behind_parent = true
 layout_mode = 0
 anchor_right = 1.0
@@ -283,7 +271,16 @@ offset_top = 18.0
 offset_right = -18.0
 offset_bottom = -18.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_vrk3s")
+theme_override_styles/panel = ExtResource("5_3fn6b")
+
+[node name="TitleBar" type="Panel" parent="." unique_id=399741053]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 527.0
+offset_right = 931.0
+offset_bottom = 607.0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("6_3fn6b")
 
 [node name="PageIcon" type="TextureRect" parent="." unique_id=1258186785]
 texture_filter = 1
@@ -302,8 +299,8 @@ offset_left = 104.0
 offset_top = 538.0
 offset_right = 579.0
 offset_bottom = 604.0
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_outline_color = Color(0.24, 0.26, 0.3, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("4_wcyik")
 theme_override_font_sizes/font_size = 42
@@ -313,323 +310,37 @@ text_overrun_behavior = 3
 
 [node name="DetailHint" type="Label" parent="." unique_id=1915047485]
 unique_name_in_owner = true
+visible = false
 layout_mode = 0
 offset_left = 33.0
 offset_top = 601.0
 offset_right = 905.0
 offset_bottom = 637.0
-theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
-theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+theme_override_colors/font_color = Color(0.5, 0.53, 0.58, 1)
+theme_override_colors/font_outline_color = Color(0.5, 0.53, 0.58, 1)
 theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 27
-text = "點名冊裡的英雄看詳情；突破、上陣行軍、設為隊長都在這裡。"
-vertical_alignment = 1
-text_overrun_behavior = 3
-
-[node name="DetailPanel" type="Panel" parent="." unique_id=1419241947]
-layout_mode = 0
-offset_left = 22.0
-offset_top = 646.0
-offset_right = 919.0
-offset_bottom = 935.0
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_wnl7x")
-
-[node name="PortraitFrame" type="Panel" parent="." unique_id=1489136151]
-layout_mode = 0
-offset_left = 39.0
-offset_top = 660.0
-offset_right = 244.0
-offset_bottom = 920.0
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_yhv7p")
-
-[node name="DetailPortrait" type="TextureRect" parent="." unique_id=1898548497]
-unique_name_in_owner = true
-texture_filter = 1
-layout_mode = 0
-offset_left = 48.0
-offset_top = 666.0
-offset_right = 235.0
-offset_bottom = 910.0
-mouse_filter = 2
-texture = SubResource("AtlasTexture_nl15e")
-expand_mode = 1
-
-[node name="PetName" type="Label" parent="." unique_id=381147360]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 272.0
-offset_top = 659.0
-offset_right = 612.0
-offset_bottom = 705.0
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_constants/outline_size = 0
-theme_override_fonts/font = ExtResource("4_wcyik")
-theme_override_font_sizes/font_size = 37
-text = "怪獸名稱"
-vertical_alignment = 1
-text_overrun_behavior = 3
-
-[node name="PetLevel" type="Label" parent="." unique_id=1832895608]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 272.0
-offset_top = 707.0
-offset_right = 414.0
-offset_bottom = 743.0
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 29
-text = "Lv.1"
-vertical_alignment = 1
-text_overrun_behavior = 3
-
-[node name="PetExperience" type="ProgressBar" parent="." unique_id=973076521]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 417.0
-offset_top = 717.0
-offset_right = 697.0
-offset_bottom = 735.0
-mouse_filter = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_4undo")
-theme_override_styles/fill = SubResource("StyleBoxFlat_yjasw")
-show_percentage = false
-
-[node name="PetExperienceText" type="Label" parent="." unique_id=623226460]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 710.0
-offset_top = 703.0
-offset_right = 897.0
-offset_bottom = 738.0
-theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
-theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
-theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 27
-text = "0 / 0"
-horizontal_alignment = 1
-vertical_alignment = 1
-text_overrun_behavior = 3
-
-[node name="PetStatus" type="Label" parent="." unique_id=1958564883]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 272.0
-offset_top = 746.0
-offset_right = 877.0
-offset_bottom = 778.0
-theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
-theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
-theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 26
-text = "未部署"
-vertical_alignment = 1
-text_overrun_behavior = 3
-
-[node name="Stat0" type="Label" parent="." unique_id=2050617378]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 272.0
-offset_top = 784.0
-offset_right = 564.0
-offset_bottom = 824.0
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 29
-text = "攻擊　—"
-vertical_alignment = 1
-text_overrun_behavior = 3
-
-[node name="Stat1" type="Label" parent="." unique_id=1630855594]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 272.0
-offset_top = 824.0
-offset_right = 564.0
-offset_bottom = 864.0
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 29
-text = "防禦　—"
-vertical_alignment = 1
-text_overrun_behavior = 3
-
-[node name="Stat2" type="Label" parent="." unique_id=284326306]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 272.0
-offset_top = 864.0
-offset_right = 564.0
-offset_bottom = 904.0
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 29
-text = "生命　—"
-vertical_alignment = 1
-text_overrun_behavior = 3
-
-[node name="PetStatSpeed" type="Label" parent="." unique_id=1922914393]
-visible = false
-layout_mode = 0
-offset_left = 272.0
-offset_top = 904.0
-offset_right = 564.0
-offset_bottom = 944.0
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 29
-text = "速度　—"
-vertical_alignment = 1
-text_overrun_behavior = 3
-
-[node name="PetStatCrit" type="Label" parent="." unique_id=1583724234]
-visible = false
-layout_mode = 0
-offset_left = 272.0
-offset_top = 944.0
-offset_right = 564.0
-offset_bottom = 984.0
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 29
-text = "暴擊　—"
-vertical_alignment = 1
-text_overrun_behavior = 3
-
-[node name="PetStatRegen" type="Label" parent="." unique_id=236806586]
-visible = false
-layout_mode = 0
-offset_left = 272.0
-offset_top = 984.0
-offset_right = 564.0
-offset_bottom = 1024.0
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 29
-text = "回復　—"
-vertical_alignment = 1
-text_overrun_behavior = 3
-
-[node name="Skill0" type="Label" parent="." unique_id=1917360524]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 571.0
-offset_top = 784.0
-offset_right = 887.0
-offset_bottom = 824.0
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 27
-text = "攻擊　—"
-vertical_alignment = 1
-clip_text = true
-text_overrun_behavior = 3
-
-[node name="Skill1" type="Label" parent="." unique_id=189857676]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 571.0
-offset_top = 824.0
-offset_right = 887.0
-offset_bottom = 864.0
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 27
-text = "防禦　—"
-vertical_alignment = 1
-clip_text = true
-text_overrun_behavior = 3
-
-[node name="Skill2" type="Label" parent="." unique_id=1007271733]
-unique_name_in_owner = true
-layout_mode = 0
-offset_left = 571.0
-offset_top = 864.0
-offset_right = 887.0
-offset_bottom = 904.0
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 27
-text = "生命　—"
-vertical_alignment = 1
-clip_text = true
-text_overrun_behavior = 3
-
-[node name="PetBonusSpeed" type="Label" parent="." unique_id=1104428758]
-visible = false
-layout_mode = 0
-offset_left = 571.0
-offset_top = 904.0
-offset_right = 887.0
-offset_bottom = 944.0
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 27
-text = "速度　—"
-vertical_alignment = 1
-text_overrun_behavior = 3
-
-[node name="PetBonusCrit" type="Label" parent="." unique_id=1219492238]
-visible = false
-layout_mode = 0
-offset_left = 571.0
-offset_top = 944.0
-offset_right = 887.0
-offset_bottom = 984.0
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 27
-text = "暴擊　—"
-vertical_alignment = 1
-text_overrun_behavior = 3
-
-[node name="PetBonusRegen" type="Label" parent="." unique_id=1546326584]
-visible = false
-layout_mode = 0
-offset_left = 571.0
-offset_top = 984.0
-offset_right = 887.0
-offset_bottom = 1024.0
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 27
-text = "回復　—"
+text = "點英雄看數值明細、技能與裝備；一鍵裝備替全部英雄換上最好的"
 vertical_alignment = 1
 text_overrun_behavior = 3
 
 [node name="CollectionPanel" type="Panel" parent="." unique_id=959264777]
 layout_mode = 0
 offset_left = 22.0
-offset_top = 1016.0
+offset_top = 646.0
 offset_right = 919.0
 offset_bottom = 1506.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_wnl7x")
+theme_override_styles/panel = ExtResource("8_6sstq")
 
 [node name="CollectionTitle" type="Label" parent="." unique_id=440391131]
 layout_mode = 0
 offset_left = 39.0
-offset_top = 1022.0
+offset_top = 652.0
 offset_right = 515.0
-offset_bottom = 1067.0
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+offset_bottom = 697.0
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_outline_color = Color(0.24, 0.26, 0.3, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("4_wcyik")
 theme_override_font_sizes/font_size = 33
@@ -641,11 +352,11 @@ text_overrun_behavior = 3
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 500.0
-offset_top = 1022.0
+offset_top = 652.0
 offset_right = 896.0
-offset_bottom = 1067.0
-theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
-theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+offset_bottom = 697.0
+theme_override_colors/font_color = Color(0.5, 0.53, 0.58, 1)
+theme_override_colors/font_outline_color = Color(0.5, 0.53, 0.58, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("4_wcyik")
 theme_override_font_sizes/font_size = 30
@@ -657,167 +368,107 @@ text_overrun_behavior = 3
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 39.0
-offset_top = 1066.0
+offset_top = 696.0
 offset_right = 897.0
-offset_bottom = 1101.0
-theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
-theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+offset_bottom = 731.0
+theme_override_colors/font_color = Color(0.5, 0.53, 0.58, 1)
+theme_override_colors/font_outline_color = Color(0.5, 0.53, 0.58, 1)
 theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 25
 text = "點「查看」切換詳情；以「部署／撤下」獨立管理同行名單。"
 vertical_alignment = 1
 text_overrun_behavior = 3
 
-[node name="ActionRow" type="HBoxContainer" parent="." unique_id=1310037278]
-layout_mode = 0
-offset_left = 30.0
-offset_top = 944.0
-offset_right = 911.0
-offset_bottom = 1006.0
-theme_override_constants/separation = 14
-
-[node name="AscendButton" type="Button" parent="ActionRow" unique_id=2113267823]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
-theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
-theme_override_fonts/font = ExtResource("4_wcyik")
-theme_override_font_sizes/font_size = 30
-theme_override_styles/normal = ExtResource("6_scaiy")
-theme_override_styles/pressed = ExtResource("6_scaiy")
-theme_override_styles/hover = ExtResource("6_scaiy")
-theme_override_styles/disabled = ExtResource("6_scaiy")
-theme_override_styles/focus = ExtResource("6_scaiy")
-text = "突破"
-
-[node name="MarchButton" type="Button" parent="ActionRow" unique_id=926752444]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
-theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
-theme_override_fonts/font = ExtResource("4_wcyik")
-theme_override_font_sizes/font_size = 30
-theme_override_styles/normal = ExtResource("7_j1y2y")
-theme_override_styles/pressed = ExtResource("7_j1y2y")
-theme_override_styles/hover = ExtResource("7_j1y2y")
-theme_override_styles/disabled = ExtResource("7_j1y2y")
-theme_override_styles/focus = ExtResource("7_j1y2y")
-text = "上陣行軍"
-
-[node name="CaptainButton" type="Button" parent="ActionRow" unique_id=864666956]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
-theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
-theme_override_fonts/font = ExtResource("4_wcyik")
-theme_override_font_sizes/font_size = 30
-theme_override_styles/normal = ExtResource("8_e00n6")
-theme_override_styles/pressed = ExtResource("8_e00n6")
-theme_override_styles/hover = ExtResource("8_e00n6")
-theme_override_styles/disabled = ExtResource("8_e00n6")
-theme_override_styles/focus = ExtResource("8_e00n6")
-text = "設為隊長"
-
-[node name="EquipButton" type="Button" parent="ActionRow" unique_id=1710220734]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
-theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
-theme_override_fonts/font = ExtResource("4_wcyik")
-theme_override_font_sizes/font_size = 30
-theme_override_styles/normal = ExtResource("8_e00n6")
-theme_override_styles/pressed = ExtResource("8_e00n6")
-theme_override_styles/hover = ExtResource("8_e00n6")
-theme_override_styles/disabled = ExtResource("8_e00n6")
-theme_override_styles/focus = ExtResource("8_e00n6")
-text = "裝備"
-
 [node name="FormFilter" type="HBoxContainer" parent="." unique_id=2086392088]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 39.0
-offset_top = 1106.0
+offset_top = 736.0
 offset_right = 899.0
-offset_bottom = 1154.0
+offset_bottom = 784.0
 theme_override_constants/separation = 10
 
 [node name="Form0" type="Button" parent="FormFilter" unique_id=655088716]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
-theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_focus_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_pressed_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_hover_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.57, 0.6, 1)
 theme_override_fonts/font = ExtResource("4_wcyik")
 theme_override_font_sizes/font_size = 29
-theme_override_styles/normal = ExtResource("8_e00n6")
-theme_override_styles/pressed = ExtResource("8_e00n6")
-theme_override_styles/hover = ExtResource("8_e00n6")
-theme_override_styles/disabled = ExtResource("8_e00n6")
-theme_override_styles/focus = ExtResource("8_e00n6")
+theme_override_styles/normal = ExtResource("9_mfayb")
+theme_override_styles/pressed = ExtResource("10_7ueyu")
+theme_override_styles/hover = ExtResource("10_7ueyu")
+theme_override_styles/disabled = ExtResource("11_37leu")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_mjp4j")
 toggle_mode = true
 text = "全部"
 
 [node name="Form1" type="Button" parent="FormFilter" unique_id=1593238169]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
-theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_focus_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_pressed_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_hover_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.57, 0.6, 1)
 theme_override_fonts/font = ExtResource("4_wcyik")
 theme_override_font_sizes/font_size = 29
-theme_override_styles/normal = ExtResource("8_e00n6")
-theme_override_styles/pressed = ExtResource("8_e00n6")
-theme_override_styles/hover = ExtResource("8_e00n6")
-theme_override_styles/disabled = ExtResource("8_e00n6")
-theme_override_styles/focus = ExtResource("8_e00n6")
+theme_override_styles/normal = ExtResource("9_mfayb")
+theme_override_styles/pressed = ExtResource("10_7ueyu")
+theme_override_styles/hover = ExtResource("10_7ueyu")
+theme_override_styles/disabled = ExtResource("11_37leu")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_72tfl")
 toggle_mode = true
 text = "人類"
 
 [node name="Form2" type="Button" parent="FormFilter" unique_id=1316392057]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
-theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_focus_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_pressed_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_hover_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.57, 0.6, 1)
 theme_override_fonts/font = ExtResource("4_wcyik")
 theme_override_font_sizes/font_size = 29
-theme_override_styles/normal = ExtResource("8_e00n6")
-theme_override_styles/pressed = ExtResource("8_e00n6")
-theme_override_styles/hover = ExtResource("8_e00n6")
-theme_override_styles/disabled = ExtResource("8_e00n6")
-theme_override_styles/focus = ExtResource("8_e00n6")
+theme_override_styles/normal = ExtResource("9_mfayb")
+theme_override_styles/pressed = ExtResource("10_7ueyu")
+theme_override_styles/hover = ExtResource("10_7ueyu")
+theme_override_styles/disabled = ExtResource("11_37leu")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_r4kd5")
 toggle_mode = true
-text = "怪獸"
+text = "獸人"
 
 [node name="Form3" type="Button" parent="FormFilter" unique_id=494454007]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
-theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_focus_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_pressed_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_hover_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.57, 0.6, 1)
 theme_override_fonts/font = ExtResource("4_wcyik")
 theme_override_font_sizes/font_size = 29
-theme_override_styles/normal = ExtResource("8_e00n6")
-theme_override_styles/pressed = ExtResource("8_e00n6")
-theme_override_styles/hover = ExtResource("8_e00n6")
-theme_override_styles/disabled = ExtResource("8_e00n6")
-theme_override_styles/focus = ExtResource("8_e00n6")
+theme_override_styles/normal = ExtResource("9_mfayb")
+theme_override_styles/pressed = ExtResource("10_7ueyu")
+theme_override_styles/hover = ExtResource("10_7ueyu")
+theme_override_styles/disabled = ExtResource("11_37leu")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_qk2k6")
 toggle_mode = true
-text = "夢靈"
+text = "精靈"
 
 [node name="HeroScroll" type="ScrollContainer" parent="." unique_id=1772525362]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 32.0
-offset_top = 1162.0
+offset_top = 792.0
 offset_right = 908.0
 offset_bottom = 1498.0
 horizontal_scroll_mode = 0
@@ -825,7 +476,1315 @@ horizontal_scroll_mode = 0
 [node name="HeroGrid" type="GridContainer" parent="HeroScroll" unique_id=172922287]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 16
+columns = 4
+
+[node name="AutoEquipButton" type="Button" parent="." unique_id=1310518781]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 640.0
+offset_top = 541.0
+offset_right = 905.0
+offset_bottom = 599.0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.57, 0.6, 1)
+theme_override_fonts/font = ExtResource("4_wcyik")
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = ExtResource("12_c3utk")
+theme_override_styles/pressed = ExtResource("13_iv1t8")
+theme_override_styles/hover = ExtResource("13_iv1t8")
+theme_override_styles/disabled = ExtResource("11_37leu")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_8lkag")
+text = "一鍵裝備"
+
+[node name="HeroDetail" type="Control" parent="." unique_id=2026798013]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 0
+offset_top = 525.0
+offset_right = 941.0
+offset_bottom = 1520.0
+
+[node name="Backdrop" type="Panel" parent="HeroDetail" unique_id=215546990]
+layout_mode = 0
+offset_left = 8.0
+offset_right = 933.0
+offset_bottom = 995.0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("4_0y3f4")
+
+[node name="PaperFill" type="Panel" parent="HeroDetail/Backdrop" unique_id=1724291925]
+visible = false
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 18.0
+offset_top = 18.0
+offset_right = -18.0
+offset_bottom = -18.0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("5_3fn6b")
+
+[node name="TitleBar" type="Panel" parent="HeroDetail" unique_id=189702632]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 2.0
+offset_right = 931.0
+offset_bottom = 82.0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("6_3fn6b")
+
+[node name="DetailTitle" type="Label" parent="HeroDetail" unique_id=1727343373]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 13.0
+offset_right = 440.0
+offset_bottom = 79.0
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_fonts/font = ExtResource("4_wcyik")
+theme_override_font_sizes/font_size = 40
+text = "英雄詳情"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="CloseButton" type="Button" parent="HeroDetail" unique_id=206373819]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 705.0
+offset_top = 18.0
+offset_right = 905.0
+offset_bottom = 74.0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_focus_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_pressed_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_hover_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.57, 0.6, 1)
+theme_override_fonts/font = ExtResource("4_wcyik")
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = ExtResource("9_mfayb")
+theme_override_styles/pressed = ExtResource("10_7ueyu")
+theme_override_styles/hover = ExtResource("10_7ueyu")
+theme_override_styles/disabled = ExtResource("11_37leu")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_we0j6")
+text = "返回名冊"
+
+[node name="DetailPanel" type="Panel" parent="HeroDetail" unique_id=1419241947]
+layout_mode = 0
+offset_left = 22.0
+offset_top = 96.0
+offset_right = 919.0
+offset_bottom = 572.0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("8_6sstq")
+
+[node name="PortraitFrame" type="Panel" parent="HeroDetail" unique_id=1489136151]
+layout_mode = 0
+offset_left = 39.0
+offset_top = 112.0
+offset_right = 239.0
+offset_bottom = 372.0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("5_3fn6b")
+
+[node name="DetailPortrait" type="TextureRect" parent="HeroDetail" unique_id=1898548497]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 48.0
+offset_top = 118.0
+offset_right = 230.0
+offset_bottom = 366.0
+mouse_filter = 2
+texture = SubResource("AtlasTexture_nl15e")
+expand_mode = 1
+
+[node name="PetName" type="Label" parent="HeroDetail" unique_id=381147360]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 260.0
+offset_top = 106.0
+offset_right = 900.0
+offset_bottom = 152.0
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_outline_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_constants/outline_size = 0
+theme_override_fonts/font = ExtResource("4_wcyik")
+theme_override_font_sizes/font_size = 37
+text = "怪獸名稱"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="PetLevel" type="Label" parent="HeroDetail" unique_id=1832895608]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 260.0
+offset_top = 154.0
+offset_right = 380.0
+offset_bottom = 190.0
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_outline_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 29
+text = "Lv.1"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="PetStatus" type="Label" parent="HeroDetail" unique_id=1958564883]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 384.0
+offset_top = 154.0
+offset_right = 905.0
+offset_bottom = 190.0
+theme_override_colors/font_color = Color(0.5, 0.53, 0.58, 1)
+theme_override_colors/font_outline_color = Color(0.5, 0.53, 0.58, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 24
+text = "未部署"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Stat0" type="Label" parent="HeroDetail" unique_id=2050617378]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 39.0
+offset_top = 396.0
+offset_right = 259.0
+offset_bottom = 436.0
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_outline_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 29
+text = "攻擊　—"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Stat1" type="Label" parent="HeroDetail" unique_id=1630855594]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 270.0
+offset_top = 396.0
+offset_right = 510.0
+offset_bottom = 436.0
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_outline_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 29
+text = "防禦　—"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Stat2" type="Label" parent="HeroDetail" unique_id=284326306]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 520.0
+offset_top = 396.0
+offset_right = 700.0
+offset_bottom = 436.0
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_outline_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 29
+text = "生命　—"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Skill0" type="Label" parent="HeroDetail" unique_id=1917360524]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 39.0
+offset_top = 452.0
+offset_right = 905.0
+offset_bottom = 488.0
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_outline_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 27
+text = "攻擊　—"
+vertical_alignment = 1
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="Skill1" type="Label" parent="HeroDetail" unique_id=189857676]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 39.0
+offset_top = 490.0
+offset_right = 905.0
+offset_bottom = 526.0
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_outline_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 27
+text = "防禦　—"
+vertical_alignment = 1
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="Skill2" type="Label" parent="HeroDetail" unique_id=1007271733]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 39.0
+offset_top = 528.0
+offset_right = 905.0
+offset_bottom = 564.0
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_outline_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_constants/outline_size = 0
+theme_override_font_sizes/font_size = 27
+text = "生命　—"
+vertical_alignment = 1
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="ActionRow" type="HBoxContainer" parent="HeroDetail" unique_id=1310037278]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 596.0
+offset_right = 911.0
+offset_bottom = 668.0
+theme_override_constants/separation = 14
+
+[node name="AscendButton" type="Button" parent="HeroDetail/ActionRow" unique_id=2113267823]
+unique_name_in_owner = true
+layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/h_separation = 9
-theme_override_constants/v_separation = 8
-columns = 5
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.57, 0.6, 1)
+theme_override_fonts/font = ExtResource("4_wcyik")
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = ExtResource("12_c3utk")
+theme_override_styles/pressed = ExtResource("13_iv1t8")
+theme_override_styles/hover = ExtResource("13_iv1t8")
+theme_override_styles/disabled = ExtResource("11_37leu")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_senyt")
+text = "突破"
+
+[node name="LevelButton" type="Button" parent="HeroDetail/ActionRow" unique_id=180174801]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_focus_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_pressed_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_hover_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.57, 0.6, 1)
+theme_override_fonts/font = ExtResource("4_wcyik")
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = ExtResource("9_mfayb")
+theme_override_styles/pressed = ExtResource("10_7ueyu")
+theme_override_styles/hover = ExtResource("10_7ueyu")
+theme_override_styles/disabled = ExtResource("11_37leu")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_p1mvk")
+text = "升級"
+
+[node name="MarchButton" type="Button" parent="HeroDetail/ActionRow" unique_id=926752444]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_focus_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_pressed_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_hover_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.57, 0.6, 1)
+theme_override_fonts/font = ExtResource("4_wcyik")
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = ExtResource("9_mfayb")
+theme_override_styles/pressed = ExtResource("10_7ueyu")
+theme_override_styles/hover = ExtResource("10_7ueyu")
+theme_override_styles/disabled = ExtResource("11_37leu")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_bhmcv")
+text = "上陣行軍"
+
+[node name="CaptainButton" type="Button" parent="HeroDetail/ActionRow" unique_id=864666956]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_focus_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_pressed_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_hover_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.57, 0.6, 1)
+theme_override_fonts/font = ExtResource("4_wcyik")
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = ExtResource("9_mfayb")
+theme_override_styles/pressed = ExtResource("10_7ueyu")
+theme_override_styles/hover = ExtResource("10_7ueyu")
+theme_override_styles/disabled = ExtResource("11_37leu")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_p1mvk")
+text = "設為隊長"
+
+[node name="WeaponSlot" type="Button" parent="HeroDetail" unique_id=1313013009]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 260.0
+offset_top = 200.0
+offset_right = 905.0
+offset_bottom = 284.0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_focus_color = Color(0.2901961, 0.20392157, 0.14117648, 1)
+theme_override_colors/font_pressed_color = Color(0.2901961, 0.20392157, 0.14117648, 1)
+theme_override_colors/font_hover_color = Color(0.2901961, 0.20392157, 0.14117648, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.2901961, 0.20392157, 0.14117648, 1)
+theme_override_colors/font_disabled_color = Color(0.2901961, 0.20392157, 0.14117648, 0.45)
+theme_override_fonts/font = ExtResource("4_wcyik")
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = ExtResource("5_3fn6b")
+theme_override_styles/pressed = ExtResource("5_3fn6b")
+theme_override_styles/hover = ExtResource("5_3fn6b")
+theme_override_styles/disabled = ExtResource("10_e00n6")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_yr0t0")
+
+[node name="Icon" type="TextureRect" parent="HeroDetail/WeaponSlot" unique_id=132500126]
+texture_filter = 1
+layout_mode = 0
+offset_left = 10.0
+offset_top = 8.0
+offset_right = 78.0
+offset_bottom = 76.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Title" type="Label" parent="HeroDetail/WeaponSlot" unique_id=2114382324]
+layout_mode = 0
+offset_left = 90.0
+offset_top = 4.0
+offset_right = 630.0
+offset_bottom = 44.0
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_fonts/font = ExtResource("4_wcyik")
+theme_override_font_sizes/font_size = 26
+text = "武器"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Note" type="Label" parent="HeroDetail/WeaponSlot" unique_id=416244014]
+layout_mode = 0
+offset_left = 90.0
+offset_top = 42.0
+offset_right = 630.0
+offset_bottom = 78.0
+theme_override_colors/font_color = Color(0.5, 0.53, 0.58, 1)
+theme_override_fonts/font = ExtResource("1_yec7j")
+theme_override_font_sizes/font_size = 20
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="CharmSlot" type="Button" parent="HeroDetail" unique_id=86617011]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 260.0
+offset_top = 292.0
+offset_right = 905.0
+offset_bottom = 376.0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_colors/font_focus_color = Color(0.2901961, 0.20392157, 0.14117648, 1)
+theme_override_colors/font_pressed_color = Color(0.2901961, 0.20392157, 0.14117648, 1)
+theme_override_colors/font_hover_color = Color(0.2901961, 0.20392157, 0.14117648, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.2901961, 0.20392157, 0.14117648, 1)
+theme_override_colors/font_disabled_color = Color(0.2901961, 0.20392157, 0.14117648, 0.45)
+theme_override_fonts/font = ExtResource("4_wcyik")
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = ExtResource("5_3fn6b")
+theme_override_styles/pressed = ExtResource("5_3fn6b")
+theme_override_styles/hover = ExtResource("5_3fn6b")
+theme_override_styles/disabled = ExtResource("10_e00n6")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_f0dci")
+
+[node name="Icon" type="TextureRect" parent="HeroDetail/CharmSlot" unique_id=51275799]
+texture_filter = 1
+layout_mode = 0
+offset_left = 10.0
+offset_top = 8.0
+offset_right = 78.0
+offset_bottom = 76.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Title" type="Label" parent="HeroDetail/CharmSlot" unique_id=696599801]
+layout_mode = 0
+offset_left = 90.0
+offset_top = 4.0
+offset_right = 630.0
+offset_bottom = 44.0
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_fonts/font = ExtResource("4_wcyik")
+theme_override_font_sizes/font_size = 26
+text = "飾品"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Note" type="Label" parent="HeroDetail/CharmSlot" unique_id=910096855]
+layout_mode = 0
+offset_left = 90.0
+offset_top = 42.0
+offset_right = 630.0
+offset_bottom = 78.0
+theme_override_colors/font_color = Color(0.5, 0.53, 0.58, 1)
+theme_override_fonts/font = ExtResource("1_yec7j")
+theme_override_font_sizes/font_size = 20
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="StatsButton" type="Button" parent="HeroDetail" unique_id=130951931]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 710.0
+offset_top = 392.0
+offset_right = 905.0
+offset_bottom = 440.0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_focus_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.56, 0.54, 1)
+theme_override_fonts/font = ExtResource("4_wcyik")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = ExtResource("9_mfayb")
+theme_override_styles/pressed = ExtResource("10_7ueyu")
+theme_override_styles/hover = ExtResource("10_7ueyu")
+theme_override_styles/disabled = ExtResource("11_37leu")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_3fn6b")
+text = "數值明細"
+
+[node name="StatsPopup" type="Control" parent="HeroDetail" unique_id=1921573889]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 0
+offset_right = 941.0
+offset_bottom = 995.0
+
+[node name="Dim" type="ColorRect" parent="HeroDetail/StatsPopup" unique_id=552218828]
+layout_mode = 0
+offset_right = 941.0
+offset_bottom = 995.0
+color = Color(0, 0, 0, 0.45)
+
+[node name="Window" type="Panel" parent="HeroDetail/StatsPopup" unique_id=274357679]
+layout_mode = 0
+offset_left = 60.0
+offset_top = 230.0
+offset_right = 880.0
+offset_bottom = 700.0
+theme_override_styles/panel = ExtResource("4_0y3f4")
+
+[node name="TitleBar" type="Panel" parent="HeroDetail/StatsPopup/Window" unique_id=1872189491]
+layout_mode = 0
+offset_right = 820.0
+offset_bottom = 76.0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("6_3fn6b")
+
+[node name="StatsTitle" type="Label" parent="HeroDetail/StatsPopup/Window" unique_id=938822021]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 28.0
+offset_right = 528.0
+offset_bottom = 76.0
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_fonts/font = ExtResource("4_wcyik")
+theme_override_font_sizes/font_size = 34
+text = "數值明細"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="StatsClose" type="Button" parent="HeroDetail/StatsPopup/Window" unique_id=1395107560]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 650.0
+offset_top = 14.0
+offset_right = 796.0
+offset_bottom = 64.0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_focus_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.56, 0.54, 1)
+theme_override_fonts/font = ExtResource("4_wcyik")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = ExtResource("9_mfayb")
+theme_override_styles/pressed = ExtResource("10_7ueyu")
+theme_override_styles/hover = ExtResource("10_7ueyu")
+theme_override_styles/disabled = ExtResource("11_37leu")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_6sstq")
+text = "關閉"
+
+[node name="StatsHint" type="Label" parent="HeroDetail/StatsPopup/Window" unique_id=1565196521]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 90.0
+offset_right = 790.0
+offset_bottom = 126.0
+theme_override_colors/font_color = Color(0.52, 0.53, 0.5, 1)
+theme_override_fonts/font = ExtResource("1_yec7j")
+theme_override_font_sizes/font_size = 22
+text = "全部相乘＝目前的攻擊與生命"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="FactorGrid" type="GridContainer" parent="HeroDetail/StatsPopup/Window" unique_id=1785502049]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 30.0
+offset_top = 136.0
+offset_right = 790.0
+offset_bottom = 436.0
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 10
+columns = 2
+
+[node name="Factor0" type="Label" parent="HeroDetail/StatsPopup/Window/FactorGrid" unique_id=39394716]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(370, 36)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_fonts/font = ExtResource("1_yec7j")
+theme_override_font_sizes/font_size = 26
+text = "等級 ×1.00"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Factor1" type="Label" parent="HeroDetail/StatsPopup/Window/FactorGrid" unique_id=652394983]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(370, 36)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_fonts/font = ExtResource("1_yec7j")
+theme_override_font_sizes/font_size = 26
+text = "等級 ×1.00"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Factor2" type="Label" parent="HeroDetail/StatsPopup/Window/FactorGrid" unique_id=1413483124]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(370, 36)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_fonts/font = ExtResource("1_yec7j")
+theme_override_font_sizes/font_size = 26
+text = "等級 ×1.00"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Factor3" type="Label" parent="HeroDetail/StatsPopup/Window/FactorGrid" unique_id=1088978473]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(370, 36)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_fonts/font = ExtResource("1_yec7j")
+theme_override_font_sizes/font_size = 26
+text = "等級 ×1.00"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Factor4" type="Label" parent="HeroDetail/StatsPopup/Window/FactorGrid" unique_id=2143362835]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(370, 36)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_fonts/font = ExtResource("1_yec7j")
+theme_override_font_sizes/font_size = 26
+text = "等級 ×1.00"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Factor5" type="Label" parent="HeroDetail/StatsPopup/Window/FactorGrid" unique_id=202494113]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(370, 36)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_fonts/font = ExtResource("1_yec7j")
+theme_override_font_sizes/font_size = 26
+text = "等級 ×1.00"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Factor6" type="Label" parent="HeroDetail/StatsPopup/Window/FactorGrid" unique_id=1068677504]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(370, 36)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_fonts/font = ExtResource("1_yec7j")
+theme_override_font_sizes/font_size = 26
+text = "等級 ×1.00"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Factor7" type="Label" parent="HeroDetail/StatsPopup/Window/FactorGrid" unique_id=358440795]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(370, 36)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_fonts/font = ExtResource("1_yec7j")
+theme_override_font_sizes/font_size = 26
+text = "等級 ×1.00"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Factor8" type="Label" parent="HeroDetail/StatsPopup/Window/FactorGrid" unique_id=611692982]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(370, 36)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_fonts/font = ExtResource("1_yec7j")
+theme_override_font_sizes/font_size = 26
+text = "等級 ×1.00"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Factor9" type="Label" parent="HeroDetail/StatsPopup/Window/FactorGrid" unique_id=907001549]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(370, 36)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_fonts/font = ExtResource("1_yec7j")
+theme_override_font_sizes/font_size = 26
+text = "等級 ×1.00"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Factor10" type="Label" parent="HeroDetail/StatsPopup/Window/FactorGrid" unique_id=304221040]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(370, 36)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_fonts/font = ExtResource("1_yec7j")
+theme_override_font_sizes/font_size = 26
+text = "等級 ×1.00"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Factor11" type="Label" parent="HeroDetail/StatsPopup/Window/FactorGrid" unique_id=308902548]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(370, 36)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.24, 0.26, 0.3, 1)
+theme_override_fonts/font = ExtResource("1_yec7j")
+theme_override_font_sizes/font_size = 26
+text = "等級 ×1.00"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="EquipPopup" type="Control" parent="HeroDetail" unique_id=101697619]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 0
+offset_right = 941.0
+offset_bottom = 995.0
+
+[node name="Dim" type="ColorRect" parent="HeroDetail/EquipPopup" unique_id=1767452099]
+layout_mode = 0
+offset_right = 941.0
+offset_bottom = 995.0
+color = Color(0, 0, 0, 0.45)
+
+[node name="Window" type="Panel" parent="HeroDetail/EquipPopup" unique_id=1452940983]
+layout_mode = 0
+offset_left = 40.0
+offset_top = 100.0
+offset_right = 900.0
+offset_bottom = 900.0
+theme_override_styles/panel = ExtResource("4_0y3f4")
+
+[node name="TitleBar" type="Panel" parent="HeroDetail/EquipPopup/Window" unique_id=1528454312]
+layout_mode = 0
+offset_right = 860.0
+offset_bottom = 76.0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("6_3fn6b")
+
+[node name="EquipTitle" type="Label" parent="HeroDetail/EquipPopup/Window" unique_id=1866201038]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 28.0
+offset_right = 528.0
+offset_bottom = 76.0
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_fonts/font = ExtResource("4_wcyik")
+theme_override_font_sizes/font_size = 34
+text = "更換裝備"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="EquipClose" type="Button" parent="HeroDetail/EquipPopup/Window" unique_id=1782034063]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 690.0
+offset_top = 14.0
+offset_right = 836.0
+offset_bottom = 64.0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_focus_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.56, 0.54, 1)
+theme_override_fonts/font = ExtResource("4_wcyik")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = ExtResource("9_mfayb")
+theme_override_styles/pressed = ExtResource("10_7ueyu")
+theme_override_styles/hover = ExtResource("10_7ueyu")
+theme_override_styles/disabled = ExtResource("11_37leu")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_mfayb")
+text = "關閉"
+
+[node name="CurrentIcon" type="TextureRect" parent="HeroDetail/EquipPopup/Window" unique_id=1930145390]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 30.0
+offset_top = 96.0
+offset_right = 126.0
+offset_bottom = 192.0
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CurrentName" type="Label" parent="HeroDetail/EquipPopup/Window" unique_id=829378265]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 144.0
+offset_top = 94.0
+offset_right = 834.0
+offset_bottom = 138.0
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_fonts/font = ExtResource("4_wcyik")
+theme_override_font_sizes/font_size = 28
+text = "目前：未裝備"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="CurrentText" type="Label" parent="HeroDetail/EquipPopup/Window" unique_id=33383656]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 144.0
+offset_top = 140.0
+offset_right = 834.0
+offset_bottom = 200.0
+theme_override_colors/font_color = Color(0.52, 0.53, 0.5, 1)
+theme_override_fonts/font = ExtResource("1_yec7j")
+theme_override_font_sizes/font_size = 22
+autowrap_mode = 3
+text_overrun_behavior = 3
+
+[node name="Line" type="Panel" parent="HeroDetail/EquipPopup/Window" unique_id=1793355208]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 214.0
+offset_right = 836.0
+offset_bottom = 222.0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("8_6sstq")
+
+[node name="CandidateLabel" type="Label" parent="HeroDetail/EquipPopup/Window" unique_id=1105115429]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 30.0
+offset_top = 226.0
+offset_right = 830.0
+offset_bottom = 266.0
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_fonts/font = ExtResource("4_wcyik")
+theme_override_font_sizes/font_size = 24
+text = "背包裡可以換的：點一件看比較"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="CandidateScroll" type="ScrollContainer" parent="HeroDetail/EquipPopup/Window" unique_id=1085995006]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 30.0
+offset_top = 272.0
+offset_right = 830.0
+offset_bottom = 508.0
+horizontal_scroll_mode = 0
+
+[node name="CandidateGrid" type="GridContainer" parent="HeroDetail/EquipPopup/Window/CandidateScroll" unique_id=2008116546]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 12
+columns = 6
+
+[node name="CandidateEmpty" type="Label" parent="HeroDetail/EquipPopup/Window" unique_id=385797722]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 30.0
+offset_top = 272.0
+offset_right = 830.0
+offset_bottom = 332.0
+theme_override_colors/font_color = Color(0.52, 0.53, 0.5, 1)
+theme_override_fonts/font = ExtResource("1_yec7j")
+theme_override_font_sizes/font_size = 24
+text = "背包裡沒有可以換的"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="CompareText" type="Label" parent="HeroDetail/EquipPopup/Window" unique_id=653638110]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 30.0
+offset_top = 520.0
+offset_right = 830.0
+offset_bottom = 660.0
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_fonts/font = ExtResource("1_yec7j")
+theme_override_font_sizes/font_size = 24
+autowrap_mode = 3
+text_overrun_behavior = 3
+
+[node name="UpgradeButton" type="Button" parent="HeroDetail/EquipPopup/Window" unique_id=1088983998]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 30.0
+offset_top = 690.0
+offset_right = 410.0
+offset_bottom = 770.0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_focus_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.56, 0.54, 1)
+theme_override_fonts/font = ExtResource("4_wcyik")
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = ExtResource("9_mfayb")
+theme_override_styles/pressed = ExtResource("10_7ueyu")
+theme_override_styles/hover = ExtResource("10_7ueyu")
+theme_override_styles/disabled = ExtResource("11_37leu")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_7ueyu")
+text = "強化武器"
+
+[node name="EquipConfirm" type="Button" parent="HeroDetail/EquipPopup/Window" unique_id=1086430293]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 450.0
+offset_top = 690.0
+offset_right = 830.0
+offset_bottom = 770.0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.56, 0.54, 1)
+theme_override_fonts/font = ExtResource("4_wcyik")
+theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = ExtResource("12_c3utk")
+theme_override_styles/pressed = ExtResource("13_iv1t8")
+theme_override_styles/hover = ExtResource("13_iv1t8")
+theme_override_styles/disabled = ExtResource("11_37leu")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_37leu")
+text = "裝備"
+
+[node name="LevelPopup" type="Control" parent="HeroDetail" unique_id=1585921637]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 0
+offset_right = 941.0
+offset_bottom = 995.0
+
+[node name="Dim" type="ColorRect" parent="HeroDetail/LevelPopup" unique_id=1425530969]
+layout_mode = 0
+offset_right = 941.0
+offset_bottom = 995.0
+color = Color(0, 0, 0, 0.45)
+
+[node name="Window" type="Panel" parent="HeroDetail/LevelPopup" unique_id=328389076]
+layout_mode = 0
+offset_left = 60.0
+offset_top = 160.0
+offset_right = 880.0
+offset_bottom = 840.0
+theme_override_styles/panel = ExtResource("4_0y3f4")
+
+[node name="TitleBar" type="Panel" parent="HeroDetail/LevelPopup/Window" unique_id=1896172828]
+layout_mode = 0
+offset_right = 820.0
+offset_bottom = 76.0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("6_3fn6b")
+
+[node name="LevelTitle" type="Label" parent="HeroDetail/LevelPopup/Window" unique_id=1587897844]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 28.0
+offset_right = 528.0
+offset_bottom = 76.0
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_fonts/font = ExtResource("4_wcyik")
+theme_override_font_sizes/font_size = 34
+text = "升級"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="LevelClose" type="Button" parent="HeroDetail/LevelPopup/Window" unique_id=251532715]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 650.0
+offset_top = 14.0
+offset_right = 796.0
+offset_bottom = 64.0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_focus_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.56, 0.54, 1)
+theme_override_fonts/font = ExtResource("4_wcyik")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = ExtResource("9_mfayb")
+theme_override_styles/pressed = ExtResource("10_7ueyu")
+theme_override_styles/hover = ExtResource("10_7ueyu")
+theme_override_styles/disabled = ExtResource("11_37leu")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_c3utk")
+text = "關閉"
+
+[node name="LevelLine" type="Label" parent="HeroDetail/LevelPopup/Window" unique_id=434224672]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 30.0
+offset_top = 96.0
+offset_right = 790.0
+offset_bottom = 144.0
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_fonts/font = ExtResource("4_wcyik")
+theme_override_font_sizes/font_size = 32
+text = "Lv.14"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="ExpBar" type="ProgressBar" parent="HeroDetail/LevelPopup/Window" unique_id=1744000653]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 30.0
+offset_top = 152.0
+offset_right = 790.0
+offset_bottom = 174.0
+theme_override_styles/background = ExtResource("14_jbp1c")
+theme_override_styles/fill = ExtResource("15_kh52k")
+show_percentage = false
+
+[node name="ExpText" type="Label" parent="HeroDetail/LevelPopup/Window" unique_id=722508485]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 30.0
+offset_top = 180.0
+offset_right = 790.0
+offset_bottom = 214.0
+theme_override_colors/font_color = Color(0.52, 0.53, 0.5, 1)
+theme_override_fonts/font = ExtResource("1_yec7j")
+theme_override_font_sizes/font_size = 22
+text = "0 / 0"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="PotionLine0" type="Panel" parent="HeroDetail/LevelPopup/Window" unique_id=476812510]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 226.0
+offset_right = 796.0
+offset_bottom = 234.0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("8_6sstq")
+
+[node name="PotionIcon0" type="TextureRect" parent="HeroDetail/LevelPopup/Window" unique_id=1494800788]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 30.0
+offset_top = 244.0
+offset_right = 110.0
+offset_bottom = 324.0
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PotionName0" type="Label" parent="HeroDetail/LevelPopup/Window" unique_id=663084298]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 126.0
+offset_top = 240.0
+offset_right = 456.0
+offset_bottom = 284.0
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_fonts/font = ExtResource("4_wcyik")
+theme_override_font_sizes/font_size = 28
+text = "經驗藥水"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="PotionInfo0" type="Label" parent="HeroDetail/LevelPopup/Window" unique_id=795592580]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 126.0
+offset_top = 284.0
+offset_right = 456.0
+offset_bottom = 324.0
+theme_override_colors/font_color = Color(0.52, 0.53, 0.5, 1)
+theme_override_fonts/font = ExtResource("1_yec7j")
+theme_override_font_sizes/font_size = 22
+text = "+500 經驗　有 0 瓶"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="UseOne0" type="Button" parent="HeroDetail/LevelPopup/Window" unique_id=1720256192]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 470.0
+offset_top = 252.0
+offset_right = 620.0
+offset_bottom = 316.0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_focus_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.56, 0.54, 1)
+theme_override_fonts/font = ExtResource("4_wcyik")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = ExtResource("9_mfayb")
+theme_override_styles/pressed = ExtResource("10_7ueyu")
+theme_override_styles/hover = ExtResource("10_7ueyu")
+theme_override_styles/disabled = ExtResource("11_37leu")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_iv1t8")
+text = "用 1 瓶"
+
+[node name="UseLevel0" type="Button" parent="HeroDetail/LevelPopup/Window" unique_id=1122165066]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 636.0
+offset_top = 252.0
+offset_right = 786.0
+offset_bottom = 316.0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_focus_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.56, 0.54, 1)
+theme_override_fonts/font = ExtResource("4_wcyik")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = ExtResource("9_mfayb")
+theme_override_styles/pressed = ExtResource("10_7ueyu")
+theme_override_styles/hover = ExtResource("10_7ueyu")
+theme_override_styles/disabled = ExtResource("11_37leu")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_jbp1c")
+text = "升 1 級"
+
+[node name="PotionLine1" type="Panel" parent="HeroDetail/LevelPopup/Window" unique_id=1329254509]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 366.0
+offset_right = 796.0
+offset_bottom = 374.0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("8_6sstq")
+
+[node name="PotionIcon1" type="TextureRect" parent="HeroDetail/LevelPopup/Window" unique_id=126534139]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 30.0
+offset_top = 384.0
+offset_right = 110.0
+offset_bottom = 464.0
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PotionName1" type="Label" parent="HeroDetail/LevelPopup/Window" unique_id=1795449929]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 126.0
+offset_top = 380.0
+offset_right = 456.0
+offset_bottom = 424.0
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_fonts/font = ExtResource("4_wcyik")
+theme_override_font_sizes/font_size = 28
+text = "經驗藥水"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="PotionInfo1" type="Label" parent="HeroDetail/LevelPopup/Window" unique_id=1091849838]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 126.0
+offset_top = 424.0
+offset_right = 456.0
+offset_bottom = 464.0
+theme_override_colors/font_color = Color(0.52, 0.53, 0.5, 1)
+theme_override_fonts/font = ExtResource("1_yec7j")
+theme_override_font_sizes/font_size = 22
+text = "+500 經驗　有 0 瓶"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="UseOne1" type="Button" parent="HeroDetail/LevelPopup/Window" unique_id=733527924]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 470.0
+offset_top = 392.0
+offset_right = 620.0
+offset_bottom = 456.0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_focus_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.56, 0.54, 1)
+theme_override_fonts/font = ExtResource("4_wcyik")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = ExtResource("9_mfayb")
+theme_override_styles/pressed = ExtResource("10_7ueyu")
+theme_override_styles/hover = ExtResource("10_7ueyu")
+theme_override_styles/disabled = ExtResource("11_37leu")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_kh52k")
+text = "用 1 瓶"
+
+[node name="UseLevel1" type="Button" parent="HeroDetail/LevelPopup/Window" unique_id=1771891434]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 636.0
+offset_top = 392.0
+offset_right = 786.0
+offset_bottom = 456.0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_focus_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.56, 0.54, 1)
+theme_override_fonts/font = ExtResource("4_wcyik")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = ExtResource("9_mfayb")
+theme_override_styles/pressed = ExtResource("10_7ueyu")
+theme_override_styles/hover = ExtResource("10_7ueyu")
+theme_override_styles/disabled = ExtResource("11_37leu")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ye2hb")
+text = "升 1 級"
+
+[node name="PotionLine2" type="Panel" parent="HeroDetail/LevelPopup/Window" unique_id=1917996214]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 506.0
+offset_right = 796.0
+offset_bottom = 514.0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("8_6sstq")
+
+[node name="PotionIcon2" type="TextureRect" parent="HeroDetail/LevelPopup/Window" unique_id=1613911763]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 30.0
+offset_top = 524.0
+offset_right = 110.0
+offset_bottom = 604.0
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PotionName2" type="Label" parent="HeroDetail/LevelPopup/Window" unique_id=77279047]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 126.0
+offset_top = 520.0
+offset_right = 456.0
+offset_bottom = 564.0
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_fonts/font = ExtResource("4_wcyik")
+theme_override_font_sizes/font_size = 28
+text = "經驗藥水"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="PotionInfo2" type="Label" parent="HeroDetail/LevelPopup/Window" unique_id=1106793896]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 126.0
+offset_top = 564.0
+offset_right = 456.0
+offset_bottom = 604.0
+theme_override_colors/font_color = Color(0.52, 0.53, 0.5, 1)
+theme_override_fonts/font = ExtResource("1_yec7j")
+theme_override_font_sizes/font_size = 22
+text = "+500 經驗　有 0 瓶"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="UseOne2" type="Button" parent="HeroDetail/LevelPopup/Window" unique_id=1214263910]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 470.0
+offset_top = 532.0
+offset_right = 620.0
+offset_bottom = 596.0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_focus_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.56, 0.54, 1)
+theme_override_fonts/font = ExtResource("4_wcyik")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = ExtResource("9_mfayb")
+theme_override_styles/pressed = ExtResource("10_7ueyu")
+theme_override_styles/hover = ExtResource("10_7ueyu")
+theme_override_styles/disabled = ExtResource("11_37leu")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_14rqu")
+text = "用 1 瓶"
+
+[node name="UseLevel2" type="Button" parent="HeroDetail/LevelPopup/Window" unique_id=535895579]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 636.0
+offset_top = 532.0
+offset_right = 786.0
+offset_bottom = 596.0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_focus_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.56, 0.54, 1)
+theme_override_fonts/font = ExtResource("4_wcyik")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = ExtResource("9_mfayb")
+theme_override_styles/pressed = ExtResource("10_7ueyu")
+theme_override_styles/hover = ExtResource("10_7ueyu")
+theme_override_styles/disabled = ExtResource("11_37leu")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_0tlxj")
+text = "升 1 級"

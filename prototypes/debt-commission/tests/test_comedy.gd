@@ -18,7 +18,7 @@ const TEST_SETTINGS: String = "user://comedy_test_settings.cfg"
 const SCENE_DIR: String = "res://scenes/comedy/"
 const PRESETS: Array[String] = ["tsukkomi_impact", "small_reaction", "full_manga_panel", "emotion_band"]
 const AFTER_IMPACT_LINE: String = "……嗯？剛剛是不是有什麼東西在吵？"
-const SAVED_NODES: Array[String] = ["res://scenes/comedy/tsukkomi_impact.tscn", "res://scenes/comedy/small_reaction.tscn",
+const SAVED_NODES: Array[String] = ["res://scenes/comedy/tsukkomi_impact.tscn", "res://scenes/comedy/tsukkomi_impact_right.tscn", "res://scenes/comedy/small_reaction.tscn",
 	"res://scenes/comedy/full_manga_panel.tscn", "res://scenes/comedy/emotion_band.tscn", "res://main.tscn"]
 
 
@@ -64,6 +64,8 @@ func _run() -> void:
 	await _test_saves()
 	await _test_presets_in_every_style()
 	await _test_small_reaction_place()
+	await _test_impact_sides()
+	await _test_edited_impact_placement()
 	await _test_emotion_band()
 	await _test_narrow_phone()
 	for path: String in SAVED_NODES:
@@ -83,6 +85,7 @@ func _test_validation(story: Dictionary) -> void:
 		["speaker", "nobody", "comedy speaker 'nobody' is not a character in the asset catalog"],
 		["expression", "bogus", "comedy expression is invalid"],
 		["color", "#ff0000", "comedy color is only for emotion_band"],
+		["side", "middle", "comedy side must be left or right"],
 	]
 	for case: Array in fields:
 		var broken: Dictionary = story.duplicate(true)
@@ -103,6 +106,16 @@ func _test_validation(story: Dictionary) -> void:
 	((with_face["nodes"]["comedy_open"]["steps"] as Array)[impact_index] as Dictionary)["expression"] = "angry"
 	FileAccess.open(BAD_STORY, FileAccess.WRITE).store_string(JSON.stringify(with_face))
 	_expect(StoryRunner.new().call("load_story", BAD_STORY), "a comedy may name a valid expression")
+	var with_side: Dictionary = story.duplicate(true)
+	var side_step: Dictionary = (with_side["nodes"]["comedy_open"]["steps"] as Array)[impact_index]
+	side_step["side"] = "right"
+	FileAccess.open(BAD_STORY, FileAccess.WRITE).store_string(JSON.stringify(with_side))
+	_expect(StoryRunner.new().call("load_story", BAD_STORY), "an impact may enter from the right")
+	side_step["preset"] = "small_reaction"
+	FileAccess.open(BAD_STORY, FileAccess.WRITE).store_string(JSON.stringify(with_side))
+	var bad_side: RefCounted = StoryRunner.new()
+	_expect(not bad_side.call("load_story", BAD_STORY) and str(bad_side.get("error_message")).contains("side is only for tsukkomi_impact"),
+		"side is rejected on other comedy presets")
 	for color: Variant in ["red", "#12345", "#fff", "#7ec8ffcc", 7]:
 		var band_story: Dictionary = story.duplicate(true)
 		var band_step: Dictionary = (band_story["nodes"]["comedy_open"]["steps"] as Array)[impact_index]
@@ -152,6 +165,15 @@ func _test_adapters() -> void:
 	var doubled: Dictionary = StoryBuilder.build_text('~ a\ndo comedy("emotion_band", "新八", "咦？", "angry", "shout")\n新八: x\ndo end("e")\n',
 		"res://story_src/__comedy_check.dialogue")
 	_expect(str(doubled["error"]).contains("got two of expression"), "two expressions are an error, not a silent pick: %s" % doubled["error"])
+	for args: String in ['"right", "shout"', '"shout", "right"']:
+		var directed: Dictionary = StoryBuilder.build_text('~ a\ndo comedy("tsukkomi_impact", "新八", "喂！", %s)\n新八: x\ndo end("e")\n' % args,
+			"res://story_src/__comedy_check.dialogue")
+		var directed_step: Dictionary = ((directed["story"]["nodes"]["a"]["steps"]) as Array)[0] if directed["error"] == "" else {}
+		_expect(directed_step.get("side") == "right" and directed_step.get("expression") == "shout",
+			"a side and expression build in either order: %s" % directed["error"])
+	var double_side: Dictionary = StoryBuilder.build_text('~ a\ndo comedy("tsukkomi_impact", "新八", "喂！", "left", "right")\n新八: x\ndo end("e")\n',
+		"res://story_src/__comedy_check.dialogue")
+	_expect(str(double_side["error"]).contains("got two of side"), "two sides are rejected")
 	for args: String in ['"#7ec8ff", "angry"', '"angry", "#7ec8ff"']:
 		var tinted: Dictionary = StoryBuilder.build_text('~ a\ndo comedy("emotion_band", "新八", "咦？", %s)\n新八: x\ndo end("e")\n' % args,
 			"res://story_src/__comedy_check.dialogue")
@@ -443,6 +465,59 @@ func _test_small_reaction_place() -> void:
 	layer.stop()
 	_expect(origin == layer.get_global_transform().origin, "the layer itself never moved")
 	await _free(game)
+
+
+func _test_impact_sides() -> void:
+	var previous_size: Vector2i = root.size
+	root.size = Vector2i(1280, 720)
+	await _frames(3)
+	var game: Control = await _new_game()
+	game._on_begin_pressed()
+	await _until(func() -> bool: return game._screen_mode == "story", "side test starts")
+	for side: String in ["left", "right"]:
+		game._effects.reduce_motion = true
+		game._comedy_layer.play({"preset": "tsukkomi_impact", "speaker": "shinpachi", "side": side, "text": "現在是工作時間吧！！！"})
+		await create_timer(0.5).timeout
+		var panel: Control = game._comedy_layer.get_child(0).get_node("%CutInPanel") as Control
+		var face: TextureRect = panel.get_node("Portrait") as TextureRect
+		var state: Dictionary = game._comedy_layer.qa_state()
+		var middle: float = game._game.get_global_rect().get_center().x
+		_expect((panel.get_global_rect().get_center().x < middle) if side == "left" else (panel.get_global_rect().get_center().x > middle),
+			"the %s impact rests on the selected side" % side)
+		_expect(state.get("side") == side and bool(state.get("text_fits", false)) and face.flip_h == (side == "right"),
+			"the %s impact has a fitting line and a portrait facing inward" % side)
+		_expect(game._bg_layer.scale == Vector2.ONE and game._char_layer.scale == Vector2.ONE,
+			"reduced motion suppresses the %s impact zoom" % side)
+		game._comedy_layer.stop()
+	await _free(game)
+	root.size = previous_size
+	await _frames(2)
+
+
+func _test_edited_impact_placement() -> void:
+	var source: String = FileAccess.get_file_as_string(SCENE_DIR + "tsukkomi_impact.tscn")
+	var edited: Control = (load(SCENE_DIR + "tsukkomi_impact.tscn") as PackedScene).instantiate() as Control
+	var panel: Control = edited.get_node("%CutInPanel") as Control
+	panel.offset_left += 65.0
+	var saved_offset: float = panel.offset_left
+	var packed: PackedScene = PackedScene.new()
+	var path: String = "user://edited_comedy_impact.tscn"
+	_expect(packed.pack(edited) == OK and ResourceSaver.save(packed, path) == OK, "an edited comic-panel placement can be saved")
+	edited.free()
+	var reloaded: Control = (load(path) as PackedScene).instantiate() as Control
+	root.add_child(reloaded)
+	await _frames(3)
+	panel = reloaded.get_node("%CutInPanel") as Control
+	var rest: Vector2 = panel.position
+	reloaded.call("play", null, "現在是工作時間吧！")
+	await create_timer(0.5).timeout
+	_expect(absf(panel.offset_left - saved_offset) < 0.1 and panel.position.distance_to(rest) < 0.1,
+		"the comic animation returns to the placement saved in the editor")
+	reloaded.queue_free()
+	await _frames(2)
+	_expect(FileAccess.get_file_as_string(SCENE_DIR + "tsukkomi_impact.tscn") == source,
+		"playing the edited copy leaves the source scene unchanged")
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
 
 
 func _test_narrow_phone() -> void:

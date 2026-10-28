@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" path="res://assets/reference/monster.png" id="3_6d1th"]
 [ext_resource type="Texture2D" path="res://assets/reference/train.png" id="4_koant"]
 [ext_resource type="Texture2D" path="res://assets/heroes/heroes.png" id="4_ofqyp"]
+[ext_resource type="PackedScene" path="res://scenes/ui_kit/sao_unit_bar.tscn" id="5_mxk50"]
 
 [node name="Unit" type="Node2D" unique_id=1153296289]
 script = ExtResource("1_gscl2")
@@ -109,18 +110,12 @@ centered = false
 region_enabled = true
 region_rect = Rect2(192, 0, 48, 48)
 
-[node name="HealthBackground" type="Polygon2D" parent="." unique_id=1311019408]
-position = Vector2(0, -60)
-scale = Vector2(1.3, 1.1)
-color = Color(0.09019608, 0.14509805, 0.20784314, 1)
-polygon = PackedVector2Array(-26, -51, 26, -51, 26, -41, -26, -41)
-
-[node name="HealthFill" type="Polygon2D" parent="." unique_id=367241668]
+[node name="HealthBar" parent="." unique_id=236764688 instance=ExtResource("5_mxk50")]
 unique_name_in_owner = true
-position = Vector2(0, -60)
-scale = Vector2(1.3, 1.1)
-color = Color(0.5803922, 0.80784315, 0.44313726, 1)
-polygon = PackedVector2Array(-24, -49, 24, -49, 24, -43, -24, -43)
+offset_left = -36.0
+offset_top = -118.0
+offset_right = 36.0
+offset_bottom = -104.0
 
 [node name="DamageFeedback" type="Label" parent="." unique_id=153512385]
 visible = false

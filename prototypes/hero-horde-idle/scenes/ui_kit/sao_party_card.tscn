@@ -1,0 +1,96 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui_kit/sao_party_card.gd" id="1_4btlp"]
+[ext_resource type="StyleBox" path="res://ui/sao_hud_glass.tres" id="2_dghsw"]
+[ext_resource type="StyleBox" path="res://ui/sao_diamond.tres" id="3_8gndr"]
+[ext_resource type="Texture2D" path="res://assets/atlas/portrait.tres" id="4_b473b"]
+[ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Bold.otf" id="5_n3lrp"]
+[ext_resource type="PackedScene" path="res://scenes/ui_kit/sao_gauge.tscn" id="6_6p7l7"]
+
+[node name="SaoPartyCard" type="Control" unique_id=1395064304]
+custom_minimum_size = Vector2(380, 118)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 380.0
+offset_bottom = 118.0
+mouse_filter = 2
+script = ExtResource("1_4btlp")
+
+[node name="Glass" type="Panel" parent="." unique_id=304111319]
+layout_mode = 0
+offset_right = 380.0
+offset_bottom = 84.0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("2_dghsw")
+
+[node name="Rail" type="ColorRect" parent="." unique_id=231048774]
+layout_mode = 0
+offset_left = -8.0
+offset_right = -5.0
+offset_bottom = 118.0
+mouse_filter = 2
+color = Color(0.9, 0.92, 0.94, 0.9)
+
+[node name="PortraitFrame" type="Panel" parent="." unique_id=2111067875]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 16.0
+offset_right = 70.0
+offset_bottom = 68.0
+rotation = 0.7853982
+pivot_offset = Vector2(26, 26)
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("3_8gndr")
+
+[node name="Portrait" type="TextureRect" parent="." unique_id=1316695894]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+offset_left = 24.0
+offset_top = 22.0
+offset_right = 64.0
+offset_bottom = 62.0
+mouse_filter = 2
+texture = ExtResource("4_b473b")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="MemberName" type="Label" parent="." unique_id=913169956]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 92.0
+offset_top = 6.0
+offset_right = 362.0
+offset_bottom = 44.0
+theme_override_colors/font_color = Color(0.96, 0.97, 0.98, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.07, 0.09, 1)
+theme_override_constants/outline_size = 6
+theme_override_fonts/font = ExtResource("5_n3lrp")
+theme_override_font_sizes/font_size = 26
+text = "歐芙"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Gauge" parent="." unique_id=1903625054 instance=ExtResource("6_6p7l7")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 0)
+layout_mode = 0
+offset_left = 92.0
+offset_top = 50.0
+offset_right = 362.0
+offset_bottom = 77.0
+
+[node name="Status" type="Label" parent="." unique_id=689351917]
+unique_name_in_owner = true
+layout_mode = 0
+offset_top = 86.0
+offset_right = 300.0
+offset_bottom = 118.0
+theme_override_colors/font_color = Color(0.85, 1, 0.85, 1)
+theme_override_colors/font_outline_color = Color(0.06, 0.07, 0.09, 1)
+theme_override_constants/outline_size = 6
+theme_override_fonts/font = ExtResource("5_n3lrp")
+theme_override_font_sizes/font_size = 22
+text = "行軍中"
+vertical_alignment = 1
+text_overrun_behavior = 3
