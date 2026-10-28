@@ -1,8 +1,22 @@
 # seal-meadow 交接進度
 
-最後更新：2026-10-28。每次 commit、使用者出門或下班時更新這份檔案。
+最後更新：2026-10-29。每次 commit、使用者出門或下班時更新這份檔案。
 
-## 2026-10-28 出門交接：已暫停
+## 2026-10-29 復工：M3 硬化與新 review
+
+使用者已返家，之後指定「做到一個階段先停下來，開另一個 Sol medium review」。S35 衣櫥單機階段及獨立審查已完成，目前暫停；多人 M4 保持延後。分支 `master`，本輪基準／目前最新提交 `180149a9`；本輪程式、場景、測試與文件尚未 commit／push，其他工作區修改保留。
+
+- `REVIEW.md` 8～10：精煉移到背包分頁，兩次確認與切換取消；範圍技能命中時，未有有效既有目標且未移動才鎖定最近的命中存活怪；點傳送門顯示金色外環，換互動、移動、攻擊、施法或傳送時清除。可編輯 `ui/refine_row.tscn` 和 `scenes/portal.tscn`。
+- M3 補強：損壞或異常大於 12 格的背包不再被載入時截斷，會回復有效備份或停止覆寫；寵物飢餓的經驗損失訊息改為顯示實際減少值。
+- 單機 S35 衣櫥：已領成就解鎖測試布衣及程序化裝飾光環；可預覽未解鎖項目、關閉還原，套用前檢查兩項資格，外觀不改裝備／數值。存檔升 v6，v5 舊檔預設原貌／無光環；v5 讀取器會拒絕 v6，舊版遊戲寫入保護的端對端仍未實測。可編輯 `ui/wardrobe_window.tscn` 與 `scenes/player.tscn` 的 `%Aura`。
+- 已補 S17／S18／S19／S33 的 GDD、TDD 與 QA 文件，和 `production/qa/m3-economy.md`。精煉以商店價的理論期望 935.24 金／件；seed 73、10,000 次模擬 934.128 金。D09／D10 仍是暫定，真人平衡未驗。
+- **L2 驗證**：衣櫥完成後 `wardrobe`、`m0`、`m3`、`m3_hardening`、`collection`、`content`、`review_interactions` 通過，匯入無錯（`/tmp/godot-tests.wtxsbV/`）；衣櫥前 `m1`、`m1_loot`、`fishing` 通過。復工起點 10 組完整 suite 通過但沙箱匯入有 socket 錯誤，之後隔離環境的 editor 匯入無錯。依分層規範，最新改動的完整 suite 等使用者手動驗收後才重跑。newer／corrupt 警告是保護案例的預期輸出。
+- `test_m3` 直接測 844×390／1280×720 下精煉列、44 px 觸控區及編輯文字／間距保留；`test_wardrobe` 測資格、預覽取消、數值不變、升版與 scene 編輯，桌面截圖 `/tmp/seal-review-resumed-shots/`、`/tmp/seal-wardrobe-shots/`。隔離副本中 11 個變異均被測試捕捉。
+- `tools/build_mobile_web.sh` 已重建並套 IDBFS 補丁，PCK 35.07 MB、WASM 約 39.5 MB；`build/seal-meadow-mobile-web.zip` SHA-256 `a8150f3138aa02062f7abbd855ea6d87a7de0fba8cb16a7d4bacefb73efb91c4`。本地 Chromium 12 項載入、設定、v4／v5→v6、精煉及衣櫥預覽／套用／重開通過，0 browser error／failed request（`/tmp/seal-web-wardrobe-20261029/report.json`）。先前 favicon 404 是測試 fixture 的請求，已換成同源 HTML fixture；沒有忽略遊戲錯誤。`build/web/` 仍是 2026-10-27 舊版。
+- **未完成**：iPhone 17 Safari 真機操作、背景／強制終止恢復、FPS、20～30 分鐘發熱與真人平衡；依使用者要求不要讓 bot 跑 25 分鐘。未上傳 itch，外部上傳與同步其他原型 kit 仍按既有約定處理。
+- **獨立審查**：另一個 GPT-6 Sol／medium 已完成唯讀審查，沒有可重現的本輪功能缺陷；完整報告 `production/qa/reviews/2026-10-29-sol-medium.md`。審查指出舊版拒絕覆寫的測試命名超出單一斷言範圍；已改為「v5 讀取器拒絕 v6」，並以 `env XDG_DATA_HOME=/tmp/seal-wardrobe-final XDG_CONFIG_HOME=/tmp/seal-wardrobe-final-config timeout 90 godot --headless --path prototypes/seal-meadow --script res://tests/test_wardrobe.gd` 單獨重跑通過；QA 另標舊版程式端對端未驗。本輪 8795 本地伺服器已停止，依使用者要求到此暫停。
+
+## 2026-10-28 出門交接（歷史紀錄，現已復工）
 
 **使用者指示**：先補 M3 尚未完成的工作，接著依 `design/planning` 推進；M3 之後選擇**先做單機後續內容**，多人 M4 繼續延後。使用者現在出門並要求交接，停止開發；沒有授權 commit、push 或上傳 itch。分支 `master`，本輪基準 `21604e31`，本專案與根目錄 `Progress.md` 的修改都尚未提交，其他專案工作區修改需保留。
 
@@ -30,7 +44,7 @@
 
 ## 一句話現況
 
-M0～M3 有桌面可玩的核心循環，本輪補強 M3 並新增單機圖鑑與釣魚切片；最終完整回歸、M3 規格與 iPhone 17 實機驗收尚未完成。先前 `REVIEW.md` 的操作／UI／比例修正與混元 3D 調查也已保留。
+M0～M3 有桌面可玩的核心循環，單機圖鑑、釣魚與衣櫥薄切片可用；獨立審查已完成，iPhone 17 實機驗收和真人平衡尚未完成。
 
 ## 怎麼驗證
 
@@ -66,7 +80,7 @@ env XDG_DATA_HOME=/tmp/seal-fishing-tests XDG_CONFIG_HOME=/tmp/seal-fishing-conf
 | 記憶體 | 貼圖 180 → 59 MB：sprite 改成 VRAM 壓縮、紙娃娃格子 384 → 256 px；陰影 2048 | `assets/sprites/**.import`、`art_src/blender/test_chibi.render.json` |
 | 修 bug | HP 回復時列表每幀重建，按鈕被刪掉；訊息紀錄沒有上限，造成記憶體洩漏（25 分鐘從 63 漲到 448 MB），已限制最多 60 行；字型缺「獠」字；Town 子節點用到區域座標 | `scripts/hud.gd`、`scripts/main.gd` |
 
-存檔目前是 v5，v1～v4 的舊存檔都有轉換步驟；最終完整回歸與真機驗證尚未完成。
+存檔目前是 v6，v1～v5 的舊存檔都有轉換步驟；最新完整回歸依規範等手動驗收後執行，真機驗證尚未完成。
 
 ## 還沒做
 

@@ -2,6 +2,8 @@
 
 狀態：**Planning Draft（文件與工作包草案）**；2026-10-26。首次交付：M5；優先層：Full Vision；相對複雜度：M（不是工期）。
 
+2026-10-29 新增單機衣櫥薄切片：[GDD](../../gdd/cosmetics-auras.md)、[TDD](../../../docs/architecture/systems/cosmetics-auras.md)、[QA](../../../production/qa/systems/cosmetics-auras.md)。獨立審查已完成；多人光環與商城不在本次範圍，真機尚未驗收。
+
 ## 玩家價值與責任
 
 提供可展示的個性，保持小螢幕戰鬥可讀。

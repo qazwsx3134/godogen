@@ -20,6 +20,10 @@ extends CanvasLayer
 @onready var bag_button: Button = %BagButton
 @onready var bag_panel: Control = %BagPanel
 @onready var bag_rows: VBoxContainer = %BagRows
+@onready var bag_scroll: ScrollContainer = bag_rows.get_parent()
+@onready var items_tab: Button = %ItemsTab
+@onready var refine_tab: Button = %RefineTab
+@onready var refine_scroll: ScrollContainer = %RefineScroll
 @onready var gear_label: Label = %GearLabel
 @onready var quest_tracker: Label = %QuestTracker
 @onready var apple_button: Button = %AppleButton
@@ -38,6 +42,8 @@ extends CanvasLayer
 @onready var settings_window: Control = %SettingsWindow
 @onready var collection_button: Button = %CollectionButton
 @onready var collection_window: Control = %CollectionWindow
+@onready var wardrobe_button: Button = %WardrobeButton
+@onready var wardrobe_window: Control = %WardrobeWindow
 @onready var fishing_window: Control = %FishingWindow
 @onready var tutorial_panel: Control = %TutorialPanel
 @onready var tutorial_text: Label = %TutorialText
@@ -57,6 +63,7 @@ const Shop = preload("res://scripts/shop.gd")
 const Refine = preload("res://scripts/refine.gd")
 const PetRules = preload("res://scripts/pet_rules.gd")
 const ItemRow = preload("res://ui/item_row.tscn")
+const RefineRow = preload("res://ui/refine_row.tscn")
 const SLOT_NAMES := {"weapon": "武器", "body": "衣服"}
 const REASON_TEXT := {"gold": "金幣不夠。", "bag_full": "背包放不下。", "full_hp": "生命已滿。", "none": "沒有這個物品。",
 	"not_done": "任務還沒完成。", "dead": "倒下時不能用。", "stone": "缺少精煉需要的寶石。", "max": "已經精煉到最高。",
@@ -112,6 +119,8 @@ func bind(p: Node3D) -> void:
 	settings_window.changed.connect(func(key: String, value: bool) -> void: main.update_setting(key, value))
 	collection_button.pressed.connect(open_collection)
 	collection_window.bind(player, main)
+	wardrobe_button.pressed.connect(open_wardrobe)
+	wardrobe_window.bind(player, main)
 	collection_window.rows_updated.connect(func() -> void: _apply_text_size(collection_window))
 	fishing_window.start_requested.connect(main.start_fishing)
 	fishing_window.stop_requested.connect(main.cancel_fishing)
@@ -140,15 +149,17 @@ func bind(p: Node3D) -> void:
 	tutorial_skip.pressed.connect(func() -> void:
 		player.tutorial.skip()
 		_act(""))
+	items_tab.pressed.connect(func() -> void: _select_bag_tab(false))
+	refine_tab.pressed.connect(func() -> void: _select_bag_tab(true))
 	bag_button.pressed.connect(func() -> void:
 		var show := not bag_panel.visible
 		_close_panels()
-		bag_panel.visible = show)
+		bag_panel.visible = show
+		if show:
+			_select_bag_tab(false)
+			refresh())
 	apple_button.pressed.connect(func() -> void: _act(player.use_item("apple")))
-	close_button.pressed.connect(func() -> void:
-		npc_panel.visible = false
-		_refine_armed = ""
-		_built.erase("refine"))
+	close_button.pressed.connect(func() -> void: npc_panel.visible = false)
 	quest_button.pressed.connect(_on_quest_button)
 	sell_button.pressed.connect(func() -> void:
 		var earned := Shop.sell_materials(player)
@@ -179,9 +190,25 @@ func open_collection() -> void:
 	collection_window.show_book()
 
 
+func open_wardrobe() -> void:
+	_close_panels()
+	wardrobe_window.show_wardrobe()
+
+
 func open_fishing() -> void:
 	_close_panels()
 	fishing_window.show_spot(player.bag.count("fishing_bait"))
+
+
+func _select_bag_tab(refining: bool) -> void:
+	_refine_armed = ""
+	_built.erase("refine")
+	items_tab.set_pressed_no_signal(not refining)
+	refine_tab.set_pressed_no_signal(refining)
+	bag_scroll.visible = not refining
+	refine_scroll.visible = refining
+	if refining:
+		_fill_refine_rows()
 
 
 func _close_panels() -> void:
@@ -191,10 +218,13 @@ func _close_panels() -> void:
 	world_map.visible = false
 	settings_window.visible = false
 	collection_window.visible = false
+	if wardrobe_window.visible:
+		wardrobe_window.dismiss()
 	if fishing_window.visible:
 		main.cancel_fishing()
 		fishing_window.visible = false
 	_refine_armed = ""
+	_built.erase("refine")
 	_evolve_armed = false
 
 
@@ -241,6 +271,8 @@ func refresh() -> void:
 		worn.append("%s：%s" % [SLOT_NAMES[slot], "%s +%d" % [Items.ALL[id].name, player.refine_level(slot)] if id != "" else "無"])
 	gear_label.text = "　".join(worn)
 	_fill_bag_rows()
+	if bag_panel.visible and refine_scroll.visible:
+		_fill_refine_rows()
 	_refresh_quest()
 	tutorial_panel.visible = not player.tutorial.finished()
 	tutorial_text.text = player.tutorial.text()
@@ -335,7 +367,6 @@ func _refresh_npc() -> void:
 			var ready: bool = player.quests.done(player)
 			quest_button.text = "提交任務" if ready else "進行中 %d/%d" % [player.quests.count(player), q.goal.n]
 			quest_button.disabled = not ready
-	_fill_refine_rows()
 	if not _changed("shop", player.gold):
 		return
 	for c in shop_rows.get_children():
@@ -364,7 +395,7 @@ func _fill_refine_rows() -> void:
 			continue
 		var level: int = player.refine_level(slot)
 		var uid: String = player.gear[slot].uid
-		var row: Node = ItemRow.instantiate()
+		var row: Node = RefineRow.instantiate()
 		refine_rows.add_child(row)
 		if level >= Refine.max_level():
 			row.setup("%s +%d" % [Items.ALL[id].name, level], "已達上限", "")
@@ -383,7 +414,8 @@ func _fill_refine_rows() -> void:
 				return
 			if _refine_armed != uid:
 				_refine_armed = uid
-				row.action_button.text = "確定？"
+				_built.erase("refine")
+				_fill_refine_rows()
 				return
 			_refine_armed = ""
 			var r := {}

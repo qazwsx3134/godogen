@@ -2,6 +2,8 @@
 
 狀態：**Planning Draft（文件與工作包草案）**；2026-10-26。首次交付：M3；優先層：Vertical Slice；相對複雜度：L（不是工期）。
 
+2026-10-28 已有單機精煉切片與現行規格：[GDD](../../gdd/refine-crafting.md)、[TDD](../../../docs/architecture/systems/refine-crafting.md)、[QA](../../../production/qa/systems/refine-crafting.md)。製作及多人交易未做，D10 與真機驗收仍待後續確認。
+
 ## 玩家價值與責任
 
 讓材料有長期用途，同時清楚呈現投入與失敗風險。

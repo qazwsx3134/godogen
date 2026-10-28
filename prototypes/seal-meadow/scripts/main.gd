@@ -14,13 +14,14 @@ const SaveValidation = preload("res://scripts/save_validation.gd")
 const Items = preload("res://scripts/items.gd")
 const LootDrop = preload("res://scenes/loot_drop.tscn")
 const Fishing = preload("res://scripts/fishing.gd")
-const SAVE_VERSION := 5
+const SAVE_VERSION := 6
 const DEFAULT_SETTINGS := {"sound": true, "large_text": false, "reduced_motion": false}
 const MIGRATIONS := {
 	1: "_migrate_v1",
 	2: "_migrate_v2",
 	3: "_migrate_v2",
 	4: "_migrate_v4",
+	5: "_migrate_v5",
 }
 
 @export var pick_radius_px: float = 70.0
@@ -52,7 +53,13 @@ var _marker_left: float = 0.0
 var _saved_progress: Vector2i
 var _loot_goal: Node3D = null
 var _npc_goal: Node3D = null
-var _portal_goal: Node3D = null
+var _portal_goal: Node3D = null:
+	set(value):
+		if is_instance_valid(_portal_goal):
+			_portal_goal.highlighted = false
+		_portal_goal = value
+		if is_instance_valid(_portal_goal):
+			_portal_goal.highlighted = true
 var _fishing_goal: Node3D = null
 var _travelling: bool = false
 var save_blocked_reason: String = ""
@@ -129,6 +136,13 @@ func _migrate_v1(data: Dictionary) -> Dictionary:
 
 ## v2 saves had no gold, equipment or quests, v3 no pet or refine levels; the player's defaults fill them.
 func _migrate_v2(data: Dictionary) -> Dictionary:
+	return data
+
+
+## v5 had no persisted wardrobe choices; preserve all other fields.
+func _migrate_v5(data: Dictionary) -> Dictionary:
+	if not data.has("appearance"):
+		data["appearance"] = {"outfit": "", "aura": ""}
 	return data
 
 
@@ -349,12 +363,13 @@ func _input(event: InputEvent) -> void:
 
 
 func _process(delta: float) -> void:
+	var pet_xp_before: int = player.pet.xp
 	for e: Dictionary in player.pet.tick(delta, zone == "town"):
 		match e.type:
 			"hungry":
 				hud.log_line("寵物肚子餓了，想吃%s。" % Items.ALL[e.wants].name, Color("ffb86b"))
 			"starved":
-				hud.log_line("寵物餓壞了，失去 %d 點經驗。" % e.xp_lost, Color("ff9d8a"))
+				hud.log_line("寵物餓壞了，失去 %d 點經驗。" % (pet_xp_before - player.pet.xp), Color("ff9d8a"))
 				save_game()
 	player.cam_yaw = rig.yaw
 	for m: Node3D in get_tree().get_nodes_in_group("monster"):
@@ -376,9 +391,14 @@ func _process(delta: float) -> void:
 		elif Vector2(_loot_goal.position.x - player.position.x, _loot_goal.position.z - player.position.z).length() <= pickup_distance:
 			pickup(_loot_goal)
 			_loot_goal = null
-	if _portal_goal != null and not player.dead and not _travelling \
-			and _flat_distance(_portal_goal, player) <= portal_distance:
-		travel(_portal_goal)
+	if _portal_goal != null:
+		if not is_instance_valid(_portal_goal):
+			_portal_goal = null
+		elif player.casting or is_instance_valid(player.target) or not player._has_goal:
+			# A skill or a new attack interrupts the walk; the old portal must not stay selected or travel later.
+			_portal_goal = null
+		elif not player.dead and not _travelling and _flat_distance(_portal_goal, player) <= portal_distance:
+			travel(_portal_goal)
 	if _npc_goal != null and not player.dead and _flat_distance(_npc_goal, player) <= talk_distance:
 		player.move_to(player.position)
 		player._has_goal = false

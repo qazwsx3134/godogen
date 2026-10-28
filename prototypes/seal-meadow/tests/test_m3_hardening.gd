@@ -35,6 +35,7 @@ func _run() -> void:
 	await _test_newer_save()
 	await _test_backup_recovery()
 	await _test_bad_payload_recovery()
+	await _test_overfull_bag_recovery()
 	await _test_quest_checkpoint()
 	await _test_equipment_independence()
 	await _test_legacy_equipment_migration()
@@ -113,6 +114,28 @@ func _test_quest_checkpoint() -> void:
 	var partial: bool = snapshots.any(func(s: Dictionary) -> bool:
 		return int(s.get("gold", 0)) >= 60 and int(s.get("quests", {}).get("index", 0)) == 0)
 	_expect(not partial, "an XP checkpoint never saves quest rewards without the completed quest")
+
+
+func _test_overfull_bag_recovery() -> void:
+	var excess: Array[Dictionary] = []
+	for i in 13:
+		excess.append({"id": "apple", "count": 1})
+	var path := _clear("overfull_bag")
+	SaveSlots.save(path, {"level": 4, "bag": [{"id": "apple", "count": 2}]}, 5)
+	SaveSlots.save(path, {"level": 8, "bag": excess}, 5)
+	await _open("overfull_bag")
+	_expect(player.level == 4 and player.bag.count("apple") == 2,
+		"an over-capacity bag restores the valid backup instead of truncating items")
+	main.save_game()
+	var backup: Variant = JSON.parse_string(FileAccess.get_file_as_string(path + ".bak"))
+	_expect(backup is Dictionary and int(backup.data.level) == 4, "recovery keeps a valid backup")
+	path = _clear("overfull_no_backup")
+	SaveSlots.save(path, {"level": 8, "bag": excess}, 5)
+	var original := FileAccess.get_file_as_bytes(path)
+	await _open("overfull_no_backup")
+	main.save_game()
+	_expect(main.save_blocked_reason == "corrupt" and FileAccess.get_file_as_bytes(path) == original,
+		"without a backup an over-capacity save is not overwritten")
 
 
 func _test_equipment_independence() -> void:

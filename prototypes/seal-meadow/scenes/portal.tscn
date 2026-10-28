@@ -13,6 +13,16 @@ outer_radius = 0.95
 rings = 32
 ring_segments = 6
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v0xau"]
+shading_mode = 0
+albedo_color = Color(1, 0.84705883, 0.36862746, 1)
+
+[sub_resource type="TorusMesh" id="TorusMesh_1ffj6"]
+inner_radius = 0.99
+outer_radius = 1.13
+rings = 32
+ring_segments = 6
+
 [node name="Portal" type="Node3D" unique_id=1406541362]
 script = ExtResource("1_v0xau")
 
@@ -32,3 +42,10 @@ modulate = Color(0.62352943, 0.84705883, 1, 1)
 text = "往蓬蓬村"
 font_size = 44
 outline_size = 10
+
+[node name="Selection" type="MeshInstance3D" parent="." unique_id=568776303]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12, 0)
+visible = false
+material_override = SubResource("StandardMaterial3D_v0xau")
+mesh = SubResource("TorusMesh_1ffj6")

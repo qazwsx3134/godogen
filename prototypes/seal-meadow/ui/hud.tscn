@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" path="res://ui/settings_window.tscn" id="5_en2x2"]
 [ext_resource type="PackedScene" path="res://ui/collection_window.tscn" id="6_1v5rv"]
 [ext_resource type="PackedScene" path="res://ui/fishing_window.tscn" id="7_q43x7"]
+[ext_resource type="PackedScene" path="res://ui/wardrobe_window.tscn" id="8_srpbi"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jf26r"]
 content_margin_left = 10.0
@@ -134,8 +135,8 @@ text = "你"
 [node name="LevelLabel" type="Label" parent="Root/Status/Rows/Head" unique_id=1791242782]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 18
 theme_override_colors/font_color = Color(1, 0.84313726, 0.36862746, 1)
+theme_override_font_sizes/font_size = 18
 text = "Lv 1"
 
 [node name="HpBar" type="ProgressBar" parent="Root/Status/Rows" unique_id=1986563662]
@@ -153,9 +154,9 @@ unique_name_in_owner = true
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-theme_override_font_sizes/font_size = 12
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.8)
 theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 12
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -174,9 +175,9 @@ unique_name_in_owner = true
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-theme_override_font_sizes/font_size = 12
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.8)
 theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 12
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -195,9 +196,9 @@ unique_name_in_owner = true
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-theme_override_font_sizes/font_size = 12
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.8)
 theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 12
 text = "AP 100 / 100"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -260,9 +261,9 @@ offset_left = -560.0
 offset_top = -56.0
 offset_right = -14.0
 offset_bottom = -12.0
-theme_override_font_sizes/font_size = 14
 theme_override_colors/font_outline_color = Color(0.05, 0.08, 0.15, 0.85)
 theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 14
 text = "點地面移動（按住持續走）　點怪物攻擊
 WASD：移動　空白鍵：打最近的怪　Q：範圍揮砍　T：白天／黃昏"
 horizontal_alignment = 2
@@ -280,11 +281,11 @@ offset_top = -210.0
 offset_right = -26.0
 offset_bottom = -86.0
 focus_mode = 0
+theme_override_font_sizes/font_size = 20
 theme_override_styles/normal = SubResource("StyleBoxFlat_jf26r")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_546lt")
 theme_override_styles/hover = SubResource("StyleBoxFlat_jf26r")
 theme_override_styles/focus = SubResource("StyleBoxFlat_jf26r")
-theme_override_font_sizes/font_size = 20
 text = "範圍揮砍
 Q"
 
@@ -293,9 +294,9 @@ unique_name_in_owner = true
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-theme_override_font_sizes/font_size = 40
 theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
 theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 40
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -309,11 +310,11 @@ offset_top = 12.0
 offset_right = -12.0
 offset_bottom = 94.0
 focus_mode = 0
+theme_override_font_sizes/font_size = 22
 theme_override_styles/normal = SubResource("StyleBoxFlat_jf26r")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_546lt")
 theme_override_styles/hover = SubResource("StyleBoxFlat_jf26r")
 theme_override_styles/focus = SubResource("StyleBoxFlat_jf26r")
-theme_override_font_sizes/font_size = 22
 text = "背包 0/12"
 
 [node name="QuestTracker" type="Label" parent="Root" unique_id=1582640130]
@@ -323,10 +324,10 @@ offset_left = 14.0
 offset_top = 128.0
 offset_right = 334.0
 offset_bottom = 152.0
-theme_override_font_sizes/font_size = 16
 theme_override_colors/font_color = Color(1, 0.84313726, 0.36862746, 1)
 theme_override_colors/font_outline_color = Color(0.05, 0.08, 0.15, 0.85)
 theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 16
 
 [node name="AppleButton" type="Button" parent="Root" unique_id=663510313]
 unique_name_in_owner = true
@@ -340,11 +341,11 @@ offset_top = -170.0
 offset_right = -166.0
 offset_bottom = -86.0
 focus_mode = 0
+theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = SubResource("StyleBoxFlat_jf26r")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_jf26r")
 theme_override_styles/hover = SubResource("StyleBoxFlat_jf26r")
 theme_override_styles/focus = SubResource("StyleBoxFlat_jf26r")
-theme_override_font_sizes/font_size = 18
 text = "蘋果
 ×0"
 
@@ -392,6 +393,17 @@ focus_mode = 0
 theme_override_font_sizes/font_size = 22
 text = "冒險圖鑑"
 
+[node name="WardrobeButton" type="Button" parent="Root" unique_id=484108046]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 328.0
+offset_top = 405.0
+offset_right = 478.0
+offset_bottom = 489.0
+focus_mode = 0
+theme_override_font_sizes/font_size = 22
+text = "衣櫥"
+
 [node name="TutorialPanel" type="PanelContainer" parent="Root" unique_id=349789019]
 unique_name_in_owner = true
 layout_mode = 0
@@ -411,8 +423,8 @@ theme_override_constants/separation = 12
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 18
 theme_override_colors/font_color = Color(1, 0.84313726, 0.36862746, 1)
+theme_override_font_sizes/font_size = 18
 text = "（1/5）點一下地面，角色會走過去。"
 autowrap_mode = 3
 
@@ -434,11 +446,11 @@ offset_top = 12.0
 offset_right = -240.0
 offset_bottom = 94.0
 focus_mode = 0
+theme_override_font_sizes/font_size = 22
 theme_override_styles/normal = SubResource("StyleBoxFlat_jf26r")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_jf26r")
 theme_override_styles/hover = SubResource("StyleBoxFlat_jf26r")
 theme_override_styles/focus = SubResource("StyleBoxFlat_jf26r")
-theme_override_font_sizes/font_size = 22
 text = "寵物"
 
 [node name="BagPanel" type="PanelContainer" parent="Root" unique_id=2126863426]
@@ -461,9 +473,31 @@ theme_override_constants/separation = 6
 [node name="GearLabel" type="Label" parent="Root/BagPanel/BagBox" unique_id=269015921]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
 theme_override_colors/font_color = Color(0.62352943, 0.84705883, 1, 1)
+theme_override_font_sizes/font_size = 16
 text = "武器：木劍　衣服：無"
+
+[node name="BagTabs" type="HBoxContainer" parent="Root/BagPanel/BagBox" unique_id=405857100]
+layout_mode = 2
+
+[node name="ItemsTab" type="Button" parent="Root/BagPanel/BagBox/BagTabs" unique_id=773912333]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 84)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+toggle_mode = true
+button_pressed = true
+text = "物品"
+
+[node name="RefineTab" type="Button" parent="Root/BagPanel/BagBox/BagTabs" unique_id=1897778709]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 84)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+toggle_mode = true
+text = "精煉"
 
 [node name="BagScroll" type="ScrollContainer" parent="Root/BagPanel/BagBox" unique_id=1643211477]
 custom_minimum_size = Vector2(0, 320)
@@ -475,6 +509,28 @@ horizontal_scroll_mode = 0
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="RefineScroll" type="ScrollContainer" parent="Root/BagPanel/BagBox" unique_id=538668556]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 320)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="RefineContents" type="VBoxContainer" parent="Root/BagPanel/BagBox/RefineScroll" unique_id=715159726]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RefineHint" type="Label" parent="Root/BagPanel/BagBox/RefineScroll/RefineContents" unique_id=1421410611]
+layout_mode = 2
+text = "請先穿戴欲精煉的裝備（+0～+6）
+失敗只消耗寶石，請按兩次確認。"
+autowrap_mode = 3
+
+[node name="RefineRows" type="VBoxContainer" parent="Root/BagPanel/BagBox/RefineScroll/RefineContents" unique_id=665564792]
+unique_name_in_owner = true
+layout_mode = 2
 
 [node name="NpcPanel" type="PanelContainer" parent="Root" unique_id=587152141]
 unique_name_in_owner = true
@@ -505,15 +561,15 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 22
 theme_override_colors/font_color = Color(1, 0.84313726, 0.36862746, 1)
+theme_override_font_sizes/font_size = 22
 text = "村長 蓬伯"
 
 [node name="GoldLabel" type="Label" parent="Root/NpcPanel/Scroll/Box/Head" unique_id=476165027]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 18
 theme_override_colors/font_color = Color(1, 0.84313726, 0.36862746, 1)
+theme_override_font_sizes/font_size = 18
 text = "金幣 0"
 
 [node name="CloseButton" type="Button" parent="Root/NpcPanel/Scroll/Box/Head" unique_id=1776936117]
@@ -527,16 +583,16 @@ text = "關閉"
 [node name="QuestTitle" type="Label" parent="Root/NpcPanel/Scroll/Box" unique_id=1363924915]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
 theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 20
 text = "任務"
 
 [node name="QuestText" type="Label" parent="Root/NpcPanel/Scroll/Box" unique_id=1866800902]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(560, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
 theme_override_colors/font_color = Color(0.9019608, 0.92941177, 0.96862745, 1)
+theme_override_font_sizes/font_size = 16
 text = "任務說明"
 autowrap_mode = 3
 
@@ -553,8 +609,8 @@ layout_mode = 2
 
 [node name="@Label@5" type="Label" parent="Root/NpcPanel/Scroll/Box" unique_id=703993718]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
 theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 20
 text = "商店"
 
 [node name="ShopRows" type="VBoxContainer" parent="Root/NpcPanel/Scroll/Box" unique_id=1097047970]
@@ -568,19 +624,6 @@ layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 18
 text = "賣掉所有材料"
-
-[node name="@HSeparator@6" type="HSeparator" parent="Root/NpcPanel/Scroll/Box" unique_id=1078731215]
-layout_mode = 2
-
-[node name="@Label@7" type="Label" parent="Root/NpcPanel/Scroll/Box" unique_id=1009437573]
-layout_mode = 2
-theme_override_font_sizes/font_size = 20
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-text = "精煉（+0～+6，失敗只失去寶石）"
-
-[node name="RefineRows" type="VBoxContainer" parent="Root/NpcPanel/Scroll/Box" unique_id=665564792]
-unique_name_in_owner = true
-layout_mode = 2
 
 [node name="PetPanel" type="PanelContainer" parent="Root" unique_id=2037423205]
 unique_name_in_owner = true
@@ -605,8 +648,8 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 22
 theme_override_colors/font_color = Color(0.72156864, 0.9490196, 0.5411765, 1)
+theme_override_font_sizes/font_size = 22
 text = "蓬蓬幼苗 +0"
 
 [node name="PetClose" type="Button" parent="Root/PetPanel/Box/Head" unique_id=266328059]
@@ -621,15 +664,15 @@ text = "關閉"
 unique_name_in_owner = true
 custom_minimum_size = Vector2(480, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
 theme_override_colors/font_color = Color(0.9019608, 0.92941177, 0.96862745, 1)
+theme_override_font_sizes/font_size = 16
 text = "經驗 0/30　飢餓 100%　加成 攻擊 +1"
 autowrap_mode = 3
 
 [node name="@Label@8" type="Label" parent="Root/PetPanel/Box" unique_id=1747057944]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
 theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 20
 text = "餵食"
 
 [node name="FeedRows" type="VBoxContainer" parent="Root/PetPanel/Box" unique_id=590081792]
@@ -669,6 +712,14 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="FishingWindow" parent="Root" unique_id=1356379306 instance=ExtResource("7_q43x7")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="WardrobeWindow" parent="Root" unique_id=1776115342 instance=ExtResource("8_srpbi")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1

@@ -2,6 +2,8 @@
 
 狀態：**Planning Draft（文件與工作包草案）**；2026-10-26。首次交付：M5；優先層：Full Vision；相對複雜度：M（不是工期）。
 
+2026-10-28 依單機優先決定先實作薄切片：[GDD](../../gdd/fishing.md)、[TDD](../../../docs/architecture/systems/fishing.md)、[QA](../../../production/qa/systems/fishing.md)。真機與多人權威尚未驗證。
+
 ## 玩家價值與責任
 
 提供低強度、可整理資源的遊玩節奏。

@@ -31,6 +31,7 @@ func _run() -> void:
 	await _test_pet()
 	_test_evolve()
 	await _test_refine()
+	await _test_hud_editor()
 	main.save_game()
 	var pet: Dictionary = player.pet.to_dict()
 	pet.erase("hunger")  # keeps draining between the save and the check
@@ -75,6 +76,13 @@ func _test_pet() -> void:
 	pet.tick(100000.0)
 	_expect(pet.alive, "an empty bar never makes the pet leave (D09)")
 	_expect(player.attack_power >= atk0, "pet bonus still applies")
+	main.set_process(false)
+	pet.xp = 1
+	pet.hunger = 0.0001
+	main._process(1.0)
+	_expect(pet.xp == 0 and main.hud.log_box.get_parsed_text().contains("失去 1 點經驗"),
+		"the starvation message reports the XP actually lost when less than the penalty remains")
+	main.set_process(true)
 
 
 func _test_evolve() -> void:
@@ -134,9 +142,74 @@ func _test_refine() -> void:
 	player.bag.add("crystal", 1)
 	hud.refresh()
 	await _frames(2)
+	await _press(hud.bag_button)
+	_expect(hud.bag_panel.visible and hud.bag_scroll.visible and not hud.refine_scroll.visible,
+		"the bag opens on its items tab")
+	await _press(hud.refine_tab)
+	_expect(hud.refine_scroll.visible and not hud.bag_scroll.visible and not hud.npc_panel.visible,
+		"the bag switches to the refine tab without the NPC")
 	var rows: Array = hud.refine_rows.get_children().filter(func(r: Node) -> bool: return not r.is_queued_for_deletion())
 	await _press(rows[0].action_button)
 	_expect(player.refine_level("body") == 0 and player.bag.count("crystal") == 1, "first tap only asks to confirm")
 	rows = hud.refine_rows.get_children().filter(func(r: Node) -> bool: return not r.is_queued_for_deletion())
 	await _press(rows[0].action_button)
 	_expect(player.refine_level("body") == 1 and player.bag.count("crystal") == 0, "second tap refines")
+	player.bag.add("crystal", 1)
+	await _frames(2)
+	rows = hud.refine_rows.get_children().filter(func(r: Node) -> bool: return not r.is_queued_for_deletion())
+	await _press(rows[0].action_button)
+	await _press(hud.items_tab)
+	await _press(hud.refine_tab)
+	rows = hud.refine_rows.get_children().filter(func(r: Node) -> bool: return not r.is_queued_for_deletion())
+	await _press(rows[0].action_button)
+	_expect(player.refine_level("body") == 1 and player.bag.count("crystal") == 1,
+		"switching tabs clears the refine confirmation")
+	hud.set_large_text(true)
+	for viewport_size: Vector2i in [Vector2i(844, 390), Vector2i(1280, 720)]:
+		root.size = viewport_size
+		await _frames(4)
+		rows = hud.refine_rows.get_children().filter(func(r: Node) -> bool: return not r.is_queued_for_deletion())
+		var name_label: Label = rows[0].name_label
+		var info_label: Label = rows[0].info_label
+		var action: Button = rows[0].action_button
+		_expect(name_label.size.y >= 20 and info_label.size.y >= 20 and name_label.size.x >= 100,
+			"the large-text refine row gives both labels space to display at %s" % viewport_size)
+		_expect(action.get_global_rect().end.x <= hud.bag_panel.get_global_rect().end.x + 0.5,
+			"the refine button stays inside the bag panel at %s" % viewport_size)
+		var to_screen: Vector2 = Vector2(root.size) / root.get_visible_rect().size
+		for button: Button in [hud.items_tab, hud.refine_tab, action]:
+			var screen_size: Vector2 = button.size * to_screen
+			_expect(screen_size.x >= 44 and screen_size.y >= 44,
+				"refine tabs and confirmation keep a 44 px touch area at %s" % viewport_size)
+	hud.set_large_text(false)
+
+
+func _test_hud_editor() -> void:
+	var path := "res://ui/hud.tscn"
+	var original_hash := FileAccess.get_sha256(path)
+	var edited: CanvasLayer = (load(path) as PackedScene).instantiate(PackedScene.GEN_EDIT_STATE_MAIN)
+	edited.scene_file_path = ""
+	var hint: Label = edited.get_node("Root/BagPanel/BagBox/RefineScroll/RefineContents/RefineHint")
+	hint.text = "可編輯的精煉說明"
+	var bag: VBoxContainer = edited.get_node("Root/BagPanel/BagBox")
+	bag.add_theme_constant_override("separation", 11)
+	var packed := PackedScene.new()
+	_expect(packed.pack(edited) == OK, "edited HUD scene packs successfully")
+	var copy_path := "user://test_m3/edited_hud.tscn"
+	DirAccess.make_dir_recursive_absolute(copy_path.get_base_dir())
+	_expect(ResourceSaver.save(packed, copy_path) == OK, "edited HUD scene saves successfully")
+	edited.free()
+	var restored: CanvasLayer = (load(copy_path) as PackedScene).instantiate()
+	root.add_child(restored)
+	restored.main = main
+	restored.bind(player)
+	restored.bag_panel.visible = true
+	restored._select_bag_tab(true)
+	restored.refresh()
+	await _frames(2)
+	_expect(restored.get_node("Root/BagPanel/BagBox/RefineScroll/RefineContents/RefineHint").text == "可編輯的精煉說明"
+		and restored.get_node("Root/BagPanel/BagBox").get_theme_constant("separation") == 11,
+		"runtime setup preserves editor changes to HUD text and spacing")
+	_expect(FileAccess.get_sha256(path) == original_hash, "runtime state never overwrites the source HUD scene")
+	restored.queue_free()
+	await _frames(1)

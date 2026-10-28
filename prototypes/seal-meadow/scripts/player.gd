@@ -21,6 +21,7 @@ const PetCare = preload("res://addons/proto_kit/pet_care.gd")
 const PetRules = preload("res://scripts/pet_rules.gd")
 const Refine = preload("res://scripts/refine.gd")
 const CollectionBook = preload("res://scripts/collection_book.gd")
+const Cosmetics = preload("res://scripts/cosmetics.gd")
 
 @export var player_name: String = "你"
 @export var move_speed: float = 5.0
@@ -46,6 +47,7 @@ var bounds_center := Vector2.ZERO
 @export var ap_regen_combat: float = 2.0
 
 @onready var actor: Node3D = $Actor
+@onready var aura: MeshInstance3D = %Aura
 
 var level: int = 1
 var max_hp: int = 120
@@ -65,11 +67,13 @@ var ap: float = 100.0
 ## Seconds until the sweep is ready again.
 var sweep_left: float = 0.0
 var casting: bool = false
-var bag := Inventory.new(12)
+var bag := Inventory.new()
 var gold: int = 0
 var quests := Quests.new()
 var tutorial := Tutorial.new()
 var collection := CollectionBook.new()
+var appearance := {"outfit": "", "aura": ""}
+var _preview_appearance: Dictionary = {}
 ## Equipment records move intact between the bag and the worn slots.
 var gear := {"weapon": {}, "body": {}}
 ## Slot-to-item-id view used by quests and presentation.
@@ -161,10 +165,40 @@ func evolve_pet(result: Dictionary = {}) -> String:
 func _dress() -> void:
 	if not is_node_ready():
 		return
+	var shown: Dictionary = _preview_appearance if not _preview_appearance.is_empty() else appearance
 	for slot: String in equipped:
 		var id: String = equipped[slot]
 		var path: String = Items.ALL[id].get("sheet", "") if id != "" else Items.EMPTY_SHEET[slot]
+		if slot == "body" and not String(shown.outfit).is_empty():
+			path = Cosmetics.OUTFITS[shown.outfit].sheet
 		actor.set_layer(Items.LAYER[slot], load(path) if path != "" else null)
+	aura.visible = shown.aura == "meadow_ring"
+
+
+## Preview is ephemeral and may show locked options; it changes no equipment or stats.
+func preview_appearance(outfit: String, aura_id: String) -> bool:
+	if not Cosmetics.known(outfit, aura_id):
+		return false
+	_preview_appearance = {"outfit": outfit, "aura": aura_id}
+	_dress()
+	return true
+
+
+func cancel_appearance_preview() -> void:
+	_preview_appearance.clear()
+	_dress()
+
+
+## Both choices are validated before either is applied.
+func apply_appearance(outfit: String, aura_id: String) -> String:
+	if not Cosmetics.known(outfit, aura_id):
+		return "unknown"
+	if not Cosmetics.allowed(outfit, aura_id, collection.claimed):
+		return "locked"
+	appearance = {"outfit": outfit, "aura": aura_id}
+	_preview_appearance.clear()
+	_dress()
+	return ""
 
 
 ## Wears an item from the bag; the one it replaces goes back into the bag. All or nothing.
@@ -271,7 +305,7 @@ func save_data() -> Dictionary:
 	return {"level": level, "xp": xp, "x": position.x, "z": position.z, "bag": bag.to_data(),
 		"gold": gold, "equipped": gear.duplicate(true), "quests": quests.to_data(), "tutorial": tutorial.step,
 		"refine_receipt": {"seq": refine_request_seq, "result": refine_last_result.duplicate(true)},
-		"pet": pet.to_dict(), "collection": collection.to_data()}
+		"pet": pet.to_dict(), "collection": collection.to_data(), "appearance": appearance.duplicate()}
 
 
 func load_data(data: Dictionary) -> void:
@@ -284,6 +318,9 @@ func load_data(data: Dictionary) -> void:
 	quests.load_data(data.get("quests", {}))
 	if data.get("collection") is Dictionary:
 		collection.load_data(data.collection)
+	if data.get("appearance") is Dictionary:
+		appearance = {"outfit": String(data.appearance.get("outfit", "")), "aura": String(data.appearance.get("aura", ""))}
+	_preview_appearance.clear()
 	tutorial.step = clampi(int(data.get("tutorial", 0)), 0, Tutorial.STEPS.size())
 	var receipt: Dictionary = data.get("refine_receipt", {}) if data.get("refine_receipt", {}) is Dictionary else {}
 	refine_request_seq = maxi(0, int(receipt.get("seq", 0)))
@@ -371,10 +408,22 @@ func _finish_sweep(id: int) -> void:
 	ap -= sweep_cost
 	sweep_left = sweep_cooldown
 	var hits := 0
+	var nearest_survivor: Node3D = null
+	var nearest_distance_squared := INF
 	for m: Node3D in get_tree().get_nodes_in_group("monster"):
-		if m.is_alive() and Vector2(m.position.x - position.x, m.position.z - position.z).length() <= sweep_radius:
+		var offset := Vector2(m.global_position.x - global_position.x, m.global_position.z - global_position.z)
+		if m.is_alive() and offset.length_squared() <= sweep_radius * sweep_radius:
 			if combat.attack(self, m, attack_power, sweep_multiplier) > 0:
 				hits += 1
+				if is_instance_valid(m) and m.is_alive() and offset.length_squared() < nearest_distance_squared:
+					nearest_survivor = m
+					nearest_distance_squared = offset.length_squared()
+	# Keep a deliberate target or ongoing movement. Only a surviving monster actually hit by the skill can
+	# become the automatic target, and nearest is independent of scene-tree ordering.
+	if is_instance_valid(nearest_survivor) and not _has_goal and not pointer_moving \
+			and Input.get_vector("move_left", "move_right", "move_forward", "move_back").length() <= 0.1 \
+			and not (is_instance_valid(target) and target.is_alive() and target.spawn_id == _target_spawn):
+		set_target(nearest_survivor)
 	Fx.ring(get_parent(), position, sweep_radius, Color(0.62, 0.85, 1.0, 0.8))
 	swept.emit(hits)
 	message.emit("範圍揮砍命中 %d 隻。" % hits if hits > 0 else "範圍揮砍沒有打到怪。", Color("9fd8ff"))

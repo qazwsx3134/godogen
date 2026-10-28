@@ -4,8 +4,9 @@ extends RefCounted
 ## Items: {id: {name, stack}} in res://scripts/items.gd.
 
 const Items = preload("res://scripts/items.gd")
+const DEFAULT_CAPACITY := 12
 
-var capacity: int = 12
+var capacity: int = DEFAULT_CAPACITY
 ## Stackable items use {id, count}; equipment additionally has a stable uid and its own refine level.
 var slots: Array[Dictionary] = []
 
@@ -19,7 +20,7 @@ static func equipment_record(id: String, level: int = 0, uid: String = "") -> Di
 		"refine": clampi(level, 0, 6)}
 
 
-func _init(slot_count: int = 12) -> void:
+func _init(slot_count: int = DEFAULT_CAPACITY) -> void:
 	capacity = slot_count
 
 

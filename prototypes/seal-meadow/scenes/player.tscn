@@ -6,6 +6,17 @@
 [ext_resource type="Resource" path="res://resources/sheets/test_chibi_hair.tres" id="4_smehm"]
 [ext_resource type="Resource" path="res://resources/sheets/test_chibi_weapon.tres" id="5_ur7pv"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qlg0r"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.37, 0.9, 0.74, 0.8)
+
+[sub_resource type="TorusMesh" id="TorusMesh_tuyoq"]
+inner_radius = 0.68
+outer_radius = 0.76
+rings = 32
+ring_segments = 6
+
 [node name="Player" type="Node3D" unique_id=1241062925]
 script = ExtResource("1_qlg0r")
 
@@ -16,3 +27,10 @@ nameplate_color = Color(0.62352943, 0.8784314, 1, 1)
 dissolve_on_down = false
 head_height = 1.8
 layer_sheets = Array[Resource]([null, ExtResource("4_smehm"), ExtResource("5_ur7pv")])
+
+[node name="Aura" type="MeshInstance3D" parent="." unique_id=134984882]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.045, 0)
+visible = false
+material_override = SubResource("StandardMaterial3D_qlg0r")
+mesh = SubResource("TorusMesh_tuyoq")

@@ -1,13 +1,13 @@
 # 進度與 Agent 交接
 
-## 蓬蓬草原 · seal-meadow（2026-10-28，出門交接）
+## 蓬蓬草原 · seal-meadow（2026-10-29，持續開發）
 
-- **狀態與決定**：使用者要求補 M3、依 `design/planning/` 繼續，選擇優先製作單機後續內容，多人 M4 暫緩；現在出門要求交接，已停止開發。分支 `master`、實作基準與目前最新提交 `21604e31`；本次 seal-meadow 程式、場景、測試與文件及本交接尚未 commit／push，保留其他專案現有修改。
-- **已實作，尚待驗收**：M3 存檔 v5／舊版遷移、裝備個別精煉狀態、交易重送與損壞／新版存檔保護、設定與背景處理、寵物進化確認；接著實作單機 S19 圖鑑／成就／聲望和 S33 釣魚薄切片。上一輪 `REVIEW.md` 的長按互動、反擊、寵物鈕、世界地圖與怪物比例修正也都保留。規格、經濟及真機驗收尚未完成，不能將 M3 標為驗收通過。
-- **驗證與限制**：10 組 headless suite 曾通過（`/tmp/godot-tests.bqN5hB/`），但後續修改存檔驗證及圖鑑保留資料後沒有重跑完整回歸；之後 `test_m3_hardening.gd`、`test_collection.gd` 分別通過，`test_fishing.gd` 的通過早於最後存檔驗證修改。Chromium 中畫布載入、設定持久化及 v4→v5 遷移檢查通過，但整體測試因 `/favicon.ico` 404 **FAIL**（`/tmp/seal-web-m3-final/report.json`），原因需處理並重跑。手機比例截圖 `/tmp/seal-m3-shots-final/` 並非真機。
-- **網頁候選**：`build/mobile-web/` 手動匯出並套 IDBFS 補丁，PCK 約 35.05 MB、WASM 約 39.5 MB；`tools/build_mobile_web.sh` 尚未完整驗證，也沒有手機版 ZIP。`build/web/` 是 2026-10-27 舊版。本輪測試伺服器 8795 已停止；沒有上傳。
-- **未完成／下一步**：釐清 favicon／測試失敗，重跑最終完整 suite、短 bot、瀏覽器與匯出腳本，補 M3 及 S19／S33 規格、經濟與 QA 文件；iPhone 17 Safari 觸控、存讀恢復、FPS、20～30 分鐘發熱及真人試玩仍待驗收。使用者要求不要再讓 bot 跑 25 分鐘；其他原型 godot-kit 副本不要自動同步。itch 草稿上傳前須另徵使用者同意；無授權不 commit／push。
-- **接手入口**：`prototypes/seal-meadow/PROGRESS.md`（詳細記錄與指令）、`README.md`、`REVIEW.md`、`production/session-state/active.md`、`production/roadmap.md`；先用 `git status --short -- Progress.md prototypes/seal-meadow` 檢查並保留既有未提交修改。
+- **狀態與決定**：使用者返家要求繼續，之後指定完成一階段就停下並開另一個 Sol medium 審查。S35 單機衣櫥階段與獨立審查已完成，目前暫停；多人 M4 延後。`master` 最新提交與本輪基準 `180149a9`；本輪程式、scene、測試及文件未 commit／push，保留其他專案現有修改。
+- **本輪完成**：`REVIEW.md` 第 8～10 項：背包精煉、技能命中後選怪、傳送門高亮；存檔過量背包回復備份或拒絕覆寫、寵物餓到時顯示實際損失。S35 衣櫥可預覽／取消、以已領成就解鎖布衣與裝飾光環，套用不改戰鬥屬性；存檔升 v6，有舊檔遷移與無效資格檢查。
+- **規格**：補齊 S17 寵物、S18 精煉、S19 圖鑑、S33 釣魚與 S35 衣櫥的 GDD／TDD／QA，以及 [經濟分析](prototypes/seal-meadow/production/qa/m3-economy.md)；精煉 +0→+6 以商店價理論期望 935.24 金／件，非真人平衡。
+- **驗證**：最新 L2 `wardrobe`／`m0`／`m3`／`m3_hardening`／`collection`／`content`／`review_interactions` 七組通過（`/tmp/godot-tests.wtxsbV/`），匯入無錯；審查後改測試名稱並單獨重跑 `test_wardrobe.gd` 通過。先前 `m1`／`m1_loot`／`fishing` 也通過；11 個隔離變異均被測試抓到。844×390 Chromium 12 項載入、v4／v5→v6、精煉與衣櫥預覽／保存通過、0 瀏覽器錯誤（`/tmp/seal-web-wardrobe-20261029/report.json`）。均非 iPhone 真機證據。
+- **Web 候選**：`tools/build_mobile_web.sh` 已成功執行，PCK 35.07 MB、WASM 約 39.5 MB；`build/seal-meadow-mobile-web.zip` SHA-256 `a8150f3138aa02062f7abbd855ea6d87a7de0fba8cb16a7d4bacefb73efb91c4`。`build/web/` 仍是 2026-10-27 舊版；本輪本地測試伺服器 8795 已停止，未上傳。
+- **獨立審查與待辦**：另開 GPT-6 Sol／medium 做唯讀審查，未發現可重現的本輪功能缺陷；指出「v5 讀取器拒絕 v6」測試本身不等於舊版整個遊戲實測不覆寫，已修正測試描述與 QA，舊版執行端對端仍未驗。報告 `prototypes/seal-meadow/production/qa/reviews/2026-10-29-sol-medium.md`。iPhone 17 Safari、FPS、20～30 分鐘發熱與真人試玩仍待驗收；bot 不跑 25 分鐘。使用者要求目前先停下，無授權不 commit／push、上傳 itch 或同步其他原型 kit。
 
 ---
 

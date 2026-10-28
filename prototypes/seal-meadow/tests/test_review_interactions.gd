@@ -50,6 +50,12 @@ func _run() -> void:
 	portal.global_position = player.global_position + Vector3(4, 0, 0)
 	main._click(cam.unproject_position(portal.global_position), true)
 	_expect(main._portal_goal == portal, "tap selects the portal")
+	_expect(portal.highlighted and portal.selection.visible, "selected portal shows its interaction highlight")
+	var other_portal: Node3D = get_nodes_in_group("portal").filter(func(p: Node3D) -> bool: return p != portal)[0]
+	main._portal_goal = other_portal
+	_expect(not portal.selection.visible and other_portal.selection.visible, "only the selected portal highlights")
+	main._portal_goal = portal
+	_expect(portal.selection.visible and not other_portal.selection.visible, "switching portals transfers the highlight")
 	main._holding = true
 	main._repeat = 0.0
 	main._process(0.13)
@@ -61,12 +67,15 @@ func _run() -> void:
 	second.global_position = portal.global_position + Vector3(1.1, 0, 0)
 	main._click(cam.unproject_position(second.global_position + Vector3.UP * 0.85), true)
 	_expect(main._loot_goal == second, "an item's label wins over a nearby portal")
+	_expect(not portal.highlighted and not portal.selection.visible, "choosing another interaction clears the portal highlight")
 	main._click(cam.unproject_position(portal.global_position + Vector3.UP * 1.4), true)
 	_expect(main._portal_goal == portal, "the portal's label is tappable near an item")
+	_expect(portal.highlighted and portal.selection.visible, "the portal label also shows the highlight")
 	player.global_position = portal.global_position + Vector3(1.0, 0, 0)
 	main._process(0.01)
 	await create_timer(0.7).timeout
 	_expect(main.zone == portal.zone and not main._travelling, "portal tap reaches the destination and finishes its fade")
+	_expect(not portal.highlighted and not portal.selection.visible, "the portal highlight clears on travel")
 	second.queue_free()
 	main._portal_goal = null
 	player._has_goal = false
@@ -97,8 +106,21 @@ func _run() -> void:
 	_expect(player.target == null, "damage does not interrupt keyboard movement")
 	main._portal_goal = portal
 	main._process(0.01)
-	_expect(main._portal_goal == null, "keyboard movement cancels a pending portal")
+	_expect(main._portal_goal == null and not portal.selection.visible, "keyboard movement cancels the pending portal and highlight")
 	Input.action_release("move_left")
+	main._portal_goal = portal
+	player.move_to(portal.global_position)
+	player.ap = player.max_ap
+	player.sweep_left = 0.0
+	_expect(player.use_sweep() == "", "a skill can interrupt walking to a portal")
+	main._process(0.01)
+	_expect(main._portal_goal == null and not portal.selection.visible, "casting cancels the pending portal and highlight")
+	player.cancel_cast()
+	main._portal_goal = portal
+	player.move_to(portal.global_position)
+	player.set_target(attacker)
+	main._process(0.01)
+	_expect(main._portal_goal == null and not portal.selection.visible, "choosing an attack cancels the pending portal and highlight")
 	player.set_target(attacker)
 	player._cooldown = 0.0
 	attacker_hp = attacker.hp
@@ -106,12 +128,55 @@ func _run() -> void:
 	player.move_to(player.position + Vector3(3, 0, 0))
 	await create_timer(0.25).timeout
 	_expect(attacker.hp == attacker_hp, "starting a manual move cancels a pending auto-attack")
+	await _test_sweep_target(attacker, other)
 	await _test_map()
 	_test_log_bound()
 	await _test_map_editor()
 	main.queue_free()
 	await _frames(2)
 	_finish("SEAL MEADOW REVIEW INTERACTIONS")
+
+
+func _test_sweep_target(near: Node3D, farther: Node3D) -> void:
+	near.global_position = player.global_position + Vector3(0.8, 0, 0)
+	farther.global_position = player.global_position + Vector3(2.0, 0, 0)
+	near.max_hp = 1000
+	near.hp = 1000
+	farther.max_hp = 1000
+	farther.hp = 1000
+	player._has_goal = false
+	player.pointer_moving = false
+	player.target = null
+	player.ap = player.max_ap
+	player.sweep_left = 0.0
+	_expect(player.use_sweep() == "", "sweep can start without a selected monster")
+	await create_timer(player.sweep_windup + 0.1).timeout
+	_expect(player.target == near, "sweep selects the closest surviving monster it actually hit")
+	var hp_after_sweep: int = near.hp
+	player._cooldown = 0.0
+	player._process(0.01)
+	await create_timer(0.25).timeout
+	_expect(near.hp < hp_after_sweep, "the new target is actually auto-attacked")
+	player.set_target(farther)
+	player.sweep_left = 0.0
+	player.ap = player.max_ap
+	player.use_sweep()
+	await create_timer(player.sweep_windup + 0.1).timeout
+	_expect(player.target == farther, "a sweep preserves an already selected live target")
+	player.target = null
+	near.hp = 1
+	player.sweep_left = 0.0
+	player.ap = player.max_ap
+	player.use_sweep()
+	await create_timer(player.sweep_windup + 0.1).timeout
+	_expect(not near.is_alive() and player.target == farther, "a defeated hit is skipped in favor of a survivor")
+	player.target = null
+	farther.hp = 1
+	player.sweep_left = 0.0
+	player.ap = player.max_ap
+	player.use_sweep()
+	await create_timer(player.sweep_windup + 0.1).timeout
+	_expect(not farther.is_alive() and player.target == null, "a sweep that defeats every hit does not target a dead monster")
 
 
 func _test_map() -> void:

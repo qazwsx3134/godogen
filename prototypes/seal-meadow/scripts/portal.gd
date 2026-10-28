@@ -11,6 +11,13 @@ const TerrainHeight = preload("res://scripts/terrain_height.gd")
 
 @onready var ring: MeshInstance3D = %Ring
 @onready var title: Label3D = %Title
+@onready var selection: MeshInstance3D = %Selection
+
+var highlighted: bool = false:
+	set(value):
+		highlighted = value
+		if is_node_ready():
+			selection.visible = value
 
 var _t: float = 0.0
 
@@ -18,6 +25,7 @@ var _t: float = 0.0
 func _ready() -> void:
 	add_to_group("portal")
 	title.text = label
+	selection.visible = highlighted
 	global_position.y = TerrainHeight.height(global_position.x, global_position.z)
 
 

@@ -2,6 +2,8 @@ extends RefCounted
 ## Validate the types used by the runtime before loading; optional fields keep older saves migratable.
 
 const Items = preload("res://scripts/items.gd")
+const Inventory = preload("res://scripts/inventory.gd")
+const Cosmetics = preload("res://scripts/cosmetics.gd")
 
 
 static func _number(value: Variant) -> bool:
@@ -14,11 +16,11 @@ static func valid(data: Dictionary) -> bool:
 	for key: String in ["level", "xp", "x", "z", "gold", "tutorial"]:
 		if data.has(key) and not _number(data[key]):
 			return false
-	for key: String in ["quests", "pet", "equipped", "refine_receipt", "settings", "collection"]:
+	for key: String in ["quests", "pet", "equipped", "refine_receipt", "settings", "collection", "appearance"]:
 		if data.has(key) and not data[key] is Dictionary:
 			return false
 	if data.has("bag"):
-		if not data.bag is Array:
+		if not data.bag is Array or data.bag.size() > Inventory.DEFAULT_CAPACITY:
 			return false
 		var seen := {}
 		for item: Variant in data.bag:
@@ -100,4 +102,10 @@ static func valid(data: Dictionary) -> bool:
 	for id: Variant in collection.get("claimed", []):
 		if not id is String:
 			return false
+	var appearance: Dictionary = data.get("appearance", {})
+	for key: String in ["outfit", "aura"]:
+		if appearance.has(key) and not appearance[key] is String:
+			return false
+	if not Cosmetics.allowed(appearance.get("outfit", ""), appearance.get("aura", ""), collection.get("claimed", [])):
+		return false
 	return true

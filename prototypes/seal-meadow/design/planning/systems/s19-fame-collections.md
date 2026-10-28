@@ -2,6 +2,8 @@
 
 狀態：**Planning Draft（文件與工作包草案）**；2026-10-26。首次交付：M5；優先層：Full Vision；相對複雜度：M（不是工期）。
 
+2026-10-28 依單機優先決定先實作薄切片：[GDD](../../gdd/fame-collections.md)、[TDD](../../../docs/architecture/systems/fame-collections.md)、[QA](../../../production/qa/systems/fame-collections.md)。真機與跨帳號擴充尚未驗證。
+
 ## 玩家價值與責任
 
 提供等級以外的長期目標與角色身分。

@@ -1,5 +1,15 @@
 # 蓬蓬草原 session checkpoint
 
+## 2026-10-29｜單機階段與獨立審查完成，暫停
+
+- 使用者返家要求繼續，之後指定做到一階段停下並開另一個 Sol medium 審查；單機優先，多人 M4 延後。`master` 基準／最新提交 `180149a9`；本輪修改未 commit／push。
+- `REVIEW.md` 8～10 已實作：背包精煉分頁、技能命中後選存活怪自動攻擊、傳送門選取外環；新增可編輯 `ui/refine_row.tscn`。過量背包存檔保護及寵物經驗損失訊息已修。
+- S17、S18、S19、S33、S35 GDD／TDD／QA 和 `production/qa/m3-economy.md` 已補；S35 衣櫥預覽／取消、資格與保存已做，存檔升 v6。D09、D10 保持暫定，M3 仍缺真人／真機驗收。
+- 最新 L2 `wardrobe`、`m0`、`m3`、`m3_hardening`、`collection`、`content`、`review_interactions` 通過（`/tmp/godot-tests.wtxsbV/`），11 個隔離變異均被抓到，headless 場景匯入無錯。最新完整 suite 依專案規範等使用者手動驗收後再跑。
+- 手機測試包 `build/seal-meadow-mobile-web.zip` SHA-256 `a8150f3138aa02062f7abbd855ea6d87a7de0fba8cb16a7d4bacefb73efb91c4`；Chromium 12 項含 v4／v5→v6、精煉與衣櫥預覽／重開通過、0 錯誤（`/tmp/seal-web-wardrobe-20261029/report.json`）。桌面模擬不是 iPhone 真機，`build/web/` 是舊版。
+- 獨立 GPT-6 Sol／medium 唯讀審查完成，未發現可重現的本輪功能缺陷；報告 `production/qa/reviews/2026-10-29-sol-medium.md`。依審查修正「v5 讀取器拒絕 v6」的測試描述並單獨重跑 `test_wardrobe.gd` 通過；舊版整個遊戲的寫入端對端未驗。本輪 8795 本地伺服器已停止。
+- 依使用者要求現在暫停；iPhone 17 Safari／背景恢復／20～30 分鐘發熱／真人試玩待驗，bot 不跑 25 分鐘。無新授權不 commit、push、上傳或同步其他原型 kit；詳細證據與指令在 `PROGRESS.md`。
+
 ## 2026-10-28｜出門交接：暫停
 
 - 使用者要求補 M3 後依規劃繼續，選擇優先做單機後續內容，多人 M4 延後；現在出門並要求交接，已停止開發。`master` 最新提交與實作基準 `21604e31`；本輪變更未 commit／push，保留其他專案工作區修改。

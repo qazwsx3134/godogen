@@ -1,0 +1,142 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://ui/theme.tres" id="1_gbir6"]
+[ext_resource type="Script" path="res://ui/wardrobe_window.gd" id="2_sepxs"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hfmya"]
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
+bg_color = Color(0.1254902, 0.18431373, 0.23921569, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.9098039, 0.7607843, 0.3529412, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[node name="WardrobeWindow" type="Control" unique_id=1776115342]
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource("1_gbir6")
+script = ExtResource("2_sepxs")
+
+[node name="Dim" type="ColorRect" parent="." unique_id=2040654687]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.02, 0.04, 0.09, 0.25)
+
+[node name="Window" type="PanelContainer" parent="." unique_id=965508521]
+layout_mode = 0
+offset_left = 20.0
+anchor_bottom = 1.0
+offset_top = 20.0
+offset_right = 560.0
+offset_bottom = -20.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_hfmya")
+
+[node name="Contents" type="VBoxContainer" parent="Window" unique_id=599338086]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Header" type="HBoxContainer" parent="Window/Contents" unique_id=1567446162]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Window/Contents/Header" unique_id=221800042]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 34
+text = "衣櫥"
+
+[node name="WardrobeClose" type="Button" parent="Window/Contents/Header" unique_id=410460186]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(110, 82)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 22
+text = "關閉"
+
+[node name="Hint" type="Label" parent="Window/Contents" unique_id=1803410924]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "外觀不影響能力；未解鎖項目也可預覽。"
+autowrap_mode = 3
+
+[node name="OutfitTitle" type="Label" parent="Window/Contents" unique_id=671679114]
+layout_mode = 2
+theme_override_font_sizes/font_size = 23
+text = "身體外觀"
+
+[node name="Outfits" type="HBoxContainer" parent="Window/Contents" unique_id=478210442]
+layout_mode = 2
+
+[node name="OutfitDefault" type="Button" parent="Window/Contents/Outfits" unique_id=1972730038]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 82)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+theme_override_font_sizes/font_size = 22
+toggle_mode = true
+text = "裝備原貌"
+
+[node name="OutfitMeadow" type="Button" parent="Window/Contents/Outfits" unique_id=697924998]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 82)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+theme_override_font_sizes/font_size = 22
+toggle_mode = true
+text = "草原布衣（未解鎖）"
+
+[node name="AuraTitle" type="Label" parent="Window/Contents" unique_id=260221768]
+layout_mode = 2
+theme_override_font_sizes/font_size = 23
+text = "裝飾光環"
+
+[node name="Auras" type="HBoxContainer" parent="Window/Contents" unique_id=725445960]
+layout_mode = 2
+
+[node name="AuraNone" type="Button" parent="Window/Contents/Auras" unique_id=1965909670]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 82)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+theme_override_font_sizes/font_size = 22
+toggle_mode = true
+text = "無光環"
+
+[node name="AuraMeadow" type="Button" parent="Window/Contents/Auras" unique_id=723161941]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 82)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+theme_override_font_sizes/font_size = 22
+toggle_mode = true
+text = "草原光環（未解鎖）"
+
+[node name="WardrobeStatus" type="Label" parent="Window/Contents" unique_id=1265656086]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 22
+text = "右側角色是預覽，關閉可取消。"
+autowrap_mode = 3
+
+[node name="WardrobeApply" type="Button" parent="Window/Contents" unique_id=59154639]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 82)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 22
+text = "套用"

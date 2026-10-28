@@ -57,8 +57,8 @@ async function loaded(page) {
   await page.waitForTimeout(800);
 }
 
-async function seedLegacy(page, key) {
-  await page.evaluate(async ({ key }) => {
+async function seedSave(page, key, save) {
+  await page.evaluate(async ({ key, save }) => {
     const db = await new Promise((resolve, reject) => {
       const request = indexedDB.open('/userfs'); request.onsuccess = () => resolve(request.result); request.onerror = () => reject(request.error);
     });
@@ -67,15 +67,12 @@ async function seedLegacy(page, key) {
     const record = await new Promise((resolve, reject) => {
       const request = store.get(key); request.onsuccess = () => resolve(request.result); request.onerror = () => reject(request.error);
     });
-    record.contents = new TextEncoder().encode(JSON.stringify({ version: 4, data: {
-      level: 3, xp: 7, x: 0, z: 4, gold: 100,
-      bag: [{ id: 'iron_sword', count: 1 }], equipped: { weapon: 'iron_sword', body: '' }, refine: { iron_sword: 2 },
-    } }));
+    record.contents = new TextEncoder().encode(JSON.stringify(save));
     record.timestamp = new Date(Date.now() + 1000);
     store.put(record, key);
     await new Promise((resolve, reject) => { tx.oncomplete = resolve; tx.onerror = () => reject(tx.error); });
     db.close();
-  }, { key });
+  }, { key, save });
 }
 
 let browser;
@@ -110,20 +107,81 @@ try {
   await page.waitForTimeout(500);
   await page.screenshot({ path: path.join(out, 'collection.png') });
 
-  // Leave the game page before changing the isolated test database, so page shutdown cannot overwrite the fixture.
-  await page.goto(new URL('index.icon.png', url).href);
+  // Leave the game before changing its isolated database, so page shutdown cannot overwrite the fixture.
+  // A same-origin HTML fixture with its own icon avoids the browser's unrelated /favicon.ico request; no
+  // console errors or failed game requests are filtered out of the report.
+  const fixtureUrl = new URL('__seal_storage_fixture__.html', url).href;
+  await page.route(fixtureUrl, route => route.fulfill({
+    status: 200, contentType: 'text/html', body: '<!doctype html><link rel="icon" href="data:,">',
+  }));
+  await page.goto(fixtureUrl, { waitUntil: 'load' });
   await page.waitForTimeout(700);
-  await seedLegacy(page, on.key);
+  await seedSave(page, on.key, { version: 4, data: {
+    level: 3, xp: 7, x: 0, z: 4, gold: 100,
+    bag: [{ id: 'iron_sword', count: 1 }, { id: 'crystal', count: 2 }],
+    equipped: { weapon: 'iron_sword', body: '' }, refine: { iron_sword: 2 },
+  } });
   await page.goto(url, { waitUntil: 'load', timeout: 60000 });
   await loaded(page);
   await page.touchscreen.tap(47, 242);
-  await page.touchscreen.tap(220, 165); // trigger a v5 checkpoint after migration
-  const migrated = await waitSave(page, s => s.version === 5 && s.data?.settings?.sound === false);
+  await page.touchscreen.tap(220, 165); // trigger a v6 checkpoint after migration
+  const migrated = await waitSave(page, s => s.version === 6 && s.data?.settings?.sound === false);
   const worn = migrated.data.data.equipped.weapon;
   const bag = migrated.data.data.bag.find(item => item.id === 'iron_sword');
   check('v4 equipment migrated in Web', worn?.refine === 2 && bag?.refine === 2 && Boolean(worn.uid) && Boolean(bag.uid) && worn.uid !== bag.uid);
   check('legacy level and currency retained', migrated.data.data.level === 3 && migrated.data.data.gold === 100);
   await page.screenshot({ path: path.join(out, 'migrated.png') });
+
+  await page.touchscreen.tap(620, 76); // close settings
+  await page.touchscreen.tap(785, 25); // bag
+  await page.touchscreen.tap(783, 98); // refine tab
+  await page.waitForTimeout(400);
+  await page.screenshot({ path: path.join(out, 'refine.png') });
+  await page.touchscreen.tap(810, 187); // first press arms the equipped sword
+  await page.waitForTimeout(300);
+  const armed = await saveRecord(page);
+  check('first refine press spends nothing', armed.data.data.equipped.weapon.refine === 2
+    && armed.data.data.bag.find(item => item.id === 'crystal')?.count === 2);
+  await page.touchscreen.tap(810, 187); // second press commits
+  const refined = await waitSave(page, s => s.data?.equipped?.weapon?.refine === 3);
+  check('second refine press saves the upgraded item and one crystal',
+    refined.data.data.bag.find(item => item.id === 'crystal')?.count === 1
+      && refined.data.data.equipped.weapon.uid === worn.uid);
+
+  // Reopen a genuine v5-shaped snapshot with the achievements already claimed.
+  const v5 = JSON.parse(JSON.stringify(refined.data));
+  v5.version = 5;
+  delete v5.data.appearance;
+  v5.data.collection = { kills: { slime: 1 }, claimed: ['first_slime', 'first_quest'] };
+  await page.goto(fixtureUrl, { waitUntil: 'load' });
+  await page.waitForTimeout(500);
+  await seedSave(page, on.key, v5);
+  await page.goto(url, { waitUntil: 'load', timeout: 60000 });
+  await loaded(page);
+  await page.touchscreen.tap(47, 242);
+  await page.touchscreen.tap(220, 165);
+  const migratedV5 = await waitSave(page, s => s.version === 6 && s.data?.settings?.sound === true);
+  check('v5 appearance migration preserves achievements', migratedV5.data.data.appearance?.outfit === ''
+    && migratedV5.data.data.collection.claimed.includes('first_quest'));
+  await page.touchscreen.tap(620, 76); // close settings
+  await page.touchscreen.tap(216, 242); // wardrobe
+  await page.touchscreen.tap(225, 138); // outfit preview
+  await page.touchscreen.tap(225, 209); // aura preview
+  await page.waitForTimeout(300);
+  await page.screenshot({ path: path.join(out, 'wardrobe.png') });
+  const preview = await saveRecord(page);
+  check('wardrobe preview does not alter saved appearance', preview.data.data.appearance.outfit === ''
+    && preview.data.data.appearance.aura === '');
+  await page.touchscreen.tap(150, 345); // apply both choices
+  const dressed = await waitSave(page, s => s.data?.appearance?.outfit === 'meadow_tunic'
+    && s.data?.appearance?.aura === 'meadow_ring');
+  check('wardrobe apply persists both unlocked choices', dressed.data.data.gold === 100);
+  await page.reload({ waitUntil: 'load', timeout: 60000 });
+  await loaded(page);
+  const restored = await saveRecord(page);
+  check('wardrobe choices survive Web reload', restored.data.data.appearance.outfit === 'meadow_tunic'
+    && restored.data.data.appearance.aura === 'meadow_ring');
+  await page.screenshot({ path: path.join(out, 'wardrobe-restored.png') });
   check('no browser errors or failed requests', errors.length === 0);
   await context.close();
 } catch (error) {

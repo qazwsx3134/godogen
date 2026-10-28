@@ -2,6 +2,8 @@
 
 狀態：**Planning Draft（文件與工作包草案）**；2026-10-26。首次交付：M3；優先層：Vertical Slice；相對複雜度：L（不是工期）。
 
+2026-10-28 已有單機原型切片與現行規格：[GDD](../../gdd/pet-care.md)、[TDD](../../../docs/architecture/systems/pet-care.md)、[QA](../../../production/qa/systems/pet-care.md)。D09 仍為暫定，真機與真人平衡尚未驗收。
+
 ## 玩家價值與責任
 
 寵物提供陪伴與雜物用途，形成可預期的養成目標。
