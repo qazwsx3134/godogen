@@ -10,6 +10,13 @@
 - **接手入口**：`prototypes/seal-meadow/PROGRESS.md`（詳細記錄與指令）、`README.md`、`REVIEW.md`、`production/session-state/active.md`、`production/roadmap.md`；先用 `git status --short -- Progress.md prototypes/seal-meadow` 檢查並保留既有未提交修改。
 
 ---
+## 全員推王 · hero-horde-idle（2026-10-28）
+
+- **目前工作**：`prototypes/hero-horde-idle`，分支 `master`。第三～六輪回饋（作者的 `REVIEW.md` 與後續對話）已 commit 到 master（未 push；最新提交以 `git log -1` 查核）。詳細交接在 [docs/PROGRESS.md](prototypes/hero-horde-idle/docs/PROGRESS.md)。
+- **已完成**：刀劍神域風介面（選單白色＋戰鬥 HUD 深色玻璃；規範 `docs/SAO_UI_SPEC.md`、元件庫 `scenes/ui_kit/`）、樓層與樓層王、天賦 18 節點、英雄詳情改版（換裝、升級、數值明細視窗）、三級經驗藥水、英雄改人類／獸人／精靈、道具圖示去背、版面留白、推王英雄被壓扁的修正、士氣改成出手頻率（被打會扣）。
+- **驗證**：`test_progression／home／main／march／report／skills／recruit／balance／stages` PASSED（2026-10-28）。
+- **等作者**：生精靈／獸人英雄圖（`docs/race-art-prompts.md`）與背景圖層（`docs/bg-layer-prompts.md`）；手機實機試玩。
+- **工作區**：debt-commission 的未提交修改保留未動，沒有夾帶進 hero-horde 的 commit。
 
 ## 萬事屋吐槽 ADV · debt-commission（2026-10-27）
 

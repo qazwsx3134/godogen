@@ -37,16 +37,14 @@ func refresh() -> void:
 	if names.is_empty():
 		names = Names.load_names()
 	var stage: int = progress.march_stage
-	%MarchStatus.text = "行軍中：%s %s　·　下一個關卡王 %s %s" % [Stages.label(stage), Stages.REGIONS[Stages.region(stage)].name,
-		Stages.label(progress.next_stage()), Stages.boss_name(progress.next_stage())]
+	%MarchStatus.text = "行軍中：%s %s" % [Stages.label(stage), Stages.REGIONS[Stages.region(stage)].name]
 	var leader: int = progress.march[0]
 	var c: int = Progression.base_class(leader)
 	var f: int = Heroes.form(leader)
 	%LeaderPortrait.texture = Portraits.hero_full(f, c)
 	%LeaderName.text = "%s　%s%s　Lv.%d" % [Names.hero_name(names, leader), Heroes.FORM_NAMES[f], PushSim.CLASS_NAMES[c],
 		progress.hero_level[leader]]
-	%SquadLine.text = "行軍小隊 %d／%d　·　擊倒 %d　·　每次擊倒 %d 金幣" % [progress.march.size(), progress.slots(),
-		progress.march_kills, progress.kill_gold(stage)]
+	%SquadLine.text = "行軍小隊 %d／%d　·　擊倒 %d" % [progress.march.size(), progress.slots(), progress.march_kills]
 	for k: int in %SquadRow.get_child_count():
 		var card: Control = %SquadRow.get_child(k)
 		card.visible = k < progress.slots()

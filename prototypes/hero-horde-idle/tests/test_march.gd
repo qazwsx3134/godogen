@@ -59,7 +59,7 @@ func _init() -> void:
 
 	# Passives.
 	var monster: Dictionary = units[1].duplicate()
-	monster.lifesteal = Heroes.MONSTER_LIFESTEAL
+	monster.lifesteal = Heroes.BEAST_LIFESTEAL
 	var plain: Dictionary = units[1].duplicate()
 	plain.lifesteal = 0.0
 	var a := MarchSim.new(1, [monster], 1)
@@ -69,7 +69,7 @@ func _init() -> void:
 		b.step(0.05)
 	_expect(a.hp[0] > b.hp[0], "a monster's lifesteal keeps it healthier (%.0f vs %.0f HP)" % [a.hp[0], b.hp[0]])
 	var dream: Dictionary = units[0].duplicate()
-	dream.regen = Heroes.DREAM_REGEN
+	dream.regen = Heroes.ELF_REGEN
 	var c := MarchSim.new(1, [dream], 1)
 	c.hp[0] = c.max_hp[0] * 0.5
 	c.step(2.0)

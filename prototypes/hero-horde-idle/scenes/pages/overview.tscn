@@ -5,8 +5,14 @@
 [ext_resource type="Texture2D" path="res://assets/reference/equipment.png" id="2_6x5rv"]
 [ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Bold.otf" id="3_1tcn0"]
 [ext_resource type="Texture2D" path="res://assets/reference/idel.png" id="4_4s711"]
+[ext_resource type="StyleBox" path="res://ui/sao_window.tres" id="4_eosu5"]
+[ext_resource type="StyleBox" path="res://ui/sao_inset.tres" id="5_etb6y"]
 [ext_resource type="PackedScene" path="res://scenes/components/equipment_bag_card.tscn" id="6_4s711"]
-[ext_resource type="StyleBox" path="res://ui/blue.tres" id="7_ka4at"]
+[ext_resource type="StyleBox" path="res://ui/sao_titlebar.tres" id="6_etb6y"]
+[ext_resource type="StyleBox" path="res://ui/sao_section.tres" id="7_q2ooh"]
+[ext_resource type="StyleBox" path="res://ui/sao_button.tres" id="10_qe4t3"]
+[ext_resource type="StyleBox" path="res://ui/sao_button_hover.tres" id="11_2x0nf"]
+[ext_resource type="StyleBox" path="res://ui/sao_disabled.tres" id="12_6rfy6"]
 
 [sub_resource type="Theme" id="Theme_1tcn0"]
 default_font = ExtResource("1_mf081")
@@ -62,45 +68,18 @@ atlas = ExtResource("2_6x5rv")
 region = Rect2(0, 470, 941, 55)
 filter_clip = true
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_3vn3e"]
-atlas = ExtResource("2_6x5rv")
-region = Rect2(8, 527, 925, 994)
-filter_clip = true
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5td6a"]
-texture = SubResource("AtlasTexture_3vn3e")
-texture_margin_left = 18.0
-texture_margin_top = 18.0
-texture_margin_right = 18.0
-texture_margin_bottom = 18.0
-draw_center = false
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_njdbk"]
-bg_color = Color(0.91764706, 0.8352941, 0.7411765, 1)
-border_color = Color(1, 1, 1, 0)
-corner_radius_top_left = 7
-corner_radius_top_right = 7
-corner_radius_bottom_right = 7
-corner_radius_bottom_left = 7
-corner_detail = 2
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wnl7x"]
-bg_color = Color(0.96862745, 0.9098039, 0.8352941, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.8, 0.7058824, 0.6039216, 1)
-corner_radius_top_left = 7
-corner_radius_top_right = 7
-corner_radius_bottom_right = 7
-corner_radius_bottom_left = 7
-corner_detail = 2
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_1p1q2"]
 atlas = ExtResource("4_4s711")
 region = Rect2(19, 10, 97, 90)
 filter_clip = true
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ybx4v"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5gu1g"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5td6a"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_njdbk"]
 
 [node name="Overview" type="Control" unique_id=1932376761]
 custom_minimum_size = Vector2(941, 1672)
@@ -111,6 +90,8 @@ theme = SubResource("Theme_1tcn0")
 script = ExtResource("2_1tcn0")
 metadata/page_id = "overview"
 metadata/fusion_readable = true
+metadata/sao_style = true
+metadata/ux_spacing = true
 
 [node name="DistantLandscape" type="TextureRect" parent="." unique_id=1888316906]
 texture_filter = 1
@@ -230,9 +211,10 @@ offset_top = 525.0
 offset_right = 933.0
 offset_bottom = 1520.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_5td6a")
+theme_override_styles/panel = ExtResource("4_eosu5")
 
 [node name="PaperFill" type="Panel" parent="ContentPanel" unique_id=1472637538]
+visible = false
 show_behind_parent = true
 layout_mode = 0
 anchor_right = 1.0
@@ -242,7 +224,16 @@ offset_top = 18.0
 offset_right = -18.0
 offset_bottom = -18.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_njdbk")
+theme_override_styles/panel = ExtResource("5_etb6y")
+
+[node name="TitleBar" type="Panel" parent="." unique_id=1933688361]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 527.0
+offset_right = 931.0
+offset_bottom = 607.0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("6_etb6y")
 
 [node name="PageTitle" type="Label" parent="." unique_id=1830695865]
 layout_mode = 0
@@ -250,8 +241,8 @@ offset_left = 31.0
 offset_top = 538.0
 offset_right = 506.0
 offset_bottom = 604.0
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_outline_color = Color(0.3, 0.31, 0.29, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("3_1tcn0")
 theme_override_font_sizes/font_size = 42
@@ -263,14 +254,14 @@ text_overrun_behavior = 3
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 34.0
-offset_top = 601.0
+offset_top = 618.0
 offset_right = 907.0
-offset_bottom = 643.0
-theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
-theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+offset_bottom = 658.0
+theme_override_colors/font_color = Color(0.52, 0.53, 0.5, 1)
+theme_override_colors/font_outline_color = Color(0.52, 0.53, 0.5, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("3_1tcn0")
-theme_override_font_sizes/font_size = 29
+theme_override_font_sizes/font_size = 26
 text = "遠征進行中"
 vertical_alignment = 1
 text_overrun_behavior = 3
@@ -278,20 +269,20 @@ text_overrun_behavior = 3
 [node name="HeroSummaryFrame" type="Panel" parent="." unique_id=1281270159]
 layout_mode = 0
 offset_left = 27.0
-offset_top = 650.0
+offset_top = 668.0
 offset_right = 913.0
-offset_bottom = 950.0
+offset_bottom = 958.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_wnl7x")
+theme_override_styles/panel = ExtResource("7_q2ooh")
 
 [node name="LeaderPortrait" type="TextureRect" parent="." unique_id=765174406]
 unique_name_in_owner = true
 texture_filter = 1
 layout_mode = 0
 offset_left = 44.0
-offset_top = 664.0
-offset_right = 164.0
-offset_bottom = 784.0
+offset_top = 686.0
+offset_right = 154.0
+offset_bottom = 796.0
 mouse_filter = 2
 texture = SubResource("AtlasTexture_1p1q2")
 expand_mode = 1
@@ -300,12 +291,12 @@ stretch_mode = 5
 [node name="LeaderName" type="Label" parent="." unique_id=371199480]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 180.0
-offset_top = 664.0
+offset_left = 174.0
+offset_top = 684.0
 offset_right = 895.0
-offset_bottom = 708.0
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+offset_bottom = 728.0
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_outline_color = Color(0.3, 0.31, 0.29, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("3_1tcn0")
 theme_override_font_sizes/font_size = 32
@@ -316,14 +307,14 @@ text_overrun_behavior = 3
 [node name="SquadLine" type="Label" parent="." unique_id=1710707022]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 180.0
-offset_top = 714.0
+offset_left = 174.0
+offset_top = 732.0
 offset_right = 895.0
-offset_bottom = 784.0
-theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
-theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+offset_bottom = 772.0
+theme_override_colors/font_color = Color(0.52, 0.53, 0.5, 1)
+theme_override_colors/font_outline_color = Color(0.52, 0.53, 0.5, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 26
 text = "擊倒 0 隻　·　金幣 0"
 vertical_alignment = 1
 autowrap_mode = 3
@@ -331,20 +322,20 @@ autowrap_mode = 3
 [node name="LogFrame" type="Panel" parent="." unique_id=1458367188]
 layout_mode = 0
 offset_left = 27.0
-offset_top = 1226.0
+offset_top = 1244.0
 offset_right = 913.0
 offset_bottom = 1506.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_wnl7x")
+theme_override_styles/panel = ExtResource("7_q2ooh")
 
 [node name="LogTitle" type="Label" parent="." unique_id=530493529]
 layout_mode = 0
 offset_left = 46.0
-offset_top = 1234.0
+offset_top = 1254.0
 offset_right = 884.0
-offset_bottom = 1276.0
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+offset_bottom = 1296.0
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_outline_color = Color(0.3, 0.31, 0.29, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("3_1tcn0")
 theme_override_font_sizes/font_size = 31
@@ -356,7 +347,7 @@ text_overrun_behavior = 3
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 44.0
-offset_top = 1280.0
+offset_top = 1302.0
 offset_right = 889.0
 offset_bottom = 1494.0
 horizontal_scroll_mode = 0
@@ -365,10 +356,10 @@ horizontal_scroll_mode = 0
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
-theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+theme_override_colors/font_color = Color(0.52, 0.53, 0.5, 1)
+theme_override_colors/font_outline_color = Color(0.52, 0.53, 0.5, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 29
+theme_override_font_sizes/font_size = 24
 text = "小隊出發了。"
 vertical_alignment = 1
 autowrap_mode = 3
@@ -377,9 +368,9 @@ autowrap_mode = 3
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 44.0
-offset_top = 796.0
+offset_top = 814.0
 offset_right = 899.0
-offset_bottom = 872.0
+offset_bottom = 890.0
 theme_override_constants/separation = 14
 
 [node name="SquadCard0" parent="SquadRow" unique_id=428669624 instance=ExtResource("6_4s711")]
@@ -401,13 +392,13 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 44.0
-offset_top = 884.0
+offset_top = 902.0
 offset_right = 899.0
-offset_bottom = 944.0
-theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
-theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+offset_bottom = 946.0
+theme_override_colors/font_color = Color(0.52, 0.53, 0.5, 1)
+theme_override_colors/font_outline_color = Color(0.52, 0.53, 0.5, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 26
 text = "擊倒 0 隻　·　金幣 0"
 vertical_alignment = 1
 autowrap_mode = 3
@@ -415,20 +406,20 @@ autowrap_mode = 3
 [node name="TodoFrame" type="Panel" parent="." unique_id=1794719569]
 layout_mode = 0
 offset_left = 27.0
-offset_top = 962.0
+offset_top = 978.0
 offset_right = 913.0
-offset_bottom = 1214.0
+offset_bottom = 1226.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_wnl7x")
+theme_override_styles/panel = ExtResource("7_q2ooh")
 
 [node name="TodoTitle" type="Label" parent="." unique_id=972969278]
 layout_mode = 0
 offset_left = 46.0
-offset_top = 968.0
+offset_top = 990.0
 offset_right = 884.0
-offset_bottom = 1010.0
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+offset_bottom = 1032.0
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_outline_color = Color(0.3, 0.31, 0.29, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("3_1tcn0")
 theme_override_font_sizes/font_size = 31
@@ -440,67 +431,79 @@ text_overrun_behavior = 3
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 44.0
-offset_top = 1014.0
+offset_top = 1040.0
 offset_right = 896.0
-offset_bottom = 1206.0
-theme_override_constants/separation = 8
+offset_bottom = 1216.0
+theme_override_constants/separation = 14
 
 [node name="Todo0" type="Button" parent="TodoList" unique_id=1601752764]
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
-theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_focus_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.57, 0.6, 1)
 theme_override_fonts/font = ExtResource("3_1tcn0")
-theme_override_font_sizes/font_size = 30
-theme_override_styles/normal = ExtResource("7_ka4at")
-theme_override_styles/pressed = ExtResource("7_ka4at")
-theme_override_styles/hover = ExtResource("7_ka4at")
-theme_override_styles/disabled = ExtResource("7_ka4at")
-theme_override_styles/focus = ExtResource("7_ka4at")
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = ExtResource("10_qe4t3")
+theme_override_styles/pressed = ExtResource("11_2x0nf")
+theme_override_styles/hover = ExtResource("11_2x0nf")
+theme_override_styles/disabled = ExtResource("12_6rfy6")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ybx4v")
 alignment = 0
 
 [node name="Todo1" type="Button" parent="TodoList" unique_id=1125894569]
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
-theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_focus_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.57, 0.6, 1)
 theme_override_fonts/font = ExtResource("3_1tcn0")
-theme_override_font_sizes/font_size = 30
-theme_override_styles/normal = ExtResource("7_ka4at")
-theme_override_styles/pressed = ExtResource("7_ka4at")
-theme_override_styles/hover = ExtResource("7_ka4at")
-theme_override_styles/disabled = ExtResource("7_ka4at")
-theme_override_styles/focus = ExtResource("7_ka4at")
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = ExtResource("10_qe4t3")
+theme_override_styles/pressed = ExtResource("11_2x0nf")
+theme_override_styles/hover = ExtResource("11_2x0nf")
+theme_override_styles/disabled = ExtResource("12_6rfy6")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_5gu1g")
 alignment = 0
 
 [node name="Todo2" type="Button" parent="TodoList" unique_id=983382633]
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
-theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_focus_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.57, 0.6, 1)
 theme_override_fonts/font = ExtResource("3_1tcn0")
-theme_override_font_sizes/font_size = 30
-theme_override_styles/normal = ExtResource("7_ka4at")
-theme_override_styles/pressed = ExtResource("7_ka4at")
-theme_override_styles/hover = ExtResource("7_ka4at")
-theme_override_styles/disabled = ExtResource("7_ka4at")
-theme_override_styles/focus = ExtResource("7_ka4at")
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = ExtResource("10_qe4t3")
+theme_override_styles/pressed = ExtResource("11_2x0nf")
+theme_override_styles/hover = ExtResource("11_2x0nf")
+theme_override_styles/disabled = ExtResource("12_6rfy6")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_5td6a")
 alignment = 0
 
 [node name="Todo3" type="Button" parent="TodoList" unique_id=11513091]
 custom_minimum_size = Vector2(0, 42)
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
-theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_focus_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.57, 0.6, 1)
 theme_override_fonts/font = ExtResource("3_1tcn0")
-theme_override_font_sizes/font_size = 30
-theme_override_styles/normal = ExtResource("7_ka4at")
-theme_override_styles/pressed = ExtResource("7_ka4at")
-theme_override_styles/hover = ExtResource("7_ka4at")
-theme_override_styles/disabled = ExtResource("7_ka4at")
-theme_override_styles/focus = ExtResource("7_ka4at")
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = ExtResource("10_qe4t3")
+theme_override_styles/pressed = ExtResource("11_2x0nf")
+theme_override_styles/hover = ExtResource("11_2x0nf")
+theme_override_styles/disabled = ExtResource("12_6rfy6")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_njdbk")
 alignment = 0

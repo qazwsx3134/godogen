@@ -80,8 +80,14 @@ const DURATION := 150.0
 const MUSTER_TIME := 6.0
 const BOSS_HP := 67000.0
 const PHASE2_AT := 0.5
+## 士氣 counts how often the heroes strike and how often the boss lands, not how hard: every hero attacking (in reach,
+## not walking, not a healer) adds MORALE_PER_ATTACKER a second; every hero the boss hurts takes MORALE_PER_HURT away,
+## one he fells MORALE_PER_FALL more. So the bar fills at the same pace however strong the army grows (about 25 s at
+## the start with ~70 attackers), and dodging the big moves keeps it.
 const MORALE_MAX := 100.0
-const MORALE_PER_DAMAGE := 0.01
+const MORALE_PER_ATTACKER := 0.08
+const MORALE_PER_HURT := 1.0
+const MORALE_PER_FALL := 3.0
 const VOLLEY_SECONDS := 8.0
 
 ## 普通攻擊: no warning; the hero nearest the boss and whoever stands within AUTO_SPLASH of them, shields first.
@@ -209,7 +215,7 @@ var sig_casts := PackedInt32Array()
 ## How strong each hero's 招牌技 is (1 + SIG_PER_LEVEL per ascension): bursts and heals scale with it.
 var sig_mult := PackedFloat32Array()
 ## Each hero's 形態 (domain/heroes.gd; -1 = none, the balance tests' reference roster) and what it brings: the share
-## of dealt damage healed back (怪獸), regen per second as a share of max HP and healing taken (夢靈).
+## of dealt damage healed back (獸人), regen per second as a share of max HP and healing taken (精靈).
 var form := PackedInt32Array()
 var lifesteal := PackedFloat32Array()
 var form_regen := PackedFloat32Array()
@@ -306,9 +312,9 @@ func _init(seed_value: int = 1, roster: Dictionary = {}, stage: Dictionary = {})
 			sig_mult[i] = 1.0 + SIG_PER_LEVEL * roster.sig_level[i]
 		var f: int = roster.form[i] if roster.has("form") else -1
 		form.append(f)
-		lifesteal.append(Heroes.MONSTER_LIFESTEAL if f == Heroes.MONSTER else 0.0)
-		form_regen.append(Heroes.DREAM_REGEN if f == Heroes.DREAM else 0.0)
-		heal_taken.append(Heroes.DREAM_HEAL_TAKEN if f == Heroes.DREAM else 1.0)
+		lifesteal.append(Heroes.BEAST_LIFESTEAL if f == Heroes.BEAST else 0.0)
+		form_regen.append(Heroes.ELF_REGEN if f == Heroes.ELF else 0.0)
+		heal_taken.append(Heroes.ELF_HEAL_TAKEN if f == Heroes.ELF else 1.0)
 	cd_mult = roster.get("cd_mult", 1.0)
 	hp = max_hp.duplicate()
 	skill_cd.resize(n)
@@ -540,7 +546,7 @@ func volley() -> bool:
 			stat_dealt[i] += atk[i] * VOLLEY_SECONDS * damage_mult()
 	amount *= VOLLEY_SECONDS * damage_mult()
 	event.emit(&"volley", amount)
-	_deal(amount, false)
+	_deal(amount)
 	return true
 
 
@@ -609,6 +615,7 @@ func _fight(dt: float) -> void:
 		return
 	var melee_sum: float = 0.0
 	var ranged_sum: float = 0.0
+	var attackers: int = 0
 	var mult: float = damage_mult()
 	var aimed: bool = aim >= 0
 	for i: int in cls.size():
@@ -626,15 +633,17 @@ func _fight(dt: float) -> void:
 			d *= a.ranged
 			ranged_sum += d
 			stat_dealt[i] += d * dt * (PART_BODY_SHARE if aimed else 1.0)
+		attackers += 1
 		if lifesteal[i] > 0.0:
 			hp[i] = minf(hp[i] + d * dt * lifesteal[i], max_hp[i])
+	morale = minf(morale + attackers * MORALE_PER_ATTACKER * dt, MORALE_MAX)
 	# Melee wear down the legs (the arm while the club is down); aimed ranged shots wear down their part.
 	_wear(_melee_part(), melee_sum * dt)
 	if aimed:
 		_wear(aim, ranged_sum * dt)
 		ranged_sum *= PART_BODY_SHARE
 	dps = melee_sum + ranged_sum
-	_deal(dps * dt, true)
+	_deal(dps * dt)
 	if phase == Phase.FIGHT and (t >= DURATION or living() == 0):
 		phase = Phase.LOST
 		event.emit(&"lost", hp_ratio())
@@ -756,7 +765,7 @@ func _auto_skills() -> void:
 		cast_at[i] = t
 		event.emit(&"skill", float(i))
 	if burst > 0.0:
-		_deal(burst, true)
+		_deal(burst)
 
 
 ## Casts every ready 招牌技 whose moment has come (see Sig). Called each fight step, after the regular skills.
@@ -777,7 +786,7 @@ func _signatures() -> void:
 				var b: float = atk[i] * CLEAVE_BURST * sig_mult[i] * damage_mult()
 				_wear(_melee_part(), b)
 				stat_dealt[i] += b
-				_deal(b, true)
+				_deal(b)
 			Sig.GALE:
 				if not in_reach(pos[i]):
 					continue
@@ -792,7 +801,7 @@ func _signatures() -> void:
 					_wear(aim, b)
 					b *= PART_BODY_SHARE
 				stat_dealt[i] += b
-				_deal(b, true)
+				_deal(b)
 			Sig.DAWN:
 				var fallen: Array[int] = []
 				for j: int in cls.size():
@@ -899,7 +908,9 @@ func _hurt(i: int, amount: float) -> int:
 	var d: float = amount * _aura[s].taken * (GUARD_MULT if guard_t[s] > 0.0 else 1.0)
 	stat_taken[i] += minf(d, hp[i])
 	hp[i] = maxf(hp[i] - d, 0.0)
+	morale = maxf(morale - MORALE_PER_HURT, 0.0)
 	if hp[i] == 0.0:
+		morale = maxf(morale - MORALE_PER_FALL, 0.0)
 		fallen_total += 1
 		death_cause[i] = _cause
 		death_squad[i] = s
@@ -963,11 +974,9 @@ func _lowest_near(p: Vector2) -> float:
 	return low
 
 
-func _deal(amount: float, earns_morale: bool) -> void:
+func _deal(amount: float) -> void:
 	boss_hp = maxf(boss_hp - amount, 0.0)
 	damage_dealt += amount
-	if earns_morale:
-		morale = minf(morale + amount * MORALE_PER_DAMAGE, MORALE_MAX)
 	if boss_hp == 0.0 and phase == Phase.FIGHT:
 		phase = Phase.WON
 		event.emit(&"won", time_left())

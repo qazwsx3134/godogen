@@ -60,6 +60,13 @@ const KILL_GOLD := 8.5
 const KILL_EXP := 1.0
 const KILL_SHARD_CHANCE := 0.0003
 const KILL_STONE_CHANCE := 0.003
+## 經驗藥水, three sizes: each gives one hero `exp` EXP (levelling up to their cap), so heroes who never march grow too.
+## A march kill drops each size by its `chance` (an elite x3); a fallen 樓層王 gives WIN_POTIONS, a first clear also
+## FIRST_POTIONS.
+const POTIONS := [{"name": "小經驗藥水", "exp": 500, "chance": 0.004}, {"name": "經驗藥水", "exp": 3000, "chance": 0.0005},
+	{"name": "大經驗藥水", "exp": 15000, "chance": 0.0}]
+const WIN_POTIONS := [0, 2, 0]
+const FIRST_POTIONS := [0, 0, 1]
 const KILL_LOOT_CHANCE := 0.002
 const MEASURE_SECONDS := 90.0
 const OFFLINE_CAP_HOURS := 8
@@ -79,6 +86,8 @@ const RECENT_SIZE := 5
 
 var gold: int = 0
 var shards: int = 0
+## 經驗藥水 held, by size (POTIONS order).
+var potions := PackedInt32Array([0, 0, 0])
 var stones: int = 0
 var talent := PackedInt32Array()
 ## The 職業武庫's weapon per class and each hero's 專屬飾品: a piece (Items.make) or {} for an empty slot.
@@ -122,12 +131,15 @@ var _rng := RandomNumberGenerator.new()
 ## Item drops have another, so loot never shifts the shard drops; pulls a third.
 var _loot := RandomNumberGenerator.new()
 var _pull := RandomNumberGenerator.new()
+## 經驗藥水 drops have their own stream too (added later: the other streams stay as they were).
+var _potion := RandomNumberGenerator.new()
 
 
 func _init(seed_value: int = 1) -> void:
 	_rng.seed = seed_value
 	_loot.seed = seed_value + 7919
 	_pull.seed = seed_value + 15485863
+	_potion.seed = seed_value + 32452843
 	talent.resize(Talents.count())
 	for c: int in PushSim.ROSTER.size():
 		armory.append({})
@@ -186,12 +198,48 @@ func base_power(i: int) -> float:
 
 ## Hero i's attack against the push's reference (1.0 = the balance tests' roster).
 func atk_mult(i: int) -> float:
-	return base_power(i) * pow(Talents.STEP, talent[Talents.SWORD]) * (1.0 + relic("atk")) \
+	return base_power(i) * talent_atk() * (1.0 + relic("atk")) \
 		* (1.0 + affix_of(i, "atk")) * (Heroes.HUMAN_DAMAGE if Heroes.form(i) == Heroes.HUMAN else 1.0)
 
 
 func hp_mult(i: int) -> float:
-	return base_power(i) * pow(Talents.STEP, talent[Talents.STAMINA]) * (1.0 + relic("hp")) * (1.0 + affix_of(i, "hp"))
+	return base_power(i) * talent_hp() * (1.0 + relic("hp")) * (1.0 + affix_of(i, "hp"))
+
+
+## The talents' army-wide attack (劍術, 劍聖) and HP (耐力, 不屈).
+func talent_atk() -> float:
+	return pow(Talents.STEP, talent[Talents.SWORD]) * pow(Talents.MASTER_STEP, talent[Talents.MASTER])
+
+
+func talent_hp() -> float:
+	return pow(Talents.STEP, talent[Talents.STAMINA]) * pow(Talents.MASTER_STEP, talent[Talents.UNYIELDING])
+
+
+## The highest hero level (天賦 nodes deeper in the tree wait for it).
+func top_level() -> int:
+	var top: int = 1
+	for lv: int in hero_level:
+		top = maxi(top, lv)
+	return top
+
+
+## What makes hero i's attack and HP (the 英雄 page's 數值明細): [{name, atk, hp}], one multiplier pair per source;
+## START_POWER times every atk (hp) is atk_mult(i) (hp_mult(i)).
+func stat_factors(i: int) -> Array:
+	var c: int = base_class(i)
+	var spec: float = Talents.spec_mult(PushSim.CLASS_SQUAD[c], talent)
+	return [
+		{"name": "等級", "atk": pow(HERO_STEP, hero_level[i] - 1), "hp": pow(HERO_STEP, hero_level[i] - 1)},
+		{"name": "職業武庫", "atk": weapon_mult(c), "hp": weapon_mult(c)},
+		{"name": "飾品", "atk": charm_mult(i), "hp": charm_mult(i)},
+		{"name": "詞綴", "atk": 1.0 + affix_of(i, "atk"), "hp": 1.0 + affix_of(i, "hp")},
+		{"name": "隊長", "atk": 1.0 + captain_buff(c), "hp": 1.0 + captain_buff(c)},
+		{"name": "圖鑑", "atk": codex_mult(), "hp": codex_mult()},
+		{"name": "天賦", "atk": talent_atk() * spec, "hp": talent_hp() * spec},
+		{"name": "遺物", "atk": 1.0 + relic("atk"), "hp": 1.0 + relic("hp")},
+		{"name": Heroes.PASSIVE_NAMES[Heroes.form(i)], "atk": Heroes.HUMAN_DAMAGE if Heroes.form(i) == Heroes.HUMAN else 1.0,
+			"hp": 1.0},
+	]
 
 
 ## How strong hero i is, in one number (attack and HP together).
@@ -205,14 +253,15 @@ func captain_buff(c: int) -> float:
 	for k: int in captains:
 		if PushSim.CLASS_SQUAD[base_class(k)] == PushSim.CLASS_SQUAD[c]:
 			total += CAPTAIN_BUFF[rarity(k)]
-	return total
+	return total * (1.0 + Talents.LEAD_STEP * talent[Talents.LEAD])
 
 
 ## The 職業武庫's boost for class c: its weapon, then its 強化 level (1 without a weapon).
 func weapon_mult(c: int) -> float:
 	if armory[c].is_empty():
 		return 1.0
-	return Items.WEAPON_MULT[Items.rarity(armory[c].id)] * pow(Items.ARMORY_STEP, armory_level[c] - 1)
+	return Items.WEAPON_MULT[Items.rarity(armory[c].id)] * pow(Items.ARMORY_STEP, armory_level[c] - 1) \
+		* (1.0 + Talents.FORGE_STEP * talent[Talents.FORGE])
 
 
 func weapon_rarity(c: int) -> int:
@@ -220,7 +269,8 @@ func weapon_rarity(c: int) -> int:
 
 
 func charm_mult(i: int) -> float:
-	return 1.0 if charm[i].is_empty() else Items.CHARM_MULT[Items.rarity(charm[i].id)]
+	return 1.0 if charm[i].is_empty() else Items.CHARM_MULT[Items.rarity(charm[i].id)] \
+		* (1.0 + Talents.RESONANCE_STEP * talent[Talents.RESONANCE])
 
 
 ## The affix `key` reaching hero i: their class's weapon and their own charm.
@@ -251,7 +301,7 @@ func codex_mult() -> float:
 
 ## 訓練 速度: skill cooldowns x this (push and march).
 func cooldown_mult() -> float:
-	return 1.0 - Talents.SPEED_CD * talent[Talents.SPEED]
+	return 1.0 - Talents.SPEED_CD * talent[Talents.SPEED] - Talents.SWIFT_CD * talent[Talents.SWIFT]
 
 
 ## What PushSim.new(seed, roster) needs.
@@ -274,7 +324,12 @@ func talent_cost(k: int) -> int:
 
 
 func talent_open(k: int) -> bool:
-	return Talents.open(k, talent)
+	return Talents.open(k, talent, cleared, top_level())
+
+
+## What talent row k still waits for ("" when open).
+func talent_need(k: int) -> String:
+	return Talents.need_text(k, talent, cleared, top_level())
 
 
 ## Buys one level of talent row k. 結伴 fills the new march slot with the strongest hero not marching.
@@ -350,9 +405,9 @@ func march_units() -> Array:
 			heal = MarchSim.HEAL * PushSim.RARITY_MULT[r] * (PushSim.PASSIVE_MULT if r >= PushSim.R else 1.0) * atk_mult(i)
 		out.append({"hero": i, "cls": c, "rarity": r, "form": f,
 			"hp": base.x * hp_mult(i) * (1.0 + b.hp), "atk": base.y * atk_mult(i) * (1.0 + b.atk), "heal": heal,
-			"lifesteal": Heroes.MONSTER_LIFESTEAL if f == Heroes.MONSTER else 0.0,
-			"regen": rest + (Heroes.DREAM_REGEN if f == Heroes.DREAM else 0.0),
-			"heal_taken": Heroes.DREAM_HEAL_TAKEN if f == Heroes.DREAM else 1.0, "guard": b.guard})
+			"lifesteal": Heroes.BEAST_LIFESTEAL if f == Heroes.BEAST else 0.0,
+			"regen": rest + (Heroes.ELF_REGEN if f == Heroes.ELF else 0.0),
+			"heal_taken": Heroes.ELF_HEAL_TAKEN if f == Heroes.ELF else 1.0, "guard": b.guard})
 	return out
 
 
@@ -387,23 +442,36 @@ func march_lost() -> void:
 	march_stage = maxi(1, march_stage - 1)
 
 
+## March EXP and item-drop boosts: the EXP relic, 天賦 學識 and 尋寶.
+func exp_mult() -> float:
+	return 1.0 + relic("exp") + Talents.STUDY_EXP * talent[Talents.STUDY]
+
+
+func loot_mult() -> float:
+	return 1.0 + Talents.TREASURE_LOOT * talent[Talents.TREASURE]
+
+
 ## A march kill: gold, EXP for the squad, and by chance a shard, a 強化石 or an item.
 ## Returns {gold, exp, levels: {hero: levels gained}, shards, stones, items, salvaged}.
 func march_kill(stage_n: int, elite: bool = false) -> Dictionary:
 	var mult: float = 3.0 if elite else 1.0
-	var got := {"gold": roundi(kill_gold(stage_n) * mult), "exp": 0, "levels": {}, "shards": 0, "stones": 0,
+	var got := {"gold": roundi(kill_gold(stage_n) * mult), "exp": 0, "levels": {}, "shards": 0, "stones": 0, "potions": [0, 0, 0],
 		"items": [], "salvaged": 0}
 	gold += got.gold
 	march_kills += 1
-	got.exp = roundi(KILL_EXP * mult * (1.0 + relic("exp")))
+	got.exp = roundi(KILL_EXP * mult * exp_mult())
 	got.levels = _give_exp(got.exp)
 	if _rng.randf() < KILL_SHARD_CHANCE * mult:
 		shards += 1
 		got.shards = 1
+	for k: int in POTIONS.size():
+		if _potion.randf() < POTIONS[k].chance * mult:
+			potions[k] += 1
+			got.potions[k] += 1
 	if _loot.randf() < KILL_STONE_CHANCE * mult:
 		stones += 1
 		got.stones = 1
-	if _loot.randf() < KILL_LOOT_CHANCE * mult:
+	if _loot.randf() < KILL_LOOT_CHANCE * mult * loot_mult():
 		_drop(got, Stages.region(stage_n), 0)
 	return got
 
@@ -412,16 +480,22 @@ func march_kill(stage_n: int, elite: bool = false) -> Dictionary:
 func _give_exp(amount: int) -> Dictionary:
 	var levels := {}
 	for i: int in march:
-		var before: int = hero_level[i]
-		hero_exp[i] += amount
-		while hero_level[i] < hero_cap(i) and hero_exp[i] >= EXP_PER_LEVEL * hero_level[i]:
-			hero_exp[i] -= EXP_PER_LEVEL * hero_level[i]
-			hero_level[i] += 1
-		if hero_level[i] >= hero_cap(i):
-			hero_exp[i] = 0
-		if hero_level[i] > before:
-			levels[i] = hero_level[i] - before
+		var gained: int = _hero_exp(i, amount)
+		if gained > 0:
+			levels[i] = gained
 	return levels
+
+
+## EXP to hero i, levelling up to their cap (EXP past the cap is lost). Returns the levels gained.
+func _hero_exp(i: int, amount: int) -> int:
+	var before: int = hero_level[i]
+	hero_exp[i] += amount
+	while hero_level[i] < hero_cap(i) and hero_exp[i] >= EXP_PER_LEVEL * hero_level[i]:
+		hero_exp[i] -= EXP_PER_LEVEL * hero_level[i]
+		hero_level[i] += 1
+	if hero_level[i] >= hero_cap(i):
+		hero_exp[i] = 0
+	return hero_level[i] - before
 
 
 ## The march's pace now: plays the squad at march_stage (one stage lower each time it falls, which also moves the
@@ -437,7 +511,7 @@ func measure_march() -> Dictionary:
 
 
 func offline_cap_hours() -> int:
-	return OFFLINE_CAP_HOURS + Talents.REST_HOURS * talent[Talents.REST]
+	return OFFLINE_CAP_HOURS + Talents.REST_HOURS * talent[Talents.REST] + Talents.LONG_MARCH_HOURS * talent[Talents.LONG_MARCH]
 
 
 ## Seconds away banked at `now` (unix seconds), at most the cap. A clock that went back restarts the count.
@@ -458,7 +532,7 @@ func claim_offline(now: int) -> Dictionary:
 	var seconds: int = offline_seconds(now)
 	march_since = now
 	if seconds < OFFLINE_MIN:
-		return {"seconds": 0, "stage": march_stage, "kills": 0, "gold": 0, "shards": 0, "stones": 0, "items": [],
+		return {"seconds": 0, "stage": march_stage, "kills": 0, "gold": 0, "shards": 0, "stones": 0, "potions": [0, 0, 0], "items": [],
 			"salvaged": 0, "levels": {}}
 	return _march_for(seconds)
 
@@ -475,12 +549,16 @@ func _march_for(seconds: int) -> Dictionary:
 	got.gold = roundi(kills * kill_gold(pace.stage))
 	gold += got.gold
 	march_kills += got.kills
-	got.levels = _give_exp(roundi(kills * KILL_EXP * (1.0 + relic("exp"))))
+	got.levels = _give_exp(roundi(kills * KILL_EXP * exp_mult()))
 	got.shards = _chances(_rng, kills * KILL_SHARD_CHANCE)
 	shards += got.shards
 	got.stones = _chances(_loot, kills * KILL_STONE_CHANCE)
 	stones += got.stones
-	for k: int in _chances(_loot, kills * KILL_LOOT_CHANCE):
+	got.potions = [0, 0, 0]
+	for k: int in POTIONS.size():
+		got.potions[k] = _chances(_potion, kills * POTIONS[k].chance)
+		potions[k] += got.potions[k]
+	for k: int in _chances(_loot, kills * KILL_LOOT_CHANCE * loot_mult()):
 		_drop(got, Stages.region(pace.stage), 0)
 	return got
 
@@ -519,8 +597,11 @@ func unlocked(n: int) -> bool:
 func push_rewards(sim: PushSim, n: int = 1) -> Dictionary:
 	var won: bool = sim.phase == PushSim.Phase.WON
 	var got := {"gold": roundi(sim.damage_dealt * PUSH_GOLD_PER_DAMAGE), "shards": KILL_SHARDS if won else 0, "won": won,
-		"first": won and n > cleared, "stones": 0, "items": [], "salvaged": 0, "relic": -1, "tickets": 0}
+		"first": won and n > cleared, "stones": 0, "potions": [0, 0, 0], "items": [], "salvaged": 0, "relic": -1, "tickets": 0}
 	if won:
+		for k: int in POTIONS.size():
+			got.potions[k] = WIN_POTIONS[k] + (FIRST_POTIONS[k] if got.first else 0)
+			potions[k] += got.potions[k]
 		got.stones = WIN_STONES + 2 * (n - 1)
 		stones += got.stones
 		_drop(got, Stages.region(n), 1)
@@ -586,13 +667,31 @@ func toggle_captain(i: int) -> bool:
 	return true
 
 
+## `count` 經驗藥水 of size k on hero i: each gives POTIONS[k].exp EXP; none are used once the hero is at their cap.
+## Returns {used, levels}.
+func use_potions(i: int, k: int, count: int = 1) -> Dictionary:
+	var out := {"used": 0, "levels": 0}
+	while out.used < count and potions[k] > 0 and hero_level[i] < hero_cap(i):
+		potions[k] -= 1
+		out.used += 1
+		out.levels += _hero_exp(i, POTIONS[k].exp)
+	return out
+
+
+func potion_total() -> int:
+	var n: int = 0
+	for c: int in potions:
+		n += c
+	return n
+
+
 ## What can be done right now (the 總覽's 待辦 and the nav bar's dots), most useful first, as {kind, text, tab}:
 ## "talent" (the cheapest 訓練 the gold covers), "ascend" (a march hero the shards cover), "slot" (a free march
 ## slot), "equip" (a better piece in the bag), "armory" (a 強化 the stones cover), "captain" (none picked yet),
 ## "recruit" (a 十連's tickets), "push" (the next stage boss: first of all before the first push, else last).
 func todo() -> Array:
 	var out: Array = []
-	var push := {"kind": "push", "text": "挑戰關卡王 %s %s（推王）" % [Stages.label(next_stage()), Stages.boss_name(next_stage())],
+	var push := {"kind": "push", "text": "挑戰樓層王 %s %s（推王）" % [Stages.label(next_stage()), Stages.boss_name(next_stage())],
 		"tab": &"adventure"}
 	if pushes == 0:
 		out.append(push)
@@ -615,14 +714,14 @@ func todo() -> Array:
 	for i: int in march:
 		equip = equip or better_charm(i) >= 0
 	if equip:
-		out.append({"kind": "equip", "text": "背包裡有更好的裝備可以換上", "tab": &"equipment"})
+		out.append({"kind": "equip", "text": "背包裡有更好的裝備可以換上", "tab": &"heroes"})
 	var cheapest: int = -1
 	for c: int in armory.size():
 		if armory_cost(c) > 0 and (cheapest < 0 or armory_cost(c) < armory_cost(cheapest)):
 			cheapest = c
 	if cheapest >= 0 and stones >= armory_cost(cheapest):
 		out.append({"kind": "armory", "text": "%s職業武庫可以強化到 Lv%d（%d 強化石）" % [PushSim.CLASS_NAMES[cheapest],
-			armory_level[cheapest] + 1, armory_cost(cheapest)], "tab": &"equipment"})
+			armory_level[cheapest] + 1, armory_cost(cheapest)], "tab": &"heroes"})
 	if captains.is_empty():
 		out.append({"kind": "captain", "text": "還沒有隊長：在英雄頁挑 1～3 名，他們的團會變強", "tab": &"heroes"})
 	if tickets >= Recruit.TEN:
@@ -914,7 +1013,7 @@ func to_dict() -> Dictionary:
 		"charm": charm, "relic_stars": Array(relic_stars), "bag": bag, "fresh": Array(fresh), "next_uid": next_uid,
 		"auto_salvage": auto_salvage, "loot_state": str(_loot.state), "tickets": tickets, "pity": pity, "pulls": pulls,
 		"recent": Array(recent), "ad_day": ad_day, "ad_pulls": ad_pulls, "owned": Array(owned),
-		"pull_state": str(_pull.state)}
+		"pull_state": str(_pull.state), "potions": Array(potions), "potion_state": str(_potion.state)}
 
 
 static func from_dict(d: Dictionary) -> RefCounted:
@@ -1011,6 +1110,12 @@ func _read_recruit(d: Dictionary) -> void:
 	owned = PackedStringArray(d.get("owned", []))
 	if d.has("pull_state"):
 		_pull.state = int(d.pull_state)
+	var held: Variant = d.get("potions", 0)
+	# A save from when there was one size: those were levels, now the small ones.
+	potions = PackedInt32Array(held) if held is Array else PackedInt32Array([int(held), 0, 0])
+	potions.resize(POTIONS.size())
+	if d.has("potion_state"):
+		_potion.state = int(d.potion_state)
 
 
 func save(path: String = SAVE_PATH) -> Error:

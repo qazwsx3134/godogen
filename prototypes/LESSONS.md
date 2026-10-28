@@ -59,6 +59,8 @@
 - **debt-commission：名字顏色被蓋掉** → `_apply_ui_style_recursive` 會依 `ui_style_role` 重設 Label 字色，個別顏色要在它之後設。（[PLAN-LOG-AVATAR-TUTORIAL](debt-commission/docs/PLAN-LOG-AVATAR-TUTORIAL.md)）
 - **演出在 `_ready` 就自己開演，蓋掉整個盤面** → 狀態機才是時間的權威，演出等狀態機叫它。（[pachinko](pachinko/TODO.md#演出)）
 - **連續升級面板出現在手指剛點過的位置，誤選** → 加 0.35 秒選卡鎖（遊戲時間 timer）。（[godot-prototype-to-itch](godot-kit/skills/godot-prototype-to-itch/SKILL.md)）
+- **滑鼠移到卡片或按鈕上，內容整個看不見**（2026-10-28，hero-horde-idle）→ 從 taskbar-hero 複製來的介面有兩種：蓋在卡片上的透明按鈕（`InspectButton`／`SelectButton`）hover、pressed 樣式是不透明色塊，把圖示整個蓋掉；有覆寫深色 `font_color` 的按鈕沒覆寫 hover／pressed／focus 字色，hover 時退回主題的白字。蓋在內容上的按鈕狀態樣式用半透明（alpha ≤ 0.2）或只畫框；覆寫 `font_color` 時連同 `font_hover_color`、`font_pressed_color`、`font_hover_pressed_color`、`font_focus_color` 一起設。用 `push_input` 送滑鼠移動與點擊再截圖驗證（座標要乘 `root.get_final_transform()`）。其他從 taskbar-hero 複製介面的原型大概也有。（[hero-horde-idle](hero-horde-idle/docs/PROGRESS.md)）
+- **推王裡所有英雄都變成一攤橫條（看起來像史萊姆）**（2026-10-28，hero-horde-idle）→ 圖集從 6 列擴成 18 列（加形態），材質 `materials/heroes.tres` 的 `frames` 還是 `(9, 6)`，每格塞進 3 列圖而被壓扁。改圖集後由 `Sprite3DSheet.apply(material)` 依 json 設定格數（`army.gd setup`），並加測試比對材質與 json；只看資料（形態、cell 編號）都對，要放大截圖才看得出。（[hero-horde-idle](hero-horde-idle/docs/PROGRESS.md)）
 
 ## 匯出與網頁版
 

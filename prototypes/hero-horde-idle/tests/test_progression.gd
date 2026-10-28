@@ -37,8 +37,33 @@ func _init() -> void:
 	_talents()
 	_squad_and_codex()
 	_items()
+	_potions()
 	_saves()
 	_finish("PROGRESSION TESTS")
+
+
+## 經驗藥水: dropped by the march, three sizes giving EXP (not whole levels), used on a resting hero, stop at the cap,
+## saved; an old save's single count becomes small ones.
+func _potions() -> void:
+	var p := Progression.new(5)
+	var got: Dictionary = p.march_hour()
+	_expect(got.potions[0] > 0 and p.potions[0] == got.potions[0], "an hour of march drops small 經驗藥水 (%s)" % str(got.potions))
+	var resting: int = 60
+	_expect(not p.in_march(resting), "hero 60 is not marching")
+	p.potions = PackedInt32Array([2, 1, 0])
+	var lv: int = p.hero_level[resting]
+	var small: Dictionary = p.use_potions(resting, 0, 1)
+	_expect(small.used == 1 and p.hero_exp[resting] == Progression.POTIONS[0].exp and p.hero_level[resting] == lv,
+		"a small potion gives 500 EXP, not a level")
+	var mid: Dictionary = p.use_potions(resting, 1, 1)
+	_expect(mid.used == 1 and p.hero_level[resting] > lv, "a medium potion (3000 EXP) levels them up (%d)" % mid.levels)
+	p.hero_level[resting] = p.hero_cap(resting)
+	_expect(p.use_potions(resting, 0, 1).used == 0 and p.potions[0] == 1, "a hero at the cap takes none")
+	var copy: RefCounted = Progression.from_dict(JSON.parse_string(JSON.stringify(p.to_dict())))
+	_expect(copy.potions == PackedInt32Array([1, 0, 0]), "potions are saved by size")
+	var old: Dictionary = p.to_dict()
+	old.potions = 4
+	_expect(Progression.from_dict(old).potions == PackedInt32Array([4, 0, 0]), "an old single count becomes small potions")
 
 
 ## 訓練: costs, what opens a row, the strength it gives, 結伴's slots, the 待辦 row.
@@ -52,7 +77,7 @@ func _talents() -> void:
 		"劍術 raises every hero's attack x%.2f, not HP" % Talents.STEP)
 	p.gold = 1_000_000
 	_expect(not p.talent_open(Talents.SPEED) and not p.level_talent(Talents.SPEED), "速度 waits for 劍術 Lv3")
-	_expect(Talents.need_text(Talents.SPEED, p.talent) == "劍術 Lv3", "the row says what it waits for")
+	_expect(p.talent_need(Talents.SPEED) == "劍術 Lv3", "the row says what it waits for")
 	p.level_talent(Talents.SWORD)
 	p.level_talent(Talents.SWORD)
 	_expect(p.level_talent(Talents.SPEED) and is_equal_approx(p.cooldown_mult(), 1.0 - Talents.SPEED_CD), "速度 opens at 劍術 Lv3")
@@ -63,6 +88,24 @@ func _talents() -> void:
 		"結伴 opens a 4th slot and fills it")
 	_expect(p.level_talent(Talents.COMPANY) and p.slots() == 5 and p.march.size() == 5 and p.talent_cost(Talents.COMPANY) == -1,
 		"a 5th slot, then 結伴 is done")
+	# Deeper nodes wait for a stage boss and a hero level as well as their parent.
+	_expect(not p.talent_open(Talents.STUDY) and p.talent_need(Talents.STUDY) == "打倒第1層樓層王、英雄 Lv10",
+		"學識 waits for 第1層 and a Lv10 hero (%s)" % p.talent_need(Talents.STUDY))
+	p.cleared = 1
+	p.hero_level[0] = 10
+	_expect(p.level_talent(Talents.STUDY) and is_equal_approx(p.exp_mult(), 1.0 + Talents.STUDY_EXP), "學識 opens; march EXP +10%")
+	p.cleared = 4
+	p.hero_level[0] = 25
+	p.talent[Talents.MELEE_SPEC] = 1
+	p.talent[Talents.FORGE] = 3
+	atk0 = p.atk_mult(0)
+	_expect(p.level_talent(Talents.MASTER) and is_equal_approx(p.atk_mult(0) / atk0, Talents.MASTER_STEP), "劍聖: attack x1.04")
+	var product: Array = [Progression.START_POWER, Progression.START_POWER]
+	for f: Dictionary in p.stat_factors(0):
+		product[0] *= f.atk
+		product[1] *= f.hp
+	_expect(is_equal_approx(product[0], p.atk_mult(0)) and is_equal_approx(product[1], p.hp_mult(0)),
+		"數值明細 multiplies out to the hero's attack and HP")
 	var q := Progression.new(4)
 	q.gold = 3000
 	var kinds: Array = q.todo().map(func(item: Dictionary) -> String: return item.kind)

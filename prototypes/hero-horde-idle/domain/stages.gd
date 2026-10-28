@@ -1,5 +1,7 @@
 extends RefCounted
-## 關卡: the stage ladder, as pure data. Stages are played in order; clearing one opens the next. Each scales the
+## 樓層: the floor ladder, as pure data (the code calls a floor a stage). Floors are climbed in order, 第1層 up; beating
+## a floor's 樓層王 opens the next. Every 樓層王 has two HP bars: the second is PushSim's phase 2 (faster, other
+## moves), so breaking the first bar changes his moves. Each floor scales the
 ## boss for PushSim.new(seed, roster, stage(n)) and the push's rewards (progression.gd push_rewards):
 ##   hp, dmg   STEP to the power of the stage's place on the ladder (stage 1 is the reference push, x1), times EASE
 ##             for the first stages (a new player wins 1-1 at once and the next ones in a few pushes)
@@ -25,6 +27,10 @@ const REGIONS := [
 ## The 推薦戰力 of a stage: the heroes' strength (progression.gd team_power()) a player who dodges like a person needs
 ## to win (measured: about 0.95 of the reference push at stage 1), scaled like the boss.
 const RECOMMEND := 0.95
+## 推薦戰力 from LATE_FROM on: x LATE, then x LATE_STEP more each floor (late_of).
+const LATE_FROM := 4
+const LATE := 1.6
+const LATE_STEP := 1.03
 ## First clear of a stage: FIRST_GOLD x reward, FIRST_SHARDS.
 const FIRST_GOLD := 15000.0
 const FIRST_SHARDS := 2
@@ -39,18 +45,30 @@ static func region(n: int) -> int:
 	return r
 
 
-## Stage n's label, e.g. "2-1" (region, place in the region).
+## Floor n's label, e.g. "第4層".
 static func label(n: int) -> String:
-	var r: int = region(n)
-	return "%d-%d" % [r + 1, n - REGIONS[r].first + 1]
+	return "第%d層" % n
+
+
+## Each floor's 樓層王 (the art is the region's troll, tinted).
+const BOSSES := ["棍棒巨魔", "斷牙巨魔", "要塞巨魔王", "沼地巨魔", "苔背巨魔", "霧沼巨魔王", "熔岩巨魔", "焦岩巨魔", "炎角巨魔",
+	"熔核巨魔王"]
+## HP bars on a 樓層王's gauge; the bar under PushSim.PHASE2_AT is the angry one.
+const BARS := 2
 
 
 static func boss_name(n: int) -> String:
-	return REGIONS[region(n)].boss
+	return BOSSES[clampi(n - 1, 0, BOSSES.size() - 1)]
 
 
 static func recommended(n: int) -> float:
-	return RECOMMEND * pow(STEP, n - 1) * ease_of(n)
+	return RECOMMEND * pow(STEP, n - 1) * ease_of(n) * late_of(n)
+
+
+## From 第4層 on the army needs more than the boss's scale alone: 士氣 fills at the attack rate, not by damage, so a
+## strong late army gets no more 大招 than an early one (measured with the bots, 2026-10-28).
+static func late_of(n: int) -> float:
+	return 1.0 if n < LATE_FROM else LATE * pow(LATE_STEP, n - LATE_FROM)
 
 
 static func ease_of(n: int) -> float:

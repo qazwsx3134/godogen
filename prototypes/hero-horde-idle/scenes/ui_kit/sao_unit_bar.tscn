@@ -1,0 +1,31 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui_kit/sao_unit_bar.gd" id="1_cifiy"]
+[ext_resource type="StyleBox" path="res://ui/sao_hud_frame.tres" id="2_4hv55"]
+[ext_resource type="PackedScene" path="res://scenes/ui_kit/sao_gauge.tscn" id="3_rw220"]
+
+[node name="SaoUnitBar" type="Control" unique_id=236764688]
+custom_minimum_size = Vector2(72, 14)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 72.0
+offset_bottom = 14.0
+mouse_filter = 2
+script = ExtResource("1_cifiy")
+
+[node name="Frame" type="Panel" parent="." unique_id=746938140]
+layout_mode = 0
+anchor_right = 1.0
+offset_bottom = 14.0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("2_4hv55")
+
+[node name="Gauge" parent="." unique_id=1903625054 instance=ExtResource("3_rw220")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 0)
+layout_mode = 0
+anchor_right = 1.0
+offset_left = 4.0
+offset_top = 3.0
+offset_right = -6.0
+offset_bottom = 11.0

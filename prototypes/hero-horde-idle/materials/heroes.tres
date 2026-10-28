@@ -7,7 +7,7 @@
 render_priority = 0
 shader = ExtResource("1_rnuti")
 shader_parameter/atlas = ExtResource("2_ojxi0")
-shader_parameter/frames = Vector2(9, 6)
+shader_parameter/frames = Vector2(9, 18)
 shader_parameter/use_instance_custom = true
 shader_parameter/use_instance_color = true
 shader_parameter/lean = 0.35

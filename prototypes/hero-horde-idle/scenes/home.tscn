@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" path="res://scenes/pages/train.tscn" id="4_kc6b6"]
 [ext_resource type="PackedScene" path="res://scenes/pages/backpack.tscn" id="5_jdxxw"]
 [ext_resource type="PackedScene" path="res://scenes/pages/heroes.tscn" id="6_6k6s7"]
-[ext_resource type="PackedScene" path="res://scenes/pages/equipment.tscn" id="7_rqor2"]
 [ext_resource type="PackedScene" path="res://scenes/pages/adventure.tscn" id="8_qmde4"]
 [ext_resource type="PackedScene" path="res://scenes/pages/store.tscn" id="9_wa7t7"]
 [ext_resource type="PackedScene" path="res://scenes/march_arena.tscn" id="10_vysw7"]
@@ -14,19 +13,29 @@
 [ext_resource type="PackedScene" path="res://scenes/components/navigation.tscn" id="12_mg211"]
 [ext_resource type="Texture2D" path="res://assets/atlas/notification.tres" id="13_sh163"]
 [ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Bold.otf" id="14_okf6m"]
-[ext_resource type="StyleBox" path="res://ui/paper_frame.tres" id="15_6k8sm"]
-[ext_resource type="StyleBox" path="res://ui/paper.tres" id="16_k665q"]
-[ext_resource type="StyleBox" path="res://ui/green.tres" id="17_oku8d"]
-[ext_resource type="StyleBox" path="res://ui/gold.tres" id="18_ri7o4"]
+[ext_resource type="StyleBox" path="res://ui/sao_window.tres" id="14_ppa51"]
+[ext_resource type="StyleBox" path="res://ui/sao_inset.tres" id="15_kc6b6"]
+[ext_resource type="StyleBox" path="res://ui/sao_button.tres" id="16_jdxxw"]
+[ext_resource type="StyleBox" path="res://ui/sao_button_hover.tres" id="17_6k6s7"]
+[ext_resource type="StyleBox" path="res://ui/sao_disabled.tres" id="18_rqor2"]
+[ext_resource type="StyleBox" path="res://ui/sao_primary.tres" id="19_qmde4"]
 [ext_resource type="PackedScene" path="res://scenes/settings_panel.tscn" id="19_ucx8p"]
+[ext_resource type="StyleBox" path="res://ui/sao_primary_hover.tres" id="20_wa7t7"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vysw7"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_miq5y"]
 
 [node name="Home" type="Control" unique_id=1196709444]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 theme = ExtResource("1_snnha")
 script = ExtResource("2_e42qu")
+metadata/sao_style = true
 
 [node name="Backdrop" type="ColorRect" parent="." unique_id=1205936388]
 layout_mode = 0
@@ -85,15 +94,6 @@ anchor_bottom = 1.0
 offset_right = 941.0
 offset_bottom = 1672.0
 
-[node name="Equipment" parent="Pages" unique_id=952000875 instance=ExtResource("7_rqor2")]
-unique_name_in_owner = true
-visible = false
-layout_mode = 0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = 941.0
-offset_bottom = 1672.0
-
 [node name="Adventure" parent="Pages" unique_id=195391531 instance=ExtResource("8_qmde4")]
 unique_name_in_owner = true
 visible = false
@@ -137,9 +137,9 @@ mouse_filter = 2
 [node name="Dot0" type="TextureRect" parent="NavDots" unique_id=1784689332]
 visible = false
 layout_mode = 0
-offset_left = 121.0
+offset_left = 150.0
 offset_top = 1530.0
-offset_right = 155.0
+offset_right = 184.0
 offset_bottom = 1564.0
 mouse_filter = 2
 texture = ExtResource("13_sh163")
@@ -149,9 +149,9 @@ stretch_mode = 5
 [node name="Dot1" type="TextureRect" parent="NavDots" unique_id=1625585603]
 visible = false
 layout_mode = 0
-offset_left = 274.0
+offset_left = 334.0
 offset_top = 1530.0
-offset_right = 308.0
+offset_right = 368.0
 offset_bottom = 1564.0
 mouse_filter = 2
 texture = ExtResource("13_sh163")
@@ -161,9 +161,9 @@ stretch_mode = 5
 [node name="Dot2" type="TextureRect" parent="NavDots" unique_id=84754956]
 visible = false
 layout_mode = 0
-offset_left = 427.0
+offset_left = 518.0
 offset_top = 1530.0
-offset_right = 461.0
+offset_right = 552.0
 offset_bottom = 1564.0
 mouse_filter = 2
 texture = ExtResource("13_sh163")
@@ -173,9 +173,9 @@ stretch_mode = 5
 [node name="Dot3" type="TextureRect" parent="NavDots" unique_id=1806469822]
 visible = false
 layout_mode = 0
-offset_left = 580.0
+offset_left = 702.0
 offset_top = 1530.0
-offset_right = 614.0
+offset_right = 736.0
 offset_bottom = 1564.0
 mouse_filter = 2
 texture = ExtResource("13_sh163")
@@ -183,18 +183,6 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="Dot4" type="TextureRect" parent="NavDots" unique_id=1659960062]
-visible = false
-layout_mode = 0
-offset_left = 733.0
-offset_top = 1530.0
-offset_right = 767.0
-offset_bottom = 1564.0
-mouse_filter = 2
-texture = ExtResource("13_sh163")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Dot5" type="TextureRect" parent="NavDots" unique_id=141832349]
 visible = false
 layout_mode = 0
 offset_left = 886.0
@@ -237,7 +225,7 @@ offset_left = 60.0
 offset_top = 360.0
 offset_right = 881.0
 offset_bottom = 1220.0
-theme_override_styles/panel = ExtResource("15_6k8sm")
+theme_override_styles/panel = ExtResource("14_ppa51")
 
 [node name="DialogFill" type="Panel" parent="Dialog/DialogPanel" unique_id=314695311]
 show_behind_parent = true
@@ -249,7 +237,7 @@ offset_top = 18.0
 offset_right = -18.0
 offset_bottom = -18.0
 mouse_filter = 2
-theme_override_styles/panel = ExtResource("16_k665q")
+theme_override_styles/panel = ExtResource("15_kc6b6")
 
 [node name="DialogTitle" type="Label" parent="Dialog/DialogPanel" unique_id=1142854185]
 unique_name_in_owner = true
@@ -258,7 +246,7 @@ offset_left = 40.0
 offset_top = 36.0
 offset_right = 781.0
 offset_bottom = 96.0
-theme_override_colors/font_color = Color(0.2901961, 0.20392157, 0.14117648, 1)
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
 theme_override_fonts/font = ExtResource("14_okf6m")
 theme_override_font_sizes/font_size = 40
 horizontal_alignment = 1
@@ -275,7 +263,7 @@ horizontal_scroll_mode = 0
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.2901961, 0.20392157, 0.14117648, 1)
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
 theme_override_font_sizes/font_size = 28
 autowrap_mode = 3
 
@@ -286,16 +274,19 @@ offset_left = 441.0
 offset_top = 724.0
 offset_right = 761.0
 offset_bottom = 816.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
-theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_focus_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.57, 0.6, 1)
 theme_override_fonts/font = ExtResource("14_okf6m")
 theme_override_font_sizes/font_size = 30
-theme_override_styles/normal = ExtResource("17_oku8d")
-theme_override_styles/pressed = ExtResource("17_oku8d")
-theme_override_styles/hover = ExtResource("17_oku8d")
-theme_override_styles/disabled = ExtResource("17_oku8d")
-theme_override_styles/focus = ExtResource("17_oku8d")
+theme_override_styles/normal = ExtResource("16_jdxxw")
+theme_override_styles/pressed = ExtResource("17_6k6s7")
+theme_override_styles/hover = ExtResource("17_6k6s7")
+theme_override_styles/disabled = ExtResource("18_rqor2")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_vysw7")
 text = "好"
 
 [node name="DialogAlt" type="Button" parent="Dialog/DialogPanel" unique_id=1565283263]
@@ -306,15 +297,18 @@ offset_top = 724.0
 offset_right = 420.0
 offset_bottom = 816.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
-theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.57, 0.6, 1)
 theme_override_fonts/font = ExtResource("14_okf6m")
 theme_override_font_sizes/font_size = 26
-theme_override_styles/normal = ExtResource("18_ri7o4")
-theme_override_styles/pressed = ExtResource("18_ri7o4")
-theme_override_styles/hover = ExtResource("18_ri7o4")
-theme_override_styles/disabled = ExtResource("18_ri7o4")
-theme_override_styles/focus = ExtResource("18_ri7o4")
+theme_override_styles/normal = ExtResource("19_qmde4")
+theme_override_styles/pressed = ExtResource("20_wa7t7")
+theme_override_styles/hover = ExtResource("20_wa7t7")
+theme_override_styles/disabled = ExtResource("18_rqor2")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_miq5y")
 text = "看廣告 金幣 ×2"
 
 [node name="SettingsOverlay" type="ColorRect" parent="." unique_id=612445024]

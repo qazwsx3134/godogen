@@ -5,10 +5,15 @@
 [ext_resource type="Texture2D" path="res://assets/reference/equipment.png" id="2_xuylc"]
 [ext_resource type="Texture2D" path="res://assets/reference/train.png" id="3_x1pro"]
 [ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Bold.otf" id="4_0vqx5"]
+[ext_resource type="StyleBox" path="res://ui/sao_window.tres" id="4_pqj07"]
+[ext_resource type="StyleBox" path="res://ui/sao_inset.tres" id="5_uy7r5"]
 [ext_resource type="Script" path="res://scripts/talent_links.gd" id="6_0vqx5"]
+[ext_resource type="StyleBox" path="res://ui/sao_titlebar.tres" id="6_uy7r5"]
 [ext_resource type="PackedScene" path="res://scenes/components/talent_node.tscn" id="7_f76w0"]
-[ext_resource type="StyleBox" path="res://ui/card.tres" id="8_5ccqm"]
-[ext_resource type="StyleBox" path="res://ui/gold.tres" id="9_yiwht"]
+[ext_resource type="StyleBox" path="res://ui/sao_section.tres" id="10_r31y1"]
+[ext_resource type="StyleBox" path="res://ui/sao_primary.tres" id="11_b5xw7"]
+[ext_resource type="StyleBox" path="res://ui/sao_primary_hover.tres" id="12_01udx"]
+[ext_resource type="StyleBox" path="res://ui/sao_disabled.tres" id="13_pbicp"]
 
 [sub_resource type="Theme" id="Theme_0vqx5"]
 default_font = ExtResource("1_og6bm")
@@ -64,32 +69,12 @@ atlas = ExtResource("2_xuylc")
 region = Rect2(0, 470, 941, 55)
 filter_clip = true
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_3vn3e"]
-atlas = ExtResource("2_xuylc")
-region = Rect2(8, 527, 925, 994)
-filter_clip = true
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5td6a"]
-texture = SubResource("AtlasTexture_3vn3e")
-texture_margin_left = 18.0
-texture_margin_top = 18.0
-texture_margin_right = 18.0
-texture_margin_bottom = 18.0
-draw_center = false
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yiwht"]
-bg_color = Color(0.91764706, 0.8352941, 0.7411765, 1)
-border_color = Color(1, 1, 1, 0)
-corner_radius_top_left = 7
-corner_radius_top_right = 7
-corner_radius_bottom_right = 7
-corner_radius_bottom_left = 7
-corner_detail = 2
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_pqj07"]
 atlas = ExtResource("3_x1pro")
 region = Rect2(63, 796, 147, 146)
 filter_clip = true
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1rg8s"]
 
 [node name="Train" type="Control" unique_id=341858121]
 custom_minimum_size = Vector2(941, 1672)
@@ -100,6 +85,7 @@ theme = SubResource("Theme_0vqx5")
 script = ExtResource("2_og6bm")
 metadata/page_id = "train"
 metadata/fusion_readable = true
+metadata/sao_style = true
 
 [node name="DistantLandscape" type="TextureRect" parent="." unique_id=680590626]
 texture_filter = 1
@@ -219,9 +205,10 @@ offset_top = 525.0
 offset_right = 933.0
 offset_bottom = 1520.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_5td6a")
+theme_override_styles/panel = ExtResource("4_pqj07")
 
 [node name="PaperFill" type="Panel" parent="ContentPanel" unique_id=1586006302]
+visible = false
 show_behind_parent = true
 layout_mode = 0
 anchor_right = 1.0
@@ -231,7 +218,16 @@ offset_top = 18.0
 offset_right = -18.0
 offset_bottom = -18.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_yiwht")
+theme_override_styles/panel = ExtResource("5_uy7r5")
+
+[node name="TitleBar" type="Panel" parent="." unique_id=994055440]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 527.0
+offset_right = 931.0
+offset_bottom = 607.0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("6_uy7r5")
 
 [node name="PageIcon" type="TextureRect" parent="." unique_id=238001337]
 texture_filter = 1
@@ -250,8 +246,8 @@ offset_left = 104.0
 offset_top = 538.0
 offset_right = 579.0
 offset_bottom = 604.0
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_outline_color = Color(0.3, 0.31, 0.29, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("4_0vqx5")
 theme_override_font_sizes/font_size = 42
@@ -266,85 +262,154 @@ offset_left = 33.0
 offset_top = 602.0
 offset_right = 897.0
 offset_bottom = 638.0
-theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
-theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+theme_override_colors/font_color = Color(0.52, 0.53, 0.5, 1)
+theme_override_colors/font_outline_color = Color(0.52, 0.53, 0.5, 1)
 theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 29
-text = "用金幣點亮節點，全軍立即變強；點亮上面的，下面的才會亮起。"
+text = "用金幣點亮節點，全軍立即變強；越下面的要先打倒樓層王、練高英雄等級。"
 vertical_alignment = 1
 text_overrun_behavior = 3
 
-[node name="TalentTree" type="Control" parent="." unique_id=720440417]
+[node name="TalentScroll" type="ScrollContainer" parent="." unique_id=119898812]
 unique_name_in_owner = true
-anchors_preset = 0
+layout_mode = 0
 offset_left = 26.0
 offset_top = 646.0
 offset_right = 915.0
 offset_bottom = 1206.0
+horizontal_scroll_mode = 0
+
+[node name="TalentTree" type="Control" parent="TalentScroll" unique_id=720440417]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(869, 1146)
+layout_mode = 2
 script = ExtResource("6_0vqx5")
 
-[node name="Node0" parent="TalentTree" unique_id=1673507367 instance=ExtResource("7_f76w0")]
+[node name="Node0" parent="TalentScroll/TalentTree" unique_id=1673507367 instance=ExtResource("7_f76w0")]
 layout_mode = 0
 offset_left = 110.0
 offset_top = 10.0
 offset_right = 260.0
 offset_bottom = 186.0
 
-[node name="Node1" parent="TalentTree" unique_id=1355895317 instance=ExtResource("7_f76w0")]
+[node name="Node1" parent="TalentScroll/TalentTree" unique_id=1355895317 instance=ExtResource("7_f76w0")]
 layout_mode = 0
 offset_left = 630.0
 offset_top = 10.0
 offset_right = 780.0
 offset_bottom = 186.0
 
-[node name="Node2" parent="TalentTree" unique_id=540800192 instance=ExtResource("7_f76w0")]
+[node name="Node2" parent="TalentScroll/TalentTree" unique_id=540800192 instance=ExtResource("7_f76w0")]
 layout_mode = 0
 offset_left = 20.0
-offset_top = 196.0
+offset_top = 200.0
 offset_right = 170.0
-offset_bottom = 372.0
+offset_bottom = 376.0
 
-[node name="Node3" parent="TalentTree" unique_id=580841754 instance=ExtResource("7_f76w0")]
+[node name="Node3" parent="TalentScroll/TalentTree" unique_id=580841754 instance=ExtResource("7_f76w0")]
 layout_mode = 0
 offset_left = 720.0
-offset_top = 196.0
+offset_top = 200.0
 offset_right = 870.0
-offset_bottom = 372.0
+offset_bottom = 376.0
 
-[node name="Node4" parent="TalentTree" unique_id=651309193 instance=ExtResource("7_f76w0")]
+[node name="Node4" parent="TalentScroll/TalentTree" unique_id=651309193 instance=ExtResource("7_f76w0")]
 layout_mode = 0
 offset_left = 370.0
-offset_top = 196.0
+offset_top = 200.0
 offset_right = 520.0
-offset_bottom = 372.0
+offset_bottom = 376.0
 
-[node name="Node5" parent="TalentTree" unique_id=1742909513 instance=ExtResource("7_f76w0")]
+[node name="Node5" parent="TalentScroll/TalentTree" unique_id=1742909513 instance=ExtResource("7_f76w0")]
 layout_mode = 0
 offset_left = 370.0
 offset_top = 10.0
 offset_right = 520.0
 offset_bottom = 186.0
 
-[node name="Node6" parent="TalentTree" unique_id=1694673019 instance=ExtResource("7_f76w0")]
+[node name="Node6" parent="TalentScroll/TalentTree" unique_id=1694673019 instance=ExtResource("7_f76w0")]
 layout_mode = 0
-offset_left = 240.0
-offset_top = 382.0
-offset_right = 390.0
-offset_bottom = 558.0
+offset_left = 220.0
+offset_top = 390.0
+offset_right = 370.0
+offset_bottom = 566.0
 
-[node name="Node7" parent="TalentTree" unique_id=1829231959 instance=ExtResource("7_f76w0")]
+[node name="Node7" parent="TalentScroll/TalentTree" unique_id=1829231959 instance=ExtResource("7_f76w0")]
 layout_mode = 0
 offset_left = 20.0
-offset_top = 382.0
+offset_top = 390.0
 offset_right = 170.0
-offset_bottom = 558.0
+offset_bottom = 566.0
 
-[node name="Node8" parent="TalentTree" unique_id=1549309205 instance=ExtResource("7_f76w0")]
+[node name="Node8" parent="TalentScroll/TalentTree" unique_id=1549309205 instance=ExtResource("7_f76w0")]
 layout_mode = 0
 offset_left = 630.0
-offset_top = 382.0
+offset_top = 390.0
 offset_right = 780.0
-offset_bottom = 558.0
+offset_bottom = 566.0
+
+[node name="Node9" parent="TalentScroll/TalentTree" unique_id=381737123 instance=ExtResource("7_f76w0")]
+layout_mode = 0
+offset_left = 220.0
+offset_top = 580.0
+offset_right = 370.0
+offset_bottom = 756.0
+
+[node name="Node10" parent="TalentScroll/TalentTree" unique_id=632520197 instance=ExtResource("7_f76w0")]
+layout_mode = 0
+offset_left = 630.0
+offset_top = 580.0
+offset_right = 780.0
+offset_bottom = 756.0
+
+[node name="Node11" parent="TalentScroll/TalentTree" unique_id=510565682 instance=ExtResource("7_f76w0")]
+layout_mode = 0
+offset_left = 410.0
+offset_top = 770.0
+offset_right = 560.0
+offset_bottom = 946.0
+
+[node name="Node12" parent="TalentScroll/TalentTree" unique_id=103910188 instance=ExtResource("7_f76w0")]
+layout_mode = 0
+offset_left = 410.0
+offset_top = 390.0
+offset_right = 560.0
+offset_bottom = 566.0
+
+[node name="Node13" parent="TalentScroll/TalentTree" unique_id=1934629536 instance=ExtResource("7_f76w0")]
+layout_mode = 0
+offset_left = 410.0
+offset_top = 580.0
+offset_right = 560.0
+offset_bottom = 756.0
+
+[node name="Node14" parent="TalentScroll/TalentTree" unique_id=239758073 instance=ExtResource("7_f76w0")]
+layout_mode = 0
+offset_left = 220.0
+offset_top = 770.0
+offset_right = 370.0
+offset_bottom = 946.0
+
+[node name="Node15" parent="TalentScroll/TalentTree" unique_id=1320455369 instance=ExtResource("7_f76w0")]
+layout_mode = 0
+offset_left = 630.0
+offset_top = 770.0
+offset_right = 780.0
+offset_bottom = 946.0
+
+[node name="Node16" parent="TalentScroll/TalentTree" unique_id=2019650972 instance=ExtResource("7_f76w0")]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 960.0
+offset_right = 170.0
+offset_bottom = 1136.0
+
+[node name="Node17" parent="TalentScroll/TalentTree" unique_id=779419492 instance=ExtResource("7_f76w0")]
+layout_mode = 0
+offset_left = 720.0
+offset_top = 960.0
+offset_right = 870.0
+offset_bottom = 1136.0
 
 [node name="DetailFrame" type="Panel" parent="." unique_id=1193407053]
 layout_mode = 0
@@ -352,7 +417,7 @@ offset_left = 26.0
 offset_top = 1214.0
 offset_right = 915.0
 offset_bottom = 1506.0
-theme_override_styles/panel = ExtResource("8_5ccqm")
+theme_override_styles/panel = ExtResource("10_r31y1")
 
 [node name="DetailIcon" type="TextureRect" parent="." unique_id=266413585]
 unique_name_in_owner = true
@@ -372,7 +437,7 @@ offset_left = 180.0
 offset_top = 1226.0
 offset_right = 895.0
 offset_bottom = 1280.0
-theme_override_colors/font_color = Color(0.2901961, 0.20392157, 0.14117648, 1)
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
 theme_override_fonts/font = ExtResource("4_0vqx5")
 theme_override_font_sizes/font_size = 38
 text = "劍術　Lv. 0／200"
@@ -385,7 +450,7 @@ offset_left = 180.0
 offset_top = 1282.0
 offset_right = 895.0
 offset_bottom = 1358.0
-theme_override_colors/font_color = Color(0.2901961, 0.20392157, 0.14117648, 1)
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
 theme_override_fonts/font = ExtResource("1_og6bm")
 theme_override_font_sizes/font_size = 32
 text = "全軍攻擊 ×1.08"
@@ -410,7 +475,7 @@ offset_left = 48.0
 offset_top = 1410.0
 offset_right = 528.0
 offset_bottom = 1480.0
-theme_override_colors/font_color = Color(0.2901961, 0.20392157, 0.14117648, 1)
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
 theme_override_fonts/font = ExtResource("4_0vqx5")
 theme_override_font_sizes/font_size = 34
 text = "3000 金幣"
@@ -424,13 +489,16 @@ offset_top = 1398.0
 offset_right = 894.0
 offset_bottom = 1492.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
-theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.57, 0.6, 1)
 theme_override_fonts/font = ExtResource("4_0vqx5")
 theme_override_font_sizes/font_size = 38
-theme_override_styles/normal = ExtResource("9_yiwht")
-theme_override_styles/pressed = ExtResource("9_yiwht")
-theme_override_styles/hover = ExtResource("9_yiwht")
-theme_override_styles/disabled = ExtResource("9_yiwht")
-theme_override_styles/focus = ExtResource("9_yiwht")
+theme_override_styles/normal = ExtResource("11_b5xw7")
+theme_override_styles/pressed = ExtResource("12_01udx")
+theme_override_styles/hover = ExtResource("12_01udx")
+theme_override_styles/disabled = ExtResource("13_pbicp")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1rg8s")
 text = "點亮"

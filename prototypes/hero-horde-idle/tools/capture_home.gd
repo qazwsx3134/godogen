@@ -1,6 +1,6 @@
 extends SceneTree
 ## Screenshots of the home screen on every page, on a mid-game save (two stages cleared, 4 march slots, gear with
-## affixes, a few 覺醒 heroes) kept aside from the player's save; the offline report on arrival, a pull's result and
+## affixes, a few 覺醒 heroes) kept aside from the player's save; a hero's detail, the offline report on arrival, a pull's result and
 ## the 行軍 strip mid-fight. Needs a display:
 ##   godot --path prototypes/hero-horde-idle --resolution 470x836 --script res://tools/capture_home.gd -- <out dir>
 const Progression = preload("res://domain/progression.gd")
@@ -9,7 +9,7 @@ const Talents = preload("res://domain/talents.gd")
 const Screenshot = preload("res://addons/proto_kit/screenshot.gd")
 const HOME := "res://scenes/home.tscn"
 const SAVE := "user://progress_home_shots.json"
-const PAGES := [&"overview", &"train", &"backpack", &"heroes", &"equipment", &"adventure", &"store"]
+const PAGES := [&"overview", &"train", &"backpack", &"heroes", &"adventure", &"store"]
 
 
 func _initialize() -> void:
@@ -55,6 +55,17 @@ func _run() -> void:
 		home.show_tab(tab)
 		await _frames(6)
 		Screenshot.save(root, out, "%02d_%s" % [PAGES.find(tab) + 1, tab])
+		if tab == &"heroes":
+			home.get_node("%Heroes").open_detail(13)
+			await _frames(4)
+			Screenshot.save(root, out, "%02d_hero_detail" % (PAGES.find(tab) + 1))
+			var heroes: Control = home.get_node("%Heroes")
+			for pop: Array in [["%WeaponSlot", "equip"], ["%LevelButton", "level"], ["%StatsButton", "stats"]]:
+				heroes.get_node(pop[0]).pressed.emit()
+				await _frames(4)
+				Screenshot.save(root, out, "%02d_hero_%s" % [PAGES.find(tab) + 1, pop[1]])
+				heroes._close_popups()
+			heroes.close_detail()
 	home.show_tab(&"store")
 	p.tickets = 10
 	home.get_node("%Store")._card(1)

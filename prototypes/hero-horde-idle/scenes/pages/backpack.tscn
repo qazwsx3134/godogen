@@ -5,8 +5,13 @@
 [ext_resource type="Texture2D" path="res://assets/reference/equipment.png" id="2_okxnh"]
 [ext_resource type="Texture2D" path="res://assets/reference/backpack.png" id="3_nmq4w"]
 [ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Bold.otf" id="4_5xfqx"]
-[ext_resource type="StyleBox" path="res://ui/green.tres" id="6_5xfqx"]
-[ext_resource type="StyleBox" path="res://ui/blue.tres" id="7_y6nse"]
+[ext_resource type="StyleBox" path="res://ui/sao_window.tres" id="4_o5b4a"]
+[ext_resource type="StyleBox" path="res://ui/sao_inset.tres" id="5_88eiy"]
+[ext_resource type="StyleBox" path="res://ui/sao_titlebar.tres" id="6_88eiy"]
+[ext_resource type="StyleBox" path="res://ui/sao_button.tres" id="8_cgdci"]
+[ext_resource type="StyleBox" path="res://ui/sao_button_hover.tres" id="9_240ie"]
+[ext_resource type="StyleBox" path="res://ui/sao_disabled.tres" id="10_xmm0h"]
+[ext_resource type="StyleBox" path="res://ui/sao_section.tres" id="11_7t6dn"]
 
 [sub_resource type="Theme" id="Theme_nmq4w"]
 default_font = ExtResource("1_6544f")
@@ -62,66 +67,22 @@ atlas = ExtResource("2_okxnh")
 region = Rect2(0, 470, 941, 55)
 filter_clip = true
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_3vn3e"]
-atlas = ExtResource("2_okxnh")
-region = Rect2(8, 527, 925, 994)
-filter_clip = true
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5td6a"]
-texture = SubResource("AtlasTexture_3vn3e")
-texture_margin_left = 18.0
-texture_margin_top = 18.0
-texture_margin_right = 18.0
-texture_margin_bottom = 18.0
-draw_center = false
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ubf26"]
-bg_color = Color(0.91764706, 0.8352941, 0.7411765, 1)
-border_color = Color(1, 1, 1, 0)
-corner_radius_top_left = 7
-corner_radius_top_right = 7
-corner_radius_bottom_right = 7
-corner_radius_bottom_left = 7
-corner_detail = 2
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_o5b4a"]
 atlas = ExtResource("3_nmq4w")
 region = Rect2(37, 734, 85, 76)
 filter_clip = true
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pwkfr"]
-bg_color = Color(0.25490198, 0.3647059, 0.52156866, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.54901963, 0.627451, 0.7411765, 1)
-corner_radius_top_left = 7
-corner_radius_top_right = 7
-corner_radius_bottom_right = 7
-corner_radius_bottom_left = 7
-corner_detail = 2
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6vrpj"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7r3wi"]
-bg_color = Color(0.17254902, 0.2509804, 0.37254903, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.9529412, 0.84313726, 0.56078434, 1)
-corner_radius_top_left = 7
-corner_radius_top_right = 7
-corner_radius_bottom_right = 7
-corner_radius_bottom_left = 7
-corner_detail = 2
+[sub_resource type="ButtonGroup" id="ButtonGroup_88eiy"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dnlsv"]
-bg_color = Color(0.32941177, 0.4509804, 0.6156863, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.9529412, 0.84313726, 0.56078434, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wnl7x"]
+bg_color = Color(0.96862745, 0.9098039, 0.8352941, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8, 0.7058824, 0.6039216, 1)
 corner_radius_top_left = 7
 corner_radius_top_right = 7
 corner_radius_bottom_right = 7
@@ -141,33 +102,17 @@ corner_radius_bottom_right = 7
 corner_radius_bottom_left = 7
 corner_detail = 2
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_30n4r"]
-bg_color = Color(0.9137255, 0.8352941, 0.73333335, 1)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.8745098, 0.6666667, 0.2901961, 1)
-corner_radius_top_left = 7
-corner_radius_top_right = 7
-corner_radius_bottom_right = 7
-corner_radius_bottom_left = 7
-corner_detail = 2
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8q1ik"]
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_88eiy"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_r463v"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wnl7x"]
-bg_color = Color(0.96862745, 0.9098039, 0.8352941, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.8, 0.7058824, 0.6039216, 1)
-corner_radius_top_left = 7
-corner_radius_top_right = 7
-corner_radius_bottom_right = 7
-corner_radius_bottom_left = 7
-corner_detail = 2
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_x7qiu"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_12jjj"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rlg88"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cv1cw"]
 
 [node name="Backpack" type="Control" unique_id=247185443]
 custom_minimum_size = Vector2(941, 1672)
@@ -178,6 +123,8 @@ theme = SubResource("Theme_nmq4w")
 script = ExtResource("2_nmq4w")
 metadata/page_id = "backpack"
 metadata/fusion_readable = true
+metadata/sao_style = true
+metadata/ux_spacing = true
 
 [node name="DistantLandscape" type="TextureRect" parent="." unique_id=1517173878]
 texture_filter = 1
@@ -297,9 +244,10 @@ offset_top = 525.0
 offset_right = 933.0
 offset_bottom = 1520.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_5td6a")
+theme_override_styles/panel = ExtResource("4_o5b4a")
 
 [node name="PaperFill" type="Panel" parent="ContentPanel" unique_id=985644654]
+visible = false
 show_behind_parent = true
 layout_mode = 0
 anchor_right = 1.0
@@ -309,7 +257,16 @@ offset_top = 18.0
 offset_right = -18.0
 offset_bottom = -18.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_ubf26")
+theme_override_styles/panel = ExtResource("5_88eiy")
+
+[node name="TitleBar" type="Panel" parent="." unique_id=1690907583]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 527.0
+offset_right = 931.0
+offset_bottom = 607.0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("6_88eiy")
 
 [node name="PageIcon" type="TextureRect" parent="." unique_id=814163296]
 texture_filter = 1
@@ -328,8 +285,8 @@ offset_left = 104.0
 offset_top = 538.0
 offset_right = 579.0
 offset_bottom = 604.0
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_outline_color = Color(0.3, 0.31, 0.29, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("4_5xfqx")
 theme_override_font_sizes/font_size = 42
@@ -339,13 +296,14 @@ text_overrun_behavior = 3
 
 [node name="BackpackSubtitle" type="Label" parent="." unique_id=789121979]
 unique_name_in_owner = true
+visible = false
 layout_mode = 0
 offset_left = 33.0
 offset_top = 601.0
 offset_right = 901.0
 offset_bottom = 637.0
-theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
-theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+theme_override_colors/font_color = Color(0.52, 0.53, 0.5, 1)
+theme_override_colors/font_outline_color = Color(0.52, 0.53, 0.5, 1)
 theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 27
 text = "裝備、遺物與素材。點選物品看詳情，不要的可以分解成強化石。"
@@ -356,25 +314,29 @@ text_overrun_behavior = 3
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 28.0
-offset_top = 647.0
+offset_top = 622.0
 offset_right = 913.0
-offset_bottom = 706.0
-theme_override_constants/separation = 7
+offset_bottom = 680.0
+theme_override_constants/separation = 12
 
 [node name="FilterAll" type="Button" parent="FilterRow" unique_id=801086141]
 custom_minimum_size = Vector2(170, 54)
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_default_cursor_shape = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_focus_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.57, 0.6, 1)
 theme_override_fonts/font = ExtResource("4_5xfqx")
 theme_override_font_sizes/font_size = 27
-theme_override_styles/normal = SubResource("StyleBoxFlat_pwkfr")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_7r3wi")
-theme_override_styles/hover = SubResource("StyleBoxFlat_dnlsv")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_yhv7p")
-theme_override_styles/focus = SubResource("StyleBoxFlat_30n4r")
+theme_override_styles/normal = ExtResource("8_cgdci")
+theme_override_styles/pressed = ExtResource("9_240ie")
+theme_override_styles/hover = ExtResource("9_240ie")
+theme_override_styles/disabled = ExtResource("10_xmm0h")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_6vrpj")
 toggle_mode = true
 button_pressed = true
 button_group = SubResource("ButtonGroup_88eiy")
@@ -386,7 +348,11 @@ custom_minimum_size = Vector2(170, 54)
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_default_cursor_shape = 2
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_focus_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_pressed_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_hover_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("4_5xfqx")
 theme_override_font_sizes/font_size = 27
@@ -394,7 +360,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/hover = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_yhv7p")
-theme_override_styles/focus = SubResource("StyleBoxFlat_30n4r")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_8q1ik")
 toggle_mode = true
 button_group = SubResource("ButtonGroup_88eiy")
 text = "武器"
@@ -405,7 +371,11 @@ custom_minimum_size = Vector2(170, 54)
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_default_cursor_shape = 2
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_focus_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_pressed_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_hover_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("4_5xfqx")
 theme_override_font_sizes/font_size = 27
@@ -413,7 +383,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/hover = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_yhv7p")
-theme_override_styles/focus = SubResource("StyleBoxFlat_30n4r")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_r463v")
 toggle_mode = true
 button_group = SubResource("ButtonGroup_88eiy")
 text = "飾品"
@@ -424,7 +394,11 @@ custom_minimum_size = Vector2(170, 54)
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_default_cursor_shape = 2
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_focus_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_pressed_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_hover_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("4_5xfqx")
 theme_override_font_sizes/font_size = 27
@@ -432,7 +406,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/hover = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_yhv7p")
-theme_override_styles/focus = SubResource("StyleBoxFlat_30n4r")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_x7qiu")
 toggle_mode = true
 button_group = SubResource("ButtonGroup_88eiy")
 text = "遺物"
@@ -443,7 +417,11 @@ custom_minimum_size = Vector2(170, 54)
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_default_cursor_shape = 2
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_focus_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_pressed_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_hover_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("4_5xfqx")
 theme_override_font_sizes/font_size = 27
@@ -451,7 +429,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/hover = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_yhv7p")
-theme_override_styles/focus = SubResource("StyleBoxFlat_30n4r")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_12jjj")
 toggle_mode = true
 button_group = SubResource("ButtonGroup_88eiy")
 text = "素材"
@@ -460,28 +438,28 @@ metadata/action = "filter:other"
 [node name="InventoryFrame" type="Panel" parent="." unique_id=1910011910]
 layout_mode = 0
 offset_left = 21.0
-offset_top = 720.0
+offset_top = 696.0
 offset_right = 920.0
-offset_bottom = 1312.0
+offset_bottom = 1306.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_wnl7x")
+theme_override_styles/panel = ExtResource("11_7t6dn")
 
 [node name="ItemsGridScroll" type="ScrollContainer" parent="." unique_id=1153508486]
 layout_mode = 0
 offset_left = 35.0
-offset_top = 736.0
+offset_top = 714.0
 offset_right = 905.0
-offset_bottom = 1298.0
+offset_bottom = 1292.0
 horizontal_scroll_mode = 0
 
 [node name="ItemsGrid" type="GridContainer" parent="ItemsGridScroll" unique_id=634252704]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 4
 size_flags_vertical = 0
-theme_override_constants/h_separation = 8
-theme_override_constants/v_separation = 8
-columns = 5
+theme_override_constants/h_separation = 24
+theme_override_constants/v_separation = 18
+columns = 4
 
 [node name="EmptyState" type="Label" parent="." unique_id=826015666]
 unique_name_in_owner = true
@@ -490,8 +468,8 @@ offset_left = 111.0
 offset_top = 990.0
 offset_right = 830.0
 offset_bottom = 1052.0
-theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
-theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+theme_override_colors/font_color = Color(0.52, 0.53, 0.5, 1)
+theme_override_colors/font_outline_color = Color(0.52, 0.53, 0.5, 1)
 theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 31
 text = "這個分類沒有東西。"
@@ -506,17 +484,17 @@ offset_top = 1322.0
 offset_right = 920.0
 offset_bottom = 1508.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_wnl7x")
+theme_override_styles/panel = ExtResource("11_7t6dn")
 
 [node name="InfoName" type="Label" parent="." unique_id=224948257]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 40.0
-offset_top = 1332.0
-offset_right = 640.0
-offset_bottom = 1376.0
-theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
-theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+offset_left = 44.0
+offset_top = 1336.0
+offset_right = 634.0
+offset_bottom = 1380.0
+theme_override_colors/font_color = Color(0.52, 0.53, 0.5, 1)
+theme_override_colors/font_outline_color = Color(0.52, 0.53, 0.5, 1)
 theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 27
 text = "點選物品看詳情"
@@ -526,15 +504,15 @@ text_overrun_behavior = 3
 [node name="InfoText" type="Label" parent="." unique_id=1554490661]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 40.0
-offset_top = 1376.0
-offset_right = 640.0
-offset_bottom = 1500.0
-theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
-theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+offset_left = 44.0
+offset_top = 1384.0
+offset_right = 634.0
+offset_bottom = 1496.0
+theme_override_colors/font_color = Color(0.52, 0.53, 0.5, 1)
+theme_override_colors/font_outline_color = Color(0.52, 0.53, 0.5, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 27
-text = "裝備、遺物與素材。點選物品看詳情，不要的可以分解成強化石。"
+theme_override_font_sizes/font_size = 24
+text = "點選物品看詳情"
 vertical_alignment = 1
 autowrap_mode = 3
 
@@ -545,16 +523,19 @@ offset_left = 660.0
 offset_top = 1334.0
 offset_right = 904.0
 offset_bottom = 1410.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
-theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_focus_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.57, 0.6, 1)
 theme_override_fonts/font = ExtResource("4_5xfqx")
 theme_override_font_sizes/font_size = 30
-theme_override_styles/normal = ExtResource("6_5xfqx")
-theme_override_styles/pressed = ExtResource("6_5xfqx")
-theme_override_styles/hover = ExtResource("6_5xfqx")
-theme_override_styles/disabled = ExtResource("6_5xfqx")
-theme_override_styles/focus = ExtResource("6_5xfqx")
+theme_override_styles/normal = ExtResource("8_cgdci")
+theme_override_styles/pressed = ExtResource("9_240ie")
+theme_override_styles/hover = ExtResource("9_240ie")
+theme_override_styles/disabled = ExtResource("10_xmm0h")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_rlg88")
 text = "分解"
 
 [node name="AutoSalvageButton" type="Button" parent="." unique_id=2037448275]
@@ -564,14 +545,17 @@ offset_left = 660.0
 offset_top = 1418.0
 offset_right = 904.0
 offset_bottom = 1494.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.9647059, 0.84705883, 1)
-theme_override_colors/font_disabled_color = Color(1, 1, 1, 0.45)
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_focus_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.57, 0.6, 1)
 theme_override_fonts/font = ExtResource("4_5xfqx")
 theme_override_font_sizes/font_size = 30
-theme_override_styles/normal = ExtResource("7_y6nse")
-theme_override_styles/pressed = ExtResource("7_y6nse")
-theme_override_styles/hover = ExtResource("7_y6nse")
-theme_override_styles/disabled = ExtResource("7_y6nse")
-theme_override_styles/focus = ExtResource("7_y6nse")
+theme_override_styles/normal = ExtResource("8_cgdci")
+theme_override_styles/pressed = ExtResource("9_240ie")
+theme_override_styles/hover = ExtResource("9_240ie")
+theme_override_styles/disabled = ExtResource("10_xmm0h")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_cv1cw")
 text = "自動分解：關"

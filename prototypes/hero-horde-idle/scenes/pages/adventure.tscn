@@ -5,7 +5,16 @@
 [ext_resource type="Texture2D" path="res://assets/reference/equipment.png" id="2_l6sk3"]
 [ext_resource type="Texture2D" path="res://assets/reference/adventure.png" id="3_palyt"]
 [ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Bold.otf" id="4_if7ry"]
+[ext_resource type="StyleBox" path="res://ui/sao_window.tres" id="4_rbwj5"]
+[ext_resource type="StyleBox" path="res://ui/sao_inset.tres" id="5_1y7t1"]
 [ext_resource type="PackedScene" path="res://scenes/components/stage_card.tscn" id="5_rbwj5"]
+[ext_resource type="StyleBox" path="res://ui/sao_titlebar.tres" id="6_rbwj5"]
+[ext_resource type="StyleBox" path="res://ui/sao_section.tres" id="8_iwgbr"]
+[ext_resource type="StyleBox" path="res://ui/sao_primary.tres" id="11_vvlr7"]
+[ext_resource type="StyleBox" path="res://ui/sao_primary_hover.tres" id="12_nvqbf"]
+[ext_resource type="StyleBox" path="res://ui/sao_disabled.tres" id="13_xxyuf"]
+[ext_resource type="StyleBox" path="res://ui/sao_button.tres" id="14_1juj4"]
+[ext_resource type="StyleBox" path="res://ui/sao_button_hover.tres" id="15_yjp0q"]
 
 [sub_resource type="Theme" id="Theme_4gfec"]
 default_font = ExtResource("1_4gfec")
@@ -61,28 +70,6 @@ atlas = ExtResource("2_l6sk3")
 region = Rect2(0, 470, 941, 55)
 filter_clip = true
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_3vn3e"]
-atlas = ExtResource("2_l6sk3")
-region = Rect2(8, 527, 925, 994)
-filter_clip = true
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5td6a"]
-texture = SubResource("AtlasTexture_3vn3e")
-texture_margin_left = 18.0
-texture_margin_top = 18.0
-texture_margin_right = 18.0
-texture_margin_bottom = 18.0
-draw_center = false
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iwgbr"]
-bg_color = Color(0.91764706, 0.8352941, 0.7411765, 1)
-border_color = Color(1, 1, 1, 0)
-corner_radius_top_left = 7
-corner_radius_top_right = 7
-corner_radius_bottom_right = 7
-corner_radius_bottom_left = 7
-corner_detail = 2
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_hc8kb"]
 atlas = ExtResource("3_palyt")
 region = Rect2(48, 792, 122, 94)
@@ -114,18 +101,7 @@ corner_radius_bottom_right = 7
 corner_radius_bottom_left = 7
 corner_detail = 2
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_30n4r"]
-bg_color = Color(0.9137255, 0.8352941, 0.73333335, 1)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.8745098, 0.6666667, 0.2901961, 1)
-corner_radius_top_left = 7
-corner_radius_top_right = 7
-corner_radius_bottom_right = 7
-corner_radius_bottom_left = 7
-corner_detail = 2
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hc8kb"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ph830"]
 atlas = ExtResource("3_palyt")
@@ -230,18 +206,9 @@ atlas = ExtResource("3_palyt")
 region = Rect2(349, 1358, 83, 84)
 filter_clip = true
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bks16"]
-bg_color = Color(0.9411765, 0.8117647, 0.4392157, 1)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.6627451, 0.48235294, 0.2, 1)
-corner_radius_top_left = 7
-corner_radius_top_right = 7
-corner_radius_bottom_right = 7
-corner_radius_bottom_left = 7
-corner_detail = 2
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_te4gr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_rp23y"]
 
 [node name="Adventure" type="Control" unique_id=195391531]
 custom_minimum_size = Vector2(941, 1672)
@@ -252,6 +219,8 @@ theme = SubResource("Theme_4gfec")
 script = ExtResource("2_4gfec")
 metadata/page_id = "adventure"
 metadata/fusion_readable = true
+metadata/sao_style = true
+metadata/ux_spacing = true
 
 [node name="DistantLandscape" type="TextureRect" parent="." unique_id=1323579610]
 texture_filter = 1
@@ -371,9 +340,10 @@ offset_top = 525.0
 offset_right = 933.0
 offset_bottom = 1520.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_5td6a")
+theme_override_styles/panel = ExtResource("4_rbwj5")
 
 [node name="PaperFill" type="Panel" parent="ContentPanel" unique_id=2137464236]
+visible = false
 show_behind_parent = true
 layout_mode = 0
 anchor_right = 1.0
@@ -383,7 +353,16 @@ offset_top = 18.0
 offset_right = -18.0
 offset_bottom = -18.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_iwgbr")
+theme_override_styles/panel = ExtResource("5_1y7t1")
+
+[node name="TitleBar" type="Panel" parent="." unique_id=762236448]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 527.0
+offset_right = 931.0
+offset_bottom = 607.0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("6_rbwj5")
 
 [node name="PageIcon" type="TextureRect" parent="." unique_id=1160077306]
 texture_filter = 1
@@ -402,8 +381,8 @@ offset_left = 104.0
 offset_top = 538.0
 offset_right = 579.0
 offset_bottom = 604.0
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_outline_color = Color(0.3, 0.31, 0.29, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("4_if7ry")
 theme_override_font_sizes/font_size = 42
@@ -419,7 +398,11 @@ offset_top = 541.0
 offset_right = 911.0
 offset_bottom = 595.0
 mouse_default_cursor_shape = 2
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_focus_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_pressed_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_hover_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
 theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
 theme_override_fonts/font = ExtResource("4_if7ry")
 theme_override_font_sizes/font_size = 27
@@ -427,7 +410,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/hover = SubResource("StyleBoxFlat_wnl7x")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_yhv7p")
-theme_override_styles/focus = SubResource("StyleBoxFlat_30n4r")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_hc8kb")
 text = "目前遠征章節　⌄"
 metadata/action = "chapter"
 
@@ -438,7 +421,7 @@ offset_top = 615.0
 offset_right = 915.0
 offset_bottom = 789.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_wnl7x")
+theme_override_styles/panel = ExtResource("8_iwgbr")
 
 [node name="ChapterLandscape" type="TextureRect" parent="." unique_id=1222547848]
 texture_filter = 1
@@ -458,8 +441,8 @@ offset_left = 46.0
 offset_top = 634.0
 offset_right = 476.0
 offset_bottom = 683.0
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_outline_color = Color(0.3, 0.31, 0.29, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("4_if7ry")
 theme_override_font_sizes/font_size = 36
@@ -474,8 +457,8 @@ offset_left = 48.0
 offset_top = 685.0
 offset_right = 493.0
 offset_bottom = 772.0
-theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
-theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+theme_override_colors/font_color = Color(0.52, 0.53, 0.5, 1)
+theme_override_colors/font_outline_color = Color(0.52, 0.53, 0.5, 1)
 theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 27
 text = "微風吹過的遠征起點。
@@ -490,12 +473,12 @@ offset_left = 37.0
 offset_top = 803.0
 offset_right = 873.0
 offset_bottom = 848.0
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_outline_color = Color(0.3, 0.31, 0.29, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("4_if7ry")
 theme_override_font_sizes/font_size = 32
-text = "關卡路線：點選關卡，決定小隊在哪裡行軍"
+text = "選擇樓層"
 vertical_alignment = 1
 text_overrun_behavior = 3
 
@@ -614,7 +597,7 @@ offset_top = 1082.0
 offset_right = 908.0
 offset_bottom = 1231.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_yhv7p")
+theme_override_styles/panel = ExtResource("5_1y7t1")
 
 [node name="RewardsTitle" type="Label" parent="." unique_id=248869574]
 layout_mode = 0
@@ -622,8 +605,8 @@ offset_left = 48.0
 offset_top = 1087.0
 offset_right = 254.0
 offset_bottom = 1124.0
-theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
-theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+theme_override_colors/font_color = Color(0.52, 0.53, 0.5, 1)
+theme_override_colors/font_outline_color = Color(0.52, 0.53, 0.5, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("4_if7ry")
 theme_override_font_sizes/font_size = 29
@@ -681,13 +664,14 @@ expand_mode = 1
 
 [node name="LaunchNote" type="Label" parent="." unique_id=573646228]
 unique_name_in_owner = true
+visible = false
 layout_mode = 0
 offset_left = 442.0
 offset_top = 1088.0
 offset_right = 880.0
 offset_bottom = 1127.0
-theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
-theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+theme_override_colors/font_color = Color(0.52, 0.53, 0.5, 1)
+theme_override_colors/font_outline_color = Color(0.52, 0.53, 0.5, 1)
 theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 26
 text = "戰鬥會沿用目前關卡進度，並持續向前推進。"
@@ -702,33 +686,37 @@ offset_top = 1265.0
 offset_right = 872.0
 offset_bottom = 1364.0
 mouse_default_cursor_shape = 2
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.56, 0.54, 1)
 theme_override_fonts/font = ExtResource("4_if7ry")
 theme_override_font_sizes/font_size = 36
-theme_override_styles/normal = SubResource("StyleBoxFlat_bks16")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_bks16")
-theme_override_styles/hover = SubResource("StyleBoxFlat_bks16")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_yhv7p")
-theme_override_styles/focus = SubResource("StyleBoxFlat_30n4r")
-text = "挑戰關卡王"
+theme_override_styles/normal = ExtResource("11_vvlr7")
+theme_override_styles/pressed = ExtResource("12_nvqbf")
+theme_override_styles/hover = ExtResource("12_nvqbf")
+theme_override_styles/disabled = ExtResource("13_xxyuf")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_te4gr")
+text = "挑戰樓層王"
 metadata/action = "depart"
 
 [node name="DepartHint" type="Label" parent="." unique_id=1283999186]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 459.0
-offset_top = 1372.0
-offset_right = 924.0
-offset_bottom = 1419.0
-theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
-theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+offset_left = 60.0
+offset_top = 1380.0
+offset_right = 880.0
+offset_bottom = 1450.0
+theme_override_colors/font_color = Color(0.52, 0.53, 0.5, 1)
+theme_override_colors/font_outline_color = Color(0.52, 0.53, 0.5, 1)
 theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 25
+theme_override_font_sizes/font_size = 24
 text = "自動戰鬥會在總覽及其他頁面持續。"
 horizontal_alignment = 1
 vertical_alignment = 1
-text_overrun_behavior = 3
+autowrap_mode = 3
 
 [node name="MarchHereButton" type="Button" parent="." unique_id=1427392506]
 unique_name_in_owner = true
@@ -738,15 +726,19 @@ offset_top = 1265.0
 offset_right = 460.0
 offset_bottom = 1364.0
 mouse_default_cursor_shape = 2
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_focus_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.56, 0.54, 1)
 theme_override_fonts/font = ExtResource("4_if7ry")
 theme_override_font_sizes/font_size = 36
-theme_override_styles/normal = SubResource("StyleBoxFlat_bks16")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_bks16")
-theme_override_styles/hover = SubResource("StyleBoxFlat_bks16")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_yhv7p")
-theme_override_styles/focus = SubResource("StyleBoxFlat_30n4r")
+theme_override_styles/normal = ExtResource("14_1juj4")
+theme_override_styles/pressed = ExtResource("15_yjp0q")
+theme_override_styles/hover = ExtResource("15_yjp0q")
+theme_override_styles/disabled = ExtResource("13_xxyuf")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_rp23y")
 text = "在此行軍"
 metadata/action = "depart"
 

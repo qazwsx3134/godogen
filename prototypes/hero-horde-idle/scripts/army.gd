@@ -9,9 +9,9 @@ extends MultiMeshInstance3D
 const PushSim = preload("res://domain/push_sim.gd")
 const Sprite3DSheet = preload("res://addons/proto_kit/sprite3d_sheet.gd")
 const SHEETS := "res://assets/heroes/heroes.json"
+const HERO_MATERIAL := preload("res://materials/heroes.tres")
 const CLASS_KEYS := ["shield", "sword", "spear", "bow", "mage", "healer"]
-## heroes.json rows per 形態 (domain/heroes.gd): humans are the class keys, the others are "<form>_<class>".
-const FORM_PREFIX := ["", "monster_", "dream_"]
+## heroes.json rows: humans are the class keys (every race draws them until the race art is drawn).
 ## The outline role per rarity: dark for all, so every hero keeps a crisp silhouette and the crowd reads by class tint.
 const RARITY_ROLE := [7, 7, 7, 7]
 ## Class tint hues and strength: shield blue, sword red, spear amber, bow green, mage violet, healer near-white.
@@ -62,10 +62,11 @@ func setup(sim: PushSim, boss_target: Vector3, captains := PackedInt32Array()) -
 	_sim = sim
 	target = boss_target
 	if _sheets.is_empty():
-		for prefix: String in FORM_PREFIX:
-			for key: String in CLASS_KEYS:
-				_sheets.append(Sprite3DSheet.from_json(SHEETS, prefix + key))
+		for key: String in CLASS_KEYS:
+			_sheets.append(Sprite3DSheet.from_json(SHEETS, key))
 		_size = _sheets[0].size_m()
+		# The atlas grid comes from heroes.json (18 rows since the 形態 sheets), not from what the material was saved with.
+		_sheets[0].apply(HERO_MATERIAL)
 	var n: int = sim.cls.size()
 	_tick.resize(n)
 	_shot.resize(n)
@@ -86,9 +87,9 @@ func setup(sim: PushSim, boss_target: Vector3, captains := PackedInt32Array()) -
 	multimesh.instance_count = n
 
 
-## Hero i's row of sheets: their form's (humans for the balance tests' formless roster) and class.
+## Hero i's row of sheets: their class's human sheet (every race, until the 精靈 and 獸人 art is drawn).
 func sheet_of(i: int) -> int:
-	return maxi(_sim.form[i], 0) * CLASS_KEYS.size() + _sim.cls[i]
+	return _sim.cls[i]
 
 
 func volley() -> void:

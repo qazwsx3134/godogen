@@ -4,8 +4,15 @@
 [ext_resource type="Texture2D" path="res://assets/reference/equipment.png" id="2_5iicw"]
 [ext_resource type="Script" path="res://scripts/pages/store_page.gd" id="2_tqwwg"]
 [ext_resource type="Texture2D" path="res://assets/reference/store.png" id="3_bhl1a"]
+[ext_resource type="StyleBox" path="res://ui/sao_window.tres" id="4_opikg"]
 [ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Bold.otf" id="4_te0y1"]
 [ext_resource type="PackedScene" path="res://scenes/components/product_card.tscn" id="5_hirrh"]
+[ext_resource type="StyleBox" path="res://ui/sao_inset.tres" id="5_srwee"]
+[ext_resource type="StyleBox" path="res://ui/sao_titlebar.tres" id="6_srwee"]
+[ext_resource type="StyleBox" path="res://ui/sao_section.tres" id="9_om3qf"]
+[ext_resource type="StyleBox" path="res://ui/sao_button.tres" id="10_wr2xg"]
+[ext_resource type="StyleBox" path="res://ui/sao_button_hover.tres" id="11_jixqn"]
+[ext_resource type="StyleBox" path="res://ui/sao_disabled.tres" id="12_nb57n"]
 
 [sub_resource type="Theme" id="Theme_tqwwg"]
 default_font = ExtResource("1_tqwwg")
@@ -60,28 +67,6 @@ filter_clip = true
 atlas = ExtResource("2_5iicw")
 region = Rect2(0, 470, 941, 55)
 filter_clip = true
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_3vn3e"]
-atlas = ExtResource("2_5iicw")
-region = Rect2(8, 527, 925, 994)
-filter_clip = true
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5td6a"]
-texture = SubResource("AtlasTexture_3vn3e")
-texture_margin_left = 18.0
-texture_margin_top = 18.0
-texture_margin_right = 18.0
-texture_margin_bottom = 18.0
-draw_center = false
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_opikg"]
-bg_color = Color(0.91764706, 0.8352941, 0.7411765, 1)
-border_color = Color(1, 1, 1, 0)
-corner_radius_top_left = 7
-corner_radius_top_right = 7
-corner_radius_bottom_right = 7
-corner_radius_bottom_left = 7
-corner_detail = 2
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_srwee"]
 atlas = ExtResource("3_bhl1a")
@@ -164,88 +149,14 @@ atlas = ExtResource("3_bhl1a")
 region = Rect2(752, 928, 115, 137)
 filter_clip = true
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5ualr"]
-bg_color = Color(0.96862745, 0.9098039, 0.8352941, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.8, 0.7058824, 0.6039216, 1)
-corner_radius_top_left = 7
-corner_radius_top_right = 7
-corner_radius_bottom_right = 7
-corner_radius_bottom_left = 7
-corner_detail = 2
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_obu5i"]
 atlas = ExtResource("3_bhl1a")
 region = Rect2(41, 1314, 295, 154)
 filter_clip = true
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pwkfr"]
-bg_color = Color(0.25490198, 0.3647059, 0.52156866, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.54901963, 0.627451, 0.7411765, 1)
-corner_radius_top_left = 7
-corner_radius_top_right = 7
-corner_radius_bottom_right = 7
-corner_radius_bottom_left = 7
-corner_detail = 2
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5ualr"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7r3wi"]
-bg_color = Color(0.17254902, 0.2509804, 0.37254903, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.9529412, 0.84313726, 0.56078434, 1)
-corner_radius_top_left = 7
-corner_radius_top_right = 7
-corner_radius_bottom_right = 7
-corner_radius_bottom_left = 7
-corner_detail = 2
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dnlsv"]
-bg_color = Color(0.32941177, 0.4509804, 0.6156863, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.9529412, 0.84313726, 0.56078434, 1)
-corner_radius_top_left = 7
-corner_radius_top_right = 7
-corner_radius_bottom_right = 7
-corner_radius_bottom_left = 7
-corner_detail = 2
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nagut"]
-bg_color = Color(0.9019608, 0.8117647, 0.70980394, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.74509805, 0.6509804, 0.54901963, 1)
-corner_radius_top_left = 7
-corner_radius_top_right = 7
-corner_radius_bottom_right = 7
-corner_radius_bottom_left = 7
-corner_detail = 2
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nd0jq"]
-bg_color = Color(0.9137255, 0.8352941, 0.73333335, 1)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.8745098, 0.6666667, 0.2901961, 1)
-corner_radius_top_left = 7
-corner_radius_top_right = 7
-corner_radius_bottom_right = 7
-corner_radius_bottom_left = 7
-corner_detail = 2
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_obu5i"]
 
 [node name="Store" type="Control" unique_id=236980738]
 custom_minimum_size = Vector2(941, 1672)
@@ -256,6 +167,7 @@ theme = SubResource("Theme_tqwwg")
 script = ExtResource("2_tqwwg")
 metadata/page_id = "store"
 metadata/fusion_readable = true
+metadata/sao_style = true
 
 [node name="DistantLandscape" type="TextureRect" parent="." unique_id=1867706014]
 texture_filter = 1
@@ -375,9 +287,10 @@ offset_top = 525.0
 offset_right = 933.0
 offset_bottom = 1520.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_5td6a")
+theme_override_styles/panel = ExtResource("4_opikg")
 
 [node name="PaperFill" type="Panel" parent="ContentPanel" unique_id=779517830]
+visible = false
 show_behind_parent = true
 layout_mode = 0
 anchor_right = 1.0
@@ -387,7 +300,16 @@ offset_top = 18.0
 offset_right = -18.0
 offset_bottom = -18.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_opikg")
+theme_override_styles/panel = ExtResource("5_srwee")
+
+[node name="TitleBar" type="Panel" parent="." unique_id=2142952006]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 527.0
+offset_right = 931.0
+offset_bottom = 607.0
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("6_srwee")
 
 [node name="PageIcon" type="TextureRect" parent="." unique_id=997963339]
 texture_filter = 1
@@ -406,8 +328,8 @@ offset_left = 104.0
 offset_top = 538.0
 offset_right = 579.0
 offset_bottom = 604.0
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_outline_color = Color(0.3, 0.31, 0.29, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("4_te0y1")
 theme_override_font_sizes/font_size = 42
@@ -422,8 +344,8 @@ offset_left = 33.0
 offset_top = 601.0
 offset_right = 905.0
 offset_bottom = 637.0
-theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
-theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+theme_override_colors/font_color = Color(0.52, 0.53, 0.5, 1)
+theme_override_colors/font_outline_color = Color(0.52, 0.53, 0.5, 1)
 theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 26
 text = "商品按鈕顯示本機商店資訊，不會進行付款或發放。"
@@ -551,7 +473,7 @@ offset_top = 1115.0
 offset_right = 915.0
 offset_bottom = 1466.0
 mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_5ualr")
+theme_override_styles/panel = ExtResource("9_om3qf")
 
 [node name="GiftArt" type="TextureRect" parent="." unique_id=1224551689]
 unique_name_in_owner = true
@@ -572,8 +494,8 @@ offset_left = 372.0
 offset_top = 1144.0
 offset_right = 830.0
 offset_bottom = 1195.0
-theme_override_colors/font_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
-theme_override_colors/font_outline_color = Color(0.1254902, 0.15686275, 0.24313726, 1)
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_outline_color = Color(0.3, 0.31, 0.29, 1)
 theme_override_constants/outline_size = 0
 theme_override_fonts/font = ExtResource("4_te0y1")
 theme_override_font_sizes/font_size = 35
@@ -588,8 +510,8 @@ offset_left = 372.0
 offset_top = 1200.0
 offset_right = 849.0
 offset_bottom = 1293.0
-theme_override_colors/font_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
-theme_override_colors/font_outline_color = Color(0.45882353, 0.41960785, 0.40784314, 1)
+theme_override_colors/font_color = Color(0.52, 0.53, 0.5, 1)
+theme_override_colors/font_outline_color = Color(0.52, 0.53, 0.5, 1)
 theme_override_constants/outline_size = 0
 theme_override_font_sizes/font_size = 26
 text = "觀看獎勵廣告的外觀保留作為商店示範。
@@ -605,15 +527,19 @@ offset_top = 1321.0
 offset_right = 871.0
 offset_bottom = 1409.0
 mouse_default_cursor_shape = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_focus_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.57, 0.6, 1)
 theme_override_fonts/font = ExtResource("4_te0y1")
 theme_override_font_sizes/font_size = 30
-theme_override_styles/normal = SubResource("StyleBoxFlat_pwkfr")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_7r3wi")
-theme_override_styles/hover = SubResource("StyleBoxFlat_dnlsv")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_nagut")
-theme_override_styles/focus = SubResource("StyleBoxFlat_nd0jq")
+theme_override_styles/normal = ExtResource("10_wr2xg")
+theme_override_styles/pressed = ExtResource("11_jixqn")
+theme_override_styles/hover = ExtResource("11_jixqn")
+theme_override_styles/disabled = ExtResource("12_nb57n")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_5ualr")
 text = "看廣告招募"
 metadata/action = "gift"
 
@@ -625,15 +551,19 @@ offset_top = 1321.0
 offset_right = 582.0
 offset_bottom = 1409.0
 mouse_default_cursor_shape = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_disabled_color = Color(0.5176471, 0.47843137, 0.4392157, 1)
+theme_override_colors/font_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_focus_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.3, 0.31, 0.29, 1)
+theme_override_colors/font_disabled_color = Color(0.55, 0.57, 0.6, 1)
 theme_override_fonts/font = ExtResource("4_te0y1")
 theme_override_font_sizes/font_size = 30
-theme_override_styles/normal = SubResource("StyleBoxFlat_pwkfr")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_7r3wi")
-theme_override_styles/hover = SubResource("StyleBoxFlat_dnlsv")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_nagut")
-theme_override_styles/focus = SubResource("StyleBoxFlat_nd0jq")
+theme_override_styles/normal = ExtResource("10_wr2xg")
+theme_override_styles/pressed = ExtResource("11_jixqn")
+theme_override_styles/hover = ExtResource("11_jixqn")
+theme_override_styles/disabled = ExtResource("12_nb57n")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_obu5i")
 text = "機率說明"
 metadata/action = "gift"
 
