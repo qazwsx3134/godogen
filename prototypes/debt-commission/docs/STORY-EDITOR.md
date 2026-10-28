@@ -21,6 +21,46 @@
 
 - **直接開檔**：雙擊 `tools/story_editor/index.html`（`file://`）也能用，從「開啟…」選任一 `*_story.json`。拿不到 catalog 時角色欄改成文字輸入，清單用內建值。
 
+## 與 agent 共用人格與記憶
+
+本機專案服務啟動後，按工具列「編劇參考」：
+
+1. 展開角色或記憶的完整內容，檢視情境反應、聲線、關係與行為界線。
+2. 勾選本次出場角色。記憶預設不選；先選擁有者才能勾選他的記憶。
+3. 按「產生編劇參考」，複製下方內容或按「下載 JSON」交給外部 agent。
+4. 和 agent 討論節拍與台詞，作者採納後，再用下方故事編輯流程製作。
+
+```text
+檢閱已確認人格 → 選角色／記憶 → 匯出參考 → 與 agent 編劇
+                                                  ↓
+                                            作者採納 → 編輯／試玩
+```
+
+本作三角色人格為 revision 2，三條基礎記憶維持 revision 1，均已由作者確認。此面板只讀 `authoring/` 正式庫，不讀 archive／proposals，不自動套用到獨立作品，也不修改人格、記憶或確認紀錄。新增設定仍須依 [authoring 規則](../authoring/README.md)另行與人類確認；不會從新劇情自動寫入記憶。
+
+未確認或雜湊不符的內容可查看，但不可選取匯出。若面板開啟後資料已變更，即使新版已獲確認，也要重開面板檢閱。產物按 known_to 分配各角色能知道的記憶，與 CLI 相同，附 revision／SHA-256；它是產生當下的參考快照。修改勾選後會清除前一份結果，須重新產生。
+
+需要本機專案服務，純靜態服務或 file:// 不顯示此入口。更新服務程式後須重啟 Python 服務，再重新整理頁面。尚無內建 AI 寫作、自動記憶檢索或 OOC 自動評分；作者與外部 agent 負責創作及內容審閱。
+
+## 從零寫一篇故事
+
+1. 按上方「新故事」，輸入英文、數字或底線組成的 id，例如 `first_short_story`。如果詢問作品 id，留空會放在本作的 `data/`。
+2. 點「開場」卡片，在右側修改場景名稱和現有台詞；在上方「故事」區填中文標題。
+3. 展開側欄底部「選擇步驟類型」，選對話、背景、立繪或其他步驟，再按「＋新增步驟」。用每個步驟右上的 ↑／↓ 調整先後順序。
+4. 要分支時加入「選項」，以「＋節點」建立後續場景，將選項連到對應的卡片。沒有分支的短篇也可以先用一個場景與結尾。
+5. 展開「試玩這個場景」，按「從這裡試玩」；未存檔的修改也會帶進獨立試玩視窗。
+6. 按「驗證並存檔」。成功後故事存入 `data/<id>_story.json` 並登記到故事清單。桌面遊戲重新開啟後可在章節選擇中找到；既有 Web 匯出版需重新匯出才會包含新故事。
+
+```text
+新故事 → 寫台詞／安排角色 → 從場景試玩 → 驗證並存檔
+                  ↑                │
+                  └──── 修改後再試玩 ┘
+```
+
+上方故事清單可打開已有內容；`.dialogue` 建置的故事是唯讀，若想在網頁裡改，先按「轉成圖編輯來源」建立一份獨立副本。新故事或副本不會覆寫原故事。
+
+已開始遊玩的故事若增刪步驟或分支，結構版本會更新，舊遊戲存檔可能無法續讀。想保留原進度時，可先建立獨立的圖編輯副本，或在遊戲設定中匯出存檔備份。
+
 ## 操作
 
 | 想做的事 | 做法 |
@@ -42,6 +82,8 @@
 | 收合流程 | 同類連續步驟預設顯示「對話 ×N」等群組；點一下展開／收合。座標檔及 localStorage 都保存收合狀態，拖卡片、自動排版與匯入座標時一併保留。 |
 | 新增步驟 | 展開側欄底部「選擇步驟類型」，選好後按「＋ 新增步驟」。七類：對話、旁白、立繪、背景・音樂、音效、事件、效果。對話 say 初始化角色，旁白 say 初始化 narrator。舊版 op 保持顯示與 JSON 編輯。 |
 | 找問題 | 側欄「問題清單」，點一條就跳到那張卡片 |
+
+`comedy` 選 `tsukkomi_impact` 時，可用「出場位置」選擇左側或右側；未選時從左側出場。這會記錄為 `side: "left"`／`"right"`，切換成其他 preset 時會清除。兩側的漫畫格、放射線與氣泡可在各自的 Godot scene 中調整；台詞與角色仍由劇本決定。
 
 `comedy` 選 `emotion_band` 時多一個 `color`（色票或 `#rrggbb`；「清除」或空白＝不寫這個鍵，用 scene 的預設黃 `#ffd23f`）；換成別的 preset 時會移除它，因為 runner 只接受 `emotion_band` 有 `color`。
 
@@ -76,7 +118,8 @@
 ## 素材與事件表單
 
 - bg：背景下拉及縮圖；bgm：音樂下拉與播放／停止，空值停止故事音樂；se：catalog 音效下拉。
-- char：角色、表情、站位、顯示／隱藏與登場。「舞台」可拖曳角色到左、中、右，或按對應按鈕；站位下拉選單選「角色預設」會使用 catalog 的 `slot`。示意圖不會模擬其他角色、對話框或螢幕裁切；位置和大小的精調在 Godot 的 `scenes/stage.tscn` 與 `scenes/characters/<角色>.tscn`，實際構圖請從該場景試玩。表情選項只列該角色 catalog 有圖的值（neutral 用角色主圖）；匯入的其他值保留並標「目前的值」，不默默替換。say／comedy 也使用角色表情清單。
+- char：選角色、表情與站位；「角色狀態」可選準備站位、立刻登場或退場。登場／退場的動畫可選淡化、從左或右滑動並淡化、直接切換；未指定使用淡入／淡出。「舞台」可拖曳角色到左、中、右，或按對應按鈕；站位下拉選單選「角色預設」會使用 catalog 的 `slot`。示意圖不會模擬其他角色、對話框或螢幕裁切；位置和大小的精調在 Godot 的 `scenes/stage.tscn` 與 `scenes/characters/<角色>.tscn`，實際構圖請從該場景試玩。表情選項只列該角色 catalog 有圖的值（neutral 用角色主圖）；匯入的其他值保留並標「目前的值」，不默默替換。say／comedy 也使用角色表情清單。
+- 立繪動作：選已登場的角色，再選「抖動」或「彈跳」；把步驟放在台詞之前即可與台詞一起呈現。若緊接著角色登場，動作會在登場完成後接著播放；畫面效果設為「減少」或略讀時，動作會略過。角色尚未登場時，動作不會讓角色自動現身。
 - 較長的 say 台詞會在固定閱讀框內分頁；出現「繼續閱讀」時，點擊後仍留在同一句，最後一頁才推進。試讀時可在設定調整字級。
 - item：取得道具；flag：設定 JSON 純量或加減整數；condition：單一 flag/equals，或遞迴 AND／OR／NOT、旗標比較與持有道具，搭配 then／else 目標。
 - 純量文字輸入要加雙引號，例如 `"已見面"`；數字與 true／false 直接填。新旗標先在故事的 flags 區宣告。條件值型別與合法性由 check_story 最終確認。
@@ -192,6 +235,10 @@ godot --headless --path prototypes/debt-commission \
 node tools/story_editor/test_core.mjs --out <暫存資料夾>      # 10 個故事往返、可達性對照 Godot（每個節點當起點）、改名、新故事
 node tools/story_editor/smoke.mjs --playwright <playwright-core 目錄> --chromium <chrome-headless-shell> \
      --godot godot --out <輸出資料夾>                            # 真的滑鼠拖線、匯出下載、截圖、file:// 檔案選擇器
+node tools/story_editor/comedy_side_smoke.mjs --playwright <playwright-core 目錄> --chromium <Chrome 路徑> \
+     --godot godot                                               # 漫畫格左右選擇、清除、驗證存檔與重開
+node tools/story_editor/portrait_motion_smoke.mjs --playwright <playwright-core 目錄> --chromium <Chrome 路徑> \
+     --godot godot                                               # 角色登退場與立繪動作的編輯、存檔與重開
 ```
 
 新增回歸涵蓋 undo/redo（新增、刪除、改名、接線、拖動與合併文字）、草稿重整復原、下載內容確認、搜尋跳轉、讀檔失敗、空間不足、跨分頁衝突與快速切故事；`batch1_regression.mjs` 由 smoke 自動執行。
@@ -244,3 +291,13 @@ node tools/story_editor/preview_smoke.mjs --playwright <playwright-core 目錄> 
 ```
 
 這項測試由瀏覽器拖曳立繪選站位，檢查按鈕及復原／重做，再以未存稿、旗標和線索啟動遊戲；也檢查啟動期間切換場景、失敗提示及唯讀故事。另從空白建立三結局故事、存檔，再用遊戲的 StoryRunner 走完三條分支。`test_project_server.py` 另驗證遊戲實際收到的狀態、獨立 user://、作品素材與外觀。
+
+人格參考回歸（全部確認紀錄只在暫存 fixture，不改正式資料）：
+
+```bash
+python3 tools/test_persona_context.py
+python3 tools/story_editor/test_persona_service.py
+node tools/story_editor/persona_smoke.mjs --playwright <playwright-core 目錄> --chromium <Chrome 路徑> --out <暫存證據目錄>
+```
+
+API 回歸不需要 Godot；瀏覽器回歸使用暫存專案、合成確認證據，檢查 UI 產物與 CLI 一致、未確認阻擋、記憶擁有者／知情隔離、版本更新、下載、窄視窗及故事不被改動。

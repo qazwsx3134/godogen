@@ -603,6 +603,22 @@ async function phase3Route() {
   await control(page, 'investigate_collapse', true);
   await waitFor(page, () => window.__debtQA?.phase3?.investigate_collapsed === true, null, 10000);
   value = await state(page);
+  assert.ok(value.controls.investigate_expand && !value.controls.investigate_folded_continue,
+    'the folded strip offers Expand and hides Continue before finding the clue');
+  assert.ok(Math.abs(value.investigate_backdrop.y + value.investigate_backdrop.height - value.game.y - value.game.height) < 2,
+    'the translucent strip rests at the bottom of the game');
+  assert.ok(value.investigate_backdrop_opacity <= 0.3, 'the strip background is translucent');
+  await screenshot(page, 'phase3-investigate-folded');
+  await control(page, 'investigate_expand', true);
+  await waitFor(page, () => window.__debtQA?.phase3?.investigate_collapsed === false, null, 10000);
+  await control(page, 'investigate_collapse', true);
+  value = await state(page);
+  const panBefore = value.phase3.pan.vertical_offset;
+  const stripStart = { x: value.game.x + value.game.width * 0.2,
+    y: value.investigate_backdrop.y + value.investigate_backdrop.height * 0.5 };
+  await gesture(page, value.viewport, stripStart, { x: stripStart.x, y: stripStart.y - 150 }, 50, true);
+  value = await state(page);
+  assert.ok(value.phase3.pan.vertical_offset < panBefore, 'dragging through the strip moves the background');
   let spot = value.phase3.hotspots[0];
   const from = { x: value.game.x + value.game.width * 0.35, y: value.game.y + value.game.height * 0.25 };
   const shiftX = value.game.x + value.game.width / 2 - (spot.screen_rect.x + spot.screen_rect.width / 2);
@@ -625,7 +641,11 @@ async function phase3Route() {
   await closeSaveSlots(page, true);
   await stable(page);
   assert.equal((await state(page)).screen, 'investigate');
-  await control(page, 'investigate_continue', true);
+  await control(page, 'investigate_collapse', true);
+  value = await state(page);
+  assert.ok(value.controls.investigate_folded_continue, 'Continue is available on the folded strip after completing the search');
+  await screenshot(page, 'phase3-investigate-folded-complete');
+  await control(page, 'investigate_folded_continue', true);
   await waitFor(page, () => window.__debtQA?.screen === 'boke_round', null, 10000);
   value = await state(page);
   assert.equal(value.phase3.boke_line_index, 0);
@@ -703,14 +723,23 @@ async function phase3Route() {
   const perfect = value.choices.find(choice => choice.id === 'point_to_bottle');
   assert.ok(perfect, 'clue-gated perfect comeback remains selectable after loading');
   await tapAt(page, value.viewport, center(perfect.rect), true);
-  await waitFor(page, () => window.__debtQA?.node_id === 'perfect', null, 10000);
+  await waitFor(page, () => window.__debtQA?.comedy?.active, null, 10000);
+  value = await state(page);
+  assert.equal(value.screen, 'busy', 'the reaction waits for the manga retort');
+  assert.equal(value.comedy.preset, 'tsukkomi_impact');
+  assert.equal(value.comedy.side, 'left');
+  assert.equal(value.toast, '', 'an earlier notification does not cover the manga bubble');
+  await page.waitForTimeout(300);
+  await screenshot(page, 'phase3-manga-retort');
+  await tapAt(page, value.viewport, center(value.controls.stage), true);
+  await waitFor(page, () => window.__debtQA?.screen === 'story' && window.__debtQA.node_id === 'perfect', null, 10000);
   value = await state(page);
   assert.equal(value.phase3.last_result, 'perfect');
   assert.equal(value.phase3.gameplay.power, 30);
   assert.equal(value.phase3.gameplay.glasses, 5);
   await waitFor(page, () => window.__debtQA?.text_complete, null, 10000);
   await screenshot(page, 'phase3-perfect-phone');
-  result.checks.push('perfect result adds power once and keeps glasses intact');
+  result.checks.push('perfect retort shows a manga panel; tapping it resumes the reaction and adds power once');
   assert.deepEqual(errors, [], 'no browser or Godot runtime errors');
   console.log(`PASS phase3 touch: ${result.checks.length} check groups`);
   await context.close();
@@ -988,7 +1017,7 @@ async function investigateRoute() {
 
 // The manga overlay (?sample=comedy): every preset plays over the reading screen, a tap on one only ends
 // it (the line after it shows whole and is not advanced), and the overlay never survives a reload.
-// Run at 800×450 and 640×360; the screenshots go to test-results/.
+// Run at 390×844 and 320×568; the screenshots go to docs/.
 async function comedyRoute(viewport, tag) {
   const { context, page, errors } = await openPage(viewport, true);
   const result = { route: `comedy-${tag}`, viewport, touch: true, checks: [], errors };
@@ -1113,7 +1142,7 @@ async function comedyRoute(viewport, tag) {
 
 // The two kinds of choice (?sample=choices): a POV choice (the edition's sheet, a tone marker on each row), then
 // the director's choice (a sheet of its own: heading, footnote, cards). Real touch taps throughout.
-// Run at 390×844 and 320×568; the screenshots go to docs/.
+// Run at 800×450 and 640×360; the screenshots go to test-results/.
 async function choicesRoute(viewport, tag) {
   const { context, page, errors } = await openPage(viewport, true);
   const result = { route: `choices-${tag}`, viewport, touch: true, checks: [], errors };

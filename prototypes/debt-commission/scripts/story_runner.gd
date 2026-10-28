@@ -18,6 +18,7 @@ const VALID_BOKE_RESULTS: Array[String] = ["perfect", "weak", "fail", "hidden"]
 const VALID_OPS: Array[String] = [
     "bg",
     "char",
+    "portrait_effect",
     "say",
     "choice",
     "item",
@@ -52,6 +53,8 @@ const VALID_OPS: Array[String] = [
 
 const VALID_STAGE_POSITIONS: Array[String] = ["reader", "host", "door", "landlady", "other_side"]
 const VALID_CHARACTER_POSITIONS: Array[String] = ["left", "center", "right"]
+const VALID_CHARACTER_TRANSITIONS: Array[String] = ["fade", "slide_left", "slide_right", "instant"]
+const VALID_PORTRAIT_EFFECTS: Array[String] = ["shake", "bounce"]
 const GRADES: Array[String] = ["S", "A", "B", "C"]
 ## Expression ids for `char` and line tags; what each means and which art to make:
 ## docs/story-telling-game/EXPRESSIONS.md.
@@ -367,6 +370,16 @@ func current() -> Dictionary:
     command["node_title"] = _node_title(node_id)
     command["step_index"] = step_index
     return command
+
+
+## The immediately following authored step in this node, without changing the reading position.
+func following_op() -> String:
+    if not _loaded or not _story_node_exists(node_id):
+        return ""
+    var steps: Array = (_story["nodes"][node_id] as Dictionary).get("steps", []) as Array
+    if step_index + 1 >= steps.size():
+        return ""
+    return String((steps[step_index + 1] as Dictionary).get("op", ""))
 
 
 func advance() -> Dictionary:
@@ -1251,10 +1264,11 @@ func _current_command() -> Dictionary:
         var character_entry: Dictionary = _character_catalog().get(character_id, {}) as Dictionary
         if not presentable_command.has("visible"):
             presentable_command["visible"] = true
-        if not presentable_command.has("expression"):
-            presentable_command["expression"] = "neutral"
-        if not presentable_command.has("position"):
-            presentable_command["position"] = String(character_entry.get("slot", "center"))
+        if bool(presentable_command["visible"]):
+            if not presentable_command.has("expression"):
+                presentable_command["expression"] = "neutral"
+            if not presentable_command.has("position"):
+                presentable_command["position"] = String(character_entry.get("slot", "center"))
     elif op == "choice":
         presentable_command["options"] = _visible_choice_options(presentable_command.get("options", []))
     return presentable_command
@@ -1712,6 +1726,13 @@ func _validate_step(current_node_id: String, index: int, step: Dictionary, nodes
                 return "%s char enter must be boolean" % prefix
             if bool(step.get("enter", false)) and not bool(step.get("visible", true)):
                 return "%s char cannot enter and hide at once" % prefix
+            if step.has("transition") and (typeof(step["transition"]) != TYPE_STRING or String(step["transition"]) not in VALID_CHARACTER_TRANSITIONS):
+                return "%s char transition is invalid" % prefix
+        "portrait_effect":
+            if not _catalog_has_character(asset_catalog, String(step.get("id", ""))):
+                return "%s portrait_effect id is not a character in the asset catalog" % prefix
+            if typeof(step.get("effect", null)) != TYPE_STRING or String(step["effect"]) not in VALID_PORTRAIT_EFFECTS:
+                return "%s portrait_effect effect is invalid" % prefix
         "placard":
             if typeof(step.get("text", null)) != TYPE_STRING:
                 return "%s placard text must be a string (\"\" clears the placard)" % prefix
@@ -1931,6 +1952,11 @@ func _validate_step(current_node_id: String, index: int, step: Dictionary, nodes
                 return "%s comedy needs text" % prefix
             if step.has("expression") and (typeof(step["expression"]) != TYPE_STRING or not VALID_EXPRESSIONS.has(String(step["expression"]))):
                 return "%s comedy expression is invalid" % prefix
+            if step.has("side"):
+                if comedy_preset != "tsukkomi_impact":
+                    return "%s comedy side is only for tsukkomi_impact" % prefix
+                if typeof(step["side"]) != TYPE_STRING or String(step["side"]) not in ["left", "right"]:
+                    return "%s comedy side must be left or right" % prefix
             if step.has("color"):
                 if comedy_preset != "emotion_band":
                     return "%s comedy color is only for emotion_band" % prefix

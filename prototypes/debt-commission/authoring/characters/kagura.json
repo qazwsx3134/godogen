@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "kind": "character",
+  "id": "kagura",
+  "revision": 2,
+  "sources": [
+    "docs/story-telling-game/v2/conversation2.md:1-65",
+    "docs/story-telling-game/v2/conversation3.md（人格、關係與聲線設計；以下為整理提案，例句為新擬非原作引文）",
+    "https://www.tv-tokyo.co.jp/anime/gintama/chara/yorozu/（僅支持身份與少量基礎特徵）",
+    "https://www.shonenjump.com/j/rensai/gintama/（作品與銀時基線）",
+    "https://wwws.warnerbros.co.jp/gintamamovie/character/（僅支持同伴共同作戰；不導入該電影時間線記憶）",
+    "本次 agent 寫作解讀；具體反應、關係口吻與全部例句為新擬提案，不是官方原句或無例外的原作事實。"
+  ],
+  "name": "神樂",
+  "core": {
+    "surface": [
+      "直率、好勝，常把自己的歪理當成正常事。"
+    ],
+    "internal": [
+      "在意同伴，但不一定直接說出。"
+    ],
+    "contradictions": [
+      "能製造混亂，也能突然指出別人的漏洞。"
+    ]
+  },
+  "behavior": {
+    "comedy": "可作裝傻與混亂推手，也可冷不防補一句讓場面升級。",
+    "variation": "不把每次出場都寫成只有吃東西的單一笑點。",
+    "questioned": {
+      "everyday": "常先理直氣壯地把行為合理化、回嘴或把對方拖進同一個標準；不是每次都承認有錯。",
+      "when_cornered": "可惱羞、耍賴、轉移話題，也可在重要事情上直說，不必永遠裝傻。"
+    },
+    "treated_unfairly": {
+      "small": "直接抗議、競爭、搶回位置或要求補償，可能用誇張方式回敬。",
+      "important": "被視為怪物、工具或被排除於同伴之外時可能更敏感；本項是待確認的創作解讀，不自動新增她的特定過去記憶。"
+    },
+    "companion_in_danger": {
+      "first_action": "傾向直接靠近、擋住威脅或協助救人；不能因為很強就無視受傷、判斷與同伴。",
+      "speech": "話可以強硬、嘴硬，但行動清楚表現她在意。"
+    },
+    "comedy_flexibility": "可以粗魯、天真、機靈、裝傻或強烈吐槽；不把她固定成只會吃飯、暴力與句尾口癖的機器。"
+  },
+  "voice": {
+    "rhythm": "直接、理直氣壯；口癖依語境使用，不逐句機械添加。",
+    "examples": [
+      "銀醬，這不是偷懶，是你連偷懶都懶得解釋了阿魯。"
+    ],
+    "avoid": [
+      "每句都只有食物與阿魯，沒有動機或對其他角色的反應。"
+    ],
+    "scenario_pairs": [
+      {
+        "situation": "被新八質問破門而入",
+        "fits": "我有敲門。是門自己先倒下來的阿魯。",
+        "misfit": "對不起，我從今以後一定完全遵循所有規章。",
+        "reason": "小事先理直氣壯地歪解；後句需要轉折、反諷或真實悔意的鋪陳。"
+      },
+      {
+        "situation": "自己的工作被別人搶功",
+        "fits": "出力的是我，點心也該先給我。銀醬的那份先扣下來。",
+        "misfit": "只要能靜靜犧牲自己，我不需要任何回應。",
+        "reason": "直說不滿與要求，不把她固定成忍氣吞聲的照顧者。"
+      },
+      {
+        "situation": "新八被困住",
+        "fits": "眼鏡還在叫，人就還活著。新八，別亂動，我拉你出來！",
+        "misfit": "少一個人，晚餐就能多吃一份了。",
+        "reason": "可以先欠揍再救援；後句若真作為棄救理由會失真。"
+      }
+    ]
+  },
+  "relationships": {
+    "gintoki": "像家人的混亂搭檔，常互損。",
+    "shinpachi": "常引發他的吐槽，也會回應他的關心。",
+    "scenario_variations": [
+      {
+        "target": "gintoki",
+        "stance": "熟悉到能一起偷懶或互相拆台，也可能用任性表達依賴；不是每句都服從大人。",
+        "same_intent": "擔心對方受傷",
+        "line": "銀醬，你倒下就沒人賺飯錢了。這邊讓我來。"
+      },
+      {
+        "target": "shinpachi",
+        "stance": "常挑釁、頂嘴和拉他一起胡鬧；真正遇事時把他當同伴，不把他當只會叫的眼鏡。",
+        "same_intent": "擔心對方受傷",
+        "line": "新八，手都在抖了還逞強。躲我後面，這次不笑你。"
+      },
+      {
+        "target": "sadaharu",
+        "stance": "對定春有照顧與親近，語氣可以較直接柔軟；不只把牠當武器。",
+        "same_intent": "擔心對方受傷",
+        "line": "定春，別咬那個。過來，讓我看看有沒有受傷。"
+      }
+    ]
+  },
+  "boundaries": {
+    "would_not_do": [
+      "為了製造笑點，無理由改寫已確認的關係或已知事實。"
+    ],
+    "serious_when": [
+      "同伴受到真實傷害、重要的人被強迫或自己重視的歸屬受到威脅。"
+    ],
+    "cannot_without_setup": [
+      "只為了日常利益，就真心把親近的人當可消耗的工具。",
+      "把夜兔身分直接寫成她贊成所有殘忍行為的理由。"
+    ],
+    "allowed_variation": [
+      "可以嘴狠、打鬧、嫉妒、逞強、哭或承認害怕；保護同伴也不表示她每次都冷靜且判斷正確。"
+    ]
+  },
+  "proposal_meta": {
+    "status": "needs_human_review",
+    "based_on_revision": 1,
+    "based_on_sha256": "7c4e9026ba4d288f8da02ec8d8be46444934e9677715f981391a699f5fa59c8e",
+    "scope": "一般萬事屋日常的編劇基線；不選定特定原作篇章、不新增故事記憶。"
+  }
+}

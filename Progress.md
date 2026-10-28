@@ -20,7 +20,7 @@
 
 ## 萬事屋吐槽 ADV · debt-commission（2026-10-27）
 
-- **目前工作**：`prototypes/debt-commission`，分支 `master`；實作基準為 `0a65639`，目前最新提交是合併其他專案的 `7b6964a`。本輪修改尚未 commit 或 push。使用者已想到第一篇短篇，會在開發與測試後提供，再一起試寫並完善協作流程；目前沒有替作者編寫新故事。
+- **目前工作／交接**：`prototypes/debt-commission`，分支 `master`；2026-10-28 作者要出門，要求交接並 commit。已完成本輪人格協作與編輯器整合；本次提交前 HEAD 為其他原型的 `6e9fb85`，先前遊戲基準為 `21604e3`。提交包含此段落對應程式、測試、資料及文件，完成後停止；最新提交以 `git log -1` 查核，沒有 push。完整交接見 [HANDOFF.md](prototypes/debt-commission/docs/HANDOFF.md)。第一篇極短篇仍等作者提供，沒有代寫。
 - **已完成**：節點編輯器可從選定場景試玩當下的未存稿或唯讀故事，調整旗標與線索；使用作品自己的素材／外觀及獨立暫存遊戲資料。新場景加入分支時會替換預設佔位結尾，編輯器與遊戲驗證會拒絕終止步驟之後不會執行的內容。
 - **本次 UI／手感**：預設改為 16:9 橫向，閱讀與選單字級縮小；LOG／AUTO／SKIP／MENU 按鈕依原圖比例呈現。舞台站位獨立於閱讀框，對話可遮住立繪；一般閱讀框固定，長台詞在框內依文字行分頁，調查或回合控制可依內容增加面板高度。橫向調查可上下及左右拖背景，並保存垂直取景。標題、選項、目錄與案件檔已調整橫向版面。
 - **編輯器與手感**：`scenes/stage.tscn` 的左／中／右站位有實際角色預覽，角色 `Art` 可單獨調整；網頁編輯器的 `char` 可拖曳或按按鈕選左／中／右。閱讀工具列有不影響觸控範圍的按壓回饋；減少畫面效果設定同時作用於按鈕、角色動作及舞台淡入淡出。
@@ -32,6 +32,49 @@
 - **重要文件**：[專案 README](prototypes/debt-commission/README.md)、[編輯器操作](prototypes/debt-commission/docs/STORY-EDITOR.md)、[商業級待辦](prototypes/debt-commission/docs/ROADMAP-COMMERCIAL.md)、[此專案 session-state](prototypes/debt-commission/production/session-state/active.md)。
 - **工作區**：保留原有其他修改（根目錄 `AGENTS.md`、`CLAUDE.md` 與 taskbar-hero 相關 AGENTS）；本輪另有 debt-commission 程式、測試與文件變更。`godot-kit/sync.sh --check debt-commission` 報既有 drift，本輪未改共用模組副本。
 - **下一步**：等使用者分享短篇構想，一起拆出場景／分支，再以編輯器寫作、存檔和試玩；依實際卡點調整工具與流程。
+
+### 2026-10-28：出門交接與編輯器人格參考（最新）
+
+- **已完成**：編輯器「編劇參考」串接正式人格／記憶庫；可唯讀查看、手選角色與記憶、產生／下載與 CLI 相同的 agent 上下文。未確認與內容變更阻擋，按 known_to 隔離記憶，owner 必須在選角中；版本更新要求重開檢閱；面板不改故事、不自動核准。三角色 revision 2／三記憶 revision 1 皆已確認；舊版與原提案存檔。
+- **本輪 L2 證據**：遊戲目錄 `python3 tools/test_persona_context.py` 11項、`python3 tools/story_editor/test_persona_service.py` 7項、`python3 tools/story_editor/test_project_server.py` 16項及 `node --check tools/story_editor/editor.js` 通過。最終 `node tools/story_editor/persona_smoke.mjs --playwright /Users/peter/.npm/_npx/e41f203b7505f1fb/node_modules/playwright-core --chromium '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' --out /private/tmp/debt-persona-editor-handoff-final` 通過，涵蓋實際勾選、知情隔離、CLI對照、下載、版本衝突、窄視窗及故事保持。報告與截圖在該暫存目錄，測試確認僅在fixture。正式 validate=6筆／6確認。
+- **未驗證／未實作**：本輪未改 Godot scene／runtime；既有漫畫、動畫、Web及完整45組遊戲測試沿用下文同日較早證據，未本輪重跑。完整 CRE、內建 AI Writer、自動記憶檢索、OOC評分、真人手機與作者短篇試作仍未完成；不宣稱 conversation 所有能力完成。
+- **交接／提交範圍**：作者已要求 commit，範圍為 debt-commission 的現有漫畫／立繪動畫、人格／記憶及編輯器整合、測試、相關文件與新八參考圖。現有第一章圖編輯副本僅 id／generated_from 與原章不同，作可編輯副本保存，不是新故事。docs/sao 與舊參考圖刪除等不屬本次變更保留。Progress.md／README／active／HANDOFF 已同步。完成 commit 後停下等續作，不 push。
+- **下次接手**：先讀 HANDOFF、README與session-state，重啟本機 Python 服務才有新增 API，再打開「編劇參考」。等待作者提供故事；後續新增人格或記憶仍請人類確認。本機服務是否存活未查核，不把舊網址當成仍可用。
+
+### 2026-10-28：調查收合列
+
+- **已完成**：「收起」改為與閱讀工具列相同尺寸的精簡深藍銀框按鈕，保留獨立觸控範圍及減少動作設定。收合後的細列貼齊底部，背景透明度為 25%；非按鈕區域可穿透拖曳與點擊。集齊線索後，客廳的展開畫面顯示可用的「繼續」，再次收合時底部也提供「繼續」。實作與版面分別在 `scripts/investigate_bar.gd`、`main.gd`、`scenes/ui/investigate_bar.tscn`、`scenes/ui/gintama_investigate_toggle.tscn` 和 `scenes/ui/dialogue_box_gintama.tscn`。
+- **本次驗證**：`phase3_ui`、`phase4_ui`、`ui_styles`、`landscape_reading`、`reading_feel` 通過（`godot-tests.qdM7fL/`）；補上新按鈕減少動作檢查後重跑 `reading_feel` 通過（`godot-tests.NRPka0/`）；補上透明列點擊穿透後重跑 `phase3_ui` 通過（`godot-tests.UKwBO9/`）。以 1136×640 Godot 視窗跑第一章與最大字級檢查，35 個畫面無裁字；其中確認客廳集齊四條線索後收合及展開都有可用的繼續鈕（`/private/tmp/debt-investigate-textfit/`）。Web 重新匯出後，Chrome 模擬觸控的 Phase 3 收合、展開、穿透拖曳、集齊線索後從收合列繼續、選項與存讀檔通過，報告在 `test-results/phase3-report.json`。本次未重跑上面記載的完整 45 組或其他編輯器瀏覽器流程；橫向真人手機實機試玩仍待使用者驗收。
+- **工作區／後續**：本 session 沒有執行 commit 或 push；目前基準 `21604e3` 已包含場景及收合功能，後續 QA、測試和文件仍有未提交修改。保留其他專案的修改；等使用者提供第一篇短篇構想，再一起試寫並完善工作流程。
+
+### 2026-10-28：漫畫吐槽與龜派氣功
+
+- **已完成**：參考 `docs/gintama-like/new/sinpachi.jpeg`，沿用既有新八表情做左右斜切漫畫格、黑白放射線和黑紅爆炸氣泡；完美／普通吐槽選詞與既有的新八吐槽 `cutin` 會播放，左右交替，點一下可快轉後接回故事，相同台詞不連播兩次，放棄及冷場不顯示口語漫畫格。光束必殺及連擊提示保留各自演出；既有故事及存檔版本沒有改動。先隱藏舊通知以免遮擋氣泡；集滿力量的提示在漫畫格後顯示。減少畫面效果時停止舞台放大。
+- **可編輯／光束**：`scenes/comedy/tsukkomi_impact.tscn`、`tsukkomi_impact_right.tscn` 可在 Godot 各自調整構圖；劇本編輯器新增「出場位置」，`.dialogue` 的 `do comedy(...)` 可附 `left`／`right`，未指定預設左側。`scenes/ui/beam.tscn` 將光束改為起點光暈及向前擴散的光束；`scenes/ui/cutin.tscn` 的 `BeamCaptionArea` 讓同時出現的台詞留在上方。畫面與資源均以現有素材及保存 scene 製作，沒有生成圖片。
+- **本次 L2 驗證**：在遊戲目錄用 `python3 tools/story_editor/run_coordinated.py /Applications/Godot.app/Contents/MacOS/Godot --headless --path . --script res://tests/<測試>.gd` 依序執行 `test_comedy`、`test_super_effects`、`test_phase3_ui`、`test_phase4_rounds_ui` 均通過，含既有吐槽與選詞去重及光束流程；補上修改漫畫格位置、儲存副本後播放仍保留位置的檢查，重跑 `test_comedy` 通過。`node tools/story_editor/comedy_side_smoke.mjs --playwright /Users/peter/.npm/_npx/e41f203b7505f1fb/node_modules/playwright-core --chromium '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'` 通過選位置、切換 preset、存檔驗證與重新載入。Godot headless 匯入完成；以隔離 HOME 重新匯出 Web 後，`node tools/browser_check.mjs --phase3 ... --url http://127.0.0.1:5198/` 的橫向觸控、漫畫格快轉與通知不遮擋通過（`test-results/phase3-report.json`、`phase3-manga-retort.png`）。編輯器瀏覽器測試在最後加上既有 `cutin` 漫畫顯示前執行；沒有重跑完整測試。桌面 Godot 實際截圖檢視左右漫畫格與光束（`/private/tmp/debt-effects-after/`），超必殺實際流程由 headless 測試驗證，尚未做真人手機手感驗收。
+- **限制與後續**：Web 匯出成功，但隔離環境仍有既有 macOS CA／MCP port 與編輯器退出時資源清理訊息。第一篇短篇仍等使用者提供，沒有代寫；之後一起以編輯器試寫與調整流程。本次沒有 commit／push，`21604e3` 是現有實作基準，以上程式、scene、測試與文件仍在未提交工作區，保留其他專案既有修改。
+
+### 2026-10-28：立繪動畫與故事編輯
+
+- **已完成**：角色 `char` 步驟可選淡入／淡出、從左／右滑動並淡化、直接切換；新增 `portrait_effect`，能讓已登場立繪抖動或彈跳。編輯器的「角色狀態」「進退場動畫」「立繪動作」都有表單；純文字來源支援 `enter(..., "slide_left")`、`hide(id, "fade")`、`portrait_effect(id, "shake"|"bounce")`。登場後馬上接立繪動作與台詞時，動作會在登場後播放；切換表情、略讀、減少動作和連續台詞不會留下偏移或過期的退場回呼。退場維持當前表情與站位，即使動畫尚未結束，下句自動存檔也記錄角色已離場。既有故事資料未改寫。
+- **本次 L2 驗證**：在遊戲目錄用 `python3 tools/story_editor/run_coordinated.py /Applications/Godot.app/Contents/MacOS/Godot --headless --path . --script res://tests/<測試>.gd` 依序執行 `test_portrait_motion`、`test_reading_feel`、`test_search_cast`、`test_phase3_ui` 通過；`test_story`、`test_story_build`、`test_stage_scene` 在最後的略讀／自動存檔修正前通過。動畫測試涵蓋進退場方向、特效、變表情、略讀／減少動作、退場時自動存檔與重讀；故意把抖動位移歸零後確實失敗，恢復後重跑通過。`node tools/story_editor/portrait_motion_smoke.mjs --playwright /Users/peter/.npm/_npx/e41f203b7505f1fb/node_modules/playwright-core --chromium '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'` 通過角色動作選擇、存檔重開、建立新故事與未存稿試玩（此瀏覽器測試在最後的略讀／自動存檔修正前執行）；編輯器 fallback 枚舉與 runner 一致。本機 Godot 視窗截圖檢視淡化、滑動、抖動、彈跳（`/private/tmp/debt-portrait-audit/`）。重新匯出 Web 後，Chrome 模擬觸控的 `--phase3` 六組通過，報告 `test-results/phase3-report.json`；本機編輯器實際載入專案、存檔入口與新增立繪動作選項已確認。
+- **使用與限制**：編輯器現於 `http://127.0.0.1:8000/tools/story_editor/`，從零寫作步驟在 `prototypes/debt-commission/docs/STORY-EDITOR.md`。未存稿可從選定場景試玩；本機存檔後桌面遊戲重新開啟可選故事，Web 需重新匯出才包含新故事。既有 `.dialogue` 故事在圖編輯器唯讀，可轉成獨立副本；增刪既有故事的步驟可能使舊遊戲存檔版本不符。本輪沒有重跑完整測試或真人手機驗收。Web 匯出仍有既有 macOS CA／MCP port 與編輯器退出時資源清理訊息；本次沒有 commit／push，保留工作區既有修改，等待使用者提供第一篇短篇構想。
+
+### 2026-10-28：conversation 功能與人格系統核對
+
+- **需求／結果**：使用者準備和 agent、編輯器合作一篇極短篇，先要求驗證 `docs/story-telling-game` conversation 中的能力。核對 base 三份與 v2 四份紀錄，對照第一方資料、runtime、編輯器與寫作指引，產出 [核對報告](docs/story-telling-game/CONVERSATION-AUDIT-2026-10-28.md)。結論不是全部完成：短篇播放、分支、演出與編輯器可用；CPC 人格 schema／三角色完整資料、記憶／知識／關係模型與檢索、人格一致性 QA、Prompt Assembler、內建 AI Writer／Chat 未落實。現有角色 profile、tone、history 與章節 carry 不能等同完整人格／記憶系統。
+- **文件修正**：STATUS 加入最新核對入口及人格缺口；STORY_WORKFLOW 的現行契約／編劇 prompt 改為 16:9 橫向，說明人工 prompt 與已整合系統的差異。早期格子地圖、紙娃娃等列作後續方向，非目前極短篇前置。
+- **本次驗證**：遊戲目錄依序用 `python3 tools/story_editor/run_coordinated.py /Applications/Godot.app/Contents/MacOS/Godot --headless --path . --script res://tests/<測試>.gd` 跑 `test_choices`、`test_ep00`（892 checks）、`test_chapter_flow`，均 PASSED。Godot 退出有既有資源／RID 清理訊息；本次未跑 Web、編輯器 browser smoke、完整測試與真人試讀，其他能力沿用本檔前次證據並做靜態核對。知識圖 MCP 回覆 Transport closed，改用第一方檔案搜尋。
+- **下一步／工作區**：建議先補製作階段 CPC 最小資料、特定記憶與 agent 寫作／檢查／作者採納流程，再合作短篇；本次未實作缺漏功能、未代寫故事。分支 master、基準 `21604e3`，沒有 commit／push，保留前次遊戲與其他專案未提交修改。
+
+### 2026-10-28：可重讀人格／記憶與人類確認
+
+- **使用者要求**：建立可重複讀取人格與記憶資料，必須和協作人類確認。已完成最小製作階段檔案／CLI 流程：`authoring/characters/` 三人草案、`authoring/memories/` 三條萬事屋基礎背景記憶、空的 `confirmations.json`、`REVIEW.md`（完整內容與雜湊），以及 README／AGENTS 規則。所有六筆仍待作者確認，沒有把使用者同意建立工具誤當成內容核准；例句新擬且非原作引文，不包含虛構的玩家歷史。
+- **工具**：`tools/persona_context.py` 提供 validate／review／context／confirm。每份人格、每條記憶分別綁定人類確認證據及 SHA-256，內容變更即失效；context 遇到未確認／未知資料會整體拒絕，明確選取記憶並按 known_to 分配。這是本機確認紀錄，不是登入／簽章或身分驗證；agent 不得自行填入確認證據。尚無網頁人格編輯器、完整 CRE、OOC 自動 QA 或自動記憶檢索。
+- **L1 驗證**：遊戲目錄 `python3 tools/test_persona_context.py` 11 項通過，涵蓋草稿阻擋、改動失效、記憶確認／知情範圍、未知 owner、重複 id、缺證據、過期確認 hash；確認 fixture 只在臨時目錄。記憶 gate 的變異檢查（在獨立 Python 程序中讓 confirmed 永遠 true）確實使阻擋測試失敗，正式程式無修改；恢復正常程序後 11 項通過。`python3 tools/persona_context.py validate` 顯示 valid=true／records=6／confirmed=0；真實 context 命令確認被阻擋。本輪未改遊戲 runtime，未跑 Godot／Web 測試。
+- **下一步／工作區**：向作者展示 REVIEW.md 內六筆具體內容，請逐筆確認／修改，取得明確答覆與內容範圍後才登記確認並開始寫故事。STORY_WORKFLOW／README／核對報告已加最新入口，active.md 已交接。master 基準 `21604e3`，沒有 commit／push；保留其他專案及前輪修改。
+
+- **後續人類確認**：作者回覆「這幾項 可以 請問人格跟記憶要列多一點比較好嗎？」；比對 REVIEW 中六筆雜湊與目前內容一致後，逐筆記錄三角色＋三條基礎記憶 revision 1 的確認及原話證據。context 成功載入六筆；README／REVIEW／active 已同步，後續新增與修改仍需重審。本次僅更新資料確認狀態，未改程式，未重跑遊戲測試。
 
 本次暫時啟動本機遊戲 `http://127.0.0.1:5198/?sample=phase3` 與編輯器 `http://127.0.0.1:8000/tools/story_editor/`；程序是否仍存活需自行確認。Web 產物在 `build/web/`，可由 `tools/build_web.sh` 重建；隔離 HOME 匯出時需讓 Godot 4.7 的現有匯出範本可見。
 
@@ -48,6 +91,20 @@ python3 tools/story_editor/run_coordinated.py node tools/story_editor/smoke.mjs 
 此 checkout 未見 `studio/runtime/codex/`；`studio/README.md` 說明安裝器會產生該目錄並修改 `.codex/`／manifest，本輪沒有執行安裝器。Herdr 環境變數指定的工作區無法解析，本輪由主 session 自行完成。
 
 ---
+
+
+### 2026-10-28：三角色人格深度補充提案
+
+- **完成／待確認**：依作者要求補上銀時、新八、神樂的情境反應（被質問、受委屈、同伴遇險）、三組語氣正反例、認真觸發／行為界線，以及面對不同人的同意圖口吻。存於 `authoring/proposals/character-depth-v2/`，含三份完整 revision 2 JSON、REVIEW 與空確認紀錄。官方人物頁支持基礎特徵；細節與台詞明確標為本次寫作解讀與原創例句，不導入電影事件或新增記憶。三筆尚未經人類確認，保留正式 revision 1 與六筆既有確認。
+- **資料驗證**：遊戲目錄執行 `python3 tools/persona_context.py --root authoring/proposals/character-depth-v2 validate` → valid=true／records=3／confirmed=0；主目錄 `validate` → records=6／confirmed=6。另以 Python subprocess 實際確認提案 context 被拒絕、正式三角色＋三記憶 context 成功，並逐筆比對提案 based_on_sha256 與正式角色一致。未改 runtime／scene／工具，未重跑 Godot、Web 或完整測試。
+- **下一步／工作區**：作者檢閱 REVIEW 中的具體內容，確認全部或指定修改後，再升入正式角色並登記新版本確認。第一篇故事仍等作者提供。分支 master，未 commit／push；保留所有既有及其他原型未提交變更。
+
+
+### 2026-10-28：第二版人格經作者採用
+
+- **已完成**：作者明確回覆「可以 採用」，已將審閱的銀時／新八／神樂三份完整 revision 2 原樣升入正式 `authoring/characters/`，透過 confirm 命令將本次原話、範圍與內容雜湊登記至正式 confirmations.json。升版前人格／審閱稿／確認證據保存在 `authoring/archive/character-depth-v1/`；三條既有記憶與其確認紀錄維持 revision 1。README／REVIEW／提案快照說明已同步；proposal_meta 保留提案建立時資料，不作目前確認狀態判定。
+- **本次資料驗證**：遊戲目錄 `python3 tools/persona_context.py validate` → valid=true／records=6／confirmed=6；以 Python subprocess 執行三角色＋三記憶的正式 context 成功，另 assert 正式三份角色與已審提案逐位元組相同、三筆記憶確認與升版前紀錄相同。只變更資料／文件，未重跑工具單元測試、Godot 或 Web；11 項工具測試仍沿用前次建置證據。
+- **下一步／工作區**：可用已確認人格與記憶共同編寫作者即將提供的極短篇。後續新內容仍逐次送人類確認。本次沒有 commit／push，保留其他專案與既有遊戲未提交變更。
 
 
 ## 全員推王融合版 · hero-horde-idle（2026-10-27）

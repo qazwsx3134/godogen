@@ -80,6 +80,20 @@ func _run() -> void:
 		_game.call("_collect_hotspot", spot)
 		if not await _play_until(func() -> bool: return _game._screen_mode == "investigate", "back to search"):
 			return _quit(1)
+	await _frames(6)
+	if _game._current_bg_id != "yorozuya_living_room" or not _game._investigation_continue_button.is_visible_in_tree() \
+			or _game._investigation_continue_button.disabled:
+		printerr("TEXT FIT FAILED: completed living-room search has no enabled Continue button")
+		return _quit(1)
+	await _audit("investigate_complete")
+	_game.call("_set_investigation_collapsed", true)
+	await _frames(6)
+	var folded_continue: Button = _game._investigate_bar.get("continue_button") as Button
+	if not folded_continue.is_visible_in_tree() or folded_continue.disabled:
+		printerr("TEXT FIT FAILED: completed folded search has no enabled Continue button")
+		return _quit(1)
+	await _audit("investigate_complete_folded")
+	_game.call("_set_investigation_collapsed", false)
 	_game.call("_open_case_file", "materials")
 	await _audit("case_file")
 	_game.call("_close_case_file")

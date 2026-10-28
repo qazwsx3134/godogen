@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "kind": "memory",
+  "id": "gintoki_yorozuya_baseline",
+  "revision": 1,
+  "category": "canon",
+  "owner": "gintoki",
+  "summary": "銀時與新八、神樂共同生活／工作於萬事屋。",
+  "known_to": [
+    "gintoki",
+    "shinpachi",
+    "kagura"
+  ],
+  "mutable": false,
+  "sources": [
+    "docs/story-telling-game/v2/conversation4.md（萬事屋日常情境）；待作者確認的本作共識，不代表已查核全部原作設定。"
+  ]
+}

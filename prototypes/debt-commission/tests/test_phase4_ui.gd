@@ -37,7 +37,16 @@ func _run() -> void:
 	await _search_all(game)
 	game._collect_hotspot("empty_milk_bottle")
 	_expect(game._runner.items.size() == 4, "each clue is granted once: %s" % [game._runner.items])
-	game._on_investigation_continue_pressed()
+	await _frames(4)
+	_expect(game._current_bg_id == "yorozuya_living_room" and game._dialog_panel.visible
+		and game._investigation_continue_button.is_visible_in_tree() and not game._investigation_continue_button.disabled,
+		"after the last clue's scene, the living room exposes an enabled Continue button")
+	game._set_investigation_collapsed(true)
+	await _frames(4)
+	var folded_continue: Button = game._investigate_bar.get("continue_button") as Button
+	_expect(folded_continue.is_visible_in_tree() and not folded_continue.disabled,
+		"the folded strip also exposes Continue when all living-room clues are found")
+	await _press(folded_continue)
 	game._set_skip(true)  # SKIP stops at the investigation; the next line needs it again
 	await _until(func() -> bool: return game._screen_mode == "choice", "reach the ask-first choice")
 

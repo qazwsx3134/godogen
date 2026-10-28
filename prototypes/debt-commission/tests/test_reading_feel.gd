@@ -57,6 +57,12 @@ func _run() -> void:
 	await create_timer(0.08).timeout
 	_expect(surface.scale.is_equal_approx(Vector2.ONE) and art.position.is_equal_approx(rest),
 		"reduced motion disables new button and character movement")
+	for compact: Button in [game._dialog_panel.investigation_collapse,
+			game._investigate_bar.get("expand_button") as Button, game._investigate_bar.get("continue_button") as Button]:
+		compact.button_down.emit()
+		await create_timer(0.08).timeout
+		_expect((compact.get_node("Surface") as Control).scale.is_equal_approx(Vector2.ONE),
+			"reduced motion also keeps the investigation button still")
 	game._motion.character(sprite, "leave", false)
 	_expect(not sprite.visible, "reduced motion still completes a character exit immediately")
 	_expect(game._motion.fade("out", 0.3, false) == 0.0 and is_equal_approx(game._motion.veil.modulate.a, 1.0),

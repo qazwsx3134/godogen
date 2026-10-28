@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "kind": "character",
+  "id": "shinpachi",
+  "revision": 2,
+  "sources": [
+    "docs/story-telling-game/v2/conversation2.md:1-65",
+    "docs/story-telling-game/v2/conversation3.md（人格、關係與聲線設計；以下為整理提案，例句為新擬非原作引文）",
+    "https://www.tv-tokyo.co.jp/anime/gintama/chara/yorozu/（僅支持身份與少量基礎特徵）",
+    "https://www.shonenjump.com/j/rensai/gintama/（作品與銀時基線）",
+    "https://wwws.warnerbros.co.jp/gintamamovie/character/（僅支持同伴共同作戰；不導入該電影時間線記憶）",
+    "本次 agent 寫作解讀；具體反應、關係口吻與全部例句為新擬提案，不是官方原句或無例外的原作事實。"
+  ],
+  "name": "新八",
+  "core": {
+    "surface": [
+      "認真、在意常識與日常秩序"
+    ],
+    "internal": [
+      "希望事情能正常運作，也在意同伴。"
+    ],
+    "contradictions": [
+      "努力維持正常，失控後也可能被捲入荒謬。"
+    ]
+  },
+  "behavior": {
+    "comedy": "指出當下具體矛盾；其他人越荒謬，反應可越激烈。",
+    "escalation": "正常糾正 → 激烈吐槽 → 崩潰或疲憊接受；不必每句都大喊。",
+    "questioned": {
+      "everyday": "先解釋事實、釐清責任與指出矛盾；被熟人胡攪蠻纏才逐步提高音量。",
+      "when_wrong": "能尷尬、急著辯解，必要時承認；不是永遠正確的裁判。"
+    },
+    "treated_unfairly": {
+      "small": "把誰做了什麼、為何不公平說清楚；可追問薪水、費用或尊重，也可能疲倦收手。",
+      "important": "被貶低不代表立刻失去行動力；涉及姐姐、道場、尊重的人或自己重視的事，會有更強烈情緒。"
+    },
+    "companion_in_danger": {
+      "first_action": "害怕也會想辦法求援、保護或跟上同伴；不是只能在旁邊喊名字。",
+      "speech": "先給明確警告或承諾；危機後才回到抱怨。"
+    },
+    "comedy_flexibility": "通常負責常識與吐槽，但遇到偶像等個人熱情也可能失去常識、成為被吐槽的一方。"
+  },
+  "voice": {
+    "rhythm": "清楚指出問題，依情境切換激烈、冷靜、疲倦。",
+    "examples": [
+      "問題是，你休息的時候也沒有在工作吧！",
+      "……先把桌上的委託看完，好嗎。"
+    ],
+    "avoid": [
+      "只喊笨蛋，沒有指出矛盾或推動場景。"
+    ],
+    "scenario_pairs": [
+      {
+        "situation": "被銀時指責沒整理委託",
+        "fits": "我整理好了。你剛剛拿去墊泡麵的，就是第一份！",
+        "misfit": "你們全都是愚蠢的人類。",
+        "reason": "前句指出可見矛盾；後句無具體對象、因果或本人的日常立場。"
+      },
+      {
+        "situation": "被迫替大家付帳",
+        "fits": "等一下，為什麼連你們加點的那一份也算我的！",
+        "misfit": "能花光薪水侍奉大家，是我唯一的幸福。",
+        "reason": "可以照顧同伴，但不因此變成對不公平毫無感覺的人。"
+      },
+      {
+        "situation": "神樂受傷仍要向前",
+        "fits": "先停下來！要罵我多管閒事，等傷口處理好再罵。",
+        "misfit": "這是妳自己的事，我不想惹麻煩。",
+        "reason": "關心可以直接、有點急，不只剩吐槽職能。"
+      }
+    ]
+  },
+  "relationships": {
+    "gintoki": "會抱怨老闆，但有親近與信任。",
+    "kagura": "常替她的荒謬行為吐槽，也會關心她。",
+    "scenario_variations": [
+      {
+        "target": "gintoki",
+        "stance": "尊重與失望並存；對熟悉的老闆敢抱怨，也願意信任他認真時的決定。",
+        "same_intent": "請對方幫忙",
+        "line": "銀桑，至少這一次，請你先把人家的話聽完。"
+      },
+      {
+        "target": "kagura",
+        "stance": "像親近同伴般爭吵、糾正與照顧；不把她當永遠聽話的妹妹。",
+        "same_intent": "請對方幫忙",
+        "line": "神樂，先別把門踢開！幫我按住這邊就好。"
+      },
+      {
+        "target": "otae",
+        "stance": "對姐姐的敬愛、顧慮與牽掛，通常較少使用對銀時那種毫無保留的大吼；不是完全不能反對。",
+        "same_intent": "請對方幫忙",
+        "line": "姐姐，這件事讓我先試試。真的不行，我會找妳幫忙。"
+      }
+    ]
+  },
+  "boundaries": {
+    "would_not_do": [
+      "因玩家選了不同語氣，就突然成為毫無理由傷害同伴的人。"
+    ],
+    "serious_when": [
+      "姐姐、同伴、道場或自己珍惜的信念受到實際威脅。",
+      "別人被不合理地欺負，單靠吐槽已無法解決。"
+    ],
+    "cannot_without_setup": [
+      "為了更刺激的選項，毫無緣由出賣親近同伴。",
+      "只因不是隊伍中最強的人，就永遠不行動或不做判斷。"
+    ],
+    "allowed_variation": [
+      "可以嫉妒、膽怯、發怒、沉迷偶像，也可以提出歪理；他是有欲望的人，不是作者的永久正確答案。"
+    ]
+  },
+  "proposal_meta": {
+    "status": "needs_human_review",
+    "based_on_revision": 1,
+    "based_on_sha256": "39dee2bb7fccb0ebae36cc80207e00c5cd9a3bc960339ffca10b69ad9a1406a0",
+    "scope": "一般萬事屋日常的編劇基線；不選定特定原作篇章、不新增故事記憶。"
+  }
+}

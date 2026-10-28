@@ -318,6 +318,8 @@ var _history: Array[Dictionary] = []
 var _boke_time_remaining: float = 0.0
 var _boke_timer_round_id: String = ""
 var _last_boke_display_second: int = -1
+var _next_tsukkomi_right: bool = false
+var _recent_retort: String = ""
 var _restored_boke_timer_remaining: float = -1.0
 var _restored_boke_ui_mode: String = ""
 var _last_boke_result: String = ""
@@ -957,19 +959,22 @@ func _apply_character(command: Dictionary) -> void:
 	if not _sprites.has(actor_id):
 		return
 	var sprite: Control = _sprites[actor_id] as Control
-	if not _dict_bool(command, "visible", true):
-		_motion.character(sprite, "leave", _skip)
+	_motion.cancel_character(sprite)
 	if command.has("expression"):
 		sprite.call("set_expression", _dict_string(command, "expression"))
 	if command.has("position"):
 		_actor_slots[actor_id] = _dict_string(command, "position")
 		_layout_sprite(actor_id)
+	var transition: String = _dict_string(command, "transition", "fade")
+	if not _dict_bool(command, "visible", true):
+		_motion.character(sprite, "leave", _skip, transition)
+		return
 	if _dict_bool(command, "enter") and not sprite.visible:
 		# `enter`: someone who has not spoken (Elisabeth) comes on stage at their slot, lit.
 		_layout_sprite(actor_id)
 		sprite.modulate = Color.WHITE
 		sprite.visible = true
-		_motion.character(sprite, "enter", _skip)
+		_motion.character(sprite, "enter", _skip, transition)
 
 
 func _build_dialogue() -> void:
@@ -1722,6 +1727,8 @@ func _drive_story(generation: int) -> void:
 		if command.is_empty():
 			_show_runtime_error("故事流程沒有可呈現的指令。")
 			return
+		if _command_op(command) in ["say", "choice", "end", "result", "investigate", "boke_round"]:
+			_recent_retort = ""
 		match _command_op(command):
 			"say":
 				_story_busy = false
@@ -1766,6 +1773,10 @@ func _drive_story(generation: int) -> void:
 				_library.unlock(_gallery_key("bg"), _dict_string(command, "id"))
 			"char":
 				_apply_character(command)
+			"portrait_effect":
+				var actor_id: String = _dict_string(command, "id")
+				if _sprites.has(actor_id):
+					_motion.reaction(_sprites[actor_id] as Control, _dict_string(command, "effect"), _skip)
 			"show":
 				_sprite(_dict_string(command, "actor")).visible = true
 			"hide":
@@ -1777,7 +1788,21 @@ func _drive_story(generation: int) -> void:
 					await get_tree().create_timer(float(command.get("duration", 0.0))).timeout
 					if generation != _generation:
 						return
-			"shake", "flash", "cutin", "bgm", "se", "beam":
+			"cutin":
+				var line: String = _dict_string(command, "text")
+				# The existing Shinpachi retorts use cutin; super captions and combo notices keep their own treatment.
+				var retort: bool = _dict_string(command, "speaker") == "shinpachi" \
+					and _runner.following_op() != "beam" and not line.begins_with("吐槽連擊")
+				if retort:
+					var repeated: bool = not _recent_retort.is_empty() and line == _recent_retort
+					_recent_retort = ""
+					if not _skip and not repeated:
+						await _play_manga_retort(line, "shinpachi", generation)
+						if generation != _generation:
+							return
+				else:
+					_effects.play(command, _skip)
+			"shake", "flash", "bgm", "se", "beam":
 				_effects.play(command, _skip)
 				if _command_op(command) == "bgm":
 					_library.unlock(_gallery_key("bgm"), _dict_string(command, "id"))
@@ -1794,13 +1819,19 @@ func _drive_story(generation: int) -> void:
 					if generation != _generation:
 						return
 			"comedy":
-				_log_comedy(command)
-				if not _skip and _comedy_layer.play(command) > 0.0:
-					_publish_qa_state()
-					while _comedy_layer.is_active() and generation == _generation:
-						await get_tree().process_frame  # a tap or stop() ends it early
-					if generation != _generation:
-						return
+				var repeated: bool = not _recent_retort.is_empty() and _dict_string(command, "speaker") == _default_pov() \
+					and _dict_string(command, "text") == _recent_retort
+				_recent_retort = ""
+				if not repeated:
+					_log_comedy(command)
+					if not _skip:
+						_toast.visible = false
+					if not _skip and _comedy_layer.play(command) > 0.0:
+						_publish_qa_state()
+						while _comedy_layer.is_active() and generation == _generation:
+							await get_tree().process_frame  # a tap or stop() ends it early
+						if generation != _generation:
+							return
 			_:
 				pass  # ponytail: move／face／camera 屬於舊的俯視舞台；VN 立繪沒有對應演出，直接略過
 		_runner.call("advance")
@@ -1811,6 +1842,16 @@ func _drive_story(generation: int) -> void:
 func _log_comedy(command: Dictionary) -> void:
 	_append_history({"key": _line_key(command, "comedy"), "kind": "say", "speaker": _dict_string(command, "speaker"),
 		"text": _dict_string(command, "text"), "thought": false})
+
+
+func _play_manga_retort(line: String, speaker: String, generation: int) -> void:
+	var side: String = "right" if _next_tsukkomi_right else "left"
+	_next_tsukkomi_right = not _next_tsukkomi_right
+	_toast.visible = false
+	_comedy_layer.play({"preset": "tsukkomi_impact", "speaker": speaker, "text": line, "side": side})
+	_publish_qa_state()
+	while _comedy_layer.is_active() and generation == _generation:
+		await get_tree().process_frame
 
 
 ## Where the speaker's picture is on screen (empty when they are not on stage): the comedy layer
@@ -2521,11 +2562,11 @@ func _on_boke_option_pressed(option_id: String) -> void:
 	_story_busy = true
 	_screen_mode = "busy"
 	var result: Dictionary = _runner.call("resolve_boke", option_id) as Dictionary
-	_resolve_boke_presentation(result, option_label, "tsukkomi")
+	_resolve_boke_presentation(result, option_label, "tsukkomi", "", true)
 
 
 func _resolve_boke_presentation(result: Dictionary, option_label: String = "", prior_ui_mode: String = "",
-		feedback_override: String = "") -> void:
+		feedback_override: String = "", show_comic: bool = false) -> void:
 	if result.is_empty():
 		_story_busy = false
 		_present_boke_round(_runner_current(), true, prior_ui_mode)
@@ -2552,11 +2593,24 @@ func _resolve_boke_presentation(result: Dictionary, option_label: String = "", p
 		feedback = feedback_override
 	var power: int = int((_runner.get("gameplay") as Dictionary).get("power", 0))
 	var maximum: int = int((_runner.get("gameplay") as Dictionary).get("max_power", 100))
-	if power >= maximum and _previous_power < maximum:
-		_effects.play({"op": "cutin", "text": _words("{power}全滿！"), "speaker": _default_pov()}, _skip)
-		_effects.play({"op": "se", "id": "power_up"}, _skip)
+	var filled_power: bool = power >= maximum and _previous_power < maximum
 	_previous_power = power
 	_refresh_phase3_hud()
+	if show_comic and not _skip and _last_boke_result in ["perfect", "weak"]:
+		var line: String = option_label.strip_edges()
+		if line.begins_with("吐槽："):
+			line = line.trim_prefix("吐槽：").strip_edges()
+		elif line.contains("反駁："):
+			line = line.substr(line.find("反駁：") + "反駁：".length()).strip_edges()
+		if not line.is_empty():
+			var generation: int = _generation
+			_recent_retort = line
+			await _play_manga_retort(line, _default_pov(), generation)
+			if generation != _generation:
+				return
+	if filled_power:
+		_effects.play({"op": "cutin", "text": _words("{power}全滿！"), "speaker": _default_pov()}, _skip)
+		_effects.play({"op": "se", "id": "power_up"}, _skip)
 	_show_toast(feedback)
 	_start_drive()
 
@@ -2906,9 +2960,18 @@ func _focus_speaker(speaker: String, expression: String) -> void:
 				_layout_sprite(actor_id)
 				sprite.visible = true
 			_char_layer.move_child(sprite, -1)
-			if not expression.is_empty():
+			var state: Dictionary = _motion.character_state(sprite)
+			if not expression.is_empty() and str(sprite.get("expression")) != expression:
+				_motion.cancel_character(sprite)
 				sprite.call("set_expression", expression)
-			_motion.character(sprite, "enter" if entering else "speak", _skip)
+				if str(state.get("kind", "")) in ["enter", "shake", "bounce"]:
+					_motion.character(sprite, str(state["kind"]), _skip, str(state.get("transition", "fade")))
+					if not str(state.get("queued", "")).is_empty():
+						_motion.reaction(sprite, str(state["queued"]), _skip)
+			if entering:
+				_motion.character(sprite, "enter", _skip)
+			elif _motion.character_kind(sprite) not in ["enter", "shake", "bounce"]:
+				_motion.character(sprite, "speak", _skip)
 
 
 func _clear_stage() -> void:
@@ -3669,7 +3732,9 @@ func _build_save_payload(preview_png: String) -> Dictionary:
 	var sprites: Dictionary = {}
 	for actor_id: String in _sprites.keys():
 		var sprite: Control = _sprites[actor_id] as Control
-		sprites[actor_id] = {"visible": sprite.visible, "expression": str(sprite.get("expression")),
+		# A fading exit is already absent in the story, even while its last frames are visible.
+		var on_stage: bool = sprite.visible and _motion.character_kind(sprite) != "leave"
+		sprites[actor_id] = {"visible": on_stage, "expression": str(sprite.get("expression")),
 			"position": str(_actor_slots.get(actor_id, "center"))}
 	var current: Dictionary = _runner_current()
 	var payload: Dictionary = {
@@ -3880,6 +3945,7 @@ func _delete_save() -> void:
 
 func _cancel_generation() -> void:
 	_pending_round_mode = ""
+	_recent_retort = ""
 	_generation += 1
 	_line_generation += 1
 	_story_busy = false
@@ -4211,8 +4277,11 @@ func _write_qa_state() -> void:
 		if hotspot.has("character") and covered:
 			reach.end.y = minf(reach.end.y, _dialog_panel.get_global_rect().position.y)
 			covered = false
-		if _investigate_bar.visible:  # the folded bar takes the taps on whatever it covers
-			reach.end.y = minf(reach.end.y, _investigate_bar.get_global_rect().position.y)
+		if _investigate_bar.visible:  # the translucent strip passes input; only its buttons cover spots
+			for name: String in ["expand_button", "continue_button"]:
+				var bar_button: Control = _investigate_bar.get(name) as Control
+				if bar_button != null and bar_button.is_visible_in_tree():
+					reach = _rect_without_control(reach, bar_button.get_global_rect())
 		var reachable: bool = reach.has_area() and Rect2(_game.global_position, _game.size).encloses(reach) and not covered
 		hotspot_state.append({
 			"id": hotspot_id,
@@ -4303,6 +4372,9 @@ func _write_qa_state() -> void:
 		"viewport": {"width": get_viewport_rect().size.x, "height": get_viewport_rect().size.y},
 		"game": _rect(_game),
 		"dialog": _rect(_dialog_panel) if _dialog_panel.is_visible_in_tree() else {},
+		"investigate_bar": _rect(_investigate_bar) if _investigate_bar.is_visible_in_tree() else {},
+		"investigate_backdrop": _rect(_investigate_bar.get("panel") as Control) if _investigate_bar.is_visible_in_tree() else {},
+		"investigate_backdrop_opacity": (_investigate_bar.get("panel") as Control).self_modulate.a,
 		"quickbar": _rect(_quickbar) if _quickbar.is_visible_in_tree() else {},
 		"choice_sheet": _rect(_choice_sheet) if _choice_sheet.is_visible_in_tree() else {},
 		"choice_viewport": _rect(_choice_sheet.choices_scroll) if _choice_sheet.is_visible_in_tree() else {},
@@ -4389,6 +4461,24 @@ func _tappable(control: Control) -> bool:
 			return false
 		parent = parent.get_parent()
 	return true
+
+
+## Largest rectangular part of a hotspot outside an interactive control, for the QA bridge.
+func _rect_without_control(area: Rect2, control: Rect2) -> Rect2:
+	if not area.intersects(control):
+		return area
+	var overlap: Rect2 = area.intersection(control)
+	var candidates: Array[Rect2] = [
+		Rect2(area.position, Vector2(overlap.position.x - area.position.x, area.size.y)),
+		Rect2(Vector2(overlap.end.x, area.position.y), Vector2(area.end.x - overlap.end.x, area.size.y)),
+		Rect2(area.position, Vector2(area.size.x, overlap.position.y - area.position.y)),
+		Rect2(Vector2(area.position.x, overlap.end.y), Vector2(area.size.x, area.end.y - overlap.end.y)),
+	]
+	var largest: Rect2 = Rect2()
+	for candidate: Rect2 in candidates:
+		if candidate.has_area() and candidate.get_area() > largest.get_area():
+			largest = candidate
+	return largest
 
 
 func _rect(control: Control) -> Dictionary:

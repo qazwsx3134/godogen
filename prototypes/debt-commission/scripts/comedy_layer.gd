@@ -16,6 +16,7 @@ const PRESETS: Dictionary = {
 	"full_manga_panel": preload("res://scenes/comedy/full_manga_panel.tscn"),
 	"emotion_band": preload("res://scenes/comedy/emotion_band.tscn"),
 }
+const TSUKKOMI_RIGHT: PackedScene = preload("res://scenes/comedy/tsukkomi_impact_right.tscn")
 ## The cut-in face when the step names none.
 const DEFAULT_EXPRESSION: Dictionary = {
 	"tsukkomi_impact": "shout", "small_reaction": "neutral", "full_manga_panel": "shout", "emotion_band": "surprised",
@@ -65,7 +66,8 @@ func play(step: Dictionary) -> float:
 	if not PRESETS.has(preset_id):
 		return 0.0
 	var speaker: String = str(step.get("speaker", ""))
-	_preset = (PRESETS[preset_id] as PackedScene).instantiate() as Control
+	var preset_scene: PackedScene = TSUKKOMI_RIGHT if preset_id == "tsukkomi_impact" and str(step.get("side", "left")) == "right" else PRESETS[preset_id] as PackedScene
+	_preset = preset_scene.instantiate() as Control
 	_preset_id = preset_id
 	add_child(_preset)
 	visible = true
@@ -119,6 +121,10 @@ func qa_state() -> Dictionary:
 	if _active and _preset != null:
 		var burst: Control = _preset.get_node_or_null("%Burst") as Control
 		var text: RichTextLabel = _preset.get_node_or_null("%Text") as RichTextLabel
+		var portrait: Control = _preset.get_node_or_null("%CutInPanel") as Control
+		state["side"] = str(_preset.get("entry_side"))
+		if portrait != null:
+			state["portrait"] = _rect_of(portrait)
 		if burst != null:
 			state["burst"] = _rect_of(burst)
 		if text != null:
@@ -174,6 +180,8 @@ func _on_shake(strength: String) -> void:
 
 
 func _on_zoom(factor: float, duration: float) -> void:
+	if _effects != null and bool(_effects.get("reduce_motion")):
+		return
 	if _zoom_tween != null:
 		_zoom_tween.kill()
 	_zoom_tween = create_tween().set_parallel()

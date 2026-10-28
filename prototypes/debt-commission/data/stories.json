@@ -69,6 +69,13 @@
       "path": "res://data/text_effects_story.json",
       "save": "user://text_effects.save",
       "authoring": "dialogue"
+    },
+    {
+      "id": "strawberry_chapter1_graph",
+      "kind": "sample",
+      "path": "res://data/strawberry_chapter1_graph_story.json",
+      "save": "user://strawberry_chapter1_graph.save",
+      "authoring": "graph"
     }
   ]
 }

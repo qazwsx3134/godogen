@@ -31,6 +31,8 @@ const MIN_FONT: int = 24
 @export var hold_until: float = 0.90
 @export var fade_at: float = 1.20
 @export var end_at: float = 1.35
+## The side a cut-in enters from; each scene keeps its own editable resting placement.
+@export_enum("left", "right") var entry_side: String = "left"
 ## From fade_at the cut-in slides out past the right edge and only Dim fades, instead of the whole overlay fading.
 @export var cutin_exit: bool = false
 @export_group("Effects")
@@ -177,7 +179,8 @@ func _slide_in() -> void:
 		_fit_text()
 	var rest: Vector2 = _cutin.position
 	_cutin.modulate.a = 1.0
-	_cutin.position = Vector2(-_cutin.size.x - 120.0, rest.y)  # fully past the left edge, tilt included
+	var start_x: float = size.x + 120.0 if entry_side == "right" else -_cutin.size.x - 120.0
+	_cutin.position = Vector2(start_x, rest.y)  # fully outside the chosen edge, tilt included
 	var tween: Tween = _cutin.create_tween()
 	tween.tween_property(_cutin, "position", rest, maxf(cutin_slide, 0.001)).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_OUT)
 

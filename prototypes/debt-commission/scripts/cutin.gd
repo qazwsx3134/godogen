@@ -11,6 +11,7 @@ extends Control
 @onready var bubble: Control = %Bubble
 @onready var speaker: Label = %Speaker
 @onready var text: Label = %Text
+@onready var beam_caption_area: Control = %BeamCaptionArea
 
 
 func _ready() -> void:
@@ -33,6 +34,12 @@ func play(line: String, speaker_name: String) -> void:
 	tween.chain().tween_interval(0.9)
 	tween.chain().tween_property(self, "modulate:a", 0.0, 0.25)
 	tween.chain().tween_callback(queue_free)
+
+
+## When a beam follows this cut-in, move the existing caption into its authored upper area.
+func make_room_for_beam() -> void:
+	if bubble.get_parent() != beam_caption_area:
+		bubble.reparent(beam_caption_area, false)
 
 
 func _draw() -> void:

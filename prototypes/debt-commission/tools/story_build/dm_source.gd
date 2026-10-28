@@ -21,7 +21,9 @@ extends RefCounted
 ##                                 Also `a >= 2 and has("item")`, `x != "y" or not b == true`: one kind of
 ##                                 joiner per `if`, no brackets; comparisons == != < <= > >=
 ##   `do bg("id")`, `do char("id", "expression", "position")`, `do hide("id")`,
-##   `do enter("id", "expression", "position")` (a character who has not spoken comes on stage),
+##   `do enter("id", "expression", "position", "transition")`, `do hide("id", "transition")`
+##   (transition: fade, slide_left, slide_right or instant); `do portrait_effect("id", "shake")`
+##   or `portrait_effect("id", "bounce")` animates an on-stage portrait,
 ##   `do placard("text")` / `placard("")` (what the placard holder's board says; "" = blank),
 ##   `do offscreen()` right before a line = [#offscreen] (Parley writes it as an ACTION node),
 ##   `do item("id")`, `do profile("character_id")`, `do investigate("block")`,
@@ -32,8 +34,8 @@ extends RefCounted
 ##   `do cutin("你在說什麼啊！！")` / `cutin("text", "shinpachi")`, `do freeze()` / `freeze(1.5)`,
 ##   `do comedy("tsukkomi_impact", "shinpachi", "line")` / `comedy(preset, speaker, text, "shout")`
 ##   (the manga overlay: preset tsukkomi_impact, small_reaction, full_manga_panel or emotion_band; the
-##   speaker is a catalog id or name; after the text come the optional expression of the cut-in and, for
-##   emotion_band, the band colour "#rrggbb", in either order: `comedy("emotion_band", "kagura", "欸！？", "#7ec8ff")`)
+##   speaker is a catalog id or name; after the text come an optional expression, a left/right side for
+##   tsukkomi_impact, or an emotion_band colour "#rrggbb", in any order.)
 ##   `do bgm("bgm_meeting")` / `bgm("")` to stop, `do se("crow")`
 ##   `銀時＆神樂: text` is a line said together (speaker "gintoki+kagura")
 ##   `=> title`                    jump; `=> END` only after `do end(...)`
@@ -359,15 +361,22 @@ static func _mutation(line: Dictionary, where: String) -> Dictionary:
 			if args.size() > 2:
 				step["position"] = args[2]
 			return step
-		["hide", 1]:
-			return {"op": "char", "id": args[0], "visible": false}
-		["enter", 1], ["enter", 2], ["enter", 3]:
+		["hide", 1], ["hide", 2]:
+			var departure: Dictionary = {"op": "char", "id": args[0], "visible": false}
+			if args.size() > 1:
+				departure["transition"] = args[1]
+			return departure
+		["enter", 1], ["enter", 2], ["enter", 3], ["enter", 4]:
 			var entrance: Dictionary = {"op": "char", "id": args[0], "visible": true, "enter": true}
 			if args.size() > 1:
 				entrance["expression"] = args[1]
 			if args.size() > 2:
 				entrance["position"] = args[2]
+			if args.size() > 3:
+				entrance["transition"] = args[3]
 			return entrance
+		["portrait_effect", 2]:
+			return {"op": "portrait_effect", "id": args[0], "effect": args[1]}
 		["placard", 1]:
 			return {"op": "placard", "text": args[0]}
 		["offscreen", 0]:
@@ -394,12 +403,12 @@ static func _mutation(line: Dictionary, where: String) -> Dictionary:
 			return {"op": "cutin", "text": args[0]}
 		["cutin", 2]:
 			return {"op": "cutin", "text": args[0], "speaker": args[1]}
-		["comedy", 3], ["comedy", 4], ["comedy", 5]:
+		["comedy", 3], ["comedy", 4], ["comedy", 5], ["comedy", 6]:
 			var comedy: Dictionary = {"op": "comedy", "preset": args[0], "speaker": args[1], "text": args[2]}
 			for extra: Variant in args.slice(3):
-				var key: String = "color" if str(extra).begins_with("#") else "expression"
+				var key: String = "color" if str(extra).begins_with("#") else "side" if str(extra) in ["left", "right"] else "expression"
 				if comedy.has(key):
-					return {"error": "%s: comedy takes one expression and one color, got two of %s" % [where, key]}
+					return {"error": "%s: comedy takes one expression, one color and one side, got two of %s" % [where, key]}
 				comedy[key] = extra
 			return comedy
 		["beam", 0]:

@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "records": {
+    "gintoki": {
+      "decision": "confirmed",
+      "sha256": "8a3843a281341627e90f9751a4c202f519bff393111050ce5dec730b0f039954",
+      "reviewer": "本對話協作人類（作者）",
+      "evidence": "本對話：展示三角色人格深度補充 revision 2 及 authoring/proposals/character-depth-v2/REVIEW.md，並詢問是否整版採用後，協作人類回覆：「可以 採用」。確認範圍為銀時、新八、神樂三份完整 revision 2 人格；既有三條 revision 1 記憶沿用先前確認，沒有新增記憶。",
+      "confirmed_at": "2026-10-28T09:45:48.277204+00:00"
+    },
+    "kagura": {
+      "decision": "confirmed",
+      "sha256": "5a465d265c4532d22050617cb6209832e23914927ad515b95c2c5ccd46d27ad8",
+      "reviewer": "本對話協作人類（作者）",
+      "evidence": "本對話：展示三角色人格深度補充 revision 2 及 authoring/proposals/character-depth-v2/REVIEW.md，並詢問是否整版採用後，協作人類回覆：「可以 採用」。確認範圍為銀時、新八、神樂三份完整 revision 2 人格；既有三條 revision 1 記憶沿用先前確認，沒有新增記憶。",
+      "confirmed_at": "2026-10-28T09:45:48.388319+00:00"
+    },
+    "shinpachi": {
+      "decision": "confirmed",
+      "sha256": "5f336ed65841ea88f6bb3691a532e04ee5993a7b00578d0053df205aa10fa9c4",
+      "reviewer": "本對話協作人類（作者）",
+      "evidence": "本對話：展示三角色人格深度補充 revision 2 及 authoring/proposals/character-depth-v2/REVIEW.md，並詢問是否整版採用後，協作人類回覆：「可以 採用」。確認範圍為銀時、新八、神樂三份完整 revision 2 人格；既有三條 revision 1 記憶沿用先前確認，沒有新增記憶。",
+      "confirmed_at": "2026-10-28T09:45:48.335450+00:00"
+    },
+    "gintoki_yorozuya_baseline": {
+      "decision": "confirmed",
+      "sha256": "afcb0d71393cf3a425f8ecbc0a714731ad8c8295a0a19ee37c2fa7520e9614f9",
+      "reviewer": "本對話協作人類（作者）",
+      "evidence": "本對話：展示三份角色人格及三條基礎記憶後，協作人類回覆：「這幾項 可以 請問人格跟記憶要列多一點比較好嗎？」；確認範圍為所展示六筆 revision 1，不涵蓋後續新增或修改。",
+      "confirmed_at": "2026-10-28T09:28:00.035973+00:00"
+    },
+    "kagura_yorozuya_baseline": {
+      "decision": "confirmed",
+      "sha256": "e9ae85397f5c66a4ca09350d95fda895fafb6588bb8d87f1e3c94a94cfbdd68d",
+      "reviewer": "本對話協作人類（作者）",
+      "evidence": "本對話：展示三份角色人格及三條基礎記憶後，協作人類回覆：「這幾項 可以 請問人格跟記憶要列多一點比較好嗎？」；確認範圍為所展示六筆 revision 1，不涵蓋後續新增或修改。",
+      "confirmed_at": "2026-10-28T09:28:00.089780+00:00"
+    },
+    "shinpachi_yorozuya_baseline": {
+      "decision": "confirmed",
+      "sha256": "9ff78521ad3cc9588a5c441b11dba3caf660d7a3c3b8e5a95fbfbd081edbc0bb",
+      "reviewer": "本對話協作人類（作者）",
+      "evidence": "本對話：展示三份角色人格及三條基礎記憶後，協作人類回覆：「這幾項 可以 請問人格跟記憶要列多一點比較好嗎？」；確認範圍為所展示六筆 revision 1，不涵蓋後續新增或修改。",
+      "confirmed_at": "2026-10-28T09:28:00.141984+00:00"
+    }
+  }
+}

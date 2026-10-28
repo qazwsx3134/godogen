@@ -1,4 +1,6 @@
-# 直式吐槽視覺小說：目前進度與待辦
+# 吐槽視覺小說：目前進度與待辦
+
+2026-10-28 最新：預設為 **16:9 橫向**。短篇播放、圖編輯與漫畫演出可用；製作階段人格／記憶檔案、雜湊綁定的人類確認，以及編輯器「編劇參考」查看／選取／匯出已建立。三角色人格 revision 2、三條基礎記憶 revision 1 已由作者確認。完整 CRE、內建 AI Writer、自動記憶檢索與 OOC 評分尚未實作。最新交接見 [HANDOFF.md](../../prototypes/debt-commission/docs/HANDOFF.md)；[conversation 核對](CONVERSATION-AUDIT-2026-10-28.md)保留建立前基準，較早各次驗證見下文。
 
 更新：2026-10-06。範圍是 [V1 Roadmap](ROADMAP.md) 與 [debt-commission Godot 原型](../../prototypes/debt-commission/README.md)；詳細測試結果見[驗證紀錄](../../prototypes/debt-commission/docs/VERIFICATION.md)。本頁區分「技術片段已通過自動驗收」與「正式內容和真人體驗已完成」，避免把兩者混為一談。
 

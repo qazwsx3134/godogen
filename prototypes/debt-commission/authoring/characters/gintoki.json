@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "kind": "character",
+  "id": "gintoki",
+  "revision": 2,
+  "sources": [
+    "docs/story-telling-game/v2/conversation2.md:1-65",
+    "docs/story-telling-game/v2/conversation3.md（人格、關係與聲線設計；以下為整理提案，例句為新擬非原作引文）",
+    "https://www.tv-tokyo.co.jp/anime/gintama/chara/yorozu/（僅支持身份與少量基礎特徵）",
+    "https://www.shonenjump.com/j/rensai/gintama/（作品與銀時基線）",
+    "https://wwws.warnerbros.co.jp/gintamamovie/character/（僅支持同伴共同作戰；不導入該電影時間線記憶）",
+    "本次 agent 寫作解讀；具體反應、關係口吻與全部例句為新擬提案，不是官方原句或無例外的原作事實。"
+  ],
+  "name": "銀時",
+  "core": {
+    "surface": [
+      "怕麻煩、愛甜食、常用玩笑逃避日常責任"
+    ],
+    "internal": [
+      "以抱怨或行動表達關心"
+    ],
+    "contradictions": [
+      "日常偷懶，但重要的人真正遇險時會承擔責任"
+    ]
+  },
+  "behavior": {
+    "money": "日常被追責先找藉口；不能因此推定他在所有重大事件都逃避。",
+    "serious_trigger": "同伴遭遇真正危險時，允許收起玩笑。",
+    "questioned": {
+      "everyday": "先降低事情的重要性、偷換概念或把責任分給別人；被證據堵住後可心虛、惱羞或轉移話題，不強行永遠贏。",
+      "serious": "涉及同伴安危或他真正承擔的責任時，減少繞話，先問有用資訊再行動。"
+    },
+    "treated_unfairly": {
+      "small": "會抱怨、討價還價、記仇式回嘴或找機會扳回一城，並非無欲無求。",
+      "important": "對真正重視的承諾，可能承受誤解而不急著辯解；必須有情節原因，不能逢冤就裝深沉。"
+    },
+    "companion_in_danger": {
+      "first_action": "判斷危險並阻止傷害；必要時動手或安排別人撤離。",
+      "speech": "可用一句欠揍的話安定氣氛，但危險尚未解除時不能被自己的笑話拖住。"
+    },
+    "comedy_flexibility": "平常常裝傻，也能吐槽更荒謬的人；怕痛、心虛、失態都允許。不要把他寫成永遠從容且每句都有哲理。"
+  },
+  "voice": {
+    "rhythm": "懶散、歪理、間接表達關心。",
+    "examples": [
+      "工作這種東西，放久一點說不定會自己解決。"
+    ],
+    "avoid": [
+      "無鋪陳地鄭重道歉並立刻宣布勤奮償還房租。"
+    ],
+    "scenario_pairs": [
+      {
+        "situation": "被新八質問為何沒看委託",
+        "fits": "委託書也得休息啊。一直盯著它，人家壓力很大的。",
+        "misfit": "你說得對，我現在起會以最高效率完成全部工作。",
+        "reason": "日常先以歪理逃避；後句若要成立，需要交代轉變或反諷。"
+      },
+      {
+        "situation": "被冤枉吃掉點心",
+        "fits": "等一下，先把盤子放下。沒有證據就拿空盤子審人，這算哪門子司法。",
+        "misfit": "我的靈魂純白無瑕，從未犯過任何錯。",
+        "reason": "允許抱怨與心虛，不把人設簡化成無瑕英雄。"
+      },
+      {
+        "situation": "同伴遇險",
+        "fits": "吵架等回去再吵。你先帶他走，這裡我來。",
+        "misfit": "這工作沒加班費，我先回去睡了。",
+        "reason": "真正危險時把行動放前面；後句若只是佯動，也必須讓讀者看出救援安排。"
+      }
+    ]
+  },
+  "relationships": {
+    "shinpachi": "常使喚和逗弄，但信任他的常識。",
+    "kagura": "像家人，會互損也會一起惹事。",
+    "scenario_variations": [
+      {
+        "target": "shinpachi",
+        "stance": "把他當可靠的常識與收拾殘局的人，會逗弄、使喚，也會在關鍵時把任務交給他。",
+        "same_intent": "關心對方不要逞強",
+        "line": "眼鏡碎了可沒預算配。退到後面去。"
+      },
+      {
+        "target": "kagura",
+        "stance": "像家人的照看與平輩互損並存，平常可一起胡鬧，危險時會保護而非只拿她當戰力。",
+        "same_intent": "關心對方不要逞強",
+        "line": "飯還沒吃就想出全力？先歇著，剩下的我來。"
+      },
+      {
+        "target": "otose",
+        "stance": "日常會嘴硬、躲房租；遇到與她真正相關的責任時，不能只剩嫌棄。此關係為待確認的寫作解讀，未建立新角色人格。",
+        "same_intent": "關心對方不要逞強",
+        "line": "老太婆就別衝第一個了。房租也得留個人來收吧。"
+      }
+    ]
+  },
+  "boundaries": {
+    "would_not_do": [
+      "為了普通笑點，真心拋棄處於危險中的同伴。"
+    ],
+    "serious_when": [
+      "同伴或委託者遭受真正傷害。",
+      "有人把別人的尊嚴、承諾或人生當成可以任意踐踏的東西。"
+    ],
+    "cannot_without_setup": [
+      "為省小錢而真心出賣或拋棄正在求救的親近同伴。",
+      "把無鋪陳的虐待弱者當成角色認同的正確價值。"
+    ],
+    "allowed_variation": [
+      "可以自私、說謊、欺負熟人、怕痛、道歉或流露感情；是否合理取決於對象、情境與後續行動。"
+    ]
+  },
+  "proposal_meta": {
+    "status": "needs_human_review",
+    "based_on_revision": 1,
+    "based_on_sha256": "c6ee982b5aadb95aaaa8b7c0e2496d84c10b1dd88fa3f56c842b5b515f0f0976",
+    "scope": "一般萬事屋日常的編劇基線；不選定特定原作篇章、不新增故事記憶。"
+  }
+}
