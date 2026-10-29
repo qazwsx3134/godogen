@@ -8,18 +8,19 @@ in-game height, reduced to a small palette and given a hard alpha edge. Writes
   assets/stage/boss.png         4 square cells (idle, windup, stunned, slam); a missing pose repeats idle
   assets/stage/props/<name>.png one per prop
   assets/stage/<tile>.png       grass, arena, cliff: downscaled and made seamless
-  assets/heroes/heroes.png+json one row per class, 9 cells of 48 px in the sprite3d sheets.json layout
-                                (run 4, attack 3, down, volley); a missing pose uses the class's ready stance
+  assets/heroes/heroes.png+json one row per race and class (人類 rows 0-5, 獸人 6-11, 精靈 12-17, class order;
+                                selected.json "heroes" and "races"), 9 cells of 48 px in the sprite3d sheets.json
+                                layout (run 4, attack 3, down, volley); a missing pose uses that row's ready stance
   assets/flags/<squad>.png      the squad's banner, two frames side by side (cloth swinging), pole foot aligned
-  assets/heroes/portraits/      each class's ready stance at PORTRAIT_PX tall for the 養成 screens, plus
-                                portraits.json: the head-and-shoulders square of each (the roster's card crop)
+  assets/heroes/portraits/      each row's ready stance at PORTRAIT_PX tall for the 養成 screens (<class>.png for
+                                humans, <race>_<class>.png), plus portraits.json: the head-and-shoulders square of each
   assets/ui/sig/<move>.png      招牌技 icons, SIG_ICON_PX square (selected.json "ui" "sig")
   assets/ui/class/<class>.png   class pennants keyed off their flat magenta, CLASS_ICON_PX tall ("ui" "class")
   assets/ui/hero_page_bg.png    the hero page's backdrop at half the 720 px UI width ("ui" "hero_bg")
   assets/ui/items/<id>.png      道具 icons (relics, materials) keyed off their magenta, fitted into ITEM_ICON_PX ("ui" "items")
   assets/ui/nav/<tab>.png       nav bar icons keyed off their magenta, fitted into NAV_ICON_PX ("ui" "nav")
   assets/ui/bg/recruit.png      the 招募 page's tavern at half the UI width ("ui" "recruit_bg")
-Steps can be named to run only those: ... pack_stage_art.py portraits ui
+Steps can be named to run only those: ... pack_stage_art.py heroes portraits ui
 """
 import json
 import sys
@@ -74,6 +75,8 @@ HERO_CELL = 48
 HERO_FOOT = 2
 HERO_BODY = 40  # px from feet to the top of the head in the ready stance (1.0 m)
 HERO_CLASSES = ["shield", "sword", "spear", "bow", "mage", "healer"]
+# Atlas row blocks in domain/heroes.gd form order; a row's character key is prefix + class ("beast_sword").
+HERO_RACES = ["", "beast_", "elf_"]
 # The 9 cells of a class row, by pose.
 HERO_CELLS = ["run_a", "run_b", "run_a", "run_b", "ready", "windup", "strike", "down", "volley"]
 HERO_ANIMS = {
@@ -88,15 +91,20 @@ def alpha_box(im: Image.Image) -> tuple:
     return im.getchannel("A").point(lambda a: 255 if a > 24 else 0).getbbox()
 
 
-def heroes(classes: dict) -> None:
+def hero_rows(sel: dict) -> list:
+    """(character key, poses) for every atlas row, in row order."""
+    races = [sel["heroes"], sel.get("races", {}).get("beast", {}), sel.get("races", {}).get("elf", {})]
+    return [(prefix + cls, races[k].get(cls)) for k, prefix in enumerate(HERO_RACES) for cls in HERO_CLASSES]
+
+
+def heroes(rows: list) -> None:
     """Every pose of a class shares one crop box and one scale (feet stay on one line); the ready stance sets the
     scale so every class is HERO_BODY px tall, shrunk only if a pose would not fit the cell."""
     out_dir = ROOT / "assets" / "heroes"
     out_dir.mkdir(parents=True, exist_ok=True)
-    sheet = Image.new("RGBA", (HERO_CELL * len(HERO_CELLS), HERO_CELL * len(HERO_CLASSES)), (0, 0, 0, 0))
+    sheet = Image.new("RGBA", (HERO_CELL * len(HERO_CELLS), HERO_CELL * len(rows)), (0, 0, 0, 0))
     chars = {}
-    for row, cls in enumerate(HERO_CLASSES):
-        poses = classes.get(cls)
+    for row, (cls, poses) in enumerate(rows):
         if not poses or not poses.get("ready"):
             continue
         srcs = {name: Image.open(ROOT / (poses.get(name) or poses["ready"])).convert("RGBA") for name in set(HERO_CELLS)}
@@ -116,21 +124,20 @@ def heroes(classes: dict) -> None:
             k: dict(v, cell=v["cell"] + row * len(HERO_CELLS)) for k, v in HERO_ANIMS.items()}}
     sheet.save(out_dir / "heroes.png")
     (out_dir / "heroes.json").write_text(json.dumps({
-        "atlas": "heroes.png", "cell_px": HERO_CELL, "columns": len(HERO_CELLS), "rows": len(HERO_CLASSES),
+        "atlas": "heroes.png", "cell_px": HERO_CELL, "columns": len(HERO_CELLS), "rows": len(rows),
         "foot_px": HERO_FOOT, "meters_per_px": M_PER_PX, "characters": chars}, indent=1) + "\n")
 
 
 PORTRAIT_PX = 160
 
 
-def portraits(classes: dict) -> None:
+def portraits(rows: list) -> None:
     """The ready stance, larger than the battle sprites (the hero page shows it at 2x). The face square sits on the
     densest band of columns near the top (the head and chest, not a raised weapon), from just above the head."""
     out_dir = ROOT / "assets" / "heroes" / "portraits"
     out_dir.mkdir(parents=True, exist_ok=True)
     faces = {}
-    for cls in HERO_CLASSES:
-        poses = classes.get(cls)
+    for cls, poses in rows:
         if not poses or not poses.get("ready"):
             continue
         px = pixelate(subject(Path(poses["ready"])), PORTRAIT_PX, 64)
@@ -266,8 +273,10 @@ if __name__ == "__main__":
     sel = json.loads((ROOT / "art_src" / "selected.json").read_text())
     OUT.mkdir(parents=True, exist_ok=True)
     if sys.argv[1:]:
+        if "heroes" in sys.argv[1:]:
+            heroes(hero_rows(sel))
         if "portraits" in sys.argv[1:]:
-            portraits(sel["heroes"])
+            portraits(hero_rows(sel))
         if "ui" in sys.argv[1:]:
             ui_art(sel.get("ui", {}))
         sys.exit(0)
@@ -277,8 +286,8 @@ if __name__ == "__main__":
     for name, spec in sel.get("tiles", {}).items():
         tile(name, spec)
     if sel.get("heroes"):
-        heroes(sel["heroes"])
-        portraits(sel["heroes"])
+        heroes(hero_rows(sel))
+        portraits(hero_rows(sel))
     for name, spec in sel.get("flags", {}).items():
         flag(name, spec)
     ui_art(sel.get("ui", {}))

@@ -1,5 +1,12 @@
 # debt-commission 交接
 
+2026-10-29 立繪風格最新：作者提供另一故事的 MS Paint 鼠繪 prompt，要求依此生成並去背。imagegen 重繪了桂的雙手姿勢，參照現有銀時／神樂畫風；RGBA 透明背景 941×1672，保留原圖原始像素。新檔 stories/katsura_dog_ears/art/katsura_dog_ears_mouse_v2.png 已設為 catalog 基礎／serious 圖，katsura.tscn Art 預覽同步，舊圖保留。Godot headless 匯入與非headless test_katsura_dog_ears.gd 通過，實際畫面 /private/tmp/debt-katsura-mouse-v2/ 已檢視，待作者試看；未重匯 Web、未commit／push。
+
+
+2026-10-29 立繪最新：作者回覆「好 那就開始生成」，已以 imagegen 依 normal／新八畫風／手勢照片／ego 生成一張透明桂立繪，保存至 stories/katsura_dog_ears/art/katsura_dog_ears.png，設為 catalog 基礎圖與 serious 表情。可編輯的 scenes/katsura.tscn 以 Godot 保存，隱藏 PosePlaceholder、將 Art 稍向左以避開QTE圓環；故事移除過時的缺圖提示並重新計算版本 s-d2fd832e6028。實際Godot視窗 test_katsura_dog_ears.gd PASSED；編輯器瀏覽器檢查桂立繪載入通過；截圖 /private/tmp/debt-katsura-generated-final/。圖為候選，尚待作者試看，真人手機／手感仍待驗收，Web舊匯出版未更新。未commit／push。下方保留生成前的歷史。
+
+2026-10-29 最新：作者已提供桂的狗耳朵極短篇，續作指示取代前次停工。核心稿及時機吐槽已實作為 stories/katsura_dog_ears/ 獨立 graph 包，阿銀「你腦袋被撞到嗎」，桂「頭痛賈奈。」→ freeze 0.55秒 → serious「咖紫拉打。」→ 玩家QTE → 新八漫畫吐槽。可在編輯器 ?story=katsura_dog_ears 開啟。過早／過晚／未按／成功及既有回合UI回歸通過；最後實際Godot視窗測試也通過，截圖在 /private/tmp/debt-katsura-story-evidence/game-final。桂姿勢立繪仍缺，作者選擇 opt image 提示詞，已存故事包 OPT-IMAGE-PROMPT.md；現為明示佔位，尚不能宣稱視覺及手感驗收完成。未新增人格或記憶。此次未commit／push；下一步等作者交圖及試玩。下文為前輪歷史紀錄，完整新證據見根Progress。
+
 更新：2026-10-28；分支 `master`。作者要出門，已授權交接並 commit，提交後停止工作，未授權 push。最新提交請用 `git log -1` 查核；遊戲原基準 `21604e3`，本次提交前 HEAD 為其他原型的 `6e9fb85`。
 
 最新狀態見 [系統與編輯器交接](../../docs/HANDOFF.md)：人格／記憶已接入編輯器「編劇參考」，可查看、手選、產生及下載 agent 上下文。正式庫六筆均已確認。本輪人格工具 11 項、API 7 項、既有服務 16 項及最終 Chrome smoke 通過；完整遊戲／Web 測試沿用同日較早證據。內建 AI Writer、自動檢索及 OOC 評分未實作。第一篇極短篇仍等作者提供；不要自行代寫。
@@ -57,3 +64,4 @@ L2 首輪 investigation_picker／investigation／phase3_ui PASS（`/tmp/godot-te
 機器可讀紀錄 `production/qa/web-candidate-2026-10-30.json` 包含來源、ZIP 與 PCK 雜湊。build log `/tmp/debt-web-build-20261030.log` 有 TCP 監聽限制與退出清理訊息，未見 SCRIPT ERROR／Parse Error。此輪僅匯出及靜態驗證，未重跑遊戲測試；沿用上一輪熱區單元／search_cast／Phase3，以及較早幾何／Phase4 證據，具體路徑見 JSON。
 
 沙箱禁止 socket，未啟動伺服器或執行本包 Chromium 互動／IndexedDB 測試；iPhone 真機仍未驗。未上傳、未 commit／push。下一步使用獨立瀏覽器資料驗證調查拖曳、角色移出／移回邊界、離開調查與存讀恢復；作者完整短篇仍待提供構想及核准。
+2026-10-29 美術來源補充：作者下載的桂參考在 stories/katsura_dog_ears/art/reference/katsura，已檢視normal／ego／happy。已按本作粗黑線、乾筆與筆劃留白的手繪風重寫OPT-IMAGE-PROMPT；建議附normal（身份）、本作新八（畫風）、手勢照片（姿勢）、ego（認真發言），不附happy。沒有生成圖或新測遊戲；待作者opt image產圖。

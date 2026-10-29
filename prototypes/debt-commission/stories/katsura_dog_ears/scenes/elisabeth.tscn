@@ -1,0 +1,95 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/placeholder_sprite.gd" id="1_cuche"]
+[ext_resource type="Texture2D" path="res://assets/image/elisabeth.png" id="2_rlugn"]
+[ext_resource type="FontFile" path="res://assets/fonts/story-cjk.ttc" id="3_56bnx"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1j7sv"]
+draw_center = false
+border_width_left = 12
+border_width_top = 12
+border_width_right = 12
+border_width_bottom = 12
+border_color = Color(1, 0.82, 0.25, 0.95)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_left = 12.0
+expand_margin_top = 12.0
+expand_margin_right = 12.0
+expand_margin_bottom = 12.0
+shadow_color = Color(1, 0.8, 0.2, 0.45)
+shadow_size = 18
+
+[node name="elisabeth" type="Control" unique_id=1890413239]
+editor_description = "本短篇的伊莉莎白取景，Art 與 Placard 向左留白，確保頭痛牌子完整在橫向畫面內。"
+layout_mode = 3
+anchors_preset = 0
+offset_right = 480.0
+offset_bottom = 1560.0
+mouse_filter = 2
+script = ExtResource("1_cuche")
+
+[node name="Box" type="ReferenceRect" parent="." unique_id=63554152]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+border_color = Color(1, 0.65, 0.2, 1)
+border_width = 4.0
+metadata/_edit_lock_ = true
+
+[node name="Art" type="TextureRect" parent="." unique_id=1390662046]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -980.0
+offset_top = -1990.0
+offset_right = 580.0
+offset_bottom = -430.0
+mouse_filter = 2
+texture = ExtResource("2_rlugn")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Placard" type="Control" parent="." unique_id=548118014]
+unique_name_in_owner = true
+editor_description = "伊莉莎白手上的白牌子。遊戲把字疊在這裡（劇本的 placard，或回合句子的 placard 槽點）；舉牌槽點的句子上，點這塊（命中區至少 48 CSS px）就是吐槽。拖曳、縮放、旋轉這個框對齊圖上的牌子；Text 的字級與顏色在 Text 上調。"
+anchors_preset = 0
+offset_left = 480.90002
+offset_top = 98.29999
+offset_right = 800.9
+offset_bottom = 288.3
+rotation = 0.49392816
+pivot_offset = Vector2(160, 95)
+mouse_filter = 2
+
+[node name="Glow" type="Panel" parent="Placard" unique_id=863712796]
+editor_description = "選詞時牌子能點的提示光框（遊戲裡會一明一暗）。"
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1j7sv")
+
+[node name="Text" type="Label" parent="Placard" unique_id=595297732]
+unique_name_in_owner = true
+editor_description = "牌子上的字；這裡的字只是編輯器預覽，遊戲一開始是空白。"
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 12.0
+offset_right = -16.0
+offset_bottom = -12.0
+theme_override_fonts/font = ExtResource("3_56bnx")
+theme_override_font_sizes/font_size = 56
+theme_override_colors/font_color = Color(0.1, 0.1, 0.12, 1)
+text = "犯人是神樂"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3

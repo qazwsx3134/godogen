@@ -128,6 +128,7 @@ static func decorate(step: Dictionary, state: Dictionary, items: Array, gameplay
 		"id": line["id"], "text": line["text"],
 		"source_id": String(line.get("source_id", "")),
 		"speaker": String(line.get("speaker", step.get("speaker", ""))),
+		"expression": String(line.get("expression", step.get("expression", "annoyed"))),
 		"caught": (state["caught"] as Dictionary).has(String(line["id"])),
 		"can_listen": line.has("listen") and String(step["mode"]) == "testimony",
 		"can_whiff": line.has("whiff") and not line.has("slot"),

@@ -301,3 +301,13 @@ node tools/story_editor/persona_smoke.mjs --playwright <playwright-core 目錄> 
 ```
 
 API 回歸不需要 Godot；瀏覽器回歸使用暫存專案、合成確認證據，檢查 UI 產物與 CLI 一致、未確認阻擋、記憶擁有者／知情隔離、版本更新、下載、窄視窗及故事不被改動。
+
+## 桂的小狗耳朵：首篇極短篇原型
+
+本機服務以 `?story=katsura_dog_ears` 打開獨立 graph 故事。opening 的阿銀台詞已改成「你腦袋被撞到嗎」；桂第一句 say 是「頭痛賈奈。」，其後 freeze=0.55 秒；timing 回合的第二句為「咖紫拉打。」，expression=serious，type_lines=true，顯示完才開始 QTE。回合及每句可用 expression 指定表情，省略沿用 annoyed，每句優先。
+
+複雜回合依現有方式在 JSON 區編輯：`lines[0].slot.qte` 的 duration、window、late_after 控制半拍與容許誤差。先維持桂手勢不動，調整秒數後從 opening 試玩，才能看到兩句間的停頓；直接從 timing 試玩不會還原前面的站位與牌子。
+
+桂的手繪姿勢候選圖已依作者提供的參考生成並接入；`scenes/katsura.tscn` 的 Art 可調整取景。提示詞保留於 stories/katsura_dog_ears/OPT-IMAGE-PROMPT.md；最終畫風與玩家手感仍待作者試看。
+
+相關 L2 路徑：`test_katsura_dog_ears.gd`（過早／過晚／未按／成功與實際 shell）、`test_phase4_rounds_ui.gd`（既有回合回歸）。用本文件的 run_coordinated.py 方式依序執行。

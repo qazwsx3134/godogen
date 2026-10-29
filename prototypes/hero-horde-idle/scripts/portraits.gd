@@ -29,10 +29,9 @@ static var _face_cache: Dictionary = {}
 static var _sprite_cache: Dictionary = {}
 
 
-## heroes.png rows: the six class rows of humans first. Every race uses the human rows until the 精靈 and 獸人 art is
-## drawn (docs/race-art-prompts.md); the old beast and slime rows below are no longer heroes.
-static func row_of(_form: int, c: int) -> int:
-	return c
+## heroes.png row of a race and class (Army.row_of).
+static func row_of(form: int, c: int) -> int:
+	return Army.row_of(form, c)
 
 
 ## A hero's ready stance by form and class (see sprite_row).
@@ -40,9 +39,9 @@ static func hero_sprite(form: int, c: int) -> AtlasTexture:
 	return sprite_row(row_of(form, c))
 
 
-## A hero's large portrait: the class's (every race, until the race art is drawn).
-static func hero_full(_form: int, c: int) -> Texture2D:
-	return full(c)
+## A hero's large portrait: their race and class's ready stance.
+static func hero_full(form: int, c: int) -> Texture2D:
+	return load(DIR + Army.RACE_PREFIXES[maxi(form, 0)] + FILES[c] + ".png")
 
 
 static func sprite(c: int) -> AtlasTexture:

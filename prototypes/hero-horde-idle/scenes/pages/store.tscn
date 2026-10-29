@@ -1,9 +1,9 @@
 [gd_scene format=3]
 
 [ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Medium.otf" id="1_tqwwg"]
-[ext_resource type="Texture2D" path="res://assets/reference/equipment.png" id="2_5iicw"]
 [ext_resource type="Script" path="res://scripts/pages/store_page.gd" id="2_tqwwg"]
 [ext_resource type="Texture2D" path="res://assets/reference/store.png" id="3_bhl1a"]
+[ext_resource type="PackedScene" path="res://scenes/components/march_backdrop.tscn" id="3_srwee"]
 [ext_resource type="StyleBox" path="res://ui/sao_window.tres" id="4_opikg"]
 [ext_resource type="FontFile" path="res://fonts/NotoSansCJKtc-Bold.otf" id="4_te0y1"]
 [ext_resource type="PackedScene" path="res://scenes/components/product_card.tscn" id="5_hirrh"]
@@ -17,56 +17,6 @@
 [sub_resource type="Theme" id="Theme_tqwwg"]
 default_font = ExtResource("1_tqwwg")
 default_font_size = 30
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_1s2ed"]
-atlas = ExtResource("2_5iicw")
-region = Rect2(0, 100, 941, 260)
-filter_clip = true
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ohxes"]
-atlas = ExtResource("2_5iicw")
-region = Rect2(0, 360, 56, 110)
-filter_clip = true
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_eosu5"]
-atlas = ExtResource("2_5iicw")
-region = Rect2(420, 360, 140, 110)
-filter_clip = true
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_etb6y"]
-atlas = ExtResource("2_5iicw")
-region = Rect2(420, 360, 140, 110)
-filter_clip = true
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_q2ooh"]
-atlas = ExtResource("2_5iicw")
-region = Rect2(420, 360, 84, 110)
-filter_clip = true
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_qe4t3"]
-atlas = ExtResource("2_5iicw")
-region = Rect2(420, 360, 140, 110)
-filter_clip = true
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_2x0nf"]
-atlas = ExtResource("2_5iicw")
-region = Rect2(420, 360, 140, 110)
-filter_clip = true
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_6rfy6"]
-atlas = ExtResource("2_5iicw")
-region = Rect2(420, 360, 140, 110)
-filter_clip = true
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ybx4v"]
-atlas = ExtResource("2_5iicw")
-region = Rect2(420, 360, 101, 110)
-filter_clip = true
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_5gu1g"]
-atlas = ExtResource("2_5iicw")
-region = Rect2(0, 470, 941, 55)
-filter_clip = true
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_srwee"]
 atlas = ExtResource("3_bhl1a")
@@ -169,112 +119,8 @@ metadata/page_id = "store"
 metadata/fusion_readable = true
 metadata/sao_style = true
 
-[node name="DistantLandscape" type="TextureRect" parent="." unique_id=1867706014]
-texture_filter = 1
+[node name="MarchBackdrop" parent="." unique_id=356675214 instance=ExtResource("3_srwee")]
 layout_mode = 0
-offset_top = 100.0
-offset_right = 941.0
-offset_bottom = 365.0
-mouse_filter = 2
-texture = SubResource("AtlasTexture_1s2ed")
-expand_mode = 1
-
-[node name="LowerLandscape0" type="TextureRect" parent="." unique_id=57597798]
-texture_filter = 1
-layout_mode = 0
-offset_top = 360.0
-offset_right = 56.0
-offset_bottom = 470.0
-mouse_filter = 2
-texture = SubResource("AtlasTexture_ohxes")
-expand_mode = 1
-
-[node name="LowerPatch0_0" type="TextureRect" parent="." unique_id=1245476613]
-texture_filter = 1
-layout_mode = 0
-offset_left = 56.0
-offset_top = 360.0
-offset_right = 196.0
-offset_bottom = 470.0
-mouse_filter = 2
-texture = SubResource("AtlasTexture_eosu5")
-expand_mode = 1
-
-[node name="LowerPatch0_1" type="TextureRect" parent="." unique_id=1330118006]
-texture_filter = 1
-layout_mode = 0
-offset_left = 196.0
-offset_top = 360.0
-offset_right = 336.0
-offset_bottom = 470.0
-mouse_filter = 2
-texture = SubResource("AtlasTexture_etb6y")
-expand_mode = 1
-
-[node name="LowerPatch0_2" type="TextureRect" parent="." unique_id=1200425632]
-texture_filter = 1
-layout_mode = 0
-offset_left = 336.0
-offset_top = 360.0
-offset_right = 420.0
-offset_bottom = 470.0
-mouse_filter = 2
-texture = SubResource("AtlasTexture_q2ooh")
-expand_mode = 1
-
-[node name="LowerLandscape2" type="TextureRect" parent="." unique_id=1148759103]
-texture_filter = 1
-layout_mode = 0
-offset_left = 420.0
-offset_top = 360.0
-offset_right = 560.0
-offset_bottom = 470.0
-mouse_filter = 2
-texture = SubResource("AtlasTexture_qe4t3")
-expand_mode = 1
-
-[node name="LowerPatch2_4" type="TextureRect" parent="." unique_id=1463768996]
-texture_filter = 1
-layout_mode = 0
-offset_left = 560.0
-offset_top = 360.0
-offset_right = 700.0
-offset_bottom = 470.0
-mouse_filter = 2
-texture = SubResource("AtlasTexture_2x0nf")
-expand_mode = 1
-
-[node name="LowerPatch2_5" type="TextureRect" parent="." unique_id=1247501801]
-texture_filter = 1
-layout_mode = 0
-offset_left = 700.0
-offset_top = 360.0
-offset_right = 840.0
-offset_bottom = 470.0
-mouse_filter = 2
-texture = SubResource("AtlasTexture_6rfy6")
-expand_mode = 1
-
-[node name="LowerPatch2_6" type="TextureRect" parent="." unique_id=152984807]
-texture_filter = 1
-layout_mode = 0
-offset_left = 840.0
-offset_top = 360.0
-offset_right = 941.0
-offset_bottom = 470.0
-mouse_filter = 2
-texture = SubResource("AtlasTexture_ybx4v")
-expand_mode = 1
-
-[node name="Ground" type="TextureRect" parent="." unique_id=715184826]
-texture_filter = 1
-layout_mode = 0
-offset_top = 470.0
-offset_right = 941.0
-offset_bottom = 525.0
-mouse_filter = 2
-texture = SubResource("AtlasTexture_5gu1g")
-expand_mode = 1
 
 [node name="BattleSocket" type="Node2D" parent="." unique_id=534762778]
 unique_name_in_owner = true

@@ -1,0 +1,27 @@
+{
+  "extends": "res://data/asset_catalog.json",
+  "default_pov": "shinpachi",
+  "default_background": "yorozuya_living_room",
+  "characters": {
+    "katsura": {
+      "name": "桂",
+      "color": "#435b8a",
+      "slot": "center",
+      "scene": "scenes/katsura.tscn",
+      "profile": "本片段依作者指定：雙手放在頭兩側，認真地糾正自己的名字。",
+      "voice_pitch": 260,
+      "path": "art/katsura_dog_ears_mouse_v2.png",
+      "expressions": {
+        "serious": "art/katsura_dog_ears_mouse_v2.png"
+      }
+    },
+    "elisabeth": {
+      "name": "伊莉莎白",
+      "profile": "桂的搭檔。從不開口，想說的話都寫在牌子上。",
+      "color": "#F4F4F0",
+      "slot": "right",
+      "path": "res://assets/image/elisabeth.png",
+      "scene": "scenes/elisabeth.tscn"
+    }
+  }
+}

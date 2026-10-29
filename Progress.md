@@ -46,6 +46,25 @@ seal 新手機包 `build/seal-meadow-mobile-web.zip`：15,112,870 bytes；SHA-25
 
 
 ## 蓬蓬草原 · seal-meadow（2026-10-29，持續開發）
+## Cyberpunk 文字 MMO RPG（2026-10-29，概念深化與開發規劃）
+
+- **專案與分支**：新作尚未建立程式專案；分支 `master`。文件入口 `docs/cyberpunk-text-mmo/README.md`，概念、玩法設計與開發計畫均在同目錄。
+- **使用者已確認**：參考 dev-sao 的文字 MMO RPG；Cyberpunk 2077 同一時空的另一座類似夜城城市，設定方向比照；主打任務、名聲、區域解鎖及排行榜。一般委託自動跑，重要劇情手動選。多人選擇 1＋2：各自接案競爭排行＋非同步合作推進城市事件。
+- **本輪新確認**：原生網頁、主要為手機直式，電腦相容。城市改東京原型；每角色委託不重複，死亡後新角可重玩；永久死亡，重大危險節點停下等玩家選擇、離線不代選。有聊天／系統訊息、警方與MaxTac型單位、Trauma Team，以及等級提高神機錯亂免疫力。使用者進一步指定React、Cloudflare，可用shadcn/ui、Tailwind並提供三個視覺參考網址。
+- **完成／未完成**：文件更新v0.2，新增 `risk-systems.md`、`content-plan.md`；移除重複刷案與不設永久死亡的舊提案。首六案「終電之後」、東京原型兩區、搶救在死亡前、神經負荷公式、通訊分流、先6案後24案及M0～M5均已規劃。程式整合粗估21～36人日另加文本製作，原12～20不適用。具體公式、名稱、保障與繼承細則、字數／內容量為提案。沒有遊戲實作、美術生成或多人驗證。
+- **React／Cloudflare架構規劃**：新增 `architecture.md`、`ui-system.md`，開發計畫更新v0.3。React SPA／Vite、Router／Query、shadcn／Tailwind，Workers／Hono模組化單體、D1生死／經濟、每頻道DO聊天；列目錄、API、版本／重送與死亡交易、outbox、部署及手機元件／tokens。這些為架構設計，尚未建立package或跑runtime證據。
+- **驗證與限制**：規劃層不跑程式測試。查閱CDPR警方／Trauma Team、R.Talsorian人性／義體／治療及Cloudflare DO官方文件，區分原作參考與本作規則。容量、成本、公式與文本交期未實測；2026-10-23～24原站研究只沿用歷史證據。本作東京地理／警方名稱未聲稱官方考證完成；Studio runtime catalog不存在，未宣稱完成正式流程。
+- **視覺參考證據**：Figma原檔及oEmbed皆無法讀取，瀏覽器也受阻；Pinterest瀏覽器看見32 Pins與部分斜切／細線／警示縮圖，登入遮罩限制完整閱讀，截圖 `/tmp/tokyo-pinterest-reference.png`。Magnific只取得分類文字、瀏覽器存取受限；未挑選／下載素材，不宣稱完整解析三份參考。UI色票與尺寸為提案。
+- **使用者Figma主檔**：作者另提供 `https://www.figma.com/design/xF0jgcnbonnTCs2UQzVHeQ/Untitled?node-id=0-1`，已列為主要元件來源；本次瀏覽器實際回403 ERROR，網頁工具／file路徑／oEmbed未能取得內容。未判定是否分享權限問題，未聲稱解析元件；架構規劃照常完成，精確樣式待可取得來源。
+- **本機SVG已取得（取代等待Figma）**：使用者提供 `docs/cyberpunk-text-mmo/example.svg`（6616×3447、1,953,050 bytes、SHA256 `1d311e840d64197e1b427eb9110d70484d60b343a295e005c2a0fced9a190a82`）。已XML盤點及瀏覽器整張／局部檢視，確認紅黑按鈕、警告、標籤、圖示；文字為path、含一張base64 PNG。新增 `svg-reference.md`，UI規劃v0.2依SVG色碼調整為紅黑骨架／淺灰正文。原檔未改、尚未拆資產或實作元件；不透明色值對比量測不等於完整無障礙驗收。
+- **ArtStation補充**：`https://www.artstation.com/artwork/18mLB8`的作者作品頁確認為Anna Kuźmińska的Cyberpunk 2077 UI Art作品；圖像／動態受載入限制未檢視完成，沒有據此宣稱抽色或動畫分析。具體視覺以本機SVG為依據。檢視截圖暫存在 `/tmp/tokyo-svg-sheet-full.png`、`/tmp/tokyo-svg-buttons-detail.png`。規劃層不跑遊戲測試。
+- **本機UI圖集與規範（本輪最新）**：使用者已下載16張`ui/anna-kuzminska-*.jpg`並指定作參考／規範／目標；本次全部逐張以view_image檢視。新增 `ui/README.md`逐圖來源、HUD／背包／醫療／電梯／對講機等對應及手機轉譯限制。`ui-system.md`升v0.3實作／review基線：17類元件合約、共用狀態、手機字級／尺寸／切角／語意色、A～D製作順序及G01～G10驗收目標。靜態圖已取得，不再受前輪網頁圖片限制；動畫仍未取得，精確原圖字體未知。
+- **本輪證據／狀態**：圖片metadata及全16張人工檢視完成；原JPG／SVG保留未改，未裁切生成遊戲素材。只更新規劃文件，沒有元件程式、遊戲測試或手機真人驗收；G01～G10皆待實作驗證。README、開發P03與SVG來源狀態同步。未commit／push或部署。
+- **Lead設計評估（最新）**：使用者要求從lead game／systems designer角度檢查如何設計與好玩缺口。主session讀取玩法、風險與文本計畫後新增 `design-assessment.md`：優先補有取捨的任務方案、人物牽掛、失敗分層、有限經濟與多人成效；義體用途、城市援助及重玩差異為新提案，沒有覆寫已確認規格。建議先兩案證明體驗，再擴六案／24案。僅規劃評估，沒有派代理、試玩或遊戲測試；單純算例驗算獨立1%風險50次的累積死亡率約39.5%，非本作平衡值。未commit／push。
+- **手機文字冒險系統藍圖（最新）**：使用者要求每個系統如何以手機優先文字冒險設計；新增 `mobile-systems-blueprint.md`，涵蓋17系統的手機呈現／玩家決策／規則／好玩目標、三種時間、診所撤離跨系統案例與兩案→六案→24案深度。保留共享城市與排行，不擅改純單機；新規則與係數仍為提案。只寫規劃、未實作／試玩／跑遊戲測試，未commit／push。
+- **下一步／工作區**：先P01前兩案試讀及P02生死／醫療／通緝／抗性狀態表、有限經濟與週榜分組，再做手機直式風險原型。死亡交易與重送驗證先於真人風險及大量文本；聊天M3、城市排行M4、內容擴充M5。文件未commit／push，未建雲端資源或部署；保留其他原型修改，不恢復其開發。
+
+## 蓬蓬草原 · seal-meadow（2026-10-28，出門交接）
 
 - **狀態與決定**：使用者返家要求繼續，之後指定完成一階段就停下並開另一個 Sol medium 審查。S35 單機衣櫥階段與獨立審查已完成，目前暫停；多人 M4 延後。`master` 最新提交與本輪基準 `180149a9`；本輪程式、scene、測試及文件未 commit／push，保留其他專案現有修改。
 - **本輪完成**：`REVIEW.md` 第 8～10 項：背包精煉、技能命中後選怪、傳送門高亮；存檔過量背包回復備份或拒絕覆寫、寵物餓到時顯示實際損失。S35 衣櫥可預覽／取消、以已領成就解鎖布衣與裝飾光環，套用不改戰鬥屬性；存檔升 v6，有舊檔遷移與無效資格檢查。
@@ -65,6 +84,31 @@ seal 新手機包 `build/seal-meadow-mobile-web.zip`：15,112,870 bytes；SHA-25
 
 ## 萬事屋吐槽 ADV · debt-commission（2026-10-27）
 
+### 2026-10-29：依作者 prompt 重繪桂與去背
+
+- **需求／結果**：作者提供另一故事使用的 MS Paint 鼠繪、粗糙像素風提示詞，要求依此生成並去背。使用 imagegen 以既有桂姿勢圖、遊戲銀時／神樂立繪及桂 normal 參考重繪，保留雙手舉在頭側與認真表情。`stories/katsura_dog_ears/art/katsura_dog_ears_mouse_v2.png` 為 941×1672 RGBA 透明背景，SHA-256 `4c55ae6b9e4820e29182aa8dbc08008fcb8f917f96d81699c53e108423b2d743`，與生成原圖一致，沒有額外影像後處理；舊圖 `katsura_dog_ears.png` 保留。用圖像工具直接輸出透明背景，角色上的白色筆觸保留。
+- **接入／驗證**：故事包 catalog 基礎及 serious 圖改用新版；以 Godot 保存 `scenes/katsura.tscn` 的 Art 預覽，維持既有取景、節點數和 owner。遊戲目錄用 `python3 tools/story_editor/run_coordinated.py /Applications/Godot.app/Contents/MacOS/Godot --headless --editor --path . --import --quit` 完成匯入；以同協作工具執行非headless `--resolution 1280x720 --script res://tests/test_katsura_dog_ears.gd -- --shots=/private/tmp/debt-katsura-mouse-v2` PASSED，檢查兩句停頓、QTE早／晚／成功、牌子、新八漫畫與立繪載入；人工查看 opening／timing 截圖確認透明背景可見場景。匯入退出仍有既有 RID 資源清理警告。
+- **待辦**：作者試看新版風格；真人手機／手感與重新Web匯出未執行。只改本作品圖片及取景，不改 story JSON 版號、人格或記憶。未commit／push，保留其他專案未提交修改。
+
+
+### 2026-10-29：桂的手繪立繪候選
+
+- **使用者決定／生成**：先前提供 opt image 提示詞，作者後續明確回覆「好 那就開始生成」，已依 normal／現有新八畫風／手勢照片／ego 四張參考用 imagegen 生成一張桂的手繪姿勢立繪。`stories/katsura_dog_ears/art/katsura_dog_ears.png` 為原圖 RGBA 941×1672、透明背景，SHA-256 `8fb9d47ddf1794fbe9354c65bfcaa4cfbb09a0ec64d1fe039281247ca2224f6f`，與生成輸出一致。角色外觀、手勢與最終畫風待作者試看。
+- **接入**：本作品 catalog 基礎圖與 serious 表情使用候選；scenes/katsura.tscn 的 Art 顯示圖並保留可編輯取景，PosePlaceholder 隱藏。實測QTE圓環曾遮住桂的臉，已將 Art 左移160本地單位，重新檢視；不改全域舞台。移除故事中過時的「立繪待匯入」提示，check_story重算版本 `s-d2fd832e6028`；已存在該原型的舊存檔可能因版本變動需重開始。
+- **本輪 L2 驗證**：`python3 tools/story_editor/run_coordinated.py /Applications/Godot.app/Contents/MacOS/Godot --headless --editor --path . --import --quit` 通過；`python3 tools/story_editor/run_coordinated.py /Applications/Godot.app/Contents/MacOS/Godot --headless --path . --script res://tools/story_editor/check_story.gd -- stories/katsura_dog_ears/dog_ears_story.json --write` OK；同工具執行非headless `--resolution 1280x720 --script res://tests/test_katsura_dog_ears.gd -- --shots=/private/tmp/debt-katsura-generated-final` PASSED，涵蓋過早／過晚／未按／成功、表情、真實QTE點擊、漫畫吐槽及新立繪實際載入。已人工檢視 opening／timing／retort 截圖。`node /private/tmp/debt-katsura-editor-smoke.mjs` 以Chrome通過編輯器graph及立繪預覽載入。scene以Godot保存，pack前後節點數與owner一致。Godot匯入退出仍有既有RID／資源清理訊息。
+- **尚待／工作區**：等待作者對候選圖及節奏的回饋；真人手機手感、正式美術驗收及重新Web匯出尚未執行。未改完整角色人格與記憶；未commit／push，保留其他專案的修改。
+
+
+### 2026-10-29：首篇極短篇「不是頭痛，是桂」
+
+- **使用者已決定**：桂雙手如參考圖放在頭兩側；伊莉莎白舉牌「頭痛？」、神樂「狗勾？」；阿銀改成「你腦袋被撞到嗎」。桂不能一次說完，先「頭痛賈奈。」→ 停頓 → 一本正經、理直氣壯且認真地說「咖紫拉打。」；之後玩家抓時機接新八「到底是怎樣啦！！那你手舉個屁啊！！！」。作者選擇 opt image 提示詞，未授權直接生成圖片。
+- **完成／部分完成**：新增獨立 `stories/katsura_dog_ears/` graph故事包（7節點、1結尾，version `s-4dcbc3f6be27`），編輯器可選及編輯，不覆寫舊第一章。兩句間 freeze=0.55 秒，第二句顯示完啟動現有 QTE（重疊0.75秒、誤差±0.18秒、未按1.3秒），過早／過晚可重試，成功播放新八漫畫吐槽。回合及單句可指定合法 expression，保持 serious，不再固定 annoyed。桂與本篇伊莉莎白取景都存成可編輯 scene；伊莉莎白牌子已調整至完整可見。
+- **美術／內容界線**：桂姿勢圖尚缺，以 PosePlaceholder 明示待補，不能稱為視覺成品。已提供 `stories/katsura_dog_ears/OPT-IMAGE-PROMPT.md`，要求雙手完整、一張認真姿勢、無真狗耳／賣萌；等作者交圖再檢查取景、隱藏佔位。操作失敗提示及具體時限是原型提案，尚未真人手感驗收。未建立桂／伊莉莎白完整人格、未新增記憶。v0.1／v0.2 場景稿及原始姿勢參考在 docs/story-telling-game/stories。
+- **本次 L2 驗證**：遊戲目錄用 `python3 tools/story_editor/run_coordinated.py /Applications/Godot.app/Contents/MacOS/Godot --headless --path . --script res://tools/story_editor/check_story.gd -- stories/katsura_dog_ears/dog_ears_story.json --write` 通過；依同方式執行 `test_katsura_dog_ears.gd`、`test_phase4_rounds_ui.gd` 均 PASSED。涵蓋早按、晚按、未按、成功至結尾、表情覆寫與非法值拒絕、實際shell保留牌子／serious及實際QTE點擊。新scene皆用Godot保存並通過headless匯入；初次新測試曾有繼承方法簽章及漫畫首幀斷言問題，修正後通過。
+- **畫面／編輯器證據**：最終用非headless `--resolution 1280x720 --script res://tests/test_katsura_dog_ears.gd -- --shots=/private/tmp/debt-katsura-story-evidence/game-final` 再跑通過，已檢視opening與retort截圖，牌子及漫畫字完整可讀。`node /private/tmp/debt-katsura-editor-smoke.mjs` 通過pack選取、graph可編輯、零結構問題、修訂台詞／分句、catalog、試玩入口與原檔不變；報告及editor截圖在 `/private/tmp/debt-katsura-story-evidence/`。瀏覽器檢查早於最後僅本篇伊莉莎白取景調整；未重新測Web遊戲或完整suite。Godot有既有CA、MCP占埠及退出資源清理警告，未見最終script/parse error。
+- **工作區／下一步**：master，記錄時最新HEAD `1677ee8`（可能包含其他session提交，以git log查核）；本次未commit／push。保留其他原型修改。等待作者opt image產圖，完成桂手勢視覺、實際試讀停頓與玩家手感；不擅自擴成長篇或加入新分支台詞。README／STORY-EDITOR／IMPLEMENTATION／HANDOFF／active／STATUS已同步。
+
+
 - **目前工作／交接**：`prototypes/debt-commission`，分支 `master`；2026-10-28 作者要出門，要求交接並 commit。已完成本輪人格協作與編輯器整合；本次提交前 HEAD 為其他原型的 `6e9fb85`，先前遊戲基準為 `21604e3`。提交包含此段落對應程式、測試、資料及文件，完成後停止；最新提交以 `git log -1` 查核，沒有 push。完整交接見 [HANDOFF.md](prototypes/debt-commission/docs/HANDOFF.md)。第一篇極短篇仍等作者提供，沒有代寫。
 - **已完成**：節點編輯器可從選定場景試玩當下的未存稿或唯讀故事，調整旗標與線索；使用作品自己的素材／外觀及獨立暫存遊戲資料。新場景加入分支時會替換預設佔位結尾，編輯器與遊戲驗證會拒絕終止步驟之後不會執行的內容。
 - **本次 UI／手感**：預設改為 16:9 橫向，閱讀與選單字級縮小；LOG／AUTO／SKIP／MENU 按鈕依原圖比例呈現。舞台站位獨立於閱讀框，對話可遮住立繪；一般閱讀框固定，長台詞在框內依文字行分頁，調查或回合控制可依內容增加面板高度。橫向調查可上下及左右拖背景，並保存垂直取景。標題、選項、目錄與案件檔已調整橫向版面。
@@ -77,6 +121,8 @@ seal 新手機包 `build/seal-meadow-mobile-web.zip`：15,112,870 bytes；SHA-25
 - **重要文件**：[專案 README](prototypes/debt-commission/README.md)、[編輯器操作](prototypes/debt-commission/docs/STORY-EDITOR.md)、[商業級待辦](prototypes/debt-commission/docs/ROADMAP-COMMERCIAL.md)、[此專案 session-state](prototypes/debt-commission/production/session-state/active.md)。
 - **工作區**：保留原有其他修改（根目錄 `AGENTS.md`、`CLAUDE.md` 與 taskbar-hero 相關 AGENTS）；本輪另有 debt-commission 程式、測試與文件變更。`godot-kit/sync.sh --check debt-commission` 報既有 drift，本輪未改共用模組副本。
 - **下一步**：等使用者分享短篇構想，一起拆出場景／分支，再以編輯器寫作、存檔和試玩；依實際卡點調整工具與流程。
+
+- **同日美術提示詞修訂**：作者提供 `stories/katsura_dog_ears/art/reference/katsura/normal.jpeg`、`ego.jpeg`、`happy.jpeg`，已實際檢視並與本作銀時／新八立繪對照。OPT-IMAGE-PROMPT 改為四圖分工：normal固定角色與灰羽織／藍和服／黃褐腰帶，現有新八指定粗黑線乾筆筆觸及帶留白色塊，照片固定雙手姿勢，ego指定認真發言神態；happy的閉眼紅暈本輪不用。補上可直接複製的完整提示詞、局部修正詞及混角時兩階段生成做法。僅文件，未生成圖／未改遊戲，驗證附圖連結存在，不跑runtime測試；未commit／push。
 
 ### 2026-10-28：出門交接與編輯器人格參考（最新）
 

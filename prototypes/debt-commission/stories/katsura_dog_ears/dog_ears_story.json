@@ -1,0 +1,173 @@
+{
+  "default_pov": "shinpachi",
+  "entry": "opening",
+  "id": "katsura_dog_ears",
+  "initial_flags": {},
+  "nodes": {
+    "early": {
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "narrator",
+          "text": "搶早了。等桂說完，再留半拍。"
+        },
+        {
+          "op": "goto",
+          "target": "timing"
+        }
+      ],
+      "title": "太早了"
+    },
+    "exhausted": {
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "narrator",
+          "text": "先休息一下。按「重試」再抓一次吐槽時機。"
+        },
+        {
+          "op": "goto",
+          "target": "timing"
+        }
+      ],
+      "title": "再抓一次時機"
+    },
+    "finish": {
+      "steps": [
+        {
+          "op": "end",
+          "text": "不是頭痛，是桂。"
+        }
+      ],
+      "title": "極短篇完"
+    },
+    "late": {
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "narrator",
+          "text": "慢了一拍。圓環重疊時，點下去吐槽。"
+        },
+        {
+          "op": "goto",
+          "target": "timing"
+        }
+      ],
+      "title": "慢了一拍"
+    },
+    "opening": {
+      "next": "timing",
+      "steps": [
+        {
+          "id": "yorozuya_living_room",
+          "op": "bg"
+        },
+        {
+          "enter": true,
+          "expression": "serious",
+          "id": "katsura",
+          "op": "char",
+          "position": "center",
+          "transition": "instant"
+        },
+        {
+          "enter": true,
+          "expression": "neutral",
+          "id": "elisabeth",
+          "op": "char",
+          "position": "right",
+          "transition": "instant"
+        },
+        {
+          "op": "placard",
+          "text": "頭痛？"
+        },
+        {
+          "op": "say",
+          "speaker": "narrator",
+          "text": "伊莉莎白舉起牌子：「頭痛？」"
+        },
+        {
+          "offscreen": true,
+          "op": "say",
+          "speaker": "kagura",
+          "text": "狗勾？"
+        },
+        {
+          "offscreen": true,
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "你腦袋被撞到嗎"
+        },
+        {
+          "expression": "serious",
+          "op": "say",
+          "speaker": "katsura",
+          "text": "頭痛賈奈。"
+        },
+        {
+          "duration": 0.55,
+          "op": "freeze"
+        }
+      ],
+      "title": "桂的小狗耳朵"
+    },
+    "perfect": {
+      "steps": [
+        {
+          "expression": "shout",
+          "op": "comedy",
+          "preset": "tsukkomi_impact",
+          "side": "left",
+          "speaker": "shinpachi",
+          "text": "到底是怎樣啦！！那你手舉個屁啊！！！"
+        },
+        {
+          "op": "goto",
+          "target": "timing"
+        }
+      ],
+      "title": "抓準吐槽"
+    },
+    "timing": {
+      "steps": [
+        {
+          "clear": "finish",
+          "expression": "serious",
+          "game_over": "exhausted",
+          "id": "katsura_timing",
+          "lines": [
+            {
+              "id": "name",
+              "slot": {
+                "qte": {
+                  "duration": 0.75,
+                  "early": "early",
+                  "late": "late",
+                  "late_after": 1.3,
+                  "perfect": "perfect",
+                  "window": 0.18
+                }
+              },
+              "text": "咖紫拉打。"
+            }
+          ],
+          "mode": "combo",
+          "op": "boke_round",
+          "rules": {
+            "combo_timers": [
+              4.0
+            ],
+            "type_lines": true
+          },
+          "speaker": "katsura",
+          "timer_seconds": 4.0
+        }
+      ],
+      "title": "一本正經的咖紫拉打"
+    }
+  },
+  "note": "核心台詞及玩家時機吐槽經作者指定；阿銀已改為「你腦袋被撞到嗎」。桂分兩句，中間停頓，第二句一本正經。桂的 AI 生成姿勢圖為初稿，等待作者試讀與視覺確認。失敗提示為可調整的操作文案。",
+  "title": "不是頭痛，是桂",
+  "version": "s-d2fd832e6028"
+}

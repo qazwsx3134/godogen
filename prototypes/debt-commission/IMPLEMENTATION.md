@@ -46,6 +46,8 @@ V1 可呈現 op：
   - `places: [{id,bg,label?,prompt?,hotspots,talk?}]`：可以移動過去的其他地點，各有背景、熱區與話題。有 `places` 時主地點要寫 `bg`；地點 id 不能是 `home`、不能含 `/`。
   - 熱區、話題、地點 id 在整個調查裡不重複。熱區 `goto` 與話題的節點最後用 `goto`（`.dialogue` 的 `=> 節點`）跳回放調查的那個節點，所以有反應（`talk`、`places` 或熱區 `goto`）的調查必須是節點的第一步，否則載入時報錯。
 - `boke_round`: `id`、`speaker`、`lines: [{id,text,listen?}]`、`timer_seconds`、`tsukkomi.options: [{id,label,result,require?,goto,set_flags?}]`、`tsukkomi.timeout`、`game_over`。閱讀發言不限時，玩家進入吐槽選詞後才開始倒數；`require` 控制素材限定選項。
+吐槽回合可選 `expression`（合法表情，預設 annoyed）；v2 的個別 lines[] 也可選 expression，優先於回合設定。用於需要認真表情的發言，進入 QTE 時仍保持相同表情；不參與結構版號。
+
 - `boke_round` 加上 `mode`（`testimony`／`combo`）就是 v2 回合：每句各自的 `slot`（`options`、第四面牆 `censor` 或 `placard`、`qte`）、`listen`／`whiff`／`hint` 反應節點、`clear`、`rules`（超必殺、連擊時限與獎勵、提示門檻），單句 `speaker` 可寫合聲（`gintoki+kagura`）；欄位與規則寫在 `scripts/tsukkomi_round.gd` 開頭，完整範例是 `story_src/phase4_rounds.blocks.json`。`current()` 會附上 `current_line`（`speaker`、`caught`、`can_listen`、`can_whiff`、`listened`、`options`、`censor`、`placard`、`qte`）、`caught_line_ids`、`combo`、`timer_seconds`、`super_available`。玩家動作：`resolve_boke`、`whiff_boke`、`resolve_censor`、`resolve_placard`、`resolve_qte(tapped, offset)`、`use_super`、`set_boke_line`、`listen_boke_line`、`timeout_boke`；每個動作跳到反應節點，反應演完回到回合。
   - `placard: {text, goto, result?}`：舉牌槽點。這句是目前句子、還沒接住時，拿牌子的角色（角色 scene 裡有 `Placard` 節點的，目前是伊莉莎白）的牌子顯示 `text`；閱讀時與選詞時點牌子都算這個槽點的結果（預設 perfect）。槽點旁仍要有 `options`（選詞與逾時照常），不能和 `censor` 或 `qte` 放在同一句。
   - 選項的 `when: [{require_caught?, require?, flags?, result, goto, set_flags?}]`：條件結果。選項照常顯示；選它時，第一個條件全部成立的 case 取代選項的 `result`／`goto`（`set_flags` 沒寫就沿用選項的）。條件：`require_caught`（本回合已接住的句子 id）、`require`（持有的素材）、`flags`（`{旗標: 值}`，旗標要是故事裡有的、型別相同）；每個 case 至少一個條件。例：放棄吐槽平常 `fail`，L1、L2 都接住時 `hidden`。
