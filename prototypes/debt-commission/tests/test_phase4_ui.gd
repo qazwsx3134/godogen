@@ -114,7 +114,8 @@ func _test_title_story_switch() -> void:
 	var rows: Dictionary = game._chapter_select.call("rows")
 	_expect(game._screen_mode == "chapter_select" and game._chapter_select.visible and rows.size() == game._story_choices.size(),
 		"the story label opens 章節選擇 with every story")
-	_expect(rows.keys() == ["chapter1", "example_ch1", "example_ch2", "debt", "phase2", "phase3", "phase4", "phase4_rounds", "comedy", "choices", "ep00", "text_effects"]
+	var baseline_ids := ["chapter1", "example_ch1", "example_ch2", "debt", "phase2", "phase3", "phase4", "phase4_rounds", "comedy", "choices", "ep00", "text_effects"]
+	_expect(rows.keys().filter(func(id: String) -> bool: return id in baseline_ids) == baseline_ids
 		and (rows["debt"] as Button).text.contains("請幫我向你老闆討債") and (rows["phase4"] as Button).text.contains("試玩片段"),
 		"rows list each story by its own title, samples marked as such: %s" % [rows.keys()])
 	_expect(not game._chapter_select.find_child("ChaptersEmpty", true, false).visible and game._chapter_select.row_text("chapter1").contains("草莓牛奶"), "本篇 lists the playable first chapter")

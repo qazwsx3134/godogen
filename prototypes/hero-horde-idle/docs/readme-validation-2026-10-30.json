@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-30",
+  "scope": "documentation only",
+  "local_links_checked": 36,
+  "missing_local_links": [],
+  "source_cross_checks": [
+    "six tabs and six saved page scenes",
+    "18 talent definitions",
+    "race names",
+    "430x932 configured window",
+    "no Web export preset"
+  ],
+  "game_tests": "not rerun; reuse /tmp/godot-tests.GbS3oh for prior runtime change",
+  "archive": "docs/history/README-2026-10-30.md"
+}

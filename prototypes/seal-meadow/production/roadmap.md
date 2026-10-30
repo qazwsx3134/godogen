@@ -135,7 +135,7 @@ MVP 首版責任 20 系統（M0 先做其中 6 個的薄切片，其餘在 M1 �
 
 以下是獨立範圍；先選要做的分支，再補 GDD／UX／TDD 與測試。首版切片不被這些功能阻塞。
 
-目前依使用者選擇先做單機後續內容，M4 多人保持延後。S19 已有[圖鑑／成就／聲望薄切片](../design/gdd/fame-collections.md)，S33 已有[草原釣點、釣餌與前景結算](../design/gdd/fishing.md)，S35 新增[單機衣櫥與裝飾光環](../design/gdd/cosmetics-auras.md)；單機 headless 證據已記錄，真機與後續擴充仍待驗證。
+目前依使用者選擇先做單機後續內容，M4 多人保持延後。S19 已有[圖鑑／成就／聲望薄切片](../design/gdd/fame-collections.md)，S33 已有[草原釣點、釣餌與前景結算](../design/gdd/fishing.md)，S35 新增[單機衣櫥與裝飾光環](../design/gdd/cosmetics-auras.md)；單機 headless 證據已記錄，真機與後續擴充仍待驗證。 2026-10-30 接續 S34 [單機乘坐](../design/gdd/battle-pets-guarders.md)：第 2 階解鎖、移速 ×1.25、戰鬥／生命週期強制下坐；[L2 證據](qa/systems/battle-pets-guarders.md)。AC-S34-03 的戰鬥 AI 仍留待擴充。
 
 | 分支／系統 | 最小交付 | 前置／啟動條件 | 再擴充前的證據 |
 |---|---|---|---|

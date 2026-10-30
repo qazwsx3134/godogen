@@ -28,6 +28,8 @@ const CHARACTER_SCENE: String = "res://scenes/characters/%s.tscn"
 ## Background frames and the left/center/right standing slots, laid out in the editor.
 const STAGE_SCENE: PackedScene = preload("res://scenes/stage.tscn")
 ## A spot to search, laid over its object in the background picture; and the folded reading box.
+const InvestigationLayout = preload("res://scripts/investigation_layout.gd")
+const InvestigationPicker = preload("res://scripts/investigation_picker.gd")
 const HOTSPOT_SCENE: PackedScene = preload("res://scenes/ui/hotspot.tscn")
 const INVESTIGATE_BAR_SCENE: PackedScene = preload("res://scenes/ui/investigate_bar.tscn")
 const CHAPTER_SELECT_SCENE: PackedScene = preload("res://scenes/ui/chapter_select.tscn")
@@ -2050,13 +2052,13 @@ func _layout_hotspots() -> void:
 		return
 	var frame: TextureRect = _hotspot_layer.get_parent() as TextureRect
 	var own: Rect2 = _anchored_rect_with(frame, _frame_offsets, Rect2(Vector2.ZERO, _game.size))
-	_picture = own
+	var art := Vector2.ZERO
 	if frame.texture != null and not frame.texture is GradientTexture2D:
-		var art: Vector2 = Vector2(frame.texture.get_width(), frame.texture.get_height())
-		var drawn: Vector2 = art * maxf(own.size.x / art.x, own.size.y / art.y)
-		_picture = Rect2(own.position + (own.size - drawn) * 0.5, drawn)
-	_pan_range = Vector2(minf(0.0, _game.size.x - _picture.end.x), maxf(0.0, -_picture.position.x))
-	_pan_y_range = Vector2(minf(0.0, _game.size.y - _picture.end.y), maxf(0.0, -_picture.position.y))
+		art = Vector2(frame.texture.get_width(), frame.texture.get_height())
+	var layout := InvestigationLayout.coverage(own, art, _game.size)
+	_picture = layout.picture
+	_pan_range = layout.horizontal
+	_pan_y_range = layout.vertical
 	_set_pan(_pan, _pan_y)
 	_place_cast_hotspots()
 
@@ -2075,8 +2077,9 @@ func _place_cast_hotspots() -> void:
 			portrait = Rect2(portrait.position + portrait.size * Vector2(region[0],region[1]),
 				portrait.size * Vector2(region[2],region[3]))
 		var shown: Rect2 = portrait.intersection(screen)
-		if not shown.has_area():
-			shown = portrait  # wholly off screen: nothing to clip, and nobody can tap it
+		spot.visible = shown.has_area()
+		if not spot.visible:
+			continue  # no visible art region means no target, even after touch expansion
 		spot.position = shown.position - _interaction_layer.global_position
 		spot.size = shown.size
 
@@ -2088,12 +2091,12 @@ func _set_pan(value: float, vertical: Variant = null) -> void:
 	if _hotspot_layer == null or not is_instance_valid(_hotspot_layer):
 		return
 	var frame: TextureRect = _hotspot_layer.get_parent() as TextureRect
-	var start: Vector2 = _game.size * Vector2(frame.anchor_left, frame.anchor_top)
-	var end: Vector2 = _game.size * Vector2(frame.anchor_right, frame.anchor_bottom)
-	frame.offset_left = _picture.position.x + _pan - start.x
-	frame.offset_right = _picture.end.x + _pan - end.x
-	frame.offset_top = _picture.position.y + _pan_y - start.y
-	frame.offset_bottom = _picture.end.y + _pan_y - end.y
+	var offsets := InvestigationLayout.panned_offsets(_picture, Vector2(_pan, _pan_y),
+		Vector4(frame.anchor_left, frame.anchor_top, frame.anchor_right, frame.anchor_bottom), _game.size)
+	frame.offset_left = offsets.x
+	frame.offset_top = offsets.y
+	frame.offset_right = offsets.z
+	frame.offset_bottom = offsets.w
 	for actor: String in _cast_pan_origins.keys():
 		(_sprites[actor] as Control).position.x = float(_cast_pan_origins[actor]) + _pan
 		(_sprites[actor] as Control).position.y = float(_cast_pan_y_origins.get(actor, (_sprites[actor] as Control).position.y)) + _pan_y
@@ -2140,11 +2143,8 @@ func _clear_hotspots() -> void:
 
 ## Where a Control would sit inside parent_rect with the given offsets [left, top, right, bottom].
 func _anchored_rect_with(node: Control, offsets: Array[float], parent_rect: Rect2) -> Rect2:
-	var start: Vector2 = parent_rect.position + parent_rect.size * Vector2(node.anchor_left, node.anchor_top) \
-		+ Vector2(offsets[0], offsets[1])
-	var end: Vector2 = parent_rect.position + parent_rect.size * Vector2(node.anchor_right, node.anchor_bottom) \
-		+ Vector2(offsets[2], offsets[3])
-	return Rect2(start, end - start)
+	return InvestigationLayout.anchored_rect(
+		Vector4(node.anchor_left, node.anchor_top, node.anchor_right, node.anchor_bottom), offsets, parent_rect)
 
 
 ## A tap on the picture while searching: the spot under it, unless the reading box covers it.
@@ -2154,18 +2154,10 @@ func _anchored_rect_with(node: Control, offsets: Array[float], parent_rect: Rect
 func _tap_investigation(at: Vector2) -> void:
 	if _story_busy or (_dialog_panel.visible and _dialog_panel.get_global_rect().has_point(at)):
 		return
-	var tapped: String = ""
-	var tapped_rank: float = INF
-	for hotspot_id: String in _hotspots.keys():
-		var spot: Control = _hotspots[hotspot_id] as Control
-		var data: Dictionary = _hotspot_data(hotspot_id)
-		if bool(spot.get("found")) and not data.has("lines"):
-			continue
-		var hit: Rect2 = _hotspot_hit_rect(spot)
-		var rank: float = hit.get_area() if not data.has("character") else 1.0e9 - _sprites[data["character"]].get_index()
-		if hit.has_point(at) and rank < tapped_rank:
-			tapped = hotspot_id
-			tapped_rank = rank
+	var definitions := {}
+	for hotspot_id: String in _hotspots:
+		definitions[hotspot_id] = _hotspot_data(hotspot_id)
+	var tapped := InvestigationPicker.pick(at, _hotspots, definitions, _sprites, 48.0 * CSS_PX * _panel_scale)
 	if not tapped.is_empty():
 		_collect_hotspot(tapped)
 
@@ -2180,10 +2172,7 @@ func _hotspot_data(hotspot_id: String) -> Dictionary:
 
 ## The spot's rect, grown to at least 48 CSS px each way so small objects stay tappable.
 func _hotspot_hit_rect(spot: Control) -> Rect2:
-	var rect: Rect2 = spot.get_global_rect()
-	var least: float = 48.0 * CSS_PX * _panel_scale
-	var grow: Vector2 = (Vector2(least, least) - rect.size).max(Vector2.ZERO) * 0.5
-	return rect.grow_individual(grow.x, grow.y, grow.x, grow.y)
+	return InvestigationPicker.hit_rect(spot, 48.0 * CSS_PX * _panel_scale)
 
 
 func _collect_hotspot(hotspot_id: String) -> void:

@@ -27,6 +27,7 @@ func _run() -> void:
 	_expect(gintoki.visible and is_equal_approx(gintoki.modulate.a, game.SEARCH_CAST_ALPHA),
 		"Gintoki, whose mouth is a spot, stays see-through")
 	_expect(kagura.visible and is_zero_approx(kagura.modulate.a), "Kagura, with no spot on her, turns invisible for the search")
+	_test_offscreen_mouth(game, gintoki)
 	game._collect_hotspot("desk_underside")
 	await _frames(2)
 	await _read_until(game, "investigate")
@@ -62,3 +63,23 @@ func _cleanup() -> void:
 	for path: String in FILES:
 		if FileAccess.file_exists(path):
 			DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
+
+
+func _test_offscreen_mouth(game: Control, actor: Control) -> void:
+	var original: Vector2 = actor.global_position
+	var screen := Rect2(game._game.global_position, game._game.size)
+	var art: Rect2 = actor.call("art_rect")
+	var region: Array = game._hotspot_data("gintoki_mouth").art_region
+	var mouth := Rect2(art.position + art.size * Vector2(region[0], region[1]), art.size * Vector2(region[2], region[3]))
+	actor.global_position.x += screen.position.x - mouth.end.x - 1.0
+	game._place_cast_hotspots()
+	var spot: Control = game._hotspots["gintoki_mouth"]
+	var point := Vector2(screen.position.x + 1.0, mouth.get_center().y)
+	_expect(not spot.visible, "a wholly offscreen mouth has no visible interaction target")
+	var picker = load("res://scripts/investigation_picker.gd")
+	var picked: String = picker.pick(point, {"gintoki_mouth": spot},
+		{"gintoki_mouth": game._hotspot_data("gintoki_mouth")}, game._sprites, 48.0 * game.CSS_PX * game._panel_scale)
+	_expect(picked.is_empty(), "touch expansion cannot bring an offscreen mouth back onto the screen")
+	actor.global_position = original
+	game._place_cast_hotspots()
+	_expect(spot.visible, "returning the portrait to view restores its interaction target")

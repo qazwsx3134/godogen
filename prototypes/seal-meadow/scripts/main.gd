@@ -118,6 +118,9 @@ func _ready() -> void:
 	click_marker.visible = false
 	player.stats_changed.connect(_on_stats_changed)
 	player.damaged.connect(func(_attacker: Node3D) -> void: cancel_fishing("受到攻擊，釣魚已中斷。"))
+	player.mounted_changed.connect(func(riding: bool) -> void:
+		if riding:
+			cancel_fishing("乘坐時已停止釣魚。"))
 	combat.hit_landed.connect(_on_hit)
 	player.swept.connect(func(hits: int) -> void:
 		sfx.play(&"sweep")
@@ -231,6 +234,7 @@ func _on_hit(attacker: Node3D, victim: Node3D, _amount: int, crit: bool) -> void
 ## Fades out, moves the player (and camera) to the portal's arrival point, saves, fades in.
 ## ponytail: both zones live in one scene far apart, so travel is a teleport; stream zones if maps grow.
 func travel(portal: Node3D) -> void:
+	player.set_mounted(false)
 	_travelling = true
 	_portal_goal = null
 	_fishing_goal = null
@@ -296,6 +300,7 @@ func _apply_settings() -> void:
 
 func _on_backgrounded(away: bool) -> void:
 	if away:
+		player.set_mounted(false)
 		_holding = false
 		_hold_to_walk = false
 		player.pointer_moving = false

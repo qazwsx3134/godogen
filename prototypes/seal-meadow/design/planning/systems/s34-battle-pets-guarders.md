@@ -44,3 +44,7 @@ M5 先一種跟隨或乘坐，後續才增加戰鬥寵物分支；若多人已�
 
 三類系統共用外觀但不同權威與生命週期，避免混用狀態。
 
+
+## 2026-10-30 單機切片 checkpoint
+
+已實作第 2 階解鎖乘坐與現有 entity 跟隨，範圍見 [GDD](../../gdd/battle-pets-guarders.md)、[TDD](../../../docs/architecture/systems/battle-pets-guarders.md)、[QA](../../../production/qa/systems/battle-pets-guarders.md)。AC-S34-01／02 有 L2 自動證據；AC-S34-03 未實作戰鬥 AI，真機視覺／操作仍待驗。這是 S34 部分交付。

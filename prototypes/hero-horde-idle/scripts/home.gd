@@ -90,6 +90,8 @@ func _ready() -> void:
 	add_log("小隊在 %s 出發。" % Stages.label(progress.march_stage))
 	show_tab(app.take(&"tab", &"overview") if app != null else &"overview")
 	_claim_offline()
+	if not progress.save_blocked_reason.is_empty():
+		dialog("存檔受保護", "原存檔無法讀取，已停止寫入。請先備份並檢查原檔；目前遊玩不會保存。")
 
 
 ## Phones are taller than the 941 x 1672 layout: the screen keeps its width and the extra height goes above the
@@ -112,7 +114,8 @@ func _path() -> String:
 
 
 func save() -> void:
-	progress.save(_path())
+	if progress.save(_path()) != OK:
+		add_log("進度尚未保存，請檢查原存檔或儲存空間。")
 	_save_in = SAVE_EVERY
 
 

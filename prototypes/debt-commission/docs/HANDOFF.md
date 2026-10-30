@@ -80,3 +80,11 @@ node tools/story_editor/persona_smoke.mjs --playwright /Users/peter/.npm/_npx/e4
 這次只提交 debt-commission 與相關文件、漫畫參考 sinpachi.jpeg，不納入其他原型或刪除的 story-telling-ui2 Large.jpeg。docs/sao 及其他未提交內容保留；禁止 reset、清理或批次還原。提交後以 git status 確認剩餘差異。沒有 push。
 
 重要入口：[README](../README.md)、[編輯器操作](STORY-EDITOR.md)、[人格與確認規則](../authoring/README.md)、[現行完整人格與記憶](../authoring/REVIEW.md)、[session-state](../production/session-state/active.md)、[conversation 歷史核對](../../../docs/story-telling-game/CONVERSATION-AUDIT-2026-10-28.md)。
+
+## 2026-10-30 Web 候選更新
+
+`tools/build_web.sh` 已完成，輸出 `build/web/`；本地封裝 `build/debt-commission-web-candidate-20261030.zip`（79,199,602 bytes），SHA-256 `dbc585c0dcd62840e07349e05be52889be018728e104f2a348097ba5bbc20598`。PCK 452 個檔案，包含 main、investigation_picker 與 investigation_layout 編譯腳本；tests／tools 未入包。IDBFS 修補與 ZIP CRC／必要檔案檢查 PASS。
+
+機器可讀紀錄 `production/qa/web-candidate-2026-10-30.json` 包含來源、ZIP 與 PCK 雜湊。build log `/tmp/debt-web-build-20261030.log` 有 TCP 監聽限制與退出清理訊息，未見 SCRIPT ERROR／Parse Error。此輪僅匯出及靜態驗證，未重跑遊戲測試；沿用上一輪熱區單元／search_cast／Phase3，以及較早幾何／Phase4 證據，具體路徑見 JSON。
+
+沙箱禁止 socket，未啟動伺服器或執行本包 Chromium 互動／IndexedDB 測試；iPhone 真機仍未驗。未上傳、未 commit／push。下一步使用獨立瀏覽器資料驗證調查拖曳、角色移出／移回邊界、離開調查與存讀恢復；作者完整短篇仍待提供構想及核准。

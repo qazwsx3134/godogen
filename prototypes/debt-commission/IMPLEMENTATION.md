@@ -1,6 +1,6 @@
-# V1 直立 VN：劇本與畫面介面契約
+# V1 橫向 VN：劇本與畫面介面契約
 
-依 [V1 Roadmap](../../docs/story-telling-game/ROADMAP.md)，直立外殼可載入不同 JSON 故事；`data/debt_story.json` 是已核准討債第一場的閱讀基線，`data/phase2_story.json` 與 `data/phase3_story.json` 是草莓牛奶技術片段，非正式第一章。`data/chapter1_story.json` 是依已採納 P1–P8 的 v0.2 草稿建置的第一章上機試讀版。
+依 [V1 Roadmap](../../docs/story-telling-game/ROADMAP.md)，橫向外殼可載入不同 JSON 故事；`data/debt_story.json` 是已核准討債第一場的閱讀基線，`data/phase2_story.json` 與 `data/phase3_story.json` 是草莓牛奶技術片段，非正式第一章。`data/chapter1_story.json` 是依已採納 P1–P8 的 v0.2 草稿建置的第一章上機試讀版。
 
 ## StoryRunner 契約
 
@@ -342,3 +342,31 @@ catalog 的每筆素材（`backgrounds`、`characters`、`items`、`sounds`、`m
 
 - 編輯器的「素材設定」編輯 catalog 檔本身（作品的相對路徑與 `extends` 原樣保留，繼承的項目唯讀），經 `GET/POST /api/catalog` 存回。存檔前 `tools/story_editor/check_catalog.gd` 用 runner 的 catalog 與劇本驗證檢查：候選檔放在原 catalog 旁（`.catalog-candidate-*.json`，不進 git、驗完即刪），經 `StoryRunner.read_catalog(path, redirect)` 頂替原檔，`extends` 它的作品也讀到候選檔。
 - 場景卡「缺圖」與投稿檢查同一套規則：`story_core.js` 的 `usedAssets`／`missingArt` 逐條對應 `scripts/asset_usage.gd` 與 `tools/art_check`，`test_core.mjs` 用同一個 fixture 作品對照兩邊。
+
+## 2026-10-29 維護邊界與漸進拆分
+
+目前外殼是橫向 16:9。StoryRunner 管規則與可保存的劇情狀態；scene 管版面；main 協調輸入與呈現。大檔案行數不是單獨重寫理由。
+
+下一次修改調查流程時，先把調查呈現收進一個控制元件，介面只接收調查命令、回報玩家選擇及取消；不直接管理存檔或推進 Runner。確認回到對話、選單暫停、讀檔恢復、離開場景時訊號與非同步任務都清理後，再考慮回合呈現。一次只搬一個職責。
+
+回歸至少覆蓋調查進出、選詞暫停／恢復及存讀檔；實際指令沿用 README 對應測試。完整短篇人工驗收見 [計畫](docs/SHORT-STORY-ACCEPTANCE.md)，尚未執行。首步熱區選取已拆分，完整調查呈現控制仍保留在 main；詳見下節。
+
+### 首步已實作：熱區命中與重疊選取
+
+`investigation_picker.gd` 是無保存狀態的呈現模組，輸入點擊座標、現有熱區、定義、角色節點與最小觸控尺寸，回傳熱區 ID 或空字串。統一觸控範圍擴張、物件／角色優先序及已查熱區的重複台詞資格。
+
+main 仍負責忙碌／對話框遮擋檢查、背景拖曳與角色生命週期；選取後呼叫既有 `_collect_hotspot`，由 StoryRunner 判定調查、素材與進度。模組不連接訊號、不啟動非同步任務，因此離開調查或讀檔不需要新增清理流程。下一次涉及背景拖曳／角色熱區生命週期的功能修改，再評估是否需要更大的呈現控制元件；本次沒有整段搬移。
+
+`test_investigation_picker.gd` 驗證小物件、角色前後層、重複台詞、觸控尺寸與狀態不變；整合回歸採既有 investigation／phase3_ui／phase4_ui。執行結果記在 Progress.md 最新段落。
+
+### 第二步：背景覆蓋與拖曳幾何
+
+`investigation_layout.gd` 集中 anchor／offset 換算、背景等比覆蓋、水平／垂直拖曳界線及拖曳後的 frame offsets。輸入為 Rect2、Vector2、Vector4 等幾何值；不依賴 Runner 或場景生命週期，也不修改 node。
+
+main 仍從已保存 scene 讀取 anchor／offset 與圖片尺寸，套用執行期背景取景；離開調查會恢復原始 offset，角色位置與各地點拖曳值仍由既有流程清理／保存。占位 GradientTexture 不做圖片覆蓋計算。`test_investigation_layout.gd` 驗證寬圖、高圖、占位、父座標偏移及邊界無空白，Phase 3／4 UI 回歸驗證拖曳及重開恢復。這次不改 scene 或存檔 schema。
+
+### 螢幕外角色熱區（2026-10-30）
+
+角色 art_region 與遊戲畫面完全不相交時，熱區必須隱藏；部分可見時使用裁切後範圍，仍保留最小觸控尺寸。InvestigationPicker 略過不可見節點。角色回到畫面後，重新計算並顯示熱區；不改 found、素材或劇情進度。
+
+`test_search_cast` 以第一章銀時嘴角移到畫面左緣外 1 單位重現：舊版兩個斷言失敗，分別是熱區仍可見及觸控擴張將目標帶回畫面（`/tmp/godot-tests.FvVWlR`）。此測試使用執行期站位邊界，不改來源 scene。修正後結果見 Progress.md 最新紀錄。

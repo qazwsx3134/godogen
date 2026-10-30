@@ -36,6 +36,7 @@ func _run() -> void:
 	_test_equip()
 	_test_use()
 	await _test_quests()
+	await _test_sale_confirmation()
 	await _test_ui()
 	await _test_zone_save()
 	await _test_tutorial()
@@ -208,3 +209,68 @@ func _test_tutorial() -> void:
 	main.save_game()
 	await _fresh()
 	_expect(player.tutorial.finished() and not main.get_node("%HUD").tutorial_panel.visible, "skipped tutorial stays hidden after a restart")
+
+
+func _test_sale_confirmation() -> void:
+	await _fresh()
+	var hud: Node = main.hud
+	player.bag.slots.clear()
+	player.bag.add("ruby", 1)
+	player.bag.add("clover", 1)
+	player.gold = 0
+	hud.open_npc()
+	await _frames(3)
+	hud.npc_panel.get_node("Scroll").ensure_control_visible(hud.sell_button)
+	await _frames(3)
+	await _press(hud.sell_button)
+	_expect(player.gold == 0 and player.bag.count("ruby") == 1 and hud.sell_confirmation.dialog_text.contains("紅寶石"), "sale preview lists growth materials without spending")
+	await _press(hud.sell_confirmation.get_node("%CancelSale"))
+	_expect(not hud.sell_confirmation.visible and player.bag.count("clover") == 1, "cancel preserves evolution materials")
+	hud._preview_sale()
+	player.bag.add("jelly_gel", 1)
+	hud._confirm_sale()
+	_expect(player.gold == 0 and player.bag.count("ruby") == 1, "changed inventory rejects stale sale")
+	hud.sell_confirmation.hide()
+	hud._preview_sale()
+	await _frames(3)
+	await _press(hud.sell_confirmation.get_node("%ConfirmSale"))
+	_expect(player.gold == 69 and player.bag.slots.is_empty(), "confirmed list sells exact materials")
+	hud.sell_confirmation.hide()
+	var restored: Dictionary = SaveSlots.restore(SAVE, main.SAVE_VERSION)
+	_expect(int(restored.data.gold) == 69 and restored.data.bag.is_empty(), "confirmed sale persists")
+	player.bag.add("ruby", 1)
+	hud._preview_sale()
+	hud.open_world_map()
+	_expect(not hud.sell_confirmation.visible, "switching panels dismisses sale confirmation")
+	hud._confirm_sale()
+	_expect(player.bag.count("ruby") == 1, "dismissed confirmation cannot sell")
+
+	for viewport_size: Vector2i in [Vector2i(844, 390), Vector2i(1280, 720)]:
+		root.size = viewport_size
+		hud.set_large_text(true)
+		player.bag.slots.clear()
+		player.bag.add("ruby", 120)
+		hud._preview_sale()
+		await _frames(4)
+		var panel: Control = hud.sell_confirmation.get_node("Panel")
+		_expect(hud.get_node("Root").get_global_rect().encloses(panel.get_global_rect()), "sale panel fits safe HUD at %s" % viewport_size)
+		var scale_to_screen: Vector2 = Vector2(root.size) / root.get_visible_rect().size
+		for name: String in ["%CancelSale", "%ConfirmSale"]:
+			var button: Button = hud.sell_confirmation.get_node(name)
+			_expect((button.size * scale_to_screen).y >= 44, "sale actions retain touch height at %s" % viewport_size)
+		var listing: Label = hud.sell_confirmation.get_node("%SaleList")
+		var scroll: ScrollContainer = listing.get_parent()
+		_expect(scroll.get_v_scroll_bar().max_value > scroll.get_v_scroll_bar().page,
+			"full bag with large text has a scrollable sale list at %s" % viewport_size)
+		var confirm: Button = hud.sell_confirmation.get_node("%ConfirmSale")
+		var confirm_rect := confirm.get_global_rect()
+		scroll.scroll_vertical = int(scroll.get_v_scroll_bar().max_value)
+		await _frames(2)
+		_expect(confirm.get_global_rect() == confirm_rect and scroll.scroll_vertical > 0,
+			"scrolling the sale list leaves confirmation fixed at %s" % viewport_size)
+		await _press(hud.sell_confirmation.get_node("%CancelSale"))
+		_expect(player.bag.count("ruby") == 120 and not hud.sell_confirmation.visible,
+			"canceling the scrolled list keeps every stack at %s" % viewport_size)
+		hud.close_top_window()
+	hud.set_large_text(false)
+	root.size = Vector2i(1280, 720)

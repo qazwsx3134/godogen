@@ -1,8 +1,14 @@
-# 全員推王：進度與商業化缺口（2026-10-27 融合版交接）
+# 全員推王：目前進度與歷史交接
 
 回來時先讀這份，再看 [FUSION.md](FUSION.md)（融合的決定與系統）、[ROADMAP.md](ROADMAP.md)（里程碑）與 [../README.md](../README.md)（規格、可編輯的 scene、執行方式）。
 
-## 現在在哪裡
+## 目前狀態（2026-10-30）
+
+master，六頁原生手機方向。現行介面與玩法見 [README](../README.md)，種族為人類／獸人／精靈。離線開頭五分鐘戰鬥模擬與強敵權重已修正；march／progression／home／main L2 通過（`/tmp/godot-tests.GbS3oh`）。本段文件整理沒有重跑遊戲測試，沿用該次證據。
+
+待完成：真人前三層驗收、手機恢復／發熱、長時間估算差距的接受標準、作者素材選擇。沒有 Web preset；尚未產生本輪新的原生手機安裝包。工作區未 commit／push，最新提交用 git log 查核。下面按日期保留歷史狀態。
+
+## 2026-10-27 融合版交接（歷史）
 
 v3.0 融合版（在 `fusion-idle` 開發，2026-10-27 合併進 master：`7b6964a`）。全員推王為主幹，併入遠征紀事的七頁介面與裝備撿寶、夢靈遠行的小隊編成與羈絆。
 
@@ -163,3 +169,27 @@ $GB --path . --resolution 390x844 --script res://tools/capture_shots.gd -- <輸�
 - 分層驗收：改單一系統跑該系統的測試；動到行軍、養成、推王之間的交互，加跑 `test_home` 與 `test_main`；完整測試等作者手動驗收後再跑（`test_stages` 約 80 秒）。
 - scene 以存檔為準：`tools/build_fusion_ui.gd` 已套用，頁面掛上腳本後重跑會跳過；要重做某頁，先看 diff 再刪檔重跑。
 - 生圖一律先列出批次內容給作者選。
+
+## 2026-10-29 離線收益審查改善
+
+使用者授權繼續改善。完成 domain 在線／離線對照工具與前後 JSON 證據，見 FIRST-THREE-FLOORS-ACCEPTANCE.md。修正離線漏算強敵三倍獎勵：使用加權獎勵速率，擊殺數仍不加權。L2 march／progression PASS（`/tmp/godot-tests.VzEGYo`）。固定 seed 第一層四組金幣差距由 -14%～-24% 縮小至 -8%～+3%；不是全面平衡或真機證據。低等隊伍成長途中加速仍未納入離線固定速率。未改存檔格式、未重建 Web、未 commit／push。
+
+## 2026-10-30 收益矩陣
+
+compare_march_rewards 新增 --matrix，48 組涵蓋三種子、前三層與第八層退關邊界、兩起始等級、兩時長。前三層金幣差距 -14.50%～+7.84%；第八層五分鐘高估 11.42%～35.07%，在線均退關五次。完整資料與模型限制見 FIRST-THREE-FLOORS-ACCEPTANCE.md／march-rewards-matrix-2026-10-30.json。
+
+工具層驗證 PASS：矩陣完整／無重複、有限正獎勵、退關條件、log 無 ERROR／SCRIPT ERROR／Parse Error；預設四組主要資源結果與前次一致。logs `/tmp/hero-march-matrix-20261030.log`、`/tmp/hero-march-default-20261030.log`。本輪未改 runtime，未重跑遊戲 suite；沿用 2026-10-29 march／progression 通過證據。近似差距容許值與算法決策待定，真人／真機未驗。未 commit／push。
+
+## 2026-10-30 離線開頭戰鬥修正
+
+已實作前五分鐘實際戰鬥、升級、退關與恢復，長時間剩餘段採更新隊伍的加權估算；單怪獎勵常數與 schema 不變。第八層五分鐘矩陣由高估 11%～35% 變為 -7%～0%；長時間與種子差距仍有，完整數據見 FIRST-THREE-FLOORS-ACCEPTANCE.md。L2 march／progression／home／main 全 PASS（`/tmp/godot-tests.GbS3oh`），戰報收支、退關與 save roundtrip 新斷言通過。桌面單次8小時結算約21ms，非真機／統計效能證據。未重建 Web、未 commit／push。
+
+## 2026-10-30 現況文件整理
+
+README 現在只記目前的六頁、種族、操作、場景與驗證入口；整理前完整內容保存於 `docs/history/README-2026-10-30.md`，含來源 SHA-256 與換算後連結。FUSION 保留作者決策但標示歷史時間。36 個目前文件連結與六頁／18 天賦／種族／430×932 設定／無 Web preset 的靜態核對 PASS，見 readme-validation-2026-10-30.json。這次沒有改程式或 scene，未重跑遊戲測試；沿用最新 L2 證據。未 commit／push。
+
+2026-10-30 存檔保護：較新／不支援版本、破損 JSON 與空檔會保留原檔並停止寫入，主畫面會提示目前遊玩不保存。保存前也重新檢查目標版本。L2 四組 PASS，詳見[規則與限制](SAVE-PROTECTION.md)；完整內部欄位 schema 驗證仍未涵蓋。本輪沒有改 schema、未產生手機安裝包、未 commit／push。
+
+## 2026-10-30 存檔 schema 完成
+
+載入與目標檔／輸出快照皆驗證英雄、隊伍、裝備、詞綴、UID、容量及可選欄位；不識別的欄位阻止覆寫。保留短天賦／遺物與 scalar potion 的舊 v2 相容，v1 裝備／件數背包可遷移，超容量保護而不截斷。L2 save_protection／progression／home／main／recruit 全 PASS（`/tmp/godot-tests.vW1ukD`）。初輪版本 float 比對失敗已修正並完整重跑，證據與限制見 SAVE-PROTECTION.md。未改 schema 版本、未 commit／push。

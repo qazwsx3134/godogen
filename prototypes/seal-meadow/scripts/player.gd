@@ -10,6 +10,7 @@ signal leveled_up(new_level: int)
 ## The sweep resolved (after its windup), hitting `hits` monsters.
 signal swept(hits: int)
 signal damaged(attacker: Node3D)
+signal mounted_changed(value: bool)
 
 const TerrainHeight = preload("res://scripts/terrain_height.gd")
 const Fx = preload("res://scripts/fx.gd")
@@ -25,6 +26,8 @@ const Cosmetics = preload("res://scripts/cosmetics.gd")
 
 @export var player_name: String = "你"
 @export var move_speed: float = 5.0
+@export_range(1.0, 2.0, 0.05) var ride_speed_multiplier: float = 1.25
+@export var ride_height: float = 0.55
 @export var base_hp: int = 120
 @export var base_attack: int = 12
 @export var attack_range: float = 1.8
@@ -48,6 +51,12 @@ var bounds_center := Vector2.ZERO
 
 @onready var actor: Node3D = $Actor
 @onready var aura: MeshInstance3D = %Aura
+
+var _mounted: bool = false
+var mounted: bool:
+	get:
+		return _mounted
+var _actor_rest_y: float = 0.0
 
 var level: int = 1
 var max_hp: int = 120
@@ -96,6 +105,7 @@ var _attack_id: int = 0
 
 
 func _ready() -> void:
+	_actor_rest_y = actor.position.y
 	pet_rng.randomize()
 	add_to_group("player")
 	_spawn = position
@@ -294,7 +304,7 @@ func _process(delta: float) -> void:
 		target = null
 
 	if dir != Vector3.ZERO:
-		position += dir * move_speed * delta
+		position += dir * movement_speed() * delta
 		_push_out()
 		actor.face(dir)
 	_snap()
@@ -309,6 +319,7 @@ func save_data() -> Dictionary:
 
 
 func load_data(data: Dictionary) -> void:
+	set_mounted(false)
 	level = maxi(1, int(data.get("level", 1)))
 	xp = maxi(0, int(data.get("xp", 0)))
 	position.x = float(data.get("x", position.x))
@@ -388,6 +399,7 @@ func use_sweep() -> String:
 		reason = "ap"
 	if reason != "":
 		return reason
+	set_mounted(false)
 	_cast_id += 1
 	casting = true
 	_has_goal = false
@@ -433,6 +445,7 @@ func _finish_sweep(id: int) -> void:
 func set_target(monster: Node3D) -> void:
 	if dead or not monster.is_alive():
 		return
+	set_mounted(false)
 	target = monster
 	_target_spawn = monster.spawn_id
 	_has_goal = false
@@ -473,6 +486,7 @@ func cancel_pending_attack() -> void:
 func take_damage(amount: int, from: Node3D = null, _crit: bool = false) -> void:
 	if dead:
 		return
+	set_mounted(false)
 	damaged.emit(from)
 	hp -= amount
 	_since_hit = 0.0
@@ -506,6 +520,7 @@ func gain_xp(amount: int, from_name: String) -> void:
 
 
 func _die() -> void:
+	set_mounted(false)
 	dead = true
 	casting = false
 	target = null
@@ -537,3 +552,34 @@ func _push_out() -> void:
 
 func _snap() -> void:
 	position.y = TerrainHeight.height(position.x, position.z)
+
+
+func mount_reason() -> String:
+	if dead:
+		return "dead"
+	if not pet.alive or pet.stage < 2:
+		return "not_ready"
+	if casting:
+		return "casting"
+	if _since_hit < 5.0 or (is_instance_valid(target) and target.is_alive()):
+		return "combat"
+	return ""
+
+
+func set_mounted(value: bool) -> String:
+	if value == _mounted:
+		return ""
+	if value:
+		var reason := mount_reason()
+		if not reason.is_empty():
+			return reason
+		cancel_pending_attack()
+	_mounted = value
+	if is_node_ready():
+		actor.position.y = _actor_rest_y + (ride_height if value else 0.0)
+	mounted_changed.emit(value)
+	return ""
+
+
+func movement_speed() -> float:
+	return move_speed * (ride_speed_multiplier if _mounted else 1.0)

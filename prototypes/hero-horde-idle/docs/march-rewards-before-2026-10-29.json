@@ -1,0 +1,189 @@
+{
+  "rows": [
+    {
+      "gold_difference_percent": -15.5844155844156,
+      "offline_exp": {
+        "13": 130,
+        "33": 130,
+        "99": 130
+      },
+      "offline_gold": 1170,
+      "offline_items": 0,
+      "offline_kills": 130,
+      "offline_levels": {
+        "13": 1,
+        "33": 1,
+        "99": 1
+      },
+      "offline_potions": [
+        1,
+        0,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 1,
+      "online_exp": {
+        "13": 154,
+        "33": 154,
+        "99": 154
+      },
+      "online_gold": 1386,
+      "online_items": 0,
+      "online_kills": 126,
+      "online_levels": {
+        "13": 1,
+        "33": 1,
+        "99": 1
+      },
+      "online_potions": [
+        1,
+        0,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 1,
+      "seconds": 300,
+      "seed": 73,
+      "starting_level": 1
+    },
+    {
+      "gold_difference_percent": -23.6417033773862,
+      "offline_exp": {
+        "13": 960,
+        "33": 960,
+        "99": 960
+      },
+      "offline_gold": 14040,
+      "offline_items": 3,
+      "offline_kills": 1560,
+      "offline_levels": {
+        "13": 2,
+        "33": 2,
+        "99": 2
+      },
+      "offline_potions": [
+        6,
+        1,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 5,
+      "online_exp": {
+        "13": 243,
+        "33": 243,
+        "99": 243
+      },
+      "online_gold": 18387,
+      "online_items": 3,
+      "online_kills": 1673,
+      "online_levels": {
+        "13": 3,
+        "33": 3,
+        "99": 3
+      },
+      "online_potions": [
+        12,
+        1,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 7,
+      "seconds": 3600,
+      "seed": 73,
+      "starting_level": 1
+    },
+    {
+      "gold_difference_percent": -14.4385026737968,
+      "offline_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "offline_gold": 1440,
+      "offline_items": 0,
+      "offline_kills": 160,
+      "offline_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "offline_potions": [
+        1,
+        0,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 1,
+      "online_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "online_gold": 1683,
+      "online_items": 0,
+      "online_kills": 153,
+      "online_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "online_potions": [
+        1,
+        0,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 1,
+      "seconds": 300,
+      "seed": 73,
+      "starting_level": 20
+    },
+    {
+      "gold_difference_percent": -15.0818222025652,
+      "offline_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "offline_gold": 17280,
+      "offline_items": 4,
+      "offline_kills": 1920,
+      "offline_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "offline_potions": [
+        8,
+        1,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 6,
+      "online_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "online_gold": 20349,
+      "online_items": 3,
+      "online_kills": 1851,
+      "online_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "online_potions": [
+        13,
+        1,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 8,
+      "seconds": 3600,
+      "seed": 73,
+      "starting_level": 20
+    }
+  ],
+  "scope": "Domain model of MarchArena kill/travel/restart rules at 20 Hz; seed 73 resets per restart; stage 1; no player upgrades or saves"
+}

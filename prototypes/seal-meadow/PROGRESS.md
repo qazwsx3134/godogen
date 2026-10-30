@@ -1,8 +1,20 @@
 # seal-meadow 交接進度
 
-最後更新：2026-10-29。每次 commit、使用者出門或下班時更新這份檔案。
+最後更新：2026-10-30。每次 commit、使用者出門或下班時更新這份檔案。
 
-## 2026-10-29 復工：M3 硬化與新 review
+## 2026-10-30｜復工：審查改善與 S34 單機乘坐
+
+使用者最新授權「繼續直到做完」及「做完之後看 seal 也繼續進度」，已解除前次暫停。分支 `master`；本輪程式／場景／文件未 commit／push，保留其他原型修改。多人 M4 仍延後。
+
+- 已完成本輪 S34 乘坐薄切片：寵物第 2 階解鎖、移速 ×1.25、重複切換不累加，攻防加成不重複。選怪／有效技能／受傷／死亡／切區／背景／讀檔會下坐，失敗技能保留狀態。乘坐取消釣魚而不扣餌；暫態不寫檔，schema 仍 v6。
+- 沿用同一個 Pet 與史萊姆占位素材；Actor 高度／比例下坐還原。`ui/hud.tscn` 的 PetPanel 改固定 Head + Scroll/Box，乘坐／進化／餵食動作具手機觸控尺寸，場景仍可在編輯器維護。
+- L2 `companions m3 review_interactions` 全 PASS（`/tmp/godot-tests.KN9GPi`），含實際按鈕、位移、戰鬥／生命週期、讀檔重開、兩尺寸大字／捲動／44px、編輯器文字／間距保留。匯入仍有沙箱 TCP 監聽錯誤，未見 SCRIPT ERROR／Parse Error。M2 未重跑，沿用 `/tmp/godot-tests.8mkgik`；L3 全套依規範等人工驗收。
+- `tools/build_mobile_web.sh` 已再次重建手機候選：`build/seal-meadow-mobile-web.zip` SHA-256 `6c1cc1117d8bc50dea798f576057665fd1ab97d53557a896ca3c8c2dc42b7b8d`；15,112,870 bytes。ZIP／PCK 靜態、IDBFS 與編譯 PCK 的乘坐／背景／出售視窗冒煙 PASS（`/tmp/seal-s34-pack.log`）；來源 hash 與上包區別見 `production/qa/mobile-candidate-2026-10-30.json`。
+- 文件入口：`design/gdd/battle-pets-guarders.md`、`docs/architecture/systems/battle-pets-guarders.md`、`production/qa/systems/battle-pets-guarders.md`；README、roadmap、planning dossier／index 同步。S34 只是乘坐分支，AC-S34-03 戰鬥 AI 仍未實作。
+- 未完成／延期：iPhone 視覺、觸控、速度感、背景／強制關閉恢復、FPS／20～30 分鐘發熱及真人平衡。沙箱禁止 socket，這次新包 Web／IndexedDB 未驗；10-29 Chromium 證據屬於舊包。未上傳，不自動同步其他 kit 副本，bot 不跑 25 分鐘。
+- 下一步：先用此手機候選驗收乘坐重疊、寵物面板與出售確認；依真人回饋調整單機內容／數值。多人與戰鬥寵 AI 不隨本切片自動展開。
+
+## 2026-10-29 復工（歷史紀錄）：M3 硬化與新 review
 
 使用者已返家，之後指定「做到一個階段先停下來，開另一個 Sol medium review」。S35 衣櫥單機階段及獨立審查已完成，目前暫停；多人 M4 保持延後。分支 `master`，本輪基準／目前最新提交 `180149a9`；本輪程式、場景、測試與文件尚未 commit／push，其他工作區修改保留。
 
@@ -103,3 +115,11 @@ env XDG_DATA_HOME=/tmp/seal-fishing-tests XDG_CONFIG_HOME=/tmp/seal-fishing-conf
 - **Blender 位置**：Windows 版 `"/mnt/c/Program Files/Blender Foundation/Blender 5.1/blender.exe"`，路徑要先用 `wslpath -w` 轉換。
 - **測試依賴的固定前提**：村莊與草原在同一個 scene，相距 300 m（`TerrainHeight.TOWN_CENTER`），Town 底下的節點要用 `global_position`。
 - **生圖要先問**：AI 生圖前要先問使用者，是直接生成還是只給 prompt；程序化的 Blender 建模不需要問。
+
+## 2026-10-30 手機候選更新
+
+已重建 `build/mobile-web/` 與 `build/seal-meadow-mobile-web.zip`，包含出售確認 Control scene；IDBFS 修補完成，ZIP CRC 完整性與 PCK 場景／腳本存在檢查通過。ZIP SHA-256 `dbb467521f52a1e971cc367f2b464fad0f0cb59cd1552741c5e712805124246f`。詳見 `production/qa/mobile-candidate-2026-10-30.json`。
+
+新增滿 12 格、大字模式、兩種橫向尺寸的捲動清單／固定按鈕／取消保留物品測試，L2 M2 PASS（`/tmp/godot-tests.8mkgik`）。未修改 runtime；未重跑 M3，沿用 2026-10-29 結果。匯出仍有沙箱 TCP 監聽錯誤，未見腳本解析錯誤。
+
+沙箱在 socket 建立階段即 PermissionError，無法啟動本機伺服器／Chromium Web 驗證；此候選的觸控與 IndexedDB 尚未驗證。前次 Chromium 12 項 PASS 屬於舊候選，不能沿用到新包。未上傳，iPhone 真機與長時間驗收仍待完成。

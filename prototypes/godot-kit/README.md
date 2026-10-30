@@ -4,7 +4,7 @@
 
 `prototypes/` 底下的 Godot 原型（debt-commission、pachinko、pixel-monster）各自寫過幾樣相同的東西：佔位音效、不怕當機的存檔、headless 測試的輔助函式。這些已抽出來，在這裡只維護一份，新原型直接拿來用，不必再寫一次。後來又加了從 sugarcane-tanks 抽出來的手感（音效庫、震動、hit stop、震屏、音樂）、搖桿、載入邏輯、scene 產生器，以及字型子集、網頁匯出、測試與錄影的工具（`tools/`）。
 
-這裡不是原型，也不是框架。收錄標準只有一條：**至少兩個原型真的在用**。只有一個專案需要的東西，留在那個專案裡。
+這裡不是原型，也不是框架。一般收錄目標：**至少兩個原型真的在用**；明確授權例外與實驗候選見文末。只有一個專案需要的東西，留在那個專案裡。
 
 | 模組 | 解決什麼 | 使用中 |
 |---|---|---|
@@ -31,9 +31,9 @@
 | [`talent_tiers.gd`](addons/proto_kit/talent_tiers.gd) | 三系天賦：每 5 點開一行、前置、10/20/30 里程碑、多組方案、免費重置、單局經驗換點數 | **尚未採用**（同上） |
 | [`loot_ledger.gd`](addons/proto_kit/loot_ledger.gd) | 首領掉落與永久收藏：區域解鎖、掉率、已擁有不重複掉、穿戴屬性、各階進度、下一批可拿的裝備 | **尚未採用**（同上） |
 | [`chest_shop.gd`](addons/proto_kit/chest_shop.gd) | 局內寶箱：花金幣開、每開一次漲價（倍率＋固定增量＋上限）、加權隨機獎勵、每局次數上限 | **尚未採用**（同上） |
-| [`combo_input.gd`](addons/proto_kit/combo_input.gd) | 節奏連招（希望 Online 的 A/S/D）：連招條、節拍與容許誤差、雙鍵和弦、逐段加傷與攻速、收尾加成 | **尚未採用**（2026-10-26 依[希望 Online 分析](../../docs/research/seal-online-2026-10-26.md)寫成；預定給 seal-meadow） |
+| [`combo_input.gd`](addons/proto_kit/combo_input.gd) | 節奏連招（希望 Online 的 A/S/D）：連招條、節拍與容許誤差、雙鍵和弦、逐段加傷與攻速、收尾加成 | **尚未採用**（2026-10-26 依[希望 Online 分析](../../docs/research/seal-online-2026-10-26.md)寫成；不在 seal-meadow 現行手機範圍） |
 | [`refine_ladder.gd`](addons/proto_kit/refine_ladder.gd) | 裝備精煉 +0～+12：各段寶石與成功率、失敗保留／退級／消失、成功率加成、保險道具、期望成本試算 | **尚未採用**（同上） |
-| [`pet_care.gd`](addons/proto_kit/pet_care.gd) | 寵物養成：飢餓與想吃的食物、依售價給經驗、+0～+9 與 7 階、進化配方與稀有、餓到跑掉、城鎮暫停 | **尚未採用**（同上） |
+| [`pet_care.gd`](addons/proto_kit/pet_care.gd) | 寵物養成：飢餓與想吃的食物、依售價給經驗、+0～+9 與 7 階、進化配方與稀有、餓到跑掉、城鎮暫停 | seal-meadow（已採用） |
 | [`ui/`](addons/proto_kit/ui/)（`ui_theme.gd`、`ui_styles.json`、`themes/*.tres`、`layouts/*.tscn`） | 3 組純色 UI 樣式（暗黑哥德／像素金框／森林藤蔓）與 8 個手機直式版型 scene：放置分割面板、分頁彈窗、升級三選一、設定列、任務列、ARPG HUD、結算報表、肖像對話框 | **尚未採用**（同上；樣式與版型說明見[UI 樣式與版型目錄](../../research/genre-scan/2026-10-25/ui-style-catalog.md)） |
 | HD-2D 場景組：[`hd2d_stage.gd`](addons/proto_kit/hd2d_stage.gd)、[`hd2d_look.gd`](addons/proto_kit/hd2d_look.gd)、[`pixel_card3d.gd`](addons/proto_kit/pixel_card3d.gd)、[`shot_camera.gd`](addons/proto_kit/shot_camera.gd)＋[`camera_shot.gd`](addons/proto_kit/camera_shot.gd)、[`ground_decal.gdshader`](addons/proto_kit/ground_decal.gdshader)、[`pixel_vfx3d.gd`](addons/proto_kit/pixel_vfx3d.gd)、[`hd2d_demo.gd`](addons/proto_kit/hd2d_demo.gd)／[`hd2d_gallery.gd`](addons/proto_kit/hd2d_gallery.gd) | 八方旅人／RO 式的立體透視模型場景：角色依附近的光染色、霧與景深的外觀預設、立著投影的像素圖卡、固定構圖的運鏡、地面預警、3D 像素特效；做法寫在 skill `hd2d-diorama` | hero-horde-idle（2026-10-23 抽出，改用前後 22 張固定種子截圖逐位元組相同）。**只有一個原型用**：使用者要求抽出 |
 | 放置橫向捲軸：[`march_strip.gd`](addons/proto_kit/march_strip.gd)＋[`parallax_layer.gdshader`](addons/proto_kit/parallax_layer.gdshader) | 隊伍自己往前走、遇怪、停下來打、怪倒下、繼續走；遠景、道具、地面各自的捲動速度與傷害數字 | hero-horde-idle 的行軍畫面；taskbar-hero（`scripts/wave_arena.gd`、`shaders/battle_parallax.gdshader`）與 erwin-run 各有一份捲動，尚未改用 |
@@ -743,3 +743,15 @@ seal-meadow 規劃中的新模組（2026-10-27，細節見 [seal-meadow roadmap]
 | `save_slots.gd` | 存檔版本、遷移鏈、備份還原；寫檔用 `atomic_file` | 已完成，seal-meadow 使用中（測試：`tests/test_m0_modules.gd`） |
 | `inventory.gd`、`stat_block.gd`、`drop_table.gd`、`ability_gate.gd`、`level_curve.gd`、`threat_table.gd`、`spawn_zone.gd` | RPG 背包交易、屬性加成、掉表、技能冷卻、升級曲線、仇恨與生怪 | 先在 seal-meadow（M1） |
 | `content_registry`、`first_time_guide`、`quest_tracker.gd`、`daily_reset.gd` | 資料引用檢查、首次教學（從 debt-commission 抽）、任務追蹤、每日重置 | 之後 |
+
+## 模組成熟度與採用紀錄（2026-10-29）
+
+目錄的「尚未採用」模組是實驗候選，僅有單元測試不代表遊戲體驗驗收。至少兩款實際採用是一般收錄目標；使用者明確要求的單一使用者模組保留例外。後續新增先留在需求遊戲，出現共用需求再抽出。
+
+採用狀態更正：seal-meadow 已使用 pet_care；combo_input 不屬於其目前手機製作基線。上方歷史表的未採用／預定描述以此更正為準。同步與版本證據見 [版本與同步](docs/VERSION-SYNC.md)。
+
+## 同步檢查工具（2026-10-30）
+
+`bash prototypes/godot-kit/sync.sh --check <原型>` 顯示差異分類與變更檔名；檢查模式需要 Python 3，差異時仍 exit 1。完整清單／雜湊：`python3 prototypes/godot-kit/tools/audit_copies.py --check --json <原型>`。可傳外部遊戲絕對路徑。
+
+驗證工具：`python3 prototypes/godot-kit/tools/test_audit_copies.py`（隔離暫存目錄，不執行同步）。詳細規則及證據見 [版本與同步](docs/VERSION-SYNC.md)。

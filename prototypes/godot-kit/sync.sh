@@ -30,7 +30,7 @@ for target in "${targets[@]}"; do
     echo "skip: $target is not a Godot project" >&2; status=1; continue
   fi
   if [[ $check -eq 1 ]]; then
-    diff -r "$source" "$target/addons/proto_kit" >/dev/null || { echo "drift: $target (run godot-kit/sync.sh)"; status=1; }
+    python3 "$kit_dir/tools/audit_copies.py" --check "$target" || status=1
   else
     mkdir -p "$target/addons/proto_kit"
     rsync -a --delete "$source/" "$target/addons/proto_kit/"

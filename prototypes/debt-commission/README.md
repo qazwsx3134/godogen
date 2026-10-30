@@ -285,3 +285,11 @@ node tools/browser_check.mjs --backup --playwright /path/to/node_modules/@playwr
 [smoke report](production/qa/smoke-2026-10-16.md)。
 
 可重跑 CPU 微基準：`godot --headless --path . --fixed-fps 60 --script res://tools/studio_bench.gd`。 `test_comedy`／`test_ep00` 的時間斷言須用正常時間執行，不加 `--fixed-fps`。
+
+2026-10-29 改善入口：[完整短篇驗收](docs/SHORT-STORY-ACCEPTANCE.md)；主程式維護邊界見 IMPLEMENTATION.md。
+
+調查熱區的觸控範圍與重疊優先序由 `scripts/investigation_picker.gd` 負責；`main.gd` 保留拖曳、遮擋與劇情協調。可用 `investigation_picker` 測試單獨驗證選取規則。
+
+調查背景的覆蓋尺寸與拖曳界線由 `scripts/investigation_layout.gd` 計算；對應單元測試 `investigation_layout`，畫面回歸使用 `phase3_ui`／`phase4_ui`。
+
+2026-10-30 本地 Web 候選已更新，包含調查模組拆分與螢幕外角色熱區修正。[ZIP](build/debt-commission-web-candidate-20261030.zip)／[驗證與來源雜湊](production/qa/web-candidate-2026-10-30.json)。匯出及靜態檢查通過，本包瀏覽器與真機仍待驗。

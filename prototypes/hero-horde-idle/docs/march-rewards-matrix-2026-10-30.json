@@ -1,0 +1,2488 @@
+{
+  "rows": [
+    {
+      "gold_difference_percent": -0.212314225053079,
+      "offline_exp": {
+        "13": 157,
+        "33": 157,
+        "99": 157
+      },
+      "offline_final_stage": 1,
+      "offline_gold": 1410,
+      "offline_items": 0,
+      "offline_kills": 130,
+      "offline_levels": {
+        "13": 1,
+        "33": 1,
+        "99": 1
+      },
+      "offline_potions": [
+        1,
+        0,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 0,
+      "online_exp": {
+        "13": 157,
+        "33": 157,
+        "99": 157
+      },
+      "online_final_stage": 1,
+      "online_gold": 1413,
+      "online_items": 0,
+      "online_kills": 129,
+      "online_levels": {
+        "13": 1,
+        "33": 1,
+        "99": 1
+      },
+      "online_losses": 0,
+      "online_potions": [
+        2,
+        0,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 0,
+      "seconds": 300,
+      "seed": 7,
+      "starting_level": 1,
+      "starting_stage": 1
+    },
+    {
+      "gold_difference_percent": -6.88459633481922,
+      "offline_exp": {
+        "13": 80,
+        "33": 80,
+        "99": 80
+      },
+      "offline_final_stage": 1,
+      "offline_gold": 16920,
+      "offline_items": 4,
+      "offline_kills": 1560,
+      "offline_levels": {
+        "13": 3,
+        "33": 3,
+        "99": 3
+      },
+      "offline_potions": [
+        8,
+        1,
+        0
+      ],
+      "offline_shards": 1,
+      "offline_stones": 5,
+      "online_exp": {
+        "13": 219,
+        "33": 219,
+        "99": 219
+      },
+      "online_final_stage": 1,
+      "online_gold": 18171,
+      "online_items": 7,
+      "online_kills": 1653,
+      "online_levels": {
+        "13": 3,
+        "33": 3,
+        "99": 3
+      },
+      "online_losses": 0,
+      "online_potions": [
+        10,
+        0,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 3,
+      "seconds": 3600,
+      "seed": 7,
+      "starting_level": 1,
+      "starting_stage": 1
+    },
+    {
+      "gold_difference_percent": 0.172711571675302,
+      "offline_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "offline_final_stage": 1,
+      "offline_gold": 1740,
+      "offline_items": 0,
+      "offline_kills": 160,
+      "offline_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "offline_potions": [
+        1,
+        0,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 0,
+      "online_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "online_final_stage": 1,
+      "online_gold": 1737,
+      "online_items": 0,
+      "online_kills": 159,
+      "online_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "online_losses": 0,
+      "online_potions": [
+        2,
+        0,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 0,
+      "seconds": 300,
+      "seed": 7,
+      "starting_level": 20,
+      "starting_stage": 1
+    },
+    {
+      "gold_difference_percent": -0.9816474605207,
+      "offline_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "offline_final_stage": 1,
+      "offline_gold": 20880,
+      "offline_items": 4,
+      "offline_kills": 1920,
+      "offline_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "offline_potions": [
+        10,
+        1,
+        0
+      ],
+      "offline_shards": 1,
+      "offline_stones": 7,
+      "online_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "online_final_stage": 1,
+      "online_gold": 21087,
+      "online_items": 8,
+      "online_kills": 1917,
+      "online_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "online_losses": 0,
+      "online_potions": [
+        11,
+        0,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 5,
+      "seconds": 3600,
+      "seed": 7,
+      "starting_level": 20,
+      "starting_stage": 1
+    },
+    {
+      "gold_difference_percent": 4.76190476190476,
+      "offline_exp": {
+        "13": 110,
+        "33": 110,
+        "99": 110
+      },
+      "offline_final_stage": 2,
+      "offline_gold": 2090,
+      "offline_items": 0,
+      "offline_kills": 90,
+      "offline_levels": {
+        "13": 1,
+        "33": 1,
+        "99": 1
+      },
+      "offline_potions": [
+        1,
+        0,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 0,
+      "online_exp": {
+        "13": 105,
+        "33": 105,
+        "99": 105
+      },
+      "online_final_stage": 2,
+      "online_gold": 1995,
+      "online_items": 0,
+      "online_kills": 87,
+      "online_levels": {
+        "13": 1,
+        "33": 1,
+        "99": 1
+      },
+      "online_losses": 0,
+      "online_potions": [
+        1,
+        0,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 0,
+      "seconds": 300,
+      "seed": 7,
+      "starting_level": 1,
+      "starting_stage": 2
+    },
+    {
+      "gold_difference_percent": -7.30337078651685,
+      "offline_exp": {
+        "13": 720,
+        "33": 720,
+        "99": 720
+      },
+      "offline_final_stage": 2,
+      "offline_gold": 25080,
+      "offline_items": 2,
+      "offline_kills": 1080,
+      "offline_levels": {
+        "13": 2,
+        "33": 2,
+        "99": 2
+      },
+      "offline_potions": [
+        6,
+        1,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 4,
+      "online_exp": {
+        "13": 824,
+        "33": 824,
+        "99": 824
+      },
+      "online_final_stage": 2,
+      "online_gold": 27056,
+      "online_items": 4,
+      "online_kills": 1166,
+      "online_levels": {
+        "13": 2,
+        "33": 2,
+        "99": 2
+      },
+      "online_losses": 0,
+      "online_potions": [
+        7,
+        0,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 2,
+      "seconds": 3600,
+      "seed": 7,
+      "starting_level": 1,
+      "starting_stage": 2
+    },
+    {
+      "gold_difference_percent": -0.510604870384918,
+      "offline_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "offline_final_stage": 2,
+      "offline_gold": 2533,
+      "offline_items": 0,
+      "offline_kills": 113,
+      "offline_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "offline_potions": [
+        1,
+        0,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 0,
+      "online_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "online_final_stage": 2,
+      "online_gold": 2546,
+      "online_items": 0,
+      "online_kills": 110,
+      "online_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "online_losses": 0,
+      "online_potions": [
+        2,
+        0,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 0,
+      "seconds": 300,
+      "seed": 7,
+      "starting_level": 20,
+      "starting_stage": 2
+    },
+    {
+      "gold_difference_percent": -1.17356392835083,
+      "offline_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "offline_final_stage": 2,
+      "offline_gold": 30400,
+      "offline_items": 3,
+      "offline_kills": 1360,
+      "offline_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "offline_potions": [
+        7,
+        1,
+        0
+      ],
+      "offline_shards": 1,
+      "offline_stones": 5,
+      "online_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "online_final_stage": 2,
+      "online_gold": 30761,
+      "online_items": 5,
+      "online_kills": 1325,
+      "online_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "online_losses": 0,
+      "online_potions": [
+        8,
+        0,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 2,
+      "seconds": 3600,
+      "seed": 7,
+      "starting_level": 20,
+      "starting_stage": 2
+    },
+    {
+      "gold_difference_percent": -10.2720450281426,
+      "offline_exp": {
+        "13": 47,
+        "33": 47,
+        "99": 47
+      },
+      "offline_final_stage": 3,
+      "offline_gold": 1913,
+      "offline_items": 0,
+      "offline_kills": 40,
+      "offline_levels": {
+        "13": 1,
+        "33": 1,
+        "99": 1
+      },
+      "offline_potions": [
+        0,
+        0,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 0,
+      "online_exp": {
+        "13": 52,
+        "33": 52,
+        "99": 52
+      },
+      "online_final_stage": 3,
+      "online_gold": 2132,
+      "online_items": 0,
+      "online_kills": 44,
+      "online_levels": {
+        "13": 1,
+        "33": 1,
+        "99": 1
+      },
+      "online_losses": 0,
+      "online_potions": [
+        0,
+        0,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 0,
+      "seconds": 300,
+      "seed": 7,
+      "starting_level": 1,
+      "starting_stage": 3
+    },
+    {
+      "gold_difference_percent": -14.3730886850153,
+      "offline_exp": {
+        "13": 560,
+        "33": 560,
+        "99": 560
+      },
+      "offline_final_stage": 3,
+      "offline_gold": 22960,
+      "offline_items": 1,
+      "offline_kills": 480,
+      "offline_levels": {
+        "13": 1,
+        "33": 1,
+        "99": 1
+      },
+      "offline_potions": [
+        2,
+        0,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 1,
+      "online_exp": {
+        "13": 54,
+        "33": 54,
+        "99": 54
+      },
+      "online_final_stage": 3,
+      "online_gold": 26814,
+      "online_items": 0,
+      "online_kills": 536,
+      "online_levels": {
+        "13": 2,
+        "33": 2,
+        "99": 2
+      },
+      "online_losses": 0,
+      "online_potions": [
+        4,
+        0,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 1,
+      "seconds": 3600,
+      "seed": 7,
+      "starting_level": 1,
+      "starting_stage": 3
+    },
+    {
+      "gold_difference_percent": 5.01169395255596,
+      "offline_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "offline_final_stage": 3,
+      "offline_gold": 3143,
+      "offline_items": 0,
+      "offline_kills": 63,
+      "offline_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "offline_potions": [
+        1,
+        0,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 0,
+      "online_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "online_final_stage": 3,
+      "online_gold": 2993,
+      "online_items": 0,
+      "online_kills": 61,
+      "online_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "online_losses": 0,
+      "online_potions": [
+        0,
+        0,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 0,
+      "seconds": 300,
+      "seed": 7,
+      "starting_level": 20,
+      "starting_stage": 3
+    },
+    {
+      "gold_difference_percent": 4.19026047565119,
+      "offline_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "offline_final_stage": 3,
+      "offline_gold": 37720,
+      "offline_items": 2,
+      "offline_kills": 760,
+      "offline_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "offline_potions": [
+        4,
+        1,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 3,
+      "online_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "online_final_stage": 3,
+      "online_gold": 36203,
+      "online_items": 1,
+      "online_kills": 723,
+      "online_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "online_losses": 0,
+      "online_potions": [
+        5,
+        0,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 1,
+      "seconds": 3600,
+      "seed": 7,
+      "starting_level": 20,
+      "starting_stage": 3
+    },
+    {
+      "gold_difference_percent": 13.5311572700297,
+      "offline_exp": {
+        "13": 47,
+        "33": 47,
+        "99": 47
+      },
+      "offline_final_stage": 3,
+      "offline_gold": 1913,
+      "offline_items": 0,
+      "offline_kills": 40,
+      "offline_levels": {
+        "13": 1,
+        "33": 1,
+        "99": 1
+      },
+      "offline_potions": [
+        0,
+        0,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 0,
+      "online_exp": {
+        "13": 35,
+        "33": 35,
+        "99": 35
+      },
+      "online_final_stage": 3,
+      "online_gold": 1685,
+      "online_items": 0,
+      "online_kills": 31,
+      "online_levels": {
+        "13": 1,
+        "33": 1,
+        "99": 1
+      },
+      "online_losses": 5,
+      "online_potions": [
+        0,
+        0,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 0,
+      "seconds": 300,
+      "seed": 7,
+      "starting_level": 1,
+      "starting_stage": 8
+    },
+    {
+      "gold_difference_percent": -12.7858390944314,
+      "offline_exp": {
+        "13": 560,
+        "33": 560,
+        "99": 560
+      },
+      "offline_final_stage": 3,
+      "offline_gold": 22960,
+      "offline_items": 1,
+      "offline_kills": 480,
+      "offline_levels": {
+        "13": 1,
+        "33": 1,
+        "99": 1
+      },
+      "offline_potions": [
+        2,
+        0,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 1,
+      "online_exp": {
+        "13": 36,
+        "33": 36,
+        "99": 36
+      },
+      "online_final_stage": 3,
+      "online_gold": 26326,
+      "online_items": 0,
+      "online_kills": 522,
+      "online_levels": {
+        "13": 2,
+        "33": 2,
+        "99": 2
+      },
+      "online_losses": 5,
+      "online_potions": [
+        4,
+        0,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 2,
+      "seconds": 3600,
+      "seed": 7,
+      "starting_level": 1,
+      "starting_stage": 8
+    },
+    {
+      "gold_difference_percent": 35.0666093682853,
+      "offline_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "offline_final_stage": 3,
+      "offline_gold": 3143,
+      "offline_items": 0,
+      "offline_kills": 63,
+      "offline_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "offline_potions": [
+        1,
+        0,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 0,
+      "online_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "online_final_stage": 3,
+      "online_gold": 2327,
+      "online_items": 0,
+      "online_kills": 41,
+      "online_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "online_losses": 5,
+      "online_potions": [
+        0,
+        0,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 0,
+      "seconds": 300,
+      "seed": 7,
+      "starting_level": 20,
+      "starting_stage": 8
+    },
+    {
+      "gold_difference_percent": 6.14289332245265,
+      "offline_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "offline_final_stage": 3,
+      "offline_gold": 37720,
+      "offline_items": 2,
+      "offline_kills": 760,
+      "offline_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "offline_potions": [
+        4,
+        1,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 3,
+      "online_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "online_final_stage": 3,
+      "online_gold": 35537,
+      "online_items": 1,
+      "online_kills": 703,
+      "online_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "online_losses": 5,
+      "online_potions": [
+        5,
+        0,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 1,
+      "seconds": 3600,
+      "seed": 7,
+      "starting_level": 20,
+      "starting_stage": 8
+    },
+    {
+      "gold_difference_percent": 1.73160173160173,
+      "offline_exp": {
+        "13": 157,
+        "33": 157,
+        "99": 157
+      },
+      "offline_final_stage": 1,
+      "offline_gold": 1410,
+      "offline_items": 0,
+      "offline_kills": 130,
+      "offline_levels": {
+        "13": 1,
+        "33": 1,
+        "99": 1
+      },
+      "offline_potions": [
+        1,
+        0,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 1,
+      "online_exp": {
+        "13": 154,
+        "33": 154,
+        "99": 154
+      },
+      "online_final_stage": 1,
+      "online_gold": 1386,
+      "online_items": 0,
+      "online_kills": 126,
+      "online_levels": {
+        "13": 1,
+        "33": 1,
+        "99": 1
+      },
+      "online_losses": 0,
+      "online_potions": [
+        1,
+        0,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 1,
+      "seconds": 300,
+      "seed": 73,
+      "starting_level": 1,
+      "starting_stage": 1
+    },
+    {
+      "gold_difference_percent": -7.97846304454234,
+      "offline_exp": {
+        "13": 80,
+        "33": 80,
+        "99": 80
+      },
+      "offline_final_stage": 1,
+      "offline_gold": 16920,
+      "offline_items": 4,
+      "offline_kills": 1560,
+      "offline_levels": {
+        "13": 3,
+        "33": 3,
+        "99": 3
+      },
+      "offline_potions": [
+        8,
+        1,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 6,
+      "online_exp": {
+        "13": 243,
+        "33": 243,
+        "99": 243
+      },
+      "online_final_stage": 1,
+      "online_gold": 18387,
+      "online_items": 3,
+      "online_kills": 1673,
+      "online_levels": {
+        "13": 3,
+        "33": 3,
+        "99": 3
+      },
+      "online_losses": 0,
+      "online_potions": [
+        12,
+        1,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 7,
+      "seconds": 3600,
+      "seed": 73,
+      "starting_level": 1,
+      "starting_stage": 1
+    },
+    {
+      "gold_difference_percent": 3.38680926916221,
+      "offline_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "offline_final_stage": 1,
+      "offline_gold": 1740,
+      "offline_items": 0,
+      "offline_kills": 160,
+      "offline_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "offline_potions": [
+        1,
+        0,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 1,
+      "online_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "online_final_stage": 1,
+      "online_gold": 1683,
+      "online_items": 0,
+      "online_kills": 153,
+      "online_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "online_losses": 0,
+      "online_potions": [
+        1,
+        0,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 1,
+      "seconds": 300,
+      "seed": 73,
+      "starting_level": 20,
+      "starting_stage": 1
+    },
+    {
+      "gold_difference_percent": 2.60946483856701,
+      "offline_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "offline_final_stage": 1,
+      "offline_gold": 20880,
+      "offline_items": 5,
+      "offline_kills": 1920,
+      "offline_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "offline_potions": [
+        10,
+        1,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 7,
+      "online_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "online_final_stage": 1,
+      "online_gold": 20349,
+      "online_items": 3,
+      "online_kills": 1851,
+      "online_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "online_losses": 0,
+      "online_potions": [
+        13,
+        1,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 8,
+      "seconds": 3600,
+      "seed": 73,
+      "starting_level": 20,
+      "starting_stage": 1
+    },
+    {
+      "gold_difference_percent": -6.77966101694915,
+      "offline_exp": {
+        "13": 110,
+        "33": 110,
+        "99": 110
+      },
+      "offline_final_stage": 2,
+      "offline_gold": 2090,
+      "offline_items": 0,
+      "offline_kills": 90,
+      "offline_levels": {
+        "13": 1,
+        "33": 1,
+        "99": 1
+      },
+      "offline_potions": [
+        1,
+        0,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 1,
+      "online_exp": {
+        "13": 118,
+        "33": 118,
+        "99": 118
+      },
+      "online_final_stage": 2,
+      "online_gold": 2242,
+      "online_items": 0,
+      "online_kills": 98,
+      "online_levels": {
+        "13": 1,
+        "33": 1,
+        "99": 1
+      },
+      "online_losses": 0,
+      "online_potions": [
+        1,
+        0,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 1,
+      "seconds": 300,
+      "seed": 73,
+      "starting_level": 1,
+      "starting_stage": 2
+    },
+    {
+      "gold_difference_percent": -10.7505070993915,
+      "offline_exp": {
+        "13": 720,
+        "33": 720,
+        "99": 720
+      },
+      "offline_final_stage": 2,
+      "offline_gold": 25080,
+      "offline_items": 3,
+      "offline_kills": 1080,
+      "offline_levels": {
+        "13": 2,
+        "33": 2,
+        "99": 2
+      },
+      "offline_potions": [
+        6,
+        0,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 4,
+      "online_exp": {
+        "13": 879,
+        "33": 879,
+        "99": 879
+      },
+      "online_final_stage": 2,
+      "online_gold": 28101,
+      "online_items": 3,
+      "online_kills": 1211,
+      "online_levels": {
+        "13": 2,
+        "33": 2,
+        "99": 2
+      },
+      "online_losses": 0,
+      "online_potions": [
+        10,
+        1,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 5,
+      "seconds": 3600,
+      "seed": 73,
+      "starting_level": 1,
+      "starting_stage": 2
+    },
+    {
+      "gold_difference_percent": 0.996810207336523,
+      "offline_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "offline_final_stage": 2,
+      "offline_gold": 2533,
+      "offline_items": 0,
+      "offline_kills": 113,
+      "offline_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "offline_potions": [
+        1,
+        0,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 1,
+      "online_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "online_final_stage": 2,
+      "online_gold": 2508,
+      "online_items": 0,
+      "online_kills": 108,
+      "online_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "online_losses": 0,
+      "online_potions": [
+        1,
+        0,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 1,
+      "seconds": 300,
+      "seed": 73,
+      "starting_level": 20,
+      "starting_stage": 2
+    },
+    {
+      "gold_difference_percent": 0.50251256281407,
+      "offline_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "offline_final_stage": 2,
+      "offline_gold": 30400,
+      "offline_items": 3,
+      "offline_kills": 1360,
+      "offline_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "offline_potions": [
+        7,
+        1,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 5,
+      "online_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "online_final_stage": 2,
+      "online_gold": 30248,
+      "online_items": 3,
+      "online_kills": 1304,
+      "online_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "online_losses": 0,
+      "online_potions": [
+        11,
+        1,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 5,
+      "seconds": 3600,
+      "seed": 73,
+      "starting_level": 20,
+      "starting_stage": 2
+    },
+    {
+      "gold_difference_percent": -10.2720450281426,
+      "offline_exp": {
+        "13": 47,
+        "33": 47,
+        "99": 47
+      },
+      "offline_final_stage": 3,
+      "offline_gold": 1913,
+      "offline_items": 0,
+      "offline_kills": 40,
+      "offline_levels": {
+        "13": 1,
+        "33": 1,
+        "99": 1
+      },
+      "offline_potions": [
+        0,
+        0,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 0,
+      "online_exp": {
+        "13": 52,
+        "33": 52,
+        "99": 52
+      },
+      "online_final_stage": 3,
+      "online_gold": 2132,
+      "online_items": 0,
+      "online_kills": 44,
+      "online_levels": {
+        "13": 1,
+        "33": 1,
+        "99": 1
+      },
+      "online_losses": 0,
+      "online_potions": [
+        1,
+        0,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 0,
+      "seconds": 300,
+      "seed": 73,
+      "starting_level": 1,
+      "starting_stage": 3
+    },
+    {
+      "gold_difference_percent": -14.5038167938931,
+      "offline_exp": {
+        "13": 560,
+        "33": 560,
+        "99": 560
+      },
+      "offline_final_stage": 3,
+      "offline_gold": 22960,
+      "offline_items": 1,
+      "offline_kills": 480,
+      "offline_levels": {
+        "13": 1,
+        "33": 1,
+        "99": 1
+      },
+      "offline_potions": [
+        2,
+        0,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 2,
+      "online_exp": {
+        "13": 55,
+        "33": 55,
+        "99": 55
+      },
+      "online_final_stage": 3,
+      "online_gold": 26855,
+      "online_items": 1,
+      "online_kills": 537,
+      "online_levels": {
+        "13": 2,
+        "33": 2,
+        "99": 2
+      },
+      "online_losses": 0,
+      "online_potions": [
+        3,
+        1,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 3,
+      "seconds": 3600,
+      "seed": 73,
+      "starting_level": 1,
+      "starting_stage": 3
+    },
+    {
+      "gold_difference_percent": -2.96387774004322,
+      "offline_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "offline_final_stage": 3,
+      "offline_gold": 3143,
+      "offline_items": 0,
+      "offline_kills": 63,
+      "offline_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "offline_potions": [
+        1,
+        0,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 1,
+      "online_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "online_final_stage": 3,
+      "online_gold": 3239,
+      "online_items": 0,
+      "online_kills": 65,
+      "online_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "online_losses": 0,
+      "online_potions": [
+        1,
+        0,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 0,
+      "seconds": 300,
+      "seed": 73,
+      "starting_level": 20,
+      "starting_stage": 3
+    },
+    {
+      "gold_difference_percent": -4.46521287642783,
+      "offline_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "offline_final_stage": 3,
+      "offline_gold": 37720,
+      "offline_items": 2,
+      "offline_kills": 760,
+      "offline_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "offline_potions": [
+        4,
+        0,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 3,
+      "online_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "online_final_stage": 3,
+      "online_gold": 39483,
+      "online_items": 2,
+      "online_kills": 789,
+      "online_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "online_losses": 0,
+      "online_potions": [
+        5,
+        1,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 3,
+      "seconds": 3600,
+      "seed": 73,
+      "starting_level": 20,
+      "starting_stage": 3
+    },
+    {
+      "gold_difference_percent": 11.4152591729761,
+      "offline_exp": {
+        "13": 47,
+        "33": 47,
+        "99": 47
+      },
+      "offline_final_stage": 3,
+      "offline_gold": 1913,
+      "offline_items": 0,
+      "offline_kills": 40,
+      "offline_levels": {
+        "13": 1,
+        "33": 1,
+        "99": 1
+      },
+      "offline_potions": [
+        0,
+        0,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 0,
+      "online_exp": {
+        "13": 37,
+        "33": 37,
+        "99": 37
+      },
+      "online_final_stage": 3,
+      "online_gold": 1717,
+      "online_items": 0,
+      "online_kills": 31,
+      "online_levels": {
+        "13": 1,
+        "33": 1,
+        "99": 1
+      },
+      "online_losses": 5,
+      "online_potions": [
+        1,
+        0,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 0,
+      "seconds": 300,
+      "seed": 73,
+      "starting_level": 1,
+      "starting_stage": 8
+    },
+    {
+      "gold_difference_percent": -12.8917216784278,
+      "offline_exp": {
+        "13": 560,
+        "33": 560,
+        "99": 560
+      },
+      "offline_final_stage": 3,
+      "offline_gold": 22960,
+      "offline_items": 1,
+      "offline_kills": 480,
+      "offline_levels": {
+        "13": 1,
+        "33": 1,
+        "99": 1
+      },
+      "offline_potions": [
+        2,
+        0,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 2,
+      "online_exp": {
+        "13": 38,
+        "33": 38,
+        "99": 38
+      },
+      "online_final_stage": 3,
+      "online_gold": 26358,
+      "online_items": 2,
+      "online_kills": 524,
+      "online_levels": {
+        "13": 2,
+        "33": 2,
+        "99": 2
+      },
+      "online_losses": 5,
+      "online_potions": [
+        3,
+        1,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 4,
+      "seconds": 3600,
+      "seed": 73,
+      "starting_level": 1,
+      "starting_stage": 8
+    },
+    {
+      "gold_difference_percent": 35.0666093682853,
+      "offline_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "offline_final_stage": 3,
+      "offline_gold": 3143,
+      "offline_items": 0,
+      "offline_kills": 63,
+      "offline_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "offline_potions": [
+        1,
+        0,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 1,
+      "online_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "online_final_stage": 3,
+      "online_gold": 2327,
+      "online_items": 0,
+      "online_kills": 41,
+      "online_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "online_losses": 5,
+      "online_potions": [
+        1,
+        0,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 0,
+      "seconds": 300,
+      "seed": 73,
+      "starting_level": 20,
+      "starting_stage": 8
+    },
+    {
+      "gold_difference_percent": -2.3101626437377,
+      "offline_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "offline_final_stage": 3,
+      "offline_gold": 37720,
+      "offline_items": 2,
+      "offline_kills": 760,
+      "offline_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "offline_potions": [
+        4,
+        0,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 3,
+      "online_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "online_final_stage": 3,
+      "online_gold": 38612,
+      "online_items": 1,
+      "online_kills": 764,
+      "online_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "online_losses": 5,
+      "online_potions": [
+        4,
+        1,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 3,
+      "seconds": 3600,
+      "seed": 73,
+      "starting_level": 20,
+      "starting_stage": 8
+    },
+    {
+      "gold_difference_percent": -0.212314225053079,
+      "offline_exp": {
+        "13": 157,
+        "33": 157,
+        "99": 157
+      },
+      "offline_final_stage": 1,
+      "offline_gold": 1410,
+      "offline_items": 0,
+      "offline_kills": 130,
+      "offline_levels": {
+        "13": 1,
+        "33": 1,
+        "99": 1
+      },
+      "offline_potions": [
+        0,
+        0,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 1,
+      "online_exp": {
+        "13": 157,
+        "33": 157,
+        "99": 157
+      },
+      "online_final_stage": 1,
+      "online_gold": 1413,
+      "online_items": 0,
+      "online_kills": 129,
+      "online_levels": {
+        "13": 1,
+        "33": 1,
+        "99": 1
+      },
+      "online_losses": 0,
+      "online_potions": [
+        1,
+        0,
+        0
+      ],
+      "online_shards": 1,
+      "online_stones": 0,
+      "seconds": 300,
+      "seed": 4242,
+      "starting_level": 1,
+      "starting_stage": 1
+    },
+    {
+      "gold_difference_percent": -4.90642387455741,
+      "offline_exp": {
+        "13": 80,
+        "33": 80,
+        "99": 80
+      },
+      "offline_final_stage": 1,
+      "offline_gold": 16920,
+      "offline_items": 4,
+      "offline_kills": 1560,
+      "offline_levels": {
+        "13": 3,
+        "33": 3,
+        "99": 3
+      },
+      "offline_potions": [
+        7,
+        1,
+        0
+      ],
+      "offline_shards": 1,
+      "offline_stones": 6,
+      "online_exp": {
+        "13": 177,
+        "33": 177,
+        "99": 177
+      },
+      "online_final_stage": 1,
+      "online_gold": 17793,
+      "online_items": 1,
+      "online_kills": 1619,
+      "online_levels": {
+        "13": 3,
+        "33": 3,
+        "99": 3
+      },
+      "online_losses": 0,
+      "online_potions": [
+        11,
+        1,
+        0
+      ],
+      "online_shards": 3,
+      "online_stones": 4,
+      "seconds": 3600,
+      "seed": 4242,
+      "starting_level": 1,
+      "starting_stage": 1
+    },
+    {
+      "gold_difference_percent": -0.854700854700855,
+      "offline_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "offline_final_stage": 1,
+      "offline_gold": 1740,
+      "offline_items": 0,
+      "offline_kills": 160,
+      "offline_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "offline_potions": [
+        1,
+        0,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 1,
+      "online_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "online_final_stage": 1,
+      "online_gold": 1755,
+      "online_items": 0,
+      "online_kills": 161,
+      "online_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "online_losses": 0,
+      "online_potions": [
+        1,
+        0,
+        0
+      ],
+      "online_shards": 1,
+      "online_stones": 0,
+      "seconds": 300,
+      "seed": 4242,
+      "starting_level": 20,
+      "starting_stage": 1
+    },
+    {
+      "gold_difference_percent": -1.90274841437632,
+      "offline_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "offline_final_stage": 1,
+      "offline_gold": 20880,
+      "offline_items": 5,
+      "offline_kills": 1920,
+      "offline_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "offline_potions": [
+        9,
+        1,
+        0
+      ],
+      "offline_shards": 1,
+      "offline_stones": 7,
+      "online_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "online_final_stage": 1,
+      "online_gold": 21285,
+      "online_items": 1,
+      "online_kills": 1935,
+      "online_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "online_losses": 0,
+      "online_potions": [
+        13,
+        3,
+        0
+      ],
+      "online_shards": 3,
+      "online_stones": 4,
+      "seconds": 3600,
+      "seed": 4242,
+      "starting_level": 20,
+      "starting_stage": 1
+    },
+    {
+      "gold_difference_percent": 7.84313725490196,
+      "offline_exp": {
+        "13": 110,
+        "33": 110,
+        "99": 110
+      },
+      "offline_final_stage": 2,
+      "offline_gold": 2090,
+      "offline_items": 0,
+      "offline_kills": 90,
+      "offline_levels": {
+        "13": 1,
+        "33": 1,
+        "99": 1
+      },
+      "offline_potions": [
+        0,
+        0,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 0,
+      "online_exp": {
+        "13": 102,
+        "33": 102,
+        "99": 102
+      },
+      "online_final_stage": 2,
+      "online_gold": 1938,
+      "online_items": 0,
+      "online_kills": 84,
+      "online_levels": {
+        "13": 1,
+        "33": 1,
+        "99": 1
+      },
+      "online_losses": 0,
+      "online_potions": [
+        1,
+        0,
+        0
+      ],
+      "online_shards": 1,
+      "online_stones": 0,
+      "seconds": 300,
+      "seed": 4242,
+      "starting_level": 1,
+      "starting_stage": 2
+    },
+    {
+      "gold_difference_percent": 7.14285714285714,
+      "offline_exp": {
+        "13": 720,
+        "33": 720,
+        "99": 720
+      },
+      "offline_final_stage": 2,
+      "offline_gold": 25080,
+      "offline_items": 3,
+      "offline_kills": 1080,
+      "offline_levels": {
+        "13": 2,
+        "33": 2,
+        "99": 2
+      },
+      "offline_potions": [
+        5,
+        0,
+        0
+      ],
+      "offline_shards": 1,
+      "offline_stones": 4,
+      "online_exp": {
+        "13": 632,
+        "33": 632,
+        "99": 632
+      },
+      "online_final_stage": 2,
+      "online_gold": 23408,
+      "online_items": 1,
+      "online_kills": 1008,
+      "online_levels": {
+        "13": 2,
+        "33": 2,
+        "99": 2
+      },
+      "online_losses": 0,
+      "online_potions": [
+        6,
+        1,
+        0
+      ],
+      "online_shards": 1,
+      "online_stones": 1,
+      "seconds": 3600,
+      "seed": 4242,
+      "starting_level": 1,
+      "starting_stage": 2
+    },
+    {
+      "gold_difference_percent": -8.05807622504537,
+      "offline_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "offline_final_stage": 2,
+      "offline_gold": 2533,
+      "offline_items": 0,
+      "offline_kills": 113,
+      "offline_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "offline_potions": [
+        0,
+        0,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 0,
+      "online_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "online_final_stage": 2,
+      "online_gold": 2755,
+      "online_items": 0,
+      "online_kills": 119,
+      "online_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "online_losses": 0,
+      "online_potions": [
+        1,
+        0,
+        0
+      ],
+      "online_shards": 1,
+      "online_stones": 0,
+      "seconds": 300,
+      "seed": 4242,
+      "starting_level": 20,
+      "starting_stage": 2
+    },
+    {
+      "gold_difference_percent": -8.51915380217267,
+      "offline_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "offline_final_stage": 2,
+      "offline_gold": 30400,
+      "offline_items": 3,
+      "offline_kills": 1360,
+      "offline_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "offline_potions": [
+        6,
+        0,
+        0
+      ],
+      "offline_shards": 1,
+      "offline_stones": 5,
+      "online_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "online_final_stage": 2,
+      "online_gold": 33231,
+      "online_items": 1,
+      "online_kills": 1431,
+      "online_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "online_losses": 0,
+      "online_potions": [
+        9,
+        1,
+        0
+      ],
+      "online_shards": 1,
+      "online_stones": 2,
+      "seconds": 3600,
+      "seed": 4242,
+      "starting_level": 20,
+      "starting_stage": 2
+    },
+    {
+      "gold_difference_percent": -4.77849676455948,
+      "offline_exp": {
+        "13": 47,
+        "33": 47,
+        "99": 47
+      },
+      "offline_final_stage": 3,
+      "offline_gold": 1913,
+      "offline_items": 0,
+      "offline_kills": 40,
+      "offline_levels": {
+        "13": 1,
+        "33": 1,
+        "99": 1
+      },
+      "offline_potions": [
+        0,
+        0,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 0,
+      "online_exp": {
+        "13": 49,
+        "33": 49,
+        "99": 49
+      },
+      "online_final_stage": 3,
+      "online_gold": 2009,
+      "online_items": 0,
+      "online_kills": 41,
+      "online_levels": {
+        "13": 1,
+        "33": 1,
+        "99": 1
+      },
+      "online_losses": 0,
+      "online_potions": [
+        0,
+        0,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 0,
+      "seconds": 300,
+      "seed": 4242,
+      "starting_level": 1,
+      "starting_stage": 3
+    },
+    {
+      "gold_difference_percent": -6.66666666666667,
+      "offline_exp": {
+        "13": 560,
+        "33": 560,
+        "99": 560
+      },
+      "offline_final_stage": 3,
+      "offline_gold": 22960,
+      "offline_items": 1,
+      "offline_kills": 480,
+      "offline_levels": {
+        "13": 1,
+        "33": 1,
+        "99": 1
+      },
+      "offline_potions": [
+        2,
+        0,
+        0
+      ],
+      "offline_shards": 1,
+      "offline_stones": 2,
+      "online_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "online_final_stage": 3,
+      "online_gold": 24600,
+      "online_items": 0,
+      "online_kills": 492,
+      "online_levels": {
+        "13": 2,
+        "33": 2,
+        "99": 2
+      },
+      "online_losses": 0,
+      "online_potions": [
+        2,
+        0,
+        0
+      ],
+      "online_shards": 1,
+      "online_stones": 0,
+      "seconds": 3600,
+      "seed": 4242,
+      "starting_level": 1,
+      "starting_stage": 3
+    },
+    {
+      "gold_difference_percent": 5.01169395255596,
+      "offline_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "offline_final_stage": 3,
+      "offline_gold": 3143,
+      "offline_items": 0,
+      "offline_kills": 63,
+      "offline_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "offline_potions": [
+        0,
+        0,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 0,
+      "online_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "online_final_stage": 3,
+      "online_gold": 2993,
+      "online_items": 0,
+      "online_kills": 61,
+      "online_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "online_losses": 0,
+      "online_potions": [
+        1,
+        0,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 0,
+      "seconds": 300,
+      "seed": 4242,
+      "starting_level": 20,
+      "starting_stage": 3
+    },
+    {
+      "gold_difference_percent": 3.83747178329571,
+      "offline_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "offline_final_stage": 3,
+      "offline_gold": 37720,
+      "offline_items": 2,
+      "offline_kills": 760,
+      "offline_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "offline_potions": [
+        3,
+        0,
+        0
+      ],
+      "offline_shards": 1,
+      "offline_stones": 3,
+      "online_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "online_final_stage": 3,
+      "online_gold": 36326,
+      "online_items": 0,
+      "online_kills": 726,
+      "online_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "online_losses": 0,
+      "online_potions": [
+        6,
+        1,
+        0
+      ],
+      "online_shards": 1,
+      "online_stones": 0,
+      "seconds": 3600,
+      "seed": 4242,
+      "starting_level": 20,
+      "starting_stage": 3
+    },
+    {
+      "gold_difference_percent": 20.0125470514429,
+      "offline_exp": {
+        "13": 47,
+        "33": 47,
+        "99": 47
+      },
+      "offline_final_stage": 3,
+      "offline_gold": 1913,
+      "offline_items": 0,
+      "offline_kills": 40,
+      "offline_levels": {
+        "13": 1,
+        "33": 1,
+        "99": 1
+      },
+      "offline_potions": [
+        0,
+        0,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 0,
+      "online_exp": {
+        "13": 34,
+        "33": 34,
+        "99": 34
+      },
+      "online_final_stage": 3,
+      "online_gold": 1594,
+      "online_items": 0,
+      "online_kills": 30,
+      "online_levels": {
+        "13": 1,
+        "33": 1,
+        "99": 1
+      },
+      "online_losses": 5,
+      "online_potions": [
+        0,
+        0,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 0,
+      "seconds": 300,
+      "seed": 4242,
+      "starting_level": 1,
+      "starting_stage": 8
+    },
+    {
+      "gold_difference_percent": -5.38591502863972,
+      "offline_exp": {
+        "13": 560,
+        "33": 560,
+        "99": 560
+      },
+      "offline_final_stage": 3,
+      "offline_gold": 22960,
+      "offline_items": 1,
+      "offline_kills": 480,
+      "offline_levels": {
+        "13": 1,
+        "33": 1,
+        "99": 1
+      },
+      "offline_potions": [
+        2,
+        0,
+        0
+      ],
+      "offline_shards": 1,
+      "offline_stones": 2,
+      "online_exp": {
+        "13": 587,
+        "33": 587,
+        "99": 587
+      },
+      "online_final_stage": 3,
+      "online_gold": 24267,
+      "online_items": 0,
+      "online_kills": 481,
+      "online_levels": {
+        "13": 1,
+        "33": 1,
+        "99": 1
+      },
+      "online_losses": 5,
+      "online_potions": [
+        3,
+        0,
+        0
+      ],
+      "online_shards": 1,
+      "online_stones": 1,
+      "seconds": 3600,
+      "seed": 4242,
+      "starting_level": 1,
+      "starting_stage": 8
+    },
+    {
+      "gold_difference_percent": 35.0666093682853,
+      "offline_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "offline_final_stage": 3,
+      "offline_gold": 3143,
+      "offline_items": 0,
+      "offline_kills": 63,
+      "offline_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "offline_potions": [
+        0,
+        0,
+        0
+      ],
+      "offline_shards": 0,
+      "offline_stones": 0,
+      "online_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "online_final_stage": 3,
+      "online_gold": 2327,
+      "online_items": 0,
+      "online_kills": 41,
+      "online_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "online_losses": 5,
+      "online_potions": [
+        0,
+        0,
+        0
+      ],
+      "online_shards": 0,
+      "online_stones": 0,
+      "seconds": 300,
+      "seed": 4242,
+      "starting_level": 20,
+      "starting_stage": 8
+    },
+    {
+      "gold_difference_percent": 5.77678070667414,
+      "offline_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "offline_final_stage": 3,
+      "offline_gold": 37720,
+      "offline_items": 2,
+      "offline_kills": 760,
+      "offline_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "offline_potions": [
+        3,
+        0,
+        0
+      ],
+      "offline_shards": 1,
+      "offline_stones": 3,
+      "online_exp": {
+        "13": 0,
+        "33": 0,
+        "99": 0
+      },
+      "online_final_stage": 3,
+      "online_gold": 35660,
+      "online_items": 0,
+      "online_kills": 706,
+      "online_levels": {
+        "13": 20,
+        "33": 20,
+        "99": 20
+      },
+      "online_losses": 5,
+      "online_potions": [
+        5,
+        1,
+        0
+      ],
+      "online_shards": 1,
+      "online_stones": 0,
+      "seconds": 3600,
+      "seed": 4242,
+      "starting_level": 20,
+      "starting_stage": 8
+    }
+  ],
+  "scope": "Domain model of MarchArena kill/travel/restart rules at 20 Hz; scenario seed resets per restart; stages recorded per row; no player upgrades or saves",
+  "summary": [
+    {
+      "stage": 1,
+      "seconds": 300,
+      "cases": 6,
+      "min_percent": -0.854700854700855,
+      "max_percent": 3.38680926916221,
+      "losses": [
+        0
+      ]
+    },
+    {
+      "stage": 1,
+      "seconds": 3600,
+      "cases": 6,
+      "min_percent": -7.97846304454234,
+      "max_percent": 2.60946483856701,
+      "losses": [
+        0
+      ]
+    },
+    {
+      "stage": 2,
+      "seconds": 300,
+      "cases": 6,
+      "min_percent": -8.05807622504537,
+      "max_percent": 7.84313725490196,
+      "losses": [
+        0
+      ]
+    },
+    {
+      "stage": 2,
+      "seconds": 3600,
+      "cases": 6,
+      "min_percent": -10.7505070993915,
+      "max_percent": 7.14285714285714,
+      "losses": [
+        0
+      ]
+    },
+    {
+      "stage": 3,
+      "seconds": 300,
+      "cases": 6,
+      "min_percent": -10.2720450281426,
+      "max_percent": 5.01169395255596,
+      "losses": [
+        0
+      ]
+    },
+    {
+      "stage": 3,
+      "seconds": 3600,
+      "cases": 6,
+      "min_percent": -14.5038167938931,
+      "max_percent": 4.19026047565119,
+      "losses": [
+        0
+      ]
+    },
+    {
+      "stage": 8,
+      "seconds": 300,
+      "cases": 6,
+      "min_percent": 11.4152591729761,
+      "max_percent": 35.0666093682853,
+      "losses": [
+        5
+      ]
+    },
+    {
+      "stage": 8,
+      "seconds": 3600,
+      "cases": 6,
+      "min_percent": -12.8917216784278,
+      "max_percent": 6.14289332245265,
+      "losses": [
+        5
+      ]
+    }
+  ],
+  "verification": "48 unique scenarios; finite positive rewards; loss/no-loss fixtures; legacy 4-scenario gold/kills/shards/stones unchanged; error-free logs"
+}

@@ -33,6 +33,7 @@ extends CanvasLayer
 @onready var quest_text: Label = %QuestText
 @onready var quest_button: Button = %QuestButton
 @onready var shop_rows: VBoxContainer = %ShopRows
+@onready var sell_confirmation: Control = %SellConfirmation
 @onready var sell_button: Button = %SellButton
 @onready var close_button: Button = %CloseButton
 @onready var minimap: Control = %Minimap
@@ -51,6 +52,8 @@ extends CanvasLayer
 @onready var fade_rect: ColorRect = %Fade
 @onready var refine_rows: VBoxContainer = %RefineRows
 @onready var pet_button: Button = %PetButton
+@onready var mount_button: Button = %MountButton
+@onready var mount_hint: Label = %MountHint
 @onready var pet_panel: Control = %PetPanel
 @onready var pet_name: Label = %PetName
 @onready var pet_info: Label = %PetInfo
@@ -109,6 +112,8 @@ func _apply_safe_area() -> void:
 func bind(p: Node3D) -> void:
 	player = p
 	player.stats_changed.connect(refresh)
+	player.mounted_changed.connect(func(_value: bool) -> void: refresh())
+	mount_button.pressed.connect(_on_mount_button)
 	player.message.connect(log_line)
 	name_label.text = player.player_name
 	sweep_button.pressed.connect(try_sweep)
@@ -161,11 +166,8 @@ func bind(p: Node3D) -> void:
 	apple_button.pressed.connect(func() -> void: _act(player.use_item("apple")))
 	close_button.pressed.connect(func() -> void: npc_panel.visible = false)
 	quest_button.pressed.connect(_on_quest_button)
-	sell_button.pressed.connect(func() -> void:
-		var earned := Shop.sell_materials(player)
-		if earned > 0:
-			log_line("賣掉材料，得到 %d 金幣。" % earned, Color("ffd75e"))
-		_act("" if earned > 0 else "none"))
+	sell_button.pressed.connect(_preview_sale)
+	sell_confirmation.confirmed.connect(_confirm_sale)
 	refresh()
 	log_line("歡迎來到蓬蓬草原！點地面移動，點怪物攻擊。", Color("ffd75e"))
 
@@ -212,6 +214,8 @@ func _select_bag_tab(refining: bool) -> void:
 
 
 func _close_panels() -> void:
+	sell_confirmation.hide()
+	_sale_snapshot.clear()
 	bag_panel.visible = false
 	npc_panel.visible = false
 	pet_panel.visible = false
@@ -283,6 +287,7 @@ func refresh() -> void:
 
 
 func _refresh_pet() -> void:
+	_refresh_mount()
 	var p = player.pet
 	pet_name.text = "%s +%d（第 %d 階）" % [PetRules.TYPE_NAMES.get(p.type, p.type), p.level, p.stage]
 	var bonus: PackedStringArray = []
@@ -290,6 +295,7 @@ func _refresh_pet() -> void:
 		bonus.append("%s +%d" % ["攻擊" if stat == "atk" else "生命", int(p.stats()[stat])])
 	pet_info.text = "經驗 %d/%d　飽足 %d%%　加成 %s%s\n進化成功率 90%%；失敗消耗材料並清空本級經驗。" % [p.xp, p.xp_to_next(), int(p.hunger * 100.0), "、".join(bonus),
 		"\n想吃：%s" % Items.ALL[p.wants].name if p.wants != "" else ""]
+	evolve_button.visible = p.stage < PetRules.OPTIONS.max_stage
 	evolve_button.text = "確認進化？" if _evolve_armed else "進化（四葉草＋野豬長牙）"
 	if not _changed("feed", [player.bag.slots, p.wants]):
 		evolve_button.disabled = not p.can_evolve()
@@ -297,7 +303,7 @@ func _refresh_pet() -> void:
 	for c in feed_rows.get_children():
 		c.queue_free()
 	for id: String in PetRules.OPTIONS.foods:
-		var row: Node = ItemRow.instantiate()
+		var row: Node = RefineRow.instantiate()
 		feed_rows.add_child(row)
 		var have: int = player.bag.count(id)
 		row.setup("%s（有 %d）" % [Items.ALL[id].name, have], "想吃！" if p.wants == id else "", "餵", have > 0)
@@ -309,7 +315,6 @@ func _refresh_pet() -> void:
 			if reason == "":
 				log_line("寵物吃了%s，經驗 +%d%s。" % [Items.ALL[id].name, r.xp, "（最愛）" if r.wanted else ""], Color("b8f28a"))
 			_act(reason))
-	evolve_button.visible = p.stage < PetRules.OPTIONS.max_stage
 	evolve_button.disabled = not p.can_evolve()
 
 
@@ -483,6 +488,8 @@ func log_line(text: String, color: Color = Color.WHITE) -> void:
 func _process(_delta: float) -> void:
 	if player == null:
 		return
+	if pet_panel.visible:
+		_refresh_mount()
 	if player.tutorial.update(player):
 		refresh()
 		if main:
@@ -498,3 +505,54 @@ func _process(_delta: float) -> void:
 		target_name.text = t.actor.display_name
 		target_hp_bar.max_value = t.max_hp
 		target_hp_bar.value = t.hp
+
+
+var _sale_snapshot: Array = []
+
+func _preview_sale() -> void:
+	_sale_snapshot = player.bag.to_data().duplicate(true)
+	var lines: PackedStringArray = []
+	var total := 0
+	for item: Dictionary in _sale_snapshot:
+		var definition: Dictionary = Items.ALL[item.id]
+		if not definition.has("slot") and not definition.has("heal") and definition.has("sell"):
+			var value: int = int(definition.sell) * int(item.count)
+			total += value
+			lines.append("%s ×%d：%d 金" % [definition.name, item.count, value])
+	if lines.is_empty():
+		_act("none")
+		return
+	sell_confirmation.dialog_text = "包含精煉、進化與餵寵材料，請確認用途。\n%s\n合計：%d 金" % ["\n".join(lines), total]
+	sell_confirmation.popup_centered()
+
+
+func _confirm_sale() -> void:
+	if not npc_panel.visible:
+		return
+	if player.bag.to_data() != _sale_snapshot:
+		log_line("背包內容已變更，請重新確認出售清單。", Color("ff9d8a"))
+		_sale_snapshot.clear()
+		return
+	_sale_snapshot.clear()
+	var earned := Shop.sell_materials(player)
+	if earned > 0:
+		log_line("賣掉材料，得到 %d 金幣。" % earned, Color("b8f28a"))
+	_act("" if earned > 0 else "none")
+
+
+func _refresh_mount() -> void:
+	var reason: String = player.mount_reason()
+	mount_button.text = "下坐" if player.mounted else "乘坐"
+	mount_button.disabled = not player.mounted and not reason.is_empty()
+	var reasons := {"not_ready": "寵物進化至第 2 階後解鎖乘坐。", "dead": "倒下時不能乘坐。",
+		"casting": "施法時不能乘坐。", "combat": "戰鬥結束後才能乘坐。"}
+	mount_hint.text = reasons.get(reason, "移動速度 ×%.2f；攻擊或受傷會下坐。" % player.ride_speed_multiplier) if not player.mounted else "乘坐中；攻擊或受傷會下坐。"
+
+
+func _on_mount_button() -> void:
+	var reason: String = player.set_mounted(not player.mounted)
+	if not reason.is_empty():
+		_refresh_mount()
+		return
+	log_line("開始乘坐。" if player.mounted else "已下坐。", Color("b8f28a"))
+	pet_panel.visible = false

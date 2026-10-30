@@ -1,5 +1,7 @@
 # Systems Index: 蓬蓬草原手機版
 
+2026-10-30 實作補充：S34 [單機乘坐薄切片](battle-pets-guarders.md)已有 [TDD](../../docs/architecture/systems/battle-pets-guarders.md)與 [QA](../../production/qa/systems/battle-pets-guarders.md)；此索引的系統級 In Design 不代表所有分支已交付。戰鬥 AI 與真機驗收仍待完成。
+
 > **Status**: Draft（規劃草案）
 > **Created**: 2026-10-26
 > **Last Updated**: 2026-10-26

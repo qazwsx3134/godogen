@@ -1,5 +1,50 @@
 # 進度與 Agent 交接
 
+## 最新 checkpoint：跨專案改善收斂與 seal 復工（2026-10-30）
+
+分支 `master`。使用者要求原改善清單持續完成，並接續 seal；必要可逆實作已執行，未 commit／push／上傳，其他工作區修改保留。以下為目前狀態，下面逐輪紀錄保留歷史證據。
+
+| 專案 | 已完成的程式／文件工作 | 仍待外部驗收／延期 |
+|---|---|---|
+| debt-commission | 短篇驗收文件、調查選取／版面拆分、離屏觸控修正、Web 候選 | 作者故事內容與完整短篇真人／手機驗收；不再為拆分而全面改寫 main |
+| godot-kit | 成熟度／採用與同步文件、唯讀 hash 盤點、sync --check、CLI 回歸 | 各原型副本不同步，既有差異維持可查 |
+| hero-horde-idle | 現況文件、48 組收益證據、強敵與前五分鐘離線算法、存檔完整 schema 與輸出保護 | 真人前三層、容許收益差距與手機恢復成本；Web 路線延後 |
+| seal-meadow | 出售確認／快照保護、經濟驗收計畫；本輪另完成 S34 單機乘坐薄切片 | iPhone／真人平衡、Web 新包 IndexedDB、長時間發熱；多人 M4 延後 |
+
+hero 最新 L2 `save_protection progression home main recruit` 全 PASS，證據 `/tmp/godot-tests.vW1ukD`；本批未重跑，詳見下方 10-30 schema 紀錄。其他專案驗證沿用各自最後一輪，未將舊證據冒充本輪結果。涉及真人、作者內容、真機及服務部署的項目保持未完成，未宣稱原清單全面驗收。
+
+seal 本輪第 2 階寵物可乘坐（移速 ×1.25），戰鬥／切區／背景／讀檔下坐；同一 entity，數值不重複，schema 仍 v6。PetPanel 已保存固定標題＋捲動內容的可編輯 scene，沿用現有素材。L2 `companions m3 review_interactions` 全 PASS（`/tmp/godot-tests.KN9GPi`），包含兩尺寸大字、44px、scene 編輯保留；headless 匯入仍有沙箱 TCP 錯誤，未見腳本解析錯誤。AC-S34-03 戰鬥 AI 尚未實作。
+
+seal 新手機包 `build/seal-meadow-mobile-web.zip`：15,112,870 bytes；SHA-256 `6c1cc1117d8bc50dea798f576057665fd1ab97d53557a896ca3c8c2dc42b7b8d`。ZIP／PCK 靜態與編譯 PCK 冒煙 PASS；新包 Web／真機未驗（socket 被沙箱禁止）。詳見 [seal checkpoint](prototypes/seal-meadow/production/session-state/active.md)與 [S34 QA](prototypes/seal-meadow/production/qa/systems/battle-pets-guarders.md)。M2 沿用 `/tmp/godot-tests.8mkgik`；L3 待人工驗收，bot 不跑 25 分鐘。
+
+下一步是此候選的真人／iPhone 驗收與內容回饋；不將待驗項標為完成，也不自行開展延期的多人分支。
+
+## 跨專案審查改善（2026-10-29）
+
+- 專案／分支：debt-commission、godot-kit、hero-horde-idle、seal-meadow；master。使用者授權照改善清單開始修；本段為文件與首項風險修正，其他章節歷史狀態保留。
+- 已完成：八份改善文件建立／補寫；debt 的完整短篇驗收與漸進拆分邊界；kit 成熟度／採用資訊與同步規範；hero 目前循環與前三層／離線收益驗收；seal 材料出售規格及經濟實測計畫。
+- 程式：seal 一鍵出售先列品項、數量、總額，明示包含養成材料；確認時核對背包快照，變動即拒絕；取消／換窗不出售。可編輯視窗 `ui/sell_confirmation.tscn`。沿用售價與保存流程。
+- L2 驗證：隔離 XDG 執行 `TEST_TIMEOUT=120 bash prototypes/godot-kit/tools/run_tests.sh prototypes/seal-meadow m2 m3`：M3 PASS（`/tmp/godot-tests.M1gwyv`）；M2 首次因出售按鈕未捲入可點範圍失敗，補測試捲動後單獨重跑 M2 PASS（`/tmp/godot-tests.Fciz7c`）。scene headless 匯入未見解析／資源錯誤，但有沙箱 TCP listen ERR_CANT_CREATE（`/tmp/seal-fix-import.log`），不宣稱無錯匯入。
+- 部分／未完成：debt 已抽出熱區選取，完整調查呈現控制仍待後續功能需求；故事內容等作者提供；三款真人／真機驗收及 hero 在線離線差距與容許值待測。未改平衡數字，未同步 kit 副本。seal Web 候選已於 2026-10-30 重建，匯出及靜態驗證完成，瀏覽器待驗。
+- 重要入口：各專案 README；debt `docs/SHORT-STORY-ACCEPTANCE.md`、kit `docs/VERSION-SYNC.md`、hero `docs/FIRST-THREE-FLOORS-ACCEPTANCE.md`、seal `design/quick-specs/material-sale-2026-10-29.md`。
+- 續作完成：kit 唯讀逐檔盤點工具 `tools/audit_copies.py` 與 SHA-256 快照；三專案共同檔案差異已分類於 `godot-kit/docs/VERSION-SYNC.md`，未同步。四類暫存 fixture 驗證 PASS。seal 確認改 HUD Control／捲動清單，M2 實際取消／確認與 844×390、1280×720 安全範圍及 44px 高度 PASS（`/tmp/godot-tests.yEAs8b`）；headless 匯入仍有沙箱 TCP listen 錯誤，未見解析／資源錯誤（`/tmp/seal-modal-import.log`）。本輪未重跑 M3，沿用上一批通過證據。
+- hero 續作：新增 `tools/compare_march_rewards.gd` 與前後 JSON 證據；修正離線漏算強敵三倍獎勵，實際擊殺數不加權。第一層 seed 73 四組 domain 對照差距從 -14%～-24% 縮至 -8%～+3%；L2 march／progression PASS（`/tmp/godot-tests.VzEGYo`）。初次 scene 嘗試缺匯入快取失敗的數據作廢；最終 domain logs 無 SCRIPT ERROR／Parse Error。重新匯入完成但有沙箱 TCP listen 錯誤。低等成長的固定速率誤差仍待決策；未做真人／真機或全面平衡驗收，未重建 Web。
+- debt 續作：新增 investigation_picker，集中熱區命中／優先序；main 保留遮擋與生命週期。L2 investigation_picker／investigation／phase3_ui PASS（`/tmp/godot-tests.ooX4GH`）。Phase4 舊測試寫死 12 個故事，因現有第 13 個故事失敗；已允許擴充並保留基線順序／標記檢查，Phase4 單獨重跑 PASS（`/tmp/godot-tests.UGlECn`）。匯入及測試仍有 MCP TCP／資源清理訊息；未見 SCRIPT ERROR／Parse Error。Web 與真人手機未重驗。
+- debt 第二步：新增 investigation_layout，集中背景覆蓋、anchor／offset 與兩軸拖曳邊界；原 pan 保存／還原及角色生命週期保留。L2 investigation_layout／phase3_ui／phase4_ui 全部 PASS（`/tmp/godot-tests.fIuGGD`）；未見 SCRIPT ERROR／Parse Error，仍有 MCP TCP／匯入 RID 清理訊息。未修改 scene／schema，Web 與真人手機未重驗。
+- 2026-10-30 seal 手機候選已重建：ZIP／PCK 靜態檢查 PASS，出售確認場景／腳本已入包；ZIP SHA-256 `dbb467521f52a1e971cc367f2b464fad0f0cb59cd1552741c5e712805124246f`。滿包 12 格／大字／兩尺寸捲動與取消 M2 PASS（`/tmp/godot-tests.8mkgik`）。詳見 `seal-meadow/production/qa/mobile-candidate-2026-10-30.json`；沙箱禁止 socket 建立，本包 Chromium／IndexedDB 未驗證，不能套用舊包瀏覽器證據。未上傳。
+- 2026-10-30 hero：完成 48 組收益矩陣與工具回歸（`compare_march_rewards --matrix`）；前三層差距 -14.50%～+7.84%，第八層五分鐘退關邊界高估 11.42%～35.07%。完整結果 `hero-horde-idle/docs/march-rewards-matrix-2026-10-30.json`；矩陣完整性／fixture／無錯誤 log 及預設四組結果回歸 PASS。本輪未改 runtime 或重跑 suite，沿用 10-29 march／progression 證據。固定速率容許差距與分段算法仍待決策。
+- 2026-10-30 hero 修正：前五分鐘執行戰鬥／升級／退關恢復，再估算剩餘時間；第八層五分鐘高估由 +11%～+35% 改為 -7%～0%，長時間誤差仍在。L2 march／progression／home／main 全 PASS（`/tmp/godot-tests.GbS3oh`）；48 組分段結果及桌面單次結算成本見 hero 驗收文件。未改 schema／單怪獎勵，未重建 Web；手機恢復效能待驗。
+- 2026-10-30 kit：sync.sh --check 已整合唯讀差異分類；保留 exit code、外部含空白路徑，audit 新增 --check／JSON 組合。L2 五項隔離 CLI 測試與 bash -n PASS；實際三專案盤點 exit 1（既有差異），數量不變（`/tmp/kit-sync-check-20261030.log`）。副本未同步，Godot 測試未重跑。
+- 2026-10-30 debt 邊界修正：第一章嘴角 art_region 完全離開畫面仍能被觸控擴張選取，新增回歸先重現兩項 FAIL（`/tmp/godot-tests.FvVWlR`）；修正為完全不相交時隱藏並略過隱藏熱區，移回可恢復。L2 search_cast／phase3_ui PASS（`/tmp/godot-tests.8FaZ2e`）；單元初次因 _init 視窗未顯示而失敗，改第一幀後執行，單獨重跑 investigation_picker PASS（`/tmp/debt-picker-visibility-final.log`）。最終 log 無 SCRIPT ERROR／Parse Error；未改 scene／schema，Web 與真機未重驗。
+- 2026-10-30 debt Web：已重建 build/web 並封裝 `build/debt-commission-web-candidate-20261030.zip`（79,199,602 bytes；SHA-256 `dbc585c0dcd62840e07349e05be52889be018728e104f2a348097ba5bbc20598`）。兩個調查模組／main 已入包，tests／tools 排除、IDBFS 及 ZIP 檢查 PASS；來源／產物雜湊見 `production/qa/web-candidate-2026-10-30.json`。本輪未重跑源碼測試，沿用上一輪證據；本包 Chromium／IndexedDB／真機未驗（沙箱禁止 socket），未上傳。
+- 2026-10-30 hero 文件收斂：README 改為現行六頁、種族、18 天賦、原生手機與五分鐘離線算法入口；原 README 全文移存 `docs/history/README-2026-10-30.md`，保留沿革與製作流程並換算相對連結。FUSION 標為歷史決策，PROGRESS 加目前 checkpoint。36 個現況文件連結與來源碼交叉核對通過（`docs/readme-validation-2026-10-30.json`）；僅文件，未重跑遊戲測試，沿用 `/tmp/godot-tests.GbS3oh`。
+- 2026-10-30 hero 存檔保護：先重現較新版本／破損 JSON／空檔被覆寫三項 FAIL（`/tmp/hero-save-before.log`）；載入與寫入前現在檢查 JSON 根型別與版本，不相容時阻止覆寫並顯示主畫面提示。L2 save_protection／progression／home／main 全 PASS（`/tmp/godot-tests.zMQXlQ`），提示字型檢查 PASS。範圍限制與重現見 `hero-horde-idle/docs/SAVE-PROTECTION.md`；尚未全面驗證內部欄位 schema，未改存檔版本或輸出安裝包。
+- 2026-10-30 hero schema：已完成英雄／隊伍／裝備／詞綴／UID／容量與舊格式驗證，並防止輸出非法快照。20 種異常加 v1／舊 v2 相容案例；初輪 float 版本判斷失敗已修正，最終 L2 save_protection／progression／home／main／recruit 全 PASS（`/tmp/godot-tests.vW1ukD`）。規則／限制見 SAVE-PROTECTION.md；未改 schema 版本。接續使用者指定的 seal 單機開發。
+- 下一步：真機確認出售清單可讀及按鈕觸控；按各驗收文件收集實測，再決定架構與數值調整。所有本輪改動未 commit／push；保留其他既有修改。
+
+---
+
+
 ## 蓬蓬草原 · seal-meadow（2026-10-29，持續開發）
 
 - **狀態與決定**：使用者返家要求繼續，之後指定完成一階段就停下並開另一個 Sol medium 審查。S35 單機衣櫥階段與獨立審查已完成，目前暫停；多人 M4 延後。`master` 最新提交與本輪基準 `180149a9`；本輪程式、scene、測試及文件未 commit／push，保留其他專案現有修改。

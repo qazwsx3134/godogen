@@ -1,0 +1,53 @@
+{
+  "date": "2026-10-30",
+  "scope": "Sale confirmation + S34 single-player riding slice",
+  "artifact": "prototypes/seal-meadow/build/seal-meadow-mobile-web.zip",
+  "zip_sha256": "6c1cc1117d8bc50dea798f576057665fd1ab97d53557a896ca3c8c2dc42b7b8d",
+  "zip_bytes": 15112870,
+  "pck_sha256": "683e41a1dfeed073a2458205407886b03c35f3cf48a4b987a0b9d23d69263552",
+  "pck_bytes": 35104064,
+  "packed_files": 338,
+  "checks": {
+    "export": "passed",
+    "zip_integrity_and_pck_match": "passed",
+    "required_packed_resources": "passed",
+    "tests_and_tools_excluded": "passed",
+    "idbfs_patch": "passed",
+    "compiled_pck_riding_and_sale_smoke": "passed",
+    "l2_companions_m3_review_interactions": "passed"
+  },
+  "logs": {
+    "build": "/tmp/seal-s34-build.log",
+    "compiled_pck_smoke": "/tmp/seal-s34-pack.log",
+    "l2": "/tmp/godot-tests.KN9GPi",
+    "scene_authoring": "/tmp/seal-s34-scene.log"
+  },
+  "sources_sha256": {
+    "scripts/player.gd": "18673deac6c4acaf4037c92ac7da841162b9c300aa49d812538362edceaf350b",
+    "scripts/main.gd": "7fcc84320dc53626402301f7aa0227d6a7f24266146ca6318d3b9595473e6606",
+    "scripts/hud.gd": "29405458e5658da6b2c436bcf09f68c66ec700e89f46e976b1538d31ffdd450f",
+    "scripts/pet_follower.gd": "7d21b53118971d906db54467ef8d940577a44250b5691b68958f6052a3e8d5e9",
+    "ui/hud.tscn": "c1ce40c4be4b3ae067db7ebec30abbcd3651d2a0f22dcdd432e5c510098643bd",
+    "scenes/pet_follower.tscn": "984a8bbf0863fce2342a5275196f6498499f101e2492d0feff78e6df18add523"
+  },
+  "previous_candidate": {
+    "zip_sha256": "dbb467521f52a1e971cc367f2b464fad0f0cb59cd1552741c5e712805124246f",
+    "pck_sha256": "7d52ee8aa4896773efc339eb898726fb10aa0be76a49d41f7f95c176c8184586",
+    "scope": "sale confirmation, before riding",
+    "m2_evidence": "/tmp/godot-tests.8mkgik",
+    "m2_rerun_after_riding": false
+  },
+  "unverified": [
+    "Chromium Web interaction and IndexedDB after this export: sandbox forbids socket creation",
+    "iPhone Safari real device",
+    "Thermal and long-session performance"
+  ],
+  "limitations": [
+    "Desktop headless execution of compiled PCK does not exercise the Web/WASM runtime",
+    "Import/export emitted sandbox TCP listener errors; no script parse errors observed",
+    "Scene authoring reported transient reparent owner warnings; saved scene node count 157 -> 161 and subscene references verified, runtime editor-preservation test passed",
+    "No upload or deployment",
+    "Earlier Chromium results concern the previous candidate",
+    "Full L3 suite waits for user manual acceptance"
+  ]
+}

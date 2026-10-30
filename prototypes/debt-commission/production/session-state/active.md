@@ -31,3 +31,29 @@
 2026-10-28 人格深度補充：`authoring/proposals/character-depth-v2/REVIEW.md` 已展示銀時／新八／神樂四項新增內容與完整人格雜湊；三份 revision 2 為待確認提案，未升入正式資料、未新增記憶。提案 validate=3筆／0確認且 context 確實拒絕；正式資料 validate=6筆／6確認，三人＋三記憶 context 仍成功，base hash 一致。本次未改工具或遊戲，未重跑 Godot／Web；下一步等作者檢閱、確認或修改新提案，不能沿用 revision 1 證據自行核准。
 
 2026-10-28 作者回覆「可以 採用」：三角色 revision 2 已原樣升入正式 characters，新增確認證據已記錄，舊版完整資料與證據留於 authoring/archive/character-depth-v1。三條記憶及確認未改；validate=6筆／6確認，正式三角色＋三記憶 context 成功；已比對提案與正式角色逐位元組一致。README／REVIEW 已同步，proposal_meta 只保留提案建立時歷史。未改程式或重跑遊戲測試，未 commit／push。下一步等待作者提供極短篇構想，一起編劇與使用編輯器。
+
+## 2026-10-29 審查改善
+
+已補完整短篇驗收計畫及 IMPLEMENTATION 維護邊界。未拆分程式、未代寫故事，人工驗收等作者構想與核准文本。本輪僅文件，未重跑遊戲測試。
+
+## 2026-10-29 調查熱區呈現拆分
+
+使用者授權繼續審查改善。新增 `scripts/investigation_picker.gd`：集中最小觸控矩形、重疊優先序與已查熱區的重複台詞資格。main 保留遮擋／忙碌判斷、背景拖曳、角色與存檔生命週期，選到 ID 後仍走原有 Runner／素材流程。未新增故事或修改規則數值。
+
+L2 首輪 investigation_picker／investigation／phase3_ui PASS（`/tmp/godot-tests.ooX4GH`）；phase4_ui 僅失敗於寫死 12 個故事的舊斷言，目錄現有額外 strawberry_chapter1_graph。已改為允許新增故事並保留基線順序、數量對應、標題及試玩標記檢查。Phase4 單獨重跑 PASS（`/tmp/godot-tests.UGlECn`）。匯入與測試有 MCP TCP 監聽受沙箱限制及離開時 RID／ObjectDB 清理訊息，不宣稱零錯誤。Web／真人手機未重驗。
+
+## 2026-10-29 調查背景幾何拆分
+
+新增 `scripts/investigation_layout.gd` 與 `test_investigation_layout.gd`：集中覆蓋取景、anchor／offset 與兩軸拖曳邊界。main 保留 node 套用、角色位置、各地點 pan 保存及離開時還原。L2 investigation_layout／phase3_ui／phase4_ui 全部 PASS（`/tmp/godot-tests.fIuGGD`），log 未見 SCRIPT ERROR／Parse Error；仍有 MCP TCP 監聽限制與匯入退出的 RID 清理訊息。沒有 scene／schema 變更，Web 與真人手機未重驗。
+
+## 2026-10-30 螢幕外角色熱區修正
+
+重現第一章嘴角 art_region 完全移出左緣，觸控擴張仍能選取的問題；修正前 search_cast 有兩項對應 FAIL（`/tmp/godot-tests.FvVWlR`）。現在完全不相交即隱藏，選取器跳過隱藏節點；移回畫面會恢復熱區。未修改素材取得、found 狀態或 scene。L2 search_cast／phase3_ui PASS（`/tmp/godot-tests.8FaZ2e`）；單元首輪因 _init 時 Window 尚未顯示而失敗，改為第一幀後執行，再單獨重跑 investigation_picker PASS（`/tmp/debt-picker-visibility-final.log`）。最終三組 log 未見 SCRIPT ERROR／Parse Error；仍有 MCP TCP 沙箱訊息。Web 與真人手機未重驗。
+
+## 2026-10-30 Web 候選更新
+
+`tools/build_web.sh` 已完成，輸出 `build/web/`；本地封裝 `build/debt-commission-web-candidate-20261030.zip`（79,199,602 bytes），SHA-256 `dbc585c0dcd62840e07349e05be52889be018728e104f2a348097ba5bbc20598`。PCK 452 個檔案，包含 main、investigation_picker 與 investigation_layout 編譯腳本；tests／tools 未入包。IDBFS 修補與 ZIP CRC／必要檔案檢查 PASS。
+
+機器可讀紀錄 `production/qa/web-candidate-2026-10-30.json` 包含來源、ZIP 與 PCK 雜湊。build log `/tmp/debt-web-build-20261030.log` 有 TCP 監聽限制與退出清理訊息，未見 SCRIPT ERROR／Parse Error。此輪僅匯出及靜態驗證，未重跑遊戲測試；沿用上一輪熱區單元／search_cast／Phase3，以及較早幾何／Phase4 證據，具體路徑見 JSON。
+
+沙箱禁止 socket，未啟動伺服器或執行本包 Chromium 互動／IndexedDB 測試；iPhone 真機仍未驗。未上傳、未 commit／push。下一步使用獨立瀏覽器資料驗證調查拖曳、角色移出／移回邊界、離開調查與存讀恢復；作者完整短篇仍待提供構想及核准。

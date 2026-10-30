@@ -1,0 +1,69 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://ui/theme.tres" id="1_lkxf4"]
+[ext_resource type="Script" path="res://ui/sell_confirmation.gd" id="2_lm50x"]
+
+[node name="SellConfirmation" type="Control" unique_id=434028445]
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource("1_lkxf4")
+script = ExtResource("2_lm50x")
+
+[node name="Dim" type="ColorRect" parent="." unique_id=561434772]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.65)
+
+[node name="Panel" type="PanelContainer" parent="." unique_id=1441776393]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -310.0
+offset_right = 300.0
+offset_bottom = 310.0
+
+[node name="Contents" type="VBoxContainer" parent="Panel" unique_id=86706271]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="@Label@2" type="Label" parent="Panel/Contents" unique_id=942098979]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "確認出售材料"
+
+[node name="@ScrollContainer@5" type="ScrollContainer" parent="Panel/Contents" unique_id=2019802797]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="SaleList" type="Label" parent="Panel/Contents/@ScrollContainer@5" unique_id=1796484119]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+autowrap_mode = 3
+
+[node name="@HBoxContainer@6" type="HBoxContainer" parent="Panel/Contents" unique_id=1193063725]
+layout_mode = 2
+
+[node name="CancelSale" type="Button" parent="Panel/Contents/@HBoxContainer@6" unique_id=625184742]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 84)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "取消"
+
+[node name="ConfirmSale" type="Button" parent="Panel/Contents/@HBoxContainer@6" unique_id=201517648]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 84)
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "確認出售"

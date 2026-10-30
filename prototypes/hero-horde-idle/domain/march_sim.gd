@@ -346,13 +346,18 @@ func _skills(dt: float) -> void:
 		events.append({"kind": &"skill", "hero": i})
 
 
-## Plays `seconds` of march headless: {kills_per_sec, lost}. A squad that falls reports lost (and the kills so far).
+## Measures raw kills and reward units (elite x3) per second. A fallen squad reports lost.
 static func measure(units: Array, stage_n: int, seconds: float, cooldown_mult: float = 1.0) -> Dictionary:
 	var sim := new(4242, units, stage_n, cooldown_mult)
+	var reward_units := 0
 	var steps: int = roundi(seconds / TICK)
 	for k: int in steps:
 		sim._tick(TICK)
-		sim.events.clear()
+		for event: Dictionary in sim.take_events():
+			if event.kind == &"kill":
+				reward_units += 3 if event.elite else 1
 		if sim.lost:
 			break
-	return {"kills_per_sec": sim.kills / maxf(sim.t, TICK), "lost": sim.lost, "kills": sim.kills}
+	return {"kills_per_sec": sim.kills / maxf(sim.t, TICK),
+		"reward_units_per_sec": reward_units / maxf(sim.t, TICK), "reward_units": reward_units,
+		"lost": sim.lost, "kills": sim.kills}

@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-30",
+  "artifact": "prototypes/debt-commission/build/debt-commission-web-candidate-20261030.zip",
+  "sha256": "dbc585c0dcd62840e07349e05be52889be018728e104f2a348097ba5bbc20598",
+  "bytes": 79199602,
+  "pck": {
+    "sha256": "47e72fabd27e0ded8a97d2561ee971dbc56d4ef47116f829f5f4a68ece9cbdd5",
+    "bytes": 72754692
+  },
+  "pack_version": 4,
+  "engine": [
+    4,
+    7,
+    0
+  ],
+  "packed_files": 452,
+  "required_scripts": [
+    "scripts/investigation_picker.gdc",
+    "scripts/investigation_layout.gdc",
+    "main.gdc"
+  ],
+  "sources": {
+    "main.gd": {
+      "sha256": "3338833a9589ae1981f5b8b130a9d137d886d47bb902569beb4507b3a358a7ad",
+      "bytes": 186437
+    },
+    "scripts/investigation_picker.gd": {
+      "sha256": "36d31560ddf458f6355e0e23cc039525b8357d304e75c4a6e6143d48cf7bef43",
+      "bytes": 1228
+    },
+    "scripts/investigation_layout.gd": {
+      "sha256": "8485088b3acd107a58acd695a70574fb707205f982e042813db80c9c19d7b45c",
+      "bytes": 1323
+    }
+  },
+  "checks": {
+    "export": "passed",
+    "required_scripts_in_pack": "passed",
+    "idbfs_patch": "passed",
+    "tests_and_tools_excluded": "passed",
+    "zip_integrity": "passed"
+  },
+  "runtime_test_evidence": {
+    "search_cast_and_phase3_ui": "/tmp/godot-tests.8FaZ2e",
+    "investigation_picker": "/tmp/debt-picker-visibility-final.log",
+    "geometry_and_phase4_ui": "/tmp/godot-tests.fIuGGD"
+  },
+  "build_log": "/tmp/debt-web-build-20261030.log",
+  "limitations": [
+    "Current candidate Chromium interaction/IndexedDB not run: sandbox forbids network sockets",
+    "iPhone Safari not verified",
+    "Export emitted TCP listener and resource cleanup errors; no script parse errors observed",
+    "Earlier source tests are not browser tests of this ZIP",
+    "Not uploaded or deployed"
+  ]
+}

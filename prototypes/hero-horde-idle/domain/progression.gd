@@ -84,6 +84,9 @@ const CAPTAIN_BUFF := [0.03, 0.05, 0.08, 0.12]
 const CODEX_PER := 0.003
 const RECENT_SIZE := 5
 
+## Nonempty when loading/writing must preserve an unreadable or incompatible existing file.
+var save_blocked_reason: String = ""
+
 var gold: int = 0
 var shards: int = 0
 ## 經驗藥水 held, by size (POTIONS order).
@@ -499,13 +502,14 @@ func _hero_exp(i: int, amount: int) -> int:
 
 
 ## The march's pace now: plays the squad at march_stage (one stage lower each time it falls, which also moves the
-## march there). Returns {stage, kills_per_sec}.
+## march there). Returns {stage, kills_per_sec, reward_units_per_sec}.
 func measure_march() -> Dictionary:
 	var units: Array = march_units()
 	while true:
 		var m: Dictionary = MarchSim.measure(units, march_stage, MEASURE_SECONDS, cooldown_mult())
 		if not m.lost or march_stage == 1:
-			return {"stage": march_stage, "kills_per_sec": m.kills_per_sec if not m.lost else 0.0}
+			return {"stage": march_stage, "kills_per_sec": m.kills_per_sec if not m.lost else 0.0,
+				"reward_units_per_sec": m.reward_units_per_sec if not m.lost else 0.0}
 		march_lost()
 	return {}
 
@@ -526,7 +530,7 @@ func keep_marching(now: int) -> void:
 	march_since = now
 
 
-## Pays the time away at the measured pace and restarts the count. Returns {seconds, stage, kills, gold, shards,
+## Resolves opening combat then estimates the remaining time and restarts the count. Returns {seconds, stage, kills, gold, shards,
 ## stones, items, salvaged, levels} (seconds 0 = nothing to pay).
 func claim_offline(now: int) -> Dictionary:
 	var seconds: int = offline_seconds(now)
@@ -537,28 +541,77 @@ func claim_offline(now: int) -> Dictionary:
 	return _march_for(seconds)
 
 
-## 行軍 1 小時 at the measured pace (the balance bots' march between pushes).
+## 行軍 1 小時 using the same offline settlement (the balance bots' march between pushes).
 func march_hour() -> Dictionary:
 	return _march_for(3600)
 
 
+## Resolve the first five minutes with combat/retreat/growth, then estimate the remaining time.
+## Work is bounded for long absences; no player interaction or automatic equipment changes are simulated.
 func _march_for(seconds: int) -> Dictionary:
+	var simulated_seconds := mini(seconds, 300)
+	var got := {"seconds": seconds, "stage": march_stage, "kills": 0, "gold": 0, "shards": 0,
+		"stones": 0, "potions": [0, 0, 0], "items": [], "salvaged": 0, "levels": {}}
+	var sim := MarchSim.new(4242, march_units(), march_stage, cooldown_mult())
+	var recovering := 0.0
+	var pending := false
+	for tick: int in simulated_seconds * 20:
+		if recovering > 0.0:
+			recovering -= MarchSim.TICK
+			if recovering <= 0.0:
+				sim = MarchSim.new(4242, march_units(), march_stage, cooldown_mult())
+				pending = false
+			continue
+		sim.step(MarchSim.TICK)
+		for event: Dictionary in sim.take_events():
+			if event.kind == &"kill":
+				_merge_march_rewards(got, march_kill(event.stage, event.elite))
+				got.kills += 1
+				pending = true
+			elif event.kind == &"travel" and pending:
+				sim = MarchSim.new(4242, march_units(), march_stage, cooldown_mult())
+				sim.travel_t = MarchSim.TRAVEL_TIME
+				pending = false
+			elif event.kind == &"lost":
+				march_lost()
+				recovering = 2.0
+	if seconds > simulated_seconds:
+		var estimated := _estimate_march(seconds - simulated_seconds)
+		_merge_march_rewards(got, estimated)
+		got.kills += estimated.kills
+	got.stage = march_stage
+	return got
+
+
+static func _merge_march_rewards(total: Dictionary, part: Dictionary) -> void:
+	for key: String in ["gold", "shards", "stones", "salvaged"]:
+		total[key] += part[key]
+	for k: int in 3:
+		total.potions[k] += part.potions[k]
+	for hero: int in part.levels:
+		total.levels[hero] = int(total.levels.get(hero, 0)) + int(part.levels[hero])
+	total.items.append_array(part.items)
+
+
+func _estimate_march(seconds: int) -> Dictionary:
 	var pace: Dictionary = measure_march()
 	var kills: float = pace.kills_per_sec * seconds
+	# Elite kills count once in the kill ledger and three times in reward expectations.
+	var reward_units: float = pace.reward_units_per_sec * seconds
 	var got := {"seconds": seconds, "stage": pace.stage, "kills": roundi(kills), "items": [], "salvaged": 0}
-	got.gold = roundi(kills * kill_gold(pace.stage))
+	got.gold = roundi(reward_units * kill_gold(pace.stage))
 	gold += got.gold
 	march_kills += got.kills
-	got.levels = _give_exp(roundi(kills * KILL_EXP * exp_mult()))
-	got.shards = _chances(_rng, kills * KILL_SHARD_CHANCE)
+	got.levels = _give_exp(roundi(reward_units * KILL_EXP * exp_mult()))
+	got.shards = _chances(_rng, reward_units * KILL_SHARD_CHANCE)
 	shards += got.shards
-	got.stones = _chances(_loot, kills * KILL_STONE_CHANCE)
+	got.stones = _chances(_loot, reward_units * KILL_STONE_CHANCE)
 	stones += got.stones
 	got.potions = [0, 0, 0]
 	for k: int in POTIONS.size():
-		got.potions[k] = _chances(_potion, kills * POTIONS[k].chance)
+		got.potions[k] = _chances(_potion, reward_units * POTIONS[k].chance)
 		potions[k] += got.potions[k]
-	for k: int in _chances(_loot, kills * KILL_LOOT_CHANCE * loot_mult()):
+	for k: int in _chances(_loot, reward_units * KILL_LOOT_CHANCE * loot_mult()):
 		_drop(got, Stages.region(pace.stage), 0)
 	return got
 
@@ -1119,13 +1172,216 @@ func _read_recruit(d: Dictionary) -> void:
 
 
 func save(path: String = SAVE_PATH) -> Error:
-	return AtomicFile.write_text(path, JSON.stringify(to_dict()))
+	if not save_blocked_reason.is_empty():
+		return ERR_FILE_CANT_WRITE
+	# Also protect a file replaced by a newer build while this instance was running.
+	var existing := _read_save(path)
+	if existing.error not in ["", "missing"]:
+		save_blocked_reason = existing.error
+		return ERR_FILE_CANT_WRITE
+	var snapshot := to_dict()
+	if not _valid_payload(snapshot):
+		return ERR_INVALID_DATA
+	return AtomicFile.write_text(path, JSON.stringify(snapshot))
 
 
-## The saved progress at `path`, or a fresh start when there is none (or it cannot be read).
+## Missing files start fresh; incompatible/unreadable files keep their original bytes and block writes.
 static func load_from(path: String = SAVE_PATH) -> RefCounted:
-	var bytes: PackedByteArray = AtomicFile.read_bytes(path)
-	if bytes.is_empty():
-		return new()
-	var data: Variant = JSON.parse_string(bytes.get_string_from_utf8())
-	return from_dict(data) if data is Dictionary else new()
+	var saved := _read_save(path)
+	if saved.error == "":
+		return from_dict(saved.data)
+	var progress := new()
+	if saved.error != "missing":
+		progress.save_blocked_reason = saved.error
+	return progress
+
+
+static func _read_save(path: String) -> Dictionary:
+	if not FileAccess.file_exists(path):
+		return {"error": "missing"}
+	var json := JSON.new()
+	var bytes := AtomicFile.read_bytes(path)
+	if bytes.is_empty() or json.parse(bytes.get_string_from_utf8()) != OK or not json.data is Dictionary:
+		return {"error": "corrupt"}
+	var data: Dictionary = json.data
+	var version: Variant = data.get("version")
+	if not (version is int or version is float) or not is_finite(float(version)) or floorf(float(version)) != float(version):
+		return {"error": "corrupt"}
+	if float(version) > SAVE_VERSION:
+		return {"error": "newer"}
+	if float(version) != 1.0 and float(version) != float(SAVE_VERSION):
+		return {"error": "unsupported"}
+	if not _valid_payload(data):
+		return {"error": "corrupt"}
+	return {"error": "", "data": data}
+
+
+## Validate persisted input before any conversion, resize or item normalization can discard data.
+static func _valid_payload(d: Dictionary) -> bool:
+	var current := new().to_dict()
+	for key: String in d:
+		if not current.has(key) and not (int(d.version) == 1 and key == "class_level"):
+			return false
+	for key: String in ["gold", "shards", "hero_level", "hero_exp", "ascension", "march", "pushes", "wins", "rng_state"]:
+		if not d.has(key):
+			return false
+	for key: String in current:
+		if current[key] is int and d.has(key):
+			if not _save_integer(d[key], -1 if key in ["ad_day", "auto_salvage"] else 0):
+				return false
+	for key: String in ["rng_state", "loot_state", "pull_state", "potion_state"]:
+		if d.has(key):
+			var state: Variant = d[key]
+			if state is String:
+				if not state.is_valid_int() or str(int(state)) != state:
+					return false
+			elif not _save_integer(state, -9007199254740991):
+				return false
+	for key: String in ["hero_level", "hero_exp", "ascension"]:
+		var maximum: int = LEVEL_CAP + CAP_PER_ASCEND * MAX_ASCEND if key == "hero_level" else (MAX_ASCEND if key == "ascension" else 2147483647)
+		if not _save_int_array(d[key], 1 if key == "hero_level" else 0, maximum) or d[key].size() != HEROES:
+			return false
+	if not _save_int_array(d.march, 0, HEROES - 1) or d.march.is_empty() or d.march.size() > MAX_SLOTS or not _save_unique(d.march):
+		return false
+	if not _save_int_array(d.get("captains", []), 0, HEROES - 1) or d.get("captains", []).size() > MAX_CAPTAINS or not _save_unique(d.get("captains", [])):
+		return false
+	if not _save_int_array(d.get("recent", []), 0, HEROES - 1) or d.get("recent", []).size() > RECENT_SIZE:
+		return false
+	for key: String in ["tips", "owned"]:
+		if not d.get(key, []) is Array:
+			return false
+		for entry: Variant in d.get(key, []):
+			if not entry is String:
+				return false
+	if int(d.get("cleared", 0)) > Stages.COUNT or int(d.get("march_stage", 1)) not in range(1, Stages.COUNT + 1):
+		return false
+	var potions_data: Variant = d.get("potions", 0)
+	if potions_data is Array:
+		if not _save_int_array(potions_data) or potions_data.size() > POTIONS.size():
+			return false
+	elif not _save_integer(potions_data, 0, 2147483647):
+		return false
+	if int(d.version) == 1:
+		return _valid_legacy_payload(d)
+	for key: String in ["talent", "armory", "armory_level", "charm", "relic_stars", "bag", "loot_state"]:
+		if not d.has(key):
+			return false
+	if not _save_int_array(d.talent) or d.talent.size() > Talents.count():
+		return false
+	for k: int in d.talent.size():
+		if d.talent[k] > Talents.ROWS[k].max:
+			return false
+	if not _save_int_array(d.armory_level, 0, Items.ARMORY_MAX) or d.armory_level.size() != PushSim.ROSTER.size():
+		return false
+	if not _save_int_array(d.relic_stars, 0, Items.MAX_STARS) or d.relic_stars.size() > Items.RELICS.size():
+		return false
+	if not _save_int_array(d.get("fresh", []), 1) or int(d.get("auto_salvage", -1)) not in [-1, 0, 1]:
+		return false
+	if not d.armory is Array or d.armory.size() != PushSim.ROSTER.size() or not d.charm is Array or d.charm.size() != HEROES:
+		return false
+	if not d.bag is Array or d.bag.size() > Items.BAG_MAX:
+		return false
+	var uids := {}
+	for k: int in d.armory.size():
+		if not _valid_save_piece(d.armory[k], uids, true):
+			return false
+		if not d.armory[k].is_empty() and (not Items.is_weapon(d.armory[k].id) or Items.weapon_class(d.armory[k].id) != k):
+			return false
+	for piece: Variant in d.charm:
+		if not _valid_save_piece(piece, uids, true):
+			return false
+		if not piece.is_empty() and Items.is_weapon(piece.id):
+			return false
+	for piece: Variant in d.bag:
+		if not _valid_save_piece(piece, uids, false):
+			return false
+	var next: Variant = d.get("next_uid", 1)
+	if not _save_integer(next, 1, 2147483647):
+		return false
+	for uid: int in uids:
+		if uid >= int(next):
+			return false
+	return true
+
+
+static func _valid_legacy_payload(d: Dictionary) -> bool:
+	if not _save_int_array(d.get("class_level", []), 1):
+		return false
+	if d.get("class_level", []).size() > PushSim.ROSTER.size():
+		return false
+	if d.has("armory"):
+		if not _save_int_array(d.armory, -1, Items.RARITY_NAMES.size() - 1) or d.armory.size() != PushSim.ROSTER.size():
+			return false
+		if not _save_int_array(d.get("armory_level"), 0, Items.ARMORY_MAX) or d.armory_level.size() != PushSim.ROSTER.size():
+			return false
+		if not _save_int_array(d.get("charm"), -1, Items.CHARMS.size() - 1) or d.charm.size() != HEROES:
+			return false
+		if not _save_int_array(d.get("relic_stars"), 0, Items.MAX_STARS) or d.relic_stars.size() > Items.RELICS.size():
+			return false
+	if not d.get("bag", {}) is Dictionary:
+		return false
+	var count := 0
+	for id: Variant in d.get("bag", {}):
+		if not id is String or not _known_save_item(id) or not _save_integer(d.bag[id], 0, Items.BAG_MAX):
+			return false
+		count += int(d.bag[id])
+	return count <= Items.BAG_MAX
+
+
+static func _valid_save_piece(piece: Variant, uids: Dictionary, allow_empty: bool) -> bool:
+	if not piece is Dictionary:
+		return false
+	if piece.is_empty():
+		return allow_empty
+	for key: Variant in piece:
+		if key not in ["uid", "id", "aff"]:
+			return false
+	if not _save_integer(piece.get("uid"), 1, 2147483647) or not piece.get("id") is String or not _known_save_item(piece.id):
+		return false
+	var uid := int(piece.uid)
+	if uids.has(uid):
+		return false
+	uids[uid] = true
+	if not piece.get("aff", []) is Array:
+		return false
+	var affixes := {}
+	for pair: Variant in piece.get("aff", []):
+		if not pair is Array or pair.size() != 2 or pair[0] not in Items.AFFIX_KEYS or affixes.has(pair[0]):
+			return false
+		if not (pair[1] is int or pair[1] is float) or not is_finite(float(pair[1])):
+			return false
+		affixes[pair[0]] = true
+	return true
+
+
+static func _known_save_item(id: String) -> bool:
+	for c: int in Items.WEAPONS.size():
+		for rarity: int in Items.RARITY_NAMES.size():
+			if id == Items.weapon_id(c, rarity):
+				return true
+	for k: int in Items.CHARMS.size():
+		if id == Items.charm_id(k):
+			return true
+	return false
+
+
+static func _save_integer(value: Variant, minimum: int = 0, maximum: int = 9007199254740991) -> bool:
+	return (value is int or value is float) and is_finite(float(value)) and floorf(float(value)) == float(value) and value >= minimum and value <= maximum
+
+
+static func _save_int_array(value: Variant, minimum: int = 0, maximum: int = 2147483647) -> bool:
+	if not value is Array:
+		return false
+	for entry: Variant in value:
+		if not _save_integer(entry, minimum, maximum):
+			return false
+	return true
+
+
+static func _save_unique(values: Array) -> bool:
+	var seen := {}
+	for value: Variant in values:
+		if seen.has(int(value)):
+			return false
+		seen[int(value)] = true
+	return true

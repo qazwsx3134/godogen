@@ -108,4 +108,35 @@ func _init() -> void:
 	_expect(k.offline_seconds(t0 + 50 * 3600) == k.offline_cap_hours() * 3600, "away for days banks only the cap")
 	k.keep_marching(t0 + 60 * 3600)
 	_expect(k.offline_seconds(t0 + 60 * 3600) == 0, "time the home screen played the march is not paid again")
+	var weighted_sim := MarchSim.new(4242, units, 1)
+	var reward_units := 0
+	for step: int in roundi(Progression.MEASURE_SECONDS / MarchSim.TICK):
+		weighted_sim.step(MarchSim.TICK)
+		for event: Dictionary in weighted_sim.take_events():
+			if event.kind == &"kill":
+				reward_units += 3 if event.elite else 1
+	var weighted: Dictionary = MarchSim.measure(units, 1, Progression.MEASURE_SECONDS)
+	_expect(reward_units > weighted_sim.kills and weighted.reward_units == reward_units,
+		"measured rewards include elite triples while raw kills count once")
+	var offline_p := Progression.new(3)
+	var measured: Dictionary = offline_p.measure_march()
+	var paid: Dictionary = offline_p._estimate_march(300)
+	_expect(paid.gold == roundi(measured.reward_units_per_sec * 300 * offline_p.kill_gold(measured.stage)),
+		"offline gold uses weighted elite rewards")
+	_expect(paid.kills == roundi(measured.kills_per_sec * 300), "offline kill ledger remains unweighted")
+
+	var retreat := Progression.new(4242)
+	retreat.march_stage = 8
+	retreat.cleared = 7
+	var before_gold: int = retreat.gold
+	var initial_kills: int = retreat.march_kills
+	var short: Dictionary = retreat._march_for(300)
+	_expect(retreat.march_stage < 8 and short.stage == retreat.march_stage, "offline opening combat resolves retreats")
+	_expect(short.gold == retreat.gold - before_gold and short.kills == retreat.march_kills - initial_kills,
+		"offline receipt matches actual gold and kills without duplicate payment")
+	var resumed := Progression.from_dict(retreat.to_dict().duplicate(true))
+	var a_next: Dictionary = retreat._march_for(3600)
+	var b_next: Dictionary = resumed._march_for(3600)
+	_expect(a_next == b_next, "opening simulation and remaining estimate reproduce after save roundtrip")
+
 	_finish("MARCH TESTS")
