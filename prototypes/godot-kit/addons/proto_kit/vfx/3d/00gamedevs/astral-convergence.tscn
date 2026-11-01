@@ -1,0 +1,80 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/00gamedevs/source_effect.gd" id="1_2w5kw"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/astral-convergence/spatial_part_0.gdshader" id="2_7jst5"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/astral-convergence/part_0.res" id="3_t7o0r"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/astral-convergence/spatial_part_1.gdshader" id="4_8ksoq"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/astral-convergence/part_1.res" id="5_0vt5d"]
+[ext_resource type="AnimationLibrary" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/astral-convergence/motion.res" id="6_wusrj"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hjvjx"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("2_7jst5")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 11052
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uRetire = 0.0
+shader_parameter/uOpening = 1.0
+shader_parameter/uStopTime = -1.0
+shader_parameter/uQuantity = 10.0
+shader_parameter/uTime = 0.35
+shader_parameter/uStretch = 1.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.5332764, 0.47932017, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_58wid"]
+resource_local_to_scene = true
+render_priority = 3
+shader = ExtResource("4_8ksoq")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 256.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 0.35
+shader_parameter/uStopTime = -1.0
+shader_parameter/uQuantity = 10.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uStretch = 1.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.5332764, 0.47932017, 1)
+
+[node name="AstralConvergence" type="Node3D" unique_id=1174412560]
+script = ExtResource("1_2w5kw")
+effect_id = "astral-convergence"
+burst = true
+duration = 3.4
+start_duration = 0.34
+end_duration = 1.53
+kind = 3
+variant = 7
+metadata/vfx_source = "00gamedevs"
+metadata/vfx_id = "astral-convergence"
+metadata/editor_preview_time = 0.35
+
+[node name="Parts" type="Node3D" parent="." unique_id=192085369]
+unique_name_in_owner = true
+
+[node name="Part000" type="MeshInstance3D" parent="Parts" unique_id=1200435060]
+material_override = SubResource("ShaderMaterial_hjvjx")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("3_t7o0r")
+metadata/source_name = "school-body"
+
+[node name="Part001" type="MeshInstance3D" parent="Parts" unique_id=334289862]
+material_override = SubResource("ShaderMaterial_58wid")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("5_0vt5d")
+metadata/source_name = "school-particles"
+
+[node name="Motion" type="AnimationPlayer" parent="." unique_id=2083425944]
+unique_name_in_owner = true
+libraries/ = ExtResource("6_wusrj")

@@ -9,6 +9,8 @@ signal message(text: String, color: Color)
 signal leveled_up(new_level: int)
 ## The sweep resolved (after its windup), hitting `hits` monsters.
 signal swept(hits: int)
+signal died
+signal respawned
 signal damaged(attacker: Node3D)
 signal mounted_changed(value: bool)
 
@@ -527,6 +529,8 @@ func _die() -> void:
 	_has_goal = false
 	actor.moving = false
 	actor.set_dead(true)
+	cancel_pending_attack()
+	died.emit()
 	message.emit("你倒下了……%d 秒後在路牌旁復活。" % int(respawn_seconds), Color("ff8a8a"))
 	await get_tree().create_timer(respawn_seconds, false).timeout
 	position = _spawn
@@ -535,6 +539,7 @@ func _die() -> void:
 	actor.hp_ratio = 1.0
 	actor.set_dead(false)
 	dead = false
+	respawned.emit()
 	stats_changed.emit()
 
 

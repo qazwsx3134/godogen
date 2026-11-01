@@ -9,3 +9,5 @@
 | AC-S33-03 | `test_fishing.gd` 以注入遊戲 clock 前進，不使用系統日曆 | 本次單機 headless PASS；多人服務端不在目前範圍 |
 
 尚需 iPhone 觸控、前景／背景返回、滿包文字及長時間試玩；真實裝置時鐘變更與效能未測。
+
+2026-10-30 交互回修：有效開始釣魚會下坐，缺餌拒絕保留乘坐；`fishing` 與 `world_lifecycle companions review_interactions` L2 全 PASS（`/tmp/godot-tests.ajHIaM`）。本輪來源與產物證據見 [交互 QA](../world-lifecycle-2026-10-30.md)。

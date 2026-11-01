@@ -82,6 +82,19 @@ func _run() -> void:
 	player.global_position = spot.global_position + Vector3(4, 0, 0)
 	main.start_fishing()
 	_expect(not main.fishing.active and hud.fishing_window.status.text.contains("靠近"), "a cast cannot start away from the pond")
+	player.global_position = spot.global_position
+	player.target = null
+	player.cancel_cast()
+	player._since_hit = 99.0
+	player.pet.stage = 2
+	_expect(player.set_mounted(true) == "", "evolved pet can be mounted beside pond")
+	main.start_fishing()
+	_expect(main.fishing.active and not player.mounted, "starting a valid cast dismounts before fishing")
+	main.cancel_fishing()
+	player.set_mounted(true)
+	player.bag.slots.clear()
+	main.start_fishing()
+	_expect(not main.fishing.active and player.mounted, "rejected no-bait cast preserves riding")
 	main.queue_free()
 	await _frames(2)
 	_finish("SEAL MEADOW FISHING TESTS")

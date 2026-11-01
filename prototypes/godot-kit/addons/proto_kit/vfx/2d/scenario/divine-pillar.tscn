@@ -1,0 +1,16 @@
+[gd_scene format=3]
+
+[ext_resource type="SpriteFrames" path="res://addons/proto_kit/vfx/assets/scenario/divine-pillar/divine-pillar.tres" id="1_44a0u"]
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/2d/sheet_effect.gd" id="2_as7rv"]
+
+[node name="DivinePillar" type="AnimatedSprite2D" unique_id=341124408]
+texture_filter = 1
+sprite_frames = ExtResource("1_44a0u")
+animation = &"divine_pillar"
+frame = 2
+offset = Vector2(0, -41.28)
+script = ExtResource("2_as7rv")
+metadata/vfx_source = "scenario"
+metadata/vfx_id = "divine-pillar"
+metadata/placement = "target-ground"
+metadata/depth_hint = "front"

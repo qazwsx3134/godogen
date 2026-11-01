@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[ext_resource type="SpriteFrames" path="res://addons/proto_kit/vfx/assets/scenario/frost-nova/frost-nova.tres" id="1_0dnf3"]
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/2d/sheet_effect.gd" id="2_ixk7n"]
+
+[node name="FrostNova" type="AnimatedSprite2D" unique_id=341124408]
+texture_filter = 1
+sprite_frames = ExtResource("1_0dnf3")
+animation = &"frost_nova"
+frame = 2
+script = ExtResource("2_ixk7n")
+metadata/vfx_source = "scenario"
+metadata/vfx_id = "frost-nova"
+metadata/placement = "target"
+metadata/depth_hint = "front"

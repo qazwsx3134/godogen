@@ -1,0 +1,80 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/00gamedevs/source_effect.gd" id="1_8cq60"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/flame-surge/spatial_part_0.gdshader" id="2_de0oh"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/flame-surge/part_0.res" id="3_gtsbw"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/flame-surge/spatial_part_1.gdshader" id="4_lryee"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/flame-surge/part_1.res" id="5_14lcr"]
+[ext_resource type="AnimationLibrary" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/flame-surge/motion.res" id="6_f3r1o"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_04qu0"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("2_de0oh")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 14856
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uRetire = 0.0
+shader_parameter/uOpening = 1.0
+shader_parameter/uStopTime = -1.0
+shader_parameter/uQuantity = 5.0
+shader_parameter/uTime = 0.7
+shader_parameter/uStretch = 1.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(1, 0.22322796, 0.048171826)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c107o"]
+resource_local_to_scene = true
+render_priority = 3
+shader = ExtResource("4_lryee")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 244.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 0.7
+shader_parameter/uStopTime = -1.0
+shader_parameter/uQuantity = 5.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uStretch = 1.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(1, 0.22322796, 0.048171826)
+
+[node name="FlameSurge" type="Node3D" unique_id=663067296]
+script = ExtResource("1_8cq60")
+effect_id = "flame-surge"
+burst = true
+duration = 3.0
+start_duration = 0.30000000000000004
+end_duration = 1.35
+kind = 3
+variant = 4
+metadata/vfx_source = "00gamedevs"
+metadata/vfx_id = "flame-surge"
+metadata/editor_preview_time = 0.7
+
+[node name="Parts" type="Node3D" parent="." unique_id=885068024]
+unique_name_in_owner = true
+
+[node name="Part000" type="MeshInstance3D" parent="Parts" unique_id=2085473434]
+material_override = SubResource("ShaderMaterial_04qu0")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("3_gtsbw")
+metadata/source_name = "school-body"
+
+[node name="Part001" type="MeshInstance3D" parent="Parts" unique_id=1019166971]
+material_override = SubResource("ShaderMaterial_c107o")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("5_14lcr")
+metadata/source_name = "school-particles"
+
+[node name="Motion" type="AnimationPlayer" parent="." unique_id=1217137367]
+unique_name_in_owner = true
+libraries/ = ExtResource("6_f3r1o")

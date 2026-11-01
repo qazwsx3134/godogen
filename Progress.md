@@ -1,6 +1,70 @@
 # 進度與 Agent 交接
 
-## 最新 checkpoint：跨專案改善收斂與 seal 復工（2026-10-30）
+## 最新 checkpoint：統一本機預覽入口（2026-11-01）
+
+- 專案／分支：repo 根目錄預覽工作台、debt-commission、godot-kit／master；基準 `fad04133`。使用者要求集中預覽及故事編輯器開啟方式。本輪未 commit／push／公開部署，保留其他專案與前輪 VFX 尚未提交的變更；未新增或改寫故事。
+- 已完成：新增 `preview/`，Windows 可雙擊 `start.bat`；或在 repo 根目錄執行 `python3 preview/start.py`，開 `http://127.0.0.1:8000/preview/`。首頁通往故事編輯器與特效試映室，只有一個本機服務；原故事網址 `/tools/story_editor/`、同源草稿空間與 project_server 的存檔／試玩保護保留。首頁會提示找不到 Godot 或特效包未建置，缺包時啟動器會嘗試建置；失敗仍可開故事編輯器。支援 `--godot`、`--port` 與 `--no-open`，連接埠改變時瀏覽器草稿空間也會改變。
+- 已更新：根 README、`preview/README.md`、debt 的 README／STORY-EDITOR／session-state、kit showcase README，集中啟動與操作連結。預覽來源仍由各專案維護，不複製一份編輯器或素材。
+- 本輪 L2：`python3 preview/test_preview.py -v` **9 tests PASS**；使用記憶體 HTTP handler 驗證真實故事頁／capabilities／實際 VFX HTML、data、PNG 與 Godot HTML；以暫存故事及模擬驗證器檢查存檔／舊 hash 衝突，並檢查無 token、路徑／symlink／Host 保護、缺包及啟動流程。`node --check preview/preview.js`、`sh -n preview/start.sh`、Python 編譯與文件連結檢查 PASS。未修改 Godot scene，未重跑遊戲／VFX suite；前輪結果見下一 checkpoint。
+- 未驗範圍：實際 `python3 preview/start.py --no-open` 在沙箱建立 socket 時得到 `Operation not permitted`，服務未常駐，瀏覽器／GPU／Windows 雙擊與實際 Godot 圖形試玩均未驗。本輪 HTTP 測試沒有監聽 socket，存檔測試的 Godot 驗證由測試替身處理；不把它寫成瀏覽器或實際 Godot 驗證 PASS。
+- 下一步：在使用者的普通終端機或 Windows 雙擊啟動，檢查故事開啟／場景試玩與特效畫面；若 Godot 不在 PATH，依 `preview/README.md` 用 `--godot` 指定 4.7 執行檔及 Web 範本。已有完整短篇仍待作者構想，前輪 Three 版本差異與 GPU 驗收限制不變。
+
+## 最新 checkpoint：46 種 Three.js 原生移植（2026-11-01）
+
+- 專案／分支：godot-kit／master，基準 `fad04133`。使用者要求「移植 threejs 的」，前輪其餘 44 份已接續實作，現有全部 **46 份**對應 Godot 原生 scene。未 commit／push／公開部署，其他原型／圖片既有修改及 `tools/vfx/pixle_vfx_forge.md` 保留。
+- 已完成：42 種原 JS 幾何／GLSL／自訂頂點屬性移植，原 CPU 動畫保存為 30 Hz AnimationLibrary；另做動態武器拖尾、0.4 秒七段全畫面後製，沿用兩個預警。幾何保存為 `.res`、shader 與可編輯 `.tscn`，42 scene 保存可見預覽時點，runtime reset 從零播放。原生 API 含重播／停止／完成訊號、投射物方向／命中、光束端點與武器綁定。來源 hash／授權／預設參數保留。
+- 展示：41 個 2D／87 個 3D（46 原生＋41 Scenario billboard），3D 預設原生效果。來源篩選、Hit／Stop／速度、慢速自動重播時距；拖影與後製的示範宿主使用獨立 scene。編譯 showcase 44 nodes，2D／3D gallery 分別 20／23 nodes，工具以 Godot pack/save 保留子 scene 引用。
+- 本輪 L2：`test_three_ports.gd` **17,760 checks PASS**（`/tmp/vfx-three-tests.log`），`test_vfx_library.gd` **3,864 PASS**（`/tmp/vfx-three-regression.log`），`test_vfx.gd` **45 PASS**（`/tmp/vfx-three-base.log`），Web clock **7 PASS**（`/tmp/vfx-three-player.log`）；209 個 shader 強制解析通過（`/tmp/vfx-three-allshaders.log`）。原 JS 再製 42 JSON＋stats byte-identical；原始 hash／JS-Python 語法／ZIP 完整性 PASS。編譯 PCK 180 幀 headless 啟動 PASS（`/tmp/vfx-three-pack.log`）。具體命令與修正前 FAIL 證據範圍見 `docs/vfx/VALIDATION.md`。
+- 本輪修正：CW winding／單面剔除、透明排序與不透明 pass、階段性深度／draw count、PackedVector4Array 動畫型別、重製工具 depth variant 冪等性、移除武器後拖尾清理、命中座標包含可編輯 Parts transform。測試不只比較數值，亦檢查 GPU 參數型別與實際 mesh 接觸點。
+- 新網站包：`prototypes/godot-kit/build/vfx-showcase.zip`，**15,839,283 bytes**，SHA-256 `5e3c759afc861d565f33631d00da9bd7e13c619a657555aa4cb0f572ec45fe5b`。`python3 prototypes/godot-kit/build/showcase/serve.py` → `http://127.0.0.1:8765/`；本輪沒有運行中的 server。`build/` 已 ignore，可由 `tools/vfx/build_showcase.py` 重建。
+- 部分／待驗：GPU 外觀、瀏覽器實際 boot、手機觸控／效能仍未驗。Chromium 沿用前輪 socket EPERM 阻礙，未冒稱本輪重跑；匯入／匯出仍有沙箱 TCP listen 錯誤，沒有腳本／shader／資源錯誤。原 JS 目標 Three 0.187.0，離線製作實際用已校驗 cache **0.185.1**；CPU 軌 30 Hz、固定預設幾何，未實作每個 setOptions 動態重建，也未宣稱逐像素相同。未執行額外 Static Impact recipe、其他遊戲／完整 kit L3。
+- 重要檔案：`prototypes/godot-kit/docs/vfx/THREE-PORTS.md`（精度／API／編輯與重製）、`VALIDATION.md`、`SOURCES.md`；`addons/proto_kit/vfx/3d/00gamedevs/`、`library.gd`／來源索引、`tools/vfx/three_port/`、`tests/test_three_ports.gd` 與原 JS 參考 fixture、`showcase/README.md`。
+- 下一步：使用者開新版網站做 GPU／瀏覽器／手機驗收，可用 Chromium 環境執行 `showcase/test_browser.cjs`；依具體外觀差異修正，再同步使用者指定專案。工作區本輪與前輪新增 vfx 素材／scene／shader／工具／測試／文件尚未提交，未同步其他遊戲副本，未使用 AI 生圖。
+
+
+## 最新 checkpoint：VFX 素材接入與網頁試映室（2026-11-01）
+
+- 專案／分支：godot-kit／master，基準 `fad04133`。使用者提供 `vfx-example/`，另要求測試與 Godot／sprite 網頁展示。本輪未 commit／push／公開部署；保留其他原型與圖片既有變更，以及使用者新增的 `tools/vfx/pixle_vfx_forge.md`。
+- 已完成：41 組 Scenario 匯出 PNG／atlas／recipe／README／SpriteFrames 接入，原 PNG bytes 保持；修正貼圖路徑、保留原動畫名／fps／loop，依 pivot 保存 82 個可編輯 2D／3D scene。46 份 Three.js 已盤點原碼 hash／preset／options，圓形／扇形預警兩份保留原方程與生命週期移植到原生 Godot。`vfx/library.gd` 只列可用的 41 個 2D／43 個 3D scene；兩個 gallery 與 32-node showcase 可 F6。
+- 網頁已完成本機建置：`prototypes/godot-kit/showcase/` 原始碼；Sprite 搜尋／播放／逐幀／速度／倍率／透明格線／錨點與 PNG／recipe 下載；另按需載入真實 Godot Web，選 2D／3D、效果並重播。建置隔離 project，沿用同版官方 release JS／WASM／audio worklet 與正式 PCK，不改 kit project.godot。啟動：`python3 prototypes/godot-kit/build/showcase/serve.py`，再開 `http://127.0.0.1:8765/`；本輪沒有運行中的 server。
+- 本輪 L2：`test_vfx_library.gd` **3,815 assertions PASS**（`/tmp/vfx-library-tests-final.log`），`test_vfx.gd` **45 checks PASS**（`/tmp/vfx-base-final.log`）；pivot 反向變異確實 FAIL，還原重跑 PASS。Web 動畫時鐘 Node **7 tests PASS**（`/tmp/vfx-player-tests-final.log`），JS 語法、原檔 hash／HTML assets／來源狀態靜態檢查 PASS。最終編譯 PCK 150 幀 headless 冒煙 PASS（`/tmp/vfx-export-pack-smoke.log`）。匯入／匯出仍有沙箱 TCP listen 錯誤；最終無 SCRIPT／SHADER／資源錯誤。未跑其他遊戲／完整 kit L3。
+- 網站 ZIP：`prototypes/godot-kit/build/vfx-showcase.zip`，11,435,626 bytes，SHA-256 `3b3c4516d30290589a83add59c2958d4e31844b0a861ddc9ab96cefd86b80c12`。build/ 已 ignore，可由 `tools/vfx/build_showcase.py` 重建；不是公開 URL。
+- 部分／未完成：其餘 **44 份 Three.js 尚未移植**；使用者額外 Static Impact recipe 未渲染。Chromium 啟動被 sandbox socket EPERM 擋住，沒有瀏覽器／GPU 外觀／手機驗收證據；不能宣稱 Web boot 已驗收。`showcase/test_browser.cjs` 已備妥，待可用瀏覽器環境接續。
+- 重要文件：`prototypes/godot-kit/showcase/README.md`、`docs/vfx/SOURCES.md`、`docs/vfx/VALIDATION.md`、`addons/proto_kit/vfx/README.md`／`sources.json`／`three_sources.json`。來源再散布說明保留於各 Scenario README 與 00GameDevs MIT notice；Scenario renderer 未打包。
+- 下一步：使用者開啟網站驗收；可用 Chromium 的環境執行 browser suite、實際 shader 外觀與手機觸控；續移植 Three.js 餘項。工作區本輪新增素材／scene／gallery／網站／測試／工具／文件，修改 kit README／.gitignore／播放器與進度，未同步既有遊戲副本、未新增 AI 生圖。
+
+
+## 最新 checkpoint：Godot 共用特效庫（2026-11-01）
+
+- 專案／分支：godot-kit／master，基準 HEAD 以 `git log -1` 查核（本次啟動 context 為 `fad04133`）。使用者要求下載 00GameDevs 與 Scenario Pixel VFX Forge，做成可跨專案使用的 Godot 2D／3D 模組。本輪未 commit／push，原有其他專案及圖片修改保留。
+- 已完成：`addons/proto_kit/vfx/` 的 2D／3D SpriteFrames 播放場景、既有 native 2D／立體碎片／地面環場景、兩個可編輯預覽、原創程序圓環校準圖集。新增 `tools/vfx/import_strip.gd`（單排 PNG 轉 SpriteFrames、來源與 SHA-256 紀錄、拒絕覆寫），沿用 `sync.sh` 跨專案複製；僅同步 `/tmp/vfx-consumer`，未更新其他遊戲副本。
+- 部分完成／阻礙：兩站下載均為 **0 份**，Three.js 移植尚未開始。shell DNS／firecrawl 連線受限；遠端網頁工具只能讀 Scenario 官方頁，無法下載 ZIP；00GameDevs 無法開啟。Scenario 官方頁可確認 PNG／Game-ready ZIP（含 SpriteFrames）匯出，但實際檔案、授權均未驗證。內建 demo 與 native 程式不是網站素材。已詢問是否有本機匯出檔路徑，尚無回覆；未使用 AI 生圖。
+- 本輪 L2：`godot --headless --path prototypes/godot-kit --script res://tests/test_vfx.gd` **45 checks PASS**（`/tmp/vfx-tests.log`）；切格座標變異確實 FAIL，還原重跑 PASS。真實 PNG CLI 匯入／重載、SHA-256、拒絕覆寫／非法切格 PASS；隔離消費者的 2D／3D scene 各 130 幀冒煙無錯。scene 由 Godot pack／save 並重載驗證 node 數／instance 引用。詳見 `docs/vfx/VALIDATION.md`。
+- 匯入仍有沙箱 TCP listen ERR_CANT_CREATE；後續測試與 preview 無 SCRIPT ERROR／Parse Error。未驗視覺、Web／手機與外部素材，未跑完整 kit／其他遊戲 suite，不宣稱 L3。編輯位置存檔／重載後保留、執行不回寫來源已有測試。
+- 重要檔案：`prototypes/godot-kit/addons/proto_kit/vfx/README.md`、`sources.json`、`docs/vfx/SOURCES.md`、`docs/vfx/VALIDATION.md`、`tests/test_vfx.gd`；根 kit README 已登記尚未採用。共用新增屬使用者明確授權例外。
+- 下一步：取得兩站實際 ZIP／JS／貼圖及授權證據的本機路徑或可下載環境；Scenario 優先接上游 SpriteFrames；00GameDevs 依實際匯出碼逐項移植。更新來源目錄後做對應 L2 與 GPU／人工外觀驗收，再同步使用者指定專案。工作區本輪新增 kit vfx／工具／測試／文件、修改 kit README／本檔／LESSONS；不夾帶其他既有變更。
+
+## 最新 checkpoint：seal 存檔寫入保護（2026-10-31）
+
+使用者要求繼續單機開發。`master`／基準 `fad04133`；前輪與本輪變更未提交，本 session 未 commit／push／上傳，其他專案修改保留。
+
+- seal 新增遊戲內 save_store，版本外層不再強轉字串／bool／小數；先遷移驗證再恢復。每次保存檢查待寫快照、現有主檔及較新備份；恢復前核對當時的 bytes，保護遊戲開啟後被替換的資料。沿用 kit 原子寫入及既有遷移，不改 kit 副本／schema v6。
+- 修正前重現失敗 `/tmp/godot-tests.ELMiQg`；本輪 L2 `save_protection m3_hardening world_lifecycle` 三組全 PASS（`/tmp/godot-tests.ClMJR5`），無 SCRIPT ERROR／Parse Error；匯入仍有沙箱 TCP 錯誤。沒有 scene 修改；其他 suite／原型未重跑，沿用各自先前證據，L3 等人工驗收。
+- 追加 v1～v6 正向載入／保存與恢復備份變更案例，save_protection 單獨重跑 PASS（`/tmp/seal-saveguard-final-positive.log`）；只有測試改動，runtime／候選未改，其他兩組沿用本輪 ClMJR5。
+- 新 seal 手機 ZIP 15,115,896 bytes，SHA-256 `1fc3a827659c957f6831ad04cf625d6d62b41f03af092fb61715ead958a41bab`；ZIP／PCK 靜態、IDBFS、編譯 PCK 的較新檔保護／v5 遷移保存冒煙 PASS。新包 Web／IndexedDB／iPhone 未驗，不能沿用舊包 Chromium 證據。
+- 規則、實作限制及命令見 [存檔保護](prototypes/seal-meadow/docs/save-protection.md)，最新產物見 [10-31 報告](prototypes/seal-meadow/production/qa/mobile-candidate-2026-10-31.json)，續作狀態見 [seal checkpoint](prototypes/seal-meadow/production/session-state/active.md)。保護不是跨程序檔案鎖或完整遊戲 schema；多人／戰鬥寵 AI 延後，真機及真人驗收仍待完成。
+
+## 前輪 checkpoint：seal 單機生命週期回修（2026-10-30）
+
+使用者續作指示已執行。`master`，本輪基準 `fad04133`；本 session 未 commit／push／上傳，本輪變更未提交，保留其他專案修改。
+
+- 修正村莊存檔重開後死亡仍使用村莊移動邊界；復活同步草原 zone／bounds、相機、同一寵物與 checkpoint。
+- 修正傳送淡出期間死亡，舊傳送繼續搬動復活角色的競態；死亡清理待互動，淡出後核對生命週期。成功開始釣魚才下坐，缺餌拒絕保留乘坐。
+- 修正前 world_lifecycle 六項／fishing 一項 FAIL（`/tmp/godot-tests.fhnDuc`）；最終 L2 `world_lifecycle fishing companions review_interactions` 四組 PASS（`/tmp/godot-tests.ajHIaM`）。無腳本解析錯誤，匯入仍有沙箱 TCP 錯誤。本輪未改 scene，M2／M3 及其他原型未重跑，沿用各自舊證據；L3 等人工驗收。
+- 最新 seal 手機包 15,113,782 bytes；SHA-256 `e3f3e418de02f17c719c95736a7f253d4023122434a02ca194ffd7a35b029ccd`。ZIP／PCK 靜態、IDBFS 與編譯 PCK 新路徑冒煙 PASS。新包 Web／IndexedDB 與真機仍未驗；多人與戰鬥寵 AI 延後。
+- 詳細命令、限制、未提交狀態及下一步見 [seal checkpoint](prototypes/seal-meadow/production/session-state/active.md)／[回修 QA](prototypes/seal-meadow/production/qa/world-lifecycle-2026-10-30.md)。下一步用最新候選做真人／iPhone 單機驗收，依回饋續作。下方各專案前輪紀錄保留。
+
+## 前輪 checkpoint：跨專案改善收斂與 seal 復工（2026-10-30）
 
 分支 `master`。使用者要求原改善清單持續完成，並接續 seal；必要可逆實作已執行，未 commit／push／上傳，其他工作區修改保留。以下為目前狀態，下面逐輪紀錄保留歷史證據。
 

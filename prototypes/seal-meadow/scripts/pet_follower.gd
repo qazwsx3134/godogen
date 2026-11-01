@@ -31,7 +31,7 @@ func _process(delta: float) -> void:
 	else:
 		actor.scale = _follow_scale
 		if to.length() > 12.0:  # travel or respawn: keep the same follower entity
-			global_position = player.global_position + Vector3(-1.0, 0.0, 0.6)
+			reset_follow()
 		elif to.length() > follow_distance:
 			global_position += to.normalized() * minf(speed * delta, to.length() - follow_distance)
 			actor.face(to)
@@ -40,3 +40,11 @@ func _process(delta: float) -> void:
 	global_position.y = TerrainHeight.height(global_position.x, global_position.z)
 	var p = player.pet
 	actor.display_name = "%s +%d%s" % [PetRules.TYPE_NAMES.get(p.type, p.type), p.level, "（餓）" if p.is_hungry() else ""]
+
+
+## Relocate the existing companion after a discontinuous player move.
+func reset_follow() -> void:
+	if player == null:
+		return
+	global_position = player.global_position + Vector3(-1.0, 0.0, 0.6)
+	global_position.y = TerrainHeight.height(global_position.x, global_position.z)

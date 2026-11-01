@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>特效試映室 · Godogen</title><link rel="stylesheet" href="styles.css"><script defer src="data.js"></script><script defer src="player.js"></script><script defer src="app.js"></script></head>
+<body>
+<header><a class="wordmark" href="#">GODOGEN <span>/ ASSET TOOLS</span></a><span class="local-label">本機素材工作台</span></header>
+<main><div class="heading"><div><p class="eyebrow">LOOK. PLAY. BUILD.</p><h1>特效試映室<span>VFX room</span></h1></div><p class="intro">先看動態，再放進遊戲。<br>逐幀檢視像素圖集，或在 Godot 裡測試場景。</p></div>
+<div class="topbar"><nav aria-label="展示模式" role="tablist"><button id="sprite-tab" role="tab" aria-selected="true" aria-controls="sprite-panel">Sprite 圖集 <span id="sprite-count"></span></button><button id="godot-tab" role="tab" aria-selected="false" aria-controls="godot-panel" tabindex="-1">Godot 特效</button></nav><span class="library-note">Scenario × 00GameDevs</span></div>
+<section id="sprite-panel" role="tabpanel" aria-labelledby="sprite-tab" class="workspace">
+<aside><label class="search-label" for="search">素材目錄</label><input type="search" id="search" placeholder="搜尋名稱或 ID…" autocomplete="off"><p class="result-count" id="results" aria-live="polite"></p><div id="effect-list" class="effect-list" aria-label="選擇素材"></div><p class="source-note">圖集來自 Scenario Pixel VFX Forge。<br>原始幀數、速度與錨點皆保留。</p></aside>
+<div class="viewer"><div class="viewer-title"><div><p class="eyebrow" id="effect-source">SCENARIO / PIXEL VFX</p><h2 id="effect-name">載入素材…</h2></div><span class="pill" id="loop-mode"></span></div>
+<div class="stage checker" id="stage"><canvas id="preview" aria-label="Sprite 動畫預覽"></canvas><span id="load-error" role="alert" hidden></span><span class="stage-label">PIXEL PERFECT</span><span class="stage-corner" id="dimensions"></span></div>
+<div class="transport"><button id="play" class="primary" aria-label="播放動畫">播放</button><button id="restart" aria-label="從頭播放">重播</button><button id="step" aria-label="下一幀">下一幀 →</button><output id="frame-label">01 / 01</output><input id="frame" type="range" min="0" max="0" value="0" aria-label="動畫幀"></div>
+<div class="options"><label>播放速度 <span><input id="fps" type="range" min="1" max="60" value="15"><output id="fps-label">15 fps</output></span></label><label>顯示倍率 <span><input id="scale" type="range" min="1" max="8" value="4"><output id="scale-label">4×</output></span></label><label class="check"><input type="checkbox" id="anchor" checked>顯示錨點</label><label class="check"><input type="checkbox" id="checker" checked>透明底格線</label></div>
+<div class="asset-meta"><code id="asset-id"></code><span><a id="download-png" download>下載 PNG</a><a id="download-recipe" download>Recipe JSON</a></span></div>
+</div></section>
+<section id="godot-panel" role="tabpanel" aria-labelledby="godot-tab" hidden><div class="engine-intro"><div><h2>在真正的 Godot 場景裡試播。</h2><p>切換 2D／3D 分頁，選擇效果、重播或調整速度。3D 含 46 種原生特效與 41 組圖卡；投射物可按 Hit，持續效果可按 Stop。</p></div><button id="load-godot" class="primary">啟動 Godot 預覽</button></div><p id="engine-status" aria-live="polite">第一次啟動需載入引擎，請透過 HTTP 開啟這個展示頁。</p><iframe id="godot-frame" title="Godot 2D 與 3D 特效展示" allow="fullscreen; autoplay" hidden></iframe><a class="engine-link" href="godot/index.html" target="_blank" rel="noopener">在獨立分頁開啟 Godot ↗</a></section>
+</main><footer><span>GODOGEN / EFFECT LIBRARY</span><span>2D 圖集 · 3D 圖卡 · 原生 Shader</span></footer>
+</body></html>

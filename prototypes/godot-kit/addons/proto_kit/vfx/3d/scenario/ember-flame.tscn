@@ -1,0 +1,18 @@
+[gd_scene format=3]
+
+[ext_resource type="SpriteFrames" path="res://addons/proto_kit/vfx/assets/scenario/ember-flame/ember-flame.tres" id="1_r6264"]
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/sheet_effect.gd" id="2_dbgks"]
+
+[node name="EmberFlame" type="AnimatedSprite3D" unique_id=2038597756]
+offset = Vector2(0, 20.8)
+pixel_size = 0.025
+billboard = 1
+texture_filter = 0
+sprite_frames = ExtResource("1_r6264")
+animation = &"ember_flame"
+frame = 2
+script = ExtResource("2_dbgks")
+metadata/vfx_source = "scenario"
+metadata/vfx_id = "ember-flame"
+metadata/placement = "target-ground"
+metadata/depth_hint = "front"

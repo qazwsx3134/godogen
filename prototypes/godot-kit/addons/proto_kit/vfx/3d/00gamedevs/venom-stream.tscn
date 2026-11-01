@@ -1,0 +1,84 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/00gamedevs/source_effect.gd" id="1_o4x4j"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/venom-stream/spatial_part_0.gdshader" id="2_7fef5"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/venom-stream/part_0.res" id="3_kgyfv"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/venom-stream/spatial_part_1.gdshader" id="4_h0a8g"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/venom-stream/part_1.res" id="5_81npi"]
+[ext_resource type="AnimationLibrary" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/venom-stream/motion.res" id="6_6xivo"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ih8pa"]
+resource_local_to_scene = true
+render_priority = 1
+shader = ExtResource("2_7fef5")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 9420
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 1.2
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uStopTime = -1.0
+shader_parameter/uEndDuration = 0.7
+shader_parameter/uStretch = 1.0
+shader_parameter/uQuantity = 8.0
+shader_parameter/uSpread = 1.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.4125426, 0.7156935, 0.15896083)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ay0gr"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("4_h0a8g")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 12
+shader_parameter/source_instance_count = 256.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 1.2
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uStopTime = -1.0
+shader_parameter/uEndDuration = 0.7
+shader_parameter/uStretch = 1.0
+shader_parameter/uQuantity = 8.0
+shader_parameter/uSpread = 1.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.4125426, 0.7156935, 0.15896083)
+
+[node name="VenomStream" type="Node3D" unique_id=320652252]
+script = ExtResource("1_o4x4j")
+effect_id = "venom-stream"
+start_duration = 0.25
+end_duration = 0.7
+kind = 1
+variant = 6
+metadata/vfx_source = "00gamedevs"
+metadata/vfx_id = "venom-stream"
+metadata/editor_preview_time = 1.2
+
+[node name="Parts" type="Node3D" parent="." unique_id=34021309]
+unique_name_in_owner = true
+
+[node name="Part000" type="MeshInstance3D" parent="Parts" unique_id=1192243380]
+material_override = SubResource("ShaderMaterial_ih8pa")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("3_kgyfv")
+metadata/source_name = "utility-body"
+
+[node name="Part001" type="MeshInstance3D" parent="Parts" unique_id=990644215]
+material_override = SubResource("ShaderMaterial_ay0gr")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("5_81npi")
+metadata/source_name = "utility-detail-particles"
+
+[node name="Motion" type="AnimationPlayer" parent="." unique_id=30907181]
+unique_name_in_owner = true
+libraries/ = ExtResource("6_6xivo")

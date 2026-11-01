@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-31",
+  "scope": "Prior single-player content plus checked save envelopes, pre-write validation and recovery race protection",
+  "artifact": "prototypes/seal-meadow/build/seal-meadow-mobile-web.zip",
+  "zip_sha256": "1fc3a827659c957f6831ad04cf625d6d62b41f03af092fb61715ead958a41bab",
+  "zip_bytes": 15115896,
+  "pck_sha256": "ce44283c795a9ac77bc306d8f3e65297efe22f3a95f574f3b71b8cb8a18d133f",
+  "pck_bytes": 35107140,
+  "packed_files": 340,
+  "checks": {
+    "export": "passed",
+    "zip_integrity_and_pck_match": "passed",
+    "required_save_resources": "passed",
+    "tests_and_tools_excluded": "passed",
+    "idbfs_patch": "passed",
+    "compiled_pck_rejects_future_replacement_and_migrates_v5": "passed",
+    "l2_save_protection_m3_hardening_world_lifecycle": "passed",
+    "v1_through_v6_positive_compatibility_and_replaced_recovery_backup": "passed"
+  },
+  "logs": {
+    "build": "/tmp/seal-saveguard-build-20261031.log",
+    "compiled_pck_smoke": "/tmp/seal-saveguard-pack-20261031.log",
+    "l2": "/tmp/godot-tests.ClMJR5",
+    "before_fix": "/tmp/godot-tests.ELMiQg",
+    "save_protection_final_positive": "/tmp/seal-saveguard-final-positive.log"
+  },
+  "sources_sha256": {
+    "scripts/main.gd": "7f2021f379842286770c7088cf60ffeeee3d7c58d5871c152c535b175ac0c010",
+    "scripts/save_store.gd": "309c0e17a304d655f6621f5c2df99c1b92ebdfa77ccb900d69405428be591e6a",
+    "scripts/save_validation.gd": "41792ff36984f5647c57cd7051830388f3d99604534463f9c61375d8503f4dae",
+    "addons/proto_kit/save_slots.gd": "853bbb00bf4ddcf342782b9b50a1c2167312f50ef610c8be39ed065ee069835a",
+    "addons/proto_kit/atomic_file.gd": "a011b9406c1ad1bb2782484e65e07d413e035e6cd3bbcb8edc8799f589129299"
+  },
+  "previous_candidate": {
+    "zip_sha256": "e3f3e418de02f17c719c95736a7f253d4023122434a02ca194ffd7a35b029ccd",
+    "report": "prototypes/seal-meadow/production/qa/mobile-candidate-2026-10-30.json",
+    "artifact_replaced_by_this_build": true
+  },
+  "unverified": [
+    "Chromium Web interaction and IndexedDB after this export: sandbox forbids socket creation",
+    "iPhone Safari real device",
+    "Thermal and long-session performance"
+  ],
+  "limitations": [
+    "Import/export reported sandbox TCP listener failures; no script parse errors observed",
+    "Desktop headless compiled PCK smoke is not Web/WASM or IndexedDB validation",
+    "No OS locking or cross-process merge; checks do not close the check-to-write race window",
+    "M2, fishing and companions suites not rerun this batch; previous results belong to previous source states",
+    "Full L3 suite waits for manual acceptance",
+    "No upload or deployment"
+  ],
+  "test_source_sha256": {
+    "tests/test_save_protection.gd": "20d363ed38e1ebf5109e1c13e2cc0fce1da00055f0a13e5107db37532eb5ef09"
+  }
+}

@@ -44,6 +44,8 @@
 - **在主場景 `_ready()` 換場景的錯誤 headless 測試看不到**（測試用 `root.add_child()`）→ 真的跑一次看 log 的 ERROR。（[testing-and-balance](godot-kit/skills/godot-prototype-to-itch/references/testing-and-balance.md#切場景與載入畫面title--loading--main踩過的坑)）
 - **用 python `str.replace` 批次改檔，比對不到也照印 ok** → 改檔腳本一律 `assert old in s`。（[pachinko](pachinko/TODO.md#盤面重設計)）
 
+- **等待動畫自動 `queue_free()` 時，Lambda 直接 capture node 會報「Lambda capture … was freed」，即使 `is_instance_valid` 檢查也來不及** → capture `WeakRef`，用 `get_ref() == null` 等待；同時檢查 log 的引擎 ERROR，不能只看測試 exit code。（[godot-kit VFX 驗證](godot-kit/docs/vfx/VALIDATION.md)，2026-11-01）
+
 ## Scene、UI 與 Godot API
 
 - **外部改 `.tscn` 時使用者的 Godot 編輯器開著同一個專案**，編輯器存檔會蓋回去 → 改前 `ps aux | grep -i godot`；開著就先講，請使用者重新載入。（[CLAUDE.md](../CLAUDE.md) 2026-10-14）
@@ -61,6 +63,13 @@
 - **連續升級面板出現在手指剛點過的位置，誤選** → 加 0.35 秒選卡鎖（遊戲時間 timer）。（[godot-prototype-to-itch](godot-kit/skills/godot-prototype-to-itch/SKILL.md)）
 - **滑鼠移到卡片或按鈕上，內容整個看不見**（2026-10-28，hero-horde-idle）→ 從 taskbar-hero 複製來的介面有兩種：蓋在卡片上的透明按鈕（`InspectButton`／`SelectButton`）hover、pressed 樣式是不透明色塊，把圖示整個蓋掉；有覆寫深色 `font_color` 的按鈕沒覆寫 hover／pressed／focus 字色，hover 時退回主題的白字。蓋在內容上的按鈕狀態樣式用半透明（alpha ≤ 0.2）或只畫框；覆寫 `font_color` 時連同 `font_hover_color`、`font_pressed_color`、`font_hover_pressed_color`、`font_focus_color` 一起設。用 `push_input` 送滑鼠移動與點擊再截圖驗證（座標要乘 `root.get_final_transform()`）。其他從 taskbar-hero 複製介面的原型大概也有。（[hero-horde-idle](hero-horde-idle/docs/PROGRESS.md)）
 - **推王裡所有英雄都變成一攤橫條（看起來像史萊姆）**（2026-10-28，hero-horde-idle）→ 圖集從 6 列擴成 18 列（加形態），材質 `materials/heroes.tres` 的 `frames` 還是 `(9, 6)`，每格塞進 3 列圖而被壓扁。改圖集後由 `Sprite3DSheet.apply(material)` 依 json 設定格數（`army.gd setup`），並加測試比對材質與 json；只看資料（形態、cell 編號）都對，要放大截圖才看得出。（[hero-horde-idle](hero-horde-idle/docs/PROGRESS.md)）
+
+- **傳送淡出 await 中死亡，復活後仍被舊傳送搬走；只換角色座標也會留下舊區域 bounds**（2026-10-30，seal-meadow）→ 死亡使生命週期編號失效，等待結束先核對再傳送；復活事件同步地圖、相機、跟隨與 checkpoint，測村莊存檔重開及淡出中死亡。（[修正規格](seal-meadow/design/quick-specs/world-lifecycle-2026-10-30.md)）
+- **Sprite2D 與 Sprite3D 的 offset.y 方向相反**（2026-11-01，godot-kit VFX）→ 從 recipe pivot 匯入時，2D 用 `(0.5-pivot.y)*h`，3D 用 `(pivot.y-0.5)*h`；用 `generate_triangle_mesh()` 驗證實際底邊位置。（[VFX 來源接入](godot-kit/docs/vfx/SOURCES.md)）
+- **Three.js GLSL 的逗號多 uniform 宣告與區域變數遮蔽 uniform 直接移到 Godot 會編譯失敗**（2026-11-01，godot-kit VFX）→ uniform 逐一宣告，shader uniform 名與區域變數分開；headless 匯入後檢查 SHADER ERROR，不能只看 exit code。（[VFX 驗證](godot-kit/docs/vfx/VALIDATION.md)）
+- **AnimationPlayer 連續插值 PackedVector4Array shader uniform 時會產生通用 Array**（2026-11-01，godot-kit VFX）→ vec4 array 保存為離散軌；對照數值之外，斷言實際 shader 參數的 Variant 型別。只攤平陣列比數值會漏掉 GPU 接口錯誤。（[Three.js 移植](godot-kit/docs/vfx/THREE-PORTS.md)）
+- **Three.js 原幾何直接交給 Godot，單面材質的正反面相反**（2026-11-01，godot-kit VFX）→ 每個三角形連同所有頂點屬性換序 CCW→CW，保留來源 FrontSide／DoubleSide 策略；製作工具標記已換序，重跑不可二次反轉。shader 檢查須呼叫 `get_shader_uniform_list()` 觸發延遲解析，僅設定 code 不足。（[Three.js 移植](godot-kit/docs/vfx/THREE-PORTS.md)）
+- **已 free 的 Godot Object 與 null 比較會讓解除綁定分支漏判**（2026-11-01，godot-kit VFX）→ 以獨立 `_was_bound` 記錄綁定狀態，再用 `is_instance_valid()` 判斷宿主；測試真實 free 後的收尾，避免武器拖尾永久活動。（[VFX 驗證](godot-kit/docs/vfx/VALIDATION.md)）
 
 ## 匯出與網頁版
 
@@ -101,6 +110,8 @@
 ## 存檔與劇本
 
 - **Dialogic 存的是 timeline 的 `event_index`**，劇本重新轉檔後舊存檔從錯的事件繼續、不報錯 → debt-commission 保留 StoryRunner。存檔位置要用穩定的 id，不要用序號。（[DIALOGIC-EVALUATION](debt-commission/docs/DIALOGIC-EVALUATION.md)）
+
+- **只在啟動檢查存檔版本，開啟後的新檔仍會被自動保存覆寫**（2026-10-31，seal-meadow）→ 寫入前核對現有主檔／備份及待寫快照；恢復備份前比對啟動選定的 bytes，避免把外部新檔換回舊資料；版本不先 int 強轉。這是檢查，不是跨程序檔案鎖。（[存檔保護](seal-meadow/docs/save-protection.md)）
 
 ## 多 agent 協作（Herdr、Codex、子 agent）
 

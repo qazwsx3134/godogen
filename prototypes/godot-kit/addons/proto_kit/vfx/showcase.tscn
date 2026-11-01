@@ -1,0 +1,19 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://addons/proto_kit/vfx/gallery_2d.tscn" id="1_pvtew"]
+[ext_resource type="PackedScene" path="res://addons/proto_kit/vfx/gallery_3d.tscn" id="2_0xrvc"]
+
+[node name="GodotVfxShowcase" type="TabContainer" unique_id=1616280250]
+anchor_right = 1.0
+anchor_bottom = 1.0
+current_tab = 0
+
+[node name="2D" parent="." unique_id=1013524590 instance=ExtResource("1_pvtew")]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="3D" parent="." unique_id=910942784 instance=ExtResource("2_0xrvc")]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1

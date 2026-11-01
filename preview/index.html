@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>預覽工作台 · Godogen</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="preview.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/preview/">GODOGEN <span>/ PREVIEW</span></a>
+    <span class="local"><span aria-hidden="true"></span> 本機工作台</span>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="title">
+      <p class="eyebrow">YOUR CREATIVE WORKSPACE</p>
+      <h1 id="title">想預覽什麼？</h1>
+      <p>故事、畫面與特效，從這裡開始。</p>
+    </section>
+
+    <section class="tools" aria-label="預覽工具">
+      <article class="tool story">
+        <div class="tool-top"><span class="number">01 / STORY</span><span class="tag">編輯與試玩</span></div>
+        <div class="art story-art" aria-hidden="true"><span class="node one"></span><span class="node two"></span><span class="node three"></span><span class="line a"></span><span class="line b"></span></div>
+        <div class="tool-body">
+          <h2>故事編輯器</h2>
+          <p>用節點編寫故事、連接分支，從選擇的場景開啟 Godot 試玩。</p>
+          <a class="action" href="/tools/story_editor/">開啟故事編輯器 <span aria-hidden="true">↗</span></a>
+          <p class="hint" id="story-status" aria-live="polite">進入後選擇故事與場景，在右側展開「試玩這個場景」。</p>
+        </div>
+      </article>
+
+      <article class="tool effects">
+        <div class="tool-top"><span class="number">02 / VISUAL EFFECTS</span><span class="tag">2D / 3D</span></div>
+        <div class="art vfx-art" aria-hidden="true"><span class="orbit orbit-one"></span><span class="orbit orbit-two"></span><span class="spark core"></span><span class="spark s1"></span><span class="spark s2"></span><span class="spark s3"></span><span class="spark s4"></span></div>
+        <div class="tool-body">
+          <h2>特效試映室</h2>
+          <p>逐幀查看 Sprite 圖集，或在 Godot 播放 2D／3D 特效。</p>
+          <a class="action" id="vfx-link" href="/preview/vfx/">開啟特效試映室 <span aria-hidden="true">↗</span></a>
+          <p class="hint" id="vfx-status" aria-live="polite">先選 Sprite 圖集或 Godot 特效，再挑選想看的素材。</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="note" aria-label="使用提醒">
+      <div><span class="note-mark" aria-hidden="true">✳</span><h2>開始之前</h2></div>
+      <p>預覽服務需保持開啟。故事的「驗證並存檔」與場景試玩需要 Godot 4.7；存檔會寫回專案。</p>
+    </section>
+  </main>
+  <footer><span>GODOGEN / PREVIEW WORKSPACE</span><span>本機運行 · 你的創作留在專案中</span></footer>
+</body>
+</html>

@@ -1,0 +1,50 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/00gamedevs/trail_demo.gd" id="1_rqvmn"]
+[ext_resource type="PackedScene" path="res://addons/proto_kit/vfx/3d/00gamedevs/weapon-smear.tscn" id="2_t76xi"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8l2iq"]
+shading_mode = 0
+albedo_color = Color(0.7, 0.85, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_7qqnx"]
+material = SubResource("StandardMaterial3D_8l2iq")
+size = Vector3(0.08, 1.4, 0.08)
+
+[sub_resource type="Animation" id="Animation_hiult"]
+length = 1.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Weapon:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.35, 0.7, 1.05, 1.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(15, 0, -65), Vector3(15, 0, 65), Vector3(15, 0, -65), Vector3(15, 0, 65), Vector3(15, 0, -65)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fbl27"]
+_data = {
+&"swing": SubResource("Animation_hiult")
+}
+
+[node name="WeaponTrailPreview" type="Node3D" unique_id=1547198206]
+script = ExtResource("1_rqvmn")
+
+[node name="Trail" parent="." unique_id=567259089 instance=ExtResource("2_t76xi")]
+unique_name_in_owner = true
+
+[node name="Weapon" type="Node3D" parent="." unique_id=1566089400]
+unique_name_in_owner = true
+
+[node name="Blade" type="MeshInstance3D" parent="Weapon" unique_id=382312505]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+mesh = SubResource("BoxMesh_7qqnx")
+
+[node name="Swing" type="AnimationPlayer" parent="." unique_id=1841797308]
+unique_name_in_owner = true
+libraries/ = SubResource("AnimationLibrary_fbl27")

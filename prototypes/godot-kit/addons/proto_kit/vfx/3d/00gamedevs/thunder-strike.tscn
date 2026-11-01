@@ -1,0 +1,80 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/00gamedevs/source_effect.gd" id="1_llnyh"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/thunder-strike/spatial_part_0.gdshader" id="2_ho2h5"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/thunder-strike/part_0.res" id="3_l0q5t"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/thunder-strike/spatial_part_1.gdshader" id="4_h4m3y"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/thunder-strike/part_1.res" id="5_85g2q"]
+[ext_resource type="AnimationLibrary" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/thunder-strike/motion.res" id="6_t0h25"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fgfk3"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("2_ho2h5")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 8568
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uRetire = 0.0
+shader_parameter/uOpening = 1.0
+shader_parameter/uStopTime = -1.0
+shader_parameter/uQuantity = 1.0
+shader_parameter/uTime = 0.36
+shader_parameter/uStretch = 1.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.02121901, 0.18782078, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ydvsp"]
+resource_local_to_scene = true
+render_priority = 3
+shader = ExtResource("4_h4m3y")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 256.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 0.36
+shader_parameter/uStopTime = -1.0
+shader_parameter/uQuantity = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uStretch = 1.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.02121901, 0.18782078, 1)
+
+[node name="ThunderStrike" type="Node3D" unique_id=315626389]
+script = ExtResource("1_llnyh")
+effect_id = "thunder-strike"
+burst = true
+duration = 2.6
+start_duration = 0.26
+end_duration = 1.1700000000000002
+kind = 3
+variant = 5
+metadata/vfx_source = "00gamedevs"
+metadata/vfx_id = "thunder-strike"
+metadata/editor_preview_time = 0.36
+
+[node name="Parts" type="Node3D" parent="." unique_id=1051024631]
+unique_name_in_owner = true
+
+[node name="Part000" type="MeshInstance3D" parent="Parts" unique_id=1528209599]
+material_override = SubResource("ShaderMaterial_fgfk3")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("3_l0q5t")
+metadata/source_name = "school-body"
+
+[node name="Part001" type="MeshInstance3D" parent="Parts" unique_id=1916921342]
+material_override = SubResource("ShaderMaterial_ydvsp")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("5_85g2q")
+metadata/source_name = "school-particles"
+
+[node name="Motion" type="AnimationPlayer" parent="." unique_id=1436308071]
+unique_name_in_owner = true
+libraries/ = ExtResource("6_t0h25")

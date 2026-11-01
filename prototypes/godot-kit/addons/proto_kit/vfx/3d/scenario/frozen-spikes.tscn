@@ -1,0 +1,18 @@
+[gd_scene format=3]
+
+[ext_resource type="SpriteFrames" path="res://addons/proto_kit/vfx/assets/scenario/frozen-spikes/frozen-spikes.tres" id="1_ldqv7"]
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/sheet_effect.gd" id="2_ona35"]
+
+[node name="FrozenSpikes" type="AnimatedSprite3D" unique_id=2038597756]
+offset = Vector2(0, 28.16)
+pixel_size = 0.025
+billboard = 1
+texture_filter = 0
+sprite_frames = ExtResource("1_ldqv7")
+animation = &"frozen_spikes"
+frame = 2
+script = ExtResource("2_ona35")
+metadata/vfx_source = "scenario"
+metadata/vfx_id = "frozen-spikes"
+metadata/placement = "target-ground"
+metadata/depth_hint = "front"

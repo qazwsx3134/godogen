@@ -1,0 +1,16 @@
+[gd_scene format=3]
+
+[ext_resource type="SpriteFrames" path="res://addons/proto_kit/vfx/assets/scenario/lucky-loot/lucky-loot.tres" id="1_0onxq"]
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/2d/sheet_effect.gd" id="2_geky1"]
+
+[node name="LuckyLoot" type="AnimatedSprite2D" unique_id=341124408]
+texture_filter = 1
+sprite_frames = ExtResource("1_0onxq")
+animation = &"lucky_loot"
+frame = 2
+offset = Vector2(0, -26.400002)
+script = ExtResource("2_geky1")
+metadata/vfx_source = "scenario"
+metadata/vfx_id = "lucky-loot"
+metadata/placement = "target-ground"
+metadata/depth_hint = "front"

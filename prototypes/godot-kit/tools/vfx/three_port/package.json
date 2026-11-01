@@ -1,0 +1,6 @@
+{
+  "name": "godogen-vfx-port-authoring",
+  "private": true,
+  "type": "module",
+  "dependencies": {"three": "0.185.1"}
+}

@@ -23,9 +23,9 @@ env -u WAYLAND_DISPLAY xvfb-run -a godot --path . --resolution 1280x720 --script
 
 操作：點地面移動（按住持續走）、點怪物追打；閒置時受擊會自動反擊，技能也會選擇命中的存活怪，手動移動與既有目標優先。點地上物品靠近撿起，點傳送圈或名稱前往並顯示選取外環；點小地圖或「世界地圖」查看兩區。右上可開啟寵物／背包；寵物進化到第 2 階後可乘坐（移速 ×1.25），點怪、受傷或成功施法會下坐。背包可切換「物品／精煉」；左側可開啟設定、冒險圖鑑與衣櫥，成就可解鎖外觀及裝飾光環。點村長接任務、買賣及購買釣餌，靠近草原池塘的釣點可釣魚。右下技能鈕或 Q 放範圍揮砍，蘋果鈕補血。手機觸控與滑鼠相同；鏡頭固定，不能轉；桌面另有 WASD 移動、空白鍵打最近的怪、T 切換白天／黃昏。
 
-測試（headless）：`tests/test_m0.gd`、`test_m1.gd`、`test_m1_loot.gd`、`test_m2.gd`、`test_m3.gd`、`test_m3_hardening.gd`、`test_collection.gd`、`test_fishing.gd`、`test_wardrobe.gd`、`test_companions.gd`、`test_content.gd` 與 `test_review_interactions.gd`；從 repo 根目錄執行 `env XDG_DATA_HOME=/tmp/seal-tests XDG_CONFIG_HOME=/tmp/seal-tests-config TEST_TIMEOUT=120 bash prototypes/godot-kit/tools/run_tests.sh prototypes/seal-meadow`。核心循環短測：`godot --headless --path . --fixed-fps 60 -s tests/bot_m1.gd -- clear 5`。bot 的 `sweeps` 是實際完成施放的次數，`sweep_attempts` 包含被取消的施放。本輪各項證據與待重跑項目見 [PROGRESS.md](PROGRESS.md)。
+測試（headless）：`tests/test_m0.gd`、`test_m1.gd`、`test_m1_loot.gd`、`test_m2.gd`、`test_m3.gd`、`test_m3_hardening.gd`、`test_collection.gd`、`test_fishing.gd`、`test_wardrobe.gd`、`test_companions.gd`、`test_world_lifecycle.gd`、`test_save_protection.gd`、`test_content.gd` 與 `test_review_interactions.gd`；從 repo 根目錄執行 `env XDG_DATA_HOME=/tmp/seal-tests XDG_CONFIG_HOME=/tmp/seal-tests-config TEST_TIMEOUT=120 bash prototypes/godot-kit/tools/run_tests.sh prototypes/seal-meadow`。核心循環短測：`godot --headless --path . --fixed-fps 60 -s tests/bot_m1.gd -- clear 5`。bot 的 `sweeps` 是實際完成施放的次數，`sweep_attempts` 包含被取消的施放。本輪各項證據與待重跑項目見 [PROGRESS.md](PROGRESS.md)。
 
-網頁匯出：`Web` 是通用 preset，`Mobile Web` 是 ETC2 手機候選。`tools/build_mobile_web.sh` 已建立 `build/mobile-web/` 和 `build/seal-meadow-mobile-web.zip` 並套 IDBFS 補丁；`build/web/` 為 2026-10-27 舊版。2026-10-30 候選包含出售確認與 S34 乘坐；最新匯出／PCK／ZIP 證據見 [候選報告](production/qa/mobile-candidate-2026-10-30.json)。Chromium 載入、設定、v4／v5→v6、精煉與衣櫥的既有 PASS 屬於 10-29 舊包；新包瀏覽器／IndexedDB 因沙箱禁止 socket 尚未驗證。未上傳，iPhone 真機相容性待驗證。
+網頁匯出：`Web` 是通用 preset，`Mobile Web` 是 ETC2 手機候選。`tools/build_mobile_web.sh` 已建立 `build/mobile-web/` 和 `build/seal-meadow-mobile-web.zip` 並套 IDBFS 補丁；`build/web/` 為 2026-10-27 舊版。2026-10-31 候選包含出售確認、S34 乘坐、跨區復活與存檔寫入保護；最新匯出／PCK／ZIP 證據見 [候選報告](production/qa/mobile-candidate-2026-10-31.json)。Chromium 載入、設定、v4／v5→v6、精煉與衣櫥的既有 PASS 屬於 10-29 舊包；新包瀏覽器／IndexedDB 因沙箱禁止 socket 尚未驗證。未上傳，iPhone 真機相容性待驗證。
 
 分層驗證：單一規則改動執行其對應 `tests/test_*.gd`（L1）；跨系統或回修以該測試加受影響的少量回歸（L2），例如 `bash prototypes/godot-kit/tools/run_tests.sh prototypes/seal-meadow m3 m3_hardening review_interactions`。里程碑的完整 suite（L3）在使用者手動驗收後執行；改 scene 後另做 Godot headless 匯入。
 
@@ -58,6 +58,10 @@ env -u WAYLAND_DISPLAY xvfb-run -a godot --path . --resolution 1280x720 --script
 
 2026-10-29：村長的一鍵出售先顯示品項、數量與總金額，確認後才出售；包含養成材料，背包變動須重開清單。[規格](design/quick-specs/material-sale-2026-10-29.md)。確認視窗可在 `ui/sell_confirmation.tscn` 調整大小與 Theme。
 
-2026-10-30 手機候選已重建，包含材料出售確認；[本次驗證與雜湊](production/qa/mobile-candidate-2026-10-30.json)。匯出／ZIP／PCK 檢查及滿包大字 M2 通過；本包 Chromium 與 IndexedDB 重開尚未驗證，先前瀏覽器結果屬舊包。
+2026-10-30 手機候選已重建，包含材料出售確認；[本次驗證與雜湊](production/qa/mobile-candidate-2026-10-31.json)。匯出／ZIP／PCK 檢查及滿包大字 M2 通過；本包 Chromium 與 IndexedDB 重開尚未驗證，先前瀏覽器結果屬舊包。
 
 S34 單機乘坐的範圍與解鎖見 [GDD](design/gdd/battle-pets-guarders.md)、[TDD](docs/architecture/systems/battle-pets-guarders.md)、[QA](production/qa/systems/battle-pets-guarders.md)。`scenes/pet_follower.tscn` 可調跟隨 Actor 比例，根腳本 export `mounted_scale` 調乘坐比例。沿用單一寵物及現有占位素材，戰鬥寵 AI 尚未實作。L2 指令：`bash prototypes/godot-kit/tools/run_tests.sh prototypes/seal-meadow companions m3 review_interactions`（repo 根目錄）。
+
+2026-10-30 單機交互回修：村莊存檔重開後死亡，會回草原路牌並同步移動邊界、相機、跟隨及存檔；傳送淡出中死亡會取消舊傳送。成功開始釣魚會下坐，缺餌拒絕保留乘坐。見 [規格](design/quick-specs/world-lifecycle-2026-10-30.md)／[L2 QA](production/qa/world-lifecycle-2026-10-30.md)；對應回歸 `world_lifecycle fishing companions review_interactions`。
+
+2026-10-31 存檔保護：載入不再強轉版本字串／bool／小數；每次保存核對現有檔案，較新主檔或備份、異常主檔、無效快照及備份恢復期間的檔案變動都會停止寫入。既有 v1～v5 遷移與有效備份恢復保留。責任與限制見 [存檔保護](docs/save-protection.md)；L2：`save_protection m3_hardening world_lifecycle`。

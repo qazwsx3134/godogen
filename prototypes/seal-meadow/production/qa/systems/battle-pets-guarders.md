@@ -22,3 +22,5 @@ L2 對應：companions（新功能）、m3（寵物養成與精煉）、review_i
 - 場景以 Godot PackedScene 儲存，node 數 157→161、子 scene 引用一致；製作過程有 reparent owner 暫態警告，存回後再載入／執行成功。正常匯入與執行不跑產生器。
 - 手機 ZIP 已重建；靜態 ZIP／PCK、IDBFS、資源入包與編譯 PCK 實例化冒煙通過。報告 [mobile-candidate-2026-10-30.json](../mobile-candidate-2026-10-30.json)。桌面 headless PCK 不等於 WASM／Safari 驗證。
 - 本輪未重跑 M2，沿用 `/tmp/godot-tests.8mkgik` 的出售滿包證據；完整 suite 依 L3 規則等人工驗收後執行。
+
+2026-10-30 後續回修：跨區復活／舊傳送取消及釣魚有效開始下坐已補；本輪 L2 `world_lifecycle fishing companions review_interactions` 全 PASS（`/tmp/godot-tests.ajHIaM`）。先前列出的 KN9GPi 是前一輪 S34 證據；最新手機包及限制見 [交互 QA](../world-lifecycle-2026-10-30.md)。

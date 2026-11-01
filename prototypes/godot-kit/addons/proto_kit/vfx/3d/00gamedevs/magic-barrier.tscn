@@ -1,0 +1,143 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/00gamedevs/source_effect.gd" id="1_xuesv"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/magic-barrier/spatial_part_0.gdshader" id="2_c14d0"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/magic-barrier/part_0.res" id="3_fe68m"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/magic-barrier/spatial_part_1.gdshader" id="4_p0g43"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/magic-barrier/part_1.res" id="5_t7vjr"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/magic-barrier/spatial_part_2.gdshader" id="6_kvei2"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/magic-barrier/part_2.res" id="7_o1x33"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/magic-barrier/spatial_part_3.gdshader" id="8_5leo0"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/magic-barrier/part_3.res" id="9_ypess"]
+[ext_resource type="AnimationLibrary" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/magic-barrier/motion.res" id="10_f43wa"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_o0fnp"]
+resource_local_to_scene = true
+render_priority = 3
+shader = ExtResource("2_c14d0")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 384.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uStopTime = -1.0
+shader_parameter/uEndDuration = 1.0
+shader_parameter/uQuantity = 1.0
+shader_parameter/uSpread = 1.0
+shader_parameter/uEmitterTime = 0.7999999999999999
+shader_parameter/uStretch = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.49693298, 0.3662526, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_amakn"]
+resource_local_to_scene = true
+render_priority = 1
+shader = ExtResource("4_p0g43")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = null
+shader_parameter/source_vertices_per_instance = 3462
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.49693298, 0.3662526, 1)
+shader_parameter/uEmitterTime = 0.7999999999999999
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_025st"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("6_kvei2")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = null
+shader_parameter/source_vertices_per_instance = 3462
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.49693298, 0.3662526, 1)
+shader_parameter/uEmitterTime = 0.7999999999999999
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wlddm"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("8_5leo0")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 4680
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.49693298, 0.3662526, 1)
+shader_parameter/uEmitterTime = 0.7999999999999999
+
+[node name="MagicBarrier" type="Node3D" unique_id=375079500]
+script = ExtResource("1_xuesv")
+effect_id = "magic-barrier"
+start_duration = 0.7
+end_duration = 1.0
+kind = 2
+variant = 3
+metadata/vfx_source = "00gamedevs"
+metadata/vfx_id = "magic-barrier"
+metadata/editor_preview_time = 0.7999999999999999
+
+[node name="Parts" type="Node3D" parent="." unique_id=680597948]
+unique_name_in_owner = true
+
+[node name="Part000" type="MeshInstance3D" parent="Parts" unique_id=194380602]
+material_override = SubResource("ShaderMaterial_o0fnp")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("3_fe68m")
+metadata/source_name = "Part0"
+
+[node name="Part001" type="MeshInstance3D" parent="Parts" unique_id=2076775190]
+transform = Transform3D(1, 0, 0, 0, 2.220446e-16, 1, 0, -1, 2.220446e-16, 0, 0.025, 0)
+material_override = SubResource("ShaderMaterial_amakn")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("5_t7vjr")
+metadata/source_name = "Part1"
+metadata/phase_ranges = [6, 3456]
+
+[node name="Part002" type="MeshInstance3D" parent="Parts" unique_id=42250386]
+transform = Transform3D(1, 0, 0, 0, 2.220446e-16, 1, 0, -1, 2.220446e-16, 0, 0.015, 0)
+material_override = SubResource("ShaderMaterial_025st")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("7_o1x33")
+metadata/source_name = "Part2"
+metadata/phase_ranges = [6, 3456]
+
+[node name="Part003" type="MeshInstance3D" parent="Parts" unique_id=703494502]
+material_override = SubResource("ShaderMaterial_wlddm")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("9_ypess")
+metadata/source_name = "Part3"
+
+[node name="Motion" type="AnimationPlayer" parent="." unique_id=1238271780]
+unique_name_in_owner = true
+libraries/ = ExtResource("10_f43wa")

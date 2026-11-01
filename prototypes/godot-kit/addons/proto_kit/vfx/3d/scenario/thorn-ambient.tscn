@@ -1,0 +1,17 @@
+[gd_scene format=3]
+
+[ext_resource type="SpriteFrames" path="res://addons/proto_kit/vfx/assets/scenario/thorn-ambient/thorn-ambient.tres" id="1_wnd66"]
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/sheet_effect.gd" id="2_k4a7q"]
+
+[node name="ThornAmbient" type="AnimatedSprite3D" unique_id=2038597756]
+pixel_size = 0.025
+billboard = 1
+texture_filter = 0
+sprite_frames = ExtResource("1_wnd66")
+animation = &"thorn_ambient"
+frame = 2
+script = ExtResource("2_k4a7q")
+metadata/vfx_source = "scenario"
+metadata/vfx_id = "thorn-ambient"
+metadata/placement = "screen"
+metadata/depth_hint = "front"

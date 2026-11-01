@@ -1,0 +1,16 @@
+[gd_scene format=3]
+
+[ext_resource type="SpriteFrames" path="res://addons/proto_kit/vfx/assets/scenario/blaze-tornado/blaze-tornado.tres" id="1_y74og"]
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/2d/sheet_effect.gd" id="2_n8823"]
+
+[node name="BlazeTornado" type="AnimatedSprite2D" unique_id=341124408]
+texture_filter = 1
+sprite_frames = ExtResource("1_y74og")
+animation = &"blaze_tornado"
+frame = 2
+offset = Vector2(0, -43.199997)
+script = ExtResource("2_n8823")
+metadata/vfx_source = "scenario"
+metadata/vfx_id = "blaze-tornado"
+metadata/placement = "target-ground"
+metadata/depth_hint = "front"

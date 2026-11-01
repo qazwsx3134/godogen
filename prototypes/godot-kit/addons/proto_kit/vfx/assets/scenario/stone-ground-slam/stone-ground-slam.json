@@ -1,0 +1,421 @@
+{
+  "frames": [
+    {
+      "filename": "stone-ground-slam_00",
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 64
+      },
+      "duration": 67
+    },
+    {
+      "filename": "stone-ground-slam_01",
+      "frame": {
+        "x": 96,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 64
+      },
+      "duration": 67
+    },
+    {
+      "filename": "stone-ground-slam_02",
+      "frame": {
+        "x": 192,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 64
+      },
+      "duration": 67
+    },
+    {
+      "filename": "stone-ground-slam_03",
+      "frame": {
+        "x": 288,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 64
+      },
+      "duration": 67
+    },
+    {
+      "filename": "stone-ground-slam_04",
+      "frame": {
+        "x": 384,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 64
+      },
+      "duration": 67
+    },
+    {
+      "filename": "stone-ground-slam_05",
+      "frame": {
+        "x": 480,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 64
+      },
+      "duration": 67
+    },
+    {
+      "filename": "stone-ground-slam_06",
+      "frame": {
+        "x": 576,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 64
+      },
+      "duration": 67
+    },
+    {
+      "filename": "stone-ground-slam_07",
+      "frame": {
+        "x": 672,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 64
+      },
+      "duration": 67
+    },
+    {
+      "filename": "stone-ground-slam_08",
+      "frame": {
+        "x": 768,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 64
+      },
+      "duration": 67
+    },
+    {
+      "filename": "stone-ground-slam_09",
+      "frame": {
+        "x": 864,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 64
+      },
+      "duration": 67
+    },
+    {
+      "filename": "stone-ground-slam_10",
+      "frame": {
+        "x": 960,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 64
+      },
+      "duration": 67
+    },
+    {
+      "filename": "stone-ground-slam_11",
+      "frame": {
+        "x": 1056,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 64
+      },
+      "duration": 67
+    },
+    {
+      "filename": "stone-ground-slam_12",
+      "frame": {
+        "x": 1152,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 64
+      },
+      "duration": 67
+    },
+    {
+      "filename": "stone-ground-slam_13",
+      "frame": {
+        "x": 1248,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 64
+      },
+      "duration": 67
+    },
+    {
+      "filename": "stone-ground-slam_14",
+      "frame": {
+        "x": 1344,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 64
+      },
+      "duration": 67
+    },
+    {
+      "filename": "stone-ground-slam_15",
+      "frame": {
+        "x": 1440,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 64
+      },
+      "duration": 67
+    },
+    {
+      "filename": "stone-ground-slam_16",
+      "frame": {
+        "x": 1536,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 64
+      },
+      "duration": 67
+    },
+    {
+      "filename": "stone-ground-slam_17",
+      "frame": {
+        "x": 1632,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 96,
+        "h": 64
+      },
+      "sourceSize": {
+        "w": 96,
+        "h": 64
+      },
+      "duration": 67
+    }
+  ],
+  "meta": {
+    "app": "Pixel VFX Forge (scenario.com/explorations/pixel-vfx-forge)",
+    "version": "1",
+    "image": "stone-ground-slam.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 1728,
+      "h": 64
+    },
+    "scale": "1",
+    "frameTags": [
+      {
+        "name": "stone-ground-slam",
+        "from": 0,
+        "to": 17,
+        "direction": "forward"
+      }
+    ],
+    "fps": 15,
+    "loop": false
+  }
+}

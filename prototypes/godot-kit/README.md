@@ -8,6 +8,7 @@
 
 | 模組 | 解決什麼 | 使用中 |
 |---|---|---|
+| [`vfx/`](addons/proto_kit/vfx/README.md) | 41 組 Scenario 的 2D／3D 場景、46 種 00GameDevs 原生特效、圖集播放器、[網頁展示](showcase/README.md)與匯入工具；[網站接入狀態](docs/vfx/SOURCES.md) | **尚未採用**（2026-11-01 使用者明確要求）；本機素材已接入；46 份 Three.js 已原生移植，GPU／瀏覽器外觀待驗 |
 | [`synth.gd`](addons/proto_kit/synth.gd) | 程序合成佔位音：掃頻、敲擊噪音、音符串。不用下載或授權任何音檔 | pachinko、pixel-monster |
 | [`atomic_file.gd`](addons/proto_kit/atomic_file.gd) | 存檔寫到一半當機或關掉分頁，也不會留下半個檔案 | debt-commission、pixel-monster |
 | [`test_kit.gd`](addons/proto_kit/test_kit.gd) | headless 測試基底：斷言、等幾幀、等條件成立、模擬點擊與手勢 | debt-commission、pixel-monster |

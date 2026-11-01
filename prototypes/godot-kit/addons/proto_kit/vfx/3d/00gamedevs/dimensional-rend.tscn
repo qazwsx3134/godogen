@@ -1,0 +1,130 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/00gamedevs/source_effect.gd" id="1_11w0n"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/dimensional-rend/spatial_part_0.gdshader" id="2_m4dw2"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/dimensional-rend/part_0.res" id="3_jfi23"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/dimensional-rend/spatial_part_1.gdshader" id="4_7ucxx"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/dimensional-rend/part_1.res" id="5_pc60b"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/dimensional-rend/spatial_part_2.gdshader" id="6_8i7ud"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/dimensional-rend/part_2.res" id="7_4uu71"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/dimensional-rend/spatial_part_3.gdshader" id="8_she38"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/dimensional-rend/part_3.res" id="9_o5erw"]
+[ext_resource type="AnimationLibrary" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/dimensional-rend/motion.res" id="10_sj3y1"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v2ppa"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("2_m4dw2")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 12672
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 2.0
+shader_parameter/uTime = 0.64
+shader_parameter/uQuantity = 18.0
+shader_parameter/uSpread = 2.0
+shader_parameter/uPanelCount = 9.0
+shader_parameter/uDetail = 1.0
+shader_parameter/transmissionSamplerSize = Vector2(64, 64)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qul2n"]
+resource_local_to_scene = true
+render_priority = -127
+shader = ExtResource("4_7ucxx")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 4608
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 2.0
+shader_parameter/uTime = 0.64
+shader_parameter/uQuantity = 18.0
+shader_parameter/uSpread = 2.0
+shader_parameter/uPanelCount = 9.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.1682694, 0.33716363, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vdbml"]
+resource_local_to_scene = true
+render_priority = 1
+shader = ExtResource("6_8i7ud")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 12
+shader_parameter/source_instance_count = 38.0
+shader_parameter/uSize = 2.0
+shader_parameter/uTime = 0.64
+shader_parameter/uQuantity = 18.0
+shader_parameter/uSpread = 2.0
+shader_parameter/uPanelCount = 9.0
+shader_parameter/uDetail = 1.0
+shader_parameter/transmissionSamplerSize = Vector2(64, 64)
+shader_parameter/uColor = Vector3(0.1682694, 0.33716363, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cl7qm"]
+resource_local_to_scene = true
+render_priority = 1
+shader = ExtResource("8_she38")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 2.0
+shader_parameter/uTime = 0.64
+shader_parameter/uQuantity = 18.0
+shader_parameter/uSpread = 2.0
+shader_parameter/uPanelCount = 9.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.1682694, 0.33716363, 1)
+
+[node name="DimensionalRend" type="Node3D" unique_id=490251609]
+script = ExtResource("1_11w0n")
+effect_id = "dimensional-rend"
+burst = true
+duration = 3.4
+start_duration = 0.2
+end_duration = 2.4
+kind = 6
+variant = 1
+metadata/vfx_source = "00gamedevs"
+metadata/vfx_id = "dimensional-rend"
+metadata/editor_preview_time = 0.64
+
+[node name="Parts" type="Node3D" parent="." unique_id=1244781237]
+unique_name_in_owner = true
+
+[node name="Part000" type="MeshInstance3D" parent="Parts" unique_id=1577971997]
+material_override = SubResource("ShaderMaterial_v2ppa")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("3_jfi23")
+metadata/source_name = "utility-rend-cuts"
+
+[node name="Part001" type="MeshInstance3D" parent="Parts" unique_id=844820460]
+material_override = SubResource("ShaderMaterial_qul2n")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("5_pc60b")
+metadata/source_name = "utility-rend-glow"
+
+[node name="Part002" type="MeshInstance3D" parent="Parts" unique_id=909327300]
+visible = false
+material_override = SubResource("ShaderMaterial_vdbml")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("7_4uu71")
+metadata/source_name = "utility-rend-particles"
+
+[node name="Part003" type="MeshInstance3D" parent="Parts" unique_id=189108573]
+material_override = SubResource("ShaderMaterial_cl7qm")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("9_o5erw")
+metadata/source_name = "utility-rend-impact"
+
+[node name="Motion" type="AnimationPlayer" parent="." unique_id=1352394647]
+unique_name_in_owner = true
+libraries/ = ExtResource("10_sj3y1")

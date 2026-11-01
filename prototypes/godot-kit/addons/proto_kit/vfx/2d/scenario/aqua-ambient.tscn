@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[ext_resource type="SpriteFrames" path="res://addons/proto_kit/vfx/assets/scenario/aqua-ambient/aqua-ambient.tres" id="1_2k3if"]
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/2d/sheet_effect.gd" id="2_uackh"]
+
+[node name="AquaAmbient" type="AnimatedSprite2D" unique_id=341124408]
+texture_filter = 1
+sprite_frames = ExtResource("1_2k3if")
+animation = &"aqua_ambient"
+frame = 2
+script = ExtResource("2_uackh")
+metadata/vfx_source = "scenario"
+metadata/vfx_id = "aqua-ambient"
+metadata/placement = "screen"
+metadata/depth_hint = "front"

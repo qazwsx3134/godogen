@@ -1,0 +1,234 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/00gamedevs/source_effect.gd" id="1_lqear"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/pulse-beam/spatial_part_0.gdshader" id="2_pxgw6"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/pulse-beam/part_0.res" id="3_rqmil"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/pulse-beam/spatial_part_1.gdshader" id="4_2scri"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/pulse-beam/part_1.res" id="5_ll3ks"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/pulse-beam/spatial_part_2.gdshader" id="6_de7s1"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/pulse-beam/part_2.res" id="7_awrkc"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/pulse-beam/spatial_part_3.gdshader" id="8_jebwf"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/pulse-beam/part_3.res" id="9_5aop2"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/pulse-beam/spatial_part_4.gdshader" id="10_o6xv0"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/pulse-beam/part_4.res" id="11_sgmvc"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/pulse-beam/spatial_part_5.gdshader" id="12_lbs5a"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/pulse-beam/part_5.res" id="13_0rgv7"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/pulse-beam/spatial_part_6.gdshader" id="14_hxcwj"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/pulse-beam/part_6.res" id="15_4tere"]
+[ext_resource type="AnimationLibrary" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/pulse-beam/motion.res" id="16_il6b5"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_trl5m"]
+resource_local_to_scene = true
+render_priority = 3
+shader = ExtResource("2_pxgw6")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 250.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uStopTime = -1.0
+shader_parameter/uEndDuration = 0.6
+shader_parameter/uQuantity = 4.0
+shader_parameter/uSpread = 1.0
+shader_parameter/uTime = 0.5
+shader_parameter/uStretch = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.1651322, 0.7991027, 0.7156935)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lwpiq"]
+resource_local_to_scene = true
+render_priority = 4
+shader = ExtResource("4_2scri")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.1651322, 0.7991027, 0.7156935)
+shader_parameter/uTime = 0.5
+shader_parameter/uRole = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ga0bu"]
+resource_local_to_scene = true
+render_priority = 4
+shader = ExtResource("6_de7s1")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.1651322, 0.7991027, 0.7156935)
+shader_parameter/uTime = 0.5
+shader_parameter/uRole = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_odhnf"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("8_jebwf")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 3456
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 0.5
+shader_parameter/uQuantity = 4.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.1651322, 0.7991027, 0.7156935)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kgvrg"]
+resource_local_to_scene = true
+render_priority = 3
+shader = ExtResource("10_o6xv0")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 960
+shader_parameter/source_instance_count = 6.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 0.5
+shader_parameter/uStretch = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.1651322, 0.7991027, 0.7156935)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_q8qxw"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("12_lbs5a")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.1651322, 0.7991027, 0.7156935)
+shader_parameter/uTime = 0.5
+shader_parameter/uEnd = -1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_odtwp"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("14_hxcwj")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.1651322, 0.7991027, 0.7156935)
+shader_parameter/uTime = 0.5
+shader_parameter/uEnd = 1.0
+
+[node name="PulseBeam" type="Node3D" unique_id=1262316370]
+script = ExtResource("1_lqear")
+effect_id = "pulse-beam"
+start_duration = 0.4
+end_duration = 0.6
+kind = 1
+variant = 1
+metadata/vfx_source = "00gamedevs"
+metadata/vfx_id = "pulse-beam"
+metadata/editor_preview_time = 0.5
+
+[node name="Parts" type="Node3D" parent="." unique_id=1431438892]
+unique_name_in_owner = true
+
+[node name="Part000" type="MeshInstance3D" parent="Parts" unique_id=270273273]
+material_override = SubResource("ShaderMaterial_trl5m")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("3_rqmil")
+metadata/source_name = "Part0"
+
+[node name="Part001" type="MeshInstance3D" parent="Parts" unique_id=1409235729]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0, 0)
+material_override = SubResource("ShaderMaterial_lwpiq")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("5_ll3ks")
+metadata/source_name = "Part1"
+
+[node name="Part002" type="MeshInstance3D" parent="Parts" unique_id=2127595957]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 0, 0)
+material_override = SubResource("ShaderMaterial_ga0bu")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("7_awrkc")
+metadata/source_name = "Part2"
+
+[node name="Part003" type="MeshInstance3D" parent="Parts" unique_id=951126567]
+transform = Transform3D(2.220446e-16, 1, 0, -1, 2.220446e-16, 0, 0, 0, 1, 0, 0, 0)
+material_override = SubResource("ShaderMaterial_odhnf")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("9_5aop2")
+metadata/source_name = "pulse-body"
+
+[node name="Part004" type="MeshInstance3D" parent="Parts" unique_id=1270874168]
+material_override = SubResource("ShaderMaterial_kgvrg")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("11_sgmvc")
+metadata/source_name = "Part4"
+
+[node name="Part005" type="MeshInstance3D" parent="Parts" unique_id=1152484003]
+transform = Transform3D(2.220446e-16, 0, 1, 0, 1, 0, -1, 0, 2.220446e-16, -2.4, 0, 0)
+material_override = SubResource("ShaderMaterial_q8qxw")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("13_0rgv7")
+metadata/source_name = "Part5"
+
+[node name="Part006" type="MeshInstance3D" parent="Parts" unique_id=1637658129]
+transform = Transform3D(2.220446e-16, 0, 1, 0, 1, 0, -1, 0, 2.220446e-16, 2.4, 0, 0)
+material_override = SubResource("ShaderMaterial_odtwp")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("15_4tere")
+metadata/source_name = "Part6"
+
+[node name="Motion" type="AnimationPlayer" parent="." unique_id=349924038]
+unique_name_in_owner = true
+libraries/ = ExtResource("16_il6b5")

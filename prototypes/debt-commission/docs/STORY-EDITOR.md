@@ -4,12 +4,15 @@
 
 ## 怎麼開
 
-- **本機專案服務**：在 `prototypes/debt-commission` 目錄執行，再開網址。Python 3.10 以上，使用標準庫，不需安裝套件；Godot 用專案的 4.7 版本。
+- **預覽工作台**：在 repo 根目錄執行，從首頁進入故事編輯器；Windows 可雙擊 `preview/start.bat`。需要 Python 3.10 以上與 Godot 4.7，不需 npm。Godot 不在 PATH 時可加 `--godot <執行檔路徑>`。見 [預覽工作台說明](../../../preview/README.md)。
 
   ```bash
-  python3 tools/story_editor/project_server.py --port 8000 --godot /Applications/Godot.app/Contents/MacOS/Godot
+  python3 preview/start.py
+  # http://127.0.0.1:8000/preview/
   # http://127.0.0.1:8000/tools/story_editor/          （?story=phase3 直接開那個故事）
   ```
+
+  若只需要故事編輯器，也可從 repo 根目錄執行 `python3 prototypes/debt-commission/tools/story_editor/project_server.py --port 8000 --godot <執行檔路徑>`。
 
   與其他 agent 共用 `.godot` 或 user:// 時，先設定 `GODOT_LOCK` 為雙方約定的同一個絕對路徑。本次協作使用：
 

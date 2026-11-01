@@ -66,13 +66,14 @@ B 超必殺演出已接入 `?sample=phase4_rounds`，使用既有素材與程序
 
 agent 共同編劇的人格與記憶資料放在 [authoring/](authoring/README.md)：三角色人格 revision 2 與三條基礎記憶 revision 1 已由作者確認，完整內容見 [確認清單](authoring/REVIEW.md)。本機編輯器上方「編劇參考」可查看、選取並下載給外部 agent 的上下文；記憶預設不選，未確認或修改過的內容會被阻擋。人格修改與確認仍走檔案／CLI，內建 AI Writer 尚未提供。最新系統／編輯器交接與驗證見 [HANDOFF.md](docs/HANDOFF.md)。
 
-劇本節點編輯器是 `tools/story_editor/` 裡的網頁，不用建置、不用 npm。在**這個資料夾**啟動本機專案服務，再用瀏覽器開網址：
+從 repo 根目錄開啟[預覽工作台](../../preview/README.md)，再點「開啟故事編輯器」。Windows 也可雙擊 `preview/start.bat`：
 
 ```bash
-cd prototypes/debt-commission
-python3 tools/story_editor/project_server.py --port 8000 --godot /Applications/Godot.app/Contents/MacOS/Godot
-# http://127.0.0.1:8000/tools/story_editor/
+python3 preview/start.py
+# http://127.0.0.1:8000/preview/
 ```
+
+也可直接進入 `http://127.0.0.1:8000/tools/story_editor/`。預覽服務會自動尋找 PATH 上的 Godot；找不到時以 `--godot <執行檔路徑>` 指定。需要 Python 3.10 以上與 Godot 4.7，不用 npm。
 
 本機專案服務提供「驗證並存檔」：圖編輯的故事直接存回 `data/`，新故事通過檢查後自動登記進 `data/stories.json`；開檔後磁碟上的檔案若被改過，會拒絕覆寫。驗證失敗時保留草稿，遊戲繼續使用上次通過的版本。用 `.dialogue` 建置的故事在編輯器裡唯讀，先「轉成圖編輯來源」建立新的故事 id 才能編輯。用一般靜態伺服器或直接雙擊 `index.html` 開啟時，改用匯出下載的流程。操作見 [編輯器說明](docs/STORY-EDITOR.md)。
 

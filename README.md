@@ -10,6 +10,10 @@ Describe a game. The agent builds it, generates assets, runs the engine, and pro
 
 This repo is not a game. It is the source for a generator that produces games: **godogen -> game repo -> game**. You publish into a fresh game repo — choosing engine and host-agent flavor — then the agent runs inside that repo and builds the actual game from a short engine guide.
 
+## 本機預覽
+
+[預覽工作台](preview/README.md) 集中故事編輯器與特效試映室。Windows 可雙擊 `preview/start.bat`；或在 repo 根目錄執行 `python3 preview/start.py`，再開啟 http://127.0.0.1:8000/preview/。
+
 ## Source layout
 
 A published repo is intentionally thin: a runtime manifest, a one-page engine guide, and the asset-generation skill. The agent recreates everything else (project scaffold, capture tooling) from the guide.

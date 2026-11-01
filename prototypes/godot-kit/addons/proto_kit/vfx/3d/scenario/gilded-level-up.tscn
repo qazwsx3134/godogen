@@ -1,0 +1,18 @@
+[gd_scene format=3]
+
+[ext_resource type="SpriteFrames" path="res://addons/proto_kit/vfx/assets/scenario/gilded-level-up/gilded-level-up.tres" id="1_0102t"]
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/sheet_effect.gd" id="2_jos35"]
+
+[node name="GildedLevelUp" type="AnimatedSprite3D" unique_id=2038597756]
+offset = Vector2(0, 36.8)
+pixel_size = 0.025
+billboard = 1
+texture_filter = 0
+sprite_frames = ExtResource("1_0102t")
+animation = &"gilded_level_up"
+frame = 2
+script = ExtResource("2_jos35")
+metadata/vfx_source = "scenario"
+metadata/vfx_id = "gilded-level-up"
+metadata/placement = "caster-ground"
+metadata/depth_hint = "front"

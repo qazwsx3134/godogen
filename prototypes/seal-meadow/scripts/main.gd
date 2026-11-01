@@ -11,6 +11,7 @@ const SaveSlots = preload("res://addons/proto_kit/save_slots.gd")
 const AtomicFile = preload("res://addons/proto_kit/atomic_file.gd")
 const Inventory = preload("res://scripts/inventory.gd")
 const SaveValidation = preload("res://scripts/save_validation.gd")
+const SaveStore = preload("res://scripts/save_store.gd")
 const Items = preload("res://scripts/items.gd")
 const LootDrop = preload("res://scenes/loot_drop.tscn")
 const Fishing = preload("res://scripts/fishing.gd")
@@ -62,8 +63,11 @@ var _portal_goal: Node3D = null:
 			_portal_goal.highlighted = true
 var _fishing_goal: Node3D = null
 var _travelling: bool = false
+var _life_epoch: int = 0
 var save_blocked_reason: String = ""
 var _recovered_backup: PackedByteArray = []
+var _recovery_primary: PackedByteArray = []
+var _save_migrations: Dictionary = {}
 var settings: Dictionary = DEFAULT_SETTINGS.duplicate()
 var fishing := Fishing.new()
 var _fishing_origin: Vector3 = Vector3.ZERO
@@ -86,19 +90,13 @@ func _ready() -> void:
 			player.quests.on_kill(kind)
 			player.collection.record_kill(kind)
 			player.stats_changed.emit())
-	var migrations := {}
 	for v: int in MIGRATIONS:
-		migrations[v] = Callable(self, MIGRATIONS[v])
-	var saved: Dictionary = SaveSlots.restore(save_path, SAVE_VERSION, migrations)
-	if saved.error == "" and not SaveValidation.valid(saved.data):
-		var backup: Dictionary = SaveSlots.restore(save_path + ".bak", SAVE_VERSION, migrations) if saved.source == "main" else {"error": "corrupt"}
-		if backup.error == "" and backup.source == "main" and SaveValidation.valid(backup.data):
-			saved = {"error": "", "data": backup.data, "source": "backup"}
-		else:
-			saved = {"error": backup.error if backup.error in ["newer", "migration"] else "corrupt"}
+		_save_migrations[v] = Callable(self, MIGRATIONS[v])
+	var saved: Dictionary = SaveStore.restore(save_path, SAVE_VERSION, _save_migrations)
 	if saved.error == "":
 		if saved.source == "backup":
 			_recovered_backup = AtomicFile.read_bytes(save_path + ".bak")
+			_recovery_primary = AtomicFile.read_bytes(save_path)
 		_set_zone(float(saved.data.get("x", 0.0)), float(saved.data.get("z", 0.0)))
 		player.load_data(saved.data)
 		for key: String in settings:
@@ -117,6 +115,8 @@ func _ready() -> void:
 		hud.log_line("已從備份讀取存檔。", Color("ffd75e"))
 	click_marker.visible = false
 	player.stats_changed.connect(_on_stats_changed)
+	player.died.connect(_on_player_died)
+	player.respawned.connect(_on_player_respawned)
 	player.damaged.connect(func(_attacker: Node3D) -> void: cancel_fishing("受到攻擊，釣魚已中斷。"))
 	player.mounted_changed.connect(func(riding: bool) -> void:
 		if riding:
@@ -234,6 +234,9 @@ func _on_hit(attacker: Node3D, victim: Node3D, _amount: int, crit: bool) -> void
 ## Fades out, moves the player (and camera) to the portal's arrival point, saves, fades in.
 ## ponytail: both zones live in one scene far apart, so travel is a teleport; stream zones if maps grow.
 func travel(portal: Node3D) -> void:
+	if _travelling or player.dead:
+		return
+	var life_epoch := _life_epoch
 	player.set_mounted(false)
 	_travelling = true
 	_portal_goal = null
@@ -243,6 +246,10 @@ func travel(portal: Node3D) -> void:
 	player.cancel_cast()
 	player.move_to(player.position)
 	await hud.fade(true)
+	if player.dead or life_epoch != _life_epoch:
+		await hud.fade(false)
+		_travelling = false
+		return
 	var to: Vector3 = portal.arrival
 	_set_zone(to.x, to.z)
 	player.position = to
@@ -253,6 +260,27 @@ func travel(portal: Node3D) -> void:
 	save_game()
 	await hud.fade(false)
 	_travelling = false
+
+
+func _on_player_died() -> void:
+	_life_epoch += 1
+	_holding = false
+	_hold_to_walk = false
+	player.pointer_moving = false
+	_loot_goal = null
+	_npc_goal = null
+	_portal_goal = null
+	_fishing_goal = null
+	_marker_left = 0.0
+	click_marker.visible = false
+	cancel_fishing("倒下時已停止釣魚。")
+
+
+func _on_player_respawned() -> void:
+	_set_zone(player.position.x, player.position.z)
+	rig.global_position = player.global_position + Vector3.UP
+	pet_follower.reset_follow()
+	save_game()
 
 
 func _set_zone(x: float, z: float) -> void:
@@ -268,21 +296,40 @@ func _flat_distance(a: Node3D, b: Node3D) -> float:
 func save_game() -> Error:
 	if not save_blocked_reason.is_empty():
 		return ERR_FILE_CANT_WRITE
+	var snapshot: Dictionary = player.save_data()
+	snapshot["settings"] = settings.duplicate()
+	if not SaveValidation.valid(snapshot):
+		return _block_save("invalid_snapshot")
+	# Backup rotation must not replace a file written by a newer game either.
+	if SaveStore.inspect(save_path + ".bak", SAVE_VERSION).error == "newer":
+		return _block_save("newer")
 	if not _recovered_backup.is_empty():
-		# Restore the validated backup first; SaveSlots must not back up a malformed primary over it.
+		if AtomicFile.read_bytes(save_path) != _recovery_primary \
+				or AtomicFile.read_bytes(save_path + ".bak") != _recovered_backup:
+			return _block_save("changed")
+		# Promote only the exact backup selected at load time, before normal rotation.
 		var recovery_error: Error = AtomicFile.write_bytes(save_path, _recovered_backup)
 		if recovery_error != OK:
 			push_warning("save recovery failed: %s" % error_string(recovery_error))
 			return recovery_error
 		_recovered_backup = []
-	var snapshot: Dictionary = player.save_data()
-	snapshot["settings"] = settings.duplicate()
+		_recovery_primary = []
+	if FileAccess.file_exists(save_path):
+		var current := SaveStore.restore(save_path, SAVE_VERSION, _save_migrations)
+		if current.error != "" or current.source != "main":
+			return _block_save(current.error if current.error != "" else "corrupt")
 	var err: Error = SaveSlots.save(save_path, snapshot, SAVE_VERSION)
 	if err != OK:
 		push_warning("save failed: %s" % error_string(err))
 	else:
 		_saved_progress = Vector2i(player.level, player.xp)
 	return err
+
+
+func _block_save(reason: String) -> Error:
+	save_blocked_reason = reason
+	hud.log_line("存檔資料異常或版本不相容，已停止寫入以保護資料。", Color("ff9d8a"))
+	return ERR_FILE_CANT_WRITE
 
 
 func update_setting(key: String, value: bool) -> void:
@@ -317,6 +364,7 @@ func start_fishing() -> void:
 		return
 	var reason: String = fishing.start(clock.now, player)
 	if reason == "":
+		player.set_mounted(false)
 		_fishing_origin = player.global_position
 	panel.status.text = "釣餌不足，可向村長購買。" if reason == "bait" else ("目前無法釣魚。" if reason != "" else "")
 	panel.update_state(fishing.active, fishing.remaining(clock.now), player.bag.count(Fishing.BAIT))
