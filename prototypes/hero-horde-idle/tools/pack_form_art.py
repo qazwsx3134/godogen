@@ -1,4 +1,7 @@
-"""Packs the 怪獸 and 夢靈 placeholder sprites (art_src/forms, see its BRIEF.md) under the human rows of
+"""Retired: atlas rows 6-17 are now the 獸人 and 精靈 heroes (tools/pack_stage_art.py heroes); running this
+would overwrite them with the old placeholders.
+
+Packs the 怪獸 and 夢靈 placeholder sprites (art_src/forms, see its BRIEF.md) under the human rows of
 assets/heroes/heroes.png, and writes their portraits. Rows 0-5 stay the humans (one per class); rows 6-11 are the
 monsters, 12-17 the dreamlings, in class order. A source sheet is five 512 px frames facing right: ready, step,
 step, lunge, hurt. They become the hero cells: run = ready, step, ready, step; attack = ready, lunge, lunge;

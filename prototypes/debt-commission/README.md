@@ -62,6 +62,10 @@ B 超必殺演出已接入 `?sample=phase4_rounds`，使用既有素材與程序
 
 `tests/fixtures/skins/plain/` 是不用任何新圖的範例（扁平配色、刃形生命圖示、「反駁／決心」用語），`tests/test_skin.gd` 驗證它換得過去也換得回來。劇本沒有吐槽回合與調查時，HUD、案件檔與「輔助」設定都不出現，就是一般的視覺小說。
 
+## 首篇極短篇協作原型
+
+[不是頭痛，是桂](stories/katsura_dog_ears/README.md)已做成獨立可編輯故事包：桂分兩句，中間停頓，第二句認真、理直氣壯；玩家抓時機接新八吐槽。桂姿勢圖已依參考圖生成並接入，待作者試看；[參考與提示詞](stories/katsura_dog_ears/OPT-IMAGE-PROMPT.md)保留供後續修訂。編輯器開啟 `?story=katsura_dog_ears`；現有 Web 匯出版尚未包含本篇。
+
 ## 打開故事編輯器（網頁）
 
 agent 共同編劇的人格與記憶資料放在 [authoring/](authoring/README.md)：三角色人格 revision 2 與三條基礎記憶 revision 1 已由作者確認，完整內容見 [確認清單](authoring/REVIEW.md)。本機編輯器上方「編劇參考」可查看、選取並下載給外部 agent 的上下文；記憶預設不選，未確認或修改過的內容會被阻擋。人格修改與確認仍走檔案／CLI，內建 AI Writer 尚未提供。最新系統／編輯器交接與驗證見 [HANDOFF.md](docs/HANDOFF.md)。

@@ -1,0 +1,14 @@
+{
+ "elf_sword": 1,
+ "beast_sword": 1,
+ "elf_shield": 1,
+ "elf_spear": 1,
+ "elf_bow": 2,
+ "elf_mage": 1,
+ "elf_healer": 2,
+ "beast_shield": 1,
+ "beast_spear": 1,
+ "beast_bow": 1,
+ "beast_mage": 2,
+ "beast_healer": 1
+}

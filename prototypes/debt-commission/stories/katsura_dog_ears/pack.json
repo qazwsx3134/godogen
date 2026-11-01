@@ -1,0 +1,13 @@
+{
+  "id": "katsura_dog_ears",
+  "title": "極短篇：不是頭痛，是桂",
+  "skin": "gintama",
+  "stories": [
+    {
+      "id": "katsura_dog_ears",
+      "kind": "sample",
+      "path": "dog_ears_story.json",
+      "authoring": "graph"
+    }
+  ]
+}

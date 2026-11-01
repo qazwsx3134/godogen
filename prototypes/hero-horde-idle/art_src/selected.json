@@ -159,5 +159,107 @@
       "stages": "art_src/ui_icons2/nav/stages.png"
     },
     "recruit_bg": "art_src/ui_icons2/bg/recruit.png"
+  },
+  "races": {
+    "beast": {
+      "shield": {
+        "ready": "art_src/races/beast_shield/ready/candidate-01.png",
+        "run_a": "art_src/races/beast_shield/run_a/candidate-01.png",
+        "run_b": "art_src/races/beast_shield/run_b/candidate-01.png",
+        "strike": "art_src/races/beast_shield/strike/candidate-01.png",
+        "down": "art_src/races/beast_shield/down/candidate-01.png",
+        "volley": "art_src/races/beast_shield/volley/candidate-01.png"
+      },
+      "sword": {
+        "ready": "art_src/races/beast_sword/ready/candidate-01.png",
+        "run_a": "art_src/races/beast_sword/run_a/candidate-01.png",
+        "run_b": "art_src/races/beast_sword/run_b/candidate-01.png",
+        "strike": "art_src/races/beast_sword/strike/candidate-01.png",
+        "down": "art_src/races/beast_sword/down/candidate-01.png",
+        "volley": "art_src/races/beast_sword/volley/candidate-01.png"
+      },
+      "spear": {
+        "ready": "art_src/races/beast_spear/ready/candidate-01.png",
+        "run_a": "art_src/races/beast_spear/run_a/candidate-01.png",
+        "run_b": "art_src/races/beast_spear/run_b/candidate-01.png",
+        "strike": "art_src/races/beast_spear/strike/candidate-01.png",
+        "down": "art_src/races/beast_spear/down/candidate-01.png",
+        "volley": "art_src/races/beast_spear/volley/candidate-01.png"
+      },
+      "bow": {
+        "ready": "art_src/races/beast_bow/ready/candidate-01.png",
+        "run_a": "art_src/races/beast_bow/run_a/candidate-01.png",
+        "run_b": "art_src/races/beast_bow/run_b/candidate-01.png",
+        "strike": "art_src/races/beast_bow/strike/candidate-01.png",
+        "down": "art_src/races/beast_bow/down/candidate-01.png",
+        "volley": "art_src/races/beast_bow/volley/candidate-01.png"
+      },
+      "mage": {
+        "ready": "art_src/races/beast_mage/ready/candidate-02.png",
+        "run_a": "art_src/races/beast_mage/run_a/candidate-01.png",
+        "run_b": "art_src/races/beast_mage/run_b/candidate-01.png",
+        "strike": "art_src/races/beast_mage/strike/candidate-01.png",
+        "down": "art_src/races/beast_mage/down/candidate-01.png",
+        "volley": "art_src/races/beast_mage/volley/candidate-01.png"
+      },
+      "healer": {
+        "ready": "art_src/races/beast_healer/ready/candidate-01.png",
+        "run_a": "art_src/races/beast_healer/run_a/candidate-01.png",
+        "run_b": "art_src/races/beast_healer/run_b/candidate-01.png",
+        "strike": "art_src/races/beast_healer/strike/candidate-01.png",
+        "down": "art_src/races/beast_healer/down/candidate-01.png",
+        "volley": "art_src/races/beast_healer/volley/candidate-01.png"
+      }
+    },
+    "elf": {
+      "shield": {
+        "ready": "art_src/races/elf_shield/ready/candidate-01.png",
+        "run_a": "art_src/races/elf_shield/run_a/candidate-01.png",
+        "run_b": "art_src/races/elf_shield/run_b/candidate-01.png",
+        "strike": "art_src/races/elf_shield/strike/candidate-01.png",
+        "down": "art_src/races/elf_shield/down/candidate-01.png",
+        "volley": "art_src/races/elf_shield/volley/candidate-01.png"
+      },
+      "sword": {
+        "ready": "art_src/races/elf_sword/ready/candidate-01.png",
+        "run_a": "art_src/races/elf_sword/run_a/candidate-01.png",
+        "run_b": "art_src/races/elf_sword/run_b/candidate-01.png",
+        "strike": "art_src/races/elf_sword/strike/candidate-01.png",
+        "down": "art_src/races/elf_sword/down/candidate-01.png",
+        "volley": "art_src/races/elf_sword/volley/candidate-01.png"
+      },
+      "spear": {
+        "ready": "art_src/races/elf_spear/ready/candidate-01.png",
+        "run_a": "art_src/races/elf_spear/run_a/candidate-01.png",
+        "run_b": "art_src/races/elf_spear/run_b/candidate-01.png",
+        "strike": "art_src/races/elf_spear/strike/candidate-01.png",
+        "down": "art_src/races/elf_spear/down/candidate-01.png",
+        "volley": "art_src/races/elf_spear/volley/candidate-01.png"
+      },
+      "bow": {
+        "ready": "art_src/races/elf_bow/ready/candidate-02.png",
+        "run_a": "art_src/races/elf_bow/run_a/candidate-01.png",
+        "run_b": "art_src/races/elf_bow/run_b/candidate-01.png",
+        "strike": "art_src/races/elf_bow/strike/candidate-01.png",
+        "down": "art_src/races/elf_bow/down/candidate-01.png",
+        "volley": "art_src/races/elf_bow/volley/candidate-01.png"
+      },
+      "mage": {
+        "ready": "art_src/races/elf_mage/ready/candidate-01.png",
+        "run_a": "art_src/races/elf_mage/run_a/candidate-01.png",
+        "run_b": "art_src/races/elf_mage/run_b/candidate-01.png",
+        "strike": "art_src/races/elf_mage/strike/candidate-01.png",
+        "down": "art_src/races/elf_mage/down/candidate-01.png",
+        "volley": "art_src/races/elf_mage/volley/candidate-01.png"
+      },
+      "healer": {
+        "ready": "art_src/races/elf_healer/ready/candidate-02.png",
+        "run_a": "art_src/races/elf_healer/run_a/candidate-01.png",
+        "run_b": "art_src/races/elf_healer/run_b/candidate-01.png",
+        "strike": "art_src/races/elf_healer/strike/candidate-01.png",
+        "down": "art_src/races/elf_healer/down/candidate-01.png",
+        "volley": "art_src/races/elf_healer/volley/candidate-01.png"
+      }
+    }
   }
 }

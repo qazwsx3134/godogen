@@ -24,6 +24,22 @@ v3.0 融合版（在 `fusion-idle` 開發，2026-10-27 合併進 master：`7b696
  存檔 v2（v1 舊檔：職業等級退款、裝備轉實例）     test_progression
 ```
 
+## 生圖：種族英雄與行軍背景（2026-10-29）
+
+作者要我照 `docs/race-art-prompts.md` 與 `docs/bg-layer-prompts.md` 生圖並去背，用 Codex。生圖用本機 Codex CLI（`--route codex-cli`），由 Claude 的 shell 直接跑 `.py`，沒有另開 Herdr pane。
+
+| 項目 | 狀態 | 位置 |
+|---|---|---|
+| 精靈、獸人 × 6 職業，各 6 個姿勢（站姿＋跑 2＋攻擊＋倒地＋大招），共 72 張，已去背並對齊腳底 | 完成並接進遊戲：`heroes.png` 第 6～11 列獸人、12～17 列精靈（取代舊的怪獸／夢靈暫代），推王、行軍、名冊卡、英雄詳情大圖都依種族換圖 | `art_src/races/`、`tools/pack_stage_art.py heroes portraits`、`scripts/army.gd row_of`、`scripts/portraits.gd` |
+| 行軍背景第一套（天空、遠山、中景、地面、7 個物件），共 11 張，已去背 | 完成並接進遊戲：共用 scene `scenes/components/march_backdrop.tscn`，六頁的 `MarchBackdrop` 取代從參考圖裁的 `DistantLandscape`／`LowerLandscape*`／`LowerPatch*`／`Ground`；霧沼與熔岩兩套還沒生 | `art_src/bg_layers/`、`tools/pack_backdrop.py`、`tools/build_backdrop.gd`、`scripts/march_arena.gd bind_scenery` |
+
+作者決定：精靈耳朵在 40 px 看不出來（沒通過文件的驗收），**不重做**。
+
+驗證：
+- 圖：逐張看過 contact sheet；色相差遮罩掃描 72 張英雄圖與 10 張透明背景，殘點合計 3 px、沒有碰到畫布邊。
+- 接進遊戲：`heroes.png` 人類第 0～5 列與原本逐位元相同；headless 匯入沒有錯誤；`test_main`、`test_home`、`test_march` PASSED（換背景後重跑一次，也 PASSED）；`capture_home.gd` 與 `capture_shots.gd` 截圖看過：名冊有狐狸、白狐等獸人卡，行軍條是新的分層背景、行軍中有位移。`test_stages`、`test_balance`、`test_progression`、`test_recruit`、`test_report`、`test_skills` 沒跑（數值與這些系統沒動）。
+- 舊的 `tools/pack_form_art.py` 標成停用（再跑會蓋掉種族列）；`assets/heroes/portraits/monster_*`、`dream_*` 與參考圖裁的風景區域已不再使用，還沒刪。
+
 ## 第六輪回饋（2026-10-28 晚）
 
 作者：「士氣不能用點數來算，要算攻擊頻率，被王傷害會扣；不然後期傷害提高會很快就滿。」

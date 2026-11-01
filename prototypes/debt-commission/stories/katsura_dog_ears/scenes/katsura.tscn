@@ -1,0 +1,45 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/placeholder_sprite.gd" id="1_3v3m5"]
+[ext_resource type="Texture2D" path="res://stories/katsura_dog_ears/art/katsura_dog_ears_mouse_v2.png" id="2_22h0w"]
+[ext_resource type="FontFile" path="res://assets/fonts/story-cjk.ttc" id="2_edue1"]
+
+[node name="katsura" type="Control" unique_id=2014282283]
+editor_description = "桂的認真狗耳朵姿勢。Art 稍向左留出時機圓環；可拖曳 Art 調整，PosePlaceholder 為隱藏的缺圖提示。"
+layout_mode = 3
+anchors_preset = 0
+offset_right = 480.0
+offset_bottom = 1560.0
+mouse_filter = 2
+script = ExtResource("1_3v3m5")
+
+[node name="Art" type="TextureRect" parent="." unique_id=515702449]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -710.0
+offset_top = -1560.0
+offset_right = 390.0
+mouse_filter = 2
+texture = ExtResource("2_22h0w")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PosePlaceholder" type="Label" parent="." unique_id=979088935]
+visible = false
+layout_mode = 0
+offset_left = -260.0
+offset_top = 240.0
+offset_right = 740.0
+offset_bottom = 570.0
+theme_override_fonts/font = ExtResource("2_edue1")
+theme_override_font_sizes/font_size = 60
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.09019608, 0.1254902, 0.22352941, 1)
+theme_override_constants/outline_size = 16
+text = "桂：立繪待補
+雙手放在頭兩側
+一本正經，維持舉手"
+horizontal_alignment = 1

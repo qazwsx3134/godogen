@@ -11,7 +11,9 @@ const Sprite3DSheet = preload("res://addons/proto_kit/sprite3d_sheet.gd")
 const SHEETS := "res://assets/heroes/heroes.json"
 const HERO_MATERIAL := preload("res://materials/heroes.tres")
 const CLASS_KEYS := ["shield", "sword", "spear", "bow", "mage", "healer"]
-## heroes.json rows: humans are the class keys (every race draws them until the race art is drawn).
+## heroes.json characters: six class rows per race, in domain/heroes.gd form order (人類 0-5, 獸人 6-11, 精靈 12-17);
+## a character key is prefix + class ("beast_sword").
+const RACE_PREFIXES := ["", "beast_", "elf_"]
 ## The outline role per rarity: dark for all, so every hero keeps a crisp silhouette and the crowd reads by class tint.
 const RARITY_ROLE := [7, 7, 7, 7]
 ## Class tint hues and strength: shield blue, sword red, spear amber, bow green, mage violet, healer near-white.
@@ -62,8 +64,9 @@ func setup(sim: PushSim, boss_target: Vector3, captains := PackedInt32Array()) -
 	_sim = sim
 	target = boss_target
 	if _sheets.is_empty():
-		for key: String in CLASS_KEYS:
-			_sheets.append(Sprite3DSheet.from_json(SHEETS, key))
+		for prefix: String in RACE_PREFIXES:
+			for key: String in CLASS_KEYS:
+				_sheets.append(Sprite3DSheet.from_json(SHEETS, prefix + key))
 		_size = _sheets[0].size_m()
 		# The atlas grid comes from heroes.json (18 rows since the 形態 sheets), not from what the material was saved with.
 		_sheets[0].apply(HERO_MATERIAL)
@@ -87,9 +90,14 @@ func setup(sim: PushSim, boss_target: Vector3, captains := PackedInt32Array()) -
 	multimesh.instance_count = n
 
 
-## Hero i's row of sheets: their class's human sheet (every race, until the 精靈 and 獸人 art is drawn).
+## Hero i's sheet: their race and class.
 func sheet_of(i: int) -> int:
-	return _sim.cls[i]
+	return row_of(_sim.form[i] if i < _sim.form.size() else -1, _sim.cls[i])
+
+
+## The heroes.png row of a race and class; a hero without a race (form -1) draws as a human.
+static func row_of(form: int, c: int) -> int:
+	return maxi(form, 0) * CLASS_KEYS.size() + c
 
 
 func volley() -> void:

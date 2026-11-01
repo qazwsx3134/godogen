@@ -1,5 +1,7 @@
 # 吐槽視覺小說：目前進度與待辦
 
+2026-10-29 極短篇協作：作者提供桂的狗耳朵梗，核定阿銀改句與玩家時機吐槽，並指定桂分句停頓、第二句理直氣壯且認真。已建立 [v0.2 場景稿](stories/004-katsura-dog-ears-draft-v0.2.md)及可編輯獨立故事包；桂手勢候選圖已依作者同意生成並接入，尚待作者確認畫風與真人節奏驗收。
+
 2026-10-28 最新：預設為 **16:9 橫向**。短篇播放、圖編輯與漫畫演出可用；製作階段人格／記憶檔案、雜湊綁定的人類確認，以及編輯器「編劇參考」查看／選取／匯出已建立。三角色人格 revision 2、三條基礎記憶 revision 1 已由作者確認。完整 CRE、內建 AI Writer、自動記憶檢索與 OOC 評分尚未實作。最新交接見 [HANDOFF.md](../../prototypes/debt-commission/docs/HANDOFF.md)；[conversation 核對](CONVERSATION-AUDIT-2026-10-28.md)保留建立前基準，較早各次驗證見下文。
 
 更新：2026-10-06。範圍是 [V1 Roadmap](ROADMAP.md) 與 [debt-commission Godot 原型](../../prototypes/debt-commission/README.md)；詳細測試結果見[驗證紀錄](../../prototypes/debt-commission/docs/VERIFICATION.md)。本頁區分「技術片段已通過自動驗收」與「正式內容和真人體驗已完成」，避免把兩者混為一談。

@@ -2303,7 +2303,7 @@ func _present_boke_round(command: Dictionary, restored: bool, requested_ui_mode:
 	_maybe_tutorial.call_deferred("boke_round")
 	_dialog_panel.set_reading_enabled(false)
 	_set_name_plate(_current_speaker, false)
-	_focus_speaker(_current_speaker, "annoyed")
+	_focus_speaker(_current_speaker, str(RoundView.line(command).get("expression", command.get("expression", "annoyed"))))
 	_layout()
 	_line_plan = DialogueText.compile(RoundView.text(command), _text_interval(), _text_label.get_theme_font_size("normal_font_size"))
 	_full_text = str(_line_plan["plain"])

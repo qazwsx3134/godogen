@@ -1808,9 +1808,15 @@ func _validate_step(current_node_id: String, index: int, step: Dictionary, nodes
         "investigate":
             return _validate_investigation(step, prefix, index, nodes, asset_catalog)
         "boke_round":
+            if step.has("expression") and not VALID_EXPRESSIONS.has(str(step["expression"])):
+                return "%s boke expression is invalid" % prefix
             if step.has("retry") and (not _is_non_empty_string(step["retry"]) or not nodes.has(String(step["retry"]))):
                 return "%s boke retry target is invalid" % prefix
             if TsukkomiRound.is_v2(step):
+                if step.get("lines") is Array:
+                    for line: Variant in step["lines"]:
+                        if line is Dictionary and line.has("expression") and not VALID_EXPRESSIONS.has(str(line["expression"])):
+                            return "%s boke line expression is invalid" % prefix
                 var v2_error: String = TsukkomiRound.validate(step, prefix,
                     func(target: String) -> bool: return nodes.has(target),
                     func(item_id: String) -> bool: return _catalog_has_item(asset_catalog, item_id),

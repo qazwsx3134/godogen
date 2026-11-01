@@ -72,26 +72,23 @@ func restart() -> void:
 	_label()
 
 
-## The page's landscape layers scroll with the march (Taskbar Hero battle_parallax).
+## The page's backdrop layers (scenes/components/march_backdrop.tscn, instanced as MarchBackdrop) scroll with the
+## march, each at its `parallax_depth` (Taskbar Hero battle_parallax). The layers tile, so the shader wraps one
+## texture width.
 func bind_scenery(page: Node) -> void:
 	_scenery.clear()
-	for node: Node in page.get_children():
-		if not node is TextureRect:
-			continue
-		var n: String = node.name
-		if not (n == "DistantLandscape" or n == "Ground" or n.begins_with("LowerLandscape") or n.begins_with("LowerPatch")):
-			continue
+	var backdrop: Node = page.get_node_or_null(^"MarchBackdrop")
+	if backdrop == null:
+		return
+	for node: Node in backdrop.get_children():
 		var rect := node as TextureRect
-		var atlas := rect.texture as AtlasTexture
-		if atlas == null or atlas.atlas == null:
+		if rect == null or rect.texture == null or not rect.has_meta(&"parallax_depth"):
 			continue
 		var mat := ShaderMaterial.new()
 		mat.shader = PARALLAX
-		var total: Vector2 = atlas.atlas.get_size()
-		mat.set_shader_parameter("region_uv", Vector4(atlas.region.position.x / total.x, atlas.region.position.y / total.y,
-			atlas.region.size.x / total.x, atlas.region.size.y / total.y))
-		mat.set_shader_parameter("region_width", atlas.region.size.x)
-		var depth: float = 0.12 if n == "DistantLandscape" else (1.0 if n == "Ground" else 0.65)
+		mat.set_shader_parameter("region_uv", Vector4(0.0, 0.0, 1.0, 1.0))
+		mat.set_shader_parameter("region_width", float(rect.texture.get_width()))
+		var depth: float = rect.get_meta(&"parallax_depth")
 		mat.set_shader_parameter("depth_far", depth)
 		mat.set_shader_parameter("depth_near", depth)
 		mat.set_shader_parameter("travel_pixels", travel_pixels)

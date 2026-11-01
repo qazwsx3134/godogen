@@ -264,7 +264,7 @@
     }
    }
   },
-  "monster_shield": {
+  "beast_shield": {
    "directions": 1,
    "mirror": false,
    "anims": {
@@ -307,7 +307,7 @@
     }
    }
   },
-  "monster_sword": {
+  "beast_sword": {
    "directions": 1,
    "mirror": false,
    "anims": {
@@ -350,7 +350,7 @@
     }
    }
   },
-  "monster_spear": {
+  "beast_spear": {
    "directions": 1,
    "mirror": false,
    "anims": {
@@ -393,7 +393,7 @@
     }
    }
   },
-  "monster_bow": {
+  "beast_bow": {
    "directions": 1,
    "mirror": false,
    "anims": {
@@ -436,7 +436,7 @@
     }
    }
   },
-  "monster_mage": {
+  "beast_mage": {
    "directions": 1,
    "mirror": false,
    "anims": {
@@ -479,7 +479,7 @@
     }
    }
   },
-  "monster_healer": {
+  "beast_healer": {
    "directions": 1,
    "mirror": false,
    "anims": {
@@ -522,7 +522,7 @@
     }
    }
   },
-  "dream_shield": {
+  "elf_shield": {
    "directions": 1,
    "mirror": false,
    "anims": {
@@ -565,7 +565,7 @@
     }
    }
   },
-  "dream_sword": {
+  "elf_sword": {
    "directions": 1,
    "mirror": false,
    "anims": {
@@ -608,7 +608,7 @@
     }
    }
   },
-  "dream_spear": {
+  "elf_spear": {
    "directions": 1,
    "mirror": false,
    "anims": {
@@ -651,7 +651,7 @@
     }
    }
   },
-  "dream_bow": {
+  "elf_bow": {
    "directions": 1,
    "mirror": false,
    "anims": {
@@ -694,7 +694,7 @@
     }
    }
   },
-  "dream_mage": {
+  "elf_mage": {
    "directions": 1,
    "mirror": false,
    "anims": {
@@ -737,7 +737,7 @@
     }
    }
   },
-  "dream_healer": {
+  "elf_healer": {
    "directions": 1,
    "mirror": false,
    "anims": {
