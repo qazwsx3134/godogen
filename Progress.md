@@ -1,5 +1,21 @@
 # 進度與 Agent 交接
 
+## 最新 checkpoint：故事編輯器節點與步驟類型（2026-11-02）
+
+- 專案／分支：debt-commission／master，基準 HEAD `0f52e45a`。使用者要求右鍵節點切換類型／新增選項，以及更改既有步驟類型。未 commit／push；原有 VFX、故事背景與其他未提交修改保留。
+- 已完成：場景卡右鍵或標題列「⋮」可切換一般場景、選項／條件分支、跳轉、結局，也能新增選項；右鍵流程小節點可定位步驟類型，側欄每一步可切換。轉換計畫先在副本執行，取代已寫內容需確認；可沿用的文字與單一出口保留，多個不同目標不猜測，支援復原／重做及唯讀限制。使用和開啟方式見 `prototypes/debt-commission/docs/STORY-EDITOR.md`。
+- 本輪 L2：`node --test --test-isolation=none prototypes/debt-commission/tools/story_editor/test_node_types.cjs`（9 tests PASS）；以 `/tmp/debt-node-ui-smoke.cjs` 的 Domino 模擬 DOM 執行實際編輯器腳本，涵蓋右鍵、選項、取消、復原／重做、步驟切換、⋮、Esc、唯讀 PASS；以轉換產生的暫存分支故事執行 `godot --headless --path prototypes/debt-commission --script res://tools/story_editor/check_story.gd -- /tmp/debt-type-conversion-story.json --write`，4 節點驗證與版本重算 PASS（Godot MCP 監聽因沙箱被拒，與驗證分開）。JS 語法與 diff 空白檢查 PASS。未改 `.tscn`。
+- 未驗範圍：新增 `node_type_smoke.mjs` 的 Chromium 實際瀏覽器回歸因沙箱 `setsockopt: Operation not permitted` 無法啟動，非瀏覽器 PASS；視覺位置、手機操作與本機服務的實際儲存流程尚待正常桌面環境驗收。未重跑完整遊戲 suite。下一步在桌機啟動 `python3 preview/start.py`，開故事編輯器試用右鍵／⋮與步驟切換；有 Playwright 時依編輯器說明重跑瀏覽器回歸。
+
+## 最新 checkpoint：桂極短篇與萬事屋背景（2026-11-02）
+
+- 專案／分支：debt-commission／master，基準 HEAD `0f52e45a`；使用者指出 `aea4c5d9c46870d5a3cf077924d3d98076753644` 有短篇，已確認該 commit 是現行 HEAD 的祖先，包含《不是頭痛，是桂》。前次回答找不到新極短篇有誤：本篇有作者指定台詞、分句及玩家時機吐槽，已存 `stories/katsura_dog_ears/`。未改故事台詞或另建人物記憶。
+- 使用者希望視覺小說背景貼近《銀魂》原作，並選擇**直接生成**所描述的一張萬事屋客廳背景。已以 imagegen 生成並補上「糖分」掛字 `stories/katsura_dog_ears/art/yorozuya_anime_bg_v2.png`，1672×941 RGB，1,769,884 bytes，SHA-256 `7feacfbb52ee2bbe75f7dec975ecb792c7859906d66ed8fce46bbf6d2a4a2c2e`；以本 repo 既有真人版室內照片作家具配置參考，以動畫上色呈現。原樣保存、僅供本篇作候選，無掛字 v1 保留；既有桂／伊莉莎白／新八圖未覆蓋。
+- 本篇 `catalog.json` 覆寫 `yorozuya_living_room` 到新圖片；其他故事的 base catalog／背景與第一章調查熱區未改。作品 README 與原草稿已標記新候選，`art/README.md` 記錄來源；`docs/ART-SPEC.md` 註明現行橫向及 art-check 尺寸提示仍是舊直式規格。編輯器從 `http://127.0.0.1:8000/tools/story_editor/?story=katsura_dog_ears` 開，服務用 repo 根目錄 `python3 preview/start.py`。
+- 本輪 L2：隔離 XDG 用 `godot --headless --path prototypes/debt-commission --editor --import --quit` 匯入（`/tmp/debt-katsura-20261102-import-v2.log`）；`godot --headless --path prototypes/debt-commission --script res://tests/test_katsura_dog_ears.gd` **PASS**（`/tmp/debt-katsura-20261102-tests-v2.log`），包含本篇背景解析、實際 reading scene 背景載入、base catalog 不變及原吐槽時機流程；`test_story_packs.gd` **PASS**（`/tmp/debt-katsura-20261102-packs-v2.log`）。`python3 preview/test_preview.py -v` **10 PASS**，含本篇被故事編輯器服務發現與 PNG 載入；這些 HTTP 測試使用記憶體 handler。Node 執行故事編輯器 `resolveCatalog`，本篇及 base 的路徑各自正確。PNG CRC／16:9／catalog 檢查 PASS，project.godot 雜湊前後不變。
+- 限制：匯入／測試有沙箱 TCP 監聽 ERR_CANT_CREATE 與退出資源清理訊息，無最終 SCRIPT／SHADER／parse 錯誤；非 headless 實際畫面嘗試因 X11／Wayland 無法連線失敗（`/tmp/debt-katsura-20261102-visual.log`），因此新背景與角色／UI 疊合外觀、Web 及手機尚未驗收。現有 `build/web/index.pck` 不包含桂故事或新背景，未重匯 Web；不要說該舊包已更新。未跑完整遊戲 suite。`art_check.gd` 背景尺寸建議仍是舊直式，未改其行為。
+- 下一步：使用者從編輯器以 Godot 4.7 試播本篇，確認新背景與既有角色畫風、裁切及 QTE 可讀性，再依回饋調整；其他場景若要換成原作風格需逐一盤點。本輪與先前其他專案／圖片修改均保留未提交；未 commit／push／發布。
+
 ## 最新 checkpoint：統一本機預覽入口（2026-11-01）
 
 - 專案／分支：repo 根目錄預覽工作台、debt-commission、godot-kit／master；基準 `fad04133`。使用者要求集中預覽及故事編輯器開啟方式。本輪未 commit／push／公開部署，保留其他專案與前輪 VFX 尚未提交的變更；未新增或改寫故事。
@@ -7,7 +23,7 @@
 - 已更新：根 README、`preview/README.md`、debt 的 README／STORY-EDITOR／session-state、kit showcase README，集中啟動與操作連結。預覽來源仍由各專案維護，不複製一份編輯器或素材。
 - 本輪 L2：`python3 preview/test_preview.py -v` **9 tests PASS**；使用記憶體 HTTP handler 驗證真實故事頁／capabilities／實際 VFX HTML、data、PNG 與 Godot HTML；以暫存故事及模擬驗證器檢查存檔／舊 hash 衝突，並檢查無 token、路徑／symlink／Host 保護、缺包及啟動流程。`node --check preview/preview.js`、`sh -n preview/start.sh`、Python 編譯與文件連結檢查 PASS。未修改 Godot scene，未重跑遊戲／VFX suite；前輪結果見下一 checkpoint。
 - 未驗範圍：實際 `python3 preview/start.py --no-open` 在沙箱建立 socket 時得到 `Operation not permitted`，服務未常駐，瀏覽器／GPU／Windows 雙擊與實際 Godot 圖形試玩均未驗。本輪 HTTP 測試沒有監聽 socket，存檔測試的 Godot 驗證由測試替身處理；不把它寫成瀏覽器或實際 Godot 驗證 PASS。
-- 下一步：在使用者的普通終端機或 Windows 雙擊啟動，檢查故事開啟／場景試玩與特效畫面；若 Godot 不在 PATH，依 `preview/README.md` 用 `--godot` 指定 4.7 執行檔及 Web 範本。已有完整短篇仍待作者構想，前輪 Three 版本差異與 GPU 驗收限制不變。
+- 下一步：在使用者的普通終端機或 Windows 雙擊啟動，檢查故事開啟／場景試玩與特效畫面；若 Godot 不在 PATH，依 `preview/README.md` 用 `--godot` 指定 4.7 執行檔及 Web 範本。當時誤以為短篇構想未提供；現行 HEAD 已包含桂短篇，見上方更正。前輪 Three 版本差異與 GPU 驗收限制不變。
 
 ## 最新 checkpoint：46 種 Three.js 原生移植（2026-11-01）
 

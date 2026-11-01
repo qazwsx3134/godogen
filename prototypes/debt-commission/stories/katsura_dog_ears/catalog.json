@@ -2,6 +2,14 @@
   "extends": "res://data/asset_catalog.json",
   "default_pov": "shinpachi",
   "default_background": "yorozuya_living_room",
+  "backgrounds": {
+    "yorozuya_living_room": {
+      "label": "萬事屋・客廳",
+      "top": "#2e2a45",
+      "bottom": "#b9794f",
+      "path": "art/yorozuya_anime_bg_v2.png"
+    }
+  },
   "characters": {
     "katsura": {
       "name": "桂",

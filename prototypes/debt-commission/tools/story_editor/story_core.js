@@ -322,6 +322,109 @@
   };
   const newStep = op => (STEP_TEMPLATES[op] ? STEP_TEMPLATES[op]() : { op });
 
+  // A card is a scene, so its "type" describes how its last step leaves that scene.
+  const SCENE_TYPES = [
+    { id: 'continue', label: '一般場景（下一場景）' },
+    { id: 'choice', label: '選項分支' },
+    { id: 'condition', label: '條件分支' },
+    { id: 'goto', label: '跳到場景' },
+    { id: 'end', label: '結局' },
+  ];
+  const clone = value => JSON.parse(JSON.stringify(value));
+  const untouchedEnding = step => step?.op === 'end' && step.text === '（尚未寫完）' && Object.keys(step).length === 2;
+  const sceneType = node => {
+    const op = finalOp(node);
+    return ['choice', 'condition', 'goto', 'end'].includes(op) ? op : TERMINAL_STEP_OPS.includes(op) ? 'other' : 'continue';
+  };
+  const onlyTarget = node => {
+    // Earlier investigate steps have their own routes; they are not the scene's exit.
+    const last = asArray(node.steps).at(-1);
+    const exit = { steps: TERMINAL_STEP_OPS.includes(asObject(last).op) ? [last] : [] };
+    if ('next' in node) exit.next = node.next;
+    const targets = [...new Set(edgesOf(exit).map(edge => edge.target).filter(Boolean))];
+    return targets.length === 1 ? targets[0] : '';
+  };
+  function addChoiceOption(step) {
+    if (step?.op !== 'choice' || !Array.isArray(step.options)) return '選項格式不正確，請先修正步驟 JSON。';
+    let n = 1;
+    while (step.options.some(option => isObject(option) && option.id === 'opt' + n)) n++;
+    step.options.push({ id: 'opt' + n, label: '新選項', next: '' });
+    return '';
+  }
+
+  /** Preview a type change on a copy; the caller confirms any discarded content before applying it. */
+  function planStepType(node, index, category, op, speaker = 'speaker') {
+    if (!isObject(node) || !Array.isArray(node.steps) || !Number.isInteger(index) || index < 0 || index >= node.steps.length)
+      return { error: '找不到要修改的步驟。' };
+    if (!STEP_GROUPS.some(group => group.id === category && group.ops.includes(op)))
+      return { error: '不支援這個步驟類型。' };
+    const old = asObject(node.steps[index]);
+    const copy = clone(node);
+    if (old.op === op) {
+      if (op !== 'say') return { node: copy, changed: false, warning: '' };
+      const voice = category === 'narration' ? 'narrator' : (speaker && speaker !== 'narrator' ? speaker : 'speaker');
+      const existingVoice = old.speaker && old.speaker !== 'narrator' ? old.speaker : '';
+      const nextVoice = category === 'dialogue' && existingVoice ? existingVoice : voice;
+      const next = copy.steps[index];
+      let warning = '';
+      if (nextVoice === 'narrator' && next.offscreen) {
+        delete next.offscreen;
+        warning = '旁白不能使用「畫外音」設定，切換時會移除該設定。可用復原取回。';
+      }
+      next.speaker = nextVoice;
+      return { node: copy, changed: JSON.stringify(copy) !== JSON.stringify(node), warning };
+    }
+    const terminal = TERMINAL_STEP_OPS.includes(op);
+    if (terminal && index !== node.steps.length - 1)
+      return { error: '結尾或分支必須是場景最後一步，請先調整步驟順序。' };
+    if (terminal && node.steps.some((step, i) => i !== index && TERMINAL_STEP_OPS.includes(asObject(step).op)))
+      return { error: '這個場景已有結尾或分支，請先處理原本的終止步驟。' };
+
+    const next = newStep(op);
+    if (op === 'say') next.speaker = category === 'narration' ? 'narrator' : (old.speaker && old.speaker !== 'narrator' ? old.speaker : speaker);
+    if (op === 'comedy' && old.speaker && old.speaker !== 'narrator') next.speaker = old.speaker;
+    // Text is safe to carry only where both commands actually have a text field.
+    if (typeof old.text === 'string' && typeof next.text === 'string' && !untouchedEnding(old)) next.text = old.text;
+
+    const wasLast = index === node.steps.length - 1;
+    const oldTerminal = TERMINAL_STEP_OPS.includes(old.op);
+    const target = wasLast ? onlyTarget(node) : '';
+    const hadNext = wasLast && typeof node.next === 'string' && node.next !== '';
+    if (terminal && wasLast) {
+      if (op === 'goto' && target) next.target = target;
+      else if (op === 'choice' && target) next.options[0].next = target;
+      else if (op === 'condition' && target) next.then = target;
+      delete copy.next;
+    } else if (oldTerminal && wasLast) {
+      if (target) copy.next = target; else delete copy.next;
+    }
+    copy.steps[index] = next;
+    const lostNext = terminal && hadNext && !(target && ['goto', 'choice', 'condition'].includes(op));
+    const warning = (!untouchedEnding(old) || lostNext)
+      ? '切換會取代原步驟，無法沿用的欄位或連線會移除；可以用「復原」取回。' : '';
+    return { node: copy, changed: true, warning };
+  }
+
+  /** Change the scene's exit without replacing its earlier dialogue and other steps. */
+  function planSceneType(node, kind, speaker = 'speaker') {
+    if (!isObject(node) || !Array.isArray(node.steps) || !SCENE_TYPES.some(type => type.id === kind))
+      return { error: '不支援這個場景類型。' };
+    if (node.steps.slice(0, -1).some(step => TERMINAL_STEP_OPS.includes(asObject(step).op)))
+      return { error: '場景的結尾或分支後面還有步驟，請先調整順序。' };
+    if (sceneType(node) === kind && node.steps.length) return { node: clone(node), changed: false, warning: '' };
+    const copy = clone(node);
+    if (kind === 'continue') {
+      const old = copy.steps.pop();
+      const target = onlyTarget(node);
+      if (target) copy.next = target; else delete copy.next;
+      if (!copy.steps.length) copy.steps.push(newStep('say'));
+      return { node: copy, changed: true,
+        warning: untouchedEnding(old) ? '' : '切換會移除原本的結尾或分支及無法沿用的連線；可以用「復原」取回。' };
+    }
+    if (!TERMINAL_STEP_OPS.includes(finalOp(copy))) copy.steps.push({ op: 'end', text: '（尚未寫完）' });
+    return planStepType(copy, copy.steps.length - 1, 'event', kind, speaker);
+  }
+
   // ---------------------------------------------------------------- card content and geometry
 
   const GEOM = { width: 340, header: 34, summaryRow: 19, portRow: 22, pad: 8, maxRows: 4, gapX: 150, gapY: 36 };
@@ -638,7 +741,7 @@
     STEP_GROUPS, STEP_LABELS, stepLabel, foldShape, stepGroup, stepRuns, runExpanded, flowRows, effectiveMedia, graphCopy, availableExpressions,
     packEntries, resolveCatalog, usedAssets, missingArt,
     stringify, exportText, formatNumber, edgesOf, setEdge, clearEdge, analyze, reachableFrom, isEnding, renameNode, deleteNode,
-    uniqueId, newNode, newStory, newStep, insertIndex, addStep, STEP_TEMPLATES, GEOM, OP_ICONS, icon, summaryOf, cardSize, portOffset,
+    uniqueId, newNode, newStory, newStep, insertIndex, addStep, addChoiceOption, sceneType, planStepType, planSceneType, SCENE_TYPES, STEP_TEMPLATES, GEOM, OP_ICONS, icon, summaryOf, cardSize, portOffset,
     inPortOffset, autoLayout, parseGdStrings, FALLBACK_ENUMS, projectUrl, finalOp, NEEDS_NO_NEXT, FORBIDS_NEXT,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;

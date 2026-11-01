@@ -1,5 +1,9 @@
 # debt-commission 交接
 
+2026-11-02：故事編輯器的場景卡可按右鍵或「⋮」切換出口類型、增加選項；每個步驟可在側欄切換類型。既有內容被取代時先確認，可復原；唯讀故事不可修改。資料層、模擬 DOM 操作與 Godot 劇本驗證已測，Chromium 在此沙箱無法啟動，畫面／實際瀏覽器流程待驗。操作見 [STORY-EDITOR.md](../../docs/STORY-EDITOR.md)，驗證與工作區狀態見根目錄 `Progress.md`。
+
+2026-11-02：使用者指出 `aea4c5d9` 有《不是頭痛，是桂》，已查明是現行 HEAD 的祖先；先前回答「找不到新極短篇」有誤。作品包在 `stories/katsura_dog_ears/`。依作者「背景貼合原作」與直接生成的選擇，imagegen 生成一張 16:9 萬事屋客廳候選，透過此作品的 catalog 接入；其他故事沿用既有背景。`test_katsura_dog_ears.gd`、`test_story_packs.gd`、預覽入口測試通過；詳細命令與視覺限制見根目錄 `Progress.md`。此圖仍需作者在實際畫面確認。下方 10-28 的「短篇仍等構想」是更早的歷史狀態。
+
 2026-11-01：故事編輯器新增 repo 根目錄共用的[預覽工作台](../../../../preview/README.md)入口。執行 `python3 preview/start.py` 後開 `http://127.0.0.1:8000/preview/`，選故事編輯器即可；原本服務、存檔與場景試玩邏輯未改。本輪驗證與沙箱限制見根目錄 `Progress.md`。
 2026-10-29 立繪風格最新：作者提供另一故事的 MS Paint 鼠繪 prompt，要求依此生成並去背。imagegen 重繪了桂的雙手姿勢，參照現有銀時／神樂畫風；RGBA 透明背景 941×1672，保留原圖原始像素。新檔 stories/katsura_dog_ears/art/katsura_dog_ears_mouse_v2.png 已設為 catalog 基礎／serious 圖，katsura.tscn Art 預覽同步，舊圖保留。Godot headless 匯入與非headless test_katsura_dog_ears.gd 通過，實際畫面 /private/tmp/debt-katsura-mouse-v2/ 已檢視，待作者試看；未重匯 Web、未commit／push。
 

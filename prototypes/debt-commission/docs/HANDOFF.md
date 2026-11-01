@@ -1,5 +1,7 @@
 # debt-commission 系統與編輯器交接
 
+2026-11-02：第一篇極短篇已是《不是頭痛，是桂》，作品包含於 `aea4c5d9`，現行編輯與試玩入口見[作品說明](../stories/katsura_dog_ears/README.md)。依作者希望貼近《銀魂》原作的方向，本篇已接入生成的[動畫風萬事屋背景](../stories/katsura_dog_ears/art/yorozuya_anime_bg_v2.png)，待作者在遊戲中確認；本輪測試與環境限制見根目錄 Progress.md。以下 2026-10-28 的「等作者提供短篇」為歷史狀態。
+
 更新：2026-10-29（Asia/Taipei）。作者已恢復共同編劇，提供桂的小狗耳朵梗並要求玩家時機吐槽；阿銀改句、桂分句停頓與認真表情已依指示落實。新內容尚未 commit／push；先前交接時的停工指示已由本輪續作取代。
 
 最新短篇：[可編輯作品包](../stories/katsura_dog_ears/README.md)、[opt image 提示詞](../stories/katsura_dog_ears/OPT-IMAGE-PROMPT.md)。作者後續授權直接生成，桂手繪姿勢候選圖已接入；作者後續提供 MS Paint 鼠繪風格提示詞，已生成並接入去背新版，舊圖保留。最終畫風與真人手感仍待作者試看。下面保留 2026-10-28 系統交接基準；最新測試與變更見根目錄 Progress.md。

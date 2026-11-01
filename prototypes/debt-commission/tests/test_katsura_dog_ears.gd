@@ -2,6 +2,7 @@ extends "res://addons/proto_kit/test_kit.gd"
 
 const STORY: String = "res://stories/katsura_dog_ears/dog_ears_story.json"
 const CATALOG: String = "res://stories/katsura_dog_ears/catalog.json"
+const BACKGROUND: String = "res://stories/katsura_dog_ears/art/yorozuya_anime_bg_v2.png"
 const RUNNER = preload("res://scripts/story_runner.gd")
 const ROUND_VIEW = preload("res://scripts/round_view.gd")
 var game: Control
@@ -11,6 +12,12 @@ func _init() -> void:
 
 func _run() -> void:
 	root.size = Vector2i(1280, 720)
+	var pack_catalog: Dictionary = RUNNER.read_catalog(CATALOG).get("catalog", {})
+	var base_catalog: Dictionary = RUNNER.read_catalog(RUNNER.ASSET_CATALOG_PATH).get("catalog", {})
+	_expect(pack_catalog.get("backgrounds", {}).get("yorozuya_living_room", {}).get("path", "") == BACKGROUND,
+		"the short story resolves its own background")
+	_expect(base_catalog.get("backgrounds", {}).get("yorozuya_living_room", {}).get("path", "") != BACKGROUND,
+		"the base game's background remains separate")
 	var story: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(STORY)) as Dictionary
 	var opening: Array = story.nodes.opening.steps
 	_expect(opening.any(func(s: Dictionary) -> bool: return s.get("speaker") == "gintoki" and s.get("text") == "你腦袋被撞到嗎"), "Gintoki uses the author's revised line")
@@ -58,6 +65,9 @@ func _run() -> void:
 	_expect(game._story_ready, "actual reading shell loads the pack")
 	game._on_begin_pressed()
 	await _read_until(func() -> bool: return game._runner.node_id == "opening" and game._screen_mode == "story", "opening")
+	var background: TextureRect = game.get("_background_rect") as TextureRect
+	_expect(background != null and background.visible and background.texture != null
+		and background.texture.resource_path == BACKGROUND, "the actual reading scene displays the story background")
 	_expect(game._sprites.katsura.has_node("Art") and game._sprites.katsura.has_node("PosePlaceholder"), "editable actor scene is instantiated")
 	var portrait: TextureRect = game._sprites.katsura.get_node("Art") as TextureRect
 	_expect(portrait.texture != null and not game._sprites.katsura.get_node("PosePlaceholder").visible, "the generated portrait is visible and the placeholder is hidden")

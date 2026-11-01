@@ -329,6 +329,7 @@
     if (!value) return;
     ++loadTicket;
     drag = null;
+    hideNodeMenu();
     S.story = value.story; S.layout = value.layout; S.sel = value.sel; conversionRegistry = value.conversionRegistry || null;
     recompute(); ensureLayout(); refreshDirty();
     saveLayout(); saveDraft(); renderAll();
@@ -380,6 +381,7 @@
   function loadStory(story, name, key = null, rawText = null, path = null) {
     ++loadTicket;
     drag = null;
+    hideNodeMenu();
     stopAudio(); conversionRegistry = null;
     S.story = story;
     S.name = name || `${story.id}_story.json`;
@@ -534,10 +536,13 @@
         el('div', { class: 'media-label', title: label('BGM', bgm) }, label('BGM', bgm))),
       bgm.status !== 'mixed' && audioButton(bgm.id));
   }
-  function openStep(id, index) {
-    select({ type: 'node', id, step: index });
+  function focusStep(index) {
     const target = $('inspector').querySelector(`[data-step="${index}"]`);
     if (target) { target.scrollIntoView({ block: 'nearest' }); target.classList.add('search-hit'); target.querySelector('textarea,input,select')?.focus({ preventScroll: true }); }
+  }
+  function openStep(id, index) {
+    select({ type: 'node', id, step: index });
+    focusStep(index);
   }
   function flowNodes(id) {
     const node = S.story.nodes[id];
@@ -601,7 +606,17 @@
       lost && el('span', { class: 'badge lost' }, '到不了'),
       S.missingArt?.[id]?.length > 0 && el('span', { class: 'badge missing-art', title: S.missingArt[id].map(m => m.text).join('\n') },
         `缺圖 ${S.missingArt[id].length}`),
-      el('span', { class: 'nid' }, id)),
+      el('span', { class: 'nid' }, id),
+      el('button', { type: 'button', class: 'node-menu-button', title: '場景操作',
+        'aria-label': `場景 ${node.title || id} 的操作`, 'aria-haspopup': 'menu', 'aria-expanded': 'false',
+        onclick: ev => {
+          ev.stopPropagation();
+          const anchor = ev.currentTarget;
+          if (!nodeMenu.hidden && menuAnchor === anchor) { hideNodeMenu(); return; }
+          const r = anchor.getBoundingClientRect();
+          select({ type: 'node', id });
+          showNodeMenu(id, r.right, r.bottom, anchor);
+        } }, '⋮')),
     el('div', { class: 'scene-body', style: { height: (size.body + 16) + 'px' } }, sceneMedia(id), el('div', { class: 'flow' }, flowNodes(id))),
     el('div', { class: 'ports' }, edges.map(edge => portRow(id, edge))));
   }
@@ -932,17 +947,16 @@
       step.preset === 'emotion_band' && field('color', colorControl(step))],
     choice: step => {
       const options = Array.isArray(step.options) ? step.options : [];
+      const optionError = el('div', { class: 'err', role: 'alert' });
       return [field('prompt', textInput(step, 'prompt')),
         ...options.map((option, j) => isObj(option) && el('div', { class: 'opt' },
           textInput(option, 'id', false, 'id'), textInput(option, 'label', false, '選項文字'),
           el('div', { class: 'wide' }, nodeSelect(option.next, v => { option.next = v; touch(); }), rowButtons(options, j)))),
         button('＋選項', () => {
-          if (!Array.isArray(step.options)) step.options = [];
-          let n = step.options.length + 1;
-          while (step.options.some(o => o.id === 'opt' + n)) n++;
-          step.options.push({ id: 'opt' + n, label: '新選項', next: '' });
+          const error = Core.addChoiceOption(step);
+          if (error) { optionError.textContent = error; return; }
           touch({ inspector: true });
-        }, 'small')];
+        }, 'small'), optionError];
     },
   };
 
@@ -957,6 +971,21 @@
 
   function stepBox(node, step, index) {
     const form = FORMS[step.op];
+    const current = `${Core.stepGroup(step).id}:${step.op}`;
+    const typeError = el('div', { class: 'err', role: 'alert' });
+    const known = Core.STEP_GROUPS.some(group => group.ops.includes(step.op));
+    const type = el('select', { class: 'step-type-picker', 'aria-label': `更改第 ${index + 1} 步類型` },
+      !known && el('option', { value: current }, `${step.op}（目前的類型）`),
+      ...Core.STEP_GROUPS.map(group => el('optgroup', { label: group.label }, group.ops.map(op =>
+        el('option', { value: `${group.id}:${op}` }, `${Core.icon(op)} ${Core.stepLabel({ op, speaker: group.id === 'narration' ? 'narrator' : 'speaker' })}（${op}）`)))));
+    type.value = current;
+    type.addEventListener('change', () => {
+      const [category, op] = type.value.split(':');
+      const id = S.sel?.type === 'node' ? S.sel.id : '';
+      const plan = Core.planStepType(node, index, category, op, defaultSpeaker());
+      if (plan.error) { typeError.textContent = plan.error; type.value = current; return; }
+      if (!applyTypePlan(id, plan, index)) type.value = current;
+    });
     const json = el('textarea', { class: 'json', value: Core.stringify(step), spellcheck: false });
     const err = el('div', { class: 'err' });
     json.addEventListener('focus', () => { json.value = Core.stringify(step); });  // the form may have changed the step since this was drawn
@@ -966,7 +995,8 @@
     });
     return el('div', { class: 'step', data: { step: index } },
       el('div', { class: 'step-head' }, el('span', {}, `#${index}`), el('span', { class: 'op', title: step.op }, `${Core.icon(step.op)} ${Core.stepLabel(step)}`, el('small', {class:'op-code'}, step.op)), rowButtons(node.steps, index)),
-      el('div', { class: 'step-body' }, form ? form(step) : [], el('details', { open: !form }, el('summary', {}, 'JSON（所有欄位）'), json, err)));
+      el('div', { class: 'step-body' }, field('步驟類型', type, typeError), form ? form(step) : [],
+        el('details', { open: !form }, el('summary', {}, 'JSON（所有欄位）'), json, err)));
   }
 
   function renderInfo() {
@@ -1176,9 +1206,104 @@
     touch({ inspector: true });
   }
 
+  const defaultSpeaker = () => {
+    const characters = S.catalog?.characters || {};
+    const preferred = S.story?.default_pov || S.catalog?.default_pov;
+    return preferred && preferred in characters ? preferred : Object.keys(characters)[0] || 'speaker';
+  };
+
+  // Plans are made on a copy. Confirmation precedes the only mutation, so cancel is lossless.
+  function applyTypePlan(id, plan, stepIndex = null) {
+    if (isReadOnly() || !S.story?.nodes[id]) return false;
+    if (plan.error) { failure(plan.error); return false; }
+    if (!plan.changed) return true;
+    if (plan.warning && !confirm(plan.warning)) return false;
+    S.story.nodes[id] = plan.node;
+    S.sel = stepIndex === null ? { type: 'node', id } : { type: 'node', id, step: stepIndex };
+    touch({ inspector: true });
+    if (stepIndex !== null) focusStep(stepIndex);
+    return true;
+  }
+
+  function changeSceneType(id, kind) {
+    if (isReadOnly() || !S.story?.nodes[id]) return;
+    applyTypePlan(id, Core.planSceneType(S.story.nodes[id], kind, defaultSpeaker()));
+  }
+
+  function addSceneOption(id) {
+    if (isReadOnly() || !S.story?.nodes[id]) return;
+    const node = S.story.nodes[id];
+    if (Core.sceneType(node) !== 'choice') {
+      const plan = Core.planSceneType(node, 'choice', defaultSpeaker());
+      applyTypePlan(id, plan, plan.node ? plan.node.steps.length - 1 : null);
+      return;
+    }
+    const copy = JSON.parse(JSON.stringify(node));
+    const index = copy.steps.length - 1;
+    const error = Core.addChoiceOption(copy.steps[index]);
+    if (error) { failure(error); return; }
+    applyTypePlan(id, { node: copy, changed: true, warning: '' }, index);
+  }
+
   // ---------------------------------------------------------------- mouse
 
   let drag = null;
+  const nodeMenu = el('div', { id: 'nodeContextMenu', class: 'node-context-menu', role: 'menu',
+    'aria-label': '場景操作', tabIndex: -1, hidden: true });
+  document.body.append(nodeMenu);
+  let menuAnchor = null;
+
+  function hideNodeMenu(restoreFocus = false) {
+    if (nodeMenu.hidden) return;
+    nodeMenu.hidden = true;
+    const anchor = menuAnchor;
+    if (anchor) anchor.setAttribute('aria-expanded', 'false');
+    menuAnchor = null;
+    if (restoreFocus) anchor?.focus();
+  }
+
+  function showNodeMenu(id, x, y, anchor = null, stepIndex = null) {
+    const node = S.story?.nodes[id];
+    if (!node) return;
+    hideNodeMenu();
+    menuAnchor = anchor;
+    if (anchor) anchor.setAttribute('aria-expanded', 'true');
+    const current = Core.sceneType(node);
+    const item = (label, action, props = {}) => el('button', {
+      type: 'button', role: 'menuitem', ...props,
+      onclick: () => { hideNodeMenu(); action(); },
+    }, label);
+    nodeMenu.replaceChildren(
+      el('div', { class: 'node-menu-title' }, node.title || id),
+      el('div', { class: 'node-menu-heading' }, '更改場景類型'),
+      ...Core.SCENE_TYPES.map(type => item(`${type.id === current ? '✓ ' : '　'}${type.label}`,
+        () => changeSceneType(id, type.id), { role: 'menuitemradio', 'aria-checked': String(type.id === current),
+          data: { sceneType: type.id }, disabled: isReadOnly() })),
+      el('div', { class: 'node-menu-divider' }),
+      item('＋新增選項', () => addSceneOption(id), { data: { action: 'add-option' }, disabled: isReadOnly() }),
+      ...(stepIndex !== null ? [item('更改這個步驟類型…', () => openStep(id, stepIndex), { data: { action: 'edit-step' } })] : []),
+      ...(isReadOnly() ? [el('div', { class: 'node-menu-note' }, '此故事為唯讀，請先轉成圖編輯來源。')] : []));
+    nodeMenu.hidden = false;
+    nodeMenu.style.left = '0px'; nodeMenu.style.top = '0px';
+    const bounds = nodeMenu.getBoundingClientRect();
+    nodeMenu.style.left = `${Math.max(8, Math.min(x, window.innerWidth - bounds.width - 8))}px`;
+    nodeMenu.style.top = `${Math.max(8, Math.min(y, window.innerHeight - bounds.height - 8))}px`;
+    (nodeMenu.querySelector('button:not(:disabled)') || nodeMenu).focus({ preventScroll: true });
+  }
+
+  view.addEventListener('contextmenu', ev => {
+    const card = ev.target.closest('.card');
+    if (!card || !S.story) return;
+    ev.preventDefault();
+    const id = card.dataset.node;
+    const step = ev.target.closest('.flow-node[data-step]');
+    select({ type: 'node', id });
+    showNodeMenu(id, ev.clientX, ev.clientY, null, step ? Number(step.dataset.step) : null);
+  });
+  document.addEventListener('pointerdown', ev => {
+    if (!nodeMenu.hidden && !nodeMenu.contains(ev.target) && ev.target !== menuAnchor) hideNodeMenu();
+  });
+  window.addEventListener('resize', () => hideNodeMenu());
 
   function cardAt(x, y) {
     for (const node of document.elementsFromPoint(x, y)) {
@@ -1286,6 +1411,7 @@
 
   view.addEventListener('wheel', ev => {
     ev.preventDefault();
+    hideNodeMenu();
     zoomAt(ev.clientX, ev.clientY, Math.exp(-ev.deltaY * 0.0015));
   }, { passive: false });
 
@@ -1296,6 +1422,20 @@
   }
 
   document.addEventListener('keydown', ev => {
+    if (!nodeMenu.hidden) {
+      if (ev.key === 'Escape') { ev.preventDefault(); hideNodeMenu(true); return; }
+      if (['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(ev.key)) {
+        ev.preventDefault();
+        const items = [...nodeMenu.querySelectorAll('button:not(:disabled)')];
+        if (!items.length) return;
+        const index = items.indexOf(document.activeElement);
+        const next = ev.key === 'Home' ? 0 : ev.key === 'End' ? items.length - 1
+          : (index + (ev.key === 'ArrowDown' ? 1 : -1) + items.length) % items.length;
+        items[next].focus();
+        return;
+      }
+      if (ev.key === 'Delete' || ev.key === 'Backspace') return;
+    }
     if ((ev.ctrlKey || ev.metaKey) && ev.key.toLowerCase() === 'f') {
       ev.preventDefault(); $('searchInput').focus(); $('searchInput').select(); return;
     }

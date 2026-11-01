@@ -35,5 +35,6 @@ L06 新八：[玩家抓準時機，左側漫畫格]「到底是怎樣啦！！�
 - 編輯器選「極短篇：不是頭痛，是桂」；桂的 Art 框在同作品 scenes/katsura.tscn，為 Godot 保存的可編輯 scene。
 - 作者後續要求直接生成；依四張參考生成的[桂姿勢候選圖](../../../prototypes/debt-commission/stories/katsura_dog_ears/art/katsura_dog_ears_mouse_v2.png)已依作者提供的 MS Paint 風格重繪、去背並接入，畫風與表情仍待作者試看。[參考分工與提示詞](../../../prototypes/debt-commission/stories/katsura_dog_ears/OPT-IMAGE-PROMPT.md)保留供修訂。
 - 第二句沿用同一張認真姿勢圖，透過分句和停頓表達理直氣壯，不切成不耐煩或笑臉。
+- 2026-11-02 新增[萬事屋動畫風背景候選](../../../prototypes/debt-commission/stories/katsura_dog_ears/art/yorozuya_anime_bg_v2.png)，僅接到本篇；畫風與構圖仍待作者在遊戲中試看。
 - 伊莉莎白只舉牌，不配開口；閱讀記錄用旁白記錄牌子文字。
 - 本篇未新增桂／伊莉莎白完整人格或任何記憶；只落實作者指定的此場行為。

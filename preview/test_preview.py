@@ -79,6 +79,16 @@ class PreviewHTTPTests(unittest.TestCase):
         header, _ = self.request("/api/save", method="POST", headers="Content-Type: application/json\r\nContent-Length: 2\r\n", body=b"{}")
         self.assertIn("403", header)
 
+    def test_katsura_story_and_new_background_are_available_to_editor(self):
+        capabilities = json.loads(self.request("/api/capabilities")[1])
+        self.assertTrue(any(pack["id"] == "katsura_dog_ears" for pack in capabilities["packs"]))
+        header, raw = self.request("/stories/katsura_dog_ears/catalog.json")
+        self.assertIn("200 OK", header)
+        relative = json.loads(raw)["backgrounds"]["yorozuya_living_room"]["path"]
+        header, image = self.request("/stories/katsura_dog_ears/" + relative)
+        self.assertIn("200 OK", header)
+        self.assertTrue(image.startswith(b"\x89PNG\r\n\x1a\n"))
+
     def test_story_save_and_conflict_through_hub_handler_in_temporary_project(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
