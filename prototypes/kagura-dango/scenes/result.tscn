@@ -1,0 +1,99 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/result.gd" id="1_aqgun"]
+
+[node name="Result" type="Control" unique_id=73145787]
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("1_aqgun")
+
+[node name="Background" type="ColorRect" parent="." unique_id=160938877]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.98, 0.93, 0.84, 1)
+
+[node name="Center" type="CenterContainer" parent="." unique_id=1715085471]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Column" type="VBoxContainer" parent="Center" unique_id=2012899616]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="LevelTitle" type="Label" parent="Center/Column" unique_id=1106621446]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(0.16, 0.15, 0.24, 1)
+text = "關卡"
+horizontal_alignment = 1
+
+[node name="Rank" type="Label" parent="Center/Column" unique_id=1579094917]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+theme_override_colors/font_color = Color(0.16, 0.15, 0.24, 1)
+text = "大胃王"
+horizontal_alignment = 1
+
+[node name="Score" type="Label" parent="Center/Column" unique_id=625760809]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(0.16, 0.15, 0.24, 1)
+text = "0 分"
+horizontal_alignment = 1
+
+[node name="Counts" type="Label" parent="Center/Column" unique_id=531091905]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.16, 0.15, 0.24, 1)
+text = "完美 0　不錯 0　勉強 0　漏掉 0"
+horizontal_alignment = 1
+
+[node name="Comment" type="Label" parent="Center/Column" unique_id=1714733544]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(520, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.16, 0.15, 0.24, 1)
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Buttons" type="HBoxContainer" parent="Center/Column" unique_id=1086914341]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="Next" type="Button" parent="Center/Column/Buttons" unique_id=1767405019]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 44)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 20
+text = "下一回合"
+
+[node name="Retry" type="Button" parent="Center/Column/Buttons" unique_id=517985855]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 44)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 20
+text = "重來這回合"
+
+[node name="Back" type="Button" parent="Center/Column/Buttons" unique_id=1241551465]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 44)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 20
+text = "回標題"

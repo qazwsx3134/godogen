@@ -1,0 +1,85 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/calibrate.gd" id="1_3kysy"]
+[ext_resource type="Script" path="res://scripts/conductor.gd" id="2_xwuu2"]
+
+[node name="Calibrate" type="Control" unique_id=994557330]
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("1_3kysy")
+
+[node name="Background" type="ColorRect" parent="." unique_id=485777126]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.98, 0.93, 0.84, 1)
+
+[node name="Center" type="CenterContainer" parent="." unique_id=1900672612]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Column" type="VBoxContainer" parent="Center" unique_id=1523060241]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Instruction" type="Label" parent="Center/Column" unique_id=93170847]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(0.16, 0.15, 0.24, 1)
+text = "跟著牛鈴的拍子點畫面（至少 8 次）"
+horizontal_alignment = 1
+
+[node name="Dot" type="ColorRect" parent="Center/Column" unique_id=1979025757]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 2
+color = Color(0.88, 0.24, 0.3, 1)
+
+[node name="Info" type="Label" parent="Center/Column" unique_id=302377238]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.16, 0.15, 0.24, 1)
+horizontal_alignment = 1
+
+[node name="Buttons" type="HBoxContainer" parent="Center/Column" unique_id=1348458674]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="Apply" type="Button" parent="Center/Column/Buttons" unique_id=670167924]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 44)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 20
+text = "套用"
+
+[node name="Retry" type="Button" parent="Center/Column/Buttons" unique_id=2140610700]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 44)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 20
+text = "重測"
+
+[node name="Back" type="Button" parent="Center/Column/Buttons" unique_id=1057289687]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 44)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 20
+text = "返回"
+
+[node name="Conductor" type="Node" parent="." unique_id=342021158]
+unique_name_in_owner = true
+script = ExtResource("2_xwuu2")

@@ -1,0 +1,11 @@
+{
+	"id": "calibrate",
+	"title": "延遲校準",
+	"music": "res://assets/music/calibrate.wav",
+	"bpm": 100,
+	"offset": 0.0,
+	"count_in_beats": 0,
+	"end_beat": 64,
+	"land_after": {},
+	"cues": []
+}

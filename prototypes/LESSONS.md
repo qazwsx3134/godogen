@@ -45,6 +45,7 @@
 - **用 python `str.replace` 批次改檔，比對不到也照印 ok** → 改檔腳本一律 `assert old in s`。（[pachinko](pachinko/TODO.md#盤面重設計)）
 
 - **等待動畫自動 `queue_free()` 時，Lambda 直接 capture node 會報「Lambda capture … was freed」，即使 `is_instance_valid` 檢查也來不及** → capture `WeakRef`，用 `get_ref() == null` 等待；同時檢查 log 的引擎 ERROR，不能只看測試 exit code。（[godot-kit VFX 驗證](godot-kit/docs/vfx/VALIDATION.md)，2026-11-01）
+- **測試裡按鈕、點擊「沒反應」**（2026-11-02，kagura-dango）→ kit 的 `_press`／`_tap` 是協程，要 `await _press(...)`；沒 await 就檢查，會在點擊送出前斷言。（[kagura-dango tests](kagura-dango/tests/test_flow.gd)）
 
 ## Scene、UI 與 Godot API
 
@@ -84,6 +85,7 @@
 - **網頁存檔 console 出現 `Failed to save IDB file system`**（原子寫入的 `.tmp` 改名競態）→ 套 kit 的 `tools/web/patch_idbfs.py`。（[web-release](godot-kit/skills/godot-prototype-to-itch/references/web-release.md#4-匯出版才會出問題的地方)）
 - **Compatibility renderer 用 Filmic 加高環境光整片過曝** → seichi-pov 改用 AgX、環境光 0.45。（[seichi-pov](seichi-pov/README.md#已知地雷)）
 - **@icons 外掛 import 3,854 個 SVG**、Godot Animated Image v1.2.0 在 Linux／Web 載入失敗 → 各套件的安裝與匯出注意事項見 kit README。（[godot-kit README](godot-kit/README.md#各套件注意事項)）
+- **同步 kit 後網頁版 pck 多出約 14 MB**（2026-11-02，kagura-dango）→ 沒用到特效庫的專案在 Web preset 的 `exclude_filter` 加 `addons/proto_kit/vfx/*`（16.1 → 5.1 MB）。（[kagura-dango PROGRESS](kagura-dango/PROGRESS.md)）
 
 ## 效能
 
@@ -107,6 +109,7 @@
 
 - **桌面 Chromium 也有 `navigator.vibrate`** → 偵測再加 `navigator.maxTouchPoints > 0` 或 `(pointer: coarse)`，用真瀏覽器驗證；iPhone Safari 沒有這個 API。（[CLAUDE.md](../CLAUDE.md) 2026-10-03、[web-release](godot-kit/skills/godot-prototype-to-itch/references/web-release.md#5-手機震動網頁)）
 - **WAV 匯入成 QOA，原始檔仍在專案裡** → 要縮專案就轉 Ogg。（[art-pipeline](godot-kit/skills/godot-prototype-to-itch/references/art-pipeline.md#匯入設定import-檔要-commit)）
+- **網頁版（Sample 播放）`play()` 之後約 1.1 秒音樂才真的開始**（2026-11-02，kagura-dango，3.7 MB WAV）→ 節奏判定用 `get_playback_position() + get_time_since_last_mix() - get_output_latency()`，取最大值防止偶爾倒退約 1 ms；用 `play()` 當下的牆上時鐘當錨點，整首會錯開 1 秒。用真 Chrome 量（`kagura-dango/tools/web_clock_probe.mjs`）。（[kagura-dango PROGRESS](kagura-dango/PROGRESS.md)）
 
 ## 存檔與劇本
 

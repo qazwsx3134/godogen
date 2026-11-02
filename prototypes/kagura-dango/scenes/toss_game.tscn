@@ -1,0 +1,79 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/toss_game.gd" id="1_bgoir"]
+[ext_resource type="Script" path="res://scripts/conductor.gd" id="2_eiksa"]
+[ext_resource type="PackedScene" path="res://scenes/stage.tscn" id="3_oyahk"]
+[ext_resource type="Script" path="res://scripts/stage.gd" id="4_l64ce"]
+[ext_resource type="PackedScene" path="res://scenes/actor.tscn" id="5_nhno4"]
+[ext_resource type="Script" path="res://scripts/actor.gd" id="6_c64pp"]
+[ext_resource type="Script" path="res://scripts/plate_stack.gd" id="7_1orei"]
+[ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="8_hu706"]
+[ext_resource type="Script" path="res://scripts/hud.gd" id="9_lcqon"]
+[ext_resource type="AudioStream" path="res://assets/sfx/chomp.wav" id="10_vmyev"]
+[ext_resource type="AudioStream" path="res://assets/sfx/miss.wav" id="11_jiuhq"]
+[ext_resource type="AudioStream" path="res://assets/sfx/whiff.wav" id="12_x4mth"]
+
+[node name="TossGame" type="Node2D" unique_id=2039944207]
+script = ExtResource("1_bgoir")
+chart_path = "res://data/songs/toss2.json"
+
+[node name="Conductor" type="Node" parent="." unique_id=1053696120]
+unique_name_in_owner = true
+script = ExtResource("2_eiksa")
+
+[node name="Camera" type="Camera2D" parent="." unique_id=1281353567]
+unique_name_in_owner = true
+position = Vector2(320, 180)
+
+[node name="Stage" type="Node2D" parent="." unique_id=685568183 instance=ExtResource("3_oyahk")]
+unique_name_in_owner = true
+script = ExtResource("4_l64ce")
+
+[node name="Gintoki" type="Node2D" parent="." unique_id=173833660 instance=ExtResource("5_nhno4")]
+unique_name_in_owner = true
+position = Vector2(110, 290)
+script = ExtResource("6_c64pp")
+display_name = "銀時"
+body_color = Color(0.86, 0.89, 0.96, 1)
+
+[node name="Shinpachi" type="Node2D" parent="." unique_id=1827043731 instance=ExtResource("5_nhno4")]
+unique_name_in_owner = true
+position = Vector2(300, 300)
+scale = Vector2(0.8, 0.8)
+script = ExtResource("6_c64pp")
+display_name = "新八"
+body_color = Color(0.55, 0.7, 0.92, 1)
+
+[node name="Kagura" type="Node2D" parent="." unique_id=949297683 instance=ExtResource("5_nhno4")]
+unique_name_in_owner = true
+position = Vector2(525, 290)
+scale = Vector2(0.95, 0.95)
+script = ExtResource("6_c64pp")
+display_name = "神樂"
+body_color = Color(0.88, 0.24, 0.3, 1)
+
+[node name="SkewerPile" type="Node2D" parent="." unique_id=1585921527]
+unique_name_in_owner = true
+position = Vector2(588, 300)
+script = ExtResource("7_1orei")
+sticks = true
+
+[node name="Skewers" type="Node2D" parent="." unique_id=187982339]
+unique_name_in_owner = true
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=169533805 instance=ExtResource("8_hu706")]
+unique_name_in_owner = true
+script = ExtResource("9_lcqon")
+hint_text = "聽到「咚」之後的第二拍點畫面；高音快拋是下一拍"
+
+[node name="Chomp" type="AudioStreamPlayer" parent="." unique_id=193310004]
+unique_name_in_owner = true
+stream = ExtResource("10_vmyev")
+
+[node name="Miss" type="AudioStreamPlayer" parent="." unique_id=187404960]
+unique_name_in_owner = true
+stream = ExtResource("11_jiuhq")
+
+[node name="Whiff" type="AudioStreamPlayer" parent="." unique_id=391850198]
+unique_name_in_owner = true
+stream = ExtResource("12_x4mth")

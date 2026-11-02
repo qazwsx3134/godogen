@@ -1,0 +1,17 @@
+# Godot's import cache and editor state: rebuilt by `godot --headless --editor --quit`
+.godot/
+
+# Web export (build_web.sh output): rebuilt from source, not versioned
+build/
+
+# Raw image-generation output and source fonts: local only
+art_src/gen/
+art_src/fonts/
+
+# Kit copy: this game does not use the VFX library (14 MB, ~1000 files); sync.sh copies it, git skips it
+addons/proto_kit/vfx/
+
+# Songs are baked from data/songs/*.json by tools/bake_music.py (deterministic): run it after a clone.
+# The short sound effects in assets/sfx/ stay versioned because scenes reference them.
+assets/music/*.wav
+assets/music/*.wav.import

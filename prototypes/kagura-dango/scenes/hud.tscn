@@ -1,0 +1,69 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/hud.gd" id="1_ahhtf"]
+
+[node name="HUD" type="CanvasLayer" unique_id=169533805]
+script = ExtResource("1_ahhtf")
+
+[node name="JudgeLabel" type="Label" parent="." unique_id=866634921]
+unique_name_in_owner = true
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -160.0
+offset_top = 48.0
+offset_right = 160.0
+offset_bottom = 96.0
+theme_override_font_sizes/font_size = 34
+theme_override_colors/font_color = Color(0.16, 0.15, 0.24, 1)
+horizontal_alignment = 1
+
+[node name="CallLabel" type="Label" parent="." unique_id=1873520311]
+unique_name_in_owner = true
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -160.0
+offset_top = 96.0
+offset_right = 160.0
+offset_bottom = 136.0
+theme_override_font_sizes/font_size = 28
+theme_override_colors/font_color = Color(0.8, 0.12, 0.15, 1)
+horizontal_alignment = 1
+
+[node name="RoundLabel" type="Label" parent="." unique_id=2135994178]
+unique_name_in_owner = true
+offset_left = 10.0
+offset_top = 8.0
+offset_right = 200.0
+offset_bottom = 28.0
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.98, 0.93, 0.84, 1)
+
+[node name="Scoreboard" type="Label" parent="." unique_id=1007181284]
+unique_name_in_owner = true
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -250.0
+offset_top = 8.0
+offset_right = -10.0
+offset_bottom = 28.0
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.98, 0.93, 0.84, 1)
+horizontal_alignment = 2
+
+[node name="Hint" type="Label" parent="." unique_id=2120160076]
+unique_name_in_owner = true
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -310.0
+offset_top = -30.0
+offset_right = 310.0
+offset_bottom = -8.0
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.98, 0.93, 0.84, 1)
+horizontal_alignment = 1

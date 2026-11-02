@@ -1,0 +1,9 @@
+{
+	"_note": "一場比賽的回合順序。scene 是關卡畫面，chart 是譜面，story 是回合前的台詞（data/story.json）。",
+	"opening": "opening",
+	"stages": [
+		{"scene": "res://scenes/three_eat.tscn", "chart": "res://data/songs/eat3.json", "story": "round1"},
+		{"scene": "res://scenes/toss_game.tscn", "chart": "res://data/songs/toss2.json", "story": "round2"},
+		{"scene": "res://scenes/toss_game.tscn", "chart": "res://data/songs/toss3.json", "story": "round3"}
+	]
+}

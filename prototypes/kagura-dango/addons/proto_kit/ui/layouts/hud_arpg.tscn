@@ -1,0 +1,174 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://addons/proto_kit/ui/themes/dark_gothic.tres" id="1_il8q7"]
+
+[node name="HudArpg" type="Control" unique_id=1075685370]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 390.0
+offset_bottom = 844.0
+theme = ExtResource("1_il8q7")
+metadata/ui_layout_id = "hud_arpg"
+metadata/authored_node_count = 27
+
+[node name="Backdrop" type="Panel" parent="." unique_id=1571221218]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="SafeMargin" type="MarginContainer" parent="." unique_id=132378695]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="Body" type="VBoxContainer" parent="SafeMargin" unique_id=632425711]
+layout_mode = 2
+
+[node name="Top" type="HBoxContainer" parent="SafeMargin/Body" unique_id=260850983]
+layout_mode = 2
+
+[node name="Portrait" type="Label" parent="SafeMargin/Body/Top" unique_id=99560452]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TitleLabel"
+text = "◆"
+autowrap_mode = 3
+
+[node name="Health" type="VBoxContainer" parent="SafeMargin/Body/Top" unique_id=1964514913]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Name" type="Label" parent="SafeMargin/Body/Top/Health" unique_id=946680811]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CaptionLabel"
+text = "旅人 · Lv.12"
+autowrap_mode = 3
+
+[node name="HpBar" type="ProgressBar" parent="SafeMargin/Body/Top/Health" unique_id=801421969]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+value = 78.0
+show_percentage = false
+
+[node name="Timer" type="Label" parent="SafeMargin/Body" unique_id=2044131201]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CaptionLabel"
+text = "第 03 層 · 02:48"
+autowrap_mode = 3
+
+[node name="WaveBar" type="ProgressBar" parent="SafeMargin/Body" unique_id=7335299]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+value = 42.0
+show_percentage = false
+
+[node name="Objective" type="Label" parent="SafeMargin/Body" unique_id=128318431]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CaptionLabel"
+text = "限時目標 · 擊敗守衛 0/1"
+autowrap_mode = 3
+
+[node name="Arena" type="PanelContainer" parent="SafeMargin/Body" unique_id=1090048762]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Content" type="VBoxContainer" parent="SafeMargin/Body/Arena" unique_id=1715730335]
+layout_mode = 2
+
+[node name="Area" type="Label" parent="SafeMargin/Body/Arena/Content" unique_id=1462121521]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TitleLabel"
+text = "迷霧林地"
+autowrap_mode = 3
+
+[node name="Actors" type="Label" parent="SafeMargin/Body/Arena/Content" unique_id=1495903989]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "✦     ◆     ✦"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="SkillBar" type="GridContainer" parent="SafeMargin/Body" unique_id=1770532010]
+unique_name_in_owner = true
+layout_mode = 2
+columns = 3
+
+[node name="Skill0" type="Button" parent="SafeMargin/Body/SkillBar" unique_id=1757438015]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "斬擊"
+
+[node name="Skill1" type="Button" parent="SafeMargin/Body/SkillBar" unique_id=1649697577]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "火球"
+
+[node name="Skill2" type="Button" parent="SafeMargin/Body/SkillBar" unique_id=926579744]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "閃避"
+
+[node name="Skill3" type="Button" parent="SafeMargin/Body/SkillBar" unique_id=386506162]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "旋風"
+
+[node name="Skill4" type="Button" parent="SafeMargin/Body/SkillBar" unique_id=1989131718]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "護盾"
+
+[node name="Skill5" type="Button" parent="SafeMargin/Body/SkillBar" unique_id=1245287303]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "治療"
+
+[node name="AutoControls" type="HBoxContainer" parent="SafeMargin/Body" unique_id=506758931]
+layout_mode = 2
+
+[node name="Spacer" type="Control" parent="SafeMargin/Body/AutoControls" unique_id=1735747078]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AutoWeapon" type="Button" parent="SafeMargin/Body/AutoControls" unique_id=1568646882]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 8
+tooltip_text = "自動武器"
+theme_type_variation = &"RoundButton"
+toggle_mode = true
+button_pressed = true
+text = "武"
+
+[node name="AutoSkill" type="Button" parent="SafeMargin/Body/AutoControls" unique_id=1339649860]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 8
+tooltip_text = "自動技能"
+theme_type_variation = &"RoundButton"
+toggle_mode = true
+button_pressed = true
+text = "技"

@@ -1,0 +1,23 @@
+{
+	"id": "eat3",
+	"title": "第一回合　三人齊吃",
+	"music": "res://assets/music/eat3.wav",
+	"bpm": 112,
+	"offset": 0.0,
+	"intensity": 1,
+	"count_in_beats": 8,
+	"end_beat": 76,
+	"rival": 18,
+	"land_after": {"anko": 2, "soy": 2, "tri": 2},
+	"lanes": {"anko": 0, "soy": 1, "tri": 2},
+	"cues": [
+		{"beat": 8, "type": "tri"}, {"beat": 12, "type": "anko"}, {"beat": 16, "type": "soy"}, {"beat": 20, "type": "tri"},
+		{"beat": 24, "type": "anko"}, {"beat": 26, "type": "soy"}, {"beat": 28, "type": "tri"}, {"beat": 30, "type": "tri"},
+		{"beat": 32, "type": "soy"}, {"beat": 34, "type": "anko"}, {"beat": 36, "type": "tri"}, {"beat": 38, "type": "soy"},
+		{"beat": 40, "type": "anko"}, {"beat": 41, "type": "soy"}, {"beat": 42, "type": "tri"},
+		{"beat": 44, "type": "tri"}, {"beat": 45, "type": "soy"}, {"beat": 46, "type": "anko"},
+		{"beat": 48, "type": "anko"}, {"beat": 50, "type": "tri"}, {"beat": 52, "type": "soy"}, {"beat": 53, "type": "tri"},
+		{"beat": 56, "type": "anko"}, {"beat": 57, "type": "soy"}, {"beat": 58, "type": "tri"}, {"beat": 59, "type": "tri"},
+		{"beat": 62, "type": "soy"}, {"beat": 63, "type": "anko"}, {"beat": 64, "type": "tri"}, {"beat": 66, "type": "tri"}
+	]
+}

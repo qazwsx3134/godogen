@@ -1,0 +1,91 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/three_eat.gd" id="1_gvuwm"]
+[ext_resource type="Script" path="res://scripts/conductor.gd" id="2_8wl4a"]
+[ext_resource type="PackedScene" path="res://scenes/stage.tscn" id="3_45lir"]
+[ext_resource type="Script" path="res://scripts/stage.gd" id="4_h03nf"]
+[ext_resource type="PackedScene" path="res://scenes/actor.tscn" id="5_0b2nc"]
+[ext_resource type="Script" path="res://scripts/actor.gd" id="6_fgfno"]
+[ext_resource type="Script" path="res://scripts/plate_stack.gd" id="7_4u2a2"]
+[ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="8_vl6yr"]
+[ext_resource type="Script" path="res://scripts/hud.gd" id="9_4uh7n"]
+[ext_resource type="AudioStream" path="res://assets/sfx/chomp.wav" id="10_d4p2e"]
+[ext_resource type="AudioStream" path="res://assets/sfx/miss.wav" id="11_kgisl"]
+[ext_resource type="AudioStream" path="res://assets/sfx/whiff.wav" id="12_ua1kt"]
+
+[node name="ThreeEat" type="Node2D" unique_id=1727875627]
+script = ExtResource("1_gvuwm")
+chart_path = "res://data/songs/eat3.json"
+
+[node name="Conductor" type="Node" parent="." unique_id=1707030465]
+unique_name_in_owner = true
+script = ExtResource("2_8wl4a")
+
+[node name="Camera" type="Camera2D" parent="." unique_id=1531371016]
+unique_name_in_owner = true
+position = Vector2(320, 180)
+
+[node name="Stage" type="Node2D" parent="." unique_id=685568183 instance=ExtResource("3_45lir")]
+unique_name_in_owner = true
+script = ExtResource("4_h03nf")
+
+[node name="HatchWindow" type="ColorRect" parent="." unique_id=820174983]
+offset_left = 290.0
+offset_top = 44.0
+offset_right = 350.0
+offset_bottom = 70.0
+mouse_filter = 2
+color = Color(0.25, 0.15, 0.1, 1)
+
+[node name="Gintoki" type="Node2D" parent="." unique_id=173833660 instance=ExtResource("5_0b2nc")]
+unique_name_in_owner = true
+position = Vector2(110, 290)
+script = ExtResource("6_fgfno")
+display_name = "銀時"
+body_color = Color(0.86, 0.89, 0.96, 1)
+
+[node name="Shinpachi" type="Node2D" parent="." unique_id=1500710848 instance=ExtResource("5_0b2nc")]
+unique_name_in_owner = true
+position = Vector2(300, 300)
+scale = Vector2(0.8, 0.8)
+script = ExtResource("6_fgfno")
+display_name = "新八"
+body_color = Color(0.55, 0.7, 0.92, 1)
+
+[node name="Kagura" type="Node2D" parent="." unique_id=1287408363 instance=ExtResource("5_0b2nc")]
+unique_name_in_owner = true
+position = Vector2(525, 290)
+scale = Vector2(0.95, 0.95)
+script = ExtResource("6_fgfno")
+display_name = "神樂"
+body_color = Color(0.88, 0.24, 0.3, 1)
+
+[node name="SkewerPile" type="Node2D" parent="." unique_id=1908608614]
+unique_name_in_owner = true
+position = Vector2(588, 300)
+script = ExtResource("7_4u2a2")
+sticks = true
+
+[node name="Skewers" type="Node2D" parent="." unique_id=1329347097]
+unique_name_in_owner = true
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=169533805 instance=ExtResource("8_vl6yr")]
+unique_name_in_owner = true
+script = ExtResource("9_4uh7n")
+hint_text = "紅豆→左（銀時）　醬油→中（新八）　三色→右（神樂）：落下那拍點那一側"
+
+[node name="Chomp" type="AudioStreamPlayer" parent="." unique_id=1955713910]
+unique_name_in_owner = true
+stream = ExtResource("10_d4p2e")
+
+[node name="Miss" type="AudioStreamPlayer" parent="." unique_id=545268204]
+unique_name_in_owner = true
+stream = ExtResource("11_kgisl")
+
+[node name="Whiff" type="AudioStreamPlayer" parent="." unique_id=904862157]
+unique_name_in_owner = true
+stream = ExtResource("12_ua1kt")
+
+[node name="Hatch" type="Marker2D" parent="." unique_id=1924329631]
+unique_name_in_owner = true
+position = Vector2(320, 62)

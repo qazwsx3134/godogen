@@ -1,0 +1,23 @@
+{
+	"id": "toss2",
+	"title": "第二回合　銀時拋丸子",
+	"music": "res://assets/music/toss2.wav",
+	"bpm": 124,
+	"offset": 0.0,
+	"intensity": 2,
+	"count_in_beats": 8,
+	"end_beat": 80,
+	"rival": 22,
+	"land_after": {"toss": 2, "quick": 1, "big": 2},
+	"cues": [
+		{"beat": 8, "type": "toss"}, {"beat": 12, "type": "toss"}, {"beat": 16, "type": "toss"}, {"beat": 18, "type": "toss"},
+		{"beat": 20, "type": "toss"}, {"beat": 22, "type": "toss"},
+		{"beat": 26, "type": "quick"}, {"beat": 28, "type": "toss"}, {"beat": 32, "type": "quick"}, {"beat": 34, "type": "quick"},
+		{"beat": 36, "type": "toss"},
+		{"beat": 40, "type": "toss"}, {"beat": 40.5, "type": "toss"}, {"beat": 44, "type": "toss"}, {"beat": 44.5, "type": "toss"},
+		{"beat": 48, "type": "quick"}, {"beat": 50, "type": "toss"}, {"beat": 52, "type": "quick"}, {"beat": 53, "type": "quick"},
+		{"beat": 56, "type": "toss"}, {"beat": 56.5, "type": "toss"}, {"beat": 58, "type": "quick"}, {"beat": 60, "type": "toss"},
+		{"beat": 62, "type": "toss"}, {"beat": 62.5, "type": "toss"}, {"beat": 64, "type": "quick"}, {"beat": 66, "type": "quick"},
+		{"beat": 70, "type": "big"}
+	]
+}

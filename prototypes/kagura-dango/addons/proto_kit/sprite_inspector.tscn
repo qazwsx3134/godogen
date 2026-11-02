@@ -1,0 +1,175 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/sprite_inspector.gd" id="1_iakwt"]
+[ext_resource type="Script" path="res://addons/proto_kit/sprite_inspector_frame.gd" id="2_7q0gv"]
+[ext_resource type="Script" path="res://addons/proto_kit/sprite_inspector_atlas.gd" id="3_dn8t0"]
+
+[node name="SpriteInspector" type="Control" unique_id=1405233973]
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_iakwt")
+
+[node name="Background" type="ColorRect" parent="." unique_id=767445437]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.11, 0.12, 0.14, 1)
+
+[node name="Margin" type="MarginContainer" parent="." unique_id=872606016]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Columns" type="HBoxContainer" parent="Margin" unique_id=2068924386]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Left" type="VBoxContainer" parent="Margin/Columns" unique_id=1762279716]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="SheetTitle" type="Label" parent="Margin/Columns/Left" unique_id=840675048]
+layout_mode = 2
+text = "Sheet"
+
+[node name="SheetList" type="ItemList" parent="Margin/Columns/Left" unique_id=799390447]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 160)
+layout_mode = 2
+
+[node name="AnimTitle" type="Label" parent="Margin/Columns/Left" unique_id=369220455]
+layout_mode = 2
+text = "動畫"
+
+[node name="AnimList" type="ItemList" parent="Margin/Columns/Left" unique_id=392164839]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+
+[node name="DirTitle" type="Label" parent="Margin/Columns/Left" unique_id=1201825825]
+layout_mode = 2
+text = "方向（↑↓）"
+
+[node name="Directions" type="GridContainer" parent="Margin/Columns/Left" unique_id=505891071]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="SpeedTitle" type="Label" parent="Margin/Columns/Left" unique_id=635178160]
+layout_mode = 2
+text = "速度（[ ]）"
+
+[node name="Speed" type="OptionButton" parent="Margin/Columns/Left" unique_id=594258032]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ZoomTitle" type="Label" parent="Margin/Columns/Left" unique_id=432214809]
+layout_mode = 2
+text = "倍率（Z）：所有幀同一倍率"
+
+[node name="Zoom" type="OptionButton" parent="Margin/Columns/Left" unique_id=714710146]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="OnionCheck" type="CheckBox" parent="Margin/Columns/Left" unique_id=1512672649]
+unique_name_in_owner = true
+layout_mode = 2
+text = "洋蔥皮：疊上一格（O）"
+
+[node name="OverlayCheck" type="CheckBox" parent="Margin/Columns/Left" unique_id=2127081630]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "格線、腳底線、外框（G）"
+
+[node name="NearestCheck" type="CheckBox" parent="Margin/Columns/Left" unique_id=770901746]
+unique_name_in_owner = true
+layout_mode = 2
+text = "像素取樣（nearest）"
+
+[node name="Middle" type="VBoxContainer" parent="Margin/Columns" unique_id=152105153]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="FrameView" type="Control" parent="Margin/Columns/Middle" unique_id=1182546402]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("2_7q0gv")
+
+[node name="Transport" type="HBoxContainer" parent="Margin/Columns/Middle" unique_id=657846002]
+layout_mode = 2
+alignment = 1
+
+[node name="PrevButton" type="Button" parent="Margin/Columns/Middle/Transport" unique_id=951005600]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 40)
+layout_mode = 2
+focus_mode = 0
+text = "◀ 上一格"
+
+[node name="PlayButton" type="Button" parent="Margin/Columns/Middle/Transport" unique_id=1583023629]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 40)
+layout_mode = 2
+focus_mode = 0
+text = "暫停"
+
+[node name="NextButton" type="Button" parent="Margin/Columns/Middle/Transport" unique_id=1214911642]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 40)
+layout_mode = 2
+focus_mode = 0
+text = "下一格 ▶"
+
+[node name="StripScroll" type="ScrollContainer" parent="Margin/Columns/Middle" unique_id=740312205]
+custom_minimum_size = Vector2(0, 170)
+layout_mode = 2
+vertical_scroll_mode = 0
+
+[node name="FrameStrip" type="HBoxContainer" parent="Margin/Columns/Middle/StripScroll" unique_id=919057511]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Info" type="Label" parent="Margin/Columns/Middle" unique_id=595318826]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 66)
+layout_mode = 2
+text = "選一個 sheet"
+autowrap_mode = 3
+
+[node name="Right" type="VBoxContainer" parent="Margin/Columns" unique_id=428529887]
+custom_minimum_size = Vector2(440, 0)
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="AtlasTitle" type="Label" parent="Margin/Columns/Right" unique_id=34083423]
+layout_mode = 2
+text = "圖集（藍框：目前動畫的格，橘框：現在這格，點格子跳過去）"
+
+[node name="AtlasView" type="Control" parent="Margin/Columns/Right" unique_id=900805589]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 320)
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("3_dn8t0")
+
+[node name="IssueTitle" type="Label" parent="Margin/Columns/Right" unique_id=903851455]
+layout_mode = 2
+text = "檢查結果（點一列跳到該格）"
+
+[node name="Issues" type="ItemList" parent="Margin/Columns/Right" unique_id=1472237531]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 220)
+layout_mode = 2
+size_flags_vertical = 3

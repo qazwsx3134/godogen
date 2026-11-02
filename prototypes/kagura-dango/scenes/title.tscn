@@ -1,0 +1,82 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/title.gd" id="1_4ignj"]
+
+[node name="Title" type="Control" unique_id=15710262]
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("1_4ignj")
+
+[node name="Background" type="ColorRect" parent="." unique_id=803738388]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.98, 0.93, 0.84, 1)
+
+[node name="Center" type="CenterContainer" parent="." unique_id=464675744]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Column" type="VBoxContainer" parent="Center" unique_id=1871695289]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="GameTitle" type="Label" parent="Center/Column" unique_id=1428545414]
+layout_mode = 2
+theme_override_font_sizes/font_size = 46
+theme_override_colors/font_color = Color(0.16, 0.15, 0.24, 1)
+text = "丸子大胃王"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="Center/Column" unique_id=171159329]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(0.16, 0.15, 0.24, 1)
+text = "～神樂生日快樂 11.3～"
+horizontal_alignment = 1
+
+[node name="Start" type="Button" parent="Center/Column" unique_id=759218056]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 44)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 20
+text = "開始"
+
+[node name="Calibrate" type="Button" parent="Center/Column" unique_id=1906925102]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 44)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 20
+text = "延遲校準"
+
+[node name="CalibInfo" type="Label" parent="Center/Column" unique_id=448794643]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.16, 0.15, 0.24, 1)
+text = "目前延遲校準：0 ms"
+horizontal_alignment = 1
+
+[node name="Credit" type="Label" parent="." unique_id=1080359712]
+layout_mode = 0
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -330.0
+offset_top = -26.0
+offset_right = -10.0
+offset_bottom = -6.0
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.16, 0.15, 0.24, 1)
+text = "銀魂同人・非商業｜美術與音樂為暫用"
+horizontal_alignment = 2

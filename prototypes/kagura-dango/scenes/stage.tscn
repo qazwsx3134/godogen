@@ -1,0 +1,103 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/stage.gd" id="1_st0q7"]
+[ext_resource type="Script" path="res://scripts/crowd.gd" id="2_1hwpr"]
+[ext_resource type="Script" path="res://scripts/lanterns.gd" id="3_dexii"]
+[ext_resource type="Script" path="res://scripts/speed_lines.gd" id="4_yd2gm"]
+[ext_resource type="PackedScene" path="res://scenes/actor.tscn" id="5_0hg5s"]
+[ext_resource type="Script" path="res://scripts/actor.gd" id="6_jl6nj"]
+[ext_resource type="Script" path="res://scripts/plate_stack.gd" id="7_e38vs"]
+
+[node name="Stage" type="Node2D" unique_id=804358556]
+script = ExtResource("1_st0q7")
+
+[node name="Background" type="ColorRect" parent="." unique_id=464442121]
+offset_left = -320.0
+offset_top = -60.0
+offset_right = 960.0
+offset_bottom = 420.0
+mouse_filter = 2
+color = Color(0.96, 0.86, 0.7, 1)
+
+[node name="Crowd" type="Node2D" parent="." unique_id=707475541]
+unique_name_in_owner = true
+position = Vector2(320, 236)
+script = ExtResource("2_1hwpr")
+width = 1100.0
+
+[node name="Curtain" type="ColorRect" parent="." unique_id=1230061684]
+unique_name_in_owner = true
+offset_left = -320.0
+offset_top = -60.0
+offset_right = 960.0
+offset_bottom = 40.0
+mouse_filter = 2
+color = Color(0.74, 0.2, 0.25, 1)
+
+[node name="Lanterns" type="Node2D" parent="." unique_id=1648775367]
+unique_name_in_owner = true
+position = Vector2(320, 40)
+script = ExtResource("3_dexii")
+count = 11
+width = 1100.0
+
+[node name="Banner" type="Label" parent="." unique_id=345981603]
+offset_left = 170.0
+offset_top = 4.0
+offset_right = 470.0
+offset_bottom = 36.0
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(0.98, 0.93, 0.84, 1)
+text = "丸子大胃王大賽"
+horizontal_alignment = 1
+
+[node name="SpeedLines" type="Node2D" parent="." unique_id=145274487]
+unique_name_in_owner = true
+visible = false
+position = Vector2(507, 150)
+script = ExtResource("4_yd2gm")
+
+[node name="BackTable" type="ColorRect" parent="." unique_id=960485824]
+offset_left = 150.0
+offset_top = 236.0
+offset_right = 320.0
+offset_bottom = 246.0
+mouse_filter = 2
+color = Color(0.45, 0.28, 0.18, 1)
+
+[node name="RivalA" type="Node2D" parent="." unique_id=173833660 instance=ExtResource("5_0hg5s")]
+unique_name_in_owner = true
+position = Vector2(180, 238)
+scale = Vector2(0.5, 0.5)
+script = ExtResource("6_jl6nj")
+display_name = "對手"
+body_color = Color(0.42, 0.38, 0.55, 1)
+
+[node name="RivalB" type="Node2D" parent="." unique_id=1782452183 instance=ExtResource("5_0hg5s")]
+unique_name_in_owner = true
+position = Vector2(240, 238)
+scale = Vector2(0.5, 0.5)
+script = ExtResource("6_jl6nj")
+display_name = "對手"
+body_color = Color(0.42, 0.38, 0.55, 1)
+
+[node name="Referee" type="Node2D" parent="." unique_id=1273655887 instance=ExtResource("5_0hg5s")]
+unique_name_in_owner = true
+position = Vector2(400, 250)
+scale = Vector2(0.62, 0.62)
+script = ExtResource("6_jl6nj")
+display_name = "裁判"
+body_color = Color(0.18, 0.18, 0.2, 1)
+
+[node name="RivalPlates" type="Node2D" parent="." unique_id=110333854]
+unique_name_in_owner = true
+position = Vector2(210, 236)
+script = ExtResource("7_e38vs")
+
+[node name="Table" type="ColorRect" parent="." unique_id=2048491096]
+offset_left = -320.0
+offset_top = 282.0
+offset_right = 960.0
+offset_bottom = 422.0
+mouse_filter = 2
+color = Color(0.55, 0.36, 0.22, 1)
