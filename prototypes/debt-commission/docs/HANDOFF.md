@@ -68,7 +68,7 @@ node tools/story_editor/persona_smoke.mjs --playwright /Users/peter/.npm/_npx/e4
 - 最終瀏覽器 smoke 通過：未確認項目禁選、記憶 owner 限制、預設不載入記憶、知情隔離、UI 產物與 CLI 一致、JSON 下載、選取變更清除結果、已核准新版本也要求重看、對話框 Escape／關閉及故事內容保持、640×600 窄視窗、零 pageerror。Chrome 截圖已人工檢視，最後加上固定標頭後重跑通過。
 - 證據為 /private/tmp/debt-persona-editor-handoff-final/report.json、persona-desktop.png、persona-narrow.png、server.log。都是本機暫存；下載的 authoring-context.fixture.json 使用合成測試確認，不能拿來正式編劇。
 - 正式庫 validate：valid=true／records=6／confirmed=6；上輪已確認正式角色與審閱提案逐位元組一致，記憶確認未改。
-- 這輪未改 Godot scene 或 runtime，不重跑完整遊戲／Web。漫畫與動畫、scene 匯入、Web 觸控證據沿用 [PROGRESS.md](../PROGRESS.md) 同日各段，不能說是本輪重驗。45 組遊戲測試是較早橫向版的證據。
+- 這輪未改 Godot scene 或 runtime，不重跑完整遊戲／Web。漫畫與動畫、scene 匯入、Web 觸控證據沿用 [MILESTONE.md](../MILESTONE.md) 同日各段，不能說是本輪重驗。45 組遊戲測試是較早橫向版的證據。
 
 ## 仍未完成與限制
 

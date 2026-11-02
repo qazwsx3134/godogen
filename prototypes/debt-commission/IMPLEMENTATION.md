@@ -361,7 +361,7 @@ catalog 的每筆素材（`backgrounds`、`characters`、`items`、`sounds`、`m
 
 main 仍負責忙碌／對話框遮擋檢查、背景拖曳與角色生命週期；選取後呼叫既有 `_collect_hotspot`，由 StoryRunner 判定調查、素材與進度。模組不連接訊號、不啟動非同步任務，因此離開調查或讀檔不需要新增清理流程。下一次涉及背景拖曳／角色熱區生命週期的功能修改，再評估是否需要更大的呈現控制元件；本次沒有整段搬移。
 
-`test_investigation_picker.gd` 驗證小物件、角色前後層、重複台詞、觸控尺寸與狀態不變；整合回歸採既有 investigation／phase3_ui／phase4_ui。執行結果記在 [PROGRESS.md](PROGRESS.md)。
+`test_investigation_picker.gd` 驗證小物件、角色前後層、重複台詞、觸控尺寸與狀態不變；整合回歸採既有 investigation／phase3_ui／phase4_ui。執行結果記在 [MILESTONE.md](MILESTONE.md)「跨專案審查改善」段。
 
 ### 第二步：背景覆蓋與拖曳幾何
 
@@ -373,7 +373,7 @@ main 仍從已保存 scene 讀取 anchor／offset 與圖片尺寸，套用執行
 
 角色 art_region 與遊戲畫面完全不相交時，熱區必須隱藏；部分可見時使用裁切後範圍，仍保留最小觸控尺寸。InvestigationPicker 略過不可見節點。角色回到畫面後，重新計算並顯示熱區；不改 found、素材或劇情進度。
 
-`test_search_cast` 以第一章銀時嘴角移到畫面左緣外 1 單位重現：舊版兩個斷言失敗，分別是熱區仍可見及觸控擴張將目標帶回畫面（`/tmp/godot-tests.FvVWlR`）。此測試使用執行期站位邊界，不改來源 scene。修正後結果見 [PROGRESS.md](PROGRESS.md)。
+`test_search_cast` 以第一章銀時嘴角移到畫面左緣外 1 單位重現：舊版兩個斷言失敗，分別是熱區仍可見及觸控擴張將目標帶回畫面（`/tmp/godot-tests.FvVWlR`）。此測試使用執行期站位邊界，不改來源 scene。修正後結果見 [MILESTONE.md](MILESTONE.md)「跨專案審查改善」段。
 
 ### 角色身高比例
 
