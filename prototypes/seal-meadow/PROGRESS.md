@@ -147,3 +147,18 @@ env XDG_DATA_HOME=/tmp/seal-fishing-tests XDG_CONFIG_HOME=/tmp/seal-fishing-conf
 新增滿 12 格、大字模式、兩種橫向尺寸的捲動清單／固定按鈕／取消保留物品測試，L2 M2 PASS（`/tmp/godot-tests.8mkgik`）。未修改 runtime；未重跑 M3，沿用 2026-10-29 結果。匯出仍有沙箱 TCP 監聽錯誤，未見腳本解析錯誤。
 
 沙箱在 socket 建立階段即 PermissionError，無法啟動本機伺服器／Chromium Web 驗證；此候選的觸控與 IndexedDB 尚未驗證。前次 Chromium 12 項 PASS 屬於舊候選，不能沿用到新包。未上傳，iPhone 真機與長時間驗收仍待完成。
+
+## 跨專案審查改善（2026-10-29～30）：根目錄紀錄補遺
+
+根目錄 `Progress.md` 拆分時（2026-11-02）移入本檔原本沒有的段落；其餘 seal 段落（10-28～10-31）本檔已有對應紀錄。
+
+| 專案 | 已完成的程式／文件工作 | 仍待外部驗收／延期 |
+|---|---|---|
+| seal-meadow | 出售確認／快照保護、經濟驗收計畫；本輪另完成 S34 單機乘坐薄切片 | iPhone／真人平衡、Web 新包 IndexedDB、長時間發熱；多人 M4 延後 |
+
+- 已完成（seal 部分）：seal 材料出售規格及經濟實測計畫。重要入口 `design/quick-specs/material-sale-2026-10-29.md`。
+- 程式：seal 一鍵出售先列品項、數量、總額，明示包含養成材料；確認時核對背包快照，變動即拒絕；取消／換窗不出售。可編輯視窗 `ui/sell_confirmation.tscn`。沿用售價與保存流程。
+- L2 驗證：隔離 XDG 執行 `TEST_TIMEOUT=120 bash prototypes/godot-kit/tools/run_tests.sh prototypes/seal-meadow m2 m3`：M3 PASS（`/tmp/godot-tests.M1gwyv`）；M2 首次因出售按鈕未捲入可點範圍失敗，補測試捲動後單獨重跑 M2 PASS（`/tmp/godot-tests.Fciz7c`）。scene headless 匯入未見解析／資源錯誤，但有沙箱 TCP listen ERR_CANT_CREATE（`/tmp/seal-fix-import.log`），不宣稱無錯匯入。
+- seal 確認改 HUD Control／捲動清單，M2 實際取消／確認與 844×390、1280×720 安全範圍及 44px 高度 PASS（`/tmp/godot-tests.yEAs8b`）；headless 匯入仍有沙箱 TCP listen 錯誤，未見解析／資源錯誤（`/tmp/seal-modal-import.log`）。本輪未重跑 M3，沿用上一批通過證據。
+- seal Web 候選已於 2026-10-30 重建，匯出及靜態驗證完成，瀏覽器待驗。
+- 下一步：真機確認出售清單可讀及按鈕觸控；按各驗收文件收集實測，再決定架構與數值調整。

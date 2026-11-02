@@ -279,12 +279,18 @@
     return TERMINAL_STEP_OPS.includes(steps[steps.length - 1].op) ? steps.length - 1 : steps.length;
   }
 
-  /** Keep a scene's terminator last; replace only the untouched placeholder ending. */
-  function addStep(node, step) {
+  /** Insert before index, or append before the terminator when omitted. Only default append can replace a placeholder ending. */
+  function addStep(node, step, index = undefined) {
     const steps = node.steps;
+    if (index !== undefined && (!Number.isInteger(index) || index < 0 || index > steps.length))
+      return '找不到要插入的步驟位置。';
     const previous = steps.findIndex(item => NEEDS_NO_NEXT.includes(asObject(item).op));
     if (previous >= 0 && previous !== steps.length - 1) return '場景的結尾或分支後面還有步驟，請先調整順序。';
     const terminal = NEEDS_NO_NEXT.includes(step.op);
+    if (index !== undefined) {
+      if (terminal && index !== steps.length) return '結尾、分支與跳轉只能放在最後一步；請在既有步驟的「步驟類型」切換。';
+      if (previous >= 0 && index > previous) return '不能插在結尾或分支之後，請選擇它前面的位置。';
+    }
     if (terminal && FORBIDS_NEXT.includes(step.op) && node.next)
       return '這個場景已有後續連線，請先斷開連線，再新增結尾或選項。';
     if (terminal && previous >= 0) {
@@ -295,7 +301,7 @@
       }
       return '這個場景已有結尾或分支，請先刪除原有的終止步驟。';
     }
-    steps.splice(insertIndex(node, step.op), 0, step);
+    steps.splice(index === undefined ? insertIndex(node, step.op) : index, 0, step);
     return '';
   }
 
@@ -308,7 +314,9 @@
     comedy: () => ({ op: 'comedy', preset: 'tsukkomi_impact', speaker: 'shinpachi', text: '' }),
     condition: () => ({ op: 'condition', flag: '', equals: true, then: '', else: '' }),
     bg: () => ({ op: 'bg', id: '' }),
-    char: () => ({ op: 'char', id: '' }),
+    char: () => ({ op: 'char', id: '', enter: true }),
+    portrait_exit: () => ({ op: 'portrait_exit', id: '', transition: 'fade' }),
+    portrait_lighting: () => ({ op: 'portrait_lighting', id: '', mode: 'dim' }),
     portrait_effect: () => ({ op: 'portrait_effect', id: '', effect: 'shake' }),
     flag: () => ({ op: 'flag', key: '', value: true }),
     item: () => ({ op: 'item', id: '' }),
@@ -360,7 +368,7 @@
       return { error: '不支援這個步驟類型。' };
     const old = asObject(node.steps[index]);
     const copy = clone(node);
-    if (old.op === op) {
+    if (stepType(old) === op) {
       if (op !== 'say') return { node: copy, changed: false, warning: '' };
       const voice = category === 'narration' ? 'narrator' : (speaker && speaker !== 'narrator' ? speaker : 'speaker');
       const existingVoice = old.speaker && old.speaker !== 'narrator' ? old.speaker : '';
@@ -381,6 +389,11 @@
       return { error: '這個場景已有結尾或分支，請先處理原本的終止步驟。' };
 
     const next = newStep(op);
+    const characterOps = ['char', 'portrait_exit', 'portrait_lighting', 'portrait_effect'];
+    if (characterOps.includes(old.op) && characterOps.includes(op)) {
+      if (typeof old.id === 'string') next.id = old.id;
+      if (['char', 'portrait_exit'].includes(op) && typeof old.transition === 'string') next.transition = old.transition;
+    }
     if (op === 'say') next.speaker = category === 'narration' ? 'narrator' : (old.speaker && old.speaker !== 'narrator' ? old.speaker : speaker);
     if (op === 'comedy' && old.speaker && old.speaker !== 'narrator') next.speaker = old.speaker;
     // Text is safe to carry only where both commands actually have a text field.
@@ -431,7 +444,7 @@
 
   const OP_ICONS = {
     say: '💬', choice: '❓', condition: '🔀', goto: '↪️', investigate: '🔍', boke_round: '🎤', comedy: '💥',
-    end: '🏁', result: '📊', bg: '🖼️', char: '🧍', portrait_effect: '✨', item: '🎒', flag: '🚩', set_flag: '🚩', profile: '📇', se: '🔊',
+    end: '🏁', result: '📊', bg: '🖼️', char: '🧍', portrait_exit: '🫥', portrait_lighting: '🌗', portrait_effect: '✨', item: '🎒', flag: '🚩', set_flag: '🚩', profile: '📇', se: '🔊',
     sound: '🔊', bgm: '🎵', shake: '📳', flash: '⚡', cutin: '🎬', freeze: '⏸️', fade: '🌗', beam: '🔆', placard: '🪧',
     wait: '⏳', show: '🧍', hide: '🫥', move: '🚶', face: '👀', expression: '🙂', camera: '🎥',
   };
@@ -534,7 +547,7 @@
 
   // Used when story_runner.gd cannot be fetched (file://); test_core.mjs checks them against the real file.
   const FALLBACK_ENUMS = {
-    VALID_OPS: ['bg', 'char', 'portrait_effect', 'say', 'choice', 'item', 'flag', 'show', 'hide', 'move', 'face', 'expression', 'camera', 'wait',
+    VALID_OPS: ['bg', 'char', 'portrait_exit', 'portrait_lighting', 'portrait_effect', 'say', 'choice', 'item', 'flag', 'show', 'hide', 'move', 'face', 'expression', 'camera', 'wait',
       'sound', 'end', 'result', 'set_flag', 'condition', 'goto', 'investigate', 'boke_round', 'profile', 'shake', 'flash',
       'cutin', 'comedy', 'freeze', 'fade', 'beam', 'bgm', 'se', 'placard'],
     VALID_EXPRESSIONS: ['neutral', 'smile', 'annoyed', 'surprised', 'thinking', 'sweat', 'smug', 'shout', 'broken', 'angry',
@@ -551,7 +564,7 @@
   const STEP_GROUPS = [
     { id: 'dialogue', label: '對話', ops: ['say', 'comedy'] },
     { id: 'narration', label: '旁白', ops: ['say'] },
-    { id: 'character', label: '立繪', ops: ['char', 'portrait_effect', 'profile'] },
+    { id: 'character', label: '立繪', ops: ['char', 'portrait_exit', 'portrait_lighting', 'portrait_effect', 'profile'] },
     { id: 'scene', label: '背景・音樂', ops: ['bg', 'bgm'] },
     { id: 'sound', label: '音效', ops: ['se'] },
     { id: 'event', label: '事件', ops: ['choice', 'condition', 'flag', 'item', 'goto', 'investigate', 'boke_round', 'placard', 'end', 'result'] },
@@ -559,13 +572,14 @@
     { id: 'legacy', label: '舊版', ops: ['show', 'hide', 'move', 'face', 'expression', 'camera', 'wait', 'sound', 'set_flag'] },
   ];
   const STEP_LABELS = {
-    say: '台詞', comedy: '漫畫吐槽', char: '角色登場／表情', portrait_effect: '立繪動作', profile: '解鎖人物檔案', bg: '換背景', bgm: '背景音樂', se: '音效',
+    say: '台詞', comedy: '漫畫吐槽', char: '角色登場／表情', portrait_exit: '角色退場', portrait_lighting: '立繪明暗', portrait_effect: '立繪動作', profile: '解鎖人物檔案', bg: '換背景', bgm: '背景音樂', se: '音效',
     choice: '選項', condition: '條件分歧', flag: '設定旗標', item: '取得道具', goto: '跳到場景', investigate: '調查',
     boke_round: '吐槽回合', placard: '舉牌', end: '結束', result: '章節結算', shake: '畫面震動', flash: '閃光',
     fade: '淡入淡出', freeze: '停格', cutin: '切入特寫', beam: '光束', show: '顯示角色', hide: '隱藏角色', move: '移動角色',
     face: '角色朝向', expression: '變更表情', camera: '鏡頭', wait: '等待', sound: '音效', set_flag: '設定旗標',
   };
-  const stepLabel = step => step.op === 'say' && stepGroup(step).id === 'narration' ? '旁白' : STEP_LABELS[step.op] || '舊版指令';
+  const stepType = step => step.op === 'char' && step.visible === false ? 'portrait_exit' : step.op;
+  const stepLabel = step => step.op === 'say' && stepGroup(step).id === 'narration' ? '旁白' : STEP_LABELS[stepType(step)] || '舊版指令';
   const foldShape = node => JSON.stringify(node.steps.map(step => stepGroup(step).id));
   function stepGroup(step) {
     if (step.op === 'say') return STEP_GROUPS[step.speaker && step.speaker !== 'narrator' ? 0 : 1];
@@ -651,7 +665,7 @@
       else if (op === 'bgm') note('music', String(value.id ?? ''), node);
       else if (op === 'se') note('sounds', String(value.id ?? ''), node);
       else if (op === 'item') note('items', String(value.id ?? ''), node);
-      else if (op === 'char' || op === 'portrait_effect' || op === 'profile') face(String(value.id ?? ''), String(value.expression ?? 'neutral'), node);
+      else if (['char', 'portrait_exit', 'portrait_lighting', 'portrait_effect', 'profile'].includes(op)) face(String(value.id ?? ''), String(value.expression ?? 'neutral'), node);
       else if (op === 'expression') face(String(value.actor ?? ''), String(value.value ?? 'neutral'), node);
       else if (op === 'choice' && String(value.perspective ?? 'pov') !== 'director') state.povChoice = true;
       for (const [key, field] of Object.entries(value)) {
@@ -738,7 +752,7 @@
   }
 
   const api = {
-    STEP_GROUPS, STEP_LABELS, stepLabel, foldShape, stepGroup, stepRuns, runExpanded, flowRows, effectiveMedia, graphCopy, availableExpressions,
+    STEP_GROUPS, STEP_LABELS, stepType, stepLabel, foldShape, stepGroup, stepRuns, runExpanded, flowRows, effectiveMedia, graphCopy, availableExpressions,
     packEntries, resolveCatalog, usedAssets, missingArt,
     stringify, exportText, formatNumber, edgesOf, setEdge, clearEdge, analyze, reachableFrom, isEnding, renameNode, deleteNode,
     uniqueId, newNode, newStory, newStep, insertIndex, addStep, addChoiceOption, sceneType, planStepType, planSceneType, SCENE_TYPES, STEP_TEMPLATES, GEOM, OP_ICONS, icon, summaryOf, cardSize, portOffset,

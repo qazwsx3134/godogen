@@ -377,6 +377,10 @@ static func _mutation(line: Dictionary, where: String) -> Dictionary:
 			return entrance
 		["portrait_effect", 2]:
 			return {"op": "portrait_effect", "id": args[0], "effect": args[1]}
+		["portrait_exit", 1], ["portrait_exit", 2]:
+			return {"op": "portrait_exit", "id": args[0], "transition": args[1] if args.size() > 1 else "fade"}
+		["portrait_lighting", 2]:
+			return {"op": "portrait_lighting", "id": args[0], "mode": args[1]}
 		["placard", 1]:
 			return {"op": "placard", "text": args[0]}
 		["offscreen", 0]:

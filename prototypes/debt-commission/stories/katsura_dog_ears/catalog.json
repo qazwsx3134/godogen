@@ -13,6 +13,8 @@
   "characters": {
     "katsura": {
       "name": "桂",
+      "height_cm": 175,
+      "height_bounds": [0.007775120, 0.999401914],
       "color": "#435b8a",
       "slot": "center",
       "scene": "scenes/katsura.tscn",

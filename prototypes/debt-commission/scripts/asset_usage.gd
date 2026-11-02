@@ -84,7 +84,7 @@ static func _walk(value: Variant, node_id: String, found: Dictionary, state: Dic
 			_note(found, catalog, "sounds", str(step.get("id", "")), node_id)
 		"item":
 			_note(found, catalog, "items", str(step.get("id", "")), node_id)
-		"char", "profile":
+		"char", "portrait_exit", "portrait_lighting", "portrait_effect", "profile":
 			_face(found, catalog, str(step.get("id", "")), str(step.get("expression", "neutral")), node_id)
 		"expression":
 			_face(found, catalog, str(step.get("actor", "")), str(step.get("value", "neutral")), node_id)

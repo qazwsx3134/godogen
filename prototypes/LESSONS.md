@@ -24,7 +24,7 @@
 
 - **`.gitignore` 早就寫了 `.godot/`、`build/`，檔案卻一直顯示已修改** → 規則加在提交之後；`git ls-files -ci --exclude-standard` 找出來，`git rm -r --cached` 移出版控。（[CLAUDE.md](../CLAUDE.md) 2026-10-14）
 - **推大量圖檔與音檔回 HTTP 400、遠端掛斷** → 只對那次用 `git -c http.postBuffer=524288000 push`，不改全域設定。（[CLAUDE.md](../CLAUDE.md) 2026-10-14）
-- **沙箱內 `.git` 唯讀、Xvfb／Chromium 圖形測試要沙箱外執行** → 是環境限制，不要寫成遊戲壞了，也不要跳過授權。（[Progress.md](../Progress.md)）
+- **沙箱內 `.git` 唯讀、Xvfb／Chromium 圖形測試要沙箱外執行** → 是環境限制，不要寫成遊戲壞了，也不要跳過授權。（[dreamling-idle/PROGRESS.md](dreamling-idle/PROGRESS.md)）
 
 ## 測試與量測
 
@@ -70,6 +70,7 @@
 - **AnimationPlayer 連續插值 PackedVector4Array shader uniform 時會產生通用 Array**（2026-11-01，godot-kit VFX）→ vec4 array 保存為離散軌；對照數值之外，斷言實際 shader 參數的 Variant 型別。只攤平陣列比數值會漏掉 GPU 接口錯誤。（[Three.js 移植](godot-kit/docs/vfx/THREE-PORTS.md)）
 - **Three.js 原幾何直接交給 Godot，單面材質的正反面相反**（2026-11-01，godot-kit VFX）→ 每個三角形連同所有頂點屬性換序 CCW→CW，保留來源 FrontSide／DoubleSide 策略；製作工具標記已換序，重跑不可二次反轉。shader 檢查須呼叫 `get_shader_uniform_list()` 觸發延遲解析，僅設定 code 不足。（[Three.js 移植](godot-kit/docs/vfx/THREE-PORTS.md)）
 - **已 free 的 Godot Object 與 null 比較會讓解除綁定分支漏判**（2026-11-01，godot-kit VFX）→ 以獨立 `_was_bound` 記錄綁定狀態，再用 `is_instance_valid()` 判斷宿主；測試真實 free 後的收尾，避免武器拖尾永久活動。（[VFX 驗證](godot-kit/docs/vfx/VALIDATION.md)）
+- **立繪動作接台詞／漫畫時看不到，可能是根本還沒登場，或同幀已被下一層蓋住** → 從真實劇本順序測角色可見性、Art 位移與 alpha；先入場再排反應，非對話後續指令等動作完成。準備站位要保存到開口時的動畫；畫外音旗標需在編輯器明示。（debt-commission `tests/test_portrait_reaction.gd`、`tests/test_portrait_controls.gd`，2026-11-02）
 
 ## 匯出與網頁版
 
@@ -119,7 +120,7 @@
 - **使用者已開好 Codex pane 時另開新的，新的卡在 CLI 自動更新** → 先 `herdr agent list` 找現成的 pane 並確認空閒；派工單路徑寫絕對路徑；用 pane ID 當目標。跨 agent 合作時 Codex 不用 Luna max。（記憶檔 `codex-collab-model`，2026-10-16／10-20）
 - **Codex 在 Herdr 裡啟動，`-c` 參數跳警告框擋住它** → 按 Esc 關掉。（[erwin-run](erwin-run/PROGRESS.md#已知的坑)）
 - **Codex 幾乎每個指令都要人工核准，使用者不在時整批停住** → 長批次前請使用者用 `/approvals` 放寬，或把產出寫在 Codex 的工作區最後一次搬。（[character-sprite-forge](godot-kit/skills/character-sprite-forge/SKILL.md#坑)）
-- **不要假設上一個 agent 開的伺服器還活著** → 先確認再用。（[Progress.md](../Progress.md)）
+- **不要假設上一個 agent 開的伺服器還活著** → 先確認再用。（[dreamling-idle/PROGRESS.md](dreamling-idle/PROGRESS.md)）
 - **派工單的壞味道**：把使用者之後會改的東西寫死在 agent 記憶裡、「故意弄壞一次」講得不具體、審查規則到第二階段才講 → 見 agent-workflow。（[agent-workflow](godot-kit/skills/godot-prototype-to-itch/references/agent-workflow.md#教訓派工單的壞味道)）
 
 ## 各原型專屬

@@ -1,10 +1,11 @@
 extends Control
 ## One character on stage, the root of scenes/characters/<id>.tscn. The root is the standing box a
 ## slot of scenes/stage.tscn scales to its height (its bottom edge is the feet line); `Art` is laid
-## out inside it in the editor, so each character keeps its own size and framing in any slot.
+## out inside it in the editor. Catalog height_cm normalizes body height; horizontal framing stays.
 ## A character without a scene gets a default Art: the box's height, standing on its bottom edge.
 
 const REFERENCE_SIZE: Vector2 = Vector2(480.0, 1560.0)
+const REFERENCE_HEIGHT_CM: float = 177.0
 
 var actor_id: String = ""
 var tint: Color = Color.GRAY
@@ -15,6 +16,8 @@ var _base_texture: Texture2D = null
 var _expression_art: Dictionary = {}
 ## The Art offsets for the usual picture (from the character scene), before any face moves them.
 var _art_rest: Array[float] = []
+var _height_cm: float = 0.0
+var _height_bounds: Vector2 = Vector2(0.0, 1.0)
 @onready var _art: TextureRect = get_node_or_null("Art") as TextureRect
 ## A board the character holds up (elisabeth.tscn): `Placard` with its `Text` label and `Glow`.
 @onready var _placard: Control = get_node_or_null("Placard") as Control
@@ -98,6 +101,15 @@ func set_expression(value: String) -> void:
 	_place_art(texture)
 
 
+## Height uses the body from crown to sole; umbrellas and transparent margins are excluded.
+## Bounds are fractions of the base image, and fitted expression canvases share its feet line.
+func configure_height(height_cm: float, bounds: Array = []) -> void:
+	_height_cm = maxf(0.0, height_cm)
+	_height_bounds = Vector2(float(bounds[0]), float(bounds[1])) if bounds.size() == 2 else Vector2(0.0, 1.0)
+	if _art != null and _base_texture != null:
+		_place_art(_art.texture)
+
+
 ## Faces made by tools/fit_expressions.gd have the usual picture's pixel scale, stand on its bottom
 ## edge and are centred on it (widened or raised where a pose sticks out), so a face's rect follows
 ## from its size and the usual picture's rect, which is the Art rect set in the character scene.
@@ -105,12 +117,17 @@ func _place_art(texture: Texture2D) -> void:
 	if _art_rest.is_empty():
 		_art_rest = [_art.offset_left, _art.offset_top, _art.offset_right, _art.offset_bottom]
 	var unit: float = (_art_rest[3] - _art_rest[1]) / float(_base_texture.get_height())
+	var bottom: float = _art_rest[3]
+	if _height_cm > 0.0:
+		var body_pixels: float = _base_texture.get_height() * (_height_bounds.y - _height_bounds.x)
+		unit = REFERENCE_SIZE.y * _height_cm / REFERENCE_HEIGHT_CM / maxf(1.0, body_pixels)
+		bottom = _base_texture.get_height() * (1.0 - _height_bounds.y) * unit
 	var half_width: float = texture.get_width() * unit * 0.5
 	var centre: float = (_art_rest[0] + _art_rest[2]) * 0.5
 	_art.offset_left = centre - half_width
 	_art.offset_right = centre + half_width
-	_art.offset_top = _art_rest[3] - texture.get_height() * unit
-	_art.offset_bottom = _art_rest[3]
+	_art.offset_top = bottom - texture.get_height() * unit
+	_art.offset_bottom = bottom
 
 
 func set_expression_art(textures: Dictionary) -> void:

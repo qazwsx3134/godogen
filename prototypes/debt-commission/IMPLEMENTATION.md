@@ -28,6 +28,8 @@ V1 可呈現 op：
 
 - `bg`: `id` 對應 catalog 的 backgrounds。
 - `char`: `id` 對應 characters，可選 `visible`、`expression`、`position`（left/center/right）、`enter`；省略時依角色 catalog 預設。`enter: true` 讓還沒開口的角色直接上場（例如只舉牌、不說話的伊莉莎白），不能和 `visible: false` 同時用。
+- `portrait_exit`: `id` 對應角色；可選 `transition`（fade／slide_left／slide_right／instant）。保留表情與站位，退場完成後才進下一步。
+- `portrait_lighting`: `id`、`mode`（dim／lit／auto）。手動明暗不被下一句說話者切換覆蓋，換背景清除；存檔角色的 lighting 與 entrance_transition 為可選欄位，舊檔預設 auto／fade。
 - `say`: `speaker` 對應 characters 或 narrator、`text`、可選 `thought`／`expression`／`offscreen`。`offscreen: true` 是畫面外的聲音：名牌照常，說話者不上場，場上其他人的明暗不變；旁白不能用。
 - `choice`: `prompt`、`options: [{id,label,next,set_flags?,require?,tone?}]`；`require` 是單一素材 ID，至少保留一個無條件選項。選填的 `perspective`（`pov`｜`director`，預設 `pov`）決定這是哪一種選項，劇本作者只標這一處，不自己組 UI：
   - **POV Choice**（`perspective` 省略或 `pov`）：玩家站在某個角色的視角，在那個人格合理的範圍內選反應（激烈吐槽／冷靜指出問題／累到懶得吐槽）。`pov`（catalog 角色 id，預設 `shinpachi`）是這句想法的主人；選項可標 `tone`（`loud`｜`calm`｜`tired`），列首多一個圓形標記。外觀是和紙的選項面板。
@@ -359,7 +361,7 @@ catalog 的每筆素材（`backgrounds`、`characters`、`items`、`sounds`、`m
 
 main 仍負責忙碌／對話框遮擋檢查、背景拖曳與角色生命週期；選取後呼叫既有 `_collect_hotspot`，由 StoryRunner 判定調查、素材與進度。模組不連接訊號、不啟動非同步任務，因此離開調查或讀檔不需要新增清理流程。下一次涉及背景拖曳／角色熱區生命週期的功能修改，再評估是否需要更大的呈現控制元件；本次沒有整段搬移。
 
-`test_investigation_picker.gd` 驗證小物件、角色前後層、重複台詞、觸控尺寸與狀態不變；整合回歸採既有 investigation／phase3_ui／phase4_ui。執行結果記在 Progress.md 最新段落。
+`test_investigation_picker.gd` 驗證小物件、角色前後層、重複台詞、觸控尺寸與狀態不變；整合回歸採既有 investigation／phase3_ui／phase4_ui。執行結果記在 [PROGRESS.md](PROGRESS.md)。
 
 ### 第二步：背景覆蓋與拖曳幾何
 
@@ -371,4 +373,10 @@ main 仍從已保存 scene 讀取 anchor／offset 與圖片尺寸，套用執行
 
 角色 art_region 與遊戲畫面完全不相交時，熱區必須隱藏；部分可見時使用裁切後範圍，仍保留最小觸控尺寸。InvestigationPicker 略過不可見節點。角色回到畫面後，重新計算並顯示熱區；不改 found、素材或劇情進度。
 
-`test_search_cast` 以第一章銀時嘴角移到畫面左緣外 1 單位重現：舊版兩個斷言失敗，分別是熱區仍可見及觸控擴張將目標帶回畫面（`/tmp/godot-tests.FvVWlR`）。此測試使用執行期站位邊界，不改來源 scene。修正後結果見 Progress.md 最新紀錄。
+`test_search_cast` 以第一章銀時嘴角移到畫面左緣外 1 單位重現：舊版兩個斷言失敗，分別是熱區仍可見及觸控擴張將目標帶回畫面（`/tmp/godot-tests.FvVWlR`）。此測試使用執行期站位邊界，不改來源 scene。修正後結果見 [PROGRESS.md](PROGRESS.md)。
+
+### 角色身高比例
+
+角色 catalog 可設 `height_cm`（正數）；留空使用場景原有大小。`height_bounds: [crown, sole]` 為人物平常表情圖頭頂、腳底的 Y 比例（0 ≤ crown < sole ≤ 1，預設整張圖），用來排除透明留白與道具。桂、銀時、神樂已校準；神樂的傘不算身高。以 177 cm 對應站姿框高 1560 計算等比縮放；底線對齊站姿框腳底，保留 Art 的水平取景與各表情已整理的像素比例。編輯器素材設定可改身高，繼承角色修改時建立作品覆寫。
+
+L2 相關測試：`tests/test_character_height.gd`、`test_portrait_controls.gd`、`test_portrait_reaction.gd`；既有演出／存檔／調查回歸 `test_portrait_motion.gd`、`test_save_validation.gd`、`test_phase3_ui.gd`。命令為 `python3 tools/story_editor/run_coordinated.py <Godot> --headless --path . --script res://tests/test_<名稱>.gd`（本 prototype 目錄執行），依序跑並檢查 PASSED、exit code 及 SCRIPT／Parse Error。

@@ -45,6 +45,8 @@
     },
     "gintoki": {
       "name": "銀時",
+      "height_cm": 177,
+      "height_bounds": [0.005208333, 1.000000000],
       "profile": "萬事屋老闆。嗜甜如命，擅長把藉口講得像道理。",
       "color": "#aab6c8",
       "slot": "center",
@@ -81,6 +83,8 @@
     },
     "kagura": {
       "name": "神樂",
+      "height_cm": 155,
+      "height_bounds": [0.185449358, 0.992867332],
       "profile": "萬事屋的大胃王，醋昆布不離身，說話尾音帶「阿魯」。嘴很毒。",
       "color": "#F08CA8",
       "slot": "right",

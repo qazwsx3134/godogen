@@ -836,6 +836,18 @@
       title: '拖曳角色到左、中或右站位'},
       picture ? el('img', {class: 'character-preview', src: Core.projectUrl(picture), alt: `${character?.name || step.id} ${step.expression || 'neutral'}`, draggable: false})
         : el('span', {class: 'stage-position-placeholder'}, character?.name || step.id || '角色'));
+    const preview = actor.querySelector('img');
+    if (preview && character?.height_cm > 0 && character.path) preview.addEventListener('load', () => {
+      const base = new Image();
+      base.onload = () => {
+        const [top, feet] = character.height_bounds || [0, 1];
+        const unit = 142 * character.height_cm / 177 / (base.naturalHeight * (feet - top));
+        actor.style.height = `${preview.naturalHeight * unit}px`;
+        actor.style.width = `${preview.naturalWidth * unit}px`;
+        actor.style.bottom = `${4 - base.naturalHeight * (1 - feet) * unit}px`;
+      };
+      base.src = Core.projectUrl(character.path);
+    });
     const stage = el('div', {class: 'stage-position-preview', 'aria-label': '角色站位示意'},
       ...places.map(place => el('span', {class: `stage-position-guide ${place === selected ? 'selected' : ''}`}, labels[place])), actor);
     let dragging = false;
@@ -862,7 +874,7 @@
       'aria-pressed': String(place === selected), onclick: () => choose(place)}, labels[place]));
     return el('div', {class: 'stage-position-editor'}, stage,
       el('div', {class: 'stage-position-actions'}, ...buttons),
-      el('p', {class: 'note'}, '拖曳立繪或按按鈕切換站位。位置與大小的精調在 Godot 的舞台和角色場景。'));
+      el('p', {class: 'note'}, '拖曳立繪或按按鈕切換站位。身高在「素材設定 → 角色」調整，舞台與取景可在 Godot 場景調整。'));
   }
   function scalarControl(obj, key, numberOnly = false) {
     const input = el('input', { type: 'text', value: JSON.stringify(obj[key] ?? (numberOnly ? 1 : true)), 'aria-label': key });
@@ -906,20 +918,26 @@
     char: step => [field('角色', assetSelect('characters', step)), field('表情', expressionControl(step)), voicePitch(step),
       field('站位', select2(['left', 'center', 'right'], step.position, v => { if (v) step.position = v; else delete step.position; touch({inspector: true}); }, '（角色預設）')),
       field('舞台', characterPositionEditor(step)),
-      field('角色狀態', select2([{value:'prepare',label:'準備站位（開口時登場）'}, {value:'enter',label:'立刻登場'}, {value:'leave',label:'退場'}],
-        step.visible === false ? 'leave' : step.enter ? 'enter' : 'prepare', v => {
+      field('登場時機', select2([{value:'prepare',label:'準備站位（開口時登場）'}, {value:'enter',label:'立刻登場'}],
+        step.enter ? 'enter' : 'prepare', v => {
           delete step.visible; delete step.enter;
           if (v === 'enter') { step.visible = true; step.enter = true; }
-          else if (v === 'leave') step.visible = false;
           touch({inspector: true});
         })),
-      field('進退場動畫', select2([{value:'fade',label:'淡入／淡出'}, {value:'slide_left',label:'左側滑動＋淡化'},
+      field('登場動畫', select2([{value:'fade',label:'淡入'}, {value:'slide_left',label:'左側滑入＋淡化'},
         {value:'slide_right',label:'右側滑動＋淡化'}, {value:'instant',label:'直接切換'}], step.transition,
         v => { if (v) step.transition = v; else delete step.transition; touch(); }, '預設（淡入／淡出）'),
-        el('small', {}, '選擇立刻登場或退場時生效。'))],
+        el('small', {}, '準備站位會在角色下次開口時套用；台詞勾選「畫外音」時不會登場。'))],
+    portrait_exit: step => [field('角色', assetSelect('characters', step)),
+      field('退場動畫', select2([{value:'fade',label:'淡出'}, {value:'slide_left',label:'向左滑出＋淡化'},
+        {value:'slide_right',label:'向右滑出＋淡化'}, {value:'instant',label:'直接退場'}], step.transition,
+        v => { if (v) step.transition = v; else delete step.transition; touch(); }, '預設（淡出）'))],
+    portrait_lighting: step => [field('角色', assetSelect('characters', step)),
+      field('明暗', select2([{value:'dim',label:'變暗'}, {value:'lit',label:'恢復明亮'}, {value:'auto',label:'隨說話者自動切換'}], step.mode,
+        v => { step.mode = v; touch(); })), el('p', {class:'note'}, '保留設定直到下個明暗步驟或換背景；不改變角色是否在場。')],
     portrait_effect: step => [field('角色', assetSelect('characters', step)),
       field('立繪動作', select2([{value:'shake',label:'抖動'}, {value:'bounce',label:'彈跳'}], step.effect,
-        v => { step.effect = v; touch(); })), el('p', {class:'note'}, '對已登場的角色生效，可放在台詞前。')],
+        v => { step.effect = v; touch(); })), el('p', {class:'note'}, '可放在台詞前。尚未登場時先登場再做動作；漫畫演出前會先播放完動作。')],
     profile: step => [field('角色檔案', assetSelect('characters', step))],
     item: step => [field('取得道具', assetSelect('items', step))],
     flag: step => [field('旗標', flagSelect(step, 'key')), field('操作', select2([{value:'value',label:'設定值'},{value:'add',label:'加減整數'}], 'add' in step ? 'add' : 'value', v => { delete step.value; delete step.add; step[v] = v === 'add' ? 1 : true; touch({inspector:true}); })), field('值 JSON', scalarControl(step, 'add' in step ? 'add' : 'value', 'add' in step))],
@@ -931,7 +949,8 @@
       field('成立 then', nodeSelect(step.then, v => {step.then=v;touch();})), field('否則 else', nodeSelect(step.else,v => {step.else=v;touch();}))],
 
     say: step => [field('speaker', speakerControl(step, 'speaker')), field('text', textArea(step, 'text')),
-      field('expression', expressionControl(step)), voicePitch(step), field('', checkbox(step, 'thought', '心聲（thought）'))],
+      field('expression', expressionControl(step)), voicePitch(step), field('', checkbox(step, 'thought', '心聲（thought）')),
+      step.speaker !== 'narrator' && field('', checkbox(step, 'offscreen', '畫外音（說話者不登場）'))],
     goto: step => [field('target', nodeSelect(step.target, v => { step.target = v; touch(); }))],
     end: step => [field('text', textArea(step, 'text', false, 2))],
     comedy: step => [
@@ -970,8 +989,8 @@
   }
 
   function stepBox(node, step, index) {
-    const form = FORMS[step.op];
-    const current = `${Core.stepGroup(step).id}:${step.op}`;
+    const form = FORMS[Core.stepType(step)];
+    const current = `${Core.stepGroup(step).id}:${Core.stepType(step)}`;
     const typeError = el('div', { class: 'err', role: 'alert' });
     const known = Core.STEP_GROUPS.some(group => group.ops.includes(step.op));
     const type = el('select', { class: 'step-type-picker', 'aria-label': `更改第 ${index + 1} 步類型` },
@@ -1035,6 +1054,35 @@
     });
   }
 
+  function stepInsert(node, index) {
+    const box = el('div', { class: 'step-insert', data: { insertIndex: index } });
+    const open = button('＋ 插入步驟', () => {
+      if (isReadOnly()) return;
+      const picker = el('select', { class: 'insert-step-type', 'aria-label': `在步驟 #${index} 前插入的類型` },
+        Core.STEP_GROUPS.slice(0, 7).map(group => el('optgroup', { label: group.label }, group.ops.map(op =>
+          el('option', { value: `${group.id}:${op}` }, `${Core.icon(op)} ${Core.stepLabel({ op, speaker: group.id === 'narration' ? 'narrator' : 'speaker' })}（${op}）`)))));
+      picker.value = 'dialogue:say';
+      const error = el('div', { class: 'err', role: 'alert' });
+      const panel = el('div', { class: 'insert-step-panel' },
+        field(`在步驟 #${index} 前插入`, picker, error),
+        el('div', { class: 'actions' }, button('插入', () => {
+          if (isReadOnly()) return;
+          const [category, op] = picker.value.split(':');
+          const step = Core.newStep(op);
+          if (op === 'say') step.speaker = category === 'narration' ? 'narrator' : defaultSpeaker();
+          error.textContent = Core.addStep(node, step, index);
+          if (error.textContent) return;
+          touch({ inspector: true });
+          focusStep(index);
+        }, 'confirm-insert'), button('取消', () => { panel.remove(); open.hidden = false; open.focus(); })));
+      open.hidden = true;
+      box.append(panel);
+      picker.focus();
+    }, 'insert-step-button');
+    box.append(open);
+    return box;
+  }
+
   function renderInspector() {
     const box = $('inspector');
     box.replaceChildren();
@@ -1083,7 +1131,7 @@
       button(id === S.story.entry ? '✓ 這是 entry' : '設為 entry', () => { S.story.entry = id; renderInfo(); touch({ inspector: true }); }),
       button('刪除節點', () => removeNode(id), 'danger')));
     if (S.service) box.append(previewControls(id));
-    box.append(el('h3', {}, `步驟（${node.steps.length}）`), ...node.steps.map((step, index) => stepBox(node, step, index)));
+    box.append(el('h3', {}, `步驟（${node.steps.length}）`), ...node.steps.flatMap((step, index) => [stepInsert(node, index), stepBox(node, step, index)]));
     const op = el('select', { id: 'addStepOp', size: 16, 'aria-label': '新增步驟分類' }, Core.STEP_GROUPS.slice(0, 7).map(group => el('optgroup', {label: group.label}, group.ops.map(name => el('option', {value: `${group.id}:${name}`}, `${Core.icon(name)} ${Core.stepLabel({op:name,speaker:group.id === 'narration' ? 'narrator' : 'speaker'})}（${name}）`)))));
     op.value = 'dialogue:say';
     box.append(el('details', {id: 'addStepPicker', class: 'step-picker'}, el('summary', {}, '選擇步驟類型（七類）'), op));

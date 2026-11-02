@@ -18,6 +18,8 @@ const VALID_BOKE_RESULTS: Array[String] = ["perfect", "weak", "fail", "hidden"]
 const VALID_OPS: Array[String] = [
     "bg",
     "char",
+    "portrait_exit",
+    "portrait_lighting",
     "portrait_effect",
     "say",
     "choice",
@@ -1498,6 +1500,14 @@ func _validate_asset_catalog(value: Variant) -> String:
                 return scene_error
         if character.has("voice_pitch") and (not _is_number(character["voice_pitch"]) or float(character["voice_pitch"]) <= 0.0):
             return "character '%s' voice_pitch must be a positive number (Hz)" % character_id
+        if character.has("height_cm") and (not _is_number(character["height_cm"]) or float(character["height_cm"]) <= 0.0):
+            return "character '%s' height_cm must be a positive number (cm)" % character_id
+        if character.has("height_bounds"):
+            var bounds: Variant = character["height_bounds"]
+            if not bounds is Array or bounds.size() != 2:
+                return "character '%s' height_bounds must contain crown and sole fractions" % character_id
+            if not _is_number_between(bounds[0], 0.0, 1.0) or not _is_number_between(bounds[1], 0.0, 1.0) or float(bounds[0]) >= float(bounds[1]):
+                return "character '%s' height_bounds must satisfy 0 <= crown < sole <= 1" % character_id
         if character.has("expressions"):
             if typeof(character["expressions"]) != TYPE_DICTIONARY:
                 return "character '%s' expressions must map expression ids to pictures" % character_id
@@ -1728,6 +1738,16 @@ func _validate_step(current_node_id: String, index: int, step: Dictionary, nodes
                 return "%s char cannot enter and hide at once" % prefix
             if step.has("transition") and (typeof(step["transition"]) != TYPE_STRING or String(step["transition"]) not in VALID_CHARACTER_TRANSITIONS):
                 return "%s char transition is invalid" % prefix
+        "portrait_exit":
+            if not _catalog_has_character(asset_catalog, String(step.get("id", ""))):
+                return "%s portrait_exit id is not a character in the asset catalog" % prefix
+            if step.has("transition") and (typeof(step["transition"]) != TYPE_STRING or String(step["transition"]) not in VALID_CHARACTER_TRANSITIONS):
+                return "%s portrait_exit transition is invalid" % prefix
+        "portrait_lighting":
+            if not _catalog_has_character(asset_catalog, String(step.get("id", ""))):
+                return "%s portrait_lighting id is not a character in the asset catalog" % prefix
+            if typeof(step.get("mode", null)) != TYPE_STRING or String(step["mode"]) not in ["dim", "lit", "auto"]:
+                return "%s portrait_lighting mode is invalid" % prefix
         "portrait_effect":
             if not _catalog_has_character(asset_catalog, String(step.get("id", ""))):
                 return "%s portrait_effect id is not a character in the asset catalog" % prefix

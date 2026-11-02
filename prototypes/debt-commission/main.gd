@@ -930,6 +930,7 @@ func _build_sprites() -> void:
 			if ResourceLoader.exists(scene_path) else SPRITE_SCRIPT.new() as Control
 		_char_layer.add_child(sprite)
 		sprite.call("setup", actor_id, str(info["name"]), Color(str(info["color"])), _font)
+		sprite.call("configure_height", float(info.get("height_cm", 0.0)), info.get("height_bounds", []))
 		var art_path: String = str(info.get("path", ""))
 		if not art_path.is_empty():
 			var art: Resource = load(art_path)
@@ -968,15 +969,30 @@ func _apply_character(command: Dictionary) -> void:
 		_actor_slots[actor_id] = _dict_string(command, "position")
 		_layout_sprite(actor_id)
 	var transition: String = _dict_string(command, "transition", "fade")
+	sprite.set_meta("entrance_transition", transition)
 	if not _dict_bool(command, "visible", true):
 		_motion.character(sprite, "leave", _skip, transition)
 		return
 	if _dict_bool(command, "enter") and not sprite.visible:
 		# `enter`: someone who has not spoken (Elisabeth) comes on stage at their slot, lit.
 		_layout_sprite(actor_id)
-		sprite.modulate = Color.WHITE
+		sprite.modulate = _portrait_color(sprite, true)
 		sprite.visible = true
 		_motion.character(sprite, "enter", _skip, transition)
+
+
+func _portrait_color(sprite: Control, focused: bool) -> Color:
+	var mode: String = str(sprite.get_meta("portrait_lighting", "auto"))
+	return Color.WHITE if mode == "lit" or (mode == "auto" and focused) else Color(0.5, 0.5, 0.56)
+
+
+func _apply_portrait_lighting(command: Dictionary) -> void:
+	var actor_id: String = _dict_string(command, "id")
+	if not _sprites.has(actor_id):
+		return
+	var sprite: Control = _sprites[actor_id]
+	sprite.set_meta("portrait_lighting", _dict_string(command, "mode", "auto"))
+	sprite.modulate = _portrait_color(sprite, _current_speaker == "narrator" or _current_speaker.split("+").has(actor_id))
 
 
 func _build_dialogue() -> void:
@@ -1673,6 +1689,8 @@ func _start_new_story() -> void:
 	_forget_search_cast()
 	for sprite: Control in _sprites.values():
 		sprite.visible = false
+		sprite.set_meta("portrait_lighting", "auto")
+		sprite.set_meta("entrance_transition", "fade")
 		sprite.call("set_expression", "neutral")
 	_apply_background(_default_background_id())
 	for actor_id: String in _sprites.keys():
@@ -1775,10 +1793,32 @@ func _drive_story(generation: int) -> void:
 				_library.unlock(_gallery_key("bg"), _dict_string(command, "id"))
 			"char":
 				_apply_character(command)
+			"portrait_exit":
+				var departure: Dictionary = command.duplicate()
+				departure["visible"] = false
+				_apply_character(departure)
+				var sprite: Control = _sprites.get(_dict_string(command, "id"))
+				while sprite != null and _motion.character_kind(sprite) == "leave" and generation == _generation:
+					await get_tree().process_frame
+				if generation != _generation:
+					return
+			"portrait_lighting":
+				_apply_portrait_lighting(command)
 			"portrait_effect":
 				var actor_id: String = _dict_string(command, "id")
 				if _sprites.has(actor_id):
-					_motion.reaction(_sprites[actor_id] as Control, _dict_string(command, "effect"), _skip)
+					var sprite: Control = _sprites[actor_id]
+					if not sprite.visible or _motion.character_kind(sprite) == "leave":
+						_motion.cancel_character(sprite)
+						sprite.visible = false
+						_apply_character({"id": actor_id, "enter": true, "transition": sprite.get_meta("entrance_transition", "fade")})
+					_motion.reaction(sprite, _dict_string(command, "effect"), _skip)
+					# Dialogue can share the beat. Other commands must not cover or cancel the reaction.
+					if str(_runner.call("following_op")) != "say":
+						while not _motion.character_kind(sprite).is_empty() and generation == _generation:
+							await get_tree().process_frame
+						if generation != _generation:
+							return
 			"show":
 				_sprite(_dict_string(command, "actor")).visible = true
 			"hide":
@@ -1952,10 +1992,12 @@ func _present_investigation(command: Dictionary, restored: bool) -> void:
 			var sprite: Control = _sprites[actor_id]
 			var pose: Dictionary = home_cast.get(actor_id, {})
 			sprite.visible = place == "home" and bool(pose.get("visible", false))
+			sprite.set_meta("portrait_lighting", pose.get("lighting", "auto"))
+			sprite.set_meta("entrance_transition", pose.get("entrance_transition", "fade"))
 			if sprite.visible:
 				_actor_slots[actor_id] = str(pose.get("position", "center"))
 				sprite.call("set_expression", str(pose.get("expression", "neutral")))
-			sprite.modulate = Color.WHITE  # nobody is in focus while searching: any of them can be tapped
+			sprite.modulate = _portrait_color(sprite, true)
 		_set_search_cast(command)
 	else:
 		_clear_stage()  # the player searches the room itself
@@ -2636,6 +2678,8 @@ func _on_game_over_retry_pressed() -> void:
 			var state: Dictionary = stage["sprites"].get(actor,{})
 			_actor_slots[actor] = str(state.get("position","center"))
 			(_sprites[actor] as Control).visible = bool(state.get("visible",false))
+			_sprites[actor].set_meta("portrait_lighting", state.get("lighting", "auto"))
+			_sprites[actor].set_meta("entrance_transition", state.get("entrance_transition", "fade"))
 			_sprites[actor].call("set_expression",str(state.get("expression","neutral")))
 			_layout_sprite(actor)
 		_effects.play_bgm(str(stage.get("bgm","")))
@@ -2942,7 +2986,7 @@ func _focus_speaker(speaker: String, expression: String) -> void:
 	for actor_id: String in _sprites.keys():
 		var sprite: Control = _sprites[actor_id]
 		var talking: bool = speaking.has(actor_id)
-		sprite.modulate = Color.WHITE if talking or speaker == "narrator" else Color(0.5, 0.5, 0.56)
+		sprite.modulate = _portrait_color(sprite, talking or speaker == "narrator")
 		if talking:
 			var entering: bool = not sprite.visible
 			if not sprite.visible:
@@ -2958,7 +3002,7 @@ func _focus_speaker(speaker: String, expression: String) -> void:
 					if not str(state.get("queued", "")).is_empty():
 						_motion.reaction(sprite, str(state["queued"]), _skip)
 			if entering:
-				_motion.character(sprite, "enter", _skip)
+				_motion.character(sprite, "enter", _skip, str(sprite.get_meta("entrance_transition", "fade")))
 			elif _motion.character_kind(sprite) not in ["enter", "shake", "bounce"]:
 				_motion.character(sprite, "speak", _skip)
 
@@ -2969,6 +3013,8 @@ func _clear_stage() -> void:
 		_motion.cancel_characters()
 	for sprite: Control in _sprites.values():
 		sprite.visible = false
+		sprite.set_meta("portrait_lighting", "auto")
+		sprite.set_meta("entrance_transition", "fade")
 
 
 func _sprite(actor_id: String) -> Control:
@@ -3724,7 +3770,9 @@ func _build_save_payload(preview_png: String) -> Dictionary:
 		# A fading exit is already absent in the story, even while its last frames are visible.
 		var on_stage: bool = sprite.visible and _motion.character_kind(sprite) != "leave"
 		sprites[actor_id] = {"visible": on_stage, "expression": str(sprite.get("expression")),
-			"position": str(_actor_slots.get(actor_id, "center"))}
+			"position": str(_actor_slots.get(actor_id, "center")),
+			"lighting": str(sprite.get_meta("portrait_lighting", "auto")),
+			"entrance_transition": str(sprite.get_meta("entrance_transition", "fade"))}
 	var current: Dictionary = _runner_current()
 	var payload: Dictionary = {
 		"schema": SAVE_SCHEMA,
@@ -3788,6 +3836,8 @@ func _valid_saved_cast(cast: Variant) -> bool:
 		var pose: Variant = cast.get(actor_id)
 		if not pose is Dictionary or not pose.get("visible") is bool or not _slot_markers.has(str(pose.get("position", ""))) or typeof(pose.get("expression", "")) != TYPE_STRING:
 			return false
+		if pose.get("lighting", "auto") not in ["dim", "lit", "auto"] or pose.get("entrance_transition", "fade") not in STORY_RUNNER_SCRIPT.VALID_CHARACTER_TRANSITIONS:
+			return false
 	return true
 
 
@@ -3822,6 +3872,8 @@ func _validate_save_payload(payload: Dictionary) -> bool:
 		if not _slot_markers.has(str((state as Dictionary).get("position", default_position))):
 			return false
 		if typeof((state as Dictionary).get("expression", "neutral")) != TYPE_STRING:
+			return false
+		if state.get("lighting", "auto") not in ["dim", "lit", "auto"] or state.get("entrance_transition", "fade") not in STORY_RUNNER_SCRIPT.VALID_CHARACTER_TRANSITIONS:
 			return false
 	for entry: Variant in history as Array:
 		if not entry is Dictionary:
@@ -3911,6 +3963,9 @@ func _apply_save_payload(payload: Dictionary) -> bool:
 		var default_position: String = str((_actors[actor_id] as Dictionary).get("slot", "center"))
 		_actor_slots[actor_id] = str(state.get("position", default_position))
 		sprite.visible = bool(state.get("visible", false))
+		sprite.set_meta("portrait_lighting", state.get("lighting", "auto"))
+		sprite.set_meta("entrance_transition", state.get("entrance_transition", "fade"))
+		sprite.modulate = _portrait_color(sprite, true)
 		sprite.call("set_expression", str(state.get("expression", "neutral")))
 		_layout_sprite(actor_id)
 	_previous_power = int((_runner.get("gameplay") as Dictionary).get("power", 0))

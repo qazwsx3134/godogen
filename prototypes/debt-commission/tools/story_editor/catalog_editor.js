@@ -79,7 +79,7 @@
         el('div', { class: 'catalog-root' },
           field('預設視角', choose(characterIds, catalog.default_pov, v => setRoot('default_pov', v), '（第一個角色）')),
           field('預設背景', choose(backgroundIds, catalog.default_background, v => setRoot('default_background', v), '（沒有）')),
-          catalog.extends && el('span', { class: 'catalog-note' }, `繼承自 ${catalog.extends}：那邊的項目在這裡唯讀，要改請開那份素材設定。`)),
+          catalog.extends && el('span', { class: 'catalog-note' }, `繼承自 ${catalog.extends}；下方可為本作品設定繼承角色的身高。其他設定請開原素材設定。`)),
         el('div', { class: 'catalog-tabs' }, KINDS.map(k => el('button', {
           class: k.key === state.kind ? 'active' : '', data: { kind: k.key },
           onclick: () => { state.kind = k.key; render(); } }, `${k.label}（${Object.keys(catalog[k.key] || {}).length}）`)),
@@ -87,7 +87,7 @@
         el('div', { class: 'catalog-list' },
           Object.keys(entries).length === 0 && el('p', { class: 'catalog-note' }, `這份設定還沒有自己的${kind.label}。`),
           Object.keys(entries).map(id => entryForm(kind, id, entries[id])),
-          inherited.length > 0 && el('p', { class: 'catalog-note' }, `繼承的${kind.label}（唯讀）：${inherited.join('、')}`))));
+          ...inherited.map(id => kind.key === 'characters' ? inheritedHeight(id) : el('p', {class:'catalog-note'}, `繼承的${kind.label}（唯讀）：${id}`)))));
     if (old) old.replaceWith(panel); else document.body.append(panel);
     panel.querySelector('.catalog-list').scrollTop = scroll;
   }
@@ -95,6 +95,19 @@
   function field(label, control, extra) {
     const { el } = state.deps;
     return el('label', { class: 'catalog-field' }, el('span', {}, label), control, extra);
+  }
+  function inheritedHeight(id) {
+    const { el } = state.deps;
+    const entry = state.inherited.characters[id];
+    const control = el('input', {type:'number',min:1,value:entry.height_cm ?? '', 'aria-label':`${entry.name || id} 身高 cm`});
+    control.addEventListener('change', () => {
+      if (control.value === '') return;
+      state.catalog.characters ||= {};
+      state.catalog.characters[id] = {...JSON.parse(JSON.stringify(entry)),height_cm:Number(control.value)};
+      state.opened.add(`characters/${id}`);
+      changed();
+    });
+    return field(`${entry.name || id}・身高 cm（繼承角色）`, control, el('small', {}, '修改後存為本作品的角色設定。'));
   }
   function choose(options, current, onChange, empty) {
     const { el } = state.deps;
@@ -131,6 +144,7 @@
     if (kind.key === 'characters') {
       body.push(field('名牌顏色', color(entry, 'color')),
         field('預設站位', choose(['left', 'center', 'right'], entry.slot, v => { if (v) entry.slot = v; else delete entry.slot; changed(); })),
+        field('身高 cm', number(entry, 'height_cm'), el('small', {}, '依身高自動統一立繪比例；留空沿用場景大小。存檔後重新試玩生效。')),
         field('打字音高 Hz', number(entry, 'voice_pitch')),
         field('人物檔案', text(entry, 'profile', true)),
         field('立繪（平常表情）', fileChoice(entry, 'path', 'image', '（沒有圖：剪影）'), preview(entry.path)),

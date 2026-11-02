@@ -209,3 +209,36 @@ README 現在只記目前的六頁、種族、操作、場景與驗證入口；�
 ## 2026-10-30 存檔 schema 完成
 
 載入與目標檔／輸出快照皆驗證英雄、隊伍、裝備、詞綴、UID、容量及可選欄位；不識別的欄位阻止覆寫。保留短天賦／遺物與 scalar potion 的舊 v2 相容，v1 裝備／件數背包可遷移，超容量保護而不截斷。L2 save_protection／progression／home／main／recruit 全 PASS（`/tmp/godot-tests.vW1ukD`）。初輪版本 float 比對失敗已修正並完整重跑，證據與限制見 SAVE-PROTECTION.md。未改 schema 版本、未 commit／push。
+
+## 根目錄紀錄補遺（2026-11-02 移入）
+
+根目錄 `Progress.md` 拆分時移入本檔原本沒有或較簡略的段落，保留原文。
+
+### 跨專案審查改善（2026-10-29～30）
+
+| 專案 | 已完成的程式／文件工作 | 仍待外部驗收／延期 |
+|---|---|---|
+| hero-horde-idle | 現況文件、48 組收益證據、強敵與前五分鐘離線算法、存檔完整 schema 與輸出保護 | 真人前三層、容許收益差距與手機恢復成本；Web 路線延後 |
+
+- 已完成（hero 部分）：hero 目前循環與前三層／離線收益驗收。重要入口 `docs/FIRST-THREE-FLOORS-ACCEPTANCE.md`。
+- 部分／未完成（hero 部分）：真人／真機驗收及 hero 在線離線差距與容許值待測。未改平衡數字。
+hero 最新 L2 `save_protection progression home main recruit` 全 PASS，證據 `/tmp/godot-tests.vW1ukD`；本批未重跑，詳見下方 10-30 schema 紀錄。其他專案驗證沿用各自最後一輪，未將舊證據冒充本輪結果。涉及真人、作者內容、真機及服務部署的項目保持未完成，未宣稱原清單全面驗收。
+- 2026-10-30 hero 存檔保護：先重現較新版本／破損 JSON／空檔被覆寫三項 FAIL（`/tmp/hero-save-before.log`）；載入與寫入前現在檢查 JSON 根型別與版本，不相容時阻止覆寫並顯示主畫面提示。L2 save_protection／progression／home／main 全 PASS（`/tmp/godot-tests.zMQXlQ`），提示字型檢查 PASS。範圍限制與重現見 `hero-horde-idle/docs/SAVE-PROTECTION.md`；尚未全面驗證內部欄位 schema，未改存檔版本或輸出安裝包。
+
+### 2026-10-28 根目錄摘要
+
+- **目前工作**：`prototypes/hero-horde-idle`，分支 `master`。第三～六輪回饋（作者的 `REVIEW.md` 與後續對話）已 commit 到 master（未 push；最新提交以 `git log -1` 查核）。詳細交接在 [docs/PROGRESS.md](PROGRESS.md)。
+- **已完成**：刀劍神域風介面（選單白色＋戰鬥 HUD 深色玻璃；規範 `docs/SAO_UI_SPEC.md`、元件庫 `scenes/ui_kit/`）、樓層與樓層王、天賦 18 節點、英雄詳情改版（換裝、升級、數值明細視窗）、三級經驗藥水、英雄改人類／獸人／精靈、道具圖示去背、版面留白、推王英雄被壓扁的修正、士氣改成出手頻率（被打會扣）。
+- **驗證**：`test_progression／home／main／march／report／skills／recruit／balance／stages` PASSED（2026-10-28）。
+- **等作者**：生精靈／獸人英雄圖（`docs/race-art-prompts.md`）與背景圖層（`docs/bg-layer-prompts.md`）；手機實機試玩。
+- **工作區**：debt-commission 的未提交修改保留未動，沒有夾帶進 hero-horde 的 commit。
+
+### 2026-10-27 融合版（根目錄原文）
+
+- **目前工作**：使用者要求把 taskbar-hero、hero-horde-idle、dreamling-idle 融合；確認後的決定見 `prototypes/hero-horde-idle/docs/FUSION.md`。分支 `fusion-idle`（從 `hero-horde-squads` 的 `0486a1f` 開出），融合版提交為 `40355fb`，2026-10-27 依使用者指示合併進 master（`7b6964a`，未 push）；原本的獨立 worktree 已移除。合併衝突在 hero-horde-idle 採融合版（master 的 `1b119d0`／`0a65639` 建在舊六區架構上），godot-kit README 與 art_src/.gitignore 兩邊都留；合併後 `test_march`／`test_home`／`test_main` 與 kit 的 `test_proto_kit`／`test_genre_modules`／`test_m0_modules` 通過。
+- **已完成**：遠征紀事七頁主畫面＋常駐行軍戰場；行軍真戰鬥（`domain/march_sim.gd`，固定 tick、打輸退關、離線依實測速率）；100 名英雄分人類 40／怪獸 30／夢靈 30 與形態被動（推王與行軍）；行軍小隊羈絆；訓練取代職業等級；上陣格 3→5；圖鑑；裝備詞綴與自動分解；存檔 v2（v1 轉換）；金幣經濟 ×10；怪獸／夢靈暫用美術（Skybound 動作圖換色）。
+- **驗證（2026-10-27，L2，沿用本輪）**：`test_march`、`test_progression`、`test_stages`（十關全過；good 在 3-4 的推薦戰力閘門放寬到 1.25 倍，理由寫在測試裡）、`test_home`、`test_recruit`、`test_balance`、`test_report`、`test_skills`、`test_main` 全部 PASSED（之後修了推王字型缺字、回前景補算離線、戰報形態頭像，重跑 `test_home`／`test_march`／`test_main`／`test_report`／`test_skills` 通過）；`tools/capture_home.gd`、`tools/capture_shots.gd` 截圖逐頁看過。完整測試等作者手動驗收後再跑一輪。
+- **已知問題**：試跑時誤用作者的真實存檔（macOS 的 user:// 不看 `XDG_DATA_HOME`），v1 存檔已被轉成 v2 並補發 8 小時離線收益，原始 v1 無備份（APFS 本機快照沒有；Time Machine 若有可能還在）；轉換後快照 `~/.claude/backups/20261027-hero-horde-idle-progress-v2-migrated.json`。舊分支遊戲讀不懂 v2。之後試玩用 `-- --save=<名稱>`。
+- **第二輪（2026-10-27 下午，合併後在 master 工作區，全部未 commit）**：使用者回饋「畫面太小、推王 UI 風格要對齊放置畫面、訓練改點亮天賦、所有英雄都能裝備＋一鍵裝備、總覽改放設定鈕左邊」。已做：天賦星圖（9 節點含 3 個團專精，`scenes/components/talent_node.tscn`、`scripts/talent_links.gd`）；裝備頁飾品持有者用 ◀▶ 切換全部英雄、一鍵裝備；英雄頁「裝備」鈕；頂欄「總覽」鈕；主畫面字級放大與單行省略號；長螢幕時頁面貼底、上方補天空（`home.gd _fit`）；預覽視窗 430×932；推王主題 `ui/theme.tres` 換成紙色／藍金按鈕（`tools/theme_taskbar.gd`）並把淺色文字覆寫改墨色。工具：`tools/build_fusion_ui_v2.gd`（已套用）。另刪除 95 個 `art_src` 殘留 `.import`。
+- **第二輪驗證**：專精調到每級 ×1.02、最多 10 級、起價 10 萬後 `test_stages` 與 `test_progression` 通過；主畫面與推王截圖看過（`/tmp/fusion_shots2`、`/tmp/fusion_push2`，暫存）。出門時 `test_home`／`test_main`／`test_march`／`test_progression` 的 L2 回歸正在背景跑，結果見下一行。
+- **下一步**：確認那四支測試結果；重拍七頁截圖（加上天空後的版面與天賦星圖名稱還沒重拍）；作者試玩看字級夠不夠大（目前每頁仍照寬度縮放，細長手機只多出天空）；決定是否 commit（master 工作區另有 debt-commission session 未提交修改，`Progress.md` 不可夾帶提交）。`art_src` 有 84 張 PNG 因 LFS 規則顯示已修改，要 `git add --renormalize` 才會消失，尚未處理。交接細節在 `prototypes/hero-horde-idle/docs/PROGRESS.md`。

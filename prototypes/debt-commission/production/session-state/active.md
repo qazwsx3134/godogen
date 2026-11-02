@@ -1,10 +1,14 @@
 # debt-commission 交接
 
+2026-11-02：立繪退場、明暗已獨立；修正未上場動作被略過、漫畫同幀蓋住動作，以及準備站位遺失登場動畫。台詞新增畫外音核取框（勾選仍不登場）。素材設定新增身高 cm，桂／銀時／神樂採 175／177／155，自動縮放並對齊腳底，排除神樂的傘；繼承角色可建立作品內身高覆寫。Node 15 項、Godot 6 suites 與實際 Chrome 的存回／重開／試玩回歸通過。未改作者故事／圖片／tscn，未重匯 Web、未 commit／push；詳細命令、限制與所有未提交範圍見根目錄 Progress.md。
+
+2026-11-02：側欄每一步前新增「＋ 插入步驟」，可就地選類型並插入到該步之前，新增後自動定位，支援取消、復原／重做及唯讀保護。L2 資料／既有類型共 12 項測試與真實 Chrome 的 60 句長場景操作回歸通過；未改 runtime／scene，未重跑完整遊戲或手機、實際存回檔案流程。未 commit／push，使用者原有狗耳朵故事修改保留。操作與指令見 [STORY-EDITOR.md](../../docs/STORY-EDITOR.md)，詳細驗證見根目錄 `Progress.md`。
+
 2026-11-02：故事編輯器的場景卡可按右鍵或「⋮」切換出口類型、增加選項；每個步驟可在側欄切換類型。既有內容被取代時先確認，可復原；唯讀故事不可修改。資料層、模擬 DOM 操作與 Godot 劇本驗證已測，Chromium 在此沙箱無法啟動，畫面／實際瀏覽器流程待驗。操作見 [STORY-EDITOR.md](../../docs/STORY-EDITOR.md)，驗證與工作區狀態見根目錄 `Progress.md`。
 
 2026-11-02：使用者指出 `aea4c5d9` 有《不是頭痛，是桂》，已查明是現行 HEAD 的祖先；先前回答「找不到新極短篇」有誤。作品包在 `stories/katsura_dog_ears/`。依作者「背景貼合原作」與直接生成的選擇，imagegen 生成一張 16:9 萬事屋客廳候選，透過此作品的 catalog 接入；其他故事沿用既有背景。`test_katsura_dog_ears.gd`、`test_story_packs.gd`、預覽入口測試通過；詳細命令與視覺限制見根目錄 `Progress.md`。此圖仍需作者在實際畫面確認。下方 10-28 的「短篇仍等構想」是更早的歷史狀態。
 
-2026-11-01：故事編輯器新增 repo 根目錄共用的[預覽工作台](../../../../preview/README.md)入口。執行 `python3 preview/start.py` 後開 `http://127.0.0.1:8000/preview/`，選故事編輯器即可；原本服務、存檔與場景試玩邏輯未改。本輪驗證與沙箱限制見根目錄 `Progress.md`。
+2026-11-01：故事編輯器新增 repo 根目錄共用的[預覽工作台](../../../../preview/README.md)入口。執行 `python3 preview/start.py` 後開 `http://127.0.0.1:8000/preview/`，選故事編輯器即可；原本服務、存檔與場景試玩邏輯未改。本輪驗證與沙箱限制見 [PROGRESS.md](../../PROGRESS.md)。
 2026-10-29 立繪風格最新：作者提供另一故事的 MS Paint 鼠繪 prompt，要求依此生成並去背。imagegen 重繪了桂的雙手姿勢，參照現有銀時／神樂畫風；RGBA 透明背景 941×1672，保留原圖原始像素。新檔 stories/katsura_dog_ears/art/katsura_dog_ears_mouse_v2.png 已設為 catalog 基礎／serious 圖，katsura.tscn Art 預覽同步，舊圖保留。Godot headless 匯入與非headless test_katsura_dog_ears.gd 通過，實際畫面 /private/tmp/debt-katsura-mouse-v2/ 已檢視，待作者試看；未重匯 Web、未commit／push。
 
 
@@ -24,7 +28,7 @@
 
 預設呈現改為 16:9 橫向，閱讀與選單字級縮小，四個閱讀工具按鈕維持原圖比例。舞台與對話框獨立；一般閱讀框固定，長台詞在框內依文字行分頁。調查的話題／回合控制仍可增加面板高度，背景可上下、左右拖曳。Godot 的 `scenes/stage.tscn` 可調左／中／右站位，角色 scene 的 `Art` 可調各自取景；網頁編輯器可拖曳或按鈕選站位。閱讀按鈕及角色回饋支援減少畫面效果。橫向版真人手機手感仍待使用者試玩。
 
-本輪 45 組遊戲測試通過，最後選項版面調整後另重跑相關四組；兩種視窗各檢查 33 個最大字級畫面，四個限時選項完整可見。重新匯出的 Web 已以 Chrome 模擬觸控通過調查、存讀檔及兩種選項；編輯器本機服務 16 項測試通過。細節與紀錄位置見根目錄 `Progress.md`。
+本輪 45 組遊戲測試通過，最後選項版面調整後另重跑相關四組；兩種視窗各檢查 33 個最大字級畫面，四個限時選項完整可見。重新匯出的 Web 已以 Chrome 模擬觸控通過調查、存讀檔及兩種選項；編輯器本機服務 16 項測試通過。細節與紀錄位置見 [PROGRESS.md](../../PROGRESS.md)。
 
 2026-10-28 收合按鈕改為精簡深藍銀框；收合列貼底且僅背景降低不透明度，按鈕以外可穿透操作場景。客廳完成全部線索後，展開與收合狀態都提供「繼續」。本次相關遊戲測試、第一章 35 畫面最大字級檢查與 Web 模擬觸控通過；完整 45 組是前次橫向改版的紀錄，這次沒有重跑。
 
@@ -32,7 +36,7 @@
 
 2026-10-28 角色步驟新增淡入／淡出、左右滑動並淡化、直接切換；「立繪動作」可選抖動或彈跳。連續登場、動作與台詞能接續播放，退場保留當前表情與站位，退場中自動存檔會記成已離場；略讀及減少畫面效果會安全結束動作。編輯器新增從零建立短篇的操作說明，本機服務現於 `http://127.0.0.1:8000/tools/story_editor/`。有獨立動畫、存讀檔與編輯器新建／試玩測試；已重匯 Web 並測 Phase 3，完整測試與真人手機試玩本輪未跑。第一篇短篇構想仍等使用者提供。
 
-操作見 [STORY-EDITOR.md](../../docs/STORY-EDITOR.md)，待辦見 [ROADMAP-COMMERCIAL.md](../../docs/ROADMAP-COMMERCIAL.md)，完整驗證與工作區狀態見[根目錄 Progress.md](../../../../Progress.md)。
+操作見 [STORY-EDITOR.md](../../docs/STORY-EDITOR.md)，待辦見 [ROADMAP-COMMERCIAL.md](../../docs/ROADMAP-COMMERCIAL.md)，完整驗證與工作區狀態見 [PROGRESS.md](../../PROGRESS.md)。
 
 2026-10-28 使用者準備和 agent／編輯器合作極短篇，先要求核對 conversation 的全部能力，含人格。報告為根目錄 `docs/story-telling-game/CONVERSATION-AUDIT-2026-10-28.md`：VN 與圖編輯可用；CPC schema／三角色人格資料、特定記憶與檢索、人格 QA、Prompt Assembler、內建 AI Writer／Chat 未實作。已有 carry 旗標不等於完整人物記憶。這輪只核對與修正過時文件，沒有新增人格系統或代寫故事；重跑 choices、ep00（892 checks）、chapter_flow 均通過。下一步建議先補製作階段的人格／記憶最小流程，等待使用者指示。
 
