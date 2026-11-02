@@ -23,7 +23,7 @@
 ## Git
 
 - **`.gitignore` 早就寫了 `.godot/`、`build/`，檔案卻一直顯示已修改** → 規則加在提交之後；`git ls-files -ci --exclude-standard` 找出來，`git rm -r --cached` 移出版控。（[CLAUDE.md](../CLAUDE.md) 2026-10-14）
-- **推大量圖檔與音檔回 HTTP 400、遠端掛斷** → 只對那次用 `git -c http.postBuffer=524288000 push`，不改全域設定。（[CLAUDE.md](../CLAUDE.md) 2026-10-14）
+- **推大量圖檔與音檔回 HTTP 400、遠端掛斷**（×2）→ HTTPS 推送的緩衝區預設只有 1 MB，超過就改成分段傳送，被 GitHub 拒絕。2026-11-02 起，這個 repo 已設 `git config http.postBuffer 157286400`（150 MB，只寫在 `.git/config`），直接 `git push` 即可；單次推超過 150 MB 時，再臨時加 `-c http.postBuffer=524288000`。不改全域設定。換一台機器 clone 要重設。（[CLAUDE.md](../CLAUDE.md) 2026-10-14）
 - **沙箱內 `.git` 唯讀、Xvfb／Chromium 圖形測試要沙箱外執行** → 是環境限制，不要寫成遊戲壞了，也不要跳過授權。（[dreamling-idle/PROGRESS.md](dreamling-idle/PROGRESS.md)）
 
 ## 測試與量測
