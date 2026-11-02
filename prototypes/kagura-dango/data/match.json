@@ -3,7 +3,7 @@
 	"opening": "opening",
 	"stages": [
 		{"scene": "res://scenes/three_eat.tscn", "chart": "res://data/songs/eat3.json", "story": "round1"},
-		{"scene": "res://scenes/toss_game.tscn", "chart": "res://data/songs/toss2.json", "story": "round2"},
+		{"scene": "res://scenes/feast.tscn", "chart": "res://data/songs/feast2.json", "story": "round2"},
 		{"scene": "res://scenes/toss_game.tscn", "chart": "res://data/songs/toss3.json", "story": "round3"}
 	]
 }

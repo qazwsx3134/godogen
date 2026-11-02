@@ -20,7 +20,7 @@ func _run() -> void:
 	_expect(main.screen.name == "Title", "starts on the title")
 	await _press(main.screen.get_node("%Start"))
 	await _read_story("opening")
-	var names := ["ThreeEat", "TossGame", "TossGame"]
+	var names := ["ThreeEat", "FeastGame", "TossGame"]
 	for i in 3:
 		await _read_story(main.match_data.stages[i].story)
 		_expect(main.screen.name == names[i], "round %d is %s (got %s)" % [i + 1, names[i], main.screen.name])

@@ -48,6 +48,11 @@ SOUNDS = {
     "soy": lambda: mix(tone(392, 0.09, 30, "square") * 0.5, tone(523, 0.3, 9, f_end=659) * 0.33),
     "tri": lambda: mix(tone(784, 0.09, 30, "square") * 0.45, tone(1047, 0.3, 9, f_end=1319) * 0.3),
     "clap": lambda: noise(0.09, 35) * 0.3,
+    # round 2: Gintoki kicks a rival (low), Shinpachi packs a bento (middle), Kagura rice / dango (high)
+    "rival": lambda: mix(tone(150, 0.12, 25, "square") * 0.6, noise(0.08, 40) * 0.3),
+    "bento": lambda: mix(tone(392, 0.06, 45, "square") * 0.5, tone(330, 0.06, 45, "square") * 0.4),
+    "rice": lambda: tone(988, 0.12, 30) * 0.5,
+    "dango": lambda: mix(tone(784, 0.09, 30, "square") * 0.45, tone(1047, 0.3, 9, f_end=1319) * 0.3),
     "big": lambda: mix(tone(260, 0.12, 25, "square") * 0.55, tone(330, 0.7, 4, f_end=880) * 0.4),
     # live sound effects
     "chomp": lambda: mix(noise(0.06, 60) * 0.6, tone(300, 0.09, 30, "square", f_end=160) * 0.45),
@@ -150,9 +155,8 @@ def write_wav(path, buf):
 
 
 def main():
-    for path in sorted((ROOT / "data/songs").glob("*.json")):
-        chart = json.loads(path.read_text())
-        write_wav(ROOT / f"assets/music/{chart['id']}.wav", bake_song(chart, band=(chart["id"] != "calibrate")))
+    # Rounds play the user's songs (mp3) with no cue sounds: the notes are on the song's own beats.
+    write_wav(ROOT / "assets/music/calibrate.wav", bake_song(json.loads((ROOT / "data/songs/calibrate.json").read_text()), band=False))
     for name in ("chomp", "miss", "whiff", "ui"):
         write_wav(ROOT / f"assets/sfx/{name}.wav", SOUNDS[name]())
 

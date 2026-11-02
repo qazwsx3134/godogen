@@ -1,6 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/story.gd" id="1_lcs0l"]
+[ext_resource type="Texture2D" path="res://assets/sprites/bg_torii_park.png" id="2_bg"]
 
 [node name="Story" type="Control" unique_id=40598635]
 layout_mode = 3
@@ -15,6 +16,32 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 2
 color = Color(0.96, 0.86, 0.7, 1)
+
+[node name="Scenery" type="TextureRect" parent="." unique_id=399304118]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0.55)
+texture_filter = 1
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource("2_bg")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Portrait" type="TextureRect" parent="." unique_id=399304119]
+unique_name_in_owner = true
+texture_filter = 1
+layout_mode = 0
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 30.0
+offset_top = -330.0
+offset_right = 230.0
+offset_bottom = -124.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Box" type="PanelContainer" parent="." unique_id=1143252600]
 layout_mode = 0

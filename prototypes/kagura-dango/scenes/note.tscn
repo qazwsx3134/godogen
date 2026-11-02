@@ -1,0 +1,10 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/note.gd" id="1_note"]
+
+[node name="Note" type="Node2D" unique_id=1450021401]
+script = ExtResource("1_note")
+
+[node name="Icon" type="Sprite2D" parent="." unique_id=1450021402]
+unique_name_in_owner = true
+texture_filter = 1

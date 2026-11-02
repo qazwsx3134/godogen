@@ -1,0 +1,104 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/feast_game.gd" id="1_gvuwm"]
+[ext_resource type="Script" path="res://scripts/conductor.gd" id="2_8wl4a"]
+[ext_resource type="PackedScene" path="res://scenes/stage.tscn" id="3_45lir"]
+[ext_resource type="PackedScene" path="res://scenes/shopkeeper.tscn" id="4_xp2rn"]
+[ext_resource type="PackedScene" path="res://scenes/actor.tscn" id="5_0b2nc"]
+[ext_resource type="Script" path="res://scripts/plate_stack.gd" id="7_4u2a2"]
+[ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="8_vl6yr"]
+[ext_resource type="AudioStream" path="res://assets/sfx/chomp.wav" id="10_d4p2e"]
+[ext_resource type="AudioStream" path="res://assets/sfx/miss.wav" id="11_kgisl"]
+[ext_resource type="AudioStream" path="res://assets/sfx/whiff.wav" id="12_ua1kt"]
+
+[node name="FeastGame" type="Node2D" unique_id=1727875628]
+script = ExtResource("1_gvuwm")
+chart_path = "res://data/songs/feast2.json"
+
+[node name="Conductor" type="Node" parent="." unique_id=1707030465]
+unique_name_in_owner = true
+script = ExtResource("2_8wl4a")
+
+[node name="Camera" type="Camera2D" parent="." unique_id=1531371016]
+unique_name_in_owner = true
+position = Vector2(320, 180)
+
+[node name="Stage" parent="." unique_id=685568183 instance=ExtResource("3_45lir")]
+unique_name_in_owner = true
+
+[node name="Shopkeeper" parent="." unique_id=996367203 instance=ExtResource("4_xp2rn")]
+unique_name_in_owner = true
+position = Vector2(205, 292)
+scale = Vector2(0.6, 0.6)
+
+[node name="Gintoki" parent="." unique_id=173833660 instance=ExtResource("5_0b2nc")]
+unique_name_in_owner = true
+position = Vector2(110, 290)
+display_name = "銀時"
+
+[node name="Shinpachi" parent="." unique_id=1500710848 instance=ExtResource("5_0b2nc")]
+unique_name_in_owner = true
+position = Vector2(300, 300)
+scale = Vector2(0.8, 0.8)
+character_id = &"shinpachi"
+display_name = "新八"
+
+[node name="Kagura" parent="." unique_id=1287408363 instance=ExtResource("5_0b2nc")]
+unique_name_in_owner = true
+position = Vector2(525, 290)
+scale = Vector2(0.95, 0.95)
+character_id = &"kagura"
+display_name = "神樂"
+
+[node name="SkewerPile" type="Node2D" parent="." unique_id=1908608614]
+unique_name_in_owner = true
+position = Vector2(588, 300)
+script = ExtResource("7_4u2a2")
+sticks = true
+
+[node name="Skewers" type="Node2D" parent="." unique_id=1329347097]
+unique_name_in_owner = true
+
+[node name="HUD" parent="." unique_id=169533805 instance=ExtResource("8_vl6yr")]
+unique_name_in_owner = true
+hint_text = "音符進圈時點：紅（有人來搶）→左踢人　藍（便當）→中　粉（飯／丸子）→右"
+
+[node name="Chomp" type="AudioStreamPlayer" parent="." unique_id=1955713910]
+unique_name_in_owner = true
+stream = ExtResource("10_d4p2e")
+
+[node name="Miss" type="AudioStreamPlayer" parent="." unique_id=545268204]
+unique_name_in_owner = true
+stream = ExtResource("11_kgisl")
+
+[node name="Whiff" type="AudioStreamPlayer" parent="." unique_id=904862157]
+unique_name_in_owner = true
+stream = ExtResource("12_ua1kt")
+
+[node name="ServeOrigin" type="Marker2D" parent="." unique_id=1753763446]
+unique_name_in_owner = true
+position = Vector2(430, 228)
+
+[node name="PlateLeft" type="Marker2D" parent="." unique_id=865706140]
+unique_name_in_owner = true
+position = Vector2(110, 264)
+
+[node name="PlateMiddle" type="Marker2D" parent="." unique_id=946898760]
+unique_name_in_owner = true
+position = Vector2(300, 264)
+
+[node name="PlateRight" type="Marker2D" parent="." unique_id=426813225]
+unique_name_in_owner = true
+position = Vector2(525, 264)
+
+[node name="Intruder" parent="." unique_id=1727875629 instance=ExtResource("5_0b2nc")]
+unique_name_in_owner = true
+visible = false
+position = Vector2(-60, 300)
+scale = Vector2(0.8, 0.8)
+character_id = &"rival_man"
+display_name = "對手"
+
+[node name="IntruderTarget" type="Marker2D" parent="." unique_id=1727875630]
+unique_name_in_owner = true
+position = Vector2(170, 300)

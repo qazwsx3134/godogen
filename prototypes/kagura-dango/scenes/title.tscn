@@ -1,12 +1,31 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/title.gd" id="1_4ignj"]
+[ext_resource type="Texture2D" path="res://assets/sprites/title_art.png" id="2_wosw1"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wosw1"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.06, 0.12, 0.19, 0.86)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.94, 0.72, 0.39, 0.96)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [node name="Title" type="Control" unique_id=15710262]
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_4ignj")
 
@@ -17,7 +36,29 @@ anchor_bottom = 1.0
 mouse_filter = 2
 color = Color(0.98, 0.93, 0.84, 1)
 
+[node name="TitleArt" type="TextureRect" parent="." unique_id=1790265335]
+texture_filter = 1
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource("2_wosw1")
+
+[node name="MenuPanel" type="Panel" parent="." unique_id=168574511]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -156.0
+offset_top = -132.0
+offset_right = 156.0
+offset_bottom = 132.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_wosw1")
+
 [node name="Center" type="CenterContainer" parent="." unique_id=464675744]
+z_index = 1
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -30,15 +71,19 @@ theme_override_constants/separation = 12
 
 [node name="GameTitle" type="Label" parent="Center/Column" unique_id=1428545414]
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.94, 0.78, 1)
+theme_override_colors/font_outline_color = Color(0.04, 0.08, 0.12, 1)
+theme_override_constants/outline_size = 2
 theme_override_font_sizes/font_size = 46
-theme_override_colors/font_color = Color(0.16, 0.15, 0.24, 1)
 text = "丸子大胃王"
 horizontal_alignment = 1
 
 [node name="Subtitle" type="Label" parent="Center/Column" unique_id=171159329]
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.94, 0.78, 1)
+theme_override_colors/font_outline_color = Color(0.04, 0.08, 0.12, 1)
+theme_override_constants/outline_size = 2
 theme_override_font_sizes/font_size = 22
-theme_override_colors/font_color = Color(0.16, 0.15, 0.24, 1)
 text = "～神樂生日快樂 11.3～"
 horizontal_alignment = 1
 
@@ -61,8 +106,10 @@ text = "延遲校準"
 [node name="CalibInfo" type="Label" parent="Center/Column" unique_id=448794643]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.94, 0.78, 1)
+theme_override_colors/font_outline_color = Color(0.04, 0.08, 0.12, 1)
+theme_override_constants/outline_size = 2
 theme_override_font_sizes/font_size = 14
-theme_override_colors/font_color = Color(0.16, 0.15, 0.24, 1)
 text = "目前延遲校準：0 ms"
 horizontal_alignment = 1
 
@@ -76,7 +123,9 @@ offset_left = -330.0
 offset_top = -26.0
 offset_right = -10.0
 offset_bottom = -6.0
+theme_override_colors/font_color = Color(1, 0.94, 0.78, 1)
+theme_override_colors/font_outline_color = Color(0.04, 0.08, 0.12, 1)
+theme_override_constants/outline_size = 2
 theme_override_font_sizes/font_size = 12
-theme_override_colors/font_color = Color(0.16, 0.15, 0.24, 1)
-text = "銀魂同人・非商業｜美術與音樂為暫用"
+text = "銀魂同人・非商業｜AI 美術・合成音樂"
 horizontal_alignment = 2

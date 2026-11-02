@@ -1,0 +1,14 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/shopkeeper.gd" id="1_y54bd"]
+[ext_resource type="Texture2D" path="res://assets/sprites/store_owner_serve.png" id="2_t3gtr"]
+
+[node name="Shopkeeper" type="Node2D" unique_id=996367203]
+script = ExtResource("1_y54bd")
+
+[node name="Sprite" type="Sprite2D" parent="." unique_id=1498787058]
+unique_name_in_owner = true
+texture_filter = 1
+position = Vector2(0, -96)
+scale = Vector2(2, 2)
+texture = ExtResource("2_t3gtr")

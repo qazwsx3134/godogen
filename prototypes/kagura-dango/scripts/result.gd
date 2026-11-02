@@ -19,8 +19,12 @@ func show_result(r: Dictionary, last_round: bool) -> void:
 	%Score.text = "%d 分" % r.score
 	var c: Dictionary = r.counts
 	%Counts.text = "完美 %d　不錯 %d　勉強 %d　漏掉 %d" % [c.ace, c.good, c.barely, c.miss]
-	%Comment.text = "%s：「%s」" % StoryData.comment(r.id, r.rank)
+	var failed: bool = r.get("failed", false)
+	if failed:  # round 3 ran out of lives: the match can't go on until it is cleared
+		%Rank.text = "眼睛被打中了…失敗"
+	%Comment.text = "%s：「%s」" % StoryData.comment(r.id, &"fail" if failed else r.rank)
 	%Next.text = "看比賽結果" if last_round else "下一回合"
+	%Next.visible = not failed
 	%Retry.text = "重來這回合"
 
 

@@ -44,7 +44,7 @@ func _qa_round() -> int:
 
 func _jump_to_round(n: int) -> void:
 	MatchState.reset()
-	var before: Dictionary = [{}, {gintoki = 8, shinpachi = 9, kagura = 13, rival = 18}, {gintoki = 8, shinpachi = 9, kagura = 41, rival = 40}][n - 1]
+	var before: Dictionary = [{}, {gintoki = 8, shinpachi = 9, kagura = 13, rival = 18}, {gintoki = 8, shinpachi = 23, kagura = 36, rival = 40}][n - 1]
 	for who in [&"gintoki", &"shinpachi", &"kagura"]:
 		MatchState.eaten[who] = before.get(String(who), 0)
 	MatchState.rival = before.get("rival", 0)

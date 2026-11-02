@@ -17,6 +17,18 @@ var intensity := 1
 @onready var _speed_lines: Node2D = %SpeedLines
 
 
+## A round may play outdoors (the chart's "background"): swap the hall picture.
+func set_background(path: String) -> void:
+	if path != "" and ResourceLoader.exists(path):
+		%Background.texture = load(path)
+
+
+## Round 1 follows the original episode's outdoor contest: a plain stage, no crowd or lanterns, one rival.
+func set_calm(calm: bool) -> void:
+	for n in [_crowd, _lanterns, %RivalB, %Commentators, _referee]:
+		n.visible = not calm
+
+
 func set_intensity(level: int) -> void:
 	intensity = clampi(level, 1, 3)
 	_crowd.count = 8 + 8 * intensity
@@ -32,11 +44,13 @@ func pulse() -> void:
 
 
 func rival_eat(total: int) -> void:
+	_rivals[total % 2].call("play_pose", &"eat", 0.3)
 	_rivals[total % 2].bump(0.1, 0.12)
 	_plates.count = total
 
 
-func referee_call() -> void:
+func referee_call(pose: StringName) -> void:
+	_referee.call("play_pose", pose, 0.8)
 	_referee.bump(0.15, 0.25)
 
 

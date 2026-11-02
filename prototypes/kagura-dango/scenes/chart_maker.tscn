@@ -1,0 +1,99 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/chart_maker.gd" id="1_cm"]
+[ext_resource type="Script" path="res://scripts/conductor.gd" id="2_cm"]
+[ext_resource type="PackedScene" path="res://scenes/note_track.tscn" id="3_cm"]
+
+[node name="ChartMaker" type="Node2D" unique_id=1450021500]
+script = ExtResource("1_cm")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1450021501]
+offset_right = 640.0
+offset_bottom = 360.0
+mouse_filter = 2
+color = Color(0.96, 0.86, 0.7, 1)
+
+[node name="Conductor" type="Node" parent="." unique_id=1450021502]
+unique_name_in_owner = true
+script = ExtResource("2_cm")
+
+[node name="NoteTrack" parent="." unique_id=1450021503 instance=ExtResource("3_cm")]
+unique_name_in_owner = true
+position = Vector2(0, 160)
+
+[node name="Panel" type="VBoxContainer" parent="." unique_id=1450021504]
+offset_left = 16.0
+offset_top = 12.0
+offset_right = 624.0
+offset_bottom = 120.0
+theme_override_constants/separation = 8
+
+[node name="Row" type="HBoxContainer" parent="Panel" unique_id=1450021505]
+layout_mode = 2
+
+[node name="Round" type="OptionButton" parent="Panel/Row" unique_id=1450021506]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+selected = 0
+item_count = 3
+popup/item_0/text = "第1回合"
+popup/item_0/id = 0
+popup/item_1/text = "第2回合"
+popup/item_1/id = 1
+popup/item_2/text = "第3回合"
+popup/item_2/id = 2
+
+[node name="Grid" type="OptionButton" parent="Panel/Row" unique_id=1450021507]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+selected = 0
+item_count = 2
+popup/item_0/text = "對齊半拍"
+popup/item_0/id = 0
+popup/item_1/text = "對齊1/4拍"
+popup/item_1/id = 1
+
+[node name="Record" type="Button" parent="Panel/Row" unique_id=1450021508]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+text = "① 錄節奏"
+
+[node name="Assign" type="Button" parent="Panel/Row" unique_id=1450021509]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+text = "② 分配顏色"
+
+[node name="Stop" type="Button" parent="Panel/Row" unique_id=1450021510]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+text = "停止"
+
+[node name="Save" type="Button" parent="Panel/Row" unique_id=1450021511]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+text = "③ 儲存"
+
+[node name="Status" type="Label" parent="Panel" unique_id=1450021512]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.16, 0.15, 0.24, 1)
+autowrap_mode = 3
+
+[node name="Help" type="Label" parent="." unique_id=1450021513]
+offset_left = 16.0
+offset_top = 220.0
+offset_right = 624.0
+offset_bottom = 350.0
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.16, 0.15, 0.24, 1)
+autowrap_mode = 3
+text = "① 錄節奏：前 8 拍是預備拍，之後跟著音樂按空白鍵（或點畫面下半部），自動對齊到半拍／四分之一拍。
+② 分配顏色：音符捲到圈裡時按 A（左・紅）S（中・藍）D（右・粉）；第 2 回合右邊會自動輪流當飯和丸子；第 3 回合只有一種顏色，不用分配。
+③ 儲存：寫回 data/songs/ 的譜面，舊的備份成 .bak.json。錄錯了就再按 ①。"

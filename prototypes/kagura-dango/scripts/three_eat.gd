@@ -1,14 +1,16 @@
 extends RhythmLevel
-## Round 1: the three of them eat together. A skewer flies out of the serving hatch; its flavour says who eats it
-## (red bean → Gintoki on the left, soy → Shinpachi in the middle, tricolour → Kagura on the right), and so does its
-## sound (low / middle / high). Tap that person's third of the screen on the landing beat.
+## Round 1: the owner serves a skewer onto the shared table on the cue beat. Its flavour identifies who eats it
+## (red bean → Gintoki on the left, soy → Shinpachi in the middle, tricolour → Kagura on the right). Tap that
+## person's third of the screen on the eating beat.
 
 const SKEWER := preload("res://scenes/skewer.tscn")
 
 var _skewers := {}
 
 @onready var _cast: Array[Node2D] = [%Gintoki, %Shinpachi, %Kagura]
-@onready var _hatch: Marker2D = %Hatch
+@onready var _serve_origin: Marker2D = %ServeOrigin
+@onready var _plates: Array[Marker2D] = [%PlateLeft, %PlateMiddle, %PlateRight]
+@onready var _shopkeeper: Node2D = %Shopkeeper
 @onready var _flying: Node2D = %Skewers
 @onready var _sticks: Node2D = %SkewerPile
 
@@ -28,15 +30,19 @@ func _process(delta: float) -> void:
 
 func _on_cue(index: int) -> void:
 	var hit := hits[index]
+	var lane: int = hit.lane
 	var s := SKEWER.instantiate()
 	s.flavor = hit.type
-	s.from = _flying.to_local(_hatch.global_position)
-	s.to = _flying.to_local(_cast[hit.lane].get_node("Mouth").global_position)
+	s.from = _flying.to_local(_serve_origin.global_position)
+	s.to = _flying.to_local(_plates[lane].global_position)
 	s.t0 = conductor.beat_time(hit.cue_beat)
-	s.t1 = hit.time
-	s.height = 60.0
+	s.t1 = conductor.beat_time(hit.cue_beat + 0.25)
+	s.height = 5.0
 	_flying.add_child(s)
 	_skewers[index] = s
+	_shopkeeper.call("serve")
+	_cast[lane].call("play_pose", &"wait", maxf(0.2, hit.time - conductor.time() + 0.15))
+	hud.call_out("店主上菜！")
 
 
 func _on_judged(index: int, grade: StringName, _offset: float, wrong_lane: int) -> void:
@@ -44,14 +50,19 @@ func _on_judged(index: int, grade: StringName, _offset: float, wrong_lane: int) 
 	if grade == &"miss":
 		%Miss.play()
 		if wrong_lane >= 0:
+			_cast[wrong_lane].call("play_pose", &"miss", 0.55)
 			_cast[wrong_lane].bump(0.12, 0.2)
+		else:
+			_cast[hits[index].lane].call("play_pose", &"miss", 0.55)
 		if is_instance_valid(s):
 			s.drop()
 	else:
 		%Chomp.play()
-		_cast[hits[index].lane].bump(0.16 if grade == &"ace" else 0.1, 0.14)
+		var lane: int = hits[index].lane
+		_cast[lane].call("play_pose", &"eat", 0.28)
+		_cast[lane].bump(0.16 if grade == &"ace" else 0.1, 0.14)
 		if is_instance_valid(s):
-			s.eat()
+			s.serve_eat(_flying.to_local(_cast[lane].get_node("Mouth").global_position))
 		_sticks.count = MatchState.team_total()
 		_refresh_bodies()
 	_skewers.erase(index)
@@ -65,6 +76,6 @@ func _on_whiff(lane: int) -> void:
 func _refresh_bodies() -> void:
 	%Gintoki.fullness = MatchState.fullness(&"gintoki")
 	%Shinpachi.fullness = MatchState.fullness(&"shinpachi")
-	%Kagura.fullness = MatchState.kagura_fullness() * 0.5
+	%Kagura.fullness = MatchState.kagura_fullness()
 	%Kagura.girth = 1.0 + 0.9 * MatchState.kagura_fullness()
 	_sticks.count = MatchState.team_total()

@@ -1,0 +1,298 @@
+{
+	"id": "feast2",
+	"title": "第二回合　配飯・打包・踢人",
+	"music": "res://assets/music/r2.mp3",
+	"music_start": 0.0,
+	"bpm": 80.28,
+	"offset": 0.357,
+	"intensity": 2,
+	"count_in_beats": 8,
+	"end_beat": 72,
+	"rival": 22,
+	"land_after": {
+		"rice": 1,
+		"dango": 1,
+		"bento": 1,
+		"rival": 1
+	},
+	"lanes": {
+		"rival": 0,
+		"bento": 1,
+		"rice": 2,
+		"dango": 2
+	},
+	"skewers": [
+		"dango",
+		"bento"
+	],
+	"cues": [
+		{
+			"beat": 8,
+			"type": "rice"
+		},
+		{
+			"beat": 9,
+			"type": "dango"
+		},
+		{
+			"beat": 10,
+			"type": "rice"
+		},
+		{
+			"beat": 11,
+			"type": "dango"
+		},
+		{
+			"beat": 12,
+			"type": "rice"
+		},
+		{
+			"beat": 13,
+			"type": "dango"
+		},
+		{
+			"beat": 14,
+			"type": "rice"
+		},
+		{
+			"beat": 15,
+			"type": "dango"
+		},
+		{
+			"beat": 16,
+			"type": "rice"
+		},
+		{
+			"beat": 17,
+			"type": "dango"
+		},
+		{
+			"beat": 18,
+			"type": "bento"
+		},
+		{
+			"beat": 19,
+			"type": "bento"
+		},
+		{
+			"beat": 20,
+			"type": "rice"
+		},
+		{
+			"beat": 21,
+			"type": "dango"
+		},
+		{
+			"beat": 22,
+			"type": "bento"
+		},
+		{
+			"beat": 23,
+			"type": "bento"
+		},
+		{
+			"beat": 24,
+			"type": "rice"
+		},
+		{
+			"beat": 25,
+			"type": "dango"
+		},
+		{
+			"beat": 26,
+			"type": "rice"
+		},
+		{
+			"beat": 27,
+			"type": "dango"
+		},
+		{
+			"beat": 28,
+			"type": "rice"
+		},
+		{
+			"beat": 29,
+			"type": "dango"
+		},
+		{
+			"beat": 29.5,
+			"type": "rival"
+		},
+		{
+			"beat": 30,
+			"type": "rice"
+		},
+		{
+			"beat": 31,
+			"type": "dango"
+		},
+		{
+			"beat": 32,
+			"type": "rice"
+		},
+		{
+			"beat": 33,
+			"type": "dango"
+		},
+		{
+			"beat": 34,
+			"type": "bento"
+		},
+		{
+			"beat": 35,
+			"type": "bento"
+		},
+		{
+			"beat": 36,
+			"type": "rice"
+		},
+		{
+			"beat": 37,
+			"type": "dango"
+		},
+		{
+			"beat": 37.5,
+			"type": "rival"
+		},
+		{
+			"beat": 38,
+			"type": "rice"
+		},
+		{
+			"beat": 39,
+			"type": "dango"
+		},
+		{
+			"beat": 40,
+			"type": "bento"
+		},
+		{
+			"beat": 40.5,
+			"type": "bento"
+		},
+		{
+			"beat": 41,
+			"type": "rice"
+		},
+		{
+			"beat": 42,
+			"type": "dango"
+		},
+		{
+			"beat": 43,
+			"type": "rival"
+		},
+		{
+			"beat": 44,
+			"type": "rice"
+		},
+		{
+			"beat": 45,
+			"type": "dango"
+		},
+		{
+			"beat": 46,
+			"type": "rice"
+		},
+		{
+			"beat": 47,
+			"type": "dango"
+		},
+		{
+			"beat": 48,
+			"type": "rice"
+		},
+		{
+			"beat": 49,
+			"type": "dango"
+		},
+		{
+			"beat": 49.5,
+			"type": "rival"
+		},
+		{
+			"beat": 50,
+			"type": "rice"
+		},
+		{
+			"beat": 51,
+			"type": "dango"
+		},
+		{
+			"beat": 52,
+			"type": "bento"
+		},
+		{
+			"beat": 52.5,
+			"type": "bento"
+		},
+		{
+			"beat": 53,
+			"type": "rice"
+		},
+		{
+			"beat": 54,
+			"type": "dango"
+		},
+		{
+			"beat": 55,
+			"type": "rival"
+		},
+		{
+			"beat": 56,
+			"type": "rice"
+		},
+		{
+			"beat": 57,
+			"type": "dango"
+		},
+		{
+			"beat": 58,
+			"type": "bento"
+		},
+		{
+			"beat": 59,
+			"type": "bento"
+		},
+		{
+			"beat": 60,
+			"type": "rice"
+		},
+		{
+			"beat": 61,
+			"type": "dango"
+		},
+		{
+			"beat": 61.5,
+			"type": "rival"
+		},
+		{
+			"beat": 62,
+			"type": "rice"
+		},
+		{
+			"beat": 63,
+			"type": "dango"
+		},
+		{
+			"beat": 64,
+			"type": "bento"
+		},
+		{
+			"beat": 64.5,
+			"type": "bento"
+		},
+		{
+			"beat": 65,
+			"type": "rice"
+		},
+		{
+			"beat": 66,
+			"type": "dango"
+		},
+		{
+			"beat": 67,
+			"type": "rival"
+		}
+	]
+}

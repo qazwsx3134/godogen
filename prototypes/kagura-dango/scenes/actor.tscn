@@ -1,32 +1,47 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/actor.gd" id="1_x4c43"]
+[ext_resource type="Texture2D" path="res://assets/sprites/gintoki_idle_0.png" id="2_0qi0m"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0qi0m"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.06, 0.12, 0.18, 0.94)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.94, 0.72, 0.39, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
 [node name="Actor" type="Node2D" unique_id=173833660]
 script = ExtResource("1_x4c43")
 
-[node name="Body" type="ColorRect" parent="." unique_id=865040529]
-offset_left = -40.0
-offset_top = -140.0
-offset_right = 40.0
+[node name="NamePlate" type="Panel" parent="." unique_id=2068665850]
+z_index = 1
+offset_left = -48.0
+offset_top = 2.0
+offset_right = 48.0
+offset_bottom = 30.0
 mouse_filter = 2
-color = Color(0.3, 0.4, 0.7, 1)
-
-[node name="Head" type="ColorRect" parent="." unique_id=1344320615]
-offset_left = -30.0
-offset_top = -196.0
-offset_right = 30.0
-offset_bottom = -138.0
-mouse_filter = 2
-color = Color(0.98, 0.86, 0.74, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_0qi0m")
 
 [node name="NameLabel" type="Label" parent="." unique_id=267624509]
+unique_name_in_owner = true
+z_index = 2
 offset_left = -50.0
 offset_top = 4.0
 offset_right = 50.0
 offset_bottom = 28.0
+theme_override_colors/font_color = Color(1, 0.94, 0.78, 1)
+theme_override_colors/font_outline_color = Color(0.04, 0.08, 0.12, 1)
+theme_override_constants/outline_size = 2
 theme_override_font_sizes/font_size = 16
-theme_override_colors/font_color = Color(0.16, 0.15, 0.24, 1)
 text = "角色"
 horizontal_alignment = 1
 
@@ -36,11 +51,9 @@ position = Vector2(46, -100)
 [node name="Mouth" type="Marker2D" parent="." unique_id=160484533]
 position = Vector2(-18, -158)
 
-[node name="Sweat" type="ColorRect" parent="." unique_id=2002028861]
-visible = false
-offset_left = 32.0
-offset_top = -200.0
-offset_right = 38.0
-offset_bottom = -188.0
-mouse_filter = 2
-color = Color(0.45, 0.75, 1, 1)
+[node name="Sprite" type="Sprite2D" parent="." unique_id=168478619]
+unique_name_in_owner = true
+texture_filter = 1
+position = Vector2(0, -96)
+scale = Vector2(2, 2)
+texture = ExtResource("2_0qi0m")

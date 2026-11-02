@@ -20,6 +20,10 @@ var hits: Array[Dictionary] = []
 ## Seconds the player's taps arrive late (from calibration); subtracted from every tap.
 var calib := 0.0
 var intensity := 1
+## Round 3: every miss hits Kagura in the eye and costs a life; at 0 the round is lost. 0 = no lives (rounds 1, 2).
+var max_lives := 0
+var lives := 0
+var failed := false
 
 var _next_cue := 0
 var _running := false
@@ -38,6 +42,8 @@ func _ready() -> void:
 	conductor.load_song(chart)
 	calib = Settings.calib_ms / 1000.0
 	intensity = int(chart.get("intensity", 1))
+	max_lives = int(chart.get("lives", 0))
+	lives = max_lives
 	var lanes: Dictionary = chart.get("lanes", {})
 	for cue in chart.cues:
 		var beat: float = cue.beat + float(chart.land_after[cue.type])
@@ -50,6 +56,9 @@ func _ready() -> void:
 	for k in int(chart.get("rival", 0)):
 		_rival_beats.append(first + 1 + floori(span * k / float(chart.rival)))
 	stage.set_intensity(intensity)
+	stage.set_background(chart.get("background", ""))
+	stage.set_calm(chart.get("calm", false))
+	hud.get_node("%NoteTrack").setup(self)
 	hud.set_round(chart.title)
 	_update_scoreboard()
 
@@ -57,6 +66,9 @@ func _ready() -> void:
 func start() -> void:
 	_next_cue = 0
 	_running = true
+	failed = false
+	lives = max_lives
+	hud.set_lives(lives, max_lives)
 	MatchState.begin_round()
 	hud.call_out("預備……")
 	conductor.play()
@@ -90,10 +102,10 @@ func _beat(b: int) -> void:
 	var count_in := int(chart.count_in_beats)
 	if b == count_in:
 		hud.call_out("開始！")
-		stage.referee_call()
+		stage.referee_call(&"start")
 	elif b == int(chart.end_beat):
 		hud.call_out("停！")
-		stage.referee_call()
+		stage.referee_call(&"stop")
 	if b >= count_in and b < int(chart.end_beat):
 		stage.pulse()
 		if b in _rival_beats:
@@ -149,13 +161,13 @@ func result() -> Dictionary:
 	var counts := {&"ace": 0, &"good": 0, &"barely": 0, &"miss": 0}
 	for g in grades:
 		counts[g] += 1
-	return {id = chart.id, title = chart.title, score = points, rank = Judge.rank(points), counts = counts}
+	return {id = chart.id, title = chart.title, score = points, rank = Judge.rank(points), counts = counts, failed = failed}
 
 
 ## wrong_lane >= 0 marks a miss caused by feeding the wrong person.
 func _judge(index: int, grade: StringName, offset: float, wrong_lane := -1) -> void:
 	hits[index].grade = grade
-	if grade != &"miss":
+	if grade != &"miss" and counts_as_skewer(index):
 		var who := eater(index)
 		MatchState.eaten[who] += 1
 		_update_scoreboard()
@@ -164,9 +176,22 @@ func _judge(index: int, grade: StringName, offset: float, wrong_lane := -1) -> v
 	hud.show_judge(JUDGE_TEXT[&"wrong" if wrong_lane >= 0 else grade])
 	_on_judged(index, grade, offset, wrong_lane)
 	judged.emit(index, grade, offset)
+	if grade == &"miss" and max_lives > 0 and _running:
+		lives -= 1
+		hud.set_lives(lives, max_lives)
+		_on_hurt()
+		if lives <= 0:
+			failed = true
+			_finish()
 
 
-## Who eats this cue's skewer: by lane in round 1, Kagura otherwise.
+## Cue types listed in the chart's "skewers" are eaten skewers (counted for the team); all count when it is absent.
+## Round 2: kicking a rival or a spoon of rice is not a skewer.
+func counts_as_skewer(index: int) -> bool:
+	return not chart.has("skewers") or String(hits[index].type) in chart.skewers
+
+
+## Who eats this cue's skewer: by lane in rounds 1 and 2, Kagura otherwise.
 func eater(index: int) -> StringName:
 	return [&"gintoki", &"shinpachi", &"kagura"][hits[index].lane] if hits[index].lane >= 0 else &"kagura"
 
@@ -183,6 +208,8 @@ func _update_scoreboard() -> void:
 
 
 func _finish() -> void:
+	if not _running:
+		return
 	_running = false
 	conductor.stop()
 	var r := result()
@@ -199,6 +226,10 @@ func _on_judged(_index: int, _grade: StringName, _offset: float, _wrong_lane: in
 
 
 func _on_whiff(_lane: int) -> void:
+	pass
+
+
+func _on_hurt() -> void:
 	pass
 
 

@@ -2,6 +2,41 @@
 
 只保留最近 3 次 commit 期間的工作與尚未 commit 的工作（新的在上）；更早的紀錄移到 MILESTONE.md。每次 commit、出門／下班／暫停前更新本檔，再更新根目錄 `Progress.md`。
 
+## 2026-11-03｜改成太鼓式音符軌道、新三回合劇情、真實音樂、第三批美術（未 commit）
+
+- **使用者要求**：依截圖與三首歌改劇情：第 1 回合三人狼吞虎嚥；第 2 回合神樂配飯、新八打包便當、銀時踢人；第 3 回合銀時新八變胖、把丸子當飛鏢射給神樂，沒對到拍打到眼睛；只有第 3 回合有命。音樂只用精華段。玩法改成太鼓達人式，選「3 種音符（每人一色）」。
+- **分工**：Luna（Codex，`gpt-6-luna` max，Herdr pane `wJ:p17`）只生素材；BPM、譜面、程式、scene、測試、文件由 Claude 主 session 做（使用者指示）。
+- **已完成**：
+  - 音樂：Pray 178 BPM（遊戲半拍 89）、Beautiful Days 160.56（遊戲 80.28）、Wo ai ni 132；各取拍點最強的 60 秒（10／66／96 秒起）。`conductor.gd` 新增 `music_start`、結束淡出；提示音改為遊戲即時播放 `assets/sfx/cue_<type>.wav`（`bake_music.py` 產生），合成曲只剩校準節拍器；`test_bake.py` 移除。原曲與截圖加進 `.gitignore`。
+  - 音符軌道：`scenes/note_track.tscn`＋`note.tscn`（HUD 內），音符在「點擊時刻減校準」抵達判定圈。
+  - 第 2 回合：`scenes/feast.tscn`＋`scripts/feast_game.gd`、`data/songs/feast2.json`（67 個提示：飯 23、丸子 23、便當 14、來搶 7）。飯與踢人不算串數；漏踢＝對手偷 1 串。
+  - 第 3 回合：胖銀時／胖新八輪流射飛鏢、鳥居戶外背景、3 命（`lives`），失誤播眼睛被打中，命歸零提前結束、結算只能重來。
+  - 素材接上：踢人、打包、胖子飛鏢、眼睛被打中、配飯、命圖示、解說員兩人（會場右上）、鳥居背景。計分板圖（`scoreboard_panel.png`）尚未使用。
+  - 店主移到左側，不再擋裁判。台詞草稿（`data/story.json`）改成新劇情。
+- **使用者回饋第二輪（同日）**：
+  - 旁白：說話的人顯示立繪（神樂在右、其他人在左），背景改成淡化的鳥居戶外圖（`scenes/story.tscn`、`scripts/story.gd`）。
+  - 拿掉低中高提示音（`cue_*.wav` 與產生程式刪除）：只靠音樂拍點與音符軌道。
+  - 第 1 回合照截圖改成戶外：鳥居背景、`calm` 關掉觀眾、燈籠、第二位對手、解說員與裁判；三人縮小，店主移到新八與神樂之間。
+  - 第 2 回合歌曲從 0:00 播（`music_start` 0、`offset` 0.357）。
+  - 第 3 回合三人縮小，神樂改面向左（`flip_sprite_h`）。
+  - 結尾加神樂慶生圖（Luna 生成 `assets/sprites/kagura_birthday.png`），放在 `ending_win`／`ending_lose` 的最後一句。
+  - 譜面製作工具 `scenes/chart_maker.tscn`（錄節奏→分配顏色→儲存），測試 `tests/test_chart_maker.gd`；`run_tests.sh . chart_maker judge levels calibrate flow font` 全 PASS（`/tmp/godot-tests.mWe8q1`）。
+  - 驗證：`run_tests.sh . judge levels calibrate flow font` 全 PASS（`/tmp/godot-tests.Gp5rwg`），headless 匯入無錯誤，截圖 `v3-*.png` 已逐張看過。
+- **L2 驗證（第一輪）**：`run_tests.sh . judge levels calibrate flow font` 全 PASS（`/tmp/godot-tests.OGyUwY`）。新增測試：第 3 回合三次失誤失敗並提前結束、兩次失誤仍存活、第 1／2 回合不失敗、第 2 回合計數與漏踢偷串。headless 匯入無錯誤。Xvfb 截圖 `.claude/tasks/kagura-dango/shots/v3-*.png`。
+- **未驗證**：聽感（拍點對不對拍，尤其 Beautiful Days 偵測分數偏低）、網頁版 mp3 從中段播放的時鐘、手機實機、真人手感。
+- **下一步**：使用者試玩三回合確認拍點與難度；再匯出網頁版用真瀏覽器量時鐘。
+
+## 2026-11-03（凌晨）｜美術接入＋第 1 回合上菜＋驗收畫面修正（未 commit）
+
+- **專案／分支**：`prototypes/kagura-dango`，master。工作區未提交；依本次要求沒有 commit、沒有 push。
+- **已完成**：依 `art_src/PROMPTS.md` 生成 25 張圖，原圖留在 git 忽略的 `art_src/gen/`；`tools/process_art.gd` 去背、切格與 nearest 縮放到 `assets/sprites/`。角色腳本依體型、吃撐與動作換圖；標題、會場、裁判、對手、丸子口味與空竹籤都接上貼圖。標題加深色底板、名牌加深底金框，最終回合拋物線避開中央標題。
+- **第 1 回合**：以桌面背景取代出餐口；新增端盤店主 scene，提示拍時前傾，再由 `ServeOrigin` 把丸子滑到 `PlateLeft`／`PlateMiddle`／`PlateRight`，先落桌、再於原判定拍吃掉，口味與左中右分路不變。`tests/test_levels.gd` 驗證店主可見、三路上菜與落桌時序。
+- **文件／場景**：更新 README 與場景樹。scene 以 Godot `PackedScene.pack`／`ResourceSaver.save` 儲存；節點數存檔前後一致。
+- **驗證**：`PYTHONPATH=/home/ronghao/.cache/uv/environments-v2/cli-cf148656915d4cee/lib/python3.12/site-packages python3 tools/test_bake.py` PASS（每張譜面共 100 個 cue）；`GODOT_BIN=/home/ronghao/.local/bin/godot bash ../godot-kit/tools/run_tests.sh . judge levels calibrate flow font` 五組全 PASS；Godot headless import exit 0，沒有 script／parse／resource load error。編輯器只印出 sandbox 本機 socket 無法建立的警告。
+- **截圖**：用 Xvfb（未開桌面視窗）覆寫標題、第 1 回合與最終回合於 `.claude/tasks/kagura-dango/shots/`，皆為 1280×720，已確認四項驗收修正。
+- **未驗證／限制**：真人手感、手機實機與網頁匯出尚未驗收；原始生成圖按專案忽略規則留在本機，不進 git；店主立繪與上菜動作已接入。預設 `python3` 環境沒有 numpy，音訊測試使用快取中的 Python 3.12 套件路徑。
+- **下一步**：作者試玩三回合並做手機橫式驗收；若採用這批原圖，提交前需確認是否要納入 git 忽略的原圖來源。
+
 ## 2026-11-02（傍晚）｜第一次 commit
 
 - 使用者要求 commit 並忽略不必要的檔案。遊戲本體以一筆 commit 進 master（hash 以 `git log -1 -- prototypes/kagura-dango` 查核）；沒有 push。

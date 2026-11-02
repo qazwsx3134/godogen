@@ -129,6 +129,16 @@ cell 4: a single pink dango ball.
 Chunky clearly visible pixels, about 16 colors, 1 pixel dark outline, very readable at small size. Solid flat magenta #FF00FF background, no shadow, no text, no grid lines.
 ```
 
+---
+
+# 第三批（2026-11-03：第 1 回合上菜店主）
+
+## G1 `store_owner_serve`（附 `referee_ref`、`rival_team_0`；只參考像素畫風）
+
+```
+Create one standalone 16-bit pixel art game sprite of a generic Edo-period Japanese wagashi shop owner serving dango. Use the attached sprites only as style references; do not copy their characters. Full-body, three-quarter view facing RIGHT, one static pose, clearly readable at a target height of 96 pixels. A friendly middle-aged male shopkeeper with a short dark topknot, white headband, cream-and-indigo striped happi coat, burgundy sash, and muted brown waist apron. Lean forward slightly and extend both hands toward the RIGHT, holding a small flat wooden serving tray with three colorful dango skewers (pink, white, green) visible on it. Make the tray and hands large enough to read on a phone screen; keep the full body and tray inside the frame. Chunky visible 16-bit pixels, limited palette around 24 colors, 1-2 pixel dark outline, bold silhouette, cheerful energetic expression. Solid flat magenta #FF00FF background, no transparency grid, no ground shadow, no floor, no text, no border, no extra character.
+```
+
 ## D1 `bg_contest`
 
 ```
@@ -140,6 +150,100 @@ Chunky clearly visible pixels, about 16 colors, 1 pixel dark outline, very reada
 ```
 Use the attached images only for the character's look.
 16-bit pixel art title illustration, wide 20:9 landscape. Kagura from Gintama in the lower middle third, hugging a giant tricolor dango skewer bigger than she is, huge happy grin, confetti and dango flying around, a birthday cake with candles beside her; Gintoki and Shinpachi small at the sides cheering. Leave the top quarter as plain warm sky-colored space for the title. Chunky visible pixels, about 32 colors, bold readable shapes. No text, no letters, no logo.
+```
+
+---
+
+# 第三批追加（v3 劇情玩法：2026-11-03）
+
+接續本檔既有的 `store_owner_serve` 素材。新圖沿用 16-bit 像素漫畫風、大像素、粗深色外框；角色／道具以純洋紅 `#FF00FF` 為去背底，不要字幕、水印或格線。原作截圖只作構圖與姿勢參考，重畫為全新像素圖，不直接貼圖或照搬字幕、標誌。動作橫條一律一列、等寬、每格留寬洋紅空隙，腳底對齊。
+
+| 檔名 | 內容 | 格數／輸出尺寸 |
+|---|---|---|
+| `kagura_rice` | 神樂左手捧飯碗、右手拿丸子串 | 1 格，角色高 96 px |
+| `rice_bowl` | 獨立飯碗提示圖示 | 1 格，32×32 px |
+| `shinpachi_bento` | 新八逐串裝盒、蓋上、便當完成 | 3 格，角色高 96 px |
+| `gintoki_kick` | 銀時蓄力、踢開、收腳 | 3 格，角色高 96 px |
+| `gintoki_dart` | 胖銀時瞄準、把丸子串像飛鏢投出 | 2 格，角色高 96 px |
+| `shinpachi_dart` | 胖新八瞄準、把丸子串像飛鏢投出 | 2 格，角色高 96 px |
+| `kagura_eye_hit` | 神樂被丸子擊中眼睛的搞笑受擊 | 1 格，角色高 96 px |
+| `life_dango` | 生命值圖示 | 1 格，32×32 px |
+| `scoreboard_panel` | 綠隊／粉隊、疊盤區、空白電子計時器 | 1 張，400×120 px |
+| `commentator_pair` | 兩位全新風格的比賽實況解說 | 1 格，角色高 96 px |
+| `bg_torii_park` | 鳥居、藍天、公園樹林與戶外大胃王會場 | 1 張，640×360 px |
+
+## V3-A `kagura_rice`（附 `kagura_ref`，姿勢參考 `assets/example/螢幕擷取畫面 2026-11-03 010127.jpg`）
+
+```
+Use Image 1 only for Kagura's pixel-art character identity and outfit; Image 2 only for the idea of holding rice while eating dango. Redraw a new game sprite; do not reproduce the anime frame, subtitles, watermark, or background.
+One standalone full-body 16-bit pixel-art sprite of Kagura, three-quarter view facing RIGHT, vermilion-orange hair buns and red Chinese-style dress with yellow trim. She holds a small blue-and-white rice bowl in her LEFT hand and a tricolor dango skewer in her RIGHT hand, glancing eagerly between them as if alternating bites. Make both bowl and skewer unmistakable at 96-pixel character height. Chunky visible pixels, limited palette about 24 colors, bold 1-2 pixel dark outline, clear readable silhouette. Solid flat magenta #FF00FF background, no shadow, no floor, no text, no border, no extra characters.
+```
+
+## V3-B `rice_bowl`
+
+```
+One standalone 16-bit pixel-art game item icon: a small blue-and-white Japanese rice bowl filled with a neat mound of white rice, three-quarter view, centered, large and unmistakable at 32 by 32 pixels. Chunky visible pixels, limited palette about 12 colors, bold 1-pixel dark outline. Solid flat magenta #FF00FF background, no shadow, no floor, no text, no border, no chopsticks, no extra objects.
+```
+
+## V3-C `shinpachi_bento`（附 `shinpachi_ref`，姿勢參考 `assets/example/螢幕擷取畫面 2026-11-03 010210.jpg`）
+
+```
+Use Image 1 only for Shinpachi's pixel-art identity, glasses and blue-white outfit; Image 2 only as broad reference for the bento-packing action. Redraw a new sprite strip; do not reproduce the anime frame, subtitles, watermark, or background.
+Horizontal sprite strip, 1 row x 3 equal-width cells, wide magenta gaps, same full-body size in every cell, feet on one baseline, facing RIGHT. 16-bit pixel-art Shinpachi with round glasses packs dango skewers into a rectangular lacquer bento box on a low table: cell 1 carefully places one skewer into the open box, cell 2 places the next skewer and folds the lid down, cell 3 proudly presents the closed filled bento. Keep face, glasses, box and hand action clearly separated and readable. Chunky pixels, about 24 colors, 1-2 pixel dark outline. Solid flat magenta #FF00FF background, no shadow, no floor, no text, no border, no extra characters.
+```
+
+## V3-D `gintoki_kick`（附 `gintoki_ref`，姿勢參考 `assets/example/螢幕擷取畫面 2026-11-03 010047.jpg`）
+
+```
+Use Image 1 only for Gintoki's pixel-art identity, silver hair and white kimono; Image 2 only for the dynamic kick silhouette. Redraw a new sprite strip; do not reproduce the anime frame, other character, subtitles, watermark, or background.
+Horizontal sprite strip, 1 row x 3 equal-width cells, wide magenta gaps, same full-body size in every cell, feet on one baseline, facing RIGHT. 16-bit pixel-art Gintoki kicks an unseen intruder away from the contest: cell 1 plants his feet and winds up with one knee raised, cell 2 snaps a strong side kick toward the RIGHT with a small impact burst at the boot, cell 3 lowers his leg and returns to his bored stance. Keep the whole body in each cell. Chunky visible pixels, limited palette about 24 colors, bold 1-2 pixel dark outline, very readable poses. Solid flat magenta #FF00FF background, no shadow, no floor, no text, no border, no extra characters.
+```
+
+## V3-E `gintoki_dart`（附 `gintoki_ref` 與 `assets/example/螢幕擷取畫面 2026-11-03 010240.jpg`；後者只參考圓胖身形）
+
+```
+Use Image 1 only for Gintoki's pixel-art identity and costume; Image 2 only for a broad comically round body silhouette. Redraw a new character; do not copy any person or anime frame.
+Horizontal sprite strip, 1 row x 2 equal-width cells, wide magenta gaps, same full-body size and baseline. 16-bit pixel-art Gintoki, unmistakable silver messy hair and white kimono with blue swirl hem, now comically round and belly-heavy but still mobile. Facing RIGHT, he throws a dango skewer like a dart toward the RIGHT: cell 1 squints and aims the skewer back beside his shoulder, cell 2 leans forward and releases the skewer with a clean follow-through. Keep his hands, skewer and belly silhouette clear at 96-pixel character height. Chunky pixels, about 24 colors, 1-2 pixel dark outline. Solid flat magenta #FF00FF background, no shadow, no floor, no text, no border, no extra characters.
+```
+
+## V3-F `shinpachi_dart`（附 `shinpachi_ref` 與 `assets/example/螢幕擷取畫面 2026-11-03 010240.jpg`；後者只參考圓胖身形）
+
+```
+Use Image 1 only for Shinpachi's pixel-art identity, glasses and blue-white outfit; Image 2 only for a broad comically round body silhouette. Redraw a new character; do not copy any person or anime frame.
+Horizontal sprite strip, 1 row x 2 equal-width cells, wide magenta gaps, same full-body size and baseline. 16-bit pixel-art Shinpachi, short black hair and unmistakable round glasses, drawn VERY fat for a slapstick transformation: dramatically spherical torso, huge protruding belly wider than his shoulders, robe stretched over the belly, fuller cheeks and short sturdy legs; do not make him average-sized or merely broad. The large belly silhouette must be obvious in BOTH cells. Facing RIGHT, he throws a dango skewer like a dart toward the RIGHT: cell 1 looks nervous and aims the skewer beside his shoulder, cell 2 thrusts forward and releases it, glasses firmly on his face. Keep hands, skewer, glasses and belly silhouette clear at 96-pixel character height. Chunky pixels, about 24 colors, 1-2 pixel dark outline. Solid flat magenta #FF00FF background, no shadow, no floor, no text, no border, no extra characters.
+```
+
+## V3-G `kagura_eye_hit`（附 `kagura_ref`，姿勢參考 `assets/example/螢幕擷取畫面 2026-11-03 010401.jpg`）
+
+```
+Use Image 1 only for Kagura's pixel-art identity and outfit; Image 2 only for the slapstick idea of dango briefly covering her eyes. Redraw a new sprite; do not reproduce the anime frame, subtitles, watermark, or background.
+One standalone full-body 16-bit pixel-art game sprite of Kagura facing RIGHT. A dango skewer has comically bounced across her eyes like a soft harmless bonk; eyes squeezed shut, surprised crooked mouth, tiny impact star and a few crumbs. Keep it lighthearted, nonviolent, no injury or blood. Vermilion-orange hair buns, red Chinese-style dress, bold readable silhouette at 96-pixel character height. Chunky pixels, about 24 colors, 1-2 pixel dark outline. Solid flat magenta #FF00FF background, no shadow, no floor, no text, no border, no extra characters.
+```
+
+## V3-H `life_dango`
+
+```
+One standalone 16-bit pixel-art life icon for a small game HUD: a plump pink heart-shaped dango with a tiny wooden skewer, friendly and instantly readable as one remaining life. Centered square composition, bold silhouette, chunky pixels, limited palette about 8 colors, dark 1-pixel outline; readable at 32 by 32 pixels. Solid flat magenta #FF00FF background, no shadow, no text, no border, no extra objects.
+```
+
+## V3-I `scoreboard_panel`（參考 `assets/example/螢幕擷取畫面 2026-11-03 010001.jpg` 的版面）
+
+```
+Redraw a new 16-bit pixel-art game HUD scoreboard inspired only by the broad layout of Image 1; do not reproduce its lettering, logos, or exact screen. Front-on wide horizontal rectangular panel with a solid deep-navy outer fill. Two clear side-by-side team zones, left deep green and right warm pink, each with an empty area where dynamic plate stacks and score numbers will be drawn later. Across the top center, a dark electronic timer window with blank seven-segment display cells (no digits or text). Wood-and-lacquer frame, thick pixel borders, strong light-dark contrast, chunky pixels, about 24 colors. No words, no letters, no numerals, no people, no screenshot UI, no watermark.
+```
+
+## V3-J `commentator_pair`（姿勢／服裝色塊參考 `assets/example/螢幕擷取畫面 2026-11-03 005854.jpg`）
+
+```
+Use Image 1 only as broad reference for an Edo tournament commentator pair and their contrasting blue / warm colors. Redraw two new generic commentators; do not copy exact faces, anime line art, subtitles, watermark, microphones from the screenshot, or background.
+One standalone 16-bit pixel-art cutout showing two full-body Edo-period food-contest commentators standing side by side, both facing RIGHT: a tall confident announcer in a slate-blue haori and white headband holding a simple microphone, plus a shorter elderly gourmet in a muted orange cap and brown coat holding one dango skewer. Different silhouettes and expressions, friendly live-broadcast energy, sized to read together at 96-pixel character height. Chunky pixels, limited palette about 24 colors, bold 1-2 pixel dark outline. Solid flat magenta #FF00FF background, no shadow, no floor, no text, no logo, no border, no extra characters.
+```
+
+## V3-K `bg_torii_park`（參考 `assets/example/螢幕擷取畫面 2026-11-03 005707.jpg`、`005818.jpg`）
+
+```
+Create an original 16-bit pixel-art 16:9 landscape game background, using Images 1 and 2 only for the broad torii / park contest layout. Do not reproduce the anime frames, exact buildings, subtitles, watermark, logos, or any recognizable character.
+An outdoor Edo-era dango eating contest in a Japanese park: clear bright blue sky and soft clouds, a large vermilion torii gate framing the far side of the grounds, deep green trees around the edges, a broad sandy contest field, and small distant green-team and pink-team tables. Keep the center middle band open and uncluttered for the player characters; keep the upper 12% and lower 10% visually quiet for HUD. Warm, cheerful birthday-daylight mood, chunky visible pixels, about 32 colors, crisp bold shapes, landscape 16:9 composition. No foreground characters, no words, no readable signs, no watermark.
 ```
 
 ---
@@ -235,4 +339,14 @@ Use the attached image only for the style; keep exactly the same pixel art style
 cell 1: a skewer of three dango covered in dark red bean paste (anko);
 cell 2: a skewer of three grilled dango glazed with shiny amber sweet soy sauce (mitarashi).
 Chunky clearly visible pixels, about 16 colors, 1 pixel dark outline, very readable at small size. Solid flat magenta #FF00FF background, no shadow, no text, no grid lines.
+```
+
+---
+
+# 第四批（2026-11-03：神樂生日結尾插圖）
+
+## K1 `kagura_birthday`
+
+```
+Create a full-bleed, opaque 16-bit pixel-comic illustration for a 16:9 game ending screen, composed for a final 640x360 display. Kagura is the joyful center: unmistakable orange-red hair buns, red Chinese-style dress with yellow trim, smiling while hugging an enormous skewer of pink, white, and green dango beside a birthday cake with candles. Gintoki, with messy silver hair and a white kimono, stands at one side; Shinpachi, with short dark hair, round glasses, and a blue-and-white outfit, stands at the other. They are laughing and pulling colorful party poppers, with streamers and confetti arcing around the side edges. Keep the upper 22% of the image, especially the upper center, as calm uncluttered blue-sky / soft festival-light negative space so the game can overlay the exact title 「神樂生日快樂」 there. Keep all three faces and the cake visible in the lower 78%; warm, affectionate birthday celebration, lively but clear composition. Use the same chunky, high-contrast 16-bit pixel-comic style as the game's existing art, deliberate visible pixel clusters, bold dark outlines, limited harmonious palette. Draw a new illustration, not a screenshot or copied anime frame. No text or lettering of any kind, no logo, no watermark, no border, no transparent or magenta background.
 ```

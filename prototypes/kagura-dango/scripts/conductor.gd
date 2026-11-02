@@ -10,6 +10,9 @@ extends Node
 
 var bpm := 120.0
 var offset := 0.0
+## Where in the song file playback starts (seconds): a round plays only the song's most rhythmic minute.
+## time() keeps counting in song-file seconds, so offset (beat 0) is also a song-file time.
+var music_start := 0.0
 var clock := Callable()
 
 var _player: AudioStreamPlayer
@@ -26,6 +29,7 @@ func _ready() -> void:
 func load_song(chart: Dictionary) -> void:
 	bpm = float(chart.bpm)
 	offset = float(chart.offset)
+	music_start = float(chart.get("music_start", 0.0))
 	var music: String = chart.get("music", "")
 	_player.stream = load(music) if ResourceLoader.exists(music) else null
 
@@ -34,12 +38,18 @@ func play() -> void:
 	_last = 0.0
 	_anchor_usec = Time.get_ticks_usec()
 	if _player.stream:
-		_player.play()
+		_player.volume_db = 0.0
+		_player.play(music_start)
 
 
 func stop() -> void:
-	_player.stop()
 	_anchor_usec = -1
+	if not _player.playing:
+		return
+	# The round ends mid-song: fade out instead of cutting.
+	var tw := create_tween()
+	tw.tween_property(_player, "volume_db", -40.0, 0.6)
+	tw.tween_callback(_player.stop)
 
 
 func playing() -> bool:
@@ -47,7 +57,7 @@ func playing() -> bool:
 
 
 func wall_time() -> float:
-	return -1.0 if _anchor_usec < 0 else (Time.get_ticks_usec() - _anchor_usec) / 1000000.0
+	return -1.0 if _anchor_usec < 0 else music_start + (Time.get_ticks_usec() - _anchor_usec) / 1000000.0
 
 
 func audio_time() -> float:
