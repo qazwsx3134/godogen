@@ -62,7 +62,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _apply() -> void:
-	Settings.calib_ms = roundf(average_ms())
+	Settings.calib_ms = clampf(roundf(average_ms()), -Settings.CALIB_MAX_MS, Settings.CALIB_MAX_MS)
 	Settings.save_all()
 	_show()
 

@@ -2,6 +2,22 @@
 
 只保留最近 3 次 commit 期間的工作與尚未 commit 的工作（新的在上）；更早的紀錄移到 MILESTONE.md。每次 commit、出門／下班／暫停前更新本檔，再更新根目錄 `Progress.md`。
 
+## 2026-11-03（夜，之三）｜網頁版譜面對拍、直式提示、打包瘦身、itch 1.0.1～1.0.6（未 commit）
+
+- **對拍（已修，手機實聽三關對上）**：網頁版譜面比音樂差 1～2 拍。三個原因疊在一起：
+  1. 瀏覽器（Sample 播放）回報的播放位置比實際聽到的晚約 1 秒；
+  2. 每首歌第一次 `play()` 卡住主執行緒 0.8～0.9 秒，舊的牆上時鐘把它算成歌曲時間；
+  3. 舊版網頁量出的延遲校準是 1～2 秒的錯值，存在玩家的 user://。
+  修法：`Conductor.time()` 在網頁版用 `play()` **返回之後**起算的牆上時鐘減 `get_output_latency()`（原生版仍用音訊位置）；`Settings` 讀到超過 ±400 ms 的校準值就歸零，校準結果也限制在 ±400 ms。
+  過程中試過的：改 Stream 播放（headless 量到倒退 0.6 s、抖動 273 ms，撤回）；1.0.4／1.0.5 放了畫面上的時鐘讀數與時鐘來源切換鈕給使用者 A/B，確認後在 1.0.6 拿掉。
+- **直式提示**：2026-11-04 抽到 godot-kit `orientation_guard.tscn`／`.gd`，`main.tscn` 實例化 kit 的 scene；只在觸控裝置（web_android／web_ios／mobile）且畫面高大於寬時蓋住整個畫面並擋點擊。玩到一半轉直**不會暫停**歌曲。
+- **打包瘦身**：`export_presets.cfg` 多排除 `assets/example/*`（參考截圖＋三首歌副本）、`chart_maker.tscn`／`chart_maker.gd`／`chart_timeline.gd`、`assets/music/r1～r3.mp3`；`build/.gdignore` 讓 Godot 不再匯入 build/web 裡的圖。pck 25.0 MB、wasm 39.5 MB。
+- **換電腦**：三首歌從 `assets/example/` 複製到譜面指定的 `assets/music/first-…／second-Anata MAGIC.mp3／last-…mp3`（gitignore，不進 repo）。
+- **itch**：`butler push build/web natsu-madao/gintama-rythum:html`，1.0.1～1.0.6，最後 1.0.6（build #2288522）。
+- **驗證**：`run_tests.sh . flow judge calibrate soak` PASS（最後一次在拿掉讀數之後）；Playwright 模擬 Pixel 7 確認直式提示與轉橫恢復；同步靠使用者手機實聽（headless Chrome 沒有聲音輸出，`web_clock_probe.mjs` 只能檢查內部一致）。
+- **抽共用模組（2026-11-04）**：`Conductor` 的時鐘、淡入淡出、降音搬到 godot-kit `song_clock.gd`，`scripts/conductor.gd` 只剩繼承與本遊戲的混音（-6 dB、Music bus）；直式提示改用 kit 的 `orientation_guard`；kit 新測試 `tests/test_song_clock.gd`。教訓寫進 `prototypes/LESSONS.md`（音效、匯出兩節）。
+- **下一步**：玩到一半轉直時暫停；commit。
+
 ## 2026-11-03（深夜，之二）｜設定畫面、瀏海安全區、itch.io 網頁版（未 commit、未上傳）
 
 - **設定**：`default_bus_layout.tres` 新增 Music／SFX／Voice 三條 bus；歌曲與對話 BGM 走 Music，命中、咀嚼、按鈕、校準節拍器走 SFX，角色台詞與吃東西錄音走 Voice。`Settings` 存三個音量（0～1，0 = 靜音）與 `haptics`，`load_all()` 時套用。新畫面 `scenes/settings.tscn`（標題「設定」按鈕；滑桿放開播一聲樣本，畫面中播 BGM 聽音樂大小；沒有震動馬達時開關停用並說明）。`flow` 加檢查。

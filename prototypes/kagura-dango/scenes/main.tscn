@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_o5qli"]
 [ext_resource type="AudioStream" path="res://assets/music/bgm.ogg" id="2_bgm"]
 [ext_resource type="AudioStream" path="res://assets/sfx/ui.wav" id="3_ui"]
+[ext_resource type="PackedScene" path="res://addons/proto_kit/orientation_guard.tscn" id="4_rh"]
 
 [node name="Main" type="Node" unique_id=468465147]
 script = ExtResource("1_o5qli")
@@ -21,3 +22,5 @@ unique_name_in_owner = true
 stream = ExtResource("3_ui")
 volume_db = -4.0
 bus = &"SFX"
+
+[node name="OrientationGuard" parent="." instance=ExtResource("4_rh")]

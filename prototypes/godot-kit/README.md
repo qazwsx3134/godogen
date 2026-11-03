@@ -17,6 +17,8 @@
 | [`sfx_bank.gd`](addons/proto_kit/sfx_bank.gd) | 依事件名播音效：放一個同名的 `.ogg`／`.wav` 就換掉聲音，沒有檔案用合成的佔位音，再沒有就借另一個事件的聲音，都沒有就靜音、絕不報錯。輪流用幾個 voice、同一事件的最小間隔、長音效截斷淡出且不疊加 | sugarcane-tanks；pachinko、pixel-monster、debt-commission 還在各自直接管 `AudioStreamPlayer`，尚未改用 |
 | [`haptics.gd`](addons/proto_kit/haptics.gd) | 手機震動：偵測（Android、iOS、網頁只認觸控裝置）、三級強度、間隔與每秒上限、較大級穿過、較弱不打斷較強、時鐘可注入。網頁版不會每次呼叫都讓瀏覽器 `console.warn` | sugarcane-tanks；pixel-monster 還在直接呼叫 `Input.vibrate_handheld(35)`，尚未改用 |
 | [`time_control.gd`](addons/proto_kit/time_control.gd) | hit stop：打擊停頓，有冷卻、可強制、只拉長不縮短；唯一碰 `Engine.time_scale` 的地方 | sugarcane-tanks |
+| [`song_clock.gd`](addons/proto_kit/song_clock.gd) | 節奏遊戲的歌曲時鐘：`time()` 是玩家聽到的歌曲秒數、`beat_time`／`beat_at` 換算拍子、淡入淡出與台詞降音、時鐘可注入。**網頁版**改用 `play()` 返回後的牆上時鐘減輸出延遲（瀏覽器回報的播放位置比聽到的晚約 1 秒，第一次 `play()` 卡 0.8～0.9 秒），原生版用音訊位置 | kagura-dango（2026-11-04 抽出，`scripts/conductor.gd` 繼承它）。**只有一個原型用**：使用者要求抽出 |
+| [`orientation_guard.tscn`](addons/proto_kit/orientation_guard.tscn)＋[`.gd`](addons/proto_kit/orientation_guard.gd) | 手機拿錯方向時蓋住畫面、擋點擊，請玩家轉橫（或轉直）；只在觸控裝置（網頁 Android／iOS、原生手機），不暫停遊戲 | kagura-dango（同上） |
 | [`music.gd`](addons/proto_kit/music.gd) | 背景音樂換軌：舊的淡出、新的淡入，同一首不重播，不受暫停與 hit stop 影響 | sugarcane-tanks |
 | [`camera_shake.gd`](addons/proto_kit/camera_shake.gd) | trauma 震屏：偏移與轉角跟 trauma 的平方成正比，平滑不抖，可關（無障礙） | sugarcane-tanks |
 | [`floating_stick.gd`](addons/proto_kit/floating_stick.gd) | 浮動虛擬搖桿：平時看不見，按下才在手指下出現，輸出螢幕向量 | sugarcane-tanks |

@@ -182,5 +182,5 @@ func _process(_delta: float) -> void:
 		row.total = screen.hits.size()
 	var js := "window.__dango=%s;" % JSON.stringify(row)
 	if row.has("audio"):
-		js += "(window.__dangoLog=window.__dangoLog||[]).push([%f,%f,%d]);" % [row.wall, row.audio, round_index]
+		js += "(window.__dangoLog=window.__dangoLog||[]).push([%f,%f,%f]);" % [row.wall, row.audio, row.time]
 	JavaScriptBridge.eval(js)

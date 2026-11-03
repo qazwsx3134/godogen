@@ -10,6 +10,7 @@ const BUSES := [&"Music", &"SFX", &"Voice"]
 
 static var path := ""
 static var calib_ms := 0.0
+const CALIB_MAX_MS := 400.0
 static var volumes := {&"Music": 1.0, &"SFX": 1.0, &"Voice": 1.0}
 static var haptics := true
 
@@ -27,6 +28,10 @@ static func load_all() -> void:
 	var cfg := ConfigFile.new()
 	if cfg.load(file_path()) == OK:
 		calib_ms = float(cfg.get_value("timing", "calib_ms", 0.0))
+		# Real device latency is 0..~300 ms. Larger values came from calibrating on the web build before its song clock
+		# waited for the decoded audio (1-2 s off): drop them so the charts line up again.
+		if absf(calib_ms) > CALIB_MAX_MS:
+			calib_ms = 0.0
 		for bus in BUSES:
 			volumes[bus] = clampf(float(cfg.get_value("audio", String(bus), 1.0)), 0.0, 1.0)
 		haptics = bool(cfg.get_value("feel", "haptics", true))

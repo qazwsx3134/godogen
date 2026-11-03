@@ -86,6 +86,9 @@
 - **Compatibility renderer 用 Filmic 加高環境光整片過曝** → seichi-pov 改用 AgX、環境光 0.45。（[seichi-pov](seichi-pov/README.md#已知地雷)）
 - **@icons 外掛 import 3,854 個 SVG**、Godot Animated Image v1.2.0 在 Linux／Web 載入失敗 → 各套件的安裝與匯出注意事項見 kit README。（[godot-kit README](godot-kit/README.md#各套件注意事項)）
 - **同步 kit 後網頁版 pck 多出約 14 MB**（2026-11-02，kagura-dango）→ 沒用到特效庫的專案在 Web preset 的 `exclude_filter` 加 `addons/proto_kit/vfx/*`（16.1 → 5.1 MB）。（[kagura-dango PROGRESS](kagura-dango/PROGRESS.md)）
+- **`build/web` 裡多出 `index.png.import` 之類的檔案，跟著上傳**（2026-11-03，kagura-dango）→ 匯出資料夾在專案裡，Godot 會把它當素材匯入；放一個空的 `build/.gdignore`。
+- **本機才有的參考檔（截圖、歌曲副本）被打包進 pck**（2026-11-03，kagura-dango）→ `all_resources` 會包所有匯入過的檔案，gitignore 不影響匯出；上傳前看一次 `exclude_filter`，再在 pck 裡 `grep -ac` 資料夾名確認。
+- **在 itch 上用網址參數（`?qa=1`）開除錯模式沒反應**（2026-11-03，kagura-dango）→ 遊戲在 iframe 裡，頁面網址的參數傳不進去；手機測試版的開關做成畫面上可點的按鈕或設定項。
 
 ## 效能
 
@@ -109,7 +112,8 @@
 
 - **桌面 Chromium 也有 `navigator.vibrate`** → 偵測再加 `navigator.maxTouchPoints > 0` 或 `(pointer: coarse)`，用真瀏覽器驗證；iPhone Safari 沒有這個 API。（[CLAUDE.md](../CLAUDE.md) 2026-10-03、[web-release](godot-kit/skills/godot-prototype-to-itch/references/web-release.md#5-手機震動網頁)）
 - **WAV 匯入成 QOA，原始檔仍在專案裡** → 要縮專案就轉 Ogg。（[art-pipeline](godot-kit/skills/godot-prototype-to-itch/references/art-pipeline.md#匯入設定import-檔要-commit)）
-- **網頁版（Sample 播放）`play()` 之後約 1.1 秒音樂才真的開始**（2026-11-02，kagura-dango，3.7 MB WAV）→ 節奏判定用 `get_playback_position() + get_time_since_last_mix() - get_output_latency()`，取最大值防止偶爾倒退約 1 ms；用 `play()` 當下的牆上時鐘當錨點，整首會錯開 1 秒。用真 Chrome 量（`kagura-dango/tools/web_clock_probe.mjs`）。（[kagura-dango PROGRESS](kagura-dango/PROGRESS.md)）
+- **網頁版（Sample 播放）譜面與音樂差 1～2 拍，headless Chrome 量卻「同步」**（2026-11-03，kagura-dango，修正 11-02 的結論）→ 瀏覽器回報的 `get_playback_position()` 比實際聽到的晚約 1 秒，不能當節奏時鐘；每首歌第一次 `play()` 會卡住主執行緒 0.8～0.9 秒。網頁版改用「`play()` 返回之後」才起算的牆上時鐘減 `get_output_latency()`，手機實聽三關都對上。headless 瀏覽器沒有聲音輸出，只能檢查內部一致，同步一定要用真機耳朵驗；手機測試版用畫面上的時鐘讀數＋可點的時鐘來源切換做 A/B（itch 在 iframe 裡，網址參數傳不進遊戲）。做法已收進 `godot-kit/addons/proto_kit/song_clock.gd`。（[kagura-dango PROGRESS](kagura-dango/PROGRESS.md)）
+- **修好時鐘後，玩家的延遲校準值還是錯的（1～2 秒）**（2026-11-03，kagura-dango）→ 校準存在 user://（瀏覽器 IndexedDB），會跨版本留著；讀取時把超出合理範圍（±400 ms）的值歸零，校準結果也夾在範圍內。改了時鐘就假設舊校準全部作廢。
 
 ## 存檔與劇本
 

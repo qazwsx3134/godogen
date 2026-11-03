@@ -78,4 +78,5 @@ GODOT_BIN=/Applications/Godot.app/Contents/MacOS/Godot bash ../godot-kit/tools/r
 
 ## 發現
 
-- 網頁版（Sample 播放）`play()` 後約 1.1 秒音樂才真的開始；開始後播放位置穩定（抖動約 1 ms），所以判定以音訊播放位置為準，不用牆上時鐘。
+- 網頁版（Sample 播放）回報的播放位置比實際聽到的晚約 1 秒，且每首歌第一次 `play()` 會卡 0.8～0.9 秒；網頁版以 `play()` 返回後起算的牆上時鐘減輸出延遲為準（手機實聽三關對上，2026-11-03），桌機原生版仍用音訊播放位置。`web_clock_probe.mjs` 只檢查內部一致，聽不到實際出聲，不能證明同步。
+- 手機直拿時 kit 的 `orientation_guard.tscn`（`main.tscn` 的 OrientationGuard）蓋住畫面請玩家轉橫向（只在觸控裝置）；玩到一半轉直不會暫停。

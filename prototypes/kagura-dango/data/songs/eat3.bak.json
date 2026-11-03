@@ -9,7 +9,7 @@
 	"offset": 20.04,
 	"intensity": 1.0,
 	"count_in_beats": 8.0,
-	"end_beat": 123,
+	"end_beat": 123.0,
 	"rival": 18.0,
 	"land_after": {
 		"anko": 2.0,
@@ -211,16 +211,20 @@
 			"type": "anko"
 		},
 		{
+			"beat": 48.5,
+			"type": "anko"
+		},
+		{
 			"beat": 49.0,
 			"type": "anko"
 		},
 		{
 			"beat": 50.0,
-			"type": "anko"
+			"type": "soy"
 		},
 		{
 			"beat": 51.0,
-			"type": "soy"
+			"type": "tri"
 		},
 		{
 			"beat": 52.0,
@@ -228,10 +232,14 @@
 		},
 		{
 			"beat": 53.0,
-			"type": "anko"
+			"type": "soy"
 		},
 		{
-			"beat": 54.0,
+			"beat": 53.5,
+			"type": "tri"
+		},
+		{
+			"beat": 54.5,
 			"type": "soy"
 		},
 		{
