@@ -123,6 +123,8 @@ func _round(file: String, scene: String, chart: String, share: float, combo: int
 	level.hud.show_judge("完美！")
 	level.hud.get_node("%NoteTrack").get_node("%JudgeCircle").burst(Color(1, 0.82, 0.2), true)
 	level._beat(int(c.beat_at(t)))
+	if level.hud.get_node("%CallLabel").text == "預備……":  # start()'s call stays up until the next one
+		level.hud.call_out("")
 	await create_timer(0.07).timeout
 	await _screen(file, level)
 

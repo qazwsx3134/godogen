@@ -10,6 +10,7 @@
 - **網頁版**：`build_web.sh`：pck 21.6 MB（mp3 12.2、字型 3.3、BGM 2.2、圖 2.0、wav 1.4），wasm 39.5 MB，zip 29 MB（`build/kagura-dango-web.zip`，資料夾 `build/web`）。匯出排除譜面備份 `.bak.json` 與不再使用的合成曲 `eat3/toss2/toss3.wav`。用 Playwright 開本機伺服器載入：標題正常、點擊進入劇情、主控台無錯誤。
 - **上傳**：使用者自行安裝並登入 butler（`~/.local/butler/butler`，下載被 auto mode 擋下，未繞過）。`butler push build/web natsu-madao/gintama-rythum:html --userversion 1.0.0`：首次上傳 58.65 MiB（patch 30.06 MiB），處理完成，upload #20252338、build #2286825。頁面設定（Kind = HTML、playable in browser、No payments、說明文字 `docs/itch-page.md`、公開）由使用者在 Edit game 頁完成；上傳時頁面仍是 404（草稿）。
 - **驗證**：`run_tests.sh . flow soak chart_maker judge calibrate font levels` 全 PASS（`godot-tests.aUb25N`）；改聲明後 `font flow` PASS（`godot-tests.yB3rNY`）。
+- **itch 頁面圖**：`tools/store_art.gd` 產生 `publishing/itch/`：`cover.png`（1260×1000，標題圖 2 倍＋遊戲名）、`cover-630x500.png`（itch 規格）、`01-title`～`06-ending.png`（1280×720：標題、劇情、三回合進行中含連擊與特效、慶生結尾）。拍圖時發現第 3 回合 HUD 的「命」與判定字重疊（上一輪把判定字移到判定圈下方造成），`Lives` 移到連擊下方（y 128）。`run_tests.sh . flow soak font` PASS。
 - **風險（已告知使用者）**：聲明不等於授權；歌曲與動畫台詞錄音公開散布仍可能被權利人要求下架。
 
 ## 2026-11-03（深夜）｜整體打磨（/team-polish：效能、視覺、音訊、邊界、手機體驗；未 commit）

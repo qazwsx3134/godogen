@@ -11,6 +11,7 @@
 ```bash
 python3 prototypes/kagura-dango/tools/bake_music.py    # clone 後先烘焙校準節拍器與提示音（需要 numpy）
 # 三首歌有版權、不進 git：放進 assets/music/（譜面的 "music" 指向檔名，可在譜面編輯器換歌）
+$G --path prototypes/kagura-dango --resolution 1280x720 -s tools/store_art.gd   # itch 封面與截圖 → publishing/itch/（會開視窗）
 bash prototypes/kagura-dango/tools/convert_voice.sh    # 台詞錄音（assets/sfx/*.MOV，有版權、不進 git）清洗成 assets/voice/*.wav；沒有也能玩，只是沒有台詞（在專案資料夾內執行）
 G=/Applications/Godot.app/Contents/MacOS/Godot
 $G --path prototypes/kagura-dango                      # 試玩（設定存在 user://settings.cfg）
