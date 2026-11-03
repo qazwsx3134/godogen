@@ -30,13 +30,15 @@ unique_name_in_owner = true
 [node name="Gintoki" parent="." unique_id=173833660 instance=ExtResource("5_nhno4")]
 unique_name_in_owner = true
 position = Vector2(100, 300)
-scale = Vector2(0.58, 0.58)
+scale = Vector2(0.42, 0.71)
+fat = true
 
 [node name="Shinpachi" parent="." unique_id=1827043731 instance=ExtResource("5_nhno4")]
 unique_name_in_owner = true
 position = Vector2(245, 305)
-scale = Vector2(0.52, 0.52)
+scale = Vector2(0.31, 0.56)
 character_id = &"shinpachi"
+fat = true
 
 [node name="Kagura" parent="." unique_id=949297683 instance=ExtResource("5_nhno4")]
 unique_name_in_owner = true
@@ -44,9 +46,11 @@ position = Vector2(545, 300)
 scale = Vector2(0.75, 0.75)
 character_id = &"kagura"
 flip_sprite_h = true
+girth = 1.5
 
 [node name="SkewerPile" type="Node2D" parent="." unique_id=1585921527]
 unique_name_in_owner = true
+texture_filter = 1
 position = Vector2(588, 300)
 script = ExtResource("7_1orei")
 sticks = true
@@ -61,11 +65,15 @@ hint_text = "音符進圈時點畫面任何地方；沒接到會打到神樂的�
 [node name="Chomp" type="AudioStreamPlayer" parent="." unique_id=193310004]
 unique_name_in_owner = true
 stream = ExtResource("10_vmyev")
+volume_db = -8.0
+bus = &"SFX"
 
 [node name="Miss" type="AudioStreamPlayer" parent="." unique_id=187404960]
 unique_name_in_owner = true
 stream = ExtResource("11_jiuhq")
+bus = &"SFX"
 
 [node name="Whiff" type="AudioStreamPlayer" parent="." unique_id=391850198]
 unique_name_in_owner = true
 stream = ExtResource("12_x4mth")
+bus = &"SFX"

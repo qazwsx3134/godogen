@@ -26,11 +26,13 @@ script = ExtResource("2_cm")
 unique_name_in_owner = true
 stream = ExtResource("4_cm")
 volume_db = -6.0
+bus = &"SFX"
 
 [node name="NoteSound" type="AudioStreamPlayer" parent="." unique_id=1878181589]
 unique_name_in_owner = true
 stream = ExtResource("5_cm")
 max_polyphony = 4
+bus = &"SFX"
 
 [node name="Panel" type="VBoxContainer" parent="." unique_id=1450021504]
 offset_left = 8.0

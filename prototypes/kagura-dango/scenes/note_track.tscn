@@ -2,17 +2,23 @@
 
 [ext_resource type="Script" path="res://scripts/note_track.gd" id="1_track"]
 [ext_resource type="Script" path="res://scripts/judge_circle.gd" id="2_circle"]
+[ext_resource type="Script" path="res://scripts/bar_lines.gd" id="3_bars"]
 
 [node name="NoteTrack" type="Node2D" unique_id=1450021410]
 position = Vector2(0, 64)
 script = ExtResource("1_track")
 
 [node name="Lane" type="ColorRect" parent="." unique_id=1450021411]
+unique_name_in_owner = true
 offset_left = 20.0
 offset_top = -19.0
 offset_right = 640.0
 offset_bottom = 19.0
 color = Color(0.16, 0.15, 0.24, 0.72)
+
+[node name="BarLines" type="Node2D" parent="." unique_id=627401975]
+unique_name_in_owner = true
+script = ExtResource("3_bars")
 
 [node name="JudgeCircle" type="Node2D" parent="." unique_id=1450021412]
 unique_name_in_owner = true

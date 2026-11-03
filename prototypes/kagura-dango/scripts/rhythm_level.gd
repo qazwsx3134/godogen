@@ -13,13 +13,21 @@ const JUDGE_TEXT := {&"ace": "完美！", &"good": "不錯", &"barely": "勉強"
 
 @export_file("*.json") var chart_path := ""
 ## Kagura's girth (actor.gd) as this round opens (x) and once she has eaten all of its food (y): her body follows the
-## round's progress, not how many skewers the charts hold. Round 3 opens with round 2's body and crosses into the
-## roundest one (girth 1.73) halfway.
+## round's progress, not how many skewers the charts hold. Rounds 1 and 2 keep her slim (below 1.14); round 3 opens
+## round (1.5) and crosses into the roundest body (1.73) halfway.
 @export var kagura_girth := Vector2(1.0, 1.0)
+## Volume of the eating sounds (clips in eat_clips / eat_clip; the Chomp players sit at the same level in the scene).
+@export var eat_volume_db := -8.0
 ## Line said as the round starts (a clip id in assets/voice/, see say()).
 @export var start_voice := ""
 
+const Haptics := preload("res://addons/proto_kit/haptics.gd")
 const VOICE_DIR := "res://assets/voice/"
+## The song fades in over the count-in while the dialogue's BGM fades out (main.gd), so they cross-fade.
+const SONG_FADE_IN := 1.2
+## Combo hype (hype()): the beat starts to punch from HYPE_FROM hits in a row and is at its biggest from HYPE_FULL.
+const HYPE_FROM := 10
+const HYPE_FULL := 50
 
 var chart := {}
 ## One entry per cue, in cue order: {cue_beat, beat, time, type, lane, grade}. grade is &"" until judged.
@@ -28,16 +36,26 @@ var hits: Array[Dictionary] = []
 ## Seconds the player's taps arrive late (from calibration); subtracted from every tap.
 var calib := 0.0
 var intensity := 1
-## Round 3: every miss hits Kagura in the eye and costs a life; at 0 the round is lost. 0 = no lives (rounds 1, 2).
+## Round 3: every miss hits Kagura in the eye and costs a life; at 0 she is knocked down (_on_knocked_down: lies on
+## the ground, misses cost nothing) until get_up() refills her lives. The round plays on, it is never lost.
+## 0 = no lives (rounds 1, 2).
 var max_lives := 0
+## Hits in a row (a miss resets it) and the round's best run; a round with no miss is a full combo.
+var combo := 0
+var max_combo := 0
 var lives := 0
-var failed := false
+## She is on the ground now; knocked_down: she went down at least once this round (the result's comment).
+var down := false
+var knocked_down := false
 
 var _next_cue := 0
 var _running := false
 var _last_beat := -999
 var _rival_beats: Array[int] = []
 var _rival_eaten := 0
+## The phone's vibration motor (harmless where there is none): a tick for a hit, a bump for a miss, a thump for a
+## combo milestone or Kagura going down.
+var haptics := Haptics.new()
 var _clips := {}  # clip id → its AudioStreamPlayer
 var _line: AudioStreamPlayer  # the spoken line playing now
 var _counted_in := false
@@ -52,6 +70,7 @@ func _ready() -> void:
 	chart = JSON.parse_string(FileAccess.get_file_as_string(chart_path))
 	conductor.load_song(chart)
 	calib = Settings.calib_ms / 1000.0
+	haptics.enabled = Settings.haptics
 	intensity = int(chart.get("intensity", 1))
 	max_lives = int(chart.get("lives", 0))
 	lives = max_lives
@@ -78,13 +97,16 @@ func _ready() -> void:
 func start() -> void:
 	_next_cue = 0
 	_rival_eaten = 0
+	combo = 0
+	max_combo = 0
 	_running = true
-	failed = false
+	knocked_down = false
+	down = false
 	lives = max_lives
 	hud.set_lives(lives, max_lives)
 	MatchState.begin_round()
 	hud.call_out("預備……")
-	conductor.play()
+	conductor.play(-1.0, SONG_FADE_IN)
 	say(start_voice)
 
 
@@ -122,7 +144,12 @@ func _beat(b: int) -> void:
 		hud.call_out("停！")
 		stage.referee_call(&"stop")
 	if b >= count_in and b < int(chart.end_beat):
-		stage.pulse()
+		var h := hype()
+		stage.pulse(h)
+		if h > 0.0:  # the screen punches in on the beat, harder the longer the combo
+			var tw := create_tween()
+			camera.zoom = Vector2.ONE * (1.0 + 0.035 * h)
+			tw.tween_property(camera, "zoom", Vector2.ONE, 0.18).set_ease(Tween.EASE_OUT)
 		if b in _rival_beats:
 			_rival_eaten += 1
 			stage.rival_eat(_rival_eaten)
@@ -175,13 +202,18 @@ func result() -> Dictionary:
 	var counts := {&"ace": 0, &"good": 0, &"barely": 0, &"miss": 0}
 	for g in grades:
 		counts[g] += 1
-	return {id = chart.id, title = chart.title, score = points, rank = Judge.rank(points), counts = counts, failed = failed,
-		points = MatchState.round_points()}
+	return {id = chart.id, title = chart.title, score = points, rank = Judge.rank(points), counts = counts,
+		knocked_down = knocked_down, points = MatchState.round_points(), max_combo = max_combo,
+		full_combo = counts[&"miss"] == 0}
 
 
 ## wrong_lane >= 0 marks a miss caused by feeding the wrong person.
 func _judge(index: int, grade: StringName, offset: float, wrong_lane := -1) -> void:
 	hits[index].grade = grade
+	combo = 0 if grade == &"miss" else combo + 1
+	max_combo = maxi(max_combo, combo)
+	hud.set_combo(combo)
+	haptics.buzz(1 if grade == &"miss" else (2 if combo > 0 and combo % hud.COMBO_MILESTONE == 0 else 0))
 	if grade != &"miss":
 		hud.play_hit(grade)
 		hud.add_score(MatchState.add_points(grade), MatchState.score, grade == &"ace")
@@ -192,13 +224,21 @@ func _judge(index: int, grade: StringName, offset: float, wrong_lane := -1) -> v
 	hud.show_judge(JUDGE_TEXT[&"wrong" if wrong_lane >= 0 else grade])
 	_on_judged(index, grade, offset, wrong_lane)
 	judged.emit(index, grade, offset)
-	if grade == &"miss" and max_lives > 0 and _running:
+	if grade == &"miss" and max_lives > 0 and _running and not down:
 		lives -= 1
 		hud.set_lives(lives, max_lives)
-		_on_hurt()
-		if lives <= 0:
-			failed = true
-			_finish()
+		if lives > 0:
+			_on_hurt()
+		else:
+			knocked_down = true
+			down = true
+			haptics.buzz(2)
+			_on_knocked_down()
+
+
+## How hyped the round is from the combo: 0 below HYPE_FROM hits in a row, 1 at HYPE_FULL and beyond.
+func hype() -> float:
+	return clampf(float(combo - HYPE_FROM) / (HYPE_FULL - HYPE_FROM), 0.0, 1.0)
 
 
 ## Kagura's girth now: kagura_girth.x → .y by the share of this round's food she has eaten.
@@ -225,7 +265,7 @@ func eater(index: int) -> StringName:
 
 ## Plays a clip from assets/voice/<id>.wav (made by tools/convert_voice.sh from the show's recordings, kept local:
 ## a clone without them skips every clip). Returns false when there is no such clip.
-func play_clip(id: String) -> bool:
+func play_clip(id: String, volume_db := 0.0) -> bool:
 	if id.is_empty():
 		return false
 	if not _clips.has(id):
@@ -236,11 +276,13 @@ func play_clip(id: String) -> bool:
 			var p := AudioStreamPlayer.new()
 			p.stream = load(path)
 			p.max_polyphony = 3  # quick chomps may overlap
+			p.bus = &"Voice"
 			add_child(p)
 			_clips[id] = p
 	var player: AudioStreamPlayer = _clips[id]
 	if player == null:
 		return false
+	player.volume_db = volume_db
 	player.play()
 	return true
 
@@ -287,6 +329,17 @@ func _on_whiff(_lane: int) -> void:
 
 func _on_hurt() -> void:
 	pass
+
+
+func _on_knocked_down() -> void:
+	pass
+
+
+## Back on her feet: lives refill.
+func get_up() -> void:
+	down = false
+	lives = max_lives
+	hud.set_lives(lives, max_lives)
 
 
 func _on_beat(_b: int) -> void:

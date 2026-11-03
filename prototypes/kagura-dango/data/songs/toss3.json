@@ -2,28 +2,676 @@
 	"id": "toss3",
 	"title": "最終回合　全力餵食",
 	"music": "res://assets/music/last-wo ai ni - Hitomi Takahashi feat. Beat Crusaders.mp3",
-	"music_start": 96.0,
-	"lives": 3,
+	"music_start": 0.0,
+	"lives": 3.0,
 	"background": "res://assets/sprites/bg_torii_park.png",
 	"bpm": 132.0,
-	"offset": 96.359,
-	"intensity": 3,
-	"count_in_beats": 8,
-	"end_beat": 92,
-	"rival": 27,
-	"land_after": {"toss": 2, "quick": 1, "big": 2},
+	"offset": -0.005,
+	"intensity": 3.0,
+	"count_in_beats": 8.0,
+	"end_beat": 205,
+	"rival": 27.0,
+	"land_after": {
+		"toss": 2.0,
+		"quick": 1.0,
+		"big": 2.0
+	},
 	"cues": [
-		{"beat": 8, "type": "toss"}, {"beat": 10, "type": "toss"}, {"beat": 12, "type": "quick"}, {"beat": 14, "type": "toss"},
-		{"beat": 16, "type": "toss"}, {"beat": 16.5, "type": "toss"}, {"beat": 20, "type": "quick"}, {"beat": 21, "type": "quick"},
-		{"beat": 22, "type": "quick"}, {"beat": 24, "type": "toss"}, {"beat": 24.5, "type": "toss"}, {"beat": 25, "type": "toss"},
-		{"beat": 28, "type": "quick"}, {"beat": 30, "type": "toss"}, {"beat": 32, "type": "toss"}, {"beat": 32.5, "type": "toss"},
-		{"beat": 36, "type": "quick"}, {"beat": 37, "type": "quick"}, {"beat": 38, "type": "toss"}, {"beat": 38.5, "type": "toss"},
-		{"beat": 42, "type": "big"},
-		{"beat": 46, "type": "toss"}, {"beat": 46.5, "type": "toss"}, {"beat": 47, "type": "toss"}, {"beat": 50, "type": "quick"},
-		{"beat": 51, "type": "quick"}, {"beat": 52, "type": "toss"}, {"beat": 54, "type": "quick"}, {"beat": 55, "type": "quick"},
-		{"beat": 56, "type": "toss"}, {"beat": 56.5, "type": "toss"}, {"beat": 60, "type": "toss"}, {"beat": 60.5, "type": "toss"},
-		{"beat": 61, "type": "toss"}, {"beat": 64, "type": "quick"}, {"beat": 65, "type": "quick"}, {"beat": 66, "type": "quick"},
-		{"beat": 67, "type": "quick"}, {"beat": 70, "type": "toss"}, {"beat": 70.5, "type": "toss"}, {"beat": 74, "type": "big"},
-		{"beat": 78, "type": "big"}
+		{
+			"beat": 9.0,
+			"type": "toss"
+		},
+		{
+			"beat": 12.0,
+			"type": "quick"
+		},
+		{
+			"beat": 13.0,
+			"type": "big"
+		},
+		{
+			"beat": 14.0,
+			"type": "big"
+		},
+		{
+			"beat": 15.5,
+			"type": "quick"
+		},
+		{
+			"beat": 17.0,
+			"type": "toss"
+		},
+		{
+			"beat": 19.0,
+			"type": "big"
+		},
+		{
+			"beat": 22.0,
+			"type": "quick"
+		},
+		{
+			"beat": 23.0,
+			"type": "quick"
+		},
+		{
+			"beat": 23.5,
+			"type": "quick"
+		},
+		{
+			"beat": 25.0,
+			"type": "toss"
+		},
+		{
+			"beat": 26.0,
+			"type": "big"
+		},
+		{
+			"beat": 28.0,
+			"type": "quick"
+		},
+		{
+			"beat": 28.0,
+			"type": "big"
+		},
+		{
+			"beat": 29.0,
+			"type": "toss"
+		},
+		{
+			"beat": 30.0,
+			"type": "toss"
+		},
+		{
+			"beat": 31.5,
+			"type": "quick"
+		},
+		{
+			"beat": 32.0,
+			"type": "big"
+		},
+		{
+			"beat": 33.0,
+			"type": "toss"
+		},
+		{
+			"beat": 35.0,
+			"type": "quick"
+		},
+		{
+			"beat": 35.0,
+			"type": "big"
+		},
+		{
+			"beat": 36.0,
+			"type": "toss"
+		},
+		{
+			"beat": 38.0,
+			"type": "quick"
+		},
+		{
+			"beat": 38.5,
+			"type": "quick"
+		},
+		{
+			"beat": 39.5,
+			"type": "quick"
+		},
+		{
+			"beat": 41.0,
+			"type": "toss"
+		},
+		{
+			"beat": 41.0,
+			"type": "quick"
+		},
+		{
+			"beat": 43.0,
+			"type": "quick"
+		},
+		{
+			"beat": 43.0,
+			"type": "big"
+		},
+		{
+			"beat": 44.0,
+			"type": "toss"
+		},
+		{
+			"beat": 46.0,
+			"type": "quick"
+		},
+		{
+			"beat": 46.5,
+			"type": "toss"
+		},
+		{
+			"beat": 47.0,
+			"type": "quick"
+		},
+		{
+			"beat": 49.0,
+			"type": "quick"
+		},
+		{
+			"beat": 49.0,
+			"type": "big"
+		},
+		{
+			"beat": 50.0,
+			"type": "toss"
+		},
+		{
+			"beat": 52.0,
+			"type": "toss"
+		},
+		{
+			"beat": 52.0,
+			"type": "quick"
+		},
+		{
+			"beat": 54.0,
+			"type": "quick"
+		},
+		{
+			"beat": 55.0,
+			"type": "quick"
+		},
+		{
+			"beat": 55.5,
+			"type": "quick"
+		},
+		{
+			"beat": 56.0,
+			"type": "toss"
+		},
+		{
+			"beat": 57.0,
+			"type": "toss"
+		},
+		{
+			"beat": 57.5,
+			"type": "quick"
+		},
+		{
+			"beat": 59.0,
+			"type": "quick"
+		},
+		{
+			"beat": 59.5,
+			"type": "big"
+		},
+		{
+			"beat": 60.0,
+			"type": "toss"
+		},
+		{
+			"beat": 62.0,
+			"type": "toss"
+		},
+		{
+			"beat": 62.0,
+			"type": "quick"
+		},
+		{
+			"beat": 63.5,
+			"type": "quick"
+		},
+		{
+			"beat": 64.0,
+			"type": "toss"
+		},
+		{
+			"beat": 65.0,
+			"type": "big"
+		},
+		{
+			"beat": 66.0,
+			"type": "toss"
+		},
+		{
+			"beat": 68.0,
+			"type": "toss"
+		},
+		{
+			"beat": 68.0,
+			"type": "quick"
+		},
+		{
+			"beat": 70.0,
+			"type": "quick"
+		},
+		{
+			"beat": 70.5,
+			"type": "toss"
+		},
+		{
+			"beat": 71.0,
+			"type": "quick"
+		},
+		{
+			"beat": 72.0,
+			"type": "big"
+		},
+		{
+			"beat": 72.5,
+			"type": "toss"
+		},
+		{
+			"beat": 74.0,
+			"type": "toss"
+		},
+		{
+			"beat": 74.0,
+			"type": "quick"
+		},
+		{
+			"beat": 76.0,
+			"type": "toss"
+		},
+		{
+			"beat": 76.0,
+			"type": "quick"
+		},
+		{
+			"beat": 77.0,
+			"type": "big"
+		},
+		{
+			"beat": 78.0,
+			"type": "big"
+		},
+		{
+			"beat": 78.5,
+			"type": "toss"
+		},
+		{
+			"beat": 81.0,
+			"type": "toss"
+		},
+		{
+			"beat": 81.0,
+			"type": "quick"
+		},
+		{
+			"beat": 82.0,
+			"type": "big"
+		},
+		{
+			"beat": 83.0,
+			"type": "toss"
+		},
+		{
+			"beat": 85.0,
+			"type": "toss"
+		},
+		{
+			"beat": 85.0,
+			"type": "quick"
+		},
+		{
+			"beat": 86.0,
+			"type": "toss"
+		},
+		{
+			"beat": 86.5,
+			"type": "toss"
+		},
+		{
+			"beat": 89.5,
+			"type": "toss"
+		},
+		{
+			"beat": 91.0,
+			"type": "quick"
+		},
+		{
+			"beat": 91.0,
+			"type": "big"
+		},
+		{
+			"beat": 92.0,
+			"type": "toss"
+		},
+		{
+			"beat": 94.0,
+			"type": "quick"
+		},
+		{
+			"beat": 94.5,
+			"type": "big"
+		},
+		{
+			"beat": 95.0,
+			"type": "quick"
+		},
+		{
+			"beat": 96.0,
+			"type": "toss"
+		},
+		{
+			"beat": 98.0,
+			"type": "quick"
+		},
+		{
+			"beat": 98.0,
+			"type": "big"
+		},
+		{
+			"beat": 99.0,
+			"type": "toss"
+		},
+		{
+			"beat": 101.0,
+			"type": "toss"
+		},
+		{
+			"beat": 101.0,
+			"type": "quick"
+		},
+		{
+			"beat": 102.0,
+			"type": "toss"
+		},
+		{
+			"beat": 103.5,
+			"type": "quick"
+		},
+		{
+			"beat": 104.0,
+			"type": "toss"
+		},
+		{
+			"beat": 105.0,
+			"type": "big"
+		},
+		{
+			"beat": 106.0,
+			"type": "toss"
+		},
+		{
+			"beat": 108.0,
+			"type": "quick"
+		},
+		{
+			"beat": 108.0,
+			"type": "big"
+		},
+		{
+			"beat": 110.0,
+			"type": "quick"
+		},
+		{
+			"beat": 110.5,
+			"type": "toss"
+		},
+		{
+			"beat": 111.0,
+			"type": "quick"
+		},
+		{
+			"beat": 112.0,
+			"type": "big"
+		},
+		{
+			"beat": 114.0,
+			"type": "toss"
+		},
+		{
+			"beat": 114.0,
+			"type": "quick"
+		},
+		{
+			"beat": 115.0,
+			"type": "big"
+		},
+		{
+			"beat": 117.0,
+			"type": "quick"
+		},
+		{
+			"beat": 118.0,
+			"type": "quick"
+		},
+		{
+			"beat": 118.5,
+			"type": "toss"
+		},
+		{
+			"beat": 119.0,
+			"type": "quick"
+		},
+		{
+			"beat": 120.0,
+			"type": "toss"
+		},
+		{
+			"beat": 120.5,
+			"type": "quick"
+		},
+		{
+			"beat": 123.0,
+			"type": "toss"
+		},
+		{
+			"beat": 124.5,
+			"type": "toss"
+		},
+		{
+			"beat": 125.0,
+			"type": "quick"
+		},
+		{
+			"beat": 127.5,
+			"type": "big"
+		},
+		{
+			"beat": 128.0,
+			"type": "toss"
+		},
+		{
+			"beat": 128.0,
+			"type": "quick"
+		},
+		{
+			"beat": 131.5,
+			"type": "big"
+		},
+		{
+			"beat": 132.0,
+			"type": "toss"
+		},
+		{
+			"beat": 132.0,
+			"type": "quick"
+		},
+		{
+			"beat": 133.5,
+			"type": "toss"
+		},
+		{
+			"beat": 135.5,
+			"type": "quick"
+		},
+		{
+			"beat": 136.0,
+			"type": "quick"
+		},
+		{
+			"beat": 137.0,
+			"type": "toss"
+		},
+		{
+			"beat": 139.0,
+			"type": "quick"
+		},
+		{
+			"beat": 139.0,
+			"type": "big"
+		},
+		{
+			"beat": 140.5,
+			"type": "toss"
+		},
+		{
+			"beat": 141.0,
+			"type": "quick"
+		},
+		{
+			"beat": 143.5,
+			"type": "big"
+		},
+		{
+			"beat": 144.5,
+			"type": "toss"
+		},
+		{
+			"beat": 145.0,
+			"type": "quick"
+		},
+		{
+			"beat": 147.0,
+			"type": "big"
+		},
+		{
+			"beat": 148.0,
+			"type": "toss"
+		},
+		{
+			"beat": 148.5,
+			"type": "quick"
+		},
+		{
+			"beat": 149.0,
+			"type": "big"
+		},
+		{
+			"beat": 150.0,
+			"type": "big"
+		},
+		{
+			"beat": 150.5,
+			"type": "big"
+		},
+		{
+			"beat": 153.0,
+			"type": "toss"
+		},
+		{
+			"beat": 155.0,
+			"type": "quick"
+		},
+		{
+			"beat": 155.0,
+			"type": "big"
+		},
+		{
+			"beat": 156.0,
+			"type": "toss"
+		},
+		{
+			"beat": 158.0,
+			"type": "quick"
+		},
+		{
+			"beat": 159.0,
+			"type": "quick"
+		},
+		{
+			"beat": 159.5,
+			"type": "quick"
+		},
+		{
+			"beat": 161.0,
+			"type": "toss"
+		},
+		{
+			"beat": 163.0,
+			"type": "quick"
+		},
+		{
+			"beat": 163.0,
+			"type": "big"
+		},
+		{
+			"beat": 165.0,
+			"type": "quick"
+		},
+		{
+			"beat": 165.0,
+			"type": "big"
+		},
+		{
+			"beat": 166.0,
+			"type": "big"
+		},
+		{
+			"beat": 166.5,
+			"type": "big"
+		},
+		{
+			"beat": 168.5,
+			"type": "toss"
+		},
+		{
+			"beat": 170.0,
+			"type": "quick"
+		},
+		{
+			"beat": 170.0,
+			"type": "big"
+		},
+		{
+			"beat": 171.0,
+			"type": "toss"
+		},
+		{
+			"beat": 173.0,
+			"type": "quick"
+		},
+		{
+			"beat": 173.0,
+			"type": "big"
+		},
+		{
+			"beat": 174.0,
+			"type": "big"
+		},
+		{
+			"beat": 174.5,
+			"type": "toss"
+		},
+		{
+			"beat": 177.0,
+			"type": "quick"
+		},
+		{
+			"beat": 177.0,
+			"type": "big"
+		},
+		{
+			"beat": 178.0,
+			"type": "toss"
+		},
+		{
+			"beat": 180.0,
+			"type": "quick"
+		},
+		{
+			"beat": 180.0,
+			"type": "big"
+		},
+		{
+			"beat": 181.0,
+			"type": "toss"
+		},
+		{
+			"beat": 182.0,
+			"type": "toss"
+		},
+		{
+			"beat": 182.5,
+			"type": "toss"
+		}
 	]
 }

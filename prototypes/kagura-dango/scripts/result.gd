@@ -20,12 +20,11 @@ func show_result(r: Dictionary, last_round: bool) -> void:
 	var c: Dictionary = r.counts
 	%Counts.text = "完美 %d　不錯 %d　勉強 %d　漏掉 %d\n本回合 +%s　總分 %s" % [c.ace, c.good, c.barely, c.miss,
 		Judge.format_points(r.get("points", 0)), Judge.format_points(MatchState.score)]
-	var failed: bool = r.get("failed", false)
-	if failed:  # round 3 ran out of lives: the match can't go on until it is cleared
-		%Rank.text = "眼睛被打中了…失敗"
-	%Comment.text = "%s：「%s」" % StoryData.comment(r.id, &"fail" if failed else r.rank)
+	%Counts.text += "\n最大連擊 %d%s" % [r.get("max_combo", 0), "　全連擊！" if r.get("full_combo", false) else ""]
+	var down: bool = r.get("knocked_down", false)  # round 3 ran out of lives: Kagura ended it lying on the ground
+	%Comment.text = "%s：「%s」" % StoryData.comment(r.id, &"fail" if down else r.rank)
 	%Next.text = "看比賽結果" if last_round else "下一回合"
-	%Next.visible = not failed
+	%Next.visible = true
 	%Retry.text = "重來這回合"
 
 

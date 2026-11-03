@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_o5qli"]
 [ext_resource type="AudioStream" path="res://assets/music/bgm.ogg" id="2_bgm"]
+[ext_resource type="AudioStream" path="res://assets/sfx/ui.wav" id="3_ui"]
 
 [node name="Main" type="Node" unique_id=468465147]
 script = ExtResource("1_o5qli")
@@ -13,3 +14,10 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 stream = ExtResource("2_bgm")
 volume_db = -8.0
+bus = &"Music"
+
+[node name="Ui" type="AudioStreamPlayer" parent="." unique_id=405076151]
+unique_name_in_owner = true
+stream = ExtResource("3_ui")
+volume_db = -4.0
+bus = &"SFX"

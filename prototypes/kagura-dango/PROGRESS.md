@@ -2,6 +2,54 @@
 
 只保留最近 3 次 commit 期間的工作與尚未 commit 的工作（新的在上）；更早的紀錄移到 MILESTONE.md。每次 commit、出門／下班／暫停前更新本檔，再更新根目錄 `Progress.md`。
 
+## 2026-11-03（深夜，之二）｜設定畫面、瀏海安全區、itch.io 網頁版（未 commit、未上傳）
+
+- **設定**：`default_bus_layout.tres` 新增 Music／SFX／Voice 三條 bus；歌曲與對話 BGM 走 Music，命中、咀嚼、按鈕、校準節拍器走 SFX，角色台詞與吃東西錄音走 Voice。`Settings` 存三個音量（0～1，0 = 靜音）與 `haptics`，`load_all()` 時套用。新畫面 `scenes/settings.tscn`（標題「設定」按鈕；滑桿放開播一聲樣本，畫面中播 BGM 聽音樂大小；沒有震動馬達時開關停用並說明）。`flow` 加檢查。
+- **安全區**：`scripts/safe_area.gd`（`SafeArea` Control）：手機用 `DisplayServer.get_display_safe_area()`，網頁版讀 CSS `env(safe-area-inset-*)`，桌機為 0。HUD 所有可見元素移到 `SafeArea` 底下，軌道仍延伸到畫面右緣。以 `--safe-inset=44,0,44,0` 在 779×360 畫布截圖確認。劇情、標題、結算沒有套用（內容置中或有邊距）。
+- **同人聲明**：標題底部一行「銀魂二次創作同人遊戲・非官方・免費・不營利｜角色、歌曲、台詞版權歸原作者所有」（原本寫「合成音樂」已不正確）；itch 頁面文字（中／英／日聲明、建議設定）在 `docs/itch-page.md`。
+- **網頁版**：`build_web.sh`：pck 21.6 MB（mp3 12.2、字型 3.3、BGM 2.2、圖 2.0、wav 1.4），wasm 39.5 MB，zip 29 MB（`build/kagura-dango-web.zip`，資料夾 `build/web`）。匯出排除譜面備份 `.bak.json` 與不再使用的合成曲 `eat3/toss2/toss3.wav`。用 Playwright 開本機伺服器載入：標題正常、點擊進入劇情、主控台無錯誤。
+- **上傳**：使用者自行安裝並登入 butler（`~/.local/butler/butler`，下載被 auto mode 擋下，未繞過）。`butler push build/web natsu-madao/gintama-rythum:html --userversion 1.0.0`：首次上傳 58.65 MiB（patch 30.06 MiB），處理完成，upload #20252338、build #2286825。頁面設定（Kind = HTML、playable in browser、No payments、說明文字 `docs/itch-page.md`、公開）由使用者在 Edit game 頁完成；上傳時頁面仍是 404（草稿）。
+- **驗證**：`run_tests.sh . flow soak chart_maker judge calibrate font levels` 全 PASS（`godot-tests.aUb25N`）；改聲明後 `font flow` PASS（`godot-tests.yB3rNY`）。
+- **風險（已告知使用者）**：聲明不等於授權；歌曲與動畫台詞錄音公開散布仍可能被權利人要求下架。
+
+## 2026-11-03（深夜）｜整體打磨（/team-polish：效能、視覺、音訊、邊界、手機體驗；未 commit）
+
+依專案成本門檻由主 session 自己扮演各角色，沒有派子代理。
+- **效能（量測）**：視窗版每回合繪製次數 71／76／160（第 1／2／3 回合），每幀約 8 ms，沒有瓶頸；`Performance.TIME_PROCESS` 數字亂跳（見 LESSONS），以牆上時間為準。沒有做最佳化。
+- **視覺**：手機橫放比 16:9 寬時（以 1688×780 視窗＝779×360 畫布量），背景只有 640 寬，兩側露出米色、判定圈浮在空白上，音符軌道也沒拉到右緣。修正：`stage.tscn` 加鏡像的左右背景（接縫看不出來），`note_track.gd` 讓軌道與音符出現處跟著畫布右緣。結尾慶生圖那句對話框半透明（0.55），看得到蛋糕。比 16:9 更高的畫面（4:3 平板）沒處理。
+- **音訊**：量到三首歌選段 -6.7～-7.4 LUFS、true peak +1.5～+2.5 dBFS（原檔就超過 0），和音效、台詞疊在 master 上會削波，也比對話 BGM 大 14 dB。`Conductor.level_db` = -6（約 -13 LUFS、-4 dBFS）。標題、結算按鈕加點擊聲（`main.tscn` 的 `Ui`，所有 BaseButton 自動接上）。
+- **手機**：接上 kit 的 `haptics.gd`：命中輕震、失誤中震、50 連擊與神樂倒地重震（桌機無震動馬達，無害）。沒有「關閉震動」的設定。
+- **硬化**：新測試 `tests/test_soak.gd`（見 README）。通過；`run_tests.sh . soak flow chart_maker judge calibrate font` PASS（`godot-tests.ArqPlu`），`levels` PASS（`godot-tests.TSPQYn`）。
+- **未做、建議**：暫停（瀏覽器分頁切走時計時仍在走，音符會被當漏掉；需要實機聽音測試）、音量／震動設定、Safe Area（瀏海）、4:3 版面。
+
+## 2026-11-03（晚上）｜劇情立繪可在編輯器調、對話框內距、音樂交叉淡入、太鼓式回饋（未 commit；接在使用者的 236427c6 之後）
+
+- **使用者要求**：劇情對話框沒有 padding；劇情裡人物的位置與大小、三個回合的人物大小與站位都要能在 Godot 直接調；故事切到遊戲時聲音切換太硬；參考太鼓達人 fan game 網頁版 https://cjdgrevival.com/（taiko-web）的玩法與畫面，把優點帶進來。
+- **已完成**：
+  - **劇情**（`story.tscn`）：單一 `Portrait` 由程式搬位置，改成 `Cast` 底下每個說話者一個 TextureRect（`speaker` metadata），位置與大小都在 scene；神樂在右、翻面。對話框加 StyleBoxFlat（內距 18／10、深底金框）。
+  - **回合預覽與執行一致**：第 3 回合銀時、新八的 `fat`、第 2 回合兩人的 `fullness`、三回合神樂的 `girth` 寫進 scene（執行時仍由比賽狀態決定），編輯器看到的就是遊戲裡的樣子；`toss_game.gd` 不再在執行時設 `fat`。
+  - **聲音銜接**：`Conductor.play(from, fade_in)`，回合歌曲在預備拍內 1.2 秒淡入；對話 BGM 淡出拉長到 1.2 秒，兩者交叉。淡入淡出與台詞時的降音分開計算再相加，不互相打斷。
+  - **參考 taiko-web**：Chrome 擴充沒連上，改用 Playwright 開網站；第一次進站會依序跳出設定、說明，三次都沒走到選歌，只截到遊戲畫面版面（延遲校準模式）。依那張畫面與 taiko-web 的公開設計，做了：
+    - 連擊數與每 50 連擊的大字（`hud.set_combo`），結算顯示最大連擊／全連擊；
+    - 判定字與連擊數移到判定圈旁；
+    - 命中時判定圈爆光圈（完美金色、較大）、軌道閃該分路的顏色；
+    - 命中的音符沿弧線飛向右上的分數（`NoteTrack.fly_target`）；
+    - 軌道上每 4 拍一條小節線（`BarLines`）。
+    - 沒做：魂量表（要改勝負規則）、咚／咔兩種打法、連打與氣球音符。
+  - `tools/capture_screenshots.gd`：macOS 視窗被蓋住時 Godot 不重畫，第 3 回合截圖其實是第 2 回合的舊畫面；改成先把視窗移到最前並等 `frame_post_draw`。
+- **驗證**：截圖看過劇情（內距、神樂在右）、第 2 回合（金色光圈、完美、50 連擊）、第 3 回合；小節線位置以 headless 腳本確認（第 9 拍時 x = 509）。`flow chart_maker judge calibrate font` PASS（`godot-tests.BAX8yT`），`levels` PASS（`godot-tests.p8ICga`）。前兩次 `levels` 失敗都是因為使用者在測試途中用編輯器存了譜面（第 2 回合 67 → 136、第 1 回合 153 → 155 個音符）；`levels` 改成開跑時先把三張譜面複製到暫存資料夾。
+- **未驗證**：交叉淡入的聽感、飛向分數的動畫在實際節奏下的感覺。
+- **補（同日）**：
+  - 標題畫面加「第1關／第2關／第3關」（`title.tscn` 的 `Rounds`），直接進那一回合；`main._jump_to_round` 改成從前面回合的譜面算「全部完美」的分數與串數（原本寫死舊譜面的數字）。`flow` 加檢查。
+  - 第 3 回合不再失敗：命用完時神樂被打倒（`_on_knocked_down`：播整段「痛苦倒地」、繞腳底轉 `down_angle_deg` = -90° 躺在地上），回合照常播完，之後命中仍得分、她維持倒地；單次失誤只做短暫反應，不再每次播 13.8 秒的台詞。結果改成 `knocked_down`，結算用 toss3 的 `fail` 評語，「下一回合」一律可按。截圖確認倒地樣子。
+  - 神樂倒地後 `down_seconds`（4 秒，歌曲時間）站起來、命補滿（`RhythmLevel.down`／`get_up`；`knocked_down` 改成「這回合倒過」，只用在結算評語），之後可以再倒。吃東西聲（錄音與 Chomp）降 8 dB：`eat_volume_db` 與三個回合 `Chomp` 的 `volume_db`；第 2 回合踢人也用 Chomp，一起變小。
+    驗證：`levels`（`godot-tests.5doWPJ`）、`flow font`（`godot-tests.egNbxI`）PASS；新增檢查：沒按的第 3 回合神樂至少倒兩次（站起來、命補滿、再倒）且確實躺平。
+  - 慶生圖加定春：使用者選「直接生成」，派工單 `.claude/tasks/kagura-dango/sadaharu-birthday.md` 交給 Herdr 的 Codex pane `wT:pH`（週額度剩 3%），提示詞在 `art_src/PROMPTS.md` 的 K2，候選圖輸出到 `art_src/gen/`。Codex 生兩張：第 1 張帽子伸進標題留白，不用；第 2 張（1672×941）採用，以 area 縮放成 640×360 取代 `assets/sprites/kagura_birthday.png`，原圖備份在 `art_src/gen/kagura_birthday_before_sadaharu.png`（git 忽略的資料夾，原檔也仍在 git 歷史）。截圖確認結尾畫面。對話框（本輪加了 0.9 不透明度的底）會蓋住下半張圖與蛋糕，尚未調整。
+    之後使用者決定不用定春版：`assets/sprites/kagura_birthday.png` 還原成原圖（與 HEAD 相同）；定春候選圖留在 `art_src/gen/`（git 忽略），提示詞 K2 標為未採用。
+  - 連擊熱度（`RhythmLevel.hype()`：10 連擊起、50 滿）：每拍鏡頭 zoom 推近最多 3.5%，背景的對手、裁判、解說員每拍跳 2～10 px，觀眾晃更大、燈籠更亮，熱度 0.6 起各回合都出現速度線（`stage.pulse(hype)`）。`levels` 加 `_check_hype`。
+  - 第 2 回合神樂不用胖的圖：`feast.tscn` 的 `kagura_girth` 改成 1.0 → 1.1（低於第 2 段體型門檻 1.14），預覽 `girth` 拿掉；第 3 回合維持 1.5 → 1.96。`levels` 的體型檢查改成「第 2 回合結束仍 < 1.14、第 3 回合結束 > 1.7」。
+  - 驗證：`flow chart_maker judge calibrate font` PASS（`godot-tests.91oW9w`），`levels` PASS（`godot-tests.76Bg4c`）。使用者把第 3 回合排到 164 個音符後，`levels` 的兩個假設要改：快拋晚丟可能比慢拋早落地，間隔與空檔改照落點時間排序；「失誤 2 次」改成依音符數取間隔。
+
 ## 2026-11-03（傍晚）｜累計分數取代對手計數、第 3 回合體型、對話 BGM（未 commit）
 
 - **補（同日，之五）**：使用者說 MOV 已經剪好，不要再裁。`convert_voice.sh` 改成整段轉檔（新八吃東西 1.16 秒、眼睛被打中 13.83 秒，長度與原檔一致），淡入淡出縮成 10 ms 只防爆音；格式維持 16-bit 單聲道 WAV，Godot 匯入時壓成 QOA（`compress/mode=2`）。headless 匯入無錯誤；遊戲邏輯沒改，沿用 `godot-tests.5M9lZ6` 的全套 PASS。

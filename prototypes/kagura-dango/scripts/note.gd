@@ -35,6 +35,18 @@ func _draw() -> void:
 	draw_circle(Vector2.ZERO, radius * 0.72, Color(1, 0.97, 0.9))
 
 
+## Hit: arc up to `to` (the score, in the parent's space), shrinking, and vanish there.
+func fly_to(to: Vector2) -> void:
+	var from := position
+	var peak := (from + to) * 0.5 + Vector2(0, -50)
+	var tw := create_tween()
+	tw.tween_method(func(t: float):
+		position = from.lerp(peak, t).lerp(peak.lerp(to, t), t)
+		scale = Vector2.ONE * lerpf(1.3, 0.6, t), 0.0, 1.0, 0.4).set_ease(Tween.EASE_IN)
+	tw.tween_property(self, "modulate:a", 0.0, 0.06)
+	tw.tween_callback(queue_free)
+
+
 ## Hit: pop and vanish. Missed: drop and fade.
 func finish(hit: bool) -> void:
 	var tw := create_tween().set_parallel()

@@ -29,7 +29,7 @@ func _run() -> void:
 		_expect(main.screen.name == names[i], "round %d is %s (got %s)" % [i + 1, names[i], main.screen.name])
 		_expect(main.screen.conductor.playing(), "round %d song is playing" % (i + 1))
 		if i == 0:
-			await create_timer(0.8).timeout
+			await create_timer(1.5).timeout  # the BGM fades out over 1.2 s
 			_expect(not main.get_node("%Bgm").playing, "the BGM fades out when a round starts")
 		main.screen._finish()
 		await _frames(2)
@@ -50,6 +50,30 @@ func _run() -> void:
 	await _press(main.screen.get_node("%Back"))
 	await _frames(2)
 	_expect(main.screen.name == "Title", "Back returns to the title")
+	# 第3關 on the title plays round 3 straight away, with the earlier rounds counted as perfect.
+	await _press(main.screen.get_node("%Rounds/Round3"))
+	await _frames(2)
+	_expect(main.screen.name == "TossGame" and main.round_index == 2 and main.screen.conductor.playing(), "第3關 starts round 3 (got %s)" % main.screen.name)
+	_expect(MatchState.score > 0 and MatchState.eaten[&"kagura"] > 0, "round 3 starts with rounds 1–2 counted (score %d)" % MatchState.score)
+	main.screen._finish()
+	await _frames(2)
+	await _press(main.screen.get_node("%Back"))
+	await _frames(2)
+	# 設定: a slider moves its bus at once and 返回 saves it.
+	await _press(main.screen.get_node("%Settings"))
+	await _frames(2)
+	_expect(main.screen.name == "Settings" and main.get_node("%Bgm").playing, "設定 opens settings, with the BGM to judge the music level")
+	main.screen.get_node("%Music").value = 0.5
+	_expect(is_equal_approx(db_to_linear(AudioServer.get_bus_volume_db(AudioServer.get_bus_index(&"Music"))), 0.5), "the music slider sets the Music bus")
+	main.screen.get_node("%Voice").value = 0.0
+	_expect(AudioServer.is_bus_mute(AudioServer.get_bus_index(&"Voice")), "voice at 0 mutes the Voice bus")
+	await _press(main.screen.get_node("%Back"))
+	await _frames(2)
+	var cfg := ConfigFile.new()
+	cfg.load(Settings.path)
+	_expect(main.screen.name == "Title" and is_equal_approx(float(cfg.get_value("audio", "Music", 1.0)), 0.5), "返回 saves the volumes and returns to the title")
+	Settings.volumes = {&"Music": 1.0, &"SFX": 1.0, &"Voice": 1.0}
+	Settings.apply()
 	await _press(main.screen.get_node("%Calibrate"))
 	await _frames(2)
 	_expect(main.screen.name == "Calibrate", "Calibrate opens calibration")

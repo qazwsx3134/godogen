@@ -1,13 +1,36 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://bdbgbkon0h0fm"]
 
-[ext_resource type="Script" path="res://scripts/story.gd" id="1_lcs0l"]
-[ext_resource type="Texture2D" path="res://assets/sprites/bg_torii_park.png" id="2_bg"]
+[ext_resource type="Script" uid="uid://d2wvf1bhs383q" path="res://scripts/story.gd" id="1_lcs0l"]
+[ext_resource type="Texture2D" uid="uid://becncsuqenjlk" path="res://assets/sprites/bg_torii_park.png" id="2_bg"]
+[ext_resource type="Texture2D" uid="uid://4pvf40mam50o" path="res://assets/sprites/gintoki_ref.png" id="p0"]
+[ext_resource type="Texture2D" uid="uid://cjl7dibbpqbfy" path="res://assets/sprites/shinpachi_ref.png" id="p1"]
+[ext_resource type="Texture2D" uid="uid://w2epe6tpj64k" path="res://assets/sprites/kagura_ref.png" id="p2"]
+[ext_resource type="Texture2D" uid="uid://1moejsbpj7l4" path="res://assets/sprites/referee_ref.png" id="p3"]
+[ext_resource type="Texture2D" uid="uid://bonc27usphrj6" path="res://assets/sprites/store_owner_serve.png" id="p4"]
+
+[sub_resource type="StyleBoxFlat" id="BoxStyle"]
+content_margin_left = 18.0
+content_margin_top = 10.0
+content_margin_right = 18.0
+content_margin_bottom = 12.0
+bg_color = Color(0.12, 0.1, 0.16, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.94, 0.72, 0.39, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
 [node name="Story" type="Control" unique_id=40598635]
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_lcs0l")
 
 [node name="Background" type="ColorRect" parent="." unique_id=399304117]
@@ -29,19 +52,104 @@ texture = ExtResource("2_bg")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Portrait" type="TextureRect" parent="." unique_id=399304119]
+[node name="Cast" type="Control" parent="." unique_id=991656950]
 unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Gintoki" type="TextureRect" parent="Cast" unique_id=2078558359]
 texture_filter = 1
-layout_mode = 0
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 205.0
+offset_top = -249.0
+offset_right = 405.0
+offset_bottom = -43.0
+grow_vertical = 0
+mouse_filter = 2
+texture = ExtResource("p0")
+expand_mode = 1
+stretch_mode = 5
+metadata/speaker = "銀時"
+
+[node name="Shinpachi" type="TextureRect" parent="Cast" unique_id=1150499146]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 63.0
+offset_top = -243.0
+offset_right = 263.0
+offset_bottom = -37.0
+grow_vertical = 0
+mouse_filter = 2
+texture = ExtResource("p1")
+expand_mode = 1
+stretch_mode = 5
+metadata/speaker = "新八"
+
+[node name="Kagura" type="TextureRect" parent="Cast" unique_id=1181509176]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -223.0
+offset_top = -264.0
+offset_right = -23.0
+offset_bottom = -58.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+texture = ExtResource("p2")
+expand_mode = 1
+stretch_mode = 5
+flip_h = true
+metadata/speaker = "神樂"
+
+[node name="Referee" type="TextureRect" parent="Cast" unique_id=38239115]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 68.0
+offset_top = -246.0
+offset_right = 268.0
+offset_bottom = -40.0
+grow_vertical = 0
+mouse_filter = 2
+texture = ExtResource("p3")
+expand_mode = 1
+stretch_mode = 5
+metadata/speaker = "裁判"
+
+[node name="Shopkeeper" type="TextureRect" parent="Cast" unique_id=602655615]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 30.0
-offset_top = -330.0
+offset_top = -236.0
 offset_right = 230.0
-offset_bottom = -124.0
+offset_bottom = -30.0
+grow_vertical = 0
 mouse_filter = 2
+texture = ExtResource("p4")
 expand_mode = 1
 stretch_mode = 5
+metadata/speaker = "店主"
 
 [node name="Box" type="PanelContainer" parent="." unique_id=1143252600]
 layout_mode = 0
@@ -53,6 +161,7 @@ offset_top = -132.0
 offset_right = -24.0
 offset_bottom = -18.0
 mouse_filter = 2
+theme_override_styles/panel = SubResource("BoxStyle")
 
 [node name="Column" type="VBoxContainer" parent="Box" unique_id=746637677]
 layout_mode = 2
@@ -61,14 +170,14 @@ mouse_filter = 2
 [node name="Speaker" type="Label" parent="Box/Column" unique_id=1234210690]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 18
 theme_override_colors/font_color = Color(0.98, 0.93, 0.84, 1)
+theme_override_font_sizes/font_size = 18
 
 [node name="Line" type="Label" parent="Box/Column" unique_id=2078865130]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 22
 theme_override_colors/font_color = Color(0.98, 0.93, 0.84, 1)
+theme_override_font_sizes/font_size = 22
 autowrap_mode = 3
 
 [node name="Hint" type="Label" parent="." unique_id=1492286149]
@@ -79,7 +188,7 @@ offset_left = -160.0
 offset_top = 10.0
 offset_right = -12.0
 offset_bottom = 32.0
-theme_override_font_sizes/font_size = 14
 theme_override_colors/font_color = Color(0.16, 0.15, 0.24, 1)
+theme_override_font_sizes/font_size = 14
 text = "點一下繼續 ▶"
 horizontal_alignment = 2

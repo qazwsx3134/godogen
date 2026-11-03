@@ -52,6 +52,7 @@ character_id = &"kagura"
 
 [node name="SkewerPile" type="Node2D" parent="." unique_id=1908608614]
 unique_name_in_owner = true
+texture_filter = 1
 position = Vector2(588, 300)
 script = ExtResource("7_4u2a2")
 sticks = true
@@ -66,14 +67,18 @@ hint_text = "音符進圈時點：紅→左（銀時）　藍→中（新八）�
 [node name="Chomp" type="AudioStreamPlayer" parent="." unique_id=1955713910]
 unique_name_in_owner = true
 stream = ExtResource("10_d4p2e")
+volume_db = -8.0
+bus = &"SFX"
 
 [node name="Miss" type="AudioStreamPlayer" parent="." unique_id=545268204]
 unique_name_in_owner = true
 stream = ExtResource("11_kgisl")
+bus = &"SFX"
 
 [node name="Whiff" type="AudioStreamPlayer" parent="." unique_id=904862157]
 unique_name_in_owner = true
 stream = ExtResource("12_ua1kt")
+bus = &"SFX"
 
 [node name="ServeOrigin" type="Marker2D" parent="." unique_id=1753763446]
 unique_name_in_owner = true

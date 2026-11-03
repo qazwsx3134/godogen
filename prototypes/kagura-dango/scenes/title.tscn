@@ -51,9 +51,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -156.0
-offset_top = -132.0
+offset_top = -158.0
 offset_right = 156.0
-offset_bottom = 132.0
+offset_bottom = 158.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_wosw1")
 
@@ -71,19 +71,19 @@ theme_override_constants/separation = 12
 
 [node name="GameTitle" type="Label" parent="Center/Column" unique_id=1428545414]
 layout_mode = 2
+theme_override_font_sizes/font_size = 46
 theme_override_colors/font_color = Color(1, 0.94, 0.78, 1)
 theme_override_colors/font_outline_color = Color(0.04, 0.08, 0.12, 1)
 theme_override_constants/outline_size = 2
-theme_override_font_sizes/font_size = 46
 text = "丸子大胃王"
 horizontal_alignment = 1
 
 [node name="Subtitle" type="Label" parent="Center/Column" unique_id=171159329]
 layout_mode = 2
+theme_override_font_sizes/font_size = 22
 theme_override_colors/font_color = Color(1, 0.94, 0.78, 1)
 theme_override_colors/font_outline_color = Color(0.04, 0.08, 0.12, 1)
 theme_override_constants/outline_size = 2
-theme_override_font_sizes/font_size = 22
 text = "～神樂生日快樂 11.3～"
 horizontal_alignment = 1
 
@@ -95,37 +95,82 @@ focus_mode = 0
 theme_override_font_sizes/font_size = 20
 text = "開始"
 
-[node name="Calibrate" type="Button" parent="Center/Column" unique_id=1906925102]
+[node name="Rounds" type="HBoxContainer" parent="Center/Column" unique_id=1915060756]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(150, 44)
+layout_mode = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="Round1" type="Button" parent="Center/Column/Rounds" unique_id=460792110]
+custom_minimum_size = Vector2(72, 36)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 16
+text = "第1關"
+metadata/round = 1
+
+[node name="Round2" type="Button" parent="Center/Column/Rounds" unique_id=500503383]
+custom_minimum_size = Vector2(72, 36)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 16
+text = "第2關"
+metadata/round = 2
+
+[node name="Round3" type="Button" parent="Center/Column/Rounds" unique_id=553424732]
+custom_minimum_size = Vector2(72, 36)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 16
+text = "第3關"
+metadata/round = 3
+
+[node name="Options" type="HBoxContainer" parent="Center/Column" unique_id=189549053]
+layout_mode = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="Calibrate" type="Button" parent="Center/Column/Options" unique_id=1906925102]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(112, 44)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 20
 text = "延遲校準"
 
+[node name="Settings" type="Button" parent="Center/Column/Options" unique_id=1204885585]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(112, 44)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 20
+text = "設定"
+
 [node name="CalibInfo" type="Label" parent="Center/Column" unique_id=448794643]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_font_sizes/font_size = 14
 theme_override_colors/font_color = Color(1, 0.94, 0.78, 1)
 theme_override_colors/font_outline_color = Color(0.04, 0.08, 0.12, 1)
 theme_override_constants/outline_size = 2
-theme_override_font_sizes/font_size = 14
 text = "目前延遲校準：0 ms"
 horizontal_alignment = 1
 
 [node name="Credit" type="Label" parent="." unique_id=1080359712]
-layout_mode = 0
-anchor_left = 1.0
+layout_mode = 1
+anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -330.0
-offset_top = -26.0
-offset_right = -10.0
-offset_bottom = -6.0
+offset_left = 8.0
+offset_top = -20.0
+offset_right = -8.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 11
 theme_override_colors/font_color = Color(1, 0.94, 0.78, 1)
 theme_override_colors/font_outline_color = Color(0.04, 0.08, 0.12, 1)
-theme_override_constants/outline_size = 2
-theme_override_font_sizes/font_size = 12
-text = "銀魂同人・非商業｜AI 美術・合成音樂"
-horizontal_alignment = 2
+theme_override_constants/outline_size = 3
+text = "銀魂二次創作同人遊戲・非官方・免費・不營利｜角色、歌曲、台詞版權歸原作者所有"
+horizontal_alignment = 1

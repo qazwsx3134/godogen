@@ -61,7 +61,7 @@ func _on_judged(index: int, grade: StringName, _offset: float, wrong_lane: int) 
 			s.drop()
 	else:
 		var lane: int = hits[index].lane
-		if not play_clip(eat_clips[lane]):
+		if not play_clip(eat_clips[lane], eat_volume_db):
 			%Chomp.play()
 		_cast[lane].call("play_pose", &"eat", 0.28)
 		_cast[lane].bump(0.16 if grade == &"ace" else 0.1, 0.14)

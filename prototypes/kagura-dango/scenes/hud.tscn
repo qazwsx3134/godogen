@@ -4,26 +4,51 @@
 [ext_resource type="PackedScene" path="res://scenes/note_track.tscn" id="2_track"]
 [ext_resource type="AudioStream" path="res://assets/sfx/hit.ogg" id="3_hit"]
 [ext_resource type="AudioStream" path="res://assets/sfx/hit-bad.ogg" id="4_hitbad"]
+[ext_resource type="Script" path="res://scripts/safe_area.gd" id="5_safe"]
 
 [node name="HUD" type="CanvasLayer" unique_id=169533805]
 script = ExtResource("1_ahhtf")
 
-[node name="JudgeLabel" type="Label" parent="." unique_id=866634921]
+[node name="SafeArea" type="Control" parent="." unique_id=1176855294]
 unique_name_in_owner = true
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -160.0
-offset_top = 88.0
-offset_right = 160.0
-offset_bottom = 136.0
-theme_override_font_sizes/font_size = 34
-theme_override_colors/font_color = Color(0.16, 0.15, 0.24, 1)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("5_safe")
+
+[node name="JudgeLabel" type="Label" parent="SafeArea" unique_id=866634921]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 6.0
+offset_top = 84.0
+offset_right = 106.0
+offset_bottom = 108.0
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(1, 0.96, 0.84, 1)
+theme_override_colors/font_outline_color = Color(0.16, 0.15, 0.24, 1)
+theme_override_constants/outline_size = 5
 horizontal_alignment = 1
 
-[node name="CallLabel" type="Label" parent="." unique_id=1873520311]
+[node name="ComboLabel" type="Label" parent="SafeArea" unique_id=866634922]
 unique_name_in_owner = true
-anchors_preset = 5
+layout_mode = 0
+offset_left = 6.0
+offset_top = 106.0
+offset_right = 106.0
+offset_bottom = 128.0
+theme_override_font_sizes/font_size = 15
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.36, 0.06, 0.08, 1)
+theme_override_constants/outline_size = 5
+horizontal_alignment = 1
+
+[node name="CallLabel" type="Label" parent="SafeArea" unique_id=1873520311]
+unique_name_in_owner = true
+layout_mode = 0
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -160.0
@@ -34,8 +59,9 @@ theme_override_font_sizes/font_size = 28
 theme_override_colors/font_color = Color(0.8, 0.12, 0.15, 1)
 horizontal_alignment = 1
 
-[node name="RoundLabel" type="Label" parent="." unique_id=2135994178]
+[node name="RoundLabel" type="Label" parent="SafeArea" unique_id=2135994178]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 10.0
 offset_top = 8.0
 offset_right = 200.0
@@ -43,9 +69,9 @@ offset_bottom = 28.0
 theme_override_font_sizes/font_size = 13
 theme_override_colors/font_color = Color(0.98, 0.93, 0.84, 1)
 
-[node name="Score" type="Label" parent="." unique_id=1007181284]
+[node name="Score" type="Label" parent="SafeArea" unique_id=1007181284]
 unique_name_in_owner = true
-anchors_preset = 1
+layout_mode = 0
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -200.0
@@ -60,10 +86,10 @@ text = "0"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="ScoreGain" type="Label" parent="." unique_id=1007181285]
+[node name="ScoreGain" type="Label" parent="SafeArea" unique_id=1007181285]
 unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0)
-anchors_preset = 1
+layout_mode = 0
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -200.0
@@ -77,9 +103,9 @@ theme_override_constants/outline_size = 4
 text = "+0"
 horizontal_alignment = 2
 
-[node name="Hint" type="Label" parent="." unique_id=2120160076]
+[node name="Hint" type="Label" parent="SafeArea" unique_id=2120160076]
 unique_name_in_owner = true
-anchors_preset = 7
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
@@ -92,9 +118,10 @@ theme_override_font_sizes/font_size = 14
 theme_override_colors/font_color = Color(0.98, 0.93, 0.84, 1)
 horizontal_alignment = 1
 
-[node name="Lives" type="RichTextLabel" parent="." unique_id=1450021337]
+[node name="Lives" type="RichTextLabel" parent="SafeArea" unique_id=1450021337]
 unique_name_in_owner = true
 visible = false
+layout_mode = 0
 offset_left = 20.0
 offset_top = 86.0
 offset_right = 200.0
@@ -107,17 +134,20 @@ bbcode_enabled = true
 fit_content = true
 scroll_active = false
 
-[node name="NoteTrack" parent="." unique_id=1450021410 instance=ExtResource("2_track")]
+[node name="NoteTrack" parent="SafeArea" unique_id=1450021410 instance=ExtResource("2_track")]
 unique_name_in_owner = true
+fly_target = NodePath("../Score")
 
 [node name="Hit" type="AudioStreamPlayer" parent="." unique_id=144642294]
 unique_name_in_owner = true
 stream = ExtResource("3_hit")
 volume_db = -3.0
 max_polyphony = 4
+bus = &"SFX"
 
 [node name="HitBad" type="AudioStreamPlayer" parent="." unique_id=962651908]
 unique_name_in_owner = true
 stream = ExtResource("4_hitbad")
 volume_db = -3.0
 max_polyphony = 4
+bus = &"SFX"

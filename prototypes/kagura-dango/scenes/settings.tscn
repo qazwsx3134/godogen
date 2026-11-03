@@ -1,0 +1,154 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/settings_screen.gd" id="1_set"]
+[ext_resource type="Texture2D" path="res://assets/sprites/title_art.png" id="2_art"]
+
+[sub_resource type="StyleBoxFlat" id="Panel_set"]
+content_margin_left = 22.0
+content_margin_top = 14.0
+content_margin_right = 22.0
+content_margin_bottom = 14.0
+bg_color = Color(0.06, 0.12, 0.19, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.94, 0.72, 0.39, 0.96)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="Settings" type="Control" unique_id=396391037]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_set")
+
+[node name="Art" type="TextureRect" parent="." unique_id=1196832204]
+modulate = Color(1, 1, 1, 0.5)
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_art")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Center" type="CenterContainer" parent="." unique_id=1022207693]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Panel" type="PanelContainer" parent="Center" unique_id=1548444396]
+layout_mode = 2
+theme_override_styles/panel = SubResource("Panel_set")
+
+[node name="Column" type="VBoxContainer" parent="Center/Panel" unique_id=1997532133]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Heading" type="Label" parent="Center/Panel/Column" unique_id=1150389892]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+theme_override_colors/font_color = Color(1, 0.94, 0.78, 1)
+text = "設定"
+horizontal_alignment = 1
+
+[node name="Grid" type="GridContainer" parent="Center/Panel/Column" unique_id=89723933]
+layout_mode = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 12
+columns = 2
+
+[node name="MusicLabel" type="Label" parent="Center/Panel/Column/Grid" unique_id=506061941]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(1, 0.94, 0.78, 1)
+text = "音樂"
+
+[node name="Music" type="HSlider" parent="Center/Panel/Column/Grid" unique_id=2091980643]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(220, 24)
+layout_mode = 2
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.05
+value = 1.0
+metadata/bus = &"Music"
+
+[node name="SfxLabel" type="Label" parent="Center/Panel/Column/Grid" unique_id=1631346266]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(1, 0.94, 0.78, 1)
+text = "音效"
+
+[node name="Sfx" type="HSlider" parent="Center/Panel/Column/Grid" unique_id=1698331633]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(220, 24)
+layout_mode = 2
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.05
+value = 1.0
+metadata/bus = &"SFX"
+
+[node name="VoiceLabel" type="Label" parent="Center/Panel/Column/Grid" unique_id=926119421]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(1, 0.94, 0.78, 1)
+text = "台詞"
+
+[node name="Voice" type="HSlider" parent="Center/Panel/Column/Grid" unique_id=1512780583]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(220, 24)
+layout_mode = 2
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.05
+value = 1.0
+metadata/bus = &"Voice"
+
+[node name="HapticsLabel" type="Label" parent="Center/Panel/Column/Grid" unique_id=1127176862]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(1, 0.94, 0.78, 1)
+text = "震動"
+
+[node name="Haptics" type="CheckButton" parent="Center/Panel/Column/Grid" unique_id=265173743]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+focus_mode = 0
+button_pressed = true
+
+[node name="HapticsNote" type="Label" parent="Center/Panel/Column" unique_id=2006164644]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(1, 0.94, 0.78, 0.7)
+text = "這台裝置沒有震動功能"
+horizontal_alignment = 1
+
+[node name="Back" type="Button" parent="Center/Panel/Column" unique_id=363841729]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme_override_font_sizes/font_size = 20
+text = "返回"
+
+[node name="Sample" type="AudioStreamPlayer" parent="." unique_id=667749513]
+unique_name_in_owner = true

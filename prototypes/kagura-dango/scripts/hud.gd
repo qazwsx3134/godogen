@@ -1,5 +1,6 @@
 extends CanvasLayer
-## Round HUD: judge text, referee call-outs, the round title and the match score (added up over all three rounds).
+## Round HUD: judge text and combo beside the judge circle, referee call-outs, the round title and the match score
+## (added up over all three rounds).
 ## A CanvasLayer, so camera shake never moves it.
 
 @export var hint_text := ""
@@ -14,6 +15,11 @@ var _shown := 0
 var _roll: Tween
 var _pop: Tween
 var _float: Tween
+var _combo_pop: Tween
+
+## Combo shows from this many hits in a row; every COMBO_MILESTONE hits it pops bigger and gold.
+const COMBO_SHOWN := 3
+const COMBO_MILESTONE := 50
 
 
 func _ready() -> void:
@@ -23,7 +29,10 @@ func _ready() -> void:
 func show_judge(text: String) -> void:
 	_judge.text = text
 	_judge.modulate.a = 1.0
+	_judge.pivot_offset = _judge.size * 0.5
+	_judge.scale = Vector2.ONE * 1.3
 	var tw := create_tween()
+	tw.tween_property(_judge, "scale", Vector2.ONE, 0.12).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	tw.tween_interval(0.3)
 	tw.tween_property(_judge, "modulate:a", 0.0, 0.25)
 
@@ -49,6 +58,24 @@ func play_hit(grade: StringName) -> void:
 		%Hit.play()
 	elif grade == &"barely":
 		%HitBad.play()
+
+
+## Hits in a row: hidden below COMBO_SHOWN, pops on every hit, bigger and gold on each COMBO_MILESTONE.
+func set_combo(n: int) -> void:
+	var combo: Label = %ComboLabel
+	combo.text = "%d 連擊" % n if n >= COMBO_SHOWN else ""
+	if n < COMBO_SHOWN:
+		return
+	var milestone := n % COMBO_MILESTONE == 0
+	combo.modulate = Color(1, 0.82, 0.2) if milestone else Color.WHITE
+	combo.pivot_offset = combo.size * 0.5
+	combo.scale = Vector2.ONE * (1.8 if milestone else 1.2)
+	if _combo_pop:
+		_combo_pop.kill()
+	_combo_pop = create_tween()
+	_combo_pop.tween_property(combo, "scale", Vector2.ONE, 0.35 if milestone else 0.15).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	if milestone:
+		call_out("%d 連擊！" % n)
 
 
 ## Shows the score at once (a round starting).

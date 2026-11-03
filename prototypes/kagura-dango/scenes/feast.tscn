@@ -15,7 +15,7 @@
 script = ExtResource("1_gvuwm")
 eat_clips = Array[String](["", "", "shinpachi_eat"])
 chart_path = "res://data/songs/feast2.json"
-kagura_girth = Vector2(1.15, 1.45)
+kagura_girth = Vector2(1, 1.1)
 start_voice = "referee_start"
 
 [node name="Conductor" type="Node" parent="." unique_id=1707030465]
@@ -37,12 +37,14 @@ scale = Vector2(0.6, 0.6)
 [node name="Gintoki" parent="." unique_id=173833660 instance=ExtResource("5_0b2nc")]
 unique_name_in_owner = true
 position = Vector2(110, 290)
+fullness = 1.0
 
 [node name="Shinpachi" parent="." unique_id=1500710848 instance=ExtResource("5_0b2nc")]
 unique_name_in_owner = true
 position = Vector2(300, 300)
 scale = Vector2(0.8, 0.8)
 character_id = &"shinpachi"
+fullness = 1.0
 
 [node name="Kagura" parent="." unique_id=1287408363 instance=ExtResource("5_0b2nc")]
 unique_name_in_owner = true
@@ -65,14 +67,18 @@ unique_name_in_owner = true
 [node name="Chomp" type="AudioStreamPlayer" parent="." unique_id=1955713910]
 unique_name_in_owner = true
 stream = ExtResource("10_d4p2e")
+volume_db = -8.0
+bus = &"SFX"
 
 [node name="Miss" type="AudioStreamPlayer" parent="." unique_id=545268204]
 unique_name_in_owner = true
 stream = ExtResource("11_kgisl")
+bus = &"SFX"
 
 [node name="Whiff" type="AudioStreamPlayer" parent="." unique_id=904862157]
 unique_name_in_owner = true
 stream = ExtResource("12_ua1kt")
+bus = &"SFX"
 
 [node name="ServeOrigin" type="Marker2D" parent="." unique_id=1753763446]
 unique_name_in_owner = true

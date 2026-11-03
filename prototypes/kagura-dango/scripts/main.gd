@@ -1,7 +1,7 @@
 extends Node
 ## Match flow from data/match.json: title → opening (referee) → for each round: its story → the round → its result
 ## → … → ending (win or lose, then the birthday) → final result. Title → calibration on the side.
-## The dialogue (story screens) plays the looping BGM (%Bgm); it fades out when any other screen comes up.
+## The dialogue (story screens) and the settings screen play the looping BGM (%Bgm); it fades out on any other screen.
 ## On the web with ?qa=1 (or `-- --qa` natively) every frame publishes the clock readings as window.__dango,
 ## which tools/web_clock_probe.mjs reads to check the audio clock in a real browser.
 
@@ -9,6 +9,7 @@ const TITLE := preload("res://scenes/title.tscn")
 const STORY := preload("res://scenes/story.tscn")
 const RESULT := preload("res://scenes/result.tscn")
 const CALIBRATE := preload("res://scenes/calibrate.tscn")
+const SETTINGS := preload("res://scenes/settings.tscn")
 
 var screen: Node
 var match_data := {}
@@ -34,8 +35,8 @@ func _ready() -> void:
 	show_title()
 
 
-## QA only (?qa=1&round=N, or `-- --qa --round=N`): straight into round N with the skewers a perfect run would
-## have eaten before it, so Kagura's size and the stage match that round.
+## QA (?qa=1&round=N, or `-- --qa --round=N`) and the title's 第N關 buttons: straight into round N (no story first)
+## with the skewers and score a perfect run would have before it.
 func _qa_round() -> int:
 	if not _qa:
 		return 0
@@ -50,10 +51,14 @@ func _qa_round() -> int:
 
 func _jump_to_round(n: int) -> void:
 	MatchState.reset()
-	var before: Dictionary = [{}, {gintoki = 8, shinpachi = 9, kagura = 13, score = 30000}, {gintoki = 8, shinpachi = 23, kagura = 36, score = 97000}][n - 1]
-	for who in [&"gintoki", &"shinpachi", &"kagura"]:
-		MatchState.eaten[who] = before.get(String(who), 0)
-	MatchState.score = before.get("score", 0)
+	for k in n - 1:  # every cue of the earlier rounds hit: their skewers eaten (by lane owner) and scored as aces
+		var c: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(match_data.stages[k].chart))
+		for cue in c.cues:
+			MatchState.score += Judge.SCORE[&"ace"]
+			if c.has("skewers") and cue.type not in c.skewers:
+				continue
+			var lane := int(c.get("lanes", {}).get(cue.type, -1))
+			MatchState.eaten[[&"gintoki", &"shinpachi", &"kagura"][lane] if lane >= 0 else &"kagura"] += 1
 	round_index = n - 1
 	play_round()
 
@@ -62,6 +67,8 @@ func show_title() -> void:
 	var s := _swap(TITLE)
 	s.start_requested.connect(start_match)
 	s.calibrate_requested.connect(show_calibrate)
+	s.round_requested.connect(_jump_to_round)
+	s.settings_requested.connect(show_settings)
 
 
 func start_match() -> void:
@@ -114,6 +121,11 @@ func show_story(lines: Array, then: Callable) -> void:
 	s.play(lines)
 
 
+func show_settings() -> void:
+	var s := _swap(SETTINGS)
+	s.back_requested.connect(show_title)
+
+
 func show_calibrate() -> void:
 	var s := _swap(CALIBRATE)
 	s.back_requested.connect(show_title)
@@ -130,7 +142,9 @@ func _put(node: Node) -> Node:
 		screen.queue_free()
 	screen = node
 	%Screen.add_child(screen)
-	_set_bgm(node.scene_file_path == STORY.resource_path)
+	for b in node.find_children("*", "BaseButton", true, false):
+		b.pressed.connect(%Ui.play)
+	_set_bgm(node.scene_file_path in [STORY.resource_path, SETTINGS.resource_path])  # settings: hear the music level
 	return screen
 
 
@@ -149,7 +163,7 @@ func _set_bgm(on: bool) -> void:
 			bgm.play()
 		_bgm_fade.tween_property(bgm, "volume_db", _bgm_db, 0.8)
 	else:
-		_bgm_fade.tween_property(bgm, "volume_db", -40.0, 0.6)
+		_bgm_fade.tween_property(bgm, "volume_db", -40.0, 1.2).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_SINE)
 		_bgm_fade.tween_callback(bgm.stop)
 
 

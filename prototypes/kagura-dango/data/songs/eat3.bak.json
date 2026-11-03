@@ -9,7 +9,7 @@
 	"offset": 20.04,
 	"intensity": 1.0,
 	"count_in_beats": 8.0,
-	"end_beat": 133,
+	"end_beat": 123,
 	"rival": 18.0,
 	"land_after": {
 		"anko": 2.0,
@@ -28,15 +28,19 @@
 		},
 		{
 			"beat": 7.0,
-			"type": "anko"
+			"type": "soy"
 		},
 		{
 			"beat": 8.0,
-			"type": "tri"
+			"type": "anko"
 		},
 		{
 			"beat": 9.0,
-			"type": "anko"
+			"type": "soy"
+		},
+		{
+			"beat": 9.5,
+			"type": "soy"
 		},
 		{
 			"beat": 10.0,
@@ -44,39 +48,27 @@
 		},
 		{
 			"beat": 11.0,
-			"type": "anko"
-		},
-		{
-			"beat": 11.5,
-			"type": "tri"
+			"type": "soy"
 		},
 		{
 			"beat": 12.0,
 			"type": "anko"
 		},
 		{
-			"beat": 12.5,
-			"type": "tri"
-		},
-		{
 			"beat": 13.0,
-			"type": "anko"
-		},
-		{
-			"beat": 13.5,
-			"type": "tri"
+			"type": "soy"
 		},
 		{
 			"beat": 14.0,
-			"type": "anko"
+			"type": "tri"
 		},
 		{
-			"beat": 14.5,
+			"beat": 15.0,
 			"type": "tri"
 		},
 		{
 			"beat": 16.0,
-			"type": "soy"
+			"type": "anko"
 		},
 		{
 			"beat": 17.0,
@@ -84,19 +76,27 @@
 		},
 		{
 			"beat": 18.0,
-			"type": "soy"
+			"type": "tri"
 		},
 		{
 			"beat": 19.0,
-			"type": "anko"
+			"type": "tri"
 		},
 		{
 			"beat": 20.0,
+			"type": "anko"
+		},
+		{
+			"beat": 20.5,
 			"type": "tri"
 		},
 		{
 			"beat": 21.0,
 			"type": "anko"
+		},
+		{
+			"beat": 21.5,
+			"type": "soy"
 		},
 		{
 			"beat": 22.0,
@@ -136,27 +136,15 @@
 		},
 		{
 			"beat": 31.0,
-			"type": "tri"
-		},
-		{
-			"beat": 31.5,
-			"type": "tri"
+			"type": "anko"
 		},
 		{
 			"beat": 32.0,
 			"type": "tri"
 		},
 		{
-			"beat": 32.5,
-			"type": "tri"
-		},
-		{
 			"beat": 33.0,
-			"type": "tri"
-		},
-		{
-			"beat": 33.5,
-			"type": "tri"
+			"type": "soy"
 		},
 		{
 			"beat": 34.0,
@@ -167,51 +155,55 @@
 			"type": "anko"
 		},
 		{
-			"beat": 35.5,
-			"type": "anko"
-		},
-		{
 			"beat": 36.0,
-			"type": "anko"
-		},
-		{
-			"beat": 36.5,
-			"type": "anko"
+			"type": "tri"
 		},
 		{
 			"beat": 37.0,
-			"type": "anko"
-		},
-		{
-			"beat": 37.5,
-			"type": "anko"
+			"type": "soy"
 		},
 		{
 			"beat": 38.0,
+			"type": "tri"
+		},
+		{
+			"beat": 39.0,
 			"type": "anko"
 		},
 		{
 			"beat": 40.0,
-			"type": "soy"
+			"type": "tri"
 		},
 		{
 			"beat": 40.5,
-			"type": "soy"
+			"type": "tri"
 		},
 		{
 			"beat": 41.0,
-			"type": "soy"
+			"type": "tri"
 		},
 		{
 			"beat": 42.0,
 			"type": "anko"
 		},
 		{
+			"beat": 43.0,
+			"type": "soy"
+		},
+		{
 			"beat": 44.0,
 			"type": "tri"
 		},
 		{
+			"beat": 45.0,
+			"type": "soy"
+		},
+		{
 			"beat": 46.0,
+			"type": "soy"
+		},
+		{
+			"beat": 47.0,
 			"type": "soy"
 		},
 		{
@@ -228,7 +220,7 @@
 		},
 		{
 			"beat": 51.0,
-			"type": "tri"
+			"type": "soy"
 		},
 		{
 			"beat": 52.0,
@@ -236,7 +228,7 @@
 		},
 		{
 			"beat": 53.0,
-			"type": "tri"
+			"type": "anko"
 		},
 		{
 			"beat": 54.0,
@@ -244,23 +236,27 @@
 		},
 		{
 			"beat": 55.0,
-			"type": "anko"
+			"type": "tri"
 		},
 		{
-			"beat": 55.0,
-			"type": "soy"
+			"beat": 55.5,
+			"type": "anko"
 		},
 		{
 			"beat": 56.0,
 			"type": "soy"
 		},
 		{
+			"beat": 56.5,
+			"type": "tri"
+		},
+		{
 			"beat": 57.0,
-			"type": "soy"
+			"type": "anko"
 		},
 		{
 			"beat": 58.0,
-			"type": "anko"
+			"type": "tri"
 		},
 		{
 			"beat": 59.0,
@@ -268,26 +264,46 @@
 		},
 		{
 			"beat": 60.0,
-			"type": "anko"
+			"type": "soy"
+		},
+		{
+			"beat": 60.5,
+			"type": "tri"
 		},
 		{
 			"beat": 61.0,
 			"type": "anko"
 		},
 		{
+			"beat": 61.5,
+			"type": "tri"
+		},
+		{
 			"beat": 62.0,
-			"type": "soy"
+			"type": "tri"
 		},
 		{
 			"beat": 63.0,
 			"type": "soy"
 		},
 		{
+			"beat": 63.5,
+			"type": "tri"
+		},
+		{
 			"beat": 64.0,
+			"type": "anko"
+		},
+		{
+			"beat": 64.5,
 			"type": "soy"
 		},
 		{
 			"beat": 65.0,
+			"type": "tri"
+		},
+		{
+			"beat": 65.5,
 			"type": "tri"
 		},
 		{
@@ -307,31 +323,23 @@
 			"type": "anko"
 		},
 		{
-			"beat": 68.0,
-			"type": "tri"
-		},
-		{
 			"beat": 68.5,
 			"type": "tri"
 		},
 		{
 			"beat": 69.0,
-			"type": "tri"
+			"type": "anko"
 		},
 		{
 			"beat": 69.5,
-			"type": "tri"
-		},
-		{
-			"beat": 70.0,
 			"type": "soy"
 		},
 		{
-			"beat": 70.5,
+			"beat": 70.0,
 			"type": "tri"
 		},
 		{
-			"beat": 71.0,
+			"beat": 70.5,
 			"type": "tri"
 		},
 		{
@@ -340,10 +348,6 @@
 		},
 		{
 			"beat": 72.0,
-			"type": "soy"
-		},
-		{
-			"beat": 72.5,
 			"type": "tri"
 		},
 		{
@@ -356,22 +360,14 @@
 		},
 		{
 			"beat": 74.0,
-			"type": "soy"
-		},
-		{
-			"beat": 74.5,
 			"type": "tri"
 		},
 		{
 			"beat": 75.0,
-			"type": "tri"
+			"type": "anko"
 		},
 		{
 			"beat": 75.5,
-			"type": "tri"
-		},
-		{
-			"beat": 76.0,
 			"type": "soy"
 		},
 		{
@@ -380,7 +376,7 @@
 		},
 		{
 			"beat": 77.0,
-			"type": "tri"
+			"type": "anko"
 		},
 		{
 			"beat": 77.5,
@@ -389,10 +385,6 @@
 		{
 			"beat": 78.0,
 			"type": "soy"
-		},
-		{
-			"beat": 78.5,
-			"type": "tri"
 		},
 		{
 			"beat": 79.0,
@@ -416,30 +408,34 @@
 		},
 		{
 			"beat": 82.5,
-			"type": "tri"
+			"type": "anko"
 		},
 		{
 			"beat": 83.0,
+			"type": "soy"
+		},
+		{
+			"beat": 83.5,
 			"type": "tri"
 		},
 		{
 			"beat": 84.0,
-			"type": "tri"
+			"type": "anko"
 		},
 		{
 			"beat": 84.5,
-			"type": "tri"
+			"type": "soy"
 		},
 		{
 			"beat": 85.0,
 			"type": "tri"
 		},
 		{
-			"beat": 86.0,
-			"type": "tri"
+			"beat": 85.5,
+			"type": "soy"
 		},
 		{
-			"beat": 86.5,
+			"beat": 86.0,
 			"type": "tri"
 		},
 		{
@@ -447,23 +443,43 @@
 			"type": "tri"
 		},
 		{
-			"beat": 88.0,
-			"type": "soy"
-		},
-		{
-			"beat": 89.0,
-			"type": "tri"
-		},
-		{
-			"beat": 90.0,
+			"beat": 87.5,
 			"type": "anko"
 		},
 		{
-			"beat": 91.0,
+			"beat": 88.0,
+			"type": "tri"
+		},
+		{
+			"beat": 89.0,
 			"type": "soy"
 		},
 		{
+			"beat": 90.0,
+			"type": "tri"
+		},
+		{
+			"beat": 90.5,
+			"type": "soy"
+		},
+		{
+			"beat": 91.0,
+			"type": "anko"
+		},
+		{
+			"beat": 91.5,
+			"type": "tri"
+		},
+		{
 			"beat": 92.0,
+			"type": "tri"
+		},
+		{
+			"beat": 92.5,
+			"type": "tri"
+		},
+		{
+			"beat": 93.0,
 			"type": "tri"
 		},
 		{
@@ -483,6 +499,10 @@
 			"type": "soy"
 		},
 		{
+			"beat": 97.5,
+			"type": "anko"
+		},
+		{
 			"beat": 98.0,
 			"type": "tri"
 		},
@@ -500,15 +520,27 @@
 		},
 		{
 			"beat": 102.0,
+			"type": "anko"
+		},
+		{
+			"beat": 102.5,
 			"type": "tri"
 		},
 		{
 			"beat": 103.0,
-			"type": "anko"
+			"type": "tri"
+		},
+		{
+			"beat": 103.5,
+			"type": "tri"
 		},
 		{
 			"beat": 104.0,
-			"type": "soy"
+			"type": "anko"
+		},
+		{
+			"beat": 104.5,
+			"type": "tri"
 		},
 		{
 			"beat": 105.0,
@@ -520,23 +552,31 @@
 		},
 		{
 			"beat": 106.0,
-			"type": "tri"
-		},
-		{
-			"beat": 106.5,
 			"type": "anko"
 		},
 		{
+			"beat": 106.5,
+			"type": "tri"
+		},
+		{
+			"beat": 107.0,
+			"type": "tri"
+		},
+		{
 			"beat": 107.5,
+			"type": "tri"
+		},
+		{
+			"beat": 108.0,
 			"type": "soy"
 		},
 		{
-			"beat": 108.5,
-			"type": "tri"
+			"beat": 109.0,
+			"type": "soy"
 		},
 		{
 			"beat": 110.0,
-			"type": "tri"
+			"type": "anko"
 		},
 		{
 			"beat": 110.5,
@@ -547,15 +587,31 @@
 			"type": "tri"
 		},
 		{
-			"beat": 112.0,
-			"type": "anko"
+			"beat": 111.5,
+			"type": "tri"
 		},
 		{
-			"beat": 113.0,
+			"beat": 112.0,
 			"type": "soy"
 		},
 		{
+			"beat": 112.5,
+			"type": "tri"
+		},
+		{
+			"beat": 113.0,
+			"type": "tri"
+		},
+		{
+			"beat": 113.5,
+			"type": "tri"
+		},
+		{
 			"beat": 114.0,
+			"type": "anko"
+		},
+		{
+			"beat": 114.5,
 			"type": "tri"
 		},
 		{
@@ -563,15 +619,19 @@
 			"type": "tri"
 		},
 		{
-			"beat": 116.0,
+			"beat": 115.5,
 			"type": "tri"
 		},
 		{
-			"beat": 116.5,
-			"type": "tri"
+			"beat": 116.0,
+			"type": "soy"
 		},
 		{
 			"beat": 117.0,
+			"type": "soy"
+		},
+		{
+			"beat": 118.0,
 			"type": "tri"
 		}
 	]

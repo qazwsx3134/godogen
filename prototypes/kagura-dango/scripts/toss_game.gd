@@ -1,10 +1,19 @@
 extends RhythmLevel
 ## Round 3: Gintoki and Shinpachi, now fat, take turns throwing skewers like darts at Kagura; each lands in her
 ## mouth land_after beats later (toss 2, quick 1, big 2). Tap anywhere on the landing beat. A miss hits her in the
-## eye and costs a life (the chart's "lives"); the round is lost at 0. Kagura keeps growing rounder.
+## eye and costs a life (the chart's "lives"); when they run out she is knocked flat on the ground (skewers still land
+## at her mouth, hits still score) and gets back up down_seconds later with her lives refilled. Kagura keeps growing
+## rounder.
 
 const SKEWER := preload("res://scenes/skewer.tscn")
 
+## Kagura's angle once knocked down (rotating about her feet; negative tips her head left, towards the middle, since she
+## stands at the right edge).
+@export var down_angle_deg := -90.0
+## Song seconds she stays on the ground before getting back up.
+@export var down_seconds := 4.0
+
+var _up_at := -1.0
 ## Kagura's eating sound: a clip id in assets/voice/ (empty or missing = the Chomp sound).
 @export var eat_clip := "shinpachi_eat"
 
@@ -26,6 +35,8 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	super(delta)
 	var t := conductor.time()
+	if down and _up_at >= 0.0 and t >= _up_at:
+		_stand_up()
 	for s in _skewers.values():
 		if is_instance_valid(s):
 			s.place(t)
@@ -55,10 +66,11 @@ func _on_judged(index: int, grade: StringName, _offset: float, _wrong_lane: int)
 		if is_instance_valid(s):
 			s.drop()
 	else:
-		if not play_clip(eat_clip):
+		if not play_clip(eat_clip, eat_volume_db):
 			%Chomp.play()
-		_kagura.call("play_pose", &"eat", 0.3)
-		_kagura.bump(0.18 if grade == &"ace" else 0.1, 0.14)
+		if not down:  # lying on the ground: she keeps her knocked-out pose
+			_kagura.call("play_pose", &"eat", 0.3)
+			_kagura.bump(0.18 if grade == &"ace" else 0.1, 0.14)
 		if is_instance_valid(s):
 			s.eat()
 		if grade == &"ace":
@@ -71,8 +83,26 @@ func _on_judged(index: int, grade: StringName, _offset: float, _wrong_lane: int)
 
 func _on_hurt() -> void:
 	_kagura.call("play_pose", &"eye", 0.6)
-	say("kagura_eye", true)
 	shake(6.0, 0.25)
+
+
+## Out of lives: the full 「痛苦倒地」 line, and she falls over backwards onto the ground (rotating about her feet).
+func _on_knocked_down() -> void:
+	say("kagura_eye", true)
+	shake(10.0, 0.4)
+	_kagura.call("play_pose", &"eye", 9999.0)
+	var tw := create_tween()
+	tw.tween_property(_kagura, "rotation", deg_to_rad(down_angle_deg), 0.45).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
+	_up_at = conductor.time() + down_seconds
+
+
+func _stand_up() -> void:
+	_up_at = -1.0
+	get_up()
+	var tw := create_tween()
+	tw.tween_property(_kagura, "rotation", 0.0, 0.35).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_kagura.call("play_pose", &"idle", 0.05)  # ends the knocked-out pose
+	_kagura.bump(0.2, 0.3)
 
 
 func _on_whiff(_lane: int) -> void:
@@ -81,12 +111,10 @@ func _on_whiff(_lane: int) -> void:
 
 
 func _refresh_bodies() -> void:
-	%Gintoki.fat = true  # both ate themselves fat by the final round
-	%Shinpachi.fat = true
 	var tier_before: int = _kagura.tier()
 	_kagura.fullness = MatchState.kagura_fullness()
 	_kagura.girth = kagura_girth_now()
-	if _running and _kagura.tier() > tier_before:  # she just grew into her roundest body mid-round: make it land
+	if _running and not down and _kagura.tier() > tier_before:  # she just grew into her roundest body mid-round: make it land
 		_kagura.bump(0.3, 0.4)
 		shake(5.0, 0.25)
 		say("kagura_now")

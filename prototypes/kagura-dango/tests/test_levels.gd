@@ -40,13 +40,18 @@ func _expected_eaten() -> Dictionary:
 
 
 func _run() -> void:
+	# Play a snapshot of each chart: the author may be saving charts in the chart maker while this runs.
 	for r in ROUNDS:
+		var copy := OS.get_temp_dir().path_join("kagura-dango-test-" + String(r[1]).get_file())
+		DirAccess.copy_absolute(ProjectSettings.globalize_path(r[1]), copy)
+		r[1] = copy
 		r[2] = _chart(r).cues.size()
 	_check_arc()
 	for r in ROUNDS:
 		_check_chart(r)
 	await _check_round_one_serving()
 	await _check_voice()
+	await _check_hype()
 	# A whole match with exact taps on the right lanes: every round all ace, Kagura grows, the team wins.
 	MatchState.reset()
 	var girth := []
@@ -54,6 +59,7 @@ func _run() -> void:
 	for r in ROUNDS:
 		var res := await _play(r, {})
 		_expect(res.score == 100 and res.counts.ace == r[2], "%s exact taps: all %d ace (got %s)" % [r[1], r[2], res])
+		_expect(res.max_combo == r[2] and res.full_combo, "%s exact taps: a full combo of %d (got %d)" % [r[1], r[2], res.max_combo])
 		_expect(res.points == r[2] * Judge.SCORE[&"ace"], "%s: every ace adds %d points (got %d)" % [r[1], Judge.SCORE[&"ace"], res.points])
 		_expect(_last_score_text == Judge.format_points(MatchState.score), "the HUD shows the match score %d (got %s)" % [MatchState.score, _last_score_text])
 		girth.append(_last_girth)
@@ -64,7 +70,7 @@ func _run() -> void:
 	_expect(MatchState.won(), "a perfect match is won")
 	_expect(tiers[2] == [2, 3], "round 3 opens with Kagura's round 2 body and grows into the roundest (got %s)" % [tiers])
 	_expect(MatchState.eaten == _expected_eaten(), "each skewer went to its lane's eater (got %s, want %s)" % [MatchState.eaten, _expected_eaten()])
-	_expect(girth[0] < girth[1] and girth[1] < girth[2] and girth[2] > 1.7, "Kagura grows every round (%s)" % [girth])
+	_expect(girth[1] < 1.14 and girth[2] > 1.7, "Kagura stays slim through round 2 and is roundest after round 3 (%s)" % [girth])
 	_expect(_intensity_seen == [1, 2, 3], "the stage gets livelier each round (%s)" % [_intensity_seen])
 	# Grades.
 	MatchState.reset()
@@ -80,18 +86,20 @@ func _run() -> void:
 	res = await _play(ROUNDS[2], {never = true, no_lives = true})
 	_expect(res.counts.miss == ROUNDS[2][2] and res.score == 0, "no taps: every cue missed (got %s)" % [res])
 	_expect(MatchState.team_total() == 0 and MatchState.score == 0, "missed skewers are not eaten and score nothing")
-	# Lives: only the final round has them. Three misses there hit Kagura in the eye and lose the round early;
-	# rounds 1 and 2 never fail, whatever is missed.
+	# Lives: only the final round has them. Running out knocks Kagura flat, but no round is ever lost: it plays to the end.
 	MatchState.reset()
-	var level_lives := []
-	res = await _play(ROUNDS[2], {never = true}, level_lives)
-	_expect(res.failed and level_lives[0] == 0 and res.counts.miss == ROUNDS[2][2], "final round, no taps: out of lives, failed (got %s)" % [res])
-	_expect(_ended_at < _miss_time_of(ROUNDS[2], 3) + 0.2, "the round ends at the third miss, not the song's end")
+	res = await _play(ROUNDS[2], {never = true})
+	_expect(res.knocked_down and res.counts.miss == ROUNDS[2][2], "final round, no taps: out of lives, knocked down (got %s)" % [res])
+	_expect(_ended_at > _miss_time_of(ROUNDS[2], ROUNDS[2][2]) - 0.2, "the round still plays to its end")
+	_expect(_max_rotation > 1.0, "Kagura lies on the ground (rotation %.2f)" % _max_rotation)
+	_expect(_downs >= 2, "she gets back up (lives refilled) and can be knocked down again (went down %d times)" % _downs)
 	for k in 2:
 		res = await _play(ROUNDS[k], {never = true})
-		_expect(not res.failed and res.counts.miss == ROUNDS[k][2], "%s, no taps: missed but not failed (got %s)" % [ROUNDS[k][1], res])
-	res = await _play(ROUNDS[2], {skip_every = 20})
-	_expect(not res.failed and res.counts.miss == 2, "final round, 2 misses: still alive at the end (got %s)" % [res])
+		_expect(not res.knocked_down and res.counts.miss == ROUNDS[k][2], "%s, no taps: missed, nobody knocked down (got %s)" % [ROUNDS[k][1], res])
+	var every: int = ROUNDS[2][2] / 3 + 1  # skips cues every, 2 × every: exactly 2 misses
+	res = await _play(ROUNDS[2], {skip_every = every})
+	_expect(not res.knocked_down and res.counts.miss == 2, "final round, 2 misses: still standing at the end (got %s)" % [res])
+	_expect(not res.full_combo and res.max_combo < ROUNDS[2][2] and res.max_combo >= every - 1, "a miss breaks the combo: best run %d" % res.max_combo)
 	# Round 2: kicks and rice score but are not skewers; a missed kick scores nothing.
 	MatchState.reset()
 	res = await _play(ROUNDS[1], {})
@@ -154,6 +162,28 @@ func _check_voice() -> void:
 	level.free()
 
 
+## Combo hype: nothing below 10 in a row, full from 50; on a hyped beat the camera punches in and the background
+## figures hop.
+func _check_hype() -> void:
+	var level: Node = load(ROUNDS[2][0]).instantiate()
+	level.chart_path = ROUNDS[2][1]
+	root.add_child(level)
+	await process_frame
+	level.combo = 9
+	_expect(level.hype() == 0.0, "no hype below 10 in a row")
+	level.combo = 30
+	_expect(is_equal_approx(level.hype(), 0.5), "30 in a row is half hype")
+	level.combo = 80
+	_expect(level.hype() == 1.0, "full hype from 50")
+	var referee: Node2D = level.stage.get_node("%Referee")
+	var rest: float = referee.position.y
+	level._beat(int(level.chart.count_in_beats) + 1)
+	_expect(level.camera.zoom.x > 1.0, "a hyped beat punches the camera in")
+	await create_timer(0.08).timeout
+	_expect(referee.position.y < rest - 5.0, "the referee hops on a hyped beat (%.1f → %.1f)" % [rest, referee.position.y])
+	level.free()
+
+
 func _check_round_one_serving() -> void:
 	var level: Node = load("res://scenes/three_eat.tscn").instantiate()
 	level.chart_path = ROUNDS[0][1]
@@ -192,7 +222,9 @@ func _check_chart(r: Array) -> void:
 	# Same-lane hits need room for a second tap; two lanes on one beat are a chord (two fingers / keys).
 	var ok := true
 	var last := {}
-	for h in level.hits:
+	var by_time: Array = level.hits.duplicate()
+	by_time.sort_custom(func(a, b): return a.time < b.time)  # a quick toss thrown later can land before a slow one
+	for h in by_time:
 		ok = ok and (not last.has(h.lane) or h.time - last[h.lane] >= 0.2)
 		last[h.lane] = h.time
 	_expect(level.hits.size() == r[2] and ok, "%s: %d hits, same-lane ones at least 0.2 s apart" % [r[1], r[2]])
@@ -220,6 +252,8 @@ var _last_score_text := ""
 var _title_seen: Array = []
 var _rivals_seen: Array = []
 var _ended_at := 0.0
+var _max_rotation := 0.0
+var _downs := 0
 
 
 ## When the n-th cue of a round is judged missed with no taps (its window closes).
@@ -270,14 +304,19 @@ func _play(r: Array, opts: Dictionary, lives_out := []) -> Dictionary:
 				lane = [(h.lane + 1) % 3, (h.lane + 2) % 3].filter(func(l): return l not in taken)[0]
 			taps.append([at, lane])
 	if opts.get("stray", false):
-		for i in range(1, level.hits.size()):
-			var a: float = level.hits[i - 1].time
-			var b: float = level.hits[i].time
+		var times: Array = level.hits.map(func(h): return h.time)
+		times.sort()
+		for i in range(1, times.size()):
+			var a: float = times[i - 1]
+			var b: float = times[i]
 			if b - a >= 0.9:
 				taps.append([(a + b) / 2.0, 1])
 	taps.sort_custom(func(x, y): return x[0] < y[0])
 	_t = start - 0.2
 	level.start()
+	_max_rotation = 0.0
+	_downs = 0
+	var was_down := false
 	var k := 0
 	while result.is_empty() and _t < level.end_time() + 2.0:
 		_t += STEP
@@ -288,6 +327,10 @@ func _play(r: Array, opts: Dictionary, lives_out := []) -> Dictionary:
 			_t = now
 			k += 1
 		await process_frame
+		if "down" in level:
+			_downs += int(level.down and not was_down)
+			was_down = level.down
+			_max_rotation = maxf(_max_rotation, absf(level.get_node("%Kagura").rotation))
 	_ended_at = _t
 	lives_out.append(level.lives)
 	if opts.is_empty():
