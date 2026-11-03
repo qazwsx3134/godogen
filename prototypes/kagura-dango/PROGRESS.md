@@ -2,6 +2,47 @@
 
 只保留最近 3 次 commit 期間的工作與尚未 commit 的工作（新的在上）；更早的紀錄移到 MILESTONE.md。每次 commit、出門／下班／暫停前更新本檔，再更新根目錄 `Progress.md`。
 
+## 2026-11-03（傍晚）｜累計分數取代對手計數、第 3 回合體型、對話 BGM（未 commit）
+
+- **補（同日，之五）**：使用者說 MOV 已經剪好，不要再裁。`convert_voice.sh` 改成整段轉檔（新八吃東西 1.16 秒、眼睛被打中 13.83 秒，長度與原檔一致），淡入淡出縮成 10 ms 只防爆音；格式維持 16-bit 單聲道 WAV，Godot 匯入時壓成 QOA（`compress/mode=2`）。headless 匯入無錯誤；遊戲邏輯沒改，沿用 `godot-tests.5M9lZ6` 的全套 PASS。
+- **補（同日，之四）**：神樂吃東西改用新八的吃東西聲（三個回合）。使用者新增 `assets/sfx/hit.ogg`（命中）與 `hit-bad.ogg`（不太好的命中）：完美／不錯播 hit、勉強播 hit-bad，放在共用 HUD；原檔峰值約 +2 dB 超過 0 dBFS，播放器 -3 dB 避免破音，開頭沒有空白，直接使用不轉檔。`levels` 加檢查。
+
+- **補（同日，之三）｜台詞音效**：使用者在 `assets/sfx/` 放了 9 支 `.MOV` 錄音（動畫台詞，底下有背景音樂、沒有靜音段）。`tools/convert_voice.sh` 抽出音軌：單聲道、90 Hz 高通、輕度降噪、響度正規化（實測約 -15 LUFS、峰值 ≤ -1 dBFS；歌曲約 -7 LUFS）、頭尾淡入淡出、16-bit WAV（ffmpeg 沒有 libvorbis；MP3 有編碼延遲）。眼睛被打中只取前 3 秒，新八吃東西取 0.7 秒。`RhythmLevel.play_clip`／`say`：檔案不存在就跳過；台詞一次一句、可打斷，講話時 `Conductor.duck` 把歌降 8 dB。原始 MOV 與 `assets/voice/` 加進 `.gitignore`（有版權，比照歌曲）。whisper 環境壞了（numpy／numba 版本衝突），沒有用語音辨識找台詞位置，長片段是照長度裁的，**實際聽感未驗證**。另外修正 `tools/resave_scene.gd`：改用 `GEN_EDIT_STATE_INSTANCE`，原本會把子 scene 實例寫成帶 `type`／`script` 覆寫（已從 `hud`／三個回合 scene 清掉）。
+
+- **補（同日，之二）**：
+  - **編輯器拖曳**：拖音符移動（點在音符所在格點上也抓得到）、拖空白處平移時間軸（沒拖動才算點擊新增）、拖尺規移游標（播放中放開才跳）、觸控板兩指捲動與雙指縮放（macOS 觸控板不送滾輪事件）。
+  - **素材大小交給 scene**：`actor.gd` 與 `skewer.gd` 不再在 `_ready` 強制 Sprite 的 2 倍大小與位置，值本來就存在 `actor.tscn`／`skewer.tscn`。README 列出各回合可調的節點。
+  - **神樂體型改依回合進度**：使用者把第 1 回合排到 138 個音符（71 個給神樂），用累計串數算體型會在第 2 回合就變最胖。改成回合 scene 根節點的 `kagura_girth`（開場→吃完）：第 1 回合 1.0→1.1、第 2 回合 1.15→1.45、第 3 回合 1.5→1.96（吃到一半跨過 1.73 變最胖）。
+  - **修正**：`set_rival_table(true)` 會把 `calm` 關掉的 RivalB 打開（第 1 回合出現兩位對手），改成只負責收起，`levels` 加了檢查。
+  - **測試**：`levels` 的音符數與每人串數改從譜面讀；機器人上限改用回合長度（第 1 回合變成約 90 秒，原本寫死 90 秒會卡到逾時）；同分路間隔檢查只看同一分路（同拍兩路是和弦）。`chart_maker` 改成不依賴譜面內容。`run_tests.sh . levels flow`（`godot-tests.Lb6Vfj`）、`chart_maker font`（`godot-tests.FWhcXI`）、`judge calibrate`（`godot-tests.BH1HiX`）全 PASS。
+  - **使用者的譜面**：`data/songs/eat3.json` 已由使用者用編輯器重排（開始 0 秒、138 個音符、133 拍；第 57 拍有一組紅豆＋醬油同拍的和弦），舊版在 `eat3.bak.json`。
+
+- **補（同日）**：使用者回報編輯器沒辦法從頭播放（游標跟著播放走、停在歌尾時按播放會立刻停）。新增「◀◀ 從頭」按鈕與 Home 鍵，從回合開始處播放；游標在歌尾時按播放也從頭開始。`run_tests.sh . chart_maker font` PASS（`godot-tests.Z8lmMH`）。
+
+- **使用者要求**：拿掉第 2 回合的回合名與對手計數，改成第 1 到第 3 回合累計的分數，加分要有跳動感；第 3 回合神樂的圖被拉寬變形，開場要是第 2 回合的樣子，之後才變更胖；對話時播 BGM。
+- **已完成**：
+  - **分數**：`Judge.SCORE`（完美 1000／不錯 700／勉強 300）加進 `MatchState.score`，跨回合累計，重來回合會還原。`MatchState.rival` 移除。HUD 右上的 `Score` 快速往上數並彈一下，`ScoreGain` 飄出「+1000」（完美判定較大、金色）。回合結算多一行「本回合＋／總分」，最終結算總分從 0 數上來。勝負改看三回合平均是否高於「再來一盤」（`MatchState.won()`）。背景對手隊仍照 `rival` 次數吃東西，但不計數；第 2 回合漏踢只是漏掉、沒有分。
+  - **第 2 回合**：`feast2.json` 加 `show_title: false`，不顯示回合名。
+  - **神樂體型**：`actor.tier()` 的門檻改成 1.14／1.73，完美進度下第 3 回合開場是第 2 段體型，吃到第 21 串才換最胖的圖，並彈一下、震一下；`kagura_full`（苗條小肚子）不再因吃飽自動換上。變形的原因是 `tools/process_art.gd` 把一條圖的每格都硬縮成同一個寬高，已改成整條等比縮放；**原圖不在這台機器（`art_src/gen` 被忽略），現有的 `kagura_tier3_*.png` 還沒重新處理**。
+  - **BGM**：`main.tscn` 新增 `Bgm`（`bgm.ogg`，import 設成循環），對話畫面淡入、連續對話不中斷，其他畫面淡出。
+- **驗證（L2）**：`run_tests.sh . levels flow chart_maker judge calibrate font` 六組全 PASS（`godot-tests.54nhjr`）。新增檢查：每回合分數與 HUD 顯示、三回合累計、第 2 回合無回合名、第 3 回合體型 2 → 3、漏踢不得分、重來回合還原分數、BGM 在對話中播放且進回合後停止。截圖看過第 2 回合（加分彈跳）、第 3 回合開場、回合結算。
+- **未驗證**：實際聽 BGM 與回合音樂的銜接、加分動畫在真機上的手感。
+- **待確認**：`bgm.ogg` 沒被 `.gitignore` 忽略，若有版權要加進忽略清單。
+
+## 2026-11-03（下午）｜譜面編輯器重寫、接上新歌、第 2 回合精簡（未 commit）
+
+- **使用者要求**：譜面編輯器要能調整音樂時長、編輯譜面；三首歌放在 `assets/music/`。中途追加：第 2 回合畫面太雜亂，讓畫面自己說話；使用者在 `actor.tscn` 刪了 NamePlate／NameLabel 後，所有角色都變成銀時。
+- **已完成**：
+  - **角色都變銀時**：`actor.gd`（`@tool`）的 `_apply()` 第一行設 `%NameLabel` 的文字，label 刪掉後在換圖前就出錯，每個角色停在 scene 預設的銀時貼圖。已移除名牌程式碼與 `display_name`（`actor.gd` 與 4 個 scene），截圖確認角色正確。
+  - **歌**：三張譜面的 `music` 指向使用者的檔名（`first-…Pray.mp3`、`second-Anata MAGIC.mp3`、`last-wo ai ni….mp3`），headless 載入三首都成功。第 2 回合換成〈Anata MAGIC〉：量到 158 BPM（各 30 秒段相位穩定），遊戲半拍 `bpm 79`、`offset 0.436`。第 1、3 回合沿用原值（量測與舊值一致）。**第 2 回合的 67 個音符是照舊歌排的，要用編輯器重排。**
+  - **譜面編輯器**（`scenes/chart_maker.tscn`、`scripts/chart_maker.gd`、新 `scripts/chart_timeline.gd`）：選歌、開始秒數（`music_start`）、長度（換成整拍 `end_beat`）、BPM、第 0 拍＋節拍器；時間軸一種音符一列，可新增、拖曳、刪除、復原，從游標播放，勾「錄音」後按 A S D F 打進各列；儲存時捨棄範圍外的音符。移動開始秒數時 `offset` 只平移整數拍。舊版會把第 3 回合的快拋／大串存成一般拋，已修正。`Conductor.play(from)` 可從任意秒數播放，並修掉 stop 淡出中又 play 時被靜音的問題。
+  - **第 2 回合精簡**：`feast2.json` 加 `calm`（關掉觀眾、燈籠、裁判、解說員）與新的 `rival_table: false`（`stage.set_rival_table`，收起後方對手隊與盤子）；拿掉底部操作說明（`hint_text`）。畫面只剩三人、店主、衝進來搶的對手與音符軌道。
+  - 新工具 `tools/resave_scene.gd`：手改的 `.tscn` 用 Godot 存回去並比對節點數（`chart_maker.tscn` 29 → 29）。
+- **驗證（L2）**：`GODOT_BIN=/Applications/Godot.app/Contents/MacOS/Godot bash ../godot-kit/tools/run_tests.sh . chart_maker judge levels calibrate flow font` 六組全 PASS（`godot-tests.kXrAFf`）；headless 匯入無錯誤；截圖看過第 2 回合（`.claude/tasks/kagura-dango/shots/v3-round-2.png`）與編輯器三個回合的版面。
+- **未驗證**：編輯器的真人操作（拖曳手感、播放時音符聲與節拍器的對齊）、第 2 回合新歌的實際聽感與 `offset` 是否要微調。
+- **注意**：使用者的 Godot 編輯器開著這個專案，需要重新載入 `actor.tscn`、`chart_maker.tscn`、`feast.tscn` 等，不要存舊版。`assets/music/bgm.ogg`（126 秒）目前沒有接上，用途待確認。`tools/build_scenes.gd` 是舊產生器（仍寫 `display_name`、`body_color`），不要再跑。
+- **下一步**：用編輯器重排第 2 回合，確認三回合的開始與長度。
+
 ## 2026-11-03｜改成太鼓式音符軌道、新三回合劇情、真實音樂、第三批美術（未 commit）
 
 - **使用者要求**：依截圖與三首歌改劇情：第 1 回合三人狼吞虎嚥；第 2 回合神樂配飯、新八打包便當、銀時踢人；第 3 回合銀時新八變胖、把丸子當飛鏢射給神樂，沒對到拍打到眼睛；只有第 3 回合有命。音樂只用精華段。玩法改成太鼓達人式，選「3 種音符（每人一色）」。

@@ -1,49 +1,10 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://ddbkv5uv0tifb"]
 
-[ext_resource type="Script" path="res://scripts/actor.gd" id="1_x4c43"]
-[ext_resource type="Texture2D" path="res://assets/sprites/gintoki_idle_0.png" id="2_0qi0m"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0qi0m"]
-content_margin_left = 4.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
-bg_color = Color(0.06, 0.12, 0.18, 0.94)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.94, 0.72, 0.39, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+[ext_resource type="Script" uid="uid://8b0eexde477n" path="res://scripts/actor.gd" id="1_x4c43"]
+[ext_resource type="Texture2D" uid="uid://opcgrt3dhnno" path="res://assets/sprites/gintoki_idle_0.png" id="2_0qi0m"]
 
 [node name="Actor" type="Node2D" unique_id=173833660]
 script = ExtResource("1_x4c43")
-
-[node name="NamePlate" type="Panel" parent="." unique_id=2068665850]
-z_index = 1
-offset_left = -48.0
-offset_top = 2.0
-offset_right = 48.0
-offset_bottom = 30.0
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_0qi0m")
-
-[node name="NameLabel" type="Label" parent="." unique_id=267624509]
-unique_name_in_owner = true
-z_index = 2
-offset_left = -50.0
-offset_top = 4.0
-offset_right = 50.0
-offset_bottom = 28.0
-theme_override_colors/font_color = Color(1, 0.94, 0.78, 1)
-theme_override_colors/font_outline_color = Color(0.04, 0.08, 0.12, 1)
-theme_override_constants/outline_size = 2
-theme_override_font_sizes/font_size = 16
-text = "角色"
-horizontal_alignment = 1
 
 [node name="Hand" type="Marker2D" parent="." unique_id=1683656227]
 position = Vector2(46, -100)

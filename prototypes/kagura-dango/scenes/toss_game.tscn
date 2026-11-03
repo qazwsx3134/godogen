@@ -13,6 +13,8 @@
 [node name="TossGame" type="Node2D" unique_id=2039944207]
 script = ExtResource("1_bgoir")
 chart_path = "res://data/songs/toss3.json"
+kagura_girth = Vector2(1.5, 1.96)
+start_voice = "gintoki_pep"
 
 [node name="Conductor" type="Node" parent="." unique_id=1053696120]
 unique_name_in_owner = true
@@ -27,24 +29,21 @@ unique_name_in_owner = true
 
 [node name="Gintoki" parent="." unique_id=173833660 instance=ExtResource("5_nhno4")]
 unique_name_in_owner = true
-scale = Vector2(0.58, 0.58)
 position = Vector2(100, 300)
-display_name = "銀時"
+scale = Vector2(0.58, 0.58)
 
 [node name="Shinpachi" parent="." unique_id=1827043731 instance=ExtResource("5_nhno4")]
 unique_name_in_owner = true
 position = Vector2(245, 305)
 scale = Vector2(0.52, 0.52)
 character_id = &"shinpachi"
-display_name = "新八"
 
 [node name="Kagura" parent="." unique_id=949297683 instance=ExtResource("5_nhno4")]
 unique_name_in_owner = true
-flip_sprite_h = true
 position = Vector2(545, 300)
 scale = Vector2(0.75, 0.75)
 character_id = &"kagura"
-display_name = "神樂"
+flip_sprite_h = true
 
 [node name="SkewerPile" type="Node2D" parent="." unique_id=1585921527]
 unique_name_in_owner = true

@@ -43,15 +43,12 @@ const SPRITES := {
 	set(value):
 		character_id = value
 		_apply()
-@export var display_name := "角色":
-	set(value):
-		display_name = value
-		_apply()
 @export var flip_sprite_h := false:
 	set(value):
 		flip_sprite_h = value
 		_apply()
-## 1 = normal; Kagura changes sprite set at 1.3 and 1.68. Mouth remains a separate marker.
+## 1 = normal; Kagura changes sprite set at 1.14 (round 2) and 1.73 (halfway through round 3), see tier().
+## Mouth remains a separate marker.
 @export var girth := 1.0:
 	set(value):
 		girth = value
@@ -73,14 +70,10 @@ var _frame_index := 0
 var _frame_elapsed := 0.0
 
 @onready var _sprite: Sprite2D = %Sprite
-@onready var _name_label: Label = %NameLabel
 
 
 func _ready() -> void:
-	_base_scale = scale
-	_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	_sprite.scale = Vector2(2.0, 2.0)
-	_sprite.position = Vector2(0.0, -96.0)
+	_base_scale = scale  # the Sprite's size and offset stay as set in actor.tscn; only its texture changes
 	_apply()
 
 
@@ -100,7 +93,6 @@ func _process(delta: float) -> void:
 func _apply() -> void:
 	if not is_node_ready():
 		return
-	_name_label.text = display_name
 	_sprite.flip_h = flip_sprite_h
 	var paths := _paths_for_pose()
 	if not paths.is_empty():
@@ -110,7 +102,7 @@ func _apply() -> void:
 
 func _paths_for_pose() -> Array:
 	if character_id == &"kagura":
-		if fullness >= 1.0 or _pose == &"full":
+		if _pose == &"full":
 			return ["res://assets/sprites/kagura_full.png"]
 		if _pose == &"eye":
 			return ["res://assets/sprites/kagura_eye_hit.png"]
@@ -118,11 +110,7 @@ func _paths_for_pose() -> Array:
 			return ["res://assets/sprites/kagura_rice.png"]
 		if _pose in [&"miss", &"eye"]:
 			return ["res://assets/sprites/kagura_miss.png"]
-		var tier := 1
-		if girth >= 1.5:
-			tier = 3
-		elif girth >= 1.14:
-			tier = 2
+		var tier := tier()
 		if _pose == &"eat":
 			if tier == 1:
 				return ["res://assets/sprites/kagura_chomp_0.png", "res://assets/sprites/kagura_chomp_1.png"]
@@ -140,6 +128,16 @@ func _paths_for_pose() -> Array:
 	if not character.has(pose) or not ResourceLoader.exists(character[pose][0]):
 		pose = &"idle"
 	return character[pose]
+
+
+## Kagura's body: 1 slim, 2 round (from girth 1.14, during round 2), 3 roundest (from 1.73: round 3 opens with
+## her round 2 body and she grows into this one halfway through).
+func tier() -> int:
+	if girth >= 1.73:
+		return 3
+	if girth >= 1.14:
+		return 2
+	return 1
 
 
 ## Show a reaction, then return to the current idle/fullness pose. Throw uses its three generated frames in order.

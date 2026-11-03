@@ -5,6 +5,9 @@ extends RhythmLevel
 
 const SKEWER := preload("res://scenes/skewer.tscn")
 
+## Kagura's eating sound: a clip id in assets/voice/ (empty or missing = the Chomp sound).
+@export var eat_clip := "shinpachi_eat"
+
 var _skewers := {}
 
 @onready var _gintoki: Node2D = %Gintoki
@@ -52,7 +55,8 @@ func _on_judged(index: int, grade: StringName, _offset: float, _wrong_lane: int)
 		if is_instance_valid(s):
 			s.drop()
 	else:
-		%Chomp.play()
+		if not play_clip(eat_clip):
+			%Chomp.play()
 		_kagura.call("play_pose", &"eat", 0.3)
 		_kagura.bump(0.18 if grade == &"ace" else 0.1, 0.14)
 		if is_instance_valid(s):
@@ -67,6 +71,7 @@ func _on_judged(index: int, grade: StringName, _offset: float, _wrong_lane: int)
 
 func _on_hurt() -> void:
 	_kagura.call("play_pose", &"eye", 0.6)
+	say("kagura_eye", true)
 	shake(6.0, 0.25)
 
 
@@ -78,6 +83,11 @@ func _on_whiff(_lane: int) -> void:
 func _refresh_bodies() -> void:
 	%Gintoki.fat = true  # both ate themselves fat by the final round
 	%Shinpachi.fat = true
+	var tier_before: int = _kagura.tier()
 	_kagura.fullness = MatchState.kagura_fullness()
-	_kagura.girth = 1.0 + 0.9 * MatchState.kagura_fullness()
+	_kagura.girth = kagura_girth_now()
+	if _running and _kagura.tier() > tier_before:  # she just grew into her roundest body mid-round: make it land
+		_kagura.bump(0.3, 0.4)
+		shake(5.0, 0.25)
+		say("kagura_now")
 	_sticks.count = MatchState.team_total()

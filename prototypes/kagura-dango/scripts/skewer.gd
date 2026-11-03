@@ -24,8 +24,6 @@ var state: StringName = &"flying"  # flying, eaten, dropped
 
 
 func _ready() -> void:
-	_sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	_sprite.scale = Vector2(2.0, 2.0)
 	var path: String = BIG_PATH if big else FLAVOR_PATHS.get(flavor, TRI_PATH)
 	if not ResourceLoader.exists(path):
 		path = TRI_PATH
@@ -59,7 +57,6 @@ func _eat_at(target: Vector2) -> void:
 func drop() -> void:
 	state = &"dropped"
 	_sprite.texture = load(DROPPED_PATH) as Texture2D
-	_sprite.scale = Vector2(2.0, 2.0)
 	var tw := create_tween()
 	tw.tween_property(self, "position", position + Vector2(30, 70), 0.35).set_ease(Tween.EASE_IN)
 	tw.parallel().tween_property(self, "rotation", rotation + 2.0, 0.35)

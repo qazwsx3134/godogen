@@ -7,6 +7,8 @@ const ACE := 0.035
 const GOOD := 0.075
 const BARELY := 0.12
 const POINTS := {&"ace": 100, &"good": 85, &"barely": 50, &"miss": 0}
+## Points a hit adds to the match score (MatchState.score), shown counting up in the HUD.
+const SCORE := {&"ace": 1000, &"good": 700, &"barely": 300}
 const RANK_TEXT := {&"superb": "大胃王", &"ok": "吃飽了", &"again": "再來一盤"}
 
 
@@ -38,3 +40,14 @@ static func rank(points: int) -> StringName:
 	if points >= 60:
 		return &"ok"
 	return &"again"
+
+
+## 12345 → "12,345".
+static func format_points(value: int) -> String:
+	var digits := str(value)
+	var out := ""
+	for i in digits.length():
+		if i > 0 and (digits.length() - i) % 3 == 0:
+			out += ","
+		out += digits[i]
+	return out

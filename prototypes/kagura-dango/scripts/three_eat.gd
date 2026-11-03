@@ -5,6 +5,9 @@ extends RhythmLevel
 
 const SKEWER := preload("res://scenes/skewer.tscn")
 
+## Eating sound per lane (left, middle, right): a clip id in assets/voice/, or empty for the Chomp sound.
+@export var eat_clips: Array[String] = ["gintoki_eat", "shinpachi_eat", "shinpachi_eat"]
+
 var _skewers := {}
 
 @onready var _cast: Array[Node2D] = [%Gintoki, %Shinpachi, %Kagura]
@@ -57,8 +60,9 @@ func _on_judged(index: int, grade: StringName, _offset: float, wrong_lane: int) 
 		if is_instance_valid(s):
 			s.drop()
 	else:
-		%Chomp.play()
 		var lane: int = hits[index].lane
+		if not play_clip(eat_clips[lane]):
+			%Chomp.play()
 		_cast[lane].call("play_pose", &"eat", 0.28)
 		_cast[lane].bump(0.16 if grade == &"ace" else 0.1, 0.14)
 		if is_instance_valid(s):
@@ -77,5 +81,5 @@ func _refresh_bodies() -> void:
 	%Gintoki.fullness = MatchState.fullness(&"gintoki")
 	%Shinpachi.fullness = MatchState.fullness(&"shinpachi")
 	%Kagura.fullness = MatchState.kagura_fullness()
-	%Kagura.girth = 1.0 + 0.9 * MatchState.kagura_fullness()
+	%Kagura.girth = kagura_girth_now()
 	_sticks.count = MatchState.team_total()

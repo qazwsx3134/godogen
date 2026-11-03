@@ -3,7 +3,7 @@ extends Node2D
 ## Base of every minigame. Reads a chart (data/songs/<id>.json), turns each cue into the beat the player must hit
 ## (cue beat + land_after[type]), judges taps against the Conductor and reports the result. Also runs what every
 ## round shares: the stage (crowd, lanterns, rival team, referee) pulsing on the beat at the chart's intensity, the
-## scoreboard, the referee's calls, and MatchState.
+## match score (every hit adds Judge.SCORE points), the referee's calls, and MatchState.
 ## A minigame scene extends this and only presents: override _on_cue, _on_judged, _on_whiff, _on_beat.
 
 signal judged(index: int, grade: StringName, offset: float)
@@ -12,6 +12,14 @@ signal finished(result: Dictionary)
 const JUDGE_TEXT := {&"ace": "完美！", &"good": "不錯", &"barely": "勉強", &"miss": "漏掉了…", &"wrong": "餵錯人！"}
 
 @export_file("*.json") var chart_path := ""
+## Kagura's girth (actor.gd) as this round opens (x) and once she has eaten all of its food (y): her body follows the
+## round's progress, not how many skewers the charts hold. Round 3 opens with round 2's body and crosses into the
+## roundest one (girth 1.73) halfway.
+@export var kagura_girth := Vector2(1.0, 1.0)
+## Line said as the round starts (a clip id in assets/voice/, see say()).
+@export var start_voice := ""
+
+const VOICE_DIR := "res://assets/voice/"
 
 var chart := {}
 ## One entry per cue, in cue order: {cue_beat, beat, time, type, lane, grade}. grade is &"" until judged.
@@ -29,6 +37,9 @@ var _next_cue := 0
 var _running := false
 var _last_beat := -999
 var _rival_beats: Array[int] = []
+var _rival_eaten := 0
+var _clips := {}  # clip id → its AudioStreamPlayer
+var _line: AudioStreamPlayer  # the spoken line playing now
 var _counted_in := false
 
 @onready var conductor: Conductor = %Conductor
@@ -50,7 +61,7 @@ func _ready() -> void:
 		hits.append({cue_beat = float(cue.beat), beat = beat, time = conductor.beat_time(beat),
 			type = StringName(cue.type), lane = int(lanes.get(cue.type, -1)), grade = &""})
 	hits.sort_custom(func(a, b): return a.cue_beat < b.cue_beat)
-	# The rival team eats `rival` skewers spread evenly over the round.
+	# The rival team (background only) eats `rival` times, spread evenly over the round.
 	var first: int = int(chart.count_in_beats)
 	var span := int(chart.end_beat) - first
 	for k in int(chart.get("rival", 0)):
@@ -58,13 +69,15 @@ func _ready() -> void:
 	stage.set_intensity(intensity)
 	stage.set_background(chart.get("background", ""))
 	stage.set_calm(chart.get("calm", false))
+	stage.set_rival_table(chart.get("rival_table", true))
 	hud.get_node("%NoteTrack").setup(self)
-	hud.set_round(chart.title)
-	_update_scoreboard()
+	hud.set_round(chart.title if chart.get("show_title", true) else "")
+	hud.set_score(MatchState.score)
 
 
 func start() -> void:
 	_next_cue = 0
+	_rival_eaten = 0
 	_running = true
 	failed = false
 	lives = max_lives
@@ -72,6 +85,7 @@ func start() -> void:
 	MatchState.begin_round()
 	hud.call_out("預備……")
 	conductor.play()
+	say(start_voice)
 
 
 func end_time() -> float:
@@ -81,6 +95,7 @@ func end_time() -> float:
 func _process(_delta: float) -> void:
 	if not _running:
 		return
+	conductor.duck(_line != null and _line.playing)
 	var t := conductor.time()
 	var beat := floori(conductor.beat_at(t))
 	if t > 0.0 and beat != _last_beat:
@@ -109,9 +124,8 @@ func _beat(b: int) -> void:
 	if b >= count_in and b < int(chart.end_beat):
 		stage.pulse()
 		if b in _rival_beats:
-			MatchState.rival += 1
-			stage.rival_eat(MatchState.rival)
-			_update_scoreboard()
+			_rival_eaten += 1
+			stage.rival_eat(_rival_eaten)
 	_on_beat(b)
 
 
@@ -161,16 +175,18 @@ func result() -> Dictionary:
 	var counts := {&"ace": 0, &"good": 0, &"barely": 0, &"miss": 0}
 	for g in grades:
 		counts[g] += 1
-	return {id = chart.id, title = chart.title, score = points, rank = Judge.rank(points), counts = counts, failed = failed}
+	return {id = chart.id, title = chart.title, score = points, rank = Judge.rank(points), counts = counts, failed = failed,
+		points = MatchState.round_points()}
 
 
 ## wrong_lane >= 0 marks a miss caused by feeding the wrong person.
 func _judge(index: int, grade: StringName, offset: float, wrong_lane := -1) -> void:
 	hits[index].grade = grade
+	if grade != &"miss":
+		hud.play_hit(grade)
+		hud.add_score(MatchState.add_points(grade), MatchState.score, grade == &"ace")
 	if grade != &"miss" and counts_as_skewer(index):
-		var who := eater(index)
-		MatchState.eaten[who] += 1
-		_update_scoreboard()
+		MatchState.eaten[eater(index)] += 1
 		if grade == &"ace" and intensity >= 2:
 			shake(2.0 + intensity, 0.12)
 	hud.show_judge(JUDGE_TEXT[&"wrong" if wrong_lane >= 0 else grade])
@@ -185,6 +201,17 @@ func _judge(index: int, grade: StringName, offset: float, wrong_lane := -1) -> v
 			_finish()
 
 
+## Kagura's girth now: kagura_girth.x → .y by the share of this round's food she has eaten.
+func kagura_girth_now() -> float:
+	var total := 0
+	var eaten := 0
+	for i in hits.size():
+		if eater(i) == &"kagura" and counts_as_skewer(i):
+			total += 1
+			eaten += int(hits[i].grade not in [&"", &"miss"])
+	return lerpf(kagura_girth.x, kagura_girth.y, eaten / float(total) if total > 0 else 0.0)
+
+
 ## Cue types listed in the chart's "skewers" are eaten skewers (counted for the team); all count when it is absent.
 ## Round 2: kicking a rival or a spoon of rice is not a skewer.
 func counts_as_skewer(index: int) -> bool:
@@ -196,15 +223,44 @@ func eater(index: int) -> StringName:
 	return [&"gintoki", &"shinpachi", &"kagura"][hits[index].lane] if hits[index].lane >= 0 else &"kagura"
 
 
+## Plays a clip from assets/voice/<id>.wav (made by tools/convert_voice.sh from the show's recordings, kept local:
+## a clone without them skips every clip). Returns false when there is no such clip.
+func play_clip(id: String) -> bool:
+	if id.is_empty():
+		return false
+	if not _clips.has(id):
+		var path := VOICE_DIR + id + ".wav"
+		if not ResourceLoader.exists(path):
+			_clips[id] = null
+		else:
+			var p := AudioStreamPlayer.new()
+			p.stream = load(path)
+			p.max_polyphony = 3  # quick chomps may overlap
+			add_child(p)
+			_clips[id] = p
+	var player: AudioStreamPlayer = _clips[id]
+	if player == null:
+		return false
+	player.play()
+	return true
+
+
+## A spoken line: one at a time (a line never talks over another; interrupt cuts the current one), and the song
+## ducks under it.
+func say(id: String, interrupt := false) -> void:
+	if _line and _line.playing:
+		if not interrupt:
+			return
+		_line.stop()
+	if play_clip(id):
+		_line = _clips[id]
+
+
 func shake(strength: float, time: float) -> void:
 	var tw := create_tween()
 	for k in 4:
 		tw.tween_property(camera, "offset", Vector2(randf_range(-1, 1), randf_range(-1, 1)) * strength, time / 5.0)
 	tw.tween_property(camera, "offset", Vector2.ZERO, time / 5.0)
-
-
-func _update_scoreboard() -> void:
-	hud.set_score(MatchState.team_total(), MatchState.rival)
 
 
 func _finish() -> void:

@@ -13,7 +13,10 @@
 
 [node name="FeastGame" type="Node2D" unique_id=1727875628]
 script = ExtResource("1_gvuwm")
+eat_clips = Array[String](["", "", "shinpachi_eat"])
 chart_path = "res://data/songs/feast2.json"
+kagura_girth = Vector2(1.15, 1.45)
+start_voice = "referee_start"
 
 [node name="Conductor" type="Node" parent="." unique_id=1707030465]
 unique_name_in_owner = true
@@ -34,21 +37,18 @@ scale = Vector2(0.6, 0.6)
 [node name="Gintoki" parent="." unique_id=173833660 instance=ExtResource("5_0b2nc")]
 unique_name_in_owner = true
 position = Vector2(110, 290)
-display_name = "銀時"
 
 [node name="Shinpachi" parent="." unique_id=1500710848 instance=ExtResource("5_0b2nc")]
 unique_name_in_owner = true
 position = Vector2(300, 300)
 scale = Vector2(0.8, 0.8)
 character_id = &"shinpachi"
-display_name = "新八"
 
 [node name="Kagura" parent="." unique_id=1287408363 instance=ExtResource("5_0b2nc")]
 unique_name_in_owner = true
 position = Vector2(525, 290)
 scale = Vector2(0.95, 0.95)
 character_id = &"kagura"
-display_name = "神樂"
 
 [node name="SkewerPile" type="Node2D" parent="." unique_id=1908608614]
 unique_name_in_owner = true
@@ -61,7 +61,6 @@ unique_name_in_owner = true
 
 [node name="HUD" parent="." unique_id=169533805 instance=ExtResource("8_vl6yr")]
 unique_name_in_owner = true
-hint_text = "音符進圈時點：紅（有人來搶）→左踢人　藍（便當）→中　粉（飯／丸子）→右"
 
 [node name="Chomp" type="AudioStreamPlayer" parent="." unique_id=1955713910]
 unique_name_in_owner = true
@@ -97,7 +96,6 @@ visible = false
 position = Vector2(-60, 300)
 scale = Vector2(0.8, 0.8)
 character_id = &"rival_man"
-display_name = "對手"
 
 [node name="IntruderTarget" type="Marker2D" parent="." unique_id=1727875630]
 unique_name_in_owner = true

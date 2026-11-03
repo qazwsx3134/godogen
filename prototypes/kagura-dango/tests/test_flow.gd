@@ -1,6 +1,7 @@
 extends "res://addons/proto_kit/test_kit.gd"
 ## The match flow through real input: title → opening → (story → round → result) ×3 → ending → final result →
-## title, a replayed round, and title → calibration → title. Settings live in the temp dir.
+## title, a replayed round, and title → calibration → title. The BGM plays through the dialogue and fades out for
+## the rounds. Settings live in the temp dir.
 
 const MAIN := preload("res://scenes/main.tscn")
 
@@ -19,12 +20,17 @@ func _run() -> void:
 	await _frames(2)
 	_expect(main.screen.name == "Title", "starts on the title")
 	await _press(main.screen.get_node("%Start"))
+	await _frames(2)
+	_expect(main.get_node("%Bgm").playing, "the BGM plays during the opening dialogue")
 	await _read_story("opening")
 	var names := ["ThreeEat", "FeastGame", "TossGame"]
 	for i in 3:
 		await _read_story(main.match_data.stages[i].story)
 		_expect(main.screen.name == names[i], "round %d is %s (got %s)" % [i + 1, names[i], main.screen.name])
 		_expect(main.screen.conductor.playing(), "round %d song is playing" % (i + 1))
+		if i == 0:
+			await create_timer(0.8).timeout
+			_expect(not main.get_node("%Bgm").playing, "the BGM fades out when a round starts")
 		main.screen._finish()
 		await _frames(2)
 		_expect(main.screen.name == "Result", "round %d ends on its result" % (i + 1))

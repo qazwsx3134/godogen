@@ -14,6 +14,8 @@
 [node name="ThreeEat" type="Node2D" unique_id=1727875627]
 script = ExtResource("1_gvuwm")
 chart_path = "res://data/songs/eat3.json"
+kagura_girth = Vector2(1, 1.1)
+start_voice = "referee_start"
 
 [node name="Conductor" type="Node" parent="." unique_id=1707030465]
 unique_name_in_owner = true
@@ -33,23 +35,20 @@ scale = Vector2(0.6, 0.6)
 
 [node name="Gintoki" parent="." unique_id=173833660 instance=ExtResource("5_0b2nc")]
 unique_name_in_owner = true
-scale = Vector2(0.72, 0.72)
 position = Vector2(120, 300)
-display_name = "銀時"
+scale = Vector2(0.72, 0.72)
 
 [node name="Shinpachi" parent="." unique_id=1500710848 instance=ExtResource("5_0b2nc")]
 unique_name_in_owner = true
 position = Vector2(320, 305)
 scale = Vector2(0.6, 0.6)
 character_id = &"shinpachi"
-display_name = "新八"
 
 [node name="Kagura" parent="." unique_id=1287408363 instance=ExtResource("5_0b2nc")]
 unique_name_in_owner = true
 position = Vector2(520, 300)
 scale = Vector2(0.7, 0.7)
 character_id = &"kagura"
-display_name = "神樂"
 
 [node name="SkewerPile" type="Node2D" parent="." unique_id=1908608614]
 unique_name_in_owner = true

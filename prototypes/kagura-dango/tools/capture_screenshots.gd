@@ -46,6 +46,7 @@ func _capture_round_two() -> void:
 	MatchState.eaten[&"gintoki"] = 8
 	MatchState.eaten[&"shinpachi"] = 9
 	MatchState.eaten[&"kagura"] = 13
+	MatchState.score = 30000
 	var level: Node = await _attach_scene(ROUND_TWO)
 	var hits: Array = level.get("hits")
 	var rival_index := hits.find_custom(func(h): return h.type == &"rival")
@@ -55,7 +56,8 @@ func _capture_round_two() -> void:
 	await create_timer(0.2).timeout
 	level.get_node("%Kagura").call("play_pose", &"rice", 2.0)
 	level.get_node("%Shinpachi").call("play_pose", &"pack", 2.0)
-	await process_frame
+	level.hud.add_score(1000, 31000, true)  # an ace just landed: the score pops and "+1000" floats up
+	await create_timer(0.08).timeout
 	_save_viewport("v3-round-2.png")
 	level.get_node("%Gintoki").call("play_pose", &"kick", 3.0)
 	await create_timer(1.05).timeout
@@ -107,8 +109,8 @@ func _capture_final_round() -> void:
 	MatchState.reset()
 	MatchState.eaten[&"gintoki"] = 8
 	MatchState.eaten[&"shinpachi"] = 9
-	MatchState.eaten[&"kagura"] = 41
-	MatchState.rival = 40
+	MatchState.eaten[&"kagura"] = 36  # a perfect run's count: round 3 opens with her round 2 body
+	MatchState.score = 97000
 	var level: Node = await _attach_scene(FINAL_ROUND, "res://data/songs/toss3.json")
 	level.call("_on_cue", 0)
 	var skewers: Node2D = level.get_node("%Skewers")

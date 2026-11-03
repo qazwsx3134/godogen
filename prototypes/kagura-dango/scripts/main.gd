@@ -1,6 +1,7 @@
 extends Node
 ## Match flow from data/match.json: title → opening (referee) → for each round: its story → the round → its result
 ## → … → ending (win or lose, then the birthday) → final result. Title → calibration on the side.
+## The dialogue (story screens) plays the looping BGM (%Bgm); it fades out when any other screen comes up.
 ## On the web with ?qa=1 (or `-- --qa` natively) every frame publishes the clock readings as window.__dango,
 ## which tools/web_clock_probe.mjs reads to check the audio clock in a real browser.
 
@@ -13,10 +14,15 @@ var screen: Node
 var match_data := {}
 var round_index := 0
 var _qa := false
+var _bgm_on := false
+var _bgm_fade: Tween
+## %Bgm volume when fully in (the scene's volume_db).
+var _bgm_db := 0.0
 
 
 func _ready() -> void:
 	Settings.load_all()
+	_bgm_db = %Bgm.volume_db
 	match_data = JSON.parse_string(FileAccess.get_file_as_string("res://data/match.json"))
 	_qa = "--qa" in OS.get_cmdline_user_args()
 	if OS.has_feature("web"):
@@ -44,10 +50,10 @@ func _qa_round() -> int:
 
 func _jump_to_round(n: int) -> void:
 	MatchState.reset()
-	var before: Dictionary = [{}, {gintoki = 8, shinpachi = 9, kagura = 13, rival = 18}, {gintoki = 8, shinpachi = 23, kagura = 36, rival = 40}][n - 1]
+	var before: Dictionary = [{}, {gintoki = 8, shinpachi = 9, kagura = 13, score = 30000}, {gintoki = 8, shinpachi = 23, kagura = 36, score = 97000}][n - 1]
 	for who in [&"gintoki", &"shinpachi", &"kagura"]:
 		MatchState.eaten[who] = before.get(String(who), 0)
-	MatchState.rival = before.get("rival", 0)
+	MatchState.score = before.get("score", 0)
 	round_index = n - 1
 	play_round()
 
@@ -85,7 +91,7 @@ func show_round_result(r: Dictionary) -> void:
 	s.next_requested.connect(func():
 		round_index += 1
 		if last:
-			var won := MatchState.team_total() > MatchState.rival
+			var won := MatchState.won()
 			show_story(StoryData.lines("ending_win" if won else "ending_lose"), show_final)
 		else:
 			show_round_intro())
@@ -124,7 +130,27 @@ func _put(node: Node) -> Node:
 		screen.queue_free()
 	screen = node
 	%Screen.add_child(screen)
+	_set_bgm(node.scene_file_path == STORY.resource_path)
 	return screen
+
+
+## Story screens fade the BGM in (or keep it going between two of them); everything else fades it out.
+func _set_bgm(on: bool) -> void:
+	if on == _bgm_on:
+		return
+	_bgm_on = on
+	var bgm: AudioStreamPlayer = %Bgm
+	if _bgm_fade:
+		_bgm_fade.kill()
+	_bgm_fade = create_tween()
+	if on:
+		if not bgm.playing:
+			bgm.volume_db = -40.0
+			bgm.play()
+		_bgm_fade.tween_property(bgm, "volume_db", _bgm_db, 0.8)
+	else:
+		_bgm_fade.tween_property(bgm, "volume_db", -40.0, 0.6)
+		_bgm_fade.tween_callback(bgm.stop)
 
 
 func _process(_delta: float) -> void:

@@ -15,8 +15,15 @@ var offset := 0.0
 var music_start := 0.0
 var clock := Callable()
 
+## Song level under a spoken line (duck).
+const DUCK_DB := -8.0
+
 var _player: AudioStreamPlayer
 var _anchor_usec := -1
+var _from := 0.0
+var _fade: Tween
+var _duck: Tween
+var _ducked := false
 var _last := 0.0
 
 
@@ -34,22 +41,48 @@ func load_song(chart: Dictionary) -> void:
 	_player.stream = load(music) if ResourceLoader.exists(music) else null
 
 
-func play() -> void:
+## Plays from music_start, or from `from` (song-file seconds; the chart maker plays from its cursor).
+func play(from := -1.0) -> void:
+	_from = music_start if from < 0.0 else from
 	_last = 0.0
 	_anchor_usec = Time.get_ticks_usec()
+	if _fade:
+		_fade.kill()  # a fade-out still running from stop() would silence the new play
+	if _duck:
+		_duck.kill()
+	_ducked = false
 	if _player.stream:
 		_player.volume_db = 0.0
-		_player.play(music_start)
+		_player.play(_from)
 
 
 func stop() -> void:
 	_anchor_usec = -1
+	if _duck:
+		_duck.kill()
+	_ducked = false
 	if not _player.playing:
 		return
 	# The round ends mid-song: fade out instead of cutting.
-	var tw := create_tween()
-	tw.tween_property(_player, "volume_db", -40.0, 0.6)
-	tw.tween_callback(_player.stop)
+	_fade = create_tween()
+	_fade.tween_property(_player, "volume_db", -40.0, 0.6)
+	_fade.tween_callback(_player.stop)
+
+
+## Lowers the song under a spoken line (on) and brings it back (off). Ignored while stopped or fading out.
+func duck(on: bool) -> void:
+	if on == _ducked or _anchor_usec < 0:
+		return
+	_ducked = on
+	if _duck:
+		_duck.kill()
+	_duck = create_tween()
+	_duck.tween_property(_player, "volume_db", DUCK_DB if on else 0.0, 0.15)
+
+
+## Length of the loaded song file in seconds (0 without one).
+func song_length() -> float:
+	return _player.stream.get_length() if _player.stream else 0.0
 
 
 func playing() -> bool:
@@ -57,7 +90,7 @@ func playing() -> bool:
 
 
 func wall_time() -> float:
-	return -1.0 if _anchor_usec < 0 else music_start + (Time.get_ticks_usec() - _anchor_usec) / 1000000.0
+	return -1.0 if _anchor_usec < 0 else _from + (Time.get_ticks_usec() - _anchor_usec) / 1000000.0
 
 
 func audio_time() -> float:

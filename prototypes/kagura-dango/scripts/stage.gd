@@ -29,6 +29,15 @@ func set_calm(calm: bool) -> void:
 		n.visible = not calm
 
 
+## Round 2 keeps the rival team off the back table: the only rival on screen is the one sneaking in.
+## Only hides (shown = true leaves what set_calm chose).
+func set_rival_table(shown: bool) -> void:
+	if shown:
+		return
+	for n in [%RivalA, %RivalB, _plates]:
+		n.visible = false
+
+
 func set_intensity(level: int) -> void:
 	intensity = clampi(level, 1, 3)
 	_crowd.count = 8 + 8 * intensity

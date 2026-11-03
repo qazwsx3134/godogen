@@ -141,20 +141,24 @@ func _save_strip(image: Image, stem: String, frame_count: int, target_height: in
 		bounds.append(frame_bounds)
 		max_height = maxi(max_height, frame_bounds.size.y)
 		max_width = maxi(max_width, frame_bounds.size.x)
-	var frame_width := maxi(1, roundi(float(max_width) * target_height / max_height))
+	# One scale for the whole strip (the tallest frame fills target_height), so no frame is stretched: each keeps its
+	# own aspect, bottom-aligned and centred in a canvas as wide as the widest frame.
+	var strip_scale := float(target_height) / max_height
+	var frame_width := maxi(1, roundi(max_width * strip_scale))
 	for index in frame_count:
 		var frame_bounds := bounds[index]
-		var content_width := frame_width
-		var content_height := target_height
+		var content_width := maxi(1, roundi(frame_bounds.size.x * strip_scale))
+		var content_height := maxi(1, roundi(frame_bounds.size.y * strip_scale))
 		if not widths.is_empty():
 			content_width = widths[index]
 			content_height = target_height if fixed_size else maxi(1, roundi(float(frame_bounds.size.y) * content_width / frame_bounds.size.x))
 		var crop := image.get_region(frame_bounds)
 		crop.resize(content_width, content_height, Image.INTERPOLATE_NEAREST)
-		var canvas := Image.create(content_width, target_height if widths.is_empty() else content_height, false, Image.FORMAT_RGBA8)
+		var canvas := Image.create(frame_width if widths.is_empty() else content_width, target_height if widths.is_empty() else content_height, false, Image.FORMAT_RGBA8)
 		canvas.fill(Color.TRANSPARENT)
+		var x_offset := (frame_width - content_width) / 2 if widths.is_empty() else 0
 		var y_offset := target_height - content_height if widths.is_empty() else 0
-		canvas.blit_rect(crop, Rect2i(Vector2i.ZERO, crop.get_size()), Vector2i(0, y_offset))
+		canvas.blit_rect(crop, Rect2i(Vector2i.ZERO, crop.get_size()), Vector2i(x_offset, y_offset))
 		var filename := stem + ("_%d" % index if frame_count > 1 else "") + ".png"
 		var output_path := ProjectSettings.globalize_path(OUTPUT_DIR.path_join(filename))
 		if canvas.save_png(output_path) != OK:

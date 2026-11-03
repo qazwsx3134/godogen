@@ -17,7 +17,12 @@ assets/music/*.wav
 assets/music/*.wav.import
 
 # The user's reference screenshots and the songs (copyrighted originals): local only, never in this public repo.
-# Rounds play assets/music/r1.mp3 … r3.mp3, copied from assets/example/ (see README).
+# Put the three songs in assets/music/; each chart's "music" names its file (the chart maker can switch it).
 assets/example/
 assets/music/*.mp3
 assets/music/*.mp3.import
+
+# Voice clips recorded from the show (copyrighted): local only. tools/convert_voice.sh cleans assets/sfx/*.MOV into
+# assets/voice/*.wav; the game skips any clip that is missing.
+assets/sfx/*.MOV
+assets/sfx/*.mov

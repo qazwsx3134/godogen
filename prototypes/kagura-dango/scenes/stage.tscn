@@ -71,21 +71,18 @@ unique_name_in_owner = true
 position = Vector2(180, 238)
 scale = Vector2(0.5, 0.5)
 character_id = &"rival_man"
-display_name = "對手"
 
 [node name="RivalB" parent="." unique_id=1782452183 instance=ExtResource("5_0hg5s")]
 unique_name_in_owner = true
 position = Vector2(240, 238)
 scale = Vector2(0.5, 0.5)
 character_id = &"rival_woman"
-display_name = "對手"
 
 [node name="Referee" parent="." unique_id=1273655887 instance=ExtResource("5_0hg5s")]
 unique_name_in_owner = true
 position = Vector2(400, 250)
 scale = Vector2(0.62, 0.62)
 character_id = &"referee"
-display_name = "裁判"
 
 [node name="RivalPlates" type="Node2D" parent="." unique_id=110333854]
 unique_name_in_owner = true
