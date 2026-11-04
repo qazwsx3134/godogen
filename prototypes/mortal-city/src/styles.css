@@ -1,0 +1,105 @@
+@import "tailwindcss";
+
+/* 色值來源：docs/cyberpunk-text-mmo/ui-system.md v0.4（reference.JPG 近似值） */
+@theme {
+  --color-bg: #020408;
+  --color-surface: #061218;
+  --color-raised: #0a1c24;
+  --color-line: #1b8d9c;
+  --color-line-strong: #60dfe6;
+  --color-cyan: #38f3fa;
+  --color-heading: #98edf4;
+  --color-fg: #c3f1ee;
+  --color-fg-list: #aeccd6;
+  --color-muted: #74afad;
+  --color-red: #ed5258;
+  --color-red-bg: #2f0a0a;
+  --color-warning: #e7d34a;
+  --color-positive: #82d8ab;
+
+  --font-sans: "Noto Sans TC", system-ui, sans-serif;
+  --font-tech: "Rajdhani", "Noto Sans TC", sans-serif;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+* {
+  scrollbar-color: var(--color-line) transparent;
+  scrollbar-width: thin;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 桌面版外框背景；手機寬度時只看到手機殼內容 */
+.desk-bg {
+  background:
+    linear-gradient(rgba(2, 4, 8, 0.55), rgba(2, 4, 8, 0.85)),
+    url("/assets/bg_street_blur.png") center / cover no-repeat,
+    radial-gradient(ellipse at 20% 10%, #3a0d14 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 90%, #06323a 0%, transparent 55%),
+    var(--color-bg);
+}
+
+/* 切角框：外層是框線色、內層是底色，兩層用同一個 clip-path，內層內縮 1px 形成切角細框 */
+.cut {
+  --cut: 10px;
+  --edge: var(--color-line);
+  --fill: var(--color-surface);
+  position: relative;
+  background: var(--edge);
+  clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, var(--cut) 100%, 0 calc(100% - var(--cut)));
+  padding: 1px;
+}
+.cut > .cut-in {
+  background: var(--fill);
+  clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, var(--cut) 100%, 0 calc(100% - var(--cut)));
+  height: 100%;
+}
+.cut-sm {
+  --cut: 6px;
+}
+.cut-red {
+  --edge: var(--color-red);
+  --fill: var(--color-red-bg);
+}
+.cut-strong {
+  --edge: var(--color-line-strong);
+}
+
+/* 細掃描線，只當裝飾，不攔點擊 */
+.scan::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg, rgba(56, 243, 250, 0.035) 0 1px, transparent 1px 3px);
+}
+
+.tech {
+  font-family: var(--font-tech);
+  letter-spacing: 0.06em;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-line-strong);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
