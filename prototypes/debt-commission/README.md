@@ -22,6 +22,7 @@ Godot 4.7 橫向視覺小說，依 [V1 Roadmap](../../docs/story-telling-game/RO
 | 長按畫面 | 隱藏全部 UI，再點一下恢復（恢復的那一下不推進） |
 | 往上滑 | 開啟對話紀錄；調查時改為拖曳背景 |
 | 目錄 | 開啟選單：存讀檔、設定及其他閱讀功能 |
+| 流程圖 | 章節選擇右上的「流程圖」：一次看一個故事，‹ › 換故事；走過的場景方塊顯示標題、之間的線變金色，沒走過的是「？？？」；拖曳畫面移動。走過哪些節點記在 `progress.cfg` 的 `[visited]`，讀舊檔或回滾不會把看過的路線收回 |
 | 章節選擇 | 標題上的故事名稱：本篇章節依序排列，前一章結算過才開放，顯示最佳評價；「結局收集」列出每章的結局，看過的顯示名稱、沒看過的是「？？？」；試玩片段一直開放。選了就回到標題，按「開始故事」或「繼續」 |
 | 設定 | 標題或目錄裡：文字速度（慢／標準／快／瞬間）、自動播放速度、背景音樂與音效音量、字級及紙框透明度、畫面效果（減少震動、閃光、立繪與按鈕動作）、吐槽輔助（寬鬆：選詞時間 ×1.5、QTE 判定窗 ×2）、教學提示（顯示／不顯示，另有「重看教學」）與存檔備份，立刻生效並記住；目錄的「音效」開關仍可一鍵靜音 |
 | 章節結算 | 章節最後：吐槽成功／出手、PERFECT、最高連擊、冷場、隱藏裝傻、剩下的眼鏡、Game Over 次數與評價（剩 5 副 S、4 副 A、3–2 副 B、1 副 C，每次 Game Over 降一級），依評價顯示一句話；「下一章」或「回標題」 |
@@ -40,6 +41,7 @@ Godot 4.7 橫向視覺小說，依 [V1 Roadmap](../../docs/story-telling-game/RO
 | QTE | 白圈縮到黃圈時點畫面任一處；太早、太晚或沒點都算冷場 |
 | Game Over | 眼鏡歸零時出現碎眼鏡畫面，可從該回合開頭重試 |
 | 角色 | 開口說話才登場；說過話的人留在畫面上，說話的人在最前面、其他人在後面變暗。換背景（新場景）時全部退場，劇本也能用 `hide()` 讓人先退場 |
+| 手感回饋 | 玩家的每種結果有固定的強弱（`scripts/stage_effects.gd` 的 `FEEDBACK`）：取得線索輕震並「啵」一聲、普通吐槽輕震、完美吐槽重震、揮空／冷場重震＋小晃動＋眼鏡裂開聲、吐槽之力全滿與 Game Over 最重；劇本的 `shake` 也會震。眼鏡碎掉那一副、吐槽之力與連擊數字上升時會跳一下；提示訊息彈出再淡出。震動只有 Android Chrome（iPhone Safari 沒有震動 API）；畫面效果「減少」時不震、不跳 |
 | 狀態列 | 右上是眼鏡（生命，掉一副就碎一副）與吐槽之力；取得的線索依序列在右邊一欄 |
 
 閱讀工具列提供目錄、回顧、自動與略讀；存檔、讀檔與素材集中在選單。Safe Area 只在 Android／iOS 原生匯出讀取；瀏覽器分頁本身已避開瀏海。讀到穩定劇本位置時寫入獨立的自動續讀檔；手動存檔有 3 頁、每頁 6 格，存入素材、背景、立繪與閱讀位置。新遊戲重設自動續讀進度，手動欄位保留。同一瀏覽器、同一網址重開後可按「繼續」或從指定欄位讀檔。選單的吐槽素材與人物檔案只在有調查或吐槽回合的故事出現。存檔也記住正在播的背景音樂。
@@ -115,7 +117,9 @@ bash tools/serve_web.sh
 
 | 檔案 | 用途 |
 | --- | --- |
-| `main.gd` | 橫向外殼：背景、立繪、特效、對話與選項、彈出視窗；手勢、AUTO／SKIP、選單、紀錄、存讀檔、QA |
+| `main.gd` | 橫向外殼：背景、立繪、特效、對話與選項、彈出視窗；手勢、AUTO／SKIP、選單、紀錄。底下四段各在自己的檔案，透過 `m`（main 的 `class_name DebtMain`）讀寫外殼的狀態：`scripts/main_investigation.gd` 調查、`main_round.gd` 裝傻回合與 QTE、`main_saves.gd` 存讀檔與備份、`main_tutorial.gd` 第一次教學，`main_qa.gd` 是 `?qa=1` 的 QA 快照。測試直接呼叫的舊名稱在 `main.gd` 末尾「轉接」保留一行 |
+| `scripts/flow_graph.gd`、`scenes/ui/flowchart_panel.tscn`、`flow_box.tscn` | 流程圖：把劇本的節點收成場景方塊（`next`、選項、`condition`、`goto`、回合 `clear` 才算路線；調查反應、吐槽失敗、提示、重試與 Game Over 留在方塊裡），走過的顯示標題、其他是 ？？？。面板根節點的 `box_size`、`column_gap`、`row_gap`、`line_color`、`faint_line_color`、`line_width` 可在 Inspector 調；方塊外觀在 `flow_box.tscn`。由 `tools/add_flowchart_scenes.gd` 產生一次 |
+| `shaders/scene_transition.gdshader` | 換背景的轉場：`bg` 步驟寫 `transition` 為 `brush`（筆刷）、`ink`（墨暈）或 `glitch`（故障），預設 `fade`；`.dialogue` 寫 `do bg("id", "brush")`。下一句等轉場結束；畫面效果「減少」時直接切換 |
 | `scripts/skin.gd`、`skins/gintama/skin.json` | 外觀包：載入並合併 `skins/<id>/skin.json`（場景、外觀、生命圖示、標題、用語） |
 | `scripts/ui_styles.gd` | 依外觀包的配色與素材畫按鈕與面板（依 node 的 `ui_style_role` 套用） |
 | `scripts/ui_stage_style.gd` | 背景照片的和紙色調 |
@@ -237,6 +241,7 @@ node tools/browser_check.mjs --backup --playwright /path/to/node_modules/@playwr
 | 目錄 | ✅ 已轉換 | `scenes/ui/menu_panel_gintama.tscn`（腳本 `scripts/menu_panel.gd`），每列是 `menu_row_gintama.tscn` |
 | 第一次教學 | ✅ 新增 | `scenes/ui/tutorial_overlay.tscn`（`Card/Margin/Rows` 的 `Title`、`Body`、`Buttons`；`Focus` 框、四條 `Shade*`、`Arrow`）。只有框、壓暗與卡片的上下位置跟著目標，其餘在 scene；由 `tools/make_tutorial_scenes.gd` 產生一次，之後沒有 `-- --force` 不覆寫 |
 | 對話紀錄 | ✅ 已轉換 | `scenes/ui/dialogue_log.tscn`、逐句 `log_entry.tscn`（`Avatar`＋`Body/Speaker`、`Body/Text`）。排版像聊天：其他角色靠左，有頭像與名字色；POV 角色與玩家的選擇靠右；旁白置中。名字色在銀魂和紙下使用 catalog 的 `ink`，沒填時由 `color` 加深到與和紙對比 ≥ 4.5（`ui_styles.ink_for`）。頭像預設為首字色卡，catalog 補上 `avatar` 圖片就會自動取代 |
+| 流程圖 | ✅ 新增 | `scenes/ui/flowchart_panel.tscn`（`Header` 的 `Prev`／`StoryName`／`Next`／`Close`、`%Progress`、`%Scroll`／`%Canvas`），方塊 `flow_box.tscn`（`%Kind`、`%Title`）。方塊的位置依劇本在執行時排，線畫在 `Canvas` 上 |
 | 存讀檔面板與覆寫確認 | ✅ 已轉換 | `scenes/ui/save_slots_panel.tscn`、`save_slot_card.tscn`、`save_overwrite_confirmation.tscn` |
 | 結尾按鈕 | ✅ 已轉換 | `scenes/ui/end_controls.tscn` |
 | 吐槽回合的操作列與消音條 | ✅ 已轉換 | 在對話框 scene 的 Actions 裡（‹ ›、句數、聽下去、吐槽！、`CensorBar`）；選項面板另有 `CensorBar` 與 `Super`；顯示什麼由 `scripts/round_view.gd` 決定 |
@@ -283,7 +288,7 @@ node tools/browser_check.mjs --backup --playwright /path/to/node_modules/@playwr
 
 新啟動的遊戲預設為第一章「萬事屋冰箱草莓牛奶失竊事件」上機試讀版，也可直接開 `?sample=chapter1`；桌機既有的故事選擇仍記住。劇本採用已核准 P1–P8 的草稿 v0.2，修改來源是 `story_src/chapter1.dialogue` 與 `chapter1.blocks.json`，台詞追溯見 `docs/chapter1-source-map.json`。玩法、驗證與真人待辦見 [C–E 交付紀錄](docs/READING-CHAPTER1.md)。
 
-新增段落內「上一句」、獨立快速存檔／快速讀檔，均在目錄。字級與紙框透明度在設定，窄手機可捲動。文字支援重點色／放大／抖動、停頓／慢速與角色打字音；`?sample=text_effects` 是文字演出示範。新安裝預設銀魂和紙；後續對話框與按鈕沿用作者確認的 PNG 紙框與深藍銀框按鈕。
+新增段落內「上一句」、獨立快速存檔／快速讀檔，均在目錄。字級與紙框透明度在設定，窄手機可捲動。文字支援重點色／放大／抖動、停頓／慢速與角色打字音；`?sample=text_effects` 是文字演出示範；`?sample=transitions` 依序示範筆刷、墨暈、故障與預設淡入淡出四種換背景轉場。新安裝預設銀魂和紙；後續對話框與按鈕沿用作者確認的 PNG 紙框與深藍銀框按鈕。
 
 直接調整 `dialogue_log.tscn` 的 `Margins` 與 `Column` 間距、`LogClose` 文字；`save_slots_panel.tscn` 的 `OuterMargins`／`Padding`／`Cards`；`save_slot_card.tscn` 的 `Preview`／`SlotTitle`；`save_overwrite_confirmation.tscn` 的確認文案；`end_controls.tscn` 的 `Actions` anchors 與兩顆按鈕。正常執行不重建這些 scene。
 

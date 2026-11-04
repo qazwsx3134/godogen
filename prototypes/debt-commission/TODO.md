@@ -5,9 +5,9 @@
 - 2026-10-23：介面只留「銀魂和紙」，另外三款（月下映畫、萬事屋委託簿、吐槽分鏡）已刪除；早期比較紀錄見 [UI-REDESIGN-OPTIONS](docs/UI-REDESIGN-OPTIONS.md)。
 
 - 重新設計對話框與常用元件。先試底部滿版、半透明對話層、上緣分隔線，再與目前畫面比較；參考：[圖一](example/image.jpg)、[圖二](example/螢幕擷取畫面%202026-09-24%20021146.jpg)、[圖三](example/螢幕擷取畫面%202026-09-24%20021221.jpg)。
-- 試用 shader 做事件或場景轉換；ASCII 與駭客風格是候選方向，需先看可讀性與故事氣質。
+- ~~試用 shader 做事件或場景轉換~~：2026-11-04 做了筆刷、墨暈、故障三種換背景轉場（`shaders/scene_transition.gdshader`，`bg` 的 `transition`；`?sample=transitions` 示範）。第一章還沒套用，等作者看過試片選定。ASCII 字元畫風格沒做（要另備字形貼圖）。
 
-[底部對話層與素材 Web 試版比較](docs/UI-TRIAL.md)保留早期試作截圖；介面是作者已確認的銀魂和紙，仍待 Android Chrome 與 iOS Safari 實機試玩。shader 轉場尚未試作；優先順序與驗收方式見[進度紀錄](../../docs/story-telling-game/STATUS.md)。
+[底部對話層與素材 Web 試版比較](docs/UI-TRIAL.md)保留早期試作截圖；介面是作者已確認的銀魂和紙，仍待 Android Chrome 與 iOS Safari 實機試玩。shader 換背景轉場已有試片（`?sample=transitions`），第一章待作者選定；優先順序與驗收方式見[進度紀錄](../../docs/story-telling-game/STATUS.md)。
 
 對話框要照著圖做銀魂風：「銀魂和紙」以 [v2 Option A](../../docs/story-telling-game/v2/story-telling-ui2.jpeg) 為基準。2026-10-06 修正紙框比例、跨框雲形名字牌、明體字型、青海波與櫻花，底列補齊 LOG／AUTO／SKIP／MENU 的圖示與實際功能；[原圖與實際對話並排](docs/gintama-reference-comparison.png)、[驗證紀錄](docs/UI-REDESIGN-OPTIONS.md#第四款還原修正2026-10-06)。追加修正波紋溢出：使用原圖經 imagegen 去背／清字的透明 PNG，波紋與櫻花合在紙框底圖中，保留四角並加裁切限制。作者已確認可採用；後續對話框與新按鈕沿用此樣式。新安裝預設為銀魂和紙，既有風格偏好仍保留。
 

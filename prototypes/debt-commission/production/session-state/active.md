@@ -1,5 +1,7 @@
 # debt-commission 交接
 
+2026-11-04：`main.gd` 拆成外殼加五個分段檔（`scripts/main_investigation.gd`、`main_round.gd`、`main_saves.gd`、`main_tutorial.gd`、`main_qa.gd`，4530 → 約 3000 行）；新增章節選擇「流程圖」（G4）、換背景的 shader 轉場（`bg` 的 `transition`：brush／ink／glitch，試片 `?sample=transitions`），以及手感回饋（震動分級、HUD 與提示的跳動、玩家結果的固定音效）。完整測試 54 通過；唯一失敗 `katsura_dog_ears` 在拆分前就失敗。`browser_check.mjs` 各路線在 HEAD 版同樣失敗，未修。2026-11-05 已 commit（未 push）；詳細見 [PROGRESS](../../PROGRESS.md)。待作者：看轉場試片、選第一章要不要用；Android 手機試震動。
+
 2026-11-02：立繪退場、明暗已獨立；修正未上場動作被略過、漫畫同幀蓋住動作，以及準備站位遺失登場動畫。台詞新增畫外音核取框（勾選仍不登場）。素材設定新增身高 cm，桂／銀時／神樂採 175／177／155，自動縮放並對齊腳底，排除神樂的傘；繼承角色可建立作品內身高覆寫。Node 15 項、Godot 6 suites 與實際 Chrome 的存回／重開／試玩回歸通過。未改作者故事／圖片／tscn，未重匯 Web、未 commit／push；詳細命令、限制與所有未提交範圍見根目錄 Progress.md。
 
 2026-11-02：側欄每一步前新增「＋ 插入步驟」，可就地選類型並插入到該步之前，新增後自動定位，支援取消、復原／重做及唯讀保護。L2 資料／既有類型共 12 項測試與真實 Chrome 的 60 句長場景操作回歸通過；未改 runtime／scene，未重跑完整遊戲或手機、實際存回檔案流程。未 commit／push，使用者原有狗耳朵故事修改保留。操作與指令見 [STORY-EDITOR.md](../../docs/STORY-EDITOR.md)，詳細驗證見根目錄 `Progress.md`。

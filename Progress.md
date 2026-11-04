@@ -10,17 +10,17 @@
 
 | commit | 日期 | 做了什麼 |
 |---|---|---|
-| 最新（`git log -1`） | 2026-11-05 | mortal-city：P01 前兩案試讀稿（資料驅動劇情委託）、自動戰鬥與戰術、排隊打鬥與戰利品、重傷停工與休養／診所／醫院、五項屬性與屬性做法、白蛇的義體診所與換裝；risk-systems §4 神經容量加技術已確認 |
+| 最新（`git log -1`） | 2026-11-05 | debt-commission：`main.gd` 拆成外殼＋五個分段檔（G6）、章節選擇「流程圖」（G4）、換背景 shader 轉場（brush／ink／glitch）、手感回饋（震動分級、HUD 與提示跳動、固定音效）、kit 同步；LESSONS 加 2 條 |
+| `0b74bd2e` | 2026-11-05 | seal-meadow：town slice 與模型素材索引（另一個 session 提交，細節見其 PROGRESS） |
+| `8f7db380` | 2026-11-05 | mortal-city：P01 前兩案試讀稿（資料驅動劇情委託）、自動戰鬥與戰術、排隊打鬥與戰利品、重傷停工與休養／診所／醫院、五項屬性與屬性做法、白蛇的義體診所與換裝；risk-systems §4 神經容量加技術已確認 |
 | `74c62c95` | 2026-11-04 | Cyberpunk 文字 MMO：ro-idle 研究與借鏡、雙層任務決定、手機直式原型 mortal-city（React，論壇終端 UI、劇情／街頭工作／高階工作、救援抵押、離開報告、城市像素橫幅）、S2 風格與主角 A 選定；LESSONS 加 2 條 |
 | `cd18ee55` | 2026-11-02 | 新原型 kagura-dango「丸子大胃王」：完整比賽（裁判、三回合、對手隊、神樂變胖）、網頁音訊時鐘驗證；LESSONS 加 3 條 |
-| `dd246e43` | 2026-11-02 | 進度檔改成「根目錄總覽＋各專案 PROGRESS／MILESTONE」，AGENTS.md 規則同步 |
-| `99f3dccc` | 2026-11-02 | debt 故事編輯器：立繪退場／明暗獨立、角色身高自動縮放、指定位置插入步驟與新測試；`Progress.md` 拆成各專案進度檔 |
 
 ## 專案入口
 
 | 專案 | 現況（一句） | 進度 | 歷史 |
 |---|---|---|---|
-| debt-commission 萬事屋吐槽 ADV | 故事編輯器持續擴充；等作者試玩桂短篇與新背景 | [PROGRESS](prototypes/debt-commission/PROGRESS.md) | [MILESTONE](prototypes/debt-commission/MILESTONE.md) |
+| debt-commission 萬事屋吐槽 ADV | main.gd 已拆分；流程圖、shader 轉場、手感回饋完成；等作者選第一章轉場、Android 試震動 | [PROGRESS](prototypes/debt-commission/PROGRESS.md) | [MILESTONE](prototypes/debt-commission/MILESTONE.md) |
 | godot-kit 共用模組 | VFX 庫完成，等 GPU／瀏覽器／手機外觀驗收；未同步各遊戲副本 | [PROGRESS](prototypes/godot-kit/PROGRESS.md) | — |
 | seal-meadow 蓬蓬草原 | 暖陶瓦風格與商店三視圖已定方向；可走商店、入口與路牌樣板已接入，正式 2D 紙娃娃及手機真人驗收待做，多人延後 | [PROGRESS](prototypes/seal-meadow/PROGRESS.md) | [MILESTONE](prototypes/seal-meadow/MILESTONE.md) |
 | hero-horde-idle 全員推王 | 等真人前三層、手機恢復成本與作者素材 | [PROGRESS](prototypes/hero-horde-idle/docs/PROGRESS.md) | [MILESTONE](prototypes/hero-horde-idle/docs/MILESTONE.md) |

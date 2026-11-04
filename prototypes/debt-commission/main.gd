@@ -1,4 +1,5 @@
 extends Control
+class_name DebtMain
 
 ## 橫向視覺小說外殼。
 ##
@@ -35,6 +36,7 @@ const INVESTIGATE_BAR_SCENE: PackedScene = preload("res://scenes/ui/investigate_
 const CHAPTER_SELECT_SCENE: PackedScene = preload("res://scenes/ui/chapter_select.tscn")
 const CREDITS_ROLL_SCENE: PackedScene = preload("res://scenes/ui/credits_roll.tscn")
 const GALLERY_SCENE: PackedScene = preload("res://scenes/ui/gallery_panel.tscn")
+const FLOWCHART_SCENE: PackedScene = preload("res://scenes/ui/flowchart_panel.tscn")
 ## The tools and assets every story uses, last on 製作名單: {title, credits: [{role, names}]}.
 const GAME_CREDITS_PATH: String = "res://data/credits.json"
 const SETTINGS_SCRIPT: Script = preload("res://scripts/settings.gd")
@@ -95,6 +97,7 @@ var _story_choices: Array[Dictionary] = []
 var _library: RefCounted = null
 var _credits_roll: Control = null
 var _gallery: Control = null
+var _flowchart: Control = null
 ## The story music to bring back when a 鑑賞 preview stops.
 var _music_before_preview: String = ""
 ## Kept alive while the browser's file picker is open (save_transfer import).
@@ -135,6 +138,11 @@ const COLOR_TEXT: Color = Color("#f6f1e7")
 const COLOR_TEXT_SOFT: Color = Color("#b9b4c8")
 const COLOR_THOUGHT: Color = Color("#9fc3ff")
 const COLOR_DISABLED: Color = Color("#5d6070")
+const MainQa = preload("res://scripts/main_qa.gd")
+const MainSaves = preload("res://scripts/main_saves.gd")
+const MainInvestigation = preload("res://scripts/main_investigation.gd")
+const MainRound = preload("res://scripts/main_round.gd")
+const MainTutorial = preload("res://scripts/main_tutorial.gd")
 
 var _font: Font = ThemeDB.fallback_font
 var _runner: RefCounted = null
@@ -338,6 +346,7 @@ var _gesture_long: bool = false
 var _gesture_start: Vector2 = Vector2.ZERO
 var _gesture_token: int = 0
 var _toast_token: int = 0
+var _toast_tween: Tween = null
 var _text_tone: String = "body"
 ## Bottom of the authored stage. It is independent of the dialogue's content and visibility.
 var _stage_bottom: float = 0.0
@@ -347,6 +356,14 @@ var _qa_enabled: bool = false
 var _tutorial: Control = null
 var _tutorials: Array = []
 var _qa_elapsed: float = 0.0
+
+
+## Sections of this shell kept in their own scripts (each reaches back through `m`).
+var _qa_ctl: MainQa = MainQa.new(self)
+var _saves: MainSaves = MainSaves.new(self)
+var _investigation: MainInvestigation = MainInvestigation.new(self)
+var _round: MainRound = MainRound.new(self)
+var _tutorial_ctl: MainTutorial = MainTutorial.new(self)
 
 
 func _ready() -> void:
@@ -375,7 +392,7 @@ func _ready() -> void:
 	_apply_ui_style()
 	get_viewport().size_changed.connect(_layout)
 	_layout()
-	_detect_qa_mode()
+	_qa_ctl._detect_qa_mode()
 	_show_title()
 
 
@@ -437,7 +454,7 @@ func _open_chapter_select() -> void:
 			"work_title": str(choice.get("work_title", ""))})
 	_chapter_select.call("set_style", _ui_style_id)
 	_chapter_select.call("open", entries, _chapter_endings())
-	_publish_qa_state()
+	_qa_ctl._publish_qa_state()
 
 
 func _on_chapter_picked(index: int) -> void:
@@ -459,7 +476,7 @@ func _open_credits() -> void:
 	_screen_mode = "credits"
 	_credits_roll.call("open", _credit_sections(), int(_settings.get("motion", 0)) == 0)
 	_apply_ui_style_recursive(_credits_roll)  # 關閉 and the rows it just added
-	_publish_qa_state()
+	_qa_ctl._publish_qa_state()
 
 
 ## 鑑賞 from 章節選擇: every background and track with a file, the ones met in play shown.
@@ -471,7 +488,7 @@ func _open_gallery() -> void:
 	_gallery.call("open", _gallery_entries("backgrounds", "bg"), _gallery_entries("music", "bgm"),
 		linear_to_db(level) if level > 0.0 else -80.0)
 	_style_gallery()
-	_publish_qa_state()
+	_qa_ctl._publish_qa_state()
 
 
 func _style_gallery() -> void:
@@ -494,7 +511,7 @@ func _gallery_entries(section: String, kind: String) -> Array[Dictionary]:
 func _close_gallery() -> void:
 	if _screen_mode == "gallery":
 		_screen_mode = "chapter_select"
-	_publish_qa_state()
+	_qa_ctl._publish_qa_state()
 
 
 ## While a 鑑賞 track plays the story's music pauses; it comes back when the preview stops.
@@ -508,10 +525,39 @@ func _on_gallery_previewing(active: bool) -> void:
 		_music_before_preview = ""
 
 
+## 流程圖 from 章節選擇: every story the player can open, starting at the current one; the scenes
+## passed through show their titles (story_library.visited).
+func _open_flowchart() -> void:
+	if _screen_mode != "chapter_select":
+		return
+	_screen_mode = "flowchart"
+	var stories: Array[Dictionary] = []
+	var start: int = 0
+	for index: int in range(_story_choices.size()):
+		var choice: Dictionary = _story_choices[index]
+		if not _story_unlocked(index):
+			continue
+		var story: Variant = JSON.parse_string(FileAccess.get_file_as_string(str(choice["path"])))
+		if not story is Dictionary:
+			continue
+		if index == _story_choice_index():
+			start = stories.size()
+		stories.append({"id": str(choice["id"]), "title": _story_title(choice), "story": story,
+			"visited": _library.visited(str(choice["id"]))})
+	_flowchart.call("open", stories, start)
+	_qa_ctl._publish_qa_state()
+
+
+func _close_flowchart() -> void:
+	if _screen_mode == "flowchart":
+		_screen_mode = "chapter_select"
+	_qa_ctl._publish_qa_state()
+
+
 func _close_credits() -> void:
 	if _screen_mode == "credits":
 		_screen_mode = "chapter_select"
-	_publish_qa_state()
+	_qa_ctl._publish_qa_state()
 
 
 ## 設定 from the title or from 目錄 (which stays open underneath).
@@ -521,13 +567,13 @@ func _open_settings() -> void:
 	_settings_return = _screen_mode
 	_screen_mode = "settings"
 	_settings_panel.call("open", _settings, _settings_return == "title", _phase3_enabled)
-	_publish_qa_state()
+	_qa_ctl._publish_qa_state()
 
 
 func _close_settings() -> void:
 	_settings_panel.visible = false
 	_screen_mode = _settings_return
-	_publish_qa_state()
+	_qa_ctl._publish_qa_state()
 
 
 # ---------------------------------------------------------------- 故事清單與進度（story_library.gd）
@@ -589,95 +635,6 @@ func _record_ending(command: Dictionary, game_over: bool = false) -> void:
 
 # ---------------------------------------------------------------- 存檔備份
 
-## Every file a backup holds: each story's saves, progress, settings and the UI choices.
-func _backup_paths() -> Array[String]:
-	return SAVE_TRANSFER.backup_paths(_story_choices, [progress_path, settings_path, STORY_CHOICE_PATH])
-
-
-## 匯出存檔: the Web build downloads the backup; a desktop build asks where to write it.
-func _export_saves() -> void:
-	var now: String = Time.get_datetime_string_from_system()
-	var text: String = SAVE_TRANSFER.export_text(_backup_paths(), now)
-	var file_name: String = "debt-commission-saves-%s.json" % now.replace(":", "").replace("T", "-")
-	if OS.has_feature("web"):
-		JavaScriptBridge.download_buffer(text.to_utf8_buffer(), file_name, "application/json")
-		_show_toast("已下載存檔備份")
-		return
-	_file_dialog(FileDialog.FILE_MODE_SAVE_FILE, file_name, func(path: String) -> void:
-		_show_toast("已匯出存檔備份" if ATOMIC_FILE.write_text(path, text) == OK else "存檔備份寫入失敗"))
-
-
-## 匯入存檔 (from the title only): the player picks a backup file, which replaces every save.
-func _import_saves() -> void:
-	if _screen_mode != "settings" or _settings_return != "title":
-		return
-	if OS.has_feature("web"):
-		_pick_web_backup()
-		return
-	_file_dialog(FileDialog.FILE_MODE_OPEN_FILE, "", func(path: String) -> void:
-		_import_backup_text(FileAccess.get_file_as_string(path)))
-
-
-## Checks a backup and, when it is good, replaces the saves with it and starts again from the
-## title. A bad file changes nothing and says why.
-func _import_backup_text(text: String) -> bool:
-	var allowed: Array[String] = _backup_paths()
-	var parsed: Dictionary = SAVE_TRANSFER.parse_import(text, allowed)
-	var error: String = str(parsed["error"])
-	if error.is_empty():
-		error = SAVE_TRANSFER.apply_import(parsed["files"], allowed)
-	if not error.is_empty():
-		_show_toast(error)
-		return false
-	_reload_after_import()
-	return true
-
-
-func _reload_after_import() -> void:
-	if get_tree().current_scene == self:
-		get_tree().reload_current_scene.call_deferred()
-		return
-	# Main inside another scene (tests): read the imported settings, progress and saves back in place.
-	_settings = SETTINGS_SCRIPT.load_settings(settings_path)
-	_library = STORY_LIBRARY.new(stories_path, progress_path, packs_root)
-	_story_choices = _library.stories
-	_close_settings()
-	_refresh_title()
-	_show_toast("已匯入存檔")
-
-
-## The browser's file picker; its text comes back through a JavaScript callback.
-func _pick_web_backup() -> void:
-	_web_backup_callback = JavaScriptBridge.create_callback(func(args: Array) -> void:
-		_import_backup_text(str(args[0]) if not args.is_empty() else ""))
-	JavaScriptBridge.get_interface("window").debtImportBackup = _web_backup_callback
-	JavaScriptBridge.eval("""(() => {
-		const input = document.createElement('input');
-		input.type = 'file';
-		input.accept = '.json,application/json';
-		input.addEventListener('change', () => {
-			const file = input.files && input.files[0];
-			if (file) file.text().then(text => window.debtImportBackup(text), () => window.debtImportBackup(''));
-		});
-		input.click();
-	})()""", true)
-
-
-func _file_dialog(mode: FileDialog.FileMode, file_name: String, done: Callable) -> void:
-	var dialog: FileDialog = FileDialog.new()
-	dialog.file_mode = mode
-	dialog.access = FileDialog.ACCESS_FILESYSTEM
-	dialog.use_native_dialog = true
-	dialog.filters = PackedStringArray(["*.json ; 存檔備份"])
-	dialog.current_file = file_name
-	dialog.file_selected.connect(func(path: String) -> void:
-		dialog.queue_free()
-		done.call(path))
-	dialog.canceled.connect(dialog.queue_free)
-	add_child(dialog)
-	dialog.popup_centered_ratio(0.8)
-
-
 func _on_setting_changed(key: String, value: int) -> void:
 	_settings[key] = value
 	if SETTINGS_SCRIPT.save_settings(settings_path, _settings) != OK:
@@ -688,11 +645,12 @@ func _on_setting_changed(key: String, value: int) -> void:
 			_motion.set_reduce_motion(value == 1)
 		_dialog_panel.set_reduce_motion(value == 1)
 		_investigate_bar.call("set_reduce_motion", value == 1)
+		_phase3_hud.reduce_motion = value == 1
 	if key.ends_with("_volume"):
 		_apply_audio_levels()
 	if key in ["font_size", "paper_opacity"]:
 		_apply_reading_settings()
-	_publish_qa_state()
+	_qa_ctl._publish_qa_state()
 
 
 func _apply_reading_settings() -> void:
@@ -734,6 +692,8 @@ func _refresh_story_switch() -> void:
 
 func _load_story() -> void:
 	_use_skin()
+	if _phase3_hud != null:
+		_phase3_hud.reset_pops()
 	_save_validation_probe = null
 	_runner = STORY_RUNNER_SCRIPT.new() as RefCounted
 	_story_ready = bool(_runner.call("load_story", story_path, story_catalog_override))
@@ -761,7 +721,7 @@ func _load_story() -> void:
 ## Another work's catalog (a story pack): its characters replace the cast on stage, and effects,
 ## music and the comedy layer read its sounds and names.
 func _rebuild_cast() -> void:
-	_forget_search_cast()
+	_investigation._forget_search_cast()
 	for sprite: Control in _sprites.values():
 		_char_layer.remove_child(sprite)
 		sprite.queue_free()
@@ -790,7 +750,7 @@ func _other_version_of(payload: Dictionary, story_id: String, version: String) -
 ## title says so until a story starts.
 func _archive_other_version_save(story_id: String, version: String) -> void:
 	_archived_save_notice = ""
-	var old_version: String = _other_version_of(_read_raw_save_payload(save_path), story_id, version)
+	var old_version: String = _other_version_of(_saves._read_raw_save_payload(save_path), story_id, version)
 	if old_version.is_empty():
 		return
 	for suffix: String in ["", ".bak"]:
@@ -817,14 +777,14 @@ func _build_ui() -> void:
 	_build_sprites()
 	_build_phase3_hud()
 	_build_dialogue()
-	_build_investigate_bar()
+	_investigation._build_investigate_bar()
 	_mount_menu()
 	_build_log()
-	_build_tutorial()
+	_tutorial_ctl._build_tutorial()
 	_build_case_file()
 	_build_toast()
 	_mount_title()
-	_build_slot_picker()
+	_saves._build_slot_picker()
 	_chapter_select = CHAPTER_SELECT_SCENE.instantiate() as Control
 	_game.add_child(_chapter_select)  # above the title screen
 	_chapter_select.connect("picked", _on_chapter_picked)
@@ -839,6 +799,11 @@ func _build_ui() -> void:
 	_gallery.connect("closed", _close_gallery)
 	_gallery.connect("tab_changed", _style_gallery)
 	_gallery.connect("previewing", _on_gallery_previewing)
+	_chapter_select.connect("flowchart_pressed", _open_flowchart)
+	_flowchart = FLOWCHART_SCENE.instantiate() as Control
+	_game.add_child(_flowchart)  # over 章節選擇
+	_flowchart.connect("closed", _close_flowchart)
+	_flowchart.connect("story_changed", func() -> void: _apply_ui_style_recursive(_flowchart))
 	_mount_settings()
 	_mount_end_screens()
 	_effects = StageEffects.new()
@@ -847,7 +812,7 @@ func _build_ui() -> void:
 	_effects.setup([_bg_layer, _char_layer, _interaction_layer, _fx_layer, _dialog_layer], _overlay_layer, _catalog)
 	_effects.reduce_motion = int(_settings.get("motion", 0)) == 1
 	_comedy_layer.setup(_effects, [_bg_layer, _char_layer], _catalog, _comedy_speaker_rect, _comedy_dialog_rect)
-	_comedy_layer.finished.connect(_publish_qa_state)
+	_comedy_layer.finished.connect(_qa_ctl._publish_qa_state)
 	_apply_audio_levels()
 	_refresh_gameplay_ui()
 
@@ -892,9 +857,11 @@ func _paper_backed(path: String) -> Texture2D:
 	return texture
 
 
-func _apply_background(background_id: String, animate: bool = false) -> void:
+## Shows the catalog's background. `animate` crossfades from the old one, or wipes it with the bg
+## step's `transition` (stage_motion.gd); returns how long that runs, so the story can wait for a wipe.
+func _apply_background(background_id: String, animate: bool = false, transition: String = "fade") -> float:
 	if not _backgrounds.has(background_id):
-		return
+		return 0.0
 	var changing: bool = animate and not _skip and _motion != null and _background_rect != null and background_id != _current_bg_id
 	if changing:
 		_motion.capture_background(_background_rect)
@@ -918,7 +885,8 @@ func _apply_background(background_id: String, animate: bool = false) -> void:
 	for frame: TextureRect in _background_frames.values():
 		frame.visible = frame == _background_rect
 	if changing:
-		_motion.crossfade()
+		return _motion.crossfade(0.28, transition)
+	return 0.0
 
 
 func _build_sprites() -> void:
@@ -954,6 +922,7 @@ func _build_phase3_hud() -> void:
 	_phase3_stats_label = _phase3_hud.power_value
 	_phase3_timer_label = _phase3_hud.timer
 	_phase3_hud.visible = false
+	_phase3_hud.reduce_motion = int(_settings.get("motion", 0)) == 1
 
 ## `char` places a character (slot, expression) for when they speak; only `hide` (visible false)
 ## takes them off stage. Characters come on stage by speaking (_focus_speaker).
@@ -1041,7 +1010,7 @@ func _mount_dialogue_box() -> void:
 		if _screen_mode == "story":
 			_set_skip(not _skip))
 	_dialog_panel.advance_pressed.connect(_on_screen_tap)
-	_dialog_panel.collapse_pressed.connect(_set_investigation_collapsed.bind(true))
+	_dialog_panel.collapse_pressed.connect(_investigation._set_investigation_collapsed.bind(true))
 	_investigation_continue_button = _dialog_panel.investigation_continue
 	_boke_controls = _dialog_panel.round_controls
 	_boke_previous_button = _dialog_panel.boke_previous
@@ -1049,12 +1018,12 @@ func _mount_dialogue_box() -> void:
 	_boke_next_button = _dialog_panel.boke_next
 	_boke_listen_button = _dialog_panel.boke_listen
 	_boke_tsukkomi_button = _dialog_panel.boke_tsukkomi
-	_investigation_continue_button.pressed.connect(_on_investigation_continue_pressed)
-	_boke_previous_button.pressed.connect(_on_boke_previous_pressed)
-	_boke_next_button.pressed.connect(_on_boke_next_pressed)
-	_boke_listen_button.pressed.connect(_on_boke_listen_pressed)
-	_boke_tsukkomi_button.pressed.connect(_on_boke_tsukkomi_pressed)
-	_dialog_panel.censor_bar.pressed.connect(_on_censor_pressed)
+	_investigation_continue_button.pressed.connect(_investigation._on_investigation_continue_pressed)
+	_boke_previous_button.pressed.connect(_round._on_boke_previous_pressed)
+	_boke_next_button.pressed.connect(_round._on_boke_next_pressed)
+	_boke_listen_button.pressed.connect(_round._on_boke_listen_pressed)
+	_boke_tsukkomi_button.pressed.connect(_round._on_boke_tsukkomi_pressed)
+	_dialog_panel.censor_bar.pressed.connect(_round._on_censor_pressed)
 	_dialog_panel.set_chapter(_chapter_title())
 	_fit_bottom_panel(_dialog_panel)
 	if old == null:
@@ -1076,7 +1045,7 @@ func _mount_dialogue_box() -> void:
 	_set_name_plate(_plate_speaker, _plate_thought)
 	_set_visible_text(_visible_text, _text_complete)
 	if _hotspot_layer != null:
-		_show_topics(_current_command)  # the search's topics move into the new box
+		_investigation._show_topics(_current_command)  # the search's topics move into the new box
 	_dialog_layer.remove_child(old)
 	old.queue_free()
 
@@ -1103,9 +1072,9 @@ func _swap_choice_sheet() -> void:
 	_dialog_layer.add_child(_choice_sheet)
 	_dialog_layer.move_child(_choice_sheet, _dialog_panel.get_index() + 1)
 	_choice_sheet.menu_pressed.connect(_open_menu)
-	_choice_sheet.censor_pressed.connect(_on_censor_pressed)
-	_choice_sheet.super_pressed.connect(_on_super_pressed)
-	_choice_sheet.pop_finished.connect(_publish_qa_state)
+	_choice_sheet.censor_pressed.connect(_round._on_censor_pressed)
+	_choice_sheet.super_pressed.connect(_round._on_super_pressed)
+	_choice_sheet.pop_finished.connect(_qa_ctl._publish_qa_state)
 	_choice_sheet.clear_options()
 	_fit_choice_sheet()
 	if old != null:
@@ -1129,7 +1098,7 @@ func _show_choice_sheet() -> void:
 		var option_id: String = _dict_string(_current_options[index], "id")
 		var row: Button = _choice_buttons[index]
 		row.name = "Boke_" + option_id if _sheet_timed else "Choice_%d" % index
-		row.pressed.connect((_on_boke_option_pressed if _sheet_timed else _on_choice_pressed).bind(option_id))
+		row.pressed.connect((_round._on_boke_option_pressed if _sheet_timed else _on_choice_pressed).bind(option_id))
 	if _sheet_timed:
 		_choice_sheet.set_timer(_boke_time_remaining, _timer_total(_current_command),
 			_screen_mode != "tsukkomi")
@@ -1177,13 +1146,13 @@ func _on_menu_row_pressed(row_id: String) -> void:
 		"resume":
 			_close_menu()
 		"save", "load":
-			_open_slot_picker(row_id)
+			_saves._open_slot_picker(row_id)
 		"rollback":
-			_rollback_line()
+			_saves._rollback_line()
 		"quick_save":
-			_quick_save()
+			_saves._quick_save()
 		"quick_load":
-			_quick_load()
+			_saves._quick_load()
 		"material":
 			_open_case_file("materials")
 		"profile":
@@ -1206,8 +1175,8 @@ func _refresh_menu_rows() -> void:
 	var from_mode: String = _mode_before_overlay if _screen_mode == "menu" else _screen_mode
 	(_menu_items["skip"] as Button).disabled = from_mode != "story"
 	(_menu_items["rollback"] as Button).disabled = from_mode != "story" or not _rollback.available()
-	(_menu_items["quick_save"] as Button).disabled = not _saveable_current_state()
-	(_menu_items["quick_load"] as Button).disabled = _read_save_payload(SAVE_SLOTS_SCRIPT.quick_path(save_path)).is_empty()
+	(_menu_items["quick_save"] as Button).disabled = not _saves._saveable_current_state()
+	(_menu_items["quick_load"] as Button).disabled = _saves._read_save_payload(SAVE_SLOTS_SCRIPT.quick_path(save_path)).is_empty()
 	for key: String in ["material", "profile"]:
 		(_menu_items[key] as Button).visible = _phase3_enabled
 	_menu_overlay.set_row_hint("mute", "關" if _audio_muted else "開")
@@ -1234,87 +1203,6 @@ func _build_log() -> void:
 
 # ---------------------------------------------------------------- 第一次教學（異獸髮廊研究，docs/PLAN-LOG-AVATAR-TUTORIAL.md B）
 
-func _build_tutorial() -> void:
-	_tutorial = preload("res://scenes/ui/tutorial_overlay.tscn").instantiate()
-	_popup_layer.add_child(_tutorial)  # last child: above every other popup
-	_tutorial.visible = false
-	_tutorial.connect("finished", _on_tutorial_finished)
-	_apply_ui_style_recursive(_tutorial)
-	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(tutorials_path)) \
-		if FileAccess.file_exists(tutorials_path) else null  # a plain JSON file ships as-is (export include_filter)
-	_tutorials = (data as Dictionary).get("tutorials", []) if data is Dictionary else []
-
-
-## Guides show for players only. ponytail: headless runs (the test suites) and ?qa=1 browser checks skip them unless
-## DEBT_TUTORIAL=1 / &tutorial=1 asks, so the 40-odd existing suites need no per-file switch.
-func _tutorials_on() -> bool:
-	if not tutorials_enabled or int(_settings.get("tutorial", 0)) != 0:
-		return false
-	if DisplayServer.get_name() == "headless" and OS.get_environment("DEBT_TUTORIAL") != "1":
-		return false
-	if _qa_enabled and not bool(JavaScriptBridge.eval("new URLSearchParams(window.location.search).get('tutorial') === '1'")):
-		return false
-	return true
-
-
-## The guide for `trigger` (a screen mode), once: only if that screen is still up and nothing else covers it.
-func _maybe_tutorial(trigger: String) -> void:
-	if _screen_mode != trigger or _tutorial.visible or not _tutorials_on():
-		return
-	if trigger == "boke_round" and not _boke_controls.visible:
-		return  # combo lines open their slot at once; the guide waits for a round the player reads
-	var seen: Array = _tutorials_seen()
-	for def: Dictionary in _tutorials:
-		if str(def.get("trigger", "")) == trigger and str(def.get("id", "")) not in seen:
-			_set_auto(false)
-			_set_skip(false)
-			_tutorial.call("start", str(def.id), def.get("steps", []), _tutorial_target)
-			_publish_qa_state()
-			return
-
-
-func _tutorial_target(target: String) -> Control:
-	match target:
-		"boke_switch": return _boke_previous_button.get_parent() as Control
-		"boke_listen": return _boke_listen_button
-		"boke_tsukkomi": return _boke_tsukkomi_button
-		"investigate_scene": return _stage_area  # the picture above the reading box
-		"investigate_collapse": return _dialog_panel.collapse_tab
-		"investigate_continue": return _investigation_continue_button
-	return null
-
-
-func _on_tutorial_finished(id: String, _skipped: bool) -> void:
-	var seen: Array = _tutorials_seen()
-	if id not in seen:
-		seen.append(id)
-	_write_tutorials_seen(seen)
-	_publish_qa_state()
-
-
-func _tutorials_seen() -> Array:
-	var config: ConfigFile = ConfigFile.new()
-	if config.load(progress_path) != OK:
-		return []
-	var seen: Variant = config.get_value("tutorial", "seen", [])
-	return (seen as Array).duplicate() if seen is Array else []
-
-
-## Writes [tutorial] seen into progress_path, keeping its other sections ([cleared], endings).
-func _write_tutorials_seen(seen: Array) -> void:
-	var config: ConfigFile = ConfigFile.new()
-	config.load(progress_path)
-	config.set_value("tutorial", "seen", seen)
-	if ATOMIC_FILE.write_text(progress_path, config.encode_to_text()) != OK:
-		_show_toast("教學進度無法儲存")
-
-
-## 設定 → 重看教學: every guide shows again the next time its screen opens.
-func _replay_tutorials() -> void:
-	_write_tutorials_seen([])
-	_show_toast("下次進入吐槽與調查時會再顯示教學")
-
-
 func _build_toast() -> void:
 	_toast = _make_label(_popup_layer, "", 32, COLOR_TEXT)
 	_toast.name = "Toast"
@@ -1337,7 +1225,7 @@ func _mount_title() -> void:
 	_title_load_button = _title_screen.load_button
 	_title_screen.begin_pressed.connect(_on_begin_pressed)
 	_title_screen.continue_pressed.connect(_on_continue_pressed)
-	_title_screen.load_pressed.connect(func() -> void: _open_slot_picker("load"))
+	_title_screen.load_pressed.connect(func() -> void: _saves._open_slot_picker("load"))
 	_title_screen.story_switch_pressed.connect(_on_story_switch_pressed)
 	_title_screen.settings_pressed.connect(_open_settings)
 	if old != null:
@@ -1358,9 +1246,9 @@ func _mount_settings() -> void:
 	_game.add_child(_settings_panel)
 	_settings_panel.connect("changed", _on_setting_changed)
 	_settings_panel.connect("closed", _close_settings)
-	_settings_panel.connect("export_saves", _export_saves)
-	_settings_panel.connect("import_saves", _import_saves)
-	_settings_panel.connect("replay_tutorials", _replay_tutorials)
+	_settings_panel.connect("export_saves", _saves._export_saves)
+	_settings_panel.connect("import_saves", _saves._import_saves)
+	_settings_panel.connect("replay_tutorials", _tutorial_ctl._replay_tutorials)
 	if old == null:
 		return
 	_game.move_child(_settings_panel, old.get_index())
@@ -1380,7 +1268,7 @@ func _mount_end_screens() -> void:
 		_game_over = over_scene.instantiate() as GameOverScreen
 		_overlay_layer.add_child(_game_over)
 		_game_over_retry_button = _game_over.retry_button
-		_game_over.retry_pressed.connect(_on_game_over_retry_pressed)
+		_game_over.retry_pressed.connect(_round._on_game_over_retry_pressed)
 		_game_over.title_pressed.connect(_show_title)
 		if old_over != null:
 			_overlay_layer.move_child(_game_over, old_over.get_index())
@@ -1400,7 +1288,7 @@ func _mount_end_screens() -> void:
 ## Story label, which buttons work, the last error and the story's exterior photo.
 func _refresh_title() -> void:
 	_refresh_story_switch()
-	_continue_button.disabled = not _has_valid_save()
+	_continue_button.disabled = not _saves._has_valid_save()
 	_begin_button.disabled = not _story_ready
 	_title_screen.set_error(_story_error if not _story_error.is_empty() else _archived_save_notice)
 	# The skin's title background in the story's catalog: its picture, or its top/bottom gradient.
@@ -1420,45 +1308,6 @@ func _refresh_title() -> void:
 		texture.fill_from = Vector2(0.5, 0.0)
 		texture.fill_to = Vector2(0.5, 1.0)
 		_title_screen.background.texture = texture
-
-
-func _build_slot_picker() -> void:
-	_slot_overlay = preload("res://scenes/ui/save_slots_panel.tscn").instantiate()
-	_game.add_child(_slot_overlay)
-	_slot_overlay.visible = false
-	_slot_panel = _slot_overlay.get_node("%SlotPanel")
-	_slot_title = _slot_overlay.get_node("%SlotTitle")
-	_slot_page_label = _slot_overlay.get_node("%SlotPage")
-	_slot_close_button = _slot_overlay.get_node("%SlotClose")
-	_slot_prev_button = _slot_overlay.get_node("%SlotPrev")
-	_slot_next_button = _slot_overlay.get_node("%SlotNext")
-	_slot_auto_button = _slot_overlay.get_node("%SlotAuto")
-	_slot_close_button.pressed.connect(_close_slot_picker)
-	_slot_prev_button.pressed.connect(func() -> void: _change_slot_page(-1))
-	_slot_next_button.pressed.connect(func() -> void: _change_slot_page(1))
-	_slot_auto_button.pressed.connect(_load_autosave_from_picker)
-	_slot_overlay.get_node("%SlotDim").gui_input.connect(func(event: InputEvent) -> void:
-		if event is InputEventMouseButton and not event.is_pressed() and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT:
-			_close_slot_picker())
-	for local_index in SAVE_SLOTS_SCRIPT.PAGE_SIZE:
-		var card: Button = _slot_overlay.get_node("%Cards").get_child(local_index)
-		card.pressed.connect(_on_slot_card_pressed.bind(local_index))
-		_slot_card_buttons.append(card)
-		_slot_card_numbers.append(card.get_node("%Number"))
-		_slot_card_titles.append(card.get_node("%SlotTitle"))
-		_slot_card_times.append(card.get_node("%SavedTime"))
-		_slot_card_previews.append(card.get_node("%Preview"))
-	_slot_confirmation_overlay = _slot_overlay.get_node("SlotConfirmationOverlay")
-	_slot_confirmation_overlay.visible = false
-	_slot_confirmation_panel = _slot_confirmation_overlay.get_node("%ConfirmationPanel")
-	_slot_confirmation_label = _slot_confirmation_overlay.get_node("%Question")
-	_slot_confirm_yes = _slot_confirmation_overlay.get_node("%SlotConfirmYes")
-	_slot_confirm_no = _slot_confirmation_overlay.get_node("%SlotConfirmNo")
-	_slot_confirm_yes.pressed.connect(_confirm_slot_overwrite)
-	_slot_confirm_no.pressed.connect(_cancel_slot_confirmation)
-	_slot_confirmation_overlay.get_node("%Dim").gui_input.connect(func(event: InputEvent) -> void:
-		if event is InputEventMouseButton and not event.is_pressed() and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT:
-			_cancel_slot_confirmation())
 
 
 func _layout() -> void:
@@ -1497,17 +1346,17 @@ func _layout() -> void:
 	_fit_full_area(_comedy_layer)
 	_fit_panel_area(_log_overlay, Rect2(0.0,top,width,bottom-top))
 
-	_layout_slot_picker(width, height, top, bottom)
+	_saves._layout_slot_picker(width, height, top, bottom)
 	_case_file_panel.call("layout", Rect2(0.0, top, width, bottom - top))
 	_fit_panel_area(_chapter_select, Rect2(0.0, top, width, bottom - top))
 	_fit_panel_area(_credits_roll, Rect2(0.0, top, width, bottom - top))
 	_fit_panel_area(_gallery, Rect2(0.0, top, width, bottom - top))
 	_fit_panel_area(_settings_panel, Rect2(0.0, top, width, bottom - top))
 	if _screen_mode == "investigate":
-		_layout_hotspots()
+		_investigation._layout_hotspots()
 	if _tutorial != null and _tutorial.visible:
 		_tutorial.call("_place")
-	_publish_qa_state()
+	_qa_ctl._publish_qa_state()
 
 
 ## The landscape scenes are drawn for a 720 CSS px wide game area. A small increase on narrower
@@ -1543,7 +1392,7 @@ func _fit_choice_sheet() -> void:
 	_fit_bottom_panel(_choice_sheet)
 	if _game != null and _game.size.y > 0.0:
 		var top: float = _safe_top + 64.0 * CSS_PX
-		if _screen_mode == "tsukkomi" and _placard_open():
+		if _screen_mode == "tsukkomi" and _round._placard_open():
 			top = maxf(top, (_placard_holder.call("placard_rect") as Rect2).end.y - _game.global_position.y + 4.0 * CSS_PX)
 		_choice_sheet.set_max_height((_game.size.y - top - _safe_bottom) / _panel_scale)
 
@@ -1591,11 +1440,6 @@ func _anchored_rect(node: Control, parent_rect: Rect2) -> Rect2:
 	return Rect2(start, end - start)
 
 
-func _layout_slot_picker(width: float, height: float, top: float, bottom: float) -> void:
-	if _slot_overlay != null:
-		_fit_panel_area(_slot_overlay, Rect2(0.0,top,width,bottom-top))
-
-
 func _read_safe_area(viewport_size: Vector2) -> void:
 	# ponytail: 只在 Android／iOS 原生匯出讀取瀏海與手勢列；瀏覽器分頁本身已避開安全區（未設 viewport-fit=cover）。
 	_safe_top = 0.0
@@ -1618,7 +1462,7 @@ func _show_title() -> void:
 	var title_bgm: String = str((_skin.get("title", {}) as Dictionary).get("bgm", ""))
 	_effects.play_bgm(title_bgm)
 	_library.unlock(_gallery_key("bgm"), title_bgm)  # heard on the title, so 鑑賞 lists it from the start
-	_close_qte()
+	_round._close_qte()
 	_close_overlays()
 	_set_ui_hidden(false)
 	_set_auto(false)
@@ -1628,7 +1472,7 @@ func _show_title() -> void:
 	_title_screen.visible = true
 	_dialog_layer.visible = false
 	_refresh_title()
-	_publish_qa_state()
+	_qa_ctl._publish_qa_state()
 
 
 func _show_story_screen() -> void:
@@ -1647,8 +1491,8 @@ func _on_begin_pressed() -> void:
 
 func _on_continue_pressed() -> void:
 	_start_audio_after_user_gesture()
-	var payload: Dictionary = _read_save_payload()
-	if not _apply_save_payload(payload):
+	var payload: Dictionary = _saves._read_save_payload()
+	if not _saves._apply_save_payload(payload):
 		_story_error = "這份續讀資料已失效，請重新開始。"
 		_show_title()
 		return
@@ -1663,20 +1507,22 @@ func _on_restart_pressed() -> void:
 
 func _start_new_story() -> void:
 	_archived_save_notice = ""
+	if _phase3_hud != null:
+		_phase3_hud.reset_pops()
 	_round_stages.clear()
 	_rollback.clear()
 	_previous_power = 0
 	_cancel_generation()
 	_close_overlays()
 	_effects.play_bgm("bgm_gintama_35")
-	_delete_save()
+	_saves._delete_save()
 	_history.clear()
 	_boke_time_remaining = 0.0
 	_boke_timer_round_id = ""
 	_restored_boke_timer_remaining = -1.0
 	_restored_boke_ui_mode = ""
 	_last_boke_result = ""
-	_clear_hotspots()
+	_investigation._clear_hotspots()
 	_investigation_pans.clear()
 	_investigation_pans_y.clear()
 	_investigation_home_casts.clear()
@@ -1686,7 +1532,7 @@ func _start_new_story() -> void:
 	_runner.call("reset")
 	for actor_id: String in _actors.keys():
 		_actor_slots[actor_id] = str((_actors[actor_id] as Dictionary).get("slot", "center"))
-	_forget_search_cast()
+	_investigation._forget_search_cast()
 	for sprite: Control in _sprites.values():
 		sprite.visible = false
 		sprite.set_meta("portrait_lighting", "auto")
@@ -1702,38 +1548,8 @@ func _start_new_story() -> void:
 # ---------------------------------------------------------------- 故事推進
 
 func _start_drive() -> void:
-	_restore_search_cast()  # a spot's or a topic's scene, or the story after the search
+	_investigation._restore_search_cast()  # a spot's or a topic's scene, or the story after the search
 	call_deferred("_drive_story", _generation)
-
-
-## The cast must not cover the room being searched: whoever has a spot on their portrait stays,
-## see-through (their spot, checked or not, counts only while they are on stage); everyone else
-## turns invisible (alpha 0, still on stage) until the search ends or a scene plays from it. Only
-## alpha changes, so whoever was already leaving the stage still leaves.
-func _set_search_cast(command: Dictionary) -> void:
-	var tappable: Dictionary = {}
-	for raw: Variant in command.get("hotspots", []):
-		if raw is Dictionary and (raw as Dictionary).has("character"):
-			tappable[str((raw as Dictionary)["character"])] = true
-	for actor_id: String in _sprites:
-		var sprite: Control = _sprites[actor_id]
-		if not sprite.visible:
-			continue
-		sprite.modulate.a = SEARCH_CAST_ALPHA if tappable.has(actor_id) else 0.0
-	_search_cast_active = true
-
-
-## The stage is being set anew (new story, a save, an empty stage): nobody comes back from a search.
-func _forget_search_cast() -> void:
-	_search_cast_active = false
-
-
-func _restore_search_cast() -> void:
-	if not _search_cast_active:
-		return
-	for sprite: Control in _sprites.values():
-		sprite.modulate.a = 1.0
-	_search_cast_active = false
 
 
 func _drive_story(generation: int) -> void:
@@ -1741,9 +1557,10 @@ func _drive_story(generation: int) -> void:
 		return
 	_story_busy = true
 	_screen_mode = "busy"
-	_publish_qa_state()
+	_qa_ctl._publish_qa_state()
 	while generation == _generation:
 		var command: Dictionary = _runner_current()
+		_record_visits()
 		if command.is_empty():
 			_show_runtime_error("故事流程沒有可呈現的指令。")
 			return
@@ -1758,39 +1575,44 @@ func _drive_story(generation: int) -> void:
 				_rollback.clear()
 				_story_busy = false
 				_present_choice(command)
-				_save_game()
+				_saves._save_game()
 				return
 			"end":
 				_rollback.clear()
 				_story_busy = false
 				_present_end(command)
-				_save_game()
+				_saves._save_game()
 				return
 			"result":
 				_rollback.clear()
 				_story_busy = false
 				_present_result(command)
-				_save_game()
+				_saves._save_game()
 				return
 			"investigate":
 				_rollback.clear()
 				_story_busy = false
-				_present_investigation(command, false)
-				_save_game()
+				_investigation._present_investigation(command, false)
+				_saves._save_game()
 				return
 			"boke_round":
 				_rollback.clear()
 				_story_busy = false
-				_present_boke_round(command, false)
-				_save_game()
+				_round._present_boke_round(command, false)
+				_saves._save_game()
 				return
 			"sound":
 				_play_sound(_dict_string(command, "id"))
 			"bg":
 				if _dict_string(command, "id") != _current_bg_id:
 					_clear_stage()  # a new scene starts with nobody on stage
-				_apply_background(_dict_string(command, "id"), true)
+				var transition: String = _dict_string(command, "transition", "fade")
+				var wipe_time: float = _apply_background(_dict_string(command, "id"), true, transition)
 				_library.unlock(_gallery_key("bg"), _dict_string(command, "id"))
+				if transition != "fade" and wipe_time > 0.0:
+					await get_tree().create_timer(wipe_time).timeout  # the next line waits for the new scene
+					if generation != _generation:
+						return
 			"char":
 				_apply_character(command)
 			"portrait_exit":
@@ -1869,7 +1691,7 @@ func _drive_story(generation: int) -> void:
 					if not _skip:
 						_toast.visible = false
 					if not _skip and _comedy_layer.play(command) > 0.0:
-						_publish_qa_state()
+						_qa_ctl._publish_qa_state()
 						while _comedy_layer.is_active() and generation == _generation:
 							await get_tree().process_frame  # a tap or stop() ends it early
 						if generation != _generation:
@@ -1891,7 +1713,7 @@ func _play_manga_retort(line: String, speaker: String, generation: int) -> void:
 	_next_tsukkomi_right = not _next_tsukkomi_right
 	_toast.visible = false
 	_comedy_layer.play({"preset": "tsukkomi_impact", "speaker": speaker, "text": line, "side": side})
-	_publish_qa_state()
+	_qa_ctl._publish_qa_state()
 	while _comedy_layer.is_active() and generation == _generation:
 		await get_tree().process_frame
 
@@ -1909,7 +1731,7 @@ func _comedy_dialog_rect() -> Rect2:
 
 func _advance_current_line() -> void:
 	if _command_op(_runner_current()) == "say":
-		_rollback.remember(_build_save_payload(""))
+		_rollback.remember(_saves._build_save_payload(""))
 	_line_generation += 1
 	_story_busy = true
 	var advanced: Variant = _runner.call("advance")
@@ -1922,7 +1744,7 @@ func _advance_current_line() -> void:
 func _present_say(command: Dictionary, restored: bool) -> void:
 	_pending_round_mode = ""
 	_current_command = command.duplicate(true)
-	_clear_hotspots()
+	_investigation._clear_hotspots()
 	_investigation_continue_button.visible = false
 	_boke_controls.visible = false
 	_game_over_retry_button.visible = false
@@ -1950,746 +1772,13 @@ func _present_say(command: Dictionary, restored: bool) -> void:
 		return
 	if not restored:
 		# 在打字前存檔：中途關閉分頁會回到這一句，且不會把它記成已讀。
-		_save_game()
+		_saves._save_game()
 	_set_visible_text("", false)
 	if _skip:
 		_complete_current_line()
 		return
 	_typewriter(_line_generation)
-	_publish_qa_state()
-
-
-func _present_investigation(command: Dictionary, restored: bool) -> void:
-	_current_command = command.duplicate(true)
-	_current_speaker = _default_pov()  # whoever thinks while searching
-	_full_text = _dict_string(command, "prompt", "調查現場，尋找線索。")
-	_current_line_key = _line_key(command, "investigate")
-	if _dict_string(command, "place", "home") != "home":
-		_current_line_key += ":" + _dict_string(command, "place")
-	_line_logged = _history_has_key(_current_line_key)
-	_line_generation += 1
-	_story_busy = false
-	_set_auto(false)
-	_set_skip(false)
-	_clear_choices()
-	_clear_hotspots()
-	_screen_mode = "investigate"
-	_maybe_tutorial.call_deferred("investigate")
-	_dialog_layer.visible = true
-	_dialog_panel.visible = true  # the prompt shows first; 收起 folds the box away
-	_end_box.visible = false
-	_investigation_continue_button.visible = true
-	_boke_controls.visible = false
-	_dialog_panel.set_reading_enabled(false)
-	_set_name_plate(_default_pov(), true)
-	if _dict_bool(command, "keep_cast"):
-		var home_key: String = _dict_string(command, "id", _dict_string(command, "node"))
-		var place: String = _dict_string(command, "place", "home")
-		if not _investigation_home_casts.has(home_key) or (place == "home" and (_dict_string(command, "bg").is_empty() or _current_bg_id == _dict_string(command, "bg"))):
-			_investigation_home_casts[home_key] = (_build_save_payload("").get("sprites", {}) as Dictionary).duplicate(true)
-		var home_cast: Dictionary = _investigation_home_casts[home_key]
-		for actor_id: String in _sprites:
-			var sprite: Control = _sprites[actor_id]
-			var pose: Dictionary = home_cast.get(actor_id, {})
-			sprite.visible = place == "home" and bool(pose.get("visible", false))
-			sprite.set_meta("portrait_lighting", pose.get("lighting", "auto"))
-			sprite.set_meta("entrance_transition", pose.get("entrance_transition", "fade"))
-			if sprite.visible:
-				_actor_slots[actor_id] = str(pose.get("position", "center"))
-				sprite.call("set_expression", str(pose.get("expression", "neutral")))
-			sprite.modulate = _portrait_color(sprite, true)
-		_set_search_cast(command)
-	else:
-		_clear_stage()  # the player searches the room itself
-	var place_bg: String = _dict_string(command, "bg")
-	if not place_bg.is_empty() and place_bg != _current_bg_id:
-		_apply_background(place_bg)  # each place of the search shows its own picture
-		_library.unlock(_gallery_key("bg"), place_bg)
-	_set_text_tone("thought")
-	_layout()
-	_set_visible_text(_full_text, true)
-	_current_command = _runner_current()
-	_build_hotspots(_current_command)
-	_show_topics(_current_command)
-	_update_investigation_controls()
-	if not _line_logged:
-		_append_history({"key": _current_line_key, "kind": "investigate", "speaker": _default_pov(),
-			"text": _full_text})
-		_line_logged = true
-	_refresh_phase3_hud()
-	_publish_qa_state()
-
-
-func _build_investigate_bar() -> void:
-	_investigate_bar = INVESTIGATE_BAR_SCENE.instantiate() as Control
-	_dialog_layer.add_child(_investigate_bar)
-	_investigate_bar.visible = false
-	_investigate_bar.connect("expand_pressed", _set_investigation_collapsed.bind(false))
-	_investigate_bar.connect("continue_pressed", _on_investigation_continue_pressed)
-	_investigate_bar.call("set_reduce_motion", int(_settings.get("motion", 0)) == 1)
-
-
-## Folds the reading box into the one-line bar (or back) while searching.
-func _set_investigation_collapsed(value: bool) -> void:
-	_investigate_collapsed = value and _screen_mode == "investigate"
-	_investigate_bar.visible = _investigate_collapsed
-	_refresh_reading_ui()
-	_publish_qa_state()
-
-
-## The spots of this investigation, on a layer over the whole background picture: each sits over
-## its object at the story's `pos` (centre) and `size`, fractions of the picture.
-func _build_hotspots(command: Dictionary) -> void:
-	_clear_hotspots()
-	_pan_key = "%s/%s" % [_dict_string(command, "id"), _dict_string(command, "place", "home")]
-	if bool(command.get("keep_cast",false)):
-		for actor: String in _sprites.keys():
-			if (_sprites[actor] as Control).visible:
-				_cast_pan_origins[actor] = (_sprites[actor] as Control).position.x
-				_cast_pan_y_origins[actor] = (_sprites[actor] as Control).position.y
-	_pan = float(_investigation_pans.get(_pan_key, 0.0))  # back from a reaction: where the player left it
-	_pan_y = float(_investigation_pans_y.get(_pan_key, 0.0))
-	var frame: TextureRect = _background_rect
-	_frame_offsets = [frame.offset_left, frame.offset_top, frame.offset_right, frame.offset_bottom]
-	_hotspot_layer = Control.new()
-	_hotspot_layer.name = "Hotspots"
-	_hotspot_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	frame.add_child(_hotspot_layer)
-	_hotspot_layer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	for raw_hotspot: Variant in command.get("hotspots", []):
-		if not raw_hotspot is Dictionary:
-			continue
-		var hotspot: Dictionary = raw_hotspot as Dictionary
-		var hotspot_id: String = _dict_string(hotspot, "id")
-		var spot: Control = HOTSPOT_SCENE.instantiate() as Control
-		spot.name = "Hotspot_" + hotspot_id
-		if hotspot.has("character"):
-			# A character's spot covers their portrait on the stage instead of a place on the picture:
-			# it lies on the interaction layer (sized by _layout_hotspots) and exists while they are on stage.
-			if not _dict_bool(hotspot, "present", true):
-				spot.free()
-				continue
-			_interaction_layer.add_child(spot)
-		else:
-			var pos: Array = hotspot.get("pos", [0.5, 0.5]) as Array
-			var extent: Array = hotspot.get("size", DEFAULT_HOTSPOT_SIZE) as Array
-			_hotspot_layer.add_child(spot)
-			spot.anchor_left = clampf(float(pos[0]) - float(extent[0]) * 0.5, 0.0, 1.0)
-			spot.anchor_right = clampf(float(pos[0]) + float(extent[0]) * 0.5, 0.0, 1.0)
-			spot.anchor_top = clampf(float(pos[1]) - float(extent[1]) * 0.5, 0.0, 1.0)
-			spot.anchor_bottom = clampf(float(pos[1]) + float(extent[1]) * 0.5, 0.0, 1.0)
-			spot.offset_left = 0.0
-			spot.offset_top = 0.0
-			spot.offset_right = 0.0
-			spot.offset_bottom = 0.0
-		spot.call("set_found", bool(hotspot.get("checked", false)), false)
-		_hotspots[hotspot_id] = spot
-	_layout_hotspots()
-
-
-## Stretches the background frame to the whole picture (which covers the frame's own rect,
-## centred) so every part of it can slide into view, and works out how far it may slide.
-func _layout_hotspots() -> void:
-	if _hotspot_layer == null or not is_instance_valid(_hotspot_layer):
-		return
-	var frame: TextureRect = _hotspot_layer.get_parent() as TextureRect
-	var own: Rect2 = _anchored_rect_with(frame, _frame_offsets, Rect2(Vector2.ZERO, _game.size))
-	var art := Vector2.ZERO
-	if frame.texture != null and not frame.texture is GradientTexture2D:
-		art = Vector2(frame.texture.get_width(), frame.texture.get_height())
-	var layout := InvestigationLayout.coverage(own, art, _game.size)
-	_picture = layout.picture
-	_pan_range = layout.horizontal
-	_pan_y_range = layout.vertical
-	_set_pan(_pan, _pan_y)
-	_place_cast_hotspots()
-
-
-## A character's spot lies over their portrait as it is on screen (kept inside the game area).
-func _place_cast_hotspots() -> void:
-	var screen: Rect2 = Rect2(_game.global_position, _game.size)
-	for raw_hotspot: Variant in _current_command.get("hotspots", []):
-		var hotspot: Dictionary = raw_hotspot as Dictionary
-		var spot: Control = _hotspots.get(_dict_string(hotspot, "id")) as Control
-		if spot == null or spot.get_parent() != _interaction_layer:
-			continue
-		var portrait: Rect2 = (_sprites[_dict_string(hotspot, "character")] as Control).call("art_rect")
-		if hotspot.has("art_region"):
-			var region: Array = hotspot["art_region"]
-			portrait = Rect2(portrait.position + portrait.size * Vector2(region[0],region[1]),
-				portrait.size * Vector2(region[2],region[3]))
-		var shown: Rect2 = portrait.intersection(screen)
-		spot.visible = shown.has_area()
-		if not spot.visible:
-			continue  # no visible art region means no target, even after touch expansion
-		spot.position = shown.position - _interaction_layer.global_position
-		spot.size = shown.size
-
-
-func _set_pan(value: float, vertical: Variant = null) -> void:
-	_pan = clampf(value, _pan_range.x, _pan_range.y)
-	if vertical != null:
-		_pan_y = clampf(float(vertical), _pan_y_range.x, _pan_y_range.y)
-	if _hotspot_layer == null or not is_instance_valid(_hotspot_layer):
-		return
-	var frame: TextureRect = _hotspot_layer.get_parent() as TextureRect
-	var offsets := InvestigationLayout.panned_offsets(_picture, Vector2(_pan, _pan_y),
-		Vector4(frame.anchor_left, frame.anchor_top, frame.anchor_right, frame.anchor_bottom), _game.size)
-	frame.offset_left = offsets.x
-	frame.offset_top = offsets.y
-	frame.offset_right = offsets.z
-	frame.offset_bottom = offsets.w
-	for actor: String in _cast_pan_origins.keys():
-		(_sprites[actor] as Control).position.x = float(_cast_pan_origins[actor]) + _pan
-		(_sprites[actor] as Control).position.y = float(_cast_pan_y_origins.get(actor, (_sprites[actor] as Control).position.y)) + _pan_y
-	if not _pan_key.is_empty():
-		_investigation_pans[_pan_key] = _pan
-		_investigation_pans_y[_pan_key] = _pan_y
-	_place_cast_hotspots()
-
-
-func _clear_hotspots() -> void:
-	for actor: String in _cast_pan_origins.keys():
-		(_sprites[actor] as Control).position.x = float(_cast_pan_origins[actor])
-		if _cast_pan_y_origins.has(actor):
-			(_sprites[actor] as Control).position.y = float(_cast_pan_y_origins[actor])
-	_cast_pan_origins.clear()
-	_cast_pan_y_origins.clear()
-	if not _pan_key.is_empty() and _hotspot_layer != null:
-		_investigation_pans[_pan_key] = _pan
-		_investigation_pans_y[_pan_key] = _pan_y
-	_pan_key = ""
-	_topic_buttons.clear()
-	if _dialog_panel != null:
-		_dialog_panel.set_topics([], [])
-	if _hotspot_layer != null and is_instance_valid(_hotspot_layer):
-		var frame: TextureRect = _hotspot_layer.get_parent() as TextureRect
-		frame.offset_left = _frame_offsets[0]
-		frame.offset_top = _frame_offsets[1]
-		frame.offset_right = _frame_offsets[2]
-		frame.offset_bottom = _frame_offsets[3]
-		_hotspot_layer.queue_free()
-	_hotspot_layer = null
-	for spot: Control in _hotspots.values():
-		if spot.get_parent() == _interaction_layer:
-			spot.queue_free()  # a character's spot lies on the interaction layer, not on the picture
-	_hotspots.clear()
-	_pan = 0.0
-	_pan_range = Vector2.ZERO
-	_pan_y = 0.0
-	_pan_y_range = Vector2.ZERO
-	_investigate_collapsed = false
-	if _investigate_bar != null:
-		_investigate_bar.visible = false
-
-
-## Where a Control would sit inside parent_rect with the given offsets [left, top, right, bottom].
-func _anchored_rect_with(node: Control, offsets: Array[float], parent_rect: Rect2) -> Rect2:
-	return InvestigationLayout.anchored_rect(
-		Vector4(node.anchor_left, node.anchor_top, node.anchor_right, node.anchor_bottom), offsets, parent_rect)
-
-
-## A tap on the picture while searching: the spot under it, unless the reading box covers it.
-## Found spots are done, except those with `lines`, which answer every tap. Where spots overlap, an
-## object beats a character (a character's spot is their whole portrait, so no object may hide in it)
-## and the smaller object wins; of two characters, the one in front wins.
-func _tap_investigation(at: Vector2) -> void:
-	if _story_busy or (_dialog_panel.visible and _dialog_panel.get_global_rect().has_point(at)):
-		return
-	var definitions := {}
-	for hotspot_id: String in _hotspots:
-		definitions[hotspot_id] = _hotspot_data(hotspot_id)
-	var tapped := InvestigationPicker.pick(at, _hotspots, definitions, _sprites, 48.0 * CSS_PX * _panel_scale)
-	if not tapped.is_empty():
-		_collect_hotspot(tapped)
-
-
-## The runner's entry for a hotspot of the current search ({} when there is none).
-func _hotspot_data(hotspot_id: String) -> Dictionary:
-	for raw_hotspot: Variant in _current_command.get("hotspots", []):
-		if raw_hotspot is Dictionary and _dict_string(raw_hotspot as Dictionary, "id") == hotspot_id:
-			return raw_hotspot as Dictionary
-	return {}
-
-
-## The spot's rect, grown to at least 48 CSS px each way so small objects stay tappable.
-func _hotspot_hit_rect(spot: Control) -> Rect2:
-	return InvestigationPicker.hit_rect(spot, 48.0 * CSS_PX * _panel_scale)
-
-
-func _collect_hotspot(hotspot_id: String) -> void:
-	if _screen_mode != "investigate" or _story_busy:
-		return
-	_sync_cast()
-	var spot: Control = _hotspots.get(hotspot_id) as Control
-	var first_time: bool = spot == null or not bool(spot.get("found"))  # `lines` spots answer every tap
-	if not bool(_runner.call("inspect_hotspot", hotspot_id)):
-		_show_toast(_runner_string("error_message", "這個位置目前不能調查。"))
-		return
-	var item_id: String = _dict_string(_hotspot_data(hotspot_id), "item")
-	var item_info: Dictionary = (_catalog.get("items", {}) as Dictionary).get(item_id, {}) as Dictionary
-	var item_name: String = str(item_info.get("name", item_id))
-	var next: Dictionary = _runner_current()
-	(_hotspots[hotspot_id] as Control).call("set_found", true, first_time)
-	if not item_id.is_empty() and first_time:
-		_show_toast("取得線索：" + item_name)
-	if _command_op(next) != "investigate":
-		# The spot has something to say: its scene plays and leads back to the search.
-		_refresh_phase3_hud()
-		_story_busy = true
-		_screen_mode = "busy"
-		_start_drive()
-		return
-	if _dict_string(next, "place") != _dict_string(_current_command, "place"):
-		_present_investigation(next, true)  # a searched-out side place sends the player home
-		_save_game()
-		return
-	_current_command = next
-	_update_investigation_controls()
-	_refresh_phase3_hud()
-	_save_game()
-	if not _investigation_continue_button.disabled and _investigate_collapsed:
-		_set_investigation_collapsed(false)  # every clue found: bring back 繼續
-	_publish_qa_state()
-
-
-## 繼續 opens once every required spot of every place is checked (runner `complete`/`progress`).
-func _update_investigation_controls() -> void:
-	var all_checked: bool = bool(_current_command.get("complete", false))
-	var progress: Array = _current_command.get("progress", [0, 0]) as Array
-	_investigation_continue_button.disabled = not all_checked
-	_investigation_continue_button.text = "線索已取得・繼續" if all_checked else "先調查所有位置"
-	_investigate_bar.call("set_progress", int(progress[0]), int(progress[1]), all_checked)
-
-
-## The 對話 and 移動 rows of the reading box for this place of the search.
-func _show_topics(command: Dictionary) -> void:
-	_topic_buttons = _dialog_panel.set_topics(command.get("talk", []) as Array, command.get("moves", []) as Array)
-	for key: String in _topic_buttons.keys():
-		var topic_id: String = key.get_slice(":", 1)
-		(_topic_buttons[key] as Button).pressed.connect(
-			(_on_talk_pressed if key.begins_with("talk:") else _on_move_pressed).bind(topic_id))
-
-
-## A talk topic: its scene plays once and leads back to the search.
-func _on_talk_pressed(topic_id: String) -> void:
-	if _screen_mode != "investigate" or _story_busy:
-		return
-	if not bool(_runner.call("talk_topic", topic_id)):
-		_show_toast(_runner_string("error_message", "這個話題現在不能聊。"))
-		return
-	_story_busy = true
-	_screen_mode = "busy"
-	_start_drive()
-
-
-## Moving: another place of the search, with its own picture, spots and topics.
-func _on_move_pressed(place_id: String) -> void:
-	if _screen_mode != "investigate" or _story_busy:
-		return
-	if not bool(_runner.call("move_to", place_id)):
-		_show_toast(_runner_string("error_message", "現在不能去那裡。"))
-		return
-	_present_investigation(_runner_current(), true)
-	_save_game()
-
-
-func _on_investigation_continue_pressed() -> void:
-	if _screen_mode != "investigate" or _story_busy or _investigation_continue_button.disabled:
-		return
-	var home_bg: String = _dict_string(_current_command, "home_bg")
-	if not home_bg.is_empty() and home_bg != _current_bg_id:
-		_clear_hotspots()
-		_apply_background(home_bg)  # the search ends where it began
-	_story_busy = true
-	_screen_mode = "busy"
-	_sync_cast()
-	var next: Dictionary = _runner.call("advance") as Dictionary
-	if _command_op(next) == "investigate":
-		_story_busy = false
-		_present_investigation(next, true)
-		return
-	_start_drive()
-
-
-func _present_boke_round(command: Dictionary, restored: bool, requested_ui_mode: String = "") -> void:
-	_pending_round_mode = ""
-	_line_generation += 1
-	var round_id: String = _dict_string(command,"id")
-	if not _round_stages.has(round_id):
-		var stage_payload: Dictionary = _build_save_payload("")
-		_round_stages[round_id] = {"background": stage_payload.get("background",_current_bg_id),
-			"sprites": stage_payload.get("sprites",{}).duplicate(true), "bgm": _effects.current_bgm}
-	var target_ui_mode: String = requested_ui_mode
-	if target_ui_mode.is_empty():
-		target_ui_mode = _restored_boke_ui_mode if restored and not _restored_boke_ui_mode.is_empty() else "boke_round"
-	if target_ui_mode not in ["boke_round", "tsukkomi"]:
-		target_ui_mode = "boke_round"
-	if RoundView.automatic(command):  # combo lines open their slot at once
-		target_ui_mode = "qte" if RoundView.action(command) == "qte" else "tsukkomi"
-	_close_qte()
-	_current_command = command.duplicate(true)
-	_current_speaker = RoundView.speaker(command)
-	_clear_hotspots()
-	_investigation_continue_button.visible = false
-	_game_over_retry_button.visible = false
-	_end_box.visible = false
-	_clear_choices()
-	_set_auto(false)
-	_set_skip(false)
-	_screen_mode = "boke_round"
-	_story_busy = false
-	_dialog_layer.visible = true
-	_dialog_panel.visible = true
-	_boke_controls.visible = not RoundView.automatic(command)
-	_maybe_tutorial.call_deferred("boke_round")
-	_dialog_panel.set_reading_enabled(false)
-	_set_name_plate(_current_speaker, false)
-	_focus_speaker(_current_speaker, str(RoundView.line(command).get("expression", command.get("expression", "annoyed"))))
-	_layout()
-	_line_plan = DialogueText.compile(RoundView.text(command), _text_interval(), _text_label.get_theme_font_size("normal_font_size"))
-	_full_text = str(_line_plan["plain"])
-	_set_text_tone("body")
-	_set_visible_text(_full_text, true)
-	_render_round_bar()
-	var line_index: int = int(command.get("line_index", 0))
-	_current_line_key = "%s:%s:%s" % [_line_key(command, "boke"), _dict_string(RoundView.line(command), "id"), line_index]
-	_line_logged = _history_has_key(_current_line_key)
-	var type_line: bool = bool((command.get("rules", {}) as Dictionary).get("type_lines", false)) and not _line_logged \
-		and (not restored or requested_ui_mode in ["", "boke_round"])
-	if type_line:
-		_pending_round_mode = target_ui_mode if RoundView.automatic(command) else ""
-		_boke_time_remaining = 0.0
-		_set_visible_text("", false)
-		_typewriter(_line_generation)
-		_refresh_phase3_hud()
-		_publish_qa_state()
-		return
-	if not _line_logged:
-		_append_history({"key": _current_line_key, "kind": "say", "speaker": _current_speaker, "text": _full_text})
-		_line_logged = true
-	match target_ui_mode:
-		"tsukkomi":
-			_present_tsukkomi_options(command, restored)
-		"qte":
-			_start_qte(command)
-		_:
-			_boke_time_remaining = 0.0
-			_boke_timer_round_id = ""
-			_restored_boke_timer_remaining = -1.0
-			_restored_boke_ui_mode = ""
-			_screen_mode = "boke_round"
-			_current_options.clear()
-	_refresh_phase3_hud()
-	_publish_qa_state()
-
-
-## The round bar for _current_command (scripts/round_view.gd decides what it shows).
-func _render_round_bar() -> void:
-	var command: Dictionary = _current_command
-	var index: int = int(command.get("line_index", 0))
-	var browse: bool = RoundView.navigable(command)
-	_boke_previous_button.visible = browse
-	_boke_next_button.visible = browse
-	_boke_previous_button.disabled = index <= 0
-	_boke_next_button.disabled = index >= (command.get("lines", []) as Array).size() - 1
-	_boke_line_label.text = RoundView.index_text(command)
-	var heard: bool = RoundView.listened(command)
-	_boke_listen_button.visible = RoundView.can_listen(command)
-	_boke_listen_button.disabled = heard
-	_boke_listen_button.text = "已聽過" if heard else "聽下去"
-	_boke_tsukkomi_button.disabled = RoundView.action(command).is_empty()
-	_boke_tsukkomi_button.text = "已接住" if RoundView.caught(command) else _term("rebut") + "！"
-	_dialog_panel.censor_bar.visible = RoundView.censor(command)
-
-
-func _present_tsukkomi_options(command: Dictionary, restored: bool) -> void:
-	_current_command = command.duplicate(true)
-	var round_id: String = _dict_string(command, "id")
-	var timer_seconds: float = _timer_total(command)
-	if _boke_timer_round_id != round_id:
-		if restored and _restored_boke_timer_remaining >= 0.0:
-			_boke_time_remaining = clampf(_restored_boke_timer_remaining, 0.0, timer_seconds)
-		else:
-			_boke_time_remaining = timer_seconds
-		_boke_timer_round_id = round_id
-		_last_boke_display_second = -1
-		_restored_boke_timer_remaining = -1.0
-	_restored_boke_ui_mode = ""
-	_screen_mode = "tsukkomi"
-	_boke_controls.visible = false
-	_current_options.clear()
-	for option_variant: Variant in RoundView.options(command):
-		if option_variant is Dictionary:
-			_current_options.append((option_variant as Dictionary).duplicate(true))
-	_sheet_prompt = _full_text
-	_sheet_timed = true
-	_sheet_perspective = "pov"
-	_sheet_note = ""
-	_sheet_tones = PackedStringArray()
-	_sheet_censor = RoundView.censor(command)
-	_sheet_super = bool(command.get("super_available", false))
-	_show_choice_sheet()
-
-
-func _on_boke_tsukkomi_pressed() -> void:
-	if _screen_mode != "boke_round" or _story_busy:
-		return
-	if not _text_complete:
-		_complete_current_line()
-		return
-	match RoundView.action(_current_command):
-		"options":
-			_present_tsukkomi_options(_current_command, false)
-			_save_game()
-			_refresh_phase3_hud()
-			_publish_qa_state()
-		"qte":
-			_start_qte(_current_command)
-		"whiff":
-			_round_action(func() -> Dictionary: return _runner.call("whiff_boke"), "（空揮）", "boke_round")
-
-
-## Hands one round move to the runner and plays its outcome.
-func _round_action(move: Callable, label: String, prior_ui_mode: String, feedback: String = "") -> void:
-	_story_busy = true
-	_screen_mode = "busy"
-	_resolve_boke_presentation(move.call() as Dictionary, label, prior_ui_mode, feedback)
-
-
-## The censor bar, torn off while reading (no timer) or while the options run.
-func _on_censor_pressed() -> void:
-	if _screen_mode not in ["boke_round", "tsukkomi"] or _story_busy or not RoundView.censor(_current_command):
-		return
-	_round_action(func() -> Dictionary: return _runner.call("resolve_censor"), "（撕下消音條）", _screen_mode)
-
-
-## The placard, pointed at while reading (no timer) or while the options run; like the censor bar.
-func _on_placard_pressed() -> void:
-	if not _placard_open():
-		return
-	_round_action(func() -> Dictionary: return _runner.call("resolve_placard"), "（指著牌子）", _screen_mode)
-
-
-## The placard answers the current line: it is on stage, the round shows that line, nothing busy.
-func _placard_open() -> bool:
-	if _placard_holder == null or not _placard_holder.visible or _runner == null or _story_busy:
-		return false
-	return _screen_mode in ["boke_round", "tsukkomi"] and bool((_runner.call("placard_view") as Dictionary).get("tappable", false))
-
-
-## The board on screen grown to at least 48 CSS px each way (like a hotspot), inside the game
-## area and above the reading box or options sheet (a tap there belongs to them).
-func _placard_hit_rect() -> Rect2:
-	var rect: Rect2 = _placard_holder.call("placard_rect")
-	var least: float = 48.0 * CSS_PX * _panel_scale
-	var grow: Vector2 = (Vector2(least, least) - rect.size).max(Vector2.ZERO) * 0.5
-	rect = rect.grow_individual(grow.x, grow.y, grow.x, grow.y).intersection(Rect2(_game.global_position, _game.size))
-	for panel: Control in [_dialog_panel, _choice_sheet]:
-		var top: float = panel.get_global_rect().position.y
-		if panel.is_visible_in_tree() and rect.end.y > top:
-			rect.size.y = maxf(0.0, top - rect.position.y)
-	return rect
-
-
-## The runner decides what the placard says; it glows while its line is up on the timed sheet.
-func _refresh_placard() -> void:
-	if _placard_holder == null or _runner == null or not _story_ready:
-		return
-	var view: Dictionary = _runner.call("placard_view") as Dictionary
-	_placard_holder.call("set_placard", str(view.get("text", "")),
-		bool(view.get("tappable", false)) and _screen_mode == "tsukkomi")
-	if bool(view.get("tappable", false)) and _placard_holder.visible:
-		# While the board answers the line, its holder steps in front of the speaker, lit.
-		_char_layer.move_child(_placard_holder, -1)
-		_placard_holder.modulate = Color.WHITE
-
-
-func _on_super_pressed() -> void:
-	if _screen_mode != "tsukkomi" or _story_busy or not bool(_current_command.get("super_available", false)):
-		return
-	_round_action(func() -> Dictionary: return _runner.call("use_super"), _words("{super}{rebut}"), "tsukkomi", _words("{super}{rebut}！全部戳破"))
-
-
-func _start_qte(command: Dictionary) -> void:
-	_close_qte()
-	_screen_mode = "qte"
-	_qte = QTE_SCENE.instantiate() as QteRing
-	_overlay_layer.add_child(_qte)
-	_qte.resolved.connect(_on_qte_resolved)
-	_qte.set_style(_ui_style_id)
-	_qte.start(RoundView.qte(command))
-	_publish_qa_state()
-
-
-## tapped=false: the ring ran out. offset: seconds from the moment the rings met.
-func _on_qte_resolved(tapped: bool, offset: float) -> void:
-	if _screen_mode != "qte" or _story_busy:
-		return
-	_close_qte()
-	offset = _judged_qte_offset(offset)
-	_last_qte_offset = offset
-	_round_action(func() -> Dictionary: return _runner.call("resolve_qte", tapped, offset), "", "qte")
-
-
-## The offset the runner judges: 吐槽輔助 寬鬆 widens the window by judging a proportionally smaller one.
-func _judged_qte_offset(offset: float) -> float:
-	return offset / SETTINGS_SCRIPT.ASSIST_QTE_WINDOW_FACTOR if int(_settings.get("assist", 0)) == 1 else offset
-
-
-func _close_qte() -> void:
-	if _qte != null and is_instance_valid(_qte):
-		_qte.queue_free()
-	_qte = null
-
-
-func _on_boke_previous_pressed() -> void:
-	_set_boke_line(int(_current_command.get("line_index", 0)) - 1)
-
-
-func _on_boke_next_pressed() -> void:
-	_set_boke_line(int(_current_command.get("line_index", 0)) + 1)
-
-
-func _set_boke_line(index: int) -> void:
-	if _screen_mode != "boke_round" or _story_busy:
-		return
-	if not bool(_runner.call("set_boke_line", index)):
-		return
-	_present_boke_round(_runner_current(), true)
-	_save_game()
-
-
-func _on_boke_listen_pressed() -> void:
-	if _screen_mode != "boke_round" or _story_busy:
-		return
-	if not _text_complete:
-		_complete_current_line()
-		return
-	if RoundView.is_v2(_current_command):
-		# The runner has jumped into the line's listen scene; play it, it leads back to the round.
-		if bool(_runner.call("listen_boke_line")):
-			_story_busy = true
-			_screen_mode = "busy"
-			_start_drive()
-		return
-	if not bool(_runner.call("listen_boke_line")):
-		return
-	var line: Dictionary = _current_command.get("current_line", {}) as Dictionary
-	var followup: String = _dict_string(line, "listen")
-	_append_history({"key": _current_line_key + ":listen", "kind": "say", "speaker": _current_speaker, "text": followup})
-	_present_boke_round(_runner_current(), true)
-	_save_game()
-
-
-func _on_boke_option_pressed(option_id: String) -> void:
-	if _screen_mode != "tsukkomi" or _story_busy:
-		return
-	var option_label: String = option_id
-	for option: Dictionary in _current_options:
-		if _dict_string(option, "id") == option_id:
-			option_label = _dict_string(option, "label", option_id)
-			break
-	_story_busy = true
-	_screen_mode = "busy"
-	var result: Dictionary = _runner.call("resolve_boke", option_id) as Dictionary
-	_resolve_boke_presentation(result, option_label, "tsukkomi", "", true)
-
-
-func _resolve_boke_presentation(result: Dictionary, option_label: String = "", prior_ui_mode: String = "",
-		feedback_override: String = "", show_comic: bool = false) -> void:
-	if result.is_empty():
-		_story_busy = false
-		_present_boke_round(_runner_current(), true, prior_ui_mode)
-		return
-	_last_boke_result = _dict_string(result, "result")
-	_boke_time_remaining = 0.0
-	_boke_timer_round_id = ""
-	_boke_controls.visible = false
-	_clear_choices()
-	if not option_label.is_empty():
-		_append_history({"key": "%s:result:%s" % [_current_line_key, _last_boke_result], "kind": "choice", "text": option_label})
-	var feedback: String = ""
-	match _last_boke_result:
-		"perfect":
-			feedback = _words("完美{rebut}！{power} +30")
-			_effects.play_perfect_voice(int((_runner.get("stats") as Dictionary).get("perfect", 1)))
-		"weak":
-			feedback = _words("普通{rebut}！{power} +10")
-		"fail":
-			feedback = _words("{whiff}！{life} -1") if not bool(result.get("game_over", false)) else _words("{life}耗盡・Game Over")
-		"hidden":
-			feedback = _words("放棄{rebut}・狀態不變")
-	if not feedback_override.is_empty():
-		feedback = feedback_override
-	var power: int = int((_runner.get("gameplay") as Dictionary).get("power", 0))
-	var maximum: int = int((_runner.get("gameplay") as Dictionary).get("max_power", 100))
-	var filled_power: bool = power >= maximum and _previous_power < maximum
-	_previous_power = power
-	_refresh_phase3_hud()
-	if show_comic and not _skip and _last_boke_result in ["perfect", "weak"]:
-		var line: String = option_label.strip_edges()
-		if line.begins_with("吐槽："):
-			line = line.trim_prefix("吐槽：").strip_edges()
-		elif line.contains("反駁："):
-			line = line.substr(line.find("反駁：") + "反駁：".length()).strip_edges()
-		if not line.is_empty():
-			var generation: int = _generation
-			_recent_retort = line
-			await _play_manga_retort(line, _default_pov(), generation)
-			if generation != _generation:
-				return
-	if filled_power:
-		_effects.play({"op": "cutin", "text": _words("{power}全滿！"), "speaker": _default_pov()}, _skip)
-		_effects.play({"op": "se", "id": "power_up"}, _skip)
-	_show_toast(feedback)
-	_start_drive()
-
-
-func _on_boke_timeout() -> void:
-	if _screen_mode != "tsukkomi" or _story_busy:
-		return
-	_story_busy = true
-	_screen_mode = "busy"
-	var result: Dictionary = _runner.call("timeout_boke") as Dictionary
-	_resolve_boke_presentation(result, "", "tsukkomi")
-
-
-func _on_game_over_retry_pressed() -> void:
-	if not _phase3_enabled or _runner == null or _story_busy:
-		return
-	if not bool(_runner.call("retry_checkpoint")):
-		_show_toast(_runner_string("error_message", "目前沒有可重試的檢查點。"))
-		return
-	_cancel_generation()
-	_rollback.clear()
-	_boke_timer_round_id = ""
-	_boke_time_remaining = 0.0
-	_restored_boke_timer_remaining = -1.0
-	_restored_boke_ui_mode = ""
-	_previous_power = int((_runner.get("gameplay") as Dictionary).get("power", 0))
-	_last_boke_result = "retry"
-	var snapshot: Dictionary = _runner.call("snapshot")
-	var retry_round: String = str((snapshot.get("checkpoint",{}) as Dictionary).get("round_id",""))
-	var stage: Dictionary = _round_stages.get(retry_round,{})
-	if not stage.is_empty():
-		_apply_background(str(stage["background"]))
-		for actor: String in _sprites.keys():
-			var state: Dictionary = stage["sprites"].get(actor,{})
-			_actor_slots[actor] = str(state.get("position","center"))
-			(_sprites[actor] as Control).visible = bool(state.get("visible",false))
-			_sprites[actor].set_meta("portrait_lighting", state.get("lighting", "auto"))
-			_sprites[actor].set_meta("entrance_transition", state.get("entrance_transition", "fade"))
-			_sprites[actor].call("set_expression",str(state.get("expression","neutral")))
-			_layout_sprite(actor)
-		_effects.play_bgm(str(stage.get("bgm","")))
-	_story_busy = false
-	_screen_mode = "busy"
-	_game_over.visible = false
-	_render_restored_current()
-	_refresh_phase3_hud()
-	_save_game()
-	_publish_qa_state()
+	_qa_ctl._publish_qa_state()
 
 
 func _typewriter(token: int) -> void:
@@ -2726,7 +1815,7 @@ func _complete_current_line() -> void:
 		_append_history({"key": _current_line_key, "kind": "say", "speaker": _current_speaker,
 			"text": _full_text, "thought": _dict_bool(_current_command, "thought")})
 		_line_logged = true
-	_save_game()
+	_saves._save_game()
 	_on_line_completed()
 
 
@@ -2735,11 +1824,11 @@ func _on_line_completed() -> void:
 		var mode: String = _pending_round_mode
 		_pending_round_mode = ""
 		if mode == "qte":
-			_start_qte(_current_command)
+			_round._start_qte(_current_command)
 		else:
-			_present_tsukkomi_options(_current_command, false)
-		_save_game()
-	_publish_qa_state()
+			_round._present_tsukkomi_options(_current_command, false)
+		_saves._save_game()
+	_qa_ctl._publish_qa_state()
 	if _skip:
 		_skip_step(_line_generation)
 	elif _auto:
@@ -2780,7 +1869,7 @@ func _present_choice(command: Dictionary) -> void:
 	_line_generation += 1
 	_set_skip(false)
 	_screen_mode = "choice"
-	_clear_hotspots()
+	_investigation._clear_hotspots()
 	_investigation_continue_button.visible = false
 	_boke_controls.visible = false
 	_end_box.visible = false
@@ -2813,7 +1902,7 @@ func _present_choice(command: Dictionary) -> void:
 	if director:
 		_choice_sheet.pop_in()
 		_effects.play({"op": "se", "id": "director_clap"}, false)  # silent while muted
-	call_deferred("_publish_qa_state")
+	_qa_ctl._publish_qa_state.call_deferred()
 
 
 func _on_choice_pressed(option_id: String) -> void:
@@ -2836,7 +1925,7 @@ func _on_choice_pressed(option_id: String) -> void:
 
 func _present_end(command: Dictionary) -> void:
 	_current_command = command.duplicate(true)
-	_clear_hotspots()
+	_investigation._clear_hotspots()
 	_investigation_continue_button.visible = false
 	_boke_controls.visible = false
 	_current_speaker = "narrator"
@@ -2864,7 +1953,7 @@ func _present_end(command: Dictionary) -> void:
 		_game_over.open(_full_text)
 	if not _history_has_key(_current_line_key):
 		_append_history({"key": _current_line_key, "kind": "say", "speaker": "narrator", "text": _full_text})
-	_publish_qa_state()
+	_qa_ctl._publish_qa_state()
 
 
 func _render_restored_current() -> void:
@@ -2888,9 +1977,9 @@ func _render_restored_current() -> void:
 		"result":
 			_present_result(current)
 		"investigate":
-			_present_investigation(current, true)
+			_investigation._present_investigation(current, true)
 		"boke_round":
-			_present_boke_round(current, true)
+			_round._present_boke_round(current, true)
 		_:
 			_start_drive()
 
@@ -2904,7 +1993,7 @@ func _present_result(command: Dictionary) -> void:
 	_set_auto(false)
 	_set_skip(false)
 	_clear_choices()
-	_clear_hotspots()
+	_investigation._clear_hotspots()
 	_end_box.visible = false
 	_screen_mode = "result"
 	var summary: Dictionary = _runner.call("chapter_result") as Dictionary
@@ -2916,7 +2005,7 @@ func _present_result(command: Dictionary) -> void:
 	_chapter_result.visible = true
 	_toast.visible = false
 	_refresh_phase3_hud()
-	_publish_qa_state()
+	_qa_ctl._publish_qa_state()
 
 
 func _on_next_chapter_pressed() -> void:
@@ -2931,6 +2020,13 @@ func _on_next_chapter_pressed() -> void:
 
 
 ## The id progress and chapter select know this story by: its registry id, else its own id.
+## The nodes the runner passed through since last asked join this story's 流程圖 (progress.cfg).
+func _record_visits() -> void:
+	var fresh: Array[String] = _runner.call("take_visits")
+	if not fresh.is_empty():
+		_library.record_visits(_progress_id(), fresh)
+
+
 func _progress_id() -> String:
 	var index: int = _story_choice_index()
 	if index >= 0:
@@ -2965,7 +2061,7 @@ func _show_runtime_error(message: String) -> void:
 	_set_name_plate("narrator", false)
 	_set_text_tone("danger")
 	_set_visible_text(message, false)
-	_publish_qa_state()
+	_qa_ctl._publish_qa_state()
 
 
 ## Narrator lines show 旁白; a combined speaker ("gintoki+kagura") lists both names.
@@ -3008,7 +2104,7 @@ func _focus_speaker(speaker: String, expression: String) -> void:
 
 
 func _clear_stage() -> void:
-	_forget_search_cast()
+	_investigation._forget_search_cast()
 	if _motion != null:
 		_motion.cancel_characters()
 	for sprite: Control in _sprites.values():
@@ -3046,6 +2142,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		else:
 			_gallery.call("close")
 		return
+	if event.is_action_pressed("ui_cancel") and _screen_mode == "flowchart":
+		get_viewport().set_input_as_handled()
+		_flowchart.call("close")
+		return
 	if event.is_action_pressed("ui_cancel") and _screen_mode == "case_file":
 		get_viewport().set_input_as_handled()
 		_close_case_file()
@@ -3053,9 +2153,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel") and _screen_mode in ["save_slots", "load_slots", "slot_confirm"]:
 		get_viewport().set_input_as_handled()
 		if _screen_mode == "slot_confirm":
-			_cancel_slot_confirmation()
+			_saves._cancel_slot_confirmation()
 		else:
-			_close_slot_picker()
+			_saves._close_slot_picker()
 		return
 	if event.is_action_pressed("ui_accept") and (_screen_mode == "story" or _comedy_layer.is_active()):
 		get_viewport().set_input_as_handled()
@@ -3099,11 +2199,11 @@ func _on_catcher_input(event: InputEvent) -> void:
 			if _screen_mode != "investigate" and -delta.y > SWIPE_DISTANCE and absf(delta.x) < -delta.y:
 				_open_log()
 			return
-		if _placard_open() and _placard_hit_rect().has_point(button.global_position):
-			_on_placard_pressed()
+		if _round._placard_open() and _round._placard_hit_rect().has_point(button.global_position):
+			_round._on_placard_pressed()
 			return
 		if _screen_mode == "investigate":
-			_tap_investigation(button.global_position)
+			_investigation._tap_investigation(button.global_position)
 		else:
 			_on_screen_tap()
 	elif event is InputEventMouseMotion and _gesture_active:
@@ -3112,7 +2212,7 @@ func _on_catcher_input(event: InputEvent) -> void:
 			_gesture_moved = true
 			_gesture_token += 1
 		if _gesture_moved and _screen_mode == "investigate":
-			_set_pan(_pan_start + motion.global_position.x - _gesture_start.x,
+			_investigation._set_pan(_pan_start + motion.global_position.x - _gesture_start.x,
 				_pan_y_start + motion.global_position.y - _gesture_start.y)
 
 
@@ -3157,7 +2257,7 @@ func _set_ui_hidden(value: bool) -> void:
 	_phase3_hud.visible = _phase3_enabled and not value and _screen_mode != "title"
 	if not value and _auto:
 		_auto_step(_line_generation)
-	_publish_qa_state()
+	_qa_ctl._publish_qa_state()
 
 
 func _set_auto(value: bool) -> void:
@@ -3169,7 +2269,7 @@ func _set_auto(value: bool) -> void:
 	_update_toggle_styles()
 	if value and _text_complete:
 		_auto_step(_line_generation)
-	_publish_qa_state()
+	_qa_ctl._publish_qa_state()
 
 
 func _set_skip(value: bool) -> void:
@@ -3187,7 +2287,7 @@ func _set_skip(value: bool) -> void:
 			_skip_step(_line_generation)
 		else:
 			_complete_current_line()
-	_publish_qa_state()
+	_qa_ctl._publish_qa_state()
 
 
 func _auto_step(token: int) -> void:
@@ -3225,15 +2325,15 @@ func _process(delta: float) -> void:
 		if displayed_second != _last_boke_display_second:
 			_last_boke_display_second = displayed_second
 			_refresh_phase3_hud()
-			_publish_qa_state()
+			_qa_ctl._publish_qa_state()
 		if _boke_time_remaining <= 0.0:
-			_on_boke_timeout()
+			_round._on_boke_timeout()
 			return
 	if _qa_enabled:
 		_qa_elapsed += delta
 		if _qa_elapsed >= QA_PUBLISH_SEC:
 			_qa_elapsed = 0.0
-			_publish_qa_state()
+			_qa_ctl._publish_qa_state()
 
 
 # ---------------------------------------------------------------- 選單、紀錄、提示
@@ -3247,8 +2347,8 @@ func _open_menu() -> void:
 	_fit_menu()
 	_menu_overlay.visible = true
 	_menu_overlay.rows_scroll.scroll_vertical = 0
-	_menu_overlay.pop_in().finished.connect(_publish_qa_state)
-	_publish_qa_state()
+	_menu_overlay.pop_in().finished.connect(_qa_ctl._publish_qa_state)
+	_qa_ctl._publish_qa_state()
 
 
 func _start_skip_from_menu() -> void:
@@ -3266,7 +2366,7 @@ func _close_menu() -> void:
 	_refresh_phase3_hud()
 	if _auto:
 		_auto_step(_line_generation)
-	_publish_qa_state()
+	_qa_ctl._publish_qa_state()
 
 
 func _open_log() -> void:
@@ -3287,7 +2387,7 @@ func _open_log() -> void:
 	_log_overlay.visible = true
 	_refresh_phase3_hud()
 	_scroll_log_to_bottom()
-	_publish_qa_state()
+	_qa_ctl._publish_qa_state()
 
 
 ## One log line, read like a chat (from the 異獸髮廊 study, docs/interactive-fiction/ref-beastfolk-barber): other
@@ -3339,7 +2439,7 @@ func _close_log() -> void:
 	_refresh_phase3_hud()
 	if _auto:
 		_auto_step(_line_generation)
-	_publish_qa_state()
+	_qa_ctl._publish_qa_state()
 
 
 func _close_overlays() -> void:
@@ -3366,197 +2466,6 @@ func _close_overlays() -> void:
 	_slot_pending_index = -1
 
 
-func _load_from_menu() -> void:
-	_open_slot_picker("load")
-
-
-func _open_slot_picker(mode: String) -> void:
-	if mode not in ["save", "load"]:
-		return
-	var return_screen: String = _screen_mode
-	if return_screen == "menu":
-		_slot_return_screen = "menu"
-		return_screen = _mode_before_overlay
-		_menu_overlay.visible = false
-	elif return_screen not in ["title", "story", "choice", "end", "investigate", "boke_round", "tsukkomi"]:
-		return
-	else:
-		_slot_return_screen = return_screen
-	if mode == "save" and return_screen not in ["story", "choice", "end", "investigate", "boke_round", "tsukkomi"]:
-		return
-	_mode_before_overlay = return_screen
-	_slot_typewriter_paused = return_screen == "story" and not _text_complete
-	if _slot_typewriter_paused:
-		_line_generation += 1
-	_slot_mode = mode
-	_slot_page = 0
-	_slot_pending_index = -1
-	_slot_confirmation_overlay.visible = false
-	_slot_title.text = "選擇存檔位" if mode == "save" else "選擇讀取存檔"
-	_screen_mode = "save_slots" if mode == "save" else "load_slots"
-	_refresh_phase3_hud()
-	await get_tree().process_frame
-	_slot_preview_png = _capture_preview_png()
-	_slot_overlay.visible = true
-	_refresh_slot_page()
-	_publish_qa_state()
-
-
-func _change_slot_page(delta: int) -> void:
-	_slot_page = clampi(_slot_page + delta, 0, SAVE_SLOTS_SCRIPT.PAGE_COUNT - 1)
-	_refresh_slot_page()
-	_publish_qa_state()
-
-
-func _refresh_slot_page() -> void:
-	if _slot_panel == null:
-		return
-	_slot_visible_entries.clear()
-	_slot_page_label.text = "%d / %d" % [_slot_page + 1, SAVE_SLOTS_SCRIPT.PAGE_COUNT]
-	_slot_prev_button.disabled = _slot_page <= 0
-	_slot_next_button.disabled = _slot_page >= SAVE_SLOTS_SCRIPT.PAGE_COUNT - 1
-	var can_save: bool = _saveable_current_state()
-	var autosave: Dictionary = _read_save_payload(save_path)
-	_slot_auto_button.visible = _slot_mode == "load" and not autosave.is_empty()
-	_slot_auto_button.disabled = autosave.is_empty()
-	for local_index: int in range(_slot_card_buttons.size()):
-		var slot_index: int = _slot_page * SAVE_SLOTS_SCRIPT.PAGE_SIZE + local_index + 1
-		var path: String = SAVE_SLOTS_SCRIPT.manual_path(save_path, slot_index)
-		var occupied: bool = _slot_file_exists(path)
-		var payload: Dictionary = _read_save_payload(path)
-		var valid: bool = not payload.is_empty()
-		var chapter: String = str(payload.get("chapter", payload.get("node_id", ""))) if valid else ""
-		var saved_at: String = _payload_saved_time(payload, path) if valid else ""
-		_slot_visible_entries.append({"index": slot_index, "occupied": occupied, "valid": valid,
-			"chapter": chapter, "saved_at": saved_at})
-		var button: Button = _slot_card_buttons[local_index]
-		var number_label: Label = _slot_card_numbers[local_index]
-		var title_label: Label = _slot_card_titles[local_index]
-		var time_label: Label = _slot_card_times[local_index]
-		var preview: TextureRect = _slot_card_previews[local_index]
-		button.disabled = _slot_mode == "load" and not valid or _slot_mode == "save" and not can_save
-		number_label.text = "%02d" % slot_index
-		if valid:
-			chapter = str(payload.get("chapter", payload.get("node_id", "存檔")))
-			var node_id: String = str(payload.get("node_id", ""))
-			title_label.text = chapter if node_id.is_empty() or node_id == chapter else "%s\n%s" % [chapter, node_id]
-			time_label.text = saved_at
-			preview.texture = _decode_preview(str(payload.get("preview_png", "")))
-		else:
-			preview.texture = null
-			time_label.text = ""
-			if occupied:
-				var snapshot: Dictionary = _runner.call("snapshot") as Dictionary
-				var older: bool = not _other_version_of(_read_raw_save_payload(path), str(snapshot.get("story_id", "")),
-					str(snapshot.get("version", ""))).is_empty()
-				if _slot_mode == "load":
-					title_label.text = "舊版劇本的存檔（無法讀取）" if older else "資料無效或不相容"
-				else:
-					title_label.text = "舊版劇本的存檔・確認後覆寫" if older else "無效資料・確認後覆寫"
-			else:
-				title_label.text = "空白存檔位" if _slot_mode == "save" else "尚無存檔"
-		var card_role: String = "slot_card" if valid else ("slot_card_invalid" if occupied else "slot_card_empty")
-		_set_button_style(button, card_role)
-		button.visible = true
-
-
-func _on_slot_card_pressed(local_index: int) -> void:
-	if local_index < 0 or local_index >= SAVE_SLOTS_SCRIPT.PAGE_SIZE:
-		return
-	var slot_index: int = _slot_page * SAVE_SLOTS_SCRIPT.PAGE_SIZE + local_index + 1
-	var path: String = SAVE_SLOTS_SCRIPT.manual_path(save_path, slot_index)
-	if _slot_mode == "save":
-		if not _saveable_current_state():
-			return
-		if _slot_file_exists(path):
-			_slot_pending_index = slot_index
-			_slot_confirmation_label.text = "覆寫第 %02d 格的存檔？" % slot_index
-			_slot_confirmation_overlay.visible = true
-			_screen_mode = "slot_confirm"
-			_publish_qa_state()
-		else:
-			_write_manual_slot(slot_index)
-		return
-	if _slot_mode == "load":
-		var payload: Dictionary = _read_save_payload(path)
-		if not payload.is_empty():
-			_load_payload_from_picker(payload, "已讀取第 %02d 格" % slot_index)
-
-
-func _confirm_slot_overwrite() -> void:
-	if _slot_pending_index < 1:
-		return
-	var selected_index: int = _slot_pending_index
-	_slot_confirmation_overlay.visible = false
-	_slot_pending_index = -1
-	_write_manual_slot(selected_index)
-
-
-func _cancel_slot_confirmation() -> void:
-	if not _slot_confirmation_overlay.visible:
-		return
-	_slot_confirmation_overlay.visible = false
-	_slot_pending_index = -1
-	_screen_mode = "save_slots"
-	_publish_qa_state()
-
-
-func _write_manual_slot(slot_index: int) -> void:
-	var path: String = SAVE_SLOTS_SCRIPT.manual_path(save_path, slot_index)
-	var payload: Dictionary = _build_save_payload(_slot_preview_png)
-	if payload.is_empty() or not bool(SAVE_SLOTS_SCRIPT.write_atomic(path, payload, _validate_save_payload)):
-		_show_toast("存檔失敗，原有資料已保留")
-		_refresh_slot_page()
-		_publish_qa_state()
-		return
-	_close_slot_picker()
-	_show_toast("已存到第 %02d 格" % slot_index)
-
-
-func _load_autosave_from_picker() -> void:
-	var payload: Dictionary = _read_save_payload(save_path)
-	if not payload.is_empty():
-		_load_payload_from_picker(payload, "已讀取自動存檔")
-
-
-func _load_payload_from_picker(payload: Dictionary, message: String) -> void:
-	if not _validate_save_payload(payload):
-		return
-	_cancel_generation()
-	_set_auto(false)
-	_set_skip(false)
-	if not _apply_save_payload(payload):
-		return
-	_close_slot_picker(false)
-	_set_ui_hidden(false)
-	_show_story_screen()
-	_render_restored_current()
-	_show_toast(message if _save_game() else "已讀檔，但續讀存檔更新失敗")
-
-
-func _close_slot_picker(resume_story: bool = true) -> void:
-	if _slot_overlay == null or not _slot_overlay.visible:
-		return
-	_slot_overlay.visible = false
-	_slot_confirmation_overlay.visible = false
-	_slot_pending_index = -1
-	_slot_mode = ""
-	var return_to_menu: bool = resume_story and _slot_return_screen == "menu"
-	_screen_mode = "menu" if return_to_menu else _mode_before_overlay
-	_menu_overlay.visible = return_to_menu
-	_refresh_phase3_hud()
-	if resume_story and _mode_before_overlay == "story":
-		if _slot_typewriter_paused and not _text_complete:
-			_typewriter(_line_generation)
-		elif not return_to_menu and _skip:
-			_skip_step(_line_generation)
-		elif not return_to_menu and _auto:
-			_auto_step(_line_generation)
-	_slot_typewriter_paused = false
-	_slot_return_screen = ""
-	_publish_qa_state()
-
-
 func _show_toast(message: String) -> void:
 	_toast_token += 1
 	var token: int = _toast_token
@@ -3567,11 +2476,25 @@ func _show_toast(message: String) -> void:
 	_toast.position = Vector2((_game.size.x - toast_size.x) * 0.5, EDGE + _safe_top + 190.0)
 	_toast.visible = true
 	_toast.modulate.a = 1.0
-	_publish_qa_state()
+	_toast.pivot_offset = toast_size * 0.5
+	_toast.scale = Vector2.ONE
+	if _toast_tween != null and _toast_tween.is_valid():
+		_toast_tween.kill()
+	if int(_settings.get("motion", 0)) == 0:
+		# Pops in, and fades over its last moment instead of blinking out.
+		_toast.scale = Vector2.ONE * 0.86
+		_toast_tween = create_tween()
+		_toast_tween.tween_property(_toast, "scale", Vector2.ONE, 0.16).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		_toast_tween.tween_interval(TOAST_SEC - 0.16 - 0.22)
+		_toast_tween.tween_property(_toast, "modulate:a", 0.0, 0.22)
+	_qa_ctl._publish_qa_state()
 	await get_tree().create_timer(TOAST_SEC).timeout
 	if token == _toast_token:
+		if _toast_tween != null and _toast_tween.is_valid():
+			_toast_tween.kill()
 		_toast.visible = false
-		_publish_qa_state()
+		_toast.modulate.a = 1.0
+		_qa_ctl._publish_qa_state()
 
 
 func _toggle_mute() -> void:
@@ -3579,7 +2502,7 @@ func _toggle_mute() -> void:
 	_apply_audio_levels()
 	_effects.set_muted(_audio_muted)
 	_refresh_menu_rows()
-	_publish_qa_state()
+	_qa_ctl._publish_qa_state()
 
 
 func _start_audio_after_user_gesture() -> void:
@@ -3609,7 +2532,7 @@ func _history_has_key(key: String) -> bool:
 func _refresh_phase3_hud() -> void:
 	if _phase3_hud == null:
 		return
-	_refresh_placard()
+	_round._refresh_placard()
 	_phase3_hud.visible = _phase3_enabled and _screen_mode != "title" and not _ui_hidden
 	if not _phase3_enabled or _runner == null:
 		return
@@ -3628,7 +2551,7 @@ func _refresh_phase3_hud() -> void:
 	_phase3_hud.show_clues(clues, _screen_mode != "investigate")
 	if _menu_items.has("material"):
 		(_menu_items["material"] as Button).text = _words("{materials}（%d）") % items.size()
-	if _command_op(current) == "boke_round" and _effective_boke_ui_mode() == "tsukkomi":
+	if _command_op(current) == "boke_round" and _saves._effective_boke_ui_mode() == "tsukkomi":
 		var prefix: String = "倒數" if _screen_mode == "tsukkomi" else "暫停"
 		_phase3_timer_label.text = "%s %02d 秒" % [prefix, ceili(_boke_time_remaining)]
 		_choice_sheet.set_timer(_boke_time_remaining, _timer_total(current),
@@ -3684,7 +2607,7 @@ func _open_case_file(tab: String) -> void:
 	_case_file_panel.call("open", _runner.call("case_file"), tab, pictures, usable)
 	_toast.visible = false  # a clue's toast would sit over the panel
 	_refresh_phase3_hud()
-	_publish_qa_state()
+	_qa_ctl._publish_qa_state()
 
 
 func _close_case_file() -> void:
@@ -3693,299 +2616,15 @@ func _close_case_file() -> void:
 	_case_file_panel.visible = false
 	_screen_mode = _mode_before_overlay
 	_refresh_phase3_hud()
-	_publish_qa_state()
+	_qa_ctl._publish_qa_state()
 
 
 func _on_case_file_material_used(option_id: String) -> void:
 	_close_case_file()
 	if _screen_mode == "tsukkomi":
-		_on_boke_option_pressed(option_id)
+		_round._on_boke_option_pressed(option_id)
 
 # ---------------------------------------------------------------- 存讀檔
-
-func _rollback_line() -> bool:
-	var mode: String = _mode_before_overlay if _screen_mode == "menu" else _screen_mode
-	if mode != "story" or not _rollback.available():
-		return false
-	var payload: Dictionary = _rollback.take()
-	_rolling_back = true
-	var restored: bool = _apply_save_payload(payload)
-	_rolling_back = false
-	if not restored:
-		return false
-	_set_auto(false)
-	_set_skip(false)
-	_close_overlays()
-	_show_story_screen()
-	_render_restored_current()
-	_save_game()
-	_show_toast("已回到上一句")
-	return true
-
-
-func _quick_save() -> bool:
-	if not _saveable_current_state():
-		return false
-	var payload: Dictionary = _build_save_payload("")
-	var written: bool = SAVE_SLOTS_SCRIPT.write_atomic(SAVE_SLOTS_SCRIPT.quick_path(save_path), payload, _validate_save_payload)
-	_show_toast("已快速存檔" if written else "快速存檔失敗，原有資料已保留")
-	_refresh_menu_rows()
-	return written
-
-
-func _quick_load() -> bool:
-	var payload: Dictionary = _read_save_payload(SAVE_SLOTS_SCRIPT.quick_path(save_path))
-	if payload.is_empty() or not _apply_save_payload(payload):
-		_show_toast("尚無可讀取的快速存檔")
-		return false
-	_set_auto(false)
-	_set_skip(false)
-	_close_overlays()
-	_set_ui_hidden(false)
-	_show_story_screen()
-	_render_restored_current()
-	_save_game()
-	_show_toast("已快速讀檔")
-	return true
-
-func _save_game() -> bool:
-	if not _saveable_current_state():
-		return false
-	var payload: Dictionary = _build_save_payload("")
-	return not payload.is_empty() and bool(SAVE_SLOTS_SCRIPT.write_atomic(save_path, payload, _validate_save_payload))
-
-
-func _saveable_current_state() -> bool:
-	return _runner != null and not _story_busy and _command_op(_runner_current()) in [
-		"say", "choice", "end", "result", "investigate", "boke_round"]
-
-
-func _build_save_payload(preview_png: String) -> Dictionary:
-	var runner_snapshot: Dictionary = _runner.call("snapshot") as Dictionary
-	if runner_snapshot.is_empty():
-		return {}
-	var sprites: Dictionary = {}
-	for actor_id: String in _sprites.keys():
-		var sprite: Control = _sprites[actor_id] as Control
-		# A fading exit is already absent in the story, even while its last frames are visible.
-		var on_stage: bool = sprite.visible and _motion.character_kind(sprite) != "leave"
-		sprites[actor_id] = {"visible": on_stage, "expression": str(sprite.get("expression")),
-			"position": str(_actor_slots.get(actor_id, "center")),
-			"lighting": str(sprite.get_meta("portrait_lighting", "auto")),
-			"entrance_transition": str(sprite.get_meta("entrance_transition", "fade"))}
-	var current: Dictionary = _runner_current()
-	var payload: Dictionary = {
-		"schema": SAVE_SCHEMA,
-		"version": SAVE_SCHEMA,
-		"story_id": str(runner_snapshot.get("story_id", "")),
-		"runner": runner_snapshot,
-		"background": _current_bg_id,
-		"sprites": sprites,
-		"history": _history.duplicate(true),
-		"chapter": str(current.get("node_title", current.get("node_id", ""))),
-		"node_id": str(runner_snapshot.get("node_id", "")),
-		"saved_at": Time.get_datetime_string_from_system(false, false),
-		"preview_png": preview_png,
-		"bgm": _effects.current_bgm,
-		"round_stages": _round_stages.duplicate(true),
-		"investigation_pans": _investigation_pans.duplicate(true),
-		"investigation_pans_y": _investigation_pans_y.duplicate(true),
-		"investigation_home_casts": _investigation_home_casts.duplicate(true),
-	}
-	if _command_op(current) == "boke_round":
-		var boke_ui_mode: String = _effective_boke_ui_mode()
-		if boke_ui_mode not in ["boke_round", "tsukkomi"]:
-			boke_ui_mode = "boke_round"  # a QTE restarts when its line comes back
-		payload["boke_ui_screen"] = boke_ui_mode
-		if boke_ui_mode == "tsukkomi":
-			payload["boke_timer_remaining"] = _boke_time_remaining
-	return payload
-
-
-func _effective_boke_ui_mode() -> String:
-	if _screen_mode in ["menu", "log", "save_slots", "load_slots", "slot_confirm"]:
-		return _mode_before_overlay
-	return _screen_mode
-
-
-func _read_save_payload(path: String = "") -> Dictionary:
-	var target_path: String = save_path if path.is_empty() else path
-	for candidate_path: String in [target_path, target_path + ".bak", target_path + ".bak.old",
-		target_path + ".old", target_path + ".tmp"]:
-		var payload: Dictionary = _read_raw_save_payload(candidate_path)
-		if not payload.is_empty() and _validate_save_payload(payload):
-			return payload
-	return {}
-
-
-func _read_raw_save_payload(path: String) -> Dictionary:
-	if not FileAccess.file_exists(path):
-		return {}
-	var file: FileAccess = FileAccess.open(path, FileAccess.READ)
-	if file == null:
-		return {}
-	var parsed: Variant = file.get_var(false)
-	file.close()
-	return (parsed as Dictionary).duplicate(true) if parsed is Dictionary else {}
-
-
-func _valid_saved_cast(cast: Variant) -> bool:
-	if not cast is Dictionary:
-		return false
-	for actor_id: String in _actors:
-		var pose: Variant = cast.get(actor_id)
-		if not pose is Dictionary or not pose.get("visible") is bool or not _slot_markers.has(str(pose.get("position", ""))) or typeof(pose.get("expression", "")) != TYPE_STRING:
-			return false
-		if pose.get("lighting", "auto") not in ["dim", "lit", "auto"] or pose.get("entrance_transition", "fade") not in STORY_RUNNER_SCRIPT.VALID_CHARACTER_TRANSITIONS:
-			return false
-	return true
-
-
-func _validate_save_payload(payload: Dictionary) -> bool:
-	# Schema 3 saves written before background/position/thumbnail metadata are
-	# migrated by supplying the same defaults the scene uses for a new game.
-	var schema: int = int(payload.get("schema", payload.get("version", -1)))
-	var version: int = int(payload.get("version", schema))
-	if schema != SAVE_SCHEMA or version > SAVE_SCHEMA or version < 1:
-		return false
-	var runner_snapshot: Variant = payload.get("runner")
-	var sprites: Variant = payload.get("sprites")
-	var history: Variant = payload.get("history")
-	if not runner_snapshot is Dictionary or not sprites is Dictionary or not history is Array:
-		return false
-	if _runner == null:
-		return false
-	var current_snapshot: Dictionary = _runner.call("snapshot") as Dictionary
-	var story_id: String = str(current_snapshot.get("story_id", ""))
-	if str(payload.get("story_id", str((runner_snapshot as Dictionary).get("story_id", "")))) != story_id:
-		return false
-	if str((runner_snapshot as Dictionary).get("story_id", "")) != story_id:
-		return false
-	var background_id: String = str(payload.get("background", _default_background_id()))
-	if not _backgrounds.has(background_id):
-		return false
-	for actor_id: String in _actors.keys():
-		var state: Variant = (sprites as Dictionary).get(actor_id)
-		if not state is Dictionary or not (state as Dictionary).get("visible") is bool:
-			return false
-		var default_position: String = str((_actors[actor_id] as Dictionary).get("slot", "center"))
-		if not _slot_markers.has(str((state as Dictionary).get("position", default_position))):
-			return false
-		if typeof((state as Dictionary).get("expression", "neutral")) != TYPE_STRING:
-			return false
-		if state.get("lighting", "auto") not in ["dim", "lit", "auto"] or state.get("entrance_transition", "fade") not in STORY_RUNNER_SCRIPT.VALID_CHARACTER_TRANSITIONS:
-			return false
-	for entry: Variant in history as Array:
-		if not entry is Dictionary:
-			return false
-	if payload.has("saved_at") and typeof(payload["saved_at"]) != TYPE_STRING:
-		return false
-	if payload.has("preview_png") and typeof(payload["preview_png"]) != TYPE_STRING:
-		return false
-	if payload.has("bgm") and typeof(payload["bgm"]) != TYPE_STRING:
-		return false
-	if payload.has("boke_timer_remaining"):
-		var remaining: Variant = payload["boke_timer_remaining"]
-		if (typeof(remaining) != TYPE_INT and typeof(remaining) != TYPE_FLOAT) or float(remaining) < 0.0:
-			return false
-	if payload.has("boke_ui_screen"):
-		if typeof(payload["boke_ui_screen"]) != TYPE_STRING or str(payload["boke_ui_screen"]) not in ["boke_round", "tsukkomi"]:
-			return false
-	# Save validation uses independent mutable state, sharing the loaded story definition.
-	for key: String in ["round_stages", "investigation_pans", "investigation_pans_y", "investigation_home_casts"]:
-		if not payload.get(key, {}) is Dictionary:
-			return false
-	for key: String in ["investigation_pans", "investigation_pans_y"]:
-		for pan: Variant in (payload.get(key, {}) as Dictionary).values():
-			if typeof(pan) not in [TYPE_INT, TYPE_FLOAT] or not is_finite(float(pan)):
-				return false
-	for stage: Variant in (payload.get("round_stages", {}) as Dictionary).values():
-		if not stage is Dictionary or not _backgrounds.has(str(stage.get("background", ""))) or typeof(stage.get("bgm", "")) != TYPE_STRING or not _valid_saved_cast(stage.get("sprites")):
-			return false
-	for cast: Variant in (payload.get("investigation_home_casts", {}) as Dictionary).values():
-		if not _valid_saved_cast(cast):
-			return false
-	if _save_validation_probe == null:
-		_save_validation_probe = _runner.call("create_validation_probe") as RefCounted
-	var probe: RefCounted = _save_validation_probe
-	if probe == null or not bool(probe.call("restore", runner_snapshot)):
-		return false
-	var probe_current: Dictionary = probe.call("current") as Dictionary
-	var probe_op: String = _command_op(probe_current)
-	if payload.has("boke_ui_screen") or payload.has("boke_timer_remaining"):
-		if probe_op != "boke_round":
-			return false
-		var saved_boke_ui_mode: String = str(payload.get("boke_ui_screen",
-			"tsukkomi" if payload.has("boke_timer_remaining") else "boke_round"))
-		if payload.has("boke_timer_remaining") and saved_boke_ui_mode != "tsukkomi":
-			return false
-	if payload.has("boke_timer_remaining"):
-		# Saved with 吐槽輔助 寬鬆 the clock can hold more than the step's seconds; restore clamps it.
-		var max_remaining: float = float(probe_current.get("timer_seconds", DEFAULT_BOKE_TIMER_SECONDS)) * \
-			SETTINGS_SCRIPT.ASSIST_TIMER_FACTOR
-		if float(payload["boke_timer_remaining"]) > max_remaining:
-			return false
-	return true
-
-
-func _has_valid_save() -> bool:
-	return not _read_save_payload().is_empty()
-
-
-func _apply_save_payload(payload: Dictionary) -> bool:
-	if not _validate_save_payload(payload) or not bool(_runner.call("restore", payload["runner"])):
-		return false
-	_cancel_generation()
-	if not _rolling_back:
-		_rollback.clear()
-	var restored_current: Dictionary = _runner_current()
-	if _command_op(restored_current) == "boke_round":
-		_restored_boke_ui_mode = str(payload.get("boke_ui_screen",
-			"tsukkomi" if payload.has("boke_timer_remaining") else "boke_round"))
-		if _restored_boke_ui_mode == "tsukkomi":
-			_restored_boke_timer_remaining = float(payload.get("boke_timer_remaining",
-				restored_current.get("timer_seconds", DEFAULT_BOKE_TIMER_SECONDS)))
-		else:
-			_restored_boke_timer_remaining = -1.0
-		_boke_timer_round_id = ""
-		_boke_time_remaining = maxf(0.0, _restored_boke_timer_remaining)
-	else:
-		_restored_boke_timer_remaining = -1.0
-		_restored_boke_ui_mode = ""
-		_boke_timer_round_id = ""
-		_boke_time_remaining = 0.0
-	_apply_background(str(payload.get("background", _default_background_id())))
-	_forget_search_cast()
-	var sprites: Dictionary = payload["sprites"]
-	for actor_id: String in _sprites.keys():
-		var state: Dictionary = sprites.get(actor_id, {"visible": false}) as Dictionary
-		var sprite: Control = _sprites[actor_id]
-		var default_position: String = str((_actors[actor_id] as Dictionary).get("slot", "center"))
-		_actor_slots[actor_id] = str(state.get("position", default_position))
-		sprite.visible = bool(state.get("visible", false))
-		sprite.set_meta("portrait_lighting", state.get("lighting", "auto"))
-		sprite.set_meta("entrance_transition", state.get("entrance_transition", "fade"))
-		sprite.modulate = _portrait_color(sprite, true)
-		sprite.call("set_expression", str(state.get("expression", "neutral")))
-		_layout_sprite(actor_id)
-	_previous_power = int((_runner.get("gameplay") as Dictionary).get("power", 0))
-	_round_stages = (payload.get("round_stages",{}) as Dictionary).duplicate(true)
-	_investigation_pans = (payload.get("investigation_pans",{}) as Dictionary).duplicate(true)
-	_investigation_pans_y = (payload.get("investigation_pans_y",{}) as Dictionary).duplicate(true)
-	_investigation_home_casts = (payload.get("investigation_home_casts",{}) as Dictionary).duplicate(true)
-	_history.clear()
-	for entry: Variant in payload["history"]:
-		_history.append((entry as Dictionary).duplicate(true))
-	_effects.play_bgm(str(payload.get("bgm", "")))  # saves before music existed have none
-	return true
-
-
-func _delete_save() -> void:
-	for path: String in [save_path, save_path + ".bak", save_path + ".bak.old", save_path + ".old",
-		save_path + ".tmp", save_path + ".bak.tmp"]:
-		if FileAccess.file_exists(path):
-			DirAccess.remove_absolute(path)
-
 
 func _cancel_generation() -> void:
 	_pending_round_mode = ""
@@ -3998,50 +2637,6 @@ func _cancel_generation() -> void:
 		_motion.reset()
 	if _effects != null:
 		_effects.stop_transients()
-
-
-func _capture_preview_png() -> String:
-	if DisplayServer.get_name() == "headless":
-		return ""
-	var viewport_texture: ViewportTexture = get_viewport().get_texture()
-	if viewport_texture == null:
-		return ""
-	var image: Image = viewport_texture.get_image()
-	if image == null or image.is_empty():
-		return ""
-	image.resize(135, 240, Image.INTERPOLATE_LANCZOS)
-	var png: PackedByteArray = image.save_png_to_buffer()
-	return Marshalls.raw_to_base64(png) if not png.is_empty() else ""
-
-
-func _decode_preview(encoded: String) -> Texture2D:
-	if encoded.is_empty():
-		return null
-	var image: Image = Image.new()
-	if image.load_png_from_buffer(Marshalls.base64_to_raw(encoded)) != OK or image.is_empty():
-		return null
-	return ImageTexture.create_from_image(image)
-
-
-func _payload_saved_time(payload: Dictionary, path: String) -> String:
-	var saved_at: String = str(payload.get("saved_at", ""))
-	if not saved_at.is_empty():
-		var date_time: PackedStringArray = saved_at.replace("T", " ").split(" ")
-		if date_time.size() >= 2 and date_time[0].length() >= 10:
-			return "%s %s" % [date_time[0].substr(5, 5), date_time[1].substr(0, 5)]
-		return saved_at.replace("T", " ")
-	if FileAccess.file_exists(path):
-		return "較早的存檔"
-	if FileAccess.file_exists(path + ".bak"):
-		return "備份存檔"
-	return "較早的存檔"
-
-
-func _slot_file_exists(path: String) -> bool:
-	for candidate: String in [path, path + ".bak", path + ".bak.old", path + ".old", path + ".tmp"]:
-		if FileAccess.file_exists(candidate):
-			return true
-	return false
 
 
 ## The picture before a story starts: the catalog's `default_background`, else its first background.
@@ -4242,289 +2837,172 @@ func _apply_ui_style_recursive(node: Node) -> void:
 
 # ---------------------------------------------------------------- QA（僅 ?qa=1 的 Web 版）
 
-func _detect_qa_mode() -> void:
-	_qa_enabled = OS.has_feature("web") and bool(JavaScriptBridge.eval(
-		"new URLSearchParams(window.location.search).get('qa') === '1'"))
+
+# ---------------------------------------------------------------- 轉接（測試與工具直接呼叫的舊名稱）
+
+func _backup_paths() -> Array[String]:
+	return _saves._backup_paths()
 
 
-## Written just before the frame draws, once containers have laid out this frame's changes, so a
-## test never reads the rows of a sheet or menu that is still being arranged.
-func _publish_qa_state() -> void:
-	if _qa_enabled and not RenderingServer.frame_pre_draw.is_connected(_write_qa_state):
-		RenderingServer.frame_pre_draw.connect(_write_qa_state, CONNECT_ONE_SHOT)
+func _import_backup_text(text: String) -> bool:
+	return _saves._import_backup_text(text)
 
 
-func _write_qa_state() -> void:
-	if not is_inside_tree():
-		return
-	var current: Dictionary = _runner_current()
-	var snapshot: Dictionary = _runner.call("snapshot")
-	var choices: Array = []
-	for index: int in range(_choice_buttons.size()):
-		if index < _current_options.size() and _tappable(_choice_buttons[index]):
-			choices.append({"id": _dict_string(_current_options[index], "id"),
-				"label": _dict_string(_current_options[index], "label"), "rect": _rect(_choice_buttons[index])})
-	var controls: Dictionary = {}
-	var named: Dictionary = {
-		"begin": _begin_button, "continue": _continue_button, "title_load": _title_load_button, "dialogue": _dialog_panel,
-		"log": _log_button, "auto": _auto_button, "advance": _advance_button,
-		"menu": _choice_sheet.menu_button if _choice_sheet.is_visible_in_tree() else _menu_button, "menu_close": _menu_close, "log_close": _log_close,
-		"restart": _restart_button, "title": _end_title_button, "investigate_continue": _investigation_continue_button,
-		"investigate_collapse": _dialog_panel.investigation_collapse, "investigate_expand": _investigate_bar.get("expand_button"),
-		"investigate_folded_continue": _investigate_bar.get("continue_button"),
-		"boke_previous": _boke_previous_button, "boke_next": _boke_next_button,
-		"boke_listen": _boke_listen_button, "boke_tsukkomi": _boke_tsukkomi_button,
-		"game_over_retry": _game_over_retry_button, "game_over_title": _game_over.title_button,
-		"result_next": _chapter_result.get("next_button"), "result_title": _chapter_result.get("title_button"),
-		"chapter_close": _chapter_select.get("close_button"), "settings_close": _settings_panel.get("close_button"),
-		"chapter_credits": _chapter_select.get("credits_button"), "credits_close": _credits_roll.get("close_button"),
-		"chapter_gallery": _chapter_select.get("gallery_button"), "gallery_close": _gallery.get("close_button"),
-		"gallery_tab_pictures": _gallery.get("pictures_tab"), "gallery_tab_music": _gallery.get("music_tab"),
-		"title_settings": _title_screen.settings_button, "story_switch": _title_screen.story_switch,
-		"censor": _choice_sheet.censor_bar if _choice_sheet.censor_bar.is_visible_in_tree() else _dialog_panel.censor_bar,
-		"super": _choice_sheet.super_button,
-	}
-	if _dialog_panel.skip_button != null:
-		named["skip"] = _dialog_panel.skip_button
-	for item_id: String in _menu_items.keys():
-		named["menu_" + item_id] = _menu_items[item_id]
-	var chapter_rows: Dictionary = _chapter_select.call("rows")
-	for story_id: String in chapter_rows.keys():
-		named["chapter_" + story_id] = chapter_rows[story_id]
-	var setting_buttons: Dictionary = _settings_panel.call("buttons")
-	for setting_id: String in setting_buttons.keys():
-		named["setting_" + setting_id] = setting_buttons[setting_id]
-	# While 目錄 is open its dim covers everything else, so only its own controls can be tapped.
-	var modal: Control = _menu_overlay if _menu_overlay.visible else null
-	var gallery_items: Dictionary = _gallery.call("items")
-	for item_id: String in gallery_items.keys():
-		named["gallery_" + item_id] = gallery_items[item_id]
-	for panel: Control in [_settings_panel, _chapter_select, _credits_roll, _gallery]:  # opened over the title or 目錄
-		if panel.visible:
-			modal = panel
-	for control_name: String in named.keys():
-		var control: Control = named[control_name]
-		if _tappable(control) and (modal == null or modal.is_ancestor_of(control)):
-			controls[control_name] = _rect(control)
-	var hotspot_state: Array[Dictionary] = []
-	for raw_hotspot: Variant in current.get("hotspots", []):
-		if not raw_hotspot is Dictionary:
-			continue
-		var hotspot: Dictionary = raw_hotspot as Dictionary
-		var hotspot_id: String = _dict_string(hotspot, "id")
-		var spot: Control = _hotspots.get(hotspot_id) as Control
-		var hit: Rect2 = _hotspot_hit_rect(spot) if spot != null and is_instance_valid(spot) else Rect2()
-		# `rect` only while a tap there would reach the spot: on screen and not under the reading box.
-		# A character's spot is their whole portrait, so it reports the part above the box.
-		var reach: Rect2 = hit
-		var covered: bool = _dialog_panel.visible and _dialog_panel.get_global_rect().intersects(hit)
-		if hotspot.has("character") and covered:
-			reach.end.y = minf(reach.end.y, _dialog_panel.get_global_rect().position.y)
-			covered = false
-		if _investigate_bar.visible:  # the translucent strip passes input; only its buttons cover spots
-			for name: String in ["expand_button", "continue_button"]:
-				var bar_button: Control = _investigate_bar.get(name) as Control
-				if bar_button != null and bar_button.is_visible_in_tree():
-					reach = _rect_without_control(reach, bar_button.get_global_rect())
-		var reachable: bool = reach.has_area() and Rect2(_game.global_position, _game.size).encloses(reach) and not covered
-		hotspot_state.append({
-			"id": hotspot_id,
-			"label": _dict_string(hotspot, "label"),
-			"checked": bool(hotspot.get("checked", false)),
-			"pos": hotspot.get("pos", []),
-			"screen_rect": {"x": hit.position.x, "y": hit.position.y, "width": hit.size.x, "height": hit.size.y},
-			"rect": {"x": reach.position.x, "y": reach.position.y, "width": reach.size.x, "height": reach.size.y} if reachable else {},
-		})
-	# 舞台中央空白處：點畫面任一處也能推進。
-	if _dialog_panel.is_visible_in_tree() or _ui_hidden:
-		var stage: Rect2 = Rect2(_game.position + Vector2(_game.size.x * 0.35, _game.size.y * 0.3),
-			Vector2(_game.size.x * 0.3, _game.size.y * 0.08))
-		controls["stage"] = {"x": stage.position.x, "y": stage.position.y, "width": stage.size.x, "height": stage.size.y}
-	if _qte != null and is_instance_valid(_qte):  # the whole screen answers the QTE
-		controls["qte"] = _rect(_qte)
-	if _placard_open():  # the part of the board a tap reaches (at least 48 CSS px tall to count)
-		var board: Rect2 = _placard_hit_rect()
-		if board.size.y >= 48.0 * CSS_PX * _panel_scale - 1.0 and board.size.x > 0.0:
-			controls["placard"] = {"x": board.position.x, "y": board.position.y, "width": board.size.x, "height": board.size.y}
-	for key: String in _topic_buttons.keys():
-		var topic: Button = _topic_buttons[key] as Button
-		if is_instance_valid(topic) and _tappable(topic) and modal == null:
-			controls[key.replace(":", "_")] = _rect(topic)
-	if _menu_overlay.visible:  # the dimmed margin beside the panel
-		var dim: Rect2 = Rect2(_game.position + Vector2(0.0, _game.size.y * 0.5 - 60.0), Vector2(14.0 * CSS_PX * _panel_scale, 120.0))
-		controls["menu_dim"] = {"x": dim.position.x, "y": dim.position.y, "width": dim.size.x, "height": dim.size.y}
-	var visible_slots: Array = []
-	if _slot_overlay.visible:
-		for local_index: int in range(_slot_card_buttons.size()):
-			var card: Button = _slot_card_buttons[local_index]
-			if not card.is_visible_in_tree() or local_index >= _slot_visible_entries.size():
-				continue
-			var entry: Dictionary = _slot_visible_entries[local_index].duplicate(true)
-			entry["rect"] = _rect(card)
-			visible_slots.append(entry)
-			if not _slot_confirmation_overlay.visible:
-				controls["slot_%d" % int(entry["index"])] = _rect(card)
-		if not _slot_confirmation_overlay.visible:
-			for pair: Array in [["slot_prev", _slot_prev_button], ["slot_next", _slot_next_button],
-				["slot_close", _slot_close_button]]:
-				var name: String = str(pair[0])
-				var button: Control = pair[1] as Control
-				if button.is_visible_in_tree() and not (button is BaseButton and (button as BaseButton).disabled):
-					controls[name] = _rect(button)
-			if _slot_auto_button.is_visible_in_tree() and not _slot_auto_button.disabled:
-				controls["slot_auto"] = _rect(_slot_auto_button)
-	if _slot_confirmation_overlay.visible:
-		controls["slot_confirm_yes"] = _rect(_slot_confirm_yes)
-		controls["slot_confirm_no"] = _rect(_slot_confirm_no)
-	var sprites: Dictionary = {}
-	for actor_id: String in _sprites.keys():
-		var sprite: Control = _sprites[actor_id]
-		sprites[actor_id] = {"visible": sprite.visible, "expression": str(sprite.get("expression")),
-			"focused": sprite.modulate.r > 0.9, "position": str(_actor_slots.get(actor_id, "center"))}
-	var state: Dictionary = {
-		# While the menu pops in, its rows are scaled and not yet laid out: report busy until it settles.
-		# The director's sheet springs in the same way.
-		"screen": "tutorial" if _tutorial != null and _tutorial.visible else "busy" if (_screen_mode == "menu" and _menu_panel.scale != Vector2.ONE) or _choice_sheet.is_popping() else _screen_mode,
-		"text": _visible_text,
-		"full_text": _full_text,
-		"speaker": _current_speaker,
-		"node_id": _dict_string(current, "node_id", _dict_string(snapshot, "node_id")),
-		"source_id": _dict_string(current,"source_id", _dict_string(RoundView.line(current), "source_id")),
-		"step_index": int(current.get("step_index", snapshot.get("step_index", -1))),
-		"flags": snapshot.get("flags", {}),
-		"items": snapshot.get("items", []),
-		"background": _current_bg_id,
-		"text_complete": _text_complete,
-		"ui_hidden": _ui_hidden,
-		"auto": _auto,
-		"skip": _skip,
-		"audio_muted": _audio_muted,
-		"result": _runner.call("chapter_result") if _screen_mode == "result" else {},
-		# Read from progress_path (and each story's JSON), so only on the screens that show it.
-		"cleared": _story_choices.map(func(choice: Dictionary) -> Dictionary:
-			return {"id": str(choice["id"]), "grade": _cleared_grade(str(choice["id"])), "endings": _ending_note(choice)})
-			if _screen_mode in ["title", "chapter_select", "result"] else [],
-		"ending_rows": _chapter_select.call("ending_rows") if _screen_mode == "chapter_select" else [],
-		"credits": {"rolling": bool(_credits_roll.get("rolling")), "lines": _credits_roll.call("lines")}
-			if _screen_mode == "credits" else {},
-		"gallery": {"tab": str(_gallery.get("tab")), "playing": str(_gallery.get("playing_id")),
-			"viewer": bool(_gallery.call("viewer_open")), "bg": _library.unlocked_ids(_gallery_key("bg")), "bgm": _library.unlocked_ids(_gallery_key("bgm"))}
-			if _screen_mode == "gallery" else {},
-		"settings": _settings.duplicate(),
-		"ui_style": _ui_style_id,
-		"toast": _toast.text if _toast.visible else "",
-		"viewport": {"width": get_viewport_rect().size.x, "height": get_viewport_rect().size.y},
-		"game": _rect(_game),
-		"dialog": _rect(_dialog_panel) if _dialog_panel.is_visible_in_tree() else {},
-		"investigate_bar": _rect(_investigate_bar) if _investigate_bar.is_visible_in_tree() else {},
-		"investigate_backdrop": _rect(_investigate_bar.get("panel") as Control) if _investigate_bar.is_visible_in_tree() else {},
-		"investigate_backdrop_opacity": (_investigate_bar.get("panel") as Control).self_modulate.a,
-		"quickbar": _rect(_quickbar) if _quickbar.is_visible_in_tree() else {},
-		"choice_sheet": _rect(_choice_sheet) if _choice_sheet.is_visible_in_tree() else {},
-		"choice_viewport": _rect(_choice_sheet.choices_scroll) if _choice_sheet.is_visible_in_tree() else {},
-		"name_plate": _rect(_name_plate) if _name_plate.is_visible_in_tree() else {},
-		"sprites": sprites,
-		"placard": {"text": str(_placard_holder.call("placard_text")) if _placard_holder != null else "",
-			"glowing": _placard_holder != null and bool(_placard_holder.call("placard_glowing")),
-			"holder_visible": _placard_holder != null and _placard_holder.visible,
-			"tappable": _placard_open()},
-		"log_scroll": {"value": _log_scroll.scroll_vertical, "max": _log_scroll.get_v_scroll_bar().max_value - _log_scroll.size.y},
-		"choices": choices,
-		"choice": _choice_qa_state(current),
-		"phase3": {
-			"enabled": _phase3_enabled,
-			"gameplay": snapshot.get("gameplay", {}),
-			"inventory": snapshot.get("items", []),
-			"hotspots": hotspot_state,
-			"investigation": {"place": _dict_string(current, "place"), "place_label": _dict_string(current, "place_label"),
-				"talk": (current.get("talk", []) as Array).map(func(topic: Dictionary) -> String: return str(topic["id"])),
-				"moves": (current.get("moves", []) as Array).map(func(move: Dictionary) -> String: return str(move["id"])),
-				"complete": bool(current.get("complete", false)), "progress": current.get("progress", [])}
-				if _command_op(current) == "investigate" else {},
-			"pan": {"offset": _pan, "min": _pan_range.x, "max": _pan_range.y,
-				"vertical_offset": _pan_y, "vertical_min": _pan_y_range.x, "vertical_max": _pan_y_range.y},
-			"investigate_collapsed": _investigate_collapsed,
-			"boke_screen_mode": _effective_boke_ui_mode() if _command_op(current) == "boke_round" else "",
-			"boke_line_index": int(current.get("line_index", -1)),
-			"boke_line_count": (current.get("lines", []) as Array).size(),
-			"boke_listened": RoundView.listened(current),
-			"boke_listen_available": RoundView.can_listen(current),
-			"round": {
-				"mode": str(current.get("mode", "")), "combo": int(current.get("combo", 0)),
-				"caught": current.get("caught_line_ids", []), "super_available": bool(current.get("super_available", false)),
-				"super_label": _choice_sheet.super_button.text,
-				"aura_active": _phase3_hud.glasses.get_children().any(func(icon: Node) -> bool: return bool(icon.get("charged")) and not bool(icon.get("broken"))),
-				"censor": RoundView.censor(current), "placard": RoundView.placard(current), "qte_active": _qte != null,
-				"qte_elapsed": _qte.call("elapsed") if _qte != null else 0.0,
-				# Browser clock (ms) at which the rings meet, so a route can aim a tap without polling lag.
-				"qte_meet_ms": Time.get_unix_time_from_system() * 1000.0 + (_qte.duration - float(_qte.call("elapsed"))) * 1000.0
-					if _qte != null else 0.0,
-				"last_qte_offset": _last_qte_offset,
-			},
-			"timer_remaining": _boke_time_remaining,
-			"timer_active": _command_op(current) == "boke_round" and _effective_boke_ui_mode() == "tsukkomi",
-			"timer_paused": _command_op(current) == "boke_round" and _effective_boke_ui_mode() == "tsukkomi" and _screen_mode != "tsukkomi",
-			"checkpoint_ready": not (snapshot.get("checkpoint", {}) as Dictionary).is_empty(),
-			"game_over_active": bool(snapshot.get("game_over_active", false)),
-			"last_result": _last_boke_result,
-		},
-		"beam_active": _overlay_layer.get_children().any(func(node: Node) -> bool: return node.scene_file_path == "res://scenes/ui/beam.tscn"),
-		"comedy": _comedy_layer.qa_state(),
-		"controls": controls,
-		"slot_page": _slot_page,
-		"slots": visible_slots,
-	}
-	JavaScriptBridge.eval("window.__debtQA=Object.freeze(%s);" % JSON.stringify(state))
+func _tutorial_target(target: String) -> Control:
+	return _tutorial_ctl._tutorial_target(target)
 
 
-## The `choice` field of the QA snapshot while a `choice` step has its options up (else {}): the look the
-## step asks for (`perspective`, whose thought `pov`, the director's `note`, each row's `tones`) and the
-## sheet that really holds it (`director`, or the edition's id).
+func _tutorials_seen() -> Array:
+	return _tutorial_ctl._tutorials_seen()
+
+
+func _replay_tutorials() -> void:
+	_tutorial_ctl._replay_tutorials()
+
+
+func _present_investigation(command: Dictionary, restored: bool) -> void:
+	_investigation._present_investigation(command, restored)
+
+
+func _set_investigation_collapsed(value: bool) -> void:
+	_investigation._set_investigation_collapsed(value)
+
+
+func _place_cast_hotspots() -> void:
+	_investigation._place_cast_hotspots()
+
+
+func _set_pan(value: float, vertical: Variant = null) -> void:
+	_investigation._set_pan(value, vertical)
+
+
+func _hotspot_data(hotspot_id: String) -> Dictionary:
+	return _investigation._hotspot_data(hotspot_id)
+
+
+func _hotspot_hit_rect(spot: Control) -> Rect2:
+	return _investigation._hotspot_hit_rect(spot)
+
+
+func _collect_hotspot(hotspot_id: String) -> void:
+	_investigation._collect_hotspot(hotspot_id)
+
+
+func _on_talk_pressed(topic_id: String) -> void:
+	_investigation._on_talk_pressed(topic_id)
+
+
+func _on_investigation_continue_pressed() -> void:
+	_investigation._on_investigation_continue_pressed()
+
+
+func _on_boke_tsukkomi_pressed() -> void:
+	_round._on_boke_tsukkomi_pressed()
+
+
+func _round_action(move: Callable, label: String, prior_ui_mode: String, feedback: String = "") -> void:
+	_round._round_action(move, label, prior_ui_mode, feedback)
+
+
+func _placard_open() -> bool:
+	return _round._placard_open()
+
+
+func _placard_hit_rect() -> Rect2:
+	return _round._placard_hit_rect()
+
+
+func _start_qte(command: Dictionary) -> void:
+	_round._start_qte(command)
+
+
+func _judged_qte_offset(offset: float) -> float:
+	return _round._judged_qte_offset(offset)
+
+
+func _close_qte() -> void:
+	_round._close_qte()
+
+
+func _on_boke_next_pressed() -> void:
+	_round._on_boke_next_pressed()
+
+
+func _set_boke_line(index: int) -> void:
+	_round._set_boke_line(index)
+
+
+func _on_boke_listen_pressed() -> void:
+	_round._on_boke_listen_pressed()
+
+
+func _on_boke_option_pressed(option_id: String) -> void:
+	_round._on_boke_option_pressed(option_id)
+
+
+func _on_game_over_retry_pressed() -> void:
+	_round._on_game_over_retry_pressed()
+
+
+func _open_slot_picker(mode: String) -> void:
+	await _saves._open_slot_picker(mode)
+
+
+func _on_slot_card_pressed(local_index: int) -> void:
+	_saves._on_slot_card_pressed(local_index)
+
+
+func _confirm_slot_overwrite() -> void:
+	_saves._confirm_slot_overwrite()
+
+
+func _cancel_slot_confirmation() -> void:
+	_saves._cancel_slot_confirmation()
+
+
+func _load_payload_from_picker(payload: Dictionary, message: String) -> void:
+	_saves._load_payload_from_picker(payload, message)
+
+
+func _close_slot_picker(resume_story: bool = true) -> void:
+	_saves._close_slot_picker(resume_story)
+
+
+func _rollback_line() -> bool:
+	return _saves._rollback_line()
+
+
+func _quick_save() -> bool:
+	return _saves._quick_save()
+
+
+func _quick_load() -> bool:
+	return _saves._quick_load()
+
+
+func _save_game() -> bool:
+	return _saves._save_game()
+
+
+func _saveable_current_state() -> bool:
+	return _saves._saveable_current_state()
+
+
+func _build_save_payload(preview_png: String) -> Dictionary:
+	return _saves._build_save_payload(preview_png)
+
+
+func _read_save_payload(path: String = "") -> Dictionary:
+	return _saves._read_save_payload(path)
+
+
+func _validate_save_payload(payload: Dictionary) -> bool:
+	return _saves._validate_save_payload(payload)
+
+
+func _apply_save_payload(payload: Dictionary) -> bool:
+	return _saves._apply_save_payload(payload)
+
+
 func _choice_qa_state(current: Dictionary) -> Dictionary:
-	if _command_op(current) != "choice" or _choice_buttons.is_empty():
-		return {}
-	var director: bool = _dict_string(current, "perspective", "pov") == "director"
-	var tones: Array = []
-	for option: Dictionary in _current_options:
-		tones.append(_dict_string(option, "tone"))
-	return {"perspective": "director" if director else "pov",
-		"pov": "" if director else _dict_string(current, "pov", _default_pov()),
-		"note": _dict_string(current, "note"),
-		"sheet": "director" if _choice_sheet.perspective == "director" else _choice_sheet.style_id,
-		"tones": tones}
-
-
-## Visible, enabled, and not scrolled or clipped out of view (a menu row below the fold is not).
-func _tappable(control: Control) -> bool:
-	if not control.is_visible_in_tree() or (control is BaseButton and (control as BaseButton).disabled):
-		return false
-	var area: Rect2 = control.get_global_rect()
-	var parent: Node = control.get_parent()
-	while parent is Control:
-		if (parent as Control).clip_contents and not (parent as Control).get_global_rect().grow(0.5).encloses(area):
-			return false
-		parent = parent.get_parent()
-	return true
-
-
-## Largest rectangular part of a hotspot outside an interactive control, for the QA bridge.
-func _rect_without_control(area: Rect2, control: Rect2) -> Rect2:
-	if not area.intersects(control):
-		return area
-	var overlap: Rect2 = area.intersection(control)
-	var candidates: Array[Rect2] = [
-		Rect2(area.position, Vector2(overlap.position.x - area.position.x, area.size.y)),
-		Rect2(Vector2(overlap.end.x, area.position.y), Vector2(area.end.x - overlap.end.x, area.size.y)),
-		Rect2(area.position, Vector2(area.size.x, overlap.position.y - area.position.y)),
-		Rect2(Vector2(area.position.x, overlap.end.y), Vector2(area.size.x, area.end.y - overlap.end.y)),
-	]
-	var largest: Rect2 = Rect2()
-	for candidate: Rect2 in candidates:
-		if candidate.has_area() and candidate.get_area() > largest.get_area():
-			largest = candidate
-	return largest
-
-
-func _rect(control: Control) -> Dictionary:
-	var rect: Rect2 = control.get_global_rect()
-	return {"x": rect.position.x, "y": rect.position.y, "width": rect.size.x, "height": rect.size.y}
+	return _qa_ctl._choice_qa_state(current)

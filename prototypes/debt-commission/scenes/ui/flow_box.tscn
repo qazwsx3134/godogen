@@ -1,0 +1,37 @@
+[gd_scene format=3]
+
+[node name="FlowBox" type="Button" unique_id=2074507381]
+offset_right = 440.0
+offset_bottom = 150.0
+focus_mode = 0
+mouse_filter = 2
+metadata/ui_style_role = "selector"
+
+[node name="Column" type="VBoxContainer" parent="." unique_id=476930531]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 10.0
+offset_right = -16.0
+offset_bottom = -10.0
+mouse_filter = 2
+alignment = 1
+
+[node name="Kind" type="Label" parent="Column" unique_id=923849948]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "分歧"
+metadata/ui_style_role = "accent"
+
+[node name="Title" type="Label" parent="Column" unique_id=2053956686]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 36
+text = "銀時的證言"
+horizontal_alignment = 1
+autowrap_mode = 3
+text_overrun_behavior = 3
+max_lines_visible = 2
+metadata/ui_style_role = "scene_overlay"

@@ -1,0 +1,147 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://addons/proto_kit/ui/themes/dark_gothic.tres" id="1_cnexw"]
+
+[node name="ResultReport" type="Control" unique_id=1691446767]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 390.0
+offset_bottom = 844.0
+theme = ExtResource("1_cnexw")
+metadata/ui_layout_id = "result_report"
+metadata/authored_node_count = 24
+
+[node name="Backdrop" type="Panel" parent="." unique_id=236607456]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="SafeMargin" type="MarginContainer" parent="." unique_id=945773336]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="Body" type="VBoxContainer" parent="SafeMargin" unique_id=1620431417]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="SafeMargin/Body" unique_id=302067349]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TitleLabel"
+text = "冒險戰報"
+autowrap_mode = 3
+
+[node name="Stamp" type="Label" parent="SafeMargin/Body" unique_id=1610562518]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TitleLabel"
+text = "勝利"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Rows" type="PanelContainer" parent="SafeMargin/Body" unique_id=675980818]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Content" type="VBoxContainer" parent="SafeMargin/Body/Rows" unique_id=1400691034]
+layout_mode = 2
+
+[node name="Row" type="HBoxContainer" parent="SafeMargin/Body/Rows/Content" unique_id=12938982]
+layout_mode = 2
+
+[node name="Field" type="Label" parent="SafeMargin/Body/Rows/Content/Row" unique_id=1900208391]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CaptionLabel"
+text = "到達層數"
+autowrap_mode = 3
+
+[node name="Value" type="Label" parent="SafeMargin/Body/Rows/Content/Row" unique_id=324980725]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "03"
+horizontal_alignment = 2
+autowrap_mode = 3
+
+[node name="Row2" type="HBoxContainer" parent="SafeMargin/Body/Rows/Content" unique_id=1691755818]
+layout_mode = 2
+
+[node name="Field" type="Label" parent="SafeMargin/Body/Rows/Content/Row2" unique_id=2011374960]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CaptionLabel"
+text = "擊敗敵人"
+autowrap_mode = 3
+
+[node name="Value" type="Label" parent="SafeMargin/Body/Rows/Content/Row2" unique_id=1686867057]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "128"
+horizontal_alignment = 2
+autowrap_mode = 3
+
+[node name="Row3" type="HBoxContainer" parent="SafeMargin/Body/Rows/Content" unique_id=1557311853]
+layout_mode = 2
+
+[node name="Field" type="Label" parent="SafeMargin/Body/Rows/Content/Row3" unique_id=2097049810]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CaptionLabel"
+text = "存活時間"
+autowrap_mode = 3
+
+[node name="Value" type="Label" parent="SafeMargin/Body/Rows/Content/Row3" unique_id=425569072]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "02:48"
+horizontal_alignment = 2
+autowrap_mode = 3
+
+[node name="Row4" type="HBoxContainer" parent="SafeMargin/Body/Rows/Content" unique_id=342180669]
+layout_mode = 2
+
+[node name="Field" type="Label" parent="SafeMargin/Body/Rows/Content/Row4" unique_id=875267591]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CaptionLabel"
+text = "獲得金幣"
+autowrap_mode = 3
+
+[node name="Value" type="Label" parent="SafeMargin/Body/Rows/Content/Row4" unique_id=718106932]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "+360"
+horizontal_alignment = 2
+autowrap_mode = 3
+
+[node name="Flavor" type="Label" parent="SafeMargin/Body" unique_id=1624438680]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CaptionLabel"
+text = "風停之後，旅途仍在繼續。"
+autowrap_mode = 3
+
+[node name="Buttons" type="HBoxContainer" parent="SafeMargin/Body" unique_id=1787718481]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Camp" type="Button" parent="SafeMargin/Body/Buttons" unique_id=673130075]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "營地"
+
+[node name="Retry" type="Button" parent="SafeMargin/Body/Buttons" unique_id=630701208]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "再出發"

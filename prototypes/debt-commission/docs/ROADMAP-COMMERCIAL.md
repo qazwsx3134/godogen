@@ -17,7 +17,7 @@
 ```
 等你決定 ──→ 第一章署名 ──→ Claude／Codex 才動手
 等你做（真人）  C2 試讀、C3 音效、B04/B17 真機
-Claude 下一批   G6（碰到哪拆到哪）
+Claude 下一批   B06（真機確認後）、G7、C4
 編輯器下一步    A07 複製子圖、A11 複雜互動表單；依第一篇短篇的實際需要調整
 ```
 
@@ -31,8 +31,8 @@ Claude 下一批   G6（碰到哪拆到哪）
 - B04／B17 Android Chrome、iOS Safari 實機：首次點擊、切到背景再回來是否有聲音（B05）、單手操作、遊玩時間、金色氣焰與光束的強度（TODO.md B 段）。
 
 **Claude 下一批（建議順序）**
-1. G6 拆分 `main.gd`：調查、回合、QA 快照在功能碰到時再拆。
-2. 之後：B06 PWA safe area（真機確認需要才做）、G4 流程圖、G7 多語系、C4 第二章流程（與你一起）。
+1. B06 PWA safe area（真機確認需要才做）、G7 多語系、C4 第二章流程（與你一起）。
+2. 2026-11-04 已做：G6 拆分 `main.gd`、G4 流程圖、shader 場景轉換、手感回饋（震動與 HUD／提示的跳動）。
 
 **Codex**
 - 已完成（2026-10-23）：編輯器以「場景」為單位（契約見 `IMPLEMENTATION.md`「編輯器的場景檢視」）——場景卡的背景縮圖與 BGM 試聽（沿用／依路線不同／無）、可收合的流程小節點、分七類的新增步驟，以及 A01、A10／A11 的一部分、A12 量測。
@@ -98,9 +98,9 @@ M5 內容：第一章定稿 → 第二章起量產（與 M2／M3 並行）
 | G1 | ☑ P1 | 複合條件：AND／OR、數值比較、持有道具；旗標可以加減 | `story_runner.gd` 的 `condition` 只支援「單一 flag == 值」；`flag` 只能直接設值 | M | C |
 | G2 | ☑ P1 | 結局 id 與結局收集：`ending` 欄位、progress 記錄、章節選擇顯示「結局 x/y」，以及章節選擇裡的「結局收集」（看過的顯示結局名，沒看過「？？？」，2026-10-19） | `scenes/ui/chapter_select.tscn`、`ending_row.tscn`；`tests/test_chapter_flow.gd` | M | C |
 | G3 | ☑ P1 | 跨章旗標（根層 `carry`）：章末把指定旗標寫進 progress，下一章開始時讀入 | `story_runner.gd` 每次載入都把 flags 重設成 `initial_flags`；progress 只記評價 | M | C |
-| G4 | P2 | 流程圖畫面（底特律式）：已走過的節點與分支，未解鎖的顯示問號 | 搜尋不到 | L | C |
+| G4 | ☑ P2 | 流程圖畫面（底特律式）：已走過的節點與分支，未解鎖的顯示問號（2026-11-04：章節選擇的「流程圖」，一次一個故事、‹ › 切換；節點收成場景方塊——`next`、選項、`condition`、`goto`、回合 `clear` 才算路線，調查反應、失敗、提示、重試與 Game Over 留在方塊裡；第一章 96 節點收成 11 格、EP00 13 格。走過的節點由 StoryRunner 回報，存在 `progress.cfg` 的 `[visited]`，只增不減） | `scripts/flow_graph.gd`、`scripts/flowchart_panel.gd`、`scenes/ui/flowchart_panel.tscn`；`tests/test_flowchart.gd` | L | C |
 | G5 | ☑ P2 | 片尾製作名單、CG 鑑賞、音樂鑑賞（2026-10-23：製作名單完成——章節選擇的「製作名單」捲動顯示每個故事的署名與 `data/credits.json` 的工具、字型、音樂；拖曳或點一下停住，「畫面效果：減少」時不自動捲動。CG 與音樂鑑賞未做）（2026-10-23 下午：鑑賞完成——章節選擇的「鑑賞」分畫廊與音樂，劇情裡遇過的背景與 BGM 解鎖，看過的圖可放大、聽過的曲子可試聽，播放時劇情音樂暫停。這個遊戲沒有獨立的 CG，畫廊收背景；之後有 CG 時加進 catalog 即可） | `scripts/gallery_panel.gd`、`scenes/ui/gallery_panel.tscn`；`tests/test_gallery.gd`、`tests/test_credits.gd` | M | C |
-| G6 | ◐ P1 | 拆分 `main.gd`（3856 行）：調查、回合、存檔、UI 掛載各自成為控制器（2026-10-23：照「改到哪拆到哪」——先拆出故事清單與進度（`story_library.gd`：清單、標題署名、評價、結局、跨章旗標、解鎖、鑑賞），鑑賞直接用它。`main.gd` 保留測試用到的一行轉接；調查、回合、QA 快照還在 main，等功能碰到再拆） | `scripts/story_library.gd`；`main.gd` 4158 → 4061 行（純拆出），之後加了鑑賞與章節卡欄位為 4149 行 | L | C |
+| G6 | ☑ P1 | 拆分 `main.gd`：調查、回合、存檔、UI 掛載各自成為控制器（2026-10-23 先拆出 `story_library.gd`。2026-11-04：再拆出調查 `main_investigation.gd`、裝傻回合與 QTE `main_round.gd`、存讀檔與備份 `main_saves.gd`、第一次教學 `main_tutorial.gd`、QA 快照 `main_qa.gd`；純搬移，用工具逐字搬並把外殼成員改成 `m.`，`main.gd` 加 `class_name DebtMain`，測試用到的 42 個舊名稱留一行轉接。完整測試前後一致：49/50 通過，唯一失敗 `katsura_dog_ears` 在拆分前就失敗） | `main.gd` 4530 → 2931 行；`scripts/main_*.gd` | L | C |
 | G7 | P2 | 多語系（`tr()`、把文字抽出來） | 搜尋不到 | L | — |
 
 ### M4 Web 發行候選（發行／品質）

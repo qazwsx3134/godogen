@@ -71,6 +71,13 @@
       "authoring": "dialogue"
     },
     {
+      "id": "transitions",
+      "kind": "sample",
+      "path": "res://data/transitions_story.json",
+      "save": "user://transitions.save",
+      "authoring": "graph"
+    },
+    {
       "id": "strawberry_chapter1_graph",
       "kind": "sample",
       "path": "res://data/strawberry_chapter1_graph_story.json",

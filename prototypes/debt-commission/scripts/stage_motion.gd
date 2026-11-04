@@ -7,6 +7,10 @@ var _fade_tween: Tween
 var _characters: Dictionary = {}
 var reduce_motion: bool = false
 
+const TRANSITION_SHADER: Shader = preload("res://shaders/scene_transition.gdshader")
+## A bg step's `transition` other than fade: [shader style, seconds].
+const TRANSITION_STYLES: Dictionary = {"brush": [0, 0.7], "ink": [1, 0.8], "glitch": [2, 0.5]}
+
 func setup(background_ghost: TextureRect, scene_fade: ColorRect) -> void:
 	ghost = background_ghost
 	veil = scene_fade
@@ -31,13 +35,35 @@ func capture_background(frame: TextureRect) -> void:
 	ghost.modulate = Color.WHITE
 	ghost.visible = true
 
-func crossfade(duration: float = 0.28) -> void:
+## The old background leaves: `fade` crossfades; brush／ink／glitch wipe it away through
+## shaders/scene_transition.gdshader (筆刷、墨暈、故障). Returns how long it runs (0 when 畫面效果 is
+## 減少, which cuts at once).
+func crossfade(duration: float = 0.28, style: String = "fade") -> float:
 	if reduce_motion:
 		ghost.visible = false
-		return
+		return 0.0
 	_background_tween = create_tween()
-	_background_tween.tween_property(ghost, "modulate:a", 0.0, duration)
-	_background_tween.tween_callback(func() -> void: ghost.visible = false)
+	if not TRANSITION_STYLES.has(style):
+		_background_tween.tween_property(ghost, "modulate:a", 0.0, duration)
+		_background_tween.tween_callback(func() -> void: ghost.visible = false)
+		return duration
+	var spec: Array = TRANSITION_STYLES[style]
+	var material: ShaderMaterial = ShaderMaterial.new()
+	material.shader = TRANSITION_SHADER
+	material.set_shader_parameter("style", spec[0])
+	material.set_shader_parameter("aspect", ghost.size.x / maxf(ghost.size.y, 1.0))
+	material.set_shader_parameter("progress", 0.0)
+	ghost.material = material
+	var time: float = float(spec[1])
+	_background_tween.tween_method(func(value: float) -> void: material.set_shader_parameter("progress", value), 0.0, 1.0, time) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	_background_tween.tween_callback(_end_wipe)
+	return time
+
+
+func _end_wipe() -> void:
+	ghost.visible = false
+	ghost.material = null
 
 func fade(direction: String, duration: float, skipping: bool) -> float:
 	if _fade_tween != null and _fade_tween.is_valid():
@@ -148,5 +174,6 @@ func reset() -> void:
 	cancel_characters(true)
 	if ghost != null:
 		ghost.visible = false
+		ghost.material = null
 	if veil != null:
 		veil.modulate.a = 0.0

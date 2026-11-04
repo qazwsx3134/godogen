@@ -56,6 +56,8 @@ const VALID_OPS: Array[String] = [
 const VALID_STAGE_POSITIONS: Array[String] = ["reader", "host", "door", "landlady", "other_side"]
 const VALID_CHARACTER_POSITIONS: Array[String] = ["left", "center", "right"]
 const VALID_CHARACTER_TRANSITIONS: Array[String] = ["fade", "slide_left", "slide_right", "instant"]
+## How a bg step changes the picture (scripts/stage_motion.gd): crossfade, or a 筆刷／墨暈／故障 wipe.
+const VALID_BACKGROUND_TRANSITIONS: Array[String] = ["fade", "brush", "ink", "glitch"]
 const VALID_PORTRAIT_EFFECTS: Array[String] = ["shake", "bounce"]
 const GRADES: Array[String] = ["S", "A", "B", "C"]
 ## Expression ids for `char` and line tags; what each means and which art to make:
@@ -96,6 +98,9 @@ var round_state: Dictionary = {}
 var stats: Dictionary = {}
 var error_message: String = ""
 var node_id: String = ""
+## Every node the story has passed through since it loaded, for 流程圖 (story_library.gd keeps them).
+var _visits: Dictionary = {}
+var _new_visits: Array[String] = []
 var step_index: int = 0
 
 var _story: Dictionary = {}
@@ -116,6 +121,8 @@ var _round_before_normalize: Dictionary = {}
 
 ## catalog_path: the catalog to check it against; "" uses catalog_path_for(path).
 func load_story(path: String, catalog_path: String = "") -> bool:
+    _visits.clear()
+    _new_visits.clear()
     if not FileAccess.file_exists(path):
         return _reject("Story file does not exist: %s" % path)
 
@@ -1160,6 +1167,9 @@ func _normalize_position() -> bool:
             return _rollback_normalization(original_node_id, original_step_index, original_flags, original_items, "Unknown node: %s" % node_id)
 
         var node: Dictionary = _story["nodes"][node_id] as Dictionary
+        if not _visits.has(node_id):
+            _visits[node_id] = true
+            _new_visits.append(node_id)
         var steps: Array = node["steps"] as Array
         if step_index >= steps.size():
             if not node.has("next"):
@@ -1722,6 +1732,8 @@ func _validate_step(current_node_id: String, index: int, step: Dictionary, nodes
             var background_id: String = String(step.get("id", ""))
             if not _catalog_has_background(asset_catalog, background_id):
                 return "%s bg id '%s' is not in asset catalog" % [prefix, background_id]
+            if step.has("transition") and (typeof(step["transition"]) != TYPE_STRING or String(step["transition"]) not in VALID_BACKGROUND_TRANSITIONS):
+                return "%s bg transition must be one of %s" % [prefix, ", ".join(VALID_BACKGROUND_TRANSITIONS)]
         "char":
             var character_id: String = String(step.get("id", ""))
             if not _catalog_has_character(asset_catalog, character_id):
@@ -2717,6 +2729,13 @@ static func endings_of(story: Dictionary) -> Array[Dictionary]:
             var fallback: String = String(step.get("text", step.get("title", ending)))
             found.append({"id": ending, "title": String(step.get("ending_title", fallback))})
     return found
+
+
+## The nodes passed through for the first time since the last call (oldest first), then forgets them.
+func take_visits() -> Array[String]:
+    var taken: Array[String] = _new_visits
+    _new_visits = []
+    return taken
 
 
 ## The `carry` flags (root field) with their current values, to hand to the next chapter.

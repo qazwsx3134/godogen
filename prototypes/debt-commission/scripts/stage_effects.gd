@@ -7,10 +7,23 @@ extends Node
 ## plays a synthesized placeholder.
 
 const Synth = preload("res://addons/proto_kit/synth.gd")
+const Haptics = preload("res://addons/proto_kit/haptics.gd")
 const BEAM_SCENE: PackedScene = preload("res://scenes/ui/beam.tscn")
 const CUTIN_SCENE: PackedScene = preload("res://scenes/ui/cutin.tscn")
 const BGM_DB: float = -14.0
 const SHAKE: Dictionary = {"small": [10.0, 0.25], "big": [28.0, 0.45]}
+## The player's own moments, one tier each, so every hit of the same weight feels the same:
+## [haptic tier (-1 none; haptics.gd 0 tick, 1 thump, 2 heavy), shake px, shake s (0 none), sound id
+## ("" none; played on its own player, so the story's next sound does not cut it off)].
+## The story's own shake steps buzz too (small → tick, big → thump).
+const FEEDBACK: Dictionary = {
+	"clue": [0, 0.0, 0.0, "comedy_pop"],
+	"weak": [0, 0.0, 0.0, ""],
+	"perfect": [1, 0.0, 0.0, ""],
+	"miss": [1, 7.0, 0.18, "glass_crack"],
+	"power_full": [2, 0.0, 0.0, ""],
+	"game_over": [2, 18.0, 0.35, ""],
+}
 const GREY_SHADER: String = """
 shader_type canvas_item;
 uniform sampler2D screen_tex : hint_screen_texture, filter_linear;
@@ -39,7 +52,12 @@ var _se_player: AudioStreamPlayer = null
 var _bgm_player: AudioStreamPlayer = null
 var _streams: Dictionary = {}
 var _shake_tween: Tween = null
+## The phone's motor (Android Chrome; iPhone Safari has none). Off while 畫面效果 is 減少.
+var haptics: Haptics = Haptics.new()
+## The last moment feedback() played ("" none yet), for tests and the QA snapshot.
+var last_feedback: String = ""
 var _charge_player: AudioStreamPlayer = null
+var _feedback_player: AudioStreamPlayer = null
 var _typing_player: AudioStreamPlayer = null
 var _voice_player: AudioStreamPlayer = null
 var _tick_elapsed: float = 1.0
@@ -71,6 +89,8 @@ func setup(shake_layers: Array[Control], overlay: Control, catalog: Dictionary) 
 	add_child(_bgm_player)
 	_charge_player = AudioStreamPlayer.new()
 	add_child(_charge_player)
+	_feedback_player = AudioStreamPlayer.new()
+	add_child(_feedback_player)
 	_typing_player = AudioStreamPlayer.new()
 	_voice_player = AudioStreamPlayer.new()
 	_typing_player.playback_type = AudioServer.PLAYBACK_TYPE_STREAM
@@ -89,6 +109,7 @@ func set_muted(muted: bool) -> void:
 	_muted = muted
 	_se_player.stop()
 	_charge_player.stop()
+	_feedback_player.stop()
 	_typing_player.stop()
 	_voice_player.stop()
 	_bgm_player.stop()
@@ -105,6 +126,7 @@ func set_volumes(bgm: float, se: float) -> void:
 	_bgm_player.volume_db = BGM_DB + linear_to_db(maxf(bgm, 0.0001))
 	_se_player.volume_db = linear_to_db(maxf(se, 0.0001))
 	_charge_player.volume_db = _se_player.volume_db
+	_feedback_player.volume_db = _se_player.volume_db - 3.0  # under the story's own sounds
 	_typing_player.volume_db = _se_player.volume_db - 15.0
 	_voice_player.volume_db = _se_player.volume_db
 	set_muted(_muted)
@@ -132,8 +154,10 @@ func play(step: Dictionary, skipping: bool) -> float:
 		"se":
 			_play_se(str(step.get("id", "")))
 		"shake":
-			var spec: Array = SHAKE[str(step.get("strength", "small"))]
+			var strength_id: String = str(step.get("strength", "small"))
+			var spec: Array = SHAKE[strength_id]
 			_shake(spec[0], float(step.get("duration", spec[1])))
+			_buzz(1 if strength_id == "big" else 0)
 		"flash":
 			_flash(Color(str(step.get("color", "#ffffff"))), float(step.get("duration", 0.3)))
 		"cutin":
@@ -196,12 +220,32 @@ func play_perfect_voice(number: int) -> bool:
 
 func stop_transients() -> void:
 	stop_shake()
-	for player: AudioStreamPlayer in [_se_player, _charge_player, _typing_player, _voice_player]:
+	for player: AudioStreamPlayer in [_se_player, _charge_player, _feedback_player, _typing_player, _voice_player]:
 		if player != null:
 			player.stop()
 	for child: Node in _overlay.get_children():
 		if child.has_meta("stage_effect"):
 			child.queue_free()
+
+
+## One of the player's moments (FEEDBACK): its buzz and its shake. Skipping plays none.
+func feedback(event: String, skipping: bool = false) -> void:
+	if skipping or not FEEDBACK.has(event):
+		return
+	var spec: Array = FEEDBACK[event]
+	last_feedback = event
+	_buzz(int(spec[0]))
+	if float(spec[2]) > 0.0:
+		_shake(float(spec[1]), float(spec[2]))
+	if not str(spec[3]).is_empty() and not _muted and _se_level > 0.0:
+		_feedback_player.stream = _stream("sounds", str(spec[3]))
+		_feedback_player.play()
+
+
+func _buzz(tier: int) -> void:
+	if tier < 0 or reduce_motion or not haptics.supported():
+		return
+	haptics.buzz(tier)
 
 
 func _play_se(id: String) -> void:

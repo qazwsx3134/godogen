@@ -77,6 +77,45 @@ static func save_scene(root: Node, path: String, options: Dictionary = {}) -> Di
 	return result
 
 
+## Opens a saved scene for a script to change and save back, the way the editor opens it: sub-scene instances
+## stay references, and the root is a plain node rather than an instance of `path` (which pack() would save as a
+## scene that inherits itself). Returns {"root": Node, "refs": Array[String]}, `refs` being the sub-scene paths
+## the file references now; pass them (plus any you add) as expected_refs when saving it back:
+##   var opened := SceneBuilder.open_scene(HUD)
+##   ...change opened.root...
+##   SceneBuilder.save_scene(opened.root, HUD, {"overwrite": true, "expected_refs": opened.refs})
+## A missing or broken file gives {"root": null, "refs": []}.
+static func open_scene(path: String) -> Dictionary:
+	var refs: Array[String] = []
+	var packed := load(path) as PackedScene
+	if packed == null:
+		push_error("cannot open scene: " + path)
+		return {"root": null, "refs": refs}
+	var root: Node = packed.instantiate(PackedScene.GEN_EDIT_STATE_MAIN)
+	root.scene_file_path = ""
+	var state: SceneState = packed.get_state()
+	for index: int in state.get_node_count():
+		var sub_scene: PackedScene = state.get_node_instance(index)
+		if sub_scene != null and not refs.has(sub_scene.resource_path):
+			refs.append(sub_scene.resource_path)
+	return {"root": root, "refs": refs}
+
+
+## Adds `child` to `parent` as `node_name` at child index `index` (-1 = last). A node of that name already there is
+## freed and `child` takes its place (and its index, when `index` is -1), so a patch script can run again.
+static func put(parent: Node, child: Node, node_name: String, index: int = -1) -> Node:
+	var old: Node = parent.get_node_or_null(NodePath(node_name))
+	if old != null:
+		if index < 0:
+			index = old.get_index()
+		parent.remove_child(old)
+		old.free()
+	add(parent, child, node_name)
+	if index >= 0:
+		parent.move_child(child, mini(index, parent.get_child_count() - 1))
+	return child
+
+
 ## Sets `owner` on every node under `root` (not into sub-scene instances) and turns unique() marks into
 ## unique_name_in_owner. save_scene() calls this; call it yourself only to inspect the tree before saving.
 static func own_nodes(root: Node) -> void:

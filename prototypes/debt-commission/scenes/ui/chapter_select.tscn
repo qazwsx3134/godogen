@@ -36,6 +36,14 @@ text = "章節選擇"
 vertical_alignment = 1
 metadata/ui_style_role = "accent"
 
+[node name="Flowchart" type="Button" parent="Margins/Layout/Header" unique_id=2129471634]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 132.92308)
+layout_mode = 2
+theme_override_font_sizes/font_size = 29
+text = "流程圖"
+metadata/ui_style_role = "standard"
+
 [node name="Gallery" type="Button" parent="Margins/Layout/Header" unique_id=2055107151]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 132.92308)

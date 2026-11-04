@@ -20,7 +20,8 @@ extends RefCounted
 ##   `if key == value` / `else`    condition (the same kinds of value); each branch holds exactly one `=> title`.
 ##                                 Also `a >= 2 and has("item")`, `x != "y" or not b == true`: one kind of
 ##                                 joiner per `if`, no brackets; comparisons == != < <= > >=
-##   `do bg("id")`, `do char("id", "expression", "position")`, `do hide("id")`,
+##   `do bg("id")` or `do bg("id", "brush")` (scene change: fade, brush, ink or glitch),
+##   `do char("id", "expression", "position")`, `do hide("id")`,
 ##   `do enter("id", "expression", "position", "transition")`, `do hide("id", "transition")`
 ##   (transition: fade, slide_left, slide_right or instant); `do portrait_effect("id", "shake")`
 ##   or `portrait_effect("id", "bounce")` animates an on-stage portrait,
@@ -354,6 +355,8 @@ static func _mutation(line: Dictionary, where: String) -> Dictionary:
 	match [name, args.size()]:
 		["bg", 1]:
 			return {"op": "bg", "id": args[0]}
+		["bg", 2]:
+			return {"op": "bg", "id": args[0], "transition": args[1]}
 		["char", 1], ["char", 2], ["char", 3]:
 			var step: Dictionary = {"op": "char", "id": args[0], "visible": true}
 			if args.size() > 1:

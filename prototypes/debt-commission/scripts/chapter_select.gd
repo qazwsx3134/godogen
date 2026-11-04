@@ -11,6 +11,7 @@ signal picked(index: int)
 signal closed
 signal credits_pressed
 signal gallery_pressed
+signal flowchart_pressed
 
 const UI_STYLES: Script = preload("res://scripts/ui_styles.gd")
 const ROW_SCENE: PackedScene = preload("res://scenes/ui/chapter_row.tscn")
@@ -27,6 +28,7 @@ var _row_texts: Dictionary = {}
 @onready var close_button: Button = %Close
 @onready var credits_button: Button = %Credits
 @onready var gallery_button: Button = %Gallery
+@onready var flowchart_button: Button = %Flowchart
 @onready var _chapters: VBoxContainer = %Chapters
 @onready var _chapters_empty: Label = %ChaptersEmpty
 @onready var _samples: VBoxContainer = %Samples
@@ -39,6 +41,7 @@ func _ready() -> void:
 	close_button.pressed.connect(func() -> void: closed.emit())
 	credits_button.pressed.connect(func() -> void: credits_pressed.emit())
 	gallery_button.pressed.connect(func() -> void: gallery_pressed.emit())
+	flowchart_button.pressed.connect(func() -> void: flowchart_pressed.emit())
 
 
 func set_style(style_id: String) -> void:

@@ -26,7 +26,7 @@
 
 V1 可呈現 op：
 
-- `bg`: `id` 對應 catalog 的 backgrounds。
+- `bg`: `id` 對應 catalog 的 backgrounds。選填 `transition`：`fade`（預設，舊圖淡出）、`brush`（筆刷由左往右刷掉，0.7 秒）、`ink`（墨從中間暈開，0.8 秒）、`glitch`（撕裂、錯色、方塊掉落，0.5 秒），其他值載入時拒絕（`VALID_BACKGROUND_TRANSITIONS`）。非 fade 時下一步等轉場結束；略讀、畫面效果「減少」時直接切換。不參與 `version`。`.dialogue` 寫 `do bg("id", "brush")`。編輯器的 bg 表單還沒有這一欄（Codex 範圍）；表單只改 `id`，已寫的 `transition` 原樣保留（`tools/story_editor/editor.js` 的 `assetSelect` 直接改 step 的欄位），要新增就用該步驟的 JSON 編輯。
 - `char`: `id` 對應 characters，可選 `visible`、`expression`、`position`（left/center/right）、`enter`；省略時依角色 catalog 預設。`enter: true` 讓還沒開口的角色直接上場（例如只舉牌、不說話的伊莉莎白），不能和 `visible: false` 同時用。
 - `portrait_exit`: `id` 對應角色；可選 `transition`（fade／slide_left／slide_right／instant）。保留表情與站位，退場完成後才進下一步。
 - `portrait_lighting`: `id`、`mode`（dim／lit／auto）。手動明暗不被下一句說話者切換覆蓋，換背景清除；存檔角色的 lighting 與 entrance_transition 為可選欄位，舊檔預設 auto／fade。
@@ -144,6 +144,8 @@ godot --headless --path . --script res://tools/story_build/build_story.gd -- sto
 - `story_path` 與 `save_path` 可在場景設定；Web `?sample=phase2` 與 `?sample=phase3` 各開啟固定技術片段及獨立存檔命名空間。
 - `save_path` 是自動續讀檔；同一命名空間另有 18 個手動欄位（3 頁 × 6 格）。目錄的「儲存進度」開啟欄位，目錄與標題的「讀取存檔」可指定欄位或自動檔；覆寫有確認。新遊戲只重設自動進度。
 - 故事清單與進度（`scripts/story_library.gd`，main 持有一個）：`data/stories.json` 的清單、各故事的標題與署名、`progress.cfg` 裡的最佳評價（`cleared`）、看過的結局（`endings`）、跨章旗標（`carry`），以及鑑賞的解鎖（`gallery` 段的 `bg`、`bgm`：劇情裡第一次出現的背景與音樂 id，依出現順序；標題曲在標題畫面就算聽過）。章節解鎖、下一章、結局收集與製作名單都由它算。
+- 流程圖（`scripts/flow_graph.gd`、`flowchart_panel.gd`）：StoryRunner 每次進入節點時記下（`take_visits()` 取出新的），外殼在推進迴圈把它們寫進 `progress.cfg` 的 `[visited]`（以故事 id 為鍵，依第一次走到的順序，只增不減）。`FlowGraph.boxes(story)` 只把 `next`、`choice` 選項、`condition` 的 then／else、`goto`、`boke_round` 的 `clear` 當路線；一進一出的連續節點併成一格，遇到含 `bg`、`investigate`、`boke_round` 的節點另起一格；欄位依從 entry 出發的廣度優先順序，往回的線不會把前面的格推到右邊。格內任一節點走過就顯示標題，結局格顯示與結局收集相同的標題。
+- 外殼的分段（2026-11-04 G6）：`main.gd` 有 `class_name DebtMain`；`scripts/main_investigation.gd`、`main_round.gd`、`main_saves.gd`、`main_tutorial.gd`、`main_qa.gd` 各是 `RefCounted`，建構時拿到 main（`m`），狀態仍在 main。新的函式寫進對應的分段檔；測試或工具要呼叫的才在 `main.gd` 末尾「轉接」留一行。
 - 章節選擇的本篇是章節路線圖（參考 `docs/gintama-like/new/episode.webp` 的版面，配色沿用和紙）：每章一張 `scenes/ui/episode_card.tscn`——「第 N 章」名牌（銀魂款用 `gintama_heading_plaque.png`，其他款用該款名牌，`ui_styles.name_plaque()`）、封面縮圖、遮罩上的標題與「評價・結局」、卡下的署名；卡與卡之間點點相連、左右交錯；目前的章節加筆刷角框（`scripts/brush_corners.gd`），未開放的章節變暗並寫「完成前一章後開放」。封面是登記檔的選填 `cover`，沒有就取劇本從入口走到的第一張有圖的背景（`story_library.cover()`）。試玩片段仍是一般列。
 - 案件檔的下半部是 status 卡（參考 `status.webp`）：`%CaseFileDetail` 和紙卡，裡面是「◆ 吐槽素材情報／◆ 人物檔案」、名牌上的名稱、件數與狀態、圓框裡的圖、◆ 說明，可以拿來吐槽時多一段 ◆ 拿來吐槽。由 `tools/restyle_case_file.gd` 產生；`CaseFilePicture`、`CaseFileName`、`CaseFileText`、`CaseFileUse` 名稱不變。
 - 鑑賞（`scenes/ui/gallery_panel.tscn`，章節選擇的「鑑賞」）：「畫廊」列出 catalog 裡有圖的背景，「音樂」列出有音檔的曲目；沒遇過的顯示「？？？」並停用。點看過的圖全螢幕顯示，點聽過的曲子在這裡播放（再點停止），播放時劇情音樂暫停、停止或關閉後接回。返回鍵先關大圖，再關鑑賞。

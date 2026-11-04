@@ -6,6 +6,9 @@
 
 最新短篇：[可編輯作品包](../stories/katsura_dog_ears/README.md)、[opt image 提示詞](../stories/katsura_dog_ears/OPT-IMAGE-PROMPT.md)。作者後續授權直接生成，桂手繪姿勢候選圖已接入；作者後續提供 MS Paint 鼠繪風格提示詞，已生成並接入去背新版，舊圖保留。最終畫風與真人手感仍待作者試看。下面保留 2026-10-28 系統交接基準；最新測試與變更見根目錄 Progress.md。
 
+
+> 2026-11-04 更新：`main.gd` 已拆分（調查、回合、存讀檔、教學、QA 各在 `scripts/main_*.gd`，透過 `m` 讀寫外殼狀態）；新增流程圖、shader 換背景轉場與手感回饋。以 [PROGRESS](../PROGRESS.md) 2026-11-04 段為準，下方是 10-28 至 10-30 的狀態。
+
 ## 現行基準與提交
 
 分支 master。先前遊戲實作基準 21604e3；本次提交前工作樹 HEAD 是其他原型的 6e9fb85。本次將 debt-commission 的漫畫演出、立繪動畫、人格協作與編輯器整合、測試及文件一併提交。提交完成後用 `git log -1 --oneline` 取得實際提交，不為了寫入本文件自己的 hash 重複提交。

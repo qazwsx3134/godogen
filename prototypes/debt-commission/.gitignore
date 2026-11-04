@@ -5,3 +5,6 @@ test-results/
 export_credentials.cfg
 
 .catalog-candidate-*.json
+
+# Kit copy: this game does not use the VFX library (13 MB, ~1000 files; export also excludes it); sync.sh copies it, git skips it
+addons/proto_kit/vfx/

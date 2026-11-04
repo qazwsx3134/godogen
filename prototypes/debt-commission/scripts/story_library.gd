@@ -340,6 +340,34 @@ func _seen_endings(story_id: String) -> Array:
 	return config.get_value("endings", story_id, [])
 
 
+# ---------------------------------------------------------------- 流程圖
+
+## The node ids of `story_id` the player has passed through, oldest first ([] when none yet).
+func visited(story_id: String) -> Array:
+	var config: ConfigFile = ConfigFile.new()
+	config.load(progress_path)
+	return config.get_value("visited", story_id, [])
+
+
+## Adds nodes the player just passed through (StoryRunner.take_visits); never forgets one, so a
+## rollback or an older save does not hide a route already seen. Writes only when something is new.
+func record_visits(story_id: String, node_ids: Array[String]) -> Error:
+	if node_ids.is_empty():
+		return OK
+	var config: ConfigFile = _progress()
+	if config == null:
+		return ERR_FILE_CORRUPT
+	var seen: Array = config.get_value("visited", story_id, [])
+	var before: int = seen.size()
+	for node_id: String in node_ids:
+		if not seen.has(node_id):
+			seen.append(node_id)
+	if seen.size() == before:
+		return OK
+	config.set_value("visited", story_id, seen)
+	return _commit(config)
+
+
 # ---------------------------------------------------------------- 鑑賞
 
 ## The progress.cfg key of a work's 鑑賞 unlocks: "bg"/"bgm" for the base work, "<work>/bg" for a pack.

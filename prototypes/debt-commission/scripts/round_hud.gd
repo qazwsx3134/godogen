@@ -29,6 +29,10 @@ var _tint: Dictionary = {}
 ## The life icon scene (the skin's `life_icon`): broken, charged, color and crack_color properties.
 var life_icon: PackedScene = GLASSES_ICON
 var _style_id: String = "cinema"
+## 畫面效果 減少: the numbers still change, without the pops.
+var reduce_motion: bool = false
+## What the last show_stats showed, so only a change pops: [glasses left, power, combo]; -1 = nothing yet.
+var _shown: Array[int] = [-1, -1, -1]
 
 
 func set_style(style_id: String) -> void:
@@ -88,6 +92,39 @@ func show_stats(glasses_left: int, max_glasses: int, power: int, max_power: int,
 	power_value.text = "%d/%d" % [power, max_power]
 	combo.text = "連擊 ×%d" % combo_count
 	combo.visible = combo_count > 0
+	if _shown[0] >= 0:
+		for index: int in range(glasses_left, mini(_shown[0], max_glasses)):
+			_pop(glasses.get_child(index) as Control, 1.45, Color(1.0, 0.45, 0.4))  # this pair just broke
+		if power > _shown[1]:
+			_pop(power_value, 1.3, Color(1.0, 0.92, 0.55))
+		if combo_count > _shown[2] and combo_count > 0:
+			_pop(combo, 1.35, Color.WHITE)
+	_shown = [glasses_left, power, combo_count]
+
+
+## Forget what was shown, so the next show_stats pops nothing: a save loaded or a story started
+## shows its own count, not a change.
+func reset_pops() -> void:
+	_shown = [-1, -1, -1]
+
+
+## A quick punch: grows to `peak` tinted `flash`, then springs back. Scale and tint only, so the
+## containers keep their layout. The tween starts `from` the peak on purpose: a container re-sorting
+## (the label's text just changed) resets its children's scale at the end of this frame, and a tween
+## that read its start value then would run from 1 to 1.
+func _pop(item: Control, peak: float, flash: Color) -> void:
+	if reduce_motion or item == null or not item.is_inside_tree():
+		return
+	if item.has_meta("pop_tween"):
+		(item.get_meta("pop_tween") as Tween).kill()
+	item.pivot_offset = item.size * 0.5
+	item.scale = Vector2.ONE * peak
+	item.modulate = flash
+	var tween: Tween = item.create_tween().set_parallel()
+	tween.tween_property(item, "scale", Vector2.ONE, 0.28).from(Vector2.ONE * peak) \
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(item, "modulate", Color.WHITE, 0.3).from(flash)
+	item.set_meta("pop_tween", tween)
 
 
 ## Clues in the order they were found, each {name, picture} (picture null: the placeholder). The tag

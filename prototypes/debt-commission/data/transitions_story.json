@@ -1,0 +1,75 @@
+{
+  "entry": "transitions_demo",
+  "id": "transitions",
+  "initial_flags": {},
+  "nodes": {
+    "transitions_demo": {
+      "steps": [
+        {
+          "id": "yorozuya_living_room",
+          "op": "bg"
+        },
+        {
+          "expression": "neutral",
+          "id": "shinpachi",
+          "op": "char",
+          "position": "left",
+          "visible": true
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "場景轉換試片。接下來每換一次背景，就換一種轉場。"
+        },
+        {
+          "id": "yorozuya_kitchen",
+          "op": "bg",
+          "transition": "brush"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "筆刷：一筆把舊畫面刷掉。"
+        },
+        {
+          "id": "yorozuya_exterior",
+          "op": "bg",
+          "transition": "ink"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "墨暈：墨從畫面中間暈開。"
+        },
+        {
+          "id": "yorozuya_living_room",
+          "op": "bg",
+          "transition": "glitch"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "故障：畫面撕裂、錯色，再一塊塊掉下來。"
+        },
+        {
+          "id": "yorozuya_kitchen",
+          "op": "bg",
+          "transition": "fade"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "淡入淡出：沒寫轉場時的預設。"
+        },
+        {
+          "op": "end",
+          "text": "轉場試片結束"
+        }
+      ],
+      "title": "場景轉換"
+    }
+  },
+  "note": "bg 的 transition 欄位：brush、ink、glitch、fade（預設）。",
+  "title": "試片・場景轉換",
+  "version": "s-a7b660f8b422"
+}

@@ -28,7 +28,7 @@
 
 ## 測試與量測
 
-- **用牆上時鐘（`Time.get_ticks_msec()`）做玩法邏輯，`--fixed-fps 60` 下十幾個測試連環失敗** → 用 `create_timer(秒, true, false, true)`（遊戲時間）或可注入的時鐘；`Tween` 要 `set_ignore_time_scale(true)`。（[testing-and-balance](godot-kit/skills/godot-prototype-to-itch/references/testing-and-balance.md#時間域陷阱最容易讓測試連環失敗的一個)、[CLAUDE.md](../CLAUDE.md) 2026-10-02）
+- **用牆上時鐘（`Time.get_ticks_msec()`）做玩法邏輯，`--fixed-fps 60` 下十幾個測試連環失敗** → 用 `create_timer(秒, true, false, true)`（遊戲時間）或可注入的時鐘；`Tween` 要 `set_ignore_time_scale(true)`。（[testing-and-balance](godot-kit/skills/godot-prototype-to-itch/references/testing-and-balance.md#時間域陷阱最容易讓測試連環失敗的一個)、[CLAUDE.md](../CLAUDE.md) 2026-10-02） (×2：2026-11-04 debt-commission，kit 的 `haptics.gd` 用牆上時鐘算震動間隔，測試用 `create_timer` 等的遊戲時間比牆上快，第二下被當成太近吞掉 → 測試設 `haptics.clock`)
 - **Godot 遇到 SCRIPT ERROR 仍可能 exit 0** → 測試一定要 grep log。（[godot-prototype-to-itch](godot-kit/skills/godot-prototype-to-itch/SKILL.md)）
 - **headless 探針遇到 parse error 會卡到 timeout**；`var x := node.prop`（`node` 沒型別）會讓整支腳本 parse error → 臨時探針一律加 `timeout 120`，改寫成 `var x: bool = ...`。（[godot-prototype-to-itch](godot-kit/skills/godot-prototype-to-itch/SKILL.md)）
 - **兩個 Godot 測試程序同時跑會互刪存檔，假失敗** → debt-commission 的測試共用 `.cache/test-data`；完整測試、瀏覽器檢查、網頁重建一律依序跑；有測試在跑時 `verifier` 只做靜態檢查。（記憶檔 `godot-tests-run-sequentially`，2026-10-02）
@@ -57,7 +57,7 @@
 - **headless 工具存 `ShaderMaterial`，沒設的 uniform 被存成 `null`** → 全部明確設值，或存完刪掉 `= null` 那幾行。（[testing-and-balance](godot-kit/skills/godot-prototype-to-itch/references/testing-and-balance.md#切場景與載入畫面title--loading--main踩過的坑)、[horde-25d](horde-25d/README.md)）
 - **MultiMesh 不能在 headless 下產生**：dummy renderer 丟掉 instance 資料，存出全零矩陣，不報錯 → 產生器偵測 headless 就拒絕執行，存檔後回讀比對。（[seichi-pov](seichi-pov/README.md#已知地雷)）
 - **剛加進 Container 的 node 讀到舊位置**（Container 在幀尾才排版）→ 等 `RenderingServer.frame_pre_draw` 或下一幀再讀 `get_global_rect()`。（[GODOT_BEST_PRACTICES](godot-kit/GODOT_BEST_PRACTICES.md) #3）
-- **Container 重新排版會重設子節點的 `scale`／`rotation`** → 動畫放在純 `Control` 外層底下的子節點。（[testing-and-balance](godot-kit/skills/godot-prototype-to-itch/references/testing-and-balance.md#切場景與載入畫面title--loading--main踩過的坑)）
+- **Container 重新排版會重設子節點的 `scale`／`rotation`** → 動畫放在純 `Control` 外層底下的子節點。（[testing-and-balance](godot-kit/skills/godot-prototype-to-itch/references/testing-and-balance.md#切場景與載入畫面title--loading--main踩過的坑)） (×2：2026-11-04 debt-commission，HUD 數字一改字就重排，跳動的 tween 讀到被重設的 1、從 1 補到 1 等於沒跳 → `tween_property(...).from(放大值)`；測試要在同一幀讀)
 - **`MOUSE_FILTER_PASS` 的 Control 蓋在按鈕上仍會吃掉點擊**；`ScrollContainer` 裡的 `RichTextLabel` 預設 STOP 會吃掉滾輪與拖曳 → 後者設 `PASS`。（同上）
 - **在主場景 `_ready()` 裡 `change_scene_to_*` 會留下舊場景** → `call_deferred`；`load_threaded_*` 只在狀態是 LOADED 時才換場景。（同上）
 - **`CanvasLayer` 裡的 `Control` 與 `_draw()` 量到不同座標空間**，桌機正常、手機選單被切掉 → 不要混用兩套座標。（[pachinko](pachinko/TODO.md#環境與工具鏈)）
@@ -74,6 +74,8 @@
 - **Three.js 原幾何直接交給 Godot，單面材質的正反面相反**（2026-11-01，godot-kit VFX）→ 每個三角形連同所有頂點屬性換序 CCW→CW，保留來源 FrontSide／DoubleSide 策略；製作工具標記已換序，重跑不可二次反轉。shader 檢查須呼叫 `get_shader_uniform_list()` 觸發延遲解析，僅設定 code 不足。（[Three.js 移植](godot-kit/docs/vfx/THREE-PORTS.md)）
 - **已 free 的 Godot Object 與 null 比較會讓解除綁定分支漏判**（2026-11-01，godot-kit VFX）→ 以獨立 `_was_bound` 記錄綁定狀態，再用 `is_instance_valid()` 判斷宿主；測試真實 free 後的收尾，避免武器拖尾永久活動。（[VFX 驗證](godot-kit/docs/vfx/VALIDATION.md)）
 - **立繪動作接台詞／漫畫時看不到，可能是根本還沒登場，或同幀已被下一層蓋住** → 從真實劇本順序測角色可見性、Art 位移與 alpha；先入場再排反應，非對話後續指令等動作完成。準備站位要保存到開口時的動畫；畫外音旗標需在編輯器明示。（debt-commission `tests/test_portrait_reaction.gd`、`tests/test_portrait_controls.gd`，2026-11-02）
+- **用 headless 腳本 `instantiate()`＋`pack()` 重存既有 scene，只為加一顆按鈕，結果子 scene instance 上的覆寫屬性全掉了**（2026-11-04，debt-commission `chapter_select.tscn` 的預覽卡片丟了 `size_flags`、邊距與文字）→ 既有 scene 只加一個節點時，存檔前先 `diff` 新舊 `.tscn`；有非預期的刪除就只把新節點那段插進原檔，或在編輯器裡加。
+- **把大 GDScript 拆成幾個控制器檔，parse 全過、執行時才 `Method not found`**（2026-11-04，debt-commission G6）→ 字串呼叫（`call_deferred("_name")`、`call("_x")`、`has_method`）不經過 parser；拆分後 grep 被搬走的函式名稱出現在字串裡的地方，改成 `obj.method.call_deferred()`。拆分前後跑完整測試逐組比對。
 
 ## 匯出與網頁版
 

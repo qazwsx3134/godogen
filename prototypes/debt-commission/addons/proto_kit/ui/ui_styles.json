@@ -1,0 +1,31 @@
+{
+  "dark_gothic": {
+    "bg": "#0b0907", "panel": "#1e1b18", "panel_alt": "#2a2520",
+    "border": "#6b5a3c", "border_width": 2, "corner_radius": 2,
+    "text": "#e6dcc8", "text_dim": "#9a9080", "accent": "#d9a441",
+    "danger": "#d9604a", "select": "#3a3020",
+    "font": "Noto Serif TC", "font_weight": 400,
+    "font_sizes": {"title": 40, "body": 28, "caption": 22},
+    "spacing": {"row": 12, "section": 28}
+  },
+  "pixel_gilded": {
+    "bg": "#12101a", "panel": "#1b1730", "panel_alt": "#2c2448",
+    "border": "#c9a227", "border_width": 4, "corner_radius": 0,
+    "text": "#f0e6c8", "text_dim": "#a79dbd", "accent": "#e0b83a",
+    "danger": "#e0604f", "select": "#3b2f63",
+    "font": "Noto Sans TC", "font_weight": 700,
+    "font_sizes": {"title": 44, "body": 30, "caption": 24},
+    "spacing": {"row": 10, "section": 24},
+    "categories": {"survival": "#2f7d55", "combat": "#b8642a", "choice": "#7a56c4", "preparation": "#b39a2e"}
+  },
+  "forest_vine": {
+    "bg": "#07120c", "panel": "#0c1a10", "panel_alt": "#153322",
+    "border": "#3f8a2f", "border_width": 3, "corner_radius": 4,
+    "text": "#f2f0e6", "text_dim": "#9fb9a5", "accent": "#f2c14e",
+    "danger": "#e8685a", "select": "#1f4a2c",
+    "font": "Noto Sans TC", "font_weight": 700,
+    "font_sizes": {"title": 36, "body": 26, "caption": 20},
+    "spacing": {"row": 8, "section": 16},
+    "elements": {"fire": "#e8743b", "water": "#4aa3e8", "wind": "#5fc46a", "earth": "#b08a4a", "light": "#f2d56a", "dark": "#9a5cd6"}
+  }
+}
