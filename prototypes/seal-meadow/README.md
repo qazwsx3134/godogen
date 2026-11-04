@@ -8,6 +8,8 @@
 
 詳細操作、安全區、效能與驗收見 [手機製作基準](design/mobile-production-baseline.md)，原作面向與 Godot 對應見 [希望 Online 詳細研究](../../docs/research/seal-online-deep-dive-2026-10-26/README.md)。現有 2.5D 管線先用來驗證手機，不因原作是完整 3D 就直接要求重做角色。固定鏡頭、觸控、背包、村莊、任務、寵物、精煉，以及單機圖鑑與釣魚薄切片已有實作；iPhone 17 Safari 尚未實機驗收。
 
+城鎮建模提案見[城鎮模型與場景製作流程](design/pipeline/town-modeling.md)：包含參考圖、模型面數、倒角、貼圖、AI 自查、Kenney／混元調查與第一個樣板；風格與參考圖尚未選定，尚未製作正式城鎮模型。
+
 系統文件與工作包見[製作規劃入口](design/planning/README.md)：包含 40 系統索引與逐系統 dossier、GDD／TDD／UX／資料／QA 交付標準、Godot 架構草案、決策清單與 [M0～M6 Roadmap](production/roadmap.md)。目前先做單機內容，多人 M4 延後；M3／S19／S33／S34 乘坐／S35 規格與本機測試已記錄，真機／長時間驗收仍待完成。現況與交接見 [PROGRESS.md](PROGRESS.md)，操作回饋見 [REVIEW.md](REVIEW.md)。
 
 > 玩家目前是 Blender 渲染的測試小人紙娃娃（身體＋頭髮＋劍三層，`resources/sheets/test_chibi_*.tres`）。怪物圖**借用 skybound-blades 的原創圖當佔位**（`assets/sprites/`、`resources/sheets/`）。本作自己的圖還沒生成：玩家是 8 方向紙娃娃（素體＋頭髮／服裝／頭飾／武器／盾分層），怪物 4 方向且一律比玩家矮，規格與 prompt 見 [design/art-prompts/](design/art-prompts/README.md)。玩家角色走 3D 建模再渲染成 sprite，完整流程見 [design/pipeline/3d-to-sprite.md](design/pipeline/3d-to-sprite.md)（渲染與打包已用測試小人跑通）。
