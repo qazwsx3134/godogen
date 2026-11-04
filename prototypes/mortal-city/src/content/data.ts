@@ -1,5 +1,5 @@
-// 原型內容。劇情案是「測試案」，只用來驗證流程，不是正式 P01 劇本。
-import type { DangerOption, Direction, Item, JobDef } from '../rules/core'
+// 原型內容：中間人、街頭工作、起始裝備、廣播。劇情委託在 cases.ts。
+import type { Attr, DangerOption, Direction, Enemy, JobDef } from '../rules/core'
 
 export interface Fixer {
   id: string
@@ -36,63 +36,8 @@ export const JOBS: Record<string, JobDef> = Object.fromEntries(
 
 export const QUEUE_SLOTS = 4
 
-/** 新角色的起始裝備（三個欄位）。抵押價＝售價 60%。 */
-export const STARTER_GEAR: Item[] = [
-  { id: 'gun-1', name: '舊型電磁手槍', slot: 'weapon', direction: 'force', bonus: 0.05, price: 1200, load: 0 },
-  { id: 'deck-1', name: '二手駭客終端', slot: 'deck', direction: 'hack', bonus: 0.05, price: 800, load: 0 },
-  { id: 'camo-1', name: '光學迷彩貼片', slot: 'implant', direction: 'stealth', bonus: 0.05, price: 1000, load: 25 },
-]
+export { STARTER_GEAR } from './items'
 export const CITY_TARGET = 50_000 // 封鎖線「民生補給」：全服完成的潛行工作件數
-
-// ---------- 測試案 ----------
-
-export interface Reply {
-  who: string
-  at: string
-  text: string
-}
-
-export interface Approach {
-  id: string
-  direction: 'force' | 'hack' | 'stealth'
-  label: string
-  summary: string
-  needs: string
-}
-
-export const TEST_CASE = {
-  id: 'TEST-001',
-  title: '終電後的手提箱',
-  fixerId: 'k',
-  zone: '新宿・地下維修道',
-  posted: '2077.11.04 01:12',
-  reward: 1500,
-  body:
-    '末班車開走之後，魔都環狀線的維修道會有一台沒有登記的工程車停在 B3。車上有一只鋁製手提箱，主人已經不需要它了，但很多人在找。\n\n把箱子帶回店裡，不要打開，不要掃描，不要賣給第一個開價的人。',
-  replies: [
-    { who: 'k', at: '01:14', text: '我只說一次：MPD 的無人機會在兩點換班，換班前後各有五分鐘的空檔。錯過了就別硬來。' },
-    { who: 'mist', at: '01:20', text: '那只箱子我也在找。你先拿到的話，記得我的價碼永遠比老頭高。' },
-    { who: 'snake', at: '01:31', text: '受傷了就往我這裡爬。保單過期的，我也收，只是比較貴。' },
-  ] as Reply[],
-  approaches: [
-    { id: 'force', direction: 'force', label: '強行突入', summary: '直接從工程車正面進去，最快，但會很吵。', needs: '火力 ≥ 1' },
-    { id: 'hack', direction: 'hack', label: '黑進號誌系統', summary: '讓維修道的燈號全部轉紅，工程車自己停下來。', needs: '入侵 ≥ 1' },
-    { id: 'stealth', direction: 'stealth', label: '換班空檔潛入', summary: '等兩點的無人機換班，五分鐘內進出。', needs: '潛行 ≥ 1' },
-  ] as Approach[],
-  autoLog: [
-    '你沿著廢棄月台往下走，鐵軌間的積水映著紅色的維修燈。',
-    '工程車就在 B3，車門半開，箱子還在副駕駛座上。',
-    '你拿到箱子了。背後的隧道傳來無人機的螺旋槳聲，比預定的換班時間早了三分鐘。',
-  ],
-  danger: {
-    title: 'MPD 無人機封鎖了出口',
-    body: '兩台 MPD 巡邏無人機停在唯一的出口，探照燈正往你的方向掃過來。你手上有箱子，身上的傷還在流血。',
-    options: [
-      { id: 'drop', label: '丟下箱子，從排水管撤離', lethal: false, lethalBase: 0, survivalWindowMin: 0 },
-      { id: 'run', label: '抱著箱子衝過探照燈', lethal: true, lethalBase: 0.35, survivalWindowMin: 4 },
-    ] as DangerOption[],
-  },
-}
 
 // ---------- 廣播（DJ 夜鴉，輕佻口吻） ----------
 
@@ -109,12 +54,21 @@ export interface DangerTemplate {
   title: string
   body: string
   options: DangerOption[]
+  /** 火力方向的高階工作要先打一場。 */
+  fight?: Enemy
 }
 
 const OPENING: Record<Direction, (n: string) => string[]> = {
-  force: (n) => [`你把彈匣壓滿，往「${n}」的目標出發。`, '第一道門很順利，守衛還在抽菸。'],
+  force: (n) => [`你把彈匣壓滿，往「${n}」的目標出發。`, '第一道門的守衛丟下菸，舉起了槍。'],
   hack: (n) => [`你接上神經線，開始「${n}」。`, '第一層防火牆像紙一樣被撕開。'],
   stealth: (n) => [`你貼著陰影移動，開始「${n}」。`, '巡邏的空檔比情報說的還長一點。'],
+}
+
+/** 高階工作的屬性選項：依方向用不同屬性，風險比硬幹低。 */
+const SKILLED: Record<Direction, { attr: Attr; label: string }> = {
+  force: { attr: 'body', label: '徒手扯開貨櫃的側門，從外骨骼的死角把貨拖走' },
+  hack: { attr: 'int', label: '開一條假的資料流把黑冰引開，再慢慢抽資料' },
+  stealth: { attr: 'cool', label: '冷靜地關掉警報，換上保全的制服走出去' },
 }
 
 const TWIST: Record<Direction, { title: string; body: string; push: string }> = {
@@ -141,9 +95,18 @@ export function highDanger(job: JobDef): DangerTemplate {
     autoLog: OPENING[job.direction](job.name),
     title: t.title,
     body: t.body,
+    fight: job.direction === 'force' ? { name: '倉庫守衛', hp: 80 + (job.tier - 4) * 30, atk: 11, hit: 0.55 } : undefined,
     options: [
       { id: 'abort', label: '放棄這份工作，馬上撤離', lethal: false, lethalBase: 0, survivalWindowMin: 0 },
       { id: 'push', label: t.push, lethal: true, lethalBase: 0.2 + (job.tier - 4) * 0.12, survivalWindowMin: 3 },
+      {
+        id: 'skilled',
+        label: SKILLED[job.direction].label,
+        lethal: true,
+        lethalBase: 0.08 + (job.tier - 4) * 0.08,
+        survivalWindowMin: 3,
+        attrNeeds: { attr: SKILLED[job.direction].attr, min: 7 },
+      },
     ],
   }
 }

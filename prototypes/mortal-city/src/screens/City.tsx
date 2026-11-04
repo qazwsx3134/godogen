@@ -1,8 +1,9 @@
 import { Building2, Users } from 'lucide-react'
 import { Meter, Panel, PanelHead } from '../components/ui'
-import { CITY_TARGET, JOBS, TEST_CASE } from '../content/data'
+import { CITY_TARGET, JOBS } from '../content/data'
+import { CASE_BY_ID } from '../content/cases'
 import { CityStrip, type StripMode } from '../components/CityStrip'
-import { jobDurationMs } from '../rules/core'
+import { SEVERE_INJURY, jobDurationMs } from '../rules/core'
 import type { useGame } from '../game/state'
 
 const ZONES = [
@@ -16,9 +17,9 @@ export function CityScreen({ game }: { game: ReturnType<typeof useGame> }) {
   const q = g.queue
   const queueRunning = q.items.length > 0 && !q.paused && q.startedAt !== null
   const highActive = g.high && g.high.stage !== 'done'
-  const storyRunning = g.story.stage === 'auto' || g.story.stage === 'danger'
+  const storyRunning = g.story.stage === 'auto' || g.story.stage === 'fight' || g.story.stage === 'danger'
   let mode: StripMode = 'rest'
-  let label = c.injury >= 60 ? '受傷休養中・新宿的公寓' : '休息中・新宿的公寓'
+  let label = c.injury >= SEVERE_INJURY ? '重傷休養中・新宿的公寓' : c.injury > 0 ? '休養中・新宿的公寓' : '休息中・新宿的公寓'
   let sub: string | undefined
   if (!c.alive) {
     mode = 'dead'
@@ -29,8 +30,8 @@ export function CityScreen({ game }: { game: ReturnType<typeof useGame> }) {
     sub = g.high!.stage === 'danger' ? '等待你的選擇' : undefined
   } else if (storyRunning) {
     mode = 'run'
-    label = `劇情委託：${TEST_CASE.title}`
-    sub = g.story.stage === 'danger' ? '等待你的選擇' : undefined
+    label = `劇情委託：${CASE_BY_ID[g.story.caseId!].title}`
+    sub = g.story.stage === 'danger' ? '等待你的選擇' : g.story.stage === 'fight' ? '戰鬥中' : undefined
   } else if (queueRunning) {
     const j = JOBS[q.items[0]]
     const left = q.startedAt! + jobDurationMs(j, c.prof[j.direction].level) - now

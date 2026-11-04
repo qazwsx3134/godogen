@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { BarChart3, Briefcase, Building2, MessageSquare, ScrollText, ShieldAlert, Square, User } from 'lucide-react'
 import { Emblem, Panel } from './components/ui'
 import { useGame } from './game/state'
-import { NEURAL_STAGE_LABEL, neuralMargin, neuralStage } from './rules/core'
+import { NEURAL_STAGE_LABEL, SEVERE_INJURY, marginOf, neuralStage } from './rules/core'
 import { JobsScreen } from './screens/Jobs'
 import { CharacterScreen } from './screens/Character'
 import { CityScreen } from './screens/City'
@@ -27,7 +27,7 @@ export default function App() {
   const [route, setRoute] = useState<Route>('jobs')
   const [comms, setComms] = useState(false)
   const c = g.character
-  const stage = neuralStage(neuralMargin(c.level, c.implantLoad, c.stress))
+  const stage = neuralStage(marginOf(c))
   const busy = g.queue.items.length > 0
   const mainRef = useRef<HTMLElement>(null)
   useEffect(() => {
@@ -78,6 +78,14 @@ export default function App() {
                 </span>
                 <button onClick={() => setRoute('jobs')} className="flex min-h-11 items-center border border-red px-3 font-bold text-red">
                   前往
+                </button>
+              </div>
+            )}
+            {c.alive && c.injury >= SEVERE_INJURY && (
+              <div className="mt-2 flex items-center gap-2 border-t border-red/50 pt-2 text-[13px]">
+                <span className="flex-1 font-bold text-red">✚ 重傷：不能工作，先休養或治療</span>
+                <button onClick={() => setRoute('char')} className="flex min-h-11 items-center border border-red px-3 font-bold text-red">
+                  治療
                 </button>
               </div>
             )}

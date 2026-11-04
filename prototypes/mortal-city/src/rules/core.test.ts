@@ -6,6 +6,12 @@ import {
   type Queue,
   jobDurationMs,
   payBill,
+  payable,
+  capacityOf,
+  fightStats,
+  resolveFight,
+  rest,
+  workBlock,
   redeem,
   neuralCapacity,
   neuralStage,
@@ -48,6 +54,9 @@ function char(over: Partial<Character> = {}): Character {
     equipment: [],
     pawned: [],
     week: { key: weekKey(0), counts: {}, points: 0 },
+    attrs: { tech: 3, reflex: 3, body: 3, int: 3, cool: 3 },
+    attrPoints: 0,
+    stash: [],
     ...over,
   }
 }
@@ -190,5 +199,129 @@ describe('rescue bill: pawn equipment, die if not enough, redeem later', () => {
     expect(back.credits).toBe(280)
     expect(back.equipment.map((i) => i.id)).toEqual(['g'])
     expect(back.pawned.length).toBe(2)
+  })
+})
+
+describe('severe injury, rest and queue fights', () => {
+  const brawl: JobDef = { ...job, id: 'brawl-3', direction: 'force', tier: 3, injury: 20 }
+  const fjobs = { [brawl.id]: brawl }
+  const q4 = (id: string): Queue => ({ items: [id, id, id, id], startedAt: 0, paused: false, seq: 0 })
+  const loose = { injuryAt: 101, heatAt: 9, stopOnCritical: false, creditReserve: 0 }
+
+  it('every force job is a fight, logged in one line, fixed by its seed', () => {
+    const a = settleQueue(char(), q4(brawl.id), 10 ** 9, fjobs, loose)
+    expect(a.events.filter((e) => e.text.includes('⚔')).length).toBe(a.completed)
+    expect(settleQueue(char(), q4(brawl.id), 10 ** 9, fjobs, loose).character).toEqual(a.character)
+  })
+
+  it('a locked default tactic falls back to a straight fight', () => {
+    const r = settleQueue(char(), q4(brawl.id), 10 ** 9, fjobs, { ...loose, tactic: 'hack' })
+    expect(r.events[0].text).toMatch(/預設戰術被鎖住/)
+  })
+
+  it('the queue always stops at 重傷, whatever the player set', () => {
+    for (let i = 0; i < 200; i++) {
+      const r = settleQueue(char({ id: `s${i}`, injury: 55 }), q4(brawl.id), 10 ** 9, fjobs, loose)
+      if (r.character.injury < 70 || r.completed === 4) continue
+      expect(r.stopped).toMatch(/重傷/)
+      expect(r.queue.items).toEqual([])
+      return
+    }
+    throw new Error('no seed reached 重傷 mid-queue')
+  })
+
+  it('rest heals 1% a minute (half speed when severe) and drops heat every 30 minutes, carrying leftovers', () => {
+    const c = char({ injury: 71, heat: 2 })
+    let carry = rest(c, { ms: 0, heatMs: 0 }, 4 * 60_000)
+    expect(c.injury).toBe(69) // 71→70 用 2 分鐘，70→69 再 2 分鐘
+    carry = rest(c, carry, 30 * 1000)
+    expect(c.injury).toBe(69)
+    rest(c, carry, 30 * 1000)
+    expect(c.injury).toBe(68)
+    const h = char({ heat: 2 })
+    rest(h, { ms: 0, heatMs: 0 }, 61 * 60_000)
+    expect(h.heat).toBe(0)
+    expect(workBlock(char({ injury: 70 }))).toMatch(/重傷/)
+    expect(workBlock(char({ injury: 69 }))).toBeUndefined()
+  })
+})
+
+describe('attributes', () => {
+  const foe = { name: 'x', hp: 70, atk: 9, hit: 0.55 }
+  const lost = (f: ReturnType<typeof resolveFight>) => f.hpStart - f.hp
+  const sum = (over: Partial<Character>, n = 200) => {
+    let won = 0
+    let hurt = 0
+    for (let i = 0; i < n; i++) {
+      const f = resolveFight(char(over), foe, 'force', i * 13)
+      won += f.won ? 1 : 0
+      hurt += lost(f)
+    }
+    return { won, hurt }
+  }
+  const at = (a: Partial<Character['attrs']>) => ({ attrs: { tech: 3, reflex: 3, body: 3, int: 3, cool: 3, ...a } })
+
+  it('技術 armour cuts the damage you take, and raises neural capacity', () => {
+    expect(sum(at({ tech: 9 })).hurt).toBeLessThan(sum({}).hurt * 0.85)
+    expect(capacityOf(char(at({ tech: 9 })))).toBe(capacityOf(char()) + 18)
+  })
+
+  it('體能 raises max HP and the injury % still matches the HP left', () => {
+    const c = char({ ...at({ body: 7 }), injury: 25 })
+    const f = resolveFight(c, foe, 'force', 3)
+    expect(f.maxHp).toBe(132)
+    expect(f.hpStart).toBe(99)
+    expect(f.injury).toBe(Math.round(100 - (f.hp * 100) / 132))
+  })
+
+  it('反應 lands crits, 沉著 makes them hit harder, 智力 jams longer', () => {
+    const text = (over: Partial<Character>) => resolveFight(char(over), foe, 'force', 5).rounds.map((r) => r.text).join()
+    expect(text({})).not.toMatch(/暴擊/)
+    expect(text(at({ reflex: 11 }))).toMatch(/暴擊/)
+    expect(fightStats(char(at({ cool: 8 }))).critDmg).toBeCloseTo(2.0)
+    const jammed = (int: number) => resolveFight(char(at({ int })), foe, 'hack', 1).rounds.filter((r) => r.text.includes('亂跳')).length
+    expect(jammed(9)).toBeGreaterThanOrEqual(jammed(3))
+    expect(resolveFight(char(at({ int: 9 })), foe, 'hack', 1).stress).toBe(2)
+  })
+})
+
+describe('items: implant armour, loot, paying with the stash', () => {
+  const foe = { name: 'x', hp: 70, atk: 9, hit: 0.55 }
+  const plate: Item = { id: 'p#1', kind: 'subdermal', name: '皮下護甲', slot: 'implant', direction: 'force', bonus: 0, price: 1500, load: 30, mods: { armor: 15 } }
+
+  it('an armour implant cuts more damage than a few points of 技術', () => {
+    let bare = 0
+    let armoured = 0
+    for (let i = 0; i < 200; i++) {
+      const a = resolveFight(char(), foe, 'force', i)
+      const b = resolveFight(char({ equipment: [plate] }), foe, 'force', i)
+      bare += a.hpStart - a.hp
+      armoured += b.hpStart - b.hp
+    }
+    expect(armoured).toBeLessThan(bare * 0.8)
+  })
+
+  it('loot has its own seed: the same queue settles the same with or without drops', () => {
+    const brawl: JobDef = { ...job, id: 'brawl-2', direction: 'force', tier: 2 }
+    const q: Queue = { items: Array(4).fill(brawl.id), startedAt: 0, paused: false, seq: 0 }
+    const rules = { injuryAt: 101, heatAt: 9, stopOnCritical: false, creditReserve: 0 }
+    const always = (seed: number) => ({ ...plate, id: `p#${seed}` })
+    const a = settleQueue(char(), q, 10 ** 9, { [brawl.id]: brawl }, rules)
+    const b = settleQueue(char(), q, 10 ** 9, { [brawl.id]: brawl }, rules, always)
+    expect({ ...b.character, stash: [] }).toEqual(a.character)
+    expect(b.character.stash.length).toBe(b.events.filter((e) => e.text.includes('打贏')).length)
+    expect(b.events.find((e) => e.text.includes('打贏'))!.text).toMatch(/戰利品：皮下護甲/)
+  })
+
+  it('a bill pawns the stash before the gear you wear, and redeeming puts it back where it was', () => {
+    const c = char({ stash: [plate], equipment: [{ id: 'g', name: '槍', slot: 'weapon', direction: 'force', bonus: 0, price: 1200, load: 0 }] })
+    expect(payable(c)).toBe(900 + 720)
+    const r = payBill(c, 800)
+    if (!r.ok) throw new Error('should pay')
+    expect(r.pawned.map((i) => i.id)).toEqual(['p#1'])
+    expect(r.character.equipment.length).toBe(1)
+    const back = redeem({ ...r.character, credits: 900 }, 'p#1')!
+    expect(back.stash.map((i) => i.id)).toEqual(['p#1'])
+    expect(back.equipment.length).toBe(1)
   })
 })
