@@ -1,0 +1,67 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/models/town_shop_draft.glb" id="1_8k38a"]
+[ext_resource type="Texture2D" path="res://assets/models/town_shop_draft_colormap.png" id="2_curpj"]
+[ext_resource type="FontFile" path="res://assets/fonts/NotoSansTC.ttf" id="2_ihfil"]
+[ext_resource type="Shader" path="res://shaders/town_shop_roof.gdshader" id="2_v33fs"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jo6ko"]
+resource_name = "WarmPlaster"
+cull_mode = 2
+albedo_color = Color(0.41614178, 0.37418956, 0.32108325, 1)
+roughness = 0.85
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x88fk"]
+resource_name = "WarmWood"
+cull_mode = 2
+albedo_color = Color(0.2828642, 0.19794063, 0.14668603, 1)
+roughness = 0.85
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3cjx0"]
+resource_name = "WindowGlass"
+cull_mode = 2
+albedo_color = Color(0.23067807, 0.32881385, 0.35762045, 1)
+roughness = 0.85
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2vkdc"]
+resource_name = "WindowGlass"
+cull_mode = 2
+albedo_color = Color(0.23067807, 0.32881385, 0.35762045, 1)
+roughness = 0.85
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pvnnj"]
+render_priority = 0
+shader = ExtResource("2_v33fs")
+shader_parameter/palette = ExtResource("2_curpj")
+shader_parameter/tile_color = Color(0.62, 0.23, 0.14, 1)
+
+[node name="TownShopDraft" type="Node3D" unique_id=942172705]
+metadata/block_radius = 2.9
+
+[node name="Model" parent="." unique_id=1011302608 instance=ExtResource("1_8k38a")]
+
+[node name="ShopBody" parent="Model" index="0" unique_id=755918586]
+surface_material_override/0 = SubResource("StandardMaterial3D_jo6ko")
+
+[node name="ShopDoor" parent="Model" index="1" unique_id=1488682082]
+surface_material_override/0 = SubResource("StandardMaterial3D_x88fk")
+
+[node name="ShopWindowLeft" parent="Model" index="2" unique_id=1629086404]
+surface_material_override/0 = SubResource("StandardMaterial3D_3cjx0")
+
+[node name="ShopWindowRight" parent="Model" index="3" unique_id=1454908364]
+surface_material_override/0 = SubResource("StandardMaterial3D_2vkdc")
+
+[node name="ShopRoof" parent="Model" index="4" unique_id=1110557692]
+surface_material_override/0 = SubResource("ShaderMaterial_pvnnj")
+
+[node name="ShopLabel" type="Label3D" parent="." unique_id=1463801321]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.32, 1.98)
+pixel_size = 0.006
+modulate = Color(0.27058825, 0.16862746, 0.11372549, 1)
+text = "雜貨屋"
+font = ExtResource("2_ihfil")
+font_size = 72
+outline_size = 0
+
+[editable path="Model"]

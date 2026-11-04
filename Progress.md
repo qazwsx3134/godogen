@@ -22,7 +22,7 @@
 |---|---|---|---|
 | debt-commission 萬事屋吐槽 ADV | 故事編輯器持續擴充；等作者試玩桂短篇與新背景 | [PROGRESS](prototypes/debt-commission/PROGRESS.md) | [MILESTONE](prototypes/debt-commission/MILESTONE.md) |
 | godot-kit 共用模組 | VFX 庫完成，等 GPU／瀏覽器／手機外觀驗收；未同步各遊戲副本 | [PROGRESS](prototypes/godot-kit/PROGRESS.md) | — |
-| seal-meadow 蓬蓬草原 | 城鎮建模流程與免費素材調查完成，等選風格參考圖；手機真人／iPhone 驗收待做，多人延後 | [PROGRESS](prototypes/seal-meadow/PROGRESS.md) | [MILESTONE](prototypes/seal-meadow/MILESTONE.md) |
+| seal-meadow 蓬蓬草原 | 暖陶瓦風格與商店三視圖已定方向；可走商店、入口與路牌樣板已接入，正式 2D 紙娃娃及手機真人驗收待做，多人延後 | [PROGRESS](prototypes/seal-meadow/PROGRESS.md) | [MILESTONE](prototypes/seal-meadow/MILESTONE.md) |
 | hero-horde-idle 全員推王 | 等真人前三層、手機恢復成本與作者素材 | [PROGRESS](prototypes/hero-horde-idle/docs/PROGRESS.md) | [MILESTONE](prototypes/hero-horde-idle/docs/MILESTONE.md) |
 | Cyberpunk 文字 MMO（魔都） | mortal-city 可玩到 P01 兩案（戰鬥、傷勢與治療、屬性、義體）；等作者試讀 P01 與正式 sprite | [PROGRESS](docs/cyberpunk-text-mmo/PROGRESS.md) | — |
 | dreamling-idle 夢靈遠行 | 第一個可玩版本完成，暫停 | [PROGRESS](prototypes/dreamling-idle/PROGRESS.md) | — |

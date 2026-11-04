@@ -1,14 +1,17 @@
 [gd_scene format=3]
 
-[ext_resource type="Material" path="res://materials/town_grass.tres" id="m_grass"]
-[ext_resource type="Material" path="res://materials/town_plaza.tres" id="m_plaza"]
 [ext_resource type="Script" path="res://scripts/town.gd" id="1_yn4qk"]
 [ext_resource type="PackedScene" path="res://scenes/props/oak.tscn" id="3_5q1rr"]
 [ext_resource type="PackedScene" path="res://scenes/props/pine.tscn" id="4_po04c"]
+[ext_resource type="Shader" path="res://shaders/lowpoly.gdshader" id="4_u4arb"]
 [ext_resource type="PackedScene" path="res://scenes/props/bush.tscn" id="5_u4arb"]
 [ext_resource type="PackedScene" path="res://scenes/props/rock.tscn" id="6_icc4n"]
 [ext_resource type="PackedScene" path="res://scenes/npc.tscn" id="7_b0eaf"]
+[ext_resource type="PackedScene" path="res://scenes/props/town_shop_draft.tscn" id="8_po04c"]
 [ext_resource type="PackedScene" path="res://scenes/portal.tscn" id="8_uutfq"]
+[ext_resource type="PackedScene" path="res://scenes/props/town_signpost_sample.tscn" id="9_u4arb"]
+[ext_resource type="Material" path="res://materials/town_grass.tres" id="m_grass"]
+[ext_resource type="Material" path="res://materials/town_plaza.tres" id="m_plaza"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_i0mj0"]
 size = Vector2(44, 44)
@@ -21,6 +24,16 @@ radial_segments = 24
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ckatl"]
 size = Vector3(44, 0.2, 44)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_icc4n"]
+render_priority = 0
+shader = ExtResource("4_u4arb")
+shader_parameter/albedo = Color(0.38, 0.25, 0.14, 1)
+shader_parameter/use_vertex_color = false
+shader_parameter/rim_strength = 0.0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_b0eaf"]
+size = Vector2(2.4, 3.7)
 
 [node name="Town" type="Node3D" unique_id=1270515040]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 300, 0, 0)
@@ -40,6 +53,11 @@ mesh = SubResource("CylinderMesh_55swn")
 [node name="Collision" type="CollisionShape3D" parent="Ground" unique_id=20552360]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
 shape = SubResource("BoxShape3D_ckatl")
+
+[node name="EntrancePath" type="MeshInstance3D" parent="Ground" unique_id=1973158867]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.012, 9.45)
+material_override = SubResource("ShaderMaterial_icc4n")
+mesh = SubResource("PlaneMesh_b0eaf")
 
 [node name="Props" type="Node3D" parent="." unique_id=565796395]
 unique_name_in_owner = true
@@ -65,9 +83,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, -3)
 [node name="Rock" parent="Props" unique_id=736364934 instance=ExtResource("6_icc4n")]
 transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, -9, 0, 2)
 
+[node name="MeadowShop" parent="Props" unique_id=942172705 instance=ExtResource("8_po04c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.5)
+
+[node name="MeadowSign" parent="Props" unique_id=350384752 instance=ExtResource("9_u4arb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 8.8)
+
 [node name="Elder" parent="." unique_id=1989931651 instance=ExtResource("7_b0eaf")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="ToMeadow" parent="." unique_id=1406541362 instance=ExtResource("8_uutfq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 11)

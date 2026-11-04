@@ -1,6 +1,29 @@
 # seal-meadow 交接進度
 
-最後更新：2026-11-04。每次 commit、使用者出門或下班時更新這份檔案。只保留最近 3 次 commit 期間的工作與尚未 commit 的工作（新的在上）；更早的紀錄移到 [MILESTONE.md](MILESTONE.md)。
+最後更新：2026-11-05。每次 commit、使用者出門或下班時更新這份檔案。只保留最近 3 次 commit 期間的工作與尚未 commit 的工作（新的在上）；更早的紀錄移到 [MILESTONE.md](MILESTONE.md)。
+
+## 2026-11-05｜暖陶瓦城鎮薄切片與製作規格
+
+- 分支 `master`、基準 `2237f384`（最新以 `git log -1` 為準）。使用者要求詳細規劃並執行，授權直接生成兩張城鎮方向圖並選定 A 暖陶瓦；接著另授權直接生成商店三視圖與陶瓦／木材／灰泥材質參考。四張圖、實際 prompt、選擇及限制見[風格參考](design/art-prompts/town-style-references-2026-11-05.md)。
+- 已接入可編輯[城鎮薄切片](design/quick-specs/town-slice-2026-11-05.md)：商店外觀在廣場北側、南側為入口路與 Kenney 路牌；原村長提供交易及任務，原傳送、存檔、重生與紙娃娃測試人保留。商店不能進入，圓形障礙保守包住目前外觀。正式角色優先直接做 2D Sprite；尚未產生正式角色圖，身體／髮型／武器同步與方向遮擋需再實作素材並驗證。
+- 以 Kenney Castle Kit CC0 屋頂加自行建模的倒角牆面、門窗、木樑及台階做出商店樣板：完整 1,296 tris，路牌 168 tris；其原始色票在 Godot 以 shader 示意暖陶色。`.blend`、GLB、原始色票、scene、Kenney 授權副本與[網格報告](production/qa/town-shop-draft-2026-11-05.json)已保存。商店 0 非流形邊、退化面、完全重複三角面與 BVH 相交候選；這些不能保證不存在所有閃爍或共面問題。參考材質圖尚未轉成正式無縫貼圖或法線圖。[正式製作規格](design/pipeline/town-shop-production-spec.md)列出尺寸起點、3,650 tris 預算、材質與驗收。
+- 本輪 L2 `env XDG_DATA_HOME=/tmp/seal-town-slice-test-data XDG_CONFIG_HOME=/tmp/seal-town-slice-test-config TEST_TIMEOUT=120 bash prototypes/godot-kit/tools/run_tests.sh prototypes/seal-meadow town_slice m2 world_lifecycle town_signpost_sample`：四組 PASS（`/tmp/godot-tests.JzWBIn`）。headless 匯入成功，仍有既知沙箱 TCP 監聽錯誤；無 scene／腳本解析錯誤。桌面 Compatibility 1280×720、844×390 的[商店](art_src/town-slice/shop-1280x720.png)與[入口](art_src/town-slice/entrance-844x390.png)靜態截圖已檢查；尚未完成人工移動時閃爍／觸控、手機 Web／iPhone 效能、L3、正式燈光與材質驗收。
+- 下一步：按正式規格統一三視圖、精修商店及真正 UV／底色／必要法線；先以一名原創 2D 角色試方向與裝備層，再擴建廣場街景。後續生成其他圖片前須依專案規則描述批次並讓使用者選擇直接生成或 opt image。多人、戰鬥寵 AI 與手機真人驗收仍依既有延期狀態。本輪城鎮及素材索引納入本次提交；其他專案未提交修改保留，未 push／上傳。測試結果沿用本輪實作證據，交接時沒有重跑。
+
+## 2026-11-05｜先前盤點：城鎮現況與 2D 紙娃娃方向
+
+- 使用者詢問城鎮還缺什麼，並偏好角色直接使用 Sprite 紙娃娃，因正式 3D 角色製作流程尚未跑通。先以直接製作 2D 圖層為優先方向，3D 離線渲染保留為備案；角色來源風格、第一批素材與 AI 生圖方式仍待選定。
+- 核對現況：玩家執行時已是 3D 世界中的 2D 分層 Sprite，已有測試身體、頭髮、武器及衣服／鐵劍換裝；現有圖層同步但順序固定，正式 2D 素材的多方向對齊與遮擋尚未驗證。原測試角色來自 Blender，渲染／打包已有證據，不代表正式角色的建模／綁骨／動畫已完成。
+- 城鎮已有廣場、草地、樹石、村長、商店、三段任務及草原傳送；缺房屋、道路街景與完整城鎮構圖，既有路牌技術樣板未放入村莊。玩家目前以圓形障礙推開，建築遮擋、動線與相應碰撞仍需實作／驗證。多人、戰鬥寵 AI、iPhone／真人驗收仍維持既有延期或待驗狀態。
+- 更新 README、[角色素材規劃](design/art-prompts/README.md)、[3D 備案](design/pipeline/3d-to-sprite.md)及 S22 planning dossier，避免把舊 3D 建模方案與未實作的依方向分層寫成現況。這次只有查閱與文件更新；未改程式、scene、圖或模型，也未重跑測試。工作區有本輪及既有未提交修改，未 commit／push。
+
+## 2026-11-04｜本機 3D 素材索引
+
+- 使用者提供 `D:\repo\godot\model-assets`，希望先分類建立索引，再優先從現有模型改造。素材庫保持原樣；共掃描 17 包，其中 11 包有 890 筆 3D 模型，同名 GLB／FBX／OBJ 合併。各包本機授權檔均標示 CC0。
+- 已建立[圖像索引](../../docs/model-assets/index.html)、[TSV 清單](../../docs/model-assets/models.tsv)、[使用說明與城鎮候選](../../docs/model-assets/README.md)，可依名稱、分類、套件、城鎮候選、原始面數與異常篩選。`scripts/index_model_assets.py` 可重掃；分類依檔名初篩，模型原始 GLB 的 890 筆解析與相依檔檢查均為 0 個異常。這批 GLB 引用外部貼圖，使用時需一併複製並維持相對路徑。
+- 代表候選：Mini Forest 木架 144／屋頂 324／柵欄 330 tris；Survival 路牌 28、木箱 124、木桶 412 tris；Retro Fantasy 門牆 36／屋頂 88 tris。Godot 4.7 `GLTFDocument` 另核對路牌 44、Mini Forest 屋頂 324、Retro Fantasy 門牆 36 tris，一致。這些均為未修改前的數字，不代表已通過倒角、碰撞、重面或手機畫面驗收。
+- Windows Blender 5.1.2 可執行；已複製並修改 Survival Kit `signpost-single`：合併原本交疊的牌面與柱子、加倒角、內嵌原色票，得到 168 tris 的[獨立路牌技術樣板](design/pipeline/town-signpost-sample.md)。來源 `.blend`、GLB、可編輯 scene 與 Blender 預覽已保存，沒有修改素材庫或現有村莊。自動檢查與適用範圍見該文件；尚未在遊戲鏡頭或手機驗證閃爍、阻擋及風格。
+- 索引生成器測試 `python3 -m unittest discover -s tests -p test_model_asset_index.py -v` 3/3 PASS；真瀏覽器開啟索引、中文搜尋／城鎮與面數篩選／縮圖及 390px 版面 PASS。Godot L1 `town_signpost_sample` PASS（`/tmp/godot-tests.LyPFWL`）；headless 匯入有既知沙箱 TCP 監聽錯誤，未見腳本解析錯誤。風格參考圖的生成方式仍待明確選擇；手機真人驗收、戰鬥寵 AI 與多人延期待辦不變。未 commit／push。
 
 ## 2026-11-04｜城鎮模型流程與免費素材調查
 
@@ -9,45 +32,9 @@
 - 查證 Kenney Fantasy Town、Nature、Retro Fantasy 的官方頁面為 3D／CC0；Fantasy Town ZIP 直接下載回傳 HTTP 403，未取得或檢查模型。Hunyuan3D 2.1 的硬體建議與涵蓋產出物的地域授權限制已附來源；未安裝或測試。WSL 的 GPU 查詢被系統阻擋，Windows 有 Blender 5.1 資料夾，本次未執行 Blender。
 - 本輪只有規劃文件和 README／交接更新，未改遊戲程式、scene、正式素材或匯出；規劃層不跑遊戲測試。此前的 iPhone／瀏覽器驗收及戰鬥寵 AI／多人延期狀態不變。後續依使用者選擇準備風格圖，選定後才做代表性模型並實測；未 commit／push。
 
-## 2026-10-31｜續作：存檔寫入與恢復保護
-
-使用者要求繼續 seal 單機。`master`，基準仍為 `fad04133`（最新以 git log 查核）；前輪生命週期回修和本輪存檔保護皆未 commit／push，保留其他工作區修改，未上傳。
-
-- 新增本遊戲 `scripts/save_store.gd`，嚴格讀取版本外層後才逐版遷移與驗證 payload，再選有效備份。字串／bool／小數版本不會被強轉成可覆寫版本。kit 來源與副本保持原樣，schema 仍 v6。
-- 每次保存先驗待寫入快照、較新備份及現有主檔；不讓背景／進度保存覆寫遊戲開啟後被替換的較新／損壞／異常檔。恢復備份前比對啟動選定的主檔／備份 bytes，防止後來的新檔被恢復流程蓋回。拒絕後保留兩檔、記錄 save_blocked_reason 並顯示訊息，重開前不自動解除。
-- 先紅後綠：`save_protection` 修正前重現失敗（`/tmp/godot-tests.ELMiQg`）；最終 L2 `save_protection m3_hardening world_lifecycle` 三組 PASS（`/tmp/godot-tests.ClMJR5`），含既有遷移、有效備份恢復、交易／設定及跨區復活。沒有 scene 修改；未見 SCRIPT ERROR／Parse Error，匯入仍有沙箱 TCP 監聽錯誤。其餘 suite 本批未跑，保留前次證據；L3 仍等人工驗收。
-- 最後補查 v1～v6 正向載入／保存、非法 header 的有效備份恢復、同版本備份被替換的恢復保護；save_protection 單獨重跑 PASS（`/tmp/seal-saveguard-final-positive.log`），只補測試，runtime／候選不變。其他兩組沿用本輪 ClMJR5 證據。
-- 最新手機 ZIP 已重建：15,115,896 bytes，SHA-256 `1fc3a827659c957f6831ad04cf625d6d62b41f03af092fb61715ead958a41bab`。ZIP／PCK 靜態、IDBFS 與 save_store 入包 PASS；編譯 PCK 的較新檔案保護／v5 遷移保存冒煙 PASS（`/tmp/seal-saveguard-pack-20261031.log`）。報告 `production/qa/mobile-candidate-2026-10-31.json`，10-30 報告標為歷史，不能把新包當作已做瀏覽器驗證。
-- 規則／限制／命令見 `docs/save-protection.md`；這不是完整經濟 schema、防作弊、檔案鎖或多分頁合併，不保證檢查後與另一程序同時寫入的窄競態。通用教訓同步至 `prototypes/LESSONS.md`。
-- 未驗／延期：新包 Web／IndexedDB 因 socket 沙箱未驗；iPhone、長時間發熱與真人平衡待驗，戰鬥寵 AI／多人 M4 保持延期。下一步用最新候選驗收存檔保護提示及單機流程；沒有真人結果前不宣稱全面驗收或跑 L3，bot 不跑 25 分鐘。
-
-## 2026-10-30｜續作：跨區復活與乘坐／釣魚交互
-
-使用者要求繼續 seal 單機。分支 `master`，本輪實作基準 `fad04133`（`git log -1`）；本 session 未 commit／push／上傳。本輪腳本、測試、文件與候選修改未提交，保留其他工作區變更。
-
-- 修正村莊存檔重開後死亡，角色回草原但 zone／bounds 仍在村莊、第一步被推回舊區域的缺陷。復活事件現在同步地圖、相機與原寵物，並保存復活位置；原有路牌、滿 HP、養成資源保留與 schema v6 政策不變。
-- 修正傳送淡出中死亡並復活，舊 travel 等待仍搬動角色／寫入目的地的競態；以生命週期編號讓死亡前的等待失效，恢復畫面後退出傳送。死亡也清除待互動與按住輸入。
-- 釣魚有效開始才下坐，缺餌等拒絕保留乘坐。先紅後綠：修正前 world_lifecycle 六項、fishing 一項 FAIL（`/tmp/godot-tests.fhnDuc`）；最終 L2 `world_lifecycle fishing companions review_interactions` 全 PASS（`/tmp/godot-tests.ajHIaM`），無 SCRIPT ERROR／Parse Error；匯入仍有沙箱 TCP 錯誤。本輪未改 scene，未重跑 M2／M3，前批證據仍各自保留；L3 等人工驗收。
-- 手機候選已重建：`build/seal-meadow-mobile-web.zip`，15,113,782 bytes，SHA-256 `e3f3e418de02f17c719c95736a7f253d4023122434a02ca194ffd7a35b029ccd`。靜態 ZIP／PCK／IDBFS 及編譯 PCK 的復活／傳送取消／釣魚下坐冒煙 PASS（`/tmp/seal-lifecycle-pack.log`）。來源 hash 與前包紀錄在 `production/qa/mobile-candidate-2026-10-30.json`。
-- 重要入口：`design/quick-specs/world-lifecycle-2026-10-30.md`、`production/qa/world-lifecycle-2026-10-30.md`、`tests/test_world_lifecycle.gd`；README／釣魚與乘坐 GDD／QA 已同步，通用 await 生命週期陷阱已記 `prototypes/LESSONS.md`。
-- 未驗／延期：新包 Web／IndexedDB 因 socket 沙箱未驗；iPhone 觸控、淡入淡出、相機、背景恢復、FPS／長時間發熱與真人平衡仍待驗。戰鬥寵 AI、多人 M4 保持延期，不自動同步其他 kit 副本，bot 不跑 25 分鐘。
-- 下一步：以最新候選試玩跨區復活、傳送中受致命傷、乘坐開始釣魚，再按真人回饋推進單機；本輪完整命令及限制見交互 QA。
-
-## 2026-10-30｜復工：審查改善與 S34 單機乘坐
-
-使用者最新授權「繼續直到做完」及「做完之後看 seal 也繼續進度」，已解除前次暫停。分支 `master`；本輪程式／場景／文件未 commit／push，保留其他原型修改。多人 M4 仍延後。
-
-- 已完成本輪 S34 乘坐薄切片：寵物第 2 階解鎖、移速 ×1.25、重複切換不累加，攻防加成不重複。選怪／有效技能／受傷／死亡／切區／背景／讀檔會下坐，失敗技能保留狀態。乘坐取消釣魚而不扣餌；暫態不寫檔，schema 仍 v6。
-- 沿用同一個 Pet 與史萊姆占位素材；Actor 高度／比例下坐還原。`ui/hud.tscn` 的 PetPanel 改固定 Head + Scroll/Box，乘坐／進化／餵食動作具手機觸控尺寸，場景仍可在編輯器維護。
-- L2 `companions m3 review_interactions` 全 PASS（`/tmp/godot-tests.KN9GPi`），含實際按鈕、位移、戰鬥／生命週期、讀檔重開、兩尺寸大字／捲動／44px、編輯器文字／間距保留。匯入仍有沙箱 TCP 監聽錯誤，未見 SCRIPT ERROR／Parse Error。M2 未重跑，沿用 `/tmp/godot-tests.8mkgik`；L3 全套依規範等人工驗收。
-- `tools/build_mobile_web.sh` 已再次重建手機候選：`build/seal-meadow-mobile-web.zip` SHA-256 `6c1cc1117d8bc50dea798f576057665fd1ab97d53557a896ca3c8c2dc42b7b8d`；15,112,870 bytes。ZIP／PCK 靜態、IDBFS 與編譯 PCK 的乘坐／背景／出售視窗冒煙 PASS（`/tmp/seal-s34-pack.log`）；來源 hash 與上包區別見 `production/qa/mobile-candidate-2026-10-30.json`。
-- 文件入口：`design/gdd/battle-pets-guarders.md`、`docs/architecture/systems/battle-pets-guarders.md`、`production/qa/systems/battle-pets-guarders.md`；README、roadmap、planning dossier／index 同步。S34 只是乘坐分支，AC-S34-03 戰鬥 AI 仍未實作。
-- 未完成／延期：iPhone 視覺、觸控、速度感、背景／強制關閉恢復、FPS／20～30 分鐘發熱及真人平衡。沙箱禁止 socket，這次新包 Web／IndexedDB 未驗；10-29 Chromium 證據屬於舊包。未上傳，不自動同步其他 kit 副本，bot 不跑 25 分鐘。
-- 下一步：先用此手機候選驗收乘坐重疊、寵物面板與出售確認；依真人回饋調整單機內容／數值。多人與戰鬥寵 AI 不隨本切片自動展開。
-
 ## 一句話現況
 
-M0～M3 有桌面可玩的核心循環，單機圖鑑、釣魚與衣櫥薄切片可用；獨立審查已完成，iPhone 17 實機驗收和真人平衡尚未完成。
+M0～M3 有桌面可玩的核心循環；城鎮已加入暖陶瓦商店、入口路與路牌樣板，正式 2D 紙娃娃角色及美術貼圖待製作。iPhone 17 實機驗收和真人平衡尚未完成。
 
 ## 怎麼驗證
 
@@ -76,7 +63,7 @@ env XDG_DATA_HOME=/tmp/seal-fishing-tests XDG_CONFIG_HOME=/tmp/seal-fishing-conf
 6. **其他原型的 godot-kit 副本是舊版**：這次只用 `sync.sh` 同步了 seal-meadow，其他原型要等使用者同意再同步。
 7. 已修正 bot 的 `sweeps` 統計；若要重新做長期平衡比較，仍需固定 seed、場景與玩法政策，不能把本輪 20 秒短測當成完整證據。
 
-8. 舊版通用 `Web` 匯出的 PCK 同時包含 S3TC／ETC2 貼圖；新版 `Mobile Web` 候選僅用 ETC2，但載入與真機記憶體仍需實測，且尚未建立 ZIP。不得把舊版壓縮 zip 的 16 MB 誤認為實際 PCK 的下載大小。
+8. 舊版通用 `Web` 匯出的 PCK 同時包含 S3TC／ETC2 貼圖；2026-10-31 的 `Mobile Web` 候選僅用 ETC2 且已建立 ZIP，但不包含本次城鎮樣板。載入與真機記憶體仍需實測，不得把舊版壓縮 zip 的 16 MB 誤認為實際 PCK 的下載大小。
 
 ## 注意事項
 
@@ -84,26 +71,3 @@ env XDG_DATA_HOME=/tmp/seal-fishing-tests XDG_CONFIG_HOME=/tmp/seal-fishing-conf
 - **Blender 位置**：Windows 版 `"/mnt/c/Program Files/Blender Foundation/Blender 5.1/blender.exe"`，路徑要先用 `wslpath -w` 轉換。
 - **測試依賴的固定前提**：村莊與草原在同一個 scene，相距 300 m（`TerrainHeight.TOWN_CENTER`），Town 底下的節點要用 `global_position`。
 - **生圖要先問**：AI 生圖前要先問使用者，是直接生成還是只給 prompt；程序化的 Blender 建模不需要問。
-
-## 2026-10-30 手機候選更新
-
-已重建 `build/mobile-web/` 與 `build/seal-meadow-mobile-web.zip`，包含出售確認 Control scene；IDBFS 修補完成，ZIP CRC 完整性與 PCK 場景／腳本存在檢查通過。ZIP SHA-256 `dbb467521f52a1e971cc367f2b464fad0f0cb59cd1552741c5e712805124246f`。詳見 `production/qa/mobile-candidate-2026-10-30.json`。
-
-新增滿 12 格、大字模式、兩種橫向尺寸的捲動清單／固定按鈕／取消保留物品測試，L2 M2 PASS（`/tmp/godot-tests.8mkgik`）。未修改 runtime；未重跑 M3，沿用 2026-10-29 結果。匯出仍有沙箱 TCP 監聽錯誤，未見腳本解析錯誤。
-
-沙箱在 socket 建立階段即 PermissionError，無法啟動本機伺服器／Chromium Web 驗證；此候選的觸控與 IndexedDB 尚未驗證。前次 Chromium 12 項 PASS 屬於舊候選，不能沿用到新包。未上傳，iPhone 真機與長時間驗收仍待完成。
-
-## 跨專案審查改善（2026-10-29～30）：根目錄紀錄補遺
-
-根目錄 `Progress.md` 拆分時（2026-11-02）移入本檔原本沒有的段落；其餘 seal 段落（10-28～10-31）本檔已有對應紀錄。
-
-| 專案 | 已完成的程式／文件工作 | 仍待外部驗收／延期 |
-|---|---|---|
-| seal-meadow | 出售確認／快照保護、經濟驗收計畫；本輪另完成 S34 單機乘坐薄切片 | iPhone／真人平衡、Web 新包 IndexedDB、長時間發熱；多人 M4 延後 |
-
-- 已完成（seal 部分）：seal 材料出售規格及經濟實測計畫。重要入口 `design/quick-specs/material-sale-2026-10-29.md`。
-- 程式：seal 一鍵出售先列品項、數量、總額，明示包含養成材料；確認時核對背包快照，變動即拒絕；取消／換窗不出售。可編輯視窗 `ui/sell_confirmation.tscn`。沿用售價與保存流程。
-- L2 驗證：隔離 XDG 執行 `TEST_TIMEOUT=120 bash prototypes/godot-kit/tools/run_tests.sh prototypes/seal-meadow m2 m3`：M3 PASS（`/tmp/godot-tests.M1gwyv`）；M2 首次因出售按鈕未捲入可點範圍失敗，補測試捲動後單獨重跑 M2 PASS（`/tmp/godot-tests.Fciz7c`）。scene headless 匯入未見解析／資源錯誤，但有沙箱 TCP listen ERR_CANT_CREATE（`/tmp/seal-fix-import.log`），不宣稱無錯匯入。
-- seal 確認改 HUD Control／捲動清單，M2 實際取消／確認與 844×390、1280×720 安全範圍及 44px 高度 PASS（`/tmp/godot-tests.yEAs8b`）；headless 匯入仍有沙箱 TCP listen 錯誤，未見解析／資源錯誤（`/tmp/seal-modal-import.log`）。本輪未重跑 M3，沿用上一批通過證據。
-- seal Web 候選已於 2026-10-30 重建，匯出及靜態驗證完成，瀏覽器待驗。
-- 下一步：真機確認出售清單可讀及按鈕觸控；按各驗收文件收集實測，再決定架構與數值調整。

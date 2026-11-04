@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>3D 素材索引</title>
+  <style>
+    :root { color-scheme: light; font-family: system-ui, "Microsoft JhengHei", sans-serif; color: #25352f; background: #f3f3eb; }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    main { max-width: 1440px; margin: auto; padding: 32px clamp(18px, 4vw, 56px) 72px; }
+    h1, h2, p { margin: 0; }
+    h1 { font-size: clamp(28px, 4vw, 42px); letter-spacing: -.04em; }
+    h2 { font-size: 18px; }
+    .eyebrow { color: #557762; font-size: 13px; font-weight: 700; letter-spacing: .12em; margin-bottom: 10px; }
+    .intro { color: #596b60; max-width: 820px; line-height: 1.7; margin-top: 9px; }
+    .stats { display: flex; gap: 10px; flex-wrap: wrap; margin: 22px 0 28px; }
+    .stat { padding: 9px 13px; background: #e2eadd; border-radius: 8px; font-size: 14px; }
+    .stat strong { font-size: 18px; padding-right: 4px; }
+    .toolbar { display: grid; grid-template-columns: minmax(200px, 2fr) repeat(3, minmax(145px, 1fr)); gap: 12px; padding: 18px; border: 1px solid #d7dfd4; border-radius: 12px; background: #fff; }
+    label { display: block; font-size: 13px; font-weight: 700; color: #496052; }
+    input[type="search"], select { width: 100%; margin-top: 6px; padding: 10px; border: 1px solid #becdc0; border-radius: 7px; background: #fff; font: inherit; color: #25352f; }
+    input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible, summary:focus-visible { outline: 3px solid #b4873d; outline-offset: 2px; }
+    .checks { display: flex; flex-wrap: wrap; gap: 18px; align-items: center; margin: 16px 1px; }
+    .checks label { font-weight: 500; color: #25352f; font-size: 14px; }
+    .results-heading { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px; margin: 26px 0 12px; }
+    .muted { font-size: 13px; color: #64776a; line-height: 1.6; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+    .card { min-width: 0; background: #fff; border: 1px solid #d9e0d7; border-radius: 11px; overflow: hidden; }
+    .preview { height: 154px; background: #31343a; display: flex; align-items: center; justify-content: center; color: #c6cbc5; font-size: 13px; }
+    .preview img { width: 100%; height: 100%; object-fit: contain; }
+    .body { padding: 13px; }
+    .name { font-size: 15px; overflow-wrap: anywhere; font-weight: 750; }
+    .pack { font-size: 12px; color: #65796d; margin-top: 4px; overflow-wrap: anywhere; }
+    .tags { display: flex; flex-wrap: wrap; gap: 5px; margin: 10px 0; }
+    .tag { background: #edf3ea; border-radius: 5px; padding: 3px 6px; color: #41634b; font-size: 12px; }
+    .triangle { font-weight: 650; font-size: 13px; }
+    .warning { color: #a7472d; font-size: 12px; margin-top: 6px; }
+    details { margin-top: 9px; }
+    summary { color: #456b53; cursor: pointer; font-size: 13px; }
+    .links, .dependencies { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 8px; font-size: 12px; overflow-wrap: anywhere; }
+    a { color: #285e40; }
+    .dependencies { display: block; line-height: 1.6; }
+    .dependency { display: block; overflow-wrap: anywhere; }
+    button { border: 0; border-radius: 8px; padding: 11px 18px; background: #315b41; color: #fff; font: inherit; cursor: pointer; }
+    #more { display: block; margin: 24px auto 0; }
+    #more[hidden] { display: none; }
+    .pack-list { padding: 18px; background: #e9eee4; border-radius: 10px; margin-top: 34px; }
+    .pack-list summary { font-size: 15px; font-weight: 700; }
+    .pack-list ul { columns: 2 330px; padding-left: 20px; line-height: 1.9; }
+    .pack-list li { break-inside: avoid; overflow-wrap: anywhere; font-size: 13px; }
+    .empty { padding: 28px; color: #65796d; text-align: center; }
+    @media (max-width: 650px) { main { padding-top: 22px; } .toolbar { grid-template-columns: 1fr; } .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } .preview { height: 120px; } }
+  </style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">LOCAL ASSET LIBRARY</div>
+  <h1>3D 素材索引</h1>
+  <p class="intro">依素材名稱和用途搜尋本機 Kenney 素材。縮圖及模型連回原素材庫；使用時保留貼圖的相對路徑，再複製到遊戲專案。</p>
+  <div class="stats" id="stats"></div>
+  <div class="toolbar">
+    <label>搜尋名稱或用途<input type="search" id="query" placeholder="例如：屋頂、木桶、tree、roof"></label>
+    <label>分類<select id="category"><option value="">全部分類</option></select></label>
+    <label>素材包<select id="pack"><option value="">全部素材包</option></select></label>
+    <label>原始三角面<select id="budget"><option value="">不限面數</option><option value="500">最多 500</option><option value="4000">最多 4,000</option><option value="8000">最多 8,000</option></select></label>
+  </div>
+  <div class="checks">
+    <label><input type="checkbox" id="town"> 蓬蓬草原城鎮候選</label>
+    <label><input type="checkbox" id="issues"> 只看解析或相依檔異常</label>
+  </div>
+  <p class="muted">三角面數依原始 GLB 預設場景計算，包含場景內的 mesh 實例；尚未包含後續倒角，也未檢查穿模與實機效果。外部相依檔只分析 GLB；FBX／OBJ 的相依檔要另外確認。分類與城鎮候選依檔名初篩，仍需看圖判斷。</p>
+  <div class="results-heading"><h2>模型</h2><span id="result-count" class="muted" aria-live="polite"></span></div>
+  <div class="cards" id="cards"></div>
+  <p class="empty" id="empty" hidden>沒有符合條件的模型，試試其他關鍵字。</p>
+  <button id="more" type="button" hidden>顯示更多</button>
+  <details class="pack-list"><summary>查看全部素材包與授權</summary><p class="muted">非 3D 素材包保留在清單中，不會出現在模型卡片。</p><ul id="packs"></ul></details>
+  <noscript>請啟用 JavaScript 使用搜尋，或開啟同資料夾的 models.tsv。</noscript>
+</main>
+<script>
+"use strict";
+const data = /*__CATALOG_DATA__*/;
+const el = id => document.getElementById(id);
+const make = (tag, text, className) => { const node = document.createElement(tag); if (text !== undefined) node.textContent = text; if (className) node.className = className; return node; };
+const assetUrl = path => `${data.source_root_url}/${path.split("/").map(encodeURIComponent).join("/")}`;
+const packsByName = new Map(data.packs.map(pack => [pack.name, pack]));
+let displayed = 60;
+let results = [];
+
+function appendLink(parent, path, label) {
+  const link = make("a", label);
+  link.href = assetUrl(path);
+  parent.appendChild(link);
+}
+
+function card(item) {
+  const article = make("article", undefined, "card");
+  const preview = make("div", undefined, "preview");
+  if (item.preview) {
+    const image = make("img");
+    image.src = assetUrl(item.preview);
+    image.alt = `${item.name} 預覽`;
+    image.loading = "lazy";
+    image.onerror = () => { image.remove(); preview.textContent = "預覽檔無法讀取"; };
+    preview.appendChild(image);
+  } else preview.textContent = "無預覽圖";
+  article.appendChild(preview);
+  const body = make("div", undefined, "body");
+  body.appendChild(make("div", item.name, "name"));
+  body.appendChild(make("div", item.pack, "pack"));
+  const tags = make("div", undefined, "tags");
+  item.categories.forEach(category => tags.appendChild(make("span", category, "tag")));
+  if (item.town_candidate) tags.appendChild(make("span", "城鎮候選", "tag"));
+  body.appendChild(tags);
+  body.appendChild(make("div", item.triangles === null ? "面數未取得" : `${item.triangles.toLocaleString()} tris（原始）`, "triangle"));
+  const problems = item.dependencies.filter(dep => dep.status !== "ok");
+  if (item.inspection_error || problems.length) body.appendChild(make("p", "GLB 或相依檔待檢查", "warning"));
+  const details = make("details");
+  details.appendChild(make("summary", "來源格式與 GLB 相依檔"));
+  const links = make("div", undefined, "links");
+  Object.entries(item.formats).forEach(([format, paths]) => paths.forEach((path, i) => appendLink(links, path, format.toUpperCase() + (paths.length > 1 ? ` ${i + 1}` : ""))));
+  const pack = packsByName.get(item.pack);
+  if (pack?.license_path) appendLink(links, pack.license_path, pack.license);
+  details.appendChild(links);
+  const deps = make("div", undefined, "dependencies");
+  if (!item.dependencies.length) deps.textContent = item.inspection_error ? item.inspection_error : "未列外部相依檔（可能已嵌入）。";
+  item.dependencies.forEach(dep => {
+    const row = make("span", undefined, "dependency");
+    if (dep.path && dep.status === "ok") appendLink(row, dep.path, dep.uri);
+    else row.textContent = `${dep.uri}（${dep.status}）`;
+    deps.appendChild(row);
+  });
+  details.appendChild(deps);
+  body.appendChild(details);
+  article.appendChild(body);
+  return article;
+}
+
+function render() {
+  const terms = el("query").value.toLowerCase().trim().split(/\s+/).filter(Boolean);
+  const category = el("category").value;
+  const pack = el("pack").value;
+  const budget = el("budget").value;
+  results = data.models.filter(item => {
+    const haystack = [item.name, item.pack, ...item.categories, ...item.aliases].join(" ").toLowerCase();
+    return terms.every(term => haystack.includes(term)) && (!category || item.categories.includes(category)) &&
+      (!pack || item.pack === pack) && (!el("town").checked || item.town_candidate) &&
+      (!budget || (item.triangles !== null && item.triangles <= Number(budget))) &&
+      (!el("issues").checked || item.inspection_error || item.dependencies.some(dep => dep.status !== "ok"));
+  });
+  const fragment = document.createDocumentFragment();
+  results.slice(0, displayed).forEach(item => fragment.appendChild(card(item)));
+  el("cards").replaceChildren(fragment);
+  el("empty").hidden = results.length > 0;
+  el("more").hidden = results.length <= displayed;
+  el("result-count").textContent = `找到 ${results.length} 筆，顯示 ${Math.min(displayed, results.length)} 筆`;
+}
+
+function setup() {
+  const counts = [[data.models.length, "個 3D 模型"], [data.packs.filter(pack => pack.models).length, "個 3D 素材包"], [data.packs.length, "個素材包"]];
+  counts.forEach(([number, label]) => { const stat = make("span", undefined, "stat"); stat.appendChild(make("strong", String(number))); stat.appendChild(document.createTextNode(label)); el("stats").appendChild(stat); });
+  [...new Set(data.models.flatMap(item => item.categories))].sort().forEach(value => { const option = make("option", value); option.value = value; el("category").appendChild(option); });
+  data.packs.filter(pack => pack.models).forEach(pack => { const option = make("option", `${pack.name}（${pack.models}）`); option.value = pack.name; el("pack").appendChild(option); });
+  data.packs.forEach(pack => {
+    const row = make("li");
+    row.appendChild(document.createTextNode(`${pack.name} · ${pack.types.join("、")} · ${pack.models} 模型 · `));
+    if (pack.license_path) appendLink(row, pack.license_path, pack.license); else row.appendChild(document.createTextNode("授權待確認"));
+    if (pack.overview) { row.appendChild(document.createTextNode(" · ")); appendLink(row, pack.overview, "原始總覽"); }
+    el("packs").appendChild(row);
+  });
+  ["query", "category", "pack", "budget", "town", "issues"].forEach(id => el(id).addEventListener(id === "query" ? "input" : "change", () => { displayed = 60; render(); }));
+  el("more").addEventListener("click", () => { displayed += 60; render(); });
+  render();
+}
+setup();
+</script>
+</body>
+</html>

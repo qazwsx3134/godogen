@@ -1,0 +1,74 @@
+{
+  "roof_source": "kenney_castle-kit/Models/GLB format/tower-square-top-roof.glb",
+  "license": "CC0",
+  "parts": {
+    "ShopBody": {
+      "triangles": 44,
+      "non_manifold_edges": 0,
+      "degenerate_faces": 0,
+      "duplicate_triangles": 0,
+      "self_intersection_candidates": 0
+    },
+    "ShopDoor": {
+      "triangles": 44,
+      "non_manifold_edges": 0,
+      "degenerate_faces": 0,
+      "duplicate_triangles": 0,
+      "self_intersection_candidates": 0
+    },
+    "ShopWindowLeft": {
+      "triangles": 44,
+      "non_manifold_edges": 0,
+      "degenerate_faces": 0,
+      "duplicate_triangles": 0,
+      "self_intersection_candidates": 0
+    },
+    "ShopWindowRight": {
+      "triangles": 44,
+      "non_manifold_edges": 0,
+      "degenerate_faces": 0,
+      "duplicate_triangles": 0,
+      "self_intersection_candidates": 0
+    },
+    "ShopRoof": {
+      "triangles": 372,
+      "non_manifold_edges": 0,
+      "degenerate_faces": 0,
+      "duplicate_triangles": 0,
+      "self_intersection_candidates": 0
+    },
+    "ShopWoodTrim": {
+      "triangles": 704,
+      "non_manifold_edges": 0,
+      "degenerate_faces": 0,
+      "duplicate_triangles": 0,
+      "self_intersection_candidates": 0
+    },
+    "ShopStep": {
+      "triangles": 44,
+      "non_manifold_edges": 0,
+      "degenerate_faces": 0,
+      "duplicate_triangles": 0,
+      "self_intersection_candidates": 0
+    }
+  },
+  "combined": {
+    "triangles": 1296,
+    "non_manifold_edges": 0,
+    "degenerate_faces": 0,
+    "duplicate_triangles": 0,
+    "self_intersection_candidates": 0
+  },
+  "body_size_m": [
+    3.8,
+    3.8,
+    2.7
+  ],
+  "roof_size_m": [
+    4.2,
+    4.2,
+    1.4
+  ],
+  "roof_gap_m": 0.008,
+  "note": "Draft with bevelled procedural body and trim, derived roof. Static tests cannot prove visual behaviour."
+}

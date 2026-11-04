@@ -2,11 +2,13 @@
 
 2026-10-26。依使用者要求**只記錄 prompt，這輪不生成任何圖**。生成時一次貼一份 prompt、產一張圖：手動貼 opt image，或由 agent 用 Scenario skills（`scenario-consistency` 維持同一角色、`scenario-sprite-animation` 做動作幀；會花 Scenario 點數，先跟使用者確認）。
 
-> **2026-10-26 更新**：玩家角色改走「3D 建模 → 渲染成 sprite」，流程見 [3d-to-sprite.md](../pipeline/3d-to-sprite.md)。玩家只需要 01（概念圖）與 [04-modeling-threeview.txt](04-modeling-threeview.txt)（建模用三視圖）；02、03、10～14 逐幀生成玩家圖的 prompt 保留作為備案。怪物的 20～22 仍可用（怪物兩條路都可以，見流程文件「怪物」一節）。
+> **2026-11-05 方向**：依使用者偏好，正式玩家角色優先直接製作 2D Sprite 紙娃娃，先以一名角色驗證方向、各層對齊、動作與換裝。02、03、10～14 可供編修成試作提示詞；舊規格仍須依實際結果確認，不能視為已量產完成。[3D 建模→Sprite](../pipeline/3d-to-sprite.md)保留為已部分驗證的備案。需要 AI 生圖時仍先讓使用者選擇直接生成或取得 opt image 提示詞。
 
 目標：取代目前借用 skybound-blades 的佔位圖（`assets/sprites/`）。風格是懷舊 Q 版 MMORPG（2～2.5 頭身、圓臉大眼、柔和賽璐珞上色），全部原創，**不畫、不提任何現有遊戲的角色或怪物**。
 
 ## 規格總表
+
+下表是 2026-10-26 的素材提案；目前測試角色實際圖格為 256 px、`foot_px = 6`、`meters_per_px = 0.0084`。正式圖格尺寸與比例待 2D 試作確認；同一角色的各層必須使用一致的格子、方向、腳底與動作配置。
 
 | 項目 | 玩家角色（紙娃娃） | 怪物 |
 |---|---|---|
@@ -45,7 +47,7 @@
 | weapon | 右手武器 | 木劍、闊劍 |
 | offhand | 左手盾 | 圓木盾（可選） |
 
-疊放順序依方向改變（程式依方向切換 z-order）：
+下列是當初提出的分方向遮擋需求；目前 `actor.gd` 已同步多層圖集，但採固定圖層順序，尚未實作下表的依方向切換。要先用實際 2D 素材驗證武器、身體與髮型的前後遮擋，再決定如何處理：
 
 ```
 正面／右前／右   : offhand → body → outfit → hair → headgear → weapon
@@ -109,4 +111,4 @@ art_src/chars/<名稱>/<方向>/<動作>_<幀>.png   例：body/front_right/walk
 
 方向資料夾名：`front`、`front_right`、`right`、`back_right`、`back`。
 
-接入：用 `godot-kit/tools/sprite_atlas.py` 打包。玩家設 `directions: 8, mirror: true`，怪物設 `directions: 4, mirror: true`。打包後每層一張圖集、一個 sheet。紙娃娃的 actor（多層 sprite 同步播放、依方向換 z-order）還沒實作，等第一批圖核准後再做。
+接入：可用 `godot-kit/tools/sprite_atlas.py` 打包。玩家設 `directions: 8, mirror: true`，怪物設 `directions: 4, mirror: true`。打包後每層一張圖集、一個 sheet；現有 `scripts/actor.gd` 已能同步圖層方向與動作，武器和衣服也有測試用換裝。正式 2D 素材的相容性、分方向遮擋與手機記憶體仍待驗證。

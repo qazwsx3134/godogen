@@ -21,7 +21,7 @@
 
 **對外契約**：ActorView.play_action／face／set_appearance／set_state；讀 domain event，不算傷害；render manifest→atlas→Resource。
 
-**scene／模組**：scenes/actors/actor.tscn；sheet .tres；tools/blender、import_sheets；沿用 godot-kit sprite3d，副本不直接改。
+**scene／模組**：scenes/actors/actor.tscn；sheet .tres；沿用 godot-kit sprite3d 與圖集工具，副本不直接改；Blender 渲染工具保留為備案。
 
 ## 相依與整合
 
@@ -42,5 +42,5 @@ M0 既有測試人可編輯呈現；M1 五動作與腳底驗證；M2 一套原�
 
 ## 風險與開工條件
 
-AI 畫分層對齊不穩；先用 3D 離線渲染管線驗證；生成需另行批次選擇。
+依 2026-11-05 使用者偏好先試直接製作 2D Sprite。各圖層的方向、動作與腳底對齊有風險，需先做一名角色的小樣並在遊戲內驗證；生成圖片前需另行選擇直接生成或 opt image 提示詞。3D 離線渲染保留為備案。
 

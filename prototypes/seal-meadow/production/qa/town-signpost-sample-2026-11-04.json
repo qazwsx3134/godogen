@@ -1,0 +1,16 @@
+{
+  "source": "kenney_survival-kit/Models/GLB format/signpost-single.glb",
+  "license": "CC0",
+  "triangles": 168,
+  "non_manifold_edges": 0,
+  "degenerate_faces": 0,
+  "duplicate_triangles": 0,
+  "self_intersection_candidates": 0,
+  "dimensions_m": [
+    0.51702,
+    0.10736,
+    1.1502
+  ],
+  "uv_layers": 1,
+  "materials": 1
+}

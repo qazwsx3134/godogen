@@ -8,13 +8,15 @@
 
 詳細操作、安全區、效能與驗收見 [手機製作基準](design/mobile-production-baseline.md)，原作面向與 Godot 對應見 [希望 Online 詳細研究](../../docs/research/seal-online-deep-dive-2026-10-26/README.md)。現有 2.5D 管線先用來驗證手機，不因原作是完整 3D 就直接要求重做角色。固定鏡頭、觸控、背包、村莊、任務、寵物、精煉，以及單機圖鑑與釣魚薄切片已有實作；iPhone 17 Safari 尚未實機驗收。
 
-城鎮建模提案見[城鎮模型與場景製作流程](design/pipeline/town-modeling.md)：包含參考圖、模型面數、倒角、貼圖、AI 自查、Kenney／混元調查與第一個樣板；風格與參考圖尚未選定，尚未製作正式城鎮模型。
+城鎮以使用者選定的[暖陶瓦參考圖](design/art-prompts/town-style-references-2026-11-05.md)為美術方向；商店三視圖和三種材質參考也已生成。[廣場與商店薄切片](design/quick-specs/town-slice-2026-11-05.md)已放入可走的商店外觀、入口路與[路牌樣板](design/pipeline/town-signpost-sample.md)，保留村長商店與任務。商店目前是待精修的低面數樣板，[正式模型與貼圖規格](design/pipeline/town-shop-production-spec.md)、擴建街景和手機真人驗收另列於規劃；完整流程及面數預算見[城鎮模型與場景製作流程](design/pipeline/town-modeling.md)。
+
+本機現成模型可從[素材圖像索引](../../docs/model-assets/index.html)搜尋；[索引說明](../../docs/model-assets/README.md)列出城鎮候選、來源授權及 GLB 貼圖複製方式。
 
 系統文件與工作包見[製作規劃入口](design/planning/README.md)：包含 40 系統索引與逐系統 dossier、GDD／TDD／UX／資料／QA 交付標準、Godot 架構草案、決策清單與 [M0～M6 Roadmap](production/roadmap.md)。目前先做單機內容，多人 M4 延後；M3／S19／S33／S34 乘坐／S35 規格與本機測試已記錄，真機／長時間驗收仍待完成。現況與交接見 [PROGRESS.md](PROGRESS.md)，操作回饋見 [REVIEW.md](REVIEW.md)。
 
-> 玩家目前是 Blender 渲染的測試小人紙娃娃（身體＋頭髮＋劍三層，`resources/sheets/test_chibi_*.tres`）。怪物圖**借用 skybound-blades 的原創圖當佔位**（`assets/sprites/`、`resources/sheets/`）。本作自己的圖還沒生成：玩家是 8 方向紙娃娃（素體＋頭髮／服裝／頭飾／武器／盾分層），怪物 4 方向且一律比玩家矮，規格與 prompt 見 [design/art-prompts/](design/art-prompts/README.md)。玩家角色走 3D 建模再渲染成 sprite，完整流程見 [design/pipeline/3d-to-sprite.md](design/pipeline/3d-to-sprite.md)（渲染與打包已用測試小人跑通）。
+> 玩家目前是 Blender 渲染的測試小人紙娃娃（身體＋頭髮＋劍三層，`resources/sheets/test_chibi_*.tres`）；武器與身體裝備已有可替換圖層。怪物圖**借用 skybound-blades 的原創圖當佔位**（`assets/sprites/`、`resources/sheets/`）。2026-11-05 使用者偏好正式角色優先直接製作 2D Sprite，沿用目前的分層播放與換裝；先用一名原創角色驗證多方向、各層對齊、動作與遮擋，再擴充素材。玩家 8 方向與怪物 4 方向仍依[角色素材規劃](design/art-prompts/README.md)。[3D 建模→Sprite](design/pipeline/3d-to-sprite.md)保留為技術備案：測試小人的渲染與打包已跑通，正式角色的建模、骨架與動作流程尚未跑完。
 
-假說：懷舊 Q 版 MMO 的「點怪練功」用固定鏡頭 2.5D（3D 地圖＋預渲染 2D 角色圖）呈現，能在手機上提供清楚的畫面與觸控手感；角色可由 3D 建模離線渲染，執行時使用 sprite。狀態：進行中，尚未完成真機驗收。
+假說：懷舊 Q 版 MMO 的「點怪練功」用固定鏡頭 2.5D（3D 地圖＋2D 角色 Sprite）呈現，能在手機上提供清楚的畫面與觸控手感。角色圖來源先以直接製作 2D 素材為優先，並以實際分層試作驗證；尚未完成真機驗收。
 
 ## 執行（WSL）
 
@@ -31,12 +33,17 @@ env -u WAYLAND_DISPLAY xvfb-run -a godot --path . --resolution 1280x720 --script
 
 分層驗證：單一規則改動執行其對應 `tests/test_*.gd`（L1）；跨系統或回修以該測試加受影響的少量回歸（L2），例如 `bash prototypes/godot-kit/tools/run_tests.sh prototypes/seal-meadow m3 m3_hardening review_interactions`。里程碑的完整 suite（L3）在使用者手動驗收後執行；改 scene 後另做 Godot headless 匯入。
 
+城鎮切片 L2：`env XDG_DATA_HOME=/tmp/seal-town-slice-test-data XDG_CONFIG_HOME=/tmp/seal-town-slice-test-config TEST_TIMEOUT=120 bash prototypes/godot-kit/tools/run_tests.sh prototypes/seal-meadow town_slice m2 world_lifecycle town_signpost_sample`；在 repo 根目錄執行。
+
 ## 結構
 
 | 位置 | 內容 |
 |---|---|
 | `scenes/main.tscn` | 主場景：`%Meadow`、`%Player`、`%CameraRig`（`pitch_deg`、`distance`）、`%ClickMarker`、`%HUD` |
 | `scenes/meadow.tscn` | 地圖：`%Props`（樹、石、灌木、路牌，位置都可拖；`block_radius` meta >0 才擋路）、`%Monsters`（每隻怪的出生點）、`Foliage`（草與花的 MultiMesh）、`%Sun`、`%WorldEnvironment`；根節點的白天／黃昏環境與日光色 |
+| `scenes/town.tscn` | 村莊：可拖動的 `Props/MeadowShop`、`Props/MeadowSign`，`Ground/EntrancePath` 的位置、面積與材質；`Elder` 和 `ToMeadow` 為既有村長與出口 |
+| `scenes/props/town_shop_draft.tscn` | 商店外觀樣板；根節點 `block_radius`、`ShopLabel` 及 `Model` 子節點材質可編輯。屋頂以 `shaders/town_shop_roof.gdshader` 保留 Kenney 色票並調成暖陶色；Blender 原檔保留原始藍色屋頂色票 |
+| `scenes/props/town_signpost_sample.tscn` | Kenney 路牌的可編輯技術樣板；可調整根節點位置、比例與 `block_radius`，`Model` 是保留貼圖的 GLB 實例；已放入村莊入口 |
 | `scenes/monsters/*.tscn` | 怪物數值（`max_hp`、`damage`、`move_speed`、`aggressive`、`xp_reward`…）與 `Actor` 的 `sheet`、`head_height` |
 | `scenes/player.tscn` | 乘坐倍率 `ride_speed_multiplier`／高度 `ride_height`；玩家數值（`base_hp`、`base_attack`、`attack_range`、`attack_interval`） |
 | `scenes/actors/actor.tscn` | 一隻角色的外觀：sprite、影子、名牌、血條、鎖定圈（從 skybound-blades 複製，腳本換成 `scripts/actor.gd`）；`layer_sheets` 是紙娃娃的額外圖層，由下往上疊 |

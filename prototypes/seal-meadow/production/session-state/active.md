@@ -1,5 +1,25 @@
 # 蓬蓬草原 session checkpoint
 
+## 2026-11-05｜暖陶瓦城鎮切片
+
+使用者要求詳細規劃並執行，已選定[暖陶瓦方向 A](../../design/art-prompts/town-style-references-2026-11-05.md)；兩張方向比較圖、商店三視圖與三材質參考均由使用者分兩批授權直接生成。商店三視圖需統一尺寸，材質參考不是可直接平鋪或烘焙的貼圖。正式角色優先直接製作 2D Sprite 紙娃娃，正式素材仍待製作。
+
+第一期[可玩切片](../../design/quick-specs/town-slice-2026-11-05.md)已加入可編輯商店、入口道路與 Kenney 路牌；既有村長、任務、交易、傳送、存檔與測試角色保留。商店為 CC0 Kenney 屋頂＋原創倒角牆體／門窗／木樑，1,296 tris；路牌 168 tris。Godot 屋頂以原色色票 shader 示意暖陶色，Blender 原檔仍為原色票。[模型檢查](../qa/town-shop-draft-2026-11-05.json)零非流形邊／退化面／重複三角面／BVH 相交候選，但尚未證明動態零閃爍。[後續製作規格](../../design/pipeline/town-shop-production-spec.md)列出尺寸、3,650 tris 分配、UV 和材質要求。
+
+L2 `town_slice m2 world_lifecycle town_signpost_sample` 四組 PASS（`/tmp/godot-tests.JzWBIn`），含 headless 匯入；既知沙箱 TCP 監聽錯誤仍在，無場景／腳本解析錯誤。桌面 Compatibility 1280×720、844×390 靜態畫面已檢查；待人工行走與閃爍觀察、手機瀏覽器／iPhone 真機效能與觸控，人工驗收後再跑 L3。多人與戰鬥寵 AI 維持延期。分支 `master`、實作基準 `2237f384`；本輪納入本次提交，其他專案的未提交修改保留，未 push。交接未重跑測試；完整紀錄見 [PROGRESS.md](../../PROGRESS.md)。
+
+## 2026-11-05｜先前盤點：城鎮現況與角色素材方向
+
+使用者詢問城鎮缺項，並偏好正式角色直接採 2D Sprite 紙娃娃。優先試直接製作 2D 圖層並沿用既有 `sprite3d`；此前 Blender 渲染測試人流程保留備案。現有測試人已支援分層同步與武器／身體裝備替換，但圖層順序固定，正式素材的多方向對齊、遮擋與手機成本未驗。README、[角色素材規劃](../../design/art-prompts/README.md)、[3D 備案](../../design/pipeline/3d-to-sprite.md)及 S22 已更新；未改程式、scene 或生成圖片。
+
+村莊目前是草地廣場、樹石、村長與草原傳送；已有商店與三段任務。城鎮房屋／道路／街景、建築碰撞與遮擋、正式 NPC 外觀和真機驗收仍待做；現有 Kenney 路牌樣板尚未放進村莊。建議先用現成素材做小範圍城鎮與一名 2D 紙娃娃角色薄切片；生圖之前仍需使用者選擇直接生成或 opt image 提示詞。本輪文件工作未重跑測試，未 commit／push；詳細現況見 [PROGRESS.md](../../PROGRESS.md)。
+
+## 2026-11-04｜本機素材庫索引
+
+使用者提供 `D:\repo\godot\model-assets`，希望先分類索引，再從現有模型改造。已建立[圖像索引](../../../../docs/model-assets/index.html)、[清單與取用說明](../../../../docs/model-assets/README.md)及 `scripts/index_model_assets.py`：17 包、890 筆 3D 模型，GLB 解析與相依檔無異常，各包本機授權檔列 CC0。GLB 通常引用外部貼圖，使用時須一併複製。Mini Forest、Survival、Castle、Retro Fantasy 有城鎮候選；原始面數與取用方法見索引說明。
+
+已用 Godot 4.7 核對三個實際 GLB 的三角面計數；Windows Blender 5.1.2 可啟動。已由 Survival Kit 路牌製作[獨立技術樣板](../../design/pipeline/town-signpost-sample.md)：修整交疊、倒角後 168 tris，保留 `.blend`、GLB、可編輯 scene 與靜態預覽，L1 PASS；未放入村莊，也沒有生圖。第一間房屋、視覺選擇與遊戲內驗收待做。測試及限制見 [PROGRESS.md](../../PROGRESS.md)，未 commit／push。
+
 ## 2026-11-04｜城鎮建模準備
 
 使用者要求思考城鎮製作並查混元與 Kenney，指定複雜／普通／簡單模型面數 8,000／4,000／500、倒角、按需貼圖與 AI 自查。已記錄在 [城鎮流程](../../design/pipeline/town-modeling.md)，面數暫按完整渲染資產的三角面統一計數。現有村莊尚無房屋；固定俯角 42 度，人物障礙需接入 `%Props` 的 `block_radius` 或另行實作並驗證。
