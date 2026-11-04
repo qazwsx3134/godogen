@@ -1,0 +1,8 @@
+node_modules/
+dist/
+# AI 生成的原始大圖（成品已縮小放進 public/ 或同層資料夾）
+art_src/raw/
+art_src/style_explore/raw/
+art_src/sprites_raw/raw/
+.DS_Store
+*.tsbuildinfo

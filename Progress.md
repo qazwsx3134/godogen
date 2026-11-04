@@ -10,11 +10,11 @@
 
 | commit | 日期 | 做了什麼 |
 |---|---|---|
-| 最新（`git log -1`） | 2026-11-02 | 新原型 kagura-dango「丸子大胃王」：完整比賽（裁判、三回合、對手隊、神樂變胖）、網頁音訊時鐘驗證；LESSONS 加 3 條 |
+| 最新（`git log -1`） | 2026-11-04 | Cyberpunk 文字 MMO：ro-idle 研究與借鏡、雙層任務決定、手機直式原型 mortal-city（React，論壇終端 UI、劇情／街頭工作／高階工作、救援抵押、離開報告、城市像素橫幅）、S2 風格與主角 A 選定；LESSONS 加 2 條 |
+| `cd18ee55` | 2026-11-02 | 新原型 kagura-dango「丸子大胃王」：完整比賽（裁判、三回合、對手隊、神樂變胖）、網頁音訊時鐘驗證；LESSONS 加 3 條 |
 | `dd246e43` | 2026-11-02 | 進度檔改成「根目錄總覽＋各專案 PROGRESS／MILESTONE」，AGENTS.md 規則同步 |
 | `99f3dccc` | 2026-11-02 | debt 故事編輯器：立繪退場／明暗獨立、角色身高自動縮放、指定位置插入步驟與新測試；`Progress.md` 拆成各專案進度檔 |
 | `18a2c336` | 2026-11-02 | debt 故事編輯器原型與桂極短篇《不是頭痛，是桂》內容、萬事屋背景候選 |
-| `0f52e45a` | 2026-11-02 | 合併遠端 master：Cyberpunk 文字 MMO 規劃文件、hero-horde-idle 素材與 debt 故事稿 |
 
 ## 專案入口
 
@@ -24,7 +24,7 @@
 | godot-kit 共用模組 | VFX 庫完成，等 GPU／瀏覽器／手機外觀驗收；未同步各遊戲副本 | [PROGRESS](prototypes/godot-kit/PROGRESS.md) | — |
 | seal-meadow 蓬蓬草原 | 單機續作；等最新手機候選的真人／iPhone 驗收，多人延後 | [PROGRESS](prototypes/seal-meadow/PROGRESS.md) | [MILESTONE](prototypes/seal-meadow/MILESTONE.md) |
 | hero-horde-idle 全員推王 | 等真人前三層、手機恢復成本與作者素材 | [PROGRESS](prototypes/hero-horde-idle/docs/PROGRESS.md) | [MILESTONE](prototypes/hero-horde-idle/docs/MILESTONE.md) |
-| Cyberpunk 文字 MMO（文件） | 只有規劃文件，無程式 | [PROGRESS](docs/cyberpunk-text-mmo/PROGRESS.md) | — |
+| Cyberpunk 文字 MMO（魔都） | 手機直式原型 `prototypes/mortal-city/` 可玩；正式 sprite 由 Codex 生成中，等使用者確認風格與流程 | [PROGRESS](docs/cyberpunk-text-mmo/PROGRESS.md) | — |
 | dreamling-idle 夢靈遠行 | 第一個可玩版本完成，暫停 | [PROGRESS](prototypes/dreamling-idle/PROGRESS.md) | — |
 | kagura-dango 丸子大胃王（神樂生日） | 完整比賽可玩：裁判開場、三回合（三人齊吃→拋丸子→全力餵食）、對手隊、神樂變胖；佔位美術；待做第 1 回合「老闆端上桌」回饋 | [PROGRESS](prototypes/kagura-dango/PROGRESS.md) | — |
 | erwin-run | 可玩到結局，未上傳 itch | [PROGRESS](prototypes/erwin-run/PROGRESS.md) | — |

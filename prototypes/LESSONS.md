@@ -46,6 +46,8 @@
 
 - **等待動畫自動 `queue_free()` 時，Lambda 直接 capture node 會報「Lambda capture … was freed」，即使 `is_instance_valid` 檢查也來不及** → capture `WeakRef`，用 `get_ref() == null` 等待；同時檢查 log 的引擎 ERROR，不能只看測試 exit code。（[godot-kit VFX 驗證](godot-kit/docs/vfx/VALIDATION.md)，2026-11-01）
 - **測試裡按鈕、點擊「沒反應」**（2026-11-02，kagura-dango）→ kit 的 `_press`／`_tap` 是協程，要 `await _press(...)`；沒 await 就檢查，會在點擊送出前斷言。（[kagura-dango tests](kagura-dango/tests/test_flow.gd)）
+- **用 Claude in Chrome 量手機寬度：`resize_window` 縮了視窗，頁面 `innerWidth` 卻沒變**（2026-11-04，mortal-city）→ 在同網域頁面內嵌指定寬度的 iframe（360／390／430px），對 iframe 的 `contentDocument` 量 `scrollWidth <= clientWidth`。（[mortal-city](mortal-city/README.md)）
+- **React 網頁原型：子元件的 `setTimeout` 一直不觸發**（2026-11-04，mortal-city）→ 遊戲時鐘每秒 tick 讓父元件重新渲染，inline callback 每次都是新函式，放在 effect 依賴裡會一直重設計時器；callback 改放 `useRef`。（[mortal-city](mortal-city/README.md#發現)）
 
 ## Scene、UI 與 Godot API
 
