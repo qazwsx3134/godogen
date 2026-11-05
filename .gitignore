@@ -12,3 +12,5 @@ production/session-logs/
 studio/runtime/
 .forge/
 vfx-example
+# Sprite 檢視器存回原檔前的備份
+preview/.sprite-backups/

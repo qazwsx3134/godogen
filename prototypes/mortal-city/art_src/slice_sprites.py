@@ -2,8 +2,8 @@
 """把 Codex 生成的綠底素材切成 sprite，縮成遊戲像素尺寸。
 
 用法：
-  python3 art_src/slice_sprites.py kit  <輸入.png> <輸出前綴>   # 綠底上分開排的多個物件 → 每個物件一張
-  python3 art_src/slice_sprites.py layer <輸入.png> <輸出.png>    # 整張圖層（綠色部分變透明）
+  python3 art_src/slice_sprites.py kit  <輸入.png> <輸出前綴> [縮小倍率]   # 綠底上分開排的多個物件 → 每個物件一張
+  python3 art_src/slice_sprites.py layer <輸入.png> <輸出.png> [倍率或 WxH] # 整張圖層（綠色部分變透明）
 
 - 去背：接近 #00FF00 的像素變透明（綠色明顯大於紅藍）。
 - 縮小：預設 1/4（素材約 4×4 畫面像素＝1 個像素格），用 BOX 取平均後把透明度二值化，邊緣保持銳利。
@@ -32,7 +32,7 @@ def key_green(im: Image.Image) -> Image.Image:
 
 def shrink(im: Image.Image, scale=SCALE) -> Image.Image:
     w, h = im.size
-    small = im.resize((max(1, w // scale), max(1, h // scale)), Image.BOX)
+    small = im.resize((max(1, round(w / scale)), max(1, round(h / scale))), Image.BOX)
     p = small.load()
     for y in range(small.size[1]):
         for x in range(small.size[0]):
@@ -81,8 +81,8 @@ def components(im: Image.Image, grow=2, min_px=12):
     return boxes
 
 
-def do_kit(src: str, prefix: str):
-    small = shrink(key_green(Image.open(src)))
+def do_kit(src: str, prefix: str, scale=SCALE):
+    small = shrink(key_green(Image.open(src)), scale)
     boxes = components(small)
     meta = []
     for i, b in enumerate(boxes):
@@ -102,12 +102,21 @@ def do_kit(src: str, prefix: str):
     print(f'{src}: {len(meta)} pieces → {prefix}_NN.png')
 
 
-def do_layer(src: str, out: str):
-    small = shrink(key_green(Image.open(src)))
+def do_layer(src: str, out: str, scale=SCALE, size=None):
+    im = key_green(Image.open(src))
+    small = shrink(im, im.size[0] / size[0]) if size else shrink(im, scale)
+    if size and small.size != tuple(size):
+        small = small.resize(tuple(size), Image.NEAREST)
     small.save(out)
     print(f'{src} → {out} {small.size}')
 
 
 if __name__ == '__main__':
     mode, src, out = sys.argv[1:4]
-    (do_kit if mode == 'kit' else do_layer)(src, out)
+    # 第 4 個參數：縮小倍率（kit）或目標尺寸 WxH（layer）
+    extra = sys.argv[4] if len(sys.argv) > 4 else None
+    if mode == 'kit':
+        do_kit(src, out, float(extra) if extra else SCALE)
+    else:
+        size = tuple(int(v) for v in extra.split('x')) if extra and 'x' in extra else None
+        do_layer(src, out, float(extra) if extra and not size else SCALE, size)

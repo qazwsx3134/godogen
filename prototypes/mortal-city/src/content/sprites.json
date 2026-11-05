@@ -1,0 +1,155 @@
+{
+ "room_bg": {
+  "src": "/sprites/room_bg.png",
+  "w": 384,
+  "h": 160
+ },
+ "window_city": {
+  "src": "/sprites/window_city.png",
+  "w": 249,
+  "h": 87,
+  "x": 100,
+  "y": 5
+ },
+ "sofa": {
+  "src": "/sprites/sofa.png",
+  "w": 250,
+  "h": 85
+ },
+ "bed": {
+  "src": "/sprites/bed.png",
+  "w": 96,
+  "h": 47
+ },
+ "laptop": {
+  "src": "/sprites/laptop.png",
+  "w": 54,
+  "h": 40
+ },
+ "fox_monitor": {
+  "src": "/sprites/fox_monitor.png",
+  "w": 34,
+  "h": 33
+ },
+ "cabinet": {
+  "src": "/sprites/cabinet.png",
+  "w": 46,
+  "h": 39
+ },
+ "table": {
+  "src": "/sprites/table.png",
+  "w": 150,
+  "h": 50
+ },
+ "blanket": {
+  "src": "/sprites/blanket.png",
+  "w": 48,
+  "h": 35
+ },
+ "ramen": {
+  "src": "/sprites/ramen.png",
+  "w": 24,
+  "h": 27
+ },
+ "can": {
+  "src": "/sprites/can.png",
+  "w": 10,
+  "h": 17
+ },
+ "cat": {
+  "src": "/sprites/cat.png",
+  "w": 42,
+  "h": 20
+ },
+ "ashtray": {
+  "src": "/sprites/ashtray.png",
+  "w": 20,
+  "h": 13
+ },
+ "phone": {
+  "src": "/sprites/phone.png",
+  "w": 22,
+  "h": 10
+ },
+ "console": {
+  "src": "/sprites/console.png",
+  "w": 26,
+  "h": 12
+ },
+ "mug": {
+  "src": "/sprites/mug.png",
+  "w": 14,
+  "h": 13
+ },
+ "gun": {
+  "src": "/sprites/gun.png",
+  "w": 44,
+  "h": 30
+ },
+ "banner": {
+  "src": "/sprites/banner.png",
+  "w": 30,
+  "h": 38
+ },
+ "vines": {
+  "src": "/sprites/vines.png",
+  "w": 26,
+  "h": 47
+ },
+ "fox_figure": {
+  "src": "/sprites/fox_figure.png",
+  "w": 14,
+  "h": 20
+ },
+ "hero_run": {
+  "src": "/sprites/hero_run.png",
+  "w": 64,
+  "h": 71
+ },
+ "hero_stand": {
+  "src": "/sprites/hero_stand.png",
+  "w": 24,
+  "h": 75
+ },
+ "hero_lying": {
+  "src": "/sprites/hero_lying.png",
+  "w": 170,
+  "h": 98
+ },
+ "drone": {
+  "src": "/sprites/drone.png",
+  "w": 30,
+  "h": 14
+ },
+ "train": {
+  "src": "/sprites/train.png",
+  "w": 220,
+  "h": 26
+ },
+ "hero_run_strip": {
+  "src": "/sprites/hero_run_strip.png",
+  "w": 43,
+  "h": 72,
+  "frames": 8
+ },
+ "city_far": {
+  "src": "/sprites/city_far.png",
+  "w": 432,
+  "h": 160
+ },
+ "city_mid": {
+  "src": "/sprites/city_mid.png",
+  "w": 432,
+  "h": 160
+ },
+ "city_front": {
+  "src": "/sprites/city_front.png",
+  "w": 432,
+  "h": 160
+ },
+ "roof_strip": {
+  "src": "/sprites/roof_strip.png",
+  "w": 432,
+  "h": 160
+ }
+}

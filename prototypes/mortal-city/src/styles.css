@@ -103,3 +103,98 @@ body {
     transition: none !important;
   }
 }
+
+/* ---------- sprite 場景動畫（SpriteScene） ---------- */
+@keyframes mc-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes mc-frames {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: var(--end, 100%) 0;
+  }
+}
+@keyframes mc-bob {
+  50% {
+    transform: translateY(var(--bob, -3%));
+  }
+}
+@keyframes mc-breathe {
+  50% {
+    transform: scaleY(1.025);
+  }
+}
+@keyframes mc-cross {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(var(--dist, -300%));
+  }
+}
+@keyframes mc-flicker {
+  0%,
+  88%,
+  92%,
+  100% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 0.5;
+  }
+}
+.mc-rain {
+  background-image: repeating-linear-gradient(100deg, transparent 0 7px, rgba(210, 190, 255, 0.16) 7px 8px);
+  background-size: 22px 18px;
+  animation: mc-rain 0.5s linear infinite;
+}
+@keyframes mc-rain {
+  to {
+    background-position: -6px 18px;
+  }
+}
+.mc-steam {
+  position: absolute;
+  bottom: 0;
+  width: 14%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: rgba(230, 222, 240, 0.45);
+  animation: mc-steam 1.8s ease-out infinite;
+}
+@keyframes mc-steam {
+  from {
+    transform: translateY(0) scale(0.6);
+    opacity: 0.7;
+  }
+  to {
+    transform: translateY(-260%) scale(1.4);
+    opacity: 0;
+  }
+}
+.mc-zz {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  font-size: clamp(9px, 2.6vw, 14px);
+  font-weight: 700;
+  color: var(--color-cyan);
+  animation: mc-zz 2.8s ease-out infinite;
+}
+@keyframes mc-zz {
+  from {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  to {
+    transform: translate(120%, -220%);
+    opacity: 0;
+  }
+}
