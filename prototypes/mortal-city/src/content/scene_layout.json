@@ -1,0 +1,169 @@
+{
+  "_說明": "場景版面：384×160 像素座標，依陣列順序由後往前疊。sprite 尺寸見 sprites.json。改位置只改這裡。",
+  "room": [
+    {
+      "id": "window_city",
+      "x": 100,
+      "y": 5,
+      "anim": "flicker:7"
+    },
+    {
+      "id": "room_bg",
+      "x": 0,
+      "y": 0
+    },
+    {
+      "id": "gun",
+      "x": 8,
+      "y": 30
+    },
+    {
+      "id": "bed",
+      "x": 322,
+      "y": 94
+    },
+    {
+      "id": "fox_monitor",
+      "x": 344,
+      "y": 60,
+      "anim": "flicker:5"
+    },
+    {
+      "id": "sofa",
+      "x": 8,
+      "y": 62
+    },
+    {
+      "id": "hero_lying",
+      "x": 22,
+      "y": 30,
+      "anim": "breathe:3.4"
+    },
+    {
+      "id": "blanket",
+      "x": 214,
+      "y": 70
+    },
+    {
+      "id": "cat",
+      "x": 216,
+      "y": 61
+    },
+    {
+      "id": "table",
+      "x": 196,
+      "y": 124
+    },
+    {
+      "id": "ashtray",
+      "x": 226,
+      "y": 116
+    },
+    {
+      "id": "phone",
+      "x": 248,
+      "y": 121
+    },
+    {
+      "id": "can",
+      "x": 274,
+      "y": 111
+    },
+    {
+      "id": "ramen",
+      "x": 290,
+      "y": 102
+    },
+    {
+      "id": "console",
+      "x": 316,
+      "y": 117
+    },
+    {
+      "id": "laptop",
+      "x": 0,
+      "y": 114
+    },
+    {
+      "id": "mug",
+      "x": 54,
+      "y": 129
+    }
+  ],
+  "street": [
+    {
+      "id": "city_far",
+      "x": 0,
+      "y": 0,
+      "anim": "scroll:90"
+    },
+    {
+      "id": "city_mid",
+      "x": 0,
+      "y": 0,
+      "anim": "scroll:45"
+    },
+    {
+      "id": "drone",
+      "x": 250,
+      "y": 18,
+      "anim": "bob:2.4:12"
+    },
+    {
+      "id": "train",
+      "x": 140,
+      "y": 92,
+      "anim": "cross:7"
+    },
+    {
+      "id": "city_front",
+      "x": 0,
+      "y": 0,
+      "anim": "scroll:20"
+    },
+    {
+      "id": "roof_strip",
+      "x": 0,
+      "y": 0,
+      "anim": "scroll:9"
+    },
+    {
+      "id": "hero_run_strip",
+      "x": 124,
+      "y": 78,
+      "anim": "frames:8:12"
+    }
+  ],
+  "room_fx": [
+    {
+      "fx": "rain",
+      "x": 100,
+      "y": 5,
+      "w": 249,
+      "h": 87
+    },
+    {
+      "fx": "steam",
+      "x": 294,
+      "y": 88,
+      "w": 16,
+      "h": 14
+    },
+    {
+      "fx": "zz",
+      "x": 66,
+      "y": 26,
+      "w": 16,
+      "h": 14
+    }
+  ],
+  "street_fx": [
+    {
+      "fx": "rain",
+      "x": 0,
+      "y": 0,
+      "w": 384,
+      "h": 160
+    }
+  ]
+}

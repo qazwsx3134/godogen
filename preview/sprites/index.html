@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sprite 檢視器 · Godogen</title>
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="snap.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body class="sv">
+  <header class="topbar">
+    <a class="brand" href="/preview/">GODOGEN <span>/ PREVIEW / SPRITES</span></a>
+    <span class="local"><span aria-hidden="true"></span> 本機工作台</span>
+  </header>
+  <div class="sv-layout">
+    <aside class="sv-list" aria-label="圖片清單">
+      <label>專案 <select id="project"></select></label>
+      <label>搜尋 <input id="search" type="search" placeholder="檔名或路徑，例如 hero"></label>
+      <p class="sv-count" id="count">讀取中…</p>
+      <ul id="files"></ul>
+    </aside>
+
+    <main class="sv-main">
+      <div class="sv-bar">
+        <span id="name" class="sv-name">選一張圖</span>
+        <span id="meta" class="sv-meta"></span>
+      </div>
+      <div class="sv-stage" id="stage">
+        <canvas id="view"></canvas>
+      </div>
+      <div class="sv-bar">
+        <span id="cursor" class="sv-meta">x —, y —</span>
+        <span class="sv-seg" role="group" aria-label="顯示">
+          <button data-show="orig" class="on">原圖</button>
+          <button data-show="snap">對齊後</button>
+          <button data-show="both">並排</button>
+        </span>
+      </div>
+    </main>
+
+    <aside class="sv-panel" aria-label="控制">
+      <section>
+        <h2>檢視</h2>
+        <label>縮放 <select id="zoom"><option value="fit">適合視窗</option><option>1</option><option>2</option><option>3</option><option>4</option><option>6</option><option>8</option><option>12</option><option>16</option></select></label>
+        <label class="row"><input id="grid" type="checkbox" checked> 像素格線（放大 4 倍以上）</label>
+        <label class="row"><input id="checker" type="checkbox" checked> 棋盤格底（看透明）</label>
+      </section>
+
+      <section>
+        <h2>動畫</h2>
+        <label>模式 <select id="mode"><option value="still">靜態</option><option value="sheet">Sprite sheet</option><option value="seq">連號序列</option></select></label>
+        <div id="sheet-opts" class="grid2" hidden>
+          <label>欄 <input id="cols" type="number" min="1" value="8"></label>
+          <label>列 <input id="rows" type="number" min="1" value="1"></label>
+          <label>格數 <input id="frames" type="number" min="1" value="8"></label>
+        </div>
+        <p id="seq-info" class="hint" hidden></p>
+        <label>FPS <input id="fps" type="number" min="1" max="60" value="10"></label>
+        <div class="row">
+          <button id="play" class="btn">▶ 播放</button>
+          <button id="prev" class="btn" aria-label="上一格">◀</button>
+          <button id="next" class="btn" aria-label="下一格">▶|</button>
+          <span id="frame" class="sv-meta"></span>
+        </div>
+        <label class="row"><input id="onion" type="checkbox"> 洋蔥皮（疊上一格，看對齊）</label>
+      </section>
+
+      <section>
+        <h2>像素對齊</h2>
+        <p class="hint">把幾個像素合併成一格、對齊到整齊的像素格（適合 AI 生成的「假像素圖」）。可以照原圖不合併，或選每 N×N 合成 1 格，也能自動偵測。流程移植自 <a href="https://github.com/Hugo-Dz/spritefusion-pixel-snapper" target="_blank" rel="noopener">spritefusion-pixel-snapper</a>（MIT）。建議放大後打開格線檢查，再按「對齊」。</p>
+        <label>合併大小 <select id="merge">
+          <option value="1" selected>1×1 照原圖（不合併）</option>
+          <option value="2">2×2 → 1 格</option>
+          <option value="3">3×3 → 1 格</option>
+          <option value="4">4×4 → 1 格</option>
+          <option value="5">5×5 → 1 格</option>
+          <option value="6">6×6 → 1 格</option>
+          <option value="8">8×8 → 1 格</option>
+          <option value="custom">自訂（可用小數）</option>
+          <option value="auto">自動偵測（依圖找格線）</option>
+        </select></label>
+        <p id="merge-info" class="hint"></p>
+        <div class="grid2">
+          <label id="custom-wrap" hidden>自訂格距 <input id="psize" type="number" min="1" step="0.05" value="4"></label>
+          <label>色數 <input id="colors" type="number" min="0" max="64" value="0" title="0＝不量化"></label>
+          <label>偏移 x <input id="offx" type="number" min="0" step="0.1" value="0"></label>
+          <label>偏移 y <input id="offy" type="number" min="0" step="0.1" value="0"></label>
+        </div>
+        <label class="row"><input id="showcuts" type="checkbox"> 在原圖上顯示格線（靜態模式）</label>
+        <button id="detect" class="btn">自動偵測格子</button>
+        <p id="detect-info" class="hint"></p>
+        <label>輸出尺寸 <select id="outsize"><option value="full">原圖解析度（每格填滿，大小不變）</option><option value="small">縮成真像素（每格 1 px）</option></select></label>
+        <button id="snap" class="btn primary">對齊</button>
+      </section>
+
+      <section>
+        <h2>編輯像素</h2>
+        <span class="sv-seg tools" role="group" aria-label="工具">
+          <button data-tool="view" class="on">檢視</button>
+          <button data-tool="pen">畫筆</button>
+          <button data-tool="erase">橡皮擦</button>
+          <button data-tool="pick">滴管</button>
+        </span>
+        <label class="row">顏色 <input id="color" type="color" value="#ff3df0"></label>
+        <p id="edit-info" class="hint">選「畫筆」在圖上點或拖曳改顏色；「橡皮擦」改成透明；「滴管」取色。編輯的是畫面上顯示的那張（原圖或對齊後），並排時不能編輯。Ctrl／⌘＋Z 復原。</p>
+        <div class="row">
+          <button id="undo" class="btn" disabled>復原</button>
+          <button id="save" class="btn primary" disabled>存回原檔</button>
+          <button id="download" class="btn" disabled>下載 PNG</button>
+        </div>
+        <p id="save-info" class="hint" aria-live="polite"></p>
+      </section>
+    </aside>
+  </div>
+</body>
+</html>

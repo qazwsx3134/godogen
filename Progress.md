@@ -24,7 +24,7 @@
 | godot-kit 共用模組 | VFX 庫完成，等 GPU／瀏覽器／手機外觀驗收；未同步各遊戲副本 | [PROGRESS](prototypes/godot-kit/PROGRESS.md) | — |
 | seal-meadow 蓬蓬草原 | 暖陶瓦風格與商店三視圖已定方向；可走商店、入口與路牌樣板已接入，正式 2D 紙娃娃及手機真人驗收待做，多人延後 | [PROGRESS](prototypes/seal-meadow/PROGRESS.md) | [MILESTONE](prototypes/seal-meadow/MILESTONE.md) |
 | hero-horde-idle 全員推王 | 等真人前三層、手機恢復成本與作者素材 | [PROGRESS](prototypes/hero-horde-idle/docs/PROGRESS.md) | [MILESTONE](prototypes/hero-horde-idle/docs/MILESTONE.md) |
-| Cyberpunk 文字 MMO（魔都） | mortal-city 可玩到 P01 兩案（戰鬥、傷勢與治療、屬性、義體）；等作者試讀 P01 與正式 sprite | [PROGRESS](docs/cyberpunk-text-mmo/PROGRESS.md) | — |
+| Cyberpunk 文字 MMO（魔都） | S2/A 10 張 sprite 已規格化；8 格跑步循環原圖已生成（尺寸與純綠有偏差）；城市場景接入待驗收 | [PROGRESS](prototypes/mortal-city/PROGRESS.md)／[設計進度](docs/cyberpunk-text-mmo/PROGRESS.md) | — |
 | dreamling-idle 夢靈遠行 | 第一個可玩版本完成，暫停 | [PROGRESS](prototypes/dreamling-idle/PROGRESS.md) | — |
 | kagura-dango 丸子大胃王（神樂生日） | 完整比賽可玩：裁判開場、三回合（三人齊吃→拋丸子→全力餵食）、對手隊、神樂變胖；佔位美術；待做第 1 回合「老闆端上桌」回饋 | [PROGRESS](prototypes/kagura-dango/PROGRESS.md) | — |
 | erwin-run | 可玩到結局，未上傳 itch | [PROGRESS](prototypes/erwin-run/PROGRESS.md) | — |

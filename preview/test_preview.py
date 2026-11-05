@@ -10,6 +10,9 @@ from unittest.mock import patch
 
 import start
 
+# 最小的 PNG 檔頭：寬 2、高 3（只有 IHDR，夠 png_size 讀）
+PNG_2x3 = b"\x89PNG\r\n\x1a\n" + b"\x00\x00\x00\rIHDR" + (2).to_bytes(4, "big") + (3).to_bytes(4, "big") + b"\x08\x06\x00\x00\x00"
+
 
 class MemoryConnection:
     def __init__(self, request):
@@ -39,7 +42,13 @@ class PreviewHTTPTests(unittest.TestCase):
             file = self.vfx / name
             file.parent.mkdir(parents=True, exist_ok=True)
             file.write_bytes(b"fixture")
-        self.server = SimpleNamespace(server_port=8000, vfx_root=self.vfx,
+        self.files = Path(self.temporary.name) / "protos"
+        for name, data in (("game/public/hero.png", PNG_2x3), ("game/art/notes.txt", b"secret"),
+                           ("game/node_modules/pkg/icon.png", PNG_2x3), ("game/.hidden/x.png", PNG_2x3)):
+            file = self.files / name
+            file.parent.mkdir(parents=True, exist_ok=True)
+            file.write_bytes(data)
+        self.server = SimpleNamespace(server_port=8000, vfx_root=self.vfx, files_root=self.files,
                                       project=start.project_server.StoryProject(start.DEBT, "godot"))
 
     def request(self, path, method="GET", host="127.0.0.1:8000", headers="", body=b""):
@@ -55,6 +64,7 @@ class PreviewHTTPTests(unittest.TestCase):
         self.assertIn("200 OK", header)
         self.assertIn(b'href="/tools/story_editor/"', body)
         self.assertIn(b'href="/preview/vfx/"', body)
+        self.assertIn(b'href="/preview/sprites/"', body)
         header, _ = self.request("/preview")
         self.assertIn("Location: /preview/", header)
         header, _ = self.request("/preview/vfx")
@@ -203,6 +213,62 @@ class PreviewHTTPTests(unittest.TestCase):
         self.assertTrue(server.served)
         self.assertEqual(server.project.root, start.DEBT.resolve())
 
+    def save(self, body, token=None, origin="http://127.0.0.1:8000"):
+        data = json.dumps(body).encode()
+        token = self.server.project.token if token is None else token
+        headers = (f"Origin: {origin}\r\nX-Preview-Token: {token}\r\nContent-Type: application/json\r\n"
+                   f"Content-Length: {len(data)}\r\n")
+        header, content = self.request("/preview/sprites/save", method="POST", headers=headers, body=data)
+        return header, json.loads(content or b"{}")
+
+    def test_sprite_save_writes_png_with_backup_and_rejects_stale_or_bad_targets(self):
+        import base64, hashlib
+        hero = self.files / "game/public/hero.png"
+        new_png = PNG_2x3 + b"edited"
+        good = {"project": "game", "path": "public/hero.png", "png": base64.b64encode(new_png).decode(),
+                "base_hash": hashlib.sha256(PNG_2x3).hexdigest()}
+        with patch.object(start, "BACKUPS", Path(self.temporary.name) / "backups"), patch.object(start, "REPO", Path(self.temporary.name)):
+            header, reply = self.save(good)
+            self.assertIn("200 OK", header, reply)
+            self.assertEqual(hero.read_bytes(), new_png)
+            backups = list((Path(self.temporary.name) / "backups/game/public").glob("hero.png.*.png"))
+            self.assertEqual([b.read_bytes() for b in backups], [PNG_2x3])
+            header, _ = self.save(good)  # hash 已經變了：不覆寫
+            self.assertIn("409", header)
+            for bad in ({**good, "path": "art/notes.txt"}, {**good, "path": "node_modules/pkg/icon.png"},
+                        {**good, "path": "../game/public/hero.png"}, {**good, "png": base64.b64encode(b"GIF89a").decode()}):
+                header, _ = self.save(bad)
+                self.assertRegex(header, r"40[03]", bad["path"])
+            header, _ = self.save(good, token="wrong")
+            self.assertIn("403", header)
+            header, _ = self.save(good, origin="http://evil.example")
+            self.assertIn("403", header)
+
+    def test_sprite_index_lists_images_only_and_skips_packages_and_hidden(self):
+        header, body = self.request("/preview/sprites/index.json")
+        self.assertIn("200 OK", header)
+        self.assertEqual(json.loads(body)["images"], [{"project": "game", "path": "public/hero.png", "bytes": len(PNG_2x3), "w": 2, "h": 3}])
+        self.assertTrue(json.loads(body)["token"])
+
+    def test_sprite_viewer_page_and_redirect(self):
+        header, body = self.request("/preview/sprites/")
+        self.assertIn("200 OK", header)
+        self.assertIn(b"snap.js", body)
+        header, _ = self.request("/preview/sprites")
+        self.assertIn("Location: /preview/sprites/", header)
+
+    def test_files_route_serves_images_and_blocks_everything_else(self):
+        header, body = self.request("/preview/files/game/public/hero.png")
+        self.assertIn("200 OK", header)
+        self.assertIn("image/png", header)
+        self.assertEqual(body, PNG_2x3)
+        for bad in ("/preview/files/game/art/notes.txt", "/preview/files/game/node_modules/pkg/icon.png",
+                    "/preview/files/game/.hidden/x.png", "/preview/files/../start.py",
+                    "/preview/files/game/public/%2e%2e/%2e%2e/x.png", "/preview/files/game/public/"):
+            header, _ = self.request(bad)
+            self.assertRegex(header, r"40[34]", bad)
+        header, _ = self.request("/preview/sprites/index.json", host="evil.example:8000")
+        self.assertIn("403", header)
 
 if __name__ == "__main__":
     unittest.main()
