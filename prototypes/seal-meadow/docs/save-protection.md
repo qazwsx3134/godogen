@@ -2,7 +2,25 @@
 
 2026-10-31；schema 仍為 v6，既有 v1～v5 遷移不變。此輪處理載入與寫入的信任邊界，不調整養成數值。
 
-## 已修正的路徑
+## 2026-11-06：接入 kit 驗證快照
+
+SaveStore.restore/save 現在委派 kit SaveSlots，注入既有 SaveValidation.valid 與 v1～v5 migrations；payload invalid 對外仍映射 corrupt。只從 kit 來源同步 save_slots.gd，atomic_file.gd 已確認逐位元組一致，未整包更新其他模組。下方 10-31 的「kit 未修改」及測試結果為歷史狀態，不適用本次修改。
+
+Main 保留恢復前 bytes 比對、異常主檔拒寫與 save_blocked_reason。新增寫入邊界錯誤映射：ERR_UNAVAILABLE → newer，ERR_INVALID_DATA → invalid_snapshot。主檔有效但備份較新，現在啟動就拒絕載入，先前是保存前才拒絕。遷移失敗可選有效備份；v0 仍不可載入（沒有 v0 migration，錯誤可能為 migration）。
+
+v4 舊裝備 UID 改為 `legacy-v4:bag:<index>`／`legacy-v4:equipped:<slot>`，只在舊檔遷移時使用，避免重複驗證產生隨機身分；新掉落及已保存 v5/v6 UID 不變。這些 UID 是單份 profile 內身分，不作跨 profile 合併鍵。
+
+```text
+Main（恢復 bytes／停止寫入狀態）
+  → SaveStore（遊戲 adapter／錯誤映射）
+    → SaveSlots（版本／備份選取／候選提交）
+      ├─ SaveValidation + migrations（遊戲 schema）
+      └─ AtomicFile（單檔寫入）
+```
+
+本次只做來源／副本一致性與生成目錄檢查；Godot 測試依指示延期，未讀寫玩家存檔、未重建匯出。恢復 L2 時跑 save_protection、m3_hardening、world_lifecycle，補查有效主檔＋future 備份的啟動拒絕，以及 v4 重複遷移 UID 相同／跨欄不重複。macOS 不可只依賴 XDG_DATA_HOME 隔離 user://，需先確認測試的 save_path 指向獨立路徑。
+
+## 已修正的路徑（2026-10-31 歷史）
 
 遊戲已開啟後，主檔可能被另一版本或外部操作替換。既有只在啟動時判斷版本的做法，會讓背景／進度存檔覆寫新檔，甚至把它旋轉進備份後再覆蓋。另一條路徑是啟動已選定有效備份，寫入前主檔又被替換，舊恢復流程仍會直接把主檔換回去。
 

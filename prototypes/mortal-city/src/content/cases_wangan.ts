@@ -19,7 +19,7 @@ export const CASE_03: StoryCase = {
   },
   approachReplies: {
     force: { who: 'mpd', at: '23:58', text: '【MPD 通報】歌舞伎町三丁目企業設施遭暴力侵入，嫌犯與昨晚環狀線襲警案特徵相符。灣岸各檢查站已加強盤查。' },
-    sprinkler: { who: 'crow', at: '23:40', text: '插播：三丁目那棟診療所的灑水系統，據說到現在都還關不掉。神坂的公關說這是「消防演練」。演練得很成功。' },
+    node: { who: 'crow', at: '23:40', text: '插播：三丁目那棟診療所的灑水系統，據說到現在都還關不掉。神坂的公關說這是「消防演練」。演練得很成功。' },
     stealth: { who: 'snake', at: '23:50', text: '病歷我看完了。下次你從我面前走過，記得出點聲音。' },
   },
   replies: [

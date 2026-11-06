@@ -57,3 +57,21 @@ kit 70 項現在為 62 項實作研究（含明列選讀）與 8 項前階段。
 本輪 codebase-memory MCP 在首次查詢與重試均回 Transport closed，改用既有清單的來源檔；未重新安裝或擅自修改 MCP 設定。VFX pixel_burst.tscn 的 MultiMesh 與 spell-indicator-circle.tscn 的材質已靜態查得 resource_local_to_scene=true；不是全部 scene 的隔離驗收。
 
 驗證層級：文件／目錄。執行既有 capabilities build/check 與 diff 格式檢查；沒有新增或執行延期的 Godot／遊戲測試。後續回到既有 P0/P1：先修存檔與鏡頭／載入所有權，再遷移觸控、光效與交易邊界。
+
+## 9 項 CLI 主入口補查
+
+已讀 9 個列入目錄的 CLI 主入口全文（sync 沿用前階段已讀來源）。未執行它們的 self-test、匯出、錄影或同步；build_web 的 fetch／patch／PCK helpers 未在此輪逐檔重審。完整限制與機器可讀 effects.writes/may_use_network/failure_effects 已回填 tools.json。
+
+| 工具 | 實際副作用／失敗語義 |
+|---|---|
+| [tool.sprite_atlas](../tools/sprite_atlas.py) | 需要 Pillow；讀 manifest 相對圖片路徑，固定角色 scale，trim 與 canvas 對齊政策不同。直接先寫 atlas.png 再寫 sheets.json，會覆寫且不是雙檔原子提交；IO 中斷可留下不同版本。AtlasError exit1，JSON/IO/型別錯誤未統一格式。格數／尺寸有上限，但完整 schema（正 cell/columns、非空動畫、正 ticks、合法 align）未全面驗證。 |
+| [tool.subset_font](../tools/subset_font.py) | 需要 fonttools；--check 不寫檔，缺字 exit1。正常模式即使發現缺字仍會寫子集，再 exit1，非零不代表沒有產物。--skip-dir 取代預設列表，不是追加；掃描忽略讀檔／UTF-8 失敗且不驗 project 存在，空掃描不等於成功。輸出覆寫；source/out 只用 abspath 比較，不解析符號連結。保留 name records 不等於工具自動審查授權；動態文字需另補集合。 |
+| [tool.build_web](../tools/web/build_web.sh) | 會下載模板、匯入專案、寫 build/.gdignore、覆寫 build/web 與 ZIP，非部署。主腳本只取引擎 major.minor 給 fetch helper；helper 的版本匹配需另審。export pipeline 以 || true 消化錯誤，後續以 index.html 存在繼續，不能保證所有匯出錯誤都讓 CLI 失敗；只移除舊 index.html，其他 stale build 檔可能進 ZIP。zip_name 必須是受控檔名，現行未驗路徑／空白檔名。使用專用輸出目錄，失敗可能留下部分產物。 |
+| [tool.run_tests](../tools/run_tests.sh) | 需 timeout；先匯入後跑 suites，會執行任意遊戲測試及其 user:// 寫入，應用隔離測試存檔。suite exit0、無指定錯誤字樣且含 PASSED 才過；PASSED 子字串並非 assertion 數驗證。import 只驗 process exit／timeout，未同樣掃 import log。TEST_TIMEOUT 每次 import／suite 各計，非總時間。參數 name/fps 應受控；本輪未執行此工具。 |
+| [tool.capture](../tools/capture.sh) | 需 renderer，可能開窗口並執行遊戲。會先刪 output 下 f*.png/f.wav，ffmpeg -y 覆寫 video.mp4；僅用專用錄影資料夾。固定30fps與 Compatibility renderer；畫面尺寸依遊戲 viewport，非必為 --resolution 值。ffmpeg 可選；缺少 ffmpeg 時不會更新既有 video.mp4，不能把舊影片當本次結果。WAV 參數經未引用命令展開，帶空白 output 路徑有風險。 |
+| [tool.audit_copies](../tools/audit_copies.py) | 唯讀 SHA-256 來源比較，無語義或採用判定。relative project 基於 prototypes，absolute 可指外部；缺 copy 以 argparse exit2，--check 有差異 exit1，無 --check 即使 drift 仍exit0。沒有忽略規則，會包含輸出／隱藏檔；符號連結檔案可能讀到外部內容。對照結果不授權同步。 |
+| [tool.sync](../sync.sh) | 修改模式使用整包 rsync -a --delete，刪除目標 kit 多餘檔；不合併修改、不做備份、不檢查相容性。沒有指定 target 會更新所有已有副本，故 AI 應明列單一目標。--check 唯讀呼叫 audit_copies；需先確認目標 project.godot。相對名稱基於 prototypes，支援 absolute；不應直接改目的副本。 |
+| [tool.vfx_import_strip](../tools/vfx/import_strip.gd) | 需 Godot 與已匯入 PNG，僅水平等寬 strip；七個參數完整，source/license_note 只需非空，不代表授權已核實。拒絕既有 .tres 或 .source.json；先存 resource 再寫來源。來源檔開啟失敗會嘗試刪新 resource，但沒有查 store_string/close 寫入錯誤或 rollback 結果；不是 crash-safe 雙檔交易。res:// 前綴檢查不是完整路徑沙箱。 |
+| [tool.capabilities](../tools/capabilities.py) | 只有 build 寫生成檔；check 比較 capabilities/resources/REFERENCE，不比較 inventory.json 新鮮度，也不執行 schema.json 完整驗證。list/show/plan 重新讀取目前來源，非直接信任舊 catalog。api 是 regex 擷取，不涵蓋繼承／內部類全部 API，註解也會進靜態引用。plan 不解析 Python import、shader include 或動態載入，非安裝 manifest。build 多檔逐寫，非原子。 |
+
+最需要更正的假設是「非零退出就沒有產物」：subset_font 缺字仍寫字型；atlas 與 VFX importer 都分兩次寫；Web 匯出 pipeline 會消化 process failure。未來工具介面應分開 status、written_files、diagnostics 與 rollback 狀態。這些結論為原始碼證據，不是失敗注入測試。

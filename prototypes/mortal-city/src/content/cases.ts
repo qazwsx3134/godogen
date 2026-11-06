@@ -1,6 +1,7 @@
 // 劇情委託（一次性、每角色一次；死亡後新角色可重玩）。
 // P01 兩案是「試讀稿」：AI 初稿，作者試讀前不算可上線文本。測試案只用來驗證流程。
 import { type Attr, type Character, type DangerOption, type Direction, type Enemy, type Slot, attrLock } from '../rules/core'
+import { CASE_03, CASE_06 } from './cases_wangan'
 
 export interface Reply {
   who: string
@@ -473,8 +474,8 @@ export const CASE_02: StoryCase = {
   },
 }
 
-/** 看板上的順序：正式案在前，測試案最後。 */
-export const CASES: StoryCase[] = [CASE_01, CASE_02, TEST_CASE]
+/** 全部的劇情委託：新宿 01、02，灣岸 03、06，測試案。 */
+export const CASES: StoryCase[] = [CASE_01, CASE_02, CASE_03, CASE_06, TEST_CASE]
 export const CASE_BY_ID: Record<string, StoryCase> = Object.fromEntries(CASES.map((c) => [c.id, c]))
 
 /** 依前置案件結果組出這一案的內文。 */

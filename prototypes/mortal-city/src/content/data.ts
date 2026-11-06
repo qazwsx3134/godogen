@@ -28,9 +28,17 @@ export const JOBS: Record<string, JobDef> = Object.fromEntries(
     j({ id: 'stealth-2', direction: 'stealth', tier: 2, name: '跟拍外遇', fixerId: 'mist', reward: 260, xp: 22, stress: 2, heat: 0, injury: 5, blurb: '港務部某課長，每週四晚上會「加班」。拍到臉就好。' }),
     j({ id: 'hack-2', direction: 'hack', tier: 2, name: '竊取監視畫面', fixerId: 'mist', reward: 240, xp: 22, stress: 4, heat: 1, injury: 3, blurb: '倉庫 7 號的攝影機昨晚拍到了不該拍的東西。' }),
     j({ id: 'force-2', direction: 'force', tier: 2, name: '清空幫派據點', fixerId: 'k', reward: 320, xp: 26, stress: 3, heat: 1, injury: 14, blurb: '高架橋下那群小鬼越來越囂張了。' }),
+    // 灣岸：第 3 階一般委託
+    j({ id: 'stealth-3', direction: 'stealth', tier: 3, name: '冷鏈走私', fixerId: 'mist', reward: 420, xp: 34, stress: 3, heat: 1, injury: 9, blurb: '一箱不能退冰的貨，混在冷凍鮪魚裡運出新木場。箱子上的溫度計比你的命值錢。' }),
+    j({ id: 'hack-3', direction: 'hack', tier: 3, name: '黑進無人機調度', fixerId: 'mist', reward: 400, xp: 34, stress: 5, heat: 1, injury: 6, blurb: '港務部的貨運無人機每晚三點換航線。讓其中一台「迷路」到我指定的屋頂。' }),
+    j({ id: 'force-3', direction: 'force', tier: 3, name: '截下港務部押運車', fixerId: 'k', reward: 480, xp: 38, stress: 4, heat: 2, injury: 18, blurb: '押運車走海岸高架，兩個押運員、一箱沒有登記的晶片。車可以留下，晶片不行。' }),
     j({ id: 'stealth-4', direction: 'stealth', tier: 4, name: '盜取原型義體', fixerId: 'mist', reward: 2200, xp: 120, stress: 9, heat: 1, injury: 22, blurb: '九頭龍重工研究所三樓的展示櫃。保全每 90 秒巡一次，櫃子有重量感應。' }),
     j({ id: 'force-4', direction: 'force', tier: 4, name: '突襲企業倉庫', fixerId: 'k', reward: 2600, xp: 120, stress: 8, heat: 2, injury: 30, blurb: '灣岸 7 號倉，港務部的私兵有重武裝。正面打進去，拿了貨就走。' }),
     j({ id: 'hack-4', direction: 'hack', tier: 4, name: '盜取企業伺服器', fixerId: 'mist', reward: 2400, xp: 120, stress: 12, heat: 2, injury: 20, blurb: '港務部的核心機房。黑冰會反咬，一次失手就可能燒掉你的腦。' }),
+    // 灣岸：第 5 階精英委託
+    j({ id: 'stealth-5', direction: 'stealth', tier: 5, name: '潛入海底隧道檢查站', fixerId: 'mist', reward: 3200, xp: 160, stress: 11, heat: 1, injury: 26, blurb: '封鎖線底下的海底隧道，港務部在中段設了檢查站。站長的抽屜裡有一份通行名單，我要它。' }),
+    j({ id: 'force-5', direction: 'force', tier: 5, name: '攻破港務部指揮艦', fixerId: 'k', reward: 3800, xp: 170, stress: 10, heat: 2, injury: 34, blurb: '停在灣岸外的指揮艦，是整條封鎖線的大腦。登艦、找到艦橋、把硬碟拔走。外骨骼部隊住在甲板下面。' }),
+    j({ id: 'hack-5', direction: 'hack', tier: 5, name: '燒穿港務部核心', fixerId: 'mist', reward: 3500, xp: 160, stress: 14, heat: 2, injury: 24, blurb: '港務部換了軍規黑冰。燒穿它，封鎖線的閘口排程就是我們的了。燒不穿，燒掉的是你。' }),
   ].map((x) => [x.id, x]),
 )
 
@@ -99,8 +107,8 @@ export function highDanger(job: JobDef): DangerTemplate {
     autoLog: OPENING[job.direction](job.name),
     title: t.title,
     body: t.body,
-    // 精英委託一定要打一場硬仗
-    fight: { ...streetEnemy(job), hp: 80 + (job.tier - 4) * 30, atk: 11, hit: 0.55 },
+    // 精英委託一定要打一場硬仗；第 5 階（灣岸）更硬
+    fight: { ...streetEnemy(job), hp: 80 + (job.tier - 4) * 30, atk: 11 + (job.tier - 4) * 3, hit: 0.55 + (job.tier - 4) * 0.03 },
     options: [
       { id: 'abort', label: '放棄這份工作，馬上撤離', lethal: false, lethalBase: 0, survivalWindowMin: 0 },
       { id: 'push', label: t.push, lethal: true, lethalBase: 0.2 + (job.tier - 4) * 0.12, survivalWindowMin: 3 },
@@ -110,7 +118,7 @@ export function highDanger(job: JobDef): DangerTemplate {
         lethal: true,
         lethalBase: 0.08 + (job.tier - 4) * 0.08,
         survivalWindowMin: 3,
-        attrNeeds: { attr: SKILLED[job.direction].attr, min: 7 },
+        attrNeeds: { attr: SKILLED[job.direction].attr, min: 7 + (job.tier - 4) },
       },
     ],
   }

@@ -1,9 +1,10 @@
 // 委託結案的演出：右上角 toast（任務完成）→ 結算畫面：印章砸下、閃光與火花、報酬一列一列跳出 → 繼續（之後才挑三選一）。
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { CheckCircle2, XCircle } from 'lucide-react'
 import { ActionButton, Panel } from '../components/ui'
 import type { Claim, useGame } from '../game/state'
 import { buzz } from '../components/haptics'
+import { sfx } from '../components/sfx'
 
 type G = ReturnType<typeof useGame>
 
@@ -43,15 +44,23 @@ export function CompleteDialog({ game }: { game: G }) {
   const [sheet, setSheet] = useState(false)
   const picks = g.character.picks.length
 
+  const opened = useRef(false)
+  const open = () => {
+    if (opened.current) return
+    opened.current = true
+    setSheet(true)
+    ;(won ? sfx.success : sfx.fail)()
+  }
   useEffect(() => {
     buzz(won ? [30, 40, 60] : 80)
-    const id = setTimeout(() => setSheet(true), TOAST_MS)
+    sfx.toast()
+    const id = setTimeout(open, TOAST_MS)
     return () => clearTimeout(id)
-  }, [won])
+  }, [won]) // open 只看 ref，不需要放進依賴
 
   if (!sheet)
     return (
-      <button onClick={() => setSheet(true)} className="claim-toast absolute top-[max(10px,env(safe-area-inset-top))] right-3 z-40 block w-64 text-left cut cut-sm" style={{ ['--edge' as string]: st.color }} aria-live="polite">
+      <button onClick={open} className="claim-toast absolute top-[max(10px,env(safe-area-inset-top))] right-3 z-40 block w-64 text-left cut cut-sm" style={{ ['--edge' as string]: st.color }} aria-live="polite">
         <span className="cut-in flex items-center gap-3 px-3 py-2.5">
           {won ? <CheckCircle2 size={22} style={{ color: st.color }} className="shrink-0" /> : <XCircle size={22} className="shrink-0 text-red" />}
           <span className="min-w-0 flex-1">

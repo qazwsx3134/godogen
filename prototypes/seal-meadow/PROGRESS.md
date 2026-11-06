@@ -2,6 +2,14 @@
 
 最後更新：2026-11-05。每次 commit、使用者出門或下班時更新這份檔案。只保留最近 3 次 commit 期間的工作與尚未 commit 的工作（新的在上）；更早的紀錄移到 [MILESTONE.md](MILESTONE.md)。
 
+## 2026-11-06｜kit 存檔 adapter 遷移（未提交）
+
+- 分支 master；跨原型能力庫重構的一部分。SaveStore 委派 SaveSlots 並注入 Validation.valid，Main 改經 adapter 保存、映射拒寫原因；保留 bytes 恢復比對與異常主檔保護。
+- 只從 kit 來源同步 save_slots.gd；atomic_file 來源／副本一致，其他 kit 副本保持原狀。v4 遷移使用固定位置 UID，v5/v6 與新掉落 UID 不變；future 備份現在啟動即拒絕。
+- 驗證：來源／副本 cmp、能力目錄 build/check PASS 70、git diff --check；未執行 Godot／讀寫真實存檔。使用者優先重構、測試延期；此前存檔與城鎮 PASS 不涵蓋本次修改。
+- 下一步：恢復測試時以隔離 save_path 跑 save_protection/m3_hardening/world_lifecycle，補雙檔 future 與 v4 UID 冪等性；其他原型 adapter 未遷移。
+- 重要入口：scripts/save_store.gd、main.gd、docs/save-protection.md；未改 scene／素材／匯出，未 commit/push，保留其他 session 工作。
+
 ## 2026-11-05｜暖陶瓦城鎮薄切片與製作規格
 
 - 分支 `master`、基準 `2237f384`（最新以 `git log -1` 為準）。使用者要求詳細規劃並執行，授權直接生成兩張城鎮方向圖並選定 A 暖陶瓦；接著另授權直接生成商店三視圖與陶瓦／木材／灰泥材質參考。四張圖、實際 prompt、選擇及限制見[風格參考](design/art-prompts/town-style-references-2026-11-05.md)。

@@ -2,6 +2,42 @@
 
 由根目錄 `Progress.md` 拆出（2026-11-02）。新的放最上面；每次 commit、出門／下班／暫停前更新本檔，根目錄只更新一行摘要。共用模組說明見 [README](README.md)。
 
+## 2026-11-06｜首款消費者 seal-meadow 接入（未提交）
+
+- godot-kit／master；seal 的 SaveStore 改為 validator/migrations adapter，Main 保存經 adapter，遊戲仍擁有恢復 bytes 與停止寫入狀態；v4 遷移改固定 UID，符合純回呼要求。
+- 僅同步 seal 的 save_slots.gd；atomic_file 已一致，其他副本未同步。這是來源接入，不是執行驗收；具體差異見 seal docs/save-protection.md。
+- 靜態檢查：cmp、capabilities.py build/check PASS 70、git diff --check；測試延期，未碰真實存檔、scene 或匯出，未 commit/push。
+- 下一步：完成其他候選小批重構；恢復測試時先驗 SaveSlots 與 seal adapter。revision／跨程序鎖等草案仍未實作。
+
+## 2026-11-06｜SaveSlots 驗證與備份保護（未提交）
+
+- godot-kit／master；完成既有 save/restore 的可選純 validator、逐版 migration 返回檢查、JSON round-trip 候選驗證、主／備份雙方 future 保護；有效主檔才以原始 bytes 輪替備份。沒有新增平行存檔框架。
+- 舊三參數呼叫保留；缺失／字串版本不再寬鬆轉型，migration 失敗可回退備份。未提供 codec／revision／跨程序鎖或跨檔原子交易，明定單寫入者。
+- 重要文件：docs/SAVE-SLOTS.md、save_slots.gd、specs 與生成能力參考；草案標註已實作子集。MCP 搜尋仍 Transport closed，按先前清單讀 kit／seal 來源。
+- 驗證：capabilities.py build 成功、check PASS 70、git diff --check 通過；測試依使用者指示延期，未執行 Godot／讀寫真實存檔；待補 L2 在 VALIDATION.md。
+- 未完成／下一步：選一款遊戲 adapter 遷移並確認版本政策；研究草案其餘功能不算已完成。未同步副本、未 commit/push；保留其他 session 工作及先前未提交修改。
+
+## 2026-11-06｜P0 鏡頭／載入／音樂生命週期重構（未提交）
+
+- 專案／分支：godot-kit／master；使用者指示繼續，優先重構、測試延期。
+- 已完成：camera_shake 擷取並還原原有 offset/rotation，新增 reset，停用／換鏡頭清理；scene_loader 忙碌拒絕重入且保留進度，新增 is_loading；music 對支援的 AudioStream 私有副本設定循環，原始 track 身分保留。
+- 契約：兩個 step 明訂有限非負秒數；loader cancel 是可能等待的收取／丟棄，不是即時取消。camera 仍要求單一寫入者，宿主釋放前 reset。用途／參數／輸出／範例與限制已回填 specs 並再生目錄；詳見 docs/REFACTOR-P0.md。
+- 驗證：靜態／目錄層，capabilities.py build 成功；capabilities.py check 顯示 PASS 70；git diff --check 通過。未執行 Godot 或 L2 測試，不沿用先前 PASS；待驗證案例在 docs/capabilities/VALIDATION.md。
+- 未完成：validated snapshot 與其餘 P0/P1 候選尚未實作；各遊戲副本未同步，不能宣稱遊戲整合驗收。
+- 下一步：先收斂 save_slots 的驗證／備份選擇與未來版本保護，保持遊戲 payload 規則由 adapter 提供。
+- 工作區：本批三支來源、specs／生成目錄、README／研究追蹤／驗證與進度文件；保留先前未提交 kit 工作、.codegraph 與其他 session 修改。未 commit／push。
+
+## 2026-11-06｜第三批 26 項與 9 CLI 實作研究（未提交）
+
+- 專案／分支：godot-kit／master；使用者連續指示繼續，延續研究與契約整理。未改 runtime／scene，未同步副本，未 commit／push。
+- 已完成：26 項剩餘 kit 腳本的實作研究（25 全文；vfx.library 為載入結構與兩個查詢方法，metadata 選讀）；9 CLI 主入口全文研究（sync 沿用前階段）。用途／時間／座標／失敗與所有權限制回填 specs.json/tools.json，CLI 新增機器可讀 effects 欄位並再生目錄。
+- 重要結果：PixelVfx 形狀與 shader、PixelVfx3D ring 與 chunks 的座標不同；VFX finished/free/cancel 契約不同；Inspector 預覽不等於 runtime one-shot 行為；CLI 非零退出可能已寫產物。詳見 `docs/KIT-RESEARCH-03.md`。
+- 覆蓋：62 項實作研究（含明列選讀）＋8 項前階段；kit 已無僅清單盤點項目。這不代表 16 原型的全部實作、423 個資源或所有 CLI helpers 都已審完；原型缺口保留於覆蓋表。
+- 工具：codebase-memory MCP 首次及重試均 Transport closed，按既有清單 fallback 讀來源；CodeGraph CLI 仍可查詢，沒有重裝或更改設定。
+- 驗證：文件／目錄層；`python3 prototypes/godot-kit/tools/capabilities.py build` 成功、`python3 prototypes/godot-kit/tools/capabilities.py check` PASS 70；本地文件連結與 git diff --check。未執行 CLI self-tests、匯出、錄影、Godot 或新重構測試，測試延期維持。
+- 下一步：回到 P0/P1 小批重構，優先 save_slots 的 validated snapshot 與 camera／loader 所有權；修正式契約時保留相容性，再按一款遊戲一個 adapter 遷移。來源深讀有紀錄，不需重做整份清單。
+- 工作區：保留先前 kit 改動與 .codegraph 本地索引；其他 session 的 mortal-city／cyberpunk 文件變更未觸碰。
+
 ## 2026-11-06｜第二批 kit 深讀與 CodeGraph MCP（未提交）
 
 - 專案／分支：godot-kit／master；使用者授權繼續並可安裝 CodeGraph MCP／skill。

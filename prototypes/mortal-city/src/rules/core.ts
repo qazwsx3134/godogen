@@ -256,7 +256,7 @@ export function xpToNext(level: number) {
 }
 
 /**
- * 名聲每級所需。機器人實測一區的總名聲：每次都選不會死的約 70（2 張卡）、敢冒險而活下來的約 160（5 張卡）；
+ * 名聲每級所需。機器人實測（新宿＋灣岸兩區）：每次都選不會死的約 6 張卡、敢冒險而活下來的約 8 張；
  * 冒險才湊得出完整流派。
  */
 export function fameToNext(level: number) {

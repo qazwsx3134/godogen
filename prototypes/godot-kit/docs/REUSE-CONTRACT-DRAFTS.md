@@ -20,6 +20,8 @@
 
 ## A. ValidatedSnapshotStore：有效存檔選取與提交
 
+目前已先以 [SaveSlots 可選 validator](SAVE-SLOTS.md) 落實驗證／備份／未來版本保護；下列 codec、revision、inspect/commit 仍是未實作草案。
+
 **用途／情境**：單人遊戲 profile／進度，主檔毀損時選有效備份，避免覆蓋較新版本。演進現有 save_slots，不新增平行存檔體系。
 
 | 介面草案 | 輸入與輸出 |

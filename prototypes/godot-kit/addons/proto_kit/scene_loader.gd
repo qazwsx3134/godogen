@@ -3,14 +3,14 @@ extends RefCounted
 ## a percentage, tips, an error and a retry button) is the game's own scene. `const SceneLoader = preload("res://addons/proto_kit/scene_loader.gd")`
 ##
 ##   var loader := SceneLoader.new()
-##   loader.request("res://main.tscn")              # false (and `failed`) if the file is missing or the request is refused
+##   loader.request("res://main.tscn")              # false if busy (unchanged), otherwise failed on load failure
 ##   func _process(delta: float) -> void:
 ##       var packed: PackedScene = loader.step(delta)   # null until the scene is loaded AND the bar has been full for a moment
 ##       bar.value = loader.shown * 100.0
 ##       if loader.failed: show the error and a retry button that calls loader.request(path) again
 ##       elif packed != null and get_tree().change_scene_to_packed(packed) != OK: loader.fail()   # loaded, cannot be instantiated
 ##   func _exit_tree() -> void:
-##       loader.cancel()                                 # a load nobody collected is taken off the thread, or the task leaks
+##       loader.cancel()                                 # collect/discard the pending result; may wait for loading
 ##
 ## What `shown` does, and why: it only moves forward; it never gets ahead of the real load; and it never gets ahead of
 ## the clock either (`min_show_time`), so the screen is no flash and a load that finishes at once (a web build without
@@ -28,7 +28,7 @@ var hold_at_full: float = 0.2
 
 ## What the bar may show, 0..1.
 var shown: float = 0.0
-## The last request failed (missing file, broken scene, refused). request() clears it.
+## The accepted request failed. A request rejected while busy does not change this flag.
 var failed: bool = false
 ## The scene being loaded.
 var path: String = ""
@@ -38,8 +38,15 @@ var _target: float = 0.0   # how far the load really is, 0..1
 var _full_for: float = 0.0
 var _requested: bool = false
 
-## Starts loading `scene_path` (again, after a failure). Resets the clock and the bar. False when it could not start.
+## True until the pending result has been collected, including the loading bar's hold period.
+func is_loading() -> bool:
+	return _requested
+
+## Starts loading `scene_path`. While busy, returns false without changing the current request or progress.
+## Otherwise resets the clock/bar and sets failed if loading cannot start. Cancel/collect before starting another.
 func request(scene_path: String) -> bool:
+	if _requested:
+		return false
 	path = scene_path
 	_elapsed = 0.0
 	_full_for = 0.0
@@ -56,6 +63,8 @@ func request(scene_path: String) -> bool:
 ## Once per frame, with the frame's delta. Returns the loaded scene once the bar has been full for `hold_at_full`
 ## seconds, else null (loading, failed, or not started). Call fail() if the game cannot use the scene it gets.
 func step(delta: float) -> PackedScene:
+	if not is_finite(delta) or delta < 0.0:
+		return null
 	_elapsed += delta
 	if not _requested or failed:
 		return null
@@ -92,7 +101,8 @@ func step(delta: float) -> PackedScene:
 func fail() -> void:
 	failed = true
 
-## Takes a load nobody collected off the thread (call it when the screen leaves the tree).
+## Collects/discards a pending result; may wait for completion. This does not abort the underlying load.
+## Call when the owner leaves, or before replacing a request. Repeated calls are harmless.
 func cancel() -> void:
 	if _requested:
 		ResourceLoader.load_threaded_get(path)

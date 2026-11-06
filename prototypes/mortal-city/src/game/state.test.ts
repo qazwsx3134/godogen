@@ -1,11 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import { CASES, CASE_01, CASE_02, caseBody, caseReplies, optionLock } from '../content/cases'
-import { EVENTS } from '../content/events'
+import { EVENTS, EVENT_BY_ID, WANGAN_EVENTS } from '../content/events'
 import { makeItem } from '../content/items'
 import { type Pick, fightStats, implantRoom, perkOptions, tacticsFor } from '../rules/core'
 import { PERK_IDS } from '../rules/perks'
-import { findNode } from '../rules/map'
-import { type Action, type Game, caseDangerOption, eventLock, initial, movable, nodeBusy, reduce } from './state'
+import { LAYERS, STORY_LAYER, findNode } from '../rules/map'
+import { type Action, type Game, caseDangerOption, eventLock, initial, movable, nextDistrict, nodeBusy, reduce } from './state'
+import { DISTRICTS } from '../content/districts'
 
 /** 換一個傭兵 id（每個 id 的 seed 不同）。 */
 const fresh = (id: string, over: Partial<Game['character']> = {}): Game => {
@@ -13,9 +14,12 @@ const fresh = (id: string, over: Partial<Game['character']> = {}): Game => {
   return { ...g, character: { ...g.character, id, ...over } }
 }
 
-/** 直接站到劇情委託節點上（跳過地圖）。 */
+/** 直接站到地圖上的劇情節點（02＝劇情大案、01＝中段劇情委託，其他用開發節點）。 */
 function atCase(g: Game, caseId: string): Game {
-  return { ...g, story: { caseId, stage: 'prep' }, run: { ...g.run, node: { kind: 'story', nodeId: `case-${caseId}`, caseId } } }
+  const all = g.run.district.layers.flat()
+  const node = caseId === CASE_02.id ? all.find((n) => n.type === 'boss') : caseId === CASE_01.id ? all.find((n) => n.type === 'story') : undefined
+  const nodeId = node?.id ?? 'dev'
+  return { ...g, story: { caseId, stage: 'prep' }, run: { ...g.run, at: node?.id ?? g.run.at, node: { kind: 'story', nodeId, caseId } } }
 }
 
 function play(g: Game, caseId: string, approach: string, optionId: string): Game {
@@ -37,10 +41,15 @@ function botAction(g: Game, risky: boolean): Action | null {
     const p = c.picks[0]
     return p.kind === 'perk' ? { t: 'pickPerk', id: perkOptions(c, p.seed)[0] } : { t: 'pickItem', index: 0 }
   }
-  if (g.run.phase === 'safehouse') return { t: 'retire' }
+  if (g.run.phase === 'safehouse') return nextDistrict(g) ? { t: 'continue' } : { t: 'retire' }
   const tactic = tacticsFor(c).find((t) => !t.locked)!.id
   const n = g.run.node
-  if (!n) return { t: 'move', nodeId: movable(g)[0].id }
+  if (!n) {
+    // 依傭兵 id 挑不同的分支，各局走不同路線
+    const opts = movable(g)
+    const k = [...c.id].reduce((s, ch) => s + ch.charCodeAt(0), 0) + g.run.path.length * 7
+    return { t: 'move', nodeId: opts[k % opts.length].id }
+  }
   if (n.kind === 'job') {
     if (n.stage === 'auto') return { t: 'jobAutoDone' }
     if (n.stage === 'fight') return n.fight ? { t: 'jobFightDone' } : { t: 'jobFight', tactic }
@@ -54,7 +63,7 @@ function botAction(g: Game, risky: boolean): Action | null {
   }
   if (n.kind === 'event') {
     if (n.stage === 'done') return { t: 'leave' }
-    const ev = EVENTS.find((e) => e.id === n.eventId)!
+    const ev = EVENT_BY_ID[n.eventId]
     return { t: 'eventChoose', optionId: ev.options.find((o) => !eventLock(c, o))!.id }
   }
   if (n.kind === 'market' && c.credits >= 450 && c.lifelines === 0) return { t: 'buyLifeline' }
@@ -88,7 +97,7 @@ function runBot(id: string, risky: boolean) {
 }
 
 describe('a whole career through the reducer', () => {
-  it('a careful bot never gets stuck, reaches the safehouse, retires and is written into the legends', () => {
+  it('a careful bot never gets stuck, goes through every district, retires and is written into the legends', () => {
     let perks = 0
     let items = 0
     for (let i = 0; i < 200; i++) {
@@ -97,13 +106,14 @@ describe('a whole career through the reducer', () => {
       expect(r.g.meta.legends.length).toBe(1)
       expect(r.g.meta.legends[0].end).toBe(r.g.character.alive ? 'retired' : 'dead')
       expect(r.g.character.alive).toBe(true) // 一律選不會死的選項就不會死
+      expect(r.g.run.districtIndex).toBe(DISTRICTS.length - 1) // 走完所有街區才退休
       expect(r.g.run.path.length).toBe(11)
       perks += r.perks
       items += r.items
     }
-    // 每次都選不會死的，一區約 2 張卡
-    expect(perks / 200).toBeGreaterThanOrEqual(1.5)
-    expect(perks / 200).toBeLessThanOrEqual(4)
+    // 每次都選不會死的，新宿＋灣岸兩區約 6 張卡
+    expect(perks / 200).toBeGreaterThanOrEqual(4)
+    expect(perks / 200).toBeLessThanOrEqual(8)
     expect(items / 200).toBeGreaterThanOrEqual(1)
   })
 
@@ -119,9 +129,9 @@ describe('a whole career through the reducer', () => {
     }
     expect(dead).toBeGreaterThan(0)
     expect(dead).toBeLessThan(100)
-    // 冒險而活下來的，一區約 4～6 張卡
-    expect(perks / (200 - dead)).toBeGreaterThanOrEqual(3.5)
-    expect(perks / (200 - dead)).toBeLessThanOrEqual(7)
+    // 冒險而活下來的，兩區約 8 張卡
+    expect(perks / (200 - dead)).toBeGreaterThanOrEqual(6)
+    expect(perks / (200 - dead)).toBeLessThanOrEqual(11)
   })
 
   it('a new mercenary keeps the legends and the seen node types, and gets a new map', () => {
@@ -152,6 +162,49 @@ describe('map movement', () => {
     const g = fresh('m2')
     const id = movable(g)[0].id
     expect(reduce(g, { t: 'move', nodeId: id }).run.node).toEqual(reduce(g, { t: 'move', nodeId: id }).run.node)
+  })
+})
+
+describe('districts', () => {
+  it('the safehouse continues into 灣岸 with a new map, keeping the mercenary; after the last district only retiring is left', () => {
+    let g = play(fresh('d1'), CASE_01.id, 'stealth', 'hand')
+    g = play(g, CASE_02.id, 'stealth', 'half')
+    g = reduce(reduce(g, { t: 'claim' }), { t: 'leave' })
+    expect(g.run.phase).toBe('safehouse')
+    expect(reduce(g, { t: 'continue' })).toBe(g) // 名聲升級的三選一還沒挑
+    while (g.character.picks.length) {
+      const p = g.character.picks[0]
+      g = reduce(g, p.kind === 'perk' ? { t: 'pickPerk', id: perkOptions(g.character, p.seed)[0] } : { t: 'pickItem', index: 0 })
+    }
+    const before = g.character
+    g = reduce(g, { t: 'continue' })
+    expect(g.run).toMatchObject({ districtIndex: 1, phase: 'map', at: null, path: [] })
+    expect(g.run.district.id).toBe('wangan')
+    expect(g.character).toBe(before)
+    // 灣岸的劇情委託是 03、劇情大案是 06
+    const story = g.run.district.layers.flat().find((n) => n.type === 'story')!
+    const boss = g.run.district.layers.flat().find((n) => n.type === 'boss')!
+    const atStory = reduce({ ...g, run: { ...g.run, at: g.run.district.layers[STORY_LAYER - 1][0].id } }, { t: 'move', nodeId: story.id })
+    expect(atStory.story.caseId).toBe('P01-03')
+    const atBoss = reduce({ ...g, run: { ...g.run, at: g.run.district.layers[LAYERS - 2][0].id } }, { t: 'move', nodeId: boss.id })
+    expect(atBoss.story.caseId).toBe('P01-06')
+    expect(reduce({ ...g, run: { ...g.run, phase: 'safehouse' } }, { t: 'continue' }).run.districtIndex).toBe(1) // 沒有下一區
+  })
+
+  it('灣岸 jobs are tier 2-3 and its elites tier 5', () => {
+    let g = reduce(play(fresh('d2'), CASE_01.id, 'stealth', 'hand'), { t: 'claim' })
+    g = { ...g, run: { ...g.run, phase: 'safehouse', node: null } }
+    g = reduce(g, { t: 'continue' })
+    const tiers = new Set<number>()
+    for (const n of g.run.district.layers.flat()) {
+      if (n.type !== 'job' && n.type !== 'elite') continue
+      const prev = g.run.district.layers.flat().find((p) => p.next.includes(n.id))
+      const h = reduce({ ...g, run: { ...g.run, at: prev?.id ?? null } }, { t: 'move', nodeId: n.id })
+      const node = h.run.node as { jobId: string } | null
+      if (node) tiers.add(Number(node.jobId.split('-')[1]))
+    }
+    expect([...tiers].every((t) => [2, 3, 5].includes(t))).toBe(true)
+    expect(tiers.has(5)).toBe(true)
   })
 })
 
@@ -311,6 +364,6 @@ describe('node services and three-way picks', () => {
 
   it('every event has an option that needs no money and no attribute', () => {
     const broke = { ...initial(0).character, credits: 0 }
-    for (const ev of EVENTS) expect(ev.options.some((o) => !eventLock(broke, o)), ev.id).toBe(true)
+    for (const ev of [...EVENTS, ...WANGAN_EVENTS]) expect(ev.options.some((o) => !eventLock(broke, o)), ev.id).toBe(true)
   })
 })

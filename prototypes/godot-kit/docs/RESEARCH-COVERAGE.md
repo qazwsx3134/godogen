@@ -112,3 +112,7 @@ MCP graph 已索引此 repo。檔案 pattern 使用 glob（例如 `*story_runner
 本表不聲稱整個研究已窮盡。已足以決定下一批重構邊界；優先回收共用基礎保護與生命週期，剩餘深讀按實際遷移目標繼續。沒有新增模型框架、修改遊戲副本或執行完整測試。
 
 第三批 graph search 連續回報 `Transport closed`，因此按既有清單直接讀取檔案；沒有把工具失敗當作零引用。來源語義／目錄一致性檢查與 runtime 驗證仍分開。
+
+## CLI 覆蓋
+
+9 個 catalog/tools.json 主入口均已讀實作；sync 沿用前階段，其他本批全文。相依 helper、外部程式與平台執行未驗；細節見 [第三批研究](KIT-RESEARCH-03.md)。

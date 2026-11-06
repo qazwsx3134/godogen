@@ -27,3 +27,18 @@
 - 原有遊戲副本未同步；新模組不能因文件完整就標為多遊戲實際驗收。
 
 後續恢復驗證時，先針對 weighted_choice 有效分佈與固定 seed 的舊新序列、非法權重的明確行為做最小 L1，再跑其四個消費模組的少量 L2。沒有作者手動驗收前不跑完整 L3。
+
+## 2026-11-06 P0 生命週期重構（執行驗證延期）
+
+本批 camera_shake／scene_loader／music 只審查來源差異與契約，再生能力目錄。沒有 Godot 執行、音訊實播或遊戲冒煙結果；先前 PASS 不涵蓋本批。未新增測試，依使用者優先重構指示延期。
+
+恢復測試時採 L2，限下列受影響路徑：
+- camera：非零 offset/rotation 的自然結束、立即停用、reset、換鏡頭、鏡頭已 free；明確遵守單一寫入者。
+- loader：載入中與滿格停留期間的重複 request 保留狀態；場景只交付一次；失敗可重試；非法 delta 無更新；cancel 收取而非中止。
+- music：同一資源另供音效使用時循環設定不變；Ogg/MP3/WAV 私有副本；同一原始資源不重播；快速換軌仍可淡出入。
+
+## 2026-11-06 SaveSlots 重構（執行驗證延期）
+
+本次僅 `capabilities.py build` 與 `check`（PASS 70）、`git diff --check`；未執行 Godot，無新的存檔測試證據。未使用作者真實 user:// 存檔。
+
+恢復時採 L2：隔離路徑檢查主檔／備份任一 future 阻擋讀寫、缺失／小數／字串版本、validator 拒絕且檔案不變、JSON 數字 round-trip、無效主檔不污染好備份、migration 缺失／非 Dictionary 返回可回退、validator 收到副本、backup IO 失敗不得提交主檔，以及舊三參數呼叫。另確認單寫入者與兩檔非交易限制，不用並發測試假裝提供鎖。

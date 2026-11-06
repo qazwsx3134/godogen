@@ -132,7 +132,7 @@
 ## 多 agent 協作（Herdr、Codex、子 agent）
 
 - **用 `herdr agent wait` 與 agent 狀態判斷子 agent 做完了**，狀態會閃成 idle、wait 提早回來 → 派工單指定報告檔，以報告檔出現為完成訊號。（[CLAUDE.md](../CLAUDE.md) 2026-10-02）
-- **使用者已開好 Codex pane 時另開新的，新的卡在 CLI 自動更新** → 先 `herdr agent list` 找現成的 pane 並確認空閒；派工單路徑寫絕對路徑；用 pane ID 當目標。跨 agent 合作時 Codex 不用 Luna max。（記憶檔 `codex-collab-model`，2026-10-16／10-20）
+- **使用者已開好 Codex pane 時另開新的，新的卡在 CLI 自動更新** → 先 `herdr agent list` 找現成的 pane 並確認空閒；派工單路徑寫絕對路徑；用 pane ID 當目標。跨 agent 合作時 Codex 不用 Luna max。現成的 pane 在忙、只能新開時：Codex 啟動時可能先自動更新，更新完就結束，`herdr agent start` 和 `agent prompt` 照樣回成功、派工單根本沒被讀到 → 派工後幾秒用 `herdr pane read <pane> --source recent-unwrapped` 確認它真的在做，看到「Please restart Codex」就在同一個 pane 重新 `agent start` 再派一次。(×2)（記憶檔 `codex-collab-model`，2026-10-16／10-20）
 - **Codex 在 Herdr 裡啟動，`-c` 參數跳警告框擋住它** → 按 Esc 關掉。（[erwin-run](erwin-run/PROGRESS.md#已知的坑)）
 - **Codex 幾乎每個指令都要人工核准，使用者不在時整批停住** → 長批次前請使用者用 `/approvals` 放寬，或把產出寫在 Codex 的工作區最後一次搬。（[character-sprite-forge](godot-kit/skills/character-sprite-forge/SKILL.md#坑)）
 - **不要假設上一個 agent 開的伺服器還活著** → 先確認再用。（[dreamling-idle/PROGRESS.md](dreamling-idle/PROGRESS.md)）

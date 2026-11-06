@@ -6,6 +6,8 @@ import { FIXERS, JOBS, highDanger } from '../content/data'
 import { CASE_BY_ID, type Reply, type StoryCase, caseBody, caseReplies, optionLock } from '../content/cases'
 import { EVENT_BY_ID } from '../content/events'
 import { buzz, reducedMotion } from '../components/haptics'
+import { sfx } from '../components/sfx'
+import { TypeLine } from '../components/Fx'
 import { ITEMS, LIFELINE_PRICE, SHOP_IMPLANTS, itemDesc, marketPrice } from '../content/items'
 import { type NodeRun, type ResultRow, type useGame, eventLock, fightEnemy, jobLines } from '../game/state'
 import { findNode } from '../rules/map'
@@ -587,7 +589,7 @@ export function AutoRun({ lines, total, fast, onDone }: { lines: string[]; total
         {lines.slice(0, n).map((l, i) => (
           <li key={i} className={`sys-line reply-in ${i === n - 1 ? 'sys-line-now' : ''}`}>
             <span className="tech sys-line-tag">{String(i + 1).padStart(2, '0')}</span>
-            <span className="flex-1">{l}</span>
+            <span className="flex-1">{i === n - 1 ? <TypeLine text={l} /> : l}</span>
           </li>
         ))}
       </ol>
@@ -647,6 +649,20 @@ function TacticPicker({ game, enemy, onPick }: { game: G; enemy: Enemy; onPick: 
   )
 }
 
+/** 每種回合事件的音效。 */
+const FIGHT_SFX: Partial<Record<FightFx, () => void>> = {
+  hit: sfx.hit,
+  crit: sfx.crit,
+  hurt: sfx.hurt,
+  shock: sfx.zap,
+  hack: sfx.zap,
+  jammed: sfx.zap,
+  ambush: sfx.whoosh,
+  stealth: sfx.whoosh,
+  win: sfx.success,
+  retreat: sfx.fail,
+}
+
 /** 每種回合事件的特效：面板震動、畫面閃光的顏色、手機震動。 */
 const FIGHT_FX: Partial<Record<FightFx, { shake?: number; flash?: string; buzz?: number }>> = {
   hurt: { shake: 7, flash: 'fx-blood', buzz: 25 },
@@ -686,6 +702,7 @@ function FightRun({ fight: f, after = [], onDone }: { fight: FightResult; after?
     if (n > f.rounds.length) return
     const fx = FIGHT_FX[last.fx]
     if (fx?.buzz) buzz(fx.buzz)
+    FIGHT_SFX[last.fx]?.()
     if (fx?.shake && stage.current && !reducedMotion()) {
       const d = fx.shake
       stage.current.animate(

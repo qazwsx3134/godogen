@@ -10,8 +10,8 @@ extends Node
 ## The node uses the AudioStreamPlayer children it finds (two is enough: one fading out, one fading in) and adds
 ## the missing ones itself. It runs while the game is paused (set process_mode ALWAYS on the node), and its fades
 ## ignore Engine.time_scale, so a hit stop does not stretch them. A track imported without looping would end and
-## leave silence, so looping is switched on when a track starts. A game that needs named tracks (a room theme and
-## a boss theme) extends this script and adds the exports:
+## leave silence, so looping is enabled on a private stream copy. The caller's resource stays unchanged.
+## A game that needs named tracks (a room theme and a boss theme) extends this script and adds the exports:
 ##
 ##   extends "res://addons/proto_kit/music.gd"
 ##   @export var room_track: AudioStream
@@ -66,8 +66,11 @@ func _spare_player() -> AudioStreamPlayer:
 			best = player
 	return best
 
-## A track imported without looping would end and leave silence, so looping is switched on here.
+## Copy the supported stream before changing loop properties; keep track as the caller's identity for deduplication.
+## Other stream types pass through unchanged; their loop policy belongs to the caller.
 func _looped(stream: AudioStream) -> AudioStream:
+	if stream is AudioStreamOggVorbis or stream is AudioStreamMP3 or stream is AudioStreamWAV:
+		stream = stream.duplicate() as AudioStream
 	if stream is AudioStreamOggVorbis or stream is AudioStreamMP3:
 		stream.loop = true
 	elif stream is AudioStreamWAV:

@@ -246,13 +246,13 @@
     {
       "id": "camera_shake",
       "path": "addons/proto_kit/camera_shake.gd",
-      "sha256": "de6a0fc43c74b56a17ab7151127c4f6031cb575971e78855849eb940911580aa",
+      "sha256": "5a20a2727f8b9772cd4fd7cfe55ad426a4f902995248178e933cd3dbeea7be6a",
       "purpose": "2D trauma 震屏；打擊回饋與無障礙強度調整",
       "use_when": "打擊回饋與無障礙強度調整",
       "kind": "rule",
       "status": "來源靜態引用：erwin-run、survivor-series；不代表本輪已做遊戲／真人驗收",
-      "constraints": "呼叫端持有狀態；輸入 Dictionary 欄位與錯誤結果依下方原碼契約。需要 RNG 時使用專屬亂數流，不與特效共用。 獨占 Camera2D.offset/rotation，假設基準為零，避免與其他鏡頭控制器同時寫入。",
-      "example": "const Capability = preload(\"res://addons/proto_kit/camera_shake.gd\")\nvar shake = Capability.new()\nshake.camera = $Camera2D\nshake.add_trauma(0.25)\n# 每幀一次：shake.step(delta)",
+      "constraints": "每幀由宿主 step 一次；delta 為有限非負秒數，非法值不更新。震動期間獨占 Camera2D.offset/rotation，首次寫入前擷取非零基準；自然結束、reset()、shake_scale <= 0 或改綁鏡頭時還原。改綁保留剩餘 trauma。釋放此 RefCounted 或交還鏡頭控制權前必須 reset()；不支援同時寫入這兩欄的控制器。decay/frequency/scale 使用有限非負值，trauma/ceiling 為 0..1；沒有 RNG。",
+      "example": "const Capability = preload(\"res://addons/proto_kit/camera_shake.gd\")\nvar shake = Capability.new()\nshake.camera = $Camera2D\nshake.add_trauma(0.25)\n# 每幀一次：shake.step(delta)\n# 離場或交還鏡頭控制權：shake.reset()\n# 立即停用並還原：shake.shake_scale = 0.0",
       "adoption_evidence": {
         "as_of": "2026-11-06",
         "static_references": [
@@ -285,16 +285,21 @@
         "runtime_acceptance": "not assessed in this inventory"
       },
       "base": "RefCounted",
-      "documentation": "Camera shake by trauma. Every impact adds trauma (0..1), trauma drains at a fixed rate, and the camera moves by\ntrauma squared: small hits barely stir it, big ones punch, and a stream of small ones does not add up to a big one.\n`const CameraShake = preload(\"res://addons/proto_kit/camera_shake.gd\")`\n\nvar shake := CameraShake.new()\nshake.camera = $Camera2D\nfunc _process(delta): shake.step(delta)        # whoever owns the camera steps it once a frame\nshake.add_trauma(0.25)                          # a small hit\nshake.add_trauma(0.85)                          # a boss death\nshake.add_trauma(0.25, 0.35)                    # never pushes trauma past 0.35, so a stream of crits rumbles instead of punching\n\nIt moves Camera2D.offset and Camera2D.rotation only, never a body or the camera's position, so aiming and\ncollisions are untouched. The motion is two sines at unrelated rates, not a random value per frame (that buzzes).\nRotation only shows with Camera2D.ignore_rotation off. When trauma reaches 0 the camera is put back at exactly zero.\nThe camera to shake. Nothing happens to the camera while this is null (trauma still drains).\nAccessibility: scales how far the camera moves. 0 = the camera never shakes (trauma is not even collected).\nTrauma lost per second. The shake itself is trauma squared, so it dies away faster than trauma does.\nCamera offset (px) at full trauma, and the roll (rad) the camera turns at most.\nHow fast the shake wobbles (Hz). Much above 10 it turns into a buzz on a 30 or 60 fps screen.\n0..1, added to by every shake and drained by `decay`. The camera shakes by trauma squared.\nShakes add up, but one never pushes the trauma past its own `ceiling` (and never lowers it).\nDoes nothing while shake_scale is 0.\nOnce per frame, with the frame's delta.\nSmooth, not random: two sines at unrelated rates. A fresh randf() every frame would buzz. Within -1..1.",
+      "documentation": "Camera shake by trauma. Every impact adds trauma (0..1), trauma drains at a fixed rate, and the camera moves by\ntrauma squared: small hits barely stir it, big ones punch, and a stream of small ones does not add up to a big one.\n`const CameraShake = preload(\"res://addons/proto_kit/camera_shake.gd\")`\n\nvar shake := CameraShake.new()\nshake.camera = $Camera2D\nfunc _process(delta): shake.step(delta)        # whoever owns the camera steps it once a frame\nshake.add_trauma(0.25)                          # a small hit\nshake.add_trauma(0.85)                          # a boss death\nshake.add_trauma(0.25, 0.35)                    # never pushes trauma past 0.35, so a stream of crits rumbles instead of punching\n\nIt moves Camera2D.offset and Camera2D.rotation only, never a body or the camera's position, so aiming and\ncollisions are untouched. The motion is two sines at unrelated rates, not a random value per frame (that buzzes).\nRotation only shows with Camera2D.ignore_rotation off. The starting offset/rotation are restored on completion.\nWhile shaking this object exclusively owns those two properties. Call reset() before handing them back.\nThe camera to shake. Nothing happens to the camera while this is null (trauma still drains).\nAccessibility: scales how far the camera moves. 0 = the camera never shakes (trauma is not even collected).\nTrauma lost per second. The shake itself is trauma squared, so it dies away faster than trauma does.\nCamera offset (px) at full trauma, and the roll (rad) the camera turns at most.\nHow fast the shake wobbles (Hz). Much above 10 it turns into a buzz on a 30 or 60 fps screen.\n0..1, added to by every shake and drained by `decay`. The camera shakes by trauma squared.\nStops the shake and restores the captured camera pose. Safe to call repeatedly or after the camera was freed.\nShakes add up, but one never pushes the trauma past its own `ceiling` (and never lowers it).\nDoes nothing while shake_scale is 0.\nOnce per frame, with the frame's delta.\nSmooth, not random: two sines at unrelated rates. A fresh randf() every frame would buzz. Within -1..1.",
       "methods": [
         {
+          "signature": "func reset() -> void:",
+          "line": 48,
+          "contract": "Stops the shake and restores the captured camera pose. Safe to call repeatedly or after the camera was freed."
+        },
+        {
           "signature": "func add_trauma(amount: float, ceiling: float = 1.0) -> void:",
-          "line": 36,
+          "line": 61,
           "contract": "Shakes add up, but one never pushes the trauma past its own `ceiling` (and never lowers it).\nDoes nothing while shake_scale is 0."
         },
         {
           "signature": "func step(delta: float) -> void:",
-          "line": 42,
+          "line": 67,
           "contract": "Once per frame, with the frame's delta."
         }
       ],
@@ -1462,12 +1467,12 @@
     {
       "id": "music",
       "path": "addons/proto_kit/music.gd",
-      "sha256": "ab7af84892175dc9c72484adc3ec9a4bddba7b27ecff4ae12563878498637073",
+      "sha256": "bcc06e0268f489c7b07d9ffaa039627b8c20fbb79cecb6216a9420f024557559",
       "purpose": "背景音樂交叉淡入淡出；場景切換與暫停仍保持播放",
       "use_when": "場景切換與暫停仍保持播放",
       "kind": "node",
       "status": "來源靜態引用：erwin-run、survivor-series；不代表本輪已做遊戲／真人驗收",
-      "constraints": "場景擁有生命週期；依下方契約準備子節點與資源。每幀只能由一個時鐘推進，不可重複 auto/manual step。",
+      "constraints": "scene Node 完成 _ready() 後才呼叫 play；至少兩個 AudioStreamPlayer（缺少時補建）。要在暫停時播放，宿主需設定 process_mode = ALWAYS；淡出入忽略 Engine.time_scale。OggVorbis/MP3/WAV 在私有副本啟用循環，不改傳入資源；其他 AudioStream 類型原樣使用，循環由呼叫者配置。track 保留傳入資源身分，同一資源再次 play 不重播。快速第三次換軌會重用最安靜 voice，可能截斷尚未淡完的曲目。",
       "example": "# scene Node 掛此腳本；track.ogg 由遊戲提供\n$Music.play(load(\"res://audio/track.ogg\"))\n$Music.stop()",
       "adoption_evidence": {
         "as_of": "2026-11-06",
@@ -1505,7 +1510,7 @@
         "runtime_acceptance": "not assessed in this inventory"
       },
       "base": "Node",
-      "documentation": "Background music with crossfades: `play(track)` fades the old track out while the new one fades in,\n`stop()` fades to silence. `const Music = preload(\"res://addons/proto_kit/music.gd\")`, or put the script on a\nNode of the game scene and call:\n\nmusic.play(room_theme)       # a different track: the old one fades out, this one fades in, looped\nmusic.play(room_theme)       # the same track again: nothing happens (walking from room to room keeps it)\nmusic.stop()                 # fades to silence\n\nThe node uses the AudioStreamPlayer children it finds (two is enough: one fading out, one fading in) and adds\nthe missing ones itself. It runs while the game is paused (set process_mode ALWAYS on the node), and its fades\nignore Engine.time_scale, so a hit stop does not stretch them. A track imported without looping would end and\nleave silence, so looping is switched on when a track starts. A game that needs named tracks (a room theme and\na boss theme) extends this script and adds the exports:\n\nextends \"res://addons/proto_kit/music.gd\"\n@export var room_track: AudioStream\n@export var boss_track: AudioStream\nVolume of a track at full level. Keep it well below the sound effects.\nSeconds the old track takes to fade out and the new one to fade in.\nWhat is meant to be playing now (null = silence).\nStarts `new_track`, looped, and fades whatever else plays out. Asking for the track that is already\nplaying changes nothing, so walking from room to room does not restart the music.\nA player that is silent, else the quietest one (a third track in quick succession cuts the fading one).\nA track imported without looping would end and leave silence, so looping is switched on here.\nLevel 1 = `volume_db`, 0 = silent. Linear in amplitude, like a fade in an audio editor.",
+      "documentation": "Background music with crossfades: `play(track)` fades the old track out while the new one fades in,\n`stop()` fades to silence. `const Music = preload(\"res://addons/proto_kit/music.gd\")`, or put the script on a\nNode of the game scene and call:\n\nmusic.play(room_theme)       # a different track: the old one fades out, this one fades in, looped\nmusic.play(room_theme)       # the same track again: nothing happens (walking from room to room keeps it)\nmusic.stop()                 # fades to silence\n\nThe node uses the AudioStreamPlayer children it finds (two is enough: one fading out, one fading in) and adds\nthe missing ones itself. It runs while the game is paused (set process_mode ALWAYS on the node), and its fades\nignore Engine.time_scale, so a hit stop does not stretch them. A track imported without looping would end and\nleave silence, so looping is enabled on a private stream copy. The caller's resource stays unchanged.\nA game that needs named tracks (a room theme and a boss theme) extends this script and adds the exports:\n\nextends \"res://addons/proto_kit/music.gd\"\n@export var room_track: AudioStream\n@export var boss_track: AudioStream\nVolume of a track at full level. Keep it well below the sound effects.\nSeconds the old track takes to fade out and the new one to fade in.\nWhat is meant to be playing now (null = silence).\nStarts `new_track`, looped, and fades whatever else plays out. Asking for the track that is already\nplaying changes nothing, so walking from room to room does not restart the music.\nA player that is silent, else the quietest one (a third track in quick succession cuts the fading one).\nCopy the supported stream before changing loop properties; keep track as the caller's identity for deduplication.\nOther stream types pass through unchanged; their loop policy belongs to the caller.\nLevel 1 = `volume_db`, 0 = silent. Linear in amplitude, like a fade in an audio editor.",
       "methods": [
         {
           "signature": "func play(new_track: AudioStream) -> void:",
@@ -2355,13 +2360,13 @@
     {
       "id": "save_slots",
       "path": "addons/proto_kit/save_slots.gd",
-      "sha256": "853bbb00bf4ddcf342782b9b50a1c2167312f50ef610c8be39ed065ee069835a",
+      "sha256": "8519b502f8069a6fafd92706f2b8ef63d1453e53c78a7bb54dd9a6164180fa16",
       "purpose": "JSON 版本、備份恢復與遷移鏈；跨版本進度存檔",
       "use_when": "跨版本進度存檔",
       "kind": "rule",
       "status": "來源靜態引用：seal-meadow；不代表本輪已做遊戲／真人驗收",
-      "constraints": "呼叫端持有狀態；輸入 Dictionary 欄位與錯誤結果依下方原碼契約。需要 RNG 時使用專屬亂數流，不與特效共用。 JSON 數字讀回為 float；新版本／遷移失敗不會靜默降版。",
-      "example": "const Capability = preload(\"res://addons/proto_kit/save_slots.gd\")\nvar error: Error = Capability.save(\"user://slot1.json\", {\"level\": 1}, 1)\nif error == OK:\n    var restored: Dictionary = Capability.restore(\"user://slot1.json\", 1)\n    if restored.error == \"\":\n        print(int(restored.data.level))",
+      "constraints": "單寫入者、JSON envelope {version,data}，version 非負整數（保留 v0）；數字讀回可能為 float。restore(path,version,migrations={},validator=Callable()) 不寫磁碟，主／備份任一可辨識較新版本均拒絕；無效主檔可選備份。migration 為逐版純 Dictionary→Dictionary；validator 為目前版本純 Dictionary→bool，驗證失敗 error=invalid，回呼無效或型別錯誤亦拒絕，回呼自身腳本錯誤不捕捉。save(path,data,version,validator=Callable(),migrations={}) 驗證序列化後候選，寫入前查兩檔；較新版本 ERR_UNAVAILABLE、候選無效 ERR_INVALID_DATA。僅能通過遷移及驗證的主檔原始 bytes 輪替備份，否則保留原備份。省略 validator 只有 envelope 檢查。可能先成功更新備份再主檔寫入失敗；不保證跨檔原子性、跨程序鎖或 revision 競態防護。",
+      "example": "const Saves = preload(\"res://addons/proto_kit/save_slots.gd\")\n# 純回呼由遊戲提供，檢查目前 schema 的必要欄位／型別／範圍\nvar validator: Callable = validate_profile\nvar migrations: Dictionary = {} # 有舊版本時填逐版轉換\nvar restored: Dictionary = Saves.restore(\"user://profile.json\", 1, migrations, validator)\n# error == \"\" 才採用 restored.data；newer 必須停止自動存檔\n# snapshot 為遊戲建立的 JSON Dictionary\nvar error: Error = Saves.save(\"user://profile.json\", snapshot, 1, validator, migrations)\n# error == OK 才顯示保存成功",
       "adoption_evidence": {
         "as_of": "2026-11-06",
         "static_references": [
@@ -2389,24 +2394,23 @@
         "runtime_acceptance": "not assessed in this inventory"
       },
       "base": "RefCounted",
-      "documentation": "Versioned JSON save with a backup and step-by-step migrations. Commits go through atomic_file.gd.\n`const SaveSlots = preload(\"res://addons/proto_kit/save_slots.gd\")`\n\nsave(): the current main file, if it reads, becomes `path.bak`; then the new data is committed.\nrestore(): main, else backup. Data from a newer build is refused (never silently downgraded).\nmigrations: {from_version: Callable(Dictionary) -> Dictionary}, each moves one version up.\nInts come back as floats (JSON); cast what you read.\nReturns {data, source: \"main\"|\"backup\"|\"\", error: \"\"|\"missing\"|\"corrupt\"|\"newer\"|\"migration\"}.",
+      "documentation": "Versioned JSON snapshots. One writer per path; callbacks must be pure and must not write files.\nvalidator(Dictionary) -> bool checks the CURRENT schema after migration / JSON serialization.\nmigrations: {from_version: Callable(Dictionary) -> Dictionary}, one version per step.\nrestore never writes. Either file from a newer version blocks restore AND save.\nNo cross-process lock or two-file transaction. AtomicFile commits each file separately.\nExisting three-argument calls remain valid. Invalid snapshots never rotate backups.\nERR_UNAVAILABLE: newer on disk; ERR_INVALID_DATA: candidate rejected; other errors: file IO.\nOnly a valid main becomes .bak, preserving its original bytes. Otherwise retain the existing backup.\nReturns {data, source: \"main\"|\"backup\"|\"\", error: \"\"|\"missing\"|\"corrupt\"|\"newer\"|\"migration\"|\"invalid\"}.\nInvalid payload / migration may fall back to backup; newer in EITHER file always blocks.\ndata is detached from disk; no repair or automatic write occurs when selecting backup.\nChecks numeric versions before conversion, including future envelopes with malformed payloads.",
       "methods": [
         {
-          "signature": "static func save(path: String, data: Dictionary, version: int) -> Error:",
-          "line": 13,
-          "contract": ""
+          "signature": "static func save(path: String, data: Dictionary, version: int, validator: Callable = Callable(), migrations: Dictionary = {}) -> Error:",
+          "line": 14,
+          "contract": "Existing three-argument calls remain valid. Invalid snapshots never rotate backups.\nERR_UNAVAILABLE: newer on disk; ERR_INVALID_DATA: candidate rejected; other errors: file IO.\nOnly a valid main becomes .bak, preserving its original bytes. Otherwise retain the existing backup."
         },
         {
-          "signature": "static func restore(path: String, version: int, migrations: Dictionary = {}) -> Dictionary:",
-          "line": 23,
-          "contract": "Returns {data, source: \"main\"|\"backup\"|\"\", error: \"\"|\"missing\"|\"corrupt\"|\"newer\"|\"migration\"}."
+          "signature": "static func restore(path: String, version: int, migrations: Dictionary = {}, validator: Callable = Callable()) -> Dictionary:",
+          "line": 39,
+          "contract": "Returns {data, source: \"main\"|\"backup\"|\"\", error: \"\"|\"missing\"|\"corrupt\"|\"newer\"|\"migration\"|\"invalid\"}.\nInvalid payload / migration may fall back to backup; newer in EITHER file always blocks.\ndata is detached from disk; no repair or automatic write occurs when selecting backup."
         }
       ],
       "properties": [],
       "signals": [],
       "resource_references": [
-        "res://addons/proto_kit/atomic_file.gd",
-        "res://addons/proto_kit/save_slots.gd"
+        "res://addons/proto_kit/atomic_file.gd"
       ],
       "tests": [
         "tests/test_capability_composition.gd",
@@ -2608,13 +2612,13 @@
     {
       "id": "scene_loader",
       "path": "addons/proto_kit/scene_loader.gd",
-      "sha256": "5be1b6a81c5637410ccd2f57427b215be51665e993d201096c131d4ec823fd45",
+      "sha256": "8b3f2e7c108720463555e5ac70e962ad9377d9eb50ec41d7a5772ef4130294ad",
       "purpose": "背景載入與顯示進度；自訂載入畫面的邏輯",
       "use_when": "自訂載入畫面的邏輯",
       "kind": "rule",
       "status": "未找到遊戲自有程式／場景的直接引用；可能經間接引用或只存在副本；不代表本輪已做遊戲／真人驗收",
-      "constraints": "呼叫端持有狀態；輸入 Dictionary 欄位與錯誤結果依下方原碼契約。需要 RNG 時使用專屬亂數流，不與特效共用。",
-      "example": "const Capability = preload(\"res://addons/proto_kit/scene_loader.gd\")\nvar loader = Capability.new()\nvar accepted: bool = loader.request(\"res://main.tscn\")\n# 每幀：var scene = loader.step(delta)；非 null 才交給 SceneTree\n# 離開載入畫面：loader.cancel()",
+      "constraints": "一個實例只持有一個請求；is_loading() 包含滿格停留期間。忙碌時 request() 回傳 false 且不改動現有 path/進度/failed；非忙碌的啟動失敗才設 failed。step(delta) 接受有限非負秒數，非法值回傳 null 且不更新；PackedScene 只交付一次。path/shown/failed 作為唯讀狀態使用。cancel() 收取並丟棄結果，可能阻塞等載入完成，不是中止背景工作。fail() 僅用於收取場景後宿主切換失敗。時間設定使用有限非負值，fill_speed > 0。無執行緒 Web 的 request 可能同步阻塞，先讓載入畫面繪製兩幀。",
+      "example": "const Capability = preload(\"res://addons/proto_kit/scene_loader.gd\")\nvar loader = Capability.new()\nvar accepted: bool = loader.request(\"res://main.tscn\")\n# 每幀：var scene = loader.step(delta)；非 null 才交給 SceneTree\n# 離開載入畫面：loader.cancel()\n# accepted == false 時先看 is_loading()：true 為忙碌，false 再看 failed\n# cancel() 可能等待，不能當成即時取消",
       "adoption_evidence": {
         "as_of": "2026-11-06",
         "static_references": [],
@@ -2634,27 +2638,32 @@
         "runtime_acceptance": "not assessed in this inventory"
       },
       "base": "RefCounted",
-      "documentation": "The logic of a loading screen: loads a scene on a thread and says what the screen may show. The look (a bar,\na percentage, tips, an error and a retry button) is the game's own scene. `const SceneLoader = preload(\"res://addons/proto_kit/scene_loader.gd\")`\n\nvar loader := SceneLoader.new()\nloader.request(\"res://main.tscn\")              # false (and `failed`) if the file is missing or the request is refused\nfunc _process(delta: float) -> void:\nvar packed: PackedScene = loader.step(delta)   # null until the scene is loaded AND the bar has been full for a moment\nbar.value = loader.shown * 100.0\nif loader.failed: show the error and a retry button that calls loader.request(path) again\nelif packed != null and get_tree().change_scene_to_packed(packed) != OK: loader.fail()   # loaded, cannot be instantiated\nfunc _exit_tree() -> void:\nloader.cancel()                                 # a load nobody collected is taken off the thread, or the task leaks\n\nWhat `shown` does, and why: it only moves forward; it never gets ahead of the real load; and it never gets ahead of\nthe clock either (`min_show_time`), so the screen is no flash and a load that finishes at once (a web build without\nthreads loads inside the request) still fills the bar over that time. It moves at most `fill_speed` of the bar's\nlength per second, and the full bar holds for `hold_at_full` seconds before `step` hands the scene over.\nOnly the status LOADED lets the switch go ahead: the progress can read 1.0 a moment before the status says so.\nOn a web build without threads, give the screen two frames to be drawn before calling request(): it loads inside the call.\nSeconds the screen is never up for less than.\nThe bar moves at most this much of its length per second, and never backwards.\nThe full bar stays this long before the switch.\nWhat the bar may show, 0..1.\nThe last request failed (missing file, broken scene, refused). request() clears it.\nThe scene being loaded.\nStarts loading `scene_path` (again, after a failure). Resets the clock and the bar. False when it could not start.\nOnce per frame, with the frame's delta. Returns the loaded scene once the bar has been full for `hold_at_full`\nseconds, else null (loading, failed, or not started). Call fail() if the game cannot use the scene it gets.\nThe game could not use what it was given (change_scene_to_packed refused it).\nTakes a load nobody collected off the thread (call it when the screen leaves the tree).",
+      "documentation": "The logic of a loading screen: loads a scene on a thread and says what the screen may show. The look (a bar,\na percentage, tips, an error and a retry button) is the game's own scene. `const SceneLoader = preload(\"res://addons/proto_kit/scene_loader.gd\")`\n\nvar loader := SceneLoader.new()\nloader.request(\"res://main.tscn\")              # false if busy (unchanged), otherwise failed on load failure\nfunc _process(delta: float) -> void:\nvar packed: PackedScene = loader.step(delta)   # null until the scene is loaded AND the bar has been full for a moment\nbar.value = loader.shown * 100.0\nif loader.failed: show the error and a retry button that calls loader.request(path) again\nelif packed != null and get_tree().change_scene_to_packed(packed) != OK: loader.fail()   # loaded, cannot be instantiated\nfunc _exit_tree() -> void:\nloader.cancel()                                 # collect/discard the pending result; may wait for loading\n\nWhat `shown` does, and why: it only moves forward; it never gets ahead of the real load; and it never gets ahead of\nthe clock either (`min_show_time`), so the screen is no flash and a load that finishes at once (a web build without\nthreads loads inside the request) still fills the bar over that time. It moves at most `fill_speed` of the bar's\nlength per second, and the full bar holds for `hold_at_full` seconds before `step` hands the scene over.\nOnly the status LOADED lets the switch go ahead: the progress can read 1.0 a moment before the status says so.\nOn a web build without threads, give the screen two frames to be drawn before calling request(): it loads inside the call.\nSeconds the screen is never up for less than.\nThe bar moves at most this much of its length per second, and never backwards.\nThe full bar stays this long before the switch.\nWhat the bar may show, 0..1.\nThe accepted request failed. A request rejected while busy does not change this flag.\nThe scene being loaded.\nTrue until the pending result has been collected, including the loading bar's hold period.\nStarts loading `scene_path`. While busy, returns false without changing the current request or progress.\nOtherwise resets the clock/bar and sets failed if loading cannot start. Cancel/collect before starting another.\nOnce per frame, with the frame's delta. Returns the loaded scene once the bar has been full for `hold_at_full`\nseconds, else null (loading, failed, or not started). Call fail() if the game cannot use the scene it gets.\nThe game could not use what it was given (change_scene_to_packed refused it).\nCollects/discards a pending result; may wait for completion. This does not abort the underlying load.\nCall when the owner leaves, or before replacing a request. Repeated calls are harmless.",
       "methods": [
         {
-          "signature": "func request(scene_path: String) -> bool:",
+          "signature": "func is_loading() -> bool:",
           "line": 42,
-          "contract": "Starts loading `scene_path` (again, after a failure). Resets the clock and the bar. False when it could not start."
+          "contract": "True until the pending result has been collected, including the loading bar's hold period."
+        },
+        {
+          "signature": "func request(scene_path: String) -> bool:",
+          "line": 47,
+          "contract": "Starts loading `scene_path`. While busy, returns false without changing the current request or progress.\nOtherwise resets the clock/bar and sets failed if loading cannot start. Cancel/collect before starting another."
         },
         {
           "signature": "func step(delta: float) -> PackedScene:",
-          "line": 58,
+          "line": 65,
           "contract": "Once per frame, with the frame's delta. Returns the loaded scene once the bar has been full for `hold_at_full`\nseconds, else null (loading, failed, or not started). Call fail() if the game cannot use the scene it gets."
         },
         {
           "signature": "func fail() -> void:",
-          "line": 92,
+          "line": 101,
           "contract": "The game could not use what it was given (change_scene_to_packed refused it)."
         },
         {
           "signature": "func cancel() -> void:",
-          "line": 96,
-          "contract": "Takes a load nobody collected off the thread (call it when the screen leaves the tree)."
+          "line": 106,
+          "contract": "Collects/discards a pending result; may wait for completion. This does not abort the underlying load.\nCall when the owner leaves, or before replacing a request. Repeated calls are harmless."
         }
       ],
       "properties": [
@@ -5293,11 +5302,19 @@
       "purpose": "角色圖集打包",
       "use_when": "角色圖集打包",
       "kind": "tool",
-      "status": "既有工具；本輪只驗證 capabilities 工具，其餘沿用既有行為",
+      "status": "CLI 主入口全文靜態研究；未執行製作／測試工作；capabilities build/check 已執行",
       "parameters": "manifest.json 路徑；--out 輸出資料夾；cell_px、columns、foot_px、meters_per_px、characters 見腳本 manifest 規格",
       "outputs": "atlas.png + sheets.json；錯誤以非零退出，不靜默縮圖",
       "example": "uv run --with pillow tools/sprite_atlas.py manifest.json --out /tmp/hero-atlas",
-      "constraints": "需要 Pillow；覆寫輸出路徑；角色比例與腳底對齊依 manifest。",
+      "constraints": "需要 Pillow；讀 manifest 相對圖片路徑，固定角色 scale，trim 與 canvas 對齊政策不同。直接先寫 atlas.png 再寫 sheets.json，會覆寫且不是雙檔原子提交；IO 中斷可留下不同版本。AtlasError exit1，JSON/IO/型別錯誤未統一格式。格數／尺寸有上限，但完整 schema（正 cell/columns、非空動畫、正 ticks、合法 align）未全面驗證。",
+      "effects": {
+        "writes": [
+          "<out>/atlas.png",
+          "<out>/sheets.json"
+        ],
+        "may_use_network": false,
+        "failure_effects": "可能已寫 atlas.png 才在 sheets.json 寫入失敗"
+      },
       "sha256": "95a5a3144d0348878688538d001936d455789dc5a88583a3aaf25edb273d0ee2"
     },
     {
@@ -5306,11 +5323,18 @@
       "purpose": "CJK 字型子集",
       "use_when": "CJK 字型子集",
       "kind": "tool",
-      "status": "既有工具；本輪只驗證 capabilities 工具，其餘沿用既有行為",
+      "status": "CLI 主入口全文靜態研究；未執行製作／測試工作；capabilities build/check 已執行",
       "parameters": "--project 遊戲路徑；--source 字型；--out 輸出；--weight 可選；--check 唯讀",
-      "outputs": "子集 TTF/OTF 或缺字報告；錯誤非零",
+      "outputs": "子集字型或唯讀缺字報告；缺字 exit1，正常生成模式仍寫輸出",
       "example": "python3 tools/subset_font.py --project ../pixel-monster --source /path/font.ttf --check",
-      "constraints": "需要 fonttools；字型授權與 Reserved Font Name 保留；動態內容需擴充字元集合。",
+      "constraints": "需要 fonttools；--check 不寫檔，缺字 exit1。正常模式即使發現缺字仍會寫子集，再 exit1，非零不代表沒有產物。--skip-dir 取代預設列表，不是追加；掃描忽略讀檔／UTF-8 失敗且不驗 project 存在，空掃描不等於成功。輸出覆寫；source/out 只用 abspath 比較，不解析符號連結。保留 name records 不等於工具自動審查授權；動態文字需另補集合。",
+      "effects": {
+        "writes": [
+          "<out>"
+        ],
+        "may_use_network": false,
+        "failure_effects": "缺字 exit1 仍可能寫入輸出字型"
+      },
       "sha256": "b9f91a933ab2f61dad205181d9c009e971236220fa6dc7e0aa65edd68cac9f5a"
     },
     {
@@ -5319,11 +5343,22 @@
       "purpose": "Web 匯出與 IDBFS 補丁",
       "use_when": "Web 匯出與 IDBFS 補丁",
       "kind": "tool",
-      "status": "既有工具；本輪只驗證 capabilities 工具，其餘沿用既有行為",
+      "status": "CLI 主入口全文靜態研究；未執行製作／測試工作；capabilities build/check 已執行",
       "parameters": "遊戲目錄；--zip-name 可選；GODOT_BIN 與 FETCH_ARGS 環境變數",
-      "outputs": "build/web/index.html 與壓縮包；失敗非零",
+      "outputs": "build/web/index.html 與 ZIP；可能部分產物，exit0不等於匯出／啟動驗收",
       "example": "bash tools/web/build_web.sh ../my-game --zip-name my-game-web",
-      "constraints": "會下載對版模板、改寫 build 產物；需名為 Web 的匯出 preset。不是部署。",
+      "constraints": "會下載模板、匯入專案、寫 build/.gdignore、覆寫 build/web 與 ZIP，非部署。主腳本只取引擎 major.minor 給 fetch helper；helper 的版本匹配需另審。export pipeline 以 || true 消化錯誤，後續以 index.html 存在繼續，不能保證所有匯出錯誤都讓 CLI 失敗；只移除舊 index.html，其他 stale build 檔可能進 ZIP。zip_name 必須是受控檔名，現行未驗路徑／空白檔名。使用專用輸出目錄，失敗可能留下部分產物。",
+      "effects": {
+        "writes": [
+          "<project>/build/.gdignore",
+          "<project>/build/web/*",
+          "<project>/build/<zip-name>.zip",
+          "Godot import cache",
+          "export templates cache"
+        ],
+        "may_use_network": true,
+        "failure_effects": "非原子多步建置，可有部分新／舊產物"
+      },
       "sha256": "3067b1a2d6df6a496b3865a53e8c500587b11fd55e10dab469306051d265afe3"
     },
     {
@@ -5332,11 +5367,20 @@
       "purpose": "嚴格 headless 測試執行",
       "use_when": "嚴格 headless 測試執行",
       "kind": "tool",
-      "status": "既有工具；本輪只驗證 capabilities 工具，其餘沿用既有行為",
+      "status": "CLI 主入口全文靜態研究；未執行製作／測試工作；capabilities build/check 已執行",
       "parameters": "project；suite[:fps] 清單；GODOT_BIN、TEST_TIMEOUT",
       "outputs": "暫存目錄日誌；失敗非零；檢查 PASSED 與腳本錯誤",
       "example": "bash tools/run_tests.sh . capability_composition",
-      "constraints": "需要 timeout 指令；會執行遊戲測試，先確認測試不觸及真實 user:// 存檔。",
+      "constraints": "需 timeout；先匯入後跑 suites，會執行任意遊戲測試及其 user:// 寫入，應用隔離測試存檔。suite exit0、無指定錯誤字樣且含 PASSED 才過；PASSED 子字串並非 assertion 數驗證。import 只驗 process exit／timeout，未同樣掃 import log。TEST_TIMEOUT 每次 import／suite 各計，非總時間。參數 name/fps 應受控；本輪未執行此工具。",
+      "effects": {
+        "writes": [
+          "temporary logs",
+          "Godot import cache",
+          "paths written by selected tests"
+        ],
+        "may_use_network": false,
+        "failure_effects": "測試執行前後都可能改專案 cache／測試狀態"
+      },
       "sha256": "aa15c1b9ed20f5510e8f423fcf16cf9b4cee61cb759c6c6fa88927b957b0c5fa"
     },
     {
@@ -5345,11 +5389,21 @@
       "purpose": "固定影格遊戲錄影",
       "use_when": "固定影格遊戲錄影",
       "kind": "tool",
-      "status": "既有工具；本輪只驗證 capabilities 工具，其餘沿用既有行為",
+      "status": "CLI 主入口全文靜態研究；未執行製作／測試工作；capabilities build/check 已執行",
       "parameters": "project、output、frames 可選；-- 後傳遊戲參數；GODOT_BIN",
       "outputs": "f*.png、f.wav；有 ffmpeg 時 video.mp4",
       "example": "bash tools/capture.sh ../my-game /tmp/my-game-capture 180",
-      "constraints": "需要 renderer；清除輸出資料夾的 f*.png/f.wav；macOS 不能 headless，會開視窗。",
+      "constraints": "需 renderer，可能開窗口並執行遊戲。會先刪 output 下 f*.png/f.wav，ffmpeg -y 覆寫 video.mp4；僅用專用錄影資料夾。固定30fps與 Compatibility renderer；畫面尺寸依遊戲 viewport，非必為 --resolution 值。ffmpeg 可選；缺少 ffmpeg 時不會更新既有 video.mp4，不能把舊影片當本次結果。WAV 參數經未引用命令展開，帶空白 output 路徑有風險。",
+      "effects": {
+        "writes": [
+          "<output>/f*.png",
+          "<output>/f.wav",
+          "<output>/video.mp4",
+          "paths written by game"
+        ],
+        "may_use_network": false,
+        "failure_effects": "先刪舊 frames；失敗可能保留舊 video 或部分新 frames"
+      },
       "sha256": "c46097d9fd6e9f1871d66e21a0882eb3b5a50c3ebe87bb0f8543516d44b038b7"
     },
     {
@@ -5358,11 +5412,16 @@
       "purpose": "共用副本差異盤點",
       "use_when": "共用副本差異盤點",
       "kind": "tool",
-      "status": "既有工具；本輪只驗證 capabilities 工具，其餘沿用既有行為",
+      "status": "CLI 主入口全文靜態研究；未執行製作／測試工作；capabilities build/check 已執行",
       "parameters": "--check、--json；原型名稱或外部專案路徑",
       "outputs": "SHA-256 與差異分類；--check 發現差異 exit 1",
       "example": "python3 tools/audit_copies.py --check --json seal-meadow",
-      "constraints": "唯讀；副本存在不代表遊戲實際使用。",
+      "constraints": "唯讀 SHA-256 來源比較，無語義或採用判定。relative project 基於 prototypes，absolute 可指外部；缺 copy 以 argparse exit2，--check 有差異 exit1，無 --check 即使 drift 仍exit0。沒有忽略規則，會包含輸出／隱藏檔；符號連結檔案可能讀到外部內容。對照結果不授權同步。",
+      "effects": {
+        "writes": [],
+        "may_use_network": false,
+        "failure_effects": "不修改檔案"
+      },
       "sha256": "c74608ff5d27bc9458ccdcfec1998fc7e171eb8288fa964d64503e24ca9f58fe"
     },
     {
@@ -5371,11 +5430,18 @@
       "purpose": "安裝或更新共用庫副本",
       "use_when": "安裝或更新共用庫副本",
       "kind": "tool",
-      "status": "既有工具；本輪只驗證 capabilities 工具，其餘沿用既有行為",
+      "status": "CLI 主入口全文靜態研究；未執行製作／測試工作；capabilities build/check 已執行",
       "parameters": "原型名稱或絕對路徑；--check 唯讀",
       "outputs": "目的專案 addons/proto_kit；check 差異 exit 1",
       "example": "bash sync.sh --check seal-meadow",
-      "constraints": "更新會複製整個 kit；先檢視 drift，不批次覆蓋手工修改。",
+      "constraints": "修改模式使用整包 rsync -a --delete，刪除目標 kit 多餘檔；不合併修改、不做備份、不檢查相容性。沒有指定 target 會更新所有已有副本，故 AI 應明列單一目標。--check 唯讀呼叫 audit_copies；需先確認目標 project.godot。相對名稱基於 prototypes，支援 absolute；不應直接改目的副本。",
+      "effects": {
+        "writes": [
+          "<target>/addons/proto_kit/** (including deletions)"
+        ],
+        "may_use_network": false,
+        "failure_effects": "rsync 中斷可留下部分更新；沒有回滾"
+      },
       "sha256": "af939e705fecc53274bcb668528f5300f899734ba9fb7d80749c10177aa562f0"
     },
     {
@@ -5384,11 +5450,19 @@
       "purpose": "橫向 PNG 圖集匯入",
       "use_when": "橫向 PNG 圖集匯入",
       "kind": "tool",
-      "status": "既有工具；本輪只驗證 capabilities 工具，其餘沿用既有行為",
+      "status": "CLI 主入口全文靜態研究；未執行製作／測試工作；capabilities build/check 已執行",
       "parameters": "七個位置參數：res://sheet.png res://output.tres frame_count fps once|loop source_url license_note；先執行 PNG 匯入",
       "outputs": "SpriteFrames 與來源 SHA-256；非法切格拒絕",
       "example": "godot --headless --path . --script res://tools/vfx/import_strip.gd -- res://assets/fire.png res://assets/fire.tres 18 15 once SOURCE_URL LICENSE_NOTE",
-      "constraints": "製作工具；需確認來源授權，既有輸出拒絕覆寫。",
+      "constraints": "需 Godot 與已匯入 PNG，僅水平等寬 strip；七個參數完整，source/license_note 只需非空，不代表授權已核實。拒絕既有 .tres 或 .source.json；先存 resource 再寫來源。來源檔開啟失敗會嘗試刪新 resource，但沒有查 store_string/close 寫入錯誤或 rollback 結果；不是 crash-safe 雙檔交易。res:// 前綴檢查不是完整路徑沙箱。",
+      "effects": {
+        "writes": [
+          "<output>.tres",
+          "<output>.tres.source.json"
+        ],
+        "may_use_network": false,
+        "failure_effects": "resource 與來源非原子；已實作部分失敗回滾"
+      },
       "sha256": "315f3d5c8b5f84f5305762576036fd8ba67e2f7f115c692e73843aa4e20c1c7a"
     },
     {
@@ -5397,11 +5471,21 @@
       "purpose": "能力探索、契約同步與盤點",
       "use_when": "能力探索、契約同步與盤點",
       "kind": "tool",
-      "status": "既有工具；本輪只驗證 capabilities 工具，其餘沿用既有行為",
+      "status": "CLI 主入口全文靜態研究；未執行製作／測試工作；capabilities build/check 已執行",
       "parameters": "list --query；show ID；plan ID...；build；check；inventory",
       "outputs": "JSON 契約／依賴計畫或 Markdown；check 過期 exit 1",
       "example": "python3 tools/capabilities.py show fixed_step",
-      "constraints": "只有 build 寫入生成檔；plan 是靜態參考，不是選擇性安裝。",
+      "constraints": "只有 build 寫生成檔；check 比較 capabilities/resources/REFERENCE，不比較 inventory.json 新鮮度，也不執行 schema.json 完整驗證。list/show/plan 重新讀取目前來源，非直接信任舊 catalog。api 是 regex 擷取，不涵蓋繼承／內部類全部 API，註解也會進靜態引用。plan 不解析 Python import、shader include 或動態載入，非安裝 manifest。build 多檔逐寫，非原子。",
+      "effects": {
+        "writes": [
+          "catalog/capabilities.json",
+          "catalog/resources.json",
+          "catalog/inventory.json",
+          "docs/capabilities/REFERENCE.md"
+        ],
+        "may_use_network": false,
+        "failure_effects": "僅 build；部分生成檔可先更新，其他失敗"
+      },
       "sha256": "b7c5aca80f6bf2737b31c8baf5032a4c60175a9675831fecb7f2ee4abb3329c0"
     }
   ]

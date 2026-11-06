@@ -1630,7 +1630,7 @@
       "kit_copies": {
         "addons/proto_kit/atomic_file.gd": "identical",
         "addons/proto_kit/auto_caster.gd": "identical",
-        "addons/proto_kit/camera_shake.gd": "identical",
+        "addons/proto_kit/camera_shake.gd": "drift",
         "addons/proto_kit/camera_shot.gd": "identical",
         "addons/proto_kit/card_draft.gd": "identical",
         "addons/proto_kit/chest_shop.gd": "drift",
@@ -1646,7 +1646,7 @@
         "addons/proto_kit/hd2d_stage.gd": "identical",
         "addons/proto_kit/loot_ledger.gd": "identical",
         "addons/proto_kit/march_strip.gd": "identical",
-        "addons/proto_kit/music.gd": "identical",
+        "addons/proto_kit/music.gd": "drift",
         "addons/proto_kit/nine_slice.gd": "identical",
         "addons/proto_kit/orientation_guard.gd": "identical",
         "addons/proto_kit/pet_care.gd": "identical",
@@ -1657,9 +1657,9 @@
         "addons/proto_kit/refine_ladder.gd": "drift",
         "addons/proto_kit/run_goals.gd": "identical",
         "addons/proto_kit/run_timeline.gd": "drift",
-        "addons/proto_kit/save_slots.gd": "identical",
+        "addons/proto_kit/save_slots.gd": "drift",
         "addons/proto_kit/scene_builder.gd": "identical",
-        "addons/proto_kit/scene_loader.gd": "identical",
+        "addons/proto_kit/scene_loader.gd": "drift",
         "addons/proto_kit/scene_router.gd": "identical",
         "addons/proto_kit/screenshot.gd": "identical",
         "addons/proto_kit/sfx_bank.gd": "identical",
@@ -1694,10 +1694,10 @@
           "tools/story_build/story_builder.gd",
           "tools/story_editor/check_story.gd"
         ],
-        "addons/proto_kit/synth.gd": [
+        "addons/proto_kit/haptics.gd": [
           "scripts/stage_effects.gd"
         ],
-        "addons/proto_kit/haptics.gd": [
+        "addons/proto_kit/synth.gd": [
           "scripts/stage_effects.gd"
         ],
         "addons/proto_kit/test_kit.gd": [
@@ -1981,7 +1981,7 @@
       "kit_copies": {
         "addons/proto_kit/atomic_file.gd": "identical",
         "addons/proto_kit/auto_caster.gd": "identical",
-        "addons/proto_kit/camera_shake.gd": "identical",
+        "addons/proto_kit/camera_shake.gd": "drift",
         "addons/proto_kit/card_draft.gd": "identical",
         "addons/proto_kit/chest_shop.gd": "drift",
         "addons/proto_kit/combo_input.gd": "identical",
@@ -1990,16 +1990,16 @@
         "addons/proto_kit/game_clock.gd": "identical",
         "addons/proto_kit/haptics.gd": "identical",
         "addons/proto_kit/loot_ledger.gd": "identical",
-        "addons/proto_kit/music.gd": "identical",
+        "addons/proto_kit/music.gd": "drift",
         "addons/proto_kit/pet_care.gd": "drift",
         "addons/proto_kit/pixel_vfx.gd": "identical",
         "addons/proto_kit/rarity.gd": "drift",
         "addons/proto_kit/refine_ladder.gd": "drift",
         "addons/proto_kit/run_goals.gd": "identical",
         "addons/proto_kit/run_timeline.gd": "drift",
-        "addons/proto_kit/save_slots.gd": "identical",
+        "addons/proto_kit/save_slots.gd": "drift",
         "addons/proto_kit/scene_builder.gd": "drift",
-        "addons/proto_kit/scene_loader.gd": "identical",
+        "addons/proto_kit/scene_loader.gd": "drift",
         "addons/proto_kit/sfx_bank.gd": "identical",
         "addons/proto_kit/sprite3d_actor.gd": "identical",
         "addons/proto_kit/sprite3d_gallery.gd": "identical",
@@ -2220,14 +2220,14 @@
       ],
       "kit_copies": {
         "addons/proto_kit/atomic_file.gd": "identical",
-        "addons/proto_kit/camera_shake.gd": "identical",
+        "addons/proto_kit/camera_shake.gd": "drift",
         "addons/proto_kit/floating_stick.gd": "identical",
         "addons/proto_kit/font_check.gd": "identical",
         "addons/proto_kit/haptics.gd": "identical",
-        "addons/proto_kit/music.gd": "identical",
+        "addons/proto_kit/music.gd": "drift",
         "addons/proto_kit/pixel_vfx.gd": "drift",
         "addons/proto_kit/scene_builder.gd": "drift",
-        "addons/proto_kit/scene_loader.gd": "identical",
+        "addons/proto_kit/scene_loader.gd": "drift",
         "addons/proto_kit/sfx_bank.gd": "identical",
         "addons/proto_kit/synth.gd": "identical",
         "addons/proto_kit/test_kit.gd": "drift",
@@ -2248,10 +2248,10 @@
           "scenes/main.tscn",
           "tools/build_scenes.gd"
         ],
-        "addons/proto_kit/camera_shake.gd": [
+        "addons/proto_kit/haptics.gd": [
           "scripts/main.gd"
         ],
-        "addons/proto_kit/haptics.gd": [
+        "addons/proto_kit/camera_shake.gd": [
           "scripts/main.gd"
         ],
         "addons/proto_kit/synth.gd": [
@@ -3315,7 +3315,7 @@
       ],
       "kit_copies": {
         "addons/proto_kit/atomic_file.gd": "identical",
-        "addons/proto_kit/camera_shake.gd": "identical",
+        "addons/proto_kit/camera_shake.gd": "drift",
         "addons/proto_kit/camera_shot.gd": "identical",
         "addons/proto_kit/floating_stick.gd": "identical",
         "addons/proto_kit/font_check.gd": "identical",
@@ -3326,13 +3326,13 @@
         "addons/proto_kit/hd2d_look.gd": "identical",
         "addons/proto_kit/hd2d_stage.gd": "identical",
         "addons/proto_kit/march_strip.gd": "identical",
-        "addons/proto_kit/music.gd": "identical",
+        "addons/proto_kit/music.gd": "drift",
         "addons/proto_kit/nine_slice.gd": "identical",
         "addons/proto_kit/pixel_card3d.gd": "identical",
         "addons/proto_kit/pixel_vfx.gd": "identical",
         "addons/proto_kit/pixel_vfx3d.gd": "identical",
         "addons/proto_kit/scene_builder.gd": "identical",
-        "addons/proto_kit/scene_loader.gd": "identical",
+        "addons/proto_kit/scene_loader.gd": "drift",
         "addons/proto_kit/scene_router.gd": "identical",
         "addons/proto_kit/screenshot.gd": "identical",
         "addons/proto_kit/sfx_bank.gd": "identical",
@@ -3680,14 +3680,14 @@
       ],
       "kit_copies": {
         "addons/proto_kit/atomic_file.gd": "identical",
-        "addons/proto_kit/camera_shake.gd": "identical",
+        "addons/proto_kit/camera_shake.gd": "drift",
         "addons/proto_kit/floating_stick.gd": "identical",
         "addons/proto_kit/font_check.gd": "identical",
         "addons/proto_kit/haptics.gd": "identical",
-        "addons/proto_kit/music.gd": "identical",
+        "addons/proto_kit/music.gd": "drift",
         "addons/proto_kit/pixel_vfx.gd": "identical",
         "addons/proto_kit/scene_builder.gd": "drift",
-        "addons/proto_kit/scene_loader.gd": "identical",
+        "addons/proto_kit/scene_loader.gd": "drift",
         "addons/proto_kit/sfx_bank.gd": "identical",
         "addons/proto_kit/sprite3d_actor.gd": "identical",
         "addons/proto_kit/sprite3d_gallery.gd": "identical",
@@ -4223,7 +4223,7 @@
       "kit_copies": {
         "addons/proto_kit/atomic_file.gd": "identical",
         "addons/proto_kit/auto_caster.gd": "identical",
-        "addons/proto_kit/camera_shake.gd": "identical",
+        "addons/proto_kit/camera_shake.gd": "drift",
         "addons/proto_kit/camera_shot.gd": "identical",
         "addons/proto_kit/card_draft.gd": "identical",
         "addons/proto_kit/chest_shop.gd": "drift",
@@ -4239,7 +4239,7 @@
         "addons/proto_kit/hd2d_stage.gd": "identical",
         "addons/proto_kit/loot_ledger.gd": "identical",
         "addons/proto_kit/march_strip.gd": "identical",
-        "addons/proto_kit/music.gd": "identical",
+        "addons/proto_kit/music.gd": "drift",
         "addons/proto_kit/nine_slice.gd": "identical",
         "addons/proto_kit/orientation_guard.gd": "identical",
         "addons/proto_kit/pet_care.gd": "identical",
@@ -4250,9 +4250,9 @@
         "addons/proto_kit/refine_ladder.gd": "drift",
         "addons/proto_kit/run_goals.gd": "identical",
         "addons/proto_kit/run_timeline.gd": "drift",
-        "addons/proto_kit/save_slots.gd": "identical",
+        "addons/proto_kit/save_slots.gd": "drift",
         "addons/proto_kit/scene_builder.gd": "identical",
-        "addons/proto_kit/scene_loader.gd": "identical",
+        "addons/proto_kit/scene_loader.gd": "drift",
         "addons/proto_kit/scene_router.gd": "identical",
         "addons/proto_kit/screenshot.gd": "identical",
         "addons/proto_kit/sfx_bank.gd": "identical",
@@ -4863,14 +4863,14 @@
       ],
       "kit_copies": {
         "addons/proto_kit/atomic_file.gd": "identical",
-        "addons/proto_kit/camera_shake.gd": "identical",
+        "addons/proto_kit/camera_shake.gd": "drift",
         "addons/proto_kit/floating_stick.gd": "identical",
         "addons/proto_kit/font_check.gd": "identical",
         "addons/proto_kit/haptics.gd": "identical",
-        "addons/proto_kit/music.gd": "identical",
+        "addons/proto_kit/music.gd": "drift",
         "addons/proto_kit/pixel_vfx.gd": "identical",
         "addons/proto_kit/scene_builder.gd": "drift",
-        "addons/proto_kit/scene_loader.gd": "identical",
+        "addons/proto_kit/scene_loader.gd": "drift",
         "addons/proto_kit/sfx_bank.gd": "identical",
         "addons/proto_kit/sprite3d_actor.gd": "identical",
         "addons/proto_kit/sprite3d_gallery.gd": "identical",
@@ -4897,11 +4897,11 @@
           "tools/build_cast_actor.gd",
           "tools/build_scenes.gd"
         ],
-        "addons/proto_kit/sprite3d_ghost.gdshader": [
+        "addons/proto_kit/sprite3d_xray.gdshader": [
           "scenes/player.tscn",
           "tools/build_scenes.gd"
         ],
-        "addons/proto_kit/sprite3d_xray.gdshader": [
+        "addons/proto_kit/sprite3d_ghost.gdshader": [
           "scenes/player.tscn",
           "tools/build_scenes.gd"
         ],
@@ -5258,14 +5258,14 @@
       ],
       "kit_copies": {
         "addons/proto_kit/atomic_file.gd": "identical",
-        "addons/proto_kit/camera_shake.gd": "identical",
+        "addons/proto_kit/camera_shake.gd": "drift",
         "addons/proto_kit/floating_stick.gd": "identical",
         "addons/proto_kit/font_check.gd": "identical",
         "addons/proto_kit/haptics.gd": "identical",
-        "addons/proto_kit/music.gd": "identical",
+        "addons/proto_kit/music.gd": "drift",
         "addons/proto_kit/pixel_vfx.gd": "identical",
         "addons/proto_kit/scene_builder.gd": "drift",
-        "addons/proto_kit/scene_loader.gd": "identical",
+        "addons/proto_kit/scene_loader.gd": "drift",
         "addons/proto_kit/sfx_bank.gd": "identical",
         "addons/proto_kit/sprite3d_actor.gd": "identical",
         "addons/proto_kit/sprite3d_gallery.gd": "identical",
@@ -5289,11 +5289,11 @@
           "scenes/player.tscn",
           "tools/build_scenes.gd"
         ],
-        "addons/proto_kit/sprite3d_ghost.gdshader": [
+        "addons/proto_kit/sprite3d_xray.gdshader": [
           "scenes/player.tscn",
           "tools/build_scenes.gd"
         ],
-        "addons/proto_kit/sprite3d_xray.gdshader": [
+        "addons/proto_kit/sprite3d_ghost.gdshader": [
           "scenes/player.tscn",
           "tools/build_scenes.gd"
         ],
@@ -5958,7 +5958,7 @@
         },
         {
           "path": "scripts/main.gd",
-          "sha256": "7f2021f379842286770c7088cf60ffeeee3d7c58d5871c152c535b175ac0c010",
+          "sha256": "aeade983136732e610f0c3831e589e8e3fcb10091cedd0981135a58cfbc91519",
           "base": "Node3D",
           "summary": "Wires the field: taps/clicks pick a monster (nearest on screen) or a ground point, the HUD follows",
           "public_methods": [
@@ -6084,12 +6084,13 @@
         },
         {
           "path": "scripts/save_store.gd",
-          "sha256": "309c0e17a304d655f6621f5c2df99c1b92ebdfa77ccb900d69405428be591e6a",
+          "sha256": "eb9a017cbb63bba39a242f6dbc97b2e26d3fd49275cd26c2cda376a3945db4d6",
           "base": "RefCounted",
-          "summary": "Game-specific envelope checks and validated recovery. Kit copies remain unchanged.",
+          "summary": "Seal adapter: v1+ envelope inspection, game payload validation, and kit snapshot IO.",
           "public_methods": [
             "static func inspect(path: String, version: int) -> Dictionary:",
-            "static func restore(path: String, version: int, migrations: Dictionary) -> Dictionary:"
+            "static func restore(path: String, version: int, migrations: Dictionary) -> Dictionary:",
+            "static func save(path: String, snapshot: Dictionary, version: int, migrations: Dictionary) -> Error:"
           ]
         },
         {
@@ -6434,7 +6435,7 @@
       "kit_copies": {
         "addons/proto_kit/atomic_file.gd": "identical",
         "addons/proto_kit/auto_caster.gd": "identical",
-        "addons/proto_kit/camera_shake.gd": "identical",
+        "addons/proto_kit/camera_shake.gd": "drift",
         "addons/proto_kit/card_draft.gd": "identical",
         "addons/proto_kit/chest_shop.gd": "drift",
         "addons/proto_kit/combo_input.gd": "identical",
@@ -6443,7 +6444,7 @@
         "addons/proto_kit/game_clock.gd": "identical",
         "addons/proto_kit/haptics.gd": "identical",
         "addons/proto_kit/loot_ledger.gd": "identical",
-        "addons/proto_kit/music.gd": "identical",
+        "addons/proto_kit/music.gd": "drift",
         "addons/proto_kit/pet_care.gd": "identical",
         "addons/proto_kit/pixel_vfx.gd": "identical",
         "addons/proto_kit/rarity.gd": "drift",
@@ -6452,7 +6453,7 @@
         "addons/proto_kit/run_timeline.gd": "drift",
         "addons/proto_kit/save_slots.gd": "identical",
         "addons/proto_kit/scene_builder.gd": "drift",
-        "addons/proto_kit/scene_loader.gd": "identical",
+        "addons/proto_kit/scene_loader.gd": "drift",
         "addons/proto_kit/sfx_bank.gd": "identical",
         "addons/proto_kit/sprite3d_actor.gd": "identical",
         "addons/proto_kit/sprite3d_gallery.gd": "identical",
@@ -6484,33 +6485,22 @@
           "scripts/actor.gd",
           "tools/import_sheets.gd"
         ],
-        "addons/proto_kit/game_clock.gd": [
-          "scenes/main.tscn"
-        ],
         "addons/proto_kit/time_control.gd": [
           "scenes/main.tscn"
         ],
-        "addons/proto_kit/sprite3d_actor.gd": [
-          "scenes/actors/actor.tscn"
+        "addons/proto_kit/game_clock.gd": [
+          "scenes/main.tscn"
         ],
         "addons/proto_kit/sprite3d_shadow.gdshader": [
+          "scenes/actors/actor.tscn"
+        ],
+        "addons/proto_kit/sprite3d_actor.gd": [
           "scenes/actors/actor.tscn"
         ],
         "addons/proto_kit/atomic_file.gd": [
           "scripts/main.gd",
           "scripts/save_store.gd",
           "tests/test_save_protection.gd"
-        ],
-        "addons/proto_kit/save_slots.gd": [
-          "scripts/main.gd",
-          "tests/test_collection.gd",
-          "tests/test_fishing.gd",
-          "tests/test_m1_loot.gd",
-          "tests/test_m2.gd",
-          "tests/test_m3_hardening.gd",
-          "tests/test_save_protection.gd",
-          "tests/test_wardrobe.gd",
-          "tests/test_world_lifecycle.gd"
         ],
         "addons/proto_kit/tap_picker_3d.gd": [
           "scripts/main.gd"
@@ -6522,16 +6512,27 @@
           "scripts/refine.gd",
           "tools/m3_economy.gd"
         ],
+        "addons/proto_kit/save_slots.gd": [
+          "scripts/save_store.gd",
+          "tests/test_collection.gd",
+          "tests/test_fishing.gd",
+          "tests/test_m1_loot.gd",
+          "tests/test_m2.gd",
+          "tests/test_m3_hardening.gd",
+          "tests/test_save_protection.gd",
+          "tests/test_wardrobe.gd",
+          "tests/test_world_lifecycle.gd"
+        ],
         "addons/proto_kit/synth.gd": [
           "scripts/sfx.gd"
         ],
         "addons/proto_kit/sfx_bank.gd": [
           "scripts/sfx.gd"
         ],
-        "addons/proto_kit/sprite3d.gdshader:": [
+        "addons/proto_kit/sprite3d.gdshaderinc": [
           "shaders/sprite3d_hd.gdshader"
         ],
-        "addons/proto_kit/sprite3d.gdshaderinc": [
+        "addons/proto_kit/sprite3d.gdshader:": [
           "shaders/sprite3d_hd.gdshader"
         ],
         "addons/proto_kit/test_kit.gd": [
@@ -7288,14 +7289,14 @@
       ],
       "kit_copies": {
         "addons/proto_kit/atomic_file.gd": "identical",
-        "addons/proto_kit/camera_shake.gd": "identical",
+        "addons/proto_kit/camera_shake.gd": "drift",
         "addons/proto_kit/floating_stick.gd": "identical",
         "addons/proto_kit/font_check.gd": "identical",
         "addons/proto_kit/haptics.gd": "identical",
-        "addons/proto_kit/music.gd": "identical",
+        "addons/proto_kit/music.gd": "drift",
         "addons/proto_kit/pixel_vfx.gd": "identical",
         "addons/proto_kit/scene_builder.gd": "drift",
-        "addons/proto_kit/scene_loader.gd": "identical",
+        "addons/proto_kit/scene_loader.gd": "drift",
         "addons/proto_kit/sfx_bank.gd": "identical",
         "addons/proto_kit/sprite3d_actor.gd": "identical",
         "addons/proto_kit/sprite3d_gallery.gd": "identical",
@@ -7340,21 +7341,21 @@
           "scenes/field.tscn",
           "tools/build_slice.gd"
         ],
-        "addons/proto_kit/sprite3d_actor.gd": [
-          "scenes/actors/actor.tscn",
-          "scenes/actors/gatekeeper_illustrated.tscn",
-          "tools/build_slice.gd"
-        ],
         "addons/proto_kit/sprite3d_shadow.gdshader": [
           "scenes/actors/actor.tscn",
           "scenes/actors/gatekeeper.tscn",
           "scenes/actors/gatekeeper_illustrated.tscn",
           "tools/build_slice.gd"
         ],
-        "addons/proto_kit/sprite3d.gdshader:": [
-          "shaders/sprite3d_hd.gdshader"
+        "addons/proto_kit/sprite3d_actor.gd": [
+          "scenes/actors/actor.tscn",
+          "scenes/actors/gatekeeper_illustrated.tscn",
+          "tools/build_slice.gd"
         ],
         "addons/proto_kit/sprite3d.gdshaderinc": [
+          "shaders/sprite3d_hd.gdshader"
+        ],
+        "addons/proto_kit/sprite3d.gdshader:": [
           "shaders/sprite3d_hd.gdshader"
         ],
         "addons/proto_kit/test_kit.gd": [
@@ -7367,19 +7368,19 @@
           "tests/test_sprites.gd",
           "tests/test_text.gd"
         ],
-        "addons/proto_kit/sprite_check.gd": [
+        "addons/proto_kit/sprite_inspector.tscn": [
           "tests/test_sprites.gd"
         ],
-        "addons/proto_kit/sprite_inspector.tscn": [
+        "addons/proto_kit/sprite_check.gd": [
           "tests/test_sprites.gd"
         ],
         "addons/proto_kit/font_check.gd": [
           "tests/test_text.gd"
         ],
-        "addons/proto_kit/scene_builder.gd": [
+        "addons/proto_kit/sprite3d.gdshader": [
           "tools/build_slice.gd"
         ],
-        "addons/proto_kit/sprite3d.gdshader": [
+        "addons/proto_kit/scene_builder.gd": [
           "tools/build_slice.gd"
         ]
       }
@@ -7586,10 +7587,10 @@
         "addons/proto_kit/synth.gd": "identical"
       },
       "kit_references": {
-        "addons/proto_kit/synth.gd": [
+        "addons/proto_kit/atomic_file.gd": [
           "scripts/harbor.gd"
         ],
-        "addons/proto_kit/atomic_file.gd": [
+        "addons/proto_kit/synth.gd": [
           "scripts/harbor.gd"
         ],
         "addons/proto_kit/scene_builder.gd": [
@@ -8342,14 +8343,14 @@
       ],
       "kit_copies": {
         "addons/proto_kit/atomic_file.gd": "identical",
-        "addons/proto_kit/camera_shake.gd": "identical",
+        "addons/proto_kit/camera_shake.gd": "drift",
         "addons/proto_kit/floating_stick.gd": "identical",
         "addons/proto_kit/font_check.gd": "identical",
         "addons/proto_kit/haptics.gd": "identical",
-        "addons/proto_kit/music.gd": "identical",
+        "addons/proto_kit/music.gd": "drift",
         "addons/proto_kit/pixel_vfx.gd": "identical",
         "addons/proto_kit/scene_builder.gd": "drift",
-        "addons/proto_kit/scene_loader.gd": "identical",
+        "addons/proto_kit/scene_loader.gd": "drift",
         "addons/proto_kit/sfx_bank.gd": "identical",
         "addons/proto_kit/synth.gd": "identical",
         "addons/proto_kit/test_kit.gd": "drift",

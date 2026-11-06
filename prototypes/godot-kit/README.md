@@ -20,6 +20,8 @@ python3 tools/capabilities.py check
 
 補充：[第二批 10 項深讀與 CodeGraph 接入](docs/KIT-RESEARCH-02.md)，語義限制已回填正式能力目錄。
 
+[第三批：26 項與 9 CLI 主入口研究](docs/KIT-RESEARCH-03.md)已回填目錄；工具寫入範圍與失敗副作用見 `catalog/tools.json` 的 `effects`。
+
 ## 介紹
 
 `prototypes/` 底下的 Godot 原型（debt-commission、pachinko、pixel-monster）各自寫過幾樣相同的東西：佔位音效、不怕當機的存檔、headless 測試的輔助函式。這些已抽出來，在這裡只維護一份，新原型直接拿來用，不必再寫一次。後來又加了從 sugarcane-tanks 抽出來的手感（音效庫、震動、hit stop、震屏、音樂）、搖桿、載入邏輯、scene 產生器，以及字型子集、網頁匯出、測試與錄影的工具（`tools/`）。
@@ -68,6 +70,10 @@ python3 tools/capabilities.py check
 | [`gacha.gd`](addons/proto_kit/gacha.gd) | 抽卡：機率、保底、限時角色占比，亂數用遊戲自己的串流（存檔重開不會重抽） | hero-horde-idle（`domain/progression.gd`）。**只有一個原型用**：同上 |
 
 GDScript、Godot 4.7。只用於 `prototypes/`，不接進 `publish.sh`（見 [ADR 0001](../docs/adr/0001-prototypes-live-in-godogen.md)）。
+
+本輪生命週期重構與相容性見 [P0 重構紀錄](docs/REFACTOR-P0.md)；遊戲副本尚未同步，執行測試延期。
+
+存檔驗證回呼、備份政策與相容性見 [SaveSlots 契約](docs/SAVE-SLOTS.md)。
 
 ## 新原型怎麼接
 

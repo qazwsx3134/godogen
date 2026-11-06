@@ -42,8 +42,9 @@ import {
 import { type District, type NodeType, STORY_LAYER, findNode, generateDistrict, reachable } from '../rules/map'
 import { JOBS, JOB_LINES, OPENING, STARTER_GEAR, highDanger } from '../content/data'
 import { ITEMS, LIFELINE_PRICE, SHOP_IMPLANTS, eliteLoot, eventLoot, makeItem, marketPrice, marketStock, rollKind, streetLoot } from '../content/items'
-import { CASE_01, CASE_02, CASE_BY_ID, TEST_CASE, type CaseOption, type CaseRecord, type StoryCase, optionLock } from '../content/cases'
-import { EVENTS, EVENT_BY_ID, type Effects, type EventOption } from '../content/events'
+import { CASE_BY_ID, TEST_CASE, type CaseOption, type CaseRecord, type StoryCase, optionLock } from '../content/cases'
+import { EVENT_BY_ID, type Effects, type EventOption } from '../content/events'
+import { DISTRICTS, type DistrictDef } from '../content/districts'
 import { PERKS, PERK_CASH } from '../rules/perks'
 
 /** 正在進行的劇情委託的階段；結案後的結果記在 Run.cases。 */
@@ -68,6 +69,8 @@ export type NodeRun =
 
 export interface Run {
   seed: number
+  /** 現在在第幾個街區（DISTRICTS 的索引）。 */
+  districtIndex: number
   district: District
   /** 目前所在節點（null＝還沒出發）。 */
   at: string | null
@@ -149,10 +152,19 @@ function newCharacter(n: number, now: number): Character {
   }
 }
 
+/** 某個街區的地圖：每區用自己的 seed。 */
+const districtMap = (seed: number, index: number) => {
+  const d = DISTRICTS[index]
+  return generateDistrict(hashSeed(seed, index), d.id, d.name)
+}
+
 function newRun(c: Character): Run {
   const seed = hashSeed(c.id, 'run')
-  return { seed, district: generateDistrict(seed), at: null, path: [], node: null, phase: 'map', cases: {}, events: [] }
+  return { seed, districtIndex: 0, district: districtMap(seed, 0), at: null, path: [], node: null, phase: 'map', cases: {}, events: [] }
 }
+
+/** 下一個街區（沒有就是還沒開放）。 */
+export const nextDistrict = (g: Game) => DISTRICTS[g.run.districtIndex + 1]
 
 export function initial(now: number, meta: Meta = { legends: [], seen: {} }): Game {
   const c = newCharacter(meta.legends.length + 1, now)
@@ -340,16 +352,17 @@ function closeCase(g: Game, now: number, sc: StoryCase, picked: CaseOption, outc
 // ---------- 節點內容 ----------
 
 /** 委託節點用哪個模板：前半段第 1 階、後半段第 2 階；精英委託用第 4 階。 */
-function pickJob(seed: number, layer: number, elite: boolean) {
-  const tier = elite ? 4 : layer < STORY_LAYER ? 1 : 2
+function pickJob(seed: number, layer: number, elite: boolean, d: DistrictDef) {
+  const tier = elite ? d.eliteTier : layer < STORY_LAYER ? d.tiers[0] : d.tiers[1]
   const pool = Object.values(JOBS).filter((j) => j.tier === tier)
   return pool[Math.floor(rng(seed)() * pool.length)]
 }
 
-/** 這段生涯還沒出現過的事件；全部出現過就重頭來。 */
-function pickEvent(seed: number, used: string[]) {
-  const pool = EVENTS.filter((e) => !used.includes(e.id))
-  const from = pool.length ? pool : EVENTS
+/** 這個街區的事件裡，這段生涯還沒出現過的；全部出現過就重頭來。 */
+function pickEvent(seed: number, used: string[], d: DistrictDef) {
+  const all = d.events.map((id) => EVENT_BY_ID[id])
+  const pool = all.filter((e) => !used.includes(e.id))
+  const from = pool.length ? pool : all
   return from[Math.floor(rng(seed)() * from.length)]
 }
 
@@ -416,6 +429,7 @@ type Action =
   | { t: 'storyFight'; tactic: Tactic }
   | { t: 'storyFightDone' }
   | { t: 'claim' }
+  | { t: 'continue' }
   | { t: 'retire' }
   | { t: 'raiseAttr'; attr: Attr }
   | { t: 'pickPerk'; id: string }
@@ -436,18 +450,19 @@ function enter(g: Game, nodeId: string, now: number): Game {
   let story = g.story
   let events = g.run.events
   if (node.type === 'job' || node.type === 'elite') {
-    const job = pickJob(seed, node.layer, node.type === 'elite')
+    const job = pickJob(seed, node.layer, node.type === 'elite', DISTRICTS[g.run.districtIndex])
     const ok = rng(hashSeed(seed, 'roll'))() < jobSuccessChance(job, dirBonus(c, job.direction))
     n = node.type === 'job' ? { kind: 'job', nodeId, jobId: job.id, ok, stage: 'auto' } : { kind: 'elite', nodeId, jobId: job.id, stage: 'auto' }
   } else if (node.type === 'event') {
-    const ev = pickEvent(seed, g.run.events)
+    const ev = pickEvent(seed, g.run.events, DISTRICTS[g.run.districtIndex])
     events = [...events, ev.id]
     n = { kind: 'event', nodeId, eventId: ev.id, stage: 'choose' }
   } else if (node.type === 'market') n = { kind: 'market', nodeId, stock: marketStock(seed) }
   else if (node.type === 'clinic') n = { kind: 'clinic', nodeId }
   else if (node.type === 'rest') n = { kind: 'rest', nodeId }
   else {
-    const sc = node.type === 'boss' ? CASE_02 : CASE_01
+    const dd = DISTRICTS[g.run.districtIndex]
+    const sc = CASE_BY_ID[node.type === 'boss' ? dd.boss : dd.story]
     n = { kind: 'story', nodeId, caseId: sc.id }
     story = { caseId: sc.id, stage: 'prep' }
   }
@@ -511,8 +526,8 @@ export function reduce(g: Game, a: Action): Game {
       // 離開節點：記下看過這種節點（之後自動段可以 2 倍速）；劇情大案打完就到安全屋
       if (!n || !nodeDone(g) || !c.alive) return g
       const type = findNode(g.run.district, n.nodeId)?.type
-      const boss = n.kind === 'story' && n.caseId === CASE_02.id
       const dev = n.nodeId === 'dev'
+      const boss = !dev && type === 'boss'
       return {
         ...g,
         run: { ...g.run, node: null, phase: boss ? 'safehouse' : g.run.phase },
@@ -722,6 +737,16 @@ export function reduce(g: Game, a: Action): Game {
       if (!g.run.claim) return g
       return { ...g, run: { ...g.run, claim: null } }
     }
+    case 'continue': {
+      // 安全屋：前往下一個街區（新地圖，傭兵、卡牌、道具都帶著走）
+      const next = nextDistrict(g)
+      if (g.run.phase !== 'safehouse' || !c.alive || c.picks.length || !next) return g
+      const index = g.run.districtIndex + 1
+      return withLog(
+        { ...g, run: { ...g.run, districtIndex: index, district: districtMap(g.run.seed, index), at: null, path: [], node: null, phase: 'map', events: [], claim: null } },
+        { at: now, kind: 'level', text: `▶ 離開安全屋，前往${next.name}。` },
+      )
+    }
     case 'retire': {
       if (g.run.phase !== 'safehouse' || !c.alive || c.picks.length) return g
       const text = `你在安全屋收起了槍。魔都會記得「${c.name}」這個名字。`
@@ -814,7 +839,8 @@ function load(): Game {
     const raw = localStorage.getItem(RUN_KEY)
     if (raw) {
       const g = JSON.parse(raw) as Omit<Game, 'meta'>
-      if (g.v === 2) return { ...g, meta }
+      // 加街區之前的存檔沒有 districtIndex：那時只有新宿
+      if (g.v === 2) return { ...g, run: { ...g.run, districtIndex: g.run.districtIndex ?? 0 }, meta }
     }
   } catch {
     /* 存檔壞掉就重來 */

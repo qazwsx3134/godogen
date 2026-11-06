@@ -136,4 +136,68 @@ export const EVENTS: CityEvent[] = [
   },
 ]
 
-export const EVENT_BY_ID = Object.fromEntries(EVENTS.map((e) => [e.id, e]))
+/** 灣岸的事件（冷鏈、走私、封鎖線）。 */
+export const WANGAN_EVENTS: CityEvent[] = [
+  {
+    id: 'reefer',
+    title: '漏電的冷藏貨櫃',
+    body: '一個冷藏貨櫃的電纜被老鼠咬斷了，門縫在滴水。裡面的貨是冷凍保存的義體零件，再過一小時就全壞了。',
+    options: [
+      { id: 'grab', label: '撬開門，挑一件還沒壞的', win: { text: '你挑走了最好的那件。貨櫃的追蹤器記下了開門時間。', loot: 'street', heat: 1 } },
+      { id: 'fix', label: '接好電纜，修好溫控，向貨主收修理費', needs: { attr: 'tech', min: 7 }, win: { text: '溫控重新啟動。貨主是個走私客，他付了錢，還說會跟朋友提起你。', credits: 300, fame: 15 } },
+      leave('不是你的貨，不是你的事。'),
+    ],
+  },
+  {
+    id: 'cards',
+    title: '碼頭走私客的牌局',
+    body: '貨運碼頭的貨櫃屋裡，四個走私客在打牌，桌上堆著信用晶片。「缺一個人，最低注 200。」',
+    options: [
+      { id: 'bet', label: '坐下來玩一把', cost: 200, chance: 0.45, win: { text: '你贏了。他們看你的眼神變了。', credits: 520 }, lose: { text: '你輸得很乾淨。' } },
+      { id: 'cheat', label: '用義手換牌（反應要夠快）', needs: { attr: 'reflex', min: 7 }, win: { text: '沒有人看見你的手動過。你帶著一疊晶片走出貨櫃屋。', credits: 420, stress: 3 } },
+      leave('你不跟走私客賭錢。'),
+    ],
+  },
+  {
+    id: 'drone',
+    title: '墜落的港務部無人機',
+    body: '一台港務部的貨運無人機掉在堆場邊，螺旋槳還在轉。它的記憶體裡有今晚所有的航線。',
+    options: [
+      { id: 'strip', label: '拆下零件賣掉', win: { text: '零件很值錢。無人機的求救訊號在你離開前已經送出去了。', credits: 260, heat: 1 } },
+      { id: 'read', label: '接上它的記憶體，讀出航線', needs: { attr: 'int', min: 7 }, win: { text: '你把航線賣給了三個不同的人。灣岸的中間人開始記住你的名字。', fame: 25, xp: 20 } },
+      leave('你繞過那台還在掙扎的機器。'),
+    ],
+  },
+  {
+    id: 'refugees',
+    title: '封鎖線旁的人',
+    body: '封鎖線的鐵絲網旁邊擠著一群人，手上提著全部家當。他們在等一個說好會來帶路的人，已經等了兩天。',
+    options: [
+      { id: 'give', label: '分給他們 150', cost: 150, win: { text: '他們沒說謝謝，只是把錢分成很多份。你的心比較靜了。', fame: 15, stress: -12 } },
+      { id: 'guide', label: '帶他們從排水道繞過去', needs: { attr: 'cool', min: 7 }, win: { text: '你帶著二十個人走過排水道，沒有一個人出聲。夜鴉第二天在節目裡提到了這件事，沒有說你的名字。', fame: 30, heat: 1 } },
+      leave('你幫不了所有人。'),
+    ],
+  },
+  {
+    id: 'diver',
+    title: '海底隧道的潛水夫',
+    body: '一個剛從海底隧道浮上來的潛水夫攔住你：「我撿到一張救命保單，還沒登記。300 賣你。」',
+    options: [
+      { id: 'buy', label: '付 300 買下', cost: 300, win: { text: '保單是真的。', lifeline: 1 } },
+      { id: 'snatch', label: '趁他不注意直接搶走', chance: 0.5, win: { text: '你搶到保單就跑，他在後面罵了你一整條街。', lifeline: 1, heat: 1 }, lose: { text: '他的潛水刀比你想的快。', injury: 16 } },
+      leave('撿來的保單，誰知道是誰的。'),
+    ],
+  },
+  {
+    id: 'portcheck',
+    title: '港務部的臨檢',
+    body: '海岸高架上，港務部的武裝臨檢攔下了每一台車和每一個人。輪到你了。',
+    options: [
+      { id: 'bribe', label: '塞 300 給檢查員', cost: 300, win: { text: '檢查員收下錢，把你的資料「漏」掉了。', heat: -1 } },
+      { id: 'run', label: '跳下高架', chance: 0.5, win: { text: '你落在下面的貨櫃頂上，一路跑進堆場。' }, lose: { text: '你摔在貨櫃的邊角上，港務部的無人機記下了你的臉。', injury: 18, heat: 1 } },
+      { id: 'wait', label: '乖乖排隊，等他們查完', win: { text: '你排了一個小時，雨一直沒停。', stress: 8 } },
+    ],
+  },
+]
+
+export const EVENT_BY_ID = Object.fromEntries([...EVENTS, ...WANGAN_EVENTS].map((e) => [e.id, e]))

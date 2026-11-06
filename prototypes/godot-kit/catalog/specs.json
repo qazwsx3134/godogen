@@ -130,8 +130,8 @@
     "use_when": "打擊回饋與無障礙強度調整",
     "kind": "rule",
     "status": "來源靜態引用：erwin-run、survivor-series；不代表本輪已做遊戲／真人驗收",
-    "constraints": "呼叫端持有狀態；輸入 Dictionary 欄位與錯誤結果依下方原碼契約。需要 RNG 時使用專屬亂數流，不與特效共用。 獨占 Camera2D.offset/rotation，假設基準為零，避免與其他鏡頭控制器同時寫入。",
-    "example": "const Capability = preload(\"res://addons/proto_kit/camera_shake.gd\")\nvar shake = Capability.new()\nshake.camera = $Camera2D\nshake.add_trauma(0.25)\n# 每幀一次：shake.step(delta)",
+    "constraints": "每幀由宿主 step 一次；delta 為有限非負秒數，非法值不更新。震動期間獨占 Camera2D.offset/rotation，首次寫入前擷取非零基準；自然結束、reset()、shake_scale <= 0 或改綁鏡頭時還原。改綁保留剩餘 trauma。釋放此 RefCounted 或交還鏡頭控制權前必須 reset()；不支援同時寫入這兩欄的控制器。decay/frequency/scale 使用有限非負值，trauma/ceiling 為 0..1；沒有 RNG。",
+    "example": "const Capability = preload(\"res://addons/proto_kit/camera_shake.gd\")\nvar shake = Capability.new()\nshake.camera = $Camera2D\nshake.add_trauma(0.25)\n# 每幀一次：shake.step(delta)\n# 離場或交還鏡頭控制權：shake.reset()\n# 立即停用並還原：shake.shake_scale = 0.0",
     "adoption_evidence": {
       "as_of": "2026-11-06",
       "static_references": [
@@ -586,7 +586,7 @@
     "use_when": "場景切換與暫停仍保持播放",
     "kind": "node",
     "status": "來源靜態引用：erwin-run、survivor-series；不代表本輪已做遊戲／真人驗收",
-    "constraints": "場景擁有生命週期；依下方契約準備子節點與資源。每幀只能由一個時鐘推進，不可重複 auto/manual step。",
+    "constraints": "scene Node 完成 _ready() 後才呼叫 play；至少兩個 AudioStreamPlayer（缺少時補建）。要在暫停時播放，宿主需設定 process_mode = ALWAYS；淡出入忽略 Engine.time_scale。OggVorbis/MP3/WAV 在私有副本啟用循環，不改傳入資源；其他 AudioStream 類型原樣使用，循環由呼叫者配置。track 保留傳入資源身分，同一資源再次 play 不重播。快速第三次換軌會重用最安靜 voice，可能截斷尚未淡完的曲目。",
     "example": "# scene Node 掛此腳本；track.ogg 由遊戲提供\n$Music.play(load(\"res://audio/track.ogg\"))\n$Music.stop()",
     "adoption_evidence": {
       "as_of": "2026-11-06",
@@ -874,8 +874,8 @@
     "use_when": "跨版本進度存檔",
     "kind": "rule",
     "status": "來源靜態引用：seal-meadow；不代表本輪已做遊戲／真人驗收",
-    "constraints": "呼叫端持有狀態；輸入 Dictionary 欄位與錯誤結果依下方原碼契約。需要 RNG 時使用專屬亂數流，不與特效共用。 JSON 數字讀回為 float；新版本／遷移失敗不會靜默降版。",
-    "example": "const Capability = preload(\"res://addons/proto_kit/save_slots.gd\")\nvar error: Error = Capability.save(\"user://slot1.json\", {\"level\": 1}, 1)\nif error == OK:\n    var restored: Dictionary = Capability.restore(\"user://slot1.json\", 1)\n    if restored.error == \"\":\n        print(int(restored.data.level))",
+    "constraints": "單寫入者、JSON envelope {version,data}，version 非負整數（保留 v0）；數字讀回可能為 float。restore(path,version,migrations={},validator=Callable()) 不寫磁碟，主／備份任一可辨識較新版本均拒絕；無效主檔可選備份。migration 為逐版純 Dictionary→Dictionary；validator 為目前版本純 Dictionary→bool，驗證失敗 error=invalid，回呼無效或型別錯誤亦拒絕，回呼自身腳本錯誤不捕捉。save(path,data,version,validator=Callable(),migrations={}) 驗證序列化後候選，寫入前查兩檔；較新版本 ERR_UNAVAILABLE、候選無效 ERR_INVALID_DATA。僅能通過遷移及驗證的主檔原始 bytes 輪替備份，否則保留原備份。省略 validator 只有 envelope 檢查。可能先成功更新備份再主檔寫入失敗；不保證跨檔原子性、跨程序鎖或 revision 競態防護。",
+    "example": "const Saves = preload(\"res://addons/proto_kit/save_slots.gd\")\n# 純回呼由遊戲提供，檢查目前 schema 的必要欄位／型別／範圍\nvar validator: Callable = validate_profile\nvar migrations: Dictionary = {} # 有舊版本時填逐版轉換\nvar restored: Dictionary = Saves.restore(\"user://profile.json\", 1, migrations, validator)\n# error == \"\" 才採用 restored.data；newer 必須停止自動存檔\n# snapshot 為遊戲建立的 JSON Dictionary\nvar error: Error = Saves.save(\"user://profile.json\", snapshot, 1, validator, migrations)\n# error == OK 才顯示保存成功",
     "adoption_evidence": {
       "as_of": "2026-11-06",
       "static_references": [
@@ -1042,8 +1042,8 @@
     "use_when": "自訂載入畫面的邏輯",
     "kind": "rule",
     "status": "未找到遊戲自有程式／場景的直接引用；可能經間接引用或只存在副本；不代表本輪已做遊戲／真人驗收",
-    "constraints": "呼叫端持有狀態；輸入 Dictionary 欄位與錯誤結果依下方原碼契約。需要 RNG 時使用專屬亂數流，不與特效共用。",
-    "example": "const Capability = preload(\"res://addons/proto_kit/scene_loader.gd\")\nvar loader = Capability.new()\nvar accepted: bool = loader.request(\"res://main.tscn\")\n# 每幀：var scene = loader.step(delta)；非 null 才交給 SceneTree\n# 離開載入畫面：loader.cancel()",
+    "constraints": "一個實例只持有一個請求；is_loading() 包含滿格停留期間。忙碌時 request() 回傳 false 且不改動現有 path/進度/failed；非忙碌的啟動失敗才設 failed。step(delta) 接受有限非負秒數，非法值回傳 null 且不更新；PackedScene 只交付一次。path/shown/failed 作為唯讀狀態使用。cancel() 收取並丟棄結果，可能阻塞等載入完成，不是中止背景工作。fail() 僅用於收取場景後宿主切換失敗。時間設定使用有限非負值，fill_speed > 0。無執行緒 Web 的 request 可能同步阻塞，先讓載入畫面繪製兩幀。",
+    "example": "const Capability = preload(\"res://addons/proto_kit/scene_loader.gd\")\nvar loader = Capability.new()\nvar accepted: bool = loader.request(\"res://main.tscn\")\n# 每幀：var scene = loader.step(delta)；非 null 才交給 SceneTree\n# 離開載入畫面：loader.cancel()\n# accepted == false 時先看 is_loading()：true 為忙碌，false 再看 failed\n# cancel() 可能等待，不能當成即時取消",
     "adoption_evidence": {
       "as_of": "2026-11-06",
       "static_references": [],

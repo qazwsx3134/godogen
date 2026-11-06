@@ -1,5 +1,8 @@
 # 蓬蓬草原 seal-meadow（原型）
 
+2026-11-06：存檔已接入 kit SaveSlots validator adapter，只同步 save_slots.gd；Main 保留恢復競態保護，v4 遷移 UID 固定化。Godot 測試延期，既有 PASS／匯出不涵蓋本次修改，詳見 [存檔保護](docs/save-protection.md)。
+
+
 懷舊 Q 版 MMORPG 風格的 2.5D 草原：3D 低多邊形地形與道具，角色和怪物是立在 3D 世界裡的 2D 插畫（沿用 skybound-blades 的 RO 式呈現與 godot-kit `sprite3d`）。玩法目前是單人練功：點地面移動、點怪追打、升級。
 
 ## 手機製作方向（2026-10-26 已確認）

@@ -1,5 +1,8 @@
 # 蓬蓬草原 session checkpoint
 
+2026-11-06：存檔已接入 kit SaveSlots validator adapter，只同步 save_slots.gd；Main 保留恢復競態保護，v4 遷移 UID 固定化。Godot 測試延期，既有 PASS／匯出不涵蓋本次修改，詳見 [存檔保護](../../docs/save-protection.md)。
+
+
 ## 2026-11-05｜暖陶瓦城鎮切片
 
 使用者要求詳細規劃並執行，已選定[暖陶瓦方向 A](../../design/art-prompts/town-style-references-2026-11-05.md)；兩張方向比較圖、商店三視圖與三材質參考均由使用者分兩批授權直接生成。商店三視圖需統一尺寸，材質參考不是可直接平鋪或烘焙的貼圖。正式角色優先直接製作 2D Sprite 紙娃娃，正式素材仍待製作。

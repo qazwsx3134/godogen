@@ -196,7 +196,7 @@ Forget timers, buffs and dots (a new run); spells and ranks stay unless `forget_
 
 入口：[addons/proto_kit/camera_shake.gd](../../addons/proto_kit/camera_shake.gd) · rule · 來源靜態引用：erwin-run、survivor-series；不代表本輪已做遊戲／真人驗收
 
-限制／副作用：呼叫端持有狀態；輸入 Dictionary 欄位與錯誤結果依下方原碼契約。需要 RNG 時使用專屬亂數流，不與特效共用。 獨占 Camera2D.offset/rotation，假設基準為零，避免與其他鏡頭控制器同時寫入。
+限制／副作用：每幀由宿主 step 一次；delta 為有限非負秒數，非法值不更新。震動期間獨占 Camera2D.offset/rotation，首次寫入前擷取非零基準；自然結束、reset()、shake_scale <= 0 或改綁鏡頭時還原。改綁保留剩餘 trauma。釋放此 RefCounted 或交還鏡頭控制權前必須 reset()；不支援同時寫入這兩欄的控制器。decay/frequency/scale 使用有限非負值，trauma/ceiling 為 0..1；沒有 RNG。
 
 ### 使用範例
 
@@ -206,6 +206,8 @@ var shake = Capability.new()
 shake.camera = $Camera2D
 shake.add_trauma(0.25)
 # 每幀一次：shake.step(delta)
+# 離場或交還鏡頭控制權：shake.reset()
+# 立即停用並還原：shake.shake_scale = 0.0
 ```
 
 ### 參數、輸出與訊號
@@ -218,6 +220,7 @@ var max_offset: Vector2 = Vector2(40.0, 30.0)
 var max_roll: float = 0.02
 var frequency: float = 8.0
 var trauma: float = 0.0
+func reset() -> void:
 func add_trauma(amount: float, ceiling: float = 1.0) -> void:
 func step(delta: float) -> void:
 ```
@@ -235,13 +238,15 @@ shake.add_trauma(0.25, 0.35)                    # never pushes trauma past 0.35,
 
 It moves Camera2D.offset and Camera2D.rotation only, never a body or the camera's position, so aiming and
 collisions are untouched. The motion is two sines at unrelated rates, not a random value per frame (that buzzes).
-Rotation only shows with Camera2D.ignore_rotation off. When trauma reaches 0 the camera is put back at exactly zero.
+Rotation only shows with Camera2D.ignore_rotation off. The starting offset/rotation are restored on completion.
+While shaking this object exclusively owns those two properties. Call reset() before handing them back.
 The camera to shake. Nothing happens to the camera while this is null (trauma still drains).
 Accessibility: scales how far the camera moves. 0 = the camera never shakes (trauma is not even collected).
 Trauma lost per second. The shake itself is trauma squared, so it dies away faster than trauma does.
 Camera offset (px) at full trauma, and the roll (rad) the camera turns at most.
 How fast the shake wobbles (Hz). Much above 10 it turns into a buzz on a 30 or 60 fps screen.
 0..1, added to by every shake and drained by `decay`. The camera shakes by trauma squared.
+Stops the shake and restores the captured camera pose. Safe to call repeatedly or after the camera was freed.
 Shakes add up, but one never pushes the trauma past its own `ceiling` (and never lowers it).
 Does nothing while shake_scale is 0.
 Once per frame, with the frame's delta.
@@ -1136,7 +1141,7 @@ The far picture keeps its own proportions at the strip's height and repeats (mir
 
 入口：[addons/proto_kit/music.gd](../../addons/proto_kit/music.gd) · node · 來源靜態引用：erwin-run、survivor-series；不代表本輪已做遊戲／真人驗收
 
-限制／副作用：場景擁有生命週期；依下方契約準備子節點與資源。每幀只能由一個時鐘推進，不可重複 auto/manual step。
+限制／副作用：scene Node 完成 _ready() 後才呼叫 play；至少兩個 AudioStreamPlayer（缺少時補建）。要在暫停時播放，宿主需設定 process_mode = ALWAYS；淡出入忽略 Engine.time_scale。OggVorbis/MP3/WAV 在私有副本啟用循環，不改傳入資源；其他 AudioStream 類型原樣使用，循環由呼叫者配置。track 保留傳入資源身分，同一資源再次 play 不重播。快速第三次換軌會重用最安靜 voice，可能截斷尚未淡完的曲目。
 
 ### 使用範例
 
@@ -1167,8 +1172,8 @@ music.stop()                 # fades to silence
 The node uses the AudioStreamPlayer children it finds (two is enough: one fading out, one fading in) and adds
 the missing ones itself. It runs while the game is paused (set process_mode ALWAYS on the node), and its fades
 ignore Engine.time_scale, so a hit stop does not stretch them. A track imported without looping would end and
-leave silence, so looping is switched on when a track starts. A game that needs named tracks (a room theme and
-a boss theme) extends this script and adds the exports:
+leave silence, so looping is enabled on a private stream copy. The caller's resource stays unchanged.
+A game that needs named tracks (a room theme and a boss theme) extends this script and adds the exports:
 
 extends "res://addons/proto_kit/music.gd"
 @export var room_track: AudioStream
@@ -1179,7 +1184,8 @@ What is meant to be playing now (null = silence).
 Starts `new_track`, looped, and fades whatever else plays out. Asking for the track that is already
 playing changes nothing, so walking from room to room does not restart the music.
 A player that is silent, else the quietest one (a third track in quick succession cuts the fading one).
-A track imported without looping would end and leave silence, so looping is switched on here.
+Copy the supported stream before changing loop properties; keep track as the caller's identity for deduplication.
+Other stream types pass through unchanged; their loop policy belongs to the caller.
 Level 1 = `volume_db`, 0 = silent. Linear in amplitude, like a fade in an audio editor.
 
 測試引用（存在不等於本輪已重跑）：tests/test_proto_kit.gd
@@ -1770,34 +1776,41 @@ JSON 版本、備份恢復與遷移鏈；跨版本進度存檔
 
 入口：[addons/proto_kit/save_slots.gd](../../addons/proto_kit/save_slots.gd) · rule · 來源靜態引用：seal-meadow；不代表本輪已做遊戲／真人驗收
 
-限制／副作用：呼叫端持有狀態；輸入 Dictionary 欄位與錯誤結果依下方原碼契約。需要 RNG 時使用專屬亂數流，不與特效共用。 JSON 數字讀回為 float；新版本／遷移失敗不會靜默降版。
+限制／副作用：單寫入者、JSON envelope {version,data}，version 非負整數（保留 v0）；數字讀回可能為 float。restore(path,version,migrations={},validator=Callable()) 不寫磁碟，主／備份任一可辨識較新版本均拒絕；無效主檔可選備份。migration 為逐版純 Dictionary→Dictionary；validator 為目前版本純 Dictionary→bool，驗證失敗 error=invalid，回呼無效或型別錯誤亦拒絕，回呼自身腳本錯誤不捕捉。save(path,data,version,validator=Callable(),migrations={}) 驗證序列化後候選，寫入前查兩檔；較新版本 ERR_UNAVAILABLE、候選無效 ERR_INVALID_DATA。僅能通過遷移及驗證的主檔原始 bytes 輪替備份，否則保留原備份。省略 validator 只有 envelope 檢查。可能先成功更新備份再主檔寫入失敗；不保證跨檔原子性、跨程序鎖或 revision 競態防護。
 
 ### 使用範例
 
 ```gdscript
-const Capability = preload("res://addons/proto_kit/save_slots.gd")
-var error: Error = Capability.save("user://slot1.json", {"level": 1}, 1)
-if error == OK:
-    var restored: Dictionary = Capability.restore("user://slot1.json", 1)
-    if restored.error == "":
-        print(int(restored.data.level))
+const Saves = preload("res://addons/proto_kit/save_slots.gd")
+# 純回呼由遊戲提供，檢查目前 schema 的必要欄位／型別／範圍
+var validator: Callable = validate_profile
+var migrations: Dictionary = {} # 有舊版本時填逐版轉換
+var restored: Dictionary = Saves.restore("user://profile.json", 1, migrations, validator)
+# error == "" 才採用 restored.data；newer 必須停止自動存檔
+# snapshot 為遊戲建立的 JSON Dictionary
+var error: Error = Saves.save("user://profile.json", snapshot, 1, validator, migrations)
+# error == OK 才顯示保存成功
 ```
 
 ### 參數、輸出與訊號
 
 ```gdscript
-static func save(path: String, data: Dictionary, version: int) -> Error:
-static func restore(path: String, version: int, migrations: Dictionary = {}) -> Dictionary:
+static func save(path: String, data: Dictionary, version: int, validator: Callable = Callable(), migrations: Dictionary = {}) -> Error:
+static func restore(path: String, version: int, migrations: Dictionary = {}, validator: Callable = Callable()) -> Dictionary:
 ```
 
-Versioned JSON save with a backup and step-by-step migrations. Commits go through atomic_file.gd.
-`const SaveSlots = preload("res://addons/proto_kit/save_slots.gd")`
-
-save(): the current main file, if it reads, becomes `path.bak`; then the new data is committed.
-restore(): main, else backup. Data from a newer build is refused (never silently downgraded).
-migrations: {from_version: Callable(Dictionary) -> Dictionary}, each moves one version up.
-Ints come back as floats (JSON); cast what you read.
-Returns {data, source: "main"|"backup"|"", error: ""|"missing"|"corrupt"|"newer"|"migration"}.
+Versioned JSON snapshots. One writer per path; callbacks must be pure and must not write files.
+validator(Dictionary) -> bool checks the CURRENT schema after migration / JSON serialization.
+migrations: {from_version: Callable(Dictionary) -> Dictionary}, one version per step.
+restore never writes. Either file from a newer version blocks restore AND save.
+No cross-process lock or two-file transaction. AtomicFile commits each file separately.
+Existing three-argument calls remain valid. Invalid snapshots never rotate backups.
+ERR_UNAVAILABLE: newer on disk; ERR_INVALID_DATA: candidate rejected; other errors: file IO.
+Only a valid main becomes .bak, preserving its original bytes. Otherwise retain the existing backup.
+Returns {data, source: "main"|"backup"|"", error: ""|"missing"|"corrupt"|"newer"|"migration"|"invalid"}.
+Invalid payload / migration may fall back to backup; newer in EITHER file always blocks.
+data is detached from disk; no repair or automatic write occurs when selecting backup.
+Checks numeric versions before conversion, including future envelopes with malformed payloads.
 
 測試引用（存在不等於本輪已重跑）：tests/test_capability_composition.gd, tests/test_m0_modules.gd
 
@@ -1902,7 +1915,7 @@ Reloads `path` from disk and returns what is wrong with it; fills `refs` with it
 
 入口：[addons/proto_kit/scene_loader.gd](../../addons/proto_kit/scene_loader.gd) · rule · 未找到遊戲自有程式／場景的直接引用；可能經間接引用或只存在副本；不代表本輪已做遊戲／真人驗收
 
-限制／副作用：呼叫端持有狀態；輸入 Dictionary 欄位與錯誤結果依下方原碼契約。需要 RNG 時使用專屬亂數流，不與特效共用。
+限制／副作用：一個實例只持有一個請求；is_loading() 包含滿格停留期間。忙碌時 request() 回傳 false 且不改動現有 path/進度/failed；非忙碌的啟動失敗才設 failed。step(delta) 接受有限非負秒數，非法值回傳 null 且不更新；PackedScene 只交付一次。path/shown/failed 作為唯讀狀態使用。cancel() 收取並丟棄結果，可能阻塞等載入完成，不是中止背景工作。fail() 僅用於收取場景後宿主切換失敗。時間設定使用有限非負值，fill_speed > 0。無執行緒 Web 的 request 可能同步阻塞，先讓載入畫面繪製兩幀。
 
 ### 使用範例
 
@@ -1912,6 +1925,8 @@ var loader = Capability.new()
 var accepted: bool = loader.request("res://main.tscn")
 # 每幀：var scene = loader.step(delta)；非 null 才交給 SceneTree
 # 離開載入畫面：loader.cancel()
+# accepted == false 時先看 is_loading()：true 為忙碌，false 再看 failed
+# cancel() 可能等待，不能當成即時取消
 ```
 
 ### 參數、輸出與訊號
@@ -1923,6 +1938,7 @@ var hold_at_full: float = 0.2
 var shown: float = 0.0
 var failed: bool = false
 var path: String = ""
+func is_loading() -> bool:
 func request(scene_path: String) -> bool:
 func step(delta: float) -> PackedScene:
 func fail() -> void:
@@ -1933,14 +1949,14 @@ The logic of a loading screen: loads a scene on a thread and says what the scree
 a percentage, tips, an error and a retry button) is the game's own scene. `const SceneLoader = preload("res://addons/proto_kit/scene_loader.gd")`
 
 var loader := SceneLoader.new()
-loader.request("res://main.tscn")              # false (and `failed`) if the file is missing or the request is refused
+loader.request("res://main.tscn")              # false if busy (unchanged), otherwise failed on load failure
 func _process(delta: float) -> void:
 var packed: PackedScene = loader.step(delta)   # null until the scene is loaded AND the bar has been full for a moment
 bar.value = loader.shown * 100.0
 if loader.failed: show the error and a retry button that calls loader.request(path) again
 elif packed != null and get_tree().change_scene_to_packed(packed) != OK: loader.fail()   # loaded, cannot be instantiated
 func _exit_tree() -> void:
-loader.cancel()                                 # a load nobody collected is taken off the thread, or the task leaks
+loader.cancel()                                 # collect/discard the pending result; may wait for loading
 
 What `shown` does, and why: it only moves forward; it never gets ahead of the real load; and it never gets ahead of
 the clock either (`min_show_time`), so the screen is no flash and a load that finishes at once (a web build without
@@ -1952,13 +1968,16 @@ Seconds the screen is never up for less than.
 The bar moves at most this much of its length per second, and never backwards.
 The full bar stays this long before the switch.
 What the bar may show, 0..1.
-The last request failed (missing file, broken scene, refused). request() clears it.
+The accepted request failed. A request rejected while busy does not change this flag.
 The scene being loaded.
-Starts loading `scene_path` (again, after a failure). Resets the clock and the bar. False when it could not start.
+True until the pending result has been collected, including the loading bar's hold period.
+Starts loading `scene_path`. While busy, returns false without changing the current request or progress.
+Otherwise resets the clock/bar and sets failed if loading cannot start. Cancel/collect before starting another.
 Once per frame, with the frame's delta. Returns the loaded scene once the bar has been full for `hold_at_full`
 seconds, else null (loading, failed, or not started). Call fail() if the game cannot use the scene it gets.
 The game could not use what it was given (change_scene_to_packed refused it).
-Takes a load nobody collected off the thread (call it when the screen leaves the tree).
+Collects/discards a pending result; may wait for completion. This does not abort the underlying load.
+Call when the owner leaves, or before replacing a request. Repeated calls are harmless.
 
 測試引用（存在不等於本輪已重跑）：tests/test_proto_kit.gd
 
@@ -3598,7 +3617,7 @@ Pure deterministic variant; unit_sample in [0,1]. At exactly 1 the final index i
 
 輸出：atlas.png + sheets.json；錯誤以非零退出，不靜默縮圖
 
-限制：需要 Pillow；覆寫輸出路徑；角色比例與腳底對齊依 manifest。
+限制：需要 Pillow；讀 manifest 相對圖片路徑，固定角色 scale，trim 與 canvas 對齊政策不同。直接先寫 atlas.png 再寫 sheets.json，會覆寫且不是雙檔原子提交；IO 中斷可留下不同版本。AtlasError exit1，JSON/IO/型別錯誤未統一格式。格數／尺寸有上限，但完整 schema（正 cell/columns、非空動畫、正 ticks、合法 align）未全面驗證。
 
 ```sh
 uv run --with pillow tools/sprite_atlas.py manifest.json --out /tmp/hero-atlas
@@ -3610,9 +3629,9 @@ CJK 字型子集
 
 輸入：--project 遊戲路徑；--source 字型；--out 輸出；--weight 可選；--check 唯讀
 
-輸出：子集 TTF/OTF 或缺字報告；錯誤非零
+輸出：子集字型或唯讀缺字報告；缺字 exit1，正常生成模式仍寫輸出
 
-限制：需要 fonttools；字型授權與 Reserved Font Name 保留；動態內容需擴充字元集合。
+限制：需要 fonttools；--check 不寫檔，缺字 exit1。正常模式即使發現缺字仍會寫子集，再 exit1，非零不代表沒有產物。--skip-dir 取代預設列表，不是追加；掃描忽略讀檔／UTF-8 失敗且不驗 project 存在，空掃描不等於成功。輸出覆寫；source/out 只用 abspath 比較，不解析符號連結。保留 name records 不等於工具自動審查授權；動態文字需另補集合。
 
 ```sh
 python3 tools/subset_font.py --project ../pixel-monster --source /path/font.ttf --check
@@ -3624,9 +3643,9 @@ Web 匯出與 IDBFS 補丁
 
 輸入：遊戲目錄；--zip-name 可選；GODOT_BIN 與 FETCH_ARGS 環境變數
 
-輸出：build/web/index.html 與壓縮包；失敗非零
+輸出：build/web/index.html 與 ZIP；可能部分產物，exit0不等於匯出／啟動驗收
 
-限制：會下載對版模板、改寫 build 產物；需名為 Web 的匯出 preset。不是部署。
+限制：會下載模板、匯入專案、寫 build/.gdignore、覆寫 build/web 與 ZIP，非部署。主腳本只取引擎 major.minor 給 fetch helper；helper 的版本匹配需另審。export pipeline 以 || true 消化錯誤，後續以 index.html 存在繼續，不能保證所有匯出錯誤都讓 CLI 失敗；只移除舊 index.html，其他 stale build 檔可能進 ZIP。zip_name 必須是受控檔名，現行未驗路徑／空白檔名。使用專用輸出目錄，失敗可能留下部分產物。
 
 ```sh
 bash tools/web/build_web.sh ../my-game --zip-name my-game-web
@@ -3640,7 +3659,7 @@ bash tools/web/build_web.sh ../my-game --zip-name my-game-web
 
 輸出：暫存目錄日誌；失敗非零；檢查 PASSED 與腳本錯誤
 
-限制：需要 timeout 指令；會執行遊戲測試，先確認測試不觸及真實 user:// 存檔。
+限制：需 timeout；先匯入後跑 suites，會執行任意遊戲測試及其 user:// 寫入，應用隔離測試存檔。suite exit0、無指定錯誤字樣且含 PASSED 才過；PASSED 子字串並非 assertion 數驗證。import 只驗 process exit／timeout，未同樣掃 import log。TEST_TIMEOUT 每次 import／suite 各計，非總時間。參數 name/fps 應受控；本輪未執行此工具。
 
 ```sh
 bash tools/run_tests.sh . capability_composition
@@ -3654,7 +3673,7 @@ bash tools/run_tests.sh . capability_composition
 
 輸出：f*.png、f.wav；有 ffmpeg 時 video.mp4
 
-限制：需要 renderer；清除輸出資料夾的 f*.png/f.wav；macOS 不能 headless，會開視窗。
+限制：需 renderer，可能開窗口並執行遊戲。會先刪 output 下 f*.png/f.wav，ffmpeg -y 覆寫 video.mp4；僅用專用錄影資料夾。固定30fps與 Compatibility renderer；畫面尺寸依遊戲 viewport，非必為 --resolution 值。ffmpeg 可選；缺少 ffmpeg 時不會更新既有 video.mp4，不能把舊影片當本次結果。WAV 參數經未引用命令展開，帶空白 output 路徑有風險。
 
 ```sh
 bash tools/capture.sh ../my-game /tmp/my-game-capture 180
@@ -3668,7 +3687,7 @@ bash tools/capture.sh ../my-game /tmp/my-game-capture 180
 
 輸出：SHA-256 與差異分類；--check 發現差異 exit 1
 
-限制：唯讀；副本存在不代表遊戲實際使用。
+限制：唯讀 SHA-256 來源比較，無語義或採用判定。relative project 基於 prototypes，absolute 可指外部；缺 copy 以 argparse exit2，--check 有差異 exit1，無 --check 即使 drift 仍exit0。沒有忽略規則，會包含輸出／隱藏檔；符號連結檔案可能讀到外部內容。對照結果不授權同步。
 
 ```sh
 python3 tools/audit_copies.py --check --json seal-meadow
@@ -3682,7 +3701,7 @@ python3 tools/audit_copies.py --check --json seal-meadow
 
 輸出：目的專案 addons/proto_kit；check 差異 exit 1
 
-限制：更新會複製整個 kit；先檢視 drift，不批次覆蓋手工修改。
+限制：修改模式使用整包 rsync -a --delete，刪除目標 kit 多餘檔；不合併修改、不做備份、不檢查相容性。沒有指定 target 會更新所有已有副本，故 AI 應明列單一目標。--check 唯讀呼叫 audit_copies；需先確認目標 project.godot。相對名稱基於 prototypes，支援 absolute；不應直接改目的副本。
 
 ```sh
 bash sync.sh --check seal-meadow
@@ -3696,7 +3715,7 @@ bash sync.sh --check seal-meadow
 
 輸出：SpriteFrames 與來源 SHA-256；非法切格拒絕
 
-限制：製作工具；需確認來源授權，既有輸出拒絕覆寫。
+限制：需 Godot 與已匯入 PNG，僅水平等寬 strip；七個參數完整，source/license_note 只需非空，不代表授權已核實。拒絕既有 .tres 或 .source.json；先存 resource 再寫來源。來源檔開啟失敗會嘗試刪新 resource，但沒有查 store_string/close 寫入錯誤或 rollback 結果；不是 crash-safe 雙檔交易。res:// 前綴檢查不是完整路徑沙箱。
 
 ```sh
 godot --headless --path . --script res://tools/vfx/import_strip.gd -- res://assets/fire.png res://assets/fire.tres 18 15 once SOURCE_URL LICENSE_NOTE
@@ -3710,7 +3729,7 @@ godot --headless --path . --script res://tools/vfx/import_strip.gd -- res://asse
 
 輸出：JSON 契約／依賴計畫或 Markdown；check 過期 exit 1
 
-限制：只有 build 寫入生成檔；plan 是靜態參考，不是選擇性安裝。
+限制：只有 build 寫生成檔；check 比較 capabilities/resources/REFERENCE，不比較 inventory.json 新鮮度，也不執行 schema.json 完整驗證。list/show/plan 重新讀取目前來源，非直接信任舊 catalog。api 是 regex 擷取，不涵蓋繼承／內部類全部 API，註解也會進靜態引用。plan 不解析 Python import、shader include 或動態載入，非安裝 manifest。build 多檔逐寫，非原子。
 
 ```sh
 python3 tools/capabilities.py show fixed_step
