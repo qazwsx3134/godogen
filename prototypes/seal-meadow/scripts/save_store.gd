@@ -1,6 +1,7 @@
 extends RefCounted
-## Game-specific envelope checks and validated recovery. Kit copies remain unchanged.
+## Seal adapter: v1+ envelope inspection, game payload validation, and kit snapshot IO.
 const AtomicFile = preload("res://addons/proto_kit/atomic_file.gd")
+const SaveSlots = preload("res://addons/proto_kit/save_slots.gd")
 const Validation = preload("res://scripts/save_validation.gd")
 
 static func inspect(path: String, version: int) -> Dictionary:
@@ -19,25 +20,14 @@ static func inspect(path: String, version: int) -> Dictionary:
 		return {"error": "corrupt"}
 	return {"error": "", "version": int(v), "data": raw.data}
 
+## Keep the game's historical corrupt error for invalid payloads.
+## Seal migrations start at v1; v0 has no migration and cannot be loaded.
 static func restore(path: String, version: int, migrations: Dictionary) -> Dictionary:
-	var error := "missing"
-	for source: String in ["main", "backup"]:
-		var loaded := inspect(path if source == "main" else path + ".bak", version)
-		if loaded.error == "newer":
-			return {"error": "newer", "data": {}, "source": ""}
-		if loaded.error != "":
-			if loaded.error != "missing":
-				error = loaded.error
-			continue
-		var v: int = loaded.version
-		var data: Dictionary = loaded.data
-		while v < version:
-			if not migrations.has(v):
-				return {"error": "migration", "data": {}, "source": ""}
-			data = migrations[v].call(data)
-			v += 1
-		if not Validation.valid(data):
-			error = "corrupt"
-			continue
-		return {"error": "", "data": data, "source": source}
-	return {"error": error, "data": {}, "source": ""}
+	var restored: Dictionary = SaveSlots.restore(path, version, migrations, Validation.valid)
+	if restored.error == "invalid":
+		restored.error = "corrupt"
+	return restored
+
+
+static func save(path: String, snapshot: Dictionary, version: int, migrations: Dictionary) -> Error:
+	return SaveSlots.save(path, snapshot, version, Validation.valid, migrations)

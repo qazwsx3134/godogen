@@ -1,6 +1,11 @@
 # Cyberpunk 文字 MMO RPG：進度與交接
 
+> 2026-11-06：遊戲方向已改為單機文字冒險 roguelike。本檔中 MMO、離線排隊、週榜、城市共同事件、熟練度、抵押與救援帳單等敘述，以 [prototypes/mortal-city/docs/adr/0001-single-player-roguelike.md](../../prototypes/mortal-city/docs/adr/0001-single-player-roguelike.md) 與 [ROGUELIKE-FLOW.md](../../prototypes/mortal-city/docs/ROGUELIKE-FLOW.md) 為準。
+
 由根目錄 `Progress.md` 拆出（2026-11-02）。文件入口 [README](README.md)；原型在 `prototypes/mortal-city/`（2026-11-04 起）。
+
+
+> 2026-11-07 合併說明：下面幾段標「未提交」的 2026-11-05～06 紀錄（黑市、圖示、私訊、保單四級、男主角…）是 WSL 上舊 MMO 架構的工作（`c8fb8afd`），合併時程式以 ADR 0001 的 roguelike 為準，這些項目的處理見 [原型 PROGRESS](../../prototypes/mortal-city/PROGRESS.md)「合併 WSL 分支」段。
 
 ## 2026-11-06｜保單四級、男主角外觀（未提交）
 

@@ -1,5 +1,7 @@
 # 雙層任務：劇情委託＋街頭工作 v0.1
 
+> 2026-11-06：遊戲方向已改為單機文字冒險 roguelike。本檔中 MMO、離線排隊、週榜、城市共同事件、熟練度、抵押與救援帳單等敘述，以 [prototypes/mortal-city/docs/adr/0001-single-player-roguelike.md](../../prototypes/mortal-city/docs/adr/0001-single-player-roguelike.md) 與 [ROGUELIKE-FLOW.md](../../prototypes/mortal-city/docs/ROGUELIKE-FLOW.md) 為準。
+
 日期：2026-11-04。§1 是使用者當天確認的決定；§2 以後是依決定展開的提案，數值與名稱都還要試算。本檔優先於其他文件中與「每角色委託不重複」「有限經濟」「週榜無法計分」有關的舊敘述，受影響段落列在 §9。
 
 ## 1. 已確認（2026-11-04）

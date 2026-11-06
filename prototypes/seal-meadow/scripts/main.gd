@@ -7,7 +7,6 @@ extends Node3D
 
 const TapPicker3D = preload("res://addons/proto_kit/tap_picker_3d.gd")
 const TerrainHeight = preload("res://scripts/terrain_height.gd")
-const SaveSlots = preload("res://addons/proto_kit/save_slots.gd")
 const AtomicFile = preload("res://addons/proto_kit/atomic_file.gd")
 const Inventory = preload("res://scripts/inventory.gd")
 const SaveValidation = preload("res://scripts/save_validation.gd")
@@ -149,7 +148,8 @@ func _migrate_v5(data: Dictionary) -> Dictionary:
 	return data
 
 
-## v4 attached refinement to an item type. Give every existing copy its own identity and preserve that bonus.
+## v4 attached refinement to an item type. Stable per-slot IDs make repeated migration pure.
+## New gameplay equipment still uses random UIDs; existing v5/v6 identities are untouched.
 func _migrate_v4(data: Dictionary) -> Dictionary:
 	if (data.has("refine") and not data.refine is Dictionary) \
 			or (data.has("bag") and not data.bag is Array) \
@@ -171,7 +171,7 @@ func _migrate_v4(data: Dictionary) -> Dictionary:
 				if not (count is int or count is float) or float(count) != 1.0:
 					data["_invalid_schema"] = true
 					return data
-				migrated_bag.append(Inventory.equipment_record(id, int(legacy.get(id, 0))))
+				migrated_bag.append(Inventory.equipment_record(id, int(legacy.get(id, 0)), "legacy-v4:bag:%d" % migrated_bag.size()))
 			else:
 				migrated_bag.append(entry)
 		else:
@@ -185,7 +185,7 @@ func _migrate_v4(data: Dictionary) -> Dictionary:
 			return data
 		var id: String = str(worn.get(slot, ""))
 		if Items.ALL.has(id) and Items.ALL[id].get("slot", "") == slot:
-			migrated_worn[slot] = Inventory.equipment_record(id, int(legacy.get(id, 0)))
+			migrated_worn[slot] = Inventory.equipment_record(id, int(legacy.get(id, 0)), "legacy-v4:equipped:%s" % slot)
 	data["equipped"] = migrated_worn
 	data.erase("refine")
 	return data
@@ -318,7 +318,11 @@ func save_game() -> Error:
 		var current := SaveStore.restore(save_path, SAVE_VERSION, _save_migrations)
 		if current.error != "" or current.source != "main":
 			return _block_save(current.error if current.error != "" else "corrupt")
-	var err: Error = SaveSlots.save(save_path, snapshot, SAVE_VERSION)
+	var err: Error = SaveStore.save(save_path, snapshot, SAVE_VERSION, _save_migrations)
+	if err == ERR_UNAVAILABLE:
+		return _block_save("newer")
+	if err == ERR_INVALID_DATA:
+		return _block_save("invalid_snapshot")
 	if err != OK:
 		push_warning("save failed: %s" % error_string(err))
 	else:

@@ -1,0 +1,10 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/damage_numbers_3d.gd" id="1_unyxh"]
+[ext_resource type="PackedScene" path="res://addons/proto_kit/damage_number_3d.tscn" id="2_ghj1r"]
+
+[node name="DamageNumbers3D" type="Node3D" unique_id=2019924990]
+script = ExtResource("1_unyxh")
+number_scene = ExtResource("2_ghj1r")
+
+[node name="Preview" parent="." unique_id=1956340809 instance=ExtResource("2_ghj1r")]

@@ -19,6 +19,7 @@
 - **`rm -rf $VAR` 被 auto mode 擋；`pkill -f '字串'` 殺到自己的 shell（exit 144）** → 用字面路徑或新的資料夾名稱；記下 PID 再 `kill <pid>`。（[CLAUDE.md](../CLAUDE.md) 2026-10-02）
 - **GitHub 下載很慢** → 匯出範本用 HTTP Range 只抓 `web_nothreads_release.zip`（kit 的 `tools/web/fetch_web_templates.py`）。（[godot-prototype-to-itch](godot-kit/skills/godot-prototype-to-itch/SKILL.md)）
 - **Blender 在 WSL 要用 Windows 版**，路徑先 `wslpath -w` 轉換。（[seal-meadow](seal-meadow/PROGRESS.md#注意事項)）
+- **`pnpm install` 失敗、叫你跑 `pnpm approve-builds`**（2026-11-06，mortal-city）：pnpm 11 沒核准相依套件的安裝腳本（例如 esbuild）就讓安裝失敗，並寫一個「set this to true or false」的 `pnpm-workspace.yaml` → 在該檔寫 `allowBuilds:` 下 `esbuild: true` 再裝；先確認專案原本用 npm 還是 pnpm，別讓兩份 lockfile 並存。（[mortal-city](mortal-city/PROGRESS.md)）
 
 - **改了程式，瀏覽器卻一直跑舊版（修好的錯誤照樣出現）**（2026-11-05，mortal-city）→ 兩個原因都遇到：WSL 上專案在 `/mnt/d`（Windows 磁碟），vite 的檔案監看收不到變更、不會重新編譯；另外前一次背景啟動的 vite 沒關、新的加 `--strictPort` 啟動失敗卻沒注意。改完先 `curl http://127.0.0.1:<port>/src/<檔案>` 確認送出的是新碼，不是就重啟（或在 vite 設 `server.watch.usePolling`）；`ss -ltnp | grep <port>` 看是誰在聽，停服務用查到的 PID。
 
@@ -50,6 +51,7 @@
 - **測試裡按鈕、點擊「沒反應」**（2026-11-02，kagura-dango）→ kit 的 `_press`／`_tap` 是協程，要 `await _press(...)`；沒 await 就檢查，會在點擊送出前斷言。（[kagura-dango tests](kagura-dango/tests/test_flow.gd)）
 - **用 Claude in Chrome 量手機寬度：`resize_window` 縮了視窗，頁面 `innerWidth` 卻沒變**（2026-11-04，mortal-city）→ 在同網域頁面內嵌指定寬度的 iframe（360／390／430px），對 iframe 的 `contentDocument` 量 `scrollWidth <= clientWidth`。（[mortal-city](mortal-city/README.md)）
 - **React 網頁原型：子元件的 `setTimeout` 一直不觸發**（2026-11-04，mortal-city）→ 遊戲時鐘每秒 tick 讓父元件重新渲染，inline callback 每次都是新函式，放在 effect 依賴裡會一直重設計時器；callback 改放 `useRef`。（[mortal-city](mortal-city/README.md#發現)）
+- **用瀏覽器自動化測網頁時動畫、捲動「沒反應」**（2026-11-06，mortal-city）：測試分頁是隱藏的，`requestAnimationFrame` 整個暫停、`scrollIntoView({behavior:'smooth'})` 完全不捲、`setTimeout`／`setInterval` 被降成每秒一次（連測試腳本裡的等待也是）→ 遊戲計時用計時器加實際經過時間，不靠 rAF；平滑捲動只在 `document.visibilityState === 'visible'` 時用；長按之類的時間判定要在前景分頁手動確認。（[mortal-city](mortal-city/PROGRESS.md)）
 
 ## Scene、UI 與 Godot API
 
@@ -78,6 +80,8 @@
 - **立繪動作接台詞／漫畫時看不到，可能是根本還沒登場，或同幀已被下一層蓋住** → 從真實劇本順序測角色可見性、Art 位移與 alpha；先入場再排反應，非對話後續指令等動作完成。準備站位要保存到開口時的動畫；畫外音旗標需在編輯器明示。（debt-commission `tests/test_portrait_reaction.gd`、`tests/test_portrait_controls.gd`，2026-11-02）
 - **用 headless 腳本 `instantiate()`＋`pack()` 重存既有 scene，只為加一顆按鈕，結果子 scene instance 上的覆寫屬性全掉了**（2026-11-04，debt-commission `chapter_select.tscn` 的預覽卡片丟了 `size_flags`、邊距與文字）→ 既有 scene 只加一個節點時，存檔前先 `diff` 新舊 `.tscn`；有非預期的刪除就只把新節點那段插進原檔，或在編輯器裡加。
 - **把大 GDScript 拆成幾個控制器檔，parse 全過、執行時才 `Method not found`**（2026-11-04，debt-commission G6）→ 字串呼叫（`call_deferred("_name")`、`call("_x")`、`has_method`）不經過 parser；拆分後 grep 被搬走的函式名稱出現在字串裡的地方，改成 `obj.method.call_deferred()`。拆分前後跑完整測試逐組比對。
+
+- **SceneBuilder 保存場景後又 free root，Godot 直接 exit 134**（2026-11-06，godot-kit）→ `SceneBuilder.save_scene(root, ...)` 無論保存或 skip 都接手並釋放 root，呼叫端不得再 free 或讀取它；外部所有權語義列入能力契約與範例。（[能力庫驗證](godot-kit/docs/capabilities/VALIDATION.md)）
 
 ## 匯出與網頁版
 
@@ -130,7 +134,7 @@
 ## 多 agent 協作（Herdr、Codex、子 agent）
 
 - **用 `herdr agent wait` 與 agent 狀態判斷子 agent 做完了**，狀態會閃成 idle、wait 提早回來 → 派工單指定報告檔，以報告檔出現為完成訊號。（[CLAUDE.md](../CLAUDE.md) 2026-10-02）
-- **使用者已開好 Codex pane 時另開新的，新的卡在 CLI 自動更新** → 先 `herdr agent list` 找現成的 pane 並確認空閒；派工單路徑寫絕對路徑；用 pane ID 當目標。跨 agent 合作時 Codex 不用 Luna max。（記憶檔 `codex-collab-model`，2026-10-16／10-20）
+- **使用者已開好 Codex pane 時另開新的，新的卡在 CLI 自動更新** → 先 `herdr agent list` 找現成的 pane 並確認空閒；派工單路徑寫絕對路徑；用 pane ID 當目標。跨 agent 合作時 Codex 不用 Luna max。現成的 pane 在忙、只能新開時：Codex 啟動時可能先自動更新，更新完就結束，`herdr agent start` 和 `agent prompt` 照樣回成功、派工單根本沒被讀到 → 派工後幾秒用 `herdr pane read <pane> --source recent-unwrapped` 確認它真的在做，看到「Please restart Codex」就在同一個 pane 重新 `agent start` 再派一次。(×2)（記憶檔 `codex-collab-model`，2026-10-16／10-20）
 - **Codex 在 Herdr 裡啟動，`-c` 參數跳警告框擋住它** → 按 Esc 關掉。（[erwin-run](erwin-run/PROGRESS.md#已知的坑)）
 - **Codex 幾乎每個指令都要人工核准，使用者不在時整批停住** → 長批次前請使用者用 `/approvals` 放寬，或把產出寫在 Codex 的工作區最後一次搬。（[character-sprite-forge](godot-kit/skills/character-sprite-forge/SKILL.md#坑)）
 - **不要假設上一個 agent 開的伺服器還活著** → 先確認再用。（[dreamling-idle/PROGRESS.md](dreamling-idle/PROGRESS.md)）

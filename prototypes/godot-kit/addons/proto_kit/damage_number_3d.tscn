@@ -1,0 +1,9 @@
+[gd_scene format=3]
+
+[node name="Number" type="Label3D" unique_id=1956340809]
+pixel_size = 0.01
+billboard = 1
+no_depth_test = true
+text = "128"
+font_size = 40
+outline_size = 8

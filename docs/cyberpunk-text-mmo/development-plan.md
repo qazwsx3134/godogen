@@ -1,5 +1,7 @@
 # 開發計畫 v0.3
 
+> 2026-11-06：遊戲方向已改為單機文字冒險 roguelike。本檔中 MMO、離線排隊、週榜、城市共同事件、熟練度、抵押與救援帳單等敘述，以 [prototypes/mortal-city/docs/adr/0001-single-player-roguelike.md](../../prototypes/mortal-city/docs/adr/0001-single-player-roguelike.md) 與 [ROGUELIKE-FLOW.md](../../prototypes/mortal-city/docs/ROGUELIKE-FLOW.md) 為準。
+
 日期：2026-10-29。本輪交付是規劃，不是實作完成或上線承諾。東京原型城市、每角色一次性委託、新角可重玩、永久死亡、重大危險節點等待玩家、聊天與系統訊息、警方、Trauma Team、等級提高神機錯亂免疫力已納入基線。具體公式、技術與內容量為建議。
 
 ## 1. 技術選擇

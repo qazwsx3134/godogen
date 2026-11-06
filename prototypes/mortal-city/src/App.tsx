@@ -1,42 +1,60 @@
-import { useEffect, useRef, useState } from 'react'
-import { IconCity, IconComms, IconJobs, IconLog, IconMerc, IconRank, ShieldAlert, Square, type IconProps } from './components/icons'
-import { Emblem, Panel } from './components/ui'
-import { dmUnread, useGame } from './game/state'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { type LucideIcon, Map as MapIcon, MessageSquare, Volume2, VolumeX, ScrollText, ShieldAlert, ShieldPlus, Sparkles, User } from 'lucide-react'
+import { Emblem, NeonIcon, Panel } from './components/ui'
+import { nodeBusy, useGame } from './game/state'
 import { NEURAL_STAGE_LABEL, SEVERE_INJURY, marginOf, neuralStage } from './rules/core'
-import { JobsScreen } from './screens/Jobs'
+import { RunScreen } from './screens/Run'
 import { CharacterScreen } from './screens/Character'
-import { CityScreen } from './screens/City'
-import { RankScreen } from './screens/Rank'
 import { LogScreen } from './screens/Log'
 import { Comms } from './screens/Comms'
-import { AwayDialog } from './screens/Away'
+import { PickDialog } from './screens/Pick'
+import { CompleteDialog } from './screens/Complete'
+import { GlitchFlash, NewsTicker } from './components/Fx'
+import { newsFor } from './content/news'
+import { onSfxChange, setSfx, sfx, sfxEnabled, unlock } from './components/sfx'
 
-export type Route = 'jobs' | 'char' | 'city' | 'rank' | 'log'
+export type Route = 'run' | 'char' | 'log'
 
-const NAV: { id: Route; label: string; icon: (p: IconProps) => React.JSX.Element; path: string }[] = [
-  { id: 'jobs', label: '委託', icon: IconJobs, path: 'JOBS' },
-  { id: 'char', label: '角色', icon: IconMerc, path: 'MERC' },
-  { id: 'city', label: '城市', icon: IconCity, path: 'CITY' },
-  { id: 'rank', label: '排行', icon: IconRank, path: 'RANK' },
-  { id: 'log', label: '紀錄', icon: IconLog, path: 'LOG' },
+const NAV: { id: Route; label: string; icon: LucideIcon; path: string }[] = [
+  { id: 'run', label: '街區', icon: MapIcon, path: 'RUN' },
+  { id: 'char', label: '角色', icon: User, path: 'MERC' },
+  { id: 'log', label: '紀錄', icon: ScrollText, path: 'LOG' },
 ]
 
 export default function App() {
   const game = useGame()
-  const { g, act } = game
-  const [route, setRoute] = useState<Route>('jobs')
+  const { g } = game
+  const [route, setRoute] = useState<Route>('run')
   const [comms, setComms] = useState(false)
   const c = g.character
   const stage = neuralStage(marginOf(c))
-  const busy = g.queue.items.length > 0
+  const claiming = c.alive && !!g.run.claim
+  const picking = c.alive && c.picks.length > 0 && !nodeBusy(g) && !claiming
   const mainRef = useRef<HTMLElement>(null)
   useEffect(() => {
     mainRef.current?.scrollTo(0, 0)
   }, [route])
+  // 音效：開關、進節點的連線音
+  const [sound, setSound] = useState(sfxEnabled())
+  useEffect(() => onSfxChange(() => setSound(sfxEnabled())), [])
+  const nodeId = g.run.node?.nodeId
+  useEffect(() => {
+    if (nodeId) sfx.enter()
+  }, [nodeId])
+  const news = useMemo(() => newsFor(g), [g.character.heat, g.character.fame.level, g.character.lifelines, g.run.cases, g.meta.legends])
+  const glitchKey = `${route}|${nodeId ?? 'map'}|${g.run.phase}`
 
   return (
     <div className="desk-bg flex min-h-full justify-center">
-      <div className="relative flex h-dvh w-full max-w-[430px] flex-col bg-bg/95 shadow-[0_0_0_1px_var(--color-line)]">
+      <div
+        className="relative flex h-dvh w-full max-w-[430px] flex-col bg-bg/95 shadow-[0_0_0_1px_var(--color-line)]"
+        onPointerDownCapture={(e) => {
+          // 瀏覽器要等使用者操作後才能發聲：第一次點擊時啟動音效；之後每個可點的按鈕都有點擊聲
+          unlock()
+          if ((e.target as HTMLElement).closest('button:not(:disabled)')) sfx.click()
+        }}
+      >
+        <GlitchFlash key={glitchKey} />
         {/* 頂列：品牌＋地點＋網址列 */}
         <header className="shrink-0 px-3 pt-[max(8px,env(safe-area-inset-top))]">
           <div className="flex items-center gap-2">
@@ -49,6 +67,13 @@ export default function App() {
               <div className="text-[14px] font-bold text-red">魔都 傭兵終端</div>
               <div className="text-[12px] text-muted">登入中：{c.name}</div>
             </div>
+            <button
+              onClick={() => setSfx(!sound)}
+              aria-label={sound ? '關閉音效' : '開啟音效'}
+              className={`grid size-11 shrink-0 place-items-center border ${sound ? 'border-line text-cyan' : 'border-line/50 text-muted'}`}
+            >
+              {sound ? <Volume2 size={18} /> : <VolumeX size={18} />}
+            </button>
           </div>
           <div className="mt-2 flex items-center gap-2 border border-line/70 bg-raised px-2 text-[12px] leading-7">
             <span className="text-cyan">▣</span>
@@ -60,65 +85,48 @@ export default function App() {
         {/* 固定狀態列：生命、等級、神經、通緝、信用點，以及停止鍵 */}
         <div className="shrink-0 px-3 pt-2">
           <Panel small tone={c.alive ? 'line' : 'red'} innerClass="px-3 py-2">
-            <div className="flex items-center gap-3 text-[14px]">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[14px] [&>span]:whitespace-nowrap">
               <span className={`font-bold ${c.alive ? (c.injury >= 60 ? 'text-warning' : 'text-positive') : 'text-red'}`}>
                 {c.alive ? (c.injury ? `傷勢 ${c.injury}%` : '存活') : '✖ 已死亡'}
               </span>
               <span className="tech text-heading">LV.{c.level}</span>
+              <span className="tech text-warning">名聲 {c.fame.level}</span>
               <span className={stage === 'stable' ? 'text-muted' : 'font-bold text-warning'}>神經 {NEURAL_STAGE_LABEL[stage]}</span>
               <span className={c.heat ? 'font-bold text-red' : 'text-muted'}>
                 通緝 {'★'.repeat(c.heat) || '—'}
               </span>
+              <span className={`flex items-center gap-0.5 ${c.lifelines ? 'text-positive' : 'text-muted'}`} title="救命保單">
+                <ShieldPlus size={14} />
+                {c.lifelines}
+              </span>
               <span className="tech ml-auto text-heading">¢{c.credits.toLocaleString()}</span>
             </div>
-            {g.high && g.high.stage !== 'done' && (
-              <div className="mt-2 flex items-center gap-2 border-t border-red/50 pt-2 text-[13px]">
-                <span className="flex-1 font-bold text-red">
-                  ⚠ 高階工作{g.high.stage === 'danger' ? '等待你的選擇' : '進行中'}
-                </span>
-                <button onClick={() => setRoute('jobs')} className="flex min-h-11 items-center border border-red px-3 font-bold text-red">
-                  前往
-                </button>
-              </div>
-            )}
             {c.alive && c.injury >= SEVERE_INJURY && (
-              <div className="mt-2 flex items-center gap-2 border-t border-red/50 pt-2 text-[13px]">
-                <span className="flex-1 font-bold text-red">✚ 重傷：不能工作，先休養或治療</span>
-                <button onClick={() => setRoute('char')} className="flex min-h-11 items-center border border-red px-3 font-bold text-red">
-                  治療
-                </button>
-              </div>
+              <div className="mt-2 border-t border-red/50 pt-2 text-[13px] font-bold text-red">✚ 重傷：開打時 HP 很低，先找診所或休息節點</div>
             )}
-            {busy && (
-              <div className="mt-2 flex items-center gap-2 border-t border-line/40 pt-2 text-[13px]">
-                <span className="flex-1 text-muted">
-                  {g.queue.paused ? '⏸ 排隊暫停中（劇情委託進行中）' : `▶ 排隊執行中：剩 ${g.queue.items.length} 件`}
-                </span>
-                <button
-                  onClick={() => act({ t: 'clearQueue' })}
-                  className="flex min-h-11 items-center gap-1 border border-red px-3 font-bold text-red"
-                >
-                  <Square size={14} /> 停止排隊
-                </button>
+            {c.alive && c.picks.length > 0 && nodeBusy(g) && (
+              <div className="mt-2 flex items-center gap-1 border-t border-line/40 pt-2 text-[13px] text-warning">
+                <Sparkles size={14} /> 有 {c.picks.length} 組三選一，這個節點結束後挑
               </div>
             )}
           </Panel>
+          <div className="mt-2">
+            <NewsTicker items={news} />
+          </div>
         </div>
 
         <main ref={mainRef} className="min-h-0 flex-1 overflow-y-auto px-3 pt-3 pb-4">
-          {!c.alive && route !== 'log' && (
+          {!c.alive && route !== 'run' && (
             <Panel tone="red" className="mb-3" innerClass="flex items-center gap-2 p-3 text-[15px]">
               <ShieldAlert size={18} className="shrink-0 text-red" />
-              <span className="flex-1 text-fg">這個角色已經死亡。生涯紀錄在「紀錄」。</span>
-              <button className="min-h-11 font-bold text-cyan" onClick={() => setRoute('log')}>
+              <span className="flex-1 text-fg">這個傭兵已經死亡，已寫進傳奇檔案。</span>
+              <button className="min-h-11 font-bold text-cyan" onClick={() => setRoute('run')}>
                 前往 →
               </button>
             </Panel>
           )}
-          {route === 'jobs' && <JobsScreen game={game} />}
+          {route === 'run' && <RunScreen game={game} />}
           {route === 'char' && <CharacterScreen game={game} />}
-          {route === 'city' && <CityScreen game={game} />}
-          {route === 'rank' && <RankScreen game={game} />}
           {route === 'log' && <LogScreen game={game} />}
         </main>
 
@@ -127,14 +135,14 @@ export default function App() {
           onClick={() => setComms(true)}
           className="mx-3 mb-2 flex min-h-11 shrink-0 items-center gap-2 border border-line/70 bg-surface px-3 text-[14px] text-fg-list"
         >
-          <IconComms size={18} className="text-cyan" />
-          <span className="flex-1 text-left">通訊・魔都 FM 104.9・私人訊息</span>
-          {dmUnread(g) > 0 && <span className="tech rounded-sm bg-red px-1 text-[12px] leading-5 text-bg">{dmUnread(g)}</span>}
+          <MessageSquare size={16} className="text-cyan" />
+          <span className="flex-1 text-left">通訊・魔都 FM 104.9</span>
+          <span className="tech rounded-sm bg-red px-1 text-[12px] leading-5 text-bg">3</span>
           <span className="text-muted">展開</span>
         </button>
 
         {/* 底部導覽：參考圖左側分類欄的手機版 */}
-        <nav className="grid shrink-0 grid-cols-5 border-t border-line bg-surface pb-[env(safe-area-inset-bottom)]">
+        <nav className="grid shrink-0 grid-cols-3 border-t border-line bg-surface pb-[env(safe-area-inset-bottom)]">
           {NAV.map((n) => {
             const on = n.id === route
             const Icon = n.icon
@@ -146,15 +154,16 @@ export default function App() {
                 aria-current={on ? 'page' : undefined}
               >
                 {on && <span className="absolute inset-x-2 top-0 h-0.5 bg-red" />}
-                <Icon size={22} className={on ? 'neon' : undefined} />
+                <NeonIcon icon={Icon} size={20} on={on} />
                 {n.label}
               </button>
             )
           })}
         </nav>
 
-        {comms && <Comms game={game} onClose={() => setComms(false)} />}
-        {g.away && <AwayDialog report={g.away} onClose={() => act({ t: 'dismissAway' })} />}
+        {comms && <Comms onClose={() => setComms(false)} />}
+        {claiming && <CompleteDialog game={game} />}
+        {picking && <PickDialog game={game} />}
       </div>
     </div>
   )

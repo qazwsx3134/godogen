@@ -5,45 +5,57 @@ import layout from '../content/scene_layout.json'
 import sprites from '../content/sprites.json'
 import { type SceneFx, type SpritePlacement, SpriteScene } from './SpriteScene'
 
-export type StripMode = 'rest' | 'run' | 'dead'
+export type StripMode = 'rest' | 'run' | 'dead' | 'node'
 
 type Man = Record<string, { src: string; w: number; h: number }>
 
-/** 主角外觀：a＝女主角 A、b＝男主角 B。B 的圖還沒做好時（sprites.json 沒有 hero_b_*）用 A 的。 */
-export type Look = 'a' | 'b'
-export const hasLook = (look: Look) => look === 'a' || 'hero_b_lying' in (sprites as object)
-
-function placements(scene: 'room' | 'street', look: Look, skip: string[] = [], rest = false): SpritePlacement[] {
+function placements(scene: 'room' | 'street', skip: string[] = []): SpritePlacement[] {
   const man = sprites as unknown as Man
-  // 休息：有「沙發＋人」的整張就用它取代沙發，原本的躺姿不畫
-  const sofaRest = rest && man[`sofa_rest_${look}`] ? `sofa_rest_${look}` : null
   return (layout[scene] as { id: string; x: number; y: number; anim?: string }[])
-    .filter((p) => !skip.includes(p.id) && !(sofaRest && p.id === 'hero_lying'))
-    .map((p) => {
-      if (sofaRest && p.id === 'sofa') return { ...man[sofaRest], ...p, id: sofaRest, y: p.y + man.sofa.h - man[sofaRest].h }
-      const alt = look === 'b' && p.id.startsWith('hero_') ? p.id.replace('hero_', 'hero_b_') : p.id
-      if (alt === p.id || !man[alt]) return { ...man[p.id], ...p }
-      // 換成 B：底邊對齊 A 的位置（躺在同一張沙發、踩在同一條線上）
-      return { ...man[alt], ...p, id: alt, y: p.y + man[p.id].h - man[alt].h }
-    })
+    .filter((p) => !skip.includes(p.id))
+    .map((p) => ({ ...man[p.id], ...p }))
 }
 
-const SCENES = Object.fromEntries(
-  (['a', 'b'] as Look[]).map((k) => [k, { room: placements('room', k, [], true), empty: placements('room', k, ['hero_lying']), street: placements('street', k) }]),
-) as Record<Look, { room: SpritePlacement[]; empty: SpritePlacement[]; street: SpritePlacement[] }>
+const ROOM = placements('room')
+const ROOM_EMPTY = placements('room', ['hero_lying'])
+const STREET = placements('street')
 const ROOM_FX = layout.room_fx as SceneFx[]
 const STREET_FX = layout.street_fx as SceneFx[]
+const RAIN = STREET_FX.filter((f) => f.fx === 'rain')
 
-export function CityStrip({ mode, label, sub, look = 'a' }: { mode: StripMode; label: string; sub?: string; look?: Look }) {
-  const sc = SCENES[look]
-  const layers = mode === 'run' ? sc.street : mode === 'dead' ? sc.empty : sc.room
+/** 有專屬背景圖的節點類型（public/sprites/node_*.png，由 art_src/build_nodes.py 產生）。 */
+export const NODE_BG = ['job', 'elite', 'event', 'market', 'clinic', 'rest'] as const
+export type NodeBg = (typeof NODE_BG)[number]
+/** 室內的節點背景不疊雨（依街區：灣岸的休息是戶外的貨櫃旅館）。 */
+const INDOOR: Record<string, NodeBg[]> = { shinjuku: ['clinic', 'rest'], wangan: ['clinic'] }
+
+/** 有自己一套節點背景的街區（檔名 node_<街區>_<類型>.png）；其他街區用新宿的（node_<類型>.png）。 */
+const DISTRICT_BG = ['wangan']
+
+/** 有專屬場景背景的劇情委託（public/sprites/story_<案件>.png）；地下的 01、02 不下雨。 */
+export const STORY_BG = ['P01-01', 'P01-02', 'P01-03', 'P01-06']
+const STORY_INDOOR = ['P01-01', 'P01-02']
+
+/** 節點畫面：該節點（或劇情委託）的整張背景，主角站在中間偏左。 */
+function nodeLayers(file: string): SpritePlacement[] {
+  const man = sprites as unknown as Man
+  return [
+    { id: 'bg', src: `/sprites/${file}.png`, w: 384, h: 160, x: 0, y: 0 },
+    { id: 'hero_stand', ...man.hero_stand, x: 150, y: 76, anim: 'breathe:3.4' },
+  ]
+}
+
+export function CityStrip({ mode, label, sub, bg, story, district = 'shinjuku' }: { mode: StripMode; label: string; sub?: string; bg?: NodeBg; story?: string; district?: string }) {
+  const file = story ? `story_${story}` : bg ? (DISTRICT_BG.includes(district) ? `node_${district}_${bg}` : `node_${bg}`) : null
+  const indoor = story ? STORY_INDOOR.includes(story) : !!bg && (INDOOR[district] ?? INDOOR.shinjuku).includes(bg)
+  const layers = mode === 'node' && file ? nodeLayers(file) : mode === 'run' ? STREET : mode === 'dead' ? ROOM_EMPTY : ROOM
   return (
     <div className="cut cut-strong">
       <div className="cut-in relative overflow-hidden">
-        <SpriteScene layers={layers} fx={mode === 'run' ? STREET_FX : mode === 'rest' ? ROOM_FX.filter((f) => look === 'a' || f.fx !== 'zz') : []} label={label} />
+        <SpriteScene layers={layers} fx={mode === 'run' ? STREET_FX : mode === 'node' ? (indoor ? [] : RAIN) : mode === 'rest' ? ROOM_FX : ROOM_FX.filter((f) => f.fx === 'rain')} label={label} />
         {mode === 'dead' && <div className="pointer-events-none absolute inset-0 bg-bg/60" />}
         <div className="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between gap-2 bg-gradient-to-b from-bg/85 to-transparent px-2 pt-1 pb-3">
-          <span className={`text-[13px] font-bold ${mode === 'dead' ? 'text-red' : mode === 'run' ? 'text-cyan' : 'text-heading'}`}>{label}</span>
+          <span className={`text-[13px] font-bold ${mode === 'dead' ? 'text-red' : mode === 'run' || mode === 'node' ? 'text-cyan' : 'text-heading'}`}>{label}</span>
           {sub && <span className="tech text-[13px] text-heading">{sub}</span>}
         </div>
       </div>

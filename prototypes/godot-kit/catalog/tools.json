@@ -1,0 +1,185 @@
+[
+  {
+    "id": "tool.sprite_atlas",
+    "path": "tools/sprite_atlas.py",
+    "purpose": "角色圖集打包",
+    "use_when": "角色圖集打包",
+    "kind": "tool",
+    "status": "CLI 主入口全文靜態研究；未執行製作／測試工作；capabilities build/check 已執行",
+    "parameters": "manifest.json 路徑；--out 輸出資料夾；cell_px、columns、foot_px、meters_per_px、characters 見腳本 manifest 規格",
+    "outputs": "atlas.png + sheets.json；錯誤以非零退出，不靜默縮圖",
+    "example": "uv run --with pillow tools/sprite_atlas.py manifest.json --out /tmp/hero-atlas",
+    "constraints": "需要 Pillow；讀 manifest 相對圖片路徑，固定角色 scale，trim 與 canvas 對齊政策不同。直接先寫 atlas.png 再寫 sheets.json，會覆寫且不是雙檔原子提交；IO 中斷可留下不同版本。AtlasError exit1，JSON/IO/型別錯誤未統一格式。格數／尺寸有上限，但完整 schema（正 cell/columns、非空動畫、正 ticks、合法 align）未全面驗證。",
+    "effects": {
+      "writes": [
+        "<out>/atlas.png",
+        "<out>/sheets.json"
+      ],
+      "may_use_network": false,
+      "failure_effects": "可能已寫 atlas.png 才在 sheets.json 寫入失敗"
+    }
+  },
+  {
+    "id": "tool.subset_font",
+    "path": "tools/subset_font.py",
+    "purpose": "CJK 字型子集",
+    "use_when": "CJK 字型子集",
+    "kind": "tool",
+    "status": "CLI 主入口全文靜態研究；未執行製作／測試工作；capabilities build/check 已執行",
+    "parameters": "--project 遊戲路徑；--source 字型；--out 輸出；--weight 可選；--check 唯讀",
+    "outputs": "子集字型或唯讀缺字報告；缺字 exit1，正常生成模式仍寫輸出",
+    "example": "python3 tools/subset_font.py --project ../pixel-monster --source /path/font.ttf --check",
+    "constraints": "需要 fonttools；--check 不寫檔，缺字 exit1。正常模式即使發現缺字仍會寫子集，再 exit1，非零不代表沒有產物。--skip-dir 取代預設列表，不是追加；掃描忽略讀檔／UTF-8 失敗且不驗 project 存在，空掃描不等於成功。輸出覆寫；source/out 只用 abspath 比較，不解析符號連結。保留 name records 不等於工具自動審查授權；動態文字需另補集合。",
+    "effects": {
+      "writes": [
+        "<out>"
+      ],
+      "may_use_network": false,
+      "failure_effects": "缺字 exit1 仍可能寫入輸出字型"
+    }
+  },
+  {
+    "id": "tool.build_web",
+    "path": "tools/web/build_web.sh",
+    "purpose": "Web 匯出與 IDBFS 補丁",
+    "use_when": "Web 匯出與 IDBFS 補丁",
+    "kind": "tool",
+    "status": "CLI 主入口全文靜態研究；未執行製作／測試工作；capabilities build/check 已執行",
+    "parameters": "遊戲目錄；--zip-name 可選；GODOT_BIN 與 FETCH_ARGS 環境變數",
+    "outputs": "build/web/index.html 與 ZIP；可能部分產物，exit0不等於匯出／啟動驗收",
+    "example": "bash tools/web/build_web.sh ../my-game --zip-name my-game-web",
+    "constraints": "會下載模板、匯入專案、寫 build/.gdignore、覆寫 build/web 與 ZIP，非部署。主腳本只取引擎 major.minor 給 fetch helper；helper 的版本匹配需另審。export pipeline 以 || true 消化錯誤，後續以 index.html 存在繼續，不能保證所有匯出錯誤都讓 CLI 失敗；只移除舊 index.html，其他 stale build 檔可能進 ZIP。zip_name 必須是受控檔名，現行未驗路徑／空白檔名。使用專用輸出目錄，失敗可能留下部分產物。",
+    "effects": {
+      "writes": [
+        "<project>/build/.gdignore",
+        "<project>/build/web/*",
+        "<project>/build/<zip-name>.zip",
+        "Godot import cache",
+        "export templates cache"
+      ],
+      "may_use_network": true,
+      "failure_effects": "非原子多步建置，可有部分新／舊產物"
+    }
+  },
+  {
+    "id": "tool.run_tests",
+    "path": "tools/run_tests.sh",
+    "purpose": "嚴格 headless 測試執行",
+    "use_when": "嚴格 headless 測試執行",
+    "kind": "tool",
+    "status": "CLI 主入口全文靜態研究；未執行製作／測試工作；capabilities build/check 已執行",
+    "parameters": "project；suite[:fps] 清單；GODOT_BIN、TEST_TIMEOUT",
+    "outputs": "暫存目錄日誌；失敗非零；檢查 PASSED 與腳本錯誤",
+    "example": "bash tools/run_tests.sh . capability_composition",
+    "constraints": "需 timeout；先匯入後跑 suites，會執行任意遊戲測試及其 user:// 寫入，應用隔離測試存檔。suite exit0、無指定錯誤字樣且含 PASSED 才過；PASSED 子字串並非 assertion 數驗證。import 只驗 process exit／timeout，未同樣掃 import log。TEST_TIMEOUT 每次 import／suite 各計，非總時間。參數 name/fps 應受控；本輪未執行此工具。",
+    "effects": {
+      "writes": [
+        "temporary logs",
+        "Godot import cache",
+        "paths written by selected tests"
+      ],
+      "may_use_network": false,
+      "failure_effects": "測試執行前後都可能改專案 cache／測試狀態"
+    }
+  },
+  {
+    "id": "tool.capture",
+    "path": "tools/capture.sh",
+    "purpose": "固定影格遊戲錄影",
+    "use_when": "固定影格遊戲錄影",
+    "kind": "tool",
+    "status": "CLI 主入口全文靜態研究；未執行製作／測試工作；capabilities build/check 已執行",
+    "parameters": "project、output、frames 可選；-- 後傳遊戲參數；GODOT_BIN",
+    "outputs": "f*.png、f.wav；有 ffmpeg 時 video.mp4",
+    "example": "bash tools/capture.sh ../my-game /tmp/my-game-capture 180",
+    "constraints": "需 renderer，可能開窗口並執行遊戲。會先刪 output 下 f*.png/f.wav，ffmpeg -y 覆寫 video.mp4；僅用專用錄影資料夾。固定30fps與 Compatibility renderer；畫面尺寸依遊戲 viewport，非必為 --resolution 值。ffmpeg 可選；缺少 ffmpeg 時不會更新既有 video.mp4，不能把舊影片當本次結果。WAV 參數經未引用命令展開，帶空白 output 路徑有風險。",
+    "effects": {
+      "writes": [
+        "<output>/f*.png",
+        "<output>/f.wav",
+        "<output>/video.mp4",
+        "paths written by game"
+      ],
+      "may_use_network": false,
+      "failure_effects": "先刪舊 frames；失敗可能保留舊 video 或部分新 frames"
+    }
+  },
+  {
+    "id": "tool.audit_copies",
+    "path": "tools/audit_copies.py",
+    "purpose": "共用副本差異盤點",
+    "use_when": "共用副本差異盤點",
+    "kind": "tool",
+    "status": "CLI 主入口全文靜態研究；未執行製作／測試工作；capabilities build/check 已執行",
+    "parameters": "--check、--json；原型名稱或外部專案路徑",
+    "outputs": "SHA-256 與差異分類；--check 發現差異 exit 1",
+    "example": "python3 tools/audit_copies.py --check --json seal-meadow",
+    "constraints": "唯讀 SHA-256 來源比較，無語義或採用判定。relative project 基於 prototypes，absolute 可指外部；缺 copy 以 argparse exit2，--check 有差異 exit1，無 --check 即使 drift 仍exit0。沒有忽略規則，會包含輸出／隱藏檔；符號連結檔案可能讀到外部內容。對照結果不授權同步。",
+    "effects": {
+      "writes": [],
+      "may_use_network": false,
+      "failure_effects": "不修改檔案"
+    }
+  },
+  {
+    "id": "tool.sync",
+    "path": "sync.sh",
+    "purpose": "安裝或更新共用庫副本",
+    "use_when": "安裝或更新共用庫副本",
+    "kind": "tool",
+    "status": "CLI 主入口全文靜態研究；未執行製作／測試工作；capabilities build/check 已執行",
+    "parameters": "原型名稱或絕對路徑；--check 唯讀",
+    "outputs": "目的專案 addons/proto_kit；check 差異 exit 1",
+    "example": "bash sync.sh --check seal-meadow",
+    "constraints": "修改模式使用整包 rsync -a --delete，刪除目標 kit 多餘檔；不合併修改、不做備份、不檢查相容性。沒有指定 target 會更新所有已有副本，故 AI 應明列單一目標。--check 唯讀呼叫 audit_copies；需先確認目標 project.godot。相對名稱基於 prototypes，支援 absolute；不應直接改目的副本。",
+    "effects": {
+      "writes": [
+        "<target>/addons/proto_kit/** (including deletions)"
+      ],
+      "may_use_network": false,
+      "failure_effects": "rsync 中斷可留下部分更新；沒有回滾"
+    }
+  },
+  {
+    "id": "tool.vfx_import_strip",
+    "path": "tools/vfx/import_strip.gd",
+    "purpose": "橫向 PNG 圖集匯入",
+    "use_when": "橫向 PNG 圖集匯入",
+    "kind": "tool",
+    "status": "CLI 主入口全文靜態研究；未執行製作／測試工作；capabilities build/check 已執行",
+    "parameters": "七個位置參數：res://sheet.png res://output.tres frame_count fps once|loop source_url license_note；先執行 PNG 匯入",
+    "outputs": "SpriteFrames 與來源 SHA-256；非法切格拒絕",
+    "example": "godot --headless --path . --script res://tools/vfx/import_strip.gd -- res://assets/fire.png res://assets/fire.tres 18 15 once SOURCE_URL LICENSE_NOTE",
+    "constraints": "需 Godot 與已匯入 PNG，僅水平等寬 strip；七個參數完整，source/license_note 只需非空，不代表授權已核實。拒絕既有 .tres 或 .source.json；先存 resource 再寫來源。來源檔開啟失敗會嘗試刪新 resource，但沒有查 store_string/close 寫入錯誤或 rollback 結果；不是 crash-safe 雙檔交易。res:// 前綴檢查不是完整路徑沙箱。",
+    "effects": {
+      "writes": [
+        "<output>.tres",
+        "<output>.tres.source.json"
+      ],
+      "may_use_network": false,
+      "failure_effects": "resource 與來源非原子；已實作部分失敗回滾"
+    }
+  },
+  {
+    "id": "tool.capabilities",
+    "path": "tools/capabilities.py",
+    "purpose": "能力探索、契約同步與盤點",
+    "use_when": "能力探索、契約同步與盤點",
+    "kind": "tool",
+    "status": "CLI 主入口全文靜態研究；未執行製作／測試工作；capabilities build/check 已執行",
+    "parameters": "list --query；show ID；plan ID...；build；check；inventory",
+    "outputs": "JSON 契約／依賴計畫或 Markdown；check 過期 exit 1",
+    "example": "python3 tools/capabilities.py show fixed_step",
+    "constraints": "只有 build 寫生成檔；check 比較 capabilities/resources/REFERENCE，不比較 inventory.json 新鮮度，也不執行 schema.json 完整驗證。list/show/plan 重新讀取目前來源，非直接信任舊 catalog。api 是 regex 擷取，不涵蓋繼承／內部類全部 API，註解也會進靜態引用。plan 不解析 Python import、shader include 或動態載入，非安裝 manifest。build 多檔逐寫，非原子。",
+    "effects": {
+      "writes": [
+        "catalog/capabilities.json",
+        "catalog/resources.json",
+        "catalog/inventory.json",
+        "docs/capabilities/REFERENCE.md"
+      ],
+      "may_use_network": false,
+      "failure_effects": "僅 build；部分生成檔可先更新，其他失敗"
+    }
+  }
+]

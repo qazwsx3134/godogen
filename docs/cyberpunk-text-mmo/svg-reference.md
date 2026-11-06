@@ -1,5 +1,7 @@
 # SVG元件參考盤點
 
+> 2026-11-06：遊戲方向已改為單機文字冒險 roguelike。本檔中 MMO、離線排隊、週榜、城市共同事件、熟練度、抵押與救援帳單等敘述，以 [prototypes/mortal-city/docs/adr/0001-single-player-roguelike.md](../../prototypes/mortal-city/docs/adr/0001-single-player-roguelike.md) 與 [ROGUELIKE-FLOW.md](../../prototypes/mortal-city/docs/ROGUELIKE-FLOW.md) 為準。
+
 日期：2026-10-29。來源是使用者自行提供的 [example.svg](example.svg)。本次已解析XML並以瀏覽器檢視整張與按鈕細節；未修改原檔，未接入遊戲程式。
 
 ## 1. 檔案實況

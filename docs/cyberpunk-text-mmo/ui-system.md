@@ -1,5 +1,7 @@
 # 手機直式 Cyberpunk 元件設計規範 v0.4
 
+> 2026-11-06：遊戲方向已改為單機文字冒險 roguelike。本檔中 MMO、離線排隊、週榜、城市共同事件、熟練度、抵押與救援帳單等敘述，以 [prototypes/mortal-city/docs/adr/0001-single-player-roguelike.md](../../prototypes/mortal-city/docs/adr/0001-single-player-roguelike.md) 與 [ROGUELIKE-FLOW.md](../../prototypes/mortal-city/docs/ROGUELIKE-FLOW.md) 為準。
+
 ## v0.4（2026-11-04）：主要參考改為論壇終端圖
 
 使用者上傳 [ui/reference.JPG](ui/reference.JPG)（cyberpunk 論壇介面）並指定**主要依這張圖製作元件**。以下 tokens 取代 §4 的紅黑色票；§4 之後的尺寸、字級、觸控、狀態語意與 G01～G10 驗收仍然有效。舊的 SVG 與 16 張 JPG 降為輔助參考。

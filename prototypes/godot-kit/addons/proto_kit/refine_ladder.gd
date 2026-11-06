@@ -32,6 +32,8 @@ const DEFAULT_STEPS: Array[Dictionary] = [
 	{"stone": "pink_diamond", "chance": 0.1, "fail": {"destroy": 1}},
 ]
 
+const WeightedChoice = preload("res://addons/proto_kit/weighted_choice.gd")
+
 var steps: Array[Dictionary]
 
 
@@ -98,12 +100,5 @@ func expected_stones(from: int, to: int, rng: RandomNumberGenerator, runs: int =
 
 
 static func _pick(weights: Dictionary, rng: RandomNumberGenerator) -> String:
-	var total := 0.0
-	for k in weights:
-		total += float(weights[k])
-	var pick := rng.randf() * total
-	for k in weights:
-		pick -= float(weights[k])
-		if pick < 0.0:
-			return String(k)
-	return String(weights.keys()[-1])
+	var selected: int = WeightedChoice.sample_index(weights.values(), rng)
+	return "keep" if selected < 0 else String(weights.keys()[selected])

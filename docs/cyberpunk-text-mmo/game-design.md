@@ -1,5 +1,7 @@
 # 玩法與世界設計 v0.2
 
+> 2026-11-06：遊戲方向已改為單機文字冒險 roguelike。本檔中 MMO、離線排隊、週榜、城市共同事件、熟練度、抵押與救援帳單等敘述，以 [prototypes/mortal-city/docs/adr/0001-single-player-roguelike.md](../../prototypes/mortal-city/docs/adr/0001-single-player-roguelike.md) 與 [ROGUELIKE-FLOW.md](../../prototypes/mortal-city/docs/ROGUELIKE-FLOW.md) 為準。
+
 日期：2026-10-29。東京原型城市、每角色一次性委託、聊天／系統訊息、永久死亡、危險節點等待玩家、警方、Trauma Team及升級提高神機錯亂免疫力均已確認。具體名稱、公式與內容量仍為提案。細則見 [風險系統](risk-systems.md) 與 [文本計畫](content-plan.md)。
 
 > 2026-11-04：使用者確認改為雙層任務（劇情委託一次性＋可重複的街頭工作）。本檔中「每角色委託不重複」「有限經濟」「週榜不能靠重刷」等敘述，以 [quest-layers.md](quest-layers.md) 為準，受影響段落列在該檔 §9。

@@ -19,6 +19,8 @@ const DEFAULT_TIERS: Array[Dictionary] = [
 	{"id": "legendary", "name": "傳說", "color": Color("ff8000"), "weight": 1.5, "damage": 0.45, "cooldown": 0.23, "targets": 2},
 ]
 
+const WeightedChoice = preload("res://addons/proto_kit/weighted_choice.gd")
+
 var tiers: Array[Dictionary]
 
 
@@ -46,17 +48,9 @@ func weights(luck: float = 0.0) -> Array[float]:
 	return w
 
 
+## Returns -1 for invalid/all-zero weight distributions, without consuming RNG.
 func roll(rng: RandomNumberGenerator, luck: float = 0.0) -> int:
-	var w := weights(luck)
-	var total := 0.0
-	for x in w:
-		total += x
-	var pick := rng.randf() * total
-	for i in w.size():
-		pick -= w[i]
-		if pick < 0.0:
-			return i
-	return w.size() - 1
+	return WeightedChoice.sample_index(weights(luck), rng)
 
 
 ## The bonus a card of this tier gives. "new": damage only (a fresh spell). "upgrade": one of damage, cooldown or

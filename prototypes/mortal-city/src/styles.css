@@ -123,6 +123,11 @@ body {
     transform: translateY(var(--bob, -3%));
   }
 }
+@keyframes mc-breathe {
+  50% {
+    transform: scaleY(1.025);
+  }
+}
 @keyframes mc-cross {
   from {
     transform: translateX(0);
@@ -140,6 +145,16 @@ body {
   }
   90% {
     opacity: 0.5;
+  }
+}
+.mc-rain {
+  background-image: repeating-linear-gradient(100deg, transparent 0 7px, rgba(210, 190, 255, 0.16) 7px 8px);
+  background-size: 22px 18px;
+  animation: mc-rain 0.5s linear infinite;
+}
+@keyframes mc-rain {
+  to {
+    background-position: -6px 18px;
   }
 }
 .mc-steam {
@@ -184,7 +199,97 @@ body {
   }
 }
 
-/* 對話：打字中的三個點、新訊息淡入 */
+/* ---------- 霓虹圖示（NeonIcon）：光暈＋紅青錯位殘影，選中時偶爾故障抖動 ---------- */
+.neon-icon {
+  display: inline-grid;
+  place-items: center;
+}
+.neon-icon > svg {
+  grid-area: 1 / 1;
+}
+.neon-core {
+  filter: drop-shadow(0 0 2px currentColor);
+}
+.neon-ghost {
+  opacity: 0.55;
+  mix-blend-mode: screen;
+}
+.neon-ghost-r {
+  color: var(--color-red);
+  transform: translate(-1px, 0);
+}
+.neon-ghost-b {
+  color: var(--color-cyan);
+  transform: translate(1px, 0);
+}
+.neon-on .neon-core {
+  filter: drop-shadow(0 0 4px currentColor);
+}
+.neon-on .neon-ghost-r {
+  animation: neon-glitch-r 3.2s steps(1) infinite;
+}
+.neon-on .neon-ghost-b {
+  animation: neon-glitch-b 3.2s steps(1) infinite;
+}
+@keyframes neon-glitch-r {
+  0%, 88%, 100% { transform: translate(-1px, 0); }
+  90% { transform: translate(-3px, 1px); }
+  93% { transform: translate(2px, -1px); }
+}
+@keyframes neon-glitch-b {
+  0%, 88%, 100% { transform: translate(1px, 0); }
+  90% { transform: translate(3px, -1px); }
+  93% { transform: translate(-2px, 1px); }
+}
+
+/* ---------- 黑市：手寫價牌、PROBABLY STOLEN 印章、紙板招牌 ---------- */
+.stolen-tag {
+  flex-shrink: 0;
+  transform: rotate(-4deg);
+  background: var(--color-warning);
+  color: var(--color-bg);
+  font-family: var(--font-tech);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1;
+  padding: 6px 8px 5px;
+  clip-path: polygon(10px 0, 100% 0, 100% 100%, 10px 100%, 0 50%);
+  padding-left: 14px;
+}
+.stolen-stamp {
+  flex-shrink: 0;
+  transform: rotate(-6deg);
+  border: 2px solid var(--color-red);
+  color: var(--color-red);
+  font-family: var(--font-tech);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  padding: 3px 5px 2px;
+  opacity: 0.9;
+}
+.stolen-sign {
+  transform: rotate(-1.5deg);
+  background: #2a2014;
+  border: 1px dashed var(--color-warning);
+  color: var(--color-warning);
+  font-weight: 700;
+  font-size: 14px;
+  padding: 4px 12px;
+  box-shadow: 0 2px 0 #000;
+}
+
+/* ---------- 論壇回覆一則一則進來：淡入與「正在輸入」的三個點 ---------- */
+.reply-in {
+  animation: reply-in 0.35s ease-out;
+}
+@keyframes reply-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
 .typing-dots {
   display: inline-flex;
   gap: 3px;
@@ -193,7 +298,7 @@ body {
   width: 5px;
   height: 5px;
   background: var(--color-cyan);
-  animation: mc-dot 1s infinite;
+  animation: typing 1s infinite;
 }
 .typing-dots i:nth-child(2) {
   animation-delay: 0.15s;
@@ -201,56 +306,595 @@ body {
 .typing-dots i:nth-child(3) {
   animation-delay: 0.3s;
 }
-@keyframes mc-dot {
+@keyframes typing {
   0%,
   100% {
-    opacity: 0.2;
+    opacity: 0.25;
   }
   50% {
     opacity: 1;
   }
 }
-.msg-in {
-  animation: mc-msg 0.25s ease-out;
+
+/* ---------- 自動段進度條：連續推進、斜紋往前流、前端發光 ---------- */
+.run-bar {
+  height: 8px;
+  border: 1px solid color-mix(in srgb, var(--color-line) 70%, transparent);
+  background: var(--color-bg);
+  overflow: hidden;
 }
-@keyframes mc-msg {
+.run-bar-fill {
+  position: relative;
+  height: 100%;
+  background: repeating-linear-gradient(-45deg, var(--color-cyan) 0 6px, color-mix(in srgb, var(--color-cyan) 55%, transparent) 6px 12px);
+  background-size: 17px 100%;
+  animation: run-stripes 0.6s linear infinite;
+}
+.run-bar-fast {
+  animation-duration: 0.3s;
+}
+.run-bar-fill::after {
+  content: "";
+  position: absolute;
+  top: -2px;
+  right: 0;
+  bottom: -2px;
+  width: 3px;
+  background: #fff;
+  box-shadow: 0 0 6px 2px var(--color-cyan);
+}
+@keyframes run-stripes {
   from {
-    opacity: 0;
-    transform: translateY(6px);
+    background-position: 0 0;
   }
-}
-@media (prefers-reduced-motion: reduce) {
-  .typing-dots i,
-  .msg-in {
-    animation: none;
+  to {
+    background-position: 17px 0;
   }
 }
 
-/* 像素霓虹圖示：紅青錯位殘影（RGB split），像便宜螢幕的色差 */
-.px-icon {
-  filter: drop-shadow(-1px 0 0 rgb(255 42 90 / 0.55)) drop-shadow(1px 0 0 rgb(0 240 255 / 0.45));
+/* ---------- 自動段的系統訊息：一行一筆，左側色線＋序號，最新一行最亮 ---------- */
+.sys-line {
+  display: flex;
+  gap: 8px;
+  padding: 6px 8px;
+  border-left: 2px solid color-mix(in srgb, var(--color-line) 60%, transparent);
+  border-bottom: 1px dashed color-mix(in srgb, var(--color-line) 35%, transparent);
+  color: var(--color-muted);
+  font-size: 15px;
+  line-height: 1.6;
 }
-/* 選中：再加一層光暈，切換時故障閃一下 */
-.px-icon.neon {
-  filter: drop-shadow(-1px 0 0 rgb(255 42 90 / 0.7)) drop-shadow(1px 0 0 rgb(0 240 255 / 0.6)) drop-shadow(0 0 4px currentColor);
-  animation: mc-glitch 0.35s steps(2) 1;
+.sys-line-now {
+  border-left-color: var(--color-cyan);
+  background: color-mix(in srgb, var(--color-cyan) 7%, transparent);
+  color: var(--color-fg);
 }
-@keyframes mc-glitch {
+.sys-line-tag {
+  flex-shrink: 0;
+  color: var(--color-line);
+  font-size: 13px;
+  line-height: 1.85;
+}
+.sys-line-now .sys-line-tag {
+  color: var(--color-cyan);
+}
+
+/* ---------- 委託結案：印章砸下、閃光、火花、報酬逐列出現 ---------- */
+.claim-stamp {
+  display: grid;
+  place-items: center;
+  width: 150px;
+  height: 110px;
+  border: 4px double var(--stamp);
+  color: var(--stamp);
+  text-shadow: 0 0 8px var(--stamp);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--stamp) 40%, transparent), inset 0 0 12px color-mix(in srgb, var(--stamp) 30%, transparent);
+  transform: rotate(-10deg);
+  animation: stamp-slam 0.38s cubic-bezier(0.2, 1.6, 0.4, 1) both;
+}
+@keyframes stamp-slam {
   0% {
-    transform: translate(2px, 0);
-    clip-path: inset(0 0 55% 0);
+    opacity: 0;
+    transform: rotate(-24deg) scale(2.6);
   }
-  40% {
-    transform: translate(-2px, 1px);
-    clip-path: inset(45% 0 0 0);
+  70% {
+    opacity: 1;
+    transform: rotate(-8deg) scale(0.92);
   }
   100% {
-    transform: none;
-    clip-path: none;
+    transform: rotate(-10deg) scale(1);
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  .px-icon.neon {
-    animation: none;
+.claim-flash {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 35%, color-mix(in srgb, var(--color-cyan) 45%, transparent), transparent 60%);
+  animation: claim-flash 0.6s ease-out both;
+}
+@keyframes claim-flash {
+  from {
+    opacity: 1;
   }
+  to {
+    opacity: 0;
+  }
+}
+.claim-spark {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  animation: claim-spark 0.7s ease-out both;
+}
+@keyframes claim-spark {
+  from {
+    opacity: 1;
+    transform: rotate(var(--a)) translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: rotate(var(--a)) translateX(var(--d)) scale(0.4);
+  }
+}
+.claim-row {
+  animation: claim-row 0.3s ease-out both;
+}
+@keyframes claim-row {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+}
+
+/* ---------- 結案 toast：右上角滑入，底下的細條倒數到打開結算畫面 ---------- */
+.claim-toast {
+  --fill: var(--color-raised);
+  position: absolute;
+  animation: toast-in 0.3s cubic-bezier(0.2, 1.3, 0.4, 1) both;
+  box-shadow: 0 6px 20px #000a;
+}
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+}
+.claim-toast-bar {
+  position: absolute;
+  left: 1px;
+  bottom: 1px;
+  height: 2px;
+  width: calc(100% - 2px);
+  transform-origin: left;
+  animation: toast-bar linear both;
+}
+@keyframes toast-bar {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
+/* ---------- 戰鬥特效：閃光（流血、暴擊、電流、迷彩）、傷害數字、低血量 ---------- */
+.fx-flash {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  animation: fx-fade 0.45s ease-out both;
+}
+@keyframes fx-fade {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+.fx-blood {
+  box-shadow: inset 0 0 42px 10px color-mix(in srgb, var(--color-red) 85%, transparent);
+  background: color-mix(in srgb, var(--color-red) 14%, transparent);
+}
+.fx-hit {
+  background: linear-gradient(90deg, transparent 40%, color-mix(in srgb, var(--color-cyan) 14%, transparent));
+  animation-duration: 0.25s;
+}
+.fx-crit {
+  background: radial-gradient(circle at 70% 45%, rgba(255, 255, 255, 0.55), color-mix(in srgb, var(--color-warning) 25%, transparent) 35%, transparent 70%);
+}
+.fx-ambush {
+  background: linear-gradient(120deg, transparent, rgba(176, 108, 255, 0.28), transparent);
+  backdrop-filter: hue-rotate(60deg);
+}
+.fx-shock {
+  background:
+    repeating-linear-gradient(0deg, color-mix(in srgb, var(--color-cyan) 30%, transparent) 0 1px, transparent 1px 4px),
+    linear-gradient(100deg, transparent 30%, rgba(200, 255, 255, 0.35) 45%, transparent 50%, rgba(200, 255, 255, 0.25) 62%, transparent 68%);
+  animation: fx-zap 0.4s steps(4) both;
+}
+@keyframes fx-zap {
+  0% {
+    opacity: 1;
+    transform: translateX(-3px);
+  }
+  25% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.9;
+    transform: translateX(3px);
+  }
+  100% {
+    opacity: 0;
+    transform: none;
+  }
+}
+.fx-glitch {
+  background: repeating-linear-gradient(0deg, color-mix(in srgb, var(--color-cyan) 12%, transparent) 0 2px, transparent 2px 6px);
+  animation: fx-zap 0.3s steps(3) both;
+}
+.fx-low {
+  animation: fx-low 1.1s ease-in-out infinite;
+}
+@keyframes fx-low {
+  0%,
+  100% {
+    box-shadow: inset 0 0 14px 2px color-mix(in srgb, var(--color-red) 35%, transparent);
+  }
+  50% {
+    box-shadow: inset 0 0 30px 6px color-mix(in srgb, var(--color-red) 70%, transparent);
+  }
+}
+.dmg-pop {
+  position: absolute;
+  top: -4px;
+  font-family: var(--font-tech);
+  font-weight: 700;
+  font-size: 20px;
+  pointer-events: none;
+  text-shadow: 0 0 6px #000, 0 0 2px #000;
+  animation: dmg-pop 0.7s ease-out both;
+}
+.dmg-you {
+  right: 46%;
+  color: var(--color-red);
+}
+.dmg-foe {
+  right: 46%;
+  color: #fff;
+}
+.dmg-crit {
+  color: var(--color-warning);
+  font-size: 24px;
+}
+.dmg-shock {
+  color: var(--color-cyan);
+}
+@keyframes dmg-pop {
+  0% {
+    opacity: 0;
+    transform: translateY(6px) scale(0.7);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(-4px) scale(1.15);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-18px) scale(1);
+  }
+}
+
+/* ---------- 街區地圖：斜躺的全息投影桌面 ---------- */
+.holo-frame {
+  position: relative;
+  border: 1px solid color-mix(in srgb, var(--color-line) 70%, transparent);
+  background:
+    radial-gradient(ellipse at 50% 100%, color-mix(in srgb, var(--color-cyan) 14%, transparent), transparent 70%),
+    linear-gradient(180deg, #02070c, #041218 60%, #031016);
+  padding: 10px 10px 8px;
+  overflow: hidden;
+}
+/* 四角的 HUD 括號 */
+.holo-frame::before,
+.holo-frame::after {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--color-cyan);
+  pointer-events: none;
+}
+.holo-frame::before {
+  top: 4px;
+  left: 4px;
+  border-right: 0;
+  border-bottom: 0;
+}
+.holo-frame::after {
+  right: 4px;
+  bottom: 4px;
+  border-left: 0;
+  border-top: 0;
+}
+.holo-hud {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 2px 8px 0;
+}
+.holo-hint {
+  padding: 2px 8px 4px;
+  font-size: 12px;
+  color: var(--color-muted);
+}
+.holo-stage {
+  perspective-origin: 50% 100%;
+  pointer-events: none;
+}
+.holo-stage .holo-pin {
+  pointer-events: auto;
+}
+/* 投影桌面：往後倒，越上面（越遠）越小；網格、掃描光與雜訊都在這一層 */
+.holo-plane {
+  position: relative;
+  transform-origin: 50% 100%;
+  background:
+    linear-gradient(color-mix(in srgb, var(--color-cyan) 9%, transparent) 1px, transparent 1px) 0 0 / 100% 28px,
+    linear-gradient(90deg, color-mix(in srgb, var(--color-cyan) 9%, transparent) 1px, transparent 1px) 0 0 / 28px 100%;
+  border: 1px solid color-mix(in srgb, var(--color-cyan) 35%, transparent);
+  box-shadow: 0 0 30px color-mix(in srgb, var(--color-cyan) 18%, transparent), inset 0 0 40px color-mix(in srgb, var(--color-cyan) 10%, transparent);
+  mask-image: linear-gradient(180deg, transparent 0, #000 9%, #000 100%);
+}
+.holo-plane::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent 0%, color-mix(in srgb, var(--color-cyan) 16%, transparent) 50%, transparent 100%) 0 0 / 100% 120px no-repeat;
+  animation: holo-scan 5s linear infinite;
+}
+@keyframes holo-scan {
+  from {
+    background-position: 0 -120px;
+  }
+  to {
+    background-position: 0 calc(100% + 120px);
+  }
+}
+.holo-block {
+  fill: color-mix(in srgb, var(--color-cyan) 4%, transparent);
+  stroke: color-mix(in srgb, var(--color-cyan) 14%, transparent);
+  stroke-width: 1;
+}
+.holo-block-tall {
+  fill: color-mix(in srgb, #b06cff 7%, transparent);
+  stroke: color-mix(in srgb, #b06cff 22%, transparent);
+}
+.holo-place {
+  position: absolute;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: color-mix(in srgb, var(--color-cyan) 38%, transparent);
+  pointer-events: none;
+  white-space: nowrap;
+}
+/* 路線：一般是暗的虛線；走過的是紅色實線；現在能走的是流動的資料光 */
+.holo-road {
+  stroke: color-mix(in srgb, var(--color-line) 45%, transparent);
+  stroke-width: 1.5;
+  stroke-dasharray: 3 5;
+}
+.holo-road-walked {
+  stroke: var(--color-red);
+  stroke-width: 2.5;
+  stroke-dasharray: none;
+  filter: drop-shadow(0 0 3px var(--color-red));
+}
+.holo-road-open {
+  stroke: var(--color-cyan);
+  stroke-width: 2.5;
+  stroke-dasharray: 8 6;
+  filter: drop-shadow(0 0 4px var(--color-cyan));
+  animation: holo-flow 0.9s linear infinite;
+}
+@keyframes holo-flow {
+  to {
+    stroke-dashoffset: 14;
+  }
+}
+/* 節點：六角形的全息標記；能去的有光柱與波紋 */
+.holo-pin {
+  position: absolute;
+  display: flex;
+  width: 60px;
+  flex-direction: column;
+  align-items: center;
+  transform: translate(-50%, -50%);
+}
+.holo-hex {
+  display: block;
+  width: 40px;
+  height: 36px;
+  padding: 1.5px;
+  background: var(--pin);
+  clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
+}
+.holo-hex-in {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  background: #020a10;
+  color: color-mix(in srgb, var(--color-muted) 60%, transparent);
+  clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
+}
+.holo-pin-on .holo-hex,
+.holo-pin-here .holo-hex {
+  filter: drop-shadow(0 0 6px var(--pin));
+}
+.holo-pin-here .holo-hex-in {
+  background: var(--color-red-bg);
+}
+.holo-beam {
+  position: absolute;
+  bottom: 60%;
+  left: 50%;
+  width: 2px;
+  height: 46px;
+  transform: translateX(-50%);
+  background: linear-gradient(0deg, var(--pin), transparent);
+  box-shadow: 0 0 8px var(--pin);
+  animation: holo-beam 1.6s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes holo-beam {
+  50% {
+    opacity: 0.35;
+  }
+}
+.holo-ring {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  width: 46px;
+  height: 46px;
+  border: 2px solid var(--pin);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0.6);
+  animation: holo-ring 1.6s ease-out infinite;
+  pointer-events: none;
+}
+@keyframes holo-ring {
+  from {
+    opacity: 0.9;
+    transform: translate(-50%, -50%) scale(0.6);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.5);
+  }
+}
+.holo-label {
+  margin-top: 3px;
+  font-size: 11px;
+  line-height: 1;
+  white-space: nowrap;
+  color: color-mix(in srgb, var(--color-muted) 70%, transparent);
+  text-shadow: 0 0 4px #000;
+}
+.holo-label-on,
+.holo-pin-here .holo-label {
+  font-weight: 700;
+  color: var(--color-heading);
+}
+.holo-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  padding: 6px 8px 0;
+  font-size: 11px;
+  color: var(--color-muted);
+  border-top: 1px dashed color-mix(in srgb, var(--color-line) 40%, transparent);
+}
+
+/* ---------- 城市新聞跑馬燈 ---------- */
+.news-ticker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 26px;
+  border: 1px solid color-mix(in srgb, var(--color-line) 55%, transparent);
+  background: #03080c;
+  font-size: 12px;
+  color: var(--color-fg-list);
+  overflow: hidden;
+}
+.news-live {
+  flex-shrink: 0;
+  align-self: stretch;
+  display: grid;
+  place-items: center;
+  padding: 0 6px;
+  background: var(--color-red);
+  color: var(--color-bg);
+  font-size: 11px;
+  font-weight: 700;
+  animation: live-blink 1.6s steps(1) infinite;
+}
+@keyframes live-blink {
+  50% {
+    opacity: 0.65;
+  }
+}
+.news-track {
+  display: flex;
+  width: max-content;
+  animation: news-scroll linear infinite;
+}
+@keyframes news-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ---------- 故障轉場：三條錯位的色帶＋閃一下 ---------- */
+.glitch-tx {
+  position: absolute;
+  inset: 0;
+  z-index: 35;
+  pointer-events: none;
+  animation: glitch-fade 0.24s steps(3) both;
+}
+.glitch-tx i {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 9%;
+  mix-blend-mode: screen;
+}
+.glitch-tx i:nth-child(1) {
+  top: 22%;
+  background: color-mix(in srgb, var(--color-red) 55%, transparent);
+  transform: translateX(-6%);
+}
+.glitch-tx i:nth-child(2) {
+  top: 48%;
+  height: 4%;
+  background: color-mix(in srgb, var(--color-cyan) 60%, transparent);
+  transform: translateX(8%);
+}
+.glitch-tx i:nth-child(3) {
+  top: 71%;
+  height: 6%;
+  background: rgba(255, 255, 255, 0.35);
+  transform: translateX(-3%);
+}
+@keyframes glitch-fade {
+  0% {
+    opacity: 1;
+    background: rgba(56, 243, 250, 0.08);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translateX(4px);
+  }
+  100% {
+    opacity: 0;
+    transform: none;
+  }
+}
+
+/* ---------- 打字機游標 ---------- */
+.type-cursor {
+  display: inline-block;
+  width: 0.55em;
+  height: 1em;
+  margin-left: 1px;
+  vertical-align: -0.12em;
+  background: var(--color-cyan);
+  animation: live-blink 0.7s steps(1) infinite;
 }

@@ -1,0 +1,182 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Godot capability catalog v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "engine",
+    "capabilities",
+    "tools"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "engine": {
+      "type": "string"
+    },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/capability"
+      }
+    },
+    "tools": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/tool"
+      }
+    }
+  },
+  "$defs": {
+    "entry": {
+      "type": "object",
+      "required": [
+        "id",
+        "path",
+        "sha256",
+        "purpose",
+        "use_when",
+        "kind",
+        "status",
+        "constraints",
+        "example"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "use_when": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1
+        },
+        "constraints": {
+          "type": "string",
+          "minLength": 1
+        },
+        "example": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "capability": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/entry"
+        },
+        {
+          "type": "object",
+          "required": [
+            "base",
+            "methods",
+            "properties",
+            "signals",
+            "documentation",
+            "resource_references",
+            "tests"
+          ],
+          "properties": {
+            "kind": {
+              "enum": [
+                "rule",
+                "resource",
+                "node",
+                "authoring",
+                "inspection",
+                "internal"
+              ]
+            },
+            "methods": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "signature",
+                  "line",
+                  "contract"
+                ],
+                "properties": {
+                  "signature": {
+                    "type": "string"
+                  },
+                  "line": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "contract": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "properties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "signals": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "tests": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "tool": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/entry"
+        },
+        {
+          "type": "object",
+          "required": [
+            "parameters",
+            "outputs"
+          ],
+          "properties": {
+            "kind": {
+              "const": "tool"
+            },
+            "parameters": {
+              "type": "string"
+            },
+            "outputs": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
