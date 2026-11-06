@@ -18,6 +18,8 @@ extends RefCounted
 ## long frame spawns its share at once. While alive_count >= max_alive the budget stops growing (no burst later).
 ## Deterministic for a seeded RNG. `next_event()` feeds a "next boss in 02:52" label.
 
+const WeightedChoice = preload("res://addons/proto_kit/weighted_choice.gd")
+
 var time: float = 0.0
 var duration: float
 var max_alive: int
@@ -112,15 +114,9 @@ static func sample(keys: Array, at: float) -> float:
 
 
 func _pick_kind() -> String:
-	var live := roster_at()
-	var total := 0.0
-	for r: Dictionary in live:
-		total += float(r.get("weight", 1.0))
-	if total <= 0.0:
-		return ""
-	var pick := _rng.randf() * total
-	for r: Dictionary in live:
-		pick -= float(r.get("weight", 1.0))
-		if pick < 0.0:
-			return r.kind
-	return live[-1].kind
+	var live: Array = roster_at()
+	var weights: Array = []
+	for entry: Dictionary in live:
+		weights.append(float(entry.get("weight", 1.0)))
+	var selected: int = WeightedChoice.sample_index(weights, _rng)
+	return "" if selected < 0 else String(live[selected].kind)

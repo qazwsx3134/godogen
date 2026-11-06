@@ -34,6 +34,8 @@ export interface CaseOption extends DangerOption {
   heat?: number
   /** 白蛇幫你縫好傷口（傷勢歸零）。 */
   heal?: boolean
+  /** 結案時多給的救命保單張數（03「不存在的保戶」）。 */
+  lifeline?: number
   /** 結果畫面與紀錄的文字。 */
   text: string
   /** 只有走這個做法才會出現的選項。 */

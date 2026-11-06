@@ -1,5 +1,5 @@
-// 原型內容：中間人、街頭工作、起始裝備、廣播。劇情委託在 cases.ts。
-import type { Attr, DangerOption, Direction, Enemy, JobDef } from '../rules/core'
+// 原型內容：中間人、委託模板（第 1～2 階＝一般委託、第 4 階＝精英委託）、起始裝備、廣播。劇情委託在 cases.ts，事件在 events.ts。
+import { type Attr, type DangerOption, type Direction, type Enemy, type JobDef, streetEnemy } from '../rules/core'
 
 export interface Fixer {
   id: string
@@ -22,22 +22,19 @@ const j = (x: JobDef) => x
 
 export const JOBS: Record<string, JobDef> = Object.fromEntries(
   [
-    j({ id: 'stealth-1', direction: 'stealth', tier: 1, name: '雨夜送貨', fixerId: 'k', minutes: 2, reward: 120, xp: 12, stress: 1, heat: 0, injury: 4, blurb: '一個不能淋濕的盒子，送到歌舞伎町後巷。別問裡面是什麼。' }),
-    j({ id: 'hack-1', direction: 'hack', tier: 1, name: '破解自販機', fixerId: 'k', minutes: 2, reward: 100, xp: 12, stress: 2, heat: 0, injury: 2, blurb: '整排販賣機都歸荒井會管，讓它們吐錢就對了。' }),
-    j({ id: 'force-1', direction: 'force', tier: 1, name: '收保護費', fixerId: 'k', minutes: 3, reward: 150, xp: 14, stress: 1, heat: 1, injury: 8, blurb: '拉麵攤老闆欠了兩個月。客氣一點，但要拿到錢。' }),
-    j({ id: 'stealth-2', direction: 'stealth', tier: 2, name: '跟拍外遇', fixerId: 'mist', minutes: 4, reward: 260, xp: 22, stress: 2, heat: 0, injury: 5, blurb: '港務部某課長，每週四晚上會「加班」。拍到臉就好。' }),
-    j({ id: 'hack-2', direction: 'hack', tier: 2, name: '竊取監視畫面', fixerId: 'mist', minutes: 4, reward: 240, xp: 22, stress: 4, heat: 1, injury: 3, blurb: '倉庫 7 號的攝影機昨晚拍到了不該拍的東西。' }),
-    j({ id: 'force-2', direction: 'force', tier: 2, name: '清空幫派據點', fixerId: 'k', minutes: 5, reward: 320, xp: 26, stress: 3, heat: 1, injury: 14, blurb: '高架橋下那群小鬼越來越囂張了。' }),
-    j({ id: 'stealth-4', direction: 'stealth', tier: 4, name: '盜取原型義體', fixerId: 'mist', minutes: 6, reward: 2200, xp: 120, stress: 9, heat: 1, injury: 22, blurb: '九頭龍重工研究所三樓的展示櫃。保全每 90 秒巡一次，櫃子有重量感應。' }),
-    j({ id: 'force-4', direction: 'force', tier: 4, name: '突襲企業倉庫', fixerId: 'k', minutes: 6, reward: 2600, xp: 120, stress: 8, heat: 2, injury: 30, blurb: '灣岸 7 號倉，港務部的私兵有重武裝。正面打進去，拿了貨就走。' }),
-    j({ id: 'hack-4', direction: 'hack', tier: 4, name: '盜取企業伺服器', fixerId: 'mist', minutes: 6, reward: 2400, xp: 120, stress: 12, heat: 2, injury: 20, blurb: '港務部的核心機房。黑冰會反咬，一次失手就可能燒掉你的腦。' }),
+    j({ id: 'stealth-1', direction: 'stealth', tier: 1, name: '雨夜送貨', fixerId: 'k', reward: 120, xp: 12, stress: 1, heat: 0, injury: 4, blurb: '一個不能淋濕的盒子，送到歌舞伎町後巷。別問裡面是什麼。' }),
+    j({ id: 'hack-1', direction: 'hack', tier: 1, name: '破解自販機', fixerId: 'k', reward: 100, xp: 12, stress: 2, heat: 0, injury: 2, blurb: '整排販賣機都歸荒井會管，讓它們吐錢就對了。' }),
+    j({ id: 'force-1', direction: 'force', tier: 1, name: '收保護費', fixerId: 'k', reward: 150, xp: 14, stress: 1, heat: 1, injury: 8, blurb: '拉麵攤老闆欠了兩個月。客氣一點，但要拿到錢。' }),
+    j({ id: 'stealth-2', direction: 'stealth', tier: 2, name: '跟拍外遇', fixerId: 'mist', reward: 260, xp: 22, stress: 2, heat: 0, injury: 5, blurb: '港務部某課長，每週四晚上會「加班」。拍到臉就好。' }),
+    j({ id: 'hack-2', direction: 'hack', tier: 2, name: '竊取監視畫面', fixerId: 'mist', reward: 240, xp: 22, stress: 4, heat: 1, injury: 3, blurb: '倉庫 7 號的攝影機昨晚拍到了不該拍的東西。' }),
+    j({ id: 'force-2', direction: 'force', tier: 2, name: '清空幫派據點', fixerId: 'k', reward: 320, xp: 26, stress: 3, heat: 1, injury: 14, blurb: '高架橋下那群小鬼越來越囂張了。' }),
+    j({ id: 'stealth-4', direction: 'stealth', tier: 4, name: '盜取原型義體', fixerId: 'mist', reward: 2200, xp: 120, stress: 9, heat: 1, injury: 22, blurb: '九頭龍重工研究所三樓的展示櫃。保全每 90 秒巡一次，櫃子有重量感應。' }),
+    j({ id: 'force-4', direction: 'force', tier: 4, name: '突襲企業倉庫', fixerId: 'k', reward: 2600, xp: 120, stress: 8, heat: 2, injury: 30, blurb: '灣岸 7 號倉，港務部的私兵有重武裝。正面打進去，拿了貨就走。' }),
+    j({ id: 'hack-4', direction: 'hack', tier: 4, name: '盜取企業伺服器', fixerId: 'mist', reward: 2400, xp: 120, stress: 12, heat: 2, injury: 20, blurb: '港務部的核心機房。黑冰會反咬，一次失手就可能燒掉你的腦。' }),
   ].map((x) => [x.id, x]),
 )
 
-export const QUEUE_SLOTS = 4
-
 export { STARTER_GEAR } from './items'
-export const CITY_TARGET = 50_000 // 封鎖線「民生補給」：全服完成的潛行工作件數
 
 // ---------- 廣播（DJ 夜鴉，輕佻口吻） ----------
 
@@ -47,24 +44,24 @@ export const BROADCASTS = [
   '聽眾來電：「夜鴉，接到會死的工作該怎麼辦？」親愛的，先看保單，再看遺囑，最後看我。',
 ]
 
-// ---------- 高階街頭工作的危險節點（模板＋變數，依方向） ----------
+// ---------- 精英委託的危險節點（模板＋變數，依方向） ----------
 
 export interface DangerTemplate {
   autoLog: string[]
   title: string
   body: string
   options: DangerOption[]
-  /** 火力方向的高階工作要先打一場。 */
-  fight?: Enemy
+  /** 精英委託要先打的那一場。 */
+  fight: Enemy
 }
 
-const OPENING: Record<Direction, (n: string) => string[]> = {
+export const OPENING: Record<Direction, (n: string) => string[]> = {
   force: (n) => [`你把彈匣壓滿，往「${n}」的目標出發。`, '第一道門的守衛丟下菸，舉起了槍。'],
   hack: (n) => [`你接上神經線，開始「${n}」。`, '第一層防火牆像紙一樣被撕開。'],
   stealth: (n) => [`你貼著陰影移動，開始「${n}」。`, '巡邏的空檔比情報說的還長一點。'],
 }
 
-/** 高階工作的屬性選項：依方向用不同屬性，風險比硬幹低。 */
+/** 精英委託的屬性選項：依方向用不同屬性，風險比硬幹低。 */
 const SKILLED: Record<Direction, { attr: Attr; label: string }> = {
   force: { attr: 'body', label: '徒手扯開貨櫃的側門，從外骨骼的死角把貨拖走' },
   hack: { attr: 'int', label: '開一條假的資料流把黑冰引開，再慢慢抽資料' },
@@ -89,13 +86,21 @@ const TWIST: Record<Direction, { title: string; body: string; push: string }> = 
   },
 }
 
+/** 一般委託自動段的中段與結尾（得手／被發現）。 */
+export const JOB_LINES: Record<Direction, { mid: string; ok: string; caught: string }> = {
+  force: { mid: '雨水順著槍管往下滴，你數著對方的人頭。', ok: '對方先動手了。', caught: '對方先動手了。' },
+  hack: { mid: '資料流在視網膜上滾動，你一層一層剝開權限。', ok: '你拿到了要的東西，悄悄斷線。', caught: '追蹤程式咬住了你的位址，有人正往這裡趕來。' },
+  stealth: { mid: '你沿著廣告看板的陰影前進，霓虹燈每隔幾秒閃一次。', ok: '沒有人看見你來過。', caught: '一道手電筒的光打在你臉上：「誰在那裡？」' },
+}
+
 export function highDanger(job: JobDef): DangerTemplate {
   const t = TWIST[job.direction]
   return {
     autoLog: OPENING[job.direction](job.name),
     title: t.title,
     body: t.body,
-    fight: job.direction === 'force' ? { name: '倉庫守衛', hp: 80 + (job.tier - 4) * 30, atk: 11, hit: 0.55 } : undefined,
+    // 精英委託一定要打一場硬仗
+    fight: { ...streetEnemy(job), hp: 80 + (job.tier - 4) * 30, atk: 11, hit: 0.55 },
     options: [
       { id: 'abort', label: '放棄這份工作，馬上撤離', lethal: false, lethalBase: 0, survivalWindowMin: 0 },
       { id: 'push', label: t.push, lethal: true, lethalBase: 0.2 + (job.tier - 4) * 0.12, survivalWindowMin: 3 },

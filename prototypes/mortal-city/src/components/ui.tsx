@@ -1,6 +1,6 @@
 // 遊戲元件：依 ui-system.md v0.4（reference.JPG 論壇終端風格）
 import { type ReactNode, useState } from 'react'
-import { AlertTriangle } from 'lucide-react'
+import { AlertTriangle, type LucideIcon } from 'lucide-react'
 import { FIXERS } from '../content/data'
 
 export function Panel({
@@ -32,6 +32,21 @@ export function PanelHead({ icon, title, right }: { icon?: ReactNode; title: str
       <h2 className="m-0 flex-1 text-[16px] font-bold leading-tight text-heading">{title}</h2>
       {right}
     </div>
+  )
+}
+
+/**
+ * 霓虹圖示：方角描邊＋光暈，後面疊紅、青兩層錯位殘影（RGB 分離）；on 時偶爾故障抖動。
+ * 用在地圖節點與底部導覽，讓通用的線條圖示有終端機的味道。
+ */
+export function NeonIcon({ icon: Icon, size = 18, on = false, className = '' }: { icon: LucideIcon; size?: number; on?: boolean; className?: string }) {
+  const p = { size, strokeWidth: 2, strokeLinecap: 'square' as const, strokeLinejoin: 'miter' as const, 'aria-hidden': true }
+  return (
+    <span className={`neon-icon ${on ? 'neon-on' : ''} ${className}`}>
+      <Icon {...p} className="neon-ghost neon-ghost-r" />
+      <Icon {...p} className="neon-ghost neon-ghost-b" />
+      <Icon {...p} className="neon-core" />
+    </span>
   )
 }
 

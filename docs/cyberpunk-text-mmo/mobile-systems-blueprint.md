@@ -1,5 +1,7 @@
 # 手機優先文字冒險：系統藍圖 v0.1
 
+> 2026-11-06：遊戲方向已改為單機文字冒險 roguelike。本檔中 MMO、離線排隊、週榜、城市共同事件、熟練度、抵押與救援帳單等敘述，以 [prototypes/mortal-city/docs/adr/0001-single-player-roguelike.md](../../prototypes/mortal-city/docs/adr/0001-single-player-roguelike.md) 與 [ROGUELIKE-FLOW.md](../../prototypes/mortal-city/docs/ROGUELIKE-FLOW.md) 為準。
+
 日期：2026-10-29。本作仍保留共享城市、非同步合作與排行，沒有改成純單機。本文把既有需求與Lead評估轉成手機玩法提案；新規則、節奏與效果需試玩，未把全部提案標成已驗收。
 
 > 2026-11-04：使用者確認改為雙層任務（劇情委託一次性＋可重複的街頭工作）。本檔中「每角色委託不重複」「有限經濟」「週榜不能靠重刷」等敘述，以 [quest-layers.md](quest-layers.md) 為準，受影響段落列在該檔 §9。

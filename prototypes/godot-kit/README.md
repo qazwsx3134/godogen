@@ -1,5 +1,25 @@
 # godot-kit：Godot 原型共用模組
 
+## AI 能力入口（2026-11-06）
+
+[組合與契約指南](docs/COMPOSITION.md) · [逐項能力參考](docs/capabilities/REFERENCE.md) · [全原型盤點與抽取決策](docs/REUSE-AUDIT.md)
+
+```sh
+python3 tools/capabilities.py list --query 存檔
+python3 tools/capabilities.py show fixed_step
+python3 tools/capabilities.py show tool.sprite_atlas
+python3 tools/capabilities.py plan save_slots fixed_step
+python3 tools/capabilities.py check
+```
+
+`catalog/specs.json` 維護用途、情境、限制與使用片段；`catalog/tools.json` 維護 CLI 的輸入輸出。`build` 從原始碼產生 API／參數／訊號／資源 uniforms／hash 與來源盤點，`check` 偵測契約漂移。目錄區分規則、Resource、node、製作、檢查與內部元件，不將副本存在當成成熟度證明。
+
+新增：`weighted_choice.gd`（四個既有模組共用加權核心）、`fixed_step.gd`（固定步長、retain/drop 追趕政策）與 `damage_numbers_3d.tscn`（池化 3D 數字、世界座標、專屬 RNG）。尚未遷移既有原型；[場景編輯位置與相容性](docs/COMPOSITION.md#編輯器入口)。加權核心重構後測試依使用者指示暫緩；先前階段 L2 證據見 [VALIDATION](docs/capabilities/VALIDATION.md)。
+
+深入研究：[跨原型比較與重構順序](docs/REUSE-RESEARCH.md) · [70 項研究覆蓋表](docs/RESEARCH-COVERAGE.md) · [下一批介面草案（未實作）](docs/REUSE-CONTRACT-DRAFTS.md)。現有目錄是靜態契約索引，部分模組仍有所有權／生命週期限制，請先看研究結論；不代表全庫已驗收。
+
+補充：[第二批 10 項深讀與 CodeGraph 接入](docs/KIT-RESEARCH-02.md)，語義限制已回填正式能力目錄。
+
 ## 介紹
 
 `prototypes/` 底下的 Godot 原型（debt-commission、pachinko、pixel-monster）各自寫過幾樣相同的東西：佔位音效、不怕當機的存檔、headless 測試的輔助函式。這些已抽出來，在這裡只維護一份，新原型直接拿來用，不必再寫一次。後來又加了從 sugarcane-tanks 抽出來的手感（音效庫、震動、hit stop、震屏、音樂）、搖桿、載入邏輯、scene 產生器，以及字型子集、網頁匯出、測試與錄影的工具（`tools/`）。

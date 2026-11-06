@@ -1,98 +1,130 @@
 import { useCallback, useEffect, useReducer } from 'react'
 import {
   type Character,
-  type Coverage,
   type DangerOption,
   type DangerOutcome,
   type Enemy,
   type FightResult,
-  type Tactic,
-  DEFAULT_STOP,
+  type Item,
   type LogEvent,
-  type Queue,
-  type StopRules,
+  type Tactic,
+  type Attr,
+  addFame,
   addXp,
   approachBonus,
+  attrLock,
+  baseAttrs,
+  dirBonus,
   grantProgress,
   hashSeed,
-  payBill,
-  redeem,
-  isLethal,
+  heatEnemy,
+  implantRoom,
   jobReward,
+  jobSuccessChance,
+  perkOptions,
+  perkReward,
+  perkTally,
   resolveDanger,
   resolveFight,
-  tacticsFor,
-  rest,
-  workBlock,
-  type Attr,
-  ATTR_MAX,
-  ATTR_LABEL,
-  ATTR_START_POINTS,
-  baseAttrs,
-  attrLock,
-  implantRoom,
+  rng,
   sellValue,
-  type Item,
-  SEVERE_INJURY,
-  CLINIC,
-  HOSPITAL,
-  settleQueue,
   statusPrefix,
-  weekKey,
+  streetEnemy,
+  tacticsFor,
+  ATTR_LABEL,
+  ATTR_MAX,
+  ATTR_START_POINTS,
+  CLINIC,
+  DIRECTION_LABEL,
+  REST,
+  SEVERE_INJURY,
 } from '../rules/core'
-import { CITY_TARGET, JOBS, QUEUE_SLOTS, STARTER_GEAR, highDanger } from '../content/data'
-import { ITEMS, SHOP_IMPLANTS, fightLoot, makeItem, rollKind, streetLoot } from '../content/items'
-import { CASE_BY_ID, type CaseOption, type CaseRecord, type StoryCase, caseUnlocked, optionLock } from '../content/cases'
+import { type District, type NodeType, STORY_LAYER, findNode, generateDistrict, reachable } from '../rules/map'
+import { JOBS, JOB_LINES, OPENING, STARTER_GEAR, highDanger } from '../content/data'
+import { ITEMS, LIFELINE_PRICE, SHOP_IMPLANTS, eliteLoot, eventLoot, makeItem, marketPrice, marketStock, rollKind, streetLoot } from '../content/items'
+import { CASE_01, CASE_02, CASE_BY_ID, TEST_CASE, type CaseOption, type CaseRecord, type StoryCase, optionLock } from '../content/cases'
+import { EVENTS, EVENT_BY_ID, type Effects, type EventOption } from '../content/events'
+import { PERKS, PERK_CASH } from '../rules/perks'
 
-/** 正在進行的劇情委託的階段；結案後的結果記在 Game.cases。 */
-export type StoryStage = 'open' | 'prep' | 'auto' | 'fight' | 'danger'
+/** 正在進行的劇情委託的階段；結案後的結果記在 Run.cases。 */
+export type StoryStage = 'prep' | 'auto' | 'fight' | 'danger'
 
-export interface Career {
-  id: string
-  name: string
-  level: number
-  credits: number
-  diedAt: number
-  cause: string
-  weekPoints: number
+/** 結算畫面的一列：一個欄位一個變化，不塞在同一句話裡。 */
+export interface ResultRow {
+  label: string
+  value: string
+  tone?: 'good' | 'bad' | 'warn'
 }
 
-export interface AwayReport {
-  awayMs: number
-  completed: number
-  credits: number
-  points: number
-  injuryFrom: number
-  injuryTo: number
-  heatFrom: number
-  heatTo: number
-  stopped: string | null
-  events: LogEvent[]
+/** 傭兵現在站著的節點裡發生的事。 */
+export type NodeRun =
+  | { kind: 'job'; nodeId: string; jobId: string; ok: boolean; stage: 'auto' | 'fight' | 'done'; fight?: FightResult; text?: string; rows?: ResultRow[] }
+  | { kind: 'elite'; nodeId: string; jobId: string; stage: 'auto' | 'fight' | 'danger' | 'done'; fight?: FightResult; outcome?: DangerOutcome }
+  | { kind: 'event'; nodeId: string; eventId: string; stage: 'choose' | 'done'; text?: string; rows?: ResultRow[] }
+  | { kind: 'market'; nodeId: string; stock: Item[] }
+  | { kind: 'clinic'; nodeId: string }
+  | { kind: 'rest'; nodeId: string; used?: boolean }
+  | { kind: 'story'; nodeId: string; caseId: string }
+
+export interface Run {
+  seed: number
+  district: District
+  /** 目前所在節點（null＝還沒出發）。 */
+  at: string | null
+  path: string[]
+  node: NodeRun | null
+  /** 'safehouse'＝劇情大案打完，在安全屋；'over'＝死亡或退休。 */
+  phase: 'map' | 'safehouse' | 'over'
+  /** 這段生涯已結案的劇情委託。 */
+  cases: Record<string, CaseRecord>
+  /** 這段生涯出現過的事件（不重複）。 */
+  events: string[]
+  /** 委託、精英委託、劇情委託結束後還沒「收下」的完成單：收下之前不能離開節點，三選一也先不跳出來。 */
+  claim?: Claim | null
+}
+
+/** 完成單：完成演出要顯示的內容。 */
+export interface Claim {
+  title: string
+  tone: 'success' | 'partial' | 'fail' | 'rescued'
+  text: string
+  rows: ResultRow[]
+}
+
+export interface Legend {
+  id: string
+  name: string
+  end: 'dead' | 'retired'
+  cause: string
+  level: number
+  fame: number
+  fameTotal: number
+  district: string
+  /** 主流派（卡牌最多的方向；沒有卡＝null）。 */
+  style: string | null
+  perks: Record<string, number>
+  at: number
+}
+
+/** 跨生涯的資料：傳奇檔案，以及哪些節點類型看過（看過的自動段可以 2 倍速）。新傭兵不會清掉。 */
+export interface Meta {
+  legends: Legend[]
+  seen: Partial<Record<NodeType, boolean>>
 }
 
 export interface Game {
-  v: 1
+  v: 2
   character: Character
-  queue: Queue
-  stopRules: StopRules
-  coverage: Coverage
-  log: LogEvent[]
+  run: Run
   story: { caseId: string | null; stage: StoryStage; approach?: string; fight?: FightResult; option?: string }
-  /** 在公寓休養累積、還沒換成恢復的時間（毫秒）。 */
-  rest: { ms: number; heatMs: number }
-  /** 這個角色已結案的劇情委託（一次性；新角色清空）。 */
-  cases: Record<string, CaseRecord>
-  high: { jobId: string; stage: 'auto' | 'fight' | 'danger' | 'done'; outcome?: DangerOutcome; fight?: FightResult } | null
-  highSeq: number
-  careers: Career[]
-  city: { supply: number }
-  clock: { real: number; virtual: number; scale: number }
-  away: AwayReport | null
+  log: LogEvent[]
   systemFault: boolean
-  notes: string[] // 生涯紀錄裡的特殊事件（例如系統補償搶救）
+  notes: string[]
+  meta: Meta
 }
 
-const KEY = 'mortal-city:v7'
+const RUN_KEY = 'mortal-city:run:v1'
+const META_KEY = 'mortal-city:meta:v1'
 
 function newCharacter(n: number, now: number): Character {
   return {
@@ -106,51 +138,92 @@ function newCharacter(n: number, now: number): Character {
     stress: 0,
     implantLoad: STARTER_GEAR.reduce((s, i) => s + i.load, 0),
     heat: 0,
-    prof: { force: { level: 0, xp: 0 }, hack: { level: 0, xp: 0 }, stealth: { level: 0, xp: 0 } },
     equipment: structuredClone(STARTER_GEAR),
-    pawned: [],
-    week: { key: weekKey(now), counts: {}, points: 0 },
+    lifelines: 0,
     attrs: baseAttrs(),
     attrPoints: ATTR_START_POINTS,
     stash: [],
+    fame: { level: 0, xp: 0, total: 0 },
+    perks: {},
+    picks: [],
   }
 }
 
-export function initial(now: number): Game {
+function newRun(c: Character): Run {
+  const seed = hashSeed(c.id, 'run')
+  return { seed, district: generateDistrict(seed), at: null, path: [], node: null, phase: 'map', cases: {}, events: [] }
+}
+
+export function initial(now: number, meta: Meta = { legends: [], seen: {} }): Game {
+  const c = newCharacter(meta.legends.length + 1, now)
   return {
-    v: 1,
-    character: newCharacter(1, now),
-    queue: { items: [], startedAt: null, paused: false, seq: 0 },
-    stopRules: DEFAULT_STOP,
-    coverage: { active: false, coversZone: true, etaMin: 3 },
-    log: [{ at: now, kind: 'system', text: '連線到 MORTAL CITY NETWORK。歡迎來到魔都，傭兵。' }],
-    story: { caseId: null, stage: 'open' },
-    cases: {},
-    rest: { ms: 0, heatMs: 0 },
-    high: null,
-    highSeq: 0,
-    careers: [],
-    city: { supply: 41_230 },
-    clock: { real: now, virtual: now, scale: 1 },
-    away: null,
+    v: 2,
+    character: c,
+    run: newRun(c),
+    story: { caseId: null, stage: 'prep' },
+    log: [{ at: now, kind: 'system', text: `連線到 MORTAL CITY NETWORK。歡迎來到魔都，${c.name}。先在「角色」分配 ${ATTR_START_POINTS} 點屬性，再從新宿的地圖出發。` }],
     systemFault: false,
     notes: [],
+    meta,
   }
-}
-
-export function vnow(g: Game, real = Date.now()) {
-  return g.clock.virtual + (real - g.clock.real) * g.clock.scale
 }
 
 const trim = (l: LogEvent[]) => l.slice(-300)
+const withLog = (g: Game, ...events: LogEvent[]): Game => ({ ...g, log: trim([...g.log, ...events]) })
 
-/** 劇情委託進行中（準備、自動段或等待選擇）。 */
+/** 劇情委託進行中。 */
 export const storyBusy = (g: Game) => g.story.caseId !== null
 
-/** 開打：鎖住的戰術不能用；結果一次算完（seed 決定），傷勢與壓力立刻套用，畫面再逐回合播放。 */
+/** 節點裡的事還沒結束（自動段、戰鬥、危險節點、事件選項、劇情委託）。這時不能換裝，三選一也先不跳出來。 */
+export function nodeBusy(g: Game): boolean {
+  const n = g.run.node
+  if (!n) return false
+  if (n.kind === 'job' || n.kind === 'elite' || n.kind === 'event') return n.stage !== 'done'
+  if (n.kind === 'story') return storyBusy(g)
+  return false
+}
+export const gearBusy = nodeBusy
+
+/** 節點結束、可以離開。 */
+export function nodeDone(g: Game): boolean {
+  const n = g.run.node
+  if (!n) return false
+  return !nodeBusy(g) && !g.run.claim
+}
+
+/** 兩個時間點之間，傭兵身上變了什麼（完成單用）。 */
+export function diffRows(a: Character, b: Character): ResultRow[] {
+  const rows: ResultRow[] = []
+  if (b.credits !== a.credits) rows.push({ label: '信用點', value: `${b.credits > a.credits ? '+' : '−'}¢${Math.abs(b.credits - a.credits)}`, tone: b.credits > a.credits ? 'good' : 'bad' })
+  if (b.injury !== a.injury) rows.push({ label: '傷勢', value: `${a.injury}% → ${b.injury}%`, tone: b.injury > a.injury ? 'bad' : 'good' })
+  if (b.heat !== a.heat) rows.push({ label: '通緝', value: `${a.heat}★ → ${b.heat}★`, tone: b.heat > a.heat ? 'bad' : 'good' })
+  if (b.lifelines !== a.lifelines) rows.push({ label: '救命保單', value: `${a.lifelines} → ${b.lifelines}`, tone: b.lifelines > a.lifelines ? 'good' : 'bad' })
+  if (b.level > a.level) rows.push({ label: '等級', value: `Lv.${a.level} → Lv.${b.level}（屬性點 +${b.level - a.level}）`, tone: 'good' })
+  if (b.fame.total > a.fame.total) rows.push({ label: '名聲', value: `+${b.fame.total - a.fame.total}`, tone: 'warn' })
+  const loot = b.picks.filter((p) => p.kind === 'item').length - a.picks.filter((p) => p.kind === 'item').length
+  if (loot > 0) rows.push({ label: '戰利品', value: `三選一 ×${loot}`, tone: 'warn' })
+  const cards = b.picks.filter((p) => p.kind === 'perk').length - a.picks.filter((p) => p.kind === 'perk').length
+  if (cards > 0) rows.push({ label: '卡牌', value: `三選一 ×${cards}（名聲升級）`, tone: 'warn' })
+  return rows
+}
+
+/** 結束一件委託：活著就開一張完成單（死了就沒有）。 */
+function withClaim(before: Game, after: Game, claim: Omit<Claim, 'rows'> & { rows?: ResultRow[] }): Game {
+  if (!after.character.alive) return after
+  return { ...after, run: { ...after.run, claim: { ...claim, rows: claim.rows ?? diffRows(before.character, after.character) } } }
+}
+
+/** 現在能前往的節點。 */
+export function movable(g: Game) {
+  const { run, character: c } = g
+  if (!c.alive || run.phase !== 'map' || run.node || c.picks.length) return []
+  return reachable(run.district, run.at)
+}
+
+/** 開打：鎖住的戰術不能用；結果一次算完（seed 決定），傷勢與壓力立刻套用，畫面再逐回合播放。通緝越高對手越強。 */
 function startFight(c: Character, enemy: Enemy, tactic: Tactic, seed: number): { c: Character; f: FightResult } | null {
   if (tacticsFor(c).find((t) => t.id === tactic)?.locked) return null
-  const f = resolveFight(c, enemy, tactic, seed)
+  const f = resolveFight(c, heatEnemy(enemy, c.heat), tactic, seed)
   return { c: { ...c, injury: f.injury, stress: c.stress + f.stress }, f }
 }
 
@@ -160,54 +233,14 @@ export function fightEnemy(sc: StoryCase, st: Game['story']): Enemy {
   return sc.approaches.find((x) => x.id === st.approach)!.fight!
 }
 
-/**
- * 結案：判定結果交給 settleLethal（被救的帳單、死亡）；pay 時，不冒險或生還照選項付報酬、通緝、治療與經驗。
- * 夜鴉插播，紀錄寫進 Game.cases。
- */
-function closeCase(g: Game, now: number, sc: StoryCase, picked: CaseOption, outcome: DangerOutcome, pay: boolean): Game {
-  const paid = (ch: Character, log: LogEvent[]) => {
-    if (!pay) return
-    ch.credits += picked.reward
-    ch.heat = Math.min(5, ch.heat + (picked.heat ?? 0))
-    if (picked.heal) ch.injury = 0
-    const parts = [picked.reward ? `+${picked.reward} 信用點` : '沒有報酬', picked.heat ? `通緝 +${picked.heat}` : '', picked.heal ? '傷口縫好了' : '']
-    log.push({ at: now, kind: picked.reward ? 'job' : 'warn', text: `${statusPrefix(ch)} 「${sc.title}」結案：${parts.filter(Boolean).join('，')}。` })
-    addXp(ch, sc.xp, now, log)
-    if (outcome.kind === 'survived')
-      for (const l of sc.loot ?? []) stashLoot(ch, rollKind(hashSeed(ch.id, sc.id, 'reward', l.kind), l.kind, l.chance), log, now, sc.title)
-  }
-  const r = settleLethal(g, now, outcome, { label: sc.title, zone: sc.zone, safeText: outcome.reason, lossText: sc.lossText, onSurvive: paid })
-  let next = r.g
-  if (r.outcome.kind === 'safe') {
-    // 不冒險也算結案；有部分報酬就照付
-    const ch = structuredClone(next.character)
-    const log: LogEvent[] = []
-    paid(ch, log)
-    next = { ...next, character: ch, log: trim([...next.log, ...log]) }
-  }
-  const won = r.outcome.kind === 'survived'
-  if (sc.broadcast && next.character.alive)
-    next = { ...next, log: trim([...next.log, { at: now, kind: 'system', text: won ? sc.broadcast.survived : sc.broadcast.other }]) }
-  const record: CaseRecord = { approach: g.story.approach ?? '', optionId: picked.id, outcome: r.outcome.kind, reason: r.outcome.reason }
-  return { ...next, story: { caseId: null, stage: 'open' }, cases: { ...next.cases, [sc.id]: record } }
+/** 掉了寶：排進三選一並寫紀錄（挑了才放進背包）。直接改 c。 */
+function offerLoot(c: Character, options: Item[] | null, log: LogEvent[], at: number, from: string) {
+  if (!options) return
+  c.picks.push({ kind: 'item', from, options })
+  log.push({ at, kind: 'gain', text: `◆ 戰利品（${from}）三選一：${options.map((i) => i.name).join('／')}。` })
 }
 
-/** 戰利品放進背包並寫紀錄。直接改 c。 */
-function stashLoot(c: Character, item: Item | null, log: LogEvent[], at: number, from: string) {
-  if (!item) return
-  c.stash.push(item)
-  log.push({ at, kind: 'gain', text: `◆ 戰利品（${from}）：${item.name}，放進背包。` })
-}
-
-/** 任務進行中不能換裝備或買東西。 */
-export const gearBusy = (g: Game) => storyBusy(g) || !!(g.high && g.high.stage !== 'done')
-
-/** 委託中途結束（打輸撤退）：排隊照 settleLethal 的方式恢復。 */
-function resumeQueue(q: Queue, now: number): Queue {
-  return { ...q, paused: false, startedAt: q.startedAt ?? (q.items.length ? now : null) }
-}
-
-/** 危險節點選項套上做法的修正：做法本身的風險，再扣掉該方向的裝備與熟練度。 */
+/** 危險節點選項套上做法的修正：做法本身的風險，再扣掉該方向的裝備與卡牌加成。 */
 export function caseDangerOption(c: Character, sc: StoryCase, approachId: string | undefined, optionId: string): DangerOption {
   const opt = sc.danger.options.find((o) => o.id === optionId)!
   const ap = sc.approaches.find((x) => x.id === approachId) ?? sc.approaches[0]
@@ -215,519 +248,594 @@ export function caseDangerOption(c: Character, sc: StoryCase, approachId: string
   return { ...opt, lethalBase: Math.min(0.95, Math.max(0.02, opt.lethalBase + ap.lethalMod - approachBonus(c, ap.direction))) }
 }
 
-type Action =
-  | { t: 'tick'; real: number }
-  | { t: 'enqueue'; jobId: string }
-  | { t: 'clearQueue' }
-  | { t: 'scale'; scale: number }
-  | { t: 'skip'; minutes: number }
-  | { t: 'dismissAway' }
-  | { t: 'storyStart'; caseId: string }
-  | { t: 'storyApproach'; id: string }
-  | { t: 'storyAutoDone' }
-  | { t: 'storyChoose'; optionId: string }
-  | { t: 'storyRetry'; caseId: string }
-  | { t: 'storyFight'; tactic: Tactic }
-  | { t: 'storyFightDone' }
-  | { t: 'highFight'; tactic: Tactic }
-  | { t: 'highFightDone' }
-  | { t: 'highStart'; jobId: string }
-  | { t: 'highAutoDone' }
-  | { t: 'highChoose'; optionId: string }
-  | { t: 'highClose' }
-  | { t: 'buyCoverage' }
-  | { t: 'treat' }
-  | { t: 'hospital' }
-  | { t: 'setTactic'; tactic: Tactic }
-  | { t: 'raiseAttr'; attr: Attr }
-  | { t: 'buy'; kind: string }
-  | { t: 'equip'; itemId: string }
-  | { t: 'unequip'; itemId: string }
-  | { t: 'sell'; itemId: string }
-  | { t: 'redeem'; itemId: string }
-  | { t: 'toggleFault' }
-  | { t: 'newCharacter' }
-  | { t: 'reset' }
-
-/** 把排隊結算到虛擬時間 now，並更新城市與紀錄。 */
-function advance(g: Game, now: number): { g: Game; r: ReturnType<typeof settleQueue> } {
-  // 休養：沒有排隊、沒有委託進行中的時間才算。ponytail: 只看這段開始時是否閒著，排隊中途做完後剩下的時間不算休養
-  const idle = g.character.alive && g.queue.items.length === 0 && !storyBusy(g) && !(g.high && g.high.stage !== 'done')
-  let character = g.character
-  let restCarry = g.rest
-  const restLog: LogEvent[] = []
-  if (idle && (character.injury > 0 || character.heat > 0)) {
-    character = structuredClone(character)
-    const before = { injury: character.injury, heat: character.heat }
-    restCarry = rest(character, g.rest, Math.max(0, now - g.clock.virtual))
-    if (before.injury >= SEVERE_INJURY && character.injury < SEVERE_INJURY)
-      restLog.push({ at: now, kind: 'system', text: `${statusPrefix(character)} 休養到能下床了，可以再接工作。` })
-    if (character.heat < before.heat) restLog.push({ at: now, kind: 'system', text: `${statusPrefix(character)} 你低調了一陣子，MPD 的注意力移開了（通緝 −${before.heat - character.heat}）。` })
-  } else if (!idle) restCarry = { ms: 0, heatMs: 0 }
-  const r = settleQueue(character, g.queue, now, JOBS, g.stopRules, streetLoot)
-  const supply = Object.entries(r.cityContrib).reduce((s, [id, n]) => s + (JOBS[id].direction === 'stealth' ? n : 0), 0)
-  return {
-    g: {
-      ...g,
-      rest: restCarry,
-      character: r.character,
-      queue: r.queue,
-      log: trim([...g.log, ...restLog, ...r.events]),
-      city: { supply: Math.min(CITY_TARGET, g.city.supply + supply) },
-    },
-    r,
+/** 生涯結束（死亡或退休）：寫進傳奇檔案。 */
+function endCareer(g: Game, end: Legend['end'], cause: string, now: number): Game {
+  const c = g.character
+  const tally = perkTally(c)
+  const top = (Object.entries(tally) as [keyof typeof DIRECTION_LABEL, number][]).sort((a, b) => b[1] - a[1])[0]
+  const legend: Legend = {
+    id: c.id,
+    name: c.name,
+    end,
+    cause,
+    level: c.level,
+    fame: c.fame.level,
+    fameTotal: c.fame.total,
+    district: g.run.district.name,
+    style: top && top[1] > 0 ? DIRECTION_LABEL[top[0]] : null,
+    perks: c.perks,
+    at: now,
   }
+  return { ...g, run: { ...g.run, phase: 'over' }, meta: { ...g.meta, legends: [...g.meta.legends, legend] } }
 }
 
 interface LethalCtx {
   label: string
-  zone: string
   safeText: string
   lossText: string
   onSurvive: (c: Character, log: LogEvent[]) => void
 }
 
 /**
- * 危險節點判定後的共用處理（劇情委託與高階工作）：
- * 生還給報酬；被救先付帳單，付不起就抵押裝備，抵押不夠就不出勤、角色死亡；死亡寫進生涯紀錄。
- * 結束後恢復排隊（死亡則清空）。
+ * 危險節點判定後的共用處理（劇情委託與精英委託）：
+ * 生還給報酬；被救用掉一張救命保單、傷勢 70；死亡寫進傳奇檔案。
  */
-function settleLethal(g: Game, now: number, first: DangerOutcome, ctx: LethalCtx): { g: Game; outcome: DangerOutcome } {
-  let outcome = first
+function settleLethal(g: Game, now: number, outcome: DangerOutcome, ctx: LethalCtx): Game {
   const c = g.character
-  let character: Character = structuredClone(c)
+  const character: Character = structuredClone(c)
   const log: LogEvent[] = []
   const notes = [...g.notes]
-  let careers = g.careers
-  if (outcome.kind === 'safe') {
-    log.push({ at: now, kind: 'warn', text: `${statusPrefix(c)} ${ctx.safeText}` })
-  } else if (outcome.kind === 'survived') {
-    ctx.onSurvive(character, log)
-  } else if (outcome.kind === 'rescued') {
-    const paid = payBill(c, outcome.bill)
-    if (paid.ok) {
-      character = { ...paid.character, injury: 70 }
-      const pawnText = paid.pawned.length ? `付不起的部分抵押了：${paid.pawned.map((i) => i.name).join('、')}（可以到「角色」贖回）。` : ''
-      log.push({ at: now, kind: 'hurt', text: `✚ ${outcome.reason} 帳單 ${outcome.bill} 信用點。${pawnText}${ctx.lossText}` })
-    } else {
-      outcome = {
-        kind: 'dead',
-        reason: `受了致命傷。武裝醫療隊帳單 ¢${outcome.bill}，你的現金加上全部裝備的抵押價只有 ¢${paid.total}，他們沒有出勤。`,
-      }
-    }
-  }
-  if (outcome.kind === 'rescued_system') {
+  if (outcome.kind === 'safe') log.push({ at: now, kind: 'warn', text: `${statusPrefix(c)} ${ctx.safeText}` })
+  else if (outcome.kind === 'survived') ctx.onSurvive(character, log)
+  else if (outcome.kind === 'rescued') {
+    character.lifelines -= 1
+    character.injury = SEVERE_INJURY
+    log.push({ at: now, kind: 'hurt', text: `✚ ${outcome.reason}${ctx.lossText}` })
+  } else if (outcome.kind === 'rescued_system') {
     character.injury = 50
     notes.push(`${ctx.label}：武裝醫療隊緊急搶救（系統補償）`)
     log.push({ at: now, kind: 'system', text: `✚ ${outcome.reason}` })
-  } else if (outcome.kind === 'dead') {
+  } else {
     character.alive = false
-    careers = [
-      ...careers,
-      { id: c.id, name: c.name, level: c.level, credits: c.credits, diedAt: now, cause: outcome.reason, weekPoints: c.week.points },
-    ]
-    log.push({ at: now, kind: 'stop', text: `✖ 你死了：${outcome.reason}（${ctx.zone}）` })
+    log.push({ at: now, kind: 'stop', text: `✖ 你死了：${outcome.reason}（${ctx.label}）` })
   }
-  return {
-    outcome,
-    g: {
-      ...g,
-      character,
-      careers,
-      notes,
-      // 結束後繼續排隊；正在做的那件保留原本的開始時間，已經做完的就從現在開始下一件
-      queue: character.alive
-        ? { ...g.queue, paused: false, startedAt: g.queue.startedAt ?? (g.queue.items.length ? now : null) }
-        : { ...g.queue, items: [], paused: false, startedAt: null },
-      log: trim([...g.log, ...log]),
-    },
+  const next = withLog({ ...g, character, notes }, ...log)
+  return outcome.kind === 'dead' ? endCareer(next, 'dead', `${ctx.label}：${outcome.reason}`, now) : next
+}
+
+/**
+ * 劇情委託結案：判定結果交給 settleLethal；pay 時，不冒險或生還照選項付報酬、通緝、治療、經驗與名聲。
+ * 夜鴉插播，紀錄寫進 Run.cases。
+ */
+function closeCase(g: Game, now: number, sc: StoryCase, picked: CaseOption, outcome: DangerOutcome, pay: boolean): Game {
+  const paid = (ch: Character, log: LogEvent[]) => {
+    if (!pay) return
+    ch.credits += picked.reward
+    ch.heat = Math.min(5, ch.heat + (picked.heat ?? 0))
+    if (picked.heal) ch.injury = 0
+    ch.lifelines += picked.lifeline ?? 0
+    const parts = [picked.reward ? `+${picked.reward} 信用點` : '沒有報酬', picked.heat ? `通緝 +${picked.heat}` : '', picked.heal ? '傷口縫好了' : '', picked.lifeline ? `救命保單 +${picked.lifeline}` : '']
+    log.push({ at: now, kind: picked.reward ? 'job' : 'warn', text: `${statusPrefix(ch)} 「${sc.title}」結案：${parts.filter(Boolean).join('，')}。` })
+    addXp(ch, sc.xp, now, log)
+    // 名聲：冒險生還是經驗的 2 倍，其他有結案的是一半
+    addFame(ch, outcome.kind === 'survived' ? sc.xp * 2 : Math.round(sc.xp / 2), now, log)
+    if (outcome.kind === 'survived')
+      for (const l of sc.loot ?? []) offerLoot(ch, rollKind(hashSeed(ch.id, sc.id, 'reward', l.kind), l.kind, l.chance, ch), log, now, sc.title)
   }
+  let next = settleLethal(g, now, outcome, { label: sc.title, safeText: outcome.reason, lossText: sc.lossText, onSurvive: paid })
+  if (outcome.kind === 'safe') {
+    // 不冒險也算結案；有部分報酬就照付
+    const ch = structuredClone(next.character)
+    const log: LogEvent[] = []
+    paid(ch, log)
+    next = withLog({ ...next, character: ch }, ...log)
+  }
+  if (sc.broadcast && next.character.alive)
+    next = withLog(next, { at: now, kind: 'system', text: outcome.kind === 'survived' ? sc.broadcast.survived : sc.broadcast.other })
+  const record: CaseRecord = { approach: g.story.approach ?? '', optionId: picked.id, outcome: outcome.kind, reason: outcome.reason }
+  const tone = outcome.kind === 'survived' ? 'success' : outcome.kind === 'safe' ? (pay && picked.reward ? 'partial' : 'fail') : 'rescued'
+  return withClaim(g, { ...next, story: { caseId: null, stage: 'prep' }, run: { ...next.run, cases: { ...next.run.cases, [sc.id]: record } } }, { title: sc.title, tone, text: outcome.reason })
+}
+
+// ---------- 節點內容 ----------
+
+/** 委託節點用哪個模板：前半段第 1 階、後半段第 2 階；精英委託用第 4 階。 */
+function pickJob(seed: number, layer: number, elite: boolean) {
+  const tier = elite ? 4 : layer < STORY_LAYER ? 1 : 2
+  const pool = Object.values(JOBS).filter((j) => j.tier === tier)
+  return pool[Math.floor(rng(seed)() * pool.length)]
+}
+
+/** 這段生涯還沒出現過的事件；全部出現過就重頭來。 */
+function pickEvent(seed: number, used: string[]) {
+  const pool = EVENTS.filter((e) => !used.includes(e.id))
+  const from = pool.length ? pool : EVENTS
+  return from[Math.floor(rng(seed)() * from.length)]
+}
+
+/** 一般委託自動段的文字。 */
+export function jobLines(jobId: string, ok: boolean): string[] {
+  const job = JOBS[jobId]
+  const l = JOB_LINES[job.direction]
+  return [...OPENING[job.direction](job.name), l.mid, ok ? l.ok : l.caught]
+}
+
+/** 事件選項能不能選：不夠錢或屬性不夠回傳原因。 */
+export function eventLock(c: Character, o: EventOption): string | undefined {
+  if (o.cost && c.credits < o.cost) return `需要 ¢${o.cost}`
+  return attrLock(c, o.needs)
+}
+
+const signed = (n: number) => `${n > 0 ? '+' : ''}${n}`
+
+/** 套用事件效果，回傳結果文字與一列一列的變化。直接改 c。 */
+function applyEffects(c: Character, e: Effects, seed: number, log: LogEvent[], at: number, from: string): { text: string; rows: ResultRow[] } {
+  c.credits = Math.max(0, c.credits + (e.credits ?? 0))
+  c.injury = Math.max(0, Math.min(100, c.injury + (e.injury ?? 0)))
+  c.heat = Math.max(0, Math.min(5, c.heat + (e.heat ?? 0)))
+  c.stress = Math.max(0, c.stress + (e.stress ?? 0))
+  c.lifelines += e.lifeline ?? 0
+  if (e.xp) addXp(c, e.xp, at, log)
+  if (e.fame) addFame(c, e.fame, at, log)
+  if (e.loot) offerLoot(c, eventLoot(seed, e.loot), log, at, from)
+  const rows: ResultRow[] = []
+  if (e.credits) rows.push({ label: '信用點', value: `${signed(e.credits)}`, tone: e.credits > 0 ? 'good' : 'bad' })
+  if (e.injury) rows.push({ label: '傷勢', value: `${signed(e.injury)}%（現在 ${c.injury}%）`, tone: e.injury > 0 ? 'bad' : 'good' })
+  if (e.heat) rows.push({ label: '通緝', value: `${signed(e.heat)}★（現在 ${c.heat}★）`, tone: e.heat > 0 ? 'bad' : 'good' })
+  if (e.stress) rows.push({ label: '神經壓力', value: signed(e.stress), tone: e.stress > 0 ? 'bad' : 'good' })
+  if (e.xp) rows.push({ label: '經驗', value: `+${e.xp}` })
+  if (e.fame) rows.push({ label: '名聲', value: `+${e.fame}`, tone: 'warn' })
+  if (e.lifeline) rows.push({ label: '救命保單', value: `+${e.lifeline}`, tone: 'good' })
+  if (e.loot) rows.push({ label: '戰利品', value: '三選一', tone: 'warn' })
+  return { text: e.text, rows }
+}
+
+/** 紀錄用：把結算列接成一句。 */
+const rowsText = (rows: ResultRow[]) => (rows.length ? `（${rows.map((r) => `${r.label} ${r.value}`).join('，')}）` : '')
+
+type Action =
+  | { t: 'move'; nodeId: string }
+  | { t: 'leave' }
+  | { t: 'jobAutoDone' }
+  | { t: 'jobFight'; tactic: Tactic }
+  | { t: 'jobFightDone' }
+  | { t: 'eliteAutoDone' }
+  | { t: 'eliteFight'; tactic: Tactic }
+  | { t: 'eliteFightDone' }
+  | { t: 'eliteChoose'; optionId: string }
+  | { t: 'eventChoose'; optionId: string }
+  | { t: 'marketBuy'; index: number }
+  | { t: 'buyLifeline' }
+  | { t: 'sell'; itemId: string }
+  | { t: 'treat' }
+  | { t: 'buyImplant'; kind: string }
+  | { t: 'rest'; choice: 'heal' | 'heat' }
+  | { t: 'storyApproach'; id: string }
+  | { t: 'storyAutoDone' }
+  | { t: 'storyChoose'; optionId: string }
+  | { t: 'storyFight'; tactic: Tactic }
+  | { t: 'storyFightDone' }
+  | { t: 'claim' }
+  | { t: 'retire' }
+  | { t: 'raiseAttr'; attr: Attr }
+  | { t: 'pickPerk'; id: string }
+  | { t: 'pickItem'; index: number }
+  | { t: 'equip'; itemId: string }
+  | { t: 'unequip'; itemId: string }
+  | { t: 'devTestCase' }
+  | { t: 'toggleFault' }
+  | { t: 'newCharacter' }
+  | { t: 'reset' }
+
+/** 進入節點：依類型準備節點裡的內容（模板、事件、貨架都用節點自己的 seed，重整不重抽）。 */
+function enter(g: Game, nodeId: string, now: number): Game {
+  const node = findNode(g.run.district, nodeId)!
+  const c = g.character
+  const seed = hashSeed(c.id, nodeId)
+  let n: NodeRun
+  let story = g.story
+  let events = g.run.events
+  if (node.type === 'job' || node.type === 'elite') {
+    const job = pickJob(seed, node.layer, node.type === 'elite')
+    const ok = rng(hashSeed(seed, 'roll'))() < jobSuccessChance(job, dirBonus(c, job.direction))
+    n = node.type === 'job' ? { kind: 'job', nodeId, jobId: job.id, ok, stage: 'auto' } : { kind: 'elite', nodeId, jobId: job.id, stage: 'auto' }
+  } else if (node.type === 'event') {
+    const ev = pickEvent(seed, g.run.events)
+    events = [...events, ev.id]
+    n = { kind: 'event', nodeId, eventId: ev.id, stage: 'choose' }
+  } else if (node.type === 'market') n = { kind: 'market', nodeId, stock: marketStock(seed) }
+  else if (node.type === 'clinic') n = { kind: 'clinic', nodeId }
+  else if (node.type === 'rest') n = { kind: 'rest', nodeId }
+  else {
+    const sc = node.type === 'boss' ? CASE_02 : CASE_01
+    n = { kind: 'story', nodeId, caseId: sc.id }
+    story = { caseId: sc.id, stage: 'prep' }
+  }
+  return withLog(
+    { ...g, story, run: { ...g.run, at: nodeId, path: [...g.run.path, nodeId], node: n, events } },
+    { at: now, kind: 'system', text: `▶ 前往第 ${node.layer + 1} 層的節點。` },
+  )
+}
+
+/** 委託做完（打完或沒打）：報酬、通緝、經驗、名聲、掉寶。 */
+function finishJob(g: Game, now: number, won: boolean): Game {
+  const n = g.run.node as Extract<NodeRun, { kind: 'job' }>
+  const job = JOBS[n.jobId]
+  const c = structuredClone(g.character)
+  const before = { injury: g.character.injury, xp: c.xp, level: c.level, fame: c.fame.total }
+  const log: LogEvent[] = []
+  const roll = rng(hashSeed(c.id, n.nodeId, 'harm'))
+  // 沒打的成功：路上小傷；打過的傷勢已經由戰鬥決定
+  const injury = n.fight ? 0 : Math.round(job.injury * 0.4 * (0.6 + roll() * 0.8))
+  const heatUp = !won && roll() < 0.35 + job.heat * 0.1 ? 1 : 0
+  const full = jobReward(job, perkReward(c, job.direction))
+  const reward = won ? full : Math.round(full * 0.3)
+  // 開打前的傷勢（戰鬥已經改過 c.injury）
+  const startInjury = n.fight ? Math.round(100 - (n.fight.hpStart * 100) / n.fight.maxHp) : before.injury
+  c.injury = Math.min(100, c.injury + injury)
+  c.stress += job.stress
+  c.heat = Math.min(5, c.heat + heatUp)
+  c.credits += reward
+  const picksBefore = c.picks.length
+  if (won && n.fight) offerLoot(c, streetLoot(hashSeed(c.id, n.nodeId, 'loot'), job.tier, c), log, now, job.name)
+  const looted = c.picks.length > picksBefore
+  grantProgress(c, job, won, now, log)
+  const f = n.fight
+  const rows: ResultRow[] = [
+    { label: '結果', value: won ? '完成' : '失手', tone: won ? 'good' : 'bad' },
+    { label: '報酬', value: `+¢${reward}${won ? '' : '（只拿到三成）'}`, tone: 'good' },
+    ...(f ? [{ label: '戰鬥', value: `${f.enemy.name}・${tacticsFor(c).find((t) => t.id === f.tactic)!.label}・${f.won ? '打贏' : '被打退'}・HP ${f.hpStart}→${f.hp}`, tone: f.won ? 'good' : 'bad' } as ResultRow] : []),
+    ...(c.injury !== startInjury ? [{ label: '傷勢', value: `${startInjury}% → ${c.injury}%`, tone: 'bad' } as ResultRow] : []),
+    ...(heatUp ? [{ label: '通緝', value: `+1★（MPD 盯上你了）`, tone: 'bad' } as ResultRow] : []),
+    { label: '神經壓力', value: `+${job.stress + (f?.stress ?? 0)}`, tone: 'warn' },
+    { label: '經驗', value: `+${won ? job.xp : Math.round(job.xp / 3)}${c.level > before.level ? `（升到 Lv.${c.level}）` : ''}` },
+    { label: '名聲', value: `+${c.fame.total - before.fame}`, tone: 'warn' },
+    ...(looted ? [{ label: '戰利品', value: '三選一（節點結束後挑）', tone: 'warn' } as ResultRow] : []),
+  ]
+  const text = won ? `完成「${job.name}」。` : `「${job.name}」失手了。`
+  log.unshift({ at: now, kind: won ? 'job' : 'hurt', text: `${statusPrefix(c)} ${text}${rowsText(rows.slice(1))}` })
+  const after = withLog({ ...g, character: c, run: { ...g.run, node: { ...n, stage: 'done', text, rows } } }, ...log)
+  return withClaim(g, after, { title: job.name, tone: won ? 'success' : 'fail', text, rows: rows.slice(1) })
 }
 
 export function reduce(g: Game, a: Action): Game {
-  const real = a.t === 'tick' ? a.real : Date.now()
-  const now = vnow(g, real)
+  const now = Date.now()
+  const c = g.character
+  const n = g.run.node
   switch (a.t) {
-    case 'tick': {
-      const { g: n } = advance(g, now)
-      return { ...n, clock: { ...g.clock, real, virtual: now } }
+    case 'move': {
+      if (!movable(g).some((x) => x.id === a.nodeId)) return g
+      return enter(g, a.nodeId, now)
     }
-    case 'enqueue': {
-      const job = JOBS[a.jobId]
-      if (workBlock(g.character) || isLethal(job) || g.queue.items.length >= QUEUE_SLOTS) return g
-      const startedAt = g.queue.items.length === 0 ? now : g.queue.startedAt
+    case 'leave': {
+      // 離開節點：記下看過這種節點（之後自動段可以 2 倍速）；劇情大案打完就到安全屋
+      if (!n || !nodeDone(g) || !c.alive) return g
+      const type = findNode(g.run.district, n.nodeId)?.type
+      const boss = n.kind === 'story' && n.caseId === CASE_02.id
+      const dev = n.nodeId === 'dev'
       return {
         ...g,
-        queue: { ...g.queue, items: [...g.queue.items, job.id], startedAt },
-        log: trim([...g.log, { at: now, kind: 'system', text: `排入「${job.name}」（${g.queue.items.length + 1}/${QUEUE_SLOTS}）。` }]),
+        run: { ...g.run, node: null, phase: boss ? 'safehouse' : g.run.phase },
+        meta: type && !dev ? { ...g.meta, seen: { ...g.meta.seen, [type]: true } } : g.meta,
       }
     }
-    case 'clearQueue':
-      return {
-        ...g,
-        queue: { ...g.queue, items: g.queue.items.slice(0, 1) },
-        log: trim([...g.log, { at: now, kind: 'stop', text: '■ 你取消了排隊中還沒開始的工作（正在做的那件會做完）。' }]),
-      }
-    case 'scale':
-      return { ...g, clock: { real, virtual: now, scale: a.scale } }
-    case 'skip': {
-      // 模擬離線：直接把虛擬時鐘往前推，並產生離開期間報告
-      const target = now + a.minutes * 60_000
-      const before = g.character
-      const { g: n, r } = advance(g, target)
-      const away: AwayReport = {
-        awayMs: a.minutes * 60_000,
-        completed: r.completed,
-        credits: r.character.credits - before.credits,
-        points: r.pointsGained,
-        injuryFrom: before.injury,
-        injuryTo: r.character.injury,
-        heatFrom: before.heat,
-        heatTo: r.character.heat,
-        stopped: r.stopped,
-        events: r.events,
-      }
-      return { ...n, clock: { real, virtual: target, scale: g.clock.scale }, away }
+    case 'jobAutoDone': {
+      if (n?.kind !== 'job' || n.stage !== 'auto') return g
+      const job = JOBS[n.jobId]
+      // 火力委託一定要打；入侵、潛行失手被發現也要打
+      if (job.direction === 'force' || !n.ok) return { ...g, run: { ...g.run, node: { ...n, stage: 'fight' } } }
+      return finishJob(g, now, true)
     }
-    case 'dismissAway':
-      return { ...g, away: null }
-    case 'storyStart': {
-      const sc = CASE_BY_ID[a.caseId]
-      if (!sc || workBlock(g.character) || storyBusy(g) || (g.high && g.high.stage !== 'done')) return g
-      if (g.cases[sc.id] || !caseUnlocked(sc, g.cases)) return g
-      // 接劇情委託：排隊中還沒開始的工作暫停
-      return {
-        ...g,
-        story: { caseId: sc.id, stage: 'prep' },
-        queue: { ...g.queue, paused: g.queue.items.length > 0 },
-        log: trim([
-          ...g.log,
-          { at: now, kind: 'system', text: `接下劇情委託「${sc.title}」。${g.queue.items.length ? '排隊中的街頭工作已暫停。' : ''}` },
-        ]),
+    case 'jobFight': {
+      if (n?.kind !== 'job' || n.stage !== 'fight' || n.fight) return g
+      const r = startFight(c, streetEnemy(JOBS[n.jobId]), a.tactic, hashSeed(c.id, n.nodeId, 'fight'))
+      if (!r) return g
+      return { ...g, character: r.c, run: { ...g.run, node: { ...n, fight: r.f } } }
+    }
+    case 'jobFightDone': {
+      if (n?.kind !== 'job' || n.stage !== 'fight' || !n.fight) return g
+      return finishJob(g, now, n.fight.won)
+    }
+    case 'eliteAutoDone': {
+      if (n?.kind !== 'elite' || n.stage !== 'auto') return g
+      const job = JOBS[n.jobId]
+      return { ...g, character: { ...c, stress: c.stress + job.stress }, run: { ...g.run, node: { ...n, stage: 'fight' } } }
+    }
+    case 'eliteFight': {
+      if (n?.kind !== 'elite' || n.stage !== 'fight' || n.fight) return g
+      const r = startFight(c, highDanger(JOBS[n.jobId]).fight, a.tactic, hashSeed(c.id, n.nodeId, 'fight'))
+      if (!r) return g
+      return { ...g, character: r.c, run: { ...g.run, node: { ...n, fight: r.f } } }
+    }
+    case 'eliteFightDone': {
+      if (n?.kind !== 'elite' || n.stage !== 'fight' || !n.fight) return g
+      const f = n.fight
+      const job = JOBS[n.jobId]
+      if (f.won) {
+        // 打贏一定掉寶（稀有表三選一）
+        const ch = structuredClone(c)
+        const log: LogEvent[] = []
+        offerLoot(ch, eliteLoot(hashSeed(ch.id, n.nodeId, 'loot')), log, now, f.enemy.name)
+        return withLog({ ...g, character: ch, run: { ...g.run, node: { ...n, stage: 'danger' } } }, ...log)
       }
+      const reason = `你被${f.enemy.name}打退了，只能撤離。這份工作沒有報酬。`
+      const lost = withLog(
+        { ...g, run: { ...g.run, node: { ...n, stage: 'done', outcome: { kind: 'safe', reason } } } },
+        { at: now, kind: 'warn', text: `${statusPrefix(c)} 「${job.name}」：${reason}` },
+      )
+      return withClaim(g, lost, { title: job.name, tone: 'fail', text: reason })
+    }
+    case 'eliteChoose': {
+      if (n?.kind !== 'elite' || n.stage !== 'danger') return g
+      const job = JOBS[n.jobId]
+      const opt = highDanger(job).options.find((o) => o.id === a.optionId)
+      if (!opt || attrLock(c, opt.attrNeeds)) return g
+      const outcome = resolveDanger(c, opt, hashSeed(c.id, n.nodeId, 'danger'), g.systemFault)
+      const r = settleLethal(g, now, outcome, {
+        label: job.name,
+        safeText: `你放棄了「${job.name}」，空手撤離。`,
+        lossText: '這份工作的報酬沒了。',
+        onSurvive: (ch, log) => {
+          const reward = jobReward(job, perkReward(ch, job.direction))
+          ch.credits += reward
+          ch.heat = Math.min(5, ch.heat + job.heat)
+          log.push({ at: now, kind: 'job', text: `${statusPrefix(ch)} 完成精英委託「${job.name}」。+${reward} 信用點，通緝 +${job.heat}。` })
+          grantProgress(ch, job, true, now, log)
+        },
+      })
+      const done = { ...r, run: { ...r.run, node: { ...n, stage: 'done' as const, outcome } } }
+      const tone = outcome.kind === 'survived' ? 'success' : outcome.kind === 'safe' ? 'partial' : 'rescued'
+      return withClaim(g, done, { title: job.name, tone, text: outcome.kind === 'safe' ? '你空手撤離，但打贏那一場拿到的戰利品還在。' : outcome.reason })
+    }
+    case 'eventChoose': {
+      if (n?.kind !== 'event' || n.stage !== 'choose') return g
+      const ev = EVENT_BY_ID[n.eventId]
+      const o = ev.options.find((x) => x.id === a.optionId)
+      if (!o || eventLock(c, o)) return g
+      const seed = hashSeed(c.id, n.nodeId, o.id)
+      const won = o.chance === undefined || rng(seed)() < o.chance
+      const ch = structuredClone(c)
+      ch.credits -= o.cost ?? 0
+      const log: LogEvent[] = []
+      const { text, rows } = applyEffects(ch, won ? o.win : (o.lose ?? o.win), hashSeed(seed, 'loot'), log, now, ev.title)
+      if (o.cost) rows.unshift({ label: '花費', value: `−¢${o.cost}`, tone: 'bad' })
+      if (o.chance !== undefined) rows.unshift({ label: '判定', value: `${won ? '成功' : '失敗'}（成功率 ${Math.round(o.chance * 100)}%）`, tone: won ? 'good' : 'bad' })
+      log.unshift({ at: now, kind: 'system', text: `${statusPrefix(ch)} 「${ev.title}」：${text}${rowsText(rows)}` })
+      return withLog({ ...g, character: ch, run: { ...g.run, node: { ...n, stage: 'done', text, rows } } }, ...log)
+    }
+    case 'marketBuy': {
+      if (n?.kind !== 'market' || !c.alive) return g
+      const item = n.stock[a.index]
+      if (!item || c.credits < marketPrice(item.price)) return g
+      const price = marketPrice(item.price)
+      return withLog(
+        { ...g, character: { ...c, credits: c.credits - price, stash: [...c.stash, item] }, run: { ...g.run, node: { ...n, stock: n.stock.filter((_, i) => i !== a.index) } } },
+        { at: now, kind: 'system', text: `黑市：買下「${item.name}」（-${price} 信用點），放進背包。` },
+      )
+    }
+    case 'buyLifeline': {
+      if (n?.kind !== 'market' || !c.alive || c.credits < LIFELINE_PRICE) return g
+      return withLog(
+        { ...g, character: { ...c, credits: c.credits - LIFELINE_PRICE, lifelines: c.lifelines + 1 } },
+        { at: now, kind: 'system', text: `黑市：買了一張救命保單（-${LIFELINE_PRICE} 信用點）。受致命傷時武裝醫療隊會救你一次。` },
+      )
+    }
+    case 'sell': {
+      const item = c.stash.find((i) => i.id === a.itemId)
+      if (n?.kind !== 'market' || !c.alive || !item) return g
+      return withLog(
+        { ...g, character: { ...c, stash: c.stash.filter((i) => i.id !== item.id), credits: c.credits + sellValue(item) } },
+        { at: now, kind: 'system', text: `黑市：賣掉「${item.name}」（+${sellValue(item)} 信用點）。` },
+      )
+    }
+    case 'treat': {
+      const cost = c.injury * CLINIC.perPoint
+      if (n?.kind !== 'clinic' || !c.alive || c.credits < cost || (c.injury === 0 && c.stress === 0)) return g
+      return withLog(
+        { ...g, character: { ...c, credits: c.credits - cost, injury: 0, stress: Math.max(0, c.stress - CLINIC.stress) } },
+        { at: now, kind: 'system', text: `白蛇的診所幫你縫好了傷口（-${cost} 信用點，神經壓力 −${CLINIC.stress}）。` },
+      )
+    }
+    case 'buyImplant': {
+      // 診所的義體：買了直接裝上（裝不下就不賣），半價
+      const def = ITEMS[a.kind]
+      const price = def ? marketPrice(def.price) : 0
+      if (n?.kind !== 'clinic' || !c.alive || !SHOP_IMPLANTS.includes(a.kind) || c.credits < price || implantRoom(c) < def.load) return g
+      const item = makeItem(a.kind, `${n.nodeId}-${c.equipment.length}`)
+      return withLog(
+        { ...g, character: { ...c, credits: c.credits - price, equipment: [...c.equipment, item], implantLoad: c.implantLoad + item.load } },
+        { at: now, kind: 'system', text: `白蛇幫你裝上了「${item.name}」（-${price} 信用點，義體負荷 +${item.load}）。` },
+      )
+    }
+    case 'rest': {
+      if (n?.kind !== 'rest' || n.used || !c.alive) return g
+      const ch = { ...c, stress: Math.max(0, c.stress - REST.stress) }
+      if (a.choice === 'heal') ch.injury = Math.max(0, c.injury - REST.heal)
+      else ch.heat = Math.max(0, c.heat - REST.heat)
+      const text = a.choice === 'heal' ? `你在膠囊旅館睡了一覺（傷勢 −${REST.heal}%）。` : `你在網咖躲了一晚，等 MPD 的注意力移開（通緝 −${REST.heat}）。`
+      return withLog({ ...g, character: ch, run: { ...g.run, node: { ...n, used: true } } }, { at: now, kind: 'system', text: `${statusPrefix(ch)} ${text}` })
     }
     case 'storyApproach': {
-      if (g.story.stage !== 'prep') return g
-      const ap = CASE_BY_ID[g.story.caseId!].approaches.find((x) => x.id === a.id)
-      if (!ap || attrLock(g.character, ap.needs)) return g
+      if (g.story.stage !== 'prep' || !g.story.caseId) return g
+      const ap = CASE_BY_ID[g.story.caseId].approaches.find((x) => x.id === a.id)
+      if (!ap || attrLock(c, ap.needs)) return g
       return { ...g, story: { ...g.story, stage: 'auto', approach: a.id } }
     }
     case 'storyAutoDone': {
-      if (g.story.stage !== 'auto') return g
-      const sc = CASE_BY_ID[g.story.caseId!]
+      if (g.story.stage !== 'auto' || !g.story.caseId) return g
+      const sc = CASE_BY_ID[g.story.caseId]
       const ap = sc.approaches.find((x) => x.id === g.story.approach) ?? sc.approaches[0]
       return {
         ...g,
-        character: { ...g.character, injury: Math.min(100, g.character.injury + ap.injury), stress: g.character.stress + 6 },
+        character: { ...c, injury: Math.min(100, c.injury + ap.injury), stress: c.stress + 6 },
         story: { ...g.story, stage: ap.fight ? 'fight' : 'danger' },
       }
     }
     case 'storyFight': {
-      if (g.story.stage !== 'fight' || g.story.fight) return g
-      const sc = CASE_BY_ID[g.story.caseId!]
-      const enemy = fightEnemy(sc, g.story)
-      const r = startFight(g.character, enemy, a.tactic, hashSeed(g.character.id, sc.id, 'fight', g.story.option ?? ''))
+      if (g.story.stage !== 'fight' || g.story.fight || !g.story.caseId) return g
+      const sc = CASE_BY_ID[g.story.caseId]
+      const r = startFight(c, fightEnemy(sc, g.story), a.tactic, hashSeed(c.id, sc.id, 'fight', g.story.option ?? ''))
       if (!r) return g
       return { ...g, character: r.c, story: { ...g.story, fight: r.f } }
     }
     case 'storyFightDone': {
       const f = g.story.fight
-      if (g.story.stage !== 'fight' || !f) return g
-      const sc = CASE_BY_ID[g.story.caseId!]
-      if (f.won) {
-        // 打贏的戰利品（自己的 seed）
-        const c = structuredClone(g.character)
-        const log: LogEvent[] = []
-        stashLoot(c, fightLoot(hashSeed(c.id, sc.id, 'loot', g.story.option ?? 'approach')), log, now, f.enemy.name)
-        g = { ...g, character: c, log: trim([...g.log, ...log]) }
-      }
+      if (g.story.stage !== 'fight' || !f || !g.story.caseId) return g
+      const sc = CASE_BY_ID[g.story.caseId]
       if (g.story.option) {
         // 危險節點選了「打」：打贏＝生還；打輸才擲致命判定，沒死也只是被打退、沒有報酬
         const picked = sc.danger.options.find((o) => o.id === g.story.option)!
         if (f.won) return closeCase(g, now, sc, picked, { kind: 'survived', reason: picked.text }, true)
-        const c = g.character
         const opt = caseDangerOption(c, sc, g.story.approach, picked.id)
-        const o = resolveDanger(c, opt, g.coverage, hashSeed(c.id, sc.id, opt.id), g.systemFault)
+        const o = resolveDanger(c, opt, hashSeed(c.id, sc.id, opt.id), g.systemFault)
         const lost = `你被${f.enemy.name}打倒在地，最後只能拖著傷撤退。委託失敗，沒有報酬。`
         return closeCase(g, now, sc, picked, o.kind === 'survived' ? { kind: 'safe', reason: lost } : o, false)
       }
       const ap = sc.approaches.find((x) => x.id === g.story.approach)!
       if (f.won) {
         const heat = ap.fightHeat ?? 0
-        const c = { ...g.character, heat: Math.min(5, g.character.heat + heat) }
-        const log = heat ? [{ at: now, kind: 'warn' as const, text: `${statusPrefix(c)} 你打倒了${f.enemy.name}，MPD 記住了你的臉（通緝 +${heat}）。` }] : []
-        return { ...g, character: c, log: trim([...g.log, ...log]), story: { ...g.story, stage: 'danger', fight: undefined } }
+        const ch = { ...c, heat: Math.min(5, c.heat + heat) }
+        const log: LogEvent[] = heat ? [{ at: now, kind: 'warn', text: `${statusPrefix(ch)} 你打倒了${f.enemy.name}，MPD 記住了你的臉（通緝 +${heat}）。` }] : []
+        return withLog({ ...g, character: ch, story: { ...g.story, stage: 'danger', fight: undefined } }, ...log)
       }
       const reason = `你被${f.enemy.name}打退了，只能先撤。委託失敗，沒有報酬。`
       const record: CaseRecord = { approach: g.story.approach ?? '', optionId: 'retreat', outcome: 'safe', reason }
-      return {
-        ...g,
-        story: { caseId: null, stage: 'open' },
-        cases: { ...g.cases, [sc.id]: record },
-        queue: resumeQueue(g.queue, now),
-        log: trim([...g.log, { at: now, kind: 'warn', text: `${statusPrefix(g.character)} 「${sc.title}」：${reason}` }]),
-      }
+      const lost = withLog(
+        { ...g, story: { caseId: null, stage: 'prep' }, run: { ...g.run, cases: { ...g.run.cases, [sc.id]: record } } },
+        { at: now, kind: 'warn', text: `${statusPrefix(c)} 「${sc.title}」：${reason}` },
+      )
+      return withClaim(g, lost, { title: sc.title, tone: 'fail', text: reason })
     }
     case 'storyChoose': {
-      if (g.story.stage !== 'danger') return g
-      const sc = CASE_BY_ID[g.story.caseId!]
+      if (g.story.stage !== 'danger' || !g.story.caseId) return g
+      const sc = CASE_BY_ID[g.story.caseId]
       const picked = sc.danger.options.find((o) => o.id === a.optionId)
-      if (!picked || optionLock(g.character, g.story.approach, picked) !== undefined) return g
+      if (!picked || optionLock(c, g.story.approach, picked) !== undefined) return g
       if (picked.fight) return { ...g, story: { ...g.story, stage: 'fight', option: picked.id, fight: undefined } }
-      const c = g.character
       const opt = caseDangerOption(c, sc, g.story.approach, picked.id)
-      let outcome = resolveDanger(c, opt, g.coverage, hashSeed(c.id, sc.id, opt.id), g.systemFault)
+      let outcome = resolveDanger(c, opt, hashSeed(c.id, sc.id, opt.id), g.systemFault)
       if (outcome.kind === 'safe' || outcome.kind === 'survived') outcome = { kind: picked.wins ? 'survived' : outcome.kind, reason: picked.text }
       return closeCase(g, now, sc, picked, outcome, true)
     }
-    case 'storyRetry': {
-      // 只有測試案可以重來；正式案一個角色一次
-      if (CASE_BY_ID[a.caseId]?.kind !== 'test' || !g.cases[a.caseId]) return g
-      const { [a.caseId]: _, ...rest } = g.cases
-      return { ...g, cases: rest }
+    case 'claim': {
+      // 收下完成單：之後才能離開節點，三選一也才跳出來
+      if (!g.run.claim) return g
+      return { ...g, run: { ...g.run, claim: null } }
     }
-    case 'highStart': {
-      const job = JOBS[a.jobId]
-      if (workBlock(g.character) || !isLethal(job) || storyBusy(g) || (g.high && g.high.stage !== 'done')) return g
-      return {
-        ...g,
-        high: { jobId: job.id, stage: 'auto' },
-        queue: { ...g.queue, paused: g.queue.items.length > 0 },
-        log: trim([
-          ...g.log,
-          { at: now, kind: 'warn', text: `⚠ 接下高階工作「${job.name}」（可能永久死亡）。${g.queue.items.length ? '排隊中的街頭工作已暫停。' : ''}` },
-        ]),
-      }
+    case 'retire': {
+      if (g.run.phase !== 'safehouse' || !c.alive || c.picks.length) return g
+      const text = `你在安全屋收起了槍。魔都會記得「${c.name}」這個名字。`
+      return endCareer(withLog(g, { at: now, kind: 'level', text: `★ 退休：${text}` }), 'retired', text, now)
     }
-    case 'highAutoDone': {
-      if (!g.high) return g
-      const job = JOBS[g.high.jobId]
-      const fight = highDanger(job).fight
-      return {
-        ...g,
-        character: {
-          ...g.character,
-          injury: fight ? g.character.injury : Math.min(100, g.character.injury + Math.round(job.injury / 2)),
-          stress: g.character.stress + job.stress,
-        },
-        high: { ...g.high, stage: fight ? 'fight' : 'danger' },
+    case 'pickPerk': {
+      // 名聲卡三選一：只能挑最前面那一組裡的卡
+      const p = c.picks[0]
+      if (!c.alive || p?.kind !== 'perk' || !perkOptions(c, p.seed).includes(a.id)) return g
+      const def = PERKS[a.id]
+      const lv = (c.perks[a.id] ?? 0) + (def.instant ? 0 : 1)
+      const next: Character = {
+        ...c,
+        picks: c.picks.slice(1),
+        perks: def.instant ? c.perks : { ...c.perks, [a.id]: lv },
+        credits: c.credits + (def.instant === 'cash' ? PERK_CASH : 0),
+        injury: def.instant === 'heal' ? 0 : c.injury,
       }
+      const text = def.instant ? `◆ 名聲 Lv.${p.level}：${def.name}（${def.desc}）。` : `★ 名聲 Lv.${p.level}：拿到「${def.name}」${lv > 1 ? ` Lv.${lv}` : ''}（${def.desc}）。`
+      return withLog({ ...g, character: next }, { at: now, kind: 'level', text })
     }
-    case 'highFight': {
-      if (!g.high || g.high.stage !== 'fight' || g.high.fight) return g
-      const job = JOBS[g.high.jobId]
-      const r = startFight(g.character, highDanger(job).fight!, a.tactic, hashSeed(g.character.id, 'high-fight', job.id, g.highSeq))
-      if (!r) return g
-      return { ...g, character: r.c, high: { ...g.high, fight: r.f } }
-    }
-    case 'highFightDone': {
-      const f = g.high?.fight
-      if (!g.high || g.high.stage !== 'fight' || !f) return g
-      if (f.won) {
-        const c = structuredClone(g.character)
-        const log: LogEvent[] = []
-        stashLoot(c, fightLoot(hashSeed(c.id, 'high-loot', g.high.jobId, g.highSeq)), log, now, f.enemy.name)
-        return { ...g, character: c, log: trim([...g.log, ...log]), high: { ...g.high, stage: 'danger' } }
-      }
-      const job = JOBS[g.high.jobId]
-      const reason = `你被${f.enemy.name}打退了，只能撤離。這份工作沒有報酬。`
-      return {
-        ...g,
-        high: { ...g.high, stage: 'done', outcome: { kind: 'safe', reason } },
-        highSeq: g.highSeq + 1,
-        queue: resumeQueue(g.queue, now),
-        log: trim([...g.log, { at: now, kind: 'warn', text: `${statusPrefix(g.character)} 「${job.name}」：${reason}` }]),
-      }
-    }
-    case 'highChoose': {
-      if (!g.high) return g
-      const job = JOBS[g.high.jobId]
-      const opt = highDanger(job).options.find((o) => o.id === a.optionId)
-      if (!opt || attrLock(g.character, opt.attrNeeds)) return g
-      const c = g.character
-      const outcome = resolveDanger(c, opt, g.coverage, hashSeed(c.id, 'high', job.id, g.highSeq), g.systemFault)
-      let supply = 0
-      const r = settleLethal(g, now, outcome, {
-        label: job.name,
-        zone: '高階工作',
-        safeText: `你放棄了「${job.name}」，空手撤離。`,
-        lossText: '這份工作的報酬沒了。',
-        onSurvive: (ch, log) => {
-          const reward = jobReward(job, ch.prof[job.direction].level)
-          ch.credits += reward
-          ch.heat = Math.min(5, ch.heat + job.heat)
-          const extra: LogEvent[] = []
-          const pts = grantProgress(ch, job, true, now, extra)
-          if (job.direction === 'stealth') supply = 1
-          stashLoot(ch, fightLoot(hashSeed(ch.id, 'high-reward', job.id, g.highSeq)), extra, now, job.name)
-          log.push({ at: now, kind: 'job', text: `${statusPrefix(ch)} 完成高階工作「${job.name}」。+${reward} 信用點，週榜 +${pts}，通緝 +${job.heat}。` }, ...extra)
-        },
-      })
-      return {
-        ...r.g,
-        city: { supply: Math.min(CITY_TARGET, r.g.city.supply + supply) },
-        high: { ...g.high, stage: 'done', outcome: r.outcome },
-        highSeq: g.highSeq + 1,
-      }
-    }
-    case 'highClose':
-      return { ...g, high: null }
-    case 'buyCoverage': {
-      if (g.coverage.active || g.character.credits < 400) return g
-      return {
-        ...g,
-        character: { ...g.character, credits: g.character.credits - 400 },
-        coverage: { ...g.coverage, active: true },
-        log: trim([...g.log, { at: now, kind: 'system', text: '購買武裝醫療基本保單（-400 信用點）。覆蓋新宿街區，預估 3 分鐘抵達。' }]),
-      }
-    }
-    case 'treat': {
-      const cost = g.character.injury * CLINIC.perPoint
-      if (!g.character.alive || g.character.credits < cost || g.character.injury === 0) return g
-      return {
-        ...g,
-        character: { ...g.character, credits: g.character.credits - cost, injury: 0, stress: Math.max(0, g.character.stress - CLINIC.stress) },
-        log: trim([...g.log, { at: now, kind: 'system', text: `白蛇的診所幫你縫好了傷口（-${cost} 信用點）。` }]),
-      }
-    }
-    case 'hospital': {
-      const c = g.character
-      const cost = c.injury * HOSPITAL.perPoint
-      if (!c.alive || c.credits < cost || c.heat > HOSPITAL.maxHeat || (c.injury === 0 && c.stress === 0)) return g
-      return {
-        ...g,
-        character: { ...c, credits: c.credits - cost, injury: 0, stress: Math.max(0, c.stress - HOSPITAL.stress) },
-        log: trim([...g.log, { at: now, kind: 'system', text: `魔都綜合醫院：傷口與神經都做了完整處理（-${cost} 信用點，神經壓力 −${HOSPITAL.stress}）。` }]),
-      }
-    }
-    case 'redeem': {
-      const c = redeem(g.character, a.itemId)
-      if (!c) return g
-      const item = g.character.pawned.find((p) => p.item.id === a.itemId)!
-      return {
-        ...g,
-        character: c,
-        log: trim([...g.log, { at: now, kind: 'system', text: `贖回「${item.item.name}」（-${item.redeem} 信用點）。` }]),
-      }
-    }
-    case 'buy': {
-      // 白蛇的診所：買了直接裝上（裝不下就不賣）
-      const c = g.character
-      const def = ITEMS[a.kind]
-      if (!c.alive || gearBusy(g) || !SHOP_IMPLANTS.includes(a.kind) || c.credits < def.price || implantRoom(c) < def.load) return g
-      const item = makeItem(a.kind, now)
-      return {
-        ...g,
-        character: { ...c, credits: c.credits - def.price, equipment: [...c.equipment, item], implantLoad: c.implantLoad + item.load },
-        log: trim([...g.log, { at: now, kind: 'system', text: `白蛇幫你裝上了「${item.name}」（-${def.price} 信用點，義體負荷 +${item.load}）。` }]),
-      }
+    case 'pickItem': {
+      // 戰利品三選一：挑的那件放進背包，其他兩件不要了
+      const p = c.picks[0]
+      const item = p?.kind === 'item' ? p.options[a.index] : undefined
+      if (!c.alive || !item || p?.kind !== 'item') return g
+      return withLog(
+        { ...g, character: { ...c, picks: c.picks.slice(1), stash: [...c.stash, item] } },
+        { at: now, kind: 'gain', text: `◆ 從「${p.from}」的戰利品裡挑了「${item.name}」，放進背包。` },
+      )
     }
     case 'equip': {
       // 從背包裝上：義體要裝得下；武器與作業設備一次一件，換下來的放回背包
-      const c = g.character
       const item = c.stash.find((i) => i.id === a.itemId)
       if (!c.alive || gearBusy(g) || !item) return g
       if (item.slot === 'implant' && implantRoom(c) < item.load) return g
       const swapped = item.slot === 'implant' ? [] : c.equipment.filter((i) => i.slot === item.slot)
-      return {
-        ...g,
-        character: {
-          ...c,
-          stash: [...c.stash.filter((i) => i.id !== item.id), ...swapped],
-          equipment: [...c.equipment.filter((i) => !swapped.includes(i)), item],
-          implantLoad: c.implantLoad + item.load,
+      return withLog(
+        {
+          ...g,
+          character: {
+            ...c,
+            stash: [...c.stash.filter((i) => i.id !== item.id), ...swapped],
+            equipment: [...c.equipment.filter((i) => !swapped.includes(i)), item],
+            implantLoad: c.implantLoad + item.load - swapped.reduce((s, i) => s + i.load, 0),
+          },
         },
-        log: trim([...g.log, { at: now, kind: 'system', text: `裝上「${item.name}」${swapped.length ? `，換下「${swapped[0].name}」` : ''}。` }]),
-      }
+        { at: now, kind: 'system', text: `裝上「${item.name}」${swapped.length ? `，換下「${swapped[0].name}」` : ''}。` },
+      )
     }
     case 'unequip': {
-      const c = g.character
       const item = c.equipment.find((i) => i.id === a.itemId)
       if (!c.alive || gearBusy(g) || !item) return g
-      return {
-        ...g,
-        character: { ...c, equipment: c.equipment.filter((i) => i.id !== item.id), stash: [...c.stash, item], implantLoad: c.implantLoad - item.load },
-        log: trim([...g.log, { at: now, kind: 'system', text: `卸下「${item.name}」，放進背包。` }]),
-      }
-    }
-    case 'sell': {
-      const c = g.character
-      const item = c.stash.find((i) => i.id === a.itemId)
-      if (!c.alive || !item) return g
-      return {
-        ...g,
-        character: { ...c, stash: c.stash.filter((i) => i.id !== item.id), credits: c.credits + sellValue(item) },
-        log: trim([...g.log, { at: now, kind: 'system', text: `賣掉「${item.name}」（+${sellValue(item)} 信用點）。` }]),
-      }
+      return withLog(
+        { ...g, character: { ...c, equipment: c.equipment.filter((i) => i.id !== item.id), stash: [...c.stash, item], implantLoad: c.implantLoad - item.load } },
+        { at: now, kind: 'system', text: `卸下「${item.name}」，放進背包。` },
+      )
     }
     case 'raiseAttr': {
       // 分配屬性點：不能退回
-      const c = g.character
       if (!c.alive || c.attrPoints <= 0 || c.attrs[a.attr] >= ATTR_MAX) return g
-      return {
-        ...g,
-        character: { ...c, attrs: { ...c.attrs, [a.attr]: c.attrs[a.attr] + 1 }, attrPoints: c.attrPoints - 1 },
-        log: trim([...g.log, { at: now, kind: 'level', text: `★ ${ATTR_LABEL[a.attr]}提升到 ${c.attrs[a.attr] + 1}。` }]),
-      }
+      return withLog(
+        { ...g, character: { ...c, attrs: { ...c.attrs, [a.attr]: c.attrs[a.attr] + 1 }, attrPoints: c.attrPoints - 1 } },
+        { at: now, kind: 'level', text: `★ ${ATTR_LABEL[a.attr]}提升到 ${c.attrs[a.attr] + 1}。` },
+      )
     }
-    case 'setTactic':
-      return { ...g, stopRules: { ...g.stopRules, tactic: a.tactic } }
+    case 'devTestCase': {
+      // 開發工具：在地圖上（沒進節點時）直接跑一次測試案，可以重複
+      if (n || !c.alive || g.run.phase !== 'map') return g
+      const { [TEST_CASE.id]: _, ...cases } = g.run.cases
+      return { ...g, story: { caseId: TEST_CASE.id, stage: 'prep' }, run: { ...g.run, cases, node: { kind: 'story', nodeId: 'dev', caseId: TEST_CASE.id } } }
+    }
     case 'toggleFault':
       return { ...g, systemFault: !g.systemFault }
     case 'newCharacter': {
-      const n = g.careers.length + 1
-      const c = newCharacter(n, real)
-      return {
-        ...initial(real),
-        character: c,
-        careers: g.careers,
-        city: g.city,
-        clock: g.clock,
-        log: [{ at: now, kind: 'system', text: `新的生涯開始：${c.name}。前一個角色的紀錄保存在「紀錄」裡。` }],
-      }
+      if (c.alive && g.run.phase !== 'over') return g
+      return initial(now, g.meta)
     }
     case 'reset':
-      return initial(real)
+      return initial(now)
   }
 }
 
 function load(): Game {
   const now = Date.now()
+  let meta: Meta = { legends: [], seen: {} }
   try {
-    const raw = localStorage.getItem(KEY)
+    const m = localStorage.getItem(META_KEY)
+    if (m) meta = JSON.parse(m) as Meta
+    const raw = localStorage.getItem(RUN_KEY)
     if (raw) {
-      const g = JSON.parse(raw) as Game
-      if (g.v === 1) {
-        // 真的離開 ≥3 分鐘：伺服器補算（這裡在本機模擬）並給報告
-        const gapReal = now - g.clock.real
-        if (gapReal >= 180_000 && g.queue.items.length) {
-          const minutes = (gapReal * g.clock.scale) / 60_000
-          return reduce({ ...g, clock: { ...g.clock, real: now } }, { t: 'skip', minutes })
-        }
-        return g
-      }
+      const g = JSON.parse(raw) as Omit<Game, 'meta'>
+      if (g.v === 2) return { ...g, meta }
     }
   } catch {
     /* 存檔壞掉就重來 */
   }
-  return initial(now)
+  return initial(now, meta)
 }
 
 export function useGame() {
   const [g, dispatch] = useReducer(reduce, undefined, load)
   useEffect(() => {
+    // 生涯（單一欄位）與跨生涯資料分開存；每走一步都存
     try {
-      localStorage.setItem(KEY, JSON.stringify(g))
+      const { meta, ...run } = g
+      localStorage.setItem(RUN_KEY, JSON.stringify(run))
+      localStorage.setItem(META_KEY, JSON.stringify(meta))
     } catch {
       /* 私密模式等情況忽略 */
     }
   }, [g])
-  useEffect(() => {
-    const id = setInterval(() => dispatch({ t: 'tick', real: Date.now() }), 1000)
-    return () => clearInterval(id)
-  }, [])
   const act = useCallback((a: Action) => dispatch(a), [])
-  return { g, act, now: vnow(g) }
+  return { g, act }
 }
 
-export { jobReward }
+export type { Action }

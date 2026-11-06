@@ -2,6 +2,40 @@
 
 由根目錄 `Progress.md` 拆出（2026-11-02）。新的放最上面；每次 commit、出門／下班／暫停前更新本檔，根目錄只更新一行摘要。共用模組說明見 [README](README.md)。
 
+## 2026-11-06｜第二批 kit 深讀與 CodeGraph MCP（未提交）
+
+- 專案／分支：godot-kit／master；使用者授權繼續並可安裝 CodeGraph MCP／skill。
+- 已完成：全文研究 gacha、card_draft、pet_care、march_strip、hd2d_look、hd2d_stage、sprite3d_actor、pixel_card3d、camera_shot、nine_slice；限制回填 catalog/specs.json 並再生能力目錄與 REFERENCE。詳見 `docs/KIT-RESEARCH-02.md`。
+- 覆蓋：累計 36 項實作研究（含選讀）、8 項前階段、26 項仍清單盤點；未宣稱全庫或全部原型完整研究／驗收。
+- 工具：CodeGraph v0.9.9 CLI 已可用；目前索引無 .gd。local installer 不支援 Codex，取得沙箱外寫入授權後，global installer 成功加入 ~/.codex/config.toml；需重啟 session 載入 MCP。本輪實際以 CLI 找到 capabilities.py 的 api；GDScript 用既有 codebase-memory MCP。
+- 驗證：文件層；`python3 prototypes/godot-kit/tools/capabilities.py build` 成功生成 70 項，check 為生成一致性檢查。遊戲測試維持延期，無新的 runtime PASS；沒有改 runtime 或同步副本。
+- 下一步：補讀剩餘 inspection／authoring／VFX／gallery，並依既有 P0/P1 順序重構。codegraph MCP 待新 session 實際連線；不用重複安裝。本機 .codegraph 索引與其他 session 的 mortal-city 修改保留，未 commit／push。
+
+## 2026-11-06｜跨 kit 與 16 原型的實作研究（未提交）
+
+- 專案／分支：godot-kit／master；承接使用者「好，研究／繼續」。本段只新增研究文件與入口，沒有再改 runtime、同步副本、commit 或 push。
+- 已完成：跨存檔、時鐘、交易／領獎、戰鬥、觸控／安全區、鏡頭／載入、敘事編譯、VFX／Sprite、音訊／平台與工具的關鍵路徑比較。每個結論附來源、抽取邊界與優先順序。
+- 重要產物：`docs/REUSE-RESEARCH.md`、`docs/RESEARCH-COVERAGE.md`、`docs/REUSE-CONTRACT-DRAFTS.md`；README 與 REUSE-AUDIT 已連結，修正 star-tide 釣魚「僅單一需求」的過度簡化。
+- 結論：先回收 seal／taskbar 的存檔驗證與備份保護；處理 camera／loader／audio 的所有權，再抽 touch scene 與 glow batch；inventory 共用交易邊界，story compiler 先在 debt 拆 seam。完整戰鬥、離線收益、釣魚與遊戲規則不硬合併。
+- 已知靜態風險：camera_shake 關閉震動可留下偏移、scene_loader 覆寫 in-flight request、music 修改共用 stream loop、save_slots 缺 payload validator。尚未重現或修正；不要當成本輪執行測試結果。
+- 部分／未完成：70 項 kit 逐項標示深度；26 項本次實作研究（含選讀）、8 項前階段、36 項仍為清單盤點。16 原型均有來源比較，但未逐行審完 666 支，也未審完 StoryRunner／battle 或全部工具／場景。外移 repo、完整歷史與素材授權重審未涵蓋。草案 API 全部標示未實作，不登記為可用能力。
+- 驗證：規劃／文件層，不執行測試；只檢查新增文件本地連結與 diff 格式。使用者延期 weighted_choice 重構後測試仍延期；此前 PASS 只適用下段列明範圍。
+- 下一步：依 P0/P1 順序做小批重構，先修正正式契約再遷移指定消費者；恢復測試時先驗 weighted_choice 與四個已改消費者。進一步來源深讀按覆蓋表補齊，不能宣稱完整研究已窮盡。
+- 工作區：保留先前 kit 未提交程式／目錄／scene／測試與 LESSONS；另有 mortal-city session 的未提交修改，未觸碰。
+
+## 2026-11-06｜Godot 能力庫盤點與組合式重構（未提交）
+
+- 專案／分支：godot-kit／master；本輪基準查得 `860e6fb7`（最新以 git log -1 為準）。未 commit／push；開始工作區乾淨，未同步或改寫其他遊戲的 kit 副本。
+- 已完成盤點：16 個頂層 Godot 原型；自有 GDScript 公開 API、kit 靜態引用／副本差異、23 組逐位元組重複來源；另列場景、Resource 與 shader uniforms。二進位美術只計數，不宣稱授權與外觀審查；外移 repo、完整 git 歷史與 art_src 巢狀專案未涵蓋。
+- 已完成工具庫：70 支腳本能力與 9 項 CLI 的用途、情境、輸入輸出、參數、範例、限制與來源採用證據；`catalog/specs.json`／`tools.json` 為人工語義來源，`tools/capabilities.py` 提供 list/show/plan/build/check/inventory，生成 JSON 契約、REFERENCE、資源清單與盤點。plan 僅靜態依賴參考，不是選擇性安裝器。附 `catalog/schema.json`。
+- 已完成重構：`fixed_step.gd` 抽取 skybound 與 dreamling 的時間累積政策（retain/drop）；`damage_numbers_3d.gd`＋兩個保存 scene 抽取三款存活遊戲相同數字池，支援世界座標、專屬 RNG、容量／顏色／生命週期調校；`weighted_choice.gd` 抽取有序浮點權重核心，rarity/chest_shop/run_timeline/refine_ladder 四個既有模組已改用。gacha 的整數抽取與 card_draft 的 <= 邊界保留。
+- 使用者最新優先序：**主要先著重重構，測試可以先緩**。停止新增／擴大測試；weighted_choice 及四個消費模組重構後尚未重跑，不能沿用此前 PASS 宣稱本輪最終程式驗收。
+- 此前 L2 證據：Python 工具 5 tests OK；Godot composition 37 checks PASS、既有 survivor 109 checks PASS；scene headless 匯入 exit 0；隔離變異 return 0 使 composition 4 FAIL（exit 1）。完整命令、log 與有效範圍在 `docs/capabilities/VALIDATION.md`。後段只再生目錄與審查 diff，沒有新的測試證據。
+- 相容性／限制：新數字池用世界座標與獨立 RNG；fixed_step drop 保留小數餘額；weighted_choice 對非法／零權重明確拒絕且不消耗 RNG，四個上層有對應失敗結果。這些不是無條件零行為差異；遷移舊遊戲需逐款確認。GPU／手機／Web／效能及完整 L3 未驗。
+- 重要入口：`README.md`、`docs/COMPOSITION.md`、`docs/REUSE-AUDIT.md`、`docs/capabilities/REFERENCE.md`、`catalog/`、新增三個原語、`tests/test_capability_composition.gd`。製作工具不得二次 free SceneBuilder 已接手釋放的 root，已修正並記錄教訓。
+- 未提交狀態：本輪 kit 原始碼／scene／工具／測試／目錄／文件，加根 Progress 與 LESSONS；Godot 匯入產生的不相關 UID 已清理，保留本輪新增檔案的 UID。
+- 後續：依使用者指定繼續消除重複與拆分候選耦合；glow_pool 需 shader/material/scene 一起抽、inventory 需注入 item catalog、story_build 需分離 graph IR 與 ADV 指令。恢復驗證時先 weighted_choice／四個消費者 L1/L2，再挑指定遊戲遷移，不批次同步。
+
 ## 2026-11-01｜46 種 Three.js 原生移植
 
 - 專案／分支：godot-kit／master，基準 `fad04133`。使用者要求「移植 threejs 的」，前輪其餘 44 份已接續實作，現有全部 **46 份**對應 Godot 原生 scene。未 commit／push／公開部署，其他原型／圖片既有修改及 `tools/vfx/pixle_vfx_forge.md` 保留。

@@ -1,0 +1,110 @@
+[
+  {
+    "id": "tool.sprite_atlas",
+    "path": "tools/sprite_atlas.py",
+    "purpose": "角色圖集打包",
+    "use_when": "角色圖集打包",
+    "kind": "tool",
+    "status": "既有工具；本輪只驗證 capabilities 工具，其餘沿用既有行為",
+    "parameters": "manifest.json 路徑；--out 輸出資料夾；cell_px、columns、foot_px、meters_per_px、characters 見腳本 manifest 規格",
+    "outputs": "atlas.png + sheets.json；錯誤以非零退出，不靜默縮圖",
+    "example": "uv run --with pillow tools/sprite_atlas.py manifest.json --out /tmp/hero-atlas",
+    "constraints": "需要 Pillow；覆寫輸出路徑；角色比例與腳底對齊依 manifest。"
+  },
+  {
+    "id": "tool.subset_font",
+    "path": "tools/subset_font.py",
+    "purpose": "CJK 字型子集",
+    "use_when": "CJK 字型子集",
+    "kind": "tool",
+    "status": "既有工具；本輪只驗證 capabilities 工具，其餘沿用既有行為",
+    "parameters": "--project 遊戲路徑；--source 字型；--out 輸出；--weight 可選；--check 唯讀",
+    "outputs": "子集 TTF/OTF 或缺字報告；錯誤非零",
+    "example": "python3 tools/subset_font.py --project ../pixel-monster --source /path/font.ttf --check",
+    "constraints": "需要 fonttools；字型授權與 Reserved Font Name 保留；動態內容需擴充字元集合。"
+  },
+  {
+    "id": "tool.build_web",
+    "path": "tools/web/build_web.sh",
+    "purpose": "Web 匯出與 IDBFS 補丁",
+    "use_when": "Web 匯出與 IDBFS 補丁",
+    "kind": "tool",
+    "status": "既有工具；本輪只驗證 capabilities 工具，其餘沿用既有行為",
+    "parameters": "遊戲目錄；--zip-name 可選；GODOT_BIN 與 FETCH_ARGS 環境變數",
+    "outputs": "build/web/index.html 與壓縮包；失敗非零",
+    "example": "bash tools/web/build_web.sh ../my-game --zip-name my-game-web",
+    "constraints": "會下載對版模板、改寫 build 產物；需名為 Web 的匯出 preset。不是部署。"
+  },
+  {
+    "id": "tool.run_tests",
+    "path": "tools/run_tests.sh",
+    "purpose": "嚴格 headless 測試執行",
+    "use_when": "嚴格 headless 測試執行",
+    "kind": "tool",
+    "status": "既有工具；本輪只驗證 capabilities 工具，其餘沿用既有行為",
+    "parameters": "project；suite[:fps] 清單；GODOT_BIN、TEST_TIMEOUT",
+    "outputs": "暫存目錄日誌；失敗非零；檢查 PASSED 與腳本錯誤",
+    "example": "bash tools/run_tests.sh . capability_composition",
+    "constraints": "需要 timeout 指令；會執行遊戲測試，先確認測試不觸及真實 user:// 存檔。"
+  },
+  {
+    "id": "tool.capture",
+    "path": "tools/capture.sh",
+    "purpose": "固定影格遊戲錄影",
+    "use_when": "固定影格遊戲錄影",
+    "kind": "tool",
+    "status": "既有工具；本輪只驗證 capabilities 工具，其餘沿用既有行為",
+    "parameters": "project、output、frames 可選；-- 後傳遊戲參數；GODOT_BIN",
+    "outputs": "f*.png、f.wav；有 ffmpeg 時 video.mp4",
+    "example": "bash tools/capture.sh ../my-game /tmp/my-game-capture 180",
+    "constraints": "需要 renderer；清除輸出資料夾的 f*.png/f.wav；macOS 不能 headless，會開視窗。"
+  },
+  {
+    "id": "tool.audit_copies",
+    "path": "tools/audit_copies.py",
+    "purpose": "共用副本差異盤點",
+    "use_when": "共用副本差異盤點",
+    "kind": "tool",
+    "status": "既有工具；本輪只驗證 capabilities 工具，其餘沿用既有行為",
+    "parameters": "--check、--json；原型名稱或外部專案路徑",
+    "outputs": "SHA-256 與差異分類；--check 發現差異 exit 1",
+    "example": "python3 tools/audit_copies.py --check --json seal-meadow",
+    "constraints": "唯讀；副本存在不代表遊戲實際使用。"
+  },
+  {
+    "id": "tool.sync",
+    "path": "sync.sh",
+    "purpose": "安裝或更新共用庫副本",
+    "use_when": "安裝或更新共用庫副本",
+    "kind": "tool",
+    "status": "既有工具；本輪只驗證 capabilities 工具，其餘沿用既有行為",
+    "parameters": "原型名稱或絕對路徑；--check 唯讀",
+    "outputs": "目的專案 addons/proto_kit；check 差異 exit 1",
+    "example": "bash sync.sh --check seal-meadow",
+    "constraints": "更新會複製整個 kit；先檢視 drift，不批次覆蓋手工修改。"
+  },
+  {
+    "id": "tool.vfx_import_strip",
+    "path": "tools/vfx/import_strip.gd",
+    "purpose": "橫向 PNG 圖集匯入",
+    "use_when": "橫向 PNG 圖集匯入",
+    "kind": "tool",
+    "status": "既有工具；本輪只驗證 capabilities 工具，其餘沿用既有行為",
+    "parameters": "七個位置參數：res://sheet.png res://output.tres frame_count fps once|loop source_url license_note；先執行 PNG 匯入",
+    "outputs": "SpriteFrames 與來源 SHA-256；非法切格拒絕",
+    "example": "godot --headless --path . --script res://tools/vfx/import_strip.gd -- res://assets/fire.png res://assets/fire.tres 18 15 once SOURCE_URL LICENSE_NOTE",
+    "constraints": "製作工具；需確認來源授權，既有輸出拒絕覆寫。"
+  },
+  {
+    "id": "tool.capabilities",
+    "path": "tools/capabilities.py",
+    "purpose": "能力探索、契約同步與盤點",
+    "use_when": "能力探索、契約同步與盤點",
+    "kind": "tool",
+    "status": "既有工具；本輪只驗證 capabilities 工具，其餘沿用既有行為",
+    "parameters": "list --query；show ID；plan ID...；build；check；inventory",
+    "outputs": "JSON 契約／依賴計畫或 Markdown；check 過期 exit 1",
+    "example": "python3 tools/capabilities.py show fixed_step",
+    "constraints": "只有 build 寫入生成檔；plan 是靜態參考，不是選擇性安裝。"
+  }
+]

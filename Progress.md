@@ -10,21 +10,21 @@
 
 | commit | 日期 | 做了什麼 |
 |---|---|---|
-| 最新（`git log -1`） | 2026-11-05 | debt-commission：`main.gd` 拆成外殼＋五個分段檔（G6）、章節選擇「流程圖」（G4）、換背景 shader 轉場（brush／ink／glitch）、手感回饋（震動分級、HUD 與提示跳動、固定音效）、kit 同步；LESSONS 加 2 條 |
+| 最新（`git log -1`） | 2026-11-06 | mortal-city 改成單機文字冒險 roguelike（ADR 0001）：新宿切片（程序地圖、8 種節點、名聲卡牌／道具三選一、救命保單、傳奇檔案）、霓虹 icon 與贓貨黑市、回覆逐則出現、連續進度條、系統訊息分行與自動捲動、任務完成 toast＋結案畫面、戰鬥特效；灣岸 03／06 試讀稿（未接入）；LESSONS 加 2 條 |
+| `18c37763` | 2026-11-05 | debt-commission：`main.gd` 拆成外殼＋五個分段檔（G6）、章節選擇「流程圖」（G4）、換背景 shader 轉場（brush／ink／glitch）、手感回饋（震動分級、HUD 與提示跳動、固定音效）、kit 同步；LESSONS 加 2 條 |
 | `0b74bd2e` | 2026-11-05 | seal-meadow：town slice 與模型素材索引（另一個 session 提交，細節見其 PROGRESS） |
 | `8f7db380` | 2026-11-05 | mortal-city：P01 前兩案試讀稿（資料驅動劇情委託）、自動戰鬥與戰術、排隊打鬥與戰利品、重傷停工與休養／診所／醫院、五項屬性與屬性做法、白蛇的義體診所與換裝；risk-systems §4 神經容量加技術已確認 |
 | `74c62c95` | 2026-11-04 | Cyberpunk 文字 MMO：ro-idle 研究與借鏡、雙層任務決定、手機直式原型 mortal-city（React，論壇終端 UI、劇情／街頭工作／高階工作、救援抵押、離開報告、城市像素橫幅）、S2 風格與主角 A 選定；LESSONS 加 2 條 |
-| `cd18ee55` | 2026-11-02 | 新原型 kagura-dango「丸子大胃王」：完整比賽（裁判、三回合、對手隊、神樂變胖）、網頁音訊時鐘驗證；LESSONS 加 3 條 |
 
 ## 專案入口
 
 | 專案 | 現況（一句） | 進度 | 歷史 |
 |---|---|---|---|
 | debt-commission 萬事屋吐槽 ADV | main.gd 已拆分；流程圖、shader 轉場、手感回饋完成；等作者選第一章轉場、Android 試震動 | [PROGRESS](prototypes/debt-commission/PROGRESS.md) | [MILESTONE](prototypes/debt-commission/MILESTONE.md) |
-| godot-kit 共用模組 | VFX 庫完成，等 GPU／瀏覽器／手機外觀驗收；未同步各遊戲副本 | [PROGRESS](prototypes/godot-kit/PROGRESS.md) | — |
+| godot-kit 共用模組 | kit 累計 36 項實作研究、8 項前階段、26 項待深讀；10 項契約補強；CodeGraph MCP 已安裝待重啟，測試暫緩 | [PROGRESS](prototypes/godot-kit/PROGRESS.md) | — |
 | seal-meadow 蓬蓬草原 | 暖陶瓦風格與商店三視圖已定方向；可走商店、入口與路牌樣板已接入，正式 2D 紙娃娃及手機真人驗收待做，多人延後 | [PROGRESS](prototypes/seal-meadow/PROGRESS.md) | [MILESTONE](prototypes/seal-meadow/MILESTONE.md) |
 | hero-horde-idle 全員推王 | 等真人前三層、手機恢復成本與作者素材 | [PROGRESS](prototypes/hero-horde-idle/docs/PROGRESS.md) | [MILESTONE](prototypes/hero-horde-idle/docs/MILESTONE.md) |
-| Cyberpunk 文字 MMO（魔都） | S2/A 10 張 sprite 已規格化；8 格跑步循環原圖已生成（尺寸與純綠有偏差）；城市場景接入待驗收 | [PROGRESS](prototypes/mortal-city/PROGRESS.md)／[設計進度](docs/cyberpunk-text-mmo/PROGRESS.md) | — |
+| 魔都傭兵（mortal-city，已改為單機文字冒險 roguelike，ADR 0001） | 新宿切片可玩，試玩回饋與戰鬥特效已做；灣岸 03／06 試讀稿已寫、還沒接進遊戲 | [PROGRESS](prototypes/mortal-city/PROGRESS.md)／[設計進度](docs/cyberpunk-text-mmo/PROGRESS.md) | — |
 | dreamling-idle 夢靈遠行 | 第一個可玩版本完成，暫停 | [PROGRESS](prototypes/dreamling-idle/PROGRESS.md) | — |
 | kagura-dango 丸子大胃王（神樂生日） | 完整比賽可玩：裁判開場、三回合（三人齊吃→拋丸子→全力餵食）、對手隊、神樂變胖；佔位美術；待做第 1 回合「老闆端上桌」回饋 | [PROGRESS](prototypes/kagura-dango/PROGRESS.md) | — |
 | erwin-run | 可玩到結局，未上傳 itch | [PROGRESS](prototypes/erwin-run/PROGRESS.md) | — |

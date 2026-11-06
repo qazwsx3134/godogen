@@ -1,34 +1,32 @@
 import { useEffect, useRef, useState } from 'react'
-import { BarChart3, Briefcase, Building2, MessageSquare, ScrollText, ShieldAlert, Square, User } from 'lucide-react'
-import { Emblem, Panel } from './components/ui'
-import { useGame } from './game/state'
+import { type LucideIcon, Map as MapIcon, MessageSquare, ScrollText, ShieldAlert, ShieldPlus, Sparkles, User } from 'lucide-react'
+import { Emblem, NeonIcon, Panel } from './components/ui'
+import { nodeBusy, useGame } from './game/state'
 import { NEURAL_STAGE_LABEL, SEVERE_INJURY, marginOf, neuralStage } from './rules/core'
-import { JobsScreen } from './screens/Jobs'
+import { RunScreen } from './screens/Run'
 import { CharacterScreen } from './screens/Character'
-import { CityScreen } from './screens/City'
-import { RankScreen } from './screens/Rank'
 import { LogScreen } from './screens/Log'
 import { Comms } from './screens/Comms'
-import { AwayDialog } from './screens/Away'
+import { PickDialog } from './screens/Pick'
+import { CompleteDialog } from './screens/Complete'
 
-export type Route = 'jobs' | 'char' | 'city' | 'rank' | 'log'
+export type Route = 'run' | 'char' | 'log'
 
-const NAV: { id: Route; label: string; icon: typeof Briefcase; path: string }[] = [
-  { id: 'jobs', label: '委託', icon: Briefcase, path: 'JOBS' },
+const NAV: { id: Route; label: string; icon: LucideIcon; path: string }[] = [
+  { id: 'run', label: '街區', icon: MapIcon, path: 'RUN' },
   { id: 'char', label: '角色', icon: User, path: 'MERC' },
-  { id: 'city', label: '城市', icon: Building2, path: 'CITY' },
-  { id: 'rank', label: '排行', icon: BarChart3, path: 'RANK' },
   { id: 'log', label: '紀錄', icon: ScrollText, path: 'LOG' },
 ]
 
 export default function App() {
   const game = useGame()
-  const { g, act } = game
-  const [route, setRoute] = useState<Route>('jobs')
+  const { g } = game
+  const [route, setRoute] = useState<Route>('run')
   const [comms, setComms] = useState(false)
   const c = g.character
   const stage = neuralStage(marginOf(c))
-  const busy = g.queue.items.length > 0
+  const claiming = c.alive && !!g.run.claim
+  const picking = c.alive && c.picks.length > 0 && !nodeBusy(g) && !claiming
   const mainRef = useRef<HTMLElement>(null)
   useEffect(() => {
     mainRef.current?.scrollTo(0, 0)
@@ -65,60 +63,40 @@ export default function App() {
                 {c.alive ? (c.injury ? `傷勢 ${c.injury}%` : '存活') : '✖ 已死亡'}
               </span>
               <span className="tech text-heading">LV.{c.level}</span>
+              <span className="tech text-warning">名聲 {c.fame.level}</span>
               <span className={stage === 'stable' ? 'text-muted' : 'font-bold text-warning'}>神經 {NEURAL_STAGE_LABEL[stage]}</span>
               <span className={c.heat ? 'font-bold text-red' : 'text-muted'}>
                 通緝 {'★'.repeat(c.heat) || '—'}
               </span>
+              <span className={`flex items-center gap-0.5 ${c.lifelines ? 'text-positive' : 'text-muted'}`} title="救命保單">
+                <ShieldPlus size={14} />
+                {c.lifelines}
+              </span>
               <span className="tech ml-auto text-heading">¢{c.credits.toLocaleString()}</span>
             </div>
-            {g.high && g.high.stage !== 'done' && (
-              <div className="mt-2 flex items-center gap-2 border-t border-red/50 pt-2 text-[13px]">
-                <span className="flex-1 font-bold text-red">
-                  ⚠ 高階工作{g.high.stage === 'danger' ? '等待你的選擇' : '進行中'}
-                </span>
-                <button onClick={() => setRoute('jobs')} className="flex min-h-11 items-center border border-red px-3 font-bold text-red">
-                  前往
-                </button>
-              </div>
-            )}
             {c.alive && c.injury >= SEVERE_INJURY && (
-              <div className="mt-2 flex items-center gap-2 border-t border-red/50 pt-2 text-[13px]">
-                <span className="flex-1 font-bold text-red">✚ 重傷：不能工作，先休養或治療</span>
-                <button onClick={() => setRoute('char')} className="flex min-h-11 items-center border border-red px-3 font-bold text-red">
-                  治療
-                </button>
-              </div>
+              <div className="mt-2 border-t border-red/50 pt-2 text-[13px] font-bold text-red">✚ 重傷：開打時 HP 很低，先找診所或休息節點</div>
             )}
-            {busy && (
-              <div className="mt-2 flex items-center gap-2 border-t border-line/40 pt-2 text-[13px]">
-                <span className="flex-1 text-muted">
-                  {g.queue.paused ? '⏸ 排隊暫停中（劇情委託進行中）' : `▶ 排隊執行中：剩 ${g.queue.items.length} 件`}
-                </span>
-                <button
-                  onClick={() => act({ t: 'clearQueue' })}
-                  className="flex min-h-11 items-center gap-1 border border-red px-3 font-bold text-red"
-                >
-                  <Square size={14} /> 停止排隊
-                </button>
+            {c.alive && c.picks.length > 0 && nodeBusy(g) && (
+              <div className="mt-2 flex items-center gap-1 border-t border-line/40 pt-2 text-[13px] text-warning">
+                <Sparkles size={14} /> 有 {c.picks.length} 組三選一，這個節點結束後挑
               </div>
             )}
           </Panel>
         </div>
 
         <main ref={mainRef} className="min-h-0 flex-1 overflow-y-auto px-3 pt-3 pb-4">
-          {!c.alive && route !== 'log' && (
+          {!c.alive && route !== 'run' && (
             <Panel tone="red" className="mb-3" innerClass="flex items-center gap-2 p-3 text-[15px]">
               <ShieldAlert size={18} className="shrink-0 text-red" />
-              <span className="flex-1 text-fg">這個角色已經死亡。生涯紀錄在「紀錄」。</span>
-              <button className="min-h-11 font-bold text-cyan" onClick={() => setRoute('log')}>
+              <span className="flex-1 text-fg">這個傭兵已經死亡，已寫進傳奇檔案。</span>
+              <button className="min-h-11 font-bold text-cyan" onClick={() => setRoute('run')}>
                 前往 →
               </button>
             </Panel>
           )}
-          {route === 'jobs' && <JobsScreen game={game} />}
+          {route === 'run' && <RunScreen game={game} />}
           {route === 'char' && <CharacterScreen game={game} />}
-          {route === 'city' && <CityScreen game={game} />}
-          {route === 'rank' && <RankScreen game={game} />}
           {route === 'log' && <LogScreen game={game} />}
         </main>
 
@@ -134,7 +112,7 @@ export default function App() {
         </button>
 
         {/* 底部導覽：參考圖左側分類欄的手機版 */}
-        <nav className="grid shrink-0 grid-cols-5 border-t border-line bg-surface pb-[env(safe-area-inset-bottom)]">
+        <nav className="grid shrink-0 grid-cols-3 border-t border-line bg-surface pb-[env(safe-area-inset-bottom)]">
           {NAV.map((n) => {
             const on = n.id === route
             const Icon = n.icon
@@ -146,7 +124,7 @@ export default function App() {
                 aria-current={on ? 'page' : undefined}
               >
                 {on && <span className="absolute inset-x-2 top-0 h-0.5 bg-red" />}
-                <Icon size={20} />
+                <NeonIcon icon={Icon} size={20} on={on} />
                 {n.label}
               </button>
             )
@@ -154,7 +132,8 @@ export default function App() {
         </nav>
 
         {comms && <Comms onClose={() => setComms(false)} />}
-        {g.away && <AwayDialog report={g.away} onClose={() => act({ t: 'dismissAway' })} />}
+        {claiming && <CompleteDialog game={game} />}
+        {picking && <PickDialog game={game} />}
       </div>
     </div>
   )

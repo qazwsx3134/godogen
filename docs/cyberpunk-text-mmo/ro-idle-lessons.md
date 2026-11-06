@@ -1,5 +1,7 @@
 # 借鏡 RO放置仙境：給本作的設計建議
 
+> 2026-11-06：遊戲方向已改為單機文字冒險 roguelike。本檔中 MMO、離線排隊、週榜、城市共同事件、熟練度、抵押與救援帳單等敘述，以 [prototypes/mortal-city/docs/adr/0001-single-player-roguelike.md](../../prototypes/mortal-city/docs/adr/0001-single-player-roguelike.md) 與 [ROGUELIKE-FLOW.md](../../prototypes/mortal-city/docs/ROGUELIKE-FLOW.md) 為準。
+
 日期：2026-11-04。依據 [ro-idle 研究](../research/ro-idle-2026-11-04.md)（公開資料、前端 bundle，以及 §11 的約 20 分鐘登入實測）。本檔是提案，不改寫 game-design、risk-systems、architecture 等已確認規格；採用哪一項由使用者決定。
 
 ## 1. 結論

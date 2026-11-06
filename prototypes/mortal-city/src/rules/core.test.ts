@@ -3,32 +3,31 @@ import {
   type Character,
   type Item,
   type JobDef,
-  type Queue,
-  jobDurationMs,
-  payBill,
-  payable,
+  type LogEvent,
   capacityOf,
+  dirBonus,
+  fameToNext,
   fightStats,
-  resolveFight,
-  rest,
-  workBlock,
-  redeem,
+  grantProgress,
+  hashSeed,
+  heatEnemy,
+  jobReward,
+  maxHpOf,
   neuralCapacity,
   neuralStage,
-  proficiencyEffects,
+  perkOptions,
+  perkReward,
   resolveDanger,
-  settleQueue,
-  weekKey,
-  weeklyPoints,
+  resolveFight,
 } from './core'
+import { PERKS, PERK_IDS } from './perks'
 
 const job: JobDef = {
-  id: 'courier-1',
+  id: 'test-1',
   direction: 'stealth',
   tier: 1,
-  name: '送貨',
+  name: '測試',
   fixerId: 'k',
-  minutes: 3,
   reward: 100,
   xp: 10,
   stress: 1,
@@ -36,7 +35,6 @@ const job: JobDef = {
   injury: 5,
   blurb: '',
 }
-const jobs = { [job.id]: job }
 
 function char(over: Partial<Character> = {}): Character {
   return {
@@ -50,13 +48,14 @@ function char(over: Partial<Character> = {}): Character {
     stress: 0,
     implantLoad: 10,
     heat: 0,
-    prof: { force: { level: 0, xp: 0 }, hack: { level: 0, xp: 0 }, stealth: { level: 0, xp: 0 } },
     equipment: [],
-    pawned: [],
-    week: { key: weekKey(0), counts: {}, points: 0 },
+    lifelines: 0,
     attrs: { tech: 3, reflex: 3, body: 3, int: 3, cool: 3 },
     attrPoints: 0,
     stash: [],
+    fame: { level: 0, xp: 0, total: 0 },
+    perks: {},
+    picks: [],
     ...over,
   }
 }
@@ -74,175 +73,30 @@ describe('neural', () => {
   })
 })
 
-describe('proficiency', () => {
-  it('more important attributes grow slower, capped at 100', () => {
-    const e = proficiencyEffects(150)
-    expect(e.success).toBeCloseTo(0.05)
-    expect(e.harm).toBeCloseTo(0.15)
-    expect(e.reward).toBeCloseTo(0.25)
-    expect(e.time).toBeCloseTo(0.4)
-  })
-  it('shortens duration', () => {
-    expect(jobDurationMs(job, 100)).toBe(Math.round(3 * 60_000 * 0.6))
-  })
-})
-
-describe('weekly decay (medium)', () => {
-  it('full for first 20, half to 40, then 20%', () => {
-    expect(weeklyPoints(3, 0)).toBe(30)
-    expect(weeklyPoints(3, 19)).toBe(30)
-    expect(weeklyPoints(3, 20)).toBe(15)
-    expect(weeklyPoints(3, 40)).toBe(6)
-  })
-})
-
-describe('settleQueue', () => {
-  const q = (n: number): Queue => ({ items: Array(n).fill(job.id), startedAt: 0, paused: false, seq: 0 })
-
-  it('settles only items whose due time has passed', () => {
-    const r = settleQueue(char(), q(4), 3 * 60_000 * 2 + 1, jobs)
-    expect(r.completed).toBe(2)
-    expect(r.queue.items.length).toBe(2)
-    expect(r.queue.startedAt).toBe(3 * 60_000 * 2)
-  })
-
-  it('is deterministic for the same inputs', () => {
-    const a = settleQueue(char(), q(4), 10 ** 9, jobs)
-    const b = settleQueue(char(), q(4), 10 ** 9, jobs)
-    expect(a.character).toEqual(b.character)
-  })
-
-  it('while paused, finishes the running job but does not start the next', () => {
-    const r = settleQueue(char(), { ...q(4), paused: true }, 10 ** 9, jobs)
-    expect(r.completed).toBe(1)
-    expect(r.queue.items.length).toBe(3)
-    expect(r.queue.startedAt).toBeNull()
-  })
-
-  it('stops and cancels the rest when injury hits the threshold', () => {
-    const r = settleQueue(char({ injury: 59 }), q(4), 10 ** 9, jobs, {
-      injuryAt: 60,
-      heatAt: 9,
-      stopOnCritical: false,
-      creditReserve: 0,
-    })
-    expect(r.stopped).toMatch(/傷勢/)
-    expect(r.queue.items.length).toBe(0)
-    expect(r.completed).toBeLessThan(4)
-  })
-})
-
-describe('resolveDanger', () => {
+describe('resolveDanger: the lifeline saves you once', () => {
   const opt = { id: 'go', label: '冒險', lethal: true, lethalBase: 0.95, survivalWindowMin: 3 }
   it('non-lethal option is always safe', () => {
-    expect(resolveDanger(char(), { ...opt, lethal: false }, { active: false, coversZone: false, etaMin: 9 }, 1).kind).toBe(
-      'safe',
-    )
+    expect(resolveDanger(char(), { ...opt, lethal: false }, 1).kind).toBe('safe')
   })
-  it('dies without coverage, is rescued with coverage in time', () => {
+  it('dies without a lifeline, is rescued with one', () => {
     const c = char({ injury: 100 })
-    expect(resolveDanger(c, opt, { active: false, coversZone: true, etaMin: 2 }, 7).kind).toBe('dead')
-    expect(resolveDanger(c, opt, { active: true, coversZone: true, etaMin: 2 }, 7).kind).toBe('rescued')
-    expect(resolveDanger(c, opt, { active: true, coversZone: true, etaMin: 5 }, 7).kind).toBe('dead')
+    expect(resolveDanger(c, opt, 7).kind).toBe('dead')
+    expect(resolveDanger({ ...c, lifelines: 1 }, opt, 7).kind).toBe('rescued')
   })
   it('system fault turns death into a free rescue', () => {
-    const c = char({ injury: 100 })
-    expect(resolveDanger(c, opt, { active: false, coversZone: false, etaMin: 9 }, 7, true).kind).toBe('rescued_system')
+    expect(resolveDanger(char({ injury: 100 }), opt, 7, true).kind).toBe('rescued_system')
   })
   it('same seed gives the same outcome', () => {
     const c = char({ injury: 30 })
-    const cov = { active: true, coversZone: true, etaMin: 2 }
-    expect(resolveDanger(c, { ...opt, lethalBase: 0.4 }, cov, 42)).toEqual(
-      resolveDanger(c, { ...opt, lethalBase: 0.4 }, cov, 42),
-    )
+    expect(resolveDanger(c, { ...opt, lethalBase: 0.4 }, 42)).toEqual(resolveDanger(c, { ...opt, lethalBase: 0.4 }, 42))
   })
 })
 
-describe('rescue bill: pawn equipment, die if not enough, redeem later', () => {
-  const gun: Item = { id: 'g', name: '槍', slot: 'weapon', direction: 'force', bonus: 0.05, price: 1200, load: 0 }
-  const deck: Item = { id: 'd', name: '終端', slot: 'deck', direction: 'hack', bonus: 0.05, price: 800, load: 0 }
-  const camo: Item = { id: 'c', name: '迷彩', slot: 'implant', direction: 'stealth', bonus: 0.05, price: 1000, load: 25 }
-  const geared = (credits: number) => char({ credits, implantLoad: 25, equipment: [gun, deck, camo] })
-
-  it('pays from cash when enough, pawns nothing', () => {
-    const r = payBill(geared(2000), 1500)
-    expect(r.ok && r.character.credits).toBe(500)
-    expect(r.ok && r.pawned.length).toBe(0)
-  })
-
-  it('pawns the most valuable items first until covered, change goes back to cash', () => {
-    // 現金 100，差 1400；槍 720 → 迷彩 600 → 終端 480，多出 400
-    const r = payBill(geared(100), 1500)
-    expect(r.ok).toBe(true)
-    if (!r.ok) return
-    expect(r.pawned.map((i) => i.id)).toEqual(['g', 'c', 'd'])
-    expect(r.character.credits).toBe(400)
-    expect(r.character.equipment.length).toBe(0)
-    expect(r.character.implantLoad).toBe(0)
-    expect(r.character.pawned.map((p) => p.redeem)).toEqual([720, 600, 480])
-  })
-
-  it('cannot pay when cash plus all pawn values is short', () => {
-    const r = payBill(geared(0), 1900) // 0 + 720 + 600 + 480 = 1800
-    expect(r.ok).toBe(false)
-    if (r.ok) return
-    expect(r.total).toBe(1800)
-    expect(r.shortfall).toBe(100)
-  })
-
-  it('redeems at the pawn price once there is enough cash', () => {
-    const r = payBill(geared(100), 1500)
-    if (!r.ok) throw new Error('should pay')
-    expect(redeem(r.character, 'g')).toBeNull() // 400 < 720
-    const rich = { ...r.character, credits: 1000 }
-    const back = redeem(rich, 'g')!
-    expect(back.credits).toBe(280)
-    expect(back.equipment.map((i) => i.id)).toEqual(['g'])
-    expect(back.pawned.length).toBe(2)
-  })
-})
-
-describe('severe injury, rest and queue fights', () => {
-  const brawl: JobDef = { ...job, id: 'brawl-3', direction: 'force', tier: 3, injury: 20 }
-  const fjobs = { [brawl.id]: brawl }
-  const q4 = (id: string): Queue => ({ items: [id, id, id, id], startedAt: 0, paused: false, seq: 0 })
-  const loose = { injuryAt: 101, heatAt: 9, stopOnCritical: false, creditReserve: 0 }
-
-  it('every force job is a fight, logged in one line, fixed by its seed', () => {
-    const a = settleQueue(char(), q4(brawl.id), 10 ** 9, fjobs, loose)
-    expect(a.events.filter((e) => e.text.includes('⚔')).length).toBe(a.completed)
-    expect(settleQueue(char(), q4(brawl.id), 10 ** 9, fjobs, loose).character).toEqual(a.character)
-  })
-
-  it('a locked default tactic falls back to a straight fight', () => {
-    const r = settleQueue(char(), q4(brawl.id), 10 ** 9, fjobs, { ...loose, tactic: 'hack' })
-    expect(r.events[0].text).toMatch(/預設戰術被鎖住/)
-  })
-
-  it('the queue always stops at 重傷, whatever the player set', () => {
-    for (let i = 0; i < 200; i++) {
-      const r = settleQueue(char({ id: `s${i}`, injury: 55 }), q4(brawl.id), 10 ** 9, fjobs, loose)
-      if (r.character.injury < 70 || r.completed === 4) continue
-      expect(r.stopped).toMatch(/重傷/)
-      expect(r.queue.items).toEqual([])
-      return
-    }
-    throw new Error('no seed reached 重傷 mid-queue')
-  })
-
-  it('rest heals 1% a minute (half speed when severe) and drops heat every 30 minutes, carrying leftovers', () => {
-    const c = char({ injury: 71, heat: 2 })
-    let carry = rest(c, { ms: 0, heatMs: 0 }, 4 * 60_000)
-    expect(c.injury).toBe(69) // 71→70 用 2 分鐘，70→69 再 2 分鐘
-    carry = rest(c, carry, 30 * 1000)
-    expect(c.injury).toBe(69)
-    rest(c, carry, 30 * 1000)
-    expect(c.injury).toBe(68)
-    const h = char({ heat: 2 })
-    rest(h, { ms: 0, heatMs: 0 }, 61 * 60_000)
-    expect(h.heat).toBe(0)
-    expect(workBlock(char({ injury: 70 }))).toMatch(/重傷/)
-    expect(workBlock(char({ injury: 69 }))).toBeUndefined()
+describe('heat makes the other side stronger', () => {
+  it('+8% HP and attack per star', () => {
+    const e = { name: 'x', hp: 100, atk: 10, hit: 0.5 }
+    expect(heatEnemy(e, 0)).toBe(e)
+    expect(heatEnemy(e, 3)).toEqual({ ...e, hp: 124, atk: 12 })
   })
 })
 
@@ -285,7 +139,7 @@ describe('attributes', () => {
   })
 })
 
-describe('items: implant armour, loot, paying with the stash', () => {
+describe('items', () => {
   const foe = { name: 'x', hp: 70, atk: 9, hit: 0.55 }
   const plate: Item = { id: 'p#1', kind: 'subdermal', name: '皮下護甲', slot: 'implant', direction: 'force', bonus: 0, price: 1500, load: 30, mods: { armor: 15 } }
 
@@ -301,27 +155,65 @@ describe('items: implant armour, loot, paying with the stash', () => {
     expect(armoured).toBeLessThan(bare * 0.8)
   })
 
-  it('loot has its own seed: the same queue settles the same with or without drops', () => {
-    const brawl: JobDef = { ...job, id: 'brawl-2', direction: 'force', tier: 2 }
-    const q: Queue = { items: Array(4).fill(brawl.id), startedAt: 0, paused: false, seq: 0 }
-    const rules = { injuryAt: 101, heatAt: 9, stopOnCritical: false, creditReserve: 0 }
-    const always = (seed: number) => ({ ...plate, id: `p#${seed}` })
-    const a = settleQueue(char(), q, 10 ** 9, { [brawl.id]: brawl }, rules)
-    const b = settleQueue(char(), q, 10 ** 9, { [brawl.id]: brawl }, rules, always)
-    expect({ ...b.character, stash: [] }).toEqual(a.character)
-    expect(b.character.stash.length).toBe(b.events.filter((e) => e.text.includes('打贏')).length)
-    expect(b.events.find((e) => e.text.includes('打贏'))!.text).toMatch(/戰利品：皮下護甲/)
+})
+
+describe('fame cards: pick 1 of 3 on each fame level', () => {
+  const brawl: JobDef = { ...job, id: 'brawl-1', direction: 'hack', tier: 1, reward: 100 }
+
+  it('fame comes from jobs and queues a card pick per level', () => {
+    const c = char()
+    const events: LogEvent[] = []
+    for (let k = 0; k < 4; k++) grantProgress(c, brawl, true, 0, events)
+    expect(c.fame).toEqual({ level: 1, xp: 40 - fameToNext(0), total: 40 })
+    expect(c.picks).toEqual([{ kind: 'perk', level: 1, seed: hashSeed('c1', 'fame', 1) }])
+    expect(events.some((e) => e.text.includes('名聲提升到 Lv.1'))).toBe(true)
+    grantProgress(c, brawl, false, 0, events)
+    expect(c.fame.total).toBe(45)
   })
 
-  it('a bill pawns the stash before the gear you wear, and redeeming puts it back where it was', () => {
-    const c = char({ stash: [plate], equipment: [{ id: 'g', name: '槍', slot: 'weapon', direction: 'force', bonus: 0, price: 1200, load: 0 }] })
-    expect(payable(c)).toBe(900 + 720)
-    const r = payBill(c, 800)
-    if (!r.ok) throw new Error('should pay')
-    expect(r.pawned.map((i) => i.id)).toEqual(['p#1'])
-    expect(r.character.equipment.length).toBe(1)
-    const back = redeem({ ...r.character, credits: 900 }, 'p#1')!
-    expect(back.stash.map((i) => i.id)).toEqual(['p#1'])
-    expect(back.equipment.length).toBe(1)
+  it('options are 3 distinct, fixed by the seed, skip maxed cards, and fill up with fallback cards', () => {
+    const o = perkOptions(char(), 42)
+    expect(new Set(o).size).toBe(3)
+    expect(perkOptions(char(), 42)).toEqual(o)
+    const maxed = Object.fromEntries(PERK_IDS.map((id) => [id, PERKS[id].max]))
+    expect(perkOptions(char({ perks: maxed }), 42)).toEqual(['cash', 'stim'])
+    const oneLeft = { ...maxed, kevlar: 0 }
+    expect(perkOptions(char({ perks: oneLeft }), 42)).toEqual(['kevlar', 'cash', 'stim'])
+  })
+
+  it('a fresh build favours the direction you already took', () => {
+    let hack = 0
+    for (let i = 0; i < 300; i++) hack += perkOptions(char({ perks: { iceApprentice: 1 } }), i).filter((id) => PERKS[id].dir === 'hack').length
+    let base = 0
+    for (let i = 0; i < 300; i++) base += perkOptions(char(), i).filter((id) => PERKS[id].dir === 'hack').length
+    expect(hack).toBeGreaterThan(base * 1.3)
+  })
+
+  it('cards change combat by fixed amounts only: no cards = same fight; ghost and feedback help their tactic', () => {
+    const foe = { name: 'x', hp: 90, atk: 10, hit: 0.6 }
+    const camo: Item = { id: 'cm', name: '迷彩', slot: 'implant', direction: 'stealth', bonus: 0, price: 1, load: 0 }
+    const deck: Item = { id: 'dk', name: '終端', slot: 'deck', direction: 'hack', bonus: 0, price: 1, load: 0 }
+    let plain = 0
+    let ghost = 0
+    let shock = 0
+    for (let i = 0; i < 200; i++) {
+      expect(resolveFight(char({ perks: {} }), foe, 'force', i)).toEqual(resolveFight(char(), foe, 'force', i))
+      plain += resolveFight(char({ equipment: [camo] }), foe, 'stealth', i).hp
+      ghost += resolveFight(char({ equipment: [camo], perks: { ghost: 1 } }), foe, 'stealth', i).hp
+      const a = resolveFight(char({ equipment: [deck] }), foe, 'hack', i)
+      const b = resolveFight(char({ equipment: [deck], perks: { feedback: 2 } }), foe, 'hack', i)
+      shock += b.rounds.length <= a.rounds.length ? 1 : 0
+    }
+    expect(ghost).toBeGreaterThan(plain)
+    expect(shock).toBeGreaterThan(150)
+    expect(fightStats(char({ perks: { gunsmith: 2, tough: 1 } })).atk).toBe(fightStats(char()).atk + 6)
+    expect(maxHpOf(char({ perks: { tough: 1 } }))).toBe(112)
+  })
+
+  it('direction cards add to job success and reward', () => {
+    const c = char({ perks: { dataBroker: 2 } })
+    expect(dirBonus(c, 'hack')).toBeCloseTo(0.06)
+    expect(dirBonus(c, 'force')).toBe(0)
+    expect(jobReward(brawl, perkReward(c, 'hack'))).toBe(120)
   })
 })

@@ -14,6 +14,8 @@ extends RefCounted
 ## Pool entry: {id, weight (1), max (openings per run that may give it; 0 = no limit)}. A failed open (not enough gold,
 ## or nothing left to give) changes nothing.
 
+const WeightedChoice = preload("res://addons/proto_kit/weighted_choice.gd")
+
 var opened: int = 0
 
 var _pool: Array[Dictionary] = []
@@ -50,16 +52,13 @@ func open(gold: int) -> Dictionary:
 	var pool := _available()
 	if gold < cost or pool.is_empty():
 		return {"ok": false, "spent": 0, "gold": gold, "reward": {}}
-	var total := 0.0
+	var weights: Array = []
 	for entry: Dictionary in pool:
-		total += float(entry.get("weight", 1.0))
-	var pick := _rng.randf() * total
-	var reward: Dictionary = pool[-1]
-	for entry: Dictionary in pool:
-		pick -= float(entry.get("weight", 1.0))
-		if pick < 0.0:
-			reward = entry
-			break
+		weights.append(float(entry.get("weight", 1.0)))
+	var selected: int = WeightedChoice.sample_index(weights, _rng)
+	if selected < 0:
+		return {"ok": false, "spent": 0, "gold": gold, "reward": {}}
+	var reward: Dictionary = pool[selected]
 	_given[reward.id] = _given.get(reward.id, 0) + 1
 	opened += 1
 	return {"ok": true, "spent": cost, "gold": gold - cost, "reward": reward}

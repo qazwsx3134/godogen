@@ -1,5 +1,7 @@
 # Lead Game／Systems Design設計評估
 
+> 2026-11-06：遊戲方向已改為單機文字冒險 roguelike。本檔中 MMO、離線排隊、週榜、城市共同事件、熟練度、抵押與救援帳單等敘述，以 [prototypes/mortal-city/docs/adr/0001-single-player-roguelike.md](../../prototypes/mortal-city/docs/adr/0001-single-player-roguelike.md) 與 [ROGUELIKE-FLOW.md](../../prototypes/mortal-city/docs/ROGUELIKE-FLOW.md) 為準。
+
 日期：2026-10-29。基於目前concept、game-design、risk-systems與content-plan所做的主session評估；沒有派遣其他代理，沒有實玩證據。以下是提案，不覆寫已確認需求，也不代表新增系統已獲驗收。
 
 ## 1. 判斷

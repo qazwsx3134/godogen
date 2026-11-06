@@ -1,5 +1,7 @@
 # React／Cloudflare 架構 v0.1
 
+> 2026-11-06：遊戲方向已改為單機文字冒險 roguelike。本檔中 MMO、離線排隊、週榜、城市共同事件、熟練度、抵押與救援帳單等敘述，以 [prototypes/mortal-city/docs/adr/0001-single-player-roguelike.md](../../prototypes/mortal-city/docs/adr/0001-single-player-roguelike.md) 與 [ROGUELIKE-FLOW.md](../../prototypes/mortal-city/docs/ROGUELIKE-FLOW.md) 為準。
+
 日期：2026-10-29。使用者已指定React、Cloudflare與手機直式，允許shadcn/ui、Tailwind並提供視覺參考。這是可實作的架構基線；尚未建立程式、雲端資源或驗證容量。
 
 ## 1. 整體決策

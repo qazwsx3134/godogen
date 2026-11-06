@@ -1,5 +1,7 @@
 # Cyberpunk 文字 MMO RPG：概念草案
 
+> 2026-11-06：遊戲方向已改為單機文字冒險 roguelike。本檔中 MMO、離線排隊、週榜、城市共同事件、熟練度、抵押與救援帳單等敘述，以 [prototypes/mortal-city/docs/adr/0001-single-player-roguelike.md](../../prototypes/mortal-city/docs/adr/0001-single-player-roguelike.md) 與 [ROGUELIKE-FLOW.md](../../prototypes/mortal-city/docs/ROGUELIKE-FLOW.md) 為準。
+
 日期：2026-10-29。狀態：概念深化與開發規劃v0.2；未開始實作。下列「已確認」來自使用者決定；其餘為提案。後續詳見 [玩法設計](game-design.md)、[風險系統](risk-systems.md)、[文本計畫](content-plan.md) 與 [開發計畫](development-plan.md)。
 
 ## 已確認

@@ -1,5 +1,7 @@
 # 一次性委託與文本製作計畫 v0.2
 
+> 2026-11-06：遊戲方向已改為單機文字冒險 roguelike。本檔中 MMO、離線排隊、週榜、城市共同事件、熟練度、抵押與救援帳單等敘述，以 [prototypes/mortal-city/docs/adr/0001-single-player-roguelike.md](../../prototypes/mortal-city/docs/adr/0001-single-player-roguelike.md) 與 [ROGUELIKE-FLOW.md](../../prototypes/mortal-city/docs/ROGUELIKE-FLOW.md) 為準。
+
 日期：2026-10-29。已確認：每個角色的委託不重複；死亡後新角色可以重玩。城市以東京為原型，正式名稱未定。以下是內容生產與首批篇章提案。
 
 > 2026-11-04：使用者確認改為雙層任務（劇情委託一次性＋可重複的街頭工作）。本檔中「每角色委託不重複」「有限經濟」「週榜不能靠重刷」等敘述，以 [quest-layers.md](quest-layers.md) 為準，受影響段落列在該檔 §9。
