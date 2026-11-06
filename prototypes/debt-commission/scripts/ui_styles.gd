@@ -12,7 +12,7 @@ const PAPER_ROLES: Array[String] = ["menu", "log", "slots", "confirmation"]
 const BASE_LOOK: Dictionary = {
 	"look": "washi",
 	"panel_paper": "res://assets/ui/gintama_panel_paper.png",
-	"plaque": "res://assets/ui/gintama_heading_plaque.png",
+	"plaque": "res://assets/ui/gintama_heading_plain.tres",
 	"hud": {"panel": "res://assets/ui/gintama_hud/hud_panel.tres", "clue_chip": "res://assets/ui/gintama_hud/clue_chip.tres",
 		"toast": "res://assets/ui/gintama_hud/toast.tres", "font": "res://assets/ui/gintama_hud/serif.tres"},
 }
@@ -520,19 +520,19 @@ static func paper(style_id: String, flat: StyleBox) -> StyleBoxTexture:
 
 
 ## A title plaque (第 N 章 on a chapter card, a name on the case file): the skin's `plaque` picture
-## (the navy plaque with the cloud), or its name tag when it has none. Its label takes `name_ink`.
+## (the navy-and-silver plaque), or its name tag when it has none. Its label takes `name_ink`.
 static func name_plaque(style_id: String) -> StyleBox:
 	var plaque: String = str(_look(style_id)["plaque"])
 	if plaque.is_empty():
 		return panel_style(style_id, "name")
 	var box: StyleBoxTexture = StyleBoxTexture.new()
 	box.texture = load(plaque) as Texture2D
-	box.texture_margin_left = 60.0
-	box.texture_margin_right = 30.0
+	box.texture_margin_left = 20.0
+	box.texture_margin_right = 20.0
 	box.texture_margin_top = 20.0
 	box.texture_margin_bottom = 20.0
-	box.content_margin_left = 72.0
-	box.content_margin_right = 48.0
+	box.content_margin_left = 28.0
+	box.content_margin_right = 28.0
 	box.content_margin_top = 8.0
 	box.content_margin_bottom = 8.0
 	return box

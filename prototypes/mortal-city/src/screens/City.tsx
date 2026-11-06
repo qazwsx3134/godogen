@@ -1,10 +1,10 @@
-import { Building2, Users } from 'lucide-react'
+import { Building2, Users } from '../components/icons'
 import { Meter, Panel, PanelHead } from '../components/ui'
 import { CITY_TARGET, JOBS } from '../content/data'
 import { CASE_BY_ID } from '../content/cases'
 import { CityStrip, type StripMode } from '../components/CityStrip'
 import { SEVERE_INJURY, jobDurationMs } from '../rules/core'
-import type { useGame } from '../game/state'
+import { type useGame, ALL_JOBS } from '../game/state'
 
 const ZONES = [
   { name: '新宿街區', online: 312, done: 18_420, deaths: 7, state: '可進入' },
@@ -33,7 +33,7 @@ export function CityScreen({ game }: { game: ReturnType<typeof useGame> }) {
     label = `劇情委託：${CASE_BY_ID[g.story.caseId!].title}`
     sub = g.story.stage === 'danger' ? '等待你的選擇' : g.story.stage === 'fight' ? '戰鬥中' : undefined
   } else if (queueRunning) {
-    const j = JOBS[q.items[0]]
+    const j = ALL_JOBS[q.items[0]]
     const left = q.startedAt! + jobDurationMs(j, c.prof[j.direction].level) - now
     const s = Math.max(0, Math.round(left / 1000))
     mode = 'run'
@@ -42,7 +42,7 @@ export function CityScreen({ game }: { game: ReturnType<typeof useGame> }) {
   }
   return (
     <div className="space-y-3">
-      <CityStrip mode={mode} label={label} sub={sub} />
+      <CityStrip mode={mode} label={label} sub={sub} look={g.character.look} />
       <Panel tone="strong" innerClass="p-4">
         <div className="text-[13px] text-red">城市事件・進行中</div>
         <h1 className="my-1 text-[20px] font-bold text-heading">灣岸封鎖線</h1>

@@ -57,6 +57,11 @@ function char(over: Partial<Character> = {}): Character {
     attrs: { tech: 3, reflex: 3, body: 3, int: 3, cool: 3 },
     attrPoints: 0,
     stash: [],
+    talentPoints: 0,
+    talents: [],
+    fame: 0,
+    trust: {},
+    uniqueDone: [],
     ...over,
   }
 }
@@ -276,8 +281,8 @@ describe('attributes', () => {
 
   it('反應 lands crits, 沉著 makes them hit harder, 智力 jams longer', () => {
     const text = (over: Partial<Character>) => resolveFight(char(over), foe, 'force', 5).rounds.map((r) => r.text).join()
-    expect(text({})).not.toMatch(/暴擊/)
-    expect(text(at({ reflex: 11 }))).toMatch(/暴擊/)
+    expect(text({})).not.toMatch(/爆擊/)
+    expect(text(at({ reflex: 11 }))).toMatch(/爆擊/)
     expect(fightStats(char(at({ cool: 8 }))).critDmg).toBeCloseTo(2.0)
     const jammed = (int: number) => resolveFight(char(at({ int })), foe, 'hack', 1).rounds.filter((r) => r.text.includes('亂跳')).length
     expect(jammed(9)).toBeGreaterThanOrEqual(jammed(3))

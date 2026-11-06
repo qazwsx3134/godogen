@@ -23,7 +23,7 @@ const j = (x: JobDef) => x
 export const JOBS: Record<string, JobDef> = Object.fromEntries(
   [
     j({ id: 'stealth-1', direction: 'stealth', tier: 1, name: '雨夜送貨', fixerId: 'k', minutes: 2, reward: 120, xp: 12, stress: 1, heat: 0, injury: 4, blurb: '一個不能淋濕的盒子，送到歌舞伎町後巷。別問裡面是什麼。' }),
-    j({ id: 'hack-1', direction: 'hack', tier: 1, name: '破解自販機', fixerId: 'k', minutes: 2, reward: 100, xp: 12, stress: 2, heat: 0, injury: 2, blurb: '整排販賣機都歸荒井會管，讓它們吐錢就對了。' }),
+    j({ id: 'hack-1', direction: 'hack', tier: 1, name: '破解販賣機', fixerId: 'k', minutes: 2, reward: 100, xp: 12, stress: 2, heat: 0, injury: 2, blurb: '整排販賣機都歸荒井會管，讓它們吐錢就對了。' }),
     j({ id: 'force-1', direction: 'force', tier: 1, name: '收保護費', fixerId: 'k', minutes: 3, reward: 150, xp: 14, stress: 1, heat: 1, injury: 8, blurb: '拉麵攤老闆欠了兩個月。客氣一點，但要拿到錢。' }),
     j({ id: 'stealth-2', direction: 'stealth', tier: 2, name: '跟拍外遇', fixerId: 'mist', minutes: 4, reward: 260, xp: 22, stress: 2, heat: 0, injury: 5, blurb: '港務部某課長，每週四晚上會「加班」。拍到臉就好。' }),
     j({ id: 'hack-2', direction: 'hack', tier: 2, name: '竊取監視畫面', fixerId: 'mist', minutes: 4, reward: 240, xp: 22, stress: 4, heat: 1, injury: 3, blurb: '倉庫 7 號的攝影機昨晚拍到了不該拍的東西。' }),
@@ -54,7 +54,7 @@ export interface DangerTemplate {
   title: string
   body: string
   options: DangerOption[]
-  /** 火力方向的高階工作要先打一場。 */
+  /** 武力方向的高階工作要先打一場。 */
   fight?: Enemy
 }
 
@@ -95,7 +95,7 @@ export function highDanger(job: JobDef): DangerTemplate {
     autoLog: OPENING[job.direction](job.name),
     title: t.title,
     body: t.body,
-    fight: job.direction === 'force' ? { name: '倉庫守衛', hp: 80 + (job.tier - 4) * 30, atk: 11, hit: 0.55 } : undefined,
+    fight: job.direction === 'force' ? { name: '倉庫守衛', hp: 80 + (job.tier - 4) * 30, atk: 11, hit: 0.55, ice: 7, sense: 7 } : undefined,
     options: [
       { id: 'abort', label: '放棄這份工作，馬上撤離', lethal: false, lethalBase: 0, survivalWindowMin: 0 },
       { id: 'push', label: t.push, lethal: true, lethalBase: 0.2 + (job.tier - 4) * 0.12, survivalWindowMin: 3 },

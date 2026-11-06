@@ -1,6 +1,6 @@
+import { X } from './icons'
 // 像素元件圖鑑：每個元件單獨放大顯示，方便一個一個檢查與修改（src/pixel/）。
 import { useEffect, useRef } from 'react'
-import { X } from 'lucide-react'
 import { CATALOG, type CatalogItem } from '../pixel/scenes'
 import { Panel } from './ui'
 

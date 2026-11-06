@@ -169,11 +169,11 @@ func _style_like(button: Button, model: Button) -> void:
 			button.add_theme_color_override(color, model.get_theme_color(color))
 
 
-## display_name "" shows the narrator. A plaque drawn as a nine-patch (CloudPlaque) widens for a
+## display_name "" shows the narrator. A plaque drawn as a nine-patch (NamePlaque) widens for a
 ## long name, so the name never runs into its ends; it is never narrower than in the scene.
 func set_speaker(display_name: String) -> void:
 	speaker_name.text = display_name if not display_name.is_empty() else "旁白"
-	if not speaker_row.has_node("NamePlate/CloudPlaque") or not speaker_row.get_node("NamePlate/CloudPlaque") is NinePatchRect:
+	if not speaker_row.has_node("NamePlate/NamePlaque") or not speaker_row.get_node("NamePlate/NamePlaque") is NinePatchRect:
 		return
 	if _plate_width <= 0.0:
 		_plate_width = speaker_row.offset_right - speaker_row.offset_left

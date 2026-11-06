@@ -1,25 +1,28 @@
-import { Activity, BedDouble, Cpu, Dna, Hospital, Package, Plus, ShieldPlus, Stethoscope, Swords } from 'lucide-react'
 import { ActionButton, Meter, Panel, PanelHead, Tabs } from '../components/ui'
 import { useState, type ReactNode } from 'react'
 import { type useGame, gearBusy } from '../game/state'
-import { ITEMS, SHOP_IMPLANTS, itemDesc } from '../content/items'
-import { ATTRS, ATTR_EFFECT, ATTR_LABEL, ATTR_MAX, CLINIC, DIRECTION_LABEL, type Direction, HOSPITAL, NEURAL_STAGE_LABEL, PROF_MAX, REST, SEVERE_INJURY, SLOT_LABEL, type Slot, capacityOf, IMPLANT_RESERVE, type Item, implantRoom, sellValue, fightStats, injuryLabel, marginOf, neuralStage, pawnValue, xpToNext } from '../rules/core'
+import { ITEMS, PROVENANCE, SHOPS, type Shop, itemDesc, shopPrice } from '../content/items'
+import { FIXERS } from '../content/data'
+import { type Look, hasLook } from '../components/CityStrip'
+import { Activity, BedDouble, Cpu, Dna, Hospital, IconFence, IconTalent, Package, Plus, ShieldPlus, Stethoscope, Swords } from '../components/icons'
+import { ATTRS, ATTR_EFFECT, ATTR_LABEL, ATTR_MAX, CLINIC, DIRECTION_LABEL, type Direction, HOSPITAL, NEURAL_STAGE_LABEL, PROF_MAX, REST, SEVERE_INJURY, SLOT_LABEL, type Slot, capacityOf, IMPLANT_RESERVE, type Item, implantRoom, powerOf, POLICIES, PLATINUM, policyOf, TALENTS, talentLock, hasTalent, sellValue, fightStats, injuryLabel, marginOf, neuralStage, pawnValue, xpToNext } from '../rules/core'
 import { BackBar, DIR_ICON } from './Jobs'
 
 export function CharacterScreen({ game }: { game: ReturnType<typeof useGame> }) {
   const { g, act } = game
   const c = g.character
-  const [shop, setShop] = useState(false)
-  const [tab, setTab] = useState<'status' | 'gear' | 'attrs'>('status')
+  const [shop, setShop] = useState<Shop | null>(null)
+  const [tab, setTab] = useState<'status' | 'gear' | 'attrs' | 'talent'>('status')
   const room = implantRoom(c)
   const busy = gearBusy(g)
-  if (shop) return <ImplantShop game={game} onBack={() => setShop(false)} />
+  if (shop) return <ShopScreen game={game} shop={shop} onBack={() => setShop(null)} />
   const cap = capacityOf(c)
   const margin = marginOf(c)
   const stage = neuralStage(margin)
   const treatCost = c.injury * CLINIC.perPoint
   const hospitalCost = c.injury * HOSPITAL.perPoint
   const st = fightStats(c)
+  const pol = policyOf(g.coverage)
   const severe = c.injury >= SEVERE_INJURY
   // 重傷那段（≥70）用慢速，其餘用一般速度
   const restMin = Math.ceil((Math.max(0, c.injury - SEVERE_INJURY + 1) * REST.severeMsPerPoint + Math.min(c.injury, SEVERE_INJURY - 1) * REST.msPerPoint) / 60_000)
@@ -28,6 +31,33 @@ export function CharacterScreen({ game }: { game: ReturnType<typeof useGame> }) 
       <Panel innerClass="p-4">
         <div className="tech text-[13px] text-muted">MERC ID・{c.id.toUpperCase()}</div>
         <h1 className="my-0 text-[22px] font-bold text-heading">{c.name}</h1>
+        <div className="mt-1 flex items-baseline gap-4">
+          <span className="text-[14px] text-muted">
+            戰力 <b className="tech text-[22px] text-cyan">{powerOf(c)}</b>
+          </span>
+          <span className="text-[14px] text-muted">
+            街頭名聲 <b className="tech text-[18px] text-heading">{c.fame}</b>
+          </span>
+        </div>
+        <div className="mt-1 flex items-center gap-2 text-[14px] text-muted">
+          外觀
+          {(['a', 'b'] as Look[]).map((k) => {
+            const on = (c.look ?? 'a') === k
+            const ready = hasLook(k)
+            return (
+              <button
+                key={k}
+                disabled={!ready || !c.alive}
+                onClick={() => act({ t: 'setLook', look: k })}
+                className={`min-h-11 border px-3 ${on ? 'border-red font-bold text-red' : 'border-line/70 text-fg'} disabled:opacity-50`}
+              >
+                {k === 'a' ? '女' : '男'}
+                {!ready && <span className="ml-1 text-[11px]">（圖製作中）</span>}
+              </button>
+            )
+          })}
+        </div>
+        <p className="mt-0 mb-1 text-[12px] text-muted">戰力看攻擊、命中、爆擊、HP 與護甲（滿血時）；名聲只從做成的任務累積，不算進戰力。</p>
         <div className="mt-2 space-y-2">
           <Meter label={`等級 Lv.${c.level}`} value={c.xp} max={xpToNext(c.level)} />
           <Meter label={`傷勢・${injuryLabel(c.injury)}`} value={c.injury} max={100} tone={severe ? 'red' : 'warning'} text={`${c.injury}%`} />
@@ -36,7 +66,7 @@ export function CharacterScreen({ game }: { game: ReturnType<typeof useGame> }) 
           <Swords size={14} className="shrink-0 text-line" />
           <span>
             HP <b className="tech text-heading">{st.hp}/{st.maxHp}</b>・攻擊 <b className="tech text-heading">{st.atk}</b>・命中 <b className="tech text-heading">{Math.round(st.hit * 100)}%</b>・護甲{' '}
-            <b className="tech text-heading">{st.armor}</b>・暴擊 <b className="tech text-heading">{Math.round(st.crit * 100)}%×{st.critDmg.toFixed(1)}</b>
+            <b className="tech text-heading">{st.armor}</b>・爆擊 <b className="tech text-heading">{Math.round(st.crit * 100)}%×{st.critDmg.toFixed(1)}</b>
           </span>
           {!st.weapon && <span className="text-warning">（沒有武器）</span>}
         </div>
@@ -49,6 +79,7 @@ export function CharacterScreen({ game }: { game: ReturnType<typeof useGame> }) 
           { id: 'status', label: '狀態' },
           { id: 'gear', label: '裝備', badge: c.stash.length },
           { id: 'attrs', label: '屬性', badge: c.attrPoints },
+          { id: 'talent', label: '天賦', badge: c.talentPoints },
         ]}
       />
 
@@ -114,6 +145,47 @@ export function CharacterScreen({ game }: { game: ReturnType<typeof useGame> }) 
       </Panel>
       )}
 
+      {tab === 'talent' && (
+      <Panel innerClass="pb-2">
+        <PanelHead
+          icon={<IconTalent size={16} />}
+          title="天賦"
+          right={<span className={c.talentPoints ? 'font-bold text-red' : 'text-[13px] text-muted'}>{c.talentPoints ? `技能點 ${c.talentPoints}` : '升級時 +1 點'}</span>}
+        />
+        <div className="grid grid-cols-3 gap-2 px-3 pt-3">
+          {(['force', 'hack', 'stealth'] as Direction[]).map((d) => {
+            const Icon = DIR_ICON[d]
+            return (
+              <div key={d} className="min-w-0 space-y-2">
+                <div className="flex items-center gap-1 text-[13px] font-bold text-heading">
+                  <Icon size={14} className="text-line" /> {DIRECTION_LABEL[d]}
+                </div>
+                {TALENTS.filter((t) => t.branch === d).map((t) => {
+                  const own = hasTalent(c, t.id)
+                  const lock = talentLock(c, t.id)
+                  return (
+                    <button
+                      key={t.id}
+                      disabled={own || !!lock || !c.alive}
+                      onClick={() => act({ t: 'learnTalent', id: t.id })}
+                      className={`block w-full text-left ${own ? 'cut cut-sm cut-red' : 'cut cut-sm'} ${!own && lock ? 'opacity-60' : ''}`}
+                    >
+                      <div className="cut-in min-h-[88px] p-2">
+                        <div className={`text-[14px] font-bold ${own ? 'text-red' : 'text-fg-list'}`}>{t.name}</div>
+                        <div className="text-[12px] text-fg">{t.desc}</div>
+                        <div className="text-[11px] text-muted">{own ? '✔ 已學會' : lock === '沒有技能點' ? '' : !lock ? '點一下學會' : lock}</div>
+                      </div>
+                    </button>
+                  )
+                })}
+              </div>
+            )
+          })}
+        </div>
+        <p className="m-0 px-3 pt-2 text-[13px] text-muted">技能點跟屬性點分開，每升一級 +1。每一支要由上往下學，學了不能退回。</p>
+      </Panel>
+      )}
+
       {tab === 'gear' && (
       <Panel innerClass="pb-2">
         <PanelHead
@@ -158,9 +230,16 @@ export function CharacterScreen({ game }: { game: ReturnType<typeof useGame> }) 
           義體空間＝神經容量 {cap} − 保留 {IMPLANT_RESERVE} − 已裝負荷 {c.implantLoad}。技術與等級提高容量。抵押價＝售價 60%，賣掉＝40%。{busy ? '任務進行中不能換裝。' : ''}
         </p>
         <div className="px-3 pt-2">
-          <ActionButton disabled={busy || !c.alive} reason={busy ? '任務進行中' : '角色已死亡'} onClick={() => setShop(true)}>
-            <Stethoscope size={16} /> 白蛇的義體診所
-          </ActionButton>
+          <div className="space-y-2">
+            {SHOPS.map((sh) => {
+              const lack = sh.trust && (c.trust[sh.fixerId] ?? 0) < sh.trust ? `要 ${FIXERS[sh.fixerId].name}的信任 ${sh.trust}（現在 ${c.trust[sh.fixerId] ?? 0}）` : undefined
+              return (
+                <ActionButton key={sh.id} disabled={busy || !c.alive || !!lack} reason={lack ?? (busy ? '任務進行中' : '角色已死亡')} onClick={() => setShop(sh)}>
+                  {sh.install ? <Stethoscope size={16} /> : <IconFence size={16} />} {sh.name}
+                </ActionButton>
+              )
+            })}
+          </div>
         </div>
       </Panel>
       )}
@@ -204,15 +283,36 @@ export function CharacterScreen({ game }: { game: ReturnType<typeof useGame> }) 
           <ShieldPlus size={16} className="text-cyan" /> 武裝醫療保單
         </div>
         <p className="m-0 text-[15px]">
-          {g.coverage.active ? (
-            <span className="text-positive">有效：覆蓋新宿街區，預估 {g.coverage.etaMin} 分鐘抵達。只能在死亡前救人；出勤帳單付不起時先抵押裝備，抵押不夠就不出勤。</span>
+          {pol ? (
+            <span className="text-positive">
+              {pol.name}保單有效：{pol.note}，救援帳單 ¢{pol.bill}。出勤帳單付不起時先抵押裝備，抵押不夠就不出勤。
+            </span>
           ) : (
             <span className="text-red">沒有保單。受致命傷時不會有人來。</span>
           )}
         </p>
-        <ActionButton disabled={g.coverage.active || c.credits < 400 || !c.alive} reason={g.coverage.active ? '已投保' : '信用點不足 400'} onClick={() => act({ t: 'buyCoverage' })}>
-          購買基本保單（¢400）
-        </ActionButton>
+        <div className="space-y-2">
+          {POLICIES.map((p) => {
+            const owned = !!pol && pol.tier >= p.tier
+            const cost = p.price - (pol?.price ?? 0)
+            return (
+              <div key={p.tier} className={`flex items-center gap-2 border px-2 py-2 ${pol?.tier === p.tier ? 'border-positive' : p.tier === PLATINUM ? 'border-warning/70' : 'border-line/50'}`}>
+                <div className="min-w-0 flex-1">
+                  <b className={p.tier === PLATINUM ? 'text-warning' : 'text-fg-list'}>{p.name}</b>
+                  <span className="ml-2 text-[13px] text-muted">帳單 ¢{p.bill}</span>
+                  <div className="text-[13px] text-fg">{p.note}</div>
+                </div>
+                {owned ? (
+                  <span className="shrink-0 text-[13px] text-positive">{pol!.tier === p.tier ? '目前' : '已涵蓋'}</span>
+                ) : (
+                  <SmallButton disabled={c.credits < cost || !c.alive} onClick={() => act({ t: 'buyCoverage', tier: p.tier })}>
+                    {pol ? '升級' : '購買'} ¢{cost}
+                  </SmallButton>
+                )}
+              </div>
+            )
+          })}
+        </div>
       </Panel>
       )}
 
@@ -258,7 +358,7 @@ function ItemRow({ slot, item, note, children }: { slot: Slot; item?: Item; note
   )
 }
 
-function ImplantShop({ game, onBack }: { game: ReturnType<typeof useGame>; onBack: () => void }) {
+function ShopScreen({ game, shop, onBack }: { game: ReturnType<typeof useGame>; shop: Shop; onBack: () => void }) {
   const { g, act } = game
   const c = g.character
   const room = implantRoom(c)
@@ -266,30 +366,47 @@ function ImplantShop({ game, onBack }: { game: ReturnType<typeof useGame>; onBac
     <div className="space-y-3">
       <BackBar onBack={onBack} label="角色" />
       <Panel innerClass="p-4">
-        <h1 className="m-0 text-[20px] font-bold text-heading">白蛇的義體診所</h1>
-        <p className="mt-1 mb-0 text-fg">「裝什麼都可以，裝不下的別怪我。你的神經只有那麼大。」</p>
+        <div className="tech text-[12px] text-red">// PROBABLY STOLEN・來源不明・不開收據</div>
+        <h1 className="m-0 text-[20px] font-bold text-heading">{shop.name}</h1>
+        <p className="mt-1 mb-0 text-fg">{shop.line}</p>
         <p className="mt-2 mb-0 text-[14px] text-muted">
-          義體空間剩 <b className="tech text-heading">{room}</b>（神經容量 {capacityOf(c)} − 保留 {IMPLANT_RESERVE} − 已裝 {c.implantLoad}）。買了直接裝上；技術每點 +3 容量。
+          {shop.install ? (
+            <>
+              義體空間剩 <b className="tech text-heading">{room}</b>（神經容量 {capacityOf(c)} − 保留 {IMPLANT_RESERVE} − 已裝 {c.implantLoad}）。買了直接裝上；技術每點 +3 容量。
+            </>
+          ) : (
+            '買了放進背包，到「裝備」裝上。價錢比行情貴兩成五：贓貨也要算風險。'
+          )}
         </p>
       </Panel>
       <Panel innerClass="pb-1">
-        {SHOP_IMPLANTS.map((kind) => {
+        {shop.kinds.map((kind, n) => {
           const d = ITEMS[kind]
+          const price = shopPrice(shop, kind)
           const after = room - d.load
-          const why = c.credits < d.price ? `需要 ¢${d.price}` : after < 0 ? `義體空間不夠（還差 ${-after}）` : undefined
+          const why = c.credits < price ? `需要 ¢${price}` : shop.install && after < 0 ? `義體空間不夠（還差 ${-after}）` : undefined
           return (
-            <div key={kind} className="flex items-center gap-2 border-b border-line/40 px-3 py-3">
-              <div className="min-w-0 flex-1">
-                <b className="text-fg-list">{d.name}</b>
-                <div className="text-[14px] text-cyan">{d.desc}</div>
-                <div className={`text-[13px] ${after < 0 ? 'text-warning' : 'text-muted'}`}>
-                  負荷 {d.load}・裝上後空間剩 {after}
-                </div>
-                {why && <div className="text-[13px] text-warning">✖ {why}</div>}
+            <div key={kind} className="border-b border-line/40 px-3 py-3">
+              <div className="tech flex items-center gap-2 text-[11px] text-muted">
+                <span>LOT #{String(n + 1).padStart(3, '0')}・{SLOT_LABEL[d.slot]}</span>
+                <span className="ml-auto -rotate-3 border border-red px-1 font-bold text-red">PROBABLY STOLEN</span>
               </div>
-              <SmallButton disabled={!!why || !c.alive} onClick={() => act({ t: 'buy', kind })}>
-                ¢{d.price}
-              </SmallButton>
+              <div className="mt-1 flex items-center gap-2">
+                <div className="min-w-0 flex-1">
+                  <b className="text-fg-list">{d.name}</b>
+                  <div className="text-[14px] text-cyan">{d.desc || `${DIRECTION_LABEL[d.direction]}工作 +${Math.round(d.bonus * 100)}%`}</div>
+                  <div className="text-[13px] text-muted">來歷：{PROVENANCE[kind]}</div>
+                  {shop.install && (
+                    <div className={`text-[13px] ${after < 0 ? 'text-warning' : 'text-muted'}`}>
+                      負荷 {d.load}・裝上後空間剩 {after}
+                    </div>
+                  )}
+                  {why && <div className="text-[13px] text-warning">✖ {why}</div>}
+                </div>
+                <SmallButton disabled={!!why || !c.alive} onClick={() => act({ t: 'buy', kind })}>
+                  ¢{price}
+                </SmallButton>
+              </div>
             </div>
           )
         })}

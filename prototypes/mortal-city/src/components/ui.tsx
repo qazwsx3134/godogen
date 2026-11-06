@@ -1,6 +1,6 @@
+import { AlertTriangle, IconEmblem } from './icons'
 // 遊戲元件：依 ui-system.md v0.4（reference.JPG 論壇終端風格）
 import { type ReactNode, useState } from 'react'
-import { AlertTriangle } from 'lucide-react'
 import { FIXERS } from '../content/data'
 
 export function Panel({
@@ -36,14 +36,8 @@ export function PanelHead({ icon, title, right }: { icon?: ReactNode; title: str
 }
 
 export function Emblem({ size = 40 }: { size?: number }) {
-  // 自製 emblem：切角六邊形＋城市天際線，不使用參考圖的原作標誌
-  return (
-    <svg width={size} height={size} viewBox="0 0 48 48" aria-hidden className="shrink-0">
-      <path d="M10 4h28l8 8v24l-8 8H10l-8-8V12z" fill="none" stroke="var(--color-cyan)" strokeWidth="2" />
-      <path d="M9 34V22h5v-6h5v10h4V12h5v14h4v-8h5v16z" fill="var(--color-cyan)" opacity=".85" />
-      <path d="M8 38h32" stroke="var(--color-red)" strokeWidth="2" />
-    </svg>
-  )
+  // 自製 emblem：像素切角框＋城市天際線，不使用參考圖的原作標誌
+  return <IconEmblem size={size} className="text-cyan" />
 }
 
 export function Avatar({ id, size = 44 }: { id: string; size?: number }) {

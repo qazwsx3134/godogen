@@ -924,8 +924,8 @@ func _build_phase3_hud() -> void:
 	_phase3_hud.visible = false
 	_phase3_hud.reduce_motion = int(_settings.get("motion", 0)) == 1
 
-## `char` places a character (slot, expression) for when they speak; only `hide` (visible false)
-## takes them off stage. Characters come on stage by speaking (_focus_speaker).
+## `char` prepares a character's slot and expression. An explicit entrance brings them to the
+## front immediately; otherwise they come on stage by speaking (_focus_speaker).
 func _apply_character(command: Dictionary) -> void:
 	var actor_id: String = _dict_string(command, "id")
 	if not _sprites.has(actor_id):
@@ -942,12 +942,13 @@ func _apply_character(command: Dictionary) -> void:
 	if not _dict_bool(command, "visible", true):
 		_motion.character(sprite, "leave", _skip, transition)
 		return
-	if _dict_bool(command, "enter") and not sprite.visible:
-		# `enter`: someone who has not spoken (Elisabeth) comes on stage at their slot, lit.
-		_layout_sprite(actor_id)
+	if _dict_bool(command, "enter"):
+		_char_layer.move_child(sprite, -1)
 		sprite.modulate = _portrait_color(sprite, true)
-		sprite.visible = true
-		_motion.character(sprite, "enter", _skip, transition)
+		if not sprite.visible:
+			_layout_sprite(actor_id)
+			sprite.visible = true
+			_motion.character(sprite, "enter", _skip, transition)
 
 
 func _portrait_color(sprite: Control, focused: bool) -> Color:
@@ -1626,6 +1627,11 @@ func _drive_story(generation: int) -> void:
 					return
 			"portrait_lighting":
 				_apply_portrait_lighting(command)
+				# Present the light change before the next command can cover the portrait.
+				if not _skip:
+					await get_tree().process_frame
+					if generation != _generation:
+						return
 			"portrait_effect":
 				var actor_id: String = _dict_string(command, "id")
 				if _sprites.has(actor_id):

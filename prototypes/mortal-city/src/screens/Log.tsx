@@ -1,5 +1,5 @@
+import { Grid3x3, RotateCcw, ScrollText, Skull } from '../components/icons'
 import { useState } from 'react'
-import { Grid3x3, RotateCcw, ScrollText, Skull } from 'lucide-react'
 import { PixelGallery } from '../components/PixelGallery'
 import { ActionButton, Panel, PanelHead } from '../components/ui'
 import type { useGame } from '../game/state'

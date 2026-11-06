@@ -151,5 +151,36 @@
   "src": "/sprites/roof_strip.png",
   "w": 432,
   "h": 160
+ },
+ "hero_b_lying": {
+  "src": "/sprites/hero_b_lying.png",
+  "w": 169,
+  "h": 98
+ },
+ "hero_b_run": {
+  "src": "/sprites/hero_b_run.png",
+  "w": 66,
+  "h": 71
+ },
+ "hero_b_stand": {
+  "src": "/sprites/hero_b_stand.png",
+  "w": 24,
+  "h": 75
+ },
+ "hero_b_run_strip": {
+  "src": "/sprites/hero_b_run_strip.png",
+  "w": 45,
+  "h": 72,
+  "frames": 8
+ },
+ "sofa_rest_a": {
+  "src": "/sprites/sofa_rest_a.png",
+  "w": 250,
+  "h": 111
+ },
+ "sofa_rest_b": {
+  "src": "/sprites/sofa_rest_b.png",
+  "w": 250,
+  "h": 104
  }
 }

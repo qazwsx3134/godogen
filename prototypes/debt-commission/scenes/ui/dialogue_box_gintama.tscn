@@ -2,7 +2,7 @@
 
 [ext_resource type="FontFile" path="res://assets/fonts/story-cjk.ttc" id="1_h3wp5"]
 [ext_resource type="Script" path="res://scripts/dialogue_box.gd" id="2_l144r"]
-[ext_resource type="Texture2D" path="res://assets/ui/gintama_extracted_nameplate.png" id="3_qvxcl"]
+[ext_resource type="Texture2D" path="res://assets/ui/gintama_heading_plain.tres" id="3_qvxcl"]
 [ext_resource type="Texture2D" path="res://assets/ui/gintama_icon_voice.svg" id="4_qvxcl"]
 [ext_resource type="FontFile" path="res://assets/fonts/NotoSerifTC.ttf" id="4_qywm6"]
 [ext_resource type="Texture2D" path="res://assets/ui/gintama_extracted_paper.png" id="6_amexu"]
@@ -914,23 +914,25 @@ anchor_bottom = 1.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_n8u6h")
 
-[node name="CloudPlaque" type="NinePatchRect" parent="PaperAndToolbar/NameOverlap/SpeakerRow/NamePlate" unique_id=671231901]
+[node name="NamePlaque" type="NinePatchRect" parent="PaperAndToolbar/NameOverlap/SpeakerRow/NamePlate" unique_id=671231901]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 texture = ExtResource("3_qvxcl")
-patch_margin_left = 64
-patch_margin_right = 72
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
 
 [node name="SpeakerName" type="Label" parent="PaperAndToolbar/NameOverlap/SpeakerRow" unique_id=1773459287]
 unique_name_in_owner = true
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 71.0
-offset_top = 5.0
-offset_right = -79.0
-offset_bottom = -10.0
+offset_left = 28.0
+offset_top = 0.0
+offset_right = -28.0
+offset_bottom = 0.0
 theme_override_fonts/font = SubResource("FontVariation_qywm6")
 theme_override_font_sizes/font_size = 35
 theme_override_colors/font_color = Color(0.972549, 0.9529412, 0.9137255, 1)

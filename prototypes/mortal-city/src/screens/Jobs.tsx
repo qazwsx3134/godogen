@@ -1,9 +1,10 @@
+import { AlertTriangle, ArrowLeft, Heart, IconForce, IconHack, IconStealth, MessageSquare, Pin, Swords, Timer, type IconProps } from '../components/icons'
+import { TypingLine, typingMs, useReveal } from '../components/reveal'
 import { useEffect, useRef, useState } from 'react'
-import { AlertTriangle, ArrowLeft, Crosshair, Eye, Flame, Heart, MessageSquare, Pin, Swords, Terminal, Timer } from 'lucide-react'
 import { ActionButton, Avatar, ListRow, Meter, Panel, PanelHead, Tabs, Tag } from '../components/ui'
 import { FIXERS, JOBS, QUEUE_SLOTS, highDanger } from '../content/data'
 import { CASES, CASE_BY_ID, type CaseRecord, type StoryCase, caseBody, caseReplies, caseUnlocked, optionLock } from '../content/cases'
-import { type useGame, fightEnemy, storyBusy } from '../game/state'
+import { type useGame, ALL_JOBS, fightEnemy, storyBusy } from '../game/state'
 import {
   type Enemy,
   type FightResult,
@@ -28,11 +29,30 @@ import {
   jobSuccessChance,
   marginOf,
   RESCUE_BILL,
+  policyOf,
+  enemyPower,
+  powerOf,
+  powerVerdict,
+  streetEnemy,
+  talentJobBonus,
+  hackPower,
+  stealthPower,
 } from '../rules/core'
 
 type G = ReturnType<typeof useGame>
 
-export const DIR_ICON: Record<Direction, typeof Flame> = { force: Crosshair, hack: Terminal, stealth: Eye }
+/** 建議戰力＋一句評語（判定仍走各自的公式，這裡只給人看）。 */
+function PowerTag({ c, enemy }: { c: G['g']['character']; enemy: Enemy }) {
+  const need = enemyPower(enemy)
+  const v = powerVerdict(powerOf(c, true), need)
+  return (
+    <Tag tone={v.tone === 'muted' ? 'line' : v.tone}>
+      建議戰力 {need}・{v.label}
+    </Tag>
+  )
+}
+
+export const DIR_ICON: Record<Direction, (p: IconProps) => React.JSX.Element> = { force: IconForce, hack: IconHack, stealth: IconStealth }
 
 const mmss = (ms: number) => {
   const s = Math.max(0, Math.round(ms / 1000))
@@ -128,9 +148,9 @@ function StreetList({ game, onOpen }: { game: G; onOpen: (id: string) => void })
                 cols={[
                   { label: '報酬', value: `¢${jobReward(j, c.prof[d].level)}` },
                   { label: '耗時', value: mmss(jobDurationMs(j, c.prof[d].level)) },
-                  { label: '階級', value: String(j.tier) },
+                  { label: '難度', value: String(j.tier) },
                 ]}
-                meta={`${FIXERS[j.fixerId].name}・${isLethal(j) ? '只能在線手動接' : '可排隊・可離線'}`}
+                meta={`${FIXERS[j.fixerId].name}・${isLethal(j) ? '只能線上手動接' : '可排隊・可離線'}`}
                 lethal={isLethal(j)}
                 onClick={() => onOpen(j.id)}
               />
@@ -167,7 +187,7 @@ function JobDetail({ game, job, onBack }: { game: G; job: JobDef; onBack: () => 
       <BackBar onBack={onBack} label="街頭工作" />
       <Panel tone={lethal ? 'red' : 'line'} innerClass="p-4">
         <div className="text-[13px] text-muted">
-          #{job.id.toUpperCase()}・{DIRECTION_LABEL[job.direction]}・階級 {job.tier}
+          #{job.id.toUpperCase()}・{DIRECTION_LABEL[job.direction]}・難度 {job.tier}
         </div>
         <h1 className="my-1 text-[22px] leading-snug font-bold text-heading">{job.name}</h1>
         <div className="flex items-start gap-3">
@@ -177,7 +197,8 @@ function JobDetail({ game, job, onBack }: { game: G; job: JobDef; onBack: () => 
         <div className="mt-3 flex flex-wrap gap-2">
           <Tag>報酬 ¢{jobReward(job, lv)}</Tag>
           <Tag>耗時 {mmss(jobDurationMs(job, lv))}</Tag>
-          <Tag>成功率 {Math.round(jobSuccessChance(job, lv, equipBonus(c, job.direction)) * 100)}%</Tag>
+          <Tag>成功率 {Math.round(jobSuccessChance(job, lv, equipBonus(c, job.direction) + talentJobBonus(c, job.direction)) * 100)}%</Tag>
+          <PowerTag c={c} enemy={lethal ? (highDanger(job).fight ?? streetEnemy(job)) : streetEnemy(job)} />
           <Tag tone="warning">壓力 +{job.stress}</Tag>
           {lethal && (
             <Tag tone="red">
@@ -186,24 +207,24 @@ function JobDetail({ game, job, onBack }: { game: G; job: JobDef; onBack: () => 
           )}
         </div>
         <p className="mt-3 mb-0 text-[14px] text-muted">
-          成功率來自工作階級、{DIRECTION_LABEL[job.direction]}熟練度 {lv} 與裝備加成 +{Math.round(equipBonus(c, job.direction) * 100)}%；熟練度每級 +0.05%，傷勢 −0.15%，報酬 +0.25%，耗時 −0.4%。
+          {job.direction === 'force' ? '武力工作每件都要打一場；' : '失手被發現就要打一場；'}你的戰力 {powerOf(c, true)}{c.injury ? '（帶傷）' : ''}。成功率來自工作難度、{DIRECTION_LABEL[job.direction]}熟練度 {lv} 與裝備加成 +{Math.round(equipBonus(c, job.direction) * 100)}%{talentJobBonus(c, job.direction) ? `、天賦 +${Math.round(talentJobBonus(c, job.direction) * 100)}%` : ''}；熟練度每級 +0.05%，傷勢 −0.15%，報酬 +0.25%，耗時 −0.4%。
         </p>
       </Panel>
       {lethal ? (
         <>
-          <p className="m-0 text-[14px] text-muted">第 4 階起只能在線手動接，不能排隊、不能離線。進行中排隊的工作會暫停（正在做的那件會做完）。</p>
+          <p className="m-0 text-[14px] text-muted">難度 4 起只能線上手動接，不能排隊、不能離線。進行中排隊的工作會暫停（正在做的那件會做完）。</p>
           <ActionButton
             tone="danger"
             disabled={!!highBlock}
             reason={highBlock}
             onClick={() => (act({ t: 'highStart', jobId: job.id }), onBack())}
           >
-            <AlertTriangle size={16} /> 在線手動接下
+            <AlertTriangle size={16} /> 線上手動接下
           </ActionButton>
         </>
       ) : (
         <ActionButton tone="primary" disabled={!!reason} reason={reason} onClick={() => (act({ t: 'enqueue', jobId: job.id }), onBack())}>
-          排入佇列（{g.queue.items.length}/{QUEUE_SLOTS}）
+          加入排隊（{g.queue.items.length}/{QUEUE_SLOTS}）
         </ActionButton>
       )}
     </div>
@@ -213,7 +234,7 @@ function JobDetail({ game, job, onBack }: { game: G; job: JobDef; onBack: () => 
 function QueueView({ game }: { game: G }) {
   const { g, act, now } = game
   const c = g.character
-  const first = g.queue.items[0] ? JOBS[g.queue.items[0]] : null
+  const first = g.queue.items[0] ? ALL_JOBS[g.queue.items[0]] : null
   const dur = first ? jobDurationMs(first, c.prof[first.direction].level) : 0
   const elapsed = first && g.queue.startedAt ? now - g.queue.startedAt : 0
   return (
@@ -222,7 +243,7 @@ function QueueView({ game }: { game: G }) {
         <PanelHead icon={<Timer size={16} />} title={`排隊（${g.queue.items.length}/${QUEUE_SLOTS}）`} />
         {g.queue.items.length === 0 && <p className="m-0 px-3 py-3 text-muted">沒有排隊中的工作。到「街頭工作」排入最多 {QUEUE_SLOTS} 件。</p>}
         {g.queue.items.map((id, i) => {
-          const j = JOBS[id]
+          const j = ALL_JOBS[id]
           const Icon = DIR_ICON[j.direction]
           return (
             <div key={i} className="border-b border-line/40 px-3 py-2">
@@ -243,7 +264,7 @@ function QueueView({ game }: { game: G }) {
           停止條件：傷勢 ≥ {g.stopRules.injuryAt}%、通緝 ≥ {g.stopRules.heatAt}★、神經進入臨界；重傷（傷勢 ≥ 70%）一定停。觸發時取消剩下的工作並寫明原因。
         </p>
         <div className="px-3 pt-2">
-          <div className="text-[13px] text-muted">遇到打鬥時的預設戰術（火力工作每件都打；入侵、潛行失手被發現也會打）</div>
+          <div className="text-[13px] text-muted">遇到打鬥時的預設戰術（武力工作每件都打；駭入、潛行失手被發現也會打）</div>
           <div className="mt-1 grid grid-cols-3 gap-2">
             {tacticsFor(g.character).map((t) => {
               const on = (g.stopRules.tactic ?? 'force') === t.id
@@ -254,7 +275,7 @@ function QueueView({ game }: { game: G }) {
                   className={`min-h-11 border px-1 text-[13px] ${on ? 'border-red font-bold text-red' : 'border-line/70 text-fg'}`}
                 >
                   {t.label}
-                  {t.locked && <span className="block text-[11px] text-warning">鎖住→正面</span>}
+                  {t.locked && <span className="block text-[11px] text-warning">被擋住→改正面交火</span>}
                 </button>
               )
             })}
@@ -300,7 +321,27 @@ function CaseThread({ game, sc, onBack }: { game: G; sc: StoryCase; onBack: () =
   const fixer = FIXERS[sc.fixerId]
   const otherBusy =
     workBlock(g.character) ?? (storyBusy(g) && !active ? '另一件劇情委託進行中' : g.high && g.high.stage !== 'done' ? '高階工作進行中' : undefined)
-  const replies = caseReplies(sc, g.cases)
+  const base = caseReplies(sc, g.cases)
+  // 追問過的問題接在回覆後面：你問、對方答
+  const asked = g.asked.filter((x) => x.startsWith(`${sc.id}#`)).map((x) => +x.split('#')[1])
+  const replies: { who: string; at: string; text: string }[] = [
+    ...base,
+    ...asked.flatMap((i) => {
+      const q = sc.asks![i]
+      return [
+        { who: 'me', at: '剛剛', text: q.q },
+        { who: q.who, at: '剛剛', text: q.a },
+      ]
+    }),
+  ]
+  const reveal = useReveal(
+    replies.length,
+    g.seen[sc.id] ?? 0,
+    (i) => typingMs(replies[i]?.text ?? '', replies[i]?.who === 'me'),
+    (n) => act({ t: 'seen', key: sc.id, n }),
+  )
+  const nextReply = replies[reveal.n]
+  const asks = (sc.asks ?? []).map((q, i) => ({ ...q, i })).filter((q) => !asked.includes(q.i))
   const visible = sc.danger.options.filter((o) => optionLock(g.character, g.story.approach, o) !== null)
   const locks = Object.fromEntries(visible.map((o) => [o.id, optionLock(g.character, g.story.approach, o) ?? '']).filter(([, v]) => v))
   const notes = Object.fromEntries(
@@ -332,7 +373,7 @@ function CaseThread({ game, sc, onBack }: { game: G; sc: StoryCase; onBack: () =
         </div>
         <div className="mt-3 flex items-center gap-4 border-t border-line/40 pt-2 text-[14px] text-muted">
           <span className="flex items-center gap-1">
-            <MessageSquare size={15} /> {replies.length}
+            <MessageSquare size={15} /> {base.length}
           </span>
           <span className="tech">最高 ¢{reward}</span>
           <span>{sc.zone}</span>
@@ -343,22 +384,48 @@ function CaseThread({ game, sc, onBack }: { game: G; sc: StoryCase; onBack: () =
       </Panel>
 
       <Panel innerClass="divide-y divide-line/40">
-        {replies.map((r, i) => (
-          <div key={i} className="flex gap-3 p-3">
-            <Avatar id={r.who} size={44} />
-            <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-2 text-[14px]">
-                <b className="text-heading">{FIXERS[r.who].name}</b>
-                <span className="text-[12px] text-muted">{FIXERS[r.who].role}</span>
-                <span className="tech ml-auto text-[13px] text-muted">{r.at}</span>
+        {replies.slice(0, reveal.n).map((r, i) =>
+          r.who === 'me' ? (
+            <div key={i} className="msg-in flex justify-end p-3">
+              <div className="max-w-[85%] border border-red/60 bg-red-bg px-2 py-1">
+                <div className="text-[12px] text-muted">你・{r.at}</div>
+                <p className="m-0 text-[16px] text-fg">{r.text}</p>
               </div>
-              <p className="mt-1 mb-0 text-[16px] text-fg">{r.text}</p>
             </div>
+          ) : (
+            <div key={i} className="msg-in flex gap-3 p-3">
+              <Avatar id={r.who} size={44} />
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2 text-[14px]">
+                  <b className="text-heading">{FIXERS[r.who].name}</b>
+                  <span className="text-[12px] text-muted">{FIXERS[r.who].role}</span>
+                  <span className="tech ml-auto text-[13px] text-muted">{r.at}</span>
+                </div>
+                <p className="mt-1 mb-0 text-[16px] text-fg">{r.text}</p>
+              </div>
+            </div>
+          ),
+        )}
+        {reveal.typing && (
+          <div className="flex items-center gap-3 p-3">
+            <span className="flex-1">{nextReply?.who !== 'me' && <TypingLine who={FIXERS[nextReply?.who ?? 'k']?.name ?? ''} />}</span>
+            <button onClick={reveal.skip} className="min-h-11 px-2 text-[14px] text-cyan">
+              全部顯示 »
+            </button>
           </div>
-        ))}
+        )}
+        {!reveal.typing && asks.length > 0 && !rec && (
+          <div className="space-y-2 p-3">
+            {asks.map((q) => (
+              <ActionButton key={q.i} tone="ghost" onClick={() => act({ t: 'ask', caseId: sc.id, i: q.i })}>
+                追問：「{q.q}」
+              </ActionButton>
+            ))}
+          </div>
+        )}
       </Panel>
 
-      {!active && !rec && (
+      {!active && !rec && !reveal.typing && (
         <ActionButton
           tone="primary"
           disabled={!!otherBusy}
@@ -447,7 +514,7 @@ function ApproachPicker({ game, sc }: { game: G; sc: StoryCase }) {
                 <div className="font-bold text-fg-list">{a.label}</div>
                 <div className="text-[15px] text-fg">{a.summary}</div>
                 <div className="text-[13px] text-muted">
-                  {DIRECTION_LABEL[a.direction]}・{a.fight ? `⚔ 要打一場（${a.fight.name}）` : `路上傷勢 +${a.injury}%`}・風險 {mod > 0 ? `+${mod}` : mod}%
+                  {DIRECTION_LABEL[a.direction]}・{a.fight ? `⚔ 要打一場（${a.fight.name}，建議戰力 ${enemyPower(a.fight)}・${powerVerdict(powerOf(c, true), enemyPower(a.fight)).label}）` : `路上傷勢 +${a.injury}%`}・風險 {mod > 0 ? `+${mod}` : mod}%
                   {bonus ? `・你的裝備與熟練度 −${bonus}%` : ''}
                 </div>
                 {a.needs && <div className="text-[13px] text-cyan">屬性做法：{ATTR_LABEL[a.needs.attr]} ≥ {a.needs.min}</div>}
@@ -474,21 +541,27 @@ function TacticPicker({ game, enemy, onPick }: { game: G; enemy: Enemy; onPick: 
     <Panel tone="red" innerClass="p-3 space-y-2">
       <div className="flex items-center gap-2 text-[18px] font-bold text-red">
         <Swords size={20} /> 遭遇戰：{enemy.name}
+        <span className="ml-auto">
+          <PowerTag c={c} enemy={enemy} />
+        </span>
       </div>
       <div className="grid grid-cols-2 gap-2 text-[14px]">
         <div className="border border-line/70 p-2">
           你 <b className="tech text-heading">HP {st.hp}/{st.maxHp}</b>・攻擊 <b className="tech text-heading">{st.atk}</b>・命中 <b className="tech text-heading">{Math.round(st.hit * 100)}%</b>
           {st.armor ? <>・護甲 <b className="tech text-heading">{st.armor}</b></> : null}
-          {st.crit ? <>・暴擊 <b className="tech text-heading">{Math.round(st.crit * 100)}%</b></> : null}
+          {st.crit ? <>・爆擊 <b className="tech text-heading">{Math.round(st.crit * 100)}%</b></> : null}
+          ・駭入強度 <b className="tech text-heading">{hackPower(c)}</b>・隱匿 <b className="tech text-heading">{stealthPower(c)}</b>
         </div>
         <div className="border border-red/60 p-2">
           對方 <b className="tech text-heading">HP {enemy.hp}</b>・攻擊 <b className="tech text-heading">{enemy.atk}</b>・命中 <b className="tech text-heading">{Math.round(enemy.hit * 100)}%</b>
+          ・防火牆 <b className={`tech ${(enemy.ice ?? 0) > hackPower(c) ? 'text-red' : 'text-heading'}`}>{enemy.ice ?? 0}</b>・感知{' '}
+          <b className={`tech ${(enemy.sense ?? 0) > stealthPower(c) ? 'text-red' : 'text-heading'}`}>{enemy.sense ?? 0}</b>
         </div>
       </div>
       <p className="m-0 text-[13px] text-muted">
         自動戰鬥，打鬥本身不會死：HP 低於最大 HP 的 {RETREAT_HP}% 會自動撤退，這件委託就失敗。受的傷會帶到後面的危險節點。選一個戰術：
       </p>
-      {tacticsFor(c).map((t) => {
+      {tacticsFor(c, enemy).map((t) => {
         const Icon = DIR_ICON[t.id]
         const on = sel === t.id
         return (
@@ -503,7 +576,7 @@ function TacticPicker({ game, enemy, onPick }: { game: G; enemy: Enemy; onPick: 
               <div className="flex-1">
                 <div className="font-bold text-fg-list">
                   {t.label}
-                  <span className="ml-2 text-[13px] font-normal text-muted">{DIRECTION_LABEL[t.id]}</span>
+                  {DIRECTION_LABEL[t.id] !== t.label && <span className="ml-2 text-[13px] font-normal text-muted">{DIRECTION_LABEL[t.id]}</span>}
                 </div>
                 <div className="text-[14px] text-fg">{t.summary}</div>
                 {t.locked && <div className="text-[13px] text-warning">✖ {t.locked}</div>}
@@ -633,7 +706,7 @@ function RiskDecision({
           通緝 <b className="text-red">{'★'.repeat(c.heat) || '—'}</b>
         </div>
         <div className="border border-red/60 p-2">
-          醫療保單 <b className={cov.active ? 'text-positive' : 'text-red'}>{cov.active ? `有效・約 ${cov.etaMin} 分鐘` : '無'}</b>
+          醫療保單 <b className={cov.active ? 'text-positive' : 'text-red'}>{policyOf(cov) ? `${policyOf(cov)!.name}・${cov.etaMin ? `約 ${cov.etaMin} 分鐘` : '待命小隊'}` : '無'}</b>
         </div>
       </div>
       <p className="m-0 text-[14px] text-muted">
@@ -641,7 +714,7 @@ function RiskDecision({
       </p>
       {cov.active && (
         <p className="m-0 border border-warning/70 p-2 text-[14px] text-warning">
-          救援帳單 ¢{RESCUE_BILL}：現金不夠時，自動抵押身上的裝備；現金加抵押價（目前最多 ¢{canPay}）還不夠，救援不會出勤。
+          救援帳單 ¢{policyOf(cov)?.bill ?? RESCUE_BILL}：現金不夠時，自動抵押身上的裝備；現金加抵押價（目前最多 ¢{canPay}）還不夠，救援不會出勤。
         </p>
       )}
       {options.map((o) => {
@@ -695,7 +768,7 @@ function Result({ outcome: o, doneTitle = '完成委託', safeTitle = '撤離・
   )
 }
 
-// ---------- 高階街頭工作（在線手動） ----------
+// ---------- 高階街頭工作（線上手動） ----------
 
 function HighRun({ game }: { game: G }) {
   const { g, act } = game
@@ -708,7 +781,7 @@ function HighRun({ game }: { game: G }) {
       {h.stage === 'done' && <BackBar onBack={() => act({ t: 'highClose' })} label="回到街頭工作" />}
       <Panel tone="red" innerClass="p-4">
         <div className="flex items-center gap-2 text-[13px] text-red">
-          <Icon size={14} /> 高階工作・{DIRECTION_LABEL[job.direction]}・階級 {job.tier}・在線手動
+          <Icon size={14} /> 高階工作・{DIRECTION_LABEL[job.direction]}・難度 {job.tier}・線上手動
         </div>
         <h1 className="my-1 text-[22px] leading-snug font-bold text-heading">{job.name}</h1>
         <div className="flex items-start gap-3">

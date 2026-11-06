@@ -1,4 +1,4 @@
-import { Mail } from 'lucide-react'
+import { Mail } from '../components/icons'
 import { ActionButton, Panel } from '../components/ui'
 import type { AwayReport } from '../game/state'
 import { LOG_COLOR, hhmm } from './Log'

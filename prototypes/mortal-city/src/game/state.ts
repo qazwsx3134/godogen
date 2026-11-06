@@ -36,12 +36,22 @@ import {
   SEVERE_INJURY,
   CLINIC,
   HOSPITAL,
+  POLICIES,
+  policyOf,
   settleQueue,
   statusPrefix,
+  talentLock,
+  TALENTS,
   weekKey,
 } from '../rules/core'
-import { CITY_TARGET, JOBS, QUEUE_SLOTS, STARTER_GEAR, highDanger } from '../content/data'
-import { ITEMS, SHOP_IMPLANTS, fightLoot, makeItem, rollKind, streetLoot } from '../content/items'
+import { CITY_TARGET, FIXERS, JOBS, QUEUE_SLOTS, STARTER_GEAR, highDanger } from '../content/data'
+
+const FIXER_NAME = Object.fromEntries(Object.values(FIXERS).map((f) => [f.id, f.name]))
+import { ITEMS, SHOPS, fightLoot, makeItem, rollKind, shopPrice, streetLoot } from '../content/items'
+import { CONTACTS, CONTACT_BY_JOB, DM_JOBS, UNIQUE_JOBS, offerOf, uniqueLock } from '../content/contacts'
+
+/** 排隊用的工作表：看板上的街頭工作＋私人通訊的獨特委託。 */
+export const ALL_JOBS = { ...JOBS, ...UNIQUE_JOBS, ...DM_JOBS }
 import { CASE_BY_ID, type CaseOption, type CaseRecord, type StoryCase, caseUnlocked, optionLock } from '../content/cases'
 
 /** 正在進行的劇情委託的階段；結案後的結果記在 Game.cases。 */
@@ -90,9 +100,44 @@ export interface Game {
   away: AwayReport | null
   systemFault: boolean
   notes: string[] // 生涯紀錄裡的特殊事件（例如系統補償搶救）
+  /** 私人通訊：中間人 id → 對話串（跟著角色，新角色清空）。 */
+  dm: Record<string, DmThread>
+  /** 劇情委託論壇串已經播到第幾則（案件 id → 則數），回來不重播。 */
+  seen: Record<string, number>
+  /** 已經追問過的問題（`案件id#第幾題`）。 */
+  asked: string[]
 }
 
-const KEY = 'mortal-city:v7'
+export interface DmMsg {
+  from: 'npc' | 'me'
+  text: string
+  at: number
+}
+
+export interface DmThread {
+  msgs: DmMsg[]
+  /** 已經播放過幾則（動畫從這裡接著播）。 */
+  seen: number
+  /** 等你回覆的委託（工作 id）。 */
+  offer: string | null
+  /** 這個遊戲時間之後才發下一件委託。 */
+  nextAt: number
+  /** 已經發過幾件一般委託（輪流挑）。 */
+  served: number
+  /** 已經說過幾句閒聊。 */
+  lines: number
+  /** 獨特委託的完成訊息送出了沒。 */
+  uniqueDone: boolean
+}
+
+/** 接了或推掉一件私訊委託後，多久（遊戲時間）才發下一件。 */
+export const DM_COOLDOWN = 10 * 60_000
+/** 每條對話串最多留幾則，超過就丟掉最舊的。 */
+export const DM_KEEP = 40
+
+const KEY = 'mortal-city:v9'
+/** 診所治療至少花這麼多，白蛇才多信任你一點（縫一針 ¢6 不算）。 */
+const CLINIC_TRUST_MIN = 100
 
 function newCharacter(n: number, now: number): Character {
   return {
@@ -113,11 +158,16 @@ function newCharacter(n: number, now: number): Character {
     attrs: baseAttrs(),
     attrPoints: ATTR_START_POINTS,
     stash: [],
+    talentPoints: 0,
+    talents: [],
+    fame: 0,
+    trust: {},
+    uniqueDone: [],
   }
 }
 
 export function initial(now: number): Game {
-  return {
+  return syncDm({
     v: 1,
     character: newCharacter(1, now),
     queue: { items: [], startedAt: null, paused: false, seq: 0 },
@@ -135,7 +185,61 @@ export function initial(now: number): Game {
     away: null,
     systemFault: false,
     notes: [],
+    dm: {},
+    seen: {},
+    asked: [],
+  })
+}
+
+const emptyThread = (): DmThread => ({ msgs: [], seen: 0, offer: null, nextAt: 0, served: 0, lines: 0, uniqueDone: false })
+
+/**
+ * 對話串的同步（每個動作之後跑一次，沒變化就回傳原物件）：信任到了就說閒聊、
+ * 獨特委託做完就回訊息、沒有待回覆的委託而且冷卻過了就發下一件（獨特優先，一般輪流）。
+ */
+export function syncDm(g: Game): Game {
+  const c = g.character
+  if (!c.alive) return g
+  let dm = g.dm
+  for (const k of CONTACTS) {
+    const old = dm[k.fixerId] ?? emptyThread()
+    const th: DmThread = { ...old, msgs: [...old.msgs] }
+    const at = g.clock.virtual
+    const say = (text: string, from: DmMsg['from'] = 'npc') => th.msgs.push({ from, text, at })
+    const trust = c.trust[k.fixerId] ?? 0
+    while (th.lines < k.lines.length && trust >= k.lines[th.lines].trust) say(k.lines[th.lines++].text)
+    if (!th.uniqueDone && c.uniqueDone.includes(k.unique.jobId)) {
+      say(k.unique.done)
+      th.uniqueDone = true
+    }
+    if (!th.offer && at >= th.nextAt) {
+      const queued = (id: string) => g.queue.items.includes(id)
+      const pool = k.requests.filter((r) => trust >= r.trust && !queued(r.jobId))
+      const pick = !uniqueLock(c, k.unique.jobId) && !queued(k.unique.jobId) ? k.unique : pool.length ? pool[th.served++ % pool.length] : undefined
+      if (pick) {
+        th.offer = pick.jobId
+        for (const t of pick.intro) say(t)
+      }
+    }
+    if (th.msgs.length === old.msgs.length && th.offer === old.offer && dm[k.fixerId]) continue
+    const drop = Math.max(0, th.msgs.length - DM_KEEP)
+    if (drop) {
+      th.msgs = th.msgs.slice(drop)
+      th.seen = Math.max(0, th.seen - drop)
+    }
+    dm = { ...dm, [k.fixerId]: th }
   }
+  return dm === g.dm ? g : { ...g, dm }
+}
+
+/** 對話串裡還沒看過的則數或待回覆的委託：通訊入口的紅點。 */
+export function dmUnread(g: Game) {
+  return Object.values(g.dm).filter((t) => t.seen < t.msgs.length || t.offer).length
+}
+
+/** 私訊委託為什麼現在不能接。 */
+export function dmAcceptBlock(g: Game) {
+  return workBlock(g.character) ?? (g.queue.items.length >= QUEUE_SLOTS ? `排隊已滿（${QUEUE_SLOTS} 件）` : undefined)
 }
 
 export function vnow(g: Game, real = Date.now()) {
@@ -149,7 +253,7 @@ export const storyBusy = (g: Game) => g.story.caseId !== null
 
 /** 開打：鎖住的戰術不能用；結果一次算完（seed 決定），傷勢與壓力立刻套用，畫面再逐回合播放。 */
 function startFight(c: Character, enemy: Enemy, tactic: Tactic, seed: number): { c: Character; f: FightResult } | null {
-  if (tacticsFor(c).find((t) => t.id === tactic)?.locked) return null
+  if (tacticsFor(c, enemy).find((t) => t.id === tactic)?.locked) return null
   const f = resolveFight(c, enemy, tactic, seed)
   return { c: { ...c, injury: f.injury, stress: c.stress + f.stress }, f }
 }
@@ -173,7 +277,14 @@ function closeCase(g: Game, now: number, sc: StoryCase, picked: CaseOption, outc
     const parts = [picked.reward ? `+${picked.reward} 信用點` : '沒有報酬', picked.heat ? `通緝 +${picked.heat}` : '', picked.heal ? '傷口縫好了' : '']
     log.push({ at: now, kind: picked.reward ? 'job' : 'warn', text: `${statusPrefix(ch)} 「${sc.title}」結案：${parts.filter(Boolean).join('，')}。` })
     addXp(ch, sc.xp, now, log)
-    if (outcome.kind === 'survived')
+    // 結案就有名聲與委託人的信任；冒險生還給得多
+    // 測試案可以重設重玩，不給名聲與信任（不然能刷）
+    const won = outcome.kind === 'survived'
+    if (sc.kind !== 'test') {
+      ch.fame += won ? 10 : 3
+      ch.trust[sc.fixerId] = (ch.trust[sc.fixerId] ?? 0) + (won ? 3 : 1)
+    }
+    if (won)
       for (const l of sc.loot ?? []) stashLoot(ch, rollKind(hashSeed(ch.id, sc.id, 'reward', l.kind), l.kind, l.chance), log, now, sc.title)
   }
   const r = settleLethal(g, now, outcome, { label: sc.title, zone: sc.zone, safeText: outcome.reason, lossText: sc.lossText, onSurvive: paid })
@@ -235,11 +346,16 @@ type Action =
   | { t: 'highAutoDone' }
   | { t: 'highChoose'; optionId: string }
   | { t: 'highClose' }
-  | { t: 'buyCoverage' }
+  | { t: 'buyCoverage'; tier: number }
   | { t: 'treat' }
   | { t: 'hospital' }
   | { t: 'setTactic'; tactic: Tactic }
   | { t: 'raiseAttr'; attr: Attr }
+  | { t: 'learnTalent'; id: string }
+  | { t: 'setLook'; look: 'a' | 'b' }
+  | { t: 'dmReply'; fixerId: string; accept: boolean }
+  | { t: 'seen'; key: string; n: number }
+  | { t: 'ask'; caseId: string; i: number }
   | { t: 'buy'; kind: string }
   | { t: 'equip'; itemId: string }
   | { t: 'unequip'; itemId: string }
@@ -264,8 +380,17 @@ function advance(g: Game, now: number): { g: Game; r: ReturnType<typeof settleQu
       restLog.push({ at: now, kind: 'system', text: `${statusPrefix(character)} 休養到能下床了，可以再接工作。` })
     if (character.heat < before.heat) restLog.push({ at: now, kind: 'system', text: `${statusPrefix(character)} 你低調了一陣子，MPD 的注意力移開了（通緝 −${before.heat - character.heat}）。` })
   } else if (!idle) restCarry = { ms: 0, heatMs: 0 }
-  const r = settleQueue(character, g.queue, now, JOBS, g.stopRules, streetLoot)
-  const supply = Object.entries(r.cityContrib).reduce((s, [id, n]) => s + (JOBS[id].direction === 'stealth' ? n : 0), 0)
+  const r = settleQueue(character, g.queue, now, ALL_JOBS, g.stopRules, streetLoot)
+  // 獨特委託做成：中間人送一件東西＋私人訊息
+  for (const id of r.character.uniqueDone) {
+    if (character.uniqueDone.includes(id)) continue
+    const k = CONTACT_BY_JOB[id]
+    const gift = makeItem(k.unique.gift, `${id}-gift`)
+    r.character.stash.push(gift)
+    const at = r.events.find((e) => e.kind === 'job' && e.text.includes(`「${UNIQUE_JOBS[id].name}」`))?.at ?? now
+    r.events.push({ at, kind: 'gain', text: `◆ ${FIXER_NAME[k.fixerId]}傳來私訊，附上一件「${gift.name}」，放進背包。` })
+  }
+  const supply = Object.entries(r.cityContrib).reduce((s, [id, n]) => s + (ALL_JOBS[id].direction === 'stealth' ? n : 0), 0)
   return {
     g: {
       ...g,
@@ -345,6 +470,11 @@ function settleLethal(g: Game, now: number, first: DangerOutcome, ctx: LethalCtx
 }
 
 export function reduce(g: Game, a: Action): Game {
+  const n = reduceCore(g, a)
+  return n === g ? g : syncDm(n)
+}
+
+function reduceCore(g: Game, a: Action): Game {
   const real = a.t === 'tick' ? a.real : Date.now()
   const now = vnow(g, real)
   switch (a.t) {
@@ -353,8 +483,9 @@ export function reduce(g: Game, a: Action): Game {
       return { ...n, clock: { ...g.clock, real, virtual: now } }
     }
     case 'enqueue': {
-      const job = JOBS[a.jobId]
-      if (workBlock(g.character) || isLethal(job) || g.queue.items.length >= QUEUE_SLOTS) return g
+      const job = ALL_JOBS[a.jobId]
+      // 私訊的委託只能從私訊回覆接（dmReply），看板這條路不收
+      if (!job || job.dm || job.unique || workBlock(g.character) || isLethal(job) || g.queue.items.length >= QUEUE_SLOTS) return g
       const startedAt = g.queue.items.length === 0 ? now : g.queue.startedAt
       return {
         ...g,
@@ -573,12 +704,17 @@ export function reduce(g: Game, a: Action): Game {
     case 'highClose':
       return { ...g, high: null }
     case 'buyCoverage': {
-      if (g.coverage.active || g.character.credits < 400) return g
+      // 買或升級保單：只付跟目前級別的差額
+      const pol = POLICIES[a.tier - 1]
+      const cur = policyOf(g.coverage)
+      if (!pol || (cur && cur.tier >= pol.tier)) return g
+      const cost = pol.price - (cur?.price ?? 0)
+      if (g.character.credits < cost) return g
       return {
         ...g,
-        character: { ...g.character, credits: g.character.credits - 400 },
-        coverage: { ...g.coverage, active: true },
-        log: trim([...g.log, { at: now, kind: 'system', text: '購買武裝醫療基本保單（-400 信用點）。覆蓋新宿街區，預估 3 分鐘抵達。' }]),
+        character: { ...g.character, credits: g.character.credits - cost },
+        coverage: { ...g.coverage, active: true, tier: pol.tier, etaMin: pol.eta },
+        log: trim([...g.log, { at: now, kind: 'system', text: `${cur ? '升級' : '購買'}武裝醫療${pol.name}保單（-${cost} 信用點）：${pol.note}，救援帳單 ¢${pol.bill}。` }]),
       }
     }
     case 'treat': {
@@ -586,7 +722,7 @@ export function reduce(g: Game, a: Action): Game {
       if (!g.character.alive || g.character.credits < cost || g.character.injury === 0) return g
       return {
         ...g,
-        character: { ...g.character, credits: g.character.credits - cost, injury: 0, stress: Math.max(0, g.character.stress - CLINIC.stress) },
+        character: { ...g.character, credits: g.character.credits - cost, injury: 0, stress: Math.max(0, g.character.stress - CLINIC.stress), trust: { ...g.character.trust, snake: (g.character.trust.snake ?? 0) + (cost >= CLINIC_TRUST_MIN ? 1 : 0) } },
         log: trim([...g.log, { at: now, kind: 'system', text: `白蛇的診所幫你縫好了傷口（-${cost} 信用點）。` }]),
       }
     }
@@ -611,19 +747,25 @@ export function reduce(g: Game, a: Action): Game {
       }
     }
     case 'buy': {
-      // 白蛇的診所：買了直接裝上（裝不下就不賣）
+      // 白蛇的診所：買了直接裝上（裝不下就不賣）；老K的貨架：放進背包，要先有信任
       const c = g.character
+      const shop = SHOPS.find((x) => x.kinds.includes(a.kind))
+      if (!shop || !c.alive || gearBusy(g)) return g
       const def = ITEMS[a.kind]
-      if (!c.alive || gearBusy(g) || !SHOP_IMPLANTS.includes(a.kind) || c.credits < def.price || implantRoom(c) < def.load) return g
+      const price = shopPrice(shop, a.kind)
+      if (c.credits < price || (shop.trust && (c.trust[shop.fixerId] ?? 0) < shop.trust)) return g
+      if (shop.install && implantRoom(c) < def.load) return g
       const item = makeItem(a.kind, now)
-      return {
-        ...g,
-        character: { ...c, credits: c.credits - def.price, equipment: [...c.equipment, item], implantLoad: c.implantLoad + item.load },
-        log: trim([...g.log, { at: now, kind: 'system', text: `白蛇幫你裝上了「${item.name}」（-${def.price} 信用點，義體負荷 +${item.load}）。` }]),
-      }
+      const character = shop.install
+        ? { ...c, credits: c.credits - price, equipment: [...c.equipment, item], implantLoad: c.implantLoad + item.load, trust: { ...c.trust, snake: (c.trust.snake ?? 0) + 1 } }
+        : { ...c, credits: c.credits - price, stash: [...c.stash, item] }
+      const text = shop.install
+        ? `白蛇幫你裝上了「${item.name}」（-${price} 信用點，義體負荷 +${item.load}）。`
+        : `你在老K的後巷貨架買了「${item.name}」（-${price} 信用點），放進背包。`
+      return { ...g, character, log: trim([...g.log, { at: now, kind: 'system', text }]) }
     }
     case 'equip': {
-      // 從背包裝上：義體要裝得下；武器與作業設備一次一件，換下來的放回背包
+      // 從背包裝上：義體要裝得下；武器與駭客終端一次一件，換下來的放回背包
       const c = g.character
       const item = c.stash.find((i) => i.id === a.itemId)
       if (!c.alive || gearBusy(g) || !item) return g
@@ -669,6 +811,55 @@ export function reduce(g: Game, a: Action): Game {
         character: { ...c, attrs: { ...c.attrs, [a.attr]: c.attrs[a.attr] + 1 }, attrPoints: c.attrPoints - 1 },
         log: trim([...g.log, { at: now, kind: 'level', text: `★ ${ATTR_LABEL[a.attr]}提升到 ${c.attrs[a.attr] + 1}。` }]),
       }
+    }
+    case 'setLook':
+      return g.character.alive ? { ...g, character: { ...g.character, look: a.look } } : g
+    case 'learnTalent': {
+      const c = g.character
+      const t = TALENTS.find((x) => x.id === a.id)
+      if (!c.alive || !t || talentLock(c, a.id)) return g
+      return {
+        ...g,
+        character: { ...c, talents: [...c.talents, t.id], talentPoints: c.talentPoints - 1 },
+        log: trim([...g.log, { at: now, kind: 'level', text: `★ 學會天賦「${t.name}」：${t.desc}。` }]),
+      }
+    }
+    case 'dmReply': {
+      const th = g.dm[a.fixerId]
+      const offer = th?.offer ? offerOf(a.fixerId, th.offer) : undefined
+      if (!th || !offer || !g.character.alive) return g
+      const job = ALL_JOBS[offer.jobId]
+      if (a.accept && (dmAcceptBlock(g) || (job.unique && uniqueLock(g.character, job.id)))) return g
+      const msgs: DmMsg[] = [
+        ...th.msgs,
+        { from: 'me', text: a.accept ? offer.accept : offer.decline, at: now },
+        { from: 'npc', text: a.accept ? offer.acceptReply : offer.declineReply, at: now },
+      ]
+      const dm = { ...g.dm, [a.fixerId]: { ...th, msgs, offer: null, nextAt: now + DM_COOLDOWN } }
+      if (!a.accept) return { ...g, dm }
+      const startedAt = g.queue.items.length === 0 ? now : g.queue.startedAt
+      return {
+        ...g,
+        dm,
+        queue: { ...g.queue, items: [...g.queue.items, job.id], startedAt },
+        log: trim([...g.log, { at: now, kind: 'system', text: `接下${FIXER_NAME[a.fixerId]}的私訊委託「${job.name}」，加入排隊（${g.queue.items.length + 1}/${QUEUE_SLOTS}）。` }]),
+      }
+    }
+    case 'seen': {
+      if (a.key.startsWith('dm:')) {
+        const id = a.key.slice(3)
+        const th = g.dm[id]
+        const n = Math.max(0, Math.min(th?.msgs.length ?? 0, a.n))
+        if (!th || n <= th.seen) return g
+        return { ...g, dm: { ...g.dm, [id]: { ...th, seen: n } } }
+      }
+      if ((g.seen[a.key] ?? 0) >= a.n) return g
+      return { ...g, seen: { ...g.seen, [a.key]: a.n } }
+    }
+    case 'ask': {
+      const key = `${a.caseId}#${a.i}`
+      if (!CASE_BY_ID[a.caseId]?.asks?.[a.i] || g.asked.includes(key)) return g
+      return { ...g, asked: [...g.asked, key] }
     }
     case 'setTactic':
       return { ...g, stopRules: { ...g.stopRules, tactic: a.tactic } }

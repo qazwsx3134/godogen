@@ -123,11 +123,6 @@ body {
     transform: translateY(var(--bob, -3%));
   }
 }
-@keyframes mc-breathe {
-  50% {
-    transform: scaleY(1.025);
-  }
-}
 @keyframes mc-cross {
   from {
     transform: translateX(0);
@@ -145,16 +140,6 @@ body {
   }
   90% {
     opacity: 0.5;
-  }
-}
-.mc-rain {
-  background-image: repeating-linear-gradient(100deg, transparent 0 7px, rgba(210, 190, 255, 0.16) 7px 8px);
-  background-size: 22px 18px;
-  animation: mc-rain 0.5s linear infinite;
-}
-@keyframes mc-rain {
-  to {
-    background-position: -6px 18px;
   }
 }
 .mc-steam {
@@ -196,5 +181,76 @@ body {
   to {
     transform: translate(120%, -220%);
     opacity: 0;
+  }
+}
+
+/* 對話：打字中的三個點、新訊息淡入 */
+.typing-dots {
+  display: inline-flex;
+  gap: 3px;
+}
+.typing-dots i {
+  width: 5px;
+  height: 5px;
+  background: var(--color-cyan);
+  animation: mc-dot 1s infinite;
+}
+.typing-dots i:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.typing-dots i:nth-child(3) {
+  animation-delay: 0.3s;
+}
+@keyframes mc-dot {
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.msg-in {
+  animation: mc-msg 0.25s ease-out;
+}
+@keyframes mc-msg {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .typing-dots i,
+  .msg-in {
+    animation: none;
+  }
+}
+
+/* 像素霓虹圖示：紅青錯位殘影（RGB split），像便宜螢幕的色差 */
+.px-icon {
+  filter: drop-shadow(-1px 0 0 rgb(255 42 90 / 0.55)) drop-shadow(1px 0 0 rgb(0 240 255 / 0.45));
+}
+/* 選中：再加一層光暈，切換時故障閃一下 */
+.px-icon.neon {
+  filter: drop-shadow(-1px 0 0 rgb(255 42 90 / 0.7)) drop-shadow(1px 0 0 rgb(0 240 255 / 0.6)) drop-shadow(0 0 4px currentColor);
+  animation: mc-glitch 0.35s steps(2) 1;
+}
+@keyframes mc-glitch {
+  0% {
+    transform: translate(2px, 0);
+    clip-path: inset(0 0 55% 0);
+  }
+  40% {
+    transform: translate(-2px, 1px);
+    clip-path: inset(45% 0 0 0);
+  }
+  100% {
+    transform: none;
+    clip-path: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .px-icon.neon {
+    animation: none;
   }
 }

@@ -9,7 +9,6 @@ export const SCENE_H = 160
  * anim：
  * - scroll:秒      圖層向左無限捲動（圖片要左右可無縫接）
  * - bob:秒:幅度%   上下浮動（幅度是自身高度的百分比）
- * - breathe:秒     由下往上微微伸縮（呼吸）
  * - cross:秒       從場景右邊外面橫越到左邊外面
  * - flicker:秒     偶爾閃一下（霓虹、螢幕）
  * - frames:格數:fps 播放橫排的 sprite strip（w 是單格寬）
@@ -26,7 +25,7 @@ export interface SpritePlacement {
 
 /** 不是圖片的小特效：雨、熱氣、zZ。 */
 export interface SceneFx {
-  fx: 'rain' | 'steam' | 'zz'
+  fx: 'steam' | 'zz'
   x: number
   y: number
   w: number
@@ -73,7 +72,6 @@ function Layer({ l }: { l: SpritePlacement }) {
   }
   const style: CSSProperties = { ...box(l.x, l.y, l.w, l.h), ...pixel }
   if (kind === 'bob') Object.assign(style, { animation: `mc-bob ${sec}s ease-in-out infinite`, ['--bob' as string]: `-${Number(b) || 3}%` })
-  if (kind === 'breathe') Object.assign(style, { animation: `mc-breathe ${sec}s ease-in-out infinite`, transformOrigin: '50% 100%' })
   if (kind === 'flicker') Object.assign(style, { animation: `mc-flicker ${sec}s steps(1) infinite` })
   if (kind === 'cross')
     Object.assign(style, {
@@ -86,7 +84,6 @@ function Layer({ l }: { l: SpritePlacement }) {
 
 function Fx({ f }: { f: SceneFx }) {
   const style = box(f.x, f.y, f.w, f.h)
-  if (f.fx === 'rain') return <div className="mc-rain pointer-events-none absolute" style={style} />
   if (f.fx === 'steam')
     return (
       <div className="pointer-events-none absolute" style={style}>

@@ -71,6 +71,8 @@ export interface StoryCase {
   /** 依前置案件走的做法多一則回覆（key＝做法 id）。 */
   approachReplies?: Record<string, Reply>
   replies: Reply[]
+  /** 可以追問的問題（你問 → who 回答）。只是對話，不改報酬與風險。 */
+  asks?: { q: string; who: string; a: string }[]
   approaches: Approach[]
   danger: { title: string; body: string; options: CaseOption[] }
   /** 被武裝醫療隊救出時，紀錄裡補的一句。 */
@@ -149,6 +151,8 @@ export const CASE_01: StoryCase = {
     { who: 'mist', at: '23:41', text: '老頭沒告訴你收件人是誰吧？我知道。價碼另談。' },
     { who: 'snake', at: '23:52', text: '……如果那個箱子是往我這裡來的，請你跑快一點。' },
   ],
+  // 追問（試讀稿，2026-11-05 新增）
+  asks: [{ q: '為什麼找我？', who: 'k', a: '因為你還沒有名字。沒有名字的人，MPD 的資料庫裡也查不到。' }],
   approaches: [
     {
       id: 'force',
@@ -157,7 +161,7 @@ export const CASE_01: StoryCase = {
       summary: '把箱子綁在背上，誰攔就打倒誰。一定會跟臨檢的巡警打起來：打輸了就得撤退，打贏了 MPD 會記住你（通緝 +1）。',
       injury: 0,
       lethalMod: 0.04,
-      fight: { name: 'MPD 臨檢巡警', hp: 50, atk: 8, hit: 0.5 },
+      fight: { name: 'MPD 臨檢巡警', hp: 50, atk: 8, hit: 0.5, ice: 3, sense: 3 },
       autoLog: [
         '你把保冷箱綁在背上，從東口的閘門直接跨過去。',
         '兩個 MPD 巡警同時轉身拔槍：「站住！箱子放下！」',
@@ -258,7 +262,7 @@ export const CASE_01: StoryCase = {
         lethal: true,
         lethalBase: 0.3,
         survivalWindowMin: 4,
-        fight: { name: '神坂保全', hp: 60, atk: 10, hit: 0.55 },
+        fight: { name: '神坂保全', hp: 60, atk: 10, hit: 0.55, ice: 5, sense: 5 },
         reward: 900,
         heat: 1,
         text: '最後一個保全倒在月台邊緣。你從他們身上搜出一張神坂的通行晶片，扛起女孩走正門出站。老K 收到晶片時哼了一聲：「多的三百算你的。」',
@@ -266,7 +270,7 @@ export const CASE_01: StoryCase = {
       {
         id: 'broadcast',
         approach: 'hack',
-        needs: { slot: 'deck', direction: 'hack', label: '作業設備' },
+        needs: { slot: 'deck', direction: 'hack', label: '駭客終端' },
         label: '你還連在車站網路上：用月台廣播假裝 MPD 包圍了車站',
         lethal: true,
         lethalBase: 0.06,
@@ -322,6 +326,8 @@ export const CASE_02: StoryCase = {
     { who: 'crow', at: '01:52', text: '三丁目今晚停電，官方說是「例行維護」。神坂的維護，總是剛好排在半夜。' },
     { who: 'mpd', at: '02:05', text: '【MPD 公告】歌舞伎町三丁目實施臨時管制。非法侵入企業設施者，執勤人員得當場制止，包含致命武力。' },
   ],
+  // 追問（試讀稿，2026-11-05 新增）
+  asks: [{ q: '為什麼不收現金？', who: 'snake', a: '現金誰都付得起，神坂也付得起——他們已經想把我的病人買走了。今晚我要的不是錢，是一個肯下去地下二樓的人。' }],
   approaches: [
     {
       id: 'force',
@@ -330,7 +336,7 @@ export const CASE_02: StoryCase = {
       summary: '老K 說的那扇門。三下就開，但整棟樓都會聽見，得先打倒一樓的保全。',
       injury: 0,
       lethalMod: 0.05,
-      fight: { name: '診療所保全', hp: 70, atk: 9, hit: 0.55 },
+      fight: { name: '診療所保全', hp: 70, atk: 9, hit: 0.55, ice: 4, sense: 3 },
       autoLog: ['你在停電的巷子裡數到三。第三腳，門框整個飛了進去。', '一樓的三個保全打開手電筒，槍口全對著你。'],
       afterFight: ['你踩過碎掉的手電筒，下到地下二樓。', '病歷庫的門開著。你在檔案目錄裡找到 K-0413，開始下載。'],
     },
@@ -431,7 +437,7 @@ export const CASE_02: StoryCase = {
         lethal: true,
         lethalBase: 0.35,
         survivalWindowMin: 3,
-        fight: { name: '神坂回收小組', hp: 80, atk: 11, hit: 0.55 },
+        fight: { name: '神坂回收小組', hp: 80, atk: 11, hit: 0.55, ice: 6, sense: 6 },
         reward: 1200,
         heat: 1,
         heal: true,
@@ -440,7 +446,7 @@ export const CASE_02: StoryCase = {
       {
         id: 'swap',
         approach: 'hack',
-        needs: { slot: 'deck', direction: 'hack', label: '作業設備' },
+        needs: { slot: 'deck', direction: 'hack', label: '駭客終端' },
         label: '你已經在主機裡：把回收清單上的 K-0413 換成另一份空白病歷',
         lethal: true,
         lethalBase: 0.08,

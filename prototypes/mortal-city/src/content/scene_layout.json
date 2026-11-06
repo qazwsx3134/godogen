@@ -36,8 +36,7 @@
     {
       "id": "hero_lying",
       "x": 22,
-      "y": 30,
-      "anim": "breathe:3.4"
+      "y": 30
     },
     {
       "id": "blanket",
@@ -131,17 +130,10 @@
       "id": "hero_run_strip",
       "x": 124,
       "y": 78,
-      "anim": "frames:8:12"
+      "anim": "frames:8:5"
     }
   ],
   "room_fx": [
-    {
-      "fx": "rain",
-      "x": 100,
-      "y": 5,
-      "w": 249,
-      "h": 87
-    },
     {
       "fx": "steam",
       "x": 294,
@@ -157,13 +149,5 @@
       "h": 14
     }
   ],
-  "street_fx": [
-    {
-      "fx": "rain",
-      "x": 0,
-      "y": 0,
-      "w": 384,
-      "h": 160
-    }
-  ]
+  "street_fx": []
 }

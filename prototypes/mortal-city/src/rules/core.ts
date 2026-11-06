@@ -4,8 +4,8 @@
 export type Direction = 'force' | 'hack' | 'stealth'
 
 export const DIRECTION_LABEL: Record<Direction, string> = {
-  force: '火力',
-  hack: '入侵',
+  force: '武力',
+  hack: '駭入',
   stealth: '潛行',
 }
 
@@ -63,9 +63,9 @@ export const ATTR_START_POINTS = 4
 export const ATTR_EFFECT: Record<Attr, string> = {
   tech: '每點 +3 護甲（每次被打中都減傷）、神經容量 +3（能裝更多義體）。所有流派都用得到',
   body: '每點最大 HP +8。傷勢是 HP 的百分比，HP 越多越耐打',
-  reflex: '每點命中 +2%、暴擊率 +4%（暴擊 ×1.5 傷害）',
-  int: '駭進智慧槍的干擾每 2 點多 1 回合、神經壓力每 2 點 −1',
-  cool: '每點暴擊傷害 +10%、迷彩偷襲第一擊 +0.1 倍',
+  reflex: '每點命中 +2%、爆擊率 +4%（爆擊 ×1.5 傷害）',
+  int: '駭入的干擾每 2 點多 1 回合、神經壓力每 2 點 −1',
+  cool: '每點爆擊傷害 +10%、光學迷彩繞背第一擊 +0.1 倍',
 }
 
 const over = (c: Character, a: Attr) => c.attrs[a] - ATTR_BASE
@@ -74,6 +74,48 @@ const over = (c: Character, a: Attr) => c.attrs[a] - ATTR_BASE
 export function attrLock(c: Character, needs: { attr: Attr; min: number } | undefined): string | undefined {
   if (!needs || c.attrs[needs.attr] >= needs.min) return undefined
   return `需要${ATTR_LABEL[needs.attr]} ${needs.min}（現在 ${c.attrs[needs.attr]}）`
+}
+
+// ---------- 天賦（技能點；每升一級 +1，跟屬性點分開） ----------
+
+export interface Talent {
+  id: string
+  branch: Direction
+  /** 同一支的第幾格：要先學前一格。 */
+  step: 1 | 2 | 3
+  name: string
+  desc: string
+}
+
+export const TALENTS: Talent[] = [
+  { id: 'f1', branch: 'force', step: 1, name: '穩定射擊', desc: '命中 +5%' },
+  { id: 'f2', branch: 'force', step: 2, name: '壓制火力', desc: '攻擊 +3' },
+  { id: 'f3', branch: 'force', step: 3, name: '硬骨頭', desc: '最大 HP +15' },
+  { id: 'h1', branch: 'hack', step: 1, name: '腳本庫', desc: '駭入工作成功率 +3%' },
+  { id: 'h2', branch: 'hack', step: 2, name: '冷卻迴路', desc: '駭入的神經壓力 −1' },
+  { id: 'h3', branch: 'hack', step: 3, name: '反制程式', desc: '駭入的干擾 +1 回合' },
+  { id: 's1', branch: 'stealth', step: 1, name: '輕步', desc: '潛行工作成功率 +3%' },
+  { id: 's2', branch: 'stealth', step: 2, name: '影襲', desc: '光學迷彩繞背第一擊 +0.3 倍' },
+  { id: 's3', branch: 'stealth', step: 3, name: '退路', desc: '劇情走潛行做法時，致命機率再 −3%' },
+]
+
+export const hasTalent = (c: Character, id: string) => c.talents.includes(id)
+const tv = (c: Character, id: string, v: number) => (hasTalent(c, id) ? v : 0)
+
+/** 能不能學：不能回傳原因。 */
+export function talentLock(c: Character, id: string): string | undefined {
+  const t = TALENTS.find((x) => x.id === id)
+  if (!t) return '沒有這個天賦'
+  if (hasTalent(c, id)) return '已學會'
+  const prev = TALENTS.find((x) => x.branch === t.branch && x.step === t.step - 1)
+  if (prev && !hasTalent(c, prev.id)) return `先學「${prev.name}」`
+  if (c.talentPoints < 1) return '沒有技能點'
+  return undefined
+}
+
+/** 工作成功率的天賦加成（駭入、潛行各一格）。 */
+export function talentJobBonus(c: Character, d: Direction) {
+  return d === 'hack' ? tv(c, 'h1', 0.03) : d === 'stealth' ? tv(c, 's1', 0.03) : 0
 }
 
 export function baseAttrs(): Record<Attr, number> {
@@ -91,7 +133,7 @@ export function armorOf(c: Character) {
   return over(c, 'tech') * 3 + gearMod(c, 'armor')
 }
 export function maxHpOf(c: Character) {
-  return 100 + over(c, 'body') * 8 + gearMod(c, 'hp')
+  return 100 + over(c, 'body') * 8 + gearMod(c, 'hp') + tv(c, 'f3', 15)
 }
 /** 傷勢 % 換算成目前 HP。 */
 export function hpOf(c: Character) {
@@ -139,9 +181,13 @@ export interface JobDef {
   heat: number
   injury: number
   blurb: string
+  /** 獨特委託：只出現在中間人的私人通訊，一個角色只能做一次。 */
+  unique?: boolean
+  /** 私訊的一般委託：不在看板上，只能從私訊回覆接（可重複）。 */
+  dm?: boolean
 }
 
-/** 第 4 階起可能永久死亡，只能在線手動接。 */
+/** 難度 4 起可能永久死亡，只能線上手動接。 */
 export const LETHAL_TIER = 4
 
 export function isLethal(job: JobDef) {
@@ -180,7 +226,7 @@ export function weekKey(ms: number) {
 // ---------- 裝備與抵押 ----------
 
 export type Slot = 'weapon' | 'deck' | 'implant'
-export const SLOT_LABEL: Record<Slot, string> = { weapon: '武器', deck: '作業設備', implant: '義體' }
+export const SLOT_LABEL: Record<Slot, string> = { weapon: '武器', deck: '駭客終端', implant: '義體' }
 
 export interface Item {
   id: string // 每件物品自己的 id（同一種可以有好幾件）
@@ -304,6 +350,17 @@ export interface Character {
   attrPoints: number
   /** 背包：沒裝在身上的物品（戰利品、卸下的裝備）。 */
   stash: Item[]
+  /** 還沒用的技能點與學會的天賦（id）。 */
+  talentPoints: number
+  talents: string[]
+  /** 街頭名聲：做成任務累積，不算進戰力。 */
+  fame: number
+  /** 中間人的信任（id → 點數）：決定私人通訊與獨特委託。 */
+  trust: Record<string, number>
+  /** 已完成的獨特委託（一次性）。 */
+  uniqueDone: string[]
+  /** 主角外觀：a＝女主角 A（預設）、b＝男主角 B。只影響圖。 */
+  look?: 'a' | 'b'
 }
 
 export interface StopRules {
@@ -404,13 +461,14 @@ export function addXp(c: Character, xp: number, at: number, events: LogEvent[]) 
     c.xp -= xpToNext(c.level)
     c.level += 1
     c.attrPoints += 1
-    events.push({ at, kind: 'level', text: `★ 等級提升到 Lv.${c.level}，神經容量 ${capacityOf(c)}，屬性點 +1。` })
+    c.talentPoints += 1
+    events.push({ at, kind: 'level', text: `★ 等級提升到 Lv.${c.level}，神經容量 ${capacityOf(c)}，屬性點 +1、技能點 +1。` })
   }
 }
 
 /** 劇情委託的做法：該方向的裝備加成＋熟練度每級 1%，從致命機率裡扣掉。 */
 export function approachBonus(c: Character, d: Direction) {
-  return equipBonus(c, d) + c.prof[d].level * 0.01
+  return equipBonus(c, d) + c.prof[d].level * 0.01 + (d === 'stealth' ? tv(c, 's3', 0.03) : 0)
 }
 
 /**
@@ -419,6 +477,12 @@ export function approachBonus(c: Character, d: Direction) {
  */
 export function grantProgress(c: Character, job: JobDef, ok: boolean, at: number, events: LogEvent[]) {
   addXp(c, ok ? job.xp : Math.round(job.xp / 3), at, events)
+  if (ok) {
+    // 名聲＝做成的任務（難度越高越多）；信任＝替這位中間人做成的件數（獨特委託 +3）
+    c.fame += job.tier * (job.unique ? 3 : 1)
+    c.trust[job.fixerId] = (c.trust[job.fixerId] ?? 0) + (job.unique ? 3 : 1)
+    if (job.unique && !c.uniqueDone.includes(job.id)) c.uniqueDone.push(job.id)
+  }
   const p = c.prof[job.direction]
   p.xp += 1
   while (p.level < PROF_MAX && p.xp >= profXpToNext(p.level)) {
@@ -455,7 +519,7 @@ export function settleQueue(
   now: number,
   jobs: Record<string, JobDef>,
   rules: StopRules = DEFAULT_STOP,
-  /** 打贏時擲戰利品（seed、工作階級）→ 物品或 null。沒給就不掉。 */
+  /** 打贏時擲戰利品（seed、工作難度）→ 物品或 null。沒給就不掉。 */
   loot?: (seed: number, tier: number) => Item | null,
 ): SettleResult {
   let c: Character = structuredClone(start)
@@ -474,22 +538,23 @@ export function settleQueue(
     if (due > now) break
 
     const roll = rng(hashSeed(c.id, queue.seq, job.id))
-    let ok = roll() < jobSuccessChance(job, p.level, equipBonus(c, job.direction))
+    let ok = roll() < jobSuccessChance(job, p.level, equipBonus(c, job.direction) + talentJobBonus(c, job.direction))
     const harm = proficiencyEffects(p.level).harm
     let injury = Math.round(job.injury * (ok ? 0.4 : 1.4) * (1 - harm) * (0.6 + roll() * 0.8))
     const heatUp = !ok && roll() < 0.35 + job.heat * 0.1 ? 1 : 0
 
-    // 打鬥：火力工作每件都要打（打贏＝成功）；入侵／潛行工作失手＝被發現，打贏就帶著東西脫身。
+    // 打鬥：武力工作每件都要打（打贏＝成功）；駭入／潛行工作失手＝被發現，打贏就帶著東西脫身。
     // 用自己的 seed，不動上面那串亂數。打鬥的掉血取代原本的傷勢公式。
     let fightNote = ''
     if (job.direction === 'force' || !ok) {
       const want = rules.tactic ?? 'force'
-      const tactic = tacticsFor(c).find((t) => t.id === want)?.locked ? 'force' : want
-      const f = resolveFight(c, streetEnemy(job), tactic, hashSeed(c.id, queue.seq, job.id, 'fight'))
+      const foe = streetEnemy(job)
+      const tactic = tacticsFor(c, foe).find((t) => t.id === want)?.locked ? 'force' : want
+      const f = resolveFight(c, foe, tactic, hashSeed(c.id, queue.seq, job.id, 'fight'))
       ok = f.won
       injury = f.injury - c.injury
       c.stress += f.stress
-      const tl = tacticsFor(c).find((t) => t.id === tactic)!.label
+      const tl = tacticsFor(c, foe).find((t) => t.id === tactic)!.label
       // 戰利品用自己的 seed，不影響戰鬥與工作的亂數
       const drop = f.won && loot ? loot(hashSeed(c.id, queue.seq, job.id, 'loot'), job.tier) : null
       if (drop) c.stash.push(drop)
@@ -536,7 +601,20 @@ export interface Coverage {
   active: boolean
   coversZone: boolean
   etaMin: number // 救援預估抵達分鐘
+  /** 保單級別（POLICIES 的 tier）；沒寫＝基本。 */
+  tier?: number
 }
+
+/** 武裝醫療保單的四個級別：越高越快到、帳單越便宜；白金會在危險節點提前介入。升級只付差額。 */
+export const POLICIES = [
+  { tier: 1, name: '基本', price: 400, eta: 3, bill: 1500, note: '預估 3 分鐘抵達' },
+  { tier: 2, name: '銀卡', price: 1200, eta: 2, bill: 1200, note: '預估 2 分鐘抵達' },
+  { tier: 3, name: '金卡', price: 3000, eta: 1, bill: 800, note: '預估 1 分鐘抵達' },
+  { tier: 4, name: '白金', price: 8000, eta: 0, bill: 500, note: '待命小隊跟著你：一定趕得到，危險節點提前介入，致命機率減半' },
+] as const
+
+export const policyOf = (cov: Coverage) => (cov.active ? POLICIES[(cov.tier ?? 1) - 1] : undefined)
+export const PLATINUM = 4
 
 export interface DangerOption {
   id: string
@@ -574,7 +652,9 @@ export function resolveDanger(
   const roll = rng(seed)
   const stage = neuralStage(marginOf(c))
   const stagePenalty = stage === 'stable' ? 0 : stage === 'alert' ? 0.05 : 0.12
-  const p = Math.min(0.95, opt.lethalBase + c.injury / 400 + stagePenalty)
+  // 白金：待命小隊在你出事前就插手，致命機率減半
+  const half = cov.active && (cov.tier ?? 1) >= PLATINUM ? 0.5 : 1
+  const p = Math.min(0.95, opt.lethalBase + c.injury / 400 + stagePenalty) * half
   if (roll() >= p) return { kind: 'survived', reason: '你撐過去了。' }
 
   if (systemFault)
@@ -587,10 +667,15 @@ export function resolveDanger(
       kind: 'dead',
       reason: `受了致命傷。救援預估 ${cov.etaMin} 分鐘抵達，你只撐得了 ${opt.survivalWindowMin} 分鐘。`,
     }
-  return { kind: 'rescued', reason: `受了致命傷，武裝醫療隊在 ${cov.etaMin} 分鐘內把你拖上了飛行器。`, bill: RESCUE_BILL }
+  const pol = policyOf(cov)!
+  return {
+    kind: 'rescued',
+    reason: cov.etaMin === 0 ? '受了致命傷。白金待命小隊早就在附近，直接把你從交火裡拖了出來。' : `受了致命傷，武裝醫療隊在 ${cov.etaMin} 分鐘內把你拖上了飛行器（${pol.name}保單）。`,
+    bill: cov.tier ? pol.bill : RESCUE_BILL,
+  }
 }
 
-// ---------- 自動戰鬥（劇情委託的火力路線、高階火力工作） ----------
+// ---------- 自動戰鬥（劇情委託的武力路線、高階武力工作） ----------
 // 打鬥本身不會死：血量掉到 RETREAT_HP 以下就自動撤退（委託失敗）。死亡只發生在玩家確認過的危險節點。
 
 export interface Enemy {
@@ -600,6 +685,10 @@ export interface Enemy {
   atk: number
   /** 命中率 0～1。 */
   hit: number
+  /** 防火牆：比你的駭入強度高，「駭入」就沒用。沒寫＝0。 */
+  ice?: number
+  /** 感知：比你的隱匿高，「光學迷彩繞背」就沒用。沒寫＝0。 */
+  sense?: number
 }
 
 export type Tactic = 'force' | 'hack' | 'stealth'
@@ -636,23 +725,24 @@ export interface FightResult {
 /** HP 低於最大 HP 的這個百分比就撤退。 */
 export const RETREAT_HP = 20
 
-/** 街頭工作遇到的對手：依階級與方向決定，不必每件工作各寫一份。 */
+/** 街頭工作遇到的對手：依難度與方向決定，不必每件工作各寫一份。 */
 export function streetEnemy(job: JobDef): Enemy {
   const name = { force: ['街頭混混', '幫派打手', '幫派幹部'], hack: ['趕來的保全', '企業保全', '企業保全小隊'], stealth: ['巡邏保全', '巡邏保全', '武裝巡邏'] }[job.direction][Math.min(2, job.tier - 1)]
-  return { name, hp: 15 + job.tier * 20, atk: 4 + job.tier * 2, hit: 0.4 + job.tier * 0.05 }
+  const level = [0, 2, 4, 5, 7, 8][job.tier] // 防火牆與感知：難度 1新角色打得過，難度 2起要練
+  return { name, hp: 15 + job.tier * 20, atk: 4 + job.tier * 2, hit: 0.4 + job.tier * 0.05, ice: level, sense: level }
 }
 const MAX_ROUNDS = 12
 
 const has = (c: Character, slot: Slot) => c.equipment.some((i) => i.slot === slot)
 
-/** 你的戰鬥數值：HP 看體能與傷勢；攻擊看等級、火力熟練度、有沒有武器；命中看火力熟練度；暴擊看反應與沉著；護甲看技術。 */
+/** 你的戰鬥數值：HP 看體能與傷勢；攻擊看等級、武力熟練度、有沒有武器；命中看武力熟練度；爆擊看反應與沉著；護甲看技術。 */
 export function fightStats(c: Character) {
   const weapon = has(c, 'weapon')
   return {
     hp: hpOf(c),
     maxHp: maxHpOf(c),
-    atk: 8 + c.level * 2 + c.prof.force.level + gearMod(c, 'atk'),
-    hit: Math.min(0.95, 0.7 + c.prof.force.level * 0.01 + over(c, 'reflex') * 0.02 + gearMod(c, 'hit')),
+    atk: 8 + c.level * 2 + c.prof.force.level + gearMod(c, 'atk') + tv(c, 'f2', 3),
+    hit: Math.min(0.95, 0.7 + c.prof.force.level * 0.01 + over(c, 'reflex') * 0.02 + gearMod(c, 'hit') + tv(c, 'f1', 0.05)),
     crit: Math.max(0, over(c, 'reflex') * 0.04 + gearMod(c, 'crit')),
     critDmg: 1.5 + over(c, 'cool') * 0.1,
     armor: armorOf(c),
@@ -660,30 +750,72 @@ export function fightStats(c: Character) {
   }
 }
 
-const jamRounds = (c: Character) => 3 + Math.floor(c.prof.hack.level / 5) + Math.floor(over(c, 'int') / 2) + gearMod(c, 'jam')
-const hackStress = (c: Character) => Math.max(1, 5 - Math.floor(over(c, 'int') / 2))
+// ---------- 戰力：給人看的總和實力（判定仍走各自的公式；名聲不算在裡面） ----------
 
-/** 依裝備與屬性能用的戰術：火力一定能用；駭客要有作業設備；迷彩偷襲要有光學迷彩義體。 */
-export function tacticsFor(c: Character): TacticInfo[] {
+/** 你的戰力：「每回合期望傷害 × 有效 HP」開根號，新角色約 100。now＝用目前 HP（帶傷），否則用滿血。 */
+export function powerOf(c: Character, now = false) {
+  const s = fightStats(c)
+  const offense = s.atk * s.hit * (1 + s.crit * (s.critDmg - 1))
+  const ehp = ((now ? s.hp : s.maxHp) * (s.armor + 40)) / 40
+  return Math.round(3 * Math.sqrt(offense * ehp))
+}
+
+/** 對手的戰力（同一把尺）：建議戰力。 */
+export function enemyPower(e: Enemy) {
+  return Math.round(3 * Math.sqrt(e.atk * e.hit * e.hp))
+}
+
+/** 戰力對建議戰力的一句話評語，不顯示更多數字。 */
+export function powerVerdict(mine: number, need: number): { label: string; tone: 'positive' | 'muted' | 'warning' | 'red' } {
+  const r = mine / need
+  if (r >= 1.6) return { label: '輕鬆', tone: 'positive' }
+  if (r >= 1.15) return { label: '有把握', tone: 'muted' }
+  if (r >= 0.85) return { label: '勢均力敵', tone: 'warning' }
+  return { label: '危險', tone: 'red' }
+}
+
+const ambushMul = (c: Character) => 1.6 + c.prof.stealth.level * 0.05 + over(c, 'cool') * 0.1 + tv(c, 's2', 0.3)
+/** 駭入強度：智力＋駭入熟練度每 5 級 +1＋干擾裝備每件 +2。新角色 3。 */
+export const hackPower = (c: Character) => c.attrs.int + Math.floor(c.prof.hack.level / 5) + gearMod(c, 'jam') * 2
+/** 隱匿：沉著＋潛行熟練度每 5 級 +1。新角色 3。 */
+export const stealthPower = (c: Character) => c.attrs.cool + Math.floor(c.prof.stealth.level / 5)
+
+const jamRounds = (c: Character) => 3 + Math.floor(c.prof.hack.level / 5) + Math.floor(over(c, 'int') / 2) + gearMod(c, 'jam') + tv(c, 'h3', 1)
+const hackStress = (c: Character) => Math.max(1, 5 - Math.floor(over(c, 'int') / 2) - tv(c, 'h2', 1))
+
+/** 依裝備與屬性能用的戰術：武力一定能用；駭客要有駭客終端；光學迷彩繞背要有光學迷彩義體。 */
+/**
+ * 依裝備、屬性與對手能用的戰術：正面交火一定能用；駭入要有駭客終端、駭入強度不低於對方防火牆；
+ * 光學迷彩繞背要有光學迷彩義體、隱匿不低於對方感知。沒給對手就只看裝備。
+ */
+export function tacticsFor(c: Character, enemy?: Enemy): TacticInfo[] {
   const weapon = has(c, 'weapon')
   const jam = jamRounds(c)
+  const hp = hackPower(c)
+  const sp = stealthPower(c)
+  const ice = enemy?.ice ?? 0
+  const sense = enemy?.sense ?? 0
   return [
     {
       id: 'force',
       label: weapon ? '正面交火' : '赤手空拳',
-      summary: weapon ? '全力開火：攻擊 ×1.25、命中 +10%，神經壓力最少（+1）。攻擊看等級、火力熟練度與武器。' : '武器抵押中，只能用拳頭（攻擊 ×1.25、命中 +10%，但沒有武器加成）。',
+      summary: weapon ? '全力開火：攻擊 ×1.25、命中 +10%，神經壓力最少（+1）。攻擊看等級、武力熟練度與武器。' : '武器抵押中，只能用拳頭（攻擊 ×1.25、命中 +10%，但沒有武器加成）。',
     },
     {
       id: 'hack',
-      label: '駭進他們的智慧槍',
-      summary: `前 ${jam} 回合對方的準星亂跳，命中率大降；神經壓力 +${hackStress(c)}。入侵熟練度與智力越高，干擾越久。`,
-      locked: has(c, 'deck') ? undefined : '需要作業設備（抵押中或沒有）',
+      label: '駭入',
+      summary: `駭入對方的智慧槍：前 ${jam} 回合準星亂跳，命中率大降；神經壓力 +${hackStress(c)}。你的駭入強度 ${hp}${enemy ? `、對方防火牆 ${ice}` : ''}。`,
+      locked: !has(c, 'deck') ? '需要駭客終端（抵押中或沒有）' : hp < ice ? `對方防火牆 ${ice}，你的駭入強度只有 ${hp}，駭不進去` : undefined,
     },
     {
       id: 'stealth',
       label: '光學迷彩繞背',
-      summary: `第一回合對方看不到你，第一擊 ×${(1.6 + c.prof.stealth.level * 0.05 + over(c, 'cool') * 0.1).toFixed(1)}，之後是普通攻擊；迷彩同步神經壓力 +3。潛行熟練度與沉著越高，第一擊越重。`,
-      locked: c.equipment.some((i) => i.slot === 'implant' && i.direction === 'stealth') ? undefined : '需要光學迷彩義體',
+      summary: `第一回合對方看不到你，第一擊 ×${ambushMul(c).toFixed(1)}，之後是普通攻擊；迷彩同步神經壓力 +3。你的隱匿 ${sp}${enemy ? `、對方感知 ${sense}` : ''}。`,
+      locked: !c.equipment.some((i) => i.slot === 'implant' && i.direction === 'stealth')
+        ? '需要光學迷彩義體'
+        : sp < sense
+          ? `對方感知 ${sense}，你的隱匿只有 ${sp}，會被看穿`
+          : undefined,
     },
   ]
 }
@@ -705,18 +837,18 @@ export function resolveFight(c: Character, enemy: Enemy, tactic: Tactic, seed: n
   for (let i = 1; i <= MAX_ROUNDS && foe > 0; i++) {
     // 你的攻擊
     const first = tactic === 'stealth' && i === 1
-    // 暴擊從同一個命中骰判定，不多抽亂數（多抽一次，所有戰鬥的結果都會變）
+    // 爆擊從同一個命中骰判定，不多抽亂數（多抽一次，所有戰鬥的結果都會變）
     const h = first ? 0 : r()
     if (first || h < s.hit + (tactic === 'force' ? 0.1 : 0)) {
       const crit = !first && h < s.crit
-      const base = s.atk * (first ? 1.6 + c.prof.stealth.level * 0.05 + over(c, 'cool') * 0.1 : (tactic === 'force' ? 1.25 : 1) * (0.8 + r() * 0.4))
+      const base = s.atk * (first ? ambushMul(c) : (tactic === 'force' ? 1.25 : 1) * (0.8 + r() * 0.4))
       const dmg = Math.round(crit ? base * s.critDmg : base)
       foe -= dmg
       push(
         first
           ? `你從背後出手，${enemy.name}來不及轉身（−${dmg}）。`
           : crit
-            ? `暴擊！你打中了${enemy.name}的要害（−${dmg}）。`
+            ? `爆擊！你打中了${enemy.name}的要害（−${dmg}）。`
           : s.weapon
             ? `${pick(['你壓低身子連開三槍', '你貼著柱子探身射擊', '電磁手槍的電弧劈開雨幕'])}，命中${enemy.name}（−${dmg}）。`
             : `${pick(['你一拳打在對方的下巴', '你抓住槍管往回撞', '你用膝蓋頂進對方的肋骨'])}（−${dmg}）。`,

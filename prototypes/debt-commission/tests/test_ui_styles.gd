@@ -1,5 +1,5 @@
 extends "res://addons/proto_kit/test_kit.gd"
-## The game's one UI look, 銀魂和紙: the washi scenes are mounted, the reading toolbar and cloud name
+## The game's one UI look, 銀魂和紙: the washi scenes are mounted, the reading toolbar and silver-framed name
 ## plate are in place, generated choices and dialogue text are readable on the paper, the reading
 ## text covers the story's Chinese, and the in-play HUD, search bar and toast use their resources.
 
@@ -36,7 +36,7 @@ func _run() -> void:
 	var name_rect: Rect2 = game._name_plate.get_global_rect()
 	var paper_rect: Rect2 = game._dialog_panel.get_node("PaperAndToolbar/Panel").get_global_rect()
 	_expect(name_rect.position.y < paper_rect.position.y and name_rect.end.y > paper_rect.position.y,
-		"the cloud name plate overlaps the paper's top edge")
+		"the name plate overlaps the paper's top edge")
 	game._dialog_panel.skip_button.pressed.emit()
 	_expect(game._skip and game._dialog_panel.skip_button.button_pressed and not game._auto,
 		"SKIP starts skipping and shows its active state")
@@ -129,7 +129,7 @@ func _choices_are_readable(game: Control) -> bool:
 func _dialogue_is_readable(game: Control) -> bool:
 	var text_color: Color = game._text_label.get_theme_color("font_color")
 	var paper_cutout: NinePatchRect = game._dialog_panel.find_child("PaperCutout", true, false) as NinePatchRect
-	var plaque: NinePatchRect = game._dialog_panel.find_child("CloudPlaque", true, false) as NinePatchRect
+	var plaque: NinePatchRect = game._dialog_panel.find_child("NamePlaque", true, false) as NinePatchRect
 	if paper_cutout == null or paper_cutout.texture == null or plaque == null or plaque.texture == null:
 		return false
 	var image: Image = paper_cutout.texture.get_image()

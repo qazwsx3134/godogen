@@ -89,7 +89,7 @@ python3 preview/start.py
 
 在本機服務選取場景後，可從側欄「試玩這個場景」設定旗標與線索，直接開啟獨立遊戲視窗。尚未存檔的修改和唯讀故事都能試玩；正式遊戲存檔不受影響。前面場景的背景、角色與進行中的互動不會自動還原，需要時請從較早的場景開始。
 
-立繪分成「角色登場／表情」、「角色退場」、「立繪明暗」與「立繪動作」。登場可選立刻上場或準備站位，開口時依所選動畫登場；退場獨立選淡出、左右滑出或直接退場。明暗可選變暗、恢復明亮或隨說話者自動切換。抖動／彈跳可放在台詞前，尚未登場時先登場再播放；緊接漫畫演出時先完成動作。台詞的「畫外音」勾選時說話者不會登場，可在表單直接取消。
+立繪分成「角色登場／表情」、「角色退場」、「立繪明暗」與「立繪動作」。登場可選立刻上場或準備站位，開口時依所選動畫登場；立刻登場會把角色移到前景，已在場的角色也適用。退場獨立選淡出、左右滑出或直接退場。明暗可選變暗、恢復明亮或隨說話者自動切換，先顯示變化再接下一個動作。抖動／彈跳可放在台詞前，尚未登場時先登場再播放；緊接漫畫演出時先完成動作。台詞的「畫外音」勾選時說話者不會登場，可在表單直接取消。「台詞表情」選「沿用目前表情」可保留登場時的表情；指定另一表情則從這句開始覆蓋。
 
 「素材設定 → 角色 → 身高 cm」會自動統一立繪比例，先設定桂 175、銀時 177、神樂 155。人物以頭頂到腳底計算，神樂的傘不算身高；表情沿用同一比例。留空沿用角色場景大小。繼承角色也能在作品內設定身高，存檔後重新試玩生效。舞台拖曳或左／中／右按鈕控制站位；Godot 場景控制舞台與水平取景。
 
@@ -173,6 +173,7 @@ XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://t
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_stage_scene.gd
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_reading_feel.gd
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_portrait_motion.gd
+XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_portrait_staging.gd
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_landscape_reading.gd
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_investigation.gd
 XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_comedy.gd

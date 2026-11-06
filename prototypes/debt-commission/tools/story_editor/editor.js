@@ -793,7 +793,7 @@
   const expressionControl = step => select2(S.catalog ? Core.availableExpressions(S.catalog, step.id || step.speaker) : S.enums.VALID_EXPRESSIONS, step.expression, v => {
     if (v === '') delete step.expression; else step.expression = v;
     touch({inspector:true});
-  }, '（預設）');
+  }, step.op === 'say' ? '沿用目前表情' : '（預設）');
   /** `color` of an emotion_band: "#rrggbb" typed or picked; 清除 (or an empty box) removes the key, so the scene's own yellow shows. */
   const BAND_DEFAULT_COLOR = '#ffd23f';  // the CutInPanel StyleBox in scenes/comedy/emotion_band.tscn
   const HEX6 = /^#[0-9a-f]{6}$/i;
@@ -912,7 +912,11 @@
   }
 
   const FORMS = {
-    bg: step => [field('背景', assetSelect('backgrounds', step)), field('預覽', thumbnail(step.id))],
+    bg: step => [field('背景', assetSelect('backgrounds', step)), field('預覽', thumbnail(step.id)),
+      field('轉場', select2([{value:'fade',label:'淡入淡出'}, {value:'brush',label:'筆刷刷開（0.7 秒）'},
+        {value:'ink',label:'墨暈擴散（0.8 秒）'}, {value:'glitch',label:'故障錯色（0.5 秒）'}], step.transition,
+        v => { if (v) step.transition = v; else delete step.transition; touch(); }, '預設（淡入淡出）'),
+        el('small', {}, '換背景時播放；筆刷、墨暈與故障會播完才進下一步。略讀或畫面效果設為「減少」時直接切換。'))],
     bgm: step => [field('BGM', assetSelect('music', step, 'id', '無（停止音樂）')), field('試聽', audioButton(step.id))],
     se: step => [field('音效', assetSelect('sounds', step))],
     char: step => [field('角色', assetSelect('characters', step)), field('表情', expressionControl(step)), voicePitch(step),
@@ -949,7 +953,8 @@
       field('成立 then', nodeSelect(step.then, v => {step.then=v;touch();})), field('否則 else', nodeSelect(step.else,v => {step.else=v;touch();}))],
 
     say: step => [field('speaker', speakerControl(step, 'speaker')), field('text', textArea(step, 'text')),
-      field('expression', expressionControl(step)), voicePitch(step), field('', checkbox(step, 'thought', '心聲（thought）')),
+      field('台詞表情', expressionControl(step), el('small', {}, '指定表情會覆蓋前面的角色表情；「沿用目前表情」保留登場步驟的設定。')),
+      voicePitch(step), field('', checkbox(step, 'thought', '心聲（thought）')),
       step.speaker !== 'narrator' && field('', checkbox(step, 'offscreen', '畫外音（說話者不登場）'))],
     goto: step => [field('target', nodeSelect(step.target, v => { step.target = v; touch(); }))],
     end: step => [field('text', textArea(step, 'text', false, 2))],

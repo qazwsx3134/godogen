@@ -3,7 +3,7 @@
 [ext_resource type="FontFile" path="res://assets/fonts/NotoSerifTC.ttf" id="1_yvdp0"]
 [ext_resource type="Script" path="res://scripts/settings_panel.gd" id="2_rnma6"]
 [ext_resource type="Texture2D" path="res://assets/ui/gintama_panel_paper.png" id="3_j5n7a"]
-[ext_resource type="Texture2D" path="res://assets/ui/gintama_heading_plaque.png" id="4_fmry8"]
+[ext_resource type="Texture2D" path="res://assets/ui/gintama_heading_plain.tres" id="4_fmry8"]
 
 [sub_resource type="FontVariation" id="FontVariation_nooyu"]
 base_font = ExtResource("1_yvdp0")
@@ -2215,14 +2215,14 @@ shadow_offset = Vector2(0, 4)
 [sub_resource type="ButtonGroup" id="ButtonGroup_rovm4"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2amoj"]
-content_margin_left = 96.0
+content_margin_left = 28.0
 content_margin_top = 14.0
-content_margin_right = 64.0
+content_margin_right = 28.0
 content_margin_bottom = 14.0
 texture = ExtResource("4_fmry8")
-texture_margin_left = 64.0
+texture_margin_left = 20.0
 texture_margin_top = 20.0
-texture_margin_right = 40.0
+texture_margin_right = 20.0
 texture_margin_bottom = 20.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ar84i"]

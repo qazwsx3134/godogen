@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
-import { BarChart3, Briefcase, Building2, MessageSquare, ScrollText, ShieldAlert, Square, User } from 'lucide-react'
+import { IconCity, IconComms, IconJobs, IconLog, IconMerc, IconRank, ShieldAlert, Square, type IconProps } from './components/icons'
 import { Emblem, Panel } from './components/ui'
-import { useGame } from './game/state'
+import { dmUnread, useGame } from './game/state'
 import { NEURAL_STAGE_LABEL, SEVERE_INJURY, marginOf, neuralStage } from './rules/core'
 import { JobsScreen } from './screens/Jobs'
 import { CharacterScreen } from './screens/Character'
@@ -13,12 +13,12 @@ import { AwayDialog } from './screens/Away'
 
 export type Route = 'jobs' | 'char' | 'city' | 'rank' | 'log'
 
-const NAV: { id: Route; label: string; icon: typeof Briefcase; path: string }[] = [
-  { id: 'jobs', label: '委託', icon: Briefcase, path: 'JOBS' },
-  { id: 'char', label: '角色', icon: User, path: 'MERC' },
-  { id: 'city', label: '城市', icon: Building2, path: 'CITY' },
-  { id: 'rank', label: '排行', icon: BarChart3, path: 'RANK' },
-  { id: 'log', label: '紀錄', icon: ScrollText, path: 'LOG' },
+const NAV: { id: Route; label: string; icon: (p: IconProps) => React.JSX.Element; path: string }[] = [
+  { id: 'jobs', label: '委託', icon: IconJobs, path: 'JOBS' },
+  { id: 'char', label: '角色', icon: IconMerc, path: 'MERC' },
+  { id: 'city', label: '城市', icon: IconCity, path: 'CITY' },
+  { id: 'rank', label: '排行', icon: IconRank, path: 'RANK' },
+  { id: 'log', label: '紀錄', icon: IconLog, path: 'LOG' },
 ]
 
 export default function App() {
@@ -127,9 +127,9 @@ export default function App() {
           onClick={() => setComms(true)}
           className="mx-3 mb-2 flex min-h-11 shrink-0 items-center gap-2 border border-line/70 bg-surface px-3 text-[14px] text-fg-list"
         >
-          <MessageSquare size={16} className="text-cyan" />
-          <span className="flex-1 text-left">通訊・魔都 FM 104.9</span>
-          <span className="tech rounded-sm bg-red px-1 text-[12px] leading-5 text-bg">3</span>
+          <IconComms size={18} className="text-cyan" />
+          <span className="flex-1 text-left">通訊・魔都 FM 104.9・私人訊息</span>
+          {dmUnread(g) > 0 && <span className="tech rounded-sm bg-red px-1 text-[12px] leading-5 text-bg">{dmUnread(g)}</span>}
           <span className="text-muted">展開</span>
         </button>
 
@@ -146,14 +146,14 @@ export default function App() {
                 aria-current={on ? 'page' : undefined}
               >
                 {on && <span className="absolute inset-x-2 top-0 h-0.5 bg-red" />}
-                <Icon size={20} />
+                <Icon size={22} className={on ? 'neon' : undefined} />
                 {n.label}
               </button>
             )
           })}
         </nav>
 
-        {comms && <Comms onClose={() => setComms(false)} />}
+        {comms && <Comms game={game} onClose={() => setComms(false)} />}
         {g.away && <AwayDialog report={g.away} onClose={() => act({ t: 'dismissAway' })} />}
       </div>
     </div>

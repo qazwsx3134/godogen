@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """把 art_src/sprites_raw/raw/ 的 Codex 原圖做成遊戲用 sprite（public/sprites/）與尺寸清單（src/content/sprites.json）。
 
-  python3 art_src/build_sprites.py
+  python3 art_src/build_sprites.py          # 全部（要有 raw/ 的全部原圖）
+  python3 art_src/build_sprites.py heroes   # 只重做主角（男女的三姿勢與跑步循環）
 
 每個物件：去綠 → 依目標寬度縮小（BOX 取平均＋透明度二值化，保持像素邊緣）。
 目標尺寸以 384×160 的場景為準；要調大小就改下面的 TARGET，再跑一次。
@@ -25,12 +26,18 @@ KITS = {
         ('blanket', 48), ('ramen', 24), ('can', 10), ('cat', 42), ('ashtray', 20), ('phone', 22),
         ('console', 26), ('mug', 14), ('gun', 44), ('banner', 30), ('vines', 26), ('fox_figure', 14),
     ],
-    'hero_a_poses': [('hero_run', 64), ('hero_stand', 24), ('hero_lying', 170)],
     'vehicles_roof': [('drone', 30), ('train', 220)],
 }
 
-# 跑步循環：8 格，目標每格高度（場景像素）
-RUN_CYCLE = ('hero_run_cycle', 'hero_run_strip', 8, 72)
+# 主角姿勢組（由左而右：躺、跑、站）：原圖 → 輸出前綴。用高度定大小，男女主角一樣高。
+# 女主角 A 用補好右腳的 hero_a_poses_fix（2026-11-06）。
+HEROES = {'hero_a_poses_fix': 'hero_', 'hero_b_poses': 'hero_b_'}
+HERO_POSES = [('lying', 98), ('run', 71), ('stand', 75)]
+
+SOFA_W = 250  # 沙發在場景裡的寬度（furniture_kit 的 sofa）
+
+# 跑步循環：原圖、輸出名、格數、目標每格高度（場景像素）
+RUN_CYCLES = [('hero_run_cycle', 'hero_run_strip', 8, 72), ('hero_b_run_cycle', 'hero_b_run_strip', 8, 72)]
 
 # 整張圖層：目標高度（寬度依比例）
 LAYERS = {'city_far': 160, 'city_mid': 160, 'city_front': 160, 'roof_strip': 160}
@@ -77,6 +84,34 @@ def save(name: str, im: Image.Image, man: dict):
     print(f'{name:12s} {im.size}')
 
 
+def heroes(man: dict):
+    """主角的三個姿勢與跑步循環（原圖不在的就跳過，保留 manifest 裡原本的）。"""
+    for src, prefix in HEROES.items():
+        if not (RAW / f'{src}.png').exists():
+            continue
+        full = key_green(Image.open(RAW / f'{src}.png'))
+        boxes = sorted(components(shrink(full, 4)), key=lambda b: b[0])  # 由左而右
+        assert len(boxes) == len(HERO_POSES), f'{src}: 切出 {len(boxes)} 塊，預期 {len(HERO_POSES)}'
+        for (pose, th), b in zip(HERO_POSES, boxes):
+            crop = full.crop(tuple(v * 4 for v in b))
+            save(f'{prefix}{pose}', shrink(crop, crop.size[1] / th), man)
+    # 休息姿勢：沙發＋人一起畫的整張（2026-11-06），縮到跟沙發一樣寬；遊戲休息時用它取代沙發與躺姿
+    for look in ('a', 'b'):
+        src = RAW / f'sofa_rest_{look}.png'
+        if src.exists():
+            im = key_green(Image.open(src))
+            im = im.crop(im.getbbox())
+            save(f'sofa_rest_{look}', shrink(im, im.size[0] / SOFA_W), man)
+    for src, name, n, th in RUN_CYCLES:
+        if not (RAW / f'{src}.png').exists():
+            continue
+        strip, cw, ch = align_frames(key_green(Image.open(RAW / f'{src}.png')), n)
+        k = ch / th
+        small = shrink(strip, k).resize((round(cw / k) * n, th), Image.NEAREST)
+        save(name, small, man)
+        man[name].update({'frames': n, 'w': small.size[0] // n})
+
+
 def main():
     man: dict = {}
     # 公寓背景＝整個場景；窗洞（原本的綠色）變透明
@@ -103,13 +138,7 @@ def main():
             crop = full.crop(tuple(v * 4 for v in b))
             save(name, shrink(crop, crop.size[0] / tw), man)
 
-    src, name, n, th = RUN_CYCLE
-    if (RAW / f'{src}.png').exists():
-        strip, cw, ch = align_frames(key_green(Image.open(RAW / f'{src}.png')), n)
-        k = ch / th
-        small = shrink(strip, k).resize((round(cw / k) * n, th), Image.NEAREST)
-        save(name, small, man)
-        man[name].update({'frames': n, 'w': small.size[0] // n})
+    heroes(man)
 
     for layer, th in LAYERS.items():
         im = key_green(Image.open(RAW / f'{layer}.png'))
@@ -120,4 +149,13 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    import sys
+
+    if sys.argv[1:] == ['heroes']:
+        # 只重做主角：其他素材的原圖不在也能跑，結果併進現有的 sprites.json
+        man = json.loads(MANIFEST.read_text())
+        heroes(man)
+        MANIFEST.write_text(json.dumps(man, indent=1, ensure_ascii=False))
+        print(f'→ {MANIFEST}')
+    else:
+        main()

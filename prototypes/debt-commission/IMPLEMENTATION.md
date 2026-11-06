@@ -27,9 +27,9 @@
 V1 可呈現 op：
 
 - `bg`: `id` 對應 catalog 的 backgrounds。選填 `transition`：`fade`（預設，舊圖淡出）、`brush`（筆刷由左往右刷掉，0.7 秒）、`ink`（墨從中間暈開，0.8 秒）、`glitch`（撕裂、錯色、方塊掉落，0.5 秒），其他值載入時拒絕（`VALID_BACKGROUND_TRANSITIONS`）。非 fade 時下一步等轉場結束；略讀、畫面效果「減少」時直接切換。不參與 `version`。`.dialogue` 寫 `do bg("id", "brush")`。編輯器的 bg 表單還沒有這一欄（Codex 範圍）；表單只改 `id`，已寫的 `transition` 原樣保留（`tools/story_editor/editor.js` 的 `assetSelect` 直接改 step 的欄位），要新增就用該步驟的 JSON 編輯。
-- `char`: `id` 對應 characters，可選 `visible`、`expression`、`position`（left/center/right）、`enter`；省略時依角色 catalog 預設。`enter: true` 讓還沒開口的角色直接上場（例如只舉牌、不說話的伊莉莎白），不能和 `visible: false` 同時用。
+- `char`: `id` 對應 characters，可選 `visible`、`expression`、`position`（left/center/right）、`enter`；省略時依角色 catalog 預設。`enter: true` 讓角色直接上場並移到角色層最前面，已在場時也會移到前景並依手動／自動明暗顯示；後續畫外音不影響這次登場。不能和 `visible: false` 同時用。
 - `portrait_exit`: `id` 對應角色；可選 `transition`（fade／slide_left／slide_right／instant）。保留表情與站位，退場完成後才進下一步。
-- `portrait_lighting`: `id`、`mode`（dim／lit／auto）。手動明暗不被下一句說話者切換覆蓋，換背景清除；存檔角色的 lighting 與 entrance_transition 為可選欄位，舊檔預設 auto／fade。
+- `portrait_lighting`: `id`、`mode`（dim／lit／auto）。更新後讓出一幀先呈現明暗再接下一步；略讀不等待，等待後檢查 generation 避免舊流程繼續。手動明暗不被下一句說話者切換覆蓋，換背景清除；存檔角色的 lighting 與 entrance_transition 為可選欄位，舊檔預設 auto／fade。
 - `say`: `speaker` 對應 characters 或 narrator、`text`、可選 `thought`／`expression`／`offscreen`。`offscreen: true` 是畫面外的聲音：名牌照常，說話者不上場，場上其他人的明暗不變；旁白不能用。
 - `choice`: `prompt`、`options: [{id,label,next,set_flags?,require?,tone?}]`；`require` 是單一素材 ID，至少保留一個無條件選項。選填的 `perspective`（`pov`｜`director`，預設 `pov`）決定這是哪一種選項，劇本作者只標這一處，不自己組 UI：
   - **POV Choice**（`perspective` 省略或 `pov`）：玩家站在某個角色的視角，在那個人格合理的範圍內選反應（激烈吐槽／冷靜指出問題／累到懶得吐槽）。`pov`（catalog 角色 id，預設 `shinpachi`）是這句想法的主人；選項可標 `tone`（`loud`｜`calm`｜`tired`），列首多一個圓形標記。外觀是和紙的選項面板。

@@ -15,7 +15,7 @@
         },
         {
           "op": "end",
-          "text": "（尚未寫完）"
+          "text": "OK\n"
         }
       ],
       "title": "新節點"
@@ -48,14 +48,13 @@
           "expression": "annoyed",
           "id": "gintoki",
           "op": "char",
-          "position": "left",
+          "position": "right",
           "visible": true
         },
         {
-          "expression": "serious",
           "op": "say",
           "speaker": "gintoki",
-          "text": "假髮，你到底在幹麻，腦袋被撞到嗎？"
+          "text": "我說假髮，耍笨去旁邊好不好，現在換我頭很痛了。"
         },
         {
           "op": "end",
@@ -85,7 +84,7 @@
         {
           "op": "say",
           "speaker": "katsura",
-          "text": "哇，哈哈哈哈哈哈"
+          "text": "哇，哈哈哈哈哈哈，銀時你快看我。"
         },
         {
           "enter": true,
@@ -119,10 +118,23 @@
           "text": "狗勾阿魯？？"
         },
         {
+          "effect": "shake",
+          "id": "elisabeth",
+          "op": "portrait_effect"
+        },
+        {
+          "id": "elisabeth",
+          "mode": "dim",
+          "op": "portrait_lighting"
+        },
+        {
+          "enter": true,
           "expression": "nosepick",
           "id": "gintoki",
           "op": "char",
-          "position": "right"
+          "position": "right",
+          "transition": "slide_left",
+          "visible": true
         },
         {
           "offscreen": true,
@@ -137,8 +149,9 @@
           "text": "頭痛賈奈。"
         },
         {
-          "duration": 0.55,
-          "op": "freeze"
+          "duration": 0.3,
+          "op": "shake",
+          "strength": "small"
         }
       ],
       "title": "桂的小狗耳朵"
@@ -172,5 +185,5 @@
   },
   "note": "核心台詞及玩家時機吐槽經作者指定；阿銀已改為「你腦袋被撞到嗎」。桂分兩句，中間停頓，第二句一本正經。桂的 AI 生成姿勢圖為初稿，等待作者試讀與視覺確認。失敗提示為可調整的操作文案。",
   "title": "不是頭痛，是桂",
-  "version": "s-40aecc0e71e4"
+  "version": "s-4717c0699f38"
 }

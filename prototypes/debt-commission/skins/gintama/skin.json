@@ -19,7 +19,7 @@
     "toast": "res://assets/ui/gintama_hud/toast.tres",
     "font": "res://assets/ui/gintama_hud/serif.tres"
   },
-  "plaque": "res://assets/ui/gintama_heading_plaque.png",
+  "plaque": "res://assets/ui/gintama_heading_plain.tres",
   "life_icon": "res://scenes/ui/glasses_icon.tscn",
   "title": {
     "background": "yorozuya_exterior",

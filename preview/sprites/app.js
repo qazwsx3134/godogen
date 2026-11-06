@@ -503,6 +503,35 @@ window.addEventListener('keydown', (e) => {
 window.addEventListener('beforeunload', (e) => state.dirty && e.preventDefault())
 document.querySelectorAll('[data-show]').forEach((b) => (b.onclick = () => setShow(b.dataset.show)))
 window.addEventListener('resize', draw)
+// 滾輪縮放：以游標下的像素為中心換到上一／下一個縮放級距（放大後用捲軸移動畫面）
+let wheelAcc = 0
+$('stage').addEventListener(
+  'wheel',
+  (e) => {
+    if (!state.orig) return
+    e.preventDefault()
+    // 觸控板一次會送很多小的 deltaY：累積到一格才換一級
+    wheelAcc += e.deltaMode ? e.deltaY * 40 : e.deltaY
+    if (Math.abs(wheelAcc) < 50) return
+    const dir = Math.sign(wheelAcc)
+    wheelAcc = 0
+    const st = $('stage')
+    const sel = $('zoom')
+    const levels = [...sel.options].map((o) => o.value).filter((v) => v !== 'fit').map(Number)
+    const cur = state.hit[0]?.scale ?? 1
+    const next = dir < 0 ? levels.find((z) => z > cur + 1e-6) : [...levels].reverse().find((z) => z < cur - 1e-6)
+    if (!next) return
+    const b = view.getBoundingClientRect()
+    const fx = (e.clientX - b.left) / b.width
+    const fy = (e.clientY - b.top) / b.height
+    sel.value = String(next)
+    draw()
+    const a = view.getBoundingClientRect()
+    st.scrollLeft += a.left + fx * a.width - e.clientX
+    st.scrollTop += a.top + fy * a.height - e.clientY
+  },
+  { passive: false },
+)
 view.addEventListener('mousemove', (e) => {
   const src = source()
   if (!src) return
