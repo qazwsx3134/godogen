@@ -34,7 +34,7 @@
 | 1 前期驗證 | 原型＋README（假設、通過條件、結論） | 玩法假設通過；最難 3 個技術點都量到數字 | Studio `prototype`、godot-kit |
 | 2 設計文件 | GDD、策劃細節、TDD、資源與時程 | 下一個里程碑需要的項目都「有」且夠具體 | `design-system`、`create-architecture`、`sprint-plan` |
 | 3 製作 | 可玩版本、`PROGRESS.md` | 里程碑驗收條件達成 | `dev-story`、godot-kit 模組 |
-| 4 評審 | `reviews/YYYY-MM-DD-game-critic.md` | 沒有未處理的高影響問題 | skill `game-critic` |
+| 4 評審 | `reviews/YYYY-MM-DD-game-critic.md` | 沒有未處理的高影響問題 | skill `game-critic`；真人試玩用 `playtest-report` |
 | 5 QA | 測試結果、兼容性紀錄 | 沒有阻斷性缺陷；流程打通 | `qa-plan`、`smoke-check`、`regression-suite`、`gate-check` |
 | 6 上架 | 匯出版、商店頁 | 匯出版在目標平台實測可玩 | skill `godot-prototype-to-itch`、`itch-publish`、`release-checklist` |
 
@@ -64,7 +64,7 @@
 ```
  設計文件
  ├─ GDD（遊戲設計）
- │   ├─ 核心玩法 ── loop 圖：秒／分鐘／小時天三層
+ │   ├─ 核心玩法 ── loop 圖：30 秒／5–15 分鐘／session 三層
  │   ├─ 美術 ───── 風格參考、art bible、素材清單（含數量）
  │   ├─ 音效 ───── 音效清單、音樂情境
  │   └─ 劇情 ───── 主線大綱、角色、怎麼接進玩法

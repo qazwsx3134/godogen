@@ -2,6 +2,16 @@
 
 只保留最近 3 次 commit 期間的工作與尚未 commit 的工作（新的在上）；更早的紀錄移到 [MILESTONE.md](MILESTONE.md)。每次 commit、出門／下班／暫停前更新本檔，根目錄 `Progress.md` 只更新一行摘要。接手順序：本檔 → [README](README.md) → [session-state](production/session-state/active.md) → [HANDOFF](docs/HANDOFF.md)。
 
+## 2026-11-09｜game-critic 評審（只有文件，未提交）
+
+- 做了什麼：用新 skill `game-critic`（`prototypes/godot-kit/skills/game-critic/`）評審本原型，Herdr Sonnet 子 agent 執行，報告 [reviews/2026-11-09-game-critic.md](reviews/2026-11-09-game-critic.md)（385 行）。
+- 總評：引擎與工具鏈紮實，但玩家玩不到完整的「調查→吐槽」loop。分數：心流 4、隨機 6、Loop 3、回饋 6、八角 5、前期驗證 4、設計文件 5、QA 6。
+- 最大的三個問題：(1) 正式內容只有功能展示和 5 句台詞的桂短篇，第一章只在 `tests/fixtures/`；(2) 全選 weak 也拿 S（`tests/test_chapter1.gd:93`），高手和亂點差別小；(3) 沒有任何真人試玩紀錄，`project.yaml` 卻標 `stage: Production`。
+- 測試（子 agent 本次實跑）：`project.yaml` 的 `commands.test`，57/57 headless 通過。
+- 待辦：12 條建議已列進 `TODO.md` 最上方「評審建議」。
+- 驗證：子 agent 在 Linux 暫存複本或暫存資料夾跑測試，沒有寫入工作樹；主 session 抽查報告引用的 `file:line` 與原始碼一致，並確認 `git status` 只多了 `reviews/`。
+- 未提交：`reviews/`（報告與 `.done` 完成標記）、本檔、`TODO.md`。建議都還沒動手改，等使用者決定先做哪幾條。
+
 ## 2026-11-08｜故事清理（只留狗耳朵）與功能展示
 
 - 專案／分支：debt-commission／master，HEAD `dfd57afb`。使用者要求：清掉故事只留 dog ear，另做一個展示故事編輯器各功能（轉場等）的展示頁，途中不合理處一併修。全部未 commit／push；工作區原有的 `art_src/expressions/*.png`、`art_src/ui/heading-plaque-20261106/*.png`（其他 session）未動。
