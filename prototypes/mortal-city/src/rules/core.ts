@@ -5,10 +5,19 @@ import { FALLBACK_PERKS, PERKS, PERK_IDS } from './perks'
 export type Direction = 'force' | 'hack' | 'stealth'
 
 export const DIRECTION_LABEL: Record<Direction, string> = {
-  force: '火力',
-  hack: '入侵',
+  force: '武力',
+  hack: '駭入',
   stealth: '潛行',
 }
+
+/** 流派：卡牌與道具的打法標籤，跟委託路線（武力／駭入／潛行）分開。每個流派的委託加成算在對應路線上。 */
+export type Style = 'berserker' | 'gunslinger' | 'netrunner' | 'nomad'
+export const STYLES: Style[] = ['berserker', 'gunslinger', 'netrunner', 'nomad']
+export const STYLE_LABEL: Record<Style, string> = { berserker: '狂暴大猩猩', gunslinger: '雙持', netrunner: '速駭', nomad: '流浪者' }
+export const STYLE_EN: Record<Style, string> = { berserker: 'Berserker', gunslinger: 'Gunslinger', netrunner: 'Netrunner', nomad: 'Nomad' }
+export const STYLE_DIR: Record<Style, Direction> = { berserker: 'force', gunslinger: 'force', netrunner: 'hack', nomad: 'stealth' }
+/** 能開「光學迷彩繞背」的義體種類（流浪者的其他義體不算）。 */
+export const CLOAK_KINDS = ['camo', 'dampener', 'ghostWeave', 'dustCloak']
 
 /** 可重現的亂數：同一個 seed 永遠得到同一串結果，重整不重抽。 */
 export function rng(seed: number) {
@@ -64,9 +73,9 @@ export const ATTR_START_POINTS = 4
 export const ATTR_EFFECT: Record<Attr, string> = {
   tech: '每點 +3 護甲（每次被打中都減傷）、神經容量 +3（能裝更多義體）。所有流派都用得到',
   body: '每點最大 HP +8。傷勢是 HP 的百分比，HP 越多越耐打',
-  reflex: '每點命中 +2%、暴擊率 +4%（暴擊 ×1.5 傷害）',
-  int: '駭進智慧槍的干擾每 2 點多 1 回合、神經壓力每 2 點 −1',
-  cool: '每點暴擊傷害 +10%、迷彩偷襲第一擊 +0.1 倍',
+  reflex: '每點命中 +2%、爆擊率 +4%（爆擊 ×1.5 傷害）',
+  int: '駭入的干擾每 2 點多 1 回合、神經壓力每 2 點 −1',
+  cool: '每點爆擊傷害 +10%、光學迷彩繞背第一擊 +0.1 倍',
 }
 
 const over = (c: Character, a: Attr) => c.attrs[a] - ATTR_BASE
@@ -122,7 +131,7 @@ export interface JobDef {
   blurb: string
 }
 
-/** 第 4 階＝精英委託：一定要打一場，之後的危險節點可能永久死亡。 */
+/** 難度 4＝精英委託：一定要打一場，之後的危險節點可能永久死亡。 */
 export const LETHAL_TIER = 4
 
 export function isLethal(job: JobDef) {
@@ -142,7 +151,7 @@ export function jobSuccessChance(job: JobDef, statBonus = 0) {
 // ---------- 裝備 ----------
 
 export type Slot = 'weapon' | 'deck' | 'implant'
-export const SLOT_LABEL: Record<Slot, string> = { weapon: '武器', deck: '作業設備', implant: '義體' }
+export const SLOT_LABEL: Record<Slot, string> = { weapon: '武器', deck: '駭客終端', implant: '義體' }
 
 export interface Item {
   id: string // 每件物品自己的 id（同一種可以有好幾件）
@@ -158,11 +167,12 @@ export interface Item {
 }
 
 /**
- * 裝備與名聲卡共用的修正：atk 攻擊、hit 命中、crit 暴擊率、critDmg 暴擊傷害倍數、armor 護甲、hp 最大 HP、
- * jam 駭客干擾回合、calm 駭客壓力減免、shock 干擾期間每回合電擊、ambush 迷彩第一擊倍數、ghost 迷彩後多幾回合打不到你、
- * berserk HP 低於一半時攻擊加成、cap 神經容量、loot 戰利品機率（相對）。
+ * 裝備與名聲卡共用的修正：atk 攻擊、hit 命中、crit 爆擊率、critDmg 爆擊傷害倍數、armor 護甲、hp 最大 HP、
+ * jam 駭入干擾回合、calm 駭客壓力減免、shock 干擾期間每回合電擊、ambush 迷彩第一擊倍數、ghost 迷彩後多幾回合打不到你、
+ * berserk HP 低於一半時攻擊加成、cap 神經容量、loot 戰利品機率（相對）、
+ * double 命中後補一槍的機率（六成傷害，用同一顆命中骰判定）、patch 打贏後立刻回復的 HP。
  */
-export type ModKey = 'atk' | 'hit' | 'crit' | 'critDmg' | 'armor' | 'hp' | 'jam' | 'calm' | 'shock' | 'ambush' | 'ghost' | 'berserk' | 'cap' | 'loot'
+export type ModKey = 'atk' | 'hit' | 'crit' | 'critDmg' | 'armor' | 'hp' | 'jam' | 'calm' | 'shock' | 'ambush' | 'ghost' | 'berserk' | 'cap' | 'loot' | 'double' | 'patch'
 /** 身上裝備的某項效果總和。 */
 export function gearMod(c: Character, k: ModKey) {
   return c.equipment.reduce((s, i) => s + (i.mods?.[k] ?? 0), 0)
@@ -188,7 +198,7 @@ export function equipBonus(c: Character, d: Direction) {
 }
 /** 名聲卡給這個方向的加成（bonus 成功率／致命扣減，reward 報酬）。 */
 function perkDir(c: Character, d: Direction, k: 'bonus' | 'reward') {
-  return Object.entries(c.perks).reduce((s, [id, lv]) => s + (PERKS[id]?.dir === d ? (PERKS[id][k] ?? 0) * lv : 0), 0)
+  return Object.entries(c.perks).reduce((s, [id, lv]) => s + (PERKS[id] && PERKS[id].style !== 'any' && STYLE_DIR[PERKS[id].style as Style] === d ? (PERKS[id][k] ?? 0) * lv : 0), 0)
 }
 /** 這個方向的工作加成：裝備＋名聲卡。 */
 export const dirBonus = (c: Character, d: Direction) => equipBonus(c, d) + perkDir(c, d, 'bonus')
@@ -221,6 +231,8 @@ export interface Character {
   perks: Record<string, number>
   /** 還沒挑的三選一，依序處理；結算只往這裡加，不停下來等玩家。 */
   picks: Pick[]
+  /** 主角外觀：a＝女主角 A（預設）、b＝男主角 B。只影響圖。 */
+  look?: 'a' | 'b'
 }
 
 /**
@@ -256,11 +268,11 @@ export function xpToNext(level: number) {
 }
 
 /**
- * 名聲每級所需。機器人實測（新宿＋灣岸兩區）：每次都選不會死的約 6 張卡、敢冒險而活下來的約 8 張；
- * 冒險才湊得出完整流派。
+ * 名聲每級所需。機器人實測（新宿＋灣岸兩區、各 200 局，2026-11-08）：每次都選不會死的平均 7.7 張卡、
+ * 敢冒險的 8.8 張（舊曲線 20＋5×等級時是 5.9／6.8）。
  */
 export function fameToNext(level: number) {
-  return 20 + level * 5
+  return 12 + level * 4
 }
 
 /** 加名聲並處理升級：每升一級排一次卡牌三選一。直接改 c。 */
@@ -275,18 +287,18 @@ export function addFame(c: Character, n: number, at: number, events: LogEvent[])
   }
 }
 
-/** 各方向拿了幾級的卡（看主流派）。 */
-export function perkTally(c: Character): Record<Direction, number> {
-  const t: Record<Direction, number> = { force: 0, hack: 0, stealth: 0 }
+/** 各流派拿了幾級的卡（看主流派）。 */
+export function perkTally(c: Character): Record<Style, number> {
+  const t: Record<Style, number> = { berserker: 0, gunslinger: 0, netrunner: 0, nomad: 0 }
   for (const [id, lv] of Object.entries(c.perks)) {
-    const d = PERKS[id]?.dir
+    const d = PERKS[id]?.style
     if (d && d !== 'any') t[d] += lv
   }
   return t
 }
 
 /**
- * 名聲卡三選一的選項：排除已滿級的卡；已經拿過的方向權重 ×2、稀有卡 ×0.4。
+ * 名聲卡三選一的選項：排除已滿級的卡；已經拿過的流派權重 ×2、稀有卡 ×0.4。
  * 可選的不到三張時用保底卡補。
  */
 export function perkOptions(c: Character, seed: number): string[] {
@@ -294,7 +306,7 @@ export function perkOptions(c: Character, seed: number): string[] {
   const tally = perkTally(c)
   const pool = PERK_IDS.filter((id) => (c.perks[id] ?? 0) < PERKS[id].max).map((id) => {
     const p = PERKS[id]
-    return { id, w: (p.rare ? 0.4 : 1) * (p.dir !== 'any' && tally[p.dir] > 0 ? 2 : 1) }
+    return { id, w: (p.rare ? 0.4 : 1) * (p.style !== 'any' && tally[p.style] > 0 ? 2 : 1) }
   })
   const out: string[] = []
   while (out.length < 3 && pool.length) {
@@ -327,7 +339,7 @@ export function approachBonus(c: Character, d: Direction) {
   return dirBonus(c, d)
 }
 
-/** 一件委託的名聲：每階 10（精英委託 40）。 */
+/** 一件委託的名聲：每級難度 10（精英委託 40）。 */
 export const jobFame = (job: JobDef) => 10 * job.tier
 
 /** 一件委託完成後的成長：經驗（失手 1/3）、名聲。直接改 c。 */
@@ -382,6 +394,10 @@ export interface Enemy {
   atk: number
   /** 命中率 0～1。 */
   hit: number
+  /** 防火牆：比你的駭入強度高，「駭入」就沒用。沒寫＝0。 */
+  ice?: number
+  /** 感知：比你的隱匿高，「光學迷彩繞背」就沒用。沒寫＝0。 */
+  sense?: number
 }
 
 export type Tactic = 'force' | 'hack' | 'stealth'
@@ -424,10 +440,11 @@ export interface FightResult {
 /** HP 低於最大 HP 的這個百分比就撤退。 */
 export const RETREAT_HP = 20
 
-/** 委託遇到的對手：依階級與方向決定，不必每件委託各寫一份。精英委託是第 4 階。 */
+/** 委託遇到的對手：依難度與方向決定，不必每件委託各寫一份。精英委託是難度 4。 */
 export function streetEnemy(job: JobDef): Enemy {
   const name = { force: ['街頭混混', '幫派打手', '幫派幹部', '倉庫私兵'], hack: ['趕來的保全', '企業保全', '企業保全小隊', '黑冰反制小組'], stealth: ['巡邏保全', '巡邏保全', '武裝巡邏', '研究所警衛'] }[job.direction][Math.min(3, job.tier - 1)]
-  return { name, hp: 15 + job.tier * 20, atk: 4 + job.tier * 2, hit: 0.4 + job.tier * 0.05 }
+  const level = [0, 2, 4, 5, 7, 8][Math.min(5, job.tier)] // 防火牆與感知：難度 1新角色打得過，之後要靠屬性、卡牌或義體
+  return { name, hp: 15 + job.tier * 20, atk: 4 + job.tier * 2, hit: 0.4 + job.tier * 0.05, ice: level, sense: level }
 }
 
 /** 通緝越高，MPD 和各方的人越把你當回事：每顆星對方 HP 與攻擊 +8%。 */
@@ -440,7 +457,7 @@ const MAX_ROUNDS = 12
 
 const has = (c: Character, slot: Slot) => c.equipment.some((i) => i.slot === slot)
 
-/** 你的戰鬥數值：HP 看體能與傷勢；攻擊看等級與武器；命中與暴擊看反應；暴擊傷害看沉著；護甲看技術。卡牌與義體再加上去。 */
+/** 你的戰鬥數值：HP 看體能與傷勢；攻擊看等級與武器；命中與爆擊看反應；爆擊傷害看沉著；護甲看技術。卡牌與義體再加上去。 */
 export function fightStats(c: Character) {
   const weapon = has(c, 'weapon')
   return {
@@ -455,15 +472,28 @@ export function fightStats(c: Character) {
   }
 }
 
+/** 駭入強度：智力＋干擾加成每點 +2。新角色 3。 */
+export const hackPower = (c: Character) => c.attrs.int + statMod(c, 'jam') * 2
+/** 隱匿：沉著＋鬼影加成每點 +2。新角色 3。 */
+export const stealthPower = (c: Character) => c.attrs.cool + statMod(c, 'ghost') * 2
+
 const jamRounds = (c: Character) => 3 + Math.floor(over(c, 'int') / 2) + statMod(c, 'jam')
 const hackStress = (c: Character) => Math.max(1, 5 - Math.floor(over(c, 'int') / 2) - statMod(c, 'calm'))
 /** 迷彩第一擊的倍數。 */
 const ambushMult = (c: Character) => 1.6 + over(c, 'cool') * 0.1 + statMod(c, 'ambush')
 
-/** 依裝備與屬性能用的戰術：火力一定能用；駭客要有作業設備；迷彩偷襲要有光學迷彩義體。 */
-export function tacticsFor(c: Character): TacticInfo[] {
+/** 依裝備與屬性能用的戰術：武力一定能用；駭客要有駭客終端；光學迷彩繞背要有光學迷彩義體。 */
+/**
+ * 能用的戰術：正面交火一定能用；駭入要有駭客終端、駭入強度不低於對方防火牆；
+ * 光學迷彩繞背要有光學迷彩義體、隱匿不低於對方感知。沒給對手就只看裝備。
+ */
+export function tacticsFor(c: Character, enemy?: Enemy): TacticInfo[] {
   const weapon = has(c, 'weapon')
   const jam = jamRounds(c)
+  const hp = hackPower(c)
+  const sp = stealthPower(c)
+  const ice = enemy?.ice ?? 0
+  const sense = enemy?.sense ?? 0
   return [
     {
       id: 'force',
@@ -472,15 +502,19 @@ export function tacticsFor(c: Character): TacticInfo[] {
     },
     {
       id: 'hack',
-      label: '駭進他們的智慧槍',
-      summary: `前 ${jam} 回合對方的準星亂跳，命中率大降${statMod(c, 'shock') ? `，每回合電擊對方 −${statMod(c, 'shock')}` : ''}；神經壓力 +${hackStress(c)}。智力越高，干擾越久。`,
-      locked: has(c, 'deck') ? undefined : '需要作業設備（抵押中或沒有）',
+      label: '駭入',
+      summary: `駭入對方的智慧槍：前 ${jam} 回合準星亂跳，命中率大降${statMod(c, 'shock') ? `，每回合電擊對方 −${statMod(c, 'shock')}` : ''}；神經壓力 +${hackStress(c)}。你的駭入強度 ${hp}${enemy ? `、對方防火牆 ${ice}` : ''}。`,
+      locked: !has(c, 'deck') ? '需要駭客終端' : hp < ice ? `對方防火牆 ${ice}，你的駭入強度只有 ${hp}，駭不進去` : undefined,
     },
     {
       id: 'stealth',
       label: '光學迷彩繞背',
-      summary: `${statMod(c, 'ghost') ? `前 ${1 + statMod(c, 'ghost')} 回合` : '第一回合'}對方看不到你，第一擊 ×${ambushMult(c).toFixed(1)}，之後是普通攻擊；迷彩同步神經壓力 +3。沉著越高，第一擊越重。`,
-      locked: c.equipment.some((i) => i.slot === 'implant' && i.direction === 'stealth') ? undefined : '需要光學迷彩義體',
+      summary: `${statMod(c, 'ghost') ? `前 ${1 + statMod(c, 'ghost')} 回合` : '第一回合'}對方看不到你，第一擊 ×${ambushMult(c).toFixed(1)}，之後是普通攻擊；迷彩同步神經壓力 +3。你的隱匿 ${sp}${enemy ? `、對方感知 ${sense}` : ''}。`,
+      locked: !c.equipment.some((i) => i.slot === 'implant' && CLOAK_KINDS.includes(i.kind ?? ''))
+        ? '需要光學迷彩義體'
+        : sp < sense
+          ? `對方感知 ${sense}，你的隱匿只有 ${sp}，會被看穿`
+          : undefined,
     },
   ]
 }
@@ -499,6 +533,8 @@ export function resolveFight(c: Character, enemy: Enemy, tactic: Tactic, seed: n
   const shock = tactic === 'hack' ? statMod(c, 'shock') : 0
   const unseen = tactic === 'stealth' ? 1 + statMod(c, 'ghost') : 0
   const berserk = statMod(c, 'berserk')
+  const double = statMod(c, 'double')
+  const patch = statMod(c, 'patch')
   const pick = (xs: string[]) => xs[Math.floor(r() * xs.length)]
   const push = (text: string, fx: FightFx, dmg?: number) => rounds.push({ text, you: Math.max(0, you), foe: Math.max(0, foe), fx, dmg })
   if (tactic === 'hack') push(`你接上神經線，黑進${enemy.name}的智慧槍。準星開始亂跳。`, 'hack')
@@ -506,7 +542,7 @@ export function resolveFight(c: Character, enemy: Enemy, tactic: Tactic, seed: n
   for (let i = 1; i <= MAX_ROUNDS && foe > 0; i++) {
     // 你的攻擊
     const first = tactic === 'stealth' && i === 1
-    // 暴擊從同一個命中骰判定，不多抽亂數（多抽一次，所有戰鬥的結果都會變）
+    // 爆擊從同一個命中骰判定，不多抽亂數（多抽一次，所有戰鬥的結果都會變）
     const h = first ? 0 : r()
     if (first || h < s.hit + (tactic === 'force' ? 0.1 : 0)) {
       const crit = !first && h < s.crit
@@ -518,13 +554,19 @@ export function resolveFight(c: Character, enemy: Enemy, tactic: Tactic, seed: n
         first
           ? `你從背後出手，${enemy.name}來不及轉身（−${dmg}）。`
           : crit
-            ? `暴擊！你打中了${enemy.name}的要害（−${dmg}）。`
+            ? `爆擊！你打中了${enemy.name}的要害（−${dmg}）。`
           : s.weapon
             ? `${pick(['你壓低身子連開三槍', '你貼著柱子探身射擊', '電磁手槍的電弧劈開雨幕'])}，命中${enemy.name}（−${dmg}）。`
             : `${pick(['你一拳打在對方的下巴', '你抓住槍管往回撞', '你用膝蓋頂進對方的肋骨'])}（−${dmg}）。`,
         first ? 'ambush' : crit ? 'crit' : 'hit',
         dmg,
       )
+      // 雙持：用同一顆命中骰判定，不多抽亂數（沒有 double 的角色結果完全不變）
+      if (!first && double && h < (s.hit + (tactic === 'force' ? 0.1 : 0)) * double && foe > 0) {
+        const d2 = Math.round(base * 0.6)
+        foe -= d2
+        push(`你另一隻手的槍跟著響了，再補${enemy.name}一槍（−${d2}）。`, 'hit', d2)
+      }
     } else push(pick(['你的子彈打在牆上，濺起一串火花。', '你撲空了，差一點滑倒在積水裡。']), 'miss')
     if (shock && i <= jam && foe > 0) {
       foe -= shock
@@ -543,6 +585,10 @@ export function resolveFight(c: Character, enemy: Enemy, tactic: Tactic, seed: n
   const won = foe <= 0
   if (won) push(`${enemy.name}倒下了。`, 'win')
   else push(you < retreat ? `你的血量太低，只能丟下一切撤退。` : `對方的增援到了，你只能撤退。`, 'retreat')
+  if (won && patch) {
+    you = Math.min(s.maxHp, you + patch)
+    push(`你靠在牆邊替自己包紮，回復了 ${patch} HP。`, 'win')
+  }
   const hp = Math.max(1, you)
   return {
     tactic,

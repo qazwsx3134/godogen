@@ -35,7 +35,8 @@ import {
   ATTR_MAX,
   ATTR_START_POINTS,
   CLINIC,
-  DIRECTION_LABEL,
+  STYLE_LABEL,
+  type Style,
   REST,
   SEVERE_INJURY,
 } from '../rules/core'
@@ -234,7 +235,7 @@ export function movable(g: Game) {
 
 /** 開打：鎖住的戰術不能用；結果一次算完（seed 決定），傷勢與壓力立刻套用，畫面再逐回合播放。通緝越高對手越強。 */
 function startFight(c: Character, enemy: Enemy, tactic: Tactic, seed: number): { c: Character; f: FightResult } | null {
-  if (tacticsFor(c).find((t) => t.id === tactic)?.locked) return null
+  if (tacticsFor(c, enemy).find((t) => t.id === tactic)?.locked) return null
   const f = resolveFight(c, heatEnemy(enemy, c.heat), tactic, seed)
   return { c: { ...c, injury: f.injury, stress: c.stress + f.stress }, f }
 }
@@ -264,7 +265,7 @@ export function caseDangerOption(c: Character, sc: StoryCase, approachId: string
 function endCareer(g: Game, end: Legend['end'], cause: string, now: number): Game {
   const c = g.character
   const tally = perkTally(c)
-  const top = (Object.entries(tally) as [keyof typeof DIRECTION_LABEL, number][]).sort((a, b) => b[1] - a[1])[0]
+  const top = (Object.entries(tally) as [Style, number][]).sort((a, b) => b[1] - a[1])[0]
   const legend: Legend = {
     id: c.id,
     name: c.name,
@@ -274,7 +275,7 @@ function endCareer(g: Game, end: Legend['end'], cause: string, now: number): Gam
     fame: c.fame.level,
     fameTotal: c.fame.total,
     district: g.run.district.name,
-    style: top && top[1] > 0 ? DIRECTION_LABEL[top[0]] : null,
+    style: top && top[1] > 0 ? STYLE_LABEL[top[0]] : null,
     perks: c.perks,
     at: now,
   }
@@ -351,7 +352,7 @@ function closeCase(g: Game, now: number, sc: StoryCase, picked: CaseOption, outc
 
 // ---------- 節點內容 ----------
 
-/** 委託節點用哪個模板：前半段第 1 階、後半段第 2 階；精英委託用第 4 階。 */
+/** 委託節點用哪個模板：前半段難度 1、後半段難度 2；精英委託用難度 4。 */
 function pickJob(seed: number, layer: number, elite: boolean, d: DistrictDef) {
   const tier = elite ? d.eliteTier : layer < STORY_LAYER ? d.tiers[0] : d.tiers[1]
   const pool = Object.values(JOBS).filter((j) => j.tier === tier)
@@ -432,6 +433,7 @@ type Action =
   | { t: 'continue' }
   | { t: 'retire' }
   | { t: 'raiseAttr'; attr: Attr }
+  | { t: 'setLook'; look: 'a' | 'b' }
   | { t: 'pickPerk'; id: string }
   | { t: 'pickItem'; index: number }
   | { t: 'equip'; itemId: string }
@@ -537,7 +539,7 @@ export function reduce(g: Game, a: Action): Game {
     case 'jobAutoDone': {
       if (n?.kind !== 'job' || n.stage !== 'auto') return g
       const job = JOBS[n.jobId]
-      // 火力委託一定要打；入侵、潛行失手被發現也要打
+      // 武力委託一定要打；駭入、潛行失手被發現也要打
       if (job.direction === 'force' || !n.ok) return { ...g, run: { ...g.run, node: { ...n, stage: 'fight' } } }
       return finishJob(g, now, true)
     }
@@ -636,11 +638,14 @@ export function reduce(g: Game, a: Action): Game {
       )
     }
     case 'sell': {
-      const item = c.stash.find((i) => i.id === a.itemId)
+      // 背包與身上的都能賣；身上的義體由攤主當場拆下，負荷一併扣掉
+      const worn = c.equipment.find((i) => i.id === a.itemId)
+      const item = worn ?? c.stash.find((i) => i.id === a.itemId)
       if (n?.kind !== 'market' || !c.alive || !item) return g
+      const drop = (xs: Item[]) => xs.filter((i) => i.id !== item.id)
       return withLog(
-        { ...g, character: { ...c, stash: c.stash.filter((i) => i.id !== item.id), credits: c.credits + sellValue(item) } },
-        { at: now, kind: 'system', text: `黑市：賣掉「${item.name}」（+${sellValue(item)} 信用點）。` },
+        { ...g, character: { ...c, stash: drop(c.stash), equipment: drop(c.equipment), implantLoad: c.implantLoad - (worn ? item.load : 0), credits: c.credits + sellValue(item) } },
+        { at: now, kind: 'system', text: `黑市：賣掉${worn ? '身上的' : ''}「${item.name}」（+${sellValue(item)} 信用點）。` },
       )
     }
     case 'treat': {
@@ -648,11 +653,11 @@ export function reduce(g: Game, a: Action): Game {
       if (n?.kind !== 'clinic' || !c.alive || c.credits < cost || (c.injury === 0 && c.stress === 0)) return g
       return withLog(
         { ...g, character: { ...c, credits: c.credits - cost, injury: 0, stress: Math.max(0, c.stress - CLINIC.stress) } },
-        { at: now, kind: 'system', text: `白蛇的診所幫你縫好了傷口（-${cost} 信用點，神經壓力 −${CLINIC.stress}）。` },
+        { at: now, kind: 'system', text: `神機醫白蛇幫你縫好了傷口（-${cost} 信用點，神經壓力 −${CLINIC.stress}）。` },
       )
     }
     case 'buyImplant': {
-      // 診所的義體：買了直接裝上（裝不下就不賣），半價
+      // 神機醫的義體：買了直接裝上（裝不下就不賣），半價
       const def = ITEMS[a.kind]
       const price = def ? marketPrice(def.price) : 0
       if (n?.kind !== 'clinic' || !c.alive || !SHOP_IMPLANTS.includes(a.kind) || c.credits < price || implantRoom(c) < def.load) return g
@@ -779,7 +784,7 @@ export function reduce(g: Game, a: Action): Game {
       )
     }
     case 'equip': {
-      // 從背包裝上：義體要裝得下；武器與作業設備一次一件，換下來的放回背包
+      // 從背包裝上：義體要裝得下；武器與駭客終端一次一件，換下來的放回背包
       const item = c.stash.find((i) => i.id === a.itemId)
       if (!c.alive || gearBusy(g) || !item) return g
       if (item.slot === 'implant' && implantRoom(c) < item.load) return g
@@ -805,6 +810,8 @@ export function reduce(g: Game, a: Action): Game {
         { at: now, kind: 'system', text: `卸下「${item.name}」，放進背包。` },
       )
     }
+    case 'setLook':
+      return g.character.alive ? { ...g, character: { ...g.character, look: a.look } } : g
     case 'raiseAttr': {
       // 分配屬性點：不能退回
       if (!c.alive || c.attrPoints <= 0 || c.attrs[a.attr] >= ATTR_MAX) return g

@@ -72,7 +72,7 @@ func _broken_and_shipped() -> void:
 	var errors: String = "\n".join(PackedStringArray(report["errors"]))
 	_expect(ArtCheck.error_count(report) == 2 and errors.contains("art/missing.png` 檔案不存在") and errors.contains("劇本 broken_ch1"),
 		"a missing picture and the story the game rejects are errors:\n%s" % errors)
-	var example: Dictionary = ArtCheck.check("res://stories/example")
+	var example: Dictionary = ArtCheck.check("res://tests/fixtures/example_pack/example")
 	_expect(example["errors"].is_empty() and (example["todo"] as Array).size() == 4, "the example work: all to-do, no errors")
 	_expect(ArtCheck.check("res://data/")["errors"].is_empty(), "the base work has no errors")
 	_expect(ArtCheck.works("res://tests/fixtures/art_check/") == ["res://data/", "res://tests/fixtures/art_check/broken/",

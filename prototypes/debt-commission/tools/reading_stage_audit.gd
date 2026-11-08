@@ -17,7 +17,7 @@ func _run() -> void:
 	_out = args[0] if not args.is_empty() else "user://reading_stage_audit"
 	DirAccess.make_dir_recursive_absolute(_out)
 	_game = MAIN.instantiate() as Control
-	_game.story_path = "res://data/phase3_story.json"
+	_game.story_path = "res://tests/fixtures/stories/phase3_story.json"
 	_game.save_path = "user://reading_stage_audit.save"
 	_game.settings_path = "user://reading_stage_audit_settings.cfg"
 	_game.progress_path = "user://reading_stage_audit_progress.cfg"

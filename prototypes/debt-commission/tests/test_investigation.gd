@@ -6,7 +6,7 @@ extends "res://addons/proto_kit/test_kit.gd"
 ## material twice. Also the data checks for investigations, offscreen lines, entrances and placards.
 
 const StoryRunner = preload("res://scripts/story_runner.gd")
-const STORY: String = "res://data/phase4_story.json"
+const STORY: String = "res://tests/fixtures/stories/phase4_story.json"
 const BROKEN: String = "user://investigation_broken.json"
 const HOME_SPOTS: Array[String] = ["empty_milk_bottle", "gintoki_mouth", "kombu_wrapper", "floor_paw_print"]
 

@@ -101,7 +101,8 @@ func _font_has(font: Font, code: int) -> bool:
 
 func _new_game() -> Control:
 	var game: Control = (load("res://main.tscn") as PackedScene).instantiate() as Control
-	game.story_path = "res://data/debt_story.json"
+	game.story_path = "res://tests/fixtures/stories/debt_story.json"
+	game.stories_path = "res://tests/fixtures/stories.json"
 	game.save_path = TEST_SAVE
 	root.add_child(game)
 	return game

@@ -18,8 +18,11 @@ const godot = arg('--godot', 'godot');
 const out = path.resolve(arg('--out', path.join(os.tmpdir(), 'story_editor_test')));
 fs.mkdirSync(out, { recursive: true });
 
-const files = fs.readdirSync(path.join(project, 'data')).filter(name => name.endsWith('_story.json')).sort();
-const read = name => fs.readFileSync(path.join(project, 'data', name), 'utf8');
+// The shipped story (data/) and the test fixtures that cover every step type.
+const storyDirs = ['data', path.join('tests', 'fixtures', 'stories')];
+const files = storyDirs.flatMap(dir => fs.readdirSync(path.join(project, dir)).filter(name => name.endsWith('_story.json'))).sort();
+const locate = name => path.join(project, storyDirs.find(dir => fs.existsSync(path.join(project, dir, name))), name);
+const read = name => fs.readFileSync(locate(name), 'utf8');
 const log = (...parts) => console.log(...parts);
 
 function checkStory(file, ...flags) {
@@ -76,7 +79,7 @@ for (const name of files) {
     const story = jsReach[name];
     const analysis = Core.analyze(story);
     for (const edge of Object.values(analysis.edges).flat()) kinds.add(edge.path.filter(p => typeof p === 'string').join('.'));
-    const godotTable = reachTable(path.join(project, 'data', name));
+    const godotTable = reachTable(locate(name));
     const ids = Object.keys(story.nodes);
     assert.deepEqual(Object.keys(godotTable).sort(), [...ids].sort());
     let differing = 0;

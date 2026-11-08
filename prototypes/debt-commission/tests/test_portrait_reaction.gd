@@ -11,7 +11,7 @@ func _run() -> void:
 	root.size = Vector2i(1280, 720)
 	for effect: String in ["shake", "bounce"]:
 		var source: String = "~ start\ndo portrait_effect(\"shinpachi\", \"%s\")\n新八: 動作要看得見。\ndo portrait_effect(\"shinpachi\", \"%s\")\ndo comedy(\"tsukkomi_impact\", \"shinpachi\", \"不要把動作蓋掉！\")\n旁白收尾。\ndo end(\"完成\")\n" % [effect, effect]
-		var built: Dictionary = BUILDER.build_text(source, "res://story_src/__portrait_reaction_test.dialogue")
+		var built: Dictionary = BUILDER.build_text(source, "res://tests/fixtures/story_src/__portrait_reaction_test.dialogue")
 		_expect(str(built.get("error", "")).is_empty(), "reaction fixture builds")
 		if not str(built.get("error", "")).is_empty():
 			continue

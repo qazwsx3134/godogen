@@ -1,9 +1,9 @@
 extends SceneTree
 
 const StoryRunner = preload("../scripts/story_runner.gd")
-const STORY_PATH: String = "res://data/phase3_story.json"
-const PHASE2_STORY_PATH: String = "res://data/phase2_story.json"
-const LEGACY_STORY_PATH: String = "res://data/debt_story.json"
+const STORY_PATH: String = "res://tests/fixtures/stories/phase3_story.json"
+const PHASE2_STORY_PATH: String = "res://tests/fixtures/stories/phase2_story.json"
+const LEGACY_STORY_PATH: String = "res://tests/fixtures/stories/debt_story.json"
 const MAX_STEPS: int = 128
 
 var failures: Array[String] = []

@@ -1,7 +1,7 @@
 extends "res://addons/proto_kit/test_kit.gd"
 ## Integration check for the Phase 2 JSON sample and the VN presentation/save layer.
 
-const SAMPLE_STORY: String = "res://data/phase2_story.json"
+const SAMPLE_STORY: String = "res://tests/fixtures/stories/phase2_story.json"
 const TEST_SAVE: String = "user://phase2_ui_test.save"
 
 
@@ -55,6 +55,7 @@ func _run() -> void:
 func _new_game() -> Control:
 	var game: Control = (load("res://main.tscn") as PackedScene).instantiate() as Control
 	game.story_path = SAMPLE_STORY
+	game.stories_path = "res://tests/fixtures/stories.json"
 	game.save_path = TEST_SAVE
 	root.add_child(game)
 	return game

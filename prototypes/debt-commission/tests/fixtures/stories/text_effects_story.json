@@ -1,6 +1,6 @@
 {
   "entry": "text_demo",
-  "generated_from": "story_src/text_effects.dialogue",
+  "generated_from": "tests/fixtures/story_src/text_effects.dialogue",
   "id": "text_effects",
   "initial_flags": {},
   "nodes": {

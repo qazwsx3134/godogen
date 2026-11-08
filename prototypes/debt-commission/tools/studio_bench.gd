@@ -5,7 +5,7 @@ func _initialize() -> void:
 	_run.call_deferred()
 func _run() -> void:
 	var game = load("res://main.tscn").instantiate()
-	game.story_path = "res://data/chapter1_story.json"
+	game.story_path = "res://tests/fixtures/stories/chapter1_story.json"
 	game.save_path = "user://studio_bench.save"
 	game.settings_path = "user://studio_bench_settings.cfg"
 	game.progress_path = "user://studio_bench_progress.cfg"

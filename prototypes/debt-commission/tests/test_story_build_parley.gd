@@ -4,8 +4,8 @@ extends "res://addons/proto_kit/test_kit.gd"
 ## their group and step.
 
 const StoryBuilder = preload("res://tools/story_build/story_builder.gd")
-const DS_SOURCE: String = "res://story_src/phase4.ds"
-const DM_SOURCE: String = "res://story_src/phase4.dialogue"
+const DS_SOURCE: String = "res://tests/fixtures/story_src/phase4.ds"
+const DM_SOURCE: String = "res://tests/fixtures/story_src/phase4.dialogue"
 
 
 func _init() -> void:

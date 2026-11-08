@@ -52,6 +52,7 @@
 - **用 Claude in Chrome 量手機寬度：`resize_window` 縮了視窗，頁面 `innerWidth` 卻沒變**（2026-11-04，mortal-city）→ 在同網域頁面內嵌指定寬度的 iframe（360／390／430px），對 iframe 的 `contentDocument` 量 `scrollWidth <= clientWidth`。（[mortal-city](mortal-city/README.md)）
 - **React 網頁原型：子元件的 `setTimeout` 一直不觸發**（2026-11-04，mortal-city）→ 遊戲時鐘每秒 tick 讓父元件重新渲染，inline callback 每次都是新函式，放在 effect 依賴裡會一直重設計時器；callback 改放 `useRef`。（[mortal-city](mortal-city/README.md#發現)）
 - **用瀏覽器自動化測網頁時動畫、捲動「沒反應」**（2026-11-06，mortal-city）：測試分頁是隱藏的，`requestAnimationFrame` 整個暫停、`scrollIntoView({behavior:'smooth'})` 完全不捲、`setTimeout`／`setInterval` 被降成每秒一次（連測試腳本裡的等待也是）→ 遊戲計時用計時器加實際經過時間，不靠 rAF；平滑捲動只在 `document.visibilityState === 'visible'` 時用；長按之類的時間判定要在前景分頁手動確認。（[mortal-city](mortal-city/PROGRESS.md)）
+- **刪掉遊戲裡的舊故事，幾十支測試連環失敗**（2026-11-08，debt-commission）：測試直接讀 `res://data/*_story.json` 與 `data/stories.json` 當夾具，故事一搬走就壞；`story_src` 搬家後建置出的 `generated_from` 也跟著變 → 舊故事連同建置來源搬進 `tests/fixtures/`，用建置工具重建夾具，測試以 `stories_path`／`packs_root` 指向夾具登記，不依賴正式清單；範例作品另放一個 packs 根目錄，別混進別的作品夾具。
 
 ## Scene、UI 與 Godot API
 

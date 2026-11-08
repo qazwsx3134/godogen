@@ -24,7 +24,7 @@ func _run() -> void:
 	settings.set_value("settings", "font_size", 2)
 	settings.save("user://shots_settings.cfg")
 	_game = MAIN.instantiate() as Control
-	_game.story_path = "res://data/chapter1_story.json"
+	_game.story_path = "res://tests/fixtures/stories/chapter1_story.json"
 	_game.save_path = "user://shots_chapter1.save"
 	_game.settings_path = "user://shots_settings.cfg"
 	_game.progress_path = "user://shots_progress.cfg"

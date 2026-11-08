@@ -12,7 +12,8 @@ func _run() -> void:
 		and ProjectSettings.get_setting("display/window/size/viewport_height") == 1080,
 		"the default logical canvas is landscape 16:9")
 	var game: Control = (load("res://main.tscn") as PackedScene).instantiate()
-	game.story_path = "res://data/phase3_story.json"
+	game.story_path = "res://tests/fixtures/stories/phase3_story.json"
+	game.stories_path = "res://tests/fixtures/stories.json"
 	game.save_path = TEST_FILES[0]
 	game.settings_path = TEST_FILES[1]
 	game.progress_path = TEST_FILES[2]

@@ -1,6 +1,6 @@
 extends "res://addons/proto_kit/test_kit.gd"
 const Runner = preload("res://scripts/story_runner.gd")
-const STORY = "res://data/chapter1_story.json"
+const STORY = "res://tests/fixtures/stories/chapter1_story.json"
 func _init() -> void:
 	for route: String in ["perfect", "hidden", "super", "weak", "timeout", "retry", "one_fail", "two_fails", "four_fails", "gin"]:
 		_route(route)

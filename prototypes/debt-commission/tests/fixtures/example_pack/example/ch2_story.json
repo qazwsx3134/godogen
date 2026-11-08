@@ -1,6 +1,6 @@
 {
   "entry": "rooftop",
-  "generated_from": "stories/example/ch2.dialogue",
+  "generated_from": "tests/fixtures/example_pack/example/ch2.dialogue",
   "id": "example_ch2",
   "initial_flags": {},
   "nodes": {

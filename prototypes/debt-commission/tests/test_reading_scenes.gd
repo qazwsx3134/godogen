@@ -26,6 +26,8 @@ func _run() -> void:
 			for i in range(6):_expect(packed.find_child("Cards",true,false).get_child(i).scene_file_path.ends_with("save_slot_card.tscn"), "slot %d preserves its item scene reference" % i)
 		packed.free()
 	var game=load("res://main.tscn").instantiate()
+	game.story_path = "res://tests/fixtures/stories/debt_story.json"
+	game.stories_path = "res://tests/fixtures/stories.json"
 	game.save_path="user://reading_scene_editor.save"
 	root.add_child(game)
 	await _frames(3)

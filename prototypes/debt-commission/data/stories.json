@@ -1,0 +1,11 @@
+{
+  "stories": [
+    {
+      "id": "showcase",
+      "kind": "sample",
+      "path": "res://data/showcase_story.json",
+      "save": "user://showcase.save",
+      "authoring": "graph"
+    }
+  ]
+}

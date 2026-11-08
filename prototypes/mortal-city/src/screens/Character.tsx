@@ -2,19 +2,22 @@ import { Cpu, Dna, Package, Plus, ShieldPlus, Sparkles, Swords } from 'lucide-re
 import { Meter, Panel, PanelHead, Tabs } from '../components/ui'
 import { useState, type ReactNode } from 'react'
 import { type useGame, gearBusy } from '../game/state'
-import { itemDesc } from '../content/items'
+import { itemDesc, itemStyle } from '../content/items'
+import { type Look, hasLook } from '../components/CityStrip'
 import {
   ATTRS,
   ATTR_EFFECT,
   ATTR_LABEL,
   ATTR_MAX,
   DIRECTION_LABEL,
-  type Direction,
   IMPLANT_RESERVE,
   type Item,
   NEURAL_STAGE_LABEL,
   SEVERE_INJURY,
   SLOT_LABEL,
+  STYLES,
+  STYLE_EN,
+  STYLE_LABEL,
   type Slot,
   capacityOf,
   fameToNext,
@@ -28,7 +31,8 @@ import {
   xpToNext,
 } from '../rules/core'
 import { PERKS, fameTitle } from '../rules/perks'
-import { DIR_ICON } from './Node'
+import { STYLE_COLOR, STYLE_ICON } from './Node'
+import { ItemIcon } from '../components/ItemIcon'
 
 export function CharacterScreen({ game }: { game: ReturnType<typeof useGame> }) {
   const { g, act } = game
@@ -49,6 +53,19 @@ export function CharacterScreen({ game }: { game: ReturnType<typeof useGame> }) 
         <div className="tech text-[13px] text-muted">MERC ID・{c.id.toUpperCase()}</div>
         <h1 className="my-0 text-[22px] font-bold text-heading">{c.name}</h1>
         <div className="text-[14px] text-warning">{fameTitle(c.fame.level)}</div>
+        <div className="mt-1 flex items-center gap-2 text-[14px] text-muted">
+          外觀
+          {(['a', 'b'] as Look[]).map((k) => (
+            <button
+              key={k}
+              disabled={!hasLook(k) || !c.alive}
+              onClick={() => act({ t: 'setLook', look: k })}
+              className={`min-h-11 border px-3 ${(c.look ?? 'a') === k ? 'border-red font-bold text-red' : 'border-line/70 text-fg'} disabled:opacity-50`}
+            >
+              {k === 'a' ? '女' : '男'}
+            </button>
+          ))}
+        </div>
         <div className="mt-2 space-y-2">
           <Meter label={`等級 Lv.${c.level}（升級給屬性點）`} value={c.xp} max={xpToNext(c.level)} />
           <Meter label={`名聲 Lv.${c.fame.level}（升級挑一張卡）`} value={c.fame.xp} max={fameToNext(c.fame.level)} tone="warning" />
@@ -58,7 +75,7 @@ export function CharacterScreen({ game }: { game: ReturnType<typeof useGame> }) 
           <Swords size={14} className="shrink-0 text-line" />
           <span>
             HP <b className="tech text-heading">{st.hp}/{st.maxHp}</b>・攻擊 <b className="tech text-heading">{st.atk}</b>・命中 <b className="tech text-heading">{Math.round(st.hit * 100)}%</b>・護甲{' '}
-            <b className="tech text-heading">{st.armor}</b>・暴擊 <b className="tech text-heading">{Math.round(st.crit * 100)}%×{st.critDmg.toFixed(1)}</b>
+            <b className="tech text-heading">{st.armor}</b>・爆擊 <b className="tech text-heading">{Math.round(st.crit * 100)}%×{st.critDmg.toFixed(1)}</b>
           </span>
           {!st.weapon && <span className="text-warning">（沒有武器）</span>}
         </div>
@@ -84,7 +101,7 @@ export function CharacterScreen({ game }: { game: ReturnType<typeof useGame> }) 
               <Meter label="義體負荷" value={c.implantLoad} max={cap} tone="warning" />
               <Meter label="神經壓力" value={c.stress} max={cap} tone="red" />
               <p className="m-0 text-[14px] text-muted">
-                安全餘裕 = 容量 − 負荷 − 壓力 = <b className="tech text-heading">{margin}</b>。40 以上穩定、20～39 警戒、1～19 臨界、0 以下失控（危險節點更容易死）。診所和休息節點能降壓力。
+                安全餘裕 = 容量 − 負荷 − 壓力 = <b className="tech text-heading">{margin}</b>。40 以上穩定、20～39 警戒、1～19 臨界、0 以下失控（危險節點更容易死）。神機醫和休息節點能降壓力。
               </p>
             </div>
           </Panel>
@@ -133,12 +150,17 @@ export function CharacterScreen({ game }: { game: ReturnType<typeof useGame> }) 
       {tab === 'style' && (
         <Panel innerClass="pb-2">
           <PanelHead icon={<Sparkles size={16} />} title="流派" right={<span className="text-[13px] text-muted">卡牌 {perkCount} 張</span>} />
-          <div className="grid grid-cols-3 gap-2 px-3 pt-2">
-            {(['force', 'hack', 'stealth'] as Direction[]).map((d) => {
-              const Icon = DIR_ICON[d]
+          <div className="grid grid-cols-2 gap-2 px-3 pt-2">
+            {STYLES.map((d) => {
+              const Icon = STYLE_ICON[d]
               return (
-                <div key={d} className="flex items-center justify-center gap-1 border border-line/60 py-2 text-[14px]">
-                  <Icon size={14} className="text-line" /> {DIRECTION_LABEL[d]} <b className="tech text-heading">{tally[d]}</b>
+                <div key={d} className="flex items-center gap-1.5 border border-line/60 px-2 py-1.5 text-[14px]">
+                  <Icon size={14} className="shrink-0" style={{ color: STYLE_COLOR[d] }} />
+                  <span className="min-w-0 flex-1 leading-tight">
+                    {STYLE_LABEL[d]}
+                    <span className="tech block text-[11px] text-muted">{STYLE_EN[d]}</span>
+                  </span>
+                  <b className="tech text-heading">{tally[d]}</b>
                 </div>
               )
             })}
@@ -150,7 +172,7 @@ export function CharacterScreen({ game }: { game: ReturnType<typeof useGame> }) 
               <div key={id} className="flex items-center gap-2 border-b border-line/40 px-3 py-2">
                 <div className="min-w-0 flex-1">
                   <b className="text-fg-list">{d.name}</b>
-                  <span className="ml-2 text-[13px] text-muted">{d.dir === 'any' ? '通用' : DIRECTION_LABEL[d.dir]}</span>
+                  <span className="ml-2 text-[13px]" style={{ color: d.style === 'any' ? undefined : STYLE_COLOR[d.style] }}>{d.style === 'any' ? '通用' : STYLE_LABEL[d.style]}</span>
                   <div className="text-[13px] text-cyan">
                     {d.desc}
                     {lv > 1 ? ` ×${lv}` : ''}
@@ -162,7 +184,7 @@ export function CharacterScreen({ game }: { game: ReturnType<typeof useGame> }) 
               </div>
             )
           })}
-          <p className="m-0 px-3 pt-2 text-[13px] text-muted">卡牌只屬於這段生涯，死亡或退休後不會帶走。已經拿過的方向，之後比較常出現。</p>
+          <p className="m-0 px-3 pt-2 text-[13px] text-muted">卡牌只屬於這段生涯，死亡或退休後不會帶走。已經拿過的流派，之後比較常出現。</p>
         </Panel>
       )}
 
@@ -192,7 +214,7 @@ export function CharacterScreen({ game }: { game: ReturnType<typeof useGame> }) 
             )
           })}
           <p className="m-0 px-3 pt-2 text-[13px] text-muted">
-            義體空間＝神經容量 {cap} − 保留 {IMPLANT_RESERVE} − 已裝負荷 {c.implantLoad}。背包的東西可以在黑市賣掉（售價 40%）。{busy ? '節點進行中不能換裝。' : ''}
+            義體空間＝神經容量 {cap} − 保留 {IMPLANT_RESERVE} − 已裝負荷 {c.implantLoad}。背包和身上的裝備都可以在黑市賣掉（售價 40%，義體當場拆）。{busy ? '節點進行中不能換裝。' : ''}
           </p>
         </Panel>
       )}
@@ -211,8 +233,12 @@ function SmallButton({ children, disabled, onClick }: { children: ReactNode; dis
 function ItemRow({ slot, item, note, children }: { slot: Slot; item?: Item; note?: string; children?: ReactNode }) {
   return (
     <div className="flex items-center gap-2 border-b border-line/40 px-3 py-2">
+      {item && <ItemIcon item={item} />}
       <div className="min-w-0 flex-1">
-        <div className="text-[13px] text-muted">{SLOT_LABEL[slot]}</div>
+        <div className="text-[13px] text-muted">
+          {SLOT_LABEL[slot]}
+          {item && itemStyle(item) ? `・${STYLE_LABEL[itemStyle(item)!]}` : ''}
+        </div>
         {item ? (
           <>
             <b className="text-fg-list">{item.name}</b>

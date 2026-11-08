@@ -1,5 +1,7 @@
 # debt-commission 交接
 
+2026-11-08：故事清理——遊戲與故事編輯器只列兩個故事：新寫的**功能展示**（`data/showcase_story.json`，預設；每張卡片示範一組步驟，見 STORY-EDITOR「功能展示」）與桂的極短篇 `stories/katsura_dog_ears/`。舊故事（第一章、討債、Phase 2–4、回合、漫畫吐槽、選項、EP00、文字效果、轉場、第一章圖副本）連同 `story_src/` 與範例作品「末班車」搬進 `tests/fixtures/`，只給測試讀（登記 `tests/fixtures/stories.json`）。`test_katsura_dog_ears.gd` 依作者改過的三選一故事重寫，不再失敗。未 commit。
+
 2026-11-04：`main.gd` 拆成外殼加五個分段檔（`scripts/main_investigation.gd`、`main_round.gd`、`main_saves.gd`、`main_tutorial.gd`、`main_qa.gd`，4530 → 約 3000 行）；新增章節選擇「流程圖」（G4）、換背景的 shader 轉場（`bg` 的 `transition`：brush／ink／glitch，試片 `?sample=transitions`），以及手感回饋（震動分級、HUD 與提示的跳動、玩家結果的固定音效）。完整測試 54 通過；唯一失敗 `katsura_dog_ears` 在拆分前就失敗。`browser_check.mjs` 各路線在 HEAD 版同樣失敗，未修。2026-11-05 已 commit（未 push）；詳細見 [PROGRESS](../../PROGRESS.md)。待作者：看轉場試片、選第一章要不要用；Android 手機試震動。
 
 2026-11-02：立繪退場、明暗已獨立；修正未上場動作被略過、漫畫同幀蓋住動作，以及準備站位遺失登場動畫。台詞新增畫外音核取框（勾選仍不登場）。素材設定新增身高 cm，桂／銀時／神樂採 175／177／155，自動縮放並對齊腳底，排除神樂的傘；繼承角色可建立作品內身高覆寫。Node 15 項、Godot 6 suites 與實際 Chrome 的存回／重開／試玩回歸通過。未改作者故事／圖片／tscn，未重匯 Web、未 commit／push；詳細命令、限制與所有未提交範圍見根目錄 Progress.md。

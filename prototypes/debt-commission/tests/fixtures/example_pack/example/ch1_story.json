@@ -1,6 +1,6 @@
 {
   "entry": "platform",
-  "generated_from": "stories/example/ch1.dialogue",
+  "generated_from": "tests/fixtures/example_pack/example/ch1.dialogue",
   "id": "example_ch1",
   "initial_flags": {
     "waited": false

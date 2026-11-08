@@ -8,6 +8,8 @@ func _run() -> void:
 	var sources: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/audio/music/sources.json"))
 	var expected: Array = [1, 2, 3, 5, 8, 10, 13, 19, 20, 21, 22, 34, 35]
 	var game: Control = (load("res://main.tscn") as PackedScene).instantiate() as Control
+	game.story_path = "res://tests/fixtures/stories/debt_story.json"
+	game.stories_path = "res://tests/fixtures/stories.json"
 	game.save_path = "user://downloaded_bgm_test.save"
 	root.add_child(game)
 	await _frames(3)

@@ -8,7 +8,7 @@ const StoryRunner = preload("res://scripts/story_runner.gd")
 const StoryBuilder = preload("res://tools/story_build/story_builder.gd")
 const MAIN_SCENE: PackedScene = preload("res://main.tscn")
 const STORY: String = "res://tests/fixtures/interaction_story.json"
-const PHASE4: String = "res://data/phase4_story.json"
+const PHASE4: String = "res://tests/fixtures/stories/phase4_story.json"
 const BROKEN: String = "user://interaction_broken.json"
 const TEST_SAVE: String = "user://interaction_ui_test.save"
 const TEST_UI: String = "user://interaction_ui_test.cfg"
@@ -319,6 +319,7 @@ func _read_back(game: Control) -> void:
 func _new_game() -> Control:
 	var game: Control = MAIN_SCENE.instantiate() as Control
 	game.story_path = STORY
+	game.stories_path = "res://tests/fixtures/stories.json"
 	game.save_path = TEST_SAVE
 	root.add_child(game)
 	return game

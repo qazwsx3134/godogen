@@ -10,11 +10,11 @@ Godot 4.7 橫向視覺小說，依 [V1 Roadmap](../../docs/story-telling-game/RO
 
 劇情會走向《底特律：變人》、《黑鏡：潘達斯奈基》那種大量分支，所以有一個 ComfyUI 手感的網頁版[劇本節點編輯器](docs/STORY-EDITOR.md)（`tools/story_editor/`）：拖卡片、拉線接分支、標出到不了的節點與結局，讀寫同一份劇本 JSON；匯出後用 `tools/story_editor/check_story.gd` 重算 `version` 並驗證。
 
-預設內容是[第一章草稿 v0.2](../../docs/story-telling-game/stories/003-strawberry-milk-ch1-draft-v0.2.md)的上機試讀版。已核准的[第一場《請幫我向你老闆討債》](../../docs/story-telling-game/stories/002-debt-commission-draft-v0.1.md)保留為 `?sample=debt` 閱讀基線。另有 Phase 2 與 Phase 3 草莓牛奶技術片段，分別檢查 JSON 與「調查 → 裝傻 → 吐槽」短循環；兩者都不是作者核准的第一章台詞。第一章結尾有一個分支結局（薪水袋之後選「叫阿銀拿過來」），`source_id` 為 `BR` 開頭的台詞不在草稿 v0.2 裡，待作者試讀。正式文本會先共同編劇與試讀。
+遊戲只附兩個故事：**功能展示**（`data/showcase_story.json`，預設）與作者的極短篇**《不是頭痛，是桂》**（`stories/katsura_dog_ears/`）。功能展示是故事編輯器的範本：目錄用選項分到「畫面：轉場與演出」「角色：立繪與文字」「玩法：分支、調查與吐槽」三段，每張卡片示範一組步驟（bg 的四種轉場、fade、shake／flash／freeze／cutin／placard／beam、bgm／se、立繪登場／表情／動作／明暗／退場、畫外音、心聲、文字標記、旗標與條件分支、四種漫畫吐槽、item／profile、調查、裝傻吐槽回合、結局），看完回到目錄。在編輯器打開同名卡片就看得到寫法。舊的第一章、討債、Phase 2–4、EP00 等片段已退出遊戲，只留在 `tests/fixtures/` 當測試夾具（見下方「測試夾具」）。
 
 ## 試玩與操作
 
-啟動下方的 Web 伺服器後，開啟 <http://127.0.0.1:5193/> 試玩討債閱讀基線；<http://127.0.0.1:5193/?sample=phase2> 是草莓牛奶劇本測試，<http://127.0.0.1:5193/?sample=phase3> 是可玩的調查與吐槽技術短循環，<http://127.0.0.1:5193/?sample=phase4> 是四線索調查（對話與移動話題、廚房、畫面外台詞），<http://127.0.0.1:5193/?sample=phase4_rounds> 是 Phase 4 回合試片（證言、消音條、神樂回合的伊莉莎白牌子與條件式放棄吐槽、連擊、QTE、超必殺；台詞取自第一章草稿，非核准）。<http://127.0.0.1:5193/?sample=comedy> 是漫畫吐槽疊加層技術片段（四個 preset，台詞取自 v2 EP00 草稿，非核准）。<http://127.0.0.1:5193/?sample=choices> 是兩種選項的技術片段（POV 選項：新八的想法，三個選項各帶語氣標記；導演選擇：跳出角色決定接下來發生什麼，三條分支各自結局；台詞取自 v2 EP00 的 Scene 02 與 Scene 06，非核准）。<http://127.0.0.1:5193/?sample=ep00> 是 VN Framework Prototype v0.1 的 vertical slice「EP00 今天也沒有工作的萬事屋」：一般 VN、POV 選項、漫畫吐槽層、互動調查、旗標與條件、導演選項、三個結局與存讀檔串成一集（台詞取自 v2 EP00 草稿，非核准）。各用自己的本機存檔；桌機或編輯器直接執行時，在標題點故事名稱打開「章節選擇」換故事。
+啟動下方的 Web 伺服器後，開啟 <http://127.0.0.1:5193/> 是功能展示；<http://127.0.0.1:5193/?sample=katsura_dog_ears> 是桂的極短篇。各用自己的本機存檔；桌機或編輯器直接執行時，在標題點故事名稱打開「章節選擇」換故事，沒選過時開清單第一個故事。
 
 | 操作 | 效果 |
 | --- | --- |
@@ -48,7 +48,7 @@ Godot 4.7 橫向視覺小說，依 [V1 Roadmap](../../docs/story-telling-game/RO
 
 [素材試版手機畫面](docs/preview-assets-dialogue-phone.png) · [UI 試版比較](docs/UI-TRIAL.md) · [Phase 2 手機畫面](docs/preview-phase2-phone.png) · [多欄位讀檔畫面](docs/preview-save-slots-phone.png) · [驗證紀錄](docs/VERIFICATION.md)
 
-B 超必殺演出已接入 `?sample=phase4_rounds`，使用既有素材與程序特效。眼鏡的 `charged` 可在 `scenes/ui/glasses_icon.tscn` Inspector 開啟，預覽金色氣焰；執行時由力量控制。`scenes/ui/beam.tscn` 的 `Strip`、`OriginGlow` 可在 Godot 調整光束位置與起點；同時出現的台詞位於 `scenes/ui/cutin.tscn` 的 `BeamCaptionArea`。後續 C → D → E 見 [TODO](TODO.md)。
+B 超必殺演出已接入回合玩法（測試夾具 `phase4_rounds`；功能展示的「畫面」段落有光束），使用既有素材與程序特效。眼鏡的 `charged` 可在 `scenes/ui/glasses_icon.tscn` Inspector 開啟，預覽金色氣焰；執行時由力量控制。`scenes/ui/beam.tscn` 的 `Strip`、`OriginGlow` 可在 Godot 調整光束位置與起點；同時出現的台詞位於 `scenes/ui/cutin.tscn` 的 `BeamCaptionArea`。後續 C → D → E 見 [TODO](TODO.md)。
 
 漫畫吐槽的左右構圖分別存於 `scenes/comedy/tsukkomi_impact.tscn` 與 `scenes/comedy/tsukkomi_impact_right.tscn`。在 Godot 可調整 `CutInPanel`、`PanelLines` 與 `Burst`；劇情編輯器的 `comedy`／`tsukkomi_impact` 有「出場位置」可選，預設左側。純文字劇本可寫 `do comedy("tsukkomi_impact", "shinpachi", "現在是工作時間吧！", "right")`。既有新八吐槽的 `cutin` 會呈現為漫畫格；緊接光束的必殺台詞與連擊通知保留各自演出。如果選詞剛說過相同台詞，不會重播漫畫格。故事 JSON 與存檔版本不因這項呈現調整而改變。
 
@@ -130,14 +130,10 @@ bash tools/serve_web.sh
 | `scenes/characters/<角色>.tscn` | 每個角色的大小與取景（腳本 `scripts/placeholder_sprite.gd`） |
 | `scripts/story_runner.gd` | 劇本節點執行、資料檢查、條件跳轉與閱讀位置 |
 | `scripts/save_slots.gd` | 手動欄位命名、暫存寫入與備份還原 |
-| `data/debt_story.json` | 已核准的討債試玩文本 |
-| `data/phase2_story.json` | 草莓牛奶短篇技術測試，非正式第一章 |
-| `data/phase3_story.json` | 調查、銀時發言與四種吐槽結果的技術短循環，非正式第一章 |
-| `data/phase4_story.json` | 四線索調查與素材限定吐槽的技術試片（`story_src/phase4.*` 建置；調查的對話話題、移動地點、查看後台詞與畫面外台詞的寫法範例） |
-| `data/phase4_rounds_story.json` | Phase 4 回合試片：銀時證言、神樂證言（伊莉莎白的牌子、條件式放棄吐槽）與連擊三回合（`story_src/phase4_rounds.*` 建置；v2 回合的寫法範例） |
-| `data/ep00_story.json` | EP00 vertical slice（`story_src/ep00.dialogue`＋`ep00.blocks.json` 建置；`?sample=ep00`）：六個場景、三個 POV 選項、導演選項與三個結局；`tests/test_ep00.gd` 窮舉所有路徑 |
+| `data/showcase_story.json` | 功能展示（圖編輯故事，`authoring: graph`）：每種步驟一張示範卡片，`tests/test_showcase.gd` 走完每條分支 |
+| `tests/fixtures/stories/`、`tests/fixtures/story_src/`、`tests/fixtures/example_pack/example/` | 測試夾具：退出遊戲的舊故事（第一章、討債、Phase 2–4、回合、漫畫吐槽、選項、EP00、文字效果、轉場）與它們的建置來源、範例作品「末班車」。只給測試讀（登記在 `tests/fixtures/stories.json`，測試以 `stories_path` 指過去），不匯出 |
 | `data/asset_catalog.json` | 背景、人物、吐槽素材及可替換圖片的統一設定 |
-| `data/stories.json` | 章節選擇裡的故事：依序的本篇（`kind: "chapter"`）與試玩片段（`"sample"`），各自的劇本與存檔路徑。新增故事加一行，不用改程式 |
+| `data/stories.json` | 章節選擇裡 `data/` 的故事（目前只有功能展示）：依序的本篇（`kind: "chapter"`）與試玩片段（`"sample"`），各自的劇本與存檔路徑。新增故事加一行，不用改程式；`stories/<作品>/pack.json` 的故事排在後面 |
 | `scripts/story_library.gd` | 故事清單、標題與署名、通關評價、結局、跨章旗標與鑑賞解鎖（`progress.cfg`） |
 | `data/credits.json` | 製作名單最後一段：引擎、劇本工具、字型、音樂、音效的來源與授權 |
 | `docs/ART-SPEC.md` | 創作者美術規格：背景、立繪、表情、線索圖的尺寸與檔名；授權欄位與投稿檢查 |
@@ -287,9 +283,9 @@ node tools/browser_check.mjs --backup --playwright /path/to/node_modules/@playwr
 
 ## 第一章與閱讀功能（2026-10-06）
 
-新啟動的遊戲預設為第一章「萬事屋冰箱草莓牛奶失竊事件」上機試讀版，也可直接開 `?sample=chapter1`；桌機既有的故事選擇仍記住。劇本採用已核准 P1–P8 的草稿 v0.2，修改來源是 `story_src/chapter1.dialogue` 與 `chapter1.blocks.json`，台詞追溯見 `docs/chapter1-source-map.json`。玩法、驗證與真人待辦見 [C–E 交付紀錄](docs/READING-CHAPTER1.md)。
+第一章「萬事屋冰箱草莓牛奶失竊事件」上機試讀版已退出遊戲，劇本留在測試夾具 `tests/fixtures/stories/chapter1_story.json`。它採用已核准 P1–P8 的草稿 v0.2，來源是 `tests/fixtures/story_src/chapter1.dialogue` 與 `chapter1.blocks.json`，台詞追溯見 `docs/chapter1-source-map.json`。玩法、驗證與真人待辦見 [C–E 交付紀錄](docs/READING-CHAPTER1.md)。
 
-新增段落內「上一句」、獨立快速存檔／快速讀檔，均在目錄。字級與紙框透明度在設定，窄手機可捲動。文字支援重點色／放大／抖動、停頓／慢速與角色打字音；`?sample=text_effects` 是文字演出示範；`?sample=transitions` 依序示範筆刷、墨暈、故障與預設淡入淡出四種換背景轉場。新安裝預設銀魂和紙；後續對話框與按鈕沿用作者確認的 PNG 紙框與深藍銀框按鈕。
+新增段落內「上一句」、獨立快速存檔／快速讀檔，均在目錄。字級與紙框透明度在設定，窄手機可捲動。文字支援重點色／放大／抖動、停頓／慢速與角色打字音；功能展示的「角色：立繪與文字」示範文字演出，「畫面：轉場與演出」依序示範筆刷、墨暈、故障與預設淡入淡出四種換背景轉場。新安裝預設銀魂和紙；後續對話框與按鈕沿用作者確認的 PNG 紙框與深藍銀框按鈕。
 
 直接調整 `dialogue_log.tscn` 的 `Margins` 與 `Column` 間距、`LogClose` 文字；`save_slots_panel.tscn` 的 `OuterMargins`／`Padding`／`Cards`；`save_slot_card.tscn` 的 `Preview`／`SlotTitle`；`save_overwrite_confirmation.tscn` 的確認文案；`end_controls.tscn` 的 `Actions` anchors 與兩顆按鈕。正常執行不重建這些 scene。
 

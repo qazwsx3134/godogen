@@ -11,7 +11,7 @@ func _initialize() -> void:
 func _run() -> void:
 	var runner := Runner.new()
 	_expect(runner.create_validation_probe() == null, "an unloaded runner has no validation probe")
-	_expect(runner.load_story("res://data/chapter1_story.json"), "chapter one loads")
+	_expect(runner.load_story("res://tests/fixtures/stories/chapter1_story.json"), "chapter one loads")
 	var state: Dictionary = runner.snapshot()
 	var probe: RefCounted = runner.create_validation_probe()
 	_expect(probe != null and probe.restore(state), "a probe accepts the loaded chapter snapshot")
@@ -23,7 +23,7 @@ func _run() -> void:
 	bad.version = "incompatible-version"
 	_expect(not probe.restore(bad), "a probe rejects an incompatible story version")
 	_expect(probe.snapshot() == state and runner.snapshot() == state, "failed validation leaves both state machines intact")
-	_expect(runner.load_story("res://data/phase2_story.json"), "another story can replace the live chapter")
+	_expect(runner.load_story("res://tests/fixtures/stories/phase2_story.json"), "another story can replace the live chapter")
 	_expect(not runner.create_validation_probe().restore(state), "new probes reject saves from the previous story")
 	_expect(probe.restore(state), "an existing probe retains its original validated definition")
 	await _test_shell_cache()
@@ -41,6 +41,7 @@ func _test_shell_cache() -> void:
 	_write_source()
 	var game := MAIN.instantiate()
 	game.story_path = SOURCE
+	game.stories_path = "res://tests/fixtures/stories.json"
 	game.save_path = SAVE
 	game.settings_path = "user://studio_save_validation_settings.cfg"
 	game.progress_path = "user://studio_save_validation_progress.cfg"

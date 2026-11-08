@@ -106,7 +106,8 @@ func _test_hud() -> void:
 
 func _test_toast() -> void:
 	var game: Control = (load("res://main.tscn") as PackedScene).instantiate()
-	game.story_path = "res://data/phase3_story.json"
+	game.story_path = "res://tests/fixtures/stories/phase3_story.json"
+	game.stories_path = "res://tests/fixtures/stories.json"
 	game.save_path = "user://game_feel_test.save"
 	game.settings_path = "user://game_feel_test.cfg"
 	game.progress_path = "user://game_feel_test_progress.cfg"

@@ -7,7 +7,8 @@ func _init() -> void:
 
 func _run() -> void:
 	var game: Control = (load("res://main.tscn") as PackedScene).instantiate()
-	game.story_path = "res://data/phase3_story.json"
+	game.story_path = "res://tests/fixtures/stories/phase3_story.json"
+	game.stories_path = "res://tests/fixtures/stories.json"
 	game.save_path = "user://reading_feel_test.save"
 	game.settings_path = "user://reading_feel_test.cfg"
 	game.progress_path = "user://reading_feel_test_progress.cfg"

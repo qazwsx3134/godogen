@@ -21,7 +21,7 @@ func _init() -> void:
 
 func _run() -> void:
 	root.size = Vector2i(1280, 720)
-	var built: Dictionary = BUILDER.build_text(SOURCE, "res://story_src/__portrait_motion_test.dialogue")
+	var built: Dictionary = BUILDER.build_text(SOURCE, "res://tests/fixtures/story_src/__portrait_motion_test.dialogue")
 	_expect(str(built.get("error", "")).is_empty(), "portrait animation source builds: %s" % built.get("error"))
 	if not str(built.get("error", "")).is_empty():
 		_finish("PORTRAIT MOTION")

@@ -4,12 +4,12 @@ importer="dialogue_manager"
 importer_version=18
 type="Resource"
 uid="uid://delalchwc6ycm"
-path="res://.godot/imported/phase4.dialogue-cd3145936c84c853a8fe0139185fe8f1.tres"
+path="res://.godot/imported/phase4.dialogue-802565b34f05dd5a7d9408d5485bd5f3.tres"
 
 [deps]
 
-source_file="res://story_src/phase4.dialogue"
-dest_files=["res://.godot/imported/phase4.dialogue-cd3145936c84c853a8fe0139185fe8f1.tres"]
+source_file="res://tests/fixtures/story_src/phase4.dialogue"
+dest_files=["res://.godot/imported/phase4.dialogue-802565b34f05dd5a7d9408d5485bd5f3.tres"]
 
 [params]
 

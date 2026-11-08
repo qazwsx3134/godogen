@@ -39,7 +39,8 @@ func _run() -> void:
 	var edited_bytes: String = FileAccess.get_file_as_string(EDITED_STAGE)
 
 	var game: Control = (load("res://main.tscn") as PackedScene).instantiate() as Control
-	game.story_path = "res://data/phase4_story.json"
+	game.story_path = "res://tests/fixtures/stories/phase4_story.json"
+	game.stories_path = "res://tests/fixtures/stories.json"
 	game.save_path = TEST_SAVE
 	game.settings_path = TEST_UI
 	game.stage_scene = ResourceLoader.load(EDITED_STAGE, "", ResourceLoader.CACHE_MODE_IGNORE)

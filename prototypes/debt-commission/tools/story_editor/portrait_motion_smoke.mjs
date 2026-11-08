@@ -16,7 +16,9 @@ const put = (relative, data) => {
   fs.mkdirSync(path.dirname(file), {recursive: true});
   fs.writeFileSync(file, data);
 };
-const copy = relative => put(relative, fs.readFileSync(path.join(root, relative)));
+// Sample stories live in the test fixtures; the temporary project gets them under data/.
+const source = relative => /^data\/.+_story\.json$/.test(relative) ? path.join(root, 'tests/fixtures/stories', path.basename(relative)) : path.join(root, relative);
+const copy = relative => put(relative, fs.readFileSync(source(relative)));
 for (const file of ['index.html', 'editor.js', 'editor_state.js', 'story_core.js', 'catalog_editor.js', 'editor.css']) copy(`tools/story_editor/${file}`);
 for (const file of ['scripts/story_runner.gd', 'data/asset_catalog.json', 'data/phase3_story.json', 'skins/gintama/skin.json']) copy(file);
 copy('assets/image/shin-pa-chi.png');

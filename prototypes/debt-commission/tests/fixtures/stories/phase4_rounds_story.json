@@ -1,6 +1,6 @@
 {
   "entry": "rounds_open",
-  "generated_from": "story_src/phase4_rounds.dialogue",
+  "generated_from": "tests/fixtures/story_src/phase4_rounds.dialogue",
   "id": "strawberry_phase4_rounds",
   "initial_flags": {},
   "nodes": {

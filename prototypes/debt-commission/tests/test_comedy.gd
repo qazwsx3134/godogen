@@ -8,9 +8,9 @@ extends "res://addons/proto_kit/test_kit.gd"
 const MAIN_SCENE: PackedScene = preload("../main.tscn")
 const StoryRunner = preload("res://scripts/story_runner.gd")
 const StoryBuilder = preload("res://tools/story_build/story_builder.gd")
-const STORY: String = "res://data/comedy_story.json"
-const DM_SOURCE: String = "res://story_src/comedy.dialogue"
-const DS_SOURCE: String = "res://story_src/comedy.ds"
+const STORY: String = "res://tests/fixtures/stories/comedy_story.json"
+const DM_SOURCE: String = "res://tests/fixtures/story_src/comedy.dialogue"
+const DS_SOURCE: String = "res://tests/fixtures/story_src/comedy.ds"
 const BAD_STORY: String = "user://comedy_bad_story.json"
 const TEST_SAVE: String = "user://comedy_test.save"
 const TEST_UI: String = "user://comedy_test_ui.cfg"
@@ -158,25 +158,25 @@ func _test_adapters() -> void:
 	_expect(on_disk == StoryBuilder.to_json(from_dm["story"]), "data/comedy_story.json is a fresh build of comedy.dialogue")
 	# The optional fourth argument and a display name through both adapters, built from text.
 	var with_face: Dictionary = StoryBuilder.build_text(
-		'~ a\ndo comedy("small_reaction", "新八", "咦？", "angry")\n新八: x\ndo end("e")\n', "res://story_src/__comedy_check.dialogue")
+		'~ a\ndo comedy("small_reaction", "新八", "咦？", "angry")\n新八: x\ndo end("e")\n', "res://tests/fixtures/story_src/__comedy_check.dialogue")
 	var step: Dictionary = ((with_face["story"]["nodes"]["a"]["steps"]) as Array)[0] if with_face["error"] == "" else {}
 	_expect(step.get("speaker") == "shinpachi" and step.get("expression") == "angry" and step.get("preset") == "small_reaction",
 		"the fourth argument is the expression and a display name becomes the id: %s %s" % [step, with_face["error"]])
 	var doubled: Dictionary = StoryBuilder.build_text('~ a\ndo comedy("emotion_band", "新八", "咦？", "angry", "shout")\n新八: x\ndo end("e")\n',
-		"res://story_src/__comedy_check.dialogue")
+		"res://tests/fixtures/story_src/__comedy_check.dialogue")
 	_expect(str(doubled["error"]).contains("got two of expression"), "two expressions are an error, not a silent pick: %s" % doubled["error"])
 	for args: String in ['"right", "shout"', '"shout", "right"']:
 		var directed: Dictionary = StoryBuilder.build_text('~ a\ndo comedy("tsukkomi_impact", "新八", "喂！", %s)\n新八: x\ndo end("e")\n' % args,
-			"res://story_src/__comedy_check.dialogue")
+			"res://tests/fixtures/story_src/__comedy_check.dialogue")
 		var directed_step: Dictionary = ((directed["story"]["nodes"]["a"]["steps"]) as Array)[0] if directed["error"] == "" else {}
 		_expect(directed_step.get("side") == "right" and directed_step.get("expression") == "shout",
 			"a side and expression build in either order: %s" % directed["error"])
 	var double_side: Dictionary = StoryBuilder.build_text('~ a\ndo comedy("tsukkomi_impact", "新八", "喂！", "left", "right")\n新八: x\ndo end("e")\n',
-		"res://story_src/__comedy_check.dialogue")
+		"res://tests/fixtures/story_src/__comedy_check.dialogue")
 	_expect(str(double_side["error"]).contains("got two of side"), "two sides are rejected")
 	for args: String in ['"#7ec8ff", "angry"', '"angry", "#7ec8ff"']:
 		var tinted: Dictionary = StoryBuilder.build_text('~ a\ndo comedy("emotion_band", "新八", "咦？", %s)\n新八: x\ndo end("e")\n' % args,
-			"res://story_src/__comedy_check.dialogue")
+			"res://tests/fixtures/story_src/__comedy_check.dialogue")
 		var band: Dictionary = ((tinted["story"]["nodes"]["a"]["steps"]) as Array)[0] if tinted["error"] == "" else {}
 		_expect(band.get("color") == "#7ec8ff" and band.get("expression") == "angry",
 			"a #hex argument is the band color, in either order (%s): %s %s" % [args, band, tinted["error"]])
@@ -606,6 +606,7 @@ func _test_emotion_band() -> void:
 func _new_game() -> Control:
 	var game: Control = MAIN_SCENE.instantiate() as Control
 	game.story_path = STORY
+	game.stories_path = "res://tests/fixtures/stories.json"
 	game.save_path = TEST_SAVE
 	game.settings_path = TEST_SETTINGS
 	root.add_child(game)

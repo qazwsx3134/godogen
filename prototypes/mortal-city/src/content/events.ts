@@ -69,10 +69,10 @@ export const EVENTS: CityEvent[] = [
   },
   {
     id: 'vending',
-    title: '會吐錢的自販機',
-    body: '荒井會管的一排自販機，有一台的面板鬆了，露出裡面的維修埠。',
+    title: '會吐錢的販賣機',
+    body: '荒井會管的一排販賣機，有一台的面板鬆了，露出裡面的維修埠。',
     options: [
-      { id: 'hack', label: '接上維修埠，讓它吐錢', needs: { attr: 'int', min: 6 }, win: { text: '整排自販機同時吐出零錢，你在荒井會的人趕到前就走了。', credits: 260, xp: 10 } },
+      { id: 'hack', label: '接上維修埠，讓它吐錢', needs: { attr: 'int', min: 6 }, win: { text: '整排販賣機同時吐出零錢，你在荒井會的人趕到前就走了。', credits: 260, xp: 10 } },
       { id: 'kick', label: '用力踹', chance: 0.4, win: { text: '它吐出了一把硬幣。', credits: 120 }, lose: { text: '警報響了。荒井會的人記下了你的臉。', heat: 1 } },
       leave('你不想惹荒井會。'),
     ],

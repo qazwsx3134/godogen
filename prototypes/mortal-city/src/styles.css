@@ -77,6 +77,11 @@ body {
 .cut-strong {
   --edge: var(--color-line-strong);
 }
+/* 稀有卡：框線加粗、帶一點流派色的底 */
+.cut-rare {
+  padding: 2px;
+  --fill: color-mix(in srgb, var(--edge) 12%, var(--color-surface));
+}
 
 /* 細掃描線，只當裝飾，不攔點擊 */
 .scan::after {
@@ -847,6 +852,7 @@ body {
   inset: 0;
   z-index: 35;
   pointer-events: none;
+  overflow: hidden; /* 撕裂條有 translateX，不裁會撐出橫向捲動 */
   animation: glitch-fade 0.24s steps(3) both;
 }
 .glitch-tx i {

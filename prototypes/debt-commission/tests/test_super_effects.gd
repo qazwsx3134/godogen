@@ -3,18 +3,19 @@ extends "res://addons/proto_kit/test_kit.gd"
 const MAIN = preload("res://main.tscn")
 const RUNNER = preload("res://scripts/story_runner.gd")
 const BUILDER = preload("res://tools/story_build/story_builder.gd")
-const SAMPLE: String = "res://data/phase4_rounds_story.json"
+const SAMPLE: String = "res://tests/fixtures/stories/phase4_rounds_story.json"
 func _init() -> void:
 	_run.call_deferred()
 func _game() -> Control:
 	var game: Control = MAIN.instantiate() as Control
 	game.story_path = SAMPLE
+	game.stories_path = "res://tests/fixtures/stories.json"
 	game.save_path = "user://super_effects_test.save"
 	root.add_child(game)
 	return game
 func _run() -> void:
 	root.size = Vector2i(1280, 720)
-	var built: Dictionary = BUILDER.build("res://story_src/phase4_rounds.dialogue")
+	var built: Dictionary = BUILDER.build("res://tests/fixtures/story_src/phase4_rounds.dialogue")
 	_expect(str(built.error).is_empty(), "source builds with beam(): %s" % built.error)
 	_expect(BUILDER.to_json(built.story) == FileAccess.get_file_as_string(SAMPLE), "generated story matches authoring source")
 	var game: Control = _game()

@@ -2,6 +2,8 @@
 
 此目錄收錄獨立的設計驗證原型。各原型維護自己的工具鏈、README 與驗證資料，repo 邊界見 [ADR 0001](docs/adr/0001-prototypes-live-in-godogen.md)。Godot 原型之間共用的程式（合成音、原子存檔、headless 測試基底）只在 [godot-kit](godot-kit/README.md) 維護一份，再同步進各原型的 `addons/proto_kit/`。把 Godot 原型做到 itch.io 網頁版的完整做法與踩過的坑（素材、測試與平衡量測、打擊感與手機震動、網頁匯出瘦身與瀏覽器驗證、多 agent 分工）整理成 skill `godot-prototype-to-itch`，原始檔在 [godot-kit/skills/godot-prototype-to-itch](godot-kit/skills/godot-prototype-to-itch/SKILL.md)，用 symlink 掛進 `~/.claude/skills/`；下一批值得抽進 kit 的模組與證據見 godot-kit README 的「下一批值得抽出來的」。
 
+從點子到上架的整條流程（各階段的文件、關卡與工具）見 [GAME_DEV_FLOW.md](GAME_DEV_FLOW.md)。
+
 **各原型踩過的坑統一列在 [LESSONS.md](LESSONS.md)**：開工前或遇到不合理的失敗時先查；新的坑也寫在那裡。
 
 ## 素材生成（Scenario skills）

@@ -19,7 +19,9 @@ const put = (relative, data) => {
   fs.mkdirSync(path.dirname(file), {recursive: true});
   fs.writeFileSync(file, data);
 };
-const copy = file => put(file, fs.readFileSync(path.join(root, file)));
+// Sample stories live in the test fixtures; the temporary project gets them under data/.
+const source = relative => /^data\/.+_story\.json$/.test(relative) ? path.join(root, 'tests/fixtures/stories', path.basename(relative)) : path.join(root, relative);
+const copy = file => put(file, fs.readFileSync(source(file)));
 const canonical = value => Array.isArray(value) ? value.map(canonical) : value && typeof value === 'object'
   ? Object.fromEntries(Object.keys(value).sort().map(k => [k, canonical(value[k])])) : value;
 const hash = value => crypto.createHash('sha256').update(JSON.stringify(canonical(value))).digest('hex');

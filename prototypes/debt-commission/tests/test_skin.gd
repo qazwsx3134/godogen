@@ -91,7 +91,7 @@ func _the_story_brings_its_skin() -> void:
 
 
 func _no_gameplay_no_gameplay_ui() -> void:
-	var game: Control = _new_game("res://data/debt_story.json")
+	var game: Control = _new_game("res://tests/fixtures/stories/debt_story.json")
 	await _frames(3)
 	game._open_settings()
 	await _frames(2)

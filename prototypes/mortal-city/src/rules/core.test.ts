@@ -19,6 +19,8 @@ import {
   perkReward,
   resolveDanger,
   resolveFight,
+  STYLES,
+  tacticsFor,
 } from './core'
 import { PERKS, PERK_IDS } from './perks'
 
@@ -130,8 +132,8 @@ describe('attributes', () => {
 
   it('反應 lands crits, 沉著 makes them hit harder, 智力 jams longer', () => {
     const text = (over: Partial<Character>) => resolveFight(char(over), foe, 'force', 5).rounds.map((r) => r.text).join()
-    expect(text({})).not.toMatch(/暴擊/)
-    expect(text(at({ reflex: 11 }))).toMatch(/暴擊/)
+    expect(text({})).not.toMatch(/爆擊/)
+    expect(text(at({ reflex: 11 }))).toMatch(/爆擊/)
     expect(fightStats(char(at({ cool: 8 }))).critDmg).toBeCloseTo(2.0)
     const jammed = (int: number) => resolveFight(char(at({ int })), foe, 'hack', 1).rounds.filter((r) => r.text.includes('亂跳')).length
     expect(jammed(9)).toBeGreaterThanOrEqual(jammed(3))
@@ -163,12 +165,12 @@ describe('fame cards: pick 1 of 3 on each fame level', () => {
   it('fame comes from jobs and queues a card pick per level', () => {
     const c = char()
     const events: LogEvent[] = []
-    for (let k = 0; k < 4; k++) grantProgress(c, brawl, true, 0, events)
-    expect(c.fame).toEqual({ level: 1, xp: 40 - fameToNext(0), total: 40 })
+    for (let k = 0; k < 2; k++) grantProgress(c, brawl, true, 0, events)
+    expect(c.fame).toEqual({ level: 1, xp: 20 - fameToNext(0), total: 20 })
     expect(c.picks).toEqual([{ kind: 'perk', level: 1, seed: hashSeed('c1', 'fame', 1) }])
     expect(events.some((e) => e.text.includes('名聲提升到 Lv.1'))).toBe(true)
     grantProgress(c, brawl, false, 0, events)
-    expect(c.fame.total).toBe(45)
+    expect(c.fame.total).toBe(25)
   })
 
   it('options are 3 distinct, fixed by the seed, skip maxed cards, and fill up with fallback cards', () => {
@@ -183,9 +185,9 @@ describe('fame cards: pick 1 of 3 on each fame level', () => {
 
   it('a fresh build favours the direction you already took', () => {
     let hack = 0
-    for (let i = 0; i < 300; i++) hack += perkOptions(char({ perks: { iceApprentice: 1 } }), i).filter((id) => PERKS[id].dir === 'hack').length
+    for (let i = 0; i < 300; i++) hack += perkOptions(char({ perks: { iceApprentice: 1 } }), i).filter((id) => PERKS[id].style === 'netrunner').length
     let base = 0
-    for (let i = 0; i < 300; i++) base += perkOptions(char(), i).filter((id) => PERKS[id].dir === 'hack').length
+    for (let i = 0; i < 300; i++) base += perkOptions(char(), i).filter((id) => PERKS[id].style === 'netrunner').length
     expect(hack).toBeGreaterThan(base * 1.3)
   })
 
@@ -215,5 +217,42 @@ describe('fame cards: pick 1 of 3 on each fame level', () => {
     expect(dirBonus(c, 'hack')).toBeCloseTo(0.06)
     expect(dirBonus(c, 'force')).toBe(0)
     expect(jobReward(brawl, perkReward(c, 'hack'))).toBe(120)
+  })
+})
+
+describe('四個流派', () => {
+  it('每個流派都有足夠的卡與道具，掉寶表裡也有', async () => {
+    const { ITEMS, STREET, RARE } = await import('../content/items')
+    for (const s of STYLES) {
+      expect(PERK_IDS.filter((id) => PERKS[id].style === s).length).toBeGreaterThanOrEqual(6)
+      const items = Object.keys(ITEMS).filter((k) => ITEMS[k].style === s)
+      expect(items.length).toBeGreaterThanOrEqual(5)
+      expect(STREET.filter((k) => ITEMS[k].style === s).length).toBeGreaterThanOrEqual(3)
+      expect(RARE.filter((k) => ITEMS[k].style === s).length).toBeGreaterThanOrEqual(3)
+    }
+    for (const k of [...STREET, ...RARE]) expect(ITEMS[k]).toBeDefined()
+    const icons = (await import('../content/item_icons.json')).default as Record<string, string>
+    expect(Object.keys(ITEMS).filter((k) => !icons[k])).toEqual([]) // 每件道具都有像素圖示
+  })
+
+  it('雙持會補槍、流浪者打贏會包紮；只有迷彩類義體能開光學迷彩繞背', async () => {
+    const { makeItem } = await import('../content/items')
+    const foe = { name: 'x', hp: 90, atk: 10, hit: 0.6 }
+    let plain = 0
+    let twin = 0
+    let healed = 0
+    for (let i = 0; i < 200; i++) {
+      plain += resolveFight(char(), foe, 'force', i).rounds.filter((r) => r.text.includes('補')).length
+      twin += resolveFight(char({ perks: { twinFire: 2 } }), foe, 'force', i).rounds.filter((r) => r.text.includes('補')).length
+      const a = resolveFight(char(), foe, 'force', i)
+      const b = resolveFight(char({ perks: { roadPatch: 1 } }), foe, 'force', i)
+      if (a.won) healed += b.hp - a.hp
+    }
+    expect(plain).toBe(0)
+    expect(twin).toBeGreaterThan(50)
+    expect(healed).toBeGreaterThan(0)
+    const stealth = (kind: string) => tacticsFor(char({ equipment: [makeItem(kind, 1)] })).find((t) => t.id === 'stealth')!.locked
+    expect(stealth('dustCloak')).toBeUndefined()
+    expect(stealth('roadMed')).toBe('需要光學迷彩義體')
   })
 })

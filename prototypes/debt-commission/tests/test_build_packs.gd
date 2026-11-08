@@ -14,8 +14,8 @@ func _init() -> void:
 
 func _run() -> void:
 	_remove_work()
-	_paths()
 	_build_into_work()
+	_paths()
 	_example_unchanged()
 	await _preview()
 	_remove_work()
@@ -24,7 +24,7 @@ func _run() -> void:
 
 func _paths() -> void:
 	_expect(Builder.output_path_for("res://story_src/chapter1.dialogue") == "res://data/chapter1_story.json", "story_src builds into data/")
-	_expect(Builder.output_path_for("res://stories/example/ch1.dialogue") == "res://stories/example/ch1_story.json",
+	_expect(Builder.output_path_for(WORK + "late.dialogue") == WORK + "late_story.json",
 		"a work's source builds beside itself")
 	_expect(Builder.output_path_for("res://stories/no_pack_here/ch1.dialogue") == "res://data/ch1_story.json",
 		"a folder without pack.json is not a work")
@@ -33,7 +33,7 @@ func _paths() -> void:
 func _build_into_work() -> void:
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(WORK))
 	_write(WORK + "pack.json", JSON.stringify({"id": "_build_test", "title": "建置測試", "stories": []}))
-	_write(WORK + "catalog.json", FileAccess.get_file_as_string("res://stories/example/catalog.json"))
+	_write(WORK + "catalog.json", FileAccess.get_file_as_string("res://tests/fixtures/example_pack/example/catalog.json"))
 	_write(WORK + "late.dialogue", SOURCE)
 	_write(WORK + "late.blocks.json", JSON.stringify({"story": {"id": "build_test_late", "title": "晚班"}, "titles": {}, "blocks": {}}))
 	var result: Dictionary = Builder.build_and_write(WORK + "late.dialogue")
@@ -45,21 +45,22 @@ func _build_into_work() -> void:
 	pack = JSON.parse_string(FileAccess.get_file_as_string(WORK + "pack.json"))
 	_expect(not result["registered"] and (pack["stories"] as Array).size() == 1, "building again does not list it twice")
 	_write(WORK + "taken.dialogue", SOURCE)
-	_write(WORK + "taken.blocks.json", JSON.stringify({"story": {"id": "example_ch1", "title": "撞名"}, "titles": {}, "blocks": {}}))
+	_write(WORK + "taken.blocks.json", JSON.stringify({"story": {"id": "katsura_dog_ears", "title": "撞名"}, "titles": {}, "blocks": {}}))
 	result = Builder.build_and_write(WORK + "taken.dialogue")
-	_expect(str(result["error"]).contains("example_ch1") and not FileAccess.file_exists(WORK + "taken_story.json"),
+	_expect(str(result["error"]).contains("katsura_dog_ears") and not FileAccess.file_exists(WORK + "taken_story.json"),
 		"an id another work has is refused and nothing is written: %s" % result["error"])
 
 
 func _example_unchanged() -> void:
-	var built: Dictionary = Builder.build("res://stories/example/ch1.dialogue")
-	_expect(Builder.to_json(built["story"]) == FileAccess.get_file_as_string("res://stories/example/ch1_story.json"),
+	var built: Dictionary = Builder.build("res://tests/fixtures/example_pack/example/ch1.dialogue")
+	_expect(Builder.to_json(built["story"]) == FileAccess.get_file_as_string("res://tests/fixtures/example_pack/example/ch1_story.json"),
 		"rebuilding the example's chapter gives the committed file byte for byte")
 
 
 func _preview() -> void:
 	var game: Control = (load("res://main.tscn") as PackedScene).instantiate() as Control
 	game.story_path = WORK + "late_story.json"
+	game.stories_path = "res://tests/fixtures/stories.json"
 	game.save_path = "user://build_packs_preview.save"
 	game.progress_path = "user://build_packs_progress.cfg"
 	game.settings_path = "user://build_packs_settings.cfg"
@@ -68,7 +69,7 @@ func _preview() -> void:
 	root.add_child(game)
 	await _frames(3)
 	_expect(game._sprites.has("aki") and not game._sprites.has("shinpachi"), "the preview plays it with the work's cast")
-	game._choose_story({"id": "phase3", "path": "res://data/phase3_story.json", "save": "user://build_packs_selected.save"})
+	game._choose_story({"id": "phase3", "path": "res://tests/fixtures/stories/phase3_story.json", "save": "user://build_packs_selected.save"})
 	_expect(game.story_catalog_override.is_empty() and game.story_skin_override.is_empty(), "selecting a story clears preview overrides")
 	_expect(game._story_ready and game._sprites.has("shinpachi") and not game._sprites.has("aki") and game._ui_style_id == "gintama",
 		"the selected story uses its own catalog and skin")

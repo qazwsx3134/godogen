@@ -14,7 +14,8 @@ func _init() -> void:
 func _run() -> void:
 	_cleanup()
 	var game: Control = (load("res://main.tscn") as PackedScene).instantiate() as Control
-	game.story_path = "res://data/chapter1_story.json"
+	game.story_path = "res://tests/fixtures/stories/chapter1_story.json"
+	game.stories_path = "res://tests/fixtures/stories.json"
 	game.save_path = FILES[0]
 	game.settings_path = FILES[3]
 	game.progress_path = FILES[4]

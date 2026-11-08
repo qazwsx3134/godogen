@@ -4,7 +4,6 @@ const STORY: String = "res://stories/katsura_dog_ears/dog_ears_story.json"
 const CATALOG: String = "res://stories/katsura_dog_ears/catalog.json"
 const BACKGROUND: String = "res://stories/katsura_dog_ears/art/yorozuya_anime_bg_v2.png"
 const RUNNER = preload("res://scripts/story_runner.gd")
-const ROUND_VIEW = preload("res://scripts/round_view.gd")
 var game: Control
 
 func _init() -> void:
@@ -20,40 +19,27 @@ func _run() -> void:
 		"the base game's background remains separate")
 	var story: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(STORY)) as Dictionary
 	var opening: Array = story.nodes.opening.steps
-	_expect(opening.any(func(s: Dictionary) -> bool: return s.get("speaker") == "gintoki" and s.get("text") == "你腦袋被撞到嗎"), "Gintoki uses the author's revised line")
-	var first: int = -1
-	for i: int in range(opening.size()):
-		if opening[i].get("text") == "頭痛賈奈。":
-			first = i
-	_expect(first >= 0 and opening[first].get("expression") == "serious", "first half is its own serious line")
-	_expect(first >= 0 and opening[first + 1].get("op") == "freeze" and float(opening[first + 1].duration) >= 0.5, "a distinct hold separates the two halves")
-	_expect(story.nodes.timing.steps[0].lines[0].text == "咖紫拉打。", "second half is independent")
-	for timing: Array in [[true, -0.5, "early"], [true, 0.5, "late"], [false, 0.0, "late"], [true, 0.0, "perfect"]]:
+	var serious: Array = opening.filter(func(s: Dictionary) -> bool: return s.get("text") == "頭痛賈奈。")
+	_expect(serious.size() == 1 and serious[0].get("expression") == "serious", "Katsura delivers 頭痛賈奈 with a serious face")
+	# 一本正經的咖紫拉打: the player picks the next line; every option reaches an ending.
+	var options: Array = story.nodes.timing.steps[0].get("options", [])
+	_expect(story.nodes.timing.steps[0].op == "choice" and not options.is_empty(), "the retort is a choice")
+	# The option whose card plays a manga retort (the author is still writing the others).
+	var retort: Array = options.filter(func(option: Dictionary) -> bool:
+		return (story.nodes[option.next].steps as Array).any(func(s: Dictionary) -> bool: return s.op == "comedy"))
+	_expect(not retort.is_empty(), "one option plays a manga retort")
+	for option: Dictionary in options:
 		var runner: RefCounted = RUNNER.new()
-		_expect(runner.call("load_story", STORY), "story loads")
-		_advance_runner(runner, "boke_round")
-		var command: Dictionary = runner.call("current")
-		_expect(ROUND_VIEW.line(command).get("expression") == "serious", "round preserves the earnest expression")
-		var result: Dictionary = runner.call("resolve_qte", timing[0], timing[1])
-		_expect(not result.has("error") and runner.get("node_id") == timing[2], "timing routes correctly: %s" % [timing])
-		if timing[2] == "perfect":
-			_expect((runner.call("current") as Dictionary).get("text") == "到底是怎樣啦！！那你手舉個屁啊！！！", "success keeps the author's exact retort")
-			_advance_runner(runner, "end")
-			_expect(runner.get("node_id") == "finish", "success reaches the ending")
-		else:
-			_advance_runner(runner, "boke_round")
-			_expect(runner.get("node_id") == "timing", "early and late can retry without replaying the opening")
+		_expect(runner.call("load_story", STORY), "story loads with the work's catalog")
+		_advance_runner(runner, "choice")
+		_expect(runner.call("choose", str(option.id)), "option %s can be chosen" % option.id)
+		_expect(runner.get("node_id") == option.next, "option %s routes to %s" % [option.id, option.next])
+		_advance_runner(runner, "end")
 	var broken: Dictionary = story.duplicate(true)
-	broken.nodes.timing.steps[0]["expression"] = "invented_expression"
+	var with_face: Dictionary = (broken.nodes.opening.steps as Array).filter(func(s: Dictionary) -> bool: return s.has("expression"))[0]
+	with_face["expression"] = "invented_expression"
 	FileAccess.open("user://katsura-invalid.json", FileAccess.WRITE).store_string(JSON.stringify(broken))
-	_expect(not RUNNER.new().load_story("user://katsura-invalid.json", CATALOG), "invalid round expression is rejected")
-	broken = story.duplicate(true)
-	broken.nodes.timing.steps[0].lines[0]["expression"] = "smug"
-	FileAccess.open("user://katsura-override.json", FileAccess.WRITE).store_string(JSON.stringify(broken))
-	var custom: RefCounted = RUNNER.new()
-	_expect(custom.call("load_story", "user://katsura-override.json", CATALOG), "per-line expression override loads")
-	_advance_runner(custom, "boke_round")
-	_expect(ROUND_VIEW.line(custom.call("current")).get("expression") == "smug", "per-line expression overrides the round default")
+	_expect(not RUNNER.new().load_story("user://katsura-invalid.json", CATALOG), "an unknown expression is rejected")
 	game = (load("res://main.tscn") as PackedScene).instantiate() as Control
 	game.story_path = STORY
 	game.save_path = "user://katsura-test.save"
@@ -71,20 +57,13 @@ func _run() -> void:
 	_expect(game._sprites.katsura.has_node("Art") and game._sprites.katsura.has_node("PosePlaceholder"), "editable actor scene is instantiated")
 	var portrait: TextureRect = game._sprites.katsura.get_node("Art") as TextureRect
 	_expect(portrait.texture != null and not game._sprites.katsura.get_node("PosePlaceholder").visible, "the generated portrait is visible and the placeholder is hidden")
-	_expect(game._sprites.elisabeth.placard_text() == "頭痛？", "Elisabeth's board displays the author's line")
 	await _shot("opening")
-	await _read_until(func() -> bool: return game._screen_mode == "qte", "timing challenge")
-	_expect(game._sprites.katsura.expression == "serious", "Katsura stays serious while the player times the retort")
-	_expect(game._sprites.katsura.visible and game._sprites.elisabeth.visible, "the pose and board remain on stage")
-	await _shot("timing")
-	game._qte._start_usec = Time.get_ticks_usec() - int(game._qte.duration * 1000000.0)
-	var press: InputEventMouseButton = InputEventMouseButton.new()
-	press.button_index = MOUSE_BUTTON_LEFT
-	press.pressed = true
-	game._qte._gui_input(press)
-	await _until(func() -> bool: return game._comedy_layer.is_active(), "manga retort")
-	_expect(game._comedy_layer.get_child_count() > 0, "a real timed tap plays the manga retort")
-	await create_timer(0.2).timeout
+	await _read_until(func() -> bool: return game._screen_mode == "choice", "the retort choice")
+	_expect(game._sprites.katsura.expression == "serious", "Katsura stays serious while the player picks the retort")
+	_expect(game._sprites.elisabeth.placard_text() == "頭痛？", "Elisabeth's board displays the author's line")
+	await _shot("choice")
+	game._on_choice_pressed(str(retort[0].id) if not retort.is_empty() else "")
+	await _read_until(func() -> bool: return game._comedy_layer.is_active(), "manga retort")
 	await _shot("retort")
 	await _read_until(func() -> bool: return game._screen_mode == "end", "short story ending")
 	game.queue_free()

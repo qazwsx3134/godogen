@@ -102,7 +102,7 @@ export default function App() {
               <span className="tech ml-auto text-heading">¢{c.credits.toLocaleString()}</span>
             </div>
             {c.alive && c.injury >= SEVERE_INJURY && (
-              <div className="mt-2 border-t border-red/50 pt-2 text-[13px] font-bold text-red">✚ 重傷：開打時 HP 很低，先找診所或休息節點</div>
+              <div className="mt-2 border-t border-red/50 pt-2 text-[13px] font-bold text-red">✚ 重傷：開打時 HP 很低，先找神機醫或休息節點</div>
             )}
             {c.alive && c.picks.length > 0 && nodeBusy(g) && (
               <div className="mt-2 flex items-center gap-1 border-t border-line/40 pt-2 text-[13px] text-warning">

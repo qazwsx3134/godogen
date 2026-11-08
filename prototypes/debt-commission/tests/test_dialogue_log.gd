@@ -29,6 +29,8 @@ func test_log_name_ink_reads_on_washi_for_every_character() -> void:
 func test_log_rows_place_each_kind_of_line() -> void:
 	# Arrange
 	var game: Node = load("res://main.tscn").instantiate()
+	game.story_path = "res://tests/fixtures/stories/debt_story.json"
+	game.stories_path = "res://tests/fixtures/stories.json"
 	game.save_path = "user://dialogue_log_test.save"
 	root.add_child(game)
 	await _frames(3)

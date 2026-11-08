@@ -23,31 +23,32 @@ func _run() -> void:
 
 
 func _library_records() -> void:
-	var library: RefCounted = Library.new("res://data/stories.json", FILES[0])
+	var library: RefCounted = Library.new("res://tests/fixtures/stories.json", FILES[0])
 	library.unlock("bg", "yorozuya_kitchen")
 	library.unlock("bg", "yorozuya_kitchen")
 	library.unlock("bgm", "bgm_daily")
 	library.unlock("bg", "")
-	var reread: RefCounted = Library.new("res://data/stories.json", FILES[0])
+	var reread: RefCounted = Library.new("res://tests/fixtures/stories.json", FILES[0])
 	_expect(reread.unlocked_ids("bg") == ["yorozuya_kitchen"] and reread.unlocked_ids("bgm") == ["bgm_daily"],
 		"unlocks are kept once each and survive a new library: %s %s" % [reread.unlocked_ids("bg"), reread.unlocked_ids("bgm")])
 	# A progress file that exists but cannot be parsed is never written over (it holds every chapter's progress).
 	var f := FileAccess.open(FILES[0], FileAccess.WRITE)
 	f.store_string("[gallery\nbroken")
 	f.close()
-	var broken: RefCounted = Library.new("res://data/stories.json", FILES[0])
+	var broken: RefCounted = Library.new("res://tests/fixtures/stories.json", FILES[0])
 	_expect(broken.record_clear("chapter1", "S") != OK and broken.unlock("bg", "street") != OK
 		and FileAccess.get_file_as_string(FILES[0]) == "[gallery\nbroken" and not broken.unlocked_ids("bg").has("street"),
 		"progress: an unreadable file reports the failure and is left as it was")
 	# A write that fails reports it and leaves the unlock to be retried.
-	var blocked: RefCounted = Library.new("res://data/stories.json", FILES[0] + "/blocked.cfg")
+	var blocked: RefCounted = Library.new("res://tests/fixtures/stories.json", FILES[0] + "/blocked.cfg")
 	_expect(blocked.unlock("bg", "street") != OK and not blocked.unlocked_ids("bg").has("street"),
 		"progress: a failed write is not counted as unlocked")
 
 
 func _play_and_browse() -> void:
 	var game: Control = (load("res://main.tscn") as PackedScene).instantiate() as Control
-	game.story_path = "res://data/chapter1_story.json"
+	game.story_path = "res://tests/fixtures/stories/chapter1_story.json"
+	game.stories_path = "res://tests/fixtures/stories.json"
 	game.save_path = FILES[3]
 	game.progress_path = FILES[0]
 	game.settings_path = FILES[2]

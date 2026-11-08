@@ -52,7 +52,7 @@ func _discovery_and_order() -> void:
 
 func _catalog_and_builder() -> void:
 	_expect(Runner.catalog_path_for(TITAN + "ch1_story.json") == TITAN + "catalog.json"
-		and Runner.catalog_path_for("res://data/chapter1_story.json") == Runner.ASSET_CATALOG_PATH, "the catalog beside the story is used")
+		and Runner.catalog_path_for("res://tests/fixtures/stories/chapter1_story.json") == Runner.ASSET_CATALOG_PATH, "the catalog beside the story is used")
 	var r = Runner.new()
 	_expect(r.load_story(TITAN + "ch1_story.json"), "a pack story loads against its own catalog: %s" % r.error_message)
 	var catalog: Dictionary = r.get_asset_catalog()

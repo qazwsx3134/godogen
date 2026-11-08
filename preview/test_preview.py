@@ -103,7 +103,7 @@ class PreviewHTTPTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             (root / "data").mkdir()
-            original = (start.DEBT / "data/phase3_story.json").read_bytes()
+            original = (start.DEBT / "tests/fixtures/stories/phase3_story.json").read_bytes()
             target = root / "data/phase3_story.json"
             target.write_bytes(original)
             registry = {"stories": [{"id": "phase3", "path": "res://data/phase3_story.json",

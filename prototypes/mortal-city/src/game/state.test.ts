@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { CASES, CASE_01, CASE_02, caseBody, caseReplies, optionLock } from '../content/cases'
 import { EVENTS, EVENT_BY_ID, WANGAN_EVENTS } from '../content/events'
 import { makeItem } from '../content/items'
-import { type Pick, fightStats, implantRoom, perkOptions, tacticsFor } from '../rules/core'
+import { type Pick, fightStats, hackPower, implantRoom, perkOptions, sellValue, stealthPower, tacticsFor } from '../rules/core'
 import { PERK_IDS } from '../rules/perks'
 import { LAYERS, STORY_LAYER, findNode } from '../rules/map'
 import { type Action, type Game, caseDangerOption, eventLock, initial, movable, nextDistrict, nodeBusy, reduce } from './state'
@@ -193,7 +193,8 @@ describe('districts', () => {
 
   it('灣岸 jobs are tier 2-3 and its elites tier 5', () => {
     let g = reduce(play(fresh('d2'), CASE_01.id, 'stealth', 'hand'), { t: 'claim' })
-    g = { ...g, run: { ...g.run, phase: 'safehouse', node: null } }
+    // 名聲升級的三選一還沒挑會擋住移動；這裡只看地圖，先清掉
+    g = { ...g, character: { ...g.character, picks: [] }, run: { ...g.run, phase: 'safehouse', node: null } }
     g = reduce(g, { t: 'continue' })
     const tiers = new Set<number>()
     for (const n of g.run.district.layers.flat()) {
@@ -321,6 +322,21 @@ describe('node services and three-way picks', () => {
     expect(g.character.credits).toBe(3000 - 950 - 450 + 640)
   })
 
+  it('the market also buys what you are wearing, implants included', () => {
+    const g0 = fresh('k5', { credits: 0 })
+    const gun = g0.character.equipment.find((i) => i.slot === 'weapon')!
+    let g = atNode(g0, { kind: 'market', nodeId: 'mk', stock: [] })
+    g = reduce(g, { t: 'sell', itemId: gun.id })
+    expect(g.character.equipment.some((i) => i.id === gun.id)).toBe(false)
+    expect(g.character.credits).toBe(sellValue(gun))
+    expect(() => fightStats(g.character)).not.toThrow()
+    const imp = makeItem('subdermal', 'w')
+    g = { ...g, character: { ...g.character, equipment: [...g.character.equipment, imp], implantLoad: g.character.implantLoad + imp.load } }
+    const load = g.character.implantLoad
+    g = reduce(g, { t: 'sell', itemId: imp.id })
+    expect(g.character.implantLoad).toBe(load - imp.load)
+  })
+
   it('the clinic heals for money and fits implants at half price when there is room', () => {
     let g = atNode(fresh('k2', { credits: 3000, injury: 20 }), { kind: 'clinic', nodeId: 'cl' })
     g = reduce(g, { t: 'treat' })
@@ -365,5 +381,19 @@ describe('node services and three-way picks', () => {
   it('every event has an option that needs no money and no attribute', () => {
     const broke = { ...initial(0).character, credits: 0 }
     for (const ev of [...EVENTS, ...WANGAN_EVENTS]) expect(ev.options.some((o) => !eventLock(broke, o)), ev.id).toBe(true)
+  })
+})
+
+describe('戰術的素質判定', () => {
+  it('對方防火牆擋駭入、感知擋光學迷彩繞背，正面交火一定能用', () => {
+    const c = initial(0).character
+    const weak = { name: 'a', hp: 10, atk: 1, hit: 0.1, ice: 3, sense: 3 }
+    const strong = { ...weak, ice: 4, sense: 4 }
+    const lock = (ch: typeof c, e: typeof weak) => Object.fromEntries(tacticsFor(ch, e).map((t) => [t.id, !!t.locked]))
+    expect([hackPower(c), stealthPower(c)]).toEqual([3, 3])
+    expect(lock(c, weak)).toEqual({ force: false, hack: false, stealth: false })
+    expect(lock(c, strong)).toEqual({ force: false, hack: true, stealth: true })
+    expect(tacticsFor(c, strong).find((t) => t.id === 'hack')!.locked).toMatch(/防火牆 4/)
+    expect(lock({ ...c, attrs: { ...c.attrs, int: 4, cool: 4 } }, strong)).toEqual({ force: false, hack: false, stealth: false })
   })
 })

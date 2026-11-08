@@ -3,12 +3,12 @@
 importer="parley_dialogue_sequence_ast_1.1.0"
 type="Resource"
 uid="uid://t5psav27eg2v"
-path="res://.godot/imported/comedy.ds-16183ee9a1dbcc0289233861f74a64dc.tres"
+path="res://.godot/imported/comedy.ds-c03cb17744f19e6bd5e6d9bb7ad581d4.tres"
 
 [deps]
 
-source_file="res://story_src/comedy.ds"
-dest_files=["res://.godot/imported/comedy.ds-16183ee9a1dbcc0289233861f74a64dc.tres"]
+source_file="res://tests/fixtures/story_src/comedy.ds"
+dest_files=["res://.godot/imported/comedy.ds-c03cb17744f19e6bd5e6d9bb7ad581d4.tres"]
 
 [params]
 

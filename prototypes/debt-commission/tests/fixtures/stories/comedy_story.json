@@ -1,6 +1,6 @@
 {
   "entry": "comedy_open",
-  "generated_from": "story_src/comedy.dialogue",
+  "generated_from": "tests/fixtures/story_src/comedy.dialogue",
   "id": "comedy",
   "initial_flags": {},
   "nodes": {

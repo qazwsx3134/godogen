@@ -2,6 +2,36 @@
 
 以場景為單位的靜態網頁：每張卡片是一個場景，內含背景、音樂與按順序排列的流程小節點；場景之間的線呈現故事走向。讀寫的就是 StoryRunner 已在讀的劇本 JSON（`data/*_story.json`，格式見 [IMPLEMENTATION.md](../IMPLEMENTATION.md)），遊戲端不用改。不用建置、沒有 npm 依賴；程式在 `tools/story_editor/`。
 
+## 功能展示（範本故事）
+
+編輯器的故事清單只有兩個：**功能展示**（`data/showcase_story.json`，`?story=showcase`）與桂的極短篇（`?story=katsura_dog_ears`）。功能展示是寫新故事時的對照範本，每張卡片示範一組步驟，卡片標題就是功能名稱：
+
+```text
+目錄（choice）─┬─ 畫面・背景轉場 → 畫面・演出效果 ──→ 再看一次／回到目錄
+               ├─ 角色・立繪 → 角色・文字效果 ──────→ 再看一次／回到目錄
+               ├─ 玩法・分支與旗標 →(set_flags) 玩法・條件分支 ─┬ 條件成立 ─┐
+               │                                               └ 條件不成立┤
+               │   玩法・漫畫吐槽 ← ──────────────────────────────────────┘
+               │      → 玩法・調查 → 玩法・裝傻吐槽回合 ─┬ 吐槽成功 → 再看一次／回到目錄
+               │                                         ├ 冷場 → 回到回合
+               │                                         └ Game Over（end；畫面的「重試」回到回合）
+               └─ 結局（end，帶結局 id）
+```
+
+| 卡片 | 示範的步驟 |
+|---|---|
+| 畫面・背景轉場 | bg 的 `transition`：brush 筆刷、ink 墨暈、glitch 故障、fade（預設）；fade 步驟的暗下／亮回 |
+| 畫面・演出效果 | shake（小／big）、flash 指定顏色、freeze、cutin、placard（空字串收牌）、beam、bgm 換曲、se |
+| 角色・立繪 | 登場轉場（slide_right）、台詞帶表情、立繪步驟換表情、portrait_effect（shake／bounce）、portrait_lighting（dim／auto）、畫外音 offscreen、portrait_exit |
+| 角色・文字效果 | narrator、thought 心聲、`[pause]`、`[color]`、`[big]`、`[shake]`、`[speed]` |
+| 玩法・分支與旗標／條件分支 | choice 的 `set_flags`、set_flag 的 `add` 計數、condition 的 then／else |
+| 玩法・漫畫吐槽 | comedy 四種 preset：small_reaction、tsukkomi_impact（side）、emotion_band（color）、full_manga_panel |
+| 玩法・調查 | item、profile、investigate 熱區給線索 |
+| 玩法・裝傻吐槽回合 | boke_round：兩句證言（第二句有 listen）、限時選詞、需要線索的完美吐槽、冷場重試、timeout 與 game_over（Game Over 卡片要以 end 收尾，閱讀畫面才會顯示「重試」；接 next 會讓之後的回合都被拒絕） |
+| 結局 | end 的 `ending`／`ending_title`（章節選擇的結局收集與流程圖會記住） |
+
+要試某個功能，在編輯器選那張卡片按「從這裡試玩」；改壞了用 git 還原這個檔。`tests/test_showcase.gd` 會走完每條分支，改卡片後跑一次。
+
 ## 怎麼開
 
 - **預覽工作台**：在 repo 根目錄執行，從首頁進入故事編輯器；Windows 可雙擊 `preview/start.bat`。需要 Python 3.10 以上與 Godot 4.7，不需 npm。Godot 不在 PATH 時可加 `--godot <執行檔路徑>`。見 [預覽工作台說明](../../../preview/README.md)。
@@ -322,10 +352,8 @@ API 回歸不需要 Godot；瀏覽器回歸使用暫存專案、合成確認證�
 
 ## 桂的小狗耳朵：首篇極短篇原型
 
-本機服務以 `?story=katsura_dog_ears` 打開獨立 graph 故事。opening 的阿銀台詞已改成「你腦袋被撞到嗎」；桂第一句 say 是「頭痛賈奈。」，其後 freeze=0.55 秒；timing 回合的第二句為「咖紫拉打。」，expression=serious，type_lines=true，顯示完才開始 QTE。回合及每句可用 expression 指定表情，省略沿用 annoyed，每句優先。
-
-複雜回合依現有方式在 JSON 區編輯：`lines[0].slot.qte` 的 duration、window、late_after 控制半拍與容許誤差。先維持桂手勢不動，調整秒數後從 opening 試玩，才能看到兩句間的停頓；直接從 timing 試玩不會還原前面的站位與牌子。
+本機服務以 `?story=katsura_dog_ears` 打開獨立 graph 故事。opening：桂登場、伊莉莎白舉牌「頭痛？」、神樂與阿銀的畫外音，桂一本正經地說「頭痛賈奈。」；timing 是三選一的選項（「下一句」），三個選項各接一張短卡片與結局（node_1 新八的漫畫吐槽、node_2 定春、node_3 阿銀），後兩張標著「尚未寫完」。
 
 桂的手繪姿勢候選圖已依作者提供的參考生成並接入；`scenes/katsura.tscn` 的 Art 可調整取景。提示詞保留於 stories/katsura_dog_ears/OPT-IMAGE-PROMPT.md；最終畫風與玩家手感仍待作者試看。
 
-相關 L2 路徑：`test_katsura_dog_ears.gd`（過早／過晚／未按／成功與實際 shell）、`test_phase4_rounds_ui.gd`（既有回合回歸）。用本文件的 run_coordinated.py 方式依序執行。
+相關 L2 路徑：`test_katsura_dog_ears.gd`（作品背景、opening 台詞與表情、三個選項各自走到結局、實際閱讀畫面的背景／立繪／牌子／漫畫吐槽）。

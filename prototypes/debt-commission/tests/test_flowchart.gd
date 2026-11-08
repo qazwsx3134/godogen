@@ -27,7 +27,7 @@ func _story(path: String) -> Dictionary:
 
 
 func _test_boxes() -> void:
-	var chapter: Dictionary = _story("res://data/chapter1_story.json")
+	var chapter: Dictionary = _story("res://tests/fixtures/stories/chapter1_story.json")
 	var boxes: Array[Dictionary] = FlowGraph.boxes(chapter)
 	_expect(boxes.size() >= 6 and boxes.size() <= 20, "chapter 1 folds its %d nodes into a readable chart (%d boxes)" % [(chapter["nodes"] as Dictionary).size(), boxes.size()])
 	_expect(boxes[0]["id"] == chapter["entry"] and int(boxes[0]["column"]) == 0, "the entry is the first box, in column 0")
@@ -49,7 +49,7 @@ func _test_boxes() -> void:
 		for target: String in box["to"]:
 			forward = forward and by_id.has(target)
 	_expect(forward, "every line leads to a box on the chart")
-	var episode: Array[Dictionary] = FlowGraph.boxes(_story("res://data/ep00_story.json"))
+	var episode: Array[Dictionary] = FlowGraph.boxes(_story("res://tests/fixtures/stories/ep00_story.json"))
 	var branch: Array = episode.filter(func(box: Dictionary) -> bool: return (box["to"] as Array).size() == 3)
 	_expect(branch.size() == 2, "EP00's POV choice and director choice each open three routes")
 	_expect(FlowGraph.boxes({}).is_empty(), "an empty story draws nothing")
@@ -64,14 +64,14 @@ func _test_boxes() -> void:
 
 func _test_runner_visits() -> void:
 	var runner: RefCounted = StoryRunner.new()
-	_expect(bool(runner.call("load_story", "res://data/debt_story.json")), "the debt sample loads")
+	_expect(bool(runner.call("load_story", "res://tests/fixtures/stories/debt_story.json")), "the debt sample loads")
 	var first: Array[String] = runner.call("take_visits")
-	_expect(first.has(str(_story("res://data/debt_story.json")["entry"])), "loading reports the entry node: %s" % [first])
+	_expect(first.has(str(_story("res://tests/fixtures/stories/debt_story.json")["entry"])), "loading reports the entry node: %s" % [first])
 	_expect((runner.call("take_visits") as Array).is_empty(), "a node is reported once")
 
 
 func _test_library() -> void:
-	var library: RefCounted = StoryLibrary.new("res://data/stories.json", PATHS[2])
+	var library: RefCounted = StoryLibrary.new("res://tests/fixtures/stories.json", PATHS[2])
 	_expect((library.call("visited", "debt") as Array).is_empty(), "nothing is visited in a fresh progress file")
 	var nodes: Array[String] = ["a", "b"]
 	library.call("record_visits", "debt", nodes)
@@ -99,7 +99,8 @@ func _test_library() -> void:
 
 func _test_panel() -> void:
 	var game: Control = (load("res://main.tscn") as PackedScene).instantiate()
-	game.story_path = "res://data/ep00_story.json"
+	game.story_path = "res://tests/fixtures/stories/ep00_story.json"
+	game.stories_path = "res://tests/fixtures/stories.json"
 	game.save_path = PATHS[0]
 	game.settings_path = PATHS[1]
 	game.progress_path = PATHS[2]
@@ -124,7 +125,7 @@ func _test_panel() -> void:
 
 	game._on_begin_pressed()
 	await _until(func() -> bool: return game._screen_mode == "story", "the story starts")
-	var entry: String = str(_story("res://data/ep00_story.json")["entry"])
+	var entry: String = str(_story("res://tests/fixtures/stories/ep00_story.json")["entry"])
 	_expect((game._library.visited(game._progress_id()) as Array).has(entry), "playing records the entry in progress.cfg")
 	game._show_title()
 	await _frames(2)

@@ -1,0 +1,663 @@
+{
+  "entry": "menu",
+  "id": "showcase",
+  "initial_flags": {
+    "branch_visits": 0.0,
+    "suspect": ""
+  },
+  "nodes": {
+    "cast_portraits": {
+      "next": "cast_text",
+      "steps": [
+        {
+          "enter": true,
+          "expression": "neutral",
+          "id": "gintoki",
+          "op": "char",
+          "position": "right",
+          "transition": "slide_right",
+          "visible": true
+        },
+        {
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "立繪登場可以選淡入、從左滑入、從右滑入或直接出現。"
+        },
+        {
+          "expression": "smug",
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "台詞步驟也能順便換表情。"
+        },
+        {
+          "expression": "annoyed",
+          "id": "gintoki",
+          "op": "char"
+        },
+        {
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "或者用立繪步驟單獨換表情。"
+        },
+        {
+          "effect": "shake",
+          "id": "gintoki",
+          "op": "portrait_effect"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "立繪動作：發抖（shake）……"
+        },
+        {
+          "effect": "bounce",
+          "id": "gintoki",
+          "op": "portrait_effect"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "……和彈跳（bounce）。"
+        },
+        {
+          "id": "gintoki",
+          "mode": "dim",
+          "op": "portrait_lighting"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "立繪明暗：把阿銀調暗（dim），強調現在說話的人。"
+        },
+        {
+          "id": "gintoki",
+          "mode": "auto",
+          "op": "portrait_lighting"
+        },
+        {
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "auto 是預設：誰說話誰亮。"
+        },
+        {
+          "offscreen": true,
+          "op": "say",
+          "speaker": "kagura",
+          "text": "畫外音：說話的人不用站上舞台阿魯。"
+        },
+        {
+          "id": "gintoki",
+          "op": "portrait_exit",
+          "transition": "slide_right"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "角色退場也有自己的轉場。"
+        }
+      ],
+      "title": "角色・立繪"
+    },
+    "cast_text": {
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "narrator",
+          "text": "旁白（narrator）沒有名牌，也不會讓立繪亮起來。"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "（心聲用 thought，字會變成內心獨白。）",
+          "thought": true
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "句中停頓……[pause=0.5]然後繼續。"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "[color=#235978]上色[/color]、[big]放大[/big]、[shake rate=18 level=4]抖動[/shake]。"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "[speed=0.09]還可以放慢打字速度……[/speed]"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "again",
+              "label": "再看一次",
+              "next": "cast_portraits"
+            },
+            {
+              "id": "back",
+              "label": "回到目錄",
+              "next": "menu"
+            }
+          ],
+          "pov": "shinpachi",
+          "prompt": "角色展示結束。"
+        }
+      ],
+      "title": "角色・文字效果"
+    },
+    "finish": {
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "結局步驟可以帶結局 id，章節選擇與流程圖會記住看過哪些結局。"
+        },
+        {
+          "ending": "showcase_end",
+          "ending_title": "看完了全部功能",
+          "op": "end",
+          "text": "功能展示結束"
+        }
+      ],
+      "title": "結局"
+    },
+    "menu": {
+      "steps": [
+        {
+          "id": "yorozuya_living_room",
+          "op": "bg"
+        },
+        {
+          "id": "bgm_daily",
+          "op": "bgm"
+        },
+        {
+          "enter": true,
+          "expression": "neutral",
+          "id": "shinpachi",
+          "op": "char",
+          "position": "left",
+          "visible": true
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "這是故事編輯器的功能展示。每一段示範一組步驟，在編輯器裡打開同名卡片就看得到寫法。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "screen",
+              "label": "畫面：轉場與演出",
+              "next": "screen_transitions"
+            },
+            {
+              "id": "cast",
+              "label": "角色：立繪與文字",
+              "next": "cast_portraits"
+            },
+            {
+              "id": "play",
+              "label": "玩法：分支、調查與吐槽",
+              "next": "play_branch"
+            },
+            {
+              "id": "finish",
+              "label": "結束展示",
+              "next": "finish"
+            }
+          ],
+          "pov": "shinpachi",
+          "prompt": "想看哪一段？"
+        }
+      ],
+      "title": "目錄"
+    },
+    "play_branch": {
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "選項可以順便記一個旗標，之後用條件分支讀它。"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "gin",
+              "label": "阿銀",
+              "next": "play_condition",
+              "set_flags": {
+                "suspect": "gintoki"
+              }
+            },
+            {
+              "id": "kagura",
+              "label": "神樂",
+              "next": "play_condition",
+              "set_flags": {
+                "suspect": "kagura"
+              }
+            }
+          ],
+          "pov": "shinpachi",
+          "prompt": "冰箱裡的草莓牛奶是誰喝的？"
+        }
+      ],
+      "title": "玩法・分支與旗標"
+    },
+    "play_comedy": {
+      "next": "play_investigate",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "漫畫吐槽有四種版面。"
+        },
+        {
+          "op": "comedy",
+          "preset": "small_reaction",
+          "speaker": "shinpachi",
+          "text": "小反應"
+        },
+        {
+          "op": "comedy",
+          "preset": "tsukkomi_impact",
+          "side": "left",
+          "speaker": "shinpachi",
+          "text": "吐槽衝擊！！"
+        },
+        {
+          "color": "#235978",
+          "op": "comedy",
+          "preset": "emotion_band",
+          "speaker": "shinpachi",
+          "text": "情緒色帶"
+        },
+        {
+          "op": "comedy",
+          "preset": "full_manga_panel",
+          "speaker": "shinpachi",
+          "text": "整頁漫畫格啊啊啊！！"
+        }
+      ],
+      "title": "玩法・漫畫吐槽"
+    },
+    "play_condition": {
+      "steps": [
+        {
+          "add": 1.0,
+          "key": "branch_visits",
+          "op": "set_flag"
+        },
+        {
+          "else": "play_suspect_other",
+          "equals": "gintoki",
+          "flag": "suspect",
+          "op": "condition",
+          "then": "play_suspect_gin"
+        }
+      ],
+      "title": "玩法・條件分支"
+    },
+    "play_investigate": {
+      "next": "play_round",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "調查：點畫面上的熱區取得線索，線索會進情報欄。"
+        },
+        {
+          "id": "salary_envelope",
+          "op": "item"
+        },
+        {
+          "id": "gintoki",
+          "op": "profile"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "item 與 profile 步驟也能直接給線索和人物檔案。"
+        },
+        {
+          "enter": true,
+          "expression": "annoyed",
+          "id": "gintoki",
+          "op": "char",
+          "position": "right",
+          "visible": true
+        },
+        {
+          "hotspots": [
+            {
+              "id": "empty_milk_bottle",
+              "item": "milk_bottle",
+              "label": "電視旁的空瓶",
+              "pos": [
+                0.11,
+                0.4
+              ],
+              "size": [
+                0.12,
+                0.14
+              ]
+            }
+          ],
+          "id": "showcase_search",
+          "op": "investigate",
+          "prompt": "找出草莓牛奶的空瓶（提示：左邊的電視）。"
+        }
+      ],
+      "title": "玩法・調查"
+    },
+    "play_round": {
+      "steps": [
+        {
+          "game_over": "play_round_over",
+          "id": "showcase_round",
+          "lines": [
+            {
+              "id": "first_excuse",
+              "text": "那瓶草莓牛奶不是我喝的。"
+            },
+            {
+              "id": "fridge_excuse",
+              "listen": "而且我睡著的時候，手會自動幫忙喝牛奶。",
+              "text": "我只是替冰箱確認它還冷不冷。"
+            }
+          ],
+          "op": "boke_round",
+          "speaker": "gintoki",
+          "timer_seconds": 8.0,
+          "tsukkomi": {
+            "options": [
+              {
+                "goto": "play_round_done",
+                "id": "bottle",
+                "label": "空瓶就在你手邊！",
+                "require": "milk_bottle",
+                "result": "perfect"
+              },
+              {
+                "goto": "play_round_done",
+                "id": "fridge",
+                "label": "冰箱可不會自己開瓶！",
+                "result": "weak"
+              },
+              {
+                "goto": "play_round_retry",
+                "id": "blank",
+                "label": "一時接不上話。",
+                "result": "fail"
+              }
+            ],
+            "timeout": {
+              "goto": "play_round_retry",
+              "result": "fail"
+            }
+          }
+        }
+      ],
+      "title": "玩法・裝傻吐槽回合"
+    },
+    "play_round_done": {
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "吐槽成功！完美吐槽需要先拿到對應的線索。"
+        },
+        {
+          "id": "gintoki",
+          "op": "portrait_exit"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "again",
+              "label": "再看一次",
+              "next": "play_branch"
+            },
+            {
+              "id": "back",
+              "label": "回到目錄",
+              "next": "menu"
+            }
+          ],
+          "pov": "shinpachi",
+          "prompt": "玩法展示結束。"
+        }
+      ],
+      "title": "吐槽成功"
+    },
+    "play_round_over": {
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "眼鏡全碎就是 Game Over。按「重試」從回合開頭再來一次。"
+        },
+        {
+          "op": "end",
+          "text": "眼鏡全碎了・從本回合重試"
+        }
+      ],
+      "title": "Game Over"
+    },
+    "play_round_retry": {
+      "next": "play_round",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "冷場會碎掉一副眼鏡，再來一次。"
+        }
+      ],
+      "title": "冷場"
+    },
+    "play_suspect_gin": {
+      "next": "play_comedy",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "條件成立（suspect = gintoki），走到這張卡。"
+        }
+      ],
+      "title": "條件成立"
+    },
+    "play_suspect_other": {
+      "next": "play_comedy",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "條件不成立，走到「否則」這張卡。"
+        }
+      ],
+      "title": "條件不成立"
+    },
+    "screen_effects": {
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "接下來是演出步驟。晃動有小、大兩種——"
+        },
+        {
+          "op": "shake"
+        },
+        {
+          "op": "shake",
+          "strength": "big"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "閃光可以指定顏色。"
+        },
+        {
+          "color": "#ffdc41",
+          "op": "flash"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "定格（freeze）讓畫面停一拍。"
+        },
+        {
+          "duration": 0.6,
+          "op": "freeze"
+        },
+        {
+          "op": "cutin",
+          "speaker": "shinpachi",
+          "text": "切入（cutin）：大字特寫！"
+        },
+        {
+          "op": "placard",
+          "text": "立牌（placard）：舉在畫面上的牌子"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "立牌會一直舉著，直到寫一個空白的 placard 收掉。"
+        },
+        {
+          "op": "placard",
+          "text": ""
+        },
+        {
+          "op": "beam"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "光束（beam）是吐槽之力的大招演出。"
+        },
+        {
+          "id": "bgm_meeting",
+          "op": "bgm"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "bgm 換背景音樂；id 留空就停止。se 播一次音效："
+        },
+        {
+          "id": "knock",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "……敲門聲。"
+        },
+        {
+          "id": "comedy_don",
+          "op": "se"
+        },
+        {
+          "id": "bgm_daily",
+          "op": "bgm"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "again",
+              "label": "再看一次",
+              "next": "screen_transitions"
+            },
+            {
+              "id": "back",
+              "label": "回到目錄",
+              "next": "menu"
+            }
+          ],
+          "pov": "shinpachi",
+          "prompt": "畫面展示結束。"
+        }
+      ],
+      "title": "畫面・演出效果"
+    },
+    "screen_transitions": {
+      "next": "screen_effects",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "bg 步驟的「轉場」欄位決定怎麼換背景。先看筆刷。"
+        },
+        {
+          "id": "yorozuya_kitchen",
+          "op": "bg",
+          "transition": "brush"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "筆刷（brush）：一筆把舊畫面刷掉。"
+        },
+        {
+          "id": "yorozuya_exterior",
+          "op": "bg",
+          "transition": "ink"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "墨暈（ink）：墨從畫面中間暈開。"
+        },
+        {
+          "id": "yorozuya_living_room",
+          "op": "bg",
+          "transition": "glitch"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "故障（glitch）：畫面撕裂、錯色，再一塊塊掉下來。"
+        },
+        {
+          "id": "yorozuya_kitchen",
+          "op": "bg",
+          "transition": "fade"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "淡入淡出（fade）：沒填轉場時的預設。"
+        },
+        {
+          "direction": "out",
+          "duration": 0.3,
+          "op": "fade"
+        },
+        {
+          "id": "yorozuya_living_room",
+          "op": "bg"
+        },
+        {
+          "direction": "in",
+          "duration": 0.3,
+          "op": "fade"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "另外還有 fade 步驟：整個畫面先暗下去，換完背景再亮回來。"
+        }
+      ],
+      "title": "畫面・背景轉場"
+    }
+  },
+  "note": "故事編輯器的功能展示：每張卡片示範一組步驟。",
+  "title": "功能展示",
+  "version": "s-1d711be5f51e"
+}

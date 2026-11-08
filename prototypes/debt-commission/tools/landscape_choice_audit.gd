@@ -12,7 +12,7 @@ func _run() -> void:
 	_out = args[0] if not args.is_empty() else "user://landscape_choice_audit"
 	DirAccess.make_dir_recursive_absolute(_out)
 	_game = (load("res://main.tscn") as PackedScene).instantiate()
-	_game.story_path = "res://data/choices_story.json"
+	_game.story_path = "res://tests/fixtures/stories/choices_story.json"
 	_game.save_path = "user://landscape_choice_audit.save"
 	_game.settings_path = "user://landscape_choice_audit.cfg"
 	_game.progress_path = "user://landscape_choice_audit_progress.cfg"

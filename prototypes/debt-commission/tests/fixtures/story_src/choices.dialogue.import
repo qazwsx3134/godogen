@@ -4,12 +4,12 @@ importer="dialogue_manager"
 importer_version=18
 type="Resource"
 uid="uid://bpj56pbuf8an8"
-path="res://.godot/imported/choices.dialogue-164cfe19da81c97df126764625635f64.tres"
+path="res://.godot/imported/choices.dialogue-928cfb9a395bdcb16aafc06251628b6e.tres"
 
 [deps]
 
-source_file="res://story_src/choices.dialogue"
-dest_files=["res://.godot/imported/choices.dialogue-164cfe19da81c97df126764625635f64.tres"]
+source_file="res://tests/fixtures/story_src/choices.dialogue"
+dest_files=["res://.godot/imported/choices.dialogue-928cfb9a395bdcb16aafc06251628b6e.tres"]
 
 [params]
 

@@ -10,9 +10,9 @@ const MAIN_SCENE: PackedScene = preload("res://main.tscn")
 const StoryRunner = preload("res://scripts/story_runner.gd")
 const StoryBuilder = preload("res://tools/story_build/story_builder.gd")
 const DmSource = preload("res://tools/story_build/dm_source.gd")
-const STORY: String = "res://data/ep00_story.json"
-const SOURCE: String = "res://story_src/ep00.dialogue"
-const STORIES: String = "res://data/stories.json"
+const STORY: String = "res://tests/fixtures/stories/ep00_story.json"
+const SOURCE: String = "res://tests/fixtures/story_src/ep00.dialogue"
+const STORIES: String = "res://tests/fixtures/stories.json"
 const CATALOG: String = "res://data/asset_catalog.json"
 const TEST_SAVE: String = "user://ep00_test.save"
 const TEST_UI: String = "user://ep00_test_ui.cfg"
@@ -382,7 +382,7 @@ func _test_bool_flags_in_the_adapters() -> void:
 	_expect(DmSource.command_step("set seen = false", "t") == {"op": "flag", "key": "seen", "value": false}, "`set seen = false` writes the bool")
 	_expect(DmSource.command_step('set seen = "yes"', "t") == {"op": "flag", "key": "seen", "value": "yes"}, "`set seen = \"yes\"` writes the string")
 	var text: String = '~ a\nset seen = false\nif seen == false\n\t=> b\nelse\n\t=> c\n\n~ b\ndo end("b")\n\n~ c\ndo end("c")\n'
-	var built: Dictionary = StoryBuilder.build_text(text, "res://story_src/__ep00_bool.dialogue")
+	var built: Dictionary = StoryBuilder.build_text(text, "res://tests/fixtures/story_src/__ep00_bool.dialogue")
 	_expect(String(built["error"]).is_empty(), "a script with a bool flag and a bool test builds: %s" % built["error"])
 	if String(built["error"]).is_empty():
 		var steps: Array = ((built["story"] as Dictionary)["nodes"] as Dictionary)["a"]["steps"] as Array
@@ -857,6 +857,7 @@ func _targets(step: Dictionary) -> Array[String]:
 func _new_game() -> Control:
 	var game: Control = MAIN_SCENE.instantiate() as Control
 	game.story_path = STORY
+	game.stories_path = "res://tests/fixtures/stories.json"
 	game.save_path = TEST_SAVE
 	game.settings_path = TEST_SETTINGS
 	root.add_child(game)

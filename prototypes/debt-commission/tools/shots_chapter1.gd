@@ -22,7 +22,7 @@ func _run() -> void:
 	var prefix: String = "chapter1"
 	DirAccess.make_dir_recursive_absolute(_out)
 	_game = MAIN.instantiate() as Control
-	_game.story_path = "res://data/chapter1_story.json"
+	_game.story_path = "res://tests/fixtures/stories/chapter1_story.json"
 	_game.save_path = "user://shots_chapter1.save"
 	_game.settings_path = "user://shots_settings.cfg"
 	_game.progress_path = "user://shots_progress.cfg"

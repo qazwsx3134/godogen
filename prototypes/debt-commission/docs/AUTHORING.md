@@ -13,7 +13,7 @@
 
 ## 二、打開或新增一個故事
 
-- **打開現有故事**：點 Parley 分頁，左上的選單選 **Open Dialogue Sequence…**，打開 `story_src` 資料夾裡的 `.ds` 檔。`story_src/phase4.ds` 是完整範例，建議先打開來對照著看。
+- **打開現有故事**：點 Parley 分頁，左上的選單選 **Open Dialogue Sequence…**，打開 `story_src` 資料夾裡的 `.ds` 檔。完整範例是測試夾具 `tests/fixtures/story_src/phase4.ds`（只供對照，改了會影響測試），建議先打開來對照著看。
 - **新增故事**：同一個選單選 **New Dialogue Sequence…**，存到 `story_src` 資料夾。檔名就是故事代號，用英文小寫加底線，例如 `chapter1.ds`。
 
 ## 三、怎麼畫
@@ -94,16 +94,16 @@
 
 ## 七、其他工具
 
-- **Dialogue 分頁（文字寫法）**：習慣像寫劇本一樣打字的人，可以改用 `.dialogue` 檔，範例是 `story_src/phase4.dialogue`，建置與試玩用同一個選單。兩種寫法效果完全相同，同一個故事選一種寫就好。
+- **Dialogue 分頁（文字寫法）**：習慣像寫劇本一樣打字的人，可以改用 `.dialogue` 檔，範例是 `tests/fixtures/story_src/phase4.dialogue`，建置與試玩用同一個選單。兩種寫法效果完全相同，同一個故事選一種寫就好。
 - **Puzzles 分頁（解謎規劃）**：畫「哪條線索解開哪個謎題」的依賴圖，只用來規劃，不會影響遊戲。
 
 ## 八、做一部自己的作品（故事包）
 
-一部作品一個資料夾，放進 `stories/` 就會出現在章節選擇，不用改程式。範例是 `stories/example/`（末班車，沒有任何圖：漸層背景、剪影角色）。
+一部作品一個資料夾，放進 `stories/` 就會出現在章節選擇，不用改程式。現有作品是 `stories/katsura_dog_ears/`（桂的極短篇，用劇本節點編輯器寫的圖編輯故事）；不用任何圖的格式範例「末班車」（漸層背景、剪影角色、`.dialogue` 來源）在 `tests/fixtures/example_pack/example/`。
 
 用劇本節點編輯器（本機服務模式，見 [STORY-EDITOR.md](STORY-EDITOR.md)「作品」）時，按「新作品」就會建好下面 1～3 的資料夾與第一章，存檔時自動登記；以下是手動做法與各檔案的意思。
 
-1. 複製 `stories/example/` 成 `stories/<作品 id>/`（id 用英文小寫加底線）。
+1. 複製 `tests/fixtures/example_pack/example/` 成 `stories/<作品 id>/`（id 用英文小寫加底線）。
 2. 改 `pack.json`：作品名 `title`、外觀包 `skin`、封面 `cover`、署名 `credits`，以及 `stories` 裡每一章的 `id`（全遊戲不能重複）、`kind`（`chapter` 本篇／`sample` 試玩片段）、`path`。
 3. 改 `catalog.json`：這部作品的角色、背景、素材、音效與音樂，格式同 `data/asset_catalog.json`。圖放在作品資料夾的 `art/`，路徑可以直接寫 `art/xxx.png`（相對於這個資料夾）。尺寸規格見 [創作者美術規格](ART-SPEC.md)。
 4. 劇本寫在作品資料夾裡的 `.dialogue` 或 `.ds`（＋同名 `.blocks.json`）。在「檔案系統」點選它，按「專案 → 工具 → 劇本：建置並試玩」：輸出到同一個資料夾的 `<名稱>_story.json`，用這部作品的角色設定檢查。第一次建置時會自動登記進 `pack.json`（排在最後、當本篇章節；順序或 `kind` 要改請找主編）。故事 id 和別的故事撞名時不會寫入，訊息會說撞到誰。
@@ -115,8 +115,8 @@
 
 ## 目前的限制
 
-- 調查／吐槽劇本會自動啟用眼鏡、吐槽之力、素材與 Game Over 重試；第一章範例是 `chapter1.dialogue`＋`chapter1.blocks.json`。
+- 調查／吐槽劇本會自動啟用眼鏡、吐槽之力、素材與 Game Over 重試；完整範例是夾具裡的 `tests/fixtures/story_src/chapter1.dialogue`＋`chapter1.blocks.json`。
 - 吐槽回合結束後走到哪個框，是寫在 `.blocks.json` 裡的，所以流程圖上的吐槽回合節點不用往外接線。
 
 
-第一章 `chapter1.dialogue` 的 `[#source:M01]` 標記用來對照核准草稿，改文字時請保留。文字演出可寫 `新八: [big]沒有工作！[/big][pause=0.3]真的沒有。`，色字用 `[color=#b94343]…[/color]`，抖動用 `[shake rate=20 level=5]…[/shake]`，慢速用 `[speed=0.08]…[/speed]`。格式不出現在對話紀錄。
+夾具第一章 `chapter1.dialogue` 的 `[#source:M01]` 標記用來對照核准草稿，改文字時請保留。文字演出可寫 `新八: [big]沒有工作！[/big][pause=0.3]真的沒有。`，色字用 `[color=#b94343]…[/color]`，抖動用 `[shake rate=20 level=5]…[/shake]`，慢速用 `[speed=0.08]…[/speed]`。格式不出現在對話紀錄。

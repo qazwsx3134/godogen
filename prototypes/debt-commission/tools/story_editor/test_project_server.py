@@ -23,7 +23,7 @@ class ProjectServiceTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory(prefix='debt-project-service-')
         self.root = Path(self.temp.name).resolve()
         (self.root / 'data').mkdir()
-        self.original = (ROOT / 'data/phase3_story.json').read_bytes()
+        self.original = (ROOT / 'tests/fixtures/stories/phase3_story.json').read_bytes()
         (self.root / 'data/phase3_story.json').write_bytes(self.original)
         self.registry = {'extra': {'keep': True}, 'stories': [
             {'id': 'phase3', 'path': 'res://data/phase3_story.json', 'authoring': 'graph', 'save': 'user://phase3.save'},
@@ -157,13 +157,13 @@ class ProjectServiceTests(unittest.TestCase):
         self.assertEqual(json.loads(self.registry_path.read_bytes()), self.registry)
 
     def test_preview_uses_work_catalog_and_skin_for_a_built_story(self):
-        work = self.root / 'stories/example'
+        work = self.root / 'stories/katsura_dog_ears'
         work.mkdir(parents=True)
-        (work / 'pack.json').write_bytes(service.json_bytes({'id': 'example', 'skin': 'example', 'stories': []}))
-        (work / 'catalog.json').write_bytes((ROOT / 'stories/example/catalog.json').read_bytes())
+        (work / 'pack.json').write_bytes(service.json_bytes({'id': 'katsura_dog_ears', 'skin': 'gintama', 'stories': []}))
+        (work / 'catalog.json').write_bytes((ROOT / 'stories/katsura_dog_ears/catalog.json').read_bytes())
         story = {'id': 'preview_work', 'title': '作品試玩', 'version': 's-unset', 'entry': 'start',
                  'generated_from': 'ch1.dialogue', 'initial_flags': {}, 'nodes': {
-                     'start': {'title': '月台', 'steps': [{'op': 'say', 'speaker': 'aki', 'text': '測試作品角色'},
+                     'start': {'title': '月台', 'steps': [{'op': 'say', 'speaker': 'katsura', 'text': '測試作品角色'},
                                                         {'op': 'end', 'text': '完'}]}}}
         project = self.server.project
         project.check_preview = lambda candidate, catalog=None: service.validate_candidate(
@@ -178,13 +178,13 @@ class ProjectServiceTests(unittest.TestCase):
             return launched['process']
         project.launch_preview = launch
         try:
-            status, result = self.request({'path': 'stories/example/preview_work_story.json', 'story': story,
-                                           'node': 'start', 'skin': 'example'}, route='/api/preview')
+            status, result = self.request({'path': 'stories/katsura_dog_ears/preview_work_story.json', 'story': story,
+                                           'node': 'start', 'skin': 'gintama'}, route='/api/preview')
             self.assertEqual(status, 200, result)
             report = json.loads(Path(launched['config']['status']).read_text())
-            self.assertEqual(report['skin'], 'example')
+            self.assertEqual(report['skin'], 'gintama')
             self.assertEqual(report['snapshot']['node_id'], 'start')
-            self.assertEqual(launched['config']['catalog'], 'res://stories/example/catalog.json')
+            self.assertEqual(launched['config']['catalog'], 'res://stories/katsura_dog_ears/catalog.json')
             self.assertFalse((work / 'preview_work_story.json').exists())
             self.assertEqual(json.loads((work / 'pack.json').read_bytes())['stories'], [])
         finally:
@@ -333,7 +333,7 @@ class ProjectServiceTests(unittest.TestCase):
         folder = self.root / 'stories/example'
         folder.mkdir(parents=True)
         for name in ('pack.json', 'catalog.json'):
-            shutil.copy(ROOT / 'stories/example' / name, folder / name)
+            shutil.copy(ROOT / 'tests/fixtures/example_pack/example' / name, folder / name)
         return folder
 
     def test_pack_story_uses_its_work_catalog_and_pack(self):

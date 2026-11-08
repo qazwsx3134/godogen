@@ -10,7 +10,7 @@ export const NODE_LABEL: Record<NodeType, string> = {
   elite: '精英委託',
   event: '事件',
   market: '黑市',
-  clinic: '診所',
+  clinic: '神機醫',
   rest: '休息',
   story: '劇情委託',
   boss: '劇情大案',

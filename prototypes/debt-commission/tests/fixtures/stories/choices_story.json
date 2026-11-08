@@ -1,6 +1,6 @@
 {
   "entry": "choices_open",
-  "generated_from": "story_src/choices.dialogue",
+  "generated_from": "tests/fixtures/story_src/choices.dialogue",
   "id": "choices",
   "initial_flags": {
     "ep00_ending": "",

@@ -1,6 +1,6 @@
 {
   "entry": "s01_open",
-  "generated_from": "story_src/ep00.dialogue",
+  "generated_from": "tests/fixtures/story_src/ep00.dialogue",
   "id": "ep00",
   "initial_flags": {
     "ep00_ending": "",

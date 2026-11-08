@@ -1,6 +1,8 @@
 import { useState } from 'react'
-import { FlaskConical, Grid3x3, RotateCcw, ScrollText, Skull } from 'lucide-react'
+import { BookOpen, BookText, FlaskConical, Grid3x3, RotateCcw, ScrollText, Skull } from 'lucide-react'
 import { PixelGallery } from '../components/PixelGallery'
+import { StoryReview } from '../components/StoryReview'
+import { GLOSSARY } from '../content/glossary'
 import { ActionButton, Panel, PanelHead } from '../components/ui'
 import type { useGame } from '../game/state'
 import type { LogKind } from '../rules/core'
@@ -20,6 +22,7 @@ export const hhmm = (ms: number) => new Date(ms).toTimeString().slice(0, 8)
 export function LogScreen({ game }: { game: ReturnType<typeof useGame> }) {
   const { g, act } = game
   const [gallery, setGallery] = useState(false)
+  const [story, setStory] = useState(false)
   const legends = [...g.meta.legends].reverse()
   return (
     <div className="space-y-3">
@@ -54,6 +57,18 @@ export function LogScreen({ game }: { game: ReturnType<typeof useGame> }) {
           ))}
         </div>
       </Panel>
+      <Panel innerClass="pb-1">
+        <PanelHead icon={<BookText size={16} />} title="名詞解釋" right={<span className="text-[13px] text-muted">{GLOSSARY.length} 條</span>} />
+        {GLOSSARY.map((x) => (
+          <details key={x.term} className="border-b border-line/40 px-3 text-[14px]">
+            <summary className="min-h-11 cursor-pointer py-2.5 font-bold text-fg-list">
+              {x.term}
+              {x.en && <span className="tech ml-2 text-[13px] font-normal text-muted">{x.en}</span>}
+            </summary>
+            <p className="m-0 pb-2 leading-6 text-muted">{x.text}</p>
+          </details>
+        ))}
+      </Panel>
       <Panel innerClass="p-3 space-y-2">
         <div className="text-[14px] font-bold text-heading">測試工具</div>
         <label className="flex min-h-11 items-center gap-2 text-[15px]">
@@ -63,6 +78,9 @@ export function LogScreen({ game }: { game: ReturnType<typeof useGame> }) {
         <ActionButton disabled={!!g.run.node || g.run.phase !== 'map' || !g.character.alive} reason="只能在地圖上（沒進節點時）開始" onClick={() => act({ t: 'devTestCase' })}>
           <FlaskConical size={16} /> 跑一次測試案「終電後的手提箱」
         </ActionButton>
+        <ActionButton onClick={() => setStory(true)}>
+          <BookOpen size={16} /> 劇情總覽（主線／支線全文）
+        </ActionButton>
         <ActionButton onClick={() => setGallery(true)}>
           <Grid3x3 size={16} /> 像素元件圖鑑
         </ActionButton>
@@ -71,6 +89,7 @@ export function LogScreen({ game }: { game: ReturnType<typeof useGame> }) {
         </ActionButton>
       </Panel>
       {gallery && <PixelGallery onClose={() => setGallery(false)} />}
+      {story && <StoryReview onClose={() => setStory(false)} />}
     </div>
   )
 }

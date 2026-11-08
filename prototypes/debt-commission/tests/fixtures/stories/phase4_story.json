@@ -1,6 +1,6 @@
 {
   "entry": "phase4_open",
-  "generated_from": "story_src/phase4.dialogue",
+  "generated_from": "tests/fixtures/story_src/phase4.dialogue",
   "id": "strawberry_phase4",
   "initial_flags": {
     "asked": "unset",

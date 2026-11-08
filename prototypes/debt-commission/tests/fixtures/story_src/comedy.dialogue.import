@@ -4,12 +4,12 @@ importer="dialogue_manager"
 importer_version=18
 type="Resource"
 uid="uid://cq22v17s6vwyb"
-path="res://.godot/imported/comedy.dialogue-a677913e0b72ef9e7b5ed842ab74ef28.tres"
+path="res://.godot/imported/comedy.dialogue-d5a81aaf937a2e3e3633bac9cfc416f4.tres"
 
 [deps]
 
-source_file="res://story_src/comedy.dialogue"
-dest_files=["res://.godot/imported/comedy.dialogue-a677913e0b72ef9e7b5ed842ab74ef28.tres"]
+source_file="res://tests/fixtures/story_src/comedy.dialogue"
+dest_files=["res://.godot/imported/comedy.dialogue-d5a81aaf937a2e3e3633bac9cfc416f4.tres"]
 
 [params]
 

@@ -15,7 +15,8 @@ func _init() -> void:
 func _run() -> void:
 	_check_validation()
 	var game: Control = (load("res://main.tscn") as PackedScene).instantiate()
-	game.story_path = "res://data/transitions_story.json"
+	game.story_path = "res://tests/fixtures/stories/transitions_story.json"
+	game.stories_path = "res://tests/fixtures/stories.json"
 	game.save_path = PATHS[0]
 	game.settings_path = PATHS[1]
 	game.progress_path = PATHS[2]
@@ -80,7 +81,7 @@ func _run() -> void:
 
 func _check_validation() -> void:
 	var runner: RefCounted = StoryRunner.new()
-	var story: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/transitions_story.json"))
+	var story: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/stories/transitions_story.json"))
 	var bad: Dictionary = story.duplicate(true)
 	((bad["nodes"]["transitions_demo"]["steps"] as Array)[3] as Dictionary)["transition"] = "spin"
 	var path: String = "user://scene_transition_bad.json"
@@ -90,7 +91,7 @@ func _check_validation() -> void:
 	_expect(not bool(runner.call("load_story", path)), "an unknown bg transition is refused")
 	_expect(str(runner.get("error_message")).contains("bg transition"), "the error names the bg transition")
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
-	_expect(bool(runner.call("load_story", "res://data/transitions_story.json")), "the transitions sample is valid")
+	_expect(bool(runner.call("load_story", "res://tests/fixtures/stories/transitions_story.json")), "the transitions sample is valid")
 
 
 ## Taps the dialogue on to the next line (finishing the typing first when needed).

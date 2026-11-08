@@ -1,14 +1,16 @@
-// 節點畫面：委託、精英委託、事件、黑市、診所、休息、劇情委託。戰鬥與危險節點的元件共用。
+import ENEMY_PORTRAITS from '../content/enemy_portraits.json'
+// 節點畫面：委託、精英委託、事件、黑市、神機醫、休息、劇情委託。戰鬥與危險節點的元件共用。
 import { useEffect, useRef, useState } from 'react'
-import { AlertTriangle, ArrowLeft, BedDouble, Crosshair, Eye, FastForward, Flame, MessageSquare, ShieldPlus, Stethoscope, Store, Swords, Terminal } from 'lucide-react'
+import { AlertTriangle, ArrowLeft, BedDouble, Compass, Crosshair, Eye, FastForward, Flame, MessageSquare, ShieldPlus, Stethoscope, Store, Swords, Terminal } from 'lucide-react'
 import { ActionButton, Avatar, Meter, Panel, Tag } from '../components/ui'
+import { ItemIcon } from '../components/ItemIcon'
 import { FIXERS, JOBS, highDanger } from '../content/data'
 import { CASE_BY_ID, type Reply, type StoryCase, caseBody, caseReplies, optionLock } from '../content/cases'
 import { EVENT_BY_ID } from '../content/events'
 import { buzz, reducedMotion } from '../components/haptics'
 import { sfx } from '../components/sfx'
 import { TypeLine } from '../components/Fx'
-import { ITEMS, LIFELINE_PRICE, SHOP_IMPLANTS, itemDesc, marketPrice } from '../content/items'
+import { itemStyle, ITEMS, LIFELINE_PRICE, SHOP_IMPLANTS, itemDesc, marketPrice } from '../content/items'
 import { type NodeRun, type ResultRow, type useGame, eventLock, fightEnemy, jobLines } from '../game/state'
 import { findNode } from '../rules/map'
 import {
@@ -40,11 +42,18 @@ import {
   sellValue,
   streetEnemy,
   tacticsFor,
+  hackPower,
+  stealthPower,
+  type Style,
+  STYLE_LABEL,
 } from '../rules/core'
 
 type G = ReturnType<typeof useGame>
 
 export const DIR_ICON: Record<Direction, typeof Flame> = { force: Crosshair, hack: Terminal, stealth: Eye }
+export const STYLE_ICON: Record<Style, typeof Flame> = { berserker: Flame, gunslinger: Crosshair, netrunner: Terminal, nomad: Compass }
+/** 流派色：卡框、道具框、圖示。 */
+export const STYLE_COLOR: Record<Style, string> = { berserker: '#ff6a3d', gunslinger: '#e7d34a', netrunner: '#38f3fa', nomad: '#e0a35a' }
 
 export function BackBar({ onBack, label }: { onBack: () => void; label: string }) {
   return (
@@ -146,7 +155,7 @@ function JobNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'job' }> })
   const lines = jobLines(n.jobId, n.ok)
   return (
     <>
-      <NodeHead tag={`委託・${DIRECTION_LABEL[job.direction]}・階級 ${job.tier}`} title={job.name} fixer={job.fixerId} body={job.blurb} />
+      <NodeHead tag={`委託・${DIRECTION_LABEL[job.direction]}・難度 ${job.tier}`} title={job.name} fixer={job.fixerId} body={job.blurb} />
       <div className="flex flex-wrap gap-2">
         <Tag>報酬 ¢{jobReward(job, perkReward(c, job.direction))}</Tag>
         <Tag>成功率 {Math.round(jobSuccessChance(job, dirBonus(c, job.direction)) * 100)}%</Tag>
@@ -222,17 +231,20 @@ function EventNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'event' }
   )
 }
 
-// ---------- 黑市、診所、休息 ----------
+// ---------- 黑市、神機醫、休息 ----------
 
 function ItemLine({ item }: { item: Item }) {
   return (
+    <>
+    <ItemIcon item={item} />
     <div className="min-w-0 flex-1">
       <b className="text-fg-list">{item.name}</b>
-      <span className="ml-2 text-[13px] text-muted">{SLOT_LABEL[item.slot]}・{DIRECTION_LABEL[item.direction]}</span>
+      <span className="ml-2 text-[13px] text-muted">{SLOT_LABEL[item.slot]}・{itemStyle(item) ? STYLE_LABEL[itemStyle(item)!] : DIRECTION_LABEL[item.direction]}</span>
       <div className="text-[13px] text-cyan">
         {[itemDesc(item), item.bonus ? `${DIRECTION_LABEL[item.direction]}委託 +${Math.round(item.bonus * 100)}%` : '', item.load ? `負荷 ${item.load}` : ''].filter(Boolean).filter((t, i, xs) => xs.indexOf(t) === i).join('・')}
       </div>
     </div>
+    </>
   )
 }
 
@@ -308,12 +320,13 @@ function MarketNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'market'
           </Buy>
         </div>
       </Panel>
-      {c.stash.length > 0 && (
+      {c.stash.length + c.equipment.length > 0 && (
         <Panel innerClass="pb-1">
-          <div className="px-3 pt-3 font-bold text-heading">收贓（售價四折）</div>
-          <div className="px-3 text-[13px] text-muted">「我收，但我不問。你也別問我賣給誰。」</div>
-          {c.stash.map((it) => (
+          <div className="px-3 pt-3 font-bold text-heading">收貨（售價四折）</div>
+          <div className="px-3 text-[13px] text-muted">「我收，但我不問。你也別問我賣給誰。身上的義體？躺下，我現在就幫你拆。」</div>
+          {[...c.equipment.map((it) => ({ it, worn: true })), ...c.stash.map((it) => ({ it, worn: false }))].map(({ it, worn }) => (
             <div key={it.id} className="flex items-center gap-2 border-b border-line/40 px-3 py-2">
+              {worn && <span className="shrink-0 border border-warning px-1 text-[12px] text-warning">身上</span>}
               <ItemLine item={it} />
               <Buy onClick={() => act({ t: 'sell', itemId: it.id })}>賣 ¢{sellValue(it)}</Buy>
             </div>
@@ -331,7 +344,7 @@ function ClinicNode({ game }: { game: G }) {
   const room = implantRoom(c)
   return (
     <>
-      <NodeHead tag="診所" title="白蛇的地下診所" fixer="snake" body="「裝什麼都可以，裝不下的別怪我。你的神經只有那麼大。」" />
+      <NodeHead tag="神機醫" title="白蛇的義體診所" fixer="snake" body="「裝什麼都可以，裝不下的別怪我。你的神經只有那麼大。」" />
       <ActionButton disabled={(c.injury === 0 && c.stress === 0) || c.credits < cost} reason={c.injury === 0 && c.stress === 0 ? '沒有傷' : `需要 ¢${cost}`} onClick={() => act({ t: 'treat' })}>
         <Stethoscope size={16} /> 縫好傷口（傷勢 {c.injury}%・¢{cost}・壓力 −{CLINIC.stress}）
       </ActionButton>
@@ -345,6 +358,7 @@ function ClinicNode({ game }: { game: G }) {
           const why = c.credits < price ? `需要 ¢${price}` : after < 0 ? `義體空間不夠（還差 ${-after}）` : undefined
           return (
             <div key={kind} className="flex items-center gap-2 border-b border-line/40 px-3 py-2">
+              <ItemIcon item={{ ...d, id: kind, kind }} />
               <div className="min-w-0 flex-1">
                 <b className="text-fg-list">{d.name}</b>
                 <div className="text-[13px] text-cyan">{d.desc}</div>
@@ -608,21 +622,25 @@ function TacticPicker({ game, enemy, onPick }: { game: G; enemy: Enemy; onPick: 
   return (
     <Panel tone="red" innerClass="p-3 space-y-2">
       <div className="flex items-center gap-2 text-[18px] font-bold text-red">
+        <EnemyFace name={enemy.name} />
         <Swords size={20} /> 遭遇戰：{enemy.name}
       </div>
       <div className="grid grid-cols-2 gap-2 text-[14px]">
         <div className="border border-line/70 p-2">
           你 <b className="tech text-heading">HP {st.hp}/{st.maxHp}</b>・攻擊 <b className="tech text-heading">{st.atk}</b>・命中 <b className="tech text-heading">{Math.round(st.hit * 100)}%</b>
           {st.armor ? <>・護甲 <b className="tech text-heading">{st.armor}</b></> : null}
-          {st.crit ? <>・暴擊 <b className="tech text-heading">{Math.round(st.crit * 100)}%</b></> : null}
+          {st.crit ? <>・爆擊 <b className="tech text-heading">{Math.round(st.crit * 100)}%</b></> : null}
+          ・駭入強度 <b className="tech text-heading">{hackPower(c)}</b>・隱匿 <b className="tech text-heading">{stealthPower(c)}</b>
         </div>
         <div className="border border-red/60 p-2">
           對方 <b className="tech text-heading">HP {enemy.hp}</b>・攻擊 <b className="tech text-heading">{enemy.atk}</b>・命中 <b className="tech text-heading">{Math.round(enemy.hit * 100)}%</b>
+          ・防火牆 <b className={`tech ${(enemy.ice ?? 0) > hackPower(c) ? 'text-red' : 'text-heading'}`}>{enemy.ice ?? 0}</b>・感知{' '}
+          <b className={`tech ${(enemy.sense ?? 0) > stealthPower(c) ? 'text-red' : 'text-heading'}`}>{enemy.sense ?? 0}</b>
           {c.heat ? <span className="block text-[12px] text-red">通緝 {c.heat}★：對方 +{c.heat * 8}%</span> : null}
         </div>
       </div>
       <p className="m-0 text-[13px] text-muted">自動戰鬥，打鬥本身不會死：HP 低於最大 HP 的 {RETREAT_HP}% 會自動撤退。受的傷會帶到之後的節點。選一個戰術：</p>
-      {tacticsFor(c).map((t) => {
+      {tacticsFor(c, enemy).map((t) => {
         const Icon = DIR_ICON[t.id]
         const on = sel === t.id
         return (
@@ -632,7 +650,7 @@ function TacticPicker({ game, enemy, onPick }: { game: G; enemy: Enemy; onPick: 
               <div className="flex-1">
                 <div className="font-bold text-fg-list">
                   {t.label}
-                  <span className="ml-2 text-[13px] font-normal text-muted">{DIRECTION_LABEL[t.id]}</span>
+                  {DIRECTION_LABEL[t.id] !== t.label && <span className="ml-2 text-[13px] font-normal text-muted">{DIRECTION_LABEL[t.id]}</span>}
                 </div>
                 <div className="text-[14px] text-fg">{t.summary}</div>
                 {t.locked && <div className="text-[13px] text-warning">✖ {t.locked}</div>}
@@ -677,7 +695,20 @@ const FIGHT_FX: Partial<Record<FightFx, { shake?: number; flash?: string; buzz?:
   retreat: { flash: 'fx-blood' },
 }
 
-/** 戰鬥逐回合播放：每回合約 0.6 秒，隨時可以 2 倍速；每回合依事件播特效（震動、流血、電流、暴擊）。 */
+/** 戰鬥逐回合播放：每回合約 0.6 秒，隨時可以 2 倍速；每回合依事件播特效（震動、流血、電流、爆擊）。 */
+/** 對手頭像（art_src/build_enemies.py 產生；沒有圖的對手不顯示）。 */
+function EnemyFace({ name, size = 48 }: { name: string; size?: number }) {
+  const src = (ENEMY_PORTRAITS as Record<string, string>)[name]
+  if (!src) return null
+  return (
+    <span className="cut cut-sm shrink-0" style={{ width: size, height: size }}>
+      <span className="cut-in grid place-items-end overflow-hidden bg-raised">
+        <img src={src} alt="" className="h-full w-full object-contain [image-rendering:pixelated]" />
+      </span>
+    </span>
+  )
+}
+
 function FightRun({ fight: f, after = [], onDone }: { fight: FightResult; after?: string[]; onDone: () => void }) {
   const [n, setN] = useState(1)
   const [x2, setX2] = useState(false)
@@ -720,13 +751,14 @@ function FightRun({ fight: f, after = [], onDone }: { fight: FightResult; after?
         {fx?.flash && <div key={n} className={`fx-flash ${fx.flash}`} aria-hidden />}
         <div className="flex items-center gap-2 text-[15px] font-bold text-red">
           <Swords size={16} />
+          <EnemyFace name={f.enemy.name} size={36} />
           <span className="flex-1">戰鬥中：{f.enemy.name}</span>
           <button onClick={() => setX2(!x2)} className={`relative z-10 flex min-h-11 items-center gap-1 border px-3 ${x2 ? 'border-red text-red' : 'border-line text-cyan'}`}>
             <FastForward size={14} /> 2×
           </button>
         </div>
         <div className="relative">
-          <Meter label="你" value={last.you} max={f.hpStart} tone={last.you < (f.maxHp * (RETREAT_HP + 10)) / 100 ? 'red' : 'positive'} text={`HP ${last.you}`} />
+          <Meter label="你" value={last.you} max={f.maxHp} tone={last.you < (f.maxHp * (RETREAT_HP + 10)) / 100 ? 'red' : 'positive'} text={`HP ${last.you}/${f.maxHp}`} />
           {pop?.fx === 'hurt' && (
             <span key={n} className="dmg-pop dmg-you">
               −{pop.dmg}
@@ -734,10 +766,10 @@ function FightRun({ fight: f, after = [], onDone }: { fight: FightResult; after?
           )}
         </div>
         <div className="relative">
-          <Meter label={f.enemy.name} value={last.foe} max={f.enemy.hp} tone="red" text={`HP ${last.foe}`} />
+          <Meter label={f.enemy.name} value={last.foe} max={f.enemy.hp} tone="red" text={`HP ${last.foe}/${f.enemy.hp}`} />
           {pop && pop.fx !== 'hurt' && (
             <span key={n} className={`dmg-pop dmg-foe ${pop.fx === 'crit' ? 'dmg-crit' : ''} ${pop.fx === 'shock' ? 'dmg-shock' : ''}`}>
-              {pop.fx === 'crit' ? '暴擊! ' : ''}−{pop.dmg}
+              {pop.fx === 'crit' ? '爆擊! ' : ''}−{pop.dmg}
             </span>
           )}
         </div>
@@ -760,7 +792,7 @@ function FightRun({ fight: f, after = [], onDone }: { fight: FightResult; after?
   )
 }
 
-/** 戰鬥紀錄每一行左邊的色線：你打中＝青、被打＝紅、電流＝青白、暴擊＝黃。 */
+/** 戰鬥紀錄每一行左邊的色線：你打中＝青、被打＝紅、電流＝青白、爆擊＝黃。 */
 const ROUND_TONE: Record<FightFx, string> = {
   hit: 'border-cyan text-fg',
   crit: 'border-warning text-warning',

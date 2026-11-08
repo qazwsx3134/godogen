@@ -15,6 +15,8 @@ func _init() -> void:
 func _run() -> void:
 	_cleanup_saves()
 	main = (load("res://main.tscn") as PackedScene).instantiate() as Control
+	main.story_path = "res://tests/fixtures/stories/debt_story.json"
+	main.stories_path = "res://tests/fixtures/stories.json"
 	main.save_path = TEST_SAVE
 	root.add_child(main)
 	await _frames(3)

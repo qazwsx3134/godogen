@@ -20,7 +20,7 @@
 
 | 專案 | 現況（一句） | 進度 | 歷史 |
 |---|---|---|---|
-| debt-commission 萬事屋吐槽 ADV | main.gd 已拆分；流程圖、shader 轉場、手感回饋完成；等作者選第一章轉場、Android 試震動 | [PROGRESS](prototypes/debt-commission/PROGRESS.md) | [MILESTONE](prototypes/debt-commission/MILESTONE.md) |
+| debt-commission 萬事屋吐槽 ADV | 故事只剩「功能展示」（編輯器範本，預設）與桂的極短篇；舊故事搬進 `tests/fixtures/` 當夾具（2026-11-08，未 commit）；等作者看功能展示 | [PROGRESS](prototypes/debt-commission/PROGRESS.md) | [MILESTONE](prototypes/debt-commission/MILESTONE.md) |
 | godot-kit 共用模組 | SaveSlots 已接入 seal-meadow adapter，保留遊戲恢復保護；只同步該存檔模組，測試暫緩 | [PROGRESS](prototypes/godot-kit/PROGRESS.md) | — |
 | seal-meadow 蓬蓬草原 | 暖陶瓦風格與商店三視圖已定方向；可走商店、入口與路牌樣板已接入，正式 2D 紙娃娃及手機真人驗收待做，多人延後 | [PROGRESS](prototypes/seal-meadow/PROGRESS.md) | [MILESTONE](prototypes/seal-meadow/MILESTONE.md) |
 | hero-horde-idle 全員推王 | 等真人前三層、手機恢復成本與作者素材 | [PROGRESS](prototypes/hero-horde-idle/docs/PROGRESS.md) | [MILESTONE](prototypes/hero-horde-idle/docs/MILESTONE.md) |

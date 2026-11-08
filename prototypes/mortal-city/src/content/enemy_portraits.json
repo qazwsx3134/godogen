@@ -1,0 +1,21 @@
+{
+ "街頭混混": "/sprites/enemy_punk.png",
+ "幫派打手": "/sprites/enemy_thug.png",
+ "幫派幹部": "/sprites/enemy_boss.png",
+ "倉庫私兵": "/sprites/enemy_merc.png",
+ "趕來的保全": "/sprites/enemy_guard.png",
+ "企業保全": "/sprites/enemy_corp.png",
+ "企業保全小隊": "/sprites/enemy_squad.png",
+ "黑冰反制小組": "/sprites/enemy_ice.png",
+ "巡邏保全": "/sprites/enemy_patrol.png",
+ "武裝巡邏": "/sprites/enemy_armed.png",
+ "研究所警衛": "/sprites/enemy_lab.png",
+ "MPD 臨檢巡警": "/sprites/enemy_mpd.png",
+ "神坂保全": "/sprites/enemy_kamisaka.png",
+ "診療所保全": "/sprites/enemy_clinic.png",
+ "神坂回收小組": "/sprites/enemy_reclaim.png",
+ "港務部私兵": "/sprites/enemy_port.png",
+ "堆場保全小組": "/sprites/enemy_yard.png",
+ "港務部外骨骼": "/sprites/enemy_exo.png",
+ "港務部增援外骨骼": "/sprites/enemy_exo2.png"
+}

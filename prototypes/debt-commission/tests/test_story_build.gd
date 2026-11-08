@@ -4,8 +4,8 @@ extends "res://addons/proto_kit/test_kit.gd"
 
 const StoryBuilder = preload("res://tools/story_build/story_builder.gd")
 const StoryRunner = preload("res://scripts/story_runner.gd")
-const SOURCE: String = "res://story_src/phase4.dialogue"
-const OUTPUT: String = "res://data/phase4_story.json"
+const SOURCE: String = "res://tests/fixtures/story_src/phase4.dialogue"
+const OUTPUT: String = "res://tests/fixtures/stories/phase4_story.json"
 
 
 func _init() -> void:
@@ -23,7 +23,7 @@ func _test_phase4_build_matches_committed_json() -> void:
 	_expect(String(built["error"]).is_empty(), "phase4.dialogue builds: %s" % built["error"])
 	_expect(StoryBuilder.to_json(built.get("story", {})) == FileAccess.get_file_as_string(OUTPUT),
 		"data/phase4_story.json matches a fresh build (run tools/story_build/build_story.gd)")
-	_expect(String(built["story"].get("generated_from", "")) == "story_src/phase4.dialogue", "output records its source")
+	_expect(String(built["story"].get("generated_from", "")) == "tests/fixtures/story_src/phase4.dialogue", "output records its source")
 
 
 func _test_version_ignores_text_but_tracks_structure() -> void:

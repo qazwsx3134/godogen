@@ -64,12 +64,10 @@ const DESIGN_WIDTH: float = 1920.0
 const CSS_PX: float = DESIGN_WIDTH / 720.0
 const FONT_PATH: String = "res://assets/fonts/story-cjk.ttc"
 const SAVE_SCHEMA: int = 3
-const PHASE3_STORY_PATH: String = "res://data/phase3_story.json"
-const PHASE3_SAVE_PATH: String = "user://strawberry_phase3.save"
 const STORY_CHOICE_PATH: String = "user://story_choice.cfg"
 const DEFAULT_BOKE_TIMER_SECONDS: float = 8.0
 
-@export_file("*.json") var story_path: String = "res://data/debt_story.json"
+@export_file("*.json") var story_path: String = "res://data/showcase_story.json"
 ## An authoring preview can use a temporary story while retaining the work's catalog and skin.
 @export_file("*.json") var story_catalog_override: String = ""
 @export var story_skin_override: String = ""
@@ -406,8 +404,8 @@ func _select_story_variant() -> void:
 		var config: ConfigFile = ConfigFile.new()
 		if config.load(STORY_CHOICE_PATH) == OK:
 			choice_id = str(config.get_value("story", "id", ""))
-	if choice_id.is_empty() and get_tree().current_scene == self:
-		choice_id = "chapter1"
+	if choice_id.is_empty() and get_tree().current_scene == self and not _story_choices.is_empty():
+		choice_id = str(_story_choices[0]["id"])
 	for choice: Dictionary in _story_choices:
 		if choice["id"] == choice_id:
 			story_path = choice["path"]

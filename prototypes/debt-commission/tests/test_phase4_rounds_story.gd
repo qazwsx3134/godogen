@@ -7,7 +7,7 @@ extends "res://addons/proto_kit/test_kit.gd"
 ## placard's text.
 
 const StoryRunner = preload("res://scripts/story_runner.gd")
-const SAMPLE: String = "res://data/phase4_rounds_story.json"
+const SAMPLE: String = "res://tests/fixtures/stories/phase4_rounds_story.json"
 
 
 func _init() -> void:

@@ -1,4 +1,4 @@
-// 街區設定：每區的劇情委託（中段）與劇情大案（終點）、委託的階級、事件池。一段生涯依序走過。
+// 街區設定：每區的劇情委託（中段）與劇情大案（終點）、委託的難度、事件池。一段生涯依序走過。
 import { CASE_01, CASE_02 } from './cases'
 import { CASE_03, CASE_06 } from './cases_wangan'
 import { EVENTS, WANGAN_EVENTS } from './events'
@@ -9,9 +9,9 @@ export interface DistrictDef {
   /** 中段的劇情委託、終點的劇情大案。 */
   story: string
   boss: string
-  /** 一般委託的階級：前半段、後半段。 */
+  /** 一般委託的難度：前半段、後半段。 */
   tiers: [1 | 2 | 3, 1 | 2 | 3]
-  /** 精英委託的階級。 */
+  /** 精英委託的難度。 */
   eliteTier: 4 | 5
   /** 這區會出現的事件。 */
   events: string[]

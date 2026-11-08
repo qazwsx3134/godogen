@@ -4,7 +4,8 @@ func _init() -> void: _run.call_deferred()
 func _run() -> void:
 	root.size = Vector2i(390,844)
 	var game = load("res://main.tscn").instantiate()
-	game.story_path = "res://data/text_effects_story.json"
+	game.story_path = "res://tests/fixtures/stories/text_effects_story.json"
+	game.stories_path = "res://tests/fixtures/stories.json"
 	game.save_path = "user://test_text_presentation.save"
 	root.add_child(game)
 	await _frames(3)

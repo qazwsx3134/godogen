@@ -4,7 +4,7 @@ extends "res://addons/proto_kit/test_kit.gd"
 ## and the 教學提示 setting work. Headless runs skip guides unless DEBT_TUTORIAL=1, which this suite sets.
 
 const MAIN_SCENE: PackedScene = preload("../main.tscn")
-const STORY_PATH: String = "res://data/phase3_story.json"
+const STORY_PATH: String = "res://tests/fixtures/stories/phase3_story.json"
 const SAVE: String = "user://tutorial_test.save"
 const PROGRESS: String = "user://tutorial_test_progress.cfg"
 const SETTINGS: String = "user://tutorial_test_settings.cfg"
@@ -96,6 +96,7 @@ func test_tutorial_setting_off_shows_nothing() -> void:
 func _new_game() -> Control:
 	var game: Control = MAIN_SCENE.instantiate() as Control
 	game.story_path = STORY_PATH
+	game.stories_path = "res://tests/fixtures/stories.json"
 	game.save_path = SAVE
 	game.progress_path = PROGRESS
 	game.settings_path = SETTINGS

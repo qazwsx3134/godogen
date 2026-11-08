@@ -41,7 +41,7 @@ func _test_atomic_backup_refresh() -> void:
 
 
 func _test_manual_slots_and_autosave() -> void:
-	var game: Control = _new_game("res://data/debt_story.json", DEBT_SAVE)
+	var game: Control = _new_game("res://tests/fixtures/stories/debt_story.json", DEBT_SAVE)
 	await _frames(3)
 	_expect(game._screen_mode == "title", "debt story opens on title")
 	_expect(not game._title_load_button.disabled, "title Load is available before starting a new game")
@@ -123,7 +123,7 @@ func _test_manual_slots_and_autosave() -> void:
 	game.queue_free()
 	await _frames(2)
 
-	var fresh: Control = _new_game("res://data/debt_story.json", DEBT_SAVE)
+	var fresh: Control = _new_game("res://tests/fixtures/stories/debt_story.json", DEBT_SAVE)
 	await _frames(3)
 	_expect(not fresh._continue_button.disabled, "autosave and manual slots persist into a fresh scene")
 	await _open_picker(fresh, "load")
@@ -160,7 +160,7 @@ func _test_manual_slots_and_autosave() -> void:
 
 
 func _test_legacy_schema_three() -> void:
-	var source: Control = _new_game("res://data/debt_story.json", DEBT_SAVE)
+	var source: Control = _new_game("res://tests/fixtures/stories/debt_story.json", DEBT_SAVE)
 	await _frames(2)
 	var legacy: Dictionary = source._read_save_payload(SAVE_SLOTS_SCRIPT.manual_path(DEBT_SAVE, 1))
 	_expect(not legacy.is_empty(), "source manual snapshot is available for migration fixture")
@@ -180,7 +180,7 @@ func _test_legacy_schema_three() -> void:
 	_expect(bool(SAVE_SLOTS_SCRIPT.write_atomic(LEGACY_SAVE, legacy)), "legacy schema three fixture writes")
 	source.queue_free()
 	await _frames(2)
-	var migrated: Control = _new_game("res://data/debt_story.json", LEGACY_SAVE)
+	var migrated: Control = _new_game("res://tests/fixtures/stories/debt_story.json", LEGACY_SAVE)
 	await _frames(3)
 	_expect(not migrated._continue_button.disabled, "old schema-three autosave remains readable")
 	migrated._on_continue_pressed()
@@ -194,7 +194,7 @@ func _test_legacy_schema_three() -> void:
 
 
 func _test_phase2_isolation() -> void:
-	var phase2: Control = _new_game("res://data/phase2_story.json", PHASE2_SAVE)
+	var phase2: Control = _new_game("res://tests/fixtures/stories/phase2_story.json", PHASE2_SAVE)
 	await _frames(3)
 	phase2._on_begin_pressed()
 	await _until(func() -> bool: return phase2._screen_mode == "story", "Phase 2 opening line")
@@ -218,7 +218,7 @@ func _test_phase2_isolation() -> void:
 ## under its old version instead of being overwritten, the title says so, and manual slots say why
 ## they cannot load.
 func _test_older_story_structure() -> void:
-	var source: Control = _new_game("res://data/debt_story.json", DEBT_SAVE)
+	var source: Control = _new_game("res://tests/fixtures/stories/debt_story.json", DEBT_SAVE)
 	await _frames(2)
 	var payload: Dictionary = source._read_save_payload(SAVE_SLOTS_SCRIPT.manual_path(DEBT_SAVE, 1))
 	source.queue_free()
@@ -230,7 +230,7 @@ func _test_older_story_structure() -> void:
 	_expect(bool(SAVE_SLOTS_SCRIPT.write_atomic(OLD_STRUCTURE_SAVE, payload)) and
 		bool(SAVE_SLOTS_SCRIPT.write_atomic(SAVE_SLOTS_SCRIPT.manual_path(OLD_STRUCTURE_SAVE, 1), payload)),
 		"older-structure autosave and manual slot write")
-	var game: Control = _new_game("res://data/debt_story.json", OLD_STRUCTURE_SAVE)
+	var game: Control = _new_game("res://tests/fixtures/stories/debt_story.json", OLD_STRUCTURE_SAVE)
 	await _frames(3)
 	_expect(not FileAccess.file_exists(OLD_STRUCTURE_SAVE) and FileAccess.file_exists(OLD_STRUCTURE_SAVE + "." + OLD_VERSION),
 		"the older autosave is kept under its old version")
@@ -251,6 +251,7 @@ func _test_older_story_structure() -> void:
 func _new_game(story: String, save: String) -> Control:
 	var game: Control = MAIN_SCENE.instantiate() as Control
 	game.story_path = story
+	game.stories_path = "res://tests/fixtures/stories.json"
 	game.save_path = save
 	root.add_child(game)
 	return game

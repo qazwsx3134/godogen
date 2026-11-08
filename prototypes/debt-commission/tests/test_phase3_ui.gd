@@ -3,7 +3,7 @@ extends "res://addons/proto_kit/test_kit.gd"
 
 const MAIN_SCENE: PackedScene = preload("../main.tscn")
 const SAVE_SLOTS_SCRIPT: Script = preload("../scripts/save_slots.gd")
-const STORY_PATH: String = "res://data/phase3_story.json"
+const STORY_PATH: String = "res://tests/fixtures/stories/phase3_story.json"
 const TEST_SAVE: String = "user://phase3_ui_test.save"
 const WEAK_SAVE: String = "user://phase3_ui_weak.save"
 const HIDDEN_SAVE: String = "user://phase3_ui_hidden.save"
@@ -28,7 +28,6 @@ func _test_investigation_save_boke_load_and_perfect() -> void:
 	var game: Control = _new_game(TEST_SAVE)
 	await _frames(3)
 	_expect(game._story_ready and game._phase3_enabled, "Phase 3 sample loads in the presentation shell")
-	_expect(game.PHASE3_SAVE_PATH == "user://strawberry_phase3.save", "Phase 3 variant has a separate autosave path")
 	await _start_to_investigation(game)
 	var investigation_snapshot: Dictionary = game._runner.call("snapshot") as Dictionary
 	_expect(game._save_game(), "investigation state saves to autosave")
@@ -366,6 +365,7 @@ func _search_drag_point(game: Control) -> Vector2:
 func _new_game(save_path: String) -> Control:
 	var game: Control = MAIN_SCENE.instantiate() as Control
 	game.story_path = STORY_PATH
+	game.stories_path = "res://tests/fixtures/stories.json"
 	game.save_path = save_path
 	root.add_child(game)
 	return game

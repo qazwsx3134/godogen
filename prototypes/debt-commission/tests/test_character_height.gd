@@ -21,7 +21,7 @@ func _run() -> void:
 		var broken: Dictionary = catalog.duplicate(true)
 		broken.characters.katsura.height_bounds = bad
 		_expect(not str(validator._validate_asset_catalog(broken)).is_empty(), "invalid body bounds rejected: %s" % [bad])
-	var built: Dictionary = BUILDER.build_text("~ start\n身高比例測試。\ndo end(\"完成\")\n", "res://story_src/__height_test.dialogue")
+	var built: Dictionary = BUILDER.build_text("~ start\n身高比例測試。\ndo end(\"完成\")\n", "res://tests/fixtures/story_src/__height_test.dialogue")
 	FileAccess.open("user://height_test.json", FileAccess.WRITE).store_string(BUILDER.to_json(built["story"]))
 	var game: Control = (load("res://main.tscn") as PackedScene).instantiate()
 	game.story_path = "user://height_test.json"

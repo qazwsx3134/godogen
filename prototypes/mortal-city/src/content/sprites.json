@@ -108,7 +108,7 @@
  },
  "hero_stand": {
   "src": "/sprites/hero_stand.png",
-  "w": 24,
+  "w": 25,
   "h": 75
  },
  "hero_lying": {
@@ -164,7 +164,7 @@
  },
  "hero_b_stand": {
   "src": "/sprites/hero_b_stand.png",
-  "w": 24,
+  "w": 21,
   "h": 75
  },
  "hero_b_run_strip": {

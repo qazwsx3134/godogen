@@ -1,6 +1,6 @@
 {
   "entry": "ch1_open_fridge",
-  "generated_from": "story_src/chapter1.dialogue",
+  "generated_from": "tests/fixtures/story_src/chapter1.dialogue",
   "id": "strawberry_chapter1",
   "initial_flags": {
     "hidden_sadaharu": false

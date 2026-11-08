@@ -26,7 +26,7 @@
 
 人物情境反應、語氣正反例、界線及關係差異，作者已回覆「可以 採用」。新增記憶或修改人格仍需另行確認。不可使用測試 fixture 證據作為真實人類採納。persona_meta／proposal_meta 類追蹤資料不是確認依據；以 confirmations.json 綁定完整內容的紀錄為準。
 
-`data/strawberry_chapter1_graph_story.json` 是既有第一章的圖編輯副本，與 chapter1_story.json 僅 id 與 generated_from 不同；不是本次新寫故事或新採納的文本。
+遊戲與編輯器只列功能展示（`data/showcase_story.json`）與桂的極短篇；第一章（含圖編輯副本 `strawberry_chapter1_graph_story.json`）、討債、Phase 2–4、EP00 等舊故事只留在 `tests/fixtures/stories/` 當測試夾具。
 
 ## 操作與接手順序
 

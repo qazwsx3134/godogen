@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""把 art_src/sprites_raw/raw/ 的 node_*.png 與 story_*.png（Codex 原圖，約 1942×809）做成橫幅背景 public/sprites/（384×160）。
+"""把 art_src/sprites_raw/raw/ 的 node_*.png、story_*.png 與 safehouse.png（Codex 原圖，約 1942×809）做成橫幅背景 public/sprites/（384×160）。
 
   python3 art_src/build_nodes.py
 
@@ -14,7 +14,7 @@ RAW = ROOT / 'sprites_raw' / 'raw'
 OUT = ROOT.parent / 'public' / 'sprites'
 W, H = 384, 160
 
-for src in sorted([*RAW.glob('node_*.png'), *RAW.glob('story_*.png')]):
+for src in sorted([*RAW.glob('node_*.png'), *RAW.glob('story_*.png'), *RAW.glob('safehouse.png')]):
     im = Image.open(src).convert('RGB')
     w, h = im.size
     if w / h > W / H:  # 太寬：左右裁

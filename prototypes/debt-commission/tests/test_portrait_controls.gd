@@ -29,7 +29,7 @@ func _next_line(game: Control) -> void:
 
 func _run() -> void:
 	root.size = Vector2i(1280, 720)
-	var built: Dictionary = BUILDER.build_text(SOURCE, "res://story_src/__portrait_controls_test.dialogue")
+	var built: Dictionary = BUILDER.build_text(SOURCE, "res://tests/fixtures/story_src/__portrait_controls_test.dialogue")
 	_expect(str(built.get("error", "")).is_empty(), "independent portrait controls build")
 	if not str(built.get("error", "")).is_empty():
 		_finish("PORTRAIT CONTROLS")

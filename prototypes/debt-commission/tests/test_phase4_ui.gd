@@ -6,7 +6,7 @@ extends "res://addons/proto_kit/test_kit.gd"
 ## content; the title screen switches between stories.
 
 const MAIN_SCENE: PackedScene = preload("../main.tscn")
-const STORY_PATH: String = "res://data/phase4_story.json"
+const STORY_PATH: String = "res://tests/fixtures/stories/phase4_story.json"
 const TEST_SAVE: String = "user://phase4_ui_test.save"
 const RETRY_SAVE: String = "user://phase4_ui_retry.save"
 const HOTSPOTS: Array[String] = ["empty_milk_bottle", "gintoki_mouth", "kombu_wrapper", "floor_paw_print"]
@@ -105,6 +105,9 @@ func _check_case_file(game: Control) -> void:
 
 func _test_title_story_switch() -> void:
 	var game: Control = MAIN_SCENE.instantiate() as Control
+	game.story_path = "res://tests/fixtures/stories/debt_story.json"
+	game.stories_path = "res://tests/fixtures/stories.json"
+	game.packs_root = "res://tests/fixtures/example_pack/"
 	game.save_path = TEST_SAVE
 	root.add_child(game)
 	await _frames(3)
@@ -262,6 +265,7 @@ func _read_until(game: Control, done: Callable, label: String) -> void:
 func _new_game(save_path: String) -> Control:
 	var game: Control = MAIN_SCENE.instantiate() as Control
 	game.story_path = STORY_PATH
+	game.stories_path = "res://tests/fixtures/stories.json"
 	game.save_path = save_path
 	game.packs_root = "res://tests/fixtures/no_packs/"  # only data/stories.json
 	root.add_child(game)

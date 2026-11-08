@@ -102,6 +102,13 @@ def heroes(man: dict):
             im = key_green(Image.open(src))
             im = im.crop(im.getbbox())
             save(f'sofa_rest_{look}', shrink(im, im.size[0] / SOFA_W), man)
+    # 節點站姿（2026-11-07，跟新休息圖一致的造型）：取代姿勢組裡的站姿
+    for look, name in (('a', 'hero_stand'), ('b', 'hero_b_stand')):
+        src = RAW / f'stand_{look}.png'
+        if src.exists():
+            im = key_green(Image.open(src))
+            im = im.crop(im.getbbox())
+            save(name, shrink(im, im.size[1] / 75), man)
     for src, name, n, th in RUN_CYCLES:
         if not (RAW / f'{src}.png').exists():
             continue

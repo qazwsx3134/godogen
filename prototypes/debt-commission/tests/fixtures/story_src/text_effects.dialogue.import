@@ -4,12 +4,12 @@ importer="dialogue_manager"
 importer_version=18
 type="Resource"
 uid="uid://croqrmpmtjayb"
-path="res://.godot/imported/text_effects.dialogue-5c8aa34e9eb72b538b25532f3bf13321.tres"
+path="res://.godot/imported/text_effects.dialogue-0d0d6e5d73f89143258636669e9fc845.tres"
 
 [deps]
 
-source_file="res://story_src/text_effects.dialogue"
-dest_files=["res://.godot/imported/text_effects.dialogue-5c8aa34e9eb72b538b25532f3bf13321.tres"]
+source_file="res://tests/fixtures/story_src/text_effects.dialogue"
+dest_files=["res://.godot/imported/text_effects.dialogue-0d0d6e5d73f89143258636669e9fc845.tres"]
 
 [params]
 

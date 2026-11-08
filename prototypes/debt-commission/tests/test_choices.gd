@@ -8,9 +8,9 @@ extends "res://addons/proto_kit/test_kit.gd"
 const MAIN_SCENE: PackedScene = preload("../main.tscn")
 const StoryRunner = preload("res://scripts/story_runner.gd")
 const StoryBuilder = preload("res://tools/story_build/story_builder.gd")
-const SAMPLE: String = "res://data/choices_story.json"
-const DEBT_STORY: String = "res://data/debt_story.json"
-const PHASE3_STORY: String = "res://data/phase3_story.json"
+const SAMPLE: String = "res://tests/fixtures/stories/choices_story.json"
+const DEBT_STORY: String = "res://tests/fixtures/stories/debt_story.json"
+const PHASE3_STORY: String = "res://tests/fixtures/stories/phase3_story.json"
 const BAD_STORY: String = "user://choices_bad_story.json"
 const MIXED_STORY: String = "user://choices_mixed_story.json"
 const NO_NOTE_STORY: String = "user://choices_no_note_story.json"
@@ -65,8 +65,8 @@ do director()
 ~ done
 do end("結束")
 """
-const DM_PATH: String = "res://story_src/__choices_check.dialogue"
-const DS_PATH: String = "res://story_src/__choices_check.ds"
+const DM_PATH: String = "res://tests/fixtures/story_src/__choices_check.dialogue"
+const DS_PATH: String = "res://tests/fixtures/story_src/__choices_check.ds"
 const SPEAKER_GINTOKI: String = "uid://x::銀時"
 
 
@@ -223,7 +223,7 @@ func _test_validation() -> void:
 ## Scripts written before the marks: no new field anywhere, built and played the same as before.
 func _test_scripts_without_the_marks() -> void:
 	for path: String in ["debt", "phase2", "phase3", "phase4", "phase4_rounds", "comedy"]:
-		var story: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/%s_story.json" % path))
+		var story: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/stories/%s_story.json" % path))
 		var marked: int = 0
 		for node: Dictionary in (story["nodes"] as Dictionary).values():
 			for step: Dictionary in node["steps"]:
@@ -233,8 +233,8 @@ func _test_scripts_without_the_marks() -> void:
 				marked += (step["options"] as Array).filter(func(option: Dictionary) -> bool: return option.has("tone")).size()
 		_expect(marked == 0, "%s has no perspective, pov, note or tone anywhere" % path)
 	for name: String in ["phase4", "phase4_rounds", "comedy", "choices"]:
-		var built: Dictionary = StoryBuilder.build("res://story_src/%s.dialogue" % name)
-		_expect(String(built["error"]).is_empty() and FileAccess.get_file_as_string("res://data/%s_story.json" % name) == StoryBuilder.to_json(built["story"]),
+		var built: Dictionary = StoryBuilder.build("res://tests/fixtures/story_src/%s.dialogue" % name)
+		_expect(String(built["error"]).is_empty() and FileAccess.get_file_as_string("res://tests/fixtures/stories/%s_story.json" % name) == StoryBuilder.to_json(built["story"]),
 			"data/%s_story.json is a fresh build of its .dialogue (%s)" % [name, built["error"]])
 
 
@@ -763,6 +763,7 @@ func _check_layout(game: Control, css_width: int, label: String, kind: String, c
 func _new_game(story: String = SAMPLE) -> Control:
 	var game: Control = MAIN_SCENE.instantiate() as Control
 	game.story_path = story
+	game.stories_path = "res://tests/fixtures/stories.json"
 	game.save_path = TEST_SAVE
 	game.settings_path = TEST_SETTINGS
 	root.add_child(game)

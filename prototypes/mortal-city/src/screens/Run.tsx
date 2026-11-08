@@ -26,16 +26,17 @@ export function RunScreen({ game }: { game: G }) {
   const { g } = game
   const { run, character: c } = g
   const here = run.at ? findNode(run.district, run.at) : undefined
-  // 橫幅：自動段在跑＝屋頂奔跑；站在有專屬背景的節點＝那張背景；劇情委託＝街景；地圖與安全屋＝公寓
+  // 橫幅：自動段在跑＝屋頂奔跑；站在有專屬背景的節點＝那張背景；劇情委託＝街景；安全屋＝安全屋背景；地圖＝公寓
   const n = run.node
   const running = (n && 'stage' in n && n.stage === 'auto') || (n?.kind === 'story' && g.story.stage === 'auto')
   const bg = n && here && (NODE_BG as readonly string[]).includes(here.type) ? (here.type as NodeBg) : undefined
   const story = n?.kind === 'story' && STORY_BG.includes(n.caseId) ? n.caseId : undefined
-  const mode = !c.alive ? 'dead' : running ? 'run' : bg || story ? 'node' : n?.kind === 'story' ? 'run' : 'rest'
+  const safehouse = c.alive && run.phase === 'safehouse'
+  const mode = !c.alive ? 'dead' : running ? 'run' : bg || story || safehouse ? 'node' : n?.kind === 'story' ? 'run' : 'rest'
   const label = !c.alive ? '空房間' : run.phase === 'safehouse' ? '安全屋' : here ? `${run.district.name}・${NODE_LABEL[here.type]}` : `${run.district.name}・出發前`
   return (
     <div className="space-y-3">
-      <CityStrip mode={mode} bg={bg} story={story} district={run.district.id} label={label} sub={here ? `第 ${here.layer + 1} 層` : undefined} />
+      <CityStrip mode={mode} bg={bg} story={story} district={run.district.id} look={c.look} safehouse={safehouse} label={label} sub={here ? `第 ${here.layer + 1} 層` : undefined} />
       {run.phase === 'over' ? <EndScreen game={game} /> : run.phase === 'safehouse' ? <Safehouse game={game} /> : run.node ? <NodeView game={game} /> : <MapView game={game} />}
     </div>
   )

@@ -10,7 +10,7 @@ extends "res://addons/proto_kit/test_kit.gd"
 ## reopens the sheet.
 
 const MAIN_SCENE: PackedScene = preload("res://main.tscn")
-const SAMPLE: String = "res://data/phase4_rounds_story.json"
+const SAMPLE: String = "res://tests/fixtures/stories/phase4_rounds_story.json"
 const TEST_SAVE: String = "user://phase4_rounds_ui_test.save"
 
 
@@ -340,6 +340,7 @@ func _play_until(game: Control, done: Callable, label: String, seconds: float = 
 func _new_game() -> Control:
 	var game: Control = MAIN_SCENE.instantiate() as Control
 	game.story_path = SAMPLE
+	game.stories_path = "res://tests/fixtures/stories.json"
 	game.save_path = TEST_SAVE
 	root.add_child(game)
 	return game
