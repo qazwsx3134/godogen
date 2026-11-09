@@ -6,3 +6,5 @@ art_src/style_explore/raw/
 art_src/sprites_raw/raw/
 .DS_Store
 *.tsbuildinfo
+# pnpm smoke 的截圖
+smoke-out/

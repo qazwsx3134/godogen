@@ -10,7 +10,7 @@
 ## 環境與工具鏈（macOS／WSL／Windows）
 
 - **macOS 照抄 WSL 的指令失敗**：`godot` 不在 PATH、沒有 `xvfb-run`、`run_tests.sh` 沒有執行權限 → `GODOT_BIN=/Applications/Godot.app/Contents/MacOS/Godot bash <腳本>`；換機器先確認 Godot 路徑與腳本權限。（[CLAUDE.md](../CLAUDE.md) 2026-10-14、[erwin-run](erwin-run/PROGRESS.md#已知的坑)）
-- **macOS 上 `XDG_DATA_HOME` 隔離不了 `user://`**：存檔一律在 `~/Library/Application Support/Godot/app_userdata/<專案>`，曾把作者的真實存檔從 v1 轉成 v2 覆蓋 → 試跑前先 `cp` 存檔到 `~/.claude/backups`，或用遊戲的 `--save=<名稱>` 參數。（[CLAUDE.md](../CLAUDE.md) 2026-10-27）
+- **macOS 上 `XDG_DATA_HOME` 隔離不了 `user://`**：存檔一律在 `~/Library/Application Support/Godot/app_userdata/<專案>`，曾把作者的真實存檔從 v1 轉成 v2 覆蓋 → 試跑前先 `cp` 存檔到 `~/.claude/backups`，或用遊戲的 `--save=<名稱>` 參數。（[CLAUDE.md](../CLAUDE.md) 2026-10-27）(×2：2026-11-09 debt-commission 跑完整測試，`test_save_transfer` 在真實資料夾把桂短篇存檔的 `.bak` 改名成 `.before_import`，存檔內容沒變；有設 `custom_user_dir_name` 的專案在 `~/Library/Application Support/<名稱>`，跑測試前一樣先備份)
 - **`--headless` 加 `--write-movie` 在 macOS 會 crash**（MoltenVK）→ 擷取畫面要開視窗。（[pachinko](pachinko/TODO.md#環境與工具鏈)）
 - **CRLF**：WSL＋Windows 的工作樹裡 `.sh` 可能是 CRLF（`bash\r: No such file`）；`.tres` 多行字串帶 `\r`，`Label` 多出空行 → 用 LF 腳本或 kit 的 `tools/run_tests.sh`；顯示前 `.replace("\r", "")`；`.gitattributes` 放 `* text=auto eol=lf`。（[testing-and-balance](godot-kit/skills/godot-prototype-to-itch/references/testing-and-balance.md#crlfwslwindows-的工作樹)、[GODOT_BEST_PRACTICES](godot-kit/GODOT_BEST_PRACTICES.md) #12）
 - **同一個 repo 在 WSL（`/mnt/d/...`）與 Mac（`~/repo/...`）路徑不同** → 舊報告裡的路徑要換算。（[character-sprite-forge](godot-kit/skills/character-sprite-forge/SKILL.md#坑)）

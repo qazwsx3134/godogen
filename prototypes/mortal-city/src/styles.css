@@ -27,6 +27,12 @@ body,
   height: 100%;
 }
 
+/* 直式手機版沒有橫向捲動：故障轉場的位移條等特效在觸控裝置上會把頁面撐寬 1～5 px */
+html,
+body {
+  overflow-x: clip;
+}
+
 * {
   scrollbar-color: var(--color-line) transparent;
   scrollbar-width: thin;
@@ -465,6 +471,12 @@ body {
     opacity: 0;
     transform: translateX(40px);
   }
+}
+/* 挑卡、挑道具、加屬性後的通知 */
+.notice {
+  --fill: var(--color-raised);
+  animation: toast-in 0.3s cubic-bezier(0.2, 1.3, 0.4, 1) both;
+  box-shadow: 0 6px 20px #000a;
 }
 .claim-toast-bar {
   position: absolute;

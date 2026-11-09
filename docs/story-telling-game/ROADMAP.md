@@ -12,8 +12,8 @@
 
 | 項目 | V1 基準 |
 | --- | --- |
-| 平台與交付 | Godot 4.7 stable、GDScript、Compatibility renderer、單執行緒 Web 匯出；手機瀏覽器直立試玩，桌機保留直式遊戲區 |
-| 畫面 | 9:16 直立，基準 1080×1920，依裝置等比縮放；處理瀏海、底部手勢列等 Safe Area |
+| 平台與交付 | Godot 4.7 stable、GDScript、Compatibility renderer、單執行緒 Web 匯出；手機橫拿試玩（2026-09 起改為橫向，早期直式版見 `prototypes/debt-commission/docs/UI-TRIAL.md`） |
+| 畫面 | 16:9 橫向，基準 1920×1080（`project.godot`），依裝置等比縮放；處理瀏海、底部手勢列等 Safe Area |
 | 分層（下到上） | 全螢幕背景 → 人物立繪（左／中／右）→ 特效 → 對話框 → 懸浮按鈕 → 彈出視窗 |
 | 對話框 | 底部約佔 28%；左上名牌依角色換色；逐字顯示、最多三行、速度可調；右下閃爍 ▼；下方快捷列 LOG／AUTO／SKIP／素材 |
 | 操作 | 點任一處：打字中補完整句，打完進下一句；上滑開對話紀錄；長按隱藏全部 UI，再點恢復 |

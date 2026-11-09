@@ -17,6 +17,9 @@ const BASE: News[] = [
 ]
 
 /** 依目前的生涯產生新聞；同樣的狀態永遠得到同樣的清單。 */
+/** 劇情案撐過去了（重傷生還也算）。 */
+const made = (r: { outcome: string }) => r.outcome === 'survived' || r.outcome === 'maimed'
+
 export function newsFor(g: Game): News[] {
   const c = g.character
   const cases = g.run.cases
@@ -24,13 +27,13 @@ export function newsFor(g: Game): News[] {
   if (c.heat >= 3) out.push({ tag: 'MPD', text: `懸賞：新宿不明傭兵，特徵已建檔，通緝等級 ${c.heat}★，提供線索者獎金 ¢5,000` })
   else if (c.heat >= 1) out.push({ tag: 'MPD', text: '新宿街區近日暴力事件增加，巡邏密度上調' })
   const c1 = cases['P01-01']
-  if (c1) out.push(c1.outcome === 'survived' ? { tag: 'FM104.9', text: '夜鴉：昨晚環狀線 B2 有個保冷箱準時送到了。送貨的人，我們都不知道是誰' } : { tag: 'MPD', text: '環狀線新宿駅臨檢「順利完成」，查獲可疑保冷箱一只' })
+  if (c1) out.push(made(c1) ? { tag: 'FM104.9', text: '夜鴉：昨晚環狀線 B2 有個保冷箱準時送到了。送貨的人，我們都不知道是誰' } : { tag: 'MPD', text: '環狀線新宿駅臨檢「順利完成」，查獲可疑保冷箱一只' })
   const c2 = cases['P01-02']
-  if (c2) out.push(c2.outcome === 'survived' ? { tag: '神坂', text: '神坂股價 ▼3.1%：三丁目社區診療所「設備異常」，病歷系統暫停服務' } : { tag: '神坂', text: '神坂發言人：K 系列病歷轉移作業順利完成' })
+  if (c2) out.push(made(c2) ? { tag: '神坂', text: '神坂股價 ▼3.1%：三丁目社區診療所「設備異常」，病歷系統暫停服務' } : { tag: '神坂', text: '神坂發言人：K 系列病歷轉移作業順利完成' })
   const c3 = cases['P01-03']
-  if (c3) out.push({ tag: '港務部', text: c3.outcome === 'survived' ? '新木場冷鏈堆場「從來沒有人」，港務部否認武裝醫療隊曾降落' : '新木場 C 區冷藏貨櫃恢復正常溫度' })
+  if (c3) out.push({ tag: '港務部', text: made(c3) ? '新木場冷鏈堆場「從來沒有人」，港務部否認武裝醫療隊曾降落' : '新木場 C 區冷藏貨櫃恢復正常溫度' })
   const c6 = cases['P01-06']
-  if (c6) out.push({ tag: 'FM104.9', text: c6.outcome === 'survived' ? '夜鴉：灣岸封鎖前的最後一班貨運列車「準時通過」，車上載了什麼，港務部拒絕說明' : '灣岸封鎖線正式關閉，最後一班列車是空車' })
+  if (c6) out.push({ tag: 'FM104.9', text: made(c6) ? '夜鴉：灣岸封鎖前的最後一班貨運列車「準時通過」，車上載了什麼，港務部拒絕說明' : '灣岸封鎖線正式關閉，最後一班列車是空車' })
   if (c.fame.level >= 3) out.push({ tag: 'FM104.9', text: `夜鴉：最近新宿的中間人都在問同一個名字——「${c.name}」` })
   if (c.lifelines > 0) out.push({ tag: 'AD', text: '你的救命保單仍然有效。武裝醫療隊，感謝您選擇活下去' })
   const last = g.meta.legends.at(-1)

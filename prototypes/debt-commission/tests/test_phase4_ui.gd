@@ -29,6 +29,11 @@ func _run() -> void:
 	await _until(func() -> bool: return game._screen_mode == "investigate", "reach the four-clue investigation")
 
 	_expect(game._hotspots.size() == 4, "four spots lie on the picture")
+	game._investigation._tap_investigation(Vector2(4, 4))
+	_expect(game._toast.text == "這裡沒什麼特別的", "a tap on nothing says so: %s" % game._toast.text)
+	game._investigation._tap_investigation(Vector2(4, 4))
+	game._investigation._tap_investigation(Vector2(4, 4))
+	_expect(game._toast.text.contains("還有 4 個地方"), "three misses in a row turn into a hint: %s" % game._toast.text)
 	_expect(game._sprites.values().all(func(sprite: Control) -> bool: return not sprite.visible),
 		"nobody is on stage while searching")
 	for hotspot_id: String in HOTSPOTS:

@@ -88,6 +88,7 @@ func _test_testimony_and_combo() -> void:
 	await _press(game._boke_tsukkomi_button)
 	await _play_until(game, func() -> bool: return game._screen_mode == "boke_round", "back from the whiff")
 	_expect(game._runner.gameplay["glasses"] == 4, "a whiff on a line without a slot costs a glass")
+	_expect(game._toast.text.contains("這句沒有槽點"), "the miss toast says why it went cold: %s" % game._toast.text)
 
 	await _press(game._boke_next_button)
 	await _press(game._boke_tsukkomi_button)

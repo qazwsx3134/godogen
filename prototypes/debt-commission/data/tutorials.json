@@ -18,6 +18,14 @@
         {"target": "investigate_collapse", "title": "收起對話框", "text": "對話框擋住畫面時按這裡，\n再點一次就展開。"},
         {"target": "investigate_continue", "title": "繼續故事", "text": "線索找夠了，\n按這裡繼續。"}
       ]
+    },
+    {
+      "id": "reading",
+      "trigger": "story",
+      "steps": [
+        {"target": "reading_stage", "title": "看整張圖", "text": "長按畫面可以隱藏對話框，\n再點一下就恢復。"},
+        {"target": "reading_box", "title": "對話紀錄", "text": "在畫面上往上滑，\n可以回頭看說過的話。"}
+      ]
     }
   ]
 }

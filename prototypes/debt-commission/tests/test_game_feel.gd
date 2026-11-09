@@ -45,9 +45,14 @@ func _test_tiers() -> void:
 	effects.call("feedback", "perfect")
 	_expect(buzzes == [durations[1]] and layer.position == Vector2.ZERO, "a perfect retort thumps without shaking: %s" % [buzzes])
 	await create_timer(0.2).timeout
+	effects.call("feedback", "weak")
+	var weak_player: AudioStreamPlayer = effects.get("_feedback_player")
+	_expect(buzzes[-1] == durations[0] and weak_player.stream != null and weak_player.playing,
+		"a weak retort ticks and plays its softer slap")
+	await create_timer(0.2).timeout
 	effects.call("feedback", "miss")
 	await _frames(2)
-	_expect(buzzes.size() == 2 and layer.position != Vector2.ZERO, "a miss thumps and shakes the stage")
+	_expect(buzzes.size() == 3 and buzzes[-1] == durations[1] and layer.position != Vector2.ZERO, "a miss thumps and shakes the stage")
 	await create_timer(0.3).timeout
 	_expect(layer.position == Vector2.ZERO, "the shake settles back")
 	var player: AudioStreamPlayer = effects.get("_feedback_player")

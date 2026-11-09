@@ -1,5 +1,7 @@
 # V1 驗證紀錄
 
+> 過時：這是 2026-09-25 直式外殼時期的紀錄，畫面已改成 16:9 橫向、內容也換過。現行驗證方式見 [README](../README.md)「驗證」。
+
 更新：2026-09-25。引擎 `4.7.stable.official.5b4e0cb0f`，官方單執行緒 Web 範本、Compatibility renderer。
 
 ## Phase 1：直立外殼

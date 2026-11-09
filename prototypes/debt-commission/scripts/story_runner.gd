@@ -60,6 +60,8 @@ const VALID_CHARACTER_TRANSITIONS: Array[String] = ["fade", "slide_left", "slide
 const VALID_BACKGROUND_TRANSITIONS: Array[String] = ["fade", "brush", "ink", "glitch"]
 const VALID_PORTRAIT_EFFECTS: Array[String] = ["shake", "bounce"]
 const GRADES: Array[String] = ["S", "A", "B", "C"]
+## Share of caught slots that must be perfect for an S (see grade_for).
+const S_PERFECT_RATIO: float = 0.6
 ## Expression ids for `char` and line tags; what each means and which art to make:
 ## docs/story-telling-game/EXPRESSIONS.md.
 const VALID_EXPRESSIONS: Array[String] = ["neutral", "smile", "annoyed", "surprised", "thinking", "sweat", "smug", "shout",
@@ -291,7 +293,8 @@ func chapter_result() -> Dictionary:
     var command: Dictionary = current()
     if String(command.get("op", "")) != "result":
         return {}
-    var grade: String = grade_for(int(gameplay.get("glasses", 0)), int(stats.get("game_overs", 0)))
+    var grade: String = grade_for(int(gameplay.get("glasses", 0)), int(stats.get("game_overs", 0)),
+            int(stats.get("perfect", 0)), int(stats.get("caught", 0)))
     var line: Dictionary = ((command.get("lines", {}) as Dictionary).get(grade, {}) as Dictionary).duplicate()
     return {
         "title": String(command.get("title", "")),
@@ -312,9 +315,12 @@ func chapter_result() -> Dictionary:
 
 
 ## The chapter grade from the glasses left (5 S, 4 A, 3–2 B, 1 C); each Game Over drops it one
-## grade, never below C, so retrying cannot farm an S.
-static func grade_for(glasses: int, game_overs: int) -> String:
+## grade, never below C, so retrying cannot farm an S. S also needs at least S_PERFECT_RATIO of
+## the caught slots answered perfect: playing safe with weak answers tops out at A.
+static func grade_for(glasses: int, game_overs: int, perfect: int = 0, caught: int = 0) -> String:
     var index: int = 0 if glasses >= 5 else 1 if glasses == 4 else 2 if glasses >= 2 else 3
+    if index == 0 and caught > 0 and perfect < ceili(caught * S_PERFECT_RATIO):
+        index = 1
     return GRADES[mini(index + maxi(game_overs, 0), GRADES.size() - 1)]
 
 
@@ -692,7 +698,7 @@ func _round_action(kind: String, payload: Dictionary = {}) -> Dictionary:
         restore(before)
         error_message = message
         return {}
-    return {"result": decision["result"], "goto": decision["goto"], "game_over": decision["game_over"]}
+    return {"result": decision["result"], "goto": decision["goto"], "game_over": decision["game_over"], "action": kind}
 
 
 ## Plays a node from inside a v2 round (listen); it leads back to the round.

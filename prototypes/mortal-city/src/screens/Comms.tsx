@@ -7,6 +7,9 @@ const CHAT = [
   { who: '鐵雨', text: '送貨工作多做一點就會開啦，大家一起推。' },
 ]
 
+/** 通訊裡有幾則訊息（入口的紅色數字）。 */
+export const COMMS_COUNT = BROADCASTS.length + CHAT.length
+
 export function Comms({ onClose }: { onClose: () => void }) {
   return (
     <div className="absolute inset-0 z-20 flex flex-col bg-bg/80" role="dialog" aria-label="通訊">

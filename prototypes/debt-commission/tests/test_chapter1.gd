@@ -90,6 +90,6 @@ func _route(route: String) -> void:
 	var result=_settle(r)
 	var ending: String = "ch1_gintoki" if route=="gin" else "ch1_sadaharu"
 	_expect(result.get("op")=="result" and result.get("ending")==ending, "%s route reaches ending %s (got %s)" % [route,ending,result.get("ending")])
-	var expected = {"gin":"S","perfect":"S","hidden":"S","super":"S","weak":"S","timeout":"A","retry":"A","one_fail":"A","two_fails":"B","four_fails":"C"}[route]
+	var expected = {"gin":"S","perfect":"S","hidden":"S","super":"S","weak":"A","timeout":"A","retry":"A","one_fail":"A","two_fails":"B","four_fails":"C"}[route]
 	_expect(r.chapter_result().get("grade")==expected, "%s route grade %s (got %s)" % [route,expected,r.chapter_result().get("grade")])
 	_roundtrip(r)

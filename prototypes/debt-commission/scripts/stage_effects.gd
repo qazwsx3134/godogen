@@ -18,7 +18,7 @@ const SHAKE: Dictionary = {"small": [10.0, 0.25], "big": [28.0, 0.45]}
 ## The story's own shake steps buzz too (small → tick, big → thump).
 const FEEDBACK: Dictionary = {
 	"clue": [0, 0.0, 0.0, "comedy_pop"],
-	"weak": [0, 0.0, 0.0, ""],
+	"weak": [0, 0.0, 0.0, "tsukkomi_weak"],
 	"perfect": [1, 0.0, 0.0, ""],
 	"miss": [1, 7.0, 0.18, "glass_crack"],
 	"power_full": [2, 0.0, 0.0, ""],
@@ -364,6 +364,8 @@ func _placeholder(collection: String, id: String) -> AudioStream:
 			return Synth.ramp(760.0, 430.0, 0.32, 0.45, 0.0, 1.6)
 		"tsukkomi_hit", "bite":
 			return Synth.click(0.14, 0.7, 18.0)
+		"tsukkomi_weak":
+			return Synth.click(0.09, 0.35, 26.0)
 		"glass_crack":
 			return Synth.ramp(3200.0, 1400.0, 0.16, 0.4, 0.0, 2.0)
 		"glass_shatter", "tear", "door_slide":

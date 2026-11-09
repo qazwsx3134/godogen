@@ -87,14 +87,14 @@ export interface StoryCase {
 export interface CaseRecord {
   approach: string
   optionId: string
-  outcome: 'safe' | 'survived' | 'rescued' | 'rescued_system' | 'dead'
+  outcome: 'safe' | 'survived' | 'maimed' | 'rescued' | 'rescued_system' | 'dead'
   reason: string
 }
 
 /** 前置案件的結果怎麼影響這一案的文字。 */
 export function variantOf(prev: CaseRecord | undefined): string | null {
   if (!prev) return null
-  return prev.outcome === 'survived' ? 'won' : 'lost'
+  return prev.outcome === 'survived' || prev.outcome === 'maimed' ? 'won' : 'lost'
 }
 
 const TEST_LOG = [

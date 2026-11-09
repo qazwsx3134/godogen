@@ -40,6 +40,8 @@ func _maybe_tutorial(trigger: String) -> void:
 		return
 	if trigger == "boke_round" and not m._boke_controls.visible:
 		return  # combo lines open their slot at once; the guide waits for a round the player reads
+	if trigger == "story" and m._skip:
+		return  # skipping through lines: the reading guide waits for a line the player reads
 	var seen: Array = _tutorials_seen()
 	for def: Dictionary in m._tutorials:
 		if str(def.get("trigger", "")) == trigger and str(def.get("id", "")) not in seen:
@@ -58,6 +60,8 @@ func _tutorial_target(target: String) -> Control:
 		"investigate_scene": return m._stage_area  # the picture above the reading box
 		"investigate_collapse": return m._dialog_panel.collapse_tab
 		"investigate_continue": return m._investigation_continue_button
+		"reading_stage": return m._stage_area
+		"reading_box": return m._dialog_panel
 	return null
 
 

@@ -5,7 +5,7 @@ framework:
   last_upgraded: 2026-10-16
 project:
   name: "萬事屋吐槽 ADV"
-  stage: Production
+  stage: Pre-Production  # 2026-11-09：玩法假設還沒有真人試玩驗證（README「要驗證的玩法假設」），通過後再改回 Production
 engine:
   name: Godot
   version: "4.7"

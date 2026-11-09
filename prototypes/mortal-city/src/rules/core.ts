@@ -164,6 +164,21 @@ export interface Item {
   load: number // 義體負荷（只有義體會有）
   /** 戰鬥效果。起始手槍的攻擊 +6 也寫在這裡。 */
   mods?: Partial<Record<ModKey, number>>
+  /** 裝上要的屬性門檻（重武器、高階義體與終端）。 */
+  needs?: { attr: Attr; min: number }
+  /** 義體等級（神機醫升級）：沒寫＝1。效果 ×itemMult，負荷每級 +UPGRADE_LOAD。 */
+  level?: number
+}
+
+/** 義體升級：最多 Lv.3；每級效果 +0.5 倍、負荷 +10；升一級要「原價 × 目前等級」。 */
+export const MAX_ITEM_LEVEL = 3
+export const UPGRADE_LOAD = 10
+export const itemMult = (i: Item) => 1 + 0.5 * ((i.level ?? 1) - 1)
+export const upgradeCost = (i: Item) => i.price * (i.level ?? 1)
+/** 升級後的單項效果：整數的（攻擊、護甲、回合數）四捨五入，比率照乘。 */
+export const itemModValue = (i: Item, k: ModKey) => {
+  const v = (i.mods?.[k] ?? 0) * itemMult(i)
+  return Number.isInteger(i.mods?.[k] ?? 0) ? Math.round(v) : v
 }
 
 /**
@@ -175,7 +190,7 @@ export interface Item {
 export type ModKey = 'atk' | 'hit' | 'crit' | 'critDmg' | 'armor' | 'hp' | 'jam' | 'calm' | 'shock' | 'ambush' | 'ghost' | 'berserk' | 'cap' | 'loot' | 'double' | 'patch'
 /** 身上裝備的某項效果總和。 */
 export function gearMod(c: Character, k: ModKey) {
-  return c.equipment.reduce((s, i) => s + (i.mods?.[k] ?? 0), 0)
+  return c.equipment.reduce((s, i) => s + itemModValue(i, k), 0)
 }
 /** 名聲卡的某項效果總和（卡的等級 × 每級效果）。 */
 export function perkMod(c: Character, k: ModKey) {
@@ -184,17 +199,43 @@ export function perkMod(c: Character, k: ModKey) {
 /** 裝備＋名聲卡。 */
 export const statMod = (c: Character, k: ModKey) => gearMod(c, k) + perkMod(c, k)
 
-/** 義體要留給神經壓力的空間：義體負荷總和不能超過「神經容量 − 這個數」。技術與等級提高容量，就能多裝義體。 */
-export const IMPLANT_RESERVE = 50
-export function implantRoom(c: Character) {
-  return capacityOf(c) - IMPLANT_RESERVE - c.implantLoad
+/**
+ * 義體想裝多少都可以，代價是神經餘裕：餘裕低於 40（警戒以下）時，每件任務（委託、精英委託、劇情委託）
+ * 進行中有機會神經錯亂。依階段的機率，以及錯亂時三種結果的比重：任務中斷、重傷（傷勢 70%＋舊傷）、死亡（有救命保單就被救）。
+ */
+export const PSYCHO: Record<NeuralStage, { chance: number; abort: number; maim: number; death: number }> = {
+  stable: { chance: 0, abort: 0, maim: 0, death: 0 },
+  alert: { chance: 0.1, abort: 0.6, maim: 0.3, death: 0.1 },
+  critical: { chance: 0.3, abort: 0.5, maim: 0.2, death: 0.3 },
+  lost: { chance: 0.7, abort: 0.4, maim: 0.1, death: 0.5 },
+}
+/** 失控（餘裕 ≤ 0）時，每低 1 點錯亂機率再 +1%，最高 95%。 */
+export const PSYCHO_LOST_STEP = 0.01
+export type PsychoOutcome = 'abort' | 'maim' | 'death'
+
+/** 這段神經餘裕下，一件任務錯亂的機率（total）與三種結果各自的機率。畫面與判定共用。 */
+export function psychoOdds(c: Character): { total: number; abort: number; maim: number; death: number } {
+  const m = marginOf(c)
+  const p = PSYCHO[neuralStage(m)]
+  const chance = m <= 0 ? Math.min(0.95, p.chance + -m * PSYCHO_LOST_STEP) : p.chance
+  return { total: chance, abort: chance * p.abort, maim: chance * p.maim, death: chance * p.death }
+}
+
+/** 任務進行中擲一次錯亂：null＝沒事。結果只依 seed 與當下的神經餘裕。 */
+export function rollPsycho(c: Character, seed: number): PsychoOutcome | null {
+  const r = rng(seed)()
+  const o = psychoOdds(c)
+  if (r < o.death) return 'death'
+  if (r < o.death + o.maim) return 'maim'
+  if (r < o.total) return 'abort'
+  return null
 }
 /** 在黑市賣掉背包裡的東西：售價的 40%。 */
 export const SELL_RATE = 0.4
-export const sellValue = (i: Item) => Math.round(i.price * SELL_RATE)
+export const sellValue = (i: Item) => Math.round(i.price * (i.level ?? 1) * SELL_RATE)
 
 export function equipBonus(c: Character, d: Direction) {
-  return c.equipment.filter((i) => i.direction === d).reduce((s, i) => s + i.bonus, 0)
+  return c.equipment.filter((i) => i.direction === d).reduce((s, i) => s + i.bonus * itemMult(i), 0)
 }
 /** 名聲卡給這個方向的加成（bonus 成功率／致命扣減，reward 報酬）。 */
 function perkDir(c: Character, d: Direction, k: 'bonus' | 'reward') {
@@ -233,13 +274,15 @@ export interface Character {
   picks: Pick[]
   /** 主角外觀：a＝女主角 A（預設）、b＝男主角 B。只影響圖。 */
   look?: 'a' | 'b'
+  /** 舊傷：重傷生還或被救命保單救回時扣掉的屬性點數（已經從 attrs 扣掉，這裡只記來由，給畫面看）。 */
+  scars?: Partial<Record<Attr, number>>
 }
 
 /**
  * 三選一。名聲卡只存 seed，選項在要挑的時候用 perkOptions 算（同一個 seed、同一組卡永遠得到同樣三張，
  * 前一次挑完而滿級的卡就不會再出現）。戰利品在掉落時就抽好三件。
  */
-export type Pick = { kind: 'perk'; level: number; seed: number } | { kind: 'item'; from: string; options: Item[] }
+export type Pick = { kind: 'perk'; level: number; seed: number } | { kind: 'item'; from: string; options: Item[]; equip?: boolean }
 
 // ---------- 傷勢與治療 ----------
 
@@ -301,18 +344,36 @@ export function perkTally(c: Character): Record<Style, number> {
  * 名聲卡三選一的選項：排除已滿級的卡；已經拿過的流派權重 ×2、稀有卡 ×0.4。
  * 可選的不到三張時用保底卡補。
  */
+/** 流派越投入越容易抽到：每張 +0.5 倍，最多 ×3（4 張以上）。 */
+export const styleWeight = (count: number) => 1 + 0.5 * Math.min(count, 4)
+
 export function perkOptions(c: Character, seed: number): string[] {
   const r = rng(seed)
   const tally = perkTally(c)
   const pool = PERK_IDS.filter((id) => (c.perks[id] ?? 0) < PERKS[id].max).map((id) => {
     const p = PERKS[id]
-    return { id, w: (p.rare ? 0.4 : 1) * (p.style !== 'any' && tally[p.style] > 0 ? 2 : 1) }
+    return { id, w: (p.rare ? 0.4 : 1) * (p.style === 'any' ? 1 : styleWeight(tally[p.style])) }
   })
+  const draw = (from: typeof pool) => {
+    let x = r() * from.reduce((s, p) => s + p.w, 0)
+    const pick = from[Math.max(0, from.findIndex((p) => (x -= p.w) < 0))]
+    pool.splice(pool.indexOf(pick), 1)
+    return pick.id
+  }
   const out: string[] = []
-  while (out.length < 3 && pool.length) {
-    let x = r() * pool.reduce((s, p) => s + p.w, 0)
-    const i = Math.max(0, pool.findIndex((p) => (x -= p.w) < 0))
-    out.push(pool.splice(i, 1)[0].id)
+  while (out.length < 3 && pool.length) out.push(draw(pool))
+  // 保底：主流派（張數最多、至少 2 張）每組至少一張；同時至少一張別的，留轉型的路
+  const top = STYLES.reduce((a, b) => (tally[b] > tally[a] ? b : a))
+  if (tally[top] >= 2 && out.length === 3) {
+    const isTop = (id: string) => PERKS[id].style === top
+    const swap = (want: boolean) => {
+      const from = pool.filter((p) => isTop(p.id) === want)
+      if (!from.length) return
+      const i = out.map(isTop).lastIndexOf(!want)
+      out[i] = draw(from)
+    }
+    if (!out.some(isTop)) swap(true)
+    else if (out.every(isTop)) swap(false)
   }
   for (const id of FALLBACK_PERKS) if (out.length < 3) out.push(id)
   return out
@@ -364,6 +425,7 @@ export interface DangerOption {
 export type DangerOutcome =
   | { kind: 'safe'; reason: string }
   | { kind: 'survived'; reason: string }
+  | { kind: 'maimed'; reason: string }
   | { kind: 'rescued'; reason: string }
   | { kind: 'rescued_system'; reason: string }
   | { kind: 'dead'; reason: string }
@@ -372,16 +434,58 @@ export type DangerOutcome =
  * 玩家確認之後一次判定：結果只依 seed 與當下快照，重整不重抽。
  * 受致命傷時有救命保單就被救（保單由呼叫端扣掉）；systemFault 為真時（程式／部署錯誤），改為免費搶救並留下紀錄。
  */
-export function resolveDanger(c: Character, opt: DangerOption, seed: number, systemFault = false): DangerOutcome {
-  if (!opt.lethal) return { kind: 'safe', reason: '你選擇不冒險，沒有生命危險。' }
-  const roll = rng(seed)
+/** 致命機率 0～0.95：選項基準＋傷勢／4＋神經負荷（警戒 5%、過載 12%）。畫面顯示與判定都用這個。 */
+export function lethalChance(c: Character, opt: DangerOption): number {
+  if (!opt.lethal) return 0
   const stage = neuralStage(marginOf(c))
   const stagePenalty = stage === 'stable' ? 0 : stage === 'alert' ? 0.05 : 0.12
-  const p = Math.min(0.95, opt.lethalBase + c.injury / 400 + stagePenalty)
-  if (roll() >= p) return { kind: 'survived', reason: '你撐過去了。' }
+  return Math.min(0.95, opt.lethalBase + c.injury / 400 + stagePenalty)
+}
+
+/** 機率顯示成整數百分比。 */
+export const pct = (p: number) => `${Math.round(p * 100)}%`
+
+/** 出事（lethalChance）裡有多少是致命傷；其餘是重傷生還：活著、拿得到報酬，但傷勢至少 70% 並留下舊傷。 */
+export const DEATH_SHARE = 0.7
+
+/**
+ * 風險倍數：危險選項的「基準＋做法修正－裝備與卡牌加成」整段乘這個（下限 2%）。
+ * 準備的效果跟著放大：帶對方向的裝備省下的機率也是 1.5 倍。冒險撐過去的名聲另有加成（RISKY_FAME_MULT）。
+ */
+export const RISK_SCALE = 1.5
+/** 不靠器材、屬性的冒險選項撐過去（含重傷生還）時，名聲的倍數。 */
+export const RISKY_FAME_MULT = 1.5
+/** 危險選項套上修正後的基準：整段乘 RISK_SCALE，夾在 2%～95%。 */
+export const scaledRisk = (raw: number) => Math.min(0.95, Math.max(0.02, raw * RISK_SCALE))
+
+/** 冒險選項的兩種壞結果：死亡（有救命保單就被救）與重傷生還。畫面顯示與 resolveDanger 都用這個。 */
+export function dangerOdds(c: Character, opt: DangerOption): { death: number; maim: number } {
+  const p = lethalChance(c, opt)
+  return { death: p * DEATH_SHARE, maim: p * (1 - DEATH_SHARE) }
+}
+
+/** 舊傷扣哪個屬性：依那次行動的路線（武力傷身體、駭入燒腦、潛行傷反應）。 */
+export const SCAR_ATTR: Record<Direction, Attr> = { force: 'body', hack: 'int', stealth: 'reflex' }
+
+/** 留下一道舊傷：該屬性 −1（最低 1），記在 scars。直接改 c。 */
+export function addScar(c: Character, dir: Direction): Attr | undefined {
+  const a = SCAR_ATTR[dir]
+  if (c.attrs[a] <= 1) return undefined
+  c.attrs = { ...c.attrs, [a]: c.attrs[a] - 1 }
+  c.scars = { ...c.scars, [a]: (c.scars?.[a] ?? 0) + 1 }
+  return a
+}
+
+export function resolveDanger(c: Character, opt: DangerOption, seed: number, systemFault = false): DangerOutcome {
+  if (!opt.lethal) return { kind: 'safe', reason: '你選擇不冒險，沒有生命危險。' }
+  const roll = rng(seed)()
+  const { death, maim } = dangerOdds(c, opt)
+  if (roll >= death + maim) return { kind: 'survived', reason: '你撐過去了。' }
+  if (roll >= death) return { kind: 'maimed', reason: `你撐過去了，但受了重傷（當時重傷機率 ${pct(maim)}），留下一道舊傷。` }
   if (systemFault) return { kind: 'rescued_system', reason: '系統錯誤造成的致命結果：武裝醫療隊免費搶救，已記錄在生涯中。' }
-  if (c.lifelines <= 0) return { kind: 'dead', reason: '受了致命傷，而你身上沒有救命保單。' }
-  return { kind: 'rescued', reason: '受了致命傷。救命保單觸發，武裝醫療隊把你拖上了飛行器（保單用掉了）。' }
+  if (c.lifelines <= 0)
+    return { kind: 'dead', reason: `受了致命傷（當時死亡機率 ${pct(death)}），而你身上沒有救命保單。先去神機醫治傷、休息降壓力、帶救命保單或該方向的裝備，都能降低這個機率。` }
+  return { kind: 'rescued', reason: `受了致命傷（當時死亡機率 ${pct(death)}）。救命保單觸發，武裝醫療隊把你拖上了飛行器（保單用掉了），身上的義體被拆下來抵費用。` }
 }
 
 // ---------- 自動戰鬥（委託、精英委託、劇情委託） ----------
@@ -476,6 +580,26 @@ export function fightStats(c: Character) {
 export const hackPower = (c: Character) => c.attrs.int + statMod(c, 'jam') * 2
 /** 隱匿：沉著＋鬼影加成每點 +2。新角色 3。 */
 export const stealthPower = (c: Character) => c.attrs.cool + statMod(c, 'ghost') * 2
+
+/** 挑卡、挑道具、加屬性前後，畫面上看得到的數值變了哪些（例如「攻擊 16→19」）。 */
+export function statChanges(a: Character, b: Character): string[] {
+  const fa = fightStats(a)
+  const fb = fightStats(b)
+  const pctv = (x: number) => `${Math.round(x * 100)}%`
+  const rows: [string, number, number, (x: number) => string][] = [
+    ['最大 HP', fa.maxHp, fb.maxHp, String],
+    ['攻擊', fa.atk, fb.atk, String],
+    ['命中', fa.hit, fb.hit, pctv],
+    ['爆擊', fa.crit, fb.crit, pctv],
+    ['爆擊傷害', fa.critDmg, fb.critDmg, (x) => `×${x.toFixed(1)}`],
+    ['護甲', fa.armor, fb.armor, String],
+    ['駭入強度', hackPower(a), hackPower(b), String],
+    ['隱匿', stealthPower(a), stealthPower(b), String],
+    ['神經容量', capacityOf(a), capacityOf(b), String],
+    ...(['force', 'hack', 'stealth'] as const).map((d) => [`${DIRECTION_LABEL[d]}委託加成`, dirBonus(a, d), dirBonus(b, d), pctv] as [string, number, number, (x: number) => string]),
+  ]
+  return rows.filter(([, x, y, f]) => f(x) !== f(y)).map(([label, x, y, f]) => `${label} ${f(x)}→${f(y)}`)
+}
 
 const jamRounds = (c: Character) => 3 + Math.floor(over(c, 'int') / 2) + statMod(c, 'jam')
 const hackStress = (c: Character) => Math.max(1, 5 - Math.floor(over(c, 'int') / 2) - statMod(c, 'calm'))

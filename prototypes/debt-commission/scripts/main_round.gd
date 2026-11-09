@@ -9,6 +9,8 @@ const SETTINGS_SCRIPT: Script = preload("res://scripts/settings.gd")
 const DialogueText: Script = preload("res://scripts/dialogue_text.gd")
 const DESIGN_WIDTH: float = 1920.0
 const CSS_PX: float = DESIGN_WIDTH / 720.0
+## Why a take went cold, shown after the miss toast (keyed by the runner's round action).
+const MISS_CAUSE: Dictionary = {"timeout": "時間到", "option": "這個選項不對", "whiff": "這句沒有槽點", "qte": "時機沒抓到"}
 
 var m: DebtMain
 
@@ -323,6 +325,9 @@ func _resolve_boke_presentation(result: Dictionary, option_label: String = "", p
 			feedback = m._words("普通{rebut}！{power} +10")
 		"fail":
 			feedback = m._words("{whiff}！{life} -1") if not bool(result.get("game_over", false)) else m._words("{life}耗盡・Game Over")
+			var cause: String = str(MISS_CAUSE.get(m._dict_string(result, "action"), ""))
+			if not cause.is_empty():
+				feedback += "（%s）" % cause
 		"hidden":
 			feedback = m._words("放棄{rebut}・狀態不變")
 	if not feedback_override.is_empty():

@@ -21,6 +21,8 @@ func _run() -> void:
 	await test_tutorial_seen_guides_stay_quiet_until_replayed()
 	await test_tutorial_setting_off_shows_nothing()
 	_cleanup()
+	await test_reading_guide_on_the_first_line_read()
+	_cleanup()
 	OS.unset_environment("DEBT_TUTORIAL")
 	_finish("TUTORIAL TESTS")
 
@@ -89,6 +91,25 @@ func test_tutorial_setting_off_shows_nothing() -> void:
 	await _frames(3)
 	# Assert
 	_expect(not game._tutorial.visible, "tutorial: 教學提示 不顯示 turns every guide off")
+	game.queue_free()
+	await _frames(2)
+
+
+func test_reading_guide_on_the_first_line_read() -> void:
+	# Arrange
+	var game: Control = await _new_game()
+	# Act: read the first line without skipping
+	game._on_begin_pressed()
+	await _until(func() -> bool: return game._screen_mode == "story", "reach the first line")
+	await _frames(3)
+	# Assert
+	var guide: Control = game._tutorial
+	_expect(guide.visible and guide.tutorial_id == "reading", "tutorial: the first line read opens the reading guide (long press, swipe up)")
+	for i: int in 2:
+		var target: Control = game._tutorial_target(str(game._tutorials[2].steps[i].target))
+		_expect(target != null and target.is_visible_in_tree(), "tutorial: reading step %d has its control on screen" % [i + 1])
+		guide.get_node("%Next").emit_signal("pressed")
+	_expect(not guide.visible and "reading" in game._tutorials_seen(), "tutorial: the reading guide is seen once read")
 	game.queue_free()
 	await _frames(2)
 

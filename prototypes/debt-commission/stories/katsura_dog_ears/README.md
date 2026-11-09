@@ -7,8 +7,7 @@
 ## 可調整處
 
 - opening 節點最後的 freeze.duration：兩句間的停頓，初始 0.55 秒。
-- timing 節點 boke_round.expression：serious；lines[0].text 是獨立第二句「咖紫拉打。」。
-- timing.lines[0].slot.qte：duration=0.75、window=0.18、late_after=1.3，分別是圓環重疊時刻、容許誤差與錯過期限。
+- timing 節點（「一本正經的咖紫拉打」）是三選一 `choice`，提示「下一句」：a「咖紫拉打」→ node_3、b「這是肉球隊長的耳朵」→ node_2、c「下一句是什麼來著？」→ node_1。原本的時機吐槽（QTE 圓環）已拿掉；要不要回來由作者決定。
 - scenes/katsura.tscn 的 Art：角色取景，可在 Godot 拖曳；生成候選已設為預覽，PosePlaceholder 暫時隱藏。
 
 桂姿勢立繪已依作者的 MS Paint 鼠繪風格提示詞重繪、去背並接入；前一版保留，最新版仍待作者試看。Godot 實際畫面已檢查手勢、牌子與吐槽演出；真人手感與最終畫風仍待作者確認。神樂及銀時採畫外音，桂和伊莉莎白保留在畫面；成功播放新八漫畫吐槽。

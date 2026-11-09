@@ -1,8 +1,9 @@
 import { Cpu, Dna, Package, Plus, ShieldPlus, Sparkles, Swords } from 'lucide-react'
 import { Meter, Panel, PanelHead, Tabs } from '../components/ui'
 import { useState, type ReactNode } from 'react'
-import { type useGame, gearBusy } from '../game/state'
-import { itemDesc, itemStyle } from '../content/items'
+import { type useGame, gearBusy, reduce } from '../game/state'
+import { notify } from '../components/notice'
+import { itemDesc, itemLock, itemStyle } from '../content/items'
 import { type Look, hasLook } from '../components/CityStrip'
 import {
   ATTRS,
@@ -10,7 +11,6 @@ import {
   ATTR_LABEL,
   ATTR_MAX,
   DIRECTION_LABEL,
-  IMPLANT_RESERVE,
   type Item,
   NEURAL_STAGE_LABEL,
   SEVERE_INJURY,
@@ -22,12 +22,14 @@ import {
   capacityOf,
   fameToNext,
   fightStats,
-  implantRoom,
   injuryLabel,
+  itemMult,
   marginOf,
   neuralStage,
+  psychoOdds,
   perkTally,
   sellValue,
+  statChanges,
   xpToNext,
 } from '../rules/core'
 import { PERKS, fameTitle } from '../rules/perks'
@@ -38,7 +40,6 @@ export function CharacterScreen({ game }: { game: ReturnType<typeof useGame> }) 
   const { g, act } = game
   const c = g.character
   const [tab, setTab] = useState<'status' | 'gear' | 'attrs' | 'style'>('status')
-  const room = implantRoom(c)
   const busy = gearBusy(g)
   const cap = capacityOf(c)
   const margin = marginOf(c)
@@ -128,6 +129,7 @@ export function CharacterScreen({ game }: { game: ReturnType<typeof useGame> }) 
                 <div className="flex items-baseline gap-2">
                   <b className="text-fg-list">{ATTR_LABEL[a]}</b>
                   <span className="tech text-[18px] text-heading">{c.attrs[a]}</span>
+                  {c.scars?.[a] ? <span className="text-[13px] font-bold text-red">舊傷 −{c.scars[a]}</span> : null}
                 </div>
                 <div className="text-[13px] text-muted">{ATTR_EFFECT[a]}</div>
               </div>
@@ -135,7 +137,12 @@ export function CharacterScreen({ game }: { game: ReturnType<typeof useGame> }) 
                 <button
                   aria-label={`提升${ATTR_LABEL[a]}`}
                   disabled={c.attrs[a] >= ATTR_MAX}
-                  onClick={() => act({ t: 'raiseAttr', attr: a })}
+                  onClick={() => {
+                    const next = reduce(g, { t: 'raiseAttr', attr: a }).character
+                    act({ t: 'raiseAttr', attr: a })
+                    const lines = statChanges(c, next)
+                    notify({ title: `${ATTR_LABEL[a]} ${c.attrs[a]}→${next.attrs[a]}`, lines })
+                  }}
                   className="flex size-11 shrink-0 items-center justify-center border border-cyan text-cyan disabled:opacity-40"
                 >
                   <Plus size={18} />
@@ -184,13 +191,13 @@ export function CharacterScreen({ game }: { game: ReturnType<typeof useGame> }) 
               </div>
             )
           })}
-          <p className="m-0 px-3 pt-2 text-[13px] text-muted">卡牌只屬於這段生涯，死亡或退休後不會帶走。已經拿過的流派，之後比較常出現。</p>
+          <p className="m-0 px-3 pt-2 text-[13px] text-muted">卡牌只屬於這段生涯，死亡或退休後不會帶走。拿得越多的流派越常出現；主流派有 2 張以上後，每次三選一都至少有一張，也至少有一張別的。</p>
         </Panel>
       )}
 
       {tab === 'gear' && (
         <Panel innerClass="pb-2">
-          <PanelHead icon={<Package size={16} />} title="裝備" right={<span className={`text-[13px] ${room < 0 ? 'text-red' : 'text-muted'}`}>義體空間剩 {room}</span>} />
+          <PanelHead icon={<Package size={16} />} title="裝備" right={<span className={`text-[13px] ${stage === 'stable' ? 'text-muted' : 'text-red'}`}>神經餘裕 {margin}</span>} />
           {(['weapon', 'deck', 'implant'] as Slot[]).flatMap((slot) => {
             const worn = c.equipment.filter((i) => i.slot === slot)
             if (!worn.length) return [<ItemRow key={slot} slot={slot} />]
@@ -204,17 +211,20 @@ export function CharacterScreen({ game }: { game: ReturnType<typeof useGame> }) 
           })}
           {c.stash.length > 0 && <div className="px-3 pt-2 text-[13px] font-bold text-heading">背包</div>}
           {c.stash.map((it) => {
-            const noRoom = it.slot === 'implant' && room < it.load
+            const lock = itemLock(c, it)
+            const after = it.slot === 'implant' ? { ...c, implantLoad: c.implantLoad + it.load } : c
+            const risk = psychoOdds(after).total
+            const note = lock ?? (it.slot === 'implant' ? `裝上後神經餘裕 ${marginOf(after)}${risk ? `・任務中錯亂 ${Math.round(risk * 100)}%` : ''}` : undefined)
             return (
-              <ItemRow key={it.id} slot={it.slot} item={it} note={noRoom ? `義體空間不夠（需要 ${it.load}）` : undefined}>
-                <SmallButton disabled={busy || noRoom} onClick={() => act({ t: 'equip', itemId: it.id })}>
+              <ItemRow key={it.id} slot={it.slot} item={it} note={note} bad={!!lock || risk > 0}>
+                <SmallButton disabled={busy || !!lock} onClick={() => act({ t: 'equip', itemId: it.id })}>
                   裝上
                 </SmallButton>
               </ItemRow>
             )
           })}
           <p className="m-0 px-3 pt-2 text-[13px] text-muted">
-            義體空間＝神經容量 {cap} − 保留 {IMPLANT_RESERVE} − 已裝負荷 {c.implantLoad}。背包和身上的裝備都可以在黑市賣掉（售價 40%，義體當場拆）。{busy ? '節點進行中不能換裝。' : ''}
+            義體想裝多少都可以：神經餘裕＝神經容量 {cap} − 義體負荷 {c.implantLoad} − 神經壓力 {c.stress}。餘裕低於 40，每件任務有機會神經錯亂（任務中斷、重傷或死亡，越低越常發生）。重武器與高階義體有屬性門檻。背包和身上的裝備都可以在黑市賣掉（售價 40%，義體當場拆）。{busy ? '節點進行中不能換裝。' : ''}
           </p>
         </Panel>
       )}
@@ -230,7 +240,7 @@ function SmallButton({ children, disabled, onClick }: { children: ReactNode; dis
   )
 }
 
-function ItemRow({ slot, item, note, children }: { slot: Slot; item?: Item; note?: string; children?: ReactNode }) {
+function ItemRow({ slot, item, note, bad = true, children }: { slot: Slot; item?: Item; note?: string; bad?: boolean; children?: ReactNode }) {
   return (
     <div className="flex items-center gap-2 border-b border-line/40 px-3 py-2">
       {item && <ItemIcon item={item} />}
@@ -241,15 +251,18 @@ function ItemRow({ slot, item, note, children }: { slot: Slot; item?: Item; note
         </div>
         {item ? (
           <>
-            <b className="text-fg-list">{item.name}</b>
+            <b className="text-fg-list">
+              {item.name}
+              {(item.level ?? 1) > 1 && <span className="tech ml-1 text-heading">Lv.{item.level}（效果 ×{itemMult(item)}）</span>}
+            </b>
             <div className="text-[13px] text-cyan">
-              {[itemDesc(item), item.bonus ? `${DIRECTION_LABEL[item.direction]}委託 +${Math.round(item.bonus * 100)}%` : '', item.load ? `負荷 ${item.load}` : '']
+              {[itemDesc(item), item.bonus ? `${DIRECTION_LABEL[item.direction]}委託 +${Math.round(item.bonus * itemMult(item) * 100)}%` : '', item.load ? `負荷 ${item.load}` : '']
                 .filter(Boolean)
                 .filter((t, i, xs) => xs.indexOf(t) === i)
                 .join('・')}
             </div>
             <div className="text-[13px] text-muted">黑市收購 ¢{sellValue(item)}</div>
-            {note && <div className="text-[13px] text-warning">✖ {note}</div>}
+            {note && <div className={`text-[13px] ${bad ? 'text-warning' : 'text-muted'}`}>{bad ? '✖ ' : ''}{note}</div>}
           </>
         ) : (
           <div className="text-muted">— 空 —</div>

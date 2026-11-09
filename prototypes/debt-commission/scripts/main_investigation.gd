@@ -10,8 +10,11 @@ const DEFAULT_HOTSPOT_SIZE: Array = [0.12, 0.12]
 const SEARCH_CAST_ALPHA: float = 0.55
 const DESIGN_WIDTH: float = 1920.0
 const CSS_PX: float = DESIGN_WIDTH / 720.0
+## Taps in a row that hit nothing on the picture before the toast turns into a hint.
+const MISS_HINT_AFTER: int = 3
 
 var m: DebtMain
+var _empty_taps: int = 0
 
 
 func _init(main: DebtMain) -> void:
@@ -290,7 +293,17 @@ func _tap_investigation(at: Vector2) -> void:
 		definitions[hotspot_id] = _hotspot_data(hotspot_id)
 	var tapped := InvestigationPicker.pick(at, m._hotspots, definitions, m._sprites, 48.0 * CSS_PX * m._panel_scale)
 	if not tapped.is_empty():
+		_empty_taps = 0
 		_collect_hotspot(tapped)
+		return
+	# Nothing there: say so, and after a few misses in a row say how many spots are left.
+	_empty_taps += 1
+	var left: int = m._hotspots.values().filter(func(spot: Control) -> bool: return not bool(spot.get("found"))).size()
+	if _empty_taps >= MISS_HINT_AFTER and left > 0:
+		_empty_taps = 0
+		m._show_toast("提示：還有 %d 個地方沒查過，人物和顯眼的東西都點點看" % left)
+	else:
+		m._show_toast("這裡沒什麼特別的")
 
 
 ## The runner's entry for a hotspot of the current search ({} when there is none).

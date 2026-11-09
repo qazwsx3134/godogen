@@ -1,5 +1,5 @@
 // 遊戲元件：依 ui-system.md v0.4（reference.JPG 論壇終端風格）
-import { type ReactNode, useState } from 'react'
+import { type ReactNode, useEffect, useState } from 'react'
 import { AlertTriangle, type LucideIcon } from 'lucide-react'
 import { FIXERS } from '../content/data'
 
@@ -121,6 +121,28 @@ export function ActionButton({
       {disabled && reason && <p className="mt-1 mb-0 text-[13px] text-muted">✖ {reason}</p>}
     </div>
   )
+}
+
+/**
+ * 不可逆的操作按兩次：第一次只「上膛」（按鈕改成確認文字），3 秒內再按同一顆才執行。
+ * armed 是目前上膛的那顆按鈕的 key。
+ */
+export function useTwoStep(ms = 3000) {
+  const [armed, setArmed] = useState<string | null>(null)
+  useEffect(() => {
+    if (!armed) return
+    const id = setTimeout(() => setArmed(null), ms)
+    return () => clearTimeout(id)
+  }, [armed, ms])
+  return {
+    armed,
+    press(key: string, run: () => void) {
+      if (armed === key) {
+        setArmed(null)
+        run()
+      } else setArmed(key)
+    },
+  }
 }
 
 /** 論壇頁籤風格的分段切換。 */

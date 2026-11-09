@@ -1,6 +1,6 @@
 extends "res://addons/proto_kit/test_kit.gd"
 ## Phase 5 chapter flow on a two-chapter fixture registry: the `result` step shows the chapter
-## result (numbers, grade from the glasses left, each Game Over one grade lower, the grade's
+## result (numbers, grade from the glasses left, S only with 60% perfect, each Game Over one grade lower, the grade's
 ## closing line), glasses carry across rounds, the best grade is kept, clearing a chapter unlocks
 ## the next, 下一章 starts it, and 結局收集 lists the endings reached.
 
@@ -19,6 +19,10 @@ func _run() -> void:
 	_cleanup()
 	for sample: Array in [[5, 0, "S"], [4, 0, "A"], [3, 0, "B"], [2, 0, "B"], [1, 0, "C"], [5, 1, "A"], [4, 2, "C"], [1, 3, "C"]]:
 		_expect(Runner.grade_for(sample[0], sample[1]) == sample[2], "grade for %d glasses, %d Game Overs is %s" % sample)
+	# S needs 60% of the caught slots perfect; all-weak tops out at A.
+	for sample: Array in [[5, 0, 3, 5, "S"], [5, 0, 2, 5, "A"], [5, 0, 0, 4, "A"], [4, 0, 0, 4, "A"], [5, 1, 0, 4, "B"]]:
+		_expect(Runner.grade_for(sample[0], sample[1], sample[2], sample[3]) == sample[4],
+			"grade for %d glasses, %d Game Overs, %d/%d perfect is %s" % sample)
 
 	var game: Control = _new_game()
 	await _frames(3)

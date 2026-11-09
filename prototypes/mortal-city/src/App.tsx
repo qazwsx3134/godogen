@@ -2,14 +2,15 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { type LucideIcon, Map as MapIcon, MessageSquare, Volume2, VolumeX, ScrollText, ShieldAlert, ShieldPlus, Sparkles, User } from 'lucide-react'
 import { Emblem, NeonIcon, Panel } from './components/ui'
 import { nodeBusy, useGame } from './game/state'
-import { NEURAL_STAGE_LABEL, SEVERE_INJURY, marginOf, neuralStage } from './rules/core'
+import { NEURAL_STAGE_LABEL, SEVERE_INJURY, marginOf, neuralStage, pct, psychoOdds } from './rules/core'
 import { RunScreen } from './screens/Run'
 import { CharacterScreen } from './screens/Character'
 import { LogScreen } from './screens/Log'
-import { Comms } from './screens/Comms'
+import { COMMS_COUNT, Comms } from './screens/Comms'
 import { PickDialog } from './screens/Pick'
 import { CompleteDialog } from './screens/Complete'
 import { GlitchFlash, NewsTicker } from './components/Fx'
+import { Notices } from './components/notice'
 import { newsFor } from './content/news'
 import { onSfxChange, setSfx, sfx, sfxEnabled, unlock } from './components/sfx'
 
@@ -26,6 +27,8 @@ export default function App() {
   const { g } = game
   const [route, setRoute] = useState<Route>('run')
   const [comms, setComms] = useState(false)
+  // 通訊的紅色數字：這次開啟頁面後還沒點開過才顯示
+  const [commsRead, setCommsRead] = useState(false)
   const c = g.character
   const stage = neuralStage(marginOf(c))
   const claiming = c.alive && !!g.run.claim
@@ -91,7 +94,10 @@ export default function App() {
               </span>
               <span className="tech text-heading">LV.{c.level}</span>
               <span className="tech text-warning">名聲 {c.fame.level}</span>
-              <span className={stage === 'stable' ? 'text-muted' : 'font-bold text-warning'}>神經 {NEURAL_STAGE_LABEL[stage]}</span>
+              <span className={stage === 'stable' ? 'text-muted' : 'font-bold text-warning'}>
+                神經 {NEURAL_STAGE_LABEL[stage]}
+                {stage !== 'stable' && ` ${marginOf(c)}・錯亂 ${pct(psychoOdds(c).total)}`}
+              </span>
               <span className={c.heat ? 'font-bold text-red' : 'text-muted'}>
                 通緝 {'★'.repeat(c.heat) || '—'}
               </span>
@@ -132,12 +138,15 @@ export default function App() {
 
         {/* 通訊入口（收合） */}
         <button
-          onClick={() => setComms(true)}
+          onClick={() => {
+            setComms(true)
+            setCommsRead(true)
+          }}
           className="mx-3 mb-2 flex min-h-11 shrink-0 items-center gap-2 border border-line/70 bg-surface px-3 text-[14px] text-fg-list"
         >
           <MessageSquare size={16} className="text-cyan" />
           <span className="flex-1 text-left">通訊・魔都 FM 104.9</span>
-          <span className="tech rounded-sm bg-red px-1 text-[12px] leading-5 text-bg">3</span>
+          {!commsRead && <span className="tech rounded-sm bg-red px-1 text-[12px] leading-5 text-bg">{COMMS_COUNT}</span>}
           <span className="text-muted">展開</span>
         </button>
 
@@ -156,11 +165,17 @@ export default function App() {
                 {on && <span className="absolute inset-x-2 top-0 h-0.5 bg-red" />}
                 <NeonIcon icon={Icon} size={20} on={on} />
                 {n.label}
+                {n.id === 'char' && c.alive && c.attrPoints > 0 && (
+                  <span className="tech absolute top-1.5 right-[calc(50%-22px)] rounded-sm bg-red px-1 text-[11px] leading-4 text-bg" aria-label={`${c.attrPoints} 點屬性可分配`}>
+                    {c.attrPoints}
+                  </span>
+                )}
               </button>
             )
           })}
         </nav>
 
+        <Notices />
         {comms && <Comms onClose={() => setComms(false)} />}
         {claiming && <CompleteDialog game={game} />}
         {picking && <PickDialog game={game} />}

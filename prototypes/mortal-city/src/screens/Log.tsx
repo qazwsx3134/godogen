@@ -3,7 +3,7 @@ import { BookOpen, BookText, FlaskConical, Grid3x3, RotateCcw, ScrollText, Skull
 import { PixelGallery } from '../components/PixelGallery'
 import { StoryReview } from '../components/StoryReview'
 import { GLOSSARY } from '../content/glossary'
-import { ActionButton, Panel, PanelHead } from '../components/ui'
+import { ActionButton, Panel, PanelHead, useTwoStep } from '../components/ui'
 import type { useGame } from '../game/state'
 import type { LogKind } from '../rules/core'
 
@@ -23,6 +23,7 @@ export function LogScreen({ game }: { game: ReturnType<typeof useGame> }) {
   const { g, act } = game
   const [gallery, setGallery] = useState(false)
   const [story, setStory] = useState(false)
+  const confirm = useTwoStep()
   const legends = [...g.meta.legends].reverse()
   return (
     <div className="space-y-3">
@@ -84,8 +85,8 @@ export function LogScreen({ game }: { game: ReturnType<typeof useGame> }) {
         <ActionButton onClick={() => setGallery(true)}>
           <Grid3x3 size={16} /> 像素元件圖鑑
         </ActionButton>
-        <ActionButton onClick={() => act({ t: 'reset' })}>
-          <RotateCcw size={16} /> 清除全部存檔重來（含傳奇檔案）
+        <ActionButton tone={confirm.armed === 'reset' ? 'danger' : 'outline'} onClick={() => confirm.press('reset', () => act({ t: 'reset' }))}>
+          <RotateCcw size={16} /> {confirm.armed === 'reset' ? '再按一次：傳奇檔案也會一起刪掉' : '清除全部存檔重來（含傳奇檔案）'}
         </ActionButton>
       </Panel>
       {gallery && <PixelGallery onClose={() => setGallery(false)} />}

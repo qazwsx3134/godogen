@@ -6,13 +6,13 @@
 
 依「影響 × 成本」排序，細節、證據與驗證方式見 [reviews/2026-11-09-game-critic.md](reviews/2026-11-09-game-critic.md) 第 4 節。分數：心流 4、隨機 6、Loop 3、回饋 6、八角 5、前期驗證 4、設計文件 5、QA 6。
 
-- [ ] 1. 在 README 寫下玩法假設、可判定的通過條件與結論日期（半天內，影響最大）
-- [ ] 2. 把可玩的核心 loop（第一章）放回正式內容：目前只在 `tests/fixtures/`，匯出會排除
-- [ ] 3. 寫最小 bot，量「不操作／隨機選／知道答案」三種玩家的數字
+- [ ] 1. 在 README 寫下玩法假設、可判定的通過條件與結論日期（半天內，影響最大）——2026-11-09 草稿已寫（README「要驗證的玩法假設」），`project.yaml` stage 改 Pre-Production；門檻、結論日期、作品／工具誰優先待作者定
+- [ ] 2. 把可玩的核心 loop（第一章）放回正式內容：目前只在 `tests/fixtures/`，匯出會排除——與 2026-11-08 使用者要求「清掉故事只留 dog ear」衝突，待使用者決定
+- [x] 3. 寫最小 bot，量「不操作／隨機選／知道答案」三種玩家的數字——`tools/bot_players.gd`
 - [ ] 4. 真人試玩 5 人（至少 3 人用手機），照 `docs/SHORT-STORY-ACCEPTANCE.md`；依賴 1、2
-- [ ] 5. 讓 perfect 有價值、weak 不再是免費安全牌（全選 weak 也拿 S：`tests/test_chapter1.gd:93`）
-- [ ] 6. 補回饋空格
-- [ ] 7. 修過時的文件
+- [x] 5. 讓 perfect 有價值、weak 不再是免費安全牌（全選 weak 也拿 S：`tests/test_chapter1.gd:93`）——S 需要 PERFECT ≥ 60%
+- [x] 6. 補回饋空格
+- [x] 7. 修過時的文件
 - [ ] 8. 讓選錯有思考成本（需作者決定）
 - [ ] 9. 重匯 Web，冒煙測試改指向現行內容
 - [ ] 10. 實機量 QTE 與手感（需裝置）
@@ -22,9 +22,9 @@
 - 2026-10-23：介面只留「銀魂和紙」，另外三款（月下映畫、萬事屋委託簿、吐槽分鏡）已刪除；早期比較紀錄見 [UI-REDESIGN-OPTIONS](docs/UI-REDESIGN-OPTIONS.md)。
 
 - 重新設計對話框與常用元件。先試底部滿版、半透明對話層、上緣分隔線，再與目前畫面比較；參考：[圖一](example/image.jpg)、[圖二](example/螢幕擷取畫面%202026-09-24%20021146.jpg)、[圖三](example/螢幕擷取畫面%202026-09-24%20021221.jpg)。
-- ~~試用 shader 做事件或場景轉換~~：2026-11-04 做了筆刷、墨暈、故障三種換背景轉場（`shaders/scene_transition.gdshader`，`bg` 的 `transition`；`?sample=transitions` 示範）。第一章還沒套用，等作者看過試片選定。ASCII 字元畫風格沒做（要另備字形貼圖）。
+- ~~試用 shader 做事件或場景轉換~~：2026-11-04 做了筆刷、墨暈、故障三種換背景轉場（`shaders/scene_transition.gdshader`，`bg` 的 `transition`；示範在功能展示的「畫面：轉場與演出」，原本的 `?sample=transitions` 已移進 `tests/fixtures/`）。第一章還沒套用，等作者看過試片選定。ASCII 字元畫風格沒做（要另備字形貼圖）。
 
-[底部對話層與素材 Web 試版比較](docs/UI-TRIAL.md)保留早期試作截圖；介面是作者已確認的銀魂和紙，仍待 Android Chrome 與 iOS Safari 實機試玩。shader 換背景轉場已有試片（`?sample=transitions`），第一章待作者選定；優先順序與驗收方式見[進度紀錄](../../docs/story-telling-game/STATUS.md)。
+[底部對話層與素材 Web 試版比較](docs/UI-TRIAL.md)保留早期試作截圖；介面是作者已確認的銀魂和紙，仍待 Android Chrome 與 iOS Safari 實機試玩。shader 換背景轉場已有示範（功能展示的「畫面：轉場與演出」），第一章待作者選定；優先順序與驗收方式見[進度紀錄](../../docs/story-telling-game/STATUS.md)。
 
 對話框要照著圖做銀魂風：「銀魂和紙」以 [v2 Option A](../../docs/story-telling-game/v2/story-telling-ui2.jpeg) 為基準。2026-10-06 修正紙框比例、跨框雲形名字牌、明體字型、青海波與櫻花，底列補齊 LOG／AUTO／SKIP／MENU 的圖示與實際功能；[原圖與實際對話並排](docs/gintama-reference-comparison.png)、[驗證紀錄](docs/UI-REDESIGN-OPTIONS.md#第四款還原修正2026-10-06)。追加修正波紋溢出：使用原圖經 imagegen 去背／清字的透明 PNG，波紋與櫻花合在紙框底圖中，保留四角並加裁切限制。作者已確認可採用；後續對話框與新按鈕沿用此樣式。新安裝預設為銀魂和紙，既有風格偏好仍保留。
 

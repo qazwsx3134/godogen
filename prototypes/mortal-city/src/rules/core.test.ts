@@ -16,9 +16,13 @@ import {
   neuralCapacity,
   neuralStage,
   perkOptions,
+  styleWeight,
   perkReward,
+  dangerOdds,
+  lethalChance,
   resolveDanger,
   resolveFight,
+  rng,
   STYLES,
   tacticsFor,
 } from './core'
@@ -91,6 +95,29 @@ describe('resolveDanger: the lifeline saves you once', () => {
   it('same seed gives the same outcome', () => {
     const c = char({ injury: 30 })
     expect(resolveDanger(c, { ...opt, lethalBase: 0.4 }, 42)).toEqual(resolveDanger(c, { ...opt, lethalBase: 0.4 }, 42))
+  })
+})
+
+describe('lethalChance: what the screen shows is what resolveDanger rolls against', () => {
+  const opt = { id: 'go', label: '冒險', lethal: true, lethalBase: 0.2, survivalWindowMin: 3 }
+  it('adds injury/4 and the neural penalty, capped at 95%', () => {
+    expect(lethalChance(char(), opt)).toBeCloseTo(0.2)
+    expect(lethalChance(char({ injury: 40 }), opt)).toBeCloseTo(0.3)
+    expect(lethalChance(char({ stress: 70 }), opt)).toBeCloseTo(0.25) // 餘裕 20：警戒
+    expect(lethalChance(char({ stress: 80 }), opt)).toBeCloseTo(0.32) // 餘裕 10：過載
+    expect(lethalChance(char({ injury: 100 }), { ...opt, lethalBase: 0.9 })).toBe(0.95)
+    expect(lethalChance(char(), { ...opt, lethal: false })).toBe(0)
+  })
+  it('the roll lands in the shown bands: below death dies, then maimed, then survived', () => {
+    for (const over of [{}, { injury: 40 }, { stress: 70 }, { injury: 60, stress: 80 }]) {
+      const c = char(over)
+      const { death, maim } = dangerOdds(c, opt)
+      expect(death + maim).toBeCloseTo(lethalChance(c, opt))
+      for (let seed = 1; seed <= 200; seed++) {
+        const r = rng(seed)()
+        expect(resolveDanger(c, opt, seed).kind).toBe(r < death ? 'dead' : r < death + maim ? 'maimed' : 'survived')
+      }
+    }
   })
 })
 
@@ -183,12 +210,32 @@ describe('fame cards: pick 1 of 3 on each fame level', () => {
     expect(perkOptions(char({ perks: oneLeft }), 42)).toEqual(['kevlar', 'cash', 'stim'])
   })
 
-  it('a fresh build favours the direction you already took', () => {
-    let hack = 0
-    for (let i = 0; i < 300; i++) hack += perkOptions(char({ perks: { iceApprentice: 1 } }), i).filter((id) => PERKS[id].style === 'netrunner').length
-    let base = 0
-    for (let i = 0; i < 300; i++) base += perkOptions(char(), i).filter((id) => PERKS[id].style === 'netrunner').length
-    expect(hack).toBeGreaterThan(base * 1.3)
+  it('the deeper you go into a style, the more often its cards show up (capped)', () => {
+    const net = PERK_IDS.filter((id) => PERKS[id].style === 'netrunner' && !PERKS[id].rare)
+    const count = (perks: Record<string, number>) => {
+      let n = 0
+      for (let i = 0; i < 300; i++) n += perkOptions(char({ perks }), i).filter((id) => PERKS[id].style === 'netrunner').length
+      return n
+    }
+    const base = count({})
+    const one = count({ [net[0]]: 1 })
+    const four = count(Object.fromEntries(net.slice(0, 4).map((id) => [id, 1])))
+    expect(one).toBeGreaterThan(base * 1.15)
+    expect(four).toBeGreaterThan(one)
+    expect(styleWeight(1)).toBe(1.5)
+    expect(styleWeight(4)).toBe(3)
+    expect(styleWeight(9)).toBe(3)
+  })
+
+  it('once a style has 2+ cards, every pick has at least one of it and at least one other card', () => {
+    const net = PERK_IDS.filter((id) => PERKS[id].style === 'netrunner' && !PERKS[id].rare)
+    const c = char({ perks: { [net[0]]: 1, [net[1]]: 1 } })
+    for (let i = 0; i < 300; i++) {
+      const styles = perkOptions(c, i).map((id) => PERKS[id].style)
+      expect(styles).toContain('netrunner')
+      expect(styles.some((s) => s !== 'netrunner')).toBe(true)
+      expect(new Set(perkOptions(c, i)).size).toBe(3)
+    }
   })
 
   it('cards change combat by fixed amounts only: no cards = same fight; ghost and feedback help their tactic', () => {

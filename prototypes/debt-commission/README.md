@@ -12,6 +12,16 @@ Godot 4.7 橫向視覺小說，依 [V1 Roadmap](../../docs/story-telling-game/RO
 
 遊戲只附兩個故事：**功能展示**（`data/showcase_story.json`，預設）與作者的極短篇**《不是頭痛，是桂》**（`stories/katsura_dog_ears/`）。功能展示是故事編輯器的範本：目錄用選項分到「畫面：轉場與演出」「角色：立繪與文字」「玩法：分支、調查與吐槽」三段，每張卡片示範一組步驟（bg 的四種轉場、fade、shake／flash／freeze／cutin／placard／beam、bgm／se、立繪登場／表情／動作／明暗／退場、畫外音、心聲、文字標記、旗標與條件分支、四種漫畫吐槽、item／profile、調查、裝傻吐槽回合、結局），看完回到目錄。在編輯器打開同名卡片就看得到寫法。舊的第一章、討債、Phase 2–4、EP00 等片段已退出遊戲，只留在 `tests/fixtures/` 當測試夾具（見下方「測試夾具」）。
 
+## 要驗證的玩法假設（草稿，待作者確認）
+
+依 2026-11-09 評審建議 1 起草；通過條件的門檻、結論日期，以及「作品」與「創作者工具」誰優先（`docs/ROADMAP-COMMERCIAL.md` 開頭的決定），由作者定。
+
+- **假設**：玩家能在 8 秒內看出哪個選項才是吐槽，並因為找對槽點而覺得好笑。
+- **通過條件**（可判定）：
+  1. 機器人：不操作的玩家過不了回合，知道答案的拿 S，全選普通吐槽最多 A（`tools/bot_players.gd`；2026-11-09 第一章夾具各 1000 局：不操作 1000 局卡在第一回合、隨便選 89.5% 三次 Game Over 後放棄、全選普通 1000 局 A、知道答案 1000 局 S）。
+  2. 真人：5 人（至少 3 人用手機）照 `docs/SHORT-STORY-ACCEPTANCE.md` 試玩，至少 3 人願意再玩一章；每回合首次冷場率落在 15–35%。
+- **結論**：繼續／轉向／放棄，日期（待填）。真人試玩前 `project.yaml` 的 `stage` 先標 Pre-Production（Studio 的階段名稱沒有 Prototype）。
+
 ## 試玩與操作
 
 啟動下方的 Web 伺服器後，開啟 <http://127.0.0.1:5193/> 是功能展示；<http://127.0.0.1:5193/?sample=katsura_dog_ears> 是桂的極短篇。各用自己的本機存檔；桌機或編輯器直接執行時，在標題點故事名稱打開「章節選擇」換故事，沒選過時開清單第一個故事。
@@ -25,7 +35,8 @@ Godot 4.7 橫向視覺小說，依 [V1 Roadmap](../../docs/story-telling-game/RO
 | 流程圖 | 章節選擇右上的「流程圖」：一次看一個故事，‹ › 換故事；走過的場景方塊顯示標題、之間的線變金色，沒走過的是「？？？」；拖曳畫面移動。走過哪些節點記在 `progress.cfg` 的 `[visited]`，讀舊檔或回滾不會把看過的路線收回 |
 | 章節選擇 | 標題上的故事名稱：本篇章節依序排列，前一章結算過才開放，顯示最佳評價；「結局收集」列出每章的結局，看過的顯示名稱、沒看過的是「？？？」；試玩片段一直開放。選了就回到標題，按「開始故事」或「繼續」 |
 | 設定 | 標題或目錄裡：文字速度（慢／標準／快／瞬間）、自動播放速度、背景音樂與音效音量、字級及紙框透明度、畫面效果（減少震動、閃光、立繪與按鈕動作）、吐槽輔助（寬鬆：選詞時間 ×1.5、QTE 判定窗 ×2）、教學提示（顯示／不顯示，另有「重看教學」）與存檔備份，立刻生效並記住；目錄的「音效」開關仍可一鍵靜音 |
-| 章節結算 | 章節最後：吐槽成功／出手、PERFECT、最高連擊、冷場、隱藏裝傻、剩下的眼鏡、Game Over 次數與評價（剩 5 副 S、4 副 A、3–2 副 B、1 副 C，每次 Game Over 降一級），依評價顯示一句話；「下一章」或「回標題」 |
+| 章節結算 | 章節最後：吐槽成功／出手、PERFECT、最高連擊、冷場、隱藏裝傻、剩下的眼鏡、Game Over 次數與評價（剩 5 副 S、4 副 A、3–2 副 B、1 副 C；S 還要抓到的槽點至少 60% 是 PERFECT，全選普通吐槽最多 A；每次 Game Over 降一級），依評價顯示一句話；「下一章」或「回標題」 |
+| 冷場與調查回饋 | 冷場的提示寫出原因（時間到／這個選項不對／這句沒有槽點／時機沒抓到）；普通吐槽有自己的輕音效與短震動；調查時點到空處顯示「這裡沒什麼特別的」，連續落空 3 次改成提示還剩幾個地方沒查。第一次正常閱讀（不是快轉）時，教學會說明長按隱藏介面、往上滑看對話紀錄 |
 | 推進鈕（›／續／→） | 補完當句、翻閱長台詞，讀完後推進劇情 |
 | 選單／標題讀檔 | 選擇指定手動欄位；讀檔頁也可選自動續讀檔 |
 | 工具列 | 閱讀框下方的 LOG、AUTO、SKIP、MENU；存讀檔、吐槽素材與人物檔案收在目錄裡 |
@@ -93,7 +104,7 @@ python3 preview/start.py
 
 「素材設定 → 角色 → 身高 cm」會自動統一立繪比例，先設定桂 175、銀時 177、神樂 155。人物以頭頂到腳底計算，神樂的傘不算身高；表情沿用同一比例。留空沿用角色場景大小。繼承角色也能在作品內設定身高，存檔後重新試玩生效。舞台拖曳或左／中／右按鈕控制站位；Godot 場景控制舞台與水平取景。
 
-- 直接開某個故事：網址後面加 `?story=<id>`，例如 `?story=chapter1`（id 見 `data/stories.json`）。
+- 直接開某個故事：網址後面加 `?story=<id>`，例如 `?story=katsura_dog_ears`（id 見 `data/stories.json`）。
 - 8000 被占用就換 `--port`。遊戲試玩用的是 5193（`tools/serve_web.sh`），兩個可以同時開。
 - 多個人或多個 agent 同時跑 Godot 時，先把環境變數 `GODOT_LOCK` 設成大家約定的同一個絕對路徑，驗證會排隊不互相干擾。
 
@@ -149,37 +160,13 @@ bash tools/serve_web.sh
 ## 驗證
 
 ```bash
-# 在此 prototype 目錄執行。XDG_DATA_HOME 讓測試資料留在專案快取。
-XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_story.gd
-XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_vn_shell.gd
-XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_phase2_story.gd
-XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_phase2_ui.gd
-XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_save_slots.gd
-XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_phase3_story.gd
-XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_phase3_ui.gd
-XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_story_build.gd
-XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_story_build_parley.gd
-XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_phase4_ui.gd
-XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_story_tools.gd
-XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_round_v2.gd
-XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_super_effects.gd
-XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_phase4_rounds_story.gd
-XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_phase4_rounds_ui.gd
-XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_ui_styles.gd
-XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_stage_scene.gd
-XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_reading_feel.gd
-XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_portrait_motion.gd
-XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_portrait_staging.gd
-XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_landscape_reading.gd
-XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_investigation.gd
-XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_comedy.gd
-XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_choices.gd
-XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_credits.gd
-XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_save_transfer.gd
-XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_gallery.gd
-XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_skin.gd
-XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_search_cast.gd
-XDG_DATA_HOME="$PWD/.cache/test-data" godot --headless --path . --script res://tests/test_ep00.gd
+# 在此 prototype 目錄執行；macOS 前面加 GODOT_BIN=/Applications/Godot.app/Contents/MacOS/Godot。
+# 測試共用 user://（macOS 是 ~/Library/Application Support/debt-commission，不受 XDG_DATA_HOME 影響），要依序跑，不要同時開兩組。
+bash ../godot-kit/tools/run_tests.sh .                          # 完整：tests/ 每個 test_*.gd（目前 57 個）
+bash ../godot-kit/tools/run_tests.sh . chapter_flow chapter1    # 只跑指定幾組（名稱去掉 test_ 與 .gd）
+
+# 三種機器人玩家（不進出貨）：不操作／隨便選／全選普通吐槽／知道答案，各跑 N 局，印評價分布與冷場數
+godot --headless --path . --script res://tools/bot_players.gd -- --runs 1000 [--story res://tests/fixtures/stories/chapter1_story.json]
 
 # 先匯出、啟動伺服器；需要已安裝 Playwright 及 Chromium 的 Node 環境。
 node tools/browser_check.mjs --playwright /path/to/node_modules/@playwright/test
@@ -194,6 +181,8 @@ node tools/browser_check.mjs --choices --playwright /path/to/node_modules/@playw
 node tools/browser_check.mjs --ep00 --playwright /path/to/node_modules/@playwright/test
 node tools/browser_check.mjs --backup --playwright /path/to/node_modules/@playwright/test
 ```
+
+分層驗收（見 repo 根目錄 AGENTS.md）：L1 跑改到的那一組；L2 再加簡易回歸——回合與評價改動加 `chapter_flow chapter1 phase4_rounds_ui game_feel`，調查加 `phase4_ui investigation`，教學加 `tutorial`；L3 跑完整。
 
 `--url` 可指定試玩位址；`--chromium /path/to/chrome-headless-shell` 可指定 Chromium。瀏覽器檢查以真實 canvas 滑鼠與觸控操作（長按、上滑用 CDP 觸控事件）；預設走討債兩條路線，`--phase2` 走劇本測試兩條路線，`--slots` 驗證觸控存讀檔與 18 格分頁，`--phase3` 以橫向 800×450 與 640×360 走調查、吐槽及限時選詞讀檔，`--comedy` 在漫畫吐槽片段驗證疊加層播放中、點擊快轉不推進下一句（390×844 與 320×568，截圖與報告存 `docs/`），`--ep00` 在 EP00 走兩條路線（390×844：路徑 A 選 `loud`、看漫畫吐槽層、調查裡點銀時三次與草莓牛奶、委託書、導演選第三個；路徑 B 選 `tired`、不找委託書、導演選第一個，並在調查與導演選項各存手動欄位、重新整理後讀檔回到同一個事件），320×568 再跑路徑 A 到調查為止，截圖存 `docs/preview-ep00-*.png`、報告存 `docs/ep00-browser-report.json`；`--choices` 在兩種選項片段驗證 POV 選項（語氣標記、選了接對應的反應與旗標）、導演選擇（導演面板、註腳、卡片至少 48 CSS px、舞台不變、開關目錄後仍是導演面板、選一張卡走到結局與旗標；800×450 與 640×360，截圖與報告存 `test-results/`），`--rounds` 在回合試片用觸控點消音條、伊莉莎白的牌子（閱讀時與 320×568 的選詞面板旁，檢查牌子至少 48 CSS px 且沒被選項面板蓋住）、超必殺與 QTE，並在 320×568 檢查回合操作列；`--investigate` 在四線索試片用觸控點對話與移動話題（390×844 與 320×568）、到廚房查冰箱（畫面外台詞）再回到客廳；`--backup` 驗證設定裡的存檔匯出、壞檔拒絕與匯入。網址帶 `?qa=1` 時才啟用唯讀的 `window.__debtQA`；一般試玩網址不啟用。
 

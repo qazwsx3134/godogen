@@ -1764,6 +1764,7 @@ func _present_say(command: Dictionary, restored: bool) -> void:
 	_clear_choices()
 	_end_box.visible = false
 	_screen_mode = "story"
+	_tutorial_ctl._maybe_tutorial.call_deferred("story")
 	_refresh_phase3_hud()
 	var thought: bool = _dict_bool(command, "thought")
 	_set_name_plate(_current_speaker, thought)

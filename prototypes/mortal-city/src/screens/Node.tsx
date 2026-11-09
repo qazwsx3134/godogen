@@ -2,7 +2,7 @@ import ENEMY_PORTRAITS from '../content/enemy_portraits.json'
 // 節點畫面：委託、精英委託、事件、黑市、神機醫、休息、劇情委託。戰鬥與危險節點的元件共用。
 import { useEffect, useRef, useState } from 'react'
 import { AlertTriangle, ArrowLeft, BedDouble, Compass, Crosshair, Eye, FastForward, Flame, MessageSquare, ShieldPlus, Stethoscope, Store, Swords, Terminal } from 'lucide-react'
-import { ActionButton, Avatar, Meter, Panel, Tag } from '../components/ui'
+import { ActionButton, Avatar, Meter, Panel, Tag, useTwoStep } from '../components/ui'
 import { ItemIcon } from '../components/ItemIcon'
 import { FIXERS, JOBS, highDanger } from '../content/data'
 import { CASE_BY_ID, type Reply, type StoryCase, caseBody, caseReplies, optionLock } from '../content/cases'
@@ -10,8 +10,8 @@ import { EVENT_BY_ID } from '../content/events'
 import { buzz, reducedMotion } from '../components/haptics'
 import { sfx } from '../components/sfx'
 import { TypeLine } from '../components/Fx'
-import { itemStyle, ITEMS, LIFELINE_PRICE, SHOP_IMPLANTS, itemDesc, marketPrice } from '../content/items'
-import { type NodeRun, type ResultRow, type useGame, eventLock, fightEnemy, jobLines } from '../game/state'
+import { itemStyle, ITEMS, LIFELINE_PRICE, SHOP_IMPLANTS, clinicOrders, itemDesc, itemLock, marketPrice } from '../content/items'
+import { type NodeRun, type ResultRow, type useGame, SAFE_STRESS, caseDangerOption, caseReward, eliteDangerOption, eventLock, fightEnemy, jobLines } from '../game/state'
 import { findNode } from '../rules/map'
 import {
   type DangerOption,
@@ -34,18 +34,24 @@ import {
   fightStats,
   hashSeed,
   heatEnemy,
-  implantRoom,
   jobReward,
   jobSuccessChance,
+  dangerOdds,
   marginOf,
+  psychoOdds,
+  pct,
   perkReward,
   sellValue,
+  statMod,
   streetEnemy,
   tacticsFor,
   hackPower,
   stealthPower,
   type Style,
   STYLE_LABEL,
+  MAX_ITEM_LEVEL,
+  UPGRADE_LOAD,
+  upgradeCost,
 } from '../rules/core'
 
 type G = ReturnType<typeof useGame>
@@ -108,7 +114,7 @@ export function NodeView({ game }: { game: G }) {
       {n.kind === 'elite' && <EliteNode game={game} n={n} />}
       {n.kind === 'event' && <EventNode game={game} n={n} />}
       {n.kind === 'market' && <MarketNode game={game} n={n} />}
-      {n.kind === 'clinic' && <ClinicNode game={game} />}
+      {n.kind === 'clinic' && <ClinicNode game={game} n={n} />}
       {n.kind === 'rest' && <RestNode game={game} n={n} />}
       {n.kind === 'story' && <CaseThread game={game} sc={CASE_BY_ID[n.caseId]} />}
       <LeaveButton game={game} />
@@ -146,6 +152,17 @@ function NodeHead({ tone = 'line', tag, title, fixer, body }: { tone?: 'line' | 
   )
 }
 
+/** 神經餘裕低於 40 時，任務中錯亂的機率（沒有風險就不顯示）。 */
+export function PsychoTag({ c }: { c: G['g']['character'] }) {
+  const o = psychoOdds(c)
+  if (!o.total) return null
+  return (
+    <Tag tone="red">
+      神經錯亂 {pct(o.total)}（中斷 {pct(o.abort)}・重傷 {pct(o.maim)}・死亡 {pct(o.death)}）
+    </Tag>
+  )
+}
+
 // ---------- 委託 ----------
 
 function JobNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'job' }> }) {
@@ -158,9 +175,14 @@ function JobNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'job' }> })
       <NodeHead tag={`委託・${DIRECTION_LABEL[job.direction]}・難度 ${job.tier}`} title={job.name} fixer={job.fixerId} body={job.blurb} />
       <div className="flex flex-wrap gap-2">
         <Tag>報酬 ¢{jobReward(job, perkReward(c, job.direction))}</Tag>
-        <Tag>成功率 {Math.round(jobSuccessChance(job, dirBonus(c, job.direction)) * 100)}%</Tag>
+        {job.direction === 'force' ? (
+          <Tag tone="red">⚔ 一定要打・打贏才算完成</Tag>
+        ) : (
+          <Tag>安靜得手 {pct(jobSuccessChance(job, dirBonus(c, job.direction)))}・失手要打一場</Tag>
+        )}
         <Tag tone="warning">壓力 +{job.stress}</Tag>
-        {job.direction === 'force' && <Tag tone="red">⚔ 一定要打</Tag>}
+        <Tag>完成時掉寶 {pct(0.1 * job.tier * (1 + statMod(c, 'loot')))}</Tag>
+        {n.stage === 'auto' && <PsychoTag c={c} />}
       </div>
       {n.stage === 'auto' && <AutoRun lines={lines} total={autoMs(lines.length)} fast={!!g.meta.seen.job} onDone={() => act({ t: 'jobAutoDone' })} />}
       {n.stage === 'fight' && !n.fight && <TacticPicker game={game} enemy={heatEnemy(streetEnemy(job), c.heat)} onPick={(t) => act({ t: 'jobFight', tactic: t })} />}
@@ -180,6 +202,11 @@ function EliteNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'elite' }
   return (
     <>
       <NodeHead tone="red" tag={`精英委託・${DIRECTION_LABEL[job.direction]}・打贏一定掉寶`} title={job.name} fixer={job.fixerId} body={job.blurb} />
+      {n.stage === 'auto' && (
+        <div className="flex flex-wrap gap-2">
+          <PsychoTag c={c} />
+        </div>
+      )}
       {n.stage === 'auto' && <AutoRun lines={t.autoLog} total={15_000} fast={!!g.meta.seen.elite} onDone={() => act({ t: 'eliteAutoDone' })} />}
       {n.stage === 'fight' && !n.fight && <TacticPicker game={game} enemy={heatEnemy(t.fight, c.heat)} onPick={(x) => act({ t: 'eliteFight', tactic: x })} />}
       {n.stage === 'fight' && n.fight && <FightRun fight={n.fight} onDone={() => act({ t: 'eliteFightDone' })} />}
@@ -190,8 +217,11 @@ function EliteNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'elite' }
           body={t.body}
           options={t.options}
           locks={Object.fromEntries(t.options.map((o) => [o.id, attrLock(c, o.attrNeeds) ?? '']).filter(([, v]) => v))}
-          notes={Object.fromEntries(t.options.filter((o) => o.attrNeeds).map((o) => [o.id, `屬性選項：${ATTR_LABEL[o.attrNeeds!.attr]} ≥ ${o.attrNeeds!.min}，風險比硬幹低`]))}
+          notes={Object.fromEntries(
+            t.options.filter((o) => o.attrNeeds).map((o) => [o.id, `屬性選項：${ATTR_LABEL[o.attrNeeds!.attr]} ≥ ${o.attrNeeds!.min}，風險比硬幹低・代價：報酬七五折、名聲減半、神經壓力 +${SAFE_STRESS}`]),
+          )}
           safeNote="拿不到報酬（戰利品已經到手）"
+          chanceOf={(o) => dangerOdds(c, eliteDangerOption(c, job, o))}
           onConfirm={(id) => act({ t: 'eliteChoose', optionId: id })}
         />
       )}
@@ -214,7 +244,7 @@ function EventNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'event' }
             const lock = eventLock(g.character, o)
             const note = [o.cost ? `¢${o.cost}` : '', o.needs ? `${ATTR_LABEL[o.needs.attr]} ≥ ${o.needs.min}` : '', o.chance !== undefined ? `成功率 ${Math.round(o.chance * 100)}%` : ''].filter(Boolean).join('・')
             return (
-              <button key={o.id} disabled={!!lock} onClick={() => act({ t: 'eventChoose', optionId: o.id })} className={`block w-full text-left cut cut-sm ${lock ? 'opacity-50' : ''}`}>
+              <button key={o.id} data-testid="event-option" disabled={!!lock} onClick={() => act({ t: 'eventChoose', optionId: o.id })} className={`block w-full text-left cut cut-sm ${lock ? 'opacity-50' : ''}`}>
                 <div className="cut-in min-h-12 p-3">
                   <div className="font-bold text-fg-list">{o.label}</div>
                   {note && <div className="text-[13px] text-cyan">{note}</div>}
@@ -272,11 +302,12 @@ const provenance = (id: string) => PROVENANCE[hashSeed(id) % PROVENANCE.length]
 function MarketNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'market' }> }) {
   const { g, act } = game
   const c = g.character
+  const confirm = useTwoStep()
   return (
     <>
       <NodeHead tag="黑市" title="高架橋下的地攤" body="帆布一掀，底下全是還帶著體溫的貨。攤主的義眼一直盯著你的錢包：「來路？別問，問了就漲價。」" />
       <div className="flex justify-center">
-        <span className="stolen-sign">全部半價・不問來路・概不退換</span>
+        <span className="stolen-sign">全部七五折・不問來路・概不退換</span>
       </div>
       <Panel innerClass="pb-1">
         <div className="flex items-center gap-2 px-3 pt-3 font-bold text-heading">
@@ -328,7 +359,7 @@ function MarketNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'market'
             <div key={it.id} className="flex items-center gap-2 border-b border-line/40 px-3 py-2">
               {worn && <span className="shrink-0 border border-warning px-1 text-[12px] text-warning">身上</span>}
               <ItemLine item={it} />
-              <Buy onClick={() => act({ t: 'sell', itemId: it.id })}>賣 ¢{sellValue(it)}</Buy>
+              <Buy onClick={() => confirm.press(it.id, () => act({ t: 'sell', itemId: it.id }))}>{confirm.armed === it.id ? '確定賣？' : `賣 ¢${sellValue(it)}`}</Buy>
             </div>
           ))}
         </Panel>
@@ -337,41 +368,91 @@ function MarketNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'market'
   )
 }
 
-function ClinicNode({ game }: { game: G }) {
+function ClinicNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'clinic' }> }) {
   const { g, act } = game
   const c = g.character
   const cost = c.injury * CLINIC.perPoint
-  const room = implantRoom(c)
+  const margin = marginOf(c)
+  const orders = clinicOrders(hashSeed(c.id, n.nodeId, 'orders'))
+  const upgradable = c.equipment.filter((i) => i.slot === 'implant')
+  /** 一列可買的義體：裝上後的神經餘裕；屬性不夠也能買（先放背包）。 */
+  const row = (kind: string, price: number) => {
+    const d = ITEMS[kind]
+    const item = { ...d, id: kind, kind }
+    const lock = itemLock(c, item)
+    const fitted = { ...c, implantLoad: c.implantLoad + d.load }
+    const risk = psychoOdds(fitted).total
+    return (
+      <div key={kind} className="flex items-center gap-2 border-b border-line/40 px-3 py-2">
+        <ItemIcon item={item} />
+        <div className="min-w-0 flex-1">
+          <b className="text-fg-list">{d.name}</b>
+          <div className="text-[13px] text-cyan">{d.desc}</div>
+          {lock ? (
+            <div className="text-[13px] text-warning">{lock}：買了先放背包，屬性夠了再裝</div>
+          ) : (
+            <div className={`text-[13px] ${risk ? 'text-warning' : 'text-muted'}`}>
+              負荷 {d.load}・裝上後神經餘裕 {marginOf(fitted)}
+              {risk ? `・任務中錯亂 ${pct(risk)}` : ''}
+            </div>
+          )}
+        </div>
+        <Buy disabled={c.credits < price} onClick={() => act({ t: 'buyImplant', kind })}>
+          ¢{price}
+        </Buy>
+      </div>
+    )
+  }
   return (
     <>
-      <NodeHead tag="神機醫" title="白蛇的義體診所" fixer="snake" body="「裝什麼都可以，裝不下的別怪我。你的神經只有那麼大。」" />
+      <NodeHead tag="神機醫" title="白蛇的義體診所" fixer="snake" body="「裝什麼都可以，裝多少都可以。腦子燒壞了別回來找我退錢。」" />
       <ActionButton disabled={(c.injury === 0 && c.stress === 0) || c.credits < cost} reason={c.injury === 0 && c.stress === 0 ? '沒有傷' : `需要 ¢${cost}`} onClick={() => act({ t: 'treat' })}>
         <Stethoscope size={16} /> 縫好傷口（傷勢 {c.injury}%・¢{cost}・壓力 −{CLINIC.stress}）
       </ActionButton>
       <Panel innerClass="pb-1">
-        <div className="px-3 pt-3 font-bold text-heading">義體（半價，買了直接裝上）</div>
-        <div className="px-3 text-[13px] text-muted">義體空間剩 {room}</div>
-        {SHOP_IMPLANTS.map((kind) => {
-          const d = ITEMS[kind]
-          const price = marketPrice(d.price)
-          const after = room - d.load
-          const why = c.credits < price ? `需要 ¢${price}` : after < 0 ? `義體空間不夠（還差 ${-after}）` : undefined
-          return (
-            <div key={kind} className="flex items-center gap-2 border-b border-line/40 px-3 py-2">
-              <ItemIcon item={{ ...d, id: kind, kind }} />
-              <div className="min-w-0 flex-1">
-                <b className="text-fg-list">{d.name}</b>
-                <div className="text-[13px] text-cyan">{d.desc}</div>
-                <div className="text-[13px] text-muted">負荷 {d.load}・裝上後空間剩 {after}</div>
-                {why && <div className="text-[13px] text-warning">✖ {why}</div>}
-              </div>
-              <Buy disabled={!!why} onClick={() => act({ t: 'buyImplant', kind })}>
-                ¢{price}
-              </Buy>
-            </div>
-          )
-        })}
+        <div className="px-3 pt-3 font-bold text-heading">常備義體（七五折，買了直接裝上）</div>
+        <div className="px-3 text-[13px] text-muted">神經餘裕 {margin}：低於 40，任務中可能神經錯亂</div>
+        {SHOP_IMPLANTS.map((kind) => row(kind, marketPrice(ITEMS[kind].price)))}
       </Panel>
+      <Panel innerClass="pb-1">
+        <div className="px-3 pt-3 font-bold text-heading">訂製義體（原價，這次只有這三種）</div>
+        {orders.map((it) => row(it.kind!, it.price))}
+      </Panel>
+      {upgradable.length > 0 && (
+        <Panel innerClass="pb-1">
+          <div className="px-3 pt-3 font-bold text-heading">升級身上的義體</div>
+          <div className="px-3 text-[13px] text-muted">每升一級效果 +0.5 倍、負荷 +{UPGRADE_LOAD}，最多 Lv.{MAX_ITEM_LEVEL}</div>
+          {upgradable.map((it) => {
+            const lv = it.level ?? 1
+            const price = upgradeCost(it)
+            const after = { ...c, implantLoad: c.implantLoad + UPGRADE_LOAD }
+            const risk = psychoOdds(after).total
+            return (
+              <div key={it.id} className="flex items-center gap-2 border-b border-line/40 px-3 py-2">
+                <ItemIcon item={it} />
+                <div className="min-w-0 flex-1">
+                  <b className="text-fg-list">
+                    {it.name} <span className="tech text-heading">Lv.{lv}</span>
+                  </b>
+                  {lv >= MAX_ITEM_LEVEL ? (
+                    <div className="text-[13px] text-muted">已經是最高等級</div>
+                  ) : (
+                    <div className={`text-[13px] ${risk ? 'text-warning' : 'text-muted'}`}>
+                      → Lv.{lv + 1}：效果 ×{1 + 0.5 * lv}・升級後神經餘裕 {marginOf(after)}
+                      {risk ? `・任務中錯亂 ${pct(risk)}` : ''}
+                    </div>
+                  )}
+                </div>
+                {lv < MAX_ITEM_LEVEL && (
+                  <Buy disabled={c.credits < price} onClick={() => act({ t: 'upgradeImplant', itemId: it.id })}>
+                    ¢{price}
+                  </Buy>
+                )}
+              </div>
+            )
+          })}
+        </Panel>
+      )}
     </>
   )
 }
@@ -416,6 +497,7 @@ function CaseThread({ game, sc }: { game: G; sc: StoryCase }) {
       [
         o.approach ? `只有走「${sc.approaches.find((x) => x.id === o.approach)!.label}」才有` : '',
         o.needs && 'attr' in o.needs ? `屬性選項：${ATTR_LABEL[o.needs.attr]} ≥ ${o.needs.min}` : '',
+        o.needs ? `代價：報酬七五折、名聲減半、神經壓力 +${SAFE_STRESS}` : '',
         o.fight ? `⚔ 要打一場（${o.fight.name} HP ${o.fight.hp}）：打贏就生還，打輸才擲致命判定` : '',
       ]
         .filter(Boolean)
@@ -441,6 +523,11 @@ function CaseThread({ game, sc }: { game: G; sc: StoryCase }) {
         </div>
       </Panel>
       {active === 'prep' && <ReplyThread replies={replies} onAllShown={setThreadRead} />}
+      {active === 'prep' && threadRead && (
+        <div className="flex flex-wrap gap-2">
+          <PsychoTag c={g.character} />
+        </div>
+      )}
       {active === 'prep' && threadRead && <ApproachPicker game={game} sc={sc} />}
       {active === 'auto' && <AutoRun lines={auto} total={autoMs(auto.length, 4000)} fast={!!(g.meta.seen.story || g.meta.seen.boss)} onDone={() => act({ t: 'storyAutoDone' })} />}
       {active === 'fight' && !g.story.fight && <TacticPicker game={game} enemy={heatEnemy(fightEnemy(sc, g.story), g.character.heat)} onPick={(t) => act({ t: 'storyFight', tactic: t })} />}
@@ -457,8 +544,9 @@ function CaseThread({ game, sc }: { game: G; sc: StoryCase }) {
           notes={notes}
           safeNote={(o) => {
             const opt = sc.danger.options.find((x) => x.id === o.id)!
-            return opt.wins ? `完成委託 ¢${opt.reward}` : opt.reward ? `只拿部分報酬 ¢${opt.reward}` : '委託失敗、拿不到報酬'
+            return opt.wins ? `完成委託 ¢${caseReward(opt)}` : opt.reward ? `只拿部分報酬 ¢${caseReward(opt)}` : '委託失敗、拿不到報酬'
           }}
+          chanceOf={(o) => dangerOdds(g.character, caseDangerOption(g.character, sc, g.story.approach, o.id))}
           onConfirm={(id) => act({ t: 'storyChoose', optionId: id })}
         />
       )}
@@ -532,6 +620,12 @@ function ApproachPicker({ game, sc }: { game: G; sc: StoryCase }) {
         const bonus = Math.round(approachBonus(c, a.direction) * 100)
         const mod = Math.round(a.lethalMod * 100)
         const lock = attrLock(c, a.needs)
+        // 照 storyAutoDone 先加上路上的傷勢與壓力，算出抵達最後關頭時的機率
+        const there = { ...c, injury: Math.min(100, c.injury + a.injury), stress: c.stress + 6 }
+        const risks = sc.danger.options
+          .filter((o) => o.lethal && (!o.approach || o.approach === a.id))
+          .map((o) => dangerOdds(there, caseDangerOption(there, sc, a.id, o.id)))
+        const range = (xs: number[]) => (Math.max(...xs) > Math.min(...xs) ? `${pct(Math.min(...xs))}～${pct(Math.max(...xs))}` : pct(xs[0]))
         return (
           <button key={a.id} disabled={!!lock} onClick={() => setSel(a.id)} className={`block w-full text-left ${on ? 'cut cut-sm cut-red' : 'cut cut-sm'} ${lock ? 'opacity-50' : ''}`}>
             <div className="cut-in flex min-h-12 gap-3 p-3">
@@ -543,6 +637,11 @@ function ApproachPicker({ game, sc }: { game: G; sc: StoryCase }) {
                   {DIRECTION_LABEL[a.direction]}・{a.fight ? `⚔ 要打一場（${a.fight.name}）` : `路上傷勢 +${a.injury}%`}・風險 {mod > 0 ? `+${mod}` : mod}%
                   {bonus ? `・你的裝備與卡牌 −${bonus}%` : ''}
                 </div>
+                {risks.length > 0 && (
+                  <div className="text-[13px] text-red">
+                    最後關頭的冒險選項：死亡 {range(risks.map((r) => r.death))}・重傷 {range(risks.map((r) => r.maim))}（含路上傷勢{a.fight ? '，不含打鬥受的傷' : ''}）
+                  </div>
+                )}
                 {a.needs && <div className="text-[13px] text-cyan">屬性做法：{ATTR_LABEL[a.needs.attr]} ≥ {a.needs.min}</div>}
                 {lock && <div className="text-[13px] text-warning">✖ {lock}</div>}
               </div>
@@ -816,6 +915,7 @@ function RiskDecision({
   safeNote,
   locks = {},
   notes = {},
+  chanceOf,
   onConfirm,
 }: {
   game: G
@@ -825,6 +925,8 @@ function RiskDecision({
   safeNote: string | ((o: DangerOption) => string)
   locks?: Record<string, string>
   notes?: Record<string, string>
+  /** 這個選項判定時實際用的死亡與重傷機率（與 resolveDanger 同一個算式）。 */
+  chanceOf: (o: DangerOption) => { death: number; maim: number }
   onConfirm: (id: string) => void
 }) {
   const c = game.g.character
@@ -861,7 +963,8 @@ function RiskDecision({
               <div className="text-[14px]">
                 {o.lethal ? (
                   <span className="flex items-center gap-1 font-bold text-red">
-                    <AlertTriangle size={14} /> 可能永久死亡
+                    <AlertTriangle size={14} />
+                    {'fight' in o && o.fight ? '打輸時：' : ''}死亡 <b className="tech">{pct(chanceOf(o).death)}</b>・重傷 <b className="tech">{pct(chanceOf(o).maim)}</b>
                   </span>
                 ) : (
                   <span className="text-positive">不會死・{typeof safeNote === 'string' ? safeNote : safeNote(o)}</span>
@@ -880,7 +983,7 @@ function RiskDecision({
 }
 
 function Result({ outcome: o, doneTitle = '完成委託', safeTitle = '撤離・委託失敗' }: { outcome: DangerOutcome; doneTitle?: string; safeTitle?: string }) {
-  const title = { safe: safeTitle, survived: doneTitle, rescued: '救命保單觸發', rescued_system: '緊急搶救（系統補償）', dead: '永久死亡' }[o.kind]
+  const title = { safe: safeTitle, survived: doneTitle, maimed: '重傷生還', rescued: '救命保單觸發', rescued_system: '緊急搶救（系統補償）', dead: '永久死亡' }[o.kind]
   return (
     <Panel tone={o.kind === 'dead' ? 'red' : 'strong'} innerClass="p-4">
       <div className={`text-[20px] font-bold ${o.kind === 'dead' ? 'text-red' : 'text-cyan'}`}>{title}</div>

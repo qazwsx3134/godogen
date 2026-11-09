@@ -2,6 +2,18 @@
 
 只保留最近 3 次 commit 期間的工作與尚未 commit 的工作（新的在上）；更早的紀錄移到 [MILESTONE.md](MILESTONE.md)。每次 commit、出門／下班／暫停前更新本檔，根目錄 `Progress.md` 只更新一行摘要。接手順序：本檔 → [README](README.md) → [session-state](production/session-state/active.md) → [HANDOFF](docs/HANDOFF.md)。
 
+## 2026-11-09｜依評審建議改善 #1、#3、#5、#6、#7（未提交）
+
+- 專案／分支：debt-commission／master（HEAD `996c51d5`）。使用者要求「根據昨天 commit 的 PROGRESS 跟 TODO 改善」。只做不需要作者決定、不需要真人或實機的項目。測試前把真實存檔資料夾 `~/Library/Application Support/debt-commission` 備份到 `~/.claude/backups/2026-11-09-debt-commission-userdata`。
+- **#5 perfect 有價值**：`StoryRunner.grade_for` 多兩個參數（perfect、caught）：剩 5 副眼鏡也要抓到的槽點至少 60%（`S_PERFECT_RATIO`）是 PERFECT 才給 S，否則 A；Game Over 降級照舊疊加。`test_chapter1` 的 weak 路線改期望 A，`test_chapter_flow` 加 5 組評價樣本。README 結算說明同步。
+- **#3 機器人玩家**：`tools/bot_players.gd`（只用 StoryRunner，不進出貨；`tools/*` 已在匯出排除）。五種策略：idle、random（不重複選錯）、repeat（會重複選錯）、weak（全選普通吐槽）、know（知道答案）。第一章夾具各 1000 局（約 50 秒）：idle 1000 局卡在第一回合（證言回合不按就不前進）；random 放棄 895（3 次 Game Over 後）、B 11、C 94，每局冷場 13.71；repeat 放棄 935、B 4、C 61，冷場 15.01；weak 1000 局 A；know 1000 局 S。隨便選幾乎都撐不完，主因是沒槽點的句子按吐槽也扣眼鏡——難度要不要放寬給作者看。
+- **#6 回饋空格**：(a) 調查點到空處 toast「這裡沒什麼特別的」，連續 3 次改成「提示：還有 N 個地方沒查過」（`main_investigation.gd`）；(b) 普通吐槽有自己的音效 `tsukkomi_weak`（合成佔位）＋短震動；(c) 冷場 toast 帶原因：時間到／這個選項不對／這句沒有槽點／時機沒抓到（runner 的回合結果多回傳 `action`，`main_round.gd` 的 `MISS_CAUSE`）；(d) `data/tutorials.json` 新增「reading」教學（長按隱藏介面、往上滑看紀錄），第一次不快轉讀到台詞時出現，快轉時不打斷。新增斷言在 `test_phase4_ui`、`test_phase4_rounds_ui`、`test_game_feel`、`test_tutorial`。
+- **#7 過時文件**：桂短篇 README 與草稿的 QTE 參數改成現在的三選一；README 範例 `?story=chapter1` → `katsura_dog_ears`；README「驗證」的 30 條 XDG 指令換成 `run_tests.sh`（含 macOS 的 GODOT_BIN、依序跑）、bot 指令與 L1／L2 對照；`docs/story-telling-game/ROADMAP.md`、`design/game-brief.md` 的 9:16 直式改 16:9 橫向；`ROADMAP-COMMERCIAL.md` C4；`TODO.md` 的 `?sample=transitions`；`docs/VERIFICATION.md` 標過時。
+- **#1 玩法假設**：README 新增「要驗證的玩法假設（草稿，待作者確認）」：假設、機器人與真人的通過條件、結論待填；`project.yaml` 的 `stage` 改 Pre-Production（Studio 的階段名稱沒有 Prototype）。
+- 驗證（本次實跑）：先跑受影響的幾組（chapter_flow、chapter1、game_feel、phase4_rounds_ui、phase3_ui、phase4_ui、tutorial）全過；完整 `GODOT_BIN=… bash ../godot-kit/tools/run_tests.sh .` 57/57 PASS（macOS，Godot 4.7）。跑完發現 `test_save_transfer` 動到真實資料夾裡桂短篇存檔的備份（`.bak` 改名成 `.before_import`，存檔內容與備份相同）：已從備份還原 `.bak`，兩個 `.before_import` 移到備份資料夾的 `_moved_after_tests/`；這是既有測試的問題，沒修，記進 `prototypes/LESSONS.md`。匯入時 Parley 外掛往 `project.godot` 加了兩個 `.ds` 翻譯檔，非本次改動，已還原。
+- 延後：#2 把第一章放回正式內容（與 11-08「只留 dog ear」的指示衝突，待使用者決定）、#4 真人試玩、#8 選錯的思考成本、#9 重匯 Web、#10 實機 QTE、#11 桂短篇收尾、#12 效能預算。
+- 未提交：上述程式、測試、`tools/bot_players.gd`（含 `.gd.uid`）、`data/tutorials.json`、文件、本檔與 `TODO.md`；連同上一段的 `reviews/`。
+
 ## 2026-11-09｜game-critic 評審（只有文件，未提交）
 
 - 做了什麼：用新 skill `game-critic`（`prototypes/godot-kit/skills/game-critic/`）評審本原型，Herdr Sonnet 子 agent 執行，報告 [reviews/2026-11-09-game-critic.md](reviews/2026-11-09-game-critic.md)（385 行）。
