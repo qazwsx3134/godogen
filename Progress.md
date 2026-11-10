@@ -10,17 +10,17 @@
 
 | commit | 日期 | 做了什麼 |
 |---|---|---|
-| 最新（`git log -1`） | 2026-11-10 | mortal-city：救命保單最多一張、分廉價／標準／白金三級（決定救回來的下場）；地圖最後一關不再被上緣漸淡遮住；做法選單拿掉風險與裝備的百分比；換區換一批中間人與神機醫（阿凜、潮伯、海鷗，頭像待畫）；名聲：6 則事件的「亮出名號」選項，名聲每 3 級通緝 +1、精英對手依名聲加強 |
+| 最新（`git log -1`） | 2026-11-10 | debt-commission：TODO 列出 33 項音效待辦；Codex（Luna max）產生的第一批介面候選圖 42 張（按鈕三套、「吐槽！」按鈕、標題題字、開機畫面、App 圖示、評價印章、結局卡、鑑賞封條、碎眼鏡）放在 `art_src/ui/gen-20261110/`，等作者挑 |
+| `965d4a89` | 2026-11-10 | mortal-city：救命保單最多一張、分廉價／標準／白金三級（決定救回來的下場）；地圖最後一關不再被上緣漸淡遮住；做法選單拿掉風險與裝備的百分比；換區換一批中間人與神機醫（阿凜、潮伯、海鷗，頭像待畫）；名聲：6 則事件的「亮出名號」選項，名聲每 3 級通緝 +1、精英對手依名聲加強 |
 | `18e03b97` | 2026-11-09 | 依 game-critic 評審改善兩個原型。debt-commission：S 評價要 60% PERFECT、`tools/bot_players.gd` 五種機器人玩家、冷場原因／調查落空提示／普通吐槽音效／長按上滑教學、過時文件、README 玩法假設草稿、stage 改 Pre-Production。mortal-city：致命機率上畫面、掉寶與路線脫鉤、地圖「下一步」資訊、回饋與二次確認、`pnpm smoke`；危險節點取捨（起始三選一、安全選項付代價、重傷生還與舊傷、風險 ×1.5）、義體不限數量＋神經錯亂＋裝備屬性門檻、流派卡權重與保底、漲價＋訂製與升級義體 |
 | `996c51d5` | 2026-11-09 | game-critic 評審報告：debt-commission 與 mortal-city 各一份（`reviews/2026-11-09-game-critic.md`），建議列進兩邊 TODO |
 | `db3ec71a` | 2026-11-09 | debt-commission：故事只留功能展示與桂短篇，舊故事搬進 `tests/fixtures/`；`prototypes/GAME_DEV_FLOW.md` |
-| `dfd57afb` | 2026-11-07 | 合併 origin/master：mortal-city 以 Mac 的 roguelike（ADR 0001）為準，WSL 舊架構的 `c8fb8afd` 只留下不衝突的圖與新檔 |
 
 ## 專案入口
 
 | 專案 | 現況（一句） | 進度 | 歷史 |
 |---|---|---|---|
-| debt-commission 萬事屋吐槽 ADV | 故事只剩功能展示（預設）與桂的極短篇；評審建議 #1、#3、#5–#7 已做（`18e03b97`），#2「第一章放回正式內容」與 11-08「只留 dog ear」衝突、待作者決定；下一步是真人試玩 | [PROGRESS](prototypes/debt-commission/PROGRESS.md) | [MILESTONE](prototypes/debt-commission/MILESTONE.md) |
+| debt-commission 萬事屋吐槽 ADV | 故事只剩功能展示（預設）與桂的極短篇；11-10 做了介面素材盤點（[展示頁](https://claude.ai/artifact/5PWktqSHkHipZ7YKbFxQpa)）與第一批介面候選圖，**等作者挑圖**後接進遊戲；音效清單在 TODO；評審 #2 待作者決定，之後是真人試玩 | [PROGRESS](prototypes/debt-commission/PROGRESS.md) | [MILESTONE](prototypes/debt-commission/MILESTONE.md) |
 | godot-kit 共用模組 | SaveSlots 已接入 seal-meadow adapter，保留遊戲恢復保護；只同步該存檔模組，測試暫緩 | [PROGRESS](prototypes/godot-kit/PROGRESS.md) | — |
 | seal-meadow 蓬蓬草原 | 暖陶瓦風格與商店三視圖已定方向；可走商店、入口與路牌樣板已接入，正式 2D 紙娃娃及手機真人驗收待做，多人延後 | [PROGRESS](prototypes/seal-meadow/PROGRESS.md) | [MILESTONE](prototypes/seal-meadow/MILESTONE.md) |
 | hero-horde-idle 全員推王 | 等真人前三層、手機恢復成本與作者素材 | [PROGRESS](prototypes/hero-horde-idle/docs/PROGRESS.md) | [MILESTONE](prototypes/hero-horde-idle/docs/MILESTONE.md) |
