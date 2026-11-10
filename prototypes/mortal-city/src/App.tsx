@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { type LucideIcon, Map as MapIcon, MessageSquare, Volume2, VolumeX, ScrollText, ShieldAlert, ShieldPlus, Sparkles, User } from 'lucide-react'
 import { Emblem, NeonIcon, Panel } from './components/ui'
 import { nodeBusy, useGame } from './game/state'
-import { NEURAL_STAGE_LABEL, SEVERE_INJURY, marginOf, neuralStage, pct, psychoOdds } from './rules/core'
+import { LIFELINES, NEURAL_STAGE_LABEL, SEVERE_INJURY, lifelineOf, marginOf, neuralStage, pct, psychoOdds } from './rules/core'
 import { RunScreen } from './screens/Run'
 import { CharacterScreen } from './screens/Character'
 import { LogScreen } from './screens/Log'
@@ -103,7 +103,7 @@ export default function App() {
               </span>
               <span className={`flex items-center gap-0.5 ${c.lifelines ? 'text-positive' : 'text-muted'}`} title="救命保單">
                 <ShieldPlus size={14} />
-                {c.lifelines}
+                {lifelineOf(c) ? LIFELINES[lifelineOf(c)!].label.slice(0, 2) : 0}
               </span>
               <span className="tech ml-auto text-heading">¢{c.credits.toLocaleString()}</span>
             </div>

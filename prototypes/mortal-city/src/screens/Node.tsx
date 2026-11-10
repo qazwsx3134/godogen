@@ -7,10 +7,11 @@ import { ItemIcon } from '../components/ItemIcon'
 import { FIXERS, JOBS, highDanger } from '../content/data'
 import { CASE_BY_ID, type Reply, type StoryCase, caseBody, caseReplies, optionLock } from '../content/cases'
 import { EVENT_BY_ID } from '../content/events'
+import { DISTRICTS, fixerIn } from '../content/districts'
 import { buzz, reducedMotion } from '../components/haptics'
 import { sfx } from '../components/sfx'
 import { TypeLine } from '../components/Fx'
-import { itemStyle, ITEMS, LIFELINE_PRICE, SHOP_IMPLANTS, clinicOrders, itemDesc, itemLock, marketPrice } from '../content/items'
+import { itemStyle, ITEMS, SHOP_IMPLANTS, clinicOrders, itemDesc, itemLock, marketPrice } from '../content/items'
 import { type NodeRun, type ResultRow, type useGame, SAFE_STRESS, caseDangerOption, caseReward, eliteDangerOption, eventLock, fightEnemy, jobLines } from '../game/state'
 import { findNode } from '../rules/map'
 import {
@@ -28,7 +29,6 @@ import {
   REST,
   RETREAT_HP,
   SLOT_LABEL,
-  approachBonus,
   attrLock,
   dirBonus,
   fightStats,
@@ -52,6 +52,11 @@ import {
   MAX_ITEM_LEVEL,
   UPGRADE_LOAD,
   upgradeCost,
+  LIFELINES,
+  LIFELINE_TIERS,
+  lifelineOf,
+  fameEdge,
+  fameEnemy,
 } from '../rules/core'
 
 type G = ReturnType<typeof useGame>
@@ -172,7 +177,7 @@ function JobNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'job' }> })
   const lines = jobLines(n.jobId, n.ok)
   return (
     <>
-      <NodeHead tag={`委託・${DIRECTION_LABEL[job.direction]}・難度 ${job.tier}`} title={job.name} fixer={job.fixerId} body={job.blurb} />
+      <NodeHead tag={`委託・${DIRECTION_LABEL[job.direction]}・難度 ${job.tier}`} title={job.name} fixer={fixerIn(DISTRICTS[g.run.districtIndex], job.fixerId)} body={job.blurb} />
       <div className="flex flex-wrap gap-2">
         <Tag>報酬 ¢{jobReward(job, perkReward(c, job.direction))}</Tag>
         {job.direction === 'force' ? (
@@ -201,14 +206,14 @@ function EliteNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'elite' }
   const t = highDanger(job)
   return (
     <>
-      <NodeHead tone="red" tag={`精英委託・${DIRECTION_LABEL[job.direction]}・打贏一定掉寶`} title={job.name} fixer={job.fixerId} body={job.blurb} />
+      <NodeHead tone="red" tag={`精英委託・${DIRECTION_LABEL[job.direction]}・打贏一定掉寶`} title={job.name} fixer={fixerIn(DISTRICTS[g.run.districtIndex], job.fixerId)} body={job.blurb} />
       {n.stage === 'auto' && (
         <div className="flex flex-wrap gap-2">
           <PsychoTag c={c} />
         </div>
       )}
       {n.stage === 'auto' && <AutoRun lines={t.autoLog} total={15_000} fast={!!g.meta.seen.elite} onDone={() => act({ t: 'eliteAutoDone' })} />}
-      {n.stage === 'fight' && !n.fight && <TacticPicker game={game} enemy={heatEnemy(t.fight, c.heat)} onPick={(x) => act({ t: 'eliteFight', tactic: x })} />}
+      {n.stage === 'fight' && !n.fight && <TacticPicker game={game} enemy={heatEnemy(fameEnemy(t.fight, c.fame.level), c.heat)} fameEdge={fameEdge(c.fame.level)} onPick={(x) => act({ t: 'eliteFight', tactic: x })} />}
       {n.stage === 'fight' && n.fight && <FightRun fight={n.fight} onDone={() => act({ t: 'eliteFightDone' })} />}
       {n.stage === 'danger' && (
         <RiskDecision
@@ -242,7 +247,7 @@ function EventNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'event' }
         <Panel innerClass="p-3 space-y-2">
           {ev.options.map((o) => {
             const lock = eventLock(g.character, o)
-            const note = [o.cost ? `¢${o.cost}` : '', o.needs ? `${ATTR_LABEL[o.needs.attr]} ≥ ${o.needs.min}` : '', o.chance !== undefined ? `成功率 ${Math.round(o.chance * 100)}%` : ''].filter(Boolean).join('・')
+            const note = [o.cost ? `¢${o.cost}` : '', o.needs ? `${ATTR_LABEL[o.needs.attr]} ≥ ${o.needs.min}` : '', o.fame ? `名聲 Lv.${o.fame}` : '', o.chance !== undefined ? `成功率 ${Math.round(o.chance * 100)}%` : ''].filter(Boolean).join('・')
             return (
               <button key={o.id} data-testid="event-option" disabled={!!lock} onClick={() => act({ t: 'eventChoose', optionId: o.id })} className={`block w-full text-left cut cut-sm ${lock ? 'opacity-50' : ''}`}>
                 <div className="cut-in min-h-12 p-3">
@@ -337,19 +342,27 @@ function MarketNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'market'
             </div>
           )
         })}
-        <div className="flex items-center gap-2 px-3 py-3">
-          <div className="min-w-0 flex-1">
-            <b className="text-fg-list">
-              <ShieldPlus size={14} className="mr-1 inline text-positive" />
-              救命保單（空白）
-            </b>
-            <div className="text-[13px] text-cyan">受致命傷時武裝醫療隊救你一次，然後就用掉。你有 {c.lifelines} 張。</div>
-            <div className="text-[13px] text-muted">某架醫療飛行器上「掉」下來的，還沒人登記。</div>
-          </div>
-          <Buy disabled={c.credits < LIFELINE_PRICE} onClick={() => act({ t: 'buyLifeline' })}>
-            ¢{LIFELINE_PRICE}
-          </Buy>
+        <div className="px-3 pt-3 text-[13px] text-muted">
+          救命保單（空白，某架醫療飛行器上「掉」下來的）：受致命傷時武裝醫療隊救你一次，然後就用掉。最多一張
+          {lifelineOf(c) ? `，你身上已經有一張${LIFELINES[lifelineOf(c)!].label}` : ''}。
         </div>
+        {LIFELINE_TIERS.map((tier) => {
+          const t = LIFELINES[tier]
+          return (
+            <div key={tier} className="flex items-center gap-2 border-b border-line/40 px-3 py-2">
+              <div className="min-w-0 flex-1">
+                <b className="text-fg-list">
+                  <ShieldPlus size={14} className="mr-1 inline text-positive" />
+                  {t.label}
+                </b>
+                <div className="text-[13px] text-cyan">救回來：{t.desc}</div>
+              </div>
+              <Buy disabled={c.lifelines > 0 || c.credits < t.price} onClick={() => act({ t: 'buyLifeline', tier })}>
+                ¢{t.price}
+              </Buy>
+            </div>
+          )
+        })}
       </Panel>
       {c.stash.length + c.equipment.length > 0 && (
         <Panel innerClass="pb-1">
@@ -374,6 +387,7 @@ function ClinicNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'clinic'
   const cost = c.injury * CLINIC.perPoint
   const margin = marginOf(c)
   const orders = clinicOrders(hashSeed(c.id, n.nodeId, 'orders'))
+  const doc = DISTRICTS[g.run.districtIndex].doctor
   const upgradable = c.equipment.filter((i) => i.slot === 'implant')
   /** 一列可買的義體：裝上後的神經餘裕；屬性不夠也能買（先放背包）。 */
   const row = (kind: string, price: number) => {
@@ -405,7 +419,7 @@ function ClinicNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'clinic'
   }
   return (
     <>
-      <NodeHead tag="神機醫" title="白蛇的義體診所" fixer="snake" body="「裝什麼都可以，裝多少都可以。腦子燒壞了別回來找我退錢。」" />
+      <NodeHead tag="神機醫" title={`${FIXERS[doc.id].name}的義體診所`} fixer={doc.id} body={doc.line} />
       <ActionButton disabled={(c.injury === 0 && c.stress === 0) || c.credits < cost} reason={c.injury === 0 && c.stress === 0 ? '沒有傷' : `需要 ¢${cost}`} onClick={() => act({ t: 'treat' })}>
         <Stethoscope size={16} /> 縫好傷口（傷勢 {c.injury}%・¢{cost}・壓力 −{CLINIC.stress}）
       </ActionButton>
@@ -613,12 +627,10 @@ function ApproachPicker({ game, sc }: { game: G; sc: StoryCase }) {
   return (
     <Panel innerClass="p-3 space-y-2">
       <div className="text-[15px] font-bold text-heading">選擇做法</div>
-      <p className="m-0 text-[13px] text-muted">做法決定路上的傷勢與最後關頭的風險；該方向的裝備與卡牌會降低風險。</p>
+      <p className="m-0 text-[13px] text-muted">做法決定路上的傷勢與最後關頭的風險；帶著這個方向的裝備與卡牌，會比較好走。</p>
       {sc.approaches.map((a) => {
         const Icon = DIR_ICON[a.direction]
         const on = sel === a.id
-        const bonus = Math.round(approachBonus(c, a.direction) * 100)
-        const mod = Math.round(a.lethalMod * 100)
         const lock = attrLock(c, a.needs)
         // 照 storyAutoDone 先加上路上的傷勢與壓力，算出抵達最後關頭時的機率
         const there = { ...c, injury: Math.min(100, c.injury + a.injury), stress: c.stress + 6 }
@@ -634,12 +646,11 @@ function ApproachPicker({ game, sc }: { game: G; sc: StoryCase }) {
                 <div className="font-bold text-fg-list">{a.label}</div>
                 <div className="text-[15px] text-fg">{a.summary}</div>
                 <div className="text-[13px] text-muted">
-                  {DIRECTION_LABEL[a.direction]}・{a.fight ? `⚔ 要打一場（${a.fight.name}）` : `路上傷勢 +${a.injury}%`}・風險 {mod > 0 ? `+${mod}` : mod}%
-                  {bonus ? `・你的裝備與卡牌 −${bonus}%` : ''}
+                  {DIRECTION_LABEL[a.direction]}・{a.fight ? `⚔ 要打一場（${a.fight.name}）` : `路上傷勢 +${a.injury}%`}
                 </div>
                 {risks.length > 0 && (
                   <div className="text-[13px] text-red">
-                    最後關頭的冒險選項：死亡 {range(risks.map((r) => r.death))}・重傷 {range(risks.map((r) => r.maim))}（含路上傷勢{a.fight ? '，不含打鬥受的傷' : ''}）
+                    最後關頭的冒險選項：死亡 {range(risks.map((r) => r.death))}・重傷 {range(risks.map((r) => r.maim))}
                   </div>
                 )}
                 {a.needs && <div className="text-[13px] text-cyan">屬性做法：{ATTR_LABEL[a.needs.attr]} ≥ {a.needs.min}</div>}
@@ -714,7 +725,7 @@ export function AutoRun({ lines, total, fast, onDone }: { lines: string[]; total
   )
 }
 
-function TacticPicker({ game, enemy, onPick }: { game: G; enemy: Enemy; onPick: (t: Tactic) => void }) {
+function TacticPicker({ game, enemy, onPick, fameEdge: edge = 0 }: { game: G; enemy: Enemy; onPick: (t: Tactic) => void; fameEdge?: number }) {
   const c = game.g.character
   const st = fightStats(c)
   const [sel, setSel] = useState<Tactic | null>(null)
@@ -736,6 +747,7 @@ function TacticPicker({ game, enemy, onPick }: { game: G; enemy: Enemy; onPick: 
           ・防火牆 <b className={`tech ${(enemy.ice ?? 0) > hackPower(c) ? 'text-red' : 'text-heading'}`}>{enemy.ice ?? 0}</b>・感知{' '}
           <b className={`tech ${(enemy.sense ?? 0) > stealthPower(c) ? 'text-red' : 'text-heading'}`}>{enemy.sense ?? 0}</b>
           {c.heat ? <span className="block text-[12px] text-red">通緝 {c.heat}★：對方 +{c.heat * 8}%</span> : null}
+          {edge ? <span className="block text-[12px] text-red">你的名聲 Lv.{c.fame.level}：對方派出更硬的人（+{Math.round(edge * 100)}%）</span> : null}
         </div>
       </div>
       <p className="m-0 text-[13px] text-muted">自動戰鬥，打鬥本身不會死：HP 低於最大 HP 的 {RETREAT_HP}% 會自動撤退。受的傷會帶到之後的節點。選一個戰術：</p>
@@ -948,10 +960,10 @@ function RiskDecision({
           通緝 <b className="text-red">{'★'.repeat(c.heat) || '—'}</b>
         </div>
         <div className="border border-red/60 p-2">
-          救命保單 <b className={c.lifelines ? 'text-positive' : 'text-red'}>{c.lifelines ? `${c.lifelines} 張` : '沒有'}</b>
+          救命保單 <b className={c.lifelines ? 'text-positive' : 'text-red'}>{lifelineOf(c) ? LIFELINES[lifelineOf(c)!].label : '沒有'}</b>
         </div>
       </div>
-      <p className="m-0 text-[14px] text-muted">沒有倒數，可以先離開再回來。確認後一次判定，重新整理不會重抽。{c.lifelines ? '受致命傷時會用掉一張救命保單。' : '沒有救命保單：受致命傷就是永久死亡。'}</p>
+      <p className="m-0 text-[14px] text-muted">沒有倒數，可以先離開再回來。確認後一次判定，重新整理不會重抽。{lifelineOf(c) ? `受致命傷時會用掉${LIFELINES[lifelineOf(c)!].label}：${LIFELINES[lifelineOf(c)!].desc}。` : '沒有救命保單：受致命傷就是永久死亡。'}</p>
       {options.map((o) => {
         const on = sel === o.id
         return (

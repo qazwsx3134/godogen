@@ -104,5 +104,3 @@ export const MARKET_RATE = 0.75
 export const marketPrice = (price: number) => Math.round(price * MARKET_RATE)
 /** 黑市貨架：兩表合併抽三件。 */
 export const marketStock = (seed: number) => offer(rng(seed), [...new Set([...STREET, ...RARE])], `m${seed.toString(36)}`)
-/** 救命保單的價格。 */
-export const LIFELINE_PRICE = 450

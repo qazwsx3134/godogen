@@ -3,7 +3,7 @@ import { CASES, CASE_01, CASE_02, caseBody, caseReplies, optionLock } from '../c
 import { EVENTS, EVENT_BY_ID, WANGAN_EVENTS } from '../content/events'
 import { JOBS, highDanger } from '../content/data'
 import { ITEMS, SHOP_IMPLANTS, STARTER_CHOICES, STARTER_GEAR, clinicOrders, itemLock, makeItem, marketPrice } from '../content/items'
-import { type Pick, STYLES, approachBonus, perkTally, upgradeCost, attrLock, dangerOdds, dirBonus, marginOf, psychoOdds, fightStats, hashSeed, jobSuccessChance, rng, hackPower, perkOptions, sellValue, stealthPower, tacticsFor } from '../rules/core'
+import { type Pick, STYLES, addFame, fameEdge, approachBonus, perkTally, upgradeCost, attrLock, dangerOdds, dirBonus, marginOf, psychoOdds, fightStats, hashSeed, jobSuccessChance, rng, hackPower, perkOptions, sellValue, stealthPower, tacticsFor } from '../rules/core'
 import { PERKS, PERK_IDS } from '../rules/perks'
 import { LAYERS, STORY_LAYER, findNode } from '../rules/map'
 import { type Action, type Game, caseDangerOption, eliteDangerOption, eventLock, initial, movable, nextDistrict, nodeBusy, nodeJob, reduce } from './state'
@@ -113,7 +113,7 @@ function botAction(g: Game, style0: BotStyle): Action | null {
     const ev = EVENT_BY_ID[n.eventId]
     return { t: 'eventChoose', optionId: ev.options.find((o) => !eventLock(c, o))!.id }
   }
-  if (n.kind === 'market' && c.credits >= 450 && c.lifelines === 0) return { t: 'buyLifeline' }
+  if (n.kind === 'market' && c.credits >= 450 && c.lifelines === 0) return { t: 'buyLifeline', tier: 'basic' }
   if (n.kind === 'rest' && !n.used) return { t: 'rest', choice: 'heal' }
   if (n.kind === 'story' && g.story.caseId) {
     const sc = CASES.find((s) => s.id === g.story.caseId)!
@@ -478,7 +478,7 @@ describe('story cases on the map', () => {
       const g = play(fresh(`s${i}`), CASE_01.id, 'stealth', 'carry')
       if (g.run.cases[CASE_01.id].outcome !== 'survived') continue
       expect(g.character.credits).toBe(500 + 600)
-      expect(g.character.heat).toBe(1)
+      expect(g.character.heat).toBe(2) // 案子 +1；名聲 90 到 Lv.3，MPD 觀察名單再 +1
       expect(g.character.fame.total).toBe(90) // 經驗 30 ×2，冒險撐過去再 ×1.5
       expect(caseBody(CASE_02, g.run.cases)).toContain(CASE_02.variants!.won)
       return
@@ -543,7 +543,7 @@ describe('node services and three-way picks', () => {
     g = reduce(g, { t: 'marketBuy', index: 1 })
     expect(g.character.credits).toBe(3000 - 1425)
     expect(g.character.stash.map((i) => i.kind)).toEqual(['smartgun', 'shotgun'])
-    g = reduce(reduce(g, { t: 'buyLifeline' }), { t: 'sell', itemId: 'smartgun#x' })
+    g = reduce(reduce(g, { t: 'buyLifeline', tier: 'basic' }), { t: 'sell', itemId: 'smartgun#x' })
     expect(g.character.lifelines).toBe(1)
     expect(g.character.credits).toBe(3000 - 1425 - 450 + 640)
   })
@@ -622,6 +622,48 @@ describe('node services and three-way picks', () => {
     expect(seen.abort).toBeGreaterThan(70)
     expect(seen.maim).toBeGreaterThan(10)
     expect(seen.dead).toBeGreaterThan(90)
+  })
+
+  it('fame opens named options in events, and gets you on the MPD watch list every 3 levels', () => {
+    const vendor = EVENT_BY_ID['vendor'].options.find((o) => o.id === 'name')!
+    expect(eventLock(fresh('f0').character, vendor)).toMatch(/名聲 Lv.3/)
+    const famous = fresh('f1', { fame: { level: 3, xp: 0, total: 60 } }).character
+    expect(eventLock(famous, vendor)).toBeUndefined()
+    const c = fresh('f2').character
+    const log: Parameters<typeof addFame>[3] = []
+    addFame(c, 60, 0, log) // Lv.1、2、3
+    expect(c.fame.level).toBe(3)
+    expect(c.heat).toBe(1)
+    expect(fameEdge(2)).toBe(0)
+    expect(fameEdge(5)).toBeCloseTo(0.12)
+    expect(fameEdge(30)).toBe(0.4)
+  })
+
+  it('only one lifeline at a time: the market will not sell a second', () => {
+    let g = atNode(fresh('l1', { credits: 5000 }), { kind: 'market', nodeId: 'mk', stock: [] })
+    g = reduce(g, { t: 'buyLifeline', tier: 'platinum' })
+    expect(g.character).toMatchObject({ lifelines: 1, lifelineTier: 'platinum', credits: 2000 })
+    expect(reduce(g, { t: 'buyLifeline', tier: 'basic' })).toBe(g)
+  })
+
+  it('the lifeline tier decides how you come back', () => {
+    const back = (tier: 'basic' | 'standard' | 'platinum') => {
+      for (let i = 0; i < 400; i++) {
+        const g = atNode(fresh(`lt${tier}${i}`, { stress: 75, lifelines: 1, lifelineTier: tier }), { kind: 'job', nodeId: 'j', jobId: 'hack-1', ok: true, stage: 'auto' })
+        const r = reduce(g, { t: 'jobAutoDone' })
+        if (r.character.lifelines === 0) return r.character
+      }
+      throw new Error('no rescue')
+    }
+    const basic = back('basic')
+    expect(basic.equipment.map((i) => i.kind)).toEqual(['gun', 'deck'])
+    expect(basic.injury).toBe(90)
+    expect(basic.scars).toEqual({ int: 1 }) // 駭入委託：燒腦
+    const plat = back('platinum')
+    expect(plat.equipment.map((i) => i.kind)).toEqual(['gun', 'deck', 'camo'])
+    expect(plat.injury).toBe(50)
+    expect(plat.scars).toBeUndefined()
+    expect(plat.lifelineTier).toBeUndefined()
   })
 
   it('a lifeline pulls you back from death, and the medics strip your implants to pay for it', () => {

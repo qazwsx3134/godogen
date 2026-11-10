@@ -665,7 +665,8 @@ body {
     linear-gradient(90deg, color-mix(in srgb, var(--color-cyan) 9%, transparent) 1px, transparent 1px) 0 0 / 28px 100%;
   border: 1px solid color-mix(in srgb, var(--color-cyan) 35%, transparent);
   box-shadow: 0 0 30px color-mix(in srgb, var(--color-cyan) 18%, transparent), inset 0 0 40px color-mix(in srgb, var(--color-cyan) 10%, transparent);
-  mask-image: linear-gradient(180deg, transparent 0, #000 9%, #000 100%);
+  /* 上緣漸淡只在 Run.tsx 的 TOP_PAD（36px）空白裡，不能蓋到最上層的節點 */
+  mask-image: linear-gradient(180deg, transparent 0, #000 30px, #000 100%);
 }
 .holo-plane::after {
   content: "";
