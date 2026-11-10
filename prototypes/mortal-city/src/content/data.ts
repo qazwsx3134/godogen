@@ -12,6 +12,10 @@ export interface Fixer {
 export const FIXERS: Record<string, Fixer> = {
   k: { id: 'k', name: '老K', role: '義體修理店・新宿街區', avatar: '/assets/avatar_fixer_k.png', glyph: 'K' },
   mist: { id: 'mist', name: '霧', role: '情報掮客・灣岸', avatar: '/assets/avatar_fixer_mist.png', glyph: '霧' },
+  // 換區後的另一批中間人與神機醫（頭像還沒畫，先顯示字）
+  rin: { id: 'rin', name: '阿凜', role: '情報販子・新宿', avatar: '/assets/avatar_fixer_rin.png', glyph: '凜' },
+  tide: { id: 'tide', name: '潮伯', role: '碼頭工頭・灣岸', avatar: '/assets/avatar_fixer_tide.png', glyph: '潮' },
+  gull: { id: 'gull', name: '海鷗', role: '神機醫・新木場', avatar: '/assets/avatar_doc_gull.png', glyph: '鷗' },
   crow: { id: 'crow', name: '夜鴉', role: '魔都 FM 104.9 DJ', avatar: '/assets/avatar_dj_crow.png', glyph: '鴉' },
   snake: { id: 'snake', name: '白蛇', role: '神機醫・歌舞伎町', avatar: '/assets/avatar_doc_snake.png', glyph: '蛇' },
   mpd: { id: 'mpd', name: 'MPD 巡警', role: '魔都警察', avatar: '/assets/avatar_mpd_officer.png', glyph: 'M' },

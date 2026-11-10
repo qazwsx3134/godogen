@@ -31,6 +31,8 @@ import {
   sellValue,
   statChanges,
   xpToNext,
+  LIFELINES,
+  lifelineOf,
 } from '../rules/core'
 import { PERKS, fameTitle } from '../rules/perks'
 import { STYLE_COLOR, STYLE_ICON } from './Node'
@@ -108,9 +110,9 @@ export function CharacterScreen({ game }: { game: ReturnType<typeof useGame> }) 
           </Panel>
           <Panel innerClass="p-3 space-y-1 text-[15px]">
             <div className="flex items-center gap-2 font-bold text-heading">
-              <ShieldPlus size={16} className="text-cyan" /> 救命保單 {c.lifelines} 張
+              <ShieldPlus size={16} className="text-cyan" /> 救命保單 {lifelineOf(c) ? LIFELINES[lifelineOf(c)!].label : '沒有'}
             </div>
-            <p className="m-0 text-fg">{c.lifelines ? '受致命傷時武裝醫療隊救你一次（傷勢 70%），用掉一張。' : '沒有保單：受致命傷就是永久死亡。黑市買得到。'}</p>
+            <p className="m-0 text-fg">{lifelineOf(c) ? `受致命傷時武裝醫療隊救你一次，救回來：${LIFELINES[lifelineOf(c)!].desc}。用掉就沒了，最多持有一張。` : '沒有保單：受致命傷就是永久死亡。黑市買得到（廉價、標準、白金三種，越貴救回來失去的越少）。'}</p>
             <p className="m-0 text-[14px] text-muted">通緝 {c.heat}★：每顆星讓對手 HP 與攻擊 +8%。休息節點可以躲起來降通緝。</p>
           </Panel>
         </>

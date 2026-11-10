@@ -61,6 +61,65 @@
 - [x] 保留「上機試讀版」標示；桌機／手機尺寸 Chromium 可玩。
 - [ ] 作者試讀修訂、真人遊玩時間量測，以及 Android Chrome／iOS Safari 實機驗收。
 
+### 音效待辦（2026-11-10 盤點）
+
+`data/asset_catalog.json` 的 `sounds` 目前沒有一筆有 `path`，全部由 `scripts/stage_effects.gd` 的 `_placeholder()` 合成。換法：檔案放 `assets/audio/se/<id>.ogg`，在 catalog 那一筆補 `path`（和 `license`），不用改程式。規格：OGG、44.1 kHz、單聲道、0.1–1.5 秒，開頭不留空白。盤點與截圖見 `build/ui_assets_page/`（[展示頁](https://claude.ai/artifact/5PWktqSHkHipZ7YKbFxQpa)）。
+
+**優先（玩家每回合都會聽到）**
+
+- [ ] `crow`：冷場的烏鴉叫「阿呆～」，銀魂式冷場的招牌聲，約 1 秒
+- [ ] `tsukkomi_hit`：完美吐槽命中，紙扇（ハリセン）用力拍下去的「啪！」
+- [ ] `tsukkomi_weak`：普通吐槽，比命中輕的拍打聲；**catalog 還沒有這一筆，要先加**（`stage_effects.gd` 的 `FEEDBACK` 在用）
+- [ ] `glass_crack`：冷場時眼鏡裂一條縫，短而脆
+- [ ] `glass_shatter`：眼鏡全碎、Game Over，玻璃碎裂加一點喜劇感的落地聲
+- [ ] `comedy_don`：漫畫吐槽格出現時的重低音「咚」，要有份量
+
+**玩法系統**
+
+- [ ] `comedy_pop`：小反應「啵」，取得線索也用這個
+- [ ] `qte_hit`：QTE 點中，清脆的「叮」
+- [ ] `combo_up`：連擊上升，音高可以一次比一次高的短音
+- [ ] `combo_break`：連擊中斷，下滑的洩氣聲
+- [ ] `tear`：撕下消音條，撕膠帶聲
+- [ ] `censor_beep`：消音嗶聲（現在的 1 kHz 合成音本來就是標準嗶聲，可以最後再換或保留）
+- [ ] `director_clap`：導演選擇出現時的場記板「啪」
+
+**超必殺（三個做成一組）**
+
+- [ ] `super_charge`：超必殺發動前的蓄力聲，往上爬
+- [ ] `power_up`：吐槽之力全滿，金色氣焰冒出來的「轟」
+- [ ] `beam`：龜派氣功光束射出，約 1.5 秒
+
+**介面音（目前完全沒有，要新增並接到程式）**
+
+- [ ] 按鈕點擊：和紙按鈕的輕「喀」
+- [ ] 開啟面板：目錄、設定、存讀檔、案件檔打開時的翻紙聲
+- [ ] 關閉面板：較短的收紙聲
+- [ ] 翻頁：存讀檔、對話紀錄換頁
+- [ ] 存檔完成：蓋章「咚」（可以沿用或重錄 `stamp.wav`）
+
+這五個要新增 catalog id（建議 `ui_click`、`ui_open`、`ui_close`、`ui_page`、`ui_save`），並在 `ui_styles.apply_button()` 或主程式開關面板的地方接上播放。
+
+**劇情音效（故事用，可以晚點換）**
+
+- [ ] `fridge`：冰箱門開關
+- [ ] `door_slide`：日式拉門
+- [ ] `bite`：定春咬人
+- [ ] `gulp`：大口喝牛奶
+- [ ] `assets/audio/` 的 `paper`、`knock`、`step`、`stamp`、`ambient` 五個 WAV：檔案存在，但也是 `tools/prepare_audio.py` 合成的，要換成正式錄音
+
+**系統 BGM**
+
+- [ ] `bgm_result`：章節結算（現在是合成的四音循環）
+- [ ] `bgm_boke`：裝傻回合
+- [ ] `bgm_combo`：連擊回合
+- [ ] 標題 BGM：目前用原聲帶第 35 首（`bgm_gintama_35`），沒有公開或販售權利，上架前要換
+
+**選用**
+
+- [ ] 打字音：現在依角色 `voice_pitch` 合成，可以保留，或每個角色錄一個短音
+- [ ] 完美吐槽語音 `assets/audio/voice/shinpachi_tsukkomi_01.ogg`～`08.ogg`（0／8；沒有檔案時靜音，這是設計上的行為）
+
 ### B 交付後待真人驗收
 
 - [ ] 手機實機觀看金色氣焰與光束，確認強度、時長與可讀性。

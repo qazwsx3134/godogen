@@ -51,10 +51,14 @@ import {
   MAX_ITEM_LEVEL,
   UPGRADE_LOAD,
   upgradeCost,
+  LIFELINES,
+  lifelineOf,
+  type LifelineTier,
+  fameEnemy,
 } from '../rules/core'
 import { type District, type MapNode, type NodeType, STORY_LAYER, findNode, generateDistrict, reachable } from '../rules/map'
-import { JOBS, JOB_LINES, OPENING, STARTER_GEAR, highDanger } from '../content/data'
-import { ITEMS, LIFELINE_PRICE, SHOP_IMPLANTS, STARTER_CHOICES, clinicOrders, eliteLoot, itemLock, eventLoot, makeItem, marketPrice, marketStock, rollKind, streetLoot } from '../content/items'
+import { FIXERS, JOBS, JOB_LINES, OPENING, STARTER_GEAR, highDanger } from '../content/data'
+import { ITEMS, SHOP_IMPLANTS, STARTER_CHOICES, clinicOrders, eliteLoot, itemLock, eventLoot, makeItem, marketPrice, marketStock, rollKind, streetLoot } from '../content/items'
 import { CASE_BY_ID, TEST_CASE, type CaseOption, type CaseRecord, type StoryCase, optionLock } from '../content/cases'
 import { EVENT_BY_ID, type Effects, type EventOption } from '../content/events'
 import { DISTRICTS, type DistrictDef } from '../content/districts'
@@ -223,7 +227,10 @@ export function diffRows(a: Character, b: Character): ResultRow[] {
   if (b.credits !== a.credits) rows.push({ label: '信用點', value: `${b.credits > a.credits ? '+' : '−'}¢${Math.abs(b.credits - a.credits)}`, tone: b.credits > a.credits ? 'good' : 'bad' })
   if (b.injury !== a.injury) rows.push({ label: '傷勢', value: `${a.injury}% → ${b.injury}%`, tone: b.injury > a.injury ? 'bad' : 'good' })
   if (b.heat !== a.heat) rows.push({ label: '通緝', value: `${a.heat}★ → ${b.heat}★`, tone: b.heat > a.heat ? 'bad' : 'good' })
-  if (b.lifelines !== a.lifelines) rows.push({ label: '救命保單', value: `${a.lifelines} → ${b.lifelines}`, tone: b.lifelines > a.lifelines ? 'good' : 'bad' })
+  if (b.lifelines !== a.lifelines || b.lifelineTier !== a.lifelineTier) {
+    const name = (x: Character) => (lifelineOf(x) ? LIFELINES[lifelineOf(x)!].label : '沒有')
+    rows.push({ label: '救命保單', value: `${name(a)} → ${name(b)}`, tone: b.lifelines > a.lifelines ? 'good' : 'bad' })
+  }
   if (b.level > a.level) rows.push({ label: '等級', value: `Lv.${a.level} → Lv.${b.level}（屬性點 +${b.level - a.level}）`, tone: 'good' })
   if (b.fame.total > a.fame.total) rows.push({ label: '名聲', value: `+${b.fame.total - a.fame.total}`, tone: 'warn' })
   const loot = b.picks.filter((p) => p.kind === 'item').length - a.picks.filter((p) => p.kind === 'item').length
@@ -325,17 +332,43 @@ function scar(c: Character, dir: Direction, at: number, log: LogEvent[]) {
 }
 
 /**
- * 救命保單把你從死亡拖回來的帳單：武裝醫療隊拆走身上所有義體抵費用（神經負荷也跟著歸零），傷勢至少 70%。
- * 身上沒有義體可拆，就留一道舊傷。直接改 c。
+ * 救命保單把你從死亡拖回來的帳單，依保單等級（LIFELINES）：廉價＝拆光義體、傷勢 90%、舊傷；
+ * 標準＝拆光義體、傷勢 70%（沒有義體可拆就改留舊傷）；白金＝義體保留、傷勢 50%。保單用掉。直接改 c。
  */
 function rescueBill(c: Character, dir: Direction, at: number, log: LogEvent[]) {
-  const taken = c.equipment.filter((i) => i.slot === 'implant')
-  if (!taken.length) return scar(c, dir, at, log)
-  c.injury = Math.max(c.injury, SEVERE_INJURY)
-  c.equipment = c.equipment.filter((i) => i.slot !== 'implant')
-  c.implantLoad -= taken.reduce((s, i) => s + i.load, 0)
-  log.push({ at, kind: 'hurt', text: `✚ 保單的帳：武裝醫療隊拆走了你身上的義體抵費用（${taken.map((i) => i.name).join('、')}），傷勢 ${c.injury}%。` })
+  const tier = lifelineOf(c) ?? 'standard'
+  const t = LIFELINES[tier]
+  c.lifelines = 0
+  c.lifelineTier = undefined
+  c.injury = Math.max(c.injury, t.injury)
+  const taken = t.strip ? c.equipment.filter((i) => i.slot === 'implant') : []
+  if (taken.length) {
+    c.equipment = c.equipment.filter((i) => i.slot !== 'implant')
+    c.implantLoad -= taken.reduce((s, i) => s + i.load, 0)
+  }
+  log.push({
+    at,
+    kind: 'hurt',
+    text: `✚ ${t.label}的帳：${taken.length ? `武裝醫療隊拆走了你身上的義體抵費用（${taken.map((i) => i.name).join('、')}），` : t.strip ? '' : '義體一件不少，'}傷勢 ${c.injury}%。`,
+  })
+  if (t.scar || (t.strip && !taken.length)) scar(c, dir, at, log)
 }
+
+/** 這區的神機醫叫什麼。 */
+const doctorName = (g: Game) => FIXERS[DISTRICTS[g.run.districtIndex].doctor.id].name
+
+/** 拿到一張保單（事件、劇情案）：沒有就收下；已經有一張（最多一張）就轉手換錢。直接改 c，回傳結果文字。 */
+function grantLifeline(c: Character, tier: LifelineTier): string {
+  if (c.lifelines > 0) {
+    c.credits += LIFELINE_RESALE
+    return `你已經有保單了，這張轉手換了 ¢${LIFELINE_RESALE}`
+  }
+  c.lifelines = 1
+  c.lifelineTier = tier
+  return `${LIFELINES[tier].label}到手`
+}
+/** 已經有保單時，多拿到的那張轉手的價錢。 */
+const LIFELINE_RESALE = 200
 
 /**
  * 任務進行中的神經錯亂（神經餘裕 < 40）：依 seed 擲一次。重傷照樣繼續任務；中斷、被救、死亡則任務結束（stop）。
@@ -363,7 +396,6 @@ function psychoCheck(g: Game, now: number, seed: number, label: string, dir: Dir
     return { g: withLog({ ...g, character: ch, notes: [...g.notes, `${label}：神經錯亂，緊急搶救（系統補償）`] }, ...log), stop: true }
   }
   if (ch.lifelines > 0) {
-    ch.lifelines -= 1
     log.push({ at: now, kind: 'hurt', text: `✚ 神經錯亂（${stage}）：「${label}」途中你的心跳停了。救命保單觸發，武裝醫療隊把你拖回來（保單用掉了）。任務中斷。` })
     rescueBill(ch, dir, now, log)
     return { g: withLog({ ...g, character: ch }, ...log), stop: true }
@@ -393,7 +425,6 @@ function settleLethal(g: Game, now: number, outcome: DangerOutcome, ctx: LethalC
     log.push({ at: now, kind: 'hurt', text: `✚ ${outcome.reason}` })
     scar(character, ctx.direction, now, log)
   } else if (outcome.kind === 'rescued') {
-    character.lifelines -= 1
     log.push({ at: now, kind: 'hurt', text: `✚ ${outcome.reason}${ctx.lossText}` })
     rescueBill(character, ctx.direction, now, log)
   } else if (outcome.kind === 'rescued_system') {
@@ -422,13 +453,13 @@ function closeCase(g: Game, now: number, sc: StoryCase, picked: CaseOption, outc
     ch.heat = Math.min(5, ch.heat + (picked.heat ?? 0))
     if (picked.needs) ch.stress += SAFE_STRESS
     if (picked.heal) ch.injury = 0
-    ch.lifelines += picked.lifeline ?? 0
+    const lifeline = picked.lifeline ? grantLifeline(ch, 'standard') : ''
     const parts = [
       reward ? `+${reward} 信用點${reward !== picked.reward ? '（靠器材或屬性：打七五折、名聲減半）' : ''}` : '沒有報酬',
       picked.heat ? `通緝 +${picked.heat}` : '',
       picked.needs ? `神經壓力 +${SAFE_STRESS}` : '',
       picked.heal ? '傷口縫好了' : '',
-      picked.lifeline ? `救命保單 +${picked.lifeline}` : '',
+      lifeline,
     ]
     log.push({ at: now, kind: picked.reward ? 'job' : 'warn', text: `${statusPrefix(ch)} 「${sc.title}」結案：${parts.filter(Boolean).join('，')}。` })
     addXp(ch, sc.xp, now, log)
@@ -488,6 +519,7 @@ export function jobLines(jobId: string, ok: boolean): string[] {
 /** 事件選項能不能選：不夠錢或屬性不夠回傳原因。 */
 export function eventLock(c: Character, o: EventOption): string | undefined {
   if (o.cost && c.credits < o.cost) return `需要 ¢${o.cost}`
+  if (o.fame && c.fame.level < o.fame) return `需要名聲 Lv.${o.fame}（現在 Lv.${c.fame.level}）`
   return attrLock(c, o.needs)
 }
 
@@ -499,7 +531,7 @@ function applyEffects(c: Character, e: Effects, seed: number, log: LogEvent[], a
   c.injury = Math.max(0, Math.min(100, c.injury + (e.injury ?? 0)))
   c.heat = Math.max(0, Math.min(5, c.heat + (e.heat ?? 0)))
   c.stress = Math.max(0, c.stress + (e.stress ?? 0))
-  c.lifelines += e.lifeline ?? 0
+  const lifeline = e.lifeline ? grantLifeline(c, 'basic') : ''
   if (e.xp) addXp(c, e.xp, at, log)
   if (e.fame) addFame(c, e.fame, at, log)
   if (e.loot) offerLoot(c, eventLoot(seed, e.loot), log, at, from)
@@ -510,7 +542,7 @@ function applyEffects(c: Character, e: Effects, seed: number, log: LogEvent[], a
   if (e.stress) rows.push({ label: '神經壓力', value: signed(e.stress), tone: e.stress > 0 ? 'bad' : 'good' })
   if (e.xp) rows.push({ label: '經驗', value: `+${e.xp}` })
   if (e.fame) rows.push({ label: '名聲', value: `+${e.fame}`, tone: 'warn' })
-  if (e.lifeline) rows.push({ label: '救命保單', value: `+${e.lifeline}`, tone: 'good' })
+  if (lifeline) rows.push({ label: '救命保單', value: lifeline, tone: 'good' })
   if (e.loot) rows.push({ label: '戰利品', value: '三選一', tone: 'warn' })
   return { text: e.text, rows }
 }
@@ -530,7 +562,7 @@ type Action =
   | { t: 'eliteChoose'; optionId: string }
   | { t: 'eventChoose'; optionId: string }
   | { t: 'marketBuy'; index: number }
-  | { t: 'buyLifeline' }
+  | { t: 'buyLifeline'; tier: LifelineTier }
   | { t: 'sell'; itemId: string }
   | { t: 'treat' }
   | { t: 'buyImplant'; kind: string }
@@ -685,7 +717,7 @@ export function reduce(g: Game, a: Action): Game {
     }
     case 'eliteFight': {
       if (n?.kind !== 'elite' || n.stage !== 'fight' || n.fight) return g
-      const r = startFight(c, highDanger(JOBS[n.jobId]).fight, a.tactic, hashSeed(c.id, n.nodeId, 'fight'))
+      const r = startFight(c, fameEnemy(highDanger(JOBS[n.jobId]).fight, c.fame.level), a.tactic, hashSeed(c.id, n.nodeId, 'fight'))
       if (!r) return g
       return { ...g, character: r.c, run: { ...g.run, node: { ...n, fight: r.f } } }
     }
@@ -761,10 +793,12 @@ export function reduce(g: Game, a: Action): Game {
       )
     }
     case 'buyLifeline': {
-      if (n?.kind !== 'market' || !c.alive || c.credits < LIFELINE_PRICE) return g
+      // 最多一張：身上有保單就不賣
+      const t = LIFELINES[a.tier]
+      if (n?.kind !== 'market' || !c.alive || !t || c.lifelines > 0 || c.credits < t.price) return g
       return withLog(
-        { ...g, character: { ...c, credits: c.credits - LIFELINE_PRICE, lifelines: c.lifelines + 1 } },
-        { at: now, kind: 'system', text: `黑市：買了一張救命保單（-${LIFELINE_PRICE} 信用點）。受致命傷時武裝醫療隊會救你一次。` },
+        { ...g, character: { ...c, credits: c.credits - t.price, lifelines: 1, lifelineTier: a.tier } },
+        { at: now, kind: 'system', text: `黑市：買了一張${t.label}（-${t.price} 信用點）。受致命傷時武裝醫療隊會救你一次：${t.desc}。` },
       )
     }
     case 'sell': {
@@ -783,7 +817,7 @@ export function reduce(g: Game, a: Action): Game {
       if (n?.kind !== 'clinic' || !c.alive || c.credits < cost || (c.injury === 0 && c.stress === 0)) return g
       return withLog(
         { ...g, character: { ...c, credits: c.credits - cost, injury: 0, stress: Math.max(0, c.stress - CLINIC.stress) } },
-        { at: now, kind: 'system', text: `神機醫白蛇幫你縫好了傷口（-${cost} 信用點，神經壓力 −${CLINIC.stress}）。` },
+        { at: now, kind: 'system', text: `神機醫${doctorName(g)}幫你縫好了傷口（-${cost} 信用點，神經壓力 −${CLINIC.stress}）。` },
       )
     }
     case 'buyImplant': {
@@ -799,11 +833,11 @@ export function reduce(g: Game, a: Action): Game {
       if (itemLock(c, item))
         return withLog(
           { ...g, character: { ...c, credits: c.credits - price, stash: [...c.stash, item] } },
-          { at: now, kind: 'system', text: `你買下了「${item.name}」（-${price} 信用點）。${itemLock(c, item)}，白蛇先幫你包起來，放進背包。` },
+          { at: now, kind: 'system', text: `你買下了「${item.name}」（-${price} 信用點）。${itemLock(c, item)}，${doctorName(g)}先幫你包起來，放進背包。` },
         )
       return withLog(
         { ...g, character: { ...c, credits: c.credits - price, equipment: [...c.equipment, item], implantLoad: c.implantLoad + item.load } },
-        { at: now, kind: 'system', text: `白蛇幫你裝上了「${item.name}」（-${price} 信用點，義體負荷 +${item.load}）。` },
+        { at: now, kind: 'system', text: `${doctorName(g)}幫你裝上了「${item.name}」（-${price} 信用點，義體負荷 +${item.load}）。` },
       )
     }
     case 'upgradeImplant': {
@@ -818,7 +852,7 @@ export function reduce(g: Game, a: Action): Game {
           ...g,
           character: { ...c, credits: c.credits - cost, equipment: c.equipment.map((i) => (i.id === item.id ? up : i)), implantLoad: c.implantLoad + UPGRADE_LOAD },
         },
-        { at: now, kind: 'system', text: `白蛇把「${item.name}」調到 Lv.${up.level}（-${cost} 信用點，義體負荷 +${UPGRADE_LOAD}）。` },
+        { at: now, kind: 'system', text: `${doctorName(g)}把「${item.name}」調到 Lv.${up.level}（-${cost} 信用點，義體負荷 +${UPGRADE_LOAD}）。` },
       )
     }
     case 'rest': {

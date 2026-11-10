@@ -259,8 +259,10 @@ export interface Character {
   implantLoad: number
   heat: number // 通緝 0～5
   equipment: Item[]
-  /** 救命保單：受致命傷時武裝醫療隊救你一次，然後就用掉。 */
+  /** 救命保單：0 或 1（最多一張）。受致命傷時武裝醫療隊救你一次，然後就用掉。 */
   lifelines: number
+  /** 保單等級（決定救回來的下場）；舊存檔沒寫＝標準。 */
+  lifelineTier?: LifelineTier
   attrs: Record<Attr, number>
   /** 還沒分配的屬性點。 */
   attrPoints: number
@@ -327,7 +329,21 @@ export function addFame(c: Character, n: number, at: number, events: LogEvent[])
     c.fame.level += 1
     c.picks.push({ kind: 'perk', level: c.fame.level, seed: hashSeed(c.id, 'fame', c.fame.level) })
     events.push({ at, kind: 'level', text: `★ 名聲提升到 Lv.${c.fame.level}，可以從三張卡裡挑一張。` })
+    // 出名的代價：每 3 級，MPD 把你往觀察名單上挪一格
+    if (c.fame.level % FAME_WATCH_EVERY === 0 && c.heat < 5) {
+      c.heat += 1
+      events.push({ at, kind: 'warn', text: `⚠ 你出名了：MPD 把你列進觀察名單（通緝 +1，現在 ${c.heat}★）。` })
+    }
   }
+}
+
+/** 名聲每升這麼多級，通緝 +1（出名的代價）。 */
+export const FAME_WATCH_EVERY = 3
+/** 精英委託的對手看你的名聲加強：名聲 Lv.2 以上每級 +4%，最多 +40%。 */
+export const fameEdge = (fameLevel: number) => Math.min(0.4, Math.max(0, fameLevel - 2) * 0.04)
+export function fameEnemy(e: Enemy, fameLevel: number): Enemy {
+  const k = 1 + fameEdge(fameLevel)
+  return k === 1 ? e : { ...e, hp: Math.round(e.hp * k), atk: Math.round(e.atk * k) }
 }
 
 /** 各流派拿了幾級的卡（看主流派）。 */
@@ -442,6 +458,17 @@ export function lethalChance(c: Character, opt: DangerOption): number {
   return Math.min(0.95, opt.lethalBase + c.injury / 400 + stagePenalty)
 }
 
+/** 救命保單的等級：越貴，救回來失去的越少。最多持有一張。 */
+export type LifelineTier = 'basic' | 'standard' | 'platinum'
+export const LIFELINES: Record<LifelineTier, { label: string; price: number; injury: number; strip: boolean; scar: boolean; desc: string }> = {
+  basic: { label: '廉價保單', price: 450, injury: 90, strip: true, scar: true, desc: '拆光身上的義體抵費用、傷勢 90%、留一道舊傷' },
+  standard: { label: '標準保單', price: 1200, injury: 70, strip: true, scar: false, desc: '拆光身上的義體抵費用、傷勢 70%' },
+  platinum: { label: '白金保單', price: 3000, injury: 50, strip: false, scar: false, desc: '義體保留、傷勢 50%' },
+}
+export const LIFELINE_TIERS: LifelineTier[] = ['basic', 'standard', 'platinum']
+/** 身上這張保單的等級（沒有保單＝null）。 */
+export const lifelineOf = (c: Character): LifelineTier | null => (c.lifelines > 0 ? (c.lifelineTier ?? 'standard') : null)
+
 /** 機率顯示成整數百分比。 */
 export const pct = (p: number) => `${Math.round(p * 100)}%`
 
@@ -485,7 +512,7 @@ export function resolveDanger(c: Character, opt: DangerOption, seed: number, sys
   if (systemFault) return { kind: 'rescued_system', reason: '系統錯誤造成的致命結果：武裝醫療隊免費搶救，已記錄在生涯中。' }
   if (c.lifelines <= 0)
     return { kind: 'dead', reason: `受了致命傷（當時死亡機率 ${pct(death)}），而你身上沒有救命保單。先去神機醫治傷、休息降壓力、帶救命保單或該方向的裝備，都能降低這個機率。` }
-  return { kind: 'rescued', reason: `受了致命傷（當時死亡機率 ${pct(death)}）。救命保單觸發，武裝醫療隊把你拖上了飛行器（保單用掉了），身上的義體被拆下來抵費用。` }
+  return { kind: 'rescued', reason: `受了致命傷（當時死亡機率 ${pct(death)}）。救命保單觸發，武裝醫療隊把你拖上了飛行器（保單用掉了）。` }
 }
 
 // ---------- 自動戰鬥（委託、精英委託、劇情委託） ----------

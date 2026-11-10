@@ -19,6 +19,8 @@ export interface EventOption {
   id: string
   label: string
   needs?: { attr: Attr; min: number }
+  /** 亮出名號：名聲要到這個等級才能選。 */
+  fame?: number
   /** 要先付的信用點（不夠就不能選）。 */
   cost?: number
   /** 成功機率；沒寫＝一定成功。 */
@@ -44,6 +46,7 @@ export const EVENTS: CityEvent[] = [
     options: [
       { id: 'buy', label: '買一個盲盒', cost: 150, win: { text: '你打開油膩的紙盒，裡面不只一樣東西。', loot: 'street' } },
       { id: 'scare', label: '冷冷地盯著他，直到他自己把貨交出來', needs: { attr: 'cool', min: 6 }, win: { text: '他的手在發抖，把最好的那幾件推到你面前。有人看到了這一幕。', loot: 'street', heat: 1 } },
+      { id: 'name', label: '【亮出名號】報上你的代號', fame: 3, win: { text: '他聽過你的代號，二話不說把推車最底下那個盒子塞給你：「算我孝敬的，以後別找我麻煩。」', loot: 'street' } },
       leave('你拉上兜帽，繼續往前走。'),
     ],
   },
@@ -64,6 +67,7 @@ export const EVENTS: CityEvent[] = [
     options: [
       { id: 'fight', label: '下場打', chance: 0.55, win: { text: '你把對手的義眼打飛了出去。觀眾在吼你的名字。', credits: 300, fame: 15 }, lose: { text: '你被打得撞上鐵籠，最後是被人拖出去的。', injury: 22 } },
       { id: 'bet', label: '押 100 在看起來比較狠的那個', cost: 100, chance: 0.5, win: { text: '你押對了。', credits: 250 }, lose: { text: '你押的那個第二回合就倒了。' } },
+      { id: 'name', label: '【亮出名號】讓莊家看清楚是誰來了', fame: 3, win: { text: '莊家認出你，臉色一變，塞了一疊晶片給你：「你站在籠邊就好，別下場，讓他們知道今晚誰在看。」', credits: 200, fame: 5 } },
       leave('你沒興趣看別人流血。'),
     ],
   },
@@ -83,6 +87,7 @@ export const EVENTS: CityEvent[] = [
     body: '靖國通被 MPD 的臨檢站封住了，每個人都要掃描身分。你身上的東西經不起掃描。',
     options: [
       { id: 'bribe', label: '塞 200 的「罰款」給巡警', cost: 200, win: { text: '巡警收下了，順手把你的紀錄刪了一筆。', heat: -1 } },
+      { id: 'name', label: '【亮出名號】直接走到巡警面前，讓他掃你的臉', fame: 3, chance: 0.6, win: { text: '巡警看了一眼螢幕，手指停了兩秒，然後揮手讓你過去。他不想今晚加班。', heat: -1 }, lose: { text: '巡警看到螢幕上的名字，反而按下了通報鍵。你的臉現在在每一台 MPD 的終端上。', heat: 2 } },
       { id: 'run', label: '趁亂衝過去', chance: 0.6, win: { text: '你衝過去了，沒有人追上來。' }, lose: { text: '電擊槍打中了你的背，你還是逃掉了，但 MPD 有了你的影像。', injury: 15, heat: 1 } },
       { id: 'detour', label: '繞遠路', win: { text: '你繞了一大圈，雨一直沒停，心情很差。', stress: 6 } },
     ],
@@ -155,6 +160,7 @@ export const WANGAN_EVENTS: CityEvent[] = [
     options: [
       { id: 'bet', label: '坐下來玩一把', cost: 200, chance: 0.45, win: { text: '你贏了。他們看你的眼神變了。', credits: 520 }, lose: { text: '你輸得很乾淨。' } },
       { id: 'cheat', label: '用義手換牌（反應要夠快）', needs: { attr: 'reflex', min: 7 }, win: { text: '沒有人看見你的手動過。你帶著一疊晶片走出貨櫃屋。', credits: 420, stress: 3 } },
+      { id: 'name', label: '【亮出名號】把代號寫在籌碼上推到桌子中間', fame: 6, win: { text: '四個人互看了一眼，把桌上的晶片分了一份給你：「新宿來的那個？這局算你的，下次換個地方坐。」', credits: 350 } },
       leave('你不跟走私客賭錢。'),
     ],
   },
@@ -175,6 +181,7 @@ export const WANGAN_EVENTS: CityEvent[] = [
     options: [
       { id: 'give', label: '分給他們 150', cost: 150, win: { text: '他們沒說謝謝，只是把錢分成很多份。你的心比較靜了。', fame: 15, stress: -12 } },
       { id: 'guide', label: '帶他們從排水道繞過去', needs: { attr: 'cool', min: 7 }, win: { text: '你帶著二十個人走過排水道，沒有一個人出聲。夜鴉第二天在節目裡提到了這件事，沒有說你的名字。', fame: 30, heat: 1 } },
+      { id: 'name', label: '【亮出名號】放話出去：這些人，我罩的', fame: 6, win: { text: '一個小時後，那個失約的帶路人自己出現了，臉色發白。他一個一個把人帶走，沒收錢。', fame: 15, stress: -8 } },
       leave('你幫不了所有人。'),
     ],
   },
@@ -194,6 +201,7 @@ export const WANGAN_EVENTS: CityEvent[] = [
     body: '海岸高架上，港務部的武裝臨檢攔下了每一台車和每一個人。輪到你了。',
     options: [
       { id: 'bribe', label: '塞 300 給檢查員', cost: 300, win: { text: '檢查員收下錢，把你的資料「漏」掉了。', heat: -1 } },
+      { id: 'name', label: '【亮出名號】把你的代號報給檢查員', fame: 6, chance: 0.6, win: { text: '檢查員的上司親自走過來，客氣地請你先走。港務部最近不想跟你這種人有瓜葛。', heat: -1 }, lose: { text: '檢查員笑了：「就是你？」三台無人機同時對準了你。你跑掉了，但港務部有了你的完整檔案。', heat: 2, injury: 10 } },
       { id: 'run', label: '跳下高架', chance: 0.5, win: { text: '你落在下面的貨櫃頂上，一路跑進堆場。' }, lose: { text: '你摔在貨櫃的邊角上，港務部的無人機記下了你的臉。', injury: 18, heat: 1 } },
       { id: 'wait', label: '乖乖排隊，等他們查完', win: { text: '你排了一個小時，雨一直沒停。', stress: 8 } },
     ],

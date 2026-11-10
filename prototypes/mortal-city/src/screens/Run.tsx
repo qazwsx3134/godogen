@@ -53,6 +53,8 @@ export function RunScreen({ game }: { game: G }) {
 }
 
 const ROW = 76
+/** 地圖最上面留的空白：投影桌面上緣的漸淡（styles.css .holo-plane 的 mask）只落在這段，不會蓋到最後一關。 */
+const TOP_PAD = 36
 /** 投影桌面往後倒的角度與透視距離（和 styles.css 的 .holo-stage／.holo-plane 一起用）。 */
 const TILT = 22
 const PERSPECTIVE = 1000
@@ -86,8 +88,8 @@ function MapView({ game }: { game: G }) {
   const can = new Set(next.map((n) => n.id))
   const visited = new Set(g.run.path)
   const L = d.layers.length
-  const pos = (n: MapNode) => ({ x: ((d.layers[n.layer].indexOf(n) + 0.5) / d.layers[n.layer].length) * 100, y: (L - 1 - n.layer) * ROW + ROW / 2 })
-  const height = L * ROW
+  const pos = (n: MapNode) => ({ x: ((d.layers[n.layer].indexOf(n) + 0.5) / d.layers[n.layer].length) * 100, y: TOP_PAD + (L - 1 - n.layer) * ROW + ROW / 2 })
+  const height = TOP_PAD + L * ROW
   const deco = useMemo(() => cityBlocks(g.run.seed, d.id, height), [g.run.seed, d.id, height])
   const here = g.run.at ? findNode(d, g.run.at) : undefined
   const focus = useRef<HTMLButtonElement | null>(null)

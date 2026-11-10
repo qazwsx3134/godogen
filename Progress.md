@@ -15,6 +15,11 @@
 | `2ea3970a` | 2026-11-07 | mortal-city：進度與待辦整理（只有文件）；11-05 段落搬進新的 `MILESTONE.md` |
 | `cf9bc101`＋`5090c606` | 2026-11-06 | mortal-city 改成單機文字冒險 roguelike（ADR 0001）：新宿切片（程序地圖、8 種節點、名聲卡牌／道具三選一、救命保單、傳奇檔案）、霓虹 icon 與贓貨黑市、回覆逐則出現、連續進度條、系統訊息分行與自動捲動、任務完成 toast＋結案畫面、戰鬥特效；灣岸 03／06 試讀稿（未接入）；LESSONS 加 2 條 |
 | `18c37763` | 2026-11-05 | debt-commission：`main.gd` 拆成外殼＋五個分段檔（G6）、章節選擇「流程圖」（G4）、換背景 shader 轉場（brush／ink／glitch）、手感回饋（震動分級、HUD 與提示跳動、固定音效）、kit 同步；LESSONS 加 2 條 |
+| 最新（`git log -1`） | 2026-11-10 | debt-commission：TODO 列出 33 項音效待辦；Codex（Luna max）產生的第一批介面候選圖 42 張（按鈕三套、「吐槽！」按鈕、標題題字、開機畫面、App 圖示、評價印章、結局卡、鑑賞封條、碎眼鏡）放在 `art_src/ui/gen-20261110/`，等作者挑 |
+| `965d4a89` | 2026-11-10 | mortal-city：救命保單最多一張、分廉價／標準／白金三級（決定救回來的下場）；地圖最後一關不再被上緣漸淡遮住；做法選單拿掉風險與裝備的百分比；換區換一批中間人與神機醫（阿凜、潮伯、海鷗，頭像待畫）；名聲：6 則事件的「亮出名號」選項，名聲每 3 級通緝 +1、精英對手依名聲加強 |
+| `18e03b97` | 2026-11-09 | 依 game-critic 評審改善兩個原型。debt-commission：S 評價要 60% PERFECT、`tools/bot_players.gd` 五種機器人玩家、冷場原因／調查落空提示／普通吐槽音效／長按上滑教學、過時文件、README 玩法假設草稿、stage 改 Pre-Production。mortal-city：致命機率上畫面、掉寶與路線脫鉤、地圖「下一步」資訊、回饋與二次確認、`pnpm smoke`；危險節點取捨（起始三選一、安全選項付代價、重傷生還與舊傷、風險 ×1.5）、義體不限數量＋神經錯亂＋裝備屬性門檻、流派卡權重與保底、漲價＋訂製與升級義體 |
+| `996c51d5` | 2026-11-09 | game-critic 評審報告：debt-commission 與 mortal-city 各一份（`reviews/2026-11-09-game-critic.md`），建議列進兩邊 TODO |
+| `db3ec71a` | 2026-11-09 | debt-commission：故事只留功能展示與桂短篇，舊故事搬進 `tests/fixtures/`；`prototypes/GAME_DEV_FLOW.md` |
 
 ## 專案入口
 
@@ -22,11 +27,12 @@
 |---|---|---|---|
 | 本次提交（`git log -1`） | 2026-11-11 | walker-tps：首次收錄完整戰鬥原型、地圖／雙機體素材、14 個處理後音效與署名；補忽略規則，Git 乾淨副本匯入／音效／戰鬥驗證 |
 | debt-commission 萬事屋吐槽 ADV | 故事只剩「功能展示」（編輯器範本，預設）與桂的極短篇；舊故事搬進 `tests/fixtures/` 當夾具（2026-11-08，未 commit）；等作者看功能展示；2026-11-09 評審完成（Loop 3 分最低，第一章不在正式內容裡），12 條建議在 TODO（未 commit） | [PROGRESS](prototypes/debt-commission/PROGRESS.md) | [MILESTONE](prototypes/debt-commission/MILESTONE.md) |
+| debt-commission 萬事屋吐槽 ADV | 故事只剩功能展示（預設）與桂的極短篇；11-10 做了介面素材盤點（[展示頁](https://claude.ai/artifact/5PWktqSHkHipZ7YKbFxQpa)）與第一批介面候選圖，**等作者挑圖**後接進遊戲；音效清單在 TODO；評審 #2 待作者決定，之後是真人試玩 | [PROGRESS](prototypes/debt-commission/PROGRESS.md) | [MILESTONE](prototypes/debt-commission/MILESTONE.md) |
 | godot-kit 共用模組 | SaveSlots 已接入 seal-meadow adapter，保留遊戲恢復保護；只同步該存檔模組，測試暫緩 | [PROGRESS](prototypes/godot-kit/PROGRESS.md) | — |
 | walker-tps 四足戰甲 | 2026-11-11 勾索慣性／自動刀片／主砲／scout AI 與單局已接通；新增 14 個處理後音效約 201 KB、事件與混音接入、Git 排除原檔及授權署名；音效／戰鬥／地圖測試通過，Git 乾淨副本已驗證，實聽與手機待驗，已納本次提交 | [PROGRESS](prototypes/walker-tps/PROGRESS.md) | — |
 | seal-meadow 蓬蓬草原 | 暖陶瓦風格與商店三視圖已定方向；可走商店、入口與路牌樣板已接入，正式 2D 紙娃娃及手機真人驗收待做，多人延後 | [PROGRESS](prototypes/seal-meadow/PROGRESS.md) | [MILESTONE](prototypes/seal-meadow/MILESTONE.md) |
 | hero-horde-idle 全員推王 | 等真人前三層、手機恢復成本與作者素材 | [PROGRESS](prototypes/hero-horde-idle/docs/PROGRESS.md) | [MILESTONE](prototypes/hero-horde-idle/docs/MILESTONE.md) |
-| 魔都傭兵（mortal-city，已改為單機文字冒險 roguelike，ADR 0001） | 新宿→灣岸兩區可玩（灣岸 03／06 試讀稿、第 3／5 階委託、灣岸事件）；全息地圖、新聞跑馬燈、音效、6 張節點背景已接入；WSL 那條舊架構分支（`c8fb8afd`）已合併、程式以 roguelike 為準，可移植的項目待移植；等作者試讀與試玩；2026-11-09 評審完成（致命機率看不到、安全選項全面勝出），R1–R11 在 TODO（未 commit） | [PROGRESS](prototypes/mortal-city/PROGRESS.md)／[設計進度](docs/cyberpunk-text-mmo/PROGRESS.md) | [MILESTONE](prototypes/mortal-city/MILESTONE.md) |
+| 魔都傭兵（mortal-city，單機文字冒險 roguelike，ADR 0001） | 新宿→灣岸兩區可玩；評審 R1、R2、R4（大部分）–R8、R10 已做，加上神經錯亂、保單分級、名聲的用處與代價；`pnpm test`＋`pnpm smoke` 自動驗證；下一步是 3～5 人真人試玩，新美術與秋葉原等試玩後再說 | [PROGRESS](prototypes/mortal-city/PROGRESS.md)／[設計進度](docs/cyberpunk-text-mmo/PROGRESS.md) | [MILESTONE](prototypes/mortal-city/MILESTONE.md) |
 | dreamling-idle 夢靈遠行 | 第一個可玩版本完成，暫停 | [PROGRESS](prototypes/dreamling-idle/PROGRESS.md) | — |
 | kagura-dango 丸子大胃王（神樂生日） | 完整比賽可玩：裁判開場、三回合（三人齊吃→拋丸子→全力餵食）、對手隊、神樂變胖；佔位美術；待做第 1 回合「老闆端上桌」回饋 | [PROGRESS](prototypes/kagura-dango/PROGRESS.md) | — |
 | erwin-run | 可玩到結局，未上傳 itch | [PROGRESS](prototypes/erwin-run/PROGRESS.md) | — |
