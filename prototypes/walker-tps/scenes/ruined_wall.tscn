@@ -1,0 +1,53 @@
+[gd_scene format=3]
+
+[ext_resource type="Material" path="res://materials/weathered_concrete.tres" id="1_4jadm"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_4jadm"]
+size = Vector3(9, 3.6, 1.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_b8k80"]
+size = Vector3(9, 3.6, 1.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_jv3cs"]
+size = Vector3(3, 1.2, 1.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5hml2"]
+size = Vector3(3, 1.2, 1.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_gjh2v"]
+size = Vector3(4, 0.5, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3dgh4"]
+size = Vector3(4, 0.5, 2)
+
+[node name="RuinedWall" type="Node3D" unique_id=1663658778]
+
+[node name="Main" type="StaticBody3D" parent="." unique_id=1020497516]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
+
+[node name="Surface" type="MeshInstance3D" parent="Main" unique_id=144174814]
+material_override = ExtResource("1_4jadm")
+mesh = SubResource("BoxMesh_4jadm")
+
+[node name="Collision" type="CollisionShape3D" parent="Main" unique_id=1113013827]
+shape = SubResource("BoxShape3D_b8k80")
+
+[node name="BrokenTop" type="StaticBody3D" parent="." unique_id=340575239]
+transform = Transform3D(0.98768836, 0.15643448, 0, -0.15643448, 0.98768836, 0, 0, 0, 1, -2.8, 4.2, 0)
+
+[node name="Surface" type="MeshInstance3D" parent="BrokenTop" unique_id=2075728393]
+material_override = ExtResource("1_4jadm")
+mesh = SubResource("BoxMesh_jv3cs")
+
+[node name="Collision" type="CollisionShape3D" parent="BrokenTop" unique_id=1590046473]
+shape = SubResource("BoxShape3D_5hml2")
+
+[node name="FallenSlab" type="StaticBody3D" parent="." unique_id=1447768667]
+transform = Transform3D(0.96716654, -0.08483125, 0.23956753, 0.12068332, 0.98288673, -0.1391731, -0.22366153, 0.16351539, 0.96085286, 3, 0.3, 2)
+
+[node name="Surface" type="MeshInstance3D" parent="FallenSlab" unique_id=1955719110]
+material_override = ExtResource("1_4jadm")
+mesh = SubResource("BoxMesh_gjh2v")
+
+[node name="Collision" type="CollisionShape3D" parent="FallenSlab" unique_id=639061599]
+shape = SubResource("BoxShape3D_3dgh4")

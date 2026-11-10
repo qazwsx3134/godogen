@@ -1,0 +1,13 @@
+# Keep user-supplied originals locally. Commit processed runtime Ogg and metadata.
+/enemy/*.wav
+/enemy/*.wav.import
+/explode/*.wav
+/explode/*.wav.import
+/hit/*.ogg
+/hit/*.ogg.import
+/machine-gun/*.wav
+/machine-gun/*.wav.import
+/machine-walk/*.wav
+/machine-walk/*.wav.import
+/machine-walk/*.mp3
+/machine-walk/*.mp3.import

@@ -1,0 +1,174 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/00gamedevs/source_effect.gd" id="1_42gl7"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/energy-burst/spatial_part_0.gdshader" id="2_l5au1"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/energy-burst/part_0.res" id="3_yqqf8"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/energy-burst/spatial_part_1.gdshader" id="4_0v3kj"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/energy-burst/part_1.res" id="5_6cq34"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/energy-burst/spatial_part_2.gdshader" id="6_pw80b"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/energy-burst/part_2.res" id="7_dyod8"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/energy-burst/spatial_part_3.gdshader" id="8_f1dbe"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/energy-burst/part_3.res" id="9_jumnf"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/energy-burst/spatial_part_4.gdshader" id="10_7bkx0"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/energy-burst/part_4.res" id="11_31uo8"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/energy-burst/spatial_part_5.gdshader" id="12_85r8t"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/energy-burst/part_5.res" id="13_gnssy"]
+[ext_resource type="AnimationLibrary" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/energy-burst/motion.res" id="14_l12jm"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_da8oh"]
+resource_local_to_scene = true
+render_priority = 3
+shader = ExtResource("2_l5au1")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 307.0
+shader_parameter/uSize = 1.0
+shader_parameter/uStopTime = -1.0
+shader_parameter/uEndDuration = 1.26
+shader_parameter/uQuantity = 12.0
+shader_parameter/uSpread = 1.0
+shader_parameter/uTime = 0.45
+shader_parameter/uStretch = 1.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.02121901, 0.18782078, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fvvl7"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("4_0v3kj")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 54.0
+shader_parameter/uSize = 1.0
+shader_parameter/uStopTime = -1.0
+shader_parameter/uEndDuration = 1.26
+shader_parameter/uQuantity = 12.0
+shader_parameter/uSpread = 1.0
+shader_parameter/uTime = 0.45
+shader_parameter/uStretch = 1.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.02121901, 0.18782078, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3bvos"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("6_pw80b")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 13824
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 0.45
+shader_parameter/uQuantity = 12.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.02121901, 0.18782078, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g6dmt"]
+resource_local_to_scene = true
+render_priority = 3
+shader = ExtResource("8_f1dbe")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 24
+shader_parameter/source_instance_count = 23.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 0.45
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.02121901, 0.18782078, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wjwld"]
+resource_local_to_scene = true
+render_priority = 4
+shader = ExtResource("10_7bkx0")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 0.45
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.02121901, 0.18782078, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5texw"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("12_85r8t")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.02121901, 0.18782078, 1)
+shader_parameter/uTime = 0.45
+
+[node name="EnergyBurst" type="Node3D" unique_id=1364364283]
+script = ExtResource("1_42gl7")
+effect_id = "energy-burst"
+burst = true
+duration = 2.8
+start_duration = 0.27999999999999997
+end_duration = 1.26
+kind = 3
+variant = 1
+metadata/vfx_source = "00gamedevs"
+metadata/vfx_id = "energy-burst"
+metadata/editor_preview_time = 0.45
+
+[node name="Parts" type="Node3D" parent="." unique_id=241619206]
+unique_name_in_owner = true
+
+[node name="Part000" type="MeshInstance3D" parent="Parts" unique_id=859429647]
+material_override = SubResource("ShaderMaterial_da8oh")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("3_yqqf8")
+metadata/source_name = "Part0"
+
+[node name="Part001" type="MeshInstance3D" parent="Parts" unique_id=796269891]
+material_override = SubResource("ShaderMaterial_fvvl7")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("5_6cq34")
+metadata/source_name = "Part1"
+
+[node name="Part002" type="MeshInstance3D" parent="Parts" unique_id=951133158]
+material_override = SubResource("ShaderMaterial_3bvos")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("7_dyod8")
+metadata/source_name = "energy-burst-arcs"
+
+[node name="Part003" type="MeshInstance3D" parent="Parts" unique_id=1376790065]
+material_override = SubResource("ShaderMaterial_g6dmt")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("9_jumnf")
+metadata/source_name = "Part3"
+
+[node name="Part004" type="MeshInstance3D" parent="Parts" unique_id=1738475987]
+material_override = SubResource("ShaderMaterial_wjwld")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("11_31uo8")
+metadata/source_name = "Part4"
+
+[node name="Part005" type="MeshInstance3D" parent="Parts" unique_id=1446909518]
+transform = Transform3D(1, 0, 0, 0, 2.220446e-16, 1, 0, -1, 2.220446e-16, 0, -1.36, 0)
+material_override = SubResource("ShaderMaterial_5texw")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("13_gnssy")
+metadata/source_name = "Part5"
+
+[node name="Motion" type="AnimationPlayer" parent="." unique_id=863108372]
+unique_name_in_owner = true
+libraries/ = ExtResource("14_l12jm")

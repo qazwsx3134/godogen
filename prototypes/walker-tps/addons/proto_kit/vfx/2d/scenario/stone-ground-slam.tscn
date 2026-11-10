@@ -1,0 +1,16 @@
+[gd_scene format=3]
+
+[ext_resource type="SpriteFrames" path="res://addons/proto_kit/vfx/assets/scenario/stone-ground-slam/stone-ground-slam.tres" id="1_egqtj"]
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/2d/sheet_effect.gd" id="2_yx5hi"]
+
+[node name="StoneGroundSlam" type="AnimatedSprite2D" unique_id=341124408]
+texture_filter = 1
+sprite_frames = ExtResource("1_egqtj")
+animation = &"stone_ground_slam"
+frame = 2
+offset = Vector2(0, -23.04)
+script = ExtResource("2_yx5hi")
+metadata/vfx_source = "scenario"
+metadata/vfx_id = "stone-ground-slam"
+metadata/placement = "target-ground"
+metadata/depth_hint = "front"

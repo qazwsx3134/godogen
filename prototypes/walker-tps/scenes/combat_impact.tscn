@@ -1,0 +1,28 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/combat_impact.gd" id="1_ls7i1"]
+[ext_resource type="AudioStream" path="res://assets/sound/runtime/hit_heavy.ogg" id="2_ewtey"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ewtey"]
+shading_mode = 0
+albedo_color = Color(1, 0.55, 0.12, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_2h28i"]
+radius = 0.6
+height = 1.2
+radial_segments = 8
+rings = 4
+
+[node name="Impact" type="Node3D" unique_id=1563219357]
+script = ExtResource("1_ls7i1")
+
+[node name="Flash" type="MeshInstance3D" parent="." unique_id=109723605]
+material_override = SubResource("StandardMaterial3D_ewtey")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_2h28i")
+
+[node name="Sound" type="AudioStreamPlayer3D" parent="." unique_id=1421087465]
+stream = ExtResource("2_ewtey")
+unit_size = 12.0
+max_distance = 95.0
+bus = &"Impacts"

@@ -1,0 +1,101 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/walker_combat.gd" id="1_dr7ih"]
+[ext_resource type="PackedScene" path="res://scenes/auto_blades.tscn" id="2_pucva"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pucva"]
+shading_mode = 0
+albedo_color = Color(0.35, 0.85, 0.95, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_kbv3k"]
+top_radius = 0.025
+bottom_radius = 0.025
+height = 1.0
+radial_segments = 6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_51cwe"]
+shading_mode = 0
+albedo_color = Color(0.8, 0.95, 1, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_31fbe"]
+radius = 0.18
+height = 0.36
+radial_segments = 8
+rings = 4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_61u1t"]
+shading_mode = 0
+albedo_color = Color(0.35, 0.85, 0.95, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_v3tom"]
+top_radius = 0.025
+bottom_radius = 0.025
+height = 1.0
+radial_segments = 6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q3j23"]
+shading_mode = 0
+albedo_color = Color(0.8, 0.95, 1, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_pr2x7"]
+radius = 0.18
+height = 0.36
+radial_segments = 8
+rings = 4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eoy7k"]
+shading_mode = 0
+albedo_color = Color(1, 0.8, 0.3, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_236dv"]
+radius = 0.4
+height = 0.8
+radial_segments = 8
+rings = 4
+
+[node name="Combat" type="Node3D" unique_id=966660870]
+script = ExtResource("1_dr7ih")
+
+[node name="Launch0" type="Marker3D" parent="." unique_id=1856493375]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05, 1.8, 1.7)
+
+[node name="Cable0" type="MeshInstance3D" parent="." unique_id=1268790026]
+top_level = true
+visible = false
+material_override = SubResource("StandardMaterial3D_pucva")
+mesh = SubResource("CylinderMesh_kbv3k")
+
+[node name="Pin0" type="MeshInstance3D" parent="." unique_id=584834458]
+top_level = true
+visible = false
+material_override = SubResource("StandardMaterial3D_51cwe")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_31fbe")
+
+[node name="Launch1" type="Marker3D" parent="." unique_id=1919380835]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 1.8, 1.7)
+
+[node name="Cable1" type="MeshInstance3D" parent="." unique_id=438914903]
+top_level = true
+visible = false
+material_override = SubResource("StandardMaterial3D_61u1t")
+mesh = SubResource("CylinderMesh_v3tom")
+
+[node name="Pin1" type="MeshInstance3D" parent="." unique_id=1217527198]
+top_level = true
+visible = false
+material_override = SubResource("StandardMaterial3D_q3j23")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_pr2x7")
+
+[node name="MuzzleFlash" type="MeshInstance3D" parent="." unique_id=1867319944]
+top_level = true
+visible = false
+material_override = SubResource("StandardMaterial3D_eoy7k")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_236dv")
+
+[node name="ShotSound" type="AudioStreamPlayer3D" parent="." unique_id=853997911]
+bus = &"Weapons"
+
+[node name="AutoBlades" parent="." unique_id=541706990 instance=ExtResource("2_pucva")]

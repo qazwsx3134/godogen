@@ -1,0 +1,65 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/00gamedevs/weapon_smear.gd" id="1_fbklj"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/spatial_weapon_smear_0.gdshader" id="2_pter7"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/spatial_weapon_smear_1.gdshader" id="3_iuxnd"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/spatial_weapon_smear_2.gdshader" id="4_ohkd8"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3imm1"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("2_pter7")
+shader_parameter/uColor = null
+shader_parameter/uDetail = null
+shader_parameter/uDensity = null
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_obi4c"]
+size = Vector2(1.4, 0.4)
+orientation = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y8kic"]
+resource_local_to_scene = true
+render_priority = 1
+shader = ExtResource("3_iuxnd")
+shader_parameter/uColor = null
+shader_parameter/uDetail = null
+shader_parameter/uDensity = null
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_s466x"]
+size = Vector2(1.4, 0.4)
+orientation = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_o50se"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("4_ohkd8")
+shader_parameter/uColor = null
+shader_parameter/uDetail = null
+shader_parameter/uDensity = null
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ot5t5"]
+size = Vector2(1.4, 0.4)
+orientation = 2
+
+[node name="WeaponSmear" type="Node3D" unique_id=567259089]
+script = ExtResource("1_fbklj")
+metadata/vfx_id = "weapon-smear"
+metadata/vfx_source = "00gamedevs"
+
+[node name="Layers" type="Node3D" parent="." unique_id=2064958555]
+unique_name_in_owner = true
+
+[node name="Layer0" type="MeshInstance3D" parent="Layers" unique_id=43222820]
+material_override = SubResource("ShaderMaterial_3imm1")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_obi4c")
+
+[node name="Layer1" type="MeshInstance3D" parent="Layers" unique_id=1200278947]
+material_override = SubResource("ShaderMaterial_y8kic")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_s466x")
+
+[node name="Layer2" type="MeshInstance3D" parent="Layers" unique_id=1504896458]
+material_override = SubResource("ShaderMaterial_o50se")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_ot5t5")

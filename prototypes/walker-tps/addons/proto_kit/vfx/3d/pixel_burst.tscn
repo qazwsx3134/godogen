@@ -1,0 +1,139 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/pixel_burst.gd" id="1_uglwk"]
+[ext_resource type="Shader" path="res://addons/proto_kit/pixel_vfx3d_ring.gdshader" id="2_amjeu"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ur17j"]
+shading_mode = 0
+vertex_color_use_as_albedo = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_qfycf"]
+material = SubResource("StandardMaterial3D_ur17j")
+
+[sub_resource type="MultiMesh" id="MultiMesh_epbas"]
+resource_local_to_scene = true
+transform_format = 1
+use_colors = true
+mesh = SubResource("BoxMesh_qfycf")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l5l8w"]
+render_priority = 0
+shader = ExtResource("2_amjeu")
+shader_parameter/outline = null
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_teuc8"]
+size = Vector2(1, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_7yyts"]
+size = Vector2(1, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_xlpmg"]
+size = Vector2(1, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_wsxs8"]
+size = Vector2(1, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_lpfkr"]
+size = Vector2(1, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_bpx2x"]
+size = Vector2(1, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ix3oc"]
+size = Vector2(1, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_dxeqf"]
+size = Vector2(1, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_a1t5p"]
+size = Vector2(1, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ga04l"]
+size = Vector2(1, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_whhe7"]
+size = Vector2(1, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_o4hjh"]
+size = Vector2(1, 1)
+
+[node name="PixelBurst3D" type="Node3D" unique_id=1633176470]
+script = ExtResource("1_uglwk")
+
+[node name="Chunks" type="MultiMeshInstance3D" parent="." unique_id=1870141275]
+unique_name_in_owner = true
+multimesh = SubResource("MultiMesh_epbas")
+
+[node name="Rings" type="Node3D" parent="." unique_id=465425702]
+unique_name_in_owner = true
+
+[node name="Ring0" type="MeshInstance3D" parent="Rings" unique_id=1144060766]
+material_override = SubResource("ShaderMaterial_l5l8w")
+instance_shader_parameters/progress = 0.3
+mesh = SubResource("PlaneMesh_teuc8")
+
+[node name="Ring1" type="MeshInstance3D" parent="Rings" unique_id=1926712932]
+visible = false
+material_override = SubResource("ShaderMaterial_l5l8w")
+instance_shader_parameters/progress = 0.3
+mesh = SubResource("PlaneMesh_7yyts")
+
+[node name="Ring2" type="MeshInstance3D" parent="Rings" unique_id=1657689898]
+visible = false
+material_override = SubResource("ShaderMaterial_l5l8w")
+instance_shader_parameters/progress = 0.3
+mesh = SubResource("PlaneMesh_xlpmg")
+
+[node name="Ring3" type="MeshInstance3D" parent="Rings" unique_id=1845789249]
+visible = false
+material_override = SubResource("ShaderMaterial_l5l8w")
+instance_shader_parameters/progress = 0.3
+mesh = SubResource("PlaneMesh_wsxs8")
+
+[node name="Ring4" type="MeshInstance3D" parent="Rings" unique_id=443209531]
+visible = false
+material_override = SubResource("ShaderMaterial_l5l8w")
+instance_shader_parameters/progress = 0.3
+mesh = SubResource("PlaneMesh_lpfkr")
+
+[node name="Ring5" type="MeshInstance3D" parent="Rings" unique_id=353645294]
+visible = false
+material_override = SubResource("ShaderMaterial_l5l8w")
+instance_shader_parameters/progress = 0.3
+mesh = SubResource("PlaneMesh_bpx2x")
+
+[node name="Ring6" type="MeshInstance3D" parent="Rings" unique_id=289801404]
+visible = false
+material_override = SubResource("ShaderMaterial_l5l8w")
+instance_shader_parameters/progress = 0.3
+mesh = SubResource("PlaneMesh_ix3oc")
+
+[node name="Ring7" type="MeshInstance3D" parent="Rings" unique_id=1206332862]
+visible = false
+material_override = SubResource("ShaderMaterial_l5l8w")
+instance_shader_parameters/progress = 0.3
+mesh = SubResource("PlaneMesh_dxeqf")
+
+[node name="Ring8" type="MeshInstance3D" parent="Rings" unique_id=863108496]
+visible = false
+material_override = SubResource("ShaderMaterial_l5l8w")
+instance_shader_parameters/progress = 0.3
+mesh = SubResource("PlaneMesh_a1t5p")
+
+[node name="Ring9" type="MeshInstance3D" parent="Rings" unique_id=328606078]
+visible = false
+material_override = SubResource("ShaderMaterial_l5l8w")
+instance_shader_parameters/progress = 0.3
+mesh = SubResource("PlaneMesh_ga04l")
+
+[node name="Ring10" type="MeshInstance3D" parent="Rings" unique_id=1383374482]
+visible = false
+material_override = SubResource("ShaderMaterial_l5l8w")
+instance_shader_parameters/progress = 0.3
+mesh = SubResource("PlaneMesh_whhe7")
+
+[node name="Ring11" type="MeshInstance3D" parent="Rings" unique_id=1894714131]
+visible = false
+material_override = SubResource("ShaderMaterial_l5l8w")
+instance_shader_parameters/progress = 0.3
+mesh = SubResource("PlaneMesh_o4hjh")

@@ -1,0 +1,16 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://shaders/spatial_env_weathered.gdshader" id="1_d5wos"]
+[ext_resource type="Texture2D" path="res://assets/environment/battlefield_albedo.png" id="2_wgwkv"]
+[ext_resource type="Texture2D" path="res://assets/environment/battlefield_normal.png" id="3_eyvjn"]
+[ext_resource type="Texture2D" path="res://assets/environment/battlefield_orm.png" id="4_8g33p"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_d5wos")
+shader_parameter/atlas_color = ExtResource("2_wgwkv")
+shader_parameter/atlas_normal = ExtResource("3_eyvjn")
+shader_parameter/atlas_orm = ExtResource("4_8g33p")
+shader_parameter/atlas_cell = Vector2(3, 0)
+shader_parameter/tile_meters = null
+shader_parameter/moss_amount = 0.5

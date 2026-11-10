@@ -1,0 +1,474 @@
+{
+  "schema_version": 1,
+  "source_total_bytes": 10104955,
+  "runtime_total_bytes": 200988,
+  "reduction_percent": 98.01,
+  "files": [
+    {
+      "name": "ai_boot",
+      "source": "enemy/ai-start-moving.wav",
+      "source_sha256": "0dbc585da1549ecb8a5bb495235ce71aa9f9ed475149a84749f0aa8c57625292",
+      "source_bytes": 282798,
+      "source_analysis_mono": {
+        "duration_seconds": 0.97673,
+        "peak_dbfs": -11.72,
+        "rms_dbfs": -34.75
+      },
+      "crop_seconds": null,
+      "credit": "Hove Audio",
+      "role": "voice",
+      "processing": {
+        "channels": 1,
+        "sample_rate": 44100,
+        "codec": "Vorbis",
+        "quality": 4,
+        "target_rms_dbfs": -23,
+        "max_preencode_peak_dbfs": -6,
+        "gain_db": 5.72,
+        "dc_removed": true,
+        "fade_in_ms": 3,
+        "fade_out_ms": 15
+      },
+      "output": "runtime/ai_boot.ogg",
+      "output_bytes": 14562,
+      "output_sha256": "19f19025fce15156e1a0f42be0c1a7d2beb62e890d5aed574f341cd2e2c1c171",
+      "duration_seconds": 0.97383,
+      "peak_dbfs": -7.53,
+      "rms_dbfs": -29.31
+    },
+    {
+      "name": "ai_radio",
+      "source": "enemy/ai-talking.wav",
+      "source_sha256": "e88eb230646025baa5b5ba31d496f6afd0e738b30840ee02396e97756094f465",
+      "source_bytes": 289520,
+      "source_analysis_mono": {
+        "duration_seconds": 1.0,
+        "peak_dbfs": -15.44,
+        "rms_dbfs": -34.86
+      },
+      "crop_seconds": null,
+      "credit": "Hove Audio",
+      "role": "voice",
+      "processing": {
+        "channels": 1,
+        "sample_rate": 44100,
+        "codec": "Vorbis",
+        "quality": 4,
+        "target_rms_dbfs": -23,
+        "max_preencode_peak_dbfs": -6,
+        "gain_db": 9.43,
+        "dc_removed": true,
+        "fade_in_ms": 3,
+        "fade_out_ms": 15
+      },
+      "output": "runtime/ai_radio.ogg",
+      "output_bytes": 6881,
+      "output_sha256": "b970926c6ea6b4be9382a62d2f2d33a6ea9fbb74c9adb59433997f5fbf0832d5",
+      "duration_seconds": 0.36168,
+      "peak_dbfs": -6.15,
+      "rms_dbfs": -21.01
+    },
+    {
+      "name": "explosion",
+      "source": "explode/explodemini.wav",
+      "source_sha256": "59eac39b32c9a89dfe9f18a3477b7ad6ca780e757e0aa1d92688beb46db1803a",
+      "source_bytes": 277340,
+      "source_analysis_mono": {
+        "duration_seconds": 1.57197,
+        "peak_dbfs": 2.3,
+        "rms_dbfs": -10.93
+      },
+      "crop_seconds": null,
+      "credit": "Michel Baradari / CC-BY 3.0",
+      "role": "impact",
+      "processing": {
+        "channels": 1,
+        "sample_rate": 44100,
+        "codec": "Vorbis",
+        "quality": 4,
+        "target_rms_dbfs": -18,
+        "max_preencode_peak_dbfs": -6,
+        "gain_db": -8.28,
+        "dc_removed": true,
+        "fade_in_ms": 0.5,
+        "fade_out_ms": 15
+      },
+      "output": "runtime/explosion.ogg",
+      "output_bytes": 16462,
+      "output_sha256": "1f659957b8774d01eb07c6abcbe21d4a860f06f53c894fee50fee93e417ccba0",
+      "duration_seconds": 1.57197,
+      "peak_dbfs": -5.75,
+      "rms_dbfs": -19.19
+    },
+    {
+      "name": "hit_heavy",
+      "source": "hit/impactGlass_heavy_001.ogg",
+      "source_sha256": "58686e0e562612cc566791844a10e269f8d1921f4766c14ba43976fd0a429f4e",
+      "source_bytes": 8946,
+      "source_analysis_mono": {
+        "duration_seconds": 0.429,
+        "peak_dbfs": 2.05,
+        "rms_dbfs": -22.26
+      },
+      "crop_seconds": null,
+      "credit": "Kenney / CC0",
+      "role": "impact",
+      "processing": {
+        "channels": 1,
+        "sample_rate": 44100,
+        "codec": "Vorbis",
+        "quality": 4,
+        "target_rms_dbfs": -22,
+        "max_preencode_peak_dbfs": -6,
+        "gain_db": -8.05,
+        "dc_removed": true,
+        "fade_in_ms": 0.5,
+        "fade_out_ms": 15
+      },
+      "output": "runtime/hit_heavy.ogg",
+      "output_bytes": 5736,
+      "output_sha256": "eaa85c660d1ef736c6ecd6f885a3950ee3a138784e5a977ab8c49eaffb590e00",
+      "duration_seconds": 0.4261,
+      "peak_dbfs": -6.22,
+      "rms_dbfs": -30.32
+    },
+    {
+      "name": "scout_gun_a",
+      "source": "machine-gun/417688__superphat__lightmachinegun1.wav",
+      "source_sha256": "dcddd92726edd2d128a33002d714ebf03aa27f9c0c2329634b8f653835403493",
+      "source_bytes": 7938044,
+      "source_analysis_mono": {
+        "duration_seconds": 30.0,
+        "peak_dbfs": 2.67,
+        "rms_dbfs": -21.07
+      },
+      "crop_seconds": [
+        17.09,
+        17.75
+      ],
+      "credit": "SuperPhat / CC0",
+      "role": "weapon",
+      "processing": {
+        "channels": 1,
+        "sample_rate": 44100,
+        "codec": "Vorbis",
+        "quality": 4,
+        "target_rms_dbfs": -21,
+        "max_preencode_peak_dbfs": -6,
+        "gain_db": -7.06,
+        "dc_removed": true,
+        "fade_in_ms": 0.5,
+        "fade_out_ms": 15
+      },
+      "output": "runtime/scout_gun_a.ogg",
+      "output_bytes": 8929,
+      "output_sha256": "d028cd2aeecd265f8c13288b54c11b627b773be4682ad6c006d0ea5c2c1d5ac5",
+      "duration_seconds": 0.6571,
+      "peak_dbfs": -5.81,
+      "rms_dbfs": -28.2
+    },
+    {
+      "name": "scout_gun_b",
+      "source": "machine-gun/417688__superphat__lightmachinegun1.wav",
+      "source_sha256": "dcddd92726edd2d128a33002d714ebf03aa27f9c0c2329634b8f653835403493",
+      "source_bytes": 7938044,
+      "source_analysis_mono": {
+        "duration_seconds": 30.0,
+        "peak_dbfs": 2.67,
+        "rms_dbfs": -21.07
+      },
+      "crop_seconds": [
+        21.1,
+        21.76
+      ],
+      "credit": "SuperPhat / CC0",
+      "role": "weapon",
+      "processing": {
+        "channels": 1,
+        "sample_rate": 44100,
+        "codec": "Vorbis",
+        "quality": 4,
+        "target_rms_dbfs": -21,
+        "max_preencode_peak_dbfs": -6,
+        "gain_db": -7.24,
+        "dc_removed": true,
+        "fade_in_ms": 0.5,
+        "fade_out_ms": 15
+      },
+      "output": "runtime/scout_gun_b.ogg",
+      "output_bytes": 8950,
+      "output_sha256": "a0c2292a07433e39b53cabb4e73a2c1fde7493f20684ee4d99278cc833cb13f3",
+      "duration_seconds": 0.6571,
+      "peak_dbfs": -6.2,
+      "rms_dbfs": -30.53
+    },
+    {
+      "name": "scout_gun_c",
+      "source": "machine-gun/417688__superphat__lightmachinegun1.wav",
+      "source_sha256": "dcddd92726edd2d128a33002d714ebf03aa27f9c0c2329634b8f653835403493",
+      "source_bytes": 7938044,
+      "source_analysis_mono": {
+        "duration_seconds": 30.0,
+        "peak_dbfs": 2.67,
+        "rms_dbfs": -21.07
+      },
+      "crop_seconds": [
+        25.11,
+        25.77
+      ],
+      "credit": "SuperPhat / CC0",
+      "role": "weapon",
+      "processing": {
+        "channels": 1,
+        "sample_rate": 44100,
+        "codec": "Vorbis",
+        "quality": 4,
+        "target_rms_dbfs": -21,
+        "max_preencode_peak_dbfs": -6,
+        "gain_db": -0.47,
+        "dc_removed": true,
+        "fade_in_ms": 0.5,
+        "fade_out_ms": 15
+      },
+      "output": "runtime/scout_gun_c.ogg",
+      "output_bytes": 9058,
+      "output_sha256": "188f367b1a42acb35cbe3b7b5b82151b238701bb6dde2c68cc10c9e7b36e469f",
+      "duration_seconds": 0.6571,
+      "peak_dbfs": -6.29,
+      "rms_dbfs": -26.94
+    },
+    {
+      "name": "scout_gun_burst",
+      "source": "machine-gun/417688__superphat__lightmachinegun1.wav",
+      "source_sha256": "dcddd92726edd2d128a33002d714ebf03aa27f9c0c2329634b8f653835403493",
+      "source_bytes": 7938044,
+      "source_analysis_mono": {
+        "duration_seconds": 30.0,
+        "peak_dbfs": 2.67,
+        "rms_dbfs": -21.07
+      },
+      "crop_seconds": [
+        2.04,
+        2.94
+      ],
+      "credit": "SuperPhat / CC0",
+      "role": "weapon",
+      "processing": {
+        "channels": 1,
+        "sample_rate": 44100,
+        "codec": "Vorbis",
+        "quality": 4,
+        "target_rms_dbfs": -21,
+        "max_preencode_peak_dbfs": -6,
+        "gain_db": -9.15,
+        "dc_removed": true,
+        "fade_in_ms": 0.5,
+        "fade_out_ms": 15
+      },
+      "output": "runtime/scout_gun_burst.ogg",
+      "output_bytes": 12071,
+      "output_sha256": "e56eb69dcd12b365c08727b3bdaa819939b897c0e994ac1df95c3ca1ab3ca47c",
+      "duration_seconds": 0.8971,
+      "peak_dbfs": -5.96,
+      "rms_dbfs": -21.12
+    },
+    {
+      "name": "mech_step_a",
+      "source": "machine-walk/557594__breviceps__battle-mech-walks-fast-slow-sequence.wav",
+      "source_sha256": "57fff8ce7d0da67ea140c4788805923545314321ab8de143159de959a665852f",
+      "source_bytes": 1209452,
+      "source_analysis_mono": {
+        "duration_seconds": 6.85605,
+        "peak_dbfs": 0.01,
+        "rms_dbfs": -13.68
+      },
+      "crop_seconds": [
+        0.16,
+        0.62
+      ],
+      "credit": "Breviceps / CC0",
+      "role": "movement",
+      "processing": {
+        "channels": 1,
+        "sample_rate": 44100,
+        "codec": "Vorbis",
+        "quality": 4,
+        "target_rms_dbfs": -23,
+        "max_preencode_peak_dbfs": -6,
+        "gain_db": -7.59,
+        "dc_removed": true,
+        "fade_in_ms": 0.5,
+        "fade_out_ms": 15
+      },
+      "output": "runtime/mech_step_a.ogg",
+      "output_bytes": 8571,
+      "output_sha256": "a04d028dc410446472e56e94ce55f0cdfeae1ac29191cc588c77b68a02ecac1c",
+      "duration_seconds": 0.47166,
+      "peak_dbfs": -8.7,
+      "rms_dbfs": -23.45
+    },
+    {
+      "name": "mech_step_b",
+      "source": "machine-walk/557594__breviceps__battle-mech-walks-fast-slow-sequence.wav",
+      "source_sha256": "57fff8ce7d0da67ea140c4788805923545314321ab8de143159de959a665852f",
+      "source_bytes": 1209452,
+      "source_analysis_mono": {
+        "duration_seconds": 6.85605,
+        "peak_dbfs": 0.01,
+        "rms_dbfs": -13.68
+      },
+      "crop_seconds": [
+        1.5,
+        1.96
+      ],
+      "credit": "Breviceps / CC0",
+      "role": "movement",
+      "processing": {
+        "channels": 1,
+        "sample_rate": 44100,
+        "codec": "Vorbis",
+        "quality": 4,
+        "target_rms_dbfs": -23,
+        "max_preencode_peak_dbfs": -6,
+        "gain_db": -7.54,
+        "dc_removed": true,
+        "fade_in_ms": 0.5,
+        "fade_out_ms": 15
+      },
+      "output": "runtime/mech_step_b.ogg",
+      "output_bytes": 8582,
+      "output_sha256": "7ea530123cd5891ff21cdc382adfdb0d7ba3795609d484288cbfa47ffb51a845",
+      "duration_seconds": 0.4615,
+      "peak_dbfs": -8.33,
+      "rms_dbfs": -23.31
+    },
+    {
+      "name": "mech_contact",
+      "source": "machine-walk/robotstep3.wav",
+      "source_sha256": "3e11c15cadfc4fefe91d9c5273a8958c949485e1da81617ddbf988adc35893e5",
+      "source_bytes": 57256,
+      "source_analysis_mono": {
+        "duration_seconds": 0.64789,
+        "peak_dbfs": -0.07,
+        "rms_dbfs": -10.31
+      },
+      "crop_seconds": null,
+      "credit": "Lee Barkovich / CC-BY 3.0 (folder info.txt)",
+      "role": "movement",
+      "processing": {
+        "channels": 1,
+        "sample_rate": 44100,
+        "codec": "Vorbis",
+        "quality": 4,
+        "target_rms_dbfs": -23,
+        "max_preencode_peak_dbfs": -6,
+        "gain_db": -12.69,
+        "dc_removed": true,
+        "fade_in_ms": 0.5,
+        "fade_out_ms": 15
+      },
+      "output": "runtime/mech_contact.ogg",
+      "output_bytes": 10279,
+      "output_sha256": "26002c863ac1952b09f2ce9e9be6414594bf76024f297665565ceda0f577f94e",
+      "duration_seconds": 0.64499,
+      "peak_dbfs": -12.55,
+      "rms_dbfs": -23.02
+    },
+    {
+      "name": "mech_servo",
+      "source": "machine-walk/robot1.wav",
+      "source_sha256": "b7c318d85b0b662b825b3661c72e30647fcd59ab7fb09811aba39873236e776b",
+      "source_bytes": 37838,
+      "source_analysis_mono": {
+        "duration_seconds": 0.42773,
+        "peak_dbfs": -0.05,
+        "rms_dbfs": -10.05
+      },
+      "crop_seconds": null,
+      "credit": "Lee Barkovich / CC-BY 3.0 (folder info.txt)",
+      "role": "movement",
+      "processing": {
+        "channels": 1,
+        "sample_rate": 44100,
+        "codec": "Vorbis",
+        "quality": 4,
+        "target_rms_dbfs": -24,
+        "max_preencode_peak_dbfs": -6,
+        "gain_db": -13.95,
+        "dc_removed": true,
+        "fade_in_ms": 0.5,
+        "fade_out_ms": 15
+      },
+      "output": "runtime/mech_servo.ogg",
+      "output_bytes": 8173,
+      "output_sha256": "be14aa4869f761a0a373a045242e0e3c5deeda0dd8885324a91c13cf981359bd",
+      "duration_seconds": 0.42483,
+      "peak_dbfs": -13.94,
+      "rms_dbfs": -24.05
+    },
+    {
+      "name": "mech_land",
+      "source": "machine-walk/jumpland44100.mp3",
+      "source_sha256": "dbe2ba7ccd174a8889e01c88aa660db18e831584f5b1c84b6cb42f1d6cfce254",
+      "source_bytes": 3761,
+      "source_analysis_mono": {
+        "duration_seconds": 0.4702,
+        "peak_dbfs": -0.99,
+        "rms_dbfs": -20.58
+      },
+      "crop_seconds": null,
+      "credit": "Lee Barkovich / CC-BY 3.0 (folder info.txt)",
+      "role": "movement",
+      "processing": {
+        "channels": 1,
+        "sample_rate": 44100,
+        "codec": "Vorbis",
+        "quality": 4,
+        "target_rms_dbfs": -20,
+        "max_preencode_peak_dbfs": -6,
+        "gain_db": -5.01,
+        "dc_removed": true,
+        "fade_in_ms": 0.5,
+        "fade_out_ms": 15
+      },
+      "output": "runtime/mech_land.ogg",
+      "output_bytes": 7163,
+      "output_sha256": "aebf0ebc35023a0516de78cfd54e1a0ece787babbb9063fce916866b8205e617",
+      "duration_seconds": 0.41914,
+      "peak_dbfs": -5.96,
+      "rms_dbfs": -25.14
+    },
+    {
+      "name": "mech_walk_sequence",
+      "source": "machine-walk/557594__breviceps__battle-mech-walks-fast-slow-sequence.wav",
+      "source_sha256": "57fff8ce7d0da67ea140c4788805923545314321ab8de143159de959a665852f",
+      "source_bytes": 1209452,
+      "source_analysis_mono": {
+        "duration_seconds": 6.85605,
+        "peak_dbfs": 0.01,
+        "rms_dbfs": -13.68
+      },
+      "crop_seconds": null,
+      "credit": "Breviceps / CC0",
+      "role": "reference",
+      "processing": {
+        "channels": 1,
+        "sample_rate": 44100,
+        "codec": "Vorbis",
+        "quality": 4,
+        "target_rms_dbfs": -23,
+        "max_preencode_peak_dbfs": -6,
+        "gain_db": -9.32,
+        "dc_removed": true,
+        "fade_in_ms": 0.5,
+        "fade_out_ms": 15
+      },
+      "output": "runtime/mech_walk_sequence.ogg",
+      "output_bytes": 75571,
+      "output_sha256": "d7eb585cc2f28665637316cb76871d567b91b10ff8cfa41781e43518cf77533c",
+      "duration_seconds": 6.85605,
+      "peak_dbfs": -8.21,
+      "rms_dbfs": -23.12
+    }
+  ]
+}

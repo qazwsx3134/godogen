@@ -1,0 +1,142 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/gallery.gd" id="1_bjb1d"]
+[ext_resource type="PackedScene" path="res://addons/proto_kit/vfx/3d/scenario/cinder-explosion.tscn" id="2_eese4"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_238w7"]
+shading_mode = 0
+albedo_color = Color(0.05, 0.065, 0.1, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_skelf"]
+material = SubResource("StandardMaterial3D_238w7")
+size = Vector2(18, 18)
+
+[node name="VfxGallery3D" type="Control" unique_id=910942784]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_bjb1d")
+dimension = "3d"
+
+[node name="Panel" type="PanelContainer" parent="." unique_id=1305267646]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Margin" type="MarginContainer" parent="Panel" unique_id=1245373724]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="Columns" type="HBoxContainer" parent="Panel/Margin" unique_id=292987544]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Controls" type="VBoxContainer" parent="Panel/Margin/Columns" unique_id=150644841]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Panel/Margin/Columns/Controls" unique_id=765537134]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Godot VFX · 3D"
+
+[node name="SourceChoice" type="OptionButton" parent="Panel/Margin/Columns/Controls" unique_id=1830667769]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+selected = 2
+item_count = 3
+popup/item_0/text = "All sources"
+popup/item_0/id = 0
+popup/item_1/text = "Scenario sprites"
+popup/item_1/id = 1
+popup/item_2/text = "00GameDevs native"
+popup/item_2/id = 2
+
+[node name="EffectsList" type="ItemList" parent="Panel/Margin/Columns/Controls" unique_id=1412792199]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 145)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Info" type="Label" parent="Panel/Margin/Columns/Controls" unique_id=434419764]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+text = "Choose an effect"
+autowrap_mode = 3
+
+[node name="ReplayButton" type="Button" parent="Panel/Margin/Columns/Controls" unique_id=1188282178]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+text = "Replay"
+
+[node name="Actions" type="HBoxContainer" parent="Panel/Margin/Columns/Controls" unique_id=2015515261]
+layout_mode = 2
+
+[node name="StopButton" type="Button" parent="Panel/Margin/Columns/Controls/Actions" unique_id=82297876]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Stop"
+
+[node name="HitButton" type="Button" parent="Panel/Margin/Columns/Controls/Actions" unique_id=671445812]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Hit"
+
+[node name="SpeedLabel" type="Label" parent="Panel/Margin/Columns/Controls" unique_id=231395136]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Speed 1.00x"
+
+[node name="SpeedControl" type="HSlider" parent="Panel/Margin/Columns/Controls" unique_id=1292896117]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+min_value = 0.25
+max_value = 2.0
+step = 0.25
+value = 1.0
+
+[node name="Stage" type="SubViewportContainer" parent="Panel/Margin/Columns" unique_id=422302493]
+custom_minimum_size = Vector2(600, 480)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch = true
+
+[node name="Preview" type="SubViewport" parent="Panel/Margin/Columns/Stage" unique_id=2030364100]
+unique_name_in_owner = true
+own_world_3d = true
+size = Vector2i(700, 500)
+render_target_update_mode = 4
+
+[node name="World" type="Node3D" parent="Panel/Margin/Columns/Stage/Preview" unique_id=267765215]
+
+[node name="Camera" type="Camera3D" parent="Panel/Margin/Columns/Stage/Preview/World" unique_id=225991108]
+transform = Transform3D(1, 0, 0, 0, 0.90630776, 0.42261827, 0, -0.42261827, 0.90630776, 0, 5, 8)
+current = true
+
+[node name="Ground" type="MeshInstance3D" parent="Panel/Margin/Columns/Stage/Preview/World" unique_id=1073035119]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.02, 0)
+mesh = SubResource("PlaneMesh_skelf")
+
+[node name="Effects" type="Node3D" parent="Panel/Margin/Columns/Stage/Preview/World" unique_id=1455866858]
+unique_name_in_owner = true
+
+[node name="EditorSample" parent="Panel/Margin/Columns/Stage/Preview/World/Effects" unique_id=2038597756 instance=ExtResource("2_eese4")]
+
+[node name="Replay" type="Timer" parent="." unique_id=697579912]
+unique_name_in_owner = true
+one_shot = true

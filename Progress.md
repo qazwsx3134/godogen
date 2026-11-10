@@ -10,18 +10,20 @@
 
 | commit | 日期 | 做了什麼 |
 |---|---|---|
+| 本次提交（`git log -1`） | 2026-11-11 | walker-tps：首次收錄完整戰鬥原型、地圖／雙機體素材、14 個處理後音效與署名；補忽略規則，Git 乾淨副本匯入／音效／戰鬥驗證 |
 | 最新（`git log -1`） | 2026-11-07 | 合併 origin/master：mortal-city 以 Mac 的 roguelike（ADR 0001）為準，WSL 舊架構的 `c8fb8afd` 只留下不衝突的圖與新檔，其餘待移植（見 mortal-city PROGRESS「合併」段） |
 | `2ea3970a` | 2026-11-07 | mortal-city：進度與待辦整理（只有文件）；11-05 段落搬進新的 `MILESTONE.md` |
 | `cf9bc101`＋`5090c606` | 2026-11-06 | mortal-city 改成單機文字冒險 roguelike（ADR 0001）：新宿切片（程序地圖、8 種節點、名聲卡牌／道具三選一、救命保單、傳奇檔案）、霓虹 icon 與贓貨黑市、回覆逐則出現、連續進度條、系統訊息分行與自動捲動、任務完成 toast＋結案畫面、戰鬥特效；灣岸 03／06 試讀稿（未接入）；LESSONS 加 2 條 |
 | `18c37763` | 2026-11-05 | debt-commission：`main.gd` 拆成外殼＋五個分段檔（G6）、章節選擇「流程圖」（G4）、換背景 shader 轉場（brush／ink／glitch）、手感回饋（震動分級、HUD 與提示跳動、固定音效）、kit 同步；LESSONS 加 2 條 |
-| `0b74bd2e` | 2026-11-05 | seal-meadow：town slice 與模型素材索引（另一個 session 提交，細節見其 PROGRESS） |
 
 ## 專案入口
 
 | 專案 | 現況（一句） | 進度 | 歷史 |
 |---|---|---|---|
+| 本次提交（`git log -1`） | 2026-11-11 | walker-tps：首次收錄完整戰鬥原型、地圖／雙機體素材、14 個處理後音效與署名；補忽略規則，Git 乾淨副本匯入／音效／戰鬥驗證 |
 | debt-commission 萬事屋吐槽 ADV | 故事只剩「功能展示」（編輯器範本，預設）與桂的極短篇；舊故事搬進 `tests/fixtures/` 當夾具（2026-11-08，未 commit）；等作者看功能展示；2026-11-09 評審完成（Loop 3 分最低，第一章不在正式內容裡），12 條建議在 TODO（未 commit） | [PROGRESS](prototypes/debt-commission/PROGRESS.md) | [MILESTONE](prototypes/debt-commission/MILESTONE.md) |
 | godot-kit 共用模組 | SaveSlots 已接入 seal-meadow adapter，保留遊戲恢復保護；只同步該存檔模組，測試暫緩 | [PROGRESS](prototypes/godot-kit/PROGRESS.md) | — |
+| walker-tps 四足戰甲 | 2026-11-11 勾索慣性／自動刀片／主砲／scout AI 與單局已接通；新增 14 個處理後音效約 201 KB、事件與混音接入、Git 排除原檔及授權署名；音效／戰鬥／地圖測試通過，Git 乾淨副本已驗證，實聽與手機待驗，已納本次提交 | [PROGRESS](prototypes/walker-tps/PROGRESS.md) | — |
 | seal-meadow 蓬蓬草原 | 暖陶瓦風格與商店三視圖已定方向；可走商店、入口與路牌樣板已接入，正式 2D 紙娃娃及手機真人驗收待做，多人延後 | [PROGRESS](prototypes/seal-meadow/PROGRESS.md) | [MILESTONE](prototypes/seal-meadow/MILESTONE.md) |
 | hero-horde-idle 全員推王 | 等真人前三層、手機恢復成本與作者素材 | [PROGRESS](prototypes/hero-horde-idle/docs/PROGRESS.md) | [MILESTONE](prototypes/hero-horde-idle/docs/MILESTONE.md) |
 | 魔都傭兵（mortal-city，已改為單機文字冒險 roguelike，ADR 0001） | 新宿→灣岸兩區可玩（灣岸 03／06 試讀稿、第 3／5 階委託、灣岸事件）；全息地圖、新聞跑馬燈、音效、6 張節點背景已接入；WSL 那條舊架構分支（`c8fb8afd`）已合併、程式以 roguelike 為準，可移植的項目待移植；等作者試讀與試玩；2026-11-09 評審完成（致命機率看不到、安全選項全面勝出），R1–R11 在 TODO（未 commit） | [PROGRESS](prototypes/mortal-city/PROGRESS.md)／[設計進度](docs/cyberpunk-text-mmo/PROGRESS.md) | [MILESTONE](prototypes/mortal-city/MILESTONE.md) |

@@ -1,0 +1,1150 @@
+[
+  {
+    "id": "aether-beam",
+    "source": "scenario",
+    "name": "Aether Beam",
+    "frames": 16,
+    "fps": 15,
+    "loop": true,
+    "animation": "aether_beam",
+    "size": [
+      176,
+      48
+    ],
+    "pivot": [
+      0.0750000000000001,
+      0.5
+    ],
+    "place": "from-caster",
+    "depth": "front",
+    "upstream_sha256": {
+      "aether-beam.png": "ed100595c0357d23aaa484ecdd22769ad700d684a851f968e60ff255c174c60d",
+      "aether-beam.json": "e5e777f5c33989e32381a51c148a8d2f83fe9cfabb1a6fee43112941976c1b11",
+      "aether-beam.recipe.json": "edcf4cccfb69f1273deb6d787cd8a9eb4e9f8d97dbb92bf601677584d31a9de2",
+      "README.txt": "11152645c7fa1e573f528c3ee80172abca56b93c66b1e9dbf2128dac4ae90e83"
+    },
+    "upstream_tres_sha256": "66ae3f0e70c470eac1854e8f614272c79dc6931faf2656f2f7a5480799e335a1",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/aether-beam.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/aether-beam.tscn"
+  },
+  {
+    "id": "aqua-ambient",
+    "source": "scenario",
+    "name": "Aqua Ambient",
+    "frames": 24,
+    "fps": 12,
+    "loop": true,
+    "animation": "aqua_ambient",
+    "size": [
+      128,
+      96
+    ],
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "place": "screen",
+    "depth": "front",
+    "upstream_sha256": {
+      "aqua-ambient.png": "b90fca638a28bb75260add8c378e82ae0195ea42fdb0925e121a1022174dc4d4",
+      "aqua-ambient.json": "3d13ab66048e325eb4782ba54dc2eceeae5358f5d05415be2e70bb0610600d19",
+      "aqua-ambient.recipe.json": "1604a6c62cf7a71cac8d587e707f238f888f681806fae6ceaa3b0b60132a7668",
+      "README.txt": "66e0d94b874625628bf6469be31d6235e0af0130d2bd6f6cfb10fd44c0addd4c"
+    },
+    "upstream_tres_sha256": "014bf823f384df54592c54c537f80be629defd65c1903f30a4b232f60b130299",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/aqua-ambient.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/aqua-ambient.tscn"
+  },
+  {
+    "id": "aqua-splash",
+    "source": "scenario",
+    "name": "Aqua Splash",
+    "frames": 16,
+    "fps": 15,
+    "loop": false,
+    "animation": "aqua_splash",
+    "size": [
+      64,
+      64
+    ],
+    "pivot": [
+      0.5,
+      0.89
+    ],
+    "place": "target-ground",
+    "depth": "front",
+    "upstream_sha256": {
+      "aqua-splash.png": "bbc87304f2acf47d0444c11c43e8b7bd035af15c15e6a63fb6792baeb988b23f",
+      "aqua-splash.json": "fae187c93bc38df90d8f2fe0a0a58d2315859c394bbec6f11171ab24d0d4e5b7",
+      "aqua-splash.recipe.json": "206a2024ee38d85748af36e67d0cbf5828e5bda5e3df449b3ed687ae6127b811",
+      "README.txt": "73b59fcb967ca4221133e0599f1a4f5e3118818daa990c116c56d055029c8cc8"
+    },
+    "upstream_tres_sha256": "0f2a9806f29c58b9a77c41dd1e48587fd606a972f03dce00b96ad65c6baa6d20",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/aqua-splash.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/aqua-splash.tscn"
+  },
+  {
+    "id": "arcane-fireworks",
+    "source": "scenario",
+    "name": "Arcane Fireworks",
+    "frames": 32,
+    "fps": 15,
+    "loop": false,
+    "animation": "arcane_fireworks",
+    "size": [
+      96,
+      96
+    ],
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "place": "screen",
+    "depth": "front",
+    "upstream_sha256": {
+      "arcane-fireworks.png": "baa46d21b44004e8b000e11139cd04cfeeca041906bf1e14f0a5a233d48da989",
+      "arcane-fireworks.json": "413c414cac3333fe266e2088938d1a1a713a4a63a137608f6518f2d0f8b86fec",
+      "arcane-fireworks.recipe.json": "9b70460c479e05775e8ea38115fc7edd9508ca4e803bebb562a403806c8c11aa",
+      "README.txt": "0e40a67819715fa14833f6d3669de768ad1910a15b95cd8e107ee420a41bc099"
+    },
+    "upstream_tres_sha256": "798e81b3a608315a59908a62654f209b4d605059c06cd66edfc9cb20b173cdd2",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/arcane-fireworks.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/arcane-fireworks.tscn"
+  },
+  {
+    "id": "ashen-poof",
+    "source": "scenario",
+    "name": "Ashen Poof",
+    "frames": 14,
+    "fps": 15,
+    "loop": false,
+    "animation": "ashen_poof",
+    "size": [
+      48,
+      48
+    ],
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "place": "target",
+    "depth": "front",
+    "upstream_sha256": {
+      "ashen-poof.png": "d9cdece5c58f45d179ccaa729eed3fe79053e4914a3e55f89f1b8b837fe057b4",
+      "ashen-poof.json": "5f0a2ba8d788a4db8cdda08063392245a728b6c6aa3dfaa3b25ea048c30cfe0e",
+      "ashen-poof.recipe.json": "700d7b35513be0b8a04fc1bfc74a5608d2f300d8200a92e24218c322b95aa3bb",
+      "README.txt": "25b1f69def0c9515e040370518ec2d025bab05efb2582815a6023a595b5f4951"
+    },
+    "upstream_tres_sha256": "98f0bffb9d00d04edc1ff8051b763117914a89b310a2aa4e14bbc5810b9a0fc3",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/ashen-poof.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/ashen-poof.tscn"
+  },
+  {
+    "id": "astral-portal",
+    "source": "scenario",
+    "name": "Astral Portal",
+    "frames": 16,
+    "fps": 12,
+    "loop": true,
+    "animation": "astral_portal",
+    "size": [
+      64,
+      64
+    ],
+    "pivot": [
+      0.5,
+      0.75
+    ],
+    "place": "between",
+    "depth": "front",
+    "upstream_sha256": {
+      "astral-portal.png": "1a1bcc08e29033bcdf46050b1eddf2bdc053b5366f64bfb8a14f92c95a656b9d",
+      "astral-portal.json": "d6f43f74621c6ea93e8b52b4d76b6eb0ef8c526b614fe8e3c3a4f2127d51ddd9",
+      "astral-portal.recipe.json": "daef86bb2e92c236588cebc036db4049464c0f4a1c24bfdb681d9137f5c07df5",
+      "README.txt": "b88913620ff9ae8e2753c2a55339df4cd2f18815abd1f47acd513087e88c3c37"
+    },
+    "upstream_tres_sha256": "688489459ce009bc3b1b28c39289360c8bec87ec30b199fa6e7abd93bec994d7",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/astral-portal.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/astral-portal.tscn"
+  },
+  {
+    "id": "blaze-ambient",
+    "source": "scenario",
+    "name": "Blaze Ambient",
+    "frames": 24,
+    "fps": 12,
+    "loop": true,
+    "animation": "blaze_ambient",
+    "size": [
+      128,
+      96
+    ],
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "place": "screen",
+    "depth": "front",
+    "upstream_sha256": {
+      "blaze-ambient.png": "89a7e4e9a0fc7c2fce8b66ff189f46a1c687d2306c2a6f3a129ed67561193b67",
+      "blaze-ambient.json": "ac5c61e3f31f2ad01de937efebb10595b8c1fc84a4d018e7fed081b2f0083a0b",
+      "blaze-ambient.recipe.json": "a61dacb8eae8932a71e34eff5d573c1ec3bcc4fd7b6255679ca15b4546715df2",
+      "README.txt": "ff4ffcf1ab6060e435a7b4222e41dde95d3233769be2c688725cfbede027eb9c"
+    },
+    "upstream_tres_sha256": "7d9f24a03bd4a22f6f2ea87b6d763fdcef424a39b96bda592968f42d4f811e10",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/blaze-ambient.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/blaze-ambient.tscn"
+  },
+  {
+    "id": "blaze-tornado",
+    "source": "scenario",
+    "name": "Blaze Tornado",
+    "frames": 16,
+    "fps": 12,
+    "loop": true,
+    "animation": "blaze_tornado",
+    "size": [
+      64,
+      96
+    ],
+    "pivot": [
+      0.5,
+      0.9500000000000001
+    ],
+    "place": "target-ground",
+    "depth": "front",
+    "upstream_sha256": {
+      "blaze-tornado.png": "95b821a837bd813fcb77672ed6f411d550f7d93856c823acb33007429c4718b3",
+      "blaze-tornado.json": "38a65f7c4271e46efaabfe1594e81e423c1000ac430d7da2b2934f84692fe4bd",
+      "blaze-tornado.recipe.json": "5456eb4d7875861798afb6eba646f992efae96777603bb921b4bad86e64d5ea1",
+      "README.txt": "7938302381611de4713ee8eaed04d3d713e3b5980290e8a7a6f26df1a251bb77"
+    },
+    "upstream_tres_sha256": "db192bd2bc3b15acad760f57f07d71a001596ee87654fc1b22a99f6af99e38e9",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/blaze-tornado.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/blaze-tornado.tscn"
+  },
+  {
+    "id": "blight-cloud",
+    "source": "scenario",
+    "name": "Blight Cloud",
+    "frames": 16,
+    "fps": 12,
+    "loop": true,
+    "animation": "blight_cloud",
+    "size": [
+      64,
+      64
+    ],
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "place": "target",
+    "depth": "front",
+    "upstream_sha256": {
+      "blight-cloud.png": "d8c65cf5dcb069675d548d078523f857da90d66c45d132ca0f2088a78f98c323",
+      "blight-cloud.json": "b45e5160bb58e274dde8aa5f3d1bf619d93ccaf58c438ed1e7ed4b8ee85f1ae5",
+      "blight-cloud.recipe.json": "422c921c800d61baabd60e042af39643991078ea325fc794edca124c55bd5fbd",
+      "README.txt": "69f820f10f726bf74e1cd871e511d4adbdced8642da73ceb704ddb3f1512b3e0"
+    },
+    "upstream_tres_sha256": "34ed9c8a5cf4e73d6cdb96f1132dc35677c40ec2d6dfb92eda7d558ce90d4e28",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/blight-cloud.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/blight-cloud.tscn"
+  },
+  {
+    "id": "bloom-ambient",
+    "source": "scenario",
+    "name": "Bloom Ambient",
+    "frames": 24,
+    "fps": 12,
+    "loop": true,
+    "animation": "bloom_ambient",
+    "size": [
+      128,
+      96
+    ],
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "place": "screen",
+    "depth": "front",
+    "upstream_sha256": {
+      "bloom-ambient.png": "9944aa7b0b130d0bbb6037d77f6a0a7acdef733a9f329022aa91ade1dab0181a",
+      "bloom-ambient.json": "7530dfdab581906407cf8edc49064bec0478fe2176c0ff89bf23d6ce979de60c",
+      "bloom-ambient.recipe.json": "3b5d11698b42fc02fb407dc0c7e89052664c002b25c3da60961769fee1ed7b7c",
+      "README.txt": "ae136abe91eee2f396c19a318c88bde697df6224e08656645c86753831a73683"
+    },
+    "upstream_tres_sha256": "169d36f319688f1ace4b4b4f64bdfaef5f8ddbfb46bd83472a06dcb249d79b27",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/bloom-ambient.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/bloom-ambient.tscn"
+  },
+  {
+    "id": "bloom-heal",
+    "source": "scenario",
+    "name": "Bloom Heal",
+    "frames": 20,
+    "fps": 15,
+    "loop": false,
+    "animation": "bloom_heal",
+    "size": [
+      48,
+      64
+    ],
+    "pivot": [
+      0.5,
+      0.95
+    ],
+    "place": "caster-ground",
+    "depth": "front",
+    "upstream_sha256": {
+      "bloom-heal.png": "336185203cdeab353ab718d1a7ef467feaf8446bc05dec94cb6d48ff090c0468",
+      "bloom-heal.json": "cf398ff2afe5a6db42c114d838b43718975bfaf92454bd0ea556d936c52a2c9e",
+      "bloom-heal.recipe.json": "b9c4ad624a2549338ae3f53b91a0a7878578f6cde7e03718f4ba165e96cc5e52",
+      "README.txt": "8a533231176d92d9fd237b869285d9dc7997058181794f760b71ba8ad82e3568"
+    },
+    "upstream_tres_sha256": "456b49e0a279f3abe223fcd1ee3c8c1c6ae8f56304e61d0f6bb34ad2f670c1c6",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/bloom-heal.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/bloom-heal.tscn"
+  },
+  {
+    "id": "cinder-breath",
+    "source": "scenario",
+    "name": "Cinder Breath",
+    "frames": 16,
+    "fps": 15,
+    "loop": true,
+    "animation": "cinder_breath",
+    "size": [
+      96,
+      48
+    ],
+    "pivot": [
+      0.1,
+      0.5
+    ],
+    "place": "from-caster",
+    "depth": "front",
+    "upstream_sha256": {
+      "cinder-breath.png": "9614bffff97c59f2f0751e1de133955fdd1630b01e80a6fe87d0dffbe9b090bb",
+      "cinder-breath.json": "896af3b69ab1ba154397df9372a7ffca6f06ba45f31746e93c215fa07428f150",
+      "cinder-breath.recipe.json": "90c870a2165bdb7327a3ab7d9c13076a6859c3b0ae9356e097fdc17cc721799a",
+      "README.txt": "d5c341b0f61fb6dee1d8bc05125174ba382297a4128716e0b36cf9c15602fe67"
+    },
+    "upstream_tres_sha256": "7c0ac1e050779476b5b8248a14a2741d0689771811a65b3090b80bdbb4c3de6b",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/cinder-breath.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/cinder-breath.tscn"
+  },
+  {
+    "id": "cinder-explosion",
+    "source": "scenario",
+    "name": "Cinder Explosion",
+    "frames": 18,
+    "fps": 15,
+    "loop": false,
+    "animation": "cinder_explosion",
+    "size": [
+      96,
+      96
+    ],
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "place": "target",
+    "depth": "front",
+    "upstream_sha256": {
+      "cinder-explosion.png": "af7ffc012055d72ffbde79b996282eadf10a5918768a313c246603fa100ed849",
+      "cinder-explosion.json": "c759ac9a4a05629b531bd96038d10fc4954232e89c7dda3095d77453f6691f0a",
+      "cinder-explosion.recipe.json": "f1262ad04bc3c950fd933ef4939b2948f166e222c6115367c749176e591c7d94",
+      "README.txt": "bdbc4e4a145ab7b0c8e1b2c52fca4c151653a34b34b8a3c4d35bec0d8722f4ad"
+    },
+    "upstream_tres_sha256": "8cffa48d48e2154e19cd2a4546490d3366e16e7e1180330a47f8328da99f376b",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/cinder-explosion.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/cinder-explosion.tscn"
+  },
+  {
+    "id": "cyclone-dash",
+    "source": "scenario",
+    "name": "Cyclone Dash",
+    "frames": 10,
+    "fps": 18,
+    "loop": false,
+    "animation": "cyclone_dash",
+    "size": [
+      64,
+      48
+    ],
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "place": "caster",
+    "depth": "front",
+    "upstream_sha256": {
+      "cyclone-dash.png": "5fca96ad2f5173649795ebac5dcb9362f17f38fc544d9bc1d53d3b732fbde690",
+      "cyclone-dash.json": "4833117975485df75111963ab9b186b9a96efd34b683c3229276deb0a3b4e3c4",
+      "cyclone-dash.recipe.json": "d88ffa2725c1ccc2698eccdfafcd6f8a8c7cdc194f46958bec15ee3436f45d7d",
+      "README.txt": "4a6558ff7527323132952e81d91645be3bd29d65091b6c9876dd50b6109e84cc"
+    },
+    "upstream_tres_sha256": "e7e12a9d67d77f9565d11c29fb6d7868c4d17a25e47a880115b213cdc63c449f",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/cyclone-dash.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/cyclone-dash.tscn"
+  },
+  {
+    "id": "cyclone-slash",
+    "source": "scenario",
+    "name": "Cyclone Slash",
+    "frames": 12,
+    "fps": 18,
+    "loop": false,
+    "animation": "cyclone_slash",
+    "size": [
+      64,
+      64
+    ],
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "place": "target",
+    "depth": "front",
+    "upstream_sha256": {
+      "cyclone-slash.png": "6f6cd8e8db21b4c61eba4767441cf0127e75bf2204938445cb3c5cc84d82a010",
+      "cyclone-slash.json": "a033de0ddfb414b5cc3b83bb225f35141dd28ded4974636952de3a8185bf8664",
+      "cyclone-slash.recipe.json": "31f68cba3a4f59afd0fcbc7b4383ec4e05ea4452450a8efcb1a0e0e99770d45f",
+      "README.txt": "219ed375dfd724cedf4f6c996cfecdff66c53227b822cc6f09560b16c8837740"
+    },
+    "upstream_tres_sha256": "6fe4f66af64a1a30213ad6c8a73e48065f92b774f968f3d2714bb9a3fd83274b",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/cyclone-slash.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/cyclone-slash.tscn"
+  },
+  {
+    "id": "divine-pillar",
+    "source": "scenario",
+    "name": "Divine Pillar",
+    "frames": 20,
+    "fps": 15,
+    "loop": false,
+    "animation": "divine_pillar",
+    "size": [
+      48,
+      96
+    ],
+    "pivot": [
+      0.5,
+      0.93
+    ],
+    "place": "target-ground",
+    "depth": "front",
+    "upstream_sha256": {
+      "divine-pillar.png": "8662f12869bb606922362b34834ea4a42701304764f0e4d874068effc354e97c",
+      "divine-pillar.json": "e121a5b8f9ed299ba3b1f5149c2fda7bb452aa749edf5cbcfcab5373532be4dc",
+      "divine-pillar.recipe.json": "ae8115d6336ed34488cb92791e5548554a1abcc3e11c2240b57b04d7fc71cf47",
+      "README.txt": "42dace5fcc4d0b77a24aeec963bb01b4eda77b2acc4c02d2f0bd9b8ea5abda6f"
+    },
+    "upstream_tres_sha256": "147747c37c396604715b6bf093acd5bc1e2e34fdb8c0535c54694aecaf21e332",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/divine-pillar.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/divine-pillar.tscn"
+  },
+  {
+    "id": "eldritch-magic-circle",
+    "source": "scenario",
+    "name": "Eldritch Magic Circle",
+    "frames": 24,
+    "fps": 12,
+    "loop": true,
+    "animation": "eldritch_magic_circle",
+    "size": [
+      96,
+      48
+    ],
+    "pivot": [
+      0.5,
+      0.6
+    ],
+    "place": "caster-ground",
+    "depth": "front",
+    "upstream_sha256": {
+      "eldritch-magic-circle.png": "cfa930fc308d4a74c4e1466db98e5c94f7b6ab2bd8446bf0d22593d1170d45bf",
+      "eldritch-magic-circle.json": "ea850802a965c1793ac1ea41980315c4b9eb2bb198bbd6664ee0b16fcd476c3d",
+      "eldritch-magic-circle.recipe.json": "2eb5cbd564fc44f1229845c8f5e723e44524d3b9845456b7559e938808a7bfd8",
+      "README.txt": "341b9de804638978c53b6a4424d24ce388fb63c0f18980d4e280e7c1e19f71b3"
+    },
+    "upstream_tres_sha256": "cf6a348e8d6583743e700d6b9d6f06949417f79deeb61ba24a7b02d2c784f75f",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/eldritch-magic-circle.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/eldritch-magic-circle.tscn"
+  },
+  {
+    "id": "ember-damage-number",
+    "source": "scenario",
+    "name": "Ember Damage Number",
+    "frames": 16,
+    "fps": 15,
+    "loop": false,
+    "animation": "ember_damage_number",
+    "size": [
+      48,
+      32
+    ],
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "place": "target",
+    "depth": "front",
+    "upstream_sha256": {
+      "ember-damage-number.png": "8c1cdf9328b27c47dde5aebe57cd09cb759030c97769d1bcfedd826a81790029",
+      "ember-damage-number.json": "d8354a7a700aa37f13976d227deeed3541643955ea37628674e9cb740f7d631b",
+      "ember-damage-number.recipe.json": "d1a2596679aef01dfcf71efc210e040aef7c1e47dde11fe36ae963452da60335",
+      "README.txt": "a756d026e776498118bd9428bdd1b1090ec0b0fd7c47097f2cf94365bb3d6238"
+    },
+    "upstream_tres_sha256": "f41fd651cc247ac82d6265117830d0749390bd4a1b251399d389b55d29de6838",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/ember-damage-number.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/ember-damage-number.tscn"
+  },
+  {
+    "id": "ember-flame",
+    "source": "scenario",
+    "name": "Ember Flame",
+    "frames": 12,
+    "fps": 12,
+    "loop": true,
+    "animation": "ember_flame",
+    "size": [
+      32,
+      48
+    ],
+    "pivot": [
+      0.5,
+      0.9333333333333332
+    ],
+    "place": "target-ground",
+    "depth": "front",
+    "upstream_sha256": {
+      "ember-flame.png": "5e87506e1319aaa30e3f88041f75f783255672bb6c51f4223e76de2fa387fa44",
+      "ember-flame.json": "96ff189f31bb9362856defb9e6b4f8bee23f7269697f7bf89b69854b705a3d53",
+      "ember-flame.recipe.json": "e72859d118c1aaf5dffce84766a209bfde29ab438856b1c31ec3e0a3fb1e5acb",
+      "README.txt": "1b386b9e64508c0772efe4b60db7a26c7b17fb83b14d68406afb467e00fb2b30"
+    },
+    "upstream_tres_sha256": "00c8db8c5b92c02e9f0faa2a9a2aa4f3a89929608ee98d481230b3a7ef6590a6",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/ember-flame.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/ember-flame.tscn"
+  },
+  {
+    "id": "ember-meteor",
+    "source": "scenario",
+    "name": "Ember Meteor",
+    "frames": 26,
+    "fps": 15,
+    "loop": false,
+    "animation": "ember_meteor",
+    "size": [
+      96,
+      96
+    ],
+    "pivot": [
+      0.6,
+      0.8099999999999999
+    ],
+    "place": "target-ground",
+    "depth": "front",
+    "upstream_sha256": {
+      "ember-meteor.png": "44dc7e58abde95ffa976547202a462763b40090e7481c105c49c8554fae7f12a",
+      "ember-meteor.json": "234244e77379cd22857152b9719d33b60f95e841151e07b0270dedbd4ee4aff1",
+      "ember-meteor.recipe.json": "0bdccf7759d102f9bbcb1ea44b2608f4a096da644076e22c553350c3cd0604e2",
+      "README.txt": "ca812ffa93a14713b419aeb0edd985d417e3bae876a527ad40574cb8322327ef"
+    },
+    "upstream_tres_sha256": "2714f8108639973f56252c97fcbaad6d0448e4b7e747f10aea71c2b657cf1408",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/ember-meteor.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/ember-meteor.tscn"
+  },
+  {
+    "id": "ember-projectile",
+    "source": "scenario",
+    "name": "Ember Projectile",
+    "frames": 8,
+    "fps": 12,
+    "loop": true,
+    "animation": "ember_projectile",
+    "size": [
+      64,
+      32
+    ],
+    "pivot": [
+      0.78,
+      0.5
+    ],
+    "place": "projectile",
+    "depth": "front",
+    "upstream_sha256": {
+      "ember-projectile.png": "9c1e4f06c67b78aef08585f409938ccbcc31b14287da21c1347b4105444191cb",
+      "ember-projectile.json": "1d27fc884e4a36000b385b2ed11b7ac5e0485319cf3d2028a15b6b5b3abca065",
+      "ember-projectile.recipe.json": "2891a392d4db7eaff4f382fe31a08ff3b871c81df98e5629967f43d341c9a593",
+      "README.txt": "528f49fd35624421d0348deaebc52aeeb31bf5b6be87dba2b691524147a2df2c"
+    },
+    "upstream_tres_sha256": "130bcd9c97aced09555a8e016659bd197f6d012ff88a8edc63828609b65e9541",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/ember-projectile.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/ember-projectile.tscn"
+  },
+  {
+    "id": "flux-shield",
+    "source": "scenario",
+    "name": "Flux Shield",
+    "frames": 16,
+    "fps": 12,
+    "loop": true,
+    "animation": "flux_shield",
+    "size": [
+      64,
+      64
+    ],
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "place": "caster",
+    "depth": "front",
+    "upstream_sha256": {
+      "flux-shield.png": "1e84d1e8116e0d37b8eef5cf67ce0f93b06ce9f7800b1c6286e4d88093bd3dc0",
+      "flux-shield.json": "e84a0d3136e838fed26f9a61235248c0789a0e849d34ce997111aa1506b974a2",
+      "flux-shield.recipe.json": "4816d6c19f3cd9bc4a8b63212fea7b0cb367599f09c899ede22e348facfe9757",
+      "README.txt": "6c17199df0e0a152228150d4c765b2ae2e2e5e9ec11fb2734a0b8b95a6b972b1"
+    },
+    "upstream_tres_sha256": "b4520608de2c05e2d67049744113b9cafcd8c3a2c9eb1ba6fd869190770adc6d",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/flux-shield.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/flux-shield.tscn"
+  },
+  {
+    "id": "flux-slash",
+    "source": "scenario",
+    "name": "Flux Slash",
+    "frames": 21,
+    "fps": 18,
+    "loop": false,
+    "animation": "flux_slash",
+    "size": [
+      64,
+      64
+    ],
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "place": "target",
+    "depth": "front",
+    "upstream_sha256": {
+      "flux-slash.png": "36bff536d5f5090123dd9e508744cfcd23340289160f0c31ee5729f4b20e3f58",
+      "flux-slash.json": "f6debe42f2a0c7521d92ffa2df5dd328efd2390475adae2019deba8b3d5f8a4f",
+      "flux-slash.recipe.json": "401b424f4d9f731fae6005f64d0babf1c308be361d0ea6df101a00f3c7eba258",
+      "README.txt": "e820c3b31d3b731e2a0f14522476c605224ded12d1f4e0bcfa00c2b2bf26131e"
+    },
+    "upstream_tres_sha256": "ee9ded2ccfffaaafe699352b151710e8589b973af17f3a2a5a9b15e3b8cec958",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/flux-slash.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/flux-slash.tscn"
+  },
+  {
+    "id": "frost-nova",
+    "source": "scenario",
+    "name": "Frost Nova",
+    "frames": 16,
+    "fps": 15,
+    "loop": false,
+    "animation": "frost_nova",
+    "size": [
+      64,
+      64
+    ],
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "place": "target",
+    "depth": "front",
+    "upstream_sha256": {
+      "frost-nova.png": "11daea6ab8fe0449c10b5feae11ed1aea362f4e8743de0255d1aa5d4ae55b5d0",
+      "frost-nova.json": "53e52a9e1203a1c518864481d6e9b7525e62d95a00d7344a892b168bcc99c032",
+      "frost-nova.recipe.json": "62537ca1346f5785d8024fe1f28644874dc741ea823dd8e0cc35778c9073825f",
+      "README.txt": "2cf9fa5320185ef8e1004d884ee6d67603a1a78025410a29d8623021c8f4def8"
+    },
+    "upstream_tres_sha256": "52e2eb8ae7f2af74bb19e6e641ffd96205702c978d9374c5f585c5125ba09371",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/frost-nova.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/frost-nova.tscn"
+  },
+  {
+    "id": "frozen-spikes",
+    "source": "scenario",
+    "name": "Frozen Spikes",
+    "frames": 18,
+    "fps": 15,
+    "loop": false,
+    "animation": "frozen_spikes",
+    "size": [
+      96,
+      64
+    ],
+    "pivot": [
+      0.5,
+      0.94
+    ],
+    "place": "target-ground",
+    "depth": "front",
+    "upstream_sha256": {
+      "frozen-spikes.png": "8d64746c91b49a05993d040055db8a46230b263674575f6a1462c6edf8bac7f3",
+      "frozen-spikes.json": "fa2da083a04b137beb83d049852809211954d06167de3c3cd3f7553da38a381c",
+      "frozen-spikes.recipe.json": "2194c692ee1d31b682622bf12c8be2ae91db04b6b50dc0eb5be7f1a910f78a64",
+      "README.txt": "92a60e7a942569ec0e10b58eb36578c3e316fce2f7a1131295b844eee9cc5910"
+    },
+    "upstream_tres_sha256": "4e8b420fbf6532e4ed19400af1a4fb45a910ca6e2dcd60aa4601cce50a2d0546",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/frozen-spikes.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/frozen-spikes.tscn"
+  },
+  {
+    "id": "gilded-level-up",
+    "source": "scenario",
+    "name": "Gilded Level Up",
+    "frames": 24,
+    "fps": 15,
+    "loop": false,
+    "animation": "gilded_level_up",
+    "size": [
+      64,
+      80
+    ],
+    "pivot": [
+      0.5,
+      0.96
+    ],
+    "place": "caster-ground",
+    "depth": "front",
+    "upstream_sha256": {
+      "gilded-level-up.png": "3a32c711838db53598132c1bf6726f302342379f45998d48526cb7e56516b501",
+      "gilded-level-up.json": "159a84924569cc9f2931d2a45dda969704c0cb1adcfdcdc4e372f90ddc0e52f7",
+      "gilded-level-up.recipe.json": "b4e4e54aa9e0aab683df2a747b96acd7fa2bc2b8819b945685b97ddb22da8e98",
+      "README.txt": "f46eaad9586c31ec5abca1aa3c838f030ce2d49584560c0d369a4b9c61ac37ce"
+    },
+    "upstream_tres_sha256": "e6c4c18776957ce0f3e9367002f15ff5d71ed4a53f1156f9419288733d12d0c9",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/gilded-level-up.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/gilded-level-up.tscn"
+  },
+  {
+    "id": "glacial-ambient",
+    "source": "scenario",
+    "name": "Glacial Ambient",
+    "frames": 24,
+    "fps": 12,
+    "loop": true,
+    "animation": "glacial_ambient",
+    "size": [
+      128,
+      96
+    ],
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "place": "screen",
+    "depth": "front",
+    "upstream_sha256": {
+      "glacial-ambient.png": "d3b8dde50a716a934c6df5aaa82303a20276c64087b59786274d333cec9df567",
+      "glacial-ambient.json": "dea0cc55932eb162339b014626b7063ded2b7fcc627477e9609219881d31caa6",
+      "glacial-ambient.recipe.json": "e28b511c86ea842a4ef2cd60a07a8937fa525279fd472840888d93d2d04dc84c",
+      "README.txt": "b38cd78d99f7b360a7b0cf58daa36c920c08245738cd883a462dbeda4f353f88"
+    },
+    "upstream_tres_sha256": "2d5484404ad9993a09c483f09f101cb15fbe33eca65feec869044eb928fb49e3",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/glacial-ambient.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/glacial-ambient.tscn"
+  },
+  {
+    "id": "ion-orb",
+    "source": "scenario",
+    "name": "Ion Orb",
+    "frames": 12,
+    "fps": 12,
+    "loop": true,
+    "animation": "ion_orb",
+    "size": [
+      48,
+      48
+    ],
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "place": "caster-hand",
+    "depth": "front",
+    "upstream_sha256": {
+      "ion-orb.png": "fac780bbb2ff3228a6944b0fff8511775a32fbd1fe52603ec089d8c72b833b55",
+      "ion-orb.json": "a13e970d2a17fb7a707cd411b3b6f6ce7ed13f8c817d298119f224ce42d3c380",
+      "ion-orb.recipe.json": "965a7a5228f50751357e0c49f5c62693b80ac8ac5609acf7a1be4f835775f599",
+      "README.txt": "5bbf77bf87d19cd5e952cc7a1c994ea49ab64262ecceb1e17fe5f8a063ae68c5"
+    },
+    "upstream_tres_sha256": "1cb1829935eeef4ed40782501d0585ed26e51522927e6127b87c45b131162083",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/ion-orb.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/ion-orb.tscn"
+  },
+  {
+    "id": "lucky-loot",
+    "source": "scenario",
+    "name": "Lucky Loot",
+    "frames": 24,
+    "fps": 15,
+    "loop": false,
+    "animation": "lucky_loot",
+    "size": [
+      48,
+      64
+    ],
+    "pivot": [
+      0.5,
+      0.9125000000000001
+    ],
+    "place": "target-ground",
+    "depth": "front",
+    "upstream_sha256": {
+      "lucky-loot.png": "81129a66812c76ebc9ebbdebb3135a185b3f3304a2d793827d9eec898a8e6b7a",
+      "lucky-loot.json": "7128d59ebc31c8e4997f3954dae9744587c6c1f3af53faad45a35d0ffdda94bf",
+      "lucky-loot.recipe.json": "2c1f4e0fa211a17c3f7322eeffbdd795f8003dd5804f201aa644d8573453885e",
+      "README.txt": "76220f7616895caec1d966fb4a1a34284152be0bf321754ec16537411ba97775"
+    },
+    "upstream_tres_sha256": "5df424b51320c5a1fcfbbafded33933348bcfa1b6d58930ee931afb9cd09b20e",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/lucky-loot.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/lucky-loot.tscn"
+  },
+  {
+    "id": "mystic-ambient",
+    "source": "scenario",
+    "name": "Mystic Ambient",
+    "frames": 24,
+    "fps": 12,
+    "loop": true,
+    "animation": "mystic_ambient",
+    "size": [
+      128,
+      96
+    ],
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "place": "screen",
+    "depth": "front",
+    "upstream_sha256": {
+      "mystic-ambient.png": "8f8cf5a3f94b11051bae9b94e9bb27ae5850e843264c1d9bcaf9664a1721b3d8",
+      "mystic-ambient.json": "05a87326b5a56ceca607058e03b3d7701d5931cf8f2b5e6ef6db48896fe63395",
+      "mystic-ambient.recipe.json": "8ea72898a2cdfbe3097adfd799f2657a5c68616e51d31ec4b43bc3f8377e39cb",
+      "README.txt": "769277dce128a8c7edddc9940ffed4861cce277d18ee53e28f19b0ac2f02f571"
+    },
+    "upstream_tres_sha256": "c0d2efd71f7ebcd511321ab2608da43cff4a4a5bbb1fbae66508a149b2083717",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/mystic-ambient.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/mystic-ambient.tscn"
+  },
+  {
+    "id": "mystic-teleport",
+    "source": "scenario",
+    "name": "Mystic Teleport",
+    "frames": 20,
+    "fps": 15,
+    "loop": false,
+    "animation": "mystic_teleport",
+    "size": [
+      48,
+      80
+    ],
+    "pivot": [
+      0.5,
+      0.89
+    ],
+    "place": "caster-ground",
+    "depth": "front",
+    "upstream_sha256": {
+      "mystic-teleport.png": "7227f45a7bbbb934c51122d62f7952c5b4c6937506124e11ba5ffffffb57a46a",
+      "mystic-teleport.json": "11ecdfafd4a8738825501eb77347680b649c5089ffd31d19563144a15f6b23de",
+      "mystic-teleport.recipe.json": "5c7b2c5c8c7130da4116fc3bf6ec609372043bff30be2f8f039d55c011955094",
+      "README.txt": "a084d3efa104ab699095f8d03cc03c9c9ffc6bef221ba04d61f65d2f393f3af8"
+    },
+    "upstream_tres_sha256": "da8c9e9ce6778bcef0d0065c825966bffeb71c526d277e11d5d92cc4f5090d05",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/mystic-teleport.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/mystic-teleport.tscn"
+  },
+  {
+    "id": "night-aura",
+    "source": "scenario",
+    "name": "Night Aura",
+    "frames": 16,
+    "fps": 12,
+    "loop": true,
+    "animation": "night_aura",
+    "size": [
+      96,
+      112
+    ],
+    "pivot": [
+      0.5,
+      0.9285714285714286
+    ],
+    "place": "caster-ground",
+    "depth": "behind",
+    "upstream_sha256": {
+      "night-aura.png": "9bae8882deee20a33cc4ca0b5ec9ae6855a25f90d816b0078ce4a4b2417f1362",
+      "night-aura.json": "715afe8f464290c19f7dd06eb2bca6e51ba67693fc39cfbc863a883de1a99150",
+      "night-aura.recipe.json": "52c9d748452907fcc0e5b1c45455dad533fc6a42b19e6026fedb0634d2afbe4f",
+      "README.txt": "638f74d9ec52dedc0159af8ff8b2e61102d0a1c95885e84cdc5d554db21fc366"
+    },
+    "upstream_tres_sha256": "5330cc39fb99dbfab0d96c70b241c3da8b5970d66d1d27aa48a7e91b560e9642",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/night-aura.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/night-aura.tscn"
+  },
+  {
+    "id": "pulse-charge",
+    "source": "scenario",
+    "name": "Pulse Charge",
+    "frames": 16,
+    "fps": 15,
+    "loop": true,
+    "animation": "pulse_charge",
+    "size": [
+      48,
+      48
+    ],
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "place": "caster-hand",
+    "depth": "front",
+    "upstream_sha256": {
+      "pulse-charge.png": "6a73fee32b074a86908413b4ef51fadf52d15a02101e65aebf7aca9ce33f6fa9",
+      "pulse-charge.json": "a0305937989993ce240b61d5d08c468b9dfe5e274a6c9b0ca8e2c6e965cdaca6",
+      "pulse-charge.recipe.json": "4f8ca585f93e040d074600e1bcaed7e22d1508727690030e612ee974f917d5f2",
+      "README.txt": "b8e984a70635f49bba72ca843c6ff73960954bbc8f30b64ec3dfc24c8a46dc15"
+    },
+    "upstream_tres_sha256": "34fdeac54a26fc16e09fde73874ce4ca5e931600604c24c9d7450c492b89bb01",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/pulse-charge.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/pulse-charge.tscn"
+  },
+  {
+    "id": "razor-slash",
+    "source": "scenario",
+    "name": "Razor Slash",
+    "frames": 12,
+    "fps": 18,
+    "loop": false,
+    "animation": "razor_slash",
+    "size": [
+      64,
+      64
+    ],
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "place": "target",
+    "depth": "front",
+    "upstream_sha256": {
+      "razor-slash.png": "b06cca8697ff175ec36b5eecd7b5f6c141e8219066802e94363b82d314414fe1",
+      "razor-slash.json": "731aac308adaf2ff64722837244b72f7ac88c41982a66c991f61903ebeaaa44f",
+      "razor-slash.recipe.json": "df52c7ae3754ff4d2c610181e2e27390f24b32ec9ca3dd551282e40d85d51474",
+      "README.txt": "b33455596e213f703f56242a4420b8208920facd1a1b1c7fefb189e4d8eacb7e"
+    },
+    "upstream_tres_sha256": "43152c4f36460a3f1e414bfe63e4a8b884beb7ac297830dc452f8cda049d3103",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/razor-slash.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/razor-slash.tscn"
+  },
+  {
+    "id": "sacred-sparkle",
+    "source": "scenario",
+    "name": "Sacred Sparkle",
+    "frames": 12,
+    "fps": 12,
+    "loop": true,
+    "animation": "sacred_sparkle",
+    "size": [
+      32,
+      32
+    ],
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "place": "target",
+    "depth": "front",
+    "upstream_sha256": {
+      "sacred-sparkle.png": "071a48187e51801bb7156983467781fd8a2a2b84f9e84eebb72ca9fca80c82b0",
+      "sacred-sparkle.json": "2e9fcaaa8fc096dd0fb3517b1fab95a5a8084f221c1bfe43fa667049001f748c",
+      "sacred-sparkle.recipe.json": "1e9d98cd34e74bb7c5a59fd06a49acae07a1817e7259dc78b028d0aedb98f301",
+      "README.txt": "b02a94c361c54538138d134def99c80161ba94c826f0d1a5dd2321f056e3d7eb"
+    },
+    "upstream_tres_sha256": "35318c392be2fa54aa7cfbe18f0866c61235d84a07cb55bb8db49af43bcc86e7",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/sacred-sparkle.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/sacred-sparkle.tscn"
+  },
+  {
+    "id": "sanguine-claw",
+    "source": "scenario",
+    "name": "Sanguine Claw",
+    "frames": 12,
+    "fps": 18,
+    "loop": false,
+    "animation": "sanguine_claw",
+    "size": [
+      64,
+      64
+    ],
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "place": "target",
+    "depth": "front",
+    "upstream_sha256": {
+      "sanguine-claw.png": "2264dad550f44fd1d90dd55dad2f598245904b264d4690a7262b74ea34c6c81f",
+      "sanguine-claw.json": "b9bc56736f8bf36b32b1e6810b6ef4eefa12b67d38b83e31b861c33cddabfb10",
+      "sanguine-claw.recipe.json": "9708155613c87487f286159e3792fd086bf79b0fbb3ae56ff04abf24cf224399",
+      "README.txt": "76b05f1b0c13b5ce76d4487bdddf58b15a0346ddd8c338caf2d21700b4c4e08e"
+    },
+    "upstream_tres_sha256": "06d8fa3507cff0d646e8a0aa0f76d116286241379360a8d356510bed7889605e",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/sanguine-claw.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/sanguine-claw.tscn"
+  },
+  {
+    "id": "shadow-vortex",
+    "source": "scenario",
+    "name": "Shadow Vortex",
+    "frames": 16,
+    "fps": 12,
+    "loop": true,
+    "animation": "shadow_vortex",
+    "size": [
+      64,
+      64
+    ],
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "place": "target",
+    "depth": "front",
+    "upstream_sha256": {
+      "shadow-vortex.png": "8a73a9823168b5707b115e3045d370f83273b3da47064661f4936a6d69958b21",
+      "shadow-vortex.json": "518ff2b72fd9b60bea053373f2d38a54887ee40c14a130dcaaf8d3aa768a9e4e",
+      "shadow-vortex.recipe.json": "b4a5931c9de46e4108c8a3e5880c28123c32a5f43ac95eecdc60ef268c41de59",
+      "README.txt": "1b318916c24e5521c4e86dc4aa340b540fa02117b82c302d8b1a7bd43ce43ff3"
+    },
+    "upstream_tres_sha256": "0723c15fa3e905aa7ead33dbcffc9a5af2f199f8640cdac7236d778eba45b9ad",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/shadow-vortex.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/shadow-vortex.tscn"
+  },
+  {
+    "id": "stone-ground-slam",
+    "source": "scenario",
+    "name": "Stone Ground Slam",
+    "frames": 18,
+    "fps": 15,
+    "loop": false,
+    "animation": "stone_ground_slam",
+    "size": [
+      96,
+      64
+    ],
+    "pivot": [
+      0.5,
+      0.86
+    ],
+    "place": "target-ground",
+    "depth": "front",
+    "upstream_sha256": {
+      "stone-ground-slam.png": "0a0ff165dd24c697aa04f33fdf1fa46722cbec181da5eef1db80b2f70b217460",
+      "stone-ground-slam.json": "c27b7cc33fce2ee2c32bead51f65a6815d7e8b687367ba9f68fbcf088cc10a91",
+      "stone-ground-slam.recipe.json": "46d3302ee2aa847064c814019950e460b8ce9d40452a3d170d1ee5caa6e557a8",
+      "README.txt": "9f725708eac06a4813474f4010d4345716bb72027eced5fed26c8554e0a2373a"
+    },
+    "upstream_tres_sha256": "c892c7844468adf548340c0d4d0ae8b375ea4a631cf83143abec5368ac809843",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/stone-ground-slam.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/stone-ground-slam.tscn"
+  },
+  {
+    "id": "storm-strike",
+    "source": "scenario",
+    "name": "Storm Strike",
+    "frames": 16,
+    "fps": 18,
+    "loop": false,
+    "animation": "storm_strike",
+    "size": [
+      64,
+      96
+    ],
+    "pivot": [
+      0.5,
+      0.9166666666666666
+    ],
+    "place": "target-ground",
+    "depth": "front",
+    "upstream_sha256": {
+      "storm-strike.png": "9d1fd26266fd52dfbec8917f75e15df2efe8bdcb3b7da01eb12c05f4c452cf66",
+      "storm-strike.json": "d05fc19fa20ffaa0b091dc5186cea1dc956dbe1dfd1e26d8fce963b1515d22d1",
+      "storm-strike.recipe.json": "a9b7b83ced23a5adda7fbf8296fb0aca786903d69bb2bf482ecebd3916bdf36f",
+      "README.txt": "f08b8006008483ddcb33de3570ad6e5323f43c278d87e4c65d592105e7ff314a"
+    },
+    "upstream_tres_sha256": "ec0c0c9434ad7d9fb8d75bfa08f548c5a42731a949440497d72a2c4a94133652",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/storm-strike.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/storm-strike.tscn"
+  },
+  {
+    "id": "thorn-ambient",
+    "source": "scenario",
+    "name": "Thorn Ambient",
+    "frames": 24,
+    "fps": 12,
+    "loop": true,
+    "animation": "thorn_ambient",
+    "size": [
+      128,
+      96
+    ],
+    "pivot": [
+      0.5,
+      0.5
+    ],
+    "place": "screen",
+    "depth": "front",
+    "upstream_sha256": {
+      "thorn-ambient.png": "186354b9f35c72ec60648183129ab5041b020486045c029a117da13533184897",
+      "thorn-ambient.json": "ede9a882599546a38a9c51b9e926d3bc68818d1872abe47fbd60d14720243c86",
+      "thorn-ambient.recipe.json": "a4b2dd18f559c474d208a4494cde56659a1b1ff7ba2cc7ceb3f2bef4dbf15d86",
+      "README.txt": "d535e5b769e2cc07fea5cf3ff2e30652526ca3c47a9ad71c1875897da517b6b1"
+    },
+    "upstream_tres_sha256": "b43f63f45ec07b83fdc0d07ae0f2440dafda4febcc559bcc6fd7ded131d52c38",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/thorn-ambient.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/thorn-ambient.tscn"
+  },
+  {
+    "id": "volcanic-pillar",
+    "source": "scenario",
+    "name": "Volcanic Pillar",
+    "frames": 20,
+    "fps": 15,
+    "loop": false,
+    "animation": "volcanic_pillar",
+    "size": [
+      48,
+      96
+    ],
+    "pivot": [
+      0.5,
+      0.93
+    ],
+    "place": "target-ground",
+    "depth": "front",
+    "upstream_sha256": {
+      "volcanic-pillar.png": "cf149ff5231b31640dae789526571197333385da933fb16861e5711c75acef10",
+      "volcanic-pillar.json": "dd7099a2b715fee13797adc5356c08f9717c04ce802d44cbcbc61487579eac64",
+      "volcanic-pillar.recipe.json": "f24d960b0ec09898520fedb605c17edec65951a6130c646c856a74772ddf9756",
+      "README.txt": "1ba5f397df0f0280ac098173f026225e97a33f53e3624ddcd627327a15b46988"
+    },
+    "upstream_tres_sha256": "863275c30d20efc5f614f9738cf2199c06124e7e05e311fcb901be7a5cb18c6a",
+    "scene_2d": "res://addons/proto_kit/vfx/2d/scenario/volcanic-pillar.tscn",
+    "scene_3d": "res://addons/proto_kit/vfx/3d/scenario/volcanic-pillar.tscn"
+  }
+]

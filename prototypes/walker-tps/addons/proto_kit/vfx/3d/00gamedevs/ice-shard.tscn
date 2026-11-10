@@ -1,0 +1,163 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/00gamedevs/source_effect.gd" id="1_jsc7c"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/ice-shard/spatial_part_0.gdshader" id="2_75lrq"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/ice-shard/part_0.res" id="3_b1tma"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/ice-shard/spatial_part_1.gdshader" id="4_75lrq"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/ice-shard/part_1.res" id="5_h7t6t"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/ice-shard/spatial_part_1_depth.gdshader" id="6_75lrq"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/ice-shard/spatial_part_2.gdshader" id="6_81wnm"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/ice-shard/part_2.res" id="7_jupye"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/ice-shard/spatial_part_3.gdshader" id="8_sn7ps"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/ice-shard/part_3.res" id="9_yespm"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/ice-shard/spatial_part_4.gdshader" id="10_aaigp"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/ice-shard/part_4.res" id="11_b3upy"]
+[ext_resource type="AnimationLibrary" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/ice-shard/motion.res" id="12_8hl3b"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_narl6"]
+resource_local_to_scene = true
+render_priority = 3
+shader = ExtResource("2_75lrq")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 24
+shader_parameter/source_instance_count = 256.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uStopTime = -1.0
+shader_parameter/uEndDuration = 0.8
+shader_parameter/uQuantity = 1.0
+shader_parameter/uSpread = 1.0
+shader_parameter/uTime = 0.45
+shader_parameter/uStretch = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.4507858, 0.7156935, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r6y7k"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("6_75lrq")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 360
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 0.45
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.4507858, 0.7156935, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3g1bt"]
+resource_local_to_scene = true
+render_priority = 3
+shader = ExtResource("6_81wnm")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 2160
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 0.45
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.4507858, 0.7156935, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tfmgs"]
+resource_local_to_scene = true
+render_priority = 5
+shader = ExtResource("8_sn7ps")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 624
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uImpactUp = Vector3(0, 1, 0)
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.4507858, 0.7156935, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7x4ch"]
+resource_local_to_scene = true
+render_priority = 4
+shader = ExtResource("10_aaigp")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.4507858, 0.7156935, 1)
+
+[node name="IceShard" type="Node3D" unique_id=1960029072]
+script = ExtResource("1_jsc7c")
+effect_id = "ice-shard"
+variant = 2
+metadata/vfx_source = "00gamedevs"
+metadata/vfx_id = "ice-shard"
+metadata/editor_preview_time = 0.45
+
+[node name="Parts" type="Node3D" parent="." unique_id=2023589235]
+unique_name_in_owner = true
+
+[node name="Part000" type="MeshInstance3D" parent="Parts" unique_id=459503393]
+material_override = SubResource("ShaderMaterial_narl6")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("3_b1tma")
+metadata/source_name = "Part0"
+
+[node name="Part001" type="MeshInstance3D" parent="Parts" unique_id=1704353926]
+transform = Transform3D(1, 0, 0, 0, 0.99930894, -0.037169408, 0, 0.037169408, 0.99930894, 0.85, 0, 0)
+material_override = SubResource("ShaderMaterial_r6y7k")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("5_h7t6t")
+metadata/source_name = "projectile-core"
+metadata/source_depth_shader = ExtResource("6_75lrq")
+metadata/source_transparent_shader = ExtResource("4_75lrq")
+metadata/source_depth_mode = "active"
+
+[node name="Part002" type="MeshInstance3D" parent="Parts" unique_id=1184671001]
+material_override = SubResource("ShaderMaterial_3g1bt")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("7_jupye")
+metadata/source_name = "projectile-trails"
+
+[node name="Part003" type="MeshInstance3D" parent="Parts" unique_id=1662297356]
+visible = false
+material_override = SubResource("ShaderMaterial_tfmgs")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("9_yespm")
+metadata/source_name = "lifecycle-impact"
+
+[node name="Part004" type="MeshInstance3D" parent="Parts" unique_id=746269998]
+visible = false
+material_override = SubResource("ShaderMaterial_7x4ch")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("11_b3upy")
+metadata/source_name = "lifecycle-contact-glow"
+
+[node name="Motion" type="AnimationPlayer" parent="." unique_id=316186512]
+unique_name_in_owner = true
+libraries/ = ExtResource("12_8hl3b")

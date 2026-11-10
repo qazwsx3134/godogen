@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[ext_resource type="SpriteFrames" path="res://addons/proto_kit/vfx/assets/scenario/pulse-charge/pulse-charge.tres" id="1_g48qk"]
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/2d/sheet_effect.gd" id="2_qi08g"]
+
+[node name="PulseCharge" type="AnimatedSprite2D" unique_id=341124408]
+texture_filter = 1
+sprite_frames = ExtResource("1_g48qk")
+animation = &"pulse_charge"
+frame = 2
+script = ExtResource("2_qi08g")
+metadata/vfx_source = "scenario"
+metadata/vfx_id = "pulse-charge"
+metadata/placement = "caster-hand"
+metadata/depth_hint = "front"

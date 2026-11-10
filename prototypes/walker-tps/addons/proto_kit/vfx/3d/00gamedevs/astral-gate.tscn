@@ -1,0 +1,113 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/00gamedevs/source_effect.gd" id="1_wvv45"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/astral-gate/spatial_part_0.gdshader" id="2_swisp"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/astral-gate/part_0.res" id="3_ww1g0"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/astral-gate/spatial_part_1.gdshader" id="4_4vg05"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/astral-gate/part_1.res" id="5_275nt"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/astral-gate/spatial_part_2.gdshader" id="6_7xtqq"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/astral-gate/part_2.res" id="7_dyaea"]
+[ext_resource type="AnimationLibrary" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/astral-gate/motion.res" id="8_c8gjs"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pw1ww"]
+resource_local_to_scene = true
+render_priority = 1
+shader = ExtResource("2_swisp")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 2688
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 1.4
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uStopTime = -1.0
+shader_parameter/uEndDuration = 0.8
+shader_parameter/uStretch = 1.0
+shader_parameter/uQuantity = 1.0
+shader_parameter/uSpread = 1.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.5332764, 0.47932017, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gkc31"]
+resource_local_to_scene = true
+render_priority = 1
+shader = ExtResource("4_4vg05")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 144
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 1.4
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uStopTime = -1.0
+shader_parameter/uEndDuration = 0.8
+shader_parameter/uStretch = 1.0
+shader_parameter/uQuantity = 1.0
+shader_parameter/uSpread = 1.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.5332764, 0.47932017, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_oubfn"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("6_7xtqq")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 12
+shader_parameter/source_instance_count = 256.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 1.4
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uStopTime = -1.0
+shader_parameter/uEndDuration = 0.8
+shader_parameter/uStretch = 1.0
+shader_parameter/uQuantity = 1.0
+shader_parameter/uSpread = 1.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.5332764, 0.47932017, 1)
+
+[node name="AstralGate" type="Node3D" unique_id=1007283552]
+script = ExtResource("1_wvv45")
+effect_id = "astral-gate"
+start_duration = 0.8
+kind = 8
+metadata/vfx_source = "00gamedevs"
+metadata/vfx_id = "astral-gate"
+metadata/editor_preview_time = 1.4
+
+[node name="Parts" type="Node3D" parent="." unique_id=1734398138]
+unique_name_in_owner = true
+
+[node name="Part000" type="MeshInstance3D" parent="Parts" unique_id=216388319]
+material_override = SubResource("ShaderMaterial_pw1ww")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("3_ww1g0")
+metadata/source_name = "utility-gate-frame"
+
+[node name="Part001" type="MeshInstance3D" parent="Parts" unique_id=1977497536]
+material_override = SubResource("ShaderMaterial_gkc31")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("5_275nt")
+metadata/source_name = "utility-star-membrane"
+
+[node name="Part002" type="MeshInstance3D" parent="Parts" unique_id=1913695059]
+material_override = SubResource("ShaderMaterial_oubfn")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("7_dyaea")
+metadata/source_name = "utility-detail-particles"
+
+[node name="Motion" type="AnimationPlayer" parent="." unique_id=768892760]
+unique_name_in_owner = true
+libraries/ = ExtResource("8_c8gjs")

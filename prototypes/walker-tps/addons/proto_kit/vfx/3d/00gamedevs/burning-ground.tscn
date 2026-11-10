@@ -1,0 +1,115 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/00gamedevs/source_effect.gd" id="1_neevk"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/burning-ground/spatial_part_0.gdshader" id="2_cuhkh"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/burning-ground/part_0.res" id="3_w6q4x"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/burning-ground/spatial_part_1.gdshader" id="4_ms74t"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/burning-ground/part_1.res" id="5_m07vb"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/burning-ground/spatial_part_2.gdshader" id="6_3syr4"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/burning-ground/part_2.res" id="7_a4ox6"]
+[ext_resource type="AnimationLibrary" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/burning-ground/motion.res" id="8_gccnh"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_m2x70"]
+resource_local_to_scene = true
+render_priority = 3
+shader = ExtResource("2_cuhkh")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 512.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uStopTime = -1.0
+shader_parameter/uEndDuration = 1.0
+shader_parameter/uQuantity = 1.0
+shader_parameter/uSpread = 1.0
+shader_parameter/uTime = 0.7999999999999999
+shader_parameter/uStretch = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(1, 0.28314874, 0.06847817)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8obl0"]
+resource_local_to_scene = true
+render_priority = 1
+shader = ExtResource("4_ms74t")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = null
+shader_parameter/source_vertices_per_instance = 3462
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(1, 0.28314874, 0.06847817)
+shader_parameter/uTime = 0.7999999999999999
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pcwg2"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("6_3syr4")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = null
+shader_parameter/source_vertices_per_instance = 3462
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(1, 0.28314874, 0.06847817)
+shader_parameter/uTime = 0.7999999999999999
+
+[node name="BurningGround" type="Node3D" unique_id=471784733]
+script = ExtResource("1_neevk")
+effect_id = "burning-ground"
+start_duration = 0.7
+end_duration = 1.0
+kind = 2
+variant = 1
+metadata/vfx_source = "00gamedevs"
+metadata/vfx_id = "burning-ground"
+metadata/editor_preview_time = 0.7999999999999999
+
+[node name="Parts" type="Node3D" parent="." unique_id=749990429]
+unique_name_in_owner = true
+
+[node name="Part000" type="MeshInstance3D" parent="Parts" unique_id=1818672760]
+material_override = SubResource("ShaderMaterial_m2x70")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("3_w6q4x")
+metadata/source_name = "Part0"
+
+[node name="Part001" type="MeshInstance3D" parent="Parts" unique_id=68956918]
+transform = Transform3D(1, 0, 0, 0, 2.220446e-16, 1, 0, -1, 2.220446e-16, 0, 0.025, 0)
+material_override = SubResource("ShaderMaterial_8obl0")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("5_m07vb")
+metadata/source_name = "Part1"
+metadata/phase_ranges = [6, 3456]
+
+[node name="Part002" type="MeshInstance3D" parent="Parts" unique_id=1910650651]
+transform = Transform3D(1, 0, 0, 0, 2.220446e-16, 1, 0, -1, 2.220446e-16, 0, 0.015, 0)
+material_override = SubResource("ShaderMaterial_pcwg2")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("7_a4ox6")
+metadata/source_name = "Part2"
+metadata/phase_ranges = [6, 3456]
+
+[node name="Motion" type="AnimationPlayer" parent="." unique_id=825192050]
+unique_name_in_owner = true
+libraries/ = ExtResource("8_gccnh")

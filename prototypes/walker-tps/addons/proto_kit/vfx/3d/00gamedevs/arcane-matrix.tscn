@@ -1,0 +1,120 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/00gamedevs/source_effect.gd" id="1_elnq7"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/arcane-matrix/spatial_part_0.gdshader" id="2_7v8d2"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/arcane-matrix/part_0.res" id="3_6g6x4"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/arcane-matrix/spatial_part_1.gdshader" id="4_0f1mt"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/arcane-matrix/spatial_part_0_depth.gdshader" id="4_7v8d2"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/arcane-matrix/part_1.res" id="5_ia5os"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/arcane-matrix/spatial_part_2.gdshader" id="6_0ofjp"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/arcane-matrix/part_2.res" id="7_borj3"]
+[ext_resource type="AnimationLibrary" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/arcane-matrix/motion.res" id="8_b0jhn"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g3jqw"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("4_7v8d2")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 2640
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uRetire = 0.0
+shader_parameter/uOpening = 1.0
+shader_parameter/uStopTime = -1.0
+shader_parameter/uQuantity = 9.0
+shader_parameter/uTime = 1.4
+shader_parameter/uStretch = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.50888133, 0.3231432, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fju00"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("4_0f1mt")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = null
+shader_parameter/source_vertices_per_instance = 3462
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.50888133, 0.3231432, 1)
+shader_parameter/uTime = 1.4
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qyep4"]
+resource_local_to_scene = true
+render_priority = 3
+shader = ExtResource("6_0ofjp")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 256.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 1.4
+shader_parameter/uStopTime = -1.0
+shader_parameter/uQuantity = 9.0
+shader_parameter/uStretch = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.50888133, 0.3231432, 1)
+
+[node name="ArcaneMatrix" type="Node3D" unique_id=2117582576]
+script = ExtResource("1_elnq7")
+effect_id = "arcane-matrix"
+start_duration = 0.7
+end_duration = 1.0
+kind = 2
+variant = 4
+metadata/vfx_source = "00gamedevs"
+metadata/vfx_id = "arcane-matrix"
+metadata/editor_preview_time = 1.4
+
+[node name="Parts" type="Node3D" parent="." unique_id=1569817731]
+unique_name_in_owner = true
+
+[node name="Part000" type="MeshInstance3D" parent="Parts" unique_id=2013821304]
+material_override = SubResource("ShaderMaterial_g3jqw")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("3_6g6x4")
+metadata/source_name = "school-body"
+metadata/source_depth_shader = ExtResource("4_7v8d2")
+metadata/source_transparent_shader = ExtResource("2_7v8d2")
+metadata/source_depth_mode = "always"
+
+[node name="Part001" type="MeshInstance3D" parent="Parts" unique_id=2129977077]
+transform = Transform3D(1, 0, 0, 0, 2.220446e-16, 1, 0, -1, 2.220446e-16, 0, 0.018, 0)
+material_override = SubResource("ShaderMaterial_fju00")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("5_ia5os")
+metadata/source_name = "Part1"
+metadata/phase_ranges = [6, 3456]
+
+[node name="Part002" type="MeshInstance3D" parent="Parts" unique_id=1798944368]
+material_override = SubResource("ShaderMaterial_qyep4")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("7_borj3")
+metadata/source_name = "school-particles"
+
+[node name="Motion" type="AnimationPlayer" parent="." unique_id=693528402]
+unique_name_in_owner = true
+libraries/ = ExtResource("8_b0jhn")

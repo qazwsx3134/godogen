@@ -1,0 +1,270 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/00gamedevs/source_effect.gd" id="1_mubr4"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/golden-chain-rain/spatial_part_0.gdshader" id="2_dsyqp"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/golden-chain-rain/part_0.res" id="3_w41k0"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/golden-chain-rain/spatial_part_0_depth.gdshader" id="4_bkfkh"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/golden-chain-rain/spatial_part_1.gdshader" id="4_dsyqp"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/golden-chain-rain/part_1.res" id="5_bkfkh"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/golden-chain-rain/spatial_part_2.gdshader" id="6_1cg0f"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/golden-chain-rain/part_2.res" id="7_4smb1"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/golden-chain-rain/spatial_part_3.gdshader" id="8_7ke4d"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/golden-chain-rain/part_3.res" id="9_4t43y"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/golden-chain-rain/spatial_part_4.gdshader" id="11_bkfkh"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/golden-chain-rain/part_4.res" id="11_idav5"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/golden-chain-rain/spatial_part_5.gdshader" id="12_pldka"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/golden-chain-rain/spatial_part_4_depth.gdshader" id="13_1cg0f"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/golden-chain-rain/part_5.res" id="13_a7jfq"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/golden-chain-rain/part_6.res" id="15_ybk75"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/golden-chain-rain/spatial_part_6.gdshader" id="16_1cg0f"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/golden-chain-rain/spatial_part_7.gdshader" id="16_egr6g"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/golden-chain-rain/part_7.res" id="17_lxsln"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/golden-chain-rain/spatial_part_6_depth.gdshader" id="18_4smb1"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/golden-chain-rain/spatial_part_8.gdshader" id="18_jrt21"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/golden-chain-rain/part_8.res" id="19_uvdgn"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/golden-chain-rain/spatial_part_9.gdshader" id="20_maiys"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/golden-chain-rain/part_9.res" id="21_sc1ty"]
+[ext_resource type="AnimationLibrary" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/golden-chain-rain/motion.res" id="22_7yuoq"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c34m6"]
+resource_local_to_scene = true
+render_priority = 1
+shader = ExtResource("4_bkfkh")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 730.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 1.65
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(1, 0.63759685, 0.13286832)
+shader_parameter/uTextureDensity = 0.7
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kq834"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("4_dsyqp")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 730.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 1.65
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(1, 0.63759685, 0.13286832)
+shader_parameter/uTextureDensity = 0.7
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_a52ux"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("6_1cg0f")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 384
+shader_parameter/source_instance_count = 24.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 1.65
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(1, 0.63759685, 0.13286832)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5d2x6"]
+resource_local_to_scene = true
+render_priority = 4
+shader = ExtResource("8_7ke4d")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 179.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 1.65
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(1, 0.63759685, 0.13286832)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5h2cf"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("13_1cg0f")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 24.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 1.65
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(1, 0.63759685, 0.13286832)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6ktm6"]
+resource_local_to_scene = true
+render_priority = 3
+shader = ExtResource("12_pldka")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 24.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 1.65
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(1, 0.63759685, 0.13286832)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2qlhq"]
+resource_local_to_scene = true
+render_priority = 1
+shader = ExtResource("18_4smb1")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 24
+shader_parameter/source_instance_count = 24.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 1.65
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(1, 0.63759685, 0.13286832)
+shader_parameter/uTextureDensity = 0.7
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_08lu0"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("16_egr6g")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 24.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 1.65
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(1, 0.63759685, 0.13286832)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hlnw3"]
+resource_local_to_scene = true
+render_priority = 4
+shader = ExtResource("18_jrt21")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 616.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 1.65
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(1, 0.63759685, 0.13286832)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_srxxs"]
+resource_local_to_scene = true
+render_priority = -1
+shader = ExtResource("20_maiys")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 384
+shader_parameter/source_instance_count = 24.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 1.65
+shader_parameter/uCrackBloomSpread = 1.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uCrackBloom = 0.15
+shader_parameter/uColor = Vector3(1, 0.63759685, 0.13286832)
+
+[node name="GoldenChainRain" type="Node3D" unique_id=927583711]
+script = ExtResource("1_mubr4")
+effect_id = "golden-chain-rain"
+burst = true
+duration = 4.8
+end_duration = 1.1
+kind = 2
+variant = 15
+metadata/vfx_source = "00gamedevs"
+metadata/vfx_id = "golden-chain-rain"
+metadata/editor_preview_time = 1.65
+
+[node name="Parts" type="Node3D" parent="." unique_id=46650815]
+unique_name_in_owner = true
+
+[node name="Part000" type="MeshInstance3D" parent="Parts" unique_id=262301923]
+material_override = SubResource("ShaderMaterial_c34m6")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("3_w41k0")
+metadata/source_name = "golden-chain-body"
+metadata/source_depth_shader = ExtResource("4_bkfkh")
+metadata/source_transparent_shader = ExtResource("2_dsyqp")
+metadata/source_depth_mode = "always"
+
+[node name="Part001" type="MeshInstance3D" parent="Parts" unique_id=258340786]
+material_override = SubResource("ShaderMaterial_kq834")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("5_bkfkh")
+metadata/source_name = "golden-chain-halo"
+
+[node name="Part002" type="MeshInstance3D" parent="Parts" unique_id=1077471796]
+material_override = SubResource("ShaderMaterial_a52ux")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("7_4smb1")
+metadata/source_name = "golden-chain-ground-cracks"
+
+[node name="Part003" type="MeshInstance3D" parent="Parts" unique_id=1004082673]
+material_override = SubResource("ShaderMaterial_5d2x6")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("9_4t43y")
+metadata/source_name = "golden-chain-dissolve-motes"
+
+[node name="Part004" type="MeshInstance3D" parent="Parts" unique_id=1675522833]
+material_override = SubResource("ShaderMaterial_5h2cf")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("11_idav5")
+metadata/source_name = "golden-chain-endpoint-ripples"
+metadata/source_depth_shader = ExtResource("13_1cg0f")
+metadata/source_transparent_shader = ExtResource("11_bkfkh")
+metadata/source_depth_mode = "always"
+
+[node name="Part005" type="MeshInstance3D" parent="Parts" unique_id=208443162]
+material_override = SubResource("ShaderMaterial_6ktm6")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("13_a7jfq")
+metadata/source_name = "golden-chain-endpoint-bloom"
+
+[node name="Part006" type="MeshInstance3D" parent="Parts" unique_id=1798695195]
+material_override = SubResource("ShaderMaterial_2qlhq")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("15_ybk75")
+metadata/source_name = "golden-chain-arrowheads"
+metadata/source_depth_shader = ExtResource("18_4smb1")
+metadata/source_transparent_shader = ExtResource("16_1cg0f")
+metadata/source_depth_mode = "always"
+
+[node name="Part007" type="MeshInstance3D" parent="Parts" unique_id=579556254]
+material_override = SubResource("ShaderMaterial_08lu0")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("17_lxsln")
+metadata/source_name = "golden-chain-endpoint-feather"
+
+[node name="Part008" type="MeshInstance3D" parent="Parts" unique_id=1991377238]
+material_override = SubResource("ShaderMaterial_hlnw3")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("19_uvdgn")
+metadata/source_name = "golden-chain-crack-chips"
+
+[node name="Part009" type="MeshInstance3D" parent="Parts" unique_id=1446475036]
+material_override = SubResource("ShaderMaterial_srxxs")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("21_sc1ty")
+metadata/source_name = "golden-chain-crack-bloom"
+
+[node name="Motion" type="AnimationPlayer" parent="." unique_id=1164073553]
+unique_name_in_owner = true
+libraries/ = ExtResource("22_7yuoq")

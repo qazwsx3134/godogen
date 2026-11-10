@@ -1,0 +1,86 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/00gamedevs/source_effect.gd" id="1_wnpmp"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/radiant-beam/spatial_part_0.gdshader" id="2_p4q8f"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/radiant-beam/part_0.res" id="3_mtnkx"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/radiant-beam/spatial_part_1.gdshader" id="4_nl2yn"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/radiant-beam/part_1.res" id="5_d3m58"]
+[ext_resource type="AnimationLibrary" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/radiant-beam/motion.res" id="6_rlth2"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qvod0"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("2_p4q8f")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 15216
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uRetire = 0.0
+shader_parameter/uOpening = 1.0
+shader_parameter/uStopTime = -1.0
+shader_parameter/uQuantity = 1.0
+shader_parameter/uTime = 1.2
+shader_parameter/uStretch = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(1, 0.76815116, 0.3515326)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_p72ov"]
+resource_local_to_scene = true
+render_priority = 3
+shader = ExtResource("4_nl2yn")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 256.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 1.2
+shader_parameter/uStopTime = -1.0
+shader_parameter/uQuantity = 1.0
+shader_parameter/uStretch = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(1, 0.76815116, 0.3515326)
+
+[node name="RadiantBeam" type="Node3D" unique_id=1949902648]
+script = ExtResource("1_wnpmp")
+effect_id = "radiant-beam"
+start_duration = 0.4
+end_duration = 0.6
+kind = 1
+variant = 4
+metadata/vfx_source = "00gamedevs"
+metadata/vfx_id = "radiant-beam"
+metadata/editor_preview_time = 1.2
+
+[node name="Parts" type="Node3D" parent="." unique_id=485419775]
+unique_name_in_owner = true
+
+[node name="Part000" type="MeshInstance3D" parent="Parts" unique_id=462966845]
+material_override = SubResource("ShaderMaterial_qvod0")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("3_mtnkx")
+metadata/source_name = "school-body"
+
+[node name="Part001" type="MeshInstance3D" parent="Parts" unique_id=1733206369]
+material_override = SubResource("ShaderMaterial_p72ov")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("5_d3m58")
+metadata/source_name = "school-particles"
+
+[node name="Motion" type="AnimationPlayer" parent="." unique_id=1410901496]
+unique_name_in_owner = true
+libraries/ = ExtResource("6_rlth2")

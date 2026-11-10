@@ -1,0 +1,906 @@
+[gd_scene format=4]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/00gamedevs/source_effect.gd" id="1_80plf"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/spatial_part_0.gdshader" id="2_28iba"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/part_0.res" id="3_yud7g"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/spatial_part_1.gdshader" id="4_pcm52"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/part_1.res" id="5_aw2ge"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/spatial_part_2.gdshader" id="6_yud7g"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/part_2.res" id="7_7haw2"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/spatial_part_3.gdshader" id="8_kly87"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/spatial_part_2_depth.gdshader" id="8_yud7g"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/part_3.res" id="9_0r77u"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/spatial_part_4.gdshader" id="10_xv7iq"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/part_4.res" id="11_86v5w"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/part_5.res" id="13_m8xc1"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/spatial_part_5.gdshader" id="13_pcm52"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/spatial_part_6.gdshader" id="14_h2a4o"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/part_6.res" id="15_mb4rn"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/spatial_part_5_depth.gdshader" id="15_pcm52"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/spatial_part_7.gdshader" id="16_sg7ah"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/part_7.res" id="17_0wi1p"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/spatial_part_8.gdshader" id="18_e1gd2"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/part_8.res" id="19_jxhbs"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/spatial_part_9.gdshader" id="20_hptnc"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/part_9.res" id="21_rud18"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/spatial_part_10.gdshader" id="22_wyb4i"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/part_10.res" id="23_1hiit"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/spatial_part_11.gdshader" id="24_0fprx"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/part_11.res" id="25_3bwvc"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/spatial_part_12.gdshader" id="26_uqlmr"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/part_12.res" id="27_gklov"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/spatial_part_13.gdshader" id="28_46l80"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/part_13.res" id="29_punpg"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/spatial_part_14.gdshader" id="30_di6tx"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/part_14.res" id="31_swnbt"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/spatial_part_15.gdshader" id="32_ro5xm"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/part_15.res" id="33_x44rd"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/spatial_part_16.gdshader" id="34_c8i6t"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/part_16.res" id="35_lkrbh"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/spatial_part_17.gdshader" id="36_fnqxt"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/part_17.res" id="37_s0dda"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/spatial_part_18.gdshader" id="38_j857s"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/part_18.res" id="39_oqyff"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/spatial_part_19.gdshader" id="40_s5xnj"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/part_19.res" id="41_dl404"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/spatial_part_20.gdshader" id="42_w7cn5"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/part_20.res" id="43_l5rcb"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/spatial_part_21.gdshader" id="44_xco8f"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/part_21.res" id="45_l8u3o"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/spatial_part_22.gdshader" id="46_siudh"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/part_22.res" id="47_vdpos"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/spatial_part_23.gdshader" id="48_mbiff"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/part_23.res" id="49_7b47g"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/spatial_part_24.gdshader" id="50_p4f4c"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/part_24.res" id="51_lxo4k"]
+[ext_resource type="AnimationLibrary" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/darkchain-detonation/motion.res" id="52_70gyr"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0u473"]
+resource_local_to_scene = true
+render_priority = 1
+shader = ExtResource("2_28iba")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uJetTravel = 0.0
+shader_parameter/uJetFade = 1.0
+shader_parameter/uWarpKick = 0.0
+shader_parameter/uWarpFade = 0.0
+shader_parameter/uTime = 3.3
+shader_parameter/uChainTension = 0.0
+shader_parameter/uFlow = 1.5238879753351826
+shader_parameter/uOrbRadius = 1.3632220489324025
+shader_parameter/uBeat = 0.96592451041096
+shader_parameter/uOrbAlive = 1.0
+shader_parameter/uBlastRadius = 1.45
+shader_parameter/uWaveRadius = 1.45
+shader_parameter/uTier = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.22696587, 0, 1)
+shader_parameter/uGlyphs = PackedVector4Array(-0.5, -0.8, -0.5, 0.8, -0.5, 0.8, 0.5, 0.8, -0.5, 0.15, 0.35, 0.15, 0.35, 0.15, 0.35, -0.3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, -0.5, 0.8, 0.5, 0.8, 0.5, 0.8, -0.4, 0, -0.4, 0, 0.45, -0.15, 0.45, -0.15, -0.4, -0.8, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 0, -0.8, 0, 0.75, -0.55, 0.45, 0, 0.1, 0.55, 0.65, 0, 0.1, -0.55, 0.45, -0.55, 0.8, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, -0.55, -0.35, 0, 0.8, 0, 0.8, 0.55, -0.35, 0.55, -0.35, -0.55, -0.35, 0, -0.35, 0, -0.8, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, -0.5, -0.7, -0.5, 0.1, -0.5, 0.1, 0.05, 0.7, 0, -0.7, 0, 0, 0, 0, 0.55, 0.6, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, -0.45, 0.8, 0.35, 0.35, 0.35, 0.35, -0.35, -0.1, -0.35, -0.1, 0.45, -0.8, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, -0.55, -0.8, 0.55, -0.8, 0.55, -0.8, 0.55, 0.75, 0.55, 0.75, -0.5, 0.75, -0.5, 0.75, -0.5, -0.3, -0.5, -0.3, 0.15, -0.3, 0.15, -0.3, 0.15, 0.25, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0.8, 0.5, 0.2, 0.5, 0.2, 0, -0.4, 0, -0.4, -0.5, 0.2, -0.5, 0.2, 0, 0.8, 0, -0.4, 0.3, -0.8, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, -0.5, 0.6, 0.05, 0, 0.05, 0, -0.5, -0.6, -0.5, -0.6, -0.5, 0.6, 0.05, 0, 0.55, 0.6, 0.55, 0.6, 0.55, -0.6, 0.55, -0.6, 0.05, 0, 4, 4, 4, 4, 4, 4, 4, 4, -0.45, -0.8, -0.45, 0.8, 0.45, -0.8, 0.45, 0.8, -0.45, 0.5, 0.45, 0.5, -0.45, 0, 0.45, 0, -0.45, -0.5, 0.45, -0.5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, -0.55, -0.6, -0.35, 0.8, -0.2, -0.7, 0, 0.7, 0.15, -0.8, 0.35, 0.6, 0.5, -0.8, 0.6, 0.5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, -0.55, 0.7, 0.55, 0.7, 0.55, 0.7, 0, 0.1, 0, 0.1, -0.55, 0.7, 0, 0.1, 0, -0.8, -0.4, -0.35, 0, -0.6, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, -0.5, 0.8, -0.5, -0.65, -0.5, -0.65, 0.35, -0.65, 0.35, -0.65, 0.35, 0.1, 0.35, 0.1, -0.05, 0.1, -0.05, 0.1, -0.05, 0.55, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, -0.5, -0.8, -0.5, 0.8, -0.5, 0.8, 0.4, 0.5, 0.4, 0.5, -0.5, 0.1, -0.5, 0.1, 0.55, -0.8, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, -0.55, 0.8, -0.1, 0.45, -0.1, 0.45, -0.5, 0.05, -0.5, 0.05, -0.1, -0.45, 0.05, 0.45, 0.5, 0.05, 0.5, 0.05, 0.1, -0.45, 0.1, -0.45, 0.55, -0.8, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0.8, -0.5, 0.35, -0.5, 0.35, 0, -0.1, 0, -0.1, 0.5, 0.35, 0.5, 0.35, 0, 0.8, 0, -0.1, 0, -0.8, -0.4, -0.5, 0.4, -0.5, 4, 4, 4, 4, 4, 4, 4, 4, -0.5, -0.8, 0.5, 0.8, -0.5, 0.8, 0.5, -0.8, -0.5, 0.8, -0.5, 0.35, 0.5, -0.8, 0.5, -0.35, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, -0.5, 0.65, 0.5, 0.65, 0.5, 0.65, 0.1, 0.1, 0.1, 0.1, 0.5, -0.65, 0.5, -0.65, -0.5, -0.65, -0.5, -0.65, -0.1, -0.1, -0.1, -0.1, -0.5, 0.65, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0.8, 0, -0.8, -0.55, 0.45, 0, 0.1, 0.55, 0.45, 0, 0.1, -0.55, -0.2, 0, -0.55, 0.55, -0.2, 0, -0.55, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, -0.5, 0.8, 0.1, 0.8, 0.1, 0.8, 0.5, 0.35, 0.5, 0.35, -0.4, 0.35, -0.4, 0.35, -0.4, -0.35, -0.4, -0.35, 0.4, -0.35, 0.4, -0.35, 0.4, -0.8, 4, 4, 4, 4, 4, 4, 4, 4, -0.5, 0.75, -0.1, 0.75, -0.1, 0.75, 0.4, 0.15, 0.4, 0.15, 0, -0.65, 0, -0.65, -0.5, -0.65, -0.5, -0.65, -0.5, 0.1, -0.5, 0.1, 0.4, 0.15, 4, 4, 4, 4, 4, 4, 4, 4, -0.5, 0.8, 0.45, 0.35, 0.45, 0.35, -0.5, -0.1, -0.5, -0.1, 0.45, -0.55, -0.5, -0.55, 0.1, -0.8, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, -0.5, -0.8, -0.5, 0.4, -0.5, 0.4, 0, 0.8, 0, 0.8, 0.5, 0.4, 0.5, 0.4, 0.5, -0.8, 0, -0.5, 0, 0.35, -0.5, -0.1, 0.5, -0.1, 4, 4, 4, 4, 4, 4, 4, 4, -0.55, 0.7, 0.55, 0.7, -0.55, 0.2, 0.55, 0.2, -0.55, -0.3, 0.55, -0.3, -0.55, -0.8, 0.55, -0.8, 0.35, -0.8, -0.1, -0.3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sq3ih"]
+resource_local_to_scene = true
+render_priority = 1
+shader = ExtResource("4_pcm52")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uJetTravel = 0.0
+shader_parameter/uJetFade = 1.0
+shader_parameter/uWarpKick = 0.0
+shader_parameter/uWarpFade = 0.0
+shader_parameter/uTime = 3.3
+shader_parameter/uChainTension = 0.0
+shader_parameter/uFlow = 1.5238879753351826
+shader_parameter/uOrbRadius = 1.3632220489324025
+shader_parameter/uBeat = 0.96592451041096
+shader_parameter/uOrbAlive = 1.0
+shader_parameter/uBlastRadius = 1.45
+shader_parameter/uWaveRadius = 1.45
+shader_parameter/uTier = 1.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.22696587, 0, 1)
+shader_parameter/uGlyphs = PackedVector4Array(-0.5, -0.8, -0.5, 0.8, -0.5, 0.8, 0.5, 0.8, -0.5, 0.15, 0.35, 0.15, 0.35, 0.15, 0.35, -0.3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, -0.5, 0.8, 0.5, 0.8, 0.5, 0.8, -0.4, 0, -0.4, 0, 0.45, -0.15, 0.45, -0.15, -0.4, -0.8, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 0, -0.8, 0, 0.75, -0.55, 0.45, 0, 0.1, 0.55, 0.65, 0, 0.1, -0.55, 0.45, -0.55, 0.8, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, -0.55, -0.35, 0, 0.8, 0, 0.8, 0.55, -0.35, 0.55, -0.35, -0.55, -0.35, 0, -0.35, 0, -0.8, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, -0.5, -0.7, -0.5, 0.1, -0.5, 0.1, 0.05, 0.7, 0, -0.7, 0, 0, 0, 0, 0.55, 0.6, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, -0.45, 0.8, 0.35, 0.35, 0.35, 0.35, -0.35, -0.1, -0.35, -0.1, 0.45, -0.8, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, -0.55, -0.8, 0.55, -0.8, 0.55, -0.8, 0.55, 0.75, 0.55, 0.75, -0.5, 0.75, -0.5, 0.75, -0.5, -0.3, -0.5, -0.3, 0.15, -0.3, 0.15, -0.3, 0.15, 0.25, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0.8, 0.5, 0.2, 0.5, 0.2, 0, -0.4, 0, -0.4, -0.5, 0.2, -0.5, 0.2, 0, 0.8, 0, -0.4, 0.3, -0.8, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, -0.5, 0.6, 0.05, 0, 0.05, 0, -0.5, -0.6, -0.5, -0.6, -0.5, 0.6, 0.05, 0, 0.55, 0.6, 0.55, 0.6, 0.55, -0.6, 0.55, -0.6, 0.05, 0, 4, 4, 4, 4, 4, 4, 4, 4, -0.45, -0.8, -0.45, 0.8, 0.45, -0.8, 0.45, 0.8, -0.45, 0.5, 0.45, 0.5, -0.45, 0, 0.45, 0, -0.45, -0.5, 0.45, -0.5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, -0.55, -0.6, -0.35, 0.8, -0.2, -0.7, 0, 0.7, 0.15, -0.8, 0.35, 0.6, 0.5, -0.8, 0.6, 0.5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, -0.55, 0.7, 0.55, 0.7, 0.55, 0.7, 0, 0.1, 0, 0.1, -0.55, 0.7, 0, 0.1, 0, -0.8, -0.4, -0.35, 0, -0.6, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, -0.5, 0.8, -0.5, -0.65, -0.5, -0.65, 0.35, -0.65, 0.35, -0.65, 0.35, 0.1, 0.35, 0.1, -0.05, 0.1, -0.05, 0.1, -0.05, 0.55, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, -0.5, -0.8, -0.5, 0.8, -0.5, 0.8, 0.4, 0.5, 0.4, 0.5, -0.5, 0.1, -0.5, 0.1, 0.55, -0.8, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, -0.55, 0.8, -0.1, 0.45, -0.1, 0.45, -0.5, 0.05, -0.5, 0.05, -0.1, -0.45, 0.05, 0.45, 0.5, 0.05, 0.5, 0.05, 0.1, -0.45, 0.1, -0.45, 0.55, -0.8, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0.8, -0.5, 0.35, -0.5, 0.35, 0, -0.1, 0, -0.1, 0.5, 0.35, 0.5, 0.35, 0, 0.8, 0, -0.1, 0, -0.8, -0.4, -0.5, 0.4, -0.5, 4, 4, 4, 4, 4, 4, 4, 4, -0.5, -0.8, 0.5, 0.8, -0.5, 0.8, 0.5, -0.8, -0.5, 0.8, -0.5, 0.35, 0.5, -0.8, 0.5, -0.35, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, -0.5, 0.65, 0.5, 0.65, 0.5, 0.65, 0.1, 0.1, 0.1, 0.1, 0.5, -0.65, 0.5, -0.65, -0.5, -0.65, -0.5, -0.65, -0.1, -0.1, -0.1, -0.1, -0.5, 0.65, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0.8, 0, -0.8, -0.55, 0.45, 0, 0.1, 0.55, 0.45, 0, 0.1, -0.55, -0.2, 0, -0.55, 0.55, -0.2, 0, -0.55, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, -0.5, 0.8, 0.1, 0.8, 0.1, 0.8, 0.5, 0.35, 0.5, 0.35, -0.4, 0.35, -0.4, 0.35, -0.4, -0.35, -0.4, -0.35, 0.4, -0.35, 0.4, -0.35, 0.4, -0.8, 4, 4, 4, 4, 4, 4, 4, 4, -0.5, 0.75, -0.1, 0.75, -0.1, 0.75, 0.4, 0.15, 0.4, 0.15, 0, -0.65, 0, -0.65, -0.5, -0.65, -0.5, -0.65, -0.5, 0.1, -0.5, 0.1, 0.4, 0.15, 4, 4, 4, 4, 4, 4, 4, 4, -0.5, 0.8, 0.45, 0.35, 0.45, 0.35, -0.5, -0.1, -0.5, -0.1, 0.45, -0.55, -0.5, -0.55, 0.1, -0.8, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, -0.5, -0.8, -0.5, 0.4, -0.5, 0.4, 0, 0.8, 0, 0.8, 0.5, 0.4, 0.5, 0.4, 0.5, -0.8, 0, -0.5, 0, 0.35, -0.5, -0.1, 0.5, -0.1, 4, 4, 4, 4, 4, 4, 4, 4, -0.55, 0.7, 0.55, 0.7, -0.55, 0.2, 0.55, 0.2, -0.55, -0.3, 0.55, -0.3, -0.55, -0.8, 0.55, -0.8, 0.35, -0.8, -0.1, -0.3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1mpx8"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("8_yud7g")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 356.0
+shader_parameter/uSize = 1.0
+shader_parameter/uJetTravel = 0.0
+shader_parameter/uJetFade = 1.0
+shader_parameter/uWarpKick = 0.0
+shader_parameter/uWarpFade = 0.0
+shader_parameter/uTime = 3.3
+shader_parameter/uChainTension = 0.0
+shader_parameter/uFlow = 1.5238879753351826
+shader_parameter/uOrbRadius = 1.3632220489324025
+shader_parameter/uBeat = 0.96592451041096
+shader_parameter/uOrbAlive = 1.0
+shader_parameter/uBlastRadius = 1.45
+shader_parameter/uWaveRadius = 1.45
+shader_parameter/uHalo = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.22696587, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s1ffx"]
+resource_local_to_scene = true
+render_priority = 3
+shader = ExtResource("8_kly87")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 356.0
+shader_parameter/uSize = 1.0
+shader_parameter/uJetTravel = 0.0
+shader_parameter/uJetFade = 1.0
+shader_parameter/uWarpKick = 0.0
+shader_parameter/uWarpFade = 0.0
+shader_parameter/uTime = 3.3
+shader_parameter/uChainTension = 0.0
+shader_parameter/uFlow = 1.5238879753351826
+shader_parameter/uOrbRadius = 1.3632220489324025
+shader_parameter/uBeat = 0.96592451041096
+shader_parameter/uOrbAlive = 1.0
+shader_parameter/uBlastRadius = 1.45
+shader_parameter/uWaveRadius = 1.45
+shader_parameter/uHalo = 1.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.22696587, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1illu"]
+resource_local_to_scene = true
+render_priority = 3
+shader = ExtResource("10_xv7iq")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 24.0
+shader_parameter/uSize = 1.0
+shader_parameter/uJetTravel = 0.0
+shader_parameter/uJetFade = 1.0
+shader_parameter/uWarpKick = 0.0
+shader_parameter/uWarpFade = 0.0
+shader_parameter/uTime = 3.3
+shader_parameter/uChainTension = 0.0
+shader_parameter/uFlow = 1.5238879753351826
+shader_parameter/uOrbRadius = 1.3632220489324025
+shader_parameter/uBeat = 0.96592451041096
+shader_parameter/uOrbAlive = 1.0
+shader_parameter/uBlastRadius = 1.45
+shader_parameter/uWaveRadius = 1.45
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.22696587, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gn5gv"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("15_pcm52")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 22464
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uJetTravel = 0.0
+shader_parameter/uJetFade = 1.0
+shader_parameter/uWarpKick = 0.0
+shader_parameter/uWarpFade = 0.0
+shader_parameter/uTime = 3.3
+shader_parameter/uChainTension = 0.0
+shader_parameter/uFlow = 1.5238879753351826
+shader_parameter/uOrbRadius = 1.3632220489324025
+shader_parameter/uBeat = 0.96592451041096
+shader_parameter/uOrbAlive = 1.0
+shader_parameter/uBlastRadius = 1.45
+shader_parameter/uWaveRadius = 1.45
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.22696587, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0v7xi"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("14_h2a4o")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uJetTravel = 0.0
+shader_parameter/uJetFade = 1.0
+shader_parameter/uWarpKick = 0.0
+shader_parameter/uWarpFade = 0.0
+shader_parameter/uTime = 3.3
+shader_parameter/uChainTension = 0.0
+shader_parameter/uFlow = 1.5238879753351826
+shader_parameter/uOrbRadius = 1.3632220489324025
+shader_parameter/uBeat = 0.96592451041096
+shader_parameter/uOrbAlive = 1.0
+shader_parameter/uBlastRadius = 1.45
+shader_parameter/uWaveRadius = 1.45
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.22696587, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ieq5p"]
+resource_local_to_scene = true
+render_priority = 4
+shader = ExtResource("16_sg7ah")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 72
+shader_parameter/source_instance_count = 12.0
+shader_parameter/uSize = 1.0
+shader_parameter/uJetTravel = 0.0
+shader_parameter/uJetFade = 1.0
+shader_parameter/uWarpKick = 0.0
+shader_parameter/uWarpFade = 0.0
+shader_parameter/uTime = 3.3
+shader_parameter/uChainTension = 0.0
+shader_parameter/uFlow = 1.5238879753351826
+shader_parameter/uOrbRadius = 1.3632220489324025
+shader_parameter/uBeat = 0.96592451041096
+shader_parameter/uOrbAlive = 1.0
+shader_parameter/uBlastRadius = 1.45
+shader_parameter/uWaveRadius = 1.45
+shader_parameter/uArcs = PackedVector4Array(1, 11, 0, 0.06, 0, 10, 0, 0.093, 0, 9, 0, 0.152, 1, 9, 0, 0.008, 0, 8, 0, 0.106, 0, 7, 0, 0.23)
+shader_parameter/uArcSeed = 2859.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.22696587, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8uf8d"]
+resource_local_to_scene = true
+render_priority = 4
+shader = ExtResource("18_e1gd2")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 120
+shader_parameter/source_instance_count = 72.0
+shader_parameter/uSize = 1.0
+shader_parameter/uJetTravel = 0.0
+shader_parameter/uJetFade = 1.0
+shader_parameter/uWarpKick = 0.0
+shader_parameter/uWarpFade = 0.0
+shader_parameter/uTime = 3.3
+shader_parameter/uChainTension = 0.0
+shader_parameter/uFlow = 1.5238879753351826
+shader_parameter/uOrbRadius = 1.3632220489324025
+shader_parameter/uBeat = 0.96592451041096
+shader_parameter/uOrbAlive = 1.0
+shader_parameter/uBlastRadius = 1.45
+shader_parameter/uWaveRadius = 1.45
+shader_parameter/uField = PackedVector4Array(1, 18, 0.076, 0.11, 1, 17, 0.049, 0.09, 1, 16, 0.04, 0.07, 1, 15, 0.049, 0.1, 1, 14, 0.076, 0.08, 0, 13, 0.121, 0.11, 0, 12, 0.184, 0.09, 0, 17, 0.1, 0.1, 0, 16, 0.082, 0.08, 1, 15, 0.082, 0.11, 0, 14, 0.1, 0.09, 0, 13, 0.136, 0.07, 1, 13, 0.002, 0.08, 1, 12, 0.065, 0.11, 0, 16, 0.124, 0.09, 0, 15, 0.115, 0.07, 0, 14, 0.124, 0.1, 0, 13, 0.151, 0.08, 1, 13, 0.017, 0.09, 0, 12, 0.071, 0.07, 0, 11, 0.143, 0.1, 1, 16, 0.005, 0.11, 0, 14, 0.148, 0.11, 1, 14, 0.005, 0.07, 1, 13, 0.032, 0.1, 1, 12, 0.077, 0.08, 0, 11, 0.14, 0.11, 1, 11, 0.024, 0.07, 1, 15, 0.029, 0.1, 1, 14, 0.029, 0.08, 1, 13, 0.047, 0.11, 1, 12, 0.083, 0.09, 0, 11, 0.137, 0.07, 1, 11, 0.021, 0.08, 1, 10, 0.102, 0.11, 1, 14, 0.053, 0.09)
+shader_parameter/uFieldSeed = 2859.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.22696587, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g18uo"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("20_hptnc")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 144
+shader_parameter/source_instance_count = 16.0
+shader_parameter/uSize = 1.0
+shader_parameter/uJetTravel = 0.0
+shader_parameter/uJetFade = 1.0
+shader_parameter/uWarpKick = 0.0
+shader_parameter/uWarpFade = 0.0
+shader_parameter/uTime = 3.3
+shader_parameter/uChainTension = 0.0
+shader_parameter/uFlow = 1.5238879753351826
+shader_parameter/uOrbRadius = 1.3632220489324025
+shader_parameter/uBeat = 0.96592451041096
+shader_parameter/uOrbAlive = 1.0
+shader_parameter/uBlastRadius = 1.45
+shader_parameter/uWaveRadius = 1.45
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.22696587, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_oytn7"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("22_wyb4i")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 192
+shader_parameter/source_instance_count = 12.0
+shader_parameter/uSize = 1.0
+shader_parameter/uJetTravel = 0.0
+shader_parameter/uJetFade = 1.0
+shader_parameter/uWarpKick = 0.0
+shader_parameter/uWarpFade = 0.0
+shader_parameter/uTime = 3.3
+shader_parameter/uChainTension = 0.0
+shader_parameter/uFlow = 1.5238879753351826
+shader_parameter/uOrbRadius = 1.3632220489324025
+shader_parameter/uBeat = 0.96592451041096
+shader_parameter/uOrbAlive = 1.0
+shader_parameter/uBlastRadius = 1.45
+shader_parameter/uWaveRadius = 1.45
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.22696587, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_npu0c"]
+resource_local_to_scene = true
+render_priority = 5
+shader = ExtResource("24_0fprx")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 128.0
+shader_parameter/uSize = 1.0
+shader_parameter/uJetTravel = 0.0
+shader_parameter/uJetFade = 1.0
+shader_parameter/uWarpKick = 0.0
+shader_parameter/uWarpFade = 0.0
+shader_parameter/uTime = 3.3
+shader_parameter/uChainTension = 0.0
+shader_parameter/uFlow = 1.5238879753351826
+shader_parameter/uOrbRadius = 1.3632220489324025
+shader_parameter/uBeat = 0.96592451041096
+shader_parameter/uOrbAlive = 1.0
+shader_parameter/uBlastRadius = 1.45
+shader_parameter/uWaveRadius = 1.45
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.22696587, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vldds"]
+resource_local_to_scene = true
+render_priority = 5
+shader = ExtResource("26_uqlmr")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 64.0
+shader_parameter/uSize = 1.0
+shader_parameter/uJetTravel = 0.0
+shader_parameter/uJetFade = 1.0
+shader_parameter/uWarpKick = 0.0
+shader_parameter/uWarpFade = 0.0
+shader_parameter/uTime = 3.3
+shader_parameter/uChainTension = 0.0
+shader_parameter/uFlow = 1.5238879753351826
+shader_parameter/uOrbRadius = 1.3632220489324025
+shader_parameter/uBeat = 0.96592451041096
+shader_parameter/uOrbAlive = 1.0
+shader_parameter/uBlastRadius = 1.45
+shader_parameter/uWaveRadius = 1.45
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.22696587, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fva0n"]
+resource_local_to_scene = true
+render_priority = 4
+shader = ExtResource("28_46l80")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 192
+shader_parameter/source_instance_count = 252.0
+shader_parameter/uSize = 1.0
+shader_parameter/uJetTravel = 0.0
+shader_parameter/uJetFade = 1.0
+shader_parameter/uWarpKick = 0.0
+shader_parameter/uWarpFade = 0.0
+shader_parameter/uTime = 3.3
+shader_parameter/uChainTension = 0.0
+shader_parameter/uFlow = 1.5238879753351826
+shader_parameter/uOrbRadius = 1.3632220489324025
+shader_parameter/uBeat = 0.96592451041096
+shader_parameter/uOrbAlive = 1.0
+shader_parameter/uBlastRadius = 1.45
+shader_parameter/uWaveRadius = 1.45
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.22696587, 0, 1)
+shader_parameter/uBlastLayer = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t354m"]
+resource_local_to_scene = true
+render_priority = 6
+shader = ExtResource("30_di6tx")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 192
+shader_parameter/source_instance_count = 252.0
+shader_parameter/uSize = 1.0
+shader_parameter/uJetTravel = 0.0
+shader_parameter/uJetFade = 1.0
+shader_parameter/uWarpKick = 0.0
+shader_parameter/uWarpFade = 0.0
+shader_parameter/uTime = 3.3
+shader_parameter/uChainTension = 0.0
+shader_parameter/uFlow = 1.5238879753351826
+shader_parameter/uOrbRadius = 1.3632220489324025
+shader_parameter/uBeat = 0.96592451041096
+shader_parameter/uOrbAlive = 1.0
+shader_parameter/uBlastRadius = 1.45
+shader_parameter/uWaveRadius = 1.45
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.22696587, 0, 1)
+shader_parameter/uBlastLayer = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qpx2k"]
+resource_local_to_scene = true
+render_priority = 5
+shader = ExtResource("32_ro5xm")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 1536
+shader_parameter/source_instance_count = 4.0
+shader_parameter/uSize = 1.0
+shader_parameter/uJetTravel = 0.0
+shader_parameter/uJetFade = 1.0
+shader_parameter/uWarpKick = 0.0
+shader_parameter/uWarpFade = 0.0
+shader_parameter/uTime = 3.3
+shader_parameter/uChainTension = 0.0
+shader_parameter/uFlow = 1.5238879753351826
+shader_parameter/uOrbRadius = 1.3632220489324025
+shader_parameter/uBeat = 0.96592451041096
+shader_parameter/uOrbAlive = 1.0
+shader_parameter/uBlastRadius = 1.45
+shader_parameter/uWaveRadius = 1.45
+shader_parameter/uPressureGlow = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.22696587, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_m50ab"]
+resource_local_to_scene = true
+render_priority = 6
+shader = ExtResource("34_c8i6t")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 1536
+shader_parameter/source_instance_count = 4.0
+shader_parameter/uSize = 1.0
+shader_parameter/uJetTravel = 0.0
+shader_parameter/uJetFade = 1.0
+shader_parameter/uWarpKick = 0.0
+shader_parameter/uWarpFade = 0.0
+shader_parameter/uTime = 3.3
+shader_parameter/uChainTension = 0.0
+shader_parameter/uFlow = 1.5238879753351826
+shader_parameter/uOrbRadius = 1.3632220489324025
+shader_parameter/uBeat = 0.96592451041096
+shader_parameter/uOrbAlive = 1.0
+shader_parameter/uBlastRadius = 1.45
+shader_parameter/uWaveRadius = 1.45
+shader_parameter/uPressureGlow = 1.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.22696587, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bpwtp"]
+resource_local_to_scene = true
+render_priority = 6
+shader = ExtResource("36_fnqxt")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 72
+shader_parameter/source_instance_count = 32.0
+shader_parameter/uSize = 1.0
+shader_parameter/uJetTravel = 0.0
+shader_parameter/uJetFade = 1.0
+shader_parameter/uWarpKick = 0.0
+shader_parameter/uWarpFade = 0.0
+shader_parameter/uTime = 3.3
+shader_parameter/uChainTension = 0.0
+shader_parameter/uFlow = 1.5238879753351826
+shader_parameter/uOrbRadius = 1.3632220489324025
+shader_parameter/uBeat = 0.96592451041096
+shader_parameter/uOrbAlive = 1.0
+shader_parameter/uBlastRadius = 1.45
+shader_parameter/uWaveRadius = 1.45
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.22696587, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8wcve"]
+resource_local_to_scene = true
+render_priority = 3
+shader = ExtResource("38_j857s")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 2160
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uJetTravel = 0.0
+shader_parameter/uJetFade = 1.0
+shader_parameter/uWarpKick = 0.0
+shader_parameter/uWarpFade = 0.0
+shader_parameter/uTime = 3.3
+shader_parameter/uChainTension = 0.0
+shader_parameter/uFlow = 1.5238879753351826
+shader_parameter/uOrbRadius = 1.3632220489324025
+shader_parameter/uBeat = 0.96592451041096
+shader_parameter/uOrbAlive = 1.0
+shader_parameter/uBlastRadius = 1.45
+shader_parameter/uWaveRadius = 1.45
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.22696587, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3dd60"]
+resource_local_to_scene = true
+render_priority = 7
+shader = ExtResource("40_s5xnj")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 20.0
+shader_parameter/uSize = 1.0
+shader_parameter/uJetTravel = 0.0
+shader_parameter/uJetFade = 1.0
+shader_parameter/uWarpKick = 0.0
+shader_parameter/uWarpFade = 0.0
+shader_parameter/uTime = 3.3
+shader_parameter/uChainTension = 0.0
+shader_parameter/uFlow = 1.5238879753351826
+shader_parameter/uOrbRadius = 1.3632220489324025
+shader_parameter/uBeat = 0.96592451041096
+shader_parameter/uOrbAlive = 1.0
+shader_parameter/uBlastRadius = 1.45
+shader_parameter/uWaveRadius = 1.45
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.22696587, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6vglf"]
+resource_local_to_scene = true
+render_priority = 3
+shader = ExtResource("42_w7cn5")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 24.0
+shader_parameter/uSize = 1.0
+shader_parameter/uJetTravel = 0.0
+shader_parameter/uJetFade = 1.0
+shader_parameter/uWarpKick = 0.0
+shader_parameter/uWarpFade = 0.0
+shader_parameter/uTime = 3.3
+shader_parameter/uChainTension = 0.0
+shader_parameter/uFlow = 1.5238879753351826
+shader_parameter/uOrbRadius = 1.3632220489324025
+shader_parameter/uBeat = 0.96592451041096
+shader_parameter/uOrbAlive = 1.0
+shader_parameter/uBlastRadius = 1.45
+shader_parameter/uWaveRadius = 1.45
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.22696587, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w4h10"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("44_xco8f")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uJetTravel = 0.0
+shader_parameter/uJetFade = 1.0
+shader_parameter/uWarpKick = 0.0
+shader_parameter/uWarpFade = 0.0
+shader_parameter/uTime = 3.3
+shader_parameter/uChainTension = 0.0
+shader_parameter/uFlow = 1.5238879753351826
+shader_parameter/uOrbRadius = 1.3632220489324025
+shader_parameter/uBeat = 0.96592451041096
+shader_parameter/uOrbAlive = 1.0
+shader_parameter/uBlastRadius = 1.45
+shader_parameter/uWaveRadius = 1.45
+shader_parameter/uSize = 1.0
+shader_parameter/transmissionSamplerSize = Vector2(64, 64)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tenp5"]
+resource_local_to_scene = true
+render_priority = 7
+shader = ExtResource("46_siudh")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 4800
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uJetTravel = 0.0
+shader_parameter/uJetFade = 1.0
+shader_parameter/uWarpKick = 0.0
+shader_parameter/uWarpFade = 0.0
+shader_parameter/uTime = 3.3
+shader_parameter/uChainTension = 0.0
+shader_parameter/uFlow = 1.5238879753351826
+shader_parameter/uOrbRadius = 1.3632220489324025
+shader_parameter/uBeat = 0.96592451041096
+shader_parameter/uOrbAlive = 1.0
+shader_parameter/uBlastRadius = 1.45
+shader_parameter/uWaveRadius = 1.45
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.22696587, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vd8jm"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("48_mbiff")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 6.0
+shader_parameter/uSize = 1.0
+shader_parameter/uJetTravel = 0.0
+shader_parameter/uJetFade = 1.0
+shader_parameter/uWarpKick = 0.0
+shader_parameter/uWarpFade = 0.0
+shader_parameter/uTime = 3.3
+shader_parameter/uChainTension = 0.0
+shader_parameter/uFlow = 1.5238879753351826
+shader_parameter/uOrbRadius = 1.3632220489324025
+shader_parameter/uBeat = 0.96592451041096
+shader_parameter/uOrbAlive = 1.0
+shader_parameter/uBlastRadius = 1.45
+shader_parameter/uWaveRadius = 1.45
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.22696587, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f45ja"]
+resource_local_to_scene = true
+render_priority = 1
+shader = ExtResource("50_p4f4c")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 48
+shader_parameter/source_instance_count = 6.0
+shader_parameter/uSize = 1.0
+shader_parameter/uJetTravel = 0.0
+shader_parameter/uJetFade = 1.0
+shader_parameter/uWarpKick = 0.0
+shader_parameter/uWarpFade = 0.0
+shader_parameter/uTime = 3.3
+shader_parameter/uChainTension = 0.0
+shader_parameter/uFlow = 1.5238879753351826
+shader_parameter/uOrbRadius = 1.3632220489324025
+shader_parameter/uBeat = 0.96592451041096
+shader_parameter/uOrbAlive = 1.0
+shader_parameter/uBlastRadius = 1.45
+shader_parameter/uWaveRadius = 1.45
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.22696587, 0, 1)
+
+[node name="DarkchainDetonation" type="Node3D" unique_id=570790716]
+script = ExtResource("1_80plf")
+effect_id = "darkchain-detonation"
+burst = true
+duration = 5.15
+start_duration = 0.45
+end_duration = 1.35
+kind = 2
+variant = 14
+metadata/vfx_source = "00gamedevs"
+metadata/vfx_id = "darkchain-detonation"
+metadata/editor_preview_time = 3.3
+
+[node name="Parts" type="Node3D" parent="." unique_id=1410001320]
+unique_name_in_owner = true
+
+[node name="Part000" type="MeshInstance3D" parent="Parts" unique_id=1825466085]
+material_override = SubResource("ShaderMaterial_0u473")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("3_yud7g")
+metadata/source_name = "darkchain-sigil-0"
+
+[node name="Part001" type="MeshInstance3D" parent="Parts" unique_id=1494741551]
+material_override = SubResource("ShaderMaterial_sq3ih")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("5_aw2ge")
+metadata/source_name = "darkchain-sigil-1"
+
+[node name="Part002" type="MeshInstance3D" parent="Parts" unique_id=582013744]
+material_override = SubResource("ShaderMaterial_1mpx8")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("7_7haw2")
+metadata/source_name = "darkchain-chain-body"
+metadata/source_depth_shader = ExtResource("8_yud7g")
+metadata/source_transparent_shader = ExtResource("6_yud7g")
+metadata/source_depth_mode = "always"
+
+[node name="Part003" type="MeshInstance3D" parent="Parts" unique_id=58846230]
+material_override = SubResource("ShaderMaterial_s1ffx")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("9_0r77u")
+metadata/source_name = "darkchain-chain-glow"
+
+[node name="Part004" type="MeshInstance3D" parent="Parts" unique_id=1343297151]
+material_override = SubResource("ShaderMaterial_1illu")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("11_86v5w")
+metadata/source_name = "darkchain-root-seals"
+
+[node name="Part005" type="MeshInstance3D" parent="Parts" unique_id=759149269]
+material_override = SubResource("ShaderMaterial_gn5gv")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("13_m8xc1")
+metadata/source_name = "darkchain-orb-body"
+metadata/source_depth_shader = ExtResource("15_pcm52")
+metadata/source_transparent_shader = ExtResource("13_pcm52")
+metadata/source_depth_mode = "always"
+
+[node name="Part006" type="MeshInstance3D" parent="Parts" unique_id=776100699]
+material_override = SubResource("ShaderMaterial_0v7xi")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("15_mb4rn")
+metadata/source_name = "darkchain-orb-halo"
+
+[node name="Part007" type="MeshInstance3D" parent="Parts" unique_id=969683779]
+material_override = SubResource("ShaderMaterial_ieq5p")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("17_0wi1p")
+metadata/source_name = "darkchain-orb-arcs"
+
+[node name="Part008" type="MeshInstance3D" parent="Parts" unique_id=129994570]
+material_override = SubResource("ShaderMaterial_8uf8d")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("19_jxhbs")
+metadata/source_name = "darkchain-field-lightning"
+
+[node name="Part009" type="MeshInstance3D" parent="Parts" unique_id=304350412]
+material_override = SubResource("ShaderMaterial_g18uo")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("21_rud18")
+metadata/source_name = "darkchain-black-aura"
+
+[node name="Part010" type="MeshInstance3D" parent="Parts" unique_id=250376141]
+material_override = SubResource("ShaderMaterial_oytn7")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("23_1hiit")
+metadata/source_name = "darkchain-inward-ribbons"
+
+[node name="Part011" type="MeshInstance3D" parent="Parts" unique_id=2124910926]
+material_override = SubResource("ShaderMaterial_npu0c")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("25_3bwvc")
+metadata/source_name = "darkchain-inward-particles"
+
+[node name="Part012" type="MeshInstance3D" parent="Parts" unique_id=743787722]
+visible = false
+material_override = SubResource("ShaderMaterial_vldds")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("27_gklov")
+metadata/source_name = "darkchain-debris"
+
+[node name="Part013" type="MeshInstance3D" parent="Parts" unique_id=365720440]
+visible = false
+material_override = SubResource("ShaderMaterial_fva0n")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("29_punpg")
+metadata/source_name = "darkchain-blast-ink"
+
+[node name="Part014" type="MeshInstance3D" parent="Parts" unique_id=1756520344]
+visible = false
+material_override = SubResource("ShaderMaterial_t354m")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("31_swnbt")
+metadata/source_name = "darkchain-blast"
+
+[node name="Part015" type="MeshInstance3D" parent="Parts" unique_id=1550287450]
+visible = false
+material_override = SubResource("ShaderMaterial_qpx2k")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("33_x44rd")
+metadata/source_name = "darkchain-energy-surface"
+
+[node name="Part016" type="MeshInstance3D" parent="Parts" unique_id=73098081]
+visible = false
+material_override = SubResource("ShaderMaterial_m50ab")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("35_lkrbh")
+metadata/source_name = "darkchain-energy-surface-glow"
+
+[node name="Part017" type="MeshInstance3D" parent="Parts" unique_id=1999054135]
+visible = false
+material_override = SubResource("ShaderMaterial_bpwtp")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("37_s0dda")
+metadata/source_name = "darkchain-core-ejection"
+
+[node name="Part018" type="MeshInstance3D" parent="Parts" unique_id=1319080049]
+visible = false
+material_override = SubResource("ShaderMaterial_8wcve")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("39_oqyff")
+metadata/source_name = "darkchain-release-plasma"
+
+[node name="Part019" type="MeshInstance3D" parent="Parts" unique_id=1261405148]
+visible = false
+material_override = SubResource("ShaderMaterial_3dd60")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("41_dl404")
+metadata/source_name = "darkchain-impact-glints"
+
+[node name="Part020" type="MeshInstance3D" parent="Parts" unique_id=1127247800]
+visible = false
+material_override = SubResource("ShaderMaterial_6vglf")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("43_l5rcb")
+metadata/source_name = "darkchain-after-smoke"
+
+[node name="Part021" type="MeshInstance3D" parent="Parts" unique_id=1208608818]
+visible = false
+material_override = SubResource("ShaderMaterial_w4h10")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("45_l8u3o")
+metadata/source_name = "darkchain-impact-refraction"
+
+[node name="Part022" type="MeshInstance3D" parent="Parts" unique_id=1325527771]
+visible = false
+material_override = SubResource("ShaderMaterial_tenp5")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("47_vdpos")
+metadata/source_name = "darkchain-shock-ring"
+
+[node name="Part023" type="MeshInstance3D" parent="Parts" unique_id=1984903481]
+material_override = SubResource("ShaderMaterial_vd8jm")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("49_7b47g")
+metadata/source_name = "darkchain-ground-smoke"
+
+[node name="Part024" type="MeshInstance3D" parent="Parts" unique_id=1982246595]
+material_override = SubResource("ShaderMaterial_f45ja")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("51_lxo4k")
+metadata/source_name = "darkchain-smoke-tails"
+
+[node name="Motion" type="AnimationPlayer" parent="." unique_id=1858637435]
+unique_name_in_owner = true
+libraries/ = ExtResource("52_70gyr")

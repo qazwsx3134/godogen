@@ -1,0 +1,76 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/battlefield.gd" id="1_21s54"]
+[ext_resource type="PackedScene" path="res://scenes/walker.tscn" id="2_jsyt3"]
+[ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="3_ixbtv"]
+[ext_resource type="PackedScene" path="res://scenes/map_01_green_rust.tscn" id="4_86tsl"]
+[ext_resource type="NavigationMesh" path="res://materials/battlefield_navigation.tres" id="5_86tsl"]
+[ext_resource type="PackedScene" path="res://scenes/combat_hud.tscn" id="6_lwkd3"]
+[ext_resource type="PackedScene" path="res://scenes/scout.tscn" id="7_htbo0"]
+[ext_resource type="AudioStream" path="res://assets/sound/runtime/ai_boot.ogg" id="8_lwkd3"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_lwkd3"]
+sky_top_color = Color(0.24, 0.38, 0.56, 1)
+sky_horizon_color = Color(0.64, 0.62, 0.58, 1)
+ground_bottom_color = Color(0.3, 0.28, 0.25, 1)
+ground_horizon_color = Color(0.6, 0.56, 0.5, 1)
+
+[sub_resource type="Sky" id="Sky_htbo0"]
+sky_material = SubResource("ProceduralSkyMaterial_lwkd3")
+
+[sub_resource type="Environment" id="Environment_3avj7"]
+background_mode = 2
+sky = SubResource("Sky_htbo0")
+ambient_light_source = 2
+ambient_light_color = Color(0.65, 0.7, 0.66, 1)
+ambient_light_energy = 0.48
+tonemap_mode = 3
+fog_enabled = true
+fog_light_color = Color(0.49, 0.56, 0.51, 1)
+fog_density = 0.0025
+
+[node name="Battlefield" type="Node3D" unique_id=1826002220 groups=["battle_session"]]
+script = ExtResource("1_21s54")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=403206041]
+environment = SubResource("Environment_3avj7")
+
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=172254778]
+transform = Transform3D(0.81915206, -0.43938506, 0.36868784, 0, 0.64278764, 0.76604444, -0.57357645, -0.62750685, 0.5265408, 0, 0, 0)
+light_color = Color(1, 0.93, 0.78, 1)
+shadow_enabled = true
+directional_shadow_max_distance = 85.0
+
+[node name="Walker" parent="." unique_id=1321293412 instance=ExtResource("2_jsyt3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5480498, -78)
+
+[node name="HUD" parent="." unique_id=291533515 instance=ExtResource("3_ixbtv")]
+
+[node name="Map" parent="." unique_id=544055547 instance=ExtResource("4_86tsl")]
+
+[node name="Navigation" type="NavigationRegion3D" parent="." unique_id=449213416]
+navigation_mesh = ExtResource("5_86tsl")
+
+[node name="Projectiles" type="Node3D" parent="." unique_id=513516319]
+
+[node name="CombatHUD" parent="." unique_id=1977136906 instance=ExtResource("6_lwkd3")]
+
+[node name="Enemies" type="Node3D" parent="." unique_id=1731507396]
+
+[node name="Scout0" parent="Enemies" unique_id=1302323479 instance=ExtResource("7_htbo0")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -4, -0.6415803, -49)
+combat_enabled = true
+
+[node name="Scout1" parent="Enemies" unique_id=1389021067 instance=ExtResource("7_htbo0")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 12, -0.21565442, -22)
+combat_enabled = true
+
+[node name="Scout2" parent="Enemies" unique_id=1129426902 instance=ExtResource("7_htbo0")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -9, -0.4132173, 8)
+combat_enabled = true
+max_health = 120.0
+mass = 12.0
+
+[node name="Radio" type="AudioStreamPlayer" parent="." unique_id=773326139]
+stream = ExtResource("8_lwkd3")
+bus = &"Voice"

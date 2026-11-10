@@ -1,0 +1,55 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/00gamedevs/source_effect.gd" id="1_iry7k"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/steam-jet/spatial_part_0.gdshader" id="2_pif1b"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/steam-jet/part_0.res" id="3_qhny7"]
+[ext_resource type="AnimationLibrary" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/steam-jet/motion.res" id="4_wo5iy"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8bgoi"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("2_pif1b")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 48.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uStopTime = -1.0
+shader_parameter/uEndDuration = 1.2
+shader_parameter/uQuantity = 1.0
+shader_parameter/uSpread = 1.0
+shader_parameter/uTime = 0.6
+shader_parameter/uStretch = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.63759685, 0.7379104, 0.80695224)
+
+[node name="SteamJet" type="Node3D" unique_id=628264592]
+script = ExtResource("1_iry7k")
+effect_id = "steam-jet"
+start_duration = 0.5
+end_duration = 1.2
+kind = 5
+variant = 2
+metadata/vfx_source = "00gamedevs"
+metadata/vfx_id = "steam-jet"
+metadata/editor_preview_time = 0.6
+
+[node name="Parts" type="Node3D" parent="." unique_id=564105790]
+unique_name_in_owner = true
+
+[node name="Part000" type="MeshInstance3D" parent="Parts" unique_id=339066465]
+material_override = SubResource("ShaderMaterial_8bgoi")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("3_qhny7")
+metadata/source_name = "Part0"
+
+[node name="Motion" type="AnimationPlayer" parent="." unique_id=1854331425]
+unique_name_in_owner = true
+libraries/ = ExtResource("4_wo5iy")

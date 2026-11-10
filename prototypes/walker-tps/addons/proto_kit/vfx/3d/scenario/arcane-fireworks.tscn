@@ -1,0 +1,17 @@
+[gd_scene format=3]
+
+[ext_resource type="SpriteFrames" path="res://addons/proto_kit/vfx/assets/scenario/arcane-fireworks/arcane-fireworks.tres" id="1_5747t"]
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/sheet_effect.gd" id="2_mxr7m"]
+
+[node name="ArcaneFireworks" type="AnimatedSprite3D" unique_id=2038597756]
+pixel_size = 0.025
+billboard = 1
+texture_filter = 0
+sprite_frames = ExtResource("1_5747t")
+animation = &"arcane_fireworks"
+frame = 2
+script = ExtResource("2_mxr7m")
+metadata/vfx_source = "scenario"
+metadata/vfx_id = "arcane-fireworks"
+metadata/placement = "screen"
+metadata/depth_hint = "front"

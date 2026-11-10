@@ -1,0 +1,211 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/combat_hud.gd" id="1_ibcap"]
+
+[sub_resource type="Gradient" id="Gradient_ptc7o"]
+colors = PackedColorArray(0.08, 0.18, 0.21, 0.8, 0.18, 0.32, 0.32, 0.85)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_wct4o"]
+gradient = SubResource("Gradient_ptc7o")
+width = 120
+height = 100
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bbgjm"]
+size = Vector2(120, 100)
+
+[sub_resource type="Gradient" id="Gradient_dpepp"]
+colors = PackedColorArray(0.08, 0.18, 0.21, 0.8, 0.18, 0.32, 0.32, 0.85)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_5yjtn"]
+gradient = SubResource("Gradient_dpepp")
+width = 120
+height = 100
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_k4q32"]
+size = Vector2(120, 100)
+
+[sub_resource type="Gradient" id="Gradient_ldyno"]
+colors = PackedColorArray(0.08, 0.18, 0.21, 0.8, 0.18, 0.32, 0.32, 0.85)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_c4dla"]
+gradient = SubResource("Gradient_ldyno")
+width = 120
+height = 100
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ri0c7"]
+size = Vector2(120, 100)
+
+[node name="CombatHUD" type="CanvasLayer" unique_id=1977136906]
+layer = 3
+script = ExtResource("1_ibcap")
+
+[node name="DamageFlash" type="ColorRect" parent="." unique_id=1562532138]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.8, 0.03, 0.02, 0.16)
+
+[node name="Status" type="Label" parent="." unique_id=111984630]
+offset_left = 20.0
+offset_top = 50.0
+offset_right = 20.0
+offset_bottom = 50.0
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_outline_color = Color(0.02, 0.04, 0.05, 0.9)
+theme_override_constants/outline_size = 5
+text = "HULL 100 / 100 | SCOUTS 0 / 3 | 05:00"
+
+[node name="Weapon" type="Label" parent="." unique_id=722184541]
+offset_left = 20.0
+offset_top = 82.0
+offset_right = 20.0
+offset_bottom = 82.0
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_outline_color = Color(0.02, 0.04, 0.05, 0.9)
+theme_override_constants/outline_size = 5
+text = "CANNON READY | HOOK READY"
+
+[node name="Crosshair" type="Label" parent="." unique_id=156626903]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -10.0
+offset_top = -20.0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_outline_color = Color(0.02, 0.04, 0.05, 0.9)
+theme_override_constants/outline_size = 5
+text = "+"
+
+[node name="GunReticle" type="Label" parent="." unique_id=138999828]
+modulate = Color(0.55, 1, 0.8, 1)
+offset_left = 620.0
+offset_top = 340.0
+offset_right = 620.0
+offset_bottom = 340.0
+theme_override_font_sizes/font_size = 26
+theme_override_colors/font_outline_color = Color(0.02, 0.04, 0.05, 0.9)
+theme_override_constants/outline_size = 5
+text = "○"
+
+[node name="Controls" type="Control" parent="." unique_id=1005859544 groups=["combat_touch"]]
+layout_mode = 3
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -450.0
+offset_top = -490.0
+offset_right = -20.0
+offset_bottom = -350.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="Fire" type="TouchScreenButton" parent="Controls" unique_id=1389064330]
+position = Vector2(290, 20)
+texture_normal = SubResource("GradientTexture2D_wct4o")
+shape = SubResource("RectangleShape2D_bbgjm")
+action = "fire"
+visibility_mode = 1
+
+[node name="Label" type="Label" parent="Controls/Fire" unique_id=813145539]
+offset_left = 16.0
+offset_top = 32.0
+offset_right = 16.0
+offset_bottom = 32.0
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_outline_color = Color(0.02, 0.04, 0.05, 0.9)
+theme_override_constants/outline_size = 5
+text = "FIRE"
+
+[node name="Hook" type="TouchScreenButton" parent="Controls" unique_id=2131215652]
+position = Vector2(150, 20)
+texture_normal = SubResource("GradientTexture2D_5yjtn")
+shape = SubResource("RectangleShape2D_k4q32")
+action = "hook"
+visibility_mode = 1
+
+[node name="Label" type="Label" parent="Controls/Hook" unique_id=761015234]
+offset_left = 16.0
+offset_top = 32.0
+offset_right = 16.0
+offset_bottom = 32.0
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_outline_color = Color(0.02, 0.04, 0.05, 0.9)
+theme_override_constants/outline_size = 5
+text = "HOOK"
+
+[node name="Aim" type="TouchScreenButton" parent="Controls" unique_id=717408833]
+position = Vector2(10, 20)
+texture_normal = SubResource("GradientTexture2D_c4dla")
+shape = SubResource("RectangleShape2D_ri0c7")
+action = "aim_toggle"
+visibility_mode = 1
+
+[node name="Label" type="Label" parent="Controls/Aim" unique_id=1486749556]
+offset_left = 16.0
+offset_top = 32.0
+offset_right = 16.0
+offset_bottom = 32.0
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_outline_color = Color(0.02, 0.04, 0.05, 0.9)
+theme_override_constants/outline_size = 5
+text = "AIM"
+
+[node name="Modal" type="Control" parent="." unique_id=1104409682]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="Modal" unique_id=76677857]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -330.0
+offset_top = -170.0
+offset_right = 330.0
+offset_bottom = 170.0
+
+[node name="Margin" type="MarginContainer" parent="Modal/Panel" unique_id=332356080]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="Rows" type="VBoxContainer" parent="Modal/Panel/Margin" unique_id=1349003979]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="Modal/Panel/Margin/Rows" unique_id=1801454848]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+theme_override_colors/font_outline_color = Color(0.02, 0.04, 0.05, 0.9)
+theme_override_constants/outline_size = 5
+text = "GREEN RUST / SORTIE"
+
+[node name="Description" type="Label" parent="Modal/Panel/Margin/Rows" unique_id=1030840096]
+custom_minimum_size = Vector2(570, 135)
+layout_mode = 2
+theme_override_font_sizes/font_size = 19
+theme_override_colors/font_outline_color = Color(0.02, 0.04, 0.05, 0.9)
+theme_override_constants/outline_size = 5
+text = "Destroy 3 scouts.
+LMB fire / RMB aim / G grapple
+Enter deploy"
+autowrap_mode = 3
+
+[node name="Action" type="Button" parent="Modal/Panel/Margin/Rows" unique_id=479732219]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+text = "DEPLOY"

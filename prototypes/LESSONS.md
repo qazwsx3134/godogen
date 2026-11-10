@@ -53,6 +53,7 @@
 - **React 網頁原型：子元件的 `setTimeout` 一直不觸發**（2026-11-04，mortal-city）→ 遊戲時鐘每秒 tick 讓父元件重新渲染，inline callback 每次都是新函式，放在 effect 依賴裡會一直重設計時器；callback 改放 `useRef`。（[mortal-city](mortal-city/README.md#發現)）
 - **用瀏覽器自動化測網頁時動畫、捲動「沒反應」**（2026-11-06，mortal-city）：測試分頁是隱藏的，`requestAnimationFrame` 整個暫停、`scrollIntoView({behavior:'smooth'})` 完全不捲、`setTimeout`／`setInterval` 被降成每秒一次（連測試腳本裡的等待也是）→ 遊戲計時用計時器加實際經過時間，不靠 rAF；平滑捲動只在 `document.visibilityState === 'visible'` 時用；長按之類的時間判定要在前景分頁手動確認。（[mortal-city](mortal-city/PROGRESS.md)）
 - **刪掉遊戲裡的舊故事，幾十支測試連環失敗**（2026-11-08，debt-commission）：測試直接讀 `res://data/*_story.json` 與 `data/stories.json` 當夾具，故事一搬走就壞；`story_src` 搬家後建置出的 `generated_from` 也跟著變 → 舊故事連同建置來源搬進 `tests/fixtures/`，用建置工具重建夾具，測試以 `stories_path`／`packs_root` 指向夾具登記，不依賴正式清單；範例作品另放一個 packs 根目錄，別混進別的作品夾具。
+- **headless 測試推觸控事件，左右半邊判斷全錯、手指被分到錯的區域**（2026-11-10，walker-tps）→ `root.push_input(e)` 預設把座標當視窗座標，再依 stretch 換算；測試要用 `root.push_input(e, true)`（viewport 座標，和 test_kit 的滑鼠輔助一致）。（[walker-tps](walker-tps/README.md#已知的坑)）
 
 ## Scene、UI 與 Godot API
 
@@ -83,6 +84,16 @@
 - **把大 GDScript 拆成幾個控制器檔，parse 全過、執行時才 `Method not found`**（2026-11-04，debt-commission G6）→ 字串呼叫（`call_deferred("_name")`、`call("_x")`、`has_method`）不經過 parser；拆分後 grep 被搬走的函式名稱出現在字串裡的地方，改成 `obj.method.call_deferred()`。拆分前後跑完整測試逐組比對。
 
 - **SceneBuilder 保存場景後又 free root，Godot 直接 exit 134**（2026-11-06，godot-kit）→ `SceneBuilder.save_scene(root, ...)` 無論保存或 skip 都接手並釋放 root，呼叫端不得再 free 或讀取它；外部所有權語義列入能力契約與範例。（[能力庫驗證](godot-kit/docs/capabilities/VALIDATION.md)）
+- **後面的節點在 `_ready` 裡 `add_to_group`，前面節點的 `_ready` 用 `get_first_node_in_group` 拿到 null**（2026-11-10，walker-tps）→ group 存進 `.tscn`（`add_to_group(名稱, true)` 再存檔）：整棵樹先 enter_tree 才輪到 `_ready`，persistent group 在任何 `_ready` 之前就註冊。（[walker-tps](walker-tps/README.md#已知的坑)）
+- **`TouchScreenButton` 設 `VISIBILITY_TOUCHSCREEN_ONLY`，桌面上還是看到按鈕上的字**（2026-11-10，walker-tps）→ 它只是不畫自己的貼圖，節點仍然 visible，子節點 Label 照畫；沒有觸控螢幕時，把按鈕的父節點設成 `visible = DisplayServer.is_touchscreen_available()`。（[walker-tps](walker-tps/README.md#已知的坑)）
+
+- **headless 製作 MultiMesh 後草叢消失**（2026-11-10，walker-tps）→ 本次 dummy renderer 的 `set_instance_transform()` 資料沒有保留到保存場景，只有 instance_count；改用 SurfaceTool 合併為分區靜態 ArrayMesh，保存後檢查 vertex 數並用真正 renderer 截圖確認。（[walker-tps](walker-tps/README.md#首張地圖編輯與驗證)）
+
+- **圖集 shader 用 `fract` 後直接隱式 mip 取樣，地面出現彩色格線**（2026-11-10，walker-tps）→ 以未包裹座標計算 `dFdx`／`dFdy`，依圖集格尺寸縮放後傳給 `textureGrad`，再為每格保留內縮邊界；須用真正 renderer 看遠近與斜角。（[walker-tps 材質](walker-tps/README.md#地圖材質2026-11-10)）
+
+- **旋轉後的細圓索用 Basis.scaled 拉長，渲染變成扁片**（2026-11-11，walker-tps）→ 全域非均勻縮放會扭曲已旋轉的軸；先求索線旋轉 Basis，再只乘局部 y column 長度，並用側面截圖＋橫向 basis 長度斷言確認粗細。（[雙勾索戰鬥](walker-tps/README.md#雙勾索與戰鬥2026-11-11)）
+
+- **同腳本 @onready 欄位引用另一個較後宣告的 @onready 欄位，拿到 null**（2026-11-11，walker-tps）→ 初始化仍依宣告順序，先宣告 parent/body 再宣告依賴它的 model／rest transform，或在 _ready 明確依序賦值；重跑 instantiate 真場景的測試。（[auto_blades.gd](walker-tps/scripts/auto_blades.gd)）
 
 ## 匯出與網頁版
 
@@ -118,6 +129,8 @@
 - **3D 世界裡的像素角色移動會抖** → 不要對世界座標做像素對齊；角色 sampler 用 nearest、不生 mipmap，地面貼圖反而要 mipmap。（[sprite-actors-3d](godot-kit/skills/sprite-actors-3d/SKILL.md#網頁版compatibility的陷阱)）
 - **像素特效的 Bayer 抖動在像素角色旁像破圖** → 用離散輪廓；煙與氣體直接半透明填色。（[pixel-vfx](godot-kit/skills/pixel-vfx/SKILL.md#坑)）
 - **Codex 生出來的原畫可能朝左下並被水平鏡像**、`route_media.py resolve` 不驗 key 和餘額、單筆生成可能卡 3 小時 → 細節與做法見 character-sprite-forge。（[character-sprite-forge](godot-kit/skills/character-sprite-forge/SKILL.md#坑)）
+- **`codex exec -i 圖片 "prompt"` 回 `No prompt provided via stdin`**（2026-11-09，docs/86 walker）→ `-i` 接多個值，把後面的 prompt 也當成圖片吃掉；prompt 改從 stdin 傳：`echo "..." | codex exec -i ref.jpg -`。
+- **Blender 腳本 `bmesh.ops.convex_hull` 後刪內部點，報 `found the same (BMVert/BMEdge/BMFace) used multiple times`**（2026-11-10，docs/86 scout）→ `geom_interior` 和 `geom_unused` 會重疊，合併時先去重：`list({*res["geom_interior"], *res["geom_unused"]})`（已修在 `docs/86/blender_kit.py`）。
 
 ## 音效與手機震動
 
@@ -125,6 +138,8 @@
 - **WAV 匯入成 QOA，原始檔仍在專案裡** → 要縮專案就轉 Ogg。（[art-pipeline](godot-kit/skills/godot-prototype-to-itch/references/art-pipeline.md#匯入設定import-檔要-commit)）
 - **網頁版（Sample 播放）譜面與音樂差 1～2 拍，headless Chrome 量卻「同步」**（2026-11-03，kagura-dango，修正 11-02 的結論）→ 瀏覽器回報的 `get_playback_position()` 比實際聽到的晚約 1 秒，不能當節奏時鐘；每首歌第一次 `play()` 會卡住主執行緒 0.8～0.9 秒。網頁版改用「`play()` 返回之後」才起算的牆上時鐘減 `get_output_latency()`，手機實聽三關都對上。headless 瀏覽器沒有聲音輸出，只能檢查內部一致，同步一定要用真機耳朵驗；手機測試版用畫面上的時鐘讀數＋可點的時鐘來源切換做 A/B（itch 在 iframe 裡，網址參數傳不進遊戲）。做法已收進 `godot-kit/addons/proto_kit/song_clock.gd`。（[kagura-dango PROGRESS](kagura-dango/PROGRESS.md)）
 - **修好時鐘後，玩家的延遲校準值還是錯的（1～2 秒）**（2026-11-03，kagura-dango）→ 校準存在 user://（瀏覽器 IndexedDB），會跨版本留著；讀取時把超出合理範圍（±400 ms）的值歸零，校準結果也夾在範圍內。改了時鐘就假設舊校準全部作廢。
+
+- **爆炸尾音被短光效壽命或回合結算切掉**（2026-11-11，walker-tps）→ 光效結束後讓音效播完並設最長存活上限；結算只清實彈，不清仍在收尾的命中特效。headless 測試退出前 stop 播放器、釋放場景並等待 audio driver 消化移除，避免把未清理的測試資源當遊戲洩漏。（[音效說明](walker-tps/assets/sound/README.md)）
 
 ## 存檔與劇本
 
@@ -154,3 +169,4 @@
 | horde-25d | [README](horde-25d/README.md) | 低角度廣角鏡頭的遮擋對策、材質存檔 |
 | debt-commission | [DIALOGIC-EVALUATION](debt-commission/docs/DIALOGIC-EVALUATION.md)、[PLAN-LOG-AVATAR-TUTORIAL](debt-commission/docs/PLAN-LOG-AVATAR-TUTORIAL.md) | 劇本系統選型、`ui_style_role` 覆寫 |
 | sugarcane-tanks（已搬出 repo） | skill [godot-prototype-to-itch](godot-kit/skills/godot-prototype-to-itch/SKILL.md) | 測試與平衡量測、打擊感、網頁匯出整套做法 |
+| walker-tps | [README「已知的坑」](walker-tps/README.md#已知的坑) | 四足 IK 步態：可及範圍、支撐期長度、整組緊急抬腳；跳躍越過外牆後無越界恢復（待修） |

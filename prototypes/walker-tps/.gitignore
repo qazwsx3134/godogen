@@ -1,0 +1,16 @@
+# Godot regenerates its import cache on each computer.
+.godot/
+
+# Local Python caches, logs, captures and exported builds.
+__pycache__/
+*.py[cod]
+*.log
+/captures/
+/build/
+/dist/
+/exports/
+.DS_Store
+Thumbs.db
+
+# Keep source assets, .import settings, .uid files and saved scenes in Git.
+# Raw audio exclusions are scoped in assets/sound/.gitignore.

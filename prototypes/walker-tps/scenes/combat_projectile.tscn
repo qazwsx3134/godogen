@@ -1,0 +1,21 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/combat_projectile.gd" id="1_pnbyw"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jnl66"]
+shading_mode = 0
+albedo_color = Color(1, 0.86, 0.3, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_yufwc"]
+radius = 0.13
+height = 0.26
+radial_segments = 8
+rings = 4
+
+[node name="Projectile" type="Node3D" unique_id=900581833]
+script = ExtResource("1_pnbyw")
+
+[node name="Tracer" type="MeshInstance3D" parent="." unique_id=1481180485]
+material_override = SubResource("StandardMaterial3D_jnl66")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_yufwc")

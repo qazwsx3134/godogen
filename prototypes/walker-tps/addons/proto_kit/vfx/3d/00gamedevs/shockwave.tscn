@@ -1,0 +1,198 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/00gamedevs/source_effect.gd" id="1_5hg0w"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/shockwave/spatial_part_0.gdshader" id="2_cwg3l"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/shockwave/part_0.res" id="3_1h0oh"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/shockwave/spatial_part_1.gdshader" id="4_4i4ao"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/shockwave/part_1.res" id="5_1qui1"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/shockwave/spatial_part_2.gdshader" id="6_ckjvu"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/shockwave/part_2.res" id="7_w7m2s"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/shockwave/spatial_part_3.gdshader" id="8_t25sq"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/shockwave/part_3.res" id="9_j47tu"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/shockwave/spatial_part_4.gdshader" id="10_3rqoq"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/shockwave/part_4.res" id="11_jnpfo"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/shockwave/spatial_part_5.gdshader" id="12_xaimp"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/shockwave/part_5.res" id="13_cc1na"]
+[ext_resource type="AnimationLibrary" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/shockwave/motion.res" id="14_e53hn"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b56o3"]
+resource_local_to_scene = true
+render_priority = 3
+shader = ExtResource("2_cwg3l")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 187.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uStopTime = -1.0
+shader_parameter/uEndDuration = 1.26
+shader_parameter/uQuantity = 1.0
+shader_parameter/uSpread = 1.0
+shader_parameter/uTime = 0.45
+shader_parameter/uStretch = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.8713671, 0.6239604, 0.33716363)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dyf8f"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("4_4i4ao")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 36.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uStopTime = -1.0
+shader_parameter/uEndDuration = 1.26
+shader_parameter/uQuantity = 1.0
+shader_parameter/uSpread = 1.0
+shader_parameter/uTime = 0.45
+shader_parameter/uStretch = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.8713671, 0.6239604, 0.33716363)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_peyqm"]
+resource_local_to_scene = true
+render_priority = 1
+shader = ExtResource("6_ckjvu")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 42
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 0.45
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.8713671, 0.6239604, 0.33716363)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ndesq"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("8_t25sq")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 72
+shader_parameter/source_instance_count = 12.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 0.45
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.8713671, 0.6239604, 0.33716363)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_iqbr6"]
+resource_local_to_scene = true
+render_priority = 3
+shader = ExtResource("10_3rqoq")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 12
+shader_parameter/source_instance_count = 14.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 0.45
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.8713671, 0.6239604, 0.33716363)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xbt2d"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("12_xaimp")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.8713671, 0.6239604, 0.33716363)
+shader_parameter/uTime = 0.45
+
+[node name="Shockwave" type="Node3D" unique_id=1759872184]
+script = ExtResource("1_5hg0w")
+effect_id = "shockwave"
+burst = true
+duration = 2.8
+start_duration = 0.27999999999999997
+end_duration = 1.26
+kind = 3
+variant = 2
+metadata/vfx_source = "00gamedevs"
+metadata/vfx_id = "shockwave"
+metadata/editor_preview_time = 0.45
+
+[node name="Parts" type="Node3D" parent="." unique_id=755302961]
+unique_name_in_owner = true
+
+[node name="Part000" type="MeshInstance3D" parent="Parts" unique_id=1860951447]
+material_override = SubResource("ShaderMaterial_b56o3")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("3_1h0oh")
+metadata/source_name = "Part0"
+
+[node name="Part001" type="MeshInstance3D" parent="Parts" unique_id=1116170656]
+material_override = SubResource("ShaderMaterial_dyf8f")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("5_1qui1")
+metadata/source_name = "Part1"
+
+[node name="Part002" type="MeshInstance3D" parent="Parts" unique_id=1523773580]
+material_override = SubResource("ShaderMaterial_peyqm")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("7_w7m2s")
+metadata/source_name = "Part2"
+
+[node name="Part003" type="MeshInstance3D" parent="Parts" unique_id=838339276]
+material_override = SubResource("ShaderMaterial_ndesq")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("9_j47tu")
+metadata/source_name = "Part3"
+
+[node name="Part004" type="MeshInstance3D" parent="Parts" unique_id=751534852]
+material_override = SubResource("ShaderMaterial_iqbr6")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("11_jnpfo")
+metadata/source_name = "Part4"
+
+[node name="Part005" type="MeshInstance3D" parent="Parts" unique_id=1286227709]
+transform = Transform3D(1, 0, 0, 0, 2.220446e-16, 1, 0, -1, 2.220446e-16, 0, -1.36, 0)
+material_override = SubResource("ShaderMaterial_xbt2d")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("13_cc1na")
+metadata/source_name = "Part5"
+
+[node name="Motion" type="AnimationPlayer" parent="." unique_id=734797545]
+unique_name_in_owner = true
+libraries/ = ExtResource("14_e53hn")

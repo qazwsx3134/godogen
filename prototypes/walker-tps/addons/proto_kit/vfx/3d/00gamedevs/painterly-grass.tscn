@@ -1,0 +1,78 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/00gamedevs/source_effect.gd" id="1_ryae8"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/painterly-grass/spatial_part_0.gdshader" id="2_2aucf"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/painterly-grass/part_0.res" id="3_2aucf"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/painterly-grass/spatial_part_0_depth.gdshader" id="4_2aucf"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/painterly-grass/part_1.res" id="5_pex4x"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/painterly-grass/spatial_part_1.gdshader" id="5_pyrnd"]
+[ext_resource type="AnimationLibrary" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/painterly-grass/motion.res" id="6_1h28k"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/painterly-grass/spatial_part_1_depth.gdshader" id="7_pyrnd"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8altf"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("4_2aucf")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 54
+shader_parameter/source_instance_count = 360.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 2.2
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.22322796, 0.30054379, 0.05780543)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qbfef"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("7_pyrnd")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 36
+shader_parameter/source_instance_count = 24.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 2.2
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.22322796, 0.30054379, 0.05780543)
+
+[node name="PainterlyGrass" type="Node3D" unique_id=900353091]
+script = ExtResource("1_ryae8")
+effect_id = "painterly-grass"
+start_duration = 0.6
+kind = 10
+metadata/vfx_source = "00gamedevs"
+metadata/vfx_id = "painterly-grass"
+metadata/editor_preview_time = 2.2
+
+[node name="Parts" type="Node3D" parent="." unique_id=1025326691]
+unique_name_in_owner = true
+
+[node name="Part000" type="MeshInstance3D" parent="Parts" unique_id=181300691]
+material_override = SubResource("ShaderMaterial_8altf")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("3_2aucf")
+metadata/source_name = "grass-brush-clumps"
+metadata/source_depth_shader = ExtResource("4_2aucf")
+metadata/source_transparent_shader = ExtResource("2_2aucf")
+metadata/source_depth_mode = "always"
+
+[node name="Part001" type="MeshInstance3D" parent="Parts" unique_id=1622013784]
+material_override = SubResource("ShaderMaterial_qbfef")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("5_pex4x")
+metadata/source_name = "grass-white-flowers"
+metadata/source_depth_shader = ExtResource("7_pyrnd")
+metadata/source_transparent_shader = ExtResource("5_pyrnd")
+metadata/source_depth_mode = "always"
+
+[node name="Motion" type="AnimationPlayer" parent="." unique_id=827812424]
+unique_name_in_owner = true
+libraries/ = ExtResource("6_1h28k")

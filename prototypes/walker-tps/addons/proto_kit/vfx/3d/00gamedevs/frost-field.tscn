@@ -1,0 +1,115 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/00gamedevs/source_effect.gd" id="1_xmlvb"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/frost-field/spatial_part_0.gdshader" id="2_ngfjs"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/frost-field/part_0.res" id="3_taa4g"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/frost-field/spatial_part_1.gdshader" id="4_j4ubq"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/frost-field/part_1.res" id="5_lqqct"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/frost-field/spatial_part_2.gdshader" id="6_8x8ql"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/frost-field/part_2.res" id="7_pdprj"]
+[ext_resource type="AnimationLibrary" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/frost-field/motion.res" id="8_ortsd"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b3003"]
+resource_local_to_scene = true
+render_priority = 3
+shader = ExtResource("2_ngfjs")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 256.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uStopTime = -1.0
+shader_parameter/uEndDuration = 1.0
+shader_parameter/uQuantity = 1.0
+shader_parameter/uSpread = 1.0
+shader_parameter/uEmitterTime = 0.7999999999999999
+shader_parameter/uStretch = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.3277781, 0.7379104, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_t3xl3"]
+resource_local_to_scene = true
+render_priority = 1
+shader = ExtResource("4_j4ubq")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = null
+shader_parameter/source_vertices_per_instance = 3462
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.3277781, 0.7379104, 1)
+shader_parameter/uEmitterTime = 0.7999999999999999
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7aaph"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("6_8x8ql")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = null
+shader_parameter/source_vertices_per_instance = 3462
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.3277781, 0.7379104, 1)
+shader_parameter/uEmitterTime = 0.7999999999999999
+
+[node name="FrostField" type="Node3D" unique_id=1386873905]
+script = ExtResource("1_xmlvb")
+effect_id = "frost-field"
+start_duration = 0.7
+end_duration = 1.0
+kind = 2
+variant = 2
+metadata/vfx_source = "00gamedevs"
+metadata/vfx_id = "frost-field"
+metadata/editor_preview_time = 0.7999999999999999
+
+[node name="Parts" type="Node3D" parent="." unique_id=1334310381]
+unique_name_in_owner = true
+
+[node name="Part000" type="MeshInstance3D" parent="Parts" unique_id=1830878132]
+material_override = SubResource("ShaderMaterial_b3003")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("3_taa4g")
+metadata/source_name = "Part0"
+
+[node name="Part001" type="MeshInstance3D" parent="Parts" unique_id=1537982634]
+transform = Transform3D(1, 0, 0, 0, 2.220446e-16, 1, 0, -1, 2.220446e-16, 0, 0.025, 0)
+material_override = SubResource("ShaderMaterial_t3xl3")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("5_lqqct")
+metadata/source_name = "Part1"
+metadata/phase_ranges = [6, 3456]
+
+[node name="Part002" type="MeshInstance3D" parent="Parts" unique_id=390656466]
+transform = Transform3D(1, 0, 0, 0, 2.220446e-16, 1, 0, -1, 2.220446e-16, 0, 0.015, 0)
+material_override = SubResource("ShaderMaterial_7aaph")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("7_pdprj")
+metadata/source_name = "Part2"
+metadata/phase_ranges = [6, 3456]
+
+[node name="Motion" type="AnimationPlayer" parent="." unique_id=1611315165]
+unique_name_in_owner = true
+libraries/ = ExtResource("8_ortsd")
