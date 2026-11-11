@@ -70,6 +70,15 @@ transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -9, 
 combat_enabled = true
 max_health = 120.0
 mass = 12.0
+attack_range = 45.0
+lead_accuracy = 0.85
+aim_spread = 0.4
+shot_damage = 18.0
+shot_speed = 50.0
+windup_time = 1.0
+fire_cooldown = 3.0
+chase_speed = 2.0
+repositions = false
 
 [node name="Radio" type="AudioStreamPlayer" parent="." unique_id=773326139]
 stream = ExtResource("8_lwkd3")

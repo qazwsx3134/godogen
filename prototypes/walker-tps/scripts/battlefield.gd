@@ -9,6 +9,12 @@ var kills := 0
 var total := 0
 var radio_wait := 0.0
 var radio_count := 0
+## Where any scout last saw the player, and when (match seconds); scouts that have not seen the
+## player themselves come to look when the report is fresh.
+var contact_position := Vector3.ZERO
+var contact_time := -100.0
+## Degrees between neighbouring scouts around the player, so one wall cannot cover them all.
+@export var surround_spacing_deg: float = 50.0
 @onready var walker: CharacterBody3D = $Walker
 @onready var spawn: Marker3D = $Map/RouteMarkers/PlayerSpawn
 
@@ -67,6 +73,36 @@ func _physics_process(delta: float) -> void:
 		walker.velocity=Vector3.ZERO
 		walker.get_node("Gait").replant()
 		walker.get_node("CameraRig").global_position=walker.global_position+Vector3.UP*3.3
+
+func match_time() -> float:
+	return match_seconds-time_left
+
+func report_contact(at: Vector3) -> void:
+	contact_position=at
+	contact_time=match_time()
+
+## Where `scout` should stand to fight: on a ring of `radius` m around the walker, spread with the other
+## engaged scouts around the bearing of their group. Slots go out in the order the scouts already stand
+## around the walker, so nobody has to walk through a teammate to reach its place.
+func slot_for(scout: Node3D, radius: float) -> Vector3:
+	var engaged: Array[Node3D] = []
+	for other: Node in $Enemies.get_children():
+		if other.get("dead")!=true and other.has_method("is_engaged") and other.is_engaged():
+			engaged.append(other)
+	if scout not in engaged: engaged.append(scout)
+	var centroid := Vector3.ZERO
+	for member: Node3D in engaged: centroid+=member.global_position
+	centroid/=engaged.size()
+	var base := centroid-walker.global_position
+	var base_angle := atan2(base.x,base.z)
+	var offset := func(member: Node3D) -> float:
+		var to := member.global_position-walker.global_position
+		return angle_difference(base_angle, atan2(to.x,to.z))
+	engaged.sort_custom(func(a: Node3D, b: Node3D) -> bool: return offset.call(a)<offset.call(b))
+	var angle := base_angle+deg_to_rad(surround_spacing_deg)*(engaged.find(scout)-(engaged.size()-1)*0.5)
+	var want := walker.global_position+Vector3(sin(angle),0,cos(angle))*radius
+	var map := get_world_3d().navigation_map
+	return NavigationServer3D.map_get_closest_point(map,want) if NavigationServer3D.map_get_iteration_id(map)>0 else want
 
 func play_radio(contact: bool = true) -> bool:
 	if match_state!="playing" or radio_wait>0 or $Radio.playing: return false

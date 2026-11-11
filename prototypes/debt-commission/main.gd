@@ -7,7 +7,7 @@ class_name DebtMain
 ## 故事流程由 scripts/story_runner.gd 執行；背景、立繪與素材從同一份 catalog 載入。
 ## 所有輸入只處理滑鼠事件（專案把觸控模擬成滑鼠），一次觸控只會觸發一次動作。
 
-const STORY_RUNNER_SCRIPT: Script = preload("res://scripts/story_runner.gd")
+const StoryRunner = preload("res://scripts/story_runner.gd")
 const DialogueBox = preload("res://scripts/dialogue_box.gd")
 const ChoiceSheet = preload("res://scripts/choice_sheet.gd")
 const MenuPanel = preload("res://scripts/menu_panel.gd")
@@ -104,7 +104,7 @@ var _chapter_result: Control = null
 var _chapter_select: Control = null
 var _settings_panel: Control = null
 var _settings: Dictionary = {}
-var _settings_return: String = "title"
+var _settings_return: Screen = Screen.TITLE
 
 const EDGE: float = 24.0
 const LONG_PRESS_SEC: float = 0.5
@@ -114,7 +114,6 @@ const AUTO_DELAY_SEC: float = 1.0
 const AUTO_PER_CHAR_SEC: float = 0.03
 const SKIP_DELAY_SEC: float = 0.06
 const TOAST_SEC: float = 1.4
-const QA_PUBLISH_SEC: float = 0.2
 
 const AUDIO_PATHS: Dictionary = {
 	"paper": "res://assets/audio/paper.wav",
@@ -143,7 +142,7 @@ const MainRound = preload("res://scripts/main_round.gd")
 const MainTutorial = preload("res://scripts/main_tutorial.gd")
 
 var _font: Font = ThemeDB.fallback_font
-var _runner: RefCounted = null
+var _runner: StoryRunner = null
 var _save_validation_probe: RefCounted = null
 var _story_ready: bool = false
 var _phase3_enabled: bool = false
@@ -304,8 +303,23 @@ var _skin: Dictionary = {}
 ## Its id, the look ui_styles.gd paints with.
 var _ui_style_id: String = UI_STYLES_SCRIPT.DEFAULT_ID
 
-var _screen_mode: String = "title"
-var _mode_before_overlay: String = "story"
+## What the player is looking at. Story screens follow the story's command (STORY ... END); the
+## others are panels opened over it (MENU, LOG, SAVE_SLOTS ...) and return to _mode_before_overlay.
+enum Screen { TITLE, CHAPTER_SELECT, STORY, BUSY, CHOICE, TSUKKOMI, BOKE_ROUND, QTE, INVESTIGATE,
+	RESULT, END, MENU, SETTINGS, LOG, CASE_FILE, GALLERY, FLOWCHART, CREDITS,
+	SAVE_SLOTS, LOAD_SLOTS, SLOT_CONFIRM }
+var _screen: Screen = Screen.TITLE
+## The lower-case name of _screen ("story", "tsukkomi" ...): what QA, the tests, tutorial triggers and
+## the saved round screen use. Setting an unknown name is an error and leaves the screen as it was.
+var _screen_mode: String:
+	get:
+		return screen_name(_screen)
+	set(value):
+		if Screen.has(value.to_upper()):
+			_screen = Screen[value.to_upper()]
+		else:
+			push_error("unknown screen mode '%s'" % value)
+var _mode_before_overlay: Screen = Screen.STORY
 var _story_busy: bool = false
 var _generation: int = 0
 var _line_generation: int = 0
@@ -325,7 +339,6 @@ var _choice_buttons: Array[Button] = []
 var _history: Array[Dictionary] = []
 var _boke_time_remaining: float = 0.0
 var _boke_timer_round_id: String = ""
-var _last_boke_display_second: int = -1
 var _next_tsukkomi_right: bool = false
 var _recent_retort: String = ""
 var _restored_boke_timer_remaining: float = -1.0
@@ -353,7 +366,6 @@ var _panel_scale: float = 1.0
 var _qa_enabled: bool = false
 var _tutorial: Control = null
 var _tutorials: Array = []
-var _qa_elapsed: float = 0.0
 
 
 ## Sections of this shell kept in their own scripts (each reaches back through `m`).
@@ -390,7 +402,7 @@ func _ready() -> void:
 	_apply_ui_style()
 	get_viewport().size_changed.connect(_layout)
 	_layout()
-	_qa_ctl._detect_qa_mode()
+	_qa_ctl.detect_qa_mode()
 	_show_title()
 
 
@@ -425,9 +437,9 @@ func _on_story_switch_pressed() -> void:
 
 
 func _open_chapter_select() -> void:
-	if _screen_mode != "title":
+	if _screen != Screen.TITLE:
 		return
-	_screen_mode = "chapter_select"
+	_screen = Screen.CHAPTER_SELECT
 	var entries: Array[Dictionary] = []
 	var chapter_numbers: Dictionary = {}  # 第 N 章 counts within each work
 	for index: int in range(_story_choices.size()):
@@ -452,7 +464,7 @@ func _open_chapter_select() -> void:
 			"work_title": str(choice.get("work_title", ""))})
 	_chapter_select.call("set_style", _ui_style_id)
 	_chapter_select.call("open", entries, _chapter_endings())
-	_qa_ctl._publish_qa_state()
+	_qa_ctl.publish_qa_state()
 
 
 func _on_chapter_picked(index: int) -> void:
@@ -469,24 +481,24 @@ func _close_chapter_select() -> void:
 
 ## 製作名單 from 章節選擇: every story with credits, in the chapter list's order, then the game's.
 func _open_credits() -> void:
-	if _screen_mode != "chapter_select":
+	if _screen != Screen.CHAPTER_SELECT:
 		return
-	_screen_mode = "credits"
+	_screen = Screen.CREDITS
 	_credits_roll.call("open", _credit_sections(), int(_settings.get("motion", 0)) == 0)
 	_apply_ui_style_recursive(_credits_roll)  # 關閉 and the rows it just added
-	_qa_ctl._publish_qa_state()
+	_qa_ctl.publish_qa_state()
 
 
 ## 鑑賞 from 章節選擇: every background and track with a file, the ones met in play shown.
 func _open_gallery() -> void:
-	if _screen_mode != "chapter_select":
+	if _screen != Screen.CHAPTER_SELECT:
 		return
-	_screen_mode = "gallery"
+	_screen = Screen.GALLERY
 	var level: float = 0.0 if _audio_muted else SETTINGS_SCRIPT.VOLUMES[int(_settings["bgm_volume"])]
 	_gallery.call("open", _gallery_entries("backgrounds", "bg"), _gallery_entries("music", "bgm"),
 		linear_to_db(level) if level > 0.0 else -80.0)
 	_style_gallery()
-	_qa_ctl._publish_qa_state()
+	_qa_ctl.publish_qa_state()
 
 
 func _style_gallery() -> void:
@@ -507,9 +519,9 @@ func _gallery_entries(section: String, kind: String) -> Array[Dictionary]:
 
 
 func _close_gallery() -> void:
-	if _screen_mode == "gallery":
-		_screen_mode = "chapter_select"
-	_qa_ctl._publish_qa_state()
+	if _screen == Screen.GALLERY:
+		_screen = Screen.CHAPTER_SELECT
+	_qa_ctl.publish_qa_state()
 
 
 ## While a 鑑賞 track plays the story's music pauses; it comes back when the preview stops.
@@ -526,9 +538,9 @@ func _on_gallery_previewing(active: bool) -> void:
 ## 流程圖 from 章節選擇: every story the player can open, starting at the current one; the scenes
 ## passed through show their titles (story_library.visited).
 func _open_flowchart() -> void:
-	if _screen_mode != "chapter_select":
+	if _screen != Screen.CHAPTER_SELECT:
 		return
-	_screen_mode = "flowchart"
+	_screen = Screen.FLOWCHART
 	var stories: Array[Dictionary] = []
 	var start: int = 0
 	for index: int in range(_story_choices.size()):
@@ -543,35 +555,35 @@ func _open_flowchart() -> void:
 		stories.append({"id": str(choice["id"]), "title": _story_title(choice), "story": story,
 			"visited": _library.visited(str(choice["id"]))})
 	_flowchart.call("open", stories, start)
-	_qa_ctl._publish_qa_state()
+	_qa_ctl.publish_qa_state()
 
 
 func _close_flowchart() -> void:
-	if _screen_mode == "flowchart":
-		_screen_mode = "chapter_select"
-	_qa_ctl._publish_qa_state()
+	if _screen == Screen.FLOWCHART:
+		_screen = Screen.CHAPTER_SELECT
+	_qa_ctl.publish_qa_state()
 
 
 func _close_credits() -> void:
-	if _screen_mode == "credits":
-		_screen_mode = "chapter_select"
-	_qa_ctl._publish_qa_state()
+	if _screen == Screen.CREDITS:
+		_screen = Screen.CHAPTER_SELECT
+	_qa_ctl.publish_qa_state()
 
 
 ## 設定 from the title or from 目錄 (which stays open underneath).
 func _open_settings() -> void:
-	if _screen_mode not in ["title", "menu"]:
+	if _screen not in [Screen.TITLE, Screen.MENU]:
 		return
-	_settings_return = _screen_mode
-	_screen_mode = "settings"
-	_settings_panel.call("open", _settings, _settings_return == "title", _phase3_enabled)
-	_qa_ctl._publish_qa_state()
+	_settings_return = _screen
+	_screen = Screen.SETTINGS
+	_settings_panel.call("open", _settings, _settings_return == Screen.TITLE, _phase3_enabled)
+	_qa_ctl.publish_qa_state()
 
 
 func _close_settings() -> void:
 	_settings_panel.visible = false
-	_screen_mode = _settings_return
-	_qa_ctl._publish_qa_state()
+	_screen = _settings_return
+	_qa_ctl.publish_qa_state()
 
 
 # ---------------------------------------------------------------- 故事清單與進度（story_library.gd）
@@ -627,7 +639,7 @@ func _record_clear(grade: String) -> void:
 ## Game Over) the story's `carry` flags are kept for the next chapter.
 func _record_ending(command: Dictionary, game_over: bool = false) -> void:
 	if _library.record_ending(_progress_id(), _dict_string(command, "ending", ""),
-			{} if game_over else _runner.call("carry_out") as Dictionary) != OK:
+			{} if game_over else _runner.carry_out() as Dictionary) != OK:
 		_show_toast("結局紀錄無法儲存")
 
 
@@ -648,7 +660,7 @@ func _on_setting_changed(key: String, value: int) -> void:
 		_apply_audio_levels()
 	if key in ["font_size", "paper_opacity"]:
 		_apply_reading_settings()
-	_qa_ctl._publish_qa_state()
+	_qa_ctl.publish_qa_state()
 
 
 func _apply_reading_settings() -> void:
@@ -681,7 +693,7 @@ func _text_interval() -> float:
 func _refresh_story_switch() -> void:
 	if _story_switch == null:
 		return
-	var info: Dictionary = _runner.call("story_info") as Dictionary if _story_ready else {}
+	var info: Dictionary = _runner.story_info() as Dictionary if _story_ready else {}
 	var title: String = str(info.get("title", story_path.get_file()))
 	var index: int = _story_choice_index()
 	# One line on the plaque: a chapter goes by its number (第一章・… → 第一章), others by their title.
@@ -693,18 +705,18 @@ func _load_story() -> void:
 	if _phase3_hud != null:
 		_phase3_hud.reset_pops()
 	_save_validation_probe = null
-	_runner = STORY_RUNNER_SCRIPT.new() as RefCounted
-	_story_ready = bool(_runner.call("load_story", story_path, story_catalog_override))
+	_runner = StoryRunner.new()
+	_story_ready = bool(_runner.load_story(story_path, story_catalog_override))
 	if not _story_ready:
 		_story_error = _runner_string("error_message", "故事資料尚未就緒。")
 		return
 	var carried: Dictionary = _previous_chapter_carry()
 	if not carried.is_empty():
-		_runner.call("carry_in", carried)
-	var initial_snapshot: Dictionary = _runner.call("snapshot") as Dictionary
+		_runner.carry_in(carried)
+	var initial_snapshot: Dictionary = _runner.snapshot() as Dictionary
 	_archive_other_version_save(str(initial_snapshot.get("story_id", "")), str(initial_snapshot.get("version", "")))
-	_phase3_enabled = bool(_runner.call("has_gameplay"))
-	var catalog: Dictionary = _runner.call("get_asset_catalog") as Dictionary
+	_phase3_enabled = bool(_runner.has_gameplay())
+	var catalog: Dictionary = _runner.get_asset_catalog() as Dictionary
 	var new_cast: bool = catalog != _catalog and not _sprites.is_empty()
 	_catalog = catalog
 	_actors = _catalog.get("characters", {}) as Dictionary
@@ -719,7 +731,7 @@ func _load_story() -> void:
 ## Another work's catalog (a story pack): its characters replace the cast on stage, and effects,
 ## music and the comedy layer read its sounds and names.
 func _rebuild_cast() -> void:
-	_investigation._forget_search_cast()
+	_investigation.forget_search_cast()
 	for sprite: Control in _sprites.values():
 		_char_layer.remove_child(sprite)
 		sprite.queue_free()
@@ -748,7 +760,7 @@ func _other_version_of(payload: Dictionary, story_id: String, version: String) -
 ## title says so until a story starts.
 func _archive_other_version_save(story_id: String, version: String) -> void:
 	_archived_save_notice = ""
-	var old_version: String = _other_version_of(_saves._read_raw_save_payload(save_path), story_id, version)
+	var old_version: String = _other_version_of(_saves.read_raw_save_payload(save_path), story_id, version)
 	if old_version.is_empty():
 		return
 	for suffix: String in ["", ".bak"]:
@@ -775,14 +787,14 @@ func _build_ui() -> void:
 	_build_sprites()
 	_build_phase3_hud()
 	_build_dialogue()
-	_investigation._build_investigate_bar()
+	_investigation.build_investigate_bar()
 	_mount_menu()
 	_build_log()
-	_tutorial_ctl._build_tutorial()
+	_tutorial_ctl.build_tutorial()
 	_build_case_file()
 	_build_toast()
 	_mount_title()
-	_saves._build_slot_picker()
+	_saves.build_slot_picker()
 	_chapter_select = CHAPTER_SELECT_SCENE.instantiate() as Control
 	_game.add_child(_chapter_select)  # above the title screen
 	_chapter_select.connect("picked", _on_chapter_picked)
@@ -810,7 +822,7 @@ func _build_ui() -> void:
 	_effects.setup([_bg_layer, _char_layer, _interaction_layer, _fx_layer, _dialog_layer], _overlay_layer, _catalog)
 	_effects.reduce_motion = int(_settings.get("motion", 0)) == 1
 	_comedy_layer.setup(_effects, [_bg_layer, _char_layer], _catalog, _comedy_speaker_rect, _comedy_dialog_rect)
-	_comedy_layer.finished.connect(_qa_ctl._publish_qa_state)
+	_comedy_layer.finished.connect(_qa_ctl.publish_qa_state)
 	_apply_audio_levels()
 	_refresh_gameplay_ui()
 
@@ -1006,10 +1018,10 @@ func _mount_dialogue_box() -> void:
 	_dialog_panel.log_pressed.connect(_open_log)
 	_dialog_panel.auto_pressed.connect(func() -> void: _set_auto(not _auto))
 	_dialog_panel.skip_pressed.connect(func() -> void:
-		if _screen_mode == "story":
+		if _screen == Screen.STORY:
 			_set_skip(not _skip))
 	_dialog_panel.advance_pressed.connect(_on_screen_tap)
-	_dialog_panel.collapse_pressed.connect(_investigation._set_investigation_collapsed.bind(true))
+	_dialog_panel.collapse_pressed.connect(_investigation.set_investigation_collapsed.bind(true))
 	_investigation_continue_button = _dialog_panel.investigation_continue
 	_boke_controls = _dialog_panel.round_controls
 	_boke_previous_button = _dialog_panel.boke_previous
@@ -1017,12 +1029,12 @@ func _mount_dialogue_box() -> void:
 	_boke_next_button = _dialog_panel.boke_next
 	_boke_listen_button = _dialog_panel.boke_listen
 	_boke_tsukkomi_button = _dialog_panel.boke_tsukkomi
-	_investigation_continue_button.pressed.connect(_investigation._on_investigation_continue_pressed)
-	_boke_previous_button.pressed.connect(_round._on_boke_previous_pressed)
-	_boke_next_button.pressed.connect(_round._on_boke_next_pressed)
-	_boke_listen_button.pressed.connect(_round._on_boke_listen_pressed)
-	_boke_tsukkomi_button.pressed.connect(_round._on_boke_tsukkomi_pressed)
-	_dialog_panel.censor_bar.pressed.connect(_round._on_censor_pressed)
+	_investigation_continue_button.pressed.connect(_investigation.on_investigation_continue_pressed)
+	_boke_previous_button.pressed.connect(_round.on_boke_previous_pressed)
+	_boke_next_button.pressed.connect(_round.on_boke_next_pressed)
+	_boke_listen_button.pressed.connect(_round.on_boke_listen_pressed)
+	_boke_tsukkomi_button.pressed.connect(_round.on_boke_tsukkomi_pressed)
+	_dialog_panel.censor_bar.pressed.connect(_round.on_censor_pressed)
 	_dialog_panel.set_chapter(_chapter_title())
 	_fit_bottom_panel(_dialog_panel)
 	if old == null:
@@ -1044,7 +1056,7 @@ func _mount_dialogue_box() -> void:
 	_set_name_plate(_plate_speaker, _plate_thought)
 	_set_visible_text(_visible_text, _text_complete)
 	if _hotspot_layer != null:
-		_investigation._show_topics(_current_command)  # the search's topics move into the new box
+		_investigation.show_topics(_current_command)  # the search's topics move into the new box
 	_dialog_layer.remove_child(old)
 	old.queue_free()
 
@@ -1071,9 +1083,9 @@ func _swap_choice_sheet() -> void:
 	_dialog_layer.add_child(_choice_sheet)
 	_dialog_layer.move_child(_choice_sheet, _dialog_panel.get_index() + 1)
 	_choice_sheet.menu_pressed.connect(_open_menu)
-	_choice_sheet.censor_pressed.connect(_round._on_censor_pressed)
-	_choice_sheet.super_pressed.connect(_round._on_super_pressed)
-	_choice_sheet.pop_finished.connect(_qa_ctl._publish_qa_state)
+	_choice_sheet.censor_pressed.connect(_round.on_censor_pressed)
+	_choice_sheet.super_pressed.connect(_round.on_super_pressed)
+	_choice_sheet.pop_finished.connect(_qa_ctl.publish_qa_state)
 	_choice_sheet.clear_options()
 	_fit_choice_sheet()
 	if old != null:
@@ -1097,10 +1109,10 @@ func _show_choice_sheet() -> void:
 		var option_id: String = _dict_string(_current_options[index], "id")
 		var row: Button = _choice_buttons[index]
 		row.name = "Boke_" + option_id if _sheet_timed else "Choice_%d" % index
-		row.pressed.connect((_round._on_boke_option_pressed if _sheet_timed else _on_choice_pressed).bind(option_id))
+		row.pressed.connect((_round.on_boke_option_pressed if _sheet_timed else _on_choice_pressed).bind(option_id))
 	if _sheet_timed:
 		_choice_sheet.set_timer(_boke_time_remaining, _timer_total(_current_command),
-			_screen_mode != "tsukkomi")
+			_screen != Screen.TSUKKOMI)
 	_choice_sheet.censor_bar.visible = _sheet_timed and _sheet_censor
 	_choice_sheet.super_button.visible = _sheet_timed and _sheet_super
 	_choice_sheet.super_button.text = str(_current_command.get("super_label", _term("super") + "！"))
@@ -1116,7 +1128,7 @@ func _refresh_reading_ui() -> void:
 
 ## Story title up to its first separator, shown at the right of the speaker row.
 func _chapter_title() -> String:
-	var title: String = str((_runner.call("story_info") as Dictionary).get("title", "")) if _story_ready else ""
+	var title: String = str((_runner.story_info() as Dictionary).get("title", "")) if _story_ready else ""
 	return title.get_slice("｜", 0).get_slice("：", 0).get_slice("（", 0).strip_edges()
 
 
@@ -1145,13 +1157,13 @@ func _on_menu_row_pressed(row_id: String) -> void:
 		"resume":
 			_close_menu()
 		"save", "load":
-			_saves._open_slot_picker(row_id)
+			_saves.open_slot_picker(row_id)
 		"rollback":
-			_saves._rollback_line()
+			_saves.rollback_line()
 		"quick_save":
-			_saves._quick_save()
+			_saves.quick_save()
 		"quick_load":
-			_saves._quick_load()
+			_saves.quick_load()
 		"material":
 			_open_case_file("materials")
 		"profile":
@@ -1171,11 +1183,11 @@ func _on_menu_row_pressed(row_id: String) -> void:
 ## Rows that depend on the story and the moment: 略讀 only from a story line, materials and
 ## profiles only in stories with gameplay, the sound state, the current edition.
 func _refresh_menu_rows() -> void:
-	var from_mode: String = _mode_before_overlay if _screen_mode == "menu" else _screen_mode
-	(_menu_items["skip"] as Button).disabled = from_mode != "story"
-	(_menu_items["rollback"] as Button).disabled = from_mode != "story" or not _rollback.available()
-	(_menu_items["quick_save"] as Button).disabled = not _saves._saveable_current_state()
-	(_menu_items["quick_load"] as Button).disabled = _saves._read_save_payload(SAVE_SLOTS_SCRIPT.quick_path(save_path)).is_empty()
+	var from_mode: Screen = _mode_before_overlay if _screen == Screen.MENU else _screen
+	(_menu_items["skip"] as Button).disabled = from_mode != Screen.STORY
+	(_menu_items["rollback"] as Button).disabled = from_mode != Screen.STORY or not _rollback.available()
+	(_menu_items["quick_save"] as Button).disabled = not _saves.saveable_current_state()
+	(_menu_items["quick_load"] as Button).disabled = _saves.read_save_payload(SAVE_SLOTS_SCRIPT.quick_path(save_path)).is_empty()
 	for key: String in ["material", "profile"]:
 		(_menu_items[key] as Button).visible = _phase3_enabled
 	_menu_overlay.set_row_hint("mute", "關" if _audio_muted else "開")
@@ -1224,7 +1236,7 @@ func _mount_title() -> void:
 	_title_load_button = _title_screen.load_button
 	_title_screen.begin_pressed.connect(_on_begin_pressed)
 	_title_screen.continue_pressed.connect(_on_continue_pressed)
-	_title_screen.load_pressed.connect(func() -> void: _saves._open_slot_picker("load"))
+	_title_screen.load_pressed.connect(func() -> void: _saves.open_slot_picker("load"))
 	_title_screen.story_switch_pressed.connect(_on_story_switch_pressed)
 	_title_screen.settings_pressed.connect(_open_settings)
 	if old != null:
@@ -1245,14 +1257,14 @@ func _mount_settings() -> void:
 	_game.add_child(_settings_panel)
 	_settings_panel.connect("changed", _on_setting_changed)
 	_settings_panel.connect("closed", _close_settings)
-	_settings_panel.connect("export_saves", _saves._export_saves)
-	_settings_panel.connect("import_saves", _saves._import_saves)
-	_settings_panel.connect("replay_tutorials", _tutorial_ctl._replay_tutorials)
+	_settings_panel.connect("export_saves", _saves.export_saves)
+	_settings_panel.connect("import_saves", _saves.import_saves)
+	_settings_panel.connect("replay_tutorials", _tutorial_ctl.replay_tutorials)
 	if old == null:
 		return
 	_game.move_child(_settings_panel, old.get_index())
 	if old.visible:
-		_settings_panel.call("open", _settings, _settings_return == "title", _phase3_enabled)
+		_settings_panel.call("open", _settings, _settings_return == Screen.TITLE, _phase3_enabled)
 	_game.remove_child(old)
 	old.queue_free()
 	_layout()
@@ -1267,7 +1279,7 @@ func _mount_end_screens() -> void:
 		_game_over = over_scene.instantiate() as GameOverScreen
 		_overlay_layer.add_child(_game_over)
 		_game_over_retry_button = _game_over.retry_button
-		_game_over.retry_pressed.connect(_round._on_game_over_retry_pressed)
+		_game_over.retry_pressed.connect(_round.on_game_over_retry_pressed)
 		_game_over.title_pressed.connect(_show_title)
 		if old_over != null:
 			_overlay_layer.move_child(_game_over, old_over.get_index())
@@ -1287,7 +1299,7 @@ func _mount_end_screens() -> void:
 ## Story label, which buttons work, the last error and the story's exterior photo.
 func _refresh_title() -> void:
 	_refresh_story_switch()
-	_continue_button.disabled = not _saves._has_valid_save()
+	_continue_button.disabled = not _saves.has_valid_save()
 	_begin_button.disabled = not _story_ready
 	_title_screen.set_error(_story_error if not _story_error.is_empty() else _archived_save_notice)
 	# The skin's title background in the story's catalog: its picture, or its top/bottom gradient.
@@ -1345,17 +1357,17 @@ func _layout() -> void:
 	_fit_full_area(_comedy_layer)
 	_fit_panel_area(_log_overlay, Rect2(0.0,top,width,bottom-top))
 
-	_saves._layout_slot_picker(width, height, top, bottom)
+	_saves.layout_slot_picker(width, height, top, bottom)
 	_case_file_panel.call("layout", Rect2(0.0, top, width, bottom - top))
 	_fit_panel_area(_chapter_select, Rect2(0.0, top, width, bottom - top))
 	_fit_panel_area(_credits_roll, Rect2(0.0, top, width, bottom - top))
 	_fit_panel_area(_gallery, Rect2(0.0, top, width, bottom - top))
 	_fit_panel_area(_settings_panel, Rect2(0.0, top, width, bottom - top))
-	if _screen_mode == "investigate":
-		_investigation._layout_hotspots()
+	if _screen == Screen.INVESTIGATE:
+		_investigation.layout_hotspots()
 	if _tutorial != null and _tutorial.visible:
 		_tutorial.call("_place")
-	_qa_ctl._publish_qa_state()
+	_qa_ctl.publish_qa_state()
 
 
 ## The landscape scenes are drawn for a 720 CSS px wide game area. A small increase on narrower
@@ -1391,7 +1403,7 @@ func _fit_choice_sheet() -> void:
 	_fit_bottom_panel(_choice_sheet)
 	if _game != null and _game.size.y > 0.0:
 		var top: float = _safe_top + 64.0 * CSS_PX
-		if _screen_mode == "tsukkomi" and _round._placard_open():
+		if _screen == Screen.TSUKKOMI and _round.placard_open():
 			top = maxf(top, (_placard_holder.call("placard_rect") as Rect2).end.y - _game.global_position.y + 4.0 * CSS_PX)
 		_choice_sheet.set_max_height((_game.size.y - top - _safe_bottom) / _panel_scale)
 
@@ -1461,23 +1473,23 @@ func _show_title() -> void:
 	var title_bgm: String = str((_skin.get("title", {}) as Dictionary).get("bgm", ""))
 	_effects.play_bgm(title_bgm)
 	_library.unlock(_gallery_key("bgm"), title_bgm)  # heard on the title, so 鑑賞 lists it from the start
-	_round._close_qte()
+	_round.close_qte()
 	_close_overlays()
 	_set_ui_hidden(false)
 	_set_auto(false)
 	_set_skip(false)
-	_screen_mode = "title"
+	_screen = Screen.TITLE
 	_phase3_hud.visible = false
 	_title_screen.visible = true
 	_dialog_layer.visible = false
 	_refresh_title()
-	_qa_ctl._publish_qa_state()
+	_qa_ctl.publish_qa_state()
 
 
 func _show_story_screen() -> void:
 	_title_screen.visible = false
 	_dialog_layer.visible = true
-	_screen_mode = "busy"
+	_screen = Screen.BUSY
 	_phase3_hud.visible = _phase3_enabled and not _ui_hidden
 
 
@@ -1490,8 +1502,8 @@ func _on_begin_pressed() -> void:
 
 func _on_continue_pressed() -> void:
 	_start_audio_after_user_gesture()
-	var payload: Dictionary = _saves._read_save_payload()
-	if not _saves._apply_save_payload(payload):
+	var payload: Dictionary = _saves.read_save_payload()
+	if not _saves.apply_save_payload(payload):
 		_story_error = "這份續讀資料已失效，請重新開始。"
 		_show_title()
 		return
@@ -1514,24 +1526,24 @@ func _start_new_story() -> void:
 	_cancel_generation()
 	_close_overlays()
 	_effects.play_bgm("bgm_gintama_35")
-	_saves._delete_save()
+	_saves.delete_save()
 	_history.clear()
 	_boke_time_remaining = 0.0
 	_boke_timer_round_id = ""
 	_restored_boke_timer_remaining = -1.0
 	_restored_boke_ui_mode = ""
 	_last_boke_result = ""
-	_investigation._clear_hotspots()
+	_investigation.clear_hotspots()
 	_investigation_pans.clear()
 	_investigation_pans_y.clear()
 	_investigation_home_casts.clear()
 	_story_error = ""
 	_set_auto(false)
 	_set_skip(false)
-	_runner.call("reset")
+	_runner.reset()
 	for actor_id: String in _actors.keys():
 		_actor_slots[actor_id] = str((_actors[actor_id] as Dictionary).get("slot", "center"))
-	_investigation._forget_search_cast()
+	_investigation.forget_search_cast()
 	for sprite: Control in _sprites.values():
 		sprite.visible = false
 		sprite.set_meta("portrait_lighting", "auto")
@@ -1547,7 +1559,7 @@ func _start_new_story() -> void:
 # ---------------------------------------------------------------- 故事推進
 
 func _start_drive() -> void:
-	_investigation._restore_search_cast()  # a spot's or a topic's scene, or the story after the search
+	_investigation.restore_search_cast()  # a spot's or a topic's scene, or the story after the search
 	call_deferred("_drive_story", _generation)
 
 
@@ -1555,8 +1567,8 @@ func _drive_story(generation: int) -> void:
 	if generation != _generation:
 		return
 	_story_busy = true
-	_screen_mode = "busy"
-	_qa_ctl._publish_qa_state()
+	_screen = Screen.BUSY
+	_qa_ctl.publish_qa_state()
 	while generation == _generation:
 		var command: Dictionary = _runner_current()
 		_record_visits()
@@ -1574,31 +1586,31 @@ func _drive_story(generation: int) -> void:
 				_rollback.clear()
 				_story_busy = false
 				_present_choice(command)
-				_saves._save_game()
+				_saves.save_game()
 				return
 			"end":
 				_rollback.clear()
 				_story_busy = false
 				_present_end(command)
-				_saves._save_game()
+				_saves.save_game()
 				return
 			"result":
 				_rollback.clear()
 				_story_busy = false
 				_present_result(command)
-				_saves._save_game()
+				_saves.save_game()
 				return
 			"investigate":
 				_rollback.clear()
 				_story_busy = false
-				_investigation._present_investigation(command, false)
-				_saves._save_game()
+				_investigation.present_investigation(command, false)
+				_saves.save_game()
 				return
 			"boke_round":
 				_rollback.clear()
 				_story_busy = false
-				_round._present_boke_round(command, false)
-				_saves._save_game()
+				_round.present_boke_round(command, false)
+				_saves.save_game()
 				return
 			"sound":
 				_play_sound(_dict_string(command, "id"))
@@ -1640,7 +1652,7 @@ func _drive_story(generation: int) -> void:
 						_apply_character({"id": actor_id, "enter": true, "transition": sprite.get_meta("entrance_transition", "fade")})
 					_motion.reaction(sprite, _dict_string(command, "effect"), _skip)
 					# Dialogue can share the beat. Other commands must not cover or cancel the reaction.
-					if str(_runner.call("following_op")) != "say":
+					if str(_runner.following_op()) != "say":
 						while not _motion.character_kind(sprite).is_empty() and generation == _generation:
 							await get_tree().process_frame
 						if generation != _generation:
@@ -1695,14 +1707,14 @@ func _drive_story(generation: int) -> void:
 					if not _skip:
 						_toast.visible = false
 					if not _skip and _comedy_layer.play(command) > 0.0:
-						_qa_ctl._publish_qa_state()
+						_qa_ctl.publish_qa_state()
 						while _comedy_layer.is_active() and generation == _generation:
 							await get_tree().process_frame  # a tap or stop() ends it early
 						if generation != _generation:
 							return
 			_:
 				pass  # ponytail: move／face／camera 屬於舊的俯視舞台；VN 立繪沒有對應演出，直接略過
-		_runner.call("advance")
+		_runner.advance()
 	_story_busy = false
 
 
@@ -1717,7 +1729,7 @@ func _play_manga_retort(line: String, speaker: String, generation: int) -> void:
 	_next_tsukkomi_right = not _next_tsukkomi_right
 	_toast.visible = false
 	_comedy_layer.play({"preset": "tsukkomi_impact", "speaker": speaker, "text": line, "side": side})
-	_qa_ctl._publish_qa_state()
+	_qa_ctl.publish_qa_state()
 	while _comedy_layer.is_active() and generation == _generation:
 		await get_tree().process_frame
 
@@ -1735,10 +1747,10 @@ func _comedy_dialog_rect() -> Rect2:
 
 func _advance_current_line() -> void:
 	if _command_op(_runner_current()) == "say":
-		_rollback.remember(_saves._build_save_payload(""))
+		_rollback.remember(_saves.build_save_payload(""))
 	_line_generation += 1
 	_story_busy = true
-	var advanced: Variant = _runner.call("advance")
+	var advanced: Variant = _runner.advance()
 	if advanced == null and not _runner_string("error_message", "").is_empty():
 		_show_runtime_error(_runner_string("error_message", "故事無法繼續。"))
 		return
@@ -1748,9 +1760,7 @@ func _advance_current_line() -> void:
 func _present_say(command: Dictionary, restored: bool) -> void:
 	_pending_round_mode = ""
 	_current_command = command.duplicate(true)
-	_investigation._clear_hotspots()
-	_investigation_continue_button.visible = false
-	_boke_controls.visible = false
+	_hide_story_parts()
 	_game_over_retry_button.visible = false
 	_dialog_panel.set_reading_enabled(true)
 	_current_speaker = _dict_string(command, "speaker", "narrator")
@@ -1762,9 +1772,8 @@ func _present_say(command: Dictionary, restored: bool) -> void:
 	_line_logged = _history_has_key(_current_line_key)
 	_line_generation += 1
 	_clear_choices()
-	_end_box.visible = false
-	_screen_mode = "story"
-	_tutorial_ctl._maybe_tutorial.call_deferred("story")
+	_screen = Screen.STORY
+	_tutorial_ctl.maybe_tutorial.call_deferred("story")
 	_refresh_phase3_hud()
 	var thought: bool = _dict_bool(command, "thought")
 	_set_name_plate(_current_speaker, thought)
@@ -1777,13 +1786,13 @@ func _present_say(command: Dictionary, restored: bool) -> void:
 		return
 	if not restored:
 		# 在打字前存檔：中途關閉分頁會回到這一句，且不會把它記成已讀。
-		_saves._save_game()
+		_saves.save_game()
 	_set_visible_text("", false)
 	if _skip:
 		_complete_current_line()
 		return
 	_typewriter(_line_generation)
-	_qa_ctl._publish_qa_state()
+	_qa_ctl.publish_qa_state()
 
 
 func _typewriter(token: int) -> void:
@@ -1820,20 +1829,20 @@ func _complete_current_line() -> void:
 		_append_history({"key": _current_line_key, "kind": "say", "speaker": _current_speaker,
 			"text": _full_text, "thought": _dict_bool(_current_command, "thought")})
 		_line_logged = true
-	_saves._save_game()
+	_saves.save_game()
 	_on_line_completed()
 
 
 func _on_line_completed() -> void:
-	if _screen_mode == "boke_round" and not _pending_round_mode.is_empty():
+	if _screen == Screen.BOKE_ROUND and not _pending_round_mode.is_empty():
 		var mode: String = _pending_round_mode
 		_pending_round_mode = ""
 		if mode == "qte":
-			_round._start_qte(_current_command)
+			_round.start_qte(_current_command)
 		else:
-			_round._present_tsukkomi_options(_current_command, false)
-		_saves._save_game()
-	_qa_ctl._publish_qa_state()
+			_round.present_tsukkomi_options(_current_command, false)
+		_saves.save_game()
+	_qa_ctl.publish_qa_state()
 	if _skip:
 		_skip_step(_line_generation)
 	elif _auto:
@@ -1873,11 +1882,8 @@ func _present_choice(command: Dictionary) -> void:
 	_line_logged = _history_has_key(_current_line_key)
 	_line_generation += 1
 	_set_skip(false)
-	_screen_mode = "choice"
-	_investigation._clear_hotspots()
-	_investigation_continue_button.visible = false
-	_boke_controls.visible = false
-	_end_box.visible = false
+	_screen = Screen.CHOICE
+	_hide_story_parts()
 	_refresh_phase3_hud()
 	if director:
 		_set_name_plate("narrator", false)
@@ -1907,19 +1913,19 @@ func _present_choice(command: Dictionary) -> void:
 	if director:
 		_choice_sheet.pop_in()
 		_effects.play({"op": "se", "id": "director_clap"}, false)  # silent while muted
-	_qa_ctl._publish_qa_state.call_deferred()
+	_qa_ctl.publish_qa_state.call_deferred()
 
 
 func _on_choice_pressed(option_id: String) -> void:
-	if _screen_mode != "choice" or _story_busy:
+	if _screen != Screen.CHOICE or _story_busy:
 		return
 	var label: String = option_id
 	for option: Dictionary in _current_options:
 		if _dict_string(option, "id") == option_id:
 			label = _dict_string(option, "label", option_id)
 	_story_busy = true
-	_screen_mode = "busy"
-	if not bool(_runner.call("choose", option_id)):
+	_screen = Screen.BUSY
+	if not bool(_runner.choose(option_id)):
 		_show_runtime_error(_runner_string("error_message", "這個選項目前不能選。"))
 		return
 	_clear_choices()
@@ -1930,23 +1936,21 @@ func _on_choice_pressed(option_id: String) -> void:
 
 func _present_end(command: Dictionary) -> void:
 	_current_command = command.duplicate(true)
-	_investigation._clear_hotspots()
-	_investigation_continue_button.visible = false
-	_boke_controls.visible = false
+	_hide_story_parts()  # the end buttons come back below, unless it is a Game Over
 	_current_speaker = "narrator"
 	_full_text = _dict_string(command, "text", "本場結束。")
 	_current_line_key = _line_key(command, "end")
 	_line_generation += 1
 	_set_auto(false)
 	_set_skip(false)
-	_screen_mode = "end"
+	_screen = Screen.END
 	_clear_choices()
 	_refresh_phase3_hud()
 	_set_name_plate("narrator", false)
 	_focus_speaker("narrator", "")
 	_set_text_tone("accent")
 	_set_visible_text(_full_text, true)
-	var snapshot: Dictionary = _runner.call("snapshot") as Dictionary
+	var snapshot: Dictionary = _runner.snapshot() as Dictionary
 	var game_over: bool = bool(snapshot.get("game_over_active", false))
 	_record_ending(command, game_over)
 	var index: int = _story_choice_index()
@@ -1960,7 +1964,7 @@ func _present_end(command: Dictionary) -> void:
 		_game_over.open(_full_text)
 	if not _history_has_key(_current_line_key):
 		_append_history({"key": _current_line_key, "kind": "say", "speaker": "narrator", "text": _full_text})
-	_qa_ctl._publish_qa_state()
+	_qa_ctl.publish_qa_state()
 
 
 func _render_restored_current() -> void:
@@ -1968,9 +1972,9 @@ func _render_restored_current() -> void:
 	var current: Dictionary = _runner_current()
 	while _command_op(current) == "comedy":  # a played overlay never comes back with a save
 		_log_comedy(current)
-		var position_before: Array = [_runner_string("node_id", ""), int(_runner.get("step_index"))]
-		_runner.call("advance")
-		if [_runner_string("node_id", ""), int(_runner.get("step_index"))] == position_before:
+		var position_before: Array = [_runner_string("node_id", ""), int(_runner.step_index)]
+		_runner.advance()
+		if [_runner_string("node_id", ""), int(_runner.step_index)] == position_before:
 			_show_runtime_error(_runner_string("error_message", "故事無法繼續。"))
 			return
 		current = _runner_current()
@@ -1984,9 +1988,9 @@ func _render_restored_current() -> void:
 		"result":
 			_present_result(current)
 		"investigate":
-			_investigation._present_investigation(current, true)
+			_investigation.present_investigation(current, true)
 		"boke_round":
-			_round._present_boke_round(current, true)
+			_round.present_boke_round(current, true)
 		_:
 			_start_drive()
 
@@ -2000,19 +2004,19 @@ func _present_result(command: Dictionary) -> void:
 	_set_auto(false)
 	_set_skip(false)
 	_clear_choices()
-	_investigation._clear_hotspots()
+	_investigation.clear_hotspots()
 	_end_box.visible = false
-	_screen_mode = "result"
-	var summary: Dictionary = _runner.call("chapter_result") as Dictionary
+	_screen = Screen.RESULT
+	var summary: Dictionary = _runner.chapter_result() as Dictionary
 	_record_clear(str(summary.get("grade", "C")))
 	_record_ending(command)
 	var speaker: String = str((summary.get("line", {}) as Dictionary).get("speaker", "narrator"))
 	_chapter_result.call("show_result", summary, str((_actors.get(speaker, {}) as Dictionary).get("name", "")),
-		not _next_chapter().is_empty(), _credit_line((_runner.call("story_info") as Dictionary).get("credits", []) as Array))
+		not _next_chapter().is_empty(), _credit_line((_runner.story_info() as Dictionary).get("credits", []) as Array))
 	_chapter_result.visible = true
 	_toast.visible = false
 	_refresh_phase3_hud()
-	_qa_ctl._publish_qa_state()
+	_qa_ctl.publish_qa_state()
 
 
 func _on_next_chapter_pressed() -> void:
@@ -2029,7 +2033,7 @@ func _on_next_chapter_pressed() -> void:
 ## The id progress and chapter select know this story by: its registry id, else its own id.
 ## The nodes the runner passed through since last asked join this story's 流程圖 (progress.cfg).
 func _record_visits() -> void:
-	var fresh: Array[String] = _runner.call("take_visits")
+	var fresh: Array[String] = _runner.take_visits()
 	if not fresh.is_empty():
 		_library.record_visits(_progress_id(), fresh)
 
@@ -2038,7 +2042,7 @@ func _progress_id() -> String:
 	var index: int = _story_choice_index()
 	if index >= 0:
 		return str(_story_choices[index]["id"])
-	return str((_runner.call("story_info") as Dictionary).get("id", story_path.get_file()))
+	return str((_runner.story_info() as Dictionary).get("id", story_path.get_file()))
 
 
 ## Switches the title to another story (and remembers it for the next run).
@@ -2063,12 +2067,12 @@ func _show_runtime_error(message: String) -> void:
 	_clear_choices()  # the message goes in the dialogue box, which the choice sheet would keep hidden
 	_story_busy = false
 	_story_error = message
-	_screen_mode = "story"
+	_screen = Screen.STORY
 	_current_command = {}
 	_set_name_plate("narrator", false)
 	_set_text_tone("danger")
 	_set_visible_text(message, false)
-	_qa_ctl._publish_qa_state()
+	_qa_ctl.publish_qa_state()
 
 
 ## Narrator lines show 旁白; a combined speaker ("gintoki+kagura") lists both names.
@@ -2111,7 +2115,7 @@ func _focus_speaker(speaker: String, expression: String) -> void:
 
 
 func _clear_stage() -> void:
-	_investigation._forget_search_cast()
+	_investigation.forget_search_cast()
 	if _motion != null:
 		_motion.cancel_characters()
 	for sprite: Control in _sprites.values():
@@ -2122,6 +2126,16 @@ func _clear_stage() -> void:
 
 func _sprite(actor_id: String) -> Control:
 	return _sprites.get(actor_id, _sprites.get(_default_pov())) as Control
+
+
+## Hides what only some story screens show: the search spots, the search's 繼續 button, the round
+## controls and the end buttons. Each _present_* calls it first and then shows its own parts; the
+## Game Over retry button and the choice sheet are cleared where each screen needs it.
+func _hide_story_parts() -> void:
+	_investigation.clear_hotspots()
+	_investigation_continue_button.visible = false
+	_boke_controls.visible = false
+	_end_box.visible = false
 
 
 func _clear_choices() -> void:
@@ -2138,33 +2152,33 @@ func _clear_choices() -> void:
 # ---------------------------------------------------------------- 手勢
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_cancel") and _screen_mode == "credits":
+	if event.is_action_pressed("ui_cancel") and _screen == Screen.CREDITS:
 		get_viewport().set_input_as_handled()
 		_credits_roll.call("close")
 		return
-	if event.is_action_pressed("ui_cancel") and _screen_mode == "gallery":
+	if event.is_action_pressed("ui_cancel") and _screen == Screen.GALLERY:
 		get_viewport().set_input_as_handled()
 		if bool(_gallery.call("viewer_open")):
 			_gallery.call("close_viewer")
 		else:
 			_gallery.call("close")
 		return
-	if event.is_action_pressed("ui_cancel") and _screen_mode == "flowchart":
+	if event.is_action_pressed("ui_cancel") and _screen == Screen.FLOWCHART:
 		get_viewport().set_input_as_handled()
 		_flowchart.call("close")
 		return
-	if event.is_action_pressed("ui_cancel") and _screen_mode == "case_file":
+	if event.is_action_pressed("ui_cancel") and _screen == Screen.CASE_FILE:
 		get_viewport().set_input_as_handled()
 		_close_case_file()
 		return
-	if event.is_action_pressed("ui_cancel") and _screen_mode in ["save_slots", "load_slots", "slot_confirm"]:
+	if event.is_action_pressed("ui_cancel") and _screen in [Screen.SAVE_SLOTS, Screen.LOAD_SLOTS, Screen.SLOT_CONFIRM]:
 		get_viewport().set_input_as_handled()
-		if _screen_mode == "slot_confirm":
-			_saves._cancel_slot_confirmation()
+		if _screen == Screen.SLOT_CONFIRM:
+			_saves.cancel_slot_confirmation()
 		else:
-			_saves._close_slot_picker()
+			_saves.close_slot_picker()
 		return
-	if event.is_action_pressed("ui_accept") and (_screen_mode == "story" or _comedy_layer.is_active()):
+	if event.is_action_pressed("ui_accept") and (_screen == Screen.STORY or _comedy_layer.is_active()):
 		get_viewport().set_input_as_handled()
 		_on_screen_tap()
 
@@ -2203,14 +2217,14 @@ func _on_catcher_input(event: InputEvent) -> void:
 			return
 		var delta: Vector2 = button.global_position - _gesture_start
 		if _gesture_moved:
-			if _screen_mode != "investigate" and -delta.y > SWIPE_DISTANCE and absf(delta.x) < -delta.y:
+			if _screen != Screen.INVESTIGATE and -delta.y > SWIPE_DISTANCE and absf(delta.x) < -delta.y:
 				_open_log()
 			return
-		if _round._placard_open() and _round._placard_hit_rect().has_point(button.global_position):
-			_round._on_placard_pressed()
+		if _round.placard_open() and _round.placard_hit_rect().has_point(button.global_position):
+			_round.on_placard_pressed()
 			return
-		if _screen_mode == "investigate":
-			_investigation._tap_investigation(button.global_position)
+		if _screen == Screen.INVESTIGATE:
+			_investigation.tap_investigation(button.global_position)
 		else:
 			_on_screen_tap()
 	elif event is InputEventMouseMotion and _gesture_active:
@@ -2218,8 +2232,8 @@ func _on_catcher_input(event: InputEvent) -> void:
 		if not _gesture_moved and motion.global_position.distance_to(_gesture_start) > TAP_SLOP:
 			_gesture_moved = true
 			_gesture_token += 1
-		if _gesture_moved and _screen_mode == "investigate":
-			_investigation._set_pan(_pan_start + motion.global_position.x - _gesture_start.x,
+		if _gesture_moved and _screen == Screen.INVESTIGATE:
+			_investigation.set_pan(_pan_start + motion.global_position.x - _gesture_start.x,
 				_pan_y_start + motion.global_position.y - _gesture_start.y)
 
 
@@ -2228,7 +2242,7 @@ func _wait_long_press(token: int) -> void:
 	if token != _gesture_token or not _gesture_active or _gesture_moved:
 		return
 	_gesture_long = true
-	if _screen_mode in ["story", "choice", "end"]:
+	if _screen in [Screen.STORY, Screen.CHOICE, Screen.END]:
 		_set_ui_hidden(not _ui_hidden)
 
 
@@ -2239,15 +2253,15 @@ func _on_screen_tap() -> void:
 	if _skip:
 		_set_skip(false)
 		return
-	if _screen_mode in ["story", "boke_round", "investigate"] and _text_complete and _dialog_panel.advance_reading_page():
-		if _auto and _screen_mode == "story":
+	if _screen in [Screen.STORY, Screen.BOKE_ROUND, Screen.INVESTIGATE] and _text_complete and _dialog_panel.advance_reading_page():
+		if _auto and _screen == Screen.STORY:
 			_line_generation += 1  # restart the auto delay for the newly revealed page
 			_auto_step(_line_generation)
 		return
-	if _screen_mode == "boke_round" and not _text_complete:
+	if _screen == Screen.BOKE_ROUND and not _text_complete:
 		_complete_current_line()
 		return
-	if _screen_mode != "story" or _story_busy or _current_command.is_empty():
+	if _screen != Screen.STORY or _story_busy or _current_command.is_empty():
 		return
 	if _command_op(_current_command) != "say":
 		return
@@ -2260,15 +2274,15 @@ func _on_screen_tap() -> void:
 func _set_ui_hidden(value: bool) -> void:
 	_ui_hidden = value
 	_refresh_reading_ui()
-	_end_box.visible = not value and _screen_mode == "end"
-	_phase3_hud.visible = _phase3_enabled and not value and _screen_mode != "title"
+	_end_box.visible = not value and _screen == Screen.END
+	_phase3_hud.visible = _phase3_enabled and not value and _screen != Screen.TITLE
 	if not value and _auto:
 		_auto_step(_line_generation)
-	_qa_ctl._publish_qa_state()
+	_qa_ctl.publish_qa_state()
 
 
 func _set_auto(value: bool) -> void:
-	if value and _screen_mode in ["save_slots", "load_slots", "slot_confirm"]:
+	if value and _screen in [Screen.SAVE_SLOTS, Screen.LOAD_SLOTS, Screen.SLOT_CONFIRM]:
 		return
 	_auto = value
 	if value:
@@ -2276,11 +2290,11 @@ func _set_auto(value: bool) -> void:
 	_update_toggle_styles()
 	if value and _text_complete:
 		_auto_step(_line_generation)
-	_qa_ctl._publish_qa_state()
+	_qa_ctl.publish_qa_state()
 
 
 func _set_skip(value: bool) -> void:
-	if value and _screen_mode in ["save_slots", "load_slots", "slot_confirm"]:
+	if value and _screen in [Screen.SAVE_SLOTS, Screen.LOAD_SLOTS, Screen.SLOT_CONFIRM]:
 		return
 	_skip = value
 	if value:
@@ -2289,21 +2303,21 @@ func _set_skip(value: bool) -> void:
 		_effects.stop_transients()
 		_comedy_layer.fast_forward()  # skipping does not wait for an overlay
 	_update_toggle_styles()
-	if value and _screen_mode == "story":
+	if value and _screen == Screen.STORY:
 		if _text_complete:
 			_skip_step(_line_generation)
 		else:
 			_complete_current_line()
-	_qa_ctl._publish_qa_state()
+	_qa_ctl.publish_qa_state()
 
 
 func _auto_step(token: int) -> void:
-	if _screen_mode != "story" or not _text_complete:
+	if _screen != Screen.STORY or not _text_complete:
 		return
 	await get_tree().create_timer((AUTO_DELAY_SEC + DialogueText.readable_count(_full_text) * AUTO_PER_CHAR_SEC
 		/ _dialog_panel.reading_page_count())
 		* SETTINGS_SCRIPT.AUTO_FACTORS[int(_settings["auto_speed"])]).timeout
-	if _auto and token == _line_generation and _screen_mode == "story" and not _ui_hidden and not _story_busy:
+	if _auto and token == _line_generation and _screen == Screen.STORY and not _ui_hidden and not _story_busy:
 		if _dialog_panel.advance_reading_page():
 			_auto_step(token)
 		else:
@@ -2312,7 +2326,7 @@ func _auto_step(token: int) -> void:
 
 func _skip_step(token: int) -> void:
 	await get_tree().create_timer(SKIP_DELAY_SEC).timeout
-	if _skip and token == _line_generation and _screen_mode == "story" and not _story_busy:
+	if _skip and token == _line_generation and _screen == Screen.STORY and not _story_busy:
 		_advance_current_line()
 
 
@@ -2325,37 +2339,24 @@ func _update_toggle_styles() -> void:
 func _process(delta: float) -> void:
 	if _dialog_panel == null:
 		return
-	if _screen_mode == "tsukkomi" and not _story_busy:
-		_boke_time_remaining = maxf(0.0, _boke_time_remaining - delta)
-		_choice_sheet.set_timer(_boke_time_remaining, _timer_total(_current_command), false)
-		var displayed_second: int = ceili(_boke_time_remaining)
-		if displayed_second != _last_boke_display_second:
-			_last_boke_display_second = displayed_second
-			_refresh_phase3_hud()
-			_qa_ctl._publish_qa_state()
-		if _boke_time_remaining <= 0.0:
-			_round._on_boke_timeout()
-			return
-	if _qa_enabled:
-		_qa_elapsed += delta
-		if _qa_elapsed >= QA_PUBLISH_SEC:
-			_qa_elapsed = 0.0
-			_qa_ctl._publish_qa_state()
+	if _round.process(delta):
+		return
+	_qa_ctl.process(delta)
 
 
 # ---------------------------------------------------------------- 選單、紀錄、提示
 
 func _open_menu() -> void:
-	if _screen_mode not in ["story", "choice", "end", "investigate", "boke_round", "tsukkomi"]:
+	if _screen not in [Screen.STORY, Screen.CHOICE, Screen.END, Screen.INVESTIGATE, Screen.BOKE_ROUND, Screen.TSUKKOMI]:
 		return
-	_mode_before_overlay = _screen_mode
-	_screen_mode = "menu"
+	_mode_before_overlay = _screen
+	_screen = Screen.MENU
 	_refresh_menu_rows()  # after the switch: the HUD and the sheet read the countdown as paused
 	_fit_menu()
 	_menu_overlay.visible = true
 	_menu_overlay.rows_scroll.scroll_vertical = 0
-	_menu_overlay.pop_in().finished.connect(_qa_ctl._publish_qa_state)
-	_qa_ctl._publish_qa_state()
+	_menu_overlay.pop_in().finished.connect(_qa_ctl.publish_qa_state)
+	_qa_ctl.publish_qa_state()
 
 
 func _start_skip_from_menu() -> void:
@@ -2369,20 +2370,20 @@ func _close_menu() -> void:
 	if not _menu_overlay.visible:
 		return
 	_menu_overlay.visible = false
-	_screen_mode = _mode_before_overlay
+	_screen = _mode_before_overlay
 	_refresh_phase3_hud()
 	if _auto:
 		_auto_step(_line_generation)
-	_qa_ctl._publish_qa_state()
+	_qa_ctl.publish_qa_state()
 
 
 func _open_log() -> void:
-	if _screen_mode == "menu":
+	if _screen == Screen.MENU:
 		_close_menu()
-	if _screen_mode not in ["story", "choice", "end", "investigate", "boke_round", "tsukkomi"]:
+	if _screen not in [Screen.STORY, Screen.CHOICE, Screen.END, Screen.INVESTIGATE, Screen.BOKE_ROUND, Screen.TSUKKOMI]:
 		return
-	_mode_before_overlay = _screen_mode
-	_screen_mode = "log"
+	_mode_before_overlay = _screen
+	_screen = Screen.LOG
 	for old: Node in _log_entries.get_children():
 		_log_entries.remove_child(old)
 		old.queue_free()
@@ -2394,7 +2395,7 @@ func _open_log() -> void:
 	_log_overlay.visible = true
 	_refresh_phase3_hud()
 	_scroll_log_to_bottom()
-	_qa_ctl._publish_qa_state()
+	_qa_ctl.publish_qa_state()
 
 
 ## One log line, read like a chat (from the 異獸髮廊 study, docs/interactive-fiction/ref-beastfolk-barber): other
@@ -2442,11 +2443,11 @@ func _close_log() -> void:
 	if not _log_overlay.visible:
 		return
 	_log_overlay.visible = false
-	_screen_mode = _mode_before_overlay
+	_screen = _mode_before_overlay
 	_refresh_phase3_hud()
 	if _auto:
 		_auto_step(_line_generation)
-	_qa_ctl._publish_qa_state()
+	_qa_ctl.publish_qa_state()
 
 
 func _close_overlays() -> void:
@@ -2494,14 +2495,14 @@ func _show_toast(message: String) -> void:
 		_toast_tween.tween_property(_toast, "scale", Vector2.ONE, 0.16).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 		_toast_tween.tween_interval(TOAST_SEC - 0.16 - 0.22)
 		_toast_tween.tween_property(_toast, "modulate:a", 0.0, 0.22)
-	_qa_ctl._publish_qa_state()
+	_qa_ctl.publish_qa_state()
 	await get_tree().create_timer(TOAST_SEC).timeout
 	if token == _toast_token:
 		if _toast_tween != null and _toast_tween.is_valid():
 			_toast_tween.kill()
 		_toast.visible = false
 		_toast.modulate.a = 1.0
-		_qa_ctl._publish_qa_state()
+		_qa_ctl.publish_qa_state()
 
 
 func _toggle_mute() -> void:
@@ -2509,7 +2510,7 @@ func _toggle_mute() -> void:
 	_apply_audio_levels()
 	_effects.set_muted(_audio_muted)
 	_refresh_menu_rows()
-	_qa_ctl._publish_qa_state()
+	_qa_ctl.publish_qa_state()
 
 
 func _start_audio_after_user_gesture() -> void:
@@ -2539,11 +2540,11 @@ func _history_has_key(key: String) -> bool:
 func _refresh_phase3_hud() -> void:
 	if _phase3_hud == null:
 		return
-	_round._refresh_placard()
-	_phase3_hud.visible = _phase3_enabled and _screen_mode != "title" and not _ui_hidden
+	_round.refresh_placard()
+	_phase3_hud.visible = _phase3_enabled and _screen != Screen.TITLE and not _ui_hidden
 	if not _phase3_enabled or _runner == null:
 		return
-	var snapshot: Dictionary = _runner.call("snapshot") as Dictionary
+	var snapshot: Dictionary = _runner.snapshot() as Dictionary
 	var gameplay: Dictionary = snapshot.get("gameplay", {}) as Dictionary
 	var current: Dictionary = _runner_current()
 	_phase3_hud.show_stats(int(gameplay.get("glasses", 0)), int(gameplay.get("max_glasses", 5)),
@@ -2555,14 +2556,14 @@ func _refresh_phase3_hud() -> void:
 	for item_id: Variant in items:
 		var info: Dictionary = catalog_items.get(str(item_id), {}) as Dictionary
 		clues.append({"name": str(info.get("name", item_id)), "picture": _catalog_picture(info)})
-	_phase3_hud.show_clues(clues, _screen_mode != "investigate")
+	_phase3_hud.show_clues(clues, _screen != Screen.INVESTIGATE)
 	if _menu_items.has("material"):
 		(_menu_items["material"] as Button).text = _words("{materials}（%d）") % items.size()
-	if _command_op(current) == "boke_round" and _saves._effective_boke_ui_mode() == "tsukkomi":
-		var prefix: String = "倒數" if _screen_mode == "tsukkomi" else "暫停"
+	if _command_op(current) == "boke_round" and _saves.effective_boke_ui_mode() == "tsukkomi":
+		var prefix: String = "倒數" if _screen == Screen.TSUKKOMI else "暫停"
 		_phase3_timer_label.text = "%s %02d 秒" % [prefix, ceili(_boke_time_remaining)]
 		_choice_sheet.set_timer(_boke_time_remaining, _timer_total(current),
-			_screen_mode != "tsukkomi")
+			_screen != Screen.TSUKKOMI)
 	else:
 		_phase3_timer_label.text = ""
 
@@ -2590,12 +2591,12 @@ func _catalog_picture(info: Dictionary) -> Texture2D:
 func _open_case_file(tab: String) -> void:
 	if not _phase3_enabled or _runner == null:
 		return
-	if _screen_mode == "menu":
+	if _screen == Screen.MENU:
 		_close_menu()
-	if _screen_mode not in ["story", "choice", "end", "investigate", "boke_round", "tsukkomi"]:
+	if _screen not in [Screen.STORY, Screen.CHOICE, Screen.END, Screen.INVESTIGATE, Screen.BOKE_ROUND, Screen.TSUKKOMI]:
 		return
-	_mode_before_overlay = _screen_mode
-	_screen_mode = "case_file"
+	_mode_before_overlay = _screen
+	_screen = Screen.CASE_FILE
 	var pictures: Dictionary = {}
 	for collection: String in ["items", "characters"]:
 		var entries: Dictionary = _catalog.get(collection, {}) as Dictionary
@@ -2605,31 +2606,31 @@ func _open_case_file(tab: String) -> void:
 				pictures[entry_id] = path
 	# 限時選詞中，能當根據的素材可以直接「拿來吐槽」。
 	var usable: Dictionary = {}
-	if _mode_before_overlay == "tsukkomi":
+	if _mode_before_overlay == Screen.TSUKKOMI:
 		for option: Dictionary in RoundView.options(_runner_current()):  # Phase 3 and v2 rounds alike
 			if option.has("require"):
 				usable[str(option["require"])] = str(option.get("id", ""))
 	_case_file_panel.call("set_style", _ui_style_id)
 	_case_file_panel.set("terms", _skin.get("terms", {}))
-	_case_file_panel.call("open", _runner.call("case_file"), tab, pictures, usable)
+	_case_file_panel.call("open", _runner.case_file(), tab, pictures, usable)
 	_toast.visible = false  # a clue's toast would sit over the panel
 	_refresh_phase3_hud()
-	_qa_ctl._publish_qa_state()
+	_qa_ctl.publish_qa_state()
 
 
 func _close_case_file() -> void:
 	if not _case_file_panel.visible:
 		return
 	_case_file_panel.visible = false
-	_screen_mode = _mode_before_overlay
+	_screen = _mode_before_overlay
 	_refresh_phase3_hud()
-	_qa_ctl._publish_qa_state()
+	_qa_ctl.publish_qa_state()
 
 
 func _on_case_file_material_used(option_id: String) -> void:
 	_close_case_file()
-	if _screen_mode == "tsukkomi":
-		_round._on_boke_option_pressed(option_id)
+	if _screen == Screen.TSUKKOMI:
+		_round.on_boke_option_pressed(option_id)
 
 # ---------------------------------------------------------------- 存讀檔
 
@@ -2682,14 +2683,14 @@ func _words(text: String) -> String:
 
 ## Whose thought an unmarked choice is and who thinks while searching (StoryRunner.default_pov).
 func _default_pov() -> String:
-	return str(_runner.call("default_pov")) if _runner != null else ""
+	return str(_runner.default_pov()) if _runner != null else ""
 
 
 # ---------------------------------------------------------------- 小工具
 
 func _runner_current() -> Dictionary:
 	_sync_cast()
-	var value: Variant = _runner.call("current") if _runner != null else null
+	var value: Variant = _runner.current() if _runner != null else null
 	return (value as Dictionary).duplicate(true) if value is Dictionary else {}
 
 
@@ -2701,12 +2702,16 @@ func _sync_cast() -> void:
 	for actor_id: String in _sprites.keys():
 		if (_sprites[actor_id] as Control).visible:
 			on_stage.append(actor_id)
-	_runner.set("cast", on_stage)
+	_runner.cast = on_stage
 
 
 func _runner_string(property_name: String, fallback: String) -> String:
 	var text_value: String = str(_runner.get(property_name)) if _runner != null else ""
 	return fallback if text_value.is_empty() else text_value
+
+
+static func screen_name(screen: Screen) -> String:
+	return String(Screen.keys()[screen]).to_lower()
 
 
 func _command_op(command: Dictionary) -> String:
@@ -2853,168 +2858,168 @@ func _apply_ui_style_recursive(node: Node) -> void:
 # ---------------------------------------------------------------- 轉接（測試與工具直接呼叫的舊名稱）
 
 func _backup_paths() -> Array[String]:
-	return _saves._backup_paths()
+	return _saves.backup_paths()
 
 
 func _import_backup_text(text: String) -> bool:
-	return _saves._import_backup_text(text)
+	return _saves.import_backup_text(text)
 
 
 func _tutorial_target(target: String) -> Control:
-	return _tutorial_ctl._tutorial_target(target)
+	return _tutorial_ctl.tutorial_target(target)
 
 
 func _tutorials_seen() -> Array:
-	return _tutorial_ctl._tutorials_seen()
+	return _tutorial_ctl.tutorials_seen()
 
 
 func _replay_tutorials() -> void:
-	_tutorial_ctl._replay_tutorials()
+	_tutorial_ctl.replay_tutorials()
 
 
 func _present_investigation(command: Dictionary, restored: bool) -> void:
-	_investigation._present_investigation(command, restored)
+	_investigation.present_investigation(command, restored)
 
 
 func _set_investigation_collapsed(value: bool) -> void:
-	_investigation._set_investigation_collapsed(value)
+	_investigation.set_investigation_collapsed(value)
 
 
 func _place_cast_hotspots() -> void:
-	_investigation._place_cast_hotspots()
+	_investigation.place_cast_hotspots()
 
 
 func _set_pan(value: float, vertical: Variant = null) -> void:
-	_investigation._set_pan(value, vertical)
+	_investigation.set_pan(value, vertical)
 
 
 func _hotspot_data(hotspot_id: String) -> Dictionary:
-	return _investigation._hotspot_data(hotspot_id)
+	return _investigation.hotspot_data(hotspot_id)
 
 
 func _hotspot_hit_rect(spot: Control) -> Rect2:
-	return _investigation._hotspot_hit_rect(spot)
+	return _investigation.hotspot_hit_rect(spot)
 
 
 func _collect_hotspot(hotspot_id: String) -> void:
-	_investigation._collect_hotspot(hotspot_id)
+	_investigation.collect_hotspot(hotspot_id)
 
 
 func _on_talk_pressed(topic_id: String) -> void:
-	_investigation._on_talk_pressed(topic_id)
+	_investigation.on_talk_pressed(topic_id)
 
 
 func _on_investigation_continue_pressed() -> void:
-	_investigation._on_investigation_continue_pressed()
+	_investigation.on_investigation_continue_pressed()
 
 
 func _on_boke_tsukkomi_pressed() -> void:
-	_round._on_boke_tsukkomi_pressed()
+	_round.on_boke_tsukkomi_pressed()
 
 
 func _round_action(move: Callable, label: String, prior_ui_mode: String, feedback: String = "") -> void:
-	_round._round_action(move, label, prior_ui_mode, feedback)
+	_round.round_action(move, label, prior_ui_mode, feedback)
 
 
 func _placard_open() -> bool:
-	return _round._placard_open()
+	return _round.placard_open()
 
 
 func _placard_hit_rect() -> Rect2:
-	return _round._placard_hit_rect()
+	return _round.placard_hit_rect()
 
 
 func _start_qte(command: Dictionary) -> void:
-	_round._start_qte(command)
+	_round.start_qte(command)
 
 
 func _judged_qte_offset(offset: float) -> float:
-	return _round._judged_qte_offset(offset)
+	return _round.judged_qte_offset(offset)
 
 
 func _close_qte() -> void:
-	_round._close_qte()
+	_round.close_qte()
 
 
 func _on_boke_next_pressed() -> void:
-	_round._on_boke_next_pressed()
+	_round.on_boke_next_pressed()
 
 
 func _set_boke_line(index: int) -> void:
-	_round._set_boke_line(index)
+	_round.set_boke_line(index)
 
 
 func _on_boke_listen_pressed() -> void:
-	_round._on_boke_listen_pressed()
+	_round.on_boke_listen_pressed()
 
 
 func _on_boke_option_pressed(option_id: String) -> void:
-	_round._on_boke_option_pressed(option_id)
+	_round.on_boke_option_pressed(option_id)
 
 
 func _on_game_over_retry_pressed() -> void:
-	_round._on_game_over_retry_pressed()
+	_round.on_game_over_retry_pressed()
 
 
 func _open_slot_picker(mode: String) -> void:
-	await _saves._open_slot_picker(mode)
+	await _saves.open_slot_picker(mode)
 
 
 func _on_slot_card_pressed(local_index: int) -> void:
-	_saves._on_slot_card_pressed(local_index)
+	_saves.on_slot_card_pressed(local_index)
 
 
 func _confirm_slot_overwrite() -> void:
-	_saves._confirm_slot_overwrite()
+	_saves.confirm_slot_overwrite()
 
 
 func _cancel_slot_confirmation() -> void:
-	_saves._cancel_slot_confirmation()
+	_saves.cancel_slot_confirmation()
 
 
 func _load_payload_from_picker(payload: Dictionary, message: String) -> void:
-	_saves._load_payload_from_picker(payload, message)
+	_saves.load_payload_from_picker(payload, message)
 
 
 func _close_slot_picker(resume_story: bool = true) -> void:
-	_saves._close_slot_picker(resume_story)
+	_saves.close_slot_picker(resume_story)
 
 
 func _rollback_line() -> bool:
-	return _saves._rollback_line()
+	return _saves.rollback_line()
 
 
 func _quick_save() -> bool:
-	return _saves._quick_save()
+	return _saves.quick_save()
 
 
 func _quick_load() -> bool:
-	return _saves._quick_load()
+	return _saves.quick_load()
 
 
 func _save_game() -> bool:
-	return _saves._save_game()
+	return _saves.save_game()
 
 
 func _saveable_current_state() -> bool:
-	return _saves._saveable_current_state()
+	return _saves.saveable_current_state()
 
 
 func _build_save_payload(preview_png: String) -> Dictionary:
-	return _saves._build_save_payload(preview_png)
+	return _saves.build_save_payload(preview_png)
 
 
 func _read_save_payload(path: String = "") -> Dictionary:
-	return _saves._read_save_payload(path)
+	return _saves.read_save_payload(path)
 
 
 func _validate_save_payload(payload: Dictionary) -> bool:
-	return _saves._validate_save_payload(payload)
+	return _saves.validate_save_payload(payload)
 
 
 func _apply_save_payload(payload: Dictionary) -> bool:
-	return _saves._apply_save_payload(payload)
+	return _saves.apply_save_payload(payload)
 
 
 func _choice_qa_state(current: Dictionary) -> Dictionary:
-	return _qa_ctl._choice_qa_state(current)
+	return _qa_ctl.choice_qa_state(current)

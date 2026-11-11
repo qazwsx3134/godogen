@@ -43,9 +43,9 @@ extends RefCounted
 ## Anything else is an error that names the title and step, never silently dropped.
 
 ## Tags a line may carry besides [#thought]: StoryRunner's expressions.
-const EXPRESSIONS: Array[String] = preload("res://scripts/story_runner.gd").VALID_EXPRESSIONS
-## The tone tags of a choice option (StoryRunner.VALID_TONES).
-const TONES: Array[String] = preload("res://scripts/story_runner.gd").VALID_TONES
+const EXPRESSIONS: Array[String] = preload("res://scripts/story_validator.gd").VALID_EXPRESSIONS
+## The tone tags of a choice option (StoryValidator.VALID_TONES).
+const TONES: Array[String] = preload("res://scripts/story_validator.gd").VALID_TONES
 const END_TARGETS: Array[String] = ["end", "end!"]
 ## A tsukkomi round leaves through its option gotos, so nothing may follow it in its title.
 const TERMINAL_OPS: Array[String] = ["end", "boke_round", "result"]

@@ -50,7 +50,7 @@ func _physics_process(delta: float) -> void:
 		windup_left-=delta
 		if windup_left<0:
 			for enemy: Node3D in candidates():
-				enemy.apply_damage(damage)
+				enemy.apply_damage(damage, enemy.global_position+Vector3.UP, (enemy.global_position-body.global_position).normalized())
 				hit_count+=1
 				var effect := Impact.instantiate() as Node3D
 				effect.radius=0.6

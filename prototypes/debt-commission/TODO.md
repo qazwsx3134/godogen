@@ -19,6 +19,19 @@
 - [ ] 11. 桂短篇收尾：三個結局有兩個「尚未寫完」（作者決定）
 - [ ] 12. 量效能預算（後期）
 
+## 程式碼檢視（2026-11-11，靜態閱讀，未實作、未跑測試）
+
+每一項的實作方式、程式草稿、驗證方法與建議順序見 [docs/CODE-IMPROVEMENTS.md](docs/CODE-IMPROVEMENTS.md)。建議順序：D4 → D5 → D6 一條線，D1 → D2 → D3 另一條線，D7 最後（會動存檔內容）。
+
+- [x] **D1 `story_runner.gd` 的驗證佔一半：** 2875 行裡約 1322–2720 行是劇本、catalog 與存檔快照的驗證。搬成 `story_validator.gd`（載入時）與快照驗證兩個檔，執行核心剩約 1200 行。（2026-11-12：劇本／catalog 驗證已搬到 `scripts/story_validator.gd`；存檔快照驗證留在 runner，理由見實作文件）
+- [x] **D2 `_validate_step` 單一函式約 350 行：** 改成每個 op 一張欄位表（必填、型別、允許值），只有特殊規則才寫程式。（2026-11-12 改做法：四個大分支搬成獨立函式，`_validate_step` 約 180 行；不做欄位表，理由見實作文件）
+- [ ] **D3 新增一個 op 要改很多檔：** `"boke_round"` 出現在 `story_runner`、`main`、`main_round`、`main_saves`、`main_qa`、`main_tutorial`、`flow_graph`、`asset_usage`、建置器等 14 個檔。做一張 op 登記表（是否互動、跳轉目標怎麼取、流程圖怎麼畫），讓這些檔查表。（2026-11-12 延後：條件「下次新增 op 前」未成立）
+- [x] **D4 `main.gd` 用字串呼叫 runner：** `_runner.call("advance")` 這類呼叫在 `main.gd` 23 處、`main_*.gd` 25 處，打錯字要到執行才知道。改成具型別的變數直接呼叫（先確認當初用 `call` 的原因，LESSONS 沒有記載）。（2026-11-12 完成）
+- [x] **D5 畫面狀態是字串：** `_screen_mode` 有 22 種字串值，`main.gd` 比對 40 次、分段檔 48 次，進出某個畫面要顯示／隱藏什麼散在各 `_present_*`。改 enum，並把每個模式的進入／離開各收成一個函式。（2026-11-12：`enum Screen`＋字串轉接屬性、`_hide_story_parts()`；不做整張顯示表與兩層變數，理由見實作文件）
+- [x] **D6 分段檔只是分檔：** `main_*.gd` 是 RefCounted，互相呼叫對方的底線私有函式（`_qa_ctl._publish_qa_state()`、`_round._on_boke_timeout()`），狀態仍全在 `main.gd`。配合 D5，讓每個分段只擁有自己的狀態。（2026-11-12：69 個公開函式去底線、回合倒數與 QA 計時搬進各自分段）
+- [x] **D7 倒數計時在畫面層：** `_boke_time_remaining` 由 `main.gd` 的 `_process` 扣，逾時才通知 runner；機器人玩家因此量不到時間壓力。把剩餘秒數放進回合狀態，由 runner 的 `tick(delta)` 判定逾時。（2026-11-12 改做法：機器人加 `slow`／`hesitant` 策略，倒數與存檔不動）
+- [ ] 一般待辦（上一輪整理）：難度曲線（沒槽點的句子按吐槽改成不扣眼鏡）、先換 6 個每回合都聽到的音效、21 張新介面圖的畫面驗收、文件收斂到 PROGRESS／TODO、上架前換掉原聲帶 BGM 與萃取 UI 圖。
+
 - 2026-10-23：介面只留「銀魂和紙」，另外三款（月下映畫、萬事屋委託簿、吐槽分鏡）已刪除；早期比較紀錄見 [UI-REDESIGN-OPTIONS](docs/UI-REDESIGN-OPTIONS.md)。
 
 - 重新設計對話框與常用元件。先試底部滿版、半透明對話層、上緣分隔線，再與目前畫面比較；參考：[圖一](example/image.jpg)、[圖二](example/螢幕擷取畫面%202026-09-24%20021146.jpg)、[圖三](example/螢幕擷取畫面%202026-09-24%20021221.jpg)。

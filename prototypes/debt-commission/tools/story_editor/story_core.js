@@ -65,7 +65,7 @@
   const asObject = value => (isObject(value) ? value : {});
   const text = value => (value === undefined || value === null ? '' : String(value));
 
-  // The last step decides whether the node needs `next` (StoryRunner._validate_node).
+  // The last step decides whether the node needs `next` (story_validator.gd _validate_node).
   const NEEDS_NO_NEXT = ['end', 'result', 'choice', 'goto', 'condition', 'boke_round'];
   const FORBIDS_NEXT = ['end', 'result', 'choice'];
   const finalOp = node => {

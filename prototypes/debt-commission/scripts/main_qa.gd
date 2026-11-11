@@ -6,21 +6,34 @@ const RoundView = preload("res://scripts/round_view.gd")
 const DESIGN_WIDTH: float = 1920.0
 const CSS_PX: float = DESIGN_WIDTH / 720.0
 
+const PUBLISH_SEC: float = 0.2
+
 var m: DebtMain
+var _elapsed: float = 0.0
+
+
+## With ?qa=1, publishes the state every PUBLISH_SEC.
+func process(delta: float) -> void:
+	if not m._qa_enabled:
+		return
+	_elapsed += delta
+	if _elapsed >= PUBLISH_SEC:
+		_elapsed = 0.0
+		publish_qa_state()
 
 
 func _init(main: DebtMain) -> void:
 	m = main
 
 
-func _detect_qa_mode() -> void:
+func detect_qa_mode() -> void:
 	m._qa_enabled = OS.has_feature("web") and bool(JavaScriptBridge.eval(
 		"new URLSearchParams(window.location.search).get('qa') === '1'"))
 
 
 ## Written just before the frame draws, once containers have laid out this frame's changes, so a
 ## test never reads the rows of a sheet or menu that is still being arranged.
-func _publish_qa_state() -> void:
+func publish_qa_state() -> void:
 	if m._qa_enabled and not RenderingServer.frame_pre_draw.is_connected(_write_qa_state):
 		RenderingServer.frame_pre_draw.connect(_write_qa_state, CONNECT_ONE_SHOT)
 
@@ -29,7 +42,7 @@ func _write_qa_state() -> void:
 	if not m.is_inside_tree():
 		return
 	var current: Dictionary = m._runner_current()
-	var snapshot: Dictionary = m._runner.call("snapshot")
+	var snapshot: Dictionary = m._runner.snapshot()
 	var choices: Array = []
 	for index: int in range(m._choice_buttons.size()):
 		if index < m._current_options.size() and _tappable(m._choice_buttons[index]):
@@ -84,7 +97,7 @@ func _write_qa_state() -> void:
 		var hotspot: Dictionary = raw_hotspot as Dictionary
 		var hotspot_id: String = m._dict_string(hotspot, "id")
 		var spot: Control = m._hotspots.get(hotspot_id) as Control
-		var hit: Rect2 = m._investigation._hotspot_hit_rect(spot) if spot != null and is_instance_valid(spot) else Rect2()
+		var hit: Rect2 = m._investigation.hotspot_hit_rect(spot) if spot != null and is_instance_valid(spot) else Rect2()
 		# `rect` only while a tap there would reach the spot: on screen and not under the reading box.
 		# A character's spot is their whole portrait, so it reports the part above the box.
 		var reach: Rect2 = hit
@@ -113,8 +126,8 @@ func _write_qa_state() -> void:
 		controls["stage"] = {"x": stage.position.x, "y": stage.position.y, "width": stage.size.x, "height": stage.size.y}
 	if m._qte != null and is_instance_valid(m._qte):  # the whole screen answers the QTE
 		controls["qte"] = _rect(m._qte)
-	if m._round._placard_open():  # the part of the board a tap reaches (at least 48 CSS px tall to count)
-		var board: Rect2 = m._round._placard_hit_rect()
+	if m._round.placard_open():  # the part of the board a tap reaches (at least 48 CSS px tall to count)
+		var board: Rect2 = m._round.placard_hit_rect()
 		if board.size.y >= 48.0 * CSS_PX * m._panel_scale - 1.0 and board.size.x > 0.0:
 			controls["placard"] = {"x": board.position.x, "y": board.position.y, "width": board.size.x, "height": board.size.y}
 	for key: String in m._topic_buttons.keys():
@@ -155,7 +168,7 @@ func _write_qa_state() -> void:
 	var state: Dictionary = {
 		# While the menu pops in, its rows are scaled and not yet laid out: report busy until it settles.
 		# The director's sheet springs in the same way.
-		"screen": "tutorial" if m._tutorial != null and m._tutorial.visible else "busy" if (m._screen_mode == "menu" and m._menu_panel.scale != Vector2.ONE) or m._choice_sheet.is_popping() else m._screen_mode,
+		"screen": "tutorial" if m._tutorial != null and m._tutorial.visible else "busy" if (m._screen == DebtMain.Screen.MENU and m._menu_panel.scale != Vector2.ONE) or m._choice_sheet.is_popping() else m._screen_mode,
 		"text": m._visible_text,
 		"full_text": m._full_text,
 		"speaker": m._current_speaker,
@@ -170,17 +183,17 @@ func _write_qa_state() -> void:
 		"auto": m._auto,
 		"skip": m._skip,
 		"audio_muted": m._audio_muted,
-		"result": m._runner.call("chapter_result") if m._screen_mode == "result" else {},
+		"result": m._runner.chapter_result() if m._screen == DebtMain.Screen.RESULT else {},
 		# Read from progress_path (and each story's JSON), so only on the screens that show it.
 		"cleared": m._story_choices.map(func(choice: Dictionary) -> Dictionary:
 			return {"id": str(choice["id"]), "grade": m._cleared_grade(str(choice["id"])), "endings": m._ending_note(choice)})
-			if m._screen_mode in ["title", "chapter_select", "result"] else [],
-		"ending_rows": m._chapter_select.call("ending_rows") if m._screen_mode == "chapter_select" else [],
+			if m._screen in [DebtMain.Screen.TITLE, DebtMain.Screen.CHAPTER_SELECT, DebtMain.Screen.RESULT] else [],
+		"ending_rows": m._chapter_select.call("ending_rows") if m._screen == DebtMain.Screen.CHAPTER_SELECT else [],
 		"credits": {"rolling": bool(m._credits_roll.get("rolling")), "lines": m._credits_roll.call("lines")}
-			if m._screen_mode == "credits" else {},
+			if m._screen == DebtMain.Screen.CREDITS else {},
 		"gallery": {"tab": str(m._gallery.get("tab")), "playing": str(m._gallery.get("playing_id")),
 			"viewer": bool(m._gallery.call("viewer_open")), "bg": m._library.unlocked_ids(m._gallery_key("bg")), "bgm": m._library.unlocked_ids(m._gallery_key("bgm"))}
-			if m._screen_mode == "gallery" else {},
+			if m._screen == DebtMain.Screen.GALLERY else {},
 		"settings": m._settings.duplicate(),
 		"ui_style": m._ui_style_id,
 		"toast": m._toast.text if m._toast.visible else "",
@@ -198,10 +211,10 @@ func _write_qa_state() -> void:
 		"placard": {"text": str(m._placard_holder.call("placard_text")) if m._placard_holder != null else "",
 			"glowing": m._placard_holder != null and bool(m._placard_holder.call("placard_glowing")),
 			"holder_visible": m._placard_holder != null and m._placard_holder.visible,
-			"tappable": m._round._placard_open()},
+			"tappable": m._round.placard_open()},
 		"log_scroll": {"value": m._log_scroll.scroll_vertical, "max": m._log_scroll.get_v_scroll_bar().max_value - m._log_scroll.size.y},
 		"choices": choices,
-		"choice": _choice_qa_state(current),
+		"choice": choice_qa_state(current),
 		"phase3": {
 			"enabled": m._phase3_enabled,
 			"gameplay": snapshot.get("gameplay", {}),
@@ -215,7 +228,7 @@ func _write_qa_state() -> void:
 			"pan": {"offset": m._pan, "min": m._pan_range.x, "max": m._pan_range.y,
 				"vertical_offset": m._pan_y, "vertical_min": m._pan_y_range.x, "vertical_max": m._pan_y_range.y},
 			"investigate_collapsed": m._investigate_collapsed,
-			"boke_screen_mode": m._saves._effective_boke_ui_mode() if m._command_op(current) == "boke_round" else "",
+			"boke_screen_mode": m._saves.effective_boke_ui_mode() if m._command_op(current) == "boke_round" else "",
 			"boke_line_index": int(current.get("line_index", -1)),
 			"boke_line_count": (current.get("lines", []) as Array).size(),
 			"boke_listened": RoundView.listened(current),
@@ -233,8 +246,8 @@ func _write_qa_state() -> void:
 				"last_qte_offset": m._last_qte_offset,
 			},
 			"timer_remaining": m._boke_time_remaining,
-			"timer_active": m._command_op(current) == "boke_round" and m._saves._effective_boke_ui_mode() == "tsukkomi",
-			"timer_paused": m._command_op(current) == "boke_round" and m._saves._effective_boke_ui_mode() == "tsukkomi" and m._screen_mode != "tsukkomi",
+			"timer_active": m._command_op(current) == "boke_round" and m._saves.effective_boke_ui_mode() == "tsukkomi",
+			"timer_paused": m._command_op(current) == "boke_round" and m._saves.effective_boke_ui_mode() == "tsukkomi" and m._screen != DebtMain.Screen.TSUKKOMI,
 			"checkpoint_ready": not (snapshot.get("checkpoint", {}) as Dictionary).is_empty(),
 			"game_over_active": bool(snapshot.get("game_over_active", false)),
 			"last_result": m._last_boke_result,
@@ -251,7 +264,7 @@ func _write_qa_state() -> void:
 ## The `choice` field of the QA snapshot while a `choice` step has its options up (else {}): the look the
 ## step asks for (`perspective`, whose thought `pov`, the director's `note`, each row's `tones`) and the
 ## sheet that really holds it (`director`, or the edition's id).
-func _choice_qa_state(current: Dictionary) -> Dictionary:
+func choice_qa_state(current: Dictionary) -> Dictionary:
 	if m._command_op(current) != "choice" or m._choice_buttons.is_empty():
 		return {}
 	var director: bool = m._dict_string(current, "perspective", "pov") == "director"

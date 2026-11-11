@@ -18,7 +18,7 @@ func _physics_process(delta: float) -> void:
 	if not hit.is_empty():
 		var body: Object = hit.collider
 		if body.has_method("apply_damage") and body.get("team") != team:
-			body.apply_damage(damage)
+			body.apply_damage(damage, hit.position, direction)
 		var effect := Impact.instantiate() as Node3D
 		get_parent().add_child(effect)
 		effect.global_position = hit.position

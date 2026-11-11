@@ -2,7 +2,7 @@ extends RefCounted
 
 ## main.gd 的存讀檔：自動／快速／手動欄位、存檔內容的建立與驗證、讀檔還原、欄位選擇面板與存檔備份。
 
-const STORY_RUNNER_SCRIPT: Script = preload("res://scripts/story_runner.gd")
+const StoryRunner = preload("res://scripts/story_runner.gd")
 const SETTINGS_SCRIPT: Script = preload("res://scripts/settings.gd")
 const SAVE_TRANSFER: Script = preload("res://scripts/save_transfer.gd")
 const STORY_LIBRARY: Script = preload("res://scripts/story_library.gd")
@@ -20,14 +20,14 @@ func _init(main: DebtMain) -> void:
 
 
 ## Every file a backup holds: each story's saves, progress, settings and the UI choices.
-func _backup_paths() -> Array[String]:
+func backup_paths() -> Array[String]:
 	return SAVE_TRANSFER.backup_paths(m._story_choices, [m.progress_path, m.settings_path, STORY_CHOICE_PATH])
 
 
 ## 匯出存檔: the Web build downloads the backup; a desktop build asks where to write it.
-func _export_saves() -> void:
+func export_saves() -> void:
 	var now: String = Time.get_datetime_string_from_system()
-	var text: String = SAVE_TRANSFER.export_text(_backup_paths(), now)
+	var text: String = SAVE_TRANSFER.export_text(backup_paths(), now)
 	var file_name: String = "debt-commission-saves-%s.json" % now.replace(":", "").replace("T", "-")
 	if OS.has_feature("web"):
 		JavaScriptBridge.download_buffer(text.to_utf8_buffer(), file_name, "application/json")
@@ -38,20 +38,20 @@ func _export_saves() -> void:
 
 
 ## 匯入存檔 (from the title only): the player picks a backup file, which replaces every save.
-func _import_saves() -> void:
-	if m._screen_mode != "settings" or m._settings_return != "title":
+func import_saves() -> void:
+	if m._screen != DebtMain.Screen.SETTINGS or m._settings_return != DebtMain.Screen.TITLE:
 		return
 	if OS.has_feature("web"):
 		_pick_web_backup()
 		return
 	_file_dialog(FileDialog.FILE_MODE_OPEN_FILE, "", func(path: String) -> void:
-		_import_backup_text(FileAccess.get_file_as_string(path)))
+		import_backup_text(FileAccess.get_file_as_string(path)))
 
 
 ## Checks a backup and, when it is good, replaces the saves with it and starts again from the
 ## title. A bad file changes nothing and says why.
-func _import_backup_text(text: String) -> bool:
-	var allowed: Array[String] = _backup_paths()
+func import_backup_text(text: String) -> bool:
+	var allowed: Array[String] = backup_paths()
 	var parsed: Dictionary = SAVE_TRANSFER.parse_import(text, allowed)
 	var error: String = str(parsed["error"])
 	if error.is_empty():
@@ -79,7 +79,7 @@ func _reload_after_import() -> void:
 ## The browser's file picker; its text comes back through a JavaScript callback.
 func _pick_web_backup() -> void:
 	m._web_backup_callback = JavaScriptBridge.create_callback(func(args: Array) -> void:
-		_import_backup_text(str(args[0]) if not args.is_empty() else ""))
+		import_backup_text(str(args[0]) if not args.is_empty() else ""))
 	JavaScriptBridge.get_interface("window").debtImportBackup = m._web_backup_callback
 	JavaScriptBridge.eval("""(() => {
 		const input = document.createElement('input');
@@ -108,7 +108,7 @@ func _file_dialog(mode: FileDialog.FileMode, file_name: String, done: Callable) 
 	dialog.popup_centered_ratio(0.8)
 
 
-func _build_slot_picker() -> void:
+func build_slot_picker() -> void:
 	m._slot_overlay = preload("res://scenes/ui/save_slots_panel.tscn").instantiate()
 	m._game.add_child(m._slot_overlay)
 	m._slot_overlay.visible = false
@@ -119,16 +119,16 @@ func _build_slot_picker() -> void:
 	m._slot_prev_button = m._slot_overlay.get_node("%SlotPrev")
 	m._slot_next_button = m._slot_overlay.get_node("%SlotNext")
 	m._slot_auto_button = m._slot_overlay.get_node("%SlotAuto")
-	m._slot_close_button.pressed.connect(_close_slot_picker)
+	m._slot_close_button.pressed.connect(close_slot_picker)
 	m._slot_prev_button.pressed.connect(func() -> void: _change_slot_page(-1))
 	m._slot_next_button.pressed.connect(func() -> void: _change_slot_page(1))
 	m._slot_auto_button.pressed.connect(_load_autosave_from_picker)
 	m._slot_overlay.get_node("%SlotDim").gui_input.connect(func(event: InputEvent) -> void:
 		if event is InputEventMouseButton and not event.is_pressed() and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT:
-			_close_slot_picker())
+			close_slot_picker())
 	for local_index in SAVE_SLOTS_SCRIPT.PAGE_SIZE:
 		var card: Button = m._slot_overlay.get_node("%Cards").get_child(local_index)
-		card.pressed.connect(_on_slot_card_pressed.bind(local_index))
+		card.pressed.connect(on_slot_card_pressed.bind(local_index))
 		m._slot_card_buttons.append(card)
 		m._slot_card_numbers.append(card.get_node("%Number"))
 		m._slot_card_titles.append(card.get_node("%SlotTitle"))
@@ -140,38 +140,38 @@ func _build_slot_picker() -> void:
 	m._slot_confirmation_label = m._slot_confirmation_overlay.get_node("%Question")
 	m._slot_confirm_yes = m._slot_confirmation_overlay.get_node("%SlotConfirmYes")
 	m._slot_confirm_no = m._slot_confirmation_overlay.get_node("%SlotConfirmNo")
-	m._slot_confirm_yes.pressed.connect(_confirm_slot_overwrite)
-	m._slot_confirm_no.pressed.connect(_cancel_slot_confirmation)
+	m._slot_confirm_yes.pressed.connect(confirm_slot_overwrite)
+	m._slot_confirm_no.pressed.connect(cancel_slot_confirmation)
 	m._slot_confirmation_overlay.get_node("%Dim").gui_input.connect(func(event: InputEvent) -> void:
 		if event is InputEventMouseButton and not event.is_pressed() and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT:
-			_cancel_slot_confirmation())
+			cancel_slot_confirmation())
 
 
-func _layout_slot_picker(width: float, height: float, top: float, bottom: float) -> void:
+func layout_slot_picker(width: float, height: float, top: float, bottom: float) -> void:
 	if m._slot_overlay != null:
 		m._fit_panel_area(m._slot_overlay, Rect2(0.0,top,width,bottom-top))
 
 
 func _load_from_menu() -> void:
-	_open_slot_picker("load")
+	open_slot_picker("load")
 
 
-func _open_slot_picker(mode: String) -> void:
+func open_slot_picker(mode: String) -> void:
 	if mode not in ["save", "load"]:
 		return
-	var return_screen: String = m._screen_mode
-	if return_screen == "menu":
+	var return_screen: DebtMain.Screen = m._screen
+	if return_screen == DebtMain.Screen.MENU:
 		m._slot_return_screen = "menu"
 		return_screen = m._mode_before_overlay
 		m._menu_overlay.visible = false
-	elif return_screen not in ["title", "story", "choice", "end", "investigate", "boke_round", "tsukkomi"]:
+	elif return_screen not in [DebtMain.Screen.TITLE, DebtMain.Screen.STORY, DebtMain.Screen.CHOICE, DebtMain.Screen.END, DebtMain.Screen.INVESTIGATE, DebtMain.Screen.BOKE_ROUND, DebtMain.Screen.TSUKKOMI]:
 		return
 	else:
-		m._slot_return_screen = return_screen
-	if mode == "save" and return_screen not in ["story", "choice", "end", "investigate", "boke_round", "tsukkomi"]:
+		m._slot_return_screen = DebtMain.screen_name(return_screen)
+	if mode == "save" and return_screen not in [DebtMain.Screen.STORY, DebtMain.Screen.CHOICE, DebtMain.Screen.END, DebtMain.Screen.INVESTIGATE, DebtMain.Screen.BOKE_ROUND, DebtMain.Screen.TSUKKOMI]:
 		return
 	m._mode_before_overlay = return_screen
-	m._slot_typewriter_paused = return_screen == "story" and not m._text_complete
+	m._slot_typewriter_paused = return_screen == DebtMain.Screen.STORY and not m._text_complete
 	if m._slot_typewriter_paused:
 		m._line_generation += 1
 	m._slot_mode = mode
@@ -179,19 +179,19 @@ func _open_slot_picker(mode: String) -> void:
 	m._slot_pending_index = -1
 	m._slot_confirmation_overlay.visible = false
 	m._slot_title.text = "選擇存檔位" if mode == "save" else "選擇讀取存檔"
-	m._screen_mode = "save_slots" if mode == "save" else "load_slots"
+	m._screen = DebtMain.Screen.SAVE_SLOTS if mode == "save" else DebtMain.Screen.LOAD_SLOTS
 	m._refresh_phase3_hud()
 	await m.get_tree().process_frame
 	m._slot_preview_png = _capture_preview_png()
 	m._slot_overlay.visible = true
 	_refresh_slot_page()
-	m._qa_ctl._publish_qa_state()
+	m._qa_ctl.publish_qa_state()
 
 
 func _change_slot_page(delta: int) -> void:
 	m._slot_page = clampi(m._slot_page + delta, 0, SAVE_SLOTS_SCRIPT.PAGE_COUNT - 1)
 	_refresh_slot_page()
-	m._qa_ctl._publish_qa_state()
+	m._qa_ctl.publish_qa_state()
 
 
 func _refresh_slot_page() -> void:
@@ -201,15 +201,15 @@ func _refresh_slot_page() -> void:
 	m._slot_page_label.text = "%d / %d" % [m._slot_page + 1, SAVE_SLOTS_SCRIPT.PAGE_COUNT]
 	m._slot_prev_button.disabled = m._slot_page <= 0
 	m._slot_next_button.disabled = m._slot_page >= SAVE_SLOTS_SCRIPT.PAGE_COUNT - 1
-	var can_save: bool = _saveable_current_state()
-	var autosave: Dictionary = _read_save_payload(m.save_path)
+	var can_save: bool = saveable_current_state()
+	var autosave: Dictionary = read_save_payload(m.save_path)
 	m._slot_auto_button.visible = m._slot_mode == "load" and not autosave.is_empty()
 	m._slot_auto_button.disabled = autosave.is_empty()
 	for local_index: int in range(m._slot_card_buttons.size()):
 		var slot_index: int = m._slot_page * SAVE_SLOTS_SCRIPT.PAGE_SIZE + local_index + 1
 		var path: String = SAVE_SLOTS_SCRIPT.manual_path(m.save_path, slot_index)
 		var occupied: bool = _slot_file_exists(path)
-		var payload: Dictionary = _read_save_payload(path)
+		var payload: Dictionary = read_save_payload(path)
 		var valid: bool = not payload.is_empty()
 		var chapter: String = str(payload.get("chapter", payload.get("node_id", ""))) if valid else ""
 		var saved_at: String = _payload_saved_time(payload, path) if valid else ""
@@ -232,8 +232,8 @@ func _refresh_slot_page() -> void:
 			preview.texture = null
 			time_label.text = ""
 			if occupied:
-				var snapshot: Dictionary = m._runner.call("snapshot") as Dictionary
-				var older: bool = not m._other_version_of(_read_raw_save_payload(path), str(snapshot.get("story_id", "")),
+				var snapshot: Dictionary = m._runner.snapshot() as Dictionary
+				var older: bool = not m._other_version_of(read_raw_save_payload(path), str(snapshot.get("story_id", "")),
 					str(snapshot.get("version", ""))).is_empty()
 				if m._slot_mode == "load":
 					title_label.text = "舊版劇本的存檔（無法讀取）" if older else "資料無效或不相容"
@@ -246,30 +246,30 @@ func _refresh_slot_page() -> void:
 		button.visible = true
 
 
-func _on_slot_card_pressed(local_index: int) -> void:
+func on_slot_card_pressed(local_index: int) -> void:
 	if local_index < 0 or local_index >= SAVE_SLOTS_SCRIPT.PAGE_SIZE:
 		return
 	var slot_index: int = m._slot_page * SAVE_SLOTS_SCRIPT.PAGE_SIZE + local_index + 1
 	var path: String = SAVE_SLOTS_SCRIPT.manual_path(m.save_path, slot_index)
 	if m._slot_mode == "save":
-		if not _saveable_current_state():
+		if not saveable_current_state():
 			return
 		if _slot_file_exists(path):
 			m._slot_pending_index = slot_index
 			m._slot_confirmation_label.text = "覆寫第 %02d 格的存檔？" % slot_index
 			m._slot_confirmation_overlay.visible = true
-			m._screen_mode = "slot_confirm"
-			m._qa_ctl._publish_qa_state()
+			m._screen = DebtMain.Screen.SLOT_CONFIRM
+			m._qa_ctl.publish_qa_state()
 		else:
 			_write_manual_slot(slot_index)
 		return
 	if m._slot_mode == "load":
-		var payload: Dictionary = _read_save_payload(path)
+		var payload: Dictionary = read_save_payload(path)
 		if not payload.is_empty():
-			_load_payload_from_picker(payload, "已讀取第 %02d 格" % slot_index)
+			load_payload_from_picker(payload, "已讀取第 %02d 格" % slot_index)
 
 
-func _confirm_slot_overwrite() -> void:
+func confirm_slot_overwrite() -> void:
 	if m._slot_pending_index < 1:
 		return
 	var selected_index: int = m._slot_pending_index
@@ -278,49 +278,49 @@ func _confirm_slot_overwrite() -> void:
 	_write_manual_slot(selected_index)
 
 
-func _cancel_slot_confirmation() -> void:
+func cancel_slot_confirmation() -> void:
 	if not m._slot_confirmation_overlay.visible:
 		return
 	m._slot_confirmation_overlay.visible = false
 	m._slot_pending_index = -1
-	m._screen_mode = "save_slots"
-	m._qa_ctl._publish_qa_state()
+	m._screen = DebtMain.Screen.SAVE_SLOTS
+	m._qa_ctl.publish_qa_state()
 
 
 func _write_manual_slot(slot_index: int) -> void:
 	var path: String = SAVE_SLOTS_SCRIPT.manual_path(m.save_path, slot_index)
-	var payload: Dictionary = _build_save_payload(m._slot_preview_png)
-	if payload.is_empty() or not bool(SAVE_SLOTS_SCRIPT.write_atomic(path, payload, _validate_save_payload)):
+	var payload: Dictionary = build_save_payload(m._slot_preview_png)
+	if payload.is_empty() or not bool(SAVE_SLOTS_SCRIPT.write_atomic(path, payload, validate_save_payload)):
 		m._show_toast("存檔失敗，原有資料已保留")
 		_refresh_slot_page()
-		m._qa_ctl._publish_qa_state()
+		m._qa_ctl.publish_qa_state()
 		return
-	_close_slot_picker()
+	close_slot_picker()
 	m._show_toast("已存到第 %02d 格" % slot_index)
 
 
 func _load_autosave_from_picker() -> void:
-	var payload: Dictionary = _read_save_payload(m.save_path)
+	var payload: Dictionary = read_save_payload(m.save_path)
 	if not payload.is_empty():
-		_load_payload_from_picker(payload, "已讀取自動存檔")
+		load_payload_from_picker(payload, "已讀取自動存檔")
 
 
-func _load_payload_from_picker(payload: Dictionary, message: String) -> void:
-	if not _validate_save_payload(payload):
+func load_payload_from_picker(payload: Dictionary, message: String) -> void:
+	if not validate_save_payload(payload):
 		return
 	m._cancel_generation()
 	m._set_auto(false)
 	m._set_skip(false)
-	if not _apply_save_payload(payload):
+	if not apply_save_payload(payload):
 		return
-	_close_slot_picker(false)
+	close_slot_picker(false)
 	m._set_ui_hidden(false)
 	m._show_story_screen()
 	m._render_restored_current()
-	m._show_toast(message if _save_game() else "已讀檔，但續讀存檔更新失敗")
+	m._show_toast(message if save_game() else "已讀檔，但續讀存檔更新失敗")
 
 
-func _close_slot_picker(resume_story: bool = true) -> void:
+func close_slot_picker(resume_story: bool = true) -> void:
 	if m._slot_overlay == null or not m._slot_overlay.visible:
 		return
 	m._slot_overlay.visible = false
@@ -328,10 +328,10 @@ func _close_slot_picker(resume_story: bool = true) -> void:
 	m._slot_pending_index = -1
 	m._slot_mode = ""
 	var return_to_menu: bool = resume_story and m._slot_return_screen == "menu"
-	m._screen_mode = "menu" if return_to_menu else m._mode_before_overlay
+	m._screen = DebtMain.Screen.MENU if return_to_menu else m._mode_before_overlay
 	m._menu_overlay.visible = return_to_menu
 	m._refresh_phase3_hud()
-	if resume_story and m._mode_before_overlay == "story":
+	if resume_story and m._mode_before_overlay == DebtMain.Screen.STORY:
 		if m._slot_typewriter_paused and not m._text_complete:
 			m._typewriter(m._line_generation)
 		elif not return_to_menu and m._skip:
@@ -340,16 +340,16 @@ func _close_slot_picker(resume_story: bool = true) -> void:
 			m._auto_step(m._line_generation)
 	m._slot_typewriter_paused = false
 	m._slot_return_screen = ""
-	m._qa_ctl._publish_qa_state()
+	m._qa_ctl.publish_qa_state()
 
 
-func _rollback_line() -> bool:
-	var mode: String = m._mode_before_overlay if m._screen_mode == "menu" else m._screen_mode
-	if mode != "story" or not m._rollback.available():
+func rollback_line() -> bool:
+	var mode: DebtMain.Screen = m._mode_before_overlay if m._screen == DebtMain.Screen.MENU else m._screen
+	if mode != DebtMain.Screen.STORY or not m._rollback.available():
 		return false
 	var payload: Dictionary = m._rollback.take()
 	m._rolling_back = true
-	var restored: bool = _apply_save_payload(payload)
+	var restored: bool = apply_save_payload(payload)
 	m._rolling_back = false
 	if not restored:
 		return false
@@ -358,24 +358,24 @@ func _rollback_line() -> bool:
 	m._close_overlays()
 	m._show_story_screen()
 	m._render_restored_current()
-	_save_game()
+	save_game()
 	m._show_toast("已回到上一句")
 	return true
 
 
-func _quick_save() -> bool:
-	if not _saveable_current_state():
+func quick_save() -> bool:
+	if not saveable_current_state():
 		return false
-	var payload: Dictionary = _build_save_payload("")
-	var written: bool = SAVE_SLOTS_SCRIPT.write_atomic(SAVE_SLOTS_SCRIPT.quick_path(m.save_path), payload, _validate_save_payload)
+	var payload: Dictionary = build_save_payload("")
+	var written: bool = SAVE_SLOTS_SCRIPT.write_atomic(SAVE_SLOTS_SCRIPT.quick_path(m.save_path), payload, validate_save_payload)
 	m._show_toast("已快速存檔" if written else "快速存檔失敗，原有資料已保留")
 	m._refresh_menu_rows()
 	return written
 
 
-func _quick_load() -> bool:
-	var payload: Dictionary = _read_save_payload(SAVE_SLOTS_SCRIPT.quick_path(m.save_path))
-	if payload.is_empty() or not _apply_save_payload(payload):
+func quick_load() -> bool:
+	var payload: Dictionary = read_save_payload(SAVE_SLOTS_SCRIPT.quick_path(m.save_path))
+	if payload.is_empty() or not apply_save_payload(payload):
 		m._show_toast("尚無可讀取的快速存檔")
 		return false
 	m._set_auto(false)
@@ -384,25 +384,25 @@ func _quick_load() -> bool:
 	m._set_ui_hidden(false)
 	m._show_story_screen()
 	m._render_restored_current()
-	_save_game()
+	save_game()
 	m._show_toast("已快速讀檔")
 	return true
 
 
-func _save_game() -> bool:
-	if not _saveable_current_state():
+func save_game() -> bool:
+	if not saveable_current_state():
 		return false
-	var payload: Dictionary = _build_save_payload("")
-	return not payload.is_empty() and bool(SAVE_SLOTS_SCRIPT.write_atomic(m.save_path, payload, _validate_save_payload))
+	var payload: Dictionary = build_save_payload("")
+	return not payload.is_empty() and bool(SAVE_SLOTS_SCRIPT.write_atomic(m.save_path, payload, validate_save_payload))
 
 
-func _saveable_current_state() -> bool:
+func saveable_current_state() -> bool:
 	return m._runner != null and not m._story_busy and m._command_op(m._runner_current()) in [
 		"say", "choice", "end", "result", "investigate", "boke_round"]
 
 
-func _build_save_payload(preview_png: String) -> Dictionary:
-	var runner_snapshot: Dictionary = m._runner.call("snapshot") as Dictionary
+func build_save_payload(preview_png: String) -> Dictionary:
+	var runner_snapshot: Dictionary = m._runner.snapshot() as Dictionary
 	if runner_snapshot.is_empty():
 		return {}
 	var sprites: Dictionary = {}
@@ -434,7 +434,7 @@ func _build_save_payload(preview_png: String) -> Dictionary:
 		"investigation_home_casts": m._investigation_home_casts.duplicate(true),
 	}
 	if m._command_op(current) == "boke_round":
-		var boke_ui_mode: String = _effective_boke_ui_mode()
+		var boke_ui_mode: String = effective_boke_ui_mode()
 		if boke_ui_mode not in ["boke_round", "tsukkomi"]:
 			boke_ui_mode = "boke_round"  # a QTE restarts when its line comes back
 		payload["boke_ui_screen"] = boke_ui_mode
@@ -443,23 +443,23 @@ func _build_save_payload(preview_png: String) -> Dictionary:
 	return payload
 
 
-func _effective_boke_ui_mode() -> String:
-	if m._screen_mode in ["menu", "log", "save_slots", "load_slots", "slot_confirm"]:
-		return m._mode_before_overlay
+func effective_boke_ui_mode() -> String:
+	if m._screen in [DebtMain.Screen.MENU, DebtMain.Screen.LOG, DebtMain.Screen.SAVE_SLOTS, DebtMain.Screen.LOAD_SLOTS, DebtMain.Screen.SLOT_CONFIRM]:
+		return DebtMain.screen_name(m._mode_before_overlay)
 	return m._screen_mode
 
 
-func _read_save_payload(path: String = "") -> Dictionary:
+func read_save_payload(path: String = "") -> Dictionary:
 	var target_path: String = m.save_path if path.is_empty() else path
 	for candidate_path: String in [target_path, target_path + ".bak", target_path + ".bak.old",
 		target_path + ".old", target_path + ".tmp"]:
-		var payload: Dictionary = _read_raw_save_payload(candidate_path)
-		if not payload.is_empty() and _validate_save_payload(payload):
+		var payload: Dictionary = read_raw_save_payload(candidate_path)
+		if not payload.is_empty() and validate_save_payload(payload):
 			return payload
 	return {}
 
 
-func _read_raw_save_payload(path: String) -> Dictionary:
+func read_raw_save_payload(path: String) -> Dictionary:
 	if not FileAccess.file_exists(path):
 		return {}
 	var file: FileAccess = FileAccess.open(path, FileAccess.READ)
@@ -477,12 +477,12 @@ func _valid_saved_cast(cast: Variant) -> bool:
 		var pose: Variant = cast.get(actor_id)
 		if not pose is Dictionary or not pose.get("visible") is bool or not m._slot_markers.has(str(pose.get("position", ""))) or typeof(pose.get("expression", "")) != TYPE_STRING:
 			return false
-		if pose.get("lighting", "auto") not in ["dim", "lit", "auto"] or pose.get("entrance_transition", "fade") not in STORY_RUNNER_SCRIPT.VALID_CHARACTER_TRANSITIONS:
+		if pose.get("lighting", "auto") not in ["dim", "lit", "auto"] or pose.get("entrance_transition", "fade") not in StoryRunner.VALID_CHARACTER_TRANSITIONS:
 			return false
 	return true
 
 
-func _validate_save_payload(payload: Dictionary) -> bool:
+func validate_save_payload(payload: Dictionary) -> bool:
 	# Schema 3 saves written before background/position/thumbnail metadata are
 	# migrated by supplying the same defaults the scene uses for a new game.
 	var schema: int = int(payload.get("schema", payload.get("version", -1)))
@@ -496,7 +496,7 @@ func _validate_save_payload(payload: Dictionary) -> bool:
 		return false
 	if m._runner == null:
 		return false
-	var current_snapshot: Dictionary = m._runner.call("snapshot") as Dictionary
+	var current_snapshot: Dictionary = m._runner.snapshot() as Dictionary
 	var story_id: String = str(current_snapshot.get("story_id", ""))
 	if str(payload.get("story_id", str((runner_snapshot as Dictionary).get("story_id", "")))) != story_id:
 		return false
@@ -514,7 +514,7 @@ func _validate_save_payload(payload: Dictionary) -> bool:
 			return false
 		if typeof((state as Dictionary).get("expression", "neutral")) != TYPE_STRING:
 			return false
-		if state.get("lighting", "auto") not in ["dim", "lit", "auto"] or state.get("entrance_transition", "fade") not in STORY_RUNNER_SCRIPT.VALID_CHARACTER_TRANSITIONS:
+		if state.get("lighting", "auto") not in ["dim", "lit", "auto"] or state.get("entrance_transition", "fade") not in StoryRunner.VALID_CHARACTER_TRANSITIONS:
 			return false
 	for entry: Variant in history as Array:
 		if not entry is Dictionary:
@@ -547,7 +547,7 @@ func _validate_save_payload(payload: Dictionary) -> bool:
 		if not _valid_saved_cast(cast):
 			return false
 	if m._save_validation_probe == null:
-		m._save_validation_probe = m._runner.call("create_validation_probe") as RefCounted
+		m._save_validation_probe = m._runner.create_validation_probe() as RefCounted
 	var probe: RefCounted = m._save_validation_probe
 	if probe == null or not bool(probe.call("restore", runner_snapshot)):
 		return false
@@ -569,14 +569,14 @@ func _validate_save_payload(payload: Dictionary) -> bool:
 	return true
 
 
-func _has_valid_save() -> bool:
-	return not _read_save_payload().is_empty()
+func has_valid_save() -> bool:
+	return not read_save_payload().is_empty()
 
 
-func _apply_save_payload(payload: Dictionary) -> bool:
+func apply_save_payload(payload: Dictionary) -> bool:
 	if m._phase3_hud != null:
 		m._phase3_hud.reset_pops()
-	if not _validate_save_payload(payload) or not bool(m._runner.call("restore", payload["runner"])):
+	if not validate_save_payload(payload) or not bool(m._runner.restore(payload["runner"])):
 		return false
 	m._cancel_generation()
 	if not m._rolling_back:
@@ -598,7 +598,7 @@ func _apply_save_payload(payload: Dictionary) -> bool:
 		m._boke_timer_round_id = ""
 		m._boke_time_remaining = 0.0
 	m._apply_background(str(payload.get("background", m._default_background_id())))
-	m._investigation._forget_search_cast()
+	m._investigation.forget_search_cast()
 	var sprites: Dictionary = payload["sprites"]
 	for actor_id: String in m._sprites.keys():
 		var state: Dictionary = sprites.get(actor_id, {"visible": false}) as Dictionary
@@ -611,7 +611,7 @@ func _apply_save_payload(payload: Dictionary) -> bool:
 		sprite.modulate = m._portrait_color(sprite, true)
 		sprite.call("set_expression", str(state.get("expression", "neutral")))
 		m._layout_sprite(actor_id)
-	m._previous_power = int((m._runner.get("gameplay") as Dictionary).get("power", 0))
+	m._previous_power = int((m._runner.gameplay as Dictionary).get("power", 0))
 	m._round_stages = (payload.get("round_stages",{}) as Dictionary).duplicate(true)
 	m._investigation_pans = (payload.get("investigation_pans",{}) as Dictionary).duplicate(true)
 	m._investigation_pans_y = (payload.get("investigation_pans_y",{}) as Dictionary).duplicate(true)
@@ -623,7 +623,7 @@ func _apply_save_payload(payload: Dictionary) -> bool:
 	return true
 
 
-func _delete_save() -> void:
+func delete_save() -> void:
 	for path: String in [m.save_path, m.save_path + ".bak", m.save_path + ".bak.old", m.save_path + ".old",
 		m.save_path + ".tmp", m.save_path + ".bak.tmp"]:
 		if FileAccess.file_exists(path):

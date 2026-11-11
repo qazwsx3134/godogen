@@ -132,7 +132,9 @@ func projectile_parent() -> Node:
 	var session := get_tree().get_first_node_in_group("battle_session")
 	return session.get_node("Projectiles") if session else body.get_parent()
 
-func apply_damage(amount: float) -> void:
+## hit_position / from_direction: where the hit landed and which way it travelled (for later
+## part damage and an incoming-fire marker); unused for now.
+func apply_damage(amount: float, _hit_position: Vector3 = Vector3.ZERO, _from_direction: Vector3 = Vector3.ZERO) -> void:
 	if health<=0: return
 	health=maxf(0,health-amount)
 	damaged.emit()

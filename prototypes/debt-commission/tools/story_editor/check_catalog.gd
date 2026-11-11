@@ -7,6 +7,7 @@ extends SceneTree
 ## Prints OK and exits 0, or every problem (ERROR …) and exits 1.
 
 const StoryRunner = preload("res://scripts/story_runner.gd")
+const StoryValidator = preload("res://scripts/story_validator.gd")
 
 
 func _init() -> void:
@@ -25,13 +26,12 @@ func _init() -> void:
 		quit(2)
 		return
 	var redirect: Dictionary = {replaces: candidate}
-	var runner: RefCounted = StoryRunner.new()
 	var problems: Array[String] = []
 	var own: Dictionary = StoryRunner.read_catalog(replaces, redirect)
 	if own.has("error"):
 		problems.append("素材設定讀不了：%s" % own["error"])
 	else:
-		var error: String = runner.call("_validate_asset_catalog", own["catalog"])
+		var error: String = StoryValidator.validate_asset_catalog(own["catalog"])
 		if not error.is_empty():
 			problems.append("素材設定不合法：%s" % error)
 	for pair: PackedStringArray in pairs:
@@ -40,8 +40,8 @@ func _init() -> void:
 		if read.has("error") or not story is Dictionary:
 			problems.append("%s：%s" % [pair[0].get_file(), read.get("error", "劇本讀不了")])
 			continue
-		var catalog_error: String = runner.call("_validate_asset_catalog", read["catalog"])
-		var error: String = catalog_error if not catalog_error.is_empty() else runner.call("_validate_story", story, read["catalog"])
+		var catalog_error: String = StoryValidator.validate_asset_catalog(read["catalog"])
+		var error: String = catalog_error if not catalog_error.is_empty() else StoryValidator.validate_story(story, read["catalog"])
 		if not error.is_empty():
 			problems.append("%s 用這份素材設定會出錯：%s" % [pair[0].get_file(), error])
 	for problem: String in problems:

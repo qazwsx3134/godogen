@@ -1,6 +1,7 @@
 extends "res://addons/proto_kit/test_kit.gd"
 
 const RUNNER = preload("res://scripts/story_runner.gd")
+const VALIDATOR = preload("res://scripts/story_validator.gd")
 const BUILDER = preload("res://tools/story_build/story_builder.gd")
 const CATALOG: String = "res://stories/katsura_dog_ears/catalog.json"
 
@@ -12,15 +13,14 @@ func _init() -> void:
 func _run() -> void:
 	root.size = Vector2i(1280, 720)
 	var catalog: Dictionary = RUNNER.read_catalog(CATALOG)["catalog"]
-	var validator: RefCounted = RUNNER.new()
 	for bad: Variant in [-1, 0, "175", false]:
 		var broken: Dictionary = catalog.duplicate(true)
 		broken.characters.katsura.height_cm = bad
-		_expect(not str(validator._validate_asset_catalog(broken)).is_empty(), "invalid height rejected: %s" % bad)
+		_expect(not str(VALIDATOR.validate_asset_catalog(broken)).is_empty(), "invalid height rejected: %s" % bad)
 	for bad: Array in [[0.5,0.2], [0,2], ["0",1], [0]]:
 		var broken: Dictionary = catalog.duplicate(true)
 		broken.characters.katsura.height_bounds = bad
-		_expect(not str(validator._validate_asset_catalog(broken)).is_empty(), "invalid body bounds rejected: %s" % [bad])
+		_expect(not str(VALIDATOR.validate_asset_catalog(broken)).is_empty(), "invalid body bounds rejected: %s" % [bad])
 	var built: Dictionary = BUILDER.build_text("~ start\n身高比例測試。\ndo end(\"完成\")\n", "res://tests/fixtures/story_src/__height_test.dialogue")
 	FileAccess.open("user://height_test.json", FileAccess.WRITE).store_string(BUILDER.to_json(built["story"]))
 	var game: Control = (load("res://main.tscn") as PackedScene).instantiate()

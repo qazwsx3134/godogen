@@ -37,8 +37,8 @@ var controls_enabled := true
 var team := "player"
 @onready var combat: Node = get_node_or_null("Combat")
 
-func apply_damage(amount: float) -> void:
-	if combat: combat.apply_damage(amount)
+func apply_damage(amount: float, hit_position: Vector3 = Vector3.ZERO, from_direction: Vector3 = Vector3.ZERO) -> void:
+	if combat: combat.apply_damage(amount, hit_position, from_direction)
 
 var touch: Node  # touch_input.gd, found by group; null on a desktop without a HUD
 var _gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -59,8 +59,9 @@ func _ready() -> void:
 	touch = get_tree().get_first_node_in_group("touch_input")
 
 func _physics_process(delta: float) -> void:
-	if not controls_enabled:
-		velocity=Vector3.ZERO
+	if not controls_enabled:  # still falls and lands, e.g. a round ending mid-jump
+		velocity=Vector3(0.0, velocity.y - _gravity * delta, 0.0)
+		move_and_slide()
 		return
 	_step_sound_wait=maxf(0,_step_sound_wait-delta)
 	var input := Input.get_vector("move_left", "move_right", "move_back", "move_forward")
@@ -94,6 +95,7 @@ func _physics_process(delta: float) -> void:
 	if moving and not _was_moving: %MovementSound.play()
 	_was_moving=moving
 	if combat: combat.step(delta)
+	gait.skid = combat != null and combat.has_dash_momentum()
 	move_and_slide()
 
 	rig.fov_add = sprint_fov_add * clampf((flat.length() - max_speed) / (sprint_speed - max_speed), 0.0, 1.0) - (18.0 if combat and combat.aiming else 0.0)

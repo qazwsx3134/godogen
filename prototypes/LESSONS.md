@@ -131,6 +131,8 @@
 - **Codex 生出來的原畫可能朝左下並被水平鏡像**、`route_media.py resolve` 不驗 key 和餘額、單筆生成可能卡 3 小時 → 細節與做法見 character-sprite-forge。（[character-sprite-forge](godot-kit/skills/character-sprite-forge/SKILL.md#坑)）
 - **`codex exec -i 圖片 "prompt"` 回 `No prompt provided via stdin`**（2026-11-09，docs/86 walker）→ `-i` 接多個值，把後面的 prompt 也當成圖片吃掉；prompt 改從 stdin 傳：`echo "..." | codex exec -i ref.jpg -`。
 - **Blender 腳本 `bmesh.ops.convex_hull` 後刪內部點，報 `found the same (BMVert/BMEdge/BMFace) used multiple times`**（2026-11-10，docs/86 scout）→ `geom_interior` 和 `geom_unused` 會重疊，合併時先去重：`list({*res["geom_interior"], *res["geom_unused"]})`（已修在 `docs/86/blender_kit.py`）。
+- **多足機的烘焙步態對整個機身做正負擺動，站立腳也會沉進地面**（2026-11-12，docs/86 melee／tank 曾下陷 4.5 cm）→ 走路先移除整體上下擺動、待機只做向上的微幅起伏；逐幀量測剛性蒙皮後的腳掌頂點最低高度，確認不低於地面。（[模型驗證](../docs/86/enemy/validate_blends.py)）
+- **WSL Codex 的 `uvx mcp-for-blender` 連 Windows Blender 能讀場景，截圖卻找不到檔案**（2026-11-12）→ 兩邊的 `/tmp` 不共用：Codex 插件改啟動 Windows 的 `uvx.exe`，讓伺服器與 Blender 共用 Windows 暫存目錄；`WSLENV` 也要轉交 `BLENDER_MCP_APPS`／`BLENDER_MCP_OPENAI_FORMS`，否則互動視窗工具不會註冊。Blender Lab MCP 和此社群插件都預設用 9876，不能同時佔用。已用真實 Blender 驗證場景、Python、截圖與互動視窗。
 
 ## 音效與手機震動
 

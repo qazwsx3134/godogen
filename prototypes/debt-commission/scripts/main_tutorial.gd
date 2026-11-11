@@ -11,7 +11,7 @@ func _init(main: DebtMain) -> void:
 	m = main
 
 
-func _build_tutorial() -> void:
+func build_tutorial() -> void:
 	m._tutorial = preload("res://scenes/ui/tutorial_overlay.tscn").instantiate()
 	m._popup_layer.add_child(m._tutorial)  # last child: above every other popup
 	m._tutorial.visible = false
@@ -35,24 +35,24 @@ func _tutorials_on() -> bool:
 
 
 ## The guide for `trigger` (a screen mode), once: only if that screen is still up and nothing else covers it.
-func _maybe_tutorial(trigger: String) -> void:
+func maybe_tutorial(trigger: String) -> void:
 	if m._screen_mode != trigger or m._tutorial.visible or not _tutorials_on():
 		return
 	if trigger == "boke_round" and not m._boke_controls.visible:
 		return  # combo lines open their slot at once; the guide waits for a round the player reads
 	if trigger == "story" and m._skip:
 		return  # skipping through lines: the reading guide waits for a line the player reads
-	var seen: Array = _tutorials_seen()
+	var seen: Array = tutorials_seen()
 	for def: Dictionary in m._tutorials:
 		if str(def.get("trigger", "")) == trigger and str(def.get("id", "")) not in seen:
 			m._set_auto(false)
 			m._set_skip(false)
-			m._tutorial.call("start", str(def.id), def.get("steps", []), _tutorial_target)
-			m._qa_ctl._publish_qa_state()
+			m._tutorial.call("start", str(def.id), def.get("steps", []), tutorial_target)
+			m._qa_ctl.publish_qa_state()
 			return
 
 
-func _tutorial_target(target: String) -> Control:
+func tutorial_target(target: String) -> Control:
 	match target:
 		"boke_switch": return m._boke_previous_button.get_parent() as Control
 		"boke_listen": return m._boke_listen_button
@@ -66,14 +66,14 @@ func _tutorial_target(target: String) -> Control:
 
 
 func _on_tutorial_finished(id: String, _skipped: bool) -> void:
-	var seen: Array = _tutorials_seen()
+	var seen: Array = tutorials_seen()
 	if id not in seen:
 		seen.append(id)
 	_write_tutorials_seen(seen)
-	m._qa_ctl._publish_qa_state()
+	m._qa_ctl.publish_qa_state()
 
 
-func _tutorials_seen() -> Array:
+func tutorials_seen() -> Array:
 	var config: ConfigFile = ConfigFile.new()
 	if config.load(m.progress_path) != OK:
 		return []
@@ -91,6 +91,6 @@ func _write_tutorials_seen(seen: Array) -> void:
 
 
 ## 設定 → 重看教學: every guide shows again the next time its screen opens.
-func _replay_tutorials() -> void:
+func replay_tutorials() -> void:
 	_write_tutorials_seen([])
 	m._show_toast("下次進入吐槽與調查時會再顯示教學")
