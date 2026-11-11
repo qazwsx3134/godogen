@@ -78,7 +78,7 @@ func _the_story_brings_its_skin() -> void:
 	game._choose_story(game._story_choices[1])
 	await _frames(3)
 	_expect(game._ui_style_id == "gintama" and game._title_screen.scene_file_path.ends_with("title_screen_gintama.tscn")
-		and (game._title_screen.find_child("Logo", true, false) as Label).text == "萬事屋\n吐槽 ADV",
+		and (game._title_screen.find_child("Logo", true, false) as Label).text == "糖事屋\n吐槽 ADV",
 		"choosing a story with the base skin puts 銀魂和紙 back")
 	_expect(game._phase3_hud.glasses.get_child_count() == 0 or
 		(game._phase3_hud.glasses.get_child(0) as Control).scene_file_path.ends_with("glasses_icon.tscn"),

@@ -1,5 +1,14 @@
 # Mortal City 進度
 
+## 2026-11-11｜骰池判定改版：規格與待辦；一般委託拆場面（未提交、未試玩）
+
+- 使用者要「更有趣、玩更久、像 DnD」。選定判定方式 B（骰池＋代價：屬性幾點擲幾顆 d6 看最高，6 成功、4～5 成功但付代價、1～3 失敗），痛點三項：節點太快沒事做、一局太短、重玩沒有新東西。
+- **文件**：規格 [docs/DICE-POOL-SPEC.md](docs/DICE-POOL-SPEC.md)（12 節，數字都是 Claude 定的起始值）；待辦在 `TODO.md`「骰池判定改版」（A 節點、B 撐更久、C 重玩、D 文件）。
+- **已寫的程式（A1，使用者說「先不用實作」之前寫的）**：`core.ts` 骰池判定與代價、`content/beats.ts` 場面文字、`state.ts` 的 `jobRoll`／`jobCost`、`Node.tsx`／`Run.tsx` 擲骰畫面、`state.test.ts` 機器人走新流程。精英委託、劇情委託、事件、戰鬥仍是舊規則。
+- 驗證（本次實跑）：型別檢查通過；`pnpm test` 66 過、**1 失敗**——「謹慎型機器人一定活著退休」有一局死了（`state.test.ts:191`），原因未追。`pnpm build`、`pnpm smoke` 沒跑；畫面沒有開起來看過。
+- 下一步：等使用者決定 A1 要收尾還是退回（`git checkout -- src` 並刪 `src/content/beats.ts`），以及待辦順序。
+- 未提交：上述 `src` 六個檔、`docs/DICE-POOL-SPEC.md`、`TODO.md`、本檔。
+
 ## 2026-11-10｜名聲：亮出名號（C）＋出名的代價（D）
 
 - 使用者選 C＋D。

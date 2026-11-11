@@ -1,8 +1,8 @@
 ---
 name: godot-animation
 description: >
-  Animate in Godot 4.7 three ways: AnimationPlayer for keyframed clips (incl. call
-  and signal tracks), AnimationTree with state machines and blend spaces for
+  Animate in Godot 4.7 three ways: AnimationPlayer for keyframed clips (incl. Call
+  Method tracks), AnimationTree with state machines and blend spaces for
   character animation, and Tween for short procedural/UI tweens via create_tween().
   Use when working with AnimationPlayer/AnimationTree nodes in a .tscn, blending
   character states, sprite-sheet animation, or code-driven Tweens.
@@ -38,7 +38,7 @@ effects → `godot-shaders`.
    `AnimationNodeBlendSpace2D` as the tree root.
 4. **Drive transitions from code** via the playback object (`travel`) or by setting blend
    parameters.
-5. **React to clip events** with the `animation_finished` signal and call/method tracks.
+5. **React to clip events** with the `animation_finished` signal and Call Method tracks.
 
 ## Patterns
 
@@ -73,10 +73,11 @@ func _physics_process(_d: float) -> void:
 ### 3. Blend space: blend run direction by a 2D parameter
 
 ```gdscript
-# Root is an AnimationNodeBlendSpace2D named "Move" with idle/run points placed in it.
+# tree.tree_root is an AnimationNodeBlendSpace2D with idle/run points placed in it.
 func update_locomotion(input_dir: Vector2) -> void:
-    # Parameter path = "parameters/<node name>/blend_position".
-    tree.set("parameters/Move/blend_position", input_dir)
+    tree.set("parameters/blend_position", input_dir)
+# If the blend space is instead a child named "Move" in a blend tree/state machine,
+# its parameter is "parameters/Move/blend_position".
 ```
 
 ### 4. Tween: fade and scale a UI element (code-driven)
@@ -96,13 +97,20 @@ func pop_in(node: Control) -> void:
 
 - **`AnimationTree.active` left false** → nothing animates and `travel()` appears to do
   nothing. Set `active = true` and assign the `anim_player` path.
-- **Wrong parameter path.** Blend/condition paths are `"parameters/<NodeName>/..."` and
-  must match the node names in the tree exactly (e.g. `"parameters/playback"`,
-  `"parameters/Move/blend_position"`). A typo silently no-ops.
+- **Wrong parameter path.** Root parameters start at `"parameters/"` (e.g.
+  `"parameters/blend_position"` or `"parameters/playback"`). Nested nodes add their names,
+  e.g. `"parameters/Move/blend_position"`; match the actual tree hierarchy.
 - **AnimationPlayer and AnimationTree fighting.** When an `AnimationTree` is active, don't
   also call `AnimationPlayer.play()` for the same tracks — let the tree own playback.
 - **3.x Tween node is gone.** There is no `Tween` node to add in 4.x; create tweens in
   code with `create_tween()` (which returns a `Tween`). They auto-start and free themselves.
+- **Tween stalls when its node leaves the tree.** `node.create_tween()` pauses while that
+  node is outside the tree and dies when it is freed. Use `get_tree().create_tween()` for a
+  tween that must keep running while the node is out of the tree.
+- **Scale/rotation tween on a child of a `Container` snaps back** → the container resets
+  child transforms whenever it re-sorts. In 4.7+ set `offset_transform_enabled = true` and
+  tween `offset_transform_scale` / `offset_transform_rotation` / `offset_transform_position`
+  instead (visual only by default).
 - **Reusing a finished tween.** A tween is one-shot; call `create_tween()` again for a new
   animation. Use `set_loops()` for repetition.
 - **`yield`/`yield(anim, "...")` is gone.** Use `await anim.animation_finished`.

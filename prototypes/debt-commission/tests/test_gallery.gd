@@ -77,6 +77,9 @@ func _play_and_browse() -> void:
 	await _frames(3)
 	var gallery: Control = game._gallery
 	_expect(game._screen_mode == "gallery" and gallery.visible and gallery.tab == "pictures", "鑑賞 opens on 畫廊")
+	_expect((gallery.pictures_tab.get_theme_stylebox("normal") as StyleBoxTexture).texture.resource_path.ends_with("tab_selected.png")
+		and (gallery.music_tab.get_theme_stylebox("normal") as StyleBoxTexture).texture.resource_path.ends_with("tab_unselected.png"),
+		"the current gallery tab uses the selected tab art")
 	var items: Dictionary = gallery.items()
 	_expect(items.keys().filter(func(k: String) -> bool: return k.begins_with("picture_")).size() == 3,
 		"every background with a picture is listed: %s" % [items.keys()])
@@ -84,8 +87,10 @@ func _play_and_browse() -> void:
 	var outside: Button = items["picture_yorozuya_exterior"]
 	_expect(not kitchen.disabled and kitchen.get_node("%Caption").text == "萬事屋廚房" and kitchen.get_node("%Thumb").texture != null,
 		"a seen picture shows its thumbnail and name")
-	_expect(outside.disabled and outside.get_node("%Caption").text == "？？？" and outside.get_node("%Thumb").texture == null,
-		"an unseen one is ？？？ with no picture")
+	_expect(outside.disabled and outside.get_node("%Caption").text == "？？？" and
+		outside.get_node("%Thumb").texture.resource_path == "res://assets/ui/selected/gallery_locked.png" and
+		outside.get_node("%Thumb").stretch_mode == TextureRect.STRETCH_KEEP_ASPECT_CENTERED,
+		"an unseen picture shows the sealed card without revealing its thumbnail")
 	kitchen.pressed.emit()
 	_expect(gallery.viewer_open(), "a seen picture opens full screen")
 	_cancel()
@@ -94,6 +99,8 @@ func _play_and_browse() -> void:
 	gallery.music_tab.pressed.emit()
 	await _frames(2)
 	_expect(gallery.tab == "music" and gallery.get_node("%Progress").text.begins_with("已聽過 2/"), "音樂 counts what was heard")
+	_expect((gallery.music_tab.get_theme_stylebox("normal") as StyleBoxTexture).texture.resource_path.ends_with("tab_selected.png"),
+		"the selected tab art follows the current tab")
 	var daily: Button = gallery.items()["track_bgm_daily"]
 	var locked: Button = gallery.items()["track_bgm_gintama_01"]
 	_expect(not daily.disabled and daily.text == "♪ 日常" and locked.disabled and locked.text == "？？？",

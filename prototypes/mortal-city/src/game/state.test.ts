@@ -3,7 +3,7 @@ import { CASES, CASE_01, CASE_02, caseBody, caseReplies, optionLock } from '../c
 import { EVENTS, EVENT_BY_ID, WANGAN_EVENTS } from '../content/events'
 import { JOBS, highDanger } from '../content/data'
 import { ITEMS, SHOP_IMPLANTS, STARTER_CHOICES, STARTER_GEAR, clinicOrders, itemLock, makeItem, marketPrice } from '../content/items'
-import { type Pick, STYLES, addFame, fameEdge, approachBonus, perkTally, upgradeCost, attrLock, dangerOdds, dirBonus, marginOf, psychoOdds, fightStats, hashSeed, jobSuccessChance, rng, hackPower, perkOptions, sellValue, stealthPower, tacticsFor } from '../rules/core'
+import { type Pick, STYLES, addFame, fameEdge, approachBonus, perkTally, upgradeCost, attrLock, dangerOdds, dirBonus, marginOf, psychoOdds, fightStats, hashSeed, hackPower, perkOptions, sellValue, stealthPower, tacticsFor } from '../rules/core'
 import { PERKS, PERK_IDS } from '../rules/perks'
 import { LAYERS, STORY_LAYER, findNode } from '../rules/map'
 import { type Action, type Game, caseDangerOption, eliteDangerOption, eventLock, initial, movable, nextDistrict, nodeBusy, nodeJob, reduce } from './state'
@@ -93,6 +93,8 @@ function botAction(g: Game, style0: BotStyle): Action | null {
   }
   if (n.kind === 'job') {
     if (n.stage === 'auto') return { t: 'jobAutoDone' }
+    if (n.stage === 'scene') return { t: 'jobRoll', push: false, gamble: false }
+    if (n.stage === 'cost') return { t: 'jobCost', index: 0 }
     if (n.stage === 'fight') return n.fight ? { t: 'jobFightDone' } : { t: 'jobFight', tactic }
     return { t: 'leave' }
   }
@@ -290,14 +292,14 @@ describe('job loot does not depend on the route', () => {
   /** 從進節點到結算跑完一件委託（照 enter 的方式擲得手），回傳有沒有掉寶。 */
   function lootOnce(id: string, jobId: string): boolean {
     const g = fresh(id)
-    const job = JOBS[jobId]
     const nodeId = 'shinjuku-1-0'
-    const ok = rng(hashSeed(hashSeed(g.character.id, nodeId), 'roll'))() < jobSuccessChance(job, dirBonus(g.character, job.direction))
-    let s: Game = { ...g, run: { ...g.run, at: nodeId, node: { kind: 'job', nodeId, jobId, ok, stage: 'auto' } } }
+    let s: Game = { ...g, run: { ...g.run, at: nodeId, node: { kind: 'job', nodeId, jobId, stage: 'auto' } } }
     s = reduce(s, { t: 'jobAutoDone' })
-    if (s.run.node?.kind === 'job' && s.run.node.stage === 'fight') {
-      s = reduce(s, { t: 'jobFight', tactic: 'force' })
-      s = reduce(s, { t: 'jobFightDone' })
+    for (let i = 0; i < 12 && s.run.node?.kind === 'job' && s.run.node.stage !== 'done'; i++) {
+      const st = s.run.node.stage
+      if (st === 'scene') s = reduce(s, { t: 'jobRoll', push: false, gamble: false })
+      else if (st === 'cost') s = reduce(s, { t: 'jobCost', index: 0 })
+      else if (st === 'fight') s = reduce(reduce(s, { t: 'jobFight', tactic: 'force' }), { t: 'jobFightDone' })
     }
     return s.character.picks.some((p) => p.kind === 'item')
   }
@@ -609,7 +611,7 @@ describe('node services and three-way picks', () => {
     const seen = { none: 0, abort: 0, maim: 0, dead: 0 }
     for (let i = 0; i < 400; i++) {
       // 餘裕 0：失控，錯亂 70%（中斷 28%、重傷 7%、死亡 35%）
-      const g = atNode(fresh(`ps${i}`, { stress: 75 }), { kind: 'job', nodeId: 'j', jobId: 'hack-1', ok: true, stage: 'auto' })
+      const g = atNode(fresh(`ps${i}`, { stress: 75 }), { kind: 'job', nodeId: 'j', jobId: 'hack-1', stage: 'auto' })
       const r = reduce(g, { t: 'jobAutoDone' })
       if (!r.character.alive) seen.dead++
       else if (r.character.scars) seen.maim++
@@ -649,7 +651,7 @@ describe('node services and three-way picks', () => {
   it('the lifeline tier decides how you come back', () => {
     const back = (tier: 'basic' | 'standard' | 'platinum') => {
       for (let i = 0; i < 400; i++) {
-        const g = atNode(fresh(`lt${tier}${i}`, { stress: 75, lifelines: 1, lifelineTier: tier }), { kind: 'job', nodeId: 'j', jobId: 'hack-1', ok: true, stage: 'auto' })
+        const g = atNode(fresh(`lt${tier}${i}`, { stress: 75, lifelines: 1, lifelineTier: tier }), { kind: 'job', nodeId: 'j', jobId: 'hack-1', stage: 'auto' })
         const r = reduce(g, { t: 'jobAutoDone' })
         if (r.character.lifelines === 0) return r.character
       }
@@ -669,7 +671,7 @@ describe('node services and three-way picks', () => {
   it('a lifeline pulls you back from death, and the medics strip your implants to pay for it', () => {
     let seen = 0
     for (let i = 0; i < 400 && !seen; i++) {
-      const g = atNode(fresh(`rb${i}`, { stress: 75, lifelines: 1 }), { kind: 'job', nodeId: 'j', jobId: 'hack-1', ok: true, stage: 'auto' })
+      const g = atNode(fresh(`rb${i}`, { stress: 75, lifelines: 1 }), { kind: 'job', nodeId: 'j', jobId: 'hack-1', stage: 'auto' })
       const r = reduce(g, { t: 'jobAutoDone' })
       if (r.character.lifelines !== 0) continue
       seen++

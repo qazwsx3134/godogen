@@ -143,9 +143,74 @@ export function jobReward(job: JobDef, extra = 0) {
   return Math.round(job.reward * (1 + extra))
 }
 
-export function jobSuccessChance(job: JobDef, statBonus = 0) {
-  const base = 0.92 - job.tier * 0.06
-  return Math.max(0.05, Math.min(0.98, base + statBonus))
+// ---------- 骰池判定 ----------
+// 擲一把六面骰，只看最高那顆：6＝乾淨成功、4～5＝成功但付代價、1～3＝失敗；兩顆以上的 6＝大成功。
+// 一顆都沒有時擲兩顆取低的。畫面不顯示機率，只顯示擲幾顆。
+
+export type PoolResult = 'crit' | 'clean' | 'cost' | 'fail'
+export const POOL_RESULT_LABEL: Record<PoolResult, string> = { crit: '大成功', clean: '乾淨成功', cost: '成功，但付代價', fail: '失敗' }
+export interface PoolRoll {
+  dice: number[]
+  best: number
+  result: PoolResult
+}
+/** 一次最多擲幾顆。 */
+export const POOL_MAX = 6
+
+export function rollPool(n: number, seed: number): PoolRoll {
+  const r = rng(seed)
+  const d = () => 1 + Math.floor(r() * 6)
+  const grade = (best: number, sixes: number): PoolResult => (sixes >= 2 ? 'crit' : best === 6 ? 'clean' : best >= 4 ? 'cost' : 'fail')
+  if (n <= 0) {
+    const dice = [d(), d()]
+    const best = Math.min(...dice)
+    return { dice, best, result: grade(best, 0) }
+  }
+  const dice = Array.from({ length: Math.min(n, POOL_MAX) }, d)
+  const best = Math.max(...dice)
+  return { dice, best, result: grade(best, dice.filter((x) => x === 6).length) }
+}
+
+/** 屬性換成骰數：3→2 顆、5→3、7→4、9 以上 5 顆。 */
+export const attrDice = (v: number) => Math.min(5, 1 + Math.floor((v - 1) / 2))
+
+/** 擲之前可以加骰：硬撐（神經壓力）、鋌而走險（通緝）。各 +1 顆。 */
+export const PUSH_STRESS = 8
+export const GAMBLE_HEAT = 1
+
+export interface PoolPart {
+  label: string
+  n: number
+}
+
+/** 委託場面的骰池：屬性、該方向的裝備與卡牌、難度、重傷。畫面與判定共用。 */
+export function jobPool(c: Character, job: JobDef, attr: Attr): PoolPart[] {
+  const gear = dirBonus(c, job.direction)
+  const parts: PoolPart[] = [{ label: `${ATTR_LABEL[attr]} ${c.attrs[attr]}`, n: attrDice(c.attrs[attr]) }]
+  if (gear >= 0.05) parts.push({ label: `${DIRECTION_LABEL[job.direction]}的裝備與卡牌`, n: gear >= 0.2 ? 2 : 1 })
+  if (job.tier >= 3) parts.push({ label: `難度 ${job.tier}`, n: -1 })
+  if (c.injury >= SEVERE_INJURY) parts.push({ label: '重傷', n: -1 })
+  return parts
+}
+export const poolSize = (parts: PoolPart[], extra = 0) => parts.reduce((s, p) => s + p.n, 0) + extra
+
+/** 場面的代價種類：受傷、通緝、神經壓力、報酬打折。 */
+export type CostKind = 'injury' | 'heat' | 'stress' | 'pay'
+export const COST_STRESS = 8
+/** 每次選「報酬打折」少拿的比例；每次大成功多拿的比例。 */
+export const COST_PAY = 0.2
+export const CRIT_PAY = 0.15
+export const costInjury = (job: JobDef) => Math.max(4, Math.round(job.injury * 0.5))
+export function costText(job: JobDef, k: CostKind, heavy = false): string {
+  const m = heavy ? 2 : 1
+  return k === 'injury' ? `傷勢 +${costInjury(job) * m}%` : k === 'heat' ? '通緝 +1' : k === 'stress' ? `神經壓力 +${COST_STRESS * m}` : `報酬 −${Math.round(COST_PAY * 100)}%`
+}
+/** 套用一個代價（報酬打折由呼叫端記帳）。失敗時 heavy：受傷與壓力加倍。直接改 c。 */
+export function applyCost(c: Character, job: JobDef, k: CostKind, heavy = false) {
+  const m = heavy ? 2 : 1
+  if (k === 'injury') c.injury = Math.min(100, c.injury + costInjury(job) * m)
+  else if (k === 'heat') c.heat = Math.min(5, c.heat + 1)
+  else if (k === 'stress') c.stress += COST_STRESS * m
 }
 
 // ---------- 裝備 ----------

@@ -2,6 +2,16 @@
 
 只保留最近 3 次 commit 期間的工作與尚未 commit 的工作（新的在上）；更早的紀錄移到 [MILESTONE.md](MILESTONE.md)。每次 commit、出門／下班／暫停前更新本檔，根目錄 `Progress.md` 只更新一行摘要。接手順序：本檔 → [README](README.md) → [session-state](production/session-state/active.md) → [HANDOFF](docs/HANDOFF.md)。
 
+## 2026-11-11｜選定介面素材接入（未提交，待作者看畫面）
+
+- **出門交接**：本輪停在 21 張選圖接入完成。獨立驗收 PASS（21/21 雜湊一致、未發現可重現缺陷），原報告在 `/private/tmp/debt-ui-verification/INDEPENDENT-REVIEW.md`。下一台先讀本段，再在 Godot 查看新版畫面；尚未做視覺／手機驗收或 Web 重匯。沙箱 `.git` 唯讀，無法代為 commit，未 push。提交範圍為本次 debt-commission 素材、介面、測試與交接文件及根目錄 Progress.md；工作區另有其他 session 的制度／skills 修改，請勿混入。`.claude/tasks/debt-ui-assets/REPORT.md` 被 gitignore，主要交接資訊已記在本檔。
+
+- 專案／分支：debt-commission／master，接手基準 `6333a892`。作者將 21 張選圖放進 `art_src/ui/gen-20261110/pick/`；沿用先前直接生圖的同意，將選定的標題 A 修成「糖事屋」與「糖」印章，App 圖示 A、開機圖 B 也為「糖」字版。原圖、修訂輸出與提示詞保留在原素材目錄。
+- 完成：21 張圖複製到 `assets/ui/selected/`（對照及雜湊見 `SOURCE.md`）；深藍／和紙按鈕、分頁與吐槽三態接入 scene 與 `ui_styles.gd`，保留閱讀列專用圖；標題圖、評價印章、未解鎖封條、結局卷軸及碎眼鏡接入現有 scene。`project.godot` 指定開機圖與圖示，Web 匯出排除 `art_src/`。場景由 Godot pack／save，核對節點數與子場景實例；可調整節點見 README。
+- 驗證：Godot `--headless --editor --recovery-mode --quit` 匯入 exit 0，無場景／腳本解析錯誤；沙箱仍拒絕系統憑證與編輯器設定寫入，退出有資源清理訊息。為避免碰真實存檔，在 `/private/tmp/debt-ui-verification/project` 複本把 `user://` 轉到副本的 `res://.test-user/`，停用 MCP autoload／編輯器外掛，逐一執行 `Godot --headless --path <副本> --script res://tests/test_<名稱>.gd`：`ui_styles`、`gallery`、`skin`、`settings`、`chapter_flow`、`phase4_rounds_ui` 均 PASS；後續版面／結局調整後重跑 `ui_styles`、`gallery`、`chapter_flow` PASS。`gallery` 的壞檔測試預期會輸出 ConfigFile parse error；`skin` 退出有資源清理訊息。
+- 另外在副本驗證 UI 間距存檔後執行仍保留、執行時狀態不寫回 scene；1920×1080 headless 版面座標檢查涵蓋標題、結算、Game Over、鑑賞、結局及吐槽。42 張候選的四角 alpha 與外緣綠邊重掃通過；App 圖示 48 px 預覽可辨，筆畫較細。完整測試、Web 匯出與手機未重跑。
+- 限制／下一步：沙箱啟動 Godot 視窗 exit 134，無法擷取新版實際畫面；請作者在編輯器及遊戲中看標題、按鈕、結算等版面。作者選定的吐槽按下 A 中央有模糊紋，停用 B 仍偏紅，實際手感與辨識待確認。原有 `pick/` 移動及本次素材、scene、腳本和文件均未提交；未 push。
+
 ## 2026-11-10｜介面素材盤點、展示頁、第一批介面候選圖（候選圖與 TODO 已在 `b944de53`，等作者挑圖）
 
 - 專案／分支：debt-commission／master。使用者要求：檢視介面（不含故事）缺什麼素材、做功能展示頁；接著用 Herdr 開 Codex（GPT-6 Luna max）產生圖片，並把需要的音效列進 TODO。使用者 17:52 自行提交 `b944de53`（TODO 音效清單＋42 張候選圖與提示詞）。現在暫停，**作者回家挑圖**。

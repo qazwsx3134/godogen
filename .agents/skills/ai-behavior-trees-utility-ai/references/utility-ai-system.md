@@ -23,8 +23,11 @@ public static class Curves
     public static float InverseLerp01(float x, float a, float b)
         => a == b ? (x >= b ? 1f : 0f) : Clamp01((x - a) / (b - a));
 
-    // Linear: desire tracks the fact directly.
-    public static float Linear(float t, float slope = 1f, float yIntercept = 0f)
+    // Linear: desire tracks the fact directly. The one-argument overload is what lets
+    // `Curves.Linear` be passed as a Func<float, float>: optional parameters do not count
+    // for method-group conversion, so a single method with defaults would not compile there.
+    public static float Linear(float t) => Clamp01(t);
+    public static float Linear(float t, float slope, float yIntercept)
         => Clamp01(slope * t + yIntercept);
 
     // Polynomial: exponent>1 = ease-in (low until high t); exponent<1 = ease-out (rises fast early).
@@ -45,6 +48,15 @@ public static class Curves
 
     // Smoothstep: eased 0..1 with zero slope at both ends; good default for "soft threshold".
     public static float Smoothstep(float t) { t = Clamp01(t); return t * t * (3f - 2f * t); }
+
+    // Compensation for a product of `count` factors (see "Scored actions" below).
+    public static float Compensate(float product, int count)
+    {
+        if (count <= 1) return Clamp01(product);
+        float modFactor = 1f - 1f / count;              // 0 for one factor, -> 1 as count grows
+        float makeUp = (1f - product) * modFactor;
+        return Clamp01(product + makeUp * product);     // a 0 product stays 0 (still a veto)
+    }
 }
 ```
 
@@ -85,8 +97,8 @@ var myHealth = new Consideration("myHealth",
 
 ## Scored actions and the compensation factor
 
-A `UtilityAction` scores as its `weight` times the **combined** considerations. Multiplying factors
-is standard (a single near-zero consideration should veto the action), but naive multiplication
+A `UtilityAction` scores as its `weight` times the **combined** considerations. An exactly-zero
+consideration vetoes the action; near-zero is only a low preference. Naive multiplication
 over-punishes as you add considerations. Apply Dave Mark's **compensation factor** so more
 considerations don't unfairly drag the score down.
 
@@ -109,12 +121,8 @@ public sealed class UtilityAction
         float product = 1f;
         for (int i = 0; i < n; i++) product *= Considerations[i].Evaluate(bb);
 
-        // Compensation: add back some of what extra factors removed. modFactor -> 0 as n grows.
-        float modFactor = 1f - 1f / n;
-        float makeUp = (1f - product) * modFactor;
-        float compensated = product + makeUp * product;
-
-        return Weight * Curves.Clamp01(compensated);
+        // Compensation: add back some of what extra factors removed (Curves.Compensate).
+        return Weight * Curves.Compensate(product, n);
     }
 }
 ```
@@ -125,6 +133,10 @@ The evaluator scores every action and selects one. Offer three strategies: **arg
 **softmax** (probabilistic, weighted by score — variety without dumb choices), and
 **weighted-random** over raw scores. Add **hysteresis** (an inertia bonus for the current action)
 so agents commit instead of flip-flopping on near-ties.
+
+Both selectors exclude non-positive raw scores before adding inertia or computing softmax weights.
+If no action qualifies, they clear the current action and return `null`; the caller must handle
+this no-action result. Use an exactly-zero consideration for a hard constraint.
 
 ```csharp
 public sealed class UtilityEvaluator
@@ -141,6 +153,7 @@ public sealed class UtilityEvaluator
         foreach (var a in _actions)
         {
             float s = a.Score(bb);
+            if (s <= 0f) continue;                      // inertia cannot revive a vetoed action
             if (a == _current) s += inertiaBonus;      // stickiness to avoid jitter
             if (s > bestScore) { bestScore = s; best = a; }
         }
@@ -149,19 +162,38 @@ public sealed class UtilityEvaluator
     }
 
     // Softmax: choose proportionally to exp(score/temperature). Higher temp = more random.
+    // Subtract the best score before exp(): with a small temperature, exp(score / 0.01)
+    // overflows float to infinity and the roll stops working. The result is unchanged.
     public UtilityAction SelectSoftmax(Blackboard bb, System.Random rng, float temperature = 0.2f)
     {
-        float sum = 0f;
-        var weights = new float[_actions.Count];
+        var weights = new float[_actions.Count];  // allocate once as a field on hot paths
+        float maxScore = float.NegativeInfinity;
+        int lastEligible = -1;
         for (int i = 0; i < _actions.Count; i++)
         {
-            weights[i] = System.MathF.Exp(_actions[i].Score(bb) / System.MathF.Max(temperature, 1e-4f));
-            sum += weights[i];
+            weights[i] = _actions[i].Score(bb);
+            if (weights[i] <= 0f) { weights[i] = 0f; continue; }
+            lastEligible = i;
+            if (weights[i] > maxScore) maxScore = weights[i];
         }
-        float roll = (float)rng.NextDouble() * sum;
+        if (lastEligible == -1) { _current = null; return null; }
+        float t = System.MathF.Max(temperature, 1e-4f);
+        double sum = 0;
+        int lastWeighted = -1;
         for (int i = 0; i < weights.Length; i++)
-            if ((roll -= weights[i]) <= 0f) { _current = _actions[i]; return _actions[i]; }
-        _current = _actions[^1];
+        {
+            if (weights[i] <= 0f) continue;
+            weights[i] = System.MathF.Exp((weights[i] - maxScore) / t);
+            sum += weights[i];
+            if (weights[i] > 0f) lastWeighted = i;
+        }
+        double roll = rng.NextDouble() * sum;          // retain precision near the exclusive upper bound
+        for (int i = 0; i < weights.Length; i++)
+        {
+            if (weights[i] <= 0f) continue;            // also skip zero when the random roll is zero
+            if ((roll -= weights[i]) < 0f) { _current = _actions[i]; return _actions[i]; }
+        }
+        _current = _actions[lastWeighted];            // never fall back to an underflowed zero weight
         return _current;
     }
 }

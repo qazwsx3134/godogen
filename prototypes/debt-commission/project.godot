@@ -15,7 +15,8 @@ run/main_scene="res://main.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="debt-commission"
 config/features=PackedStringArray("4.7", "GL Compatibility")
-config/icon="res://assets/icon.svg"
+boot_splash/image="res://assets/ui/selected/boot_splash.png"
+config/icon="res://assets/ui/selected/app_icon.png"
 
 [autoload]
 

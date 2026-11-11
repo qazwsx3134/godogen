@@ -6,7 +6,8 @@ import { ActionButton, NeonIcon, Panel, useTwoStep } from '../components/ui'
 import { type useGame, movable, nextDistrict, nodeJob } from '../game/state'
 import { DISTRICTS } from '../content/districts'
 import { type MapNode, type NodeType, NODE_LABEL, findNode } from '../rules/map'
-import { DIRECTION_LABEL, dirBonus, hashSeed, jobReward, jobSuccessChance, pct, perkReward, psychoOdds, rng } from '../rules/core'
+import { BEATS } from '../content/beats'
+import { DIRECTION_LABEL, hashSeed, jobReward, jobPool, poolSize, pct, perkReward, psychoOdds, rng } from '../rules/core'
 import { DIR_ICON, NodeView } from './Node'
 
 type G = ReturnType<typeof useGame>
@@ -210,7 +211,7 @@ function NextList({ game, nodes }: { game: G; nodes: MapNode[] }) {
           ? NODE_HINT[n.type as keyof typeof NODE_HINT]
           : [
               `「${job.name}」¢${jobReward(job, perkReward(c, job.direction))}`,
-              n.type === 'elite' ? '⚔ 硬仗＋可能致命的抉擇・打贏一定掉寶' : job.direction === 'force' ? '⚔ 一定要打' : `安靜得手 ${pct(jobSuccessChance(job, dirBonus(c, job.direction)))}`,
+              n.type === 'elite' ? '⚔ 硬仗＋可能致命的抉擇・打贏一定掉寶' : `${BEATS[job.direction].length} 個場面・第一場擲 ${Math.max(0, poolSize(jobPool(c, job, BEATS[job.direction][0].attr)))} 顆${job.direction === 'force' ? '・最後一定要打' : ''}`,
             ].join('・')
         const mission = n.type === 'job' || n.type === 'elite' || n.type === 'story' || n.type === 'boss'
         return (

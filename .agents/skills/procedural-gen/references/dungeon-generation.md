@@ -1,7 +1,8 @@
 # Dungeon and level generation
 
-Three families cover most 2D level generation. All write into a plain grid
-(`0 = wall`, `1 = floor`) that a tile pass renders later. All take a seeded RNG.
+Four families cover most 2D level generation. All write into a plain grid
+(`0 = wall`, `1 = floor`, or tile ids for WFC) that a tile pass renders later.
+All take a seeded RNG.
 
 ## A. Rooms and corridors
 
@@ -60,13 +61,27 @@ with cellular automata.
 
 ```python
 # Drunkard's walk: a digger wanders, carving floor, until enough is open.
-def drunkard(W, H, rng, target_ratio=0.45):
+def drunkard(W, H, rng, target_ratio=0.45, max_steps=None):
+    if W < 3 or H < 3 or not 0 <= target_ratio <= 1:
+        raise ValueError("need W,H >= 3 and target_ratio in [0,1]")
+    goal = int(W*H*target_ratio)             # fraction of the whole map, including its border
+    capacity = (W-2)*(H-2)
+    if goal > capacity:
+        raise ValueError("target exceeds the carveable interior")
+    if max_steps is None:
+        max_steps = capacity * 100
+    if max_steps < 0:
+        raise ValueError("max_steps must be non-negative")
     grid = [[0]*W for _ in range(H)]
-    x, y = W//2, H//2; carved = 0; goal = int(W*H*target_ratio)
-    while carved < goal:
+    x, y = W//2, H//2; carved = 0
+    for _ in range(max_steps):
+        if carved == goal: return grid
         if grid[y][x] == 0: grid[y][x] = 1; carved += 1
-        x = clamp(x + rng.choice([-1,0,1]), 1, W-2)   # random step, stay in bounds
-        y = clamp(y + rng.choice([-1,0,1]), 1, H-2)
+        dx, dy = rng.choice([(1,0), (-1,0), (0,1), (0,-1)])
+        x = min(max(x + dx, 1), W-2)        # cardinal steps keep carved floor 4-connected
+        y = min(max(y + dy, 1), H-2)
+    if carved < goal:
+        raise RuntimeError("target not reached within max_steps")
     return grid
 
 # Cellular automata smoothing: a cell becomes wall if most neighbors are walls.
@@ -82,6 +97,71 @@ def smooth(grid, W, H, steps=4):
     return grid
 ```
 
+`target_ratio` counts the whole map; the solid border cannot be carved. Impossible
+targets fail immediately. A feasible target can still exhaust the random walk's
+step budget: report that failure or retry with an explicit new seed/budget rather
+than treating a partial cave as a finished map. Smoothing can split regions, so
+validate connectivity again after applying it.
+
+## D. Wave function collapse (tile adjacency rules)
+
+WFC fills a grid so every pair of neighbours obeys adjacency rules you give it
+(simple-tiled model). Each cell starts with every tile possible; repeat:
+**observe** the undecided cell with the fewest options, **collapse** it to one
+tile by weight, then **propagate** — shrink neighbours to tiles still compatible,
+spreading until nothing changes. An empty cell is a contradiction: restart (or
+backtrack).
+
+```python
+DIRS = [(1, 0), (-1, 0), (0, 1), (0, -1)]          # +x, -x, +y, -y
+
+def wfc(W, H, weights, allowed, rng, max_restarts=20):
+    """weights: {tile: weight}; allowed[(tile, d)]: tiles that may sit in DIRS[d] of tile."""
+    for _ in range(max_restarts):
+        cells = [[set(weights) for _ in range(W)] for _ in range(H)]
+        failed = False
+        # Validate the initial domains too: singleton grids still have adjacency constraints.
+        stack = [(x, y) for y in range(H) for x in range(W)]
+        while not failed:
+            # Propagate: shrink neighbours to tiles some remaining option still allows.
+            while stack and not failed:
+                cx, cy = stack.pop()
+                for d, (dx, dy) in enumerate(DIRS):
+                    nx, ny = cx + dx, cy + dy
+                    if not (0 <= nx < W and 0 <= ny < H):
+                        continue
+                    support = set().union(*(allowed[(t, d)] for t in cells[cy][cx]))
+                    narrowed = cells[ny][nx] & support
+                    if narrowed != cells[ny][nx]:
+                        if not narrowed:
+                            failed = True                # contradiction: restart
+                            break
+                        cells[ny][nx] = narrowed
+                        stack.append((nx, ny))
+            if failed: break
+            # Observe only after propagation, including on the first iteration.
+            open_cells = [(len(cells[y][x]), x, y) for y in range(H) for x in range(W)
+                          if len(cells[y][x]) > 1]
+            if not open_cells:
+                return [[next(iter(c)) for c in row] for row in cells]
+            fewest = min(n for n, _, _ in open_cells)
+            _, x, y = rng.choice([c for c in open_cells if c[0] == fewest])
+            opts = sorted(cells[y][x])                   # sorted: set order is not stable
+            cells[y][x] = {rng.choices(opts, [weights[t] for t in opts])[0]}
+            stack = [(x, y)]
+    raise RuntimeError("no solution within max_restarts")
+```
+
+- Author symmetric rules: if B may sit east of A, A must be allowed west of B.
+  Both directed constraints are propagated; conflicting rules can make the grid unsatisfiable.
+- Option count is the simplest "entropy"; the weighted Shannon entropy of the
+  remaining options is the usual refinement. Either way the grid grows outward
+  from the first collapse, so tile **weights** decide the overall mix.
+- Pre-collapse fixed cells (border = wall, an entrance tile) and propagate from
+  them before the loop to steer layouts.
+- WFC guarantees local rules only. Run the connectivity check below on the
+  result like any other generator.
+
 ## Connectivity validation (do this every time)
 
 Generation can isolate regions. Flood-fill from the spawn; if floor tiles remain
@@ -89,7 +169,7 @@ unreached, either discard the map, dig a tunnel to the nearest reached tile, or
 keep only the largest region.
 
 ```python
-def reachable_floor(grid, start):
+def reachable_floor(grid, start):    # assumes a solid wall border (no bounds checks)
     seen, stack = set(), [start]
     while stack:
         x, y = stack.pop()

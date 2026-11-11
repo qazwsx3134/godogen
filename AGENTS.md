@@ -21,12 +21,12 @@ This repository is not a published game repo. It is the source that `publish.sh`
 - Delegated Codex workers, including Herdr sibling sessions, preferentially use **GPT-6 Luna** (`gpt-6-luna`) with **max** reasoning effort. Pass both the model and effort explicitly when starting a worker; an explicit user override takes precedence.
 - Updating this file does not switch a session that is already running. Apply these settings when starting the next session or worker.
 
-## 子代理的成本門檻
+## 委派門檻（delegation cost gate）
 
-- 開啟 subagent 前，先估算由主 session 自行完成與委派的 API 總成本。委派成本包含子代理的輸入／輸出、重複載入上下文，以及主 session 的派工、協調、審查與整合；使用各自模型的費率，不能只比較 token 數。
-- 若自行完成的預估成本 **小於委派總成本的 1.2 倍**，就在自己的 session 完成，不特別開子代理。子代理的目的是節省成本；達到門檻才考慮委派，不因為能平行或任務較大就自動開啟。
-- 無法合理判斷能達到門檻時，預設自行完成。決定委派時，簡短說明成本估算與預期節省，勿把估算當成實際帳單。
-- 此門檻適用於內建 subagent、Herdr sibling session 與其他委派方式，優先於一般性的委派／平行工作偏好；使用者當次明確要求開子代理時，以該要求為準。
+- 預設在自己的 session 完成。只有兩種情況才開子代理：要讀的原文很多（約 >1500 行或大量網頁）而且讀完只需要結論；或幾件互不依賴、各自夠大的工作可以同時進行。
+- 子代理要重新載入上下文，主 session 還要派工、審查、整合，所以不以省錢為由委派——除非確知有更便宜的模型可派，且任務是機械式的。判斷不了就自行完成。
+- 決定委派時，用一句話說明理由（隔離哪些原文，或哪幾件事平行）。
+- 此門檻適用於內建 subagent、Herdr sibling session 與其他委派方式；使用者當次明確要求開子代理時，以該要求為準。
 
 ## KISS 與分層測試驗收
 
@@ -43,17 +43,7 @@ This repository is not a published game repo. It is the source that `publish.sh`
 - 層級判不準時取高一層。改 `.tscn`／`.tres` 後的 headless 匯入檢查成本很低，任何層級都照做。
 - 各原型的單元測試、簡易回歸與完整測試對應哪些指令，寫在該原型的 README 或 AGENTS.md。
 
-## Source Layout
-
-- `prompts/runtime.md` — the engine-agnostic runtime manifest text
-- `asset-gen/` — the asset-generation skill (CLI tools + docs), the one skill every published repo carries
-- `engines/babylon.md`, `engines/godot.md`, `engines/bevy.md` — per-engine guides (stack, project sketch, capture recipe, silent-failure traps)
-- `publish.sh` — renders a runtime repo with `--engine {godot,bevy,babylon}`, `--agent {claude,codex}`
-- `scripts/` — render helpers: `render_dir.py` (token substitution), `generate_codex_metadata.py` (Codex `openai.yaml`)
-
 ## Editing Rules
-
-- **debt-commission 的介面基準**：新增或修改對話框與按鈕時，沿用作者已驗收的「銀魂和紙」透明 PNG 與場景元件（`dialogue_box_gintama.tscn`、`gintama_reading_*.tscn`）；它是遊戲唯一的介面外觀，沒有執行時切換。紙框、波紋與櫻花使用整張透明底圖，保留四角與裁切，不重新手繪。文字與功能保持獨立 node；新面板與按鈕也沿用和紙／深藍銀框的處理。
 
 - Do not create or maintain `.claude/skills/` or `.agents/skills/` in this source repo.
 - Don't give obvious guidance. The agent is a highly capable LLM, and the deliverable (a recorded video, or a live URL the user watches) surfaces its own mistakes — so keep the guides to what the model can't infer or discover fast.

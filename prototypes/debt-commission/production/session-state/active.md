@@ -1,5 +1,9 @@
 # debt-commission 交接
 
+2026-11-11 出門停工：21 張介面圖接入與六組回歸、獨立驗收 PASS。未 commit／push（沙箱 .git 唯讀）；換機前需由使用者提交並同步。下一步只待實際 Godot 畫面確認，詳見 PROGRESS 最新段落。
+
+2026-11-11：作者在 `art_src/ui/gen-20261110/pick/` 選定 21 張介面圖，已接入標題、共用按鈕、吐槽、鑑賞、結算、結局、Game Over、開機圖與圖示。選定標題 A 依前次要求修成「糖事屋」與「糖」印章。Godot 4.7 匯入及隔離副本的六組相關測試通過；沙箱無法開啟 Godot 視窗，實際畫面與手機待作者確認。詳細驗證、限制及未提交狀態見 [PROGRESS](../../PROGRESS.md)。
+
 2026-11-08：故事清理——遊戲與故事編輯器只列兩個故事：新寫的**功能展示**（`data/showcase_story.json`，預設；每張卡片示範一組步驟，見 STORY-EDITOR「功能展示」）與桂的極短篇 `stories/katsura_dog_ears/`。舊故事（第一章、討債、Phase 2–4、回合、漫畫吐槽、選項、EP00、文字效果、轉場、第一章圖副本）連同 `story_src/` 與範例作品「末班車」搬進 `tests/fixtures/`，只給測試讀（登記 `tests/fixtures/stories.json`）。`test_katsura_dog_ears.gd` 依作者改過的三選一故事重寫，不再失敗。未 commit。
 
 2026-11-04：`main.gd` 拆成外殼加五個分段檔（`scripts/main_investigation.gd`、`main_round.gd`、`main_saves.gd`、`main_tutorial.gd`、`main_qa.gd`，4530 → 約 3000 行）；新增章節選擇「流程圖」（G4）、換背景的 shader 轉場（`bg` 的 `transition`：brush／ink／glitch，試片 `?sample=transitions`），以及手感回饋（震動分級、HUD 與提示的跳動、玩家結果的固定音效）。完整測試 54 通過；唯一失敗 `katsura_dog_ears` 在拆分前就失敗。`browser_check.mjs` 各路線在 HEAD 版同樣失敗，未修。2026-11-05 已 commit（未 push）；詳細見 [PROGRESS](../../PROGRESS.md)。待作者：看轉場試片、選第一章要不要用；Android 手機試震動。

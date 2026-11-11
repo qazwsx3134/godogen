@@ -26,8 +26,7 @@
 | 專案 | 現況（一句） | 進度 | 歷史 |
 |---|---|---|---|
 | 本次提交（`git log -1`） | 2026-11-11 | walker-tps：首次收錄完整戰鬥原型、地圖／雙機體素材、14 個處理後音效與署名；補忽略規則，Git 乾淨副本匯入／音效／戰鬥驗證 |
-| debt-commission 萬事屋吐槽 ADV | 故事只剩「功能展示」（編輯器範本，預設）與桂的極短篇；舊故事搬進 `tests/fixtures/` 當夾具（2026-11-08，未 commit）；等作者看功能展示；2026-11-09 評審完成（Loop 3 分最低，第一章不在正式內容裡），12 條建議在 TODO（未 commit） | [PROGRESS](prototypes/debt-commission/PROGRESS.md) | [MILESTONE](prototypes/debt-commission/MILESTONE.md) |
-| debt-commission 萬事屋吐槽 ADV | 故事只剩功能展示（預設）與桂的極短篇；11-10 做了介面素材盤點（[展示頁](https://claude.ai/artifact/5PWktqSHkHipZ7YKbFxQpa)）與第一批介面候選圖，**等作者挑圖**後接進遊戲；音效清單在 TODO；評審 #2 待作者決定，之後是真人試玩 | [PROGRESS](prototypes/debt-commission/PROGRESS.md) | [MILESTONE](prototypes/debt-commission/MILESTONE.md) |
+| debt-commission 萬事屋吐槽 ADV | 故事為功能展示與桂短篇；11-11 已將作者選定的 21 張介面圖接入，相關 headless 測試通過，待作者看遊戲畫面及手機；音效與評審 #2 仍在 TODO | [PROGRESS](prototypes/debt-commission/PROGRESS.md) | [MILESTONE](prototypes/debt-commission/MILESTONE.md) |
 | godot-kit 共用模組 | SaveSlots 已接入 seal-meadow adapter，保留遊戲恢復保護；只同步該存檔模組，測試暫緩 | [PROGRESS](prototypes/godot-kit/PROGRESS.md) | — |
 | walker-tps 四足戰甲 | 2026-11-11 勾索慣性／自動刀片／主砲／scout AI 與單局已接通；新增 14 個處理後音效約 201 KB、事件與混音接入、Git 排除原檔及授權署名；音效／戰鬥／地圖測試通過，Git 乾淨副本已驗證，實聽與手機待驗，已納本次提交 | [PROGRESS](prototypes/walker-tps/PROGRESS.md) | — |
 | seal-meadow 蓬蓬草原 | 暖陶瓦風格與商店三視圖已定方向；可走商店、入口與路牌樣板已接入，正式 2D 紙娃娃及手機真人驗收待做，多人延後 | [PROGRESS](prototypes/seal-meadow/PROGRESS.md) | [MILESTONE](prototypes/seal-meadow/MILESTONE.md) |

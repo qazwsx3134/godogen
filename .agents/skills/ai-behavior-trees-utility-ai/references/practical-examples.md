@@ -67,10 +67,10 @@ public sealed class GuardAgent
     {
         _tree = new BehaviorTree(
             new ReactiveSelector()                       // reactive: seeing the player preempts patrol
-                .Add(new Sequence()                      // --- combat branch (higher priority) ---
-                    .Add(new CanSeeTarget(sightRange: 12f))
+                .Add(new ReactiveSequence()              // --- combat branch (higher priority) ---
+                    .Add(new CanSeeTarget(sightRange: 12f))          // re-checked every tick
                     .Add(new MoveToTarget(speed: 6f, arriveRadius: 1.5f))
-                    .Add(new Cooldown(0.8f).Wrap(new AttackTarget())))
+                    .Add(new ForceSuccess().Wrap(new Cooldown(0.8f).Wrap(new AttackTarget()))))
                 .Add(new Patrol(patrolRoute)),           // --- fallback ---
             _bb);
     }
@@ -126,6 +126,7 @@ UtilityEvaluator BuildVillagerBrain()
 void UpdateVillager(UtilityEvaluator brain, Blackboard bb)
 {
     var choice = brain.SelectBest(bb, inertiaBonus: 0.05f);
+    if (choice == null) return; // no available action; preserve the game's idle behavior
     Dispatch(choice.Name);      // route "Eat"/"Sleep"/... to your gameplay handlers
 }
 ```
@@ -151,7 +152,9 @@ public sealed class UtilitySelectorNode : Leaf
     {
         var choice = _evaluator.SelectBest(bb, _inertia);
         if (choice != _running) { _running?.Behavior?.Reset(); _running = choice; }  // switched: clean up
-        return _running?.Behavior?.Tick(bb, dt) ?? Status.Failure;
+        var s = _running?.Behavior?.Tick(bb, dt) ?? Status.Failure;
+        if (s != Status.Running) Reset();             // the chosen subtree may be entered again
+        return s;
     }
 
     public override void Reset() { _running?.Behavior?.Reset(); _running = null; }
@@ -169,7 +172,7 @@ var attackChoice = new UtilityEvaluator()
 
 var hybrid = new BehaviorTree(
     new ReactiveSelector()
-        .Add(new Sequence()
+        .Add(new ReactiveSequence()                       // keeps re-checking sight while attacking
             .Add(new CanSeeTarget(12f))
             .Add(new UtilitySelectorNode(attackChoice)))   // BT picks "engage"; utility picks how
         .Add(new Patrol(route)),

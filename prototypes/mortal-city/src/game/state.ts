@@ -16,12 +16,10 @@ import {
   approachBonus,
   attrLock,
   baseAttrs,
-  dirBonus,
   grantProgress,
   hashSeed,
   heatEnemy,
   jobReward,
-  jobSuccessChance,
   perkOptions,
   perkReward,
   perkTally,
@@ -55,7 +53,20 @@ import {
   lifelineOf,
   type LifelineTier,
   fameEnemy,
+  type PoolResult,
+  type CostKind,
+  POOL_RESULT_LABEL,
+  PUSH_STRESS,
+  GAMBLE_HEAT,
+  COST_PAY,
+  CRIT_PAY,
+  applyCost,
+  costText,
+  jobPool,
+  poolSize,
+  rollPool,
 } from '../rules/core'
+import { BEATS } from '../content/beats'
 import { type District, type MapNode, type NodeType, STORY_LAYER, findNode, generateDistrict, reachable } from '../rules/map'
 import { FIXERS, JOBS, JOB_LINES, OPENING, STARTER_GEAR, highDanger } from '../content/data'
 import { ITEMS, SHOP_IMPLANTS, STARTER_CHOICES, clinicOrders, eliteLoot, itemLock, eventLoot, makeItem, marketPrice, marketStock, rollKind, streetLoot } from '../content/items'
@@ -76,13 +87,40 @@ export interface ResultRow {
 
 /** 傭兵現在站著的節點裡發生的事。 */
 export type NodeRun =
-  | { kind: 'job'; nodeId: string; jobId: string; ok: boolean; stage: 'auto' | 'fight' | 'done'; fight?: FightResult; text?: string; rows?: ResultRow[] }
+  | {
+      kind: 'job'
+      nodeId: string
+      jobId: string
+      /** auto 開場 → scene 擲骰 → cost 選代價 → （fight 遭遇戰）→ done。 */
+      stage: 'auto' | 'scene' | 'cost' | 'fight' | 'done'
+      /** 現在第幾個場面（BEATS 的索引）。 */
+      beat?: number
+      /** 失敗幾次：駭入、潛行失敗兩次就被逮到、要打一場；武力每次失敗對手更硬。 */
+      strikes?: number
+      /** 成功的場面數、其中大成功幾次、選了幾次「報酬打折」。 */
+      wins?: number
+      crits?: number
+      cuts?: number
+      history?: BeatLog[]
+      fight?: FightResult
+      text?: string
+      rows?: ResultRow[]
+    }
   | { kind: 'elite'; nodeId: string; jobId: string; stage: 'auto' | 'fight' | 'danger' | 'done'; fight?: FightResult; outcome?: DangerOutcome }
   | { kind: 'event'; nodeId: string; eventId: string; stage: 'choose' | 'done'; text?: string; rows?: ResultRow[] }
   | { kind: 'market'; nodeId: string; stock: Item[] }
   | { kind: 'clinic'; nodeId: string }
   | { kind: 'rest'; nodeId: string; used?: boolean }
   | { kind: 'story'; nodeId: string; caseId: string }
+
+/** 一個場面擲出來的結果（畫面與結算用）。 */
+export interface BeatLog {
+  beat: number
+  dice: number[]
+  result: PoolResult
+  /** 付了什麼代價（成功但付代價、失敗）。 */
+  cost?: string
+}
 
 export interface Run {
   seed: number
@@ -510,10 +548,33 @@ function pickEvent(seed: number, used: string[], d: DistrictDef) {
 }
 
 /** 一般委託自動段的文字。 */
-export function jobLines(jobId: string, ok: boolean): string[] {
+export function jobLines(jobId: string): string[] {
   const job = JOBS[jobId]
-  const l = JOB_LINES[job.direction]
-  return [...OPENING[job.direction](job.name), l.mid, ok ? l.ok : l.caught]
+  return [...OPENING[job.direction](job.name), JOB_LINES[job.direction].mid]
+}
+
+type JobNodeRun = Extract<NodeRun, { kind: 'job' }>
+
+/** 委託的遭遇戰對手。武力委託：前面每個成功的場面讓對方 HP −12%（大成功再 −12%），每次失敗 +15%。 */
+export function jobEnemy(job: JobDef, n: Pick<JobNodeRun, 'wins' | 'crits' | 'strikes'>): Enemy {
+  const e = streetEnemy(job)
+  if (job.direction !== 'force') return e
+  const k = Math.max(0.5, 1 - 0.12 * ((n.wins ?? 0) + (n.crits ?? 0)) + 0.15 * (n.strikes ?? 0))
+  return { ...e, hp: Math.round(e.hp * k) }
+}
+
+/** 通緝已經滿了就改付神經壓力。 */
+const realCost = (c: Character, k: CostKind): CostKind => (k === 'heat' && c.heat >= 5 ? 'stress' : k)
+
+/** 一個場面結束：往下一個場面；駭入、潛行失敗兩次就被逮到要打；場面走完，武力開打、其他直接完成。 */
+function advanceJob(g: Game, now: number, n: JobNodeRun): Game {
+  const job = JOBS[n.jobId]
+  const next: JobNodeRun = { ...n, beat: (n.beat ?? 0) + 1, stage: 'scene' }
+  const put = (node: JobNodeRun): Game => ({ ...g, run: { ...g.run, node } })
+  if (job.direction !== 'force' && (next.strikes ?? 0) >= 2) return put({ ...next, stage: 'fight' })
+  if ((next.beat ?? 0) < BEATS[job.direction].length) return put(next)
+  if (job.direction === 'force') return put({ ...next, stage: 'fight' })
+  return finishJob(put(next), now, true)
 }
 
 /** 事件選項能不能選：不夠錢或屬性不夠回傳原因。 */
@@ -554,6 +615,8 @@ type Action =
   | { t: 'move'; nodeId: string }
   | { t: 'leave' }
   | { t: 'jobAutoDone' }
+  | { t: 'jobRoll'; push: boolean; gamble: boolean }
+  | { t: 'jobCost'; index: number }
   | { t: 'jobFight'; tactic: Tactic }
   | { t: 'jobFightDone' }
   | { t: 'eliteAutoDone' }
@@ -597,8 +660,7 @@ function enter(g: Game, nodeId: string, now: number): Game {
   let events = g.run.events
   if (node.type === 'job' || node.type === 'elite') {
     const job = nodeJob(g, node)!
-    const ok = rng(hashSeed(seed, 'roll'))() < jobSuccessChance(job, dirBonus(c, job.direction))
-    n = node.type === 'job' ? { kind: 'job', nodeId, jobId: job.id, ok, stage: 'auto' } : { kind: 'elite', nodeId, jobId: job.id, stage: 'auto' }
+    n = node.type === 'job' ? { kind: 'job', nodeId, jobId: job.id, stage: 'auto' } : { kind: 'elite', nodeId, jobId: job.id, stage: 'auto' }
   } else if (node.type === 'event') {
     const ev = pickEvent(seed, g.run.events, DISTRICTS[g.run.districtIndex])
     events = [...events, ev.id]
@@ -625,17 +687,12 @@ function finishJob(g: Game, now: number, won: boolean): Game {
   const c = structuredClone(g.character)
   const before = { injury: g.character.injury, xp: c.xp, level: c.level, fame: c.fame.total }
   const log: LogEvent[] = []
-  const roll = rng(hashSeed(c.id, n.nodeId, 'harm'))
-  // 沒打的成功：路上小傷；打過的傷勢已經由戰鬥決定
-  const injury = n.fight ? 0 : Math.round(job.injury * 0.4 * (0.6 + roll() * 0.8))
-  const heatUp = !won && roll() < 0.35 + job.heat * 0.1 ? 1 : 0
+  // 傷勢、通緝已經在各場面的代價裡付過；這裡只算報酬：選過「報酬打折」的少拿，大成功多拿
   const full = jobReward(job, perkReward(c, job.direction))
-  const reward = won ? full : Math.round(full * 0.3)
+  const reward = Math.round(full * (won ? Math.max(0.2, 1 - COST_PAY * (n.cuts ?? 0) + CRIT_PAY * (n.crits ?? 0)) : 0.3))
   // 開打前的傷勢（戰鬥已經改過 c.injury）
   const startInjury = n.fight ? Math.round(100 - (n.fight.hpStart * 100) / n.fight.maxHp) : before.injury
-  c.injury = Math.min(100, c.injury + injury)
   c.stress += job.stress
-  c.heat = Math.min(5, c.heat + heatUp)
   c.credits += reward
   const picksBefore = c.picks.length
   // 掉寶只看有沒有完成，不看有沒有開打：駭入、潛行安靜得手也一樣有機會
@@ -645,10 +702,13 @@ function finishJob(g: Game, now: number, won: boolean): Game {
   const f = n.fight
   const rows: ResultRow[] = [
     { label: '結果', value: won ? '完成' : '失手', tone: won ? 'good' : 'bad' },
-    { label: '報酬', value: `+¢${reward}${won ? '' : '（只拿到三成）'}`, tone: 'good' },
+    { label: '報酬', value: `+¢${reward}${won ? (reward !== full ? `（原本 ¢${full}）` : '') : '（只拿到三成）'}`, tone: 'good' },
+    ...(n.history ?? []).map((h) => {
+      const tone: ResultRow['tone'] = h.result === 'fail' ? 'bad' : h.result === 'cost' ? 'warn' : 'good'
+      return { label: BEATS[job.direction][h.beat].title, value: `${h.dice.join(' ')} → ${POOL_RESULT_LABEL[h.result]}${h.cost ? `：${h.cost}` : ''}`, tone }
+    }),
     ...(f ? [{ label: '戰鬥', value: `${f.enemy.name}・${tacticsFor(c).find((t) => t.id === f.tactic)!.label}・${f.won ? '打贏' : '被打退'}・HP ${f.hpStart}→${f.hp}`, tone: f.won ? 'good' : 'bad' } as ResultRow] : []),
     ...(c.injury !== startInjury ? [{ label: '傷勢', value: `${startInjury}% → ${c.injury}%`, tone: 'bad' } as ResultRow] : []),
-    ...(heatUp ? [{ label: '通緝', value: `+1★（MPD 盯上你了）`, tone: 'bad' } as ResultRow] : []),
     { label: '神經壓力', value: `+${job.stress + (f?.stress ?? 0)}`, tone: 'warn' },
     { label: '經驗', value: `+${won ? job.xp : Math.round(job.xp / 3)}${c.level > before.level ? `（升到 Lv.${c.level}）` : ''}` },
     { label: '名聲', value: `+${c.fame.total - before.fame}`, tone: 'warn' },
@@ -690,13 +750,47 @@ export function reduce(g: Game, a: Action): Game {
         const after = { ...p.g, run: { ...p.g.run, node: { ...n, stage: 'done' as const, text: PSYCHO_ABORT, rows } } }
         return withClaim(g, after, { title: job.name, tone: 'fail', text: PSYCHO_ABORT })
       }
-      // 武力委託一定要打；駭入、潛行失手被發現也要打
-      if (job.direction === 'force' || !n.ok) return { ...p.g, run: { ...p.g.run, node: { ...n, stage: 'fight' } } }
-      return finishJob(p.g, now, true)
+      return { ...p.g, run: { ...p.g.run, node: { ...n, stage: 'scene', beat: 0 } } }
+    }
+    case 'jobRoll': {
+      // 擲這個場面的骰池；擲之前可以硬撐（神經壓力）或鋌而走險（通緝）各加一顆
+      if (n?.kind !== 'job' || n.stage !== 'scene') return g
+      const job = JOBS[n.jobId]
+      const at = n.beat ?? 0
+      const beat = BEATS[job.direction][at]
+      const gamble = a.gamble && c.heat < 5
+      const ch = structuredClone(c)
+      if (a.push) ch.stress += PUSH_STRESS
+      if (gamble) ch.heat += GAMBLE_HEAT
+      const roll = rollPool(poolSize(jobPool(c, job, beat.attr), (a.push ? 1 : 0) + (gamble ? 1 : 0)), hashSeed(c.id, n.nodeId, 'beat', at))
+      const entry: BeatLog = { beat: at, dice: roll.dice, result: roll.result }
+      const said: LogEvent = { at: now, kind: roll.result === 'fail' ? 'hurt' : 'job', text: `「${job.name}」${beat.title}：擲出 ${roll.dice.join('、')}，${POOL_RESULT_LABEL[roll.result]}。${beat.out[roll.result]}` }
+      const history = [...(n.history ?? []), entry]
+      if (roll.result === 'cost') return withLog({ ...g, character: ch, run: { ...g.run, node: { ...n, history, stage: 'cost' } } }, said)
+      if (roll.result === 'fail') {
+        const k = realCost(ch, beat.fail)
+        applyCost(ch, job, k, true)
+        entry.cost = costText(job, k, true)
+        return advanceJob(withLog({ ...g, character: ch }, said), now, { ...n, history, strikes: (n.strikes ?? 0) + 1 })
+      }
+      return advanceJob(withLog({ ...g, character: ch }, said), now, { ...n, history, wins: (n.wins ?? 0) + 1, crits: (n.crits ?? 0) + (roll.result === 'crit' ? 1 : 0) })
+    }
+    case 'jobCost': {
+      // 成功但付代價：二選一
+      if (n?.kind !== 'job' || n.stage !== 'cost') return g
+      const job = JOBS[n.jobId]
+      const pick = BEATS[job.direction][n.beat ?? 0].costs[a.index]
+      if (!pick) return g
+      const k = realCost(c, pick.kind)
+      const ch = structuredClone(c)
+      applyCost(ch, job, k)
+      const history = (n.history ?? []).map((h, i, all) => (i === all.length - 1 ? { ...h, cost: `${pick.text}（${costText(job, k)}）` } : h))
+      const said: LogEvent = { at: now, kind: 'warn', text: `代價：${pick.text}（${costText(job, k)}）。` }
+      return advanceJob(withLog({ ...g, character: ch }, said), now, { ...n, history, wins: (n.wins ?? 0) + 1, cuts: (n.cuts ?? 0) + (k === 'pay' ? 1 : 0) })
     }
     case 'jobFight': {
       if (n?.kind !== 'job' || n.stage !== 'fight' || n.fight) return g
-      const r = startFight(c, streetEnemy(JOBS[n.jobId]), a.tactic, hashSeed(c.id, n.nodeId, 'fight'))
+      const r = startFight(c, jobEnemy(JOBS[n.jobId], n), a.tactic, hashSeed(c.id, n.nodeId, 'fight'))
       if (!r) return g
       return { ...g, character: r.c, run: { ...g.run, node: { ...n, fight: r.f } } }
     }

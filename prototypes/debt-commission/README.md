@@ -215,6 +215,8 @@ node tools/browser_check.mjs --backup --playwright /path/to/node_modules/@playwr
 
 畫面原本全在 `main.gd` 執行時建立，編輯器裡看不到。依 repo 根目錄 `CLAUDE.md` 的原則，改到哪個畫面就轉成 `scenes/ui/` 裡的 scene，版面交給 node 與 Container，程式只負責填資料和行為。
 
+2026-11-11 選定的介面圖位於 `assets/ui/selected/`：九宮格 StyleBox 在其 `styles/`，深藍與和紙按鈕四邊邊距各 48 px，分頁下邊為 8 px；吐槽按鈕使用整張圖。可在編輯器調整 `title_screen_gintama.tscn` 的 `LogoArt`、`chapter_result_gintama.tscn` 的 `GradeStamp`、`end_controls.tscn` 的 `EndingCard`／`EndingTitle`、`game_over_gintama.tscn` 的 `Glasses`、`gallery_picture.tscn` 的 `Thumb`，以及 `dialogue_box_gintama.tscn` 的 `BokeTsukkomi`。評價印章、結局名稱及未解鎖卡面由腳本依狀態填入；其位置與尺寸保存在 scene。開機圖與 App 圖示設定在 `project.godot`；Web 匯出排除候選原圖 `art_src/`。
+
 | 畫面 | 狀態 | Scene |
 |---|---|---|
 | 舞台（背景取景、角色站位） | ✅ 已轉換 | `scenes/stage.tscn`（見下方「舞台」） |
@@ -239,7 +241,6 @@ node tools/browser_check.mjs --backup --playwright /path/to/node_modules/@playwr
 | 調查的對話／移動話題 | ✅ 已轉換 | 對話框 scene 的 `InvestigationTopics`（`TalkRow`／`MoveRow`，標籤與間距在 scene 裡），每個話題是 `scenes/ui/investigate_topic.tscn`（大小與字級在這裡，顏色跟著該款的「聽下去」） |
 | 伊莉莎白的牌子 | ✅ 已轉換 | `scenes/characters/elisabeth.tscn` 的 `Placard`（對齊圖上白牌子的框，可拖曳、縮放、旋轉）、`Text`（字級與顏色）、`Glow`（選詞時的光框樣式）；牌子上的字由劇本決定 |
 | 漫畫吐槽疊加層 | ✅ 已轉換 | `scenes/comedy/*.tscn`（四個 preset；`ComedyLayer` 在 `main.tscn`） |
-| 結尾按鈕 | 待轉換（做成小 item scene） | |
 
 **銀魂和紙**：`scenes/ui/dialogue_box_gintama.tscn` 的 `NameOverlap/SpeakerRow` 決定雲形名牌跨在紙框上方的位置；`NamePlate/CloudPlaque` 使用含喇叭的透明名牌 PNG，名字仍由 `SpeakerName` 更新。`Padding` 調整正文留白，`Frame/PaperCutout` 是含紙紋、波紋、櫻花與下一句三角的完整透明底圖；用 NinePatch 保留四角，`Frame.clip_contents` 限制繪製範圍。[去背素材與提示詞](assets/ui/GINTAMA-EXTRACTION.md)保留來源和製作紀錄。正文與名字的明體字重保存在 `FontVariation`，見[字型來源與授權](assets/fonts/NotoSerifTC-SOURCE.md)。紙框下方 `ToolbarMargin/Toolbar` 依序實例化 `gintama_reading_log.tscn`、`gintama_reading_auto.tscn`、`gintama_reading_skip.tscn`、`gintama_reading_menu.tscn`；小場景的 `Surface/CutoutArt` 是含圖示的透明按鈕底圖，`Contents/Caption` 調整標籤，根 Button 保留獨立觸控範圍，圖面維持原圖比例。另有 `title_screen_gintama.tscn`、`menu_panel_gintama.tscn`、`choice_sheet_gintama.tscn` 與 `choice_item_gintama.tscn`。標題卡 `CardArea/Card` 與設定卡 `Area/Card` 的底圖是去掉下一句三角的和紙 `gintama_panel_paper.png`（StyleBoxTexture 九宮格，只拉長第 140–168 列與第 280–805 欄的素紙，波紋與櫻花不變形），故事切換鈕與設定的 `Header/Plaque` 是去掉喇叭的雲形名牌 `gintama_heading_plaque.png`；按鈕樣式寫在 scene 裡：深藍銀框是主要動作，和紙色是一般選項，選中的設定是深藍金邊（選項是同一個 `ButtonGroup` 的 toggle）。目錄 `Area/Center/Panel` 也是這張和紙，標題 `Heading` 用雲形名牌，`Rows` 裡沒有 `ui_style_role` 的列是和紙色按鈕（快速存讀檔等三列沿用工具列的深藍）。Game Over 與章節結算 `game_over_gintama.tscn`、`chapter_result_gintama.tscn` 是和紙卡 `Center/Card`（結算卡外面包一層 `Scroll`，矮螢幕可捲），根節點 `z_index = 2` 讓卡片蓋過對話框的名牌。對話紀錄、存檔欄位、覆寫確認、章節選擇、人物檔案等共用面板在銀魂和紙下由 `ui_styles.gd` 依 `ui_style_role`（`menu`／`log`／`slots`／`confirmation`）換成同一張和紙（`GINTAMA_PAPER_ROLES`），`standard` 按鈕與存檔卡是和紙色圓角卡。這兩張圖與這些 scene 由 `tools/make_gintama_panels.gd` 產生一次（`-- textures`，`--import`，再 `-- scenes`），之後 scene 是來源檔，沒有 `--force` 不覆寫。場景是維護來源，正常執行不會重建；`tools/add_gintama_edition_scenes.gd` 是早期一次性製作紀錄，已存在新場景時會拒絕執行。
 
@@ -267,6 +268,7 @@ node tools/browser_check.mjs --backup --playwright /path/to/node_modules/@playwr
 ## 素材來源
 
 - 背景與立繪：使用者加入 `assets/image/` 的 PNG（外觀、客廳、廚房 `kitchen.png`；新八、銀時、神樂、登勢、定春、伊莉莎白），在 `data/asset_catalog.json` 登記。站位預覽直接實例化既有角色 scene，只在編輯器顯示。每個角色要畫哪些表情（生氣、慌張、緊張……）見 [表情清單](../../docs/story-telling-game/EXPRESSIONS.md)；表情圖登記在角色的 `expressions`，還沒有的先用原本那張。
+- 介面新圖：作者從 imagegen 候選中選定，來源、檔案對照與雜湊見 [SOURCE.md](assets/ui/selected/SOURCE.md)；提示詞與原圖留在 `art_src/ui/gen-20261110/`。
 - 音效與稀疏背景音：`tools/prepare_audio.py` 產生的原創 PCM WAV，可重建。
 - 中文字型：WenQuanYi Zen Hei，隨附 `assets/fonts/COPYRIGHT.txt` 與 `LICENSE-GPL-2.txt`，包含字型嵌入例外及 M+ FONTS 授權文字。
 

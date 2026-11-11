@@ -43,6 +43,7 @@ func _run() -> void:
 	var screen: Control = game._chapter_result
 	_expect(screen.visible and screen.grade.text.contains("A") and screen.quote.text == "神樂：「還算有用阿魯。」"
 		and screen.caught.text == "2 / 3" and screen.next_button.visible, "the result screen shows them, with 下一章")
+	_expect(screen.grade_stamp.texture.resource_path.ends_with("selected/grade_a.png"), "the result shows the A stamp")
 	_expect(game._cleared_grade("chapter_a") == "A" and game._story_unlocked(1), "clearing chapter A unlocks chapter B")
 	var progress: ConfigFile = ConfigFile.new()
 	progress.load(PROGRESS)
@@ -63,6 +64,8 @@ func _run() -> void:
 	for _attempt: int in range(5):
 		await _pick(game, "miss")
 	_expect(game._game_over.visible, "five cold takes end in Game Over")
+	_expect((game._game_over.find_child("Glasses", true, false) as TextureRect).texture.resource_path.ends_with("selected/broken_glasses.png"),
+		"Game Over shows the selected broken glasses")
 	_expect(game._ending_note(game._story_choices[0]) == "結局 2/2", "the Game Over end is an ending too")
 	game._on_game_over_retry_pressed()
 	await _read_until(game, ["boke_round"])
@@ -79,6 +82,9 @@ func _run() -> void:
 	game._chapter_result.next_button.pressed.emit()
 	await _read_until(game, ["end"])
 	_expect(game._screen_mode == "end", "下一章 starts chapter B and plays it to its end")
+	_expect((game._end_box.get_node("%EndingTitle") as Label).text == "測試章 B 結束"
+		and (game._end_box.find_child("EndingCard", true, false) as TextureRect).texture.resource_path.ends_with("selected/ending_card.png"),
+		"the ending shows the scroll and its title")
 	_expect(game.save_path == "user://fixture_chapter_b.save" and not game._chapter_result.visible,
 		"chapter B plays in its own save with the result closed")
 	_expect(game._next_chapter().is_empty(), "the last chapter has no 下一章")

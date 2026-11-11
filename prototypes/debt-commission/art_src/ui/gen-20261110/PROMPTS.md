@@ -743,3 +743,23 @@ Output: wide 2:1 composition, centered full glasses, transparent pixels around t
 Constraints: only eyeglasses. No person, face, hands, words, watermark, scene, background, color trim, flowers, leaves, waves, seigaiha, decorative patterns, gold details, or extra props.
 ```
 
+# 2026-11-11 使用者選定版本字樣修訂
+
+以下三段是針對使用者選定候選圖送出的完整編修提示詞。原生成輸出另存於 `raw/`，精確尺寸版寫回選定的候選檔。
+
+## `title_logo_B_sugar_edit.png`
+
+Edit the supplied transparent Japanese game title logo, preserving its composition, brush lettering, colors, painted texture, silver edging, washi backing, wave ornaments, and transparency. Make only these exact glyph changes: in the large top title, replace the first character 萬 with 糖 so the title reads exactly 糖事屋; in the small red square seal near the right side, replace its white character 萬 with the white character 糖. Keep the lower title exactly 吐槽 ADV. Do not alter or add any other text, symbols, ornaments, or background. Retain a clean transparent background outside the existing logo art. Deliver at the original 1200x600 dimensions.
+
+## `app_icon_A_sugar_edit.png`
+
+Edit this exact square game app icon. Keep the navy rounded-square plaque, silver double border, cherry blossom branch, wave pattern, colors, texture, scale, and layout unchanged. Replace only the single large central white brush-calligraphy character 萬 with the Chinese character 糖, using a similarly bold, legible white brush style and fitting the same central area. Preserve the small red square flower seal unchanged. Add no other writing or symbols. Keep transparency outside the rounded icon and deliver a square 1024x1024 PNG.
+
+## `boot_splash_B_sugar_edit.png`
+
+Edit this exact 16:9 Japanese game boot splash, preserving the warm washi background, corner cherry blossoms and seigaiha waves, all layout, colors, brush style, subtitle, and composition. Make only these exact text changes: change the large upper title from 萬事屋 to 糖事屋, and change the white character 萬 inside the small red square seal to 糖. Keep the lower line exactly 吐槽 ADV and keep the tagline exactly 今夜，也先把帳算清。 Do not change any other text or add anything. Keep the final image fully opaque and at 1920x1080.
+
+
+## `title_logo_A_sugar_edit.png` — selected A revision
+
+Edit this exact selected transparent Japanese visual novel title logo. Preserve the A-version composition: large black brush lettering with silver edging, the circular pale blue seigaiha, warm washi banners, paper fan with sakura, dark navy lower plaque and red cord. Change the first large character 萬 to 糖 so the top title reads exactly 糖事屋. In the small red square seal at the right, replace the flower with the single clearly legible white Chinese character 糖. Keep the lower plaque text exactly 吐槽 ADV. Do not change any other wording, arrangement, colors, ornament or background. Preserve real transparency outside the logo and the wide 2:1 composition.

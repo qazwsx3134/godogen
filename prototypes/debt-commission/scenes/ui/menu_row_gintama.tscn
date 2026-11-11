@@ -1,102 +1,43 @@
 [gd_scene format=3]
 
+[ext_resource type="Texture2D" path="res://assets/ui/selected/btn_navy_normal.png" id="1_7fvvg"]
 [ext_resource type="FontFile" path="res://assets/fonts/NotoSerifTC.ttf" id="1_c0ml1"]
+[ext_resource type="Texture2D" path="res://assets/ui/selected/btn_navy_pressed.png" id="2_swwey"]
+[ext_resource type="Texture2D" path="res://assets/ui/selected/btn_navy_disabled.png" id="3_wcyfu"]
+[ext_resource type="StyleBox" path="res://assets/ui/selected/styles/focus.tres" id="4_8md3b"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ycr80"]
-content_margin_left = 18.0
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_g5adm"]
+content_margin_left = 32.0
 content_margin_top = 10.0
-content_margin_right = 18.0
+content_margin_right = 55.0
 content_margin_bottom = 10.0
-bg_color = Color(0.03137255, 0.15686275, 0.23921569, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.7490196, 0.78039217, 0.80784315, 1)
-corner_radius_top_left = 17
-corner_radius_top_right = 17
-corner_radius_bottom_right = 17
-corner_radius_bottom_left = 17
+texture = ExtResource("1_7fvvg")
+texture_margin_left = 48.0
+texture_margin_top = 48.0
+texture_margin_right = 48.0
+texture_margin_bottom = 48.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y6ouf"]
-content_margin_left = 18.0
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_bli4o"]
+content_margin_left = 32.0
 content_margin_top = 10.0
-content_margin_right = 18.0
+content_margin_right = 55.0
 content_margin_bottom = 10.0
-bg_color = Color(0.19607843, 0.39607844, 0.50980395, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.7490196, 0.78039217, 0.80784315, 1)
-corner_radius_top_left = 17
-corner_radius_top_right = 17
-corner_radius_bottom_right = 17
-corner_radius_bottom_left = 17
+texture = ExtResource("2_swwey")
+texture_margin_left = 48.0
+texture_margin_top = 48.0
+texture_margin_right = 48.0
+texture_margin_bottom = 48.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j13ny"]
-content_margin_left = 18.0
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pysq7"]
+content_margin_left = 32.0
 content_margin_top = 10.0
-content_margin_right = 18.0
+content_margin_right = 55.0
 content_margin_bottom = 10.0
-bg_color = Color(0.1254902, 0.3019608, 0.41568628, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.84313726, 0.75686276, 0.54509807, 1)
-corner_radius_top_left = 17
-corner_radius_top_right = 17
-corner_radius_bottom_right = 17
-corner_radius_bottom_left = 17
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7fvvg"]
-content_margin_left = 18.0
-content_margin_top = 10.0
-content_margin_right = 18.0
-content_margin_bottom = 10.0
-bg_color = Color(0.19607843, 0.39607844, 0.50980395, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.7490196, 0.78039217, 0.80784315, 1)
-corner_radius_top_left = 17
-corner_radius_top_right = 17
-corner_radius_bottom_right = 17
-corner_radius_bottom_left = 17
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_swwey"]
-content_margin_left = 18.0
-content_margin_top = 10.0
-content_margin_right = 18.0
-content_margin_bottom = 10.0
-bg_color = Color(0.20392157, 0.27058825, 0.3254902, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.41568628, 0.48235294, 0.5294118, 1)
-corner_radius_top_left = 17
-corner_radius_top_right = 17
-corner_radius_bottom_right = 17
-corner_radius_bottom_left = 17
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wcyfu"]
-content_margin_left = 18.0
-content_margin_top = 10.0
-content_margin_right = 18.0
-content_margin_bottom = 10.0
-bg_color = Color(0.1254902, 0.3019608, 0.41568628, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.84313726, 0.75686276, 0.54509807, 1)
-corner_radius_top_left = 17
-corner_radius_top_right = 17
-corner_radius_bottom_right = 17
-corner_radius_bottom_left = 17
+texture = ExtResource("3_wcyfu")
+texture_margin_left = 48.0
+texture_margin_top = 48.0
+texture_margin_right = 48.0
+texture_margin_bottom = 48.0
 
 [sub_resource type="FontVariation" id="FontVariation_8md3b"]
 base_font = ExtResource("1_c0ml1")
@@ -107,18 +48,18 @@ variation_opentype = {
 [node name="MenuRow" type="Button" unique_id=1089343561]
 custom_minimum_size = Vector2(0, 132.92308)
 size_flags_horizontal = 3
-theme_override_styles/normal = SubResource("StyleBoxFlat_ycr80")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_y6ouf")
-theme_override_styles/hover = SubResource("StyleBoxFlat_j13ny")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_7fvvg")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_swwey")
-theme_override_styles/focus = SubResource("StyleBoxFlat_wcyfu")
+theme_override_styles/normal = SubResource("StyleBoxTexture_g5adm")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_bli4o")
+theme_override_styles/hover = SubResource("StyleBoxTexture_g5adm")
+theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_bli4o")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_pysq7")
+theme_override_styles/focus = ExtResource("4_8md3b")
 theme_override_colors/font_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_focus_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_hover_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_hover_pressed_color = Color(0.23137255, 0.1882353, 0.15686275, 1)
-theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_disabled_color = Color(0.72156864, 0.7607843, 0.7882353, 1)
 theme_override_fonts/font = SubResource("FontVariation_8md3b")
 theme_override_font_sizes/font_size = 35
 text = "儲存進度"

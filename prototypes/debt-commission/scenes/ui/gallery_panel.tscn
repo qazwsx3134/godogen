@@ -2,6 +2,9 @@
 
 [ext_resource type="Script" path="res://scripts/gallery_panel.gd" id="1_mmj4g"]
 [ext_resource type="PackedScene" path="res://scenes/ui/gallery_picture.tscn" id="2_63ceu"]
+[ext_resource type="StyleBox" path="res://assets/ui/selected/styles/tab_selected.tres" id="2_u1oya"]
+[ext_resource type="StyleBox" path="res://assets/ui/selected/styles/focus.tres" id="3_3co1u"]
+[ext_resource type="StyleBox" path="res://assets/ui/selected/styles/tab_unselected.tres" id="4_bhv7p"]
 
 [node name="GalleryPanel" type="Panel" unique_id=19934867]
 anchor_right = 1.0
@@ -52,18 +55,34 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_styles/normal = ExtResource("2_u1oya")
+theme_override_styles/pressed = ExtResource("2_u1oya")
+theme_override_styles/hover = ExtResource("2_u1oya")
+theme_override_styles/hover_pressed = ExtResource("2_u1oya")
+theme_override_styles/disabled = ExtResource("2_u1oya")
+theme_override_styles/focus = ExtResource("3_3co1u")
+theme_override_colors/font_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_font_sizes/font_size = 32
 text = "畫廊"
-metadata/ui_style_role = "selector"
+metadata/ui_style_role = "tab"
+metadata/ui_style_active = true
 
 [node name="MusicTab" type="Button" parent="Margins/Layout/Tabs" unique_id=1132614118]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 132.92308)
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_styles/normal = ExtResource("4_bhv7p")
+theme_override_styles/pressed = ExtResource("4_bhv7p")
+theme_override_styles/hover = ExtResource("4_bhv7p")
+theme_override_styles/hover_pressed = ExtResource("4_bhv7p")
+theme_override_styles/disabled = ExtResource("4_bhv7p")
+theme_override_styles/focus = ExtResource("3_3co1u")
+theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_font_sizes/font_size = 32
 text = "音樂"
-metadata/ui_style_role = "selector"
+metadata/ui_style_role = "tab"
+metadata/ui_style_active = false
 
 [node name="Progress" type="Label" parent="Margins/Layout" unique_id=1004511089]
 unique_name_in_owner = true
@@ -89,17 +108,11 @@ theme_override_constants/h_separation = 16
 theme_override_constants/v_separation = 16
 columns = 2
 
-[node name="Preview0" type="Button" parent="Margins/Layout/Scroll/List/Pictures" unique_id=1882561822 instance=ExtResource("2_63ceu")]
-custom_minimum_size = Vector2(0, 380)
+[node name="Preview0" parent="Margins/Layout/Scroll/List/Pictures" unique_id=1882561822 instance=ExtResource("2_63ceu")]
 layout_mode = 2
-size_flags_horizontal = 3
-metadata/ui_style_role = "selector"
 
-[node name="Preview1" type="Button" parent="Margins/Layout/Scroll/List/Pictures" unique_id=423789888 instance=ExtResource("2_63ceu")]
-custom_minimum_size = Vector2(0, 380)
+[node name="Preview1" parent="Margins/Layout/Scroll/List/Pictures" unique_id=423789888 instance=ExtResource("2_63ceu")]
 layout_mode = 2
-size_flags_horizontal = 3
-metadata/ui_style_role = "selector"
 
 [node name="Music" type="VBoxContainer" parent="Margins/Layout/Scroll/List" unique_id=1635249913]
 unique_name_in_owner = true

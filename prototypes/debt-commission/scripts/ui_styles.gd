@@ -5,6 +5,20 @@ extends RefCounted
 ## A skin with `"look": "flat"` gets plain StyleBoxes from its palette instead.
 
 const DEFAULT_ID: String = "gintama"
+const SELECTED_STYLES: Dictionary = {
+	"navy_normal": preload("res://assets/ui/selected/styles/navy_normal.tres"),
+	"navy_pressed": preload("res://assets/ui/selected/styles/navy_pressed.tres"),
+	"navy_disabled": preload("res://assets/ui/selected/styles/navy_disabled.tres"),
+	"washi_normal": preload("res://assets/ui/selected/styles/washi_normal.tres"),
+	"washi_pressed": preload("res://assets/ui/selected/styles/washi_pressed.tres"),
+	"washi_disabled": preload("res://assets/ui/selected/styles/washi_disabled.tres"),
+	"tab_selected": preload("res://assets/ui/selected/styles/tab_selected.tres"),
+	"tab_unselected": preload("res://assets/ui/selected/styles/tab_unselected.tres"),
+	"tsukkomi_normal": preload("res://assets/ui/selected/styles/tsukkomi_normal.tres"),
+	"tsukkomi_pressed": preload("res://assets/ui/selected/styles/tsukkomi_pressed.tres"),
+	"tsukkomi_disabled": preload("res://assets/ui/selected/styles/tsukkomi_disabled.tres"),
+	"focus": preload("res://assets/ui/selected/styles/focus.tres"),
+}
 
 ## Full panels (log, save slots, chapters, case file, confirmations) on the skin's panel paper.
 const PAPER_ROLES: Array[String] = ["menu", "log", "slots", "confirmation"]
@@ -125,30 +139,37 @@ static func apply_button(button: Button, style_id: String, role: String = "stand
 	button.add_theme_color_override("font_color", regular_ink)
 	button.add_theme_color_override("font_hover_color", _button_ink(p, role, active, "hover", washi(normalized)))
 	button.add_theme_color_override("font_pressed_color", _button_ink(p, role, active, "pressed", washi(normalized)))
+	button.add_theme_color_override("font_hover_pressed_color", _button_ink(p, role, active, "pressed", washi(normalized)))
 	button.add_theme_color_override("font_focus_color", regular_ink)
 	button.add_theme_color_override("font_disabled_color", _button_ink(p, role, active, "disabled", washi(normalized)))
 
 
-static func button_style(style_id: String, role: String, state: String, active: bool = false, scale_factor: float = 1.0) -> StyleBoxFlat:
-	if washi(style_id) and role in ["reading_action", "primary", "selector", "danger_action"]:
-		var frame: StyleBoxFlat = StyleBoxFlat.new()
-		frame.bg_color = Color("#08283d") if not active else Color("#275978")
-		frame.border_color = Color("#bfc7ce")
-		if state in ["hover", "focus"]:
-			frame.bg_color = Color("#204d6a")
-			frame.border_color = Color("#d7c18b")
-		elif state == "pressed":
-			frame.bg_color = Color("#326582")
-		elif state == "disabled":
-			frame.bg_color = Color("#344553")
-			frame.border_color = Color("#6a7b87")
-		frame.set_border_width_all(2 if state != "focus" else 3)
-		frame.set_corner_radius_all(17)
-		frame.content_margin_left = 18.0
-		frame.content_margin_right = 18.0
-		frame.content_margin_top = 10.0
-		frame.content_margin_bottom = 10.0
-		return frame
+static func button_style(style_id: String, role: String, state: String, active: bool = false, scale_factor: float = 1.0) -> StyleBox:
+	if washi(style_id):
+		var family: String = ""
+		if role in ["reading_action", "primary", "selector", "danger_action", "menu_primary"]:
+			family = "navy"
+		elif role in ["standard", "slot_card", "slot_card_empty"]:
+			family = "washi"
+		elif role == "boke_primary":
+			family = "tsukkomi"
+		elif role == "tab":
+			family = "tab"
+		if not family.is_empty():
+			if state == "focus":
+				return SELECTED_STYLES["focus"] as StyleBox
+			var name: String = "tab_selected" if active else "tab_unselected"
+			if family != "tab":
+				name = family + "_" + (state if state in ["pressed", "disabled"] else "normal")
+			var texture_style: StyleBoxTexture = (SELECTED_STYLES[name] as StyleBoxTexture).duplicate()
+			if state == "hover":
+				texture_style.modulate_color = Color(1.12, 1.12, 1.12, 1.0)
+			var density: float = maxf(1.0, scale_factor)
+			texture_style.content_margin_left = 18.0 * density
+			texture_style.content_margin_right = 18.0 * density
+			texture_style.content_margin_top = 10.0 * density
+			texture_style.content_margin_bottom = 10.0 * density
+			return texture_style
 	var p: Dictionary = palette(style_id)
 	var density: float = maxf(1.0, scale_factor)
 	var is_primary: bool = role in ["primary", "boke_primary", "danger_action", "menu_primary"]
@@ -556,8 +577,14 @@ static func contrast_ratio(foreground: Color, background: Color) -> float:
 
 
 static func _button_ink(p: Dictionary, role: String, active: bool, state: String, framed: bool = false) -> Color:
-	if framed and role in ["reading_action", "primary", "selector", "danger_action"]:
+	if framed and role == "tab":
+		return Color("#f8f3e9") if active else p["text"] as Color
+	if framed and role == "boke_primary":
+		return Color("#e4ddd2") if state == "disabled" else Color("#f8f3e9")
+	if framed and role in ["reading_action", "primary", "selector", "danger_action", "menu_primary"]:
 		return Color("#99a8b3") if state == "disabled" else Color("#f8f3e9")
+	if framed and role in ["standard", "slot_card", "slot_card_empty"]:
+		return p["disabled"] as Color if state == "disabled" else p["text"] as Color
 	if state == "disabled":
 		return p["disabled"] as Color
 	if framed and state == "pressed":

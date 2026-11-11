@@ -12,6 +12,7 @@ signal tab_changed
 
 const PICTURE_SCENE: PackedScene = preload("res://scenes/ui/gallery_picture.tscn")
 const TRACK_SCENE: PackedScene = preload("res://scenes/ui/gallery_track.tscn")
+const LOCKED_ART: Texture2D = preload("res://assets/ui/selected/gallery_locked.png")
 const LOCKED: String = "？？？"
 
 var tab: String = "pictures"
@@ -55,7 +56,8 @@ func open(pictures: Array, music: Array, volume_db: float) -> void:
 		var seen: bool = bool(entry["seen"])
 		(item.get_node("%Caption") as Label).text = str(entry["label"]) if seen else LOCKED
 		var thumb: TextureRect = item.get_node("%Thumb") as TextureRect
-		thumb.texture = load(str(entry["path"])) as Texture2D if seen else null
+		thumb.texture = load(str(entry["path"])) as Texture2D if seen else LOCKED_ART
+		thumb.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED if seen else TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		item.disabled = not seen
 		if seen:
 			item.pressed.connect(open_viewer.bind(str(entry["path"])))

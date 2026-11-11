@@ -6,6 +6,13 @@ extends Control
 signal next_pressed
 signal title_pressed
 
+const GRADE_STAMPS: Dictionary = {
+	"S": preload("res://assets/ui/selected/grade_s.png"),
+	"A": preload("res://assets/ui/selected/grade_a.png"),
+	"B": preload("res://assets/ui/selected/grade_b.png"),
+	"C": preload("res://assets/ui/selected/grade_c.png"),
+}
+
 @onready var heading: Label = %Heading
 @onready var caught: Label = %Caught
 @onready var perfect: Label = %Perfect
@@ -15,6 +22,7 @@ signal title_pressed
 @onready var glasses: Label = %GlassesLeft
 @onready var game_overs: Label = %GameOvers
 @onready var grade: Label = %Grade
+@onready var grade_stamp: TextureRect = %GradeStamp
 @onready var quote: Label = %Quote
 @onready var credit: Label = %Credit
 @onready var next_button: Button = %Next
@@ -42,7 +50,9 @@ func show_result(summary: Dictionary, speaker_name: String, has_next: bool, cred
 	hidden_found.text = str(int(summary.get("hidden", 0))) + (" / %d" % hidden_total if hidden_total > 0 else "")
 	glasses.text = "%d / %d" % [int(summary.get("glasses", 0)), int(summary.get("max_glasses", 5))]
 	game_overs.text = str(int(summary.get("game_overs", 0)))
-	grade.text = "【 %s 】" % str(summary.get("grade", "C"))
+	var grade_name: String = str(summary.get("grade", "C"))
+	grade.text = "【 %s 】" % grade_name
+	grade_stamp.texture = GRADE_STAMPS.get(grade_name, GRADE_STAMPS["C"]) as Texture2D
 	var line: Dictionary = summary.get("line", {}) as Dictionary
 	var text: String = str(line.get("text", ""))
 	quote.text = text if speaker_name.is_empty() or text.is_empty() else "%s：「%s」" % [speaker_name, text]

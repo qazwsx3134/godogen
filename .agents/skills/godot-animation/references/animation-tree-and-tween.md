@@ -5,17 +5,19 @@ Depth companion to `godot-animation`.
 ## AnimationPlayer essentials
 
 - Author clips in the editor's Animation panel; each clip keys node properties over time.
-- Track types: **Property** (most common), **3D Position/Rotation/Scale**, **Method**
-  (call a function at a keyframe), **Call** track, **Bezier** (curved value), **Audio**,
-  **Animation** (play another AnimationPlayer's clip).
+- Track types: **Property** (most common), **3D Position/Rotation/Scale**, **Blend Shape**,
+  **Call Method** (call a function at a keyframe), **Bezier Curve** (curved value),
+  **Audio Playback**, **Animation Playback** (play another AnimationPlayer's clip).
 - Playback: `play("name")`, `play_backwards("name")`, `stop()`, `pause()`,
   `seek(time, true)`, `speed_scale`, `queue("next")`.
 - Signals: `animation_finished(name)`, `animation_started(name)`,
   `current_animation_changed(name)`.
 - Set a clip's loop mode in the panel (None / Linear / Ping-Pong).
 
-A **method track** calls a function on the keyed node — great for spawning a hitbox at the
-exact attack frame. A **call track** is similar via the editor's "Functions" track.
+A **Call Method track** calls a function on the keyed node — great for spawning a hitbox at
+the exact attack frame. There is no signal track: to emit a signal at a frame, key a method
+that emits it. Method keys do not run when you preview the animation in the editor (a safety
+rule), so test them in the running game.
 
 ## AnimationTree nodes
 
@@ -33,15 +35,17 @@ Set `AnimationTree.tree_root` to one of:
   **advance conditions** (booleans you set: `tree.set("parameters/conditions/is_dead", true)`)
   or an advance expression.
 - `AnimationNodeBlendSpace1D` / `BlendSpace2D` — place clips at points; set
-  `"parameters/<name>/blend_position"` to blend between them (e.g. directional locomotion).
+  `"parameters/blend_position"` when the blend space is the root, or
+  `"parameters/<name>/blend_position"` for a named child (e.g. directional locomotion).
 - `AnimationNodeBlendTree` — a graph of blend/add/one-shot nodes with named outputs.
 - `AnimationNodeOneShot` — fire a one-off (e.g. a hit reaction) over a base animation:
   ```gdscript
   tree.set("parameters/Shot/request", AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
   ```
 
-Parameter path rule: `"parameters/" + node_name + "/" + property`. The playback for the
-root state machine is always `"parameters/playback"`.
+Parameter paths start at `"parameters/"`, then add each named child along the path and
+the property. The root itself adds no name: root blend position is
+`"parameters/blend_position"`; root state-machine playback is `"parameters/playback"`.
 
 ## Root motion
 
@@ -73,6 +77,7 @@ tw.tween_property(obj, "modulate:a", 0.0, 0.3)         # sub-property
 tw.tween_interval(0.2)                                 # wait
 tw.tween_callback(func(): print("done"))               # call a function
 tw.tween_method(_set_progress, 0.0, 1.0, 1.0)          # call setter over time
+tw.tween_await(dialog.closed).set_timeout(5.0)         # 4.7+: pause until a signal fires
 
 tw.set_parallel(true)        # subsequent tweens run together (default is sequential)
 tw.set_loops(3)              # repeat (0 = infinite)
@@ -86,5 +91,10 @@ Transitions: `TRANS_LINEAR/SINE/QUINT/QUART/QUAD/EXPO/ELASTIC/CUBIC/CIRC/BOUNCE/
 Eases: `EASE_IN/OUT/IN_OUT/OUT_IN`. Chain methods on the returned `PropertyTweener`:
 `.set_delay(0.1)`, `.from(start)`, `.from_current()`, `.as_relative()`.
 
-A tween created with `create_tween()` is bound to the node's tree and is killed if the
-node leaves the tree. Use `get_tree().create_tween()` to outlive a specific node.
+`Node.create_tween()` binds the tween to that node: it pauses while the node is outside the
+tree and is killed when the node is freed. `get_tree().create_tween()` makes an unbound tween
+that keeps running regardless of any node.
+
+`tween_await(signal)` (4.7+) holds the sequence until the signal is emitted — useful for
+cutscenes and dialogue. `set_timeout(seconds)` on the returned `AwaitTweener` lets the tween
+carry on if the signal never comes.

@@ -12,7 +12,8 @@ import { buzz, reducedMotion } from '../components/haptics'
 import { sfx } from '../components/sfx'
 import { TypeLine } from '../components/Fx'
 import { itemStyle, ITEMS, SHOP_IMPLANTS, clinicOrders, itemDesc, itemLock, marketPrice } from '../content/items'
-import { type NodeRun, type ResultRow, type useGame, SAFE_STRESS, caseDangerOption, caseReward, eliteDangerOption, eventLock, fightEnemy, jobLines } from '../game/state'
+import { type NodeRun, type ResultRow, type useGame, SAFE_STRESS, caseDangerOption, caseReward, eliteDangerOption, eventLock, fightEnemy, jobEnemy, jobLines, type BeatLog } from '../game/state'
+import { BEATS } from '../content/beats'
 import { findNode } from '../rules/map'
 import {
   type DangerOption,
@@ -30,12 +31,16 @@ import {
   RETREAT_HP,
   SLOT_LABEL,
   attrLock,
-  dirBonus,
   fightStats,
   hashSeed,
   heatEnemy,
   jobReward,
-  jobSuccessChance,
+  jobPool,
+  poolSize,
+  costText,
+  PUSH_STRESS,
+  POOL_RESULT_LABEL,
+  type PoolResult,
   dangerOdds,
   marginOf,
   psychoOdds,
@@ -43,7 +48,6 @@ import {
   perkReward,
   sellValue,
   statMod,
-  streetEnemy,
   tacticsFor,
   hackPower,
   stealthPower,
@@ -170,27 +174,128 @@ export function PsychoTag({ c }: { c: G['g']['character'] }) {
 
 // ---------- 委託 ----------
 
+const RESULT_TONE: Record<PoolResult, string> = { crit: 'text-positive', clean: 'text-positive', cost: 'text-warning', fail: 'text-red' }
+
+/** 一把骰：最高那顆（決定結果的）亮起來。 */
+function Dice({ dice, best }: { dice: number[]; best: number }) {
+  const hi = dice.indexOf(best)
+  return (
+    <span className="inline-flex flex-wrap gap-1 align-middle">
+      {dice.map((d, i) => (
+        <span key={i} className={`tech inline-flex h-8 w-8 items-center justify-center border text-[17px] font-bold ${i === hi ? 'border-cyan text-heading' : 'border-line/60 text-muted'}`}>
+          {d}
+        </span>
+      ))}
+    </span>
+  )
+}
+
+/** 已經擲過的場面。 */
+function BeatHistory({ beats, history }: { beats: (typeof BEATS)['force']; history: BeatLog[] }) {
+  if (!history.length) return null
+  return (
+    <div className="space-y-2">
+      {history.map((h) => {
+        const b = beats[h.beat]
+        const best = Math.max(...h.dice)
+        return (
+          <div key={h.beat} className="border border-line/60 p-3">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="font-bold text-cyan">{b.title}</span>
+              <Dice dice={h.dice} best={best} />
+              <span className={`font-bold ${RESULT_TONE[h.result]}`}>{POOL_RESULT_LABEL[h.result]}</span>
+            </div>
+            <p className="m-0 mt-1 text-[14px] text-fg">{b.out[h.result]}</p>
+            {h.cost && <p className="m-0 mt-1 text-[13px] text-warning">代價：{h.cost}</p>}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
 function JobNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'job' }> }) {
   const { g, act } = game
   const c = g.character
   const job = JOBS[n.jobId]
-  const lines = jobLines(n.jobId, n.ok)
+  const lines = jobLines(n.jobId)
+  const beats = BEATS[job.direction]
+  const at = n.beat ?? 0
+  const beat = beats[Math.min(at, beats.length - 1)]
+  const [push, setPush] = useState(false)
+  const [gamble, setGamble] = useState(false)
+  const parts = jobPool(c, job, beat.attr)
+  const size = poolSize(parts, (push ? 1 : 0) + (gamble && c.heat < 5 ? 1 : 0))
+  const roll = () => {
+    sfx.click()
+    act({ t: 'jobRoll', push, gamble: gamble && c.heat < 5 })
+    setPush(false)
+    setGamble(false)
+  }
+  const toggle = (on: boolean, set: (v: boolean) => void, title: string, note: string, disabled = false) => (
+    <button disabled={disabled} onClick={() => set(!on)} className={`block w-full text-left ${on ? 'cut cut-sm cut-red' : 'cut cut-sm'} ${disabled ? 'opacity-50' : ''}`}>
+      <div className="cut-in flex min-h-12 items-center justify-between gap-3 p-3">
+        <span className={on ? 'font-bold text-red' : 'text-fg'}>{on ? '✓ ' : ''}{title}</span>
+        <span className="text-[13px] text-muted">{note}</span>
+      </div>
+    </button>
+  )
   return (
     <>
       <NodeHead tag={`委託・${DIRECTION_LABEL[job.direction]}・難度 ${job.tier}`} title={job.name} fixer={fixerIn(DISTRICTS[g.run.districtIndex], job.fixerId)} body={job.blurb} />
       <div className="flex flex-wrap gap-2">
         <Tag>報酬 ¢{jobReward(job, perkReward(c, job.direction))}</Tag>
-        {job.direction === 'force' ? (
-          <Tag tone="red">⚔ 一定要打・打贏才算完成</Tag>
-        ) : (
-          <Tag>安靜得手 {pct(jobSuccessChance(job, dirBonus(c, job.direction)))}・失手要打一場</Tag>
-        )}
+        <Tag>{beats.length} 個場面{job.direction === 'force' ? '・最後一定要打' : '・失敗兩次要打一場'}</Tag>
         <Tag tone="warning">壓力 +{job.stress}</Tag>
         <Tag>完成時掉寶 {pct(0.1 * job.tier * (1 + statMod(c, 'loot')))}</Tag>
         {n.stage === 'auto' && <PsychoTag c={c} />}
       </div>
       {n.stage === 'auto' && <AutoRun lines={lines} total={autoMs(lines.length)} fast={!!g.meta.seen.job} onDone={() => act({ t: 'jobAutoDone' })} />}
-      {n.stage === 'fight' && !n.fight && <TacticPicker game={game} enemy={heatEnemy(streetEnemy(job), c.heat)} onPick={(t) => act({ t: 'jobFight', tactic: t })} />}
+      {n.stage !== 'auto' && n.stage !== 'done' && <BeatHistory beats={beats} history={n.stage === 'cost' ? (n.history ?? []).slice(0, -1) : (n.history ?? [])} />}
+      {n.stage === 'scene' && (
+        <Panel tone="strong" innerClass="p-4 space-y-3">
+          <div className="text-[13px] text-muted">場面 {at + 1}／{beats.length}</div>
+          <div className="text-[18px] font-bold text-cyan">{beat.title}</div>
+          <p className="m-0 text-fg">{beat.setup}</p>
+          <div className="text-[14px] text-muted">
+            {parts.map((p, i) => (
+              <span key={i}>
+                {i ? '、' : ''}
+                {p.label} <b className={`tech ${p.n < 0 ? 'text-red' : 'text-heading'}`}>{p.n > 0 ? `+${p.n}` : p.n} 顆</b>
+              </span>
+            ))}
+          </div>
+          <p className="m-0 text-[13px] text-muted">只看最高那顆：6 乾淨成功、4～5 成功但付代價、1～3 失敗；兩顆 6 是大成功。{size <= 0 ? '你一顆骰都沒有：擲兩顆取低的。' : ''}</p>
+          {toggle(push, setPush, '硬撐：多擲 1 顆', `神經壓力 +${PUSH_STRESS}`)}
+          {toggle(gamble && c.heat < 5, setGamble, '鋌而走險：多擲 1 顆', c.heat >= 5 ? '通緝已經滿了' : '通緝 +1', c.heat >= 5)}
+          <ActionButton tone="primary" className="w-full" onClick={roll}>
+            {size <= 0 ? '擲 2 顆（取低的）' : `擲 ${Math.min(6, size)} 顆`}
+          </ActionButton>
+        </Panel>
+      )}
+      {n.stage === 'cost' && n.history?.length ? (
+        <Panel tone="strong" innerClass="p-4 space-y-3">
+          <div className="text-[13px] text-muted">場面 {at + 1}／{beats.length}・{beat.title}</div>
+          <div className="flex flex-wrap items-center gap-2">
+            <Dice dice={n.history[n.history.length - 1].dice} best={Math.max(...n.history[n.history.length - 1].dice)} />
+            <span className="font-bold text-warning">{POOL_RESULT_LABEL.cost}</span>
+          </div>
+          <p className="m-0 text-fg">{beat.out.cost} 選一個代價：</p>
+          {beat.costs.map((o, i) => {
+            const k = o.kind === 'heat' && c.heat >= 5 ? 'stress' : o.kind
+            return (
+              <button key={i} onClick={() => act({ t: 'jobCost', index: i })} className="block w-full text-left cut cut-sm">
+                <div className="cut-in flex min-h-12 items-center justify-between gap-3 p-3">
+                  <span className="text-fg">{o.text}</span>
+                  <span className="shrink-0 text-[13px] text-warning">{costText(job, k)}</span>
+                </div>
+              </button>
+            )
+          })}
+        </Panel>
+      ) : null}
+      {n.stage === 'fight' && !n.fight && job.direction !== 'force' && <p className="m-0 text-red">你失手兩次，被逮個正著。只能打出去。</p>}
+      {n.stage === 'fight' && !n.fight && <TacticPicker game={game} enemy={heatEnemy(jobEnemy(job, n), c.heat)} onPick={(t) => act({ t: 'jobFight', tactic: t })} />}
       {n.stage === 'fight' && n.fight && <FightRun fight={n.fight} onDone={() => act({ t: 'jobFightDone' })} />}
       {n.stage === 'done' && <ResultRows title="結算" text={n.text} rows={n.rows} />}
     </>

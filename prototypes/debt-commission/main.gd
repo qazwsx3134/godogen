@@ -1952,6 +1952,8 @@ func _present_end(command: Dictionary) -> void:
 	var index: int = _story_choice_index()
 	if not game_over and not _phase3_enabled and index >= 0 and str(_story_choices[index].get("kind", "")) == "chapter":
 		_record_clear(CLEARED_WITHOUT_GRADE)  # a chapter with no rounds is cleared by reaching its end
+	var ending_title: String = _dict_string(command, "ending_title", "")
+	(_end_box.get_node("%EndingTitle") as Label).text = ending_title if not ending_title.is_empty() else _full_text
 	_end_box.visible = not game_over
 	_game_over_retry_button.visible = game_over
 	if game_over:
@@ -2800,6 +2802,11 @@ func _apply_ui_style() -> void:
 		_mount_end_screens()
 		_layout()
 	_apply_ui_style_recursive(self)
+	var logo_art: TextureRect = _title_screen.get_node_or_null("%LogoArt") as TextureRect
+	if logo_art != null:
+		var logo_text: Label = _title_screen.get_node("%Logo") as Label
+		logo_art.visible = _ui_style_id == UI_STYLES_SCRIPT.DEFAULT_ID
+		logo_text.visible = not logo_art.visible
 	_update_toggle_styles()
 	_apply_stage_style()
 	if _effects != null:

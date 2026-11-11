@@ -23,6 +23,27 @@ func _run() -> void:
 		and game._menu_overlay.scene_file_path.ends_with("menu_panel_gintama.tscn")
 		and game._settings_panel.scene_file_path.ends_with("settings_panel_gintama.tscn"),
 		"the washi scenes are mounted")
+	var title_art: TextureRect = game._title_screen.get_node("%LogoArt") as TextureRect
+	var primary: StyleBoxTexture = UI_STYLES_SCRIPT.button_style("gintama", "primary", "normal") as StyleBoxTexture
+	var boke: StyleBoxTexture = game._boke_tsukkomi_button.get_theme_stylebox("normal") as StyleBoxTexture
+	_expect(title_art.visible and title_art.texture.resource_path.ends_with("selected/title_logo.png")
+		and primary != null and primary.texture.resource_path.ends_with("selected/btn_navy_normal.png")
+		and primary.texture_margin_left == 48 and boke != null
+		and boke.texture.resource_path.ends_with("selected/btn_tsukkomi_normal.png"),
+		"the selected title, nine-slice button and tsukkomi art are mounted")
+	_expect(ProjectSettings.get_setting("application/config/icon") == "res://assets/ui/selected/app_icon.png"
+		and ProjectSettings.get_setting("application/boot_splash/image") == "res://assets/ui/selected/boot_splash.png",
+		"the selected app icon and boot splash are configured")
+	for role: String in ["primary", "standard", "boke_primary"]:
+		var family: String = {"primary": "navy", "standard": "washi", "boke_primary": "tsukkomi"}[role]
+		for state: String in ["normal", "pressed", "disabled"]:
+			var box: StyleBoxTexture = UI_STYLES_SCRIPT.button_style("gintama", role, state) as StyleBoxTexture
+			_expect(box != null and box.texture.resource_path.ends_with("btn_%s_%s.png" % [family, state]),
+				"%s %s uses the selected art" % [role, state])
+	for letter: String in ["S", "A", "B", "C"]:
+		game._chapter_result.show_result({"grade": letter}, "", false)
+		_expect(game._chapter_result.grade_stamp.texture.resource_path.ends_with("grade_%s.png" % letter.to_lower()),
+			"result grade %s uses its selected stamp" % letter)
 	_expect(game._title_screen.find_child("Styles", true, false) == null
 		and game._menu_overlay.find_child("Styles", true, false) == null
 		and not game._settings_panel.call("buttons").keys().any(func(k: String) -> bool: return k.begins_with("ui_style")),

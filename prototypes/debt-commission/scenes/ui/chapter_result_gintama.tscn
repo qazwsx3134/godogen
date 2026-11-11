@@ -3,6 +3,14 @@
 [ext_resource type="FontFile" path="res://assets/fonts/NotoSerifTC.ttf" id="1_qtlou"]
 [ext_resource type="Script" path="res://scripts/chapter_result.gd" id="2_5t4q8"]
 [ext_resource type="Texture2D" path="res://assets/ui/gintama_panel_paper.png" id="3_l71bq"]
+[ext_resource type="Texture2D" path="res://assets/ui/selected/grade_a.png" id="4_k5ofo"]
+[ext_resource type="StyleBox" path="res://assets/ui/selected/styles/navy_normal.tres" id="5_dsjsm"]
+[ext_resource type="StyleBox" path="res://assets/ui/selected/styles/navy_pressed.tres" id="6_j2jgv"]
+[ext_resource type="StyleBox" path="res://assets/ui/selected/styles/navy_disabled.tres" id="7_m8gnk"]
+[ext_resource type="StyleBox" path="res://assets/ui/selected/styles/focus.tres" id="8_hjny6"]
+[ext_resource type="StyleBox" path="res://assets/ui/selected/styles/washi_normal.tres" id="9_ivq6y"]
+[ext_resource type="StyleBox" path="res://assets/ui/selected/styles/washi_pressed.tres" id="10_yoe7q"]
+[ext_resource type="StyleBox" path="res://assets/ui/selected/styles/washi_disabled.tres" id="11_cs2ox"]
 
 [sub_resource type="FontVariation" id="FontVariation_r7w0l"]
 base_font = ExtResource("1_qtlou")
@@ -29,194 +37,6 @@ base_font = ExtResource("1_qtlou")
 variation_opentype = {
 2003265652: 800.0
 }
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4nif3"]
-content_margin_left = 16.0
-content_margin_top = 10.0
-content_margin_right = 16.0
-content_margin_bottom = 10.0
-bg_color = Color(0.03137255, 0.15686275, 0.23921569, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.7490196, 0.78039217, 0.80784315, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-shadow_color = Color(0.03, 0.09, 0.14, 0.22)
-shadow_size = 3
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uu0np"]
-content_margin_left = 16.0
-content_margin_top = 10.0
-content_margin_right = 16.0
-content_margin_bottom = 10.0
-bg_color = Color(0.03137255, 0.15686275, 0.23921569, 1)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.84313726, 0.75686276, 0.54509807, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-shadow_color = Color(0.03, 0.09, 0.14, 0.22)
-shadow_size = 3
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_olcpe"]
-content_margin_left = 16.0
-content_margin_top = 10.0
-content_margin_right = 16.0
-content_margin_bottom = 10.0
-bg_color = Color(0.1254902, 0.3019608, 0.41568628, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.84313726, 0.75686276, 0.54509807, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-shadow_color = Color(0.03, 0.09, 0.14, 0.22)
-shadow_size = 3
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k5ofo"]
-content_margin_left = 16.0
-content_margin_top = 10.0
-content_margin_right = 16.0
-content_margin_bottom = 10.0
-bg_color = Color(0.8666667, 0.84705883, 0.80784315, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.6627451, 0.69411767, 0.72156864, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-shadow_color = Color(0.03, 0.09, 0.14, 0.22)
-shadow_size = 3
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dsjsm"]
-content_margin_left = 16.0
-content_margin_top = 10.0
-content_margin_right = 16.0
-content_margin_bottom = 10.0
-bg_color = Color(0, 0, 0, 0)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.84313726, 0.75686276, 0.54509807, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-shadow_color = Color(0.03, 0.09, 0.14, 0.22)
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j2jgv"]
-content_margin_left = 16.0
-content_margin_top = 10.0
-content_margin_right = 16.0
-content_margin_bottom = 10.0
-bg_color = Color(0.9843137, 0.96862745, 0.93333334, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.21960784, 0.3372549, 0.4509804, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-shadow_color = Color(0.03, 0.09, 0.14, 0.22)
-shadow_size = 3
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m8gnk"]
-content_margin_left = 16.0
-content_margin_top = 10.0
-content_margin_right = 16.0
-content_margin_bottom = 10.0
-bg_color = Color(0.03137255, 0.15686275, 0.23921569, 1)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.84313726, 0.75686276, 0.54509807, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-shadow_color = Color(0.03, 0.09, 0.14, 0.22)
-shadow_size = 3
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hjny6"]
-content_margin_left = 16.0
-content_margin_top = 10.0
-content_margin_right = 16.0
-content_margin_bottom = 10.0
-bg_color = Color(0.9019608, 0.92941177, 0.94509804, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.1254902, 0.24313726, 0.36862746, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-shadow_color = Color(0.03, 0.09, 0.14, 0.22)
-shadow_size = 3
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ivq6y"]
-content_margin_left = 16.0
-content_margin_top = 10.0
-content_margin_right = 16.0
-content_margin_bottom = 10.0
-bg_color = Color(0.8666667, 0.84705883, 0.80784315, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.6627451, 0.69411767, 0.72156864, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-shadow_color = Color(0.03, 0.09, 0.14, 0.22)
-shadow_size = 3
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yoe7q"]
-content_margin_left = 16.0
-content_margin_top = 10.0
-content_margin_right = 16.0
-content_margin_bottom = 10.0
-bg_color = Color(0, 0, 0, 0)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.84313726, 0.75686276, 0.54509807, 1)
-corner_radius_top_left = 30
-corner_radius_top_right = 30
-corner_radius_bottom_right = 30
-corner_radius_bottom_left = 30
-shadow_color = Color(0.03, 0.09, 0.14, 0.22)
-shadow_offset = Vector2(0, 4)
 
 [node name="ChapterResult" type="Control" unique_id=520334365]
 z_index = 2
@@ -392,6 +212,15 @@ text = "吐槽評價"
 vertical_alignment = 1
 metadata/skin_text = "result_grade"
 
+[node name="GradeStamp" type="TextureRect" parent="Scroll/Center/Card/Column/GradeRow" unique_id=1366923296]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(112, 112)
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("4_k5ofo")
+expand_mode = 1
+stretch_mode = 5
+
 [node name="Grade" type="Label" parent="Scroll/Center/Card/Column/GradeRow" unique_id=1023592606]
 unique_name_in_owner = true
 layout_mode = 2
@@ -429,18 +258,18 @@ alignment = 1
 unique_name_in_owner = true
 custom_minimum_size = Vector2(332.3077, 132.92308)
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_4nif3")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_uu0np")
-theme_override_styles/hover = SubResource("StyleBoxFlat_olcpe")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_uu0np")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_k5ofo")
-theme_override_styles/focus = SubResource("StyleBoxFlat_dsjsm")
+theme_override_styles/normal = ExtResource("5_dsjsm")
+theme_override_styles/pressed = ExtResource("6_j2jgv")
+theme_override_styles/hover = ExtResource("5_dsjsm")
+theme_override_styles/hover_pressed = ExtResource("6_j2jgv")
+theme_override_styles/disabled = ExtResource("7_m8gnk")
+theme_override_styles/focus = ExtResource("8_hjny6")
 theme_override_colors/font_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_focus_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_hover_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
+theme_override_colors/font_disabled_color = Color(0.72156864, 0.7607843, 0.7882353, 1)
 theme_override_fonts/font = SubResource("FontVariation_ttoty")
 theme_override_font_sizes/font_size = 33
 text = "下一章"
@@ -449,17 +278,17 @@ text = "下一章"
 unique_name_in_owner = true
 custom_minimum_size = Vector2(332.3077, 132.92308)
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_j2jgv")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_m8gnk")
-theme_override_styles/hover = SubResource("StyleBoxFlat_hjny6")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_m8gnk")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_ivq6y")
-theme_override_styles/focus = SubResource("StyleBoxFlat_yoe7q")
+theme_override_styles/normal = ExtResource("9_ivq6y")
+theme_override_styles/pressed = ExtResource("10_yoe7q")
+theme_override_styles/hover = ExtResource("9_ivq6y")
+theme_override_styles/hover_pressed = ExtResource("10_yoe7q")
+theme_override_styles/disabled = ExtResource("11_cs2ox")
+theme_override_styles/focus = ExtResource("8_hjny6")
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_focus_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_pressed_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_r7w0l")
 theme_override_font_sizes/font_size = 33
