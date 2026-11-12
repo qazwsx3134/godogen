@@ -13,7 +13,6 @@ import {
   type Attr,
   addFame,
   addXp,
-  approachBonus,
   attrLock,
   baseAttrs,
   grantProgress,
@@ -23,7 +22,6 @@ import {
   perkOptions,
   perkReward,
   perkTally,
-  resolveDanger,
   resolveFight,
   rng,
   sellValue,
@@ -41,11 +39,13 @@ import {
   addScar,
   jobFame,
   RISKY_FAME_MULT,
-  scaledRisk,
-  NEURAL_STAGE_LABEL,
-  marginOf,
-  neuralStage,
-  rollPsycho,
+  DIR_ATTR,
+  DROP_INJURY,
+  type FoeKind,
+  type LethalSpec,
+  type PoolPart,
+  lethalPool,
+  lethalWound,
   MAX_ITEM_LEVEL,
   UPGRADE_LOAD,
   upgradeCost,
@@ -56,27 +56,34 @@ import {
   type PoolResult,
   type CostKind,
   POOL_RESULT_LABEL,
-  PUSH_STRESS,
   GAMBLE_HEAT,
+  PSYCHO_LETHAL_DICE,
+  PSYCHO_PUSH_FAIL,
+  PSYCHO_SCENE_ABORT,
+  psychoDie,
+  psychoRules,
+  pushStress,
   COST_PAY,
   CRIT_PAY,
   applyCost,
   costText,
   jobPool,
+  scenePool,
+  eventPool,
   poolSize,
   rollPool,
 } from '../rules/core'
-import { BEATS } from '../content/beats'
+import { BEATS, storyBeats } from '../content/beats'
 import { type District, type MapNode, type NodeType, STORY_LAYER, findNode, generateDistrict, reachable } from '../rules/map'
 import { FIXERS, JOBS, JOB_LINES, OPENING, STARTER_GEAR, highDanger } from '../content/data'
 import { ITEMS, SHOP_IMPLANTS, STARTER_CHOICES, clinicOrders, eliteLoot, itemLock, eventLoot, makeItem, marketPrice, marketStock, rollKind, streetLoot } from '../content/items'
-import { CASE_BY_ID, TEST_CASE, type CaseOption, type CaseRecord, type StoryCase, optionLock } from '../content/cases'
+import { CASE_BY_ID, TEST_CASE, type CaseOption, type CaseRecord, type StoryCase, caseThreat, optionLock } from '../content/cases'
 import { EVENT_BY_ID, type Effects, type EventOption } from '../content/events'
 import { DISTRICTS, type DistrictDef } from '../content/districts'
 import { PERKS, PERK_CASH } from '../rules/perks'
 
 /** 正在進行的劇情委託的階段；結案後的結果記在 Run.cases。 */
-export type StoryStage = 'prep' | 'auto' | 'fight' | 'danger'
+export type StoryStage = 'prep' | 'auto' | 'scene' | 'sceneCost' | 'fight' | 'danger' | 'cost' | 'chase'
 
 /** 結算畫面的一列：一個欄位一個變化，不塞在同一句話裡。 */
 export interface ResultRow {
@@ -106,20 +113,50 @@ export type NodeRun =
       text?: string
       rows?: ResultRow[]
     }
-  | { kind: 'elite'; nodeId: string; jobId: string; stage: 'auto' | 'fight' | 'danger' | 'done'; fight?: FightResult; outcome?: DangerOutcome }
-  | { kind: 'event'; nodeId: string; eventId: string; stage: 'choose' | 'done'; text?: string; rows?: ResultRow[] }
+  | {
+      kind: 'elite'
+      nodeId: string
+      jobId: string
+      /** chase＝致命判定失敗、追兵逼近，要再打一場。 */
+      stage: 'auto' | 'fight' | 'danger' | 'cost' | 'chase' | 'done'
+      fight?: FightResult
+      /** 追兵那一場。 */
+      chase?: FightResult
+      outcome?: DangerOutcome
+      lethal?: LethalLog
+    }
+  | { kind: 'event'; nodeId: string; eventId: string; stage: 'choose' | 'done'; text?: string; rows?: ResultRow[]; roll?: { dice: number[]; best: number; result: PoolResult } }
   | { kind: 'market'; nodeId: string; stock: Item[] }
   | { kind: 'clinic'; nodeId: string }
   | { kind: 'rest'; nodeId: string; used?: boolean }
   | { kind: 'story'; nodeId: string; caseId: string }
 
+/** 危險節點的致命判定擲出來的結果（擲出 4～5 時等玩家選代價）。 */
+export interface LethalLog {
+  option: string
+  dice: number[]
+  /** 決定結果的那顆（骰池 ≤0 時是低的那顆）。 */
+  best?: number
+  result: PoolResult
+  /** 臨界以下硬撐後擲的錯亂骰。 */
+  psycho?: number[]
+  /** 錯亂骰讓這次判定直接失敗。 */
+  broke?: boolean
+}
+
 /** 一個場面擲出來的結果（畫面與結算用）。 */
 export interface BeatLog {
   beat: number
   dice: number[]
+  /** 決定結果的那顆（骰池 ≤0 時是低的那顆）。 */
+  best?: number
   result: PoolResult
   /** 付了什麼代價（成功但付代價、失敗）。 */
   cost?: string
+  /** 這個場面擲的錯亂骰（失控的場面前、臨界以下硬撐後）。 */
+  psycho?: number[]
+  /** 錯亂骰讓這個場面失敗或中斷了任務。 */
+  broke?: 'fail' | 'abort'
 }
 
 export interface Run {
@@ -139,6 +176,20 @@ export interface Run {
   events: string[]
   /** 委託、精英委託、劇情委託結束後還沒「收下」的完成單：收下之前不能離開節點，三選一也先不跳出來。 */
   claim?: Claim | null
+  /** 剛擲完、還沒播完的致命判定（全螢幕揭曉；播完才出現結案或死亡畫面）。 */
+  reveal?: Reveal | null
+}
+
+/** 致命判定的揭曉演出要顯示的內容。 */
+export interface Reveal {
+  id: string
+  title: string
+  dice: number[]
+  best: number
+  result: PoolResult
+  psycho?: number[]
+  broke?: boolean
+  text: string
 }
 
 /** 完成單：完成演出要顯示的內容。 */
@@ -167,14 +218,27 @@ export interface Legend {
 /** 跨生涯的資料：傳奇檔案，以及哪些節點類型看過（看過的自動段可以 2 倍速）。新傭兵不會清掉。 */
 export interface Meta {
   legends: Legend[]
-  seen: Partial<Record<NodeType, boolean>>
+  /** 看過的節點類型，以及看過的介紹（dice＝骰池、lethal＝致命判定）。 */
+  seen: Partial<Record<NodeType | 'dice' | 'lethal', boolean>>
 }
 
 export interface Game {
   v: 2
   character: Character
   run: Run
-  story: { caseId: string | null; stage: StoryStage; approach?: string; fight?: FightResult; option?: string }
+  story: {
+    caseId: string | null
+    stage: StoryStage
+    approach?: string
+    fight?: FightResult
+    option?: string
+    lethal?: LethalLog
+    /** 做法的場面：第幾個、擲過的紀錄、累計影響致命判定的骰數（乾淨成功 +1、失敗 −1）、選了幾次報酬打折。 */
+    beat?: number
+    history?: BeatLog[]
+    scenes?: number
+    cuts?: number
+  }
   log: LogEvent[]
   systemFault: boolean
   notes: string[]
@@ -311,19 +375,48 @@ function offerLoot(c: Character, options: Item[] | null, log: LogEvent[], at: nu
   log.push({ at, kind: 'gain', text: `◆ 戰利品（${from}）三選一：${options.map((i) => i.name).join('／')}。` })
 }
 
-/** 危險節點選項套上做法的修正：做法本身的風險，再扣掉該方向的裝備與卡牌加成。 */
-export function caseDangerOption(c: Character, sc: StoryCase, approachId: string | undefined, optionId: string): DangerOption {
-  const opt = sc.danger.options.find((o) => o.id === optionId)!
+/** 劇情案選項的致命判定：選項的屬性門檻（沒有就用做法路線的屬性）、器材選項算器材的路線；大案的對手 −1。 */
+export function caseLethal(sc: StoryCase, approachId: string | undefined, o: CaseOption, scenes = 0): LethalSpec {
   const ap = sc.approaches.find((x) => x.id === approachId) ?? sc.approaches[0]
-  if (!opt.lethal) return opt
-  return { ...opt, lethalBase: scaledRisk(opt.lethalBase + ap.lethalMod - approachBonus(c, ap.direction)) }
+  const direction = o.needs && 'slot' in o.needs ? o.needs.direction : ap.direction
+  const foe: FoeKind = DISTRICTS.some((d) => d.boss === sc.id) ? 'boss' : 'story'
+  return { attr: o.needs && 'attr' in o.needs ? o.needs.attr : DIR_ATTR[direction], direction, foe, risk: o.lethalBase + ap.lethalMod, prepared: !!o.needs, scenes }
 }
 
-/** 精英委託的危險選項：和劇情案一樣，扣掉該方向的裝備與卡牌加成（下限 2%）。 */
-export function eliteDangerOption(c: Character, job: JobDef, opt: DangerOption): DangerOption {
-  if (!opt.lethal) return opt
-  return { ...opt, lethalBase: scaledRisk(opt.lethalBase - approachBonus(c, job.direction)) }
+/** 精英委託選項的致命判定：屬性選項用它的門檻屬性並 +2 顆；精英對手 −1。 */
+export function eliteLethal(job: JobDef, o: DangerOption): LethalSpec {
+  return { attr: o.attrNeeds?.attr ?? DIR_ATTR[job.direction], direction: job.direction, foe: 'elite', risk: o.lethalBase, prepared: !!o.attrNeeds }
 }
+
+/**
+ * 擲一把有加骰的骰池（委託場面、致命判定共用）：硬撐付神經壓力、鋌而走險付通緝（滿了不算），各 +1 顆；
+ * 臨界以下硬撐之後擲錯亂骰，擲出 1 就算失敗。回傳付過加骰代價的角色。
+ */
+function rollChecked(c: Character, parts: PoolPart[], push: boolean, gamble0: boolean, seed: number, pushSeed: number) {
+  const gamble = gamble0 && c.heat < 5
+  const ch = structuredClone(c)
+  if (push) ch.stress += pushStress(c)
+  if (gamble) ch.heat += GAMBLE_HEAT
+  const roll = rollPool(poolSize(parts, (push ? 1 : 0) + (gamble ? 1 : 0)), seed)
+  const psycho: number[] = []
+  let broke = false
+  if (push && psychoRules(c).pushCheck) {
+    const d = psychoDie(pushSeed)
+    psycho.push(d)
+    broke = d <= PSYCHO_PUSH_FAIL
+  }
+  if (broke) roll.result = 'fail'
+  return { ch, roll, psycho, broke }
+}
+
+/** 事件擲出 4～5 時沒寫代價的選項付這個。 */
+const EVENT_TOLL: Effects = { text: '過程不太順利，你繃緊了神經。', stress: 6 }
+
+/** 致命判定失敗、追兵逼近時的說明。 */
+const chaseText = (who: string) => `${who}逼近了。打出去就算撐過去，報酬照拿；打輸才是致命傷。`
+
+/** 致命判定的文字：擲出什麼、錯亂骰有沒有搞砸。 */
+const lethalText = (l: LethalLog) => `致命判定擲出 ${l.dice.join('、')}${l.broke ? `，但錯亂骰擲出 ${PSYCHO_PUSH_FAIL}，手不聽使喚` : ''}，${l.broke ? '失敗' : POOL_RESULT_LABEL[l.result]}`
 
 /** 靠器材或屬性走的安全選項要付代價：報酬打七五折、名聲減半、神經壓力 +10。 */
 export const SAFE_REWARD_RATE = 0.75
@@ -408,44 +501,52 @@ function grantLifeline(c: Character, tier: LifelineTier): string {
 /** 已經有保單時，多拿到的那張轉手的價錢。 */
 const LIFELINE_RESALE = 200
 
+/** 任務因錯亂中斷：節點或劇情案直接結束，沒有報酬。 */
+const PSYCHO_ABORT = '神經錯亂，任務中斷。沒有報酬。'
+
+/** 放上致命判定的揭曉演出。 */
+const withReveal = (g: Game, reveal: Reveal): Game => ({ ...g, run: { ...g.run, reveal } })
+/** 致命判定的揭曉內容：擲出 4～5 時等玩家選代價；其他照結果的文字。 */
+function lethalReveal(id: string, title: string, l: LethalLog, outcome?: DangerOutcome): Reveal {
+  const text = l.result === 'cost' && !l.broke ? '撐過去了，但要付重代價：重傷生還，或丟下一切脫身。' : (outcome?.reason ?? '')
+  return { id, title, dice: l.dice, best: l.best ?? Math.max(...l.dice), result: l.broke ? 'fail' : l.result, psycho: l.psycho, broke: l.broke, text }
+}
+
 /**
- * 任務進行中的神經錯亂（神經餘裕 < 40）：依 seed 擲一次。重傷照樣繼續任務；中斷、被救、死亡則任務結束（stop）。
- * 死亡時直接寫進傳奇檔案。
+ * 失控時錯亂骰擲出 1～2：任務中斷，再擲 2 顆的致命判定（骰池版錯亂）。
+ * 大成功／乾淨成功＝只是中斷；付代價＝重傷＋舊傷；失敗＝致命傷（保單、系統補償或死亡）。
  */
-function psychoCheck(g: Game, now: number, seed: number, label: string, dir: Direction): { g: Game; stop: boolean } {
-  const c = g.character
-  const hit = rollPsycho(c, seed)
-  if (!hit) return { g, stop: false }
-  const ch = structuredClone(c)
-  const log: LogEvent[] = []
-  const stage = NEURAL_STAGE_LABEL[neuralStage(marginOf(c))]
-  if (hit === 'maim') {
-    log.push({ at: now, kind: 'hurt', text: `✚ 神經錯亂（${stage}）：「${label}」途中你失控了一陣子，回過神來滿手是血，有一部分是你自己的。` })
+function psychoBreak(g: Game, now: number, seed: number, label: string, dir: Direction): { g: Game; roll: ReturnType<typeof rollPool>; text: string } {
+  const r = psychoBreakRaw(g, now, seed, label, dir)
+  const reveal: Reveal = { id: `${g.character.id}:psycho:${seed}`, title: `神經錯亂・${label}`, dice: r.roll.dice, best: r.roll.best, result: r.roll.result, text: r.text }
+  return { ...r, g: withReveal(r.g, reveal) }
+}
+
+function psychoBreakRaw(g: Game, now: number, seed: number, label: string, dir: Direction): { g: Game; roll: ReturnType<typeof rollPool>; text: string } {
+  const roll = rollPool(PSYCHO_LETHAL_DICE, seed)
+  const ch = structuredClone(g.character)
+  const log: LogEvent[] = [{ at: now, kind: 'warn', text: `⚠ 神經錯亂（失控）：「${label}」途中你眼前一黑。任務中斷，致命判定擲出 ${roll.dice.join('、')}，${POOL_RESULT_LABEL[roll.result]}。` }]
+  if (roll.result === 'crit' || roll.result === 'clean') return { g: withLog({ ...g, character: ch }, ...log), roll, text: `${PSYCHO_ABORT}回過神來，你已經在撤離的路上。` }
+  if (roll.result === 'cost') {
+    log.push({ at: now, kind: 'hurt', text: `✚ 你失控了一陣子，回過神來滿手是血，有一部分是你自己的。` })
     scar(ch, dir, now, log)
-    return { g: withLog({ ...g, character: ch }, ...log), stop: false }
-  }
-  if (hit === 'abort') {
-    log.push({ at: now, kind: 'warn', text: `⚠ 神經錯亂（${stage}）：「${label}」途中你眼前一黑，回過神來已經在撤離的路上。任務中斷。` })
-    return { g: withLog({ ...g, character: ch }, ...log), stop: true }
+    return { g: withLog({ ...g, character: ch }, ...log), roll, text: `${PSYCHO_ABORT}你受了重傷，留下一道舊傷。` }
   }
   if (g.systemFault) {
     ch.injury = Math.max(ch.injury, 50)
-    log.push({ at: now, kind: 'system', text: `✚ 神經錯亂造成的致命結果：武裝醫療隊免費搶救（系統補償）。任務中斷。` })
-    return { g: withLog({ ...g, character: ch, notes: [...g.notes, `${label}：神經錯亂，緊急搶救（系統補償）`] }, ...log), stop: true }
+    log.push({ at: now, kind: 'system', text: `✚ 神經錯亂造成的致命結果：武裝醫療隊免費搶救（系統補償）。` })
+    return { g: withLog({ ...g, character: ch, notes: [...g.notes, `${label}：神經錯亂，緊急搶救（系統補償）`] }, ...log), roll, text: `${PSYCHO_ABORT}系統補償：免費搶救。` }
   }
   if (ch.lifelines > 0) {
-    log.push({ at: now, kind: 'hurt', text: `✚ 神經錯亂（${stage}）：「${label}」途中你的心跳停了。救命保單觸發，武裝醫療隊把你拖回來（保單用掉了）。任務中斷。` })
+    log.push({ at: now, kind: 'hurt', text: `✚ 你的心跳停了。救命保單觸發，武裝醫療隊把你拖回來（保單用掉了）。` })
     rescueBill(ch, dir, now, log)
-    return { g: withLog({ ...g, character: ch }, ...log), stop: true }
+    return { g: withLog({ ...g, character: ch }, ...log), roll, text: `${PSYCHO_ABORT}你的心跳停了，救命保單把你拖了回來。` }
   }
   ch.alive = false
-  const cause = `神經錯亂（${stage}）：「${label}」途中你的心跳停了，身上沒有救命保單。`
+  const cause = `神經錯亂（失控）：「${label}」途中你的心跳停了，身上沒有救命保單。`
   log.push({ at: now, kind: 'stop', text: `✖ 你死了：${cause}` })
-  return { g: endCareer(withLog({ ...g, character: ch }, ...log), 'dead', cause, now), stop: true }
+  return { g: endCareer(withLog({ ...g, character: ch }, ...log), 'dead', cause, now), roll, text: cause }
 }
-
-/** 任務因錯亂中斷：節點或劇情案直接結束，沒有報酬。 */
-const PSYCHO_ABORT = '神經錯亂，任務中斷。沒有報酬。'
 
 /**
  * 危險節點判定後的共用處理（劇情委託與精英委託）：
@@ -486,14 +587,15 @@ function closeCase(g: Game, now: number, sc: StoryCase, picked: CaseOption, outc
   const made = outcome.kind === 'survived' || outcome.kind === 'maimed'
   const paid = (ch: Character, log: LogEvent[]) => {
     if (!pay) return
-    const reward = caseReward(picked)
+    // 場面裡選過「報酬打折」的少拿（每次 −20%，最少兩成）
+    const reward = Math.round(caseReward(picked) * Math.max(0.2, 1 - COST_PAY * (g.story.cuts ?? 0)))
     ch.credits += reward
     ch.heat = Math.min(5, ch.heat + (picked.heat ?? 0))
     if (picked.needs) ch.stress += SAFE_STRESS
     if (picked.heal) ch.injury = 0
     const lifeline = picked.lifeline ? grantLifeline(ch, 'standard') : ''
     const parts = [
-      reward ? `+${reward} 信用點${reward !== picked.reward ? '（靠器材或屬性：打七五折、名聲減半）' : ''}` : '沒有報酬',
+      reward ? `+${reward} 信用點${picked.needs ? '（靠器材或屬性：打七五折、名聲減半）' : ''}${g.story.cuts ? `（場面裡報酬打折 ${g.story.cuts} 次）` : ''}` : '沒有報酬',
       picked.heat ? `通緝 +${picked.heat}` : '',
       picked.needs ? `神經壓力 +${SAFE_STRESS}` : '',
       picked.heal ? '傷口縫好了' : '',
@@ -522,6 +624,32 @@ function closeCase(g: Game, now: number, sc: StoryCase, picked: CaseOption, outc
   const record: CaseRecord = { approach: g.story.approach ?? '', optionId: picked.id, outcome: outcome.kind, reason: outcome.reason }
   const tone = outcome.kind === 'survived' ? 'success' : outcome.kind === 'safe' ? (pay && picked.reward ? 'partial' : 'fail') : 'rescued'
   return withClaim(g, { ...next, story: { caseId: null, stage: 'prep' }, run: { ...next.run, cases: { ...next.run.cases, [sc.id]: record } } }, { title: sc.title, tone, text: outcome.reason })
+}
+
+/** 精英委託的危險節點結算：生還給報酬、經驗、名聲與戰利品；其他結果交給 settleLethal。 */
+function eliteSettle(g: Game, now: number, n: Extract<NodeRun, { kind: 'elite' }>, opt: DangerOption, outcome: DangerOutcome): Game {
+  const job = JOBS[n.jobId]
+  const r = settleLethal(g, now, outcome, {
+    label: job.name,
+    safeText: outcome.reason,
+    lossText: '這份工作的報酬沒了。',
+    direction: job.direction,
+    onSurvive: (ch, log) => {
+      const full = jobReward(job, perkReward(ch, job.direction))
+      const reward = opt.attrNeeds ? Math.round(full * SAFE_REWARD_RATE) : full
+      if (opt.attrNeeds) ch.stress += SAFE_STRESS
+      ch.credits += reward
+      ch.heat = Math.min(5, ch.heat + job.heat)
+      log.push({ at: now, kind: 'job', text: `${statusPrefix(ch)} 完成精英委託「${job.name}」。+${reward} 信用點${opt.attrNeeds ? `（靠屬性：打七五折、名聲減半、神經壓力 +${SAFE_STRESS}）` : ''}，通緝 +${job.heat}。` })
+      addXp(ch, job.xp, now, log)
+      addFame(ch, Math.round(jobFame(job) * (opt.attrNeeds ? SAFE_FAME_RATE : RISKY_FAME_MULT)), now, log)
+      // 撐過去（含重傷生還）一定掉寶（稀有表三選一）
+      offerLoot(ch, eliteLoot(hashSeed(ch.id, n.nodeId, 'loot')), log, now, highDanger(job).fight.name)
+    },
+  })
+  const done = { ...r, run: { ...r.run, node: { ...n, stage: 'done' as const, outcome } } }
+  const tone = outcome.kind === 'survived' ? 'success' : outcome.kind === 'safe' ? 'fail' : 'rescued'
+  return withClaim(g, done, { title: job.name, tone, text: outcome.kind === 'safe' && !n.lethal ? '你空手撤離：沒有報酬，也沒有戰利品。' : outcome.reason })
 }
 
 // ---------- 節點內容 ----------
@@ -577,6 +705,15 @@ function advanceJob(g: Game, now: number, n: JobNodeRun): Game {
   return finishJob(put(next), now, true)
 }
 
+/** 做法的場面走完一個：還有就下一個；走完了，要打的做法先打，再到危險節點。 */
+function advanceStory(g: Game, story: Game['story']): Game {
+  const sc = CASE_BY_ID[story.caseId!]
+  const ap = sc.approaches.find((x) => x.id === story.approach) ?? sc.approaches[0]
+  const beat = (story.beat ?? 0) + 1
+  if (beat < storyBeats(ap.direction).length) return { ...g, story: { ...story, beat, stage: 'scene' } }
+  return { ...g, story: { ...story, beat, stage: ap.fight ? 'fight' : 'danger' } }
+}
+
 /** 事件選項能不能選：不夠錢或屬性不夠回傳原因。 */
 export function eventLock(c: Character, o: EventOption): string | undefined {
   if (o.cost && c.credits < o.cost) return `需要 ¢${o.cost}`
@@ -622,7 +759,12 @@ type Action =
   | { t: 'eliteAutoDone' }
   | { t: 'eliteFight'; tactic: Tactic }
   | { t: 'eliteFightDone' }
-  | { t: 'eliteChoose'; optionId: string }
+  | { t: 'eliteChoose'; optionId: string; push?: boolean; gamble?: boolean }
+  | { t: 'lethalCost'; choice: 'maim' | 'drop' }
+  | { t: 'revealDone' }
+  | { t: 'chaseFight'; tactic: Tactic }
+  | { t: 'chaseDone' }
+  | { t: 'seenIntro'; key: 'dice' | 'lethal' }
   | { t: 'eventChoose'; optionId: string }
   | { t: 'marketBuy'; index: number }
   | { t: 'buyLifeline'; tier: LifelineTier }
@@ -633,7 +775,9 @@ type Action =
   | { t: 'rest'; choice: 'heal' | 'heat' }
   | { t: 'storyApproach'; id: string }
   | { t: 'storyAutoDone' }
-  | { t: 'storyChoose'; optionId: string }
+  | { t: 'storyChoose'; optionId: string; push?: boolean; gamble?: boolean }
+  | { t: 'storyRoll'; push: boolean; gamble: boolean }
+  | { t: 'storySceneCost'; index: number }
   | { t: 'storyFight'; tactic: Tactic }
   | { t: 'storyFightDone' }
   | { t: 'claim' }
@@ -742,15 +886,9 @@ export function reduce(g: Game, a: Action): Game {
       }
     }
     case 'jobAutoDone': {
+      // 錯亂改在每個場面擲（看得到的錯亂骰），開場不再有隱藏判定
       if (n?.kind !== 'job' || n.stage !== 'auto') return g
-      const job = JOBS[n.jobId]
-      const p = psychoCheck(g, now, hashSeed(c.id, n.nodeId, 'psycho'), job.name, job.direction)
-      if (p.stop) {
-        const rows: ResultRow[] = [{ label: '結果', value: '任務中斷（神經錯亂）', tone: 'bad' }]
-        const after = { ...p.g, run: { ...p.g.run, node: { ...n, stage: 'done' as const, text: PSYCHO_ABORT, rows } } }
-        return withClaim(g, after, { title: job.name, tone: 'fail', text: PSYCHO_ABORT })
-      }
-      return { ...p.g, run: { ...p.g.run, node: { ...n, stage: 'scene', beat: 0 } } }
+      return { ...g, run: { ...g.run, node: { ...n, stage: 'scene', beat: 0 } } }
     }
     case 'jobRoll': {
       // 擲這個場面的骰池；擲之前可以硬撐（神經壓力）或鋌而走險（通緝）各加一顆
@@ -759,12 +897,32 @@ export function reduce(g: Game, a: Action): Game {
       const at = n.beat ?? 0
       const beat = BEATS[job.direction][at]
       const gamble = a.gamble && c.heat < 5
-      const ch = structuredClone(c)
-      if (a.push) ch.stress += PUSH_STRESS
-      if (gamble) ch.heat += GAMBLE_HEAT
-      const roll = rollPool(poolSize(jobPool(c, job, beat.attr), (a.push ? 1 : 0) + (gamble ? 1 : 0)), hashSeed(c.id, n.nodeId, 'beat', at))
-      const entry: BeatLog = { beat: at, dice: roll.dice, result: roll.result }
-      const said: LogEvent = { at: now, kind: roll.result === 'fail' ? 'hurt' : 'job', text: `「${job.name}」${beat.title}：擲出 ${roll.dice.join('、')}，${POOL_RESULT_LABEL[roll.result]}。${beat.out[roll.result]}` }
+      const rules = psychoRules(c)
+      // 失控：場面開始前擲錯亂骰，1～2 任務中斷＋致命判定
+      if (rules.sceneCheck) {
+        const d = psychoDie(hashSeed(c.id, n.nodeId, 'psycho', at))
+        if (d <= PSYCHO_SCENE_ABORT) {
+          const b = psychoBreak(g, now, hashSeed(c.id, n.nodeId, 'psycho-lethal', at), job.name, job.direction)
+          const entry: BeatLog = { beat: at, dice: b.roll.dice, best: b.roll.best, result: b.roll.result, psycho: [d], broke: 'abort' }
+          const rows: ResultRow[] = [
+            { label: '結果', value: '任務中斷（神經錯亂）', tone: 'bad' },
+            { label: '錯亂骰', value: `${d}（1～${PSYCHO_SCENE_ABORT} 中斷）`, tone: 'bad' },
+            { label: '致命判定', value: `${b.roll.dice.join(' ')} → ${POOL_RESULT_LABEL[b.roll.result]}`, tone: b.roll.result === 'fail' ? 'bad' : b.roll.result === 'cost' ? 'warn' : 'good' },
+            ...diffRows(c, b.g.character),
+          ]
+          const after = { ...b.g, run: { ...b.g.run, node: { ...n, history: [...(n.history ?? []), entry], stage: 'done' as const, text: b.text, rows } } }
+          return withClaim(g, after, { title: job.name, tone: b.g.character.alive && b.roll.result !== 'fail' ? 'fail' : 'rescued', text: b.text })
+        }
+      }
+      // 臨界以下：硬撐之後擲錯亂骰，1＝這個場面直接失敗
+      const { ch, roll, psycho: pushed, broke } = rollChecked(c, jobPool(c, job, beat.attr), a.push, gamble, hashSeed(c.id, n.nodeId, 'beat', at), hashSeed(c.id, n.nodeId, 'psycho-push', at))
+      const psycho = [...(rules.sceneCheck ? [psychoDie(hashSeed(c.id, n.nodeId, 'psycho', at))] : []), ...pushed]
+      const entry: BeatLog = { beat: at, dice: roll.dice, best: roll.best, result: roll.result, ...(psycho.length ? { psycho } : {}), ...(broke ? { broke: 'fail' as const } : {}) }
+      const said: LogEvent = {
+        at: now,
+        kind: roll.result === 'fail' ? 'hurt' : 'job',
+        text: `「${job.name}」${beat.title}：擲出 ${roll.dice.join('、')}，${broke ? `但錯亂骰擲出 ${PSYCHO_PUSH_FAIL}，手不聽使喚——失敗` : POOL_RESULT_LABEL[roll.result]}。${beat.out[roll.result]}`,
+      }
       const history = [...(n.history ?? []), entry]
       if (roll.result === 'cost') return withLog({ ...g, character: ch, run: { ...g.run, node: { ...n, history, stage: 'cost' } } }, said)
       if (roll.result === 'fail') {
@@ -801,13 +959,16 @@ export function reduce(g: Game, a: Action): Game {
     case 'eliteAutoDone': {
       if (n?.kind !== 'elite' || n.stage !== 'auto') return g
       const job = JOBS[n.jobId]
-      const p = psychoCheck(g, now, hashSeed(c.id, n.nodeId, 'psycho'), job.name, job.direction)
-      if (p.stop) {
-        const after = { ...p.g, run: { ...p.g.run, node: { ...n, stage: 'done' as const, outcome: { kind: 'safe' as const, reason: PSYCHO_ABORT } } } }
-        return withClaim(g, after, { title: job.name, tone: 'fail', text: PSYCHO_ABORT })
+      // 失控：開場擲錯亂骰，1～2 任務中斷＋致命判定
+      const d = psychoRules(c).sceneCheck ? psychoDie(hashSeed(c.id, n.nodeId, 'psycho')) : 0
+      if (d && d <= PSYCHO_SCENE_ABORT) {
+        const b = psychoBreak(g, now, hashSeed(c.id, n.nodeId, 'psycho-lethal'), job.name, job.direction)
+        const reason = `錯亂骰 ${d}：${b.text}`
+        const after = { ...b.g, run: { ...b.g.run, node: { ...n, stage: 'done' as const, outcome: { kind: 'safe' as const, reason } } } }
+        return withClaim(g, after, { title: job.name, tone: 'fail', text: reason })
       }
-      const ch = p.g.character
-      return { ...p.g, character: { ...ch, stress: ch.stress + job.stress }, run: { ...p.g.run, node: { ...n, stage: 'fight' } } }
+      const said: LogEvent[] = d ? [{ at: now, kind: 'warn', text: `錯亂骰 ${d}：你撐住了，開工。` }] : []
+      return withLog({ ...g, character: { ...c, stress: c.stress + job.stress }, run: { ...g.run, node: { ...n, stage: 'fight' } } }, ...said)
     }
     case 'eliteFight': {
       if (n?.kind !== 'elite' || n.stage !== 'fight' || n.fight) return g
@@ -819,13 +980,8 @@ export function reduce(g: Game, a: Action): Game {
       if (n?.kind !== 'elite' || n.stage !== 'fight' || !n.fight) return g
       const f = n.fight
       const job = JOBS[n.jobId]
-      if (f.won) {
-        // 打贏一定掉寶（稀有表三選一）
-        const ch = structuredClone(c)
-        const log: LogEvent[] = []
-        offerLoot(ch, eliteLoot(hashSeed(ch.id, n.nodeId, 'loot')), log, now, f.enemy.name)
-        return withLog({ ...g, character: ch, run: { ...g.run, node: { ...n, stage: 'danger' } } }, ...log)
-      }
+      // 打贏進危險節點；戰利品要撐過去才拿得到（撤離、被保單救回都沒有）
+      if (f.won) return { ...g, run: { ...g.run, node: { ...n, stage: 'danger' } } }
       const reason = `你被${f.enemy.name}打退了，只能撤離。這份工作沒有報酬。`
       const lost = withLog(
         { ...g, run: { ...g.run, node: { ...n, stage: 'done', outcome: { kind: 'safe', reason } } } },
@@ -834,31 +990,43 @@ export function reduce(g: Game, a: Action): Game {
       return withClaim(g, lost, { title: job.name, tone: 'fail', text: reason })
     }
     case 'eliteChoose': {
+      // 危險節點：撤離不擲骰；冒險選項擲一次致命判定（可以加骰）
       if (n?.kind !== 'elite' || n.stage !== 'danger') return g
       const job = JOBS[n.jobId]
       const raw = highDanger(job).options.find((o) => o.id === a.optionId)
       if (!raw || attrLock(c, raw.attrNeeds)) return g
-      const opt = eliteDangerOption(c, job, raw)
-      const outcome = resolveDanger(c, opt, hashSeed(c.id, n.nodeId, 'danger'), g.systemFault)
-      const r = settleLethal(g, now, outcome, {
-        label: job.name,
-        safeText: `你放棄了「${job.name}」，空手撤離。`,
-        lossText: '這份工作的報酬沒了。',
-        direction: job.direction,
-        onSurvive: (ch, log) => {
-          const full = jobReward(job, perkReward(ch, job.direction))
-          const reward = opt.attrNeeds ? Math.round(full * SAFE_REWARD_RATE) : full
-          if (opt.attrNeeds) ch.stress += SAFE_STRESS
-          ch.credits += reward
-          ch.heat = Math.min(5, ch.heat + job.heat)
-          log.push({ at: now, kind: 'job', text: `${statusPrefix(ch)} 完成精英委託「${job.name}」。+${reward} 信用點${opt.attrNeeds ? `（靠屬性：打七五折、名聲減半、神經壓力 +${SAFE_STRESS}）` : ''}，通緝 +${job.heat}。` })
-          addXp(ch, job.xp, now, log)
-          addFame(ch, Math.round(jobFame(job) * (opt.attrNeeds ? SAFE_FAME_RATE : RISKY_FAME_MULT)), now, log)
-        },
-      })
-      const done = { ...r, run: { ...r.run, node: { ...n, stage: 'done' as const, outcome } } }
-      const tone = outcome.kind === 'survived' ? 'success' : outcome.kind === 'safe' ? 'partial' : 'rescued'
-      return withClaim(g, done, { title: job.name, tone, text: outcome.kind === 'safe' ? '你空手撤離，但打贏那一場拿到的戰利品還在。' : outcome.reason })
+      if (!raw.lethal) return eliteSettle(g, now, n, raw, { kind: 'safe', reason: `你放棄了「${job.name}」，空手撤離。` })
+      const r = rollChecked(c, lethalPool(c, eliteLethal(job, raw)), !!a.push, !!a.gamble, hashSeed(c.id, n.nodeId, 'danger'), hashSeed(c.id, n.nodeId, 'danger-push'))
+      const lethal: LethalLog = { option: raw.id, dice: r.roll.dice, best: r.roll.best, result: r.roll.result, ...(r.psycho.length ? { psycho: r.psycho, broke: r.broke } : {}) }
+      const g1 = withLog({ ...g, character: r.ch }, { at: now, kind: r.roll.result === 'fail' ? 'hurt' : 'warn', text: `${statusPrefix(r.ch)} 「${job.name}」${lethalText(lethal)}。` })
+      const rid = `${c.id}:${n.nodeId}:danger`
+      if (r.roll.result === 'cost') return withReveal({ ...g1, run: { ...g1.run, node: { ...n, stage: 'cost', lethal } } }, lethalReveal(rid, job.name, lethal))
+      // 失敗而且有人在場：追兵逼近，打一場；打贏算撐過去，打輸才是致命傷
+      const threat = highDanger(job).threat
+      if (r.roll.result === 'fail' && threat)
+        return withReveal({ ...g1, run: { ...g1.run, node: { ...n, stage: 'chase', lethal } } }, { ...lethalReveal(rid, job.name, lethal), text: chaseText(threat.name) })
+      const outcome: DangerOutcome = r.roll.result === 'fail' ? lethalWound(r.ch, r.roll.dice, g.systemFault) : { kind: 'survived', reason: `${lethalText(lethal)}：你撐過去了。` }
+      return withReveal(eliteSettle(g1, now, { ...n, lethal }, raw, outcome), lethalReveal(rid, job.name, lethal, outcome))
+    }
+    case 'lethalCost': {
+      // 致命判定擲出 4～5：重傷生還（報酬照拿、留舊傷），或丟下報酬脫身（傷勢 +20，沒有報酬與戰利品）
+      const maim = a.choice === 'maim'
+      if (n?.kind === 'elite' && n.stage === 'cost' && n.lethal) {
+        const raw = highDanger(JOBS[n.jobId]).options.find((o) => o.id === n.lethal!.option)!
+        const base = lethalText(n.lethal)
+        if (maim) return eliteSettle(g, now, n, raw, { kind: 'maimed', reason: `${base}：你撐過去了，但受了重傷，留下一道舊傷。` })
+        const hurt = { ...g, character: { ...c, injury: Math.min(100, c.injury + DROP_INJURY) } }
+        return eliteSettle(hurt, now, n, raw, { kind: 'safe', reason: `${base}：你丟下這份工作脫身（傷勢 +${DROP_INJURY}%），沒有報酬，也沒有戰利品。` })
+      }
+      if (g.story.stage === 'cost' && g.story.caseId && g.story.lethal) {
+        const sc = CASE_BY_ID[g.story.caseId]
+        const picked = sc.danger.options.find((o) => o.id === g.story.lethal!.option)!
+        const base = lethalText(g.story.lethal)
+        if (maim) return closeCase(g, now, sc, picked, { kind: 'maimed', reason: `${picked.text}（${base}）你受了重傷，留下一道舊傷。` }, true)
+        const hurt = { ...g, character: { ...c, injury: Math.min(100, c.injury + DROP_INJURY) } }
+        return closeCase(hurt, now, sc, picked, { kind: 'safe', reason: `${base}：你丟下委託脫身（傷勢 +${DROP_INJURY}%），沒有報酬。` }, false)
+      }
+      return g
     }
     case 'eventChoose': {
       if (n?.kind !== 'event' || n.stage !== 'choose') return g
@@ -866,15 +1034,23 @@ export function reduce(g: Game, a: Action): Game {
       const o = ev.options.find((x) => x.id === a.optionId)
       if (!o || eventLock(c, o)) return g
       const seed = hashSeed(c.id, n.nodeId, o.id)
-      const won = o.chance === undefined || rng(seed)() < o.chance
+      // 有 check 的選項擲骰池：1～3 失敗；4～5 成功但另付小代價；6 乾淨成功
+      const roll = o.check ? rollPool(poolSize(eventPool(c, o.check)), seed) : undefined
+      const won = !roll || roll.result !== 'fail'
       const ch = structuredClone(c)
       ch.credits -= o.cost ?? 0
       const log: LogEvent[] = []
       const { text, rows } = applyEffects(ch, won ? o.win : (o.lose ?? o.win), hashSeed(seed, 'loot'), log, now, ev.title)
+      let all = text
+      if (roll?.result === 'cost') {
+        const toll = applyEffects(ch, o.toll ?? EVENT_TOLL, hashSeed(seed, 'toll'), log, now, ev.title)
+        rows.push(...toll.rows)
+        all = `${text}${toll.text}`
+      }
       if (o.cost) rows.unshift({ label: '花費', value: `−¢${o.cost}`, tone: 'bad' })
-      if (o.chance !== undefined) rows.unshift({ label: '判定', value: `${won ? '成功' : '失敗'}（成功率 ${Math.round(o.chance * 100)}%）`, tone: won ? 'good' : 'bad' })
-      log.unshift({ at: now, kind: 'system', text: `${statusPrefix(ch)} 「${ev.title}」：${text}${rowsText(rows)}` })
-      return withLog({ ...g, character: ch, run: { ...g.run, node: { ...n, stage: 'done', text, rows } } }, ...log)
+      if (roll) rows.unshift({ label: '判定', value: `${roll.dice.join(' ')} → ${POOL_RESULT_LABEL[roll.result]}`, tone: roll.result === 'fail' ? 'bad' : roll.result === 'cost' ? 'warn' : 'good' })
+      log.unshift({ at: now, kind: 'system', text: `${statusPrefix(ch)} 「${ev.title}」：${all}${rowsText(rows)}` })
+      return withLog({ ...g, character: ch, run: { ...g.run, node: { ...n, stage: 'done', text: all, rows, ...(roll ? { roll: { dice: roll.dice, best: roll.best, result: roll.result } } : {}) } } }, ...log)
     }
     case 'marketBuy': {
       if (n?.kind !== 'market' || !c.alive) return g
@@ -967,18 +1143,72 @@ export function reduce(g: Game, a: Action): Game {
       if (g.story.stage !== 'auto' || !g.story.caseId) return g
       const sc = CASE_BY_ID[g.story.caseId]
       const ap = sc.approaches.find((x) => x.id === g.story.approach) ?? sc.approaches[0]
-      const p = psychoCheck(g, now, hashSeed(c.id, sc.id, 'psycho'), sc.title, ap.direction)
-      if (p.stop) {
-        const record: CaseRecord = { approach: ap.id, optionId: 'psycho', outcome: 'safe', reason: PSYCHO_ABORT }
-        const after = { ...p.g, story: { caseId: null, stage: 'prep' as const }, run: { ...p.g.run, cases: { ...p.g.run.cases, [sc.id]: record } } }
-        return withClaim(g, after, { title: sc.title, tone: 'fail', text: PSYCHO_ABORT })
+      // 失控：開場擲錯亂骰，1～2 任務中斷＋致命判定
+      const d = psychoRules(c).sceneCheck ? psychoDie(hashSeed(c.id, sc.id, 'psycho')) : 0
+      if (d && d <= PSYCHO_SCENE_ABORT) {
+        const b = psychoBreak(g, now, hashSeed(c.id, sc.id, 'psycho-lethal'), sc.title, ap.direction)
+        const reason = `錯亂骰 ${d}：${b.text}`
+        const record: CaseRecord = { approach: ap.id, optionId: 'psycho', outcome: 'safe', reason }
+        const after = { ...b.g, story: { caseId: null, stage: 'prep' as const }, run: { ...b.g.run, cases: { ...b.g.run.cases, [sc.id]: record } } }
+        return withClaim(g, after, { title: sc.title, tone: 'fail', text: reason })
       }
-      const ch = p.g.character
-      return {
-        ...p.g,
-        character: { ...ch, injury: Math.min(100, ch.injury + ap.injury), stress: ch.stress + 6 },
-        story: { ...g.story, stage: ap.fight ? 'fight' : 'danger' },
+      const said: LogEvent[] = d ? [{ at: now, kind: 'warn', text: `錯亂骰 ${d}：你撐住了。` }] : []
+      return withLog(
+        {
+          ...g,
+          character: { ...c, injury: Math.min(100, c.injury + ap.injury), stress: c.stress + 6 },
+          story: { ...g.story, stage: 'scene', beat: 0, history: [], scenes: 0, cuts: 0 },
+        },
+        ...said,
+      )
+    }
+    case 'storyRoll': {
+      // 做法的場面：擲骰池，結果影響最後致命判定的骰數
+      if (g.story.stage !== 'scene' || !g.story.caseId) return g
+      const sc = CASE_BY_ID[g.story.caseId]
+      const ap = sc.approaches.find((x) => x.id === g.story.approach) ?? sc.approaches[0]
+      const beats = storyBeats(ap.direction)
+      const at = g.story.beat ?? 0
+      const beat = beats[at]
+      // 失控：場面開始前擲錯亂骰，1～2 任務中斷＋致命判定
+      const d = psychoRules(c).sceneCheck ? psychoDie(hashSeed(c.id, sc.id, 'psycho', at)) : 0
+      if (d && d <= PSYCHO_SCENE_ABORT) {
+        const b = psychoBreak(g, now, hashSeed(c.id, sc.id, 'psycho-lethal', at), sc.title, ap.direction)
+        const reason = `錯亂骰 ${d}：${b.text}`
+        const record: CaseRecord = { approach: ap.id, optionId: 'psycho', outcome: 'safe', reason }
+        const after = { ...b.g, story: { caseId: null, stage: 'prep' as const }, run: { ...b.g.run, cases: { ...b.g.run.cases, [sc.id]: record } } }
+        return withClaim(g, after, { title: sc.title, tone: 'fail', text: reason })
       }
+      const base = { injury: ap.injury }
+      const { ch, roll, psycho: pushed, broke } = rollChecked(c, scenePool(c, ap.direction, 1, beat.attr), a.push, a.gamble, hashSeed(c.id, sc.id, 'beat', at), hashSeed(c.id, sc.id, 'psycho-push', at))
+      const psycho = [...(d ? [d] : []), ...pushed]
+      const entry: BeatLog = { beat: at, dice: roll.dice, best: roll.best, result: roll.result, ...(psycho.length ? { psycho } : {}), ...(broke ? { broke: 'fail' as const } : {}) }
+      const said: LogEvent = { at: now, kind: roll.result === 'fail' ? 'hurt' : 'job', text: `「${sc.title}」${beat.title}：擲出 ${roll.dice.join('、')}，${broke ? '錯亂骰擲出 1，失敗' : POOL_RESULT_LABEL[roll.result]}。${beat.out[roll.result]}` }
+      const history = [...(g.story.history ?? []), entry]
+      if (roll.result === 'cost') return withLog({ ...g, character: ch, story: { ...g.story, history, stage: 'sceneCost' } }, said)
+      let scenes = g.story.scenes ?? 0
+      if (roll.result === 'fail') {
+        const k = realCost(ch, beat.fail)
+        applyCost(ch, base, k, true)
+        entry.cost = costText(base, k, true)
+        scenes--
+      } else scenes++
+      return advanceStory(withLog({ ...g, character: ch }, said), { ...g.story, history, scenes })
+    }
+    case 'storySceneCost': {
+      // 成功但付代價：二選一；這個場面不加也不減致命判定的骰
+      if (g.story.stage !== 'sceneCost' || !g.story.caseId) return g
+      const sc = CASE_BY_ID[g.story.caseId]
+      const ap = sc.approaches.find((x) => x.id === g.story.approach) ?? sc.approaches[0]
+      const pick = storyBeats(ap.direction)[g.story.beat ?? 0].costs[a.index]
+      if (!pick) return g
+      const base = { injury: ap.injury }
+      const k = realCost(c, pick.kind)
+      const ch = structuredClone(c)
+      applyCost(ch, base, k)
+      const history = (g.story.history ?? []).map((h, i, all) => (i === all.length - 1 ? { ...h, cost: `${pick.text}（${costText(base, k)}）` } : h))
+      const said: LogEvent = { at: now, kind: 'warn', text: `代價：${pick.text}（${costText(base, k)}）。` }
+      return advanceStory(withLog({ ...g, character: ch }, said), { ...g.story, history, cuts: (g.story.cuts ?? 0) + (k === 'pay' ? 1 : 0) })
     }
     case 'storyFight': {
       if (g.story.stage !== 'fight' || g.story.fight || !g.story.caseId) return g
@@ -995,10 +1225,17 @@ export function reduce(g: Game, a: Action): Game {
         // 危險節點選了「打」：打贏＝生還；打輸才擲致命判定，沒死也只是被打退、沒有報酬
         const picked = sc.danger.options.find((o) => o.id === g.story.option)!
         if (f.won) return closeCase(g, now, sc, picked, { kind: 'survived', reason: picked.text }, true)
-        const opt = caseDangerOption(c, sc, g.story.approach, picked.id)
-        const o = resolveDanger(c, opt, hashSeed(c.id, sc.id, opt.id), g.systemFault)
-        const lost = `你被${f.enemy.name}打倒在地，最後只能拖著傷撤退。委託失敗，沒有報酬。`
-        return closeCase(g, now, sc, picked, o.kind === 'survived' ? { kind: 'safe', reason: lost } : o.kind === 'maimed' ? { kind: 'maimed', reason: `${lost}${o.reason}` } : o, false)
+        // 打輸：擲致命判定。成功＝拖著傷撤退；4～5＝傷勢再 +20；失敗＝致命傷
+        const roll = rollPool(poolSize(lethalPool(c, caseLethal(sc, g.story.approach, picked, g.story.scenes))), hashSeed(c.id, sc.id, picked.id))
+        const lost = `你被${f.enemy.name}打倒在地（致命判定擲出 ${roll.dice.join('、')}，${POOL_RESULT_LABEL[roll.result]}），最後只能拖著傷撤退。委託失敗，沒有報酬。`
+        const lethal: LethalLog = { option: picked.id, dice: roll.dice, best: roll.best, result: roll.result }
+        const rid = `${c.id}:${sc.id}:fight-lethal`
+        if (roll.result === 'fail') {
+          const wound = lethalWound(c, roll.dice, g.systemFault)
+          return withReveal(closeCase(g, now, sc, picked, wound, false), lethalReveal(rid, sc.title, lethal, wound))
+        }
+        const hurt = roll.result === 'cost' ? { ...g, character: { ...c, injury: Math.min(100, c.injury + DROP_INJURY) } } : g
+        return withReveal(closeCase(hurt, now, sc, picked, { kind: 'safe', reason: lost }, false), { ...lethalReveal(rid, sc.title, lethal), text: lost })
       }
       const ap = sc.approaches.find((x) => x.id === g.story.approach)!
       if (f.won) {
@@ -1021,11 +1258,63 @@ export function reduce(g: Game, a: Action): Game {
       const picked = sc.danger.options.find((o) => o.id === a.optionId)
       if (!picked || optionLock(c, g.story.approach, picked) !== undefined) return g
       if (picked.fight) return { ...g, story: { ...g.story, stage: 'fight', option: picked.id, fight: undefined } }
-      const opt = caseDangerOption(c, sc, g.story.approach, picked.id)
-      let outcome = resolveDanger(c, opt, hashSeed(c.id, sc.id, opt.id), g.systemFault)
-      if (outcome.kind === 'safe' || outcome.kind === 'survived') outcome = { kind: picked.wins ? 'survived' : outcome.kind, reason: picked.text }
-      else if (outcome.kind === 'maimed') outcome = { kind: 'maimed', reason: `${picked.text}${outcome.reason}` }
-      return closeCase(g, now, sc, picked, outcome, true)
+      if (!picked.lethal) return closeCase(g, now, sc, picked, { kind: 'safe', reason: picked.text }, true)
+      // 冒險選項：擲一次致命判定（可以加骰）
+      const r = rollChecked(c, lethalPool(c, caseLethal(sc, g.story.approach, picked, g.story.scenes)), !!a.push, !!a.gamble, hashSeed(c.id, sc.id, picked.id), hashSeed(c.id, sc.id, picked.id, 'push'))
+      const lethal: LethalLog = { option: picked.id, dice: r.roll.dice, best: r.roll.best, result: r.roll.result, ...(r.psycho.length ? { psycho: r.psycho, broke: r.broke } : {}) }
+      const g1 = withLog({ ...g, character: r.ch }, { at: now, kind: r.roll.result === 'fail' ? 'hurt' : 'warn', text: `${statusPrefix(r.ch)} 「${sc.title}」${lethalText(lethal)}。` })
+      const rid = `${c.id}:${sc.id}:danger`
+      if (r.roll.result === 'cost') return withReveal({ ...g1, story: { ...g1.story, stage: 'cost', option: picked.id, lethal } }, lethalReveal(rid, sc.title, lethal))
+      const threat = caseThreat(sc)
+      if (r.roll.result === 'fail' && threat)
+        return withReveal({ ...g1, story: { ...g1.story, stage: 'chase', option: picked.id, lethal, fight: undefined } }, { ...lethalReveal(rid, sc.title, lethal), text: chaseText(threat.name) })
+      const outcome: DangerOutcome = r.roll.result === 'fail' ? lethalWound(r.ch, r.roll.dice, g.systemFault) : { kind: 'survived', reason: `${picked.text}（${lethalText(lethal)}）` }
+      return withReveal(closeCase(g1, now, sc, picked, outcome, true), lethalReveal(rid, sc.title, lethal, outcome))
+    }
+    case 'chaseFight': {
+      // 追兵那一場：精英用節點的 chase，劇情用 story.fight
+      if (n?.kind === 'elite' && n.stage === 'chase' && !n.chase) {
+        const threat = highDanger(JOBS[n.jobId]).threat
+        if (!threat) return g
+        const r = startFight(c, fameEnemy(threat, c.fame.level), a.tactic, hashSeed(c.id, n.nodeId, 'chase'))
+        if (!r) return g
+        return { ...g, character: r.c, run: { ...g.run, node: { ...n, chase: r.f } } }
+      }
+      if (g.story.stage === 'chase' && g.story.caseId && !g.story.fight) {
+        const threat = caseThreat(CASE_BY_ID[g.story.caseId])
+        if (!threat) return g
+        const r = startFight(c, threat, a.tactic, hashSeed(c.id, g.story.caseId, 'chase'))
+        if (!r) return g
+        return { ...g, character: r.c, story: { ...g.story, fight: r.f } }
+      }
+      return g
+    }
+    case 'chaseDone': {
+      if (n?.kind === 'elite' && n.stage === 'chase' && n.chase && n.lethal) {
+        const job = JOBS[n.jobId]
+        const raw = highDanger(job).options.find((o) => o.id === n.lethal!.option)!
+        const f = n.chase
+        if (f.won) return eliteSettle(g, now, n, raw, { kind: 'survived', reason: `${lethalText(n.lethal)}：${f.enemy.name}逼近，你打出了一條路。` })
+        const w = lethalWound(c, n.lethal.dice, g.systemFault)
+        return eliteSettle(g, now, n, raw, { ...w, reason: `你被${f.enemy.name}打倒了。${w.reason}` })
+      }
+      if (g.story.stage === 'chase' && g.story.caseId && g.story.fight && g.story.lethal) {
+        const sc = CASE_BY_ID[g.story.caseId]
+        const picked = sc.danger.options.find((o) => o.id === g.story.lethal!.option)!
+        const f = g.story.fight
+        if (f.won) return closeCase(g, now, sc, picked, { kind: 'survived', reason: `${picked.text}（${lethalText(g.story.lethal)}，${f.enemy.name}逼近，你打出了一條路。）` }, true)
+        const w = lethalWound(c, g.story.lethal.dice, g.systemFault)
+        return closeCase(g, now, sc, picked, { ...w, reason: `你被${f.enemy.name}打倒了。${w.reason}` }, true)
+      }
+      return g
+    }
+    case 'revealDone': {
+      if (!g.run.reveal) return g
+      return { ...g, run: { ...g.run, reveal: null } }
+    }
+    case 'seenIntro': {
+      if (g.meta.seen[a.key]) return g
+      return { ...g, meta: { ...g.meta, seen: { ...g.meta.seen, [a.key]: true } } }
     }
     case 'claim': {
       // 收下完成單：之後才能離開節點，三選一也才跳出來

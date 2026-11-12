@@ -183,12 +183,26 @@ export interface PoolPart {
   n: number
 }
 
-/** 委託場面的骰池：屬性、該方向的裝備與卡牌、難度、重傷。畫面與判定共用。 */
-export function jobPool(c: Character, job: JobDef, attr: Attr): PoolPart[] {
-  const gear = dirBonus(c, job.direction)
+/** 場面的骰池：屬性、該方向的裝備與卡牌、難度 3 以上、重傷。委託與劇情做法的場面共用，畫面與判定也共用。 */
+export function scenePool(c: Character, direction: Direction, tier: number, attr: Attr): PoolPart[] {
+  const gear = dirBonus(c, direction)
   const parts: PoolPart[] = [{ label: `${ATTR_LABEL[attr]} ${c.attrs[attr]}`, n: attrDice(c.attrs[attr]) }]
-  if (gear >= 0.05) parts.push({ label: `${DIRECTION_LABEL[job.direction]}的裝備與卡牌`, n: gear >= 0.2 ? 2 : 1 })
-  if (job.tier >= 3) parts.push({ label: `難度 ${job.tier}`, n: -1 })
+  if (gear >= 0.05) parts.push({ label: `${DIRECTION_LABEL[direction]}的裝備與卡牌`, n: gear >= 0.2 ? 2 : 1 })
+  if (tier >= 3) parts.push({ label: `難度 ${tier}`, n: -1 })
+  if (c.injury >= SEVERE_INJURY) parts.push({ label: '重傷', n: -1 })
+  return parts
+}
+export const jobPool = (c: Character, job: JobDef, attr: Attr) => scenePool(c, job.direction, job.tier, attr)
+
+/** 事件選項的骰池：看屬性（屬性骰數 −1，臨場發揮）或純靠運氣（固定骰數）；重傷 −1。 */
+export const EVENT_EDGE = -1
+export function eventPool(c: Character, check: { attr?: Attr; dice?: number }): PoolPart[] {
+  const parts: PoolPart[] = check.attr
+    ? [
+        { label: `${ATTR_LABEL[check.attr]} ${c.attrs[check.attr]}`, n: attrDice(c.attrs[check.attr]) },
+        { label: '臨場發揮', n: EVENT_EDGE + (check.dice ?? 0) },
+      ]
+    : [{ label: '純靠運氣', n: check.dice ?? 1 }]
   if (c.injury >= SEVERE_INJURY) parts.push({ label: '重傷', n: -1 })
   return parts
 }
@@ -200,13 +214,15 @@ export const COST_STRESS = 8
 /** 每次選「報酬打折」少拿的比例；每次大成功多拿的比例。 */
 export const COST_PAY = 0.2
 export const CRIT_PAY = 0.15
-export const costInjury = (job: JobDef) => Math.max(4, Math.round(job.injury * 0.5))
-export function costText(job: JobDef, k: CostKind, heavy = false): string {
+/** 代價只看「這件事有多容易受傷」：委託的 injury，劇情做法的路上傷勢。 */
+export type CostBase = { injury: number }
+export const costInjury = (job: CostBase) => Math.max(4, Math.round(job.injury * 0.5))
+export function costText(job: CostBase, k: CostKind, heavy = false): string {
   const m = heavy ? 2 : 1
   return k === 'injury' ? `傷勢 +${costInjury(job) * m}%` : k === 'heat' ? '通緝 +1' : k === 'stress' ? `神經壓力 +${COST_STRESS * m}` : `報酬 −${Math.round(COST_PAY * 100)}%`
 }
 /** 套用一個代價（報酬打折由呼叫端記帳）。失敗時 heavy：受傷與壓力加倍。直接改 c。 */
-export function applyCost(c: Character, job: JobDef, k: CostKind, heavy = false) {
+export function applyCost(c: Character, job: CostBase, k: CostKind, heavy = false) {
   const m = heavy ? 2 : 1
   if (k === 'injury') c.injury = Math.min(100, c.injury + costInjury(job) * m)
   else if (k === 'heat') c.heat = Math.min(5, c.heat + 1)
@@ -264,37 +280,47 @@ export function perkMod(c: Character, k: ModKey) {
 /** 裝備＋名聲卡。 */
 export const statMod = (c: Character, k: ModKey) => gearMod(c, k) + perkMod(c, k)
 
-/**
- * 義體想裝多少都可以，代價是神經餘裕：餘裕低於 40（警戒以下）時，每件任務（委託、精英委託、劇情委託）
- * 進行中有機會神經錯亂。依階段的機率，以及錯亂時三種結果的比重：任務中斷、重傷（傷勢 70%＋舊傷）、死亡（有救命保單就被救）。
- */
-export const PSYCHO: Record<NeuralStage, { chance: number; abort: number; maim: number; death: number }> = {
-  stable: { chance: 0, abort: 0, maim: 0, death: 0 },
-  alert: { chance: 0.1, abort: 0.6, maim: 0.3, death: 0.1 },
-  critical: { chance: 0.3, abort: 0.5, maim: 0.2, death: 0.3 },
-  lost: { chance: 0.7, abort: 0.4, maim: 0.1, death: 0.5 },
-}
-/** 失控（餘裕 ≤ 0）時，每低 1 點錯亂機率再 +1%，最高 95%。 */
-export const PSYCHO_LOST_STEP = 0.01
-export type PsychoOutcome = 'abort' | 'maim' | 'death'
+/** 義體想裝多少都可以，代價是神經餘裕：餘裕低於 40（警戒以下）時，任務裡的錯亂規則一階比一階重（psychoRules）。 */
+export const neuralRisk = (c: Character) => neuralStage(marginOf(c)) !== 'stable'
+/** 「神經警戒」這類短標籤（穩定時是空字串）。 */
+export const neuralTag = (c: Character) => (neuralRisk(c) ? `神經${NEURAL_STAGE_LABEL[neuralStage(marginOf(c))]}` : '')
 
-/** 這段神經餘裕下，一件任務錯亂的機率（total）與三種結果各自的機率。畫面與判定共用。 */
-export function psychoOdds(c: Character): { total: number; abort: number; maim: number; death: number } {
-  const m = marginOf(c)
-  const p = PSYCHO[neuralStage(m)]
-  const chance = m <= 0 ? Math.min(0.95, p.chance + -m * PSYCHO_LOST_STEP) : p.chance
-  return { total: chance, abort: chance * p.abort, maim: chance * p.maim, death: chance * p.death }
+// ---------- 神經錯亂（骰池版，DICE-POOL-SPEC §6）----------
+// 錯亂是看得到、能迴避的風險：每一條規則都寫在擲骰畫面上，錯亂骰也擲在玩家面前。
+// 警戒以下：硬撐的神經壓力多 +4。臨界以下：每次硬撐後擲一顆錯亂骰，1＝這個場面直接失敗。
+// 失控：每個場面開始前擲一顆錯亂骰，1～2＝任務中斷，再擲 2 顆的致命判定（失敗＝致命傷、付代價＝重傷）。
+// 一般委託每個場面、精英委託與劇情委託的開場都適用；硬撐的規則也用在致命判定。
+export const PSYCHO_PUSH_EXTRA = 4
+export const PSYCHO_PUSH_FAIL = 1
+export const PSYCHO_SCENE_ABORT = 2
+export const PSYCHO_LETHAL_DICE = 2
+export interface PsychoRules {
+  stage: NeuralStage
+  /** 硬撐多付的神經壓力。 */
+  pushExtra: number
+  /** 硬撐之後要擲錯亂骰。 */
+  pushCheck: boolean
+  /** 每個場面開始前要擲錯亂骰。 */
+  sceneCheck: boolean
+}
+export function psychoRules(c: Character): PsychoRules {
+  const stage = neuralStage(marginOf(c))
+  return { stage, pushExtra: stage === 'stable' ? 0 : PSYCHO_PUSH_EXTRA, pushCheck: stage === 'critical' || stage === 'lost', sceneCheck: stage === 'lost' }
+}
+/** 一顆錯亂骰（1～6）。 */
+export const psychoDie = (seed: number) => 1 + Math.floor(rng(seed)() * 6)
+/** 這一次硬撐要付的神經壓力。 */
+export const pushStress = (c: Character) => PUSH_STRESS + psychoRules(c).pushExtra
+/** 擲骰畫面上的錯亂規則說明；穩定時沒有。 */
+export function psychoRuleText(c: Character): string[] {
+  const r = psychoRules(c)
+  const t: string[] = []
+  if (r.sceneCheck) t.push(`失控：每個場面先擲一顆錯亂骰，擲出 1～${PSYCHO_SCENE_ABORT}＝任務中斷，再擲 ${PSYCHO_LETHAL_DICE} 顆的致命判定`)
+  if (r.pushCheck) t.push(`硬撐之後擲一顆錯亂骰，擲出 ${PSYCHO_PUSH_FAIL}＝這個場面直接失敗`)
+  if (r.pushExtra) t.push(`硬撐的神經壓力 +${r.pushExtra}`)
+  return t
 }
 
-/** 任務進行中擲一次錯亂：null＝沒事。結果只依 seed 與當下的神經餘裕。 */
-export function rollPsycho(c: Character, seed: number): PsychoOutcome | null {
-  const r = rng(seed)()
-  const o = psychoOdds(c)
-  if (r < o.death) return 'death'
-  if (r < o.death + o.maim) return 'maim'
-  if (r < o.total) return 'abort'
-  return null
-}
 /** 在黑市賣掉背包裡的東西：售價的 40%。 */
 export const SELL_RATE = 0.4
 export const sellValue = (i: Item) => Math.round(i.price * (i.level ?? 1) * SELL_RATE)
@@ -511,18 +537,6 @@ export type DangerOutcome =
   | { kind: 'rescued_system'; reason: string }
   | { kind: 'dead'; reason: string }
 
-/**
- * 玩家確認之後一次判定：結果只依 seed 與當下快照，重整不重抽。
- * 受致命傷時有救命保單就被救（保單由呼叫端扣掉）；systemFault 為真時（程式／部署錯誤），改為免費搶救並留下紀錄。
- */
-/** 致命機率 0～0.95：選項基準＋傷勢／4＋神經負荷（警戒 5%、過載 12%）。畫面顯示與判定都用這個。 */
-export function lethalChance(c: Character, opt: DangerOption): number {
-  if (!opt.lethal) return 0
-  const stage = neuralStage(marginOf(c))
-  const stagePenalty = stage === 'stable' ? 0 : stage === 'alert' ? 0.05 : 0.12
-  return Math.min(0.95, opt.lethalBase + c.injury / 400 + stagePenalty)
-}
-
 /** 救命保單的等級：越貴，救回來失去的越少。最多持有一張。 */
 export type LifelineTier = 'basic' | 'standard' | 'platinum'
 export const LIFELINES: Record<LifelineTier, { label: string; price: number; injury: number; strip: boolean; scar: boolean; desc: string }> = {
@@ -537,23 +551,55 @@ export const lifelineOf = (c: Character): LifelineTier | null => (c.lifelines > 
 /** 機率顯示成整數百分比。 */
 export const pct = (p: number) => `${Math.round(p * 100)}%`
 
-/** 出事（lethalChance）裡有多少是致命傷；其餘是重傷生還：活著、拿得到報酬，但傷勢至少 70% 並留下舊傷。 */
-export const DEATH_SHARE = 0.7
+// ---------- 致命判定（骰池版，DICE-POOL-SPEC §5）----------
+// 危險節點的冒險選項擲一次骰池：大成功／乾淨成功＝撐過去；4～5＝撐過去但要付重代價（二選一：重傷生還，或丟下報酬脫身）；
+// 失敗＝致命傷（有保單被救，沒有就死）。畫面只顯示擲幾顆、哪些東西加減骰，不顯示百分比。
 
-/**
- * 風險倍數：危險選項的「基準＋做法修正－裝備與卡牌加成」整段乘這個（下限 2%）。
- * 準備的效果跟著放大：帶對方向的裝備省下的機率也是 1.5 倍。冒險撐過去的名聲另有加成（RISKY_FAME_MULT）。
- */
-export const RISK_SCALE = 1.5
+/** 選項沒有指定屬性時，用路線的屬性：武力拚體能、駭入拚智力、潛行拚沉著。 */
+export const DIR_ATTR: Record<Direction, Attr> = { force: 'body', hack: 'int', stealth: 'cool' }
+/** 靠器材或屬性門檻的選項多擲的骰數（代價：報酬七五折、名聲減半、神經壓力 +10）。 */
+export const PREPARED_DICE = 2
+/** 選項本身的險度換成骰數：基準 ≥28% −1、≤10% +1（器材、屬性選項不另算）。 */
+export const riskDice = (raw: number) => (raw >= 0.28 ? -1 : raw <= 0.1 ? 1 : 0)
+/** 對手修正：精英委託 −1、劇情大案 −2（規格第 5 節）。 */
+export const FOE_DICE = { elite: -1, boss: -2, story: 0 } as const
+export type FoeKind = keyof typeof FOE_DICE
 /** 不靠器材、屬性的冒險選項撐過去（含重傷生還）時，名聲的倍數。 */
 export const RISKY_FAME_MULT = 1.5
-/** 危險選項套上修正後的基準：整段乘 RISK_SCALE，夾在 2%～95%。 */
-export const scaledRisk = (raw: number) => Math.min(0.95, Math.max(0.02, raw * RISK_SCALE))
+/** 擲出 4～5、選「丟下報酬脫身」時加的傷勢。 */
+export const DROP_INJURY = 20
 
-/** 冒險選項的兩種壞結果：死亡（有救命保單就被救）與重傷生還。畫面顯示與 resolveDanger 都用這個。 */
-export function dangerOdds(c: Character, opt: DangerOption): { death: number; maim: number } {
-  const p = lethalChance(c, opt)
-  return { death: p * DEATH_SHARE, maim: p * (1 - DEATH_SHARE) }
+export interface LethalSpec {
+  attr: Attr
+  direction: Direction
+  foe: FoeKind
+  /** 選項的基準險度（加上做法修正，0～1）。 */
+  risk: number
+  /** 靠器材或屬性門檻的選項。 */
+  prepared: boolean
+  /** 前面場面的結果（劇情做法的場面：每個成功 +1、每次失敗 −1）。 */
+  scenes?: number
+}
+/** 致命判定的骰池：畫面與判定共用。 */
+export function lethalPool(c: Character, s: LethalSpec): PoolPart[] {
+  const gear = dirBonus(c, s.direction)
+  const parts: PoolPart[] = [{ label: `${ATTR_LABEL[s.attr]} ${c.attrs[s.attr]}`, n: attrDice(c.attrs[s.attr]) }]
+  if (gear >= 0.05) parts.push({ label: `${DIRECTION_LABEL[s.direction]}的裝備與卡牌`, n: gear >= 0.2 ? 2 : 1 })
+  if (s.prepared) parts.push({ label: '有備而來（器材或屬性）', n: PREPARED_DICE })
+  else if (riskDice(s.risk)) parts.push({ label: riskDice(s.risk) > 0 ? '這條路比較穩' : '這條路特別險', n: riskDice(s.risk) })
+  if (FOE_DICE[s.foe]) parts.push({ label: s.foe === 'elite' ? '精英對手' : '劇情大案', n: FOE_DICE[s.foe] })
+  if (s.scenes) parts.push({ label: '前面的場面', n: s.scenes })
+  if (c.injury >= SEVERE_INJURY) parts.push({ label: '重傷', n: -1 })
+  return parts
+}
+
+/** 擲出致命傷之後：有保單被救、系統錯誤免費搶救，沒有就死。 */
+export function lethalWound(c: Character, dice: number[], systemFault = false): DangerOutcome {
+  const d = dice.join('、')
+  if (systemFault) return { kind: 'rescued_system', reason: '系統錯誤造成的致命結果：武裝醫療隊免費搶救，已記錄在生涯中。' }
+  if (c.lifelines <= 0)
+    return { kind: 'dead', reason: `致命判定擲出 ${d}，受了致命傷，而你身上沒有救命保單。先去神機醫治傷、帶該方向的裝備、走有備而來的選項，或擲之前硬撐、鋌而走險，都能多擲幾顆。` }
+  return { kind: 'rescued', reason: `致命判定擲出 ${d}，受了致命傷。救命保單觸發，武裝醫療隊把你拖上了飛行器（保單用掉了）。` }
 }
 
 /** 舊傷扣哪個屬性：依那次行動的路線（武力傷身體、駭入燒腦、潛行傷反應）。 */
@@ -566,18 +612,6 @@ export function addScar(c: Character, dir: Direction): Attr | undefined {
   c.attrs = { ...c.attrs, [a]: c.attrs[a] - 1 }
   c.scars = { ...c.scars, [a]: (c.scars?.[a] ?? 0) + 1 }
   return a
-}
-
-export function resolveDanger(c: Character, opt: DangerOption, seed: number, systemFault = false): DangerOutcome {
-  if (!opt.lethal) return { kind: 'safe', reason: '你選擇不冒險，沒有生命危險。' }
-  const roll = rng(seed)()
-  const { death, maim } = dangerOdds(c, opt)
-  if (roll >= death + maim) return { kind: 'survived', reason: '你撐過去了。' }
-  if (roll >= death) return { kind: 'maimed', reason: `你撐過去了，但受了重傷（當時重傷機率 ${pct(maim)}），留下一道舊傷。` }
-  if (systemFault) return { kind: 'rescued_system', reason: '系統錯誤造成的致命結果：武裝醫療隊免費搶救，已記錄在生涯中。' }
-  if (c.lifelines <= 0)
-    return { kind: 'dead', reason: `受了致命傷（當時死亡機率 ${pct(death)}），而你身上沒有救命保單。先去神機醫治傷、休息降壓力、帶救命保單或該方向的裝備，都能降低這個機率。` }
-  return { kind: 'rescued', reason: `受了致命傷（當時死亡機率 ${pct(death)}）。救命保單觸發，武裝醫療隊把你拖上了飛行器（保單用掉了）。` }
 }
 
 // ---------- 自動戰鬥（委託、精英委託、劇情委託） ----------

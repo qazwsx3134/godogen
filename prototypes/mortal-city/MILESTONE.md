@@ -2,6 +2,16 @@
 
 從 `PROGRESS.md` 搬出的較早段落（原文保留，新的在上）。
 
+## 2026-11-09｜game-critic 評審（只有文件，已提交 `996c51d5`）
+
+- 做了什麼：用新 skill `game-critic`（`prototypes/godot-kit/skills/game-critic/`）評審本原型，Herdr Sonnet 子 agent 執行，報告 [reviews/2026-11-09-game-critic.md](reviews/2026-11-09-game-critic.md)（473 行）。
+- 總評：規則、存檔、手機寬度都穩定，但「要不要賭命」沒有真正的取捨。分數：心流 4、隨機 5、Loop 5、回饋 6、八角 5.6、前期驗證 4、設計文件 5、QA 6。
+- 最大的三個問題：(1) 致命機率看不到，起始裝備與屬性門檻讓安全選項全面勝出；(2) 只選安全的 bot 200/200 活著退休（`src/game/state.test.ts:108` 寫成斷言），地圖節點沒有可決策的資訊；(3) 沒有真人試玩，美術已先做約 80 張，外層 loop 沒有出口。
+- 測試（子 agent 本次實跑）：`pnpm test` 48/48、型別檢查通過；正式建置輸出到暫存資料夾（沒有覆蓋 `dist/`）；另跑 4 次唯讀冒煙腳本（放在 repo 外），發現觸控模擬下街區分頁 1～5 px 橫向溢出。
+- 待辦：11 條建議（R1–R11）與「接 AI 玩家量平衡」的方向已列進 `TODO.md` 最下方「評審建議」。
+- 驗證：子 agent 在 Linux 暫存複本或暫存資料夾跑測試，沒有寫入工作樹；主 session 抽查報告引用的 `file:line` 與原始碼一致，並確認 `git status` 只多了 `reviews/`。
+- 未提交：`reviews/`（報告與 `.done` 完成標記）、本檔、`TODO.md`。建議都還沒動手改，等使用者決定先做哪幾條。
+
 ## 2026-11-07｜合併 WSL 分支 `c8fb8afd`（舊 MMO 架構）
 
 - 情況：WSL 這台在舊的文字 MMO 架構上提交了 `c8fb8afd`（2026-11-05～06 的工作），Mac 這邊同時改成 roguelike（`cf9bc101`、`5090c606`、`2ea3970a`）。`git pull` 時 mortal-city 16 個檔案衝突。使用者要求修好衝突。

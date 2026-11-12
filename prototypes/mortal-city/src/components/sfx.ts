@@ -134,6 +134,18 @@ export const sfx = {
   whoosh: () => noise(0.25, 700, 0.08),
   success: () => [523, 659, 784, 1047].forEach((f, i) => tone(f, 0.16, 'triangle', 0.07, undefined, i * 0.08)),
   fail: () => tone(220, 0.4, 'sawtooth', 0.05, 90),
+  /** 擲骰：一串電子雜訊的喀噠聲。 */
+  dice: () => {
+    for (let i = 0; i < 9; i++) {
+      noise(0.025, 2600 + Math.random() * 2400, 0.07, 'bandpass', i * 0.055)
+      tone(600 + Math.random() * 900, 0.015, 'square', 0.015, undefined, i * 0.055)
+    }
+  },
+  /** 一顆骰子落定。 */
+  die: () => {
+    tone(1500, 0.035, 'square', 0.03, 700)
+    noise(0.03, 3000, 0.05)
+  },
   toast: () => {
     tone(880, 0.06, 'square', 0.035)
     tone(1320, 0.08, 'square', 0.035, undefined, 0.07)

@@ -22,6 +22,7 @@
 - **`pnpm install` 失敗、叫你跑 `pnpm approve-builds`**（2026-11-06，mortal-city）：pnpm 11 沒核准相依套件的安裝腳本（例如 esbuild）就讓安裝失敗，並寫一個「set this to true or false」的 `pnpm-workspace.yaml` → 在該檔寫 `allowBuilds:` 下 `esbuild: true` 再裝；先確認專案原本用 npm 還是 pnpm，別讓兩份 lockfile 並存。（[mortal-city](mortal-city/PROGRESS.md)）
 
 - **改了程式，瀏覽器卻一直跑舊版（修好的錯誤照樣出現）**（2026-11-05，mortal-city）→ 兩個原因都遇到：WSL 上專案在 `/mnt/d`（Windows 磁碟），vite 的檔案監看收不到變更、不會重新編譯；另外前一次背景啟動的 vite 沒關、新的加 `--strictPort` 啟動失敗卻沒注意。改完先 `curl http://127.0.0.1:<port>/src/<檔案>` 確認送出的是新碼，不是就重啟（或在 vite 設 `server.watch.usePolling`）；`ss -ltnp | grep <port>` 看是誰在聽，停服務用查到的 PID。
+- **macOS 上新建 `Reveal.tsx` 蓋掉了既有的 `reveal.tsx`**（2026-11-12，mortal-city）：檔案系統不分大小寫，`cat >`／Write 新檔名只差大小寫時會直接覆寫舊檔，型別檢查才報「only in casing」→ 新增檔案前先 `ls` 同目錄確認沒有只差大小寫的檔名；蓋掉了就 `git checkout -- <舊檔>` 還原。
 
 ## Git
 
@@ -57,6 +58,7 @@
 - **headless 測試推觸控事件，左右半邊判斷全錯、手指被分到錯的區域**（2026-11-10，walker-tps）→ `root.push_input(e)` 預設把座標當視窗座標，再依 stretch 換算；測試要用 `root.push_input(e, true)`（viewport 座標，和 test_kit 的滑鼠輔助一致）。（[walker-tps](walker-tps/README.md#已知的坑)）
 - **測試把障礙物（scout）擺在機體正下方，量到的是「機體站到障礙物上」而不是要測的落腳點**（2026-11-12，walker-tps）→ 機體的碰撞體會站上去、整台被墊高；要測「這一點的地面在哪」，把障礙物放在機體旁邊，直接呼叫查詢函式（`gait._ground()`），並用改動前的程式跑一次確認測試會失敗。
 - **測試寫死「按住前進 N 幀」，調快移動速度後走過頭、掉下平台，量到的滑動是掉落造成的**（2026-11-12，walker-tps）→ 按住的時間用距離除以 `max_speed` 換算；調速度前先在暫存複本跑一次相關測試。
+- **網頁冒煙測試偶爾在 `page.screenshot` 逾時 30 秒、卡在「waiting for fonts to load」**（2026-11-12，mortal-city）→ 頁面用 Google Fonts 時是網路偶發，重跑就過；判定失敗前先看是不是這個錯誤，要穩定可以把字型放進 repo 或截圖時傳 `timeout` 加長。（[mortal-city PROGRESS](mortal-city/PROGRESS.md)）
 
 ## Scene、UI 與 Godot API
 

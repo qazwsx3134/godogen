@@ -26,7 +26,8 @@ import {
   itemMult,
   marginOf,
   neuralStage,
-  psychoOdds,
+  neuralRisk,
+  neuralTag,
   perkTally,
   sellValue,
   statChanges,
@@ -215,10 +216,10 @@ export function CharacterScreen({ game }: { game: ReturnType<typeof useGame> }) 
           {c.stash.map((it) => {
             const lock = itemLock(c, it)
             const after = it.slot === 'implant' ? { ...c, implantLoad: c.implantLoad + it.load } : c
-            const risk = psychoOdds(after).total
-            const note = lock ?? (it.slot === 'implant' ? `裝上後神經餘裕 ${marginOf(after)}${risk ? `・任務中錯亂 ${Math.round(risk * 100)}%` : ''}` : undefined)
+            const risk = neuralRisk(after)
+            const note = lock ?? (it.slot === 'implant' ? `裝上後神經餘裕 ${marginOf(after)}${risk ? `・${neuralTag(after)}：任務裡要擲錯亂骰` : ''}` : undefined)
             return (
-              <ItemRow key={it.id} slot={it.slot} item={it} note={note} bad={!!lock || risk > 0}>
+              <ItemRow key={it.id} slot={it.slot} item={it} note={note} bad={!!lock || risk}>
                 <SmallButton disabled={busy || !!lock} onClick={() => act({ t: 'equip', itemId: it.id })}>
                   裝上
                 </SmallButton>
@@ -226,7 +227,7 @@ export function CharacterScreen({ game }: { game: ReturnType<typeof useGame> }) 
             )
           })}
           <p className="m-0 px-3 pt-2 text-[13px] text-muted">
-            義體想裝多少都可以：神經餘裕＝神經容量 {cap} − 義體負荷 {c.implantLoad} − 神經壓力 {c.stress}。餘裕低於 40，每件任務有機會神經錯亂（任務中斷、重傷或死亡，越低越常發生）。重武器與高階義體有屬性門檻。背包和身上的裝備都可以在黑市賣掉（售價 40%，義體當場拆）。{busy ? '節點進行中不能換裝。' : ''}
+            義體想裝多少都可以：神經餘裕＝神經容量 {cap} − 義體負荷 {c.implantLoad} − 神經壓力 {c.stress}。餘裕低於 40，任務裡的錯亂規則一階比一階重：警戒時硬撐的壓力加重、臨界時硬撐後要擲錯亂骰、失控時每個場面先擲錯亂骰（可能中斷並擲致命判定）。重武器與高階義體有屬性門檻。背包和身上的裝備都可以在黑市賣掉（售價 40%，義體當場拆）。{busy ? '節點進行中不能換裝。' : ''}
           </p>
         </Panel>
       )}

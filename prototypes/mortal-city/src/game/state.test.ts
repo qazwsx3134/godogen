@@ -3,10 +3,12 @@ import { CASES, CASE_01, CASE_02, caseBody, caseReplies, optionLock } from '../c
 import { EVENTS, EVENT_BY_ID, WANGAN_EVENTS } from '../content/events'
 import { JOBS, highDanger } from '../content/data'
 import { ITEMS, SHOP_IMPLANTS, STARTER_CHOICES, STARTER_GEAR, clinicOrders, itemLock, makeItem, marketPrice } from '../content/items'
-import { type Pick, STYLES, addFame, fameEdge, approachBonus, perkTally, upgradeCost, attrLock, dangerOdds, dirBonus, marginOf, psychoOdds, fightStats, hashSeed, hackPower, perkOptions, sellValue, stealthPower, tacticsFor } from '../rules/core'
+import { type Pick, STYLES, addFame, fameEdge, approachBonus, perkTally, upgradeCost, attrLock, dirBonus, marginOf, lethalPool, poolSize, PREPARED_DICE, eventPool, fightStats, hashSeed, hackPower, perkOptions, sellValue, stealthPower, tacticsFor } from '../rules/core'
 import { PERKS, PERK_IDS } from '../rules/perks'
 import { LAYERS, STORY_LAYER, findNode } from '../rules/map'
-import { type Action, type Game, caseDangerOption, eliteDangerOption, eventLock, initial, movable, nextDistrict, nodeBusy, nodeJob, reduce } from './state'
+import { type Action, type Game, caseLethal, eliteLethal, eventLock, initial, jobEnemy, movable, nextDistrict, nodeBusy, nodeJob, reduce } from './state'
+import { COST_PAY, CRIT_PAY, PUSH_STRESS, jobReward, perkReward, psychoRuleText, psychoRules, streetEnemy } from '../rules/core'
+import { BEATS } from '../content/beats'
 import { DISTRICTS } from '../content/districts'
 
 /** 換一個傭兵 id（每個 id 的 seed 不同）。起始三選一先跳過：手槍＋終端＋迷彩（單元測試用的固定配備）。 */
@@ -33,9 +35,16 @@ function atCase(g: Game, caseId: string): Game {
   return { ...g, story: { caseId, stage: 'prep' }, run: { ...g.run, at: node?.id ?? g.run.at, node: { kind: 'story', nodeId, caseId } } }
 }
 
+/** 跳過做法的兩個場面（場面另有測試；這裡只測危險節點的結算）。 */
+function scenes(g: Game): Game {
+  if (g.story.stage !== 'scene') return g
+  const ap = CASES.find((x) => x.id === g.story.caseId)!.approaches.find((x) => x.id === g.story.approach)!
+  return { ...g, story: { ...g.story, stage: ap.fight ? 'fight' : 'danger', scenes: 0 } }
+}
+
 function play(g: Game, caseId: string, approach: string, optionId: string): Game {
   g = reduce(atCase(g, caseId), { t: 'storyApproach', id: approach })
-  g = reduce(g, { t: 'storyAutoDone' })
+  g = scenes(reduce(g, { t: 'storyAutoDone' }))
   return reduce(g, { t: 'storyChoose', optionId })
 }
 
@@ -101,12 +110,19 @@ function botAction(g: Game, style0: BotStyle): Action | null {
   if (n.kind === 'elite') {
     if (n.stage === 'auto') return { t: 'eliteAutoDone' }
     if (n.stage === 'fight') return n.fight ? { t: 'eliteFightDone' } : { t: 'eliteFight', tactic }
+    if (n.stage === 'cost') return { t: 'lethalCost', choice: risky ? 'maim' : 'drop' }
+    if (n.stage === 'chase') return n.chase ? { t: 'chaseDone' } : { t: 'chaseFight', tactic }
     if (n.stage === 'danger') {
-      if (style !== 'optimal') return { t: 'eliteChoose', optionId: risky ? 'push' : 'abort' }
+      // 謹慎：一律撤離；冒險：硬幹，能加骰就加；最佳化：骰最多的選項，硬撐後 ≥4 顆才上
+      if (style === 'safe') return { t: 'eliteChoose', optionId: 'abort' }
+      if (risky) return { t: 'eliteChoose', optionId: 'push', push: true, gamble: true }
       const job = JOBS[n.jobId]
       const open = highDanger(job).options.filter((o) => o.lethal && !attrLock(c, o.attrNeeds))
-      const best = open.sort((a, b) => dangerOdds(c, eliteDangerOption(c, job, a)).death - dangerOdds(c, eliteDangerOption(c, job, b)).death)[0]
-      return { t: 'eliteChoose', optionId: best.id }
+      const size = (o: (typeof open)[number]) => poolSize(lethalPool(c, eliteLethal(job, o)))
+      const best = open.sort((a, b) => size(b) - size(a))[0]
+      if (size(best) >= 4) return { t: 'eliteChoose', optionId: best.id }
+      if (size(best) >= 3) return { t: 'eliteChoose', optionId: best.id, push: true }
+      return { t: 'eliteChoose', optionId: 'abort' }
     }
     return { t: 'leave' }
   }
@@ -127,14 +143,22 @@ function botAction(g: Game, style0: BotStyle): Action | null {
       return { t: 'storyApproach', id: pick.id }
     }
     if (st.stage === 'auto') return { t: 'storyAutoDone' }
+    if (st.stage === 'scene') return { t: 'storyRoll', push: false, gamble: false }
+    if (st.stage === 'sceneCost') return { t: 'storySceneCost', index: 0 }
     if (st.stage === 'fight') return st.fight ? { t: 'storyFightDone' } : { t: 'storyFight', tactic }
+    if (st.stage === 'cost') return { t: 'lethalCost', choice: risky ? 'maim' : 'drop' }
+    if (st.stage === 'chase') return st.fight ? { t: 'chaseDone' } : { t: 'chaseFight', tactic }
     const opts = sc.danger.options.filter((o) => optionLock(c, st.approach, o) === undefined && !o.fight)
+    const safe = opts.find((o) => !o.lethal)!
     if (style === 'optimal') {
-      const win = opts.find((o) => o.wins)
-      const lethal = opts.filter((o) => o.lethal).sort((a, b) => dangerOdds(c, caseDangerOption(c, sc, st.approach, a.id)).death - dangerOdds(c, caseDangerOption(c, sc, st.approach, b.id)).death)
-      return { t: 'storyChoose', optionId: (win ?? lethal[0] ?? opts[0]).id }
+      const size = (o: (typeof opts)[number]) => poolSize(lethalPool(c, caseLethal(sc, st.approach, o)))
+      const best = opts.filter((o) => o.lethal).sort((a, b) => size(b) - size(a))[0]
+      if (best && size(best) >= 4) return { t: 'storyChoose', optionId: best.id }
+      if (best && size(best) >= 3) return { t: 'storyChoose', optionId: best.id, push: true }
+      return { t: 'storyChoose', optionId: safe.id }
     }
-    return { t: 'storyChoose', optionId: (opts.find((o) => o.lethal === risky) ?? opts[0]).id }
+    if (risky) return { t: 'storyChoose', optionId: (opts.find((o) => o.lethal && !o.needs) ?? safe).id, push: true, gamble: true }
+    return { t: 'storyChoose', optionId: safe.id }
   }
   return { t: 'leave' }
 }
@@ -169,7 +193,8 @@ function runBot(id: string, style: BotStyle) {
 }
 
 describe('a whole career through the reducer', () => {
-  it('a careful bot never gets stuck, goes through every district, retires and is written into the legends', () => {
+  it('a careful bot never gets stuck, almost always lives through every district, retires and is written into the legends', () => {
+    let dead = 0
     let perks = 0
     let items = 0
     let fame = 0
@@ -178,7 +203,6 @@ describe('a whole career through the reducer', () => {
     const offers = { committed: 0, noTop: 0, allTop: 0 }
     for (let i = 0; i < 200; i++) {
       const r = runBot(`safe${i}`, 'safe')
-      fame += r.g.character.fame.total
       const t = Object.values(perkTally(r.g.character))
       const sum = t.reduce((a, b) => a + b, 0)
       const top = sum ? Math.max(...t) / sum : 0
@@ -188,23 +212,30 @@ describe('a whole career through the reducer', () => {
       expect(r.g.run.phase).toBe('over')
       expect(r.g.meta.legends.length).toBe(1)
       expect(r.g.meta.legends[0].end).toBe(r.g.character.alive ? 'retired' : 'dead')
-      expect(r.g.character.alive).toBe(true) // 一律選不會死的選項就不會死
+      // 骰池改版後代價會累積神經壓力，舊的隱藏錯亂判定偶爾會殺死謹慎型（規格第 8 節目標 1：≥95% 活著；A6 會把錯亂改成看得到的風險）
+      if (!r.g.character.alive) {
+        dead++
+        continue
+      }
       expect(r.g.run.districtIndex).toBe(DISTRICTS.length - 1) // 走完所有街區才退休
       expect(r.g.run.path.length).toBe(11)
       perks += r.perks
       items += r.items
+      fame += r.g.character.fame.total
     }
+    const alive = 200 - dead
     // 流派成形：生涯結束時主流派（張數最多的）佔流派卡的幾成
     console.log(
       `[bot] 流派 謹慎 200 局：主流派平均佔 ${Math.round((share / 200) * 100)}%，佔 60% 以上的 ${built} 局；` +
         `有主流派時的三選一 ${offers.committed} 組：沒有主流派卡 ${offers.noTop}、三張都是主流派 ${offers.allTop}`,
     )
     // README「掉落率」那行的數字：pnpm test 的輸出裡找 [bot]
-    console.log(`[bot] 謹慎 200 局：全部活著，每局卡牌 ${(perks / 200).toFixed(1)}、道具 ${(items / 200).toFixed(1)}、名聲總量 ${Math.round(fame / 200)}`)
+    console.log(`[bot] 謹慎 200 局：死 ${dead}；活下來的每局卡牌 ${(perks / alive).toFixed(1)}、道具 ${(items / alive).toFixed(1)}、名聲總量 ${Math.round(fame / alive)}`)
+    expect(dead).toBeLessThanOrEqual(10)
     // 每次都選不會死的，新宿＋灣岸兩區約 6 張卡
-    expect(perks / 200).toBeGreaterThanOrEqual(4)
-    expect(perks / 200).toBeLessThanOrEqual(8)
-    expect(items / 200).toBeGreaterThanOrEqual(1)
+    expect(perks / alive).toBeGreaterThanOrEqual(4)
+    expect(perks / alive).toBeLessThanOrEqual(8)
+    expect(items / alive).toBeGreaterThanOrEqual(1)
   })
 
   it('a reckless bot also always ends: dead (into the legends) or retired', () => {
@@ -285,6 +316,142 @@ describe('a whole career through the reducer', () => {
     expect(g.meta.seen.job || g.meta.seen.event).toBe(true)
     expect(g.run.path).toEqual([])
     expect(g.character.perks).toEqual({})
+  })
+})
+
+describe('jobs are played scene by scene with a dice pool (DICE-POOL-SPEC §3)', () => {
+  type JobNode = Extract<NonNullable<Game['run']['node']>, { kind: 'job' }>
+  const node = (g: Game) => g.run.node as JobNode
+  /** 站在一件委託的某個場面上（跳過開場與錯亂判定）。 */
+  const atBeat = (id: string, jobId: string, extra: Partial<JobNode> = {}, over: Partial<Game['character']> = {}): Game => {
+    const g = fresh(id, over)
+    return { ...g, run: { ...g.run, at: 'shinjuku-1-0', node: { kind: 'job', nodeId: 'shinjuku-1-0', jobId, stage: 'scene', beat: 0, ...extra } } }
+  }
+  const roll = (g: Game, push = false, gamble = false) => reduce(g, { t: 'jobRoll', push, gamble })
+  const last = (g: Game) => node(g).history!.at(-1)!
+
+  it('the opening leads into the first scene; an old save still holding `ok` does too', () => {
+    const g = fresh('open1')
+    const old = { kind: 'job', nodeId: 'shinjuku-1-0', jobId: 'hack-1', ok: true, stage: 'auto' } as unknown as JobNode
+    const r = reduce({ ...g, run: { ...g.run, at: 'shinjuku-1-0', node: old } }, { t: 'jobAutoDone' })
+    expect(node(r).stage).toBe('scene')
+    expect(node(r).beat).toBe(0)
+  })
+
+  it('the same seed rolls the same dice; pushing and gambling each add a die and charge for it', () => {
+    const g = atBeat('same1', 'hack-1')
+    expect([roll(g).character, roll(g).run.node]).toEqual([roll(g).character, roll(g).run.node]) // 紀錄的時間戳不比
+    const plain = last(roll(g)).dice
+    const r = roll(g, true, true)
+    expect(last(r).dice.slice(0, plain.length)).toEqual(plain)
+    expect(last(r).dice).toHaveLength(plain.length + 2)
+    expect(r.character.heat).toBe(g.character.heat + 1)
+    expect(r.character.stress).toBeGreaterThanOrEqual(g.character.stress + PUSH_STRESS)
+    // 通緝滿了：鋌而走險不算數
+    const full = atBeat('same1', 'hack-1', {}, { heat: 5 })
+    expect(last(roll(full, false, true)).dice).toHaveLength(plain.length)
+  })
+
+  it('a cost result waits for a choice, and the choice is paid; a failure pays the scene cost twice', () => {
+    let cost = 0
+    let fail = 0
+    for (let i = 0; i < 300 && !(cost && fail); i++) {
+      const g = atBeat(`cf${i}`, 'hack-1')
+      const r = roll(g)
+      const res = last(r).result
+      if (res === 'cost' && !cost) {
+        cost++
+        expect(node(r).stage).toBe('cost')
+        expect(node(r).beat).toBe(0)
+        // 接入的代價：用神經訊號硬撐（壓力 +8）
+        const after = reduce(r, { t: 'jobCost', index: 0 })
+        expect(after.character.stress).toBe(r.character.stress + 8)
+        expect(node(after).beat).toBe(1)
+        expect(node(after).stage).toBe('scene')
+        expect(last(after).cost).toMatch(/神經壓力 \+8/)
+      }
+      if (res === 'fail' && !fail) {
+        fail++
+        // 接入失敗：神經壓力加倍（+16），記一次失手，往下一個場面
+        expect(BEATS.hack[0].fail).toBe('stress')
+        expect(r.character.stress).toBe(g.character.stress + 16)
+        expect(node(r).strikes).toBe(1)
+        expect(node(r).beat).toBe(1)
+      }
+    }
+    expect(cost).toBe(1)
+    expect(fail).toBe(1)
+  })
+
+  it('a full wanted level turns a heat cost into stress', () => {
+    for (let i = 0; i < 300; i++) {
+      // 斷線（第 3 個場面）失敗吃通緝
+      const g = atBeat(`hf${i}`, 'hack-1', { beat: 2 }, { heat: 5 })
+      const r = roll(g)
+      if (last(r).result !== 'fail') continue
+      expect(r.character.heat).toBe(5)
+      // 最後一個場面：失敗的代價 +16，再加上結算時委託本身的壓力
+      expect(r.character.stress).toBe(g.character.stress + 16 + JOBS['hack-1'].stress)
+      return
+    }
+    throw new Error('no failure found')
+  })
+
+  it('hack and stealth: two failures and you are caught and must fight; otherwise three scenes finish the job', () => {
+    let caught = 0
+    let clean = 0
+    for (let i = 0; i < 200; i++) {
+      // 一顆骰也沒有（智力 1、難度 3、重傷）比較容易失敗兩次
+      let g = atBeat(`tw${i}`, i % 2 ? 'hack-3' : 'stealth-3', {}, { attrs: { tech: 1, reflex: 1, body: 1, int: 1, cool: 1 }, injury: i % 4 < 2 ? 75 : 0, equipment: [] })
+      for (let k = 0; k < 6 && (node(g).stage === 'scene' || node(g).stage === 'cost'); k++) g = node(g).stage === 'cost' ? reduce(g, { t: 'jobCost', index: 0 }) : roll(g)
+      const n = node(g)
+      if (n.stage === 'fight') {
+        caught++
+        expect(n.strikes).toBe(2)
+      } else {
+        expect(n.stage).toBe('done')
+        expect(n.strikes ?? 0).toBeLessThan(2)
+        expect(n.history).toHaveLength(3)
+        clean++
+      }
+    }
+    expect(caught).toBeGreaterThan(0)
+    expect(clean).toBeGreaterThan(0)
+  })
+
+  it('force: every scene won softens the opponent, every failure hardens it, and the fight always comes', () => {
+    const job = JOBS['force-1']
+    const hp = streetEnemy(job).hp
+    expect(jobEnemy(job, {}).hp).toBe(hp)
+    expect(jobEnemy(job, { wins: 2, crits: 1 }).hp).toBe(Math.round(hp * 0.64))
+    expect(jobEnemy(job, { strikes: 1 }).hp).toBe(Math.round(hp * 1.15))
+    expect(jobEnemy(job, { wins: 2, crits: 2 }).hp).toBe(Math.round(hp * 0.52))
+    expect(jobEnemy(job, { wins: 9, crits: 9 }).hp).toBe(Math.round(hp * 0.5))
+    // 駭入、潛行的對手不受場面影響
+    expect(jobEnemy(JOBS['hack-1'], { wins: 2, strikes: 2 }).hp).toBe(streetEnemy(JOBS['hack-1']).hp)
+    let g = atBeat('ff1', 'force-1')
+    for (let k = 0; k < 4 && node(g).stage !== 'fight'; k++) g = node(g).stage === 'cost' ? reduce(g, { t: 'jobCost', index: 0 }) : roll(g)
+    expect(node(g).stage).toBe('fight')
+    expect(node(g).history).toHaveLength(2)
+  })
+
+  it('pay cuts take 20% each, crits add 15%, never below 20% of the full pay', () => {
+    const job = JOBS['hack-1']
+    const seen = new Set<string>()
+    for (let i = 0; i < 400 && seen.size < 2; i++) {
+      for (const cuts of [2, 6]) {
+        const g = atBeat(`pay${i}`, 'hack-1', { beat: 2, cuts, crits: 1, wins: 2 })
+        const r = roll(g)
+        const res = last(r).result
+        if (res !== 'clean') continue
+        const full = jobReward(job, perkReward(g.character, job.direction))
+        const rate = Math.max(0.2, 1 - COST_PAY * cuts + CRIT_PAY)
+        expect(node(r).stage).toBe('done')
+        expect(r.character.credits - g.character.credits).toBe(Math.round(full * rate))
+        seen.add(`${cuts}`)
+      }
+    }
+    expect(seen.size).toBe(2)
   })
 })
 
@@ -396,6 +563,39 @@ describe('districts', () => {
 })
 
 describe('story cases on the map', () => {
+  it('an approach is played as two scenes; clean wins add a die to the lethal check, failures take one away', () => {
+    const risky = CASE_02.danger.options.find((o) => o.lethal && !o.needs)!
+    const half = CASE_02.danger.options.find((o) => o.id === 'half')!
+    expect(half.reward).toBeGreaterThan(0)
+    const seen = new Set<number>()
+    let cut = 0
+    for (let i = 0; i < 120; i++) {
+      let g = reduce(atCase(fresh(`sc${i}`), CASE_02.id), { t: 'storyApproach', id: 'stealth' })
+      g = reduce(g, { t: 'storyAutoDone' })
+      expect(g.story).toMatchObject({ stage: 'scene', beat: 0, scenes: 0 })
+      const before = g.character.credits
+      for (let k = 0; k < 4 && (g.story.stage === 'scene' || g.story.stage === 'sceneCost'); k++)
+        g = g.story.stage === 'scene' ? reduce(g, { t: 'storyRoll', push: false, gamble: false }) : reduce(g, { t: 'storySceneCost', index: 0 })
+      expect(g.story.stage).toBe('danger')
+      const h = g.story.history!
+      expect(h).toHaveLength(2)
+      const net = h.filter((x) => x.result === 'crit' || x.result === 'clean').length - h.filter((x) => x.result === 'fail').length
+      expect(g.story.scenes).toBe(net)
+      seen.add(net)
+      const part = lethalPool(g.character, caseLethal(CASE_02, 'stealth', risky, g.story.scenes)).find((p) => p.label === '前面的場面')
+      expect(part?.n ?? 0).toBe(net)
+      // 潛行第 2 個場面「得手」的第一個代價是報酬打折：記下來，結案時少拿 20%
+      if (h[1].result === 'cost') {
+        expect(g.story.cuts).toBe(1)
+        cut++
+      }
+      const done = reduce(g, { t: 'storyChoose', optionId: 'half' })
+      expect(done.character.credits - before).toBe(Math.round(half.reward * (1 - 0.2 * (g.story.cuts ?? 0))))
+    }
+    expect(seen.size).toBeGreaterThanOrEqual(3)
+    expect(cut).toBeGreaterThan(0)
+  })
+
   it('every case has a way out that cannot kill, and every option has text', () => {
     for (const sc of CASES) {
       expect(sc.danger.options.some((o) => !o.lethal), sc.id).toBe(true)
@@ -424,28 +624,50 @@ describe('story cases on the map', () => {
     expect(g.run.phase).toBe('safehouse')
   })
 
-  it('the approach changes the lethal chance: its own risk, minus gear in that direction', () => {
-    const c = fresh('ap').character // 手槍、終端、迷彩：每方向 +5%
-    expect(caseDangerOption(c, CASE_01, 'force', 'carry').lethalBase).toBeCloseTo((0.18 + 0.04 - 0.05) * 1.5)
-    expect(caseDangerOption(c, CASE_01, 'stealth', 'carry').lethalBase).toBeCloseTo((0.18 - 0.02 - 0.05) * 1.5)
-    const pro = { ...c, perks: { quietPro: 1 } }
-    expect(caseDangerOption(pro, CASE_01, 'stealth', 'carry').lethalBase).toBeCloseTo((0.18 - 0.02 - 0.05 - 0.03) * 1.5)
-    expect(caseDangerOption(c, CASE_01, 'force', 'hand').lethalBase).toBe(0)
+  it('the approach decides the attribute and gear of the lethal check; the big case is a harder foe', () => {
+    const carry = CASE_01.danger.options.find((o) => o.id === 'carry')!
+    expect(caseLethal(CASE_01, 'force', carry)).toMatchObject({ attr: 'body', direction: 'force', foe: 'story', prepared: false })
+    expect(caseLethal(CASE_01, 'stealth', carry)).toMatchObject({ attr: 'cool', direction: 'stealth' })
+    expect(caseLethal(CASE_02, 'stealth', CASE_02.danger.options.find((o) => o.lethal)!).foe).toBe('boss')
+    const c = fresh('ap').character // 手槍、終端、迷彩：每方向 +5% → +1 顆
+    expect(lethalPool(c, caseLethal(CASE_01, 'stealth', carry))).toEqual([
+      { label: '沉著 3', n: 2 },
+      { label: '潛行的裝備與卡牌', n: 1 },
+    ])
+    // 器材選項看器材的路線、屬性選項看門檻屬性，都 +2
+    const stare = CASE_01.danger.options.find((o) => o.id === 'stare')!
+    expect(caseLethal(CASE_01, 'hack', stare)).toMatchObject({ attr: 'cool', prepared: true })
+    expect(lethalPool(c, caseLethal(CASE_01, 'hack', stare)).find((p) => p.n === PREPARED_DICE)).toBeTruthy()
   })
 
-  it('a gear or attribute option pays 75% and costs 10 stress', () => {
-    const c = fresh('cost', { attrs: { ...initial(0).character.attrs, cool: 6 } })
-    const g = play(c, CASE_01.id, 'stealth', 'stare')
-    expect(g.character.credits).toBe(500 + Math.round(600 * 0.75))
-    expect(g.character.stress).toBe(6 + 10) // 路上 6、靠屬性 10
-    expect(g.character.fame.total).toBe(CASE_01.xp) // 撐過去是經驗 ×2，靠屬性減半
+  it('a gear or attribute option rolls 2 more dice, pays 75% and costs 10 stress', () => {
+    for (let i = 0; i < 200; i++) {
+      const c = fresh(`cost${i}`, { attrs: { ...initial(0).character.attrs, cool: 6 } })
+      const g = play(c, CASE_01.id, 'stealth', 'stare')
+      if (g.run.cases[CASE_01.id]?.outcome !== 'survived') continue
+      expect(g.character.credits).toBe(500 + Math.round(600 * 0.75))
+      expect(g.character.stress).toBe(6 + 10) // 路上 6、靠屬性 10
+      expect(g.character.fame.total).toBe(CASE_01.xp) // 撐過去是經驗 ×2，靠屬性減半
+      return
+    }
+    throw new Error('no surviving seed')
   })
 
-  it('a maimed survivor is paid but keeps an old wound in that direction', () => {
+  it('a 4-5 on the lethal check asks: maimed with the pay, or walk away hurt without it', () => {
     let seen = 0
     for (let i = 0; i < 300 && !seen; i++) {
-      const g = play(fresh(`m${i}`), CASE_01.id, 'stealth', 'carry')
-      if (g.run.cases[CASE_01.id].outcome !== 'maimed') continue
+      const g0 = play(fresh(`m${i}`), CASE_01.id, 'stealth', 'carry')
+      if (g0.story.stage !== 'cost') continue
+      expect(g0.story.lethal!.result).toBe('cost')
+      expect(Math.max(...g0.story.lethal!.dice)).toBeGreaterThanOrEqual(4)
+      expect(reduce(g0, { t: 'leave' })).toBe(g0) // 還沒選代價不能走
+      const drop = reduce(g0, { t: 'lethalCost', choice: 'drop' })
+      expect(drop.run.cases[CASE_01.id].outcome).toBe('safe')
+      expect(drop.character.credits).toBe(500)
+      expect(drop.character.injury).toBe(g0.character.injury + 20)
+      expect(drop.character.scars).toBeUndefined()
+      const g = reduce(g0, { t: 'lethalCost', choice: 'maim' })
+      expect(g.run.cases[CASE_01.id].outcome).toBe('maimed')
       seen++
       expect(g.character.alive).toBe(true)
       expect(g.character.credits).toBe(500 + 600)
@@ -457,11 +679,149 @@ describe('story cases on the map', () => {
     expect(seen).toBe(1)
   })
 
-  it('elite danger options also take off the gear bonus in that direction', () => {
-    const c = fresh('el').character
+  it('elite danger options count gear in that direction and a tougher foe; the dice on screen are the dice rolled', () => {
     const job = JOBS['hack-4']
     const push = highDanger(job).options.find((o) => o.id === 'push')!
-    expect(eliteDangerOption(c, job, push).lethalBase).toBeCloseTo((push.lethalBase - 0.05) * 1.5)
+    expect(eliteLethal(job, push)).toMatchObject({ attr: 'int', direction: 'hack', foe: 'elite', prepared: false })
+    for (let i = 0; i < 50; i++) {
+      const g0 = fresh(`ed${i}`, { attrs: { ...initial(0).character.attrs, int: 3 + (i % 6) } })
+      const g = { ...g0, run: { ...g0.run, at: 'e', node: { kind: 'elite' as const, nodeId: 'e', jobId: 'hack-4', stage: 'danger' as const } } }
+      const size = poolSize(lethalPool(g.character, eliteLethal(job, push)))
+      for (const [boost, extra] of [[false, 0], [true, 2]] as const) {
+        const r = reduce(g, { t: 'eliteChoose', optionId: 'push', push: boost, gamble: boost })
+        const n = r.run.node as Extract<NonNullable<Game['run']['node']>, { kind: 'elite' }>
+        expect(n.lethal!.dice).toHaveLength(size + extra <= 0 ? 2 : Math.min(6, size + extra))
+      }
+    }
+  })
+
+  it('elite loot comes only when you live through the danger node; walking away or being rescued gets nothing', () => {
+    const seen = new Set<string>()
+    for (let i = 0; i < 300; i++) {
+      const g0 = fresh(`d8-${i}`, { lifelines: i % 2, lifelineTier: 'basic' })
+      const g = { ...g0, run: { ...g0.run, at: 'e', node: { kind: 'elite' as const, nodeId: 'e', jobId: 'hack-4', stage: 'danger' as const } } }
+      const items = (x: Game) => x.character.picks.filter((p) => p.kind === 'item').length
+      if (i === 0) expect(items(reduce(g, { t: 'eliteChoose', optionId: 'abort' }))).toBe(0)
+      let r = reduce(g, { t: 'eliteChoose', optionId: 'push' })
+      if (r.run.node?.kind === 'elite' && r.run.node.stage === 'cost') r = reduce(r, { t: 'lethalCost', choice: i % 3 ? 'maim' : 'drop' })
+      const out = (r.run.node as Extract<NonNullable<Game['run']['node']>, { kind: 'elite' }>).outcome!.kind
+      seen.add(out)
+      expect(items(r)).toBe(out === 'survived' || out === 'maimed' ? 1 : 0)
+    }
+    expect(seen.has('survived') && seen.has('rescued')).toBe(true)
+  })
+
+  it('a lethal check puts up a reveal with the same dice, until the player dismisses it', () => {
+    const g0 = fresh('rv')
+    const g = { ...g0, run: { ...g0.run, at: 'e', node: { kind: 'elite' as const, nodeId: 'e', jobId: 'hack-4', stage: 'danger' as const } } }
+    expect(reduce(g, { t: 'eliteChoose', optionId: 'abort' }).run.reveal).toBeUndefined() // 撤離不擲骰
+    const r = reduce(g, { t: 'eliteChoose', optionId: 'push' })
+    const n = r.run.node as Extract<NonNullable<Game['run']['node']>, { kind: 'elite' }>
+    expect(r.run.reveal).toMatchObject({ dice: n.lethal!.dice, best: n.lethal!.best, title: JOBS['hack-4'].name })
+    const done = reduce(r, { t: 'revealDone' })
+    expect(done.run.reveal).toBeNull()
+    expect(reduce(done, { t: 'revealDone' })).toBe(done)
+  })
+
+  it('a failed lethal check with enemies around becomes a fight: win and you made it, lose and it is a lethal wound', () => {
+    type Elite = Extract<NonNullable<Game['run']['node']>, { kind: 'elite' }>
+    const seen = { won: 0, lost: 0 }
+    for (let i = 0; i < 400 && !(seen.won && seen.lost); i++) {
+      // 體能 1：硬幹只擲一顆、很容易失敗
+      // 一半帶傷上場（HP 低，打輸的機會才夠）
+      const g0 = fresh(`ch${i}`, { attrs: { ...initial(0).character.attrs, body: 1 }, lifelines: 1, injury: i % 2 ? 65 : 0 })
+      const g = { ...g0, run: { ...g0.run, at: 'e', node: { kind: 'elite' as const, nodeId: 'e', jobId: 'force-4', stage: 'danger' as const } } }
+      const r = reduce(g, { t: 'eliteChoose', optionId: 'push' })
+      const n = r.run.node as Elite
+      if (n.lethal!.result !== 'fail') continue
+      expect(n.stage).toBe('chase') // 不是直接致命傷
+      expect(r.character.lifelines).toBe(1)
+      expect(r.run.reveal!.text).toMatch(/外骨骼私兵逼近/)
+      expect(reduce(r, { t: 'chaseDone' })).toBe(r) // 還沒打
+      const f = reduce(r, { t: 'chaseFight', tactic: 'force' })
+      const won = (f.run.node as Elite).chase!.won
+      const done = reduce(f, { t: 'chaseDone' })
+      const out = (done.run.node as Elite).outcome!
+      if (won) {
+        expect(out.kind).toBe('survived')
+        expect(done.character.picks.some((p) => p.kind === 'item')).toBe(true) // 撐過去一定掉寶
+        seen.won++
+      } else {
+        expect(out.kind).toBe('rescued') // 打輸才是致命傷：保單用掉
+        expect(done.character.lifelines).toBe(0)
+        seen.lost++
+      }
+    }
+    expect(seen.won).toBeGreaterThan(0)
+    expect(seen.lost).toBeGreaterThan(0)
+  })
+
+  it('no one comes for you in black ICE: a failed hack elite is still an immediate lethal wound', () => {
+    expect(highDanger(JOBS['hack-4']).threat).toBeUndefined()
+    for (let i = 0; i < 300; i++) {
+      const g0 = fresh(`ice${i}`, { attrs: { ...initial(0).character.attrs, int: 1 }, lifelines: 1 })
+      const g = { ...g0, run: { ...g0.run, at: 'e', node: { kind: 'elite' as const, nodeId: 'e', jobId: 'hack-4', stage: 'danger' as const } } }
+      const r = reduce(g, { t: 'eliteChoose', optionId: 'push' })
+      const n = r.run.node as Extract<NonNullable<Game['run']['node']>, { kind: 'elite' }>
+      if (n.lethal!.result !== 'fail') continue
+      expect(n.stage).toBe('done')
+      expect(n.outcome!.kind).toBe('rescued')
+      return
+    }
+    throw new Error('no failed roll')
+  })
+
+  it('story cases chase you too: the danger node enemy closes in after a failed lethal check', () => {
+    for (let i = 0; i < 300; i++) {
+      const g = play(fresh(`sch${i}`, { attrs: { ...initial(0).character.attrs, reflex: 1, cool: 1 } }), CASE_01.id, 'stealth', 'carry')
+      if (g.story.stage !== 'chase') continue
+      expect(g.story.lethal!.result).toBe('fail')
+      const f = reduce(g, { t: 'chaseFight', tactic: 'force' })
+      expect(f.story.fight!.enemy.name).toBe('神坂保全')
+      const r = reduce(f, { t: 'chaseDone' })
+      expect(r.story.caseId).toBe(null)
+      expect(r.run.cases[CASE_01.id].outcome).toBe(f.story.fight!.won ? 'survived' : 'dead')
+      expect(r.run.cases[CASE_01.id].reason).toMatch(/致命判定擲出 \d/)
+      return
+    }
+    throw new Error('no chase')
+  })
+
+  it('event checks roll dice: the attribute decides how many, 4-5 wins with a small toll, 1-3 loses', () => {
+    const all = [...EVENTS, ...WANGAN_EVENTS]
+    expect(all.flatMap((e) => e.options).filter((o) => o.check)).toHaveLength(11)
+    // 看屬性：屬性骰數 −1；純運氣：固定骰數
+    const c = fresh('ev').character
+    expect(poolSize(eventPool(c, { attr: 'reflex' }))).toBe(1)
+    expect(poolSize(eventPool({ ...c, attrs: { ...c.attrs, reflex: 7 } }, { attr: 'reflex' }))).toBe(3)
+    expect(poolSize(eventPool(c, { dice: 1 }))).toBe(1)
+    const seen = { crit: 0, clean: 0, cost: 0, fail: 0 }
+    for (let i = 0; i < 300; i++) {
+      const g0 = fresh(`evr${i}`)
+      const g = { ...g0, run: { ...g0.run, node: { kind: 'event' as const, nodeId: 'ev', eventId: 'vending', stage: 'choose' as const } } }
+      const ev = EVENT_BY_ID['vending']
+      const o = ev.options.find((x) => x.check && !x.cost && !x.fame && !eventLock(g.character, x))
+      if (!o) throw new Error('vending has no plain check option')
+      const r = reduce(g, { t: 'eventChoose', optionId: o.id })
+      const n = r.run.node as Extract<NonNullable<Game['run']['node']>, { kind: 'event' }>
+      seen[n.roll!.result]++
+      expect(n.roll!.dice).toHaveLength(poolSize(eventPool(g.character, o.check!)) <= 0 ? 2 : poolSize(eventPool(g.character, o.check!)))
+      if (n.roll!.result === 'fail') expect(n.text).toBe(o.lose!.text)
+      else expect(n.text!.startsWith(o.win.text)).toBe(true)
+      if (n.roll!.result === 'cost') expect(r.character.stress - g.character.stress).toBeGreaterThanOrEqual(o.toll ? 0 : 6)
+      expect(n.rows!.some((x) => x.label === '判定' && !/%/.test(x.value))).toBe(true)
+    }
+    expect(seen.fail).toBeGreaterThan(0)
+    expect(seen.cost).toBeGreaterThan(0)
+  })
+
+  it('the dice and lethal intros are shown once per player, across mercenaries', () => {
+    let g = reduce(fresh('in'), { t: 'seenIntro', key: 'dice' })
+    expect(g.meta.seen.dice).toBe(true)
+    expect(reduce(g, { t: 'seenIntro', key: 'dice' })).toBe(g)
+    g = reduce({ ...g, character: { ...g.character, alive: false } }, { t: 'newCharacter' })
+    expect(g.meta.seen.dice).toBe(true)
+    expect(g.meta.seen.lethal).toBeUndefined()
   })
 
   it('a new mercenary picks one starting item, which is worn at once', () => {
@@ -490,11 +850,13 @@ describe('story cases on the map', () => {
 
   it('a lethal outcome uses up the lifeline instead of killing you', () => {
     for (let i = 0; i < 300; i++) {
-      const g = play(fresh(`l${i}`, { lifelines: 1 }), CASE_01.id, 'hack', 'carry')
+      let g = play(fresh(`l${i}`, { lifelines: 1, injury: 60 }), CASE_01.id, 'hack', 'carry')
+      // 致命判定失敗 → 保全逼近 → 打輸才是致命傷
+      if (g.story.stage === 'chase') g = reduce(reduce(g, { t: 'chaseFight', tactic: 'force' }), { t: 'chaseDone' })
       if (g.run.cases[CASE_01.id]?.outcome !== 'rescued') continue
       expect(g.character.alive).toBe(true)
       expect(g.character.lifelines).toBe(0)
-      expect(g.character.injury).toBe(70)
+      expect(g.character.injury).toBeGreaterThanOrEqual(70) // 標準保單：至少 70%（打輸那場的傷可能更重）
       return
     }
     throw new Error('no rescued seed')
@@ -503,7 +865,7 @@ describe('story cases on the map', () => {
   it('choosing to fight at the danger node: a won fight survives with the bigger reward', () => {
     for (let i = 0; i < 300; i++) {
       let g = reduce(atCase(fresh(`b${i}`), CASE_01.id), { t: 'storyApproach', id: 'force' })
-      g = reduce(g, { t: 'storyAutoDone' })
+      g = scenes(reduce(g, { t: 'storyAutoDone' }))
       g = reduce(g, { t: 'storyFight', tactic: 'stealth' })
       if (!g.story.fight!.won) continue
       g = reduce(g, { t: 'storyFightDone' })
@@ -521,11 +883,16 @@ describe('story cases on the map', () => {
     throw new Error('no seed won both fights')
   })
 
-  it('attribute options: 沉著 6 finishes 01 without risk; the 體能 approach is locked below 6', () => {
+  it('attribute options need the attribute and roll more dice than the bare risk; the 體能 approach is locked below 6', () => {
     let g = fresh('a1')
+    const stare = CASE_01.danger.options.find((o) => o.id === 'stare')!
+    const carry = CASE_01.danger.options.find((o) => o.id === 'carry')!
+    expect(optionLock(g.character, 'hack', stare)).toBeTruthy()
     for (let i = 0; i < 3; i++) g = reduce(g, { t: 'raiseAttr', attr: 'cool' })
-    g = play(g, CASE_01.id, 'hack', 'stare')
-    expect(g.run.cases[CASE_01.id]).toMatchObject({ outcome: 'survived', optionId: 'stare' })
+    expect(optionLock(g.character, 'hack', stare)).toBeUndefined()
+    // 沉著 6（3 顆）＋駭入裝備 1＋有備而來 2；硬幹看智力 3（2 顆）＋駭入裝備 1
+    expect(poolSize(lethalPool(g.character, caseLethal(CASE_01, 'hack', stare)))).toBe(6)
+    expect(poolSize(lethalPool(g.character, caseLethal(CASE_01, 'hack', carry)))).toBe(3)
     const h = atCase(fresh('a2'), CASE_01.id)
     expect(reduce(h, { t: 'storyApproach', id: 'roof' }).story.stage).toBe('prep')
   })
@@ -577,12 +944,12 @@ describe('node services and three-way picks', () => {
     g = reduce({ ...g, run: { ...g.run, node: null } }, { t: 'equip', itemId: g.character.stash[0].id })
     g = atNode(g, { kind: 'clinic', nodeId: 'cl' })
     expect(fightStats(g.character).armor).toBe(15)
-    // 沒有義體上限：一直裝，神經餘裕一路往下掉，任務錯亂的機率跟著升
+    // 沒有義體上限：一直裝，神經餘裕一路往下掉，錯亂規則跟著加重
     for (let i = 0; i < 3; i++) g = reduce(g, { t: 'buyImplant', kind: 'tendon' })
     expect(g.character.equipment.filter((i) => i.kind === 'tendon').length).toBe(3)
     expect(marginOf(g.character)).toBe(100 - 25 - 30 - 60)
     expect(reduce(g, { t: 'buyImplant', kind: 'nope' })).toBe(g) // 不在這次的訂製清單（也不是常備）就不能買
-    expect(psychoOdds(g.character).total).toBeCloseTo(0.85) // 餘裕 −15：失控 70%，每低 1 點 +1%
+    expect(psychoRules(g.character)).toMatchObject({ stage: 'lost', sceneCheck: true }) // 餘裕 −15：失控
   })
 
   it('the clinic upgrades a worn implant: effect x1.5 then x2, +10 load each, list price x level', () => {
@@ -607,23 +974,70 @@ describe('node services and three-way picks', () => {
     expect(reduce(g, { t: 'equip', itemId: shotgun.id }).character.equipment.some((i) => i.kind === 'shotgun')).toBe(true)
   })
 
-  it('below 40 neural margin a mission can go wrong: abort, maim or death, by seed', () => {
+  it('lost (margin <= 0): a psycho die before each scene; 1-2 aborts and rolls a 2-die lethal check, by seed', () => {
     const seen = { none: 0, abort: 0, maim: 0, dead: 0 }
     for (let i = 0; i < 400; i++) {
-      // 餘裕 0：失控，錯亂 70%（中斷 28%、重傷 7%、死亡 35%）
-      const g = atNode(fresh(`ps${i}`, { stress: 75 }), { kind: 'job', nodeId: 'j', jobId: 'hack-1', stage: 'auto' })
-      const r = reduce(g, { t: 'jobAutoDone' })
+      // 餘裕 0：失控。錯亂骰 1～2（1/3）中斷，再擲 2 顆：失敗（1/4）死亡、付代價（7/16）重傷
+      const g = atNode(fresh(`ps${i}`, { stress: 75 }), { kind: 'job', nodeId: 'j', jobId: 'hack-1', stage: 'scene', beat: 0 })
+      const r = reduce(g, { t: 'jobRoll', push: false, gamble: false })
+      const h = (r.run.node as Extract<NonNullable<Game['run']['node']>, { kind: 'job' }>).history!.at(-1)!
+      expect(h.psycho).toHaveLength(1)
+      expect(h.broke === 'abort').toBe(h.psycho![0] <= 2)
       if (!r.character.alive) seen.dead++
       else if (r.character.scars) seen.maim++
-      else if (r.run.node?.kind === 'job' && r.run.node.text?.includes('神經錯亂')) seen.abort++
+      else if (h.broke === 'abort') seen.abort++
       else seen.none++
-      const again = reduce(g, { t: 'jobAutoDone' }) // 同一個 seed 同一個結果（紀錄的時間戳不比）
+      if (h.broke === 'abort') expect(r.run.node?.kind === 'job' && r.run.node.stage).toBe('done')
+      const again = reduce(g, { t: 'jobRoll', push: false, gamble: false }) // 同一個 seed 同一個結果
       expect([again.character, again.run.node]).toEqual([r.character, r.run.node])
     }
-    expect(seen.none).toBeGreaterThan(80)
-    expect(seen.abort).toBeGreaterThan(70)
-    expect(seen.maim).toBeGreaterThan(10)
-    expect(seen.dead).toBeGreaterThan(90)
+    // 期望值：沒事 267、只中斷 42、重傷 58、死亡 33
+    expect(seen.none).toBeGreaterThan(220)
+    expect(seen.abort).toBeGreaterThan(20)
+    expect(seen.maim).toBeGreaterThan(30)
+    expect(seen.dead).toBeGreaterThan(15)
+  })
+
+  it('the psycho rules get worse with the stage, and none of them is hidden', () => {
+    const at = (stress: number) => fresh('pr', { stress }).character
+    // 起始配備：容量 100、義體負荷 25 → 餘裕 75 − 壓力
+    expect(psychoRules(at(0))).toMatchObject({ stage: 'stable', pushExtra: 0, pushCheck: false, sceneCheck: false })
+    expect(psychoRules(at(40))).toMatchObject({ stage: 'alert', pushExtra: 4, pushCheck: false, sceneCheck: false })
+    expect(psychoRules(at(60))).toMatchObject({ stage: 'critical', pushCheck: true, sceneCheck: false })
+    expect(psychoRules(at(75))).toMatchObject({ stage: 'lost', pushCheck: true, sceneCheck: true })
+    expect(psychoRuleText(at(0))).toEqual([])
+    expect(psychoRuleText(at(75))).toHaveLength(3)
+    // 穩定時開場與擲骰都不會錯亂；警戒的硬撐壓力 +12
+    for (let i = 0; i < 100; i++) {
+      const g = atNode(fresh(`st${i}`, { stress: 40 }), { kind: 'job', nodeId: 'j', jobId: 'hack-1', stage: 'scene', beat: 0 })
+      const r = reduce(g, { t: 'jobRoll', push: true, gamble: false })
+      const h = (r.run.node as Extract<NonNullable<Game['run']['node']>, { kind: 'job' }>).history!.at(-1)!
+      expect(h.psycho).toBeUndefined()
+      if (h.result !== 'fail') expect(r.character.stress - 40).toBeLessThanOrEqual(12 + 8) // 硬撐 12，付代價最多再 8
+    }
+  })
+
+  it('critical: after pushing, a psycho die of 1 fails the scene even on a good roll', () => {
+    let broke = 0
+    let held = 0
+    for (let i = 0; i < 300; i++) {
+      const g = atNode(fresh(`cr${i}`, { stress: 60 }), { kind: 'job', nodeId: 'j', jobId: 'hack-1', stage: 'scene', beat: 0 })
+      const plain = reduce(g, { t: 'jobRoll', push: false, gamble: false })
+      expect((plain.run.node as Extract<NonNullable<Game['run']['node']>, { kind: 'job' }>).history!.at(-1)!.psycho).toBeUndefined()
+      const r = reduce(g, { t: 'jobRoll', push: true, gamble: false })
+      const h = (r.run.node as Extract<NonNullable<Game['run']['node']>, { kind: 'job' }>).history!.at(-1)!
+      expect(h.psycho).toHaveLength(1)
+      if (h.psycho![0] === 1) {
+        expect(h.broke).toBe('fail')
+        expect(h.result).toBe('fail')
+        broke++
+      } else {
+        expect(h.broke).toBeUndefined()
+        held++
+      }
+    }
+    expect(broke).toBeGreaterThan(20)
+    expect(held).toBeGreaterThan(200)
   })
 
   it('fame opens named options in events, and gets you on the MPD watch list every 3 levels', () => {
@@ -651,8 +1065,8 @@ describe('node services and three-way picks', () => {
   it('the lifeline tier decides how you come back', () => {
     const back = (tier: 'basic' | 'standard' | 'platinum') => {
       for (let i = 0; i < 400; i++) {
-        const g = atNode(fresh(`lt${tier}${i}`, { stress: 75, lifelines: 1, lifelineTier: tier }), { kind: 'job', nodeId: 'j', jobId: 'hack-1', stage: 'auto' })
-        const r = reduce(g, { t: 'jobAutoDone' })
+        const g = atNode(fresh(`lt${tier}${i}`, { stress: 75, lifelines: 1, lifelineTier: tier }), { kind: 'job', nodeId: 'j', jobId: 'hack-1', stage: 'scene', beat: 0 })
+        const r = reduce(g, { t: 'jobRoll', push: false, gamble: false })
         if (r.character.lifelines === 0) return r.character
       }
       throw new Error('no rescue')
@@ -671,8 +1085,8 @@ describe('node services and three-way picks', () => {
   it('a lifeline pulls you back from death, and the medics strip your implants to pay for it', () => {
     let seen = 0
     for (let i = 0; i < 400 && !seen; i++) {
-      const g = atNode(fresh(`rb${i}`, { stress: 75, lifelines: 1 }), { kind: 'job', nodeId: 'j', jobId: 'hack-1', stage: 'auto' })
-      const r = reduce(g, { t: 'jobAutoDone' })
+      const g = atNode(fresh(`rb${i}`, { stress: 75, lifelines: 1 }), { kind: 'job', nodeId: 'j', jobId: 'hack-1', stage: 'scene', beat: 0 })
+      const r = reduce(g, { t: 'jobRoll', push: false, gamble: false })
       if (r.character.lifelines !== 0) continue
       seen++
       expect(r.character.alive).toBe(true)

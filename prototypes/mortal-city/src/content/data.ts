@@ -65,6 +65,8 @@ export interface DangerTemplate {
   options: DangerOption[]
   /** 精英委託要先打的那一場。 */
   fight: Enemy
+  /** 致命判定失敗時逼近、要打一場的敵人；駭入（黑冰咬的是神經）沒有。 */
+  threat?: Enemy
 }
 
 export const OPENING: Record<Direction, (n: string) => string[]> = {
@@ -80,11 +82,12 @@ const SKILLED: Record<Direction, { attr: Attr; label: string }> = {
   stealth: { attr: 'cool', label: '冷靜地關掉警報，換上保全的制服走出去' },
 }
 
-const TWIST: Record<Direction, { title: string; body: string; push: string }> = {
+const TWIST: Record<Direction, { title: string; body: string; push: string; threat?: string }> = {
   force: {
     title: '對方的重裝私兵到了',
     body: '兩台外骨骼從貨櫃後面走出來，機砲已經在轉。貨就在你身後三公尺。',
     push: '頂著機砲把貨拖出去',
+    threat: '外骨骼私兵',
   },
   hack: {
     title: '黑冰鎖定了你的神經',
@@ -95,6 +98,7 @@ const TWIST: Record<Direction, { title: string; body: string; push: string }> = 
     title: '重量感應觸發了警報',
     body: '櫃子的感應比情報說的靈敏，整層樓的燈全亮了，保全正在往這裡跑。',
     push: '抓了就跑，從電梯井往下跳',
+    threat: '趕到的保全小隊',
   },
 }
 
@@ -113,6 +117,8 @@ export function highDanger(job: JobDef): DangerTemplate {
     body: t.body,
     // 精英委託一定要打一場硬仗；難度 5（灣岸）更硬
     fight: { ...streetEnemy(job), hp: 80 + (job.tier - 4) * 30, atk: 11 + (job.tier - 4) * 3, hit: 0.55 + (job.tier - 4) * 0.03 },
+    // 追兵比開頭那場弱一點（你剛打完一場，他們是趕過來的）
+    threat: t.threat ? { ...streetEnemy(job), name: t.threat, hp: 60 + (job.tier - 4) * 25, atk: 10 + (job.tier - 4) * 3, hit: 0.55 + (job.tier - 4) * 0.03 } : undefined,
     options: [
       { id: 'abort', label: '放棄這份工作，馬上撤離', lethal: false, lethalBase: 0, survivalWindowMin: 0 },
       { id: 'push', label: t.push, lethal: true, lethalBase: 0.2 + (job.tier - 4) * 0.12, survivalWindowMin: 3 },

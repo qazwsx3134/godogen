@@ -2,13 +2,14 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { type LucideIcon, Map as MapIcon, MessageSquare, Volume2, VolumeX, ScrollText, ShieldAlert, ShieldPlus, Sparkles, User } from 'lucide-react'
 import { Emblem, NeonIcon, Panel } from './components/ui'
 import { nodeBusy, useGame } from './game/state'
-import { LIFELINES, NEURAL_STAGE_LABEL, SEVERE_INJURY, lifelineOf, marginOf, neuralStage, pct, psychoOdds } from './rules/core'
+import { LIFELINES, NEURAL_STAGE_LABEL, SEVERE_INJURY, lifelineOf, marginOf, neuralStage } from './rules/core'
 import { RunScreen } from './screens/Run'
 import { CharacterScreen } from './screens/Character'
 import { LogScreen } from './screens/Log'
 import { COMMS_COUNT, Comms } from './screens/Comms'
 import { PickDialog } from './screens/Pick'
 import { CompleteDialog } from './screens/Complete'
+import { LethalReveal } from './components/LethalReveal'
 import { GlitchFlash, NewsTicker } from './components/Fx'
 import { Notices } from './components/notice'
 import { newsFor } from './content/news'
@@ -31,8 +32,10 @@ export default function App() {
   const [commsRead, setCommsRead] = useState(false)
   const c = g.character
   const stage = neuralStage(marginOf(c))
-  const claiming = c.alive && !!g.run.claim
-  const picking = c.alive && c.picks.length > 0 && !nodeBusy(g) && !claiming
+  // 致命判定的揭曉播完之前，結案與三選一都先等
+  const revealing = !!g.run.reveal
+  const claiming = c.alive && !!g.run.claim && !revealing
+  const picking = c.alive && c.picks.length > 0 && !nodeBusy(g) && !claiming && !revealing
   const mainRef = useRef<HTMLElement>(null)
   useEffect(() => {
     mainRef.current?.scrollTo(0, 0)
@@ -96,7 +99,7 @@ export default function App() {
               <span className="tech text-warning">名聲 {c.fame.level}</span>
               <span className={stage === 'stable' ? 'text-muted' : 'font-bold text-warning'}>
                 神經 {NEURAL_STAGE_LABEL[stage]}
-                {stage !== 'stable' && ` ${marginOf(c)}・錯亂 ${pct(psychoOdds(c).total)}`}
+                {stage !== 'stable' && ` ${marginOf(c)}`}
               </span>
               <span className={c.heat ? 'font-bold text-red' : 'text-muted'}>
                 通緝 {'★'.repeat(c.heat) || '—'}
@@ -179,6 +182,7 @@ export default function App() {
         {comms && <Comms onClose={() => setComms(false)} />}
         {claiming && <CompleteDialog game={game} />}
         {picking && <PickDialog game={game} />}
+        {revealing && <LethalReveal key={g.run.reveal!.id} game={game} />}
       </div>
     </div>
   )
