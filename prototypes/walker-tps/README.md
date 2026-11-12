@@ -22,6 +22,9 @@
 cd prototypes/walker-tps
 godot --headless --fixed-fps 60 --path . --script res://tests/test_combat.gd    # 戰鬥整合測試
 godot --headless --fixed-fps 60 --path . --script res://tests/test_battlefield.gd    # 地圖回歸
+godot --headless --fixed-fps 60 --path . --script res://tests/test_scout_ai.gd    # scout AI：預判、遲滯、警覺、換位、視角錐、協同
+godot --headless --fixed-fps 60 --path . --script res://tests/test_gait_terrain.gd    # 步態：衝刺、只踩地形、坡面傾斜、拖行不踏步
+godot --headless --fixed-fps 60 --path . --script res://tests/test_grapple_inertia.gd    # 勾索慣性與甩尾
 godot --path .                                   # 開遊戲（或用編輯器開 project.godot，按 F5）
 godot --headless --fixed-fps 60 --path . --script res://tests/test_walker.gd    # 舊移動測試；Arena 位移基線見 TODO
 godot --headless --fixed-fps 60 --path . --script res://tests/test_scouts.gd    # 舊展示敵機測試；Arena 位移基線見 TODO
@@ -41,7 +44,7 @@ xvfb-run -a godot --path . --resolution 1280x720 --fixed-fps 60 --script res://t
 | 出擊／重試 | Enter 出擊；結算 R 重試 | 介面按鈕 | DEPLOY／RETRY |
 
 - **車身朝向：** 移動時以每秒 90° 轉向鏡頭方向，主砲會朝鏡頭目標旋轉，砲塔限制 ±30°。瞄準或開火時超出砲塔角度會帶動車身原地轉向；未瞄準時可自由環視。
-- **速度：** 走路 4.0 m/s，衝刺 6.5 m/s。越快步伐越密，車身也壓得越低，鏡頭 FOV 跟著放寬 10°。
+- **速度：** 走路 6.0 m/s，衝刺 9.0 m/s（2026-11-12 從 4／6.5 調快）。越快步伐越密，車身也壓得越低，鏡頭 FOV 跟著放寬 10°。在 `walker.tscn` 根節點的 max_speed／sprint_speed 調，步態的 `Gait` 節點 run_speed 要跟著改成同一個衝刺速度。
 - **跳躍：** 先蹲 0.12 秒再彈起，最高約 2.5 m，1.4 m 高的掩體跳得過去。空中轉向只有 30%。
   - 腳的姿勢：上升時收起，下墜時往下伸。
   - 落地：四腳重新踩地、車身下沉再回彈，揚起四團塵、鏡頭重震，配上低沉的落地聲。
@@ -179,6 +182,7 @@ scene 由 `tools/build_scenes.gd` 產生一次，之後 `.tscn` 就是原始檔�
 |---|---|
 | L1 地形與恢復 | `godot --headless --fixed-fps 60 --path . --script res://tests/test_battlefield.gd` |
 | L2 戰鬥／地圖回歸 | `test_combat.gd` 加 `test_battlefield.gd`；用上面的 headless 指令替換 script 路徑 |
+| AI／步態／勾索 | `test_scout_ai.gd`、`test_gait_terrain.gd`、`test_grapple_inertia.gd`（含甩尾）、`test_auto_blades.gd` |
 | 場景匯入 | `godot --headless --path . --editor --quit` |
 | L3 | 真人驗收後再擴大完整平台測試；本次未跑完整 suite |
 
@@ -200,6 +204,8 @@ scene 由 `tools/build_scenes.gd` 產生一次，之後 `.tscn` 就是原始檔�
 
 ## 雙勾索與戰鬥（2026-11-11）
 
+**甩尾（2026-11-12）**：拖行改成繩索。繩長從勾住時的距離開始，只會縮短、不會推人。往錨點的速度照舊加速；橫向速度保留，所以邊跑邊勾旁邊的地面，機體會繞錨點甩出去。拖行中按左右鍵可以加大或反推擺盪，機身會轉向錨點，與滑行方向分開，形成甩尾。放開時保留速度滑行再剎車。中途失去錨點、繩子被擋、撞牆或視窗失焦時都改成剎車；只有越界、機體毀損、回合結束才立即停下。參數在 `walker_combat.tscn` 的 `Combat/Grapple`（Swing 群組）：`steer_acceleration`、`swing_max_speed`、`drag_turn_speed_deg`、`max_drag_time`、`max_swing_deg`。從靜止直線勾正前方時，行為與數字和下段描述相同。
+
 G 從前方兩個發射點射出索釘，最多 45 m；命中地形／重型 scout 時向前拉動玩家，兩索命中同一輕型 scout 時將敵人拉近。玩家衝刺以 45 m/s² 漸進加速，離錨點 4 m 時鬆索，靠慣性越過錨點約 2 m 才開始以 24 m/s² 剎車；開放平地實測完全停下時越位約 8.9 m。拉動中再次按 G 是提早剎車；發射途中按 G 則取消。遮擋、錨點失效、越界、失焦或結束回合會安全斷索；牆面和敵人本體仍會阻擋滑行，冷卻 3 秒。勾索是受碰撞限制的衝刺／拖曳，不是擺盪繩索模擬；錨點上限與速度在 Combat export 調整。
 
 主砲每發 40 傷害，裝填 1.2 秒；白色中心準星是鏡頭目標，綠圈是砲管實際射線。砲彈從 Muzzle 發射，每個物理步掃掠；發射前檢查砲座到砲口的遮擋，防止砲管穿牆後從另一側射出。受擊會有短閃白／畫面紅閃，擊毀有爆炸、倒伏模型與計數。
@@ -208,10 +214,10 @@ G 從前方兩個發射點射出索釘，最多 45 m；命中地形／重型 sco
 
 | 編輯入口 | 可調整項目 |
 |---|---|
-| `scenes/walker_combat.tscn` | 根 Combat 的生命、質量、裝填、砲塔速度、勾索射程／索釘速度／拉動速度／冷卻、pull_acceleration／release_distance／overshoot_distance／brake_deceleration；Launch0／1 發射點、Cable0／1 索線、Pin0／1 索釘、砲口光與音效 |
+| `scenes/walker_combat.tscn` | 根 Combat 的生命、質量、裝填、砲塔速度、砲口光與音效；`Grapple` 子節點（`scripts/grapple.gd`）的勾索射程／索釘速度／拉動速度／冷卻、pull_acceleration／release_distance／overshoot_distance／brake_deceleration、Swing 群組，以及其下的 Launch0／1 發射點、Cable0／1 索線、Pin0／1 索釘 |
 | `scenes/combat_projectile.tscn` | 砲彈速度／傷害與可見 tracer；玩家／敵方可覆寫實例數值 |
 | `scenes/combat_impact.tscn` | 命中光、音效、半徑與持續時間 |
-| `scenes/scout.tscn` | HP、質量、視野／攻擊距離、移速；Status、Warning、HitFlash、NavigationAgent；battlefield 的實例設定輕／重型 |
+| `scenes/scout.tscn` | HP、質量；Senses（視野、視角錐、近距察覺、搜索時間、回應隊友）、Weapon（射程、遲滯、預判、散布、傷害、彈速、前搖、連發、冷卻、背面加成）、Movement（速度、換位）；Status、Warning、HitFlash、NavigationAgent（avoidance 半徑 1.4）；battlefield 的 Scout2 實例覆寫成重型數值（`tools/tune_scouts.gd`）。行為見 `scripts/scout.gd` 開頭註解 |
 | `scenes/combat_hud.tscn` | Status／Weapon、雙準星、觸控按鈕、DamageFlash、Modal 內任務文字與按鈕版面；全部為保存 Control 節點 |
 | `scenes/battlefield.tscn` | Enemies 的位置／朝向、Navigation 的烘焙資源、Projectiles 容器；根 script 的回合秒數與邊界 |
 

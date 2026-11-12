@@ -44,7 +44,7 @@ func finish(result: String) -> void:
 	if match_state!="playing": return
 	match_state=result
 	walker.controls_enabled=false
-	walker.get_node("Combat").cancel_hook("ROUND OVER")
+	walker.get_node("Combat/Grapple").cancel_hook("ROUND OVER")
 	walker.get_node("Combat/MuzzleFlash").visible=false
 	for enemy: Node in $Enemies.get_children(): enemy.ai_enabled=false
 	for projectile: Node in $Projectiles.get_children():
@@ -68,7 +68,7 @@ func _physics_process(delta: float) -> void:
 		if time_left<=0: finish("timeout")
 	var p := walker.global_position
 	if absf(p.x)>playable_half_extents.x or absf(p.z)>playable_half_extents.y or p.y<fall_limit:
-		walker.get_node("Combat").cancel_hook("OUT OF BOUNDS")
+		walker.get_node("Combat/Grapple").cancel_hook("OUT OF BOUNDS")
 		walker.global_position=spawn.global_position
 		walker.velocity=Vector3.ZERO
 		walker.get_node("Gait").replant()

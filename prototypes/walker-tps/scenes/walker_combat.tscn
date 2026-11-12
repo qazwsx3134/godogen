@@ -1,6 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/walker_combat.gd" id="1_dr7ih"]
+[ext_resource type="Script" path="res://scripts/grapple.gd" id="2_kbv3k"]
 [ext_resource type="PackedScene" path="res://scenes/auto_blades.tscn" id="2_pucva"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pucva"]
@@ -56,32 +57,35 @@ rings = 4
 [node name="Combat" type="Node3D" unique_id=966660870]
 script = ExtResource("1_dr7ih")
 
-[node name="Launch0" type="Marker3D" parent="." unique_id=1856493375]
+[node name="Grapple" type="Node3D" parent="." unique_id=1565252946]
+script = ExtResource("2_kbv3k")
+
+[node name="Launch0" type="Marker3D" parent="Grapple" unique_id=1856493375]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05, 1.8, 1.7)
 
-[node name="Cable0" type="MeshInstance3D" parent="." unique_id=1268790026]
+[node name="Cable0" type="MeshInstance3D" parent="Grapple" unique_id=1268790026]
 top_level = true
 visible = false
 material_override = SubResource("StandardMaterial3D_pucva")
 mesh = SubResource("CylinderMesh_kbv3k")
 
-[node name="Pin0" type="MeshInstance3D" parent="." unique_id=584834458]
+[node name="Pin0" type="MeshInstance3D" parent="Grapple" unique_id=584834458]
 top_level = true
 visible = false
 material_override = SubResource("StandardMaterial3D_51cwe")
 cast_shadow = 0
 mesh = SubResource("SphereMesh_31fbe")
 
-[node name="Launch1" type="Marker3D" parent="." unique_id=1919380835]
+[node name="Launch1" type="Marker3D" parent="Grapple" unique_id=1919380835]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 1.8, 1.7)
 
-[node name="Cable1" type="MeshInstance3D" parent="." unique_id=438914903]
+[node name="Cable1" type="MeshInstance3D" parent="Grapple" unique_id=438914903]
 top_level = true
 visible = false
 material_override = SubResource("StandardMaterial3D_61u1t")
 mesh = SubResource("CylinderMesh_v3tom")
 
-[node name="Pin1" type="MeshInstance3D" parent="." unique_id=1217527198]
+[node name="Pin1" type="MeshInstance3D" parent="Grapple" unique_id=1217527198]
 top_level = true
 visible = false
 material_override = SubResource("StandardMaterial3D_q3j23")

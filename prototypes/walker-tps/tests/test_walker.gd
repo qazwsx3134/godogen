@@ -131,7 +131,8 @@ func _test_ramp() -> void:
 		if up[0] and up[1]:
 			both_up[0] += 1
 	get_root().get_tree().process_frame.connect(count)
-	var drift := await _hold("move_forward", 330)
+	# 22 m of walking: up the ramp and onto the platform, short of its far edge, whatever max_speed is.
+	var drift := await _hold("move_forward", int(round(22.0 / walker.max_speed * 60.0)))
 	get_root().get_tree().process_frame.disconnect(count)
 	_expect(walker.global_position.y > 2.5, "walks up the ramp onto the platform (y=%.2f)" % walker.global_position.y)
 	_expect(drift < 0.03, "planted feet do not slide on the ramp (worst %.3f m)" % drift)

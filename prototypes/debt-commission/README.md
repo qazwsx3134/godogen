@@ -165,8 +165,8 @@ bash tools/serve_web.sh
 bash ../godot-kit/tools/run_tests.sh .                          # 完整：tests/ 每個 test_*.gd（目前 57 個）
 bash ../godot-kit/tools/run_tests.sh . chapter_flow chapter1    # 只跑指定幾組（名稱去掉 test_ 與 .gd）
 
-# 三種機器人玩家（不進出貨）：不操作／隨便選／全選普通吐槽／知道答案，各跑 N 局，印評價分布與冷場數
-godot --headless --path . --script res://tools/bot_players.gd -- --runs 1000 [--story res://tests/fixtures/stories/chapter1_story.json]
+# 機器人玩家（不進出貨）：不操作／隨便選／重複選錯／全選普通吐槽／知道答案，以及會花時間想的 slow（每題想 --think 秒）與 hesitant（每題想時限的 0.5～1.3 倍），各跑 N 局，印評價分布與冷場數；--assist 套輔助模式的時限
+godot --headless --path . --script res://tools/bot_players.gd -- --runs 1000 [--story res://tests/fixtures/stories/chapter1_story.json] [--think 5] [--assist]
 
 # 先匯出、啟動伺服器；需要已安裝 Playwright 及 Chromium 的 Node 環境。
 node tools/browser_check.mjs --playwright /path/to/node_modules/@playwright/test

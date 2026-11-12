@@ -13,6 +13,7 @@ extends CharacterBody3D
 signal destroyed(scout: Node)
 enum State { PATROL, CHASE, AIM, REPOSITION, SEARCH, REELED, DEAD }
 const SENSE_INTERVAL := 0.15
+const Layers = preload("res://scripts/layers.gd")
 const GUN_CLIPS = [preload("res://assets/sound/runtime/scout_gun_a.ogg"),preload("res://assets/sound/runtime/scout_gun_b.ogg"),preload("res://assets/sound/runtime/scout_gun_c.ogg")]
 const Projectile = preload("res://scenes/combat_projectile.tscn")
 const Impact = preload("res://scenes/combat_impact.tscn")
@@ -194,7 +195,7 @@ func sees_player() -> bool:
 	if from.distance_to(player.global_position)>sight_range: return false
 	var space := get_world_3d().direct_space_state
 	for height: float in [1.3, 2.6]:
-		var hit := space.intersect_ray(PhysicsRayQueryParameters3D.create(from,player.global_position+Vector3.UP*height,7,[get_rid()]))
+		var hit := space.intersect_ray(PhysicsRayQueryParameters3D.create(from,player.global_position+Vector3.UP*height,Layers.SOLID,[get_rid()]))
 		if not hit.is_empty() and hit.collider==player: return true
 	return false
 

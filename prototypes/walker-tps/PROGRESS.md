@@ -1,5 +1,38 @@
 # walker-tps 進度
 
+## 2026-11-12｜scout AI、步態、勾索拆分、加速與甩尾（部分已由使用者提交於 `3065d559`）
+
+- 專案／分支：walker-tps／master。使用者要求照 [design/code-improvements.md](design/code-improvements.md) 實作，之後追加：移動加速、勾索要注意慣性並做出甩尾的感覺。各項結果與差異見該文件開頭的「實作結果」表。
+- **已完成**：
+  - scout AI：A1–A8，A9 部分。
+  - 步態：G1、G2、G5。
+  - 戰鬥：C1、C2、C4、C5、C7，C3 部分。
+  - 加速：走路 6、衝刺 9 m/s。
+  - 勾索繩索甩尾。
+- **未做**：G3、G4、C6。
+- **提交狀態**：使用者 02:51 自行提交 `3065d559`，包含到 AI 那一批為止（scout、battlefield、步態、`test_gait_terrain` 的前一版）。之後的勾索拆分、甩尾、加速、圖層常數、測試更新仍未提交。
+- **重要檔案**：
+  - 程式：`scripts/scout.gd`、`battlefield.gd`、`grapple.gd`（新）、`layers.gd`（新）、`walker_combat.gd`、`walker_gait.gd`、`walker_player.gd`、`combat_hud.gd`、`combat_projectile.gd`、`auto_blades.gd`。
+  - 場景：`scenes/battlefield.tscn`（重型數值）、`scout.tscn`（avoidance）、`walker_combat.tscn`（`Combat/Grapple`）、`project.godot`（`[layer_names]`）。
+  - 製作工具：`tools/tune_scouts.gd`、`tools/split_grapple.gd`，都用 Godot 存檔，正常執行不會呼叫。
+  - 新測試：`tests/test_scout_ai.gd`、`tests/test_gait_terrain.gd`，以及 `test_grapple_inertia.gd` 的甩尾段。
+- **驗證（本次實跑，Linux 暫存複本，`godot --headless --fixed-fps 60 --path . --script res://tests/test_<名稱>.gd`）**：
+  - 基準（改動前）：audio／auto_blades／battlefield／combat／grapple_inertia PASS；walker、scouts 因 Arena 移位 FAIL。
+  - 最後一輪：grapple_inertia、combat、auto_blades、scout_ai、gait_terrain、battlefield、audio 全部 PASS，無 SCRIPT ERROR。
+  - 數字：勾索直線拉 `overshoot=8.85 peak=18.00 brake_start=17.60`，與改動前完全相同；`SWING swept=70 deg drift=88 deg slack=-0.00 m release=22.0 m/s`；拖行中按住反方向 `STEER swept free=70 deg, holding the opposite strafe=17 deg`；`SPRINT top=9.00 safety_lifts=1`（原速度也是 1）。
+  - 變異檢查：
+    - 遲滯拿掉、視角錐拿掉時 `test_scout_ai` 會失敗。
+    - 換回原步態程式，`test_gait_terrain` 四條失敗。
+    - 換回直線拉的勾索，甩尾那條失敗（掃過 6°）。
+  - **Arena 歸零的暫存複本**（工作樹的 `main.tscn` 沒動）：新程式 `test_walker` PASS（斜坡腳滑 0、衝刺 9 m/s 腳滑 0）、`test_scouts` PASS。斜坡那段原本固定按住 330 幀，加速後會走過平台，已改成依 `max_speed` 換算約 22 m。
+- **未驗證**：實玩手感（甩尾、加速、scout 難度）、手機、手把、截圖。甩尾目前沒有額外視覺特效。
+- **限制／下一步**：
+  - `main.tscn` 的 Arena 移位仍待使用者決定；工作樹裡 `test_walker`／`test_scouts` 仍然失敗。
+  - 玩家加速後 scout 命中率會下降，要實玩後重調。
+  - 甩尾參數在 `Combat/Grapple` 的 Swing 群組。
+  - 沒有新增使用者延期事項。未 push。
+
+
 ## 2026-11-11｜首次提交與跨電腦完整性驗證
 
 - 專案／分支：walker-tps／master。使用者明確要求 commit，排除不必要檔案，同時確保另一台電腦 pull 後不缺遊戲檔案。本次提交整個既有原型：保存場景、雙機體 GLB／貼圖、綠鏽地圖／材質、勾索慣性／刀片／主砲／AI／回合、處理後音效、proto_kit 副本、測試及製作工具。遊戲實作基準以本次提交為準，最新 hash 由 `git log -1` 查核。

@@ -2,6 +2,29 @@
 
 只保留最近 3 次 commit 期間的工作與尚未 commit 的工作（新的在上）；更早的紀錄移到 [MILESTONE.md](MILESTONE.md)。每次 commit、出門／下班／暫停前更新本檔，根目錄 `Progress.md` 只更新一行摘要。接手順序：本檔 → [README](README.md) → [session-state](production/session-state/active.md) → [HANDOFF](docs/HANDOFF.md)。
 
+## 2026-11-12｜程式結構改善 D1–D7（未提交）
+
+- 專案／分支：debt-commission／master。使用者要求「照著分析文件，先把 debt-commission 做完再做 walker-tps」。依據 [docs/CODE-IMPROVEMENTS.md](docs/CODE-IMPROVEMENTS.md)；實作時與原方案不同的地方，以該文件開頭的「實作結果」表為準。
+- **基準（改動前）**：在 Linux 暫存複本跑完整 `run_tests.sh`，`XDG_DATA_HOME` 指到暫存區（不碰真實存檔）。結果 56/57 PASS；`reading_scenes` 原本就失敗：`authored res://scenes/ui/end_controls.tscn has its expected nodes before packing`，應是 11-11 介面素材接入後 scene 與測試期待不一致。本次沒有修它，也不算本次退化。
+- **已完成**：
+  - D4：48 處字串呼叫改成具型別。
+  - D5：`enum Screen` 加 `_screen_mode` 字串轉接屬性，新增 `_hide_story_parts()`。
+  - D6：69 個跨檔函式去底線；回合倒數與 QA 計時搬進 `main_round.gd`／`main_qa.gd` 的 `process()`。
+  - D1：新增 `scripts/story_validator.gd`，runner 從 2875 行降到約 1730 行。
+  - D2：四個大分支各自成為函式，`_validate_step` 從約 350 行降到約 180 行。
+  - D7：`tools/bot_players.gd` 加 `slow`／`hesitant` 策略與 `--think`／`--assist`。
+- **延後**：D3 op 登記表。原方案自己的條件「新增 op 前」沒有成立。
+- **連帶修改**：`tests/test_character_height.gd`、`tools/story_editor/check_catalog.gd` 原本直接呼叫被搬走的私有驗證函式，改用 `StoryValidator`。`tools/story_build/dm_source.gd` 改從 validator 讀常數。`tests/test_phase4_ui.gd` 一處改名。`tools/story_editor/story_core.js` 一行註解。
+- **驗證（本次實跑，Linux 暫存複本，Godot 4.7）**：
+  - 每一步跑完整 `bash ../godot-kit/tools/run_tests.sh <複本>`：D4 56/57；D5 第一步＋D1 55/57，`character_height` 因上述私有呼叫失敗，修正後恢復；D6＋D5 第二步＋D2 56/57；最後一輪見下一點。
+  - 每輪除 `reading_scenes` 外全過，log 裡沒有 `unknown screen mode`。ERROR／WARNING 的種類與基準相同，只有結束時資源洩漏的次數會浮動。
+  - 機器人：`godot --headless --path . --script res://tools/bot_players.gd -- --runs 300`，原始碼與 D1、D2 之後的輸出逐字相同（只差 MCP 路徑那行）；D7 之後原有五行仍逐字相同。
+  - 新策略 300 局：`slow`（5 秒）全 A、每局冷場 1；`--think 6 --assist` 全 S；`hesitant` S 6／A 23／B 98／C 128、放棄 45。
+  - 沒有測試涵蓋的工具：所有引用 runner 的 `tools/*.gd` 都跑過 `--check-only` 解析（故意放錯確認抓得到）；`check_catalog.gd` 好壞兩份 catalog 各實跑一次，結果分別是 OK 與正確拒絕。
+- **最後一輪完整測試（全部改動，含 D6 狀態搬移）**：56/57，只有 `reading_scenes` 失敗（與基準相同），304 秒；沒有 `unknown screen mode`；ERROR／WARNING 種類與基準相同，另多一條「`story_validator.gd` 缺 `.uid`」，已從匯入後的複本補回 `scripts/story_validator.gd.uid`。
+- **未驗證**：Web 匯出、瀏覽器檢查（`browser_check.mjs`）、手機。D5 改了畫面狀態的型別，`window.__debtQA` 對外字串不變，但沒有用瀏覽器實跑。
+- **工作區**：上述檔案與本檔未提交，未 push；其他 session 的修改未觸碰。
+
 ## 2026-11-11｜選定介面素材接入（未提交，待作者看畫面）
 
 - **出門交接**：本輪停在 21 張選圖接入完成。獨立驗收 PASS（21/21 雜湊一致、未發現可重現缺陷），原報告在 `/private/tmp/debt-ui-verification/INDEPENDENT-REVIEW.md`。下一台先讀本段，再在 Godot 查看新版畫面；尚未做視覺／手機驗收或 Web 重匯。沙箱 `.git` 唯讀，無法代為 commit，未 push。提交範圍為本次 debt-commission 素材、介面、測試與交接文件及根目錄 Progress.md；工作區另有其他 session 的制度／skills 修改，請勿混入。`.claude/tasks/debt-ui-assets/REPORT.md` 被 gitignore，主要交接資訊已記在本檔。

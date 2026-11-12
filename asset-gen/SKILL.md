@@ -62,6 +62,11 @@ python3 ${ASSET_GEN_SKILL_DIR}/tools/asset_gen.py retarget --rigged rigged.glb \
   --animation preset:biped:walk -o walk.glb                                             # 10¢ per clip
 ```
 
+For mechs, vehicles and props that must match a reference closely, have named rigid parts with
+animation, or fit a tight triangle budget, build them with a Blender script instead. Read
+`${ASSET_GEN_SKILL_DIR}/modeling.md` for the pipeline and the topology rules. `tools/check_topology.py`
+reports a model's buried, interpenetrating, sliver and split-vertex counts.
+
 Source image for `glb`: 3/4 elevated angle, solid white/gray background, matte finish, opaque glass, single centered subject — and **do not** rembg it (Tripo3D needs the solid bg). `rig` is biped-only and aborts if the mesh isn't humanoid; quadrupeds use plain `glb`. `retarget` reuses the rigged task id — run it once per animation against the same rigged GLB (no re-rigging). Don't assume the preset name survives into the GLB; inspect the imported clip names before wiring playback.
 
 Biped retarget presets (pass as `preset:biped:<name>`):

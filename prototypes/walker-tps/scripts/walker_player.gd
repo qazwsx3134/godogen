@@ -3,8 +3,8 @@ extends CharacterBody3D
 ## looks while moving, so the gun ends up pointing where the player looks. One movement model for keyboard,
 ## gamepad and touch; each look source has its own sensitivity. Sprint while held; jump = short squat, then launch.
 
-@export var max_speed: float = 4.0
-@export var sprint_speed: float = 6.5
+@export var max_speed: float = 6.0
+@export var sprint_speed: float = 9.0
 @export var accel: float = 8.0
 ## Fraction of `accel` available in the air.
 @export var air_control: float = 0.3
@@ -77,10 +77,11 @@ func _physics_process(delta: float) -> void:
 	var speed := sprint_speed if Input.is_action_pressed("sprint") else max_speed
 	var a := accel if is_on_floor() else accel * air_control
 	var flat := Vector3(velocity.x, 0, velocity.z)
-	if not combat or not combat.has_dash_momentum():
+	if not combat or not combat.grapple.has_dash_momentum():
 		flat=flat.move_toward(wish * speed, a * delta)
 	velocity = Vector3(flat.x, velocity.y - _gravity * delta, flat.z)
-	if wish.length() > 0.05:  # model front is +Z: face the camera's forward
+	var dragged: bool = combat != null and combat.grapple.is_dragging()  # the grapple turns the hull then
+	if wish.length() > 0.05 and not dragged:  # model front is +Z: face the camera's forward
 		rotation.y = rotate_toward(rotation.y, atan2(fwd.x, fwd.z), deg_to_rad(turn_speed_deg) * delta)
 
 	if Input.is_action_just_pressed("jump") and is_on_floor() and _squat_left < 0.0:
@@ -94,8 +95,10 @@ func _physics_process(delta: float) -> void:
 	var moving := flat.length()>0.5
 	if moving and not _was_moving: %MovementSound.play()
 	_was_moving=moving
-	if combat: combat.step(delta)
-	gait.skid = combat != null and combat.has_dash_momentum()
+	if combat:
+		combat.grapple.steer = wish  # strafe pushes a grapple swing sideways
+		combat.step(delta)
+	gait.skid = combat != null and combat.grapple.has_dash_momentum()
 	move_and_slide()
 
 	rig.fov_add = sprint_fov_add * clampf((flat.length() - max_speed) / (sprint_speed - max_speed), 0.0, 1.0) - (18.0 if combat and combat.aiming else 0.0)
@@ -175,5 +178,5 @@ func _notification(what: int) -> void:
 		for action: StringName in InputMap.get_actions():
 			Input.action_release(action)
 		if combat:
-			combat.cancel_hook("FOCUS LOST")
+			combat.grapple.release("FOCUS LOST")
 			combat.aim_toggle=false

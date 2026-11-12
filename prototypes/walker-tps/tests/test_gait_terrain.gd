@@ -18,6 +18,7 @@ func _run() -> void:
 	gait=walker.get_node("Gait")
 	await _frames(40)
 	await _test_flat_is_level()
+	await _test_sprint_keeps_the_trot()
 	await _test_feet_ignore_scouts()
 	await _test_slope_tilts_hull_and_pads()
 	await _test_grapple_drag_braces()
@@ -42,6 +43,32 @@ func _hull() -> Node3D:
 
 func _test_flat_is_level() -> void:
 	_expect(absf(_hull().global_basis.z.normalized().y)<sin(deg_to_rad(1.0)), "the hull stays level on flat ground")
+
+func _test_sprint_keeps_the_trot() -> void:
+	walker.global_position=Vector3(0,0.5,-30)
+	walker.velocity=Vector3.ZERO
+	await _frames(5)
+	gait.replant()
+	var player: Node = walker
+	var lifts_before: int = gait.safety_lifts
+	Input.action_press("move_forward")
+	Input.action_press("sprint")
+	var top := 0.0
+	for i: int in 180:
+		await _frames(1)
+		top=maxf(top, Vector2(walker.velocity.x, walker.velocity.z).length())
+	Input.action_release("move_forward")
+	Input.action_release("sprint")
+	await _frames(90)
+	var lifts: int = gait.safety_lifts-lifts_before
+	print("SPRINT top=%.2f safety_lifts=%d" % [top, lifts])
+	_expect(top>player.sprint_speed-0.2, "the walker reaches sprint speed (%.2f m/s)" % top)
+	_expect(lifts<=2, "at sprint speed the trot holds: legs rarely lift out of turn (%d)" % lifts)
+	walker.global_position=Vector3(0,1,0)
+	walker.velocity=Vector3.ZERO
+	await _frames(5)
+	gait.replant()
+	await _frames(30)
 
 func _test_feet_ignore_scouts() -> void:
 	# A scout beside the walker (not under its body, which would stand on it); ask where the ground is there.
@@ -79,14 +106,14 @@ func _test_slope_tilts_hull_and_pads() -> void:
 
 func _test_grapple_drag_braces() -> void:
 	var combat: Node = walker.get_node("Combat")
-	combat.cooldown_left=0
+	combat.grapple.cooldown_left=0
 	var steps: Array[int] = [0]
 	var count_steps := func(_at: Vector3) -> void: steps[0]+=1
-	_expect(combat.launch_hooks(walker.global_position+Vector3(0,0,18)), "terrain grapple launches")
+	_expect(combat.grapple.launch_hooks(walker.global_position+Vector3(0,0,18)), "terrain grapple launches")
 	var dragging_frames := 0
 	for i: int in 240:
 		await _frames(1)
-		if combat.has_dash_momentum():
+		if combat.grapple.has_dash_momentum():
 			if dragging_frames==0: gait.stepped.connect(count_steps)
 			dragging_frames+=1
 		elif dragging_frames>0:

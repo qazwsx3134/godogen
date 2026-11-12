@@ -7,13 +7,14 @@ var team := "player"
 var excluded: Array[RID] = []
 var life := 3.0
 const Impact = preload("res://scenes/combat_impact.tscn")
+const Layers = preload("res://scripts/layers.gd")
 
 func _ready() -> void:
 	add_to_group("live_projectile")
 
 func _physics_process(delta: float) -> void:
 	var next := global_position + direction * speed * delta
-	var query := PhysicsRayQueryParameters3D.create(global_position, next, 7, excluded)
+	var query := PhysicsRayQueryParameters3D.create(global_position, next, Layers.SOLID, excluded)
 	var hit := get_world_3d().direct_space_state.intersect_ray(query)
 	if not hit.is_empty():
 		var body: Object = hit.collider

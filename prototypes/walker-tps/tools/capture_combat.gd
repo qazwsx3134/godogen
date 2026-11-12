@@ -21,7 +21,7 @@ func _run() -> void:
 	Input.action_press("aim")
 	await frames(70)
 	Screenshot.save(root,out,"aim")
-	walker.get_node("Combat").launch_hooks(enemy.global_position+Vector3.UP*1.1)
+	walker.get_node("Combat/Grapple").launch_hooks(enemy.global_position+Vector3.UP*1.1)
 	await frames(10)
 	Screenshot.save(root,out,"twin_hooks")
 	var side := Camera3D.new()

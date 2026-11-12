@@ -28,6 +28,7 @@
 - **`.gitignore` 早就寫了 `.godot/`、`build/`，檔案卻一直顯示已修改** → 規則加在提交之後；`git ls-files -ci --exclude-standard` 找出來，`git rm -r --cached` 移出版控。（[CLAUDE.md](../CLAUDE.md) 2026-10-14）
 - **推大量圖檔與音檔回 HTTP 400、遠端掛斷**（×2）→ HTTPS 推送的緩衝區預設只有 1 MB，超過就改成分段傳送，被 GitHub 拒絕。2026-11-02 起，這個 repo 已設 `git config http.postBuffer 157286400`（150 MB，只寫在 `.git/config`），直接 `git push` 即可；單次推超過 150 MB 時，再臨時加 `-c http.postBuffer=524288000`。不改全域設定。換一台機器 clone 要重設。（[CLAUDE.md](../CLAUDE.md) 2026-10-14）
 - **沙箱內 `.git` 唯讀、Xvfb／Chromium 圖形測試要沙箱外執行** → 是環境限制，不要寫成遊戲壞了，也不要跳過授權。（[dreamling-idle/PROGRESS.md](dreamling-idle/PROGRESS.md)）
+- **`git mv -k` 搬一個還沒被追蹤的檔案，什麼都沒做卻回傳成功**（2026-11-12，asset-gen）→ `-k` 會略過錯誤，未追蹤的檔案不會被搬，`|| mv` 的備援也不會執行；未追蹤的檔案直接用 `mv`，搬完 `ls` 確認。
 
 ## 測試與量測
 
@@ -54,6 +55,8 @@
 - **用瀏覽器自動化測網頁時動畫、捲動「沒反應」**（2026-11-06，mortal-city）：測試分頁是隱藏的，`requestAnimationFrame` 整個暫停、`scrollIntoView({behavior:'smooth'})` 完全不捲、`setTimeout`／`setInterval` 被降成每秒一次（連測試腳本裡的等待也是）→ 遊戲計時用計時器加實際經過時間，不靠 rAF；平滑捲動只在 `document.visibilityState === 'visible'` 時用；長按之類的時間判定要在前景分頁手動確認。（[mortal-city](mortal-city/PROGRESS.md)）
 - **刪掉遊戲裡的舊故事，幾十支測試連環失敗**（2026-11-08，debt-commission）：測試直接讀 `res://data/*_story.json` 與 `data/stories.json` 當夾具，故事一搬走就壞；`story_src` 搬家後建置出的 `generated_from` 也跟著變 → 舊故事連同建置來源搬進 `tests/fixtures/`，用建置工具重建夾具，測試以 `stories_path`／`packs_root` 指向夾具登記，不依賴正式清單；範例作品另放一個 packs 根目錄，別混進別的作品夾具。
 - **headless 測試推觸控事件，左右半邊判斷全錯、手指被分到錯的區域**（2026-11-10，walker-tps）→ `root.push_input(e)` 預設把座標當視窗座標，再依 stretch 換算；測試要用 `root.push_input(e, true)`（viewport 座標，和 test_kit 的滑鼠輔助一致）。（[walker-tps](walker-tps/README.md#已知的坑)）
+- **測試把障礙物（scout）擺在機體正下方，量到的是「機體站到障礙物上」而不是要測的落腳點**（2026-11-12，walker-tps）→ 機體的碰撞體會站上去、整台被墊高；要測「這一點的地面在哪」，把障礙物放在機體旁邊，直接呼叫查詢函式（`gait._ground()`），並用改動前的程式跑一次確認測試會失敗。
+- **測試寫死「按住前進 N 幀」，調快移動速度後走過頭、掉下平台，量到的滑動是掉落造成的**（2026-11-12，walker-tps）→ 按住的時間用距離除以 `max_speed` 換算；調速度前先在暫存複本跑一次相關測試。
 
 ## Scene、UI 與 Godot API
 
@@ -133,6 +136,7 @@
 - **Blender 腳本 `bmesh.ops.convex_hull` 後刪內部點，報 `found the same (BMVert/BMEdge/BMFace) used multiple times`**（2026-11-10，docs/86 scout）→ `geom_interior` 和 `geom_unused` 會重疊，合併時先去重：`list({*res["geom_interior"], *res["geom_unused"]})`（已修在 `docs/86/blender_kit.py`）。
 - **多足機的烘焙步態對整個機身做正負擺動，站立腳也會沉進地面**（2026-11-12，docs/86 melee／tank 曾下陷 4.5 cm）→ 走路先移除整體上下擺動、待機只做向上的微幅起伏；逐幀量測剛性蒙皮後的腳掌頂點最低高度，確認不低於地面。（[模型驗證](../docs/86/enemy/validate_blends.py)）
 - **WSL Codex 的 `uvx mcp-for-blender` 連 Windows Blender 能讀場景，截圖卻找不到檔案**（2026-11-12）→ 兩邊的 `/tmp` 不共用：Codex 插件改啟動 Windows 的 `uvx.exe`，讓伺服器與 Blender 共用 Windows 暫存目錄；`WSLENV` 也要轉交 `BLENDER_MCP_APPS`／`BLENDER_MCP_OPENAI_FORMS`，否則互動視窗工具不會註冊。Blender Lab MCP 和此社群插件都預設用 9876，不能同時佔用。已用真實 Blender 驗證場景、Python、截圖與互動視窗。
+- **在 Blender 用 BVH 射線判斷面是否埋在別的零件裡，結果大量漏判或誤判**（2026-11-12，docs/86 模型檢查）→ 射線起點落在封閉形狀內部時不會回報命中，只取面中心又會把大三角形部分露出的情況算成埋住；起點從面往外推 1 cm，每個三角形取 7 個點，分「完全埋住」與「部分穿插」兩類（`asset-gen/tools/check_topology.py`）。
 
 ## 音效與手機震動
 

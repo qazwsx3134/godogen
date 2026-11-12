@@ -21,6 +21,12 @@ window/size/viewport_height=720
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
+[layer_names]
+
+3d_physics/layer_1="terrain"
+3d_physics/layer_2="player"
+3d_physics/layer_3="enemy"
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"

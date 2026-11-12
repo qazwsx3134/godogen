@@ -26,16 +26,16 @@ func run() -> void:
 	view.current=true
 	view.global_position=walker.global_position+Vector3(19,10,8)
 	view.look_at(anchor+Vector3(0,0,-3))
-	combat.launch_hooks(anchor)
+	combat.grapple.launch_hooks(anchor)
 	var coast_shot := false
 	var brake_shot := false
 	var out := Screenshot.out_dir()
 	for i: int in 180:
 		await process_frame
-		if combat.hook_state=="coasting" and walker.global_position.z>anchor.z and not coast_shot:
+		if combat.grapple.state_name()=="coasting" and walker.global_position.z>anchor.z and not coast_shot:
 			Screenshot.save(root,out,"past_anchor")
 			coast_shot=true
-		if combat.hook_state=="braking" and not brake_shot:
+		if combat.grapple.state_name()=="braking" and not brake_shot:
 			Screenshot.save(root,out,"braking")
 			brake_shot=true
 	Screenshot.save(root,out,"stopped")

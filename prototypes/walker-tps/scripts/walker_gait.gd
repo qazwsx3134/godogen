@@ -22,8 +22,8 @@ signal landed(impact: float)
 @export var settle_distance: float = 0.12
 ## Swing time at walking pace and at `run_speed`; in between it is interpolated by speed.
 @export var step_time: float = 0.28
-@export var step_time_run: float = 0.17
-@export var run_speed: float = 6.5
+@export var step_time_run: float = 0.15
+@export var run_speed: float = 9.0
 @export var step_height: float = 0.4
 ## Feet land ahead of their home by velocity * step time * lead, so they do not trail behind a moving body.
 @export var lead: float = 0.5
@@ -40,11 +40,14 @@ signal landed(impact: float)
 var squat: float = 0.0
 ## Set by the player each frame: being dragged by the grapple. The legs brace out and stop stepping.
 var skid: bool = false
+## Times a planted foot had to lift out of turn because the leg was about to overstretch (the trot broke).
+## Stays near zero at every speed the walker can reach on foot; tests read it.
+var safety_lifts: int = 0
 
 const SOLE := 0.36  # ankle pivot height above the ground contact (the foot pad)
 const LEG_NAMES := ["FL", "BR", "FR", "BL"]  # pairs: FL+BR = group 0, FR+BL = group 1
 const AIR_DELAY := 0.08  # seconds off the floor before the legs switch to their airborne pose
-const GROUND_MASK := 1   # terrain and props; the player is layer 2, scouts layer 3
+const Layers = preload("res://scripts/layers.gd")
 
 class Leg:
 	var thigh: Node3D
@@ -192,6 +195,7 @@ func _walk(delta: float, vel: Vector3) -> float:
 	var to_hull := _hull.global_transform.affine_inverse()
 	for leg: Leg in legs:
 		if leg.t < 0.0 and (to_hull * (leg.plant + _model.global_basis.y * SOLE) - leg.hip).length() > leg.reach.y * 0.97:
+			safety_lifts += 1
 			_lift(leg.group)
 
 	var lifted := 0.0
@@ -270,7 +274,7 @@ func _ground(p: Vector3) -> Vector3:
 
 ## The terrain straight under p (within 3 m up or down); {} when there is none.
 func _ground_hit(p: Vector3) -> Dictionary:
-	var query := PhysicsRayQueryParameters3D.create(p + Vector3.UP * 3.0, p + Vector3.DOWN * 3.0, GROUND_MASK)
+	var query := PhysicsRayQueryParameters3D.create(p + Vector3.UP * 3.0, p + Vector3.DOWN * 3.0, Layers.TERRAIN)
 	query.exclude = [_body.get_rid()]
 	return _body.get_world_3d().direct_space_state.intersect_ray(query)
 

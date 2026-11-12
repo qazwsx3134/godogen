@@ -18,7 +18,7 @@ func _process(_delta: float) -> void:
 	hurt_left=maxf(0,hurt_left-_delta)
 	$DamageFlash.visible=hurt_left>0
 	$Status.text="HULL %d / %d   |   SCOUTS %d / %d   |   %02d:%02d"%[combat.health,combat.max_health,session.kills,session.total,int(session.time_left)/60,int(session.time_left)%60]
-	$Weapon.text=("CANNON READY" if combat.reload_left<=0 else "RELOAD %.1fs"%combat.reload_left)+"   |   HOOK: "+combat.hook_message+(" %.1fs"%combat.cooldown_left if combat.cooldown_left>0 else "")
+	$Weapon.text=("CANNON READY" if combat.reload_left<=0 else "RELOAD %.1fs"%combat.reload_left)+"   |   HOOK: "+combat.grapple.message+(" %.1fs"%combat.grapple.cooldown_left if combat.grapple.cooldown_left>0 else "")
 	var blades: Node = combat.get_node("AutoBlades")
 	$Weapon.text+=" | BLADES "+("AUTO" if blades.cooldown_left<=0 else "%.1fs"%blades.cooldown_left)
 	var playing: bool = session.match_state=="playing"

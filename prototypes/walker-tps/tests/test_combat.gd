@@ -113,47 +113,47 @@ func _test_hooks() -> void:
 	enemy.global_position=walker.global_position+Vector3(0,0,16)
 	enemy.velocity=Vector3.ZERO
 	walker.rotation.y=0
-	combat.cooldown_left=0
+	combat.grapple.cooldown_left=0
 	var start: Vector3 = enemy.global_position
 	var stationary_player := walker.global_position
-	_expect(combat.launch_hooks(enemy.global_position+Vector3.UP*1.1),"two hooks launch toward light scout")
+	_expect(combat.grapple.launch_hooks(enemy.global_position+Vector3.UP*1.1),"two hooks launch toward light scout")
 	await _frames(45)
 	_expect(enemy.global_position.distance_to(walker.global_position)<start.distance_to(walker.global_position)-3,"light scout reels toward player")
 	_expect(walker.global_position.distance_to(stationary_player)<1.0,"light-target mode does not dash player")
-	_expect(combat.hook_message=="REELING ENEMY","both pins anchor to the light enemy")
+	_expect(combat.grapple.message=="REELING ENEMY","both pins anchor to the light enemy")
 	for side: int in 2:
-		var cable: Node3D = combat.get_node("Cable%d"%side)
+		var cable: Node3D = combat.get_node("Grapple/Cable%d"%side)
 		_expect(cable.visible and absf(cable.global_basis.x.length()-1.0)<0.01 and absf(cable.global_basis.z.length()-1.0)<0.01,"cable keeps constant thickness along its rotated local axis")
 
-	combat.cancel_hook()
-	_expect(combat.pins.is_empty() and combat.cooldown_left>0,"cancel releases both hooks and starts cooldown")
-	_expect(not combat.launch_hooks(enemy.global_position),"cooldown blocks repeated grapple")
+	combat.grapple.cancel_hook()
+	_expect(combat.grapple.pins.is_empty() and combat.grapple.cooldown_left>0,"cancel releases both hooks and starts cooldown")
+	_expect(not combat.grapple.launch_hooks(enemy.global_position),"cooldown blocks repeated grapple")
 	# Heavy target pulls the player instead.
 	enemy.mass=12
 	enemy.global_position=walker.global_position+Vector3(0,0,18)
 	enemy.velocity=Vector3.ZERO
 	await _frames(3)
-	combat.cooldown_left=0
+	combat.grapple.cooldown_left=0
 	var player_start := walker.global_position
-	combat.launch_hooks(enemy.global_position+Vector3.UP*1.2)
+	combat.grapple.launch_hooks(enemy.global_position+Vector3.UP*1.2)
 	await _frames(35)
 	_expect(walker.global_position.z>player_start.z+3,"heavy target causes player dash")
-	combat.cancel_hook()
+	combat.grapple.cancel_hook()
 	walker.velocity=Vector3.ZERO
 	# Fixed terrain anchor: a ray aimed down the open road.
-	combat.cooldown_left=0
+	combat.grapple.cooldown_left=0
 	player_start=walker.global_position
-	combat.launch_hooks(walker.global_position+Vector3(0,-1,14))
+	combat.grapple.launch_hooks(walker.global_position+Vector3(0,-1,14))
 	await _frames(35)
 	_expect(walker.global_position.distance_to(player_start)>2,"fixed terrain pulls player")
-	combat.cancel_hook()
-	combat.cooldown_left=0
-	combat.launch_hooks(walker.global_position+Vector3(0,100,100))
+	combat.grapple.cancel_hook()
+	combat.grapple.cooldown_left=0
+	combat.grapple.launch_hooks(walker.global_position+Vector3(0,100,100))
 	await _frames(80)
-	_expect(combat.hook_state not in ["flying","pulling"],"sky miss releases without permanent tether")
+	_expect(combat.grapple.state_name() not in ["flying","pulling"],"sky miss releases without permanent tether")
 
 func _test_ai() -> void:
-	combat.cancel_hook()
+	combat.grapple.cancel_hook()
 	enemy.mass=3
 	enemy.ai_enabled=true
 	enemy.global_position=walker.global_position+Vector3(0,0,50)

@@ -21,7 +21,7 @@ func _run() -> void:
 	enemy=main.get_node("Enemies/Scout1")
 	enemy.global_position=walker.global_position+Vector3(0,0,12)
 	var combat: Node = walker.get_node("Combat")
-	combat.launch_hooks(enemy.global_position+Vector3.UP*1.1)
+	combat.grapple.launch_hooks(enemy.global_position+Vector3.UP*1.1)
 	await _frames(200)
 	_expect(enemy.dead and main.kills==2,"reeling a light enemy automatically chains into lethal blade attacks")
 	enemy=main.get_node("Enemies/Scout2")
