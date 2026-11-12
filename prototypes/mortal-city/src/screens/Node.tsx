@@ -5,15 +5,16 @@ import { AlertTriangle, ArrowLeft, BedDouble, Compass, Crosshair, Eye, FastForwa
 import { ActionButton, Avatar, Meter, Panel, Tag, useTwoStep } from '../components/ui'
 import { ItemIcon } from '../components/ItemIcon'
 import { FIXERS, JOBS, highDanger } from '../content/data'
-import { CASE_BY_ID, type Reply, type StoryCase, caseBody, caseReplies, optionLock } from '../content/cases'
+import { CASE_BY_ID, type CaseOption, type Reply, type StoryCase, caseBody, caseReplies, caseThreat, optionLock } from '../content/cases'
 import { EVENT_BY_ID } from '../content/events'
 import { DISTRICTS, fixerIn } from '../content/districts'
 import { buzz, reducedMotion } from '../components/haptics'
 import { sfx } from '../components/sfx'
 import { TypeLine } from '../components/Fx'
 import { itemStyle, ITEMS, SHOP_IMPLANTS, clinicOrders, itemDesc, itemLock, marketPrice } from '../content/items'
-import { type NodeRun, type ResultRow, type useGame, SAFE_STRESS, caseDangerOption, caseReward, eliteDangerOption, eventLock, fightEnemy, jobEnemy, jobLines, type BeatLog } from '../game/state'
-import { BEATS } from '../content/beats'
+import { type NodeRun, type ResultRow, type useGame, SAFE_STRESS, caseLethal, caseReward, eliteLethal, type LethalLog, eventLock, fightEnemy, jobEnemy, jobLines, type BeatLog } from '../game/state'
+import { BEATS, type Beat, storyBeats } from '../content/beats'
+import { DiceIntro, DiceRoll, IntroButton, useIntro, useRollDone } from '../components/dice'
 import { findNode } from '../rules/map'
 import {
   type DangerOption,
@@ -36,14 +37,24 @@ import {
   heatEnemy,
   jobReward,
   jobPool,
+  scenePool,
+  eventPool,
   poolSize,
   costText,
-  PUSH_STRESS,
+  pushStress,
+  psychoRuleText,
+  NEURAL_STAGE_LABEL,
+  neuralStage,
   POOL_RESULT_LABEL,
   type PoolResult,
-  dangerOdds,
+  lethalPool,
+  type PoolPart,
+  DROP_INJURY,
+  SCAR_ATTR,
+  SEVERE_INJURY,
   marginOf,
-  psychoOdds,
+  neuralRisk,
+  neuralTag,
   pct,
   perkReward,
   sellValue,
@@ -161,14 +172,23 @@ function NodeHead({ tone = 'line', tag, title, fixer, body }: { tone?: 'line' | 
   )
 }
 
-/** 神經餘裕低於 40 時，任務中錯亂的機率（沒有風險就不顯示）。 */
+/** 神經餘裕低於 40：標出神經階段（規則寫在擲骰與危險節點的畫面上）。 */
 export function PsychoTag({ c }: { c: G['g']['character'] }) {
-  const o = psychoOdds(c)
-  if (!o.total) return null
+  if (!neuralRisk(c)) return null
+  return <Tag tone="red">{neuralTag(c)}：任務裡要注意錯亂</Tag>
+}
+
+/** 一般委託的錯亂規則（骰池版）：穩定時不顯示。 */
+function PsychoRules({ c }: { c: G['g']['character'] }) {
+  const t = psychoRuleText(c)
+  if (!t.length) return null
   return (
-    <Tag tone="red">
-      神經錯亂 {pct(o.total)}（中斷 {pct(o.abort)}・重傷 {pct(o.maim)}・死亡 {pct(o.death)}）
-    </Tag>
+    <div className="border border-red/60 p-2 text-[13px] text-red">
+      <div className="font-bold">神經{NEURAL_STAGE_LABEL[neuralStage(marginOf(c))]}（餘裕 {marginOf(c)}）</div>
+      {t.map((x) => (
+        <div key={x}>・{x}</div>
+      ))}
+    </div>
   )
 }
 
@@ -176,41 +196,136 @@ export function PsychoTag({ c }: { c: G['g']['character'] }) {
 
 const RESULT_TONE: Record<PoolResult, string> = { crit: 'text-positive', clean: 'text-positive', cost: 'text-warning', fail: 'text-red' }
 
-/** 一把骰：最高那顆（決定結果的）亮起來。 */
-function Dice({ dice, best }: { dice: number[]; best: number }) {
-  const hi = dice.indexOf(best)
-  return (
-    <span className="inline-flex flex-wrap gap-1 align-middle">
-      {dice.map((d, i) => (
-        <span key={i} className={`tech inline-flex h-8 w-8 items-center justify-center border text-[17px] font-bold ${i === hi ? 'border-cyan text-heading' : 'border-line/60 text-muted'}`}>
-          {d}
-        </span>
-      ))}
-    </span>
-  )
-}
+/** 一個場面那次擲骰的動畫 key（錯亂中斷的那把在全螢幕揭曉播，不在這裡）。 */
+const beatKey = (keyBase: string, h: BeatLog | undefined) => (h && h.broke !== 'abort' ? `${keyBase}:${h.beat}:${h.dice.join('')}` : undefined)
 
-/** 已經擲過的場面。 */
-function BeatHistory({ beats, history }: { beats: (typeof BEATS)['force']; history: BeatLog[] }) {
+/** 已經擲過的場面。keyBase 讓同一次擲骰只播一次動畫（剛擲的那個場面在這裡播）。 */
+function BeatHistory({ beats, history, keyBase }: { beats: Beat[]; history: BeatLog[]; keyBase: string }) {
   if (!history.length) return null
   return (
     <div className="space-y-2">
       {history.map((h) => {
         const b = beats[h.beat]
-        const best = Math.max(...h.dice)
         return (
           <div key={h.beat} className="border border-line/60 p-3">
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="mb-1.5 flex flex-wrap items-center gap-2">
               <span className="font-bold text-cyan">{b.title}</span>
-              <Dice dice={h.dice} best={best} />
-              <span className={`font-bold ${RESULT_TONE[h.result]}`}>{POOL_RESULT_LABEL[h.result]}</span>
+              {h.broke === 'abort' && <span className="text-[13px] text-red">錯亂・致命判定</span>}
             </div>
-            <p className="m-0 mt-1 text-[14px] text-fg">{b.out[h.result]}</p>
-            {h.cost && <p className="m-0 mt-1 text-[13px] text-warning">代價：{h.cost}</p>}
+            <DiceRoll dice={h.dice} best={h.best} result={h.result} psycho={h.psycho} rollKey={beatKey(keyBase, h)}>
+              <div className={`mt-1.5 font-bold ${RESULT_TONE[h.result]}`}>{h.broke === 'fail' ? '失敗（錯亂）' : POOL_RESULT_LABEL[h.result]}</div>
+              {h.psycho?.length ? (
+                <p className="m-0 mt-1 text-[13px] text-[#b06cff]">
+                  錯亂骰 {h.psycho.join('、')}
+                  {h.broke === 'fail' ? '：手不聽使喚，這個場面失敗' : h.broke === 'abort' ? '：眼前一黑，任務中斷' : '：撐住了'}
+                </p>
+              ) : null}
+              {h.broke !== 'abort' && <p className="m-0 mt-1 text-[14px] text-fg">{b.out[h.result]}</p>}
+              {h.cost && <p className="m-0 mt-1 text-[13px] text-warning">代價：{h.cost}</p>}
+            </DiceRoll>
           </div>
         )
       })}
     </div>
+  )
+}
+
+/** 擲之前的加骰：硬撐（神經壓力）、鋌而走險（通緝，滿了不能選）。 */
+function BoostToggles({ c, push, setPush, gamble, setGamble }: { c: G['g']['character']; push: boolean; setPush: (v: boolean) => void; gamble: boolean; setGamble: (v: boolean) => void }) {
+  const toggle = (on: boolean, set: (v: boolean) => void, title: string, note: string, disabled = false) => (
+    <button disabled={disabled} onClick={() => set(!on)} className={`block w-full text-left ${on ? 'cut cut-sm cut-red' : 'cut cut-sm'} ${disabled ? 'opacity-50' : ''}`}>
+      <div className="cut-in flex min-h-12 items-center justify-between gap-3 p-3">
+        <span className={on ? 'font-bold text-red' : 'text-fg'}>{on ? '✓ ' : ''}{title}</span>
+        <span className="text-[13px] text-muted">{note}</span>
+      </div>
+    </button>
+  )
+  return (
+    <>
+      {toggle(push, setPush, '硬撐：多擲 1 顆', `神經壓力 +${pushStress(c)}`)}
+      {toggle(gamble && c.heat < 5, setGamble, '鋌而走險：多擲 1 顆', c.heat >= 5 ? '通緝已經滿了' : '通緝 +1', c.heat >= 5)}
+    </>
+  )
+}
+
+/** 骰池的組成：「沉著 5 +3 顆、難度 3 −1 顆」。 */
+function PoolParts({ parts }: { parts: PoolPart[] }) {
+  return (
+    <div className="text-[14px] text-muted">
+      {parts.map((p, i) => (
+        <span key={i}>
+          {i ? '、' : ''}
+          {p.label} <b className={`tech ${p.n < 0 ? 'text-red' : 'text-heading'}`}>{p.n > 0 ? `+${p.n}` : p.n} 顆</b>
+        </span>
+      ))}
+    </div>
+  )
+}
+
+const rollLabel = (size: number) => (size <= 0 ? '擲 2 顆（取低的）' : `擲 ${Math.min(6, size)} 顆`)
+
+/** 一個場面：情境、骰池組成、加骰、擲骰鈕。 */
+function ScenePanel({ game, beats, at, parts, onRoll }: { game: G; beats: Beat[]; at: number; parts: PoolPart[]; onRoll: (push: boolean, gamble: boolean) => void }) {
+  const c = game.g.character
+  const intro = useIntro(!!game.g.meta.seen.dice, () => game.act({ t: 'seenIntro', key: 'dice' }))
+  const beat = beats[Math.min(at, beats.length - 1)]
+  const [push, setPush] = useState(false)
+  const [gamble, setGamble] = useState(false)
+  const size = poolSize(parts, (push ? 1 : 0) + (gamble && c.heat < 5 ? 1 : 0))
+  const roll = () => {
+    sfx.click()
+    onRoll(push, gamble && c.heat < 5)
+    setPush(false)
+    setGamble(false)
+  }
+  return (
+    <Panel tone="strong" innerClass="p-4 space-y-3">
+      {intro.open && <DiceIntro kind="dice" onClose={intro.close} />}
+      <div className="flex items-center justify-between gap-2">
+        <span className="text-[13px] text-muted">
+          場面 {at + 1}／{beats.length}
+        </span>
+        <IntroButton onClick={intro.show} />
+      </div>
+      <div className="text-[18px] font-bold text-cyan">{beat.title}</div>
+      <p className="m-0 text-fg">{beat.setup}</p>
+      <PoolParts parts={parts} />
+      <p className="m-0 text-[13px] text-muted">只看最高那顆：6 乾淨成功、4～5 成功但付代價、1～3 失敗；兩顆 6 是大成功。{size <= 0 ? '你一顆骰都沒有：擲兩顆取低的。' : ''}</p>
+      <BoostToggles c={c} push={push} setPush={setPush} gamble={gamble} setGamble={setGamble} />
+      <ActionButton tone="primary" className="w-full" testId="beat-roll" onClick={roll}>
+        {rollLabel(size)}
+      </ActionButton>
+    </Panel>
+  )
+}
+
+/** 場面擲出 4～5：選一個代價。 */
+function SceneCostPanel({ c, beats, at, last, base, keyBase, onPick }: { c: G['g']['character']; beats: Beat[]; at: number; last: BeatLog; base: { injury: number }; keyBase: string; onPick: (i: number) => void }) {
+  const beat = beats[Math.min(at, beats.length - 1)]
+  return (
+    <Panel tone="strong" innerClass="p-4 space-y-3">
+      <div className="text-[13px] text-muted">
+        場面 {at + 1}／{beats.length}・{beat.title}
+      </div>
+      <DiceRoll dice={last.dice} best={last.best} result={last.result} psycho={last.psycho} rollKey={beatKey(keyBase, last)}>
+        <div className="mt-1.5 font-bold text-warning">{POOL_RESULT_LABEL.cost}</div>
+        {last.psycho?.length ? <p className="m-0 text-[13px] text-[#b06cff]">錯亂骰 {last.psycho.join('、')}：撐住了</p> : null}
+        <p className="m-0 mt-2 mb-2 text-fg">{beat.out.cost} 選一個代價：</p>
+        <div className="space-y-2">
+          {beat.costs.map((o, i) => {
+            const k = o.kind === 'heat' && c.heat >= 5 ? 'stress' : o.kind
+            return (
+              <button key={i} data-testid="beat-cost" onClick={() => onPick(i)} className="block w-full text-left cut cut-sm">
+                <div className="cut-in flex min-h-12 items-center justify-between gap-3 p-3">
+                  <span className="text-fg">{o.text}</span>
+                  <span className="shrink-0 text-[13px] text-warning">{costText(base, k)}</span>
+                </div>
+              </button>
+            )
+          })}
+        </div>
+      </DiceRoll>
+    </Panel>
   )
 }
 
@@ -222,24 +337,8 @@ function JobNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'job' }> })
   const beats = BEATS[job.direction]
   const at = n.beat ?? 0
   const beat = beats[Math.min(at, beats.length - 1)]
-  const [push, setPush] = useState(false)
-  const [gamble, setGamble] = useState(false)
-  const parts = jobPool(c, job, beat.attr)
-  const size = poolSize(parts, (push ? 1 : 0) + (gamble && c.heat < 5 ? 1 : 0))
-  const roll = () => {
-    sfx.click()
-    act({ t: 'jobRoll', push, gamble: gamble && c.heat < 5 })
-    setPush(false)
-    setGamble(false)
-  }
-  const toggle = (on: boolean, set: (v: boolean) => void, title: string, note: string, disabled = false) => (
-    <button disabled={disabled} onClick={() => set(!on)} className={`block w-full text-left ${on ? 'cut cut-sm cut-red' : 'cut cut-sm'} ${disabled ? 'opacity-50' : ''}`}>
-      <div className="cut-in flex min-h-12 items-center justify-between gap-3 p-3">
-        <span className={on ? 'font-bold text-red' : 'text-fg'}>{on ? '✓ ' : ''}{title}</span>
-        <span className="text-[13px] text-muted">{note}</span>
-      </div>
-    </button>
-  )
+  // 剛擲的骰還在跳：下一個場面、戰鬥、結算等它播完才出現
+  const rolled = useRollDone(n.stage === 'cost' ? undefined : beatKey(`${c.id}:${n.nodeId}`, n.history?.at(-1)))
   return (
     <>
       <NodeHead tag={`委託・${DIRECTION_LABEL[job.direction]}・難度 ${job.tier}`} title={job.name} fixer={fixerIn(DISTRICTS[g.run.districtIndex], job.fixerId)} body={job.blurb} />
@@ -248,56 +347,16 @@ function JobNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'job' }> })
         <Tag>{beats.length} 個場面{job.direction === 'force' ? '・最後一定要打' : '・失敗兩次要打一場'}</Tag>
         <Tag tone="warning">壓力 +{job.stress}</Tag>
         <Tag>完成時掉寶 {pct(0.1 * job.tier * (1 + statMod(c, 'loot')))}</Tag>
-        {n.stage === 'auto' && <PsychoTag c={c} />}
       </div>
       {n.stage === 'auto' && <AutoRun lines={lines} total={autoMs(lines.length)} fast={!!g.meta.seen.job} onDone={() => act({ t: 'jobAutoDone' })} />}
-      {n.stage !== 'auto' && n.stage !== 'done' && <BeatHistory beats={beats} history={n.stage === 'cost' ? (n.history ?? []).slice(0, -1) : (n.history ?? [])} />}
-      {n.stage === 'scene' && (
-        <Panel tone="strong" innerClass="p-4 space-y-3">
-          <div className="text-[13px] text-muted">場面 {at + 1}／{beats.length}</div>
-          <div className="text-[18px] font-bold text-cyan">{beat.title}</div>
-          <p className="m-0 text-fg">{beat.setup}</p>
-          <div className="text-[14px] text-muted">
-            {parts.map((p, i) => (
-              <span key={i}>
-                {i ? '、' : ''}
-                {p.label} <b className={`tech ${p.n < 0 ? 'text-red' : 'text-heading'}`}>{p.n > 0 ? `+${p.n}` : p.n} 顆</b>
-              </span>
-            ))}
-          </div>
-          <p className="m-0 text-[13px] text-muted">只看最高那顆：6 乾淨成功、4～5 成功但付代價、1～3 失敗；兩顆 6 是大成功。{size <= 0 ? '你一顆骰都沒有：擲兩顆取低的。' : ''}</p>
-          {toggle(push, setPush, '硬撐：多擲 1 顆', `神經壓力 +${PUSH_STRESS}`)}
-          {toggle(gamble && c.heat < 5, setGamble, '鋌而走險：多擲 1 顆', c.heat >= 5 ? '通緝已經滿了' : '通緝 +1', c.heat >= 5)}
-          <ActionButton tone="primary" className="w-full" onClick={roll}>
-            {size <= 0 ? '擲 2 顆（取低的）' : `擲 ${Math.min(6, size)} 顆`}
-          </ActionButton>
-        </Panel>
-      )}
-      {n.stage === 'cost' && n.history?.length ? (
-        <Panel tone="strong" innerClass="p-4 space-y-3">
-          <div className="text-[13px] text-muted">場面 {at + 1}／{beats.length}・{beat.title}</div>
-          <div className="flex flex-wrap items-center gap-2">
-            <Dice dice={n.history[n.history.length - 1].dice} best={Math.max(...n.history[n.history.length - 1].dice)} />
-            <span className="font-bold text-warning">{POOL_RESULT_LABEL.cost}</span>
-          </div>
-          <p className="m-0 text-fg">{beat.out.cost} 選一個代價：</p>
-          {beat.costs.map((o, i) => {
-            const k = o.kind === 'heat' && c.heat >= 5 ? 'stress' : o.kind
-            return (
-              <button key={i} onClick={() => act({ t: 'jobCost', index: i })} className="block w-full text-left cut cut-sm">
-                <div className="cut-in flex min-h-12 items-center justify-between gap-3 p-3">
-                  <span className="text-fg">{o.text}</span>
-                  <span className="shrink-0 text-[13px] text-warning">{costText(job, k)}</span>
-                </div>
-              </button>
-            )
-          })}
-        </Panel>
-      ) : null}
-      {n.stage === 'fight' && !n.fight && job.direction !== 'force' && <p className="m-0 text-red">你失手兩次，被逮個正著。只能打出去。</p>}
-      {n.stage === 'fight' && !n.fight && <TacticPicker game={game} enemy={heatEnemy(jobEnemy(job, n), c.heat)} onPick={(t) => act({ t: 'jobFight', tactic: t })} />}
+      {n.stage !== 'done' && <PsychoRules c={c} />}
+      {n.stage !== 'auto' && <BeatHistory beats={beats} keyBase={`${c.id}:${n.nodeId}`} history={n.stage === 'cost' ? (n.history ?? []).slice(0, -1) : (n.history ?? [])} />}
+      {rolled && n.stage === 'scene' && <ScenePanel key={at} game={game} beats={beats} at={at} parts={jobPool(c, job, beat.attr)} onRoll={(push, gamble) => act({ t: 'jobRoll', push, gamble })} />}
+      {n.stage === 'cost' && n.history?.length ? <SceneCostPanel c={c} beats={beats} at={at} last={n.history[n.history.length - 1]} base={job} keyBase={`${c.id}:${n.nodeId}`} onPick={(i) => act({ t: 'jobCost', index: i })} /> : null}
+      {rolled && n.stage === 'fight' && !n.fight && job.direction !== 'force' && <p className="m-0 text-red">你失手兩次，被逮個正著。只能打出去。</p>}
+      {rolled && n.stage === 'fight' && !n.fight && <TacticPicker game={game} enemy={heatEnemy(jobEnemy(job, n), c.heat)} onPick={(t) => act({ t: 'jobFight', tactic: t })} />}
       {n.stage === 'fight' && n.fight && <FightRun fight={n.fight} onDone={() => act({ t: 'jobFightDone' })} />}
-      {n.stage === 'done' && <ResultRows title="結算" text={n.text} rows={n.rows} />}
+      {rolled && n.stage === 'done' && <ResultRows title="結算" text={n.text} rows={n.rows} />}
     </>
   )
 }
@@ -311,7 +370,7 @@ function EliteNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'elite' }
   const t = highDanger(job)
   return (
     <>
-      <NodeHead tone="red" tag={`精英委託・${DIRECTION_LABEL[job.direction]}・打贏一定掉寶`} title={job.name} fixer={fixerIn(DISTRICTS[g.run.districtIndex], job.fixerId)} body={job.blurb} />
+      <NodeHead tone="red" tag={`精英委託・${DIRECTION_LABEL[job.direction]}・撐過去一定掉寶`} title={job.name} fixer={fixerIn(DISTRICTS[g.run.districtIndex], job.fixerId)} body={job.blurb} />
       {n.stage === 'auto' && (
         <div className="flex flex-wrap gap-2">
           <PsychoTag c={c} />
@@ -328,14 +387,19 @@ function EliteNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'elite' }
           options={t.options}
           locks={Object.fromEntries(t.options.map((o) => [o.id, attrLock(c, o.attrNeeds) ?? '']).filter(([, v]) => v))}
           notes={Object.fromEntries(
-            t.options.filter((o) => o.attrNeeds).map((o) => [o.id, `屬性選項：${ATTR_LABEL[o.attrNeeds!.attr]} ≥ ${o.attrNeeds!.min}，風險比硬幹低・代價：報酬七五折、名聲減半、神經壓力 +${SAFE_STRESS}`]),
+            t.options.filter((o) => o.attrNeeds).map((o) => [o.id, `屬性選項：${ATTR_LABEL[o.attrNeeds!.attr]} ≥ ${o.attrNeeds!.min}，多擲 2 顆・代價：報酬七五折、名聲減半、神經壓力 +${SAFE_STRESS}`]),
           )}
-          safeNote="拿不到報酬（戰利品已經到手）"
-          chanceOf={(o) => dangerOdds(c, eliteDangerOption(c, job, o))}
-          onConfirm={(id) => act({ t: 'eliteChoose', optionId: id })}
+          safeNote="沒有報酬、沒有戰利品"
+          poolOf={(o) => lethalPool(c, eliteLethal(job, o))}
+          threat={t.threat?.name}
+          onConfirm={(id, push, gamble) => act({ t: 'eliteChoose', optionId: id, push, gamble })}
         />
       )}
-      {n.stage === 'done' && n.outcome && <Result outcome={n.outcome} doneTitle="完成精英委託" safeTitle={n.fight && !n.fight.won ? '被打退・撤離' : undefined} />}
+      {n.stage === 'cost' && n.lethal && <LethalCostPick c={c} lethal={n.lethal} direction={job.direction} dropNote="沒有報酬，也沒有戰利品" onPick={(choice) => act({ t: 'lethalCost', choice })} />}
+      {n.stage === 'chase' && t.threat && (
+        <ChaseFight game={game} enemy={fameEnemy(t.threat, c.fame.level)} fight={n.chase} lethal={n.lethal} onPick={(x) => act({ t: 'chaseFight', tactic: x })} onDone={() => act({ t: 'chaseDone' })} />
+      )}
+      {n.stage === 'done' && n.outcome && <Result outcome={n.outcome} doneTitle="完成精英委託" safeTitle={n.fight && !n.fight.won ? '被打退・撤離' : n.lethal ? '丟下一切・撤離' : undefined} />}
     </>
   )
 }
@@ -352,7 +416,15 @@ function EventNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'event' }
         <Panel innerClass="p-3 space-y-2">
           {ev.options.map((o) => {
             const lock = eventLock(g.character, o)
-            const note = [o.cost ? `¢${o.cost}` : '', o.needs ? `${ATTR_LABEL[o.needs.attr]} ≥ ${o.needs.min}` : '', o.fame ? `名聲 Lv.${o.fame}` : '', o.chance !== undefined ? `成功率 ${Math.round(o.chance * 100)}%` : ''].filter(Boolean).join('・')
+            const dice = o.check ? poolSize(eventPool(g.character, o.check)) : 0
+            const note = [
+              o.cost ? `¢${o.cost}` : '',
+              o.needs ? `${ATTR_LABEL[o.needs.attr]} ≥ ${o.needs.min}` : '',
+              o.fame ? `名聲 Lv.${o.fame}` : '',
+              o.check ? `${rollLabel(dice)}（${o.check.attr ? ATTR_LABEL[o.check.attr] : '純靠運氣'}）・1～3 失敗、4～5 成功但付點代價` : '',
+            ]
+              .filter(Boolean)
+              .join('・')
             return (
               <button key={o.id} data-testid="event-option" disabled={!!lock} onClick={() => act({ t: 'eventChoose', optionId: o.id })} className={`block w-full text-left cut cut-sm ${lock ? 'opacity-50' : ''}`}>
                 <div className="cut-in min-h-12 p-3">
@@ -363,6 +435,16 @@ function EventNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'event' }
               </button>
             )
           })}
+        </Panel>
+      ) : n.roll ? (
+        <Panel tone="strong" innerClass="p-4 space-y-2">
+          <div className="text-[13px] text-muted">判定</div>
+          <DiceRoll dice={n.roll.dice} best={n.roll.best} result={n.roll.result} rollKey={`${g.character.id}:${n.nodeId}:event`}>
+            <div className={`mt-1.5 font-bold ${RESULT_TONE[n.roll.result]}`}>{POOL_RESULT_LABEL[n.roll.result]}</div>
+            <div className="mt-3">
+              <ResultRows title="結果" text={n.text} rows={n.rows} />
+            </div>
+          </DiceRoll>
         </Panel>
       ) : (
         <ResultRows title="結果" text={n.text} rows={n.rows} />
@@ -500,7 +582,7 @@ function ClinicNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'clinic'
     const item = { ...d, id: kind, kind }
     const lock = itemLock(c, item)
     const fitted = { ...c, implantLoad: c.implantLoad + d.load }
-    const risk = psychoOdds(fitted).total
+    const risk = neuralRisk(fitted)
     return (
       <div key={kind} className="flex items-center gap-2 border-b border-line/40 px-3 py-2">
         <ItemIcon item={item} />
@@ -512,7 +594,7 @@ function ClinicNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'clinic'
           ) : (
             <div className={`text-[13px] ${risk ? 'text-warning' : 'text-muted'}`}>
               負荷 {d.load}・裝上後神經餘裕 {marginOf(fitted)}
-              {risk ? `・任務中錯亂 ${pct(risk)}` : ''}
+              {risk ? `・${neuralTag(fitted)}` : ''}
             </div>
           )}
         </div>
@@ -530,7 +612,7 @@ function ClinicNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'clinic'
       </ActionButton>
       <Panel innerClass="pb-1">
         <div className="px-3 pt-3 font-bold text-heading">常備義體（七五折，買了直接裝上）</div>
-        <div className="px-3 text-[13px] text-muted">神經餘裕 {margin}：低於 40，任務中可能神經錯亂</div>
+        <div className="px-3 text-[13px] text-muted">神經餘裕 {margin}：低於 40，任務裡要擲錯亂骰或付更多壓力</div>
         {SHOP_IMPLANTS.map((kind) => row(kind, marketPrice(ITEMS[kind].price)))}
       </Panel>
       <Panel innerClass="pb-1">
@@ -545,7 +627,7 @@ function ClinicNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'clinic'
             const lv = it.level ?? 1
             const price = upgradeCost(it)
             const after = { ...c, implantLoad: c.implantLoad + UPGRADE_LOAD }
-            const risk = psychoOdds(after).total
+            const risk = neuralRisk(after)
             return (
               <div key={it.id} className="flex items-center gap-2 border-b border-line/40 px-3 py-2">
                 <ItemIcon item={it} />
@@ -558,7 +640,7 @@ function ClinicNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'clinic'
                   ) : (
                     <div className={`text-[13px] ${risk ? 'text-warning' : 'text-muted'}`}>
                       → Lv.{lv + 1}：效果 ×{1 + 0.5 * lv}・升級後神經餘裕 {marginOf(after)}
-                      {risk ? `・任務中錯亂 ${pct(risk)}` : ''}
+                      {risk ? `・${neuralTag(after)}` : ''}
                     </div>
                   )}
                 </div>
@@ -616,14 +698,18 @@ function CaseThread({ game, sc }: { game: G; sc: StoryCase }) {
       [
         o.approach ? `只有走「${sc.approaches.find((x) => x.id === o.approach)!.label}」才有` : '',
         o.needs && 'attr' in o.needs ? `屬性選項：${ATTR_LABEL[o.needs.attr]} ≥ ${o.needs.min}` : '',
-        o.needs ? `代價：報酬七五折、名聲減半、神經壓力 +${SAFE_STRESS}` : '',
+        o.needs ? `有備而來，多擲 2 顆・代價：報酬七五折、名聲減半、神經壓力 +${SAFE_STRESS}` : '',
         o.fight ? `⚔ 要打一場（${o.fight.name} HP ${o.fight.hp}）：打贏就生還，打輸才擲致命判定` : '',
       ]
         .filter(Boolean)
         .join('・'),
     ]),
   )
-  const auto = sc.approaches.find((x) => x.id === g.story.approach)?.autoLog ?? []
+  const ap = sc.approaches.find((x) => x.id === g.story.approach) ?? sc.approaches[0]
+  const auto = ap.autoLog
+  const beats = storyBeats(ap.direction)
+  // 剛擲的場面骰還在跳：後面的場面、戰鬥、危險節點等它播完才出現
+  const rolled = useRollDone(active === 'sceneCost' ? undefined : beatKey(`${g.character.id}:${sc.id}`, g.story.history?.at(-1)))
   return (
     <>
       <Panel innerClass="p-4">
@@ -649,11 +735,26 @@ function CaseThread({ game, sc }: { game: G; sc: StoryCase }) {
       )}
       {active === 'prep' && threadRead && <ApproachPicker game={game} sc={sc} />}
       {active === 'auto' && <AutoRun lines={auto} total={autoMs(auto.length, 4000)} fast={!!(g.meta.seen.story || g.meta.seen.boss)} onDone={() => act({ t: 'storyAutoDone' })} />}
-      {active === 'fight' && !g.story.fight && <TacticPicker game={game} enemy={heatEnemy(fightEnemy(sc, g.story), g.character.heat)} onPick={(t) => act({ t: 'storyFight', tactic: t })} />}
+      {active && active !== 'prep' && active !== 'auto' && <PsychoRules c={g.character} />}
+      {active && active !== 'prep' && active !== 'auto' && g.story.history?.length ? (
+        <BeatHistory beats={beats} keyBase={`${g.character.id}:${sc.id}`} history={active === 'sceneCost' ? g.story.history.slice(0, -1) : g.story.history} />
+      ) : null}
+      {rolled && (active === 'fight' || active === 'danger') && g.story.history?.length ? (
+        <p className="m-0 text-[14px] text-muted">
+          做法的場面：致命判定 <b className={`tech ${(g.story.scenes ?? 0) < 0 ? 'text-red' : 'text-heading'}`}>{(g.story.scenes ?? 0) >= 0 ? '+' : ''}{g.story.scenes ?? 0} 顆</b>（乾淨成功 +1、失敗 −1、付代價不加不減）
+        </p>
+      ) : null}
+      {rolled && active === 'scene' && (
+        <ScenePanel key={g.story.beat} game={game} beats={beats} at={g.story.beat ?? 0} parts={scenePool(g.character, ap.direction, 1, beats[Math.min(g.story.beat ?? 0, beats.length - 1)].attr)} onRoll={(push, gamble) => act({ t: 'storyRoll', push, gamble })} />
+      )}
+      {active === 'sceneCost' && g.story.history?.length ? (
+        <SceneCostPanel c={g.character} beats={beats} at={g.story.beat ?? 0} last={g.story.history[g.story.history.length - 1]} base={ap} keyBase={`${g.character.id}:${sc.id}`} onPick={(i) => act({ t: 'storySceneCost', index: i })} />
+      ) : null}
+      {rolled && active === 'fight' && !g.story.fight && <TacticPicker game={game} enemy={heatEnemy(fightEnemy(sc, g.story), g.character.heat)} onPick={(t) => act({ t: 'storyFight', tactic: t })} />}
       {active === 'fight' && g.story.fight && (
         <FightRun fight={g.story.fight} after={g.story.option ? undefined : sc.approaches.find((x) => x.id === g.story.approach)?.afterFight} onDone={() => act({ t: 'storyFightDone' })} />
       )}
-      {active === 'danger' && (
+      {rolled && active === 'danger' && (
         <RiskDecision
           game={game}
           title={sc.danger.title}
@@ -663,20 +764,41 @@ function CaseThread({ game, sc }: { game: G; sc: StoryCase }) {
           notes={notes}
           safeNote={(o) => {
             const opt = sc.danger.options.find((x) => x.id === o.id)!
-            return opt.wins ? `完成委託 ¢${caseReward(opt)}` : opt.reward ? `只拿部分報酬 ¢${caseReward(opt)}` : '委託失敗、拿不到報酬'
+            return opt.reward ? `只拿部分報酬 ¢${caseReward(opt)}` : '委託失敗、拿不到報酬'
           }}
-          chanceOf={(o) => dangerOdds(g.character, caseDangerOption(g.character, sc, g.story.approach, o.id))}
-          onConfirm={(id) => act({ t: 'storyChoose', optionId: id })}
+          poolOf={(o) => lethalPool(g.character, caseLethal(sc, g.story.approach, sc.danger.options.find((x) => x.id === o.id)!, g.story.scenes))}
+          threat={caseThreat(sc)?.name}
+          onConfirm={(id, push, gamble) => act({ t: 'storyChoose', optionId: id, push, gamble })}
+        />
+      )}
+      {active === 'chase' && caseThreat(sc) && (
+        <ChaseFight game={game} enemy={caseThreat(sc)!} fight={g.story.fight} lethal={g.story.lethal} onPick={(x) => act({ t: 'chaseFight', tactic: x })} onDone={() => act({ t: 'chaseDone' })} />
+      )}
+      {active === 'cost' && g.story.lethal && (
+        <LethalCostPick
+          c={g.character}
+          lethal={g.story.lethal}
+          direction={(sc.approaches.find((x) => x.id === g.story.approach) ?? sc.approaches[0]).direction}
+          dropNote="委託失敗，沒有報酬"
+          onPick={(choice) => act({ t: 'lethalCost', choice })}
         />
       )}
       {rec && !active && (
         <Result
           outcome={{ kind: rec.outcome, reason: rec.reason } as DangerOutcome}
-          safeTitle={rec.optionId === 'retreat' ? '被打退・委託失敗' : sc.danger.options.find((o) => o.id === rec.optionId)?.reward ? '部分完成' : undefined}
+          safeTitle={caseSafeTitle(rec.optionId, sc.danger.options.find((o) => o.id === rec.optionId))}
         />
       )}
     </>
   )
+}
+
+/** 劇情案沒撐過去也沒受致命傷時的標題：撤離選項有部分報酬才算「部分完成」；冒險選項落到這裡是丟下一切或打輸。 */
+function caseSafeTitle(optionId: string, o: CaseOption | undefined): string | undefined {
+  if (optionId === 'retreat' || o?.fight) return '被打退・委託失敗'
+  if (optionId === 'psycho') return '神經錯亂・任務中斷'
+  if (o?.lethal) return '丟下一切・委託失敗'
+  return o?.reward ? '部分完成' : undefined
 }
 
 /** 論壇回覆一則一則進來（約 1.5 秒一則，先顯示「正在輸入…」）；點一下回覆串就立刻顯示下一則。 */
@@ -740,9 +862,9 @@ function ApproachPicker({ game, sc }: { game: G; sc: StoryCase }) {
         // 照 storyAutoDone 先加上路上的傷勢與壓力，算出抵達最後關頭時的機率
         const there = { ...c, injury: Math.min(100, c.injury + a.injury), stress: c.stress + 6 }
         const risks = sc.danger.options
-          .filter((o) => o.lethal && (!o.approach || o.approach === a.id))
-          .map((o) => dangerOdds(there, caseDangerOption(there, sc, a.id, o.id)))
-        const range = (xs: number[]) => (Math.max(...xs) > Math.min(...xs) ? `${pct(Math.min(...xs))}～${pct(Math.max(...xs))}` : pct(xs[0]))
+          .filter((o) => o.lethal && (!o.approach || o.approach === a.id) && !o.needs)
+          .map((o) => Math.max(0, poolSize(lethalPool(there, caseLethal(sc, a.id, o)))))
+        const range = (xs: number[]) => (Math.max(...xs) > Math.min(...xs) ? `${Math.min(...xs)}～${Math.max(...xs)}` : `${xs[0]}`)
         return (
           <button key={a.id} disabled={!!lock} onClick={() => setSel(a.id)} className={`block w-full text-left ${on ? 'cut cut-sm cut-red' : 'cut cut-sm'} ${lock ? 'opacity-50' : ''}`}>
             <div className="cut-in flex min-h-12 gap-3 p-3">
@@ -755,7 +877,7 @@ function ApproachPicker({ game, sc }: { game: G; sc: StoryCase }) {
                 </div>
                 {risks.length > 0 && (
                   <div className="text-[13px] text-red">
-                    最後關頭的冒險選項：死亡 {range(risks.map((r) => r.death))}・重傷 {range(risks.map((r) => r.maim))}
+                    最後關頭的冒險選項：擲 {range(risks)} 顆（還沒算做法的 2 個場面、加骰與器材），失敗＝致命傷
                   </div>
                 )}
                 {a.needs && <div className="text-[13px] text-cyan">屬性做法：{ATTR_LABEL[a.needs.attr]} ≥ {a.needs.min}</div>}
@@ -1024,6 +1146,23 @@ const ROUND_TONE: Record<FightFx, string> = {
   retreat: 'border-red text-red',
 }
 
+/** 致命判定失敗、追兵逼近：先選戰術再打；打贏算撐過去，打輸才是致命傷。 */
+function ChaseFight({ game, enemy, fight, lethal, onPick, onDone }: { game: G; enemy: Enemy; fight?: FightResult; lethal?: LethalLog; onPick: (t: Tactic) => void; onDone: () => void }) {
+  return (
+    <>
+      <Panel tone="red" innerClass="p-4 space-y-2">
+        <div className="flex items-center gap-2 text-[18px] font-bold text-red">
+          <AlertTriangle size={20} /> {enemy.name}逼近了
+        </div>
+        {lethal && <DiceRoll dice={lethal.dice} best={lethal.best} result="fail" />}
+        <p className="m-0 text-fg">致命判定失敗，但你還站著。打出去就算撐過去，報酬照拿；打輸（HP 掉到撤退線）才是致命傷。</p>
+      </Panel>
+      {!fight && <TacticPicker game={game} enemy={heatEnemy(enemy, game.g.character.heat)} onPick={onPick} />}
+      {fight && <FightRun fight={fight} onDone={onDone} />}
+    </>
+  )
+}
+
 function RiskDecision({
   game,
   title,
@@ -1032,7 +1171,8 @@ function RiskDecision({
   safeNote,
   locks = {},
   notes = {},
-  chanceOf,
+  poolOf,
+  threat,
   onConfirm,
 }: {
   game: G
@@ -1042,17 +1182,27 @@ function RiskDecision({
   safeNote: string | ((o: DangerOption) => string)
   locks?: Record<string, string>
   notes?: Record<string, string>
-  /** 這個選項判定時實際用的死亡與重傷機率（與 resolveDanger 同一個算式）。 */
-  chanceOf: (o: DangerOption) => { death: number; maim: number }
-  onConfirm: (id: string) => void
+  /** 這個選項致命判定的骰池（與判定同一個函式）。 */
+  poolOf: (o: DangerOption) => PoolPart[]
+  /** 有人在場時，失敗會變成追兵逼近、要打一場（不是直接致命傷）。 */
+  threat?: string
+  onConfirm: (id: string, push: boolean, gamble: boolean) => void
 }) {
   const c = game.g.character
+  const intro = useIntro(!!game.g.meta.seen.lethal, () => game.act({ t: 'seenIntro', key: 'lethal' }))
   const [sel, setSel] = useState<string | null>(null)
+  const [push, setPush] = useState(false)
+  const [gamble, setGamble] = useState(false)
+  const picked = options.find((o) => o.id === sel)
+  const boostable = !!picked?.lethal && !('fight' in picked && picked.fight)
+  const extra = boostable ? (push ? 1 : 0) + (gamble && c.heat < 5 ? 1 : 0) : 0
   return (
     <Panel tone="red" innerClass="p-4 space-y-3">
+      {intro.open && <DiceIntro kind="lethal" onClose={intro.close} />}
       <div className="flex items-center gap-2 text-[18px] font-bold text-red">
         <AlertTriangle size={20} /> 重大危險：{title}
       </div>
+      <IntroButton onClick={intro.show} label="致命判定怎麼玩？" />
       <p className="m-0 whitespace-pre-line text-fg">{body}</p>
       <div className="grid grid-cols-2 gap-2 text-[14px]">
         <div className="border border-red/60 p-2">
@@ -1068,11 +1218,16 @@ function RiskDecision({
           救命保單 <b className={c.lifelines ? 'text-positive' : 'text-red'}>{lifelineOf(c) ? LIFELINES[lifelineOf(c)!].label : '沒有'}</b>
         </div>
       </div>
-      <p className="m-0 text-[14px] text-muted">沒有倒數，可以先離開再回來。確認後一次判定，重新整理不會重抽。{lifelineOf(c) ? `受致命傷時會用掉${LIFELINES[lifelineOf(c)!].label}：${LIFELINES[lifelineOf(c)!].desc}。` : '沒有救命保單：受致命傷就是永久死亡。'}</p>
+      <p className="m-0 text-[14px] text-muted">
+        冒險選項是一次<b className="text-red">致命判定</b>：只看最高那顆，6 撐過去、4～5 撐過去但要付重代價（重傷或丟下一切）、1～3 {threat ? `會讓${threat}逼近，要打一場，打輸才是致命傷` : '是致命傷'}。沒有倒數，可以先離開再回來；擲過就不會重擲。
+        {lifelineOf(c) ? `受致命傷時會用掉${LIFELINES[lifelineOf(c)!].label}：${LIFELINES[lifelineOf(c)!].desc}。` : '沒有救命保單：致命傷就是永久死亡。'}
+      </p>
+      <PsychoRules c={c} />
       {options.map((o) => {
         const on = sel === o.id
+        const size = o.lethal ? poolSize(poolOf(o)) : 0
         return (
-          <button key={o.id} disabled={!!locks[o.id]} onClick={() => setSel(o.id)} className={`block w-full text-left cut cut-sm ${on ? 'cut-strong' : ''} ${locks[o.id] ? 'opacity-50' : ''}`}>
+          <button key={o.id} data-testid="danger-option" disabled={!!locks[o.id]} onClick={() => setSel(o.id)} className={`block w-full text-left cut cut-sm ${on ? 'cut-strong' : ''} ${locks[o.id] ? 'opacity-50' : ''}`}>
             <div className="cut-in min-h-12 p-3">
               <div className={`font-bold ${on ? 'text-cyan' : 'text-fg-list'}`}>{o.label}</div>
               {notes[o.id] && <div className="text-[13px] text-cyan">{notes[o.id]}</div>}
@@ -1081,7 +1236,7 @@ function RiskDecision({
                 {o.lethal ? (
                   <span className="flex items-center gap-1 font-bold text-red">
                     <AlertTriangle size={14} />
-                    {'fight' in o && o.fight ? '打輸時：' : ''}死亡 <b className="tech">{pct(chanceOf(o).death)}</b>・重傷 <b className="tech">{pct(chanceOf(o).maim)}</b>
+                    {'fight' in o && o.fight ? '打輸時：' : ''}致命判定・{rollLabel(size)}・{threat && !('fight' in o && o.fight) ? `失敗＝${threat}逼近，打輸才致命` : '失敗＝致命傷'}
                   </span>
                 ) : (
                   <span className="text-positive">不會死・{typeof safeNote === 'string' ? safeNote : safeNote(o)}</span>
@@ -1091,10 +1246,48 @@ function RiskDecision({
           </button>
         )
       })}
-      <ActionButton tone="danger" disabled={!sel} reason="先選一個行動" onClick={() => onConfirm(sel!)}>
-        確認這個行動
+      {picked?.lethal && (
+        <div className="space-y-2 border border-red/60 p-3">
+          <PoolParts parts={poolOf(picked)} />
+          {boostable && <BoostToggles c={c} push={push} setPush={setPush} gamble={gamble} setGamble={setGamble} />}
+        </div>
+      )}
+      <ActionButton tone="danger" testId="danger-confirm" disabled={!sel} reason="先選一個行動" onClick={() => onConfirm(sel!, boostable && push, boostable && gamble && c.heat < 5)}>
+        {picked?.lethal && boostable ? `確認：${rollLabel(poolSize(poolOf(picked), extra))}` : '確認這個行動'}
       </ActionButton>
       <Reveal />
+    </Panel>
+  )
+}
+
+/** 致命判定擲出 4～5：重傷生還，或丟下一切脫身。 */
+function LethalCostPick({ c, lethal, direction, dropNote, onPick }: { c: G['g']['character']; lethal: LethalLog; direction: Direction; dropNote: string; onPick: (choice: 'maim' | 'drop') => void }) {
+  const a = SCAR_ATTR[direction]
+  return (
+    <Panel tone="red" innerClass="p-4 space-y-3">
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="font-bold text-red">致命判定</span>
+        <DiceRoll dice={lethal.dice} best={lethal.best} result="cost" />
+        <span className="font-bold text-warning">撐過去了，但要付重代價</span>
+      </div>
+      {lethal.psycho?.length ? <p className="m-0 text-[13px] text-red">錯亂骰 {lethal.psycho.join('、')}：撐住了</p> : null}
+      <p className="m-0 text-fg">選一個：</p>
+      <button data-testid="lethal-cost" onClick={() => onPick('maim')} className="block w-full text-left cut cut-sm cut-red">
+        <div className="cut-in min-h-12 p-3">
+          <div className="font-bold text-fg-list">咬牙撐完：重傷生還</div>
+          <div className="text-[13px] text-warning">
+            報酬與名聲照拿・傷勢至少 {SEVERE_INJURY}%・舊傷：{ATTR_LABEL[a]} −1（{ATTR_LABEL[a]} {c.attrs[a]} → {Math.max(1, c.attrs[a] - 1)}）
+          </div>
+        </div>
+      </button>
+      <button data-testid="lethal-cost" onClick={() => onPick('drop')} className="block w-full text-left cut cut-sm">
+        <div className="cut-in min-h-12 p-3">
+          <div className="font-bold text-fg-list">丟下一切脫身</div>
+          <div className="text-[13px] text-warning">
+            {dropNote}・傷勢 +{DROP_INJURY}%（{c.injury}% → {Math.min(100, c.injury + DROP_INJURY)}%）・沒有舊傷
+          </div>
+        </div>
+      </button>
     </Panel>
   )
 }

@@ -81,7 +81,7 @@ function CaseView({ sc, role }: { sc: StoryCase; role: string }) {
           <div key={o.id} className="border border-line/40 p-2">
             <div className="font-bold text-fg-list">▸ {o.label}</div>
             <div className="text-[13px] text-muted">
-              {[needText(o), o.lethal ? `致命 ${pct(o.lethalBase)}` : '不會死', o.wins ? '直接成功' : '', `報酬 ¢${o.reward}`, o.heat ? `通緝 +${o.heat}` : '', o.fight ? `⚔ ${o.fight.name}` : '']
+              {[needText(o), o.lethal ? (o.needs ? '致命判定・有備而來 +2 顆' : `致命判定・險度 ${pct(o.lethalBase)}`) : '不會死', `報酬 ¢${o.reward}`, o.heat ? `通緝 +${o.heat}` : '', o.fight ? `⚔ ${o.fight.name}` : '']
                 .filter(Boolean)
                 .join('・')}
             </div>
@@ -124,7 +124,7 @@ function SideView() {
                     <div className="font-bold text-fg-list">
                       ▸ {o.label}
                       <span className="text-[13px] font-normal text-muted">
-                        {[o.needs ? `${ATTR_LABEL[o.needs.attr]} ≥ ${o.needs.min}` : '', o.cost ? `付 ¢${o.cost}` : '', o.chance ? `成功率 ${pct(o.chance)}` : ''].filter(Boolean).map((t) => `・${t}`).join('')}
+                        {[o.needs ? `${ATTR_LABEL[o.needs.attr]} ≥ ${o.needs.min}` : '', o.cost ? `付 ¢${o.cost}` : '', o.check ? (o.check.attr ? `擲骰：${ATTR_LABEL[o.check.attr]}` : `擲骰：運氣 ${o.check.dice ?? 1} 顆`) : ''].filter(Boolean).map((t) => `・${t}`).join('')}
                       </span>
                     </div>
                     <p className="m-0">{o.lose ? '成功：' : ''}{o.win.text} <span className="text-[13px] text-cyan">{fx(o.win)}</span></p>

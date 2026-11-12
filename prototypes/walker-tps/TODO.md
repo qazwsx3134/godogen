@@ -87,3 +87,7 @@
 - [x] 四足 IK 移動、衝刺（6.5 m/s）、跳躍（2.56 m）、第三人稱鏡頭、鍵鼠／手把／雙指觸控、JUMP／BOOST 觸控鍵。
 - [x] scout 敵機：低面數蒙皮模型 1,304 tris、1 次 draw call，`walk`／`idle` 動畫，機砲照參考圖細化；移動測試場放了 12 台，用暫時的遊蕩 AI。
 - [x] 綠鏽戰線地形與共用材質（另一個 session 做的，見 PROGRESS）。
+
+https://sketchfab.com/3d-models/lowe-86-96027bc691ed4894a1d21108e1a51d44
+https://sketchfab.com/3d-models/juggernaut-86-eighty-six-1f4d04b7d1154b63ba27ab21702fcffe
+https://www.reddit.com/r/gamedev/comments/1m76pm4/the_ultimate_free_game_dev_asset_list_50_sites/

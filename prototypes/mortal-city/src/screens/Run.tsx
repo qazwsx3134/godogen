@@ -7,7 +7,7 @@ import { type useGame, movable, nextDistrict, nodeJob } from '../game/state'
 import { DISTRICTS } from '../content/districts'
 import { type MapNode, type NodeType, NODE_LABEL, findNode } from '../rules/map'
 import { BEATS } from '../content/beats'
-import { DIRECTION_LABEL, hashSeed, jobReward, jobPool, poolSize, pct, perkReward, psychoOdds, rng } from '../rules/core'
+import { DIRECTION_LABEL, NEURAL_STAGE_LABEL, hashSeed, jobReward, jobPool, marginOf, neuralStage, poolSize, perkReward, rng } from '../rules/core'
 import { DIR_ICON, NodeView } from './Node'
 
 type G = ReturnType<typeof useGame>
@@ -195,11 +195,13 @@ function MapView({ game }: { game: G }) {
   )
 }
 
+/** 各神經階段的錯亂規則（短版，地圖用）。 */
+const JOB_PSYCHO_SHORT: Record<ReturnType<typeof neuralStage>, string> = { stable: '', alert: '硬撐的壓力加重', critical: '硬撐後要擲錯亂骰', lost: '開場與每個場面先擲錯亂骰，可能中斷並致命' }
+
 /** 地圖下方的「下一步」：每個能去的節點是什麼（委託的方向、難度、報酬、要不要打），點了就前往。 */
 function NextList({ game, nodes }: { game: G; nodes: MapNode[] }) {
   const { g, act } = game
   const c = g.character
-  const psycho = psychoOdds(c).total
   return (
     <Panel innerClass="p-3 space-y-2">
       <div className="text-[15px] font-bold text-heading">下一步可以去</div>
@@ -211,7 +213,7 @@ function NextList({ game, nodes }: { game: G; nodes: MapNode[] }) {
           ? NODE_HINT[n.type as keyof typeof NODE_HINT]
           : [
               `「${job.name}」¢${jobReward(job, perkReward(c, job.direction))}`,
-              n.type === 'elite' ? '⚔ 硬仗＋可能致命的抉擇・打贏一定掉寶' : `${BEATS[job.direction].length} 個場面・第一場擲 ${Math.max(0, poolSize(jobPool(c, job, BEATS[job.direction][0].attr)))} 顆${job.direction === 'force' ? '・最後一定要打' : ''}`,
+              n.type === 'elite' ? '⚔ 硬仗＋可能致命的抉擇・撐過去一定掉寶' : `${BEATS[job.direction].length} 個場面・第一場擲 ${Math.max(0, poolSize(jobPool(c, job, BEATS[job.direction][0].attr)))} 顆${job.direction === 'force' ? '・最後一定要打' : ''}`,
             ].join('・')
         const mission = n.type === 'job' || n.type === 'elite' || n.type === 'story' || n.type === 'boss'
         return (
@@ -221,7 +223,7 @@ function NextList({ game, nodes }: { game: G; nodes: MapNode[] }) {
               <div className="min-w-0 flex-1">
                 <div className="font-bold text-fg-list">{head}</div>
                 <div className="text-[13px] text-muted">{sub}</div>
-                {mission && psycho > 0 && <div className="text-[13px] text-red">神經錯亂 {pct(psycho)}</div>}
+                {mission && neuralStage(marginOf(c)) !== 'stable' && <div className="text-[13px] text-red">{`神經${NEURAL_STAGE_LABEL[neuralStage(marginOf(c))]}：${JOB_PSYCHO_SHORT[neuralStage(marginOf(c))]}`}</div>}
               </div>
             </div>
           </button>

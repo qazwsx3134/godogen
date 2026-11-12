@@ -1,4 +1,4 @@
-// 事件節點：一段短文字加上 2～3 個選項。有 chance 的選項用節點自己的 seed 擲一次（重整不重抽）。
+// 事件節點：一段短文字加上 2～3 個選項。有 check 的選項擲一把骰池（用節點自己的 seed，重整不重抽）。
 // 每則至少有一個不花錢、不要求屬性的選項，不會卡住。
 import type { Attr } from '../rules/core'
 
@@ -23,8 +23,10 @@ export interface EventOption {
   fame?: number
   /** 要先付的信用點（不夠就不能選）。 */
   cost?: number
-  /** 成功機率；沒寫＝一定成功。 */
-  chance?: number
+  /** 要擲骰：attr＝看這個屬性（骰數＝屬性骰數 −1，臨場發揮），沒有 attr＝純靠運氣、固定擲 dice 顆。沒寫＝一定成功。 */
+  check?: { attr?: Attr; dice?: number }
+  /** 擲出 4～5（成功但付代價）時另外吃的小代價；沒寫就是神經壓力 +6。 */
+  toll?: Effects
   win: Effects
   lose?: Effects
 }
@@ -65,8 +67,8 @@ export const EVENTS: CityEvent[] = [
     title: '地下拳賽',
     body: '停車場最底層圍了一圈人，中間的鐵籠裡正缺一個對手。莊家朝你招手：「打一場 300，輸了自己去找醫生。」',
     options: [
-      { id: 'fight', label: '下場打', chance: 0.55, win: { text: '你把對手的義眼打飛了出去。觀眾在吼你的名字。', credits: 300, fame: 15 }, lose: { text: '你被打得撞上鐵籠，最後是被人拖出去的。', injury: 22 } },
-      { id: 'bet', label: '押 100 在看起來比較狠的那個', cost: 100, chance: 0.5, win: { text: '你押對了。', credits: 250 }, lose: { text: '你押的那個第二回合就倒了。' } },
+      { id: 'fight', label: '下場打', check: { attr: 'body' }, win: { text: '你把對手的義眼打飛了出去。觀眾在吼你的名字。', credits: 300, fame: 15 }, lose: { text: '你被打得撞上鐵籠，最後是被人拖出去的。', injury: 22 } },
+      { id: 'bet', label: '押 100 在看起來比較狠的那個', cost: 100, check: { dice: 1 }, toll: { text: '莊家抽了一成。', credits: -25 }, win: { text: '你押對了。', credits: 250 }, lose: { text: '你押的那個第二回合就倒了。' } },
       { id: 'name', label: '【亮出名號】讓莊家看清楚是誰來了', fame: 3, win: { text: '莊家認出你，臉色一變，塞了一疊晶片給你：「你站在籠邊就好，別下場，讓他們知道今晚誰在看。」', credits: 200, fame: 5 } },
       leave('你沒興趣看別人流血。'),
     ],
@@ -77,7 +79,7 @@ export const EVENTS: CityEvent[] = [
     body: '荒井會管的一排販賣機，有一台的面板鬆了，露出裡面的維修埠。',
     options: [
       { id: 'hack', label: '接上維修埠，讓它吐錢', needs: { attr: 'int', min: 6 }, win: { text: '整排販賣機同時吐出零錢，你在荒井會的人趕到前就走了。', credits: 260, xp: 10 } },
-      { id: 'kick', label: '用力踹', chance: 0.4, win: { text: '它吐出了一把硬幣。', credits: 120 }, lose: { text: '警報響了。荒井會的人記下了你的臉。', heat: 1 } },
+      { id: 'kick', label: '用力踹', check: { attr: 'body' }, win: { text: '它吐出了一把硬幣。', credits: 120 }, lose: { text: '警報響了。荒井會的人記下了你的臉。', heat: 1 } },
       leave('你不想惹荒井會。'),
     ],
   },
@@ -87,8 +89,8 @@ export const EVENTS: CityEvent[] = [
     body: '靖國通被 MPD 的臨檢站封住了，每個人都要掃描身分。你身上的東西經不起掃描。',
     options: [
       { id: 'bribe', label: '塞 200 的「罰款」給巡警', cost: 200, win: { text: '巡警收下了，順手把你的紀錄刪了一筆。', heat: -1 } },
-      { id: 'name', label: '【亮出名號】直接走到巡警面前，讓他掃你的臉', fame: 3, chance: 0.6, win: { text: '巡警看了一眼螢幕，手指停了兩秒，然後揮手讓你過去。他不想今晚加班。', heat: -1 }, lose: { text: '巡警看到螢幕上的名字，反而按下了通報鍵。你的臉現在在每一台 MPD 的終端上。', heat: 2 } },
-      { id: 'run', label: '趁亂衝過去', chance: 0.6, win: { text: '你衝過去了，沒有人追上來。' }, lose: { text: '電擊槍打中了你的背，你還是逃掉了，但 MPD 有了你的影像。', injury: 15, heat: 1 } },
+      { id: 'name', label: '【亮出名號】直接走到巡警面前，讓他掃你的臉', fame: 3, check: { attr: 'cool' }, win: { text: '巡警看了一眼螢幕，手指停了兩秒，然後揮手讓你過去。他不想今晚加班。', heat: -1 }, lose: { text: '巡警看到螢幕上的名字，反而按下了通報鍵。你的臉現在在每一台 MPD 的終端上。', heat: 2 } },
+      { id: 'run', label: '趁亂衝過去', check: { attr: 'reflex' }, win: { text: '你衝過去了，沒有人追上來。' }, lose: { text: '電擊槍打中了你的背，你還是逃掉了，但 MPD 有了你的影像。', injury: 15, heat: 1 } },
       { id: 'detour', label: '繞遠路', win: { text: '你繞了一大圈，雨一直沒停，心情很差。', stress: 6 } },
     ],
   },
@@ -106,7 +108,7 @@ export const EVENTS: CityEvent[] = [
     title: '試驗針劑',
     body: '一個沒有執照的醫生攔住你：「新配方，免費。幫我記錄副作用就好。」針筒裡的液體在發光。',
     options: [
-      { id: 'take', label: '打一針', chance: 0.6, win: { text: '傷口在幾分鐘內就收口了，腦子也清楚得可怕。', injury: -30, xp: 20 }, lose: { text: '你的神經整夜都在尖叫。', stress: 22 } },
+      { id: 'take', label: '打一針', check: { attr: 'body' }, win: { text: '傷口在幾分鐘內就收口了，腦子也清楚得可怕。', injury: -30, xp: 20 }, lose: { text: '你的神經整夜都在尖叫。', stress: 22 } },
       leave('你沒那麼想當白老鼠。'),
     ],
   },
@@ -135,7 +137,7 @@ export const EVENTS: CityEvent[] = [
     title: '被丟下的武裝醫療箱',
     body: '一台武裝醫療隊的飛行器剛從這裡起飛，地上留著一個沒關好的箱子。箱子上有防盜鎖，指示燈在閃。',
     options: [
-      { id: 'open', label: '撬開它', chance: 0.5, win: { text: '裡面有一張還沒啟用的救命保單。你把它塞進口袋。', lifeline: 1 }, lose: { text: '防盜鎖噴出電流，你的手麻了半小時。', injury: 12 } },
+      { id: 'open', label: '撬開它', check: { attr: 'tech' }, win: { text: '裡面有一張還沒啟用的救命保單。你把它塞進口袋。', lifeline: 1 }, lose: { text: '防盜鎖噴出電流，你的手麻了半小時。', injury: 12 } },
       leave('跟武裝醫療隊搶東西，太蠢了。'),
     ],
   },
@@ -158,7 +160,7 @@ export const WANGAN_EVENTS: CityEvent[] = [
     title: '碼頭走私客的牌局',
     body: '貨運碼頭的貨櫃屋裡，四個走私客在打牌，桌上堆著信用晶片。「缺一個人，最低注 200。」',
     options: [
-      { id: 'bet', label: '坐下來玩一把', cost: 200, chance: 0.45, win: { text: '你贏了。他們看你的眼神變了。', credits: 520 }, lose: { text: '你輸得很乾淨。' } },
+      { id: 'bet', label: '坐下來玩一把', cost: 200, check: { dice: 1 }, toll: { text: '桌邊的人要你請一輪。', credits: -60 }, win: { text: '你贏了。他們看你的眼神變了。', credits: 520 }, lose: { text: '你輸得很乾淨。' } },
       { id: 'cheat', label: '用義手換牌（反應要夠快）', needs: { attr: 'reflex', min: 7 }, win: { text: '沒有人看見你的手動過。你帶著一疊晶片走出貨櫃屋。', credits: 420, stress: 3 } },
       { id: 'name', label: '【亮出名號】把代號寫在籌碼上推到桌子中間', fame: 6, win: { text: '四個人互看了一眼，把桌上的晶片分了一份給你：「新宿來的那個？這局算你的，下次換個地方坐。」', credits: 350 } },
       leave('你不跟走私客賭錢。'),
@@ -191,7 +193,7 @@ export const WANGAN_EVENTS: CityEvent[] = [
     body: '一個剛從海底隧道浮上來的潛水夫攔住你：「我撿到一張救命保單，還沒登記。300 賣你。」',
     options: [
       { id: 'buy', label: '付 300 買下', cost: 300, win: { text: '保單是真的。', lifeline: 1 } },
-      { id: 'snatch', label: '趁他不注意直接搶走', chance: 0.5, win: { text: '你搶到保單就跑，他在後面罵了你一整條街。', lifeline: 1, heat: 1 }, lose: { text: '他的潛水刀比你想的快。', injury: 16 } },
+      { id: 'snatch', label: '趁他不注意直接搶走', check: { attr: 'reflex' }, win: { text: '你搶到保單就跑，他在後面罵了你一整條街。', lifeline: 1, heat: 1 }, lose: { text: '他的潛水刀比你想的快。', injury: 16 } },
       leave('撿來的保單，誰知道是誰的。'),
     ],
   },
@@ -201,8 +203,8 @@ export const WANGAN_EVENTS: CityEvent[] = [
     body: '海岸高架上，港務部的武裝臨檢攔下了每一台車和每一個人。輪到你了。',
     options: [
       { id: 'bribe', label: '塞 300 給檢查員', cost: 300, win: { text: '檢查員收下錢，把你的資料「漏」掉了。', heat: -1 } },
-      { id: 'name', label: '【亮出名號】把你的代號報給檢查員', fame: 6, chance: 0.6, win: { text: '檢查員的上司親自走過來，客氣地請你先走。港務部最近不想跟你這種人有瓜葛。', heat: -1 }, lose: { text: '檢查員笑了：「就是你？」三台無人機同時對準了你。你跑掉了，但港務部有了你的完整檔案。', heat: 2, injury: 10 } },
-      { id: 'run', label: '跳下高架', chance: 0.5, win: { text: '你落在下面的貨櫃頂上，一路跑進堆場。' }, lose: { text: '你摔在貨櫃的邊角上，港務部的無人機記下了你的臉。', injury: 18, heat: 1 } },
+      { id: 'name', label: '【亮出名號】把你的代號報給檢查員', fame: 6, check: { attr: 'cool' }, win: { text: '檢查員的上司親自走過來，客氣地請你先走。港務部最近不想跟你這種人有瓜葛。', heat: -1 }, lose: { text: '檢查員笑了：「就是你？」三台無人機同時對準了你。你跑掉了，但港務部有了你的完整檔案。', heat: 2, injury: 10 } },
+      { id: 'run', label: '跳下高架', check: { attr: 'reflex' }, win: { text: '你落在下面的貨櫃頂上，一路跑進堆場。' }, lose: { text: '你摔在貨櫃的邊角上，港務部的無人機記下了你的臉。', injury: 18, heat: 1 } },
       { id: 'wait', label: '乖乖排隊，等他們查完', win: { text: '你排了一個小時，雨一直沒停。', stress: 8 } },
     ],
   },

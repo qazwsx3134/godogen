@@ -18,15 +18,18 @@ import {
   perkOptions,
   styleWeight,
   perkReward,
-  dangerOdds,
-  lethalChance,
-  resolveDanger,
+  PREPARED_DICE,
+  lethalPool,
+  lethalWound,
+  riskDice,
   resolveFight,
-  rng,
   STYLES,
   tacticsFor,
 } from './core'
 import { PERKS, PERK_IDS } from './perks'
+import { POOL_MAX, SEVERE_INJURY, applyCost, attrDice, costInjury, jobPool, poolSize, rollPool } from './core'
+import { BEATS } from '../content/beats'
+import { ITEMS, makeItem } from '../content/items'
 
 const job: JobDef = {
   id: 'test-1',
@@ -79,45 +82,23 @@ describe('neural', () => {
   })
 })
 
-describe('resolveDanger: the lifeline saves you once', () => {
-  const opt = { id: 'go', label: '冒險', lethal: true, lethalBase: 0.95, survivalWindowMin: 3 }
-  it('non-lethal option is always safe', () => {
-    expect(resolveDanger(char(), { ...opt, lethal: false }, 1).kind).toBe('safe')
+describe('lethal check (DICE-POOL-SPEC §5): dice, not percentages', () => {
+  const spec = { attr: 'cool' as const, direction: 'stealth' as const, foe: 'story' as const, risk: 0.18, prepared: false }
+  it('builds the pool from the attribute, gear, the option, the foe and severe injury', () => {
+    expect(lethalPool(char(), spec)).toEqual([{ label: '沉著 3', n: 2 }])
+    expect(lethalPool(char(), { ...spec, risk: 0.3 }).map((p) => p.n)).toEqual([2, -1])
+    expect(lethalPool(char(), { ...spec, risk: 0.06 }).map((p) => p.n)).toEqual([2, 1])
+    // 器材、屬性選項：+2，不再另算險度
+    expect(lethalPool(char(), { ...spec, risk: 0.3, prepared: true }).map((p) => p.n)).toEqual([2, PREPARED_DICE])
+    expect(lethalPool(char({ injury: 70 }), { ...spec, foe: 'elite' }).map((p) => p.n)).toEqual([2, -1, -1])
+    expect(lethalPool(char(), { ...spec, scenes: -2 }).map((p) => p.n)).toEqual([2, -2])
+    expect([0.28, 0.2, 0.1].map(riskDice)).toEqual([-1, 0, 1])
   })
-  it('dies without a lifeline, is rescued with one', () => {
-    const c = char({ injury: 100 })
-    expect(resolveDanger(c, opt, 7).kind).toBe('dead')
-    expect(resolveDanger({ ...c, lifelines: 1 }, opt, 7).kind).toBe('rescued')
-  })
-  it('system fault turns death into a free rescue', () => {
-    expect(resolveDanger(char({ injury: 100 }), opt, 7, true).kind).toBe('rescued_system')
-  })
-  it('same seed gives the same outcome', () => {
-    const c = char({ injury: 30 })
-    expect(resolveDanger(c, { ...opt, lethalBase: 0.4 }, 42)).toEqual(resolveDanger(c, { ...opt, lethalBase: 0.4 }, 42))
-  })
-})
-
-describe('lethalChance: what the screen shows is what resolveDanger rolls against', () => {
-  const opt = { id: 'go', label: '冒險', lethal: true, lethalBase: 0.2, survivalWindowMin: 3 }
-  it('adds injury/4 and the neural penalty, capped at 95%', () => {
-    expect(lethalChance(char(), opt)).toBeCloseTo(0.2)
-    expect(lethalChance(char({ injury: 40 }), opt)).toBeCloseTo(0.3)
-    expect(lethalChance(char({ stress: 70 }), opt)).toBeCloseTo(0.25) // 餘裕 20：警戒
-    expect(lethalChance(char({ stress: 80 }), opt)).toBeCloseTo(0.32) // 餘裕 10：過載
-    expect(lethalChance(char({ injury: 100 }), { ...opt, lethalBase: 0.9 })).toBe(0.95)
-    expect(lethalChance(char(), { ...opt, lethal: false })).toBe(0)
-  })
-  it('the roll lands in the shown bands: below death dies, then maimed, then survived', () => {
-    for (const over of [{}, { injury: 40 }, { stress: 70 }, { injury: 60, stress: 80 }]) {
-      const c = char(over)
-      const { death, maim } = dangerOdds(c, opt)
-      expect(death + maim).toBeCloseTo(lethalChance(c, opt))
-      for (let seed = 1; seed <= 200; seed++) {
-        const r = rng(seed)()
-        expect(resolveDanger(c, opt, seed).kind).toBe(r < death ? 'dead' : r < death + maim ? 'maimed' : 'survived')
-      }
-    }
+  it('a lethal wound kills without a lifeline, uses it when there is one, and a system fault rescues for free', () => {
+    expect(lethalWound(char(), [2, 3]).kind).toBe('dead')
+    expect(lethalWound(char({ lifelines: 1 }), [2, 3]).kind).toBe('rescued')
+    expect(lethalWound(char(), [2, 3], true).kind).toBe('rescued_system')
+    expect(lethalWound(char(), [2, 3]).reason).toMatch(/擲出 2、3/)
   })
 })
 
@@ -301,5 +282,87 @@ describe('四個流派', () => {
     const stealth = (kind: string) => tacticsFor(char({ equipment: [makeItem(kind, 1)] })).find((t) => t.id === 'stealth')!.locked
     expect(stealth('dustCloak')).toBeUndefined()
     expect(stealth('roadMed')).toBe('需要光學迷彩義體')
+  })
+})
+
+describe('dice pool (DICE-POOL-SPEC §2)', () => {
+  it('grades by the highest die: two 6s crit, 6 clean, 4-5 cost, 1-3 fail; every result shows up', () => {
+    const seen = { crit: 0, clean: 0, cost: 0, fail: 0 }
+    for (let s = 0; s < 2000; s++) {
+      const r = rollPool(3, s)
+      expect(r.dice).toHaveLength(3)
+      expect(r.best).toBe(Math.max(...r.dice))
+      const sixes = r.dice.filter((d) => d === 6).length
+      expect(r.result).toBe(sixes >= 2 ? 'crit' : r.best === 6 ? 'clean' : r.best >= 4 ? 'cost' : 'fail')
+      seen[r.result]++
+    }
+    for (const k of ['crit', 'clean', 'cost', 'fail'] as const) expect(seen[k]).toBeGreaterThan(0)
+  })
+
+  it('with no dice it rolls two and keeps the lower, and never crits', () => {
+    for (let s = 0; s < 500; s++)
+      for (const n of [0, -1, -3]) {
+        const r = rollPool(n, s)
+        expect(r.dice).toHaveLength(2)
+        expect(r.best).toBe(Math.min(...r.dice))
+        expect(r.result).not.toBe('crit')
+      }
+  })
+
+  it('is capped at POOL_MAX, fixed by the seed, and an extra die keeps the dice already rolled', () => {
+    expect(rollPool(9, 7).dice).toHaveLength(POOL_MAX)
+    for (let s = 0; s < 200; s++) {
+      expect(rollPool(4, s)).toEqual(rollPool(4, s))
+      expect(rollPool(4, s).dice).toEqual(rollPool(3, s).dice.concat(rollPool(4, s).dice[3]))
+    }
+  })
+
+  it('more dice never make the best die lower', () => {
+    for (let s = 0; s < 500; s++) expect(rollPool(4, s).best).toBeGreaterThanOrEqual(rollPool(2, s).best)
+  })
+
+  it('turns attributes into dice: 3 -> 2, 5 -> 3, 7 -> 4, 9 and up -> 5', () => {
+    expect([1, 3, 4, 5, 7, 9, 12].map(attrDice)).toEqual([1, 2, 2, 3, 4, 5, 5])
+  })
+
+  it('builds the job pool from the attribute, gear in that direction, tier 3+ and severe injury', () => {
+    const c = char({ attrs: { tech: 3, reflex: 3, body: 3, int: 3, cool: 5 } })
+    expect(jobPool(c, job, 'cool')).toEqual([{ label: '沉著 5', n: 3 }])
+    const hard = jobPool(char({ injury: SEVERE_INJURY }), { ...job, tier: 3 }, 'tech')
+    expect(hard.map((p) => p.n)).toEqual([2, -1, -1])
+    expect(poolSize(hard)).toBe(0)
+    expect(poolSize(hard, 2)).toBe(2)
+    // 裝備與卡牌：該方向加成 ≥5% +1 顆、≥20% +2 顆（每件裝備、兩件疊起來都檢查）
+    const kinds = Object.keys(ITEMS)
+    const levels = new Set<number>()
+    for (const [i, kind] of kinds.entries()) {
+      const g = char({ equipment: [makeItem(kind, 1), makeItem(kinds[(i + 7) % kinds.length], 2)] })
+      const b = dirBonus(g, job.direction)
+      const gear = jobPool(g, job, 'cool').find((p) => p.label.includes('裝備'))
+      expect(gear?.n ?? 0).toBe(b >= 0.2 ? 2 : b >= 0.05 ? 1 : 0)
+      levels.add(gear?.n ?? 0)
+    }
+    expect([...levels].sort()).toEqual([0, 1])
+    // 一件裝備最多 +10%：要 +2 顆得堆好幾件或加上卡牌
+    const stacked = char({ equipment: kinds.map((k) => makeItem(k, 1)) })
+    expect(dirBonus(stacked, job.direction)).toBeGreaterThanOrEqual(0.2)
+    expect(jobPool(stacked, job, 'cool').find((p) => p.label.includes('裝備'))?.n).toBe(2)
+  })
+
+  it('a cost hurts once; a failure hurts twice, and a full wanted level is not raised further', () => {
+    const c = char({ heat: 4 })
+    applyCost(c, job, 'injury')
+    expect(c.injury).toBe(costInjury(job))
+    applyCost(c, job, 'injury', true)
+    expect(c.injury).toBe(costInjury(job) * 3)
+    applyCost(c, job, 'stress', true)
+    expect(c.stress).toBe(16)
+    applyCost(c, job, 'heat')
+    applyCost(c, job, 'heat')
+    expect(c.heat).toBe(5)
+  })
+
+  it('no scene lets a failure cost only pay (a failure must hurt)', () => {
+    for (const beats of Object.values(BEATS)) for (const b of beats) expect(b.fail).not.toBe('pay')
   })
 })

@@ -43,8 +43,6 @@ export interface CaseOption extends DangerOption {
   approach?: string
   /** 需要的裝備（欄位＋方向，抵押中就不能選）或屬性門檻（每條路線都看得到）。 */
   needs?: { slot: Slot; direction: Direction; label: string } | { attr: Attr; min: number }
-  /** 不會死、而且算完成委託（屬性選項）。 */
-  wins?: boolean
   /** 選了就要打一場：打贏＝生還；打輸才擲致命判定（用 lethalBase）。 */
   fight?: Enemy
 }
@@ -75,7 +73,8 @@ export interface StoryCase {
   approachReplies?: Record<string, Reply>
   replies: Reply[]
   approaches: Approach[]
-  danger: { title: string; body: string; options: CaseOption[] }
+  /** threat：致命判定失敗時逼近、要打一場的敵人；沒寫就用「打」選項的對手。 */
+  danger: { title: string; body: string; options: CaseOption[]; threat?: Enemy }
   /** 被武裝醫療隊救出時，紀錄裡補的一句。 */
   lossText: string
   /** 活著完成（survived）時，依機率拿到的物品（種類、機率）。 */
@@ -126,6 +125,7 @@ export const TEST_CASE: StoryCase = {
   danger: {
     title: 'MPD 無人機封鎖了出口',
     body: '兩台 MPD 巡邏無人機停在唯一的出口，探照燈正往你的方向掃過來。你手上有箱子，身上的傷還在流血。',
+    threat: { name: 'MPD 巡邏無人機', hp: 45, atk: 8, hit: 0.5, ice: 3, sense: 4 },
     options: [
       { id: 'drop', label: '丟下箱子，從排水管撤離', lethal: false, lethalBase: 0, survivalWindowMin: 0, reward: 0, text: '你丟下箱子撤離。委託失敗，但你活著。' },
       { id: 'run', label: '抱著箱子衝過探照燈', lethal: true, lethalBase: 0.35, survivalWindowMin: 4, reward: 1500, heat: 1, text: '你抱著箱子衝出隧道。' },
@@ -246,11 +246,10 @@ export const CASE_01: StoryCase = {
       {
         id: 'stare',
         needs: { attr: 'cool', min: 6 },
-        wins: true,
         label: '不動聲色地盯著領頭的保全：「神坂付你們的錢，夠買你們三條命嗎？」',
-        lethal: false,
-        lethalBase: 0,
-        survivalWindowMin: 0,
+        lethal: true,
+        lethalBase: 0.06,
+        survivalWindowMin: 3,
         reward: 600,
         text: '領頭的保全和你對看了五秒，先移開了視線。「……我們什麼都沒看到。」他們退回月台另一頭。你扶起女孩，搭上了末班車。',
       },
@@ -418,11 +417,10 @@ export const CASE_02: StoryCase = {
       {
         id: 'lockdown',
         needs: { attr: 'tech', min: 6 },
-        wins: true,
         label: '拆開病歷庫的門禁面板，把回收小組鎖在走廊上',
-        lethal: false,
-        lethalBase: 0,
-        survivalWindowMin: 0,
+        lethal: true,
+        lethalBase: 0.06,
+        survivalWindowMin: 3,
         reward: 900,
         heal: true,
         text: '你剪斷兩條線、接上第三條，防爆門在回收小組面前落下。他們在門外敲了九十秒，你在門內等完了進度條，從另一側的貨梯離開。白蛇拿到完整的 K-0413：「你的手很穩。這種人我會記得。」',
@@ -493,3 +491,6 @@ export function caseBody(sc: StoryCase, done: Record<string, CaseRecord>): strin
 export function caseUnlocked(sc: StoryCase, done: Record<string, CaseRecord>): boolean {
   return !sc.requires || !!done[sc.requires]
 }
+
+/** 致命判定失敗時逼近的敵人（節點上有人在場才有）：沒寫 threat 就用危險節點「打」選項的對手。 */
+export const caseThreat = (sc: StoryCase): Enemy | undefined => sc.danger.threat ?? sc.danger.options.find((o) => o.fight)?.fight

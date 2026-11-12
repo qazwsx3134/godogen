@@ -22,6 +22,7 @@
 - **`pnpm install` 失敗、叫你跑 `pnpm approve-builds`**（2026-11-06，mortal-city）：pnpm 11 沒核准相依套件的安裝腳本（例如 esbuild）就讓安裝失敗，並寫一個「set this to true or false」的 `pnpm-workspace.yaml` → 在該檔寫 `allowBuilds:` 下 `esbuild: true` 再裝；先確認專案原本用 npm 還是 pnpm，別讓兩份 lockfile 並存。（[mortal-city](mortal-city/PROGRESS.md)）
 
 - **改了程式，瀏覽器卻一直跑舊版（修好的錯誤照樣出現）**（2026-11-05，mortal-city）→ 兩個原因都遇到：WSL 上專案在 `/mnt/d`（Windows 磁碟），vite 的檔案監看收不到變更、不會重新編譯；另外前一次背景啟動的 vite 沒關、新的加 `--strictPort` 啟動失敗卻沒注意。改完先 `curl http://127.0.0.1:<port>/src/<檔案>` 確認送出的是新碼，不是就重啟（或在 vite 設 `server.watch.usePolling`）；`ss -ltnp | grep <port>` 看是誰在聽，停服務用查到的 PID。
+- **macOS 上新建 `Reveal.tsx` 蓋掉了既有的 `reveal.tsx`**（2026-11-12，mortal-city）：檔案系統不分大小寫，`cat >`／Write 新檔名只差大小寫時會直接覆寫舊檔，型別檢查才報「only in casing」→ 新增檔案前先 `ls` 同目錄確認沒有只差大小寫的檔名；蓋掉了就 `git checkout -- <舊檔>` 還原。
 
 ## Git
 
@@ -54,6 +55,7 @@
 - **用瀏覽器自動化測網頁時動畫、捲動「沒反應」**（2026-11-06，mortal-city）：測試分頁是隱藏的，`requestAnimationFrame` 整個暫停、`scrollIntoView({behavior:'smooth'})` 完全不捲、`setTimeout`／`setInterval` 被降成每秒一次（連測試腳本裡的等待也是）→ 遊戲計時用計時器加實際經過時間，不靠 rAF；平滑捲動只在 `document.visibilityState === 'visible'` 時用；長按之類的時間判定要在前景分頁手動確認。（[mortal-city](mortal-city/PROGRESS.md)）
 - **刪掉遊戲裡的舊故事，幾十支測試連環失敗**（2026-11-08，debt-commission）：測試直接讀 `res://data/*_story.json` 與 `data/stories.json` 當夾具，故事一搬走就壞；`story_src` 搬家後建置出的 `generated_from` 也跟著變 → 舊故事連同建置來源搬進 `tests/fixtures/`，用建置工具重建夾具，測試以 `stories_path`／`packs_root` 指向夾具登記，不依賴正式清單；範例作品另放一個 packs 根目錄，別混進別的作品夾具。
 - **headless 測試推觸控事件，左右半邊判斷全錯、手指被分到錯的區域**（2026-11-10，walker-tps）→ `root.push_input(e)` 預設把座標當視窗座標，再依 stretch 換算；測試要用 `root.push_input(e, true)`（viewport 座標，和 test_kit 的滑鼠輔助一致）。（[walker-tps](walker-tps/README.md#已知的坑)）
+- **網頁冒煙測試偶爾在 `page.screenshot` 逾時 30 秒、卡在「waiting for fonts to load」**（2026-11-12，mortal-city）→ 頁面用 Google Fonts 時是網路偶發，重跑就過；判定失敗前先看是不是這個錯誤，要穩定可以把字型放進 repo 或截圖時傳 `timeout` 加長。（[mortal-city PROGRESS](mortal-city/PROGRESS.md)）
 
 ## Scene、UI 與 Godot API
 

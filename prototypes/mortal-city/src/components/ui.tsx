@@ -87,6 +87,7 @@ export function ActionButton({
   reason,
   className = '',
   type = 'button',
+  testId,
 }: {
   children: ReactNode
   onClick?: () => void
@@ -95,6 +96,7 @@ export function ActionButton({
   reason?: string
   className?: string
   type?: 'button' | 'submit'
+  testId?: string
 }) {
   const edge =
     tone === 'primary' ? 'cut-strong' : tone === 'danger' ? 'cut-red' : tone === 'ghost' ? '' : ''
@@ -109,6 +111,7 @@ export function ActionButton({
     <div className={className}>
       <button
         type={type}
+        data-testid={testId}
         onClick={onClick}
         disabled={disabled}
         className={`cut cut-sm block w-full ${edge} ${disabled ? 'opacity-45' : 'active:brightness-125'}`}

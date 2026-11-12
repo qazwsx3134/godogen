@@ -155,3 +155,6 @@ export const BEATS: Record<Direction, Beat[]> = {
     },
   ],
 }
+
+/** 劇情委託的做法：該路線的前兩個場面（文字暫時借用委託的，待作者改寫成每件案子自己的）。 */
+export const storyBeats = (d: Direction): Beat[] => BEATS[d].slice(0, 2)

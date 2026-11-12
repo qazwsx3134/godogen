@@ -917,3 +917,40 @@ body {
   background: var(--color-cyan);
   animation: live-blink 0.7s steps(1) infinite;
 }
+
+/* ---------- 骰子（components/dice.tsx） ---------- */
+.die {
+  flex-shrink: 0;
+  transition: filter 0.2s, opacity 0.2s;
+}
+.die-lit {
+  filter: drop-shadow(0 0 3px var(--die)) drop-shadow(0 0 9px var(--die));
+  animation: die-land 0.35s ease-out;
+}
+.die-rolling {
+  animation: die-shake 0.18s steps(2) infinite;
+  filter: drop-shadow(-2px 0 0 #ff5cf0) drop-shadow(2px 0 0 #38f3fa);
+}
+@keyframes die-shake {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(-2px, 1px) rotate(-9deg); }
+  50% { transform: translate(2px, -2px) rotate(7deg) skewX(6deg); }
+  75% { transform: translate(-1px, -1px) rotate(-4deg); }
+  100% { transform: translate(1px, 2px) rotate(10deg); }
+}
+@keyframes die-land {
+  0% { transform: scale(1.35); }
+  60% { transform: scale(0.92); }
+  100% { transform: scale(1); }
+}
+.dice-after {
+  animation: fx-fade-in 0.3s ease-out;
+}
+@keyframes fx-fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+/* 致命判定揭曉：紅色掃描線 */
+.reveal-scan {
+  background-image: repeating-linear-gradient(0deg, rgb(237 82 88 / 0.07) 0 2px, transparent 2px 4px);
+}
