@@ -163,6 +163,7 @@
 - **Codex 幾乎每個指令都要人工核准，使用者不在時整批停住** → 長批次前請使用者用 `/approvals` 放寬，或把產出寫在 Codex 的工作區最後一次搬。（[character-sprite-forge](godot-kit/skills/character-sprite-forge/SKILL.md#坑)）
 - **不要假設上一個 agent 開的伺服器還活著** → 先確認再用。（[dreamling-idle/PROGRESS.md](dreamling-idle/PROGRESS.md)）
 - **派工單的壞味道**：把使用者之後會改的東西寫死在 agent 記憶裡、「故意弄壞一次」講得不具體、審查規則到第二階段才講 → 見 agent-workflow。（[agent-workflow](godot-kit/skills/godot-prototype-to-itch/references/agent-workflow.md#教訓派工單的壞味道)）
+- **`herdr agent start --kind claude` 逾時，pane 裡顯示 `zsh: command not found: claude`**（2026-11-13，mortal-city）：主 session 的 claude 在 `~/.claude/local/`，新開 pane 的 shell PATH 沒有它 → 啟動前先 `herdr pane run <pane> 'export PATH="$HOME/.claude/local:$PATH"'`，再 `agent start`。
 
 ## 各原型專屬
 

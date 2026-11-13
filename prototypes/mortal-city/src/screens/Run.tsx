@@ -47,7 +47,10 @@ export function RunScreen({ game }: { game: G }) {
   const label = !c.alive ? '空房間' : run.phase === 'safehouse' ? '安全屋' : here ? `${run.district.name}・${NODE_LABEL[here.type]}` : `${run.district.name}・出發前`
   return (
     <div className="space-y-3">
-      <CityStrip mode={mode} bg={bg} story={story} district={run.district.id} look={c.look} safehouse={safehouse} label={label} sub={here ? `第 ${here.layer + 1} 層` : undefined} />
+      {/* 螢幕夠高時像素圖固定在捲動區頂端，文字從下面捲過去，不會被捲到跑馬燈底下 */}
+      <div className="strip-sticky">
+        <CityStrip mode={mode} bg={bg} story={story} district={run.district.id} look={c.look} safehouse={safehouse} label={label} sub={here ? `第 ${here.layer + 1} 層` : undefined} />
+      </div>
       {run.phase === 'over' ? <EndScreen game={game} /> : run.phase === 'safehouse' ? <Safehouse game={game} /> : run.node ? <NodeView game={game} /> : <MapView game={game} />}
     </div>
   )

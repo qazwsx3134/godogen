@@ -40,6 +40,12 @@ export default function App() {
   useEffect(() => {
     mainRef.current?.scrollTo(0, 0)
   }, [route])
+  // 進出節點也捲回頂端：不然會停在地圖捲過的位置，節點的像素圖整張被捲到跑馬燈底下
+  // （回到地圖時，地圖自己會在下一輪把能去的節點捲到中間）
+  const nodeKey = g.run.node?.nodeId ?? null
+  useEffect(() => {
+    mainRef.current?.scrollTo(0, 0)
+  }, [nodeKey])
   // 音效：開關、進節點的連線音
   const [sound, setSound] = useState(sfxEnabled())
   useEffect(() => onSfxChange(() => setSound(sfxEnabled())), [])

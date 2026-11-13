@@ -3,7 +3,7 @@ import { CASES, CASE_01, CASE_02, caseBody, caseReplies, optionLock } from '../c
 import { EVENTS, EVENT_BY_ID, WANGAN_EVENTS } from '../content/events'
 import { JOBS, highDanger } from '../content/data'
 import { ITEMS, SHOP_IMPLANTS, STARTER_CHOICES, STARTER_GEAR, clinicOrders, itemLock, makeItem, marketPrice } from '../content/items'
-import { type Pick, STYLES, addFame, fameEdge, approachBonus, perkTally, upgradeCost, attrLock, dirBonus, marginOf, lethalPool, poolSize, PREPARED_DICE, eventPool, fightStats, hashSeed, hackPower, perkOptions, sellValue, stealthPower, tacticsFor } from '../rules/core'
+import { type Pick, STYLES, addFame, fameEdge, approachBonus, perkTally, upgradeCost, attrLock, dirBonus, marginOf, neuralStage, CALMER, CLINIC, lethalPool, poolSize, PREPARED_DICE, eventPool, fightStats, hashSeed, hackPower, perkOptions, sellValue, stealthPower, tacticsFor } from '../rules/core'
 import { PERKS, PERK_IDS } from '../rules/perks'
 import { LAYERS, STORY_LAYER, findNode } from '../rules/map'
 import { type Action, type Game, caseLethal, eliteLethal, eventLock, initial, jobEnemy, movable, nextDistrict, nodeBusy, nodeJob, reduce } from './state'
@@ -91,6 +91,9 @@ function botAction(g: Game, style0: BotStyle): Action | null {
       if (up) return { t: 'upgradeImplant', itemId: up.id }
     }
   }
+  // 降壓（2026-11-13）：神經到臨界以下而且身上有鎮定劑就打一劑
+  const stage = neuralStage(marginOf(c))
+  if ((stage === 'critical' || stage === 'lost') && (c.calmers ?? 0) > 0) return { t: 'useCalmer' }
   if (g.run.phase === 'safehouse') return nextDistrict(g) ? { t: 'continue' } : { t: 'retire' }
   const tactic = tacticsFor(c).find((t) => !t.locked)!.id
   const n = g.run.node
@@ -132,7 +135,10 @@ function botAction(g: Game, style0: BotStyle): Action | null {
     return { t: 'eventChoose', optionId: ev.options.find((o) => !eventLock(c, o))!.id }
   }
   if (n.kind === 'market' && c.credits >= 450 && c.lifelines === 0) return { t: 'buyLifeline', tier: 'basic' }
-  if (n.kind === 'rest' && !n.used) return { t: 'rest', choice: 'heal' }
+  if (n.kind === 'market' && c.credits >= 450 + CALMER.price && (c.calmers ?? 0) < 2) return { t: 'buyCalmer' }
+  if (n.kind === 'clinic' && !n.tuned && stage !== 'stable' && c.credits >= 450 + CLINIC.tunePrice) return { t: 'tune' }
+  // 休息：壓力比傷勢急就斷線靜養
+  if (n.kind === 'rest' && !n.used) return { t: 'rest', choice: stage !== 'stable' && c.injury < 50 ? 'calm' : 'heal' }
   if (n.kind === 'story' && g.story.caseId) {
     const sc = CASES.find((s) => s.id === g.story.caseId)!
     const st = g.story
@@ -372,9 +378,9 @@ describe('jobs are played scene by scene with a dice pool (DICE-POOL-SPEC §3)',
       }
       if (res === 'fail' && !fail) {
         fail++
-        // 接入失敗：神經壓力加倍（+16），記一次失手，往下一個場面
+        // 接入失敗：神經壓力三倍再加慌張（8×3＋4），記一次失手，往下一個場面
         expect(BEATS.hack[0].fail).toBe('stress')
-        expect(r.character.stress).toBe(g.character.stress + 16)
+        expect(r.character.stress).toBe(g.character.stress + 28)
         expect(node(r).strikes).toBe(1)
         expect(node(r).beat).toBe(1)
       }
@@ -390,8 +396,8 @@ describe('jobs are played scene by scene with a dice pool (DICE-POOL-SPEC §3)',
       const r = roll(g)
       if (last(r).result !== 'fail') continue
       expect(r.character.heat).toBe(5)
-      // 最後一個場面：失敗的代價 +16，再加上結算時委託本身的壓力
-      expect(r.character.stress).toBe(g.character.stress + 16 + JOBS['hack-1'].stress)
+      // 最後一個場面：通緝滿了改付壓力（8×3＋慌張 4），再加上結算時委託本身的壓力
+      expect(r.character.stress).toBe(g.character.stress + 28 + JOBS['hack-1'].stress)
       return
     }
     throw new Error('no failure found')
@@ -756,7 +762,7 @@ describe('story cases on the map', () => {
     expect(seen.lost).toBeGreaterThan(0)
   })
 
-  it('no one comes for you in black ICE: a failed hack elite is still an immediate lethal wound', () => {
+  it('no one comes for you behind a firewall: a failed hack elite is still an immediate lethal wound', () => {
     expect(highDanger(JOBS['hack-4']).threat).toBeUndefined()
     for (let i = 0; i < 300; i++) {
       const g0 = fresh(`ice${i}`, { attrs: { ...initial(0).character.attrs, int: 1 }, lifelines: 1 })
@@ -950,6 +956,52 @@ describe('node services and three-way picks', () => {
     expect(marginOf(g.character)).toBe(100 - 25 - 30 - 60)
     expect(reduce(g, { t: 'buyImplant', kind: 'nope' })).toBe(g) // 不在這次的訂製清單（也不是常備）就不能買
     expect(psychoRules(g.character)).toMatchObject({ stage: 'lost', sceneCheck: true }) // 餘裕 −15：失控
+  })
+
+  it('the clinic only stitches real wounds (no free stress relief), and heals old wounds back into attributes', () => {
+    // 沒有傷：縫傷口不能按（以前 ¢0 可以一直降壓）
+    const calm = atNode(fresh('cl0', { stress: 40, credits: 1000 }), { kind: 'clinic', nodeId: 'cl' })
+    expect(reduce(calm, { t: 'treat' })).toBe(calm)
+    // 有傷：照價縫，順便壓力 −10；縫好之後再按就沒用
+    const hurt = reduce(atNode(fresh('cl1', { injury: 10, stress: 40, credits: 1000 }), { kind: 'clinic', nodeId: 'cl' }), { t: 'treat' })
+    expect(hurt.character).toMatchObject({ injury: 0, stress: 30, credits: 940 })
+    expect(reduce(hurt, { t: 'treat' })).toBe(hurt)
+    // 舊傷：每道 ¢500，恢復 1 點屬性；修完 scars 清空
+    const c0 = fresh('cl2').character
+    let g = atNode(fresh('cl2', { credits: 1200, attrs: { ...c0.attrs, int: 2, body: 4 }, scars: { int: 1, body: 1 } }), { kind: 'clinic', nodeId: 'cl' })
+    expect(reduce(g, { t: 'healScar', attr: 'reflex' })).toBe(g) // 沒有這個舊傷
+    g = reduce(g, { t: 'healScar', attr: 'int' })
+    expect(g.character).toMatchObject({ credits: 700, scars: { body: 1 } })
+    expect(g.character.attrs.int).toBe(3)
+    g = reduce(g, { t: 'healScar', attr: 'body' })
+    expect(g.character.attrs.body).toBe(5)
+    expect(g.character.scars).toBeUndefined()
+    const broke = atNode(fresh('cl3', { credits: 100, scars: { int: 1 } }), { kind: 'clinic', nodeId: 'cl' })
+    expect(reduce(broke, { t: 'healScar', attr: 'int' })).toBe(broke) // 錢不夠
+    expect(reduce({ ...broke, character: { ...broke.character, credits: 900 }, run: { ...broke.run, node: null } }, { t: 'healScar', attr: 'int' }).character.scars).toEqual({ int: 1 }) // 只能在神機醫
+  })
+
+  it('ways to lower neural stress: calm rest, clinic tuning once per visit, calmers bought at the market and used any time', () => {
+    // 休息：斷線靜養只降壓力（−30），不回傷、不降通緝
+    const r = reduce(atNode(fresh('st1', { stress: 50, injury: 20, heat: 2 }), { kind: 'rest', nodeId: 'r' }), { t: 'rest', choice: 'calm' })
+    expect(r.character).toMatchObject({ stress: 20, injury: 20, heat: 2 })
+    // 神經調校：¢200、−20，每次來只能一次；沒有壓力不能做
+    let g = atNode(fresh('st2', { stress: 50, credits: 1000 }), { kind: 'clinic', nodeId: 'cl' })
+    g = reduce(g, { t: 'tune' })
+    expect(g.character).toMatchObject({ stress: 30, credits: 800 })
+    expect(reduce(g, { t: 'tune' })).toBe(g)
+    const zero = atNode(fresh('st3', { credits: 1000 }), { kind: 'clinic', nodeId: 'cl' })
+    expect(reduce(zero, { t: 'tune' })).toBe(zero)
+    // 鎮定劑：黑市 ¢150，最多 3 劑；在哪裡都能用（場面擲骰前也可以）
+    let m = atNode(fresh('st4', { credits: 1000, stress: 40 }), { kind: 'market', nodeId: 'mk', stock: [] })
+    for (let i = 0; i < 4; i++) m = reduce(m, { t: 'buyCalmer' })
+    expect(m.character).toMatchObject({ calmers: 3, credits: 550 })
+    expect(reduce({ ...m, run: { ...m.run, node: null } }, { t: 'buyCalmer' }).character.calmers).toBe(3) // 只有黑市賣
+    const scene = { ...m, run: { ...m.run, node: { kind: 'job' as const, nodeId: 'j', jobId: 'hack-1', stage: 'scene' as const, beat: 0 } } }
+    const used = reduce(scene, { t: 'useCalmer' })
+    expect(used.character).toMatchObject({ calmers: 2, stress: 28 })
+    const none = { ...used, character: { ...used.character, calmers: 0 } }
+    expect(reduce(none, { t: 'useCalmer' })).toBe(none)
   })
 
   it('the clinic upgrades a worn implant: effect x1.5 then x2, +10 load each, list price x level', () => {

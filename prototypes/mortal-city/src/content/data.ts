@@ -38,11 +38,11 @@ export const JOBS: Record<string, JobDef> = Object.fromEntries(
     j({ id: 'force-3', direction: 'force', tier: 3, name: '截下港務部押運車', fixerId: 'k', reward: 480, xp: 38, stress: 4, heat: 2, injury: 18, blurb: '押運車走海岸高架，兩個押運員、一箱沒有登記的晶片。車可以留下，晶片不行。' }),
     j({ id: 'stealth-4', direction: 'stealth', tier: 4, name: '盜取原型義體', fixerId: 'mist', reward: 2200, xp: 120, stress: 9, heat: 1, injury: 22, blurb: '九頭龍重工研究所三樓的展示櫃。保全每 90 秒巡一次，櫃子有重量感應。' }),
     j({ id: 'force-4', direction: 'force', tier: 4, name: '突襲企業倉庫', fixerId: 'k', reward: 2600, xp: 120, stress: 8, heat: 2, injury: 30, blurb: '灣岸 7 號倉，港務部的私兵有重武裝。正面打進去，拿了貨就走。' }),
-    j({ id: 'hack-4', direction: 'hack', tier: 4, name: '盜取企業伺服器', fixerId: 'mist', reward: 2400, xp: 120, stress: 12, heat: 2, injury: 20, blurb: '港務部的核心機房。黑冰會反咬，一次失手就可能燒掉你的腦。' }),
+    j({ id: 'hack-4', direction: 'hack', tier: 4, name: '盜取企業伺服器', fixerId: 'mist', reward: 2400, xp: 120, stress: 12, heat: 2, injury: 20, blurb: '港務部的核心機房。防火牆會反擊，一次失手就可能燒掉你的腦。' }),
     // 灣岸：難度 5精英委託
     j({ id: 'stealth-5', direction: 'stealth', tier: 5, name: '潛入海底隧道檢查站', fixerId: 'mist', reward: 3200, xp: 160, stress: 11, heat: 1, injury: 26, blurb: '封鎖線底下的海底隧道，港務部在中段設了檢查站。站長的抽屜裡有一份通行名單，我要它。' }),
     j({ id: 'force-5', direction: 'force', tier: 5, name: '攻破港務部指揮艦', fixerId: 'k', reward: 3800, xp: 170, stress: 10, heat: 2, injury: 34, blurb: '停在灣岸外的指揮艦，是整條封鎖線的大腦。登艦、找到艦橋、把硬碟拔走。外骨骼部隊住在甲板下面。' }),
-    j({ id: 'hack-5', direction: 'hack', tier: 5, name: '燒穿港務部核心', fixerId: 'mist', reward: 3500, xp: 160, stress: 14, heat: 2, injury: 24, blurb: '港務部換了軍規黑冰。燒穿它，封鎖線的閘口排程就是我們的了。燒不穿，燒掉的是你。' }),
+    j({ id: 'hack-5', direction: 'hack', tier: 5, name: '燒穿港務部核心', fixerId: 'mist', reward: 3500, xp: 160, stress: 14, heat: 2, injury: 24, blurb: '港務部換了軍規防火牆。燒穿它，封鎖線的閘口排程就是我們的了。燒不穿，燒掉的是你。' }),
   ].map((x) => [x.id, x]),
 )
 
@@ -65,7 +65,7 @@ export interface DangerTemplate {
   options: DangerOption[]
   /** 精英委託要先打的那一場。 */
   fight: Enemy
-  /** 致命判定失敗時逼近、要打一場的敵人；駭入（黑冰咬的是神經）沒有。 */
+  /** 致命判定失敗時逼近、要打一場的敵人；駭入（防火牆攻擊的是神經）沒有。 */
   threat?: Enemy
 }
 
@@ -78,7 +78,7 @@ export const OPENING: Record<Direction, (n: string) => string[]> = {
 /** 精英委託的屬性選項：依方向用不同屬性，風險比硬幹低。 */
 const SKILLED: Record<Direction, { attr: Attr; label: string }> = {
   force: { attr: 'body', label: '徒手扯開貨櫃的側門，從外骨骼的死角把貨拖走' },
-  hack: { attr: 'int', label: '開一條假的資料流把黑冰引開，再慢慢抽資料' },
+  hack: { attr: 'int', label: '開一條假的資料流把防火牆引開，再慢慢抽資料' },
   stealth: { attr: 'cool', label: '冷靜地關掉警報，換上保全的制服走出去' },
 }
 
@@ -90,8 +90,8 @@ const TWIST: Record<Direction, { title: string; body: string; push: string; thre
     threat: '外骨骼私兵',
   },
   hack: {
-    title: '黑冰鎖定了你的神經',
-    body: '防火牆後面是一層會反咬的黑冰，它已經沿著神經線爬回來，你的視野開始出現雜訊。',
+    title: '防火牆鎖定了你的神經',
+    body: '這層防火牆會反擊：它已經沿著神經線追回來，你的視野開始出現雜訊。',
     push: '不斷線，硬把資料抽完',
   },
   stealth: {
@@ -105,7 +105,7 @@ const TWIST: Record<Direction, { title: string; body: string; push: string; thre
 /** 一般委託自動段的中段與結尾（得手／被發現）。 */
 export const JOB_LINES: Record<Direction, { mid: string; ok: string; caught: string }> = {
   force: { mid: '雨水順著槍管往下滴，你數著對方的人頭。', ok: '對方先動手了。', caught: '對方先動手了。' },
-  hack: { mid: '資料流在視網膜上滾動，你一層一層剝開權限。', ok: '你拿到了要的東西，悄悄斷線。', caught: '追蹤程式咬住了你的位址，有人正往這裡趕來。' },
+  hack: { mid: '資料流在視網膜上滾動，你一層一層剝開權限。', ok: '你拿到了要的東西，悄悄斷線。', caught: '追蹤程式鎖定了你的位址，有人正往這裡趕來。' },
   stealth: { mid: '你沿著廣告看板的陰影前進，霓虹燈每隔幾秒閃一次。', ok: '沒有人看見你來過。', caught: '一道手電筒的光打在你臉上：「誰在那裡？」' },
 }
 

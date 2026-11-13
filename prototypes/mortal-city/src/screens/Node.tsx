@@ -42,6 +42,8 @@ import {
   poolSize,
   costText,
   pushStress,
+  CALMER,
+  type Attr as AttrKey,
   psychoRuleText,
   NEURAL_STAGE_LABEL,
   neuralStage,
@@ -92,10 +94,15 @@ export function BackBar({ onBack, label }: { onBack: () => void; label: string }
 /** 自動段的總長：10～30 秒，依行數。 */
 export const autoMs = (lines: number, base = 2500) => Math.min(30_000, Math.max(10_000, lines * base))
 
+/** 剛進節點的這段時間內不自動捲動：讓玩家先看到像素圖與標題，不要一進來就被捲到最下面。 */
+let revealHoldUntil = 0
+const REVEAL_HOLD_MS = 600
+
 /** 放在會長出新訊息的地方底下：dep 一變（或剛出現時）就把這裡捲進畫面，玩家不用自己捲到底。 */
 function Reveal({ dep }: { dep?: unknown }) {
   const ref = useRef<HTMLDivElement>(null)
   useEffect(() => {
+    if (performance.now() < revealHoldUntil) return
     // 平滑捲動只在分頁看得見時才會動（背景分頁完全不捲），其他情況直接跳過去
     const smooth = document.visibilityState === 'visible' && !reducedMotion()
     ref.current?.scrollIntoView({ block: 'nearest', behavior: smooth ? 'smooth' : 'auto' })
@@ -128,6 +135,12 @@ function ResultRows({ title, text, rows }: { title: string; text?: string; rows?
 export function NodeView({ game }: { game: G }) {
   const { g } = game
   const n = g.run.node!
+  // 換了節點：在子元件的捲動 effect 跑之前先擋住（effect 是子先父後，所以在 render 時設）
+  const entered = useRef<string | null>(null)
+  if (entered.current !== n.nodeId) {
+    entered.current = n.nodeId
+    revealHoldUntil = performance.now() + REVEAL_HOLD_MS
+  }
   return (
     <div className="space-y-3">
       {n.kind === 'job' && <JobNode game={game} n={n} />}
@@ -179,7 +192,8 @@ export function PsychoTag({ c }: { c: G['g']['character'] }) {
 }
 
 /** 一般委託的錯亂規則（骰池版）：穩定時不顯示。 */
-function PsychoRules({ c }: { c: G['g']['character'] }) {
+function PsychoRules({ game }: { game: G }) {
+  const c = game.g.character
   const t = psychoRuleText(c)
   if (!t.length) return null
   return (
@@ -188,7 +202,21 @@ function PsychoRules({ c }: { c: G['g']['character'] }) {
       {t.map((x) => (
         <div key={x}>・{x}</div>
       ))}
+      {c.calmers ? <CalmerButton game={game} /> : null}
     </div>
+  )
+}
+
+/** 打一劑鎮定劑（身上有才出現）。 */
+export function CalmerButton({ game }: { game: G }) {
+  const c = game.g.character
+  return (
+    <button data-testid="use-calmer" disabled={!c.stress} onClick={() => game.act({ t: 'useCalmer' })} className="mt-2 flex min-h-11 w-full items-center justify-between gap-2 border border-cyan/70 px-3 text-left text-cyan disabled:opacity-50">
+      <span className="font-bold">打一劑鎮定劑</span>
+      <span className="text-[13px]">
+        神經壓力 −{CALMER.stress}・剩 {c.calmers ?? 0} 劑
+      </span>
+    </button>
   )
 }
 
@@ -349,7 +377,7 @@ function JobNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'job' }> })
         <Tag>完成時掉寶 {pct(0.1 * job.tier * (1 + statMod(c, 'loot')))}</Tag>
       </div>
       {n.stage === 'auto' && <AutoRun lines={lines} total={autoMs(lines.length)} fast={!!g.meta.seen.job} onDone={() => act({ t: 'jobAutoDone' })} />}
-      {n.stage !== 'done' && <PsychoRules c={c} />}
+      {n.stage !== 'done' && <PsychoRules game={game} />}
       {n.stage !== 'auto' && <BeatHistory beats={beats} keyBase={`${c.id}:${n.nodeId}`} history={n.stage === 'cost' ? (n.history ?? []).slice(0, -1) : (n.history ?? [])} />}
       {rolled && n.stage === 'scene' && <ScenePanel key={at} game={game} beats={beats} at={at} parts={jobPool(c, job, beat.attr)} onRoll={(push, gamble) => act({ t: 'jobRoll', push, gamble })} />}
       {n.stage === 'cost' && n.history?.length ? <SceneCostPanel c={c} beats={beats} at={at} last={n.history[n.history.length - 1]} base={job} keyBase={`${c.id}:${n.nodeId}`} onPick={(i) => act({ t: 'jobCost', index: i })} /> : null}
@@ -529,6 +557,17 @@ function MarketNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'market'
             </div>
           )
         })}
+        <div className="flex items-center gap-2 border-b border-line/40 px-3 py-2">
+          <div className="min-w-0 flex-1">
+            <b className="text-fg-list">鎮定劑</b>
+            <div className="text-[13px] text-cyan">
+              隨時能打，擲骰前也行：神經壓力 −{CALMER.stress}。最多帶 {CALMER.max} 劑，你身上 {c.calmers ?? 0} 劑
+            </div>
+          </div>
+          <Buy disabled={(c.calmers ?? 0) >= CALMER.max || c.credits < CALMER.price} onClick={() => act({ t: 'buyCalmer' })}>
+            ¢{CALMER.price}
+          </Buy>
+        </div>
         <div className="px-3 pt-3 text-[13px] text-muted">
           救命保單（空白，某架醫療飛行器上「掉」下來的）：受致命傷時武裝醫療隊救你一次，然後就用掉。最多一張
           {lifelineOf(c) ? `，你身上已經有一張${LIFELINES[lifelineOf(c)!].label}` : ''}。
@@ -607,9 +646,38 @@ function ClinicNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'clinic'
   return (
     <>
       <NodeHead tag="神機醫" title={`${FIXERS[doc.id].name}的義體診所`} fixer={doc.id} body={doc.line} />
-      <ActionButton disabled={(c.injury === 0 && c.stress === 0) || c.credits < cost} reason={c.injury === 0 && c.stress === 0 ? '沒有傷' : `需要 ¢${cost}`} onClick={() => act({ t: 'treat' })}>
+      <ActionButton disabled={c.injury === 0 || c.credits < cost} reason={c.injury === 0 ? '沒有傷' : `需要 ¢${cost}`} onClick={() => act({ t: 'treat' })}>
         <Stethoscope size={16} /> 縫好傷口（傷勢 {c.injury}%・¢{cost}・壓力 −{CLINIC.stress}）
       </ActionButton>
+      <ActionButton
+        disabled={!!n.tuned || c.stress === 0 || c.credits < CLINIC.tunePrice}
+        reason={n.tuned ? '這次已經調校過了' : c.stress === 0 ? '神經壓力已經是 0' : `需要 ¢${CLINIC.tunePrice}`}
+        onClick={() => act({ t: 'tune' })}
+      >
+        神經調校（¢{CLINIC.tunePrice}・壓力 −{CLINIC.tune}，每次來一次）
+      </ActionButton>
+      {c.scars && Object.values(c.scars).some(Boolean) && (
+        <Panel innerClass="pb-1">
+          <div className="px-3 pt-3 font-bold text-heading">治療舊傷</div>
+          <div className="px-3 text-[13px] text-muted">重傷或被保單救回留下的舊傷：每修好一道，恢復 1 點屬性。</div>
+          {(Object.entries(c.scars) as [AttrKey, number][])
+            .filter(([, k]) => k > 0)
+            .map(([a, k]) => (
+              <div key={a} className="flex items-center gap-2 border-b border-line/40 px-3 py-2">
+                <div className="min-w-0 flex-1">
+                  <b className="text-fg-list">{ATTR_LABEL[a]}的舊傷</b>
+                  <span className="ml-2 text-[13px] text-red">還有 {k} 道</span>
+                  <div className="text-[13px] text-muted">
+                    修好一道：{ATTR_LABEL[a]} {c.attrs[a]} → {c.attrs[a] + 1}
+                  </div>
+                </div>
+                <Buy disabled={c.credits < CLINIC.scar} onClick={() => act({ t: 'healScar', attr: a })}>
+                  ¢{CLINIC.scar}
+                </Buy>
+              </div>
+            ))}
+        </Panel>
+      )}
       <Panel innerClass="pb-1">
         <div className="px-3 pt-3 font-bold text-heading">常備義體（七五折，買了直接裝上）</div>
         <div className="px-3 text-[13px] text-muted">神經餘裕 {margin}：低於 40，任務裡要擲錯亂骰或付更多壓力</div>
@@ -663,7 +731,7 @@ function RestNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'rest' }> 
   const c = g.character
   return (
     <>
-      <NodeHead tag="休息" title="膠囊旅館與網咖" body="今晚只夠做一件事：好好睡一覺，或者躲起來等風頭過去。" />
+      <NodeHead tag="休息" title="膠囊旅館與網咖" body="今晚只夠做一件事：好好睡一覺、躲起來等風頭過去，或者拔掉所有連線，讓神經安靜下來。" />
       {n.used ? (
         <Panel tone="strong" innerClass="p-4 text-fg">你休息過了。</Panel>
       ) : (
@@ -673,6 +741,9 @@ function RestNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'rest' }> 
           </ActionButton>
           <ActionButton disabled={c.heat === 0} reason="沒有被通緝" onClick={() => act({ t: 'rest', choice: 'heat' })}>
             躲起來（通緝 −{REST.heat}、壓力 −{REST.stress}）
+          </ActionButton>
+          <ActionButton disabled={c.stress === 0} reason="神經壓力已經是 0" onClick={() => act({ t: 'rest', choice: 'calm' })}>
+            斷線靜養（壓力 −{REST.calm}）
           </ActionButton>
         </>
       )}
@@ -707,7 +778,7 @@ function CaseThread({ game, sc }: { game: G; sc: StoryCase }) {
   )
   const ap = sc.approaches.find((x) => x.id === g.story.approach) ?? sc.approaches[0]
   const auto = ap.autoLog
-  const beats = storyBeats(ap.direction)
+  const beats = storyBeats(ap)
   // 剛擲的場面骰還在跳：後面的場面、戰鬥、危險節點等它播完才出現
   const rolled = useRollDone(active === 'sceneCost' ? undefined : beatKey(`${g.character.id}:${sc.id}`, g.story.history?.at(-1)))
   return (
@@ -735,7 +806,7 @@ function CaseThread({ game, sc }: { game: G; sc: StoryCase }) {
       )}
       {active === 'prep' && threadRead && <ApproachPicker game={game} sc={sc} />}
       {active === 'auto' && <AutoRun lines={auto} total={autoMs(auto.length, 4000)} fast={!!(g.meta.seen.story || g.meta.seen.boss)} onDone={() => act({ t: 'storyAutoDone' })} />}
-      {active && active !== 'prep' && active !== 'auto' && <PsychoRules c={g.character} />}
+      {active && active !== 'prep' && active !== 'auto' && <PsychoRules game={game} />}
       {active && active !== 'prep' && active !== 'auto' && g.story.history?.length ? (
         <BeatHistory beats={beats} keyBase={`${g.character.id}:${sc.id}`} history={active === 'sceneCost' ? g.story.history.slice(0, -1) : g.story.history} />
       ) : null}
@@ -1222,7 +1293,7 @@ function RiskDecision({
         冒險選項是一次<b className="text-red">致命判定</b>：只看最高那顆，6 撐過去、4～5 撐過去但要付重代價（重傷或丟下一切）、1～3 {threat ? `會讓${threat}逼近，要打一場，打輸才是致命傷` : '是致命傷'}。沒有倒數，可以先離開再回來；擲過就不會重擲。
         {lifelineOf(c) ? `受致命傷時會用掉${LIFELINES[lifelineOf(c)!].label}：${LIFELINES[lifelineOf(c)!].desc}。` : '沒有救命保單：致命傷就是永久死亡。'}
       </p>
-      <PsychoRules c={c} />
+      <PsychoRules game={game} />
       {options.map((o) => {
         const on = sel === o.id
         const size = o.lethal ? poolSize(poolOf(o)) : 0

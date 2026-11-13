@@ -2,6 +2,7 @@
 // P01 兩案是「試讀稿」：AI 初稿，作者試讀前不算可上線文本。測試案只用來驗證流程。
 import { type Attr, type Character, type DangerOption, type Direction, type Enemy, type Slot, attrLock } from '../rules/core'
 import { CASE_03, CASE_06 } from './cases_wangan'
+import type { Beat } from './beats'
 
 export interface Reply {
   who: string
@@ -27,6 +28,8 @@ export interface Approach {
   fightHeat?: number
   /** 屬性門檻：不夠就不能選這個做法。 */
   needs?: { attr: Attr; min: number }
+  /** 自動段之後的兩個場面（擲骰）；沒寫就借用委託該路線的前兩個場面。 */
+  beats?: Beat[]
 }
 
 export interface CaseOption extends DangerOption {
@@ -340,13 +343,13 @@ export const CASE_02: StoryCase = {
       id: 'hack',
       direction: 'hack',
       label: '直接接上離線病歷庫',
-      summary: '從停電的配電箱繞進地下室，把神經線插進病歷庫的主機。黑冰會醒，你得比它快。',
+      summary: '從停電的配電箱繞進地下室，把神經線插進病歷庫的主機。防火牆會啟動，你得比它快。',
       injury: 5,
       lethalMod: 0.02,
       autoLog: [
         '你沿著配電箱的備用線路摸進地下室，緊急照明是紅色的。',
-        '病歷庫的終端機沒有連網，你把神經線直接插上去，一層黑冰慢慢醒過來。',
-        '你在黑冰咬到你之前找到 K-0413，開始下載。',
+        '病歷庫的終端機沒有連網，你把神經線直接插上去，一層防火牆慢慢啟動。',
+        '你在防火牆攻擊你之前找到 K-0413，開始下載。',
       ],
     },
     {

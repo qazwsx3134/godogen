@@ -356,7 +356,8 @@ describe('dice pool (DICE-POOL-SPEC §2)', () => {
     applyCost(c, job, 'injury', true)
     expect(c.injury).toBe(costInjury(job) * 3)
     applyCost(c, job, 'stress', true)
-    expect(c.stress).toBe(16)
+    // 受傷失敗慌張 +4；壓力失敗 8×3＋慌張 4
+    expect(c.stress).toBe(4 + 28)
     applyCost(c, job, 'heat')
     applyCost(c, job, 'heat')
     expect(c.heat).toBe(5)
