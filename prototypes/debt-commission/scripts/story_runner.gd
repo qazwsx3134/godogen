@@ -202,6 +202,11 @@ func default_pov() -> String:
     return String(characters.keys()[0]) if not characters.is_empty() else ""
 
 
+## The story's screen: "landscape" (default) or "portrait". Chosen before writing; main switches the canvas.
+func orientation() -> String:
+    return String(_story.get("orientation", "landscape"))
+
+
 func story_info() -> Dictionary:
     return {"title": String(_story.get("title", "")), "note": String(_story.get("note", "")),
         "credits": (_story.get("credits", []) as Array).duplicate(true)}
@@ -266,7 +271,32 @@ func case_file() -> Dictionary:
     for character_id: String in profiles:
         var character: Dictionary = characters.get(character_id, {}) as Dictionary
         people.append({"id": character_id, "name": String(character.get("name", character_id)), "profile": String(character.get("profile", ""))})
-    return {"materials": materials, "profiles": people}
+    var found: Dictionary = _collectables()
+    return {"materials": materials, "profiles": people,
+        "material_total": maxi(found["items"].size(), materials.size()), "profile_total": maxi(found["profiles"].size(), people.size())}
+
+
+## Every material and profile this story can give: `item` and `profile` steps and the items of search
+## spots (every place). The case file shows the ones not found yet as numbered blanks.
+func _collectables() -> Dictionary:
+    var item_ids: Dictionary = {}
+    var profile_ids: Dictionary = {}
+    for node: Variant in (_story.get("nodes", {}) as Dictionary).values():
+        for step: Variant in (node as Dictionary).get("steps", []):
+            var command: Dictionary = step as Dictionary
+            match String(command.get("op", "")):
+                "item":
+                    item_ids[String(command.get("id", ""))] = true
+                "profile":
+                    profile_ids[String(command.get("id", ""))] = true
+                "investigate":
+                    var spots: Array = (command.get("hotspots", []) as Array).duplicate()
+                    for place: Variant in command.get("places", []):
+                        spots.append_array((place as Dictionary).get("hotspots", []))
+                    for spot: Variant in spots:
+                        if (spot as Dictionary).has("item"):
+                            item_ids[String((spot as Dictionary)["item"])] = true
+    return {"items": item_ids.keys(), "profiles": profile_ids.keys()}
 
 
 func reset() -> void:

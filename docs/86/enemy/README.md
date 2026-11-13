@@ -71,3 +71,7 @@ B="/mnt/c/Program Files/Blender Foundation/Blender 5.1/blender.exe"
 多機測試使用 Godot 4.7 Compatibility、1280×720、Mesa llvmpipe、陰影關閉，所有機體可見並播放步行：24 台共 24 次 draw call／33,384 個三角面；48 台共 48 次／66,768 個三角面。這是繪製結構量測，**不是手機效能或實際戰場 FPS 測試**；陰影、環境、AI、碰撞及畫面大小都會增加成本。Linux 沒有 `DISPLAY` 時，`--crowd` 需要 `xvfb-run`。
 
 這兩個模型尚未接入 walker-tps，也沒有實機驗證；需在實際遊戲與手機上確認動畫倍率、視覺大小、陰影和同屏數量。
+
+## 共用零件組裝稿（2026-11-13）
+
+近戰與坦克已有[可編輯的共用零件組裝稿](modular/README.md)：抽出並減少共同的機身／腿，再分別組裝與輸出。原本的 melee／tank／scout GLB 保持原樣；組裝稿尚未接入遊戲。

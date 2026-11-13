@@ -15,6 +15,11 @@
                │      → 玩法・調查 → 玩法・裝傻吐槽回合 ─┬ 吐槽成功 → 再看一次／回到目錄
                │                                         ├ 冷場 → 回到回合
                │                                         └ Game Over（end；畫面的「重試」回到回合）
+               ├─ 進階・調查的話題與移動 → 調查：客廳（對話／移動／角色熱區）
+               │      → 進階・證言回合 → 證言回合（消音條、牌子、空揮）
+               │      → 進階・連擊回合 → 連擊回合（QTE、連擊加成、超必殺）
+               │      → 進階・導演選擇 ─┬ 進階展示結束 → 再看一次／回到目錄
+               │                        └ 進階・章節結算（result）
                └─ 結局（end，帶結局 id）
 ```
 
@@ -28,6 +33,11 @@
 | 玩法・漫畫吐槽 | comedy 四種 preset：small_reaction、tsukkomi_impact（side）、emotion_band（color）、full_manga_panel |
 | 玩法・調查 | item、profile、investigate 熱區給線索 |
 | 玩法・裝傻吐槽回合 | boke_round：兩句證言（第二句有 listen）、限時選詞、需要線索的完美吐槽、冷場重試、timeout 與 game_over（Game Over 卡片要以 end 收尾，閱讀畫面才會顯示「重試」；接 next 會讓之後的回合都被拒絕） |
+| 進階・調查的話題與移動 | investigate 的 `keep_cast`、角色熱區（`character`＋`art_region`）、`talk` 對話話題、`places` 移動到廚房（optional 熱區）；反應卡片以 `next` 回到調查 |
+| 進階・證言回合 | boke_round `mode: testimony`：沒槽點的句子（`listen`、`whiff`）、`censor` 消音條、`placard` 伊莉莎白的牌子、`clear`／`game_over` |
+| 進階・連擊回合 | boke_round `mode: combo`：`rules` 的 `combo_timers`、`combo_bonus`、`combo_break`、`super`／`super_label`；最後一句 `qte`（perfect／early／late） |
+| 進階・導演選擇 | choice 的 `perspective: director` 與 `note` |
+| 進階・章節結算 | result 步驟：S／A／B／C 各一句台詞、`ending`／`ending_title`、`hidden_total` |
 | 結局 | end 的 `ending`／`ending_title`（章節選擇的結局收集與流程圖會記住） |
 
 要試某個功能，在編輯器選那張卡片按「從這裡試玩」；改壞了用 git 還原這個檔。`tests/test_showcase.gd` 會走完每條分支，改卡片後跑一次。
@@ -169,7 +179,7 @@
 
 ## 故事外觀與預設視角
 
-「故事」資訊區可選外觀包、章節封面與預設視角。外觀包顯示 id 與 name；專案服務列出 `skins/*/skin.json`，靜態服務列出 registry 已使用的 id 加上 gintama。封面從 catalog 有圖片的背景中選取，可預覽；空白使用遊戲的自動封面。外觀包空白使用 gintama。
+「故事」資訊區可選畫面方向、外觀包、章節封面與預設視角。畫面方向寫入劇本根層 `orientation`：選直式 9:16 寫 `"portrait"`，選回橫式就刪掉這個鍵；寫故事前先決定，因為站位與演出構圖會跟著方向不同（見 README「直式與橫式」）。外觀包顯示 id 與 name；專案服務列出 `skins/*/skin.json`，靜態服務列出 registry 已使用的 id 加上 gintama。封面從 catalog 有圖片的背景中選取，可預覽；空白使用遊戲的自動封面。外觀包空白使用 gintama。
 
 skin／cover 寫在 stories.json 的故事列，不進劇本 JSON。建置故事的文字仍唯讀，外觀欄位可編輯；專案服務的「存回外觀設定」只更新 registry，不重建或改寫劇本。既有列只改 skin／cover，其餘欄位保留；新故事及圖編輯副本保留來源列的外觀與未知欄位，並建立自己的 id、path、save 與 graph 來源。
 

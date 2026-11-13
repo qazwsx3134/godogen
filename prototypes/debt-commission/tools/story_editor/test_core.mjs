@@ -40,11 +40,11 @@ function reachTable(file) {
 
 // 1. The fallback lists in story_core.js are the runner's (the page reads the real file when it can).
 {
-  const runner = fs.readFileSync(path.join(project, 'scripts', 'story_runner.gd'), 'utf8');
+  const runner = fs.readFileSync(path.join(project, 'scripts', 'story_validator.gd'), 'utf8');
   for (const [name, fallback] of Object.entries(Core.FALLBACK_ENUMS)) {
-    assert.deepEqual(Core.parseGdStrings(runner, name), fallback, `${name} in story_core.js differs from story_runner.gd`);
+    assert.deepEqual(Core.parseGdStrings(runner, name), fallback, `${name} in story_core.js differs from story_validator.gd`);
   }
-  log('ok  FALLBACK_ENUMS equal the lists in story_runner.gd');
+  log('ok  FALLBACK_ENUMS equal the lists in story_validator.gd');
 }
 
 // 2. Import -> export of every data file. Build output must come back byte for byte; hand-formatted files

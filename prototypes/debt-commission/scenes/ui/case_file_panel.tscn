@@ -29,6 +29,7 @@ theme_override_constants/separation = 16
 
 [node name="CaseFileTab_materials" type="Button" parent="Margins/Layout/Tabs" unique_id=1802315571]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 133)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 35
@@ -38,6 +39,7 @@ metadata/skin_text = "materials_tab"
 
 [node name="CaseFileTab_profiles" type="Button" parent="Margins/Layout/Tabs" unique_id=257083451]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 133)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 35
@@ -46,7 +48,7 @@ metadata/ui_style_role = "selector"
 
 [node name="CaseFileClose" type="Button" parent="Margins/Layout/Tabs" unique_id=1494216908]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(112, 112)
+custom_minimum_size = Vector2(133, 133)
 layout_mode = 2
 theme_override_font_sizes/font_size = 45
 text = "×"
@@ -69,12 +71,20 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 30
 metadata/ui_style_role = "muted"
 
-[node name="CaseFileGrid" type="GridContainer" parent="Margins/Layout/ContentScroll/Content" unique_id=418101769]
+[node name="CardStrip" type="ScrollContainer" parent="Margins/Layout/ContentScroll/Content" unique_id=925208568]
+unique_name_in_owner = true
+editor_description = "線索卡排成一列，多了就左右捲。"
+custom_minimum_size = Vector2(0, 520)
+layout_mode = 2
+vertical_scroll_mode = 0
+
+[node name="CaseFileGrid" type="GridContainer" parent="Margins/Layout/ContentScroll/Content/CardStrip" unique_id=418101769]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 0
 theme_override_constants/h_separation = 16
 theme_override_constants/v_separation = 16
-columns = 4
+columns = 64
 
 [node name="CaseFileDetail" type="PanelContainer" parent="Margins/Layout/ContentScroll/Content" unique_id=966699382]
 unique_name_in_owner = true

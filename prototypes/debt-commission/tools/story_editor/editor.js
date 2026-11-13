@@ -4,7 +4,7 @@
  *
  * Opened from file:// it reads/writes files through the pickers; served from the project root
  * (python3 -m http.server -d <project>) it also lists data/stories.json and reads the asset
- * catalog and story_runner.gd's constant lists for the dropdowns. */
+ * catalog and story_validator.gd's constant lists for the dropdowns. */
 (function () {
   'use strict';
   const Core = globalThis.StoryCore;
@@ -1044,6 +1044,8 @@
       field('entry', select2(nodeIds(), story.entry, v => { story.entry = v; touch(); })),
       field('version', el('code', {}, story.version ?? '（無）'), el('div', { id: 'versionHint', class: 'err', style: { color: 'var(--muted)' } })),
       field('flags', flags, flagsErr),
+      field('畫面方向', select2([{ value: 'landscape', label: '橫式 16:9（1920×1080）' }, { value: 'portrait', label: '直式 9:16（1080×1920）' }],
+        story.orientation || 'landscape', v => { if (v === 'portrait') story.orientation = v; else delete story.orientation; touch(); })),
       ...registryControls(),
       field('預設視角',select2(Object.entries(S.catalog?.characters || {}).map(([id,c])=>({value:id,label:`${c.name || id} · ${id}`})),story.default_pov,v=>{if(v)story.default_pov=v;else delete story.default_pov;touch();},`用 catalog 預設（${S.catalog?.default_pov || '未設定'}）`)));
   }
@@ -1824,7 +1826,7 @@
   async function loadProject() {
     const [stories, catalog, runner, service] = await Promise.allSettled([
       getJson('../../data/stories.json'), getJson('../../data/asset_catalog.json'),
-      fetch('../../scripts/story_runner.gd').then(r => (r.ok ? r.text() : Promise.reject(new Error(r.status)))),
+      fetch('../../scripts/story_validator.gd').then(r => (r.ok ? r.text() : Promise.reject(new Error(r.status)))),
       detectService(),
     ]);
     if (service.status === 'fulfilled') S.service = service.value;

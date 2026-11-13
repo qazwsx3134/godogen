@@ -1,5 +1,5 @@
 extends "res://addons/proto_kit/test_kit.gd"
-## Landscape composition, undistorted toolbar, fixed portraits and readable long lines.
+## Landscape composition, an icon-only toolbar, fixed portraits and readable long lines.
 
 const TEST_FILES: Array[String] = ["user://landscape_reading.save", "user://landscape_reading.cfg", "user://landscape_reading_progress.cfg"]
 
@@ -32,10 +32,14 @@ func _run() -> void:
 	var bounds: Array[Rect2] = []
 	for button: Button in [game._dialog_panel.log_button, game._dialog_panel.auto_button,
 			game._dialog_panel.skip_button, game._dialog_panel.menu_button]:
-		var surface: Control = button.get_node("Surface")
-		var rect: Rect2 = surface.get_global_rect()
-		_expect(absf(rect.size.x / rect.size.y - 195.0 / 62.0) < 0.02,
-			button.name + " artwork keeps its original aspect ratio")
+		# The toolbar speaks with icons: no caption, the name kept as a tooltip, a touch area of 133+ design px.
+		_expect(bool(button.get("icon_only")) and not (button.get_node("Surface/Contents/Caption") as Control).visible
+			and (button.get_node("Surface/Contents/Icon") as Control).is_visible_in_tree() and not button.tooltip_text.is_empty(),
+			button.name + " shows only its icon and keeps its name as a tooltip")
+		var icon_center: Vector2 = (button.get_node("Surface/Contents/Icon") as Control).get_global_rect().get_center()
+		var face_center: Vector2 = (button.get_node("Surface") as Control).get_global_rect().get_center()
+		_expect(icon_center.distance_to(face_center) <= 1.5, button.name + " centres its icon: %s vs %s" % [icon_center, face_center])
+		_expect(button.size.x >= 133.0 and button.size.y >= 133.0, button.name + " keeps a large touch area: %s" % button.size)
 		_expect(game_rect.encloses(button.get_global_rect()), button.name + " remains inside the playable area")
 		for previous: Rect2 in bounds:
 			_expect(not previous.intersects(button.get_global_rect()), button.name + " has its own touch area")

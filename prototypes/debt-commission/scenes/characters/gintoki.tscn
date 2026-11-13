@@ -34,3 +34,20 @@ mouse_filter = 2
 texture = ExtResource("2_y25ap")
 expand_mode = 1
 stretch_mode = 5
+
+[node name="Spots" type="Control" parent="Art" unique_id=408163254]
+editor_description = "調查時可以點的部位。每個子 node 是一塊熱區：劇本的熱區寫 \"character\" 和 \"spot\": \"<node 名稱>\"。拖曳、縮放框調整範圍；框只在編輯器顯示。"
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="mouth" type="ReferenceRect" parent="Art/Spots" unique_id=1231962911]
+layout_mode = 0
+anchor_left = 0.36
+anchor_top = 0.15
+anchor_right = 0.5
+anchor_bottom = 0.21
+mouse_filter = 2
+border_color = Color(0.2, 0.85, 1, 1)
+border_width = 4.0

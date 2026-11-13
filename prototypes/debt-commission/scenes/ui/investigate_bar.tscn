@@ -130,6 +130,7 @@ theme_override_constants/outline_size = 3
 text = "線索 1/4 · 拖曳背景調查"
 vertical_alignment = 1
 clip_text = true
+text_overrun_behavior = 3
 
 [node name="Continue" parent="Content/Row" unique_id=125961985 instance=ExtResource("3_kyohw")]
 unique_name_in_owner = true

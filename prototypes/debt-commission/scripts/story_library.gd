@@ -100,8 +100,9 @@ func index_of_path(path: String) -> int:
 
 # ---------------------------------------------------------------- title and credits
 
+## The story's `title`; an entry that plays it another way (its portrait edition) may name itself.
 func title(entry: Dictionary) -> String:
-	return str(_read_meta(entry)["title"])
+	return str(entry["title"]) if entry.get("title") is String else str(_read_meta(entry)["title"])
 
 
 ## A story's `credits`, else its work's ([] when there are none or they are malformed).

@@ -150,7 +150,7 @@ func set_topics(talk: Array, moves: Array) -> Dictionary:
 			button.name = "%s_%s" % [group[2], entry.get("id", "")]
 			_style_like(button, boke_listen)
 			if UI_STYLES.washi(style_id):
-				UI_STYLES.apply_button(button, style_id, "reading_action")
+				UI_STYLES.apply_button(button, style_id, "key_action")
 			list.add_child(button)
 			buttons["%s:%s" % [group[2], entry.get("id", "")]] = button
 	talk_row.visible = talk_list.get_child_count() > 0

@@ -551,6 +551,10 @@ func _test_narrow_phone() -> void:
 				"%s: the big line is inside the balloon and the game area: %s" % [label, text.get_global_rect()])
 			_expect(float(text.get_content_height()) <= text.size.y + 1.0 and layer.qa_state().get("text_fits", false),
 				"%s: the whole line is laid out inside its box, none of it clipped (%d of %.0f px)" % [label, text.get_content_height(), text.size.y])
+			if root_node.get_node_or_null("%Burst") != null:
+				var oval: float = pow(text.get_content_width() / (area.size.x * 1.2), 2) + pow(text.get_content_height() * 1.1 / (area.size.y * 1.2), 2)
+				_expect(oval <= 1.0 and text.horizontal_alignment == HORIZONTAL_ALIGNMENT_CENTER,
+					"%s: the centred line keeps inside the balloon's oval, off its spikes (%.2f)" % [label, oval])
 			_expect(text.size.y <= area.size.y + 1.0 and text.get_theme_font_size("normal_font_size") >= 24,
 				"%s: the line is sized to fit (font %d, %.0f of %.0f px)" % [label, text.get_theme_font_size("normal_font_size"), text.size.y, area.size.y])
 			var panel: Control = root_node.get_node_or_null("%CutInPanel") as Control

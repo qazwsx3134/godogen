@@ -20,6 +20,8 @@ const SHOUT_MARKS: String = "！？!?～"
 const FACE_WIDTH: float = 0.78
 const FAST_FORWARD_SEC: float = 0.1
 const MIN_FONT: int = 24
+## The oval a burst's line fits in, as a multiple of TextArea (1.0 = the oval through its edge midpoints).
+const OVAL_ROOM: float = 1.2
 
 @export_group("Timeline (seconds)")
 @export var dim_in: float = 0.05
@@ -206,7 +208,8 @@ func _pop() -> void:
 
 ## The largest font size, font_max down to MIN_FONT, at which the line fits TextArea (with a
 ## tenth to spare for the outline); Text is then given that height, centred on the area. The label
-## itself measures its wrapped content, so every text server wraps the way it draws.
+## itself measures its wrapped content, so every text server wraps the way it draws. Inside a Burst the
+## room is the oval through TextArea's edge midpoints, scaled by OVAL_ROOM, so long lines keep out of the spikes.
 func _fit_text() -> void:
 	if _text == null or _text_area == null:
 		return
@@ -217,7 +220,10 @@ func _fit_text() -> void:
 		_text.add_theme_font_size_override("bold_font_size", font_size)
 		_text.add_theme_constant_override("outline_size", maxi(6, font_size / 9))
 		height = float(_text.get_content_height()) * 1.1
-		if height <= box.y:
+		if _burst == null:
+			if height <= box.y:
+				break
+		elif pow(_text.get_content_width() / (box.x * OVAL_ROOM), 2) + pow(height / (box.y * OVAL_ROOM), 2) <= 1.0:
 			break
 	_text.offset_top = -height * 0.5
 	_text.offset_bottom = height * 0.5

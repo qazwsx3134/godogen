@@ -49,6 +49,8 @@ const VALID_CHARACTER_POSITIONS: Array[String] = ["left", "center", "right"]
 const VALID_CHARACTER_TRANSITIONS: Array[String] = ["fade", "slide_left", "slide_right", "instant"]
 ## How a bg step changes the picture (scripts/stage_motion.gd): crossfade, or a 筆刷／墨暈／故障 wipe.
 const VALID_BACKGROUND_TRANSITIONS: Array[String] = ["fade", "brush", "ink", "glitch"]
+## A bg step's `scroll`: which way the camera travels over the picture.
+const VALID_BACKGROUND_SCROLLS: Array[String] = ["down", "up", "left", "right"]
 const VALID_PORTRAIT_EFFECTS: Array[String] = ["shake", "bounce"]
 const GRADES: Array[String] = ["S", "A", "B", "C"]
 ## Expression ids for `char` and line tags; what each means and which art to make:
@@ -294,6 +296,19 @@ static func _is_css_hex(value: Variant) -> bool:
     return true
 
 
+## Whether the character's scene (catalog `scene`, else scenes/characters/<id>.tscn) has Art/Spots/<spot>.
+static func character_has_spot(asset_catalog: Dictionary, character: String, spot: String) -> bool:
+    var info: Dictionary = (asset_catalog.get("characters", {}) as Dictionary).get(character, {}) as Dictionary
+    var path: String = String(info.get("scene", "res://scenes/characters/%s.tscn" % character))
+    if not ResourceLoader.exists(path):
+        return false
+    var state: SceneState = (load(path) as PackedScene).get_state()
+    for index: int in state.get_node_count():
+        if String(state.get_node_path(index)) == "./Art/Spots/" + spot:
+            return true
+    return false
+
+
 static func validate_story(value: Variant, asset_catalog: Dictionary) -> String:
     if typeof(value) != TYPE_DICTIONARY:
         return "root must be an object"
@@ -326,6 +341,8 @@ static func validate_story(value: Variant, asset_catalog: Dictionary) -> String:
     if root.has("default_pov") and (typeof(root["default_pov"]) != TYPE_STRING
             or not catalog_has_character(asset_catalog, String(root["default_pov"]))):
         return "default_pov must be a character in the asset catalog"
+    if root.has("orientation") and not ["landscape", "portrait"].has(root["orientation"]):
+        return "orientation must be 'landscape' or 'portrait'"
     if root.has("credits"):
         var credits_error: String = validate_credits(root["credits"])
         if not credits_error.is_empty():
@@ -429,6 +446,12 @@ static func _validate_step(current_node_id: String, index: int, step: Dictionary
                 return "%s bg id '%s' is not in asset catalog" % [prefix, background_id]
             if step.has("transition") and (typeof(step["transition"]) != TYPE_STRING or String(step["transition"]) not in VALID_BACKGROUND_TRANSITIONS):
                 return "%s bg transition must be one of %s" % [prefix, ", ".join(VALID_BACKGROUND_TRANSITIONS)]
+            if step.has("title") and typeof(step["title"]) != TYPE_STRING:
+                return "%s bg title must be a string (shown across the screen after the change)" % prefix
+            if step.has("scroll") and (typeof(step["scroll"]) != TYPE_STRING or String(step["scroll"]) not in VALID_BACKGROUND_SCROLLS):
+                return "%s bg scroll must be one of %s" % [prefix, ", ".join(VALID_BACKGROUND_SCROLLS)]
+            if step.has("scroll_seconds") and (not _is_number(step["scroll_seconds"]) or float(step["scroll_seconds"]) <= 0.0):
+                return "%s bg scroll_seconds must be a positive number" % prefix
         "char":
             var character_id: String = String(step.get("id", ""))
             if not catalog_has_character(asset_catalog, character_id):
@@ -860,13 +883,20 @@ static func _validate_hotspots(value: Variant, where: String, seen: Dictionary, 
                 return "%s hotspot '%s' character '%s' is not in asset catalog" % [where, hotspot_id, hotspot["character"]]
             if hotspot.has("pos") or hotspot.has("size"):
                 return "%s hotspot '%s' has a character, so its area is the portrait: drop pos and size" % [where, hotspot_id]
+            if hotspot.has("spot"):
+                if hotspot.has("art_region"):
+                    return "%s hotspot '%s' has both spot and art_region: keep one" % [where, hotspot_id]
+                if not is_non_empty_string(hotspot["spot"]) \
+                        or not character_has_spot(asset_catalog, String(hotspot["character"]), String(hotspot["spot"])):
+                    return "%s hotspot '%s' spot '%s' is not a node Art/Spots/%s in %s's character scene" % [
+                        where, hotspot_id, hotspot["spot"], hotspot["spot"], hotspot["character"]]
             if hotspot.has("art_region"):
                 var region: Variant = hotspot["art_region"]
                 if not region is Array or region.size() != 4 or not region.all(func(n: Variant) -> bool: return _is_number_between(n,0.0,1.0)) \
                         or float(region[2]) <= 0.0 or float(region[3]) <= 0.0 or float(region[0])+float(region[2]) > 1.0 or float(region[1])+float(region[3]) > 1.0:
                     return "%s hotspot '%s' art_region must fit the portrait [x,y,w,h]" % [where, hotspot_id]
-        elif hotspot.has("art_region"):
-            return "%s hotspot '%s' art_region requires a character" % [where, hotspot_id]
+        elif hotspot.has("art_region") or hotspot.has("spot"):
+            return "%s hotspot '%s' art_region and spot require a character" % [where, hotspot_id]
         elif not _is_normalized_position(hotspot.get("pos", null)):
             return "%s hotspot '%s' pos must contain normalized x/y coordinates" % [where, hotspot_id]
         if hotspot.has("size") and (not _is_normalized_position(hotspot["size"]) \

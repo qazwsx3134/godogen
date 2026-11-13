@@ -10,6 +10,11 @@
 
 | commit | 日期 | 做了什麼 |
 |---|---|---|
+| 未提交 | 2026-11-13 | debt-commission：稽核 P0–P2 全修（設定層級、手機字級 ×1.25、cut-in 殘留、目錄／卷宗／存檔卡等）；新增標題橫幅、捲動 CG（`bg` `scroll`）、調查方向鈕與矮螢幕自動收起、卷宗直長卡片＋羅馬數字空卡、工具列圖示按鈕 |
+| 未提交 | 2026-11-13 | debt-commission：UI／UX 稽核報告 `reviews/2026-11-13-uiux-audit.md`（P0 設定被目錄蓋住；字級偏小等），`screen_audit.gd` 加量測模式；尚未修 |
+| 未提交 | 2026-11-13 | debt-commission：「吐槽！」改一般深藍按鈕；角色熱區改由角色 scene 的 `Art/Spots/<名稱>` node 決定（`"spot"`）；結局改成全暗→卷軸→點一下才出現重玩／回標題（`end_controls.tscn` 刪除）|
+| 未提交 | 2026-11-12 | debt-commission：換背景轉場重做（墨暈分批暈開＋退墨、故障跳格錯位＋RGB 分離、筆刷實心墨帶＋飛白；新舊畫面都參與、直式橫式一致）|
+| 未提交 | 2026-11-12 | debt-commission：故事可設直式／橫式（`orientation`，畫布 1080×1920 ↔ 1920×1080，node 的 `metadata/portrait_layout`）、「功能展示（直式）」、功能展示補進階段落（話題／證言／連擊＋QTE／導演）、編輯器「畫面方向」、`tools/screen_audit.gd`；LESSONS 加 3 條 |
 | 未提交 | 2026-11-12 | walker-tps：勾索拆成 `Combat/Grapple`、繩索甩尾、移動加速（6／9 m/s）、圖層常數；asset-gen：新增 `modeling.md`（程序化建模 pipeline 與拓撲規則）與 `tools/check_topology.py`，docs/86 melee／tank 拓撲檢查結果；LESSONS 加 4 條 |
 | `3065d559`（使用者提交） | 2026-11-12 | docs/86 melee／tank 敵機模型；debt-commission 程式結構 D1–D7（具型別 runner、畫面 enum、驗證搬出、機器人思考時間）；walker-tps scout AI 狀態機／預判／協同、步態地形傾斜；三個專案的程式改善文件 |
 | `62849c19` | 2026-11-11 | walker-tps：首次收錄完整戰鬥原型、地圖／雙機體素材、14 個處理後音效與署名；補忽略規則，Git 乾淨副本匯入／音效／戰鬥驗證 |
@@ -28,7 +33,7 @@
 | 專案 | 現況（一句） | 進度 | 歷史 |
 |---|---|---|---|
 | 本次提交（`git log -1`） | 2026-11-11 | walker-tps：首次收錄完整戰鬥原型、地圖／雙機體素材、14 個處理後音效與署名；補忽略規則，Git 乾淨副本匯入／音效／戰鬥驗證 |
-| debt-commission 萬事屋吐槽 ADV | 故事為功能展示與桂短篇；11-12 程式結構改善 D1–D7 完成（D3 延後），完整測試 56/57（`reading_scenes` 改動前就失敗）；介面圖待作者看畫面及手機；音效與評審 #2 仍在 TODO | [PROGRESS](prototypes/debt-commission/PROGRESS.md) | [MILESTONE](prototypes/debt-commission/MILESTONE.md) |
+| debt-commission 萬事屋吐槽 ADV | 故事為功能展示（橫式＋直式）與桂短篇；11-12 直式／橫式可切換與功能展示進階段落（未提交，待作者看畫面）；11-12 程式結構改善 D1–D7 完成（D3 延後），完整測試 56/57（`reading_scenes` 改動前就失敗）；介面圖待作者看畫面及手機；音效與評審 #2 仍在 TODO | [PROGRESS](prototypes/debt-commission/PROGRESS.md) | [MILESTONE](prototypes/debt-commission/MILESTONE.md) |
 | godot-kit 共用模組 | SaveSlots 已接入 seal-meadow adapter，保留遊戲恢復保護；只同步該存檔模組，測試暫緩 | [PROGRESS](prototypes/godot-kit/PROGRESS.md) | — |
 | walker-tps 四足戰甲 | 11-12 scout AI（狀態機、預判、警覺、包圍、輕重型）、步態貼地傾斜、勾索繩索甩尾、移動加速；7 組測試通過；`main.tscn` Arena 移位待使用者決定（歸零的複本上 walker／scouts 也通過）；甩尾與難度待實玩 | [PROGRESS](prototypes/walker-tps/PROGRESS.md) | — |
 | seal-meadow 蓬蓬草原 | 暖陶瓦風格與商店三視圖已定方向；可走商店、入口與路牌樣板已接入，正式 2D 紙娃娃及手機真人驗收待做，多人延後 | [PROGRESS](prototypes/seal-meadow/PROGRESS.md) | [MILESTONE](prototypes/seal-meadow/MILESTONE.md) |

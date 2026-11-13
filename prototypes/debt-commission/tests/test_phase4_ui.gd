@@ -91,7 +91,8 @@ func _check_case_file(game: Control) -> void:
 	var panel: Panel = game._case_file_panel
 	var grid: GridContainer = panel.find_child("CaseFileGrid", true, false)
 	_expect(game._screen_mode == "case_file" and panel.visible, "the materials screen opens")
-	_expect(grid.get_child_count() == 4 and grid.columns == 4, "four materials fill one row of the four-column grid")
+	_expect(_found_cards(grid) == 4 and grid.columns >= grid.get_child_count(), "four materials, all in one row of cards")
+	_expect(grid.get_children().all(_found_or_blank), "any card still to find is a numbered blank")
 	_expect(grid.get_child(0).get_node("Content/Picture").texture == null
 		and (grid.get_child(0).get_node("Content/Picture") as Control).is_visible_in_tree()
 		and panel.find_child("CaseFilePicture", true, false).visible,
@@ -99,13 +100,21 @@ func _check_case_file(game: Control) -> void:
 	_expect(panel.find_child("CaseFileName", true, false).text == "空的草莓牛奶瓶", "the first material is selected with its name")
 	_expect(not panel.find_child("CaseFileUse", true, false).visible, "拿來吐槽 is hidden outside the timed choice")
 	await _press(panel.find_child("CaseFileTab_profiles", true, false))
-	_expect(grid.get_child_count() == 3 and panel.find_child("CaseFileText", true, false).text.contains("嗜甜"),
+	_expect(_found_cards(grid) == 3 and panel.find_child("CaseFileText", true, false).text.contains("嗜甜"),
 		"the profiles tab lists Gintoki, Sadaharu and Kagura with profile text")
 	await _frames(1)
 	_expect(grid.get_child(0).get_node("Content/Picture").texture != null,
 		"a character with art shows its picture instead of the placeholder")
 	await _press(panel.find_child("CaseFileClose", true, false))
 	_expect(game._screen_mode == "boke_round" and not panel.visible, "closing returns to the round")
+
+
+func _found_or_blank(card: Node) -> bool:
+	return card.name.begins_with("CaseFileCard_") or ((card as Button).disabled and (card.get_node("Numeral") as Label).visible)
+
+
+func _found_cards(grid: GridContainer) -> int:
+	return grid.get_children().filter(func(card: Node) -> bool: return card.name.begins_with("CaseFileCard_")).size()
 
 
 func _test_title_story_switch() -> void:

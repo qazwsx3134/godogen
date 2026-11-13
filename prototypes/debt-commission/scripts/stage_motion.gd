@@ -8,8 +8,10 @@ var _characters: Dictionary = {}
 var reduce_motion: bool = false
 
 const TRANSITION_SHADER: Shader = preload("res://shaders/scene_transition.gdshader")
-## A bg step's `transition` other than fade: [shader style, seconds].
-const TRANSITION_STYLES: Dictionary = {"brush": [0, 0.7], "ink": [1, 0.8], "glitch": [2, 0.5]}
+## A bg step's `transition` other than fade: [shader style, seconds, tween transition]. 墨暈 holds a beat
+## at full ink in the middle; 故障 runs at an even pace (its stutter is in the shader).
+const TRANSITION_STYLES: Dictionary = {"brush": [0, 0.7, Tween.TRANS_SINE], "ink": [1, 1.3, Tween.TRANS_LINEAR],
+	"glitch": [2, 0.75, Tween.TRANS_LINEAR]}
 
 func setup(background_ghost: TextureRect, scene_fade: ColorRect) -> void:
 	ghost = background_ghost
@@ -51,12 +53,12 @@ func crossfade(duration: float = 0.28, style: String = "fade") -> float:
 	var material: ShaderMaterial = ShaderMaterial.new()
 	material.shader = TRANSITION_SHADER
 	material.set_shader_parameter("style", spec[0])
-	material.set_shader_parameter("aspect", ghost.size.x / maxf(ghost.size.y, 1.0))
+	material.set_shader_parameter("seed", randf() * 100.0)  # different drops, slices and blocks each time
 	material.set_shader_parameter("progress", 0.0)
 	ghost.material = material
 	var time: float = float(spec[1])
 	_background_tween.tween_method(func(value: float) -> void: material.set_shader_parameter("progress", value), 0.0, 1.0, time) \
-		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+		.set_trans(spec[2]).set_ease(Tween.EASE_IN_OUT)
 	_background_tween.tween_callback(_end_wipe)
 	return time
 
@@ -64,6 +66,64 @@ func crossfade(duration: float = 0.28, style: String = "fade") -> float:
 func _end_wipe() -> void:
 	ghost.visible = false
 	ghost.material = null
+
+## A bg step's `scroll` (down, up, left, right): the camera travels over the picture in `seconds`. The frame
+## is sized to cover the screen with room to travel; a picture with too little overflow on that axis is
+## enlarged until it has SCROLL_ROOM of the screen to cross. Skipping or 畫面效果：減少 lands on the end.
+const SCROLL_ROOM: float = 0.3
+var _scrolled: TextureRect = null
+var _scroll_tween: Tween = null
+
+
+func scroll(frame: TextureRect, direction: String, seconds: float, skipping: bool) -> void:
+	end_scroll()
+	if frame == null or frame.texture == null or frame.texture is GradientTexture2D:
+		return
+	var screen: Vector2 = (frame.get_parent() as Control).size
+	var art: Vector2 = Vector2(frame.texture.get_width(), frame.texture.get_height())
+	if screen.x <= 0.0 or art.x <= 0.0 or art.y <= 0.0:
+		return
+	var vertical: bool = direction in ["down", "up"]
+	var picture: Vector2 = art * maxf(screen.x / art.x, screen.y / art.y)
+	var axis: int = 1 if vertical else 0
+	if picture[axis] < screen[axis] * (1.0 + SCROLL_ROOM):
+		picture *= screen[axis] * (1.0 + SCROLL_ROOM) / picture[axis]
+	var centre: Vector2 = (screen - picture) * 0.5
+	var start: Vector2 = centre
+	var finish: Vector2 = centre
+	start[axis] = 0.0 if direction in ["down", "right"] else screen[axis] - picture[axis]
+	finish[axis] = screen[axis] - picture[axis] if direction in ["down", "right"] else 0.0
+	_scrolled = frame
+	frame.set_meta(&"scroll_anchors", [frame.anchor_left, frame.anchor_top, frame.anchor_right, frame.anchor_bottom,
+		frame.offset_left, frame.offset_top, frame.offset_right, frame.offset_bottom])
+	frame.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	frame.size = picture
+	frame.position = start
+	if skipping or reduce_motion:
+		frame.position = finish
+		return
+	_scroll_tween = create_tween()
+	_scroll_tween.tween_property(frame, "position", finish, seconds).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+
+## Puts the scrolled frame back to covering the screen (the next bg, a search, a load).
+func end_scroll() -> void:
+	if _scroll_tween != null and _scroll_tween.is_valid():
+		_scroll_tween.kill()
+	_scroll_tween = null
+	if _scrolled != null and is_instance_valid(_scrolled) and _scrolled.has_meta(&"scroll_anchors"):
+		var saved: Array = _scrolled.get_meta(&"scroll_anchors")
+		_scrolled.anchor_left = saved[0]
+		_scrolled.anchor_top = saved[1]
+		_scrolled.anchor_right = saved[2]
+		_scrolled.anchor_bottom = saved[3]
+		_scrolled.offset_left = saved[4]
+		_scrolled.offset_top = saved[5]
+		_scrolled.offset_right = saved[6]
+		_scrolled.offset_bottom = saved[7]
+		_scrolled.remove_meta(&"scroll_anchors")
+	_scrolled = null
+
 
 func fade(direction: String, duration: float, skipping: bool) -> float:
 	if _fade_tween != null and _fade_tween.is_valid():

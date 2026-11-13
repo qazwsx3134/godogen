@@ -1,6 +1,7 @@
 extends Panel
-## 吐槽素材／人物檔案 (scenes/ui/case_file_panel.tscn): tabs, a four-column grid of what the
-## player has, and below it the selected entry's status card — a ◆ ribbon, the name on a plaque,
+## 吐槽素材／人物檔案 (scenes/ui/case_file_panel.tscn): tabs, a row of tall cards (CardStrip, scrolls
+## sideways) — what the player has, then a dark blank with a Roman numeral for each one the story still
+## holds — and below it the selected entry's status card — a ◆ ribbon, the name on a plaque,
 ## its place in the list and whether it can be used now beside the picture in a ring, then ◆ 說明
 ## and, while it can answer the timed choice, ◆ 拿來吐槽. Layout lives in the scene; this
 ## script fills it. During the timed tsukkomi choice, a material that backs one of the visible
@@ -17,6 +18,9 @@ var _style_id: String = "gintama"
 ## The skin's words (skin.gd terms): rebut, materials, …
 var terms: Dictionary = {"rebut": "吐槽", "materials": "吐槽素材"}
 var _entries: Dictionary = {"materials": [], "profiles": []}
+## How many each tab can hold in this story (StoryRunner.case_file() material_total / profile_total).
+var _totals: Dictionary = {"materials": 0, "profiles": 0}
+const NUMERALS: Array[String] = ["Ⅰ", "Ⅱ", "Ⅲ", "Ⅳ", "Ⅴ", "Ⅵ", "Ⅶ", "Ⅷ", "Ⅸ", "Ⅹ", "Ⅺ", "Ⅻ"]
 var _pictures: Dictionary = {}
 var _usable: Dictionary = {}
 var _tab: String = "materials"
@@ -60,6 +64,7 @@ func layout(area: Rect2) -> void:
 ## usable: {material_id: option_id} for materials that back a visible tsukkomi option now.
 func open(case_file: Dictionary, tab: String, pictures: Dictionary, usable: Dictionary = {}) -> void:
 	_entries = {"materials": case_file.get("materials", []), "profiles": case_file.get("profiles", [])}
+	_totals = {"materials": int(case_file.get("material_total", 0)), "profiles": int(case_file.get("profile_total", 0))}
 	_pictures = pictures
 	_usable = usable
 	visible = true
@@ -73,7 +78,7 @@ func current_tab() -> String:
 func _show_tab(tab: String) -> void:
 	_tab = tab if tab in ["materials", "profiles"] else "materials"
 	for tab_id: String in _tabs.keys():
-		UI_STYLES.apply_button(_tabs[tab_id], _style_id, "selector", tab_id == _tab)
+		UI_STYLES.apply_button(_tabs[tab_id], _style_id, "tab", tab_id == _tab)  # selected and not look different
 	for card: Node in _grid.get_children():
 		_grid.remove_child(card)
 		card.queue_free()
@@ -87,6 +92,8 @@ func _show_tab(tab: String) -> void:
 		card.get_node("Content/Picture").call("show_item", entry_name, _picture_of(str(entry.get("id", ""))))
 		_grid.add_child(card)
 		card.pressed.connect(_select.bind(index))
+	for blank: int in range(entries.size(), maxi(int(_totals[_tab]), entries.size())):
+		_grid.add_child(_blank_card(blank))
 	_empty.text = "還沒有取得%s。" % terms["materials"] if _tab == "materials" else "還沒有解鎖人物檔案。"
 	_empty.visible = entries.is_empty()
 	_select(0)
@@ -95,9 +102,9 @@ func _show_tab(tab: String) -> void:
 func _select(index: int) -> void:
 	var entries: Array = _entries[_tab]
 	_selected = clampi(index, 0, maxi(entries.size() - 1, 0))
-	for card_index: int in range(_grid.get_child_count()):
+	for card_index: int in range(entries.size()):
 		var card: Button = _grid.get_child(card_index) as Button
-		UI_STYLES.apply_button(card, _style_id, "selector", card_index == _selected)
+		UI_STYLES.apply_button(card, _style_id, "selector" if card_index == _selected else "standard", card_index == _selected)
 		(card.get_node("Content/Name") as Label).add_theme_color_override("font_color", card.get_theme_color("font_color"))
 	var entry: Dictionary = entries[_selected] if not entries.is_empty() else {}
 	var entry_id: String = str(entry.get("id", ""))
@@ -109,11 +116,32 @@ func _select(index: int) -> void:
 	_use_button.visible = usable
 	_use_head.visible = usable
 	_kind.text = "◆ %s情報" % terms["materials"] if _tab == "materials" else "◆ 人物檔案"
-	_order.text = "第 %d 件／共 %d 件" % [_selected + 1, entries.size()] if _tab == "materials" \
-		else "第 %d 人／共 %d 人" % [_selected + 1, entries.size()]
+	var total: int = maxi(int(_totals[_tab]), entries.size())  # found and still hidden
+	_order.text = "第 %d 件／共 %d 件" % [_selected + 1, total] if _tab == "materials" \
+		else "第 %d 人／共 %d 人" % [_selected + 1, total]
 	_status.text = ("現在可以拿來%s！" % terms["rebut"] if usable else "收在案件檔裡，%s時可以拿出來" % terms["rebut"]) if _tab == "materials" \
 		else "已解鎖的人物檔案"
 	_paint_card()
+
+
+## A card the player has not found yet: dark, inert, numbered in the order it would come.
+func _blank_card(index: int) -> Button:
+	var card: Button = CARD_SCENE.instantiate() as Button
+	card.name = "CaseFileBlank_%d" % (index + 1)
+	card.disabled = true
+	card.focus_mode = Control.FOCUS_NONE
+	card.get_node("Content").visible = false
+	var numeral: Label = card.get_node("Numeral")
+	numeral.text = NUMERALS[index] if index < NUMERALS.size() else str(index + 1)
+	numeral.visible = true
+	var dark: StyleBoxFlat = StyleBoxFlat.new()
+	dark.bg_color = Color(0.07, 0.08, 0.11, 0.92)
+	dark.border_color = Color(0.55, 0.58, 0.64, 0.6)
+	dark.set_border_width_all(3)
+	dark.set_corner_radius_all(14)
+	for state: String in ["normal", "disabled", "hover", "pressed", "focus"]:
+		card.add_theme_stylebox_override(state, dark)
+	return card
 
 
 ## The plaque, the picture ring and the plaque's ink in the current edition.

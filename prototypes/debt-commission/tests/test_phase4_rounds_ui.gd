@@ -290,7 +290,7 @@ func _test_game_over_screen() -> void:
 		await _press(game._boke_tsukkomi_button)
 		await _play_until(game, func() -> bool: return game._screen_mode in ["boke_round", "end"], "after whiff %d" % (whiff + 1))
 	_expect(game._screen_mode == "end" and game._game_over.visible and game._game_over_retry_button.is_visible_in_tree() and
-		not game._end_box.visible and game._game_over.message.text.begins_with("眼鏡耗盡"),
+		not game._chapter_result.visible and game._game_over.message.text.begins_with("眼鏡耗盡"),
 		"the fifth whiff ends on the Game Over screen instead of the ending buttons")
 	await _press(game._game_over_retry_button)
 	await _frames(3)

@@ -15,7 +15,7 @@
       "trigger": "investigate",
       "steps": [
         {"target": "investigate_scene", "title": "調查", "text": "拖曳畫面看看四周，\n點可疑的地方就能取得線索。"},
-        {"target": "investigate_collapse", "title": "收起對話框", "text": "對話框擋住畫面時按這裡，\n再點一次就展開。"},
+        {"target": "investigate_collapse", "title": "收起與展開", "text": "對話框擋住畫面時按這裡收起；\n要看話題或移動時再展開。"},
         {"target": "investigate_continue", "title": "繼續故事", "text": "線索找夠了，\n按這裡繼續。"}
       ]
     },

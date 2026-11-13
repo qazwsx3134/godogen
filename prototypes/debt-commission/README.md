@@ -6,11 +6,28 @@
 
 Godot 4.7 橫向視覺小說，依 [V1 Roadmap](../../docs/story-telling-game/ROADMAP.md) 與 [gintama0923](../../docs/gintama-like/new/gintama0923.md) 製作。狀態：**Phase 1、Phase 2 與 Phase 3 技術短循環已完成自動驗收；Phase 4 的回合玩法（逐句槽點、第四面牆消音條與伊莉莎白的牌子、條件式放棄吐槽、連擊、QTE、超必殺、演出效果）與調查的對話／移動話題有可玩的技術試片與自動驗收**；第一章草稿 v0.2 已做成上機試讀版，作者試讀修訂與真人手機試玩待完成。
 
-遊戲以 16:9 橫向畫面呈現：立繪固定在舞台上，底部閱讀框可以遮住人物，長台詞在框內分頁。預設閱讀與選單字級較小，閱讀字級仍可在設定調整。作者只改 JSON 就能換場景、角色、分支與素材條件。[早期直式版比較](docs/UI-TRIAL.md)保留歷史畫面；橫向版仍待真人手機試玩。
+遊戲預設以 16:9 橫向畫面呈現，每個故事也可以改成 9:16 直式（見下方「直式與橫式」）：立繪固定在舞台上，底部閱讀框可以遮住人物，長台詞在框內分頁。預設閱讀與選單字級較小，閱讀字級仍可在設定調整。作者只改 JSON 就能換場景、角色、分支與素材條件。[早期直式版比較](docs/UI-TRIAL.md)保留歷史畫面；橫向版仍待真人手機試玩。
 
 劇情會走向《底特律：變人》、《黑鏡：潘達斯奈基》那種大量分支，所以有一個 ComfyUI 手感的網頁版[劇本節點編輯器](docs/STORY-EDITOR.md)（`tools/story_editor/`）：拖卡片、拉線接分支、標出到不了的節點與結局，讀寫同一份劇本 JSON；匯出後用 `tools/story_editor/check_story.gd` 重算 `version` 並驗證。
 
-遊戲只附兩個故事：**功能展示**（`data/showcase_story.json`，預設）與作者的極短篇**《不是頭痛，是桂》**（`stories/katsura_dog_ears/`）。功能展示是故事編輯器的範本：目錄用選項分到「畫面：轉場與演出」「角色：立繪與文字」「玩法：分支、調查與吐槽」三段，每張卡片示範一組步驟（bg 的四種轉場、fade、shake／flash／freeze／cutin／placard／beam、bgm／se、立繪登場／表情／動作／明暗／退場、畫外音、心聲、文字標記、旗標與條件分支、四種漫畫吐槽、item／profile、調查、裝傻吐槽回合、結局），看完回到目錄。在編輯器打開同名卡片就看得到寫法。舊的第一章、討債、Phase 2–4、EP00 等片段已退出遊戲，只留在 `tests/fixtures/` 當測試夾具（見下方「測試夾具」）。
+遊戲只附兩個故事：**功能展示**（`data/showcase_story.json`，預設）與作者的極短篇**《不是頭痛，是桂》**（`stories/katsura_dog_ears/`）。功能展示是故事編輯器的範本：目錄用選項分到「畫面：轉場與演出」「角色：立繪與文字」「玩法：分支、調查與吐槽」「進階：話題、證言、連擊與導演」四段，每張卡片示範一組步驟（bg 的四種轉場、fade、shake／flash／freeze／cutin／placard／beam、bgm／se、立繪登場／表情／動作／明暗／退場、畫外音、心聲、文字標記、旗標與條件分支、四種漫畫吐槽、item／profile、調查、裝傻吐槽回合、調查的對話與移動話題、證言回合的消音條與伊莉莎白的牌子、連擊回合與 QTE、導演選擇、章節結算 result、結局），看完回到目錄。章節選擇裡的「功能展示（直式）」是同一份劇本的直式版，用來對照兩種方向。在編輯器打開同名卡片就看得到寫法。舊的第一章、討債、Phase 2–4、EP00 等片段已退出遊戲，只留在 `tests/fixtures/` 當測試夾具（見下方「測試夾具」）。
+
+## 直式與橫式
+
+畫面方向是故事的設定，寫故事前在編輯器左欄「畫面方向」選：橫式 16:9（1920×1080，預設）或直式 9:16（1080×1920）。存進劇本 JSON 根層的 `"orientation": "portrait"`；不寫就是橫式。`data/stories.json` 的一列也可以寫 `orientation`（與 `title`），讓同一份劇本另開一個直式版，例如 `showcase_portrait`。`orientation` 不影響故事的 `version`，舊存檔不會因此封存。
+
+- **執行時**：開始或切換故事時，`main.gd` 的 `_apply_orientation()` 把畫布換成該方向（`content_scale_size`），桌機視窗跟著轉直或轉橫（縮到螢幕放得下），Android／iOS 呼叫 `screen_set_orientation`。同一個匯出版可以同時放直式與橫式故事；網頁版用 `?sample=showcase_portrait` 直接開直式。
+- **scene 怎麼支援兩種方向**：scene 本身的 anchor／offset 是橫式版面。橫式版面放不進直式的 node，加 `metadata/portrait_layout`（Inspector 最下方 Metadata），內容是直式時要換的屬性，例如 `{"anchor_top": 0.4, "anchor_left": 0.08}`；值可以是任何屬性（`custom_minimum_size`、`visible`、`columns`…）。`scripts/orientation_layout.gd` 在直式時套用，切回橫式時還原成 scene 裡的值。執行時才產生的 scene（選項列、漫畫吐槽）也會套用。用 Container 與比例 anchor 排好的面板（對話框、選項、目錄、存讀檔、紀錄、設定、調查列、回合操作）兩種方向共用，不需要 metadata。
+- **目前有直式 metadata 的 node**：`scenes/stage.tscn` 的 `StageArea/left`、`center`、`right`（直式站位）、`scenes/ui/title_screen_gintama.tscn` 的 `CardArea`（標題卡移到下方）、`scenes/ui/round_hud.tscn` 根節點（全寬、在場景名稱下方）、`scenes/comedy/tsukkomi_impact.tscn`／`tsukkomi_impact_right.tscn` 的 `CutInPanel`、`Burst`（人物格在爆炸框下方）。第一次寫入用 `tools/add_portrait_layouts.gd`，之後直接在 Inspector 改。
+- **檢查畫面**：`xvfb-run -a godot --path . --resolution 540x960 --script res://tools/screen_audit.gd -- <輸出資料夾> showcase_portrait` 用真實外殼把功能展示從頭玩到尾，每到新畫面（每段第一句、各種演出、選項、調查、回合、QTE、目錄／設定／存讀檔等疊加層）存一張圖，並列出標題按鈕、狀態列、工具列超出畫面的地方。橫式改 `--resolution 960x540` 與 `showcase`。不寫入玩家存檔。
+- **限制**：直式背景一樣是 cover 裁切，16:9 的背景圖左右會被裁掉，調查時可左右拖曳（`test_orientation` 確認拖到邊後空瓶在畫面內、點得到）；直式版面在 Inspector 改數字，不能在 2D 編輯器拖曳（編輯器預覽是 1920×1080）；直式專用背景、`.dialogue`（Parley）來源的方向設定還沒做；Android／iOS 原生匯出的轉向沒有驗證（iOS 要在匯出設定允許直式才會轉）。
+
+## 轉場標題、捲動 CG、線索卡
+
+- **轉場後的標題**：`bg` 步驟寫 `"title": "萬事屋・廚房"`，換完背景後畫面中間的深色帶從中央展開、標題浮上來、停一下再淡出；不擋點擊也不拖住下一句，略讀時不播。調查第一次開始時自動顯示「開始尋找線索」（`investigate` 可用 `title` 換字）。外觀在 `scenes/ui/title_banner.tscn`（`Band`、`Text`、`Rule`；根節點 `open_seconds`／`hold_seconds`／`fade_seconds`）。
+- **捲動 CG**：`bg` 步驟寫 `"scroll": "down"`（`up`／`left`／`right`）與選填 `"scroll_seconds": 7`（預設 6），鏡頭沿那個方向慢慢走過整張圖，不擋下一句；圖在那個方向比畫面長 30% 以上就直接走，不夠就稍微放大（手繪圖放大會變軟，直式長圖最好）。略讀與畫面效果「減少」時直接停在終點；下一個 `bg`、調查或讀檔會把圖放回原位。功能展示「畫面・背景轉場」有往下與往右的示範。
+- **已知線索（吐槽素材／人物檔案）**：直長卡片排成一列（`CardStrip`，多了左右捲），還沒拿到的是暗色空卡＋羅馬數字；總數由故事裡的 `item`／`profile` 步驟與調查熱區的 `item` 算出（`StoryRunner.case_file()` 的 `material_total`／`profile_total`）。卡片外觀在 `scenes/ui/case_file_card.tscn`（`Numeral` 是空卡的數字）。
+- **手機字級**：在手機上（每 CSS px 約 2.6 個設計像素以上），所有小於 44 的字放大 1.25 倍（`scripts/text_scale.gd`；對話正文另外乘上「對話字級」設定），桌機維持 scene 裡的字級。不想被放大的 node 加 `metadata/fixed_font_size`。原生 Android／iOS 一律當手機（沒有實機驗證）。
 
 ## 要驗證的玩法假設（草稿，待作者確認）
 
@@ -39,8 +56,8 @@ Godot 4.7 橫向視覺小說，依 [V1 Roadmap](../../docs/story-telling-game/RO
 | 冷場與調查回饋 | 冷場的提示寫出原因（時間到／這個選項不對／這句沒有槽點／時機沒抓到）；普通吐槽有自己的輕音效與短震動；調查時點到空處顯示「這裡沒什麼特別的」，連續落空 3 次改成提示還剩幾個地方沒查。第一次正常閱讀（不是快轉）時，教學會說明長按隱藏介面、往上滑看對話紀錄 |
 | 推進鈕（›／續／→） | 補完當句、翻閱長台詞，讀完後推進劇情 |
 | 選單／標題讀檔 | 選擇指定手動欄位；讀檔頁也可選自動續讀檔 |
-| 工具列 | 閱讀框下方的 LOG、AUTO、SKIP、MENU；存讀檔、吐槽素材與人物檔案收在目錄裡 |
-| 調查 | 線索是背景圖上的東西，不是按鈕：拖曳背景找（橫向畫面可上下或左右移動有裁切的部分），點那樣東西就取得線索，找到的會留下淡框與勾；有查看後台詞的會先演完再回來。按「收起 ▼」後，底部會留下半透明細列；可從列上拖曳或點擊背景，按「展開 ▲」叫回對話框。全部找到時會顯示「繼續」，收合後也能直接按「繼續」離開。`keep_cast` 調查保留角色，第一章的銀時嘴角跟隨立繪與拖曳；移往廚房時角色留在客廳 |
+| 工具列 | 閱讀框下方四顆只有圖示的按鈕：紀錄、自動、略讀、選單（名稱在 tooltip；AUTO／SKIP 開著時按鈕變亮）。`gintama_reading_*` 按鈕的 `icon_only` 匯出欄位決定只顯示圖示或圖示＋文字。存讀檔、吐槽素材與人物檔案收在目錄裡 |
+| 調查 | 線索是背景圖上的東西，不是按鈕：拖曳背景找（橫向畫面可上下或左右移動有裁切的部分），點那樣東西就取得線索，找到的會留下淡框與勾；有查看後台詞的會先演完再回來。按「收起 ▼」後，底部會留下半透明細列；可從列上拖曳或點擊背景，按「展開 ▲」叫回對話框。全部找到時會顯示「繼續」，收合後也能直接按「繼續」離開。第一次進入一個調查時，畫面中間浮現「開始尋找線索」；畫面還能往哪邊拖，邊緣就有 ‹ › ︿ ﹀ 鈕，點一下平滑移一段，拖到底那一側的鈕會消失（`scenes/ui/pan_arrows.tscn`）。手機橫拿（畫面高度不到 480 CSS px）時對話框一開始就收成細列，細列帶著這次調查的提示。`keep_cast` 調查保留角色，第一章的銀時嘴角跟隨立繪與拖曳；移往廚房時角色留在客廳 |
 | 對話／移動 | 調查時對話框裡的兩排話題：「對話」點了演出那段對話，聊過的不再出現；「移動」換到另一個地點（例如廚房），那裡有自己的背景與熱區，查完會自動回到原地點，也可以按「移動」回去。各地點已查過的熱區保持打勾 |
 | 裝傻發言 | ‹ › 切換句子；有補充時按「聽下去」；按「吐槽！」才進入 8 秒選詞 |
 | 吐槽選詞 | 選吐槽詞；完美或普通吐槽會先顯示左右交替的漫畫格與台詞，點一下可快轉演出，再接回故事。素材會解鎖完美選項，逾時算冷場；選單、紀錄及存檔欄位會暫停倒數 |
@@ -110,7 +127,7 @@ python3 preview/start.py
 
 ## 開發與 Web 匯出
 
-此目錄是獨立的 Godot 專案，用 **Godot 4.7 stable** 開啟 `project.godot`，按 F5 試玩。設計尺寸 1920×1080（16:9），`stretch aspect=keep` 保持橫向構圖，比例不同的視窗會留邊；原生手機以橫向啟動。
+此目錄是獨立的 Godot 專案，用 **Godot 4.7 stable** 開啟 `project.godot`，按 F5 試玩。設計尺寸 1920×1080（16:9），`stretch aspect=keep` 保持構圖，比例不同的視窗會留邊；原生手機以橫向啟動。直式故事執行時把畫布換成 1080×1920（見「直式與橫式」）。
 
 ```bash
 cd prototypes/debt-commission
@@ -130,7 +147,7 @@ bash tools/serve_web.sh
 | --- | --- |
 | `main.gd` | 橫向外殼：背景、立繪、特效、對話與選項、彈出視窗；手勢、AUTO／SKIP、選單、紀錄。底下四段各在自己的檔案，透過 `m`（main 的 `class_name DebtMain`）讀寫外殼的狀態：`scripts/main_investigation.gd` 調查、`main_round.gd` 裝傻回合與 QTE、`main_saves.gd` 存讀檔與備份、`main_tutorial.gd` 第一次教學，`main_qa.gd` 是 `?qa=1` 的 QA 快照。測試直接呼叫的舊名稱在 `main.gd` 末尾「轉接」保留一行 |
 | `scripts/flow_graph.gd`、`scenes/ui/flowchart_panel.tscn`、`flow_box.tscn` | 流程圖：把劇本的節點收成場景方塊（`next`、選項、`condition`、`goto`、回合 `clear` 才算路線；調查反應、吐槽失敗、提示、重試與 Game Over 留在方塊裡），走過的顯示標題、其他是 ？？？。面板根節點的 `box_size`、`column_gap`、`row_gap`、`line_color`、`faint_line_color`、`line_width` 可在 Inspector 調；方塊外觀在 `flow_box.tscn`。由 `tools/add_flowchart_scenes.gd` 產生一次 |
-| `shaders/scene_transition.gdshader` | 換背景的轉場：`bg` 步驟寫 `transition` 為 `brush`（筆刷）、`ink`（墨暈）或 `glitch`（故障），預設 `fade`；`.dialogue` 寫 `do bg("id", "brush")`。下一句等轉場結束；畫面效果「減少」時直接切換 |
+| `shaders/scene_transition.gdshader` | 換背景的轉場：`bg` 步驟寫 `transition` 為 `brush`（筆刷）、`ink`（墨暈）或 `glitch`（故障），預設 `fade`（各自的樣子與秒數見 IMPLEMENTATION.md `bg`）；`.dialogue` 寫 `do bg("id", "brush")`。下一句等轉場結束；畫面效果「減少」時直接切換 |
 | `scripts/skin.gd`、`skins/gintama/skin.json` | 外觀包：載入並合併 `skins/<id>/skin.json`（場景、外觀、生命圖示、標題、用語） |
 | `scripts/ui_styles.gd` | 依外觀包的配色與素材畫按鈕與面板（依 node 的 `ui_style_role` 套用） |
 | `scripts/ui_stage_style.gd` | 背景照片的和紙色調 |
@@ -215,7 +232,7 @@ node tools/browser_check.mjs --backup --playwright /path/to/node_modules/@playwr
 
 畫面原本全在 `main.gd` 執行時建立，編輯器裡看不到。依 repo 根目錄 `CLAUDE.md` 的原則，改到哪個畫面就轉成 `scenes/ui/` 裡的 scene，版面交給 node 與 Container，程式只負責填資料和行為。
 
-2026-11-11 選定的介面圖位於 `assets/ui/selected/`：九宮格 StyleBox 在其 `styles/`，深藍與和紙按鈕四邊邊距各 48 px，分頁下邊為 8 px；吐槽按鈕使用整張圖。可在編輯器調整 `title_screen_gintama.tscn` 的 `LogoArt`、`chapter_result_gintama.tscn` 的 `GradeStamp`、`end_controls.tscn` 的 `EndingCard`／`EndingTitle`、`game_over_gintama.tscn` 的 `Glasses`、`gallery_picture.tscn` 的 `Thumb`，以及 `dialogue_box_gintama.tscn` 的 `BokeTsukkomi`。評價印章、結局名稱及未解鎖卡面由腳本依狀態填入；其位置與尺寸保存在 scene。開機圖與 App 圖示設定在 `project.godot`；Web 匯出排除候選原圖 `art_src/`。
+2026-11-11 選定的介面圖位於 `assets/ui/selected/`：九宮格 StyleBox 在其 `styles/`，深藍與和紙按鈕四邊邊距各 48 px，分頁下邊為 8 px；「吐槽！」和其他主要按鈕一樣用深藍框（`ui_style_role` `boke_primary`），`btn_tsukkomi_*.png` 目前沒有使用。可在編輯器調整 `title_screen_gintama.tscn` 的 `LogoArt`、`chapter_result_gintama.tscn` 的 `GradeStamp`、`game_over_gintama.tscn` 的 `Glasses`、`gallery_picture.tscn` 的 `Thumb`，以及 `dialogue_box_gintama.tscn` 的 `BokeTsukkomi`。評價印章、結局名稱及未解鎖卡面由腳本依狀態填入；其位置與尺寸保存在 scene。開機圖與 App 圖示設定在 `project.godot`；Web 匯出排除候選原圖 `art_src/`。
 
 | 畫面 | 狀態 | Scene |
 |---|---|---|
@@ -231,7 +248,7 @@ node tools/browser_check.mjs --backup --playwright /path/to/node_modules/@playwr
 | 對話紀錄 | ✅ 已轉換 | `scenes/ui/dialogue_log.tscn`、逐句 `log_entry.tscn`（`Avatar`＋`Body/Speaker`、`Body/Text`）。排版像聊天：其他角色靠左，有頭像與名字色；POV 角色與玩家的選擇靠右；旁白置中。名字色在銀魂和紙下使用 catalog 的 `ink`，沒填時由 `color` 加深到與和紙對比 ≥ 4.5（`ui_styles.ink_for`）。頭像預設為首字色卡，catalog 補上 `avatar` 圖片就會自動取代 |
 | 流程圖 | ✅ 新增 | `scenes/ui/flowchart_panel.tscn`（`Header` 的 `Prev`／`StoryName`／`Next`／`Close`、`%Progress`、`%Scroll`／`%Canvas`），方塊 `flow_box.tscn`（`%Kind`、`%Title`）。方塊的位置依劇本在執行時排，線畫在 `Canvas` 上 |
 | 存讀檔面板與覆寫確認 | ✅ 已轉換 | `scenes/ui/save_slots_panel.tscn`、`save_slot_card.tscn`、`save_overwrite_confirmation.tscn` |
-| 結尾按鈕 | ✅ 已轉換 | `scenes/ui/end_controls.tscn` |
+| 結局卷軸（end 與 result 共用） | ✅ 已轉換 | `scenes/ui/chapter_result_gintama.tscn`：`Dim` 全暗、`Card` 卷軸、`Buttons`（下一章／重玩／回標題，點一下才出現）、`TapHint`；根節點的 `dim_in`、`unroll`、`buttons_in`（秒）可調 |
 | 吐槽回合的操作列與消音條 | ✅ 已轉換 | 在對話框 scene 的 Actions 裡（‹ ›、句數、聽下去、吐槽！、`CensorBar`）；選項面板另有 `CensorBar` 與 `Super`；顯示什麼由 `scripts/round_view.gd` 決定 |
 | 超必殺光束 | ✅ 已轉換 | `scenes/ui/beam.tscn`（`Strip` 調 anchors／offsets 與厚度，`Aura`／`Light`／`Core` 調顏色，根 node 的 `reveal_seconds` 調展開秒數；`shaders/beam.gdshader` 調脈動速度與邊緣；正常執行不重建） |
 | QTE、cut-in、Game Over | ✅ 已轉換 | `scenes/ui/qte_ring.tscn`、`cutin.tscn`、`game_over_gintama.tscn` |
@@ -278,7 +295,7 @@ node tools/browser_check.mjs --backup --playwright /path/to/node_modules/@playwr
 
 新增段落內「上一句」、獨立快速存檔／快速讀檔，均在目錄。字級與紙框透明度在設定，窄手機可捲動。文字支援重點色／放大／抖動、停頓／慢速與角色打字音；功能展示的「角色：立繪與文字」示範文字演出，「畫面：轉場與演出」依序示範筆刷、墨暈、故障與預設淡入淡出四種換背景轉場。新安裝預設銀魂和紙；後續對話框與按鈕沿用作者確認的 PNG 紙框與深藍銀框按鈕。
 
-直接調整 `dialogue_log.tscn` 的 `Margins` 與 `Column` 間距、`LogClose` 文字；`save_slots_panel.tscn` 的 `OuterMargins`／`Padding`／`Cards`；`save_slot_card.tscn` 的 `Preview`／`SlotTitle`；`save_overwrite_confirmation.tscn` 的確認文案；`end_controls.tscn` 的 `Actions` anchors 與兩顆按鈕。正常執行不重建這些 scene。
+直接調整 `dialogue_log.tscn` 的 `Margins` 與 `Column` 間距、`LogClose` 文字；`save_slots_panel.tscn` 的 `OuterMargins`／`Padding`／`Cards`；`save_slot_card.tscn` 的 `Preview`／`SlotTitle`；`save_overwrite_confirmation.tscn` 的確認文案；`chapter_result_gintama.tscn` 的 `Dim` 顏色、`Buttons` 與 `TapHint`。正常執行不重建這些 scene。
 
 ## Studio 效能改善（2026-10-16）
 

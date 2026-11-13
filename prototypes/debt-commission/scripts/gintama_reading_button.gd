@@ -5,6 +5,14 @@ extends Button
 @export var active_surface: StyleBoxFlat
 ## Only the painted surface moves; the button's touch area and container layout stay fixed.
 @export_range(0.9, 1.0, 0.01) var pressed_scale: float = 0.96
+## The icon alone says what the button does (the caption is hidden, the icon drawn larger); tooltip_text
+## keeps the name for hover and screen readers.
+const ICON_ONLY_WIDTH: float = 150.0
+@export var icon_only: bool = false:
+	set(value):
+		icon_only = value
+		if is_node_ready():
+			_apply_icon_only()
 @onready var surface: Panel = %Surface
 @onready var cutout_art: TextureRect = %CutoutArt
 var _hovering: bool = false
@@ -28,7 +36,27 @@ func _ready() -> void:
 		if not is_visible_in_tree():
 			_reset_press())
 	_center_surface_pivot()
+	_apply_icon_only()
 	refresh_state()
+
+
+func _apply_icon_only() -> void:
+	# The paper art has the glyph and room for the caption painted in; alone, the SVG icon sits centred on
+	# the surface StyleBox (normal / hover / active) of a narrower button.
+	var caption: Control = get_node_or_null("Surface/Contents/Caption") as Control
+	var icon_rect: TextureRect = get_node_or_null("Surface/Contents/Icon") as TextureRect
+	var contents: HBoxContainer = get_node_or_null("Surface/Contents") as HBoxContainer
+	# ponytail: only switches on; the scene's own visibility stands for captioned buttons (some hide the art).
+	if not icon_only or caption == null or icon_rect == null or contents == null:
+		return
+	caption.visible = false
+	cutout_art.visible = false
+	icon_rect.visible = true
+	icon_rect.custom_minimum_size = Vector2(44, 44)
+	icon_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon_rect.size_flags_horizontal = Control.SIZE_EXPAND | Control.SIZE_SHRINK_CENTER
+	contents.offset_left = 0.0
+	custom_minimum_size.x = ICON_ONLY_WIDTH
 
 
 func set_reduce_motion(reduced: bool) -> void:

@@ -59,6 +59,10 @@ func _run() -> void:
 	await create_timer(0.4).timeout  # the panel pops in
 	await _press(game._menu_items["settings"])
 	_expect(game._screen_mode == "settings" and game._menu_overlay.visible, "設定 opens over 目錄")
+	# Drawn above 目錄: the popup layer's z_index is 2, so 設定 needs more (clicks already reach it first).
+	var menu_z: int = game._menu_overlay.get_parent().z_index + game._menu_overlay.z_index
+	_expect(game._settings_panel.z_index > menu_z and game._settings_panel.get_index() > game._popup_layer.get_index(),
+		"設定 is drawn on top of 目錄 and takes the clicks")
 	await _press(game._settings_panel.call("buttons")["text_speed_1"])
 	await _press(game._settings_panel.close_button)
 	_expect(game._screen_mode == "menu" and game._menu_overlay.visible, "closing returns to 目錄")

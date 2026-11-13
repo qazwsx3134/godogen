@@ -5,7 +5,6 @@
 [ext_resource type="Texture2D" path="res://assets/image/yorosuya-outside.png" id="3_dexii"]
 [ext_resource type="Script" path="res://scripts/stage_slot_preview.gd" id="4_1hwpr"]
 [ext_resource type="PackedScene" path="res://scenes/characters/shinpachi.tscn" id="5_dexii"]
-[ext_resource type="Script" path="res://scripts/placeholder_sprite.gd" id="6_yd2gm"]
 [ext_resource type="PackedScene" path="res://scenes/characters/gintoki.tscn" id="7_0hg5s"]
 [ext_resource type="PackedScene" path="res://scenes/characters/kagura.tscn" id="8_jl6nj"]
 
@@ -85,6 +84,14 @@ offset_right = 240.0
 offset_bottom = 80.0
 mouse_filter = 2
 metadata/_edit_group_ = true
+metadata/portrait_layout = {
+"anchor_bottom": 0.88,
+"anchor_left": 0.2,
+"anchor_right": 0.2,
+"anchor_top": 0.3,
+"offset_bottom": 0.0,
+"offset_top": 0.0
+}
 
 [node name="Preview" type="Control" parent="StageArea/left" unique_id=321471511]
 anchors_preset = 0
@@ -93,13 +100,8 @@ anchor_bottom = 1.0
 mouse_filter = 2
 script = ExtResource("4_1hwpr")
 
-[node name="shinpachi" type="Control" parent="StageArea/left/Preview" unique_id=1186610596 instance=ExtResource("5_dexii")]
-editor_description = "新八 的站姿框。框的底邊是腳底線，站位（scenes/stage.tscn）會把整個框縮放到站位的高度。拖曳、縮放 Art 決定新八在任何站位的大小與位置；框本身不用動。圖以 asset_catalog.json 為準，這裡的圖是預覽。"
-anchors_preset = 0
-offset_right = 480.0
-offset_bottom = 1560.0
-mouse_filter = 2
-script = ExtResource("6_yd2gm")
+[node name="shinpachi" parent="StageArea/left/Preview" unique_id=1186610596 instance=ExtResource("5_dexii")]
+layout_mode = 0
 
 [node name="center" type="Control" parent="StageArea" unique_id=1442116471]
 editor_description = "站位「center」：拖曳整個框可移動，拉上下邊可調立繪高度。預覽使用一位代表角色，實際角色由劇本決定。"
@@ -116,6 +118,14 @@ grow_horizontal = 2
 grow_vertical = 0
 mouse_filter = 2
 metadata/_edit_group_ = true
+metadata/portrait_layout = {
+"anchor_bottom": 0.88,
+"anchor_left": 0.5,
+"anchor_right": 0.5,
+"anchor_top": 0.3,
+"offset_bottom": 0.0,
+"offset_top": 0.0
+}
 
 [node name="Preview" type="Control" parent="StageArea/center" unique_id=1702630425]
 anchors_preset = 0
@@ -124,13 +134,8 @@ anchor_bottom = 1.0
 mouse_filter = 2
 script = ExtResource("4_1hwpr")
 
-[node name="gintoki" type="Control" parent="StageArea/center/Preview" unique_id=187605281 instance=ExtResource("7_0hg5s")]
-editor_description = "銀時 的站姿框。框的底邊是腳底線，站位（scenes/stage.tscn）會把整個框縮放到站位的高度。拖曳、縮放 Art 決定銀時在任何站位的大小與位置；框本身不用動。圖以 asset_catalog.json 為準，這裡的圖是預覽。"
-anchors_preset = 0
-offset_right = 480.0
-offset_bottom = 1560.0
-mouse_filter = 2
-script = ExtResource("6_yd2gm")
+[node name="gintoki" parent="StageArea/center/Preview" unique_id=187605281 instance=ExtResource("7_0hg5s")]
+layout_mode = 0
 
 [node name="right" type="Control" parent="StageArea" unique_id=1155395482]
 editor_description = "站位「right」：拖曳整個框可移動，拉上下邊可調立繪高度。預覽使用一位代表角色，實際角色由劇本決定。"
@@ -145,6 +150,14 @@ offset_right = 240.0
 offset_bottom = 80.0
 mouse_filter = 2
 metadata/_edit_group_ = true
+metadata/portrait_layout = {
+"anchor_bottom": 0.88,
+"anchor_left": 0.8,
+"anchor_right": 0.8,
+"anchor_top": 0.3,
+"offset_bottom": 0.0,
+"offset_top": 0.0
+}
 
 [node name="Preview" type="Control" parent="StageArea/right" unique_id=1959457246]
 anchors_preset = 0
@@ -153,13 +166,8 @@ anchor_bottom = 1.0
 mouse_filter = 2
 script = ExtResource("4_1hwpr")
 
-[node name="kagura" type="Control" parent="StageArea/right/Preview" unique_id=1353873735 instance=ExtResource("8_jl6nj")]
-editor_description = "神樂 的站姿框。框的底邊是腳底線，站位（scenes/stage.tscn）會把整個框縮放到站位的高度。拖曳、縮放 Art 決定神樂在任何站位的大小與位置；框本身不用動。圖以 asset_catalog.json 為準，這裡的圖是預覽。"
-anchors_preset = 0
-offset_right = 480.0
-offset_bottom = 1560.0
-mouse_filter = 2
-script = ExtResource("6_yd2gm")
+[node name="kagura" parent="StageArea/right/Preview" unique_id=1353873735 instance=ExtResource("8_jl6nj")]
+layout_mode = 0
 
 [node name="DialogueGuide" type="ColorRect" parent="." unique_id=913392828]
 editor_description = "橫向閱讀框約略的位置；立繪可被遮住。此示意只在編輯器顯示。"

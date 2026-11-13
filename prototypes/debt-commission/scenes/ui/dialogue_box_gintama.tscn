@@ -8,17 +8,20 @@
 [ext_resource type="Texture2D" path="res://assets/ui/gintama_extracted_paper.png" id="6_amexu"]
 [ext_resource type="Texture2D" path="res://assets/ui/gintama_icon_advance.svg" id="7_amexu"]
 [ext_resource type="PackedScene" path="res://scenes/ui/gintama_reading_log.tscn" id="8_qywm6"]
-[ext_resource type="StyleBox" path="res://assets/ui/selected/styles/washi_normal.tres" id="8_xtycp"]
 [ext_resource type="PackedScene" path="res://scenes/ui/gintama_reading_auto.tscn" id="9_g6mmy"]
-[ext_resource type="StyleBox" path="res://assets/ui/selected/styles/washi_pressed.tres" id="9_whc87"]
-[ext_resource type="StyleBox" path="res://assets/ui/selected/styles/washi_disabled.tres" id="10_0udxm"]
 [ext_resource type="PackedScene" path="res://scenes/ui/gintama_reading_skip.tscn" id="10_053nw"]
 [ext_resource type="PackedScene" path="res://scenes/ui/gintama_reading_menu.tscn" id="11_2u5mq"]
 [ext_resource type="StyleBox" path="res://assets/ui/selected/styles/focus.tres" id="11_v3g4j"]
-[ext_resource type="StyleBox" path="res://assets/ui/selected/styles/tsukkomi_normal.tres" id="12_6j0l8"]
+[ext_resource type="StyleBox" path="res://assets/ui/selected/styles/navy_normal.tres" id="12_6j0l8"]
+[ext_resource type="StyleBox" path="res://assets/ui/selected/styles/key_normal.tres" id="12_8y3he"]
+[ext_resource type="StyleBox" path="res://assets/ui/selected/styles/key_pressed.tres" id="13_ef8tn"]
 [ext_resource type="PackedScene" path="res://scenes/ui/gintama_investigate_toggle.tscn" id="13_g6mmy"]
-[ext_resource type="StyleBox" path="res://assets/ui/selected/styles/tsukkomi_pressed.tres" id="13_hgqtv"]
-[ext_resource type="StyleBox" path="res://assets/ui/selected/styles/tsukkomi_disabled.tres" id="14_8y3he"]
+[ext_resource type="StyleBox" path="res://assets/ui/selected/styles/navy_pressed.tres" id="13_hgqtv"]
+[ext_resource type="StyleBox" path="res://assets/ui/selected/styles/navy_disabled.tres" id="14_8y3he"]
+[ext_resource type="StyleBox" path="res://assets/ui/selected/styles/key_hover.tres" id="14_wql47"]
+[ext_resource type="StyleBox" path="res://assets/ui/selected/styles/key_disabled.tres" id="15_l1mdh"]
+[ext_resource type="Texture2D" path="res://assets/ui/gintama_icon_chevron_left.svg" id="16_mpfba"]
+[ext_resource type="Texture2D" path="res://assets/ui/gintama_icon_chevron_right.svg" id="17_txbcg"]
 
 [sub_resource type="Theme" id="Theme_kqggf"]
 default_font = ExtResource("1_h3wp5")
@@ -764,11 +767,11 @@ visible = false
 custom_minimum_size = Vector2(132.92308, 132.92308)
 layout_mode = 2
 size_flags_horizontal = 8
-theme_override_styles/normal = ExtResource("8_xtycp")
-theme_override_styles/pressed = ExtResource("9_whc87")
-theme_override_styles/hover = ExtResource("8_xtycp")
-theme_override_styles/hover_pressed = ExtResource("9_whc87")
-theme_override_styles/disabled = ExtResource("10_0udxm")
+theme_override_styles/normal = ExtResource("12_8y3he")
+theme_override_styles/pressed = ExtResource("13_ef8tn")
+theme_override_styles/hover = ExtResource("14_wql47")
+theme_override_styles/hover_pressed = ExtResource("13_ef8tn")
+theme_override_styles/disabled = ExtResource("15_l1mdh")
 theme_override_styles/focus = ExtResource("11_v3g4j")
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_focus_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
@@ -826,11 +829,11 @@ theme_override_constants/separation = 10
 unique_name_in_owner = true
 custom_minimum_size = Vector2(132.92308, 132.92308)
 layout_mode = 2
-theme_override_styles/normal = ExtResource("8_xtycp")
-theme_override_styles/pressed = ExtResource("9_whc87")
-theme_override_styles/hover = ExtResource("8_xtycp")
-theme_override_styles/hover_pressed = ExtResource("9_whc87")
-theme_override_styles/disabled = ExtResource("10_0udxm")
+theme_override_styles/normal = ExtResource("12_8y3he")
+theme_override_styles/pressed = ExtResource("13_ef8tn")
+theme_override_styles/hover = ExtResource("14_wql47")
+theme_override_styles/hover_pressed = ExtResource("13_ef8tn")
+theme_override_styles/disabled = ExtResource("15_l1mdh")
 theme_override_styles/focus = ExtResource("11_v3g4j")
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_focus_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
@@ -839,17 +842,24 @@ theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 
 theme_override_colors/font_hover_pressed_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_font_sizes/font_size = 32
-text = "<"
+theme_override_colors/icon_normal_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/icon_focus_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/icon_pressed_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/icon_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/icon_disabled_color = Color(0.47, 0.46, 0.44, 1)
+icon = ExtResource("16_mpfba")
+icon_alignment = 1
 
 [node name="BokeNext" type="Button" parent="PaperAndToolbar/Panel/Padding/Column/Actions/RoundControls/RoundBar" unique_id=1430882116]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(132.92308, 132.92308)
 layout_mode = 2
-theme_override_styles/normal = ExtResource("8_xtycp")
-theme_override_styles/pressed = ExtResource("9_whc87")
-theme_override_styles/hover = ExtResource("8_xtycp")
-theme_override_styles/hover_pressed = ExtResource("9_whc87")
-theme_override_styles/disabled = ExtResource("10_0udxm")
+theme_override_styles/normal = ExtResource("12_8y3he")
+theme_override_styles/pressed = ExtResource("13_ef8tn")
+theme_override_styles/hover = ExtResource("14_wql47")
+theme_override_styles/hover_pressed = ExtResource("13_ef8tn")
+theme_override_styles/disabled = ExtResource("15_l1mdh")
 theme_override_styles/focus = ExtResource("11_v3g4j")
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_focus_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
@@ -858,7 +868,14 @@ theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 
 theme_override_colors/font_hover_pressed_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_font_sizes/font_size = 32
-text = ">"
+theme_override_colors/icon_normal_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/icon_focus_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/icon_pressed_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/icon_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
+theme_override_colors/icon_disabled_color = Color(0.47, 0.46, 0.44, 1)
+icon = ExtResource("17_txbcg")
+icon_alignment = 1
 
 [node name="Gap" type="Control" parent="PaperAndToolbar/Panel/Padding/Column/Actions/RoundControls/RoundBar" unique_id=1006893471]
 layout_mode = 2
@@ -869,11 +886,11 @@ mouse_filter = 2
 unique_name_in_owner = true
 custom_minimum_size = Vector2(132.92308, 132.92308)
 layout_mode = 2
-theme_override_styles/normal = ExtResource("8_xtycp")
-theme_override_styles/pressed = ExtResource("9_whc87")
-theme_override_styles/hover = ExtResource("8_xtycp")
-theme_override_styles/hover_pressed = ExtResource("9_whc87")
-theme_override_styles/disabled = ExtResource("10_0udxm")
+theme_override_styles/normal = ExtResource("12_8y3he")
+theme_override_styles/pressed = ExtResource("13_ef8tn")
+theme_override_styles/hover = ExtResource("14_wql47")
+theme_override_styles/hover_pressed = ExtResource("13_ef8tn")
+theme_override_styles/disabled = ExtResource("15_l1mdh")
 theme_override_styles/focus = ExtResource("11_v3g4j")
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_focus_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
@@ -899,7 +916,7 @@ theme_override_colors/font_focus_color = Color(0.972549, 0.9529412, 0.9137255, 1
 theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_hover_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_disabled_color = Color(0.72156864, 0.7607843, 0.7882353, 1)
+theme_override_colors/font_disabled_color = Color(0.6, 0.65882355, 0.7019608, 1)
 theme_override_font_sizes/font_size = 32
 text = "吐槽！"
 metadata/ui_style_role = "boke_primary"
@@ -935,6 +952,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_xy32q")
 normal_surface = SubResource("StyleBoxFlat_a60pk")
 hover_surface = SubResource("StyleBoxFlat_llyv6")
 active_surface = SubResource("StyleBoxFlat_kc6xy")
+icon_only = true
 
 [node name="Auto" parent="PaperAndToolbar/ToolbarMargin/Toolbar" unique_id=992363603 instance=ExtResource("9_g6mmy")]
 unique_name_in_owner = true
@@ -948,6 +966,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_em1q6")
 normal_surface = SubResource("StyleBoxFlat_ensc7")
 hover_surface = SubResource("StyleBoxFlat_ydu6f")
 active_surface = SubResource("StyleBoxFlat_riqsd")
+icon_only = true
 
 [node name="Skip" parent="PaperAndToolbar/ToolbarMargin/Toolbar" unique_id=1861651720 instance=ExtResource("10_053nw")]
 unique_name_in_owner = true
@@ -961,6 +980,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_0cyxi")
 normal_surface = SubResource("StyleBoxFlat_7km5t")
 hover_surface = SubResource("StyleBoxFlat_w55u1")
 active_surface = SubResource("StyleBoxFlat_snbm7")
+icon_only = true
 
 [node name="Menu" parent="PaperAndToolbar/ToolbarMargin/Toolbar" unique_id=125961985 instance=ExtResource("11_2u5mq")]
 unique_name_in_owner = true
@@ -974,6 +994,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_0ma3d")
 normal_surface = SubResource("StyleBoxFlat_opugl")
 hover_surface = SubResource("StyleBoxFlat_e2phs")
 active_surface = SubResource("StyleBoxFlat_1xldt")
+icon_only = true
 
 [node name="Corner" type="Control" parent="." unique_id=1098711187]
 z_index = 2

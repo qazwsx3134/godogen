@@ -34,8 +34,9 @@ func set_style(style_id: String) -> void:
 	UI_STYLES.set_hud_font(progress, style_id)
 
 
-func set_progress(found: int, total: int, complete: bool) -> void:
-	progress.text = "線索 %d/%d · 拖曳背景調查" % [found, total]
+## prompt: the search's own line (what to look for); without one the bar says to drag the picture.
+func set_progress(found: int, total: int, complete: bool, prompt: String = "") -> void:
+	progress.text = "線索 %d/%d · %s" % [found, total, prompt if not prompt.is_empty() else "拖曳背景調查"]
 	continue_button.visible = complete
 
 

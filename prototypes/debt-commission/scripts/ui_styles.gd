@@ -14,12 +14,11 @@ const SELECTED_STYLES: Dictionary = {
 	"washi_disabled": preload("res://assets/ui/selected/styles/washi_disabled.tres"),
 	"tab_selected": preload("res://assets/ui/selected/styles/tab_selected.tres"),
 	"tab_unselected": preload("res://assets/ui/selected/styles/tab_unselected.tres"),
-	"tsukkomi_normal": preload("res://assets/ui/selected/styles/tsukkomi_normal.tres"),
-	"tsukkomi_pressed": preload("res://assets/ui/selected/styles/tsukkomi_pressed.tres"),
-	"tsukkomi_disabled": preload("res://assets/ui/selected/styles/tsukkomi_disabled.tres"),
 	"focus": preload("res://assets/ui/selected/styles/focus.tres"),
 }
 
+## Buttons drawn as raised keys (key_style), not the selected art.
+const KEY_ROLES: Array[String] = ["boke_primary", "key_action"]
 ## Full panels (log, save slots, chapters, case file, confirmations) on the skin's panel paper.
 const PAPER_ROLES: Array[String] = ["menu", "log", "slots", "confirmation"]
 ## The base skin's look, used until skin.gd registers it (scenes opened in the editor, tools).
@@ -130,7 +129,7 @@ static func apply_button(button: Button, style_id: String, role: String = "stand
 	button.add_theme_stylebox_override("focus", button_style(normalized, role, "focus", active, density))
 	button.add_theme_stylebox_override("disabled", button_style(normalized, role, "disabled", active, density))
 	var p: Dictionary = palette(normalized)
-	if washi(normalized) and role in ["reading_action", "primary", "selector", "danger_action"]:
+	if washi(normalized) and role in ["reading_action", "key_action", "primary", "selector", "danger_action"]:
 		var font: FontVariation = FontVariation.new()
 		font.base_font = load("res://assets/fonts/NotoSerifTC.ttf")
 		font.variation_opentype = {TextServerManager.get_primary_interface().name_to_tag("wght"): 500.0}
@@ -145,14 +144,15 @@ static func apply_button(button: Button, style_id: String, role: String = "stand
 
 
 static func button_style(style_id: String, role: String, state: String, active: bool = false, scale_factor: float = 1.0) -> StyleBox:
+	if washi(style_id) and role in KEY_ROLES and state != "focus":
+		return key_style(state, maxf(1.0, scale_factor))
 	if washi(style_id):
 		var family: String = ""
-		if role in ["reading_action", "primary", "selector", "danger_action", "menu_primary"]:
+		# 吐槽！ (boke_primary) is an ordinary primary button: the same navy frame as 開始故事.
+		if role in ["reading_action", "primary", "boke_primary", "selector", "danger_action", "menu_primary"]:
 			family = "navy"
 		elif role in ["standard", "slot_card", "slot_card_empty"]:
 			family = "washi"
-		elif role == "boke_primary":
-			family = "tsukkomi"
 		elif role == "tab":
 			family = "tab"
 		if not family.is_empty():
@@ -165,8 +165,8 @@ static func button_style(style_id: String, role: String, state: String, active: 
 			if state == "hover":
 				texture_style.modulate_color = Color(1.12, 1.12, 1.12, 1.0)
 			var density: float = maxf(1.0, scale_factor)
-			texture_style.content_margin_left = 18.0 * density
-			texture_style.content_margin_right = 18.0 * density
+			texture_style.content_margin_left = 34.0 * density
+			texture_style.content_margin_right = 34.0 * density
 			texture_style.content_margin_top = 10.0 * density
 			texture_style.content_margin_bottom = 10.0 * density
 			return texture_style
@@ -385,6 +385,32 @@ static func button_style(style_id: String, role: String, state: String, active: 
 	return result
 
 
+## A slate key that stands on its ledge and sinks onto it when pressed (吐槽！, the search topics); the
+## paper keys beside it (聽下去 < >) are assets/ui/selected/styles/key_*.tres.
+static func key_style(state: String, density: float = 1.0) -> StyleBoxFlat:
+	var drop: float = 9.0 * density
+	var box := StyleBoxFlat.new()
+	# Muted slate, a little see-through, no frame.
+	box.bg_color = {"hover": Color(0.33, 0.37, 0.43, 0.86), "pressed": Color(0.22, 0.25, 0.3, 0.9),
+		"disabled": Color(0.45, 0.48, 0.52, 0.45)}.get(state, Color(0.27, 0.31, 0.37, 0.82))
+	box.set_corner_radius_all(roundi(30.0 * density))
+	box.anti_aliasing = true
+	box.content_margin_left = 34.0 * density
+	box.content_margin_right = 34.0 * density
+	box.content_margin_top = 10.0 * density
+	box.content_margin_bottom = 10.0 * density
+	# The depth is a see-through ledge along the bottom (a shadow would show through the face); pressed,
+	# the ledge goes and the face drops onto it. The text keeps to the face.
+	if state == "pressed":
+		box.content_margin_top += drop
+		box.expand_margin_top = -drop
+	elif state != "disabled":
+		box.border_width_bottom = roundi(drop)
+		box.border_color = Color(0.05, 0.06, 0.08, 0.4)
+		box.content_margin_bottom += drop
+	return box
+
+
 static func panel_style(style_id: String, role: String, scale_factor: float = 1.0) -> StyleBoxFlat:
 	var p: Dictionary = palette(style_id)
 	var density: float = maxf(1.0, scale_factor)
@@ -579,9 +605,7 @@ static func contrast_ratio(foreground: Color, background: Color) -> float:
 static func _button_ink(p: Dictionary, role: String, active: bool, state: String, framed: bool = false) -> Color:
 	if framed and role == "tab":
 		return Color("#f8f3e9") if active else p["text"] as Color
-	if framed and role == "boke_primary":
-		return Color("#e4ddd2") if state == "disabled" else Color("#f8f3e9")
-	if framed and role in ["reading_action", "primary", "selector", "danger_action", "menu_primary"]:
+	if framed and role in ["reading_action", "key_action", "primary", "boke_primary", "selector", "danger_action", "menu_primary"]:
 		return Color("#99a8b3") if state == "disabled" else Color("#f8f3e9")
 	if framed and role in ["standard", "slot_card", "slot_card_empty"]:
 		return p["disabled"] as Color if state == "disabled" else p["text"] as Color

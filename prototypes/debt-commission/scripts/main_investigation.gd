@@ -17,6 +17,22 @@ var m: DebtMain
 var _empty_taps: int = 0
 
 
+## Below this game-area height (CSS px, a phone held sideways) a search starts with the box folded.
+const SHORT_SCREEN_CSS: float = 480.0
+## The edge arrows of a search (scenes/ui/pan_arrows.tscn).
+var arrows: Control = null
+var _glide_tween: Tween = null
+## How far one arrow tap moves the view, as a share of the screen.
+const GLIDE_STEP: float = 0.4
+
+## Searches whose 開始尋找線索 title has played this session.
+var _banner_shown: Dictionary = {}
+
+
+func forget_banners() -> void:
+	_banner_shown.clear()
+
+
 func _init(main: DebtMain) -> void:
 	m = main
 
@@ -66,6 +82,7 @@ func present_investigation(command: Dictionary, restored: bool) -> void:
 	m._clear_choices()
 	m._hide_story_parts()
 	m._screen = DebtMain.Screen.INVESTIGATE
+	m._motion.end_scroll()  # a search lays the picture out for panning itself
 	m._tutorial_ctl.maybe_tutorial.call_deferred("investigate")
 	m._dialog_layer.visible = true
 	m._dialog_panel.visible = true  # the prompt shows first; 收起 folds the box away
@@ -107,10 +124,23 @@ func present_investigation(command: Dictionary, restored: bool) -> void:
 			"text": m._full_text})
 		m._line_logged = true
 	m._refresh_phase3_hud()
+	# The first time into a search (not on coming back from a find or a topic, nor from a save).
+	var search_id: String = m._dict_string(command, "id")
+	if not restored and not _banner_shown.has(search_id):
+		_banner_shown[search_id] = true
+		m._show_banner(m._dict_string(command, "title", "開始尋找線索"))
+		# On a short screen (a phone held sideways) the open box would hide most of the room: start folded;
+		# the folded bar keeps the prompt, and 展開 brings the topics back.
+		if m._screen_css_height < SHORT_SCREEN_CSS:
+			set_investigation_collapsed(true)
 	m._qa_ctl.publish_qa_state()
 
 
 func build_investigate_bar() -> void:
+	arrows = preload("res://scenes/ui/pan_arrows.tscn").instantiate() as Control
+	m._dialog_layer.add_child(arrows)
+	m._dialog_layer.move_child(arrows, m._tap_catcher.get_index() + 1)  # over the tap catcher: its taps are not searches
+	arrows.connect("pan_requested", glide)
 	m._investigate_bar = INVESTIGATE_BAR_SCENE.instantiate() as Control
 	m._dialog_layer.add_child(m._investigate_bar)
 	m._investigate_bar.visible = false
@@ -203,8 +233,11 @@ func place_cast_hotspots() -> void:
 		var spot: Control = m._hotspots.get(m._dict_string(hotspot, "id")) as Control
 		if spot == null or spot.get_parent() != m._interaction_layer:
 			continue
-		var portrait: Rect2 = (m._sprites[m._dict_string(hotspot, "character")] as Control).call("art_rect")
-		if hotspot.has("art_region"):
+		var sprite: Control = m._sprites[m._dict_string(hotspot, "character")] as Control
+		var portrait: Rect2 = sprite.call("art_rect")
+		if hotspot.has("spot"):
+			portrait = sprite.call("spot_rect", m._dict_string(hotspot, "spot"))  # the scene's Art/Spots/<spot>
+		elif hotspot.has("art_region"):
 			var region: Array = hotspot["art_region"]
 			portrait = Rect2(portrait.position + portrait.size * Vector2(region[0],region[1]),
 				portrait.size * Vector2(region[2],region[3]))
@@ -236,9 +269,30 @@ func set_pan(value: float, vertical: Variant = null) -> void:
 		m._investigation_pans[m._pan_key] = m._pan
 		m._investigation_pans_y[m._pan_key] = m._pan_y
 	place_cast_hotspots()
+	if arrows != null:
+		arrows.visible = m._screen == DebtMain.Screen.INVESTIGATE
+		arrows.call("refresh", m._pan, m._pan_range, m._pan_y, m._pan_y_range)
+
+
+## An edge arrow: the view glides one step that way (a larger pan shows more of the left or top).
+func glide(direction: Vector2) -> void:
+	if m._screen != DebtMain.Screen.INVESTIGATE:
+		return
+	if _glide_tween != null and _glide_tween.is_valid():
+		_glide_tween.kill()
+	var target: Vector2 = Vector2(m._pan, m._pan_y) - direction * m._game.size * GLIDE_STEP
+	target = Vector2(clampf(target.x, m._pan_range.x, m._pan_range.y), clampf(target.y, m._pan_y_range.x, m._pan_y_range.y))
+	if int(m._settings.get("motion", 0)) == 1:
+		set_pan(target.x, target.y)
+		return
+	_glide_tween = m.create_tween()
+	_glide_tween.tween_method(func(at: Vector2) -> void: set_pan(at.x, at.y), Vector2(m._pan, m._pan_y), target, 0.35) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 
 func clear_hotspots() -> void:
+	if arrows != null:
+		arrows.visible = false
 	for actor: String in m._cast_pan_origins.keys():
 		(m._sprites[actor] as Control).position.x = float(m._cast_pan_origins[actor])
 		if m._cast_pan_y_origins.has(actor):
@@ -360,7 +414,7 @@ func _update_investigation_controls() -> void:
 	var progress: Array = m._current_command.get("progress", [0, 0]) as Array
 	m._investigation_continue_button.disabled = not all_checked
 	m._investigation_continue_button.text = "線索已取得・繼續" if all_checked else "先調查所有位置"
-	m._investigate_bar.call("set_progress", int(progress[0]), int(progress[1]), all_checked)
+	m._investigate_bar.call("set_progress", int(progress[0]), int(progress[1]), all_checked, m._full_text)
 
 
 ## The 對話 and 移動 rows of the reading box for this place of the search.

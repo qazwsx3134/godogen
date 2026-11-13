@@ -223,6 +223,11 @@ func stop_transients() -> void:
 	for player: AudioStreamPlayer in [_se_player, _charge_player, _feedback_player, _typing_player, _voice_player]:
 		if player != null:
 			player.stop()
+	clear_overlays()
+
+
+## Takes cut-ins, beams and flashes off the screen (sounds play on): a choice must not open under them.
+func clear_overlays() -> void:
 	for child: Node in _overlay.get_children():
 		if child.has_meta("stage_effect"):
 			child.queue_free()

@@ -1,12 +1,11 @@
 extends "res://addons/proto_kit/test_kit.gd"
 const Builder = preload("res://addons/proto_kit/scene_builder.gd")
 const PATHS = {
- "res://scenes/ui/dialogue_log.tscn":8,
+ "res://scenes/ui/dialogue_log.tscn":9,
  "res://scenes/ui/log_entry.tscn":5,
  "res://scenes/ui/save_slot_card.tscn":8,
  "res://scenes/ui/save_overwrite_confirmation.tscn":10,
  "res://scenes/ui/save_slots_panel.tscn":74,
- "res://scenes/ui/end_controls.tscn":4,
 }
 func _init():_run.call_deferred()
 func _nodes(n: Node) -> int:

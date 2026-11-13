@@ -228,8 +228,10 @@ func _refresh_slot_page() -> void:
 			title_label.text = chapter if node_id.is_empty() or node_id == chapter else "%s\n%s" % [chapter, node_id]
 			time_label.text = saved_at
 			preview.texture = _decode_preview(str(payload.get("preview_png", "")))
+			preview.visible = preview.texture != null
 		else:
 			preview.texture = null
+			preview.visible = false  # an empty slot's text starts at the card's edge
 			time_label.text = ""
 			if occupied:
 				var snapshot: Dictionary = m._runner.snapshot() as Dictionary

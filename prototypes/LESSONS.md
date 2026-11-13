@@ -23,6 +23,7 @@
 
 - **改了程式，瀏覽器卻一直跑舊版（修好的錯誤照樣出現）**（2026-11-05，mortal-city）→ 兩個原因都遇到：WSL 上專案在 `/mnt/d`（Windows 磁碟），vite 的檔案監看收不到變更、不會重新編譯；另外前一次背景啟動的 vite 沒關、新的加 `--strictPort` 啟動失敗卻沒注意。改完先 `curl http://127.0.0.1:<port>/src/<檔案>` 確認送出的是新碼，不是就重啟（或在 vite 設 `server.watch.usePolling`）；`ss -ltnp | grep <port>` 看是誰在聽，停服務用查到的 PID。
 - **macOS 上新建 `Reveal.tsx` 蓋掉了既有的 `reveal.tsx`**（2026-11-12，mortal-city）：檔案系統不分大小寫，`cat >`／Write 新檔名只差大小寫時會直接覆寫舊檔，型別檢查才報「only in casing」→ 新增檔案前先 `ls` 同目錄確認沒有只差大小寫的檔名；蓋掉了就 `git checkout -- <舊檔>` 還原。
+- **WSL 在 `/mnt/d` 上的 Godot 專案跑腳本，一堆 `Unable to open file: res://.godot/imported/...ctex`**（2026-11-12，debt-commission）→ 匯入快取不全（Windows 編輯器與 WSL 共用 `.godot`）。在這種狀態下用腳本 `ResourceSaver.save` 存 `.tscn` 可能掉貼圖參照；`rsync` 一份到 Linux 暫存區，`--headless --editor --quit` 匯入後在複本跑，存好的 `.tscn` 先 `diff` 再拷回。
 
 ## Git
 
@@ -99,6 +100,9 @@
 - **旋轉後的細圓索用 Basis.scaled 拉長，渲染變成扁片**（2026-11-11，walker-tps）→ 全域非均勻縮放會扭曲已旋轉的軸；先求索線旋轉 Basis，再只乘局部 y column 長度，並用側面截圖＋橫向 basis 長度斷言確認粗細。（[雙勾索戰鬥](walker-tps/README.md#雙勾索與戰鬥2026-11-11)）
 
 - **同腳本 @onready 欄位引用另一個較後宣告的 @onready 欄位，拿到 null**（2026-11-11，walker-tps）→ 初始化仍依宣告順序，先宣告 parent/body 再宣告依賴它的 model／rest transform，或在 _ready 明確依序賦值；重跑 instantiate 真場景的測試。（[auto_blades.gd](walker-tps/scripts/auto_blades.gd)）
+- **同一個專案要同時支援直式與橫式，不想複製整份 scene**（2026-11-12，debt-commission）→ 執行時改 `get_window().content_scale_size`（1920×1080 ↔ 1080×1920，`project.godot` 不動）；用 Container 與比例 anchor 排的面板兩邊共用，放不下的 node 在 `metadata/portrait_layout` 寫直式屬性，切換時套用並記住原值；`get_tree().node_added` 讓執行時才實例化的 scene 也套到。另注意窄螢幕放大觸控目標的係數（例如 ×1.15）在直式會把最小寬度撐出畫面，要用面板的 `get_combined_minimum_size()` 封頂。（[debt-commission README「直式與橫式」](debt-commission/README.md#直式與橫式)）
+- **轉場 shader 的最後一格整片黑**（2026-11-12，debt-commission）→ `pow(sin(PI * progress), n)` 在 progress=1 時 `sin` 是 -8.7e-8，負數取 `pow` 得 NaN，整格變黑；`pow` 的底數先 `max(…, 0.0)`。要讓轉場同時動到新畫面，殘影的 shader 用 `hint_screen_texture` 讀它底下已畫好的新背景（Compatibility 渲染器也支援）。
+- **面板開在另一個面板「之上」卻被蓋住，或畫在上面卻點不到**（2026-11-13，debt-commission）→ 繪製看 `z_index`，點擊判定看節點順序（後面的兄弟先拿到）；兩者不一致就會「看得到點不到」或「點得到看不到」。新面板放在點擊順序正確的位置，再用 `z_index` 補繪製順序，測試同時檢查兩者（`test_settings`）。
 
 ## 匯出與網頁版
 
@@ -154,6 +158,7 @@
 - **Dialogic 存的是 timeline 的 `event_index`**，劇本重新轉檔後舊存檔從錯的事件繼續、不報錯 → debt-commission 保留 StoryRunner。存檔位置要用穩定的 id，不要用序號。（[DIALOGIC-EVALUATION](debt-commission/docs/DIALOGIC-EVALUATION.md)）
 
 - **只在啟動檢查存檔版本，開啟後的新檔仍會被自動保存覆寫**（2026-10-31，seal-meadow）→ 寫入前核對現有主檔／備份及待寫快照；恢復備份前比對啟動選定的 bytes，避免把外部新檔換回舊資料；版本不先 int 強轉。這是檢查，不是跨程序檔案鎖。（[存檔保護](seal-meadow/docs/save-protection.md)）
+- **把常數從一個 `.gd` 搬到另一個檔後，網頁編輯器的下拉選單悄悄變回內建清單、`test_core.mjs` 報 `null`**（2026-11-12，debt-commission）→ 有工具用 `fetch`／正規式直接讀 `.gd` 原始碼取常數；搬常數前 `grep -rn "<檔名>.gd" tools/` 找出讀它的工具一起改。
 
 ## 多 agent 協作（Herdr、Codex、子 agent）
 

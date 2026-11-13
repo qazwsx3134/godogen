@@ -42,7 +42,8 @@ func _run() -> void:
 	game._on_setting_changed("font_size",2)
 	game._on_setting_changed("paper_opacity",0)
 	var base_size: int = game._dialog_panel._normal_font_size
-	_expect(game._text_label.get_theme_font_size("normal_font_size") == roundi(base_size * 1.2)
+	# 字級 大 (×1.2), times the phone's text scale (this window is 390×844 CSS px: ×1.25).
+	_expect(game._text_label.get_theme_font_size("normal_font_size") == roundi(base_size * 1.2 * game._text_scale)
 		and game._text_label.get_theme_font_size("normal_font_size") > base_size, "dialogue font size applies immediately")
 	_expect(is_equal_approx(game._dialog_panel.get_node("PaperAndToolbar/Panel/Frame/PaperCutout").modulate.a,0.65) \
 		and game._text_label.modulate.a==1.0 and game._name_label.modulate.a==1.0,"paper transparency keeps text and name opaque")

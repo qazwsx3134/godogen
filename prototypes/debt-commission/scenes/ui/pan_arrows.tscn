@@ -1,0 +1,162 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/pan_arrows.gd" id="1_qbn1g"]
+[ext_resource type="Texture2D" path="res://assets/ui/gintama_icon_chevron_left.svg" id="2_qfjoc"]
+[ext_resource type="Texture2D" path="res://assets/ui/gintama_icon_chevron_right.svg" id="3_bb2ft"]
+[ext_resource type="Texture2D" path="res://assets/ui/gintama_icon_chevron_up.svg" id="4_1vrum"]
+[ext_resource type="Texture2D" path="res://assets/ui/gintama_icon_chevron_down.svg" id="5_ld4ju"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_it50a"]
+bg_color = Color(0.02, 0.04, 0.08, 0.5)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.92, 0.94, 0.97, 0.75)
+corner_radius_top_left = 66
+corner_radius_top_right = 66
+corner_radius_bottom_right = 66
+corner_radius_bottom_left = 66
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i2dy0"]
+bg_color = Color(0.1, 0.16, 0.26, 0.75)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.92, 0.94, 0.97, 0.75)
+corner_radius_top_left = 66
+corner_radius_top_right = 66
+corner_radius_bottom_right = 66
+corner_radius_bottom_left = 66
+
+[node name="PanArrows" type="Control" unique_id=2045496713]
+editor_description = "調查時畫面邊緣的方向鈕：只顯示還能拖的方向。拖曳各鈕調位置；外觀在各鈕的 StyleBox。"
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("1_qbn1g")
+
+[node name="Left" type="Button" parent="." unique_id=1948099801]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_top = 0.42
+anchor_bottom = 0.42
+offset_left = 24.0
+offset_top = -66.0
+offset_right = 156.0
+offset_bottom = 66.0
+tooltip_text = "往左看"
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_it50a")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_i2dy0")
+theme_override_styles/hover = SubResource("StyleBoxFlat_it50a")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_i2dy0")
+theme_override_styles/focus = SubResource("StyleBoxFlat_it50a")
+theme_override_colors/font_color = Color(0.97, 0.97, 0.98, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 72
+theme_override_colors/icon_normal_color = Color(0.97, 0.97, 0.98, 1)
+theme_override_colors/icon_focus_color = Color(0.97, 0.97, 0.98, 1)
+theme_override_colors/icon_pressed_color = Color(0.97, 0.97, 0.98, 1)
+theme_override_colors/icon_hover_color = Color(0.97, 0.97, 0.98, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.97, 0.97, 0.98, 1)
+icon = ExtResource("2_qfjoc")
+icon_alignment = 1
+metadata/fixed_font_size = true
+
+[node name="Right" type="Button" parent="." unique_id=1687963902]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_top = 0.42
+anchor_right = 1.0
+anchor_bottom = 0.42
+offset_left = -156.0
+offset_top = -66.0
+offset_right = -24.0
+offset_bottom = 66.0
+tooltip_text = "往右看"
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_it50a")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_i2dy0")
+theme_override_styles/hover = SubResource("StyleBoxFlat_it50a")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_i2dy0")
+theme_override_styles/focus = SubResource("StyleBoxFlat_it50a")
+theme_override_colors/font_color = Color(0.97, 0.97, 0.98, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 72
+theme_override_colors/icon_normal_color = Color(0.97, 0.97, 0.98, 1)
+theme_override_colors/icon_focus_color = Color(0.97, 0.97, 0.98, 1)
+theme_override_colors/icon_pressed_color = Color(0.97, 0.97, 0.98, 1)
+theme_override_colors/icon_hover_color = Color(0.97, 0.97, 0.98, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.97, 0.97, 0.98, 1)
+icon = ExtResource("3_bb2ft")
+icon_alignment = 1
+metadata/fixed_font_size = true
+
+[node name="Up" type="Button" parent="." unique_id=1779236819]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.17
+anchor_right = 0.5
+anchor_bottom = 0.17
+offset_left = -66.0
+offset_top = -66.0
+offset_right = 66.0
+offset_bottom = 66.0
+tooltip_text = "往上看"
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_it50a")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_i2dy0")
+theme_override_styles/hover = SubResource("StyleBoxFlat_it50a")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_i2dy0")
+theme_override_styles/focus = SubResource("StyleBoxFlat_it50a")
+theme_override_colors/font_color = Color(0.97, 0.97, 0.98, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 72
+theme_override_colors/icon_normal_color = Color(0.97, 0.97, 0.98, 1)
+theme_override_colors/icon_focus_color = Color(0.97, 0.97, 0.98, 1)
+theme_override_colors/icon_pressed_color = Color(0.97, 0.97, 0.98, 1)
+theme_override_colors/icon_hover_color = Color(0.97, 0.97, 0.98, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.97, 0.97, 0.98, 1)
+icon = ExtResource("4_1vrum")
+icon_alignment = 1
+metadata/fixed_font_size = true
+
+[node name="Down" type="Button" parent="." unique_id=78970675]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.72
+anchor_right = 0.5
+anchor_bottom = 0.72
+offset_left = -66.0
+offset_top = -66.0
+offset_right = 66.0
+offset_bottom = 66.0
+tooltip_text = "往下看"
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_it50a")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_i2dy0")
+theme_override_styles/hover = SubResource("StyleBoxFlat_it50a")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_i2dy0")
+theme_override_styles/focus = SubResource("StyleBoxFlat_it50a")
+theme_override_colors/font_color = Color(0.97, 0.97, 0.98, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 72
+theme_override_colors/icon_normal_color = Color(0.97, 0.97, 0.98, 1)
+theme_override_colors/icon_focus_color = Color(0.97, 0.97, 0.98, 1)
+theme_override_colors/icon_pressed_color = Color(0.97, 0.97, 0.98, 1)
+theme_override_colors/icon_hover_color = Color(0.97, 0.97, 0.98, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.97, 0.97, 0.98, 1)
+icon = ExtResource("5_ld4ju")
+icon_alignment = 1
+metadata/fixed_font_size = true

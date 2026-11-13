@@ -80,6 +80,14 @@ async function tapAt(page, view, point, touch) {
 
 async function control(page, name, touch) {
   let current = await state(page);
+  // The ending scroll waits for one tap before its buttons come up.
+  if (!current.controls[name] && ['end', 'result'].includes(current.screen)) {
+    const css = page.viewportSize();
+    if (touch) await page.touchscreen.tap(css.width * 0.5, css.height * 0.3);
+    else await page.mouse.click(css.width * 0.5, css.height * 0.3);
+    await page.waitForTimeout(600);
+    current = await state(page);
+  }
   // A row below the fold of a scrolling panel (目錄, 設定) is wheeled into view first.
   for (let i = 0; i < 12 && !current.controls[name] && ['menu', 'settings'].includes(current.screen); i++) {
     const css = page.viewportSize();

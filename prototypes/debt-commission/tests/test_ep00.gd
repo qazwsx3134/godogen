@@ -670,7 +670,7 @@ func _test_endings_in_the_shell() -> void:
 		await _until(func() -> bool: return game._screen_mode == "story" and game._runner.node_id == ENDING_NODES[ending], "card %d goes to %s" % [ending, ENDING_NODES[ending]])
 		_expect(game._runner.flags["ep00_ending"] == ENDING_FLAGS[ending], "card %d sets ep00_ending=%s" % [ending, ENDING_FLAGS[ending]])
 		await _read_until(game, func() -> bool: return game._screen_mode == "end", "the ending %d" % ending)
-		_expect(game._full_text == ENDING_TEXTS[ending] and game._runner.flags["ep00_ending"] == ENDING_FLAGS[ending] and game._end_box.visible,
+		_expect(game._full_text == ENDING_TEXTS[ending] and game._runner.flags["ep00_ending"] == ENDING_FLAGS[ending] and game._chapter_result.visible,
 			"ending %d ends the story with %s (%s)" % [ending, ENDING_TEXTS[ending], game._full_text])
 		_expect(game._runner.flags["pov_style"] == "loud" and game._runner.flags["found_job"] == true,
 			"and the flags of the whole run are kept: %s" % [game._runner.flags])

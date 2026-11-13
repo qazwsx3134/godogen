@@ -82,11 +82,9 @@ func _run() -> void:
 	game._chapter_result.next_button.pressed.emit()
 	await _read_until(game, ["end"])
 	_expect(game._screen_mode == "end", "下一章 starts chapter B and plays it to its end")
-	_expect((game._end_box.get_node("%EndingTitle") as Label).text == "測試章 B 結束"
-		and (game._end_box.find_child("EndingCard", true, false) as TextureRect).texture.resource_path.ends_with("selected/ending_card.png"),
-		"the ending shows the scroll and its title")
-	_expect(game.save_path == "user://fixture_chapter_b.save" and not game._chapter_result.visible,
-		"chapter B plays in its own save with the result closed")
+	_expect(game._chapter_result.visible and game._chapter_result.heading.text.begins_with("測試章 B 結束")
+		and not game._chapter_result.stats.visible, "the ending shows the scroll with its text and no numbers")
+	_expect(game.save_path == "user://fixture_chapter_b.save", "chapter B plays in its own save")
 	_expect(game._next_chapter().is_empty(), "the last chapter has no 下一章")
 	_expect(game._ending_note(game._story_choices[1]) == "結局 1/1", "chapter B's end is recorded under chapter B")
 	_expect(game._chapter_endings().all(func(ending: Dictionary) -> bool: return ending["seen"]),

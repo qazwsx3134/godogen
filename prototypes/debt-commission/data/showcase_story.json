@@ -6,6 +6,790 @@
     "suspect": ""
   },
   "nodes": {
+    "adv_c_bonus": {
+      "next": "adv_combo_clear",
+      "steps": [
+        {
+          "id": "combo_up",
+          "op": "se"
+        },
+        {
+          "color": "#ffdc41",
+          "op": "flash"
+        },
+        {
+          "op": "cutin",
+          "text": "吐槽連擊！！"
+        },
+        {
+          "op": "say",
+          "speaker": "kagura",
+          "text": "……眼鏡今天有點帥阿魯。"
+        }
+      ],
+      "title": "連擊加成"
+    },
+    "adv_c_break": {
+      "next": "adv_combo",
+      "steps": [
+        {
+          "id": "combo_break",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "斷了。新八，吐槽是講節奏的。"
+        }
+      ],
+      "title": "連擊中斷"
+    },
+    "adv_c_hit": {
+      "next": "adv_combo",
+      "steps": [
+        {
+          "id": "tsukkomi_hit",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "……下一句。"
+        }
+      ],
+      "title": "接住"
+    },
+    "adv_c_miss": {
+      "next": "adv_combo",
+      "steps": [
+        {
+          "op": "freeze"
+        },
+        {
+          "id": "crow",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "speaker": "kagura",
+          "text": "眼鏡跟不上阿魯。"
+        }
+      ],
+      "title": "冷場"
+    },
+    "adv_c_super": {
+      "next": "adv_combo",
+      "steps": [
+        {
+          "id": "super_charge",
+          "op": "se"
+        },
+        {
+          "op": "cutin",
+          "speaker": "shinpachi",
+          "text": "龜——派——氣——功——！！"
+        },
+        {
+          "op": "beam"
+        },
+        {
+          "id": "beam",
+          "op": "se"
+        },
+        {
+          "color": "#ffdc41",
+          "op": "flash"
+        },
+        {
+          "op": "shake",
+          "strength": "big"
+        }
+      ],
+      "title": "超必殺"
+    },
+    "adv_combo": {
+      "steps": [
+        {
+          "clear": "adv_combo_clear",
+          "game_over": "play_round_over",
+          "id": "adv_combo_round",
+          "lines": [
+            {
+              "id": "c1",
+              "slot": {
+                "options": [
+                  {
+                    "goto": "adv_c_hit",
+                    "id": "a",
+                    "label": "試毒試到一滴不剩嗎！",
+                    "result": "perfect"
+                  },
+                  {
+                    "goto": "adv_c_hit",
+                    "id": "b",
+                    "label": "那也該先問我一聲吧！",
+                    "result": "weak"
+                  },
+                  {
+                    "goto": "adv_c_miss",
+                    "id": "c",
+                    "label": "原來是為了我……",
+                    "result": "fail"
+                  }
+                ],
+                "timeout": "adv_c_miss"
+              },
+              "text": "我們不是偷喝。是試毒。怕新八喝到壞掉的牛奶。"
+            },
+            {
+              "id": "c2",
+              "slot": {
+                "options": [
+                  {
+                    "goto": "adv_c_hit",
+                    "id": "a",
+                    "label": "安心了就不用喝完吧！",
+                    "result": "perfect"
+                  },
+                  {
+                    "goto": "adv_c_hit",
+                    "id": "b",
+                    "label": "一半是你，一半是阿銀吧！",
+                    "result": "weak"
+                  },
+                  {
+                    "goto": "adv_c_miss",
+                    "id": "c",
+                    "label": "沒毒真是太好了。",
+                    "result": "fail"
+                  }
+                ],
+                "timeout": "adv_c_miss"
+              },
+              "speaker": "kagura",
+              "text": "試到一半發現沒毒，就安心地喝完了阿魯。"
+            },
+            {
+              "id": "c3",
+              "slot": {
+                "qte": {
+                  "duration": 1.6,
+                  "early": "adv_qte_early",
+                  "late": "adv_qte_late",
+                  "late_after": 2.0,
+                  "perfect": "adv_qte_perfect",
+                  "window": 0.12
+                }
+              },
+              "speaker": "gintoki+kagura",
+              "text": "所以錯的是——把名字寫在牛奶上的新八！"
+            }
+          ],
+          "mode": "combo",
+          "op": "boke_round",
+          "rules": {
+            "combo_bonus": "adv_c_bonus",
+            "combo_break": "adv_c_break",
+            "combo_timers": [
+              8.0,
+              6.0
+            ],
+            "super": "adv_c_super",
+            "super_label": "龜派氣功！"
+          },
+          "speaker": "gintoki"
+        }
+      ],
+      "title": "連擊回合"
+    },
+    "adv_combo_clear": {
+      "next": "adv_director",
+      "steps": [
+        {
+          "id": "bgm_daily",
+          "op": "bgm"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "兩種回合都看過了。最後是導演選擇。"
+        }
+      ],
+      "title": "連擊回合結束"
+    },
+    "adv_combo_intro": {
+      "next": "adv_combo",
+      "steps": [
+        {
+          "enter": true,
+          "expression": "smug",
+          "id": "kagura",
+          "op": "char",
+          "position": "center",
+          "visible": true
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "連擊回合（mode: combo）：每句講完直接選詞，接住一句時限就縮短。最後一句是 QTE：白圈縮到黃圈時點畫面。吐槽之力集滿可以按超必殺。"
+        }
+      ],
+      "title": "進階・連擊回合"
+    },
+    "adv_director": {
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "kagura",
+          "text": "阿銀，接下來要演什麼阿魯？"
+        },
+        {
+          "note": "※製作組經費有限",
+          "op": "choice",
+          "options": [
+            {
+              "id": "tose_enters",
+              "label": "登勢闖進來",
+              "next": "adv_director_done"
+            },
+            {
+              "id": "phone_rings",
+              "label": "電話突然響了",
+              "next": "adv_director_done"
+            },
+            {
+              "id": "wrap_up",
+              "label": "收工，看這章的結算",
+              "next": "adv_result"
+            }
+          ],
+          "perspective": "director",
+          "prompt": "接下來發生什麼？"
+        }
+      ],
+      "title": "進階・導演選擇"
+    },
+    "adv_director_done": {
+      "steps": [
+        {
+          "id": "director_clap",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "導演選擇（perspective: director）用場記板的面板，選的是劇情走向，不是角色台詞。"
+        },
+        {
+          "id": "gintoki",
+          "op": "portrait_exit"
+        },
+        {
+          "id": "kagura",
+          "op": "portrait_exit"
+        },
+        {
+          "op": "choice",
+          "options": [
+            {
+              "id": "again",
+              "label": "再看一次",
+              "next": "adv_investigate_intro"
+            },
+            {
+              "id": "back",
+              "label": "回到目錄",
+              "next": "menu"
+            }
+          ],
+          "pov": "shinpachi",
+          "prompt": "進階展示結束。"
+        }
+      ],
+      "title": "進階展示結束"
+    },
+    "adv_fridge": {
+      "next": "adv_investigate",
+      "steps": [
+        {
+          "id": "fridge",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "冰箱裡只剩醬油，和一個布丁。"
+        },
+        {
+          "offscreen": true,
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "布丁不准碰。上面寫了銀桑的名字。"
+        }
+      ],
+      "title": "移動：廚房的冰箱"
+    },
+    "adv_inspect_mouth": {
+      "next": "adv_investigate",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "阿銀，你嘴角那條白白的是什麼？……有草莓味。"
+        },
+        {
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "別湊那麼近。想聞銀桑的臉，要先預約。"
+        }
+      ],
+      "title": "銀時的嘴角"
+    },
+    "adv_investigate": {
+      "next": "adv_testimony_intro",
+      "steps": [
+        {
+          "bg": "yorozuya_living_room",
+          "hotspots": [
+            {
+              "character": "gintoki",
+              "goto": "adv_inspect_mouth",
+              "id": "adv_gintoki_mouth",
+              "item": "milk_trace",
+              "label": "銀時的嘴角",
+              "spot": "mouth"
+            }
+          ],
+          "id": "adv_search",
+          "keep_cast": true,
+          "label": "客廳",
+          "op": "investigate",
+          "places": [
+            {
+              "bg": "yorozuya_kitchen",
+              "hotspots": [
+                {
+                  "goto": "adv_fridge",
+                  "id": "adv_fridge",
+                  "label": "冰箱",
+                  "optional": true,
+                  "pos": [
+                    0.45,
+                    0.45
+                  ],
+                  "size": [
+                    0.24,
+                    0.3
+                  ]
+                }
+              ],
+              "id": "kitchen",
+              "label": "廚房",
+              "prompt": "查看冰箱，查完回到客廳。"
+            }
+          ],
+          "prompt": "點銀時的嘴角，也試試「對話」與「移動」。",
+          "talk": [
+            {
+              "goto": "adv_talk_sleep",
+              "id": "adv_topic_sleep",
+              "label": "問銀時：昨晚幾點睡？"
+            }
+          ]
+        }
+      ],
+      "title": "調查：客廳"
+    },
+    "adv_investigate_intro": {
+      "next": "adv_investigate",
+      "steps": [
+        {
+          "id": "yorozuya_living_room",
+          "op": "bg"
+        },
+        {
+          "enter": true,
+          "expression": "annoyed",
+          "id": "gintoki",
+          "op": "char",
+          "position": "right",
+          "visible": true
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "進階調查：keep_cast 讓角色留在畫面上，角色身上的某個部位也能當熱區——銀時的嘴角就是 scenes/characters/gintoki.tscn 裡 Art/Spots/mouth 那個框，在 Godot 拖框就能改範圍。對話框裡多兩排話題：「對話」問人，「移動」換到別的房間。"
+        }
+      ],
+      "title": "進階・調查的話題與移動"
+    },
+    "adv_qte_early": {
+      "next": "adv_combo",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "錯的是——"
+        },
+        {
+          "op": "say",
+          "speaker": "kagura",
+          "text": "還沒講完阿魯。"
+        }
+      ],
+      "title": "QTE 太早"
+    },
+    "adv_qte_late": {
+      "next": "adv_combo",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "新八，你慢了一拍。"
+        }
+      ],
+      "title": "QTE 太晚"
+    },
+    "adv_qte_perfect": {
+      "next": "adv_combo",
+      "steps": [
+        {
+          "id": "qte_hit",
+          "op": "se"
+        },
+        {
+          "op": "cutin",
+          "speaker": "shinpachi",
+          "text": "錯的是你們兩個啊啊啊！！"
+        },
+        {
+          "op": "shake",
+          "strength": "big"
+        },
+        {
+          "op": "say",
+          "speaker": "gintoki+kagura",
+          "text": "……是。"
+        }
+      ],
+      "title": "QTE 正中"
+    },
+    "adv_result": {
+      "steps": [
+        {
+          "id": "director_clap",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "result 步驟是章節結算：依這章的完美吐槽、冷場與眼鏡算出 S／A／B／C，每個評價配一句台詞，也記成一個結局。"
+        },
+        {
+          "ending": "showcase_result",
+          "ending_title": "收工結算",
+          "hidden_total": 0.0,
+          "id": "showcase_result",
+          "lines": {
+            "A": {
+              "speaker": "kagura",
+              "text": "這副眼鏡，今天還算有用阿魯。"
+            },
+            "B": {
+              "speaker": "gintoki",
+              "text": "普通的吐槽，普通的眼鏡。明天也拜託了。"
+            },
+            "C": {
+              "speaker": "otose",
+              "text": "吐槽也好，房租也好，欠著的總要還。"
+            },
+            "S": {
+              "speaker": "shinpachi",
+              "text": "一副眼鏡都沒碎！今天的吐槽完美收工！"
+            }
+          },
+          "op": "result",
+          "title": "～ 功能展示 完 ～"
+        }
+      ],
+      "title": "進階・章節結算"
+    },
+    "adv_t1_listen": {
+      "next": "adv_testimony",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "睡著的時候，手會自己幫忙喝牛奶。"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "……補充反而更可疑了。",
+          "thought": true
+        }
+      ],
+      "title": "補充"
+    },
+    "adv_t1_whiff": {
+      "next": "adv_testimony",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "睡覺這種事，誰能證明——"
+        },
+        {
+          "op": "freeze"
+        },
+        {
+          "id": "crow",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "沒有槽點的句子，吐了也是空揮。",
+          "thought": true
+        }
+      ],
+      "title": "空揮"
+    },
+    "adv_t2_censor": {
+      "next": "adv_testimony",
+      "steps": [
+        {
+          "id": "tear",
+          "op": "se"
+        },
+        {
+          "op": "cutin",
+          "speaker": "shinpachi",
+          "text": "消音條底下是神樂的名字啊！！"
+        },
+        {
+          "op": "shake"
+        },
+        {
+          "op": "say",
+          "speaker": "narrator",
+          "text": "消音條被撕下來。底下寫著——「神樂」。"
+        }
+      ],
+      "title": "消音條"
+    },
+    "adv_t3_placard": {
+      "next": "adv_testimony",
+      "steps": [
+        {
+          "op": "placard",
+          "text": "犯人是銀時"
+        },
+        {
+          "id": "tsukkomi_hit",
+          "op": "se"
+        },
+        {
+          "op": "cutin",
+          "speaker": "shinpachi",
+          "text": "證人的牌子寫著犯人是你啊！！"
+        },
+        {
+          "op": "shake"
+        },
+        {
+          "op": "placard",
+          "text": "我只是路過"
+        },
+        {
+          "op": "say",
+          "speaker": "narrator",
+          "text": "伊莉莎白默默把牌子翻過來。背面寫著：「我只是路過」。"
+        }
+      ],
+      "title": "伊莉莎白的牌子"
+    },
+    "adv_t_fail": {
+      "next": "adv_testimony",
+      "steps": [
+        {
+          "op": "freeze"
+        },
+        {
+          "id": "crow",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "新八，你跟不上了。"
+        }
+      ],
+      "title": "冷場"
+    },
+    "adv_t_weak": {
+      "next": "adv_testimony",
+      "steps": [
+        {
+          "id": "tsukkomi_hit",
+          "op": "se"
+        },
+        {
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "……這次算你接到一半。"
+        }
+      ],
+      "title": "普通吐槽"
+    },
+    "adv_talk_sleep": {
+      "next": "adv_investigate",
+      "steps": [
+        {
+          "op": "say",
+          "speaker": "gintoki",
+          "text": "十點。銀桑是早睡早起的模範市民。"
+        },
+        {
+          "id": "gin_sleep_testimony",
+          "op": "item"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "對話也能給線索。早起的人，不會現在還在打呵欠。",
+          "thought": true
+        }
+      ],
+      "title": "對話：幾點睡"
+    },
+    "adv_testimony": {
+      "steps": [
+        {
+          "clear": "adv_testimony_clear",
+          "game_over": "play_round_over",
+          "id": "adv_testimony_round",
+          "lines": [
+            {
+              "id": "t1",
+              "listen": "adv_t1_listen",
+              "text": "我昨晚一直在睡覺。睡著的人喝不了牛奶。",
+              "whiff": "adv_t1_whiff"
+            },
+            {
+              "id": "t2",
+              "slot": {
+                "censor": {
+                  "goto": "adv_t2_censor",
+                  "hidden": "神樂",
+                  "result": "perfect"
+                },
+                "options": [
+                  {
+                    "goto": "adv_t_weak",
+                    "id": "b",
+                    "label": "定春只會「汪」吧！",
+                    "result": "weak"
+                  },
+                  {
+                    "goto": "adv_t_fail",
+                    "id": "c",
+                    "label": "你翻譯得真好。",
+                    "result": "fail"
+                  }
+                ],
+                "timeout": "adv_t_fail"
+              },
+              "text": "定春跟我說了：『牛奶是▇▇喝的，汪』。"
+            },
+            {
+              "id": "t3",
+              "slot": {
+                "options": [
+                  {
+                    "goto": "adv_t_weak",
+                    "id": "b",
+                    "label": "證人根本不會說話吧！",
+                    "result": "weak"
+                  },
+                  {
+                    "goto": "adv_t_fail",
+                    "id": "c",
+                    "label": "那就沒辦法了。",
+                    "result": "fail"
+                  }
+                ],
+                "placard": {
+                  "goto": "adv_t3_placard",
+                  "result": "perfect",
+                  "text": "犯人是銀時"
+                },
+                "timeout": "adv_t_fail"
+              },
+              "text": "總之銀桑是清白的。證人就在角落。"
+            }
+          ],
+          "mode": "testimony",
+          "op": "boke_round",
+          "speaker": "gintoki",
+          "timer_seconds": 8.0
+        }
+      ],
+      "title": "證言回合"
+    },
+    "adv_testimony_clear": {
+      "next": "adv_combo_intro",
+      "steps": [
+        {
+          "op": "placard",
+          "text": ""
+        },
+        {
+          "id": "elisabeth",
+          "op": "char",
+          "visible": false
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "證言回合接住了。接下來是連擊回合。"
+        }
+      ],
+      "title": "證言回合結束"
+    },
+    "adv_testimony_intro": {
+      "next": "adv_testimony",
+      "steps": [
+        {
+          "enter": true,
+          "expression": "neutral",
+          "id": "elisabeth",
+          "op": "char",
+          "position": "center",
+          "visible": true
+        },
+        {
+          "op": "placard",
+          "text": ""
+        },
+        {
+          "id": "bgm_boke",
+          "op": "bgm"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "證言回合（mode: testimony）：每句可能藏一個槽點。台詞裡發亮的消音條、伊莉莎白牌子上的字，直接點就是吐槽。"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "沒槽點的句子按「吐槽！」會空揮；按「詳細」聽補充。",
+          "thought": true
+        }
+      ],
+      "title": "進階・證言回合"
+    },
     "cast_portraits": {
       "next": "cast_text",
       "steps": [
@@ -202,6 +986,11 @@
               "id": "play",
               "label": "玩法：分支、調查與吐槽",
               "next": "play_branch"
+            },
+            {
+              "id": "advanced",
+              "label": "進階：話題、證言、連擊與導演",
+              "next": "adv_investigate_intro"
             },
             {
               "id": "finish",
@@ -597,22 +1386,24 @@
         {
           "id": "yorozuya_kitchen",
           "op": "bg",
+          "title": "萬事屋・廚房",
           "transition": "brush"
         },
         {
           "op": "say",
           "speaker": "shinpachi",
-          "text": "筆刷（brush）：一筆把舊畫面刷掉。"
+          "text": "筆刷（brush）：一道乾筆墨刷過去，尾巴的飛白透出新畫面。"
         },
         {
           "id": "yorozuya_exterior",
           "op": "bg",
+          "title": "萬事屋・外觀",
           "transition": "ink"
         },
         {
           "op": "say",
           "speaker": "shinpachi",
-          "text": "墨暈（ink）：墨從畫面中間暈開。"
+          "text": "墨暈（ink）：墨滴落下暈開、蓋滿畫面，再退開露出還濕著的新場景。"
         },
         {
           "id": "yorozuya_living_room",
@@ -622,7 +1413,37 @@
         {
           "op": "say",
           "speaker": "shinpachi",
-          "text": "故障（glitch）：畫面撕裂、錯色，再一塊塊掉下來。"
+          "text": "故障（glitch）：訊號壞掉似的錯位、錯色、跳格，新舊畫面一塊塊換過去。"
+        },
+        {
+          "op": "say",
+          "speaker": "shinpachi",
+          "text": "換背景後寫 title，標題會從畫面中間浮現再淡出，不擋下一句。剛才的「萬事屋・廚房」就是。"
+        },
+        {
+          "id": "yorozuya_exterior",
+          "op": "bg",
+          "scroll": "down",
+          "scroll_seconds": 7.0,
+          "title": "捲動（scroll）",
+          "transition": "fade"
+        },
+        {
+          "op": "say",
+          "speaker": "narrator",
+          "text": "scroll 讓鏡頭沿著圖慢慢移動：down／up 往下或往上，left／right 往左或往右；scroll_seconds 是秒數。"
+        },
+        {
+          "id": "yorozuya_living_room",
+          "op": "bg",
+          "scroll": "right",
+          "scroll_seconds": 6.0,
+          "transition": "fade"
+        },
+        {
+          "op": "say",
+          "speaker": "narrator",
+          "text": "圖比畫面長時直接沿著長邊走；不夠長就稍微放大再走。直式畫面裡橫向的圖，往左右捲正好。"
         },
         {
           "id": "yorozuya_kitchen",
@@ -659,5 +1480,5 @@
   },
   "note": "故事編輯器的功能展示：每張卡片示範一組步驟。",
   "title": "功能展示",
-  "version": "s-1d711be5f51e"
+  "version": "s-b9224ad13c5d"
 }

@@ -14,6 +14,7 @@ func _init(main: DebtMain) -> void:
 func build_tutorial() -> void:
 	m._tutorial = preload("res://scenes/ui/tutorial_overlay.tscn").instantiate()
 	m._popup_layer.add_child(m._tutorial)  # last child: above every other popup
+	m._tutorial.z_index = 2  # also drawn above 設定 (z 3)
 	m._tutorial.visible = false
 	m._tutorial.connect("finished", _on_tutorial_finished)
 	m._apply_ui_style_recursive(m._tutorial)
@@ -58,7 +59,8 @@ func tutorial_target(target: String) -> Control:
 		"boke_listen": return m._boke_listen_button
 		"boke_tsukkomi": return m._boke_tsukkomi_button
 		"investigate_scene": return m._stage_area  # the picture above the reading box
-		"investigate_collapse": return m._dialog_panel.collapse_tab
+		"investigate_collapse":  # already folded on a short screen: point at 展開 instead
+			return m._investigate_bar.get("expand_button") if m._investigate_collapsed else m._dialog_panel.collapse_tab
 		"investigate_continue": return m._investigation_continue_button
 		"reading_stage": return m._stage_area
 		"reading_box": return m._dialog_panel

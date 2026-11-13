@@ -6,6 +6,15 @@
       "path": "res://data/showcase_story.json",
       "save": "user://showcase.save",
       "authoring": "graph"
+    },
+    {
+      "id": "showcase_portrait",
+      "kind": "sample",
+      "title": "功能展示（直式）",
+      "path": "res://data/showcase_story.json",
+      "save": "user://showcase_portrait.save",
+      "authoring": "graph",
+      "orientation": "portrait"
     }
   ]
 }

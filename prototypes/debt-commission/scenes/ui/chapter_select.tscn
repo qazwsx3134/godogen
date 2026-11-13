@@ -38,7 +38,7 @@ metadata/ui_style_role = "accent"
 
 [node name="Flowchart" type="Button" parent="Margins/Layout/Header" unique_id=2129471634]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 132.92308)
+custom_minimum_size = Vector2(132.92308, 132.92308)
 layout_mode = 2
 theme_override_font_sizes/font_size = 29
 text = "流程圖"
@@ -46,7 +46,7 @@ metadata/ui_style_role = "standard"
 
 [node name="Gallery" type="Button" parent="Margins/Layout/Header" unique_id=2055107151]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 132.92308)
+custom_minimum_size = Vector2(132.92308, 132.92308)
 layout_mode = 2
 theme_override_font_sizes/font_size = 29
 text = "鑑賞"
@@ -54,7 +54,7 @@ metadata/ui_style_role = "standard"
 
 [node name="Credits" type="Button" parent="Margins/Layout/Header" unique_id=1945748368]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 132.92308)
+custom_minimum_size = Vector2(132.92308, 132.92308)
 layout_mode = 2
 theme_override_font_sizes/font_size = 29
 text = "製作名單"

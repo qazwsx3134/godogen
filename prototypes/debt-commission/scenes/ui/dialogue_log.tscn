@@ -147,7 +147,8 @@ metadata/ui_style_role = "body"
 unique_name_in_owner = true
 custom_minimum_size = Vector2(133, 133)
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 10
+tooltip_text = "關閉"
 theme_override_styles/normal = SubResource("StyleBoxFlat_shria")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_nd3oa")
 theme_override_styles/hover = SubResource("StyleBoxFlat_ruvje")
@@ -160,8 +161,8 @@ theme_override_colors/font_pressed_color = Color(0.972549, 0.9529412, 0.9137255,
 theme_override_colors/font_hover_color = Color(0.972549, 0.9529412, 0.9137255, 1)
 theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_pne67")
-theme_override_font_sizes/font_size = 27
-text = "關閉"
+theme_override_font_sizes/font_size = 45
+text = "×"
 metadata/ui_style_role = "reading_action"
 metadata/ui_style_active = false
 
@@ -178,3 +179,15 @@ layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
 theme_override_constants/separation = 32
+
+[node name="LogEmpty" type="Label" parent="Margins/Column" unique_id=1382623464]
+unique_name_in_owner = true
+editor_description = "沒有任何紀錄時顯示（腳本依紀錄切換）。"
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 34
+theme_override_colors/font_color = Color(0.1254902, 0.23921569, 0.3254902, 0.6)
+text = "還沒有對話。讀過的台詞會出現在這裡。"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3

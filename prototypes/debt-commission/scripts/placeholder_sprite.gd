@@ -91,6 +91,16 @@ func art_rect() -> Rect2:
 	var box: Control = _art if _art != null else self
 	return box.get_global_transform() * Rect2(Vector2.ZERO, box.size)
 
+## A clickable part of the portrait for investigations: the node Art/Spots/<spot_id> (a ReferenceRect,
+## drawn only in the editor; drag it there over the mouth, the hand ...). Canvas coordinates; empty when
+## the scene has no such spot.
+func spot_rect(spot_id: String) -> Rect2:
+	var spot: Control = get_node_or_null("Art/Spots/" + spot_id) as Control
+	if spot == null:
+		return Rect2()
+	return spot.get_global_transform() * Rect2(Vector2.ZERO, spot.size)
+
+
 ## Shows that face's picture when the catalog has one, else the character's usual picture.
 func set_expression(value: String) -> void:
 	expression = value

@@ -3,7 +3,6 @@
 [ext_resource type="FontFile" path="res://assets/fonts/story-cjk.ttc" id="1_eqf1x"]
 [ext_resource type="Script" path="res://scripts/round_hud.gd" id="2_4h080"]
 [ext_resource type="PackedScene" path="res://scenes/ui/glasses_icon.tscn" id="3_hdkj7"]
-[ext_resource type="Script" path="res://scripts/glasses_icon.gd" id="4_hdkj7"]
 [ext_resource type="PackedScene" path="res://scenes/ui/clue_chip.tscn" id="5_saj44"]
 
 [sub_resource type="Theme" id="Theme_af6c1"]
@@ -26,6 +25,12 @@ theme_override_constants/margin_left = 39
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 39
 script = ExtResource("2_4h080")
+metadata/portrait_layout = {
+"anchor_bottom": 0.03,
+"anchor_left": 0.01,
+"anchor_right": 0.99,
+"anchor_top": 0.03
+}
 
 [node name="Stack" type="VBoxContainer" parent="." unique_id=783362094]
 layout_mode = 2
@@ -61,40 +66,20 @@ layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 6
 
-[node name="Glasses1" type="Control" parent="Stack/Panel/Padding/Rows/Stats/Glasses" unique_id=938117765 instance=ExtResource("3_hdkj7")]
-custom_minimum_size = Vector2(72, 36)
+[node name="Glasses1" parent="Stack/Panel/Padding/Rows/Stats/Glasses" unique_id=938117765 instance=ExtResource("3_hdkj7")]
 layout_mode = 2
-size_flags_vertical = 4
-mouse_filter = 2
-script = ExtResource("4_hdkj7")
 
-[node name="Glasses2" type="Control" parent="Stack/Panel/Padding/Rows/Stats/Glasses" unique_id=374594795 instance=ExtResource("3_hdkj7")]
-custom_minimum_size = Vector2(72, 36)
+[node name="Glasses2" parent="Stack/Panel/Padding/Rows/Stats/Glasses" unique_id=374594795 instance=ExtResource("3_hdkj7")]
 layout_mode = 2
-size_flags_vertical = 4
-mouse_filter = 2
-script = ExtResource("4_hdkj7")
 
-[node name="Glasses3" type="Control" parent="Stack/Panel/Padding/Rows/Stats/Glasses" unique_id=228911427 instance=ExtResource("3_hdkj7")]
-custom_minimum_size = Vector2(72, 36)
+[node name="Glasses3" parent="Stack/Panel/Padding/Rows/Stats/Glasses" unique_id=228911427 instance=ExtResource("3_hdkj7")]
 layout_mode = 2
-size_flags_vertical = 4
-mouse_filter = 2
-script = ExtResource("4_hdkj7")
 
-[node name="Glasses4" type="Control" parent="Stack/Panel/Padding/Rows/Stats/Glasses" unique_id=1175518508 instance=ExtResource("3_hdkj7")]
-custom_minimum_size = Vector2(72, 36)
+[node name="Glasses4" parent="Stack/Panel/Padding/Rows/Stats/Glasses" unique_id=1175518508 instance=ExtResource("3_hdkj7")]
 layout_mode = 2
-size_flags_vertical = 4
-mouse_filter = 2
-script = ExtResource("4_hdkj7")
 
-[node name="Glasses5" type="Control" parent="Stack/Panel/Padding/Rows/Stats/Glasses" unique_id=2134513836 instance=ExtResource("3_hdkj7")]
-custom_minimum_size = Vector2(72, 36)
+[node name="Glasses5" parent="Stack/Panel/Padding/Rows/Stats/Glasses" unique_id=2134513836 instance=ExtResource("3_hdkj7")]
 layout_mode = 2
-size_flags_vertical = 4
-mouse_filter = 2
-script = ExtResource("4_hdkj7")
 broken = true
 
 [node name="Power" type="HBoxContainer" parent="Stack/Panel/Padding/Rows/Stats" unique_id=503572465]
@@ -167,12 +152,10 @@ layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 8
 
-[node name="Chip1" type="PanelContainer" parent="Stack/Clues/ClueList" unique_id=637419230 instance=ExtResource("5_saj44")]
+[node name="Chip1" parent="Stack/Clues/ClueList" unique_id=637419230 instance=ExtResource("5_saj44")]
 layout_mode = 2
-mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_40fyp")
 
-[node name="Chip2" type="PanelContainer" parent="Stack/Clues/ClueList" unique_id=588575513 instance=ExtResource("5_saj44")]
+[node name="Chip2" parent="Stack/Clues/ClueList" unique_id=588575513 instance=ExtResource("5_saj44")]
 layout_mode = 2
-mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_40fyp")

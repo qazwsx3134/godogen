@@ -1,0 +1,103 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/title_banner.gd" id="1_6xmxg"]
+
+[sub_resource type="Gradient" id="Gradient_fpp2f"]
+offsets = PackedFloat32Array(0, 0.22, 0.5, 0.78, 1)
+colors = PackedColorArray(0.02, 0.04, 0.08, 0, 0.02, 0.04, 0.08, 0.78, 0.03, 0.06, 0.12, 0.86, 0.02, 0.04, 0.08, 0.78, 0.02, 0.04, 0.08, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_8t02h"]
+gradient = SubResource("Gradient_fpp2f")
+width = 512
+height = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d1wf1"]
+bg_color = Color(0.02, 0.04, 0.08, 0.9)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.9, 0.92, 0.95, 0.9)
+corner_radius_top_left = 11
+corner_radius_top_right = 11
+corner_radius_bottom_right = 11
+corner_radius_bottom_left = 11
+
+[node name="TitleBanner" type="Control" unique_id=2056697242]
+editor_description = "轉場後與調查開始時的標題橫幅：Band 是半透明深色帶、Text 是標題、Rule 是下方的細線與小圓。秒數在根節點的 open_seconds／hold_seconds／fade_seconds。"
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("1_6xmxg")
+
+[node name="Band" type="TextureRect" parent="." unique_id=1311166201]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_top = 0.395
+anchor_right = 1.0
+anchor_bottom = 0.565
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_8t02h")
+expand_mode = 1
+
+[node name="Text" type="Label" parent="." unique_id=169554191]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_top = 0.395
+anchor_right = 1.0
+anchor_bottom = 0.565
+theme_override_font_sizes/font_size = 88
+theme_override_colors/font_color = Color(0.97, 0.96, 0.93, 1)
+theme_override_colors/font_outline_color = Color(0, 0.02, 0.06, 0.85)
+theme_override_constants/outline_size = 8
+text = "開始尋找線索"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/fixed_font_size = true
+
+[node name="Rule" type="Control" parent="." unique_id=1905421719]
+unique_name_in_owner = true
+anchors_preset = 0
+anchor_left = 0.1
+anchor_top = 0.565
+anchor_right = 0.9
+anchor_bottom = 0.565
+offset_top = -12.0
+offset_bottom = 12.0
+mouse_filter = 2
+
+[node name="LineLeft" type="ColorRect" parent="Rule" unique_id=1953471049]
+layout_mode = 0
+anchor_top = 0.5
+anchor_right = 0.485
+anchor_bottom = 0.5
+offset_top = -1.5
+offset_bottom = 1.5
+mouse_filter = 2
+color = Color(0.9, 0.92, 0.95, 0.85)
+
+[node name="LineRight" type="ColorRect" parent="Rule" unique_id=172130925]
+layout_mode = 0
+anchor_left = 0.515
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -1.5
+offset_bottom = 1.5
+mouse_filter = 2
+color = Color(0.9, 0.92, 0.95, 0.85)
+
+[node name="Ring" type="Panel" parent="Rule" unique_id=1061747202]
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -11.0
+offset_top = -11.0
+offset_right = 11.0
+offset_bottom = 11.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_d1wf1")

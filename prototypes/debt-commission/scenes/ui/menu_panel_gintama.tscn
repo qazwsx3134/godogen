@@ -5,7 +5,6 @@
 [ext_resource type="Texture2D" path="res://assets/ui/gintama_panel_paper.png" id="3_wni0k"]
 [ext_resource type="FontFile" path="res://assets/fonts/NotoSerifTC.ttf" id="4_rcuof"]
 [ext_resource type="PackedScene" path="res://scenes/ui/menu_row_washi.tscn" id="4_wni0k"]
-[ext_resource type="PackedScene" path="res://scenes/ui/menu_row_gintama.tscn" id="5_3x304"]
 [ext_resource type="Texture2D" path="res://assets/ui/gintama_heading_plain.tres" id="5_ucuoe"]
 [ext_resource type="StyleBox" path="res://assets/ui/selected/styles/navy_normal.tres" id="6_gh4hh"]
 [ext_resource type="StyleBox" path="res://assets/ui/selected/styles/navy_pressed.tres" id="7_i46qt"]
@@ -14,9 +13,6 @@
 [ext_resource type="Texture2D" path="res://assets/ui/selected/btn_washi_normal.png" id="11_su7cl"]
 [ext_resource type="Texture2D" path="res://assets/ui/selected/btn_washi_pressed.png" id="12_0mfb2"]
 [ext_resource type="Texture2D" path="res://assets/ui/selected/btn_washi_disabled.png" id="13_udo05"]
-[ext_resource type="Texture2D" path="res://assets/ui/selected/btn_navy_normal.png" id="15_dxlod"]
-[ext_resource type="Texture2D" path="res://assets/ui/selected/btn_navy_pressed.png" id="16_svo24"]
-[ext_resource type="Texture2D" path="res://assets/ui/selected/btn_navy_disabled.png" id="17_pwg81"]
 
 [sub_resource type="Theme" id="Theme_ee2nr"]
 default_font = ExtResource("1_bu7kj")
@@ -83,111 +79,6 @@ content_margin_top = 10.0
 content_margin_right = 55.0
 content_margin_bottom = 10.0
 texture = ExtResource("13_udo05")
-texture_margin_left = 48.0
-texture_margin_top = 48.0
-texture_margin_right = 48.0
-texture_margin_bottom = 48.0
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_vffw6"]
-content_margin_left = 32.0
-content_margin_top = 10.0
-content_margin_right = 55.0
-content_margin_bottom = 10.0
-texture = ExtResource("15_dxlod")
-texture_margin_left = 48.0
-texture_margin_top = 48.0
-texture_margin_right = 48.0
-texture_margin_bottom = 48.0
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ydo0q"]
-content_margin_left = 32.0
-content_margin_top = 10.0
-content_margin_right = 55.0
-content_margin_bottom = 10.0
-texture = ExtResource("16_svo24")
-texture_margin_left = 48.0
-texture_margin_top = 48.0
-texture_margin_right = 48.0
-texture_margin_bottom = 48.0
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pmvcn"]
-content_margin_left = 32.0
-content_margin_top = 10.0
-content_margin_right = 55.0
-content_margin_bottom = 10.0
-texture = ExtResource("17_pwg81")
-texture_margin_left = 48.0
-texture_margin_top = 48.0
-texture_margin_right = 48.0
-texture_margin_bottom = 48.0
-
-[sub_resource type="FontVariation" id="FontVariation_8md3b"]
-base_font = ExtResource("4_rcuof")
-variation_opentype = {
-2003265652: 500.0
-}
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3egq6"]
-content_margin_left = 32.0
-content_margin_top = 10.0
-content_margin_right = 55.0
-content_margin_bottom = 10.0
-texture = ExtResource("15_dxlod")
-texture_margin_left = 48.0
-texture_margin_top = 48.0
-texture_margin_right = 48.0
-texture_margin_bottom = 48.0
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0lltd"]
-content_margin_left = 32.0
-content_margin_top = 10.0
-content_margin_right = 55.0
-content_margin_bottom = 10.0
-texture = ExtResource("16_svo24")
-texture_margin_left = 48.0
-texture_margin_top = 48.0
-texture_margin_right = 48.0
-texture_margin_bottom = 48.0
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2d1el"]
-content_margin_left = 32.0
-content_margin_top = 10.0
-content_margin_right = 55.0
-content_margin_bottom = 10.0
-texture = ExtResource("17_pwg81")
-texture_margin_left = 48.0
-texture_margin_top = 48.0
-texture_margin_right = 48.0
-texture_margin_bottom = 48.0
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_e03bc"]
-content_margin_left = 32.0
-content_margin_top = 10.0
-content_margin_right = 55.0
-content_margin_bottom = 10.0
-texture = ExtResource("15_dxlod")
-texture_margin_left = 48.0
-texture_margin_top = 48.0
-texture_margin_right = 48.0
-texture_margin_bottom = 48.0
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_62ofh"]
-content_margin_left = 32.0
-content_margin_top = 10.0
-content_margin_right = 55.0
-content_margin_bottom = 10.0
-texture = ExtResource("16_svo24")
-texture_margin_left = 48.0
-texture_margin_top = 48.0
-texture_margin_right = 48.0
-texture_margin_bottom = 48.0
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ueo5h"]
-content_margin_left = 32.0
-content_margin_top = 10.0
-content_margin_right = 55.0
-content_margin_bottom = 10.0
-texture = ExtResource("17_pwg81")
 texture_margin_left = 48.0
 texture_margin_top = 48.0
 texture_margin_right = 48.0
@@ -626,13 +517,6 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_fxgot")
 theme_override_styles/hover = SubResource("StyleBoxTexture_e7nmc")
 theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_fxgot")
 theme_override_styles/disabled = SubResource("StyleBoxTexture_8x726")
-theme_override_styles/focus = ExtResource("9_ewonq")
-theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_focus_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_pressed_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_hover_pressed_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 text = "回到故事"
 
@@ -644,46 +528,19 @@ theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.87450
 theme_override_constants/outline_size = 0
 text = "→"
 
-[node name="Rollback" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1089343561 instance=ExtResource("5_3x304")]
+[node name="Rollback" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=985593053 instance=ExtResource("4_wni0k")]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxTexture_vffw6")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_ydo0q")
-theme_override_styles/hover = SubResource("StyleBoxTexture_vffw6")
-theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_ydo0q")
-theme_override_styles/disabled = SubResource("StyleBoxTexture_pmvcn")
-theme_override_styles/focus = ExtResource("9_ewonq")
-theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_disabled_color = Color(0.72156864, 0.7607843, 0.7882353, 1)
-theme_override_fonts/font = SubResource("FontVariation_8md3b")
 text = "回上一句"
 
-[node name="QuickSave" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=2049675069 instance=ExtResource("5_3x304")]
+[node name="QuickSave" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1407690739 instance=ExtResource("4_wni0k")]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxTexture_3egq6")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_0lltd")
-theme_override_styles/hover = SubResource("StyleBoxTexture_3egq6")
-theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_0lltd")
-theme_override_styles/disabled = SubResource("StyleBoxTexture_2d1el")
-theme_override_styles/focus = ExtResource("9_ewonq")
-theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_disabled_color = Color(0.72156864, 0.7607843, 0.7882353, 1)
-theme_override_fonts/font = SubResource("FontVariation_8md3b")
 text = "快速存檔"
 
-[node name="QuickLoad" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1760311257 instance=ExtResource("5_3x304")]
+[node name="QuickLoad" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=2106671498 instance=ExtResource("4_wni0k")]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxTexture_e03bc")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_62ofh")
-theme_override_styles/hover = SubResource("StyleBoxTexture_e03bc")
-theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_62ofh")
-theme_override_styles/disabled = SubResource("StyleBoxTexture_ueo5h")
-theme_override_styles/focus = ExtResource("9_ewonq")
-theme_override_colors/font_hover_pressed_color = Color(0.972549, 0.9529412, 0.9137255, 1)
-theme_override_colors/font_disabled_color = Color(0.72156864, 0.7607843, 0.7882353, 1)
-theme_override_fonts/font = SubResource("FontVariation_8md3b")
 text = "快速讀檔"
 
 [node name="Save" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1978079474 instance=ExtResource("4_wni0k")]
@@ -694,13 +551,6 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_oeosj")
 theme_override_styles/hover = SubResource("StyleBoxTexture_1yhl0")
 theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_oeosj")
 theme_override_styles/disabled = SubResource("StyleBoxTexture_rj5qj")
-theme_override_styles/focus = ExtResource("9_ewonq")
-theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_focus_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_pressed_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_hover_pressed_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 
 [node name="Hint" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Save" index="0" unique_id=826033919]
@@ -709,6 +559,7 @@ theme_override_font_sizes/font_size = 47
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
+text = "›"
 
 [node name="Load" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=646477398 instance=ExtResource("4_wni0k")]
 unique_name_in_owner = true
@@ -718,13 +569,6 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_h60c8")
 theme_override_styles/hover = SubResource("StyleBoxTexture_lgf2j")
 theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_h60c8")
 theme_override_styles/disabled = SubResource("StyleBoxTexture_j8ugn")
-theme_override_styles/focus = ExtResource("9_ewonq")
-theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_focus_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_pressed_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_hover_pressed_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 text = "讀取存檔"
 
@@ -734,6 +578,7 @@ theme_override_font_sizes/font_size = 47
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
+text = "›"
 
 [node name="Material" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=1255567864 instance=ExtResource("4_wni0k")]
 unique_name_in_owner = true
@@ -743,13 +588,6 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_pgf1f")
 theme_override_styles/hover = SubResource("StyleBoxTexture_1ip8k")
 theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_pgf1f")
 theme_override_styles/disabled = SubResource("StyleBoxTexture_m2cw8")
-theme_override_styles/focus = ExtResource("9_ewonq")
-theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_focus_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_pressed_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_hover_pressed_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 text = "吐槽素材"
 
@@ -759,6 +597,7 @@ theme_override_font_sizes/font_size = 47
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
+text = "›"
 
 [node name="Profile" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=65704121 instance=ExtResource("4_wni0k")]
 unique_name_in_owner = true
@@ -768,13 +607,6 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_mc1ys")
 theme_override_styles/hover = SubResource("StyleBoxTexture_3f4jj")
 theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_mc1ys")
 theme_override_styles/disabled = SubResource("StyleBoxTexture_xo7si")
-theme_override_styles/focus = ExtResource("9_ewonq")
-theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_focus_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_pressed_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_hover_pressed_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 text = "人物檔案"
 
@@ -784,6 +616,7 @@ theme_override_font_sizes/font_size = 47
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
+text = "›"
 
 [node name="Log" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=639856437 instance=ExtResource("4_wni0k")]
 unique_name_in_owner = true
@@ -793,13 +626,6 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_ibgu3")
 theme_override_styles/hover = SubResource("StyleBoxTexture_2m30f")
 theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_ibgu3")
 theme_override_styles/disabled = SubResource("StyleBoxTexture_ivalb")
-theme_override_styles/focus = ExtResource("9_ewonq")
-theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_focus_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_pressed_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_hover_pressed_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 text = "故事回顧"
 
@@ -809,6 +635,7 @@ theme_override_font_sizes/font_size = 47
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
+text = "›"
 
 [node name="Skip" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=831211539 instance=ExtResource("4_wni0k")]
 unique_name_in_owner = true
@@ -818,13 +645,6 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_gi6uv")
 theme_override_styles/hover = SubResource("StyleBoxTexture_8uu2n")
 theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_gi6uv")
 theme_override_styles/disabled = SubResource("StyleBoxTexture_ge35n")
-theme_override_styles/focus = ExtResource("9_ewonq")
-theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_focus_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_pressed_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_hover_pressed_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 text = "略讀"
 
@@ -834,6 +654,7 @@ theme_override_font_sizes/font_size = 47
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
+text = ""
 
 [node name="Mute" parent="Area/Center/Panel/Padding/Column/RowsScroll/Rows" unique_id=882528724 instance=ExtResource("4_wni0k")]
 unique_name_in_owner = true
@@ -843,13 +664,6 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_0tcci")
 theme_override_styles/hover = SubResource("StyleBoxTexture_yasjt")
 theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_0tcci")
 theme_override_styles/disabled = SubResource("StyleBoxTexture_td4gc")
-theme_override_styles/focus = ExtResource("9_ewonq")
-theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_focus_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_pressed_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_hover_pressed_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 text = "音效"
 
@@ -869,13 +683,6 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_qmdft")
 theme_override_styles/hover = SubResource("StyleBoxTexture_hg502")
 theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_qmdft")
 theme_override_styles/disabled = SubResource("StyleBoxTexture_q4ds3")
-theme_override_styles/focus = ExtResource("9_ewonq")
-theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_focus_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_pressed_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_hover_pressed_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 text = "設定"
 
@@ -887,13 +694,6 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_r3fw2")
 theme_override_styles/hover = SubResource("StyleBoxTexture_6xxca")
 theme_override_styles/hover_pressed = SubResource("StyleBoxTexture_r3fw2")
 theme_override_styles/disabled = SubResource("StyleBoxTexture_leqi2")
-theme_override_styles/focus = ExtResource("9_ewonq")
-theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_focus_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_pressed_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_hover_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_hover_pressed_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
-theme_override_colors/font_disabled_color = Color(0.46666667, 0.4627451, 0.43529412, 1)
 theme_override_fonts/font = SubResource("FontVariation_nooyu")
 text = "回標題"
 
@@ -903,6 +703,7 @@ theme_override_font_sizes/font_size = 47
 theme_override_colors/font_color = Color(0.1254902, 0.1882353, 0.2784314, 1)
 theme_override_colors/font_outline_color = Color(0.95686275, 0.92941177, 0.8745098, 1)
 theme_override_constants/outline_size = 0
+text = ""
 
 [editable path="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Resume"]
 [editable path="Area/Center/Panel/Padding/Column/RowsScroll/Rows/Save"]

@@ -25,17 +25,19 @@ func _run() -> void:
 		"the washi scenes are mounted")
 	var title_art: TextureRect = game._title_screen.get_node("%LogoArt") as TextureRect
 	var primary: StyleBoxTexture = UI_STYLES_SCRIPT.button_style("gintama", "primary", "normal") as StyleBoxTexture
-	var boke: StyleBoxTexture = game._boke_tsukkomi_button.get_theme_stylebox("normal") as StyleBoxTexture
+	var boke: StyleBoxFlat = game._boke_tsukkomi_button.get_theme_stylebox("normal") as StyleBoxFlat
 	_expect(title_art.visible and title_art.texture.resource_path.ends_with("selected/title_logo.png")
 		and primary != null and primary.texture.resource_path.ends_with("selected/btn_navy_normal.png")
-		and primary.texture_margin_left == 48 and boke != null
-		and boke.texture.resource_path.ends_with("selected/btn_tsukkomi_normal.png"),
-		"the selected title, nine-slice button and tsukkomi art are mounted")
+		and primary.texture_margin_left == 48 and boke != null and boke.border_width_bottom > 0 and boke.border_width_top == 0 and boke.bg_color.a < 1.0,
+		"the selected title and nine-slice button are mounted; 吐槽！ is a see-through key on a bottom ledge, no frame")
+	var sunk: StyleBoxFlat = game._boke_tsukkomi_button.get_theme_stylebox("pressed") as StyleBoxFlat
+	_expect(sunk != null and sunk.border_width_bottom == 0 and is_equal_approx(-sunk.expand_margin_top, float(boke.border_width_bottom)),
+		"pressed, 吐槽！ sinks onto where its ledge was")
 	_expect(ProjectSettings.get_setting("application/config/icon") == "res://assets/ui/selected/app_icon.png"
 		and ProjectSettings.get_setting("application/boot_splash/image") == "res://assets/ui/selected/boot_splash.png",
 		"the selected app icon and boot splash are configured")
-	for role: String in ["primary", "standard", "boke_primary"]:
-		var family: String = {"primary": "navy", "standard": "washi", "boke_primary": "tsukkomi"}[role]
+	for role: String in ["primary", "standard"]:
+		var family: String = {"primary": "navy", "standard": "washi"}[role]
 		for state: String in ["normal", "pressed", "disabled"]:
 			var box: StyleBoxTexture = UI_STYLES_SCRIPT.button_style("gintama", role, state) as StyleBoxTexture
 			_expect(box != null and box.texture.resource_path.ends_with("btn_%s_%s.png" % [family, state]),

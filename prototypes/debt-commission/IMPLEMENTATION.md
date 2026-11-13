@@ -22,11 +22,11 @@
 - `case_file() -> Dictionary`：`{materials: [{id,name,description}], profiles: [{id,name,profile}]}`，依取得順序列出素材與已解鎖的人物檔案，文字取自素材設定；給素材／人物檔案畫面用。
 - 公開 `flags: Dictionary`、`items: Array[String]`、`profiles: Array[String]`、`gameplay: Dictionary`、`checked_hotspots: Dictionary`（主地點以調查 id 為鍵，其他地點是 `<調查 id>/<地點 id>`）、`investigations: Dictionary`（`{調查 id: {place, talked, counts?}}`，`counts` 是 `{lines 熱區 id: 點擊次數}`，第一次點才出現）、`cast: Array`（目前在場的角色 id。舞台在外殼手上，外殼在問調查之前設定，不存檔；只有 `character` 熱區看它，沒設定就是沒人在場）、`placard: String`、`error_message: String`、`node_id: String`、`step_index: int`。
 
-故事根資料：`id`、`version`、`title`、`entry`、`initial_flags`、`nodes`。每個 node 有 `title`、`steps`、選擇性的 `next`。選填 `credits`：`[{role, names: [字串]}]`，每個字串都不能空（`validate_credits`）；`story_info()` 帶出，章節列第三行與結算卡顯示前三個職務，製作名單列出全部。`.dialogue` 故事寫在 `blocks.json` 的 `story.credits`，建置照抄。不參與 `version`。全遊戲共用的工具與素材授權在 `data/credits.json`（`{title, credits}`，同一格式），排在製作名單最後。
+故事根資料：`id`、`version`、`title`、`entry`、`initial_flags`、`nodes`。每個 node 有 `title`、`steps`、選擇性的 `next`。選填 `credits`：`[{role, names: [字串]}]`，每個字串都不能空（`validate_credits`）；`story_info()` 帶出，章節列第三行與結算卡顯示前三個職務，製作名單列出全部。`.dialogue` 故事寫在 `blocks.json` 的 `story.credits`，建置照抄。不參與 `version`。選填 `orientation`：`"landscape"`（預設）或 `"portrait"`，其他值驗證失敗；`StoryRunner.orientation()` 帶出，`data/stories.json` 該列的 `orientation` 優先（同一份劇本可另列一個直式版）。不參與 `version`。直式時 main 把畫布換成 1080×1920，並套用各 node 的 `metadata/portrait_layout`（`scripts/orientation_layout.gd`）。全遊戲共用的工具與素材授權在 `data/credits.json`（`{title, credits}`，同一格式），排在製作名單最後。
 
 V1 可呈現 op：
 
-- `bg`: `id` 對應 catalog 的 backgrounds。選填 `transition`：`fade`（預設，舊圖淡出）、`brush`（筆刷由左往右刷掉，0.7 秒）、`ink`（墨從中間暈開，0.8 秒）、`glitch`（撕裂、錯色、方塊掉落，0.5 秒），其他值載入時拒絕（`VALID_BACKGROUND_TRANSITIONS`）。非 fade 時下一步等轉場結束；略讀、畫面效果「減少」時直接切換。不參與 `version`。`.dialogue` 寫 `do bg("id", "brush")`。編輯器的 bg 表單還沒有這一欄（Codex 範圍）；表單只改 `id`，已寫的 `transition` 原樣保留（`tools/story_editor/editor.js` 的 `assetSelect` 直接改 step 的欄位），要新增就用該步驟的 JSON 編輯。
+- `bg`: `id` 對應 catalog 的 backgrounds。選填 `transition`：`fade`（預設，舊圖淡出）、`brush`（一道乾筆墨帶由左往右刷過，尾端飛白露出新畫面，0.7 秒）、`ink`（墨滴分批落下暈開、蓋滿後停一拍，再從別處退墨，新畫面帶著濕氣浮出，1.3 秒）、`glitch`（訊號故障：跳格的橫條錯位、RGB 分離、方塊位移、掃描線與雜訊，新舊畫面逐塊交換，0.75 秒）。shader 用 `hint_screen_texture` 讀殘影底下的新背景，圖案以螢幕座標排，直式橫式節奏相同；每次轉場的 `seed` 隨機，墨滴與故障塊每次不同，其他值載入時拒絕（`VALID_BACKGROUND_TRANSITIONS`）。選填 `title`（字串：換完後的標題橫幅，`scenes/ui/title_banner.tscn`）、`scroll`（`down`／`up`／`left`／`right`，`VALID_BACKGROUND_SCROLLS`：鏡頭走過整張圖，`stage_motion.gd` `scroll()`）與 `scroll_seconds`（正數，預設 6）。非 fade 時下一步等轉場結束；略讀、畫面效果「減少」時直接切換。不參與 `version`。`.dialogue` 寫 `do bg("id", "brush")`。編輯器的 bg 表單還沒有這一欄（Codex 範圍）；表單只改 `id`，已寫的 `transition` 原樣保留（`tools/story_editor/editor.js` 的 `assetSelect` 直接改 step 的欄位），要新增就用該步驟的 JSON 編輯。
 - `char`: `id` 對應 characters，可選 `visible`、`expression`、`position`（left/center/right）、`enter`；省略時依角色 catalog 預設。`enter: true` 讓角色直接上場並移到角色層最前面，已在場時也會移到前景並依手動／自動明暗顯示；後續畫外音不影響這次登場。不能和 `visible: false` 同時用。
 - `portrait_exit`: `id` 對應角色；可選 `transition`（fade／slide_left／slide_right／instant）。保留表情與站位，退場完成後才進下一步。
 - `portrait_lighting`: `id`、`mode`（dim／lit／auto）。更新後讓出一幀先呈現明暗再接下一步；略讀不等待，等待後檢查 generation 避免舊流程繼續。手動明暗不被下一句說話者切換覆蓋，換背景清除；存檔角色的 lighting 與 entrance_transition 為可選欄位，舊檔預設 auto／fade。
@@ -35,7 +35,7 @@ V1 可呈現 op：
   - **POV Choice**（`perspective` 省略或 `pov`）：玩家站在某個角色的視角，在那個人格合理的範圍內選反應（激烈吐槽／冷靜指出問題／累到懶得吐槽）。`pov`（catalog 角色 id，預設 `shinpachi`）是這句想法的主人；選項可標 `tone`（`loud`｜`calm`｜`tired`），列首多一個圓形標記。外觀是和紙的選項面板。
   - **Director Choice**（`perspective: "director"`）：玩家跳出角色、變成導演，決定「接下來發生什麼」，每個選項是真分支，至少 2 個。選填 `note`（非空字串）是面板底下的註腳（例：「※製作組經費有限」）。外觀是導演專用面板。
   - 不寫 `perspective`、`pov`、`note`、`tone` 的 `choice` 就是新八的 POV 選項，用和紙的選項面板。載入時驗證，錯誤指出節點與步序：`perspective` 不是兩者之一；`pov` 不是 catalog 角色，或用在 director；`note` 用在 pov 或不是非空字串；`tone` 不是三者之一，或用在 director；director 的選項少於 2 個。這些欄位不影響存檔位置（`version` 不看它們）。
-- `end`: `text`。
+- `end`: `text`。不是 Game Over 時，畫面先淡入全暗，再展開結局卷軸（`chapter_result_gintama.tscn` 的 `show_ending`：文字、結局名稱、製作名單，沒有數據與評價）；`result` 走同一個卷軸並多了數據與評價。卷軸出現後等玩家點一下（任何點擊、觸控或確認鍵），才淡入「下一章（`result` 且有下一章）／重玩／回標題」。畫面效果「減少」時不播動畫，但一樣等那一下。Game Over 仍是碎眼鏡畫面。
 - `result`: 章節結算，章節的最後一步。`title`（例如「～ 第一章 完 ～」）、`lines: {S|A|B|C: {speaker, text}}`（依評價顯示的一句）、可選 `hidden_total`（本章隱藏裝傻總數）。`chapter_result()` 回傳 `title`、`grade`、`line`、`caught`、`tries`、`perfect`、`max_combo`、`fails`、`hidden`、`hidden_total`、`glasses`、`max_glasses`、`game_overs`。評價只看剩下的眼鏡：5 副 S、4 副 A、3–2 副 B、1 副 C，每次 Game Over 降一級、最低 C（`grade_for`）。`stats` 記在 runner、不隨檢查點重試回溯，v1 與 v2 回合都會累計；眼鏡在回合之間不回滿。
 - `investigate`: `id`、`prompt`、`hotspots: [{id,label,pos:[x,y],size?:[w,h],item?,goto?,optional?}]`；`pos` 是調查點中心、`size` 是大小（預設 0.12×0.12），都是背景圖寬高的比例，所以左右拖曳背景時調查點跟著圖走。熱區至少有 `item`（取得素材）、`goto`（查看後台詞的節點）或 `lines` 其中一個；`optional: true` 的熱區不擋「繼續」。可選欄位：
   - `keep_cast`（bool，預設 false）：true 時開始調查不讓角色全部退場（預設是全部退場），調查像是可點擊的場景。為了不擋住要找的東西：身上有角色熱區的人留在場上、半透明（`SEARCH_CAST_ALPHA` 0.55）；其他人調查期間隱形（透明度 0，仍算在場），從調查演出一段劇情（熱區、話題）或離開調查時回復不透明；本來就在退場的人照常退場。
@@ -186,7 +186,7 @@ Web 網址帶 `?qa=1` 時，`window.__debtQA` 為唯讀快照：`screen`（title
 ## 第一章新增呈現欄位（E）
 
 - `say.source_id`／回合句子的 `source_id` 保存草稿句號；QA 顯示目前句號。第一章追溯表含 220 句（一般台詞與 12 句回合發言）及四個結算評語。
-- 角色熱區可寫 `art_region: [x,y,w,h]`，全部為立繪的 0–1 比例，正寬高且不能越界；需搭配 `character`。省略仍使用整張立繪。背景拖曳時保留角色相對位置，熱區跟隨；側地點暫時收起家中角色，返回或讀檔恢復。
+- 角色熱區的範圍：寫 `"spot": "<名稱>"` 時，是角色 scene（catalog `scene`，否則 `scenes/characters/<id>.tscn`）裡 `Art/Spots/<名稱>` 這個 node（ReferenceRect，只在編輯器畫框）——在 Godot 打開角色 scene，拖曳、縮放那個框就是調整可點的部位，例如 `gintoki.tscn` 的 `Spots/mouth`；新增部位就在 `Art/Spots` 底下加一個 ReferenceRect。驗證會確認 scene 裡真的有這個 node。舊寫法 `art_region: [x,y,w,h]`（立繪的 0–1 比例，正寬高且不能越界）仍可用，兩者擇一；都沒寫就是整張立繪。需搭配 `character`。背景拖曳時保留角色相對位置，熱區跟隨；側地點暫時收起家中角色，返回或讀檔恢復。
 - v2 回合選填 `retry`（節點 id）：檢查點先還原，再播該節點並回到回合。第一章用 G05 備用眼鏡台詞；未填仍直接回到回合。此欄位參與劇本版本。
 - `rules.type_lines: true` 讓證言與連擊發言依閱讀設定逐字顯示，補完後才開連擊選詞／QTE，避免讀句子消耗反應時間。既有試片省略時維持直接呈現。
 

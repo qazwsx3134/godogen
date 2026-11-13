@@ -2,6 +2,88 @@
 
 只保留最近 3 次 commit 期間的工作與尚未 commit 的工作（新的在上）；更早的紀錄移到 [MILESTONE.md](MILESTONE.md)。每次 commit、出門／下班／暫停前更新本檔，根目錄 `Progress.md` 只更新一行摘要。接手順序：本檔 → [README](README.md) → [session-state](production/session-state/active.md) → [HANDOFF](docs/HANDOFF.md)。
 
+## 2026-11-14｜試玩回饋：置中、齒輪、按鍵陰影、吐槽字超框（未提交）
+
+- 使用者：方向鈕圖示沒置中、有些按鈕的齒輪擋到字、吐槽選項的 < > 形狀怪（應該用陰影做按壓感）、新八吐槽字有時超出框；其餘驗收 OK。
+- **修正**：
+  - 齒輪：`gintama_reading_button.gd` 的 `_apply_icon_only` 只在 `icon_only` 開啟時改顯示，不再把其他按鈕（調查「收起／展開」）藏起來的紙框圖（畫有齒輪）打開。
+  - 置中：方向鈕與 < > 改用置中的 SVG 箭頭（`assets/ui/gintama_icon_chevron_{left,right,up,down}.svg`），不再用字型字元 `‹›︿﹀`。`tools/make_pan_arrows.gd` 同步。
+  - 吐槽字：`comedy_preset.gd` 在爆炸框裡改用橢圓判斷字是否放得下（`OVAL_ROOM` 1.2 倍 TextArea），長句不再壓到尖角；五個漫畫效果的 `Text` 改水平置中。
+  - 「聽下去」與相關按鈕（使用者追加）：對話框裡的動作鈕全部改成同一種「按鍵」：低飽和、略透明、無外框，底部一條半透明深色台階（用陰影會從透明的鍵面透出來），按下時台階收掉、鍵面下沉。聽下去／繼續（`InvestigationContinue`）／< > 用淺色 `key_*.tres`；吐槽！（`boke_primary`）與調查話題（新角色 `key_action`）用 `ui_styles.key_style()` 的灰藍按鍵。
+  - 和紙按鈕左右內距 18→34（`washi_*.tres` 與 `ui_styles.gd`），字不再貼到圓角（例：「先調查所有位置」）。
+- **測試**：`test_ui_styles`（吐槽！是半透明、無外框、有底部台階的按鍵，按下沉下）、`test_landscape_reading`（工具列圖示置中）、`test_orientation`（方向鈕是置中圖示、收起鈕沒有齒輪）、`test_comedy`（字在爆炸框橢圓內且置中）加檢查。結果見下一行。
+- **驗證（2026-11-14 實跑，Linux 暫存複本）**：最終樣式完整測試 60/60 PASS（log `/tmp/godot-tests.BqfGx5`）；巡檢 390×844 68 張無超出（最終樣式），844×390 沿用前一版按鍵樣式的巡檢。手機實機未驗證。
+- **已知**：鍵面半透明，所以壓在下面的「下一句 ▼」三角形會淡淡透出來（吐槽！右下角）。
+
+## 2026-11-13｜稽核問題全修＋參考圖新功能（未提交，待作者看畫面）
+
+- 使用者：「都修」（`reviews/2026-11-13-uiux-audit.md`），並依 `docs/story-telling-game/ui-ref/` 加：可選方向的捲動 CG、圖示按鈕、轉場後標題動畫、查找線索頁面、已知線索頁面。
+- **修正**：
+  - P0 設定被目錄蓋住：設定留在 `Game` 底下（點擊順序對），`z_index = 3` 畫在 `PopupLayer`（z 2）之上；toast 與教學遮罩 z +2 才不被設定蓋住。`test_settings` 檢查繪製與點擊順序。
+  - P1 字級：`scripts/text_scale.gd`，手機（每 CSS px ≥ 約 2.6 設計像素）小於 44 的字 ×1.25，桌機不變；對話正文 = 字級設定 × 同一倍數；`metadata/fixed_font_size` 可排除。在 `_ui_scale` 之前算（對話框寬度跟字有關）。headless 的 64×64 假視窗與原生 Android／iOS 另外處理。實測直式手機正文 13→16.3 px、最小字 9.4→12 px。
+  - P1 cut-in 殘留：選項出現時 `StageEffects.clear_overlays()`。P1 調查：見下方「查找線索」。
+  - P2：作答時 HUD 不再重複倒數（目錄蓋住時仍顯示「暫停」）；目錄三列改和紙列，右側只有開面板的列用「›」；卷宗分頁用 tab 樣式（選中與否看得出）、分頁與關閉鈕 133；存檔卡內距加大、空存檔隱藏預覽位；標題「章節選擇」入口 27→36；章節選擇右上三鈕最小寬 133、列表字 30→34；對話紀錄加空狀態、紀錄與存讀檔的「關閉」改 × 方鈕；捲軸 14 px（主題）。行長過長在手機上隨字級放大解決。
+- **新功能**：
+  - 標題橫幅 `scenes/ui/title_banner.tscn`（`tools/make_title_banner.gd` 產生一次）：`bg` 的 `title`、調查第一次開始的「開始尋找線索」。不擋點擊、不拖住下一句、略讀不播。
+  - 捲動 CG：`bg` 的 `scroll`（down/up/left/right）＋`scroll_seconds`，`stage_motion.gd` `scroll()`／`end_scroll()`；驗證規則已加。功能展示加兩個示範（version 改為 `s-b9224ad13c5d`，舊的功能展示存檔會封存）。
+  - 查找線索：`scenes/ui/pan_arrows.tscn`（`tools/make_pan_arrows.gd`）邊緣方向鈕，只顯示還能拖的方向，點一下滑一段；矮螢幕（CSS 高 < 480）一進調查就收成細列，細列帶提示文字；教學第二步收起時改指「展開」。
+  - 已知線索：卷宗改成直長卡片一列（`CardStrip`），未取得的是暗色空卡＋羅馬數字；`StoryRunner.case_file()` 加 `material_total`／`profile_total`。
+  - 圖示按鈕：`gintama_reading_button.gd` 的 `icon_only`；工具列四鈕只顯示置中 SVG 圖示（隱藏有字位的紙框圖），名稱留在 tooltip。
+- **驗證（本次實跑，Linux 暫存複本）**：受影響測試逐組通過（settings、orientation〔新增手機字級、方向鈕〕、landscape_reading〔改驗圖示按鈕〕、phase3_ui、phase4_ui〔卷宗卡片〕、reading_convenience、vn_shell、investigation、search_cast、scene_transition、reading_scenes、ui_styles、skin、reading_feel 等）。完整測試結果見下一行。巡檢 390×844 與 844×390 各 68 張無超出、44 px 以下按鈕 0 個；截圖 `test-results/ui-ref/`、橫幅與捲動逐格截圖驗過。
+- **未做／待決定**：直式長圖（往下捲最適合）需要 AI 生圖，依規則等作者決定要直接生成還是給 opt image 提示詞；手機實機、網頁匯出未驗證。
+- **完整測試**：`bash ../godot-kit/tools/run_tests.sh <Linux 複本>` 60/60 PASS（2026-11-13 本次最終程式碼實跑，log `/tmp/godot-tests.9CSZoH`）。
+
+## 2026-11-13｜UI／UX 稽核（只有報告與工具，未提交）
+
+- 使用者：「再對不同元件做一次 uiux audit」。報告：[reviews/2026-11-13-uiux-audit.md](reviews/2026-11-13-uiux-audit.md)，證據截圖與量測 log 在 `test-results/uiux-audit/`（gitignore）。
+- 工具：`tools/screen_audit.gd` 加 `AUDIT_METRICS=1`（逐畫面印出按鈕／文字的 CSS px 與字級）；設定改成從目錄的「設定」列打開、流程圖從章節選擇打開並正常關閉（原本那兩張截圖拍錯畫面）。
+- 主要發現：P0 從目錄開設定時被目錄蓋住（`PopupLayer` z_index 2，設定面板 z 0）；P1 手機字級偏小（正文 13 px、HUD 9.7 px）、橫式手機調查面板蓋滿畫面、直式調查沒有拖曳提示、cut-in 殘留在選項上；P2 共 9 項（倒數重複、目錄停用樣式、卷宗分頁、存檔卡編號等）。
+- **沒有修任何問題**，等作者決定順序。驗證：巡檢在 390×844 與 844×390 全程跑完（68 張）；設定與流程圖在兩種尺寸另跑一次（17 張）。
+
+## 2026-11-13｜吐槽按鈕、角色熱區 node、結局卷軸（未提交，待作者看畫面）
+
+- 使用者：「吐槽按鈕太醜，做得像一般按鈕」；「調查銀時的嘴角時，看不到哪邊可以設定 node 讓圖上的哪個部分可以被點」；「結束時先畫面全暗、顯示結算卷軸，點了之後才顯示重玩、回標題」。
+- **已完成**：
+  - 「吐槽！」：`ui_styles.gd` 的 `boke_primary` 改用深藍框（和「開始故事」同一套），`dialogue_box_gintama.tscn` 的 `BokeTsukkomi` 樣式同步；`btn_tsukkomi_*.png` 不再使用（檔案保留）。
+  - 角色熱區 node：角色 scene 的 `Art/Spots/<名稱>`（ReferenceRect，只在編輯器畫框），劇本熱區寫 `"spot": "<名稱>"`；`placeholder_sprite.gd` `spot_rect()`、`main_investigation.gd` 依它擺熱區、`story_validator.gd` 確認 scene 有這個 node、不可同時寫 `art_region`。`gintoki.tscn` 加了 `Spots/mouth`（原 art_region 的位置）；功能展示改用 `spot`（version 不變），說明台詞指出 node 在哪。`art_region` 仍支援（第一章夾具還在用）。
+  - 結局：`end`（非 Game Over）與 `result` 共用 `chapter_result_gintama.tscn`——`Dim` 全黑淡入 0.6 秒 → 卷軸由中間展開 0.45 秒 → 「點一下繼續」緩慢明滅 → 點一下（任何點擊／觸控／確認鍵）後「下一章／重玩／回標題」淡入。`end` 的卷軸只有文字、結局名稱、製作名單。新增 `Restart` 按鈕與 `TapHint`；根節點 `dim_in`／`unroll`／`buttons_in` 可調；畫面效果「減少」不播動畫但仍等那一下。`end_controls.tscn` 刪除（工作樹刪除，未動 index），`_end_box` 移除，`_restart_button`／`_end_title_button` 指向卷軸的按鈕；按鈕出現時發 QA 狀態；`tools/browser_check.mjs` 在結局畫面先點一下再按按鈕。`test_reading_scenes` 不再檢查 end_controls（原本的既有失敗因此消失）。
+- **驗證（本次實跑，Linux 暫存複本）**：新測試 `test_portrait_spots`（驗證規則、熱區＝scene 的框、移動框熱區跟著移）、`test_ending_scroll`（end：漸暗→全暗、按鈕先隱藏且不能按、點一下才出現、重玩重新開始；result：數據與評價、減少動畫時立即出現仍等點擊、回標題）。`run_tests.sh` ending_scroll chapter_flow ep00 reading_scenes ui_styles phase4_rounds_ui phase3_ui phase4_ui showcase story_packs katsura_dog_ears save_slots choices comedy portrait_spots search_cast investigation 全 PASS（`reading_scenes` 現在也過）。巡檢截圖：結局橫式（end）、直式（result）、吐槽按鈕兩種方向，存在 `test-results/ending/`。
+- **未驗證**：`browser_check.mjs` 的修改沒在瀏覽器跑過。
+
+## 2026-11-12｜換背景轉場重做：墨暈、故障、筆刷（未提交，待作者看畫面）
+
+- 使用者：「墨水跟 glitch 太簡陋，請優化，讓轉場更專業」。
+- **已完成**（`shaders/scene_transition.gdshader` 重寫，`scripts/stage_motion.gd` 秒數與節奏）：
+  - shader 用 `hint_screen_texture` 讀殘影底下的新背景，新舊畫面都參與；圖案改用螢幕座標，直式橫式掃得一樣（舊版在直式下筆刷掃不滿）；每次轉場隨機 `seed`。拿掉沒用到的 `aspect` 參數。
+  - 墨暈 1.3 秒（原 0.8）：五滴墨依序落下各自暈開（扭曲的不規則邊、毛細暈開、前緣積墨、濃淡灰階），蓋滿後停一拍，再從另一組墨滴退開；新畫面先灰暗濕潤再回色，留一點殘墨。墨滴大小依畫面對角線縮放。
+  - 故障 0.75 秒（原 0.5）、等速：以 22 格跳格；不等高橫條錯位、RGB 分離、方塊位移、垂直跳動、掃描線、雜訊條，少量壓色／反色／染色塊；新舊畫面逐塊交換。修掉 `pow(sin(PI))` 得到 NaN 讓最後一格全黑。
+  - 筆刷 0.7 秒不變：一道實心墨帶（刷毛濃淡），尾端飛白露出新畫面，前方少量墨點；取代原本像金屬尖刺的漸層邊。
+  - 功能展示「畫面・背景轉場」三句說明改寫（只改文字，version 不變）；IMPLEMENTATION.md、README 更新。
+- **驗證（本次實跑，Linux 暫存複本）**：xvfb（Compatibility 渲染器，與網頁版同一套）逐進度 0／15／30／45／60／72／85／100% 截圖，直式與橫式，無 shader 錯誤，0% 與舊畫面相同、100% 與新畫面相同；總覽在 `test-results/transitions/`。`run_tests.sh` scene_transition showcase reading_feel game_feel orientation 全 PASS；`check_story.gd` OK。
+- **未驗證**：實際播放的動態觀感（截圖只看定格）、網頁匯出版與手機上的效能（墨暈每像素約 15 次 noise）。
+- **可以再加**：轉場音效（catalog 目前沒有刷筆／墨滴／雜訊音）。
+
+## 2026-11-12｜直式／橫式可切換＋功能展示補齊進階玩法（未提交，待作者看畫面）
+
+- 專案／分支：debt-commission／master。使用者要求：寫故事或 build 前能選直式或橫式，元件與 node 兩種都支援，並用一篇 demo 展示所有功能。
+- **已完成**：
+  - 故事設定 `orientation`（劇本 JSON 根層，`"portrait"`／預設橫式）；`data/stories.json` 一列也可寫 `orientation`＋`title`。新增 `showcase_portrait`「功能展示（直式）」，與橫式共用同一份劇本、各自存檔。不影響 `version`。
+  - `main.gd` `_apply_orientation()`：載入／切換故事時換 `content_scale_size`（1920×1080 ↔ 1080×1920），桌機視窗跟著轉，Android／iOS 呼叫 `screen_set_orientation`。`_story_choice_index()` 先比 path＋save（同劇本兩列）。`_ui_scale()` 直式以 390 CSS px 為基準，並以對話框最小寬封頂（原本窄螢幕 ×1.15 會讓 972 寬的框撐出 1080 畫面）。冷啟動（網頁 `?sample=showcase_portrait`、桌機記住直式故事）時 UI 還沒建，不排版，靠 `node_added` 套 metadata。桌機視窗轉直時縮到螢幕放得下（實測 1080p 螢幕 577×1026）。
+  - `scripts/orientation_layout.gd`：node 的 `metadata/portrait_layout` 是直式屬性，直式時套用、橫式還原；`node_added` 讓執行時才實例化的 scene 也套到。已寫入 metadata（`tools/add_portrait_layouts.gd`，Godot 存檔）：`stage.tscn` 三個站位、標題 `CardArea`、`round_hud.tscn` 根、`tsukkomi_impact(_right).tscn` 的 `CutInPanel`／`Burst`。其他面板靠 Container／比例 anchor 兩邊共用。重存時 Godot 去掉了與子 scene 預設值相同的覆寫（已逐項確認相同）。
+  - 功能展示加「進階：話題、證言、連擊與導演」一段（目錄第 4 項，共 44 個節點、3 個結局，`check_story.gd --write` 後 version `s-448840e52b56`；舊的 showcase 存檔會被封存）：調查的 keep_cast／角色熱區／對話／移動、證言回合（listen、whiff、消音條、牌子）、連擊回合（combo_timers、bonus、break、super、QTE）、導演選擇、章節結算 result（導演選第三張「收工」）。
+  - 故事編輯器「故事」區加「畫面方向」下拉。
+  - `tools/screen_audit.gd`：真實外殼把故事從頭玩到尾，每個新畫面存一張圖，回報超出畫面的標題按鈕／HUD／工具列。
+  - 順手修：D1 搬常數後，編輯器 `loadProject()` 與 `test_core.mjs` 還在從 `story_runner.gd` 讀 `VALID_OPS` 等清單（測試報 null、編輯器退回內建清單），改讀 `story_validator.gd`。
+- **驗證（本次實跑，Linux 暫存複本 `rsync`，Godot 4.7）**：
+  - `run_tests.sh` 22 組：build_packs chapter_flow choices comedy ep00 flowchart game_feel orientation phase4_rounds_ui phase4_ui portrait_reaction save_slots search_cast settings showcase skin stage_scene story_packs ui_styles landscape_reading phase3_ui investigation，全 PASS。`reading_scenes` 仍是改動前就有的 `end_controls.tscn` 失敗，沒有修。
+  - 新測試 `test_orientation`：直式畫布 1080×1920、標題按鈕／HUD／對話框在畫面內、三站位分開、切回橫式還原 scene 的值、故事自己的 `orientation` 也生效、非法值被拒、直式冷啟動、直式調查拖到邊後空瓶在畫面內且點得到。`test_showcase` 加進階與結算兩條路線（runner 層）。最後一次 main.gd 修改後重跑 12 組（orientation showcase landscape_reading phase3_ui chapter_flow story_packs save_slots flowchart choices phase4_rounds_ui comedy settings）全 PASS。
+  - `tools/story_editor`：`test_core.mjs` ALL PASSED（50 項）、`test_node_types`／`test_step_insert`／`test_portrait_controls` 通過。
+  - `screen_audit.gd`：直式 540×960 與 320×568 各 66 張、橫式 960×540 66 張，無超出畫面；另跑直式結算卡、Game Over（五次冷場）、開著第一次教學各一輪，畫面正常。總覽圖在 `test-results/orientation/`（gitignore）。橫式畫面與改動前一致。
+  - **未驗證**：完整測試（L3，待作者手動驗收後跑）、Web 匯出版、Android／iOS 原生轉向、真人手機試玩；編輯器裡的新下拉只有語法檢查與 test_core，沒在瀏覽器點過。
+- **已知限制**：直式背景沿用 16:9 圖 cover 裁切（調查可左右拖）；直式三人同台時伊莉莎白的牌子會壓到右邊的人；`.dialogue`（Parley）來源還不能設方向；編輯器的舞台預覽仍是橫式。
+- **下一步**：作者看 `test-results/orientation/` 總覽圖或 `?sample=showcase_portrait` 試玩直式，調整 `stage.tscn` 站位與其他 metadata；驗收後跑完整測試再提交。
+- **工作區**：以上全部未提交；`art_src/` 的大量 PNG 修改不是本次工作，保持原狀。
+
 ## 2026-11-12｜程式結構改善 D1–D7（未提交）
 
 - 專案／分支：debt-commission／master。使用者要求「照著分析文件，先把 debt-commission 做完再做 walker-tps」。依據 [docs/CODE-IMPROVEMENTS.md](docs/CODE-IMPROVEMENTS.md)；實作時與原方案不同的地方，以該文件開頭的「實作結果」表為準。

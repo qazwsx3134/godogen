@@ -539,13 +539,13 @@
 
   // ---------------------------------------------------------------- game constants
 
-  /** The array literal of `const NAME: Array[String] = [...]` in story_runner.gd, or null. */
+  /** The array literal of `const NAME: Array[String] = [...]` in story_validator.gd, or null. */
   function parseGdStrings(source, name) {
     const match = new RegExp('const\\s+' + name + '\\s*:\\s*Array\\[String\\]\\s*=\\s*\\[([^\\]]*)\\]').exec(source);
     return match ? Array.from(match[1].matchAll(/"([^"]*)"/g), m => m[1]) : null;
   }
 
-  // Used when story_runner.gd cannot be fetched (file://); test_core.mjs checks them against the real file.
+  // Used when story_validator.gd cannot be fetched (file://); test_core.mjs checks them against the real file.
   const FALLBACK_ENUMS = {
     VALID_OPS: ['bg', 'char', 'portrait_exit', 'portrait_lighting', 'portrait_effect', 'say', 'choice', 'item', 'flag', 'show', 'hide', 'move', 'face', 'expression', 'camera', 'wait',
       'sound', 'end', 'result', 'set_flag', 'condition', 'goto', 'investigate', 'boke_round', 'profile', 'shake', 'flash',

@@ -77,6 +77,11 @@ rotation = -0.08726646
 pivot_offset_ratio = Vector2(0.5, 0.5)
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_qqk4w")
+metadata/portrait_layout = {
+"anchor_bottom": 0.76,
+"anchor_right": 0.64,
+"anchor_top": 0.3
+}
 
 [node name="PanelLines" type="Control" parent="CutInPanel" unique_id=155699337]
 anchors_preset = 0
@@ -121,6 +126,12 @@ mouse_filter = 2
 script = ExtResource("5_igc0h")
 spikes = 22
 fill = Color(1, 1, 1, 0.98)
+metadata/portrait_layout = {
+"anchor_bottom": 0.31,
+"anchor_left": 0.3,
+"anchor_right": 0.99,
+"anchor_top": 0.07
+}
 
 [node name="TextArea" type="Control" parent="Burst" unique_id=146616378]
 unique_name_in_owner = true
@@ -153,3 +164,4 @@ theme_override_font_sizes/bold_font_size = 112
 bbcode_enabled = true
 text = "[color=#141414]現在是工作時[/color][color=#d7191c]間吧！！！[/color]"
 scroll_active = false
+horizontal_alignment = 1

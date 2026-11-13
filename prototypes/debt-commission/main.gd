@@ -30,6 +30,8 @@ const CHARACTER_SCENE: String = "res://scenes/characters/%s.tscn"
 const STAGE_SCENE: PackedScene = preload("res://scenes/stage.tscn")
 ## A spot to search, laid over its object in the background picture; and the folded reading box.
 const InvestigationLayout = preload("res://scripts/investigation_layout.gd")
+const OrientationLayout = preload("res://scripts/orientation_layout.gd")
+const TextScale = preload("res://scripts/text_scale.gd")
 const InvestigationPicker = preload("res://scripts/investigation_picker.gd")
 const HOTSPOT_SCENE: PackedScene = preload("res://scenes/ui/hotspot.tscn")
 const INVESTIGATE_BAR_SCENE: PackedScene = preload("res://scenes/ui/investigate_bar.tscn")
@@ -201,7 +203,6 @@ var _qte: QteRing = null
 ## Set when an autosave from an older story structure was set aside (_archive_other_version_save).
 var _archived_save_notice: String = ""
 var _last_qte_offset: float = 0.0  # QA: the last answered QTE's offset (seconds from the rings meeting)
-var _end_box: Control = null
 var _quickbar: Container = null
 var _log_button: Button = null
 var _auto_button: Button = null
@@ -362,6 +363,17 @@ var _text_tone: String = "body"
 ## Bottom of the authored stage. It is independent of the dialogue's content and visibility.
 var _stage_bottom: float = 0.0
 var _panel_scale: float = 1.0
+## The story's screen (its `orientation`, or its stories.json entry's). Portrait swaps the project's
+## 1920×1080 canvas to 1080×1920 and applies each node's `metadata/portrait_layout`.
+var _portrait: bool = false
+## Text size multiplier for the screen's density (scripts/text_scale.gd): 1 on desktop, larger on phones.
+var _text_scale: float = 1.0
+## The title across the screen after a scene change or when a search starts (scenes/ui/title_banner.tscn).
+var _title_banner: Control = null
+## Tests and audits: a fixed text multiplier instead of the screen's (0 = from the screen).
+var text_scale_override: float = 0.0
+## The game area's height in CSS px (a phone held sideways is under 480).
+var _screen_css_height: float = 1080.0
 
 var _qa_enabled: bool = false
 var _tutorial: Control = null
@@ -378,6 +390,11 @@ var _tutorial_ctl: MainTutorial = MainTutorial.new(self)
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	get_tree().node_added.connect(func(node: Node) -> void:
+		if _portrait:
+			OrientationLayout.apply(node, true)
+		if _text_scale != 1.0:
+			TextScale.apply(node, _text_scale))
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	if ResourceLoader.exists(FONT_PATH):
 		var loaded_font: Resource = load(FONT_PATH)
@@ -386,6 +403,7 @@ func _ready() -> void:
 	var ui_theme: Theme = Theme.new()
 	ui_theme.default_font = _font
 	ui_theme.default_font_size = 34
+	_add_scrollbar_style(ui_theme)
 	theme = ui_theme
 
 	_library = STORY_LIBRARY.new(stories_path, progress_path, packs_root)
@@ -404,6 +422,23 @@ func _ready() -> void:
 	_layout()
 	_qa_ctl.detect_qa_mode()
 	_show_title()
+
+
+## Scroll bars thick enough to see on a phone (the default is 2 CSS px): a 14 px rail with a rounded grabber.
+func _add_scrollbar_style(ui_theme: Theme) -> void:
+	for bar: String in ["VScrollBar", "HScrollBar"]:
+		var rail: StyleBoxFlat = StyleBoxFlat.new()
+		rail.bg_color = Color(0.1, 0.12, 0.2, 0.12)
+		rail.set_corner_radius_all(7)
+		var grabber: StyleBoxFlat = StyleBoxFlat.new()
+		grabber.bg_color = Color(0.13, 0.19, 0.28, 0.55)
+		grabber.set_corner_radius_all(7)
+		for box: StyleBoxFlat in [rail, grabber]:
+			box.set_content_margin_all(7.0)
+		ui_theme.set_stylebox("scroll", bar, rail)
+		ui_theme.set_stylebox("grabber", bar, grabber)
+		ui_theme.set_stylebox("grabber_highlight", bar, grabber)
+		ui_theme.set_stylebox("grabber_pressed", bar, grabber)
 
 
 func _select_story_variant() -> void:
@@ -425,10 +460,14 @@ func _select_story_variant() -> void:
 
 
 func _story_choice_index() -> int:
+	var found: int = -1
 	for index: int in range(_story_choices.size()):
 		if _story_choices[index]["path"] == story_path:
-			return index
-	return -1
+			if _story_choices[index]["save"] == save_path:
+				return index  # two entries may play one story (e.g. its portrait edition)
+			if found < 0:
+				found = index
+	return found
 
 
 ## The title's story label opens 章節選擇.
@@ -664,7 +703,7 @@ func _on_setting_changed(key: String, value: int) -> void:
 
 
 func _apply_reading_settings() -> void:
-	_dialog_panel.apply_reading_settings(SETTINGS_SCRIPT.FONT_SCALES[int(_settings.get("font_size", 1))],
+	_dialog_panel.apply_reading_settings(SETTINGS_SCRIPT.FONT_SCALES[int(_settings.get("font_size", 1))] * _text_scale,
 		SETTINGS_SCRIPT.PAPER_OPACITIES[int(_settings.get("paper_opacity", 2))])
 	if _command_op(_current_command) == "say":
 		_line_plan = DialogueText.compile(_dict_string(_current_command,"text"), _text_interval(),
@@ -726,6 +765,35 @@ func _load_story() -> void:
 		_actor_slots[actor_id] = str(info.get("slot", "center"))
 	if new_cast:
 		_rebuild_cast()
+	_apply_orientation()
+
+
+## Landscape is the project's canvas; a portrait story turns it (and a phone) upright.
+func _apply_orientation() -> void:
+	var index: int = _story_choice_index()
+	var entry: Dictionary = _story_choices[index] if index >= 0 else {}
+	var wanted: String = str(entry.get("orientation", _runner.orientation() if _story_ready else "landscape"))
+	var portrait: bool = wanted == "portrait"
+	var base: Vector2i = Vector2i(int(ProjectSettings.get_setting("display/window/size/viewport_width")),
+		int(ProjectSettings.get_setting("display/window/size/viewport_height")))
+	var canvas: Vector2i = Vector2i(base.y, base.x) if portrait else base
+	var window: Window = get_window()
+	if portrait == _portrait and window.content_scale_size == canvas:
+		return
+	_portrait = portrait
+	window.content_scale_size = canvas
+	if OS.get_name() in ["Android", "iOS"]:
+		DisplayServer.screen_set_orientation(DisplayServer.SCREEN_PORTRAIT if portrait else DisplayServer.SCREEN_LANDSCAPE)
+	elif get_tree().current_scene == self and not OS.has_feature("web") and window.mode == Window.MODE_WINDOWED \
+			and (window.size.x > window.size.y) == portrait:
+		# The desktop window turns with the story, kept inside the screen (1280 tall does not fit 1080p).
+		var turned: Vector2 = Vector2(window.size.y, window.size.x)
+		var usable: Vector2 = Vector2(DisplayServer.screen_get_usable_rect(window.current_screen).size)
+		window.size = Vector2i(turned * minf(1.0, minf(usable.x / turned.x, usable.y / turned.y) * 0.95))
+		window.move_to_center()
+	if _place_tag != null:  # on a cold start the UI is built (and laid out) after this
+		OrientationLayout.apply_tree(self, portrait)
+		_layout()
 
 
 ## Another work's catalog (a story pack): its characters replace the cast on stage, and effects,
@@ -874,7 +942,9 @@ func _apply_background(background_id: String, animate: bool = false, transition:
 		return 0.0
 	var changing: bool = animate and not _skip and _motion != null and _background_rect != null and background_id != _current_bg_id
 	if changing:
-		_motion.capture_background(_background_rect)
+		_motion.capture_background(_background_rect)  # the ghost keeps a scrolled picture where it was
+	if _motion != null:
+		_motion.end_scroll()
 	var info: Dictionary = _backgrounds[background_id] as Dictionary
 	_current_bg_id = background_id
 	_place_tag.text = str(info.get("label", background_id))
@@ -929,6 +999,9 @@ func _build_sprites() -> void:
 func _build_phase3_hud() -> void:
 	_phase3_hud = ROUND_HUD_SCENE.instantiate() as RoundHud
 	_fx_layer.add_child(_phase3_hud)
+	_title_banner = preload("res://scenes/ui/title_banner.tscn").instantiate() as Control
+	_fx_layer.add_child(_title_banner)
+	_fx_layer.move_child(_title_banner, _phase3_hud.get_index())  # under the HUD
 	_phase3_stats_label = _phase3_hud.power_value
 	_phase3_timer_label = _phase3_hud.timer
 	_phase3_hud.visible = false
@@ -987,12 +1060,6 @@ func _build_dialogue() -> void:
 	_mount_dialogue_box()
 	_mount_choice_sheet()
 
-	_end_box = preload("res://scenes/ui/end_controls.tscn").instantiate()
-	_dialog_layer.add_child(_end_box)
-	_restart_button = _end_box.get_node("%Restart")
-	_end_title_button = _end_box.get_node("%EndTitle")
-	_restart_button.pressed.connect(_on_restart_pressed)
-	_end_title_button.pressed.connect(_show_title)
 
 
 
@@ -1001,9 +1068,10 @@ func _build_dialogue() -> void:
 func _mount_dialogue_box() -> void:
 	var old: DialogueBox = _dialog_panel
 	_dialog_panel = SKIN.scene(_skin, "dialogue_box").instantiate() as DialogueBox
+	_dialog_panel.get_node("%Text").set_meta(&"fixed_font_size", true)  # the reading text follows 字級 × _text_scale
 	_dialog_layer.add_child(_dialog_panel)
 	_dialog_panel.set_reduce_motion(int(_settings.get("motion", 0)) == 1)
-	_dialog_panel.apply_reading_settings(SETTINGS_SCRIPT.FONT_SCALES[int(_settings.get("font_size",1))],
+	_dialog_panel.apply_reading_settings(SETTINGS_SCRIPT.FONT_SCALES[int(_settings.get("font_size",1))] * _text_scale,
 		SETTINGS_SCRIPT.PAPER_OPACITIES[int(_settings.get("paper_opacity",2))])
 	_dialog_layer.move_child(_dialog_panel, _tap_catcher.get_index() + 1)
 	_text_label = _dialog_panel.text
@@ -1217,6 +1285,7 @@ func _build_log() -> void:
 func _build_toast() -> void:
 	_toast = _make_label(_popup_layer, "", 32, COLOR_TEXT)
 	_toast.name = "Toast"
+	_toast.z_index = 2  # with the popup layer's 2: above 設定 (z 3), which raises toasts for its backup rows
 	_toast.set_meta("ui_style_role", "toast")
 	_toast.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_toast.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -1255,6 +1324,9 @@ func _mount_settings() -> void:
 		return
 	_settings_panel = scene.instantiate() as Control
 	_game.add_child(_settings_panel)
+	# Clicks go to the later sibling and 設定 is added after the popup layer, but drawing follows z_index:
+	# above PopupLayer's 2, so opened from 目錄 it is also drawn over 目錄.
+	_settings_panel.z_index = 3
 	_settings_panel.connect("changed", _on_setting_changed)
 	_settings_panel.connect("closed", _close_settings)
 	_settings_panel.connect("export_saves", _saves.export_saves)
@@ -1291,6 +1363,11 @@ func _mount_end_screens() -> void:
 		_overlay_layer.add_child(_chapter_result)
 		_chapter_result.connect("title_pressed", _show_title)
 		_chapter_result.connect("next_pressed", _on_next_chapter_pressed)
+		_chapter_result.connect("restart_pressed", _on_restart_pressed)
+		_chapter_result.connect("buttons_revealed", _qa_ctl.publish_qa_state)
+		# The ending scroll's 重玩／回標題 serve both `end` and `result`.
+		_restart_button = _chapter_result.get("restart_button")
+		_end_title_button = _chapter_result.get("title_button")
 		if old_result != null:
 			_overlay_layer.move_child(_chapter_result, old_result.get_index())
 			old_result.queue_free()
@@ -1339,13 +1416,13 @@ func _layout() -> void:
 	_phase3_hud.offset_top = _safe_top
 
 	# Bottom panels respect the device safe area. The portrait stage remains independent of them.
+	_fit_text_to_screen()  # first: the reading box's width (and so _ui_scale's cap) depends on the text size
 	_panel_scale = _ui_scale()
 	_fit_bottom_panel(_dialog_panel)
 	_fit_bottom_panel(_investigate_bar)
 	_fit_choice_sheet()
 	_stage_bottom = _anchored_rect(_stage_area, Rect2(Vector2.ZERO, _game.size)).end.y
 
-	_fit_full_area(_end_box)
 
 	for actor_id: String in _sprites.keys():
 		_layout_sprite(actor_id)
@@ -1370,14 +1447,44 @@ func _layout() -> void:
 	_qa_ctl.publish_qa_state()
 
 
-## The landscape scenes are drawn for a 720 CSS px wide game area. A small increase on narrower
+## The title across the screen; it plays over the story without holding it (skipped while skipping).
+func _show_banner(title: String) -> void:
+	if title.is_empty() or _skip or _title_banner == null:
+		return
+	_title_banner.set("reduce_motion", int(_settings.get("motion", 0)) == 1)
+	_title_banner.call("play", title)
+
+
+## Phones get larger text (scripts/text_scale.gd); desktop windows keep the scenes' sizes.
+func _fit_text_to_screen() -> void:
+	var design_per_css: float = DisplayServer.screen_get_scale() / maxf(get_viewport().get_final_transform().get_scale().x, 0.001)
+	var window: Vector2i = get_window().size
+	if window.x < 200 or window.y < 200:
+		design_per_css = 1.0  # headless's 64×64 stand-in window is no screen: measure as a desktop
+	_screen_css_height = _game.size.y / maxf(design_per_css, 0.001)
+	var factor: float = TextScale.multiplier(design_per_css)
+	if OS.get_name() in ["Android", "iOS"]:
+		factor = TextScale.MAX  # ponytail: native builds may report a screen scale of 1; every native build is a phone here
+	if text_scale_override > 0.0:
+		factor = text_scale_override
+	if is_equal_approx(factor, _text_scale):
+		return
+	_text_scale = factor
+	TextScale.apply_tree(self, factor)
+	_apply_reading_settings()
+
+
+## The scenes are drawn for a 720 CSS px wide landscape game area (390 in portrait). A small increase on narrower
 ## windows helps touch targets, with a cap so the reading and investigation panels still fit.
 func _ui_scale() -> float:
 	var screen_px: float = _game.size.x * get_viewport().get_final_transform().get_scale().x
 	var css_px: float = screen_px / maxf(1.0, DisplayServer.screen_get_scale())
-	var k: float = 720.0 / maxf(css_px, 1.0)
+	var k: float = (390.0 if _portrait else 720.0) / maxf(css_px, 1.0)
 	# 0.4 % headroom: a 48 CSS px button scaled to exactly 48 measures 47.997 after rounding.
-	return 1.0 if k <= 1.0 else minf(k * 1.004, 1.15)
+	var scale_up: float = 1.0 if k <= 1.0 else minf(k * 1.004, 1.15)
+	# The narrow portrait canvas: scaled up, the reading box (its toolbar sets its width) must still fit.
+	var widest: float = _dialog_panel.get_combined_minimum_size().x if _dialog_panel != null else 0.0
+	return minf(scale_up, _game.size.x / widest) if widest > 0.0 else scale_up
 
 
 ## Full-screen scene part at _panel_scale, laid out smaller so that scaled it covers the game area.
@@ -1518,6 +1625,7 @@ func _on_restart_pressed() -> void:
 
 func _start_new_story() -> void:
 	_archived_save_notice = ""
+	_investigation.forget_banners()
 	if _phase3_hud != null:
 		_phase3_hud.reset_pops()
 	_round_stages.clear()
@@ -1624,6 +1732,9 @@ func _drive_story(generation: int) -> void:
 					await get_tree().create_timer(wipe_time).timeout  # the next line waits for the new scene
 					if generation != _generation:
 						return
+				_show_banner(_dict_string(command, "title"))
+				if command.has("scroll"):
+					_motion.scroll(_background_rect, _dict_string(command, "scroll"), float(command.get("scroll_seconds", 6.0)), _skip)
 			"char":
 				_apply_character(command)
 			"portrait_exit":
@@ -1883,6 +1994,7 @@ func _present_choice(command: Dictionary) -> void:
 	_line_generation += 1
 	_set_skip(false)
 	_screen = Screen.CHOICE
+	_effects.clear_overlays()  # a cut-in still holding after quick taps would cover the options
 	_hide_story_parts()
 	_refresh_phase3_hud()
 	if director:
@@ -1936,7 +2048,7 @@ func _on_choice_pressed(option_id: String) -> void:
 
 func _present_end(command: Dictionary) -> void:
 	_current_command = command.duplicate(true)
-	_hide_story_parts()  # the end buttons come back below, unless it is a Game Over
+	_hide_story_parts()
 	_current_speaker = "narrator"
 	_full_text = _dict_string(command, "text", "本場結束。")
 	_current_line_key = _line_key(command, "end")
@@ -1956,12 +2068,14 @@ func _present_end(command: Dictionary) -> void:
 	var index: int = _story_choice_index()
 	if not game_over and not _phase3_enabled and index >= 0 and str(_story_choices[index].get("kind", "")) == "chapter":
 		_record_clear(CLEARED_WITHOUT_GRADE)  # a chapter with no rounds is cleared by reaching its end
-	var ending_title: String = _dict_string(command, "ending_title", "")
-	(_end_box.get_node("%EndingTitle") as Label).text = ending_title if not ending_title.is_empty() else _full_text
-	_end_box.visible = not game_over
 	_game_over_retry_button.visible = game_over
 	if game_over:
 		_game_over.open(_full_text)
+	else:
+		# Dark screen, the ending scroll, and 重玩／回標題 after a tap.
+		_chapter_result.set("reduce_motion", int(_settings.get("motion", 0)) == 1)
+		_chapter_result.call("show_ending", _full_text, _dict_string(command, "ending_title", ""), false,
+			_credit_line((_runner.story_info() as Dictionary).get("credits", []) as Array))
 	if not _history_has_key(_current_line_key):
 		_append_history({"key": _current_line_key, "kind": "say", "speaker": "narrator", "text": _full_text})
 	_qa_ctl.publish_qa_state()
@@ -2005,12 +2119,12 @@ func _present_result(command: Dictionary) -> void:
 	_set_skip(false)
 	_clear_choices()
 	_investigation.clear_hotspots()
-	_end_box.visible = false
 	_screen = Screen.RESULT
 	var summary: Dictionary = _runner.chapter_result() as Dictionary
 	_record_clear(str(summary.get("grade", "C")))
 	_record_ending(command)
 	var speaker: String = str((summary.get("line", {}) as Dictionary).get("speaker", "narrator"))
+	_chapter_result.set("reduce_motion", int(_settings.get("motion", 0)) == 1)
 	_chapter_result.call("show_result", summary, str((_actors.get(speaker, {}) as Dictionary).get("name", "")),
 		not _next_chapter().is_empty(), _credit_line((_runner.story_info() as Dictionary).get("credits", []) as Array))
 	_chapter_result.visible = true
@@ -2129,13 +2243,12 @@ func _sprite(actor_id: String) -> Control:
 
 
 ## Hides what only some story screens show: the search spots, the search's 繼續 button, the round
-## controls and the end buttons. Each _present_* calls it first and then shows its own parts; the
+## controls. Each _present_* calls it first and then shows its own parts; the
 ## Game Over retry button and the choice sheet are cleared where each screen needs it.
 func _hide_story_parts() -> void:
 	_investigation.clear_hotspots()
 	_investigation_continue_button.visible = false
 	_boke_controls.visible = false
-	_end_box.visible = false
 
 
 func _clear_choices() -> void:
@@ -2274,7 +2387,6 @@ func _on_screen_tap() -> void:
 func _set_ui_hidden(value: bool) -> void:
 	_ui_hidden = value
 	_refresh_reading_ui()
-	_end_box.visible = not value and _screen == Screen.END
 	_phase3_hud.visible = _phase3_enabled and not value and _screen != Screen.TITLE
 	if not value and _auto:
 		_auto_step(_line_generation)
@@ -2392,6 +2504,8 @@ func _open_log() -> void:
 		_log_entries.add_child(row)
 		_fill_log_row(row, entry)
 		_apply_ui_style_recursive(row)
+	_log_overlay.get_node("%LogEmpty").visible = _history.is_empty()
+	_log_overlay.get_node("%LogScroll").visible = not _history.is_empty()
 	_log_overlay.visible = true
 	_refresh_phase3_hud()
 	_scroll_log_to_bottom()
@@ -2560,8 +2674,8 @@ func _refresh_phase3_hud() -> void:
 	if _menu_items.has("material"):
 		(_menu_items["material"] as Button).text = _words("{materials}（%d）") % items.size()
 	if _command_op(current) == "boke_round" and _saves.effective_boke_ui_mode() == "tsukkomi":
-		var prefix: String = "倒數" if _screen == Screen.TSUKKOMI else "暫停"
-		_phase3_timer_label.text = "%s %02d 秒" % [prefix, ceili(_boke_time_remaining)]
+		# While answering, the sheet's own bar counts down; the HUD speaks only when 目錄 covers the sheet.
+		_phase3_timer_label.text = "" if _screen == Screen.TSUKKOMI else "暫停 %02d 秒" % ceili(_boke_time_remaining)
 		_choice_sheet.set_timer(_boke_time_remaining, _timer_total(current),
 			_screen != Screen.TSUKKOMI)
 	else:
@@ -2635,6 +2749,8 @@ func _on_case_file_material_used(option_id: String) -> void:
 # ---------------------------------------------------------------- 存讀檔
 
 func _cancel_generation() -> void:
+	if _title_banner != null:
+		_title_banner.call("stop")  # a jump, a load or the title screen ends the old scene's title
 	_pending_round_mode = ""
 	_recent_retort = ""
 	_generation += 1

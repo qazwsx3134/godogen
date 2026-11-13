@@ -2,13 +2,13 @@
 
 [ext_resource type="PackedScene" path="res://scenes/ui/item_picture.tscn" id="1_c02se"]
 [ext_resource type="FontFile" path="res://assets/fonts/story-cjk.ttc" id="2_8nnfc"]
-[ext_resource type="Script" path="res://scripts/item_picture.gd" id="3_uyhc0"]
 
 [sub_resource type="Theme" id="Theme_fwwn3"]
 default_font = ExtResource("2_8nnfc")
 
 [node name="CaseFileCard" type="Button" unique_id=1059259295]
-custom_minimum_size = Vector2(0, 260.30768)
+editor_description = "線索卡（直長）：拿到的顯示 Picture 與 Name；還沒拿到的是暗色空卡，只顯示 Numeral 的羅馬數字。"
+custom_minimum_size = Vector2(290, 480)
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 34
 autowrap_mode = 3
@@ -26,15 +26,11 @@ offset_bottom = -17.0
 mouse_filter = 2
 theme_override_constants/separation = 8
 
-[node name="Picture" type="TextureRect" parent="Content" unique_id=408534221 instance=ExtResource("1_c02se")]
-custom_minimum_size = Vector2(0, 121.84615)
+[node name="Picture" parent="Content" unique_id=408534221 instance=ExtResource("1_c02se")]
+custom_minimum_size = Vector2(0, 330)
 layout_mode = 2
 size_flags_vertical = 3
-mouse_filter = 2
 theme = SubResource("Theme_fwwn3")
-expand_mode = 1
-stretch_mode = 5
-script = ExtResource("3_uyhc0")
 
 [node name="Name" type="Label" parent="Content" unique_id=1298383761]
 layout_mode = 2
@@ -43,3 +39,15 @@ text = "空的草莓牛奶瓶"
 horizontal_alignment = 1
 autowrap_mode = 3
 max_lines_visible = 2
+
+[node name="Numeral" type="Label" parent="." unique_id=563327446]
+visible = false
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_font_sizes/font_size = 96
+theme_override_colors/font_color = Color(0.78, 0.8, 0.84, 0.75)
+text = "Ⅰ"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/fixed_font_size = true
