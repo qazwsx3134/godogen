@@ -8,6 +8,8 @@ import { EVENT_BY_ID, type Effects } from '../content/events'
 import { FIXERS, JOBS } from '../content/data'
 import { ATTR_LABEL, DIRECTION_LABEL } from '../rules/core'
 import { Panel } from './ui'
+import { DRAFTS, type Draft } from '../content/drafts'
+import { COST_LABEL } from '../content/storyCheckLabels'
 
 const who = (id: string) => FIXERS[id]?.name ?? id
 const pct = (x: number) => `${Math.round(x * 100)}%`
@@ -73,6 +75,21 @@ function CaseView({ sc, role }: { sc: StoryCase; role: string }) {
           <Lines xs={a.autoLog} />
           {a.fight && <p className="m-0 text-red">⚔ {a.fight.name}（HP {a.fight.hp}・攻擊 {a.fight.atk}・防火牆 {a.fight.ice ?? 0}・感知 {a.fight.sense ?? 0}）</p>}
           {a.afterFight && <Lines xs={a.afterFight} />}
+          {a.beats ? (
+            a.beats.map((b, i) => (
+              <div key={i} className="border border-line/40 p-2">
+                <div className="text-[13px] text-warning">
+                  場面 {i + 1}「{b.title}」・擲{ATTR_LABEL[b.attr]}・失敗吃{COST_LABEL[b.fail]}
+                </div>
+                <Lines xs={[b.setup]} />
+                <p className="m-0 text-muted">
+                  大成功：{b.out.crit}／乾淨成功：{b.out.clean}／付代價：{b.out.cost}（{b.costs.map((c) => `${c.text}＝${COST_LABEL[c.kind]}`).join('、')}）／失敗：{b.out.fail}
+                </p>
+              </div>
+            ))
+          ) : (
+            <p className="m-0 text-[13px] text-muted">（沒寫場面：借用委託「{DIRECTION_LABEL[a.direction]}」的通用場面文字）</p>
+          )}
         </Sec>
       ))}
       <Sec title={`危險：${sc.danger.title}（${sc.danger.options.length} 個選項）`}>
@@ -153,17 +170,60 @@ function SideView() {
   )
 }
 
+/** AI 寫的草稿：機器檢查結果、審查報告、全文。 */
+function DraftView() {
+  if (!DRAFTS.length)
+    return <p className="m-0 px-1 text-[14px] text-muted">還沒有草稿。流程見 docs/story-pipeline/README.md：寫手把 JSON 放進 story-drafts/，審查員寫 .review.md。</p>
+  return (
+    <>
+      {DRAFTS.map((d) => (
+        <DraftCard key={d.file} d={d} />
+      ))}
+    </>
+  )
+}
+
+function DraftCard({ d }: { d: Draft }) {
+  const errors = d.issues.filter((x) => x.level === 'error')
+  const warns = d.issues.filter((x) => x.level === 'warn')
+  const verdict = d.review?.match(/結論[：:]\s*\**\s*(\S+)/)?.[1]
+  return (
+    <div className="space-y-2">
+      <div className="flex flex-wrap items-center gap-2 px-1 text-[13px]">
+        <b className="text-warning">{d.file}</b>
+        <span className={errors.length ? 'font-bold text-red' : 'text-positive'}>機器檢查：錯誤 {errors.length}・警告 {warns.length}</span>
+        <span className={!d.review ? 'text-muted' : /不通過|FAIL/.test(verdict ?? '') ? 'font-bold text-red' : 'text-positive'}>審查：{d.review ? (verdict ?? '見報告') : '還沒審'}</span>
+      </div>
+      {d.issues.length > 0 && (
+        <Sec title={`機器檢查（${d.issues.length}）`} open={errors.length > 0}>
+          {d.issues.map((x, i) => (
+            <p key={i} className={`m-0 text-[13px] ${x.level === 'error' ? 'text-red' : 'text-warning'}`}>
+              {x.level === 'error' ? '✖' : '△'} {x.where}：{x.msg}
+            </p>
+          ))}
+        </Sec>
+      )}
+      {d.review && (
+        <Sec title="審查報告" open>
+          <pre className="m-0 whitespace-pre-wrap font-[inherit] text-[13px] leading-6 text-fg">{d.review}</pre>
+        </Sec>
+      )}
+      <CaseView sc={d.sc} role={`草稿${d.sc.requires ? `（接在 ${d.sc.requires} 之後）` : ''}`} />
+    </div>
+  )
+}
+
 export function StoryReview({ onClose }: { onClose: () => void }) {
-  const [tab, setTab] = useState<'main' | 'side'>('main')
+  const [tab, setTab] = useState<'main' | 'side' | 'draft'>(DRAFTS.length ? 'draft' : 'main')
   const wired = new Set(DISTRICTS.flatMap((d) => [d.story, d.boss]))
   const loose = CASES.filter((c) => !wired.has(c.id))
   return (
     <div className="absolute inset-0 z-30 flex flex-col bg-bg/90 p-2" role="dialog" aria-label="劇情總覽">
       <Panel tone="strong" className="min-h-0 flex-1" innerClass="flex h-full flex-col">
         <div className="flex items-center gap-1 border-b border-line/60 px-2 py-1">
-          {(['main', 'side'] as const).map((t) => (
+          {(['main', 'side', 'draft'] as const).map((t) => (
             <button key={t} onClick={() => setTab(t)} className={`min-h-11 border px-3 font-bold ${tab === t ? 'border-cyan text-cyan' : 'border-line/50 text-muted'}`}>
-              {t === 'main' ? '主線' : '支線'}
+              {t === 'main' ? '主線' : t === 'side' ? '支線' : `草稿 ${DRAFTS.length}`}
             </button>
           ))}
           <b className="flex-1 px-1 text-heading">劇情總覽</b>
@@ -186,8 +246,10 @@ export function StoryReview({ onClose }: { onClose: () => void }) {
               ))}
               {loose.length > 0 && <p className="m-0 px-1 text-[13px] text-muted">沒接進街區的案件：{loose.map((c) => `${c.title}（${c.id}）`).join('、')}</p>}
             </>
-          ) : (
+          ) : tab === 'side' ? (
             <SideView />
+          ) : (
+            <DraftView />
           )}
         </div>
       </Panel>

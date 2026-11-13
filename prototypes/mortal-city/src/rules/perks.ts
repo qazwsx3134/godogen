@@ -37,7 +37,7 @@ export const PERKS: Record<string, PerkDef> = {
   quickDraw: { name: '快拔', style: 'gunslinger', max: 3, mods: { hit: 0.03, crit: 0.02 }, desc: '命中 +3%、爆擊率 +2%' },
   bountyHunter: { name: '賞金獵人', style: 'gunslinger', max: 3, bonus: 0.03, reward: 0.1, desc: '武力委託成功率 +3%、報酬 +10%' },
   // 速駭 Netrunner：干擾、電擊、腦袋撐得住（駭入路線）
-  iceApprentice: { name: '黑冰學徒', style: 'netrunner', max: 2, mods: { jam: 1 }, desc: '駭入的干擾 +1 回合（駭入強度 +2）' },
+  iceApprentice: { name: '駭客學徒', style: 'netrunner', max: 2, mods: { jam: 1 }, desc: '駭入的干擾 +1 回合（駭入強度 +2）' },
   buffer: { name: '神經緩衝', style: 'netrunner', max: 3, mods: { cap: 10 }, desc: '神經容量 +10（多一點義體空間）' },
   feedback: { name: '回授電擊', style: 'netrunner', max: 2, rare: true, mods: { shock: 4 }, desc: '干擾期間每回合電擊對方 −4' },
   coolant: { name: '冷卻迴路', style: 'netrunner', max: 2, mods: { calm: 1 }, desc: '駭入神經壓力 −1（最少 1）' },

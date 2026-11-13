@@ -72,14 +72,14 @@ export const BEATS: Record<Direction, Beat[]> = {
       fail: 'stress',
     },
     {
-      title: '破冰',
+      title: '突破防火牆',
       attr: 'tech',
-      setup: '資料在第三層。中間隔著一道會回咬的防火牆。',
+      setup: '資料在第三層。中間隔著一道會反擊的防火牆。',
       out: {
         crit: '你找到一個沒補的舊漏洞，防火牆整面倒下，還多撈到一包帳本。',
         clean: '你繞開了防火牆，它連警告都沒發。',
         cost: '你鑽過去了，防火牆在你身上留了記號。',
-        fail: '防火牆咬住了你。視野邊緣開始出現雜訊。',
+        fail: '防火牆攻擊了你。視野邊緣開始出現雜訊。',
       },
       costs: [
         { kind: 'stress', text: '讓回授電流燒過去' },
@@ -156,5 +156,5 @@ export const BEATS: Record<Direction, Beat[]> = {
   ],
 }
 
-/** 劇情委託的做法：該路線的前兩個場面（文字暫時借用委託的，待作者改寫成每件案子自己的）。 */
-export const storyBeats = (d: Direction): Beat[] => BEATS[d].slice(0, 2)
+/** 劇情委託做法的兩個場面：做法自己寫了 beats 就用它；沒寫就借用委託該路線的前兩個場面（舊案子待改寫）。 */
+export const storyBeats = (ap: { direction: Direction; beats?: Beat[] }): Beat[] => ap.beats ?? BEATS[ap.direction].slice(0, 2)

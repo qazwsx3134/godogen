@@ -35,6 +35,7 @@ import {
   STYLE_LABEL,
   type Style,
   REST,
+  CALMER,
   SEVERE_INJURY,
   addScar,
   jobFame,
@@ -127,7 +128,7 @@ export type NodeRun =
     }
   | { kind: 'event'; nodeId: string; eventId: string; stage: 'choose' | 'done'; text?: string; rows?: ResultRow[]; roll?: { dice: number[]; best: number; result: PoolResult } }
   | { kind: 'market'; nodeId: string; stock: Item[] }
-  | { kind: 'clinic'; nodeId: string }
+  | { kind: 'clinic'; nodeId: string; /** 這次來已經做過神經調校。 */ tuned?: boolean }
   | { kind: 'rest'; nodeId: string; used?: boolean }
   | { kind: 'story'; nodeId: string; caseId: string }
 
@@ -710,7 +711,7 @@ function advanceStory(g: Game, story: Game['story']): Game {
   const sc = CASE_BY_ID[story.caseId!]
   const ap = sc.approaches.find((x) => x.id === story.approach) ?? sc.approaches[0]
   const beat = (story.beat ?? 0) + 1
-  if (beat < storyBeats(ap.direction).length) return { ...g, story: { ...story, beat, stage: 'scene' } }
+  if (beat < storyBeats(ap).length) return { ...g, story: { ...story, beat, stage: 'scene' } }
   return { ...g, story: { ...story, beat, stage: ap.fight ? 'fight' : 'danger' } }
 }
 
@@ -770,9 +771,13 @@ type Action =
   | { t: 'buyLifeline'; tier: LifelineTier }
   | { t: 'sell'; itemId: string }
   | { t: 'treat' }
+  | { t: 'healScar'; attr: Attr }
   | { t: 'buyImplant'; kind: string }
   | { t: 'upgradeImplant'; itemId: string }
-  | { t: 'rest'; choice: 'heal' | 'heat' }
+  | { t: 'rest'; choice: 'heal' | 'heat' | 'calm' }
+  | { t: 'tune' }
+  | { t: 'buyCalmer' }
+  | { t: 'useCalmer' }
   | { t: 'storyApproach'; id: string }
   | { t: 'storyAutoDone' }
   | { t: 'storyChoose'; optionId: string; push?: boolean; gamble?: boolean }
@@ -1083,11 +1088,45 @@ export function reduce(g: Game, a: Action): Game {
       )
     }
     case 'treat': {
+      // 只有有傷才能縫；神經壓力 −10 是縫傷口順便的（沒有傷就不能一直按來免費降壓）
       const cost = c.injury * CLINIC.perPoint
-      if (n?.kind !== 'clinic' || !c.alive || c.credits < cost || (c.injury === 0 && c.stress === 0)) return g
+      if (n?.kind !== 'clinic' || !c.alive || c.injury === 0 || c.credits < cost) return g
       return withLog(
         { ...g, character: { ...c, credits: c.credits - cost, injury: 0, stress: Math.max(0, c.stress - CLINIC.stress) } },
         { at: now, kind: 'system', text: `神機醫${doctorName(g)}幫你縫好了傷口（-${cost} 信用點，神經壓力 −${CLINIC.stress}）。` },
+      )
+    }
+    case 'tune': {
+      // 神經調校：花錢降壓，每次來診所限一次
+      if (n?.kind !== 'clinic' || n.tuned || !c.alive || c.stress === 0 || c.credits < CLINIC.tunePrice) return g
+      const ch = { ...c, credits: c.credits - CLINIC.tunePrice, stress: Math.max(0, c.stress - CLINIC.tune) }
+      return withLog(
+        { ...g, character: ch, run: { ...g.run, node: { ...n, tuned: true } } },
+        { at: now, kind: 'system', text: `神機醫${doctorName(g)}幫你做了一次神經調校（-${CLINIC.tunePrice} 信用點，神經壓力 −${CLINIC.tune}）。` },
+      )
+    }
+    case 'buyCalmer': {
+      if (n?.kind !== 'market' || !c.alive || (c.calmers ?? 0) >= CALMER.max || c.credits < CALMER.price) return g
+      return withLog(
+        { ...g, character: { ...c, credits: c.credits - CALMER.price, calmers: (c.calmers ?? 0) + 1 } },
+        { at: now, kind: 'system', text: `黑市：買了一劑鎮定劑（-${CALMER.price} 信用點，身上 ${(c.calmers ?? 0) + 1} 劑）。` },
+      )
+    }
+    case 'useCalmer': {
+      // 鎮定劑隨時能用，擲骰前也可以
+      if (!c.alive || !(c.calmers ?? 0) || c.stress === 0) return g
+      const ch = { ...c, calmers: (c.calmers ?? 0) - 1, stress: Math.max(0, c.stress - CALMER.stress) }
+      return withLog({ ...g, character: ch }, { at: now, kind: 'system', text: `${statusPrefix(ch)} 你打了一劑鎮定劑（神經壓力 −${CALMER.stress}，剩 ${ch.calmers} 劑）。` })
+    }
+    case 'healScar': {
+      // 修好一道舊傷：恢復 1 點屬性
+      const left = c.scars?.[a.attr] ?? 0
+      if (n?.kind !== 'clinic' || !c.alive || !left || c.credits < CLINIC.scar) return g
+      const scars = { ...c.scars, [a.attr]: left - 1 }
+      if (!scars[a.attr]) delete scars[a.attr]
+      return withLog(
+        { ...g, character: { ...c, credits: c.credits - CLINIC.scar, attrs: { ...c.attrs, [a.attr]: c.attrs[a.attr] + 1 }, scars: Object.keys(scars).length ? scars : undefined } },
+        { at: now, kind: 'system', text: `神機醫${doctorName(g)}修好了一道舊傷（-${CLINIC.scar} 信用點）：${ATTR_LABEL[a.attr]} ${c.attrs[a.attr]} → ${c.attrs[a.attr] + 1}。` },
       )
     }
     case 'buyImplant': {
@@ -1127,10 +1166,15 @@ export function reduce(g: Game, a: Action): Game {
     }
     case 'rest': {
       if (n?.kind !== 'rest' || n.used || !c.alive) return g
-      const ch = { ...c, stress: Math.max(0, c.stress - REST.stress) }
+      const ch = { ...c, stress: Math.max(0, c.stress - (a.choice === 'calm' ? REST.calm : REST.stress)) }
       if (a.choice === 'heal') ch.injury = Math.max(0, c.injury - REST.heal)
-      else ch.heat = Math.max(0, c.heat - REST.heat)
-      const text = a.choice === 'heal' ? `你在膠囊旅館睡了一覺（傷勢 −${REST.heal}%）。` : `你在網咖躲了一晚，等 MPD 的注意力移開（通緝 −${REST.heat}）。`
+      else if (a.choice === 'heat') ch.heat = Math.max(0, c.heat - REST.heat)
+      const text =
+        a.choice === 'heal'
+          ? `你在膠囊旅館睡了一覺（傷勢 −${REST.heal}%）。`
+          : a.choice === 'heat'
+            ? `你在網咖躲了一晚，等 MPD 的注意力移開（通緝 −${REST.heat}）。`
+            : `你拔掉所有連線，在隔音艙裡躺了一整晚（神經壓力 −${REST.calm}）。`
       return withLog({ ...g, character: ch, run: { ...g.run, node: { ...n, used: true } } }, { at: now, kind: 'system', text: `${statusPrefix(ch)} ${text}` })
     }
     case 'storyApproach': {
@@ -1167,7 +1211,7 @@ export function reduce(g: Game, a: Action): Game {
       if (g.story.stage !== 'scene' || !g.story.caseId) return g
       const sc = CASE_BY_ID[g.story.caseId]
       const ap = sc.approaches.find((x) => x.id === g.story.approach) ?? sc.approaches[0]
-      const beats = storyBeats(ap.direction)
+      const beats = storyBeats(ap)
       const at = g.story.beat ?? 0
       const beat = beats[at]
       // 失控：場面開始前擲錯亂骰，1～2 任務中斷＋致命判定
@@ -1200,7 +1244,7 @@ export function reduce(g: Game, a: Action): Game {
       if (g.story.stage !== 'sceneCost' || !g.story.caseId) return g
       const sc = CASE_BY_ID[g.story.caseId]
       const ap = sc.approaches.find((x) => x.id === g.story.approach) ?? sc.approaches[0]
-      const pick = storyBeats(ap.direction)[g.story.beat ?? 0].costs[a.index]
+      const pick = storyBeats(ap)[g.story.beat ?? 0].costs[a.index]
       if (!pick) return g
       const base = { injury: ap.injury }
       const k = realCost(c, pick.kind)

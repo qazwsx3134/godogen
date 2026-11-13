@@ -954,3 +954,16 @@ body {
 .reveal-scan {
   background-image: repeating-linear-gradient(0deg, rgb(237 82 88 / 0.07) 0 2px, transparent 2px 4px);
 }
+
+/* 像素圖橫幅：螢幕夠高（≥700px）時固定在主畫面頂端；矮螢幕留給文字 */
+@media (min-height: 700px) {
+  .strip-sticky {
+    position: sticky;
+    top: -12px;
+    z-index: 10;
+    margin-top: -12px;
+    padding-top: 12px;
+    padding-bottom: 6px;
+    background: var(--color-bg);
+  }
+}

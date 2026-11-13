@@ -217,16 +217,20 @@ export const CRIT_PAY = 0.15
 /** 代價只看「這件事有多容易受傷」：委託的 injury，劇情做法的路上傷勢。 */
 export type CostBase = { injury: number }
 export const costInjury = (job: CostBase) => Math.max(4, Math.round(job.injury * 0.5))
+/** 失敗時：受傷加倍、神經壓力三倍；另外任何失敗都慌一下，神經壓力再 +FAIL_SHAKE（不管這個場面的代價是什麼）。 */
+export const FAIL_STRESS_MULT = 3
+export const FAIL_SHAKE = 4
 export function costText(job: CostBase, k: CostKind, heavy = false): string {
-  const m = heavy ? 2 : 1
-  return k === 'injury' ? `傷勢 +${costInjury(job) * m}%` : k === 'heat' ? '通緝 +1' : k === 'stress' ? `神經壓力 +${COST_STRESS * m}` : `報酬 −${Math.round(COST_PAY * 100)}%`
+  const shake = heavy && k !== 'stress' ? `、神經壓力 +${FAIL_SHAKE}` : ''
+  const main = k === 'injury' ? `傷勢 +${costInjury(job) * (heavy ? 2 : 1)}%` : k === 'heat' ? '通緝 +1' : k === 'stress' ? `神經壓力 +${COST_STRESS * (heavy ? FAIL_STRESS_MULT : 1) + (heavy ? FAIL_SHAKE : 0)}` : `報酬 −${Math.round(COST_PAY * 100)}%`
+  return main + shake
 }
-/** 套用一個代價（報酬打折由呼叫端記帳）。失敗時 heavy：受傷與壓力加倍。直接改 c。 */
+/** 套用一個代價（報酬打折由呼叫端記帳）。失敗時 heavy：受傷加倍、壓力三倍，再加慌張的 +FAIL_SHAKE。直接改 c。 */
 export function applyCost(c: Character, job: CostBase, k: CostKind, heavy = false) {
-  const m = heavy ? 2 : 1
-  if (k === 'injury') c.injury = Math.min(100, c.injury + costInjury(job) * m)
+  if (k === 'injury') c.injury = Math.min(100, c.injury + costInjury(job) * (heavy ? 2 : 1))
   else if (k === 'heat') c.heat = Math.min(5, c.heat + 1)
-  else if (k === 'stress') c.stress += COST_STRESS * m
+  else if (k === 'stress') c.stress += COST_STRESS * (heavy ? FAIL_STRESS_MULT : 1)
+  if (heavy) c.stress += FAIL_SHAKE
 }
 
 // ---------- 裝備 ----------
@@ -354,6 +358,8 @@ export interface Character {
   lifelines: number
   /** 保單等級（決定救回來的下場）；舊存檔沒寫＝標準。 */
   lifelineTier?: LifelineTier
+  /** 身上的鎮定劑（黑市買，隨時能用來降神經壓力）；舊存檔沒寫＝0。 */
+  calmers?: number
   attrs: Record<Attr, number>
   /** 還沒分配的屬性點。 */
   attrPoints: number
@@ -387,9 +393,13 @@ export function injuryLabel(injury: number) {
 }
 
 /** 診所：每 1% 傷勢的價格，縫完神經壓力也降一點。 */
-export const CLINIC = { perPoint: 6, stress: 10 }
+/** 神機醫：縫傷口每 1% 傷勢的價錢與順便降的神經壓力；修好一道舊傷（恢復 1 點屬性）的價錢；神經調校（每次來限一次）的價錢與降的壓力。 */
+export const CLINIC = { perPoint: 6, stress: 10, scar: 500, tunePrice: 200, tune: 20 }
 /** 休息節點：二選一，回傷勢或降通緝（也降一點壓力）。 */
-export const REST = { heal: 30, heat: 2, stress: 10 }
+/** 休息：三選一。睡一覺回傷勢、躲起來降通緝（都順便壓力 −10），或斷線靜養只降壓力。 */
+export const REST = { heal: 30, heat: 2, stress: 10, calm: 30 }
+/** 黑市的鎮定劑：一劑壓力 −12，最多帶 3 劑，隨時能用。 */
+export const CALMER = { price: 150, stress: 12, max: 3 }
 
 export type LogKind = 'job' | 'gain' | 'hurt' | 'warn' | 'stop' | 'level' | 'system'
 
@@ -672,7 +682,7 @@ export const RETREAT_HP = 20
 
 /** 委託遇到的對手：依難度與方向決定，不必每件委託各寫一份。精英委託是難度 4。 */
 export function streetEnemy(job: JobDef): Enemy {
-  const name = { force: ['街頭混混', '幫派打手', '幫派幹部', '倉庫私兵'], hack: ['趕來的保全', '企業保全', '企業保全小隊', '黑冰反制小組'], stealth: ['巡邏保全', '巡邏保全', '武裝巡邏', '研究所警衛'] }[job.direction][Math.min(3, job.tier - 1)]
+  const name = { force: ['街頭混混', '幫派打手', '幫派幹部', '倉庫私兵'], hack: ['趕來的保全', '企業保全', '企業保全小隊', '資安反制小組'], stealth: ['巡邏保全', '巡邏保全', '武裝巡邏', '研究所警衛'] }[job.direction][Math.min(3, job.tier - 1)]
   const level = [0, 2, 4, 5, 7, 8][Math.min(5, job.tier)] // 防火牆與感知：難度 1新角色打得過，之後要靠屬性、卡牌或義體
   return { name, hp: 15 + job.tier * 20, atk: 4 + job.tier * 2, hit: 0.4 + job.tier * 0.05, ice: level, sense: level }
 }

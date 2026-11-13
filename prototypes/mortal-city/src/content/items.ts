@@ -24,7 +24,7 @@ export const ITEMS: Record<string, Def> = {
   monoblade: { style: 'berserker', name: '單分子刃', slot: 'weapon', direction: 'force', bonus: 0.05, price: 2200, load: 0, mods: { atk: 9, crit: 0.06, critDmg: 0.2 }, needs: { attr: 'reflex', min: 5 }, desc: '攻擊 +9、爆擊率 +6%、爆擊傷害 +0.2 倍' },
   shockNode: { style: 'netrunner', name: '回授電擊節點', slot: 'implant', direction: 'hack', bonus: 0.03, price: 1700, load: 20, mods: { shock: 4 }, needs: { attr: 'int', min: 5 }, desc: '駭入干擾期間每回合電擊對方 −4' },
   adrenal: { style: 'berserker', name: '腎上腺泵', slot: 'implant', direction: 'force', bonus: 0, price: 1600, load: 20, mods: { berserk: 0.25 }, needs: { attr: 'body', min: 5 }, desc: 'HP 低於一半時攻擊 +25%' },
-  icepick: { style: 'netrunner', name: '冰鑿終端', slot: 'deck', direction: 'hack', bonus: 0.08, price: 2100, load: 0, mods: { jam: 1, shock: 2 }, needs: { attr: 'int', min: 6 }, desc: '駭入干擾 +1 回合、每回合電擊 −2' },
+  icepick: { style: 'netrunner', name: '突破終端', slot: 'deck', direction: 'hack', bonus: 0.08, price: 2100, load: 0, mods: { jam: 1, shock: 2 }, needs: { attr: 'int', min: 6 }, desc: '駭入干擾 +1 回合、每回合電擊 −2' },
   ghostWeave: { style: 'nomad', name: '幽影纖維', slot: 'implant', direction: 'stealth', bonus: 0.05, price: 2000, load: 20, mods: { ghost: 1 }, needs: { attr: 'cool', min: 6 }, desc: '迷彩繞背後，對方多一回合打不到你' },
   // 雙持
   pairedPistols: { style: 'gunslinger', name: '成對手槍', slot: 'weapon', direction: 'force', bonus: 0.05, price: 1300, load: 0, mods: { atk: 5, double: 0.2 }, desc: '攻擊 +5、命中後 20% 機率補一槍' },

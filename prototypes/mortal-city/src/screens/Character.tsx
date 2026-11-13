@@ -6,6 +6,9 @@ import { notify } from '../components/notice'
 import { itemDesc, itemLock, itemStyle } from '../content/items'
 import { type Look, hasLook } from '../components/CityStrip'
 import {
+  CALMER,
+  CLINIC,
+  REST,
   ATTRS,
   ATTR_EFFECT,
   ATTR_LABEL,
@@ -36,7 +39,7 @@ import {
   lifelineOf,
 } from '../rules/core'
 import { PERKS, fameTitle } from '../rules/perks'
-import { STYLE_COLOR, STYLE_ICON } from './Node'
+import { CalmerButton, STYLE_COLOR, STYLE_ICON } from './Node'
 import { ItemIcon } from '../components/ItemIcon'
 
 export function CharacterScreen({ game }: { game: ReturnType<typeof useGame> }) {
@@ -105,8 +108,9 @@ export function CharacterScreen({ game }: { game: ReturnType<typeof useGame> }) 
               <Meter label="義體負荷" value={c.implantLoad} max={cap} tone="warning" />
               <Meter label="神經壓力" value={c.stress} max={cap} tone="red" />
               <p className="m-0 text-[14px] text-muted">
-                安全餘裕 = 容量 − 負荷 − 壓力 = <b className="tech text-heading">{margin}</b>。40 以上穩定、20～39 警戒、1～19 臨界、0 以下失控（危險節點更容易死）。神機醫和休息節點能降壓力。
+                安全餘裕 = 容量 − 負荷 − 壓力 = <b className="tech text-heading">{margin}</b>。40 以上穩定、20～39 警戒、1～19 臨界、0 以下失控。降壓力：休息節點（斷線靜養 −{REST.calm}，或睡覺、躲起來各 −{REST.stress}）、神機醫（縫傷口 −{CLINIC.stress}、神經調校 ¢{CLINIC.tunePrice} −{CLINIC.tune}）、黑市的鎮定劑（−{CALMER.stress}，隨時能用）。
               </p>
+              {c.calmers ? <CalmerButton game={game} /> : null}
             </div>
           </Panel>
           <Panel innerClass="p-3 space-y-1 text-[15px]">
