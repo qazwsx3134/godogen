@@ -1,0 +1,10 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/armor_display.gd" id="1_u8rfq"]
+[ext_resource type="PackedScene" path="res://assets/armor/phido.glb" id="2_hku2c"]
+
+[node name="Phido" type="Node3D" unique_id=1098074225]
+script = ExtResource("1_u8rfq")
+
+[node name="Model" parent="." unique_id=294282614 instance=ExtResource("2_hku2c")]
+unique_name_in_owner = true

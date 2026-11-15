@@ -1,0 +1,10 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/boss.gd" id="1_neq0i"]
+[ext_resource type="PackedScene" path="res://assets/boss/boss_animated.glb" id="2_jncid"]
+
+[node name="Boss" type="Node3D" unique_id=799665999]
+script = ExtResource("1_neq0i")
+
+[node name="Model" parent="." unique_id=2119072893 instance=ExtResource("2_jncid")]
+unique_name_in_owner = true

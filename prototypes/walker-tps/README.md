@@ -4,6 +4,12 @@
 
 2026-11-11：預設「綠鏽戰線」已接入雙勾索、主砲、3 台可擊毀的 scout（含重型）、導航 AI，以及出擊／勝敗／超時／重試流程。按 F5 後點 DEPLOY 或 Enter 開始。規則與可調數值見 [戰鬥切片](design/combat-slice.md)，進度見 [PROGRESS](PROGRESS.md)。手機與手把實機驗收待做。
 
+## Boss／裝甲負載場景
+
+開啟 `scenes/boss_battlefield.tscn` 並按 F6；原戰場仍由 F5 開啟。`1`／`2`／`3` 切換 Boss 待機、飛行及開火動畫；`4`／`5`／`6` 切換 10／40／80 台展示機；`7` 切換展示機的投影，預設關閉。也可按右上角按鈕，出擊後先按 Esc 釋放滑鼠。左上角原 HUD 顯示 FPS 與 draw call。
+
+預設展示機為 4 台 melee、4 台 tank、2 台 Phido，數量不包含 Boss、玩家或原本 3 台 scout。Boss 和展示機目前是視覺與渲染負載測試，沒有戰鬥 AI、碰撞或受傷判定；Boss 開火只播放動畫。[量測方法、結果和場景截圖](docs/BOSS_LOAD_TEST.md)列出投影開關的差異與實機驗證方式。
+
 ## 要驗證的假設
 
 1. 剛體零件組成的四足模型（`docs/86/walker/new/walker.glb`）不用骨架，只靠程式 IK，就能走得像有重量，腳不打滑。
@@ -67,6 +73,8 @@ scene 由 `tools/build_scenes.gd` 產生一次，之後 `.tscn` 就是原始檔�
 | scene | 內容 | 可以在編輯器調的 |
 |---|---|---|
 | `scenes/main.tscn` | 環境光、太陽、Arena、Walker、HUD、Enemies（12 台 scout） | `WorldEnvironment` 的霧與環境光、`Sun` 的角度與陰影距離；Enemies 底下每台 scout 的位置與朝向（`tools/add_scouts.gd` 用 `open_scene`＋`put` 加進去的，重跑只換掉 Enemies） |
+| `scenes/boss_battlefield.tscn` | 既有戰場、Boss、10 台已儲存的展示機與負載控制 | `Boss` 和 `Armor` 底下各機體的位置及方向；每台展示機的 `animation_phase`、`shadows_enabled`；額外展示機在執行時按需求實例化 |
+| `scenes/boss.tscn`、`melee_display.tscn`、`tank_display.tscn`、`phido_display.tscn` | Boss／各展示機的可重用場景與模型 | Boss 根節點的 `initial_animation`；展示機的 `animation_phase`、`shadows_enabled` |
 | `scenes/arena.tscn` | 160 m 網格地面、外牆、坡道與平台、掩體、木箱、門、地標塔 | 每個方塊是 StaticBody3D，拖曳就能改位置；網格的格寬與顏色在 `shaders/grid_ground.gdshader` 的 uniform |
 | `scenes/walker.tscn` | CharacterBody3D、膠囊碰撞、`Model`（walker.glb）、`Gait`、4 個揚塵粒子、腳步聲、`CameraRig` → `Pitch` → `Arm`（SpringArm3D）→ `Camera` | Walker 的 `max_speed`、`sprint_speed`、`accel`、`air_control`、`turn_speed_deg`、`jump_velocity`、`jump_squat_time`／`_depth`、三種靈敏度、`step_kick`、`sprint_fov_add`；Gait 的 `step_distance`、`step_time`／`step_time_run`、`run_speed`、`run_crouch`、`step_height`、`lead`、`bob`；CameraRig 的 `height`、`pitch_*`；Arm 的 `spring_length` |
 | `scenes/scout.tscn` | CharacterBody3D、膠囊碰撞、`Model`（scout.glb：1 個蒙皮 mesh、AnimationPlayer 的 `walk`／`idle`） | `speed`、`turn_speed_deg`、`wander_radius`、`pause_min`／`pause_max`；模型與動畫的細節見 `docs/86/enemy/scout/README.md` |

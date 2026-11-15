@@ -2,10 +2,10 @@
 """速通片 15 秒配乐模板 —— 纯代码合成，不用任何采样。乐谱是一段原创示例（D 小调），换成你自己的即可。
 
 运行：
-  uv run --with numpy --with scipy --with soundfile python scripts/audio/synth_艺术史速通.py
+  uv run --with numpy --with scipy --with soundfile python audio/synth_music_history_speedrun.py
 输出：脚本同目录 示例配乐.wav（48k / 立体声 / 15.06s）
 
-方法见 references/风格配方/_音轨_艺术史速通.md：128 BPM 严格网格（八分音符 0.23431s，网格零点 0.028s），
+方法见同目录 audio_style.md：128 BPM 严格网格（八分音符 0.23431s，网格零点 0.028s），
 17 个时代按八分音符数 6,4,4,4,4,4,3,3,3,3,2,2,2,1,1,1,9 依次排布（这是独立配乐示例，换片子时按实际段落表重排），
 每个时代换一套配器，一个三音动机换乐器、随和弦移调；13.155s 音乐停，接音效（拍杯叮、滑哨坠落、碎裂、猫叫、收尾拨弦）。
 响度：逐段 K 加权响度对齐到 target 表，再整体对齐 -14 LUFS / 真峰 -1.5 dBFS。

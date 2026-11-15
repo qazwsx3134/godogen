@@ -24,6 +24,7 @@
 - **改了程式，瀏覽器卻一直跑舊版（修好的錯誤照樣出現）**（2026-11-05，mortal-city）→ 兩個原因都遇到：WSL 上專案在 `/mnt/d`（Windows 磁碟），vite 的檔案監看收不到變更、不會重新編譯；另外前一次背景啟動的 vite 沒關、新的加 `--strictPort` 啟動失敗卻沒注意。改完先 `curl http://127.0.0.1:<port>/src/<檔案>` 確認送出的是新碼，不是就重啟（或在 vite 設 `server.watch.usePolling`）；`ss -ltnp | grep <port>` 看是誰在聽，停服務用查到的 PID。
 - **macOS 上新建 `Reveal.tsx` 蓋掉了既有的 `reveal.tsx`**（2026-11-12，mortal-city）：檔案系統不分大小寫，`cat >`／Write 新檔名只差大小寫時會直接覆寫舊檔，型別檢查才報「only in casing」→ 新增檔案前先 `ls` 同目錄確認沒有只差大小寫的檔名；蓋掉了就 `git checkout -- <舊檔>` 還原。
 - **WSL 在 `/mnt/d` 上的 Godot 專案跑腳本，一堆 `Unable to open file: res://.godot/imported/...ctex`**（2026-11-12，debt-commission）→ 匯入快取不全（Windows 編輯器與 WSL 共用 `.godot`）。在這種狀態下用腳本 `ResourceSaver.save` 存 `.tscn` 可能掉貼圖參照；`rsync` 一份到 Linux 暫存區，`--headless --editor --quit` 匯入後在複本跑，存好的 `.tscn` 先 `diff` 再拷回。
+- **沙盒內 Godot 測試啟動時 `user://logs` 無法寫入而崩潰**（2026-11-15，walker-tps）→ 在 Linux 為每個測試進程指定可寫且獨立的 `XDG_DATA_HOME`／`XDG_CONFIG_HOME`；編輯器匯入仍需依沙盒規則處理網路與權限。（[walker-tps PROGRESS](walker-tps/PROGRESS.md)）
 
 ## Git
 
@@ -120,6 +121,8 @@
 - **`build/web` 裡多出 `index.png.import` 之類的檔案，跟著上傳**（2026-11-03，kagura-dango）→ 匯出資料夾在專案裡，Godot 會把它當素材匯入；放一個空的 `build/.gdignore`。
 - **本機才有的參考檔（截圖、歌曲副本）被打包進 pck**（2026-11-03，kagura-dango）→ `all_resources` 會包所有匯入過的檔案，gitignore 不影響匯出；上傳前看一次 `exclude_filter`，再在 pck 裡 `grep -ac` 資料夾名確認。
 - **在 itch 上用網址參數（`?qa=1`）開除錯模式沒反應**（2026-11-03，kagura-dango）→ 遊戲在 iframe 裡，頁面網址的參數傳不進去；手機測試版的開關做成畫面上可點的按鈕或設定項。
+- **網頁版 90 MB、gzip 只省 4%**（2026-11-14，debt-commission）：pck 裡的圖、ogg、壓過的字型本來就是壓縮格式，傳輸壓縮只對 `index.wasm` 有效（38→10 MB）→ 匯出前瘦身內容：kit 的 `tools/web/slim_web.py` 在 `.cache/web-slim` 副本上做字型子集、Lossy WebP、縮開機圖／icon、重壓音樂，原始檔不動；debt-commission 降到 37 MB。（[debt-commission web-slimming](debt-commission/production/release/web-slimming.md)）
+- **用 `soundfile` 一次寫完整首 Vorbis，Python 直接 segfault（exit 139），連前面 print 的輸出都沒了**（2026-11-14，debt-commission）→ 開 `SoundFile(…, "w")` 每次寫 65536 個 frame；除錯時加 `python3 -u`，不然看不到死在哪一步。
 
 ## 效能
 
@@ -143,6 +146,8 @@
 - **多足機的烘焙步態對整個機身做正負擺動，站立腳也會沉進地面**（2026-11-12，docs/86 melee／tank 曾下陷 4.5 cm）→ 走路先移除整體上下擺動、待機只做向上的微幅起伏；逐幀量測剛性蒙皮後的腳掌頂點最低高度，確認不低於地面。（[模型驗證](../docs/86/enemy/validate_blends.py)）
 - **WSL Codex 的 `uvx mcp-for-blender` 連 Windows Blender 能讀場景，截圖卻找不到檔案**（2026-11-12）→ 兩邊的 `/tmp` 不共用：Codex 插件改啟動 Windows 的 `uvx.exe`，讓伺服器與 Blender 共用 Windows 暫存目錄；`WSLENV` 也要轉交 `BLENDER_MCP_APPS`／`BLENDER_MCP_OPENAI_FORMS`，否則互動視窗工具不會註冊。Blender Lab MCP 和此社群插件都預設用 9876，不能同時佔用。已用真實 Blender 驗證場景、Python、截圖與互動視窗。
 - **在 Blender 用 BVH 射線判斷面是否埋在別的零件裡，結果大量漏判或誤判**（2026-11-12，docs/86 模型檢查）→ 射線起點落在封閉形狀內部時不會回報命中，只取面中心又會把大三角形部分露出的情況算成埋住；起點從面往外推 1 cm，每個三角形取 7 個點，分「完全埋住」與「部分穿插」兩類（`asset-gen/tools/check_topology.py`）。
+- **零件各自封閉，不代表組裝後都接上了**（2026-11-14，docs/86 Boss）→ 同時檢查世界座標下的接觸／包容組群並目視接縫；接觸或穿插不等於頂點焊接，動作與布林需求要另外檢查。（[Boss 檢查紀錄](../docs/86/enemy/boss/MODEL_AUDIT.md)）
+- **拓撲檢查全通過，造型仍可能和參考圖差很多**（2026-11-14，docs/86 Boss）→ 先拆出辨識性部位，比對輪廓、部位連續關係與各視角，再做減面和貼圖；幾何檢查不等於美術相似度驗收。（[重建稿](../docs/86/enemy/boss/rebuild/README.md)）
 
 ## 音效與手機震動
 

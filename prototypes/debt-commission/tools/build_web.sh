@@ -21,8 +21,22 @@ for script in addons/parley/parley_runtime.gd addons/dialogue_manager/dialogue_m
 done
 mkdir -p "$project_dir/build/web"
 touch "$project_dir/build/.gdignore"
-"${godot_run[@]}" --headless --path "$project_dir" --editor --import
-"${godot_run[@]}" --headless --path "$project_dir" --export-release Web "$project_dir/build/web/index.html"
+# Slim the download (fonts subset, lossy textures, smaller splash/icon, re-encoded music) on a scratch copy in
+# .cache/web-slim, so the project's own files never change. SLIM=0 exports the project as it is.
+# Steps and numbers: godot-kit/tools/web/slim_web.py and production/release/web-slimming.md.
+export_root="$project_dir"
+if [[ "${SLIM:-1}" != 0 ]]; then
+  export_root="$project_dir/.cache/web-slim"
+  mkdir -p "$export_root"
+  # .godot is copied only the first time: later builds reimport just what changed.
+  [[ -d "$export_root/.godot" ]] || rsync -a "$project_dir/.godot" "$export_root/"
+  rsync -a --delete --exclude=/.godot --exclude=/build --exclude=/.cache --exclude=/art_src --exclude=/test-results \
+    --exclude=/addons/proto_kit/vfx "$project_dir/" "$export_root/"
+  uv run -q --with fonttools --with pillow --with soundfile \
+    python3 "$project_dir/../godot-kit/tools/web/slim_web.py" "$export_root"
+fi
+"${godot_run[@]}" --headless --path "$export_root" --editor --import
+"${godot_run[@]}" --headless --path "$export_root" --export-release Web "$project_dir/build/web/index.html"
 # Emscripten's IDBFS lists user:// first, then copies each listed file into IndexedDB once the
 # database answers. A file deleted in between (restart deletes the save right after writing it)
 # fails the copy with ENOENT (errno 44), logged as "Failed to save IDB file system: undefined".

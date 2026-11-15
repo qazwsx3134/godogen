@@ -35,7 +35,7 @@
 | 本次提交（`git log -1`） | 2026-11-11 | walker-tps：首次收錄完整戰鬥原型、地圖／雙機體素材、14 個處理後音效與署名；補忽略規則，Git 乾淨副本匯入／音效／戰鬥驗證 |
 | debt-commission 萬事屋吐槽 ADV | 故事為功能展示（橫式＋直式）與桂短篇；11-12 直式／橫式可切換與功能展示進階段落（未提交，待作者看畫面）；11-12 程式結構改善 D1–D7 完成（D3 延後），完整測試 56/57（`reading_scenes` 改動前就失敗）；介面圖待作者看畫面及手機；音效與評審 #2 仍在 TODO | [PROGRESS](prototypes/debt-commission/PROGRESS.md) | [MILESTONE](prototypes/debt-commission/MILESTONE.md) |
 | godot-kit 共用模組 | SaveSlots 已接入 seal-meadow adapter，保留遊戲恢復保護；只同步該存檔模組，測試暫緩 | [PROGRESS](prototypes/godot-kit/PROGRESS.md) | — |
-| walker-tps 四足戰甲 | 11-12 scout AI（狀態機、預判、警覺、包圍、輕重型）、步態貼地傾斜、勾索繩索甩尾、移動加速；7 組測試通過；`main.tscn` Arena 移位待使用者決定（歸零的複本上 walker／scouts 也通過）；甩尾與難度待實玩 | [PROGRESS](prototypes/walker-tps/PROGRESS.md) | — |
+| walker-tps 四足戰甲 | 11-15 新增 Boss 骨架動畫與 10／40／80 台裝甲渲染負載場景，L2 通過；目標裝置效能與外觀待實玩；`main.tscn` Arena 移位待使用者決定，甩尾與難度待實玩 | [PROGRESS](prototypes/walker-tps/PROGRESS.md) | — |
 | seal-meadow 蓬蓬草原 | 暖陶瓦風格與商店三視圖已定方向；可走商店、入口與路牌樣板已接入，正式 2D 紙娃娃及手機真人驗收待做，多人延後 | [PROGRESS](prototypes/seal-meadow/PROGRESS.md) | [MILESTONE](prototypes/seal-meadow/MILESTONE.md) |
 | hero-horde-idle 全員推王 | 等真人前三層、手機恢復成本與作者素材 | [PROGRESS](prototypes/hero-horde-idle/docs/PROGRESS.md) | [MILESTONE](prototypes/hero-horde-idle/docs/MILESTONE.md) |
 | 魔都傭兵（mortal-city，單機文字冒險 roguelike，ADR 0001） | 新宿→灣岸兩區可玩；評審 R1、R2、R4（大部分）–R8、R10 已做，加上神經錯亂、保單分級、名聲的用處與代價；骰池改版（DnD 式，`docs/DICE-POOL-SPEC.md`）：A1 委託場面、A4 危險節點致命判定＋劇情做法場面、A5 事件擲骰、A6 錯亂骰、D8 精英撤離沒有戰利品、致命判定失敗有敵人就打追擊戰、賽博風骰子圖示＋擲骰動畫＋第一次介紹，都已完成、未提交、未試玩；`pnpm test`＋`pnpm smoke` 自動驗證；下一步是作者試玩骰池，再排 A2／A3／A5／A7、B | [PROGRESS](prototypes/mortal-city/PROGRESS.md)／[設計進度](docs/cyberpunk-text-mmo/PROGRESS.md) | [MILESTONE](prototypes/mortal-city/MILESTONE.md) |

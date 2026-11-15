@@ -1,0 +1,10 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/armor_display.gd" id="1_d8dqb"]
+[ext_resource type="PackedScene" path="res://assets/armor/melee.glb" id="2_ta7j0"]
+
+[node name="Melee" type="Node3D" unique_id=998860742]
+script = ExtResource("1_d8dqb")
+
+[node name="Model" parent="." unique_id=487571945 instance=ExtResource("2_ta7j0")]
+unique_name_in_owner = true

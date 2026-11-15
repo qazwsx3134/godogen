@@ -1,0 +1,156 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/boss_battlefield.gd" id="1_2g7ry"]
+[ext_resource type="PackedScene" path="res://scenes/battlefield.tscn" id="2_crhxc"]
+[ext_resource type="Script" path="res://scripts/boss_battle_session.gd" id="3_ufgpq"]
+[ext_resource type="PackedScene" path="res://scenes/boss.tscn" id="4_i1dx1"]
+[ext_resource type="PackedScene" path="res://scenes/melee_display.tscn" id="5_tiyuq"]
+[ext_resource type="PackedScene" path="res://scenes/tank_display.tscn" id="6_ixlw6"]
+[ext_resource type="PackedScene" path="res://scenes/phido_display.tscn" id="7_1e4vd"]
+
+[node name="BossBattlefield" type="Node3D" unique_id=2033315677]
+script = ExtResource("1_2g7ry")
+
+[node name="Battlefield" parent="." unique_id=1826002220 instance=ExtResource("2_crhxc")]
+script = ExtResource("3_ufgpq")
+
+[node name="Boss" parent="." unique_id=799665999 instance=ExtResource("4_i1dx1")]
+unique_name_in_owner = true
+transform = Transform3D(-0.8660254, 0, 0.50000006, 0, 1, 0, -0.50000006, 0, -0.8660254, 0, 12, -20)
+
+[node name="Armor" type="Node3D" parent="." unique_id=1941147477]
+
+[node name="Melee00" parent="Armor" unique_id=998860742 instance=ExtResource("5_tiyuq")]
+transform = Transform3D(-0.99026805, 0, 0.13917318, 0, 1, 0, -0.13917318, 0, -0.99026805, -14, -0.011416625, -65)
+shadows_enabled = false
+
+[node name="Tank01" parent="Armor" unique_id=516428362 instance=ExtResource("6_ixlw6")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 14, -0.42099303, -65)
+animation_phase = 0.23
+shadows_enabled = false
+
+[node name="Tank02" parent="Armor" unique_id=1929918222 instance=ExtResource("6_ixlw6")]
+transform = Transform3D(-0.99026805, 0, -0.13917312, 0, 1, 0, 0.13917312, 0, -0.99026805, -14, -0.16199036, -51)
+animation_phase = 0.46
+shadows_enabled = false
+
+[node name="Melee03" parent="Armor" unique_id=1330110660 instance=ExtResource("5_tiyuq")]
+transform = Transform3D(-0.99026805, 0, 0.13917318, 0, 1, 0, -0.13917318, 0, -0.99026805, 14, -0.25397032, -51)
+animation_phase = 0.6900000000000001
+shadows_enabled = false
+
+[node name="Melee04" parent="Armor" unique_id=781306486 instance=ExtResource("5_tiyuq")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -14, -0.34812468, -37)
+animation_phase = 0.92
+shadows_enabled = false
+
+[node name="Tank05" parent="Armor" unique_id=1034769318 instance=ExtResource("6_ixlw6")]
+transform = Transform3D(-0.99026805, 0, -0.13917312, 0, 1, 0, 0.13917312, 0, -0.99026805, 14, -0.15885468, -37)
+animation_phase = 1.1500000000000001
+shadows_enabled = false
+
+[node name="Tank06" parent="Armor" unique_id=333121346 instance=ExtResource("6_ixlw6")]
+transform = Transform3D(-0.99026805, 0, 0.13917318, 0, 1, 0, -0.13917318, 0, -0.99026805, -14.000002, 1.4424802, -23.000002)
+animation_phase = 1.3800000000000001
+shadows_enabled = false
+
+[node name="Melee07" parent="Armor" unique_id=181645418 instance=ExtResource("5_tiyuq")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 14.000001, 1.1309721, -23)
+animation_phase = 1.61
+shadows_enabled = false
+
+[node name="Phido08" parent="Armor" unique_id=1098074225 instance=ExtResource("7_1e4vd")]
+transform = Transform3D(-0.99026805, 0, -0.13917312, 0, 1, 0, 0.13917312, 0, -0.99026805, -5, -0.67933196, -70)
+animation_phase = 0.040000000000000036
+shadows_enabled = false
+
+[node name="Phido09" parent="Armor" unique_id=2025387294 instance=ExtResource("7_1e4vd")]
+transform = Transform3D(-0.99026805, 0, 0.13917318, 0, 1, 0, -0.13917318, 0, -0.99026805, 5, -0.3913223, -70)
+animation_phase = 0.27000000000000024
+shadows_enabled = false
+
+[node name="StressUnits" type="Node3D" parent="." unique_id=120175551]
+
+[node name="BossPreviewControls" type="CanvasLayer" parent="." unique_id=1558891724]
+layer = 4
+
+[node name="Panel" type="PanelContainer" parent="BossPreviewControls" unique_id=707970101]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -405.0
+offset_top = 12.0
+offset_right = -16.0
+offset_bottom = 105.0
+grow_horizontal = 0
+
+[node name="Column" type="VBoxContainer" parent="BossPreviewControls/Panel" unique_id=785900309]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Buttons" type="HBoxContainer" parent="BossPreviewControls/Panel/Column" unique_id=37961421]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Title" type="Label" parent="BossPreviewControls/Panel/Column/Buttons" unique_id=1030103627]
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "BOSS "
+
+[node name="BossIdle" type="Button" parent="BossPreviewControls/Panel/Column/Buttons" unique_id=230456191]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "1 IDLE"
+
+[node name="BossFly" type="Button" parent="BossPreviewControls/Panel/Column/Buttons" unique_id=1746280056]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "2 FLY"
+
+[node name="BossFire" type="Button" parent="BossPreviewControls/Panel/Column/Buttons" unique_id=1052884875]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "3 FIRE"
+
+[node name="LoadButtons" type="HBoxContainer" parent="BossPreviewControls/Panel/Column" unique_id=1284958871]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="LoadCount" type="Label" parent="BossPreviewControls/Panel/Column/LoadButtons" unique_id=454348614]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "LOAD 10"
+
+[node name="Load10" type="Button" parent="BossPreviewControls/Panel/Column/LoadButtons" unique_id=530562613]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "4:10"
+
+[node name="Load40" type="Button" parent="BossPreviewControls/Panel/Column/LoadButtons" unique_id=299041306]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "5:40"
+
+[node name="Load80" type="Button" parent="BossPreviewControls/Panel/Column/LoadButtons" unique_id=1061594728]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+text = "6:80"
+
+[node name="ArmorShadows" type="CheckButton" parent="BossPreviewControls/Panel/Column/LoadButtons" unique_id=209016901]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+text = "7 SHADOW"

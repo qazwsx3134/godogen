@@ -1,5 +1,16 @@
 # walker-tps 進度
 
+## 2026-11-15｜Boss 與裝甲渲染負載場景（未 commit）
+
+- 專案／分支：walker-tps／master。依使用者要求把前一輪完成的骨架動畫 Boss 放入場景，並加入其他裝甲測試負載與優化；保留既有戰場及 `main.tscn` 的使用者修改。
+- **已完成：** `scenes/boss_battlefield.tscn` 組合原戰場、40 m Boss、4 台 melee、4 台 tank、2 台 Phido 及可編輯的按鈕；前 10 台是已儲存 instance，執行時可切換 10／40／80 台展示機。Boss 的 `idle`／`fly`／`fire` 由 1／2／3 控制，開火結束後恢復選定狀態；4／5／6 控制數量，7 切展示機陰影。原 scout 戰鬥目標、出擊與重試保留；此變體的重試會回到本場景。
+- **優化與量測：** melee／tank 使用 `docs/86/enemy/modular/` 低面數重組資產，各 1,294／1,160 三角面，展示機預設關投影。固定鏡頭、1280×720、GL Compatibility、llvmpipe：40 台陰影開／關為 357／297 draw call，80 台為 437／337。這是全畫面與多個渲染 pass 的統計，軟體渲染數值不代表手機 FPS。[完整條件與資料](docs/BOSS_LOAD_TEST.md)。
+- **重要檔案：** `scenes/boss.tscn`、`boss_battlefield.tscn`、三種 `*_display.tscn`；`scripts/boss*.gd`、`armor_display.gd`；`assets/boss/`、`assets/armor/`（含用於量測的原始對照版本）；`tests/test_boss_scene.gd`、`tools/perf_boss_armors.gd`、`tools/create_boss_scenes.gd`。製作工具預設跳過已存 scene，`--overwrite` 才重建；正常開啟不重建。畫面：[出生點截圖](docs/boss_battlefield.png)，FPS 是軟體繪圖數字。
+- **本次 L2：** 對 `/tmp/walker-boss-integration` 複本，用各自的 `XDG_DATA_HOME`／`XDG_CONFIG_HOME` 執行 `godot --headless --fixed-fps 60 --path /tmp/walker-boss-integration --script res://tests/test_boss_scene.gd` → `BOSS_SCENE PASSED`；替換 script 為 `test_battlefield.gd` → `BATTLEFIELD PASSED`；加 `--verbose` 並換 `test_combat.gd` → `COMBAT PASSED`。皆退出 0，最終無洩漏警告；戰鬥測試先前一次退出曾有 ObjectDB 清理警告，後續重跑乾淨。新測試涵蓋動畫切換與開火復原、數量及陰影、原目標、勝利與此變體的重試。
+- **匯入與檢查：** `env XDG_DATA_HOME=/tmp/walker-boss-godot-data XDG_CONFIG_HOME=/tmp/walker-boss-godot-config godot --headless --path /tmp/walker-boss-integration --editor --quit` → 退出 0、無匯入錯誤；`check_godot_project.py prototypes/walker-tps --json` → 765 檔、0 錯誤／0 警告。Boss GLB 的 SHA-256 與原始動畫模型一致，34 個模型與貼圖檔案和已驗證複本相同。因 Windows 編輯器開著原專案，場景在隔離複本保存驗證後以新檔加入，沒有覆寫已開啟的原戰場。第一次在沙盒直接測試因 `user://logs` 無法寫入而在啟動時崩潰；改用可寫的獨立 XDG 目錄後通過。
+- **限制／下一步：** Boss 開火只播放動畫；Boss 與新增展示機無碰撞、受傷或戰鬥 AI，故不是 80 台完整敵人模擬。手機、手把、目標 GPU／CPU 負載及長時間溫度仍待實機驗收；既有 Arena 移位待使用者決定，未擴大跑完整 suite。請重新掃描／重開目前 Godot 專案，開啟 Boss 變體按 F6 實玩。
+- **工作區：** 本次新增場景、素材、工具、測試與文件尚未 commit／push；原 `scenes/main.tscn` 的既有修改保留。
+
 ## 2026-11-12｜scout AI、步態、勾索拆分、加速與甩尾（部分已由使用者提交於 `3065d559`）
 
 - 專案／分支：walker-tps／master。使用者要求照 [design/code-improvements.md](design/code-improvements.md) 實作，之後追加：移動加速、勾索要注意慣性並做出甩尾的感覺。各項結果與差異見該文件開頭的「實作結果」表。

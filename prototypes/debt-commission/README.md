@@ -137,7 +137,7 @@ bash tools/build_web.sh
 bash tools/serve_web.sh
 ```
 
-`GODOT_BIN` 可指定 Godot 執行檔位置；`serve_web.sh` 可接受埠號，例如 `bash tools/serve_web.sh 5194`。伺服器綁定本機 `127.0.0.1`。產物為 `build/web/index.html` 及同目錄相關檔案。Compatibility renderer、單執行緒 Web 匯出。
+匯出時會在 `.cache/web-slim` 副本上自動瘦身（字型子集、Lossy 圖、縮開機圖、重壓音樂；原始檔不動，`SLIM=0` 關掉），pck 從 90 MB 降到 37 MB，流程與數字見 [production/release/web-slimming.md](production/release/web-slimming.md)。`GODOT_BIN` 可指定 Godot 執行檔位置；`serve_web.sh` 可接受埠號，例如 `bash tools/serve_web.sh 5194`。伺服器綁定本機 `127.0.0.1`。產物為 `build/web/index.html` 及同目錄相關檔案。Compatibility renderer、單執行緒 Web 匯出。
 
 `build_web.sh` 匯出後會修補 `index.js` 的 Emscripten IDBFS：存檔同步到 IndexedDB 的途中若檔案已被刪除（例如「重新開始」緊接在存檔之後刪掉存檔），略過那個檔案，不再報 `Failed to save IDB file system: undefined`；刪除本身會在 Godot 下一次同步時寫進 IndexedDB。換 Godot 版本後如果修補對不上，建置會直接失敗並說明原因。
 

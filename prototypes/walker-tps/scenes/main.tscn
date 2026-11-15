@@ -37,7 +37,7 @@ shadow_enabled = true
 directional_shadow_max_distance = 45.0
 
 [node name="Arena" parent="." unique_id=693151828 instance=ExtResource("1_sugp2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0023632, -2.00918, 0.15683556)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.591113, -2.7779026, 4.6710916)
 
 [node name="Walker" parent="." unique_id=1321293412 instance=ExtResource("2_jyhfs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
