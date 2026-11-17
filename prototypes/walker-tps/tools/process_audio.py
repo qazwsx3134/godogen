@@ -20,6 +20,13 @@ SPECS=[
  ('mech_contact','machine-walk/robotstep3.wav',None,-23,'movement','Lee Barkovich / CC-BY 3.0 (folder info.txt)'),
  ('mech_servo','machine-walk/robot1.wav',None,-24,'movement','Lee Barkovich / CC-BY 3.0 (folder info.txt)'),
  ('mech_land','machine-walk/jumpland44100.mp3',None,-20,'movement','Lee Barkovich / CC-BY 3.0 (folder info.txt)'),
+ ('cannon_shot','voice-and-steps/gun-shot-real.mp3',(0.0,1.3),-16,'weapon','user supplied (2026-11-18)'),
+ ('shell_drop','voice-and-steps/gun-shot-ching.mp3',None,-22,'impact','user supplied (2026-11-18)'),
+ ('bullet_whiz','voice-and-steps/whiz.mp3',(0.0,1.0),-24,'weapon','user supplied (2026-11-18)'),
+ ('enemy_step','voice-and-steps/step-snow-crunch.mp3',(0.30,0.80),-23,'movement','user supplied (2026-11-17)'),
+ ('boss_talk','voice-and-steps/ai-boss-talking.mp3',None,-21,'voice','user supplied (2026-11-17)'),
+ ('boss_angry','voice-and-steps/boss-angry.mp3',None,-19,'voice','user supplied (2026-11-17)'),
+ ('round_impact','voice-and-steps/impact-explosion-grenade.v5.mp3',(0.0,1.6),-18,'impact','user supplied (2026-11-18)'),
  ('mech_walk_sequence','machine-walk/557594__breviceps__battle-mech-walks-fast-slow-sequence.wav',None,-23,'reference','Breviceps / CC0'),
 ]
 def decode(ff,path):

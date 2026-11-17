@@ -30,7 +30,7 @@ def belongs(obj):
 
 
 source=[obj for obj in bpy.context.scene.objects if obj.type=='MESH' and belongs(obj)]
-if len(source)!=607 or len(rig.data.bones)!=11:
+if len(source)!=557 or len(rig.data.bones)!=55:  # 607 - 94 straight legs + 44 knee-leg segments (22 legs)
     raise RuntimeError('Unexpected source mesh or bone count')
 parameters={}
 for obj in source:

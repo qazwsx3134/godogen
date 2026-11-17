@@ -103,7 +103,7 @@ func _test_swing_drift(steer_action: String = "") -> float:
 	Input.action_release("sprint")
 	var run_velocity := Vector3(walker.velocity.x,0,walker.velocity.z)
 	_expect(run_velocity.length()>6.0, "walker runs sideways before hooking (%.1f m/s)" % run_velocity.length())
-	_expect(combat.grapple.launch_hooks(walker.global_position+walker.global_basis.z*15), "hooks ground 15 m ahead")
+	_expect(combat.grapple.launch_hooks(walker.global_position+walker.global_basis.z.normalized()*15), "hooks ground 15 m ahead")
 	if not steer_action.is_empty(): Input.action_press(steer_action)
 	var steps: Array[int] = [0]
 	var count_steps := func(_at: Vector3) -> void: steps[0]+=1

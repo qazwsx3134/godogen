@@ -22,8 +22,8 @@ signal landed(impact: float)
 @export var settle_distance: float = 0.12
 ## Swing time at walking pace and at `run_speed`; in between it is interpolated by speed.
 @export var step_time: float = 0.28
-@export var step_time_run: float = 0.15
-@export var run_speed: float = 9.0
+@export var step_time_run: float = 0.10
+@export var run_speed: float = 12.0
 @export var step_height: float = 0.4
 ## Feet land ahead of their home by velocity * step time * lead, so they do not trail behind a moving body.
 @export var lead: float = 0.5
@@ -305,9 +305,9 @@ func _tilt_hull(delta: float) -> void:
 
 ## A planted pad lies on its ground (by pad_follow); a swinging or hanging one stays level with the body.
 func _pad_basis(leg: Leg) -> Basis:
-	var body_up := _model.global_basis.y
+	var body_up := _model.global_basis.y.normalized()
 	if leg.t >= 0.0 or airborne or skid or leg.normal.dot(body_up) < 0.5:
 		return _model.global_basis
 	var up := body_up.slerp(leg.normal, pad_follow).normalized()
 	var right := up.cross(_model.global_basis.z).normalized()
-	return Basis(right, up, right.cross(up)).orthonormalized()
+	return Basis(right, up, right.cross(up)).orthonormalized().scaled_local(_model.global_basis.get_scale())  # keep the walker's size

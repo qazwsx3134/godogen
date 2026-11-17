@@ -1,21 +1,46 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://scripts/combat_projectile.gd" id="1_pnbyw"]
+[ext_resource type="Texture2D" path="res://assets/vfx/glow.png" id="2_xnrf4"]
+[ext_resource type="Shader" path="res://assets/vfx/tracer.gdshader" id="3_d06me"]
+[ext_resource type="AudioStream" path="res://assets/sound/runtime/bullet_whiz.ogg" id="4_it1ar"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jnl66"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xnrf4"]
+transparency = 1
 shading_mode = 0
-albedo_color = Color(1, 0.86, 0.3, 1)
+albedo_color = Color(1, 0.75, 0.4, 1)
+albedo_texture = ExtResource("2_xnrf4")
+billboard_mode = 1
 
-[sub_resource type="SphereMesh" id="SphereMesh_yufwc"]
-radius = 0.13
-height = 0.26
-radial_segments = 8
-rings = 4
+[sub_resource type="QuadMesh" id="QuadMesh_d06me"]
+size = Vector2(0.55, 0.55)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_it1ar"]
+render_priority = 0
+shader = ExtResource("3_d06me")
+shader_parameter/width = null
+shader_parameter/core = null
+shader_parameter/edge = null
+
+[sub_resource type="QuadMesh" id="QuadMesh_w13sk"]
 
 [node name="Projectile" type="Node3D" unique_id=900581833]
 script = ExtResource("1_pnbyw")
 
-[node name="Tracer" type="MeshInstance3D" parent="." unique_id=1481180485]
-material_override = SubResource("StandardMaterial3D_jnl66")
+[node name="Head" type="MeshInstance3D" parent="." unique_id=1707932417]
+material_override = SubResource("StandardMaterial3D_xnrf4")
 cast_shadow = 0
-mesh = SubResource("SphereMesh_yufwc")
+mesh = SubResource("QuadMesh_d06me")
+
+[node name="Tail" type="MeshInstance3D" parent="." unique_id=35785361]
+material_override = SubResource("ShaderMaterial_it1ar")
+cast_shadow = 0
+extra_cull_margin = 4.0
+mesh = SubResource("QuadMesh_w13sk")
+
+[node name="Whiz" type="AudioStreamPlayer3D" parent="." unique_id=2119746400]
+stream = ExtResource("4_it1ar")
+volume_db = -8.0
+unit_size = 5.0
+max_distance = 35.0
+bus = &"Weapons"

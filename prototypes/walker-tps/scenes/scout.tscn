@@ -3,6 +3,8 @@
 [ext_resource type="Script" path="res://scripts/scout.gd" id="1_7hcjh"]
 [ext_resource type="PackedScene" path="res://assets/scout/scout.glb" id="2_5iy45"]
 [ext_resource type="AudioStream" path="res://assets/sound/runtime/scout_gun_a.ogg" id="3_5iy45"]
+[ext_resource type="Script" path="res://addons/proto_kit/hit_react3d.gd" id="4_ksba2"]
+[ext_resource type="AudioStream" path="res://assets/sound/runtime/enemy_step.ogg" id="5_fi6b0"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ksba2"]
 radius = 0.9
@@ -18,17 +20,8 @@ height = 0.7
 radial_segments = 8
 rings = 4
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ksba2"]
-shading_mode = 0
-albedo_color = Color(1, 0.95, 0.8, 1)
-
-[sub_resource type="SphereMesh" id="SphereMesh_fi6b0"]
-radius = 1.4
-height = 2.8
-radial_segments = 8
-rings = 4
-
 [node name="Scout" type="CharacterBody3D" unique_id=1302323479]
+transform = Transform3D(0.91, 0, 0, 0, 0.91, 0, 0, 0, 0.91, 0, 0, 0)
 collision_layer = 4
 collision_mask = 7
 floor_max_angle = 0.6981317
@@ -61,13 +54,6 @@ material_override = SubResource("StandardMaterial3D_7hcjh")
 cast_shadow = 0
 mesh = SubResource("SphereMesh_5iy45")
 
-[node name="HitFlash" type="MeshInstance3D" parent="." unique_id=2068052870]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0)
-visible = false
-material_override = SubResource("StandardMaterial3D_ksba2")
-cast_shadow = 0
-mesh = SubResource("SphereMesh_fi6b0")
-
 [node name="GunSound" type="AudioStreamPlayer3D" parent="." unique_id=1066931228]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.65, 0.6)
 stream = ExtResource("3_5iy45")
@@ -75,3 +61,15 @@ unit_size = 12.0
 max_distance = 95.0
 max_polyphony = 2
 bus = &"Weapons"
+
+[node name="HitReact" type="Node" parent="." unique_id=509038714]
+script = ExtResource("4_ksba2")
+squash = 0.18
+knock_distance = 0.4
+
+[node name="StepSound" type="AudioStreamPlayer3D" parent="." unique_id=397171579]
+stream = ExtResource("5_fi6b0")
+volume_db = -4.0
+unit_size = 6.0
+max_polyphony = 2
+bus = &"Movement"

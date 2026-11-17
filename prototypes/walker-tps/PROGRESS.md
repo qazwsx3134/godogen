@@ -1,5 +1,127 @@
 # walker-tps 進度
 
+## 2026-11-18（深夜）｜鐵柱改細圓柱、射擊／彈殼／擦身音效歸位、單位尺寸（未 commit）
+
+- 使用者要求：鐵柱要鐵灰色圓柱、細一點、多一點；射擊聲改 `gun-shot-real.mp3`，`gun-shot-ching` 是彈殼落地聲，`whiz` 是子彈擦肩而過；尺寸以 melee＝1：Boss 40、主角與 tank 2、scout 0.8（使用者確認以 melee 為基準）。
+- 完成：
+  - 柱雨：`build_boss_pillar.gd` 改為鐵灰色 12 邊圓柱（半徑 0.3、長 8、無發光帶），紅圈 3.4 m；`pillar_count` 16、`pillar_stagger` 0.1、`max_pillars` 40；柱子 24 血、12 傷害、命中半徑 1.5 m＋機身半徑。
+  - 音效：`cannon_shot` 改由 gun-shot-real（0–1.3 s）產生，新增 `shell_drop`（ching）；kit `debris3d.gd` 新增 `landed(at, speed)` 訊號，`walker_combat` 的 `ShellSound` 依落地速度播。`combat_projectile.gd`：只有敵方子彈通過主角 5 m 內的最近點後播 whiz，主角自己的子彈不播。
+  - 尺寸：新 `tools/apply_unit_scales.gd` 寫入 Walker 1.9、tank 1.67、scout 0.91、Boss 5.45（含 battlefield／boss_battlefield／main 的實例）。程式中當方向用的 `global_basis.z` 改 `.normalized()`（scout、grapple、auto_blades）；`walker_gait` 的貼地腳掌保留縮放；scout 瞄準高度乘玩家縮放；Boss 距離數值乘 `_k = scale/1.35`；Walker 步態距離與鏡頭 height 6.3／arm 14。Boss 移到 z=55。
+  - 測試：test_scout_ai／gun_juice／grapple_inertia／walker 內 `walker.global_basis.*` 改 normalized；test_boss_scene 場地 900 m、玩家在 -120 m。
+- 驗證：`verify_audio.py` 21 檔通過；全套 `--fixed-fps 60` 12 組通過（`test_walker` 11、`test_scouts` 12 為既有 Arena 失敗）。`test_boss_scene` 連跑 10 次有 1 次隨機失敗，未抓到是哪一項；之後把柱子傷害半徑加上機身半徑（之後未再重跑 10 次）。xvfb 截圖：總覽 Boss 壓過整個戰場、追尾鏡頭恢復正常。
+- 已知限制：地圖約 240×220 m，Boss 約 218 m 長，尾巴超出地圖；移動速度未隨尺寸調整。
+
+## 2026-11-18（夜）｜Boss 追蹤飛彈改成柱雨；主砲彈命中爆炸聲；射擊聲保持原音（未 commit）
+
+- 使用者要求：Boss 追蹤飛彈改成射很多柱狀物從天而降、插在地上、可被破壞；`impact-explosion-grenade.v5.mp3` 當主角子彈打到物件的爆炸聲（隨機音高、依距離大小聲）；射擊聲不要被調 pitch，只照原音微調音高與音量。
+- 完成：
+  - 新 `scripts/boss_pillar.gd`＋`tools/build_boss_pillar.gd` → `scenes/boss_pillar.tscn`（StaticBody3D，ENEMY 層；六角尖柱、橘色發光核心帶、頂蓋；地面紅圈 Marker 貼坡面、`no_depth_test`；HitReact）。流程 WAITING（紅圈脈動）→ FALLING（60 m/s）→ STUCK（插地 1.6 m，成為障礙，可被打 36 血，30 s 自碎）。
+  - `boss.gd`：攻擊 `missile` → `pillars`（`PILLAR_CHARGE` 0.9 s 後 `_launch_pillars()`），參數 `pillar_count` 8、`pillar_stagger` 0.18、`pillar_spread` 14、`max_pillars` 20。刪除 `boss_missile.gd/.tscn`（未進版控），`build_ground_boss.gd` 移除飛彈段，按鈕改「2 PILLARS」。
+  - 音效：`round_impact` 加入處理流程（只併新紀錄）；`combat_impact.gd` 新增 `explosive`（主角子彈設為 true）→ 播 round_impact，pitch 0.8–1.2、`unit_size` 9、`max_distance` 110。`walker_combat.gd` 射擊聲 pitch 0.97–1.03、音量 +6 ±1.5 dB。
+- 驗證：`verify_audio.py` 20 檔通過；全套 `--fixed-fps 60` 12 組通過（`test_walker`／`test_scouts` 為既有失敗）。`test_boss_scene` 改為柱雨：數量、紅圈、落點傷害、插地成障礙、可被打爆；`test_gun_juice` 新增主砲彈命中用 round_impact。xvfb 截圖：紅圈清楚、柱子插地、落地爆炸。
+- 未驗證：柱雨難度與音效聽感待實玩；柱子當掩體是否擋到 scout 尋路（scout 走直線，未用導航避障）。
+
+## 2026-11-18（晚）｜曳光彈改光帶、主砲改 gun-shot-ching、子彈呼嘯改 whiz（未 commit）
+
+- 使用者要求：子彈的圓柱太出戲，要像曳光彈；射擊聲改 `gun-shot-ching.mp3` 並保持大聲；子彈飛過用 `whiz.mp3`，速度與音高調高、音量小一點。
+- 完成：
+  - 新 `assets/vfx/tracer.gdshader`：沿飛行方向拉長、繞軸面向鏡頭的四邊形光帶，白熱中心、橘邊、往後淡出；彈頭改成 billboard 光點（glow.png）。`tools/build_gun_juice.gd` 的子彈段改為建立這兩個節點並重跑（walker_combat／scout／boss 一併重存，內容不變）。尾長 `tail_seconds` 0.07 → 0.06，仍只延伸到已飛距離。
+  - 音效：兩個原檔移到 `voice-and-steps/`；`cannon_shot` 改由 `gun-shot-ching.mp3` 產生（原檔很小聲，處理到峰值上限 -6 dBFS，遊戲內再 +6 dB）；新增 `bullet_whiz`（whiz 前 1 s），子彈上 pitch 1.6–1.9、-14 dB。只更新這兩筆 manifest，其他 ogg 未重編。合成的 whiz 已移除。
+- 驗證：`verify_audio.py` 19 檔通過；全套 `--fixed-fps 60` 12 組通過（`test_walker`／`test_scouts` 為既有失敗）；`test_audio` 新增 whiz 檢查。xvfb 截追尾與側面：細長橘白光帶、無方塊。
+- 未驗證：沒有實聽；槍聲 +6 dB 是否過大、whiz 音高待耳朵確認。
+
+## 2026-11-18（下午）｜接上使用者提供的 4 個音效（未 commit）
+
+- 使用者提供 `ai-boss-talking.mp3`、`boss-angry.mp3`、`gun-shot.mp3`、`step-snow-crunch.mp3`（原放在 `assets/sound/` 根目錄）：Boss 與小兵移動聲（Boss 低音高、小兵高）、Boss 說話、Boss 生氣、主角射擊聲。
+- 完成：
+  - 原檔移到 `assets/sound/voice-and-steps/`（加 `.gdignore`，`.gitignore` 排除原檔），`tools/process_audio.py` 新增 4 筆：`cannon_shot`（裁 0–1.2 s）、`enemy_step`（裁 0.30–0.80 s 一下踩踏）、`boss_talk`、`boss_angry`。只把新檔併進 `manifest.json`，舊 14 個 ogg 保持不變（重跑會用不同版本 FFmpeg 重編全部）。`verify_audio.py` 上限 250 KB → 320 KB。
+  - `tools/build_enemy_audio.gd`（Godot 存檔）：scout 加 `StepSound`，Boss 的 `StepSound` 換成 `enemy_step`，加 `Voice`。
+  - `scout.gd`：走路動畫每循環兩下踩踏，音高 1.35–1.6。`boss.gd`：腳步音高 0.5–0.6；開戰與出招時說話（≥6 s 間隔），第二型態與死亡時怒吼。`walker_combat.gd`：主砲改用 `cannon_shot`，音高 0.92–1.08。
+- 驗證：`verify_audio.py` 18 個檔通過；全套 `--fixed-fps 60` 12 組通過（`test_walker`／`test_scouts` 為既有失敗）。`test_audio` 新增 scout 踩踏與主砲音檔、`test_boss_scene` 新增死亡怒吼。
+- 未驗證：沒有實聽；音量、音高與說話頻率待耳朵確認。CREDITS 裡這 4 個檔的來源與授權待使用者補。
+
+## 2026-11-18｜Boss 死亡表演、命中火花加爆炸、勾索改鋼纜（未 commit）
+
+- 使用者要求：Boss 死亡要有表演；死掉時瞄準準心還在；子彈命中要有火花與爆炸；勾索太亮沒機甲感，要像鐵絲吊掛。
+- 完成：
+  - `boss.gd`：`_begin_death()` 先 `_end_attack()` 收掉光束、蓄能、光纖瞄準線與砸地圈，隱藏血條；`death_time` 3.2 s 內每約 0.22 s 在背上隨機爆炸（半徑 3.2–4.6）、噴零件、小震，機身下沉 2.4 m×scale 並傾斜，翅膀縮小；最後 `_final_blast()` 最大停頓震屏、24 塊零件、大油漬，之後才送 `destroyed`（任務完成）。殘骸保持碰撞（子彈還會在上面冒火花）。
+  - `combat_hud.gd`：有 `death_show` 群組（Boss 表演中）時隱藏 Crosshair 與 GunReticle。
+  - `combat_impact.gd`：身體命中＝火花＋小火球＋煙＋橘色小光，不顯示白色 Flash／Flare。
+  - kit `hit_react3d.gd`：閃光改成半透明橘色（alpha 0.5，4 階淡出）。上一版的疊加提亮在 Boss 白色機身上整隻過曝。
+  - 勾索：`walker_combat.tscn` Cable 改深色金屬（metallic 0.9）、半徑 0.035；Pin 由發光球改成四角帶刺鉤頭，`grapple.gd` 讓鉤頭沿纜線方向。`build_combat_slice.gd` 仍是舊外觀，不要重跑。
+- 驗證：全套 `--fixed-fps 60` 12 組通過，`test_walker`／`test_scouts` 為既有 Arena 基準失敗。`test_boss_scene` 新增死亡清掉瞄準線、表演中準心隱藏、表演後才勝利、機身下沉；`test_gun_juice` 新增身體命中有火球與火花。xvfb 截圖確認：鋼索與鉤頭、受擊橘色不過曝、背上連環爆炸冒煙、機身下沉傾斜。
+- 未驗證：表演節奏與鋼索手感待實玩。
+
+## 2026-11-17（深夜）｜曳光不穿砲管、衝刺斜上、受擊閃光自然、Boss 尾巴拖地與放大（未 commit）
+
+- 使用者要求：開火時子彈從砲管露出（破圖）；衝刺角度再高、斜上；小兵與 Boss 受擊閃光更自然；Boss 尾巴拖地不要直立；Boss 再大一點。
+- 完成：
+  - `combat_projectile.gd`：曳光尾長度 = min(速度 × 0.07 s, 已飛距離)，剛出膛時隱藏，不再往後穿過砲管與砲塔（原本一出膛就向後伸 8 m）。
+  - `walker_player.gd`：`jump_velocity` 2.5 → 4.5（約 1 m 高的斜上衝刺）；速度高於 `sprint_speed` 時空中也用地面加速度減速，避免高速滑翔。
+  - kit `hit_react3d.gd`（同步到 walker-tps）：閃光改成疊加（BLEND_MODE_ADD）暖色、0.12 s 分 4 階淡出，保留原貼圖；4 個共用材質，不增加每個目標的材質。
+  - `boss_tail_modifier.gd`：兩條尾巴前兩節從機身斜下到地面、後兩節平貼地面；`tail_angle` 改成真的水平掃（原本是繞骨頭長軸扭轉），尾端稍微落後。
+  - Boss 放大 1.35 倍（`boss.tscn` 根節點與 `boss_battlefield.tscn` 實例的 transform）；`boss.gd` 方向計算改用 `_facing()`（正交化），停止追擊距離 26 → 30 m。
+- 驗證：全套 `--fixed-fps 60` 12 組通過，`test_walker`／`test_scouts` 為既有 Arena 基準失敗；`test_gun_juice` 新增「曳光不伸進砲管」。xvfb 截側面與俯視圖確認尾巴斜下拖地、Boss 變大。
+- 未驗證：受擊閃光、衝刺手感與 Boss 掃尾動作待實玩。
+
+## 2026-11-17（夜）｜跳躍改成衝刺（未 commit）
+
+- 使用者要求：跳躍要像 dash，不要跳那麼高（太不真實）。
+- 完成（`walker_player.gd`）：空白鍵＝短蹲 0.06 s 後朝搖桿方向衝刺 20 m/s、維持 0.22 s 再減速；沒按方向朝鏡頭前方，站在斜坡上順坡往外；離地小跳 2.5 m/s（約 0.3 m，原本 7 m/s 約 2.5 m）；冷卻 0.45 s；衝刺時有速度模糊與小震。貼牆按＝沿法線彈開衝出（`wall_jump_push` 8 → 10）。
+- 測試：`test_mobility` 新增衝刺四項（爆衝 >18 m/s、高度 <0.8 m、前進 >4 m、之後減速），牆與坡的判準改成衝刺版；`test_walker` 的跳躍判準改成低跳（該檔仍是既有 Arena 基準失敗）。全套 `--fixed-fps 60`：12 組通過，`test_walker`／`test_scouts` 為既有失敗。
+- 未驗證：手感待實玩。
+
+## 2026-11-17（晚）｜彈匣換彈、彈速加快、敵方瞄準更散、命中改火花＋零件（未 commit）
+
+- 使用者要求：子彈要有彈夾與換彈；子彈與飛彈都快一點，敵方 AI 瞄準因此要更隨機；scout 被打到不該出白色圈圈，要火花加零件飛起。
+- 完成：
+  - `walker_combat.gd`：`magazine_size` 30、`magazine_reload_time` 1.8，打空自動換彈，R／手把 X 手動換；換彈出／入各一聲（`ReloadSound`，`build_gun_juice.gd` 加入）。HUD 顯示 AMMO／RELOADING。
+  - 彈速：主砲 70–90 → 110–135 m/s；scout 36（battlefield 覆寫 50）→ 72；Boss 飛彈 24 → 36、轉向 1.1 → 1.5。
+  - 敵方瞄準：`aim_spread` 0.4 → 1.3 m、`lead_accuracy` 0.85 → 0.6；瞄準點改在機身碰撞膠囊中心（1.3 m）。
+  - 白圈來源是 scout 的 `HitFlash`（1.4 m 白球），已從 scene、`scout.gd`、`build_combat_slice.gd` 移除。身體命中的 impact 關掉 Flash／Flare 光層、火花放大 1.6 倍；每發命中固定打下 2～3 塊零件。
+- 驗證（`--fixed-fps 60`，全套）：14 組中 12 組通過；`test_walker`／`test_scouts` 仍是既有 Arena 基準失敗。`test_gun_juice` 新增彈匣、身體命中無光圈、命中掉零件三項。`test_combat` 的 AI 開火項把 `aim_spread` 設 0（它驗開火與傷害，不驗準度；散佈 1.3 m 時 2.5 秒內可能全打偏）。
+- 注意：不帶 `--fixed-fps 60` 跑時，headless 每幀約 7 ms，用幀數計時的移動測試會大量失敗；README 的指令本來就帶這個參數。
+- 未驗證：沒有重截畫面，火花與零件的實際觀感待實玩確認。
+
+## 2026-11-17（下午）｜Boss 腳少粗沉重、翅膀展開；主砲手感 7 項標準（未 commit）
+
+- 使用者要求：Boss 腳少一點粗一點、移動更沉重、腹部貼地；翅膀沒張開纏在一起。主角主砲照 7 項標準做（扳機同幀閃光與後座、散佈／速度／曳光／火花＋連射、命中閃白擠壓擊退、後座推人踢鏡頭、彈殼與殘骸留地上、槍聲／呼嘯／悶響／叮聲、擊殺停頓拋飛且最後一擊最大），能優化就優化，並把流程記錄給其他專案用。
+- **Boss**：`knee_legs.py` 改每側每 3 個位置一隻（22 隻、55 骨）、粗 2.2 倍、腳底 z=1.2＋Godot 中 Model 下移 1.14 m（腹部約 0.8 m）、1.6 s 單波步態＋落腳機身下沉；`boss.gd` 爬速 2.2、轉向 24°/s、落腳 `StepSound`；`CANNON_PIVOT`、翅膀位置、攻擊光纖根部跟著降低。翅膀改成根部沿背部向外排開、較細較長、少扭轉與擺動，從正面看是分開的扇形光纖。
+- **主砲**：見 README「主砲手感」。新 kit 模組 `godot-kit/addons/proto_kit/hit_react3d.gd`、`debris3d.gd`（只把這兩檔複製進本原型；完整 `sync.sh` 會改寫 41 個與本次無關的 vfx `.tres`，未執行）。新 skill `godot-kit/skills/gun-juice/SKILL.md`，已用 `install_skills.sh gun-juice` 裝到 `~/.claude/skills`；kit README 模組表已登記。
+- **測試調整**：`test_audio`、`test_auto_blades` 在擊殺後加 `OS.delay_msec(300)`：擊殺停頓用牆鐘，headless 幾百幀會全落在停頓裡；`test_mobility` 的槍聲斷言改為檢查每發輪選的素材。
+- **驗證（實跑）**：完整測試 audio、auto_blades、battlefield、boss_scene、combat、gait_terrain、grapple_inertia、gun_juice（新）、mobility、scout_ai PASS；walker、scouts 為既有 Arena 基線 FAIL。`validate_animation.py` PASS（55 骨、24,728 面）。xvfb 截圖：Boss 粗腳蹲伏貼地、翅膀扇形展開；開火時砲口燈光、彈殼飛出並留地上；擊殺時大爆炸、殘骸拋飛後傾倒在地。
+- **未驗證**：實玩手感（射速、散佈、後座推力、震屏大小、停頓長度）、聲音實聽（呼嘯與叮聲是合成佔位音）、手機效能；追尾鏡頭下曳光尾巴幾乎看不到（正對鏡頭），是否改偏肩鏡頭待使用者決定。
+- **工作區**：與前幾段一起未 commit。
+
+## 2026-11-17｜Boss 折刀腳、蓄力主砲光束、第二型態光纖翅膀（未 commit）
+
+- 使用者要求：腳改兩節式昆蟲腳（問答後選「保留很多細腳、各加膝」，再依 `docs/86/enemy/boss/boss-fight.png` 改成低膝外張的折刀甲片）；光束改長蓄力、頭上主砲瞄準聚能再發射；第二型態有光纖翅膀，光纖用來刺與砸；注意效能，低面數＋貼圖。
+- **模型**：`docs/.../animated/knee_legs.py` 把 62 根直腳換成折刀腳＋124 根骨頭與 `walk` 波浪步態，移除 32 根短支柱；`export_animated.py` 計數改 637／135；`validate_animation.gd` 改 135 骨、27,688 面、加 `walk`。GLB 複製到 `assets/boss/`。
+- **Godot**：`boss.gd` 爬行改用 `walk`（speed_scale = 速度 / `walk_anim_speed` 1.9）；光束改 `BEAM_CHARGE`（追瞄＋聚能 2.6 s，最後 0.55 s 鎖定＋紅色瞄準線）→沿砲管 `cannon_dir` 發射，`boss_tail_modifier.gd` 在動畫後轉 Cannon 骨頭；`boss_charge.tscn`（alpha 混合聚能球＋吸入線條＋燈光）。第二型態 `PHASE_SHIFT`→翅膀展開，攻擊輪替加 `stab`／`slam`；`boss_wings.tscn`（兩個 MultiMesh 翅膀＋4 條攻擊光纖＋砸擊紅圈）、`shaders/fiber.gdshader`、`assets/vfx/fiber.png`。產生器 `build_vfx.gd` 新增 `charge`／`fiber`／`wings` 三個只改對應 scene 的 pass。
+- **測試修正**：`test_boss_scene.gd` 改成等待狀態而非固定幀；原本 Boss 在測試裡站到玩家頭上（進樹後才設位置），舊光束斷言是碰巧通過，已改為進樹前設位置並斷言 Boss 留在原地。新增主砲瞄準、無預傷、第二型態、刺擊／砸擊命中斷言。
+- **驗證（實跑）**：完整測試 audio、auto_blades、battlefield、boss_scene、combat、gait_terrain、grapple_inertia、mobility、scout_ai PASS；walker、scouts 為既有 Arena 基線 FAIL。`python3 validate_animation.py` → PASS（135 骨、4 段動畫）。xvfb 截圖確認：側面兩節折刀腳步態、聚能球→紅線鎖定→光束命中（HULL 91）、翅膀展開、三刺命中（HULL 82）、紅圈砸擊（HULL 52）。第二型態截圖時整張畫面 draw call 325–339，與第一型態相近（llvmpipe，非手機數據）。
+- **新坑**（已寫入 LESSONS）：headless 產生器存 MultiMesh 會丟失 buffer（改 xvfb 非 headless）；additive 特效在白機體／淡天空前看不見；billboard 需 keep_scale；測試進樹後才設位置導致角色互騎。
+- **未驗證**：實玩手感與難度（蓄力時長、刺擊範圍、砸擊半徑）、翅膀造型是否夠像參考、手機效能、未開 glow。
+- **工作區**：與前兩段一起未 commit；`docs/86/.../animated/boss_animated.blend`／`.glb`／貼圖也已修改。
+
+## 2026-11-16（晚）｜拿掉 Boss 外加機械足、開火／爆炸改多層粒子（未 commit）
+
+- 使用者回饋：Boss 細細的就是腳，不用加機械足；開火與爆炸太假，參考 YouTube「GODOT VFX - Muzzle Flash Effect Tutorial」（YuCvAwZ3OlQ）與「Hits and Impacts Effect Tutorial」（uDjR7F-aOsc）的字幕做法。
+- **已完成：** `scenes/boss.tscn` 移除 `Legs`（41→10 nodes），刪 `boss_leg.gd/.tscn`，`build_ground_boss.gd` 與 `test_boss_scene.gd` 同步；模型最低點 y≈-0.04，自己的細腳著地。新增 `tools/build_vfx.gd`（textures／scenes 兩段）、`scripts/one_shot_fx.gd`、`scenes/muzzle_flash.tscn`、`assets/vfx/` 5 張程式貼圖；`combat_impact.tscn` 的球體＋sprite 爆炸換成 `Fx` 多層粒子，`walker_combat.tscn` 的球體砲口閃光換成粒子 scene。
+- **踩到的坑：** world-space GPU 粒子不吃父節點 scale（改 local_coords）；`Curve` 預設 max 1 會把放大曲線截斷（設 max_value 4）；ArrayMesh 沒有 `material` 屬性（用 `surface_set_material`）。
+- **驗證：** 修改 scene 後 headless 匯入無錯；xvfb 1280×720 在戰場與空場景分別截 2／6／15／30／60 幀，確認大爆炸有閃光→火球＋地面環＋火花＋碎片→煙，砲口側面有鋸齒火焰；追尾鏡頭下砲口前幾幀被砲塔擋住（因此加閃光燈）。完整測試：audio、auto_blades、battlefield、boss_scene、combat、gait_terrain、grapple_inertia、mobility、scout_ai 全 PASS；walker、scouts 仍是既有 Arena 基線 FAIL。
+- **未驗證：** 實玩觀感是否還假（作者判斷）、glow 未開、手機效能。
+- **工作區：** 與上一段一起未 commit。
+
+## 2026-11-16｜地面 Boss 戰鬥、裝甲巡行、加農砲特效、機動性（未 commit）
+
+- 專案／分支：walker-tps／master。使用者 6 點要求：Boss 改地面爬行並用光束／飛彈／甩尾攻擊；其他裝甲要會動；主砲改大口徑加農砲加 VFX 爆炸；接回音效；提高移動速度、Shift 與勾索拖行加速度模糊、甩尾時砲塔不跟著甩；碰牆壁／斜坡可反射跳離。
+- **接手經過：** Codex（Herdr pane）在 `/tmp/walker-combat-20261116` 隔離複本完成實作與驗證後，因用量上限中斷，未同步回 repo；電腦重開後 /tmp 被清空。由 Claude 從 Codex session log（`~/.codex/sessions/2026/11/14/rollout-…01a1d947….jsonl`）依序重放 apply_patch（跳過一個當時就失敗的 patch）與三支 Godot 製作腳本，builder 輸出的 node 數與原紀錄完全一致，再同步回本目錄。暫用的 `*_tmp.gd` 檢查／修補腳本未帶回。
+- **已完成：** `scripts/boss.gd` 重寫為地面 AI（追擊、光束、追蹤飛彈 `boss_missile`、甩尾 `boss_tail_modifier`、四隻程序步態腳 `boss_leg`、受傷與擊毀）；`boss_battle_session.gd` 把 Boss 納入勝利目標；`armor_display.gd` 展示機巡行；`walker_player.gd` 速度 7.5／12、牆跳與斜坡跳、速度模糊（`shaders/speed_blur.gdshader`、`scenes/speed_blur.tscn`，HUD 下層）；`walker_gait.gd` 衝刺步伐 0.10 s 避免 12 m/s 緊急抬腳過多；`walker_combat.gd` 砲管放大、2.4 m 爆炸、勾索拖行時砲塔跟鏡頭目標；`combat_impact` 接 VFX 爆炸；`grapple.gd` 勾索音效。場景由 `tools/build_ground_boss.gd -- --overwrite` 與 Godot 存檔產生。
+- **本次驗證（L2，實跑）：** 重建複本 headless 匯入無錯；`godot --headless --fixed-fps 60 --path . --script res://tests/test_<名稱>.gd` 全跑：audio、auto_blades、battlefield、boss_scene、combat、gait_terrain、grapple_inertia、mobility（新）、scout_ai 全 PASS；walker、scouts FAIL，為既有 Arena 移位基線問題，非本次造成。同步回 repo 後原地匯入無錯，mobility／boss_scene／combat 再跑 PASS。Codex 當時另有 xvfb 截圖檢查（Boss 落地、光束、爆炸、模糊不蓋 HUD），本次未重拍。
+- **未驗證：** 實玩手感（速度、牆跳、模糊強度、Boss 難度）、音效實聽、手機／手把效能。
+- **工作區：** 上述改動與新檔皆未 commit／push；前一段 Boss 負載場景已由使用者提交於 `128b6544`。
+
 ## 2026-11-15｜Boss 與裝甲渲染負載場景（未 commit）
 
 - 專案／分支：walker-tps／master。依使用者要求把前一輪完成的骨架動畫 Boss 放入場景，並加入其他裝甲測試負載與優化；保留既有戰場及 `main.tscn` 的使用者修改。

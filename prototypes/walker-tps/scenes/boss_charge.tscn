@@ -1,0 +1,85 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/vfx/glow.png" id="1_11hdn"]
+
+[sub_resource type="Curve" id="Curve_ntmhy"]
+_limits = [0.0, 4.0, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.6), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_fgj4p"]
+curve = SubResource("Curve_ntmhy")
+
+[sub_resource type="Curve" id="Curve_eemld"]
+_limits = [0.0, 4.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.3), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_d7u7b"]
+curve = SubResource("Curve_eemld")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_tne31"]
+particle_flag_align_y = true
+emission_shape = 2
+emission_sphere_radius = 4.0
+direction = Vector3(0, 0, 1)
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+radial_accel_min = -38.0
+radial_accel_max = -38.0
+scale_min = 0.8
+scale_max = 1.4
+scale_curve = SubResource("CurveTexture_d7u7b")
+color = Color(1, 0.42, 0.08, 1)
+alpha_curve = SubResource("CurveTexture_fgj4p")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3rfrb"]
+transparency = 1
+cull_mode = 2
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("1_11hdn")
+disable_receive_shadows = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_v1bdl"]
+material = SubResource("StandardMaterial3D_3rfrb")
+size = Vector2(0.18, 1.2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nexfs"]
+transparency = 1
+cull_mode = 2
+no_depth_test = true
+shading_mode = 0
+albedo_color = Color(1, 0.5, 0.12, 1)
+albedo_texture = ExtResource("1_11hdn")
+disable_receive_shadows = true
+billboard_mode = 1
+billboard_keep_scale = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_1kps3"]
+
+[node name="BossCharge" type="Node3D" unique_id=983577506]
+visible = false
+
+[node name="Gather" type="GPUParticles3D" parent="." unique_id=1475377516]
+cast_shadow = 0
+emitting = false
+amount = 64
+lifetime = 0.45
+randomness = 0.5
+fixed_fps = 60
+visibility_aabb = AABB(-8, -8, -8, 16, 16, 16)
+local_coords = true
+transform_align = 3
+process_material = SubResource("ParticleProcessMaterial_tne31")
+draw_pass_1 = SubResource("QuadMesh_v1bdl")
+
+[node name="Core" type="MeshInstance3D" parent="." unique_id=1392353648]
+material_override = SubResource("StandardMaterial3D_nexfs")
+cast_shadow = 0
+mesh = SubResource("QuadMesh_1kps3")
+
+[node name="Light" type="OmniLight3D" parent="." unique_id=1591032898]
+light_color = Color(1, 0.55, 0.2, 1)
+light_energy = 0.0
+omni_range = 14.0

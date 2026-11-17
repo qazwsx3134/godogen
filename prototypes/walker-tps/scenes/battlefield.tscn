@@ -42,7 +42,7 @@ shadow_enabled = true
 directional_shadow_max_distance = 85.0
 
 [node name="Walker" parent="." unique_id=1321293412 instance=ExtResource("2_jsyt3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5480498, -78)
+transform = Transform3D(1.9, 0, 0, 0, 1.9, 0, 0, 0, 1.9, 0, -0.5480498, -78)
 
 [node name="HUD" parent="." unique_id=291533515 instance=ExtResource("3_ixbtv")]
 
@@ -58,23 +58,21 @@ navigation_mesh = ExtResource("5_86tsl")
 [node name="Enemies" type="Node3D" parent="." unique_id=1731507396]
 
 [node name="Scout0" parent="Enemies" unique_id=1302323479 instance=ExtResource("7_htbo0")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -4, -0.6415803, -49)
+transform = Transform3D(-0.91, 0, -1.3740619e-07, 0, 0.91, 0, 1.3740619e-07, 0, -0.91, -4, -0.6415803, -49)
 combat_enabled = true
 
 [node name="Scout1" parent="Enemies" unique_id=1389021067 instance=ExtResource("7_htbo0")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 12, -0.21565442, -22)
+transform = Transform3D(-0.91, 0, -1.3740619e-07, 0, 0.91, 0, 1.3740619e-07, 0, -0.91, 12, -0.21565442, -22)
 combat_enabled = true
 
 [node name="Scout2" parent="Enemies" unique_id=1129426902 instance=ExtResource("7_htbo0")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -9, -0.4132173, 8)
+transform = Transform3D(-0.91, 0, -1.3740619e-07, 0, 0.91, 0, 1.3740619e-07, 0, -0.91, -9, -0.4132173, 8)
 combat_enabled = true
 max_health = 120.0
 mass = 12.0
 attack_range = 45.0
-lead_accuracy = 0.85
-aim_spread = 0.4
+lead_accuracy = 0.6
 shot_damage = 18.0
-shot_speed = 50.0
 windup_time = 1.0
 fire_cooldown = 3.0
 chase_speed = 2.0

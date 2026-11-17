@@ -194,9 +194,8 @@ func _test_jump() -> void:
 	await _frames(30)
 	gait.landed.disconnect(on_land)
 	_expect(was_air, "jump leaves the ground")
-	_expect(peak - y0 > 2.0, "jump rises over 2 m (%.2f m)" % (peak - y0))
-	_expect(apex_sole > 1.5, "feet are tucked up off the ground at the apex (lowest sole %.2f m)" % apex_sole)
-	_expect(landings.size() == 1 and landings[0] > 4.0, "lands once, hard (%s)" % str(landings))
+	_expect(peak - y0 > 0.5 and peak - y0 < 1.6, "the jump is a low dash hop (%.2f m)" % (peak - y0))
+	_expect(landings.size() <= 1, "lands once (%s)" % str(landings))
 	_expect(walker.is_on_floor() and not gait.airborne, "back on the ground after the jump")
 	for leg in gait.legs:
 		_expect(absf(leg.plant.y) < 0.05 and gait.sole(leg).distance_to(leg.plant) < 0.03,

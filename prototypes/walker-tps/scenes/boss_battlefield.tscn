@@ -16,7 +16,7 @@ script = ExtResource("3_ufgpq")
 
 [node name="Boss" parent="." unique_id=799665999 instance=ExtResource("4_i1dx1")]
 unique_name_in_owner = true
-transform = Transform3D(-0.8660254, 0, 0.50000006, 0, 1, 0, -0.50000006, 0, -0.8660254, 0, 12, -20)
+transform = Transform3D(-5.45, 0, 0, 0, 5.45, 0, 0, 0, -5.45, 0, 6, 55)
 
 [node name="Armor" type="Node3D" parent="." unique_id=1941147477]
 
@@ -25,12 +25,12 @@ transform = Transform3D(-0.99026805, 0, 0.13917318, 0, 1, 0, -0.13917318, 0, -0.
 shadows_enabled = false
 
 [node name="Tank01" parent="Armor" unique_id=516428362 instance=ExtResource("6_ixlw6")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 14, -0.42099303, -65)
+transform = Transform3D(-1.67, 0, -2.5216298e-07, 0, 1.67, 0, 2.5216298e-07, 0, -1.67, 14, -0.42099303, -65)
 animation_phase = 0.23
 shadows_enabled = false
 
 [node name="Tank02" parent="Armor" unique_id=1929918222 instance=ExtResource("6_ixlw6")]
-transform = Transform3D(-0.99026805, 0, -0.13917312, 0, 1, 0, 0.13917312, 0, -0.99026805, -14, -0.16199036, -51)
+transform = Transform3D(-1.6537476, 0, -0.23241921, 0, 1.67, 0, 0.23241921, 0, -1.6537476, -14, -0.16199036, -51)
 animation_phase = 0.46
 shadows_enabled = false
 
@@ -40,28 +40,28 @@ animation_phase = 0.6900000000000001
 shadows_enabled = false
 
 [node name="Melee04" parent="Armor" unique_id=781306486 instance=ExtResource("5_tiyuq")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -14, -0.34812468, -37)
+transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, -14, -0.34812468, -37)
 animation_phase = 0.92
 shadows_enabled = false
 
 [node name="Tank05" parent="Armor" unique_id=1034769318 instance=ExtResource("6_ixlw6")]
-transform = Transform3D(-0.99026805, 0, -0.13917312, 0, 1, 0, 0.13917312, 0, -0.99026805, 14, -0.15885468, -37)
-animation_phase = 1.1500000000000001
+transform = Transform3D(-1.6537476, 0, -0.23241921, 0, 1.67, 0, 0.23241921, 0, -1.6537476, 14, -0.15885468, -37)
+animation_phase = 1.15
 shadows_enabled = false
 
 [node name="Tank06" parent="Armor" unique_id=333121346 instance=ExtResource("6_ixlw6")]
-transform = Transform3D(-0.99026805, 0, 0.13917318, 0, 1, 0, -0.13917318, 0, -0.99026805, -14.000002, 1.4424802, -23.000002)
-animation_phase = 1.3800000000000001
+transform = Transform3D(-1.6537476, 0, 0.23241921, 0, 1.67, 0, -0.23241921, 0, -1.6537476, -14.000002, 1.4424802, -23.000002)
+animation_phase = 1.38
 shadows_enabled = false
 
 [node name="Melee07" parent="Armor" unique_id=181645418 instance=ExtResource("5_tiyuq")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 14.000001, 1.1309721, -23)
+transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, 14.000001, 1.1309721, -23)
 animation_phase = 1.61
 shadows_enabled = false
 
 [node name="Phido08" parent="Armor" unique_id=1098074225 instance=ExtResource("7_1e4vd")]
 transform = Transform3D(-0.99026805, 0, -0.13917312, 0, 1, 0, 0.13917312, 0, -0.99026805, -5, -0.67933196, -70)
-animation_phase = 0.040000000000000036
+animation_phase = 0.04000000000000003
 shadows_enabled = false
 
 [node name="Phido09" parent="Armor" unique_id=2025387294 instance=ExtResource("7_1e4vd")]
@@ -102,21 +102,21 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
-text = "1 IDLE"
+text = "1 BEAM"
 
 [node name="BossFly" type="Button" parent="BossPreviewControls/Panel/Column/Buttons" unique_id=1746280056]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
-text = "2 FLY"
+text = "2 PILLARS"
 
 [node name="BossFire" type="Button" parent="BossPreviewControls/Panel/Column/Buttons" unique_id=1052884875]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
-text = "3 FIRE"
+text = "3 TAIL"
 
 [node name="LoadButtons" type="HBoxContainer" parent="BossPreviewControls/Panel/Column" unique_id=1284958871]
 layout_mode = 2

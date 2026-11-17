@@ -1,5 +1,5 @@
 extends Node3D
-## Animation and repeatable load controls for the Boss battlefield.
+## Attack and repeatable load controls for the Boss battlefield.
 ## The first ten armor instances are saved in the scene; extras are instances of
 ## the same editable scenes and are created only when a higher load is selected.
 
@@ -33,15 +33,15 @@ func _ready() -> void:
 
 
 func _show_idle() -> void:
-	boss.set_flying(false)
+	boss.try_attack("beam")
 
 
 func _show_fly() -> void:
-	boss.set_flying(true)
+	boss.try_attack("pillars")
 
 
 func _show_fire() -> void:
-	boss.fire()
+	boss.try_attack("tail")
 
 
 ## Total is restricted to the three measured configurations.

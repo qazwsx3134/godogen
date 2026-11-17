@@ -168,6 +168,7 @@ func _test_ai() -> void:
 	_expect(enemy.sees_player(),"scout sees player in clear line of sight")
 	var hp: float = combat.health
 	enemy.fire_wait=0
+	enemy.aim_spread=0.0  # this checks that rounds fire and hurt; accuracy is a tuning knob
 	await _frames(150)
 	_expect(combat.health<hp,"AI telegraphs and shoots damaging rounds")
 	enemy.ai_enabled=false

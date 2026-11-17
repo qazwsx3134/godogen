@@ -7,6 +7,7 @@ var match_state := "briefing"
 var time_left: float
 var kills := 0
 var total := 0
+var objective_name := "SCOUTS"
 var radio_wait := 0.0
 var radio_count := 0
 ## Where any scout last saw the player, and when (match seconds); scouts that have not seen the

@@ -127,9 +127,6 @@ func build() -> void:
 	var warning := sphere(s.root,"Warning",0.35,Color(1,0.12,0.06))
 	warning.position=Vector3(0,2.8,0)
 	warning.visible=false
-	var hit := sphere(s.root,"HitFlash",1.4,Color(1,0.95,0.8))
-	hit.position=Vector3(0,1.4,0)
-	hit.visible=false
 	save(s.root,"res://scenes/scout.tscn",s.refs,true)
 	var hud := CanvasLayer.new()
 	hud.name="CombatHUD"

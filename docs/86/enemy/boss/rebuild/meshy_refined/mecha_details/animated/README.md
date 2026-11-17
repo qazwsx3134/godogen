@@ -1,5 +1,18 @@
 # Boss 骨架與動畫
 
+## 折刀腳（2026-11-17）
+
+`knee_legs.py` 把原本 62 根直的 `Leg_Primary` 換成兩節折刀腳（參考 `docs/86/enemy/boss/boss-fight.png`：膝蓋低、向外張、扁平菱形斷面、尖端著地）。2026-11-17 第二版依使用者「少一點、粗一點、更沉重、腹部貼地」：每側只留每第 3 個位置（共 22 隻，`LEG_EVERY`），粗 2.2 倍（`THICK`），腳底放在模型座標 z=1.2（`FOOT_Z`，遊戲裡把 Model 下移 1.14 m，腹部離地約 0.8 m）。每隻腳有 Upper／Lower 骨頭（44 根，加原本 11 根共 55 根）；32 根短支柱 `Leg_Secondary` 移除。`walk` 循環 1.6 秒、每側一道波、左右反相，落腳時機身下沉 0.18 m（`HULL_BOB`），原速對應約 1.04 m/s（腳本會印出）；`idle`／`fly`／`fire` 對新骨頭補了靜止 key。來源零件 557 個、匯出 24,728 三角面。
+
+```text
+git checkout -- boss_animated.blend        # 腳本拒絕重複執行，重做前先還原
+blender --background boss_animated.blend --python-exit-code 1 --python knee_legs.py
+blender --background boss_animated.blend --python-exit-code 1 --python export_animated.py -- --overwrite
+python3 validate_animation.py              # 2026-11-17：BOSS_ANIMATED_GODOT_VALIDATION_PASS
+```
+
+匯出後把 `boss_animated.glb` 複製到 `prototypes/walker-tps/assets/boss/`。下方是加腳前的原始紀錄。
+
 以機甲線條版為基礎，加入 11 根骨頭：`Hull`、`Cannon`、`CoreRotor`，以及左右各四節 `Tail_L_1`–`Tail_L_4`、`Tail_R_1`–`Tail_R_4`。尾部甲片跟隨各節骨頭，長尾核心及側邊導軌在相鄰骨頭間混合權重。
 
 | 動作 | Godot 名稱 | 長度 | 內容 |

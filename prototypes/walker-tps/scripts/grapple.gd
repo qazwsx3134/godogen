@@ -56,6 +56,7 @@ var _last_bearing := Vector3.ZERO
 @onready var _launch: Array[Node3D] = [$Launch0, $Launch1]
 @onready var _cable: Array[MeshInstance3D] = [$Cable0, $Cable1]
 @onready var _pin: Array[Node3D] = [$Pin0, $Pin1]
+@onready var _sound: AudioStreamPlayer3D = $HookSound
 
 ## Lower-case name of the state ("pulling", "coasting" ...), for HUD text and tests.
 func state_name() -> String:
@@ -95,7 +96,7 @@ func step(delta: float, pressed: bool, aim_point: Vector3) -> void:
 func launch_hooks(target: Vector3) -> bool:
 	if cooldown_left>0 or combat.health<=0 or not body.controls_enabled or is_active(): return false
 	var toward := target-body.global_position
-	if toward.normalized().dot(body.global_basis.z)<0.25:
+	if toward.normalized().dot(body.global_basis.z.normalized())<0.25:
 		message="TARGET IN FRONT"
 		return false
 	pins.clear()
@@ -112,6 +113,9 @@ func launch_hooks(target: Vector3) -> bool:
 	swept_deg=0.0
 	state=Hook.FLYING
 	message="LAUNCHING"
+	_sound.stream = preload("res://assets/sound/runtime/mech_servo.ogg")
+	_sound.pitch_scale = 1.15
+	_sound.play()
 	return true
 
 func cancel_hook(reason: String = "READY") -> void:
@@ -164,6 +168,7 @@ func _update(delta: float) -> void:
 			state=Hook.READY
 			if message not in ["TARGET IN FRONT"]: message="READY"
 		return
+	var was_flying := state == Hook.FLYING
 	elapsed+=delta
 	for pin: Dictionary in pins:
 		if not pin.done:
@@ -192,6 +197,10 @@ func _update(delta: float) -> void:
 			cancel_hook("NO ANCHOR")
 			return
 		state=Hook.PULLING
+		if was_flying:
+			_sound.stream = preload("res://assets/sound/runtime/mech_contact.ogg")
+			_sound.pitch_scale = 0.8
+			_sound.play()
 		var pull_target: Node3D = pins[anchors[0]].target
 		var light: bool = anchors.size()==2 and pins[anchors[1]].target==pull_target and pull_target.has_method("grapple_pull") and float(pull_target.mass)<combat.mass
 		var destination := Vector3.ZERO
@@ -265,3 +274,5 @@ func _draw_cables() -> void:
 			_cable[side].global_transform=Transform3D(cable_basis,(start+end)*0.5)
 		_pin[side].visible=true
 		_pin[side].global_position=end
+		if length>0.01:  # the barbed head points along the cable, tip first
+			_pin[side].global_basis=Basis(Quaternion(Vector3.UP,(end-start).normalized()))

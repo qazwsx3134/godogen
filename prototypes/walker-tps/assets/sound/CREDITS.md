@@ -9,6 +9,7 @@
 | `impactGlass_heavy_001.ogg` → `hit_heavy.ogg` | Kenney — Impact Sounds 1.0；隨附 [License.txt](hit/License.txt)，[Kenney](https://kenney.nl/) | [CC0](https://creativecommons.org/publicdomain/zero/1.0/)。 |
 | `417688__superphat__lightmachinegun1.wav` → `scout_gun_a/b/c.ogg`、`scout_gun_burst.ogg` | SuperPhat — [LightMachineGun1.wav](https://freesound.org/people/SuperPhat/sounds/417688/) | CC0，依原始 Freesound 素材頁。 |
 | `557594__breviceps__battle-mech-walks-fast-slow-sequence.wav` → `mech_step_a/b.ogg`、`mech_walk_sequence.ogg` | Breviceps — [Battle Mech walks (fast & slow sequence)](https://freesound.org/people/Breviceps/sounds/557594/) | CC0，依原始 Freesound 素材頁。 |
+| `voice-and-steps/gun-shot-ching.mp3`、`whiz.mp3`、`impact-explosion-grenade.v5.mp3`、`gun-shot-real.mp3` → `shell_drop.ogg`、`bullet_whiz.ogg`、`round_impact.ogg`、`cannon_shot.ogg`（2026-11-18）；`gun-shot.mp3`（已不使用）、`step-snow-crunch.mp3`、`ai-boss-talking.mp3`、`boss-angry.mp3` → `cannon_shot.ogg`、`enemy_step.ogg`、`boss_talk.ogg`、`boss_angry.ogg` | 使用者 2026-11-17 提供 | 來源與授權未記錄；公開發佈前請補上。 |
 | `robot1.wav`、`robotstep3.wav`、`jumpland44100.mp3` → `mech_servo.ogg`、`mech_contact.ogg`、`mech_land.ogg` | Lee Barkovich，來源依隨附 [info.txt](machine-walk/info.txt)：[Berklee44Barkovich](https://archive.org/details/Berklee44Barkovich)，由 OpenGameArt.org 分發 | 隨附資料記載 CC BY 3.0；保留其署名與來源，未額外宣稱已逐檔核對原始包。 |
 
 本專案修改：裁切較長錄音中的單發／短點射與短步伐、轉單聲道 44.1 kHz、去直流偏移、RMS 增益配對（受 -6 dBFS 編碼前峰值上限限制）、短淡入淡出及 Vorbis 品質 4 壓縮；AI 與原始走路整段另保留處理後版本。沒有生成新的 AI 聲音。

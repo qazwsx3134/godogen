@@ -29,7 +29,7 @@ func candidates() -> Array[Node3D]:
 		var to: Vector3 = enemy.global_position-body.global_position
 		if absf(to.y)>1.8: continue
 		to.y=0
-		if to.length()>reach or to.normalized().dot(body.global_basis.z)<0.35: continue
+		if to.length()>reach or to.normalized().dot(body.global_basis.z.normalized())<0.35: continue
 		var hit: Dictionary = combat.ray(body.global_position+Vector3.UP*1.2,enemy.global_position+Vector3.UP*1.1)
 		if not hit.is_empty() and hit.collider==enemy: result.append(enemy)
 	return result

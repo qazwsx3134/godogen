@@ -49,7 +49,7 @@ func _test_intercept_point() -> void:
 ## Puts the scout `distance` m in front of the walker, facing it (or facing away), with a fresh state.
 func _place(distance: float, facing_player: bool = true) -> void:
 	scout.ai_enabled=false
-	scout.global_position=walker.global_position+walker.global_basis.z*distance
+	scout.global_position=walker.global_position+walker.global_basis.z.normalized()*distance
 	scout.velocity=Vector3.ZERO
 	var to := walker.global_position-scout.global_position
 	scout.rotation.y=atan2(to.x, to.z)+(0.0 if facing_player else PI)
@@ -80,7 +80,7 @@ func _test_aim_hysteresis() -> void:
 	scout.ai_enabled=true
 	await _until(func() -> bool: return scout.state==Scout.State.AIM, "scout starts aiming in range", 3.0)
 	scout.fire_wait=10.0  # hold fire: only the state is under test
-	scout.global_position=walker.global_position+walker.global_basis.z*(scout.attack_range+3.0)
+	scout.global_position=walker.global_position+walker.global_basis.z.normalized()*(scout.attack_range+3.0)
 	var flips := 0
 	var last: int = scout.state
 	for i: int in 60:
@@ -88,7 +88,7 @@ func _test_aim_hysteresis() -> void:
 		if scout.state!=last: flips+=1
 		last=scout.state
 	_expect(scout.state==Scout.State.AIM and flips==0, "inside the exit margin the scout keeps aiming (flips %d)" % flips)
-	scout.global_position=walker.global_position+walker.global_basis.z*(scout.attack_range+scout.aim_exit_margin+4.0)
+	scout.global_position=walker.global_position+walker.global_basis.z.normalized()*(scout.attack_range+scout.aim_exit_margin+4.0)
 	await _frames(30)
 	_expect(scout.state==Scout.State.CHASE, "past the exit margin the scout chases again")
 	scout.repositions=true
@@ -129,7 +129,7 @@ func _test_rear_hit() -> void:
 func _test_team_contact_and_spread() -> void:
 	walker.get_node("Combat").health=10000  # three scouts shoot during this; the round must not end
 	var scouts: Array[Node] = main.get_node("Enemies").get_children()
-	var forward: Vector3 = walker.global_basis.z
+	var forward: Vector3 = walker.global_basis.z.normalized()
 	var side: Vector3 = forward.cross(Vector3.UP)
 	for i: int in scouts.size():
 		var other: CharacterBody3D = scouts[i]

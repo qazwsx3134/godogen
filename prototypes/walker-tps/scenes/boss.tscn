@@ -1,10 +1,79 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scripts/boss.gd" id="1_neq0i"]
-[ext_resource type="PackedScene" path="res://assets/boss/boss_animated.glb" id="2_jncid"]
+[ext_resource type="Script" path="res://scripts/boss.gd" id="1_jncid"]
+[ext_resource type="PackedScene" path="res://assets/boss/boss_animated.glb" id="2_qnbj4"]
+[ext_resource type="PackedScene" path="res://scenes/boss_charge.tscn" id="3_jncid"]
+[ext_resource type="PackedScene" path="res://scenes/boss_wings.tscn" id="4_qnbj4"]
+[ext_resource type="AudioStream" path="res://assets/sound/runtime/enemy_step.ogg" id="5_2cdgk"]
+[ext_resource type="Script" path="res://addons/proto_kit/hit_react3d.gd" id="6_wqpjq"]
+[ext_resource type="AudioStream" path="res://assets/sound/runtime/boss_talk.ogg" id="7_qsl3t"]
 
-[node name="Boss" type="Node3D" unique_id=799665999]
-script = ExtResource("1_neq0i")
+[sub_resource type="BoxShape3D" id="BoxShape3D_wqpjq"]
+size = Vector3(10, 6, 15)
 
-[node name="Model" parent="." unique_id=2119072893 instance=ExtResource("2_jncid")]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2cdgk"]
+shading_mode = 0
+albedo_color = Color(1, 0.3, 0.04, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_qsl3t"]
+height = 1.0
+radial_segments = 8
+
+[node name="Boss" type="CharacterBody3D" unique_id=678752962]
+transform = Transform3D(5.45, 0, 0, 0, 5.45, 0, 0, 0, 5.45, 0, 0, 0)
+collision_layer = 4
+collision_mask = 3
+floor_snap_length = 0.5
+script = ExtResource("1_jncid")
+
+[node name="Model" parent="." unique_id=676847541 instance=ExtResource("2_qnbj4")]
 unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.14, 0)
+
+[node name="Body" type="CollisionShape3D" parent="." unique_id=1741022700]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.1, 1.5)
+shape = SubResource("BoxShape3D_wqpjq")
+
+[node name="Beam" type="MeshInstance3D" parent="." unique_id=2099512182]
+top_level = true
+visible = false
+material_override = SubResource("StandardMaterial3D_2cdgk")
+cast_shadow = 0
+mesh = SubResource("CylinderMesh_qsl3t")
+
+[node name="Status" type="Label3D" parent="." unique_id=733556711]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11, 0)
+pixel_size = 0.03
+billboard = 1
+text = "BOSS 600 / 600"
+
+[node name="AttackSound" type="AudioStreamPlayer3D" parent="." unique_id=217230387]
+unit_size = 25.0
+max_distance = 160.0
+bus = &"Weapons"
+
+[node name="Charge" parent="." unique_id=983577506 instance=ExtResource("3_jncid")]
+top_level = true
+
+[node name="Wings" parent="." unique_id=1333941135 instance=ExtResource("4_qnbj4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.4, -3)
+
+[node name="StepSound" type="AudioStreamPlayer3D" parent="." unique_id=1543602627]
+stream = ExtResource("5_2cdgk")
+volume_db = 2.0
+unit_size = 22.0
+pitch_scale = 0.55
+max_polyphony = 3
+bus = &"Movement"
+
+[node name="HitReact" type="Node" parent="." unique_id=315461854]
+script = ExtResource("6_wqpjq")
+squash = 0.03
+knock_distance = 0.12
+
+[node name="Voice" type="AudioStreamPlayer3D" parent="." unique_id=1240245826]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, 4)
+stream = ExtResource("7_qsl3t")
+volume_db = 2.0
+unit_size = 30.0
+bus = &"Voice"

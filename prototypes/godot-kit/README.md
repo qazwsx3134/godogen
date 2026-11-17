@@ -43,6 +43,8 @@ python3 tools/capabilities.py check
 | [`orientation_guard.tscn`](addons/proto_kit/orientation_guard.tscn)＋[`.gd`](addons/proto_kit/orientation_guard.gd) | 手機拿錯方向時蓋住畫面、擋點擊，請玩家轉橫（或轉直）；只在觸控裝置（網頁 Android／iOS、原生手機），不暫停遊戲 | kagura-dango（同上） |
 | [`music.gd`](addons/proto_kit/music.gd) | 背景音樂換軌：舊的淡出、新的淡入，同一首不重播，不受暫停與 hit stop 影響 | sugarcane-tanks |
 | [`camera_shake.gd`](addons/proto_kit/camera_shake.gd) | trauma 震屏：偏移與轉角跟 trauma 的平方成正比，平滑不抖，可關（無障礙） | sugarcane-tanks |
+| [`hit_react3d.gd`](addons/proto_kit/hit_react3d.gd) | 3D 目標的命中反應：半透明暖色閃光再淡出（4 個共用 material_overlay，蒙皮網格也行，白色機身不過曝）、擠壓、視覺後退，擊殺時把模型拋飛落地；只動模型不動物理 body。做法見 [gun-juice](skills/gun-juice/SKILL.md) | walker-tps（2026-11-17） |
+| [`debris3d.gd`](addons/proto_kit/debris3d.gd) | 彈殼、零件、地上污漬的 MultiMesh 池：一池一次 draw call，滿了重用最舊的，落地彈跳後靜止不耗 CPU | walker-tps（2026-11-17） |
 | [`floating_stick.gd`](addons/proto_kit/floating_stick.gd) | 浮動虛擬搖桿：平時看不見，按下才在手指下出現，輸出螢幕向量 | sugarcane-tanks |
 | [`scene_loader.gd`](addons/proto_kit/scene_loader.gd) | 載入畫面的邏輯：執行緒載入、進度不倒退也不跑在時鐘前面、失敗可重試、離開時收掉任務 | sugarcane-tanks |
 | [`sprite3d*.gdshader`](addons/proto_kit/sprite3d.gdshader)、[`sprite3d_sheet.gd`](addons/proto_kit/sprite3d_sheet.gd)、[`sprite3d_actor.gd`](addons/proto_kit/sprite3d_actor.gd) | 2D 角色圖立在 3D 世界（pokebonk.com／仙境傳說式）：billboard、腳底貼地、依鏡頭相對方向選 1／4／8 方向（含鏡像與遲滯）、描邊身分色、閃白、溶解、x-ray 剪影、殘影、腳下影子，MultiMesh 大軍可用。搭配 `tools/sprite_atlas.py` | madara-survivor、horde-25d（2026-10-19 從這兩份抽出） |

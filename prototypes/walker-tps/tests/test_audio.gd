@@ -26,6 +26,13 @@ func _run() -> void:
 	_expect(walker.get_node("StepSound").stream==clip,"simultaneous foot contacts are coalesced")
 	walker._on_landed(6.0)
 	_expect(walker.get_node("StepSound").stream.resource_path.ends_with("mech_land.ogg"),"landing uses processed contact sound")
+	var scout: Node = main.get_node("Enemies").get_child(0)
+	for i in 60: scout._play_walk(Vector3(2.5, 0, 0))
+	_expect(scout.get_node("StepSound").playing and scout.get_node("StepSound").pitch_scale > 1.2, "a walking scout crunches, pitched up")
+	_expect(walker.get_node("Combat").get_node("ShotSound").max_polyphony >= 4 and walker.get_node("Combat").SHOT_SOUNDS[0].resource_path.ends_with("cannon_shot.ogg"), "the walker cannon uses the supplied gun shot")
+	var round := load("res://scenes/combat_projectile.tscn").instantiate() as Node
+	_expect(round.get_node("Whiz").stream.resource_path.ends_with("bullet_whiz.ogg") and not round.get_node("Whiz").autoplay, "near misses whiz with the supplied clip")
+	round.free()
 	var explosion := load("res://scenes/combat_impact.tscn").instantiate() as Node3D
 	explosion.radius=3
 	main.get_node("Projectiles").add_child(explosion)
@@ -34,6 +41,7 @@ func _run() -> void:
 	for enemy: Node in main.get_node("Enemies").get_children(): enemy.apply_damage(1000)
 	await _frames(2)
 	_expect(main.match_state=="victory" and is_instance_valid(explosion),"last-kill audio tail survives round end")
+	OS.delay_msec(300)  # the kill hit stop runs on the wall clock; let it end before counting frames
 	await _frames(150)
 	_expect(not is_instance_valid(explosion),"audio effect has bounded lifetime")
 	for player: Node in main.find_children("*","AudioStreamPlayer3D",true,false): player.stop()

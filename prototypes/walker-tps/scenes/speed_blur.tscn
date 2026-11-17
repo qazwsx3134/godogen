@@ -1,0 +1,19 @@
+[gd_scene format=3]
+
+[ext_resource type="Shader" path="res://shaders/speed_blur.gdshader" id="1_ypwum"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w1g3h"]
+resource_local_to_scene = true
+shader = ExtResource("1_ypwum")
+shader_parameter/strength = 0.0
+
+[node name="SpeedBlur" type="CanvasLayer" unique_id=782333914]
+layer = 0
+
+[node name="Screen" type="ColorRect" parent="." unique_id=2112804028]
+visible = false
+material = SubResource("ShaderMaterial_w1g3h")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2

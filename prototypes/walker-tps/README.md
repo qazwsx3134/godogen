@@ -6,9 +6,55 @@
 
 ## Boss／裝甲負載場景
 
-開啟 `scenes/boss_battlefield.tscn` 並按 F6；原戰場仍由 F5 開啟。`1`／`2`／`3` 切換 Boss 待機、飛行及開火動畫；`4`／`5`／`6` 切換 10／40／80 台展示機；`7` 切換展示機的投影，預設關閉。也可按右上角按鈕，出擊後先按 Esc 釋放滑鼠。左上角原 HUD 顯示 FPS 與 draw call。
+開啟 `scenes/boss_battlefield.tscn` 並按 F6；原戰場仍由 F5 開啟。Boss 是地面敵人，22 隻粗的折刀狀兩節腳蹲伏撐地、腹部離地約 0.8 m（模型在 `boss.tscn` 下移 1.14 m），用 1.6 秒一圈的沉重波浪步態慢慢爬行（`crawl_speed` 2.2、落腳有低沉的 `StepSound`；動畫速度依實際移動速度縮放，`walk_anim_speed`），可被擊毀並計入勝利目標。
 
-預設展示機為 4 台 melee、4 台 tank、2 台 Phido，數量不包含 Boss、玩家或原本 3 台 scout。Boss 和展示機目前是視覺與渲染負載測試，沒有戰鬥 AI、碰撞或受傷判定；Boss 開火只播放動畫。[量測方法、結果和場景截圖](docs/BOSS_LOAD_TEST.md)列出投影開關的差異與實機驗證方式。
+- **第一型態**：輪流用光束與柱雨（`scenes/boss_pillar.tscn`，由 `tools/build_boss_pillar.gd` 製作）：Boss 蓄力 0.9 秒後射出 `pillar_count` 16 根鐵灰色細圓柱（半徑 0.3 m、長 8 m），各自先在地上亮紅色脈動圈（穿透草地顯示），錯開 `pillar_stagger` 0.1 秒從天而降；第一根落在玩家前進方向，其他散在 3.5～`pillar_spread` 14 m 內。落在圈內（`hit_radius` 1.5 m＋機身半徑）的玩家受 12 傷害並震屏；柱子插進地面成為障礙物與掩體，24 血可被主砲打爆，30 秒後自行碎裂，場上最多 `max_pillars` 40 根。玩家在背後近處時甩尾。光束是長蓄力招：頭上主砲追瞄玩家、砲口聚集能量（`scenes/boss_charge.tscn`）約 2 秒，最後 0.55 秒鎖定瞄準並顯示紅色瞄準線（此時閃避），然後沿砲管方向發射。時間在 `beam_charge_time`／`beam_lock_time`／`beam_fire_time`。
+- **第二型態**（血量 ≤ `phase2_health_ratio`，預設 50%）：背後展開光纖翅膀（`scenes/boss_wings.tscn`），加入兩招。光纖刺擊：三條光纖鎖定玩家與左右各 3.5 m 的位置，0.8 秒淡色預告後刺下。光纖砸擊：地面紅圈追蹤玩家，最後 0.4 秒鎖定，一束光纖舉起後砸下，半徑 `slam_radius`。
+- **效能**：每邊翅膀是一個 MultiMesh（16 條十字面片，各 4 個三角面，一次 draw call），共用 `shaders/fiber.gdshader` 與程式產生的 `assets/vfx/fiber.png`，擺動與流光都在 shader 裡；攻擊用的光纖是 4 個同材質的長面片，只在出招時顯示。
+
+`1`／`2`／`3` 立即觸發光束／飛彈／甩尾；`4`／`5`／`6` 切換 10／40／80 台展示機；`7` 切換展示機投影，預設關閉。也可按右上角按鈕，出擊後先按 Esc 釋放滑鼠。左上角原 HUD 顯示 FPS 與 draw call。
+
+預設展示機為 4 台 melee、4 台 tank、2 台 Phido，會在出生點附近巡行；數量不包含 Boss、玩家或原本 3 台 scout。展示機只巡行、沒有碰撞與戰鬥。Boss 速度、血量、攻擊間隔在 `Boss` node 的 export 欄位。
+
+玩家機甲：走路 7.5、Shift 衝刺 12 m/s；衝刺與勾索拖行時有全螢幕速度模糊（`scenes/speed_blur.tscn`，畫在 HUD 下層，強度在 Walker 的 `speed_blur_strength`，0 為關閉）。主砲是大口徑加農砲，命中為 2.4 m 範圍爆炸；開火與爆炸是疊多層一次性 GPU 粒子（見下方「開火與爆炸特效」）；勾索有發射音效。勾索甩尾時砲塔不再受 ±30° 限制，維持瞄準鏡頭目標。空白鍵是衝刺不是高跳：短蹲 0.06 秒後朝搖桿方向（沒按方向時朝鏡頭前方，站在斜坡上則順坡往外）以 `dash_speed` 20 m/s 衝出 `dash_time` 0.22 秒，斜斜往上約 1 m（`jump_velocity` 4.5），超過衝刺速度的部分在空中也照地面減速；冷卻 `dash_cooldown` 0.45 秒。貼著牆按會沿牆面法線彈開衝出（`wall_jump_push`）。場景由 `tools/build_ground_boss.gd -- --overwrite` 製作，正常執行不會重建。
+
+[量測方法、結果和場景截圖](docs/BOSS_LOAD_TEST.md)列出投影開關的差異與實機驗證方式。
+
+## 單位尺寸
+
+以 melee＝1（最長水平邊約 5.5 m）：主角機甲與 tank 2（約 11 m）、scout 0.8（約 4.4 m）、Boss 40（約 218 m）。由 `tools/apply_unit_scales.gd` 寫進各單位 scene 根節點與所有擺放的實例（Walker 1.9、tank 1.67、scout 0.91、Boss 5.45）。
+
+- 根節點有縮放，所以程式裡當「方向」用的 `global_basis.z` 一律 `.normalized()`（scout、勾索、刀片、Boss 的 `_facing()`）。
+- Boss 的距離數值（停止追擊、甩尾觸發、砸地半徑、光束射程、死亡爆炸大小）按 `scale / TUNED_SCALE(1.35)` 放大。
+- Walker 的步態距離（`step_distance`、`step_height` 等）與鏡頭（`CameraRig.height` 6.3、`Arm.spring_length` 14，rig 是 top_level 不吃縮放）已按 1.9 倍設在 `walker.tscn`。移動速度沒改。
+- 地圖只有約 240×220 m，Boss 幾乎和地圖一樣長：放在 `boss_battlefield.tscn` 的 z=55 面向玩家，尾巴伸出地圖外。地圖大小待定。
+
+## 主砲手感（gun juice）
+
+主砲是按住連射的機砲（每秒約 6 發、每發 12 傷害；彈匣 `magazine_size` 30 發，打空或按 R／手把 X 換彈 `magazine_reload_time` 1.8 秒，換彈中不能開火，HUD 顯示 `AMMO n / 30` 或 `RELOADING`），照 [gun-juice 標準](../godot-kit/skills/gun-juice/SKILL.md) 7 項做，驗收在 `tests/test_gun_juice.gd`：
+
+1. **扳機那一幀**：`walker_combat.gd` 的 `try_fire()` 同時做砲口閃光、砲管後座（`barrel_kick`，自己快速回位，不綁裝填）、鏡頭上跳（`camera_kick_deg`）與小震、把機身往後推（`recoil_push`）、退出彈殼、播槍聲。
+2. **子彈**：錐內均勻散佈（`spread_deg`，瞄準時 `aim_spread_deg`）、速度 `bullet_speed_min`～`max`（110～135 m/s）、曳光尾隨速度拉長，但只延伸到已飛過的距離（不會從砲管後方穿出）；打牆的火花沿表面法線噴。
+3. **被打中**：命中點噴火花加一團小火球與煙（沒有白色光圈），打下 2～3 塊零件；目標的 `HitReact`（kit `hit_react3d.gd`）蓋一層半透明橘色 0.12 秒並淡出（保留原貼圖，白色機身不會過曝）、擠壓、模型後退；槍彈另外呼叫 `knockback()` 真的推開 scout（重型推得少；刀片不推，否則會把目標推出刀片範圍）。
+4. **後座**：見 1。鏡頭震動在 `orbit_camera.gd` 的 `gun_kick()`／`shake()`，`shake_scale` 設 0 可關（無障礙）。
+5. **彈殼與殘骸**：`walker_combat.tscn` 的 `Shells`／`Parts`／`Stains` 是 kit `debris3d.gd` 的 MultiMesh 池（各一次 draw call，滿了重用最舊的），彈殼、零件、油漬留在地上。
+6. **聲音**：每發槍聲（三個變體、隨機低音高、最多 4 個重疊）、子彈上的呼嘯、打到身體的悶響、打到牆的叮聲（後兩個沒有素材，用 kit `synth.gd` 合成）。
+敵方：scout 子彈 72 m/s，瞄準點加 `aim_spread` 1.3 m 的隨機偏移、預判 `lead_accuracy` 0.6（`battlefield.tscn` 的覆寫值）；Boss 飛彈 36 m/s。
+
+7. **擊殺**：Boss 有 `death_time` 3.2 秒的死亡表演：先停頓，背上每 `death_blast_interval` 秒一處爆炸並噴零件、機身下沉傾斜、翅膀萎縮，期間隱藏玩家準心，最後一次最大的爆炸與停頓後才判定任務完成；死亡時光束、蓄能與光纖瞄準線全部收掉。勾索是深色鋼纜加四角帶刺鉤頭（`walker_combat.tscn` 的 Cable0/1、Pin0/1 材質，`tools/build_combat_slice.gd` 已不反映此外觀，不要重跑）。
+
+`kill_feedback()` 停頓（`TimeControl`，牆鐘計時）＋大震屏，scout 殘骸被拋飛翻滾後留在地上，噴 6 個零件、留一大灘油；Boss 死亡是 3 倍。
+
+製作工具 `tools/build_gun_juice.gd` 把上述節點加進 scene（之後以 scene 為準）。已知限制：追尾鏡頭在砲塔正後方，曳光彈多半是正對鏡頭的亮點，要看到長尾巴需要偏肩鏡頭。
+
+## 開火與爆炸特效
+
+照 GODOT VFX 兩支教學（Muzzle Flash、Hits and Impacts）的做法：每層是 additive、unshaded 的一次性 `GPUParticles3D`，各自有壽命、縮放曲線與透明度淡出，火花沿速度方向拉長。
+
+- `scenes/muzzle_flash.tscn`：Planes（十字交叉面片、樞紐在砲口、沿 +Z 長出）、Flash、Sparks、Smoke、Light。砲口在追尾鏡頭裡常被砲塔擋住，所以加 0.08 s 的閃光燈照亮機身與地面。
+- `scenes/combat_impact.tscn` 的 `Fx`：Flash、Flare、Sparks、Smoke 是所有命中都有的；半徑 ≥ 2（加農砲、飛彈）再加 Fireball、地面 Shockwave 環、Debris、Light。整組依 `radius` 縮放，所有命中（玩家砲彈、Boss、飛彈、scout、刀片）共用這個 scene。
+- 貼圖 `assets/vfx/*.png` 由 `tools/build_vfx.gd -- textures` 用程式產生；粒子數值直接在編輯器改各 GPUParticles3D 的 process material。
+- 目前沒有開 WorldEnvironment glow：教學的亮度靠 glow，但這會改變整個戰場的畫面與負載量測數字，要不要開由作者決定。
 
 ## 要驗證的假設
 
@@ -31,6 +77,8 @@ godot --headless --fixed-fps 60 --path . --script res://tests/test_battlefield.g
 godot --headless --fixed-fps 60 --path . --script res://tests/test_scout_ai.gd    # scout AI：預判、遲滯、警覺、換位、視角錐、協同
 godot --headless --fixed-fps 60 --path . --script res://tests/test_gait_terrain.gd    # 步態：衝刺、只踩地形、坡面傾斜、拖行不踏步
 godot --headless --fixed-fps 60 --path . --script res://tests/test_grapple_inertia.gd    # 勾索慣性與甩尾
+godot --headless --fixed-fps 60 --path . --script res://tests/test_mobility.gd    # 牆跳、斜坡跳、衝刺模糊、甩尾時砲塔瞄準
+godot --headless --fixed-fps 60 --path . --script res://tests/test_gun_juice.gd    # 主砲手感 7 項標準
 godot --path .                                   # 開遊戲（或用編輯器開 project.godot，按 F5）
 godot --headless --fixed-fps 60 --path . --script res://tests/test_walker.gd    # 舊移動測試；Arena 位移基線見 TODO
 godot --headless --fixed-fps 60 --path . --script res://tests/test_scouts.gd    # 舊展示敵機測試；Arena 位移基線見 TODO
@@ -76,7 +124,7 @@ scene 由 `tools/build_scenes.gd` 產生一次，之後 `.tscn` 就是原始檔�
 | `scenes/boss_battlefield.tscn` | 既有戰場、Boss、10 台已儲存的展示機與負載控制 | `Boss` 和 `Armor` 底下各機體的位置及方向；每台展示機的 `animation_phase`、`shadows_enabled`；額外展示機在執行時按需求實例化 |
 | `scenes/boss.tscn`、`melee_display.tscn`、`tank_display.tscn`、`phido_display.tscn` | Boss／各展示機的可重用場景與模型 | Boss 根節點的 `initial_animation`；展示機的 `animation_phase`、`shadows_enabled` |
 | `scenes/arena.tscn` | 160 m 網格地面、外牆、坡道與平台、掩體、木箱、門、地標塔 | 每個方塊是 StaticBody3D，拖曳就能改位置；網格的格寬與顏色在 `shaders/grid_ground.gdshader` 的 uniform |
-| `scenes/walker.tscn` | CharacterBody3D、膠囊碰撞、`Model`（walker.glb）、`Gait`、4 個揚塵粒子、腳步聲、`CameraRig` → `Pitch` → `Arm`（SpringArm3D）→ `Camera` | Walker 的 `max_speed`、`sprint_speed`、`accel`、`air_control`、`turn_speed_deg`、`jump_velocity`、`jump_squat_time`／`_depth`、三種靈敏度、`step_kick`、`sprint_fov_add`；Gait 的 `step_distance`、`step_time`／`step_time_run`、`run_speed`、`run_crouch`、`step_height`、`lead`、`bob`；CameraRig 的 `height`、`pitch_*`；Arm 的 `spring_length` |
+| `scenes/walker.tscn` | CharacterBody3D、膠囊碰撞、`Model`（walker.glb）、`Gait`、4 個揚塵粒子、腳步聲、`CameraRig` → `Pitch` → `Arm`（SpringArm3D）→ `Camera` | Walker 的 `max_speed`、`sprint_speed`、`accel`、`air_control`、`turn_speed_deg`、`dash_speed`、`dash_time`、`dash_cooldown`、`jump_velocity`（衝刺離地的小跳）、`jump_squat_time`／`_depth`、三種靈敏度、`step_kick`、`sprint_fov_add`；Gait 的 `step_distance`、`step_time`／`step_time_run`、`run_speed`、`run_crouch`、`step_height`、`lead`、`bob`；CameraRig 的 `height`、`pitch_*`；Arm 的 `spring_length` |
 | `scenes/scout.tscn` | CharacterBody3D、膠囊碰撞、`Model`（scout.glb：1 個蒙皮 mesh、AnimationPlayer 的 `walk`／`idle`） | `speed`、`turn_speed_deg`、`wander_radius`、`pause_min`／`pause_max`；模型與動畫的細節見 `docs/86/enemy/scout/README.md` |
 | `scenes/hud.tscn` | TouchInput（搖桿底座和搖桿頭）、Stats、Hint、Buttons（JUMP、BOOST 兩個 TouchScreenButton，只在觸控裝置顯示） | 搖桿的大小與樣式、`radius`、`dead_zone`；按鈕位置；文字位置。按鈕是 `tools/add_action_buttons.gd` 用 `open_scene`＋`put` 加進去的，不會動到 scene 其他部分 |
 

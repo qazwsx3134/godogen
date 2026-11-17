@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "source_total_bytes": 10104955,
-  "runtime_total_bytes": 200988,
-  "reduction_percent": 98.01,
+  "source_total_bytes": 10763539,
+  "runtime_total_bytes": 303043,
+  "reduction_percent": 97.18,
   "files": [
     {
       "name": "ai_boot",
@@ -437,6 +437,242 @@
       "duration_seconds": 0.41914,
       "peak_dbfs": -5.96,
       "rms_dbfs": -25.14
+    },
+    {
+      "name": "cannon_shot",
+      "source": "voice-and-steps/gun-shot-real.mp3",
+      "source_sha256": "08b1bf6da85ea14e5709a181be1c0c5a683aae4f3fe83eabd56dabd77a4b097b",
+      "source_bytes": 130655,
+      "source_analysis_mono": {
+        "duration_seconds": 3.188,
+        "peak_dbfs": 2.1,
+        "rms_dbfs": -20.23
+      },
+      "crop_seconds": [
+        0.0,
+        1.3
+      ],
+      "credit": "user supplied (2026-11-18)",
+      "role": "weapon",
+      "processing": {
+        "channels": 1,
+        "sample_rate": 44100,
+        "codec": "Vorbis",
+        "quality": 4,
+        "target_rms_dbfs": -16,
+        "max_preencode_peak_dbfs": -6,
+        "gain_db": -8.11,
+        "dc_removed": true,
+        "fade_in_ms": 0.5,
+        "fade_out_ms": 15
+      },
+      "output": "runtime/cannon_shot.ogg",
+      "output_bytes": 15268,
+      "output_sha256": "d9a53ccb713680b6774e04b9aeeb454924e1c94b384e10e4763f7dc9814b0115",
+      "duration_seconds": 1.3,
+      "peak_dbfs": -5.95,
+      "rms_dbfs": -24.61
+    },
+    {
+      "name": "shell_drop",
+      "source": "voice-and-steps/gun-shot-ching.mp3",
+      "source_sha256": "7f40a53b86c886c238a1d7e7e8e91329751e480cfe376a3d1e72eb32b85f624e",
+      "source_bytes": 59602,
+      "source_analysis_mono": {
+        "duration_seconds": 1.43045,
+        "peak_dbfs": 1.99,
+        "rms_dbfs": -21.74
+      },
+      "crop_seconds": null,
+      "credit": "user supplied (2026-11-18)",
+      "role": "impact",
+      "processing": {
+        "channels": 1,
+        "sample_rate": 44100,
+        "codec": "Vorbis",
+        "quality": 4,
+        "target_rms_dbfs": -22,
+        "max_preencode_peak_dbfs": -6,
+        "gain_db": -7.99,
+        "dc_removed": true,
+        "fade_in_ms": 0.5,
+        "fade_out_ms": 15
+      },
+      "output": "runtime/shell_drop.ogg",
+      "output_bytes": 16513,
+      "output_sha256": "c54ee445e0cd4d1ae89e5ee3336be22ff2d5063c99d8cd198fdfc92d770950b9",
+      "duration_seconds": 1.41578,
+      "peak_dbfs": -6.18,
+      "rms_dbfs": -29.78
+    },
+    {
+      "name": "bullet_whiz",
+      "source": "voice-and-steps/whiz.mp3",
+      "source_sha256": "ce946742ac19b8e22c51b9e2267b6c9464f5aadf2a1383b34f391cd6fae4d44f",
+      "source_bytes": 99308,
+      "source_analysis_mono": {
+        "duration_seconds": 2.4229,
+        "peak_dbfs": 2.14,
+        "rms_dbfs": -17.01
+      },
+      "crop_seconds": [
+        0.0,
+        1.0
+      ],
+      "credit": "user supplied (2026-11-18)",
+      "role": "weapon",
+      "processing": {
+        "channels": 1,
+        "sample_rate": 44100,
+        "codec": "Vorbis",
+        "quality": 4,
+        "target_rms_dbfs": -24,
+        "max_preencode_peak_dbfs": -6,
+        "gain_db": -10.83,
+        "dc_removed": true,
+        "fade_in_ms": 0.5,
+        "fade_out_ms": 15
+      },
+      "output": "runtime/bullet_whiz.ogg",
+      "output_bytes": 12146,
+      "output_sha256": "cff5ffca775845c05907a77d30cdfc242c00aa3113b43e46ae66cead8c82fc2b",
+      "duration_seconds": 0.9971,
+      "peak_dbfs": -7.62,
+      "rms_dbfs": -24.08
+    },
+    {
+      "name": "enemy_step",
+      "source": "voice-and-steps/step-snow-crunch.mp3",
+      "source_sha256": "974a0890630ce6020b75c38eb9ab02416da3a98a8f568294d26f73a811f2037c",
+      "source_bytes": 135879,
+      "source_analysis_mono": {
+        "duration_seconds": 3.32812,
+        "peak_dbfs": 1.57,
+        "rms_dbfs": -20.94
+      },
+      "crop_seconds": [
+        0.3,
+        0.8
+      ],
+      "credit": "user supplied (2026-11-17)",
+      "role": "movement",
+      "processing": {
+        "channels": 1,
+        "sample_rate": 44100,
+        "codec": "Vorbis",
+        "quality": 4,
+        "target_rms_dbfs": -23,
+        "max_preencode_peak_dbfs": -6,
+        "gain_db": -5.48,
+        "dc_removed": true,
+        "fade_in_ms": 0.5,
+        "fade_out_ms": 15
+      },
+      "output": "runtime/enemy_step.ogg",
+      "output_bytes": 9300,
+      "output_sha256": "917c768858aec31a4a87d1eb2b3a66c5b5a4fe64f869600954fc91c6a6f344f2",
+      "duration_seconds": 0.51229,
+      "peak_dbfs": -5.97,
+      "rms_dbfs": -24.69
+    },
+    {
+      "name": "boss_talk",
+      "source": "voice-and-steps/ai-boss-talking.mp3",
+      "source_sha256": "c65168e1a87570b2af14aac3163338fe129b752ba319c043f32bb33b95c9a32b",
+      "source_bytes": 18851,
+      "source_analysis_mono": {
+        "duration_seconds": 0.4,
+        "peak_dbfs": 1.9,
+        "rms_dbfs": -12.49
+      },
+      "crop_seconds": null,
+      "credit": "user supplied (2026-11-17)",
+      "role": "voice",
+      "processing": {
+        "channels": 1,
+        "sample_rate": 44100,
+        "codec": "Vorbis",
+        "quality": 4,
+        "target_rms_dbfs": -21,
+        "max_preencode_peak_dbfs": -6,
+        "gain_db": -8.5,
+        "dc_removed": true,
+        "fade_in_ms": 3,
+        "fade_out_ms": 15
+      },
+      "output": "runtime/boss_talk.ogg",
+      "output_bytes": 7682,
+      "output_sha256": "d34539f2da159c9b1f4e42fecb520cb07b96cbccc5f79b6fec08845dd11a5dcd",
+      "duration_seconds": 0.4107,
+      "peak_dbfs": -6.58,
+      "rms_dbfs": -21.3
+    },
+    {
+      "name": "boss_angry",
+      "source": "voice-and-steps/boss-angry.mp3",
+      "source_sha256": "77da88eda17b561a6fcbe952d743d8abfec4131c2363874dc997538a05282dd0",
+      "source_bytes": 107667,
+      "source_analysis_mono": {
+        "duration_seconds": 2.62469,
+        "peak_dbfs": -0.02,
+        "rms_dbfs": -15.44
+      },
+      "crop_seconds": null,
+      "credit": "user supplied (2026-11-17)",
+      "role": "voice",
+      "processing": {
+        "channels": 1,
+        "sample_rate": 44100,
+        "codec": "Vorbis",
+        "quality": 4,
+        "target_rms_dbfs": -19,
+        "max_preencode_peak_dbfs": -6,
+        "gain_db": -5.97,
+        "dc_removed": true,
+        "fade_in_ms": 3,
+        "fade_out_ms": 15
+      },
+      "output": "runtime/boss_angry.ogg",
+      "output_bytes": 25207,
+      "output_sha256": "8dc977f53a53d7dd04a7ac7e51cc4b8e2e31122cc001c06c43fa5d0c8f58ab14",
+      "duration_seconds": 2.62469,
+      "peak_dbfs": -6.52,
+      "rms_dbfs": -21.49
+    },
+    {
+      "name": "round_impact",
+      "source": "voice-and-steps/impact-explosion-grenade.v5.mp3",
+      "source_sha256": "c1430763ef71d5944a0567110cce7c65d03b2e28cd137082fac79e0132d2d758",
+      "source_bytes": 106622,
+      "source_analysis_mono": {
+        "duration_seconds": 2.61211,
+        "peak_dbfs": 1.4,
+        "rms_dbfs": -15.81
+      },
+      "crop_seconds": [
+        0.0,
+        1.6
+      ],
+      "credit": "user supplied (2026-11-18)",
+      "role": "impact",
+      "processing": {
+        "channels": 1,
+        "sample_rate": 44100,
+        "codec": "Vorbis",
+        "quality": 4,
+        "target_rms_dbfs": -18,
+        "max_preencode_peak_dbfs": -6,
+        "gain_db": -7.42,
+        "dc_removed": true,
+        "fade_in_ms": 0.5,
+        "fade_out_ms": 15
+      },
+      "output": "runtime/round_impact.ogg",
+      "output_bytes": 15939,
+      "output_sha256": "5205b354b30f727bfd8f45c99065aaafebd91e9f605e2c16d85b5b78a05ac70a",
+      "duration_seconds": 1.5941,
+      "peak_dbfs": -6.14,
+      "rms_dbfs": -21.14
     },
     {
       "name": "mech_walk_sequence",

@@ -18,6 +18,8 @@ func _run() -> void:
 	_expect(enemy.health==50,"attack interval prevents continuous damage")
 	await _frames(90)
 	_expect(enemy.dead and main.kills==1,"automatic repeated swipes destroy scout and update mission")
+	OS.delay_msec(300)  # the kill hit stop runs on the wall clock; let it end before counting frames
+	await _frames(2)
 	enemy=main.get_node("Enemies/Scout1")
 	enemy.global_position=walker.global_position+Vector3(0,0,12)
 	var combat: Node = walker.get_node("Combat")

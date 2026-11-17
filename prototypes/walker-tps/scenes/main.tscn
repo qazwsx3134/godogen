@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://b8a0iuf02x8xf"]
+[gd_scene format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/arena.tscn" id="1_sugp2"]
 [ext_resource type="PackedScene" path="res://scenes/walker.tscn" id="2_jyhfs"]
@@ -40,44 +40,44 @@ directional_shadow_max_distance = 45.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.591113, -2.7779026, 4.6710916)
 
 [node name="Walker" parent="." unique_id=1321293412 instance=ExtResource("2_jyhfs")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
+transform = Transform3D(1.9, 0, 0, 0, 1.9, 0, 0, 0, 1.9, 0, 0.05, 0)
 
 [node name="HUD" parent="." unique_id=291533515 instance=ExtResource("3_tbgi4")]
 
 [node name="Enemies" type="Node3D" parent="." unique_id=808641896]
 
 [node name="Scout00" parent="Enemies" unique_id=1302323479 instance=ExtResource("4_jyhfs")]
-transform = Transform3D(-0.87883556, 0, 0.47712478, 0, 1, 0, -0.47712478, 0, -0.87883556, -17, 0.05, 26)
+transform = Transform3D(-0.7997404, 0, 0.43418357, 0, 0.91, 0, -0.43418357, 0, -0.7997404, -17, 0.05, 26)
 
 [node name="Scout01" parent="Enemies" unique_id=294270374 instance=ExtResource("4_jyhfs")]
-transform = Transform3D(-0.38628912, 0, -0.92237777, 0, 1, 0, 0.92237777, 0, -0.38628912, -11, 0.05, 26)
+transform = Transform3D(-0.35152313, 0, -0.8393638, 0, 0.91, 0, 0.8393638, 0, -0.35152313, -11, 0.05, 26)
 
 [node name="Scout02" parent="Enemies" unique_id=190617878 instance=ExtResource("4_jyhfs")]
-transform = Transform3D(-0.73648304, 0, 0.676456, 0, 1, 0, -0.676456, 0, -0.73648304, -5, 0.05, 26)
+transform = Transform3D(-0.6701996, 0, 0.61557496, 0, 0.91, 0, -0.61557496, 0, -0.6701996, -5, 0.05, 26)
 
 [node name="Scout03" parent="Enemies" unique_id=1513251386 instance=ExtResource("4_jyhfs")]
-transform = Transform3D(-0.9748954, 0, -0.22266313, 0, 1, 0, 0.22266313, 0, -0.9748954, 1, 0.05, 26)
+transform = Transform3D(-0.8871549, 0, -0.20262352, 0, 0.91, 0, 0.20262352, 0, -0.8871549, 1, 0.05, 26)
 
 [node name="Scout04" parent="Enemies" unique_id=1513016862 instance=ExtResource("4_jyhfs")]
-transform = Transform3D(0.7182085, 0, -0.69582796, 0, 1, 0, 0.69582796, 0, 0.7182085, -17, 0.05, 32)
+transform = Transform3D(0.65356976, 0, -0.63320345, 0, 0.91, 0, 0.63320345, 0, 0.65356976, -17, 0.05, 32)
 
 [node name="Scout05" parent="Enemies" unique_id=474208146 instance=ExtResource("4_jyhfs")]
-transform = Transform3D(0.94660497, 0, -0.32239577, 0, 1, 0, 0.32239577, 0, 0.94660497, -11, 0.05, 32)
+transform = Transform3D(0.86141056, 0, -0.29338017, 0, 0.91, 0, 0.29338017, 0, 0.86141056, -11, 0.05, 32)
 
 [node name="Scout06" parent="Enemies" unique_id=891025111 instance=ExtResource("4_jyhfs")]
-transform = Transform3D(-0.6678235, 0, -0.7443197, 0, 1, 0, 0.7443197, 0, -0.6678235, -5, 0.05, 32)
+transform = Transform3D(-0.6077195, 0, -0.6773308, 0, 0.91, 0, 0.6773308, 0, -0.6077195, -5, 0.05, 32)
 
 [node name="Scout07" parent="Enemies" unique_id=1950056542 instance=ExtResource("4_jyhfs")]
-transform = Transform3D(0.96135765, 0, -0.2753024, 0, 1, 0, 0.2753024, 0, 0.96135765, 1, 0.05, 32)
+transform = Transform3D(0.8748355, 0, -0.25052524, 0, 0.91, 0, 0.25052524, 0, 0.8748355, 1, 0.05, 32)
 
 [node name="Scout08" parent="Enemies" unique_id=476192048 instance=ExtResource("4_jyhfs")]
-transform = Transform3D(-0.9975345, 0, 0.070177436, 0, 1, 0, -0.070177436, 0, -0.9975345, -17, 0.05, 38)
+transform = Transform3D(-0.90775645, 0, 0.06386147, 0, 0.91, 0, -0.06386147, 0, -0.90775645, -17, 0.05, 38)
 
 [node name="Scout09" parent="Enemies" unique_id=1117416705 instance=ExtResource("4_jyhfs")]
-transform = Transform3D(-0.46119034, 0, -0.8873012, 0, 1, 0, 0.8873012, 0, -0.46119034, -11, 0.05, 38)
+transform = Transform3D(-0.41968337, 0, -0.8074441, 0, 0.91, 0, 0.8074441, 0, -0.41968337, -11, 0.05, 38)
 
 [node name="Scout10" parent="Enemies" unique_id=2053459202 instance=ExtResource("4_jyhfs")]
-transform = Transform3D(-0.8971853, 0, -0.44165424, 0, 1, 0, 0.44165424, 0, -0.8971853, -5, 0.05, 38)
+transform = Transform3D(-0.8164387, 0, -0.40190542, 0, 0.91, 0, 0.40190542, 0, -0.8164387, -5, 0.05, 38)
 
 [node name="Scout11" parent="Enemies" unique_id=123278841 instance=ExtResource("4_jyhfs")]
-transform = Transform3D(0.19125634, 0, -0.98154014, 0, 1, 0, 0.98154014, 0, 0.19125634, 1, 0.05, 38)
+transform = Transform3D(0.17404333, 0, -0.89320153, 0, 0.91, 0, 0.89320153, 0, 0.17404333, 1, 0.05, 38)

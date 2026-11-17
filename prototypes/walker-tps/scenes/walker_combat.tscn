@@ -3,56 +3,92 @@
 [ext_resource type="Script" path="res://scripts/walker_combat.gd" id="1_dr7ih"]
 [ext_resource type="Script" path="res://scripts/grapple.gd" id="2_kbv3k"]
 [ext_resource type="PackedScene" path="res://scenes/auto_blades.tscn" id="2_pucva"]
+[ext_resource type="PackedScene" path="res://scenes/muzzle_flash.tscn" id="3_51cwe"]
+[ext_resource type="Script" path="res://addons/proto_kit/time_control.gd" id="5_v3tom"]
+[ext_resource type="Script" path="res://addons/proto_kit/debris3d.gd" id="6_q3j23"]
+[ext_resource type="Texture2D" path="res://assets/vfx/smoke.png" id="7_pr2x7"]
+[ext_resource type="AudioStream" path="res://assets/sound/runtime/mech_contact.ogg" id="8_q3j23"]
+[ext_resource type="AudioStream" path="res://assets/sound/runtime/shell_drop.ogg" id="9_pr2x7"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pucva"]
-shading_mode = 0
-albedo_color = Color(0.35, 0.85, 0.95, 1)
+albedo_color = Color(0.2, 0.21, 0.22, 1)
+metallic = 0.9
+roughness = 0.35
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_kbv3k"]
-top_radius = 0.025
-bottom_radius = 0.025
+top_radius = 0.035
+bottom_radius = 0.035
 height = 1.0
 radial_segments = 6
+rings = 1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_51cwe"]
-shading_mode = 0
-albedo_color = Color(0.8, 0.95, 1, 1)
+albedo_color = Color(0.14, 0.14, 0.15, 1)
+metallic = 0.85
+roughness = 0.45
 
-[sub_resource type="SphereMesh" id="SphereMesh_31fbe"]
-radius = 0.18
-height = 0.36
-radial_segments = 8
-rings = 4
+[sub_resource type="CylinderMesh" id="SphereMesh_31fbe"]
+top_radius = 0.0
+bottom_radius = 0.26
+height = 0.6
+radial_segments = 4
+rings = 1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_61u1t"]
-shading_mode = 0
-albedo_color = Color(0.35, 0.85, 0.95, 1)
+albedo_color = Color(0.2, 0.21, 0.22, 1)
+metallic = 0.9
+roughness = 0.35
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_v3tom"]
-top_radius = 0.025
-bottom_radius = 0.025
+top_radius = 0.035
+bottom_radius = 0.035
 height = 1.0
 radial_segments = 6
+rings = 1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q3j23"]
-shading_mode = 0
-albedo_color = Color(0.8, 0.95, 1, 1)
+albedo_color = Color(0.14, 0.14, 0.15, 1)
+metallic = 0.85
+roughness = 0.45
 
-[sub_resource type="SphereMesh" id="SphereMesh_pr2x7"]
-radius = 0.18
-height = 0.36
-radial_segments = 8
-rings = 4
+[sub_resource type="CylinderMesh" id="SphereMesh_pr2x7"]
+top_radius = 0.0
+bottom_radius = 0.26
+height = 0.6
+radial_segments = 4
+rings = 1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eoy7k"]
-shading_mode = 0
-albedo_color = Color(1, 0.8, 0.3, 1)
+albedo_color = Color(0.78, 0.58, 0.22, 1)
+metallic = 0.85
+roughness = 0.35
 
-[sub_resource type="SphereMesh" id="SphereMesh_236dv"]
-radius = 0.4
-height = 0.8
-radial_segments = 8
-rings = 4
+[sub_resource type="CylinderMesh" id="CylinderMesh_236dv"]
+material = SubResource("StandardMaterial3D_eoy7k")
+top_radius = 0.07
+bottom_radius = 0.08
+height = 0.34
+radial_segments = 6
+rings = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_thgj5"]
+albedo_color = Color(0.22, 0.23, 0.24, 1)
+metallic = 0.7
+roughness = 0.55
+
+[sub_resource type="BoxMesh" id="BoxMesh_imtnb"]
+material = SubResource("StandardMaterial3D_thgj5")
+size = Vector3(0.32, 0.12, 0.22)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jy7ls"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.05, 0.04, 0.03, 0.85)
+albedo_texture = ExtResource("7_pr2x7")
+
+[sub_resource type="QuadMesh" id="QuadMesh_a4tk3"]
+material = SubResource("StandardMaterial3D_jy7ls")
+orientation = 1
 
 [node name="Combat" type="Node3D" unique_id=966660870]
 script = ExtResource("1_dr7ih")
@@ -92,14 +128,46 @@ material_override = SubResource("StandardMaterial3D_q3j23")
 cast_shadow = 0
 mesh = SubResource("SphereMesh_pr2x7")
 
-[node name="MuzzleFlash" type="MeshInstance3D" parent="." unique_id=1867319944]
+[node name="HookSound" type="AudioStreamPlayer3D" parent="Grapple" unique_id=718707825]
+unit_size = 12.0
+max_distance = 80.0
+bus = &"Weapons"
+
+[node name="MuzzleFlash" parent="." unique_id=698972088 instance=ExtResource("3_51cwe")]
 top_level = true
-visible = false
-material_override = SubResource("StandardMaterial3D_eoy7k")
-cast_shadow = 0
-mesh = SubResource("SphereMesh_236dv")
 
 [node name="ShotSound" type="AudioStreamPlayer3D" parent="." unique_id=853997911]
 bus = &"Weapons"
 
 [node name="AutoBlades" parent="." unique_id=541706990 instance=ExtResource("2_pucva")]
+
+[node name="TimeControl" type="Node" parent="." unique_id=969378513 groups=["time_control"]]
+process_mode = 3
+script = ExtResource("5_v3tom")
+
+[node name="Shells" type="MultiMeshInstance3D" parent="." unique_id=1660510628 groups=["debris_shells"]]
+script = ExtResource("6_q3j23")
+piece_mesh = SubResource("CylinderMesh_236dv")
+capacity = 80
+
+[node name="Parts" type="MultiMeshInstance3D" parent="." unique_id=93864795 groups=["debris_parts"]]
+script = ExtResource("6_q3j23")
+piece_mesh = SubResource("BoxMesh_imtnb")
+capacity = 60
+
+[node name="Stains" type="MultiMeshInstance3D" parent="." unique_id=1760815810 groups=["debris_stains"]]
+script = ExtResource("6_q3j23")
+piece_mesh = SubResource("QuadMesh_a4tk3")
+capacity = 40
+
+[node name="ReloadSound" type="AudioStreamPlayer3D" parent="." unique_id=701893520]
+stream = ExtResource("8_q3j23")
+volume_db = -4.0
+bus = &"Weapons"
+
+[node name="ShellSound" type="AudioStreamPlayer3D" parent="." unique_id=1121025855]
+stream = ExtResource("9_pr2x7")
+unit_size = 4.0
+max_distance = 30.0
+max_polyphony = 6
+bus = &"Impacts"

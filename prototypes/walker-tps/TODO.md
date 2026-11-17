@@ -99,3 +99,9 @@
 https://sketchfab.com/3d-models/lowe-86-96027bc691ed4894a1d21108e1a51d44
 https://sketchfab.com/3d-models/juggernaut-86-eighty-six-1f4d04b7d1154b63ba27ab21702fcffe
 https://www.reddit.com/r/gamedev/comments/1m76pm4/the_ultimate_free_game_dev_asset_list_50_sites/
+
+要你決定：地圖大小
+- 地圖只有約 240 × 220 m，所以 Boss 幾乎和整張地圖一樣長。
+- 我先把 Boss 放到地圖遠端、面向你，尾巴會伸出地圖外。
+- 截圖看起來是一隻巨獸壓在整個戰場上；追尾鏡頭裡 Boss 佔滿上半個畫面。
+- 要不要把地圖放大、放大多少，由你決定。

@@ -41,9 +41,9 @@ const WALK_ANIM_SPEED := 1.6
 ## 0 shoots where the player is, 1 where a steady player will be when the round arrives.
 @export var lead_accuracy: float = 0.7
 ## Random miss (m) around the aim point.
-@export var aim_spread: float = 0.6
+@export var aim_spread: float = 1.3
 @export var shot_damage: float = 8.0
-@export var shot_speed: float = 36.0
+@export var shot_speed: float = 72.0
 ## Telegraph (the red warning) before the first shot of a burst.
 @export var windup_time: float = 0.8
 @export var burst_count: int = 1
@@ -71,15 +71,17 @@ var player: CharacterBody3D
 var last_seen := Vector3.ZERO
 var charge := 0.0
 var fire_wait := 1.8
-var hit_flash := 0.0
 var pull_left := 0.0
 var pull_velocity := Vector3.ZERO
+## Hit knockback (m/s), decays fast; applied before the AI moves, heavier units budge less.
+var knock_velocity := Vector3.ZERO
 var path_wait := 0.0
 var age := 0.0
 var ai_enabled := true
 @onready var agent: NavigationAgent3D = $NavigationAgent
 
 var _gun_next := 0
+var _step_left := 0.0
 var _radio_wait := 2.0
 var _state_time := 0.0
 var _sees := false
@@ -130,7 +132,7 @@ func _physics_process(delta: float) -> void:
 		else:
 			var dir := to.normalized()
 			rotation.y = rotate_toward(rotation.y, atan2(dir.x, dir.z), deg_to_rad(turn_speed_deg) * delta)
-			var fwd := global_basis.z  # model front is +Z
+			var fwd := global_basis.z.normalized()  # model front is +Z (the root is scaled)
 			flat = fwd * speed * clampf(fwd.dot(dir), 0.0, 1.0)  # turn on the spot, then walk
 	velocity.x = flat.x
 	velocity.z = flat.z
@@ -148,30 +150,44 @@ func _pick_target() -> void:
 ## from_direction: the way the hit travelled (a round's direction), so the scout knows where it came from.
 func apply_damage(amount: float, _hit_position: Vector3 = Vector3.ZERO, from_direction: Vector3 = Vector3.ZERO) -> void:
 	if dead: return
-	if from_direction != Vector3.ZERO and from_direction.normalized().dot(global_basis.z) > 0.5:
+	if from_direction != Vector3.ZERO and from_direction.normalized().dot(global_basis.z.normalized()) > 0.5:
 		amount *= rear_multiplier
 	health=maxf(0,health-amount)
-	hit_flash=0.15
 	if health<=0:
-		_die()
+		_die(from_direction)
 		return
+	# Readable hit: white flash + squash + recoil on the model (every damage source).
+	$HitReact.react(from_direction, 1.0)
 	if combat_enabled and state in [State.PATROL, State.SEARCH]:
 		# Shot from somewhere it cannot see: search back along the round's path.
 		last_seen = global_position - from_direction.normalized() * 25.0 if from_direction != Vector3.ZERO \
 			else (player.global_position if is_instance_valid(player) else global_position)
 		_begin_search()
 
-func _die() -> void:
+## A real shove from gunfire (projectiles call it; melee does not, or it would push the
+## target out of the blades' reach). Heavier units budge less.
+func knockback(direction: Vector3, strength: float = 1.0) -> void:
+	var push := Vector3(direction.x, 0.0, direction.z)
+	if dead or push.length() < 0.01: return
+	knock_velocity += push.normalized() * 6.0 * strength / maxf(1.0, mass / 3.0)
+
+func _die(from_direction: Vector3 = Vector3.ZERO) -> void:
 	dead=true
 	_enter(State.DEAD)
 	collision_layer=0
 	collision_mask=0
 	_anim.stop()
-	$Model.rotation.z=0.8
-	$Model.position.y=-0.35
+	# The last hit is the biggest: freeze (kill_feedback), then the wreck is thrown and tumbles.
+	get_tree().call_group("combat_feedback", "kill_feedback", 1.0)
+	var away := Vector3(from_direction.x, 0.0, from_direction.z).normalized() if from_direction.length() > 0.01 else -global_basis.z.normalized()
+	$HitReact.throw(away * 9.0 + Vector3.UP * 8.0, Vector3(randf_range(-9, 9), randf_range(-4, 4), randf_range(-9, 9)))
+	var parts := get_tree().get_first_node_in_group("debris_parts")
+	if parts:
+		for i in 6: parts.spawn(global_position + Vector3.UP * 1.2, (away + Vector3(randf_range(-1, 1), 0, randf_range(-1, 1))).normalized() * randf_range(5.0, 10.0) + Vector3.UP * randf_range(5.0, 9.0), randf_range(0.8, 1.5))
+	var stains := get_tree().get_first_node_in_group("debris_stains")
+	if stains: stains.stamp(global_position, 2.6)
 	$Status.visible=false
 	$Warning.visible=false
-	$HitFlash.visible=false
 	var effect := Impact.instantiate() as Node3D
 	effect.radius=3.0
 	var session := get_tree().get_first_node_in_group("battle_session")
@@ -205,7 +221,7 @@ func _check_sight() -> bool:
 	var to := player.global_position-global_position
 	to.y=0
 	if state in [State.PATROL, State.SEARCH] and to.length()>close_sense_range \
-			and global_basis.z.dot(to.normalized())<cos(deg_to_rad(view_half_angle_deg)):
+			and global_basis.z.normalized().dot(to.normalized())<cos(deg_to_rad(view_half_angle_deg)):
 		return false
 	return sees_player()
 
@@ -230,9 +246,10 @@ static func intercept_point(shooter: Vector3, target: Vector3, target_velocity: 
 
 func combat_step(delta: float) -> void:
 	age+=delta
-	hit_flash=maxf(0,hit_flash-delta)
-	$HitFlash.visible=hit_flash>0
 	$Warning.visible=false
+	if knock_velocity.length_squared() > 0.01:
+		move_and_collide(knock_velocity * delta)
+		knock_velocity = knock_velocity.move_toward(Vector3.ZERO, 30.0 * delta)
 	if pull_left>0:
 		pull_left-=delta
 		velocity=pull_velocity
@@ -388,7 +405,7 @@ func _aim_and_fire(delta: float) -> void:
 			_burst_wait=burst_gap
 			if _burst_left==0: _after_burst()
 		return
-	if fire_wait>0 or global_basis.z.dot(to.normalized())<=0.92:
+	if fire_wait>0 or global_basis.z.normalized().dot(to.normalized())<=0.92:
 		charge=0
 		return
 	charge+=delta
@@ -427,7 +444,7 @@ func shoot() -> void:
 	var bullet := Projectile.instantiate() as Node3D
 	session.get_node("Projectiles").add_child(bullet)
 	bullet.global_position=global_position+Vector3.UP*1.65+global_basis.z*0.6
-	var target := player.global_position+Vector3.UP*1.1
+	var target := player.global_position+Vector3.UP*1.3*player.scale.y  # centre of the hull capsule
 	var moving := player.velocity
 	moving.y*=0.3  # a jump's rise and fall is hard to predict; lead mostly on the ground plane
 	var lead := intercept_point(bullet.global_position,target,moving,shot_speed)-target
@@ -447,3 +464,9 @@ func _play_walk(flat: Vector3) -> void:
 	var want := "walk" if moving else "idle"
 	if _anim.current_animation!=want: _anim.play(want,0.2)
 	_anim.speed_scale=maxf(flat.length()/WALK_ANIM_SPEED,0.3) if moving else 1.0
+	if moving:  # two footfall crunches per walk cycle, light and high (the Boss plays the same one low)
+		_step_left-=get_physics_process_delta_time()*_anim.speed_scale
+		if _step_left<=0.0:
+			_step_left=_anim.get_animation("walk").length*0.5
+			$StepSound.pitch_scale=_rng.randf_range(1.35,1.6)
+			$StepSound.play()

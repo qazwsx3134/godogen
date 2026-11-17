@@ -61,6 +61,9 @@
 - **測試把障礙物（scout）擺在機體正下方，量到的是「機體站到障礙物上」而不是要測的落腳點**（2026-11-12，walker-tps）→ 機體的碰撞體會站上去、整台被墊高；要測「這一點的地面在哪」，把障礙物放在機體旁邊，直接呼叫查詢函式（`gait._ground()`），並用改動前的程式跑一次確認測試會失敗。
 - **測試寫死「按住前進 N 幀」，調快移動速度後走過頭、掉下平台，量到的滑動是掉落造成的**（2026-11-12，walker-tps）→ 按住的時間用距離除以 `max_speed` 換算；調速度前先在暫存複本跑一次相關測試。
 - **網頁冒煙測試偶爾在 `page.screenshot` 逾時 30 秒、卡在「waiting for fonts to load」**（2026-11-12，mortal-city）→ 頁面用 Google Fonts 時是網路偶發，重跑就過；判定失敗前先看是不是這個錯誤，要穩定可以把字型放進 repo 或截圖時傳 `timeout` 加長。（[mortal-city PROGRESS](mortal-city/PROGRESS.md)）
+- **測試裡 Boss 莫名跑到玩家位置、站在玩家頭上**（2026-11-17，walker-tps）→ `add_child` 後才設 `global_position`，物理會先在原點跑一格，兩個 CharacterBody3D 重疊，之後一方把另一方當移動地板載走；進樹前先設 `position`／`rotation`，並斷言位置沒漂。（[test_boss_scene.gd](walker-tps/tests/test_boss_scene.gd)）
+- **加了擊殺 hit stop 後，headless 測試「擊殺後等 N 幀」開始失敗**（2026-11-17，walker-tps）→ hit stop 用牆鐘，headless 一秒跑上千幀，幾百幀都落在 `Engine.time_scale = 0.05` 的停頓裡；擊殺後先 `OS.delay_msec(300)` 再數幀。（[gun-juice](godot-kit/skills/gun-juice/SKILL.md#坑)）
+- **命中擊退讓近戰自動刀片殺不死目標**（2026-11-17，walker-tps）→ 擊退寫在 `apply_damage` 裡，刀片每刀都把目標推出攻擊範圍；擊退做成獨立的 `knockback()`，只讓槍彈呼叫。
 
 ## Scene、UI 與 Godot API
 
@@ -104,6 +107,9 @@
 - **同一個專案要同時支援直式與橫式，不想複製整份 scene**（2026-11-12，debt-commission）→ 執行時改 `get_window().content_scale_size`（1920×1080 ↔ 1080×1920，`project.godot` 不動）；用 Container 與比例 anchor 排的面板兩邊共用，放不下的 node 在 `metadata/portrait_layout` 寫直式屬性，切換時套用並記住原值；`get_tree().node_added` 讓執行時才實例化的 scene 也套到。另注意窄螢幕放大觸控目標的係數（例如 ×1.15）在直式會把最小寬度撐出畫面，要用面板的 `get_combined_minimum_size()` 封頂。（[debt-commission README「直式與橫式」](debt-commission/README.md#直式與橫式)）
 - **轉場 shader 的最後一格整片黑**（2026-11-12，debt-commission）→ `pow(sin(PI * progress), n)` 在 progress=1 時 `sin` 是 -8.7e-8，負數取 `pow` 得 NaN，整格變黑；`pow` 的底數先 `max(…, 0.0)`。要讓轉場同時動到新畫面，殘影的 shader 用 `hint_screen_texture` 讀它底下已畫好的新背景（Compatibility 渲染器也支援）。
 - **面板開在另一個面板「之上」卻被蓋住，或畫在上面卻點不到**（2026-11-13，debt-commission）→ 繪製看 `z_index`，點擊判定看節點順序（後面的兄弟先拿到）；兩者不一致就會「看得到點不到」或「點得到看不到」。新面板放在點擊順序正確的位置，再用 `z_index` 補繪製順序，測試同時檢查兩者（`test_settings`）。
+- **headless 產生器存出的 MultiMesh 實例全是原點、AABB 為 0**（2026-11-17，walker-tps）→ dummy 渲染器不保存 MultiMesh buffer，存檔時就遺失；建 MultiMesh 的產生器改用 `xvfb-run -a godot --path . --script …`（不加 `--headless`），存完 grep `buffer =` 確認。（[build_vfx.gd](walker-tps/tools/build_vfx.gd)）
+- **3D 特效放大了卻沒變大**（2026-11-16，walker-tps）→ world-space（`local_coords=false`）GPU 粒子不吃父節點 scale；`Curve` 預設 max 1 會把放大曲線截斷，要設 `max_value`；`BILLBOARD_ENABLED` 的材質要開 `billboard_keep_scale` 才吃節點縮放。（[開火與爆炸特效](walker-tps/README.md#開火與爆炸特效)）
+- **additive 特效在白色機體或淡色天空前看不見**（2026-11-16，walker-tps）→ 沒開 glow 時 additive 疊在亮底上只會變白；要在亮底前讀得到的蓄力光、光纖改用 alpha 混合＋飽和色。
 
 ## 匯出與網頁版
 

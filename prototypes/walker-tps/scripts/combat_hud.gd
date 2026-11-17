@@ -17,20 +17,22 @@ func _action() -> void:
 func _process(_delta: float) -> void:
 	hurt_left=maxf(0,hurt_left-_delta)
 	$DamageFlash.visible=hurt_left>0
-	$Status.text="HULL %d / %d   |   SCOUTS %d / %d   |   %02d:%02d"%[combat.health,combat.max_health,session.kills,session.total,int(session.time_left)/60,int(session.time_left)%60]
-	$Weapon.text=("CANNON READY" if combat.reload_left<=0 else "RELOAD %.1fs"%combat.reload_left)+"   |   HOOK: "+combat.grapple.message+(" %.1fs"%combat.grapple.cooldown_left if combat.grapple.cooldown_left>0 else "")
+	$Status.text="HULL %d / %d   |   %s %d / %d   |   %02d:%02d"%[combat.health,combat.max_health,session.objective_name,session.kills,session.total,int(session.time_left)/60,int(session.time_left)%60]
+	$Weapon.text=("RELOADING %.1fs"%combat.magazine_left if combat.magazine_left>0 else "AMMO %d / %d"%[combat.ammo,combat.magazine_size])+"   |   HOOK: "+combat.grapple.message+(" %.1fs"%combat.grapple.cooldown_left if combat.grapple.cooldown_left>0 else "")
 	var blades: Node = combat.get_node("AutoBlades")
 	$Weapon.text+=" | BLADES "+("AUTO" if blades.cooldown_left<=0 else "%.1fs"%blades.cooldown_left)
 	var playing: bool = session.match_state=="playing"
 	$Modal.visible=not playing
 	$Controls.visible=playing and DisplayServer.is_touchscreen_available()
-	$Crosshair.visible=playing
-	$GunReticle.visible=playing and not camera.is_position_behind(combat.gun_point)
+	var sights: bool = playing and not get_tree().has_group("death_show")  # a Boss death show is a cutscene
+	$Crosshair.visible=sights
+	$GunReticle.visible=sights and not camera.is_position_behind(combat.gun_point)
 	if $GunReticle.visible: $GunReticle.position=camera.unproject_position(combat.gun_point)-Vector2(10,10)
 	if not playing:
 		var briefing: bool = session.match_state=="briefing"
 		$Modal/Panel/Margin/Rows/Title.text="GREEN RUST / SORTIE" if briefing else ("MISSION COMPLETE" if session.match_state=="victory" else "MISSION FAILED")
-		$Modal/Panel/Margin/Rows/Description.text="Destroy 3 scouts. Twin grapples reel light targets in; terrain and heavy targets pull you forward.\nLMB fire / RMB aim / G grapple / Q aim toggle\nShift boost / Space jump / Enter deploy" if briefing else "Scouts destroyed: %d / %d\nPress R or RETRY to return to briefing."%[session.kills,session.total]
+		var objective := "Destroy the Boss and 3 scouts." if session.objective_name == "TARGETS" else "Destroy 3 scouts."
+		$Modal/Panel/Margin/Rows/Description.text=objective+" Twin grapples reel light targets in; terrain and heavy targets pull you forward.\nLMB fire / RMB aim / G grapple / Q aim toggle\nShift boost / Space jump / Enter deploy" if briefing else "Targets destroyed: %d / %d\nPress R or RETRY to return to briefing."%[session.kills,session.total]
 		$Modal/Panel/Margin/Rows/Action.text="DEPLOY" if briefing else "RETRY"
 
 var fire_finger := -1

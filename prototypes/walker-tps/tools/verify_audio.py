@@ -32,6 +32,6 @@ def verify():
         assert ignored(original),(original,'raw original would enter Git')
         if original.exists(): assert hashlib.sha256(original.read_bytes()).hexdigest()==record['source_sha256'],original
         total+=len(data)
-    assert total==manifest['runtime_total_bytes'] and total<250000,total
+    assert total==manifest['runtime_total_bytes'] and total<320000  # 18 clips,total
     print('AUDIO_ASSETS PASSED:',len(manifest['files']),'mono Vorbis clips,',total,'bytes; originals ignored and unchanged.')
 if __name__=='__main__': verify()

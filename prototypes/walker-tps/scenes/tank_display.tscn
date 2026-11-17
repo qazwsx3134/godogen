@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" path="res://assets/armor/tank.glb" id="2_5dkvr"]
 
 [node name="Tank" type="Node3D" unique_id=516428362]
+transform = Transform3D(1.67, 0, 0, 0, 1.67, 0, 0, 0, 1.67, 0, 0, 0)
 script = ExtResource("1_c7j0f")
 
 [node name="Model" parent="." unique_id=989521733 instance=ExtResource("2_5dkvr")]

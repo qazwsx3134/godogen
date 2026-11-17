@@ -25,7 +25,7 @@ func _run() -> void:
 	var mesh := mesh_node.mesh
 	var rig := rigs[0] as Skeleton3D
 	var player := players[0] as AnimationPlayer
-	if mesh == null or mesh.get_surface_count() != 1 or rig.get_bone_count() != 11:
+	if mesh == null or mesh.get_surface_count() != 1 or rig.get_bone_count() != 55:
 		printerr("FAILED: wrong mesh surfaces or bone count")
 		quit(1)
 		return
@@ -37,7 +37,7 @@ func _run() -> void:
 	var weights: PackedFloat32Array = arrays[Mesh.ARRAY_WEIGHTS]
 	var bones: PackedInt32Array = arrays[Mesh.ARRAY_BONES]
 	var tris: int = indices.size() / 3
-	if tris != 24476:
+	if tris != 24728:
 		errors.append("unexpected triangle count %d" % tris)
 	if vertices.size() != uvs.size() or vertices.size() != normals.size():
 		errors.append("missing UVs or normals")
@@ -75,7 +75,7 @@ func _run() -> void:
 	for name in expected_bones:
 		if rig.find_bone(name) < 0:
 			errors.append("missing bone " + name)
-	for name in ["idle", "fly", "fire"]:
+	for name in ["idle", "fly", "fire", "walk"]:
 		if not player.has_animation(name):
 			errors.append("missing clip " + name)
 	print("MODEL triangles=%d vertices=%d bones=%d clips=%s aabb=%s" % [tris, vertices.size(), rig.get_bone_count(), player.get_animation_list(), mesh.get_aabb()])
