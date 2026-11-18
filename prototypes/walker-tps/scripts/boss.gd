@@ -40,7 +40,7 @@ const TUNED_SCALE := 1.35
 const CANNON_PIVOT := Vector3(0.0, 5.91, 0.05)  # model is lowered 1.14 m in boss.tscn
 ## Strand roots on the wings, in Boss space.
 const WING_ROOTS := [Vector3(-6.0, 13.0, -4.0), Vector3(0.0, 15.0, -4.5), Vector3(6.0, 13.0, -4.0)]
-const CANNON_LENGTH := 2.7
+const CANNON_LENGTH := 2.62  # distance from the imported Cannon bone to the bore
 var health: float
 var mass := 100.0
 var team := "enemy"
@@ -66,6 +66,8 @@ var _slam_side := 1.0
 var _slam_hit := false
 var _player: CharacterBody3D
 var _anim: AnimationPlayer
+var _skeleton: Skeleton3D
+var _cannon_bone := -1
 var _death_left := 0.0
 var _k := 1.0
 var _greeted := false
@@ -100,11 +102,12 @@ func _ready() -> void:
 			library.add_animation(pair[1], animation)
 		_anim.add_animation_library("ground", library)
 		_anim.play("ground/idle")
-	var skeleton := _model.find_child("Skeleton3D", true, false) as Skeleton3D
-	if skeleton:
+	_skeleton = _model.find_child("Skeleton3D", true, false) as Skeleton3D
+	if _skeleton:
+		_cannon_bone = _skeleton.find_bone("Cannon")
 		var modifier := TailModifier.new()
 		modifier.boss = self
-		skeleton.add_child(modifier)
+		_skeleton.add_child(modifier)
 	_beam.visible = false
 	cannon_dir = _facing().z
 	_update_status()
@@ -124,6 +127,7 @@ func _physics_process(delta: float) -> void:
 		velocity.x = 0.0
 		velocity.z = 0.0
 		move_and_slide()
+		_crush_cover(delta)
 		return
 	if state == State.CHASE:
 		_chase(delta)
@@ -132,6 +136,7 @@ func _physics_process(delta: float) -> void:
 		velocity.z = 0.0
 		_attack_step(delta)
 	move_and_slide()
+	_crush_cover(delta)
 	if _anim and state == State.CHASE:
 		var speed := Vector2(velocity.x, velocity.z).length()
 		var animation := "ground/crawl" if speed > 0.2 else "ground/idle"
@@ -144,6 +149,18 @@ func _physics_process(delta: float) -> void:
 				_step_left = _anim.get_animation("ground/crawl").length * 0.5
 				$StepSound.pitch_scale = randf_range(0.5, 0.6)
 				$StepSound.play()
+
+## The hull can sweep through props without standing on top of them.
+func _crush_cover(delta: float) -> void:
+	var hull: CollisionShape3D = $Body
+	var query := PhysicsShapeQueryParameters3D.new()
+	query.shape = hull.shape
+	query.transform = hull.global_transform.translated(velocity * delta + Vector3.DOWN)
+	query.collision_mask = Layers.BREAKABLE_COVER
+	for hit: Dictionary in get_world_3d().direct_space_state.intersect_shape(query, 32):
+		var cover: Node3D = hit.collider
+		cover.break_cover(cover.global_position)
+
 
 func _chase(delta: float) -> void:
 	var to := _player.global_position - global_position
@@ -217,11 +234,11 @@ func _attack_step(delta: float) -> void:
 	match state:
 		State.BEAM_CHARGE:
 			var t := clampf(1.0 - _state_left / beam_charge_time, 0.0, 1.0)
-			var to := _player.global_position - global_position
-			rotation.y = rotate_toward(rotation.y, atan2(to.x, to.z), deg_to_rad(turn_speed_deg) * 0.5 * delta)
 			var locked := _state_left <= beam_lock_time
 			if not locked:
-				var aim := _player.global_position + Vector3.UP * 1.2 - to_global(CANNON_PIVOT)
+				var to := _player.global_position - global_position
+				rotation.y = rotate_toward(rotation.y, atan2(to.x, to.z), deg_to_rad(turn_speed_deg) * 0.5 * delta)
+				var aim := _player.global_position + Vector3.UP * 1.2 - _cannon_pivot()
 				cannon_dir = _turn_dir(cannon_dir, _clamp_aim(aim), cannon_turn_deg * delta)
 			_charge.global_position = _muzzle() + cannon_dir * 2.5
 			_charge.get_node("Core").scale = Vector3.ONE * lerpf(1.5, 10.0, pow(t, 1.5))
@@ -253,8 +270,8 @@ func _attack_step(delta: float) -> void:
 			_beam_tick -= delta
 			if _beam_tick <= 0.0:
 				_beam_tick = 0.22
-				if not hit.is_empty() and hit.collider == _player:
-					_player.apply_damage(9.0, hit.position, (end - from).normalized())
+				if not hit.is_empty() and (hit.collider == _player or hit.collider.has_method("break_cover")):
+					hit.collider.apply_damage(9.0, hit.position, cannon_dir)
 			_beam_impact -= delta
 			if _beam_impact <= 0.0 and not hit.is_empty():
 				_beam_impact = 0.12
@@ -349,8 +366,13 @@ func _attack_step(delta: float) -> void:
 func _facing() -> Basis:
 	return global_basis.orthonormalized()
 
+func _cannon_pivot() -> Vector3:
+	if _cannon_bone >= 0:
+		return _skeleton.to_global(_skeleton.get_bone_global_pose(_cannon_bone).origin)
+	return to_global(CANNON_PIVOT)
+
 func _muzzle() -> Vector3:
-	return to_global(CANNON_PIVOT) + cannon_dir * CANNON_LENGTH
+	return _cannon_pivot() + cannon_dir * CANNON_LENGTH * global_basis.z.length()
 
 func _beam_end() -> Vector3:
 	var from := _muzzle()

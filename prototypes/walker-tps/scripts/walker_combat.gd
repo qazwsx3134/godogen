@@ -30,6 +30,7 @@ var magazine_left := 0.0  # > 0 while swapping magazines
 var aiming := false
 var aim_toggle := false
 var aim_point := Vector3.ZERO
+var aim_distance := -1.0
 var gun_point := Vector3.ZERO
 var shot_count := 0
 @onready var body: CharacterBody3D = get_parent()
@@ -98,6 +99,7 @@ func step(delta: float) -> void:
 	var end := origin + camera.project_ray_normal(center)*160
 	var hit := ray(origin,end)
 	aim_point=hit.position if not hit.is_empty() else end
+	aim_distance = -1.0 if hit.is_empty() else origin.distance_to(aim_point)
 	grapple.step(delta, Input.is_action_just_pressed("hook"), aim_point)
 	update_aim(delta)
 	var gun_end := muzzle.global_position + muzzle.global_basis.z.normalized()*160

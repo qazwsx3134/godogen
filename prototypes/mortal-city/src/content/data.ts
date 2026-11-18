@@ -1,5 +1,5 @@
 // 原型內容：中間人、委託模板（難度 1～2＝一般委託、難度 4＝精英委託）、起始裝備、廣播。劇情委託在 cases.ts，事件在 events.ts。
-import { type Attr, type DangerOption, type Direction, type Enemy, type JobDef, streetEnemy } from '../rules/core'
+import { type Attr, type DangerOption, type Direction, type Enemy, type JobDef, type Style, streetEnemy } from '../rules/core'
 
 export interface Fixer {
   id: string
@@ -132,4 +132,15 @@ export function highDanger(job: JobDef): DangerTemplate {
       },
     ],
   }
+}
+
+
+const SHINJUKU_ELITE_REWARD: Partial<Record<string, Style>> = {
+  'force-4': 'gunslinger',
+  'hack-4': 'netrunner',
+  'stealth-4': 'nomad',
+}
+
+export function eliteRewardStyle(job: JobDef, districtIndex: number): Style | undefined {
+  return districtIndex === 0 ? SHINJUKU_ELITE_REWARD[job.id] : undefined
 }

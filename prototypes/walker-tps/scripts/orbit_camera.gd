@@ -6,6 +6,7 @@ extends Node3D
 @export var follow_rate: float = 10.0
 ## Slower vertical follow, so a jump visibly lifts the walker in the frame.
 @export var follow_rate_vertical: float = 3.5
+@export var pitch_start_deg: float = -16.0
 @export var pitch_min_deg: float = -55.0
 @export var pitch_max_deg: float = 20.0
 
@@ -30,6 +31,9 @@ func _ready() -> void:
 	var body := get_parent() as CollisionObject3D
 	_arm.add_excluded_object(body.get_rid())
 	global_position = body.global_position + Vector3.UP * height
+	pitch = deg_to_rad(pitch_start_deg)
+	rotation.y = yaw
+	_pitch.rotation.x = pitch
 	_base_fov = _camera.fov
 
 ## d.x turns right, d.y looks down (radians).

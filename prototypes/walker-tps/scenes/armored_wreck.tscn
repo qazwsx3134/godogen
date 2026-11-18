@@ -1,5 +1,7 @@
 [gd_scene format=4]
 
+[ext_resource type="Script" path="res://scripts/breakable_cover.gd" id="99_cover"]
+
 [ext_resource type="Material" path="res://materials/rusted_armor.tres" id="1_3llvr"]
 [ext_resource type="Material" path="res://materials/burnt_steel.tres" id="2_y1alc"]
 
@@ -52,6 +54,9 @@ _surfaces = [{
 [node name="ArmoredWreck" type="Node3D" unique_id=302276319]
 
 [node name="BurntHull" type="StaticBody3D" parent="." unique_id=129293217]
+collision_layer = 9
+script = ExtResource("99_cover")
+attached_visual = NodePath("../HullOvergrowth")
 transform = Transform3D(0.97437006, -0.22495106, 0, 0.22495106, 0.97437006, 0, 0, 0, 1, 0, 1.2, 0)
 
 [node name="Surface" type="MeshInstance3D" parent="BurntHull" unique_id=1713355000]
@@ -62,6 +67,8 @@ mesh = SubResource("BoxMesh_3uelx")
 shape = SubResource("BoxShape3D_3llvr")
 
 [node name="Turret" type="StaticBody3D" parent="." unique_id=337189681]
+collision_layer = 9
+script = ExtResource("99_cover")
 transform = Transform3D(0.8667253, -0.16847433, 0.46947157, 0.190809, 0.98162717, 0, -0.46084604, 0.0895794, 0.88294756, 0.3, 2.4, 0)
 
 [node name="Surface" type="MeshInstance3D" parent="Turret" unique_id=41403869]
@@ -72,6 +79,8 @@ mesh = SubResource("BoxMesh_ha68q")
 shape = SubResource("BoxShape3D_fcedj")
 
 [node name="BrokenGun" type="StaticBody3D" parent="." unique_id=1323416715]
+collision_layer = 9
+script = ExtResource("99_cover")
 transform = Transform3D(0.88294756, 0.03274868, 0.46832797, 0, 0.9975641, -0.06975647, -0.46947157, 0.061591305, 0.8807968, 1.2, 2.65, 2.5)
 
 [node name="Surface" type="MeshInstance3D" parent="BrokenGun" unique_id=1748345489]
@@ -82,6 +91,8 @@ mesh = SubResource("BoxMesh_cygeb")
 shape = SubResource("BoxShape3D_klg7d")
 
 [node name="Track" type="StaticBody3D" parent="." unique_id=1565385198]
+collision_layer = 9
+script = ExtResource("99_cover")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7, 0.5, 0)
 
 [node name="Surface" type="MeshInstance3D" parent="Track" unique_id=1618330059]
@@ -92,6 +103,8 @@ mesh = SubResource("BoxMesh_o7dn7")
 shape = SubResource("BoxShape3D_ucwmv")
 
 [node name="Track2" type="StaticBody3D" parent="." unique_id=859449609]
+collision_layer = 9
+script = ExtResource("99_cover")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7, 0.5, 0)
 
 [node name="Surface" type="MeshInstance3D" parent="Track2" unique_id=1791776129]

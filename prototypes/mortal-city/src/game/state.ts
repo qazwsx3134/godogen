@@ -74,11 +74,11 @@ import {
   poolSize,
   rollPool,
 } from '../rules/core'
-import { BEATS, storyBeats } from '../content/beats'
+import { BEATS, jobScene, jobSolutions, storyBeats } from '../content/beats'
 import { type District, type MapNode, type NodeType, STORY_LAYER, findNode, generateDistrict, reachable } from '../rules/map'
-import { FIXERS, JOBS, JOB_LINES, OPENING, STARTER_GEAR, highDanger } from '../content/data'
+import { FIXERS, JOBS, JOB_LINES, OPENING, STARTER_GEAR, eliteRewardStyle, highDanger } from '../content/data'
 import { ITEMS, SHOP_IMPLANTS, STARTER_CHOICES, clinicOrders, eliteLoot, itemLock, eventLoot, makeItem, marketPrice, marketStock, rollKind, streetLoot } from '../content/items'
-import { CASE_BY_ID, TEST_CASE, type CaseOption, type CaseRecord, type StoryCase, caseThreat, optionLock } from '../content/cases'
+import { CASE_BY_ID, TEST_CASE, type CaseOption, type CaseRecord, type StoryCase, caseLeadFee, caseThreat, optionLock } from '../content/cases'
 import { EVENT_BY_ID, type Effects, type EventOption } from '../content/events'
 import { DISTRICTS, type DistrictDef } from '../content/districts'
 import { PERKS, PERK_CASH } from '../rules/perks'
@@ -148,6 +148,7 @@ export interface LethalLog {
 /** 一個場面擲出來的結果（畫面與結算用）。 */
 export interface BeatLog {
   beat: number
+  solution?: string
   dice: number[]
   /** 決定結果的那顆（骰池 ≤0 時是低的那顆）。 */
   best?: number
@@ -426,6 +427,12 @@ export const SAFE_STRESS = 10
 /** 劇情案選項實際拿到的報酬（器材或屬性選項打折）；畫面與結案共用。 */
 export const caseReward = (o: CaseOption) => (o.needs ? Math.round(o.reward * SAFE_REWARD_RATE) : o.reward)
 
+export function casePayout(g: Game, sc: StoryCase, option: CaseOption) {
+  const gross = Math.round(caseReward(option) * Math.max(0.2, 1 - COST_PAY * (g.story.cuts ?? 0)))
+  const leadFee = Math.round(gross * caseLeadFee(sc, g.run.cases))
+  return { reward: gross - leadFee, leadFee }
+}
+
 /** 生涯結束（死亡或退休）：寫進傳奇檔案。 */
 function endCareer(g: Game, end: Legend['end'], cause: string, now: number): Game {
   const c = g.character
@@ -589,7 +596,7 @@ function closeCase(g: Game, now: number, sc: StoryCase, picked: CaseOption, outc
   const paid = (ch: Character, log: LogEvent[]) => {
     if (!pay) return
     // 場面裡選過「報酬打折」的少拿（每次 −20%，最少兩成）
-    const reward = Math.round(caseReward(picked) * Math.max(0.2, 1 - COST_PAY * (g.story.cuts ?? 0)))
+    const { reward, leadFee } = casePayout(g, sc, picked)
     ch.credits += reward
     ch.heat = Math.min(5, ch.heat + (picked.heat ?? 0))
     if (picked.needs) ch.stress += SAFE_STRESS
@@ -597,6 +604,7 @@ function closeCase(g: Game, now: number, sc: StoryCase, picked: CaseOption, outc
     const lifeline = picked.lifeline ? grantLifeline(ch, 'standard') : ''
     const parts = [
       reward ? `+${reward} 信用點${picked.needs ? '（靠器材或屬性：打七五折、名聲減半）' : ''}${g.story.cuts ? `（場面裡報酬打折 ${g.story.cuts} 次）` : ''}` : '沒有報酬',
+      leadFee ? `補線索扣抵 ¢${leadFee}` : '',
       picked.heat ? `通緝 +${picked.heat}` : '',
       picked.needs ? `神經壓力 +${SAFE_STRESS}` : '',
       picked.heal ? '傷口縫好了' : '',
@@ -645,7 +653,7 @@ function eliteSettle(g: Game, now: number, n: Extract<NodeRun, { kind: 'elite' }
       addXp(ch, job.xp, now, log)
       addFame(ch, Math.round(jobFame(job) * (opt.attrNeeds ? SAFE_FAME_RATE : RISKY_FAME_MULT)), now, log)
       // 撐過去（含重傷生還）一定掉寶（稀有表三選一）
-      offerLoot(ch, eliteLoot(hashSeed(ch.id, n.nodeId, 'loot')), log, now, highDanger(job).fight.name)
+      offerLoot(ch, eliteLoot(hashSeed(ch.id, n.nodeId, 'loot'), eliteRewardStyle(job, g.run.districtIndex)), log, now, highDanger(job).fight.name)
     },
   })
   const done = { ...r, run: { ...r.run, node: { ...n, stage: 'done' as const, outcome } } }
@@ -753,7 +761,7 @@ type Action =
   | { t: 'move'; nodeId: string }
   | { t: 'leave' }
   | { t: 'jobAutoDone' }
-  | { t: 'jobRoll'; push: boolean; gamble: boolean }
+  | { t: 'jobRoll'; push: boolean; gamble: boolean; solution?: string }
   | { t: 'jobCost'; index: number }
   | { t: 'jobFight'; tactic: Tactic }
   | { t: 'jobFightDone' }
@@ -900,7 +908,8 @@ export function reduce(g: Game, a: Action): Game {
       if (n?.kind !== 'job' || n.stage !== 'scene') return g
       const job = JOBS[n.jobId]
       const at = n.beat ?? 0
-      const beat = BEATS[job.direction][at]
+      if (a.solution && !jobSolutions(job.id, at, c).some((s) => s.id === a.solution)) return g
+      const beat = jobScene(job, at, a.solution)
       const gamble = a.gamble && c.heat < 5
       const rules = psychoRules(c)
       // 失控：場面開始前擲錯亂骰，1～2 任務中斷＋致命判定
@@ -908,7 +917,7 @@ export function reduce(g: Game, a: Action): Game {
         const d = psychoDie(hashSeed(c.id, n.nodeId, 'psycho', at))
         if (d <= PSYCHO_SCENE_ABORT) {
           const b = psychoBreak(g, now, hashSeed(c.id, n.nodeId, 'psycho-lethal', at), job.name, job.direction)
-          const entry: BeatLog = { beat: at, dice: b.roll.dice, best: b.roll.best, result: b.roll.result, psycho: [d], broke: 'abort' }
+          const entry: BeatLog = { beat: at, solution: a.solution, dice: b.roll.dice, best: b.roll.best, result: b.roll.result, psycho: [d], broke: 'abort' }
           const rows: ResultRow[] = [
             { label: '結果', value: '任務中斷（神經錯亂）', tone: 'bad' },
             { label: '錯亂骰', value: `${d}（1～${PSYCHO_SCENE_ABORT} 中斷）`, tone: 'bad' },
@@ -922,7 +931,7 @@ export function reduce(g: Game, a: Action): Game {
       // 臨界以下：硬撐之後擲錯亂骰，1＝這個場面直接失敗
       const { ch, roll, psycho: pushed, broke } = rollChecked(c, jobPool(c, job, beat.attr), a.push, gamble, hashSeed(c.id, n.nodeId, 'beat', at), hashSeed(c.id, n.nodeId, 'psycho-push', at))
       const psycho = [...(rules.sceneCheck ? [psychoDie(hashSeed(c.id, n.nodeId, 'psycho', at))] : []), ...pushed]
-      const entry: BeatLog = { beat: at, dice: roll.dice, best: roll.best, result: roll.result, ...(psycho.length ? { psycho } : {}), ...(broke ? { broke: 'fail' as const } : {}) }
+      const entry: BeatLog = { beat: at, solution: a.solution, dice: roll.dice, best: roll.best, result: roll.result, ...(psycho.length ? { psycho } : {}), ...(broke ? { broke: 'fail' as const } : {}) }
       const said: LogEvent = {
         at: now,
         kind: roll.result === 'fail' ? 'hurt' : 'job',
@@ -942,7 +951,7 @@ export function reduce(g: Game, a: Action): Game {
       // 成功但付代價：二選一
       if (n?.kind !== 'job' || n.stage !== 'cost') return g
       const job = JOBS[n.jobId]
-      const pick = BEATS[job.direction][n.beat ?? 0].costs[a.index]
+      const pick = jobScene(job, n.beat ?? 0, n.history?.at(-1)?.solution).costs[a.index]
       if (!pick) return g
       const k = realCost(c, pick.kind)
       const ch = structuredClone(c)

@@ -8,7 +8,7 @@ import { PERKS, PERK_IDS } from '../rules/perks'
 import { LAYERS, STORY_LAYER, findNode } from '../rules/map'
 import { type Action, type Game, caseLethal, eliteLethal, eventLock, initial, jobEnemy, movable, nextDistrict, nodeBusy, nodeJob, reduce } from './state'
 import { COST_PAY, CRIT_PAY, PUSH_STRESS, jobReward, perkReward, psychoRuleText, psychoRules, streetEnemy } from '../rules/core'
-import { BEATS } from '../content/beats'
+import { BEATS, jobSolutions } from '../content/beats'
 import { DISTRICTS } from '../content/districts'
 
 /** 換一個傭兵 id（每個 id 的 seed 不同）。起始三選一先跳過：手槍＋終端＋迷彩（單元測試用的固定配備）。 */
@@ -619,9 +619,12 @@ describe('story cases on the map', () => {
 
   it('a partial reward is paid and the clinic stitches you up even when you play it safe; 02 leads to the safehouse', () => {
     let g = play(fresh('s2'), CASE_01.id, 'stealth', 'hand')
-    const credits = g.character.credits
-    g = play(g, CASE_02.id, 'stealth', 'half')
-    expect(g.character.credits).toBe(credits + 400)
+    g = { ...g, character: { ...g.character, credits: 0, stress: 100 } }
+    g = reduce(atCase(g, CASE_02.id), { t: 'storyApproach', id: 'stealth' })
+    expect(g.story.stage).toBe('auto')
+    g = reduce({ ...g, story: { ...g.story, stage: 'danger' } }, { t: 'storyChoose', optionId: 'half' })
+    expect(g.character.credits).toBe(320)
+    expect(g.log.some((e) => e.text.includes('補線索扣抵 ¢80'))).toBe(true)
     expect(g.character.injury).toBe(0)
     expect(g.log.some((e) => e.text.includes('夜鴉插播'))).toBe(true)
     expect(reduce(g, { t: 'leave' })).toBe(g) // 完成單還沒收下
@@ -713,8 +716,13 @@ describe('story cases on the map', () => {
       const out = (r.run.node as Extract<NonNullable<Game['run']['node']>, { kind: 'elite' }>).outcome!.kind
       seen.add(out)
       expect(items(r)).toBe(out === 'survived' || out === 'maimed' ? 1 : 0)
+      const reward = r.character.picks.find((p) => p.kind === 'item')
+      if (reward) {
+        expect(new Set(reward.options.map((item) => item.kind)).size).toBe(3)
+        expect(reward.options.some((item) => ITEMS[item.kind ?? ""]?.style === 'netrunner')).toBe(true)
+      }
     }
-    expect(seen.has('survived') && seen.has('rescued')).toBe(true)
+    expect([...seen]).toEqual(expect.arrayContaining(['survived', 'maimed', 'rescued']))
   })
 
   it('a lethal check puts up a reveal with the same dice, until the player dismisses it', () => {
@@ -1197,5 +1205,26 @@ describe('戰術的素質判定', () => {
     expect(lock(c, strong)).toEqual({ force: false, hack: true, stealth: true })
     expect(tacticsFor(c, strong).find((t) => t.id === 'hack')!.locked).toMatch(/防火牆 4/)
     expect(lock({ ...c, attrs: { ...c.attrs, int: 4, cool: 4 } }, strong)).toEqual({ force: false, hack: false, stealth: false })
+  })
+})
+
+
+describe('Shinjuku scene solutions', () => {
+  it('uses actual equipment and cards, and keeps the basic solution available to any mercenary', () => {
+    const base = fresh('warehouse', { equipment: [], perks: {} })
+    const armor = { ...base.character, equipment: [makeItem('subdermal', 'test')] }
+    const shooter = { ...base.character, perks: { quickDraw: 1 } }
+    const ids = (c: Game['character']) => jobSolutions('force-2', 0, c).map((s) => s.id)
+    expect(ids(base.character)).toEqual([])
+    expect(ids(armor)).toEqual(['brace'])
+    expect(ids(shooter)).toEqual(['draw'])
+    expect(ids({ ...armor, perks: shooter.perks })).toEqual(['brace', 'draw'])
+
+    const g: Game = { ...base, run: { ...base.run, node: { kind: 'job', jobId: 'force-2', nodeId: 'warehouse', stage: 'scene' } } }
+    const roll: Action = { t: 'jobRoll', push: false, gamble: false }
+    expect(reduce(g, { ...roll, solution: 'draw' })).toBe(g)
+    expect(reduce(g, roll)).not.toBe(g)
+    const drawn = reduce({ ...g, character: shooter }, { ...roll, solution: 'draw' })
+    expect(drawn.run.node).toMatchObject({ history: [{ beat: 0, solution: 'draw' }] })
   })
 })

@@ -142,6 +142,8 @@ func _physics_process(delta: float) -> void:
 		combat.step(delta)
 	gait.skid = combat != null and combat.grapple.has_dash_momentum()
 	move_and_slide()
+	if flat.length() > max_speed or _dash_left > 0.0:
+		preload("res://scripts/breakable_cover.gd").crush_contacts(self)
 
 	rig.fov_add = sprint_fov_add * clampf((flat.length() - max_speed) / (sprint_speed - max_speed), 0.0, 1.0) - (18.0 if combat and combat.aiming else 0.0)
 	var speed_effect: bool = (Input.is_action_pressed("sprint") and flat.length() > max_speed) \

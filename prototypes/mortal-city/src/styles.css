@@ -48,14 +48,13 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* 桌面版外框背景；手機寬度時只看到手機殼內容 */
-.desk-bg {
-  background:
-    linear-gradient(rgba(2, 4, 8, 0.55), rgba(2, 4, 8, 0.85)),
-    url("/assets/bg_street_blur.png") center / cover no-repeat,
-    radial-gradient(ellipse at 20% 10%, #3a0d14 0%, transparent 55%),
-    radial-gradient(ellipse at 80% 90%, #06323a 0%, transparent 55%),
-    var(--color-bg);
+/* 大螢幕外框沿用遊戲街景。窄螢幕只載入遊戲內場景。 */
+.desk-bg { background: var(--color-bg); }
+@media (min-width: 1160px) {
+  .desk-bg {
+    background: linear-gradient(rgb(2 4 8 / 72%), rgb(2 4 8 / 88%)),
+      url("/assets/bg_street_blur.png") center / cover no-repeat, var(--color-bg);
+  }
 }
 
 /* 切角框：外層是框線色、內層是底色，兩層用同一個 clip-path，內層內縮 1px 形成切角細框 */
@@ -616,73 +615,14 @@ body {
   padding: 10px 10px 8px;
   overflow: hidden;
 }
-/* 四角的 HUD 括號 */
-.holo-frame::before,
-.holo-frame::after {
-  content: "";
-  position: absolute;
-  width: 18px;
-  height: 18px;
-  border: 2px solid var(--color-cyan);
-  pointer-events: none;
-}
-.holo-frame::before {
-  top: 4px;
-  left: 4px;
-  border-right: 0;
-  border-bottom: 0;
-}
-.holo-frame::after {
-  right: 4px;
-  bottom: 4px;
-  border-left: 0;
-  border-top: 0;
-}
-.holo-hud {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  padding: 2px 8px 0;
-}
-.holo-hint {
-  padding: 2px 8px 4px;
-  font-size: 12px;
-  color: var(--color-muted);
-}
-.holo-stage {
-  perspective-origin: 50% 100%;
-  pointer-events: none;
-}
-.holo-stage .holo-pin {
-  pointer-events: auto;
-}
-/* 投影桌面：往後倒，越上面（越遠）越小；網格、掃描光與雜訊都在這一層 */
+/* 街區路線下方的全息網格。 */
 .holo-plane {
   position: relative;
-  transform-origin: 50% 100%;
   background:
     linear-gradient(color-mix(in srgb, var(--color-cyan) 9%, transparent) 1px, transparent 1px) 0 0 / 100% 28px,
     linear-gradient(90deg, color-mix(in srgb, var(--color-cyan) 9%, transparent) 1px, transparent 1px) 0 0 / 28px 100%;
   border: 1px solid color-mix(in srgb, var(--color-cyan) 35%, transparent);
   box-shadow: 0 0 30px color-mix(in srgb, var(--color-cyan) 18%, transparent), inset 0 0 40px color-mix(in srgb, var(--color-cyan) 10%, transparent);
-  /* 上緣漸淡只在 Run.tsx 的 TOP_PAD（36px）空白裡，不能蓋到最上層的節點 */
-  mask-image: linear-gradient(180deg, transparent 0, #000 30px, #000 100%);
-}
-.holo-plane::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(180deg, transparent 0%, color-mix(in srgb, var(--color-cyan) 16%, transparent) 50%, transparent 100%) 0 0 / 100% 120px no-repeat;
-  animation: holo-scan 5s linear infinite;
-}
-@keyframes holo-scan {
-  from {
-    background-position: 0 -120px;
-  }
-  to {
-    background-position: 0 calc(100% + 120px);
-  }
 }
 .holo-block {
   fill: color-mix(in srgb, var(--color-cyan) 4%, transparent);
@@ -690,8 +630,8 @@ body {
   stroke-width: 1;
 }
 .holo-block-tall {
-  fill: color-mix(in srgb, #b06cff 7%, transparent);
-  stroke: color-mix(in srgb, #b06cff 22%, transparent);
+  fill: color-mix(in srgb, var(--color-cyan) 7%, transparent);
+  stroke: color-mix(in srgb, var(--color-cyan) 22%, transparent);
 }
 .holo-place {
   position: absolute;
@@ -766,13 +706,7 @@ body {
   transform: translateX(-50%);
   background: linear-gradient(0deg, var(--pin), transparent);
   box-shadow: 0 0 8px var(--pin);
-  animation: holo-beam 1.6s ease-in-out infinite;
   pointer-events: none;
-}
-@keyframes holo-beam {
-  50% {
-    opacity: 0.35;
-  }
 }
 .holo-ring {
   position: absolute;
@@ -783,18 +717,8 @@ body {
   border: 2px solid var(--pin);
   border-radius: 50%;
   transform: translate(-50%, -50%) scale(0.6);
-  animation: holo-ring 1.6s ease-out infinite;
+  opacity: 0.4;
   pointer-events: none;
-}
-@keyframes holo-ring {
-  from {
-    opacity: 0.9;
-    transform: translate(-50%, -50%) scale(0.6);
-  }
-  to {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(1.5);
-  }
 }
 .holo-label {
   margin-top: 3px;
@@ -809,16 +733,6 @@ body {
   font-weight: 700;
   color: var(--color-heading);
 }
-.holo-legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 12px;
-  padding: 6px 8px 0;
-  font-size: 11px;
-  color: var(--color-muted);
-  border-top: 1px dashed color-mix(in srgb, var(--color-line) 40%, transparent);
-}
-
 /* ---------- 城市新聞跑馬燈 ---------- */
 .news-ticker {
   display: flex;
@@ -841,12 +755,7 @@ body {
   color: var(--color-bg);
   font-size: 11px;
   font-weight: 700;
-  animation: live-blink 1.6s steps(1) infinite;
-}
-@keyframes live-blink {
-  50% {
-    opacity: 0.65;
-  }
+
 }
 .news-track {
   display: flex;
@@ -856,54 +765,6 @@ body {
 @keyframes news-scroll {
   to {
     transform: translateX(-50%);
-  }
-}
-
-/* ---------- 故障轉場：三條錯位的色帶＋閃一下 ---------- */
-.glitch-tx {
-  position: absolute;
-  inset: 0;
-  z-index: 35;
-  pointer-events: none;
-  overflow: hidden; /* 撕裂條有 translateX，不裁會撐出橫向捲動 */
-  animation: glitch-fade 0.24s steps(3) both;
-}
-.glitch-tx i {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 9%;
-  mix-blend-mode: screen;
-}
-.glitch-tx i:nth-child(1) {
-  top: 22%;
-  background: color-mix(in srgb, var(--color-red) 55%, transparent);
-  transform: translateX(-6%);
-}
-.glitch-tx i:nth-child(2) {
-  top: 48%;
-  height: 4%;
-  background: color-mix(in srgb, var(--color-cyan) 60%, transparent);
-  transform: translateX(8%);
-}
-.glitch-tx i:nth-child(3) {
-  top: 71%;
-  height: 6%;
-  background: rgba(255, 255, 255, 0.35);
-  transform: translateX(-3%);
-}
-@keyframes glitch-fade {
-  0% {
-    opacity: 1;
-    background: rgba(56, 243, 250, 0.08);
-  }
-  50% {
-    opacity: 0.8;
-    transform: translateX(4px);
-  }
-  100% {
-    opacity: 0;
-    transform: none;
   }
 }
 
@@ -955,15 +816,237 @@ body {
   background-image: repeating-linear-gradient(0deg, rgb(237 82 88 / 0.07) 0 2px, transparent 2px 4px);
 }
 
-/* 像素圖橫幅：螢幕夠高（≥700px）時固定在主畫面頂端；矮螢幕留給文字 */
-@media (min-height: 700px) {
-  .strip-sticky {
-    position: sticky;
-    top: -12px;
-    z-index: 10;
-    margin-top: -12px;
-    padding-top: 12px;
-    padding-bottom: 6px;
-    background: var(--color-bg);
+
+/* 遊戲終端：狀態、決策和導覽共用同一組邊距與光色。 */
+.terminal-desk {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-height: 100%;
+  justify-items: center;
+}
+.terminal {
+  --gutter: clamp(0.75rem, 2.3vw, 1.5rem);
+  --rail: #24434b;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 70rem;
+  min-width: 0;
+  height: 100vh;
+  height: 100dvh;
+  background: #071015;
+}
+.terminal-header {
+  display: grid;
+  grid-template: "brand tools" auto "meter meter" auto / minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.45rem 1rem;
+  flex-shrink: 0;
+  padding: max(0.5rem, env(safe-area-inset-top)) var(--gutter) 0.5rem;
+}
+.terminal-brand, .terminal-tools, .terminal-policy {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 0;
+}
+.terminal-brand { grid-area: brand; }
+.terminal-wordmark {
+  color: var(--color-heading);
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  line-height: 1.35;
+}
+.terminal-callsign {
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  overflow-wrap: anywhere;
+}
+.terminal-tools { grid-area: tools; }
+.terminal-policy { font-size: 0.72rem; gap: 0.25rem; }
+.terminal-icon {
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
+  border: 1px solid var(--rail);
+}
+.terminal-meter {
+  grid-area: meter;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, 1.35fr);
+  margin: 0;
+  border: 1px solid var(--rail);
+  background: #0c1a20;
+}
+.terminal-meter > div { min-width: 0; padding: 0.33rem 0.55rem; }
+.terminal-meter > div + div { border-inline-start: 1px solid var(--rail); }
+.terminal-meter dt { color: var(--color-muted); font-size: 0.68rem; line-height: 1.35; }
+.terminal-meter dd {
+  margin: 0;
+  line-height: 1.35;
+  font-size: 0.94rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.terminal-news, .terminal-alerts { flex-shrink: 0; margin-inline: var(--gutter); }
+.terminal-news .news-ticker { border-color: var(--rail); }
+.terminal-alerts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  padding-block-end: 0.35rem;
+  font-size: 0.8rem;
+}
+.terminal-alerts span { display: inline-flex; align-items: center; gap: 0.3rem; }
+.terminal-main {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  padding: 0.75rem var(--gutter) 1.25rem;
+}
+.terminal-dock {
+  display: flex;
+  flex-shrink: 0;
+  border-top: 1px solid var(--rail);
+  padding: 0 var(--gutter) env(safe-area-inset-bottom);
+  background: #0b181e;
+}
+.terminal-nav { display: flex; flex: 3; min-width: 0; }
+.terminal-nav button, .terminal-comms {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-height: 3.25rem;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 0.15rem;
+  color: var(--color-muted);
+  font-size: 0.78rem;
+}
+.terminal-nav button[aria-current="page"] {
+  color: var(--color-heading);
+  box-shadow: inset 0 2px var(--color-cyan);
+  background: #11292f;
+}
+.terminal-comms { border-inline-start: 1px solid var(--rail); }
+.terminal-count {
+  position: absolute;
+  top: 0.3rem;
+  left: calc(50% + 0.62rem);
+  min-width: 1rem;
+  padding: 0 0.2rem;
+  background: var(--color-warning);
+  color: var(--color-bg);
+  line-height: 1rem;
+  font-size: 0.65rem;
+  text-align: center;
+}
+
+.route-board, .encounter-layout, .character-status, .log-grid { display: grid; gap: 0.9rem; align-items: start; }
+.route-scene { position: relative; grid-area: scene; }
+.route-choices { grid-area: choices; }
+.route-map { grid-area: map; }
+.route-board { grid-template: "scene" auto "choices" auto "map" auto / minmax(0, 1fr); }
+.district-title {
+  position: absolute;
+  inset: auto 1px 1px;
+  padding: 0.8rem 1rem;
+  background: linear-gradient(transparent, rgb(3 10 15 / 95%));
+  pointer-events: none;
+  color: var(--color-heading);
+  line-height: 1.3;
+  font-size: 0.8rem;
+}
+.district-title h1, .page-title {
+  margin: 0;
+  color: #e1fcfa;
+  font-size: clamp(1.6rem, 5vw, 2.5rem);
+  font-weight: 800;
+  line-height: 1.17;
+  overflow-wrap: anywhere;
+}
+.screen-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.45rem;
+  font-size: 0.75rem;
+}
+.screen-heading h2 { margin: 0; color: #d5f5f5; font-size: 1.05rem; font-weight: 750; }
+.route-list { display: grid; gap: 0.4rem; }
+.route-option {
+  width: 100%;
+  text-align: start;
+  border: 1px solid var(--rail);
+  border-inline-start: 3px solid #3cbbc3;
+  background: linear-gradient(100deg, #11292e, #0e1b22);
+  transition: border-color 140ms ease, transform 140ms ease, background-color 140ms ease;
+}
+.route-option[data-risk="high"] { border-inline-start-color: var(--color-red); }
+.route-option-inner {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.65rem;
+  padding: 0.65rem 0.7rem;
+  align-items: start;
+  line-height: 1.5;
+}
+.route-option-title { color: #e1f8f6; font-weight: 700; }
+.route-reward { color: var(--color-heading); font-variant-numeric: tabular-nums; font-size: 0.85rem; }
+.route-arrow { color: var(--color-line-strong); align-self: center; }
+.holo-scroll { height: clamp(15rem, 45dvh, 30rem); overflow: auto; }
+.holo-pin { min-height: 2.75rem; justify-content: center; }
+.holo-pin-on { cursor: pointer; }
+.holo-pin-on .holo-hex-in { color: var(--pin); }
+.encounter-content { min-width: 0; }
+.profile-grid { display: grid; gap: 0.8rem; padding: 0.9rem; }
+.profile-identity { display: flex; align-items: center; gap: 1rem; }
+.profile-portrait {
+  display: grid;
+  place-items: center;
+  width: 5.25rem;
+  height: 6rem;
+  flex-shrink: 0;
+  border: 1px solid var(--rail);
+  background: repeating-linear-gradient(0deg, #17313a 0 1px, transparent 1px 8px), radial-gradient(ellipse, #244f58, #0b1b24);
+}
+.profile-portrait img { max-width: 78%; max-height: 5.25rem; image-rendering: pixelated; width: auto; height: 5.25rem; object-fit: contain; }
+.log-entry { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0.65rem; padding: 0.3rem 0; }
+.log-entry + .log-entry { border-top: 1px solid var(--rail); }
+[data-enter] { animation: terminal-enter 340ms ease-out both; }
+@keyframes terminal-enter {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: none; }
+}
+@media (hover: hover) and (pointer: fine) {
+  .route-option:hover { border-color: var(--color-cyan); transform: translateY(-2px); }
+  .terminal-icon:hover, .terminal-nav button:hover, .terminal-comms:hover, button.cut:hover:not(:disabled) { filter: brightness(1.23); }
+}
+.route-option:active { transform: translateY(1px); }
+@media (min-width: 760px) {
+  .terminal-header { grid-template: "brand meter tools" auto / minmax(10rem, 1fr) minmax(17rem, 1.7fr) auto; }
+  .terminal-meter > div { padding-inline: 0.75rem; }
+  .route-board {
+    grid-template: "scene map" auto "choices map" 1fr / minmax(0, 1fr) minmax(0, 1.15fr);
   }
+  .route-map .holo-scroll { height: clamp(24rem, 62dvh, 38rem); }
+  .encounter-layout { grid-template-columns: minmax(0, 0.83fr) minmax(0, 1.17fr); }
+  .encounter-scene { position: sticky; top: 0; }
+  .profile-grid, .character-status, .log-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .terminal-dock { justify-content: space-between; }
+  .terminal-nav { flex: 0 1 25rem; }
+  .terminal-comms { flex: 0 0 7rem; }
+  .terminal-nav button, .terminal-comms { flex-direction: row; gap: 0.5rem; }
+  .terminal-count { position: static; }
+  .terminal [aria-label="三選一"] > .cut, .terminal [aria-label="委託結案"] > .cut { max-width: 43rem; margin-inline: auto; }
+}
+@media (min-width: 1160px) {
+  .terminal { height: calc(100dvh - 2rem); margin-block: 1rem; border: 1px solid #24434b; }
 }

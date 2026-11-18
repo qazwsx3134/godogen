@@ -56,10 +56,18 @@ export function CharacterScreen({ game }: { game: ReturnType<typeof useGame> }) 
   const perkCount = Object.values(c.perks).reduce((a, b) => a + b, 0)
   return (
     <div className="space-y-3">
-      <Panel innerClass="p-4">
-        <div className="tech text-[13px] text-muted">MERC ID・{c.id.toUpperCase()}</div>
-        <h1 className="my-0 text-[22px] font-bold text-heading">{c.name}</h1>
-        <div className="text-[14px] text-warning">{fameTitle(c.fame.level)}</div>
+      <Panel className="character-profile" innerClass="profile-grid">
+        <div className="profile-identity" data-enter>
+          <div className="profile-portrait">
+            <img src={c.look === 'b' && hasLook('b') ? '/sprites/hero_b_stand.png' : '/sprites/hero_stand.png'} alt="" />
+          </div>
+          <div className="min-w-0">
+            <div className="text-[13px] text-muted">傭兵檔案</div>
+            <h1 className="page-title">{c.name}</h1>
+            <div className="text-[14px] text-warning">{fameTitle(c.fame.level)}</div>
+          </div>
+        </div>
+        <div className="profile-stats">
         <div className="mt-1 flex items-center gap-2 text-[14px] text-muted">
           外觀
           {(['a', 'b'] as Look[]).map((k) => (
@@ -86,6 +94,7 @@ export function CharacterScreen({ game }: { game: ReturnType<typeof useGame> }) 
           </span>
           {!st.weapon && <span className="text-warning">（沒有武器）</span>}
         </div>
+        </div>
       </Panel>
 
       <Tabs
@@ -100,7 +109,7 @@ export function CharacterScreen({ game }: { game: ReturnType<typeof useGame> }) 
       />
 
       {tab === 'status' && (
-        <>
+        <div className="character-status">
           <Panel innerClass="pb-3">
             <PanelHead icon={<Cpu size={16} />} title="神經負荷" right={<span className={stage === 'stable' ? 'text-positive' : 'font-bold text-warning'}>{NEURAL_STAGE_LABEL[stage]}</span>} />
             <div className="space-y-2 px-3 pt-2">
@@ -120,7 +129,7 @@ export function CharacterScreen({ game }: { game: ReturnType<typeof useGame> }) 
             <p className="m-0 text-fg">{lifelineOf(c) ? `受致命傷時武裝醫療隊救你一次，救回來：${LIFELINES[lifelineOf(c)!].desc}。用掉就沒了，最多持有一張。` : '沒有保單：受致命傷就是永久死亡。黑市買得到（廉價、標準、白金三種，越貴救回來失去的越少）。'}</p>
             <p className="m-0 text-[14px] text-muted">通緝 {c.heat}★：每顆星讓對手 HP 與攻擊 +8%。休息節點可以躲起來降通緝。</p>
           </Panel>
-        </>
+        </div>
       )}
 
       {tab === 'attrs' && (

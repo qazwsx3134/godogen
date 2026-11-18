@@ -1,5 +1,7 @@
 [gd_scene format=4]
 
+[ext_resource type="Script" path="res://scripts/breakable_cover.gd" id="99_cover"]
+
 [ext_resource type="Material" path="res://materials/battlefield_ground.tres" id="1_1upuo"]
 [ext_resource type="PackedScene" path="res://scenes/ruined_wall.tscn" id="1_edrn5"]
 [ext_resource type="PackedScene" path="res://scenes/armored_wreck.tscn" id="2_estyf"]
@@ -478,6 +480,7 @@ _surfaces = [{
 [node name="GreenRust" type="Node3D" unique_id=544055547]
 
 [node name="Terrain" type="StaticBody3D" parent="." unique_id=1510324856]
+collision_layer = 17
 
 [node name="GroundSurface" type="MeshInstance3D" parent="Terrain" unique_id=1787732636]
 material_override = ExtResource("1_1upuo")
@@ -565,6 +568,8 @@ transform = Transform3D(-0.9807957, 0, -0.19503793, 0, 1, 0, 0.19503793, 0, -0.9
 [node name="BrokenViaduct" type="Node3D" parent="." unique_id=963103415]
 
 [node name="Pier0" type="StaticBody3D" parent="BrokenViaduct" unique_id=1535955495]
+collision_layer = 9
+script = ExtResource("99_cover")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -90, 7.239994, 35)
 
 [node name="Surface" type="MeshInstance3D" parent="BrokenViaduct/Pier0" unique_id=259202806]
@@ -575,6 +580,8 @@ mesh = SubResource("BoxMesh_rkqys")
 shape = SubResource("BoxShape3D_org7x")
 
 [node name="Deck0" type="StaticBody3D" parent="BrokenViaduct" unique_id=1044506038]
+collision_layer = 9
+script = ExtResource("99_cover")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -85, 12.739994, 35)
 
 [node name="Surface" type="MeshInstance3D" parent="BrokenViaduct/Deck0" unique_id=1245036508]
@@ -585,6 +592,8 @@ mesh = SubResource("BoxMesh_vkpgn")
 shape = SubResource("BoxShape3D_taxg6")
 
 [node name="Pier1" type="StaticBody3D" parent="BrokenViaduct" unique_id=168489712]
+collision_layer = 9
+script = ExtResource("99_cover")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -69, 10.331925, 35)
 
 [node name="Surface" type="MeshInstance3D" parent="BrokenViaduct/Pier1" unique_id=1317272838]
@@ -595,6 +604,8 @@ mesh = SubResource("BoxMesh_ct7yk")
 shape = SubResource("BoxShape3D_bcrx1")
 
 [node name="Deck1" type="StaticBody3D" parent="BrokenViaduct" unique_id=862180700]
+collision_layer = 9
+script = ExtResource("99_cover")
 transform = Transform3D(0.9986295, 0.05233596, 0, -0.05233596, 0.9986295, 0, 0, 0, 1, -64, 15.831925, 35)
 
 [node name="Surface" type="MeshInstance3D" parent="BrokenViaduct/Deck1" unique_id=1099255852]
@@ -605,6 +616,8 @@ mesh = SubResource("BoxMesh_jgaw4")
 shape = SubResource("BoxShape3D_o6sec")
 
 [node name="Pier2" type="StaticBody3D" parent="BrokenViaduct" unique_id=1455421322]
+collision_layer = 9
+script = ExtResource("99_cover")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -48, 8.797449, 35)
 
 [node name="Surface" type="MeshInstance3D" parent="BrokenViaduct/Pier2" unique_id=1523144551]
@@ -615,6 +628,8 @@ mesh = SubResource("BoxMesh_gmtbh")
 shape = SubResource("BoxShape3D_lwqsv")
 
 [node name="Pier3" type="StaticBody3D" parent="BrokenViaduct" unique_id=85039673]
+collision_layer = 9
+script = ExtResource("99_cover")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27, 6.013477, 35)
 
 [node name="Surface" type="MeshInstance3D" parent="BrokenViaduct/Pier3" unique_id=1329956699]
@@ -625,6 +640,8 @@ mesh = SubResource("BoxMesh_o240q")
 shape = SubResource("BoxShape3D_db36r")
 
 [node name="Deck3" type="StaticBody3D" parent="BrokenViaduct" unique_id=444702478]
+collision_layer = 9
+script = ExtResource("99_cover")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 11.513477, 35)
 
 [node name="Surface" type="MeshInstance3D" parent="BrokenViaduct/Deck3" unique_id=37704433]
@@ -635,6 +652,8 @@ mesh = SubResource("BoxMesh_34bx1")
 shape = SubResource("BoxShape3D_rbyc0")
 
 [node name="Pier4" type="StaticBody3D" parent="BrokenViaduct" unique_id=1570919214]
+collision_layer = 9
+script = ExtResource("99_cover")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 5.2337356, 35)
 
 [node name="Surface" type="MeshInstance3D" parent="BrokenViaduct/Pier4" unique_id=1621954669]
@@ -645,6 +664,8 @@ mesh = SubResource("BoxMesh_2c8hw")
 shape = SubResource("BoxShape3D_5imvx")
 
 [node name="Deck4" type="StaticBody3D" parent="BrokenViaduct" unique_id=32887961]
+collision_layer = 9
+script = ExtResource("99_cover")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 10.733735, 35)
 
 [node name="Surface" type="MeshInstance3D" parent="BrokenViaduct/Deck4" unique_id=547913574]
@@ -657,6 +678,8 @@ shape = SubResource("BoxShape3D_2f4yd")
 [node name="Factory" type="Node3D" parent="." unique_id=1330058976]
 
 [node name="Frame0" type="StaticBody3D" parent="Factory" unique_id=650201868]
+collision_layer = 9
+script = ExtResource("99_cover")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 65, 4.212735, -5)
 
 [node name="Surface" type="MeshInstance3D" parent="Factory/Frame0" unique_id=232534787]
@@ -667,6 +690,8 @@ mesh = SubResource("BoxMesh_5d35l")
 shape = SubResource("BoxShape3D_58hwv")
 
 [node name="Beam0" type="StaticBody3D" parent="Factory" unique_id=2049285614]
+collision_layer = 9
+script = ExtResource("99_cover")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 57, 8.712735, -5)
 
 [node name="Surface" type="MeshInstance3D" parent="Factory/Beam0" unique_id=777777063]
@@ -677,6 +702,8 @@ mesh = SubResource("BoxMesh_2p1x2")
 shape = SubResource("BoxShape3D_262at")
 
 [node name="Frame1" type="StaticBody3D" parent="Factory" unique_id=910418906]
+collision_layer = 9
+script = ExtResource("99_cover")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 65, 4.21279, 5)
 
 [node name="Surface" type="MeshInstance3D" parent="Factory/Frame1" unique_id=463971333]
@@ -687,6 +714,8 @@ mesh = SubResource("BoxMesh_6eor8")
 shape = SubResource("BoxShape3D_iab4b")
 
 [node name="Beam1" type="StaticBody3D" parent="Factory" unique_id=1268704209]
+collision_layer = 9
+script = ExtResource("99_cover")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 57, 8.71279, 5)
 
 [node name="Surface" type="MeshInstance3D" parent="Factory/Beam1" unique_id=230897043]
@@ -697,6 +726,8 @@ mesh = SubResource("BoxMesh_jceey")
 shape = SubResource("BoxShape3D_o1pv1")
 
 [node name="Frame2" type="StaticBody3D" parent="Factory" unique_id=72209869]
+collision_layer = 9
+script = ExtResource("99_cover")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 65, 4.265084, 15)
 
 [node name="Surface" type="MeshInstance3D" parent="Factory/Frame2" unique_id=389419024]
@@ -707,6 +738,8 @@ mesh = SubResource("BoxMesh_hvl32")
 shape = SubResource("BoxShape3D_mu0fh")
 
 [node name="Beam2" type="StaticBody3D" parent="Factory" unique_id=537913268]
+collision_layer = 9
+script = ExtResource("99_cover")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 57, 8.765084, 15)
 
 [node name="Surface" type="MeshInstance3D" parent="Factory/Beam2" unique_id=935581896]
@@ -717,6 +750,8 @@ mesh = SubResource("BoxMesh_w0xpq")
 shape = SubResource("BoxShape3D_jhtn3")
 
 [node name="Frame3" type="StaticBody3D" parent="Factory" unique_id=2049414822]
+collision_layer = 9
+script = ExtResource("99_cover")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 65, 4.360146, 25)
 
 [node name="Surface" type="MeshInstance3D" parent="Factory/Frame3" unique_id=739356065]
@@ -727,6 +762,8 @@ mesh = SubResource("BoxMesh_a11pd")
 shape = SubResource("BoxShape3D_x5enj")
 
 [node name="Beam3" type="StaticBody3D" parent="Factory" unique_id=58871307]
+collision_layer = 9
+script = ExtResource("99_cover")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 57, 8.8601465, 25)
 
 [node name="Surface" type="MeshInstance3D" parent="Factory/Beam3" unique_id=527202]
@@ -737,6 +774,8 @@ mesh = SubResource("BoxMesh_m1cs1")
 shape = SubResource("BoxShape3D_bce4k")
 
 [node name="Frame4" type="StaticBody3D" parent="Factory" unique_id=2029679848]
+collision_layer = 9
+script = ExtResource("99_cover")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 65, 4.4806714, 35)
 
 [node name="Surface" type="MeshInstance3D" parent="Factory/Frame4" unique_id=1034359393]
@@ -747,6 +786,8 @@ mesh = SubResource("BoxMesh_r0mct")
 shape = SubResource("BoxShape3D_eynhj")
 
 [node name="Beam4" type="StaticBody3D" parent="Factory" unique_id=1414794631]
+collision_layer = 9
+script = ExtResource("99_cover")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 57, 8.980672, 35)
 
 [node name="Surface" type="MeshInstance3D" parent="Factory/Beam4" unique_id=83442225]
@@ -757,6 +798,8 @@ mesh = SubResource("BoxMesh_5cgxc")
 shape = SubResource("BoxShape3D_tpj1i")
 
 [node name="Chimney" type="StaticBody3D" parent="Factory" unique_id=1430671328]
+collision_layer = 9
+script = ExtResource("99_cover")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 74, 13.765353, 48)
 
 [node name="Surface" type="MeshInstance3D" parent="Factory/Chimney" unique_id=570083322]

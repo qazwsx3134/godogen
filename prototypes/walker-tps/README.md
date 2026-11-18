@@ -4,6 +4,13 @@
 
 2026-11-11：預設「綠鏽戰線」已接入雙勾索、主砲、3 台可擊毀的 scout（含重型）、導航 AI，以及出擊／勝敗／超時／重試流程。按 F5 後點 DEPLOY 或 Enter 開始。規則與可調數值見 [戰鬥切片](design/combat-slice.md)，進度見 [PROGRESS](PROGRESS.md)。手機與手把實機驗收待做。
 
+## 戰鬥鏡頭與 HUD
+
+- 在 `scenes/walker.tscn` 的 `CameraRig` 調整高度與起始俯角，`Pitch.position.x` 控制肩位偏移，`Arm.spring_length` 控制跟拍距離。一般戰場及 Boss 戰共用此機體場景。
+- 開啟 `scenes/combat_hud.tscn` 可直接調整 `Telemetry`、`Heading`、`Hull`、`Radar`、`Readouts` 與 `Crosshair`。青色準星對應操作瞄準點，琥珀環標記主砲實際投射點。中央戰鬥框至少佔畫面三分之一寬與高，內顯示倒數和彈藥／裝填，底部機甲圖示與分段量表顯示耐久，左上顯示目標進度。準星兩側顯示水平速度與瞄準射線的命中距離，左側雷達以鏡頭前方為上，顯示 100 m 內尚存活的敵機。
+
+地圖的斷牆、殘骸、橋墩與工廠結構可分件破壞。主砲可削減其耐久，高速衝撞與 Boss 機身接觸可直接撞碎並觸發空間音效。Boss 由地表支撐，頭部砲骨決定光束砲口位置。
+
 ## Boss／裝甲負載場景
 
 開啟 `scenes/boss_battlefield.tscn` 並按 F6；原戰場仍由 F5 開啟。Boss 是地面敵人，22 隻粗的折刀狀兩節腳蹲伏撐地、腹部離地約 0.8 m（模型在 `boss.tscn` 下移 1.14 m），用 1.6 秒一圈的沉重波浪步態慢慢爬行（`crawl_speed` 2.2、落腳有低沉的 `StepSound`；動畫速度依實際移動速度縮放，`walk_anim_speed`），可被擊毀並計入勝利目標。
@@ -80,8 +87,8 @@ godot --headless --fixed-fps 60 --path . --script res://tests/test_grapple_inert
 godot --headless --fixed-fps 60 --path . --script res://tests/test_mobility.gd    # 牆跳、斜坡跳、衝刺模糊、甩尾時砲塔瞄準
 godot --headless --fixed-fps 60 --path . --script res://tests/test_gun_juice.gd    # 主砲手感 7 項標準
 godot --path .                                   # 開遊戲（或用編輯器開 project.godot，按 F5）
-godot --headless --fixed-fps 60 --path . --script res://tests/test_walker.gd    # 舊移動測試；Arena 位移基線見 TODO
-godot --headless --fixed-fps 60 --path . --script res://tests/test_scouts.gd    # 舊展示敵機測試；Arena 位移基線見 TODO
+godot --headless --fixed-fps 60 --path . --script res://tests/test_walker.gd    # 展示場移動、步態與落地
+godot --headless --fixed-fps 60 --path . --script res://tests/test_scouts.gd    # 展示場敵機回歸
 xvfb-run -a godot --path . --resolution 1280x720 --script res://tools/perf_scouts.gd   # 敵機的 draw call 量測
 xvfb-run -a godot --path . --resolution 1280x720 --fixed-fps 60 --script res://tools/capture.gd -- <輸出資料夾>  # 螢幕外截圖
 ```

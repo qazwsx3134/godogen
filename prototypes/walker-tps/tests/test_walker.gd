@@ -191,7 +191,12 @@ func _test_jump() -> void:
 					apex_sole = minf(apex_sole, gait.sole(leg).y)
 		elif was_air and walker.is_on_floor():
 			break
-	await _frames(30)
+	# Landing starts a recovery step at this scale. Give the actual trot a bounded
+	# window to settle before checking that all soles are planted.
+	for _i: int in 120:
+		await _frames(1)
+		if gait.legs.all(func(leg: Variant) -> bool: return leg.t < 0.0):
+			break
 	gait.landed.disconnect(on_land)
 	_expect(was_air, "jump leaves the ground")
 	_expect(peak - y0 > 0.5 and peak - y0 < 1.6, "the jump is a low dash hop (%.2f m)" % (peak - y0))

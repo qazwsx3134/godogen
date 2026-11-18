@@ -1,6 +1,6 @@
 // 委託的場面：一件委託拆成幾個場面，每個場面擲一次骰池（規則見 rules/core.ts「骰池判定」）。
 // 文字依路線共用，不必每件委託各寫一份。
-import type { Attr, CostKind, Direction, PoolResult } from '../rules/core'
+import type { Attr, Character, CostKind, Direction, JobDef, PoolResult } from '../rules/core'
 
 export interface Beat {
   title: string
@@ -158,3 +158,61 @@ export const BEATS: Record<Direction, Beat[]> = {
 
 /** 劇情委託做法的兩個場面：做法自己寫了 beats 就用它；沒寫就借用委託該路線的前兩個場面（舊案子待改寫）。 */
 export const storyBeats = (ap: { direction: Direction; beats?: Beat[] }): Beat[] => ap.beats ?? BEATS[ap.direction].slice(0, 2)
+
+/** 新宿「清空幫派據點」第一個場面的能力解法。 */
+const WAREHOUSE_SOLUTIONS = [
+  {
+    id: 'brace',
+    label: '頂住火力撞開封鎖',
+    items: ['subdermal', 'tendon', 'boneLace'],
+    perks: ['ironHide', 'tough'],
+    beat: {
+      title: '撞開封鎖',
+      attr: 'body',
+      setup: '你把肩膀壓低，用護具或強化過的身體頂著火力撞開貨架路障。',
+      out: {
+        crit: '貨架連著路障一起倒下，後排守衛也被迫讓出通道。',
+        clean: '你撞開中央通道，守衛退到第二排貨架。',
+        cost: '路障倒了，但你還得處理撞擊的反作用力。',
+        fail: '路障只移開半步，你的肩膀先撐不住。',
+      },
+      costs: [{ kind: 'injury', text: '硬扛撞擊留下的傷' }, { kind: 'stress', text: '靠義體補償撐住手臂' }],
+      fail: 'injury',
+    },
+  },
+  {
+    id: 'draw',
+    label: '趁守衛換彈搶先制伏',
+    items: ['reflexes', 'pairedPistols', 'twinSmart'],
+    perks: ['quickDraw', 'twinFire'],
+    beat: {
+      title: '搶下換彈空檔',
+      attr: 'reflex',
+      setup: '你等第一輪射擊停下，趁守衛伸手換彈時從側邊切入。',
+      out: {
+        crit: '你在第二支彈匣進槍之前制伏兩人，後排還沒聽到動靜。',
+        clean: '最前面的守衛來不及換彈，你搶到了側門。',
+        cost: '你趕在換彈空檔進門，另一個守衛卻轉了過來。',
+        fail: '你慢了一拍。守衛打出警告，全倉庫都知道你來了。',
+      },
+      costs: [{ kind: 'heat', text: '開火壓制，暴露行蹤' }, { kind: 'pay', text: '打壞一箱貨來堵住側門' }],
+      fail: 'heat',
+    },
+  },
+] satisfies { id: string; label: string; items: string[]; perks: string[]; beat: Beat }[]
+
+export function jobSolutions(jobId: string, at: number, c: Character) {
+  if (jobId !== 'force-2' || at !== 0) return []
+  return WAREHOUSE_SOLUTIONS.filter((s) =>
+    c.equipment.some((item) => s.items.includes(item.kind ?? "")) ||
+    s.perks.some((id) => (c.perks[id] ?? 0) > 0),
+  )
+}
+
+export function jobScene(job: JobDef, at: number, solution?: string): Beat {
+  if (job.id === 'force-2' && at === 0) {
+    const alternate = WAREHOUSE_SOLUTIONS.find((s) => s.id === solution)
+    if (alternate) return alternate.beat
+  }
+  return BEATS[job.direction][at]
+}

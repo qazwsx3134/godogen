@@ -172,15 +172,17 @@ bus = &"Movement"
 unique_name_in_owner = true
 top_level = true
 script = ExtResource("4_rbrpf")
-height = 6.3
+height = 5.8
+pitch_start_deg = -8.0
 
 [node name="Pitch" type="Node3D" parent="CameraRig" unique_id=381732218]
 unique_name_in_owner = true
+position = Vector3(4.6, 0, 0)
 
 [node name="Arm" type="SpringArm3D" parent="CameraRig/Pitch" unique_id=570433590]
 unique_name_in_owner = true
 shape = SubResource("SphereShape3D_f37qn")
-spring_length = 14.0
+spring_length = 12.8
 margin = 0.3
 
 [node name="Camera" type="Camera3D" parent="CameraRig/Pitch/Arm" unique_id=1768795553]

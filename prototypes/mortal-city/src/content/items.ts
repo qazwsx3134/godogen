@@ -95,7 +95,13 @@ export function rollKind(seed: number, kind: string, chance: number, c: Characte
 
 
 /** 精英委託打贏：一定掉，稀有表三選一。 */
-export const eliteLoot = (seed: number) => rollFrom(seed, RARE, 1)!
+export function eliteLoot(seed: number, style?: Style): Item[] {
+  if (!style) return rollFrom(seed, RARE, 1)!
+  const r = rng(seed)
+  const matching = RARE.filter((kind) => ITEMS[kind].style === style)
+  const guaranteed = matching[Math.floor(r() * matching.length)]
+  return offer(r, RARE, seed.toString(36), guaranteed)
+}
 /** 事件給的掉寶：一定掉。 */
 export const eventLoot = (seed: number, table: 'street' | 'rare') => rollFrom(seed, table === 'rare' ? RARE : STREET, 1)!
 

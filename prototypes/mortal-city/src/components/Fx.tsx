@@ -1,4 +1,4 @@
-// 城市新聞跑馬燈、故障轉場、打字機文字。
+// 城市新聞跑馬燈與打字機文字。
 import { useEffect, useState } from 'react'
 import type { News, NewsTag } from '../content/news'
 
@@ -34,17 +34,6 @@ export function NewsTicker({ items }: { items: News[] }) {
           {row('b')}
         </div>
       </div>
-    </div>
-  )
-}
-
-/** 換頁、進節點時閃一下的畫面撕裂（約 0.22 秒）；key 一變就重播。 */
-export function GlitchFlash() {
-  return (
-    <div className="glitch-tx" aria-hidden>
-      <i />
-      <i />
-      <i />
     </div>
   )
 }

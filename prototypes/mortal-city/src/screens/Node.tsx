@@ -1,19 +1,19 @@
 import ENEMY_PORTRAITS from '../content/enemy_portraits.json'
 // 節點畫面：委託、精英委託、事件、黑市、神機醫、休息、劇情委託。戰鬥與危險節點的元件共用。
-import { useEffect, useRef, useState } from 'react'
+import { type ReactNode, useEffect, useRef, useState } from 'react'
 import { AlertTriangle, ArrowLeft, BedDouble, Compass, Crosshair, Eye, FastForward, Flame, MessageSquare, ShieldPlus, Stethoscope, Store, Swords, Terminal } from 'lucide-react'
 import { ActionButton, Avatar, Meter, Panel, Tag, useTwoStep } from '../components/ui'
 import { ItemIcon } from '../components/ItemIcon'
-import { FIXERS, JOBS, highDanger } from '../content/data'
-import { CASE_BY_ID, type CaseOption, type Reply, type StoryCase, caseBody, caseReplies, caseThreat, optionLock } from '../content/cases'
+import { FIXERS, JOBS, eliteRewardStyle, highDanger } from '../content/data'
+import { CASE_BY_ID, type CaseOption, type Reply, type StoryCase, caseBody, caseLeadFee, caseReplies, caseThreat, optionLock } from '../content/cases'
 import { EVENT_BY_ID } from '../content/events'
 import { DISTRICTS, fixerIn } from '../content/districts'
 import { buzz, reducedMotion } from '../components/haptics'
 import { sfx } from '../components/sfx'
 import { TypeLine } from '../components/Fx'
 import { itemStyle, ITEMS, SHOP_IMPLANTS, clinicOrders, itemDesc, itemLock, marketPrice } from '../content/items'
-import { type NodeRun, type ResultRow, type useGame, SAFE_STRESS, caseLethal, caseReward, eliteLethal, type LethalLog, eventLock, fightEnemy, jobEnemy, jobLines, type BeatLog } from '../game/state'
-import { BEATS, type Beat, storyBeats } from '../content/beats'
+import { type NodeRun, type ResultRow, type useGame, SAFE_STRESS, caseLethal, casePayout, eliteLethal, type LethalLog, eventLock, fightEnemy, jobEnemy, jobLines, type BeatLog } from '../game/state'
+import { BEATS, type Beat, jobScene, jobSolutions, storyBeats } from '../content/beats'
 import { DiceIntro, DiceRoll, IntroButton, useIntro, useRollDone } from '../components/dice'
 import { findNode } from '../rules/map'
 import {
@@ -176,7 +176,7 @@ function NodeHead({ tone = 'line', tag, title, fixer, body }: { tone?: 'line' | 
   return (
     <Panel tone={tone} innerClass="p-4">
       <div className={`text-[13px] ${tone === 'red' ? 'text-red' : 'text-muted'}`}>{tag}</div>
-      <h1 className="my-1 text-[22px] leading-snug font-bold text-heading">{title}</h1>
+      <h1 className="page-title mb-3">{title}</h1>
       <div className="flex items-start gap-3">
         {fixer && <Avatar id={fixer} size={48} />}
         <p className="m-0 flex-1 whitespace-pre-line text-fg">{body}</p>
@@ -228,12 +228,12 @@ const RESULT_TONE: Record<PoolResult, string> = { crit: 'text-positive', clean: 
 const beatKey = (keyBase: string, h: BeatLog | undefined) => (h && h.broke !== 'abort' ? `${keyBase}:${h.beat}:${h.dice.join('')}` : undefined)
 
 /** 已經擲過的場面。keyBase 讓同一次擲骰只播一次動畫（剛擲的那個場面在這裡播）。 */
-function BeatHistory({ beats, history, keyBase }: { beats: Beat[]; history: BeatLog[]; keyBase: string }) {
+function BeatHistory({ beats, history, keyBase, sceneFor }: { beats: Beat[]; history: BeatLog[]; keyBase: string; sceneFor?: (entry: BeatLog) => Beat }) {
   if (!history.length) return null
   return (
     <div className="space-y-2">
       {history.map((h) => {
-        const b = beats[h.beat]
+        const b = sceneFor?.(h) ?? beats[h.beat]
         return (
           <div key={h.beat} className="border border-line/60 p-3">
             <div className="mb-1.5 flex flex-wrap items-center gap-2">
@@ -293,10 +293,10 @@ function PoolParts({ parts }: { parts: PoolPart[] }) {
 const rollLabel = (size: number) => (size <= 0 ? '擲 2 顆（取低的）' : `擲 ${Math.min(6, size)} 顆`)
 
 /** 一個場面：情境、骰池組成、加骰、擲骰鈕。 */
-function ScenePanel({ game, beats, at, parts, onRoll }: { game: G; beats: Beat[]; at: number; parts: PoolPart[]; onRoll: (push: boolean, gamble: boolean) => void }) {
+function ScenePanel({ game, beats, at, parts, onRoll, selectedBeat, choices }: { game: G; beats: Beat[]; at: number; parts: PoolPart[]; onRoll: (push: boolean, gamble: boolean) => void; selectedBeat?: Beat; choices?: ReactNode }) {
   const c = game.g.character
   const intro = useIntro(!!game.g.meta.seen.dice, () => game.act({ t: 'seenIntro', key: 'dice' }))
-  const beat = beats[Math.min(at, beats.length - 1)]
+  const beat = selectedBeat ?? beats[Math.min(at, beats.length - 1)]
   const [push, setPush] = useState(false)
   const [gamble, setGamble] = useState(false)
   const size = poolSize(parts, (push ? 1 : 0) + (gamble && c.heat < 5 ? 1 : 0))
@@ -315,6 +315,7 @@ function ScenePanel({ game, beats, at, parts, onRoll }: { game: G; beats: Beat[]
         </span>
         <IntroButton onClick={intro.show} />
       </div>
+      {choices}
       <div className="text-[18px] font-bold text-cyan">{beat.title}</div>
       <p className="m-0 text-fg">{beat.setup}</p>
       <PoolParts parts={parts} />
@@ -328,8 +329,8 @@ function ScenePanel({ game, beats, at, parts, onRoll }: { game: G; beats: Beat[]
 }
 
 /** 場面擲出 4～5：選一個代價。 */
-function SceneCostPanel({ c, beats, at, last, base, keyBase, onPick }: { c: G['g']['character']; beats: Beat[]; at: number; last: BeatLog; base: { injury: number }; keyBase: string; onPick: (i: number) => void }) {
-  const beat = beats[Math.min(at, beats.length - 1)]
+function SceneCostPanel({ c, beats, at, last, base, keyBase, onPick, selectedBeat }: { selectedBeat?: Beat; c: G['g']['character']; beats: Beat[]; at: number; last: BeatLog; base: { injury: number }; keyBase: string; onPick: (i: number) => void }) {
+  const beat = selectedBeat ?? beats[Math.min(at, beats.length - 1)]
   return (
     <Panel tone="strong" innerClass="p-4 space-y-3">
       <div className="text-[13px] text-muted">
@@ -364,7 +365,22 @@ function JobNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'job' }> })
   const lines = jobLines(n.jobId)
   const beats = BEATS[job.direction]
   const at = n.beat ?? 0
-  const beat = beats[Math.min(at, beats.length - 1)]
+  const [selection, setSelection] = useState<{ nodeId: string; id: string }>()
+  const solutions = jobSolutions(job.id, at, c)
+  const solution = selection?.nodeId === n.nodeId ? solutions.find((s) => s.id === selection.id) : undefined
+  const beat = jobScene(job, at, solution?.id)
+  const choices = solutions.length > 0 && (
+    <fieldset className="min-w-0 border border-line p-2">
+      <legend className="px-1 font-bold text-heading">場面解法</legend>
+      {[{ id: '', label: '沿掩體逼近' }, ...solutions].map(({ id, label }) => (
+        <label key={id} className="flex min-h-12 cursor-pointer items-center gap-3 px-2 text-fg">
+          <input type="radio" name={`solution-${n.nodeId}`} checked={id === (solution?.id ?? '')}
+            onChange={() => setSelection({ nodeId: n.nodeId, id })} className="accent-[var(--color-cyan)]" />
+          {label}
+        </label>
+      ))}
+    </fieldset>
+  )
   // 剛擲的骰還在跳：下一個場面、戰鬥、結算等它播完才出現
   const rolled = useRollDone(n.stage === 'cost' ? undefined : beatKey(`${c.id}:${n.nodeId}`, n.history?.at(-1)))
   return (
@@ -378,9 +394,9 @@ function JobNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'job' }> })
       </div>
       {n.stage === 'auto' && <AutoRun lines={lines} total={autoMs(lines.length)} fast={!!g.meta.seen.job} onDone={() => act({ t: 'jobAutoDone' })} />}
       {n.stage !== 'done' && <PsychoRules game={game} />}
-      {n.stage !== 'auto' && <BeatHistory beats={beats} keyBase={`${c.id}:${n.nodeId}`} history={n.stage === 'cost' ? (n.history ?? []).slice(0, -1) : (n.history ?? [])} />}
-      {rolled && n.stage === 'scene' && <ScenePanel key={at} game={game} beats={beats} at={at} parts={jobPool(c, job, beat.attr)} onRoll={(push, gamble) => act({ t: 'jobRoll', push, gamble })} />}
-      {n.stage === 'cost' && n.history?.length ? <SceneCostPanel c={c} beats={beats} at={at} last={n.history[n.history.length - 1]} base={job} keyBase={`${c.id}:${n.nodeId}`} onPick={(i) => act({ t: 'jobCost', index: i })} /> : null}
+      {n.stage !== 'auto' && <BeatHistory sceneFor={(entry) => jobScene(job, entry.beat, entry.solution)} beats={beats} keyBase={`${c.id}:${n.nodeId}`} history={n.stage === 'cost' ? (n.history ?? []).slice(0, -1) : (n.history ?? [])} />}
+      {rolled && n.stage === 'scene' && <ScenePanel key={at} game={game} beats={beats} at={at} selectedBeat={beat} choices={choices} parts={jobPool(c, job, beat.attr)} onRoll={(push, gamble) => act({ t: 'jobRoll', push, gamble, solution: solution?.id })} />}
+      {n.stage === 'cost' && n.history?.length ? <SceneCostPanel selectedBeat={jobScene(job, at, n.history.at(-1)?.solution)} c={c} beats={beats} at={at} last={n.history[n.history.length - 1]} base={job} keyBase={`${c.id}:${n.nodeId}`} onPick={(i) => act({ t: 'jobCost', index: i })} /> : null}
       {rolled && n.stage === 'fight' && !n.fight && job.direction !== 'force' && <p className="m-0 text-red">你失手兩次，被逮個正著。只能打出去。</p>}
       {rolled && n.stage === 'fight' && !n.fight && <TacticPicker game={game} enemy={heatEnemy(jobEnemy(job, n), c.heat)} onPick={(t) => act({ t: 'jobFight', tactic: t })} />}
       {n.stage === 'fight' && n.fight && <FightRun fight={n.fight} onDone={() => act({ t: 'jobFightDone' })} />}
@@ -396,9 +412,11 @@ function EliteNode({ game, n }: { game: G; n: Extract<NodeRun, { kind: 'elite' }
   const c = g.character
   const job = JOBS[n.jobId]
   const t = highDanger(job)
+  const rewardStyle = eliteRewardStyle(job, g.run.districtIndex)
   return (
     <>
       <NodeHead tone="red" tag={`精英委託・${DIRECTION_LABEL[job.direction]}・撐過去一定掉寶`} title={job.name} fixer={fixerIn(DISTRICTS[g.run.districtIndex], job.fixerId)} body={job.blurb} />
+      {rewardStyle && n.stage !== 'done' && <Tag tone="warning">完成保證出現 1 件{STYLE_LABEL[rewardStyle]}稀有裝備・重傷生還也算</Tag>}
       {n.stage === 'auto' && (
         <div className="flex flex-wrap gap-2">
           <PsychoTag c={c} />
@@ -759,6 +777,7 @@ function CaseThread({ game, sc }: { game: G; sc: StoryCase }) {
   const rec = g.run.cases[sc.id]
   const fixer = FIXERS[sc.fixerId]
   const replies = caseReplies(sc, g.run.cases)
+  const leadFee = caseLeadFee(sc, g.run.cases)
   // 回覆串一則一則進來；全部到齊才選做法
   const [threadRead, setThreadRead] = useState(false)
   const visible = sc.danger.options.filter((o) => optionLock(g.character, g.story.approach, o) !== null)
@@ -785,7 +804,7 @@ function CaseThread({ game, sc }: { game: G; sc: StoryCase }) {
     <>
       <Panel innerClass="p-4">
         <div className="text-[13px] text-red">{sc.kind === 'test' ? '測試案' : '劇情委託'}・{sc.zone}</div>
-        <h1 className="my-1 text-[22px] leading-snug font-bold text-heading">{sc.title}</h1>
+        <h1 className="page-title mb-3">{sc.title}</h1>
         <div className="mt-1 flex items-start gap-3">
           <Avatar id={fixer.id} size={52} />
           <p className="m-0 flex-1 whitespace-pre-line text-fg">{caseBody(sc, g.run.cases)}</p>
@@ -798,6 +817,11 @@ function CaseThread({ game, sc }: { game: G; sc: StoryCase }) {
           <span className="tech ml-auto">{sc.posted}</span>
         </div>
       </Panel>
+      {active && leadFee > 0 && (
+        <Panel innerClass="p-3 text-warning">
+          前案沒把人帶出來，霧會補上夜班班表。這筆費用從本案結算報酬扣 {pct(leadFee)}，現在不用付錢。
+        </Panel>
+      )}
       {active === 'prep' && <ReplyThread replies={replies} onAllShown={setThreadRead} />}
       {active === 'prep' && threadRead && (
         <div className="flex flex-wrap gap-2">
@@ -835,7 +859,7 @@ function CaseThread({ game, sc }: { game: G; sc: StoryCase }) {
           notes={notes}
           safeNote={(o) => {
             const opt = sc.danger.options.find((x) => x.id === o.id)!
-            return opt.reward ? `只拿部分報酬 ¢${caseReward(opt)}` : '委託失敗、拿不到報酬'
+            return opt.reward ? `只拿部分報酬 ¢${casePayout(g, sc, opt).reward}` : '委託失敗、拿不到報酬'
           }}
           poolOf={(o) => lethalPool(g.character, caseLethal(sc, g.story.approach, sc.danger.options.find((x) => x.id === o.id)!, g.story.scenes))}
           threat={caseThreat(sc)?.name}

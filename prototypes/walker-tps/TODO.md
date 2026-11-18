@@ -4,11 +4,7 @@
 
 ## 先處理（阻礙）
 
-- [ ] **`main.tscn` 的 Arena 被移位了：** 位置變成 `(2.00, −2.01, 0.16)`，地面往下沉 2 m。
-  - 檔案在 2026-11-10 22:53 從開著的 Godot 編輯器存檔，像是不小心拖到。
-  - 影響：`test_walker.gd` 和 `test_scouts.gd` 會失敗，機體會生在地面上方 2 m、往下掉。
-  - 修法：在編輯器把 Arena 的 Transform 重設成原點，再重跑兩套測試。如果是刻意移的，就改測試和出生點。
-  - `battlefield.tscn` 不受影響。
+- [x] **展示場 Arena 座標**已恢復原點。11 月 19 日 headless `test_walker.gd` 與 `test_scouts.gd` 通過。
 
 ## 待使用者決定
 

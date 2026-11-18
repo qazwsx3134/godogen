@@ -52,6 +52,38 @@ try {
     await ctx.close()
   }
 
+  // 用隔離的 360px 存檔驗證新宿切片，保留真實玩家存檔。
+  {
+    const { initial } = await server.ssrLoadModule('/src/game/state.ts')
+    const { makeItem } = await server.ssrLoadModule('/src/content/items.ts')
+    const fixture = initial(Date.UTC(2026, 0, 1))
+    fixture.character.picks = []
+    fixture.character.equipment = [makeItem('tendon', 'smoke')]
+    fixture.character.perks = { quickDraw: 1 }
+    fixture.meta.seen = { dice: true }
+    fixture.run.node = { kind: 'job', jobId: 'force-2', nodeId: 'slice-smoke', stage: 'scene' }
+    const { meta, ...saved } = fixture
+    const ctx = await phone(360)
+    try {
+      await ctx.addInitScript(({ saved, meta }) => {
+        localStorage.setItem('mortal-city:run:v1', JSON.stringify(saved))
+        localStorage.setItem('mortal-city:meta:v1', JSON.stringify(meta))
+      }, { saved, meta })
+      const page = await ctx.newPage()
+      await page.goto(url)
+      const brace = page.getByRole('radio', { name: '頂住火力撞開封鎖' })
+      await brace.check()
+      check(await page.getByText('撞開封鎖', { exact: true }).isVisible(), '重型義體可以選體能解法')
+      await brace.press('ArrowDown')
+      check(await page.getByRole('radio', { name: '趁守衛換彈搶先制伏' }).isChecked(), '方向鍵可切換場面解法')
+      check(await page.getByText('搶下換彈空檔', { exact: true }).isVisible(), '雙持能力切換到反應解法')
+      const o = await overflow(page)
+      check(o.sw <= o.cw && o.x === 0, '360px 場面解法不橫向溢出')
+    } finally {
+      await ctx.close()
+    }
+  }
+
   // 2. 走兩個節點
   {
     const ctx = await phone(360)

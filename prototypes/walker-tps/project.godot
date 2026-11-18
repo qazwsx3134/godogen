@@ -26,6 +26,8 @@ window/stretch/aspect="expand"
 3d_physics/layer_1="terrain"
 3d_physics/layer_2="player"
 3d_physics/layer_3="enemy"
+3d_physics/layer_4="breakable_cover"
+3d_physics/layer_5="map_ground"
 
 [rendering]
 

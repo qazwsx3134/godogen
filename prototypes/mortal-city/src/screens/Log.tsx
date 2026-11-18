@@ -27,6 +27,19 @@ export function LogScreen({ game }: { game: ReturnType<typeof useGame> }) {
   const legends = [...g.meta.legends].reverse()
   return (
     <div className="space-y-3">
+      <h1 className="page-title" data-enter>生涯紀錄</h1>
+      <div className="log-grid">
+      <Panel innerClass="pb-2">
+        <PanelHead icon={<ScrollText size={16} />} title="行動紀錄" right={<span className="text-[13px] text-muted">最近 {Math.min(60, g.log.length)} 筆</span>} />
+        {g.log.length === 0 && <p className="m-0 px-3 py-2 text-sm text-muted">進入街區後，擲骰、任務與結算會記在這裡。</p>}
+        <div className="max-h-[55dvh] overflow-y-auto px-3 pt-2 font-[family-name:var(--font-sans)] text-[14px] leading-6">
+          {g.log.slice(-60).reverse().map((e, i) => (
+            <div key={i} className={`log-entry ${LOG_COLOR[e.kind]}`}>
+              <time className="tech text-muted">{hhmm(e.at)}</time><span>{e.text}</span>
+            </div>
+          ))}
+        </div>
+      </Panel>
       <Panel innerClass="pb-2">
         <PanelHead icon={<Skull size={16} />} title="傳奇檔案" right={<span className="text-[13px] text-muted">{legends.length} 位傭兵</span>} />
         {legends.length === 0 && <p className="m-0 px-3 py-2 text-[14px] text-muted">還沒有人在魔都留下名字。死亡或退休的傭兵會記在這裡。</p>}
@@ -48,16 +61,7 @@ export function LogScreen({ game }: { game: ReturnType<typeof useGame> }) {
           </div>
         ))}
       </Panel>
-      <Panel innerClass="pb-2">
-        <PanelHead icon={<ScrollText size={16} />} title="行動紀錄" right={<span className="text-[13px] text-muted">最近 {Math.min(60, g.log.length)} 筆</span>} />
-        <div className="max-h-[55dvh] overflow-y-auto px-3 pt-2 font-[family-name:var(--font-sans)] text-[14px] leading-6">
-          {g.log.slice(-60).reverse().map((e, i) => (
-            <div key={i} className={LOG_COLOR[e.kind]}>
-              <span className="tech text-muted">[{hhmm(e.at)}]</span> {e.text}
-            </div>
-          ))}
-        </div>
-      </Panel>
+      </div>
       <Panel innerClass="pb-1">
         <PanelHead icon={<BookText size={16} />} title="名詞解釋" right={<span className="text-[13px] text-muted">{GLOSSARY.length} 條</span>} />
         {GLOSSARY.map((x) => (

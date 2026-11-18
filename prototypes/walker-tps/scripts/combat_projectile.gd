@@ -37,7 +37,10 @@ func _physics_process(delta: float) -> void:
 	var hit := get_world_3d().direct_space_state.intersect_ray(query)
 	if not hit.is_empty():
 		var body: Object = hit.collider
-		var on_body: bool = body.has_method("apply_damage") and body.get("team") != team
+		var on_cover := body.has_method("break_cover")
+		var on_body: bool = not on_cover and body.has_method("apply_damage") and body.get("team") != team
+		if on_cover:
+			body.apply_damage(damage, hit.position, direction)
 		if on_body:
 			body.apply_damage(damage, hit.position, direction)
 			if body.has_method("knockback"): body.knockback(direction)

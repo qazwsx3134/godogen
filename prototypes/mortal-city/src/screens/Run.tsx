@@ -1,13 +1,14 @@
 // 生涯主畫面：上方像素橫幅；下面依進度顯示街區地圖、節點、安全屋或生涯結束。
-import { BedDouble, BookOpen, Briefcase, CircleHelp, Crown, Skull, Stethoscope, Store } from 'lucide-react'
+import { ArrowUpRight, BedDouble, BookOpen, Briefcase, CircleHelp, Crown, Skull, Stethoscope, Store } from 'lucide-react'
 import { CityStrip, NODE_BG, STORY_BG, type NodeBg } from '../components/CityStrip'
-import { useEffect, useMemo, useRef } from 'react'
-import { ActionButton, NeonIcon, Panel, useTwoStep } from '../components/ui'
+import { type ReactNode, useEffect, useMemo, useRef } from 'react'
+import { ActionButton, Panel, useTwoStep } from '../components/ui'
 import { type useGame, movable, nextDistrict, nodeJob } from '../game/state'
 import { DISTRICTS } from '../content/districts'
 import { type MapNode, type NodeType, NODE_LABEL, findNode } from '../rules/map'
-import { BEATS } from '../content/beats'
-import { DIRECTION_LABEL, NEURAL_STAGE_LABEL, hashSeed, jobReward, jobPool, marginOf, neuralStage, poolSize, perkReward, rng } from '../rules/core'
+import { BEATS, jobSolutions } from '../content/beats'
+import { eliteRewardStyle } from '../content/data'
+import { DIRECTION_LABEL, NEURAL_STAGE_LABEL, STYLE_LABEL, hashSeed, jobReward, jobPool, marginOf, neuralStage, poolSize, perkReward, rng } from '../rules/core'
 import { DIR_ICON, NodeView } from './Node'
 
 type G = ReturnType<typeof useGame>
@@ -45,30 +46,21 @@ export function RunScreen({ game }: { game: G }) {
   const safehouse = c.alive && run.phase === 'safehouse'
   const mode = !c.alive ? 'dead' : running ? 'run' : bg || story || safehouse ? 'node' : n?.kind === 'story' ? 'run' : 'rest'
   const label = !c.alive ? '空房間' : run.phase === 'safehouse' ? '安全屋' : here ? `${run.district.name}・${NODE_LABEL[here.type]}` : `${run.district.name}・出發前`
+  const onMap = c.alive && run.phase === 'map' && !n
+  const scene = <CityStrip mode={mode} bg={bg} story={story} district={run.district.id} look={c.look} safehouse={safehouse} showLabel={!onMap} label={label} sub={here ? `第 ${here.layer + 1} 層` : undefined} />
+  if (onMap) return <MapView game={game} scene={scene} />
   return (
-    <div className="space-y-3">
-      {/* 螢幕夠高時像素圖固定在捲動區頂端，文字從下面捲過去，不會被捲到跑馬燈底下 */}
-      <div className="strip-sticky">
-        <CityStrip mode={mode} bg={bg} story={story} district={run.district.id} look={c.look} safehouse={safehouse} label={label} sub={here ? `第 ${here.layer + 1} 層` : undefined} />
+    <div className="encounter-layout">
+      <div className="encounter-scene">{scene}</div>
+      <div className="encounter-content space-y-3">
+        {run.phase === 'over' ? <EndScreen game={game} /> : safehouse ? <Safehouse game={game} /> : <NodeView game={game} />}
       </div>
-      {run.phase === 'over' ? <EndScreen game={game} /> : run.phase === 'safehouse' ? <Safehouse game={game} /> : run.node ? <NodeView game={game} /> : <MapView game={game} />}
     </div>
   )
 }
 
 const ROW = 76
-/** 地圖最上面留的空白：投影桌面上緣的漸淡（styles.css .holo-plane 的 mask）只落在這段，不會蓋到最後一關。 */
-const TOP_PAD = 36
-/** 投影桌面往後倒的角度與透視距離（和 styles.css 的 .holo-stage／.holo-plane 一起用）。 */
-const TILT = 22
-const PERSPECTIVE = 1000
-
-/** 3D 變形不會縮小排版占的空間：算出倒下後實際看得到的高度，把上方多出來的空白收掉。 */
-function tiltGap(height: number) {
-  const a = (TILT * Math.PI) / 180
-  const seen = (height * Math.cos(a) * PERSPECTIVE) / (PERSPECTIVE + height * Math.sin(a))
-  return Math.max(0, height - seen)
-}
+const TOP_PAD = 20
 
 /** 各街區地圖上浮著的地名（裝飾）。 */
 const PLACE_NAMES: Record<string, string[]> = {
@@ -84,8 +76,8 @@ function cityBlocks(seed: number, district: string, height: number) {
   return { blocks, names }
 }
 
-/** 街區地圖：斜躺的全息投影桌面。起點在最下面（離你最近），劇情大案在最上方的地平線。 */
-function MapView({ game }: { game: G }) {
+/** 起點在下，沿連線往上走。地圖獨立捲動，保留下一步清單的位置。 */
+function MapView({ game, scene }: { game: G; scene: ReactNode }) {
   const { g, act } = game
   const d = g.run.district
   const next = movable(g)
@@ -96,33 +88,37 @@ function MapView({ game }: { game: G }) {
   const height = TOP_PAD + L * ROW
   const deco = useMemo(() => cityBlocks(g.run.seed, d.id, height), [g.run.seed, d.id, height])
   const here = g.run.at ? findNode(d, g.run.at) : undefined
-  const focus = useRef<HTMLButtonElement | null>(null)
-  // 進地圖時把能前往的節點捲到畫面中間（地圖是從下往上走的）。
-  // 延到下一輪：App 換分頁時會把主畫面捲回頂端，它的 effect 比子元件晚跑，會蓋掉這次捲動
+  const mapScroll = useRef<HTMLDivElement>(null)
+  const nextLayer = Math.min(L, (here?.layer ?? -1) + 2)
   useEffect(() => {
-    const id = setTimeout(() => focus.current?.scrollIntoView({ block: 'center', behavior: 'auto' }), 0)
-    return () => clearTimeout(id)
-  }, [g.run.at])
-  const types = [...new Set(d.layers.flat().map((n) => n.type))]
+    const map = mapScroll.current
+    if (map) map.scrollTop = TOP_PAD + (L - nextLayer) * ROW - map.clientHeight * 0.48
+  }, [L, nextLayer])
   return (
-    <>
-      <div className="holo-frame">
-        <div className="holo-hud">
-          <span className="tech text-[12px] text-cyan">NETMAP://{d.id.toUpperCase()}</span>
-          <span className="text-[15px] font-bold text-heading">{d.name}・街區地圖</span>
-          <span className="tech ml-auto text-[12px] text-muted">
-            LAYER {String((here?.layer ?? -1) + 2).padStart(2, '0')}/{L}
-          </span>
+    <div className="route-board">
+      <div className="route-scene" data-enter>
+        {scene}
+        <div className="district-title">
+          <h1>{d.name}</h1>
+          <span className="tech">第 {nextLayer} / {L} 層</span>
         </div>
-        <div className="holo-hint">
-          {g.character.picks.length
-            ? '先挑完三選一才能前進'
-            : g.character.attrPoints > 0
-              ? `還有 ${g.character.attrPoints} 點屬性：點下方「角色」分配`
-              : '▼ 你在這裡・往上走，點亮著的節點前進'}
+      </div>
+      <section className="route-choices" aria-labelledby="next-routes">
+        <div className="screen-heading">
+          <h2 id="next-routes">下一步可以去</h2>
+          <span className="tech text-muted">{next.length} 條路線</span>
         </div>
-        <div className="holo-stage" style={{ perspective: `${PERSPECTIVE}px`, marginTop: -tiltGap(height) + 4 }}>
-          <div className="holo-plane" style={{ height, transform: `rotateX(${TILT}deg)` }}>
+        {next.length > 0
+          ? <NextList game={game} nodes={next} />
+          : <p className="text-muted">{g.character.picks.length ? '先挑完三選一才能前進。' : '目前沒有可前往的節點。'}</p>}
+      </section>
+      <section className="holo-frame route-map" aria-labelledby="route-map-title">
+        <div className="screen-heading px-1">
+          <h2 id="route-map-title">街區地圖</h2>
+          <span className="text-muted">往上看後續路線</span>
+        </div>
+        <div ref={mapScroll} className="holo-scroll" tabIndex={0} aria-label="可捲動的街區路線">
+          <div className="holo-plane" style={{ height }}>
             <svg className="absolute inset-0 h-full w-full overflow-visible" aria-hidden>
               {deco.blocks.map((b, i) => (
                 <rect key={i} x={`${b.x}%`} y={b.y} width={`${b.w}%`} height={b.h} className={b.tall ? 'holo-block holo-block-tall' : 'holo-block'} />
@@ -156,16 +152,17 @@ function MapView({ game }: { game: G }) {
               const p = pos(n)
               const on = can.has(n.id)
               const been = visited.has(n.id)
+              const eliteJob = n.type === 'elite' ? nodeJob(g, n) : undefined
+              const reward = eliteJob ? eliteRewardStyle(eliteJob, g.run.districtIndex) : undefined
               const isHere = g.run.at === n.id
               const tone = n.type === 'elite' || n.type === 'boss' ? 'var(--color-red)' : n.type === 'story' ? 'var(--color-warning)' : 'var(--color-cyan)'
               const color = isHere ? 'var(--color-red)' : on ? tone : been ? 'color-mix(in srgb, var(--color-red) 55%, transparent)' : 'color-mix(in srgb, var(--color-line) 45%, transparent)'
               return (
                 <button
                   key={n.id}
-                  ref={n.id === next[0]?.id ? focus : undefined}
                   disabled={!on}
                   onClick={() => act({ t: 'move', nodeId: n.id })}
-                  aria-label={`${NODE_LABEL[n.type]}（第 ${n.layer + 1} 層）`}
+                  aria-label={`${NODE_LABEL[n.type]}（第 ${n.layer + 1} 層）${reward ? `・保證${STYLE_LABEL[reward]}稀有裝備` : ''}`}
                   className={`holo-pin ${on ? 'holo-pin-on' : ''} ${isHere ? 'holo-pin-here' : ''}`}
                   style={{ left: `${p.x}%`, top: p.y, ['--pin' as string]: color }}
                 >
@@ -173,28 +170,17 @@ function MapView({ game }: { game: G }) {
                   {(on || isHere) && <span className="holo-ring" aria-hidden />}
                   <span className="holo-hex">
                     <span className="holo-hex-in" style={{ color: on || isHere ? tone : undefined }}>
-                      {on || isHere ? <NeonIcon icon={Icon} on={on} size={17} /> : <Icon size={16} strokeLinecap="square" strokeLinejoin="miter" />}
+                      <Icon size={17} aria-hidden />
                     </span>
                   </span>
-                  <span className={`holo-label ${on ? 'holo-label-on' : ''}`}>{isHere ? '你在這裡' : NODE_LABEL[n.type]}</span>
+                  <span className={`holo-label ${on ? 'holo-label-on' : ''}`}>{isHere ? '你在這裡' : reward ? `精英・${STYLE_LABEL[reward]}` : NODE_LABEL[n.type]}</span>
                 </button>
               )
             })}
           </div>
         </div>
-        <div className="holo-legend">
-          {types.map((t) => {
-            const Icon = NODE_ICON[t]
-            return (
-              <span key={t} className="flex items-center gap-1">
-                <Icon size={12} /> {NODE_LABEL[t]}
-              </span>
-            )
-          })}
-        </div>
-      </div>
-      {next.length > 0 && <NextList game={game} nodes={next} />}
-    </>
+      </section>
+    </div>
   )
 }
 
@@ -206,8 +192,7 @@ function NextList({ game, nodes }: { game: G; nodes: MapNode[] }) {
   const { g, act } = game
   const c = g.character
   return (
-    <Panel innerClass="p-3 space-y-2">
-      <div className="text-[15px] font-bold text-heading">下一步可以去</div>
+    <div className="route-list">
       {nodes.map((n) => {
         const job = nodeJob(g, n)
         const Icon = job ? DIR_ICON[job.direction] : NODE_ICON[n.type]
@@ -215,24 +200,31 @@ function NextList({ game, nodes }: { game: G; nodes: MapNode[] }) {
         const sub = !job
           ? NODE_HINT[n.type as keyof typeof NODE_HINT]
           : [
-              `「${job.name}」¢${jobReward(job, perkReward(c, job.direction))}`,
               n.type === 'elite' ? '⚔ 硬仗＋可能致命的抉擇・撐過去一定掉寶' : `${BEATS[job.direction].length} 個場面・第一場擲 ${Math.max(0, poolSize(jobPool(c, job, BEATS[job.direction][0].attr)))} 顆${job.direction === 'force' ? '・最後一定要打' : ''}`,
             ].join('・')
+        const rewardStyle = job && n.type === 'elite' ? eliteRewardStyle(job, g.run.districtIndex) : undefined
+        const solutions = job && n.type === 'job' ? jobSolutions(job.id, 0, c) : []
         const mission = n.type === 'job' || n.type === 'elite' || n.type === 'story' || n.type === 'boss'
         return (
-          <button key={n.id} data-testid="next-node" onClick={() => act({ t: 'move', nodeId: n.id })} className={`block w-full text-left cut cut-sm ${n.type === 'elite' || n.type === 'boss' ? 'cut-red' : ''}`}>
-            <div className="cut-in flex min-h-12 items-start gap-3 p-2.5">
+          <button key={n.id} data-testid="next-node" onClick={() => act({ t: 'move', nodeId: n.id })} className="route-option" data-risk={n.type === 'elite' || n.type === 'boss' ? 'high' : undefined}>
+            <div className="route-option-inner">
               <Icon size={18} className={`mt-0.5 shrink-0 ${n.type === 'elite' || n.type === 'boss' ? 'text-red' : 'text-cyan'}`} />
               <div className="min-w-0 flex-1">
-                <div className="font-bold text-fg-list">{head}</div>
-                <div className="text-[13px] text-muted">{sub}</div>
+                <div className="flex flex-wrap items-baseline justify-between gap-x-2">
+                  <span className="route-option-title">{job?.name ?? head}</span>
+                  {job && <span className="route-reward">¢{jobReward(job, perkReward(c, job.direction)).toLocaleString()}</span>}
+                </div>
+                <div className="text-[13px] text-muted">{job && <span>{head} · </span>}{sub}</div>
+                {rewardStyle && <div className="text-[13px] text-warning">完成保證出現 1 件{STYLE_LABEL[rewardStyle]}稀有裝備</div>}
+                {solutions.length > 0 && <div className="text-[13px] text-cyan">可用解法・{solutions.map((s) => s.label).join('／')}</div>}
                 {mission && neuralStage(marginOf(c)) !== 'stable' && <div className="text-[13px] text-red">{`神經${NEURAL_STAGE_LABEL[neuralStage(marginOf(c))]}：${JOB_PSYCHO_SHORT[neuralStage(marginOf(c))]}`}</div>}
               </div>
+              <ArrowUpRight size={17} className="route-arrow" aria-hidden />
             </div>
           </button>
         )
       })}
-    </Panel>
+    </div>
   )
 }
 

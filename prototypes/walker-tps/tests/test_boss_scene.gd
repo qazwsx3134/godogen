@@ -18,6 +18,15 @@ func _test_battle_scene() -> void:
 	_expect(not boss.has_node("Legs"), "the Boss walks on its own model legs, no added limbs")
 	_expect(session.total == 4 and session.objective_name == "TARGETS", "Boss and three scouts share the victory objective")
 	_expect(armor.get_child_count() == 10, "ten armor instances are saved in the map")
+	var cover := (load("res://scenes/ruined_wall.tscn") as PackedScene).instantiate() as Node3D
+	cover.position = boss.position
+	scene.add_child(cover)
+	await _frames(3)
+	_expect(not cover.has_node("Main"), "Boss hull contact removes destructible cover")
+	_expect(cover.get_children().any(func(node: Node) -> bool:
+		var sound := node.get_node_or_null("Sound") as AudioStreamPlayer3D
+		return sound != null and sound.playing), "crushed cover emits a spatial break sound")
+	cover.queue_free()
 	var start := boss.global_position
 	var unit: Node3D = armor.get_node("Melee00")
 	var unit_start := unit.global_position

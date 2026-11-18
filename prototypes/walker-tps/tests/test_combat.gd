@@ -19,6 +19,16 @@ func _run() -> void:
 	await _frames(30)
 	_expect(main.match_state=="playing" and walker.controls_enabled,"deploy enables controls")
 	_expect(main.get_node("Navigation").navigation_mesh.get_polygon_count()>0,"saved navigation mesh exists")
+	var hud := main.get_node("CombatHUD")
+	var sight: Control = hud.get_node("Crosshair")
+	var status: Label = hud.get_node("Telemetry/Status")
+	var weapon: Label = hud.get_node("Readouts/Ammo")
+	_expect(sight.visible and sight.get_rect().get_center().is_equal_approx(
+		root.get_visible_rect().get_center()), "HUD sight is centered on the camera aim")
+	_expect("SCOUTS" in status.text and "HULL" in hud.get_node("Hull/Integrity").text and ":" in hud.get_node("Readouts/Timer").text,
+		"combat telemetry shows hull, mission progress and time")
+	_expect("AMMO" in weapon.text,
+		"sight frame shows current ammunition")
 	await _test_projectiles()
 	await _test_hooks()
 	await _test_ai()

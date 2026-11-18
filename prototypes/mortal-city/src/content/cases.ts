@@ -69,6 +69,8 @@ export interface StoryCase {
   xp: number
   /** 要先結案（活著結案，任何結果都算）的案件；撤離也會解鎖，不軟鎖。 */
   requires?: string
+  /** 前案未完成時，補線索從本案報酬扣除的比例。 */
+  missingLeadFee?: number
   body: string
   /** 依前置案件的結果多一段內文：key 是 `variantOf` 回傳值。 */
   variants?: Record<string, string>
@@ -97,6 +99,10 @@ export interface CaseRecord {
 export function variantOf(prev: CaseRecord | undefined): string | null {
   if (!prev) return null
   return prev.outcome === 'survived' || prev.outcome === 'maimed' ? 'won' : 'lost'
+}
+
+export function caseLeadFee(sc: StoryCase, records: Record<string, CaseRecord>): number {
+  return sc.requires && variantOf(records[sc.requires]) === 'lost' ? sc.missingLeadFee ?? 0 : 0
 }
 
 const TEST_LOG = [
@@ -309,6 +315,7 @@ export const CASE_02: StoryCase = {
   posted: '2077.11.06 01:30',
   xp: 40,
   requires: 'P01-01',
+  missingLeadFee: 0.2,
   body:
     '我這裡今晚不收現金。\n\n三丁目有一間神坂バイオテック的「社區診療所」，地下二樓的病歷庫裡有一份編號 K-0413 的病歷。我要那份病歷，完整的，不是摘要。\n\n神坂今晚 03:00 要把它轉到本社，在那之前拿出來。\n\n你拿到它，我付你錢，再把你身上的洞縫好，不收費。拿不到，你身上的洞就自己想辦法。',
   variants: {
@@ -317,7 +324,7 @@ export const CASE_02: StoryCase = {
   },
   approachReplies: {
     force: { who: 'mpd', at: '01:12', text: '【MPD 通報】昨晚環狀線新宿駅有不明傭兵毆打執勤巡警兩名，特徵已建檔。提供線索者有獎。' },
-    hack: { who: 'mist', at: '01:20', text: '昨晚車站的掃描器是你改的吧？手法還行。這次的班表，算我請客。' },
+    hack: { who: 'mist', at: '01:20', text: '昨晚車站的掃描器是你改的吧？手法還行。女孩要是到了白蛇那裡，她記得夜班交接的時間。' },
     roof: { who: 'crow', at: '01:18', text: '插播：昨晚有乘客說，末班車的車頂上趴著兩個人。MPD 說是雨太大看錯了。我說，魔都的雨從來不會讓人看錯。' },
     stealth: { who: 'crow', at: '01:25', text: '聽眾來電說，昨晚環狀線 B2 有個女孩憑空消失了。我說親愛的，這座城市每天都有人消失，只是很少消失得這麼漂亮。' },
   },

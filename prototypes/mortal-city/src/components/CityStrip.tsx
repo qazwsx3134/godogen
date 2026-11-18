@@ -52,7 +52,7 @@ function nodeLayers(file: string, look: Look): SpritePlacement[] {
   return [{ id: 'bg', src: `/sprites/${file}.png`, w: 384, h: 160, x: 0, y: 0 }, heroOf(look, { id: 'hero_stand', x: 150, y: 76 })]
 }
 
-export function CityStrip({ mode, label, sub, bg, story, district = 'shinjuku', look = 'a', safehouse }: { mode: StripMode; label: string; sub?: string; bg?: NodeBg; story?: string; district?: string; look?: Look; safehouse?: boolean }) {
+export function CityStrip({ mode, label, sub, bg, story, district = 'shinjuku', look = 'a', safehouse, showLabel = true }: { mode: StripMode; label: string; sub?: string; bg?: NodeBg; story?: string; district?: string; look?: Look; safehouse?: boolean; showLabel?: boolean }) {
   const sc = SCENES[look]
   const file = safehouse ? 'safehouse' : story ? `story_${story}` : bg ? (DISTRICT_BG.includes(district) ? `node_${district}_${bg}` : `node_${bg}`) : null
   const layers = mode === 'node' && file ? nodeLayers(file, look) : mode === 'run' ? sc.street : mode === 'dead' ? sc.empty : sc.room
@@ -61,10 +61,10 @@ export function CityStrip({ mode, label, sub, bg, story, district = 'shinjuku', 
       <div className="cut-in relative overflow-hidden">
         <SpriteScene layers={layers} fx={mode === 'run' ? STREET_FX : mode === 'rest' ? ROOM_FX.filter((f) => look === 'a' || f.fx !== 'zz') : []} label={label} />
         {mode === 'dead' && <div className="pointer-events-none absolute inset-0 bg-bg/60" />}
-        <div className="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between gap-2 bg-gradient-to-b from-bg/85 to-transparent px-2 pt-1 pb-3">
+        {showLabel && <div className="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between gap-2 bg-gradient-to-b from-bg/85 to-transparent px-2 pt-1 pb-3">
           <span className={`text-[13px] font-bold ${mode === 'dead' ? 'text-red' : mode === 'run' || mode === 'node' ? 'text-cyan' : 'text-heading'}`}>{label}</span>
           {sub && <span className="tech text-[13px] text-heading">{sub}</span>}
-        </div>
+        </div>}
       </div>
     </div>
   )
