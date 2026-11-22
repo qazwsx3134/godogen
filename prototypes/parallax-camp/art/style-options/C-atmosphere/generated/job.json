@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 2,
+  "provider": "openai",
+  "kind": "image",
+  "route": "codex-cli",
+  "requestedModel": "codex-image_gen",
+  "options": {
+    "tool": "image_gen"
+  },
+  "promptSha256": "1490b5cbc33624cefa97ba250cefd885af4ca276cb77de33fd1961ec77156923",
+  "references": [
+    {
+      "sha256": "43409feb3704e1c84dbf5a40529c3c0eea46d419618a0337ffd3607898083a22",
+      "bytes": 172330
+    }
+  ],
+  "fingerprint": "b1b2a124352e262a070733fba7078019d5e7727ec27a48544b804d6a5434678a",
+  "estimate": {
+    "usd": 0.0,
+    "currency": "USD",
+    "pricesVersion": "2026-10-06",
+    "items": [],
+    "basis": "subscription quota call: no per-call USD price; counted by call caps"
+  },
+  "consent": {
+    "provider": "openai",
+    "model": "codex-image_gen",
+    "calls": 1,
+    "estimateUsd": 0.0,
+    "route": "codex-cli",
+    "quota": true,
+    "account": "the user's own Codex sign-in (ChatGPT)",
+    "note": "uses the subscription quota of that sign-in, never API credit"
+  },
+  "artSource": "host_image",
+  "execution": "execute",
+  "status": "done",
+  "receipt": {
+    "startedAt": "2026-11-22T18:20:46.245Z",
+    "submittedAt": "2026-11-22T18:20:46.273Z",
+    "completedAt": "2026-11-22T18:21:47.681Z",
+    "wallMs": 61436,
+    "providerMs": 62848,
+    "attempt": 1,
+    "purpose": "Style option C blue hour hand painted pixel preview",
+    "toolVersion": "cli_media/0.6.0",
+    "outcomeCode": "ok"
+  },
+  "ledger": {
+    "projectDir": "../..",
+    "reservationId": "9f671782eb654bed812b16f58df7ce8c",
+    "status": "done"
+  },
+  "cliRun": {
+    "tool": "codex",
+    "runId": "bf4cfa80d5f24ea5930a06a178f8663c",
+    "cwd": "<tmp>/forge-cli-bf4cfa80d5f2-4737b4d2",
+    "startedAt": "2026-11-22T18:20:46.245Z",
+    "version": "0.170.0",
+    "versionText": "codex-cli 0.170.0",
+    "recipe": "codex-exec-imagegen/1",
+    "home": "CODEX_HOME",
+    "verifiedBefore": true,
+    "threadId": "01a2047d-3edd-7b81-b0ea-f603ab028178"
+  },
+  "adoption": {
+    "method": "native-run-folder",
+    "source": "CODEX_HOME/generated_images/01a2047d-3edd-7b81-b0ea-f603ab028178/exec-f97aa7ff-80e3-446e-8892-76315e09af2b.png",
+    "sourceSha256": "2e256972dad54ce3e464057daa81a04dbe61d25772755379cf95884cad6293dc",
+    "sourceMtime": "2026-11-22T18:21:42Z",
+    "freshAfter": "2026-11-22T18:20:46.281Z",
+    "checks": [
+      "inside the CLI's own folder for this run",
+      "no symlink or junction",
+      "regular file of a sane size",
+      "newer than the run",
+      "magic bytes",
+      "decodes",
+      "exactly one output",
+      "exclusive copy with matching sha256"
+    ],
+    "finalAnswerNamesFile": true
+  },
+  "artifact": {
+    "path": "generated.png",
+    "sha256": "2e256972dad54ce3e464057daa81a04dbe61d25772755379cf95884cad6293dc",
+    "bytes": 2749671,
+    "format": "PNG",
+    "size": [
+      1672,
+      941
+    ]
+  }
+}
