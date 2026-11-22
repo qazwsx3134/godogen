@@ -1,0 +1,18 @@
+[gd_scene format=3]
+
+[ext_resource type="SpriteFrames" path="res://addons/proto_kit/vfx/assets/scenario/ember-projectile/ember-projectile.tres" id="1_nyyyh"]
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/sheet_effect.gd" id="2_t3kke"]
+
+[node name="EmberProjectile" type="AnimatedSprite3D" unique_id=2038597756]
+offset = Vector2(-17.919998, 0)
+pixel_size = 0.025
+billboard = 1
+texture_filter = 0
+sprite_frames = ExtResource("1_nyyyh")
+animation = &"ember_projectile"
+frame = 2
+script = ExtResource("2_t3kke")
+metadata/vfx_source = "scenario"
+metadata/vfx_id = "ember-projectile"
+metadata/placement = "projectile"
+metadata/depth_hint = "front"

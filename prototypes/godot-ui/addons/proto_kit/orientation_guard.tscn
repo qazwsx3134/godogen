@@ -1,0 +1,30 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/orientation_guard.gd" id="1_og"]
+
+[node name="OrientationGuard" type="CanvasLayer"]
+process_mode = 3
+layer = 100
+script = ExtResource("1_og")
+
+[node name="Cover" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.08, 0.06, 0.12, 1)
+
+[node name="Message" type="Label" parent="Cover"]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 28
+text = "請把手機轉成橫向
+才能遊玩"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3

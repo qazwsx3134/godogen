@@ -1,0 +1,22 @@
+[gd_scene format=3]
+
+[ext_resource type="StyleBox" path="res://scenes/button_frame.tres" id="1_6u4wf"]
+[ext_resource type="Script" path="res://scripts/card.gd" id="2_ktuci"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kg30u"]
+
+[node name="Card" type="Button" unique_id=2039680796]
+offset_right = 110.0
+offset_bottom = 150.0
+theme_override_styles/normal = ExtResource("1_6u4wf")
+theme_override_styles/pressed = ExtResource("1_6u4wf")
+theme_override_styles/hover = ExtResource("1_6u4wf")
+theme_override_styles/disabled = ExtResource("1_6u4wf")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_kg30u")
+theme_override_colors/font_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_pressed_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_hover_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_disabled_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_font_sizes/font_size = 36
+text = "1"
+script = ExtResource("2_ktuci")

@@ -1,0 +1,169 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/00gamedevs/source_effect.gd" id="1_pf7bh"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/fire-vortex/spatial_part_0.gdshader" id="2_bu7p2"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/fire-vortex/part_0.res" id="3_xebhq"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/fire-vortex/spatial_part_1.gdshader" id="4_mn43t"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/fire-vortex/part_1.res" id="5_v8n6f"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/fire-vortex/spatial_part_2.gdshader" id="6_sfcy0"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/fire-vortex/part_2.res" id="7_l07p7"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/fire-vortex/spatial_part_3.gdshader" id="8_7eo3c"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/fire-vortex/part_3.res" id="9_p781g"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/fire-vortex/spatial_part_4.gdshader" id="10_ws0bt"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/fire-vortex/part_4.res" id="11_i7e6m"]
+[ext_resource type="AnimationLibrary" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/fire-vortex/motion.res" id="12_rgpky"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kn82t"]
+resource_local_to_scene = true
+render_priority = 3
+shader = ExtResource("2_bu7p2")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 402.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uStopTime = -1.0
+shader_parameter/uEndDuration = 1.4
+shader_parameter/uQuantity = 1.0
+shader_parameter/uSpread = 1.0
+shader_parameter/uTime = 1.8
+shader_parameter/uStretch = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(1, 0.24620132, 0.070360094)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l32fb"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("4_mn43t")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 15840
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 1.8
+shader_parameter/uRetire = 0.0
+shader_parameter/uOpening = 1.0
+shader_parameter/uStoppedAt = -1.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(1, 0.24620132, 0.070360094)
+shader_parameter/uGlow = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u2j0k"]
+resource_local_to_scene = true
+render_priority = 1
+shader = ExtResource("6_sfcy0")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 82.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 1.8
+shader_parameter/uStopTime = -1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(1, 0.24620132, 0.070360094)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3y6ht"]
+resource_local_to_scene = true
+render_priority = 4
+shader = ExtResource("8_7eo3c")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 28.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 1.8
+shader_parameter/uStopTime = -1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(1, 0.24620132, 0.070360094)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lue65"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("10_ws0bt")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(1, 0.24620132, 0.070360094)
+shader_parameter/uTime = 1.8
+
+[node name="FireVortex" type="Node3D" unique_id=396946464]
+script = ExtResource("1_pf7bh")
+effect_id = "fire-vortex"
+start_duration = 1.7
+end_duration = 1.4
+kind = 4
+variant = 2
+metadata/vfx_source = "00gamedevs"
+metadata/vfx_id = "fire-vortex"
+metadata/editor_preview_time = 1.8
+
+[node name="Parts" type="Node3D" parent="." unique_id=370483552]
+unique_name_in_owner = true
+
+[node name="Part000" type="MeshInstance3D" parent="Parts" unique_id=936809939]
+material_override = SubResource("ShaderMaterial_kn82t")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("3_xebhq")
+metadata/source_name = "Part0"
+
+[node name="Part001" type="MeshInstance3D" parent="Parts" unique_id=1093986033]
+material_override = SubResource("ShaderMaterial_l32fb")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("5_v8n6f")
+metadata/source_name = "vortex-column"
+
+[node name="Part002" type="MeshInstance3D" parent="Parts" unique_id=1383409700]
+material_override = SubResource("ShaderMaterial_u2j0k")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("7_l07p7")
+metadata/source_name = "Part2"
+
+[node name="Part003" type="MeshInstance3D" parent="Parts" unique_id=868833996]
+material_override = SubResource("ShaderMaterial_3y6ht")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("9_p781g")
+metadata/source_name = "Part3"
+
+[node name="Part004" type="MeshInstance3D" parent="Parts" unique_id=715599512]
+transform = Transform3D(1, 0, 0, 0, 2.220446e-16, 1, 0, -1, 2.220446e-16, 0, -1.38, 0)
+material_override = SubResource("ShaderMaterial_lue65")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("11_i7e6m")
+metadata/source_name = "Part4"
+
+[node name="Motion" type="AnimationPlayer" parent="." unique_id=638237770]
+unique_name_in_owner = true
+libraries/ = ExtResource("12_rgpky")

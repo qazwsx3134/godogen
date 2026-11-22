@@ -1,0 +1,232 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/00gamedevs/source_effect.gd" id="1_ley3a"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/charged-beam/spatial_part_0.gdshader" id="2_80p2k"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/charged-beam/part_0.res" id="3_l6jvp"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/charged-beam/spatial_part_1.gdshader" id="4_s1qyw"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/charged-beam/part_1.res" id="5_je4vm"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/charged-beam/spatial_part_2.gdshader" id="6_vbgvw"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/charged-beam/part_2.res" id="7_eyg38"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/charged-beam/spatial_part_3.gdshader" id="8_ta622"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/charged-beam/part_3.res" id="9_t3nu8"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/charged-beam/spatial_part_4.gdshader" id="10_vvjx5"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/charged-beam/part_4.res" id="11_4w8el"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/charged-beam/spatial_part_5.gdshader" id="12_la4mk"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/charged-beam/part_5.res" id="13_kxfxw"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/charged-beam/spatial_part_6.gdshader" id="14_vsfhs"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/charged-beam/part_6.res" id="15_7p8oo"]
+[ext_resource type="AnimationLibrary" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/charged-beam/motion.res" id="16_5b7u1"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v80tp"]
+resource_local_to_scene = true
+render_priority = 3
+shader = ExtResource("2_80p2k")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 378.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uStopTime = -1.0
+shader_parameter/uEndDuration = 0.6
+shader_parameter/uQuantity = 1.0
+shader_parameter/uSpread = 1.0
+shader_parameter/uTime = 1.7000000000000002
+shader_parameter/uStretch = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.92158186, 0.57112485, 0.14995979)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_62vqs"]
+resource_local_to_scene = true
+render_priority = 4
+shader = ExtResource("4_s1qyw")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.92158186, 0.57112485, 0.14995979)
+shader_parameter/uTime = 1.7000000000000002
+shader_parameter/uRole = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_30vg6"]
+resource_local_to_scene = true
+render_priority = 4
+shader = ExtResource("6_vbgvw")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.92158186, 0.57112485, 0.14995979)
+shader_parameter/uTime = 1.7000000000000002
+shader_parameter/uRole = 1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i7ufq"]
+resource_local_to_scene = true
+render_priority = 3
+shader = ExtResource("8_ta622")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 1920
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 1.7000000000000002
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.92158186, 0.57112485, 0.14995979)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_thwbg"]
+resource_local_to_scene = true
+render_priority = 3
+shader = ExtResource("10_vvjx5")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 192
+shader_parameter/source_instance_count = 6.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 1.7000000000000002
+shader_parameter/uStretch = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.92158186, 0.57112485, 0.14995979)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vckqv"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("12_la4mk")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.92158186, 0.57112485, 0.14995979)
+shader_parameter/uTime = 1.7000000000000002
+shader_parameter/uEnd = -1.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r4go6"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("14_vsfhs")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.92158186, 0.57112485, 0.14995979)
+shader_parameter/uTime = 1.7000000000000002
+shader_parameter/uEnd = 1.0
+
+[node name="ChargedBeam" type="Node3D" unique_id=1470639800]
+script = ExtResource("1_ley3a")
+effect_id = "charged-beam"
+start_duration = 1.6
+end_duration = 0.6
+kind = 1
+variant = 2
+metadata/vfx_source = "00gamedevs"
+metadata/vfx_id = "charged-beam"
+metadata/editor_preview_time = 1.7000000000000002
+
+[node name="Parts" type="Node3D" parent="." unique_id=532282482]
+unique_name_in_owner = true
+
+[node name="Part000" type="MeshInstance3D" parent="Parts" unique_id=1420009437]
+material_override = SubResource("ShaderMaterial_v80tp")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("3_l6jvp")
+metadata/source_name = "Part0"
+
+[node name="Part001" type="MeshInstance3D" parent="Parts" unique_id=670415839]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.4, 0, 0)
+material_override = SubResource("ShaderMaterial_62vqs")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("5_je4vm")
+metadata/source_name = "Part1"
+
+[node name="Part002" type="MeshInstance3D" parent="Parts" unique_id=1475001530]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4, 0, 0)
+material_override = SubResource("ShaderMaterial_30vg6")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("7_eyg38")
+metadata/source_name = "Part2"
+
+[node name="Part003" type="MeshInstance3D" parent="Parts" unique_id=1034658137]
+material_override = SubResource("ShaderMaterial_i7ufq")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("9_t3nu8")
+metadata/source_name = "Part3"
+
+[node name="Part004" type="MeshInstance3D" parent="Parts" unique_id=918820527]
+material_override = SubResource("ShaderMaterial_thwbg")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("11_4w8el")
+metadata/source_name = "Part4"
+
+[node name="Part005" type="MeshInstance3D" parent="Parts" unique_id=2102182460]
+transform = Transform3D(2.220446e-16, 0, 1, 0, 1, 0, -1, 0, 2.220446e-16, -2.4, 0, 0)
+material_override = SubResource("ShaderMaterial_vckqv")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("13_kxfxw")
+metadata/source_name = "Part5"
+
+[node name="Part006" type="MeshInstance3D" parent="Parts" unique_id=1857834918]
+transform = Transform3D(2.220446e-16, 0, 1, 0, 1, 0, -1, 0, 2.220446e-16, 2.4, 0, 0)
+material_override = SubResource("ShaderMaterial_r4go6")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("15_7p8oo")
+metadata/source_name = "Part6"
+
+[node name="Motion" type="AnimationPlayer" parent="." unique_id=1108877360]
+unique_name_in_owner = true
+libraries/ = ExtResource("16_5b7u1")

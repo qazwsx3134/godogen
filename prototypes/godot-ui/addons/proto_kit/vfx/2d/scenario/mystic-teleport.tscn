@@ -1,0 +1,16 @@
+[gd_scene format=3]
+
+[ext_resource type="SpriteFrames" path="res://addons/proto_kit/vfx/assets/scenario/mystic-teleport/mystic-teleport.tres" id="1_0ihc6"]
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/2d/sheet_effect.gd" id="2_5moen"]
+
+[node name="MysticTeleport" type="AnimatedSprite2D" unique_id=341124408]
+texture_filter = 1
+sprite_frames = ExtResource("1_0ihc6")
+animation = &"mystic_teleport"
+frame = 2
+offset = Vector2(0, -31.199999)
+script = ExtResource("2_5moen")
+metadata/vfx_source = "scenario"
+metadata/vfx_id = "mystic-teleport"
+metadata/placement = "caster-ground"
+metadata/depth_hint = "front"

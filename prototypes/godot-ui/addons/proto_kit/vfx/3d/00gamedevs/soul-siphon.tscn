@@ -1,0 +1,83 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/00gamedevs/source_effect.gd" id="1_2iw43"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/soul-siphon/spatial_part_0.gdshader" id="2_nu0ua"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/soul-siphon/part_0.res" id="3_khhgx"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/soul-siphon/spatial_part_1.gdshader" id="4_bpx4x"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/soul-siphon/part_1.res" id="5_fkw0t"]
+[ext_resource type="AnimationLibrary" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/soul-siphon/motion.res" id="6_0jjsk"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gklec"]
+resource_local_to_scene = true
+render_priority = 1
+shader = ExtResource("2_nu0ua")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 8046
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 1.2
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uStopTime = -1.0
+shader_parameter/uEndDuration = 0.65
+shader_parameter/uStretch = 1.0
+shader_parameter/uQuantity = 9.0
+shader_parameter/uSpread = 1.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.39157248, 0.22696587, 0.80695224)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8c386"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("4_bpx4x")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 12
+shader_parameter/source_instance_count = 256.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 1.2
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uStopTime = -1.0
+shader_parameter/uEndDuration = 0.65
+shader_parameter/uStretch = 1.0
+shader_parameter/uQuantity = 9.0
+shader_parameter/uSpread = 1.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.39157248, 0.22696587, 0.80695224)
+
+[node name="SoulSiphon" type="Node3D" unique_id=746082368]
+script = ExtResource("1_2iw43")
+effect_id = "soul-siphon"
+end_duration = 0.65
+kind = 1
+variant = 5
+metadata/vfx_source = "00gamedevs"
+metadata/vfx_id = "soul-siphon"
+metadata/editor_preview_time = 1.2
+
+[node name="Parts" type="Node3D" parent="." unique_id=1240181585]
+unique_name_in_owner = true
+
+[node name="Part000" type="MeshInstance3D" parent="Parts" unique_id=1331901728]
+material_override = SubResource("ShaderMaterial_gklec")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("3_khhgx")
+metadata/source_name = "utility-body"
+
+[node name="Part001" type="MeshInstance3D" parent="Parts" unique_id=851697210]
+material_override = SubResource("ShaderMaterial_8c386")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("5_fkw0t")
+metadata/source_name = "utility-detail-particles"
+
+[node name="Motion" type="AnimationPlayer" parent="." unique_id=1424029571]
+unique_name_in_owner = true
+libraries/ = ExtResource("6_0jjsk")

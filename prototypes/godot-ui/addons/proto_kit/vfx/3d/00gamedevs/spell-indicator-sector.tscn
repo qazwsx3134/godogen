@@ -1,0 +1,24 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/00gamedevs/spell_indicator.gd" id="1_0eg07"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/spatial_spell_indicator.gdshader" id="2_10jjw"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3kptt"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("2_10jjw")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_mtini"]
+size = Vector2(2.04, 2.04)
+
+[node name="SpellIndicatorSector" type="Node3D" unique_id=736106398]
+script = ExtResource("1_0eg07")
+angle_degrees = 90.0
+metadata/vfx_source = "00gamedevs"
+metadata/vfx_id = "spell-indicator-sector"
+
+[node name="Surface" type="MeshInstance3D" parent="." unique_id=1383387750]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.01, 0)
+material_override = SubResource("ShaderMaterial_3kptt")
+mesh = SubResource("PlaneMesh_mtini")

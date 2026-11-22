@@ -1,0 +1,16 @@
+[gd_scene format=3]
+
+[ext_resource type="SpriteFrames" path="res://addons/proto_kit/vfx/assets/scenario/astral-portal/astral-portal.tres" id="1_kp0f1"]
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/2d/sheet_effect.gd" id="2_3iobh"]
+
+[node name="AstralPortal" type="AnimatedSprite2D" unique_id=341124408]
+texture_filter = 1
+sprite_frames = ExtResource("1_kp0f1")
+animation = &"astral_portal"
+frame = 2
+offset = Vector2(0, -16)
+script = ExtResource("2_3iobh")
+metadata/vfx_source = "scenario"
+metadata/vfx_id = "astral-portal"
+metadata/placement = "between"
+metadata/depth_hint = "front"

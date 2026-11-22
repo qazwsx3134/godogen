@@ -1,0 +1,23 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/00gamedevs/impact_frame.gd" id="1_ljy6o"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/canvas_impact_frame.gdshader" id="2_xtaaq"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nxemj"]
+resource_local_to_scene = true
+shader = ExtResource("2_xtaaq")
+
+[node name="ImpactFrame" type="CanvasLayer" unique_id=1854443058]
+layer = 100
+script = ExtResource("1_ljy6o")
+metadata/vfx_id = "impact-frame"
+metadata/vfx_source = "00gamedevs"
+
+[node name="Overlay" type="ColorRect" parent="." unique_id=1813788366]
+unique_name_in_owner = true
+visible = false
+material = SubResource("ShaderMaterial_nxemj")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2

@@ -1,0 +1,11 @@
+[gd_scene format=3]
+
+[ext_resource type="SpriteFrames" path="res://addons/proto_kit/vfx/demo_ring.tres" id="1_q6oum"]
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/sheet_effect.gd" id="2_3wr1w"]
+
+[node name="SheetEffect3D" type="AnimatedSprite3D" unique_id=2038597756]
+pixel_size = 0.04
+billboard = 1
+texture_filter = 0
+sprite_frames = ExtResource("1_q6oum")
+script = ExtResource("2_3wr1w")

@@ -1,0 +1,16 @@
+[gd_scene format=3]
+
+[ext_resource type="SpriteFrames" path="res://addons/proto_kit/vfx/assets/scenario/night-aura/night-aura.tres" id="1_7v2ka"]
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/2d/sheet_effect.gd" id="2_sio0u"]
+
+[node name="NightAura" type="AnimatedSprite2D" unique_id=341124408]
+texture_filter = 1
+sprite_frames = ExtResource("1_7v2ka")
+animation = &"night_aura"
+frame = 2
+offset = Vector2(0, -47.999996)
+script = ExtResource("2_sio0u")
+metadata/vfx_source = "scenario"
+metadata/vfx_id = "night-aura"
+metadata/placement = "caster-ground"
+metadata/depth_hint = "behind"

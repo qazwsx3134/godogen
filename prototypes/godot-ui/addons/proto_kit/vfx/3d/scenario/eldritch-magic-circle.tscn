@@ -1,0 +1,18 @@
+[gd_scene format=3]
+
+[ext_resource type="SpriteFrames" path="res://addons/proto_kit/vfx/assets/scenario/eldritch-magic-circle/eldritch-magic-circle.tres" id="1_vys1j"]
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/sheet_effect.gd" id="2_n2nxl"]
+
+[node name="EldritchMagicCircle" type="AnimatedSprite3D" unique_id=2038597756]
+offset = Vector2(0, 4.800001)
+pixel_size = 0.025
+billboard = 1
+texture_filter = 0
+sprite_frames = ExtResource("1_vys1j")
+animation = &"eldritch_magic_circle"
+frame = 2
+script = ExtResource("2_n2nxl")
+metadata/vfx_source = "scenario"
+metadata/vfx_id = "eldritch-magic-circle"
+metadata/placement = "caster-ground"
+metadata/depth_hint = "front"

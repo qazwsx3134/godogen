@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://ou8emlkjn5qs"]
+
+[ext_resource type="StyleBox" path="res://scenes/button_frame.tres" id="1_87skf"]
+[ext_resource type="Script" uid="uid://bgiwb2afvgmny" path="res://scripts/juicy_button.gd" id="2_se8b6"]
+[ext_resource type="Texture2D" uid="uid://bbcv3sewf3o50" path="res://assets/kenney/button_frame.png" id="3_4x6wf"]
+[ext_resource type="AudioStream" uid="uid://dqk1g5gnnmg5h" path="res://assets/sfx/bong_001.ogg" id="3_se8b6"]
+[ext_resource type="AudioStream" uid="uid://dyjntt0vlc46q" path="res://assets/sfx/select_002.ogg" id="4_4x6wf"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ug6un"]
+
+[node name="JuicyButton" type="Button" unique_id=1208500778]
+offset_transform_enabled = true
+theme_override_colors/font_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_focus_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_pressed_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_hover_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = ExtResource("1_87skf")
+theme_override_styles/pressed = ExtResource("1_87skf")
+theme_override_styles/hover = ExtResource("1_87skf")
+theme_override_styles/disabled = ExtResource("1_87skf")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ug6un")
+text = "Button"
+script = ExtResource("2_se8b6")
+hover_sound = ExtResource("3_se8b6")
+unhover_sound = null
+press_sound = ExtResource("4_4x6wf")
+
+[node name="Shadow" type="NinePatchRect" parent="." unique_id=1862106641]
+unique_name_in_owner = true
+self_modulate = Color(0, 0, 0, 0.45)
+show_behind_parent = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = 6.0
+offset_bottom = 6.0
+texture = ExtResource("3_4x6wf")
+patch_margin_left = 6
+patch_margin_top = 6
+patch_margin_right = 6
+patch_margin_bottom = 6

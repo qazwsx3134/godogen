@@ -1,0 +1,169 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/00gamedevs/source_effect.gd" id="1_5jre7"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/dust-devil/spatial_part_0.gdshader" id="2_eeoey"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/dust-devil/part_0.res" id="3_qou5w"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/dust-devil/spatial_part_1.gdshader" id="4_ecsrd"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/dust-devil/part_1.res" id="5_pojob"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/dust-devil/spatial_part_2.gdshader" id="6_3f3q1"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/dust-devil/part_2.res" id="7_l4ny5"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/dust-devil/spatial_part_3.gdshader" id="8_utiwy"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/dust-devil/part_3.res" id="9_0m5u1"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/dust-devil/spatial_part_4.gdshader" id="10_dtoc0"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/dust-devil/part_4.res" id="11_xb53y"]
+[ext_resource type="AnimationLibrary" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/dust-devil/motion.res" id="12_xhapc"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v4oks"]
+resource_local_to_scene = true
+render_priority = 3
+shader = ExtResource("2_eeoey")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 380.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uStopTime = -1.0
+shader_parameter/uEndDuration = 1.4
+shader_parameter/uQuantity = 1.0
+shader_parameter/uSpread = 1.0
+shader_parameter/uTime = 1.8
+shader_parameter/uStretch = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.7156935, 0.49693298, 0.24228112)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g1erw"]
+resource_local_to_scene = true
+render_priority = 2
+shader = ExtResource("4_ecsrd")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 15972
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 1.8
+shader_parameter/uRetire = 0.0
+shader_parameter/uOpening = 1.0
+shader_parameter/uStoppedAt = -1.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.7156935, 0.49693298, 0.24228112)
+shader_parameter/uGlow = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uwjsw"]
+resource_local_to_scene = true
+render_priority = 1
+shader = ExtResource("6_3f3q1")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 82.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 1.8
+shader_parameter/uStopTime = -1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.7156935, 0.49693298, 0.24228112)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1iriw"]
+resource_local_to_scene = true
+render_priority = 4
+shader = ExtResource("8_utiwy")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 28.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uTime = 1.8
+shader_parameter/uStopTime = -1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.7156935, 0.49693298, 0.24228112)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f1h6p"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("10_dtoc0")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 1.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.7156935, 0.49693298, 0.24228112)
+shader_parameter/uTime = 1.8
+
+[node name="DustDevil" type="Node3D" unique_id=604864126]
+script = ExtResource("1_5jre7")
+effect_id = "dust-devil"
+start_duration = 1.7
+end_duration = 1.4
+kind = 4
+variant = 1
+metadata/vfx_source = "00gamedevs"
+metadata/vfx_id = "dust-devil"
+metadata/editor_preview_time = 1.8
+
+[node name="Parts" type="Node3D" parent="." unique_id=2064389468]
+unique_name_in_owner = true
+
+[node name="Part000" type="MeshInstance3D" parent="Parts" unique_id=44343756]
+material_override = SubResource("ShaderMaterial_v4oks")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("3_qou5w")
+metadata/source_name = "Part0"
+
+[node name="Part001" type="MeshInstance3D" parent="Parts" unique_id=1165898662]
+material_override = SubResource("ShaderMaterial_g1erw")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("5_pojob")
+metadata/source_name = "vortex-column"
+
+[node name="Part002" type="MeshInstance3D" parent="Parts" unique_id=332291716]
+material_override = SubResource("ShaderMaterial_uwjsw")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("7_l4ny5")
+metadata/source_name = "Part2"
+
+[node name="Part003" type="MeshInstance3D" parent="Parts" unique_id=1456278282]
+material_override = SubResource("ShaderMaterial_1iriw")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("9_0m5u1")
+metadata/source_name = "Part3"
+
+[node name="Part004" type="MeshInstance3D" parent="Parts" unique_id=1664790424]
+transform = Transform3D(1, 0, 0, 0, 2.220446e-16, 1, 0, -1, 2.220446e-16, 0, -1.38, 0)
+material_override = SubResource("ShaderMaterial_f1h6p")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("11_xb53y")
+metadata/source_name = "Part4"
+
+[node name="Motion" type="AnimationPlayer" parent="." unique_id=1963993304]
+unique_name_in_owner = true
+libraries/ = ExtResource("12_xhapc")

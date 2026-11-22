@@ -1,0 +1,401 @@
+[gd_scene format=3]
+
+[ext_resource type="StyleBox" path="res://scenes/button_frame.tres" id="1_ohgsq"]
+[ext_resource type="Script" path="res://scripts/inventory.gd" id="2_j8d85"]
+[ext_resource type="Texture2D" path="res://assets/items/apple_red_01.png" id="3_5mlvw"]
+[ext_resource type="Texture2D" path="res://assets/items/potion_red_01.png" id="4_jc13p"]
+[ext_resource type="Texture2D" path="res://assets/items/potion_blue_01.png" id="5_iqxo6"]
+[ext_resource type="Texture2D" path="res://assets/items/short_sword_01.png" id="6_y2qpb"]
+[ext_resource type="Texture2D" path="res://assets/items/bow_unloaded_01.png" id="7_5kq8a"]
+[ext_resource type="Texture2D" path="res://assets/items/bomb_01.png" id="8_1bg26"]
+[ext_resource type="Texture2D" path="res://assets/items/book_01.png" id="9_it0hx"]
+[ext_resource type="Texture2D" path="res://assets/items/crystal_01.png" id="10_l0dva"]
+[ext_resource type="Texture2D" path="res://assets/items/gold-coin_pile-S_01.png" id="11_ohh50"]
+[ext_resource type="Texture2D" path="res://assets/items/carrot_01.png" id="12_ax4un"]
+[ext_resource type="Texture2D" path="res://assets/items/shovel_01.png" id="13_dt67b"]
+[ext_resource type="Texture2D" path="res://assets/items/katana_01.png" id="14_b5wre"]
+[ext_resource type="Texture2D" path="res://assets/items/backpack_LVL_01.png" id="15_1ilke"]
+[ext_resource type="PackedScene" path="res://scenes/juicy_button.tscn" id="16_nrd71"]
+[ext_resource type="Script" path="res://scripts/juicy_button.gd" id="17_i2752"]
+[ext_resource type="Script" path="res://addons/proto_kit/ui_anim/container_tween.gd" id="18_42nhh"]
+[ext_resource type="PackedScene" path="res://scenes/item_slot.tscn" id="19_rj052"]
+[ext_resource type="Texture2D" path="res://assets/kenney/button_frame.png" id="20_fghhq"]
+[ext_resource type="Script" path="res://scripts/item_slot.gd" id="21_p530v"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ug6un"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_30wnl"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+texture = ExtResource("20_fghhq")
+texture_margin_left = 6.0
+texture_margin_top = 6.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lvora"]
+
+[node name="Inventory" type="PanelContainer" unique_id=1220281232]
+theme_override_styles/panel = ExtResource("1_ohgsq")
+script = ExtResource("2_j8d85")
+start_items = Array[Texture2D]([ExtResource("3_5mlvw"), ExtResource("4_jc13p"), ExtResource("5_iqxo6"), ExtResource("6_y2qpb"), ExtResource("7_5kq8a"), ExtResource("8_1bg26"), ExtResource("9_it0hx")])
+start_counts = Array[int]([5, 3, 1, 1, 1, 12, 1])
+loot_pool = Array[Texture2D]([ExtResource("3_5mlvw"), ExtResource("4_jc13p"), ExtResource("5_iqxo6"), ExtResource("6_y2qpb"), ExtResource("7_5kq8a"), ExtResource("8_1bg26"), ExtResource("9_it0hx"), ExtResource("10_l0dva"), ExtResource("11_ohh50"), ExtResource("12_ax4un"), ExtResource("13_dt67b"), ExtResource("14_b5wre")])
+
+[node name="VBox" type="VBoxContainer" parent="." unique_id=326929380]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Header" type="HBoxContainer" parent="VBox" unique_id=1771626504]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="BagIcon" type="TextureRect" parent="VBox/Header" unique_id=2025408064]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+texture = ExtResource("15_1ilke")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Title" type="Label" parent="VBox/Header" unique_id=1055190516]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 28
+theme_override_colors/font_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+text = "Backpack"
+
+[node name="Loot" type="Button" parent="VBox/Header" unique_id=1208500778 instance=ExtResource("16_nrd71")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/normal = ExtResource("1_ohgsq")
+theme_override_styles/pressed = ExtResource("1_ohgsq")
+theme_override_styles/hover = ExtResource("1_ohgsq")
+theme_override_styles/disabled = ExtResource("1_ohgsq")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ug6un")
+theme_override_colors/font_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_focus_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_pressed_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_hover_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_font_sizes/font_size = 22
+text = "Loot"
+script = ExtResource("17_i2752")
+shadow_dir = 2
+
+[node name="Close" type="Button" parent="VBox/Header" unique_id=1754161938 instance=ExtResource("16_nrd71")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_styles/normal = ExtResource("1_ohgsq")
+theme_override_styles/pressed = ExtResource("1_ohgsq")
+theme_override_styles/hover = ExtResource("1_ohgsq")
+theme_override_styles/disabled = ExtResource("1_ohgsq")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ug6un")
+theme_override_colors/font_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_focus_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_pressed_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_hover_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_font_sizes/font_size = 22
+text = "Close"
+script = ExtResource("17_i2752")
+shadow_dir = 2
+
+[node name="Grid" type="GridContainer" parent="VBox" unique_id=285792687]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 6
+columns = 6
+script = ExtResource("18_42nhh")
+trigger = 1
+delay_between_element = 0.015
+
+[node name="Slot0" type="Button" parent="VBox/Grid" unique_id=1627509051 instance=ExtResource("19_rj052")]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/hover = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_lvora")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("21_p530v")
+
+[node name="Slot1" type="Button" parent="VBox/Grid" unique_id=1948456559 instance=ExtResource("19_rj052")]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/hover = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_lvora")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("21_p530v")
+
+[node name="Slot2" type="Button" parent="VBox/Grid" unique_id=520230298 instance=ExtResource("19_rj052")]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/hover = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_lvora")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("21_p530v")
+
+[node name="Slot3" type="Button" parent="VBox/Grid" unique_id=1531141593 instance=ExtResource("19_rj052")]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/hover = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_lvora")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("21_p530v")
+
+[node name="Slot4" type="Button" parent="VBox/Grid" unique_id=1677959274 instance=ExtResource("19_rj052")]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/hover = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_lvora")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("21_p530v")
+
+[node name="Slot5" type="Button" parent="VBox/Grid" unique_id=1022751542 instance=ExtResource("19_rj052")]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/hover = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_lvora")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("21_p530v")
+
+[node name="Slot6" type="Button" parent="VBox/Grid" unique_id=497238329 instance=ExtResource("19_rj052")]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/hover = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_lvora")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("21_p530v")
+
+[node name="Slot7" type="Button" parent="VBox/Grid" unique_id=1710681814 instance=ExtResource("19_rj052")]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/hover = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_lvora")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("21_p530v")
+
+[node name="Slot8" type="Button" parent="VBox/Grid" unique_id=1930596035 instance=ExtResource("19_rj052")]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/hover = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_lvora")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("21_p530v")
+
+[node name="Slot9" type="Button" parent="VBox/Grid" unique_id=440632323 instance=ExtResource("19_rj052")]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/hover = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_lvora")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("21_p530v")
+
+[node name="Slot10" type="Button" parent="VBox/Grid" unique_id=1473849530 instance=ExtResource("19_rj052")]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/hover = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_lvora")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("21_p530v")
+
+[node name="Slot11" type="Button" parent="VBox/Grid" unique_id=1433664504 instance=ExtResource("19_rj052")]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/hover = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_lvora")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("21_p530v")
+
+[node name="Slot12" type="Button" parent="VBox/Grid" unique_id=882262579 instance=ExtResource("19_rj052")]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/hover = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_lvora")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("21_p530v")
+
+[node name="Slot13" type="Button" parent="VBox/Grid" unique_id=42897669 instance=ExtResource("19_rj052")]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/hover = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_lvora")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("21_p530v")
+
+[node name="Slot14" type="Button" parent="VBox/Grid" unique_id=511040976 instance=ExtResource("19_rj052")]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/hover = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_lvora")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("21_p530v")
+
+[node name="Slot15" type="Button" parent="VBox/Grid" unique_id=1307074912 instance=ExtResource("19_rj052")]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/hover = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_lvora")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("21_p530v")
+
+[node name="Slot16" type="Button" parent="VBox/Grid" unique_id=1388706575 instance=ExtResource("19_rj052")]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/hover = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_lvora")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("21_p530v")
+
+[node name="Slot17" type="Button" parent="VBox/Grid" unique_id=4819026 instance=ExtResource("19_rj052")]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/hover = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_lvora")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("21_p530v")
+
+[node name="Slot18" type="Button" parent="VBox/Grid" unique_id=372379974 instance=ExtResource("19_rj052")]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/hover = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_lvora")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("21_p530v")
+
+[node name="Slot19" type="Button" parent="VBox/Grid" unique_id=1193513456 instance=ExtResource("19_rj052")]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/hover = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_lvora")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("21_p530v")
+
+[node name="Slot20" type="Button" parent="VBox/Grid" unique_id=59909079 instance=ExtResource("19_rj052")]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/hover = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_lvora")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("21_p530v")
+
+[node name="Slot21" type="Button" parent="VBox/Grid" unique_id=1069988906 instance=ExtResource("19_rj052")]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/hover = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_lvora")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("21_p530v")
+
+[node name="Slot22" type="Button" parent="VBox/Grid" unique_id=210880612 instance=ExtResource("19_rj052")]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/hover = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_lvora")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("21_p530v")
+
+[node name="Slot23" type="Button" parent="VBox/Grid" unique_id=2043027114 instance=ExtResource("19_rj052")]
+custom_minimum_size = Vector2(72, 72)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/hover = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_lvora")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("21_p530v")

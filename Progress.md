@@ -10,6 +10,7 @@
 
 | commit | 日期 | 做了什麼 |
 |---|---|---|
+| 本次提交（以 `git log` 查核） | 2026-11-23 | feat(godot-ui): add reusable UI components；整理提交，測試未重跑 |
 | 本次提交（以 `git log` 查核） | 2026-11-23 | feat(godot-assets): add shared UI asset library；整理提交，測試未重跑 |
 | 本次提交（以 `git log` 查核） | 2026-11-23 | feat(godot-kit): add shared tools and optional addons；整理提交，測試未重跑 |
 | 本次提交（以 `git log` 查核） | 2026-11-23 | chore: record repository guidance and ignore Godot caches；整理提交，測試未重跑 |

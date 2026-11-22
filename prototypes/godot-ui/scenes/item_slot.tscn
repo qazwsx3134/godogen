@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://drhilu6ny1qd"]
+
+[ext_resource type="Texture2D" uid="uid://bbcv3sewf3o50" path="res://assets/kenney/button_frame.png" id="1_l0xgl"]
+[ext_resource type="Script" uid="uid://dg6q5haepxjoo" path="res://scripts/item_slot.gd" id="2_fa8gv"]
+[ext_resource type="AudioStream" uid="uid://dqk1g5gnnmg5h" path="res://assets/sfx/bong_001.ogg" id="3_fa8gv"]
+[ext_resource type="Script" uid="uid://c3l68d427gfn0" path="res://addons/proto_kit/ui_anim/tween_once.gd" id="3_ps388"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_30wnl"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+texture = ExtResource("1_l0xgl")
+texture_margin_left = 6.0
+texture_margin_top = 6.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lvora"]
+
+[node name="ItemSlot" type="Button" unique_id=1627509051]
+custom_minimum_size = Vector2(72, 72)
+theme_override_styles/normal = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/hover = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_30wnl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_lvora")
+icon_alignment = 1
+expand_icon = true
+script = ExtResource("2_fa8gv")
+hover_sound = ExtResource("3_fa8gv")
+
+[node name="Count" type="Label" parent="." unique_id=506611191]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -30.0
+offset_right = -8.0
+offset_bottom = -4.0
+theme_override_colors/font_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_outline_color = Color(1, 0.9529412, 0.8392157, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 18
+horizontal_alignment = 2
+script = ExtResource("3_ps388")

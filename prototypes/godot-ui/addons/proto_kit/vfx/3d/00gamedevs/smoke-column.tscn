@@ -1,0 +1,54 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/00gamedevs/source_effect.gd" id="1_lxfq7"]
+[ext_resource type="Shader" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/smoke-column/spatial_part_0.gdshader" id="2_jlm1n"]
+[ext_resource type="ArrayMesh" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/smoke-column/part_0.res" id="3_c6en1"]
+[ext_resource type="AnimationLibrary" path="res://addons/proto_kit/vfx/3d/00gamedevs/ported/smoke-column/motion.res" id="4_48kq6"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gfcu2"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("2_jlm1n")
+shader_parameter/source_to_group = null
+shader_parameter/source_draw_start = 0.0
+shader_parameter/source_draw_count = -1.0
+shader_parameter/source_vertices_per_instance = 6
+shader_parameter/source_instance_count = 64.0
+shader_parameter/uLifeStage = 1.0
+shader_parameter/uLifeStart = 1.0
+shader_parameter/uLifeEnd = 0.0
+shader_parameter/uLifeOrigin = 1.0
+shader_parameter/uSize = 1.0
+shader_parameter/uStopTime = -1.0
+shader_parameter/uEndDuration = 1.2
+shader_parameter/uQuantity = 1.0
+shader_parameter/uSpread = 1.0
+shader_parameter/uTime = 0.6
+shader_parameter/uStretch = 1.0
+shader_parameter/uImpact = 0.0
+shader_parameter/uDetail = 1.0
+shader_parameter/uColor = Vector3(0.42326766, 0.48514995, 0.59720176)
+
+[node name="SmokeColumn" type="Node3D" unique_id=182565247]
+script = ExtResource("1_lxfq7")
+effect_id = "smoke-column"
+start_duration = 0.5
+end_duration = 1.2
+kind = 5
+metadata/vfx_source = "00gamedevs"
+metadata/vfx_id = "smoke-column"
+metadata/editor_preview_time = 0.6
+
+[node name="Parts" type="Node3D" parent="." unique_id=2028459596]
+unique_name_in_owner = true
+
+[node name="Part000" type="MeshInstance3D" parent="Parts" unique_id=1133544529]
+material_override = SubResource("ShaderMaterial_gfcu2")
+cast_shadow = 0
+custom_aabb = AABB(-64, -64, -64, 128, 128, 128)
+mesh = ExtResource("3_c6en1")
+metadata/source_name = "Part0"
+
+[node name="Motion" type="AnimationPlayer" parent="." unique_id=193442941]
+unique_name_in_owner = true
+libraries/ = ExtResource("4_48kq6")

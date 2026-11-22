@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[ext_resource type="SpriteFrames" path="res://addons/proto_kit/vfx/assets/scenario/ember-damage-number/ember-damage-number.tres" id="1_wx3jo"]
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/2d/sheet_effect.gd" id="2_nfl8d"]
+
+[node name="EmberDamageNumber" type="AnimatedSprite2D" unique_id=341124408]
+texture_filter = 1
+sprite_frames = ExtResource("1_wx3jo")
+animation = &"ember_damage_number"
+frame = 2
+script = ExtResource("2_nfl8d")
+metadata/vfx_source = "scenario"
+metadata/vfx_id = "ember-damage-number"
+metadata/placement = "target"
+metadata/depth_hint = "front"

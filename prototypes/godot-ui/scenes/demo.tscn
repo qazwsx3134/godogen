@@ -1,0 +1,295 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/demo.gd" id="1_3mope"]
+[ext_resource type="Script" path="res://addons/proto_kit/ui_anim/container_tween.gd" id="2_6abv7"]
+[ext_resource type="AudioStream" path="res://assets/sfx/appear.ogg" id="3_k1mpm"]
+[ext_resource type="PackedScene" path="res://scenes/juicy_button.tscn" id="4_ydix6"]
+[ext_resource type="StyleBox" path="res://scenes/button_frame.tres" id="5_dg67p"]
+[ext_resource type="Script" path="res://scripts/juicy_button.gd" id="6_f1hw0"]
+[ext_resource type="Texture2D" path="res://assets/kenney/mouse_left.png" id="7_04bex"]
+[ext_resource type="Script" path="res://addons/proto_kit/ui_anim/tween_once.gd" id="8_18vu0"]
+[ext_resource type="Script" path="res://scripts/card_hand.gd" id="9_hj0bg"]
+[ext_resource type="PackedScene" path="res://scenes/card.tscn" id="10_ijaeb"]
+[ext_resource type="Script" path="res://addons/proto_kit/ui_anim/auto_tween.gd" id="11_ssbcb"]
+[ext_resource type="PackedScene" path="res://scenes/inventory.tscn" id="12_nbj7l"]
+[ext_resource type="Script" path="res://scripts/inventory.gd" id="13_tmadj"]
+[ext_resource type="Texture2D" path="res://assets/items/apple_red_01.png" id="14_keb61"]
+[ext_resource type="Texture2D" path="res://assets/items/potion_red_01.png" id="15_n3amx"]
+[ext_resource type="Texture2D" path="res://assets/items/potion_blue_01.png" id="16_dgtg0"]
+[ext_resource type="Texture2D" path="res://assets/items/short_sword_01.png" id="17_rtn4a"]
+[ext_resource type="Texture2D" path="res://assets/items/bow_unloaded_01.png" id="18_kxiys"]
+[ext_resource type="Texture2D" path="res://assets/items/bomb_01.png" id="19_y24d5"]
+[ext_resource type="Texture2D" path="res://assets/items/book_01.png" id="20_1mbge"]
+[ext_resource type="Texture2D" path="res://assets/items/crystal_01.png" id="21_itma0"]
+[ext_resource type="Texture2D" path="res://assets/items/gold-coin_pile-S_01.png" id="22_0wqbi"]
+[ext_resource type="Texture2D" path="res://assets/items/carrot_01.png" id="23_fbdsg"]
+[ext_resource type="Texture2D" path="res://assets/items/shovel_01.png" id="24_3obfh"]
+[ext_resource type="Texture2D" path="res://assets/items/katana_01.png" id="25_dv2fi"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ug6un"]
+
+[node name="Demo" type="Control" unique_id=472813729]
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_3mope")
+
+[node name="Bg" type="ColorRect" parent="." unique_id=850988970]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.9098039, 0.8627451, 0.76862746, 1)
+
+[node name="Center" type="CenterContainer" parent="." unique_id=1902305200]
+layout_mode = 0
+anchor_right = 1.0
+offset_bottom = 520.0
+
+[node name="Columns" type="HBoxContainer" parent="Center" unique_id=1951712695]
+layout_mode = 2
+theme_override_constants/separation = 64
+
+[node name="Title" type="VBoxContainer" parent="Center/Columns" unique_id=782655453]
+layout_mode = 2
+theme_override_constants/separation = 18
+script = ExtResource("2_6abv7")
+appear_sound = ExtResource("3_k1mpm")
+
+[node name="TitleLabel" type="Label" parent="Center/Columns/Title" unique_id=803446205]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+theme_override_colors/font_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+text = "GODOT UI"
+horizontal_alignment = 1
+
+[node name="Bag" type="Button" parent="Center/Columns/Title" unique_id=1208500778 instance=ExtResource("4_ydix6")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/normal = ExtResource("5_dg67p")
+theme_override_styles/pressed = ExtResource("5_dg67p")
+theme_override_styles/hover = ExtResource("5_dg67p")
+theme_override_styles/disabled = ExtResource("5_dg67p")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ug6un")
+theme_override_colors/font_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_focus_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_pressed_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_hover_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_font_sizes/font_size = 22
+text = "Bag"
+script = ExtResource("6_f1hw0")
+
+[node name="MenuToggle" type="Button" parent="Center/Columns/Title" unique_id=956248059 instance=ExtResource("4_ydix6")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/normal = ExtResource("5_dg67p")
+theme_override_styles/pressed = ExtResource("5_dg67p")
+theme_override_styles/hover = ExtResource("5_dg67p")
+theme_override_styles/disabled = ExtResource("5_dg67p")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ug6un")
+theme_override_colors/font_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_focus_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_pressed_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_hover_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_font_sizes/font_size = 22
+text = "Menu"
+script = ExtResource("6_f1hw0")
+shadow_dir = 1
+
+[node name="Plus" type="Button" parent="Center/Columns/Title" unique_id=456268037 instance=ExtResource("4_ydix6")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/normal = ExtResource("5_dg67p")
+theme_override_styles/pressed = ExtResource("5_dg67p")
+theme_override_styles/hover = ExtResource("5_dg67p")
+theme_override_styles/disabled = ExtResource("5_dg67p")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ug6un")
+theme_override_colors/font_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_focus_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_pressed_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_hover_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_font_sizes/font_size = 22
+text = "+1"
+icon = ExtResource("7_04bex")
+script = ExtResource("6_f1hw0")
+shadow_dir = 2
+
+[node name="Long" type="Button" parent="Center/Columns/Title" unique_id=1130288723 instance=ExtResource("4_ydix6")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/normal = ExtResource("5_dg67p")
+theme_override_styles/pressed = ExtResource("5_dg67p")
+theme_override_styles/hover = ExtResource("5_dg67p")
+theme_override_styles/disabled = ExtResource("5_dg67p")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ug6un")
+theme_override_colors/font_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_focus_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_pressed_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_hover_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_font_sizes/font_size = 22
+text = "A Much Longer Button"
+script = ExtResource("6_f1hw0")
+
+[node name="Draw" type="Button" parent="Center/Columns/Title" unique_id=319600953 instance=ExtResource("4_ydix6")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/normal = ExtResource("5_dg67p")
+theme_override_styles/pressed = ExtResource("5_dg67p")
+theme_override_styles/hover = ExtResource("5_dg67p")
+theme_override_styles/disabled = ExtResource("5_dg67p")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ug6un")
+theme_override_colors/font_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_focus_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_pressed_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_hover_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_font_sizes/font_size = 22
+text = "Draw Card"
+script = ExtResource("6_f1hw0")
+shadow_dir = 2
+
+[node name="Counter" type="Label" parent="Center/Columns/Title" unique_id=667119958]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+theme_override_colors/font_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+text = "0"
+horizontal_alignment = 1
+script = ExtResource("8_18vu0")
+
+[node name="Hand" type="HBoxContainer" parent="." unique_id=2047968256]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -200.0
+offset_bottom = -50.0
+theme_override_constants/separation = 0
+alignment = 1
+script = ExtResource("9_hj0bg")
+card_scene = ExtResource("10_ijaeb")
+
+[node name="Overlay" type="Control" parent="." unique_id=1693276937]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Dim" type="ColorRect" parent="Overlay" unique_id=1884615895]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.45)
+
+[node name="Center" type="CenterContainer" parent="Overlay" unique_id=1707411989]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Menu" type="PanelContainer" parent="Overlay/Center" unique_id=1822481656]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 0)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("5_dg67p")
+
+[node name="Items" type="VBoxContainer" parent="Overlay/Center/Menu" unique_id=454111649]
+layout_mode = 2
+theme_override_constants/separation = 12
+script = ExtResource("2_6abv7")
+trigger = 1
+anim_type = 1
+appear_sound = ExtResource("3_k1mpm")
+
+[node name="MenuHead" type="Label" parent="Overlay/Center/Menu/Items" unique_id=1903317686]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+theme_override_colors/font_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+text = "Settings"
+
+[node name="AutoTween" type="Node" parent="Overlay/Center/Menu/Items/MenuHead" unique_id=1535942041]
+script = ExtResource("11_ssbcb")
+
+[node name="Audio" type="Button" parent="Overlay/Center/Menu/Items" unique_id=398925835 instance=ExtResource("4_ydix6")]
+layout_mode = 2
+theme_override_styles/normal = ExtResource("5_dg67p")
+theme_override_styles/pressed = ExtResource("5_dg67p")
+theme_override_styles/hover = ExtResource("5_dg67p")
+theme_override_styles/disabled = ExtResource("5_dg67p")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ug6un")
+theme_override_colors/font_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_focus_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_pressed_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_hover_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_font_sizes/font_size = 22
+text = "Audio"
+script = ExtResource("6_f1hw0")
+shadow_dir = 2
+
+[node name="Video" type="Button" parent="Overlay/Center/Menu/Items" unique_id=379684004 instance=ExtResource("4_ydix6")]
+layout_mode = 2
+theme_override_styles/normal = ExtResource("5_dg67p")
+theme_override_styles/pressed = ExtResource("5_dg67p")
+theme_override_styles/hover = ExtResource("5_dg67p")
+theme_override_styles/disabled = ExtResource("5_dg67p")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ug6un")
+theme_override_colors/font_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_focus_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_pressed_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_hover_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_font_sizes/font_size = 22
+text = "Video"
+script = ExtResource("6_f1hw0")
+shadow_dir = 2
+
+[node name="Back" type="Button" parent="Overlay/Center/Menu/Items" unique_id=436665308 instance=ExtResource("4_ydix6")]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("5_dg67p")
+theme_override_styles/pressed = ExtResource("5_dg67p")
+theme_override_styles/hover = ExtResource("5_dg67p")
+theme_override_styles/disabled = ExtResource("5_dg67p")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ug6un")
+theme_override_colors/font_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_focus_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_pressed_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_colors/font_hover_color = Color(0.23137255, 0.16470589, 0.11764706, 1)
+theme_override_font_sizes/font_size = 22
+text = "Back"
+script = ExtResource("6_f1hw0")
+shadow_dir = 2
+
+[node name="BagOverlay" type="Control" parent="." unique_id=2138361830]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Dim" type="ColorRect" parent="BagOverlay" unique_id=479715202]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.45)
+
+[node name="Center" type="CenterContainer" parent="BagOverlay" unique_id=1639265419]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Inventory" type="PanelContainer" parent="BagOverlay/Center" unique_id=1220281232 instance=ExtResource("12_nbj7l")]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/panel = ExtResource("5_dg67p")
+script = ExtResource("13_tmadj")
+start_items = Array[Texture2D]([ExtResource("14_keb61"), ExtResource("15_n3amx"), ExtResource("16_dgtg0"), ExtResource("17_rtn4a"), ExtResource("18_kxiys"), ExtResource("19_y24d5"), ExtResource("20_1mbge")])
+start_counts = Array[int]([5, 3, 1, 1, 1, 12, 1])
+loot_pool = Array[Texture2D]([ExtResource("14_keb61"), ExtResource("15_n3amx"), ExtResource("16_dgtg0"), ExtResource("17_rtn4a"), ExtResource("18_kxiys"), ExtResource("19_y24d5"), ExtResource("20_1mbge"), ExtResource("21_itma0"), ExtResource("22_0wqbi"), ExtResource("23_fbdsg"), ExtResource("24_3obfh"), ExtResource("25_dv2fi")])

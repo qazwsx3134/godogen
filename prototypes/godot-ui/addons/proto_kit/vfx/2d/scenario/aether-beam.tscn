@@ -1,0 +1,16 @@
+[gd_scene format=3]
+
+[ext_resource type="SpriteFrames" path="res://addons/proto_kit/vfx/assets/scenario/aether-beam/aether-beam.tres" id="1_0wr0n"]
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/2d/sheet_effect.gd" id="2_30nn4"]
+
+[node name="AetherBeam" type="AnimatedSprite2D" unique_id=341124408]
+texture_filter = 1
+sprite_frames = ExtResource("1_0wr0n")
+animation = &"aether_beam"
+frame = 2
+offset = Vector2(74.8, 0)
+script = ExtResource("2_30nn4")
+metadata/vfx_source = "scenario"
+metadata/vfx_id = "aether-beam"
+metadata/placement = "from-caster"
+metadata/depth_hint = "front"

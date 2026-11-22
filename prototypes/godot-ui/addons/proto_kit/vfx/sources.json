@@ -1,0 +1,99 @@
+{
+  "checked_at": "2026-11-01",
+  "sources": [
+    {
+      "id": "00gamedevs",
+      "url": "https://00gamedevs.com/zh-TW/",
+      "status": "native_ports_implemented",
+      "license_status": "MIT notice embedded in each supplied JS; preserved in licenses/00gamedevs-MIT.txt",
+      "local_source": "vfx-example/three-effect",
+      "received_sources": 46,
+      "ported_effects": [
+        "arc-ray",
+        "arcane-matrix",
+        "arcane-missile",
+        "astral-convergence",
+        "astral-gate",
+        "azure-sweep",
+        "billowing-airburst",
+        "black-hole",
+        "burning-ground",
+        "charged-beam",
+        "continuous-beam",
+        "darkchain-detonation",
+        "dimensional-rend",
+        "dust-devil",
+        "energy-burst",
+        "energy-vortex",
+        "fire-explosion",
+        "fire-vortex",
+        "fireball",
+        "flame-surge",
+        "frost-field",
+        "golden-chain-rain",
+        "ground-fog",
+        "healing-field",
+        "ice-shard",
+        "ice-shatter",
+        "impact-frame",
+        "magic-barrier",
+        "painterly-grass",
+        "plasma-bolt",
+        "prism-guard",
+        "prism-parry",
+        "pulse-beam",
+        "radiant-beam",
+        "shockwave",
+        "smoke-column",
+        "smoke-puff",
+        "soul-siphon",
+        "spell-indicator-circle",
+        "spell-indicator-sector",
+        "spiral-gale",
+        "steam-jet",
+        "thunder-strike",
+        "venom-stream",
+        "weapon-smear",
+        "wind-vortex"
+      ],
+      "pending_ports": 0,
+      "note": "No website download performed; files provided by user.",
+      "visual_acceptance": "pending_gpu_browser",
+      "authoring_three_version": "0.185.1 (verified local cache; exports target 0.187.0)"
+    },
+    {
+      "id": "scenario_pixel_vfx_forge",
+      "url": "https://www.scenario.com/explorations/pixel-vfx-forge/",
+      "status": "imported_from_user_exports",
+      "license_status": "Each supplied README.txt explicitly permits commercial and non-commercial use of frames; retained per effect. No renderer code redistributed.",
+      "verified_exports": [
+        "PNG horizontal strip",
+        "ZIP with SpriteFrames, atlas, frames, GIF, recipe"
+      ],
+      "agent_skill_url": "https://iieqkinwjorxrzjp.public.blob.vercel-storage.com/explorations/f5284ec0200005bb234c2b9ddafa82cd3ab54b3321dda785ce8cccd17d23cd2c/scenario-pixel-vfx-skill.zip?download=1",
+      "local_source": "vfx-example/scenario-pixel-vfx-skill",
+      "imported_effects": 41,
+      "scene_count_2d": 41,
+      "scene_count_3d": 41,
+      "note": "Upstream .tres PNG references repaired; names, frames, fps and loops retained. Recipe pivots mapped to 2D/3D offsets. PNG bytes preserved."
+    },
+    {
+      "id": "kit_native",
+      "status": "available",
+      "source_files": [
+        "../pixel_vfx.gd",
+        "../pixel_vfx3d.gd",
+        "../pixel_vfx3d_ring.gdshader"
+      ],
+      "note": "Existing repository implementation, wrapped in editable scenes; not a port from either website."
+    },
+    {
+      "id": "demo_ring",
+      "status": "available",
+      "source_files": [
+        "../../../tools/vfx/build_scenes.gd"
+      ],
+      "note": "Original procedural calibration strip authored for this module. No AI generation or third-party art."
+    }
+  ]
+}

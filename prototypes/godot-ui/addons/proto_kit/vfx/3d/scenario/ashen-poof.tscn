@@ -1,0 +1,17 @@
+[gd_scene format=3]
+
+[ext_resource type="SpriteFrames" path="res://addons/proto_kit/vfx/assets/scenario/ashen-poof/ashen-poof.tres" id="1_dqj5j"]
+[ext_resource type="Script" path="res://addons/proto_kit/vfx/3d/sheet_effect.gd" id="2_dmvc0"]
+
+[node name="AshenPoof" type="AnimatedSprite3D" unique_id=2038597756]
+pixel_size = 0.025
+billboard = 1
+texture_filter = 0
+sprite_frames = ExtResource("1_dqj5j")
+animation = &"ashen_poof"
+frame = 2
+script = ExtResource("2_dmvc0")
+metadata/vfx_source = "scenario"
+metadata/vfx_id = "ashen-poof"
+metadata/placement = "target"
+metadata/depth_hint = "front"

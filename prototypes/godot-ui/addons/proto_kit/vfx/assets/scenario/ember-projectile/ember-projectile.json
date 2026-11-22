@@ -1,0 +1,201 @@
+{
+  "frames": [
+    {
+      "filename": "ember-projectile_00",
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 64,
+        "h": 32
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 64,
+        "h": 32
+      },
+      "sourceSize": {
+        "w": 64,
+        "h": 32
+      },
+      "duration": 83
+    },
+    {
+      "filename": "ember-projectile_01",
+      "frame": {
+        "x": 64,
+        "y": 0,
+        "w": 64,
+        "h": 32
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 64,
+        "h": 32
+      },
+      "sourceSize": {
+        "w": 64,
+        "h": 32
+      },
+      "duration": 83
+    },
+    {
+      "filename": "ember-projectile_02",
+      "frame": {
+        "x": 128,
+        "y": 0,
+        "w": 64,
+        "h": 32
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 64,
+        "h": 32
+      },
+      "sourceSize": {
+        "w": 64,
+        "h": 32
+      },
+      "duration": 83
+    },
+    {
+      "filename": "ember-projectile_03",
+      "frame": {
+        "x": 192,
+        "y": 0,
+        "w": 64,
+        "h": 32
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 64,
+        "h": 32
+      },
+      "sourceSize": {
+        "w": 64,
+        "h": 32
+      },
+      "duration": 83
+    },
+    {
+      "filename": "ember-projectile_04",
+      "frame": {
+        "x": 256,
+        "y": 0,
+        "w": 64,
+        "h": 32
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 64,
+        "h": 32
+      },
+      "sourceSize": {
+        "w": 64,
+        "h": 32
+      },
+      "duration": 83
+    },
+    {
+      "filename": "ember-projectile_05",
+      "frame": {
+        "x": 320,
+        "y": 0,
+        "w": 64,
+        "h": 32
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 64,
+        "h": 32
+      },
+      "sourceSize": {
+        "w": 64,
+        "h": 32
+      },
+      "duration": 83
+    },
+    {
+      "filename": "ember-projectile_06",
+      "frame": {
+        "x": 384,
+        "y": 0,
+        "w": 64,
+        "h": 32
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 64,
+        "h": 32
+      },
+      "sourceSize": {
+        "w": 64,
+        "h": 32
+      },
+      "duration": 83
+    },
+    {
+      "filename": "ember-projectile_07",
+      "frame": {
+        "x": 448,
+        "y": 0,
+        "w": 64,
+        "h": 32
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 64,
+        "h": 32
+      },
+      "sourceSize": {
+        "w": 64,
+        "h": 32
+      },
+      "duration": 83
+    }
+  ],
+  "meta": {
+    "app": "Pixel VFX Forge (scenario.com/explorations/pixel-vfx-forge)",
+    "version": "1",
+    "image": "ember-projectile.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 512,
+      "h": 32
+    },
+    "scale": "1",
+    "frameTags": [
+      {
+        "name": "ember-projectile",
+        "from": 0,
+        "to": 7,
+        "direction": "forward"
+      }
+    ],
+    "fps": 12,
+    "loop": true
+  }
+}
