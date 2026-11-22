@@ -261,6 +261,31 @@
       ]
     },
     {
+      "path": "addons/proto_kit/vat_crowd.gdshader",
+      "sha256": "121231233de74bf5b4765a1badf6bf882af2e49cf8bf79a37ae82dcda64ae449",
+      "parameters": [
+        "uniform sampler2D albedo_map : source_color, hint_default_white;",
+        "uniform sampler2D marking_map : source_color, hint_default_black;",
+        "uniform vec4 armor_color : source_color = vec4(1.0);",
+        "uniform float metallic : hint_range(0, 1) = 0.5;",
+        "uniform float roughness : hint_range(0, 1) = 0.65;",
+        "uniform float idle_seconds = 1.0;",
+        "uniform float run_seconds = 1.0;"
+      ],
+      "references": [
+        "res://addons/proto_kit/vat_crowd.gdshaderinc"
+      ]
+    },
+    {
+      "path": "addons/proto_kit/vat_crowd.gdshaderinc",
+      "sha256": "5349ee688e18289ba2a808f0e5496592e99a133081de12bfcea7d899e135cd61",
+      "parameters": [
+        "uniform sampler2D vat_positions : filter_nearest, repeat_disable;",
+        "uniform sampler2D vat_normals : filter_nearest, repeat_disable;"
+      ],
+      "references": []
+    },
+    {
       "path": "addons/proto_kit/ui/layouts/card_draft.tscn",
       "sha256": "9d2ecbdad0431276361e0f428c378c946750eceec3dff4c2b702dd05bbf8a25d",
       "parameters": [],

@@ -10,6 +10,7 @@
 
 | commit | 日期 | 做了什麼 |
 |---|---|---|
+| 本次提交（以 `git log` 查核） | 2026-11-23 | feat(godot-kit): add shared tools and optional addons；整理提交，測試未重跑 |
 | 本次提交（以 `git log` 查核） | 2026-11-23 | chore: record repository guidance and ignore Godot caches；整理提交，測試未重跑 |
 | 未提交 | 2026-11-13 | debt-commission：稽核 P0–P2 全修（設定層級、手機字級 ×1.25、cut-in 殘留、目錄／卷宗／存檔卡等）；新增標題橫幅、捲動 CG（`bg` `scroll`）、調查方向鈕與矮螢幕自動收起、卷宗直長卡片＋羅馬數字空卡、工具列圖示按鈕 |
 | 未提交 | 2026-11-13 | debt-commission：UI／UX 稽核報告 `reviews/2026-11-13-uiux-audit.md`（P0 設定被目錄蓋住；字級偏小等），`screen_audit.gd` 加量測模式；尚未修 |

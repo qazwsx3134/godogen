@@ -13,6 +13,7 @@
 | [chest_shop](#chest_shop) | 遞增價格的局內寶箱；消費貨幣取得加權獎勵 | rule |
 | [combo_input](#combo_input) | 節拍連招與雙鍵和弦判定；輸入已正規化按鍵和秒數 | rule |
 | [damage_numbers_3d](#damage_numbers_3d) | 池化 3D 傷害數字；跨存活類遊戲的純視覺回饋 | node |
+| [debris3d](#debris3d) | 池化拋射碎片與落地痕跡 | node |
 | [fixed_step](#fixed_step) | 固定步長累積器；可選保留或丟棄追趕時間 | rule |
 | [floating_stick](#floating_stick) | 浮動虛擬搖桿；觸控區輸出螢幕方向向量 | node |
 | [font_check](#font_check) | 檢查字型涵蓋遊戲字元；Web 匯出與字型子集驗證 | inspection |
@@ -23,6 +24,7 @@
 | [hd2d_gallery](#hd2d_gallery) | HD-2D 擷取工具；比較鏡頭與渲染預設 | inspection |
 | [hd2d_look](#hd2d_look) | HD-2D 環境、景深與暗角資源；製作期保存外觀預設 | authoring |
 | [hd2d_stage](#hd2d_stage) | 場景燈光取樣與火光變化；像素角色融入 3D 環境 | node |
+| [hit_react3d](#hit_react3d) | 模型受擊閃光與變形 | node |
 | [loot_ledger](#loot_ledger) | 首領掉落、區域解鎖與裝備收藏；永久收集成長 | rule |
 | [march_strip](#march_strip) | 放置行軍展示；把收益規則留在遊戲端 | node |
 | [music](#music) | 背景音樂交叉淡入淡出；場景切換與暫停仍保持播放 | node |
@@ -59,6 +61,7 @@
 | [time_control](#time_control) | 牆上時間驅動 hit stop；集中管理 Engine.time_scale | node |
 | [ui.ui_theme](#ui-ui_theme) | 從樣式資料製作 Theme；手機 UI 版型的主題來源 | rule |
 | [upgrade_tree](#upgrade_tree) | 永久升級與天賦相鄰圖；購買預覽、退款與屬性加總 | rule |
+| [vat_crowd](#vat_crowd) | 將骨架動畫烘焙成 VAT，供 MultiMesh 大量 3D 敵群播放 | rule |
 | [vfx.2d.sheet_effect](#vfx-2d-sheet_effect) | 2D 圖集特效場景行為；完成訊號與生命週期 | node |
 | [vfx.3d.00gamedevs.impact_demo](#vfx-3d-00gamedevs-impact_demo) | 命中特效展示宿主；只用於預覽 | internal |
 | [vfx.3d.00gamedevs.impact_frame](#vfx-3d-00gamedevs-impact_frame) | 全畫面命中效果；中心、方向與遮罩參數 | node |
@@ -516,6 +519,57 @@ Capacity is fixed on _ready; changing pool_size later requires a new instance.
 World metres; amount below min_shown, non-finite input or unavailable pool returns false.
 Ring reuse: when full, the oldest issued slot is reused. No allocation on accepted hits.
 Nonnegative game seconds. Invalid delta is ignored; completed labels are hidden, not freed.
+
+測試引用（存在不等於本輪已重跑）：無直接引用；可能由場景或上層測試涵蓋，需個別驗證。
+
+## debris3d
+
+池化拋射碎片與落地痕跡
+
+適用：池化拋射碎片與落地痕跡
+
+入口：[addons/proto_kit/debris3d.gd](../../addons/proto_kit/debris3d.gd) · node · Walker TPS 已接入
+
+限制／副作用：節點設定與生命週期見來源註解。
+
+### 使用範例
+
+```gdscript
+$Parts.spawn(at, velocity)
+```
+
+### 參數、輸出與訊號
+
+```gdscript
+@export var piece_mesh: Mesh
+@export var capacity := 64
+@export var gravity := 22.0
+@export var bounce := 0.3
+@export_flags_3d_physics var floor_mask := 1
+signal landed(at: Vector3, speed: float)
+func spawn(at: Vector3, velocity: Vector3, size: float = 1.0) -> int:
+func stamp(at: Vector3, size: float = 1.0) -> int:
+func active_count() -> int:
+```
+
+A fixed-size pool of small things that fly, bounce and stay on the floor: shell casings,
+broken parts, and flat stains (stamp()). One MultiMesh = one draw call however many lie
+around; when full, the oldest piece is reused. Flight is a few lines of CPU per moving
+piece and one floor ray per spawn; pieces at rest cost nothing.
+`const Debris3D = preload("res://addons/proto_kit/debris3d.gd")`
+
+# scene: MultiMeshInstance3D (this script, top_level) with a small mesh assigned in `piece_mesh`
+$Shells.spawn(breech_pos, right * 4.0 + Vector3.UP * 3.0)   # ejected casing
+$Parts.spawn(hit_pos, -dir * 5.0 + Vector3.UP * 4.0, 1.4)   # chunk knocked off a target
+$Stains.stamp(hit_floor_pos, 1.8)                          # oil splat, flat on the floor
+
+`landed(at, speed)` fires on every bounce harder than 2.5 m/s (casing clinks, part clunks).
+
+The MultiMesh is built in _ready from `piece_mesh` and `capacity`, so nothing is baked into
+the scene (a headless save would drop the instance buffer anyway).
+Fraction of speed kept on each bounce; under 2 m/s the piece settles.
+Throws a piece from `at` with `velocity` (world). Returns its slot.
+Lays a flat piece (a stain) on the floor under `at`, randomly turned.
 
 測試引用（存在不等於本輪已重跑）：無直接引用；可能由場景或上層測試涵蓋，需個別驗證。
 
@@ -990,6 +1044,66 @@ The lights that flicker: the children of %FlickerLights (override to name anothe
 The stage's region light; white is the light the stage is built for.
 Advances the stage clock and flickers the flicker lights. Call it every frame with game time.
 Tint multiplier for a sprite at world point `p`: the key plus every visible omni light reaching it.
+
+測試引用（存在不等於本輪已重跑）：無直接引用；可能由場景或上層測試涵蓋，需個別驗證。
+
+## hit_react3d
+
+模型受擊閃光與變形
+
+適用：模型受擊閃光與變形
+
+入口：[addons/proto_kit/hit_react3d.gd](../../addons/proto_kit/hit_react3d.gd) · node · Walker TPS 已接入
+
+限制／副作用：節點設定與生命週期見來源註解。
+
+### 使用範例
+
+```gdscript
+$HitReact.react(direction, 1.0)
+```
+
+### 參數、輸出與訊號
+
+```gdscript
+@export var visual: NodePath = ^"../Model"
+@export var flash_color := Color(1.0, 0.6, 0.25, 0.5)
+@export var flash_time := 0.12
+@export var squash := 0.16
+@export var knock_distance := 0.35
+@export var recover_time := 0.16
+@export_flags_3d_physics var floor_mask := 1
+func react(direction: Vector3 = Vector3.ZERO, strength: float = 1.0) -> void:
+func throw(velocity: Vector3, spin: Vector3 = Vector3(5.0, 2.0, 7.0)) -> void:
+func is_reacting() -> bool:
+```
+
+Hit reaction for any 3D target: white flash, squash, visual knockback, and a death throw.
+Without these the player cannot tell a shot landed. It only moves the `visual` node
+(usually the model under a body), never the body, so physics and AI are untouched; push
+the body yourself when the target is light enough (e.g. move_and_collide(dir * 0.3)).
+`const HitReact3D = preload("res://addons/proto_kit/hit_react3d.gd")`
+
+# scene: Scout (CharacterBody3D) > Model, HitReact (this script, visual = ../Model)
+$HitReact.react(bullet_direction)            # every hit: flash + squash + recoil, same frame
+$HitReact.react(dir, 2.0)                    # a heavier hit
+$HitReact.throw(dir * 9.0 + Vector3.UP * 7.0)  # death: the model flies, spins and lands
+
+The flash is a translucent warm material_overlay on every GeometryInstance3D under `visual`
+(skinned meshes included) that fades out: the target's own texture shows through, and a white
+hull is tinted rather than blown out (additive would saturate it). The fade steps are a few
+shared materials, so no material per target. A throw keeps the
+model where it lands (y of the floor under it, found by one ray), it is not a ragdoll.
+The node to flash, squash and push: normally the model, not the physics body.
+Laid over the target at the moment of the hit (alpha = strength), then fades to nothing.
+Fractional squash at strength 1: wider and flatter, then springs back.
+Visual recoil distance (m) at strength 1, along the hit direction.
+Physics layers the thrown model lands on.
+Flash, squash and recoil now (call it on the frame the hit lands). direction: where the
+shot was travelling, world space. strength scales squash and recoil (kill shots: 2-3).
+Death throw: the visual flies with `velocity` (world), tumbles, and rests on the floor.
+t = 1 at the hit, 0 at rest. Ease-out so the hit snaps and the recovery glides.
+step 0 = brightest, -1 = off.
 
 測試引用（存在不等於本輪已重跑）：無直接引用；可能由場景或上層測試涵蓋，需個別驗證。
 
@@ -3048,6 +3162,35 @@ Edges are undirected; a graph requires an explicit root. Costs may override each
 
 測試引用（存在不等於本輪已重跑）：tests/test_genre_modules.gd
 
+## vat_crowd
+
+將骨架動畫烘焙成 VAT，供 MultiMesh 大量 3D 敵群播放
+
+適用：大量同型機器人、割草敵群共用待機與跑步動畫
+
+入口：[addons/proto_kit/vat_crowd.gd](../../addons/proto_kit/vat_crowd.gd) · rule · 框架可用，目標裝置效能待量測
+
+限制／副作用：單表面固定頂點順序，烘焙時需要 renderer，切線貼圖須另處理。
+
+### 使用範例
+
+```gdscript
+var baked := await preload("res://addons/proto_kit/vat_crowd.gd").bake(player, mesh, [&"idle", &"run"], 24)
+```
+
+### 參數、輸出與訊號
+
+```gdscript
+static func bake(player: AnimationPlayer, mesh: MeshInstance3D, clips: Array[StringName], fps := 24) -> Dictionary:
+static func set_actor(batch: MultiMesh, index: int, pose: Transform3D, rows: Vector2i, phase: float, flash: float) -> void:
+```
+
+Bake one mesh surface on an isolated rig using a rendering-enabled Godot process.
+Rows are successive poses, columns follow the original surface vertex buffer.
+One animated instance. Phase is an offset in cycles.
+
+測試引用（存在不等於本輪已重跑）：無直接引用；可能由場景或上層測試涵蓋，需個別驗證。
+
 ## vfx.2d.sheet_effect
 
 2D 圖集特效場景行為；完成訊號與生命週期
@@ -3697,11 +3840,11 @@ python3 tools/audit_copies.py --check --json seal-meadow
 
 安裝或更新共用庫副本
 
-輸入：原型名稱或絕對路徑；--check 唯讀
+輸入：原型名稱或絕對路徑；--check 唯讀；--addon <ID> 選擇單一第三方套件並明列目標；--conductor 為 Conductor 相容入口
 
-輸出：目的專案 addons/proto_kit；check 差異 exit 1
+輸出：目的專案 addons/proto_kit 或選用套件的上游 addons 路徑；check 差異 exit 1
 
-限制：修改模式使用整包 rsync -a --delete，刪除目標 kit 多餘檔；不合併修改、不做備份、不檢查相容性。沒有指定 target 會更新所有已有副本，故 AI 應明列單一目標。--check 唯讀呼叫 audit_copies；需先確認目標 project.godot。相對名稱基於 prototypes，支援 absolute；不應直接改目的副本。
+限制：共用庫模式用 rsync -a --delete，省略目標會更新所有已有副本。--addon 模式保留目標額外檔案，忽略生成的 .import，並拒絕混裝 AmbientCG 的兩套版本。兩種模式均需目標 project.godot；相對名稱基於 prototypes，也支援絕對路徑。
 
 ```sh
 bash sync.sh --check seal-meadow

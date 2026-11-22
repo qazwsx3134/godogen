@@ -671,6 +671,50 @@
       "tests": []
     },
     {
+      "id": "debris3d",
+      "path": "addons/proto_kit/debris3d.gd",
+      "sha256": "43fdc905347ed2c2a08f1c4964adc4de41257466a50a45360d387399a5d1dadf",
+      "purpose": "池化拋射碎片與落地痕跡",
+      "use_when": "池化拋射碎片與落地痕跡",
+      "kind": "node",
+      "status": "Walker TPS 已接入",
+      "constraints": "節點設定與生命週期見來源註解。",
+      "example": "$Parts.spawn(at, velocity)",
+      "base": "MultiMeshInstance3D",
+      "documentation": "A fixed-size pool of small things that fly, bounce and stay on the floor: shell casings,\nbroken parts, and flat stains (stamp()). One MultiMesh = one draw call however many lie\naround; when full, the oldest piece is reused. Flight is a few lines of CPU per moving\npiece and one floor ray per spawn; pieces at rest cost nothing.\n`const Debris3D = preload(\"res://addons/proto_kit/debris3d.gd\")`\n\n# scene: MultiMeshInstance3D (this script, top_level) with a small mesh assigned in `piece_mesh`\n$Shells.spawn(breech_pos, right * 4.0 + Vector3.UP * 3.0)   # ejected casing\n$Parts.spawn(hit_pos, -dir * 5.0 + Vector3.UP * 4.0, 1.4)   # chunk knocked off a target\n$Stains.stamp(hit_floor_pos, 1.8)                          # oil splat, flat on the floor\n\n`landed(at, speed)` fires on every bounce harder than 2.5 m/s (casing clinks, part clunks).\n\nThe MultiMesh is built in _ready from `piece_mesh` and `capacity`, so nothing is baked into\nthe scene (a headless save would drop the instance buffer anyway).\nFraction of speed kept on each bounce; under 2 m/s the piece settles.\nThrows a piece from `at` with `velocity` (world). Returns its slot.\nLays a flat piece (a stain) on the floor under `at`, randomly turned.",
+      "methods": [
+        {
+          "signature": "func spawn(at: Vector3, velocity: Vector3, size: float = 1.0) -> int:",
+          "line": 53,
+          "contract": "Throws a piece from `at` with `velocity` (world). Returns its slot."
+        },
+        {
+          "signature": "func stamp(at: Vector3, size: float = 1.0) -> int:",
+          "line": 68,
+          "contract": "Lays a flat piece (a stain) on the floor under `at`, randomly turned."
+        },
+        {
+          "signature": "func active_count() -> int:",
+          "line": 79,
+          "contract": ""
+        }
+      ],
+      "properties": [
+        "@export var piece_mesh: Mesh",
+        "@export var capacity := 64",
+        "@export var gravity := 22.0",
+        "@export var bounce := 0.3",
+        "@export_flags_3d_physics var floor_mask := 1"
+      ],
+      "signals": [
+        "signal landed(at: Vector3, speed: float)"
+      ],
+      "resource_references": [
+        "res://addons/proto_kit/debris3d.gd"
+      ],
+      "tests": []
+    },
+    {
       "id": "fixed_step",
       "path": "addons/proto_kit/fixed_step.gd",
       "sha256": "397594fb4983b29ca85d76230c289aeaad13bc51cb3dd162571aed7bf1d09f18",
@@ -1282,6 +1326,50 @@
       "signals": [],
       "resource_references": [
         "res://addons/proto_kit/hd2d_stage.gd"
+      ],
+      "tests": []
+    },
+    {
+      "id": "hit_react3d",
+      "path": "addons/proto_kit/hit_react3d.gd",
+      "sha256": "59f61c40eca950ccca5d6392105d28cc8f1f7a85a21e4c60a75d61d420a58ac8",
+      "purpose": "模型受擊閃光與變形",
+      "use_when": "模型受擊閃光與變形",
+      "kind": "node",
+      "status": "Walker TPS 已接入",
+      "constraints": "節點設定與生命週期見來源註解。",
+      "example": "$HitReact.react(direction, 1.0)",
+      "base": "Node",
+      "documentation": "Hit reaction for any 3D target: white flash, squash, visual knockback, and a death throw.\nWithout these the player cannot tell a shot landed. It only moves the `visual` node\n(usually the model under a body), never the body, so physics and AI are untouched; push\nthe body yourself when the target is light enough (e.g. move_and_collide(dir * 0.3)).\n`const HitReact3D = preload(\"res://addons/proto_kit/hit_react3d.gd\")`\n\n# scene: Scout (CharacterBody3D) > Model, HitReact (this script, visual = ../Model)\n$HitReact.react(bullet_direction)            # every hit: flash + squash + recoil, same frame\n$HitReact.react(dir, 2.0)                    # a heavier hit\n$HitReact.throw(dir * 9.0 + Vector3.UP * 7.0)  # death: the model flies, spins and lands\n\nThe flash is a translucent warm material_overlay on every GeometryInstance3D under `visual`\n(skinned meshes included) that fades out: the target's own texture shows through, and a white\nhull is tinted rather than blown out (additive would saturate it). The fade steps are a few\nshared materials, so no material per target. A throw keeps the\nmodel where it lands (y of the floor under it, found by one ray), it is not a ragdoll.\nThe node to flash, squash and push: normally the model, not the physics body.\nLaid over the target at the moment of the hit (alpha = strength), then fades to nothing.\nFractional squash at strength 1: wider and flatter, then springs back.\nVisual recoil distance (m) at strength 1, along the hit direction.\nPhysics layers the thrown model lands on.\nFlash, squash and recoil now (call it on the frame the hit lands). direction: where the\nshot was travelling, world space. strength scales squash and recoil (kill shots: 2-3).\nDeath throw: the visual flies with `velocity` (world), tumbles, and rests on the floor.\nt = 1 at the hit, 0 at rest. Ease-out so the hit snaps and the recovery glides.\nstep 0 = brightest, -1 = off.",
+      "methods": [
+        {
+          "signature": "func react(direction: Vector3 = Vector3.ZERO, strength: float = 1.0) -> void:",
+          "line": 72,
+          "contract": "Flash, squash and recoil now (call it on the frame the hit lands). direction: where the\nshot was travelling, world space. strength scales squash and recoil (kill shots: 2-3)."
+        },
+        {
+          "signature": "func throw(velocity: Vector3, spin: Vector3 = Vector3(5.0, 2.0, 7.0)) -> void:",
+          "line": 85,
+          "contract": "Death throw: the visual flies with `velocity` (world), tumbles, and rests on the floor."
+        },
+        {
+          "signature": "func is_reacting() -> bool:",
+          "line": 97,
+          "contract": ""
+        }
+      ],
+      "properties": [
+        "@export var visual: NodePath = ^\"../Model\"",
+        "@export var flash_color := Color(1.0, 0.6, 0.25, 0.5)",
+        "@export var flash_time := 0.12",
+        "@export var squash := 0.16",
+        "@export var knock_distance := 0.35",
+        "@export var recover_time := 0.16",
+        "@export_flags_3d_physics var floor_mask := 1"
+      ],
+      "signals": [],
+      "resource_references": [
+        "res://addons/proto_kit/hit_react3d.gd"
       ],
       "tests": []
     },
@@ -4514,6 +4602,35 @@
       ]
     },
     {
+      "id": "vat_crowd",
+      "path": "addons/proto_kit/vat_crowd.gd",
+      "sha256": "1ea1be40247977d69bff4e98f3628c03a9dafaf8e27a813b415644b7073ffb6e",
+      "purpose": "將骨架動畫烘焙成 VAT，供 MultiMesh 大量 3D 敵群播放",
+      "use_when": "大量同型機器人、割草敵群共用待機與跑步動畫",
+      "kind": "rule",
+      "status": "框架可用，目標裝置效能待量測",
+      "constraints": "單表面固定頂點順序，烘焙時需要 renderer，切線貼圖須另處理。",
+      "example": "var baked := await preload(\"res://addons/proto_kit/vat_crowd.gd\").bake(player, mesh, [&\"idle\", &\"run\"], 24)",
+      "base": "RefCounted",
+      "documentation": "Bake one mesh surface on an isolated rig using a rendering-enabled Godot process.\nRows are successive poses, columns follow the original surface vertex buffer.\nOne animated instance. Phase is an offset in cycles.",
+      "methods": [
+        {
+          "signature": "static func bake(player: AnimationPlayer, mesh: MeshInstance3D, clips: Array[StringName], fps := 24) -> Dictionary:",
+          "line": 4,
+          "contract": "Bake one mesh surface on an isolated rig using a rendering-enabled Godot process.\nRows are successive poses, columns follow the original surface vertex buffer."
+        },
+        {
+          "signature": "static func set_actor(batch: MultiMesh, index: int, pose: Transform3D, rows: Vector2i, phase: float, flash: float) -> void:",
+          "line": 50,
+          "contract": "One animated instance. Phase is an offset in cycles."
+        }
+      ],
+      "properties": [],
+      "signals": [],
+      "resource_references": [],
+      "tests": []
+    },
+    {
       "id": "vfx.2d.sheet_effect",
       "path": "addons/proto_kit/vfx/2d/sheet_effect.gd",
       "sha256": "56e347759974bd7ea50fb8de2dedeccb1b778d0600d51fd09937a3a82ddbd208",
@@ -5431,18 +5548,19 @@
       "use_when": "安裝或更新共用庫副本",
       "kind": "tool",
       "status": "CLI 主入口全文靜態研究；未執行製作／測試工作；capabilities build/check 已執行",
-      "parameters": "原型名稱或絕對路徑；--check 唯讀",
-      "outputs": "目的專案 addons/proto_kit；check 差異 exit 1",
+      "parameters": "原型名稱或絕對路徑；--check 唯讀；--addon <ID> 選擇單一第三方套件並明列目標；--conductor 為 Conductor 相容入口",
+      "outputs": "目的專案 addons/proto_kit 或選用套件的上游 addons 路徑；check 差異 exit 1",
       "example": "bash sync.sh --check seal-meadow",
-      "constraints": "修改模式使用整包 rsync -a --delete，刪除目標 kit 多餘檔；不合併修改、不做備份、不檢查相容性。沒有指定 target 會更新所有已有副本，故 AI 應明列單一目標。--check 唯讀呼叫 audit_copies；需先確認目標 project.godot。相對名稱基於 prototypes，支援 absolute；不應直接改目的副本。",
+      "constraints": "共用庫模式用 rsync -a --delete，省略目標會更新所有已有副本。--addon 模式保留目標額外檔案，忽略生成的 .import，並拒絕混裝 AmbientCG 的兩套版本。兩種模式均需目標 project.godot；相對名稱基於 prototypes，也支援絕對路徑。",
       "effects": {
         "writes": [
-          "<target>/addons/proto_kit/** (including deletions)"
+          "<target>/addons/proto_kit/** (including deletions)",
+          "<target>/addons/<selected upstream folder>/** (--addon or --conductor only)"
         ],
         "may_use_network": false,
         "failure_effects": "rsync 中斷可留下部分更新；沒有回滾"
       },
-      "sha256": "af939e705fecc53274bcb668528f5300f899734ba9fb7d80749c10177aa562f0"
+      "sha256": "45f229cb145f26d7f038983e0fb514195e529c73b1efabf026976c001fcbb92a"
     },
     {
       "id": "tool.vfx_import_strip",

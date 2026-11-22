@@ -25,36 +25,38 @@
       "project": "debt-commission",
       "file_counts_by_extension": {
         "": 10,
-        ".json": 117,
-        ".md": 59,
+        ".json": 199,
+        ".md": 68,
         ".cfg": 6,
-        ".gd": 497,
-        ".uid": 527,
-        ".tscn": 160,
+        ".gd": 526,
+        ".uid": 765,
+        ".tscn": 300,
         ".godot": 1,
         ".yaml": 1,
-        ".tres": 11,
+        ".tres": 70,
         ".cs": 9,
-        ".svg": 63,
-        ".import": 165,
+        ".svg": 67,
+        ".import": 238,
         ".po": 5,
         ".pot": 1,
         ".template": 1,
-        ".png": 247,
+        ".png": 333,
         ".csv": 1,
         ".translation": 1,
-        ".gdshader": 14,
+        ".gdshader": 223,
         ".gdshaderinc": 7,
+        ".res": 233,
+        ".txt": 48,
         ".wav": 5,
         ".ogg": 13,
-        ".txt": 6,
         ".ttf": 1,
         ".ttc": 1,
         ".html": 2,
         ".jpg": 3,
-        ".log": 40,
-        ".dialogue": 9,
+        ".log": 42,
+        ".done": 1,
         ".jpeg": 3,
+        ".dialogue": 9,
         ".ds": 2,
         ".mjs": 17,
         ".sh": 2,
@@ -66,10 +68,12 @@
       "source_modules": [
         {
           "path": "main.gd",
-          "sha256": "b0c9c636bd2d5750faf43164312d90ccb05e95109480a23f988f5c94ee363a26",
+          "sha256": "cc821c56eda6483e993006e0250d944ad73ea2e880b9df428daa44e2b4a89509",
           "base": "Control",
           "summary": "橫向視覺小說外殼。",
-          "public_methods": []
+          "public_methods": [
+            "static func screen_name(screen: Screen) -> String:"
+          ]
         },
         {
           "path": "scripts/asset_usage.gd",
@@ -114,9 +118,9 @@
         },
         {
           "path": "scripts/case_file_panel.gd",
-          "sha256": "86ee4d2a300b852c9d108285e44b7eae223aa83954bc55b3f4b88dbafa753ba0",
+          "sha256": "005f947983607c84b32734ff79b9b262b6abc8ec6cfb510ae0076bc3886ab64a",
           "base": "Panel",
-          "summary": "吐槽素材／人物檔案 (scenes/ui/case_file_panel.tscn): tabs, a four-column grid of what the",
+          "summary": "吐槽素材／人物檔案 (scenes/ui/case_file_panel.tscn): tabs, a row of tall cards (CardStrip, scrolls",
           "public_methods": [
             "func set_style(style_id: String) -> void:",
             "func layout(area: Rect2) -> void:",
@@ -126,11 +130,14 @@
         },
         {
           "path": "scripts/chapter_result.gd",
-          "sha256": "d1892ed7be184b6eec8175f75e9c810c2fbdd0f22f652f353e31012fff449cb6",
+          "sha256": "17febc48087167040d54c34a2f12c427999496376e77ad3979fc9a08f83e5848",
           "base": "Control",
-          "summary": "The chapter result (scenes/ui/chapter_result.tscn), shown by a story's `result` step: the",
+          "summary": "The ending scroll (scenes/ui/chapter_result_gintama.tscn). A story's `result` step shows the chapter's",
           "public_methods": [
-            "func show_result(summary: Dictionary, speaker_name: String, has_next: bool, credit_line: String = \"\") -> void:"
+            "func show_result(summary: Dictionary, speaker_name: String, has_next: bool, credit_line: String = \"\") -> void:",
+            "func show_ending(text: String, ending_title: String, has_next: bool, credit_line: String = \"\") -> void:",
+            "func buttons_shown() -> bool:",
+            "func reveal_buttons() -> void:"
           ]
         },
         {
@@ -178,7 +185,7 @@
         },
         {
           "path": "scripts/comedy_preset.gd",
-          "sha256": "5c21dec5e12ceb31124a2b063cc5166688bc084d8be8931fa803a4c6e30a4c9a",
+          "sha256": "601c1e609ccb5203eb8b085111623ca17d399b7baf209641f6e38552cf0f02b3",
           "base": "Control",
           "summary": "One manga overlay preset (scenes/comedy/<preset>.tscn). The root's exports are the timeline and",
           "public_methods": [
@@ -212,7 +219,7 @@
         },
         {
           "path": "scripts/dialogue_box.gd",
-          "sha256": "2d5ef58d09c3f99cf847c0307ab6a23627c7d2ff07960fd6ddf2a4b2181b12f5",
+          "sha256": "924773bfdca0732227bd78cdcaa8bf22703ec663b988484156b7737133a45325",
           "base": "MarginContainer",
           "summary": "The reading box, one scene per UI edition: scenes/ui/dialogue_box_<style>.tscn.",
           "public_methods": [
@@ -270,7 +277,7 @@
         },
         {
           "path": "scripts/gallery_panel.gd",
-          "sha256": "4decacec384d2bcf7ed6862c443779fe163518c2caea5299966df1dfab1d5885",
+          "sha256": "b03b2eef269f63e41a4c0919b7d5eb3609a5b8523b7c8d8bbb17771624e92f8c",
           "base": "Panel",
           "summary": "鑑賞 (scenes/ui/gallery_panel.tscn), opened from 章節選擇: 畫廊 shows every background with a",
           "public_methods": [
@@ -296,7 +303,7 @@
         },
         {
           "path": "scripts/gintama_reading_button.gd",
-          "sha256": "4bae39bbadbe414cc8d6eff2fcf8c891b605320190a4578e159b7eabe7bbb72f",
+          "sha256": "70e16c3c758c167ae24e91388a18ef8cb872636f2580010d6a775bdcb1266b0a",
           "base": "Button",
           "summary": "The visible frame is smaller than the touch target, matching the reference toolbar.",
           "public_methods": [
@@ -322,12 +329,12 @@
         },
         {
           "path": "scripts/investigate_bar.gd",
-          "sha256": "26ab3366deb726ddc4654d6ac59b8595336fa0b263f3d0b98c9a878ceed7adad",
+          "sha256": "f90e46e3e03c6656caac7c61d3e6ca92a286b4d572563b8b7c38093bf0deb840",
           "base": "MarginContainer",
           "summary": "The folded reading box while searching: a translucent bottom strip and compact controls.",
           "public_methods": [
             "func set_style(style_id: String) -> void:",
-            "func set_progress(found: int, total: int, complete: bool) -> void:",
+            "func set_progress(found: int, total: int, complete: bool, prompt: String = \"\") -> void:",
             "func set_reduce_motion(reduced: bool) -> void:"
           ]
         },
@@ -363,47 +370,120 @@
         },
         {
           "path": "scripts/main_investigation.gd",
-          "sha256": "838acf0dd3e1ce336db689a2557f50c24eb3b19b059ed23a6946b3d960724775",
+          "sha256": "c7922a78c88624f5d40fdc8be094f4ff7407641b76d4f7c21cea618819b4e285",
           "base": "RefCounted",
           "summary": "main.gd 的調查：熱區、背景拖曳、對話／移動話題、調查時的角色透明度與收合列。",
           "public_methods": [
-            "func _init(main: DebtMain) -> void:"
+            "func forget_banners() -> void:",
+            "func _init(main: DebtMain) -> void:",
+            "func forget_search_cast() -> void:",
+            "func restore_search_cast() -> void:",
+            "func present_investigation(command: Dictionary, restored: bool) -> void:",
+            "func build_investigate_bar() -> void:",
+            "func set_investigation_collapsed(value: bool) -> void:",
+            "func layout_hotspots() -> void:",
+            "func place_cast_hotspots() -> void:",
+            "func set_pan(value: float, vertical: Variant = null) -> void:",
+            "func glide(direction: Vector2) -> void:",
+            "func clear_hotspots() -> void:",
+            "func tap_investigation(at: Vector2) -> void:",
+            "func hotspot_data(hotspot_id: String) -> Dictionary:",
+            "func hotspot_hit_rect(spot: Control) -> Rect2:",
+            "func collect_hotspot(hotspot_id: String) -> void:",
+            "func show_topics(command: Dictionary) -> void:",
+            "func on_talk_pressed(topic_id: String) -> void:",
+            "func on_investigation_continue_pressed() -> void:"
           ]
         },
         {
           "path": "scripts/main_qa.gd",
-          "sha256": "bcfb1c949b71ba12df4adc5329fd042b06278b740e554dfc50a8f10bb47556b1",
+          "sha256": "efdda41cad6d241868f49ddccb2b6dc0178959d57c10f479ec18881126764cc3",
           "base": "RefCounted",
           "summary": "main.gd 的 QA 快照：只在 ?qa=1 的 Web 版把畫面狀態寫給瀏覽器檢查（tools/browser_check.mjs）讀。",
           "public_methods": [
-            "func _init(main: DebtMain) -> void:"
+            "func process(delta: float) -> void:",
+            "func _init(main: DebtMain) -> void:",
+            "func detect_qa_mode() -> void:",
+            "func publish_qa_state() -> void:",
+            "func choice_qa_state(current: Dictionary) -> Dictionary:"
           ]
         },
         {
           "path": "scripts/main_round.gd",
-          "sha256": "de99c7f7dacc1cef96421df8607406a201d94a7250b2a9997e425cc28f71c119",
+          "sha256": "b749a2b63a62aa75ff3ca1a9cb6cb91bc40ae2dd26074627e22452b0ac7349fa",
           "base": "RefCounted",
           "summary": "main.gd 的裝傻回合：證言與選詞、消音條、伊莉莎白的牌子、超必殺、QTE 與 Game Over 重試。",
           "public_methods": [
-            "func _init(main: DebtMain) -> void:"
+            "func process(delta: float) -> bool:",
+            "func _init(main: DebtMain) -> void:",
+            "func present_boke_round(command: Dictionary, restored: bool, requested_ui_mode: String = \"\") -> void:",
+            "func present_tsukkomi_options(command: Dictionary, restored: bool) -> void:",
+            "func on_boke_tsukkomi_pressed() -> void:",
+            "func round_action(move: Callable, label: String, prior_ui_mode: String, feedback: String = \"\") -> void:",
+            "func on_censor_pressed() -> void:",
+            "func on_placard_pressed() -> void:",
+            "func placard_open() -> bool:",
+            "func placard_hit_rect() -> Rect2:",
+            "func refresh_placard() -> void:",
+            "func on_super_pressed() -> void:",
+            "func start_qte(command: Dictionary) -> void:",
+            "func judged_qte_offset(offset: float) -> float:",
+            "func close_qte() -> void:",
+            "func on_boke_previous_pressed() -> void:",
+            "func on_boke_next_pressed() -> void:",
+            "func set_boke_line(index: int) -> void:",
+            "func on_boke_listen_pressed() -> void:",
+            "func on_boke_option_pressed(option_id: String) -> void:",
+            "func on_boke_timeout() -> void:",
+            "func on_game_over_retry_pressed() -> void:"
           ]
         },
         {
           "path": "scripts/main_saves.gd",
-          "sha256": "05eab4fa6b0fb8ff0d0902aabb67531f5ec114902508e3a55e2a0556e4848336",
+          "sha256": "0591f2a22e4b13f3ca9cf8c21e4372d6cf639fb12878f8cc3429b7d08e4b710e",
           "base": "RefCounted",
           "summary": "main.gd 的存讀檔：自動／快速／手動欄位、存檔內容的建立與驗證、讀檔還原、欄位選擇面板與存檔備份。",
           "public_methods": [
-            "func _init(main: DebtMain) -> void:"
+            "func _init(main: DebtMain) -> void:",
+            "func backup_paths() -> Array[String]:",
+            "func export_saves() -> void:",
+            "func import_saves() -> void:",
+            "func import_backup_text(text: String) -> bool:",
+            "func build_slot_picker() -> void:",
+            "func layout_slot_picker(width: float, height: float, top: float, bottom: float) -> void:",
+            "func open_slot_picker(mode: String) -> void:",
+            "func on_slot_card_pressed(local_index: int) -> void:",
+            "func confirm_slot_overwrite() -> void:",
+            "func cancel_slot_confirmation() -> void:",
+            "func load_payload_from_picker(payload: Dictionary, message: String) -> void:",
+            "func close_slot_picker(resume_story: bool = true) -> void:",
+            "func rollback_line() -> bool:",
+            "func quick_save() -> bool:",
+            "func quick_load() -> bool:",
+            "func save_game() -> bool:",
+            "func saveable_current_state() -> bool:",
+            "func build_save_payload(preview_png: String) -> Dictionary:",
+            "func effective_boke_ui_mode() -> String:",
+            "func read_save_payload(path: String = \"\") -> Dictionary:",
+            "func read_raw_save_payload(path: String) -> Dictionary:",
+            "func validate_save_payload(payload: Dictionary) -> bool:",
+            "func has_valid_save() -> bool:",
+            "func apply_save_payload(payload: Dictionary) -> bool:",
+            "func delete_save() -> void:"
           ]
         },
         {
           "path": "scripts/main_tutorial.gd",
-          "sha256": "e6b1cb338d0654cd14d9b9e7c7a7ce48f6cdd61d61cb3cc685c5760c79e086b4",
+          "sha256": "4060b3c367232b2335e87d7b062026e83126e896deaf6c0ca71fa23de5d76332",
           "base": "RefCounted",
           "summary": "main.gd 的第一次教學（data/tutorials.json）：何時出現、框住哪個按鈕、看過的記錄。",
           "public_methods": [
-            "func _init(main: DebtMain) -> void:"
+            "func _init(main: DebtMain) -> void:",
+            "func build_tutorial() -> void:",
+            "func maybe_tutorial(trigger: String) -> void:",
+            "func tutorial_target(target: String) -> Control:",
+            "func tutorials_seen() -> Array:",
+            "func replay_tutorials() -> void:"
           ]
         },
         {
@@ -418,8 +498,28 @@
           ]
         },
         {
+          "path": "scripts/orientation_layout.gd",
+          "sha256": "b8ab88c7c408dc25b0ea2eb8b6c011f40e2c23c7dc6c66dd6a2788c091c2de3a",
+          "base": "RefCounted",
+          "summary": "Portrait overrides kept in the scene itself: a node's `metadata/portrait_layout` is a Dictionary of",
+          "public_methods": [
+            "static func apply_tree(root: Node, portrait: bool) -> void:",
+            "static func apply(node: Node, portrait: bool) -> void:"
+          ]
+        },
+        {
+          "path": "scripts/pan_arrows.gd",
+          "sha256": "6ea86d736fc7f0dc785749fa4031303207232be099fd27d6584f8f396fbdbc27",
+          "base": "Control",
+          "summary": "Arrows on the edges of a search (scenes/ui/pan_arrows.tscn): each shows only while the picture can still",
+          "public_methods": [
+            "func refresh(pan: float, pan_range: Vector2, pan_y: float, pan_y_range: Vector2) -> void:",
+            "func arrow(direction: Vector2) -> Button:"
+          ]
+        },
+        {
           "path": "scripts/placeholder_sprite.gd",
-          "sha256": "1558c3af03e1652ebc7920f542455adae1051a7f86bfe68703c7402cf183f8d8",
+          "sha256": "8e2023857b93c4d7c8365626ab6bf0bcceb25186a522cef4ea07fe0a5b3c50ee",
           "base": "Control",
           "summary": "One character on stage, the root of scenes/characters/<id>.tscn. The root is the standing box a",
           "public_methods": [
@@ -430,6 +530,7 @@
             "func placard_glowing() -> bool:",
             "func placard_rect() -> Rect2:",
             "func art_rect() -> Rect2:",
+            "func spot_rect(spot_id: String) -> Rect2:",
             "func set_expression(value: String) -> void:",
             "func configure_height(height_cm: float, bounds: Array = []) -> void:",
             "func set_expression_art(textures: Dictionary) -> void:",
@@ -564,7 +665,7 @@
         },
         {
           "path": "scripts/stage_effects.gd",
-          "sha256": "0255d9d06479eb5b711d670703dbb8d068a08b99c30037baad779ec35396fbaa",
+          "sha256": "22d476ebd9cc487e5cdc1135bcf78cb9118dfb1a9c248105bc80708c300d446e",
           "base": "Node",
           "summary": "Stage effects the story asks for: shake, flash, cut-in, freeze, background music and sound",
           "public_methods": [
@@ -578,6 +679,7 @@
             "func play_type_tick(speaker: String, cluster: String, thought: bool, skipping: bool) -> void:",
             "func play_perfect_voice(number: int) -> bool:",
             "func stop_transients() -> void:",
+            "func clear_overlays() -> void:",
             "func feedback(event: String, skipping: bool = false) -> void:",
             "func add_shake_layer(layer: Control) -> void:",
             "func remove_shake_layer(layer: Control) -> void:",
@@ -586,7 +688,7 @@
         },
         {
           "path": "scripts/stage_motion.gd",
-          "sha256": "790376ae78e5f8e04548bbe0137cb581f98d442ae4391dec203cfb8669d72816",
+          "sha256": "0f93ed35f1cdd564eae794ce0a62e3200dd46e9f8fcace75e0f6673b77f7ab37",
           "base": "Node",
           "summary": "Scene-owned visual nodes; this controller only manages cancellable transient animation.",
           "public_methods": [
@@ -594,6 +696,8 @@
             "func set_reduce_motion(reduced: bool) -> void:",
             "func capture_background(frame: TextureRect) -> void:",
             "func crossfade(duration: float = 0.28, style: String = \"fade\") -> float:",
+            "func scroll(frame: TextureRect, direction: String, seconds: float, skipping: bool) -> void:",
+            "func end_scroll() -> void:",
             "func fade(direction: String, duration: float, skipping: bool) -> float:",
             "func character(sprite: Control, kind: String, skipping: bool, transition: String = \"fade\") -> void:",
             "func reaction(sprite: Control, kind: String, skipping: bool) -> void:",
@@ -613,7 +717,7 @@
         },
         {
           "path": "scripts/story_library.gd",
-          "sha256": "93300e244f04721cfa404bfbbbcb64c96b2210776d5b1c3e34806cb3389d754c",
+          "sha256": "7d15735e4b700b2036b2605796ee295f886ed1ef2ec8756b53449fb4d08341ed",
           "base": "RefCounted",
           "summary": "The stories the player can pick and what the player has reached in them (user://progress.cfg).",
           "public_methods": [
@@ -643,7 +747,7 @@
         },
         {
           "path": "scripts/story_runner.gd",
-          "sha256": "b3f334c2fbf1e357a737b3e6507d46f59a25aaf0cb33c3d90af26728e46561bc",
+          "sha256": "021fab7c86743c4fe02f1f96bce8b8a11bdfce67d9d40c8963b18ee2be4db923",
           "base": "RefCounted",
           "summary": "Data-driven story runtime for the debt commission prototype.",
           "public_methods": [
@@ -651,11 +755,11 @@
             "func create_validation_probe() -> RefCounted:",
             "func has_gameplay() -> bool:",
             "func default_pov() -> String:",
+            "func orientation() -> String:",
             "func story_info() -> Dictionary:",
-            "func validate_credits(credits: Variant) -> String:",
             "func get_asset_catalog() -> Dictionary:",
             "func chapter_result() -> Dictionary:",
-            "static func grade_for(glasses: int, game_overs: int) -> String:",
+            "static func grade_for(glasses: int, game_overs: int, perfect: int = 0, caught: int = 0) -> String:",
             "func case_file() -> Dictionary:",
             "func reset() -> void:",
             "func current() -> Dictionary:",
@@ -683,7 +787,26 @@
             "static func endings_of(story: Dictionary) -> Array[Dictionary]:",
             "func take_visits() -> Array[String]:",
             "func carry_out() -> Dictionary:",
-            "func carry_in(values: Dictionary) -> bool:"
+            "func carry_in(values: Dictionary) -> bool:",
+            "func validate_credits(credits: Variant) -> String:"
+          ]
+        },
+        {
+          "path": "scripts/story_validator.gd",
+          "sha256": "ff079c86a6db9ce128863c012b9796a2d9d04b1c791c87286b25204383528764",
+          "base": "RefCounted",
+          "summary": "Load-time checks of a story and its asset catalog, used by story_runner.gd's load_story.",
+          "public_methods": [
+            "static func validate_credits(credits: Variant) -> String:",
+            "static func catalog_has_character(asset_catalog: Dictionary, character_id: String) -> bool:",
+            "static func catalog_has_item(asset_catalog: Dictionary, item_id: String) -> bool:",
+            "static func story_has_phase3_ops(story: Dictionary) -> bool:",
+            "static func validate_asset_catalog(value: Variant) -> String:",
+            "static func character_has_spot(asset_catalog: Dictionary, character: String, spot: String) -> bool:",
+            "static func validate_story(value: Variant, asset_catalog: Dictionary) -> String:",
+            "static func collect_allowed_flag_values(story: Dictionary) -> Dictionary:",
+            "static func is_non_empty_string(value: Variant) -> bool:",
+            "static func flag_kind(value: Variant) -> int:"
           ]
         },
         {
@@ -692,6 +815,28 @@
           "base": "Control",
           "summary": "A bar of slanted stripes in two colours: the caution tape along the director's choice sheet and the",
           "public_methods": []
+        },
+        {
+          "path": "scripts/text_scale.gd",
+          "sha256": "5dee8040677e82b533edd954edbec867fb9585e6167fc95aa33f039b6de804e0",
+          "base": "RefCounted",
+          "summary": "Readable text on phones. The scenes' font sizes are design pixels picked for a desktop or tablet window;",
+          "public_methods": [
+            "static func multiplier(design_px_per_css_px: float) -> float:",
+            "static func apply_tree(root: Node, factor: float) -> void:",
+            "static func apply(node: Node, factor: float) -> void:"
+          ]
+        },
+        {
+          "path": "scripts/title_banner.gd",
+          "sha256": "0ee506e6572eb15965be9a6e4e9c015201d9611d6e7002d14b20bc49fbfe33b8",
+          "base": "Control",
+          "summary": "A title across the middle of the screen (scenes/ui/title_banner.tscn): after a scene change (a `bg` step's",
+          "public_methods": [
+            "func play(title: String) -> void:",
+            "func stop() -> void:",
+            "func is_playing() -> bool:"
+          ]
         },
         {
           "path": "scripts/title_screen.gd",
@@ -763,7 +908,7 @@
         },
         {
           "path": "scripts/ui_styles.gd",
-          "sha256": "a4889f98b9ee86cec850afa84ea770563f41d1ef31bd8b7b95681a66096185cf",
+          "sha256": "d1e6cc6d90fb3d43073e736f77f329f3337819242e8a74abffc9853c6209ff28",
           "base": "RefCounted",
           "summary": "Control styling for the skin in play (skin.gd registers each skin's look under its id). The base",
           "public_methods": [
@@ -774,7 +919,8 @@
             "static func washi(style_id: String) -> bool:",
             "static func hud_resource(style_id: String, key: String) -> Resource:",
             "static func apply_button(button: Button, style_id: String, role: String = \"standard\", active: bool = false, scale_factor: float = 1.0) -> void:",
-            "static func button_style(style_id: String, role: String, state: String, active: bool = false, scale_factor: float = 1.0) -> StyleBoxFlat:",
+            "static func button_style(style_id: String, role: String, state: String, active: bool = false, scale_factor: float = 1.0) -> StyleBox:",
+            "static func key_style(state: String, density: float = 1.0) -> StyleBoxFlat:",
             "static func panel_style(style_id: String, role: String, scale_factor: float = 1.0) -> StyleBoxFlat:",
             "static func label_color(style_id: String, role: String) -> Color:",
             "static func contrast(a: Color, b: Color) -> float:",
@@ -789,7 +935,7 @@
         },
         {
           "path": "tests/test_art_check.gd",
-          "sha256": "2d61b07f929f9c206246ae6b445d7aa971940193e30c63c629dcecf3feedb52f",
+          "sha256": "d73eb4be36d0871290ec50dc4101904cf5e744cdc35d2ba6c7d77619386905d4",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "投稿檢查 and 素材授權: what a story uses (with the faces the game sets itself), what is still to",
           "public_methods": [
@@ -798,7 +944,7 @@
         },
         {
           "path": "tests/test_build_packs.gd",
-          "sha256": "93542595f3039a7143531b71f122e1e4edc8751e762d1bf5cf0db3f07cd0a7b1",
+          "sha256": "d3bef0b3a55bfa949f813d7f82a3bfceb6e691617a6d0aa366e4d807f2969499",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "劇本：建置 for a work: stories/<作品>/<name>.dialogue builds beside itself with the work's",
           "public_methods": [
@@ -807,7 +953,7 @@
         },
         {
           "path": "tests/test_chapter1.gd",
-          "sha256": "14550b7ad9566b6033286f7d4e3848c2285ffb01a87845e5f1f7139fa86e5e20",
+          "sha256": "a73ba737c4f05e2987f6c4e4c0adb24a7e262b69417dd5aa1102f1417f6547fb",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "",
           "public_methods": [
@@ -816,7 +962,7 @@
         },
         {
           "path": "tests/test_chapter_flow.gd",
-          "sha256": "88416d73ca8029bb46e12fc22317270cb664ada32e057ee131906f6548511813",
+          "sha256": "c0458292ad9f0ebdc70f8a5c00542a7bbec0fd9784c20444bb1f1ba3db6eb106",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "Phase 5 chapter flow on a two-chapter fixture registry: the `result` step shows the chapter",
           "public_methods": [
@@ -825,7 +971,7 @@
         },
         {
           "path": "tests/test_character_height.gd",
-          "sha256": "ad6bc9947a24c104304169aecb71ac1188d7db249c153df3d120c029f3f4e2a0",
+          "sha256": "d426b3031a216a7949d65017412cdf4425dd956dcdca6c49b8c7236870ae7563",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "",
           "public_methods": [
@@ -834,7 +980,7 @@
         },
         {
           "path": "tests/test_choices.gd",
-          "sha256": "0a5cb3b5295d661c0a259e4cbfb3dff906a1c56f90f50b9511bde84dd873b1a2",
+          "sha256": "bd914f9ec1f2fc4a88de85bddeab21319b4175f27a2947caac50b6000acb56b6",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "The two kinds of `choice`: a POV choice (a thought of `pov`; the rows in the edition's sheet, a round",
           "public_methods": [
@@ -843,7 +989,7 @@
         },
         {
           "path": "tests/test_comedy.gd",
-          "sha256": "8ff4b64e0c9624bcd99798fe7d0c75b5813712dc0f36ed1603212f3d68510e72",
+          "sha256": "34cca88f81114fb1dc3185d77d18ccd3b71cf431b729ed06e8fb37282a8a06b0",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "The `comedy` op and the ComedyLayer: the data (validation, both build adapters), the four",
           "public_methods": [
@@ -868,7 +1014,7 @@
         },
         {
           "path": "tests/test_dialogue_log.gd",
-          "sha256": "c6b234f4a27377bb5d8544cf5e3835e7db5900a986420d8f883d73509e28ba34",
+          "sha256": "a5269844c05b6c91702db5479258eae35dc4d89b81f5d3c6dfb6cab761e2100c",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "Dialogue log read like a chat (docs/PLAN-LOG-AVATAR-TUTORIAL.md A): others left with avatar and name ink,",
           "public_methods": [
@@ -888,7 +1034,7 @@
         },
         {
           "path": "tests/test_downloaded_bgm.gd",
-          "sha256": "a9a7a68c5ab9e402007cd0f0f20b4b96b6b7c9580ad077438409bd99b24d5d79",
+          "sha256": "a01099805d8e02e0da2168052ba6d7ae8d593744e9fe0da663676e8c00a31f45",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "Downloaded tracks, default BGM, playback controls and explicit story overrides.",
           "public_methods": [
@@ -896,8 +1042,17 @@
           ]
         },
         {
+          "path": "tests/test_ending_scroll.gd",
+          "sha256": "b394062f563914bf87e3947a512b58de7d4632b6a9940b7c112ec2f11aa9b047",
+          "base": "\"res://addons/proto_kit/test_kit.gd\"",
+          "summary": "The ending: the screen goes dark, the scroll (scenes/ui/chapter_result_gintama.tscn) unrolls with the",
+          "public_methods": [
+            "func _init() -> void:"
+          ]
+        },
+        {
           "path": "tests/test_ep00.gd",
-          "sha256": "df94c7cfe01b2fa754c0483c9953398a08a8d4c47462cf41e49dfa68c8710f5f",
+          "sha256": "dc7f4f309c540f284c798d474dc2bf332f81cdcdc3bace0747da3e8b1e661e6d",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "EP00「今天也沒有工作的萬事屋」(data/ep00_story.json, built from story_src/ep00.dialogue): the whole chain of",
           "public_methods": [
@@ -906,7 +1061,7 @@
         },
         {
           "path": "tests/test_flowchart.gd",
-          "sha256": "890d548a1b89589ab6ef22ce6210fc61863f2a86dc8abbead1fef6016f146abc",
+          "sha256": "1854ded9865ba25347f2cff8f2c689881284be2b5d5ff78c7ea3384c7509812d",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "流程圖: stories fold into scene boxes (flow_graph.gd), the runner reports the nodes it passes,",
           "public_methods": [
@@ -915,7 +1070,7 @@
         },
         {
           "path": "tests/test_gallery.gd",
-          "sha256": "20e09b1eaefd95cd09c1e6358b37e8b30801339dbd33b626c66a17fc4cc2f552",
+          "sha256": "ad50f2422e1491df8e3d0e0a518dce5346536822df7280ecb01d49ec648c9e15",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "鑑賞: backgrounds and music met in play are recorded once in progress.cfg (story_library.gd);",
           "public_methods": [
@@ -924,7 +1079,7 @@
         },
         {
           "path": "tests/test_game_feel.gd",
-          "sha256": "bcaab6adcd040c48cbddbd8d03b02006648a4144aa40c337ffe2ffc10ebb8ba3",
+          "sha256": "d6e8543547095dd4824afe60a357944417784ea2f9cfa1696258321f3c5a0b43",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "Game feel: each of the player's moments has one tier (stage_effects.gd FEEDBACK) that buzzes the",
           "public_methods": [
@@ -933,7 +1088,7 @@
         },
         {
           "path": "tests/test_interaction.gd",
-          "sha256": "0bcbce1516d1744fc2d06d513fcb76d9372b5e3fb8a40af1ccfe1190f13ac274",
+          "sha256": "c6a574c1360cc93ff71ea47e018dd581a281e76c3676b210115eac45275e7d07",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "v2 Interaction Mode on investigations (tests/fixtures/interaction_story.json): `keep_cast` keeps the",
           "public_methods": [
@@ -942,7 +1097,7 @@
         },
         {
           "path": "tests/test_investigation.gd",
-          "sha256": "8413f8f4af776a694cd401dad6c7d63ced4ee02ad0e796567cf37142c781fbae",
+          "sha256": "1f2729c2ae25e84e707e424a6fc6bf59625ffa23397d635c04d48328907e235f",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "Investigation with talk topics and places (the Phase 4 sample, story_src/phase4.*): topics play",
           "public_methods": [
@@ -969,7 +1124,7 @@
         },
         {
           "path": "tests/test_katsura_dog_ears.gd",
-          "sha256": "1b93e03af0f93320dc969492d77a662275986e8e97a16dd98ce2a5a6a374ee33",
+          "sha256": "294f4cd19d6b23a25797c6d1ce43deb545339598193b2cd9150154e54095036a",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "",
           "public_methods": [
@@ -978,9 +1133,18 @@
         },
         {
           "path": "tests/test_landscape_reading.gd",
-          "sha256": "3a5fd7befadee188e2975ffff3c2e53b3ddc44e3ea2632a74fd03f419495b538",
+          "sha256": "34292963b9973b1d4a6dbd831bd7b11716241009bb369feee33fc3dc180b8046",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
-          "summary": "Landscape composition, undistorted toolbar, fixed portraits and readable long lines.",
+          "summary": "Landscape composition, an icon-only toolbar, fixed portraits and readable long lines.",
+          "public_methods": [
+            "func _init() -> void:"
+          ]
+        },
+        {
+          "path": "tests/test_orientation.gd",
+          "sha256": "0b9797c389def8e810c09f370577ad5dc6093dba6214230342c911e1610d102a",
+          "base": "\"res://addons/proto_kit/test_kit.gd\"",
+          "summary": "A story's `orientation` (or its stories.json entry's) turns the canvas: portrait is 1080×1920 with each",
           "public_methods": [
             "func _init() -> void:"
           ]
@@ -996,7 +1160,7 @@
         },
         {
           "path": "tests/test_phase2_story.gd",
-          "sha256": "e9a41b9f5c893cfbdf40ad006e88484c7997dac9f23827990e0ae63b9b729ba9",
+          "sha256": "79157a84fbb028756a56f82608e1f624b1a4a69df976185d16e5f299ea5bee5b",
           "base": "SceneTree",
           "summary": "",
           "public_methods": [
@@ -1005,7 +1169,7 @@
         },
         {
           "path": "tests/test_phase2_ui.gd",
-          "sha256": "4c13ce311f7a8748646691c513b42737af88d5f336e70b5f34510360376827ff",
+          "sha256": "444565c6d772567f19ff951c6e9da3a7d254758f64a03c99563b7f82471f7050",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "Integration check for the Phase 2 JSON sample and the VN presentation/save layer.",
           "public_methods": [
@@ -1014,7 +1178,7 @@
         },
         {
           "path": "tests/test_phase3_story.gd",
-          "sha256": "f12ce842f1d85df5ccd3c12caefa27eab7387c6f6f2ce8aecb5944aa12305309",
+          "sha256": "343c596b9e11d8aae3e25cb54157453ef266802619f58866120ff72809e66f0c",
           "base": "SceneTree",
           "summary": "",
           "public_methods": [
@@ -1023,7 +1187,7 @@
         },
         {
           "path": "tests/test_phase3_ui.gd",
-          "sha256": "b0f43d5a767686134398a304a291ff959a431fdfa21839ad56547606d7216365",
+          "sha256": "77d089cb00db167040cb85b80549f50de35ca021ad5813aa58c8f0100117bc65",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "Phase 3 VN-shell flow, overlay timer, and save/restore integration.",
           "public_methods": [
@@ -1032,7 +1196,7 @@
         },
         {
           "path": "tests/test_phase4_rounds_story.gd",
-          "sha256": "6541b1874e974dc116de0d14ae0cacead101f113657e69cfa6e66f0f3c2c8bfc",
+          "sha256": "4f647658ed1f2b239f65e7c74623c97c0c01467b89cd2641b817358ec12f4e23",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "The Phase 4 rounds sample (story_src/phase4_rounds.*) is playable end to end through the",
           "public_methods": [
@@ -1041,7 +1205,7 @@
         },
         {
           "path": "tests/test_phase4_rounds_ui.gd",
-          "sha256": "23a06a8cba9aae302007dbd10053b097980ed9f79773666633e14b08c0b6f910",
+          "sha256": "0ba7ebc6b834a626f57d98e4172b84aff07147c473ae488adb44f1df10a435ed",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "The Phase 4 rounds sample in the shell: stage effects (music survives a save, a cut-in never",
           "public_methods": [
@@ -1050,7 +1214,7 @@
         },
         {
           "path": "tests/test_phase4_ui.gd",
-          "sha256": "35c9cf3680690c573ea0513b71221ad4a7a6dfe8f907bb73734f9bc10b48e7d5",
+          "sha256": "c7143929ca0ecb71d1fdf5e14c538e8c5d0984b1c2ce0c73b92ef530e7288c0e",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "The Phase 4 four-clue sample plays in the existing VN shell: four hotspots (the footprints",
           "public_methods": [
@@ -1059,7 +1223,7 @@
         },
         {
           "path": "tests/test_portrait_controls.gd",
-          "sha256": "b8fd64f390cb3f8fece3900d53164eaf9144d57fc55216b01ac2468044236bfd",
+          "sha256": "1d36973fa47373dcd9616aa549c750a119b898d156c9a0cc2a8d7d27a08cfb3a",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "",
           "public_methods": [
@@ -1068,7 +1232,7 @@
         },
         {
           "path": "tests/test_portrait_motion.gd",
-          "sha256": "80d5f43eabee835200a3275124f2a84f4c76d2c73314917adaa84682c15f7615",
+          "sha256": "e5a10a6f20fb33aea9eeb5368cde61964f09b479db20326f75db081fa8560d0f",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "Authoring -> validation -> real reading shell, including animation interruption and reduced motion.",
           "public_methods": [
@@ -1077,7 +1241,7 @@
         },
         {
           "path": "tests/test_portrait_reaction.gd",
-          "sha256": "cf16c244c7a11cfc616f62f5af6dd9f113368a5cfde816eeda4574eaa15cfe2d",
+          "sha256": "aa1903916bf0e580f8c4f91596e85c6b5a83e20e2187f381ca33bc375b335f72",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "",
           "public_methods": [
@@ -1085,8 +1249,26 @@
           ]
         },
         {
+          "path": "tests/test_portrait_spots.gd",
+          "sha256": "5f87046de603d8e635f678e464dbc88b8d3bfbc6c3bca335bf47347f4aa6e8d0",
+          "base": "\"res://addons/proto_kit/test_kit.gd\"",
+          "summary": "A character hotspot's `spot` names a node Art/Spots/<spot> in the character's scene (scenes/characters/",
+          "public_methods": [
+            "func _init() -> void:"
+          ]
+        },
+        {
+          "path": "tests/test_portrait_staging.gd",
+          "sha256": "55d3743e178d66e46d7a3f4c4dada1722fe72bd26d15d21e0e64d31c17191199",
+          "base": "\"res://addons/proto_kit/test_kit.gd\"",
+          "summary": "Reproduce dog_ears: a placard, a reaction, dimming, then an entrance with offscreen speech.",
+          "public_methods": [
+            "func _init() -> void:"
+          ]
+        },
+        {
           "path": "tests/test_reading_convenience.gd",
-          "sha256": "efdd288d6ed83791de342d7ec9d615366c920d9c2c7f364ae383b03fd865e15f",
+          "sha256": "7db3cdaffc748ca4b797cf5b3eee4f73b393e3fce24141e6f9a463d27e98f3df",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "",
           "public_methods": [
@@ -1095,7 +1277,7 @@
         },
         {
           "path": "tests/test_reading_feel.gd",
-          "sha256": "42d33172f0b1fcd4f0443c879c41c72f1924c6de539a46e016559ee6c4eddfec",
+          "sha256": "da469f12c340e70b9727ae245f7c22ef5cfba0f045e66c719456534aa4d76655",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "Reading feedback must not change the hit area, block input, or ignore reduced motion.",
           "public_methods": [
@@ -1104,7 +1286,7 @@
         },
         {
           "path": "tests/test_reading_scenes.gd",
-          "sha256": "98500ca2c48866bd5f0d4c051a6e35c6ed090dfdd78aab5511e625a6de1747b6",
+          "sha256": "1c0877bf07e3a6ca2ccbd9b4e44ab883586b1ab6eeb46b0f2543094700e50282",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "",
           "public_methods": [
@@ -1122,7 +1304,7 @@
         },
         {
           "path": "tests/test_save_slots.gd",
-          "sha256": "e3cb5d98fe879ea9c8f47aa430c5028aed123477b1d6115099820cb243619872",
+          "sha256": "a43c373a8801515076632172f9f52c3b6ec744ec242b138b84d67d30c9c6034f",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "Persistence and picker integration checks for autosave plus 18 manual slots.",
           "public_methods": [
@@ -1140,14 +1322,14 @@
         },
         {
           "path": "tests/test_save_validation.gd",
-          "sha256": "df11b220fe60a38682f38b1adeb0738ffaba93162b1f9a194416dd32ec9be1fd",
+          "sha256": "2f45a64bb58e7e01248c33bdc7e759df4604de451398b6d31d8b8d1da28200bc",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "Loaded story definitions remain authoritative; save previews never change live state.",
           "public_methods": []
         },
         {
           "path": "tests/test_scene_transition.gd",
-          "sha256": "2a72a2ce2e67dfe2233314dfa5826cf2963c36b3a4e599f47c30e4a83d327cf9",
+          "sha256": "3b307349e5b66ecc50e5c0d0431ccacbd3e7b6071c7c899ca3f1d92924e9cc64",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "Scene changes: a bg step's `transition` (fade, brush, ink, glitch) is validated, wipes the old",
           "public_methods": [
@@ -1156,7 +1338,7 @@
         },
         {
           "path": "tests/test_search_cast.gd",
-          "sha256": "03b9ec315e05f4f44ca9e1b33661b9488f97f31d571cf28528528bcebbcaa55e",
+          "sha256": "dabf0b9aa0c77e503af2ad3bd700a758757569f8b699e16e75d8132adbdf5fc3",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "While searching, the cast does not cover the room: in chapter 1's living room Gintoki (his mouth is",
           "public_methods": [
@@ -1165,7 +1347,7 @@
         },
         {
           "path": "tests/test_settings.gd",
-          "sha256": "cdfc67c044c96fb24401e0fc988016e595977bfbf803a4de8c19764bf9b3dbcd",
+          "sha256": "8d11c0dec1fb65eda1750e406327e1606839540718d812adbbef930c2c4a45ae",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "設定: opens from the title and from 目錄 (returning to each), the defaults keep the old speeds",
           "public_methods": [
@@ -1173,8 +1355,17 @@
           ]
         },
         {
+          "path": "tests/test_showcase.gd",
+          "sha256": "a46b60514c56dc3978f98545b42491f606c86731ab5948ecf1c6bf71ddfce4a5",
+          "base": "\"res://addons/proto_kit/test_kit.gd\"",
+          "summary": "功能展示 (data/showcase_story.json): the shipped list is the showcase (landscape and its portrait entry) plus the dog-ears work; every",
+          "public_methods": [
+            "func _init() -> void:"
+          ]
+        },
+        {
           "path": "tests/test_skin.gd",
-          "sha256": "d98c2e14ec38c73ed609fd2dc34c456124a80ff78775825757107e4143cf3ec4",
+          "sha256": "cbc8492746dcfb196e4f8ffed4d372af5be05b6f15fd4392645f60d295f73b61",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "外觀包: a story's `skin` brings its scenes, look, life icon, title picture and music, and words;",
           "public_methods": [
@@ -1183,7 +1374,7 @@
         },
         {
           "path": "tests/test_stage_scene.gd",
-          "sha256": "33c0b2ddc6a0d7c32204d97ea1375a940a77d38eed74a4c1e431a3bf82524f52",
+          "sha256": "2232b2c43b1cb353b9ce27b09a4da906c2e36873c56d0df3b7eafc39ae41614f",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "scenes/stage.tscn drives the stage: an actor's standing box is scaled to its slot (left/center/right)",
           "public_methods": [
@@ -1192,7 +1383,7 @@
         },
         {
           "path": "tests/test_story.gd",
-          "sha256": "033592ebc86a5b3413ec3c77c8327ceca0a2bd7bf61315835c9fdedcdcfa981c",
+          "sha256": "91f89563cde5794e3130a5c74ff0b01a3a226296ce7251ca8fceee6c097281c4",
           "base": "SceneTree",
           "summary": "",
           "public_methods": [
@@ -1201,7 +1392,7 @@
         },
         {
           "path": "tests/test_story_build.gd",
-          "sha256": "60c76ca9238dd85936a18fe0c8fca053fc6525679f7f8f5f831628afbdaf57a8",
+          "sha256": "8145530440745fd5ad34b9c21789486c270bccc95791864ae21b05a141723f3e",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "Story build pipeline: .dialogue -> StoryRunner JSON, the structural version, strict errors,",
           "public_methods": [
@@ -1210,7 +1401,7 @@
         },
         {
           "path": "tests/test_story_build_parley.gd",
-          "sha256": "565d7bb32393a7282202a0cfc234d797bac93f648cc1fcbbe0a3bf2ce161b5df",
+          "sha256": "14c2f7a1d79546d6155f6a7d6d129af8713fd81057c037cd11301db5c6876c99",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "Parley (.ds) adapter: the Phase 4 graph builds to the same story as phase4.dialogue (talk,",
           "public_methods": [
@@ -1219,7 +1410,7 @@
         },
         {
           "path": "tests/test_story_packs.gd",
-          "sha256": "4ba79081f4c540af8ade2d2991973a7f6a4168476ba37fbb8fd06e4680ef1548",
+          "sha256": "39c2928039bf68f17a7f9d63f86730e68f00e693e343fdca98cf727f99a78547",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "故事包: stories/<work>/pack.json joins the chapter list after the base work, with its own catalog",
           "public_methods": [
@@ -1228,7 +1419,7 @@
         },
         {
           "path": "tests/test_story_tools.gd",
-          "sha256": "01a26732a6896ec38e1367be6910fd43377cf255ebd5029f72f35409d4fb8226",
+          "sha256": "6351ad6c31185e5e5c791a6469191fd45532f0e8dda7c31f67e3a5ff65910268",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "The writer workflow behind Project > Tools: stories without a blocks file, the default output",
           "public_methods": [
@@ -1237,7 +1428,7 @@
         },
         {
           "path": "tests/test_super_effects.gd",
-          "sha256": "66daa213487fd9f26df4b17eedf777a1b57b78ae9da7b39b579f3b303b8282e5",
+          "sha256": "b9230d27a513c0d1bfd1614a2bae0888d80eb31970375460171c677129ccdb68",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "B acceptance: full-gauge notification/aura, custom super label, consumption/QTE, restore and beam input/cleanup.",
           "public_methods": [
@@ -1246,7 +1437,7 @@
         },
         {
           "path": "tests/test_text_presentation.gd",
-          "sha256": "9515b53c5389c9b3fc1c08417f6c92d4c4d21cfa2cf9cedd5524f587b5bdbd5e",
+          "sha256": "5139efea25104e424c76da360a24a9016d61436cfe082b63603645a42391b3a6",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "",
           "public_methods": [
@@ -1255,28 +1446,29 @@
         },
         {
           "path": "tests/test_tutorial.gd",
-          "sha256": "203bd1e3e2f14e1e4d0b94d84c2918b69a0ad6a6317a2256f664cdfe8b3530c0",
+          "sha256": "3b74e01ab8e7c112a7defbe245d5087e719e0b2671cd2ef4753df821d1cddd0f",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "First-time guides (docs/PLAN-LOG-AVATAR-TUTORIAL.md B, data/tutorials.json): shown once when investigation and",
           "public_methods": [
             "func _init() -> void:",
             "func test_tutorial_shows_once_and_frames_each_control() -> void:",
             "func test_tutorial_seen_guides_stay_quiet_until_replayed() -> void:",
-            "func test_tutorial_setting_off_shows_nothing() -> void:"
+            "func test_tutorial_setting_off_shows_nothing() -> void:",
+            "func test_reading_guide_on_the_first_line_read() -> void:"
           ]
         },
         {
           "path": "tests/test_ui_styles.gd",
-          "sha256": "4a4f0bbc1e0b7c1ca8039b2be743084dae154af4e6bff98e182ffbfec07d0685",
+          "sha256": "45fbe4f8aecde6c94e6cd5533bf9dd47cd2e03230cc4ded5f4d4234273884ce6",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
-          "summary": "The game's one UI look, 銀魂和紙: the washi scenes are mounted, the reading toolbar and cloud name",
+          "summary": "The game's one UI look, 銀魂和紙: the washi scenes are mounted, the reading toolbar and silver-framed name",
           "public_methods": [
             "func _init() -> void:"
           ]
         },
         {
           "path": "tests/test_vn_shell.gd",
-          "sha256": "17f0a12521b9de6e8c419c7ddf14f81e09b6d427f2ae06f9cb3c00147a2d76ef",
+          "sha256": "2843a08a48cacb05693f181e086af9f4b266b54fa3064f8f9b4ce59352e6dde0",
           "base": "\"res://addons/proto_kit/test_kit.gd\"",
           "summary": "Headless gesture checks for the Phase 1 VN shell: one tap = one action, long-press,",
           "public_methods": [
@@ -1352,6 +1544,13 @@
           "public_methods": []
         },
         {
+          "path": "tools/add_portrait_layouts.gd",
+          "sha256": "e1c0e095068d9e53c9d688a63d990f3c8530dbbb3e518e05ecac4b3ed72be0f5",
+          "base": "SceneTree",
+          "summary": "One-off authoring tool: writes `metadata/portrait_layout` (scripts/orientation_layout.gd) on the nodes whose",
+          "public_methods": []
+        },
+        {
           "path": "tools/add_result_scroll.gd",
           "sha256": "61ad3a9c826fca77fb8ff461cb6e1f4278b5a7004ac411ff6e2c3a515401f186",
           "base": "SceneTree",
@@ -1379,6 +1578,15 @@
           ]
         },
         {
+          "path": "tools/bot_players.gd",
+          "sha256": "9cdf65d7481865331b6ce6a071cb33d2eb7f8df6fc3f542a53a11db5dd8b92cc",
+          "base": "SceneTree",
+          "summary": "三種機器人玩家跑同一章，給「不操作／隨便選／知道答案」一個數字基準（不進出貨，export 排除 tools/）。",
+          "public_methods": [
+            "func _init() -> void:"
+          ]
+        },
+        {
           "path": "tools/fit_expressions.gd",
           "sha256": "af37e49728ed7c802ae9cb9bfb182c04dedbf5046e90514bb0b0cc8f4108eb8b",
           "base": "SceneTree",
@@ -1398,7 +1606,7 @@
         },
         {
           "path": "tools/landscape_choice_audit.gd",
-          "sha256": "35b7640b256d33fe7c23121cce556e6d71b3827eec51603de8a344922f17e47c",
+          "sha256": "4f7704db7c94a9a9c5a9193ce74365851d7cca8618d93ab28e93bf4b50599ad6",
           "base": "SceneTree",
           "summary": "Captures both landscape choice sheets and their scroll geometry with isolated player data.",
           "public_methods": []
@@ -1449,6 +1657,20 @@
           ]
         },
         {
+          "path": "tools/make_pan_arrows.gd",
+          "sha256": "58403f1a138b65d0d9afd1a21da1fcdc5cd4aafa5f32117fef3f922ec1973d8a",
+          "base": "SceneTree",
+          "summary": "Builds scenes/ui/pan_arrows.tscn once (script scripts/pan_arrows.gd); the saved scene is the source",
+          "public_methods": []
+        },
+        {
+          "path": "tools/make_title_banner.gd",
+          "sha256": "70d02f55457d0eca0882bbf442d2ef90b56326c9327e4e0885705d415d888716",
+          "base": "SceneTree",
+          "summary": "Builds scenes/ui/title_banner.tscn once (script scripts/title_banner.gd). The saved scene is the source",
+          "public_methods": []
+        },
+        {
           "path": "tools/make_tutorial_scenes.gd",
           "sha256": "d6e7a5927ab738e4ff3ba377a3ce1ba3fa14a85da2b728a0941300520039b79e",
           "base": "SceneTree",
@@ -1459,7 +1681,7 @@
         },
         {
           "path": "tools/reading_stage_audit.gd",
-          "sha256": "dde1b4f05d31968a4907f7a611a7776e16db45112c7098c6f77890dc84b2883e",
+          "sha256": "4b23a50cb0d2e1009351f1db3c887acf5de6ed518d1c99b027cfda032c9507ed",
           "base": "SceneTree",
           "summary": "Capture the real reading stage at the requested window size without touching player saves.",
           "public_methods": []
@@ -1483,8 +1705,15 @@
           ]
         },
         {
+          "path": "tools/screen_audit.gd",
+          "sha256": "dead2d637dfd0457bea966638e95bb76abe262b88ec3e6220215c9128bfb3510",
+          "base": "SceneTree",
+          "summary": "Plays a story in the real shell and saves one picture of every new screen it reaches (each step",
+          "public_methods": []
+        },
+        {
           "path": "tools/shots_chapter1.gd",
-          "sha256": "0c625115fa579d473c48c33237316de7c0b8605f1193498834a025b6c316c17f",
+          "sha256": "845a099f2adffbcc511f81717468bbfd730c1f817f2ca43e1206456bb8c30ce1",
           "base": "SceneTree",
           "summary": "Screenshots of chapter 1's in-play screens: investigation (open and folded to its",
           "public_methods": [
@@ -1493,14 +1722,14 @@
         },
         {
           "path": "tools/studio_bench.gd",
-          "sha256": "f63236ec951209cf0f5a1b13975a38dfc382b2722a122cd9ffe927cbe2707671",
+          "sha256": "eca45bcb7bafc121f78a0de005e1a400363dc6fffb16627ea6de45e415149cf6",
           "base": "SceneTree",
           "summary": "Fixed-input CPU microbenchmark. Run headless with --fixed-fps 60; isolates its own save paths.",
           "public_methods": []
         },
         {
           "path": "tools/text_fit_audit.gd",
-          "sha256": "57065c04823a0844b05b46e04a7606c540a207a211fe2cc3a20a9bfdd8903d6e",
+          "sha256": "767dcd219a47c557ac9624382e74b249934bb85d046a3307085925f7ea0f14b8",
           "base": "\"res://tools/shots_chapter1.gd\"",
           "summary": "B14: plays chapter 1 at the largest reading size and, on every screen it reaches, lists text",
           "public_methods": []
@@ -1537,7 +1766,7 @@
         },
         {
           "path": "tools/story_build/dm_source.gd",
-          "sha256": "4d974cf8b53e05d20e5317c41dd63cb9c261043f5799763298c79285f14bd0c6",
+          "sha256": "6156093d74f694933c64d7051401b81a8167a32837d9d58be95513caf7a844f4",
           "base": "RefCounted",
           "summary": "Dialogue Manager `.dialogue` -> StoryRunner nodes, parsed with Dialogue Manager's own compiler.",
           "public_methods": [
@@ -1603,7 +1832,7 @@
         },
         {
           "path": "tools/story_editor/check_catalog.gd",
-          "sha256": "ecb13fb747f5317e9a407fb56779669202e178977d11e915ab4779e61c89b41f",
+          "sha256": "039c8bc9ab4eaca4d38f2fe2c1c15b1fdce60edbddf26a70aaac8bf87182ce61",
           "base": "SceneTree",
           "summary": "Checks an edited catalog before the story editor saves it: the catalog itself (as the game",
           "public_methods": [
@@ -1680,7 +1909,21 @@
         "addons/proto_kit/time_control.gd": "identical",
         "addons/proto_kit/upgrade_tree.gd": "identical",
         "addons/proto_kit/vfx_gallery.gd": "identical",
-        "addons/proto_kit/ui/ui_theme.gd": "identical"
+        "addons/proto_kit/ui/ui_theme.gd": "identical",
+        "addons/proto_kit/vfx/gallery.gd": "identical",
+        "addons/proto_kit/vfx/library.gd": "identical",
+        "addons/proto_kit/vfx/preview_2d.gd": "identical",
+        "addons/proto_kit/vfx/preview_3d.gd": "identical",
+        "addons/proto_kit/vfx/sheet_frames.gd": "identical",
+        "addons/proto_kit/vfx/2d/sheet_effect.gd": "identical",
+        "addons/proto_kit/vfx/3d/pixel_burst.gd": "identical",
+        "addons/proto_kit/vfx/3d/sheet_effect.gd": "identical",
+        "addons/proto_kit/vfx/3d/00gamedevs/impact_demo.gd": "identical",
+        "addons/proto_kit/vfx/3d/00gamedevs/impact_frame.gd": "identical",
+        "addons/proto_kit/vfx/3d/00gamedevs/source_effect.gd": "identical",
+        "addons/proto_kit/vfx/3d/00gamedevs/spell_indicator.gd": "identical",
+        "addons/proto_kit/vfx/3d/00gamedevs/trail_demo.gd": "identical",
+        "addons/proto_kit/vfx/3d/00gamedevs/weapon_smear.gd": "identical"
       },
       "kit_references": {
         "addons/proto_kit/atomic_file.gd": [
@@ -1713,6 +1956,7 @@
           "tests/test_dialogue_log.gd",
           "tests/test_dialogue_text.gd",
           "tests/test_downloaded_bgm.gd",
+          "tests/test_ending_scroll.gd",
           "tests/test_ep00.gd",
           "tests/test_flowchart.gd",
           "tests/test_gallery.gd",
@@ -1723,6 +1967,7 @@
           "tests/test_investigation_picker.gd",
           "tests/test_katsura_dog_ears.gd",
           "tests/test_landscape_reading.gd",
+          "tests/test_orientation.gd",
           "tests/test_parley_stores.gd",
           "tests/test_phase2_ui.gd",
           "tests/test_phase3_ui.gd",
@@ -1732,6 +1977,8 @@
           "tests/test_portrait_controls.gd",
           "tests/test_portrait_motion.gd",
           "tests/test_portrait_reaction.gd",
+          "tests/test_portrait_spots.gd",
+          "tests/test_portrait_staging.gd",
           "tests/test_reading_convenience.gd",
           "tests/test_reading_feel.gd",
           "tests/test_reading_scenes.gd",
@@ -1742,6 +1989,7 @@
           "tests/test_scene_transition.gd",
           "tests/test_search_cast.gd",
           "tests/test_settings.gd",
+          "tests/test_showcase.gd",
           "tests/test_skin.gd",
           "tests/test_stage_scene.gd",
           "tests/test_story_build.gd",
@@ -2050,12 +2298,10 @@
     {
       "project": "erwin-run",
       "file_counts_by_extension": {
-        "": 4,
+        "": 2,
         ".md": 3,
         ".cfg": 1,
         ".godot": 1,
-        ".json": 5,
-        ".txt": 5,
         ".gd": 27,
         ".uid": 31,
         ".gdshaderinc": 2,
@@ -2235,17 +2481,17 @@
         "addons/proto_kit/vfx_gallery.gd": "drift"
       },
       "kit_references": {
-        "addons/proto_kit/pixel_vfx.gd": [
+        "addons/proto_kit/time_control.gd": [
           "scenes/main.tscn",
-          "scenes/screens.tscn",
           "tools/build_scenes.gd"
         ],
         "addons/proto_kit/music.gd": [
           "scenes/main.tscn",
           "tools/build_scenes.gd"
         ],
-        "addons/proto_kit/time_control.gd": [
+        "addons/proto_kit/pixel_vfx.gd": [
           "scenes/main.tscn",
+          "scenes/screens.tscn",
           "tools/build_scenes.gd"
         ],
         "addons/proto_kit/haptics.gd": [
@@ -2260,12 +2506,12 @@
         "addons/proto_kit/sfx_bank.gd": [
           "scripts/sfx.gd"
         ],
-        "addons/proto_kit/font_check.gd": [
-          "tests/test_font.gd"
-        ],
         "addons/proto_kit/test_kit.gd": [
           "tests/test_font.gd",
           "tests/test_play.gd"
+        ],
+        "addons/proto_kit/font_check.gd": [
+          "tests/test_font.gd"
         ],
         "addons/proto_kit/scene_builder.gd": [
           "tools/build_scenes.gd"
@@ -2275,7 +2521,7 @@
     {
       "project": "hero-horde-idle",
       "file_counts_by_extension": {
-        "": 3,
+        "": 2,
         ".md": 14,
         ".godot": 1,
         ".gd": 127,
@@ -2283,10 +2529,9 @@
         ".gdshader": 19,
         ".gdshaderinc": 7,
         ".tres": 276,
-        ".png": 186,
+        ".png": 165,
         ".import": 169,
         ".json": 9,
-        ".jpg": 10,
         ".otf": 3,
         ".tscn": 44,
         ".py": 9,
@@ -3347,12 +3592,12 @@
         "addons/proto_kit/vfx_gallery.gd": "identical"
       },
       "kit_references": {
+        "addons/proto_kit/gacha.gd": [
+          "domain/progression.gd"
+        ],
         "addons/proto_kit/atomic_file.gd": [
           "domain/progression.gd",
           "domain/settings.gd"
-        ],
-        "addons/proto_kit/gacha.gd": [
-          "domain/progression.gd"
         ],
         "addons/proto_kit/sprite3d.gdshader": [
           "materials/boss.tres",
@@ -3729,12 +3974,12 @@
     {
       "project": "kagura-dango",
       "file_counts_by_extension": {
-        "": 2,
+        "": 1,
         ".md": 6,
         ".tres": 46,
         ".cfg": 1,
         ".svg": 1,
-        ".import": 139,
+        ".import": 166,
         ".godot": 1,
         ".gd": 111,
         ".uid": 338,
@@ -3745,12 +3990,11 @@
         ".res": 233,
         ".txt": 42,
         ".png": 114,
+        ".mp3": 9,
+        ".jpg": 24,
         ".otf": 1,
         ".ogg": 3,
-        ".wav": 17,
-        ".mp3": 3,
-        ".MOV": 7,
-        ".mov": 2,
+        ".wav": 14,
         ".py": 1,
         ".sh": 1,
         ".mjs": 1
@@ -6491,19 +6735,19 @@
         "addons/proto_kit/game_clock.gd": [
           "scenes/main.tscn"
         ],
+        "addons/proto_kit/sprite3d_actor.gd": [
+          "scenes/actors/actor.tscn"
+        ],
         "addons/proto_kit/sprite3d_shadow.gdshader": [
           "scenes/actors/actor.tscn"
         ],
-        "addons/proto_kit/sprite3d_actor.gd": [
-          "scenes/actors/actor.tscn"
+        "addons/proto_kit/tap_picker_3d.gd": [
+          "scripts/main.gd"
         ],
         "addons/proto_kit/atomic_file.gd": [
           "scripts/main.gd",
           "scripts/save_store.gd",
           "tests/test_save_protection.gd"
-        ],
-        "addons/proto_kit/tap_picker_3d.gd": [
-          "scripts/main.gd"
         ],
         "addons/proto_kit/pet_care.gd": [
           "scripts/player.gd"
@@ -7341,14 +7585,14 @@
           "scenes/field.tscn",
           "tools/build_slice.gd"
         ],
-        "addons/proto_kit/sprite3d_shadow.gdshader": [
+        "addons/proto_kit/sprite3d_actor.gd": [
           "scenes/actors/actor.tscn",
-          "scenes/actors/gatekeeper.tscn",
           "scenes/actors/gatekeeper_illustrated.tscn",
           "tools/build_slice.gd"
         ],
-        "addons/proto_kit/sprite3d_actor.gd": [
+        "addons/proto_kit/sprite3d_shadow.gdshader": [
           "scenes/actors/actor.tscn",
+          "scenes/actors/gatekeeper.tscn",
           "scenes/actors/gatekeeper_illustrated.tscn",
           "tools/build_slice.gd"
         ],
@@ -7377,10 +7621,10 @@
         "addons/proto_kit/font_check.gd": [
           "tests/test_text.gd"
         ],
-        "addons/proto_kit/sprite3d.gdshader": [
+        "addons/proto_kit/scene_builder.gd": [
           "tools/build_slice.gd"
         ],
-        "addons/proto_kit/scene_builder.gd": [
+        "addons/proto_kit/sprite3d.gdshader": [
           "tools/build_slice.gd"
         ]
       }
@@ -7400,6 +7644,8 @@
         ".gdshader": 2,
         ".tres": 1,
         ".ttf": 1,
+        ".jpg": 9,
+        ".png": 8,
         ".json": 1,
         ".tscn": 8,
         ".py": 3
@@ -7469,7 +7715,7 @@
         },
         {
           "path": "scripts/harbor.gd",
-          "sha256": "5abbbb67e67aadcbe24f944c96eb6c748abff743d00113c79428172634f067b9",
+          "sha256": "6bcc214e7a72a125c0d8aee4f6e84ec45b84e90c218c34ffd4cb7fd6e3e836cd",
           "base": "Node2D",
           "summary": "",
           "public_methods": [
@@ -8361,13 +8607,13 @@
         "addons/proto_kit/pixel_vfx.gdshaderinc": [
           "assets/fx/smoker_smoke.gdshader"
         ],
-        "addons/proto_kit/music.gd": [
+        "addons/proto_kit/time_control.gd": [
           "scenes/game.tscn",
           "scenes/main.tscn",
           "tools/build_playable.gd",
           "tools/build_scaffold.gd"
         ],
-        "addons/proto_kit/time_control.gd": [
+        "addons/proto_kit/music.gd": [
           "scenes/game.tscn",
           "scenes/main.tscn",
           "tools/build_playable.gd",
@@ -8812,6 +9058,740 @@
           "tests/test_waves.gd",
           "tools/capture_review.gd",
           "tools/capture_waves.gd"
+        ]
+      }
+    },
+    {
+      "project": "walker-tps",
+      "file_counts_by_extension": {
+        "": 10,
+        ".md": 14,
+        ".cfg": 2,
+        ".tres": 52,
+        ".godot": 1,
+        ".gd": 137,
+        ".uid": 370,
+        ".tscn": 175,
+        ".gdshader": 226,
+        ".gdshaderinc": 7,
+        ".json": 87,
+        ".res": 233,
+        ".txt": 45,
+        ".png": 68,
+        ".import": 105,
+        ".glb": 8,
+        ".wav": 7,
+        ".ogg": 22,
+        ".mp3": 9,
+        ".py": 3
+      },
+      "source_modules": [
+        {
+          "path": "scripts/armor_display.gd",
+          "sha256": "507e52c9294709442cd2766550798aef36a1a5d585a9172e3f12f53ba0783274",
+          "base": "Node3D",
+          "summary": "Lightweight patrol for the load-test units; movement follows the terrain.",
+          "public_methods": [
+            "func set_shadows_enabled(enabled: bool) -> void:"
+          ]
+        },
+        {
+          "path": "scripts/auto_blades.gd",
+          "sha256": "7288e99ffce73c6c13342c4a819f6a55bb8e996ec029aac42566534a7da30eb0",
+          "base": "Node3D",
+          "summary": "Front blades auto-swipe at close enemies. Recheck range and cover at the hit frame.",
+          "public_methods": [
+            "func candidates() -> Array[Node3D]:"
+          ]
+        },
+        {
+          "path": "scripts/battlefield.gd",
+          "sha256": "2ef62ee26f84619598c2eb4df773f9c1d105d0205b29a6d53520d3b6fb95d10b",
+          "base": "Node3D",
+          "summary": "Where any scout last saw the player, and when (match seconds); scouts that have not seen the",
+          "public_methods": [
+            "func start_match() -> void:",
+            "func finish(result: String) -> void:",
+            "func retry() -> void:",
+            "func match_time() -> float:",
+            "func report_contact(at: Vector3) -> void:",
+            "func slot_for(scout: Node3D, radius: float) -> Vector3:",
+            "func play_radio(contact: bool = true) -> bool:"
+          ]
+        },
+        {
+          "path": "scripts/boss.gd",
+          "sha256": "e5151681c56c347c8123c1826888e93aad68f627db8c2534228423c758281b3e",
+          "base": "CharacterBody3D",
+          "summary": "Ground-crawling Boss on knee legs with a charged head-cannon beam, pillar rain and tail sweep.",
+          "public_methods": [
+            "func try_attack(kind: String) -> bool:",
+            "func apply_damage(amount: float, _position: Vector3 = Vector3.ZERO, _direction: Vector3 = Vector3.ZERO) -> void:"
+          ]
+        },
+        {
+          "path": "scripts/boss_battle_session.gd",
+          "sha256": "fc95fa2cadb93b725098d2348b578272c6b829493e2dfecb05c0428527073555",
+          "base": "\"res://scripts/battlefield.gd\"",
+          "summary": "Include the Boss in the objective and retain this composition on Retry.",
+          "public_methods": [
+            "func start_match() -> void:",
+            "func finish(result: String) -> void:",
+            "func retry() -> void:"
+          ]
+        },
+        {
+          "path": "scripts/boss_battlefield.gd",
+          "sha256": "60d3d93634191750eb9c11fc57d179c3f7250be6c889d822df912f67dcc90637",
+          "base": "Node3D",
+          "summary": "Attack and repeatable load controls for the Boss battlefield.",
+          "public_methods": [
+            "func set_armor_count(total: int) -> void:",
+            "func set_armors_shadows(enabled: bool) -> void:"
+          ]
+        },
+        {
+          "path": "scripts/boss_pillar.gd",
+          "sha256": "c1703865cc3b89ab32d772d7048438c514d46f5e5c77d89f9e8b9488f1a3fdd8",
+          "base": "StaticBody3D",
+          "summary": "Boss \"pillar rain\": one pillar dropped from the sky onto a marked spot. While it waits the",
+          "public_methods": [
+            "func drop(ground: Vector3, wait: float) -> void:",
+            "func apply_damage(amount: float, _hit_position: Vector3 = Vector3.ZERO, from_direction: Vector3 = Vector3.ZERO) -> void:",
+            "func shatter() -> void:"
+          ]
+        },
+        {
+          "path": "scripts/boss_tail_modifier.gd",
+          "sha256": "bf6666c4af63ccaa829ba5f305753ded24e8dcf97cf9bb487376f59995f4c623",
+          "base": "SkeletonModifier3D",
+          "summary": "Applied after the imported animation: lays both tails down so they drag on the ground behind",
+          "public_methods": []
+        },
+        {
+          "path": "scripts/breakable_cover.gd",
+          "sha256": "2676c1f6b56ce98cde6156b321616d20f8125064a427f3c5f7c5838af53b2b0b",
+          "base": "StaticBody3D",
+          "summary": "Authored cover may support other pieces; breaking it releases those pieces.",
+          "public_methods": [
+            "func apply_damage(amount: float, at: Vector3, _direction: Vector3) -> void:",
+            "func break_cover(at: Vector3) -> void:",
+            "static func crush_contacts(body: CharacterBody3D) -> void:"
+          ]
+        },
+        {
+          "path": "scripts/combat_hud.gd",
+          "sha256": "9d2e9b427bce8fc91286469b235e973b1858cfc8f307870fdeb0cf45d9e99dd6",
+          "base": "CanvasLayer",
+          "summary": "",
+          "public_methods": []
+        },
+        {
+          "path": "scripts/combat_impact.gd",
+          "sha256": "57c816a3bce599d084b941638cbf025f3a2d7c46a086c306e01dc2ca37d5df58",
+          "base": "\"res://scripts/one_shot_fx.gd\"",
+          "summary": "Layered particle impact; radius >= 2 adds fireball, ground ring, debris and light.",
+          "public_methods": []
+        },
+        {
+          "path": "scripts/combat_projectile.gd",
+          "sha256": "8ed9fd8c6d0012cd717f50325588ac7fd35f22a9e22717ce0c0c245a33e1f41d",
+          "base": "Node3D",
+          "summary": "Swept ray each physics step: fast projectiles cannot tunnel between frames.",
+          "public_methods": []
+        },
+        {
+          "path": "scripts/grapple.gd",
+          "sha256": "2517726d7981fa06b354e559d1c54b2ee4de65d67793688d42d01561a3593f1f",
+          "base": "Node3D",
+          "summary": "Twin grapple of the walker (child of Combat in walker_combat.tscn; Launch0/1, Cable0/1, Pin0/1 are its",
+          "public_methods": [
+            "func state_name() -> String:",
+            "func is_active() -> bool:",
+            "func has_dash_momentum() -> bool:",
+            "func is_dragging() -> bool:",
+            "func release(reason: String) -> void:",
+            "func step(delta: float, pressed: bool, aim_point: Vector3) -> void:",
+            "func launch_hooks(target: Vector3) -> bool:",
+            "func cancel_hook(reason: String = \"READY\") -> void:",
+            "func clear_cables() -> void:",
+            "func begin_coasting(anchor: Vector3) -> void:",
+            "func begin_braking() -> void:"
+          ]
+        },
+        {
+          "path": "scripts/hud.gd",
+          "sha256": "63524648e9396adf50fb1d3527be2f30cfbbdf5d9a6e0b427b1821d3d2f7278a",
+          "base": "CanvasLayer",
+          "summary": "FPS and draw calls in a corner: the cheapest way to see how the walker runs on a phone.",
+          "public_methods": []
+        },
+        {
+          "path": "scripts/hud_gun_reticle.gd",
+          "sha256": "5a244e44df5fe7304f0ef264f598b02782bfe325be268af41402ce50e8e97a4b",
+          "base": "Label",
+          "summary": "Screen-projected cannon marker. Drawn in geometry so it has no font dependency.",
+          "public_methods": []
+        },
+        {
+          "path": "scripts/hud_hull.gd",
+          "sha256": "0e47aafdb0f0f5143987dac441b6c61c86bca9f8d810558dd88fd01b2a40f50d",
+          "base": "Control",
+          "summary": "Armored walker silhouette, drawn as a slanted diagnostic view.",
+          "public_methods": []
+        },
+        {
+          "path": "scripts/hud_radar.gd",
+          "sha256": "a9e6cce1076886b1be47b785a0c3c2aece3e0797eb8ece93db2d78b3ea4acfd8",
+          "base": "Control",
+          "summary": "Short-range tactical radar with camera-forward at the top.",
+          "public_methods": [
+            "func track_terrain(actor: Node3D) -> void:",
+            "func set_contacts(origin: Vector3, forward: Vector3, targets: Array[Node]) -> void:"
+          ]
+        },
+        {
+          "path": "scripts/hud_sight.gd",
+          "sha256": "5e81ff2ece0c26425ab6d7d421e4e7db9f39749bd4a62904d5dd8a01691a5604",
+          "base": "Control",
+          "summary": "The center matches the viewport point used by the weapons ray.",
+          "public_methods": []
+        },
+        {
+          "path": "scripts/layers.gd",
+          "sha256": "6806272797eaa408016412416618b1194abc8700f5d208f8904f24f0c0c2901b",
+          "base": "RefCounted",
+          "summary": "Physics layers (named in project.godot [layer_names]). Masks for rays and shapes.",
+          "public_methods": []
+        },
+        {
+          "path": "scripts/one_shot_fx.gd",
+          "sha256": "38dba2ee6c549d40c3fe0a8d0c4c4d63b001205281278c51468093978931e16d",
+          "base": "Node3D",
+          "summary": "Restarts every one-shot GPUParticles3D layer under this node and flickers the",
+          "public_methods": [
+            "func play() -> void:",
+            "func duration() -> float:"
+          ]
+        },
+        {
+          "path": "scripts/orbit_camera.gd",
+          "sha256": "9b0e348533195290f10bde175091d2c170589cae6c0403aa58fbf0e1df4ecde6",
+          "base": "Node3D",
+          "summary": "Third-person orbit rig: top_level, follows its parent (the walker) with a little lag, yaw on this node,",
+          "public_methods": [
+            "func look(d: Vector2) -> void:",
+            "func forward_flat() -> Vector3:",
+            "func kick(amount: float) -> void:",
+            "func gun_kick(radians: float) -> void:",
+            "func shake(amount: float, ceiling: float = 1.0) -> void:"
+          ]
+        },
+        {
+          "path": "scripts/scout.gd",
+          "sha256": "b9f57761263f3ae5236c600fd1084f4e0b7efbae1cfba05dcefa4250e113aaaf",
+          "base": "CharacterBody3D",
+          "summary": "Scout walker. Two modes:",
+          "public_methods": [
+            "func apply_damage(amount: float, _hit_position: Vector3 = Vector3.ZERO, from_direction: Vector3 = Vector3.ZERO) -> void:",
+            "func knockback(direction: Vector3, strength: float = 1.0) -> void:",
+            "func grapple_pull(force: Vector3) -> void:",
+            "func sees_player() -> bool:",
+            "static func intercept_point(shooter: Vector3, target: Vector3, target_velocity: Vector3, shot_speed_value: float) -> Vector3:",
+            "func combat_step(delta: float) -> void:",
+            "func is_engaged() -> bool:",
+            "func shoot() -> void:"
+          ]
+        },
+        {
+          "path": "scripts/touch_input.gd",
+          "sha256": "3c0c14f7f37d9715a43c3fa968abee28760fb9e1ada40a61eef1ae162ca26e73",
+          "base": "Control",
+          "summary": "Two-finger touch controls. A finger that lands on the left half drives a floating stick (%StickBase appears",
+          "public_methods": [
+            "func take_look() -> Vector2:"
+          ]
+        },
+        {
+          "path": "scripts/walker_combat.gd",
+          "sha256": "f42f2962516cf05b4ccaf3b6fd7cfce8c3f922733690088f4b8b2958dbbbcd1e",
+          "base": "Node3D",
+          "summary": "Main gun, aim and hull health of the walker; the twin grapple is the Grapple child (grapple.gd) and the",
+          "public_methods": [
+            "func ray(from: Vector3, to: Vector3) -> Dictionary:",
+            "func step(delta: float) -> void:",
+            "func update_aim(delta: float) -> void:",
+            "func try_fire() -> bool:",
+            "func start_reload() -> void:",
+            "func kill_feedback(strength: float) -> void:",
+            "func projectile_parent() -> Node:",
+            "func apply_damage(amount: float, _hit_position: Vector3 = Vector3.ZERO, _from_direction: Vector3 = Vector3.ZERO) -> void:"
+          ]
+        },
+        {
+          "path": "scripts/walker_gait.gd",
+          "sha256": "752e9225baa3b6a1437777abec74ff906b5e532c0eb3c7f98927b755bba7563c",
+          "base": "Node",
+          "summary": "Procedural quadruped walk for the rigid walker model: every foot is planted at a world point and stays there",
+          "public_methods": [
+            "func setup(body: CharacterBody3D, model: Node3D) -> void:",
+            "func replant() -> void:",
+            "func contact(leg: Leg) -> Vector3:",
+            "func sole(leg: Leg) -> Vector3:",
+            "func current_step_time() -> float:"
+          ]
+        },
+        {
+          "path": "scripts/walker_player.gd",
+          "sha256": "d113e04fa857c746d89bf462a90d3476f8699c036ccde3b55b4623d3ff98ccb5",
+          "base": "CharacterBody3D",
+          "summary": "Third-person walker: moves relative to the camera (forward/back/strafe), the hull turns toward where the camera",
+          "public_methods": [
+            "func apply_damage(amount: float, hit_position: Vector3 = Vector3.ZERO, from_direction: Vector3 = Vector3.ZERO) -> void:"
+          ]
+        },
+        {
+          "path": "tests/test_audio.gd",
+          "sha256": "bba53a28abb2425f34e95107bbcc1f5b2c406f6db477e60e1e624e8865d00890",
+          "base": "\"res://addons/proto_kit/test_kit.gd\"",
+          "summary": "",
+          "public_methods": [
+            "func _init() -> void: _run.call_deferred() func _run() -> void:"
+          ]
+        },
+        {
+          "path": "tests/test_auto_blades.gd",
+          "sha256": "cbd7a7fadadc987a179e1ef2f327d4464f6f2209e0e939601981089b4c3d7d85",
+          "base": "\"res://addons/proto_kit/test_kit.gd\"",
+          "summary": "",
+          "public_methods": [
+            "func _init() -> void: _run.call_deferred() func _run() -> void:"
+          ]
+        },
+        {
+          "path": "tests/test_battlefield.gd",
+          "sha256": "dfbe93830bdf1e4156ec19300027ec6485b28247f0d2b1ce779a0115d6af7ea7",
+          "base": "\"res://addons/proto_kit/test_kit.gd\"",
+          "summary": "",
+          "public_methods": [
+            "func _init() -> void:"
+          ]
+        },
+        {
+          "path": "tests/test_boss_scene.gd",
+          "sha256": "c0d3d097998a2c7d0dee87e6f16b40753032421af7e585a2ad242ef088428190",
+          "base": "\"res://addons/proto_kit/test_kit.gd\"",
+          "summary": "",
+          "public_methods": [
+            "func _init() -> void: _run.call_deferred()  func _run() -> void:"
+          ]
+        },
+        {
+          "path": "tests/test_combat.gd",
+          "sha256": "b8650239510df55eca18f31e23118e40f689f5925ae9091bdfa16fd8fed23ea8",
+          "base": "\"res://addons/proto_kit/test_kit.gd\"",
+          "summary": "",
+          "public_methods": [
+            "func _init() -> void: _run.call_deferred() func _run() -> void:"
+          ]
+        },
+        {
+          "path": "tests/test_gait_terrain.gd",
+          "sha256": "647b3209270d2acf2baf8af16c8e823f8a3ff72aa82553dbf5eded7d61a54116",
+          "base": "\"res://addons/proto_kit/test_kit.gd\"",
+          "summary": "Gait on terrain, on its own stage (main.tscn's Arena is not needed): feet stand on terrain only,",
+          "public_methods": [
+            "func _init() -> void: _run.call_deferred()  func _run() -> void:"
+          ]
+        },
+        {
+          "path": "tests/test_grapple_inertia.gd",
+          "sha256": "6e565b6e464e88523680d957274abab03917c7f680653ee7916c0649f17fb4b3",
+          "base": "\"res://addons/proto_kit/test_kit.gd\"",
+          "summary": "Running sideways and hooking ground ahead swings the walker round the anchor (a drift) instead of",
+          "public_methods": [
+            "func _init() -> void: _run.call_deferred() func _run() -> void:",
+            "func reset_walker() -> void:"
+          ]
+        },
+        {
+          "path": "tests/test_gun_juice.gd",
+          "sha256": "bac5082156e5700021076732190565c772c7e0983c8299ed7fa58ec2ae40fa8b",
+          "base": "\"res://addons/proto_kit/test_kit.gd\"",
+          "summary": "The cannon feel standard (docs: godot-kit/skills/gun-juice): every item is checked on the",
+          "public_methods": [
+            "func _init() -> void: _run.call_deferred() func _run() -> void:"
+          ]
+        },
+        {
+          "path": "tests/test_mobility.gd",
+          "sha256": "b9f08dea2436cbf6988e1b5e5d43e98e6e162b045cfd6471ab393a435ffbd169",
+          "base": "\"res://addons/proto_kit/test_kit.gd\"",
+          "summary": "",
+          "public_methods": [
+            "func _init() -> void: _run.call_deferred()  func _box(at: Vector3, size: Vector3, pitch := 0.0) -> StaticBody3D:"
+          ]
+        },
+        {
+          "path": "tests/test_scout_ai.gd",
+          "sha256": "b47a579dcc8cbddd20cc75cf4acc7a2d1320e6bf9581bfa24c8ef81711a59d31",
+          "base": "\"res://addons/proto_kit/test_kit.gd\"",
+          "summary": "Scout combat AI: aim prediction, the state machine's hysteresis, alert on being hit, moving",
+          "public_methods": [
+            "func _init() -> void: _run.call_deferred()  func _run() -> void:"
+          ]
+        },
+        {
+          "path": "tests/test_scouts.gd",
+          "sha256": "3f457404ab911a05e8430b868efcb7c7859e3fb2e012c371bf985eab51e988e2",
+          "base": "\"res://addons/proto_kit/test_kit.gd\"",
+          "summary": "godot --headless --fixed-fps 60 --path . --script res://tests/test_scouts.gd",
+          "public_methods": [
+            "func _init() -> void:"
+          ]
+        },
+        {
+          "path": "tests/test_walker.gd",
+          "sha256": "ff4b076e89281ee1bb602ee6bf1a33755c5d0083ea6257e7a3dfc1024e456796",
+          "base": "\"res://addons/proto_kit/test_kit.gd\"",
+          "summary": "godot --headless --fixed-fps 60 --path . --script res://tests/test_walker.gd",
+          "public_methods": [
+            "func _init() -> void:"
+          ]
+        },
+        {
+          "path": "tools/add_action_buttons.gd",
+          "sha256": "678f0b5f842180f4936960a86a98634e2c515b5f1d0fadc61f7d29183b0bb974",
+          "base": "SceneTree",
+          "summary": "Adds the touch JUMP / BOOST buttons to scenes/hud.tscn (opens the saved scene, puts the nodes, saves it back).",
+          "public_methods": []
+        },
+        {
+          "path": "tools/add_auto_blades.gd",
+          "sha256": "bb1e71be280447df703836c012e9f1efbaaf790f1ec5706c30233eea10e2fc06",
+          "base": "SceneTree",
+          "summary": "Explicit one-time authoring; existing blade scene is preserved unless --overwrite is supplied.",
+          "public_methods": []
+        },
+        {
+          "path": "tools/add_scouts.gd",
+          "sha256": "8ccc00524536d4a264d2f6383c18aa8cb2a4d84a2ab3f168439afac17d597ec5",
+          "base": "SceneTree",
+          "summary": "Creates scenes/scout.tscn (skipped if it exists) and puts an \"Enemies\" node with 12 scout instances into",
+          "public_methods": []
+        },
+        {
+          "path": "tools/apply_audio.gd",
+          "sha256": "40c3921d4fdcfab78f98df22623ca1fd21492c4804f2fc6495ddcbb1823c11e1",
+          "base": "SceneTree",
+          "summary": "Explicit scene authoring only. Keeps existing scene positions and reusable references.",
+          "public_methods": [
+            "func save(opened: Dictionary,path: String) -> bool:"
+          ]
+        },
+        {
+          "path": "tools/apply_battlefield_materials.gd",
+          "sha256": "4b3ca72bbf61b21410892721b321a57b3c50414fdce1fc3d52df23395de570fd",
+          "base": "SceneTree",
+          "summary": "Explicit material authoring pass. Preserves saved geometry and scene instances.",
+          "public_methods": [
+            "func make_material(label: String, cell: Vector2, moss: float) -> ShaderMaterial:",
+            "func textures(m: ShaderMaterial) -> void:",
+            "func surfaces(node: Node, material: Material) -> void:",
+            "func save_opened(opened: Dictionary, path: String) -> bool:"
+          ]
+        },
+        {
+          "path": "tools/apply_unit_scales.gd",
+          "sha256": "3901f1d5aeb2a0c79b8cef2d1ba5154ec1f99c82c0ebbf105a86330f0f1cf6c3",
+          "base": "SceneTree",
+          "summary": "Sets the unit sizes (2026-11-18, melee = 1 by longest ground length, about 5.5 m):",
+          "public_methods": []
+        },
+        {
+          "path": "tools/build_battlefield.gd",
+          "sha256": "1805b4810d2dedffa15eb1d523c92544e7ca5dabe8e0b9f26ba46b5edc293d54",
+          "base": "SceneTree",
+          "summary": "One-time authored terrain tool. Existing scenes are skipped; never runs during gameplay.",
+          "public_methods": [
+            "func mat(color: Color) -> StandardMaterial3D:",
+            "func height_at(x: float, z: float) -> float:",
+            "func box(parent: Node, label: String, size: Vector3, pos: Vector3, material: Material, angles := Vector3.ZERO) -> Node3D:",
+            "func terrain() -> StaticBody3D:",
+            "func grass_mesh() -> ArrayMesh:",
+            "func grass_chunk(blade: ArrayMesh, poses: Array[Transform3D]) -> MeshInstance3D:",
+            "func build() -> void:"
+          ]
+        },
+        {
+          "path": "tools/build_boss_pillar.gd",
+          "sha256": "a9f274046a51396bb87236339489483b75e4d4d55aa97e165664eed8ba9cc36c",
+          "base": "SceneTree",
+          "summary": "Authors scenes/boss_pillar.tscn (the Boss's pillar rain; behaviour in scripts/boss_pillar.gd).",
+          "public_methods": []
+        },
+        {
+          "path": "tools/build_combat_slice.gd",
+          "sha256": "9496fdae43a060baf101219e1365fa3aeebd7bb774990ec3675e900a6b3b7cdc",
+          "base": "SceneTree",
+          "summary": "Explicit authoring tool; new reusable scenes plus bounded edits to existing scene trees.",
+          "public_methods": [
+            "func material(color: Color) -> StandardMaterial3D:",
+            "func sphere(parent: Node, label: String, radius: float, color: Color) -> MeshInstance3D:",
+            "func save(node: Node, path: String, refs: Array = [], overwrite: bool = false) -> void:",
+            "func label(parent: Node, name: String, text: String, pos: Vector2, font_size: int = 20) -> Label:",
+            "func touch_button(parent: Node, name: String, action: String, pos: Vector2) -> void:",
+            "func build() -> void:"
+          ]
+        },
+        {
+          "path": "tools/build_enemy_audio.gd",
+          "sha256": "b3a58152270b95993dc76c6af47eac86e38c25206b16cbe6ec692436c8218c78",
+          "base": "SceneTree",
+          "summary": "Adds the user-supplied enemy sounds to the saved scenes (one-time authoring tool; rerunning",
+          "public_methods": []
+        },
+        {
+          "path": "tools/build_ground_boss.gd",
+          "sha256": "0b50b9405be47efe734d394912dd90900206e928bc0dce6494f25ac2ce25d70b",
+          "base": "SceneTree",
+          "summary": "One-time editor tool. Existing scenes are only updated when --overwrite is",
+          "public_methods": []
+        },
+        {
+          "path": "tools/build_gun_juice.gd",
+          "sha256": "39fd1411e8c7497265fb0c08347c856c8d6cbcfb275872c44d0e1e18468b11da",
+          "base": "SceneTree",
+          "summary": "Adds the cannon \"juice\" nodes to the saved scenes (one-time authoring tool; the scenes are",
+          "public_methods": []
+        },
+        {
+          "path": "tools/build_scenes.gd",
+          "sha256": "50f07f9feda6367d566e0a7ecb30a8a284ab6efb1f6cb4b6afa3180dae5d931f",
+          "base": "SceneTree",
+          "summary": "One-time generator for the walker-tps scenes (walker, arena, hud, main). After it has run, the .tscn files are",
+          "public_methods": []
+        },
+        {
+          "path": "tools/build_vfx.gd",
+          "sha256": "fc525c1362381a3ddf2a524aa01fcd52fbefca150ab4395bc4dc85d98ca28e96",
+          "base": "SceneTree",
+          "summary": "Layered GPU-particle muzzle flash and impact, after the GODOT VFX tutorials",
+          "public_methods": []
+        },
+        {
+          "path": "tools/capture.gd",
+          "sha256": "736f8f52c9879fdcd0e90000df7d21288114c8ebfa2e21f169db08bf040dfde2",
+          "base": "SceneTree",
+          "summary": "Screenshots of the walker standing, mid-stride and strafing. Needs a renderer (not --headless):",
+          "public_methods": []
+        },
+        {
+          "path": "tools/capture_boss_scene.gd",
+          "sha256": "a609ba6e6b17a2f8e36d91366d2c39a192620c6f48ad837ccca29366e764a1ce",
+          "base": "SceneTree",
+          "summary": "Capture the actual Boss battlefield with the regular walker camera.",
+          "public_methods": []
+        },
+        {
+          "path": "tools/capture_combat.gd",
+          "sha256": "f3663e9681f54083cb4cdaeb4f924869280873197cb20a32ef81db18efe6d55b",
+          "base": "SceneTree",
+          "summary": "",
+          "public_methods": [
+            "func frames(count: int) -> void:"
+          ]
+        },
+        {
+          "path": "tools/capture_dash_blades.gd",
+          "sha256": "95cb2caf17d1ce0990fdbe0ec6d9a02685cdc6a8965f0195eb45c38c525e027d",
+          "base": "SceneTree",
+          "summary": "",
+          "public_methods": [
+            "func frames(count: int) -> void:",
+            "func run() -> void:"
+          ]
+        },
+        {
+          "path": "tools/capture_ground_boss.gd",
+          "sha256": "731c215ca357ae5f67c0f909e9bd944fcd8aade56ff0a0f8325b0d46fa69dc6b",
+          "base": "SceneTree",
+          "summary": "Visual check of the playable Boss, attack effects and speed blur.",
+          "public_methods": []
+        },
+        {
+          "path": "tools/create_boss_scenes.gd",
+          "sha256": "793f6c6b42e6be4142b549ca64e80a0531d2c2639669ddc881c60ec4fd1e865a",
+          "base": "SceneTree",
+          "summary": "One-time authoring tool. Saved scenes are the source; existing scenes are",
+          "public_methods": []
+        },
+        {
+          "path": "tools/perf_boss_armors.gd",
+          "sha256": "cd94f97cdc7e7a9f37e2655b7f502901e2ba5052ec46db3bbb532c47e3d66477",
+          "base": "SceneTree",
+          "summary": "Compare the same battlefield/camera using saved units, original vs reduced",
+          "public_methods": []
+        },
+        {
+          "path": "tools/perf_scouts.gd",
+          "sha256": "d56fa47f591e9228f25a9c80bb0c795e6ccbf401769c5dcd49dca6bdd45a7750",
+          "base": "SceneTree",
+          "summary": "Render cost of the scout crowd from the start camera (all 12 in view). Needs a renderer:",
+          "public_methods": []
+        },
+        {
+          "path": "tools/split_grapple.gd",
+          "sha256": "fd0cd8b1cbca077d449434847b582d6959339b7d23431924e33bb6d5aca85ef4",
+          "base": "SceneTree",
+          "summary": "One-time authoring: moves Launch0/1, Cable0/1, Pin0/1 of walker_combat.tscn under a new Grapple node",
+          "public_methods": []
+        },
+        {
+          "path": "tools/tune_scouts.gd",
+          "sha256": "72ff9699ce8274c3a3865fd224ea5e29e4dce1d9d30de34db03351a5b63bc0c5",
+          "base": "SceneTree",
+          "summary": "One-time authoring: gives battlefield.tscn's heavy scout (Scout2) its own fighting numbers, so the",
+          "public_methods": []
+        }
+      ],
+      "kit_copies": {
+        "addons/proto_kit/atomic_file.gd": "identical",
+        "addons/proto_kit/auto_caster.gd": "identical",
+        "addons/proto_kit/camera_shake.gd": "identical",
+        "addons/proto_kit/camera_shot.gd": "identical",
+        "addons/proto_kit/card_draft.gd": "identical",
+        "addons/proto_kit/chest_shop.gd": "identical",
+        "addons/proto_kit/combo_input.gd": "identical",
+        "addons/proto_kit/damage_numbers_3d.gd": "identical",
+        "addons/proto_kit/debris3d.gd": "identical",
+        "addons/proto_kit/fixed_step.gd": "identical",
+        "addons/proto_kit/floating_stick.gd": "identical",
+        "addons/proto_kit/font_check.gd": "identical",
+        "addons/proto_kit/gacha.gd": "identical",
+        "addons/proto_kit/game_clock.gd": "identical",
+        "addons/proto_kit/haptics.gd": "identical",
+        "addons/proto_kit/hd2d_demo.gd": "identical",
+        "addons/proto_kit/hd2d_gallery.gd": "identical",
+        "addons/proto_kit/hd2d_look.gd": "identical",
+        "addons/proto_kit/hd2d_stage.gd": "identical",
+        "addons/proto_kit/hit_react3d.gd": "identical",
+        "addons/proto_kit/loot_ledger.gd": "identical",
+        "addons/proto_kit/march_strip.gd": "identical",
+        "addons/proto_kit/music.gd": "identical",
+        "addons/proto_kit/nine_slice.gd": "identical",
+        "addons/proto_kit/orientation_guard.gd": "identical",
+        "addons/proto_kit/pet_care.gd": "identical",
+        "addons/proto_kit/pixel_card3d.gd": "identical",
+        "addons/proto_kit/pixel_vfx.gd": "identical",
+        "addons/proto_kit/pixel_vfx3d.gd": "identical",
+        "addons/proto_kit/rarity.gd": "identical",
+        "addons/proto_kit/refine_ladder.gd": "identical",
+        "addons/proto_kit/run_goals.gd": "identical",
+        "addons/proto_kit/run_timeline.gd": "identical",
+        "addons/proto_kit/save_slots.gd": "identical",
+        "addons/proto_kit/scene_builder.gd": "identical",
+        "addons/proto_kit/scene_loader.gd": "identical",
+        "addons/proto_kit/scene_router.gd": "identical",
+        "addons/proto_kit/screenshot.gd": "identical",
+        "addons/proto_kit/sfx_bank.gd": "identical",
+        "addons/proto_kit/shot_camera.gd": "identical",
+        "addons/proto_kit/song_clock.gd": "identical",
+        "addons/proto_kit/sprite3d_actor.gd": "identical",
+        "addons/proto_kit/sprite3d_gallery.gd": "identical",
+        "addons/proto_kit/sprite3d_sheet.gd": "identical",
+        "addons/proto_kit/sprite_check.gd": "identical",
+        "addons/proto_kit/sprite_inspector.gd": "identical",
+        "addons/proto_kit/sprite_inspector_atlas.gd": "identical",
+        "addons/proto_kit/sprite_inspector_frame.gd": "identical",
+        "addons/proto_kit/store_front.gd": "identical",
+        "addons/proto_kit/synth.gd": "identical",
+        "addons/proto_kit/talent_tiers.gd": "identical",
+        "addons/proto_kit/tap_picker_3d.gd": "identical",
+        "addons/proto_kit/test_kit.gd": "identical",
+        "addons/proto_kit/time_control.gd": "identical",
+        "addons/proto_kit/upgrade_tree.gd": "identical",
+        "addons/proto_kit/vfx_gallery.gd": "identical",
+        "addons/proto_kit/weighted_choice.gd": "identical",
+        "addons/proto_kit/ui/ui_theme.gd": "identical",
+        "addons/proto_kit/vfx/gallery.gd": "identical",
+        "addons/proto_kit/vfx/library.gd": "identical",
+        "addons/proto_kit/vfx/preview_2d.gd": "identical",
+        "addons/proto_kit/vfx/preview_3d.gd": "identical",
+        "addons/proto_kit/vfx/sheet_frames.gd": "identical",
+        "addons/proto_kit/vfx/2d/sheet_effect.gd": "identical",
+        "addons/proto_kit/vfx/3d/pixel_burst.gd": "identical",
+        "addons/proto_kit/vfx/3d/sheet_effect.gd": "identical",
+        "addons/proto_kit/vfx/3d/00gamedevs/impact_demo.gd": "identical",
+        "addons/proto_kit/vfx/3d/00gamedevs/impact_frame.gd": "identical",
+        "addons/proto_kit/vfx/3d/00gamedevs/source_effect.gd": "identical",
+        "addons/proto_kit/vfx/3d/00gamedevs/spell_indicator.gd": "identical",
+        "addons/proto_kit/vfx/3d/00gamedevs/trail_demo.gd": "identical",
+        "addons/proto_kit/vfx/3d/00gamedevs/weapon_smear.gd": "identical"
+      },
+      "kit_references": {
+        "addons/proto_kit/hit_react3d.gd": [
+          "scenes/boss.tscn",
+          "scenes/boss_pillar.tscn",
+          "scenes/scout.tscn",
+          "tools/build_boss_pillar.gd",
+          "tools/build_gun_juice.gd"
+        ],
+        "addons/proto_kit/time_control.gd": [
+          "scenes/walker_combat.tscn",
+          "tools/build_gun_juice.gd"
+        ],
+        "addons/proto_kit/debris3d.gd": [
+          "scenes/walker_combat.tscn",
+          "tools/build_gun_juice.gd"
+        ],
+        "addons/proto_kit/synth.gd": [
+          "scripts/auto_blades.gd",
+          "scripts/combat_impact.gd",
+          "scripts/walker_combat.gd"
+        ],
+        "addons/proto_kit/test_kit.gd": [
+          "tests/test_audio.gd",
+          "tests/test_auto_blades.gd",
+          "tests/test_battlefield.gd",
+          "tests/test_boss_scene.gd",
+          "tests/test_combat.gd",
+          "tests/test_gait_terrain.gd",
+          "tests/test_grapple_inertia.gd",
+          "tests/test_gun_juice.gd",
+          "tests/test_mobility.gd",
+          "tests/test_scout_ai.gd",
+          "tests/test_scouts.gd",
+          "tests/test_walker.gd"
+        ],
+        "addons/proto_kit/scene_builder.gd": [
+          "tools/add_action_buttons.gd",
+          "tools/add_auto_blades.gd",
+          "tools/add_scouts.gd",
+          "tools/apply_audio.gd",
+          "tools/apply_battlefield_materials.gd",
+          "tools/apply_unit_scales.gd",
+          "tools/build_battlefield.gd",
+          "tools/build_boss_pillar.gd",
+          "tools/build_combat_slice.gd",
+          "tools/build_enemy_audio.gd",
+          "tools/build_ground_boss.gd",
+          "tools/build_gun_juice.gd",
+          "tools/build_scenes.gd",
+          "tools/build_vfx.gd",
+          "tools/create_boss_scenes.gd",
+          "tools/split_grapple.gd",
+          "tools/tune_scouts.gd"
+        ],
+        "addons/proto_kit/vfx/3d/scenario/cinder-explosion.tscn": [
+          "tools/build_ground_boss.gd"
+        ],
+        "addons/proto_kit/screenshot.gd": [
+          "tools/capture.gd",
+          "tools/capture_boss_scene.gd",
+          "tools/capture_combat.gd",
+          "tools/capture_dash_blades.gd",
+          "tools/capture_ground_boss.gd"
         ]
       }
     }

@@ -2,6 +2,32 @@
 
 由根目錄 `Progress.md` 拆出（2026-11-02）。新的放最上面；每次 commit、出門／下班／暫停前更新本檔，根目錄只更新一行摘要。共用模組說明見 [README](README.md)。
 
+
+## 2026-11-23｜master｜分類提交
+
+- feat(godot-kit): add shared tools and optional addons
+- 本次整理未重跑遊戲測試；既有驗證與待辦以 README、先前進度及測試檔為準。未 push。
+- 下一步：依原專案進度進行人工驗收與後續工作。
+
+## 2026-11-22｜master｜Phantom Camera 共用鏡頭
+
+- 收錄 Ramokz 的 Asset Store 官方 Phantom Camera v0.12（MIT，最低 Godot 4.4）。`sync.sh --addon phantom-camera <原型>` 安裝至上游 `addons/phantom_camera/` 路徑。根目錄 AGENTS 與 Kit README 可直接找到接入指南。
+- L2 在隔離 Godot 4.7 專案核對同步，完成編輯器匯入後重跑並驗證 2D 目標跟隨、鏡頭優先級切換與 3D Host 套用鏡頭位置。手機／Web 匯出與個別原型移植待接入時驗收。
+- [接線與版本注意項目](docs/PHANTOM-CAMERA.md)。基準 `f2f7c056`，本地未提交。
+
+## 2026-11-22｜master｜除錯、空間音訊、材質與雲 addon
+
+- 收錄 Debug Draw 3D 1.7.3、Raytraced Audio 1.0、AzPepoze AmbientCG 0.1.2、Venit Studios AmbientCG 指定快照及 Sunshine Clouds 2 2.7。套件與授權保存在 `third_party/`。Raytraced Audio 為選用，Sunshine Clouds 2 搭配 Forward+。
+- `sync.sh [--check] --addon <ID> <目標>` 選擇性安裝，`--conductor` 仍可使用。兩個 AmbientCG 共用上游安裝路徑，已驗證混裝會拒絕。雲的範例遮罩及引用留在 addon 內。
+- L2 在隔離副本驗證 bash 語法、各包同步／核對、Godot 4.7 headless 匯入，Debug Draw 3D 另確認原生 singleton 和 `draw_line` 載入。各套件實際場景效果、網路材質下載及目標平台匯出待驗。[選用與接入](docs/THIRD-PARTY-ADDONS.md)
+- 本地未提交。套件由實際使用的原型選擇安裝。
+
+## 2026-11-22｜master｜Conductor 音畫同步插件
+
+- 依使用者要求收錄 MIT 上游 addon，固定 GitHub commit `6250a1b`（plugin.cfg 0.1.4）。來源與授權位於 `third_party/conductor/`。用 `sync.sh --conductor <目標>` 選擇性安裝進 `addons/conductor/`，`--check --conductor` 可核對已匯入的副本。
+- L2 在隔離 Godot 4.7 專案通過 shell 語法、同步／核對及原始 addon 比對。使用手動登記的 Autoload，headless 播放測得拍點 0–6、小節 0–1 及按拍計時器 timeout。編輯器手動點插件啟用以及手機／Web 聲畫延遲待使用專案驗證。
+- 完整能力目錄 build 因既有 `ui_anim.auto_tween` 缺 curated spec 停止。本次只更新同步工具的索引與生成條目。[安裝與接線](docs/CONDUCTOR.md) 本地變更未提交，實際原型由後續需求指定。
+
 ## 2026-11-06｜首款消費者 seal-meadow 接入（未提交）
 
 - godot-kit／master；seal 的 SaveStore 改為 validator/migrations adapter，Main 保存經 adapter，遊戲仍擁有恢復 bytes 與停止寫入狀態；v4 遷移改固定 UID，符合純回呼要求。

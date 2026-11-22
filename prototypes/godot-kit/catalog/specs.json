@@ -2262,5 +2262,29 @@
       ],
       "runtime_acceptance": "deferred by user"
     }
+  },
+  "vat_crowd": {
+    "purpose": "將骨架動畫烘焙成 VAT，供 MultiMesh 大量 3D 敵群播放",
+    "use_when": "大量同型機器人、割草敵群共用待機與跑步動畫",
+    "kind": "rule",
+    "status": "框架可用，目標裝置效能待量測",
+    "constraints": "單表面固定頂點順序，烘焙時需要 renderer，切線貼圖須另處理。",
+    "example": "var baked := await preload(\"res://addons/proto_kit/vat_crowd.gd\").bake(player, mesh, [&\"idle\", &\"run\"], 24)"
+  },
+  "debris3d": {
+    "purpose": "池化拋射碎片與落地痕跡",
+    "use_when": "池化拋射碎片與落地痕跡",
+    "kind": "node",
+    "status": "Walker TPS 已接入",
+    "constraints": "節點設定與生命週期見來源註解。",
+    "example": "$Parts.spawn(at, velocity)"
+  },
+  "hit_react3d": {
+    "purpose": "模型受擊閃光與變形",
+    "use_when": "模型受擊閃光與變形",
+    "kind": "node",
+    "status": "Walker TPS 已接入",
+    "constraints": "節點設定與生命週期見來源註解。",
+    "example": "$HitReact.react(direction, 1.0)"
   }
 }

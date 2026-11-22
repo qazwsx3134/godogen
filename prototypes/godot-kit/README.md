@@ -1,6 +1,16 @@
 # godot-kit：Godot 原型共用模組
 
-## AI 能力入口（2026-11-06）
+## 開發者與 AI 共用入口
+
+開發新功能前，先用下方的能力搜尋找可重用模組，再看組合指南的依賴與限制。用 `./sync.sh <原型名稱>` 將共用程式同步到專案。製作流程收在 [skills 目錄](skills/)。
+
+**大量 3D 機甲、割草敵群**可從 [VAT 烘焙與批次播放技能](skills/vat-crowd/SKILL.md) 開始，搭配 [烘焙及實例 API](addons/proto_kit/vat_crowd.gd) 與 [頂點 shader](addons/proto_kit/vat_crowd.gdshaderinc)。
+
+**音樂與畫面同步**可選用 [Conductor 接入指南](docs/CONDUCTOR.md)。用 `./sync.sh --conductor <原型名稱>` 安裝，再在目標專案啟用插件。適合踩拍播動畫、燈光和關卡事件。
+
+**2D／3D 鏡頭跟隨與轉場**先查 [Phantom Camera 接入指南](docs/PHANTOM-CAMERA.md)，可重用死區、阻尼、群組取景和優先級切換。
+
+**3D 除錯、空間音訊、PBR/HDRI 與體積雲**見 [第三方 addon 指南](docs/THIRD-PARTY-ADDONS.md)。用 `./sync.sh --addon <ID> <原型名稱>` 安裝指定套件。
 
 [組合與契約指南](docs/COMPOSITION.md) · [逐項能力參考](docs/capabilities/REFERENCE.md) · [全原型盤點與抽取決策](docs/REUSE-AUDIT.md)
 
@@ -31,6 +41,7 @@ python3 tools/capabilities.py check
 | 模組 | 解決什麼 | 使用中 |
 |---|---|---|
 | [`vfx/`](addons/proto_kit/vfx/README.md) | 41 組 Scenario 的 2D／3D 場景、46 種 00GameDevs 原生特效、圖集播放器、[網頁展示](showcase/README.md)與匯入工具；[網站接入狀態](docs/vfx/SOURCES.md) | **尚未採用**（2026-11-01 使用者明確要求）；本機素材已接入；46 份 Three.js 已原生移植，GPU／瀏覽器外觀待驗 |
+| [`ui_anim/`](addons/proto_kit/ui_anim/) | UI 動畫：Container 子 node 依序出場（只動透明度不動 visible）、auto_tween（visible 切換時自動出場）、tween_once（`_set` 攔截屬性寫入就彈一下） | godot-ui（2026-11-22） |
 | [`synth.gd`](addons/proto_kit/synth.gd) | 程序合成佔位音：掃頻、敲擊噪音、音符串。不用下載或授權任何音檔 | pachinko、pixel-monster |
 | [`atomic_file.gd`](addons/proto_kit/atomic_file.gd) | 存檔寫到一半當機或關掉分頁，也不會留下半個檔案 | debt-commission、pixel-monster |
 | [`test_kit.gd`](addons/proto_kit/test_kit.gd) | headless 測試基底：斷言、等幾幀、等條件成立、模擬點擊與手勢 | debt-commission、pixel-monster |
@@ -40,6 +51,7 @@ python3 tools/capabilities.py check
 | [`haptics.gd`](addons/proto_kit/haptics.gd) | 手機震動：偵測（Android、iOS、網頁只認觸控裝置）、三級強度、間隔與每秒上限、較大級穿過、較弱不打斷較強、時鐘可注入。網頁版不會每次呼叫都讓瀏覽器 `console.warn` | sugarcane-tanks；pixel-monster 還在直接呼叫 `Input.vibrate_handheld(35)`，尚未改用 |
 | [`time_control.gd`](addons/proto_kit/time_control.gd) | hit stop：打擊停頓，有冷卻、可強制、只拉長不縮短；唯一碰 `Engine.time_scale` 的地方 | sugarcane-tanks |
 | [`song_clock.gd`](addons/proto_kit/song_clock.gd) | 節奏遊戲的歌曲時鐘：`time()` 是玩家聽到的歌曲秒數、`beat_time`／`beat_at` 換算拍子、淡入淡出與台詞降音、時鐘可注入。**網頁版**改用 `play()` 返回後的牆上時鐘減輸出延遲（瀏覽器回報的播放位置比聽到的晚約 1 秒，第一次 `play()` 卡 0.8～0.9 秒），原生版用音訊位置 | kagura-dango（2026-11-04 抽出，`scripts/conductor.gd` 繼承它）。**只有一個原型用**：使用者要求抽出 |
+| [Conductor](docs/CONDUCTOR.md) | 設定 BPM 和每小節拍數，訂閱拍點與小節，提供按拍計時與動畫節點 | 選用上游 addon，MIT |
 | [`orientation_guard.tscn`](addons/proto_kit/orientation_guard.tscn)＋[`.gd`](addons/proto_kit/orientation_guard.gd) | 手機拿錯方向時蓋住畫面、擋點擊，請玩家轉橫（或轉直）；只在觸控裝置（網頁 Android／iOS、原生手機），不暫停遊戲 | kagura-dango（同上） |
 | [`music.gd`](addons/proto_kit/music.gd) | 背景音樂換軌：舊的淡出、新的淡入，同一首不重播，不受暫停與 hit stop 影響 | sugarcane-tanks |
 | [`camera_shake.gd`](addons/proto_kit/camera_shake.gd) | trauma 震屏：偏移與轉角跟 trauma 的平方成正比，平滑不抖，可關（無障礙） | sugarcane-tanks |
@@ -47,6 +59,8 @@ python3 tools/capabilities.py check
 | [`debris3d.gd`](addons/proto_kit/debris3d.gd) | 彈殼、零件、地上污漬的 MultiMesh 池：一池一次 draw call，滿了重用最舊的，落地彈跳後靜止不耗 CPU | walker-tps（2026-11-17） |
 | [`floating_stick.gd`](addons/proto_kit/floating_stick.gd) | 浮動虛擬搖桿：平時看不見，按下才在手指下出現，輸出螢幕向量 | sugarcane-tanks |
 | [`scene_loader.gd`](addons/proto_kit/scene_loader.gd) | 載入畫面的邏輯：執行緒載入、進度不倒退也不跑在時鐘前面、失敗可重試、離開時收掉任務 | sugarcane-tanks |
+| [`loading/`](addons/proto_kit/loading/) | 全域載入畫面＋關卡進度：`loading_system.tscn`（CanvasLayer＋ProgressBar，autoload 名 `LoadingSystem`）用 `scene_loader.gd` 執行緒載入、Tween 淡入淡出、`go("uid://…")` 可用 UID 換場景；`game_data.gd`（autoload 名 `GameData`）用 `atomic_file.gd` 存解鎖關卡、最佳分數、目前關卡。外觀重產：`tools/build_loading_scene.gd`。測試：`tests/test_loading.gd` | **尚未採用**（2026-11-22） |
+| [`polish3d/`](addons/proto_kit/polish3d/) | 3D 打磨流程的材料：天空雲、樹葉（樹冠中心法線＋搖擺）、草（頂點色彎曲）、地面（mask：R 泥土、G 樹下）、暗角顆粒後製 shader，MultiMesh 分 chunk 的草地 `grass_field.gd`，FPS＋逐項開關 `perf_hud.gd`，示範 `demo.tscn`。流程與數值見 [docs/POLISH-3D.md](docs/POLISH-3D.md) | **尚未採用**（2026-11-22） |
 | [`sprite3d*.gdshader`](addons/proto_kit/sprite3d.gdshader)、[`sprite3d_sheet.gd`](addons/proto_kit/sprite3d_sheet.gd)、[`sprite3d_actor.gd`](addons/proto_kit/sprite3d_actor.gd) | 2D 角色圖立在 3D 世界（pokebonk.com／仙境傳說式）：billboard、腳底貼地、依鏡頭相對方向選 1／4／8 方向（含鏡像與遲滯）、描邊身分色、閃白、溶解、x-ray 剪影、殘影、腳下影子，MultiMesh 大軍可用。搭配 `tools/sprite_atlas.py` | madara-survivor、horde-25d（2026-10-19 從這兩份抽出） |
 | [`sprite_check.gd`](addons/proto_kit/sprite_check.gd)、[`sprite_inspector.tscn`](addons/proto_kit/sprite_inspector.tscn) | sprite 動畫測試頁：方向切換、速度、逐幀、格線、洋蔥皮，自動抓切錯格、空白幀與腳底跳動；只讀，不縮放不重排 | skybound-blades；madara-survivor、horde-25d 的 sheet 在程式裡建，存成 `.tres` 後可用 |
 | [`card_draft.gd`](addons/proto_kit/card_draft.gd) | 升級三選一：加權抽牌、有次數的重抽與放逐、佔欄位的技能與不佔欄位的強化、分支進度滿才出現終極牌，可存讀檔（含亂數狀態） | **尚未採用**（2026-10-25 依[類型掃描](../../research/genre-scan/2026-10-25/README.md)的遊戲 B 寫成） |

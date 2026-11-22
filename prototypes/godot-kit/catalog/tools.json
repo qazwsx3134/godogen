@@ -128,13 +128,14 @@
     "use_when": "安裝或更新共用庫副本",
     "kind": "tool",
     "status": "CLI 主入口全文靜態研究；未執行製作／測試工作；capabilities build/check 已執行",
-    "parameters": "原型名稱或絕對路徑；--check 唯讀",
-    "outputs": "目的專案 addons/proto_kit；check 差異 exit 1",
+    "parameters": "原型名稱或絕對路徑；--check 唯讀；--addon <ID> 選擇單一第三方套件並明列目標；--conductor 為 Conductor 相容入口",
+    "outputs": "目的專案 addons/proto_kit 或選用套件的上游 addons 路徑；check 差異 exit 1",
     "example": "bash sync.sh --check seal-meadow",
-    "constraints": "修改模式使用整包 rsync -a --delete，刪除目標 kit 多餘檔；不合併修改、不做備份、不檢查相容性。沒有指定 target 會更新所有已有副本，故 AI 應明列單一目標。--check 唯讀呼叫 audit_copies；需先確認目標 project.godot。相對名稱基於 prototypes，支援 absolute；不應直接改目的副本。",
+    "constraints": "共用庫模式用 rsync -a --delete，省略目標會更新所有已有副本。--addon 模式保留目標額外檔案，忽略生成的 .import，並拒絕混裝 AmbientCG 的兩套版本。兩種模式均需目標 project.godot；相對名稱基於 prototypes，也支援絕對路徑。",
     "effects": {
       "writes": [
-        "<target>/addons/proto_kit/** (including deletions)"
+        "<target>/addons/proto_kit/** (including deletions)",
+        "<target>/addons/<selected upstream folder>/** (--addon or --conductor only)"
       ],
       "may_use_network": false,
       "failure_effects": "rsync 中斷可留下部分更新；沒有回滾"
