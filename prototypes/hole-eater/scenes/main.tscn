@@ -1,0 +1,936 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_tipki"]
+[ext_resource type="Texture2D" path="res://scenes/floor_checker.tres" id="2_85g3d"]
+[ext_resource type="PackedScene" path="res://scenes/hole.tscn" id="3_choun"]
+[ext_resource type="Script" path="res://scripts/hole_body.gd" id="4_ya4ey"]
+[ext_resource type="PackedScene" path="res://scenes/prop_box.tscn" id="5_eb6dy"]
+[ext_resource type="PackedScene" path="res://scenes/prop_ball.tscn" id="6_trceg"]
+[ext_resource type="PackedScene" path="res://scenes/prop_pillar.tscn" id="7_a8y0u"]
+[ext_resource type="PackedScene" path="res://scenes/prop_crate.tscn" id="8_jkv2x"]
+
+[sub_resource type="Environment" id="Environment_jbj1t"]
+background_mode = 1
+background_color = Color(0.6039216, 0.8156863, 0.9098039, 1)
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_energy = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_muem4"]
+render_priority = -127
+transparency = 1
+depth_draw_mode = 1
+albedo_texture = ExtResource("2_85g3d")
+uv1_scale = Vector3(20, 20, 1)
+texture_filter = 0
+stencil_mode = 3
+stencil_flags = 1
+stencil_compare = 5
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_dp3eg"]
+size = Vector2(40, 40)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0ld40"]
+size = Vector3(40, 1, 40)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_spnof"]
+friction = 0.0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_tipki"]
+size = Vector3(160, 1, 160)
+
+[node name="Main" type="Node3D" unique_id=1756121046]
+script = ExtResource("1_tipki")
+
+[node name="Env" type="WorldEnvironment" parent="." unique_id=29593514]
+environment = SubResource("Environment_jbj1t")
+
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=1625397567]
+transform = Transform3D(0.8660254, -0.40957603, 0.28678823, 0, 0.57357645, 0.81915206, -0.5, -0.7094065, 0.49673176, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Camera" type="Camera3D" parent="." unique_id=289515649]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 0.52999896, 0.8479983, 0, -0.8479983, 0.52999896, 0, 24, 17)
+fov = 50.0
+
+[node name="Floor" type="StaticBody3D" parent="." unique_id=1912709699]
+collision_mask = 0
+
+[node name="Mesh" type="MeshInstance3D" parent="Floor" unique_id=260190858]
+material_override = SubResource("StandardMaterial3D_muem4")
+mesh = SubResource("PlaneMesh_dp3eg")
+
+[node name="Shape" type="CollisionShape3D" parent="Floor" unique_id=215272634]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_0ld40")
+
+[node name="Hole" type="RigidBody3D" parent="." unique_id=2058188634 instance=ExtResource("3_choun")]
+unique_name_in_owner = true
+collision_layer = 16
+collision_mask = 0
+physics_material_override = SubResource("PhysicsMaterial_spnof")
+gravity_scale = 0.0
+freeze = true
+freeze_mode = 1
+script = ExtResource("4_ya4ey")
+
+[node name="Props" type="Node3D" parent="." unique_id=290584967]
+
+[node name="Prop0" type="RigidBody3D" parent="Props" unique_id=374247792 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.832575, 0.7, -14.851808)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop1" type="RigidBody3D" parent="Props" unique_id=1119925965 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.07118, 0.7, -12.782119)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop2" type="RigidBody3D" parent="Props" unique_id=1057838574 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.9371, 0.7, -10.315458)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop3" type="RigidBody3D" parent="Props" unique_id=1413662057 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.752474, 0.7, -8.3838005)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop4" type="RigidBody3D" parent="Props" unique_id=150269727 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.096432, 0.7, -6.0137978)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop5" type="RigidBody3D" parent="Props" unique_id=10058649 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.85994, 0.7, -4.2703905)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop6" type="RigidBody3D" parent="Props" unique_id=1570923731 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.786783, 0.7, -2.100707)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop7" type="RigidBody3D" parent="Props" unique_id=1957825460 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.546595, 0.7, 1.8612028)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop8" type="RigidBody3D" parent="Props" unique_id=840456196 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.790258, 0.7, 6.0078306)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop9" type="RigidBody3D" parent="Props" unique_id=1090485273 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.614517, 0.7, 8.126832)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop10" type="RigidBody3D" parent="Props" unique_id=585966941 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.68518, 0.7, 16.525814)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop11" type="RigidBody3D" parent="Props" unique_id=1723489972 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.941694, 0.7, -12.710586)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop12" type="RigidBody3D" parent="Props" unique_id=2007738410 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.608573, 0.7, -8.523962)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop13" type="RigidBody3D" parent="Props" unique_id=237814974 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.957141, 0.7, -1.9704504)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop14" type="RigidBody3D" parent="Props" unique_id=382359269 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.59329, 0.7, 6.391102)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop15" type="RigidBody3D" parent="Props" unique_id=1310349629 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.798085, 0.7, 8.54243)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop16" type="RigidBody3D" parent="Props" unique_id=1523152117 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.504051, 0.7, 10.471748)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop17" type="RigidBody3D" parent="Props" unique_id=356118311 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.968521, 0.7, 12.335755)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop18" type="RigidBody3D" parent="Props" unique_id=2115847798 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.477544, 0.7, -14.5192795)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop19" type="RigidBody3D" parent="Props" unique_id=1880292763 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.349856, 0.7, -12.642836)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop20" type="RigidBody3D" parent="Props" unique_id=1681385969 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.4487295, 0.7, -6.0203605)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop21" type="RigidBody3D" parent="Props" unique_id=278938345 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.696226, 0.7, -4.405757)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop22" type="RigidBody3D" parent="Props" unique_id=1380488057 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.831754, 0.7, -0.12567605)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop23" type="RigidBody3D" parent="Props" unique_id=297334262 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.425513, 0.7, 1.8275564)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop24" type="RigidBody3D" parent="Props" unique_id=1680983787 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.533052, 0.7, 6.592353)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop25" type="RigidBody3D" parent="Props" unique_id=1394560175 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.804926, 0.7, 10.334781)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop26" type="RigidBody3D" parent="Props" unique_id=969130568 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.45891, 0.7, 12.348598)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop27" type="RigidBody3D" parent="Props" unique_id=1133536621 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5134535, 0.7, 16.814503)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop28" type="RigidBody3D" parent="Props" unique_id=534503924 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.499555, 0.7, -16.591328)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop29" type="RigidBody3D" parent="Props" unique_id=1866499941 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.675601, 0.7, -10.779475)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop30" type="RigidBody3D" parent="Props" unique_id=581019728 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.3884, 0.7, -1.8391829)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop31" type="RigidBody3D" parent="Props" unique_id=1500997461 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.321894, 0.7, 0.21843076)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop32" type="RigidBody3D" parent="Props" unique_id=1935476878 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.243236, 0.7, 1.9636879)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop33" type="RigidBody3D" parent="Props" unique_id=905693029 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.798073, 0.7, 16.644022)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop34" type="RigidBody3D" parent="Props" unique_id=1235204466 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.203927, 0.7, -14.793754)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop35" type="RigidBody3D" parent="Props" unique_id=230851243 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.296946, 0.7, -12.839786)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop36" type="RigidBody3D" parent="Props" unique_id=1655313697 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.268082, 0.7, -10.742517)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop37" type="RigidBody3D" parent="Props" unique_id=747546697 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.2763405, 0.7, -4.371115)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop38" type="RigidBody3D" parent="Props" unique_id=110612341 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.46626, 0.7, 6.1744943)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop39" type="RigidBody3D" parent="Props" unique_id=1770908907 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.658179, 0.7, 12.314973)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop40" type="RigidBody3D" parent="Props" unique_id=2014125830 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.3116, 0.7, 14.617713)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop41" type="RigidBody3D" parent="Props" unique_id=826640423 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.435714, 0.7, 16.968363)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop42" type="RigidBody3D" parent="Props" unique_id=313343492 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.4117417, 0.7, -16.915548)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop43" type="RigidBody3D" parent="Props" unique_id=2075540485 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.469088, 0.7, -2.2640119)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop44" type="RigidBody3D" parent="Props" unique_id=1521753350 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.10553, 0.7, 0.11415976)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop45" type="RigidBody3D" parent="Props" unique_id=630207443 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.468401, 0.7, 6.2445693)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop46" type="RigidBody3D" parent="Props" unique_id=1313516709 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.3806243, 0.7, 8.49481)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop47" type="RigidBody3D" parent="Props" unique_id=472132773 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.0243516, 0.7, 10.347767)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop48" type="RigidBody3D" parent="Props" unique_id=1850947754 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.0453124, 0.7, 14.643787)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop49" type="RigidBody3D" parent="Props" unique_id=1346806257 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.9715266, 0.7, -16.504704)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop50" type="RigidBody3D" parent="Props" unique_id=1291825262 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.9872274, 0.7, -14.431292)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop51" type="RigidBody3D" parent="Props" unique_id=2000628029 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.9040747, 0.7, -12.581216)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop52" type="RigidBody3D" parent="Props" unique_id=1941561354 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.2032337, 0.7, -10.743089)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop53" type="RigidBody3D" parent="Props" unique_id=961995817 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.9638064, 0.7, -8.611769)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop54" type="RigidBody3D" parent="Props" unique_id=1112460585 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.9531746, 0.7, -3.9465988)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop55" type="RigidBody3D" parent="Props" unique_id=1270979362 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.312384, 0.7, -2.1300952)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop56" type="RigidBody3D" parent="Props" unique_id=1268985204 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.918433, 0.7, 2.3758397)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop57" type="RigidBody3D" parent="Props" unique_id=810252529 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.0221615, 0.7, 4.233011)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop58" type="RigidBody3D" parent="Props" unique_id=694841322 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.150483, 0.7, 14.785231)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop59" type="RigidBody3D" parent="Props" unique_id=1829183139 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.364879, 0.7, -14.867053)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop60" type="RigidBody3D" parent="Props" unique_id=1790709122 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.0789108, 0.7, -8.132796)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop61" type="RigidBody3D" parent="Props" unique_id=600497968 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.172083, 0.7, -6.5144095)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop62" type="RigidBody3D" parent="Props" unique_id=1486215003 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.1082008, 0.7, 4.0323577)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop63" type="RigidBody3D" parent="Props" unique_id=213117868 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8105725, 0.7, 6.3738275)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop64" type="RigidBody3D" parent="Props" unique_id=403790113 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9332345, 0.7, 8.532909)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop65" type="RigidBody3D" parent="Props" unique_id=41604186 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.0862873, 0.7, 10.2023325)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop66" type="RigidBody3D" parent="Props" unique_id=199585195 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.011863, 0.7, 12.330968)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop67" type="RigidBody3D" parent="Props" unique_id=1639351273 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.1547942, 0.7, 14.846393)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop68" type="RigidBody3D" parent="Props" unique_id=745738339 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.3744555, 0.7, 16.624481)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop69" type="RigidBody3D" parent="Props" unique_id=370891128 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.27520955, 0.7, -14.632017)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop70" type="RigidBody3D" parent="Props" unique_id=408582570 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.009908587, 0.7, -10.776916)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop71" type="RigidBody3D" parent="Props" unique_id=716959243 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.22112367, 0.7, -4.3404117)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop72" type="RigidBody3D" parent="Props" unique_id=1340795867 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24387383, 0.7, 4.183176)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop73" type="RigidBody3D" parent="Props" unique_id=475288411 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.15275565, 0.7, 6.181858)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop74" type="RigidBody3D" parent="Props" unique_id=1307000831 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.028834611, 0.7, 8.627366)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop75" type="RigidBody3D" parent="Props" unique_id=196758801 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.20756763, 0.7, 10.287463)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop76" type="RigidBody3D" parent="Props" unique_id=146664748 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0664065, 0.7, 14.421968)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop77" type="RigidBody3D" parent="Props" unique_id=1843967061 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.11745003, 0.7, 16.869528)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop78" type="RigidBody3D" parent="Props" unique_id=1384343939 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8435799, 0.7, -16.860207)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop79" type="RigidBody3D" parent="Props" unique_id=1082462739 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3789735, 0.7, -14.7225895)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop80" type="RigidBody3D" parent="Props" unique_id=857064228 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9923619, 0.7, -12.642237)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop81" type="RigidBody3D" parent="Props" unique_id=1660549436 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3163402, 0.7, -10.231985)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop82" type="RigidBody3D" parent="Props" unique_id=758430340 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.970068, 0.7, 3.999698)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop83" type="RigidBody3D" parent="Props" unique_id=28660559 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.110954, 0.7, 8.167295)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop84" type="RigidBody3D" parent="Props" unique_id=1124788586 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9780482, 0.7, 12.880812)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop85" type="RigidBody3D" parent="Props" unique_id=773784859 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.387009, 0.7, 16.764488)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop86" type="RigidBody3D" parent="Props" unique_id=236345499 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.0387263, 0.7, -16.593565)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop87" type="RigidBody3D" parent="Props" unique_id=95309912 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.3109274, 0.7, -10.251688)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop88" type="RigidBody3D" parent="Props" unique_id=1092782258 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.22719, 0.7, -4.499731)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop89" type="RigidBody3D" parent="Props" unique_id=1677479801 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.4551597, 0.7, 2.3121126)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop90" type="RigidBody3D" parent="Props" unique_id=1360314965 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.4724336, 0.7, 4.3412232)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop91" type="RigidBody3D" parent="Props" unique_id=885735962 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.2754693, 0.7, 10.655608)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop92" type="RigidBody3D" parent="Props" unique_id=844197349 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.4340687, 0.7, 12.690778)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop93" type="RigidBody3D" parent="Props" unique_id=1763736811 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.253269, 0.7, 16.824171)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop94" type="RigidBody3D" parent="Props" unique_id=923982074 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.091002, 0.7, -17.039707)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop95" type="RigidBody3D" parent="Props" unique_id=382675748 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.334564, 0.7, -12.346418)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop96" type="RigidBody3D" parent="Props" unique_id=2117714532 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.4155025, 0.7, -2.024876)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop97" type="RigidBody3D" parent="Props" unique_id=1176879179 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.154111, 0.7, -0.015026689)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop98" type="RigidBody3D" parent="Props" unique_id=616018930 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.222004, 0.7, 6.3091016)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop99" type="RigidBody3D" parent="Props" unique_id=1081961386 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5020075, 0.7, 8.207583)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop100" type="RigidBody3D" parent="Props" unique_id=1643936572 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.354584, 0.7, 10.3155365)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop101" type="RigidBody3D" parent="Props" unique_id=880889824 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.596303, 0.7, 12.785234)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop102" type="RigidBody3D" parent="Props" unique_id=406230198 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.278021, 0.7, 16.687117)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop103" type="RigidBody3D" parent="Props" unique_id=2024132263 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.116894, 0.7, -14.599968)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop104" type="RigidBody3D" parent="Props" unique_id=1246939966 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.637409, 0.7, -12.5764265)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop105" type="RigidBody3D" parent="Props" unique_id=508069162 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.230727, 0.7, -8.400451)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop106" type="RigidBody3D" parent="Props" unique_id=952437836 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.144404, 0.7, -4.2848325)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop107" type="RigidBody3D" parent="Props" unique_id=202083862 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.627923, 0.7, 8.433011)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop108" type="RigidBody3D" parent="Props" unique_id=449419084 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.603825, 0.7, 10.285526)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop109" type="RigidBody3D" parent="Props" unique_id=8442991 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.258804, 0.7, 12.541014)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop110" type="RigidBody3D" parent="Props" unique_id=1709879056 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.5348425, 0.7, -14.455666)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop111" type="RigidBody3D" parent="Props" unique_id=1517860976 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.542536, 0.7, -10.324563)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop112" type="RigidBody3D" parent="Props" unique_id=1319133893 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.771817, 0.7, -8.4516735)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop113" type="RigidBody3D" parent="Props" unique_id=1356587127 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.294588, 0.7, -6.4078345)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop114" type="RigidBody3D" parent="Props" unique_id=1092118404 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.491952, 0.7, -1.9113098)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop115" type="RigidBody3D" parent="Props" unique_id=1507082056 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.562991, 0.7, 8.248994)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop116" type="RigidBody3D" parent="Props" unique_id=1127861186 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.383947, 0.7, 10.45987)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop117" type="RigidBody3D" parent="Props" unique_id=1590040789 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.409692, 0.7, 12.547616)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop118" type="RigidBody3D" parent="Props" unique_id=93161136 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.425041, 0.7, 14.8920765)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop119" type="RigidBody3D" parent="Props" unique_id=773907583 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.505638, 0.7, -12.47891)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop120" type="RigidBody3D" parent="Props" unique_id=1211905027 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.4841385, 0.7, -10.408002)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop121" type="RigidBody3D" parent="Props" unique_id=363195494 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.89855, 0.7, -3.9306078)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop122" type="RigidBody3D" parent="Props" unique_id=2119856981 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.374398, 0.7, -2.3806581)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop123" type="RigidBody3D" parent="Props" unique_id=1736438793 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.8320055, 0.7, 0.14559564)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop124" type="RigidBody3D" parent="Props" unique_id=1103299006 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.467334, 0.7, 4.1558685)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop125" type="RigidBody3D" parent="Props" unique_id=2067906478 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.364626, 0.7, 6.4820504)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop126" type="RigidBody3D" parent="Props" unique_id=902946679 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.600727, 0.7, 10.490204)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop127" type="RigidBody3D" parent="Props" unique_id=1043269850 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.881733, 0.7, 12.338899)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop128" type="RigidBody3D" parent="Props" unique_id=907865493 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.912636, 0.7, -16.611464)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop129" type="RigidBody3D" parent="Props" unique_id=1927078470 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.799552, 0.7, -14.422932)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop130" type="RigidBody3D" parent="Props" unique_id=465213840 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.904088, 0.7, -10.573548)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop131" type="RigidBody3D" parent="Props" unique_id=220270590 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.4971695, 0.7, -6.3272767)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop132" type="RigidBody3D" parent="Props" unique_id=241394057 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.558286, 0.7, 1.9109659)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop133" type="RigidBody3D" parent="Props" unique_id=2029980777 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.614524, 0.7, 6.3576837)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop134" type="RigidBody3D" parent="Props" unique_id=55668424 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.609945, 0.7, 8.402707)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop135" type="RigidBody3D" parent="Props" unique_id=1142270668 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.706914, 0.7, 10.790493)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop136" type="RigidBody3D" parent="Props" unique_id=167507295 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.900716, 0.7, 12.419586)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop137" type="RigidBody3D" parent="Props" unique_id=1672507438 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.783096, 0.7, -17.067404)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop138" type="RigidBody3D" parent="Props" unique_id=38959814 instance=ExtResource("7_a8y0u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.866863, 0.7, -14.720197)
+collision_layer = 2
+collision_mask = 3
+mass = 1.5
+
+[node name="Prop139" type="RigidBody3D" parent="Props" unique_id=1478065896 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.693756, 0.7, -10.465084)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop140" type="RigidBody3D" parent="Props" unique_id=976529508 instance=ExtResource("5_eb6dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.523405, 0.7, -1.8182647)
+collision_layer = 2
+collision_mask = 3
+
+[node name="Prop141" type="RigidBody3D" parent="Props" unique_id=1758438389 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.087688, 0.7, 2.0472944)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Prop142" type="RigidBody3D" parent="Props" unique_id=1039473946 instance=ExtResource("6_trceg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.978506, 0.7, 10.454502)
+collision_layer = 2
+collision_mask = 3
+mass = 0.6
+
+[node name="Crate143" type="RigidBody3D" parent="Props" unique_id=2081691658 instance=ExtResource("8_jkv2x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.3, 0.7, -6.3)
+collision_layer = 2
+collision_mask = 3
+mass = 8.0
+
+[node name="Crate144" type="RigidBody3D" parent="Props" unique_id=1215646417 instance=ExtResource("8_jkv2x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.4, 0.7, 4.2)
+collision_layer = 2
+collision_mask = 3
+mass = 8.0
+
+[node name="Crate145" type="RigidBody3D" parent="Props" unique_id=2061909131 instance=ExtResource("8_jkv2x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.5, 0.7, 8.4)
+collision_layer = 2
+collision_mask = 3
+mass = 8.0
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=1431022931]
+
+[node name="Score" type="Label" parent="UI" unique_id=233182261]
+unique_name_in_owner = true
+offset_left = 24.0
+offset_top = 16.0
+offset_right = 24.0
+offset_bottom = 16.0
+theme_override_font_sizes/font_size = 32
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+text = "Eaten: 0"
+
+[node name="Abyss" type="Area3D" parent="." unique_id=239625713]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8, 0)
+collision_layer = 0
+collision_mask = 2
+
+[node name="Shape" type="CollisionShape3D" parent="Abyss" unique_id=327951100]
+shape = SubResource("BoxShape3D_tipki")

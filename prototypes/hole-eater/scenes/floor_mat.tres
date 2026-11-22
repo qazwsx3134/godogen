@@ -1,0 +1,14 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://scenes/floor_checker.tres" id="1_ny3gi"]
+
+[resource]
+render_priority = -127
+transparency = 1
+depth_draw_mode = 1
+albedo_texture = ExtResource("1_ny3gi")
+uv1_scale = Vector3(20, 20, 1)
+texture_filter = 0
+stencil_mode = 3
+stencil_flags = 1
+stencil_compare = 5
