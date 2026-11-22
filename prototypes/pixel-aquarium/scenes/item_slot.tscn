@@ -1,0 +1,10 @@
+[gd_scene format=3]
+
+[node name="ItemSlot" type="MenuButton" unique_id=904381523]
+texture_filter = 1
+custom_minimum_size = Vector2(58, 52)
+theme_override_constants/icon_max_width = 26
+action_mode = 1
+flat = false
+icon_alignment = 1
+expand_icon = true

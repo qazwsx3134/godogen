@@ -1,0 +1,285 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/aquarium.gd" id="1_d0q3v"]
+[ext_resource type="PackedScene" path="res://scenes/tank.tscn" id="2_ffceb"]
+[ext_resource type="FontFile" path="res://assets/NotoSansTC.ttf" id="3_pxnnk"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_5dg5m"]
+viewport_path = NodePath("TankView")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_71x8f"]
+bg_color = Color(0.13725491, 0.20392157, 0.22745098, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.22352941, 0.30588236, 0.3137255, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_odjgq"]
+bg_color = Color(1, 1, 1, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.95686275, 0.83137256, 0.5882353, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6g8si"]
+bg_color = Color(0.20784314, 0.30980393, 0.3137255, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.45882353, 0.59607846, 0.54509807, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g8q5e"]
+bg_color = Color(0.14509805, 0.21960784, 0.23529412, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2784314, 0.3764706, 0.39215687, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_roldy"]
+bg_color = Color(0.25882354, 0.36078432, 0.33333334, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.7019608, 0.6039216, 0.44705883, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8dbdb"]
+bg_color = Color(0.20784314, 0.30980393, 0.3137255, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.45882353, 0.59607846, 0.54509807, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4dfkl"]
+bg_color = Color(0.08235294, 0.18431373, 0.20784314, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.50980395, 0.6666667, 0.61960787, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="Theme" id="Theme_ot80x"]
+default_font = ExtResource("3_pxnnk")
+default_font_size = 11
+Button/colors/font_color = Color(0.83137256, 0.8901961, 0.81960785, 1)
+Button/colors/font_disabled_color = Color(0.6039216, 0.6901961, 0.6666667, 1)
+Button/colors/font_pressed_color = Color(1, 0.8862745, 0.7058824, 1)
+Button/styles/disabled = SubResource("StyleBoxFlat_71x8f")
+Button/styles/focus = SubResource("StyleBoxFlat_odjgq")
+Button/styles/hover = SubResource("StyleBoxFlat_6g8si")
+Button/styles/normal = SubResource("StyleBoxFlat_g8q5e")
+Button/styles/pressed = SubResource("StyleBoxFlat_roldy")
+PopupMenu/colors/font_color = Color(0.83137256, 0.8901961, 0.81960785, 1)
+PopupMenu/styles/hover = SubResource("StyleBoxFlat_8dbdb")
+PopupMenu/styles/panel = SubResource("StyleBoxFlat_4dfkl")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ysjuy"]
+content_margin_left = 12.0
+content_margin_top = 12.0
+content_margin_right = 12.0
+content_margin_bottom = 12.0
+bg_color = Color(0.08235294, 0.18431373, 0.20784314, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.50980395, 0.6666667, 0.61960787, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[node name="Aquarium" type="Control" unique_id=1952644352]
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("1_d0q3v")
+
+[node name="TankView" type="SubViewport" parent="." unique_id=1719965788]
+unique_name_in_owner = true
+own_world_3d = true
+size = Vector2i(640, 360)
+render_target_update_mode = 4
+
+[node name="Tank" type="Node3D" parent="TankView" unique_id=1769908176 instance=ExtResource("2_ffceb")]
+
+[node name="WaterPicture" type="TextureRect" parent="." unique_id=1212319160]
+texture_filter = 1
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = SubResource("ViewportTexture_5dg5m")
+expand_mode = 1
+
+[node name="Controls" type="Control" parent="." unique_id=308724666]
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = SubResource("Theme_ot80x")
+
+[node name="ZoomControls" type="HBoxContainer" parent="Controls" unique_id=1639416072]
+layout_mode = 0
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = -37.0
+offset_right = 128.0
+offset_bottom = -12.0
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="ZoomOut" type="Button" parent="Controls/ZoomControls" unique_id=13991811]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(29, 0)
+layout_mode = 2
+tooltip_text = "縮小魚缸"
+text = "−"
+
+[node name="ZoomReset" type="Button" parent="Controls/ZoomControls" unique_id=754375999]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+tooltip_text = "回到預設視野"
+text = "100%"
+
+[node name="ZoomIn" type="Button" parent="Controls/ZoomControls" unique_id=1779094033]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(29, 0)
+layout_mode = 2
+tooltip_text = "放大魚缸"
+text = "+"
+
+[node name="SelectionMarker" type="ColorRect" parent="Controls" unique_id=121170588]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_right = 13.0
+offset_bottom = 2.0
+mouse_filter = 2
+color = Color(0.98039216, 0.8901961, 0.68235296, 1)
+
+[node name="StoredFish" type="MenuButton" parent="Controls" unique_id=2022225956]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -115.0
+offset_top = 12.0
+offset_right = -12.0
+offset_bottom = 38.0
+text = "收起的魚"
+
+[node name="FishPanel" type="PanelContainer" parent="Controls" unique_id=346184716]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -187.0
+offset_top = -82.0
+offset_right = -12.0
+offset_bottom = 82.0
+mouse_force_pass_scroll_events = false
+theme_override_styles/panel = SubResource("StyleBoxFlat_ysjuy")
+
+[node name="Details" type="VBoxContainer" parent="Controls/FishPanel" unique_id=894770003]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Header" type="HBoxContainer" parent="Controls/FishPanel/Details" unique_id=949784784]
+layout_mode = 2
+
+[node name="FishName" type="Label" parent="Controls/FishPanel/Details/Header" unique_id=193330532]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.98039216, 0.8901961, 0.68235296, 1)
+theme_override_font_sizes/font_size = 17
+text = "月影鬥魚"
+
+[node name="CloseFish" type="Button" parent="Controls/FishPanel/Details/Header" unique_id=1308258342]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(23, 0)
+layout_mode = 2
+tooltip_text = "關閉魚隻資訊"
+text = "×"
+
+[node name="Status" type="Label" parent="Controls/FishPanel/Details" unique_id=614801779]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6784314, 0.80784315, 0.75686276, 1)
+theme_override_font_sizes/font_size = 10
+text = "成魚 · 游動中"
+
+[node name="Traits" type="Label" parent="Controls/FishPanel/Details" unique_id=1303194229]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6784314, 0.80784315, 0.75686276, 1)
+theme_override_font_sizes/font_size = 10
+text = "長尾 · 月牙銀紋"
+
+[node name="Separator" type="HSeparator" parent="Controls/FishPanel/Details" unique_id=875551034]
+layout_mode = 2
+
+[node name="BreedFish" type="Button" parent="Controls/FishPanel/Details" unique_id=2128714062]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 23)
+layout_mode = 2
+tooltip_text = "育種系統開放後可選擇另一尾魚"
+disabled = true
+text = "繁殖"
+
+[node name="SellFish" type="Button" parent="Controls/FishPanel/Details" unique_id=670916696]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 23)
+layout_mode = 2
+tooltip_text = "交易系統開放後可出售"
+disabled = true
+text = "出售"
+
+[node name="StoreFish" type="Button" parent="Controls/FishPanel/Details" unique_id=1080026187]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 23)
+layout_mode = 2
+tooltip_text = "從目前魚缸暫時收起"
+text = "收起"

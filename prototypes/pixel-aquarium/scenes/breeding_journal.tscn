@@ -1,0 +1,382 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" path="res://assets/notebook/leaf_panel.png" id="1_6r4lu"]
+[ext_resource type="Script" path="res://scripts/breeding_journal.gd" id="2_i1ib3"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5v2at"]
+content_margin_left = 16.0
+content_margin_top = 16.0
+content_margin_right = 16.0
+content_margin_bottom = 16.0
+texture = ExtResource("1_6r4lu")
+texture_margin_left = 22.0
+texture_margin_top = 22.0
+texture_margin_right = 22.0
+texture_margin_bottom = 22.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2lkh1"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.9607843, 0.8627451, 0.68235296, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.68235296, 0.4627451, 0.30588236, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_color = Color(0.2627451, 0.13725491, 0.09803922, 0.4)
+shadow_size = 2
+shadow_offset = Vector2(0, 2)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fxuge"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.9607843, 0.8627451, 0.68235296, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.68235296, 0.4627451, 0.30588236, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_color = Color(0.2627451, 0.13725491, 0.09803922, 0.4)
+shadow_size = 2
+shadow_offset = Vector2(0, 2)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1n5gc"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.9607843, 0.8627451, 0.68235296, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.68235296, 0.4627451, 0.30588236, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_color = Color(0.2627451, 0.13725491, 0.09803922, 0.4)
+shadow_size = 2
+shadow_offset = Vector2(0, 2)
+anti_aliasing = false
+
+[node name="BreedingJournal" type="PanelContainer" unique_id=342474070]
+visible = false
+mouse_force_pass_scroll_events = false
+theme_override_styles/panel = SubResource("StyleBoxTexture_5v2at")
+script = ExtResource("2_i1ib3")
+
+[node name="Content" type="VBoxContainer" parent="." unique_id=1647716530]
+layout_mode = 2
+theme_override_constants/separation = 7
+
+[node name="Header" type="HBoxContainer" parent="Content" unique_id=167810350]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="JournalHeading" type="Label" parent="Content/Header" unique_id=99711235]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+theme_override_font_sizes/font_size = 18
+text = "育種手札"
+
+[node name="CloseJournal" type="Button" parent="Content/Header" unique_id=162259557]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+tooltip_text = "回到魚缸"
+text = "關閉"
+
+[node name="JournalTabs" type="TabContainer" parent="Content" unique_id=702257146]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+current_tab = 0
+
+[node name="圖鑑" type="VBoxContainer" parent="Content/JournalTabs" unique_id=113847813]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 5
+metadata/_tab_index = 0
+
+[node name="Phenotypes" type="VBoxContainer" parent="Content/JournalTabs/圖鑑" unique_id=1440337855]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Phenotype0" type="HBoxContainer" parent="Content/JournalTabs/圖鑑/Phenotypes" unique_id=1527975550]
+custom_minimum_size = Vector2(0, 29)
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Name" type="Label" parent="Content/JournalTabs/圖鑑/Phenotypes/Phenotype0" unique_id=964287598]
+custom_minimum_size = Vector2(92, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+theme_override_font_sizes/font_size = 12
+text = "普通鬥魚"
+
+[node name="Traits" type="Label" parent="Content/JournalTabs/圖鑑/Phenotypes/Phenotype0" unique_id=2124050217]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.40392157, 0.26666668, 0.18039216, 1)
+theme_override_font_sizes/font_size = 10
+text = "短尾 · 無銀紋"
+
+[node name="Date" type="Label" parent="Content/JournalTabs/圖鑑/Phenotypes/Phenotype0" unique_id=1342312375]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.40392157, 0.26666668, 0.18039216, 1)
+theme_override_font_sizes/font_size = 10
+text = "尚未發現"
+
+[node name="Phenotype1" type="HBoxContainer" parent="Content/JournalTabs/圖鑑/Phenotypes" unique_id=1606788294]
+custom_minimum_size = Vector2(0, 29)
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Name" type="Label" parent="Content/JournalTabs/圖鑑/Phenotypes/Phenotype1" unique_id=179238986]
+custom_minimum_size = Vector2(92, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+theme_override_font_sizes/font_size = 12
+text = "長尾鬥魚"
+
+[node name="Traits" type="Label" parent="Content/JournalTabs/圖鑑/Phenotypes/Phenotype1" unique_id=1258301759]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.40392157, 0.26666668, 0.18039216, 1)
+theme_override_font_sizes/font_size = 10
+text = "長尾 · 無銀紋"
+
+[node name="Date" type="Label" parent="Content/JournalTabs/圖鑑/Phenotypes/Phenotype1" unique_id=1655187436]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.40392157, 0.26666668, 0.18039216, 1)
+theme_override_font_sizes/font_size = 10
+text = "尚未發現"
+
+[node name="Phenotype2" type="HBoxContainer" parent="Content/JournalTabs/圖鑑/Phenotypes" unique_id=721664157]
+custom_minimum_size = Vector2(0, 29)
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Name" type="Label" parent="Content/JournalTabs/圖鑑/Phenotypes/Phenotype2" unique_id=1366027444]
+custom_minimum_size = Vector2(92, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+theme_override_font_sizes/font_size = 12
+text = "銀紋鬥魚"
+
+[node name="Traits" type="Label" parent="Content/JournalTabs/圖鑑/Phenotypes/Phenotype2" unique_id=1786336150]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.40392157, 0.26666668, 0.18039216, 1)
+theme_override_font_sizes/font_size = 10
+text = "短尾 · 月牙銀紋"
+
+[node name="Date" type="Label" parent="Content/JournalTabs/圖鑑/Phenotypes/Phenotype2" unique_id=2071557839]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.40392157, 0.26666668, 0.18039216, 1)
+theme_override_font_sizes/font_size = 10
+text = "尚未發現"
+
+[node name="Phenotype3" type="HBoxContainer" parent="Content/JournalTabs/圖鑑/Phenotypes" unique_id=1958394369]
+custom_minimum_size = Vector2(0, 29)
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Name" type="Label" parent="Content/JournalTabs/圖鑑/Phenotypes/Phenotype3" unique_id=94636481]
+custom_minimum_size = Vector2(92, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+theme_override_font_sizes/font_size = 12
+text = "月影鬥魚"
+
+[node name="Traits" type="Label" parent="Content/JournalTabs/圖鑑/Phenotypes/Phenotype3" unique_id=1835468964]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.40392157, 0.26666668, 0.18039216, 1)
+theme_override_font_sizes/font_size = 10
+text = "長尾 · 月牙銀紋"
+
+[node name="Date" type="Label" parent="Content/JournalTabs/圖鑑/Phenotypes/Phenotype3" unique_id=1621323184]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.40392157, 0.26666668, 0.18039216, 1)
+theme_override_font_sizes/font_size = 10
+text = "尚未發現"
+
+[node name="Phenotype4" type="HBoxContainer" parent="Content/JournalTabs/圖鑑/Phenotypes" unique_id=1107015235]
+custom_minimum_size = Vector2(0, 29)
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Name" type="Label" parent="Content/JournalTabs/圖鑑/Phenotypes/Phenotype4" unique_id=65994715]
+custom_minimum_size = Vector2(92, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+theme_override_font_sizes/font_size = 12
+text = "紅蓮燈"
+
+[node name="Traits" type="Label" parent="Content/JournalTabs/圖鑑/Phenotypes/Phenotype4" unique_id=1902579959]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.40392157, 0.26666668, 0.18039216, 1)
+theme_override_font_sizes/font_size = 10
+text = "紅色下腹 · 藍色亮帶"
+
+[node name="Date" type="Label" parent="Content/JournalTabs/圖鑑/Phenotypes/Phenotype4" unique_id=1471523413]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.40392157, 0.26666668, 0.18039216, 1)
+theme_override_font_sizes/font_size = 10
+text = "尚未發現"
+
+[node name="Achievements" type="Label" parent="Content/JournalTabs/圖鑑" unique_id=79007727]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+theme_override_font_sizes/font_size = 11
+autowrap_mode = 3
+
+[node name="家系" type="VBoxContainer" parent="Content/JournalTabs" unique_id=2004790526]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 5
+metadata/_tab_index = 1
+
+[node name="HistoryEmpty" type="Label" parent="Content/JournalTabs/家系" unique_id=896810473]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.40392157, 0.26666668, 0.18039216, 1)
+theme_override_font_sizes/font_size = 11
+text = "第一胎孵化後，這裡會記下子代與親魚。"
+
+[node name="FamilyColumns" type="HBoxContainer" parent="Content/JournalTabs/家系" unique_id=983044162]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="History" type="ItemList" parent="Content/JournalTabs/家系/FamilyColumns" unique_id=1280373449]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(144, 125)
+layout_mode = 2
+mouse_force_pass_scroll_events = false
+
+[node name="Lineage" type="VBoxContainer" parent="Content/JournalTabs/家系/FamilyColumns" unique_id=637299636]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 5
+
+[node name="Parents" type="HBoxContainer" parent="Content/JournalTabs/家系/FamilyColumns/Lineage" unique_id=1889574508]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="FirstParentCard" type="PanelContainer" parent="Content/JournalTabs/家系/FamilyColumns/Lineage/Parents" unique_id=1333586171]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_2lkh1")
+
+[node name="FirstParent" type="Label" parent="Content/JournalTabs/家系/FamilyColumns/Lineage/Parents/FirstParentCard" unique_id=604019018]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+theme_override_font_sizes/font_size = 11
+horizontal_alignment = 1
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="SecondParentCard" type="PanelContainer" parent="Content/JournalTabs/家系/FamilyColumns/Lineage/Parents" unique_id=1797758245]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_fxuge")
+
+[node name="SecondParent" type="Label" parent="Content/JournalTabs/家系/FamilyColumns/Lineage/Parents/SecondParentCard" unique_id=451351192]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+theme_override_font_sizes/font_size = 11
+horizontal_alignment = 1
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="ParentsToChild" type="Label" parent="Content/JournalTabs/家系/FamilyColumns/Lineage" unique_id=233302997]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.40392157, 0.26666668, 0.18039216, 1)
+theme_override_font_sizes/font_size = 14
+text = "↓"
+horizontal_alignment = 1
+
+[node name="ChildNameCard" type="PanelContainer" parent="Content/JournalTabs/家系/FamilyColumns/Lineage" unique_id=808088904]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_1n5gc")
+
+[node name="ChildName" type="Label" parent="Content/JournalTabs/家系/FamilyColumns/Lineage/ChildNameCard" unique_id=28082409]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+theme_override_font_sizes/font_size = 11
+horizontal_alignment = 1
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="FamilyDate" type="Label" parent="Content/JournalTabs/家系/FamilyColumns/Lineage" unique_id=743515976]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.40392157, 0.26666668, 0.18039216, 1)
+theme_override_font_sizes/font_size = 10
+
+[node name="FamilyBadge" type="Label" parent="Content/JournalTabs/家系/FamilyColumns/Lineage" unique_id=697916330]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+theme_override_font_sizes/font_size = 10
+text = "穩定月影家系"
+
+[node name="FindChild" type="Button" parent="Content/JournalTabs/家系/FamilyColumns/Lineage" unique_id=1799444126]
+unique_name_in_owner = true
+layout_mode = 2
+text = "在缸中找到這尾魚"
+
+[node name="育種" type="VBoxContainer" parent="Content/JournalTabs" unique_id=739050324]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 5
+metadata/_tab_index = 2
+
+[node name="PairStatus" type="Label" parent="Content/JournalTabs/育種" unique_id=1565507170]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.40392157, 0.26666668, 0.18039216, 1)
+theme_override_font_sizes/font_size = 16
+text = "等待兩尾同種成魚"
+
+[node name="HatchStatus" type="Label" parent="Content/JournalTabs/育種" unique_id=276406058]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+theme_override_font_sizes/font_size = 16

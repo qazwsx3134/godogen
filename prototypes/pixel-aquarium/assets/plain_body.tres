@@ -1,0 +1,12 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://shaders/scales.gdshader" id="1_lgtp0"]
+[ext_resource type="Texture2D" path="res://assets/betta_scales.png" id="2_m16ug"]
+[ext_resource type="Texture2D" path="res://assets/silver_mask.png" id="3_qm3xp"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_lgtp0")
+shader_parameter/scales = ExtResource("2_m16ug")
+shader_parameter/silver_mask = ExtResource("3_qm3xp")
+shader_parameter/silver = false

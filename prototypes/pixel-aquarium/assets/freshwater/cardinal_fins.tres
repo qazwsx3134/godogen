@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://shaders/fins.gdshader" id="1_x5ceo"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_x5ceo")
+shader_parameter/root_color = Color(0.3019608, 0.48235294, 0.5137255, 1)
+shader_parameter/main_color = Color(0.54901963, 0.70980394, 0.7294118, 1)
+shader_parameter/edge_color = Color(0.7294118, 0.85882354, 0.827451, 1)

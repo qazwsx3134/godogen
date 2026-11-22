@@ -1,0 +1,33 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/food.gd" id="1_xven1"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_af40f"]
+shading_mode = 0
+albedo_color = Color(0.9529412, 0.7019608, 0.49803922, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_370ap"]
+radial_segments = 9
+rings = 5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qjm1k"]
+shading_mode = 0
+albedo_color = Color(0.5137255, 0.7254902, 0.69803923, 1)
+
+[sub_resource type="TorusMesh" id="TorusMesh_p8t0w"]
+inner_radius = 0.1
+outer_radius = 0.115
+rings = 12
+ring_segments = 5
+
+[node name="Food" type="Node3D" unique_id=1652135833]
+script = ExtResource("1_xven1")
+
+[node name="Pellet" type="MeshInstance3D" parent="." unique_id=1161068111]
+transform = Transform3D(0.068, 0, 0, 0, 0.068, 0, 0, 0, 0.068, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_af40f")
+mesh = SubResource("SphereMesh_370ap")
+
+[node name="Ripple" type="MeshInstance3D" parent="." unique_id=878608861]
+material_override = SubResource("StandardMaterial3D_qjm1k")
+mesh = SubResource("TorusMesh_p8t0w")

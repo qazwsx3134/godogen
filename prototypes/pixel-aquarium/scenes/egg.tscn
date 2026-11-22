@@ -1,0 +1,55 @@
+[gd_scene format=3]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6vy26"]
+albedo_color = Color(0.25882354, 0.4117647, 0.44313726, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_maxla"]
+top_radius = 0.36
+bottom_radius = 0.28
+height = 0.077
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qlus4"]
+shading_mode = 0
+albedo_color = Color(0.7882353, 0.8509804, 0.6784314, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_34461"]
+radial_segments = 9
+rings = 5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ifgqj"]
+shading_mode = 0
+albedo_color = Color(0.7882353, 0.8509804, 0.6784314, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_vh25c"]
+radial_segments = 9
+rings = 5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_akbkp"]
+shading_mode = 0
+albedo_color = Color(0.7882353, 0.8509804, 0.6784314, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_kdx64"]
+radial_segments = 9
+rings = 5
+
+[node name="EggClutch" type="Node3D" unique_id=205125139]
+
+[node name="Tray" type="MeshInstance3D" parent="." unique_id=1611711976]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.88, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_6vy26")
+mesh = SubResource("CylinderMesh_maxla")
+
+[node name="Shell0" type="MeshInstance3D" parent="." unique_id=605864811]
+transform = Transform3D(0.14, 0, 0, 0, 0.18, 0, 0, 0, 0.14, -0.16, 0.11, 0)
+material_override = SubResource("StandardMaterial3D_qlus4")
+mesh = SubResource("SphereMesh_34461")
+
+[node name="Shell1" type="MeshInstance3D" parent="." unique_id=715804775]
+transform = Transform3D(0.14, 0, 0, 0, 0.18, 0, 0, 0, 0.14, 0, 0.11, 0.028)
+material_override = SubResource("StandardMaterial3D_ifgqj")
+mesh = SubResource("SphereMesh_vh25c")
+
+[node name="Shell2" type="MeshInstance3D" parent="." unique_id=264261924]
+transform = Transform3D(0.14, 0, 0, 0, 0.18, 0, 0, 0, 0.14, 0.16, 0.11, 0.056)
+material_override = SubResource("StandardMaterial3D_akbkp")
+mesh = SubResource("SphereMesh_kdx64")

@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://shaders/fins.gdshader" id="1_rd370"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_rd370")
+shader_parameter/root_color = Color(0.18431373, 0.27450982, 0.3647059, 1)
+shader_parameter/main_color = Color(0.28235295, 0.5568628, 0.5529412, 1)
+shader_parameter/edge_color = Color(0.50980395, 0.8156863, 0.6901961, 1)

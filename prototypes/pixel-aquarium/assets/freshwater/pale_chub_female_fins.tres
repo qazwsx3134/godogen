@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://shaders/fins.gdshader" id="1_bmu31"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_bmu31")
+shader_parameter/root_color = Color(0.30980393, 0.40392157, 0.42352942, 1)
+shader_parameter/main_color = Color(0.6156863, 0.6627451, 0.6039216, 1)
+shader_parameter/edge_color = Color(0.8509804, 0.78431374, 0.6313726, 1)

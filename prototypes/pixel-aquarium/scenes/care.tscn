@@ -1,0 +1,769 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/care.gd" id="1_wwmqq"]
+[ext_resource type="PackedScene" path="res://scenes/tank.tscn" id="2_uo5er"]
+[ext_resource type="Theme" path="res://assets/care_notebook.tres" id="3_kvajl"]
+[ext_resource type="Texture2D" path="res://assets/items/stored.png" id="4_ypaoj"]
+[ext_resource type="Texture2D" path="res://assets/notebook/panel.png" id="5_lf1og"]
+[ext_resource type="Texture2D" path="res://assets/items/flake.png" id="6_nsupo"]
+[ext_resource type="Texture2D" path="res://assets/items/shop.png" id="7_w6k2c"]
+[ext_resource type="Texture2D" path="res://assets/items/journal.png" id="8_ll615"]
+[ext_resource type="Texture2D" path="res://assets/items/sound.png" id="9_crvlo"]
+[ext_resource type="Texture2D" path="res://assets/items/silver_egg.png" id="10_tya1j"]
+[ext_resource type="Texture2D" path="res://assets/items/bag.png" id="11_sukb3"]
+[ext_resource type="Texture2D" path="res://assets/items/rotate.png" id="12_3pklk"]
+[ext_resource type="Texture2D" path="res://assets/items/check.png" id="13_53cj0"]
+[ext_resource type="Texture2D" path="res://assets/items/cancel.png" id="14_ua0lo"]
+[ext_resource type="Texture2D" path="res://assets/notebook/leaf_panel.png" id="15_ybdnk"]
+[ext_resource type="PackedScene" path="res://scenes/breeding_journal.tscn" id="16_oddku"]
+[ext_resource type="Script" path="res://scripts/breeding_journal.gd" id="17_ohfyf"]
+[ext_resource type="Script" path="res://scripts/tank_audio.gd" id="18_cvac4"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q1mdl"]
+albedo_color = Color(0.2509804, 0.29411766, 0.44313726, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_a4y66"]
+size = Vector3(0.48, 0.1, 0.37)
+
+[sub_resource type="BoxMesh" id="BoxMesh_2lf7e"]
+size = Vector3(0.09, 0.49, 0.09)
+
+[sub_resource type="BoxMesh" id="BoxMesh_bkved"]
+size = Vector3(0.43, 0.18, 0.31)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0cbfg"]
+shading_mode = 0
+albedo_color = Color(0.7058824, 0.78039217, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_3igau"]
+size = Vector3(0.055, 0.105, 0.24)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_aqnjs"]
+viewport_path = NodePath("TankView")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0fhhj"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+texture = ExtResource("5_lf1og")
+texture_margin_left = 9.0
+texture_margin_top = 9.0
+texture_margin_right = 9.0
+texture_margin_bottom = 9.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h1swm"]
+content_margin_left = 10.0
+content_margin_top = 4.0
+content_margin_right = 10.0
+content_margin_bottom = 4.0
+bg_color = Color(0.40392157, 0.25490198, 0.17254902, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.75686276, 0.5176471, 0.3254902, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_color = Color(0.2627451, 0.13725491, 0.09803922, 0.4)
+shadow_size = 2
+shadow_offset = Vector2(0, 2)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_yjigb"]
+content_margin_left = 16.0
+content_margin_top = 16.0
+content_margin_right = 16.0
+content_margin_bottom = 16.0
+texture = ExtResource("15_ybdnk")
+texture_margin_left = 22.0
+texture_margin_top = 22.0
+texture_margin_right = 22.0
+texture_margin_bottom = 22.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hq4k2"]
+content_margin_left = 11.0
+content_margin_top = 11.0
+content_margin_right = 11.0
+content_margin_bottom = 11.0
+texture = ExtResource("5_lf1og")
+texture_margin_left = 9.0
+texture_margin_top = 9.0
+texture_margin_right = 9.0
+texture_margin_bottom = 9.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_t7iqa"]
+content_margin_left = 11.0
+content_margin_top = 11.0
+content_margin_right = 11.0
+content_margin_bottom = 11.0
+texture = ExtResource("5_lf1og")
+texture_margin_left = 9.0
+texture_margin_top = 9.0
+texture_margin_right = 9.0
+texture_margin_bottom = 9.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5v2at"]
+content_margin_left = 16.0
+content_margin_top = 16.0
+content_margin_right = 16.0
+content_margin_bottom = 16.0
+texture = ExtResource("15_ybdnk")
+texture_margin_left = 22.0
+texture_margin_top = 22.0
+texture_margin_right = 22.0
+texture_margin_bottom = 22.0
+
+[node name="Aquarium" type="Control" unique_id=1952644352]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("1_wwmqq")
+
+[node name="TankView" type="SubViewport" parent="." unique_id=1719965788]
+unique_name_in_owner = true
+own_world_3d = true
+size = Vector2i(640, 360)
+render_target_update_mode = 4
+
+[node name="Tank" type="Node3D" parent="TankView" unique_id=1769908176 instance=ExtResource("2_uo5er")]
+
+[node name="PlacedLamp" type="Node3D" parent="TankView" unique_id=1782649743]
+unique_name_in_owner = true
+visible = false
+
+[node name="Foot" type="MeshInstance3D" parent="TankView/PlacedLamp" unique_id=92497468]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
+material_override = SubResource("StandardMaterial3D_q1mdl")
+mesh = SubResource("BoxMesh_a4y66")
+
+[node name="Stand" type="MeshInstance3D" parent="TankView/PlacedLamp" unique_id=1605527730]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.12, 0.27, 0)
+material_override = SubResource("StandardMaterial3D_q1mdl")
+mesh = SubResource("BoxMesh_2lf7e")
+
+[node name="Hood" type="MeshInstance3D" parent="TankView/PlacedLamp" unique_id=144232153]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03, 0.55, 0)
+material_override = SubResource("StandardMaterial3D_q1mdl")
+mesh = SubResource("BoxMesh_bkved")
+
+[node name="Diffuser" type="MeshInstance3D" parent="TankView/PlacedLamp" unique_id=1782759403]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.248, 0.537, 0)
+material_override = SubResource("StandardMaterial3D_0cbfg")
+mesh = SubResource("BoxMesh_3igau")
+
+[node name="Beam" type="SpotLight3D" parent="TankView/PlacedLamp" unique_id=811970638]
+transform = Transform3D(-4.371139e-08, 0.2079117, -0.9781476, 0, 0.9781476, 0.2079117, 1, 9.088109e-09, -4.275619e-08, 0.24, 0.56, 0)
+light_color = Color(0.5803922, 0.6509804, 1, 1)
+light_energy = 1.6
+spot_range = 5.2
+spot_angle = 34.0
+
+[node name="Eggs" type="Node3D" parent="TankView" unique_id=594213413]
+
+[node name="Pellets" type="Node3D" parent="TankView" unique_id=176582037]
+
+[node name="WaterPicture" type="TextureRect" parent="." unique_id=1212319160]
+texture_filter = 1
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = SubResource("ViewportTexture_aqnjs")
+expand_mode = 1
+
+[node name="Controls" type="Control" parent="." unique_id=308724666]
+texture_filter = 1
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = ExtResource("3_kvajl")
+
+[node name="ZoomControls" type="HBoxContainer" parent="Controls" unique_id=1639416072]
+layout_mode = 0
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = -62.0
+offset_right = 128.0
+offset_bottom = -12.0
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="ZoomOut" type="Button" parent="Controls/ZoomControls" unique_id=13991811]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(44, 0)
+layout_mode = 2
+tooltip_text = "縮小魚缸"
+theme_override_font_sizes/font_size = 16
+text = "−"
+
+[node name="ZoomReset" type="Button" parent="Controls/ZoomControls" unique_id=754375999]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(44, 0)
+layout_mode = 2
+tooltip_text = "回到預設視野"
+theme_override_font_sizes/font_size = 16
+text = "100%"
+
+[node name="ZoomIn" type="Button" parent="Controls/ZoomControls" unique_id=1779094033]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(44, 0)
+layout_mode = 2
+tooltip_text = "放大魚缸"
+theme_override_font_sizes/font_size = 16
+text = "+"
+
+[node name="SelectionMarker" type="ColorRect" parent="Controls" unique_id=121170588]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_right = 13.0
+offset_bottom = 2.0
+mouse_filter = 2
+color = Color(0.98039216, 0.8901961, 0.68235296, 1)
+
+[node name="StoredFish" type="MenuButton" parent="Controls" unique_id=2022225956]
+unique_name_in_owner = true
+visible = false
+texture_filter = 1
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -68.0
+offset_top = 12.0
+offset_right = -12.0
+offset_bottom = 60.0
+tooltip_text = "收起的魚"
+theme_override_constants/icon_max_width = 26
+theme_override_font_sizes/font_size = 16
+icon = ExtResource("4_ypaoj")
+icon_alignment = 1
+
+[node name="FishPanel" type="PanelContainer" parent="Controls" unique_id=346184716]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -207.0
+offset_top = 68.0
+offset_right = -12.0
+offset_bottom = 230.0
+mouse_force_pass_scroll_events = false
+theme_override_styles/panel = SubResource("StyleBoxTexture_0fhhj")
+
+[node name="Details" type="VBoxContainer" parent="Controls/FishPanel" unique_id=894770003]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Header" type="HBoxContainer" parent="Controls/FishPanel/Details" unique_id=949784784]
+layout_mode = 2
+
+[node name="FishName" type="Label" parent="Controls/FishPanel/Details/Header" unique_id=193330532]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+theme_override_font_sizes/font_size = 17
+text = "月影鬥魚"
+
+[node name="CloseFish" type="Button" parent="Controls/FishPanel/Details/Header" unique_id=1308258342]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(23, 0)
+layout_mode = 2
+tooltip_text = "關閉魚隻資訊"
+text = "×"
+
+[node name="Status" type="Label" parent="Controls/FishPanel/Details" unique_id=614801779]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.40392157, 0.26666668, 0.18039216, 1)
+theme_override_font_sizes/font_size = 10
+text = "成魚 · 游動中"
+
+[node name="Traits" type="Label" parent="Controls/FishPanel/Details" unique_id=1303194229]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.40392157, 0.26666668, 0.18039216, 1)
+theme_override_font_sizes/font_size = 10
+text = "長尾 · 月牙銀紋"
+
+[node name="Hunger" type="Label" parent="Controls/FishPanel/Details" unique_id=1162436002]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+theme_override_font_sizes/font_size = 14
+
+[node name="Growth" type="Label" parent="Controls/FishPanel/Details" unique_id=732030644]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.40392157, 0.26666668, 0.18039216, 1)
+theme_override_font_sizes/font_size = 14
+
+[node name="FishActions" type="HBoxContainer" parent="Controls/FishPanel/Details" unique_id=784868899]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="FeedFish" type="Button" parent="Controls/FishPanel/Details/FishActions" unique_id=2080381364]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "選擇飼料落點"
+theme_override_constants/icon_max_width = 26
+theme_override_font_sizes/font_size = 14
+text = "投餌"
+icon = ExtResource("6_nsupo")
+icon_alignment = 1
+
+[node name="StoreFish" type="Button" parent="Controls/FishPanel/Details/FishActions" unique_id=1080026187]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "從目前魚缸暫時收起"
+theme_override_font_sizes/font_size = 14
+text = "收起"
+
+[node name="RenameFish" type="LineEdit" parent="Controls/FishPanel/Details" unique_id=1949130466]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+placeholder_text = "輸入名字，按 Enter"
+max_length = 18
+
+[node name="FishRecords" type="HBoxContainer" parent="Controls/FishPanel/Details" unique_id=225647758]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="ViewFamily" type="Button" parent="Controls/FishPanel/Details/FishRecords" unique_id=76083074]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "查看父母與胎次"
+theme_override_font_sizes/font_size = 14
+text = "家系"
+
+[node name="RehomeFish" type="Button" parent="Controls/FishPanel/Details/FishRecords" unique_id=2060644867]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 34)
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "確認後騰出魚位"
+theme_override_font_sizes/font_size = 14
+text = "送養…"
+
+[node name="CareBar" type="HBoxContainer" parent="Controls" unique_id=2044208581]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 12.0
+offset_bottom = 12.0
+mouse_filter = 2
+theme_override_constants/separation = 5
+
+[node name="Shop" type="MenuButton" parent="Controls/CareBar" unique_id=37593289]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+tooltip_text = "商店"
+theme_override_constants/icon_max_width = 26
+theme_override_font_sizes/font_size = 16
+action_mode = 1
+icon = ExtResource("7_w6k2c")
+flat = false
+icon_alignment = 1
+
+[node name="Journal" type="Button" parent="Controls/CareBar" unique_id=784538928]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+tooltip_text = "育種手札"
+theme_override_constants/icon_max_width = 26
+theme_override_font_sizes/font_size = 16
+icon = ExtResource("8_ll615")
+icon_alignment = 1
+
+[node name="AudioSettings" type="Button" parent="Controls/CareBar" unique_id=562443504]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+tooltip_text = "聲音設定"
+theme_override_colors/icon_normal_color = Color(0.38431373, 0.4509804, 0.40784314, 1)
+theme_override_colors/icon_focus_color = Color(0.38431373, 0.4509804, 0.40784314, 1)
+theme_override_colors/icon_pressed_color = Color(0.38431373, 0.4509804, 0.40784314, 1)
+theme_override_colors/icon_hover_color = Color(0.38431373, 0.4509804, 0.40784314, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.38431373, 0.4509804, 0.40784314, 1)
+theme_override_constants/icon_max_width = 26
+theme_override_font_sizes/font_size = 16
+icon = ExtResource("9_crvlo")
+icon_alignment = 1
+
+[node name="Returns" type="MenuButton" parent="Controls/CareBar" unique_id=200488196]
+unique_name_in_owner = true
+visible = false
+texture_filter = 1
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+tooltip_text = "回缸紀錄"
+theme_override_constants/icon_max_width = 26
+theme_override_font_sizes/font_size = 16
+action_mode = 1
+icon = ExtResource("10_tya1j")
+flat = false
+icon_alignment = 1
+
+[node name="Balance" type="Label" parent="Controls/CareBar" unique_id=1462963212]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 1
+theme_override_colors/font_color = Color(0.98039216, 0.8901961, 0.68235296, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_h1swm")
+
+[node name="TankNotice" type="Label" parent="Controls" unique_id=751544140]
+unique_name_in_owner = true
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -194.0
+offset_top = -112.0
+offset_right = 194.0
+offset_bottom = -83.0
+theme_override_colors/font_color = Color(0.98039216, 0.8901961, 0.68235296, 1)
+theme_override_colors/font_shadow_color = Color(0.08235294, 0.18431373, 0.20784314, 1)
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+
+[node name="FeedAim" type="Label" parent="Controls" unique_id=68944450]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+theme_override_colors/font_color = Color(0.98039216, 0.8901961, 0.68235296, 1)
+theme_override_font_sizes/font_size = 15
+text = "◈"
+
+[node name="BirthMarker" type="Label" parent="Controls" unique_id=1456344931]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+theme_override_colors/font_color = Color(0.98039216, 0.8901961, 0.68235296, 1)
+theme_override_font_sizes/font_size = 14
+text = "✦"
+
+[node name="HungerIcons" type="Control" parent="Controls" unique_id=1721151327]
+unique_name_in_owner = true
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="InventoryToggle" type="Button" parent="Controls" unique_id=318600647]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(58, 0)
+layout_mode = 0
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -72.0
+offset_top = -70.0
+offset_right = -12.0
+offset_bottom = -12.0
+grow_horizontal = 0
+grow_vertical = 0
+tooltip_text = "背包"
+theme_override_constants/icon_max_width = 26
+theme_override_font_sizes/font_size = 16
+toggle_mode = true
+icon = ExtResource("11_sukb3")
+icon_alignment = 1
+
+[node name="ToolButtons" type="HBoxContainer" parent="Controls" unique_id=60233257]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -184.0
+offset_top = -66.0
+offset_right = -12.0
+offset_bottom = -12.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_constants/separation = 5
+
+[node name="RotateDecor" type="Button" parent="Controls/ToolButtons" unique_id=1123736097]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(54, 0)
+layout_mode = 2
+tooltip_text = "旋轉 30 度"
+theme_override_colors/icon_normal_color = Color(0.38431373, 0.4509804, 0.40784314, 1)
+theme_override_colors/icon_focus_color = Color(0.38431373, 0.4509804, 0.40784314, 1)
+theme_override_colors/icon_pressed_color = Color(0.38431373, 0.4509804, 0.40784314, 1)
+theme_override_colors/icon_hover_color = Color(0.38431373, 0.4509804, 0.40784314, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.38431373, 0.4509804, 0.40784314, 1)
+theme_override_constants/icon_max_width = 26
+theme_override_font_sizes/font_size = 16
+icon = ExtResource("12_3pklk")
+icon_alignment = 1
+
+[node name="ApplyDecor" type="Button" parent="Controls/ToolButtons" unique_id=348748074]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(54, 0)
+layout_mode = 2
+tooltip_text = "確認擺放"
+theme_type_variation = &"NotebookPrimary"
+theme_override_colors/icon_normal_color = Color(0.38431373, 0.4509804, 0.40784314, 1)
+theme_override_colors/icon_focus_color = Color(0.38431373, 0.4509804, 0.40784314, 1)
+theme_override_colors/icon_pressed_color = Color(0.38431373, 0.4509804, 0.40784314, 1)
+theme_override_colors/icon_hover_color = Color(0.38431373, 0.4509804, 0.40784314, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.38431373, 0.4509804, 0.40784314, 1)
+theme_override_constants/icon_max_width = 26
+theme_override_font_sizes/font_size = 16
+icon = ExtResource("13_53cj0")
+icon_alignment = 1
+
+[node name="CancelTool" type="Button" parent="Controls/ToolButtons" unique_id=559787329]
+unique_name_in_owner = true
+texture_filter = 1
+custom_minimum_size = Vector2(54, 0)
+layout_mode = 2
+tooltip_text = "取消"
+theme_override_colors/icon_normal_color = Color(0.38431373, 0.4509804, 0.40784314, 1)
+theme_override_colors/icon_focus_color = Color(0.38431373, 0.4509804, 0.40784314, 1)
+theme_override_colors/icon_pressed_color = Color(0.38431373, 0.4509804, 0.40784314, 1)
+theme_override_colors/icon_hover_color = Color(0.38431373, 0.4509804, 0.40784314, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.38431373, 0.4509804, 0.40784314, 1)
+theme_override_constants/icon_max_width = 26
+theme_override_font_sizes/font_size = 16
+icon = ExtResource("14_ua0lo")
+icon_alignment = 1
+
+[node name="Inventory" type="PanelContainer" parent="Controls" unique_id=1749656654]
+visible = false
+layout_mode = 0
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -118.0
+offset_top = -137.0
+offset_right = -12.0
+offset_bottom = -77.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_force_pass_scroll_events = false
+theme_override_styles/panel = SubResource("StyleBoxTexture_yjigb")
+
+[node name="ItemSlots" type="GridContainer" parent="Controls/Inventory" unique_id=302686302]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 4
+columns = 4
+
+[node name="InventoryEmpty" type="Label" parent="Controls/Inventory/ItemSlots" unique_id=1467880591]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(76, 37)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.40392157, 0.26666668, 0.18039216, 1)
+theme_override_font_sizes/font_size = 14
+text = "背包是空的"
+horizontal_alignment = 1
+
+[node name="CareDialog" type="PanelContainer" parent="Controls" unique_id=482419276]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -142.5
+offset_top = -106.0
+offset_right = 142.5
+offset_bottom = 106.0
+mouse_force_pass_scroll_events = false
+theme_override_styles/panel = SubResource("StyleBoxTexture_hq4k2")
+
+[node name="Content" type="VBoxContainer" parent="Controls/CareDialog" unique_id=1663715336]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="DialogTitle" type="Label" parent="Controls/CareDialog/Content" unique_id=1844844847]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+theme_override_font_sizes/font_size = 17
+text = "送養魚隻"
+
+[node name="DialogText" type="Label" parent="Controls/CareDialog/Content" unique_id=1804572737]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.40392157, 0.26666668, 0.18039216, 1)
+theme_override_font_sizes/font_size = 15
+autowrap_mode = 3
+
+[node name="Confirm" type="Button" parent="Controls/CareDialog/Content" unique_id=458562684]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+text = "確認送養"
+
+[node name="CloseDialog" type="Button" parent="Controls/CareDialog/Content" unique_id=340084744]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+text = "取消"
+
+[node name="AudioPanel" type="PanelContainer" parent="Controls" unique_id=686902107]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -134.0
+offset_top = -90.0
+offset_right = 134.0
+offset_bottom = 90.0
+mouse_force_pass_scroll_events = false
+theme_override_styles/panel = SubResource("StyleBoxTexture_t7iqa")
+
+[node name="Rows" type="VBoxContainer" parent="Controls/AudioPanel" unique_id=233809227]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Controls/AudioPanel/Rows" unique_id=1970307391]
+layout_mode = 2
+
+[node name="Caption" type="Label" parent="Controls/AudioPanel/Rows/HBoxContainer" unique_id=1270794332]
+custom_minimum_size = Vector2(55, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+theme_override_font_sizes/font_size = 12
+text = "總音量"
+
+[node name="Slider" type="HSlider" parent="Controls/AudioPanel/Rows/HBoxContainer" unique_id=591408365]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.01
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Controls/AudioPanel/Rows" unique_id=810066849]
+layout_mode = 2
+
+[node name="Caption" type="Label" parent="Controls/AudioPanel/Rows/HBoxContainer2" unique_id=263954885]
+custom_minimum_size = Vector2(55, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+theme_override_font_sizes/font_size = 12
+text = "音樂"
+
+[node name="Slider" type="HSlider" parent="Controls/AudioPanel/Rows/HBoxContainer2" unique_id=1376313368]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.01
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="Controls/AudioPanel/Rows" unique_id=1597838361]
+layout_mode = 2
+
+[node name="Caption" type="Label" parent="Controls/AudioPanel/Rows/HBoxContainer3" unique_id=1462228393]
+custom_minimum_size = Vector2(55, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+theme_override_font_sizes/font_size = 12
+text = "水聲"
+
+[node name="Slider" type="HSlider" parent="Controls/AudioPanel/Rows/HBoxContainer3" unique_id=1236685591]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.01
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="Controls/AudioPanel/Rows" unique_id=507787560]
+layout_mode = 2
+
+[node name="Caption" type="Label" parent="Controls/AudioPanel/Rows/HBoxContainer4" unique_id=539873814]
+custom_minimum_size = Vector2(55, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+theme_override_font_sizes/font_size = 12
+text = "音效"
+
+[node name="Slider" type="HSlider" parent="Controls/AudioPanel/Rows/HBoxContainer4" unique_id=2050614505]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+size_flags_horizontal = 3
+max_value = 1.0
+step = 0.01
+
+[node name="CloseAudio" type="Button" parent="Controls/AudioPanel/Rows" unique_id=1263898500]
+unique_name_in_owner = true
+layout_mode = 2
+text = "完成"
+
+[node name="BreedingJournal" type="PanelContainer" parent="Controls" unique_id=342474070 instance=ExtResource("16_oddku")]
+visible = false
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -238.0
+offset_top = -154.0
+offset_right = 238.0
+offset_bottom = 154.0
+mouse_force_pass_scroll_events = false
+theme_override_styles/panel = SubResource("StyleBoxTexture_5v2at")
+script = ExtResource("17_ohfyf")
+
+[node name="TankAudio" type="Node" parent="." unique_id=1488724022]
+unique_name_in_owner = true
+script = ExtResource("18_cvac4")
+
+[node name="Harmony" type="AudioStreamPlayer" parent="TankAudio" unique_id=900288307]
+volume_db = -4.0
+bus = &"Music"
+
+[node name="Melody" type="AudioStreamPlayer" parent="TankAudio" unique_id=954147743]
+bus = &"Music"
+
+[node name="Water" type="AudioStreamPlayer" parent="TankAudio" unique_id=198289180]
+volume_db = -6.0
+bus = &"Water"
+
+[node name="Effect" type="AudioStreamPlayer" parent="TankAudio" unique_id=996994514]
+volume_db = -8.0
+bus = &"Effects"
+
+[node name="Cue" type="AudioStreamPlayer" parent="TankAudio" unique_id=1179902753]
+volume_db = -6.0
+bus = &"Effects"

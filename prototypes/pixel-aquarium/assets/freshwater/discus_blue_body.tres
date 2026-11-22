@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://shaders/freshwater_scales.gdshader" id="1_m2bht"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_m2bht")
+shader_parameter/pattern = 1
+shader_parameter/base_color = Color(0.25882354, 0.35686275, 0.6784314, 1)
+shader_parameter/stripe_color = Color(0.44705883, 0.7647059, 0.94509804, 1)
+shader_parameter/accent_color = Color(0.4117647, 0.5254902, 0.827451, 1)

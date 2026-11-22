@@ -1,0 +1,165 @@
+[gd_resource type="Theme" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/notebook/tile_highlight.png" id="1_2uw8y"]
+[ext_resource type="Texture2D" path="res://assets/notebook/tile.png" id="2_bhb5o"]
+[ext_resource type="Texture2D" path="res://assets/notebook/panel.png" id="3_gsyth"]
+[ext_resource type="FontFile" path="res://assets/NotoSansTC.ttf" id="4_wrtkj"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e78ku"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0.89411765, 0.78039217, 0.6156863, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.60784316, 0.4745098, 0.3529412, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_color = Color(0.2627451, 0.13725491, 0.09803922, 0.4)
+shadow_size = 2
+shadow_offset = Vector2(0, 2)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cylc8"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.44313726, 0.2784314, 0.16862746, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_color = Color(0.2627451, 0.13725491, 0.09803922, 0.4)
+shadow_offset = Vector2(0, 2)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_khkrs"]
+content_margin_left = 6.0
+content_margin_top = 6.0
+content_margin_right = 6.0
+content_margin_bottom = 6.0
+texture = ExtResource("1_2uw8y")
+texture_margin_left = 9.0
+texture_margin_top = 9.0
+texture_margin_right = 9.0
+texture_margin_bottom = 9.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2757b"]
+content_margin_left = 6.0
+content_margin_top = 6.0
+content_margin_right = 6.0
+content_margin_bottom = 6.0
+texture = ExtResource("2_bhb5o")
+texture_margin_left = 9.0
+texture_margin_top = 9.0
+texture_margin_right = 9.0
+texture_margin_bottom = 9.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_18sy8"]
+content_margin_left = 7.0
+content_margin_top = 7.0
+content_margin_right = 7.0
+content_margin_bottom = 7.0
+texture = ExtResource("3_gsyth")
+texture_margin_left = 9.0
+texture_margin_top = 9.0
+texture_margin_right = 9.0
+texture_margin_bottom = 9.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sdoyy"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+bg_color = Color(1, 0.94509804, 0.83137256, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 3
+border_color = Color(0.68235296, 0.4627451, 0.30588236, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_color = Color(0.2627451, 0.13725491, 0.09803922, 0.4)
+shadow_size = 2
+shadow_offset = Vector2(0, 2)
+anti_aliasing = false
+
+[resource]
+default_font = ExtResource("4_wrtkj")
+default_font_size = 11
+Button/colors/font_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+Button/colors/font_disabled_color = Color(0.40392157, 0.26666668, 0.18039216, 1)
+Button/colors/font_focus_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+Button/colors/font_hover_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+Button/colors/font_hover_pressed_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+Button/colors/font_pressed_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+Button/styles/disabled = SubResource("StyleBoxFlat_e78ku")
+Button/styles/focus = SubResource("StyleBoxFlat_cylc8")
+Button/styles/hover = SubResource("StyleBoxTexture_khkrs")
+Button/styles/hover_pressed = SubResource("StyleBoxTexture_khkrs")
+Button/styles/normal = SubResource("StyleBoxTexture_2757b")
+Button/styles/pressed = SubResource("StyleBoxTexture_khkrs")
+ItemList/colors/font_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+ItemList/colors/font_selected_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+ItemList/styles/panel = SubResource("StyleBoxTexture_2757b")
+ItemList/styles/selected = SubResource("StyleBoxTexture_khkrs")
+ItemList/styles/selected_focus = SubResource("StyleBoxTexture_khkrs")
+LineEdit/colors/caret_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+LineEdit/colors/font_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+LineEdit/colors/font_placeholder_color = Color(0.40392157, 0.26666668, 0.18039216, 1)
+LineEdit/styles/focus = SubResource("StyleBoxFlat_cylc8")
+LineEdit/styles/normal = SubResource("StyleBoxTexture_2757b")
+MenuButton/colors/font_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+MenuButton/colors/font_disabled_color = Color(0.40392157, 0.26666668, 0.18039216, 1)
+MenuButton/colors/font_focus_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+MenuButton/colors/font_hover_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+MenuButton/colors/font_hover_pressed_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+MenuButton/colors/font_pressed_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+MenuButton/styles/disabled = SubResource("StyleBoxFlat_e78ku")
+MenuButton/styles/focus = SubResource("StyleBoxFlat_cylc8")
+MenuButton/styles/hover = SubResource("StyleBoxTexture_khkrs")
+MenuButton/styles/hover_pressed = SubResource("StyleBoxTexture_khkrs")
+MenuButton/styles/normal = SubResource("StyleBoxTexture_2757b")
+MenuButton/styles/pressed = SubResource("StyleBoxTexture_khkrs")
+NotebookPrimary/base_type = &"Button"
+NotebookPrimary/colors/font_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+NotebookPrimary/colors/font_disabled_color = Color(0.40392157, 0.26666668, 0.18039216, 1)
+NotebookPrimary/colors/font_focus_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+NotebookPrimary/colors/font_hover_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+NotebookPrimary/colors/font_hover_pressed_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+NotebookPrimary/colors/font_pressed_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+NotebookPrimary/styles/disabled = SubResource("StyleBoxFlat_e78ku")
+NotebookPrimary/styles/focus = SubResource("StyleBoxFlat_cylc8")
+NotebookPrimary/styles/hover = SubResource("StyleBoxTexture_khkrs")
+NotebookPrimary/styles/hover_pressed = SubResource("StyleBoxTexture_khkrs")
+NotebookPrimary/styles/normal = SubResource("StyleBoxTexture_khkrs")
+NotebookPrimary/styles/pressed = SubResource("StyleBoxTexture_khkrs")
+PopupMenu/colors/font_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+PopupMenu/colors/font_disabled_color = Color(0.52156866, 0.41960785, 0.32156864, 1)
+PopupMenu/colors/font_hover_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+PopupMenu/colors/font_separator_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+PopupMenu/constants/icon_max_width = 24
+PopupMenu/constants/v_separation = 20
+PopupMenu/font_sizes/font_size = 17
+PopupMenu/styles/hover = SubResource("StyleBoxTexture_khkrs")
+PopupMenu/styles/panel = SubResource("StyleBoxTexture_18sy8")
+TabContainer/colors/font_hovered_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+TabContainer/colors/font_selected_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+TabContainer/colors/font_unselected_color = Color(0.28235295, 0.16862746, 0.1254902, 1)
+TabContainer/styles/panel = SubResource("StyleBoxFlat_sdoyy")
+TabContainer/styles/tab_hovered = SubResource("StyleBoxTexture_khkrs")
+TabContainer/styles/tab_selected = SubResource("StyleBoxTexture_khkrs")
+TabContainer/styles/tab_unselected = SubResource("StyleBoxTexture_2757b")
