@@ -1,0 +1,10 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/buildings/street_lamp_steel.res" id="1_sap4g"]
+
+[node name="StreetLamp" type="Node3D" unique_id=1193783744]
+
+[node name="Steel" type="MeshInstance3D" parent="." unique_id=864007530]
+cast_shadow = 0
+visibility_range_end = 110.0
+mesh = ExtResource("1_sap4g")

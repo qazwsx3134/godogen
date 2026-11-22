@@ -54,9 +54,23 @@ func _test_sprint_keeps_the_trot() -> void:
 	Input.action_press("move_forward")
 	Input.action_press("sprint")
 	var top := 0.0
+	var leg: Variant = gait.legs[0]
+	var lifted_frames := 0
+	var completed := 0
+	var prior_plant: Vector3 = leg.plant
 	for i: int in 180:
 		await _frames(1)
 		top=maxf(top, Vector2(walker.velocity.x, walker.velocity.z).length())
+		if leg.t >= 0.0:
+			lifted_frames += 1
+		elif lifted_frames > 0:
+			if i > 90:
+				completed += 1
+				_expect(lifted_frames >= 6, "steady sprint shows at least six airborne poses per step")
+				_expect(prior_plant.distance_to(leg.plant) >= 2.6, "steady sprint lands over 2.6 m ahead")
+			lifted_frames = 0
+			prior_plant = leg.plant
+	_expect(completed >= 3, "the cadence check sampled several complete steps")
 	Input.action_release("move_forward")
 	Input.action_release("sprint")
 	await _frames(90)

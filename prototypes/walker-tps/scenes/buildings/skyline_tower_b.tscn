@@ -1,0 +1,14 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/buildings/skyline_tower_b_concrete.res" id="1_0q451"]
+[ext_resource type="ArrayMesh" path="res://assets/buildings/skyline_tower_b_fill.res" id="2_fx6q0"]
+
+[node name="SkylineTowerB" type="StaticBody3D" unique_id=161636281]
+
+[node name="Concrete" type="MeshInstance3D" parent="." unique_id=1779803527]
+cast_shadow = 0
+mesh = ExtResource("1_0q451")
+
+[node name="Fill" type="MeshInstance3D" parent="." unique_id=2011683294]
+cast_shadow = 0
+mesh = ExtResource("2_fx6q0")

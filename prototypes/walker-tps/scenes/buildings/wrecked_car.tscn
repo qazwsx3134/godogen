@@ -1,0 +1,26 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/buildings/wrecked_car_rust.res" id="1_0nqge"]
+[ext_resource type="ArrayMesh" path="res://assets/buildings/wrecked_car_steel.res" id="2_5kk5y"]
+[ext_resource type="ArrayMesh" path="res://assets/buildings/wrecked_car_fill.res" id="3_1ccjk"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_luaj2"]
+size = Vector3(4.3, 1.6, 1.8)
+
+[node name="WreckedCar" type="StaticBody3D" unique_id=318207366]
+
+[node name="Collision" type="CollisionShape3D" parent="." unique_id=276395196]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("BoxShape3D_luaj2")
+
+[node name="Rust" type="MeshInstance3D" parent="." unique_id=1405865538]
+visibility_range_end = 110.0
+mesh = ExtResource("1_0nqge")
+
+[node name="Steel" type="MeshInstance3D" parent="." unique_id=694581778]
+visibility_range_end = 110.0
+mesh = ExtResource("2_5kk5y")
+
+[node name="Fill" type="MeshInstance3D" parent="." unique_id=298517926]
+visibility_range_end = 110.0
+mesh = ExtResource("3_1ccjk")

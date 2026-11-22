@@ -1,0 +1,76 @@
+[gd_scene format=3]
+
+[ext_resource type="Shader" path="res://addons/proto_kit/polish3d/sky.gdshader" id="polish_sky"]
+[ext_resource type="Texture2D" path="res://assets/env/cloud_noise.tres" id="polish_cloud"]
+[ext_resource type="Script" path="res://scripts/boss_battle_session.gd" id="1_gjgox"]
+[ext_resource type="PackedScene" path="res://scenes/walker.tscn" id="2_js8sm"]
+[ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="3_o7peq"]
+[ext_resource type="PackedScene" path="res://scenes/map_shattered_plaza.tscn" id="4_1oq8r"]
+[ext_resource type="PackedScene" path="res://scenes/combat_hud.tscn" id="5_c7bcu"]
+[ext_resource type="AudioStream" path="res://assets/sound/runtime/ai_boot.ogg" id="6_newum"]
+[ext_resource type="PackedScene" path="res://scenes/boss.tscn" id="7_b8no8"]
+
+[sub_resource type="ShaderMaterial" id="ProceduralSkyMaterial_lwkd3"]
+shader = ExtResource("polish_sky")
+shader_parameter/top_color = Color(0.24, 0.38, 0.56, 1)
+shader_parameter/horizon_color = Color(0.64, 0.62, 0.58, 1)
+shader_parameter/ground_color = Color(0.3, 0.28, 0.25, 1)
+shader_parameter/cloud_noise = ExtResource("polish_cloud")
+
+[sub_resource type="Sky" id="Sky_htbo0"]
+sky_material = SubResource("ProceduralSkyMaterial_lwkd3")
+
+[sub_resource type="Environment" id="Environment_b7xny"]
+background_mode = 2
+sky = SubResource("Sky_htbo0")
+ambient_light_source = 3
+ambient_light_color = Color(0.65, 0.7, 0.66, 1)
+ambient_light_energy = 1.0
+tonemap_mode = 4
+tonemap_exposure = 1.12
+tonemap_agx_contrast = 1.32
+fog_enabled = true
+fog_light_color = Color(0.5411765, 0.38431373, 0.3372549, 1)
+fog_density = 0.0048
+fog_height = 1.5
+fog_height_density = 0.02
+
+[node name="ShatteredPlaza" type="Node3D" unique_id=940642904]
+
+[node name="Battlefield" type="Node3D" parent="." unique_id=1826002220 groups=["battle_session"]]
+script = ExtResource("1_gjgox")
+playable_half_extents = Vector2(106, 127)
+sortie_title = "SHATTERED PLAZA"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Battlefield" unique_id=403206041]
+environment = SubResource("Environment_b7xny")
+
+[node name="Sun" type="DirectionalLight3D" parent="Battlefield" unique_id=172254778]
+transform = Transform3D(0.81915206, -0.43938506, 0.36868784, 0, 0.64278764, 0.76604444, -0.57357645, -0.62750685, 0.5265408, 0, 0, 0)
+light_color = Color(1, 0.7529412, 0.54901963, 1)
+shadow_enabled = true
+directional_shadow_max_distance = 85.0
+
+[node name="Walker" parent="Battlefield" unique_id=1321293412 instance=ExtResource("2_js8sm")]
+transform = Transform3D(1.9, 0, 0, 0, 1.9, 0, 0, 0, 1.9, 0, 0.15, -99)
+
+[node name="HUD" parent="Battlefield" unique_id=291533515 instance=ExtResource("3_o7peq")]
+
+[node name="Map" parent="Battlefield" unique_id=1659489319 instance=ExtResource("4_1oq8r")]
+
+[node name="Navigation" type="NavigationRegion3D" parent="Battlefield" unique_id=449213416]
+
+[node name="Projectiles" type="Node3D" parent="Battlefield" unique_id=513516319]
+
+[node name="CombatHUD" parent="Battlefield" unique_id=1977136906 instance=ExtResource("5_c7bcu")]
+
+[node name="Enemies" type="Node3D" parent="Battlefield" unique_id=1053082943]
+
+[node name="Radio" type="AudioStreamPlayer" parent="Battlefield" unique_id=773326139]
+stream = ExtResource("6_newum")
+bus = &"Voice"
+
+[node name="Boss" parent="." unique_id=678752962 instance=ExtResource("7_b8no8")]
+transform = Transform3D(-5.45, 0, -4.7645412e-07, 0, 5.45, 0, 4.7645412e-07, 0, -5.45, 0, 1, 64)
+collision_mask = 18
+floor_snap_length = 2.0

@@ -170,11 +170,43 @@ func _test_attacks() -> void:
 	_expect(combat.health < combat.max_health, "fibre stab hits a player standing still")
 	combat.health = combat.max_health
 	boss._attack_timer = 1000.0
-	_expect(boss.try_attack("slam"), "fibre slam starts")
+	walker.global_position = boss.to_global(Vector3(6, 0.1, 55))
+	walker.velocity = Vector3.ZERO
+	await _frames(2)
+	_expect(boss.try_attack("slam"), "wing slam starts")
+	var attacking_wing: Node3D = boss._slam_wing
+	var resting_basis := attacking_wing.basis
 	await _frames(20)
 	_expect(boss.get_node("Wings/Strands/SlamRing").visible, "slam marks its ring on the ground")
+	await _frames(30)
+	var raised_basis := attacking_wing.basis
+	await _frames(35)
+	var charged_basis := attacking_wing.basis
+	_expect(boss.state == boss.State.SLAM_CHARGE and not charged_basis.is_equal_approx(raised_basis)
+		and float(boss._slam_material.get_shader_parameter("charge")) > 0.8,
+		"the raised wing pulls back and gathers energy before the swing")
+	await _frames(9)
+	_expect(boss.state == boss.State.SLAM_CHARGE and attacking_wing.basis.is_equal_approx(charged_basis)
+		and combat.health == combat.max_health, "the loaded wing holds briefly before striking")
+	var slam_waited := 0
+	while not boss._slam_hit and slam_waited < 160:
+		await _frames(1)
+		slam_waited += 1
+	var local_tip: Vector3 = boss.WING_TIPS[0 if boss._slam_side > 0 else 1]
+	_expect((attacking_wing.basis * local_tip).length() > (resting_basis * local_tip).length() * 1.4,
+		"the actual wing extends to reach a distant target")
+	_expect(attacking_wing.to_global(local_tip).distance_to(boss._slam_target) < 1.0,
+		"the extended feather lands in the marked ground area")
+	_expect(combat.health < combat.max_health, "wing slam hits a player inside the ring")
+	_expect(combat.rig._kick > 0.25 and combat.rig._trauma > 0.6, "wing slam jolts the nearby camera")
+	_expect(projectiles.get_children().any(func(node: Node) -> bool:
+		var radius: Variant = node.get("ground_wave_radius")
+		return radius is float and is_equal_approx(radius, boss.slam_radius * boss._k)
+	), "the ground wave covers the marked area")
+	await _frames(8)
+	_expect(attacking_wing.to_global(local_tip).distance_to(boss._slam_target) < 1.0, "the wing holds against the ground after impact")
 	while boss.state != boss.State.CHASE: await _frames(1)
-	_expect(combat.health < combat.max_health, "fibre slam hits a player inside the ring")
+	_expect(attacking_wing.basis.is_equal_approx(resting_basis), "the wing returns to its authored pose")
 	_stop_audio(arena)
 	arena.queue_free()
 	await _frames(12)

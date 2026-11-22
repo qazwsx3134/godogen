@@ -23,9 +23,10 @@ signal landed(impact: float)
 ## Swing time at walking pace and at `run_speed`; in between it is interpolated by speed.
 @export var step_time: float = 0.28
 @export var step_time_run: float = 0.10
+@export_range(0.5, 3.0) var cadence_multiplier := 1.0
 @export var run_speed: float = 12.0
 @export var step_height: float = 0.4
-## Feet land ahead of their home by velocity * step time * lead, so they do not trail behind a moving body.
+## Forward reach of the landing point relative to the predicted movement of the hull.
 @export var lead: float = 0.5
 ## How far (m) the hull rises while a pair is in the air.
 @export var bob: float = 0.06
@@ -64,6 +65,7 @@ class Leg:
 	var air_local: Vector3   # contact point (model space) while airborne
 	var plant: Vector3     # world ground contact while planted
 	var swing_from: Vector3
+	var swing_time := 0.2
 	var t := -1.0          # swing progress 0..1, -1 = planted
 	var target: Vector3    # where the current swing lands (world)
 	var normal := Vector3.UP  # ground normal at plant
@@ -119,7 +121,8 @@ func contact(leg: Leg) -> Vector3:
 	if leg.t < 0.0:
 		return leg.plant
 	var s := smoothstep(0.0, 1.0, leg.t)
-	return leg.swing_from.lerp(leg.target, s) + Vector3.UP * step_height * sin(PI * leg.t)
+	var rise := sin(PI * leg.t)
+	return leg.swing_from.lerp(leg.target, s) + Vector3.UP * step_height * rise * rise
 
 ## Where the sole of the leg's foot actually is (world), for tests and effects.
 func sole(leg: Leg) -> Vector3:
@@ -128,7 +131,7 @@ func sole(leg: Leg) -> Vector3:
 ## Swing time at the current speed.
 func current_step_time() -> float:
 	var speed := Vector2(_body.velocity.x, _body.velocity.z).length()
-	return lerpf(step_time, step_time_run, clampf(speed / run_speed, 0.0, 1.0))
+	return lerpf(step_time, step_time_run, clampf(speed / run_speed, 0.0, 1.0)) / cadence_multiplier
 
 func _physics_process(delta: float) -> void:
 	if _body == null:
@@ -147,7 +150,7 @@ func _physics_process(delta: float) -> void:
 	var lifted := 0.0
 	if skid and not airborne:
 		if not _was_skidding:
-			_take_off()  # legs leave their footholds and brace
+			_take_off(false)  # legs leave their footholds and brace; still on the ground, so no landing later
 		_air_pose(delta, true)
 	elif airborne:
 		_air_pose(delta)
@@ -181,13 +184,13 @@ func _walk(delta: float, vel: Vector3) -> float:
 		if leg.t >= 0.0:
 			swinging[leg.group] = true
 	if not swinging[0] and not swinging[1]:
-		var limit := step_distance if moving else settle_distance
+		var limit := step_distance / cadence_multiplier if moving else settle_distance
 		var worst := [0.0, 0.0]
 		for i: int in legs.size():
 			worst[legs[i].group] = maxf(worst[legs[i].group], _flat(homes[i] - legs[i].plant))
 		var g: int = 0 if worst[0] >= worst[1] else 1
 		if worst[g] > limit:
-			_lift(g)
+			_lift(g, st, vel)
 
 	# Safety: a planted foot about to be stretched past what the leg can reach lifts now, even out of turn
 	# (hard starts and sharp turns); otherwise IK clamps and the foot visibly slides. The whole diagonal pair
@@ -196,15 +199,14 @@ func _walk(delta: float, vel: Vector3) -> float:
 	for leg: Leg in legs:
 		if leg.t < 0.0 and (to_hull * (leg.plant + _model.global_basis.y * SOLE) - leg.hip).length() > leg.reach.y * 0.97:
 			safety_lifts += 1
-			_lift(leg.group)
+			_lift(leg.group, st, vel)
 
 	var lifted := 0.0
 	for i: int in legs.size():
 		var leg := legs[i]
 		if leg.t < 0.0:
 			continue
-		leg.target = homes[i]
-		leg.t += delta / st
+		leg.t += delta / leg.swing_time
 		lifted = maxf(lifted, sin(PI * minf(leg.t, 1.0)))
 		if leg.t >= 1.0:
 			leg.t = -1.0
@@ -212,14 +214,17 @@ func _walk(delta: float, vel: Vector3) -> float:
 			stepped.emit(leg.plant)
 	return lifted
 
-func _lift(group: int) -> void:
+func _lift(group: int, duration: float, velocity: Vector3) -> void:
+	var advance := velocity * duration * (0.7 + lead)
 	for leg: Leg in legs:
 		if leg.group == group and leg.t < 0.0:
 			leg.t = 0.0
+			leg.swing_time = duration
 			leg.swing_from = leg.plant
+			leg.target = _ground(_model.global_transform * leg.home_local + advance)
 
-func _take_off() -> void:
-	airborne = true
+func _take_off(flying := true) -> void:
+	airborne = flying
 	var to_model := _model.global_transform.affine_inverse()
 	for leg: Leg in legs:
 		leg.air_local = to_model * contact(leg)

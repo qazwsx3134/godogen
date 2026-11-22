@@ -1,4 +1,6 @@
 extends "res://addons/proto_kit/test_kit.gd"
+const AudioMix := preload("res://addons/audio_tuner/mix.gd")
+
 func _init() -> void: _run.call_deferred()
 func _run() -> void:
 	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/sound/manifest.json"))
@@ -30,6 +32,31 @@ func _run() -> void:
 	for i in 60: scout._play_walk(Vector3(2.5, 0, 0))
 	_expect(scout.get_node("StepSound").playing and scout.get_node("StepSound").pitch_scale > 1.2, "a walking scout crunches, pitched up")
 	_expect(walker.get_node("Combat").get_node("ShotSound").max_polyphony >= 4 and walker.get_node("Combat").SHOT_SOUNDS[0].resource_path.ends_with("cannon_shot.ogg"), "the walker cannon uses the supplied gun shot")
+	var shot_sound: AudioStreamPlayer3D = walker.get_node("Combat/ShotSound")
+	shot_sound.stream = walker.get_node("Combat").SHOT_SOUNDS[0]
+	var saved := AudioMix._clips
+	AudioMix._clips = {shot_sound.stream.resource_path: {"pitch": 1.2, "gain_db": -6.0}}
+	AudioMix.play(shot_sound, 0.75, 3.0)
+	_expect(is_equal_approx(shot_sound.pitch_scale, 0.9) and is_equal_approx(shot_sound.volume_db, -3.0),
+		"clip tuning combines with authored gameplay pitch and gain")
+	AudioMix.play(shot_sound, 0.75, 3.0)
+	_expect(is_equal_approx(shot_sound.pitch_scale, 0.9) and is_equal_approx(shot_sound.volume_db, -3.0),
+		"repeated shots do not accumulate clip tuning")
+	AudioMix._clips = saved
+	# Repeated shots and steps vary a little in pitch and volume around the centre value.
+	var pitches := {}
+	var gains := {}
+	var tuned := AudioMix._clips
+	AudioMix._clips = {}  # no per-clip mix offsets: check the spread alone
+	for i in 12:
+		AudioMix.play_varied(shot_sound, 1.0, 0.0, 0.05, 1.5)
+		pitches[snappedf(shot_sound.pitch_scale, 0.001)] = true
+		gains[snappedf(shot_sound.volume_db, 0.01)] = true
+		_expect(absf(shot_sound.pitch_scale - 1.0) <= 0.051 and absf(shot_sound.volume_db) <= 1.51, "variation stays small")
+	AudioMix._clips = tuned
+	_expect(pitches.size() > 6 and gains.size() > 6, "each play gets its own random pitch and volume")
+	shot_sound.stop()
+	shot_sound.stop()
 	var round := load("res://scenes/combat_projectile.tscn").instantiate() as Node
 	_expect(round.get_node("Whiz").stream.resource_path.ends_with("bullet_whiz.ogg") and not round.get_node("Whiz").autoplay, "near misses whiz with the supplied clip")
 	round.free()

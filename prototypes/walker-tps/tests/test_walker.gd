@@ -191,6 +191,11 @@ func _test_jump() -> void:
 					apex_sole = minf(apex_sole, gait.sole(leg).y)
 		elif was_air and walker.is_on_floor():
 			break
+	# A dash lands above grip speed: wait out the skid (friction) before checking the feet.
+	for _i: int in 150:
+		if not walker.skidding and Vector2(walker.velocity.x, walker.velocity.z).length() < walker.grip_speed: break
+		await _frames(1)
+	_expect(not walker.skidding, "the landing skid ends")
 	# Landing starts a recovery step at this scale. Give the actual trot a bounded
 	# window to settle before checking that all soles are planted.
 	for _i: int in 120:

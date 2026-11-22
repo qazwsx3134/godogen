@@ -8,12 +8,14 @@ extends Node3D
 ## is kept, so a walker that was
 ## moving sideways swings around the anchor, and strafe input (steer) pushes the swing: a drift. The hull
 ## turns to face the anchor while it slides. The drag lets go release_distance short of the anchor (or after
-## max_drag_time / max_swing_deg) and coasts on its momentum (overshoot_distance past the anchor, or along
-## the swing), then brakes (brake_deceleration). G during a drag brakes early; G otherwise launches.
-## Losing the anchor or the rope mid-drag also brakes; only a round end, death or leaving the map stop dead.
+## max_drag_time / max_swing_deg) and keeps all its momentum: the rope only ever pulled, so letting go
+## adds no force. The walker then slides on its feet (walker_player.gd: skid friction) until the legs can
+## grip again. G during a drag cuts the rope early; G otherwise launches. Losing the anchor or the rope
+## mid-drag also just lets go; only a round end, death or leaving the map stop dead (cancel_hook).
 ## Combat calls step() before the walker's move_and_slide.
+const AudioMix := preload("res://addons/audio_tuner/mix.gd")
 
-enum Hook { READY, FLYING, PULLING, COASTING, BRAKING, COOLDOWN }
+enum Hook { READY, FLYING, PULLING, COOLDOWN }
 
 @export var hook_range: float = 45.0
 @export var hook_speed: float = 80.0
@@ -21,8 +23,6 @@ enum Hook { READY, FLYING, PULLING, COASTING, BRAKING, COOLDOWN }
 @export var hook_cooldown: float = 3.0
 @export var pull_acceleration: float = 45.0
 @export var release_distance: float = 4.0
-@export var overshoot_distance: float = 2.0
-@export var brake_deceleration: float = 24.0
 @export_group("Swing")
 ## Strafe input accelerates the swing sideways (m/s^2).
 @export var steer_acceleration: float = 16.0
@@ -40,9 +40,6 @@ var cooldown_left := 0.0
 var pins: Array[Dictionary] = []
 var elapsed := 0.0
 var _dash_active := false
-var _coast_anchor := Vector3.ZERO
-var _coast_direction := Vector3.ZERO
-var _coast_left := 0.0
 ## Current rope length during a drag (m); the walker is kept within it.
 var rope_length := 0.0
 ## Degrees the walker has gone round the anchor during this drag.
@@ -58,13 +55,13 @@ var _last_bearing := Vector3.ZERO
 @onready var _pin: Array[Node3D] = [$Pin0, $Pin1]
 @onready var _sound: AudioStreamPlayer3D = $HookSound
 
-## Lower-case name of the state ("pulling", "coasting" ...), for HUD text and tests.
+## Lower-case name of the state ("pulling", "cooldown" ...), for HUD text and tests.
 func state_name() -> String:
 	return String(Hook.keys()[state]).to_lower()
 
-## Pins out, dragging, or still moving on the drag's momentum.
+## Pins out or dragging.
 func is_active() -> bool:
-	return state in [Hook.FLYING, Hook.PULLING, Hook.COASTING, Hook.BRAKING]
+	return state in [Hook.FLYING, Hook.PULLING]
 
 func has_dash_momentum() -> bool:
 	return _dash_active
@@ -73,22 +70,18 @@ func has_dash_momentum() -> bool:
 func is_dragging() -> bool:
 	return _dash_active and state==Hook.PULLING
 
-## Ends a grapple but keeps a drag's momentum: brakes instead of stopping dead.
+## Lets go of the rope. The velocity is left exactly as it is: momentum carries on.
 func release(reason: String) -> void:
-	if _dash_active:
-		begin_braking()
-		message=reason
-	else:
-		cancel_hook(reason)
+	_dash_active=false
+	cancel_hook(reason)
 
 ## Once per physics frame from Combat. `pressed`: G / LB / HOOK this frame, which launches at
-## `aim_point`, or brakes / cancels a grapple in progress.
+## `aim_point`, or cuts / cancels a grapple in progress.
 func step(delta: float, pressed: bool, aim_point: Vector3) -> void:
 	cooldown_left=maxf(0,cooldown_left-delta)
 	if pressed:
 		if is_active():
-			if _dash_active: begin_braking()
-			else: cancel_hook("CANCELLED")
+			release("ROPE CUT" if _dash_active else "CANCELLED")
 		else:
 			launch_hooks(aim_point)
 	_update(delta)
@@ -114,10 +107,10 @@ func launch_hooks(target: Vector3) -> bool:
 	state=Hook.FLYING
 	message="LAUNCHING"
 	_sound.stream = preload("res://assets/sound/runtime/mech_servo.ogg")
-	_sound.pitch_scale = 1.15
-	_sound.play()
+	AudioMix.play(_sound, 1.15)
 	return true
 
+## Hard stop (round end, death, leaving the map): also kills a drag's speed. Use release() otherwise.
 func cancel_hook(reason: String = "READY") -> void:
 	if _dash_active: body.velocity=Vector3.ZERO
 	_dash_active=false
@@ -132,37 +125,7 @@ func clear_cables() -> void:
 		_cable[side].visible=false
 		_pin[side].visible=false
 
-func begin_coasting(anchor: Vector3) -> void:
-	clear_cables()
-	_coast_anchor=anchor
-	var flat := Vector3(body.velocity.x,0,body.velocity.z)
-	_coast_direction=flat.normalized()
-	var remaining := maxf(0,(anchor-body.global_position).dot(_coast_direction))
-	_coast_left=clampf((remaining+overshoot_distance)/maxf(flat.length(),1.0)+0.25,0.2,1.25)
-	state=Hook.COASTING
-	message="INERTIA / G TO BRAKE"
-
-func begin_braking() -> void:
-	clear_cables()
-	state=Hook.BRAKING
-	message="BRAKING"
-
-func _update_inertia(delta: float) -> void:
-	if state==Hook.COASTING:
-		_coast_left-=delta
-		var beyond := (body.global_position-_coast_anchor).dot(_coast_direction)
-		if beyond>=overshoot_distance or _coast_left<=0 or body.is_on_wall():
-			begin_braking()
-	if state==Hook.BRAKING:
-		var flat := Vector3(body.velocity.x,0,body.velocity.z).move_toward(Vector3.ZERO,brake_deceleration*delta)
-		body.velocity.x=flat.x
-		body.velocity.z=flat.z
-		if flat.length()<0.15: cancel_hook("BRAKED")
-
 func _update(delta: float) -> void:
-	if state in [Hook.COASTING, Hook.BRAKING]:
-		_update_inertia(delta)
-		return
 	if state not in [Hook.FLYING, Hook.PULLING]:
 		if cooldown_left<=0:
 			state=Hook.READY
@@ -199,8 +162,7 @@ func _update(delta: float) -> void:
 		state=Hook.PULLING
 		if was_flying:
 			_sound.stream = preload("res://assets/sound/runtime/mech_contact.ogg")
-			_sound.pitch_scale = 0.8
-			_sound.play()
+			AudioMix.play(_sound, 0.8)
 		var pull_target: Node3D = pins[anchors[0]].target
 		var light: bool = anchors.size()==2 and pins[anchors[1]].target==pull_target and pull_target.has_method("grapple_pull") and float(pull_target.mass)<combat.mass
 		var destination := Vector3.ZERO
@@ -211,8 +173,7 @@ func _update(delta: float) -> void:
 			release("RELEASED")
 			return
 		if to.length()<(3.2 if light else release_distance):
-			if _dash_active: begin_coasting(destination)
-			else: cancel_hook("RELEASED")
+			release("RELEASED")
 			return
 		for side: int in anchors:
 			var obstruction: Dictionary = combat.ray(_launch[side].global_position,pins[side].position)

@@ -1,0 +1,16 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/buildings/signboard_steel.res" id="1_p1ttb"]
+[ext_resource type="ArrayMesh" path="res://assets/buildings/signboard_sign.res" id="2_poott"]
+
+[node name="Signboard" type="Node3D" unique_id=1068615863]
+
+[node name="Steel" type="MeshInstance3D" parent="." unique_id=454604335]
+cast_shadow = 0
+visibility_range_end = 110.0
+mesh = ExtResource("1_p1ttb")
+
+[node name="Sign" type="MeshInstance3D" parent="." unique_id=1318981904]
+cast_shadow = 0
+visibility_range_end = 110.0
+mesh = ExtResource("2_poott")

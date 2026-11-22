@@ -11,8 +11,13 @@ uniform vec4 edge : source_color = vec4(1.0, 0.5, 0.12, 1.0);
 void vertex() {
 	vec3 axis = (MODELVIEW_MATRIX * vec4(0.0, 0.0, 1.0, 0.0)).xyz;
 	vec3 center = (MODELVIEW_MATRIX * vec4(0.0, 0.0, 0.0, 1.0)).xyz;
-	vec3 side = normalize(cross(normalize(axis), center));
-	vec3 p = center + axis * VERTEX.y + side * VERTEX.x * width;
+	vec3 forward = normalize(axis);
+	vec3 side = cross(forward, center);
+	if (dot(side, side) < 0.0001) {
+		vec3 up = abs(forward.y) < 0.95 ? vec3(0.0, 1.0, 0.0) : vec3(1.0, 0.0, 0.0);
+		side = cross(forward, up);
+	}
+	vec3 p = center + axis * VERTEX.y + normalize(side) * VERTEX.x * width * length(MODEL_MATRIX[0].xyz);
 	POSITION = PROJECTION_MATRIX * vec4(p, 1.0);
 }
 

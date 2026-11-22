@@ -12,6 +12,7 @@ uniform vec4 core_color : source_color = vec4(0.7, 1.0, 1.0, 1.0);
 uniform float opacity = 1.0;
 uniform float sway = 0.6;
 uniform float flow_speed = 1.6;
+uniform float charge : hint_range(0.0, 1.0) = 0.0;
 
 varying float seed;
 
@@ -24,7 +25,11 @@ void vertex() {
 
 void fragment() {
 	vec4 t = texture(fiber_tex, UV);
-	float pulse = 0.5 + 0.5 * sin((UV.y - TIME * flow_speed) * 18.0 + seed * 9.0);
-	ALBEDO = mix(color.rgb, core_color.rgb, clamp(t.r * 0.45 + pulse * 0.3, 0.0, 1.0));
-	ALPHA = t.a * opacity * (0.75 + 0.25 * pulse) * smoothstep(0.0, 0.06, UV.y);
+	float pulse = 0.5 + 0.5 * sin(UV.y * 18.0 - TIME * flow_speed * 18.0 + seed * 9.0);
+	float gather = 0.5 + 0.5 * sin(UV.y * 19.0 + TIME * flow_speed * 27.0);
+	vec3 base = mix(color.rgb, vec3(1.0, 0.34, 0.08), charge);
+	vec3 core = mix(core_color.rgb, vec3(1.0, 0.89, 0.56), charge);
+	float wave = mix(pulse, gather, charge);
+	ALBEDO = mix(base, core, clamp(t.r * 0.45 + wave * 0.3, 0.0, 1.0));
+	ALPHA = t.a * opacity * (0.75 + 0.25 * wave) * smoothstep(0.0, 0.06, UV.y);
 }

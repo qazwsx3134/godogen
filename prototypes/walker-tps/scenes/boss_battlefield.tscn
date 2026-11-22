@@ -1,8 +1,8 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://dq1f3b7ljekv0"]
 
-[ext_resource type="Script" path="res://scripts/boss_battlefield.gd" id="1_2g7ry"]
+[ext_resource type="Script" uid="uid://4hu1amf6msfe" path="res://scripts/boss_battlefield.gd" id="1_2g7ry"]
 [ext_resource type="PackedScene" path="res://scenes/battlefield.tscn" id="2_crhxc"]
-[ext_resource type="Script" path="res://scripts/boss_battle_session.gd" id="3_ufgpq"]
+[ext_resource type="Script" uid="uid://ovt553llblpd" path="res://scripts/boss_battle_session.gd" id="3_ufgpq"]
 [ext_resource type="PackedScene" path="res://scenes/boss.tscn" id="4_i1dx1"]
 [ext_resource type="PackedScene" path="res://scenes/melee_display.tscn" id="5_tiyuq"]
 [ext_resource type="PackedScene" path="res://scenes/tank_display.tscn" id="6_ixlw6"]

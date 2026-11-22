@@ -11,6 +11,6 @@ void fragment() {
 	for (int i = 1; i <= 4; i++) {
 		sum += texture(screen_texture, clamp(SCREEN_UV - ray * strength * float(i) * 0.25, vec2(0.0), vec2(1.0)));
 	}
-	float edge = smoothstep(0.16, 0.7, length(ray));
+	float edge = smoothstep(0.15, 0.54, length(ray));
 	COLOR = mix(original, sum / 5.0, edge);
 }

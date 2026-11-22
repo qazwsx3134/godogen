@@ -6,8 +6,11 @@ uniform sampler2D atlas_orm : filter_linear_mipmap;
 uniform vec2 atlas_cell = vec2(3.0,0.0);
 uniform float tile_meters : hint_range(0.5,8.0) = 3.0;
 uniform float moss_amount : hint_range(0.0,1.0) = 0.25;
-varying vec3 world_position;
-varying vec3 world_normal;
+uniform bool local_projection = false;
+uniform vec3 projection_origin;
+uniform mat3 projection_basis = mat3(1.0);
+varying vec3 surface_position;
+varying vec3 surface_normal;
 varying vec2 object_offset;
 // Smooth value noise: broad dirt patches rather than a periodic stripe mask.
 float hash21(vec2 p) { return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453); }
@@ -20,15 +23,17 @@ const vec2 ATLAS_GRADIENT_SCALE=vec2(0.234375,0.46875); // 240px inset tile / at
 
 vec2 atlas_uv(vec2 uv) { return (atlas_cell + (fract(uv)*240.0+8.0)/256.0)/vec2(4.0,2.0); }
 void vertex() {
-	world_position=(MODEL_MATRIX*vec4(VERTEX,1.0)).xyz;
-	world_normal=normalize(MODEL_NORMAL_MATRIX*NORMAL);
-	object_offset=vec2(hash21(MODEL_MATRIX[3].xz),hash21(MODEL_MATRIX[3].zx+19.7))*37.0;
+	// Moving debris keeps both the projection and its random seed attached to the mesh.
+	surface_position=local_projection ? projection_basis*VERTEX+projection_origin : (MODEL_MATRIX*vec4(VERTEX,1.0)).xyz;
+	surface_normal=normalize(local_projection ? projection_basis*NORMAL : MODEL_NORMAL_MATRIX*NORMAL);
+	vec2 origin=local_projection ? projection_origin.xz : MODEL_MATRIX[3].xz;
+	object_offset=vec2(hash21(origin),hash21(origin.yx+19.7))*37.0;
 }
 void fragment() {
 	// Dominant-axis projection avoids UV stretch on the simple box modules.
-	vec3 n=abs(world_normal);
-	vec2 plane=mix(world_position.xy,world_position.zy,step(n.z,n.x));
-	plane=mix(plane,world_position.xz,step(max(n.x,n.z),n.y));
+	vec3 n=abs(surface_normal);
+	vec2 plane=mix(surface_position.xy,surface_position.zy,step(n.z,n.x));
+	plane=mix(plane,surface_position.xz,step(max(n.x,n.z),n.y));
 	// Object offsets prevent neighboring modules from sharing the same crack positions.
 	float angle=object_offset.x;
 	mat2 rotation=mat2(vec2(cos(angle),sin(angle)),vec2(-sin(angle),cos(angle)));
@@ -49,11 +54,11 @@ void fragment() {
 	float rust_surface=(1.0-step(0.5,atlas_cell.x))*step(0.5,atlas_cell.y);
 	// Paint remnants interrupt continuous rust. Streaks stretch in world Y (gravity).
 	base=mix(base,vec3(0.11,0.13,0.105),rust_surface*smoothstep(0.5,0.74,broad)*0.8);
-	float streak=smoothstep(0.57,0.78,noise2(vec2(plane.x*3.7,world_position.y*0.12)+object_offset));
-	streak*=1.0-smoothstep(0.3,0.8,world_normal.y);
+	float streak=smoothstep(0.57,0.78,noise2(vec2(plane.x*3.7,surface_position.y*0.12)+object_offset));
+	streak*=1.0-smoothstep(0.3,0.8,surface_normal.y);
 	base*=1.0-0.26*dirt-0.22*streak;
 	base*=0.93+0.12*hash21(object_offset);
-	float moss=moss_amount*smoothstep(0.45,0.72,noise2(plane*0.65+object_offset))*smoothstep(0.15,0.8,world_normal.y);
+	float moss=moss_amount*smoothstep(0.45,0.72,noise2(plane*0.65+object_offset))*smoothstep(0.15,0.8,surface_normal.y);
 	ALBEDO=mix(base,vec3(0.12,0.18,0.055),moss);
 	ROUGHNESS=mix(properties.g,0.98,max(dirt,moss));
 	METALLIC=properties.b*(1.0-max(dirt,moss));

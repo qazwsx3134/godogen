@@ -1,0 +1,16 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/buildings/utility_pole_concrete.res" id="1_rle0k"]
+[ext_resource type="ArrayMesh" path="res://assets/buildings/utility_pole_steel.res" id="2_a0465"]
+
+[node name="UtilityPole" type="Node3D" unique_id=378762905]
+
+[node name="Concrete" type="MeshInstance3D" parent="." unique_id=1033513543]
+cast_shadow = 0
+visibility_range_end = 110.0
+mesh = ExtResource("1_rle0k")
+
+[node name="Steel" type="MeshInstance3D" parent="." unique_id=1070332007]
+cast_shadow = 0
+visibility_range_end = 110.0
+mesh = ExtResource("2_a0465")

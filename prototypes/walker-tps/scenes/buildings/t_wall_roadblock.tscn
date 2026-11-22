@@ -1,0 +1,27 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/breakable_cover.gd" id="1_786m5"]
+[ext_resource type="Material" path="res://materials/weathered_concrete.tres" id="2_guo7t"]
+[ext_resource type="ArrayMesh" path="res://assets/buildings/t_wall_roadblock_concrete.res" id="3_e21jx"]
+[ext_resource type="Material" path="res://materials/burnt_steel.tres" id="4_2bkml"]
+[ext_resource type="ArrayMesh" path="res://assets/buildings/t_wall_roadblock_steel.res" id="5_r0hud"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_62xf8"]
+size = Vector3(12, 4, 1.6)
+
+[node name="TWallRoadblock" type="StaticBody3D" unique_id=1297705633]
+collision_layer = 9
+script = ExtResource("1_786m5")
+durability = 150.0
+
+[node name="Collision" type="CollisionShape3D" parent="." unique_id=1149236466]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+shape = SubResource("BoxShape3D_62xf8")
+
+[node name="Concrete" type="MeshInstance3D" parent="." unique_id=1270021650]
+material_override = ExtResource("2_guo7t")
+mesh = ExtResource("3_e21jx")
+
+[node name="Steel" type="MeshInstance3D" parent="." unique_id=126413881]
+material_override = ExtResource("4_2bkml")
+mesh = ExtResource("5_r0hud")

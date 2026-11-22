@@ -29,6 +29,15 @@ func _run() -> void:
 		"combat telemetry shows hull, mission progress and time")
 	_expect("AMMO" in weapon.text,
 		"sight frame shows current ammunition")
+	var ring: Control = hud.get_node("GunReticle")
+	_expect(ring.visible and ring.size.x >= 30, "amber cannon ring is drawn during combat")
+	var rig: Node3D = walker.get_node("CameraRig")
+	rig.look(Vector2(0.3, 0.0))
+	await _frames(2)
+	_expect(sight.drift.length() > 1.0, "cockpit sight trails a sharp view change")
+	await _frames(46)
+	_expect(sight.drift.length() < 0.2, "cockpit sight settles after the view stops")
+	rig.look(Vector2(-0.3, 0.0))
 	await _test_projectiles()
 	await _test_hooks()
 	await _test_ai()
@@ -123,6 +132,7 @@ func _test_hooks() -> void:
 	enemy.global_position=walker.global_position+Vector3(0,0,16)
 	enemy.velocity=Vector3.ZERO
 	walker.rotation.y=0
+	walker.velocity=Vector3.ZERO  # earlier shots' recoil must not count as a dash
 	combat.grapple.cooldown_left=0
 	var start: Vector3 = enemy.global_position
 	var stationary_player := walker.global_position

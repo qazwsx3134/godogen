@@ -1,5 +1,7 @@
 [gd_scene format=3]
 
+[ext_resource type="Shader" path="res://addons/proto_kit/polish3d/sky.gdshader" id="polish_sky"]
+[ext_resource type="Texture2D" path="res://assets/env/cloud_noise.tres" id="polish_cloud"]
 [ext_resource type="Script" path="res://scripts/battlefield.gd" id="1_21s54"]
 [ext_resource type="PackedScene" path="res://scenes/walker.tscn" id="2_jsyt3"]
 [ext_resource type="PackedScene" path="res://scenes/hud.tscn" id="3_ixbtv"]
@@ -9,11 +11,12 @@
 [ext_resource type="PackedScene" path="res://scenes/scout.tscn" id="7_htbo0"]
 [ext_resource type="AudioStream" path="res://assets/sound/runtime/ai_boot.ogg" id="8_lwkd3"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_lwkd3"]
-sky_top_color = Color(0.24, 0.38, 0.56, 1)
-sky_horizon_color = Color(0.64, 0.62, 0.58, 1)
-ground_bottom_color = Color(0.3, 0.28, 0.25, 1)
-ground_horizon_color = Color(0.6, 0.56, 0.5, 1)
+[sub_resource type="ShaderMaterial" id="ProceduralSkyMaterial_lwkd3"]
+shader = ExtResource("polish_sky")
+shader_parameter/top_color = Color(0.24, 0.38, 0.56, 1)
+shader_parameter/horizon_color = Color(0.64, 0.62, 0.58, 1)
+shader_parameter/ground_color = Color(0.3, 0.28, 0.25, 1)
+shader_parameter/cloud_noise = ExtResource("polish_cloud")
 
 [sub_resource type="Sky" id="Sky_htbo0"]
 sky_material = SubResource("ProceduralSkyMaterial_lwkd3")
@@ -21,13 +24,18 @@ sky_material = SubResource("ProceduralSkyMaterial_lwkd3")
 [sub_resource type="Environment" id="Environment_3avj7"]
 background_mode = 2
 sky = SubResource("Sky_htbo0")
-ambient_light_source = 2
+ambient_light_source = 3
 ambient_light_color = Color(0.65, 0.7, 0.66, 1)
-ambient_light_energy = 0.48
-tonemap_mode = 3
+ambient_light_energy = 1.0
+tonemap_mode = 4
+tonemap_exposure = 1.12
+tonemap_agx_contrast = 1.32
 fog_enabled = true
 fog_light_color = Color(0.49, 0.56, 0.51, 1)
 fog_density = 0.0025
+fog_aerial_perspective = 0.5
+fog_height = 1.5
+fog_height_density = 0.02
 
 [node name="Battlefield" type="Node3D" unique_id=1826002220 groups=["battle_session"]]
 script = ExtResource("1_21s54")

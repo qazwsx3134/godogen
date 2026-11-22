@@ -137,6 +137,7 @@ bus = &"Weapons"
 top_level = true
 
 [node name="ShotSound" type="AudioStreamPlayer3D" parent="." unique_id=853997911]
+max_polyphony = 6
 bus = &"Weapons"
 
 [node name="AutoBlades" parent="." unique_id=541706990 instance=ExtResource("2_pucva")]

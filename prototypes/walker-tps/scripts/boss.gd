@@ -1,9 +1,10 @@
 extends CharacterBody3D
 ## Ground-crawling Boss on knee legs with a charged head-cannon beam, pillar rain and tail sweep.
 ## Below phase2_health_ratio it unfolds optical-fibre wings (second form) and adds fibre
-## stabs (three strands thrust at locked points) and a fibre slam (a bundle smashes a ring).
+## stabs (three strands thrust at locked points) and a slam with one of the articulated wings.
 signal destroyed(enemy: Node)
 enum State { CHASE, BEAM_CHARGE, BEAM, PILLAR_CHARGE, TAIL_CHARGE, TAIL_SWEEP, PHASE_SHIFT, STAB_CHARGE, STAB, SLAM_CHARGE, SLAM, DEAD }
+const AudioMix := preload("res://addons/audio_tuner/mix.gd")
 
 @export var max_health := 600.0
 @export var crawl_speed := 2.2
@@ -21,9 +22,10 @@ enum State { CHASE, BEAM_CHARGE, BEAM, PILLAR_CHARGE, TAIL_CHARGE, TAIL_SWEEP, P
 @export var phase_shift_time := 1.8
 @export var stab_telegraph_time := 0.8
 @export var stab_damage := 18.0
-@export var slam_telegraph_time := 1.3
+@export var slam_telegraph_time := 1.65
 @export var slam_radius := 7.0
 @export var slam_damage := 30.0
+@export_range(0.35, 0.9) var slam_fold_ratio := 0.6
 ## Death: the hull shudders through a chain of explosions while the legs give way, then one
 ## last blast; `destroyed` (mission complete) is sent after it.
 ## Pillar rain: how many fall per attack, the gap between them (s), how far from the player
@@ -40,6 +42,12 @@ const TUNED_SCALE := 1.35
 const CANNON_PIVOT := Vector3(0.0, 5.91, 0.05)  # model is lowered 1.14 m in boss.tscn
 ## Strand roots on the wings, in Boss space.
 const WING_ROOTS := [Vector3(-6.0, 13.0, -4.0), Vector3(0.0, 15.0, -4.5), Vector3(6.0, 13.0, -4.0)]
+# Authored middle-feather tips in their MultiMesh node's local space.
+const WING_TIPS := [Vector3(27.63, 16.38, -3.15), Vector3(-22.67, 14.18, -6.72)]
+const SLAM_TIME := 1.28
+const SLAM_SWING := 0.32
+const SLAM_HOLD := 0.28
+const SLAM_LOCK := 0.48
 const CANNON_LENGTH := 2.62  # distance from the imported Cannon bone to the bore
 var health: float
 var mass := 100.0
@@ -49,6 +57,7 @@ var active := false
 var state := State.CHASE
 var tail_angle := 0.0
 var attacks_fired := 0
+var _attack_pitch := 1.0
 var _attack_timer := 3.0
 var _state_left := 0.0
 var _beam_tick := 0.0
@@ -64,6 +73,10 @@ var _stab_hit := false
 var _slam_target := Vector3.ZERO
 var _slam_side := 1.0
 var _slam_hit := false
+var _slam_wing: MultiMeshInstance3D
+var _slam_rest := Basis.IDENTITY
+var _slam_original_material: Material
+var _slam_material: ShaderMaterial
 var _player: CharacterBody3D
 var _anim: AnimationPlayer
 var _skeleton: Skeleton3D
@@ -147,8 +160,7 @@ func _physics_process(delta: float) -> void:
 			_step_left -= delta * _anim.speed_scale
 			if _step_left <= 0.0:
 				_step_left = _anim.get_animation("ground/crawl").length * 0.5
-				$StepSound.pitch_scale = randf_range(0.5, 0.6)
-				$StepSound.play()
+				AudioMix.play_varied($StepSound, 0.55, INF, 0.08)
 
 ## The hull can sweep through props without standing on top of them.
 func _crush_cover(delta: float) -> void:
@@ -195,18 +207,18 @@ func try_attack(kind: String) -> bool:
 			_charge.visible = true
 			_charge.get_node("Gather").emitting = true
 			$AttackSound.stream = preload("res://assets/sound/runtime/mech_servo.ogg")
-			$AttackSound.play()
+			AudioMix.play($AttackSound, _attack_pitch)
 		"pillars":
 			state = State.PILLAR_CHARGE
 			_state_left = 0.9
 			$AttackSound.stream = preload("res://assets/sound/runtime/mech_servo.ogg")
-			$AttackSound.play()
+			AudioMix.play($AttackSound, _attack_pitch)
 		"tail":
 			state = State.TAIL_CHARGE
 			_state_left = 0.75
 			_tail_hit = false
 			$AttackSound.stream = preload("res://assets/sound/runtime/mech_servo.ogg")
-			$AttackSound.play()
+			AudioMix.play($AttackSound, _attack_pitch)
 		"stab":
 			if phase < 2: return false
 			state = State.STAB_CHARGE
@@ -215,16 +227,24 @@ func try_attack(kind: String) -> bool:
 			var side := _player.global_basis.x
 			_stab_targets.assign([_player.global_position - side * 3.5, _player.global_position, _player.global_position + side * 3.5])
 			$AttackSound.stream = preload("res://assets/sound/runtime/mech_servo.ogg")
-			$AttackSound.play()
+			AudioMix.play($AttackSound, _attack_pitch)
 		"slam":
 			if phase < 2: return false
 			state = State.SLAM_CHARGE
 			_state_left = slam_telegraph_time
 			_slam_hit = false
-			_slam_target = _player.global_position
+			_slam_target = _slam_ground_target()
 			_slam_side = 1.0 if to_local(_player.global_position).x > 0.0 else -1.0
+			_slam_wing = _wings.get_node("Left" if _slam_side > 0 else "Right")
+			_slam_rest = _slam_wing.basis
+			_slam_original_material = _slam_wing.material_override
+			var material := _slam_original_material
+			if material == null:
+				material = _slam_wing.multimesh.mesh.surface_get_material(0)
+			_slam_material = material.duplicate() as ShaderMaterial
+			_slam_wing.material_override = _slam_material
 			$AttackSound.stream = preload("res://assets/sound/runtime/mech_servo.ogg")
-			$AttackSound.play()
+			AudioMix.play($AttackSound, _attack_pitch)
 		_:
 			return false
 	return true
@@ -257,7 +277,7 @@ func _attack_step(delta: float) -> void:
 					_anim.speed_scale = 1.0
 					_anim.play("ground/fire", 0.05)
 				$AttackSound.stream = preload("res://assets/sound/runtime/explosion.ogg")
-				$AttackSound.play()
+				AudioMix.play($AttackSound, _attack_pitch)
 		State.BEAM:
 			var from := _muzzle()
 			var hit := _ray(from, from + cannon_dir * 160.0 * _k)
@@ -296,7 +316,7 @@ func _attack_step(delta: float) -> void:
 				_state_left = 0.55
 				attacks_fired += 1
 				$AttackSound.stream = preload("res://assets/sound/runtime/hit_heavy.ogg")
-				$AttackSound.play()
+				AudioMix.play($AttackSound, _attack_pitch)
 		State.STAB:
 			var thrust := clampf((0.55 - _state_left) / 0.1, 0.0, 1.0)
 			var retract := clampf(_state_left / 0.3, 0.0, 1.0)
@@ -315,34 +335,33 @@ func _attack_step(delta: float) -> void:
 						break
 			if _state_left <= 0.0: _end_attack()
 		State.SLAM_CHARGE:
-			if _state_left > 0.4: _slam_target = _player.global_position  # tracks, then locks
+			if _state_left > SLAM_LOCK:
+				_slam_target = _slam_ground_target()
 			var ring: MeshInstance3D = _strands.get_node("SlamRing")
 			ring.visible = true
 			ring.global_position = _slam_target + Vector3.UP * 0.15
-			ring.scale = Vector3.ONE * slam_radius * 2.0 * (0.85 + 0.15 * sin(_state_left * 20.0))
-			var root := to_global(Vector3(_slam_side * 6.0, 12.5, -3.0))
-			var rise := clampf(1.0 - _state_left / slam_telegraph_time, 0.0, 1.0)
-			_place_strand(_strands.get_node("Slam"), root, root + (Vector3.UP * 0.9 + _facing().z * -0.4).normalized() * root.distance_to(_slam_target) * rise, 3.5, 1.0)
+			ring.scale = Vector3.ONE * slam_radius * _k * 2.0
+			var preparation := clampf(1.0 - _state_left / maxf(slam_telegraph_time, 0.01), 0.0, 1.0)
+			var rise := smoothstep(0.0, 0.48, preparation)
+			var windup := smoothstep(0.4, 0.84, preparation)
+			var direction := _raised_wing_direction().slerp(_loaded_wing_direction(), windup)
+			_pose_slam_wing(direction, rise, lerpf(slam_fold_ratio, _loaded_wing_fold(), windup))
+			_slam_material.set_shader_parameter("charge", smoothstep(0.3, 0.89, preparation))
 			if _state_left <= 0.0:
 				state = State.SLAM
-				_state_left = 0.7
+				_state_left = SLAM_TIME
 				attacks_fired += 1
 		State.SLAM:
-			var progress := clampf((0.7 - _state_left) / 0.18, 0.0, 1.0)
-			var root := to_global(Vector3(_slam_side * 6.0, 12.5, -3.0))
-			var raised := (Vector3.UP * 0.9 + _facing().z * -0.4).normalized()
-			var down := (_slam_target - root).normalized()
-			var direction := raised.slerp(down, progress * progress)
-			_place_strand(_strands.get_node("Slam"), root, root + direction * root.distance_to(_slam_target), 3.5, clampf(_state_left / 0.3, 0.0, 1.0))
+			var elapsed := SLAM_TIME - _state_left
+			var progress := clampf(elapsed / SLAM_SWING, 0.0, 1.0)
+			var down := (_wings.to_local(_slam_target) - _slam_wing.position).normalized()
+			var direction := _loaded_wing_direction().slerp(down, progress * progress * progress)
+			var retract := smoothstep(SLAM_SWING + SLAM_HOLD, SLAM_TIME, elapsed)
+			var flare := 1.0 + smoothstep(0.18, 0.85, progress) * (1.0 - retract) * 0.4
+			_pose_slam_wing(direction, 1.0 - retract, lerpf(_loaded_wing_fold(), 1.0, progress), flare)
+			_slam_material.set_shader_parameter("charge", 1.0 - smoothstep(0.35, 1.0, progress))
 			if progress >= 1.0 and not _slam_hit:
-				_slam_hit = true
-				_strands.get_node("SlamRing").visible = false
-				_spawn_impact(_slam_target, 4.0 * _k)
-				$AttackSound.stream = preload("res://assets/sound/runtime/explosion.ogg")
-				$AttackSound.play()
-				var offset := _player.global_position - _slam_target
-				if Vector2(offset.x, offset.z).length() < slam_radius * _k and absf(offset.y) < 4.0 * _k:
-					_player.apply_damage(slam_damage, _player.global_position, Vector3(offset.x, 0.4, offset.z).normalized())
+				_hit_slam()
 			if _state_left <= 0.0: _end_attack()
 		State.TAIL_CHARGE:
 			tail_angle = -0.65 * (1.0 - maxf(0.0, _state_left) / 0.75)
@@ -351,7 +370,7 @@ func _attack_step(delta: float) -> void:
 				_state_left = 0.75
 				attacks_fired += 1
 				$AttackSound.stream = preload("res://assets/sound/runtime/mech_land.ogg")
-				$AttackSound.play()
+				AudioMix.play($AttackSound, _attack_pitch)
 		State.TAIL_SWEEP:
 			var progress := clampf(1.0 - _state_left / 0.75, 0.0, 1.0)
 			tail_angle = lerpf(-0.65, 0.85, progress)
@@ -391,6 +410,60 @@ func _turn_dir(from: Vector3, to: Vector3, max_deg: float) -> Vector3:
 	if angle < 0.0001: return to.normalized()
 	return from.slerp(to.normalized(), minf(1.0, deg_to_rad(max_deg) / angle)).normalized()
 
+func _hit_slam() -> void:
+	_slam_hit = true
+	_strands.get_node("SlamRing").visible = false
+	var radius := slam_radius * _k
+	_spawn_impact(_slam_target + Vector3.UP * 0.18, radius * 0.65, radius)
+	$AttackSound.stream = preload("res://assets/sound/runtime/mech_land.ogg")
+	AudioMix.play($AttackSound, 0.62 * _attack_pitch, 4.0)
+	var offset := _player.global_position - _slam_target
+	var distance := Vector2(offset.x, offset.z).length()
+	var rig := _player.get_node_or_null("CameraRig")
+	var impact_strength := 1.0 - smoothstep(radius * 0.55, radius * 3.5, offset.length())
+	if rig and impact_strength > 0.0:
+		rig.kick(0.48 * impact_strength * rig.shake_scale)
+		rig.shake(0.83 * impact_strength)
+	if distance < radius and absf(offset.y) < 4.0 * _k:
+		_player.apply_damage(slam_damage, _player.global_position, Vector3(offset.x, 0.4, offset.z).normalized())
+
+
+func _slam_ground_target() -> Vector3:
+	var at := _player.global_position
+	var query := PhysicsRayQueryParameters3D.create(at + Vector3.UP * 2.0,
+		at + Vector3.DOWN * 50.0, Layers.MAP_GROUND)
+	var space := get_world_3d().direct_space_state
+	var hit := space.intersect_ray(query)
+	if hit.is_empty():
+		query.collision_mask = Layers.TERRAIN
+		hit = space.intersect_ray(query)
+	return hit.position if not hit.is_empty() else at
+
+
+func _raised_wing_direction() -> Vector3:
+	return Vector3(_slam_side * 0.6, 0.92, 0.20).normalized()
+
+
+func _loaded_wing_direction() -> Vector3:
+	return Vector3(_slam_side * 0.25, 0.94, -0.62).normalized()
+
+
+func _loaded_wing_fold() -> float:
+	return slam_fold_ratio * 0.8
+
+
+## Swing the authored fan around its mount and stretch along the middle feather.
+func _pose_slam_wing(direction: Vector3, weight: float, extension: float, width: float = 1.0) -> void:
+	var rest_tip: Vector3 = _slam_rest * WING_TIPS[0 if _slam_side > 0 else 1]
+	var axis := rest_tip.normalized()
+	var target_offset := _wings.to_local(_slam_target) - _slam_wing.position
+	var span_ratio := target_offset.length() / rest_tip.length() * extension
+	var twist := Quaternion.IDENTITY.slerp(Quaternion(axis, direction), weight)
+	var scale_frame := Basis(Quaternion(Vector3.UP, axis))
+	var stretch := scale_frame * Basis.from_scale(Vector3(width, lerpf(1.0, span_ratio, weight), width)) * scale_frame.inverse()
+	_slam_wing.basis = Basis(twist) * stretch * _slam_rest
+
+
 ## Stretches a crossed-plane fibre strand from root to tip (mesh runs 0..1 along +Y).
 func _place_strand(strand: MeshInstance3D, root: Vector3, tip: Vector3, width: float, opacity: float) -> void:
 	var axis := tip - root
@@ -402,9 +475,10 @@ func _place_strand(strand: MeshInstance3D, root: Vector3, tip: Vector3, width: f
 	strand.global_transform = Transform3D(Basis(x, y, z), root)
 	(strand.mesh.surface_get_material(0) as ShaderMaterial).set_shader_parameter("opacity", opacity)
 
-func _spawn_impact(at: Vector3, radius: float) -> void:
+func _spawn_impact(at: Vector3, radius: float, ground_wave_radius: float = 0.0) -> void:
 	var effect := Impact.instantiate() as Node3D
 	effect.radius = radius
+	effect.ground_wave_radius = ground_wave_radius
 	var session := get_tree().get_first_node_in_group("battle_session")
 	(session.get_node("Projectiles") if session else get_parent()).add_child(effect)
 	effect.global_position = at
@@ -445,10 +519,16 @@ func _launch_pillars() -> void:
 	_spawn_impact(to_global(Vector3(0.0, 7.0, -3.0)), 2.0)
 	attacks_fired += 1
 	$AttackSound.stream = preload("res://assets/sound/runtime/scout_gun_burst.ogg")
-	$AttackSound.pitch_scale = 0.6
-	$AttackSound.play()
+	_attack_pitch = 0.6
+	AudioMix.play($AttackSound, _attack_pitch)
 
 func _end_attack() -> void:
+	if is_instance_valid(_slam_wing):
+		_slam_wing.basis = _slam_rest
+		_slam_wing.material_override = _slam_original_material
+		_slam_wing = null
+		_slam_material = null
+		_slam_original_material = null
 	state = State.CHASE
 	_attack_timer = attack_interval
 	tail_angle = 0.0
@@ -529,15 +609,14 @@ func _enter_phase_two() -> void:
 	_wings.visible = true
 	_wings.scale = Vector3.ONE * 0.02
 	$AttackSound.stream = preload("res://assets/sound/runtime/explosion.ogg")
-	$AttackSound.play()
+	AudioMix.play($AttackSound, _attack_pitch)
 	_say(preload("res://assets/sound/runtime/boss_angry.ogg"), 0.9, true)
 
 ## Boss voice: talk when it starts an attack (at most every 6 s), roar on the phase shift and death.
 func _say(clip: AudioStream, pitch: float = 0.9, force: bool = false) -> void:
 	if _voice_wait > 0.0 and not force: return
 	$Voice.stream = clip
-	$Voice.pitch_scale = pitch
-	$Voice.play()
+	AudioMix.play($Voice, pitch)
 	_voice_wait = maxf(6.0, clip.get_length() + 1.0)
 
 func _update_status() -> void:

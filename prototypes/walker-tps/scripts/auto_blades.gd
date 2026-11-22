@@ -15,6 +15,7 @@ var swing_left := 0.0
 @onready var model: Node3D = body.get_node("Model")
 @onready var rest_yaw: float = model.rotation.y
 const Impact = preload("res://scenes/combat_impact.tscn")
+const AudioMix := preload("res://addons/audio_tuner/mix.gd")
 
 func _ready() -> void:
 	$Sound.stream=preload("res://addons/proto_kit/synth.gd").click(0.14,0.45,16.0)
@@ -63,6 +64,6 @@ func _physics_process(delta: float) -> void:
 		swing_left=0.3
 		windup_left=windup_time
 		cooldown_left=attack_interval
-		$Sound.play()
+		AudioMix.play($Sound)
 	$Sweeps.visible=windup_left>=0 or flash_left>0
 	$Sweeps.rotation.y=(1.0 if attack_count%2 else -1.0)*(0.18-flash_left)*2.5

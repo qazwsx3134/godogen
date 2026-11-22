@@ -1,0 +1,50 @@
+[gd_scene format=3]
+
+[ext_resource type="Shader" path="res://addons/proto_kit/polish3d/post.gdshader" id="1_wqi20"]
+[ext_resource type="Script" path="res://addons/proto_kit/polish3d/perf_hud.gd" id="2_ca3l0"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f3ay5"]
+shader = ExtResource("1_wqi20")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_5wu8r"]
+emission_shape = 3
+emission_box_extents = Vector3(10, 3, 10)
+spread = 180.0
+initial_velocity_min = 0.05
+initial_velocity_max = 0.25
+gravity = Vector3(0, -0.02, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1civc"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(1, 0.95, 0.85, 0.45)
+billboard_mode = 1
+billboard_keep_scale = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_c5jdu"]
+material = SubResource("StandardMaterial3D_1civc")
+size = Vector2(0.025, 0.025)
+
+[node name="PolishOverlay" type="Node3D" unique_id=1113832864]
+
+[node name="Post" type="CanvasLayer" parent="." unique_id=1244517023]
+
+[node name="Rect" type="ColorRect" parent="Post" unique_id=223407004 groups=["post"]]
+material = SubResource("ShaderMaterial_f3ay5")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Dust" type="GPUParticles3D" parent="." unique_id=1943664492]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+cast_shadow = 0
+amount = 160
+lifetime = 8.0
+visibility_aabb = AABB(-14, -6, -14, 28, 12, 28)
+process_material = SubResource("ParticleProcessMaterial_5wu8r")
+draw_pass_1 = SubResource("QuadMesh_c5jdu")
+
+[node name="PerfHud" type="CanvasLayer" parent="." unique_id=915625886]
+script = ExtResource("2_ca3l0")
+label_position = Vector2(8, 560)

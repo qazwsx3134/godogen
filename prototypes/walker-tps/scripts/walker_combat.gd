@@ -7,18 +7,23 @@ signal destroyed
 @export var mass: float = 8.0
 ## Autocannon: hold fire. Everything a shot does (flash, barrel kick, camera kick, recoil push,
 ## shell, sound) happens inside try_fire(), on the trigger frame.
-@export var reload_time: float = 0.16
-@export var shot_damage: float = 12.0
+@export var reload_time: float = 0.42
+@export var shot_damage: float = 55.0
+## Splash: everything else within splash_radius takes up to splash_damage (100% at
+## the centre, 40% at the rim) and a shove away from the burst.
+@export var splash_radius: float = 5.5
+@export var splash_damage: float = 30.0
+@export var blast_radius: float = 4.0       # visual size of the burst
 @export_range(0.0, 5.0) var spread_deg: float = 1.4      # hip fire cone (half angle)
 @export_range(0.0, 5.0) var aim_spread_deg: float = 0.5  # while aiming
 @export var bullet_speed_min: float = 110.0
 @export var bullet_speed_max: float = 135.0
 ## Magazine: empty (or R / gamepad X) starts reload_magazine_time; firing is locked meanwhile.
-@export var magazine_size: int = 30
-@export var magazine_reload_time: float = 1.8
-@export var barrel_kick: float = 0.32      # m the barrel snaps back
-@export var camera_kick_deg: float = 0.7   # view climb per shot, eases back
-@export var recoil_push: float = 0.9       # m/s the hull is shoved back per shot
+@export var magazine_size: int = 8
+@export var magazine_reload_time: float = 2.2
+@export var barrel_kick: float = 0.7       # m the barrel snaps back
+@export var camera_kick_deg: float = 2.6    # view climb per shot, eases back
+@export var recoil_push: float = 3.2        # m/s the hull is shoved back per shot
 @export var turret_speed: float = 80.0
 const Layers = preload("res://scripts/layers.gd")
 const Projectile = preload("res://scenes/combat_projectile.tscn")
@@ -44,6 +49,7 @@ var cannon_rest := Vector3.ZERO
 var _barrel := 0.0  # current barrel kick (m), decays fast
 const Synth = preload("res://addons/proto_kit/synth.gd")
 const SHOT_SOUNDS := [preload("res://assets/sound/runtime/cannon_shot.ogg")]
+const AudioMix := preload("res://addons/audio_tuner/mix.gd")
 
 func _ready() -> void:
 	health = max_health
@@ -110,7 +116,7 @@ func step(delta: float) -> void:
 	if Input.get_joy_axis(0,JOY_AXIS_TRIGGER_RIGHT)>0.6: try_fire()
 	_barrel = lerpf(_barrel, 0.0, 1.0 - exp(-30.0 * delta))
 	cannon.position = cannon_rest + Vector3(0, 0, -_barrel)
-	$MuzzleFlash.global_transform=muzzle.global_transform.orthonormalized()
+	$MuzzleFlash.global_transform = muzzle.global_transform.orthonormalized().scaled_local(Vector3.ONE * 1.4)
 
 func update_aim(delta: float) -> void:
 	var local: Vector3 = turret.get_parent().to_local(aim_point)-turret.position
@@ -140,19 +146,23 @@ func try_fire() -> bool:
 	bullet.speed = randf_range(bullet_speed_min, bullet_speed_max)
 	bullet.damage = shot_damage
 	bullet.team="player"
-	bullet.impact_radius=1.0
+	bullet.impact_radius = blast_radius
+	bullet.splash_radius = splash_radius
+	bullet.splash_damage = splash_damage
+	bullet.visual_scale = 2.0
+	bullet.tail_seconds = 0.095
 	bullet.excluded.assign([body.get_rid()])
 	reload_left=reload_time
 	shot_count+=1
 	ammo-=1
 	if ammo<=0: start_reload()
 	# --- all on the trigger frame: flash, barrel, camera, hull, shell, sound ---
-	$MuzzleFlash.global_transform=muzzle.global_transform.orthonormalized()
+	$MuzzleFlash.global_transform = muzzle.global_transform.orthonormalized().scaled_local(Vector3.ONE * 1.4)
 	$MuzzleFlash.play()
 	_barrel = barrel_kick
 	cannon.position = cannon_rest + Vector3(0, 0, -_barrel)
 	rig.gun_kick(deg_to_rad(camera_kick_deg))
-	rig.shake(0.12, 0.3)
+	rig.shake(0.45, 0.7)
 	var back := Vector3(-forward.x, 0.0, -forward.z).normalized()
 	body.velocity += back * recoil_push
 	var shells := get_tree().get_first_node_in_group("debris_shells")
@@ -160,18 +170,14 @@ func try_fire() -> bool:
 		var side := turret.global_basis.x.normalized()
 		shells.spawn(cannon.global_position + Vector3.UP * 0.3, side * randf_range(3.0, 5.0) + Vector3.UP * randf_range(3.0, 4.5) + back * 1.0, 1.0)
 	$ShotSound.stream = SHOT_SOUNDS[randi() % SHOT_SOUNDS.size()]
-	$ShotSound.pitch_scale = randf_range(0.97, 1.03)  # stays the recording; only a hint of variation
-	$ShotSound.volume_db = 3.0 + randf_range(-1.5, 1.5)  # a loud cannon
 	$ShotSound.global_position=muzzle.global_position
-	$ShotSound.play()
+	AudioMix.play_varied($ShotSound, 1.0, 3.0, 0.04, 1.5)
 	return true
 
 ## A casing hits the floor: a brass clink, quieter for the softer bounces.
 func _shell_landed(at: Vector3, speed: float) -> void:
 	$ShellSound.global_position = at
-	$ShellSound.pitch_scale = randf_range(0.9, 1.25)
-	$ShellSound.volume_db = linear_to_db(clampf(speed / 9.0, 0.25, 1.0))
-	$ShellSound.play()
+	AudioMix.play($ShellSound, randf_range(0.9, 1.25), linear_to_db(clampf(speed / 9.0, 0.25, 1.0)))
 
 func start_reload() -> void:
 	if magazine_left > 0.0: return
@@ -179,8 +185,7 @@ func start_reload() -> void:
 	_reload_sound(1.3)  # magazine out
 
 func _reload_sound(pitch: float) -> void:
-	$ReloadSound.pitch_scale = pitch
-	$ReloadSound.play()
+	AudioMix.play($ReloadSound, pitch)
 
 ## Random direction inside a cone, uniform over the disc (not clumped at the centre).
 func _spread(forward: Vector3, half_angle_deg: float) -> Vector3:

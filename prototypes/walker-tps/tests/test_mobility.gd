@@ -35,7 +35,7 @@ func _run() -> void:
 	var speed := Vector2(walker.velocity.x, walker.velocity.z).length()
 	_expect(speed > 11.8, "boost reaches the faster sprint speed")
 	var blur: ColorRect = walker.get_node("SpeedBlur/Screen")
-	_expect(blur.visible and blur.material.get_shader_parameter("strength") > 0.005, "moving boost enables speed blur")
+	_expect(blur.visible and blur.material.get_shader_parameter("strength") > 0.035, "moving boost enables speed blur")
 	Input.action_release("move_forward")
 	Input.action_release("sprint")
 	await _frames(90)
@@ -57,7 +57,13 @@ func _run() -> void:
 	_expect(top_speed > 18.0, "dash bursts forward (%.1f m/s)" % top_speed)
 	_expect(peak - y0 > 0.5 and peak - y0 < 1.6, "dash rises at a low angle (%.2f m)" % (peak - y0))
 	_expect(walker.global_position.z - z0 > 4.0, "dash covers ground (%.1f m)" % (walker.global_position.z - z0))
-	_expect(Vector2(walker.velocity.x, walker.velocity.z).length() < 16.0, "dash eases back down")
+	# Physics: no braking in the air; after landing the feet skid (friction) down to grip speed.
+	var skidded := false
+	for i in 120:
+		await _frames(1)
+		skidded = skidded or walker.skidding
+	_expect(skidded, "landing above grip speed skids")
+	_expect(Vector2(walker.velocity.x, walker.velocity.z).length() < walker.grip_speed, "the skid bleeds the dash back down to grip speed")
 	await _frames(60)
 	# The wall's near face is at z=49.5; the capsule reaches it from the front.
 	walker.global_position = Vector3(0, 0.1, 47.5)

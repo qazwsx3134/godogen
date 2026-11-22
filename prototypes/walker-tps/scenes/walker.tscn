@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" path="res://scenes/walker_combat.tscn" id="5_rw8xo"]
 [ext_resource type="AudioStream" path="res://assets/sound/runtime/mech_servo.ogg" id="7_34ppg"]
 [ext_resource type="PackedScene" path="res://scenes/speed_blur.tscn" id="8_kuxr4"]
+[ext_resource type="PackedScene" path="res://scenes/polish_overlay.tscn" id="polish_overlay"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_kuxr4"]
 radius = 1.1
@@ -54,6 +55,9 @@ collision_mask = 5
 floor_max_angle = 0.6981317
 floor_snap_length = 0.6
 script = ExtResource("1_bren1")
+max_speed = 8.0
+sprint_speed = 12.6
+speed_blur_strength = 0.046
 
 [node name="Body" type="CollisionShape3D" parent="." unique_id=1919471070]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3, 0)
@@ -70,8 +74,12 @@ unique_name_in_owner = true
 script = ExtResource("3_leld5")
 step_distance = 0.76
 settle_distance = 0.23
-step_height = 0.76
-bob = 0.11
+step_time_run = 0.155
+cadence_multiplier = 1.3
+run_speed = 12.6
+step_height = 0.66
+lead = 0.53
+bob = 0.055
 run_crouch = 0.57
 
 [node name="Dust" type="Node3D" parent="." unique_id=832873898]
@@ -201,5 +209,7 @@ max_distance = 50.0
 bus = &"Movement"
 
 [node name="SpeedBlur" parent="." unique_id=782333914 instance=ExtResource("8_kuxr4")]
+
+[node name="PolishOverlay" parent="." unique_id=1113832865 instance=ExtResource("polish_overlay")]
 
 [editable path="Model"]

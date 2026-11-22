@@ -15,6 +15,3 @@ func start_match() -> void:
 func finish(result: String) -> void:
 	super(result)
 	get_parent().get_node("Boss").active = false
-
-func retry() -> void:
-	get_tree().change_scene_to_file.call_deferred("res://scenes/boss_battlefield.tscn")

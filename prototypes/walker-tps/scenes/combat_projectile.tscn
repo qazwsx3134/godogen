@@ -11,6 +11,7 @@ shading_mode = 0
 albedo_color = Color(1, 0.75, 0.4, 1)
 albedo_texture = ExtResource("2_xnrf4")
 billboard_mode = 1
+billboard_keep_scale = true
 
 [sub_resource type="QuadMesh" id="QuadMesh_d06me"]
 size = Vector2(0.55, 0.55)

@@ -69,6 +69,7 @@ shape = SubResource("BoxShape3D_3llvr")
 [node name="Turret" type="StaticBody3D" parent="." unique_id=337189681]
 collision_layer = 9
 script = ExtResource("99_cover")
+support = NodePath("../BurntHull")
 transform = Transform3D(0.8667253, -0.16847433, 0.46947157, 0.190809, 0.98162717, 0, -0.46084604, 0.0895794, 0.88294756, 0.3, 2.4, 0)
 
 [node name="Surface" type="MeshInstance3D" parent="Turret" unique_id=41403869]
@@ -81,6 +82,7 @@ shape = SubResource("BoxShape3D_fcedj")
 [node name="BrokenGun" type="StaticBody3D" parent="." unique_id=1323416715]
 collision_layer = 9
 script = ExtResource("99_cover")
+support = NodePath("../Turret")
 transform = Transform3D(0.88294756, 0.03274868, 0.46832797, 0, 0.9975641, -0.06975647, -0.46947157, 0.061591305, 0.8807968, 1.2, 2.65, 2.5)
 
 [node name="Surface" type="MeshInstance3D" parent="BrokenGun" unique_id=1748345489]

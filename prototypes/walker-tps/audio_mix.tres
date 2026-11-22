@@ -1,0 +1,6 @@
+[gd_resource type="Resource" format=3 uid="uid://dct2j7hk2tn3a"]
+
+[ext_resource type="Script" uid="uid://bn1yid6bnycpl" path="res://addons/audio_tuner/profile.gd" id="1"]
+
+[resource]
+script = ExtResource("1")

@@ -9,6 +9,7 @@ extends CharacterBody3D
 ##   Shots lead the target (intercept_point) times lead_accuracy, plus aim_spread: the difficulty knobs.
 ##   Light and heavy scouts are the same script with different exported numbers (battlefield.tscn).
 ## Each scout has its own RNG seeded from its node name, so runs are repeatable and the global randf is untouched.
+const AudioMix := preload("res://addons/audio_tuner/mix.gd")
 
 signal destroyed(scout: Node)
 enum State { PATROL, CHASE, AIM, REPOSITION, SEARCH, REELED, DEAD }
@@ -457,7 +458,7 @@ func shoot() -> void:
 	bullet.excluded.assign([get_rid()])
 	$GunSound.stream=GUN_CLIPS[_gun_next]
 	_gun_next=(_gun_next+1)%GUN_CLIPS.size()
-	$GunSound.play()
+	AudioMix.play_varied($GunSound)
 
 func _play_walk(flat: Vector3) -> void:
 	var moving := flat.length()>0.1
@@ -468,5 +469,4 @@ func _play_walk(flat: Vector3) -> void:
 		_step_left-=get_physics_process_delta_time()*_anim.speed_scale
 		if _step_left<=0.0:
 			_step_left=_anim.get_animation("walk").length*0.5
-			$StepSound.pitch_scale=_rng.randf_range(1.35,1.6)
-			$StepSound.play()
+			AudioMix.play_varied($StepSound, 1.47, INF, 0.08)

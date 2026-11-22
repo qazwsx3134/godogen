@@ -1,5 +1,77 @@
 # walker-tps 進度
 
+
+## 2026-11-23｜master｜分類提交
+
+- feat(walker-tps): expand combat and urban environments
+- 本次整理未重跑遊戲測試；既有驗證與待辦以 README、先前進度及測試檔為準。未 push。
+- 下一步：依原專案進度進行人工驗收與後續工作。
+
+## 2026-11-23｜手機可用的畫面打磨第 1 步（未 commit）
+
+- 使用者要求：依 godot-kit `docs/POLISH-3D.md` 打磨，但**不換 Forward+**，先做手機（GL Compatibility）能用的；第 1 步＝AgX、天空雲、霧、後製、FPS 開關。
+- 完成：
+  - 四個戰場（`battlefield`、`ruined_district`、`shattered_plaza`、`main`）的 Environment：天空改 kit `polish3d/sky.gdshader`（沿用原天色＋雲，`assets/env/cloud_noise.tres`），環境光改取天空 energy 1.0，ACES → AgX（曝光 1.12、對比 1.32），加地面薄霧（`fog_height` 1.5、密度 0.02）。空氣透視 0.5 只加在綠鏽戰線；斷城廣場、廢都街區加了會把主題霧色洗成天空藍，所以不加。用文字直接改 Environment，其他內容不動。
+  - 新 `scenes/polish_overlay.tscn`（掛在 `walker.tscn` 底下，所有戰場共用）：暗角 0.3＋顆粒 0.014（CanvasLayer 1，在速度模糊之上、HUD 之下）、跟著機甲的灰塵粒子、kit `perf_hud.gd`（左下，F1–F9 逐項開關，F10 隱藏；數字鍵留給 Boss 測試）。產生器 `tools/apply_polish_mobile.gd`。
+  - 只複製了 kit 的 `polish3d/{sky,post}.gdshader`、`perf_hud.gd`，沒有整包 sync（walker-tps 的 proto_kit 與 kit 差很多）。
+- 驗證（本次實跑，`--fixed-fps 60`）：battlefield、boss_scene、urban_sorties、combat、walker PASS。xvfb 截圖比對斷城廣場改前／改後、綠鏽戰線改後：雲、AgX、暗角正常，主題色保留。
+- 未驗證：手機實機 FPS；灰塵粒子大小在實際遊玩鏡頭下是否看得到。
+- 下一步（已向使用者提出）：用 F1–F9 量測後做太陽陰影（柔邊 1.1、atlas 4096、距離 60）、MSAA 2x、機甲補光；之後再評估 LightmapGI 烘焙與綠鏽戰線的草。
+
+## 2026-11-21（三續）｜移動物理：勾索放開保留動量、超速打滑（未 commit）
+
+- 使用者要求：勾爪放開後速度驟降不符合物理；機甲超過某個速度後要停下來時應該打滑；重新審視物理。
+- 問題：(1) 勾索放開後進 COASTING（最多 1.25 s）再 BRAKING 以 24 m/s²（約 2.4 g）強制煞停，是人為煞車；(2) 地面不論速度都用同一個 `accel` 8 m/s² 朝搖桿目標速度逼近，等於腳在任何速度都抓得住；(3) 空中超過衝刺速度也用地面減速率（空中沒東西可以推）；(4) 步態 `skid` 在地面每幀會再觸發一次落地（落地音效、揚塵、鏡頭震動），勾索拖行時就有此問題。
+- 完成：
+  - `grapple.gd`：移除 COASTING／BRAKING 狀態與 `overshoot_distance`／`brake_deceleration`。放開（到點、超時、超角度、錨點／繩子斷、G、牆跳）一律 `release()`：只放開繩子，速度不動。`cancel_hook()` 只留給回合結束、死亡、出界（立刻歸零）。
+  - `walker_player.gd`：新增 `grip_speed` 13、`slide_friction` 5.5（約 0.55 g）、`slide_steer` 3、`air_drag` 0.6；地面高於 grip 時打滑（只受摩擦，搖桿只能側向帶彎），低於 grip 才照 `accel` 走；空中高於目標速度只有空氣阻力。新屬性 `skidding`，打滑時腿撐住（gait.skid）並保留速度模糊。
+  - `walker_gait.gd`：打滑撐腳不再把 `airborne` 設為 true，修掉每幀重複落地。
+  - 測試：`test_grapple_inertia` 改驗「放開時仍高速、之後打滑、任一幀減速不超過抓地減速率、最後被摩擦停下、G 剪斷不掉速、撞牆停住」；`test_mobility` 衝刺改驗「落地打滑、滑回 grip 以下」；`test_walker` 跳躍等打滑結束再驗腳著地（同時驗只落地一次）。
+- 驗證（本次實跑，`--fixed-fps 60`）：grapple_inertia、mobility、walker、gait_terrain、combat、battlefield、boss_scene、urban_sorties、auto_blades、scout_ai PASS。數據：勾索 18 m/s 放開，滑過錨點約 21 m 才停（原本約 2 m＋強制煞車）。
+- 未驗證／注意：手感未實玩。衝刺現在整段 hop 都保持約 20 m/s、落地再滑 1 s 多，放手不按方向鍵時，從起跳到停下共 48.7 m、3.8 s（實測）；若太遠，調 `slide_friction`（摩擦大＝滑短）或 `dash_speed`，不要再加空中煞車。
+
+## 2026-11-21（再續）｜射擊與腳步音效每次隨機音高與音量（未 commit）
+
+- 使用者要求：射擊與走路音效每次播放都隨機 pitch 與 dB，幅度不要太大。
+- 完成：kit `godot-kit/addons/audio_tuner/mix.gd` 新增 `play_varied(player, pitch, gain_db, pitch_jitter=0.06, db_jitter=1.5)`（以中心值隨機，之後照常套用 `audio_mix.cfg` 偏移），只把這一檔複製進本原型（與 kit 原本相同）。改用它的地方：主角主砲（±4%、±1.5 dB）、主角腳步（±10%）與落地（±7%）、scout 開火（±6%）與腳步（±8%）、Boss 腳步（±8%）；音量都 ±1.5 dB。原本主角腳步、scout 開火、各腳步的音量是固定的。
+- 驗證：`test_audio` 新增「連播 12 次音高與音量各不相同、且在範圍內」；audio、gun_juice、mobility、boss_scene、scout_ai PASS。
+- 未驗證：沒有實聽，幅度是否合適待耳朵確認（調 `pitch_jitter`／`db_jitter` 引數即可）。
+
+## 2026-11-21（續）｜場景優化規劃 1–4 實作（未 commit）
+
+- 使用者要求：照規劃做 1–4（第 5 項選做，見下）。
+- 完成：
+  1. 遠景塔樓：每開間只剩一個盒子，窗格（含破窗、髒污）改由新 `shaders/tower_windows.gdshader` 畫；拿掉塔樓鋼筋。塔樓網格約 500 三角形。
+  2. 地面：新 `shaders/asphalt.gdshader`（程序化補丁、時有時無的裂縫、焦黑彈坑；Compatibility 沒有 decal，所以畫在 shader 裡）；人行道改高 0.25 m＋碰撞（路緣），顏色調暗。
+  3. `t_wall_roadblock`（六片 T 型防爆牆、一片倒下，breakable cover 耐久 150）、`elevated_rail`（錘頭橋墩、雙主梁、護欄、枕木與鐵軌、北端斷裂有鋼筋與垂落樓板）取代方塊；`ruined_wall.tscn` 的 Main 換成有窗洞、端柱與參差頂的網格（碰撞不變，其餘節點未動）。
+  4. 街道道具：路燈、電線桿、廢車（有碰撞）、看板，由 `build_urban_sorties.gd` 的 `_street_props()` 沿人行道散佈到地圖 `Props` 節點。細長道具不投影；全部道具 `visibility_range_end` 110 m。
+  - 以上都在 `tools/build_ruined_buildings.gd`（新增 `_props()`、共用 `_merge()`）；兩張戰場刪掉重產並重新烘焙導航。
+- 驗證（本次實跑）：urban_sorties、battlefield、combat、gun_juice PASS；headless 匯入無錯；xvfb 截街景、側面、道具特寫。街景同機位 llvmpipe：draw call 314 → 368（道具增加），三角形 36.6 萬 → 約 20 萬（廣場 16 萬）。
+- 未達標：三角形目標 < 15 萬未達成；剩下多半是近處大樓的陰影 pass（每棟 3–5 千三角形）。下一步可減陰影 split 數或把大樓背面不可見的立面去掉。
+- 第 5 項（大樓可破壞）未做：每棟合併成單一網格，要削掉單一開間得拆回每開間獨立網格（draw call 約 ×16）或改用碎塊替換，待使用者決定。
+
+## 2026-11-21｜城市建築重做、主砲加強＋濺射（未 commit）
+
+- 使用者要求：城市場景建築品質差，先規劃再優化建築；主砲威力加強、加濺射、爆炸範圍加大、後座力加強。
+- 現況（接手時）：11-19／20 已有 `tools/build_urban_sorties.gd` 產生廢都街區（RUINED DISTRICT）與破碎廣場（SHATTERED PLAZA），PROGRESS 未記錄；建築是單色方塊＋浮空樓板，遠景塔樓是藍色無貼圖方塊。
+- 完成：
+  - 新 `tools/build_ruined_buildings.gd` → `scenes/buildings/ruined_block_a/b/c.tscn`（4／5／7 層）與 `skyline_tower_a/b/c.tscn`（10／15／21 層）。每棟是格狀開間，各開間有自己的層數（一角倒塌）；立面＝柱＋窗下牆、窗洞後是暗色室內（塔樓為玻璃）；一樓店面＋半拉鐵捲門；斷層有參差斷柱與鋼筋、倒塌角有瓦礫堆與斜靠樓板，街區大樓側面有一個炸開的洞。每棟合併成每種材質一個網格（`assets/buildings/*.res`，新材質 `materials/ruin_interior.tres`、`ruin_glass.tres`）；大樓每開間一個碰撞盒，塔樓無碰撞。
+  - `build_urban_sorties.gd`：CollapsedCore＋ExposedFloor 換成大樓 instance（倒塌角朝街），Tower／TowerRib／RearTower 換成塔樓 instance；地圖改為覆寫存檔。刪掉舊的 `ruined_district.tscn`／`shattered_plaza.tscn` 後重跑（兩者與地圖都是 11-20 產生器輸出、無人工編輯），導航重新烘焙。
+  - 主砲（`walker_combat.gd`）：直擊 34 → 55；新增 `splash_radius` 5.5、`splash_damage` 30（中心 100%→邊緣 40%，並推開）、`blast_radius` 2.4 → 4.0；`barrel_kick` 0.46 → 0.7、`camera_kick_deg` 1.35 → 2.6、`recoil_push` 1.45 → 3.2、射擊震動 0.27 → 0.45。`combat_projectile.gd` 新增 `_splash()`（球形查詢 ENEMY＋BREAKABLE_COVER，排除直擊目標與同隊）。
+  - 測試：`test_gun_juice` 數值斷言更新、新增濺射（兩台 scout 都受傷、近的較多、被往外推）；`test_combat` 勾索測試前把玩家速度歸零（前一段開火的後座力變大，會被誤判成衝刺）。
+- 驗證（本次實跑，`--fixed-fps 60`）：gun_juice、combat、mobility、boss_scene、battlefield、urban_sorties PASS；改 scene 後 headless 匯入無錯。xvfb 截圖：街區與廣場大樓有窗洞、倒塌角、鋼筋、瓦礫，遠景塔樓有窗格。llvmpipe 街景 draw call 314（改前約 307）、三角形約 36.6 萬。
+- 未驗證：濺射與後座力手感、難度（scout 80 血現在直擊 2 發）待實玩；手機效能。
+- 已知限制：濺射衰減以目標原點距離計算，打 Boss 腳邊只吃 40%；瓦礫沒有碰撞（腳可能穿進去）；遠景塔樓面數偏高。
+- 下一步建議：見本段後的「場景優化規劃」。
+
+### 場景優化規劃（建議順序）
+
+1. 遠景塔樓減面：塔樓改成整面一個盒子＋窗格貼圖／shader（或 VisibilityRange LOD），目標三角形 < 15 萬。
+2. 地面：柏油改有裂縫／補丁的貼圖材質，人行道加路緣石，路面加彈坑與焦痕貼花（現在整片單色偏藍）。
+3. 路障、斷牆、高架鐵道：換成有細節的 item scene（紐澤西護欄、鐵道梁＋鐵軌＋斷裂鋼筋）。
+4. 街道雜物：路燈、電線桿、廢車、招牌，做成小 scene 散佈，增加尺度感（機甲 2 m 級需要參照物）。
+5. 大樓可破壞（選做）：開間碰撞盒已分開，可讓主砲濺射削掉單一開間並換成瓦礫。
+
 ## 2026-11-18（深夜）｜鐵柱改細圓柱、射擊／彈殼／擦身音效歸位、單位尺寸（未 commit）
 
 - 使用者要求：鐵柱要鐵灰色圓柱、細一點、多一點；射擊聲改 `gun-shot-real.mp3`，`gun-shot-ching` 是彈殼落地聲，`whiz` 是子彈擦肩而過；尺寸以 melee＝1：Boss 40、主角與 tank 2、scout 0.8（使用者確認以 melee 為基準）。

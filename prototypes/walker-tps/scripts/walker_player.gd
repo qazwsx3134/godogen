@@ -3,6 +3,7 @@ extends CharacterBody3D
 ## looks while moving, so the gun ends up pointing where the player looks. One movement model for keyboard,
 ## gamepad and touch; each look source has its own sensitivity. Sprint while held; jump = dash: a short squat, then a low burst along the stick (camera forward
 ## without input) that slides back down to running speed.
+const AudioMix := preload("res://addons/audio_tuner/mix.gd")
 
 @export var max_speed: float = 7.5
 @export var sprint_speed: float = 12.0
@@ -10,6 +11,14 @@ extends CharacterBody3D
 ## Fraction of `accel` available in the air.
 @export var air_control: float = 0.3
 @export var turn_speed_deg: float = 90.0
+## Feet only grip up to grip_speed (the fastest the legs can step). Faster than that (after a dash or a
+## grapple drag) the walker skids: kinetic friction slide_friction (m/s^2, about 0.55 g for steel feet on
+## concrete) slows it whatever the stick says, and the stick only bends the slide (slide_steer, m/s^2
+## sideways). In the air there is only air_drag.
+@export var grip_speed: float = 13.0
+@export var slide_friction: float = 5.5
+@export var slide_steer: float = 3.0
+@export var air_drag: float = 0.6
 ## Dash: burst speed (m/s), how long it is held before easing back, and a small hop
 ## (m/s up; apex = v^2 / 2g, about 1 m at 4.5): a rising diagonal, not a high jump.
 @export var dash_speed: float = 20.0
@@ -44,6 +53,7 @@ const STEP_CLIPS = [
 @onready var step_sound: AudioStreamPlayer3D = %StepSound
 
 var controls_enabled := true
+var skidding := false  # sliding on its feet above grip_speed
 var team := "player"
 @onready var combat: Node = get_node_or_null("Combat")
 @onready var speed_blur: ColorRect = get_node_or_null("SpeedBlur/Screen")
@@ -100,12 +110,24 @@ func _physics_process(delta: float) -> void:
 	var wish: Vector3 = fwd.cross(Vector3.UP) * input.x + fwd * input.y
 	var speed := sprint_speed if Input.is_action_pressed("sprint") else max_speed
 	var flat := Vector3(velocity.x, 0, velocity.z)
-	# Air control is weak, but a dash's extra speed still bleeds off at the ground rate.
-	var a := accel if is_on_floor() or flat.length() > sprint_speed else accel * air_control
+	var dragged_now: bool = combat != null and combat.grapple.has_dash_momentum()
+	skidding = false
 	if _dash_left > 0.0:
-		flat = _dash_dir * dash_speed  # held flat out, then eases back via accel below
-	elif not combat or not combat.grapple.has_dash_momentum():
-		flat=flat.move_toward(wish * speed, a * delta)
+		flat = _dash_dir * dash_speed  # held flat out, then skids back down to grip speed
+	elif dragged_now:
+		pass  # the rope sets the velocity
+	elif not is_on_floor():
+		if flat.length() > speed:
+			flat = flat.move_toward(Vector3.ZERO, air_drag * delta)
+		else:
+			flat = flat.move_toward(wish * speed, accel * air_control * delta)
+	elif flat.length() > grip_speed:
+		skidding = true
+		var dir := flat.normalized()
+		var side := wish - dir * wish.dot(dir)
+		flat = flat.move_toward(Vector3.ZERO, slide_friction * delta) + side * slide_steer * delta
+	else:
+		flat = flat.move_toward(wish * speed, accel * delta)
 	velocity = Vector3(flat.x, velocity.y - _gravity * delta, flat.z)
 	var dragged: bool = combat != null and combat.grapple.is_dragging()  # the grapple turns the hull then
 	if wish.length() > 0.05 and not dragged:  # model front is +Z: face the camera's forward
@@ -135,19 +157,19 @@ func _physics_process(delta: float) -> void:
 			velocity.z = _dash_dir.z * dash_speed
 			rig.shake(0.15, 0.3)
 	var moving := flat.length()>0.5
-	if moving and not _was_moving: %MovementSound.play()
+	if moving and not _was_moving: AudioMix.play(%MovementSound)
 	_was_moving=moving
 	if combat:
 		combat.grapple.steer = wish  # strafe pushes a grapple swing sideways
 		combat.step(delta)
-	gait.skid = combat != null and combat.grapple.has_dash_momentum()
+	gait.skid = skidding or (combat != null and combat.grapple.has_dash_momentum())
 	move_and_slide()
 	if flat.length() > max_speed or _dash_left > 0.0:
 		preload("res://scripts/breakable_cover.gd").crush_contacts(self)
 
 	rig.fov_add = sprint_fov_add * clampf((flat.length() - max_speed) / (sprint_speed - max_speed), 0.0, 1.0) - (18.0 if combat and combat.aiming else 0.0)
-	var speed_effect: bool = (Input.is_action_pressed("sprint") and flat.length() > max_speed) \
-		or _dash_left > 0.0 or (combat != null and combat.grapple.has_dash_momentum())
+	var speed_effect: bool = (Input.is_action_pressed("sprint") and flat.length() > max_speed * 0.6) \
+		or _dash_left > 0.0 or skidding or (combat != null and combat.grapple.has_dash_momentum())
 	_update_speed_blur(delta, speed_effect, Vector2(velocity.x, velocity.z).length())
 
 func _wall_jump(normal: Vector3) -> void:
@@ -155,7 +177,7 @@ func _wall_jump(normal: Vector3) -> void:
 	if away.length_squared() < 0.01: return
 	var incoming := Vector3(velocity.x, 0.0, velocity.z)
 	if combat and combat.grapple.has_dash_momentum():
-		combat.grapple.cancel_hook("WALL JUMP")
+		combat.grapple.release("WALL JUMP")
 	var tangent := incoming - away * incoming.dot(away)
 	var reflected := maxf(wall_jump_push, -incoming.dot(away) * 0.8)
 	velocity = tangent + away * reflected + Vector3.UP * jump_velocity
@@ -194,20 +216,17 @@ func _on_stepped(at: Vector3) -> void:
 	_step_sound_wait=0.07
 	step_sound.stream = STEP_CLIPS[_step_next]
 	_step_next=(_step_next+1)%STEP_CLIPS.size()
-	step_sound.volume_db=-2
+
 	step_sound.global_position = at
-	step_sound.pitch_scale = randf_range(0.85, 1.1)
-	step_sound.play()
+	AudioMix.play_varied(step_sound, 0.97, -2.0, 0.1)
 
 func _on_landed(impact: float) -> void:
 	for leg in gait.legs:
 		_puff(leg.plant)
 	rig.kick(clampf(impact * 0.04, 0.1, 0.35))
 	step_sound.stream = _land_stream
-	step_sound.volume_db=2
 	step_sound.global_position = global_position
-	step_sound.pitch_scale = randf_range(0.9, 1.05)
-	step_sound.play()
+	AudioMix.play_varied(step_sound, 0.97, 2.0, 0.07)
 
 ## Input map lives here rather than in project.godot so the bindings read as code. ponytail: no rebinding UI.
 static func _ensure_actions() -> void:

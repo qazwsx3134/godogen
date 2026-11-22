@@ -2,6 +2,7 @@ extends Node3D
 signal match_finished(result: String)
 @export var playable_half_extents := Vector2(116,106)
 @export var fall_limit: float = -12.0
+@export var sortie_title := "GREEN RUST"
 @export var match_seconds: float = 300.0
 var match_state := "briefing"
 var time_left: float
@@ -18,6 +19,7 @@ var contact_time := -100.0
 @export var surround_spacing_deg: float = 50.0
 @onready var walker: CharacterBody3D = $Walker
 @onready var spawn: Marker3D = $Map/RouteMarkers/PlayerSpawn
+const AudioMix := preload("res://addons/audio_tuner/mix.gd")
 
 func _ready() -> void:
 	time_left=match_seconds
@@ -55,7 +57,7 @@ func finish(result: String) -> void:
 	match_finished.emit(result)
 
 func retry() -> void:
-	get_tree().change_scene_to_file.call_deferred("res://scenes/battlefield.tscn")
+	get_tree().reload_current_scene.call_deferred()
 
 func _unhandled_key_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
@@ -108,7 +110,7 @@ func slot_for(scout: Node3D, radius: float) -> Vector3:
 func play_radio(contact: bool = true) -> bool:
 	if match_state!="playing" or radio_wait>0 or $Radio.playing: return false
 	$Radio.stream=preload("res://assets/sound/runtime/ai_radio.ogg") if contact else preload("res://assets/sound/runtime/ai_boot.ogg")
-	$Radio.play()
+	AudioMix.play($Radio)
 	radio_wait=6.0
 	radio_count+=1
 	return true

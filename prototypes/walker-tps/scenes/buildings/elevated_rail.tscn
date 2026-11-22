@@ -1,0 +1,40 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/buildings/elevated_rail_concrete.res" id="1_ayjrl"]
+[ext_resource type="ArrayMesh" path="res://assets/buildings/elevated_rail_steel.res" id="2_kqjig"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_i1eea"]
+size = Vector3(3, 10, 3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_rt6kt"]
+size = Vector3(3, 10, 3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_24vse"]
+size = Vector3(3, 10, 3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kcto3"]
+size = Vector3(9, 1.8, 51)
+
+[node name="ElevatedRail" type="StaticBody3D" unique_id=1155481272]
+
+[node name="Pier-18" type="CollisionShape3D" parent="." unique_id=1442231069]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -18)
+shape = SubResource("BoxShape3D_i1eea")
+
+[node name="Pier3" type="CollisionShape3D" parent="." unique_id=812918939]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 3)
+shape = SubResource("BoxShape3D_rt6kt")
+
+[node name="Pier24" type="CollisionShape3D" parent="." unique_id=2142975624]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 24)
+shape = SubResource("BoxShape3D_24vse")
+
+[node name="Deck" type="CollisionShape3D" parent="." unique_id=1220936540]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 11.6, 0)
+shape = SubResource("BoxShape3D_kcto3")
+
+[node name="Concrete" type="MeshInstance3D" parent="." unique_id=577885585]
+mesh = ExtResource("1_ayjrl")
+
+[node name="Steel" type="MeshInstance3D" parent="." unique_id=1959837500]
+mesh = ExtResource("2_kqjig")
