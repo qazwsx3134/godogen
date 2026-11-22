@@ -64,6 +64,7 @@
 - **測試裡 Boss 莫名跑到玩家位置、站在玩家頭上**（2026-11-17，walker-tps）→ `add_child` 後才設 `global_position`，物理會先在原點跑一格，兩個 CharacterBody3D 重疊，之後一方把另一方當移動地板載走；進樹前先設 `position`／`rotation`，並斷言位置沒漂。（[test_boss_scene.gd](walker-tps/tests/test_boss_scene.gd)）
 - **加了擊殺 hit stop 後，headless 測試「擊殺後等 N 幀」開始失敗**（2026-11-17，walker-tps）→ hit stop 用牆鐘，headless 一秒跑上千幀，幾百幀都落在 `Engine.time_scale = 0.05` 的停頓裡；擊殺後先 `OS.delay_msec(300)` 再數幀。（[gun-juice](godot-kit/skills/gun-juice/SKILL.md#坑)）
 - **命中擊退讓近戰自動刀片殺不死目標**（2026-11-17，walker-tps）→ 擊退寫在 `apply_damage` 裡，刀片每刀都把目標推出攻擊範圍；擊退做成獨立的 `knockback()`，只讓槍彈呼叫。
+- **headless 測試裡 `assert()` 失敗不結束，卡到 timeout 也沒輸出**（2026-11-22，godot-ui）→ 斷言失敗進 debugger 等 stdin；SceneTree 測試改用 `if not _ok(cond): return`（`push_error`＋`quit(1)`），指令加 `</dev/null` 與 `timeout`。
 
 ## Scene、UI 與 Godot API
 
@@ -109,7 +110,21 @@
 - **面板開在另一個面板「之上」卻被蓋住，或畫在上面卻點不到**（2026-11-13，debt-commission）→ 繪製看 `z_index`，點擊判定看節點順序（後面的兄弟先拿到）；兩者不一致就會「看得到點不到」或「點得到看不到」。新面板放在點擊順序正確的位置，再用 `z_index` 補繪製順序，測試同時檢查兩者（`test_settings`）。
 - **headless 產生器存出的 MultiMesh 實例全是原點、AABB 為 0**（2026-11-17，walker-tps）→ dummy 渲染器不保存 MultiMesh buffer，存檔時就遺失；建 MultiMesh 的產生器改用 `xvfb-run -a godot --path . --script …`（不加 `--headless`），存完 grep `buffer =` 確認。（[build_vfx.gd](walker-tps/tools/build_vfx.gd)）
 - **3D 特效放大了卻沒變大**（2026-11-16，walker-tps）→ world-space（`local_coords=false`）GPU 粒子不吃父節點 scale；`Curve` 預設 max 1 會把放大曲線截斷，要設 `max_value`；`BILLBOARD_ENABLED` 的材質要開 `billboard_keep_scale` 才吃節點縮放。（[開火與爆炸特效](walker-tps/README.md#開火與爆炸特效)）
+- **世界座標投影套在會掉落的結構上會閃爍**（2026-11-20，walker-tps）→ 位置雜湊與主軸投影會隨平移、旋轉跳動。脫離支撐時複製掉落構件的材質，固定投影使用脫離當下的原點與基底，再讓紋理跟著網格移動。（[breakable_cover.gd](walker-tps/scripts/breakable_cover.gd)）
 - **additive 特效在白色機體或淡色天空前看不見**（2026-11-16，walker-tps）→ 沒開 glow 時 additive 疊在亮底上只會變白；要在亮底前讀得到的蓄力光、光纖改用 alpha 混合＋飽和色。
+- **UI 出場動畫把子 node 設 `visible=false` 會讓 Container 重排、畫面跳**（2026-11-22，godot-ui）→ 只把 `modulate.a` 設 0 再 tween，不碰 `visible`；讀 `position` 前等一幀讓 Container 排好版。做法見 [godot-ui](godot-ui/README.md)。
+- **VBox 裡的按鈕寬度全被撐成一樣，依寬度調整的動畫幅度失效**（2026-11-22，godot-ui）→ 按鈕設 `size_flags_horizontal = SHRINK_CENTER`。
+- **UI 動畫改 `scale`／`position` 被 Container 蓋掉，或縮小時點擊範圍跟著縮**（2026-11-22，godot-ui）→ Godot 4.7 用 `offset_transform_enabled`＋`offset_transform_visual_only = true` 再 tween `offset_transform_position／scale／rotation`；手牌類用 dummy slot 包卡，tween slot 的 `custom_minimum_size` 展開收起。
+- **想在原生屬性被賦值時觸發效果**（2026-11-22，godot-ui）→ 節點腳本覆寫 `_set(property, value)` 並 `return false`，`label.text = x`（有型別或無型別）與 `set()` 都會經過；實測 Godot 4.7。
+- **stencil 挖洞時洞不出現**（2026-11-22，hole-eater）→ 寫 stencil 與讀 stencil 的材質都在透明佇列時，依 `render_priority` 由小到大畫；寫入方要比讀取方小（洞口 -128、地板 -127）。
+- **kinematic 移動的地面把上面的物體拖走或鏟飛**（2026-11-22，hole-eater）→ 物體停在多個碰撞形狀拼成、且每幀移動的地面上：本體摩擦設 0、限制移動速度（8 m/s），該地面比相鄰的靜態地面低幾公分。見 [hole-eater](hole-eater/README.md)。
+- **SceneTree 測試裡 `node.set_process(false)` 沒效**（2026-11-22，hole-eater）→ 腳本有 `_process` 時，`_ready` 會重新打開 process；用 export 旗標（例如 `follow_mouse = false`）在 `add_child` 前設定。
+- **幾百個 MultiMeshInstance3D 用 `instance uniform` → `Too many instances using shader instance variables`**（2026-11-22，godot-kit polish3d）→ 全域緩衝只有 4096；每 chunk 的參數改放 MultiMesh `use_custom_data`，shader 讀 `INSTANCE_CUSTOM`。
+- **headless 腳本存出的 `.tscn` 沒有 `uid=`，`ResourceUID.path_to_uid` 拿回原路徑**（2026-11-22，godot-kit loading）→ 存完再呼叫 `ResourceSaver.set_uid(path, ResourceUID.create_id())`，然後 `--editor --import` 一次讓 UID 快取登記。
+- **改 RigidBody3D 的 `scale` 沒效果，下一幀又變回 1**（2026-11-22，hole-eater）→ 物理每幀用 body 狀態覆寫 transform，scale 被丟掉；要縮放整個 body 時，記下每個子 node 的原始 transform，等比縮放它們的 basis 與 origin（Jolt 接受等比縮放的形狀）。
+- **洞變大後，移動中的洞把剛好吞得下的物體往前推**（2026-11-22，hole-eater）→ 偵測區跟著放大後，物體還在洞緣上就換成碰帶洞地面，洞緣的碰撞形狀以 kinematic 速度撞上它。尚未修；測試改成洞停住時放物體。
+- **物體掉到一半洞滑開，就永遠在地底掉、不計分**（2026-11-22，hole-eater）→ 刪除區只掛在洞底會跟著洞走；場景最底下再放一個固定的全域刪除區（`Abyss`），接到同一個計分函式。
+- **測試物體「比洞大」用邊長判斷，結果卡住吞不下**（2026-11-22，hole-eater）→ 方形物體能不能掉進圓洞看對角線（3.6m 箱子對角線 5.1m），洞直徑要大於對角線。
 
 ## 匯出與網頁版
 

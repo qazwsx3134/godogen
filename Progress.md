@@ -10,6 +10,7 @@
 
 | commit | 日期 | 做了什麼 |
 |---|---|---|
+| 本次提交（以 `git log` 查核） | 2026-11-23 | chore: record repository guidance and ignore Godot caches；整理提交，測試未重跑 |
 | 未提交 | 2026-11-13 | debt-commission：稽核 P0–P2 全修（設定層級、手機字級 ×1.25、cut-in 殘留、目錄／卷宗／存檔卡等）；新增標題橫幅、捲動 CG（`bg` `scroll`）、調查方向鈕與矮螢幕自動收起、卷宗直長卡片＋羅馬數字空卡、工具列圖示按鈕 |
 | 未提交 | 2026-11-13 | debt-commission：UI／UX 稽核報告 `reviews/2026-11-13-uiux-audit.md`（P0 設定被目錄蓋住；字級偏小等），`screen_audit.gd` 加量測模式；尚未修 |
 | 未提交 | 2026-11-13 | debt-commission：「吐槽！」改一般深藍按鈕；角色熱區改由角色 scene 的 `Art/Spots/<名稱>` node 決定（`"spot"`）；結局改成全暗→卷軸→點一下才出現重玩／回標題（`end_controls.tscn` 刪除）|
@@ -34,8 +35,9 @@
 |---|---|---|---|
 | 本次提交（`git log -1`） | 2026-11-11 | walker-tps：首次收錄完整戰鬥原型、地圖／雙機體素材、14 個處理後音效與署名；補忽略規則，Git 乾淨副本匯入／音效／戰鬥驗證 |
 | debt-commission 萬事屋吐槽 ADV | 故事為功能展示（橫式＋直式）與桂短篇；11-12 直式／橫式可切換與功能展示進階段落（未提交，待作者看畫面）；11-12 程式結構改善 D1–D7 完成（D3 延後），完整測試 56/57（`reading_scenes` 改動前就失敗）；介面圖待作者看畫面及手機；音效與評審 #2 仍在 TODO | [PROGRESS](prototypes/debt-commission/PROGRESS.md) | [MILESTONE](prototypes/debt-commission/MILESTONE.md) |
-| godot-kit 共用模組 | SaveSlots 已接入 seal-meadow adapter，保留遊戲恢復保護；只同步該存檔模組，測試暫緩 | [PROGRESS](prototypes/godot-kit/PROGRESS.md) | — |
-| walker-tps 四足戰甲 | 11-15 新增 Boss 骨架動畫與 10／40／80 台裝甲渲染負載場景，L2 通過；目標裝置效能與外觀待實玩；`main.tscn` Arena 移位待使用者決定，甩尾與難度待實玩 | [PROGRESS](prototypes/walker-tps/PROGRESS.md) | — |
+| godot-kit 共用模組 | 新增 Phantom Camera，2D 跟隨／分鏡與 3D Host 通過；另可選裝音畫同步、3D 除錯、空間音訊、AmbientCG 與體積雲；SaveSlots 已接入 seal-meadow | [PROGRESS](prototypes/godot-kit/PROGRESS.md) | — |
+| pixel-aquarium 像素水族箱 | 同種成魚自動配對、離線產卵與孵化；手機背包、道具回售、點按旋轉及拖曳通過 L2，採 B 木紋、葉飾及緊湊 UI，真機待驗 | [PROGRESS](prototypes/pixel-aquarium/PROGRESS.md) | — |
+| walker-tps 四足戰甲 | 11-21 城市場景：廢棄大樓／塔樓（shader 窗格）、程序化柏油與彈坑、T 型路障、高架鐵道、路燈／電線桿／廢車／看板；主砲直擊 55＋濺射 5.5 m、後座力加強；L2 通過（未提交）；手感與手機效能待實玩，大樓可破壞待決定 | [PROGRESS](prototypes/walker-tps/PROGRESS.md) | — |
 | seal-meadow 蓬蓬草原 | 暖陶瓦風格與商店三視圖已定方向；可走商店、入口與路牌樣板已接入，正式 2D 紙娃娃及手機真人驗收待做，多人延後 | [PROGRESS](prototypes/seal-meadow/PROGRESS.md) | [MILESTONE](prototypes/seal-meadow/MILESTONE.md) |
 | hero-horde-idle 全員推王 | 等真人前三層、手機恢復成本與作者素材 | [PROGRESS](prototypes/hero-horde-idle/docs/PROGRESS.md) | [MILESTONE](prototypes/hero-horde-idle/docs/MILESTONE.md) |
 | 魔都傭兵（mortal-city，單機文字冒險 roguelike，ADR 0001） | 新宿→灣岸兩區可玩；評審 R1、R2、R4（大部分）–R8、R10 已做，加上神經錯亂、保單分級、名聲的用處與代價；骰池改版（DnD 式，`docs/DICE-POOL-SPEC.md`）：A1 委託場面、A4 危險節點致命判定＋劇情做法場面、A5 事件擲骰、A6 錯亂骰、D8 精英撤離沒有戰利品、致命判定失敗有敵人就打追擊戰、賽博風骰子圖示＋擲骰動畫＋第一次介紹，都已完成、未提交、未試玩；`pnpm test`＋`pnpm smoke` 自動驗證；下一步是作者試玩骰池，再排 A2／A3／A5／A7、B | [PROGRESS](prototypes/mortal-city/PROGRESS.md)／[設計進度](docs/cyberpunk-text-mmo/PROGRESS.md) | [MILESTONE](prototypes/mortal-city/MILESTONE.md) |

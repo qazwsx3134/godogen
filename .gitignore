@@ -4,6 +4,8 @@
 .playwright-cli/
 .playwright
 **/__pycache__
+# Godot editor/import cache for prototype projects
+prototypes/**/.godot/
 godot/skills/godot-api/doc_api/
 godot/skills/godot-api/doc_source/
 project.local.yaml

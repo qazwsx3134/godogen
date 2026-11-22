@@ -55,6 +55,7 @@ This repository is not a published game repo. It is the source that `publish.sh`
 
 - **版面交給 node**：位置與大小用 anchor、offset 和 Container（VBox／HBox／Grid／Margin）表達，程式不要每幀或每次縮放時改寫 `position`／`size`；否則編輯器裡的調整一執行就被蓋掉。
 - **行為交給腳本**：scene 的根 node 掛腳本，用 `%唯一名稱`（Scene Unique Name）取得子 node，在 `_ready` 連接 signal。
+- **跨節點事件優先用 Signal**：UI 操作、狀態變更、動畫完成等事件，優先使用節點內建 signal。自訂事件由狀態擁有者宣告帶型別的 signal，例如 `signal health_changed(current: int)`，更新狀態後用 `health_changed.emit(current)` 通知。由場景根節點或組裝端集中接線，GDScript 優先使用 Godot 4 的 Signal 型別語法，例如 `player.health_changed.connect(_on_health_changed)`。明確命令、讀取資料或需要回傳值時，直接呼叫方法。詳見 [Godot 官方 Signal 教學](https://docs.godotengine.org/en/stable/getting_started/step_by_step/signals.html)。
 - **重複的東西做成小 scene 再實例化**：選項按鈕、素材卡片、熱區、存檔欄位各做一個 item scene，程式依資料 `instantiate()`。
 - **只有必須在執行時決定的才留在程式**：依劇本資料換的內容（哪個角色、哪張背景）、依畫面比例與 Safe Area 的整體縮放、`ui_styles.gd` 依 node 的 `ui_style_role` metadata 套上的和紙配色、特效與動畫。
 - **新建或大改 scene 時**，用 Godot 存檔（編輯器，或 headless 腳本以 `PackedScene.pack()` + `ResourceSaver.save()`），不要手寫大型 `.tscn` 文字；存完用 headless 匯入確認沒有錯誤。
@@ -63,6 +64,8 @@ This repository is not a published game repo. It is the source that `publish.sh`
 - **產生器只作為製作工具**：scene 儲存後就是可維護的來源檔。正常開啟、執行、匯入與測試不得自動重建它；重新產生前先檢查 diff，保留人工編輯。序列化時驗證 owner、子 scene instance 關係與 pack 前後 node 數量。
 - **編輯器驗收**：README 列出主要 scene、可調整的 node／export 欄位。驗證直接修改一個 UI 間距或靜態文字後執行仍然保留，且戰鬥移動、生命值等執行狀態不會反向污染原始 scene。
 - **共用模組優先**：新增功能先查 `prototypes/godot-kit/README.md`。適用時用 `sync.sh <project>` 同步並引用現成模組，副本不可直接改；外部套件只在確有需要時引入，記錄來源、版本、授權與匯出限制。
+- **共用鏡頭優先**：新增 2D／3D 跟隨、死區、群組取景或鏡頭轉場時，先評估 [Godot Kit 的 Phantom Camera](prototypes/godot-kit/docs/PHANTOM-CAMERA.md)。
+- **共用 UI 素材**：製作像素介面、道具圖示或操作提示前，查 [共用素材索引](prototypes/godot-assets/README.md) 與 [Godot UI 素材使用指南](prototypes/godot-assets/AGENTS.md)。把實際用到的素材與授權複製進該遊戲的 `res://`。
 - 現有原型大多仍在程式裡建畫面。改到哪個畫面，就順手把它轉成 scene；debt-commission 的轉換進度記在它的 README「Scene 轉換進度」。
 # 全域偏好
 
